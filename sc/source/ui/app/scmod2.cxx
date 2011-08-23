@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,15 +46,16 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-#define LINGUPROP_AUTOSPELL         "IsSpellAuto"
+#define LINGUPROP_AUTOSPELL			"IsSpellAuto"
 
 //------------------------------------------------------------------
 
-void ScModule::GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
-                                    sal_Bool& rAutoSpell )
+// static
+void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCtlLang,
+                                    BOOL& rAutoSpell )
 {
-    //  use SvtLinguConfig instead of service LinguProperties to avoid
-    //  loading the linguistic component
+    //	use SvtLinguConfig instead of service LinguProperties to avoid
+    //	loading the linguistic component
     SvtLinguConfig aConfig;
 
     SvtLinguOptions aOptions;
@@ -66,28 +67,30 @@ void ScModule::GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal
     rAutoSpell = aOptions.bIsSpellAuto;
 }
 
-void ScModule::SetAutoSpellProperty( sal_Bool bSet )
+// static
+void ScModule::SetAutoSpellProperty( BOOL bSet )
 {
-    //  use SvtLinguConfig instead of service LinguProperties to avoid
-    //  loading the linguistic component
+    //	use SvtLinguConfig instead of service LinguProperties to avoid
+    //	loading the linguistic component
     SvtLinguConfig aConfig;
 
     uno::Any aAny;
     aAny <<= bSet;
-    aConfig.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( LINGUPROP_AUTOSPELL )), aAny );
+    aConfig.SetProperty( rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ), aAny );
 }
 
 
 
-sal_Bool ScModule::HasThesaurusLanguage( sal_uInt16 nLang )
+// static
+BOOL ScModule::HasThesaurusLanguage( USHORT nLang )
 {
     if ( nLang == LANGUAGE_NONE )
-        return false;
+        return FALSE;
 
     lang::Locale aLocale;
     SvxLanguageToLocale( aLocale, nLang );
 
-    sal_Bool bHasLang = false;
+    BOOL bHasLang = FALSE;
     try
     {
         uno::Reference< linguistic2::XThesaurus > xThes(LinguMgr::GetThesaurus());
@@ -96,7 +99,7 @@ sal_Bool ScModule::HasThesaurusLanguage( sal_uInt16 nLang )
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL("Error in Thesaurus");
+        DBG_ERROR("Error in Thesaurus");
     }
 
     return bHasLang;

@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Mar 2005           Created
+ Mar 2005			Created
  ************************************************************************/
 
 #ifndef _LWPPROPLIST_HXX_
@@ -73,7 +73,7 @@ class LwpPropListElement : public LwpDLVList
 {
 public:
     LwpPropListElement(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
-    ~LwpPropListElement(){}
+    ~LwpPropListElement(){};
     void Read();
     sal_Bool IsNamed(OUString name);
     LwpPropListElement* GetNext();
@@ -87,8 +87,8 @@ private:
 class LwpPropList : public LwpDLVListHead
 {
 public:
-    LwpPropList(){}
-    ~LwpPropList(){}
+    LwpPropList(){};
+    ~LwpPropList(){};
     void Read(LwpObjectStream* pObjStrm);
     LwpPropListElement* GetFirst();
     OUString GetNamedProperty(OUString name);

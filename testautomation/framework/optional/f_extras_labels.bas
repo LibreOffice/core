@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : gregor.hartmann@oracle.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : check the names of all labels
 '*

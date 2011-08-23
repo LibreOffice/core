@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,6 @@
 //_______________________________________
 // other includes
 #include <rtl/ustring.hxx>
-#include <fwidllapi.h>
 
 //_______________________________________
 // namespace
@@ -60,7 +59,7 @@ namespace framework{
             instead of using soecialize config items of the svtools
             project. This class can wrapp such configuration access.
  */
-class FWI_DLLPUBLIC ConfigAccess : public ThreadHelpBase
+class ConfigAccess : public ThreadHelpBase
 {
     //___________________________________
     // const

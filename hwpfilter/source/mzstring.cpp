@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,13 @@
  *
  ************************************************************************/
 
-/* PURPOSE
+/* NAME $Id: mzstring.cpp,v 1.5 2008-06-04 10:02:20 vg Exp $
+ * PURPOSE
  *   supposed to be used instead of std::string
+ * NOTES
+ *
+ * HISTORY
+ *        frog - Oct 8, 1998: Created.
  */
 
 #ifdef __GNUG__
@@ -78,7 +83,7 @@ MzString::~MzString()
 }
 
 
-MzString &MzString::operator = (MzString &s)
+void MzString::operator = (MzString &s)
 {
     int n = s.length();
     if (allocate(n))
@@ -86,11 +91,10 @@ MzString &MzString::operator = (MzString &s)
         if (n > 0) memcpy(Data, s.Data, n);
         Length = n;
     }
-    return *this;
 }
 
 
-MzString &MzString::operator = (const char *s)
+void MzString::operator = (const char *s)
 {
     if (s == NULL)
         s = "";
@@ -100,7 +104,6 @@ MzString &MzString::operator = (const char *s)
         if (n > 0) memcpy(Data, s, n);
         Length = n;
     }
-    return *this;
 }
 
 

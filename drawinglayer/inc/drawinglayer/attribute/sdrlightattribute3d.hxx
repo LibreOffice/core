@@ -3,6 +3,12 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: sdrattribute3d.hxx,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
+ *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -59,8 +65,8 @@ namespace drawinglayer
         public:
             // constructors/destructor
             Sdr3DLightAttribute(
-                const basegfx::BColor& rColor,
-                const basegfx::B3DVector& rDirection,
+                const basegfx::BColor& rColor, 
+                const basegfx::B3DVector& rDirection, 
                 bool bSpecular);
             Sdr3DLightAttribute(const basegfx::BColor& rColor);
             Sdr3DLightAttribute();

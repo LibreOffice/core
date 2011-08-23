@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,6 @@
 
 #include <list>
 #include <tools/mempool.hxx>
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include "rangelst.hxx"
 #include "patattr.hxx"
 #include "xladdress.hxx"
@@ -41,7 +38,7 @@
 #include "xiroot.hxx"
 
 class ScDocumentPool;
-struct ScAttrEntry;
+class ScAttrEntry;
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF)
@@ -69,9 +66,6 @@ public:
         @return  The color from current or default palette or COL_AUTO, if nothing else found. */
     inline Color        GetColor( sal_uInt16 nXclIndex ) const
                             { return Color( GetColorData( nXclIndex ) ); }
-    /** Returns the palette colors as UNO sequence. */
-    ::com::sun::star::uno::Sequence< sal_Int32 >
-                        CreateColorSequence() const;
 
     /** Reads a PALETTE record. */
     void                ReadPalette( XclImpStream& rStrm );
@@ -174,7 +168,7 @@ private:
 // ----------------------------------------------------------------------------
 
 /** Stores the data of all fonts occurred in an Excel file. */
-class XclImpFontBuffer : protected XclImpRoot, private boost::noncopyable
+class XclImpFontBuffer : protected XclImpRoot, ScfNoCopy
 {
 public:
     explicit            XclImpFontBuffer( const XclImpRoot& rRoot );
@@ -212,15 +206,15 @@ private:
     void                UpdateAppFont( const XclFontData& rFontData, bool bHasCharSet );
 
 private:
-    boost::ptr_vector< XclImpFont > maFontList; /// List of all FONT records in the Excel file.
-    XclFontData         maAppFont;              /// Application font (for column width).
-    XclImpFont          maFont4;                /// Built-in font with index 4.
-    XclImpFont          maCtrlFont;             /// BIFF5 default form controls font (Helv,8pt,bold).
+    ScfDelList< XclImpFont > maFontList;    /// List of all FONT records in the Excel file.
+    XclFontData         maAppFont;          /// Application font (for column width).
+    XclImpFont          maFont4;            /// Built-in font with index 4.
+    XclImpFont          maCtrlFont;         /// BIFF5 default form controls font (Helv,8pt,bold).
 };
 
 // FORMAT record - number formats =============================================
 
-/** Stores all user defined number formats occurred in the file. */
+/** Stores all user defined number formats occured in the file. */
 class XclImpNumFmtBuffer : public XclNumFmtBuffer, protected XclImpRoot
 {
 public:
@@ -235,7 +229,7 @@ public:
     void                CreateScFormats();
 
     /** Returns the format key with the passed Excel index or NUMBERFORMAT_ENTRY_NOT_FOUND on error. */
-    sal_uLong               GetScFormat( sal_uInt16 nXclNumFmt ) const;
+    ULONG               GetScFormat( sal_uInt16 nXclNumFmt ) const;
 
     /** Fills an Excel number format to the passed item set.
         @param rItemSet  The destination item set.
@@ -249,11 +243,11 @@ public:
         @param nScNumFmt  The Calc number formatter index of the format.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
     void                FillScFmtToItemSet(
-                            SfxItemSet& rItemSet, sal_uLong nScNumFmt,
+                            SfxItemSet& rItemSet, ULONG nScNumFmt,
                             bool bSkipPoolDefs = false ) const;
 
 private:
-    typedef ::std::map< sal_uInt16, sal_uLong > XclImpIndexMap;
+    typedef ::std::map< sal_uInt16, ULONG > XclImpIndexMap;
 
     XclImpIndexMap      maIndexMap;     /// Maps Excel format indexes to Calc formats.
     sal_uInt16          mnNextXclIdx;   /// Index counter for BIFF2-BIFF4.
@@ -398,7 +392,7 @@ inline bool operator!=( const XclImpXFIndex& rLeft, const XclImpXFIndex& rRight 
 // ----------------------------------------------------------------------------
 
 /** Contains all data of a XF record and a Calc item set. */
-class XclImpXF : public XclXFBase, protected XclImpRoot, private boost::noncopyable
+class XclImpXF : public XclXFBase, protected XclImpRoot, ScfNoCopy
 {
 public:
     explicit            XclImpXF( const XclImpRoot& rRoot );
@@ -484,9 +478,9 @@ private:
 
 // ----------------------------------------------------------------------------
 
-/** Contains all XF records occurred in the file.
+/** Contains all XF records occured in the file.
     @descr  This class is able to read XF records (BIFF2 - BIFF8) and STYLE records (BIFF8). */
-class XclImpXFBuffer : protected XclImpRoot, private boost::noncopyable
+class XclImpXFBuffer : protected XclImpRoot, ScfNoCopy
 {
 public:
     explicit            XclImpXFBuffer( const XclImpRoot& rRoot );
@@ -500,11 +494,8 @@ public:
     void                ReadStyle( XclImpStream& rStrm );
 
     /** Returns the object that stores all contents of an XF record. */
-    inline XclImpXF*    GetXF( sal_uInt16 nXFIndex )
-                            { return (nXFIndex >= maXFList.size()) ? NULL : &maXFList.at(nXFIndex); }
-
-    inline const XclImpXF*    GetXF( sal_uInt16 nXFIndex ) const
-                            { return (nXFIndex >= maXFList.size()) ? NULL : &maXFList.at(nXFIndex); }
+    inline XclImpXF*    GetXF( sal_uInt16 nXFIndex ) const
+                            { return maXFList.GetObject( nXFIndex ); }
 
     /** Returns the index to the Excel font used in the specified XF record. */
     sal_uInt16          GetFontIndex( sal_uInt16 nXFIndex ) const;
@@ -518,10 +509,10 @@ public:
     ScStyleSheet*       CreateStyleSheet( sal_uInt16 nXFIndex );
 
 private:
-    typedef boost::ptr_vector< XclImpStyle >        XclImpStyleList;
+    typedef ScfDelList< XclImpStyle >               XclImpStyleList;
     typedef ::std::map< sal_uInt16, XclImpStyle* >  XclImpStyleMap;
 
-    boost::ptr_vector< XclImpXF > maXFList; /// List of contents of all XF record.
+    ScfDelList< XclImpXF > maXFList;        /// List of contents of all XF record.
     XclImpStyleList     maBuiltinStyles;    /// List of built-in cell styles.
     XclImpStyleList     maUserStyles;       /// List of user defined cell styles.
     XclImpStyleMap      maStylesByXf;       /// Maps XF records to cell styles.
@@ -573,15 +564,15 @@ inline bool XclImpXFRange::Contains( SCROW nScRow ) const
 // ----------------------------------------------------------------------------
 
 /** Contains the XF indexes for every used cell in a column. */
-class XclImpXFRangeColumn : private boost::noncopyable
+class XclImpXFRangeColumn : ScfNoCopy
 {
 public:
-    typedef ::boost::ptr_vector<XclImpXFRange> IndexList;
-
     inline explicit     XclImpXFRangeColumn() {}
 
-    IndexList::iterator begin() { return maIndexList.begin(); }
-    IndexList::iterator end() { return maIndexList.end(); }
+    /** Returns the first formatted cell range in this column. */
+    inline XclImpXFRange* First() { return maIndexList.First(); }
+    /** Returns the next formatted cell range in this column. */
+    inline XclImpXFRange* Next() { return maIndexList.Next(); }
 
     /** Inserts a single row range into the list. */
     void                SetDefaultXF( const XclImpXFIndex& rXFIndex );
@@ -595,25 +586,22 @@ private:
     void                Find(
                             XclImpXFRange*& rpPrevRange,
                             XclImpXFRange*& rpNextRange,
-                            sal_uLong& rnNextIndex,
-                            SCROW nScRow );
+                            ULONG& rnNextIndex,
+                            SCROW nScRow ) const;
 
     /** Tries to concatenate a range with its predecessor.
         @descr  The ranges must have the same XF index and must not have a gap.
         The resulting range has the index nIndex-1. */
-    void                TryConcatPrev( sal_uLong nIndex );
-
-    /** Insert a range into the list at the specified index. */
-    void                Insert(XclImpXFRange* pXFRange, sal_uLong nIndex);
+    void                TryConcatPrev( ULONG nIndex );
 
 private:
-    IndexList maIndexList;    /// The list of XF index range.
+    ScfDelList< XclImpXFRange > maIndexList;    /// The list of XF index range.
 };
 
 // ----------------------------------------------------------------------------
 
 /** Contains the XF indexes for every used cell in a single sheet. */
-class XclImpXFRangeBuffer : protected XclImpRoot, private boost::noncopyable
+class XclImpXFRangeBuffer : protected XclImpRoot, ScfNoCopy
 {
 public:
     explicit            XclImpXFRangeBuffer( const XclImpRoot& rRoot );
@@ -663,13 +651,13 @@ private:
         @param nLine
         BOX_LINE_RIGHT = copy most-right border of top row;
         BOX_LINE_BOTTOM = copy most-bottom border of first column. */
-    void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, sal_uInt16 nLine );
+    void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, USHORT nLine );
 
 private:
-    typedef boost::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;
-    typedef ::std::vector< XclImpXFRangeColumnRef >  XclImpXFRangeColumnVec;
-    typedef ::std::pair< XclRange, String >          XclImpHyperlinkRange;
-    typedef ::std::list< XclImpHyperlinkRange >      XclImpHyperlinkList;
+    typedef ScfRef< XclImpXFRangeColumn >           XclImpXFRangeColumnRef;
+    typedef ::std::vector< XclImpXFRangeColumnRef > XclImpXFRangeColumnVec;
+    typedef ::std::pair< XclRange, String >         XclImpHyperlinkRange;
+    typedef ::std::list< XclImpHyperlinkRange >     XclImpHyperlinkList;
 
     XclImpXFRangeColumnVec maColumns;       /// Array of column XF index buffers.
     XclImpHyperlinkList maHyperlinks;       /// Maps URLs to hyperlink cells.

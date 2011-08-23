@@ -98,8 +98,8 @@ CFLAGSCXX+=$(OBJCXXFLAGS)
 
 # Xlib
 SLOFILES+= $(SLO)$/cairo_xlib_cairo.obj
-SHL1STDLIBS+= $(FONTCONFIG_LIBS) -lX11 -lXrender $(FREETYPE_LIBS)
-CFLAGS+= $(FREETYPE_CFLAGS)
+SHL1STDLIBS+= -lfontconfig -lX11 -lXrender $(FREETYPE_LIBS)
+CFLAGS+=$(FREETYPE_CFLAGS)
 
 .ENDIF   # "$(GUIBASE)"=="aqua"
 
@@ -130,11 +130,3 @@ DEF1EXPORTFILE=exports.dxp
 # ==========================================================================
 
 .INCLUDE :	target.mk
-
-ALLTAR : $(MISC)/cairocanvas.component
-
-$(MISC)/cairocanvas.component .ERRREMOVE : \
-        $(SOLARENV)/bin/createcomponent.xslt cairocanvas.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt cairocanvas.component

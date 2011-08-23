@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,10 +51,10 @@ TYPEINIT1( FuTextAttrDlg, FuPoor );
 \************************************************************************/
 
 FuTextAttrDlg::FuTextAttrDlg (
-    ViewShell* pViewSh,
-    ::sd::Window* pWin,
+    ViewShell* pViewSh, 
+    ::sd::Window* pWin, 
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument* pDoc, 
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
@@ -79,7 +79,7 @@ void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, mpView );
 
-        sal_uInt16 nResult = pDlg->Execute();
+        USHORT nResult = pDlg->Execute();
 
         switch( nResult )
         {

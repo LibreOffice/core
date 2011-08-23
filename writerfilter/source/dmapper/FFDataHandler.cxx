@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: PropertyMap.hxx,v $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +31,10 @@
 #include "FFDataHandler.hxx"
 
 #include <ooxml/resourceids.hxx>
+#ifdef DEBUG_DOMAINMAPPER
+#include <resourcemodel/QNameToString.hxx>
 #include "dmapperLoggers.hxx"
-
+#endif
 namespace writerfilter {
 namespace dmapper {
 
@@ -37,18 +42,17 @@ namespace dmapper {
  * class: FFDataHandler *
  ************************/
 
-FFDataHandler::FFDataHandler() :
-LoggedProperties(dmapper_logger, "FFDataHandler"),
-m_bEnabled(false),
-m_bCalcOnExit(false),
-m_nHelpTextType(0),
-m_nStatusTextType(0),
-m_nCheckboxHeight(0),
-m_bCheckboxAutoHeight(false),
-m_bCheckboxDefault(false),
-m_bCheckboxChecked(false),
-m_nTextType(0),
-m_nTextMaxLength(0)
+FFDataHandler::FFDataHandler()
+: m_bEnabled(false),
+  m_bCalcOnExit(false),
+  m_nHelpTextType(0),
+  m_nStatusTextType(0),
+  m_nCheckboxHeight(0),
+  m_bCheckboxAutoHeight(false),
+  m_bCheckboxDefault(false),
+  m_bCheckboxChecked(false),
+  m_nTextType(0),
+  m_nTextMaxLength(0)
 {
 }
 
@@ -85,10 +89,20 @@ void FFDataHandler::setCalcOnExit(bool r_calcOnExit)
     m_bCalcOnExit = r_calcOnExit;
 }
 
+bool FFDataHandler::getCalcOnExit() const
+{
+    return m_bCalcOnExit;
+}
+
 // member: FFDataHandler::entryMacro
 void FFDataHandler::setEntryMacro(const rtl::OUString & r_sEntryMacro)
 {
     m_sEntryMacro = r_sEntryMacro;
+}
+
+const rtl::OUString & FFDataHandler::getEntryMacro() const
+{
+    return m_sEntryMacro;
 }
 
 // member: FFDataHandler::exitMacro
@@ -97,10 +111,20 @@ void FFDataHandler::setExitMacro(const rtl::OUString & r_sExitMacro)
     m_sExitMacro = r_sExitMacro;
 }
 
+const rtl::OUString & FFDataHandler::getExitMacro() const
+{
+    return m_sExitMacro;
+}
+
 // member: FFDataHandler::helpTextType
 void FFDataHandler::setHelpTextType(sal_uInt32 r_helpTextType)
 {
     m_nHelpTextType = r_helpTextType;
+}
+
+sal_uInt32 FFDataHandler::getHelpTextType() const
+{
+    return m_nHelpTextType;
 }
 
 // member: FFDataHandler::helpText
@@ -118,6 +142,11 @@ const rtl::OUString & FFDataHandler::getHelpText() const
 void FFDataHandler::setStatusTextType(sal_uInt32 r_statusTextType)
 {
     m_nStatusTextType = r_statusTextType;
+}
+
+sal_uInt32 FFDataHandler::getStatusTextType() const
+{
+    return m_nStatusTextType;
 }
 
 // member: FFDataHandler::statusText
@@ -157,6 +186,11 @@ bool FFDataHandler::getCheckboxAutoHeight() const
 void FFDataHandler::setCheckboxDefault(bool r_checkboxDefault)
 {
     m_bCheckboxDefault = r_checkboxDefault;
+}
+
+bool FFDataHandler::getCheckboxDefault() const
+{
+    return m_bCheckboxDefault;
 }
 
 // member: FFDataHandler::checkboxChecked
@@ -203,6 +237,11 @@ const FFDataHandler::DropDownEntries_t & FFDataHandler::getDropDownEntries() con
     return m_DropDownEntries;
 }
 
+void FFDataHandler::dropDownEntriesPushBack(const rtl::OUString & r_Element)
+{
+    m_DropDownEntries.push_back(r_Element);
+}
+
 // member: FFDataHandler::textType
 void FFDataHandler::setTextType(sal_uInt32 r_textType)
 {
@@ -218,6 +257,11 @@ sal_uInt32 FFDataHandler::getTextType() const
 void FFDataHandler::setTextMaxLength(sal_uInt32 r_textMaxLength)
 {
     m_nTextMaxLength = r_textMaxLength;
+}
+
+sal_uInt32 FFDataHandler::getTextMaxLength() const
+{
+    return m_nTextMaxLength;
 }
 
 // member: FFDataHandler::textDefault
@@ -237,112 +281,142 @@ void FFDataHandler::setTextFormat(const rtl::OUString & r_sTextFormat)
     m_sTextFormat = r_sTextFormat;
 }
 
-
-void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
+const rtl::OUString & FFDataHandler::getTextFormat() const
 {
+    return m_sTextFormat;
+}
+
+
+void FFDataHandler::sprm(Sprm & r_Sprm)
+{
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("FFDataHandler.sprm");
+    dmapper_logger->chars(r_Sprm.toString());
+#endif
     switch(r_Sprm.getId())
     {
     case NS_ooxml::LN_CT_FFData_name:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_sName = r_Sprm.getValue()->getString();
         }
         break;
     case NS_ooxml::LN_CT_FFData_enabled:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_bEnabled = r_Sprm.getValue()->getInt();
         }
         break;
     case NS_ooxml::LN_CT_FFData_calcOnExit:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_bCalcOnExit = r_Sprm.getValue()->getInt();
         }
         break;
     case NS_ooxml::LN_CT_FFData_entryMacro:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_sEntryMacro = r_Sprm.getValue()->getString();
         }
         break;
     case NS_ooxml::LN_CT_FFData_exitMacro:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_sExitMacro = r_Sprm.getValue()->getString();
         }
         break;
     case NS_ooxml::LN_CT_FFData_helpText:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             resolveSprm(r_Sprm);
         }
         break;
     case NS_ooxml::LN_CT_FFData_statusText:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             resolveSprm(r_Sprm);
         }
         break;
     case NS_ooxml::LN_CT_FFCheckBox_size:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_nCheckboxHeight = r_Sprm.getValue()->getInt();
         }
         break;
     case NS_ooxml::LN_CT_FFCheckBox_sizeAuto:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_bCheckboxAutoHeight = r_Sprm.getValue()->getInt();
         }
         break;
     case NS_ooxml::LN_CT_FFCheckBox_default:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_bCheckboxDefault = r_Sprm.getValue()->getInt();
         }
         break;
     case NS_ooxml::LN_CT_FFCheckBox_checked:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_bCheckboxChecked = r_Sprm.getValue()->getInt();
         }
         break;
     case NS_ooxml::LN_CT_FFData_checkBox:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             resolveSprm(r_Sprm);
         }
         break;
     case NS_ooxml::LN_CT_FFDDList_result:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_sDropDownResult = r_Sprm.getValue()->getString();
         }
         break;
     case NS_ooxml::LN_CT_FFDDList_default:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_sDropDownDefault = r_Sprm.getValue()->getString();
         }
         break;
     case NS_ooxml::LN_CT_FFDDList_listEntry:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_DropDownEntries.push_back(r_Sprm.getValue()->getString());;
         }
         break;
     case NS_ooxml::LN_CT_FFData_ddList:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             resolveSprm(r_Sprm);
         }
         break;
     case NS_ooxml::LN_CT_FFTextInput_type:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_nTextType = r_Sprm.getValue()->getInt();
         }
         break;
     case NS_ooxml::LN_CT_FFTextInput_default:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_sTextDefault = r_Sprm.getValue()->getString();
         }
         break;
     case NS_ooxml::LN_CT_FFTextInput_maxLength:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_nTextMaxLength = r_Sprm.getValue()->getInt();
         }
         break;
     case NS_ooxml::LN_CT_FFTextInput_format:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_sTextFormat = r_Sprm.getValue()->getString();
         }
         break;
     case NS_ooxml::LN_CT_FFData_textInput:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             resolveSprm(r_Sprm);
         }
@@ -353,6 +427,9 @@ void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
 #endif
         break;
     }
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("FFDataHandler.sprm");
+#endif
 }
 
 void FFDataHandler::resolveSprm(Sprm & r_Sprm)
@@ -362,26 +439,36 @@ void FFDataHandler::resolveSprm(Sprm & r_Sprm)
         pProperties->resolve(*this);
 }
 
-void FFDataHandler::lcl_attribute(Id name, Value & val)
+void FFDataHandler::attribute(Id name, Value & val)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("FFDataHandler.attribute");
+    dmapper_logger->attribute("name", (*QNameToString::Instance())(name));
+    dmapper_logger->attribute("value", val.toString());
+    dmapper_logger->endElement("FFDataHandler.attribute");
+#endif
     switch (name)
     {
     case NS_ooxml::LN_CT_FFHelpText_type:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_nHelpTextType = val.getInt();
         }
         break;
     case NS_ooxml::LN_CT_FFHelpText_val:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_sHelpText = val.getString();
         }
         break;
     case NS_ooxml::LN_CT_FFStatusText_type:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_nStatusTextType = val.getInt();
         }
         break;
     case NS_ooxml::LN_CT_FFStatusText_val:
+    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */
         {
             m_sStatusText = val.getString();
         }

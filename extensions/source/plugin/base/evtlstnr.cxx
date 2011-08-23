@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,13 +35,9 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#undef OPTIONAL
-#endif
-
+#if STLPORT_VERSION>=321
 #include <cstdarg>
+#endif
 
 #include <plugin/impl.hxx>
 

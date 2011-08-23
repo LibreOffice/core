@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include "uiconfiguration/uicategorydescription.hxx"
@@ -39,10 +39,8 @@
 
 #include "properties.h"
 
-#include "helper/mischelper.hxx"
-
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -51,7 +49,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -63,8 +61,9 @@
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
+//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -73,8 +72,9 @@ using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
 //_________________________________________________________________________________________________________________
-//  Namespace
+//	Namespace
 //_________________________________________________________________________________________________________________
+//
 
 struct ModuleToCategory
 {
@@ -92,7 +92,7 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//  Configuration access class for PopupMenuControllerFactory implementation
+//	Configuration access class for PopupMenuControllerFactory implementation
 //*****************************************************************************************************************
 
 class ConfigurationAccess_UICategory : // Order is neccessary for right initialization!
@@ -135,7 +135,7 @@ class ConfigurationAccess_UICategory : // Order is neccessary for right initiali
         sal_Bool                  fillCache();
 
     private:
-        typedef ::boost::unordered_map< ::rtl::OUString,
+        typedef ::std::hash_map< ::rtl::OUString,
                                  ::rtl::OUString,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > IdToInfoCache;
@@ -148,14 +148,13 @@ class ConfigurationAccess_UICategory : // Order is neccessary for right initiali
         Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
-        Reference< XContainerListener >   m_xConfigListener;
         sal_Bool                          m_bConfigAccessInitialized;
         sal_Bool                          m_bCacheFilled;
         IdToInfoCache                     m_aIdCache;
 };
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
+//	XInterface, XTypeProvider
 //*****************************************************************************************************************
 
 ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const rtl::OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XMultiServiceFactory >& rServiceManager ) :
@@ -181,7 +180,7 @@ ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
     ResetableGuard aLock( m_aLock );
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
-        xContainer->removeContainerListener(m_xConfigListener);
+        xContainer->removeContainerListener( this );
 }
 
 // XNameAccess
@@ -388,10 +387,7 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
             // Add as container listener
             Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
             if ( xContainer.is() )
-            {
-                m_xConfigListener = new WeakContainerListener(this);
-                xContainer->addContainerListener(m_xConfigListener);
-            }
+                xContainer->addContainerListener( this );
         }
 
         return sal_True;
@@ -437,11 +433,11 @@ void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEve
 }
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   UICategoryDescription                   ,
-                                            ::cppu::OWeakObject                     ,
-                                            SERVICENAME_UICATEGORYDESCRIPTION       ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   UICategoryDescription				    ,
+                                            ::cppu::OWeakObject						,
+                                            SERVICENAME_UICATEGORYDESCRIPTION	    ,
                                             IMPLEMENTATIONNAME_UICATEGORYDESCRIPTION
                                         )
 
@@ -456,7 +452,7 @@ UICategoryDescription::UICategoryDescription( const Reference< XMultiServiceFact
 
     // insert generic categories mappings
     m_aModuleToCommandFileMap.insert( ModuleToCommandFileMap::value_type(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GENERIC_MODULE_NAME )), aGenericCategories ));
+        rtl::OUString::createFromAscii( GENERIC_MODULE_NAME ), aGenericCategories ));
 
     UICommandsHashMap::iterator pCatIter = m_aUICommandsHashMap.find( aGenericCategories );
     if ( pCatIter != m_aUICommandsHashMap.end() )

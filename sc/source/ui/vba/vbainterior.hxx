@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,9 @@ class ScVbaInterior :  public ScVbaInterior_BASE
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
     ScDocument* m_pScDoc;
     Color m_aPattColor;
-    sal_Int32 m_nPattern;
+    sal_Int32 m_nPattern; 
 
-        css::uno::Reference< css::container::XIndexAccess > getPalette();
+        css::uno::Reference< css::container::XIndexAccess > getPalette(); 
     css::uno::Reference< css::container::XNameContainer > GetAttributeContainer();
     css::uno::Any SetAttributeData( sal_Int32 nValue );
     sal_Int32 GetAttributeData( css::uno::Any aValue );
@@ -58,7 +58,7 @@ class ScVbaInterior :  public ScVbaInterior_BASE
 protected:
     Color GetPatternColor( const Color& rPattColor, const Color& rBackColor, sal_uInt32 nXclPattern );
     Color GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8 nTrans );
-    sal_uInt8 GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 nTrans ) const;
+    sal_uInt8 GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 nTrans );
     css::uno::Any GetIndexColor( const sal_Int32& nColorIndex );
     sal_Int32 GetColorIndex( const sal_Int32 nColor );
     css::uno::Any GetUserDefinedAttributes( const rtl::OUString& sName );
@@ -80,7 +80,7 @@ public:
     virtual css::uno::Any SAL_CALL getPatternColor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPatternColor( const css::uno::Any& _patterncolor ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getPatternColorIndex() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setPatternColorIndex( const css::uno::Any& _patterncolorindex ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPatternColorIndex( const css::uno::Any& _patterncolorindex ) throw (css::uno::RuntimeException); 
     //XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

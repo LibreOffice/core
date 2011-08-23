@@ -80,13 +80,17 @@ public:
 
 private:
     inline char read() { return pos_ == end_ ? '\0' : *pos_++; }
+
     inline char peek() { return pos_ == end_ ? '\0' : *pos_; }
 
     void normalizeLineEnds(Span const & text);
 
     void skipSpace();
+
     bool skipComment();
+
     void skipProcessingInstruction();
+
     void skipDocumentTypeDeclaration();
 
     Span scanCdataSection();
@@ -101,12 +105,15 @@ private:
         char const * begin, char const * end, bool fullyNormalize);
 
     Result handleStartTag(Namespace * ns, Span * localName);
+
     Result handleEndTag();
 
     void handleElementEnd();
 
     Result handleSkippedText(Span * data, Namespace * ns);
+
     Result handleRawText(Span * text);
+
     Result handleNormalizedText(Span * text);
 
     struct NamespaceData {

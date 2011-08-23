@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,9 +60,14 @@
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SFX_IMPL_INTERFACE(SwWebTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_WEBTEXT))
 {
-    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_TEXT_POPUPMENU));
+    SFX_POPUPMENU_REGISTRATION(SW_RES(MN_WEB_TEXT_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
     SFX_CHILDWINDOW_REGISTRATION(FN_EDIT_FORMULA);
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_FIELD);
@@ -70,11 +75,20 @@ SFX_IMPL_INTERFACE(SwWebTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_WEBTEXT))
 
 TYPEINIT1(SwWebTextShell, SwTextShell)
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SwWebTextShell::SwWebTextShell(SwView &_rView) :
     SwTextShell(_rView)
 {
     SetHelpId(SW_WEBTEXTSHELL);
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 
 SwWebTextShell::~SwWebTextShell()
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,6 +73,7 @@
 #include <svx/bmpmask.hxx>
 #include "LayerTabBar.hxx"
 
+// #97016# IV
 #include <svx/svditer.hxx>
 
 namespace sd {
@@ -94,7 +95,7 @@ using namespace ::com::sun::star::drawing;
 
 void DrawViewShell::DeleteActualPage()
 {
-    sal_uInt16          nPage = maTabControl.GetCurPageId() - 1;
+    USHORT			nPage = maTabControl.GetCurPageId() - 1;
 
     mpDrawView->SdrEndTextEdit();
 
@@ -107,7 +108,7 @@ void DrawViewShell::DeleteActualPage()
     }
     catch( Exception& )
     {
-        OSL_FAIL("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
+        DBG_ERROR("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
     }
 }
 
@@ -124,13 +125,13 @@ void DrawViewShell::DeleteActualLayer()
     String         aString(SdResId(STR_ASK_DELETE_LAYER));
 
     // Platzhalter ersetzen
-    sal_uInt16 nPos = aString.Search(sal_Unicode('$'));
+    USHORT nPos = aString.Search(sal_Unicode('$'));
     aString.Erase(nPos, 1);
     aString.Insert(rName, nPos);
 
     if (QueryBox(GetActiveWindow(), WB_YES_NO, aString).Execute() == RET_YES)
     {
-        const SdrLayer* pLayer = rAdmin.GetLayer(rName, sal_False);
+        const SdrLayer* pLayer = rAdmin.GetLayer(rName, FALSE);
         mpDrawView->DeleteLayer( pLayer->GetName() );
 
         // damit TabBar und Window neu gezeichnet werden;
@@ -138,7 +139,7 @@ void DrawViewShell::DeleteActualLayer()
         // Hint von Joe angestossen werden
         // ( View::Notify() --> ViewShell::ResetActualLayer() )
 
-        mbIsLayerModeActive = false;    // damit ChangeEditMode() ueberhaupt was tut
+        mbIsLayerModeActive = false; 	// damit ChangeEditMode() ueberhaupt was tut
         ChangeEditMode(GetEditMode(), true);
     }
 }
@@ -150,12 +151,13 @@ void DrawViewShell::DeleteActualLayer()
 |*
 \************************************************************************/
 
-sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
+BOOL DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     if ( !IsInputLocked() || ( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE ) )
     {
+        // #97016# IV
         if(KEY_RETURN == rKEvt.GetKeyCode().GetCode()
             && rKEvt.GetKeyCode().IsMod1()
             && GetView()->IsTextEdit())
@@ -177,7 +179,7 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 
                 // look for a new candidate, a successor of pOldObj
                 SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
-                sal_Bool bDidVisitOldObject(sal_False);
+                BOOL bDidVisitOldObject(FALSE);
 
                 while(aIter.IsMore() && !pCandidate)
                 {
@@ -197,7 +199,7 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 
                         if(pObj == pOldObj)
                         {
-                            bDidVisitOldObject = sal_True;
+                            bDidVisitOldObject = TRUE;
                         }
                     }
                 }
@@ -245,13 +247,13 @@ void DrawViewShell::StartRulerDrag (
     if ( rRuler.GetExtraRect().IsInside(rMEvt.GetPosPixel()) )
     {
         mpDrawView->BegSetPageOrg(aWPos);
-        mbIsRulerDrag = sal_True;
+        mbIsRulerDrag = TRUE;
     }
     else
     {
         // #i34536# if no guide-lines are visible yet, that show them
         if( ! mpDrawView->IsHlplVisible())
-            mpDrawView->SetHlplVisible( sal_True );
+            mpDrawView->SetHlplVisible( TRUE );
 
         SdrHelpLineKind eKind;
 
@@ -263,7 +265,7 @@ void DrawViewShell::StartRulerDrag (
             eKind = SDRHELPLINE_VERTICAL;
 
         mpDrawView->BegDragHelpLine(aWPos, eKind);
-        mbIsRulerDrag = sal_True;
+        mbIsRulerDrag = TRUE;
     }
 }
 
@@ -282,8 +284,9 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     // opened by inplace client and we would deactivate the inplace client,
     // the contex menu is closed by VCL asynchronously which in the end
     // would work on deleted objects or the context menu has no parent anymore)
+    // See #126086# and #128122#
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
-    sal_Bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
+    BOOL bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
 
     if ( bIsOleActive && PopupMenu::IsInExecute() )
         return;
@@ -314,7 +317,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
             if ( !aOutputArea.IsInside(rMEvt.GetPosPixel()) )
             {
-                sal_Bool bInsideOtherWindow = sal_False;
+                BOOL bInsideOtherWindow = FALSE;
 
                 if (mpContentWindow.get() != NULL)
                 {
@@ -323,7 +326,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
                     Point aPos = mpContentWindow->GetPointerPosPixel();
                     if ( aOutputArea.IsInside(aPos) )
-                        bInsideOtherWindow = sal_True;
+                        bInsideOtherWindow = TRUE;
                 }
 
                 if (! GetActiveWindow()->HasFocus ())
@@ -342,6 +345,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
                  pWin->CaptureMouse();
         }
 
+        // #109585#
         // Since the next MouseMove may execute a IsSolidDraggingNow() in
         // SdrCreateView::MovCreateObj and there the ApplicationBackgroundColor
         // is needed it is necessary to set it here.
@@ -389,14 +393,14 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
         if ( mbPipette && GetViewFrame()->HasChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() ) )
         {
-            const long      nStartX = maMousePos.X() - PIPETTE_RANGE;
-            const long      nEndX = maMousePos.X() + PIPETTE_RANGE;
-            const long      nStartY = maMousePos.Y() - PIPETTE_RANGE;
-            const long      nEndY = maMousePos.Y() + PIPETTE_RANGE;
-            long            nRed = 0;
-            long            nGreen = 0;
-            long            nBlue = 0;
-            const double    fDiv = ( ( PIPETTE_RANGE << 1 ) + 1 ) * ( ( PIPETTE_RANGE << 1 ) + 1 );
+            const long		nStartX = maMousePos.X() - PIPETTE_RANGE;
+            const long		nEndX = maMousePos.X() + PIPETTE_RANGE;
+            const long		nStartY = maMousePos.Y() - PIPETTE_RANGE;
+            const long		nEndY = maMousePos.Y() + PIPETTE_RANGE;
+            long			nRed = 0;
+            long			nGreen = 0;
+            long			nBlue = 0;
+            const double	fDiv = ( ( PIPETTE_RANGE << 1 ) + 1 ) * ( ( PIPETTE_RANGE << 1 ) + 1 );
 
             for ( long nY = nStartY; nY <= nEndY; nY++ )
             {
@@ -411,9 +415,9 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
             }
 
             ( (SvxBmpMask*) GetViewFrame()->GetChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
-                SetColor( Color( (sal_uInt8) ( nRed / fDiv + .5 ),
-                                 (sal_uInt8) ( nGreen / fDiv + .5 ),
-                                 (sal_uInt8) ( nBlue / fDiv + .5 ) ) );
+                SetColor( Color( (BYTE) ( nRed / fDiv + .5 ),
+                                 (BYTE) ( nGreen / fDiv + .5 ),
+                                 (BYTE) ( nBlue / fDiv + .5 ) ) );
         }
     }
 }
@@ -456,7 +460,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
             }
 
             GetActiveWindow()->ReleaseMouse();
-            mbIsRulerDrag = sal_False;
+            mbIsRulerDrag = FALSE;
         }
         else
             ViewShell::MouseButtonUp(rMEvt, pWin);
@@ -475,8 +479,9 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     // menu from an inplace client is closed. Now we have the chance to
     // deactivate the inplace client without any problem regarding parent
     // windows and code on the stack.
+    // For more information, see #126086# and #128122#
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
-    sal_Bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
+    BOOL bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
     if ( bIsOleActive && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ))
     {
         // Deactivate OLE object
@@ -504,9 +509,9 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 if( GetActiveWindow() )
                     aPos = GetActiveWindow()->PixelToLogic( rCEvt.GetMousePosPixel() );
 
-                if( !mpDrawView->InsertData( aDataHelper, aPos, nDnDAction, sal_False ) )
+                if( !mpDrawView->InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
                 {
-                    INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
+                    INetBookmark	aINetBookmark( aEmptyStr, aEmptyStr );
 
                     if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
                           aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
@@ -523,23 +528,24 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         else if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU && !bNativeShow &&
                  pWin != NULL && !mpDrawView->IsAction() && !SD_MOD()->GetWaterCan() )
         {
-            sal_uInt16 nSdResId = 0;          // ResourceID fuer Popup-Menue
-            sal_Bool bGraphicShell = this->ISA(GraphicViewShell);
+            USHORT nSdResId = 0;          // ResourceID fuer Popup-Menue
+            BOOL bGraphicShell = this->ISA(GraphicViewShell);
 
             // Ist ein Fangobjekt unter dem Mauszeiger?
             SdrPageView* pPV;
-            Point   aMPos = pWin->PixelToLogic( maMousePos );
-            sal_uInt16  nHitLog = (sal_uInt16) GetActiveWindow()->PixelToLogic(
+            Point	aMPos = pWin->PixelToLogic( maMousePos );
+            USHORT	nHitLog = (USHORT) GetActiveWindow()->PixelToLogic(
                 Size(FuPoor::HITPIX, 0 ) ).Width();
-            sal_uInt16  nHelpLine;
+            USHORT	nHelpLine;
             // fuer Klebepunkt
-            SdrObject*  pObj = NULL;
-            sal_uInt16      nPickId = 0;
+            SdrObject*	pObj = NULL;
+            USHORT		nPickId = 0;
             // fuer Feldbefehl
             OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
             const SvxFieldItem* pFldItem = NULL;
             if( pOLV )
                 pFldItem = pOLV->GetFieldAtSelection();
+                //pFldItem = pOLV->GetFieldUnderMousePointer();
 
             // Hilfslinie
             if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
@@ -562,7 +568,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             {
                 LanguageType eLanguage( LANGUAGE_SYSTEM );
 
-                // Format popup with outliner language, if possible
+                // #101743# Format popup with outliner language, if possible
                 if( pOLV->GetOutliner() )
                 {
                     ESelection aSelection( pOLV->GetSelection() );
@@ -581,12 +587,13 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 if( pField )
                 {
                     SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
+                    //pOLV->DeleteSelected(); <-- fehlt leider !
                     // Feld selektieren, so dass es beim Insert geloescht wird
                     ESelection aSel = pOLV->GetSelection();
-                    sal_Bool bSel = sal_True;
+                    BOOL bSel = TRUE;
                     if( aSel.nStartPos == aSel.nEndPos )
                     {
-                        bSel = sal_False;
+                        bSel = FALSE;
                         aSel.nEndPos++;
                     }
                     pOLV->SetSelection( aSel );
@@ -608,7 +615,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     mpDrawView->GetMarkedObjectList().GetMarkCount() == 1 )
                 {
                     pObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-                    if( HasCurrentFunction(SID_BEZIER_EDIT) && (dynamic_cast< SdrPathObj * >( pObj ) != 0 ) )
+                    if( HasCurrentFunction(SID_BEZIER_EDIT)	&& (dynamic_cast< SdrPathObj * >( pObj ) != 0 ) )
                     {
                         nSdResId = RID_BEZIER_POPUP;
                     }
@@ -624,7 +631,8 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 if( (  rCEvt.IsMouseEvent() && pOutlinerView->IsWrongSpelledWordAtPos(aPos) ) ||
                                     ( !rCEvt.IsMouseEvent() && pOutlinerView->IsCursorAtWrongSpelledWord() ) )
                                 {
-                                    // Popup for Online-Spelling now handled by DrawDocShell
+                                    // #91457# Popup for Online-Spelling now handled by DrawDocShell
+                                    // Link aLink = LINK(GetDoc(), SdDrawDocument, OnlineSpellCallback);
                                     Link aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
 
                                     if( !rCEvt.IsMouseEvent() )
@@ -657,8 +665,8 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                         }
                         else
                         {
-                            sal_uInt32 nInv = pObj->GetObjInventor();
-                            sal_uInt16 nId = pObj->GetObjIdentifier();
+                            UINT32 nInv = pObj->GetObjInventor();
+                            UINT16 nId = pObj->GetObjIdentifier();
 
                             if (nInv == SdrInventor)
                             {
@@ -683,7 +691,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                         break;
 
                                     case OBJ_FREELINE:
-                                    case OBJ_EDGE:      // Connector
+                                    case OBJ_EDGE:		// Connector
                                         nSdResId = bGraphicShell ? RID_GRAPHIC_EDGEOBJ_POPUP :
                                                                     RID_DRAW_EDGEOBJ_POPUP;
                                         break;
@@ -739,7 +747,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                         break;
                                 }
                             }
-                            else if( nInv == E3dInventor )
+                            else if( nInv == E3dInventor /*&& nId == E3D_POLYSCENE_ID*/)
                             {
                                 if( nId == E3D_POLYSCENE_ID || nId == E3D_SCENE_ID )
                                 {
@@ -777,7 +785,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                                 RID_DRAW_NOSEL_POPUP;
                 }
             }
-            // show Popup-Menu
+            // Popup-Menue anzeigen
             if (nSdResId)
             {
                 GetActiveWindow()->ReleaseMouse();
@@ -786,7 +794,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId));
                 else
                 {
-                    //don't open contextmenu at mouse position if not opened via mouse
+                    //#106326# don't open contextmenu at mouse position if not opened via mouse
 
                     //middle of the window if nothing is marked
                     Point aMenuPos(GetActiveWindow()->GetSizePixel().Width()/2
@@ -813,7 +821,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     //open context menu at that point
                     GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId),GetActiveWindow(),&aMenuPos);
                 }
-                mbMousePosFreezed = sal_False;
+                mbMousePosFreezed = FALSE;
             }
         }
         else
@@ -834,11 +842,11 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
 {
     if (mbHasRulers && pWin )
     {
-        RulerLine   pHLines[2];
-        RulerLine   pVLines[2];
+        RulerLine	pHLines[2];
+        RulerLine	pVLines[2];
         long        nHOffs = 0L;
         long        nVOffs = 0L;
-        sal_uInt16      nCnt;
+        USHORT		nCnt;
 
         if (mpHorizontalRuler.get() != NULL)
             mpHorizontalRuler->SetLines();
@@ -888,7 +896,7 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
                                    SID_ATTR_SIZE, SID_ATTR_SIZE,
                                    0L);
 
-//        GetStatusBarState(aSet);  nicht performant bei gedrueckter Modifiertaste!!
+//		  GetStatusBarState(aSet);	nicht performant bei gedrueckter Modifiertaste!!
 
         aSet.Put( SfxStringItem( SID_CONTEXT, mpDrawView->GetStatusText() ) );
 
@@ -900,10 +908,22 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
     }
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void DrawViewShell::LockInput()
 {
     mnLockCount++;
 }
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 void DrawViewShell::UnlockInput()
 {
@@ -917,7 +937,7 @@ void DrawViewShell::UnlockInput()
 
 void DrawViewShell::ShowSnapLineContextMenu (
     SdrPageView& rPageView,
-    const sal_uInt16 nSnapLineIndex,
+    const USHORT nSnapLineIndex,
     const Point& rMouseLocation)
 {
     const SdrHelpLine& rHelpLine (rPageView.GetHelpLines()[nSnapLineIndex]);
@@ -944,9 +964,9 @@ void DrawViewShell::ShowSnapLineContextMenu (
             String(SdResId(STR_POPUP_DELETE_SNAPLINE)));
     }
 
-    pMenu->RemoveDisabledEntries(sal_False, sal_False);
+    pMenu->RemoveDisabledEntries(FALSE, FALSE);
 
-    const sal_uInt16 nResult = pMenu->Execute(
+    const USHORT nResult = pMenu->Execute(
         GetActiveWindow(),
         Rectangle(rMouseLocation, Size(10,10)),
         POPUPMENU_EXECUTE_DOWN);

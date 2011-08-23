@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,12 +30,10 @@
 
 #include "charttoolsdllapi.hxx"
 #include "ReferenceSizeProvider.hxx"
-#include "ExplicitCategoriesProvider.hxx"
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <vector>
 
@@ -61,15 +59,6 @@ public:
     static bool isLogarithmic( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XScaling >& xScaling );
 
-    static void checkDateAxis( ::com::sun::star::chart2::ScaleData& rScale, ExplicitCategoriesProvider* pExplicitCategoriesProvider, bool bChartTypeAllowsDateAxis );
-    static ::com::sun::star::chart2::ScaleData getDateCheckedScale( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
-
-    static sal_Int32 getExplicitNumberFormatKeyForAxis(
-                  const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis
-                , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >& xCorrespondingCoordinateSystem
-                , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
-                , bool bSearchForParallelAxisIfNothingIsFound );
-
     static ::com::sun::star::uno::Reference<
            ::com::sun::star::chart2::XAxis >
         createAxis( sal_Int32 nDimensionIndex, bool bMainAxis
@@ -92,7 +81,7 @@ public:
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext
                 , ReferenceSizeProvider * pRefSizeProvider = 0 );
-
+        
     static void showGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
@@ -119,7 +108,7 @@ public:
     SAL_DLLPRIVATE static sal_Bool areAxisLabelsVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProperties );
     static sal_Bool isAxisVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
     static sal_Bool isGridVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xGridProperties );
-
+    
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XCoordinateSystem >
         getCoordinateSystemByIndex(
@@ -190,7 +179,7 @@ public:
             , sal_Int32& rOutCooSysIndex, sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex );
 
     /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
-               </sal_True> are returned
+               </TRUE> are returned
      */
     static ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Reference<
@@ -200,7 +189,7 @@ public:
             , bool bOnlyVisible = false );
 
     /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
-               </sal_True> are returned
+               </TRUE> are returned
      */
     SAL_DLLPRIVATE static std::vector<
                 ::com::sun::star::uno::Reference<
@@ -209,7 +198,7 @@ public:
                     ::com::sun::star::chart2::XCoordinateSystem >& xCooSys
             , bool bOnlyVisible = false );
 
-    static ::com::sun::star::uno::Sequence<
+    static ::com::sun::star::uno::Sequence< 
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet > >
             getAllGrids( const ::com::sun::star::uno::Reference<

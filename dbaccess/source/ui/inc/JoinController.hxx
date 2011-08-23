@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,9 @@
 #include "JoinDesignView.hxx"
 #include "TableConnectionData.hxx"
 #include "TableWindowData.hxx"
+#ifndef _MEMORY_
 #include <memory>
+#endif
 #include <boost/shared_ptr.hpp>
 
 namespace comphelper
@@ -60,32 +62,32 @@ namespace dbaui
         TTableConnectionData m_vTableConnectionData;
         TTableWindowData     m_vTableData;
 
-        Fraction                                m_aZoom;
-        ::dbtools::SQLExceptionInfo             m_aExceptionInfo;
+        Fraction								m_aZoom;
+        ::dbtools::SQLExceptionInfo				m_aExceptionInfo;
 
-        OAddTableDlg*                               m_pAddTableDialog;
+        OAddTableDlg*	                            m_pAddTableDialog;
         ::std::auto_ptr< AddTableDialogContext >    m_pDialogContext;
         Point                                   m_aMinimumTableViewSize;
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId) const;
+        virtual FeatureState	GetState(sal_uInt16 nId) const;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void			Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         /** loads the information for the windows.
-            @param  i_rViewSettings
+            @param	i_rViewSettings
                 The properties which comes from the layout information.
         */
         void loadTableWindows( const ::comphelper::NamedValueCollection& i_rViewSettings );
 
         /** loads the information for one window.
-            @param  _rTable
+            @param	_rTable
                 The properties which comes from the layout information.
         */
         void loadTableWindow( const ::comphelper::NamedValueCollection& i_rTableWindowSettings );
 
         /** saves the TableWindows structure in a sequence of property values
-            @param  _rViewProps
+            @param	_rViewProps
                 Contains the new sequence.
         */
         void saveTableWindows( ::comphelper::NamedValueCollection& o_rViewSettings ) const;
@@ -96,8 +98,8 @@ namespace dbaui
 
         // ---------------------------------------------------------------
         // attribute access
-        inline TTableWindowData*        getTableWindowData()     { return &m_vTableData; }
-        inline TTableConnectionData*    getTableConnectionData() { return &m_vTableConnectionData;}
+        inline TTableWindowData*		getTableWindowData()     { return &m_vTableData; }
+        inline TTableConnectionData*	getTableConnectionData() { return &m_vTableConnectionData;}
         inline OAddTableDlg*            getAddTableDialog()const { return m_pAddTableDialog; }
 
         // ---------------------------------------------------------------
@@ -118,19 +120,19 @@ namespace dbaui
         /** provides access to the OJoinDesignView belonging to the controller, which might
             or might not be the direct view (getView)
         */
-        virtual OJoinDesignView*    getJoinView();
+        virtual OJoinDesignView*	getJoinView();
 
 
         // ---------------------------------------------------------------
         /** erase the data in the data vector
-            @param  _pData
+            @param	_pData
                     the data whioch should be erased
         */
         void    removeConnectionData(const TTableConnectionData::value_type& _pData);
 
         void    SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
 
-        void    SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY);
+        void	SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY);
 
         // ---------------------------------------------------------------
         // UNO interface overridables
@@ -138,7 +140,7 @@ namespace dbaui
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::lang::XComponent
-        virtual void    SAL_CALL disposing();
+        virtual void	SAL_CALL disposing();
         // ::com::sun::star::frame::XController
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -148,14 +150,14 @@ namespace dbaui
         /** only defines a method to save a SQLException in d&d methods to show the error at a later state
             set the internal member m_aExceptionInfo to _rInfo
         */
-        void setErrorOccurred(const ::dbtools::SQLExceptionInfo& _rInfo)
+        void setErrorOccured(const ::dbtools::SQLExceptionInfo& _rInfo)
         {
             m_aExceptionInfo = _rInfo;
         }
         /**
             just returns the internal member and clears it
         */
-        ::dbtools::SQLExceptionInfo clearOccurredError()
+        ::dbtools::SQLExceptionInfo clearOccuredError()
         {
             ::dbtools::SQLExceptionInfo aInfo = m_aExceptionInfo;
             m_aExceptionInfo = ::dbtools::SQLExceptionInfo();
@@ -167,7 +169,7 @@ namespace dbaui
         // ask the user if the design should be saved when it is modified
         virtual short saveModified() = 0;
         // called when the orignal state should be reseted (first time load)
-        virtual void reset()         = 0;
+        virtual void reset()		 = 0;
         virtual void describeSupportedFeatures();
 
         AddTableDialogContext&  impl_getDialogContext() const;

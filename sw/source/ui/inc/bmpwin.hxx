@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,30 +34,31 @@
 #include <vcl/window.hxx>
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Extended Page fuer Grafiken
+    Beschreibung:	Extended Page fuer Grafiken
  --------------------------------------------------------------------*/
 class BmpWindow : public Window
 {
 private:
     Graphic     aGraphic;
     BitmapEx    aBmp;
+    BitmapEx    aBmpHC;
 
-    sal_Bool        bHorz : 1;
-    sal_Bool        bVert : 1;
-    sal_Bool        bGraphic : 1;
-    sal_Bool        bLeftAlign : 1;
+    BOOL        bHorz : 1;
+    BOOL        bVert : 1;
+    BOOL        bGraphic : 1;
+    BOOL        bLeftAlign : 1;
 
     void Paint(const Rectangle& rRect);
 
 public:
-    BmpWindow(Window* pPar, sal_uInt16 nId,
-                const Graphic& rGraphic, const BitmapEx& rBmp);
+    BmpWindow(Window* pPar, USHORT nId,
+                const Graphic& rGraphic, const BitmapEx& rBmp, const BitmapEx& rBmpHC);
     BmpWindow(Window* pParent, const ResId rResId) :
         Window(pParent, rResId),
-        bHorz(sal_False), bVert(sal_False),bGraphic(sal_False), bLeftAlign(sal_True) {}
+        bHorz(FALSE), bVert(FALSE),bGraphic(FALSE), bLeftAlign(TRUE) {}
     ~BmpWindow();
-    void MirrorVert(sal_Bool bMirror) { bVert = bMirror; Invalidate(); }
-    void MirrorHorz(sal_Bool bMirror) { bHorz = bMirror; Invalidate(); }
+    void MirrorVert(BOOL bMirror) { bVert = bMirror; Invalidate(); }
+    void MirrorHorz(BOOL bMirror) { bHorz = bMirror; Invalidate(); }
     void SetGraphic(const Graphic& rGrf);
 };
 

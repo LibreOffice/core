@@ -57,7 +57,12 @@
  * @file
  * Styles for ordered list and unordered list.
  ************************************************************************/
-#include    "xfliststyle.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-01-07	create the file.
+ * 2005-01-20	use XFNumFmt to fill XFListLevelNumber.
+ ************************************************************************/
+#include	"xfliststyle.hxx"
 
 XFListLevel::XFListLevel()
 {
@@ -78,7 +83,7 @@ void XFListLevel::ToXml(IXFStream * /*pStrm*/)
 
 void XFListlevelNumber::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("text:level"), Int16ToOUString(m_nLevel) );
@@ -112,16 +117,16 @@ void XFListlevelNumber::ToXml(IXFStream *pStrm)
     pStrm->EndElement( A2OUSTR("text:list-level-style-number") );
 }
 
-void    XFListLevelBullet::ToXml(IXFStream *pStrm)
+void	XFListLevelBullet::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("text:level"), Int16ToOUString(m_nLevel) );
     //text:style-name,ignore now.
     m_aNumFmt.ToXml(pStrm);
     //bullet-char
-    rtl::OUString   bullet(m_chBullet);
+    rtl::OUString	bullet(m_chBullet);
     pAttrList->AddAttribute( A2OUSTR("text:bullet-char"), bullet );
 
     pStrm->StartElement( A2OUSTR("text:list-level-style-bullet") );
@@ -156,7 +161,7 @@ void    XFListLevelBullet::ToXml(IXFStream *pStrm)
 //----------------------------------------------------
 XFListStyle::XFListStyle()
 {
-    XFNumFmt    nf;
+    XFNumFmt	nf;
     nf.SetSuffix( A2OUSTR(".") );
     nf.SetFormat( A2OUSTR("1") );
 
@@ -223,7 +228,7 @@ XFListStyle::~XFListStyle()
     }
 }
 
-void    XFListStyle::SetDisplayLevel(sal_Int32 level, sal_Int16 nDisplayLevel)
+void	XFListStyle::SetDisplayLevel(sal_Int32 level, sal_Int16 nDisplayLevel)
 {
     assert(level>=1&&level<=10);
 
@@ -242,11 +247,11 @@ void    XFListStyle::SetDisplayLevel(sal_Int32 level, sal_Int16 nDisplayLevel)
         pLevel->SetDisplayLevel(nDisplayLevel);
 }
 
-void    XFListStyle::SetListPosition(sal_Int32 level,
+void	XFListStyle::SetListPosition(sal_Int32 level,
                 double indent,
                 double minLabelWidth,
                 double minLabelDistance,
-                enumXFAlignType align
+                enumXFAlignType	align
                 )
 {
     assert(level>=1&&level<=10);
@@ -272,7 +277,7 @@ void    XFListStyle::SetListPosition(sal_Int32 level,
     }
 }
 
-void    XFListStyle::SetListBullet(sal_Int32 level,
+void	XFListStyle::SetListBullet(sal_Int32 level,
                                    UChar32 bullet,
                                    rtl::OUString fontname,
                                    rtl::OUString prefix,
@@ -297,7 +302,7 @@ void    XFListStyle::SetListBullet(sal_Int32 level,
     m_pListLevels[level-1] = pLevel;
 }
 
-void    XFListStyle::SetListNumber(sal_Int32 level, XFNumFmt& fmt, sal_Int16 start )
+void	XFListStyle::SetListNumber(sal_Int32 level, XFNumFmt& fmt, sal_Int16 start )
 {
     assert(level>=1&&level<=10);
 
@@ -318,7 +323,7 @@ void    XFListStyle::SetListNumber(sal_Int32 level, XFNumFmt& fmt, sal_Int16 sta
 void XFListStyle::ToXml(IXFStream *pStrm)
 {
     std::vector<XFListLevel*>::iterator it;
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );

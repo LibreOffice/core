@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ class SwListImpl
         void ValidateListTree();
 
         void MarkListLevel( const int nListLevel,
-                            const sal_Bool bValue );
+                            const BOOL bValue );
 
         bool IsListLevelMarked( const int nListLevel ) const;
 
@@ -103,7 +103,7 @@ SwListImpl::SwListImpl( const String sListId,
         pNode = pNode->EndOfSectionNode();
         if (pNode != &rNodes.GetEndOfContent())
         {
-            sal_uLong nIndex = pNode->GetIndex();
+            ULONG nIndex = pNode->GetIndex();
             nIndex++;
             pNode = rNodes[nIndex];
         }
@@ -187,7 +187,7 @@ void SwListImpl::ValidateListTree()
 }
 
 void SwListImpl::MarkListLevel( const int nListLevel,
-                                const sal_Bool bValue )
+                                const BOOL bValue )
 {
     if ( bValue )
     {
@@ -280,7 +280,7 @@ void SwList::ValidateListTree()
 }
 
 void SwList::MarkListLevel( const int nListLevel,
-                                  const sal_Bool bValue )
+                                  const BOOL bValue )
 {
     mpListImpl->MarkListLevel( nListLevel, bValue );
 }
@@ -289,5 +289,18 @@ bool SwList::IsListLevelMarked( const int nListLevel ) const
 {
     return mpListImpl->IsListLevelMarked( nListLevel );
 }
+
+//void SwList::ContinueList( SwList& rList )
+//{
+//    mpListImpl->ContinueList( rList );
+//}
+//const SwList* SwList::GetContinuedList() const
+//{
+//    return mpListImpl->GetContinuedList();
+//}
+//void SwList::ClearContinuation()
+//{
+//    mpListImpl->ClearContinuation();
+//}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

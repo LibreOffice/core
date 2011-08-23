@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,42 +30,42 @@
 
 #include <vcl/virdev.hxx>
 
-#include "swtypes.hxx"      // UCHAR
-#include "swrect.hxx"       // SwRect
+#include "swtypes.hxx"		// UCHAR
+#include "swrect.hxx"		// SwRect
 
 class ViewShell;
 #define VIRTUALHEIGHT 64
 
 /*************************************************************************
- *                      class SwTxtVout
+ *						class SwTxtVout
  *************************************************************************/
 
 class SwLayVout
 {
-    friend void _FrmFinit();    //loescht das Vout
+    friend void _FrmFinit();	//loescht das Vout
 private:
-    ViewShell*      pSh;
-    OutputDevice*   pOut;
-    VirtualDevice*  pVirDev;
-    SwRect          aRect;
-    SwRect          aOrgRect;
-    Size            aSize;
-    sal_uInt16          nCount;
+    ViewShell*		pSh;
+    OutputDevice*	pOut;
+    VirtualDevice*	pVirDev;
+    SwRect			aRect;
+    SwRect			aOrgRect;
+    Size			aSize;
+    USHORT			nCount;
 
-    sal_Bool DoesFit( const Size &rOut );
+    BOOL DoesFit( const Size &rOut );
 
 public:
     SwLayVout() : pSh(0), pOut(0), pVirDev(0), aSize(0, VIRTUALHEIGHT), nCount(0) {}
     ~SwLayVout() { delete pVirDev; }
 
     /// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
-    void Enter( ViewShell *pShell, SwRect &rRect, sal_Bool bOn );
+    void Enter( ViewShell *pShell, SwRect &rRect, BOOL bOn );
     void Leave() { --nCount; Flush(); }
 
     void SetOrgRect( SwRect &rRect ) { aOrgRect = rRect; }
     const SwRect& GetOrgRect() const { return aOrgRect; }
 
-    sal_Bool IsFlushable() { return 0 != pOut; }
+    BOOL IsFlushable() { return 0 != pOut; }
     void _Flush();
     void Flush() { if( pOut ) _Flush(); }
 };

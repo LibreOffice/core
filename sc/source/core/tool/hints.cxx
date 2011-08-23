@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@ TYPEINIT1(ScDataPilotModifiedHint, SfxHint);
 //      ScPaintHint - Angabe, was neu gezeichnet werden muss
 // -----------------------------------------------------------------------
 
-ScPaintHint::ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint ) :
+ScPaintHint::ScPaintHint( const ScRange& rRng, USHORT nPaint ) :
     aRange( rRng ),
     nParts( nPaint ),
-    bPrint( sal_True )
+    bPrint( TRUE )
 {
 }
 
@@ -106,7 +106,7 @@ void ScLinkRefreshedHint::SetSheetLink( const String& rSourceUrl )
 }
 
 void ScLinkRefreshedHint::SetDdeLink(
-            const String& rA, const String& rT, const String& rI, sal_uInt8 nM )
+            const String& rA, const String& rT, const String& rI, BYTE nM )
 {
     nLinkType = SC_LINKREFTYPE_DDE;
     aDdeAppl  = rA;
@@ -126,7 +126,7 @@ void ScLinkRefreshedHint::SetAreaLink( const ScAddress& rPos )
 // -----------------------------------------------------------------------
 
 ScAutoStyleHint::ScAutoStyleHint( const ScRange& rR, const String& rSt1,
-                                        sal_uLong nT, const String& rSt2 ) :
+                                        ULONG nT, const String& rSt2 ) :
     aRange( rR ),
     aStyle1( rSt1 ),
     aStyle2( rSt2 ),

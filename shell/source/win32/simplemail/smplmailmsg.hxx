@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define _SMPLMAILMSG_HXX_
 
 //_______________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_______________________________________________________________________________________________________________________
 
 #include <cppuhelper/compbase1.hxx>
@@ -40,73 +40,73 @@
 #include <com/sun/star/system/XSimpleMailMessage.hpp>
 
 //----------------------------------------------------------
-// class declaration
+// class declaration		
 //----------------------------------------------------------
 
-class CSmplMailMsg :
+class CSmplMailMsg : 
     public  cppu::WeakImplHelper1< com::sun::star::system::XSimpleMailMessage >
 {
 public:
     CSmplMailMsg( );
-
+    
     //------------------------------------------------
-    //
-    //------------------------------------------------
+    // 
+    //------------------------------------------------ 
 
-    virtual void SAL_CALL setRecipient( const ::rtl::OUString& aRecipient )
+    virtual void SAL_CALL setRecipient( const ::rtl::OUString& aRecipient ) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getRecipient(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    //------------------------------------------------
-    //
-    //------------------------------------------------
-
-    virtual void SAL_CALL setCcRecipient( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aCcRecipient )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCcRecipient(  )
+    virtual ::rtl::OUString SAL_CALL getRecipient(  ) 
         throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
-    //
-    //------------------------------------------------
+    // 
+    //------------------------------------------------ 
 
-    virtual void SAL_CALL setBccRecipient( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aBccRecipient )
+    virtual void SAL_CALL setCcRecipient( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aCcRecipient ) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getBccRecipient(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    //------------------------------------------------
-    //
-    //------------------------------------------------
-
-    virtual void SAL_CALL setOriginator( const ::rtl::OUString& aOriginator )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::rtl::OUString SAL_CALL getOriginator(  )
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCcRecipient(  ) 
         throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
-    //
-    //------------------------------------------------
+    // 
+    //------------------------------------------------ 
 
-    virtual void SAL_CALL setSubject( const ::rtl::OUString& aSubject )
+    virtual void SAL_CALL setBccRecipient( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aBccRecipient ) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getSubject(  )
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getBccRecipient(  ) 
         throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
-    //
-    //------------------------------------------------
+    // 
+    //------------------------------------------------ 
 
-    virtual void SAL_CALL setAttachement( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAttachement )
+    virtual void SAL_CALL setOriginator( const ::rtl::OUString& aOriginator ) 
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::rtl::OUString SAL_CALL getOriginator(  ) 
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------
+    // 
+    //------------------------------------------------ 
+
+    virtual void SAL_CALL setSubject( const ::rtl::OUString& aSubject ) 
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::rtl::OUString SAL_CALL getSubject(  ) 
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------
+    // 
+    //------------------------------------------------ 
+
+    virtual void SAL_CALL setAttachement( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAttachement ) 
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAttachement(  )
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAttachement(  ) 
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
@@ -114,10 +114,10 @@ private:
     rtl::OUString                                   m_aOriginator;
     rtl::OUString                                   m_aSubject;
     com::sun::star::uno::Sequence< rtl::OUString >  m_CcRecipients;
-    com::sun::star::uno::Sequence< rtl::OUString >  m_BccRecipients;
-    com::sun::star::uno::Sequence< rtl::OUString >  m_Attachements;
-};
+    com::sun::star::uno::Sequence< rtl::OUString >  m_BccRecipients;    
+    com::sun::star::uno::Sequence< rtl::OUString >  m_Attachements;    
+}; 
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

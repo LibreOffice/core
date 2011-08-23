@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,17 +37,21 @@
  {
  public:
 
-    /** DocInfo has changed (notify via DocShell):
-        make required fields update.
+    /** die DocInfo hat siche geaendert (Notify ueber die DocShell)
+        stosse die entsp. Felder zum Updaten an.
     */
     virtual void DocInfoChgd() = 0;
 
-    /** Document - Statistics
+    /**	Dokument - Statistics
     */
-    virtual const SwDocStat &GetDocStat() const = 0;
+    virtual const SwDocStat	&GetDocStat() const = 0;
 
+    /**
+    */
     virtual void SetDocStat(const SwDocStat& rStat) = 0;
 
+    /**
+    */
     virtual void UpdateDocStat(SwDocStat& rStat) = 0;
 
 protected:

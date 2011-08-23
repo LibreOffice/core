@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,12 +69,12 @@ public:
 
     //    static css::awt::Size ConvertSize (
     //        const css::geometry::RealSize2D& rSize);
-
+    
     static css::awt::Rectangle TranslateRectangle (
         const css::awt::Rectangle& rBox,
         const sal_Int32 nXOffset,
         const sal_Int32 nYOffset);
-
+    
     static css::awt::Rectangle Intersection (
         const css::awt::Rectangle& rBox1,
         const css::awt::Rectangle& rBox2);

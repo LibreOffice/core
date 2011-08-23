@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,17 +32,18 @@
 #include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>
 
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/factory.hxx>	// helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
 
 #include "thesdsp.hxx"
-#include "linguistic/lngprops.hxx"
+#include "lngprops.hxx"
 
 using namespace utl;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -50,24 +51,22 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-using ::rtl::OUString;
-
 ///////////////////////////////////////////////////////////////////////////
 
-static sal_Bool SvcListHasLanguage(
-        const Sequence< Reference< XThesaurus > > &rRefs,
+static BOOL SvcListHasLanguage( 
+        const Sequence< Reference< XThesaurus > > &rRefs, 
         const Locale &rLocale )
 {
-    sal_Bool bHasLanguage = sal_False;
-
+    BOOL bHasLanguage = FALSE;
+    
     const Reference< XThesaurus > *pRef = rRefs.getConstArray();
-    sal_Int32 nLen = rRefs.getLength();
-    for (sal_Int32 k = 0;  k < nLen  &&  !bHasLanguage;  ++k)
+    INT32 nLen = rRefs.getLength();
+    for (INT32 k = 0;  k < nLen  &&  !bHasLanguage;  ++k)
     {
         if (pRef[k].is())
             bHasLanguage = pRef[k]->hasLocale( rLocale );
     }
-
+    
     return bHasLanguage;
 }
 
@@ -97,7 +96,7 @@ Sequence< Locale > SAL_CALL
     ThesaurusDispatcher::getLocales()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     Sequence< Locale > aLocales( static_cast< sal_Int32 >(aSvcMap.size()) );
     Locale *pLocales = aLocales.getArray();
@@ -105,7 +104,7 @@ Sequence< Locale > SAL_CALL
     for (aIt = aSvcMap.begin();  aIt != aSvcMap.end();  ++aIt)
     {
         *pLocales++ = CreateLocale( aIt->first );
-    }
+    }    
     return aLocales;
 }
 
@@ -114,7 +113,7 @@ sal_Bool SAL_CALL
     ThesaurusDispatcher::hasLocale( const Locale& rLocale )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     ThesSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LocaleToLanguage( rLocale ) ) );
     return aIt != aSvcMap.end();
 }
@@ -126,11 +125,11 @@ Sequence< Reference< XMeaning > > SAL_CALL
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
-    Sequence< Reference< XMeaning > >   aMeanings;
+    Sequence< Reference< XMeaning > >	aMeanings;
 
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    INT16 nLanguage = LocaleToLanguage( rLocale );
     if (nLanguage == LANGUAGE_NONE  || !rTerm.getLength())
         return aMeanings;
 
@@ -152,13 +151,13 @@ Sequence< Reference< XMeaning > > SAL_CALL
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             RemoveControlChars( aChkWord );
 
-        sal_Int32 nLen = pEntry->aSvcRefs.getLength();
+        INT32 nLen = pEntry->aSvcRefs.getLength();
         DBG_ASSERT( nLen == pEntry->aSvcImplNames.getLength(),
                 "lng : sequence length mismatch");
         DBG_ASSERT( pEntry->nLastTriedSvcIndex < nLen,
                 "lng : index out of range");
 
-        sal_Int32 i = 0;
+        INT32 i = 0;
 
         // try already instantiated services first
         {
@@ -205,10 +204,10 @@ Sequence< Reference< XMeaning > > SAL_CALL
                     if (xThes.is()  &&  xThes->hasLocale( rLocale ))
                         aMeanings = xThes->queryMeanings( aChkWord, rLocale, rProperties );
 
-                    pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                    pEntry->nLastTriedSvcIndex = (INT16) i;
                     ++i;
                 }
-
+                
                 // if language is not supported by any of the services
                 // remove it from the list.
                 if (i == nLen  &&  aMeanings.getLength() == 0)
@@ -227,11 +226,11 @@ Sequence< Reference< XMeaning > > SAL_CALL
 void ThesaurusDispatcher::SetServiceList( const Locale &rLocale,
         const Sequence< OUString > &rSvcImplNames )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    INT16 nLanguage = LocaleToLanguage( rLocale );
 
-    sal_Int32 nLen = rSvcImplNames.getLength();
+    INT32 nLen = rSvcImplNames.getLength();
     if (0 == nLen)
         // remove entry
         aSvcMap.erase( nLanguage );
@@ -258,12 +257,12 @@ void ThesaurusDispatcher::SetServiceList( const Locale &rLocale,
 Sequence< OUString >
     ThesaurusDispatcher::GetServiceList( const Locale &rLocale ) const
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     Sequence< OUString > aRes;
 
     // search for entry with that language and use data from that
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    INT16 nLanguage = LocaleToLanguage( rLocale );
     ThesaurusDispatcher             *pThis = (ThesaurusDispatcher *) this;
     const ThesSvcByLangMap_t::iterator  aIt( pThis->aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Thes       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;

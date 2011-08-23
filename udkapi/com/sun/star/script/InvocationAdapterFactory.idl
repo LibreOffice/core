@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,50 +24,54 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_InvocationAdapterFactory_idl__
-#define __com_sun_star_script_InvocationAdapterFactory_idl__
-
-#include <com/sun/star/script/XInvocationAdapterFactory.idl>
-#include <com/sun/star/script/XInvocationAdapterFactory2.idl>
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module script {
-
-//=============================================================================
-/** Provides functionality to create an adapter that supports (a)
-    special interface type(s) and maps calls to the interface's
+#ifndef __com_sun_star_script_InvocationAdapterFactory_idl__ 
+#define __com_sun_star_script_InvocationAdapterFactory_idl__ 
+ 
+#ifndef __com_sun_star_script_XInvocationAdapterFactory_idl__ 
+#include <com/sun/star/script/XInvocationAdapterFactory.idl> 
+#endif
+#ifndef __com_sun_star_script_XInvocationAdapterFactory2_idl__ 
+#include <com/sun/star/script/XInvocationAdapterFactory2.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module script {  
+ 
+//============================================================================= 
+/** Provides functionality to create an adapter that supports (a) 
+    special interface type(s) and maps calls to the	interface's
     methods to an invocation interface.
 
-    <p>
+    <p>	
     An adapter like this allows generic dispatch interfaces to
     meet interface requirements, e.g. if a specific listener
     interface has to be passed to an add...Listener method.
     </p>
-
-    <p>
-    The adapter has to support
+        
+    <p>	
+    The adapter has to support 
         <type scope="com::sun::star::script">XInvocationAdapterFactory</type>.
-    The adapter may also support
+    The adapter may also support 
         <type scope="com::sun::star::script">XInvocationAdapterFactory2</type>.
     </p>
  */
 published service InvocationAdapterFactory
-{
+{ 
     /** Interface for creating adapter objects.
         This interface is deprecated.  Use <type>XInvocationAdapterFactory2</type>.
         @deprecated
     */
-    interface com::sun::star::script::XInvocationAdapterFactory;
+    interface com::sun::star::script::XInvocationAdapterFactory; 
 
     /** Interface for creating adapter objects.
     */
-    interface com::sun::star::script::XInvocationAdapterFactory2;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    interface com::sun::star::script::XInvocationAdapterFactory2; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

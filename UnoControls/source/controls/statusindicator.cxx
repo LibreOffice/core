@@ -27,13 +27,13 @@
  ************************************************************************/
 
 //____________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //____________________________________________________________________________________________________________
 
 #include "statusindicator.hxx"
 
 //____________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //____________________________________________________________________________________________________________
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -41,53 +41,53 @@
 #include <tools/debug.hxx>
 
 //____________________________________________________________________________________________________________
-//  includes of my project
+//	includes of my project
 //____________________________________________________________________________________________________________
 #include "progressbar.hxx"
 
 //____________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //____________________________________________________________________________________________________________
 
-using namespace ::cppu                  ;
-using namespace ::osl                   ;
-using namespace ::rtl                   ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
-using namespace ::com::sun::star::awt   ;
-using namespace ::com::sun::star::task  ;
+using namespace	::cppu					;
+using namespace	::osl					;
+using namespace	::rtl					;
+using namespace	::com::sun::star::uno	;
+using namespace	::com::sun::star::lang	;
+using namespace	::com::sun::star::awt	;
+using namespace	::com::sun::star::task	;
 
 namespace unocontrols{
 
 //____________________________________________________________________________________________________________
-//  construct/destruct
+//	construct/destruct
 //____________________________________________________________________________________________________________
 
 StatusIndicator::StatusIndicator( const Reference< XMultiServiceFactory >& xFactory )
-    : BaseContainerControl  ( xFactory  )
+    : BaseContainerControl	( xFactory	)
 {
     // Its not allowed to work with member in this method (refcounter !!!)
     // But with a HACK (++refcount) its "OK" :-(
     ++m_refCount ;
 
     // Create instances for fixedtext and progress ...
-    m_xText         = Reference< XFixedText >   ( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_SERVICENAME )) ), UNO_QUERY );
-    m_xProgressBar  = Reference< XProgressBar > ( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_PROGRESSBAR   )) ), UNO_QUERY );
+    m_xText			= Reference< XFixedText > 	( xFactory->createInstance( OUString::createFromAscii( FIXEDTEXT_SERVICENAME	) ), UNO_QUERY );
+    m_xProgressBar	= Reference< XProgressBar >	( xFactory->createInstance( OUString::createFromAscii( SERVICENAME_PROGRESSBAR	) ), UNO_QUERY );
     // ... cast controls to Reference< XControl > and set model ...
     // ( ProgressBar has no model !!! )
-    Reference< XControl > xTextControl      ( m_xText       , UNO_QUERY );
-    Reference< XControl > xProgressControl  ( m_xProgressBar, UNO_QUERY );
-    xTextControl->setModel( Reference< XControlModel >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_MODELNAME )) ), UNO_QUERY ) );
+    Reference< XControl > xTextControl		( m_xText		, UNO_QUERY );
+    Reference< XControl > xProgressControl	( m_xProgressBar, UNO_QUERY );
+    xTextControl->setModel( Reference< XControlModel >( xFactory->createInstance( OUString::createFromAscii( FIXEDTEXT_MODELNAME ) ), UNO_QUERY ) );
     // ... and add controls to basecontainercontrol!
-    addControl( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_TEXT          )), xTextControl    );
-    addControl( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_PROGRESSBAR   )), xProgressControl    );
+    addControl( OUString::createFromAscii( CONTROLNAME_TEXT			), xTextControl   	);
+    addControl( OUString::createFromAscii( CONTROLNAME_PROGRESSBAR	), xProgressControl	);
     // FixedText make it automaticly visible by himself ... but not the progressbar !!!
     // it must be set explicitly
     Reference< XWindow > xProgressWindow( m_xProgressBar, UNO_QUERY );
     xProgressWindow->setVisible( sal_True );
     // Reset to defaults !!!
     // (progressbar take automaticly its own defaults)
-    m_xText->setText( OUString(RTL_CONSTASCII_USTRINGPARAM( STATUSINDICATOR_DEFAULT_TEXT )) );
+    m_xText->setText( OUString::createFromAscii( STATUSINDICATOR_DEFAULT_TEXT ) );
 
     --m_refCount ;
 }
@@ -95,18 +95,18 @@ StatusIndicator::StatusIndicator( const Reference< XMultiServiceFactory >& xFact
 StatusIndicator::~StatusIndicator()
 {
     // Release all references
-    m_xText         = Reference< XFixedText >();
-    m_xProgressBar  = Reference< XProgressBar >();
+    m_xText			= Reference< XFixedText >();
+    m_xProgressBar	= Reference< XProgressBar >();
 }
 
 //____________________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //____________________________________________________________________________________________________________
 
 Any SAL_CALL StatusIndicator::queryInterface( const Type& rType ) throw( RuntimeException )
 {
     // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
     Any aReturn ;
     Reference< XInterface > xDel = BaseContainerControl::impl_getDelegator();
     if ( xDel.is() )
@@ -125,33 +125,33 @@ Any SAL_CALL StatusIndicator::queryInterface( const Type& rType ) throw( Runtime
 }
 
 //____________________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //____________________________________________________________________________________________________________
 
 void SAL_CALL StatusIndicator::acquire() throw()
 {
     // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
     BaseControl::acquire();
 }
 
 //____________________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //____________________________________________________________________________________________________________
 
 void SAL_CALL StatusIndicator::release() throw()
 {
     // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
     BaseControl::release();
 }
 
 //____________________________________________________________________________________________________________
-//  XTypeProvider
+//	XTypeProvider
 //____________________________________________________________________________________________________________
 
 Sequence< Type > SAL_CALL StatusIndicator::getTypes() throw( RuntimeException )
@@ -170,8 +170,8 @@ Sequence< Type > SAL_CALL StatusIndicator::getTypes() throw( RuntimeException )
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection  ( ::getCppuType(( const Reference< XLayoutConstrains    >*)NULL )   ,
-                                                      ::getCppuType(( const Reference< XStatusIndicator >*)NULL )   ,
+            static OTypeCollection aTypeCollection	( ::getCppuType(( const Reference< XLayoutConstrains	>*)NULL )	,
+                                                      ::getCppuType(( const Reference< XStatusIndicator	>*)NULL )	,
                                                       BaseContainerControl::getTypes()
                                                     );
             // ... and set his address to static pointer!
@@ -183,16 +183,16 @@ Sequence< Type > SAL_CALL StatusIndicator::getTypes() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XAggregation
+//	XAggregation
 //____________________________________________________________________________________________________________
 
 Any SAL_CALL StatusIndicator::queryAggregation( const Type& aType ) throw( RuntimeException )
 {
     // Ask for my own supported interfaces ...
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
-    Any aReturn ( ::cppu::queryInterface( aType                                     ,
-                                          static_cast< XLayoutConstrains*   > ( this )  ,
-                                          static_cast< XStatusIndicator*    > ( this )
+    Any aReturn	( ::cppu::queryInterface( aType					   					,
+                                          static_cast< XLayoutConstrains*	> ( this )	,
+                                          static_cast< XStatusIndicator*	> ( this )
                                         )
                 );
 
@@ -207,7 +207,7 @@ Any SAL_CALL StatusIndicator::queryAggregation( const Type& aType ) throw( Runti
 }
 
 //____________________________________________________________________________________________________________
-//  XStatusIndicator
+//	XStatusIndicator
 //____________________________________________________________________________________________________________
 
 void SAL_CALL StatusIndicator::start( const OUString& sText, sal_Int32 nRange ) throw( RuntimeException )
@@ -223,7 +223,7 @@ void SAL_CALL StatusIndicator::start( const OUString& sText, sal_Int32 nRange ) 
 }
 
 //____________________________________________________________________________________________________________
-//  XStatusIndicator
+//	XStatusIndicator
 //____________________________________________________________________________________________________________
 
 void SAL_CALL StatusIndicator::end() throw( RuntimeException )
@@ -238,7 +238,7 @@ void SAL_CALL StatusIndicator::end() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XStatusIndicator
+//	XStatusIndicator
 //____________________________________________________________________________________________________________
 
 void SAL_CALL StatusIndicator::setText( const OUString& sText ) throw( RuntimeException )
@@ -251,7 +251,7 @@ void SAL_CALL StatusIndicator::setText( const OUString& sText ) throw( RuntimeEx
 }
 
 //____________________________________________________________________________________________________________
-//  XStatusIndicator
+//	XStatusIndicator
 //____________________________________________________________________________________________________________
 
 void SAL_CALL StatusIndicator::setValue( sal_Int32 nValue ) throw( RuntimeException )
@@ -264,7 +264,7 @@ void SAL_CALL StatusIndicator::setValue( sal_Int32 nValue ) throw( RuntimeExcept
 }
 
 //____________________________________________________________________________________________________________
-//  XStatusIndicator
+//	XStatusIndicator
 //____________________________________________________________________________________________________________
 
 void SAL_CALL StatusIndicator::reset() throw( RuntimeException )
@@ -279,7 +279,7 @@ void SAL_CALL StatusIndicator::reset() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XLayoutConstrains
+//	XLayoutConstrains
 //____________________________________________________________________________________________________________
 
 Size SAL_CALL StatusIndicator::getMinimumSize () throw( RuntimeException )
@@ -288,7 +288,7 @@ Size SAL_CALL StatusIndicator::getMinimumSize () throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XLayoutConstrains
+//	XLayoutConstrains
 //____________________________________________________________________________________________________________
 
 Size SAL_CALL StatusIndicator::getPreferredSize () throw( RuntimeException )
@@ -297,8 +297,8 @@ Size SAL_CALL StatusIndicator::getPreferredSize () throw( RuntimeException )
     ClearableMutexGuard aGuard ( m_aMutex ) ;
 
     // get information about required place of child controls
-    Reference< XLayoutConstrains >  xTextLayout ( m_xText, UNO_QUERY );
-    Size                            aTextSize   = xTextLayout->getPreferredSize();
+    Reference< XLayoutConstrains >	xTextLayout	( m_xText, UNO_QUERY );
+    Size							aTextSize	= xTextLayout->getPreferredSize();
 
     aGuard.clear () ;
 
@@ -321,7 +321,7 @@ Size SAL_CALL StatusIndicator::getPreferredSize () throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XLayoutConstrains
+//	XLayoutConstrains
 //____________________________________________________________________________________________________________
 
 Size SAL_CALL StatusIndicator::calcAdjustedSize ( const Size& /*rNewSize*/ ) throw( RuntimeException )
@@ -330,7 +330,7 @@ Size SAL_CALL StatusIndicator::calcAdjustedSize ( const Size& /*rNewSize*/ ) thr
 }
 
 //____________________________________________________________________________________________________________
-//  XControl
+//	XControl
 //____________________________________________________________________________________________________________
 
 void SAL_CALL StatusIndicator::createPeer (
@@ -351,7 +351,7 @@ void SAL_CALL StatusIndicator::createPeer (
 }
 
 //____________________________________________________________________________________________________________
-//  XControl
+//	XControl
 //____________________________________________________________________________________________________________
 
 sal_Bool SAL_CALL StatusIndicator::setModel ( const Reference< XControlModel > & /*rModel*/ ) throw( RuntimeException )
@@ -361,7 +361,7 @@ sal_Bool SAL_CALL StatusIndicator::setModel ( const Reference< XControlModel > &
 }
 
 //____________________________________________________________________________________________________________
-//  XControl
+//	XControl
 //____________________________________________________________________________________________________________
 
 Reference< XControlModel > SAL_CALL StatusIndicator::getModel () throw( RuntimeException )
@@ -372,7 +372,7 @@ Reference< XControlModel > SAL_CALL StatusIndicator::getModel () throw( RuntimeE
 }
 
 //____________________________________________________________________________________________________________
-//  XComponent
+//	XComponent
 //____________________________________________________________________________________________________________
 
 void SAL_CALL StatusIndicator::dispose () throw( RuntimeException )
@@ -381,11 +381,11 @@ void SAL_CALL StatusIndicator::dispose () throw( RuntimeException )
     MutexGuard aGuard ( m_aMutex ) ;
 
     // "removeControl()" control the state of a reference
-    Reference< XControl >  xTextControl     ( m_xText       , UNO_QUERY );
-    Reference< XControl >  xProgressControl ( m_xProgressBar, UNO_QUERY );
+    Reference< XControl >  xTextControl		( m_xText		, UNO_QUERY );
+    Reference< XControl >  xProgressControl	( m_xProgressBar, UNO_QUERY );
 
-    removeControl( xTextControl     );
-    removeControl( xProgressControl );
+    removeControl( xTextControl		);
+    removeControl( xProgressControl	);
 
     // do'nt use "...->clear ()" or "... = XFixedText ()"
     // when other hold a reference at this object !!!
@@ -395,7 +395,7 @@ void SAL_CALL StatusIndicator::dispose () throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL StatusIndicator::setPosSize (
@@ -406,12 +406,12 @@ void SAL_CALL StatusIndicator::setPosSize (
     sal_Int16 nFlags
 ) throw( RuntimeException )
 {
-    Rectangle   aBasePosSize = getPosSize () ;
+    Rectangle	aBasePosSize = getPosSize () ;
     BaseContainerControl::setPosSize (nX, nY, nWidth, nHeight, nFlags) ;
 
     // if position or size changed
     if (
-        ( nWidth  != aBasePosSize.Width ) ||
+        ( nWidth  != aBasePosSize.Width	) ||
         ( nHeight != aBasePosSize.Height)
        )
     {
@@ -426,28 +426,28 @@ void SAL_CALL StatusIndicator::setPosSize (
 }
 
 //____________________________________________________________________________________________________________
-//  impl but public method to register service
+//	impl but public method to register service
 //____________________________________________________________________________________________________________
 
 const Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames()
 {
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_STATUSINDICATOR ));
+    seqServiceNames.getArray() [0] = OUString::createFromAscii( SERVICENAME_STATUSINDICATOR );
     return seqServiceNames ;
 }
 
 //____________________________________________________________________________________________________________
-//  impl but public method to register service
+//	impl but public method to register service
 //____________________________________________________________________________________________________________
 
 const OUString StatusIndicator::impl_getStaticImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_STATUSINDICATOR ));
+    return OUString::createFromAscii( IMPLEMENTATIONNAME_STATUSINDICATOR );
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
 WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
@@ -458,17 +458,17 @@ WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const Reference< XW
 
     WindowDescriptor* pDescriptor = new WindowDescriptor ;
 
-    pDescriptor->Type               =   WindowClass_SIMPLE                              ;
-    pDescriptor->WindowServiceName  =   OUString(RTL_CONSTASCII_USTRINGPARAM("floatingwindow")) ;
-    pDescriptor->ParentIndex        =   -1                                              ;
-    pDescriptor->Parent             =   xParentPeer                                     ;
-    pDescriptor->Bounds             =   getPosSize ()                                   ;
+    pDescriptor->Type				=	WindowClass_SIMPLE								;
+    pDescriptor->WindowServiceName	=	OUString::createFromAscii( "floatingwindow" )	;
+    pDescriptor->ParentIndex		=	-1												;
+    pDescriptor->Parent				=	xParentPeer										;
+    pDescriptor->Bounds				=	getPosSize ()									;
 
     return pDescriptor ;
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
 void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGraphics > & rGraphics )
@@ -477,7 +477,7 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< 
     // Every request paint the completely control. ( but only, if peer exist )
      if ( rGraphics.is () )
     {
-        MutexGuard  aGuard (m_aMutex) ;
+        MutexGuard	aGuard (m_aMutex) ;
 
         // background = gray
         Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
@@ -507,27 +507,27 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< 
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
 void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
 {
-    sal_Int32   nX_ProgressBar          ;
-    sal_Int32   nY_ProgressBar          ;
-    sal_Int32   nWidth_ProgressBar      ;
-    sal_Int32   nHeight_ProgressBar     ;
-    sal_Int32   nX_Text                 ;
-    sal_Int32   nY_Text                 ;
-    sal_Int32   nWidth_Text             ;
-    sal_Int32   nHeight_Text            ;
+    sal_Int32	nX_ProgressBar			;
+    sal_Int32	nY_ProgressBar			;
+    sal_Int32	nWidth_ProgressBar		;
+    sal_Int32	nHeight_ProgressBar		;
+    sal_Int32	nX_Text					;
+    sal_Int32	nY_Text					;
+    sal_Int32	nWidth_Text				;
+    sal_Int32	nHeight_Text			;
 
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex ) ;
 
     // get information about required place of child controls
-    Size                            aWindowSize     ( aEvent.Width, aEvent.Height );
-    Reference< XLayoutConstrains >  xTextLayout     ( m_xText, UNO_QUERY );
-    Size                            aTextSize       = xTextLayout->getPreferredSize();
+    Size							aWindowSize		( aEvent.Width, aEvent.Height );
+    Reference< XLayoutConstrains >	xTextLayout		( m_xText, UNO_QUERY );
+    Size							aTextSize		= xTextLayout->getPreferredSize();
 
     if( aWindowSize.Width < STATUSINDICATOR_DEFAULT_WIDTH )
     {
@@ -550,13 +550,13 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
     nHeight_ProgressBar = nHeight_Text                                  ;
 
     // Set new position and size on all controls
-    Reference< XWindow >  xTextWindow       ( m_xText       , UNO_QUERY );
-    Reference< XWindow >  xProgressWindow   ( m_xProgressBar, UNO_QUERY );
+    Reference< XWindow >  xTextWindow		( m_xText		, UNO_QUERY );
+    Reference< XWindow >  xProgressWindow	( m_xProgressBar, UNO_QUERY );
 
-    xTextWindow->setPosSize     ( nX_Text       , nY_Text       , nWidth_Text       , nHeight_Text          , 15 ) ;
-    xProgressWindow->setPosSize ( nX_ProgressBar, nY_ProgressBar, nWidth_ProgressBar, nHeight_ProgressBar   , 15 ) ;
+    xTextWindow->setPosSize		( nX_Text		, nY_Text		, nWidth_Text		, nHeight_Text	  		, 15 ) ;
+    xProgressWindow->setPosSize	( nX_ProgressBar, nY_ProgressBar, nWidth_ProgressBar, nHeight_ProgressBar	, 15 ) ;
 }
 
-}   // namespace unocontrols
+}	// namespace unocontrols
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

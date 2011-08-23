@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,10 +71,10 @@ const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< XComponentCo
     return aDeviceInfo;
 }
 
-void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, const GraphicSettings& rGraphicSettings, const GraphicCollector::GraphicUser& rUser )
+void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, Reference< XGraphic >& rxGraphic, const GraphicSettings& rGraphicSettings, const GraphicCollector::GraphicUser& rUser )
 {
     const rtl::OUString aGraphicURL( rUser.maGraphicURL );
-    const rtl::OUString sPackageURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.GraphicObject:") );
+    const rtl::OUString sPackageURL( OUString::createFromAscii( "vnd.sun.star.GraphicObject:" ) );
 
     if ( rGraphicSettings.mbEmbedLinkedGraphics || ( !aGraphicURL.getLength() || aGraphicURL.match( sPackageURL, 0 ) ) )
     {
@@ -90,11 +90,11 @@ void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntit
                 aIter->maUser.push_back( rUser );
                 break;
             }
-            ++aIter;
+            aIter++;
         }
         if ( aIter == rGraphicEntities.end() )
         {
-            GraphicCollector::GraphicEntity aEntity( rUser );
+            GraphicCollector::GraphicEntity aEntity( rxGraphic, rUser );
             rGraphicEntities.push_back( aEntity );
         }
     }
@@ -134,7 +134,7 @@ void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference
         }
         aUser.maGraphicCropLogic = aGraphicCropLogic;
         aUser.maLogicalSize = aLogicalSize;
-        ImpAddEntity( rGraphicEntities, rGraphicSettings, aUser );
+        ImpAddEntity( rGraphicEntities, xGraphic, rGraphicSettings, aUser );
     }
 }
 
@@ -199,7 +199,7 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const 
                         aUser.mbFillBitmap = sal_True;
                         aUser.maLogicalSize = aLogicalSize;
                         aUser.mxPagePropertySet = rxPagePropertySet;
-                        ImpAddEntity( rGraphicEntities, rGraphicSettings, aUser );
+                        ImpAddEntity( rGraphicEntities, xGraphic, rGraphicSettings, aUser );
                     }
                 }
             }
@@ -218,7 +218,7 @@ void ImpCollectBackgroundGraphic( const Reference< XComponentContext >& rxMSF, c
         Reference< XPropertySet > xPropertySet( rxDrawPage, UNO_QUERY_THROW );
         xPropertySet->getPropertyValue( TKGet( TK_Width ) ) >>= aLogicalSize.Width;
         xPropertySet->getPropertyValue( TKGet( TK_Height ) ) >>= aLogicalSize.Height;
-
+        
         Reference< XPropertySet > xBackgroundPropSet;
         if ( xPropertySet->getPropertyValue( TKGet( TK_Background ) ) >>= xBackgroundPropSet )
             ImpAddFillBitmapEntity( rxMSF, xBackgroundPropSet, aLogicalSize, rGraphicEntities, rGraphicSettings, xPropertySet );
@@ -267,7 +267,7 @@ awt::Size GraphicCollector::GetOriginalSize( const Reference< XComponentContext 
     if ( xGraphicPropertySet->getPropertyValue( TKGet( TK_Size100thMM ) ) >>= aSize100thMM )
     {
         if ( !aSize100thMM.Width && !aSize100thMM.Height )
-        {   // MAPMODE_PIXEL USED :-(
+        {	// MAPMODE_PIXEL USED :-(
             awt::Size aSourceSizePixel( 0, 0 );
             if ( xGraphicPropertySet->getPropertyValue( TKGet( TK_SizePixel ) ) >>= aSourceSizePixel )
             {
@@ -340,12 +340,12 @@ void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rx
                     }
                     else
                         aGraphicIter->mbRemoveCropArea = sal_False;
-                    ++aGUIter;
+                    aGUIter++;
                 }
             }
             if ( !aGraphicIter->mbRemoveCropArea )
                 aGraphicIter->maGraphicCropLogic = text::GraphicCrop( 0, 0, 0, 0 );
-            ++aGraphicIter;
+            aGraphicIter++;
         }
     }
     catch ( Exception& )
@@ -404,7 +404,7 @@ void ImpCountBackgroundGraphic( const Reference< XComponentContext >& /* rxMSF *
         Reference< XPropertySet > xPropertySet( rxDrawPage, UNO_QUERY_THROW );
         xPropertySet->getPropertyValue( TKGet( TK_Width ) ) >>= aLogicalSize.Width;
         xPropertySet->getPropertyValue( TKGet( TK_Height ) ) >>= aLogicalSize.Height;
-
+        
         Reference< XPropertySet > xBackgroundPropSet;
         if ( xPropertySet->getPropertyValue( TKGet( TK_Background ) ) >>= xBackgroundPropSet )
         {

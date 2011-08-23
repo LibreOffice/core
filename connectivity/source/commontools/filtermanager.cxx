@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,6 @@
 #include "TConnection.hxx"
 #include <osl/diagnose.h>
 #include "connectivity/dbtools.hxx"
-#include <tools/diagnose_ex.h>
-#include <rtl/ustrbuf.hxx>
 
 //........................................................................
 namespace dbtools
@@ -95,7 +93,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            OSL_ENSURE( sal_False, "FilterManager::setFilterComponent: setting the filter failed!" );
         }
     }
 
@@ -116,30 +114,44 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            OSL_ENSURE( sal_False, "FilterManager::setApplyPublicFilter: setting the filter failed!" );
         }
     }
 
     //--------------------------------------------------------------------
-    void FilterManager::appendFilterComponent( ::rtl::OUStringBuffer& io_appendTo, const ::rtl::OUString& i_component ) const
+    namespace
     {
-        if ( io_appendTo.getLength() > 0 )
+        void    lcl_ensureBracketed( ::rtl::OUString& /* [inout] */ _rExpression )
         {
-            io_appendTo.insert( 0, sal_Unicode( '(' ) );
-            io_appendTo.insert( 1, sal_Unicode( ' ' ) );
-            io_appendTo.appendAscii( " ) AND " );
+            OSL_ENSURE( _rExpression.getLength(), "lcl_ensureBracketed: expression is empty!" );
+            if ( _rExpression.getLength() )
+            {
+                if ( ( _rExpression.getStr()[0] != '(' ) || ( _rExpression.getStr()[ _rExpression.getLength() - 1 ] != ')' ) )
+                {
+                    ::rtl::OUString sComposed( RTL_CONSTASCII_USTRINGPARAM( "(" ) );
+                    sComposed += _rExpression;
+                    sComposed += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+                    _rExpression = sComposed;
+                }
+            }
         }
+    }
+    //--------------------------------------------------------------------
+    void FilterManager::appendFilterComponent( ::rtl::OUString& /* [inout] */ _rAppendTo, const ::rtl::OUString& _rComponent ) const
+    {
+        if ( _rAppendTo.getLength() )
+            _rAppendTo += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " AND " ) );
 
-        io_appendTo.appendAscii( "( " );
-        io_appendTo.append( i_component );
-        io_appendTo.appendAscii( " )" );
+        ::rtl::OUString sComponent( _rComponent );
+        lcl_ensureBracketed( sComponent );
+        _rAppendTo += sComponent;
     }
 
     //--------------------------------------------------------------------
-    bool FilterManager::isThereAtMostOneComponent( ::rtl::OUStringBuffer& o_singleComponent ) const
+    bool FilterManager::isThereAtMostOneComponent( ::rtl::OUString& _rOnlyComponent ) const
     {
         sal_Int32 nOnlyNonEmpty = -1;
-        sal_Int32 i;
+    sal_Int32 i;
         for ( i = getFirstApplicableFilterIndex(); i < FC_COMPONENT_COUNT; ++i )
         {
             if ( m_aFilterComponents[ i ].getLength() )
@@ -153,14 +165,14 @@ namespace dbtools
         }
         if ( nOnlyNonEmpty == -1 )
         {
-            o_singleComponent.makeStringAndClear();
+            _rOnlyComponent = ::rtl::OUString();
             return true;
         }
 
         if ( i == FC_COMPONENT_COUNT )
         {
             // we found only one non-empty filter component
-            o_singleComponent = m_aFilterComponents[ nOnlyNonEmpty ];
+            _rOnlyComponent = m_aFilterComponents[ nOnlyNonEmpty ];
             return true;
         }
         return false;
@@ -169,17 +181,17 @@ namespace dbtools
     //--------------------------------------------------------------------
     ::rtl::OUString FilterManager::getComposedFilter( ) const
     {
-        ::rtl::OUStringBuffer aComposedFilter;
+        ::rtl::OUString sComposedFilter;
 
         // if we have only one non-empty component, then there's no need to compose anything
-        if ( !isThereAtMostOneComponent( aComposedFilter ) )
-        {
-            // append the single components
-            for ( sal_Int32 i = getFirstApplicableFilterIndex(); i < FC_COMPONENT_COUNT; ++i )
-                appendFilterComponent( aComposedFilter, m_aFilterComponents[ i ] );
-        }
+        if ( isThereAtMostOneComponent( sComposedFilter ) )
+            return sComposedFilter;
 
-        return aComposedFilter.makeStringAndClear();
+        // append the single components
+        for ( sal_Int32 i = getFirstApplicableFilterIndex(); i < FC_COMPONENT_COUNT; ++i )
+            appendFilterComponent( sComposedFilter, m_aFilterComponents[ i ] );
+
+        return sComposedFilter;
     }
 
 //........................................................................

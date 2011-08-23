@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@ namespace drawinglayer
         class SdrGrafPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            ::basegfx::B2DHomMatrix                     maTransform;
-            attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
-            GraphicObject                               maGraphicObject;
-            GraphicAttr                                 maGraphicAttr;
+            ::basegfx::B2DHomMatrix						maTransform;
+            attribute::SdrLineFillShadowTextAttribute	maSdrLFSTAttribute;
+            GraphicObject								maGraphicObject;
+            GraphicAttr									maGraphicAttr;
 
         protected:
             // local decomposition.
@@ -57,7 +57,7 @@ namespace drawinglayer
 
         public:
             SdrGrafPrimitive2D(
-                const ::basegfx::B2DHomMatrix& rTransform,
+                const ::basegfx::B2DHomMatrix& rTransform, 
                 const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
                 const GraphicObject& rGraphicObject,
                 const GraphicAttr& rGraphicAttr);

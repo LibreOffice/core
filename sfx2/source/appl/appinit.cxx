@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,18 +69,18 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/evntconf.hxx>
 #include "intro.hxx"
+#include <sfx2/macrconf.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/progress.hxx>
-#include "sfx2/sfxhelp.hxx"
-#include "sfx2/sfxresid.hxx"
+#include "sfxhelp.hxx"
+#include "sfxresid.hxx"
 #include "sfxtypes.hxx"
 #include <sfx2/viewsh.hxx>
 #include "nochaos.hxx"
 #include <sfx2/fcontnr.hxx>
-#include "helper.hxx"   // SfxContentHelper::Kill()
+#include "helper.hxx"	// SfxContentHelper::Kill()
 #include "sfxpicklist.hxx"
-#include <tools/svlibrary.hxx>
 
 #ifdef UNX
 #define stricmp(a,b) strcmp(a,b)
@@ -120,8 +120,8 @@ void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) 
 
 void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent ) throw(RuntimeException )
 {
-    static ::rtl::OUString SERVICE_GLOBALEVENTBROADCASTER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"));
-    static ::rtl::OUString EVENT_QUIT_APP                (RTL_CONSTASCII_USTRINGPARAM("OnCloseApp"));
+    static ::rtl::OUString SERVICE_GLOBALEVENTBROADCASTER = ::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster");
+    static ::rtl::OUString EVENT_QUIT_APP                 = ::rtl::OUString::createFromAscii("OnCloseApp");
 
     Reference< XDesktop > xDesktop( aEvent.Source, UNO_QUERY );
     if( xDesktop.is() == sal_True )
@@ -144,13 +144,14 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
         xGlobalBroadcaster->notifyEvent(aEvent2);
     }
 
+    //pApp->Deinitialize();
     delete pApp;
     Application::Quit();
 }
 
 ::rtl::OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (RuntimeException)
 {
-    static const ::rtl::OUString IMPLNAME(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sfx2.SfxTerminateListener"));
+    static const ::rtl::OUString IMPLNAME = ::rtl::OUString::createFromAscii("com.sun.star.comp.sfx2.SfxTerminateListener");
     return IMPLNAME;
 }
 
@@ -177,7 +178,7 @@ Sequence< ::rtl::OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServ
     // The desktop must know, which listener will terminate the SfxApplication in real !
     // It must call this special listener as last one ... otherwise we shutdown the SfxApplication BEFORE other listener
     // can react ...
-    static const ::rtl::OUString SERVICENAME(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.TerminateListener"));
+    static const ::rtl::OUString SERVICENAME = ::rtl::OUString::createFromAscii("com.sun.star.frame.TerminateListener");
     Sequence< ::rtl::OUString > lNames(1);
     lNames[0] = SERVICENAME;
     return lNames;
@@ -185,8 +186,8 @@ Sequence< ::rtl::OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServ
 
 //====================================================================
 
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
+#define DOSTRING( x )			   			#x
+#define STRING( x )				   			DOSTRING( x )
 
 typedef bool ( *PFunc_getSpecialCharsForEdit)( Window* i_pParent, const Font& i_rFont, String& o_rOutString );
 
@@ -207,7 +208,10 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
     {
         bDetermineFunction = true;
 
-        static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "cui" ) ) );
+        String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
+        sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "cui" ) ) );
+
+        rtl::OUString aLibName( sLibName );
         oslModule handleMod = osl_loadModuleRelative(
             &thisModule, aLibName.pData, 0 );
 
@@ -248,13 +252,13 @@ bool SfxApplication::Initialize_Impl()
     Help::EnableExtHelp();
 
     SvtLocalisationOptions aLocalisation;
-    Application::EnableAutoMnemonic ( aLocalisation.IsAutoMnemonic() );
-    Application::SetDialogScaleX    ( (short)(aLocalisation.GetDialogScale()) );
+    Application::EnableAutoMnemonic	( aLocalisation.IsAutoMnemonic() );
+    Application::SetDialogScaleX	( (short)(aLocalisation.GetDialogScale()) );
 
 
 #ifdef DBG_UTIL
-    // The SimplerErrorHandler is for debugging. In the Product errors
-    // not processed are given to SFX as Errorcode 1.
+    // Der SimplerErrorHandler dient Debugzwecken. In der Product werden
+    // nichtgehandelte Fehler durch Errorcode 1 an SFX gegeben.
     new SimpleErrorHandler;
 #endif
     new SfxErrorHandler(RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
@@ -267,6 +271,7 @@ bool SfxApplication::Initialize_Impl()
     // diverse Pointer
     SfxPickList::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );
 
+    /////////////////////////////////////////////////////////////////
 
     DBG_ASSERT( !pAppData_Impl->pAppDispat, "AppDispatcher already exists" );
     pAppData_Impl->pAppDispat = new SfxDispatcher((SfxDispatcher*)0);

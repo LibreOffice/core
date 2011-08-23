@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,10 @@
 #include "glossary.hrc"
 #include "cmdid.h"
 #include "helpid.h"
-#include "access.hrc"
-
  // #define DLG_GLOSSARY 256
 ModalDialog DLG_GLOSSARY
 {
-    HelpID = CMD_FN_GLOSSARY_DLG ;
+    HelpID = FN_GLOSSARY_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 375 , 164 ) ;
@@ -42,7 +40,6 @@ ModalDialog DLG_GLOSSARY
     Moveable = TRUE ;
     CheckBox CB_INSERT_TIP
     {
-        HelpID = "sw:CheckBox:DLG_GLOSSARY:CB_INSERT_TIP";
         Pos = MAP_APPFONT ( 12 , 12 ) ;
         Size = MAP_APPFONT ( 200 , 12 ) ;
         TabStop = TRUE ;
@@ -57,7 +54,6 @@ ModalDialog DLG_GLOSSARY
     };
     Edit ED_NAME
     {
-        HelpID = "sw:Edit:DLG_GLOSSARY:ED_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55 , 29 ) ;
         Size = MAP_APPFONT ( 85 , 12 ) ;
@@ -74,7 +70,6 @@ ModalDialog DLG_GLOSSARY
     };
     Edit ED_SHORTNAME
     {
-        HelpID = "sw:Edit:DLG_GLOSSARY:ED_SHORTNAME";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 203 , 29 ) ;
@@ -103,7 +98,6 @@ ModalDialog DLG_GLOSSARY
     };
     CheckBox CB_FILE_REL
     {
-        HelpID = "sw:CheckBox:DLG_GLOSSARY:CB_FILE_REL";
         Pos = MAP_APPFONT ( 14 , 145 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
         TabStop = TRUE ;
@@ -111,7 +105,6 @@ ModalDialog DLG_GLOSSARY
     };
     CheckBox CB_NET_REL
     {
-        HelpID = "sw:CheckBox:DLG_GLOSSARY:CB_NET_REL";
         Pos = MAP_APPFONT ( 109 , 145 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
         Text [ en-US ] = "Inte~rnet" ;
@@ -129,7 +122,6 @@ ModalDialog DLG_GLOSSARY
     };
     CheckBox CB_SHOW_EXAMPLE
     {
-        HelpID = "sw:CheckBox:DLG_GLOSSARY:CB_SHOW_EXAMPLE";
         Pos = MAP_APPFONT ( 231 , 145 ) ;
         Size = MAP_APPFONT ( 82 , 12 ) ;
         Text [ en-US ] = "Sho~w preview";
@@ -138,7 +130,9 @@ ModalDialog DLG_GLOSSARY
     {
         Pos = MAP_APPFONT ( 319 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen : ~Einf³gen */
         Text [ en-US ] = "~Insert" ;
+        /* ### ACHTUNG: Neuer Text in Resource? Fügt den aktuellen Textblock ein und schließt das Dialogfeld : F³gt den aktuellen Textblock ein und schlie˜t das Dialogfeld */
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
@@ -146,6 +140,7 @@ ModalDialog DLG_GLOSSARY
     {
         Pos = MAP_APPFONT ( 319 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE ;
     };
@@ -156,7 +151,6 @@ ModalDialog DLG_GLOSSARY
     };
     MenuButton PB_EDIT
     {
-        HelpID = "sw:MenuButton:DLG_GLOSSARY:PB_EDIT";
         Pos = MAP_APPFONT ( 319 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "AutoTe~xt" ;
@@ -164,7 +158,6 @@ ModalDialog DLG_GLOSSARY
     };
     PushButton PB_BIB
     {
-        HelpID = "sw:PushButton:DLG_GLOSSARY:PB_BIB";
         Pos = MAP_APPFONT ( 319 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "C~ategories..." ;
@@ -172,7 +165,6 @@ ModalDialog DLG_GLOSSARY
     };
     PushButton PB_PATH
     {
-        HelpID = "sw:PushButton:DLG_GLOSSARY:PB_PATH";
         Pos = MAP_APPFONT ( 319 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -226,6 +218,7 @@ ModalDialog DLG_GLOSSARY
             {
                 Identifier = FN_GL_DELETE ;
                 HelpID = HID_MD_GLOS_DELETE ;
+                /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
                 Text [ en-US ] = "~Delete" ;
             };
             MenuItem
@@ -263,12 +256,14 @@ ModalDialog DLG_GLOSSARY
 };
 InfoBox MSG_DOUBLE_SHORTNAME
 {
+    /* ### ACHTUNG: Neuer Text in Resource? Kürzel wird bereits verwendet. Bitte einen anderen Namen vergeben! : K³rzel wird bereits verwendet. Bitte einen anderen Namen vergeben! */
     Message [ en-US ] = "Shortcut name already exists. Please choose another name." ;
 };
 QueryBox MSG_QUERY_DELETE
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Soll der AutoText gelöscht werden? : Soll der AutoText gel÷scht werden? */
     Message [ en-US ] = "Delete AutoText?" ;
 };
 String STR_QUERY_DELETE_GROUP1
@@ -277,18 +272,13 @@ String STR_QUERY_DELETE_GROUP1
 };
 String STR_QUERY_DELETE_GROUP2
 {
+    /* ### ACHTUNG: Neuer Text in Resource?  gelöscht werden? :  gel÷scht werden? */
     Text [ en-US ] = "?" ;
 };
 String STR_GLOSSARY
 {
     Text [ en-US ] = "AutoText :" ;
 };
-/*IAccessibility2 Implementation 2009-----*/
-String STR_ACCESS_SW_CATEGORY
-{
-    Text [ en-US ] = "Category" ;
-};
-/*-----IAccessibility2 Implementation 2009*/
 ModalDialog DLG_RENAME_GLOS
 {
     OutputSize = TRUE ;
@@ -318,7 +308,6 @@ ModalDialog DLG_RENAME_GLOS
     };
     Edit ED_ON
     {
-        HelpID = "sw:Edit:DLG_RENAME_GLOS:ED_ON";
         ReadOnly = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 44 , 12 ) ;
@@ -333,7 +322,6 @@ ModalDialog DLG_RENAME_GLOS
     };
     Edit ED_OS
     {
-        HelpID = "sw:Edit:DLG_RENAME_GLOS:ED_OS";
         ReadOnly = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 200 , 12 ) ;
@@ -348,7 +336,6 @@ ModalDialog DLG_RENAME_GLOS
     };
     Edit ED_NN
     {
-        HelpID = "sw:Edit:DLG_RENAME_GLOS:ED_NN";
         TabStop = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 44 , 27 ) ;
@@ -363,7 +350,6 @@ ModalDialog DLG_RENAME_GLOS
     };
     Edit ED_NS
     {
-        HelpID = "sw:Edit:DLG_RENAME_GLOS:ED_NS";
         TabStop = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 200 , 27 ) ;

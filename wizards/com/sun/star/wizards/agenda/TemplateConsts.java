@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ public interface TemplateConsts
      */
     public final static String SECTION_TOPICS = "AGENDA_TOPICS";
     /**
-     * the name of the parent minutes section.
+     * the name of the parent minutes section. 
      */
     public final static String SECTION_MINUTES_ALL = "MINUTES_ALL";
     /**
@@ -58,9 +58,9 @@ public interface TemplateConsts
     public final static String SECTION_MINUTES = "MINUTES";    //public final static String AGENDA_ITEM = "AGENDA_ITEM";
     /**
      * taged headings and names.
-     * These will be searched in item tables (in the template) and will be
+     * These will be searched in item tables (in the template) and will be 
      * replaced with resource strings.
-     *
+     * 
      * headings...
      */
     public final static String FILLIN_MEETING_TYPE = "<meeting-type>";
@@ -80,7 +80,7 @@ public interface TemplateConsts
     /**
      * Styles (paragraph styles) used for agenda items.
      * headings styles
-     *
+     * 
      */
     public final static String STYLE_MEETING_TYPE = "MeetingType";
     public final static String STYLE_BRING = "Bring";
@@ -97,9 +97,9 @@ public interface TemplateConsts
     public final static String STYLE_OBSERVERS = "Observers";
     public final static String STYLE_RESOURCE_PERSONS = "ResourcePersons";
     /**
-     * Styles (paragraph styles) used for the <b>text</b> of agenda items
+     * Styles (paragraph styles) used for the <b>text</b> of agenda items 
      * The agenda wizard creates fill-in fields with the given styles...)
-     *
+     * 
      * headings fields styles
      */
     public final static String STYLE_MEETING_TYPE_TEXT = "MeetingTypeText";

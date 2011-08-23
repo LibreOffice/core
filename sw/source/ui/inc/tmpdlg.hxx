@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,26 +39,25 @@ class SwWrtShell;
 class SwTemplateDlg: public SfxStyleDialog
 {
 
-    sal_uInt16      nType;
-    sal_uInt16      nHtmlMode;
-    SwWrtShell* pWrtShell;
-    sal_Bool        bNewStyle;
+    USHORT      nType;
+    USHORT      nHtmlMode;
+    SwWrtShell*	pWrtShell;
+    BOOL		bNewStyle;
 
     DECL_LINK( NumOptionsHdl, PushButton* );
-    DECL_LINK( ApplyHdl, void* );
 
 public:
     SwTemplateDlg(  Window*             pParent,
                     SfxStyleSheetBase&  rBase,
-                    sal_uInt16              nRegion,
-                    sal_Bool                bColumn = sal_False,
-                    SwWrtShell*         pActShell = 0,
-                    sal_Bool                bNew = sal_False );
+                    USHORT              nRegion,
+                    BOOL 				bColumn = FALSE,
+                    SwWrtShell* 		pActShell = 0,
+                    BOOL 				bNew = FALSE );
 
     ~SwTemplateDlg();
     const SfxItemSet* GetRefreshedSet();
 
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
     virtual short Ok();
 };
 

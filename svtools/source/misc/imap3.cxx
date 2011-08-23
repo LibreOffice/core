@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@
 |*
 \******************************************************************************/
 
-IMapCompat::IMapCompat( SvStream& rStm, const sal_uInt16 nStreamMode ) :
-            pRWStm      ( &rStm ),
-            nStmMode    ( nStreamMode )
+IMapCompat::IMapCompat( SvStream& rStm, const USHORT nStreamMode ) :
+            pRWStm		( &rStm ),
+            nStmMode	( nStreamMode )
 {
     DBG_ASSERT( nStreamMode == STREAM_READ || nStreamMode == STREAM_WRITE, "Wrong Mode!" );
 
@@ -57,7 +57,7 @@ IMapCompat::IMapCompat( SvStream& rStm, const sal_uInt16 nStreamMode ) :
         }
         else
         {
-            sal_uInt32 nTotalSizeTmp;
+            UINT32 nTotalSizeTmp;
             *pRWStm >> nTotalSizeTmp;
             nTotalSize = nTotalSizeTmp;
             nCompatPos = pRWStm->Tell();
@@ -78,15 +78,15 @@ IMapCompat::~IMapCompat()
     {
         if ( nStmMode == STREAM_WRITE )
         {
-            const sal_uLong nEndPos = pRWStm->Tell();
+            const ULONG	nEndPos = pRWStm->Tell();
 
             pRWStm->Seek( nCompatPos );
-            *pRWStm << (sal_uInt32) ( nEndPos - nTotalSize );
+            *pRWStm << (UINT32) ( nEndPos - nTotalSize );
             pRWStm->Seek( nEndPos );
         }
         else
         {
-            const sal_uLong nReadSize = pRWStm->Tell() - nCompatPos;
+            const ULONG nReadSize = pRWStm->Tell() - nCompatPos;
 
             if ( nTotalSize > nReadSize )
                 pRWStm->SeekRel( nTotalSize - nReadSize );

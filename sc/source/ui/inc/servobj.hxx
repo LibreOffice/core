@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,20 +52,20 @@ class ScServerObject : public ::sfx2::SvLinkSource, public SfxListener
 {
 private:
     ScServerObjectSvtListenerForwarder  aForwarder;
-    ScDocShell*     pDocSh;
-    ScRange         aRange;
-    String          aItemStr;
-    sal_Bool            bRefreshListener;
+    ScDocShell*		pDocSh;
+    ScRange			aRange;
+    String			aItemStr;
+    BOOL			bRefreshListener;
 
-    void    Clear();
+    void	Clear();
 
 public:
             ScServerObject( ScDocShell* pShell, const String& rItem );
     virtual ~ScServerObject();
 
-    virtual sal_Bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual BOOL GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                              const String & rMimeType,
-                             sal_Bool bSynchron = false );
+                             BOOL bSynchron = FALSE );
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
             void    EndListeningAll();

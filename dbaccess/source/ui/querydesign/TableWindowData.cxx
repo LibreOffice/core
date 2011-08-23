@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
     ,m_sComposedName(_rComposedName)
     ,m_aPosition( Point(-1,-1) )
     ,m_aSize( Size(-1,-1) )
-    ,m_bShowAll( sal_True )
+    ,m_bShowAll( TRUE )
     ,m_bIsQuery(false)
     ,m_bIsValid(true)
 {
@@ -82,13 +82,13 @@ OTableWindowData::~OTableWindowData()
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTableWindowData::HasPosition() const
+BOOL OTableWindowData::HasPosition() const
 {
     return ( (m_aPosition.X() != -1) && (m_aPosition.Y() != -1) );
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTableWindowData::HasSize() const
+BOOL OTableWindowData::HasSize() const
 {
     return ( (m_aSize.Width() != -1) && (m_aSize.Height() !=-1) );
 }
@@ -99,7 +99,7 @@ void OTableWindowData::_disposing( const ::com::sun::star::lang::EventObject& /*
     // it doesn't matter which one was disposed
     m_xColumns.clear();
     m_xKeys.clear();
-    m_xTable.clear();
+    m_xTable.clear();    
 }
 // -----------------------------------------------------------------------------
 bool OTableWindowData::init(const Reference< XConnection  >& _xConnection,bool _bAllowQueries)

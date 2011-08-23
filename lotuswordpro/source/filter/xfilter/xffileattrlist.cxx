@@ -58,7 +58,11 @@
  * Attribute list for sax element,this is a help class to write xml to
  * local file.
  ************************************************************************/
-#include    "xffileattrlist.hxx"
+/*************************************************************************
+ * Change History
+ * 2004-12-23 create this file.
+ ************************************************************************/
+#include	"xffileattrlist.hxx"
 
 XFFileAttrList::XFFileAttrList()
 {
@@ -68,12 +72,12 @@ XFFileAttrList::~XFFileAttrList()
 {
 }
 
-void    XFFileAttrList::AddAttribute(const rtl::OUString& name, const rtl::OUString& value)
+void	XFFileAttrList::AddAttribute(const rtl::OUString& name, const rtl::OUString& value)
 {
     m_aAttrList.push_back( std::pair<rtl::OUString,rtl::OUString>(name,value) );
 }
 
-void    XFFileAttrList::Clear()
+void	XFFileAttrList::Clear()
 {
     m_aAttrList.clear();
 }

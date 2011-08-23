@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,6 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.task.XInteractionRequest;
 
-import static org.junit.Assert.*;
-
 /**
  *
  * @author oj93728
@@ -39,12 +37,14 @@ import static org.junit.Assert.*;
 class CopyTableInterActionHandler extends WeakBase
         implements XInteractionHandler
 {
-    CopyTableInterActionHandler()
+    private final CopyTableWizard test;
+    public CopyTableInterActionHandler(CopyTableWizard testCase)
     {
+        test = testCase;
     }
 
     public void handle(XInteractionRequest xRequest)
     {
-        fail( "interaction handler is not expected to be called" );
+        test.assure(xRequest.toString());
     }
 }

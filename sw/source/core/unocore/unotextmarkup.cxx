@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,7 @@ using namespace ::com::sun::star;
 SwXTextMarkup::SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper::ConversionMap* pMap )
     : mpTxtNode( &rTxtNode ), mpConversionMap( pMap )
 {
-    // FME 2007-07-16 #i79641# SwXTextMarkup is allowed to be removed ...
-    SetIsAllowedToBeRemovedInModifyCall(true);
-    mpTxtNode->Add(this);
+     mpTxtNode->Add(this);
 }
 
 SwXTextMarkup::~SwXTextMarkup()
@@ -67,12 +65,12 @@ uno::Reference< container::XStringKeyMap > SAL_CALL SwXTextMarkup::getMarkupInfo
     return xProp;
 }
 
-void SAL_CALL SwXTextMarkup::commitTextMarkup(
-    ::sal_Int32 nType,
-    const ::rtl::OUString & rIdentifier,
-    ::sal_Int32 nStart,
-    ::sal_Int32 nLength,
-    const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer)
+void SAL_CALL SwXTextMarkup::commitTextMarkup( 
+    ::sal_Int32 nType, 
+    const ::rtl::OUString & rIdentifier, 
+    ::sal_Int32 nStart, 
+    ::sal_Int32 nLength, 
+    const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer) 
     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -96,7 +94,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
             pWList = new SwWrongList( WRONGLIST_SPELL );
             mpTxtNode->SetWrong( pWList );
         }
-    }
+    }    
     else if ( nType == text::TextMarkupType::PROOFREADING || nType == text::TextMarkupType::SENTENCE )
     {
         IGrammarContact *pGrammarContact = getGrammarContact( *mpTxtNode );
@@ -129,7 +127,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
     }
     else
     {
-        OSL_FAIL( "Unknown mark-up type" );
+        OSL_ENSURE( false, "Unknown mark-up type" );
         return;
     }
 
@@ -147,7 +145,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
     {
         nStart = aStartPos.mnSubPos;
         const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
-        const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+        const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
 
         SwWrongList* pSubList = pWList->SubList( nInsertPos );
         if ( !pSubList )
@@ -176,7 +174,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
         if( bStartInField && nType != text::TextMarkupType::SENTENCE )
         {
             const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
-            const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwWrongList* pSubList = pWList->SubList( nInsertPos );
             if ( !pSubList )
             {
@@ -202,7 +200,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
         if( bEndInField && nType != text::TextMarkupType::SENTENCE )
         {
             const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aEndPos.mnPos);
-            const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwWrongList* pSubList = pWList->SubList( nInsertPos );
             if ( !pSubList )
             {
@@ -225,7 +223,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
         if( nType == text::TextMarkupType::SENTENCE )
             ((SwGrammarMarkUp*)pWList)->setSentence( static_cast< xub_StrLen >(nStart) );
         else
-            pWList->Insert( rIdentifier, xMarkupInfoContainer,
+            pWList->Insert( rIdentifier, xMarkupInfoContainer, 
                 static_cast< xub_StrLen >(nStart), static_cast< xub_StrLen >(nLength) );
     }
 
@@ -234,14 +232,14 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
 }
 
 
-void lcl_commitGrammarMarkUp(
+void lcl_commitGrammarMarkUp( 
     const ModelToViewHelper::ConversionMap* pConversionMap,
     SwGrammarMarkUp* pWList,
-    ::sal_Int32 nType,
-    const ::rtl::OUString & rIdentifier,
-    ::sal_Int32 nStart,
-    ::sal_Int32 nLength,
-    const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer)
+    ::sal_Int32 nType, 
+    const ::rtl::OUString & rIdentifier, 
+    ::sal_Int32 nStart, 
+    ::sal_Int32 nLength, 
+    const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer) 
 {
     OSL_ENSURE( nType == text::TextMarkupType::PROOFREADING || nType == text::TextMarkupType::SENTENCE, "Wrong mark-up type" );
     const ModelToViewHelper::ModelPosition aStartPos =
@@ -257,7 +255,7 @@ void lcl_commitGrammarMarkUp(
     {
         nStart = aStartPos.mnSubPos;
         const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
-        const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+        const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
 
         SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
         if ( !pSubList )
@@ -283,7 +281,7 @@ void lcl_commitGrammarMarkUp(
         if( bStartInField && nType != text::TextMarkupType::SENTENCE )
         {
             const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
-            const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
             if ( !pSubList )
             {
@@ -301,7 +299,7 @@ void lcl_commitGrammarMarkUp(
         if( bEndInField && nType != text::TextMarkupType::SENTENCE )
         {
             const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aEndPos.mnPos);
-            const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
             if ( !pSubList )
             {
@@ -324,14 +322,14 @@ void lcl_commitGrammarMarkUp(
         if( nType == text::TextMarkupType::SENTENCE )
             ((SwGrammarMarkUp*)pWList)->setSentence( static_cast< xub_StrLen >(nStart+nLength) );
         else
-            pWList->Insert( rIdentifier, xMarkupInfoContainer,
+            pWList->Insert( rIdentifier, xMarkupInfoContainer, 
                 static_cast< xub_StrLen >(nStart), static_cast< xub_StrLen >(nLength) );
     }
 }
 
 
 void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
-    const uno::Sequence< text::TextMarkupDescriptor > &rMarkups )
+    const uno::Sequence< text::TextMarkupDescriptor > &rMarkups ) 
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -360,11 +358,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 nSentenceMarkUpIndex = i;
             else    // there is already one sentence markup
                 throw lang::IllegalArgumentException();
-        }
+        } 
         else if( pMarkups[i].nType != text::TextMarkupType::PROOFREADING )
             return;
     }
-
+    
     if( nSentenceMarkUpIndex == -1 )
         return;
 
@@ -393,18 +391,18 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if( pWList->GetBeginInv() < STRING_LEN )
     {
         const ModelToViewHelper::ModelPosition aSentenceEnd =
-            ModelToViewHelper::ConvertToModelPosition( mpConversionMap,
+            ModelToViewHelper::ConvertToModelPosition( mpConversionMap, 
                 pMarkups[nSentenceMarkUpIndex].nOffset + pMarkups[nSentenceMarkUpIndex].nLength );
         bAcceptGrammarError = (xub_StrLen)aSentenceEnd.mnPos > pWList->GetBeginInv();
         pWList->ClearGrammarList( (xub_StrLen)aSentenceEnd.mnPos );
     }
-
+    
     if( bAcceptGrammarError )
     {
         for( i = 0;  i < nLen;  ++i )
         {
             const text::TextMarkupDescriptor &rDesc = pMarkups[i];
-            lcl_commitGrammarMarkUp( mpConversionMap, pWList, rDesc.nType,
+            lcl_commitGrammarMarkUp( mpConversionMap, pWList, rDesc.nType, 
                 rDesc.aIdentifier, rDesc.nOffset, rDesc.nLength, rDesc.xMarkupInfoContainer );
         }
     }
@@ -413,7 +411,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         bRepaint = false;
         i = nSentenceMarkUpIndex;
         const text::TextMarkupDescriptor &rDesc = pMarkups[i];
-        lcl_commitGrammarMarkUp( mpConversionMap, pWList, rDesc.nType,
+        lcl_commitGrammarMarkUp( mpConversionMap, pWList, rDesc.nType, 
             rDesc.aIdentifier, rDesc.nOffset, rDesc.nLength, rDesc.xMarkupInfoContainer );
     }
 
@@ -421,17 +419,17 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         finishGrammarCheck( *mpTxtNode );
 
     return;
-}
+}    
 
 
-void SwXTextMarkup::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pNew*/ )
+void SwXTextMarkup::Modify( SfxPoolItem* /*pOld*/, SfxPoolItem* /*pNew*/ )
 {
     // FME 2007-07-16 #i79641# In my opinion this is perfectly legal,
     // therefore I remove the assertion in SwModify::_Remove()
-    if ( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove( this );
+    if ( pRegisteredIn )
+        pRegisteredIn->Remove( this );
     // <--
-
+    
     SolarMutexGuard aGuard;
     mpTxtNode = 0;
 }

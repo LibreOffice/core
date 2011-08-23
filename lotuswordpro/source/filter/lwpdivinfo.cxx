@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwpdivinfo.hxx"
@@ -127,15 +127,15 @@ void LwpDivInfo::SkipFront()
     {
         m_pObjStrm->SkipExtra();
     }
-    toSkip.ReadIndexed(m_pObjStrm); // skip ListPrevious;
+    toSkip.ReadIndexed(m_pObjStrm);	// skip ListPrevious;
     if (LwpFileHeader::m_nFileRevision < 0x0006)
     {
         m_pObjStrm->SkipExtra();
     }
-    toSkip.ReadIndexed(m_pObjStrm); // skip Head;
+    toSkip.ReadIndexed(m_pObjStrm);	// skip Head;
     if (LwpFileHeader::m_nFileRevision < 0x0006)
     {
-        toSkip.ReadIndexed(m_pObjStrm); //skip tail
+        toSkip.ReadIndexed(m_pObjStrm);	//skip tail
         m_pObjStrm->SkipExtra();
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -122,7 +122,7 @@ void XMLShapeExport::ImpExport3DShape(
         aTransform.AddHomogenMatrix(xHomMat);
         if(aTransform.NeedsAction())
             mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_TRANSFORM, aTransform.GetExportString(mrExport.GetMM100UnitConverter()));
-
+        
         switch(eShapeType)
         {
             case XmlShapeTypeDraw3DCubeObject:
@@ -211,13 +211,13 @@ void XMLShapeExport::ImpExport3DShape(
                 double fXMax = 0;
                 double fYMin = 0;
                 double fYMax = 0;
-                sal_Bool bInit(sal_False);
+                BOOL bInit(FALSE);
                 sal_Int32 nOuterSequenceCount(xPolyPolygon3D.SequenceX.getLength());
                 drawing::DoubleSequence* pInnerSequenceX = xPolyPolygon3D.SequenceX.getArray();
                 drawing::DoubleSequence* pInnerSequenceY = xPolyPolygon3D.SequenceY.getArray();
 
                 sal_Int32 a;
-                for (a = 0; a < nOuterSequenceCount; a++)
+                for( a= 0L; a < nOuterSequenceCount; a++)
                 {
                     sal_Int32 nInnerSequenceCount(pInnerSequenceX->getLength());
                     double* pArrayX = pInnerSequenceX->getArray();
@@ -246,7 +246,7 @@ void XMLShapeExport::ImpExport3DShape(
                         {
                             fXMin = fXMax = fX;
                             fYMin = fYMax = fY;
-                            bInit = sal_True;
+                            bInit = TRUE;
                         }
                     }
 
@@ -259,7 +259,7 @@ void XMLShapeExport::ImpExport3DShape(
                 awt::Size aMaxSize(FRound(fXMax) - aMinPoint.X, FRound(fYMax) - aMinPoint.Y);
                 SdXMLImExViewBox aViewBox(
                     aMinPoint.X, aMinPoint.Y, aMaxSize.Width, aMaxSize.Height);
-                mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX,
+                mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, 
                     aViewBox.GetExportString());
 
                 // prepare svx:d element export
@@ -267,7 +267,7 @@ void XMLShapeExport::ImpExport3DShape(
                 pInnerSequenceX = xPolyPolygon3D.SequenceX.getArray();
                 pInnerSequenceY = xPolyPolygon3D.SequenceY.getArray();
 
-                for (a = 0; a < nOuterSequenceCount; a++)
+                for(a = 0L; a < nOuterSequenceCount; a++)
                 {
                     sal_Int32 nInnerSequenceCount(pInnerSequenceX->getLength());
                     double* pArrayX = pInnerSequenceX->getArray();
@@ -287,9 +287,9 @@ void XMLShapeExport::ImpExport3DShape(
                     // calculate closed flag
                     awt::Point* pFirst = aPoly.getArray();
                     awt::Point* pLast = pFirst + (nInnerSequenceCount - 1);
-                    sal_Bool bClosed = (pFirst->X == pLast->X && pFirst->Y == pLast->Y);
+                    BOOL bClosed = (pFirst->X == pLast->X && pFirst->Y == pLast->Y);
 
-                    aSvgDElement.AddPolygon(&aPoly, 0L, aMinPoint,
+                    aSvgDElement.AddPolygon(&aPoly, 0L, aMinPoint, 
                         aMaxSize, bClosed);
 
                     // #80594# corrected error in PolyPolygon3D export for 3D XML
@@ -339,7 +339,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")));
     drawing::CameraGeometry aCamGeo;
     aAny >>= aCamGeo;
-
+    
     ::basegfx::B3DVector aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
     if(aVRP != ::basegfx::B3DVector(0.0, 0.0, 1.0)) // write only when not default
     {
@@ -484,11 +484,11 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
         mrExport.GetMM100UnitConverter().convertBool(sStringBuffer, bLightOnOff);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_ENABLED, aStr);
-
+        
         // specular
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SPECULAR,
             nLamp == 1 ? XML_TRUE : XML_FALSE);
-
+        
         // write light entry
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_LIGHT, sal_True, sal_True);
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@
 // -------------
 
 XBMReader::XBMReader( SvStream& rStm ) :
-            rIStm           ( rStm ),
-            pAcc1           ( NULL ),
-            nLastPos        ( rStm.Tell() ),
-            nWidth          ( 0 ),
-            nHeight         ( 0 ),
-            bStatus         ( sal_True )
+            rIStm			( rStm ),
+            pAcc1			( NULL ),
+            nLastPos		( rStm.Tell() ),
+            nWidth			( 0 ),
+            nHeight			( 0 ),
+            bStatus			( TRUE )
 {
     pHexTable = new short[ 256 ];
     maUpperName = String::CreateFromAscii( "SVIXBM", 6 );
@@ -92,7 +92,7 @@ void XBMReader::InitTable()
     pHexTable['e'] = 14;
     pHexTable['f'] = 15;
     pHexTable['x'] = 0;
-    pHexTable[' '] =     -1;
+    pHexTable[' '] =	 -1;
     pHexTable[','] = -1;
     pHexTable['}'] = -1;
     pHexTable['\n'] = -1;
@@ -105,12 +105,12 @@ void XBMReader::InitTable()
 ByteString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
                                  const char* pTok2, const char* pTok3 )
 {
-    ByteString  aRet;
-    long        nPos1;
-    long        nPos2;
-    long        nPos3;
+    ByteString	aRet;
+    long		nPos1;
+    long		nPos2;
+    long		nPos3;
 
-    bStatus = sal_False;
+    bStatus = FALSE;
 
     do
     {
@@ -121,23 +121,23 @@ ByteString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
         {
             if( ( nPos1 = aRet.Search( pTok1 ) ) != STRING_NOTFOUND )
             {
-                bStatus = sal_True;
+                bStatus = TRUE;
 
                 if( pTok2 )
                 {
-                    bStatus = sal_False;
+                    bStatus = FALSE;
 
                     if( ( ( nPos2 = aRet.Search( pTok2 ) ) != STRING_NOTFOUND ) &&
                          ( nPos2 > nPos1 ) )
                     {
-                        bStatus = sal_True;
+                        bStatus = TRUE;
 
                         if( pTok3 )
                         {
-                            bStatus = sal_False;
+                            bStatus = FALSE;
 
                             if( ( ( nPos3 = aRet.Search( pTok3 ) ) != STRING_NOTFOUND ) && ( nPos3 > nPos2 ) )
-                                bStatus = sal_True;
+                                bStatus = TRUE;
                         }
                     }
                 }
@@ -153,9 +153,9 @@ ByteString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
 
 long XBMReader::ParseDefine( const sal_Char* pDefine )
 {
-    long    nRet = 0;
-    char*   pTmp = (char*) pDefine;
-    unsigned char   cTmp;
+    long	nRet = 0;
+    char*	pTmp = (char*) pDefine;
+    unsigned char	cTmp;
 
     // bis zum Ende gehen
     pTmp += ( strlen( pDefine ) - 1 );
@@ -200,16 +200,16 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
 
 // ------------------------------------------------------------------------
 
-sal_Bool XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFormat eFormat )
+BOOL XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFormat eFormat )
 {
-    ByteString      aLine;
-    long            nRow = 0;
-    long            nCol = 0;
-    long            nBits = ( eFormat == XBM10 ) ? 16 : 8;
-    long            nBit;
-    sal_uInt16          nValue;
-    sal_uInt16          nDigits;
-    sal_Bool            bFirstLine = sal_True;
+    ByteString		aLine;
+    long			nRow = 0;
+    long			nCol = 0;
+    long			nBits = ( eFormat == XBM10 ) ? 16 : 8;
+    long			nBit;
+    USHORT			nValue;
+    USHORT			nDigits;
+    BOOL			bFirstLine = TRUE;
 
     while( nRow < nHeight )
     {
@@ -221,37 +221,37 @@ sal_Bool XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XB
             if( (nPos = ( aLine = aLastLine ).Search( '{' ) ) != STRING_NOTFOUND )
                 aLine.Erase( 0, nPos + 1 );
 
-            bFirstLine = sal_False;
+            bFirstLine = FALSE;
         }
         else if( !pInStm->ReadLine( aLine ) )
             break;
 
         if( aLine.Len() )
         {
-            const sal_uInt16 nCount = aLine.GetTokenCount( ',' );
+            const USHORT nCount = aLine.GetTokenCount( ',' );
 
-            for( sal_uInt16 i = 0; ( i < nCount ) && ( nRow < nHeight ); i++ )
+            for( USHORT i = 0; ( i < nCount ) && ( nRow < nHeight ); i++ )
             {
-                const ByteString    aToken( aLine.GetToken( i, ',' ) );
+                const ByteString	aToken( aLine.GetToken( i, ',' ) );
                 const xub_StrLen nLen = aToken.Len();
-                sal_Bool                bProcessed = sal_False;
+                BOOL				bProcessed = FALSE;
 
                 nBit = nDigits = nValue = 0;
 
                 for( xub_StrLen n = 0UL; n < nLen; n++ )
                 {
                     const unsigned char cChar = aToken.GetChar( n );
-                    const short         nTable = pHexTable[ cChar ];
+                    const short			nTable = pHexTable[ cChar ];
 
                     if( isxdigit( cChar ) || !nTable )
                     {
                         nValue = ( nValue << 4 ) + nTable;
                         nDigits++;
-                        bProcessed = sal_True;
+                        bProcessed = TRUE;
                     }
                     else if( ( nTable < 0 ) && nDigits )
                     {
-                        bProcessed = sal_True;
+                        bProcessed = TRUE;
                         break;
                     }
                 }
@@ -268,15 +268,15 @@ sal_Bool XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XB
         }
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 // ------------------------------------------------------------------------
 
 ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 {
-    ReadState   eReadState;
-    sal_uInt8       cDummy;
+    ReadState	eReadState;
+    BYTE		cDummy;
 
     // sehen, ob wir _alles_ lesen koennen
     rIStm.Seek( STREAM_SEEK_TO_END );
@@ -286,15 +286,15 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
     // kehren wir zurueck und warten auf neue Daten
     if ( rIStm.GetError() != ERRCODE_IO_PENDING )
     {
-        ByteString  aLine;
+        ByteString	aLine;
+        int			nValue;
 
         rIStm.Seek( nLastPos );
-        bStatus = sal_False;
+        bStatus = FALSE;
         aLine = FindTokenLine( &rIStm, "#define", "_width" );
 
         if ( bStatus )
         {
-            int nValue;
             if ( ( nValue = (int) ParseDefine( aLine.GetBuffer() ) ) > 0 )
             {
                 nWidth = nValue;
@@ -309,7 +309,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
                 }
             }
             else
-                bStatus = sal_False;
+                bStatus = FALSE;
 
             if ( bStatus )
             {
@@ -327,7 +327,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
                         else if ( aLine.Search( "char" ) != STRING_NOTFOUND )
                             eFormat = XBM11;
                         else
-                            bStatus = sal_False;
+                            bStatus = FALSE;
 
                         if ( bStatus && nWidth && nHeight )
                         {
@@ -341,7 +341,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
                                 bStatus = ParseData( &rIStm, aLine, eFormat );
                             }
                             else
-                                bStatus = sal_False;
+                                bStatus = FALSE;
                         }
                     }
                 }
@@ -373,11 +373,11 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 // - ImportXBM -
 // -------------
 
-sal_Bool ImportXBM( SvStream& rStm, Graphic& rGraphic )
+BOOL ImportXBM( SvStream& rStm, Graphic& rGraphic )
 {
-    XBMReader*  pXBMReader = (XBMReader*) rGraphic.GetContext();
-    ReadState   eReadState;
-    sal_Bool        bRet = sal_True;
+    XBMReader*	pXBMReader = (XBMReader*) rGraphic.GetContext();
+    ReadState	eReadState;
+    BOOL		bRet = TRUE;
 
     if( !pXBMReader )
         pXBMReader = new XBMReader( rStm );
@@ -387,7 +387,7 @@ sal_Bool ImportXBM( SvStream& rStm, Graphic& rGraphic )
 
     if( eReadState == XBMREAD_ERROR )
     {
-        bRet = sal_False;
+        bRet = FALSE;
         delete pXBMReader;
     }
     else if( eReadState == XBMREAD_OK )

@@ -348,7 +348,7 @@ testcase tFormatPage_6
 
 	Call hNewDocument
 
-	hFileOpen( gOfficepath + "user\work\tFormatPage_6.odt")
+	Call hFileOpen(gOfficepath + "user\work\tFormatPage_6.odt")
 
 	'/// Check if Pre-defined formats are correct
 	fFormatPageWriter("TabSeite")
@@ -602,8 +602,8 @@ testcase tFormatPage_11
     '/// Open a test file ,
     '/// + There are 2 pictures in 2 pages separately ,
     '/// + and they are anchored as character
-     hFileOpenLocally( sTestFile )
-     
+     Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// FormatPage / tabpage Page , Set left margins to 10cm ,
     '/// + and set page layout to "Right to left"
@@ -662,8 +662,8 @@ testcase tFormatPage_12
 
     '/// Open a test file ,
     '/// + there are 2 pictures in 2 pages separately , and they are anchored as character
-     hFileOpenLocally( sTestFile )
-     
+     Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// FormatPage / tabpage Page , Set left margins to 10cm ,
     '/// + and set page layout to "Mirrored"
@@ -724,8 +724,8 @@ testcase tFormatPage_13
 
     '/// Open a test file ,
     '/// + there are 2 pictures in 2 pages separately
-     hFileOpenLocally( sTestFile )
-     
+     Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// FormatPage / tabpage Page , Set left margins to 10cm ,
     '/// + and set page layout to "Only right"
@@ -753,7 +753,7 @@ testcase tFormatPage_13
      if Not Navigator.Exists then ViewNavigator
      Kontext "NavigatorWriter"
      Sleep 1
-     if Seitennummer.GetText <> sPage2 then Warnlog "2nd pic isn't in page 3 !"
+     if Seitennummer.GetText <> sPage2 then Warnlog "#i40333# 2nd pic isn't in page 3 !"
      fCloseNavigator
      Wait 500
 
@@ -781,8 +781,8 @@ testcase tFormatPage_14
 
     '/// Open a test file ,
     '/// + there are 2 pictures in 2 pages separately
-     hFileOpenLocally( sTestFile )
-     
+     Call hFileOpen(sTestFile)
+     Call sMakeReadOnlyDocumentEditable
 
     '/// FormatPage / tabpage Page , Set left margins to 10cm ,
     '/// + and set page layout to "Only left"
@@ -810,7 +810,7 @@ testcase tFormatPage_14
      if Not Navigator.Exists then ViewNavigator
      Kontext "NavigatorWriter"
      Sleep 1
-     if Seitennummer.GetText <> sPage2 then Warnlog "2nd pic isn't in page 4 !"
+     if Seitennummer.GetText <> sPage2 then Warnlog "#i40333# 2nd pic isn't in page 4 !"
      fCloseNavigator
      Wait 500
 

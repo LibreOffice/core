@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@
 namespace dp_misc {
 
 //==============================================================================
-ResId getResId( sal_uInt16 id );
+ResId getResId( USHORT id );
 
 //==============================================================================
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC String getResourceString( sal_uInt16 id );
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC String getResourceString( USHORT id );
 
-template <typename Unique, sal_uInt16 id>
+template <typename Unique, USHORT id>
 struct StaticResourceString :
         public ::rtl::StaticWithInit<const ::rtl::OUString, Unique> {
     const ::rtl::OUString operator () () { return getResourceString(id); }

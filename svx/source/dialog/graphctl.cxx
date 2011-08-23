@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,18 @@
 
 #include <svx/graphctl.hxx>
 #include "GraphCtlAccessibleContext.hxx"
-#include "svx/xoutbmp.hxx"
+#include "xoutbmp.hxx"
 #include <svx/svxids.hrc>
 #include <svx/svdpage.hxx>
 
 // #i72889#
-#include "svx/sdrpaintwindow.hxx"
+#include "sdrpaintwindow.hxx"
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, const Rectangle& /*rOldBoundRect*/ )
 {
@@ -65,13 +71,20 @@ void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, c
     }
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 GraphCtrl::GraphCtrl( Window* pParent, const WinBits nWinBits ) :
-            Control         ( pParent, nWinBits ),
-            aMap100         ( MAP_100TH_MM ),
+            Control			( pParent, nWinBits ),
+            aMap100			( MAP_100TH_MM ),
             eObjKind        ( OBJ_NONE ),
-            nPolyEdit       ( 0 ),
-            bEditMode       ( sal_False ),
-            bSdrMode        ( sal_False ),
+            nPolyEdit		( 0 ),
+            bEditMode		( FALSE ),
+            bSdrMode		( FALSE ),
             mpAccContext    ( NULL ),
             pModel          ( NULL ),
             pView           ( NULL )
@@ -83,18 +96,25 @@ GraphCtrl::GraphCtrl( Window* pParent, const WinBits nWinBits ) :
 
     SetWinStyle( nWinBits );
 
-    EnableRTL( sal_False );
+    EnableRTL( FALSE );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 GraphCtrl::GraphCtrl( Window* pParent, const ResId& rResId ) :
-            Control         ( pParent, rResId ),
-            aMap100         ( MAP_100TH_MM ),
+            Control			( pParent, rResId ),
+            aMap100			( MAP_100TH_MM ),
             nWinStyle       ( 0 ),
             eObjKind        ( OBJ_NONE ),
-            nPolyEdit       ( 0 ),
-            bEditMode       ( sal_False ),
-            bSdrMode        ( sal_False ),
-            bAnim           ( sal_False ),
+            nPolyEdit		( 0 ),
+            bEditMode       ( FALSE ),
+            bSdrMode        ( FALSE ),
+            bAnim           ( FALSE ),
             mpAccContext    ( NULL ),
             pModel          ( NULL ),
             pView           ( NULL )
@@ -103,8 +123,15 @@ GraphCtrl::GraphCtrl( Window* pParent, const ResId& rResId ) :
     aUpdateTimer.SetTimeout( 500 );
     aUpdateTimer.SetTimeoutHdl( LINK( this, GraphCtrl, UpdateHdl ) );
     aUpdateTimer.Start();
-    EnableRTL( sal_False );
+    EnableRTL( FALSE );
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 GraphCtrl::~GraphCtrl()
 {
@@ -117,6 +144,13 @@ GraphCtrl::~GraphCtrl()
     delete pModel;
     delete pUserCall;
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 void GraphCtrl::SetWinStyle( WinBits nWinBits )
 {
@@ -138,17 +172,24 @@ void GraphCtrl::SetWinStyle( WinBits nWinBits )
         InitSdrModel();
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void GraphCtrl::InitSdrModel()
 {
     SolarMutexGuard aGuard;
 
     SdrPage* pPage;
 
-    // destroy old junk
+    // alten Kram zerstoeren
     delete pView;
     delete pModel;
 
-    // Creating a Model
+    // Model anlegen
     pModel = new SdrModel;
     pModel->GetItemPool().FreezeIdRanges();
     pModel->SetScaleUnit( aMap100.GetMapUnit() );
@@ -162,14 +203,15 @@ void GraphCtrl::InitSdrModel()
     pModel->InsertPage( pPage );
     pModel->SetChanged( sal_False );
 
-    // Creating a View
+    // View anlegen
     pView = new GraphCtrlView( pModel, this );
     pView->SetWorkArea( Rectangle( Point(), aGraphSize ) );
-    pView->EnableExtendedMouseEventDispatcher( sal_True );
+    pView->EnableExtendedMouseEventDispatcher( TRUE );
     pView->ShowSdrPage(pView->GetModel()->GetPage(0));
-    pView->SetFrameDragSingles( sal_True );
+//	pView->ShowSdrPage(pView->GetModel()->GetPage(0));
+    pView->SetFrameDragSingles( TRUE );
     pView->SetMarkedPointsSmooth( SDRPATHSMOOTH_SYMMETRIC );
-    pView->SetEditMode( sal_True );
+    pView->SetEditMode( TRUE );
 
     // #i72889# set neeeded flags
     pView->SetPagePaintingAllowed(false);
@@ -181,14 +223,21 @@ void GraphCtrl::InitSdrModel()
         mpAccContext->setModelAndView (pModel, pView);
 }
 
-void GraphCtrl::SetGraphic( const Graphic& rGraphic, sal_Bool bNewModel )
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+void GraphCtrl::SetGraphic( const Graphic& rGraphic, BOOL bNewModel )
 {
-    // If possible we dither bitmaps for the display
+    // Bitmaps dithern wir ggf. fuer die Anzeige
     if ( !bAnim && ( rGraphic.GetType() == GRAPHIC_BITMAP )  )
     {
         if ( rGraphic.IsTransparent() )
         {
-            Bitmap  aBmp( rGraphic.GetBitmap() );
+            Bitmap	aBmp( rGraphic.GetBitmap() );
 
             DitherBitmap( aBmp );
             aGraphic = Graphic( BitmapEx( aBmp, rGraphic.GetBitmapEx().GetMask() ) );
@@ -218,22 +267,29 @@ void GraphCtrl::SetGraphic( const Graphic& rGraphic, sal_Bool bNewModel )
     Invalidate();
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void GraphCtrl::Resize()
 {
     Control::Resize();
 
     if ( aGraphSize.Width() && aGraphSize.Height() )
     {
-        MapMode         aDisplayMap( aMap100 );
+        MapMode			aDisplayMap( aMap100 );
         Point           aNewPos;
-        Size            aNewSize;
-        const Size      aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
-        const long      nWidth = aWinSize.Width();
-        const long      nHeight = aWinSize.Height();
+        Size			aNewSize;
+        const Size		aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
+        const long		nWidth = aWinSize.Width();
+        const long		nHeight = aWinSize.Height();
         double          fGrfWH = (double) aGraphSize.Width() / aGraphSize.Height();
         double          fWinWH = (double) nWidth / nHeight;
 
-        // Adapt Bitmap to Thumb size
+        // Bitmap an Thumbgroesse anpassen
         if ( fGrfWH < fWinWH)
         {
             aNewSize.Width() = (long) ( (double) nHeight * fGrfWH );
@@ -248,7 +304,7 @@ void GraphCtrl::Resize()
         aNewPos.X() = ( nWidth - aNewSize.Width() )  >> 1;
         aNewPos.Y() = ( nHeight - aNewSize.Height() ) >> 1;
 
-        // Implementing MapMode for Engine
+        // MapMode fuer Engine umsetzen
         aDisplayMap.SetScaleX( Fraction( aNewSize.Width(), aGraphSize.Width() ) );
         aDisplayMap.SetScaleY( Fraction( aNewSize.Height(), aGraphSize.Height() ) );
 
@@ -258,6 +314,13 @@ void GraphCtrl::Resize()
 
     Invalidate();
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 void GraphCtrl::Paint( const Rectangle& rRect )
 {
@@ -272,10 +335,10 @@ void GraphCtrl::Paint( const Rectangle& rRect )
         if(bGraphicValid)
         {
             OutputDevice& rTarget = pPaintWindow->GetTargetOutputDevice();
-
+            
             rTarget.SetBackground(GetBackground());
             rTarget.Erase();
-
+            
             aGraphic.Draw(&rTarget, Point(), aGraphSize);
         }
 
@@ -293,13 +356,34 @@ void GraphCtrl::Paint( const Rectangle& rRect )
     }
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void GraphCtrl::SdrObjChanged( const SdrObject&  )
 {
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void GraphCtrl::SdrObjCreated( const SdrObject& )
 {
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 void GraphCtrl::MarkListHasChanged()
 {
@@ -307,10 +391,17 @@ void GraphCtrl::MarkListHasChanged()
         aMarkObjLink.Call( this );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aCode( rKEvt.GetKeyCode() );
-    sal_Bool    bProc = sal_False;
+    BOOL	bProc = FALSE;
 
     switch ( aCode.GetCode() )
     {
@@ -320,7 +411,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
             if ( bSdrMode )
             {
                 pView->DeleteMarked();
-                bProc = sal_True;
+                bProc = TRUE;
                 if( !pView->AreObjectsMarked() )
                     ((Dialog*)GetParent())->GrabFocusToFirstControl();
             }
@@ -353,7 +444,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 {
                     ((Dialog*)GetParent())->GrabFocusToFirstControl();
                 }
-                bProc = sal_True;
+                bProc = TRUE;
             }
         }
         break;
@@ -374,7 +465,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                         pView->UnmarkAllObj();
                         pView->MarkNextObj (bForward);
                     }
-                    bProc = sal_True;
+                    bProc = TRUE;
                 }
                 else if(aCode.IsMod1())
                 {
@@ -395,9 +486,9 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
             if ( aCode.IsMod1() )
             {
-                // mark last object
+                // #97016# mark last object
                 pView->UnmarkAllObj();
-                pView->MarkNextObj(sal_False);
+                pView->MarkNextObj(FALSE);
 
                 bProc = true;
             }
@@ -409,7 +500,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
             if ( aCode.IsMod1() )
             {
                 pView->UnmarkAllObj();
-                pView->MarkNextObj(sal_True);
+                pView->MarkNextObj(TRUE);
 
                 bProc = true;
             }
@@ -426,25 +517,25 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
             if (aCode.GetCode() == KEY_UP)
             {
-                // Scroll up
+                // Scroll nach oben
                 nX = 0;
                 nY =-1;
             }
             else if (aCode.GetCode() == KEY_DOWN)
             {
-                // Scroll down
+                // Scroll nach unten
                 nX = 0;
                 nY = 1;
             }
             else if (aCode.GetCode() == KEY_LEFT)
             {
-                // Scroll left
+                // Scroll nach links
                 nX =-1;
                 nY = 0;
             }
             else if (aCode.GetCode() == KEY_RIGHT)
             {
-                // Scroll right
+                // Scroll nach rechts
                 nX = 1;
                 nY = 0;
             }
@@ -453,7 +544,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
             {
                 if(aCode.IsMod2())
                 {
-                    // move in 1 pixel distance
+                    // #97016# move in 1 pixel distance
                     Size aLogicSizeOnePixel = PixelToLogic(Size(1,1));
                     nX *= aLogicSizeOnePixel.Width();
                     nY *= aLogicSizeOnePixel.Height();
@@ -465,13 +556,13 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                     nY *= 100;
                 }
 
-                // II
+                // #97016# II
                 const SdrHdlList& rHdlList = pView->GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
                 if(0L == pHdl)
                 {
-                    // restrict movement to WorkArea
+                    // #90129# restrict movement to WorkArea
                     const Rectangle& rWorkArea = pView->GetWorkArea();
 
                     if(!rWorkArea.IsEmpty())
@@ -525,13 +616,13 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                         if(pView->IsDragObj())
                         {
                             bool bWasNoSnap = rDragStat.IsNoSnap();
-                            sal_Bool bWasSnapEnabled = pView->IsSnapEnabled();
+                            BOOL bWasSnapEnabled = pView->IsSnapEnabled();
 
                             // switch snapping off
                             if(!bWasNoSnap)
-                                ((SdrDragStat&)rDragStat).SetNoSnap(sal_True);
+                                ((SdrDragStat&)rDragStat).SetNoSnap(TRUE);
                             if(bWasSnapEnabled)
-                                pView->SetSnapEnabled(sal_False);
+                                pView->SetSnapEnabled(FALSE);
 
                             pView->MovAction(aEndPoint);
                             pView->EndDragObj();
@@ -604,7 +695,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                         }
                     }
 
-                    bProc = sal_True;
+                    bProc = TRUE;
                 }
             }
         }
@@ -620,6 +711,13 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
         ReleaseMouse();
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( bSdrMode && ( rMEvt.GetClicks() < 2 ) )
@@ -630,13 +728,13 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
             Control::MouseButtonDown( rMEvt );
         else
         {
-            // Get Focus for key inputs
+            // Focus anziehen fuer Key-Inputs
             GrabFocus();
 
             if ( nPolyEdit )
             {
-                SdrViewEvent    aVEvt;
-                SdrHitKind      eHit = pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
+                SdrViewEvent	aVEvt;
+                SdrHitKind		eHit = pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
 
                 if ( nPolyEdit == SID_BEZIER_INSERT && eHit == SDRHIT_MARKEDOBJECT )
                     pView->BegInsObjPoint( aLogPt, rMEvt.IsMod1());
@@ -649,7 +747,7 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
 
         SdrObject* pCreateObj = pView->GetCreateObj();
 
-        // We want to realize the insert
+        // Wir wollen das Inserten mitbekommen
         if ( pCreateObj && !pCreateObj->GetUserCall() )
             pCreateObj->SetUserCall( pUserCall );
 
@@ -659,9 +757,16 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
         Control::MouseButtonDown( rMEvt );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void GraphCtrl::MouseMove(const MouseEvent& rMEvt)
 {
-    const Point aLogPos( PixelToLogic( rMEvt.GetPosPixel() ) );
+    const Point	aLogPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
     if ( bSdrMode )
     {
@@ -690,6 +795,13 @@ void GraphCtrl::MouseMove(const MouseEvent& rMEvt)
     }
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void GraphCtrl::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if ( bSdrMode )
@@ -706,13 +818,20 @@ void GraphCtrl::MouseButtonUp(const MouseEvent& rMEvt)
         Control::MouseButtonUp( rMEvt );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 SdrObject* GraphCtrl::GetSelectedSdrObject() const
 {
     SdrObject* pSdrObj = NULL;
 
     if ( bSdrMode )
     {
-        const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
+        const SdrMarkList&	rMarkList = pView->GetMarkedObjectList();
 
         if ( rMarkList.GetMarkCount() == 1 )
             pSdrObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
@@ -721,20 +840,34 @@ SdrObject* GraphCtrl::GetSelectedSdrObject() const
     return pSdrObj;
 }
 
-void GraphCtrl::SetEditMode( const sal_Bool _bEditMode )
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+void GraphCtrl::SetEditMode( const BOOL _bEditMode )
 {
     if ( bSdrMode )
     {
         bEditMode = _bEditMode;
         pView->SetEditMode( bEditMode );
         eObjKind = OBJ_NONE;
-        pView->SetCurrentObj( sal::static_int_cast< sal_uInt16 >( eObjKind ) );
+        pView->SetCurrentObj( sal::static_int_cast< UINT16 >( eObjKind ) );
     }
     else
-        bEditMode = sal_False;
+        bEditMode = FALSE;
 }
 
-void GraphCtrl::SetPolyEditMode( const sal_uInt16 _nPolyEdit )
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+void GraphCtrl::SetPolyEditMode( const USHORT _nPolyEdit )
 {
     if ( bSdrMode && ( _nPolyEdit != nPolyEdit ) )
     {
@@ -745,18 +878,32 @@ void GraphCtrl::SetPolyEditMode( const sal_uInt16 _nPolyEdit )
         nPolyEdit = 0;
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
 {
     if ( bSdrMode )
     {
-        bEditMode = sal_False;
+        bEditMode = FALSE;
         pView->SetEditMode( bEditMode );
         eObjKind = _eObjKind;
-        pView->SetCurrentObj( sal::static_int_cast< sal_uInt16 >( eObjKind ) );
+        pView->SetCurrentObj( sal::static_int_cast< UINT16 >( eObjKind ) );
     }
     else
         eObjKind = OBJ_NONE;
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 String GraphCtrl::GetStringFromDouble( const double& rDouble )
 {
@@ -766,6 +913,13 @@ String GraphCtrl::GetStringFromDouble( const double& rDouble )
                 rtl_math_StringFormat_F, 2, cSep ));
     return aStr;
 }
+
+
+/*************************************************************************
+www|*
+|*
+|*
+\************************************************************************/
 
 IMPL_LINK( GraphCtrl, UpdateHdl, Timer*, pTimer )
 {
@@ -790,8 +944,8 @@ IMPL_LINK( GraphCtrl, UpdateHdl, Timer*, pTimer )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccParent( pParent->GetAccessible() );
 
-            // Disable accessibility if no model/view data available
-            if( pView &&
+            // #103856# Disable accessibility if no model/view data available
+            if( pView &&                
                 pModel &&
                 xAccParent.is() )
             {

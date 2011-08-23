@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class Sound;
 
 namespace sd {
 
-class FuSelection
+class FuSelection 
     : public FuDraw
 {
 public:
@@ -50,20 +50,20 @@ public:
     virtual void DoExecute( SfxRequest& rReq );
 
                                        // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 
     virtual void SelectionHasChanged();
 
-    void    SetEditMode(sal_uInt16 nMode);
-    sal_uInt16  GetEditMode() { return nEditMode; }
+    void    SetEditMode(USHORT nMode);
+    USHORT  GetEditMode() { return nEditMode; }
 
-    sal_Bool    AnimateObj(SdrObject* pObj, const Point& rPos);
+    BOOL	AnimateObj(SdrObject* pObj, const Point& rPos);
 
     /** is called when the currenct function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -74,21 +74,21 @@ public:
     virtual bool cancel();
 
 protected:
-    FuSelection (ViewShell* pViewSh,
-        ::sd::Window* pWin,
+    FuSelection (ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq);
 
     virtual ~FuSelection();
 
-    sal_Bool            bTempRotation;
-    sal_Bool            bSelectionChanged;
-    sal_Bool            bHideAndAnimate;
+    BOOL			bTempRotation;
+    BOOL            bSelectionChanged;
+    BOOL            bHideAndAnimate;
     SdrHdl*         pHdl;
-    sal_Bool            bSuppressChangesOfSelection;
-    sal_Bool            bMirrorSide0;
-    sal_uInt16          nEditMode;
+    BOOL            bSuppressChangesOfSelection;
+    BOOL            bMirrorSide0;
+    USHORT          nEditMode;
         ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
 
 private:
@@ -109,6 +109,6 @@ private:
 
 } // end of namespace sd
 
-#endif      // _SD_FUSEL_HXX
+#endif		// _SD_FUSEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

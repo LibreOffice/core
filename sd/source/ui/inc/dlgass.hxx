@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,19 +49,19 @@ private:
     AssistentDlgImpl* mpImpl;
 
 public:
-    AssistentDlg(Window* pParent, sal_Bool bAutoPilot);
+    AssistentDlg(Window* pParent, BOOL bAutoPilot);
     ~AssistentDlg();
 
     DECL_LINK( FinishHdl, OKButton * );
 
     SfxObjectShellLock GetDocument();
     OutputType GetOutputMedium() const;
-    sal_Bool IsSummary() const;
+    BOOL IsSummary() const;
     StartType GetStartType() const;
     String GetDocPath() const;
-    sal_Bool GetStartWithFlag() const;
+    BOOL GetStartWithFlag() const;
 
-    sal_Bool IsDocEmpty() const;
+    BOOL IsDocEmpty() const;
     String GetPassword();
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ ScPageBreakShell::ScPageBreakShell( ScTabViewShell* pViewSh ) :
 {
     SetPool( &pViewSh->GetPool() );
     ScViewData* pViewData = pViewSh->GetViewData();
-    ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !pViewData->GetDocument()->IsUndoEnabled() )
     {

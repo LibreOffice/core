@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: securityenvironment_nssimpl.cxx,v $
+ * $Revision: 1.23 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -99,8 +102,8 @@
 {SEC_ERROR_EXTENSION_NOT_FOUND, "Certificate extension not found."},
 
 {SEC_ERROR_CA_CERT_INVALID, "Issuer certificate is invalid."},
-
-{SEC_ERROR_PATH_LEN_CONSTRAINT_INVALID, "Certificate path length constraint is invalid."},
+   
+{SEC_ERROR_PATH_LEN_CONSTRAINT_INVALID,	"Certificate path length constraint is invalid."},
 
 {SEC_ERROR_CERT_USAGES_INVALID, "Certificate usages field is invalid."},
 
@@ -135,7 +138,7 @@ Please remove it and return it to your issuer."},
 
 {XP_SEC_FORTEZZA_NO_CARD, "No Fortezza cards Found"},
 
-{XP_SEC_FORTEZZA_NONE_SELECTED, "No Fortezza card selected"},
+{XP_SEC_FORTEZZA_NONE_SELECTED,	"No Fortezza card selected"},
 
 {XP_SEC_FORTEZZA_MORE_INFO, "Please select a personality to get more info on"},
 
@@ -218,13 +221,13 @@ Please remove it and return it to your issuer."},
 
 {SEC_ERROR_CERT_ADDR_MISMATCH, "Address in signing certificate does not match address in message headers."},
 
-{SEC_ERROR_PKCS12_UNABLE_TO_IMPORT_KEY, "Unable to import.  Error attempting to import private key."},
+{SEC_ERROR_PKCS12_UNABLE_TO_IMPORT_KEY,	"Unable to import.  Error attempting to import private key."},
 
-{SEC_ERROR_PKCS12_IMPORTING_CERT_CHAIN, "Unable to import.  Error attempting to import certificate chain."},
+{SEC_ERROR_PKCS12_IMPORTING_CERT_CHAIN,	"Unable to import.  Error attempting to import certificate chain."},
 
 {SEC_ERROR_PKCS12_UNABLE_TO_LOCATE_OBJECT_BY_NAME, "Unable to export.  Unable to locate certificate or key by nickname."},
 
-{SEC_ERROR_PKCS12_UNABLE_TO_EXPORT_KEY, "Unable to export.  Private Key could not be located and exported."},
+{SEC_ERROR_PKCS12_UNABLE_TO_EXPORT_KEY,	"Unable to export.  Private Key could not be located and exported."},
 
 {SEC_ERROR_PKCS12_UNABLE_TO_WRITE, "Unable to export.  Unable to write the export file."},
 
@@ -253,7 +256,7 @@ Please remove it and return it to your issuer."},
 {SEC_ERROR_JS_DEL_MOD_FAILURE, "Unable to delete module"},
 
 {SEC_ERROR_OLD_KRL, "New KRL is not later than the current one."},
-
+ 
 {SEC_ERROR_CKL_CONFLICT, "New CKL has different issuer than current CKL.  Delete current CKL."},
 
 {SEC_ERROR_CERT_NOT_IN_NAME_SPACE, "The Certifying Authority for this certificate is not permitted to issue a \
@@ -335,9 +338,9 @@ an existing cert, but that is not the same cert."},
 
 {SEC_ERROR_CRL_UNKNOWN_CRITICAL_EXTENSION, "Issuer's V2 Certificate Revocation List has an unknown critical extension."},
 
-{SEC_ERROR_UNKNOWN_OBJECT_TYPE, "Unknown object type specified."},
+{SEC_ERROR_UNKNOWN_OBJECT_TYPE,	"Unknown object type specified."},
 
-{SEC_ERROR_INCOMPATIBLE_PKCS11, "PKCS #11 driver violates the spec in an incompatible way."},
+{SEC_ERROR_INCOMPATIBLE_PKCS11,	"PKCS #11 driver violates the spec in an incompatible way."},
 
 {SEC_ERROR_NO_EVENT, "No new slot event is available at this time."},
 
@@ -367,7 +370,7 @@ an existing cert, but that is not the same cert."},
 
 {SEC_ERROR_BAD_INFO_ACCESS_LOCATION, "Bad information access location in cert extension"},
 
-{SEC_ERROR_LIBPKIX_INTERNAL, "Libpkix internal error occurred during cert validation."},
+{SEC_ERROR_LIBPKIX_INTERNAL, "Libpkix internal error occured during cert validation."},
 
 #if ( NSS_VMAJOR > 3 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR > 12 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR == 12 && NSS_VPATCH > 2 )
 // following 3 errors got first used in NSS 3.12.3

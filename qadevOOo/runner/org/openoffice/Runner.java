@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -184,7 +184,7 @@ public class Runner
 
     public static boolean run(String... args)
     {
-        System.out.println("OOoRunner Main() version from 20101118 (yyyymmdd)");
+        System.out.println("OOoRunner Main() version from 20100323 (yyyymmdd)");
 
         setStartTime(getTime());
 

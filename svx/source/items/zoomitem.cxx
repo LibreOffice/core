@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ TYPEINIT1_FACTORY(SvxZoomItem,SfxUInt16Item, new SvxZoomItem);
 SvxZoomItem::SvxZoomItem
 (
     SvxZoomType eZoomType,
-    sal_uInt16      nVal,
+    sal_uInt16		nVal,
     sal_uInt16      _nWhich
 )
 :   SfxUInt16Item( _nWhich, nVal ),
@@ -61,7 +61,7 @@ SvxZoomItem::SvxZoomItem
 // -----------------------------------------------------------------------
 
 SvxZoomItem::SvxZoomItem( const SvxZoomItem& rOrig )
-:   SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
+:	SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
     nValueSet( rOrig.GetValueSet() ),
     eType( rOrig.GetType() )
 {
@@ -111,12 +111,12 @@ int SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
 
     SvxZoomItem& rItem = (SvxZoomItem&)rAttr;
 
-    return ( GetValue() == rItem.GetValue()     &&
-             nValueSet  == rItem.GetValueSet()  &&
-             eType      == rItem.GetType()          );
+    return ( GetValue() == rItem.GetValue() 	&&
+             nValueSet 	== rItem.GetValueSet() 	&&
+             eType 		== rItem.GetType() 			);
 }
 
-bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -139,14 +139,14 @@ bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberI
         case MID_VALUESET: rVal <<= (sal_Int16) nValueSet; break;
         case MID_TYPE: rVal <<= (sal_Int16) eType; break;
         default:
-            OSL_FAIL("svx::SvxZoomItem::QueryValue(), Wrong MemberId!");
+            DBG_ERROR("svx::SvxZoomItem::QueryValue(), Wrong MemberId!");
             return false;
     }
 
     return true;
 }
 
-bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -183,7 +183,7 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMem
 
                 if ( bAllConverted && nConvertedCount == ZOOM_PARAMS )
                 {
-                    SetValue( (sal_uInt16)nValueTmp );
+                    SetValue( (UINT16)nValueTmp );
                     nValueSet = nValueSetTmp;
                     eType = SvxZoomType( nTypeTmp );
                     return true;
@@ -198,7 +198,7 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMem
             sal_Int32 nVal = 0;
             if ( rVal >>= nVal )
             {
-                SetValue( (sal_uInt16)nVal );
+                SetValue( (UINT16)nVal );
                 return true;
             }
             else
@@ -222,7 +222,7 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMem
         }
 
         default:
-            OSL_FAIL("svx::SvxZoomItem::PutValue(), Wrong MemberId!");
+            DBG_ERROR("svx::SvxZoomItem::PutValue(), Wrong MemberId!");
             return false;
     }
 

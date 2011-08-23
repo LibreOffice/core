@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,13 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 
 #include <uielement/addonstoolbarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <framework/actiontriggerhelper.hxx>
+#include <helper/actiontriggerhelper.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/addonstoolbarmanager.hxx>
@@ -44,7 +44,7 @@
 #include <uielement/toolbar.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -56,7 +56,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #include <toolkit/unohlp.hxx>
@@ -124,7 +124,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
             PropertyValue aPropValue;
             if ( aArguments[n] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ConfigurationData" ) ))
+                if ( aPropValue.Name.equalsAscii( "ConfigurationData" ))
                     aPropValue.Value >>= m_aConfigData;
             }
         }
@@ -140,7 +140,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
                 Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {
-                    sal_uLong nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
+                    ULONG nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
 
                     pToolBar = new ToolBar( pWindow, nStyles );
                     m_xToolBarWindow = VCLUnoHelper::GetInterface( pToolBar );
@@ -157,7 +157,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
                     // Fill toolbar with container contents
                     pToolBarManager->FillToolbar( m_aConfigData );
                     pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
-                    pToolBar->EnableCustomize( sal_True );
+                    pToolBar->EnableCustomize( TRUE );
                     ::Size aActSize( pToolBar->GetSizePixel() );
                     ::Size aSize( pToolBar->CalcWindowSizePixel() );
                     aSize.Width() = aActSize.Width();

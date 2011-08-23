@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,12 +73,12 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 
     AccessibleTextHelper_BASE( new VCLExternalSolarLock() ),
 
-    m_pToolBox      ( _pToolBox ),
+    m_pToolBox		( _pToolBox ),
     m_nIndexInParent( _nPos ),
-    m_nRole         ( AccessibleRole::PUSH_BUTTON ),
-    m_nItemId       ( 0 ),
-    m_bHasFocus     ( sal_False ),
-    m_bIsChecked    ( sal_False ),
+    m_nRole			( AccessibleRole::PUSH_BUTTON ),
+    m_nItemId		( 0 ),
+    m_bHasFocus		( sal_False ),
+    m_bIsChecked	( sal_False ),
     m_bIndeterminate( false )
 
 {
@@ -87,23 +87,23 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock( ) );
 
     DBG_ASSERT( m_pToolBox, "invalid toolbox" );
-    m_nItemId = m_pToolBox->GetItemId( (sal_uInt16)m_nIndexInParent );
+    m_nItemId = m_pToolBox->GetItemId( (USHORT)m_nIndexInParent );
     m_sOldName = GetText( true );
     m_bIsChecked = m_pToolBox->IsItemChecked( m_nItemId );
     m_bIndeterminate = ( m_pToolBox->GetItemState( m_nItemId ) == STATE_DONTKNOW );
-    ToolBoxItemType eType = m_pToolBox->GetItemType( (sal_uInt16)m_nIndexInParent );
+    ToolBoxItemType eType = m_pToolBox->GetItemType( (USHORT)m_nIndexInParent );
     switch ( eType )
     {
         case TOOLBOXITEM_BUTTON :
         {
             ToolBoxItemBits nBits = m_pToolBox->GetItemBits( m_nItemId );
             if (( nBits & TIB_DROPDOWN ) == TIB_DROPDOWN)
-                m_nRole = AccessibleRole::BUTTON_DROPDOWN;
+                m_nRole	= AccessibleRole::BUTTON_DROPDOWN;
             else if (( ( nBits & TIB_CHECKABLE ) == TIB_CHECKABLE ) ||
                 ( ( nBits & TIB_AUTOCHECK ) == TIB_AUTOCHECK ) )
-                m_nRole = AccessibleRole::TOGGLE_BUTTON;
+                m_nRole	= AccessibleRole::TOGGLE_BUTTON;
             else if ( m_pToolBox->GetItemWindow( m_nItemId ) )
-                m_nRole = AccessibleRole::PANEL;
+                m_nRole	= AccessibleRole::PANEL;
             break;
         }
 
@@ -234,7 +234,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleToolBoxItem::implGetBounds(  ) throw (Runt
 {
     awt::Rectangle aRect;
     if ( m_pToolBox )
-        aRect = AWTRectangle( m_pToolBox->GetItemPosRect( (sal_uInt16)m_nIndexInParent ) );
+        aRect = AWTRectangle( m_pToolBox->GetItemPosRect( (USHORT)m_nIndexInParent ) );
 
     return aRect;
 }
@@ -287,7 +287,7 @@ void SAL_CALL VCLXAccessibleToolBoxItem::disposing()
 // -----------------------------------------------------------------------------
 ::rtl::OUString VCLXAccessibleToolBoxItem::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleToolBoxItem" ));
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleToolBoxItem" );
 }
 // -----------------------------------------------------------------------------
 sal_Bool VCLXAccessibleToolBoxItem::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
@@ -304,10 +304,10 @@ sal_Bool VCLXAccessibleToolBoxItem::supportsService( const ::rtl::OUString& rSer
 Sequence< ::rtl::OUString > VCLXAccessibleToolBoxItem::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(4);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ));
-    aNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleComponent" ));
-    aNames[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleExtendedComponent" ));
-    aNames[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleToolBoxItem" ));
+    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleContext" );
+    aNames[1] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleComponent" );
+    aNames[2] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleExtendedComponent" );
+    aNames[3] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleToolBoxItem" );
     return aNames;
 }
 // -----------------------------------------------------------------------------
@@ -541,11 +541,11 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleAtPoin
 void SAL_CALL VCLXAccessibleToolBoxItem::grabFocus(  ) throw (RuntimeException)
 {
     Reference< XAccessible > xParent(getAccessibleParent());
-
+    
     if( xParent.is() )
     {
         Reference< XAccessibleSelection > rxAccessibleSelection(xParent->getAccessibleContext(), UNO_QUERY);
-
+       
         if ( rxAccessibleSelection.is() )
         {
             rxAccessibleSelection -> selectAccessibleChild ( getAccessibleIndexInParent() );
@@ -577,7 +577,7 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getBackground(  ) throw (RuntimeEx
 // -----------------------------------------------------------------------------
 // XAccessibleExtendedComponent
 // -----------------------------------------------------------------------------
-Reference< awt::XFont > SAL_CALL VCLXAccessibleToolBoxItem::getFont(    ) throw (RuntimeException)
+Reference< awt::XFont > SAL_CALL VCLXAccessibleToolBoxItem::getFont(	) throw (RuntimeException)
 {
     return uno::Reference< awt::XFont >();
 }
@@ -686,7 +686,7 @@ sal_Bool VCLXAccessibleToolBoxItem::setCurrentValue( const Any& aNumber ) throw 
         else if ( nValue > 1 )
             nValue = 1;
 
-        m_pToolBox->CheckItem( m_nItemId, (sal_Bool) nValue );
+        m_pToolBox->CheckItem( m_nItemId, (BOOL) nValue );
         bReturn = sal_True;
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,13 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
+#include <tools/prewin.h>
+#include <winreg.h>
+#include <tools/postwin.h>
 #include <tools/urlobj.hxx>
 
-#include <windows.h>
 
-
-#define U2S(STRING)     ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
+#define U2S(STRING)		::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
 namespace desktop
 {
@@ -54,7 +55,7 @@ void FATToVFat_Impl( String& aName )
         HANDLE h = FindFirstFile( U2S(aName).getStr(), &aData );
         if ( h )
         {
-            // Change FAT short filename into VFAT long filename
+            // FAT-Kurzname in VFAT-Langname wandeln
             aObj.removeSegment();
             aObj.insertName( String::CreateFromAscii( aData.cFileName ) );
             aName = aObj.PathToFileName();

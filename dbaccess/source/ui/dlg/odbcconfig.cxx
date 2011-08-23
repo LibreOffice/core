@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,6 @@
 #include "precompiled_dbaccess.hxx"
 
 #include "odbcconfig.hxx"
-
-#ifdef SYSTEM_ODBC_HEADERS
-#include <sqltypes.h>
-#else
-#include <odbc/sqltypes.h>
-#endif
-
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -48,29 +41,29 @@
 
 #ifdef HAVE_ODBC_SUPPORT
 
-#if defined(OS2)
-#define ODBC_LIBRARY    "ODBC.DLL"
-#define ODBC_UI_LIBRARY "ODBCINST.DLL"
+#if defined(WIN) || defined(OS2)
+#define ODBC_LIBRARY	"ODBC.DLL"
+#define ODBC_UI_LIBRARY	"ODBCINST.DLL"
 #endif
 #if defined WNT
-#define ODBC_LIBRARY    "ODBC32.DLL"
-#define ODBC_UI_LIBRARY "ODBCCP32.DLL"
+#define ODBC_LIBRARY	"ODBC32.DLL"
+#define ODBC_UI_LIBRARY	"ODBCCP32.DLL"
 #endif
 #ifdef UNX
 #ifdef MACOSX
-#define ODBC_LIBRARY        "libiodbc.dylib"
-#define ODBC_UI_LIBRARY     "libiodbcinst.dylib"
+#define ODBC_LIBRARY		"libiodbc.dylib"
+#define ODBC_UI_LIBRARY		"libiodbcinst.dylib"
 #else
-#define ODBC_LIBRARY_1      "libodbc.so.1"
-#define ODBC_UI_LIBRARY_1   "libodbcinst.so.1"
-#define ODBC_LIBRARY        "libodbc.so"
-#define ODBC_UI_LIBRARY     "libodbcinst.so"
+#define ODBC_LIBRARY_1		"libodbc.so.1"
+#define ODBC_UI_LIBRARY_1	"libodbcinst.so.1"
+#define ODBC_LIBRARY		"libodbc.so"
+#define ODBC_UI_LIBRARY		"libodbcinst.so"
 #endif
 #endif
 
 // just to go with calling convention of windows
 // so don't touch this
-#if defined(WNT)
+#if defined(WIN) || defined(WNT)
 #define SQL_API __stdcall
 // At least under some circumstances, the below #include <odbc/sqlext.h> re-
 // defines SQL_API to an empty string, leading to a compiler warning on MSC; to
@@ -80,7 +73,7 @@
 #pragma warning(push)
 #pragma warning(disable: 4005)
 #endif
-#endif // defined(WNT)
+#endif // defined(WIN) || defined(WNT)
 
 #if defined(OS2)
 #define ALLREADY_HAVE_OS2_TYPES
@@ -93,13 +86,13 @@
 #include <odbc/sqlext.h>
 #endif
 
-#if defined(WNT)
+#if defined(WIN) || defined(WNT)
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
 #undef SQL_API
 #define SQL_API __stdcall
-#endif // defined(WNT)
+#endif // defined(WIN) || defined(WNT)
 // from here on you can do what you want to
 
 #if defined(OS2)
@@ -108,10 +101,10 @@
 
 #else
 
-#define ODBC_LIBRARY    ""
-#define ODBC_UI_LIBRARY ""
+#define ODBC_LIBRARY	""
+#define ODBC_UI_LIBRARY	""
 
-#endif  // HAVE_ODBC_SUPPORT
+#endif	// HAVE_ODBC_SUPPORT
 
 //.........................................................................
 namespace dbaui
@@ -121,10 +114,10 @@ namespace dbaui
 
 #ifdef HAVE_ODBC_SUPPORT
 typedef SQLRETURN (SQL_API* TSQLManageDataSource) (SQLHWND hwndParent);
-typedef SQLRETURN (SQL_API* TSQLAllocHandle) (SQLSMALLINT HandleType, SQLHANDLE InputHandle, SQLHANDLE* OutputHandlePtr);
+typedef SQLRETURN (SQL_API* TSQLAllocHandle) (SQLSMALLINT HandleType, SQLHANDLE InputHandle, SQLHANDLE*	OutputHandlePtr);
 typedef SQLRETURN (SQL_API* TSQLFreeHandle) (SQLSMALLINT HandleType, SQLHANDLE Handle);
 typedef SQLRETURN (SQL_API* TSQLSetEnvAttr) (SQLHENV EnvironmentHandle, SQLINTEGER Attribute, SQLPOINTER ValuePtr, SQLINTEGER StringLength);
-typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMALLINT   Direction, SQLCHAR* ServerName,
+typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMALLINT	Direction, SQLCHAR* ServerName,
                                 SQLSMALLINT BufferLength1, SQLSMALLINT* NameLength1Ptr, SQLCHAR* Description, SQLSMALLINT BufferLength2, SQLSMALLINT* NameLength2Ptr);
 
 #define NSQLManageDataSource(a) (*(TSQLManageDataSource)(m_pSQLManageDataSource))(a)
@@ -191,10 +184,10 @@ OOdbcLibWrapper::~OOdbcLibWrapper()
 struct OdbcTypesImpl
 {
 #ifdef HAVE_ODBC_SUPPORT
-    SQLHANDLE   hEnvironment;
+    SQLHANDLE	hEnvironment;
     OdbcTypesImpl() : hEnvironment(0) { }
 #else
-    void*       pDummy;
+    void*		pDummy;
 #endif
 };
 DBG_NAME(OOdbcEnumeration)
@@ -285,7 +278,7 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
 
     if (!allocEnv())
     {
-        OSL_FAIL("OOdbcEnumeration::getDatasourceNames: could not allocate an ODBC environment!");
+        OSL_ENSURE(sal_False, "OOdbcEnumeration::getDatasourceNames: could not allocate an ODBC environment!");
         return;
     }
 
@@ -298,7 +291,7 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
     SQLRETURN nResult = SQL_SUCCESS;
     rtl_TextEncoding nTextEncoding = osl_getThreadTextEncoding();
 
-    for (   nResult = NSQLDataSources(m_pImpl->hEnvironment, SQL_FETCH_FIRST, szDSN, sizeof(szDSN), &pcbDSN, szDescription, sizeof(szDescription)-1, &pcbDescription);
+    for (	nResult = NSQLDataSources(m_pImpl->hEnvironment, SQL_FETCH_FIRST, szDSN, sizeof(szDSN), &pcbDSN, szDescription, sizeof(szDescription)-1, &pcbDescription);
             ;
             nResult = NSQLDataSources(m_pImpl->hEnvironment, SQL_FETCH_NEXT, szDSN, sizeof(szDSN), &pcbDSN, szDescription, sizeof(szDescription)-1, &pcbDescription)
         )
@@ -389,7 +382,7 @@ bool OOdbcManagement::isRunning() const
 #endif // HAVE_ODBC_ADMINISTRATION
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

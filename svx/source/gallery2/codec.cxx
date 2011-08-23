@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 // - GalleryCodec -
 // ----------------
 
-GalleryCodec::GalleryCodec( SvStream& rIOStm ) :
+GalleryCodec::GalleryCodec( SvStream& rIOStm ) : 
     rStm( rIOStm )
 {
 }
@@ -50,23 +50,23 @@ GalleryCodec::~GalleryCodec()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
+BOOL GalleryCodec::IsCoded( SvStream& rStm, UINT32& rVersion )
 {
-    const sal_uIntPtr   nPos = rStm.Tell();
-    sal_Bool        bRet;
-    sal_uInt8       cByte1, cByte2, cByte3, cByte4, cByte5, cByte6;
+    const ULONG	nPos = rStm.Tell();
+    BOOL		bRet;
+    BYTE		cByte1, cByte2, cByte3, cByte4, cByte5, cByte6;
 
     rStm >> cByte1 >> cByte2 >> cByte3 >> cByte4 >> cByte5 >> cByte6;
 
     if ( cByte1 == 'S' && cByte2 == 'V' && cByte3 == 'R' && cByte4 == 'L' && cByte5 == 'E' && ( cByte6 == '1' || cByte6 == '2' ) )
     {
         rVersion = ( ( cByte6 == '1' ) ? 1 : 2 );
-        bRet = sal_True;
+        bRet = TRUE;
     }
     else
     {
         rVersion = 0;
-        bRet = sal_False;
+        bRet = FALSE;
     }
 
     rStm.Seek( nPos );
@@ -78,10 +78,10 @@ sal_Bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
 
 void GalleryCodec::Write( SvStream& rStmToWrite )
 {
-    sal_uInt32 nPos, nCompSize;
-
+    UINT32 nPos, nCompSize;
+    
     rStmToWrite.Seek( STREAM_SEEK_TO_END );
-    const sal_uInt32 nSize = rStmToWrite.Tell();
+    const UINT32 nSize = rStmToWrite.Tell();
     rStmToWrite.Seek( 0UL );
 
     rStm << 'S' << 'V' << 'R' << 'L' << 'E' << '2';
@@ -105,11 +105,11 @@ void GalleryCodec::Write( SvStream& rStmToWrite )
 
 void GalleryCodec::Read( SvStream& rStmToRead )
 {
-    sal_uInt32 nVersion = 0;
+    UINT32 nVersion = 0;
 
     if( IsCoded( rStm, nVersion ) )
     {
-        sal_uInt32  nCompressedSize, nUnCompressedSize;
+        UINT32	nCompressedSize, nUnCompressedSize;
 
         rStm.SeekRel( 6 );
         rStm >> nUnCompressedSize >> nCompressedSize;
@@ -117,13 +117,13 @@ void GalleryCodec::Read( SvStream& rStmToRead )
         // decompress
         if( 1 == nVersion )
         {
-            sal_uInt8*   pCompressedBuffer = new sal_uInt8[ nCompressedSize ]; rStm.Read( pCompressedBuffer, nCompressedSize );
-            sal_uInt8*  pInBuf = pCompressedBuffer;
-            sal_uInt8*  pOutBuf = new sal_uInt8[ nUnCompressedSize ];
-            sal_uInt8*  pTmpBuf = pOutBuf;
-            sal_uInt8*  pLast = pOutBuf + nUnCompressedSize - 1;
-            sal_uIntPtr   nIndex = 0UL, nCountByte, nRunByte;
-            sal_Bool    bEndDecoding = sal_False;
+            BYTE*   pCompressedBuffer = new BYTE[ nCompressedSize ]; rStm.Read( pCompressedBuffer, nCompressedSize );
+            BYTE*	pInBuf = pCompressedBuffer;
+            BYTE*	pOutBuf = new BYTE[ nUnCompressedSize ];
+            BYTE*	pTmpBuf = pOutBuf;
+            BYTE*	pLast = pOutBuf + nUnCompressedSize - 1;
+            ULONG   nIndex = 0UL, nCountByte, nRunByte;
+            BOOL    bEndDecoding = FALSE;
 
             do
             {
@@ -145,11 +145,11 @@ void GalleryCodec::Read( SvStream& rStmToRead )
                             pInBuf++;
                     }
                     else if ( nRunByte == 1 )   // Ende des Bildes
-                        bEndDecoding = sal_True;
+                        bEndDecoding = TRUE;
                 }
                 else
                 {
-                    const sal_uInt8 cVal = *pInBuf++;
+                    const BYTE cVal = *pInBuf++;
 
                     memset( &pTmpBuf[ nIndex ], cVal, nCountByte );
                     nIndex += nCountByte;
@@ -158,7 +158,7 @@ void GalleryCodec::Read( SvStream& rStmToRead )
             while ( !bEndDecoding && ( pTmpBuf <= pLast ) );
 
                rStmToRead.Write( pOutBuf, nUnCompressedSize );
-
+            
             delete[] pOutBuf;
             delete[] pCompressedBuffer;
         }

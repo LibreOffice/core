@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,21 +41,22 @@ class ScDrawObjData;
 
 class ScDrawView: public FmFormView
 {
-    ScViewData*             pViewData;
-    OutputDevice*           pDev;                   //! needed ?
-    ScDocument*             pDoc;
-    SCTAB                   nTab;
-    Fraction                aScaleX;                // Factor for Drawing-MapMode
-    Fraction                aScaleY;
-    SdrDropMarkerOverlay*   pDropMarker;
-    SdrObject*              pDropMarkObj;
-    sal_Bool                    bInConstruct;
+    ScViewData*				pViewData;
+    OutputDevice*			pDev;					//! noetig ?
+    ScDocument*				pDoc;
+    SCTAB					nTab;
+    Fraction				aScaleX;				// Faktor fuer Drawing-MapMode
+    Fraction				aScaleY;
+    SdrDropMarkerOverlay*	pDropMarker;
+    SdrObject*				pDropMarkObj;
+    BOOL					bInConstruct;
+    //HMHBOOL					bDisableHdl;
 
-    void            Construct();
-    void            UpdateBrowser();
+    void			Construct();
+    void			UpdateBrowser();
 
 protected:
-    virtual void    ModelHasChanged();
+    virtual void	ModelHasChanged();
 
     // add custom handles (used by other apps, e.g. AnchorPos)
     virtual void AddCustomHdl();
@@ -64,54 +65,57 @@ protected:
 
 public:
                     ScDrawView( OutputDevice* pOut, ScViewData* pData );
-    virtual         ~ScDrawView();
+    virtual			~ScDrawView();
 
-    virtual void    MarkListHasChanged();
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void	MarkListHasChanged();
+    virtual void	Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     virtual void    DoConnect(SdrOle2Obj* pOleObj);
 
-    virtual void    MakeVisible( const Rectangle& rRect, Window& rWin );
+    virtual void	MakeVisible( const Rectangle& rRect, Window& rWin );
 
     virtual void    DeleteMarked();
 
-    void            MarkDropObj( SdrObject* pObj );
+    void			DrawMarks( OutputDevice* pOut ) const;
 
-    void            SetMarkedToLayer( sal_uInt8 nLayerNo );
+    void			MarkDropObj( SdrObject* pObj );
 
-    void            InvalidateAttribs();
-    void            InvalidateDrawTextAttrs();
+    //HMHBOOL			IsDisableHdl() const 	{ return bDisableHdl; }
 
-    sal_Bool            BeginDrag( Window* pWindow, const Point& rStartPos );
-    void            DoCut();
-    void            DoCopy();
+    void			SetMarkedToLayer( BYTE nLayerNo );
 
-    void            GetScale( Fraction& rFractX, Fraction& rFractY ) const;
-    void            RecalcScale();
-    void            UpdateWorkArea();
-    SCTAB           GetTab() const      { return nTab; }
+    void			InvalidateAttribs();
+    void			InvalidateDrawTextAttrs();
 
-    void            CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const;
+    BOOL			BeginDrag( Window* pWindow, const Point& rStartPos );
+    void			DoCut();
+    void			DoCopy();
 
-    void            SetPageAnchored();
-    void            SetCellAnchored();
-    ScAnchorType    GetAnchorType() const;
+    void			GetScale( Fraction& rFractX, Fraction& rFractY ) const;
+    void			RecalcScale();
+    void			UpdateWorkArea();
+    SCTAB			GetTab() const		{ return nTab; }
 
-    void            VCAddWin( Window* pWin );
-    void            VCRemoveWin( Window* pWin );
+    void			CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const;
 
-    void            UpdateIMap( SdrObject* pObj );
+    void			SetAnchor( ScAnchorType );
+    ScAnchorType	GetAnchor() const;
 
-    sal_uInt16          GetPopupMenuId();
-    void            UpdateUserViewOptions();
+    void			VCAddWin( Window* pWin );
+    void			VCRemoveWin( Window* pWin );
 
-    void            SetMarkedOriginalSize();
+    void 			UpdateIMap( SdrObject* pObj );
 
-    sal_Bool            SelectObject( const String& rName );
+    USHORT			GetPopupMenuId();
+    void			UpdateUserViewOptions();
+
+    void			SetMarkedOriginalSize();
+
+    BOOL			SelectObject( const String& rName );
     bool            HasMarkedControl() const;
     bool            HasMarkedInternal() const;
 
-    bool            InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong nOptions=0);
+    bool            InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions=0);
 
     /** Returns the selected object, if it is the caption object of a cell note.
         @param ppCaptData  (out-param) If not null, returns the pointer to the caption object data. */
@@ -135,7 +139,7 @@ public:
     /** Unlocks the internal layer that contains caption objects of cell notes. */
     inline void     UnlockInternalLayer() { LockInternalLayer( false ); }
 
-    SdrEndTextEditKind  ScEndTextEdit();    // calls SetDrawTextUndo(0)
+    SdrEndTextEditKind	ScEndTextEdit();	// ruft SetDrawTextUndo(0)
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 };
 

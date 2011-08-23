@@ -38,49 +38,50 @@ PROJECTPCHSOURCE=ide_pch
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 .IF "$(basicdebug)" != "" || "$(BASICDEBUG)" != ""
 CDEFS+=-DBASICDEBUG
 .ENDIF
 
+
 # --- Allgemein ----------------------------------------------------------
 
-EXCEPTIONSFILES= \
-                $(SLO)$/basdoc.obj		\
-                $(SLO)$/basicbox.obj		\
-                $(SLO)$/basicrenderable.obj	\
+EXCEPTIONSFILES=$(SLO)$/basicrenderable.obj  \
+                $(SLO)$/scriptdocument.obj  \
+                $(SLO)$/basicbox.obj	\
+                $(SLO)$/basidesh.obj	\
+                $(SLO)$/basides1.obj	\
+                $(SLO)$/basides2.obj	\
+                $(SLO)$/basides3.obj	\
                 $(SLO)$/baside2.obj		\
-                $(SLO)$/baside2b.obj		\
                 $(SLO)$/baside3.obj		\
-                $(SLO)$/basidectrlr.obj		\
-                $(SLO)$/basides1.obj		\
-                $(SLO)$/basides2.obj		\
-                $(SLO)$/basides3.obj		\
-                $(SLO)$/basidesh.obj		\
                 $(SLO)$/basobj2.obj		\
                 $(SLO)$/basobj3.obj		\
-                $(SLO)$/bastype2.obj		\
-                $(SLO)$/bastype3.obj		\
-                $(SLO)$/bastypes.obj		\
-                $(SLO)$/brkdlg.obj		\
-                $(SLO)$/doceventnotifier.obj	\
-                $(SLO)$/docsignature.obj	\
-                $(SLO)$/documentenumeration.obj	\
+                $(SLO)$/bastypes.obj	\
+                $(SLO)$/bastype2.obj	\
+                $(SLO)$/bastype3.obj	\
                 $(SLO)$/iderdll.obj		\
-                $(SLO)$/localizationmgr.obj	\
-                $(SLO)$/macrodlg.obj		\
-                $(SLO)$/moduldl2.obj		\
-                $(SLO)$/moduldlg.obj		\
-                $(SLO)$/objdlg.obj		\
-                $(SLO)$/register.obj		\
-                $(SLO)$/scriptdocument.obj	\
+                $(SLO)$/macrodlg.obj	\
+                $(SLO)$/moduldlg.obj	\
+                $(SLO)$/moduldl2.obj	\
+                $(SLO)$/unomodel.obj	\
+                $(SLO)$/register.obj	\
+                $(SLO)$/basdoc.obj	    \
                 $(SLO)$/tbxctl.obj		\
-                $(SLO)$/unomodel.obj
+                $(SLO)$/basidectrlr.obj	\
+                $(SLO)$/localizationmgr.obj \
+                $(SLO)$/doceventnotifier.obj \
+                $(SLO)$/docsignature.obj \
+                $(SLO)$/documentenumeration.obj
 
-SLOFILES =  $(EXCEPTIONSFILES)
+SLOFILES =  $(EXCEPTIONSFILES) \
+            $(SLO)$/baside2b.obj	\
+            $(SLO)$/brkdlg.obj	\
+            $(SLO)$/objdlg.obj	\
 
 SRS1NAME=$(TARGET)
-SRC1FILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src basicprint.src
+SRC1FILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src basicprint.src
 
 .INCLUDE :  target.mk
 

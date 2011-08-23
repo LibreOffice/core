@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ XMLEnumPropertyHdl::~XMLEnumPropertyHdl()
 
 sal_Bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_uInt16 nValue = 0;
+    USHORT nValue = 0;
 
     if( SvXMLUnitConverter::convertEnum( nValue, rStrImpValue, mpEnumMap ) )
     {
@@ -72,7 +72,7 @@ sal_Bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValu
             rValue <<= (sal_Int8) nValue;
             break;
         default:
-            OSL_FAIL( "Wrong type for enum property handler!" );
+            DBG_ERROR( "Wrong type for enum property handler!" );
             return sal_False;
         }
         return sal_True;

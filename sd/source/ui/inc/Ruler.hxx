@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,22 +46,22 @@ class Window;
 |*
 \************************************************************************/
 
-class Ruler
+class Ruler 
     : public SvxRuler
 {
 public:
     Ruler (
-        DrawViewShell& rViewSh,
-        ::Window* pParent,
+        DrawViewShell& rViewSh, 
+        ::Window* pParent, 
         ::sd::Window* pWin,
-        sal_uInt16 nRulerFlags,
+        USHORT nRulerFlags, 
         SfxBindings& rBindings,
         WinBits nWinStyle);
     virtual ~Ruler (void);
 
     void SetNullOffset(const Point& rOffset);
 
-    sal_Bool IsHorizontal() const { return bHorz; }
+    BOOL IsHorizontal() const { return bHorz; }
 
     using ::Ruler::SetNullOffset;
 protected:
@@ -69,12 +69,12 @@ protected:
     ::sd::Window* pSdWin;
     DrawViewShell* pDrViewShell;
     RulerCtrlItem* pCtrlItem;
-    sal_Bool bHorz;
+    BOOL bHorz;
 
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void    MouseButtonUp(const MouseEvent& rMEvt);
-    virtual void    MouseMove(const MouseEvent& rMEvt);
-    virtual void    Command(const CommandEvent& rCEvt);
+    virtual void	MouseButtonDown(const MouseEvent& rMEvt);
+    virtual void	MouseButtonUp(const MouseEvent& rMEvt);
+    virtual void	MouseMove(const MouseEvent& rMEvt);
+    virtual void	Command(const CommandEvent& rCEvt);
     virtual void    ExtraDown();
 };
 

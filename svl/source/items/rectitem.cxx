@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ SfxRectangleItem::SfxRectangleItem()
 
 // -----------------------------------------------------------------------
 
-SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const Rectangle& rVal ) :
+SfxRectangleItem::SfxRectangleItem( USHORT nW, const Rectangle& rVal ) :
     SfxPoolItem( nW ),
     aVal( rVal )
 {
@@ -64,7 +64,7 @@ SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const Rectangle& rVal ) :
 
 // -----------------------------------------------------------------------
 
-SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, SvStream &rStream ) :
+SfxRectangleItem::SfxRectangleItem( USHORT nW, SvStream &rStream ) :
     SfxPoolItem( nW )
 {
     DBG_CTOR(SfxRectangleItem, 0);
@@ -84,12 +84,12 @@ SfxRectangleItem::SfxRectangleItem( const SfxRectangleItem& rItem ) :
 
 SfxItemPresentation SfxRectangleItem::GetPresentation
 (
-    SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    SfxItemPresentation 	/*ePresentation*/,
+    SfxMapUnit				/*eCoreMetric*/,
+    SfxMapUnit				/*ePresentationMetric*/,
+    XubString& 				rText,
     const IntlWrapper *
-)   const
+)	const
 {
     DBG_CHKTHIS(SfxRectangleItem, 0);
     rText = UniString::CreateFromInt32(aVal.Top());
@@ -121,7 +121,7 @@ SfxPoolItem* SfxRectangleItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
+SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxRectangleItem, 0);
     Rectangle aStr;
@@ -131,7 +131,7 @@ SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxRectangleItem::Store(SvStream &rStream, sal_uInt16 ) const
+SvStream& SfxRectangleItem::Store(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxRectangleItem, 0);
     rStream << aVal;
@@ -141,7 +141,7 @@ SvStream& SfxRectangleItem::Store(SvStream &rStream, sal_uInt16 ) const
 
 // -----------------------------------------------------------------------
 bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                   sal_uInt8 nMemberId) const
+                                   BYTE nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -158,7 +158,7 @@ bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
         case MID_RECT_RIGHT: rVal <<= aVal.getY(); break;
         case MID_WIDTH: rVal <<= aVal.getWidth(); break;
         case MID_HEIGHT: rVal <<= aVal.getHeight(); break;
-        default: OSL_FAIL("Wrong MemberID!"); return false;
+        default: DBG_ERROR("Wrong MemberID!"); return false;
     }
 
     return true;
@@ -166,7 +166,7 @@ bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
 
 // -----------------------------------------------------------------------
 bool SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                 sal_uInt8 nMemberId  )
+                                 BYTE nMemberId  )
 {
     bool bRet = false;
     nMemberId &= ~CONVERT_TWIPS;
@@ -191,7 +191,7 @@ bool SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
             case MID_RECT_RIGHT: aVal.setY( nVal ); break;
             case MID_WIDTH: aVal.setWidth( nVal ); break;
             case MID_HEIGHT: aVal.setHeight( nVal ); break;
-            default: OSL_FAIL("Wrong MemberID!"); return false;
+            default: DBG_ERROR("Wrong MemberID!"); return false;
         }
     }
 

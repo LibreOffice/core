@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,6 +51,7 @@
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include "dlgsave.hxx"
@@ -90,7 +91,6 @@
 #include <sfx2/docfilt.hxx>
 #include <svtools/fileview.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 #include "defaultobjectnamecheck.hxx"
 #include <osl/mutex.hxx>
 #include "subcomponentmanager.hxx"
@@ -173,7 +173,7 @@ void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>&
                         if(e.TargetException >>= aSql)
                             aErrorInfo = aSql;
                         else
-                            OSL_FAIL("OApplicationController::implDropTable: something strange happended!");
+                            OSL_ENSURE(sal_False, "OApplicationController::implDropTable: something strange happended!");
                     }
                     catch( const Exception& )
                     {
@@ -211,7 +211,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
         // The list of elements to delete is allowed to contain related elements: A given element may
         // be the ancestor or child of another element from the list.
         // We want to ensure that ancestors get deleted first, so we normalize the list in this respect.
-        // #i33353#
+        // #i33353# - 2004-09-27 - fs@openoffice.org
         ::std::set< ::rtl::OUString > aDeleteNames;
             // Note that this implicitly uses ::std::less< ::rtl::OUString > a comparison operation, which
             // results in lexicographical order, which is exactly what we need, because "foo" is *before*
@@ -265,7 +265,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
 
                     // now that we removed the element, care for all it's child elements
                     // which may also be a part of the list
-                    // #i33353#
+                    // #i33353# - 2004-09-27 - fs@openoffice.org
                     OSL_ENSURE( aThisRound->getLength() - 1 >= 0, "OApplicationController::deleteObjects: empty name?" );
                     ::rtl::OUStringBuffer sSmallestSiblingName( *aThisRound );
                     sSmallestSiblingName.append( (sal_Unicode)( '/' + 1) );
@@ -294,7 +294,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                     if ( e.TargetException >>= aSql )
                         showError( SQLExceptionInfo( e.TargetException ) );
                     else
-                        OSL_FAIL( "OApplicationController::deleteObjects: something strange happended!" );
+                        OSL_ENSURE( sal_False, "OApplicationController::deleteObjects: something strange happended!" );
                 }
                 catch( const Exception& )
                 {
@@ -512,7 +512,7 @@ TransferableHelper* OApplicationController::copyObject()
                 ::rtl::OUString sName = getContainer()->getQualifiedName( NULL );
                 if ( sName.getLength() )
                 {
-                    ::rtl::OUString sDataSource = getDatabaseName();
+                    ::rtl::OUString sDataSource	= getDatabaseName();
 
                     if ( eType == E_TABLE )
                     {
@@ -564,29 +564,29 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
         {
             sal_Int32 nCommandType = CommandType::TABLE;
             if ( _rPasteData.has(daCommandType) )
-                _rPasteData[daCommandType]      >>= nCommandType;
+                _rPasteData[daCommandType]		>>= nCommandType;
 
             if ( CommandType::QUERY == nCommandType || CommandType::COMMAND == nCommandType )
             {
-                // read all necessary data
+                // read all nescessary data
 
-                ::rtl::OUString sCommand;
+                ::rtl::OUString	sCommand;
                 sal_Bool bEscapeProcessing = sal_True;
 
                 _rPasteData[daCommand] >>= sCommand;
                 if ( _rPasteData.has(daEscapeProcessing) )
-                    _rPasteData[daEscapeProcessing] >>= bEscapeProcessing;
+                    _rPasteData[daEscapeProcessing]	>>= bEscapeProcessing;
 
                 // plausibility check
                 sal_Bool bValidDescriptor = sal_False;
-                ::rtl::OUString sDataSourceName = _rPasteData.getDataSource();
+                ::rtl::OUString	sDataSourceName = _rPasteData.getDataSource();
                 if (CommandType::QUERY == nCommandType)
                     bValidDescriptor = sDataSourceName.getLength() && sCommand.getLength();
                 else if (CommandType::COMMAND == nCommandType)
                     bValidDescriptor = (0 != sCommand.getLength());
                 if (!bValidDescriptor)
                 {
-                    OSL_FAIL("OApplicationController::paste: invalid descriptor!");
+                    DBG_ERROR("OApplicationController::paste: invalid descriptor!");
                     return sal_False;
                 }
 
@@ -629,7 +629,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                             bSuccess = true;
                         }
                     }
-                    catch(SQLException&) { throw; } // caught and handled by the outer catch
+                    catch(SQLException&) { throw; }	// caught and handled by the outer catch
                     catch( const Exception& )
                     {
                         DBG_UNHANDLED_EXCEPTION();
@@ -637,7 +637,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                     if (!bSuccess)
                     {
-                        OSL_FAIL("OApplicationController::paste: could not extract the source query object!");
+                        DBG_ERROR("OApplicationController::paste: could not extract the source query object!");
                         // TODO: maybe this is worth an error message to be displayed to the user ....
                         return sal_False;
                     }
@@ -648,7 +648,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 Reference< XSingleServiceFactory > xQueryFactory(xDestQueries, UNO_QUERY);
                 if (!xQueryFactory.is())
                 {
-                    OSL_FAIL("OApplicationController::paste: invalid destination query container!");
+                    DBG_ERROR("OApplicationController::paste: invalid destination query container!");
                     return sal_False;
                 }
 
@@ -665,7 +665,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                                                 has a /table/ with that name) */
                 if ( bNeedAskForName )
                 {
-                    OSaveAsDlg aAskForName( getView(),
+                    OSaveAsDlg aAskForName(	getView(),
                                             CommandType::QUERY,
                                             getORB(),
                                             getConnection(),
@@ -680,7 +680,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                 // create a new object
                 Reference< XPropertySet > xNewQuery(xQueryFactory->createInstance(), UNO_QUERY);
-                OSL_ENSURE(xNewQuery.is(), "OApplicationController::paste: invalid object created by factory!");
+                DBG_ASSERT(xNewQuery.is(), "OApplicationController::paste: invalid object created by factory!");
                 if (xNewQuery.is())
                 {
                     // initialize
@@ -710,7 +710,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                                 Sequence< ::rtl::OUString> aSeq = xSrcNameAccess->getElementNames();
                                 const ::rtl::OUString* pIter = aSeq.getConstArray();
-                                const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+                                const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
                                 for( ; pIter != pEnd ; ++pIter)
                                 {
                                     Reference<XPropertySet> xSrcProp(xSrcNameAccess->getByName(*pIter),UNO_QUERY);
@@ -811,7 +811,7 @@ IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
     return 0L;
 }
 //........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //........................................................................
 
 

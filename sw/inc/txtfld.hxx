@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,8 @@ class SwTxtFld : public SwTxtAttr
     SwTxtNode * m_pTxtNode;
 
 public:
-    SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStart);
+    SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStart,
+            bool const bInClipboard);
     virtual ~SwTxtFld();
 
     void CopyFld( SwTxtFld *pDest ) const;
@@ -56,11 +57,13 @@ public:
     // enable notification that field content has changed and needs reformatting
     void NotifyContentChange(SwFmtFld& rFmtFld);
 
+    // #111840#
     /**
        Returns position of this field.
 
        @return position of this field. Has to be deleted explicitly.
     */
+//    SwPosition * GetPosition() const;
 };
 
 inline SwTxtNode& SwTxtFld::GetTxtNode() const

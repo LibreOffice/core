@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,19 +57,18 @@
 
 #include "convdic.hxx"
 #include "convdicxml.hxx"
-#include "linguistic/misc.hxx"
+#include "misc.hxx"
 #include "defs.hxx"
 
 using namespace std;
 using namespace utl;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
-
-using ::rtl::OUString;
 
 #define XML_NAMESPACE_TCD_STRING        "http://openoffice.org/2003/text-conversion-dictionary"
 #define CONV_TYPE_HANGUL_HANJA          "Hangul / Hanja"
@@ -129,7 +128,7 @@ public:
 class ConvDicXMLDictionaryContext_Impl :
     public ConvDicXMLImportContext
 {
-    sal_Int16       nLanguage;
+    INT16		nLanguage;
     sal_Int16   nConversionType;
 
 public:
@@ -145,8 +144,8 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
 
-    sal_Int16       GetLanguage() const         { return nLanguage; }
-    sal_Int16   GetConversionType() const   { return nConversionType; }
+    INT16		GetLanguage() const			{ return nLanguage; }
+    sal_Int16   GetConversionType() const	{ return nConversionType; }
 };
 
 
@@ -155,7 +154,7 @@ class ConvDicXMLEntryTextContext_Impl :
 {
     OUString    aLeftText;
     sal_Int16   nPropertyType;  // used for Chinese simplified/traditional conversion
-    ConvDicXMLDictionaryContext_Impl    &rDicContext;
+    ConvDicXMLDictionaryContext_Impl	&rDicContext;
 
 public:
     ConvDicXMLEntryTextContext_Impl(
@@ -172,7 +171,7 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
 
-    const OUString &    GetLeftText() const { return aLeftText; }
+    const OUString &	GetLeftText() const	{ return aLeftText; }
     sal_Int16           GetPropertyType() const { return nPropertyType; }
     void                SetPropertyType( sal_Int16 nVal )   { nPropertyType = nVal; }
 };
@@ -199,9 +198,9 @@ public:
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
     virtual void Characters( const OUString &rChars );
 
-    const OUString &    GetRightText() const    { return aRightText; }
-    const OUString &    GetLeftText() const     { return rEntryContext.GetLeftText(); }
-    ConvDic *           GetDic()                { return GetConvDicImport().GetDic(); }
+    const OUString &	GetRightText() const	{ return aRightText; }
+    const OUString &	GetLeftText() const		{ return rEntryContext.GetLeftText(); }
+    ConvDic *			GetDic()				{ return GetConvDicImport().GetDic(); }
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -225,7 +224,7 @@ SvXMLImportContext * ConvDicXMLImportContext::CreateChildContext(
         const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
     SvXMLImportContext *pContext = 0;
-    if (nPrefix == XML_NAMESPACE_TCD && rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("text-conversion-dictionary")))
+    if (nPrefix == XML_NAMESPACE_TCD && rLocalName.equalsAscii( "text-conversion-dictionary" ))
         pContext = new ConvDicXMLDictionaryContext_Impl( GetConvDicImport(), nPrefix, rLocalName );
     else
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
@@ -246,9 +245,9 @@ void ConvDicXMLDictionaryContext_Impl::StartElement(
                                     GetKeyByAttrName( aAttrName, &aLocalName );
         OUString aValue = rxAttrList->getValueByIndex(i);
 
-        if (nPrefix == XML_NAMESPACE_TCD && aLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("lang")))
+        if (nPrefix == XML_NAMESPACE_TCD && aLocalName.equalsAscii( "lang" ))
             nLanguage = MsLangId::convertIsoStringToLanguage( aValue );
-        else if (nPrefix == XML_NAMESPACE_TCD && aLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("conversion-type")))
+        else if (nPrefix == XML_NAMESPACE_TCD && aLocalName.equalsAscii( "conversion-type" ))
             nConversionType = GetConversionTypeFromText( aValue );
     }
     GetConvDicImport().SetLanguage( nLanguage );
@@ -265,7 +264,7 @@ SvXMLImportContext * ConvDicXMLDictionaryContext_Impl::CreateChildContext(
         const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
     SvXMLImportContext *pContext = 0;
-    if (nPrefix == XML_NAMESPACE_TCD  &&  rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("entry")))
+    if (nPrefix == XML_NAMESPACE_TCD  &&  rLocalName.equalsAscii( "entry" ))
         pContext = new ConvDicXMLEntryTextContext_Impl( GetConvDicImport(), nPrefix, rLocalName, *this );
     else
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
@@ -279,7 +278,7 @@ SvXMLImportContext * ConvDicXMLEntryTextContext_Impl::CreateChildContext(
         const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
     SvXMLImportContext *pContext = 0;
-    if (nPrefix == XML_NAMESPACE_TCD  &&  rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("right-text")))
+    if (nPrefix == XML_NAMESPACE_TCD  &&  rLocalName.equalsAscii( "right-text" ))
         pContext = new ConvDicXMLRightTextContext_Impl( GetConvDicImport(), nPrefix, rLocalName, *this );
     else
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
@@ -298,9 +297,9 @@ void ConvDicXMLEntryTextContext_Impl::StartElement(
                                     GetKeyByAttrName( aAttrName, &aLocalName );
         OUString aValue = rxAttrList->getValueByIndex(i);
 
-        if (nPrefix == XML_NAMESPACE_TCD && aLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("left-text")))
+        if (nPrefix == XML_NAMESPACE_TCD && aLocalName.equalsAscii( "left-text" ))
             aLeftText = aValue;
-        if (nPrefix == XML_NAMESPACE_TCD && aLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("property-type")))
+        if (nPrefix == XML_NAMESPACE_TCD && aLocalName.equalsAscii( "property-type" ))
             nPropertyType = (sal_Int16) aValue.toInt32();
     }
 }
@@ -444,7 +443,7 @@ SvXMLImportContext * ConvDicXMLImport::CreateContext(
         const uno::Reference < xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
     SvXMLImportContext *pContext = 0;
-    if (nPrefix == XML_NAMESPACE_TCD && rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("text-conversion-dictionary")))
+    if (nPrefix == XML_NAMESPACE_TCD && rLocalName.equalsAscii( "text-conversion-dictionary" ))
         pContext = new ConvDicXMLDictionaryContext_Impl( *this, nPrefix, rLocalName );
     else
         pContext = new SvXMLImportContext( *this, nPrefix, rLocalName );

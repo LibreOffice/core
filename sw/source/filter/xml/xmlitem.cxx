@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 
-SvXMLItemSetContext::SvXMLItemSetContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
+SvXMLItemSetContext::SvXMLItemSetContext( SvXMLImport& rImp, USHORT nPrfx,
                                           const OUString& rLName,
                                           const uno::Reference< xml::sax::XAttributeList >& xAttrList,
                                           SfxItemSet& rISet,
@@ -56,7 +56,7 @@ SvXMLItemSetContext::~SvXMLItemSetContext()
 {
 }
 
-SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( USHORT nPrefix,
                                             const OUString& rLocalName,
                                             const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -78,7 +78,7 @@ SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
     CreateChildContext if the element matches an entry in the
     SvXMLImportItemMapper with the mid flag MID_SW_FLAG_ELEMENT
 */
-SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( USHORT nPrefix,
                                    const rtl::OUString& rLocalName,
                                    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/,
                                     SfxItemSet&  /*rItemSet*/,

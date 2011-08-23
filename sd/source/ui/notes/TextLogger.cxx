@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ TextLogger::TextLogger (void)
 
 void TextLogger::AppendText (const char* sText)
 {
-    OSL_TRACE("%s", sText);
+    OSL_TRACE (sText);
     if (mpEditWindow != NULL)
         mpEditWindow->InsertText (UniString::CreateFromAscii(sText));
 }
@@ -74,7 +74,7 @@ void TextLogger::AppendText (const char* sText)
 void TextLogger::AppendText (const String& sText)
 {
     ByteString s(sText, RTL_TEXTENCODING_ISO_8859_1);
-    OSL_TRACE("%s", s.GetBuffer());
+    OSL_TRACE (s.GetBuffer());
     if (mpEditWindow != NULL)
         mpEditWindow->InsertText (sText);
 }
@@ -97,7 +97,7 @@ void TextLogger::ConnectToEditWindow (EditWindow* pEditWindow)
         if (pEditWindow != NULL)
             pEditWindow->AddEventListener(
                 LINK(this, TextLogger, WindowEventHandler));
-        else
+        else 
             mpEditWindow->RemoveEventListener(
                 LINK(this, TextLogger, WindowEventHandler));
 
@@ -113,7 +113,7 @@ IMPL_LINK(TextLogger, WindowEventHandler, VclWindowEvent*, pEvent)
     if (pEvent != NULL)
     {
         DBG_ASSERT(static_cast<VclWindowEvent*>(pEvent)->GetWindow()
-            == mpEditWindow,
+            == mpEditWindow, 
             "TextLogger: received event from unknown window");
         switch (pEvent->GetId())
         {
@@ -123,7 +123,7 @@ IMPL_LINK(TextLogger, WindowEventHandler, VclWindowEvent*, pEvent)
                 break;
         }
     }
-    return sal_True;
+    return TRUE;
 }
 
 

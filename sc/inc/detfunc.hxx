@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ class ScAddress;
 class ScRange;
 class ScRangeList;
 
-#define SC_DET_MAXCIRCLE    1000
+#define SC_DET_MAXCIRCLE	1000
 
 enum ScDetectiveDelete { SC_DET_ALL, SC_DET_DETECTIVE, SC_DET_CIRCLES, SC_DET_ARROWS };
 
@@ -67,10 +67,10 @@ class SC_DLLPUBLIC ScDetectiveFunc
     static ColorData nArrowColor;
     static ColorData nErrorColor;
     static ColorData nCommentColor;
-    static sal_Bool      bColorsInitialized;
+    static BOOL		 bColorsInitialized;
 
-    ScDocument*     pDoc;
-    SCTAB           nTab;
+    ScDocument*		pDoc;
+    SCTAB			nTab;
 
     enum DrawPosMode
     {
@@ -90,83 +90,83 @@ class SC_DLLPUBLIC ScDetectiveFunc
     /** Returns the drawing layer rectangle for the passed cell address. */
     Rectangle   GetDrawRect( SCCOL nCol, SCROW nRow ) const;
 
-    sal_Bool        HasArrow( const ScAddress& rStart,
+    BOOL		HasArrow( const ScAddress& rStart,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab );
 
-    void        DeleteArrowsAt( SCCOL nCol, SCROW nRow, sal_Bool bDestPnt );
-    void        DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
+    void		DeleteArrowsAt( SCCOL nCol, SCROW nRow, BOOL bDestPnt );
+    void		DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
-    sal_Bool        HasError( const ScRange& rRange, ScAddress& rErrPos );
+    BOOL		HasError( const ScRange& rRange, ScAddress& rErrPos );
 
-    void        FillAttributes( ScDetectiveData& rData );
+    void		FillAttributes( ScDetectiveData& rData );
 
                 // called from DrawEntry/DrawAlienEntry and InsertObject
-    sal_Bool        InsertArrow( SCCOL nCol, SCROW nRow,
+    BOOL		InsertArrow( SCCOL nCol, SCROW nRow,
                                 SCCOL nRefStartCol, SCROW nRefStartRow,
                                 SCCOL nRefEndCol, SCROW nRefEndRow,
-                                sal_Bool bFromOtherTab, sal_Bool bRed,
+                                BOOL bFromOtherTab, BOOL bRed,
                                 ScDetectiveData& rData );
-    sal_Bool        InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, sal_Bool bRed,
+    BOOL		InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
+                                SCCOL nEndCol, SCROW nEndRow, BOOL bRed,
                                 ScDetectiveData& rData );
 
                 // DrawEntry / DrawAlienEntry check for existing arrows and errors
-    sal_Bool        DrawEntry( SCCOL nCol, SCROW nRow, const ScRange& rRef,
+    BOOL		DrawEntry( SCCOL nCol, SCROW nRow, const ScRange& rRef,
                                 ScDetectiveData& rData );
-    sal_Bool        DrawAlienEntry( const ScRange& rRef,
+    BOOL		DrawAlienEntry( const ScRange& rRef,
                                 ScDetectiveData& rData );
 
-    void        DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData );
+    void		DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData );
 
-    sal_uInt16      InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData, sal_uInt16 nLevel );
-    sal_uInt16      InsertPredLevelArea( const ScRange& rRef,
-                                        ScDetectiveData& rData, sal_uInt16 nLevel );
-    sal_uInt16      FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nLevel, sal_uInt16 nDeleteLevel );
-    sal_uInt16      FindPredLevelArea( const ScRange& rRef,
-                                    sal_uInt16 nLevel, sal_uInt16 nDeleteLevel );
+    USHORT		InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData, USHORT nLevel );
+    USHORT		InsertPredLevelArea( const ScRange& rRef,
+                                        ScDetectiveData& rData, USHORT nLevel );
+    USHORT		FindPredLevel( SCCOL nCol, SCROW nRow, USHORT nLevel, USHORT nDeleteLevel );
+    USHORT		FindPredLevelArea( const ScRange& rRef,
+                                    USHORT nLevel, USHORT nDeleteLevel );
 
-    sal_uInt16      InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData, sal_uInt16 nLevel );
+    USHORT		InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData, USHORT nLevel );
 
-    sal_uInt16      InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                        ScDetectiveData& rData, sal_uInt16 nLevel );
-    sal_uInt16      FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                sal_uInt16 nLevel, sal_uInt16 nDeleteLevel );
+    USHORT		InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                                        ScDetectiveData& rData, USHORT nLevel );
+    USHORT		FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                                USHORT nLevel, USHORT nDeleteLevel );
 
-    sal_Bool        FindFrameForObject( SdrObject* pObject, ScRange& rRange );
+    BOOL		FindFrameForObject( SdrObject* pObject, ScRange& rRange );
 
     void        Modified();
 
 public:
                 ScDetectiveFunc(ScDocument* pDocument, SCTAB nTable) : pDoc(pDocument),nTab(nTable) {}
 
-    sal_Bool        ShowSucc( SCCOL nCol, SCROW nRow );
-    sal_Bool        ShowPred( SCCOL nCol, SCROW nRow );
-    sal_Bool        ShowError( SCCOL nCol, SCROW nRow );
+    BOOL		ShowSucc( SCCOL nCol, SCROW nRow );
+    BOOL		ShowPred( SCCOL nCol, SCROW nRow );
+    BOOL		ShowError( SCCOL nCol, SCROW nRow );
 
-    sal_Bool        DeleteSucc( SCCOL nCol, SCROW nRow );
-    sal_Bool        DeletePred( SCCOL nCol, SCROW nRow );
-    sal_Bool        DeleteAll( ScDetectiveDelete eWhat );
+    BOOL		DeleteSucc( SCCOL nCol, SCROW nRow );
+    BOOL		DeletePred( SCCOL nCol, SCROW nRow );
+    BOOL		DeleteAll( ScDetectiveDelete eWhat );
 
-    sal_Bool        MarkInvalid(sal_Bool& rOverflow);
+    BOOL		MarkInvalid(BOOL& rOverflow);
 
-    void        GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScTokenRef>& rRefTokens);
-    void        GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScTokenRef>& rRefTokens);
+    void        GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScSharedTokenRef>& rRefTokens);
+    void        GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScSharedTokenRef>& rRefTokens);
 
     static void UpdateAllComments( ScDocument& rDoc );        // on all tables
-    void        UpdateAllArrowColors();     // on all tables
+    void		UpdateAllArrowColors();		// on all tables
 
-    static sal_Bool IsNonAlienArrow( SdrObject* pObject );
+    static BOOL	IsNonAlienArrow( SdrObject* pObject );
 
     ScDetectiveObjType GetDetectiveObjectType( SdrObject* pObject, SCTAB nObjTab,
-                                ScAddress& rPosition, ScRange& rSource, sal_Bool& rRedLine );
-    void        InsertObject( ScDetectiveObjType eType, const ScAddress& rPosition,
-                                const ScRange& rSource, sal_Bool bRedLine );
+                                ScAddress& rPosition, ScRange& rSource, BOOL& rRedLine );
+    void		InsertObject( ScDetectiveObjType eType, const ScAddress& rPosition,
+                                const ScRange& rSource, BOOL bRedLine );
 
     static ColorData GetArrowColor();
     static ColorData GetErrorColor();
     static ColorData GetCommentColor();
     static void InitializeColors();
-    static sal_Bool IsColorsInitialized();
+    static BOOL	IsColorsInitialized();
 };
 
 

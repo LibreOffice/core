@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,64 +24,64 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_XSQLQueryComposer_idl__
-#define __com_sun_star_sdb_XSQLQueryComposer_idl__
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
-#include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
-#include <com/sun/star/sdbc/SQLException.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module sdb {
-
-//=============================================================================
-
+#ifndef __com_sun_star_sdb_XSQLQueryComposer_idl__ 
+#define __com_sun_star_sdb_XSQLQueryComposer_idl__ 
+ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_PropertyValue_idl__ 
+#include <com/sun/star/beans/PropertyValue.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_sdbc_SQLException_idl__ 
+#include <com/sun/star/sdbc/SQLException.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module sdb { 
+ 
+//============================================================================= 
+ 
 /** should be provided by a tool which simplifies the handling with SQL select statements.
-
+    
     <p>
     The interface can be used for composing SELECT statements without knowing the
     structure of the used query.
     </p>
  */
 published interface XSQLQueryComposer: com::sun::star::uno::XInterface
-{
-
+{ 
+     
     /** returns the query used for composing.
         @returns
             the query
      */
-    string getQuery();
-    //-------------------------------------------------------------------------
-
+    string getQuery(); 
+    //------------------------------------------------------------------------- 
+     
     /** sets a new query for the composer, which may be expanded by filters
         and sort criteria.
         @param command
             the command to set
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    void setQuery([in] string command )
-            raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
-    /** returns the query composed with filters and sort criteria.
+    void setQuery([in] string command ) 
+            raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
+    /** returns the query composed with filters and sort criterias.
         @returns
             the composed query
      */
-    string getComposedQuery();
-    //-------------------------------------------------------------------------
-
+    string getComposedQuery(); 
+    //------------------------------------------------------------------------- 
+     
     /** returns the currently used filter.
-
+        
         <p>
         The filter criteria returned is part of the where condition of the
         select command, but it does not contain the where token.
@@ -89,26 +89,26 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
         @returns
             the filter
      */
-    string getFilter();
-    //-------------------------------------------------------------------------
-
-    /** returns the currently used filter.
+    string getFilter(); 
+    //------------------------------------------------------------------------- 
+     
+    /** returns the currently used filter. 
              <p>
-             The filter criteria is split into levels. Each level represents the
-             OR criteria. Within each level, the filters are provided as an AND criteria
-             with the name of the column and the filter condition. The filter condition
+             The filter criteria is split into levels. Each level represents the 
+             OR criterias. Within each level, the filters are provided as an AND criteria 
+             with the name of the column and the filter condition. The filter condition 
              is of type string.
              </p>
         @returns
             the structured filter
      */
-    sequence< sequence<com::sun::star::beans::PropertyValue> >
-        getStructuredFilter();
-    //-------------------------------------------------------------------------
-
+    sequence< sequence<com::sun::star::beans::PropertyValue> > 
+        getStructuredFilter(); 
+    //------------------------------------------------------------------------- 
+     
     /** returns the currently used sort order.
-
-
+        
+        
         <p>
         The order criteria returned is part of the ORDER BY clause of the
         select command, but it does not contain the ORDER BY keyword .
@@ -116,60 +116,60 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
         @returns
             the order
      */
-    string getOrder();
-    //-------------------------------------------------------------------------
-
-    /** appends a new filter condition by a
+    string getOrder(); 
+    //------------------------------------------------------------------------- 
+     
+    /** appends a new filter condition by a 
         <type scope="com::sun::star::sdb">DataColumn</type>
         providing the name and the value for the filter.
         @param column
             the column which is used to create a filter
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException  
             if a database access error occurs.
      */
-    void appendFilterByColumn([in] com::sun::star::beans::XPropertySet column)
-            raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
+    void appendFilterByColumn([in] com::sun::star::beans::XPropertySet column) 
+            raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** appends an additional part to the sort order criteria of the select
         statement.
         @param column
             the column which is used to create a order part
-        @param  ascending
+        @param	ascending
             <TRUE/> when the order should be ascending, otherwise <FALSE/>
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException  
             if a database access error occurs.
      */
-    void appendOrderByColumn([in] com::sun::star::beans::XPropertySet column,
-                              [in] boolean ascending)
-            raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
-    /** makes it possible to set a filter condition for the query.
+    void appendOrderByColumn([in] com::sun::star::beans::XPropertySet column, 
+                              [in] boolean ascending) 
+            raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
+    /** makes it possible to set a filter condition	for the query.
         @param filter
             the filter to set
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException  
             if a database access error occurs.
      */
-    void setFilter([in] string filter)
-            raises (com::sun::star::sdbc::SQLException);
-    //-------------------------------------------------------------------------
-
-    /** makes it possible to set a sort condition for the query.
+    void setFilter([in] string filter) 
+            raises (com::sun::star::sdbc::SQLException); 
+    //------------------------------------------------------------------------- 
+     
+    /** makes it possibile to set a sort condition for the query.
         @param order
             the order part to set
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException  
             if a database access error occurs.
      */
-    void setOrder([in] string order)
-            raises (com::sun::star::sdbc::SQLException);
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    void setOrder([in] string order) 
+            raises (com::sun::star::sdbc::SQLException); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

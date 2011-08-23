@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/objface.hxx>
+
+
 #include <fldmgr.hxx>
 #include <expfld.hxx>
 #include <modcfg.hxx>
@@ -59,6 +61,10 @@ extern String* pOldTabCat;
 extern String* pOldFrmCat;
 extern String* pOldDrwCat;
 
+/* -----------------06.11.98 13:45-------------------
+ *
+ * --------------------------------------------------*/
+
 void SwView::ExecDlgExt(SfxRequest &rReq)
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
@@ -84,10 +90,10 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( DLG_INS_FOOTNOTE,
-                                                        pMDI, *pWrtShell, sal_True );
+                                                        pMDI, *pWrtShell, TRUE );
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
-            pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());
+            pDlg->SetHelpId(FN_EDIT_FOOTNOTE);
             pDlg->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );
             pDlg->Execute();
             delete pDlg;
@@ -96,18 +102,26 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
     }
 }
 
-void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)
+/* -----------------06.11.98 14:53-------------------
+ *
+ * --------------------------------------------------*/
+
+void SwView::AutoCaption(const USHORT nType, const SvGlobalName *pOleId)
 {
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
     if (pModOpt->IsInsWithCaption(bWeb))
     {
         const InsCaptionOpt *pOpt = pModOpt->GetCapOption(bWeb, (SwCapObjType)nType, pOleId);
-        if (pOpt && pOpt->UseCaption() == sal_True)
+        if (pOpt && pOpt->UseCaption() == TRUE)
             InsertCaption(pOpt);
     }
 }
+
+/* -----------------06.11.98 12:58-------------------
+ *
+ * --------------------------------------------------*/
 
 void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 {
@@ -120,7 +134,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     SwWrtShell &rSh = GetWrtShell();
     if(rName.Len())
     {
-        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
+        USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
         if( USHRT_MAX != nPoolId )
             rSh.GetTxtCollFromPool(nPoolId);
             // Pool-Vorlage existiert nicht: Existiert sie am Dokument?
@@ -159,16 +173,16 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
         if (pFldType)
         {
             pFldType->SetDelimiter(pOpt->GetSeparator());
-            pFldType->SetOutlineLvl( static_cast< sal_uInt8 >(pOpt->GetLevel()) );
+            pFldType->SetOutlineLvl( static_cast< BYTE >(pOpt->GetLevel()) );
         }
     }
 
-    sal_uInt16       nID    = USHRT_MAX;
-    SwFieldType* pType  = 0;
-    const sal_uInt16 nCount = aMgr.GetFldTypeCount();
+    USHORT       nID    = USHRT_MAX;
+    SwFieldType* pType 	= 0;
+    const USHORT nCount = aMgr.GetFldTypeCount();
     if( rName.Len() )
     {
-        for (sal_uInt16 i = 0; i < nCount; ++i)
+        for (USHORT i = 0; i < nCount; ++i)
         {
             pType = aMgr.GetFldType(USHRT_MAX, i);
             String aTmpName( pType->GetName() );
@@ -193,7 +207,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     if(pType)
         ((SwSetExpFieldType*)pType)->SetSeqFormat(pOpt->GetNumType());
 
-    rSh.UpdateExpFlds( sal_True );
+    rSh.UpdateExpFlds( TRUE );
 
     rSh.EndAllAction();
 

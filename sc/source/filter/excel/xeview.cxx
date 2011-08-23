@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include "xelink.hxx"
 #include "xestyle.hxx"
 
-using namespace ::oox;
+#include <oox/core/tokens.hxx>
 
 using ::rtl::OString;
 
@@ -73,7 +73,7 @@ void XclExpWindow1::SaveXml( XclExpXmlStream& rStrm )
             XML_tabRatio,               OString::valueOf( (sal_Int32)mnTabBarSize ).getStr(),
             XML_firstSheet,             OString::valueOf( (sal_Int32)rTabInfo.GetFirstVisXclTab() ).getStr(),
             XML_activeTab,              OString::valueOf( (sal_Int32)rTabInfo.GetDisplayedXclTab() ).getStr(),
-            // OOXTODO: XML_autoFilterDateGrouping,     // bool; AUTOFILTER12? 87Eh
+            // OOXTODO: XML_autoFilterDateGrouping,     // bool; AUTOFILTER12? 87Eh 
             FSEND );
 }
 
@@ -353,7 +353,7 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
                 maData.mnSplitX = static_cast< sal_uInt16 >( nFreezeScCol ) - maData.maFirstXclPos.mnCol;
             SCROW nFreezeScRow = rTabSett.maFreezePos.Row();
             if( (0 < nFreezeScRow) && (nFreezeScRow <= GetXclMaxPos().Row()) )
-                maData.mnSplitY = static_cast< sal_uInt32 >( nFreezeScRow ) - maData.maFirstXclPos.mnRow;
+                maData.mnSplitY = static_cast< sal_uInt16 >( nFreezeScRow ) - maData.maFirstXclPos.mnRow;
             // if both splits are left out (address overflow), remove the frozen flag
             maData.mbFrozenPanes = maData.IsSplit();
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,6 +56,7 @@
 #include <vcl/sysdata.hxx>
 
 using namespace vcl;
+using namespace rtl;
 
 namespace vcl {
 
@@ -92,17 +93,17 @@ namespace vcl {
 
 class XIMStatusWindow : public StatusWindow
 {
-    FixedText               m_aStatusText;
-    SalFrame*               m_pLastParent;
-    Size                    m_aWindowSize;
+    FixedText				m_aStatusText;
+    SalFrame*				m_pLastParent;
+    Size					m_aWindowSize;
     bool                    m_bAnchoredAtRight;
         // true if the right edge (instead of the left edge) should stay at a
         // fixed position when re-sizing the window
 
     // for delayed showing
-    bool                    m_bDelayedShow;
-    I18NStatus::ShowReason  m_eDelayedReason;
-    sal_uLong                   m_nDelayedEvent;
+    bool					m_bDelayedShow;
+    I18NStatus::ShowReason	m_eDelayedReason;
+    ULONG					m_nDelayedEvent;
     // for toggling
     bool                    m_bOn;
 
@@ -165,7 +166,7 @@ void XIMStatusWindow::layout()
 
     m_aStatusText.SetPosSizePixel( Point( 1, 1 ), aControlSize );
     m_aStatusText.SetFont( aFont );
-    m_aStatusText.Show( sal_True );
+    m_aStatusText.Show( TRUE );
 
     if (m_bAnchoredAtRight && IsVisible())
     {
@@ -207,7 +208,7 @@ Point XIMStatusWindow::updatePosition()
     if( checkLastParent() )
     {
         const SystemEnvData* pParentEnvData = m_pLastParent->GetSystemData();
-
+        
         SalExtTextInputPosEvent aPosEvent;
         m_pLastParent->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent );
         int x, y;
@@ -257,7 +258,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
         {
             setText( String() );
             m_pLastParent = pParent;
-            Show( sal_False, SHOW_NOACTIVATE );
+            Show( FALSE, SHOW_NOACTIVATE );
         }
         if( IsVisible() )
         {
@@ -318,9 +319,9 @@ namespace vcl {
 
 class IIIMPStatusWindow : public StatusWindow
 {
-    MenuButton              m_aStatusBtn;
-    PopupMenu               m_aMenu;
-    SalFrame*               m_pResetFocus;
+    MenuButton				m_aStatusBtn;
+    PopupMenu				m_aMenu;
+    SalFrame*				m_pResetFocus;
     bool                    m_bShow;
     bool                    m_bOn;
 
@@ -359,7 +360,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
 
     m_aStatusBtn.SetSelectHdl( LINK( this, IIIMPStatusWindow, SelectHdl ) );
     m_aStatusBtn.SetPopupMenu( &m_aMenu );
-    m_aStatusBtn.Show( sal_True );
+    m_aStatusBtn.Show( TRUE );
 
     const ::std::vector< I18NStatus::ChoiceData >& rChoices( I18NStatus::get().getChoices() );
     int i = 1;
@@ -384,7 +385,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
     else
         fprintf( stderr, "Warning: could not reposition status window since no frame\n" );
 #endif
-    EnableAlwaysOnTop( sal_True );
+    EnableAlwaysOnTop( TRUE );
 }
 
 IIIMPStatusWindow::~IIIMPStatusWindow()
@@ -613,7 +614,7 @@ void I18NStatus::setStatusText( const String& rText )
         String aText( pBuffer );
         m_pStatusWindow->setText( aText );
         m_pStatusWindow->setPosition( m_pParent );
-
+        
         bool bVisible = true;
         if( m_pParent )
         {
@@ -624,7 +625,7 @@ void I18NStatus::setStatusText( const String& rText )
                 bVisible = false;
             }
         }
-
+        
         m_pStatusWindow->show( bVisible, contextmap );
     }
 }
@@ -655,8 +656,8 @@ void I18NStatus::clearChoices()
 void I18NStatus::addChoice( const String& rChoice, void* pData )
 {
     ChoiceData aData;
-    aData.pData     = pData;
-    aData.aString   = rChoice;
+    aData.pData		= pData;
+    aData.aString	= rChoice;
     m_aChoices.push_back( aData );
 }
 

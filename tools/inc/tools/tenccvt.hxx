@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,19 +51,8 @@ TOOLS_DLLPUBLIC rtl_TextEncoding GetExtendedTextEncoding( rtl_TextEncoding eEnco
 // is returned (normally windows-1252).
 TOOLS_DLLPUBLIC rtl_TextEncoding GetOneByteTextEncoding( rtl_TextEncoding eEncoding );
 
-TOOLS_DLLPUBLIC rtl_TextEncoding GetSOLoadTextEncoding( rtl_TextEncoding eEncoding, sal_uInt16 nVersion = SOFFICE_FILEFORMAT_50 );
-TOOLS_DLLPUBLIC rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncoding, sal_uInt16 nVersion = SOFFICE_FILEFORMAT_50 );
-
-/*
- * Given a Unicode character, return a legacy Microsoft Encoding which
- * supports it. Returns RTL_TEXTENCODING_DONTKNOW if there is
- * no encoding which could support the character
- *
- * Useful as a utility to categorize unicode characters into the best fit
- * windows charset range for exporting to ww6 & wmf or as a hint to non \u
- * unicode token aware rtf readers
- */
-TOOLS_DLLPUBLIC rtl_TextEncoding getBestMSEncodingByChar(sal_Unicode c);
+TOOLS_DLLPUBLIC rtl_TextEncoding GetSOLoadTextEncoding( rtl_TextEncoding eEncoding, USHORT nVersion = SOFFICE_FILEFORMAT_50 );
+TOOLS_DLLPUBLIC rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncoding, USHORT nVersion = SOFFICE_FILEFORMAT_50 );
 
 #endif  // _TOOLS_TENCCVT_HXX
 

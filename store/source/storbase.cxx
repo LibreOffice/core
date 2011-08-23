@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,8 +159,7 @@ PageData::Allocator_Impl::~Allocator_Impl()
 void PageData::Allocator_Impl::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
 {
     OSL_PRECOND((ppPage != 0) && (pnSize != 0), "contract violation");
-    if ((ppPage != 0) && (pnSize != 0))
-        *ppPage = rtl_cache_alloc(m_page_cache), *pnSize = m_page_size;
+    *ppPage = rtl_cache_alloc(m_page_cache), *pnSize = m_page_size;
 }
 
 void PageData::Allocator_Impl::deallocate_Impl (void * pPage)

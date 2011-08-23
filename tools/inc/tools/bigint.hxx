@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,8 +94,8 @@ public:
     operator        long()  const;
     operator        int()   const;
     operator        double() const;
-    operator        sal_uInt16() const;
-    operator        sal_uIntPtr() const;
+    operator        USHORT() const;
+    operator        ULONG() const;
 
     void            Set( sal_Bool bSet ) { bIsSet = bSet; }
     ByteString      GetByteString() const;
@@ -200,10 +200,10 @@ inline BigInt::operator int() const
         return 0;
 }
 
-inline BigInt::operator sal_uInt16() const
+inline BigInt::operator USHORT() const
 {
     if ( !bIsBig && nVal >= 0 && nVal <= USHRT_MAX )
-        return (sal_uInt16)nVal;
+        return (USHORT)nVal;
     else
         return 0;
 }

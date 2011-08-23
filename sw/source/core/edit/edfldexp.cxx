@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,39 +36,41 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <ndtxt.hxx>        // GetCurFld
+#include <ndtxt.hxx>		// GetCurFld
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <edimp.hxx>
 #include <flddat.hxx>
-#include <switerator.hxx>
 
 using namespace com::sun::star;
 using ::rtl::OUString;
 
-sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
+/* -----------------28.11.2002 17:53-----------------
+ *
+ * --------------------------------------------------*/
+BOOL SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
-    const sal_uInt16 nSize = pFldTypes->Count();
+    const USHORT nSize = pFldTypes->Count();
     uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( !xMgr.is() )
-        return sal_False;
+        return FALSE;
     uno::Reference<uno::XInterface> xInstance = xMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseContext")));
     uno::Reference<container::XNameAccess> xDBContext(xInstance, uno::UNO_QUERY) ;
     if(!xDBContext.is())
-        return sal_False;
-    for(sal_uInt16 i = 0; i < nSize; ++i)
+        return FALSE;
+    for(USHORT i = 0; i < nSize; ++i)
     {
         SwFieldType& rFldType = *((*pFldTypes)[i]);
-        sal_uInt16 nWhich = rFldType.Which();
+        USHORT nWhich = rFldType.Which();
         if(IsUsed(rFldType))
         {
             switch(nWhich)
             {
                 case RES_DBFLD:
                 {
-                    SwIterator<SwFmtFld,SwFieldType> aIter( rFldType );
-                    SwFmtFld* pFld = aIter.First();
+                    SwClientIter aIter( rFldType );
+                    SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
                     while(pFld)
                     {
                         if(pFld->IsFldInDoc())
@@ -82,17 +84,17 @@ sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
                             catch(uno::Exception const &)
                             {
                                 rUsedDataSource = rData.sDataSource;
-                                return sal_False;
+                                return FALSE;
                             }
                         }
-                        pFld = aIter.Next();
+                        pFld = (SwFmtFld*)aIter.Next();
                     }
                 }
                 break;
             }
         }
     }
-    return sal_True;
+    return TRUE;
 }
 
 

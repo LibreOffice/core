@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,33 +55,33 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 
 using namespace ::com::sun::star;
+//using namespace text;
 
-static sal_uInt16 aFrmMgrRange[] = {
+static USHORT __FAR_DATA aFrmMgrRange[] = {
                             RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                             FN_SET_FRM_NAME, FN_SET_FRM_NAME,
                             0};
 
 /*--------------------------------------------------------------------
-     Description: determine frame attributes via Shell
+     Beschreibung: Rahmen-Attribute ueber Shell ermitteln
  --------------------------------------------------------------------*/
-SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nType ) :
+SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType ) :
     aSet( (SwAttrPool&)pSh->GetAttrPool(), aFrmMgrRange ),
     pOwnSh( pSh ),
-    bAbsPos( sal_False ),
+    bAbsPos( FALSE ),
     bNewFrm( bNew ),
-    bIsInVertical( sal_False ),
-    bIsInVerticalL2R( sal_False )
+    bIsInVertical( FALSE )
 {
     if ( bNewFrm )
     {
-        // set defaults:
-        sal_uInt16 nId = 0;
+        // Defaults einstellen:
+        USHORT nId = 0;
         switch ( nType )
         {
-            case FRMMGR_TYPE_TEXT:  nId = RES_POOLFRM_FRAME;    break;
-            case FRMMGR_TYPE_OLE:   nId = RES_POOLFRM_OLE;      break;
-            case FRMMGR_TYPE_GRF:   nId = RES_POOLFRM_GRAPHIC;  break;
+            case FRMMGR_TYPE_TEXT:	nId = RES_POOLFRM_FRAME;	break;
+            case FRMMGR_TYPE_OLE:	nId = RES_POOLFRM_OLE;		break;
+            case FRMMGR_TYPE_GRF:	nId = RES_POOLFRM_GRAPHIC;	break;
         }
         aSet.SetParent( &pOwnSh->GetFmtFromPool( nId )->GetAttrSet());
         aSet.Put( SwFmtFrmSize( ATT_MIN_SIZE, DFLT_WIDTH, DFLT_HEIGHT ));
@@ -91,29 +91,28 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nTyp
     else if ( nType == FRMMGR_TYPE_NONE )
     {
         pOwnSh->GetFlyFrmAttr( aSet );
-        sal_Bool bRightToLeft;
-        bIsInVertical = pOwnSh->IsFrmVertical(sal_True, bRightToLeft, bIsInVerticalL2R);
+        BOOL bRightToLeft;
+        bIsInVertical = pOwnSh->IsFrmVertical(TRUE, bRightToLeft);
     }
     ::PrepareBoxInfo( aSet, *pOwnSh );
 }
 
-SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, const SfxItemSet &rSet ) :
+SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, const SfxItemSet &rSet ) :
     aSet( rSet ),
     pOwnSh( pSh ),
-    bAbsPos( sal_False ),
+    bAbsPos( FALSE ),
     bNewFrm( bNew ),
-    bIsInVertical(sal_False),
-    bIsInVerticalL2R(sal_False)
+    bIsInVertical(FALSE)
 {
     if(!bNew)
     {
-        sal_Bool bRightToLeft;
-        bIsInVertical = pSh->IsFrmVertical(sal_True, bRightToLeft, bIsInVerticalL2R);
+        BOOL bRightToLeft;
+        bIsInVertical = pSh->IsFrmVertical(TRUE, bRightToLeft);
     }
 }
 
 /*--------------------------------------------------------------------
-     Description:   Initialise
+     Beschreibung:	Initialisieren
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::UpdateAttrMgr()
 {
@@ -126,7 +125,7 @@ void SwFlyFrmAttrMgr::_UpdateFlyFrm()
 {
     const SfxPoolItem* pItem = 0;
 
-    if (aSet.GetItemState(FN_SET_FRM_NAME, sal_False, &pItem) == SFX_ITEM_SET)
+    if (aSet.GetItemState(FN_SET_FRM_NAME, FALSE, &pItem) == SFX_ITEM_SET)
         pOwnSh->SetFlyName(((SfxStringItem *)pItem)->GetValue());
 
     pOwnSh->SetModified();
@@ -134,12 +133,12 @@ void SwFlyFrmAttrMgr::_UpdateFlyFrm()
     if ( bAbsPos )
     {
         pOwnSh->SetFlyPos( aAbsPos );
-        bAbsPos = sal_False;
+        bAbsPos = FALSE;
     }
 }
 
 /*--------------------------------------------------------------------
-    Description: change existing Fly-Frame
+    Beschreibung: Bestehenden Fly-Frame aendern
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::UpdateFlyFrm()
 {
@@ -150,11 +149,11 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
     {
         //JP 6.8.2001: set never an invalid anchor into the core.
         const SfxPoolItem *pGItem, *pItem;
-        if( SFX_ITEM_SET == aSet.GetItemState( RES_ANCHOR, sal_False, &pItem ))
+        if( SFX_ITEM_SET == aSet.GetItemState( RES_ANCHOR, FALSE, &pItem ))
         {
             SfxItemSet aGetSet( *aSet.GetPool(), RES_ANCHOR, RES_ANCHOR );
             if( pOwnSh->GetFlyFrmAttr( aGetSet ) && 1 == aGetSet.Count() &&
-                SFX_ITEM_SET == aGetSet.GetItemState( RES_ANCHOR, sal_False, &pGItem )
+                SFX_ITEM_SET == aGetSet.GetItemState( RES_ANCHOR, FALSE, &pGItem )
                 && ((SwFmtAnchor*)pGItem)->GetAnchorId() ==
                    ((SwFmtAnchor*)pItem)->GetAnchorId() )
                 aSet.ClearItem( RES_ANCHOR );
@@ -172,15 +171,15 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
 }
 
 /*--------------------------------------------------------------------
-     Description:   insert frame
+     Beschreibung:	Rahmen einfuegen
  --------------------------------------------------------------------*/
-sal_Bool SwFlyFrmAttrMgr::InsertFlyFrm()
+BOOL SwFlyFrmAttrMgr::InsertFlyFrm()
 {
     pOwnSh->StartAllAction();
 
-    sal_Bool bRet = 0 != pOwnSh->NewFlyFrm( aSet );
+    BOOL bRet = 0 != pOwnSh->NewFlyFrm( aSet );
 
-    // turn on the right mode at the shell, frame got selected automatically.
+    // richtigen Mode an der Shell einschalten, Rahmen wurde aut. selektiert.
     if ( bRet )
     {
         _UpdateFlyFrm();
@@ -192,14 +191,15 @@ sal_Bool SwFlyFrmAttrMgr::InsertFlyFrm()
 }
 
 /*------------------------------------------------------------------------
- Description:   Insert frames of type eAnchorType. Position and size are
-                being set explicitely.
-                Not-allowed values of the enumeration type get corrected.
+ Beschreibung:	Rahmen des Typs eAnchorType einfuegen. Position und
+                Groesse werden explizit angegeben.
+                Nicht erlaubte Werte des Aufzaehlungstypes werden
+                korrigiert.
 ------------------------------------------------------------------------*/
-void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
-                                   const Point  &rPos,
-                                   const Size   &rSize,
-                                   sal_Bool bAbs )
+void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds	eAnchorType,
+                                   const Point	&rPos,
+                                   const Size	&rSize,
+                                   BOOL bAbs )
 {
     OSL_ENSURE( eAnchorType == FLY_AT_PAGE ||
             eAnchorType == FLY_AT_PARA ||
@@ -218,11 +218,11 @@ void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
 }
 
 /*--------------------------------------------------------------------
-     Description:   set anchor
+     Beschreibung:	Anker setzen
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
 {
-    sal_uInt16 nPhyPageNum, nVirtPageNum;
+    USHORT nPhyPageNum, nVirtPageNum;
     pOwnSh->GetPageNum( nPhyPageNum, nVirtPageNum );
 
     aSet.Put( SwFmtAnchor( eId, nPhyPageNum ) );
@@ -239,7 +239,7 @@ void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
 }
 
 /*------------------------------------------------------------------------
- Description:   set the attribute for columns
+ Beschreibung:	Setzen des Attributs fuer Spalten
 ------------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::SetCol( const SwFmtCol &rCol )
 {
@@ -247,11 +247,11 @@ void SwFlyFrmAttrMgr::SetCol( const SwFmtCol &rCol )
 }
 
 /*--------------------------------------------------------------------
-     Description:   set absolute position
+     Beschreibung:	Absolute Position setzen
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
 {
-    bAbsPos = sal_True;
+    bAbsPos = TRUE;
     aAbsPos = rPoint;
 
     SwFmtVertOrient aVertOrient( GetVertOrient() );
@@ -263,11 +263,11 @@ void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
 }
 
 /*--------------------------------------------------------------------
-    Description: check metrics for correctness
+    Beschreibung: Metriken auf Korrektheit pruefen
  --------------------------------------------------------------------*/
 void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         const SwPosition* pToCharCntntPos,
-        sal_Bool bOnlyPercentRefValue )
+        BOOL bOnlyPercentRefValue )
 {
     if (!bOnlyPercentRefValue)
     {
@@ -290,9 +290,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     if (bOnlyPercentRefValue)
         return;
 
-    // --> OD 2009-09-01 #mongolianlayout#
-    if ( bIsInVertical || bIsInVerticalL2R )
-    // <--
+    if(bIsInVertical)
     {
         Point aPos(aBoundRect.Pos());
         long nTmp = aPos.X();
@@ -350,11 +348,11 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         if ( rVal.nHoriOrient != text::HoriOrientation::NONE )
             nH = aBoundRect.Left();
 
-        rVal.nMaxHPos   = aBoundRect.Right()  - rVal.nWidth;
+        rVal.nMaxHPos	= aBoundRect.Right()  - rVal.nWidth;
         rVal.nMaxHeight = aBoundRect.Bottom() - nV;
 
-        rVal.nMaxVPos   = aBoundRect.Bottom() - rVal.nHeight;
-        rVal.nMaxWidth  = aBoundRect.Right()  - nH;
+        rVal.nMaxVPos	= aBoundRect.Bottom() - rVal.nHeight;
+        rVal.nMaxWidth	= aBoundRect.Right()  - nH;
     }
     // OD 12.11.2003 #i22341# - handle to character anchored objects vertical
     // aligned at character or top of line in a special case
@@ -412,7 +410,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
             rVal.nMaxVPos  = aBoundRect.Height() - rVal.nHeight;
         }
 
-        // maximum width height
+        // Maximale Breite Hoehe
         const SwTwips nH = ( rVal.nHoriOrient != text::HoriOrientation::NONE )
                            ? aBoundRect.Left()
                            : rVal.nHPos;
@@ -420,7 +418,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
                            ? aBoundRect.Top()
                            : rVal.nVPos;
         rVal.nMaxHeight  = rVal.nMaxVPos + rVal.nHeight - nV;
-        rVal.nMaxWidth   = rVal.nMaxHPos + rVal.nWidth - nH;
+        rVal.nMaxWidth	 = rVal.nMaxHPos + rVal.nWidth - nH;
     }
     // OD 12.11.2003 #i22341# - special case for to character anchored objects
     // vertical aligned at character or top of line.
@@ -479,19 +477,17 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         rVal.nMaxHPos = 0;
 
         rVal.nMaxHeight = aBoundRect.Height();
-        rVal.nMaxWidth  = aBoundRect.Width();
+        rVal.nMaxWidth	= aBoundRect.Width();
 
-        rVal.nMaxVPos   = aBoundRect.Height();
-        rVal.nMinVPos   = -aBoundRect.Height() + rVal.nHeight;
+        rVal.nMaxVPos	= aBoundRect.Height();
+        rVal.nMinVPos	= -aBoundRect.Height() + rVal.nHeight;
         if (rVal.nMaxVPos < rVal.nMinVPos)
         {
             rVal.nMinVPos = rVal.nMaxVPos;
             rVal.nMaxVPos = -aBoundRect.Height();
         }
     }
-    // --> OD 2009-09-01 #mongolianlayout#
-    if ( bIsInVertical || bIsInVerticalL2R )
-    // <--
+    if(bIsInVertical)
     {
         //restore width/height exchange
         long nTmp = rVal.nWidth;
@@ -506,40 +502,40 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
 }
 
 /*--------------------------------------------------------------------
-    Description: correction for border
+    Beschreibung: Korrektur fuer Umrandung
  --------------------------------------------------------------------*/
 SwTwips SwFlyFrmAttrMgr::CalcTopSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
-    const SvxBoxItem&    rBox    = GetBox();
+    const SvxBoxItem& 	 rBox 	 = GetBox();
     return rShadow.CalcShadowSpace(SHADOW_TOP ) + rBox.CalcLineSpace(BOX_LINE_TOP);
 }
 
 SwTwips SwFlyFrmAttrMgr::CalcBottomSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
-    const SvxBoxItem& rBox       = GetBox();
+    const SvxBoxItem& rBox 		 = GetBox();
     return rShadow.CalcShadowSpace(SHADOW_BOTTOM) + rBox.CalcLineSpace(BOX_LINE_BOTTOM);
 }
 
 SwTwips SwFlyFrmAttrMgr::CalcLeftSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
-    const SvxBoxItem&    rBox    = GetBox();
+    const SvxBoxItem&	 rBox 	 = GetBox();
     return rShadow.CalcShadowSpace(SHADOW_LEFT) + rBox.CalcLineSpace(BOX_LINE_LEFT);
 }
 
 SwTwips SwFlyFrmAttrMgr::CalcRightSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
-    const SvxBoxItem&    rBox    = GetBox();
+    const SvxBoxItem&	 rBox 	 = GetBox();
     return rShadow.CalcShadowSpace(SHADOW_RIGHT) + rBox.CalcLineSpace(BOX_LINE_RIGHT);
 }
 
 /*--------------------------------------------------------------------
-    Description: erase attribute from the set
+    Beschreibung: Attribut aus dem Set loeschen
  --------------------------------------------------------------------*/
-void SwFlyFrmAttrMgr::DelAttr( sal_uInt16 nId )
+void SwFlyFrmAttrMgr::DelAttr( USHORT nId )
 {
     aSet.ClearItem( nId );
 }
@@ -550,9 +546,9 @@ void SwFlyFrmAttrMgr::SetLRSpace( long nLeft, long nRight )
 
     SvxLRSpaceItem aTmp( (SvxLRSpaceItem&)aSet.Get( RES_LR_SPACE ) );
     if( LONG_MAX != nLeft )
-        aTmp.SetLeft( sal_uInt16(nLeft) );
+        aTmp.SetLeft( USHORT(nLeft) );
     if( LONG_MAX != nRight )
-        aTmp.SetRight( sal_uInt16(nRight) );
+        aTmp.SetRight( USHORT(nRight) );
     aSet.Put( aTmp );
 }
 
@@ -562,9 +558,9 @@ void SwFlyFrmAttrMgr::SetULSpace( long nTop, long nBottom )
 
     SvxULSpaceItem aTmp( (SvxULSpaceItem&)aSet.Get( RES_UL_SPACE ) );
     if( LONG_MAX != nTop )
-        aTmp.SetUpper( sal_uInt16(nTop) );
+        aTmp.SetUpper( USHORT(nTop) );
     if( LONG_MAX != nBottom )
-        aTmp.SetLower( sal_uInt16(nBottom) );
+        aTmp.SetLower( USHORT(nBottom) );
     aSet.Put( aTmp );
 }
 
@@ -573,10 +569,10 @@ void SwFlyFrmAttrMgr::SetPos( const Point& rPoint )
     SwFmtVertOrient aVertOrient( GetVertOrient() );
     SwFmtHoriOrient aHoriOrient( GetHoriOrient() );
 
-    aHoriOrient.SetPos       ( rPoint.X() );
+    aHoriOrient.SetPos		 ( rPoint.X() );
     aHoriOrient.SetHoriOrient( text::HoriOrientation::NONE  );
 
-    aVertOrient.SetPos       ( rPoint.Y() );
+    aVertOrient.SetPos		 ( rPoint.Y() );
     aVertOrient.SetVertOrient( text::VertOrientation::NONE  );
 
     aSet.Put( aVertOrient );

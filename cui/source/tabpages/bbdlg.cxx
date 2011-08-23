@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <svx/dialogs.hrc>
@@ -41,7 +44,7 @@
 
 SvxBorderBackgroundDlg::SvxBorderBackgroundDlg( Window *pParent,
                                                 const SfxItemSet& rCoreSet,
-                                                sal_Bool bEnableSelector ) :
+                                                BOOL bEnableSelector ) :
 
     SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_BBDLG ), &rCoreSet ),
     bEnableBackgroundSelector( bEnableSelector )
@@ -59,7 +62,7 @@ SvxBorderBackgroundDlg::~SvxBorderBackgroundDlg()
 
 // -----------------------------------------------------------------------
 
-void SvxBorderBackgroundDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
+void SvxBorderBackgroundDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
 {
     // Umschalten zwischen Farbe/Grafik ermoeglichen:
 

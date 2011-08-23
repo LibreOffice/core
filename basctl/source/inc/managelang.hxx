@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ class LocalizationMgr;
 
 struct LanguageEntry
 {
-    String                          m_sLanguage;
-    ::com::sun::star::lang::Locale  m_aLocale;
-    bool                            m_bIsDefault;
+    String							m_sLanguage;
+    ::com::sun::star::lang::Locale	m_aLocale;
+    bool							m_bIsDefault;
 
     LanguageEntry( const String& _rLanguage,
                    const ::com::sun::star::lang::Locale& _rLocale,
@@ -58,32 +58,32 @@ extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
 class ManageLanguageDialog : public ModalDialog
 {
 private:
-    FixedText           m_aLanguageFT;
-    ListBox             m_aLanguageLB;
-    PushButton          m_aAddPB;
-    PushButton          m_aDeletePB;
-    PushButton          m_aMakeDefPB;
-    FixedText           m_aInfoFT;
+    FixedText       	m_aLanguageFT;
+    ListBox         	m_aLanguageLB;
+    PushButton     		m_aAddPB;
+    PushButton      	m_aDeletePB;
+    PushButton      	m_aMakeDefPB;
+    FixedText       	m_aInfoFT;
 
-    FixedLine           m_aBtnLine;
-    HelpButton          m_aHelpBtn;
-    OKButton            m_aCloseBtn;
+    FixedLine			m_aBtnLine;
+    HelpButton      	m_aHelpBtn;
+    OKButton      		m_aCloseBtn;
 
     LocalizationMgr*    m_pLocalizationMgr;
 
-    String              m_sDefLangStr;
-    String              m_sDeleteStr;
-    String              m_sCreateLangStr;
+    String				m_sDefLangStr;
+    String				m_sDeleteStr;
+    String				m_sCreateLangStr;
 
-    void                Init();
+    void				Init();
     void                CalcInfoSize();
-    void                FillLanguageBox();
-    void                ClearLanguageBox();
+    void				FillLanguageBox();
+    void				ClearLanguageBox();
 
-    DECL_LINK(          AddHdl, Button * );
-    DECL_LINK(          DeleteHdl, Button * );
-    DECL_LINK(          MakeDefHdl, Button * );
-    DECL_LINK(          SelectHdl, ListBox * );
+    DECL_LINK( 			AddHdl, Button * );
+    DECL_LINK( 			DeleteHdl, Button * );
+    DECL_LINK( 			MakeDefHdl, Button * );
+    DECL_LINK( 			SelectHdl, ListBox * );
 
 public:
     ManageLanguageDialog( Window* pParent, LocalizationMgr* _pLMgr );
@@ -98,22 +98,22 @@ private:
     SvxCheckListBox*    m_pCheckLangLB;
     FixedText           m_aInfoFT;
 
-    FixedLine           m_aBtnLine;
+    FixedLine		    m_aBtnLine;
     OKButton            m_aOKBtn;
-    CancelButton        m_aCancelBtn;
+    CancelButton   	    m_aCancelBtn;
     HelpButton          m_aHelpBtn;
 
-    bool                m_bIsDefaultMode;
+    bool				m_bIsDefaultMode;
     LocalizationMgr*    m_pLocalizationMgr;
 
-    void                FillLanguageBox();
+    void			    FillLanguageBox();
     void                CalcInfoSize();
 
 public:
     SetDefaultLanguageDialog( Window* pParent, LocalizationMgr* _pLMgr );
     ~SetDefaultLanguageDialog();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >   GetLocales() const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >	GetLocales() const;
 };
 
 #endif //_BASCTL_MANAGELANG_HXX

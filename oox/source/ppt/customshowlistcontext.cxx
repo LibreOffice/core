@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,10 @@
  *
  ************************************************************************/
 
-#include "oox/ppt/customshowlistcontext.hxx"
+#include "customshowlistcontext.hxx"
+#include "oox/core/namespaces.hxx"
+#include "tokens.hxx"
+
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -69,8 +72,8 @@ Reference< XFastContextHandler > SAL_CALL CustomShowContext::createFastChildCont
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case PPT_TOKEN( sld ) :
-            mrCustomShow.maSldLst.push_back( xAttribs->getOptionalValue( R_TOKEN( id ) ) );
+        case NMSP_PPT|XML_sld :
+            mrCustomShow.maSldLst.push_back( xAttribs->getOptionalValue( NMSP_RELATIONSHIPS | XML_id ) );
         default:
         break;
     }
@@ -100,7 +103,7 @@ Reference< XFastContextHandler > SAL_CALL CustomShowListContext::createFastChild
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case PPT_TOKEN( custShow ) :
+        case NMSP_PPT|XML_custShow :
         {
             CustomShow aCustomShow;
             mrCustomShowList.push_back( aCustomShow );

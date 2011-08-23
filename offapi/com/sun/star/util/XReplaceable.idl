@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,34 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_XReplaceable_idl__
-#define __com_sun_star_util_XReplaceable_idl__
-
-#ifndef __com_sun_star_util_XSearchable_idl__
-#include <com/sun/star/util/XSearchable.idl>
-#endif
-
-#ifndef __com_sun_star_util_XReplaceDescriptor_idl__
-#include <com/sun/star/util/XReplaceDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_util_XSearchDescriptor_idl__
-#include <com/sun/star/util/XSearchDescriptor.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module util {
-
-//=============================================================================
-
-/** makes it possible to replace strings in a text described by a
+#ifndef __com_sun_star_util_XReplaceable_idl__ 
+#define __com_sun_star_util_XReplaceable_idl__ 
+ 
+#ifndef __com_sun_star_util_XSearchable_idl__ 
+#include <com/sun/star/util/XSearchable.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_util_XReplaceDescriptor_idl__ 
+#include <com/sun/star/util/XReplaceDescriptor.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_util_XSearchDescriptor_idl__ 
+#include <com/sun/star/util/XSearchDescriptor.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module util {  
+ 
+//============================================================================= 
+ 
+/** makes it possible to replace strings in a text described by a 
     <type>SearchDescriptor</type>.
-
-    @example
+    
+    @example 
     <listing>
-    replace all bold words "search for" by "look for"
+    'replace all bold words "search for" by "look for"
     xReplaceDescr = xDocument.createReplaceDescriptor()
     xReplaceDescr.SearchString = "search for"
     xReplaceDescr.ReplaceString = "look for"
@@ -59,22 +59,22 @@ module com {  module sun {  module star {  module util {
     </listing>
  */
 published interface XReplaceable: com::sun::star::util::XSearchable
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
     /** creates a descriptor which contains properties that
         specify a search in this container.@see SearchDescriptor
      */
-    com::sun::star::util::XReplaceDescriptor createReplaceDescriptor();
-
-    //-------------------------------------------------------------------------
+    com::sun::star::util::XReplaceDescriptor createReplaceDescriptor(); 
+ 
+    //------------------------------------------------------------------------- 
     /** searches for all occurrences of whatever is specified.@see SearchDescriptor
      */
-    long replaceAll( [in] com::sun::star::util::XSearchDescriptor xDesc );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    long replaceAll( [in] com::sun::star::util::XSearchDescriptor xDesc ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

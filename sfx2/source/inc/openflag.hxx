@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,13 +28,14 @@
 #ifndef _SFX_OPENFLAG_HXX
 #define _SFX_OPENFLAG_HXX
 
-// Open file for editing, then only the third option (reading a copy) works
+// Datei zum Bearbeiten "offnen, anschliessend funktioniert nur noch
+// die dritte Variante (Lesen einer Kopie)
 #define SFX_STREAM_READWRITE  (STREAM_READWRITE |  STREAM_SHARE_DENYWRITE)
-// I work on the original, not a copy
-// -> file then can not be opened for editing
+// Ich arbeite roh auf dem Original, keine Kopie
+// -> Datei kann anschliessend nicht zum Bearbeiten ge"offnet werden
 #define SFX_STREAM_READONLY   (STREAM_READ | STREAM_SHARE_DENYWRITE) // + !bDirect
-// Someone else is editing the file, a copy it created
-// -> the file can then be opened for editing
+// Jemand anders bearbeitet das File, es wird eine Kopie erstellt
+// -> Datei kann anschliessend zum Bearbeiten ge"offnet werden
 #define SFX_STREAM_READONLY_MAKECOPY   (STREAM_READ | STREAM_SHARE_DENYNONE)
 
 

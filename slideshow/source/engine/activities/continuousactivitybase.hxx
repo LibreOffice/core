@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,19 +54,19 @@ namespace slideshow
                 This method will be called from perform(), already
                 equipped with the modified time (nMinNumberOfFrames, repeat,
                 acceleration and deceleration taken into account).
-
+                
                 @param nModifiedTime
                 Already accelerated/decelerated and repeated time, always
                 in the [0,1] range.
-
+                
                 @param nRepeatCount
                 Number of full repeats already performed
             */
             virtual void perform( double nModifiedTime, sal_uInt32 nRepeatCount ) const = 0;
 
             /// From SimpleContinuousActivityBase class
-            virtual void simplePerform( double      nSimpleTime,
-                                        sal_uInt32  nRepeatCount ) const;
+            virtual void simplePerform( double 		nSimpleTime, 
+                                        sal_uInt32	nRepeatCount ) const;
         };
     }
 }

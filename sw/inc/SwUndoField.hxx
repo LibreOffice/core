@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,13 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_UNDO_FIELD_HXX
-#define SW_UNDO_FIELD_HXX
+#ifndef _SW_UNDO_FIELD_HXX
+#define _SW_UNDO_FIELD_HXX
 
 #include <undobj.hxx>
-
-#include <com/sun/star/uno/Any.h>
-
 
 class SwDoc;
 class SwField;
@@ -39,7 +36,7 @@ class SwMsgPoolItem;
 
 class SwUndoField : public SwUndo
 {
-    sal_uLong nNodeIndex;
+    ULONG nNodeIndex;
     xub_StrLen nOffset;
 
 protected:
@@ -55,42 +52,37 @@ class SwUndoFieldFromDoc : public SwUndoField
 {
     SwField * pOldField, * pNewField;
     SwMsgPoolItem * pHnt;
-    sal_Bool bUpdate;
-
-    void DoImpl();
+    BOOL bUpdate;
 
 public:
     SwUndoFieldFromDoc(const SwPosition & rPos, const SwField & aOldField,
                        const SwField & aNewField,
-                       SwMsgPoolItem * pHnt, sal_Bool bUpdate,
+                       SwMsgPoolItem * pHnt, BOOL bUpdate,
                        SwUndoId nId = UNDO_FIELD );
-
     virtual ~SwUndoFieldFromDoc();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void Undo(SwUndoIter & rIt);
+    virtual void Redo(SwUndoIter & rIt);
+    virtual void Repeat(SwUndoIter & rIt);
 };
 
 class SwUndoFieldFromAPI : public SwUndoField
 {
     com::sun::star::uno::Any aOldVal, aNewVal;
-    sal_uInt16 nWhich;
-
-    void DoImpl();
+    USHORT nWhich;
 
 public:
     SwUndoFieldFromAPI(const SwPosition & rPos,
                        const com::sun::star::uno::Any & rOldVal,
                        const com::sun::star::uno::Any & rNewVal,
-                       sal_uInt16 nWhich);
+                       USHORT nWhich);
     virtual ~SwUndoFieldFromAPI();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void Undo(SwUndoIter & rIt);
+    virtual void Redo(SwUndoIter & rIt);
+    virtual void Repeat(SwUndoIter & rIt);
 };
 
-#endif // SW_UNDO_FIELD_HXX
+#endif // _SW_UNDO_FIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

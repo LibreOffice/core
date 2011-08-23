@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,6 +57,8 @@
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 
+#include <svl/svarray.hxx>
+
 
 // Token-Typen TT_...
 enum TokenTypes
@@ -74,28 +76,29 @@ enum TokenTypes
     TT_PARAMETER
 };
 
-struct HighlightPortion { sal_uInt16 nBegin; sal_uInt16 nEnd; TokenTypes tokenType; };
+struct HighlightPortion { UINT16 nBegin; UINT16 nEnd; TokenTypes tokenType; };
 
 
-typedef std::vector<HighlightPortion> HighlightPortions;
+
+SV_DECL_VARARR(HighlightPortions, HighlightPortion, 0, 16)
 
 /////////////////////////////////////////////////////////////////////////
 // Hilfsklasse zur Untersuchung von JavaScript-Modulen, zunaechst zum
 // Heraussuchen der Funktionen, spaeter auch zum Syntax-Highlighting verwenden
 
-//  Flags fuer Zeichen-Eigenschaften
-#define CHAR_START_IDENTIFIER   0x0001
-#define CHAR_IN_IDENTIFIER      0x0002
-#define CHAR_START_NUMBER       0x0004
-#define CHAR_IN_NUMBER          0x0008
-#define CHAR_IN_HEX_NUMBER      0x0010
-#define CHAR_IN_OCT_NUMBER      0x0020
-#define CHAR_START_STRING       0x0040
-#define CHAR_OPERATOR           0x0080
-#define CHAR_SPACE              0x0100
-#define CHAR_EOL                0x0200
+//	Flags fuer Zeichen-Eigenschaften
+#define CHAR_START_IDENTIFIER	0x0001
+#define CHAR_IN_IDENTIFIER		0x0002
+#define CHAR_START_NUMBER		0x0004
+#define CHAR_IN_NUMBER			0x0008
+#define CHAR_IN_HEX_NUMBER		0x0010
+#define CHAR_IN_OCT_NUMBER		0x0020
+#define CHAR_START_STRING		0x0040
+#define CHAR_OPERATOR			0x0080
+#define CHAR_SPACE				0x0100
+#define CHAR_EOL				0x0200
 
-#define CHAR_EOF                0x00
+#define CHAR_EOF				0x00
 
 
 // Sprachmodus des HighLighters (spaeter eventuell feiner
@@ -110,23 +113,23 @@ class SimpleTokenizer_Impl
 {
     HighlighterLanguage aLanguage;
     // Zeichen-Info-Tabelle
-    sal_uInt16 aCharTypeTab[256];
+    USHORT aCharTypeTab[256];
 
     const sal_Unicode* mpStringBegin;
     const sal_Unicode* mpActualPos;
 
     // Zeile und Spalte
-    sal_uInt32 nLine;
-    sal_uInt32 nCol;
+    UINT32 nLine;
+    UINT32 nCol;
 
-    sal_Unicode peekChar( void )    { return *mpActualPos; }
-    sal_Unicode getChar( void )     { nCol++; return *mpActualPos++; }
+    sal_Unicode peekChar( void )	{ return *mpActualPos; }
+    sal_Unicode getChar( void )		{ nCol++; return *mpActualPos++; }
 
     // Hilfsfunktion: Zeichen-Flag Testen
-    sal_Bool testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags );
+    BOOL testCharFlags( sal_Unicode c, USHORT nTestFlags );
 
     // Neues Token holen, Leerstring == nix mehr da
-    sal_Bool getNextToken( /*out*/TokenTypes& reType,
+    BOOL getNextToken( /*out*/TokenTypes& reType,
         /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos );
 
     String getTokStr( /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos );
@@ -138,16 +141,16 @@ class SimpleTokenizer_Impl
 #endif
 
     const char** ppListKeyWords;
-    sal_uInt16 nKeyWordCount;
+    UINT16 nKeyWordCount;
 
 public:
     SimpleTokenizer_Impl( HighlighterLanguage aLang = HIGHLIGHT_BASIC );
     ~SimpleTokenizer_Impl( void );
 
-    sal_uInt16 parseLine( sal_uInt32 nLine, const String* aSource );
-    void getHighlightPortions( sal_uInt32 nParseLine, const String& rLine,
+    UINT16 parseLine( UINT32 nLine, const String* aSource );
+    void getHighlightPortions( UINT32 nParseLine, const String& rLine,
                                                     /*out*/HighlightPortions& portions );
-    void setKeyWords( const char** ppKeyWords, sal_uInt16 nCount );
+    void setKeyWords( const char** ppKeyWords, UINT16 nCount );
 };
 
 
@@ -163,9 +166,9 @@ class SVT_DLLPUBLIC SyntaxHighlighter
     HighlighterLanguage eLanguage;
     SimpleTokenizer_Impl* m_pSimpleTokenizer;
     char* m_pKeyWords;
-    sal_uInt16 m_nKeyWordCount;
+    UINT16 m_nKeyWordCount;
 
-//  void initializeKeyWords( HighlighterLanguage eLanguage );
+//	void initializeKeyWords( HighlighterLanguage eLanguage );
 
 public:
     SyntaxHighlighter( void );
@@ -177,10 +180,10 @@ public:
     // nur Zeile 0 angegeben werden.
     void initialize( HighlighterLanguage eLanguage_ );
 
-    const Range notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDifference,
-                                const String* pChangedLines, sal_uInt32 nArrayLength);
+    const Range notifyChange( UINT32 nLine, INT32 nLineCountDifference,
+                                const String* pChangedLines, UINT32 nArrayLength);
 
-    void getHighlightPortions( sal_uInt32 nLine, const String& rLine,
+    void getHighlightPortions( UINT32 nLine, const String& rLine,
                                             HighlightPortions& pPortions );
 
     HighlighterLanguage GetLanguage() { return eLanguage;}

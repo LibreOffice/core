@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,30 +33,30 @@
 
 // USED SERVICES
     // BASE CLASSES
-#include <list>
+#include <slist>
     // COMPONENTS
     // PARAMETERS
 
 
 
 template <class ELEM>
-class EStack : private std::list<ELEM>
+class EStack : private std::slist<ELEM>
 {
   private:
-    typedef std::list<ELEM>    base;
+    typedef std::slist<ELEM>    base;
     const base &        Base() const            { return *this; }
     base &              Base()                  { return *this; }
 
   public:
     typedef ELEM                                    value_type;
-    typedef typename std::list<ELEM>::size_type    size_type;
+    typedef typename std::slist<ELEM>::size_type    size_type;
 
     // LIFECYCLE
-                        EStack()                {}
+                        EStack() 				{}
                         EStack(
                             const EStack &      i_rStack )
-                                                :   base( (const base &)(i_rStack) ) {}
-                        ~EStack()               {}
+                                                : 	base( (const base &)(i_rStack) ) {}
+                        ~EStack() 				{}
     // OPERATORS
     EStack &            operator=(
                             const EStack &      i_rStack )

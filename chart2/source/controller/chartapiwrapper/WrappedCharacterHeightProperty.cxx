@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,6 +43,10 @@ using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
 
 //.............................................................................
+//.............................................................................
+
+//.............................................................................
+//.............................................................................
 
 namespace chart
 {
@@ -59,6 +63,7 @@ WrappedCharacterHeightProperty_Base::~WrappedCharacterHeightProperty_Base()
 {
 }
 
+//static
 void WrappedCharacterHeightProperty::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ReferenceSizePropertyProvider* pRefSizePropProvider  )
 {
@@ -122,15 +127,17 @@ beans::PropertyState WrappedCharacterHeightProperty_Base::getPropertyState( cons
 
 Any WrappedCharacterHeightProperty_Base::convertInnerToOuterValue( const Any& rInnerValue ) const
 {
-    OSL_FAIL("should not be used: WrappedCharacterHeightProperty_Base::convertInnerToOuterValue - check if you miss data");
+    OSL_ASSERT("should not be used: WrappedCharacterHeightProperty_Base::convertInnerToOuterValue - check if you miss data");
     return rInnerValue;
 }
 Any WrappedCharacterHeightProperty_Base::convertOuterToInnerValue( const Any& rOuterValue ) const
 {
-    OSL_FAIL("should not be used: WrappedCharacterHeightProperty_Base::convertOuterToInnerValue - check if you miss data");
+    OSL_ASSERT("should not be used: WrappedCharacterHeightProperty_Base::convertOuterToInnerValue - check if you miss data");
     return rOuterValue;
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 WrappedCharacterHeightProperty::WrappedCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,19 +38,19 @@
 class RscMgr : public RscClass {
     struct RscMgrInst {
         RscId   aRefId; // nRefId = Referenz Identifier
-        sal_Bool    bDflt;  // Ist Default
-        void Create(){ aRefId.Create(); bDflt = sal_True; }
+        BOOL    bDflt;  // Ist Default
+        void Create(){ aRefId.Create(); bDflt = TRUE; }
         void Destroy(){ aRefId.Destroy(); }
     };
-    ERRTYPE         IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep = 0 );
+    ERRTYPE			IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep = 0 );
 public:
                     RscMgr( Atom nId, sal_uInt32 nTypId, RscTop * pSuperCl );
 
-    void            SetToDefault( const RSCINST & rInst );
-    sal_Bool            IsDefault( const RSCINST & rInst );
-    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    void			SetToDefault( const RSCINST & rInst );
+    BOOL            IsDefault( const RSCINST & rInst );
+    BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, BOOL );
     void            Destroy( const RSCINST & rInst );
     sal_uInt32          Size();
     void            WriteSrcHeader( const RSCINST & aInst, FILE * fOutput,
@@ -61,9 +61,9 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                    RscTypCont * pTC, const RscId & rId,
-                                   sal_uInt32, sal_Bool bExtra );
+                                   sal_uInt32, BOOL bExtra );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
     ERRTYPE         WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
                                     RscTypCont * pTC, const RscId & rId );
     ERRTYPE         WriteHxx( const RSCINST & rInst, FILE * fOutput,
@@ -72,7 +72,8 @@ public:
                                     RscTypCont * pTC, const RscId & rId );
     ERRTYPE         WriteCxx( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, const RscId & rId );
-    sal_Bool        IsConsistent( const RSCINST & rInst );
+    BOOL    		IsConsistent( const RSCINST & rInst,
+                                  RscInconsList * pList = NULL );
     ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );
 };

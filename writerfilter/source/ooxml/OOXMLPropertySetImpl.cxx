@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,8 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <ooxml/OOXMLFastTokens.hxx>
 #include "ooxmlLoggers.hxx"
+
+//#define DEBUG_RESOLVE
 
 namespace writerfilter {
 namespace ooxml
@@ -126,15 +128,15 @@ string OOXMLPropertyImpl::getName() const
 
     if (sResult.length() == 0)
         sResult = (*SprmIdToString::Instance())(mId);
-
+        
     if (sResult.length() == 0)
         sResult = fastTokenToId(mId);
-
+        
     if (sResult.length() == 0)
     {
         static char sBuffer[256];
-
-        snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIxUINT32, mId);
+        
+        snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIxUINT32, mId); 
         sResult = sBuffer;
     }
 
@@ -144,7 +146,7 @@ string OOXMLPropertyImpl::getName() const
 string OOXMLPropertyImpl::toString() const
 {
     string sResult = "(";
-
+    
     sResult += getName();
     sResult += ", ";
     if (mpValue.get() != NULL)
@@ -152,7 +154,7 @@ string OOXMLPropertyImpl::toString() const
     else
         sResult +="(null)";
     sResult +=")";
-
+    
     return sResult;
 }
 
@@ -189,7 +191,7 @@ void OOXMLPropertyImpl::resolve(writerfilter::Properties & rProperties)
     }
 }
 
-/*
+/* 
    class OOXMLValue
 */
 
@@ -250,7 +252,7 @@ OOXMLValue * OOXMLValue::clone() const
   class OOXMLBinaryValue
  */
 
-OOXMLBinaryValue::OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t
+OOXMLBinaryValue::OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t 
                                    pBinaryObj)
 : mpBinaryObj(pBinaryObj)
 {
@@ -281,7 +283,7 @@ OOXMLValue * OOXMLBinaryValue::clone() const
 
 OOXMLBooleanValue::OOXMLBooleanValue(bool bValue)
 : mbValue(bValue)
-{
+{    
 }
 
 OOXMLBooleanValue::OOXMLBooleanValue(const rtl::OUString & rValue)
@@ -314,7 +316,7 @@ int OOXMLBooleanValue::getInt() const
 uno::Any OOXMLBooleanValue::getAny() const
 {
     uno::Any aResult(mbValue);
-
+    
     return aResult;
 }
 
@@ -344,7 +346,7 @@ OOXMLStringValue::~OOXMLStringValue()
 uno::Any OOXMLStringValue::getAny() const
 {
     uno::Any aAny(mStr);
-
+    
     return aAny;
 }
 
@@ -413,7 +415,7 @@ bool OOXMLPropertySetImplCompare::operator()(const OOXMLProperty::Pointer_t x,
    class OOXMLPropertySetImpl
 */
 
-OOXMLPropertySetImpl::OOXMLPropertySetImpl()
+OOXMLPropertySetImpl::OOXMLPropertySetImpl()    
 : msType("OOXMLPropertySetImpl")
 {
 }
@@ -436,11 +438,11 @@ void OOXMLPropertySetImpl::resolve(Properties & rHandler)
         {
             debug_logger->startElement("error");
             debug_logger->chars("zero-property");
-            debug_logger->endElement();
+            debug_logger->endElement("error");
         }
 #endif
 
-        ++aIt;
+        aIt++;
     }
 }
 
@@ -454,13 +456,13 @@ OOXMLPropertySetImpl::OOXMLProperties_t::iterator OOXMLPropertySetImpl::end()
     return mProperties.end();
 }
 
-OOXMLPropertySetImpl::OOXMLProperties_t::const_iterator
+OOXMLPropertySetImpl::OOXMLProperties_t::const_iterator 
 OOXMLPropertySetImpl::begin() const
 {
     return mProperties.begin();
 }
 
-OOXMLPropertySetImpl::OOXMLProperties_t::const_iterator
+OOXMLPropertySetImpl::OOXMLProperties_t::const_iterator 
 OOXMLPropertySetImpl::end() const
 {
     return mProperties.end();
@@ -473,22 +475,15 @@ string OOXMLPropertySetImpl::getType() const
 
 void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
-#ifdef DEBUG_PROPERTY_SET
-    debug_logger->startElement("propertyset.add");
-    debug_logger->chars(pProperty->toString());
-#endif
-
     if (pProperty.get() != NULL && pProperty->getId() != 0x0)
     {
         mProperties.push_back(pProperty);
     }
-#ifdef DEBUG_PROPERTY_SET
-    else
+#ifdef DEBUG_PROPERTIES
+    else 
     {
         debug_logger->element("warning.property_not_added");
     }
-
-    debug_logger->endElement("propertyset.add");
 #endif
 }
 
@@ -496,14 +491,14 @@ void OOXMLPropertySetImpl::add(OOXMLPropertySet::Pointer_t pPropertySet)
 {
     if (pPropertySet.get() != NULL)
     {
-        OOXMLPropertySetImpl * pSet =
+        OOXMLPropertySetImpl * pSet = 
             dynamic_cast<OOXMLPropertySetImpl *>(pPropertySet.get());
-
+        
         if (pSet != NULL)
-        {
+        {        
             mProperties.resize(mProperties.size() + pSet->mProperties.size());
-            for (OOXMLProperties_t::iterator aIt = pSet->mProperties.begin();
-                 aIt != pSet->mProperties.end(); ++aIt)
+            for (OOXMLProperties_t::iterator aIt = pSet->mProperties.begin(); 
+                 aIt != pSet->mProperties.end(); aIt++)
                 add(*aIt);
         }
     }
@@ -526,11 +521,11 @@ string OOXMLPropertySetImpl::toString()
     snprintf(sBuffer, sizeof(sBuffer), "%p", this);
     sResult += sBuffer;
     sResult += ":";
-
+    
     OOXMLProperties_t::iterator aItBegin = begin();
     OOXMLProperties_t::iterator aItEnd = end();
 
-    for (OOXMLProperties_t::iterator aIt = aItBegin; aIt != aItEnd; ++aIt)
+    for (OOXMLProperties_t::iterator aIt = aItBegin; aIt != aItEnd; aIt++)
     {
         if (aIt != aItBegin)
             sResult += ", ";
@@ -540,7 +535,7 @@ string OOXMLPropertySetImpl::toString()
         else
             sResult += "0x0";
     }
-
+    
     sResult += "]";
 
     return sResult;
@@ -553,7 +548,7 @@ string OOXMLPropertySetImpl::toString()
 OOXMLPropertySetValue::OOXMLPropertySetValue
 (OOXMLPropertySet::Pointer_t pPropertySet)
 : mpPropertySet(pPropertySet)
-{
+{    
 }
 
 OOXMLPropertySetValue::~OOXMLPropertySetValue()
@@ -607,7 +602,7 @@ int OOXMLIntegerValue::getInt() const
 uno::Any OOXMLIntegerValue::getAny() const
 {
     uno::Any aResult(mnValue);
-
+    
     return aResult;
 }
 
@@ -713,17 +708,17 @@ void OOXMLTableImpl::resolve(Table & rTable)
 
     PropertySets_t::iterator it = mPropertySets.begin();
     PropertySets_t::iterator itEnd = mPropertySets.end();
-
+        
     while (it != itEnd)
     {
-        writerfilter::Reference<Properties>::Pointer_t pProperties
+        writerfilter::Reference<Properties>::Pointer_t pProperties 
             ((*it)->getProperties());
 
         if (pProperties.get() != NULL)
             pTable->entry(nPos, pProperties);
 
         ++nPos;
-        ++it;
+        it++;
     }
 }
 
@@ -781,7 +776,7 @@ OOXMLPropertySetEntryToInteger::~OOXMLPropertySetEntryToInteger()
 }
 
 void OOXMLPropertySetEntryToInteger::sprm(Sprm & /*rSprm*/)
-{
+{    
 }
 
 void OOXMLPropertySetEntryToInteger::attribute(Id nId, Value & rValue)

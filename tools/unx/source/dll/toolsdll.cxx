@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,12 @@ static void* aAppData[SHL_COUNT];
 |*    GetAppData()
 |*
 |*    Beschreibung      Daten fuer andere Libs abfragen
+|*    Ersterstellung    TH 19.01.95
+|*    Letzte Aenderung  TH 19.01.95
 |*
 ***************************************************************************/
 
-void** GetAppData( sal_uInt16 nSharedLib )
+void** GetAppData( USHORT nSharedLib )
 {
     return &(aAppData[nSharedLib]);
 }

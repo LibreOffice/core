@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svx/XPropertyTable.hxx"
+#include "XPropertyTable.hxx"
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -43,7 +43,7 @@
 #include "unopolyhelper.hxx"
 #include <svx/xdef.hxx>
 
-#include "svx/unoapi.hxx"
+#include "unoapi.hxx"
 #include <editeng/unoprnms.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
@@ -54,8 +54,8 @@ using namespace ::rtl;
 class SvxUnoXPropertyTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
-    XPropertyTable* mpTable;
-    XPropertyList*  mpList;
+    XPropertyTable*	mpTable;
+    XPropertyList*	mpList;
     sal_Int16 mnWhich;
 
     long getCount() const { return mpList ? mpList->Count() : (mpTable?mpTable->Count():0); }
@@ -64,7 +64,7 @@ public:
     SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pList ) throw();
     SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyTable* pTable ) throw();
 
-    virtual ~SvxUnoXPropertyTable() throw();
+    virtual	~SvxUnoXPropertyTable() throw();
 
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() = 0;
     virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw() = 0;
@@ -457,7 +457,7 @@ uno::Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const throw()
 
     drawing::LineDash aLineDash;
 
-    aLineDash.Style = (::com::sun::star::drawing::DashStyle)((sal_uInt16)rXD.GetDashStyle());
+    aLineDash.Style = (::com::sun::star::drawing::DashStyle)((UINT16)rXD.GetDashStyle());
     aLineDash.Dots = rXD.GetDots();
     aLineDash.DotLen = rXD.GetDotLen();
     aLineDash.Dashes = rXD.GetDashes();
@@ -477,7 +477,7 @@ XPropertyEntry* SvxUnoXDashTable::getEntry( const OUString& rName, const uno::An
 
     XDash aXDash;
 
-    aXDash.SetDashStyle((XDashStyle)((sal_uInt16)(aLineDash.Style)));
+    aXDash.SetDashStyle((XDashStyle)((UINT16)(aLineDash.Style)));
     aXDash.SetDots(aLineDash.Dots);
     aXDash.SetDotLen(aLineDash.DotLen);
     aXDash.SetDashes(aLineDash.Dashes);
@@ -543,7 +543,7 @@ uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const throw()
     aUnoHatch.Color = aHatch.GetColor().GetColor();
     aUnoHatch.Distance = aHatch.GetDistance();
     aUnoHatch.Angle = aHatch.GetAngle();
-
+    
     uno::Any aAny;
     aAny <<= aUnoHatch;
     return aAny;
@@ -616,8 +616,8 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const thro
     awt::Gradient aGradient;
 
     aGradient.Style = (awt::GradientStyle) aXGradient.GetGradientStyle();
-    aGradient.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
-    aGradient.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
+    aGradient.StartColor = (INT32)aXGradient.GetStartColor().GetColor();
+    aGradient.EndColor = (INT32)aXGradient.GetEndColor().GetColor();
     aGradient.Angle = (short)aXGradient.GetAngle();
     aGradient.Border = aXGradient.GetBorder();
     aGradient.XOffset = aXGradient.GetXOffset();
@@ -701,9 +701,9 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XP
 // SvxUnoXPropertyTable
 uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
-    OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
+    OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));			
     aURL += OUString::createFromAscii( ((XBitmapEntry*)pEntry)->GetXBitmap().GetGraphicObject().GetUniqueID().GetBuffer() );
-
+    
     uno::Any aAny;
     aAny <<= aURL;
     return aAny;
@@ -717,7 +717,7 @@ XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::
 
     GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
     XOBitmap aBMP( aGrafObj );
-
+    
     const String aName( rName );
     return new XBitmapEntry( aBMP, aName );
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <tools/fldunit.hxx>
+#include <vcl/fldunit.hxx>
 #include "metadata.hxx"
 
 //........................................................................
@@ -47,6 +47,7 @@ namespace rptui
 {
 //........................................................................
 using namespace ::com::sun::star;
+// using namespace comphelper;
 
 ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentContext > const & context)
     :ReportComponentHandler_Base(m_aMutex)
@@ -189,7 +190,7 @@ uno::Sequence< beans::Property > SAL_CALL ReportComponentHandler::getSupportedPr
 {
     ::std::vector< beans::Property > aNewProps;
     m_pInfoService->getExcludeProperties( aNewProps, m_xFormComponentHandler );
-
+    
     return aNewProps.empty() ? uno::Sequence< beans::Property > () : uno::Sequence< beans::Property > (&(*aNewProps.begin()),aNewProps.size());
 }
 

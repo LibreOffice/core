@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,31 +38,30 @@
 
 using namespace utl;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 
-using ::rtl::OUString;
-
 namespace linguistic
 {
-
+    
 ///////////////////////////////////////////////////////////////////////////
 
-Meaning::Meaning(
+Meaning::Meaning( 
 #if 0
-            const OUString &rTerm, sal_Int16 nLang,
+            const OUString &rTerm, INT16 nLang,
             const PropertyHelper_Thes &rHelper ) :
 #else
-            const OUString &rTerm, sal_Int16 nLang) :
+            const OUString &rTerm, INT16 nLang) :
 #endif
 
     aSyn        ( Sequence< OUString >(1) ),
     aTerm       (rTerm),
     nLanguage   (nLang)
-
+        
 {
 #if 0
     // this is for future use by a german thesaurus when one exists
@@ -79,7 +78,7 @@ Meaning::~Meaning()
 OUString SAL_CALL Meaning::getMeaning()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return aTerm;
 }
 
@@ -87,7 +86,7 @@ OUString SAL_CALL Meaning::getMeaning()
 Sequence< OUString > SAL_CALL Meaning::querySynonyms()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
         return aSyn;
 }
 
@@ -106,7 +105,7 @@ void Meaning::SetMeaning( const OUString &rTerm )
 
 ///////////////////////////////////////////////////////////////////////////
 
-}   // namespace linguistic
+}	// namespace linguistic
 
 
 

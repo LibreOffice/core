@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPHEADERS_HXX
@@ -68,7 +68,7 @@
 #include <math.h>
 #include <vector>
 #include <memory>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <map>
 #include <assert.h>
 #include <string>

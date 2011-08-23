@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
             {
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(),
+                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(), 
                                   aDesc.GetMethodName(), ConvertType( aDesc.GetType() ) );
                 pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
                                         SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
@@ -88,7 +88,7 @@ void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 ObjectCatalog::ObjectCatalog( Window * pParent )
     :FloatingWindow( pParent, IDEResId( RID_BASICIDE_OBJCAT ) )
     ,aMacroTreeList( this, IDEResId( RID_TLB_MACROS ) )
-    ,aToolBox(this, IDEResId(RID_TB_TOOLBOX))
+    ,aToolBox(this, IDEResId(RID_TB_TOOLBOX), IDEResId(RID_IMGLST_TB_HC))
     ,aMacroDescr( this, IDEResId( RID_FT_MACRODESCR ) )
 {
     FreeResource();
@@ -97,16 +97,13 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
     aToolBox.SetSizePixel( aToolBox.CalcWindowSizePixel() );
     aToolBox.SetSelectHdl( LINK( this, ObjectCatalog, ToolBoxHdl ) );
 
-    aMacroTreeList.SetStyle( WB_BORDER | WB_TABSTOP |
-                             WB_HASLINES | WB_HASLINESATROOT |
-                             WB_HASBUTTONS | WB_HASBUTTONSATROOT |
-                             WB_HSCROLL );
+    aMacroTreeList.SetWindowBits( WB_HASLINES | WB_HASLINESATROOT | 
+                                  WB_HASBUTTONS | WB_HASBUTTONSATROOT |
+                                  WB_HSCROLL );
 
     aMacroTreeList.SetSelectHdl( LINK( this, ObjectCatalog, TreeListHighlightHdl ) );
-    aMacroTreeList.SetAccessibleName(String(IDEResId(RID_STR_TLB_MACROS)));
-    aMacroTreeList.ScanAllEntries();
-    aMacroTreeList.GrabFocus();
 
+    aMacroTreeList.ScanAllEntries();
     CheckButtons();
 
     Point aPos = IDE_DLL()->GetExtraData()->GetObjectCatalogPos();
@@ -127,7 +124,7 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
     if ( aSize.Width() )
         SetOutputSizePixel( aSize );
 
-    Resize();   // damit der Resize-Handler die Controls anordnet
+    Resize();	// damit der Resize-Handler die Controls anordnet
 
     // make object catalog keyboard accessible
     pParent->GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
@@ -138,18 +135,18 @@ ObjectCatalog::~ObjectCatalog()
     GetParent()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
 }
 
-void ObjectCatalog::Move()
+void __EXPORT ObjectCatalog::Move()
 {
     IDE_DLL()->GetExtraData()->SetObjectCatalogPos( GetPosPixel() );
 }
 
-sal_Bool ObjectCatalog::Close()
+BOOL __EXPORT ObjectCatalog::Close()
 {
     aCancelHdl.Call( this );
-    return sal_True;
+    return TRUE;
 }
 
-void ObjectCatalog::Resize()
+void __EXPORT ObjectCatalog::Resize()
 {
     Size aOutSz = GetOutputSizePixel();
     IDE_DLL()->GetExtraData()->SetObjectCatalogSize( aOutSz );
@@ -181,7 +178,7 @@ void ObjectCatalog::Resize()
 
 IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
 {
-    sal_uInt16 nCurItem = pToolBox->GetCurItemId();
+    USHORT nCurItem = pToolBox->GetCurItemId();
     switch ( nCurItem )
     {
         case TBITEM_SHOW:
@@ -196,13 +193,13 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
             SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-            if ( aDesc.GetType() == OBJ_TYPE_MODULE ||
+            if ( aDesc.GetType() == OBJ_TYPE_MODULE || 
                  aDesc.GetType() == OBJ_TYPE_DIALOG ||
                  aDesc.GetType() == OBJ_TYPE_METHOD )
             {
                 if( pDispatcher )
                 {
-                    SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(),
+                    SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(), 
                                       aDesc.GetMethodName(), aMacroTreeList.ConvertType( aDesc.GetType() ) );
                     pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
                                           SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
@@ -228,9 +225,9 @@ void ObjectCatalog::CheckButtons()
     SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
     BasicEntryType eType = pCurEntry ? ((BasicEntry*)pCurEntry->GetUserData())->GetType() : OBJ_TYPE_UNKNOWN;
     if ( eType == OBJ_TYPE_DIALOG || eType == OBJ_TYPE_MODULE || eType == OBJ_TYPE_METHOD )
-        aToolBox.EnableItem( TBITEM_SHOW, sal_True );
+        aToolBox.EnableItem( TBITEM_SHOW, TRUE );
     else
-        aToolBox.EnableItem( TBITEM_SHOW, sal_False );
+        aToolBox.EnableItem( TBITEM_SHOW, FALSE );
 }
 
 
@@ -268,14 +265,17 @@ void ObjectCatalog::UpdateEntries()
 }
 
 void ObjectCatalog::SetCurrentEntry( BasicEntryDescriptor& rDesc )
-{
+{ 
     aMacroTreeList.SetCurrentEntry( rDesc );
 }
 
 ObjectCatalogToolBox_Impl::ObjectCatalogToolBox_Impl(
-    Window * pParent, ResId const & rResId)
-    : ToolBox(pParent, rResId)
-    , m_aImagesNormal(GetImageList())
+    Window * pParent, ResId const & rResId,
+    ResId const & rImagesHighContrastId):
+    ToolBox(pParent, rResId),
+    m_aImagesNormal(GetImageList()),
+    m_aImagesHighContrast(rImagesHighContrastId),
+    m_bHighContrast(false)
 {
     setImages();
 }
@@ -292,7 +292,12 @@ void ObjectCatalogToolBox_Impl::DataChanged(DataChangedEvent const & rDCEvt)
 
 void ObjectCatalogToolBox_Impl::setImages()
 {
-    SetImageList(m_aImagesNormal);
+    bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
+    if (bHC != m_bHighContrast)
+    {
+        SetImageList(bHC ? m_aImagesHighContrast : m_aImagesNormal);
+        m_bHighContrast = bHC;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

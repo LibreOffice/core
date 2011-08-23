@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.uno.UnoRuntime;
@@ -44,7 +44,7 @@ public class DocumentSaver {
      * @param args The program needs two arguments:
      * - full file name to open,
      * - full file name to save.
-     */
+     */    
     public static void main(String args[]) {
         if ( args.length < 2 ) {
             System.out.println("usage: java -jar DocumentSaver.jar" +
@@ -66,10 +66,10 @@ public class DocumentSaver {
             // get the remote office service manager
             com.sun.star.lang.XMultiComponentFactory xMCF =
                 xContext.getServiceManager();
-
+            
             Object oDesktop = xMCF.createInstanceWithContext(
                 "com.sun.star.frame.Desktop", xContext);
-
+        
             com.sun.star.frame.XComponentLoader xCompLoader =
                 (com.sun.star.frame.XComponentLoader)
                      UnoRuntime.queryInterface(
@@ -88,7 +88,7 @@ public class DocumentSaver {
             propertyValue[0] = new com.sun.star.beans.PropertyValue();
             propertyValue[0].Name = "Hidden";
             propertyValue[0].Value = new Boolean(true);
-
+      
             Object oDocToStore = xCompLoader.loadComponentFromURL(
                 sLoadUrl.toString(), "_blank", 0, propertyValue );
             com.sun.star.frame.XStorable xStorable =
@@ -106,7 +106,7 @@ public class DocumentSaver {
 
             System.out.println("\nDocument \"" + sLoadUrl + "\" saved under \"" +
                                sSaveUrl + "\"\n");
-
+      
             com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)
                 UnoRuntime.queryInterface(com.sun.star.util.XCloseable.class,
                                           oDocToStore );
@@ -120,7 +120,7 @@ public class DocumentSaver {
                         com.sun.star.lang.XComponent.class, oDocToStore );
                 xComp.dispose();
             }
-            System.out.println("document closed!");
+            System.out.println("document closed!");            
             System.exit(0);
         }
         catch( Exception e ) {

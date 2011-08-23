@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -154,7 +154,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
                         arguments[argPos].pData, &url.pData ) );
         bool supposedToBeCompatible = ! url.endsWithIgnoreAsciiCaseAsciiL(
             RTL_CONSTASCII_STRINGPARAM("_incomp.rdb") );
-
+        
         css::uno::Reference<css::registry::XSimpleRegistry> xReg(
             m_context->getServiceManager()->createInstanceWithContext(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -183,9 +183,9 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
             assertFalse(supposedToBeCompatible);
         }
     }
-
+    
     ///////
-
+    
     css::uno::Reference< css::reflection::XIndirectTypeDescription > sequence(
         manager->getByHierarchicalName(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[][]boolean"))),
@@ -299,7 +299,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
 }
 
 rtl::OUString Service::getImplementationName() {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test.tdmanager.impl"));
+    return rtl::OUString::createFromAscii("test.tdmanager.impl");
 }
 
 css::uno::Sequence< rtl::OUString > Service::getSupportedServiceNames() {
@@ -343,9 +343,9 @@ namespace {
 
 bool writeInfo(void * registryKey, rtl::OUString const & implementationName,
                css::uno::Sequence< rtl::OUString > const & serviceNames) {
-    rtl::OUString keyName(RTL_CONSTASCII_USTRINGPARAM("/"));
+    rtl::OUString keyName(rtl::OUString::createFromAscii("/"));
     keyName += implementationName;
-    keyName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    keyName += rtl::OUString::createFromAscii("/UNO/SERVICES");
     css::uno::Reference< css::registry::XRegistryKey > key;
     try {
         key = static_cast< css::registry::XRegistryKey * >(registryKey)->

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,9 @@
 #include "property.hrc"
 #include "convert.hxx"
 
+/** === begin UNO includes === **/
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
+/** === end UNO includes === **/
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
@@ -211,7 +213,7 @@ namespace xforms
         static void lcl_initializePatternMatcher( ::std::auto_ptr< RegexMatcher >& _rpMatcher, const ::rtl::OUString& _rPattern )
         {
             UErrorCode nMatchStatus = U_ZERO_ERROR;
-            UnicodeString aIcuPattern( reinterpret_cast<const UChar *>(_rPattern.getStr()), _rPattern.getLength() );    // UChar != sal_Unicode in MinGW
+            UnicodeString aIcuPattern( reinterpret_cast<const UChar *>(_rPattern.getStr()), _rPattern.getLength() );	// UChar != sal_Unicode in MinGW
             _rpMatcher.reset( new RegexMatcher( aIcuPattern, 0, nMatchStatus ) );
             OSL_ENSURE( U_SUCCESS( nMatchStatus ), "lcl_initializePatternMatcher: invalid pattern property!" );
                 // if asserts, then something changed our pattern without going to convertFastPropertyValue/checkPropertySanity
@@ -220,7 +222,7 @@ namespace xforms
         static bool lcl_matchString( RegexMatcher& _rMatcher, const ::rtl::OUString& _rText )
         {
             UErrorCode nMatchStatus = U_ZERO_ERROR;
-            UnicodeString aInput( reinterpret_cast<const UChar *>(_rText.getStr()), _rText.getLength() );   // UChar != sal_Unicode in MinGW
+            UnicodeString aInput( reinterpret_cast<const UChar *>(_rText.getStr()), _rText.getLength() );	// UChar != sal_Unicode in MinGW
             _rMatcher.reset( aInput );
             if ( _rMatcher.matches( nMatchStatus ) )
             {
@@ -294,7 +296,7 @@ namespace xforms
             ::rtl::OUString sPattern;
             OSL_VERIFY( _rNewValue >>= sPattern );
 
-            UnicodeString aIcuPattern( reinterpret_cast<const UChar *>(sPattern.getStr()), sPattern.getLength() );  // UChar != sal_Unicode in MinGW
+            UnicodeString aIcuPattern( reinterpret_cast<const UChar *>(sPattern.getStr()), sPattern.getLength() );	// UChar != sal_Unicode in MinGW
             UErrorCode nMatchStatus = U_ZERO_ERROR;
             RegexMatcher aMatcher( aIcuPattern, 0, nMatchStatus );
             if ( U_FAILURE( nMatchStatus ) )
@@ -503,7 +505,7 @@ namespace xforms
             break;
 
         default:
-            OSL_FAIL( "OValueLimitedType::_explainInvalid: unknown reason!" );
+            OSL_ENSURE( false, "OValueLimitedType::_explainInvalid: unknown reason!" );
             break;
         }
 
@@ -768,7 +770,7 @@ namespace xforms
     }
 
     //====================================================================
-    //=
+    //= 
     //====================================================================
 #define DEFAULT_IMPLEMNENT_SUBTYPE( classname, typeclass )      \
     classname::classname( const ::rtl::OUString& _rName )       \

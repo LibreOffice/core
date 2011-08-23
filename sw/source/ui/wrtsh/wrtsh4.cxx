@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 */
 
 
-sal_Bool SwWrtShell::_SttWrd()
+BOOL SwWrtShell::_SttWrd()
 {
     if ( IsSttPara() )
         return 1;
@@ -66,14 +66,14 @@ sal_Bool SwWrtShell::_SttWrd()
 }
 /*
  * Das Ende eines Wortes ist das Folgen von Trennzeichen auf
- * nicht-Trennzeichen.  Unter dem Ende eines Wortes wird
+ * nicht-Trennzeichen.	Unter dem Ende eines Wortes wird
  * ebenfalls die Folge von Worttrennzeichen auf Interpunktions-
  * zeichen verstanden. Das Absatzende ist ebenfalls Wortende.
  */
 
 
 
-sal_Bool SwWrtShell::_EndWrd()
+BOOL SwWrtShell::_EndWrd()
 {
     if ( IsEndWrd() )
         return 1;
@@ -91,14 +91,14 @@ sal_Bool SwWrtShell::_EndWrd()
 
 
 
-sal_Bool SwWrtShell::_NxtWrd()
+BOOL SwWrtShell::_NxtWrd()
 {
-    sal_Bool bRet = sal_False;
-    while( IsEndPara() )                // wenn schon am Ende, dann naechsten ???
+    BOOL bRet = FALSE;
+    while( IsEndPara() )				// wenn schon am Ende, dann naechsten ???
     {
-        if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))  // Document - Ende ??
+        if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))	// Document - Ende ??
         {
-            Pop( sal_False );
+            Pop( FALSE );
             return bRet;
         }
         bRet = IsStartWord();
@@ -115,21 +115,21 @@ sal_Bool SwWrtShell::_NxtWrd()
             bRet = IsStartWord();
         }
         else
-            bRet = sal_True;
+            bRet = TRUE;
     }
     ClearMark();
     Combine();
     return bRet;
 }
 
-sal_Bool SwWrtShell::_PrvWrd()
+BOOL SwWrtShell::_PrvWrd()
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     while( IsSttPara() )
-    {                               // wenn schon am Anfang, dann naechsten ???
+    {								// wenn schon am Anfang, dann naechsten ???
         if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
-        {                           // Document - Anfang ??
-            Pop( sal_False );
+        {							// Document - Anfang ??
+            Pop( FALSE );
             return bRet;
         }
         bRet = IsStartWord();
@@ -146,7 +146,7 @@ sal_Bool SwWrtShell::_PrvWrd()
             bRet = IsStartWord();
         }
         else
-            bRet = sal_True;
+            bRet = TRUE;
     }
     ClearMark();
     Combine();
@@ -155,16 +155,16 @@ sal_Bool SwWrtShell::_PrvWrd()
 
 // --> OD 2008-08-06 #i92468#
 // method code of <SwWrtShell::_NxtWrd()> before fix for issue i72162
-sal_Bool SwWrtShell::_NxtWrdForDelete()
+BOOL SwWrtShell::_NxtWrdForDelete()
 {
     if ( IsEndPara() )
     {
         if ( !SwCrsrShell::Right(1,CRSR_SKIP_CHARS) )
         {
-            Pop( sal_False );
-            return sal_False;
+            Pop( FALSE );
+            return FALSE;
         }
-        return sal_True;
+        return TRUE;
     }
     Push();
     ClearMark();
@@ -174,20 +174,20 @@ sal_Bool SwWrtShell::_NxtWrdForDelete()
     }
     ClearMark();
     Combine();
-    return sal_True;
+    return TRUE;
 }
 
 // method code of <SwWrtShell::_PrvWrd()> before fix for issue i72162
-sal_Bool SwWrtShell::_PrvWrdForDelete()
+BOOL SwWrtShell::_PrvWrdForDelete()
 {
     if ( IsSttPara() )
     {
         if ( !SwCrsrShell::Left(1,CRSR_SKIP_CHARS) )
         {
-            Pop( sal_False );
-            return sal_False;
+            Pop( FALSE );
+            return FALSE;
         }
-        return sal_True;
+        return TRUE;
     }
     Push();
     ClearMark();
@@ -197,18 +197,18 @@ sal_Bool SwWrtShell::_PrvWrdForDelete()
     }
     ClearMark();
     Combine();
-    return sal_True;
+    return TRUE;
 }
 // <--
 
 
-sal_Bool SwWrtShell::_FwdSentence()
+BOOL SwWrtShell::_FwdSentence()
 {
     Push();
     ClearMark();
     if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))
     {
-        Pop(sal_False);
+        Pop(FALSE);
         return 0;
     }
     if( !GoNextSentence() && !IsEndPara() )
@@ -221,13 +221,13 @@ sal_Bool SwWrtShell::_FwdSentence()
 
 
 
-sal_Bool SwWrtShell::_BwdSentence()
+BOOL SwWrtShell::_BwdSentence()
 {
     Push();
     ClearMark();
     if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
     {
-        Pop(sal_False);
+        Pop(FALSE);
         return 0;
     }
     if(IsSttPara())
@@ -244,11 +244,21 @@ sal_Bool SwWrtShell::_BwdSentence()
 }
 
 
-sal_Bool SwWrtShell::_FwdPara()
+BOOL SwWrtShell::_FwdPara()
 {
     Push();
     ClearMark();
-    sal_Bool bRet = SwCrsrShell::MovePara(fnParaNext, fnParaStart);
+    // --> OD 2009-01-06 #i81824#
+    // going right and back again left not needed and causes too much
+    // accessibility events due to the cursor movements.
+//    if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))
+//    {
+//        Pop(FALSE);
+//        return 0;
+//    }
+//    SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
+    // <--
+    BOOL bRet = SwCrsrShell::MovePara(fnParaNext, fnParaStart);
 
     ClearMark();
     Combine();
@@ -256,12 +266,27 @@ sal_Bool SwWrtShell::_FwdPara()
 }
 
 
-sal_Bool SwWrtShell::_BwdPara()
+BOOL SwWrtShell::_BwdPara()
 {
     Push();
     ClearMark();
-
-    sal_Bool bRet = SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
+    // --> OD 2009-01-06 #i81824#
+    // going left and back again right not needed and causes too much
+    // accessibility events due to the cursor movements.
+//    if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
+//    {
+//        Pop(FALSE);
+//        return 0;
+//    }
+//    SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
+    // <--
+    // --> OD 2009-01-06 #i81824#
+    // going to start of paragraph only needed, if move to previous paragraph
+    // does not happen. Otherwise, useless accessibility events are triggered
+    // due to cursor movements.
+//    if(!IsSttOfPara())
+//        SttPara();
+    BOOL bRet = SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
     if ( !bRet && !IsSttOfPara() )
     {
         SttPara();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 published interface XPersistanceHolder: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** disconnects the object from the persistence.
+    /** disconnects the object from the persistance.
 
         @throws com::sun::star::io::IOException
             in case of io problems
@@ -62,10 +62,10 @@ published interface XPersistanceHolder: com::sun::star::uno::XInterface
                 ::com::sun::star::uno::Exception );
 
     //-------------------------------------------------------------------------
-    /** connects the object to a persistence.
+    /** connects the object to a persistance.
 
         @param xStream
-            a stream that specify the persistence
+            a stream that specify the persistance
 
         @throws com::sun::star::io::IOException
             in case of io problems

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,8 +163,8 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual	bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool		PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 // class SfxDocumentPage -------------------------------------------------
@@ -174,7 +174,6 @@ class SfxDocumentPage : public SfxTabPage
 private:
     FixedImage                  aBmp1;
     Edit                        aNameED;
-    PushButton                  aChangePassBtn;
 
     FixedLine                   aLine1FL;
     FixedText                   aTypeFT;
@@ -209,25 +208,23 @@ private:
     String                      aUnknownSize;
     String                      aMultiSignedStr;
 
-    sal_Bool                        bEnableUseUserData  : 1,
+    BOOL                        bEnableUseUserData  : 1,
                                 bHandleDelete       : 1;
 
     DECL_LINK(          DeleteHdl, PushButton * );
     DECL_LINK(          SignatureHdl, PushButton * );
-    DECL_LINK( ChangePassHdl, PushButton * );
     void                ImplUpdateSignatures();
-    void                ImplCheckPasswordState();
 
 protected:
     SfxDocumentPage( Window* pParent, const SfxItemSet& );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet& );
+    virtual BOOL		FillItemSet( SfxItemSet& );
+    virtual void		Reset( const SfxItemSet& );
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& );
 
-    void                EnableUseUserData();
+    void				EnableUseUserData();
 };
 
 // class SfxDocumentDescPage ---------------------------------------------
@@ -235,28 +232,29 @@ public:
 class SfxDocumentDescPage : public SfxTabPage
 {
 private:
-    FixedText               aTitleFt;
-    Edit                    aTitleEd;
-    FixedText               aThemaFt;
-    Edit                    aThemaEd;
-    FixedText               aKeywordsFt;
-    Edit                    aKeywordsEd;
-    FixedText               aCommentFt;
-    MultiLineEdit           aCommentEd;
-    SfxDocumentInfoItem*    pInfoItem;
+    FixedText				aTitleFt;
+    Edit					aTitleEd;
+    FixedText				aThemaFt;
+    Edit					aThemaEd;
+    FixedText				aKeywordsFt;
+    Edit					aKeywordsEd;
+    FixedText				aCommentFt;
+    MultiLineEdit			aCommentEd;
+    SfxDocumentInfoItem*	pInfoItem;
 
 protected:
     SfxDocumentDescPage( Window* pParent, const SfxItemSet& );
 
-    virtual sal_Bool            FillItemSet( SfxItemSet& );
-    virtual void            Reset( const SfxItemSet& );
+    virtual BOOL        	FillItemSet( SfxItemSet& );
+    virtual void        	Reset( const SfxItemSet& );
 
 public:
-    static SfxTabPage*      Create( Window* pParent, const SfxItemSet& );
+    static SfxTabPage*		Create( Window* pParent, const SfxItemSet& );
 };
 
 // class SfxInternetPage -------------------------------------------------
 
+class TargetList;
 namespace sfx2
 {
     class FileDialogHelper;
@@ -265,37 +263,37 @@ namespace sfx2
 class SfxInternetPage : public SfxTabPage
 {
 private:
-    RadioButton             aRBNoAutoUpdate;
-    RadioButton             aRBReloadUpdate;
-    RadioButton             aRBForwardUpdate;
+    RadioButton				aRBNoAutoUpdate;
+    RadioButton				aRBReloadUpdate;
+    RadioButton				aRBForwardUpdate;
 
-    FixedText               aFTEvery;
-    NumericField            aNFReload;
-    FixedText               aFTReloadSeconds;
+    FixedText				aFTEvery;
+    NumericField			aNFReload;
+    FixedText				aFTReloadSeconds;
 
-    FixedText               aFTAfter;
-    NumericField            aNFAfter;
-    FixedText               aFTAfterSeconds;
-    FixedText               aFTURL;
-    Edit                    aEDForwardURL;
-    PushButton              aPBBrowseURL;
-    FixedText               aFTFrame;
-    ComboBox                aCBFrame;
+    FixedText				aFTAfter;
+    NumericField			aNFAfter;
+    FixedText				aFTAfterSeconds;
+    FixedText				aFTURL;
+    Edit					aEDForwardURL;
+    PushButton				aPBBrowseURL;
+    FixedText				aFTFrame;
+    ComboBox				aCBFrame;
 
-    String                  aForwardErrorMessg;
+    String					aForwardErrorMessg;
     String                  aBaseURL;
-    SfxDocumentInfoItem*    pInfoItem;
+    SfxDocumentInfoItem*	pInfoItem;
     sfx2::FileDialogHelper* pFileDlg;
 
     enum STATE              { S_Init, S_NoUpdate, S_Reload, S_Forward };
                             // S_Init is only valid as initial value
-    STATE                   eState;
+    STATE					eState;
 
-    void                    ChangeState( STATE eNewState );     // S_Init is not a valid value here
+    void					ChangeState( STATE eNewState );		// S_Init is not a valid value here
                                                                 // also checks corresponding radiobutton
-    void                    EnableNoUpdate( sal_Bool bEnable );
-    void                    EnableReload( sal_Bool bEnable );
-    void                    EnableForward( sal_Bool bEnable );
+    void					EnableNoUpdate( BOOL bEnable );
+    void					EnableReload( BOOL bEnable );
+    void					EnableForward( BOOL bEnable );
 
     DECL_LINK( ClickHdlNoUpdate, Control* );
     DECL_LINK( ClickHdlReload, Control* );
@@ -309,12 +307,12 @@ protected:
     SfxInternetPage( Window* pParent, const SfxItemSet& );
     ~SfxInternetPage();
 
-    virtual sal_Bool            FillItemSet( SfxItemSet& );
-    virtual void            Reset( const SfxItemSet& );
+    virtual BOOL			FillItemSet( SfxItemSet& );
+    virtual void			Reset( const SfxItemSet& );
     virtual int                     DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& );
 };
 
 // class SfxDocumentInfoDialog -------------------------------------------
@@ -322,10 +320,10 @@ public:
 class SFX2_DLLPUBLIC SfxDocumentInfoDialog : public SfxTabDialog
 {
 protected:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage& rPage );
+    virtual void	PageCreated( USHORT nId, SfxTabPage& rPage );
 
 public:
-    SfxDocumentInfoDialog(  Window* pParent, const SfxItemSet& );
+    SfxDocumentInfoDialog(	Window* pParent, const SfxItemSet& );
 };
 
 // class CustomPropertiesRemoveButton ------------------------------------
@@ -388,13 +386,13 @@ class CustomPropertiesDurationField : public Edit
     com::sun::star::util::Duration  m_aDuration;
 protected:
     virtual void    RequestHelp(const HelpEvent& rEvt);
-public:
+public:    
     CustomPropertiesDurationField( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
     ~CustomPropertiesDurationField();
 
     void SetDuration( const com::sun::star::util::Duration& rDuration );
     const com::sun::star::util::Duration& GetDuration() const { return m_aDuration; }
-};
+};    
 
 class CustomPropertiesEditButton : public PushButton
 {
@@ -405,7 +403,7 @@ public:
     ~CustomPropertiesEditButton();
 
     DECL_LINK(ClickHdl, PushButton*);
-};
+};    
 
 class CustomPropertiesRemoveButton : public ImageButton
 {
@@ -433,7 +431,7 @@ public:
 
     inline void     CheckYes() { m_aYesButton.Check(); }
     inline void     CheckNo() { m_aNoButton.Check(); }
-    inline bool     IsYesChecked() const { return m_aYesButton.IsChecked() != sal_False; }
+    inline bool     IsYesChecked() const { return m_aYesButton.IsChecked() != FALSE; }
 };
 
 // struct CustomPropertyLine ---------------------------------------------
@@ -479,14 +477,14 @@ private:
     ImageButton                         m_aRemoveButton;
 
     sal_Int32                           m_nLineHeight;
-    sal_Int32                           m_nScrollPos;
+    sal_Int32							m_nScrollPos;
     SvtSysLocale                        m_aSysLocale;
     std::vector< CustomPropertyLine* >  m_aCustomPropertiesLines;
     CustomPropertyLine*                 m_pCurrentLine;
     SvNumberFormatter                   m_aNumberFormatter;
     Timer                               m_aEditLoseFocusTimer;
     Timer                               m_aBoxLoseFocusTimer;
-    Link                                m_aRemovedHdl;
+    Link								m_aRemovedHdl;
 
     DECL_LINK(  TypeHdl, CustomPropertiesTypeBox* );
     DECL_LINK(  RemoveHdl, CustomPropertiesRemoveButton* );
@@ -505,7 +503,7 @@ public:
     ~CustomPropertiesWindow();
 
     void                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
-    sal_uInt16              GetVisibleLineCount() const;
+    USHORT              GetVisibleLineCount() const;
     inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
     void                AddLine( const ::rtl::OUString& sName, com::sun::star::uno::Any& rAny );
     bool                AreAllLinesValid() const;
@@ -515,7 +513,7 @@ public:
     bool                DoesCustomPropertyExist( const String& rName ) const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                         GetCustomProperties() const;
-    void                SetRemovedHdl( const Link& rLink ) { m_aRemovedHdl = rLink; }
+    void				SetRemovedHdl( const Link& rLink ) { m_aRemovedHdl = rLink; }
 };
 
 // class CustomPropertiesControl -----------------------------------------
@@ -555,9 +553,9 @@ public:
 class SfxCustomPropertiesPage : public SfxTabPage
 {
 private:
+    FixedText               m_aPropertiesFT;
     CustomPropertiesControl m_aPropertiesCtrl;
     PushButton              m_aAddBtn;
-    FixedText               m_aPropertiesFT; // Sym2_5121----, Moved by Steve Yin
 
     DECL_LINK(  AddHdl, PushButton* );
 
@@ -566,7 +564,7 @@ private:
 protected:
     SfxCustomPropertiesPage( Window* pParent, const SfxItemSet& );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
+    virtual BOOL        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
 

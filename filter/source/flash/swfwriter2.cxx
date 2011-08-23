@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ void BitStream::writeUB( sal_uInt32 nValue, sal_uInt16 nBits )
         mnCurrentByte |= nValue << (32 - nBits) >> (32 - mnBitPos);
 
         if ( nBits > mnBitPos )
-        {
+        {	
             nBits = nBits - mnBitPos;
             mnBitPos = 0;
         }
@@ -322,30 +322,30 @@ void Tag::writeMatrix( SvStream& rOut, const ::basegfx::B2DHomMatrix& rMatrix ) 
     if( bHasScale )
     {
         sal_uInt8 nScaleBits = 31;
-
+        
         aBits.writeUB( nScaleBits, 5 );
-        aBits.writeFB( getFixed( rMatrix.get(0, 0) ), nScaleBits ); // Scale X
+        aBits.writeFB( getFixed( rMatrix.get(0, 0) ), nScaleBits );	// Scale X
         aBits.writeFB( getFixed( rMatrix.get(1, 1) ), nScaleBits ); // Scale Y
     }
 
     const sal_uInt8 bHasRotate = rMatrix.get(0, 1) != 0.0 || rMatrix.get(1, 0) != 0.0;
 
     aBits.writeUB( bHasRotate, 1 );
-
+    
     if( bHasRotate )
     {
         sal_uInt8 nRotateBits = 31;
 
         aBits.writeUB( nRotateBits, 5 );
-        aBits.writeFB( getFixed( rMatrix.get(0, 1) ), nRotateBits );    // RotateSkew0
-        aBits.writeFB( getFixed( rMatrix.get(1, 0) ), nRotateBits );    // RotateSkew1
+        aBits.writeFB( getFixed( rMatrix.get(0, 1) ), nRotateBits );	// RotateSkew0
+        aBits.writeFB( getFixed( rMatrix.get(1, 0) ), nRotateBits );	// RotateSkew1
     }
 
     sal_uInt8 nTranslateBits = 16;
 
     aBits.writeUB( nTranslateBits, 5 );
-    aBits.writeSB( (sal_Int16)rMatrix.get(0, 2), nTranslateBits );      // Translate X
-    aBits.writeSB( (sal_Int16)rMatrix.get(1, 2), nTranslateBits );      // Translate Y
+    aBits.writeSB( (sal_Int16)rMatrix.get(0, 2), nTranslateBits );		// Translate X
+    aBits.writeSB( (sal_Int16)rMatrix.get(1, 2), nTranslateBits );		// Translate Y
 
     aBits.writeTo( rOut );
 }
@@ -381,7 +381,7 @@ Sprite::Sprite( sal_uInt16 nId )
 
 Sprite::~Sprite()
 {
-    for(vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); ++i)
+    for(vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); i++)
         delete *i;
 }
 
@@ -390,7 +390,7 @@ Sprite::~Sprite()
 void Sprite::write( SvStream& out )
 {
     SvMemoryStream aTmp;
-    for(vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); ++i)
+    for(vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); i++)
         (*i)->write( aTmp );
 
     if( !mnFrames )
@@ -482,7 +482,7 @@ sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
     {
         Polygon& rPoly = aPolyPoly[ i ];
 
-        const sal_uInt16 nSize = rPoly.GetSize();
+        const USHORT nSize = rPoly.GetSize();
         if( nSize )
         {
             // convert polygon to flash EM_SQUARE (1024x1024)
@@ -501,7 +501,7 @@ sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
     maGlyphData.pad();
 
     pVDev->SetFont( aOldFont );
-
+    
     return mnNextIndex++;
 }
 
@@ -516,7 +516,7 @@ void FlashFont::write( SvStream& out )
     sal_uInt16 nGlyphs = _uInt16( maGlyphOffsets.size() );
     sal_uInt16 nOffset = nGlyphs * sizeof( sal_uInt16 );
 
-    for(vector< sal_uInt16 >::iterator i = maGlyphOffsets.begin(); i != maGlyphOffsets.end(); ++i)
+    for(vector< sal_uInt16 >::iterator i = maGlyphOffsets.begin(); i != maGlyphOffsets.end(); i++)
         aTag.addUI16( nOffset + (*i) );
 
     aTag.addBits( maGlyphData );
@@ -528,7 +528,7 @@ void FlashFont::write( SvStream& out )
 
 /** this c'tor creates a solid fill style */
 FillStyle::FillStyle( const Color& rSolidColor )
-:   meType( solid ),
+:	meType( solid ),
     maColor( rSolidColor )
 {
 }
@@ -537,7 +537,7 @@ FillStyle::FillStyle( const Color& rSolidColor )
 
 /** this c'tor creates a tiled or clipped bitmap fill style */
 FillStyle::FillStyle( sal_uInt16 nBitmapId, bool bClipped, const ::basegfx::B2DHomMatrix& rMatrix ) // #i73264#
-:   meType( bClipped ? clipped_bitmap : tiled_bitmap ),
+:	meType( bClipped ? clipped_bitmap : tiled_bitmap ),
     maMatrix( rMatrix ),
     mnBitmapId( nBitmapId )
 {
@@ -552,10 +552,10 @@ FillStyle::FillStyleType Impl_getFillStyleType( const Gradient& rGradient )
     case GradientStyle_ELLIPTICAL:
     case GradientStyle_RADIAL:
         return FillStyle::radial_gradient;
-//  case GradientStyle_AXIAL:
-//  case GradientStyle_SQUARE:
-//  case GradientStyle_RECT:
-//  case GradientStyle_LINEAR:
+//	case GradientStyle_AXIAL:
+//	case GradientStyle_SQUARE:
+//	case GradientStyle_RECT:
+//	case GradientStyle_LINEAR:
     default:
         return FillStyle::linear_gradient;
     }
@@ -565,7 +565,7 @@ FillStyle::FillStyleType Impl_getFillStyleType( const Gradient& rGradient )
 
 /** this c'tor creates a linear or radial gradient fill style */
 FillStyle::FillStyle( const Rectangle& rBoundRect, const Gradient& rGradient )
-:   meType( Impl_getFillStyleType( rGradient ) ),
+:	meType( Impl_getFillStyleType( rGradient ) ),
     maGradient( rGradient ),
     maBoundRect( rBoundRect )
 {
@@ -597,8 +597,8 @@ void FillStyle::addTo( Tag* pTag ) const
 
 struct GradRecord
 {
-    sal_uInt8   mnRatio;
-    Color       maColor;
+    sal_uInt8	mnRatio;
+    Color		maColor;
 
     GradRecord( sal_uInt8 nRatio, const Color& rColor ) : mnRatio( nRatio ), maColor( rColor ) {}
 };
@@ -684,7 +684,7 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
 
     pTag->addUI8( static_cast<sal_uInt8>( aGradientRecords.size() ) );
 
-    for(std::vector< GradRecord >::iterator i = aGradientRecords.begin(); i != aGradientRecords.end(); ++i)
+    for(std::vector< GradRecord >::iterator i = aGradientRecords.begin(); i != aGradientRecords.end(); i++)
     {
         pTag->addUI8( (*i).mnRatio );
         pTag->addRGBA( (*i).maColor );

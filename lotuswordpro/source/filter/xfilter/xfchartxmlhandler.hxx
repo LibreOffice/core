@@ -56,7 +56,7 @@
 /*****************************************************************************
 * Change History
 * <<Date>> <<Name of editor>> <<Description>>
-*   2005/2      draft code for XML handler of chart xml.
+*	2005/2		draft code for XML handler of chart xml.
 ****************************************************************************/
 
 /*************************************************************************
@@ -77,10 +77,9 @@
 #include "ixfstream.hxx"
 #include "ixfattrlist.hxx"
 #include <rtl/ustring.hxx>
+using namespace rtl;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
 
 /**
 * @brief

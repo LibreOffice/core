@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,8 @@
 #define PRV_SV_DECL_OWNER_LIST(ClassName,Type)                            \
     List  aTypes;                                                         \
 public:                                                                   \
-                        ClassName( sal_uInt16 nInitSize = 16,                 \
-                                   sal_uInt16 nReSize = 16 )                  \
+                        ClassName( USHORT nInitSize = 16,                 \
+                                   USHORT nReSize = 16 )                  \
                             : aTypes( nInitSize, nReSize ) {}             \
                         ClassName( const ClassName & rObj )               \
                         { *this = rObj; }                                 \
@@ -49,18 +49,18 @@ public:                                                                   \
                         { delete (Type *)aTypes.Remove(); }               \
     void                Remove( Type * pObj )                             \
                         { delete (Type *)aTypes.Remove( pObj ); }         \
-    void                Remove( sal_uIntPtr nPos )                              \
+    void                Remove( ULONG nPos )                              \
                         { delete (Type *)aTypes.Remove( nPos ); }         \
-    Type &              Insert( const Type &, sal_uIntPtr nPos );               \
-    Type &              Insert( const Type & rType )                      \
-                        { return Insert( rType, aTypes.GetCurPos() ); }   \
+    Type &              Insert( const Type &, ULONG nPos );               \
+    Type &              Insert( const Type & rType )           			  \
+                        { return Insert( rType, aTypes.GetCurPos() ); }	  \
     Type &              Append( const Type & rType )                      \
                         { return Insert( rType, LIST_APPEND ); }          \
-    Type &              GetObject( sal_uIntPtr nPos ) const                     \
+    Type &              GetObject( ULONG nPos ) const                     \
                         { return *(Type *)aTypes.GetObject( nPos ); }     \
-    Type &              operator []( sal_uIntPtr nPos ) const                   \
+    Type &              operator []( ULONG nPos ) const                   \
                         { return *(Type *)aTypes.GetObject( nPos ); }     \
-    sal_uIntPtr               Count() const { return aTypes.Count(); }
+    ULONG               Count() const { return aTypes.Count(); }
 
 #define PRV_SV_IMPL_OWNER_LIST(ClassName,Type)                          \
 ClassName & ClassName::operator = ( const ClassName & rObj )            \
@@ -68,7 +68,7 @@ ClassName & ClassName::operator = ( const ClassName & rObj )            \
     if( this != &rObj )                                                 \
     {                                                                   \
         Clear();                                                        \
-        for( sal_uIntPtr i = 0; i < rObj.Count(); i++ )                       \
+        for( ULONG i = 0; i < rObj.Count(); i++ )                       \
             Append( rObj.GetObject( i ) );                              \
     }                                                                   \
     return *this;                                                       \
@@ -83,7 +83,7 @@ void ClassName::Clear()                                                 \
     }                                                                   \
     aTypes.Clear();                                                     \
 }                                                                       \
-Type & ClassName::Insert( const Type & rType, sal_uIntPtr nPos )              \
+Type & ClassName::Insert( const Type & rType, ULONG nPos )              \
 {                                                                       \
     Type * pType = new Type( rType );                                   \
     aTypes.Insert( pType, nPos );                                       \

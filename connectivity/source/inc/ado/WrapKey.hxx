@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ namespace connectivity
         class WpADOKey : public WpOLEBase<ADOKey>
         {
         public:
-            WpADOKey(ADOKey* pInt=NULL) :   WpOLEBase<ADOKey>(pInt){}
+            WpADOKey(ADOKey* pInt=NULL)	:	WpOLEBase<ADOKey>(pInt){}
             WpADOKey(const WpADOKey& rhs){operator=(rhs);}
 
             inline WpADOKey& operator=(const WpADOKey& rhs)

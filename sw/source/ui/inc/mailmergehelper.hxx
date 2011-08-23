@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
-/*-------------------------------------------------------------------------
+/*-- 27.04.2004 13:20:00---------------------------------------------------
     Preview window used to show the possible selection of address blocks
     and also the resulting address filled with database data
   -----------------------------------------------------------------------*/
@@ -139,7 +139,7 @@ public:
     void    SetSelectHdl (const Link& rLink) {m_aSelectHdl = rLink;}
 };
 
-/*-------------------------------------------------------------------------
+/*-- 11.05.2004 15:39:59---------------------------------------------------
     iterate over an address block or a greeting line
     the iterator returns the parts either as pure string
     or as column

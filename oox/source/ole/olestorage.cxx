@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include "oox/ole/olestorage.hxx"
-
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -37,31 +36,42 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include "oox/helper/helper.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/helper.hxx"
+
+using ::rtl::OUString;
+using ::com::sun::star::container::XNameContainer;
+using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::embed::XStorage;
+using ::com::sun::star::embed::XTransactedObject;
+using ::com::sun::star::io::BufferSizeExceededException;
+using ::com::sun::star::io::IOException;
+using ::com::sun::star::io::NotConnectedException;
+using ::com::sun::star::io::XInputStream;
+using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::io::XSeekable;
+using ::com::sun::star::io::XStream;
+using ::com::sun::star::lang::IllegalArgumentException;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
 
 namespace oox {
 namespace ole {
 
 // ============================================================================
 
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::embed;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
-
-// ============================================================================
-
 namespace {
 
 typedef ::cppu::WeakImplHelper2< XSeekable, XOutputStream > OleOutputStreamBase;
-
+    
 /** Implementation of an OLE storage output stream that inserts itself into the
     storage when it is closed.
  */
@@ -254,7 +264,7 @@ void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "OleStorage::initStorage - cannot create temporary copy of input stream" );
+        OSL_ENSURE( false, "OleStorage::initStorage - cannot create temporary copy of input stream" );
     }
 
     // create base storage object
@@ -307,7 +317,7 @@ bool OleStorage::implIsStorage() const
 
 Reference< XStorage > OleStorage::implGetXStorage() const
 {
-    OSL_FAIL( "OleStorage::getXStorage - not implemented" );
+    OSL_ENSURE( false, "OleStorage::getXStorage - not implemented" );
     return Reference< XStorage >();
 }
 

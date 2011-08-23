@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,18 +39,16 @@ public:
     TYPEINFO();
     // Constructor movet alle Lines/Boxen aus der SwTable zu sich.
     // Die SwTable ist danach Leer und muss geloescht werden.
-    SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
-                sal_Bool bUpdate = sal_True );
+    SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, 
+                BOOL bUpdate = TRUE );
     ~SwDDETable();
 
+    void Modify( SfxPoolItem*, SfxPoolItem* );
     void ChangeContent();
-    sal_Bool  NoDDETable();
+    BOOL  NoDDETable();
 
     SwDDEFieldType* GetDDEFldType();
     inline const SwDDEFieldType* GetDDEFldType() const;
-protected:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
-    virtual void SwClientNotify( const SwModify&, const SfxHint& );
 };
 
 

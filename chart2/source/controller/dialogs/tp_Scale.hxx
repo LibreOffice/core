@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,6 @@
 #include <vcl/button.hxx>
 // header for MetricField
 #include <vcl/field.hxx>
-// header for class ListBox
-#include <vcl/lstbox.hxx>
 
 //.............................................................................
 namespace chart
@@ -52,7 +50,7 @@ public:
     ScaleTabPage( Window* pParent, const SfxItemSet& rInAttrs );
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual sal_Bool FillItemSet( SfxItemSet& rOutAttrs );
+    virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );
     virtual void Reset( const SfxItemSet& rInAttrs );
     using TabPage::DeactivatePage;
     virtual int DeactivatePage( SfxItemSet* pItemSet = NULL );
@@ -65,65 +63,46 @@ public:
     virtual void StateChanged( StateChangedType nType );
 
 private:
-    FixedLine           aFlScale;
+    FixedLine			aFlScale;
 
-    CheckBox            aCbxReverse;
+    FixedText			aTxtMin;
+    FormattedField		aFmtFldMin;
+    CheckBox			aCbxAutoMin;
 
-    CheckBox            aCbxLogarithm;
-
-    FixedText           m_aTxt_AxisType;
-    ListBox             m_aLB_AxisType;
-
-    FixedText           aTxtMin;
-    FormattedField      aFmtFldMin;
-    CheckBox            aCbxAutoMin;
-
-    FixedText           aTxtMax;
-    FormattedField      aFmtFldMax;
-    CheckBox            aCbxAutoMax;
-
-    FixedText           m_aTxt_TimeResolution;
-    ListBox             m_aLB_TimeResolution;
-    CheckBox            m_aCbx_AutoTimeResolution;
+    FixedText			aTxtMax;
+    FormattedField		aFmtFldMax;
+    CheckBox			aCbxAutoMax;
 
     FixedText           aTxtMain;
-    FormattedField      aFmtFldStepMain;
-    MetricField         m_aMt_MainDateStep;
-    ListBox             m_aLB_MainTimeUnit;
-    CheckBox            aCbxAutoStepMain;
+    FormattedField		aFmtFldStepMain;
+    CheckBox			aCbxAutoStepMain;
 
-    FixedText           aTxtHelpCount;
     FixedText           aTxtHelp;
     MetricField         aMtStepHelp;
-    ListBox             m_aLB_HelpTimeUnit;
-    CheckBox            aCbxAutoStepHelp;
+    CheckBox			aCbxAutoStepHelp;
 
     FixedText           aTxtOrigin;
-    FormattedField      aFmtFldOrigin;
-    CheckBox            aCbxAutoOrigin;
-
-    double              fMin;
-    double              fMax;
-    double              fStepMain;
+    FormattedField		aFmtFldOrigin;
+    CheckBox			aCbxAutoOrigin;
+    
+    CheckBox			aCbxLogarithm;
+    CheckBox            aCbxReverse;
+    
+    double				fMin;
+    double				fMax;
+    double				fStepMain;
     sal_Int32           nStepHelp;
-    double              fOrigin;
-    sal_Int32           m_nTimeResolution;
-    sal_Int32           m_nMainTimeUnit;
-    sal_Int32           m_nHelpTimeUnit;
-    int                 m_nAxisType;
-    bool                m_bAllowDateAxis;
-    SvNumberFormatter*  pNumFormatter;
+    double				fOrigin;
+    int                 nAxisType;
+    SvNumberFormatter*	pNumFormatter;
 
     bool                m_bShowAxisOrigin;
-
+    
     void AdjustControlPositions();
     void EnableControls();
-    void PlaceIntervalControlsAccordingToAxisType();
-
-    DECL_LINK( SelectAxisTypeHdl, void* );
+    
     DECL_LINK( EnableValueHdl, CheckBox* );
-    DECL_LINK( FmtFieldModifiedHdl, FormattedField* );
-
+    
     /** shows a warning window due to an invalid input.
 
         @param nResIdMessage
@@ -137,7 +116,7 @@ private:
 
         @return false, if nResIdMessage was 0, true otherwise
      */
-    bool ShowWarning( sal_uInt16 nResIdMessage, Control* pControl = NULL );
+    bool ShowWarning( USHORT nResIdMessage, Edit * pControl = NULL );
 };
 
 //.............................................................................

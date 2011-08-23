@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,8 +84,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-using ::rtl::OUString;
-using ::rtl::OString;
+using namespace rtl;
+
 namespace framework{
 
 //_______________________________________________
@@ -139,7 +139,7 @@ SessionListener::SessionListener(const css::uno::Reference< css::lang::XMultiSer
         , m_bSessionStoreRequested( sal_False )
         , m_bAllowUserInteractionOnQuit( sal_False )
         , m_bTerminated( sal_False )
-{
+{   
 }
 
 SessionListener::~SessionListener()
@@ -153,8 +153,8 @@ SessionListener::~SessionListener()
 
 void SessionListener::StoreSession( sal_Bool bAsync )
 {
-    ResetableGuard aGuard(m_aLock);
-    try
+    ResetableGuard aGuard(m_aLock);    
+    try 
     {
         // xd create SERVICENAME_AUTORECOVERY -> XDispatch
         // xd->dispatch("vnd.sun.star.autorecovery:/doSessionSave, async=bAsync
@@ -164,7 +164,7 @@ void SessionListener::StoreSession( sal_Bool bAsync )
         css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
         css::uno::Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
         URL aURL;
-        aURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/doSessionSave"));
+        aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionSave");
         xURLTransformer->parseStrict(aURL);
 
         // in case of asynchronous call the notification will trigger saveDone()
@@ -172,11 +172,11 @@ void SessionListener::StoreSession( sal_Bool bAsync )
             xDispatch->addStatusListener(this, aURL);
 
         Sequence< PropertyValue > args(1);
-        args[0] = PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("DispatchAsynchron")),-1,makeAny(bAsync),PropertyState_DIRECT_VALUE);
+        args[0] = PropertyValue(OUString::createFromAscii("DispatchAsynchron"),-1,makeAny(bAsync),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
     } catch (com::sun::star::uno::Exception& e) {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
-        OSL_FAIL(aMsg.getStr());
+        OSL_ENSURE(sal_False, aMsg.getStr());
         // save failed, but tell manager to go on if we havent yet dispatched the request
         // in case of synchronous saving the notification is done by the caller
         if ( bAsync && m_rSessionManager.is() )
@@ -186,8 +186,8 @@ void SessionListener::StoreSession( sal_Bool bAsync )
 
 void SessionListener::QuitSessionQuietly()
 {
-    ResetableGuard aGuard(m_aLock);
-    try
+    ResetableGuard aGuard(m_aLock);    
+    try 
     {
         // xd create SERVICENAME_AUTORECOVERY -> XDispatch
         // xd->dispatch("vnd.sun.star.autorecovery:/doSessionQuietQuit, async=false
@@ -196,15 +196,15 @@ void SessionListener::QuitSessionQuietly()
         css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
         css::uno::Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
         URL aURL;
-        aURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/doSessionQuietQuit"));
+        aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionQuietQuit");
         xURLTransformer->parseStrict(aURL);
 
         Sequence< PropertyValue > args(1);
-        args[0] = PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("DispatchAsynchron")),-1,makeAny(sal_False),PropertyState_DIRECT_VALUE);
+        args[0] = PropertyValue(OUString::createFromAscii("DispatchAsynchron"),-1,makeAny(sal_False),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
     } catch (com::sun::star::uno::Exception& e) {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
-        OSL_FAIL(aMsg.getStr());
+        OSL_ENSURE(sal_False, aMsg.getStr());
     }
 }
 
@@ -216,7 +216,7 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
     throw (RuntimeException)
 {
 
-    OUString aSMgr(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.SessionManagerClient"));
+    OUString aSMgr = OUString::createFromAscii("com.sun.star.frame.SessionManagerClient");
     if (args.getLength() > 0)
     {
         NamedValue v;
@@ -224,11 +224,11 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
         {
             if (args[i] >>= v)
             {
-                if (v.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SessionManagerName")))
+                if (v.Name.equalsAscii("SessionManagerName"))
                     v.Value >>= aSMgr;
-                else if (v.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SessionManager")))
+                else if (v.Name.equalsAscii("SessionManager"))
                     v.Value >>= m_rSessionManager;
-                else if (v.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AllowUserInteractionOnQuit")))
+                else if (v.Name.equalsAscii("AllowUserInteractionOnQuit"))
                     v.Value >>= m_bAllowUserInteractionOnQuit;
             }
         }
@@ -246,13 +246,14 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
 void SAL_CALL SessionListener::statusChanged(const FeatureStateEvent& event)
     throw (css::uno::RuntimeException)
 {
-   if (event.FeatureURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.autorecovery:/doSessionRestore")))
+   if (event.FeatureURL.Complete.equalsAscii("vnd.sun.star.autorecovery:/doSessionRestore"))
     {
         if (event.FeatureDescriptor.compareToAscii("update")==0)
             m_bRestored = sal_True; // a document was restored
+        // if (event.FeatureDescriptor.compareToAscii("stop")==0)
 
     }
-    else if (event.FeatureURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.autorecovery:/doSessionSave")))
+    else if (event.FeatureURL.Complete.equalsAscii("vnd.sun.star.autorecovery:/doSessionSave"))
     {
         if (event.FeatureDescriptor.compareToAscii("stop")==0)
         {
@@ -272,7 +273,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
         css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
 
         URL aURL;
-        aURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/doSessionRestore"));
+        aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionRestore");
         css::uno::Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
         xURLTransformer->parseStrict(aURL);
         Sequence< PropertyValue > args;
@@ -282,7 +283,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
 
     } catch (com::sun::star::uno::Exception& e) {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
-        OSL_FAIL(aMsg.getStr());
+        OSL_ENSURE(sal_False, aMsg.getStr());
     }
 
     return m_bRestored;
@@ -309,7 +310,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
     throw (RuntimeException)
 {
     // do AutoSave as the first step
-    ResetableGuard aGuard(m_aLock);
+    ResetableGuard aGuard(m_aLock);    
 
     if ( bInteractionGranted )
     {

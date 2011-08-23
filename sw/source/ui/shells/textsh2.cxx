@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,9 @@
 
 
 
+#if STLPORT_VERSION>=321
 #include <cstdarg>
+#endif
 
 #include <svtools/svmedit.hxx>
 #include <svl/eitem.hxx>
@@ -93,15 +95,20 @@ struct DBTextStruct_Impl
 {
     SwDBData aDBData;
     Sequence<Any> aSelection;
-    Reference<XResultSet>   xCursor;
-    Reference<XConnection>  xConnection;
+    Reference<XResultSet>	xCursor;
+    Reference<XConnection>	xConnection;
 };
+
+inline void AddSelList( List& rLst, long nRow )
+{
+    rLst.Insert( (void*)nRow , LIST_APPEND );
+}
 
 void SwTextShell::ExecDB(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
     SwNewDBMgr* pNewDBMgr = GetShell().GetNewDBMgr();
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     ::rtl::OUString sSourceArg, sCommandArg;
     sal_Int32 nCommandTypeArg = 0;
 
@@ -113,29 +120,29 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     const SfxPoolItem* pSelectionItem = 0;
 
     // first get the selection of rows to be inserted
-    pArgs->GetItemState(FN_DB_DATA_SELECTION_ANY, sal_False, &pSelectionItem);
+    pArgs->GetItemState(FN_DB_DATA_SELECTION_ANY, FALSE, &pSelectionItem);
 
     Sequence<Any> aSelection;
     if(pSelectionItem)
         ((SfxUsrAnyItem*)pSelectionItem)->GetValue() >>= aSelection;
 
     // get the data source name
-    pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, sal_False, &pSourceItem);
+    pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, FALSE, &pSourceItem);
     if(pSourceItem)
         ((const SfxUsrAnyItem*)pSourceItem)->GetValue() >>= sSourceArg;
 
     // get the command
-    pArgs->GetItemState(FN_DB_DATA_COMMAND_ANY, sal_False, &pCommandItem);
+    pArgs->GetItemState(FN_DB_DATA_COMMAND_ANY, FALSE, &pCommandItem);
     if(pCommandItem)
         ((const SfxUsrAnyItem*)pCommandItem)->GetValue() >>= sCommandArg;
 
     // get the command type
-    pArgs->GetItemState(FN_DB_DATA_COMMAND_TYPE_ANY, sal_False, &pCommandTypeItem);
+    pArgs->GetItemState(FN_DB_DATA_COMMAND_TYPE_ANY, FALSE, &pCommandTypeItem);
     if(pCommandTypeItem)
         ((const SfxUsrAnyItem*)pCommandTypeItem)->GetValue() >>= nCommandTypeArg;
 
     Reference<XConnection> xConnection;
-    pArgs->GetItemState(FN_DB_CONNECTION_ANY, sal_False, &pConnectionItem);
+    pArgs->GetItemState(FN_DB_CONNECTION_ANY, FALSE, &pConnectionItem);
     if ( pConnectionItem )
         ((const SfxUsrAnyItem*)pConnectionItem)->GetValue() >>= xConnection;
     // may be we even get no connection
@@ -149,7 +156,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
 
     // get the cursor, we use to travel, may be NULL
     Reference<XResultSet> xCursor;
-    pArgs->GetItemState(FN_DB_DATA_CURSOR_ANY, sal_False, &pCursorItem);
+    pArgs->GetItemState(FN_DB_DATA_CURSOR_ANY, FALSE, &pCursorItem);
     if ( pCursorItem )
         ((const SfxUsrAnyItem*)pCursorItem)->GetValue() >>= xCursor;
 
@@ -159,15 +166,15 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
             {
                 if(pSourceItem && pCommandItem && pCommandTypeItem)
                 {
-                    DBTextStruct_Impl* pNew     = new DBTextStruct_Impl;
-                    pNew->aDBData.sDataSource   = sSourceArg;
-                    pNew->aDBData.sCommand      = sCommandArg;
-                    pNew->aDBData.nCommandType  = nCommandTypeArg;
-                    pNew->aSelection            = aSelection;
+                    DBTextStruct_Impl* pNew		= new DBTextStruct_Impl;
+                    pNew->aDBData.sDataSource	= sSourceArg;
+                    pNew->aDBData.sCommand		= sCommandArg;
+                    pNew->aDBData.nCommandType	= nCommandTypeArg;
+                    pNew->aSelection			= aSelection;
                     //if the cursor is NULL, it must be created inside InsertDBTextHdl
                     // because it called via a PostUserEvent
-                    pNew->xCursor               = xCursor;
-                    pNew->xConnection           = xConnection;
+                    pNew->xCursor				= xCursor;
+                    pNew->xConnection			= xConnection;
 
                     Application::PostUserEvent( STATIC_LINK( this, SwBaseShell,
                                             InsertDBTextHdl ), pNew );
@@ -179,7 +186,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
         case FN_QRY_MERGE_FIELD:
             {
                 // we don't get any cursor, so we must create our own
-                sal_Bool bDisposeResultSet = sal_False;
+                BOOL bDisposeResultSet = FALSE;
                 if ( !xCursor.is() )
                 {
                     xCursor = SwNewDBMgr::createCursor(sSourceArg,sCommandArg,nCommandTypeArg,xConnection);
@@ -188,10 +195,10 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
 
                 ODataAccessDescriptor aDescriptor;
                 aDescriptor.setDataSource(sSourceArg);
-                aDescriptor[daCommand]      <<= sCommandArg;
-                aDescriptor[daCursor]       <<= xCursor;
-                aDescriptor[daSelection]    <<= aSelection;
-                aDescriptor[daCommandType]  <<= nCommandTypeArg;
+                aDescriptor[daCommand]		<<= sCommandArg;
+                aDescriptor[daCursor]		<<= xCursor;
+                aDescriptor[daSelection]	<<= aSelection;
+                aDescriptor[daCommandType]	<<= nCommandTypeArg;
 
                 SwMergeDescriptor aMergeDesc( DBMGR_MERGE, *GetShellPtr(), aDescriptor );
                 pNewDBMgr->MergeNew(aMergeDesc);
@@ -206,8 +213,8 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 const SfxPoolItem* pColumnItem = 0;
                 const SfxPoolItem* pColumnNameItem = 0;
 
-                pArgs->GetItemState(FN_DB_COLUMN_ANY, sal_False, &pColumnItem);
-                pArgs->GetItemState(FN_DB_DATA_COLUMN_NAME_ANY, sal_False, &pColumnNameItem);
+                pArgs->GetItemState(FN_DB_COLUMN_ANY, FALSE, &pColumnItem);
+                pArgs->GetItemState(FN_DB_DATA_COLUMN_NAME_ANY, FALSE, &pColumnNameItem);
 
                 ::rtl::OUString sColumnName;
                 if(pColumnNameItem)
@@ -221,7 +228,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 sDBName += (String)sColumnName;
 
                 SwFldMgr aFldMgr(GetShellPtr());
-                SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, sal_False, sal_True);
+                SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, FALSE, TRUE);
                 if(pConnectionItem)
                     aData.aDBConnection = ((SfxUsrAnyItem*)pConnectionItem)->GetValue();
                 if(pColumnItem)

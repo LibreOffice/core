@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <rtl/string.h>
-#include <tools/diagnose_ex.h>
+
 
 #include <util/util.hxx>
 
@@ -50,8 +50,8 @@ using namespace ::com::sun::star::uno;
 namespace scripting_impl
 {
 //*************************************************************************
-ScriptMetadataImporter::ScriptMetadataImporter(
-    const Reference< XComponentContext > & xContext )
+ScriptMetadataImporter::ScriptMetadataImporter( 
+    const Reference< XComponentContext > & xContext ) 
     : m_xContext( xContext )
 {
     OSL_TRACE( "< ScriptMetadataImporter ctor called >\n" );
@@ -68,7 +68,7 @@ ScriptMetadataImporter::~ScriptMetadataImporter() SAL_THROW( () )
 
 //*************************************************************************
 void ScriptMetadataImporter::parseMetaData(
-    Reference< io::XInputStream > const & xInput,
+    Reference< io::XInputStream > const & xInput, 
     const ::rtl::OUString & parcelURI,
     InfoImpls_vec &  io_ScriptDatas )
     throw ( xml::sax::SAXException, io::IOException, RuntimeException )
@@ -83,14 +83,31 @@ void ScriptMetadataImporter::parseMetaData(
     ms_parcelURI = parcelURI;
 
     //Get the parser service
-    ENSURE_OR_THROW( m_xContext.is(),
+    validateXRef( m_xContext,
         "ScriptMetadataImporter::parseMetaData: No context available" );
 
-    Reference< lang::XMultiComponentFactory > xMgr( m_xContext->getServiceManager(), UNO_SET_THROW );
+    Reference< lang::XMultiComponentFactory > xMgr = 
+        m_xContext->getServiceManager();
+        
+    validateXRef( xMgr,
+        "ScriptMetadataImporter::parseMetaData: No service manager available" );
 
-    Reference< xml::sax::XParser > xParser(
-        xMgr->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ), m_xContext ),
-        UNO_QUERY_THROW );
+    Reference< XInterface > xInterface = xMgr->createInstanceWithContext(
+        OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ), m_xContext );
+
+    validateXRef( xInterface, "ScriptMetadataImporter::parseMetaData: cannot get SAX Parser" );
+    Reference< xml::sax::XParser > xParser;
+    try
+    {
+        xParser.set( xInterface ,UNO_QUERY_THROW );
+    }
+    catch (RuntimeException & re )
+    {
+        OUString msg = OUString::createFromAscii(
+            "ScriptMetadata:Importer::parserMetaData cannot get XParser" );
+        msg.concat( re.Message );
+        throw RuntimeException( msg, Reference< XInterface > () );
+    }
 
     // xxx todo: error handler, entity resolver omitted
     // This class is the document handler for the parser
@@ -110,31 +127,31 @@ void ScriptMetadataImporter::parseMetaData(
     }
     catch ( xml::sax::SAXException & saxe )
     {
-        OUString msg(RTL_CONSTASCII_USTRINGPARAM(
-            "ScriptMetadata:Importer::parserMetaData SAXException" ));
+        OUString msg = OUString::createFromAscii(
+            "ScriptMetadata:Importer::parserMetaData SAXException" );
         msg.concat( saxe.Message );
-        throw xml::sax::SAXException( msg, Reference< XInterface > (),
+        throw xml::sax::SAXException( msg, Reference< XInterface > (), 
             saxe.WrappedException );
     }
     catch ( io::IOException & ioe )
     {
-        throw io::IOException( OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "ScriptMetadataImporter::parseMetaData IOException: " )) + ioe.Message,
+        throw io::IOException( OUString::createFromAscii(
+            "ScriptMetadataImporter::parseMetaData IOException: " ) + ioe.Message,
             Reference< XInterface > () );
     }
 
 #ifdef _DEBUG
     catch ( ... )
     {
-        throw RuntimeException( OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "ScriptMetadataImporter::parseMetadata UnknownException: " )),
+        throw RuntimeException( OUString::createFromAscii(
+            "ScriptMetadataImporter::parseMetadata UnknownException: " ),
             Reference< XInterface > () );
     }
 #endif
 
     OSL_TRACE( "ScriptMetadataImporter: Parser finished\n ");
 
-    OSL_TRACE(  "ScriptMetadataImporter: vector size is %d\n",
+    OSL_TRACE(  "ScriptMetadataImporter: vector size is %d\n", 
         mpv_ScriptDatas->size() );
 }
 
@@ -212,36 +229,36 @@ void ScriptMetadataImporter::startElement(
     {
         case SCRIPT:
             m_ScriptData.parcelURI = ms_parcelURI;
-            m_ScriptData.language = xAttribs->getValueByName(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("language")));
+            m_ScriptData.language = xAttribs->getValueByName( 
+                ::rtl::OUString::createFromAscii( "language" ));
             OSL_TRACE(  "Trace Message: language is %s\n",
                 ::rtl::OUStringToOString( m_ScriptData.language,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             break;
         case LOCALE:
             ms_localeLang = xAttribs->getValueByName(
-               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lang")) );
+               ::rtl::OUString::createFromAscii( "lang" ) );
             OSL_TRACE(  "Trace Message: Locale is %s\n",
                 ::rtl::OUStringToOString( ms_localeLang,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             break;
         case DISPLAYNAME:
             ms_localeDisName = xAttribs->getValueByName(
-               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")));
+               ::rtl::OUString::createFromAscii( "value" ));
             OSL_TRACE(  "Trace Message: Displyaname is %s\n",
                 ::rtl::OUStringToOString( ms_localeDisName,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             break;
         case FUNCTIONNAME:
             m_ScriptData.functionname = xAttribs->getValueByName(
-               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")) );
+               ::rtl::OUString::createFromAscii( "value" ) );
             OSL_TRACE(  "Trace Message: Functionname is %s\n",
                 ::rtl::OUStringToOString( m_ScriptData.functionname,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             break;
         case LOGICALNAME:
             m_ScriptData.logicalname = xAttribs->getValueByName(
-               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")));
+               ::rtl::OUString::createFromAscii( "value" ));
 #ifdef _DEBUG
             fprintf(stderr, "Trace Message: logicalname is %s\n",
                 ::rtl::OUStringToOString( m_ScriptData.logicalname,
@@ -249,60 +266,69 @@ void ScriptMetadataImporter::startElement(
 #endif
             break;
         case LANGDEPPROPS:
-             m_ScriptData.languagedepprops.push_back(
+             m_ScriptData.languagedepprops.push_back( 
                 ::std::make_pair( xAttribs->getValueByName(
-                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")) ),
+                     ::rtl::OUString::createFromAscii( "name" ) ),
                  xAttribs->getValueByName(
-                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")) )
+                     ::rtl::OUString::createFromAscii( "value" ) )
                  ));
             OSL_TRACE(  "Trace Message: Langdepprops is %s\t%s\n",
                 ::rtl::OUStringToOString( xAttribs->getValueByName(
-                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")) ),
-                   RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                   ::rtl::OUString::createFromAscii( "name" ) ),
+                   RTL_TEXTENCODING_ASCII_US ).pData->buffer, 
                 ::rtl::OUStringToOString( xAttribs->getValueByName(
-                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")) ),
+                   ::rtl::OUString::createFromAscii( "value" ) ), 
                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
              break;
         case FILESET:
             ms_filesetname = xAttribs->getValueByName(
-               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")) );
+               ::rtl::OUString::createFromAscii( "name" ) );
             OSL_TRACE(  "Trace Message: filesetname is %s\n",
                 ::rtl::OUStringToOString(ms_filesetname,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             break;
         case FILESETPROPS:
-            mv_filesetprops.push_back( ::std::make_pair(
+            mv_filesetprops.push_back( ::std::make_pair( 
                 xAttribs->getValueByName(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")) ),
+                    ::rtl::OUString::createFromAscii( "name" ) ), 
                 xAttribs->getValueByName(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")) )
+                    ::rtl::OUString::createFromAscii( "value" ) )
                 ));
             OSL_TRACE(  "Trace Message: filesetprops is %s\t%s\n",
                 ::rtl::OUStringToOString( xAttribs->getValueByName(
-                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")) ),
-                   RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                   ::rtl::OUString::createFromAscii( "name" ) ),
+                   RTL_TEXTENCODING_ASCII_US ).pData->buffer, 
                 ::rtl::OUStringToOString( xAttribs->getValueByName(
-                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")) ),
+                   ::rtl::OUString::createFromAscii( "value" ) ), 
                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             break;
         case FILES:
             ms_filename = xAttribs->getValueByName(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")) );
+                ::rtl::OUString::createFromAscii( "name" ) );
             OSL_TRACE(  "Trace Message: filename is %s\n",
                 ::rtl::OUStringToOString( ms_filename,
                     RTL_TEXTENCODING_ASCII_US).pData->buffer );
             break;
         case FILEPROPS:
+            /**
+            mm_files.insert( strpair_pair( ms_filename,
+                str_pair( xAttribs->getValueByName(
+                    ::rtl::OUString::createFromAscii( "name" ) ),
+                xAttribs->getValueByName( 
+                    ::rtl::OUString::createFromAscii( "value") ) )
+                )
+            );
+            */
             mv_fileprops.push_back(str_pair( xAttribs->getValueByName(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")) ),
+                ::rtl::OUString::createFromAscii( "name" ) ),
                 xAttribs->getValueByName(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")) ) ) );
+                ::rtl::OUString::createFromAscii( "value") ) ) );
             OSL_TRACE(  "Trace Message: fileprops is %s\t%s\n",
                 ::rtl::OUStringToOString( xAttribs->getValueByName(
-                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")) ),
-                   RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                   ::rtl::OUString::createFromAscii( "name" ) ),
+                   RTL_TEXTENCODING_ASCII_US ).pData->buffer, 
                 ::rtl::OUStringToOString( xAttribs->getValueByName(
-                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")) ),
+                   ::rtl::OUString::createFromAscii( "value" ) ), 
                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             break;
 
@@ -310,7 +336,7 @@ void ScriptMetadataImporter::startElement(
         case PARCEL:
         case DESCRIPTION:
         case LANGUAGEDEPPROPS:
-            break;
+            break;    
     }
 }
 
@@ -320,7 +346,7 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
 {
 
     //The end tag of an element
-    OSL_TRACE(  "ScriptMetadataImporter: endElement() %s\n",
+    OSL_TRACE(  "ScriptMetadataImporter: endElement() %s\n", 
         ::rtl::OUStringToOString( aName,
             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
@@ -347,16 +373,16 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
             break;
         case FILESET:
             OSL_TRACE("adding fileset %s to filesets map",
-                   ::rtl::OUStringToOString( ms_filesetname,
+                   ::rtl::OUStringToOString( ms_filesetname, 
                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-            m_ScriptData.filesets[ ms_filesetname ] = ::std::make_pair(
+            m_ScriptData.filesets[ ms_filesetname ] = ::std::make_pair( 
                 mv_filesetprops, mm_files );
             mm_files.clear();
             mv_filesetprops.clear();
             break;
         case FILES:
             OSL_TRACE("adding files %s to files map",
-                   ::rtl::OUStringToOString( ms_filename,
+                   ::rtl::OUStringToOString( ms_filename, 
                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             mm_files[ ms_filename ] = mv_fileprops;
             mv_fileprops.clear();
@@ -371,7 +397,7 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
         case LANGDEPPROPS:
         case FILESETPROPS:
         case FILEPROPS:
-            break;
+            break;    
     }
 }
 
@@ -399,7 +425,7 @@ void ScriptMetadataImporter::characters( const ::rtl::OUString & aChars )
         case LANGDEPPROPS:
         case FILESETPROPS:
         case FILEPROPS:
-            break;
+            break;    
     }
 }
 
@@ -493,9 +519,9 @@ void ScriptMetadataImporter::setState( const ::rtl::OUString & tagName )
     else
     {
         //If there is a tag we don't know about, throw a exception (wobbler) :)
-        ::rtl::OUString str_sax(RTL_CONSTASCII_USTRINGPARAM("No Such Tag"));
+        ::rtl::OUString str_sax = ::rtl::OUString::createFromAscii( "No Such Tag" );
 
-        OSL_TRACE(  "ScriptMetadataImporter: No Such Tag: %s\n",
+        OSL_TRACE(  "ScriptMetadataImporter: No Such Tag: %s\n", 
             ::rtl::OUStringToOString(
                 tagName, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 

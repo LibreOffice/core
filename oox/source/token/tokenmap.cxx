@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,24 +27,28 @@
  ************************************************************************/
 
 #include "oox/token/tokenmap.hxx"
-
 #include <string.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
-#include "oox/token/tokens.hxx"
+#include "tokens.hxx"
+#include "oox/helper/containerhelper.hxx"
 
-namespace oox {
-// ============================================================================
+#include <string.h>
 
-using ::com::sun::star::uno::Sequence;
 using ::rtl::OString;
 using ::rtl::OUString;
+using ::com::sun::star::uno::Sequence;
+
+namespace oox {
 
 // ============================================================================
 
 namespace {
-// include auto-generated Perfect_Hash
-#include "tokenhash.inc"
+
+// include auto-generated token lists
+#include "tokens.inc"
+#include "tokenwords.inc"
+
 } // namespace
 
 // ============================================================================
@@ -52,17 +56,10 @@ namespace {
 TokenMap::TokenMap() :
     maTokenNames( static_cast< size_t >( XML_TOKEN_COUNT ) )
 {
-    static const sal_Char* sppcTokenNames[] =
+    const sal_Char* const* ppcTokenWord = xmltokenwordlist;
+    for( TokenNameVector::iterator aIt = maTokenNames.begin(), aEnd = maTokenNames.end(); aIt != aEnd; ++aIt, ++ppcTokenWord )
     {
-// include auto-generated C array with token names as C strings
-#include "tokennames.inc"
-        ""
-    };
-
-    const sal_Char* const* ppcTokenName = sppcTokenNames;
-    for( TokenNameVector::iterator aIt = maTokenNames.begin(), aEnd = maTokenNames.end(); aIt != aEnd; ++aIt, ++ppcTokenName )
-    {
-        OString aUtf8Token( *ppcTokenName );
+        OString aUtf8Token( *ppcTokenWord );
         aIt->maUniName = OStringToOUString( aUtf8Token, RTL_TEXTENCODING_UTF8 );
         aIt->maUtf8Name = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aUtf8Token.getStr() ), aUtf8Token.getLength() );
     }
@@ -76,7 +73,7 @@ TokenMap::TokenMap() :
         OString aUtf8Name = OUStringToOString( maTokenNames[ nToken ].maUniName, RTL_TEXTENCODING_UTF8 );
         struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
         bOk = pToken && (pToken->nToken == nToken);
-        OSL_ENSURE( bOk, ::rtl::OStringBuffer( "TokenMap::TokenMap - token list broken, #" ).
+        OSL_ENSURE( bOk, ::rtl::OStringBuffer( "FastTokenHandler::FastTokenHandler - token list broken, #" ).
             append( nToken ).append( ", '" ).append( aUtf8Name ).append( '\'' ).getStr() );
     }
 #endif
@@ -88,9 +85,8 @@ TokenMap::~TokenMap()
 
 OUString TokenMap::getUnicodeTokenName( sal_Int32 nToken ) const
 {
-    if( (0 <= nToken) && (static_cast< size_t >( nToken ) < maTokenNames.size()) )
-        return maTokenNames[ static_cast< size_t >( nToken ) ].maUniName;
-    return OUString();
+    const TokenName* pTokenName = ContainerHelper::getVectorElement( maTokenNames, nToken );
+    return pTokenName ? pTokenName->maUniName : OUString();
 }
 
 sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
@@ -102,9 +98,8 @@ sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
 
 Sequence< sal_Int8 > TokenMap::getUtf8TokenName( sal_Int32 nToken ) const
 {
-    if( (0 <= nToken) && (static_cast< size_t >( nToken ) < maTokenNames.size()) )
-        return maTokenNames[ static_cast< size_t >( nToken ) ].maUtf8Name;
-    return Sequence< sal_Int8 >();
+    const TokenName* pTokenName = ContainerHelper::getVectorElement( maTokenNames, nToken );
+    return pTokenName ? pTokenName->maUtf8Name : Sequence< sal_Int8 >();
 }
 
 sal_Int32 TokenMap::getTokenFromUtf8( const Sequence< sal_Int8 >& rUtf8Name ) const

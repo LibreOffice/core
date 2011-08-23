@@ -3,6 +3,12 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: sdrattribute3d.cxx,v $
+ *
+ *  $Revision: 1.5 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
+ *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -44,25 +50,25 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32                              mnRefCount;
+            sal_uInt32								mnRefCount;
 
             // 3D object attribute definitions
-            ::com::sun::star::drawing::NormalsKind              maNormalsKind;              // normals type (0..2)
-            ::com::sun::star::drawing::TextureProjectionMode    maTextureProjectionX;       // texture projection type X (0..2)
-            ::com::sun::star::drawing::TextureProjectionMode    maTextureProjectionY;       // texture projection type Y (0..2)
-            ::com::sun::star::drawing::TextureKind2             maTextureKind;              // texture kind (see uno API)
-            ::com::sun::star::drawing::TextureMode              maTextureMode;              // texture kind (see uno API)
-            MaterialAttribute3D                                 maMaterial;                 // object, specular and emissive colors, SpecularIntensity
+            ::com::sun::star::drawing::NormalsKind				maNormalsKind;				// normals type (0..2)
+            ::com::sun::star::drawing::TextureProjectionMode	maTextureProjectionX;		// texture projection type X (0..2)
+            ::com::sun::star::drawing::TextureProjectionMode	maTextureProjectionY;		// texture projection type Y (0..2)
+            ::com::sun::star::drawing::TextureKind2				maTextureKind;				// texture kind (see uno API)
+            ::com::sun::star::drawing::TextureMode				maTextureMode;				// texture kind (see uno API)
+            MaterialAttribute3D									maMaterial;					// object, specular and emissive colors, SpecularIntensity
 
             // bitfield
-            unsigned                                            mbNormalsInvert : 1;        // invert normals
-            unsigned                                            mbDoubleSided : 1;          // surfaces are double sided
-            unsigned                                            mbShadow3D : 1;             // display shadow in 3D (if on), params for that are at scene
-            unsigned                                            mbTextureFilter : 1;        // filter texture to make more smooth
-            unsigned                                            mbReducedLineGeometry : 1;  // use reduced line geometry (object specific)
+            unsigned											mbNormalsInvert : 1;		// invert normals
+            unsigned											mbDoubleSided : 1;			// surfaces are double sided
+            unsigned											mbShadow3D : 1;				// display shadow in 3D (if on), params for that are at scene
+            unsigned											mbTextureFilter : 1;		// filter texture to make more smooth
+            unsigned											mbReducedLineGeometry : 1;	// use reduced line geometry (object specific)
 
             ImpSdr3DObjectAttribute(
-                ::com::sun::star::drawing::NormalsKind  aNormalsKind,
+                ::com::sun::star::drawing::NormalsKind	aNormalsKind,
                 ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionX,
                 ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionY,
                 ::com::sun::star::drawing::TextureKind2 aTextureKind,
@@ -73,7 +79,7 @@ namespace drawinglayer
                 bool bShadow3D,
                 bool bTextureFilter,
                 bool bReducedLineGeometry)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 maNormalsKind(aNormalsKind),
                 maTextureProjectionX(aTextureProjectionX),
                 maTextureProjectionY(aTextureProjectionY),
@@ -115,7 +121,7 @@ namespace drawinglayer
                     && getTextureFilter() == rCandidate.getTextureFilter()
                     && getReducedLineGeometry() == rCandidate.getReducedLineGeometry());
             }
-
+            
             static ImpSdr3DObjectAttribute* get_global_default()
             {
                 static ImpSdr3DObjectAttribute* pDefault = 0;
@@ -144,7 +150,7 @@ namespace drawinglayer
         };
 
         Sdr3DObjectAttribute::Sdr3DObjectAttribute(
-            ::com::sun::star::drawing::NormalsKind  aNormalsKind,
+            ::com::sun::star::drawing::NormalsKind	aNormalsKind,
             ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionX,
             ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionY,
             ::com::sun::star::drawing::TextureKind2 aTextureKind,
@@ -155,20 +161,20 @@ namespace drawinglayer
             bool bShadow3D,
             bool bTextureFilter,
             bool bReducedLineGeometry)
-        :   mpSdr3DObjectAttribute(new ImpSdr3DObjectAttribute(
+        :	mpSdr3DObjectAttribute(new ImpSdr3DObjectAttribute(
                 aNormalsKind, aTextureProjectionX, aTextureProjectionY, aTextureKind, aTextureMode,
                 rMaterial, bNormalsInvert, bDoubleSided, bShadow3D, bTextureFilter, bReducedLineGeometry))
         {
         }
 
         Sdr3DObjectAttribute::Sdr3DObjectAttribute()
-        :   mpSdr3DObjectAttribute(ImpSdr3DObjectAttribute::get_global_default())
+        :	mpSdr3DObjectAttribute(ImpSdr3DObjectAttribute::get_global_default())
         {
             mpSdr3DObjectAttribute->mnRefCount++;
         }
 
         Sdr3DObjectAttribute::Sdr3DObjectAttribute(const Sdr3DObjectAttribute& rCandidate)
-        :   mpSdr3DObjectAttribute(rCandidate.mpSdr3DObjectAttribute)
+        :	mpSdr3DObjectAttribute(rCandidate.mpSdr3DObjectAttribute)
         {
             mpSdr3DObjectAttribute->mnRefCount++;
         }
@@ -202,7 +208,7 @@ namespace drawinglayer
                 {
                     delete mpSdr3DObjectAttribute;
                 }
-
+                
                 mpSdr3DObjectAttribute = rCandidate.mpSdr3DObjectAttribute;
                 mpSdr3DObjectAttribute->mnRefCount++;
             }
@@ -225,59 +231,59 @@ namespace drawinglayer
             return (*rCandidate.mpSdr3DObjectAttribute == *mpSdr3DObjectAttribute);
         }
 
-        ::com::sun::star::drawing::NormalsKind Sdr3DObjectAttribute::getNormalsKind() const
-        {
-            return mpSdr3DObjectAttribute->getNormalsKind();
+        ::com::sun::star::drawing::NormalsKind Sdr3DObjectAttribute::getNormalsKind() const 
+        { 
+            return mpSdr3DObjectAttribute->getNormalsKind(); 
         }
 
-        ::com::sun::star::drawing::TextureProjectionMode Sdr3DObjectAttribute::getTextureProjectionX() const
-        {
-            return mpSdr3DObjectAttribute->getTextureProjectionX();
+        ::com::sun::star::drawing::TextureProjectionMode Sdr3DObjectAttribute::getTextureProjectionX() const 
+        { 
+            return mpSdr3DObjectAttribute->getTextureProjectionX(); 
         }
 
-        ::com::sun::star::drawing::TextureProjectionMode Sdr3DObjectAttribute::getTextureProjectionY() const
-        {
-            return mpSdr3DObjectAttribute->getTextureProjectionY();
+        ::com::sun::star::drawing::TextureProjectionMode Sdr3DObjectAttribute::getTextureProjectionY() const 
+        { 
+            return mpSdr3DObjectAttribute->getTextureProjectionY(); 
         }
 
-        ::com::sun::star::drawing::TextureKind2 Sdr3DObjectAttribute::getTextureKind() const
-        {
-            return mpSdr3DObjectAttribute->getTextureKind();
+        ::com::sun::star::drawing::TextureKind2 Sdr3DObjectAttribute::getTextureKind() const 
+        { 
+            return mpSdr3DObjectAttribute->getTextureKind(); 
         }
 
-        ::com::sun::star::drawing::TextureMode Sdr3DObjectAttribute::getTextureMode() const
-        {
-            return mpSdr3DObjectAttribute->getTextureMode();
+        ::com::sun::star::drawing::TextureMode Sdr3DObjectAttribute::getTextureMode() const 
+        { 
+            return mpSdr3DObjectAttribute->getTextureMode(); 
         }
 
-        const MaterialAttribute3D& Sdr3DObjectAttribute::getMaterial() const
-        {
-            return mpSdr3DObjectAttribute->getMaterial();
+        const MaterialAttribute3D& Sdr3DObjectAttribute::getMaterial() const 
+        { 
+            return mpSdr3DObjectAttribute->getMaterial(); 
         }
 
-        bool Sdr3DObjectAttribute::getNormalsInvert() const
-        {
-            return mpSdr3DObjectAttribute->getNormalsInvert();
+        bool Sdr3DObjectAttribute::getNormalsInvert() const 
+        { 
+            return mpSdr3DObjectAttribute->getNormalsInvert(); 
         }
 
-        bool Sdr3DObjectAttribute::getDoubleSided() const
-        {
-            return mpSdr3DObjectAttribute->getDoubleSided();
+        bool Sdr3DObjectAttribute::getDoubleSided() const 
+        { 
+            return mpSdr3DObjectAttribute->getDoubleSided(); 
         }
 
-        bool Sdr3DObjectAttribute::getShadow3D() const
-        {
-            return mpSdr3DObjectAttribute->getShadow3D();
+        bool Sdr3DObjectAttribute::getShadow3D() const 
+        { 
+            return mpSdr3DObjectAttribute->getShadow3D(); 
         }
 
-        bool Sdr3DObjectAttribute::getTextureFilter() const
-        {
-            return mpSdr3DObjectAttribute->getTextureFilter();
+        bool Sdr3DObjectAttribute::getTextureFilter() const 
+        { 
+            return mpSdr3DObjectAttribute->getTextureFilter(); 
         }
 
-        bool Sdr3DObjectAttribute::getReducedLineGeometry() const
-        {
-            return mpSdr3DObjectAttribute->getReducedLineGeometry();
+        bool Sdr3DObjectAttribute::getReducedLineGeometry() const 
+        { 
+            return mpSdr3DObjectAttribute->getReducedLineGeometry(); 
         }
 
     } // end of namespace attribute

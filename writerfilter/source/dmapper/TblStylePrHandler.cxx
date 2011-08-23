@@ -5,17 +5,14 @@
 #include <dmapperLoggers.hxx>
 #include <resourcemodel/QNameToString.hxx>
 
-#include "dmapperLoggers.hxx"
-
 namespace writerfilter {
 namespace dmapper {
 
 TblStylePrHandler::TblStylePrHandler( DomainMapper & rDMapper ) :
-LoggedProperties(dmapper_logger, "TblStylePrHandler"),
-m_rDMapper( rDMapper ),
-m_pTablePropsHandler( new TablePropertiesHandler( true ) ),
-m_nType( TBL_STYLE_UNKNOWN ),
-m_pProperties( new PropertyMap )
+   m_rDMapper( rDMapper ), 
+   m_pTablePropsHandler( new TablePropertiesHandler( true ) ),
+   m_nType( TBL_STYLE_UNKNOWN ),
+   m_pProperties( new PropertyMap )
 {
 }
 
@@ -24,13 +21,13 @@ TblStylePrHandler::~TblStylePrHandler( )
     delete m_pTablePropsHandler, m_pTablePropsHandler = NULL;
 }
 
-void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
+void TblStylePrHandler::attribute(Id rName, Value & rVal)
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("TblStylePrHandler.attribute");
     dmapper_logger->attribute("name", (*QNameToString::Instance())(rName));
     dmapper_logger->chars(rVal.toString());
-    dmapper_logger->endElement();
+    dmapper_logger->endElement("TblStylePrHandler.attribute");
 #endif
 
     switch ( rName )
@@ -45,7 +42,7 @@ void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
     }
 }
 
-void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
+void TblStylePrHandler::sprm(Sprm & rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("TblStylePrHandler.sprm");
@@ -58,7 +55,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_PPrBase:
         case NS_ooxml::LN_EG_RPrBase:
         case NS_ooxml::LN_CT_TblPrBase:
-        case NS_ooxml::LN_CT_TrPrBase:
+        case NS_ooxml::LN_CT_TrPrBase: 
         case NS_ooxml::LN_CT_TcPrBase:
             resolveSprmProps( rSprm );
             break;
@@ -75,9 +72,9 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
                 m_rDMapper.PopStyleSheetProperties( true );
             }
     }
-
+    
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
+    dmapper_logger->endElement("TblStylePrHandler.sprm");
 #endif
 }
 

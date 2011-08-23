@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,12 +30,11 @@
 #include "precompiled_sw.hxx"
 
 
-#include "dcontact.hxx" // SwDrawContact
-#include "dflyobj.hxx"  // SwVirtFlyDrawObj
-#include "pam.hxx"      // SwPosition
-#include "flyfrm.hxx"   // SwFlyInCntFrm
-#include "rootfrm.hxx"
-#include "frmfmt.hxx"   // SwFrmFmt
+#include "dcontact.hxx"	// SwDrawContact
+#include "dflyobj.hxx"	// SwVirtFlyDrawObj
+#include "pam.hxx"		// SwPosition
+#include "flyfrm.hxx"	// SwFlyInCntFrm
+#include "frmfmt.hxx"	// SwFrmFmt
 #include "viewsh.hxx"
 
 #include <vcl/outdev.hxx>
@@ -46,17 +45,17 @@
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
 #include "flyfrms.hxx"
-#include "txatbase.hxx" // SwTxtAttr
+#include "txatbase.hxx"	// SwTxtAttr
 #include "porfly.hxx"
-#include "porlay.hxx"   // SetFly
-#include "inftxt.hxx"   // SwTxtPaintInfo
+#include "porlay.hxx"	// SetFly
+#include "inftxt.hxx"	// SwTxtPaintInfo
 
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
 
 /*************************************************************************
- *                class SwFlyPortion
+ *				  class SwFlyPortion
  *
  * Wir erwarten ein framelokales SwRect !
  *************************************************************************/
@@ -66,7 +65,7 @@ void SwFlyPortion::Paint( const SwTxtPaintInfo& ) const
 }
 
 /*************************************************************************
- *                 virtual SwFlyPortion::Format()
+ *				   virtual SwFlyPortion::Format()
  *************************************************************************/
 sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
 {
@@ -77,7 +76,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
 
     // Der Glue wird aufgespannt.
     rInf.GetLast()->FormatEOL( rInf );
-    PrtWidth( static_cast<sal_uInt16>(Fix() - rInf.X() + PrtWidth()) );
+    PrtWidth( static_cast<USHORT>(Fix() - rInf.X() + PrtWidth()) );
     if( !Width() )
     {
         OSL_ENSURE( Width(), "+SwFlyPortion::Format: a fly is a fly is a fly" );
@@ -90,7 +89,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
     rInf.GetParaPortion()->SetFly( sal_True );
 
     // trailing blank:
-    if( rInf.GetIdx() < rInf.GetTxt().Len() &&  1 < rInf.GetIdx()
+    if( rInf.GetIdx() < rInf.GetTxt().Len() && 	1 < rInf.GetIdx()
         && !rInf.GetRest()
         && ' ' == rInf.GetChar( rInf.GetIdx() )
         && ' ' != rInf.GetChar( rInf.GetIdx() - 1 )
@@ -100,7 +99,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
         SetLen( 1 );
     }
 
-    const sal_uInt16 nNewWidth = static_cast<sal_uInt16>(rInf.X() + PrtWidth());
+    const USHORT nNewWidth = static_cast<USHORT>(rInf.X() + PrtWidth());
     if( rInf.Width() <= nNewWidth )
     {
         Truncate();
@@ -115,7 +114,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                 virtual SwFlyCntPortion::Format()
+ *				   virtual SwFlyCntPortion::Format()
  *************************************************************************/
 sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
 {
@@ -130,7 +129,7 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
         // KerningPortions at beginning of line, e.g., for grid layout
         // must be considered.
         const SwLinePortion* pLastPor = rInf.GetLast();
-        const sal_uInt16 nLeft = ( pLastPor &&
+        const USHORT nLeft = ( pLastPor &&
                                     ( pLastPor->IsKernPortion() ||
                                       pLastPor->IsErgoSumPortion() ) ) ?
                                pLastPor->Width() :
@@ -160,7 +159,7 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *  SwTxtFrm::MoveFlyInCnt() haengt jetzt die zeichengebundenen Objekte
+ *	SwTxtFrm::MoveFlyInCnt() haengt jetzt die zeichengebundenen Objekte
  *  innerhalb des angegebenen Bereichs um, damit koennen diese vom Master
  *  zum Follow oder umgekehrt wandern.
  *************************************************************************/
@@ -201,7 +200,7 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
 }
 
 /*************************************************************************
- *                SwTxtFrm::CalcFlyPos()
+ *				  SwTxtFrm::CalcFlyPos()
  *************************************************************************/
 xub_StrLen SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
 {
@@ -210,7 +209,7 @@ xub_StrLen SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
     if( !pHints )
         return STRING_LEN;
     SwTxtAttr* pFound = NULL;
-    for ( sal_uInt16 i = 0; i < pHints->Count(); i++)
+    for ( USHORT i = 0; i < pHints->Count(); i++)
     {
         SwTxtAttr *pHt = pHints->GetTextHint( i );
         if( RES_TXTATR_FLYCNT == pHt->Which() )
@@ -227,7 +226,7 @@ xub_StrLen SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
 }
 
 /*************************************************************************
- *                 virtual SwFlyCntPortion::Paint()
+ *				   virtual SwFlyCntPortion::Paint()
  *************************************************************************/
 void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -256,7 +255,7 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( (GetFlyFrm()->IsCompletePaint() ||
              GetFlyFrm()->Frm().IsOver( aRepaintRect )) &&
              SwFlyFrm::IsPaint( (SdrObject*)GetFlyFrm()->GetVirtDrawObj(),
-                                GetFlyFrm()->getRootFrm()->GetCurrShell() ))
+                                GetFlyFrm()->GetShell() ))
         {
             SwRect aRect( GetFlyFrm()->Frm() );
             if( !GetFlyFrm()->IsCompletePaint() )
@@ -287,7 +286,7 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
 }
 
 /*************************************************************************
- *                  SwFlyCntPortion::SwFlyCntPortion()
+ *					SwFlyCntPortion::SwFlyCntPortion()
  *
  * Es werden die Masze vom pFly->OutRect() eingestellt.
  * Es erfolgt ein SetBase() !
@@ -341,7 +340,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
 
 
 /*************************************************************************
- *                  SwFlyCntPortion::SetBase()
+ *					SwFlyCntPortion::SetBase()
  *
  * Nach dem Setzen des RefPoints muss der Ascent neu berechnet werden,
  * da er von der RelPos abhaengt.
@@ -366,7 +365,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         pSdrObj = GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm );
         if ( !pSdrObj )
         {
-            OSL_FAIL( "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm )>" );
+            OSL_ENSURE( false, "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm )>" );
             pSdrObj = GetDrawContact()->GetMaster();
         }
         // --> OD 2007-11-29 #i65798#
@@ -409,14 +408,14 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         SwTwips nRelPos = aObjPositioning.GetRelPosY();
         if ( nRelPos < 0 )
         {
-            nAscent = static_cast<sal_uInt16>(-nRelPos);
+            nAscent = static_cast<USHORT>(-nRelPos);
             if( nAscent > Height() )
                 Height( nAscent );
         }
         else
         {
             nAscent = 0;
-            Height( Height() + static_cast<sal_uInt16>(nRelPos) );
+            Height( Height() + static_cast<USHORT>(nRelPos) );
         }
     }
     else
@@ -427,7 +426,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
 }
 
 /*************************************************************************
- *              virtual SwFlyCntPortion::GetFlyCrsrOfst()
+ *				virtual SwFlyCntPortion::GetFlyCrsrOfst()
  *************************************************************************/
 
 xub_StrLen SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
@@ -445,7 +444,7 @@ xub_StrLen SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
 }
 
 /*************************************************************************
- *              virtual SwFlyCntPortion::GetCrsrOfst()
+ *				virtual SwFlyCntPortion::GetCrsrOfst()
  *************************************************************************/
 
 xub_StrLen SwFlyCntPortion::GetCrsrOfst( const KSHORT nOfst ) const

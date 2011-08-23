@@ -36,7 +36,6 @@
 #include "core_resource.hrc"
 
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
@@ -71,7 +70,7 @@ void OBookmarkContainer::dispose()
 {
     MutexGuard aGuard(m_rMutex);
 
-    // say goodbye to our listeners
+    // say our listeners goobye
     EventObject aEvt(*this);
     m_aContainerListeners.disposeAndClear(aEvt);
 
@@ -98,7 +97,7 @@ OBookmarkContainer::~OBookmarkContainer()
 // XServiceInfo
 ::rtl::OUString SAL_CALL OBookmarkContainer::getImplementationName(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.OBookmarkContainer"));
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.dba.OBookmarkContainer");
 }
 
 sal_Bool SAL_CALL OBookmarkContainer::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
@@ -111,7 +110,7 @@ sal_Bool SAL_CALL OBookmarkContainer::supportsService( const ::rtl::OUString& _r
 Sequence< ::rtl::OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aReturn(1);
-    aReturn.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DefinitionContainer"));
+    aReturn.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.DefinitionContainer");
     return aReturn;
 }
 
@@ -287,7 +286,7 @@ Sequence< ::rtl::OUString > SAL_CALL OBookmarkContainer::getElementNames(  ) thr
     Sequence< ::rtl::OUString > aNames(m_aBookmarks.size());
     ::rtl::OUString* pNames = aNames.getArray();
     ;
-    for (   ConstMapIteratorVectorIterator aNameIter = m_aBookmarksIndexed.begin();
+    for	(	ConstMapIteratorVectorIterator aNameIter = m_aBookmarksIndexed.begin();
             aNameIter != m_aBookmarksIndexed.end();
             ++pNames, ++aNameIter
         )
@@ -312,7 +311,7 @@ void OBookmarkContainer::implRemove(const ::rtl::OUString& _rName)
 
     // look for the name in the index access vector
     MapString2StringIterator aMapPos = m_aBookmarks.end();
-    for (   MapIteratorVectorIterator aSearch = m_aBookmarksIndexed.begin();
+    for (	MapIteratorVectorIterator aSearch = m_aBookmarksIndexed.begin();
             aSearch != m_aBookmarksIndexed.end();
             ++aSearch
         )
@@ -330,7 +329,7 @@ void OBookmarkContainer::implRemove(const ::rtl::OUString& _rName)
 
     if (m_aBookmarks.end() == aMapPos)
     {
-        OSL_FAIL("OBookmarkContainer::implRemove: inconsistence!");
+        DBG_ERROR("OBookmarkContainer::implRemove: inconsistence!");
         return;
     }
 
@@ -343,13 +342,13 @@ void OBookmarkContainer::implAppend(const ::rtl::OUString& _rName, const ::rtl::
     MutexGuard aGuard(m_rMutex);
 
     OSL_ENSURE(m_aBookmarks.find(_rName) == m_aBookmarks.end(),"Bookmark already known!");
-    m_aBookmarksIndexed.push_back(m_aBookmarks.insert(  MapString2String::value_type(_rName,_rDocumentLocation)).first);
+    m_aBookmarksIndexed.push_back(m_aBookmarks.insert(	MapString2String::value_type(_rName,_rDocumentLocation)).first);
 }
 
 void OBookmarkContainer::implReplace(const ::rtl::OUString& _rName, const ::rtl::OUString& _rNewLink)
 {
     MutexGuard aGuard(m_rMutex);
-    OSL_ENSURE(checkExistence(_rName), "OBookmarkContainer::implReplace : invalid name !");
+    DBG_ASSERT(checkExistence(_rName), "OBookmarkContainer::implReplace : invalid name !");
 
     m_aBookmarks[_rName] = _rNewLink;
 }
@@ -368,5 +367,5 @@ void SAL_CALL OBookmarkContainer::setParent( const Reference< XInterface >& /*Pa
     throw NoSupportException();
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

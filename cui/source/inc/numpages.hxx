@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,17 +49,18 @@ class ValueSet;
 class SvxNumberingPreview;
 class SvxBrushItem;
 
+/*-----------------13.02.97 14.02-------------------
 
-//------------------------------------------------
+--------------------------------------------------*/
 
 struct SvxNumSettings_Impl
 {
-    short           nNumberType;
-    short           nParentNumbering;
-    rtl::OUString   sPrefix;
-    rtl::OUString   sSuffix;
-    rtl::OUString   sBulletChar;
-    rtl::OUString   sBulletFont;
+    short			nNumberType;
+    short 			nParentNumbering;
+    rtl::OUString	sPrefix;
+    rtl::OUString	sSuffix;
+    rtl::OUString	sBulletChar;
+    rtl::OUString	sBulletFont;
     SvxNumSettings_Impl() :
         nNumberType(0),
         nParentNumbering(0)
@@ -69,24 +70,25 @@ struct SvxNumSettings_Impl
 typedef SvxNumSettings_Impl* SvxNumSettings_ImplPtr;
 SV_DECL_PTRARR_DEL(SvxNumSettingsArr_Impl,SvxNumSettings_ImplPtr,8,4)
 
+/*-----------------07.02.97 11.36-------------------
 
-//------------------------------------------------
+--------------------------------------------------*/
 class SvxSingleNumPickTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
     FixedLine               aValuesFL;
-    SvxNumValueSet*         pExamplesVS;
-    SvxNumSettingsArr_Impl  aNumSettingsArr;
-    SvxNumRule*             pActNum;
-    SvxNumRule*             pSaveNum;
-    sal_uInt16                  nActNumLvl;
-    sal_Bool                    bModified   : 1;
-    sal_Bool                    bPreset     : 1;
+    SvxNumValueSet* 		pExamplesVS;
+    SvxNumSettingsArr_Impl	aNumSettingsArr;
+    SvxNumRule* 			pActNum;
+    SvxNumRule* 			pSaveNum;
+    USHORT					nActNumLvl;
+    BOOL					bModified 	: 1;
+    BOOL					bPreset		: 1;
 
-    String              sNumCharFmtName;
-    sal_uInt16              nNumItemId;
+    String				sNumCharFmtName;
+    USHORT 				nNumItemId;
 
     protected:
         DECL_LINK( NumSelectHdl_Impl, ValueSet*);
@@ -97,19 +99,20 @@ class SvxSingleNumPickTabPage : public SfxTabPage
                                const SfxItemSet& rSet);
         ~SvxSingleNumPickTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void 		ActivatePage(const SfxItemSet& rSet);
+    virtual int 		DeactivatePage(SfxItemSet *pSet);
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
-    void                SetNumCharFmtName(const String& rName){sNumCharFmtName = rName;}
+    void				SetNumCharFmtName(const String& rName){sNumCharFmtName = rName;}
 };
 
+/*-----------------07.02.97 11.36-------------------
 
-//------------------------------------------------
+--------------------------------------------------*/
 
 class SvxBulletPickTabPage : public SfxTabPage
 {
@@ -117,15 +120,15 @@ class SvxBulletPickTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
     FixedLine           aValuesFL;
-    SvxNumValueSet*     pExamplesVS;
-    SvxNumRule*         pActNum;
-    SvxNumRule*         pSaveNum;
-    sal_uInt16              nActNumLvl;
-    sal_Bool                bModified   : 1;
-    sal_Bool                bPreset     : 1;
-    sal_uInt16              nNumItemId;
+    SvxNumValueSet*		pExamplesVS;
+    SvxNumRule* 		pActNum;
+    SvxNumRule* 		pSaveNum;
+    USHORT 				nActNumLvl;
+    BOOL				bModified 	: 1;
+    BOOL				bPreset		: 1;
+    USHORT 				nNumItemId;
 
-    String              sBulletCharFmtName;
+    String				sBulletCharFmtName;
     protected:
         DECL_LINK(NumSelectHdl_Impl, ValueSet*);
         DECL_LINK( DoubleClickHdl_Impl, ValueSet* );
@@ -134,19 +137,19 @@ class SvxBulletPickTabPage : public SfxTabPage
                                const SfxItemSet& rSet);
         ~SvxBulletPickTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void 		ActivatePage(const SfxItemSet& rSet);
+    virtual int 		DeactivatePage(SfxItemSet *pSet);
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
-    void                SetCharFmtName(const String& rName){sBulletCharFmtName = rName;}
-    virtual void        PageCreated(SfxAllItemSet aSet);
+    void				SetCharFmtName(const String& rName){sBulletCharFmtName = rName;}
+    virtual void 		PageCreated(SfxAllItemSet aSet); // add CHINA001
 };
 
-/*--------------------------------------------------
+/*-----------------07.02.97 11.36-------------------
     TabPage fuer vollstaendig Numerierung
 --------------------------------------------------*/
 #define NUMTYPE_MEMBER 4   // Anzahl der Elemente des FormatStrings je Ebene
@@ -157,18 +160,18 @@ class SvxNumPickTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
     FixedLine           aValuesFL;
-    SvxNumValueSet*     pExamplesVS;
-    String              sNumCharFmtName;
-    String              sBulletCharFmtName;
+    SvxNumValueSet*		pExamplesVS;
+    String				sNumCharFmtName;
+    String				sBulletCharFmtName;
 
-    SvxNumSettingsArr_Impl  aNumSettingsArrays[NUM_VALUSET_COUNT];  // wird mit den fuenf Formaten initialisiert
+    SvxNumSettingsArr_Impl	aNumSettingsArrays[NUM_VALUSET_COUNT];	// wird mit den fuenf Formaten initialisiert
 
-    SvxNumRule*         pActNum;
-    SvxNumRule*         pSaveNum;
-    sal_uInt16              nActNumLvl;
-    sal_uInt16              nNumItemId;
-    sal_Bool                bModified   : 1;
-    sal_Bool                bPreset     : 1;
+    SvxNumRule* 		pActNum;
+    SvxNumRule* 		pSaveNum;
+    USHORT 				nActNumLvl;
+    USHORT 				nNumItemId;
+    BOOL				bModified 	: 1;
+    BOOL				bPreset		: 1;
 
 
     protected:
@@ -180,42 +183,43 @@ class SvxNumPickTabPage : public SfxTabPage
                                const SfxItemSet& rSet);
         ~SvxNumPickTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void 		ActivatePage(const SfxItemSet& rSet);
+    virtual int 		DeactivatePage(SfxItemSet *pSet);
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
-    void                SetCharFmtNames(const String& rCharName, const String& rBulName)
-                            {   sNumCharFmtName = rCharName;
+    void				SetCharFmtNames(const String& rCharName, const String& rBulName)
+                            {	sNumCharFmtName = rCharName;
                                 sBulletCharFmtName = rBulName;}
-    virtual void        PageCreated(SfxAllItemSet aSet);
+    virtual void 		PageCreated(SfxAllItemSet aSet); // add CHINA001
 };
 
+/*-----------------12.02.97 07.42-------------------
 
-//------------------------------------------------
+--------------------------------------------------*/
 class SvxBitmapPickTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
     FixedLine           aValuesFL;
-    SvxBmpNumValueSet*  pExamplesVS;
-    FixedText           aErrorText;
-    CheckBox            aLinkedCB;
+    SvxBmpNumValueSet* 	pExamplesVS;
+    FixedText			aErrorText;
+    CheckBox			aLinkedCB;
 
-    List                aGrfNames;
-    String              sNumCharFmtName;
+    List				aGrfNames;
+    String				sNumCharFmtName;
 
-    SvxNumRule*         pActNum;
-    SvxNumRule*         pSaveNum;
-    sal_uInt16              nActNumLvl;
-    sal_uInt16              nNumItemId;
-    SfxMapUnit          eCoreUnit;
-    sal_Bool                bModified   : 1;
-    sal_Bool                bPreset     : 1;
+    SvxNumRule* 		pActNum;
+    SvxNumRule* 		pSaveNum;
+    USHORT 				nActNumLvl;
+    USHORT 				nNumItemId;
+    SfxMapUnit			eCoreUnit;
+    BOOL				bModified 	: 1;
+    BOOL				bPreset		: 1;
 
     protected:
         DECL_LINK( NumSelectHdl_Impl, ValueSet*);
@@ -227,18 +231,20 @@ class SvxBitmapPickTabPage : public SfxTabPage
                                const SfxItemSet& rSet);
         ~SvxBitmapPickTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void 		ActivatePage(const SfxItemSet& rSet);
+    virtual int 		DeactivatePage(SfxItemSet *pSet);
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
-    void                SetNumCharFmtName(const String& rName){sNumCharFmtName = rName;}
+    void				SetNumCharFmtName(const String& rName){sNumCharFmtName = rName;}
 };
 
-//------------------------------------------------
+/*-----------------01.12.97 16:13-------------------
+
+--------------------------------------------------*/
 class SvxNumOptionsTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -246,71 +252,71 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     FixedLine       aFormatFL;
     FixedText       aLevelFT;
-    MultiListBox    aLevelLB;
+    MultiListBox	aLevelLB;
 
     FixedText       aFmtFT;
-    ListBox         aFmtLB;
-    FixedText       aPrefixFT;
-    Edit            aPrefixED;
-    FixedText       aSuffixFT;
-    Edit            aSuffixED;
-    FixedText       aCharFmtFT;
-    ListBox         aCharFmtLB;
-    FixedText       aBulColorFT;
-    ColorListBox    aBulColLB;
-    FixedText       aBulRelSizeFT;
-    MetricField     aBulRelSizeMF;
+    ListBox     	aFmtLB;
+    FixedText   	aPrefixFT;
+    Edit        	aPrefixED;
+    FixedText   	aSuffixFT;
+    Edit        	aSuffixED;
+    FixedText		aCharFmtFT;
+    ListBox			aCharFmtLB;
+    FixedText		aBulColorFT;
+    ColorListBox	aBulColLB;
+    FixedText 		aBulRelSizeFT;
+    MetricField		aBulRelSizeMF;
     FixedText       aAllLevelFT;
-    NumericField    aAllLevelNF;
+    NumericField	aAllLevelNF;
     FixedText       aStartFT;
     NumericField    aStartED;
     PushButton      aBulletPB;
-    FixedText       aAlignFT;
-    ListBox         aAlignLB;
-    FixedText       aBitmapFT;
+    FixedText		aAlignFT;
+    ListBox			aAlignLB;
+    FixedText 		aBitmapFT;
     MenuButton      aBitmapMB;
-    FixedText       aSizeFT;
-    MetricField     aWidthMF;
-    FixedText       aMultFT;
-    MetricField     aHeightMF;
-    CheckBox        aRatioCB;
-    FixedText       aOrientFT;
-    ListBox         aOrientLB;
+    FixedText 		aSizeFT;
+    MetricField		aWidthMF;
+    FixedText		aMultFT;
+    MetricField		aHeightMF;
+    CheckBox		aRatioCB;
+    FixedText		aOrientFT;
+    ListBox			aOrientLB;
 
     FixedLine       aSameLevelFL;
-    CheckBox        aSameLevelCB;
+    CheckBox		aSameLevelCB;
 
-    String          sNumCharFmtName;
-    String          sBulletCharFmtName;
+    String 			sNumCharFmtName;
+    String 			sBulletCharFmtName;
 
     Timer           aInvalidateTimer;
 
-    SvxNumberingPreview*    pPreviewWIN;
+    SvxNumberingPreview*	pPreviewWIN;
 
-    SvxNumRule*         pActNum;
-    SvxNumRule*         pSaveNum;
+    SvxNumRule* 		pActNum;
+    SvxNumRule* 		pSaveNum;
 
-    Size                aInitSize[SVX_MAX_NUM];
+    Size				aInitSize[SVX_MAX_NUM];
 
-    sal_Bool                bLastWidthModified  : 1;
-    sal_Bool                bModified           : 1;
-    sal_Bool                bPreset             : 1;
-    sal_Bool                bAutomaticCharStyles: 1;
-    sal_Bool                bHTMLMode           : 1;
-    sal_Bool                bMenuButtonInitialized : 1;
+    BOOL				bLastWidthModified 	: 1;
+    BOOL				bModified 			: 1;
+    BOOL				bPreset				: 1;
+    BOOL				bAutomaticCharStyles: 1;
+    BOOL 				bHTMLMode 			: 1;
+    BOOL				bMenuButtonInitialized : 1;
 
-    List                aGrfNames;
-    Font                aActBulletFont;
-    String              sBullet;
-    String              sStartWith;
+    List				aGrfNames;
+    Font            	aActBulletFont;
+    String				sBullet;
+    String				sStartWith;
 
-    sal_uInt8               nBullet;
-    sal_uInt16              nActNumLvl;
-    sal_uInt16              nNumItemId;
-    SfxMapUnit          eCoreUnit;
+    BYTE            	nBullet;
+    USHORT				nActNumLvl;
+    USHORT 				nNumItemId;
+    SfxMapUnit			eCoreUnit;
 
-    void                InitControls();
-    void                SwitchNumberType( sal_uInt8 nType, sal_Bool bBmp = sal_False );
+    void				InitControls();
+    void				SwitchNumberType( BYTE nType, BOOL bBmp = FALSE );
     void                CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
         DECL_LINK( NumberTypeSelectHdl_Impl, ListBox * );
@@ -336,27 +342,30 @@ class SvxNumOptionsTabPage : public SfxTabPage
                                const SfxItemSet& rSet);
         ~SvxNumOptionsTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void 		ActivatePage(const SfxItemSet& rSet);
+    virtual int 		DeactivatePage(SfxItemSet *pSet);
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
-    void                SetCharFmts(const String& rNumName, const String& rBulletName )
+//???	void				SetWrtShell(SwWrtShell* pSh);
+    void				SetCharFmts(const String& rNumName, const String& rBulletName )
                                 {
                                     sNumCharFmtName = rNumName;
                                     sBulletCharFmtName = rBulletName;
                                 }
-    void                SetMetric(FieldUnit eSet);
+    void				SetMetric(FieldUnit eSet);
 
-    ListBox&            GetCharFmtListBox() {return aCharFmtLB;}
-    void                SetModified(sal_Bool bRepaint = sal_True);
-    virtual void        PageCreated(SfxAllItemSet aSet);
+    ListBox&			GetCharFmtListBox() {return aCharFmtLB;}
+    void				SetModified(BOOL bRepaint = TRUE);
+    virtual void 		PageCreated(SfxAllItemSet aSet); // add CHINA001
 };
 
-//------------------------------------------------
+/*-----------------03.12.97 10:18-------------------
+
+--------------------------------------------------*/
 class SvxNumPositionTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -368,15 +377,16 @@ class SvxNumPositionTabPage : public SfxTabPage
 
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
-    FixedText           aDistBorderFT;
-    MetricField         aDistBorderMF;
-    CheckBox            aRelativeCB;
-    FixedText           aIndentFT;
-    MetricField         aIndentMF;
-    FixedText           aDistNumFT;
-    MetricField         aDistNumMF;
-    FixedText           aAlignFT;
-    ListBox             aAlignLB;
+    FixedText       	aDistBorderFT;
+    MetricField			aDistBorderMF;
+    CheckBox			aRelativeCB;
+    FixedText			aIndentFT;
+    MetricField			aIndentMF;
+    FixedText       	aDistNumFT;
+    MetricField			aDistNumMF;
+    FixedText			aAlignFT;
+    ListBox				aAlignLB;
+    // <--
 
     // new set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
@@ -390,24 +400,25 @@ class SvxNumPositionTabPage : public SfxTabPage
     MetricField         aAlignedAtMF;
     FixedText           aIndentAtFT;
     MetricField         aIndentAtMF;
+    // <--
 
-    PushButton          aStandardPB;
+    PushButton			aStandardPB;
 
 #if OSL_DEBUG_LEVEL > 1
-    FixedText*          pDebugFixedText;
+    FixedText* 			pDebugFixedText;
 #endif
     SvxNumberingPreview* pPreviewWIN;
 
-    SvxNumRule*         pActNum;
-    SvxNumRule*         pSaveNum;
+    SvxNumRule* 		pActNum;
+    SvxNumRule* 		pSaveNum;
 
-    sal_uInt16              nActNumLvl;
-    sal_uInt16              nNumItemId;
-    SfxMapUnit          eCoreUnit;
+    USHORT				nActNumLvl;
+    USHORT 				nNumItemId;
+    SfxMapUnit			eCoreUnit;
 
-    sal_Bool                bModified           : 1;
-    sal_Bool                bPreset             : 1;
-    sal_Bool                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
+    BOOL				bModified 			: 1;
+    BOOL				bPreset				: 1;
+    BOOL				bInInintControl		: 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
     bool                bLabelAlignmentPosAndSpaceModeActive;
 
     void                InitControls();
@@ -431,17 +442,17 @@ public:
                                const SfxItemSet& rSet);
         ~SvxNumPositionTabPage();
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void 		ActivatePage(const SfxItemSet& rSet);
+    virtual int 		DeactivatePage(SfxItemSet *pSet);
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    void                SetMetric(FieldUnit eSet);
-    void                SetModified(sal_Bool bRepaint = sal_True);
-    virtual void        PageCreated(SfxAllItemSet aSet);
+    void				SetMetric(FieldUnit eSet);
+    void				SetModified(BOOL bRepaint = TRUE);
+    virtual void 		PageCreated(SfxAllItemSet aSet); // add CHINA001
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,12 +54,12 @@ class SFX2_DLLPUBLIC SfxFrameHTMLWriter
     SAL_DLLPRIVATE static const sal_Char sNewLine[];
     SAL_DLLPRIVATE static void OutMeta( SvStream& rStrm,
                                 const sal_Char *pIndent, const String& rName,
-                                const String& rContent, sal_Bool bHTTPEquiv,
+                                const String& rContent, BOOL bHTTPEquiv,
                                 rtl_TextEncoding eDestEnc,
                             String *pNonConvertableChars = 0 );
     SAL_DLLPRIVATE inline static void OutMeta( SvStream& rStrm,
                                 const sal_Char *pIndent, const sal_Char *pName,
-                                const String& rContent, sal_Bool bHTTPEquiv,
+                                const String& rContent, BOOL bHTTPEquiv,
                                 rtl_TextEncoding eDestEnc,
                             String *pNonConvertableChars = 0 );
 
@@ -82,7 +82,7 @@ public:
 
 inline void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                             const sal_Char *pIndent, const sal_Char *pName,
-                            const String& rContent, sal_Bool bHTTPEquiv,
+                            const String& rContent, BOOL bHTTPEquiv,
                             rtl_TextEncoding eDestEnc,
                             String *pNonConvertableChars )
 {

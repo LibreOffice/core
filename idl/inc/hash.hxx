@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,59 +29,62 @@
 #ifndef _HASH_HXX
 #define _HASH_HXX
 
+
+
 #include <tools/ref.hxx>
 #include <tools/string.hxx>
-#include <vector>
 
+/****************** H a s h - T a b l e **********************************/
 class SvHashTable
 {
-    sal_uInt32       nMax;                 // size of hash-tabel
-    sal_uInt32       nFill;                // elements in hash-tabel
-    sal_uInt32       lAsk;                 // number of requests
-    sal_uInt32       lTry;                 // number of tries
+    UINT32       nMax;                 // size of hash-tabel
+    UINT32       nFill;                // elements in hash-tabel
+    UINT32       lAsk;                 // Anzahl der Anfragen
+    UINT32       lTry;                 // Anzahl der Versuche
 protected:
-    sal_Bool        Test_Insert( const void *, sal_Bool bInsert, sal_uInt32 * pInsertPos );
+    BOOL        Test_Insert( const void *, BOOL bInsert, UINT32 * pInsertPos );
 
                             // compare element with entry
-    virtual StringCompare   Compare( const void * , sal_uInt32 ) const = 0;
+    virtual StringCompare   Compare( const void * , UINT32 ) const = 0;
                             // get hash value from subclass
-    virtual sal_uInt32          HashFunc( const void * ) const = 0;
+    virtual UINT32          HashFunc( const void * ) const = 0;
 public:
-                SvHashTable( sal_uInt32 nMaxEntries );
+                SvHashTable( UINT32 nMaxEntries );
                 virtual ~SvHashTable();
 
-    sal_uInt32      GetMax() const { return nMax; }
+    UINT32      GetMax() const { return nMax; }
 
-    virtual sal_Bool            IsEntry( sal_uInt32 ) const = 0;
+    virtual BOOL            IsEntry( UINT32 ) const = 0;
 };
 
+/************** S t r i n g H a s h T a b l e E n t r y ******************/
 class SvStringHashTable;
 class SvStringHashEntry : public SvRefBase
 {
 friend class SvStringHashTable;
     ByteString  aName;
-    sal_uInt32  nHashId;
-    sal_uLong   nValue;
-    sal_Bool    bHasId;
+    UINT32  nHashId;
+    ULONG   nValue;
+    BOOL    bHasId;
 public:
-                    SvStringHashEntry() : bHasId( sal_False ) {;}
-                    SvStringHashEntry( const ByteString & rName, sal_uInt32 nIdx )
+                    SvStringHashEntry() : bHasId( FALSE ) {;}
+                    SvStringHashEntry( const ByteString & rName, UINT32 nIdx )
                         : aName( rName )
                         , nHashId( nIdx )
                         , nValue( 0 )
-                        , bHasId( sal_True ) {}
+                        , bHasId( TRUE ) {}
                     ~SvStringHashEntry();
 
     const ByteString &  GetName() const { return aName; }
-    sal_Bool            HasId() const { return bHasId; }
-    sal_uInt32          GetId() const { return nHashId; }
+    BOOL            HasId() const { return bHasId; }
+    UINT32          GetId() const { return nHashId; }
 
-    void            SetValue( sal_uLong n ) { nValue = n; }
-    sal_uLong           GetValue() const { return nValue; }
+    void            SetValue( ULONG n ) { nValue = n; }
+    ULONG           GetValue() const { return nValue; }
 
-    sal_Bool            operator == ( const SvStringHashEntry & rRef )
+    BOOL            operator == ( const SvStringHashEntry & rRef )
                     { return nHashId == rRef.nHashId; }
-    sal_Bool            operator != ( const SvStringHashEntry & rRef )
+    BOOL            operator != ( const SvStringHashEntry & rRef )
                     { return ! operator == ( rRef ); }
     SvStringHashEntry & operator = ( const SvStringHashEntry & rRef )
         { SvRefBase::operator=( rRef );
@@ -95,25 +98,26 @@ public:
 
 SV_DECL_IMPL_REF(SvStringHashEntry)
 
-typedef ::std::vector< SvStringHashEntry* > SvStringHashList;
+/****************** S t r i n g H a s h T a b l e ************************/
+DECLARE_LIST(SvStringHashList,SvStringHashEntry *)
 
 class SvStringHashTable : public SvHashTable
 {
-    SvStringHashEntry*      pEntries;
+    SvStringHashEntry * pEntries;
 protected:
-    virtual sal_uInt32          HashFunc( const void * pElement ) const;
-    virtual StringCompare   Compare( const void * pElement, sal_uInt32 nIndex ) const;
+    virtual UINT32          HashFunc( const void * pElement ) const;
+    virtual StringCompare   Compare( const void * pElement, UINT32 nIndex ) const;
 public:
-            SvStringHashTable( sal_uInt32 nMaxEntries );   // max size of hash-tabel
+            SvStringHashTable( UINT32 nMaxEntries );   // max size of hash-tabel
             virtual ~SvStringHashTable();
 
     ByteString          GetNearString( const ByteString & rName ) const;
-    virtual sal_Bool    IsEntry( sal_uInt32 nIndex ) const;
+    virtual BOOL    IsEntry( UINT32 nIndex ) const;
 
-    sal_Bool    Insert( const ByteString & rStr, sal_uInt32 * pHash ); // insert string
-    sal_Bool    Test( const ByteString & rStr, sal_uInt32 * pHash ) const; // test of insert string
-    SvStringHashEntry * Get ( sal_uInt32 nIndex ) const; // return pointer to string
-    SvStringHashEntry & operator []( sal_uInt32 nPos ) const
+    BOOL    Insert( const ByteString & rStr, UINT32 * pHash ); // insert string
+    BOOL    Test( const ByteString & rStr, UINT32 * pHash ) const; // test of insert string
+    SvStringHashEntry * Get ( UINT32 nIndex ) const; // return pointer to string
+    SvStringHashEntry & operator []( UINT32 nPos ) const
             { return pEntries[ nPos ]; }
 
     void    FillHashList( SvStringHashList * rList ) const;

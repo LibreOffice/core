@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 
 // -----------------------------------------------------------------------
 
-static sal_uInt16 pPrintOptRanges[] =
+static USHORT pPrintOptRanges[] =
 {
     SID_SCPRINTOPTIONS,
     SID_SCPRINTOPTIONS,
@@ -51,14 +51,14 @@ static sal_uInt16 pPrintOptRanges[] =
 
 // -----------------------------------------------------------------------
 
-ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
+ScTpPrintOptions::ScTpPrintOptions( Window*			  pParent,
                                     const SfxItemSet& rCoreAttrs )
-    :   SfxTabPage      ( pParent,
+    :	SfxTabPage		( pParent,
                           ScResId( RID_SCPAGE_PRINT ),
                           rCoreAttrs ),
-        aPagesFL         ( this, ScResId( FL_PAGES ) ),
+        aPagesFL	     ( this, ScResId( FL_PAGES ) ),
         aSkipEmptyPagesCB( this, ScResId( BTN_SKIPEMPTYPAGES ) ),
-        aSheetsFL        ( this, ScResId( FL_SHEETS ) ),
+        aSheetsFL		 ( this, ScResId( FL_SHEETS ) ),
         aSelectedSheetsCB( this, ScResId( BTN_SELECTEDSHEETS ) )
 {
     FreeResource();
@@ -68,7 +68,7 @@ ScTpPrintOptions::~ScTpPrintOptions()
 {
 }
 
-sal_uInt16* ScTpPrintOptions::GetRanges()
+USHORT* ScTpPrintOptions::GetRanges()
 {
     return pPrintOptRanges;
 }
@@ -93,7 +93,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
     ScPrintOptions aOptions;
 
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCPRINTOPTIONS, false , &pItem))
+    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCPRINTOPTIONS, FALSE , &pItem))
         aOptions = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
     else
     {
@@ -101,9 +101,9 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
         aOptions = SC_MOD()->GetPrintOptions();
     }
 
-    if ( SFX_ITEM_SET == rCoreSet.GetItemState( SID_PRINT_SELECTEDSHEET, false , &pItem ) )
+    if ( SFX_ITEM_SET == rCoreSet.GetItemState( SID_PRINT_SELECTEDSHEET, FALSE , &pItem ) )
     {
-        sal_Bool bChecked = ( (const SfxBoolItem*)pItem )->GetValue();
+        BOOL bChecked = ( (const SfxBoolItem*)pItem )->GetValue();
         aSelectedSheetsCB.Check( bChecked );
     }
     else
@@ -118,7 +118,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
+BOOL ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     rCoreAttrs.ClearItem( SID_PRINT_SELECTEDSHEET );
 
@@ -135,11 +135,11 @@ sal_Bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
         {
             rCoreAttrs.Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, aSelectedSheetsCB.IsChecked() ) );
         }
-        return sal_True;
+        return TRUE;
     }
     else
     {
-        return false;
+        return FALSE;
     }
 }
 

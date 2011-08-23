@@ -44,7 +44,7 @@
     return self;
 }
 
--(BOOL)knowsPageRange: (NSRangePointer)range
+-(MacOSBOOL)knowsPageRange: (NSRangePointer)range
 {
     range->location = 1;
     range->length = mpInfoPrinter->getCurPageRangeCount();

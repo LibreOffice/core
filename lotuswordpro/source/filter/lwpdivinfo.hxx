@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPDIVINFO_HXX
@@ -72,7 +72,7 @@
 #include "lwpheader.hxx"
 #include "lwpdoc.hxx"
 
-#define STR_OleDivisionClassName    "OLEDivision"
+#define STR_OleDivisionClassName	"OLEDivision"
 
 
 class LwpDivInfo : public LwpObject
@@ -94,7 +94,7 @@ public:
     inline LwpDocument* GetDivision();
     void GetNumberOfPages(sal_uInt16& nPageno);
     sal_uInt16 GetMaxNumberOfPages();
-    LwpAtomHolder* GetExternalName(){return &m_ExternalName;}
+    LwpAtomHolder* GetExternalName(){return &m_ExternalName;};
 protected:
     void Read();
 private:

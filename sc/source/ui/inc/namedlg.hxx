@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,75 +33,55 @@
 #include <vcl/combobox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include "rangenam.hxx"
 #include "anyrefdg.hxx"
 
-#include <boost/ptr_container/ptr_map.hpp>
-
 class ScViewData;
 class ScDocument;
-struct ScNameDlgImpl;
+
 
 //==================================================================
 
 class ScNameDlg : public ScAnyRefDlg
 {
 private:
-    typedef ::boost::ptr_map<SCTAB, ScRangeName> TabNameMapType;
-    FixedText       maFtScope;
-    ListBox         maLbScope;
     FixedLine       aFlName;
-    ComboBox        aEdName;
+    ComboBox		aEdName;
 
     FixedLine       aFlAssign;
-    formula::RefEdit        aEdAssign;
-    formula::RefButton      aRbAssign;
+    formula::RefEdit		aEdAssign;
+    formula::RefButton		aRbAssign;
 
-    FixedLine       aFlType;
-    CheckBox        aBtnPrintArea;
-    CheckBox        aBtnColHeader;
-    CheckBox        aBtnCriteria;
-    CheckBox        aBtnRowHeader;
+    FixedLine		aFlType;
+    CheckBox		aBtnPrintArea;
+    CheckBox		aBtnColHeader;
+    CheckBox		aBtnCriteria;
+    CheckBox		aBtnRowHeader;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
-    MoreButton      aBtnMore;
-    sal_Bool            bSaved;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
+    PushButton		aBtnAdd;
+    PushButton		aBtnRemove;
+    MoreButton		aBtnMore;
+    BOOL			bSaved;
 
-    const String    aStrAdd;    // "Hinzufuegen"
-    const String    aStrModify; // "Aendern"
-    const String    errMsgInvalidSym;
-    const ::rtl::OUString maGlobalNameStr;
+    const String	aStrAdd;	// "Hinzufuegen"
+    const String	aStrModify;	// "Aendern"
+    const String	errMsgInvalidSym;
 
-    ScViewData*     pViewData;
-    ScDocument*     pDoc;
-    ScRangeName     maGlobalRangeName;
-    ScRangeName::TabNameMap maTabRangeNames;
-    ScRangeName*    mpCurRangeName;    //! range name set currently selected
-    const ScAddress theCursorPos;
-    Selection       theCurSel;
+    ScViewData*		pViewData;
+    ScDocument*		pDoc;
+    ScRangeName		aLocalRangeName;
+    const ScAddress	theCursorPos;
+    Selection		theCurSel;
 
-    ScNameDlgImpl*  mpImpl;
-
+#ifdef _NAMEDLG_CXX
 private:
     void Init();
     void UpdateChecks();
     void UpdateNames();
-    void CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData );
-
-    void SaveControlStates();
-    void RestoreControlStates();
-
-    bool AddPushed();
-    void RemovePushed();
-    void OKPushed();
-    void NameSelected();
-    void ScopeChanged();
-    void NameModified(Edit* pEd);
+    void CalcCurTableAssign( String& aAssign, USHORT nPos );
 
     // Handler:
     DECL_LINK( OkBtnHdl, void * );
@@ -111,22 +91,24 @@ private:
     DECL_LINK( EdModifyHdl, Edit * );
     DECL_LINK( NameSelectHdl, void * );
     DECL_LINK( AssignGetFocusHdl, void * );
-    DECL_LINK( ScopeChangedHdl, ListBox* );
+#endif
 
 protected:
-    virtual void    RefInputDone( sal_Bool bForced = sal_False );
+
+    virtual void	RefInputDone( BOOL bForced = FALSE );
+
 
 public:
                     ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                               ScViewData*      ptrViewData,
-                               const ScAddress& aCursorPos );
+                               ScViewData*		ptrViewData,
+                               const ScAddress&	aCursorPos );
                     ~ScNameDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual sal_Bool    IsRefInputMode() const;
+    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual BOOL	IsRefInputMode() const;
 
-    virtual void    SetActive();
-    virtual sal_Bool    Close();
+    virtual void	SetActive();
+    virtual BOOL	Close();
 
 };
 

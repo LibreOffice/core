@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -160,7 +160,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
 
     // find FilterName in MediaDescriptor
     OUString aFilterName(
-        lcl_getProperty< OUString >( rMediaDescriptor, OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ))));
+        lcl_getProperty< OUString >( rMediaDescriptor, OUString::createFromAscii("FilterName")));
 
     // if FilterName was found, get Filter from factory
     if( aFilterName.getLength() > 0 )
@@ -178,7 +178,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
                 (aFilterProps >>= aProps))
             {
                 OUString aFilterServiceName(
-                    lcl_getProperty< OUString >( aProps, OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterService" ))));
+                    lcl_getProperty< OUString >( aProps, OUString::createFromAscii("FilterService")));
 
                 if( aFilterServiceName.getLength())
                 {
@@ -374,7 +374,7 @@ void ChartModel::impl_store(
     }
     else
     {
-        OSL_FAIL( "No filter" );
+        OSL_ENSURE( false, "No filter" );
     }
 
     setModified( sal_False );
@@ -389,7 +389,7 @@ void ChartModel::impl_store(
         apphelper::MediaDescriptorHelper aMDHelper(rMediaDescriptor);
         try
         {
-            xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "SavedObject" )),
+            xPropSet->setPropertyValue( OUString::createFromAscii("SavedObject"),
                 uno::makeAny( aMDHelper.HierarchicalDocumentName ) );
         }
         catch ( uno::Exception& )
@@ -605,18 +605,18 @@ void ChartModel::impl_load(
     }
     else
     {
-        OSL_FAIL( "loadFromStorage cannot create filter" );
+        OSL_ENSURE( false, "loadFromStorage cannot create filter" );
     }
-
+    
     if( xStorage.is() )
         impl_loadGraphics( xStorage );
 
     setModified( sal_False );
-
+    
     // switchToStorage without notifying listeners (which shouldn't exist at
     // this time, anyway)
     m_xStorage = xStorage;
-
+    
     {
         MutexGuard aGuard( m_aModelMutex );
         m_nInLoad--;
@@ -628,35 +628,35 @@ void ChartModel::impl_loadGraphics(
 {
     try
     {
-        const Reference< embed::XStorage >& xGraphicsStorage(
-            xStorage->openStorageElement( C2U( "Pictures" ),
+        const Reference< embed::XStorage >& xGraphicsStorage( 
+            xStorage->openStorageElement( C2U( "Pictures" ), 
                                           embed::ElementModes::READ ) );
-
+        
         if( xGraphicsStorage.is() )
-        {
+        {   
             const uno::Sequence< ::rtl::OUString > aElementNames(
                 xGraphicsStorage->getElementNames() );
-
+            
             for( int i = 0; i < aElementNames.getLength(); ++i )
             {
                 if( xGraphicsStorage->isStreamElement( aElementNames[ i ] ) )
                 {
-                    uno::Reference< io::XStream > xElementStream(
-                        xGraphicsStorage->openStreamElement(
+                    uno::Reference< io::XStream > xElementStream( 
+                        xGraphicsStorage->openStreamElement( 
                             aElementNames[ i ],
                             embed::ElementModes::READ ) );
-
+                    
                     if( xElementStream.is() )
                     {
-                        std::auto_ptr< SvStream > apIStm(
-                            ::utl::UcbStreamHelper::CreateStream(
+                        std::auto_ptr< SvStream > apIStm( 
+                            ::utl::UcbStreamHelper::CreateStream( 
                                 xElementStream, true ) );
 
                         if( apIStm.get() )
                         {
                             Graphic aGraphic;
-
-                            if( !GraphicConverter::Import(
+                            
+                            if( !GraphicConverter::Import( 
                                     *apIStm.get(),
                                     aGraphic ) )
                             {

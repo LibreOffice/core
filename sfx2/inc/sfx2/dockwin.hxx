@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,17 +67,17 @@ protected:
                         CheckAlignment(SfxChildAlignment,SfxChildAlignment);
 
     virtual void        Resize();
-    virtual sal_Bool        PrepareToggleFloatingMode();
+    virtual BOOL        PrepareToggleFloatingMode();
     virtual void        ToggleFloatingMode();
     virtual void        StartDocking();
-    virtual sal_Bool        Docking( const Point& rPos, Rectangle& rRect );
-    virtual void        EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
+    virtual BOOL        Docking( const Point& rPos, Rectangle& rRect );
+    virtual void        EndDocking( const Rectangle& rRect, BOOL bFloatMode );
     virtual void        Resizing( Size& rSize );
     virtual void        Paint( const Rectangle& rRect );
-    virtual sal_Bool        Close();
+    virtual BOOL        Close();
     virtual void        Move();
 
-    SAL_DLLPRIVATE SfxChildWindow* GetChildWindow_Impl()    { return pMgr; }
+    SAL_DLLPRIVATE SfxChildWindow* GetChildWindow_Impl()	{ return pMgr; }
 
 public:
                         SfxDockingWindow( SfxBindings *pBindings,
@@ -92,35 +92,35 @@ public:
 
     void                Initialize (SfxChildWinInfo* pInfo);
     virtual void        FillInfo(SfxChildWinInfo&) const;
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void		StateChanged( StateChangedType nStateChange );
 
     void                SetDockingRects(const Rectangle& rOuter, const Rectangle& rInner)
                             { aInnerRect = rInner; aOuterRect = rOuter; }
-    const Rectangle&    GetInnerRect() const                    { return aInnerRect; }
-    const Rectangle&    GetOuterRect() const                    { return aOuterRect; }
-    SfxBindings&        GetBindings() const                     { return *pBindings; }
-    sal_uInt16              GetType() const                         { return pMgr->GetType(); }
-    SfxChildAlignment   GetAlignment() const                    { return pMgr->GetAlignment(); }
-    void                SetAlignment(SfxChildAlignment eAlign)  { pMgr->SetAlignment(eAlign); }
-    Size                GetFloatingSize() const                 { return aFloatSize; }
-    void                SetFloatingSize(const Size& rSize)      { aFloatSize=rSize; }
+    const Rectangle&    GetInnerRect() const					{ return aInnerRect; }
+    const Rectangle&    GetOuterRect() const					{ return aOuterRect; }
+    SfxBindings&        GetBindings() const						{ return *pBindings; }
+    USHORT              GetType() const							{ return pMgr->GetType(); }
+    SfxChildAlignment   GetAlignment() const					{ return pMgr->GetAlignment(); }
+    void                SetAlignment(SfxChildAlignment eAlign)	{ pMgr->SetAlignment(eAlign); }
+    Size                GetFloatingSize() const					{ return aFloatSize; }
+    void                SetFloatingSize(const Size& rSize)		{ aFloatSize=rSize; }
 
     void                SetMinOutputSizePixel( const Size& rSize );
     Size                GetMinOutputSizePixel() const;
-    virtual long        Notify( NotifyEvent& rNEvt );
-    virtual void        FadeIn( sal_Bool );
-    void                AutoShow( sal_Bool bShow = sal_True );
+    virtual long		Notify( NotifyEvent& rNEvt );
+    virtual void        FadeIn( BOOL );
+    void                AutoShow( BOOL bShow = TRUE );
     DECL_LINK( TimerHdl, Timer* );
 
     SAL_DLLPRIVATE void Initialize_Impl();
-    SAL_DLLPRIVATE sal_uInt16 GetWinBits_Impl() const;
+    SAL_DLLPRIVATE USHORT GetWinBits_Impl() const;
     SAL_DLLPRIVATE void SetItemSize_Impl( const Size& rSize );
     SAL_DLLPRIVATE void Disappear_Impl();
     SAL_DLLPRIVATE void Reappear_Impl();
-    SAL_DLLPRIVATE sal_Bool IsAutoHide_Impl() const;
-    SAL_DLLPRIVATE sal_Bool IsPinned_Impl() const;
-    SAL_DLLPRIVATE void AutoShow_Impl( sal_Bool bShow = sal_True );
-    SAL_DLLPRIVATE void Pin_Impl( sal_Bool bPinned );
+    SAL_DLLPRIVATE BOOL IsAutoHide_Impl() const;
+    SAL_DLLPRIVATE BOOL IsPinned_Impl() const;
+    SAL_DLLPRIVATE void AutoShow_Impl( BOOL bShow = TRUE );
+    SAL_DLLPRIVATE void Pin_Impl( BOOL bPinned );
     SAL_DLLPRIVATE SfxSplitWindow* GetSplitWindow_Impl() const;
     SAL_DLLPRIVATE void ReleaseChildWindow_Impl();
 };
@@ -129,7 +129,7 @@ class SfxDockingWrapper : public SfxChildWindow
 {
     public:
         SfxDockingWrapper( Window* pParent ,
-                           sal_uInt16 nId ,
+                           USHORT nId ,
                            SfxBindings* pBindings ,
                            SfxChildWinInfo* pInfo );
 

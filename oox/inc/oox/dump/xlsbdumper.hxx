@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 #define OOX_DUMP_XLSBDUMPER_HXX
 
 #include "oox/dump/dumperbase.hxx"
+#include "oox/helper/recordinputstream.hxx"
 
 #if OOX_INCLUDE_DUMPER
 
@@ -96,9 +97,9 @@ private:
     bool                readCompressedInt( BinaryInputStream& rStrm, sal_Int32& ornValue );
 
 private:
-    typedef ::boost::shared_ptr< SequenceInputStream > SequenceInputStreamRef;
+    typedef ::boost::shared_ptr< RecordInputStream > RecordInputStreamRef;
 
-    SequenceInputStreamRef mxBiffStrm;
+    RecordInputStreamRef mxBiffStrm;
     NameListRef         mxErrCodes;
 };
 

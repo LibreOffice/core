@@ -51,11 +51,7 @@ namespace {
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
-
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringBuffer;
+using namespace rtl;
 
 GConfClient* getGconfClient()
 {
@@ -64,24 +60,24 @@ GConfClient* getGconfClient()
     {
         /* initialize glib object type library */
         g_type_init();
-
+    
         GError* aError = NULL;
         if (!gconf_init(0, NULL, &aError))
         {
             rtl::OUStringBuffer msg;
             msg.appendAscii("GconfBackend:GconfLayer: Cannot Initialize Gconf connection - " );
             msg.appendAscii(aError->message);
-
-            g_error_free(aError);
+            
+            g_error_free(aError); 
             aError = NULL;
             throw uno::RuntimeException(msg.makeStringAndClear(),NULL);
         }
-
+    
         mClient = gconf_client_get_default();
         if (!mClient)
         {
-            throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                ("GconfBackend:GconfLayer: Cannot Initialize Gconf connection")),NULL);
+            throw uno::RuntimeException(rtl::OUString::createFromAscii
+                ("GconfBackend:GconfLayer: Cannot Initialize Gconf connection"),NULL);
         }
 
         static const char * const PreloadValuesList[] =
@@ -100,7 +96,7 @@ GConfClient* getGconfClient()
         int i = 0;
         while( PreloadValuesList[i] != NULL )
             gconf_client_preload( mClient, PreloadValuesList[i++], GCONF_CLIENT_PRELOAD_ONELEVEL, NULL );
-    }
+    } 
 
     return mClient;
 }
@@ -121,7 +117,7 @@ static OUString xdg_user_dir_lookup (const char *type)
 
     if (!aSecurity.getHomeDir( aHomeDirURL ) )
     {
-    osl::FileBase::getFileURLFromSystemPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/tmp")), aDocumentsDirURL);
+    osl::FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii("/tmp"), aDocumentsDirURL);
     return aDocumentsDirURL;
     }
 
@@ -129,12 +125,12 @@ static OUString xdg_user_dir_lookup (const char *type)
     if (config_home == NULL || config_home[0] == 0)
     {
     aConfigFileURL = OUString(aHomeDirURL);
-    aConfigFileURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/.config/user-dirs.dirs"));
+    aConfigFileURL += OUString::createFromAscii( "/.config/user-dirs.dirs" );
     }
     else
     {
     aConfigFileURL = OUString::createFromAscii(config_home);
-    aConfigFileURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/user-dirs.dirs"));
+    aConfigFileURL += OUString::createFromAscii( "/user-dirs.dirs" );
     }
 
     if(osl_File_E_None == osl_openFile(aConfigFileURL.pData, &handle, osl_File_OpenFlag_Read))
@@ -232,19 +228,19 @@ static OUString xdg_user_dir_lookup (const char *type)
 
 //------------------------------------------------------------------------------
 
-uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
+uno::Any makeAnyOfGconfValue( GConfValue *aGconfValue )
 {
-    switch( pGconfValue->type )
+    switch( aGconfValue->type )
     {
         case GCONF_VALUE_BOOL:
-            return uno::makeAny( (sal_Bool) gconf_value_get_bool( pGconfValue ) );
+            return uno::makeAny( (sal_Bool) gconf_value_get_bool( aGconfValue ) );
 
         case GCONF_VALUE_INT:
-            return uno::makeAny( (sal_Int32) gconf_value_get_int( pGconfValue ) );
+            return uno::makeAny( (sal_Int32) gconf_value_get_int( aGconfValue ) );
 
         case GCONF_VALUE_STRING:
             return uno::makeAny( OStringToOUString( rtl::OString(
-                gconf_value_get_string(pGconfValue) ), RTL_TEXTENCODING_UTF8 ) );
+                gconf_value_get_string(aGconfValue) ), RTL_TEXTENCODING_UTF8 ) );
 
         default:
             fprintf( stderr, "makeAnyOfGconfValue: Type not handled.\n" );
@@ -256,9 +252,9 @@ uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
 
 //------------------------------------------------------------------------------
 
-static void splitFontName( GConfValue *pGconfValue, rtl::OUString &rName, sal_Int16 &rHeight)
+static void splitFontName( GConfValue *aGconfValue, rtl::OUString &rName, sal_Int16 &rHeight)
 {
-   rtl::OString aFont( gconf_value_get_string( pGconfValue ) );
+   rtl::OString aFont( gconf_value_get_string( aGconfValue ) );
    aFont.trim();
    sal_Int32 nIdx = aFont.lastIndexOf( ' ' );
    if (nIdx < 1) { // urk
@@ -274,20 +270,20 @@ static void splitFontName( GConfValue *pGconfValue, rtl::OUString &rName, sal_In
 
 //------------------------------------------------------------------------------
 
-uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfValue )
+uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValue )
 {
 
-    switch( rValue.nSettingId )
+    switch( aValue.nSettingId )
     {
         case SETTING_PROXY_MODE:
         {
             rtl::OUString aProxyMode;
-            uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
+            uno::Any aOriginalValue = makeAnyOfGconfValue( aGconfValue );
             aOriginalValue >>= aProxyMode;
 
-            if( aProxyMode.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("manual")) ) )
+            if( aProxyMode.equals( rtl::OUString::createFromAscii( "manual" ) ) )
                 return uno::makeAny( (sal_Int32) 1 );
-            else if( aProxyMode.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("none")) ) )
+            else if( aProxyMode.equals( rtl::OUString::createFromAscii( "none" ) ) )
                 return uno::makeAny( (sal_Int32) 0 );
         }
             break;
@@ -295,9 +291,9 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
         case SETTING_NO_PROXY_FOR:
         {
             rtl::OStringBuffer aBuffer;
-            if( (GCONF_VALUE_LIST == pGconfValue->type) && (GCONF_VALUE_STRING == gconf_value_get_list_type(pGconfValue)) )
+            if( (GCONF_VALUE_LIST == aGconfValue->type) && (GCONF_VALUE_STRING == gconf_value_get_list_type(aGconfValue)) )
             {
-                GSList * list = gconf_value_get_list(pGconfValue);
+                GSList * list = gconf_value_get_list(aGconfValue);
                 for(; list; list = g_slist_next(list))
                 {
                     aBuffer.append(gconf_value_get_string((GConfValue *) list->data));
@@ -311,11 +307,11 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
                 g_warning( "unexpected type for ignore_hosts" );
         }
             break;
-
+            
         case SETTING_MAILER_PROGRAM:
         {
             rtl::OUString aMailer;
-            uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
+            uno::Any aOriginalValue = makeAnyOfGconfValue( aGconfValue );
             aOriginalValue >>= aMailer;
             sal_Int32 nIndex = 0;
             return uno::makeAny( aMailer.getToken( 0, ' ', nIndex ) );
@@ -326,8 +322,8 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
         case SETTING_FONT_ANTI_ALIASING_MIN_PIXEL:
         case SETTING_SYMBOL_SET:
         {
-            sal_Int32 nShortValue(0);
-            uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
+            sal_Int32 nShortValue;
+            uno::Any aOriginalValue = makeAnyOfGconfValue( aGconfValue );
             aOriginalValue >>= nShortValue;
             return uno::makeAny( (sal_Int16) nShortValue );
         }
@@ -341,7 +337,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
 #endif // ENABLE_LOCKDOWN
         {
             sal_Bool bBooleanValue = false;
-            uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
+            uno::Any aOriginalValue = makeAnyOfGconfValue( aGconfValue );
             aOriginalValue >>= bBooleanValue;
             return uno::makeAny( rtl::OUString::valueOf( (sal_Bool) bBooleanValue ) );
         }
@@ -385,9 +381,9 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
         {
             rtl::OUString aName;
             sal_Int16 nHeight;
-
-            splitFontName (pGconfValue, aName, nHeight);
-            if (rValue.nSettingId == SETTING_SOURCEVIEWFONT_NAME)
+                   
+            splitFontName (aGconfValue, aName, nHeight);
+            if (aValue.nSettingId == SETTING_SOURCEVIEWFONT_NAME)
                 return uno::makeAny( aName );
             else
                 return uno::makeAny( nHeight );
@@ -404,18 +400,18 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
 
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const ConfigurationValue &rValue )
+sal_Bool SAL_CALL isDependencySatisfied( GConfClient* aClient, const ConfigurationValue aValue )
 {
-    switch( rValue.nDependsOn )
+    switch( aValue.nDependsOn )
     {
         case SETTING_PROXY_MODE:
         {
-            GConfValue* pGconfValue = gconf_client_get( pClient, GCONF_PROXY_MODE_KEY, NULL );
+            GConfValue* aGconfValue = gconf_client_get( aClient, GCONF_PROXY_MODE_KEY, NULL );
 
-            if ( pGconfValue != NULL )
+            if ( aGconfValue != NULL ) 
             {
-                bool bOk = g_strcasecmp( "manual", gconf_value_get_string( pGconfValue ) ) == 0;
-                gconf_value_free( pGconfValue );
+                bool bOk = g_strcasecmp( "manual", gconf_value_get_string( aGconfValue ) ) == 0;
+                gconf_value_free( aGconfValue );
                 if (bOk) return sal_True;
             }
         }
@@ -435,7 +431,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
         {
             rtl::OUString aCompleteName( rtl::OStringToOUString(
                 g_get_real_name(), osl_getThreadTextEncoding() ) );
-            if( !aCompleteName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Unknown")) )
+            if( !aCompleteName.equalsAscii( "Unknown" ) )
                 return sal_True;
         }
             break;
@@ -444,9 +440,9 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
         {
             rtl::OUString aCompleteName( rtl::OStringToOUString(
                 g_get_real_name(), osl_getThreadTextEncoding() ) );
-            if( !aCompleteName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Unknown")) )
+            if( !aCompleteName.equalsAscii( "Unknown" ) )
             {
-                if( aCompleteName.trim().indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")), 0) != -1 )
+                if( aCompleteName.trim().indexOf(rtl::OUString::createFromAscii(" "), 0) != -1 )
                     return sal_True;
             }
         }
@@ -455,12 +451,12 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
 #ifdef ENABLE_LOCKDOWN
         case SETTING_AUTO_SAVE:
         {
-            GConfValue* pGconfValue = gconf_client_get( pClient, GCONF_AUTO_SAVE_KEY, NULL );
+            GConfValue* aGconfValue = gconf_client_get( aClient, GCONF_AUTO_SAVE_KEY, NULL );
 
-            if( ( pGconfValue != NULL ) )
+            if( ( aGconfValue != NULL ) )
             {
-                bool bOk = gconf_value_get_bool( pGconfValue );
-                gconf_value_free( pGconfValue );
+                bool bOk = gconf_value_get_bool( aGconfValue );
+                gconf_value_free( aGconfValue );
                 if (bOk) return sal_True;
             }
         }
@@ -482,7 +478,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_ENABLE_ACCESSIBILITY,
         "/desktop/gnome/interface/accessibility",
-        RTL_CONSTASCII_STRINGPARAM("EnableATToolSupport"),
+        "EnableATToolSupport",
         sal_True,
         SETTINGS_LAST
     },
@@ -490,7 +486,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_PROXY_MODE,
         GCONF_PROXY_MODE_KEY,
-        RTL_CONSTASCII_STRINGPARAM("ooInetProxyType"),
+        "ooInetProxyType",
         sal_True,
         SETTINGS_LAST
     },
@@ -498,7 +494,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_PROXY_HTTP_HOST,
         "/system/http_proxy/host",
-        RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyName"),
+        "ooInetHTTPProxyName",
         sal_False,
         SETTING_PROXY_MODE
     },
@@ -506,7 +502,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_PROXY_HTTP_PORT,
         "/system/http_proxy/port",
-        RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyPort"),
+        "ooInetHTTPProxyPort",
         sal_False,
         SETTING_PROXY_MODE
     },
@@ -514,7 +510,7 @@ ConfigurationValue const ConfigurationValues[] =
      {
         SETTING_PROXY_HTTPS_HOST,
         "/system/proxy/secure_host",
-        RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyName"),
+        "ooInetHTTPSProxyName",
         sal_False,
         SETTING_PROXY_MODE
     },
@@ -522,7 +518,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_PROXY_HTTPS_PORT,
         "/system/proxy/secure_port",
-        RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyPort"),
+        "ooInetHTTPSProxyPort",
         sal_False,
         SETTING_PROXY_MODE
     },
@@ -530,7 +526,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_PROXY_FTP_HOST,
         "/system/proxy/ftp_host",
-        RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName"),
+        "ooInetFTPProxyName",
         sal_False,
         SETTING_PROXY_MODE
     },
@@ -538,15 +534,15 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_PROXY_FTP_PORT,
         "/system/proxy/ftp_port",
-        RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyPort"),
+        "ooInetFTPProxyPort",
         sal_False,
         SETTING_PROXY_MODE
     },
-
+    
     {
         SETTING_NO_PROXY_FOR,
         "/system/http_proxy/ignore_hosts",
-        RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy"),
+        "ooInetNoProxy",
         sal_True,
         SETTING_PROXY_MODE
     },
@@ -554,21 +550,21 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_MAILER_PROGRAM,
         "/desktop/gnome/url-handlers/mailto/command",
-        RTL_CONSTASCII_STRINGPARAM("ExternalMailer"),
+        "ExternalMailer",
         sal_True,
         SETTINGS_LAST
     },
     {
         SETTING_SOURCEVIEWFONT_NAME,
         "/desktop/gnome/interface/monospace_font_name",
-        RTL_CONSTASCII_STRINGPARAM("SourceViewFontName"),
+        "SourceViewFontName",
         sal_True,
         SETTINGS_LAST
     },
     {
         SETTING_SOURCEVIEWFONT_HEIGHT,
         "/desktop/gnome/interface/monospace_font_name",
-        RTL_CONSTASCII_STRINGPARAM("SourceViewFontHeight"),
+        "SourceViewFontHeight",
         sal_True,
         SETTINGS_LAST
     },
@@ -576,7 +572,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_WORK_DIRECTORY,
         "/desktop/gnome/url-handlers/mailto/command", // dummy
-        RTL_CONSTASCII_STRINGPARAM("WorkPathVariable"),
+        "WorkPathVariable",
         sal_True,
         SETTING_WORK_DIRECTORY, // so that the existence of the dir can be checked
     },
@@ -585,7 +581,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_WRITER_DEFAULT_DOC_FORMAT,
         "/apps/openoffice/writer_default_document_format",
-        RTL_CONSTASCII_STRINGPARAM("TextDocumentSetupFactoryDefaultFilter"),
+        "TextDocumentSetupFactoryDefaultFilter",
         sal_False,
         SETTINGS_LAST
     },
@@ -593,7 +589,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_IMPRESS_DEFAULT_DOC_FORMAT,
         "/apps/openoffice/impress_default_document_format",
-        RTL_CONSTASCII_STRINGPARAM("PresentationDocumentSetupFactoryDefaultFilter"),
+        "PresentationDocumentSetupFactoryDefaultFilter",
         sal_False,
         SETTINGS_LAST
     },
@@ -601,7 +597,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_CALC_DEFAULT_DOC_FORMAT,
         "/apps/openoffice/calc_default_document_format",
-        RTL_CONSTASCII_STRINGPARAM("SpreadsheetDocumentSetupFactoryDefaultFilter"),
+        "SpreadsheetDocumentSetupFactoryDefaultFilter",
         sal_False,
         SETTINGS_LAST
     },
@@ -609,7 +605,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_AUTO_SAVE,
         GCONF_AUTO_SAVE_KEY,
-        RTL_CONSTASCII_STRINGPARAM("AutoSaveEnabled"),
+        "AutoSaveEnabled",
         sal_False,
         SETTINGS_LAST
     },
@@ -617,7 +613,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_AUTO_SAVE_INTERVAL,
         "/apps/openoffice/auto_save_interval",
-        RTL_CONSTASCII_STRINGPARAM("AutoSaveTimeIntervall"),
+        "AutoSaveTimeIntervall",
         sal_False,
         SETTING_AUTO_SAVE
     },
@@ -625,7 +621,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_USER_GIVENNAME,
         "/desktop/gnome/url-handlers/mailto/command", // dummy
-        RTL_CONSTASCII_STRINGPARAM("givenname"),
+        "givenname",
         sal_True,
         SETTING_USER_GIVENNAME
     },
@@ -633,7 +629,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_USER_SURNAME,
         "/desktop/gnome/url-handlers/mailto/command", // dummy
-        RTL_CONSTASCII_STRINGPARAM("sn"),
+        "sn",
         sal_True,
         SETTING_USER_SURNAME
     },
@@ -641,7 +637,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_DISABLE_PRINTING,
         "/desktop/gnome/lockdown/disable_printing",
-        RTL_CONSTASCII_STRINGPARAM("DisablePrinting"),
+        "DisablePrinting",
         sal_True,
         SETTINGS_LAST
     },
@@ -649,7 +645,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_USE_SYSTEM_FILE_DIALOG,
         "/apps/openoffice/use_system_file_dialog",
-        RTL_CONSTASCII_STRINGPARAM("UseSystemFileDialog"),
+        "UseSystemFileDialog",
         sal_False,
         SETTINGS_LAST
     },
@@ -657,7 +653,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_PRINTING_MODIFIES_DOCUMENT,
         "/apps/openoffice/printing_modifies_doc",
-        RTL_CONSTASCII_STRINGPARAM("PrintingModifiesDocument"),
+        "PrintingModifiesDocument",
         sal_False,
         SETTINGS_LAST
     },
@@ -665,7 +661,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_SHOW_ICONS_IN_MENUS,
         "/apps/openoffice/show_menu_icons",
-        RTL_CONSTASCII_STRINGPARAM("ShowIconsInMenues"),
+        "ShowIconsInMenues",
         sal_False,
         SETTINGS_LAST
     },
@@ -673,7 +669,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_SHOW_INACTIVE_MENUITEMS,
         "/apps/openoffice/show_menu_inactive_items",
-        RTL_CONSTASCII_STRINGPARAM("DontHideDisabledEntry"),
+        "DontHideDisabledEntry",
         sal_False,
         SETTINGS_LAST
     },
@@ -681,7 +677,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_SHOW_FONT_PREVIEW,
         "/apps/openoffice/show_font_preview",
-        RTL_CONSTASCII_STRINGPARAM("ShowFontBoxWYSIWYG"),
+        "ShowFontBoxWYSIWYG",
         sal_False,
         SETTINGS_LAST
     },
@@ -689,7 +685,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_SHOW_FONT_HISTORY,
         "/apps/openoffice/show_font_history",
-        RTL_CONSTASCII_STRINGPARAM("FontViewHistory"),
+        "FontViewHistory",
         sal_False,
         SETTINGS_LAST
     },
@@ -697,7 +693,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_ENABLE_OPENGL,
         "/apps/openoffice/use_opengl",
-        RTL_CONSTASCII_STRINGPARAM("OpenGL"),
+        "OpenGL",
         sal_False,
         SETTINGS_LAST
     },
@@ -705,7 +701,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_OPTIMIZE_OPENGL,
         "/apps/openoffice/optimize_opengl",
-        RTL_CONSTASCII_STRINGPARAM("OpenGL_Faster"),
+        "OpenGL_Faster",
         sal_False,
         SETTINGS_LAST
     },
@@ -713,7 +709,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_USE_SYSTEM_FONT,
         "/apps/openoffice/use_system_font",
-        RTL_CONSTASCII_STRINGPARAM("AccessibilityIsSystemFont"),
+        "AccessibilityIsSystemFont",
         sal_False,
         SETTINGS_LAST
     },
@@ -721,7 +717,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_USE_FONT_ANTI_ALIASING,
         "/apps/openoffice/use_font_anti_aliasing",
-        RTL_CONSTASCII_STRINGPARAM("FontAntiAliasingEnabled"),
+        "FontAntiAliasingEnabled",
         sal_False,
         SETTINGS_LAST
     },
@@ -729,7 +725,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_FONT_ANTI_ALIASING_MIN_PIXEL,
         "/apps/openoffice/font_anti_aliasing_min_pixel",
-        RTL_CONSTASCII_STRINGPARAM("FontAntiAliasingMinPixelHeight"),
+        "FontAntiAliasingMinPixelHeight",
         sal_True,
         SETTINGS_LAST
     },
@@ -737,7 +733,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_WARN_CREATE_PDF,
         "/apps/openoffice/lockdown/warn_info_create_pdf",
-        RTL_CONSTASCII_STRINGPARAM("WarnCreatePDF"),
+        "WarnCreatePDF",
         sal_False,
         SETTINGS_LAST
     },
@@ -745,7 +741,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_WARN_PRINT_DOC,
         "/apps/openoffice/lockdown/warn_info_printing",
-        RTL_CONSTASCII_STRINGPARAM("WarnPrintDoc"),
+        "WarnPrintDoc",
         sal_False,
         SETTINGS_LAST
     },
@@ -753,7 +749,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_WARN_SAVEORSEND_DOC,
         "/apps/openoffice/lockdown/warn_info_saving",
-        RTL_CONSTASCII_STRINGPARAM("WarnSaveOrSendDoc"),
+        "WarnSaveOrSendDoc",
         sal_False,
         SETTINGS_LAST
     },
@@ -761,7 +757,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_WARN_SIGN_DOC,
         "/apps/openoffice/lockdown/warn_info_signing",
-        RTL_CONSTASCII_STRINGPARAM("WarnSignDoc"),
+        "WarnSignDoc",
         sal_False,
         SETTINGS_LAST
     },
@@ -769,7 +765,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_REMOVE_PERSONAL_INFO,
         "/apps/openoffice/lockdown/remove_personal_info_on_save",
-        RTL_CONSTASCII_STRINGPARAM("RemovePersonalInfoOnSaving"),
+        "RemovePersonalInfoOnSaving",
         sal_False,
         SETTINGS_LAST
     },
@@ -777,7 +773,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_RECOMMEND_PASSWORD,
         "/apps/openoffice/lockdown/recommend_password_on_save",
-        RTL_CONSTASCII_STRINGPARAM("RecommendPasswordProtection"),
+        "RecommendPasswordProtection",
         sal_False,
         SETTINGS_LAST
     },
@@ -785,7 +781,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_UNDO_STEPS,
         "/apps/openoffice/undo_steps",
-        RTL_CONSTASCII_STRINGPARAM("UndoSteps"),
+        "UndoSteps",
         sal_False,
         SETTINGS_LAST
     },
@@ -793,7 +789,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_SYMBOL_SET,
         "/apps/openoffice/icon_size",
-        RTL_CONSTASCII_STRINGPARAM("SymbolSet"),
+        "SymbolSet",
         sal_True,
         SETTINGS_LAST
     },
@@ -801,7 +797,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_MACRO_SECURITY_LEVEL,
         "/apps/openoffice/lockdown/macro_security_level",
-        RTL_CONSTASCII_STRINGPARAM("MacroSecurityLevel"),
+        "MacroSecurityLevel",
         sal_False,
         SETTINGS_LAST
     },
@@ -809,7 +805,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_CREATE_BACKUP,
         "/apps/openoffice/create_backup",
-        RTL_CONSTASCII_STRINGPARAM("CreateBackup"),
+        "CreateBackup",
         sal_False,
         SETTINGS_LAST
     },
@@ -817,7 +813,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_WARN_ALIEN_FORMAT,
         "/apps/openoffice/warn_alien_format",
-        RTL_CONSTASCII_STRINGPARAM("WarnAlienFormat"),
+        "WarnAlienFormat",
         sal_False,
         SETTINGS_LAST
     },
@@ -829,21 +825,21 @@ std::size_t const nConfigurationValues = SAL_N_ELEMENTS(ConfigurationValues);
 
 css::beans::Optional< css::uno::Any > getValue(ConfigurationValue const & data)
 {
-    GConfClient* pClient = getGconfClient();
-    GConfValue* pGconfValue;
-    if( ( data.nDependsOn == SETTINGS_LAST ) || isDependencySatisfied( pClient, data ) )
+    GConfClient* aClient = getGconfClient();
+    GConfValue* aGconfValue;
+    if( ( data.nDependsOn == SETTINGS_LAST ) || isDependencySatisfied( aClient, data ) )
     {
-        pGconfValue = gconf_client_get( pClient, data.GconfItem, NULL );
+        aGconfValue = gconf_client_get( aClient, data.GconfItem, NULL );
 
-        if( pGconfValue != NULL )
+        if( aGconfValue != NULL )
         {
             css::uno::Any value;
             if( data.bNeedsTranslation )
-                value = translateToOOo( data, pGconfValue );
+                value = translateToOOo( data, aGconfValue );
             else
-                value = makeAnyOfGconfValue( pGconfValue );
+                value = makeAnyOfGconfValue( aGconfValue );
 
-            gconf_value_free( pGconfValue );
+            gconf_value_free( aGconfValue );
 
             return css::beans::Optional< css::uno::Any >(true, value);
         }

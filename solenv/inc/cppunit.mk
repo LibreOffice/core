@@ -44,7 +44,7 @@
 # unroll begin
 # ---- create the test libraries ------------------------------------
 
-.IF "$(SHL$(TNR)TARGETN)"!=""
+.IF "$(SHL$(TNR)TARGET)"!=""
 ALLTAR : test$(TNR)
 test$(TNR) .PHONY : $(SHL$(TNR)TARGETN)
         @echo ----------------------------------------------------------

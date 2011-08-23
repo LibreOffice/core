@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,11 +57,11 @@ using namespace ::com::sun::star;
 //////////////////////////////////////////////////////////////////////////////
 
 SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
-    sal_uInt16 nPrfx, const OUString& rLocalName,
+    USHORT nPrfx, const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
-,   mbHadSMILNodes( false )
+    uno::Reference< drawing::XShapes >& rShapes) 
+:	SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+,	mbHadSMILNodes( false )
 {
     bool bHaveXmlId( false );
     OUString sXmlId;
@@ -72,7 +72,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     {
         OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        sal_uInt16 nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         OUString sValue = xAttrList->getValueByIndex( i );
         const SvXMLTokenMap& rAttrTokenMap = GetSdImport().GetDrawPageAttrTokenMap();
 
@@ -167,8 +167,8 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 
         if(xDrawPage.is() && xMasterPages.is())
         {
-            sal_Bool bDone(sal_False);
-            OUString sDisplayName( rImport.GetStyleDisplayName(
+            sal_Bool bDone(FALSE);
+            OUString sDisplayName( rImport.GetStyleDisplayName( 
                             XML_STYLE_FAMILY_MASTER_PAGE, maMasterPageName ) );
 
             for(sal_Int32 a = 0; !bDone && a < xMasterPages->getCount(); a++)
@@ -183,11 +183,11 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                     {
                         OUString sMasterPageName = xMasterNamed->getName();
 
-                        if(sMasterPageName.getLength() &&
+                        if(sMasterPageName.getLength() && 
                             sMasterPageName.equals(sDisplayName))
                         {
                             xDrawPage->setMasterPage(xMasterPage);
-                            bDone = sal_True;
+                            bDone = TRUE;
                         }
                     }
                 }
@@ -232,7 +232,7 @@ SdXMLDrawPageContext::~SdXMLDrawPageContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( USHORT nPrefix,
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -305,8 +305,8 @@ void SdXMLDrawPageContext::EndElement()
 //////////////////////////////////////////////////////////////////////////////
 
 SdXMLBodyContext::SdXMLBodyContext( SdXMLImport& rImport,
-    sal_uInt16 nPrfx, const OUString& rLocalName )
-:   SvXMLImportContext( rImport, nPrfx, rLocalName )
+    USHORT nPrfx, const OUString& rLocalName ) 
+:	SvXMLImportContext( rImport, nPrfx, rLocalName )
 {
 }
 
@@ -318,8 +318,8 @@ SdXMLBodyContext::~SdXMLBodyContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
-    sal_uInt16 nPrefix,
+SvXMLImportContext *SdXMLBodyContext::CreateChildContext( 
+    USHORT nPrefix, 
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
@@ -368,7 +368,7 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
                     if(xNewShapes.is())
                     {
                         // draw:page inside office:body context
-                        pContext = new SdXMLDrawPageContext(GetSdImport(), nPrefix, rLocalName, xAttrList,
+                        pContext = new SdXMLDrawPageContext(GetSdImport(), nPrefix, rLocalName, xAttrList, 
                             xNewShapes);
                     }
                 }

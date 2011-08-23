@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import java.awt.Color;
@@ -112,7 +112,7 @@ class TextualDisplay
     private void showContextInfo (XAccessibleContext xContext, String sIndentation)
     {
         // Show the description.
-        msTextContent += sIndentation + "Description: "
+        msTextContent += sIndentation + "Description: " 
             + xContext.getAccessibleDescription() + "\n";
 
         showStates (xContext, sIndentation);
@@ -120,7 +120,7 @@ class TextualDisplay
 
 
 
-
+        
     /** Show a list of all of the the given object's states.  Use the
         NameConverter class to transform the numerical state ids into human
         readable names.
@@ -147,7 +147,7 @@ class TextualDisplay
 
 
 
-
+    
     /** When the given object supports the XAccessibleComponent interface then
         show its size and location on the screen.
     */
@@ -155,17 +155,17 @@ class TextualDisplay
     {
         // Try to cast the given accessible context to the
         // XAccessibleComponent interface.
-        XAccessibleComponent xComponent =
+        XAccessibleComponent xComponent = 
             (XAccessibleComponent)UnoRuntime.queryInterface(
                 XAccessibleComponent.class, xContext);
         if (xComponent != null)
         {
             Point aLocation = xComponent.getLocationOnScreen();
-            msTextContent += sIndentation + "Position   : "
+            msTextContent += sIndentation + "Position   : " 
                 + aLocation.X + ", " + aLocation.Y + "\n";
-
+                
             Size aSize = xComponent.getSize();
-            msTextContent += sIndentation + "Size       : "
+            msTextContent += sIndentation + "Size       : " 
                 + aSize.Width + ", " + aSize.Height + "\n";
         }
     }
@@ -208,7 +208,7 @@ class TextualDisplay
             XAccessibleContext xParentContext = (XAccessibleContext)aPathToRoot.get(i);
             String sParentName = xParentContext.getAccessibleName();
             if (sParentName.length() == 0)
-                sParentName = "<unnamed> / Role "
+                sParentName = "<unnamed> / Role " 
                     + NameProvider.getRoleName(xParentContext.getAccessibleRole());
             msTextContent += sIndentation + sParentName + "\n";
             sIndentation += msIndentation;

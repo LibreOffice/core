@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,9 @@
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
 
-//  ----------------------------------------------------
-//  class UnoPropertyArrayHelper
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoPropertyArrayHelper
+//	----------------------------------------------------
 
 UnoPropertyArrayHelper::UnoPropertyArrayHelper( const ::com::sun::star::uno::Sequence<sal_Int32>& rIDs )
 {
@@ -47,7 +47,7 @@ UnoPropertyArrayHelper::UnoPropertyArrayHelper( const ::com::sun::star::uno::Seq
 UnoPropertyArrayHelper::UnoPropertyArrayHelper( const std::list< sal_uInt16 > &rIDs )
 {
     std::list< sal_uInt16 >::const_iterator iter;
-    for( iter = rIDs.begin(); iter != rIDs.end(); ++iter)
+    for( iter = rIDs.begin(); iter != rIDs.end(); iter++)
       maIDs.Insert( *iter, (void*)1L);
 }
 
@@ -55,7 +55,7 @@ sal_Bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
 {
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
         nPropId = BASEPROPERTY_FONTDESCRIPTOR;
-
+    
     return maIDs.Get( nPropId ) ? sal_True : sal_False;
 }
 
@@ -64,11 +64,11 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( ::rtl::OUString * 
 {
     sal_uInt16 id = sal::static_int_cast< sal_uInt16 >(nPropId);
     sal_Bool bValid = ImplHasProperty( id );
-    if ( bValid )
+    if ( bValid ) 
     {
-        if ( pPropName )
+        if ( pPropName ) 
             *pPropName = GetPropertyName( id );
-        if ( pAttributes )
+        if ( pAttributes ) 
             *pAttributes = GetPropertyAttribs( id );
     }
     return bValid;
@@ -77,36 +77,36 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( ::rtl::OUString * 
 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > UnoPropertyArrayHelper::getProperties()
 {
     // Sortiert nach Namen...
-
+    
     Table aSortedPropsIds;
     sal_uInt32 nProps = maIDs.Count();
     for ( sal_uInt32 s = 0; s < nProps; s++ )
     {
         sal_uInt16 nId = sal::static_int_cast< sal_uInt16 >(
             maIDs.GetObjectKey( s ));
-        aSortedPropsIds.Insert( 1+GetPropertyOrderNr( nId ), (void*)(sal_uIntPtr)nId );
+        aSortedPropsIds.Insert( 1+GetPropertyOrderNr( nId ), (void*)(sal_uInt32)nId );
 
         if ( nId == BASEPROPERTY_FONTDESCRIPTOR )
         {
             // Einzelproperties...
             for ( sal_uInt16 i = BASEPROPERTY_FONTDESCRIPTORPART_START; i <= BASEPROPERTY_FONTDESCRIPTORPART_END; i++ )
-                aSortedPropsIds.Insert( 1+GetPropertyOrderNr( i ), (void*)(sal_uIntPtr)i );
+                aSortedPropsIds.Insert( 1+GetPropertyOrderNr( i ), (void*)(sal_uInt32)i );
         }
     }
 
-    nProps = aSortedPropsIds.Count();   // koennen jetzt mehr sein
+    nProps = aSortedPropsIds.Count();	// koennen jetzt mehr sein
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aProps( nProps );
     ::com::sun::star::beans::Property* pProps = aProps.getArray();
-
-    for ( sal_uInt32 n = 0; n < nProps; n++ )
+    
+    for ( sal_uInt32 n = 0; n < nProps; n++ ) 
     {
-        sal_uInt16 nId = (sal_uInt16)(sal_uLong)aSortedPropsIds.GetObject( n );
+        sal_uInt16 nId = (sal_uInt16)(sal_uIntPtr)aSortedPropsIds.GetObject( n );
         pProps[n].Name = GetPropertyName( nId );
         pProps[n].Handle = nId;
         pProps[n].Type = *GetPropertyType( nId );
         pProps[n].Attributes = GetPropertyAttribs( nId );
     }
-
+    
     return aProps;
 }
 
@@ -142,10 +142,10 @@ sal_Int32 UnoPropertyArrayHelper::fillHandles( sal_Int32* pHandles, const ::com:
     sal_Int32 nValues = rPropNames.getLength();
     sal_Int32 nValidHandles = 0;
 
-    for ( sal_Int32 n = 0; n < nValues; n++ )
+    for ( sal_Int32 n = 0; n < nValues; n++ ) 
     {
         sal_uInt16 nPropId = GetPropertyId( pNames[n] );
-        if ( nPropId && ImplHasProperty( nPropId ) )
+        if ( nPropId && ImplHasProperty( nPropId ) ) 
         {
             pHandles[n] = nPropId;
             nValidHandles++;

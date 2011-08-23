@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,28 +25,22 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SWUNDO_HXX
-#define SWUNDO_HXX
+#ifndef _SWUNDO_HXX
+#define _SWUNDO_HXX
 
-#include <vector>
-
-#include <rtl/ustring.hxx>
-
-
-typedef ::std::vector< ::rtl::OUString > SwUndoComments_t;
-
+#include <svl/svarray.hxx>
 
 // die Ids fuer StdAktionen
 enum SwUndoId
 {
     UNDO_EMPTY = 0,
     UNDO_STD_BEGIN = 1,
-    UNDO_START = UNDO_STD_BEGIN,            //  1
+    UNDO_START = UNDO_STD_BEGIN,    		//  1
     UNDO_END,                               //  2
-        REPEAT_START,               // alle UndoIds zwischen REPEAT_START und
+        REPEAT_START,				// alle UndoIds zwischen REPEAT_START und
                                     // REPEAT_END sind Repeat-Faehig !!
-    UNDO_DELETE = REPEAT_START,             //  3
-    UNDO_INSERT,                            //  4
+    UNDO_DELETE = REPEAT_START,            	//  3
+    UNDO_INSERT,							//  4
     UNDO_OVERWRITE,                         //  5
     UNDO_SPLITNODE,                         //  6
     UNDO_INSATTR,                           //  7
@@ -79,12 +73,14 @@ enum SwUndoId
     UNDO_REJECT_REDLINE,                    // 34
     UNDO_SPLIT_TABLE,                       // 35
     UNDO_DONTEXPAND,                        // 36
-    UNDO_AUTOCORRECT,                       // 37
-    UNDO_MERGE_TABLE,                       // 38
+    UNDO_AUTOCORRECT,                    	// 37
+    UNDO_MERGE_TABLE,                    	// 38
     UNDO_TRANSLITERATE,                     // 39
 
-    UNDO_PASTE_CLIPBOARD,                   // 40
+    // -> #111827#
+    UNDO_PASTE_CLIPBOARD,                           // 40
     UNDO_TYPING,                           // 41
+    // <- #111827#
     UNDO_REPEAT_DUMMY_6,                    // 42
     UNDO_REPEAT_DUMMY_7,                    // 43
     UNDO_REPEAT_DUMMY_8,                    // 44
@@ -130,15 +126,15 @@ enum SwUndoId
     UNDO_ENDNOTEINFO,                       // 82
     UNDO_COMPAREDOC,                        // 83
     UNDO_SETFLYFRMFMT,                      // 84
-    UNDO_SETRUBYATTR,                       // 85
+    UNDO_SETRUBYATTR,						// 85
 
-    UNDO_TMPAUTOCORR,                       // 86
+    UNDO_TMPAUTOCORR,                       // 86 #102505#
     UNDO_TOXCHANGE,                         // 87
     UNDO_CREATE_PAGEDESC,                           // 88
     UNDO_CHANGE_PAGEDESC,                           // 89
     UNDO_DELETE_PAGEDESC,                           // 90
     UNDO_HEADER_FOOTER,                           // 91 #i7983#
-    UNDO_FIELD,                             // 92
+    UNDO_FIELD,                             // 92 #111840#
     UNDO_TXTFMTCOL_CREATE,                   // 93
     UNDO_TXTFMTCOL_DELETE,                   // 94
     UNDO_TXTFMTCOL_RENAME, // 95
@@ -158,7 +154,7 @@ enum SwUndoId
     UNDO_ROW_DELETE, // 109
     UNDO_RENAME_PAGEDESC, // 110
     UNDO_NUMDOWN, // 111
-    // --> #i73249#
+    // --> OD 2009-07-16 #i73249#
     UNDO_FLYFRMFMT_TITLE,           // 112
     UNDO_FLYFRMFMT_DESCRIPTION,     // 113
     // <--
@@ -181,6 +177,26 @@ enum SwUndoId
     UNDO_UI_REPLACE_STYLE
 };
 
+
+#define INIT_UNDOIDS 20
+#define GROW_UNDOIDS 32
+// Das Array der verwendeten Undo-Ids
+class String;
+class SwUndoIdAndName
+{
+    SwUndoId eUndoId;
+    String* pUndoStr;
+
+public:
+    SwUndoIdAndName() : eUndoId( UNDO_EMPTY ), pUndoStr( 0 ) {}
+    SwUndoIdAndName( SwUndoId nId, const String* pStr = 0 );
+    ~SwUndoIdAndName();
+
+    SwUndoId GetUndoId() const          { return eUndoId; }
+    const String* GetUndoStr() const	{ return pUndoStr; }
+};
+typedef SwUndoIdAndName* SwUndoIdAndNamePtr;
+SV_DECL_PTRARR_DEL( SwUndoIds, SwUndoIdAndNamePtr, INIT_UNDOIDS, GROW_UNDOIDS )
 
 #endif
 

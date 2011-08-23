@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,11 @@
 #include "precompiled_sfx2.hxx"
 
 #ifdef SOLARIS
+// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
 #include <ctime>
 #endif
 
-#include <string>
+#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -107,6 +108,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
         SfxPoolItem *pItem=NULL;
         sal_uInt16 nId = pCache->GetId();
         SfxItemState eState = SFX_ITEM_DISABLED;
+        // pCache->Invalidate( sal_False );
         if ( !aStatus.IsEnabled )
         {
             // default
@@ -116,7 +118,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
             eState = SFX_ITEM_AVAILABLE;
             ::com::sun::star::uno::Any aAny = aStatus.State;
 
-            ::com::sun::star::uno::Type pType = aAny.getValueType();
+            ::com::sun::star::uno::Type pType =	aAny.getValueType();
             if ( pType == ::getBooleanCppuType() )
             {
                 sal_Bool bTemp = false;
@@ -200,7 +202,10 @@ void BindDispatch_Impl::Dispatch( uno::Sequence < beans::PropertyValue > aProps,
 }
 
 //--------------------------------------------------------------------
-// This constructor for an invalid cache that is updated in the first request.
+
+/*	Dieser Konstruktor fuer einen ungueltigen Cache, der sich also
+    bei der ersten Anfrage zun"achst updated.
+ */
 
 SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
     pDispatch( 0 ),
@@ -212,20 +217,23 @@ SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
     bItemVisible( sal_True )
 {
     DBG_MEMTEST();
-    DBG_CTOR(SfxStateCache, 0);
+    DBG_CTOR(SfxStateCache,	0);
     bCtrlDirty = sal_True;
     bSlotDirty = sal_True;
     bItemDirty = sal_True;
 }
 
 //--------------------------------------------------------------------
-// The Destructor checks by assertion, even if controllers are registered.
+
+/*	Der Destruktor pr"uft per Assertion, ob noch Controller angemeldet
+    sind.
+ */
 
 SfxStateCache::~SfxStateCache()
 {
     DBG_MEMTEST();
-    DBG_DTOR(SfxStateCache, 0);
-    DBG_ASSERT( pController == 0 && pInternalController == 0, "there are still Controllers registered" );
+    DBG_DTOR(SfxStateCache,	0);
+    DBG_ASSERT( pController == 0 && pInternalController == 0, "es sind noch Controller angemeldet" );
     if ( !IsInvalidItem(pLastItem) )
         delete pLastItem;
     if ( pDispatch )
@@ -253,6 +261,7 @@ void SfxStateCache::Invalidate( sal_Bool bWithMsg )
 }
 
 //--------------------------------------------------------------------
+
 // gets the corresponding function from the dispatcher or the cache
 
 const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & xProv )
@@ -349,32 +358,37 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
 
 //--------------------------------------------------------------------
 
-// Set Status in all Controllers
+// Status setzen in allen Controllern
 
 void SfxStateCache::SetState
 (
-    SfxItemState        eState,  // <SfxItemState> from 'pState'
-    const SfxPoolItem*  pState,  // Slot Status, 0 or -1
-    sal_Bool bMaybeDirty
+    SfxItemState		eState, 	// <SfxItemState> von 'pState'
+    const SfxPoolItem*	pState,		// Status des Slots, ggf. 0 oder -1
+    BOOL bMaybeDirty
 )
 
-/*  [Description]
+/*	[Beschreibung]
 
-    This method distributes the status of all of this SID bound
-    <SfxControllerItem>s. If the value is the same as before, and if neither
-    controller was registered nor invalidated inbetween, then no value is
-    passed. This way the flickering is for example avoided in ListBoxes.
+    Diese Methode verteilt die Status auf alle an dieser SID gebundenen
+    <SfxControllerItem>s. Ist der Wert derselbe wie zuvor und wurde in-
+    zwischen weder ein Controller angemeldet, noch ein Controller invalidiert,
+    dann wird kein Wert weitergeleitet. Dadurch wird z.B. Flackern in
+    ListBoxen vermieden.
 */
+
 {
+//    if ( pDispatch )
+//        return;
     SetState_Impl( eState, pState, bMaybeDirty );
 }
 
 //--------------------------------------------------------------------
 
-void SfxStateCache::SetVisibleState( sal_Bool bShow )
+void SfxStateCache::SetVisibleState( BOOL bShow )
 {
-    SfxItemState        eState( SFX_ITEM_AVAILABLE );
-    const SfxPoolItem*  pState( NULL );
+    SfxItemState		eState( SFX_ITEM_AVAILABLE );
+    const SfxPoolItem*	pState( NULL );
+    sal_Bool            bNotify( sal_False );
     sal_Bool            bDeleteItem( sal_False );
 
     if ( bShow != bItemVisible )
@@ -391,14 +405,15 @@ void SfxStateCache::SetVisibleState( sal_Bool bShow )
                 pState = pLastItem;
 
             eState = eLastState;
+            bNotify = ( pState != 0 );
         }
         else
         {
-            pState = new SfxVisibilityItem( nId, sal_False );
+            pState = new SfxVisibilityItem( nId, FALSE );
             bDeleteItem = sal_True;
         }
 
-        // Update Controller
+        // Controller updaten
         if ( !pDispatch && pController )
         {
             for ( SfxControllerItem *pCtrl = pController;
@@ -419,25 +434,27 @@ void SfxStateCache::SetVisibleState( sal_Bool bShow )
 
 void SfxStateCache::SetState_Impl
 (
-    SfxItemState        eState,  // <SfxItemState> from 'pState'
-    const SfxPoolItem*  pState,  // Slot Status, 0 or -1
-    sal_Bool bMaybeDirty
+    SfxItemState		eState, 	// <SfxItemState> von 'pState'
+    const SfxPoolItem*	pState,		// Status des Slots, ggf. 0 oder -1
+    BOOL bMaybeDirty
 )
 {
     (void)bMaybeDirty; //unused
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxStateCache, 0);
 
-    // If a hard update occurs between enter- and leave-registrations is a
-    // can also intermediate Cached exist without controller.
+    // wenn zwischen Enter- und LeaveRegistrations ein hartes Update kommt
+    // k"onnen zwischenzeitlich auch Cached ohne Controller exisitieren
     if ( !pController && !pInternalController )
         return;
 
     DBG_ASSERT( bMaybeDirty || !bSlotDirty, "setting state of dirty message" );
+//	DBG_ASSERT( bCtrlDirty || ( aSlotServ.GetSlot() && aSlotServ.GetSlot()->IsMode(SFX_SLOT_VOLATILE) ), ! Discussed with MBA
+//				"setting state of non dirty controller" );
     DBG_ASSERT( SfxControllerItem::GetItemState(pState) == eState, "invalid SfxItemState" );
     DBG_PROFSTART(SfxStateCacheSetState);
 
-    // does the controller have to be notified at all?
+    // m"ussen die Controller "uberhaupt benachrichtigt werden?
     bool bNotify = bItemDirty;
     if ( !bItemDirty )
     {
@@ -453,7 +470,7 @@ void SfxStateCache::SetState_Impl
 
     if ( bNotify )
     {
-        // Update Controller
+        // Controller updaten
         if ( !pDispatch && pController )
         {
             for ( SfxControllerItem *pCtrl = pController;
@@ -465,7 +482,7 @@ void SfxStateCache::SetState_Impl
         if ( pInternalController )
             ((SfxDispatchController_Impl *)pInternalController)->StateChanged( nId, eState, pState, &aSlotServ );
 
-        // Remember new value
+        // neuen Wert merken
         if ( !IsInvalidItem(pLastItem) )
             DELETEZ(pLastItem);
         if ( pState && !IsInvalidItem(pState) )
@@ -482,21 +499,22 @@ void SfxStateCache::SetState_Impl
 
 
 //--------------------------------------------------------------------
-// Set old status again in all the controllers
 
-void SfxStateCache::SetCachedState( sal_Bool bAlways )
+// alten Status in allen Controllern nochmal setzen
+
+void SfxStateCache::SetCachedState( BOOL bAlways )
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxStateCache, 0);
-    DBG_ASSERT(pController==NULL||pController->GetId()==nId, "Cache with wrong ControllerItem" );
+    DBG_ASSERT(pController==NULL||pController->GetId()==nId, "Cache mit falschem ControllerItem" );
     DBG_PROFSTART(SfxStateCacheSetState);
 
-    // Only update if cached item exists and also able to process.
-    // (If the State is sent, it must be ensured that a SlotServer is present,
-    // see SfxControllerItem:: GetCoreMetric())
+    // nur updaten wenn cached item vorhanden und auch verarbeitbar
+    // (Wenn der State gesendet wird, mu\s sichergestellt sein, da\s ein
+    // Slotserver vorhanden ist, s. SfxControllerItem::GetCoreMetric() )
     if ( bAlways || ( !bItemDirty && !bSlotDirty ) )
     {
-        // Update Controller
+        // Controller updaten
         if ( !pDispatch && pController )
         {
             for ( SfxControllerItem *pCtrl = pController;
@@ -508,7 +526,7 @@ void SfxStateCache::SetCachedState( sal_Bool bAlways )
         if ( pInternalController )
             ((SfxDispatchController_Impl *)pInternalController)->StateChanged( nId, eLastState, pLastItem, &aSlotServ );
 
-        // Controller is now ok
+        // Controller sind jetzt ok
         bCtrlDirty = sal_True;
     }
 
@@ -517,7 +535,8 @@ void SfxStateCache::SetCachedState( sal_Bool bAlways )
 
 
 //--------------------------------------------------------------------
-// Destroy FloatingWindows in all Controls with this Id
+
+// FloatingWindows in allen Controls mit dieser Id zerstoeren
 
 void SfxStateCache::DeleteFloatingWindows()
 {
@@ -527,7 +546,7 @@ void SfxStateCache::DeleteFloatingWindows()
     SfxControllerItem *pNextCtrl=0;
     for ( SfxControllerItem *pCtrl=pController; pCtrl; pCtrl=pNextCtrl )
     {
-        OSL_TRACE((ByteString("pCtrl: ").Append(ByteString::CreateFromInt64((sal_uIntPtr)pCtrl))).GetBuffer());
+        DBG_TRACE((ByteString("pCtrl: ").Append(ByteString::CreateFromInt64((sal_uIntPtr)pCtrl))).GetBuffer());
         pNextCtrl = pCtrl->GetItemLink();
         pCtrl->DeleteFloatingWindow();
     }

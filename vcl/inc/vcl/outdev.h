@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,14 +48,14 @@ class GetDevSizeList;
 // -----------------------
 
 // flags for mnMatchType member
-#define IMPL_DEVFONT_SCALABLE       ((sal_uIntPtr)0x00000001)
-#define IMPL_DEVFONT_SYMBOL         ((sal_uIntPtr)0x00000002)
-#define IMPL_DEVFONT_NONESYMBOL     ((sal_uIntPtr)0x00000004)
-#define IMPL_DEVFONT_LIGHT          ((sal_uIntPtr)0x00000010)
-#define IMPL_DEVFONT_BOLD           ((sal_uIntPtr)0x00000020)
-#define IMPL_DEVFONT_NORMAL         ((sal_uIntPtr)0x00000040)
-#define IMPL_DEVFONT_NONEITALIC     ((sal_uIntPtr)0x00000100)
-#define IMPL_DEVFONT_ITALIC         ((sal_uIntPtr)0x00000200)
+#define IMPL_DEVFONT_SCALABLE       ((ULONG)0x00000001)
+#define IMPL_DEVFONT_SYMBOL         ((ULONG)0x00000002)
+#define IMPL_DEVFONT_NONESYMBOL     ((ULONG)0x00000004)
+#define IMPL_DEVFONT_LIGHT          ((ULONG)0x00000010)
+#define IMPL_DEVFONT_BOLD           ((ULONG)0x00000020)
+#define IMPL_DEVFONT_NORMAL         ((ULONG)0x00000040)
+#define IMPL_DEVFONT_NONEITALIC     ((ULONG)0x00000100)
+#define IMPL_DEVFONT_ITALIC         ((ULONG)0x00000200)
 
 // TODO: rename ImplDevFontListData to PhysicalFontFamily
 class ImplDevFontListData
@@ -86,8 +86,8 @@ friend class ImplDevFontList; // TODO: remove soon
     String              maName;             // Fontname (original font family name)
     String              maSearchName;       // normalized font family name
     String              maMapNames;         // fontname aliases
-    sal_uIntPtr               mnTypeFaces;        // Typeface Flags
-    sal_uIntPtr               mnMatchType;        // MATCH - Type
+    ULONG               mnTypeFaces;        // Typeface Flags
+    ULONG               mnMatchType;        // MATCH - Type
     String              maMatchFamilyName;  // MATCH - FamilyName
     FontWeight          meMatchWeight;      // MATCH - Weight
     FontWidth           meMatchWidth;       // MATCH - Width
@@ -140,10 +140,10 @@ public:
 // nowadays these substitutions are needed for backward compatibility and tight platform integration:
 // - substitutions from configuration entries (Tools->Options->FontReplacement and/or fontconfig)
 // - device specific substitutions (e.g. for PS printer builtin fonts)
-// - substitutions for missing fonts defined by configuration entries (generic and/or platform dependent fallbacks)
+// - substitutions for missing fonts defined by configuration entries (generic and/or platform dependent fallbacks) 
 // - substitutions for missing fonts defined by multi-token fontnames (e.g. fontname="SpecialFont;FallbackA;FallbackB")
 // - substitutions for incomplete fonts (implicit, generic, EUDC and/or platform dependent fallbacks)
-// - substitutions for missing symbol fonts by translating code points into other symbol fonts
+// - substitutions for missing symbol fonts by translating code points into other symbol fonts 
 
 class ImplFontSubstitution
 {
@@ -162,9 +162,9 @@ struct ImplFontSubstEntry
     String                  maReplaceName;
     String                  maSearchName;
     String                  maSearchReplaceName;
-    sal_uInt16                  mnFlags;
+    USHORT                  mnFlags;
 
-    ImplFontSubstEntry(  const String& rFontName, const String& rSubstFontName, sal_uInt16 nSubstFlags );
+    ImplFontSubstEntry(  const String& rFontName, const String& rSubstFontName, USHORT nSubstFlags );
 };
 
 class ImplDirectFontSubstitution
@@ -174,14 +174,14 @@ private:
     typedef std::list<ImplFontSubstEntry> FontSubstList;
     FontSubstList maFontSubstList;
 public:
-    void    AddFontSubstitute( const String& rFontName, const String& rSubstName, sal_uInt16 nFlags );
+    void    AddFontSubstitute( const String& rFontName, const String& rSubstName, USHORT nFlags );
     void    RemoveFontSubstitute( int nIndex );
-    bool    GetFontSubstitute( int nIndex, String& rFontName, String& rSubstName, sal_uInt16& rFlags ) const;
+    bool    GetFontSubstitute( int nIndex, String& rFontName, String& rSubstName, USHORT& rFlags ) const;
     int     GetFontSubstituteCount() const { return maFontSubstList.size(); };
     bool    Empty() const { return maFontSubstList.empty(); }
     void    Clear() { maFontSubstList.clear(); }
 
-    bool    FindFontSubstitute( String& rSubstName, const String& rFontName, sal_uInt16 nFlags ) const;
+    bool    FindFontSubstitute( String& rSubstName, const String& rFontName, USHORT nFlags ) const;
 };
 
 // PreMatchFontSubstitution
@@ -218,11 +218,11 @@ private:
     // cache of recently used font instances
     struct IFSD_Equal { bool operator()( const ImplFontSelectData&, const ImplFontSelectData& ) const; };
     struct IFSD_Hash { size_t operator()( const ImplFontSelectData& ) const; };
-    typedef ::boost::unordered_map<ImplFontSelectData,ImplFontEntry*,IFSD_Hash,IFSD_Equal > FontInstanceList;
+    typedef ::std::hash_map<ImplFontSelectData,ImplFontEntry*,IFSD_Hash,IFSD_Equal > FontInstanceList;
     FontInstanceList    maFontInstanceList;
 
     // cache of recently requested font names vs. selected font names
-    typedef ::boost::unordered_map<String,String,FontNameHash> FontNameList;
+    typedef ::std::hash_map<String,String,FontNameHash> FontNameList;
     FontNameList        maFontNameList;
 
 public:
@@ -250,14 +250,14 @@ namespace basegfx { class B2DHomMatrix; }
 
 struct ImplOutDevData
 {
-    VirtualDevice*              mpRotateDev;
-    vcl::ControlLayoutData*     mpRecordLayout;
-    Rectangle                   maRecordRect;
-    ImplDirectFontSubstitution      maDevFontSubst;
+    VirtualDevice*				mpRotateDev;
+    vcl::ControlLayoutData*		mpRecordLayout;
+    Rectangle					maRecordRect;
+    ImplDirectFontSubstitution		maDevFontSubst;
 
     // #i75163#
-    basegfx::B2DHomMatrix*      mpViewTransform;
-    basegfx::B2DHomMatrix*      mpInverseViewTransform;
+    basegfx::B2DHomMatrix*		mpViewTransform;
+    basegfx::B2DHomMatrix*		mpInverseViewTransform;
 };
 
 void ImplFreeOutDevFontData();

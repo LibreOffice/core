@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,6 +46,10 @@
 |*
 |*    RefNode::RefNode()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 03.05.91
+|*    Letzte Aenderung  MM 03.05.91
+|*
 *************************************************************************/
 RefNode::RefNode( Atom nTyp ){
     pObjBiTree = 0;
@@ -55,6 +59,10 @@ RefNode::RefNode( Atom nTyp ){
 /*************************************************************************
 |*
 |*    RefNode::GetId()
+|*
+|*    Beschreibung
+|*    Ersterstellung    MM 29.10.91
+|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 sal_uInt32 RefNode::GetId() const
@@ -66,23 +74,31 @@ sal_uInt32 RefNode::GetId() const
 |*
 |*    RefNode::PutObjNode()
 |*
+|*    Beschreibung      NAME.DOC
+|*    Ersterstellung    MM 21.03.90
+|*    Letzte Aenderung  MM 27.06.90
+|*
 *************************************************************************/
-sal_Bool RefNode::PutObjNode( ObjNode * pPutObject ){
+BOOL RefNode::PutObjNode( ObjNode * pPutObject ){
 // insert a node in the b-tree pObjBiTree
 // if the node with the same name is in pObjBiTree,
-// return sal_False and no insert,
+// return FALSE and no insert,
 
     if( pObjBiTree )
         return( pObjBiTree->Insert( pPutObject ) );
 
     pObjBiTree = pPutObject;
-    return( sal_True );
+    return( TRUE );
 }
 
 /****************** O b j N o d e ****************************************/
 /*************************************************************************
 |*
 |*    RefNode::GetObjNode()
+|*
+|*    Beschreibung      NAME.DOC
+|*    Ersterstellung    MM 21.03.90
+|*    Letzte Aenderung  MM 27.06.90
 |*
 *************************************************************************/
 ObjNode * RefNode :: GetObjNode( const RscId & rRscId ){
@@ -100,8 +116,12 @@ ObjNode * RefNode :: GetObjNode( const RscId & rRscId ){
 |*
 |*    ObjNode::ObjNode()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 15.05.91
+|*    Letzte Aenderung  MM 15.05.91
+|*
 *************************************************************************/
-ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey ){
+ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, ULONG lKey ){
     pRscObj  = pData;
     aRscId   = rId;
     lFileKey = lKey;
@@ -111,8 +131,12 @@ ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey ){
 |*
 |*    ObjNode::DelObjNode()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 09.12.91
+|*    Letzte Aenderung  MM 09.12.91
+|*
 *************************************************************************/
-ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey ){
+ObjNode * ObjNode::DelObjNode( RscTop * pClass, ULONG nFileKey ){
     ObjNode * pRetNode = this;
 
     if( Right() )
@@ -141,6 +165,10 @@ ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey ){
 |*
 |*    ObjNode::GetId()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 29.10.91
+|*    Letzte Aenderung  MM 29.10.91
+|*
 *************************************************************************/
 sal_uInt32 ObjNode::GetId() const
 {
@@ -151,34 +179,48 @@ sal_uInt32 ObjNode::GetId() const
 |*
 |*    ObjNode::IsConsistent()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 23.09.91
+|*    Letzte Aenderung  MM 23.09.91
+|*
 *************************************************************************/
-sal_Bool ObjNode::IsConsistent()
+BOOL ObjNode::IsConsistent( RscInconsList * pList )
 {
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
 
     if( (long)aRscId > 0x7FFF || (long)aRscId < 1 )
     {
-        bRet = sal_False;
+        bRet = FALSE;
+        if( pList )
+            pList->Insert( new RscInconsistent( aRscId, aRscId ) );
     }
     else
     {
         if( Left() )
         {
-            if( !((ObjNode *)Left())->IsConsistent() )
-                bRet = sal_False;
+            if( !((ObjNode *)Left())->IsConsistent( pList ) )
+                bRet = FALSE;
             if( ((ObjNode *)Left())->aRscId >= aRscId )
             {
-                bRet = sal_False;
+                bRet = FALSE;
+                if( pList )
+                    pList->Insert(
+                        new RscInconsistent( ((ObjNode *)Left())->GetRscId(),
+                                             GetRscId() ) );
             }
         };
         if( Right() )
         {
             if( ((ObjNode *)Right())->aRscId <= aRscId )
             {
-                bRet = sal_False;
+                bRet = FALSE;
+                if( pList )
+                    pList->Insert(
+                        new RscInconsistent( GetRscId(),
+                                             ((ObjNode *)Right())->GetRscId() ) );
             }
-            if( !((ObjNode *)Right())->IsConsistent() )
-                bRet = sal_False;
+            if( !((ObjNode *)Right())->IsConsistent( pList ) )
+                bRet = FALSE;
         };
     };
 

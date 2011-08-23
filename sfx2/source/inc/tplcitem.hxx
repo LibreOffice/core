@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,17 +35,17 @@ class SfxCommonTemplateDialog_Impl;
 
 class SfxTemplateControllerItem: public SfxControllerItem {
     SfxCommonTemplateDialog_Impl  &rTemplateDlg;
-    sal_uInt8                            nWaterCanState;
+    BYTE                            nWaterCanState;
     long                            nUserEventId;
 
     DECL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
                                 SfxTemplateControllerItem*);
 
 protected:
-    virtual void    StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState );
+    virtual void	StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
 
 public:
-    SfxTemplateControllerItem( sal_uInt16 nId, SfxCommonTemplateDialog_Impl &rDlg, SfxBindings &);
+    SfxTemplateControllerItem( USHORT nId, SfxCommonTemplateDialog_Impl &rDlg, SfxBindings &);
     ~SfxTemplateControllerItem();
 };
 

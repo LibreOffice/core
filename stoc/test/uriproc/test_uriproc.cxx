@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -253,7 +253,7 @@ void Test::testParse() {
                 data[i].pathSegmentCount, uriRef->getPathSegmentCount());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), uriRef->getPathSegment(-1));
+                rtl::OUString::createFromAscii(""), uriRef->getPathSegment(-1));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 rtl::OUString::createFromAscii(data[i].pathSegment0),
@@ -276,7 +276,7 @@ void Test::testParse() {
                 uriRef->getPathSegment(4));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString(), uriRef->getPathSegment(5));
+                rtl::OUString::createFromAscii(""), uriRef->getPathSegment(5));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 data[i].query != 0, uriRef->hasQuery());
@@ -850,7 +850,7 @@ void Test::testVndSunStarScript() {
                                 "testVndSunStarScript",
                                 static_cast< double >(i)
                                 + static_cast< double >(j) / 10.0,
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParameter")),
+                                ::rtl::OUString::createFromAscii("setParameter"),
                                 originalReference,
                                 uriRef->getUriReference());
                         }
@@ -862,7 +862,7 @@ void Test::testVndSunStarScript() {
                 TEST_ASSERT_EQUAL(
                     "testVndSunStarScript",
                     i,
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setName")),
+                    ::rtl::OUString::createFromAscii("setName"),
                     originalReference,
                     uriRef->getUriReference());
             }
@@ -904,8 +904,8 @@ void Test::testVndSunStarScript() {
     }
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript",
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("illegal arguments")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")),
+        ::rtl::OUString::createFromAscii("illegal arguments"),
+        ::rtl::OUString::createFromAscii("name"),
         caughtExpected,
         true);
 
@@ -913,15 +913,15 @@ void Test::testVndSunStarScript() {
     try {
         scriptUrl->setParameter(
             ::rtl::OUString(),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("non-empty")));
+            ::rtl::OUString::createFromAscii("non-empty"));
     }
     catch( const css::lang::IllegalArgumentException& ) {
         caughtExpected = true;
     }
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript",
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("illegal arguments")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("parameter")),
+        ::rtl::OUString::createFromAscii("illegal arguments"),
+        ::rtl::OUString::createFromAscii("parameter"),
         caughtExpected,
         true);
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -198,6 +198,10 @@ protected:
     using OPropertySet::disposing;
 
     void fireModifyEvent();
+
+    /** const variant of getInfoHelper()
+     */
+    ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelperConst() const;
 
 private:
     ::com::sun::star::uno::Reference<

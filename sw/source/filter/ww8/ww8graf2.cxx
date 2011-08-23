@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,6 +41,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <dcontact.hxx>
 #include <grfatr.hxx>           // class SwCropGrf
 #include <fmtflcnt.hxx>
 #include <fmtanchr.hxx>
@@ -70,7 +71,7 @@ wwZOrderer::wwZOrderer(const sw::util::SetLayer &rSetLayer, SdrPage* pDrawPg,
     OSL_ENSURE(mpDrawPg,"Missing draw page impossible!");
 }
 
-void wwZOrderer::InsideEscher(sal_uLong nSpId)
+void wwZOrderer::InsideEscher(ULONG nSpId)
 {
     maIndexes.push(GetEscherObjectIdx(nSpId));
 }
@@ -80,17 +81,17 @@ void wwZOrderer::OutsideEscher()
     maIndexes.pop();
 }
 
-// consider new parameter <_bInHeaderFooter>
+// --> OD 2004-12-13 #117915# - consider new parameter <_bInHeaderFooter>
 void wwZOrderer::InsertEscherObject( SdrObject* pObject,
-                                     sal_uLong nSpId,
+                                     ULONG nSpId,
                                      const bool _bInHeaderFooter )
 {
-    sal_uLong nInsertPos = GetEscherObjectPos( nSpId, _bInHeaderFooter );
+    ULONG nInsertPos = GetEscherObjectPos( nSpId, _bInHeaderFooter );
 // <--
     InsertObject(pObject, nInsertPos + mnNoInitialObjects + mnInlines);
 }
 
-wwZOrderer::myeiter wwZOrderer::MapEscherIdxToIter(sal_uLong nIdx)
+wwZOrderer::myeiter wwZOrderer::MapEscherIdxToIter(ULONG nIdx)
 {
     myeiter aIter = maEscherLayer.begin();
     myeiter aEnd = maEscherLayer.end();
@@ -103,12 +104,12 @@ wwZOrderer::myeiter wwZOrderer::MapEscherIdxToIter(sal_uLong nIdx)
     return aIter;
 }
 
-sal_uInt16 wwZOrderer::GetEscherObjectIdx(sal_uLong nSpId)
+USHORT wwZOrderer::GetEscherObjectIdx(ULONG nSpId)
 {
-    sal_uInt16 nFound=0;
-    sal_uInt16 nShapeCount = mpShapeOrders ? mpShapeOrders->Count() : 0;
+    USHORT nFound=0;
+    USHORT nShapeCount = mpShapeOrders ? mpShapeOrders->Count() : 0;
     // First, find out what position this shape is in in the Escher order.
-    for (sal_uInt16 nShapePos=0; nShapePos < nShapeCount; nShapePos++)
+    for (USHORT nShapePos=0; nShapePos < nShapeCount; nShapePos++)
     {
         const SvxMSDffShapeOrder *pOrder = mpShapeOrders->GetObject(nShapePos);
         if (pOrder->nShapeId == nSpId)
@@ -120,25 +121,25 @@ sal_uInt16 wwZOrderer::GetEscherObjectIdx(sal_uLong nSpId)
     return nFound;
 }
 
-// consider new parameter <_bInHeaderFooter>
-sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
+// --> OD 2004-12-13 #117915# - consider new parameter <_bInHeaderFooter>
+ULONG wwZOrderer::GetEscherObjectPos( ULONG nSpId,
                                       const bool _bInHeaderFooter )
 {
     /*
-    EscherObjects have their own ordering which needs to be matched to
+    #97824# EscherObjects have their own ordering which needs to be matched to
     the actual ordering that should be used when inserting them into the
     document.
     */
-    sal_uInt16 nFound = GetEscherObjectIdx(nSpId);
+    USHORT nFound = GetEscherObjectIdx(nSpId);
     // Match the ordering position from the ShapeOrders to the ordering of all
     // objects in the document, there is a complexity when escherobjects
     // contain inlines objects, we need to consider thsose as part of the
     // escher count
-    sal_uLong nRet=0;
+    ULONG nRet=0;
     myeiter aIter = maEscherLayer.begin();
     myeiter aEnd = maEscherLayer.end();
-    // skip objects in page header|footer,
-    // if current object isn't in page header|footer
+    // --> OD 2004-12-13 #117915# - skip objects in page header|footer, if
+    // current object isn't in page header|footer
     if ( !_bInHeaderFooter )
     {
         while ( aIter != aEnd )
@@ -154,7 +155,7 @@ sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
     // <--
     while (aIter != aEnd)
     {
-        // insert object in page header|footer
+        // --> OD 2004-12-13 #117915# - insert object in page header|footer
         // before objects in page body
         if ( _bInHeaderFooter && !aIter->mbInHeaderFooter )
         {
@@ -175,7 +176,7 @@ sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
 // einem VarArr
 void wwZOrderer::InsertDrawingObject(SdrObject* pObj, short nWwHeight)
 {
-    sal_uLong nPos = GetDrawingObjectPos(nWwHeight);
+    ULONG nPos = GetDrawingObjectPos(nWwHeight);
     if (nWwHeight & 0x2000)                 // Heaven ?
         maSetLayer.SendObjectToHeaven(*pObj);
     else
@@ -196,10 +197,10 @@ void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
     {
         //If we are inside an escher objects, place us just after that
         //escher obj, and increment its inline count
-        sal_uInt16 nIdx = maIndexes.top();
+        USHORT nIdx = maIndexes.top();
         myeiter aEnd = MapEscherIdxToIter(nIdx);
 
-        sal_uLong nInsertPos=0;
+        ULONG nInsertPos=0;
         myeiter aIter = maEscherLayer.begin();
         while (aIter != aEnd)
         {
@@ -224,7 +225,7 @@ void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
 // Der Offset bei Datei in bestehendes Dokument mit Grafiklayer einfuegen
 // muss der Aufrufer den Index um mnNoInitialObjects erhoeht werden, damit die
 // neuen Objekte am Ende landen ( Einfuegen ist dann schneller )
-sal_uLong wwZOrderer::GetDrawingObjectPos(short nWwHeight)
+ULONG wwZOrderer::GetDrawingObjectPos(short nWwHeight)
 {
     myditer aIter = maDrawHeight.begin();
     myditer aEnd = maDrawHeight.end();
@@ -240,7 +241,7 @@ sal_uLong wwZOrderer::GetDrawingObjectPos(short nWwHeight)
     return std::distance(maDrawHeight.begin(), aIter);
 }
 
-bool wwZOrderer::InsertObject(SdrObject* pObject, sal_uLong nPos)
+bool wwZOrderer::InsertObject(SdrObject* pObject, ULONG nPos)
 {
     if (!pObject->IsInserted())
     {
@@ -261,11 +262,11 @@ bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
 }
 
 bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
-    const WW8_PIC& rPic, SvStream* pSt, sal_uLong nFilePos, bool* pbInDoc)
+    const WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos, bool* pbInDoc)
 {                                                  // Grafik in File schreiben
     *pbInDoc = true;                               // default
 
-    sal_uLong nPosFc = nFilePos + rPic.cbHeader;
+    ULONG nPosFc = nFilePos + rPic.cbHeader;
 
     switch (rPic.MFP.mm)
     {
@@ -291,6 +292,26 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
 
     if (pWwFib->envr != 1) // !MAC als Creator
     {
+
+/* SJ: #i40742#, we will use the prefsize from the mtf directly.
+The scaling has been done in former days, because the wmf filter was sometimes not
+able to calculate the proper prefsize (especially if the wmf fileheader was missing)
+
+
+        aWMF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+        // MetaFile auf neue Groesse skalieren und
+        // neue Groesse am MetaFile setzen
+        if (rPic.MFP.xExt && rPic.MFP.yExt)
+        {
+            Size aOldSiz(aWMF.GetPrefSize());
+            Size aNewSiz(rPic.MFP.xExt, rPic.MFP.yExt );
+            Fraction aFracX(aNewSiz.Width(), aOldSiz.Width());
+            Fraction aFracY(aNewSiz.Height(), aOldSiz.Height());
+
+            aWMF.Scale(aFracX, aFracY);
+            aWMF.SetPrefSize(aNewSiz);
+        }
+*/
         rpGraphic = new Graphic( aWMF );
         return true;
     }
@@ -312,7 +333,7 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
 
 struct WW8PicDesc
 {
-    sal_Int16 nCL, nCR, nCT, nCB;
+    INT16 nCL, nCR, nCT, nCB;
     long nWidth, nHeight;
 
     WW8PicDesc( const WW8_PIC& rPic );
@@ -366,14 +387,14 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
     const Graphic* pGraph, const String& rFileName, const SfxItemSet& rGrfSet)
 {
 
-    sal_uInt32 nWidth = rPD.nWidth;
-    sal_uInt32 nHeight = rPD.nHeight;
+    UINT32 nWidth = rPD.nWidth;
+    UINT32 nHeight = rPD.nHeight;
 
     // Vertikale Verschiebung durch Zeilenabstand
-    sal_Int32 nNetHeight = nHeight + rPD.nCT + rPD.nCB;
+    INT32 nNetHeight = nHeight + rPD.nCT + rPD.nCB;
     if( pSFlyPara->nLineSpace && pSFlyPara->nLineSpace > nNetHeight )
         pSFlyPara->nYPos =
-            (sal_uInt16)( pSFlyPara->nYPos + pSFlyPara->nLineSpace - nNetHeight );
+            (USHORT)( pSFlyPara->nYPos + pSFlyPara->nLineSpace - nNetHeight );
 
     WW8FlySet aFlySet(*this, pWFlyPara, pSFlyPara, true);
 
@@ -387,7 +408,7 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
         &aFlySet, &rGrfSet, NULL);
 
     // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden:
-    if (rDoc.GetCurrentViewShell() &&   //swmod 071108//swmod 071225
+    if (rDoc.GetRootFrm() &&
         (FLY_AT_PARA == pFlyFmt->GetAnchor().GetAnchorId()))
     {
         pFlyFmt->MakeFrms();
@@ -423,7 +444,7 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
 }
 
 SwFrmFmt* SwWW8ImplReader::ImportGraf1(WW8_PIC& rPic, SvStream* pSt,
-    sal_uLong nFilePos )
+    ULONG nFilePos )
 {
     SwFrmFmt* pRet = 0;
     if( pSt->IsEof() || rPic.fError || rPic.MFP.mm == 99 )
@@ -498,7 +519,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
         Wir mappen ansonsten die Variable pDataStream auf pStream.
     */
 
-    sal_uLong nOldPos = pDataStream->Tell();
+    ULONG nOldPos = pDataStream->Tell();
     WW8_PIC aPic;
     pDataStream->Seek( nPicLocFc );
     PicRead( pDataStream, &aPic, bVer67);
@@ -516,9 +537,11 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
             WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth, aPD.nHeight );
 
-            // the correct anchor is set in Read_F_IncludePicture and the current PaM point's
-            // behind the position if it is anchored in content; because this anchor add
-            // a character into the textnode. IussueZilla task 2806
+            //JP 17.1.2002: the correct anchor is set in Read_F_IncludePicture
+            //              and the current PaM point's behind the position if
+            //              it is anchored in content; because this anchor add
+            //              a character into the textnode.
+            //              IussueZilla task 2806
             if (FLY_AS_CHAR ==
                 pFlyFmtOfJustInsertedGraphic->GetAnchor().GetAnchorId() )
             {
@@ -562,7 +585,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
             if (0x66 == aPic.MFP.mm)
             {
                 //These ones have names prepended
-                sal_uInt8 nNameLen=0;
+                BYTE nNameLen=0;
                 *pDataStream >> nNameLen;
                 pDataStream->SeekRel( nNameLen );
             }
@@ -652,7 +675,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     ReplaceObj(*pTextObj, *pObject);
                 else
                 {
-                    if (sal_uInt16(OBJ_OLE2) == pObject->GetObjIdentifier())
+                    if (UINT16(OBJ_OLE2) == pObject->GetObjIdentifier())
                     {
                         // the size from BLIP, if there is any, should be already set
                         pRet = InsertOle(*((SdrOle2Obj*)pObject), aAttrSet, aGrSet);
@@ -742,7 +765,7 @@ void WW8PicShadowToReal( WW8_PIC_SHADOW * pPicS, WW8_PIC * pPic )
     pPic->MFP.xExt = SVBT16ToShort( pPicS->MFP.xExt );
     pPic->MFP.yExt = SVBT16ToShort( pPicS->MFP.yExt );
     pPic->MFP.hMF = SVBT16ToShort( pPicS->MFP.hMF );
-    for( sal_uInt16 i = 0; i < 14 ; i++ )
+    for( USHORT i = 0; i < 14 ; i++ )
         pPic->rcWinMF[i] = SVBT8ToByte( pPicS->rcWinMF[i] );
     pPic->dxaGoal = SVBT16ToShort( pPicS->dxaGoal );
     pPic->dyaGoal = SVBT16ToShort( pPicS->dyaGoal );
@@ -762,13 +785,28 @@ void WW8PicShadowToReal( WW8_PIC_SHADOW * pPicS, WW8_PIC * pPic )
 
 void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 {
+    //long nSpId;       //Shape Identifier. Used in conjunction with the office art data (found via fcDggInfo in the FIB) to find the actual data for this shape.
+    //long nXaLeft; //left of rectangle enclosing shape relative to the origin of the shape
+    //long nYaTop;      //top of rectangle enclosing shape relative to the origin of the shape
+    //long nXaRight;    //right of rectangle enclosing shape relative to the origin of the shape
+    //long nYaBottom;//bottom of the rectangle enclosing shape relative to the origin of the shape
+    //USHORT bHdr:1;
+    //USHORT nbx:2;
+    //USHORT nby:2;
+    //USHORT nwr:4;
+    //USHORT nwrk:4;
+    //USHORT bRcaSimple:1;
+    //USHORT bAnchorLock:1;
+    //long nTxbx; //count of textboxes in shape (undo doc only)
+
+
     pFSPA->nSpId        = SVBT32ToUInt32( pFSPAS->nSpId );
     pFSPA->nXaLeft      = SVBT32ToUInt32( pFSPAS->nXaLeft );
     pFSPA->nYaTop       = SVBT32ToUInt32( pFSPAS->nYaTop );
     pFSPA->nXaRight     = SVBT32ToUInt32( pFSPAS->nXaRight );
     pFSPA->nYaBottom    = SVBT32ToUInt32( pFSPAS->nYaBottom );
 
-    sal_uInt16 nBits        = SVBT16ToShort( pFSPAS->aBits1 );
+    USHORT nBits        = SVBT16ToShort( pFSPAS->aBits1 );
 
     pFSPA->bHdr         = 0 !=  ( nBits & 0x0001 );
     pFSPA->nbx          =       ( nBits & 0x0006 ) >> 1;

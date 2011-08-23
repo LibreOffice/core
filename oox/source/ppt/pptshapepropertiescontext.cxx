@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,14 @@
 #include "oox/ppt/pptshapepropertiescontext.hxx"
 #include "oox/ppt/slidepersist.hxx"
 #include "oox/drawingml/shapestylecontext.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
+#include "properties.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -66,7 +69,7 @@ Reference< XFastContextHandler > PPTShapePropertiesContext::createFastChildConte
 
     switch( aElementToken )
     {
-        case A_TOKEN( xfrm ):
+        case NMSP_DRAWINGML | XML_xfrm:
         {
             mrShape.getShapeProperties()[ PROP_IsPlaceholderDependent ] <<= sal_False;
 

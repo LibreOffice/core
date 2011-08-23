@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ ChartTransferable::ChartTransferable( SdrModel* pDrawModel, SdrObject* pSelected
         pExchgView->MarkObj( pSelectedObj, pPv );
     else
         pExchgView->MarkAllObj( pPv );
-    Graphic aGraphic( pExchgView->GetMarkedObjMetaFile( sal_True ));
+    Graphic aGraphic( pExchgView->GetMarkedObjMetaFile( TRUE ));
     m_xMetaFileGraphic.set( aGraphic.GetXGraphic());
     if ( m_bDrawing )
     {
@@ -128,6 +128,7 @@ sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                 {
                     rxOStm->SetBufferSize( 0xff00 );
 
+                    // #108584#
                     // for the changed pool defaults from drawing layer pool set those
                     // attributes as hard attributes to preserve them for saving
                     const SfxItemPool& rItemPool = pMarkedObjModel->GetItemPool();
@@ -162,7 +163,7 @@ sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
             break;
         default:
             {
-                OSL_FAIL( "ChartTransferable::WriteObject: unknown object id" );
+                DBG_ERROR( "ChartTransferable::WriteObject: unknown object id" );
             }
             break;
     }

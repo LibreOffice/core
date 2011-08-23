@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,15 +30,15 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <uielement/menubarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <framework/actiontriggerhelper.hxx>
+#include <helper/actiontriggerhelper.hxx>
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -50,7 +50,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <tools/solar.h>
@@ -71,7 +71,7 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
+//	XInterface, XTypeProvider
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_11    (   MenuBarWrapper                                                    ,
                             UIConfigElementWrapperBase                                        ,
@@ -102,6 +102,7 @@ DEFINE_XTYPEPROVIDER_11 (   MenuBarWrapper                                  ,
                             ::com::sun::star::container::XNameAccess
                         )
 
+// #110897#
 MenuBarWrapper::MenuBarWrapper(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
     )
@@ -181,7 +182,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 if ( m_xConfigData.is() )
                 {
                     // Fill menubar with container contents
-                    sal_uInt16 nId = 1;
+                    USHORT nId = 1;
                     MenuBarManager::FillMenuWithConfiguration( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData, xTrans );
                 }
             }
@@ -195,7 +196,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 PropertyValue aPropValue;
                 if ( aArguments[n] >>= aPropValue )
                 {
-                    if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MenuOnly")) )
+                    if ( aPropValue.Name.equalsAscii( "MenuOnly" ))
                         aPropValue.Value >>= bMenuOnly;
                 }
             }
@@ -208,6 +209,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 // support. This feature is currently used for "Inplace editing"!
                 Reference< XDispatchProvider > xDispatchProvider;
 
+                // #110897#
                 MenuBarManager* pMenuBarManager = new MenuBarManager( m_xServiceFactory,
                                                                       xFrame,
                                                                       xTrans,

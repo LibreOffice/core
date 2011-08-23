@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,6 @@
 #include <boost/scoped_array.hpp>
 #include <boost/bind.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
-#include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <comphelper/sequence.hxx>
@@ -77,16 +76,16 @@ namespace dxcanvas
     {
     }
 
-    void TextLayoutDrawHelper::drawText(
+    void TextLayoutDrawHelper::drawText( 
         const GraphicsSharedPtr&                            rGraphics,
-        const ::com::sun::star::rendering::ViewState&       rViewState,
-        const ::com::sun::star::rendering::RenderState&     rRenderState,
-        const ::basegfx::B2ISize&                           rOutputOffset,
-        const ::com::sun::star::rendering::StringContext&   rText,
-        const ::com::sun::star::uno::Sequence< double >&    rLogicalAdvancements,
+        const ::com::sun::star::rendering::ViewState& 		rViewState,
+        const ::com::sun::star::rendering::RenderState& 	rRenderState,
+        const ::basegfx::B2ISize& 							rOutputOffset,
+        const ::com::sun::star::rendering::StringContext& 	rText,
+        const ::com::sun::star::uno::Sequence< double >& 	rLogicalAdvancements,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XCanvasFont >&     rCanvasFont,
-        const ::com::sun::star::geometry::Matrix2D&         rFontMatrix,
+            ::com::sun::star::rendering::XCanvasFont >& 	rCanvasFont,
+        const ::com::sun::star::geometry::Matrix2D& 		rFontMatrix,
         bool                                                bAlphaSurface )
     {
         HDC hdc = rGraphics->GetHDC();
@@ -132,7 +131,7 @@ namespace dxcanvas
 
             aFont.SetAlign( ALIGN_BASELINE );
             aFont.SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==com::sun::star::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-            aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? sal_True : sal_False );
+            aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? TRUE : FALSE );
             aFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
             aFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
             aFont.SetPitch(
@@ -243,10 +242,10 @@ namespace dxcanvas
         }
     }
 
-    geometry::RealRectangle2D TextLayoutDrawHelper::queryTextBounds( const rendering::StringContext&                    rText,
-                                                                     const uno::Sequence< double >&                     rLogicalAdvancements,
-                                                                     const uno::Reference< rendering::XCanvasFont >&    rCanvasFont,
-                                                                     const geometry::Matrix2D&                          rFontMatrix )
+    geometry::RealRectangle2D TextLayoutDrawHelper::queryTextBounds( const rendering::StringContext& 					rText,
+                                                                     const uno::Sequence< double >& 					rLogicalAdvancements,
+                                                                     const uno::Reference< rendering::XCanvasFont >&	rCanvasFont,
+                                                                     const geometry::Matrix2D& 							rFontMatrix )
     {
         if(!(rText.Length))
             return geometry::RealRectangle2D();
@@ -267,7 +266,7 @@ namespace dxcanvas
 
         aFont.SetAlign( ALIGN_BASELINE );
         aFont.SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==com::sun::star::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-        aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? sal_True : sal_False );
+        aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? TRUE : FALSE );
         aFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
         aFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
         aFont.SetPitch(
@@ -310,8 +309,8 @@ namespace dxcanvas
             return geometry::RealRectangle2D( 0, nAboveBaseline,
                                               aVirtualDevice.GetTextWidth(
                                                   rText.Text,
-                                                  ::canvas::tools::numeric_cast<sal_uInt16>(rText.StartPosition),
-                                                  ::canvas::tools::numeric_cast<sal_uInt16>(rText.Length) ),
+                                                  ::canvas::tools::numeric_cast<USHORT>(rText.StartPosition),
+                                                  ::canvas::tools::numeric_cast<USHORT>(rText.Length) ),
                                               nBelowBaseline );
         }
     }

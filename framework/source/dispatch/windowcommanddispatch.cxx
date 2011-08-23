@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,8 +65,8 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // declarations
 
-const ::rtl::OUString WindowCommandDispatch::COMMAND_PREFERENCES(RTL_CONSTASCII_USTRINGPARAM(".uno:OptionsTreeDialog"));
-const ::rtl::OUString WindowCommandDispatch::COMMAND_ABOUTBOX(RTL_CONSTASCII_USTRINGPARAM(".uno:About"));
+const ::rtl::OUString WindowCommandDispatch::COMMAND_PREFERENCES = ::rtl::OUString::createFromAscii(".uno:OptionsTreeDialog");
+const ::rtl::OUString WindowCommandDispatch::COMMAND_ABOUTBOX    = ::rtl::OUString::createFromAscii(".uno:About");
 
 //-----------------------------------------------
 WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
@@ -82,20 +82,30 @@ WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::lan
 //-----------------------------------------------
 WindowCommandDispatch::~WindowCommandDispatch()
 {
-    impl_stopListening();
     m_xSMGR.clear();
+}
+
+//-----------------------------------------------
+void SAL_CALL WindowCommandDispatch::disposing(const css::lang::EventObject& /*aSource*/)
+    throw (css::uno::RuntimeException)
+{
+    // We hold our window weak ... so there is no need to clear it's reference here.
+    // The window and we will die by ref count automatically.
 }
 
 //-----------------------------------------------
 void WindowCommandDispatch::impl_startListening()
 {
+    // SYNCHRONIZED ->
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::awt::XWindow > xWindow( m_xWindow.get(), css::uno::UNO_QUERY );
     aReadLock.unlock();
+    // <- SYNCHRONIZED
 
     if ( ! xWindow.is())
         return;
 
+    // SYNCHRONIZED ->
     {
         SolarMutexGuard aSolarLock;
 
@@ -105,43 +115,16 @@ void WindowCommandDispatch::impl_startListening()
 
         pWindow->AddEventListener( LINK(this, WindowCommandDispatch, impl_notifyCommand) );
     }
+    // <- SYNCHRONIZED
 }
-
-void WindowCommandDispatch::impl_stopListening()
-{
-    ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::awt::XWindow > xWindow( m_xWindow.get(), css::uno::UNO_QUERY );
-    aReadLock.unlock();
-
-    if (!xWindow.is())
-        return;
-
-    {
-        SolarMutexGuard aSolarLock;
-
-        Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
-        if (!pWindow)
-            return;
-
-        pWindow->RemoveEventListener( LINK(this, WindowCommandDispatch, impl_notifyCommand) );
-
-        m_xWindow.clear();
-    }
-}
-
 
 //-----------------------------------------------
 IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
 {
     if ( ! pParam)
         return 0L;
-
+    
     const VclWindowEvent* pEvent = (VclWindowEvent*)pParam;
-    if (pEvent->GetId() == VCLEVENT_OBJECT_DYING)
-    {
-        impl_stopListening();
-        return 0L;
-    }
     if (pEvent->GetId() != VCLEVENT_WINDOW_COMMAND)
         return 0L;
 
@@ -152,20 +135,20 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
     const CommandDialogData* pData = pCommand->GetDialogData();
     if ( ! pData)
         return 0L;
-
+    
     const int nCommand = pData->GetDialogId();
           ::rtl::OUString sCommand;
-
+    
     switch (nCommand)
     {
         case SHOWDIALOG_ID_PREFERENCES :
                 sCommand = WindowCommandDispatch::COMMAND_PREFERENCES;
                 break;
-
+        
         case SHOWDIALOG_ID_ABOUT :
                 sCommand = WindowCommandDispatch::COMMAND_ABOUTBOX;
                 break;
-
+        
         default :
                 return 0L;
     }
@@ -188,16 +171,16 @@ void WindowCommandDispatch::impl_dispatchCommand(const ::rtl::OUString& sCommand
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR    = m_xSMGR;
         aReadLock.unlock();
         // <- SYNCHRONIZED
-
+    
         // check provider ... we know it's weak reference only
         if ( ! xProvider.is())
             return;
-
+    
         css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY_THROW);
         css::util::URL aCommand;
         aCommand.Complete = sCommand;
         xParser->parseStrict(aCommand);
-
+        
         css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aCommand, SPECIALTARGET_SELF, 0);
         if (xDispatch.is())
             xDispatch->dispatch(aCommand, css::uno::Sequence< css::beans::PropertyValue >());

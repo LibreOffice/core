@@ -80,8 +80,8 @@ namespace testdoctok
                 {
                     uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >
                         xNameContainer(xFactory->createInstanceWithContext
-                                       (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                                        ("com.sun.star.ucb.SimpleFileAccess" )),
+                                       (::rtl::OUString::createFromAscii
+                                        ("com.sun.star.ucb.SimpleFileAccess" ),
                                         xComponentContext), uno::UNO_QUERY );
 
                     if (xNameContainer.is())
@@ -105,7 +105,9 @@ namespace testdoctok
                 rtl_uString *dir=NULL;
                 osl_getProcessWorkingDir(&dir);
                 rtl_uString *fname=NULL;
+                //rtl_uString_newFromAscii(&fname, "/OpenDocument-v1.doc");
                 rtl_uString_newFromAscii(&fname, "/test.doc");
+                //rtl_uString_newFromAscii(&fname, "/numbers.doc");
                 rtl_uString *absfile=NULL;
                 rtl_uString_newConcat(&absfile, dir, fname);
 
@@ -201,15 +203,16 @@ namespace testdoctok
             ::ucb::ContentBroker::deinitialize();
         }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
+        // Change the following lines only, if you add, remove or rename 
+        // member functions of the current class, 
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(test);
         CPPUNIT_TEST(testInitUno);
         CPPUNIT_TEST(testOpenFile);
+        //CPPUNIT_TEST(testTraversal);
         CPPUNIT_TEST(testEvents);
-        CPPUNIT_TEST(testEnd);
+        CPPUNIT_TEST(testEnd);        
         CPPUNIT_TEST_SUITE_END();
     }; // class test
 

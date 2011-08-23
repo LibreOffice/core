@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <algorithm>
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <set>
 #include <vector>
 #include <svl/lstner.hxx>
@@ -62,7 +62,7 @@ public:
         document.
     */
     void UnregisterDocument (SdDrawDocument& rDocument);
-
+    
     /** Add a listener that is informed of master pages that are newly
         assigned to slides or become unassigned.
         @param rEventListener
@@ -90,10 +90,10 @@ private:
     ::std::vector<Link> maListeners;
 
     struct DrawDocHash {
-        size_t operator()(SdDrawDocument* argument) const
+        size_t operator()(SdDrawDocument* argument) const 
         { return reinterpret_cast<unsigned long>(argument); }
     };
-    typedef ::boost::unordered_map<SdDrawDocument*,
+    typedef ::std::hash_map<SdDrawDocument*,
                             MasterPageObserver::MasterPageNameSet,
                             DrawDocHash>
         MasterPageContainer;
@@ -133,7 +133,7 @@ MasterPageObserver&  MasterPageObserver::Instance (void)
     {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
-
+    
     DBG_ASSERT(Implementation::mpInstance!=NULL,
         "MasterPageObserver::Instance(): instance is NULL");
     return *Implementation::mpInstance;
@@ -157,7 +157,7 @@ void MasterPageObserver::UnregisterDocument (SdDrawDocument& rDocument)
 
 
 
-
+    
 void MasterPageObserver::AddEventListener (const Link& rEventListener)
 {
 
@@ -194,9 +194,9 @@ void MasterPageObserver::Implementation::RegisterDocument (
     SdDrawDocument& rDocument)
 {
     // Gather the names of all the master pages in the given document.
-    MasterPageContainer::mapped_type aMasterPageSet;
-    sal_uInt16 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
-    for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
+    MasterPageContainer::data_type aMasterPageSet;
+    USHORT nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
+    for (USHORT nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PK_STANDARD);
         if (pMasterPage != NULL)
@@ -223,7 +223,7 @@ void MasterPageObserver::Implementation::UnregisterDocument (
 
 
 
-
+    
 void MasterPageObserver::Implementation::AddEventListener (
     const Link& rEventListener)
 {
@@ -233,7 +233,7 @@ void MasterPageObserver::Implementation::AddEventListener (
         rEventListener) == maListeners.end())
     {
         maListeners.push_back (rEventListener);
-
+        
         // Tell the new listener about all the master pages that are
         // currently in use.
         typedef ::std::vector<String> StringList;
@@ -275,7 +275,7 @@ void MasterPageObserver::Implementation::RemoveEventListener (
 
 
 
-MasterPageObserver::MasterPageNameSet
+MasterPageObserver::MasterPageNameSet 
     MasterPageObserver::Implementation::GetMasterPageNames (
         SdDrawDocument& rDocument)
 {
@@ -331,9 +331,9 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
     SdDrawDocument& rDocument)
 {
     // Create a set of names of the master pages used by the given document.
-    sal_uInt16 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
+    USHORT nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
     ::std::set<String> aCurrentMasterPages;
-    for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
+    for (USHORT nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PK_STANDARD);
         if (pMasterPage != NULL)
@@ -355,8 +355,8 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
 
         ::std::set<String>::iterator J;
         int i=0;
-        for (J=aOldMasterPagesDescriptor->second.begin();
-             J!=aOldMasterPagesDescriptor->second.end();
+        for (J=aOldMasterPagesDescriptor->second.begin(); 
+             J!=aOldMasterPagesDescriptor->second.end(); 
              ++J)
             OSL_TRACE("old used master page %d is %s",
             i++,
@@ -377,8 +377,8 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
                     RTL_TEXTENCODING_UTF8).getStr());
 
             MasterPageObserverEvent aEvent (
-                MasterPageObserverEvent::ET_MASTER_PAGE_ADDED,
-                rDocument,
+                MasterPageObserverEvent::ET_MASTER_PAGE_ADDED, 
+                rDocument, 
                 *I);
             SendEvent (aEvent);
         }
@@ -398,7 +398,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
 
             MasterPageObserverEvent aEvent (
                 MasterPageObserverEvent::ET_MASTER_PAGE_REMOVED,
-                rDocument,
+                rDocument, 
                 *I);
             SendEvent (aEvent);
         }

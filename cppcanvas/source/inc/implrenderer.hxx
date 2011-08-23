@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,18 +69,18 @@ namespace cppcanvas
 
         // state stack of OutputDevice, to correctly handle
         // push/pop actions
-        typedef ::std::vector< OutDevState >    VectorOfOutDevStates;
+        typedef ::std::vector< OutDevState >	VectorOfOutDevStates;
 
         // EMF+
         // TODO: replace?
         struct XForm
         {
-            float   eM11;
-            float   eM12;
-            float   eM21;
-            float   eM22;
-            float   eDx;
-            float   eDy;
+            float	eM11;
+            float	eM12;
+            float	eM21;
+            float	eM22;
+            float	eDx;
+            float	eDy;
             XForm()
             {
                 SetIdentity ();
@@ -147,7 +147,7 @@ static float GetSwapFloat( SvStream& rSt )
             {
                 if ( sizeof( float ) != 4 )
                 {
-                    OSL_FAIL( "EnhWMFReader::sizeof( float ) != 4" );
+                    DBG_ERROR( "EnhWMFReader::sizeof( float ) != 4" );
                     rXForm = XForm();
                 }
                 else
@@ -171,40 +171,40 @@ static float GetSwapFloat( SvStream& rSt )
         class ImplRenderer : public virtual Renderer, protected CanvasGraphicHelper
         {
         public:
-            ImplRenderer( const CanvasSharedPtr&    rCanvas,
-                          const GDIMetaFile&        rMtf,
-                          const Parameters&         rParms );
-            ImplRenderer( const CanvasSharedPtr&    rCanvas,
-                          const BitmapEx&           rBmpEx,
-                          const Parameters&         rParms );
+            ImplRenderer( const CanvasSharedPtr&	rCanvas,
+                          const GDIMetaFile&		rMtf,
+                          const Parameters& 		rParms );
+            ImplRenderer( const CanvasSharedPtr&	rCanvas,
+                          const BitmapEx&			rBmpEx,
+                          const Parameters& 		rParms );
 
             virtual ~ImplRenderer();
 
-            virtual bool                draw() const;
-            virtual bool                drawSubset( sal_Int32   nStartIndex,
-                                                    sal_Int32   nEndIndex ) const;
-            virtual ::basegfx::B2DRange getSubsetArea( sal_Int32    nStartIndex,
-                                                       sal_Int32    nEndIndex ) const;
+            virtual bool 				draw() const;
+            virtual bool 				drawSubset( sal_Int32	nStartIndex,
+                                                    sal_Int32	nEndIndex ) const;
+            virtual ::basegfx::B2DRange getSubsetArea( sal_Int32	nStartIndex,
+                                                       sal_Int32	nEndIndex ) const;
 
 
             // element of the Renderer's action vector. Need to be
             // public, since some functors need it, too.
             struct MtfAction
             {
-                MtfAction( const ActionSharedPtr&   rAction,
-                           sal_Int32                nOrigIndex ) :
+                MtfAction( const ActionSharedPtr& 	rAction,
+                           sal_Int32				nOrigIndex ) :
                     mpAction( rAction ),
                     mnOrigIndex( nOrigIndex )
                 {
                 }
 
                 ActionSharedPtr mpAction;
-                sal_Int32       mnOrigIndex;
+                sal_Int32		mnOrigIndex;
             };
 
             // prefetched and prepared canvas actions
             // (externally not visible)
-            typedef ::std::vector< MtfAction >      ActionVector;
+            typedef ::std::vector< MtfAction > 		ActionVector;
 
             /* EMF+ */
             void ReadRectangle (SvStream& s, float& x, float& y, float &width, float& height, sal_uInt32 flags = 0);
@@ -228,7 +228,7 @@ static float GetSwapFloat( SvStream& rSt )
                                  const ActionFactoryParameters&     rParms,
                                  bool                               bIntersect );
 
-            ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::Reference< 
                 ::com::sun::star::rendering::XCanvasFont > createFont( double&                         o_rFontRotation,
                                                                        const ::Font&                   rFont,
                                                                        const ActionFactoryParameters&  rParms ) const;
@@ -245,7 +245,7 @@ static float GetSwapFloat( SvStream& rSt )
 
             bool isActionContained( GDIMetaFile& rMtf,
                                     const char*  pCommentString,
-                                    sal_uInt16       nType ) const;
+                                    USHORT       nType ) const;
 
             void createGradientAction( const ::PolyPolygon&           rPoly,
                                        const ::Gradient&              rGradient,
@@ -266,7 +266,7 @@ static float GetSwapFloat( SvStream& rSt )
                                    ActionVector::const_iterator& o_rRangeBegin,
                                    ActionVector::const_iterator& o_rRangeEnd ) const;
 
-            void processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags);
+            void processObjectRecord(SvMemoryStream& rObjectStream, UINT16 flags);
             void processEMFPlus( MetaCommentAction* pAct, const ActionFactoryParameters& rFactoryParms, OutDevState& rState, const CanvasSharedPtr& rCanvas );
             void EMFPPlusFillPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms, OutDevState& rState, const CanvasSharedPtr& rCanvas, bool isColor, sal_uInt32 brushIndexOrColor);
 
@@ -293,7 +293,7 @@ static float GetSwapFloat( SvStream& rSt )
             sal_Int32       nMmY;
             /* multipart object data */
             bool            mbMultipart;
-            sal_uInt16      mMFlags;
+            UINT16          mMFlags;
             SvMemoryStream  mMStream;
         };
 

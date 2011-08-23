@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,6 @@
 #include "dbaccess_helpid.hrc"
 #include "UITools.hxx"
 #include <osl/mutex.hxx>
-#include <osl/diagnose.h>
 #include <svtools/imgdef.hxx>
 #include "TablesSingleDlg.hxx"
 #include <tools/diagnose_ex.h>
@@ -87,11 +86,11 @@ DBG_NAME(OTableSubscriptionPage)
 //------------------------------------------------------------------------
     OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs,OTableSubscriptionDialog* _pTablesDlg )
         :OGenericAdministrationPage( pParent, ModuleRes(PAGE_TABLESUBSCRIPTION), _rCoreAttrs )
-        ,m_aTables              (this, ModuleRes(FL_SEPARATOR1))
-        ,m_aTablesList          (this, NULL,ModuleRes(CTL_TABLESUBSCRIPTION),sal_True)
-        ,m_aExplanation         (this, ModuleRes(FT_FILTER_EXPLANATION))
-        ,m_bCheckedAll          ( sal_False )
-        ,m_bCatalogAtStart      ( sal_True )
+        ,m_aTables				(this, ModuleRes(FL_SEPARATOR1))
+        ,m_aTablesList			(this, NULL,ModuleRes(CTL_TABLESUBSCRIPTION),sal_True)
+        ,m_aExplanation			(this, ModuleRes(FT_FILTER_EXPLANATION))
+        ,m_bCheckedAll			( sal_False )
+        ,m_bCatalogAtStart		( sal_True )
         ,m_pTablesDlg(_pTablesDlg)
     {
         DBG_CTOR(OTableSubscriptionPage,NULL);
@@ -102,7 +101,7 @@ DBG_NAME(OTableSubscriptionPage)
         m_aTablesList.SetSelectionMode( MULTIPLE_SELECTION );
         m_aTablesList.SetDragDropMode( 0 );
         m_aTablesList.EnableInplaceEditing( sal_False );
-        m_aTablesList.SetStyle(m_aTablesList.GetStyle() | WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
+        m_aTablesList.SetWindowBits(WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
 
         m_aTablesList.Clear();
 
@@ -141,9 +140,9 @@ DBG_NAME(OTableSubscriptionPage)
     {
         OGenericAdministrationPage::DataChanged( rDCEvt );
 
-        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
-            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
-            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS	)	||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY	))	&&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE		))
         {
             // Check if we need to get new images for normal/high contrast mode
             m_aTablesList.notifyHiContrastChanged();
@@ -174,7 +173,7 @@ DBG_NAME(OTableSubscriptionPage)
         }
         catch(SQLException&)
         {
-            OSL_FAIL("OTableSubscriptionPage::implCheckTables : could not retrieve the current connection's meta data!");
+            DBG_ERROR("OTableSubscriptionPage::implCheckTables : could not retrieve the current connection's meta data!");
         }
 
         // uncheck all
@@ -234,13 +233,13 @@ DBG_NAME(OTableSubscriptionPage)
     void OTableSubscriptionPage::implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter )
     {
         if (!_rTableFilter.getLength())
-        {   // no tables visible
+        {	// no tables visible
             CheckAll(sal_False);
         }
         else
         {
             if ((1 == _rTableFilter.getLength()) && _rTableFilter[0].equalsAsciiL("%", 1))
-            {   // all tables visible
+            {	// all tables visible
                 CheckAll(sal_True);
             }
             else
@@ -257,15 +256,15 @@ DBG_NAME(OTableSubscriptionPage)
 
         // get the name of the data source we're working for
         SFX_ITEMSET_GET(_rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True);
-        OSL_ENSURE(pNameItem, "OTableSubscriptionPage::implInitControls: missing the name attribute!");
+        DBG_ASSERT(pNameItem, "OTableSubscriptionPage::implInitControls: missing the name attribute!");
         String sDSName = pNameItem->GetValue();
 
         if (bValid && sDSName.Len() && !m_xCurrentConnection.is() )
-        {   // get the current table list from the connection for the current settings
+        {	// get the current table list from the connection for the current settings
 
             // the PropertyValues for the current dialog settings
             Sequence< PropertyValue > aConnectionParams;
-            OSL_ENSURE(m_pTablesDlg, "OTableSubscriptionPage::implInitControls: need a parent dialog doing the translation!");
+            DBG_ASSERT(m_pTablesDlg, "OTableSubscriptionPage::implInitControls: need a parent dialog doing the translation!");
             if ( m_pTablesDlg )
             {
                 if (!m_pTablesDlg->getCurrentSettings(aConnectionParams))
@@ -314,7 +313,7 @@ DBG_NAME(OTableSubscriptionPage)
                     Any aTableTypeFilter = xProp->getPropertyValue(PROPERTY_TABLETYPEFILTER);
 
                     Reference<XModifiable> xModi(getDataSourceOrModel(xProp),UNO_QUERY);
-                    sal_Bool bModified = ( xModi.is() && xModi->isModified() );
+                    sal_Bool bModified = ( xModi.is() && xModi->isModified() );					
 
                     Sequence< ::rtl::OUString > aNewTableFilter(1);
                     aNewTableFilter[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"));
@@ -331,7 +330,7 @@ DBG_NAME(OTableSubscriptionPage)
                         xModi->setModified(sal_False);
 
                 }
-
+                
                 if ( m_xCurrentConnection.is() )
                 {
                     m_aTablesList.UpdateTableList( m_xCurrentConnection );
@@ -363,8 +362,8 @@ DBG_NAME(OTableSubscriptionPage)
             else
             {
                 // in addition, we need some infos about the connection used
-                m_sCatalogSeparator = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));    // (default)
-                m_bCatalogAtStart = sal_True;   // (default)
+                m_sCatalogSeparator = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));	// (default)
+                m_bCatalogAtStart = sal_True;	// (default)
                 try
                 {
                     Reference< XDatabaseMetaData > xMeta;
@@ -388,9 +387,13 @@ DBG_NAME(OTableSubscriptionPage)
 
         // get the current table filter
         SFX_ITEMSET_GET(_rSet, pTableFilter, OStringListItem, DSID_TABLEFILTER, sal_True);
+        SFX_ITEMSET_GET(_rSet, pSuppress, SfxBoolItem, DSID_SUPPRESSVERSIONCL, sal_True);
         Sequence< ::rtl::OUString > aTableFilter;
+        sal_Bool bSuppressVersionColumns = sal_True;
         if (pTableFilter)
             aTableFilter = pTableFilter->getList();
+        if (pSuppress)
+            bSuppressVersionColumns = pSuppress->GetValue();
 
         implCompleteTablesCheck( aTableFilter );
 
@@ -447,16 +450,16 @@ DBG_NAME(OTableSubscriptionPage)
     {
         SvLBoxEntry* pLHS = static_cast<SvLBoxEntry*>(_pSortData->pLeft);
         SvLBoxEntry* pRHS = static_cast<SvLBoxEntry*>(_pSortData->pRight);
-        OSL_ENSURE(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
+        DBG_ASSERT(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
 
         SvLBoxString* pLeftTextItem = static_cast<SvLBoxString*>(pLHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
         SvLBoxString* pRightTextItem = static_cast<SvLBoxString*>(pRHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
-        OSL_ENSURE(pLeftTextItem && pRightTextItem, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid text items!");
+        DBG_ASSERT(pLeftTextItem && pRightTextItem, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid text items!");
 
         String sLeftText = pLeftTextItem->GetText();
         String sRightText = pRightTextItem->GetText();
 
-        sal_Int32 nCompareResult = 0;   // equal by default
+        sal_Int32 nCompareResult = 0;	// equal by default
 
         if (m_xCollator.is())
         {
@@ -489,13 +492,13 @@ DBG_NAME(OTableSubscriptionPage)
         SvLBoxEntry* pEntry = m_aTablesList.GetModel()->Next(const_cast<SvLBoxEntry*>(pAllObjectsEntry));
         while(pEntry)
         {
-            sal_Bool bCatalogWildcard = sal_False;
-            sal_Bool bSchemaWildcard =  sal_False;
+            sal_Bool bCatalogWildcard =	sal_False;
+            sal_Bool bSchemaWildcard =	sal_False;
             SvLBoxEntry* pSchema = NULL;
             SvLBoxEntry* pCatalog = NULL;
 
             if (m_aTablesList.GetCheckButtonState(pEntry) == SV_BUTTON_CHECKED && !m_aTablesList.GetModel()->HasChilds(pEntry))
-            {   // checked and a leaf, which means it's no catalog, no schema, but a real table
+            {	// checked and a leaf, which means it's no catalog, no schema, but a real table
                 ::rtl::OUString sCatalog;
                 if(m_aTablesList.GetModel()->HasParent(pEntry))
                 {
@@ -505,7 +508,7 @@ DBG_NAME(OTableSubscriptionPage)
                         pSchema = NULL;
 
                     if (pSchema)
-                    {   // it's a real schema entry, not the "all objects" root
+                    {	// it's a real schema entry, not the "all objects" root
                         if(m_aTablesList.GetModel()->HasParent(pSchema))
                         {
                             pCatalog = m_aTablesList.GetModel()->GetParent(pSchema);
@@ -514,7 +517,7 @@ DBG_NAME(OTableSubscriptionPage)
                                 pCatalog = NULL;
 
                             if (pCatalog)
-                            {   // it's a real catalog entry, not the "all objects" root
+                            {	// it's a real catalog entry, not the "all objects" root
                                 bCatalogWildcard = m_aTablesList.isWildcardChecked(pCatalog);
                                 if (m_bCatalogAtStart)
                                 {
@@ -583,7 +586,7 @@ DBG_NAME(OTableSubscriptionPage)
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
+    BOOL OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
     {
         sal_Bool bValid, bReadonly;
         getFlags(_rCoreAttrs, bValid, bReadonly);
@@ -595,7 +598,7 @@ DBG_NAME(OTableSubscriptionPage)
         /////////////////////////////////////////////////////////////////////////
         // create the output string which contains all the table names
         if ( m_xCurrentConnection.is() )
-        {   // collect the table filter data only if we have a connection - else no tables are displayed at all
+        {	// collect the table filter data only if we have a connection - else no tables are displayed at all
             Sequence< ::rtl::OUString > aTableFilter;
             if (m_aTablesList.isWildcardChecked(m_aTablesList.getAllObjectsEntry()))
             {
@@ -625,7 +628,7 @@ DBG_NAME(OTableSubscriptionPage)
     }
     // -----------------------------------------------------------------------
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

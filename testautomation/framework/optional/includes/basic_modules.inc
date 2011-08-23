@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : gregor.hartmann@oracle.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Edit several modules and dialogs in basic ide
 '*

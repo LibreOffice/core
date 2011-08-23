@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,11 +80,11 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         CurReportDocument.StopProcess();
     }
 
-//    public static void main(String args[])
+//    public static void main(String args[]) 
 //        {
 //            String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
 //            XMultiServiceFactory xMSF = null;
-//            try
+//            try 
 //            {
 //                xMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
 //                if (xMSF != null)
@@ -103,11 +103,11 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
 //                CurDataimport.createReport(xMSF, oTextDocument.xTextDocument, curproperties);
 //
 //            }
-//            catch (Exception e)
+//            catch (Exception e) 
 //            {
 //                e.printStackTrace(System.out);
 //            }
-//            catch (java.lang.Exception javaexception)
+//            catch (java.lang.Exception javaexception) 
 //            {
 //                javaexception.printStackTrace(System.out);
 //            }
@@ -119,7 +119,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             Helper.setUnoPropertyValues(xDialogModel,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_STEP, "Title", PropertyNames.PROPERTY_WIDTH
+                        "Height", "Step", "Title", "Width"
                     },
                     new Object[]
                     {
@@ -132,7 +132,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDBConnection",
                         new String[]
                         {
-                            "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                            "FontDescriptor", "Height", "Label", "PositionX", "PositionY", "Step", "Width"
                         },
                         new Object[]
                         {
@@ -142,7 +142,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDataImport",
                         new String[]
                         {
-                            PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                            "Height", "Label", "PositionX", "PositionY", "Step", "Width"
                         },
                         new Object[]
                         {
@@ -154,7 +154,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDataImport",
                         new String[]
                         {
-                            "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                            "FontDescriptor", "Height", "Label", "PositionX", "PositionY", "Step", "Width"
                         },
                         new Object[]
                         {
@@ -164,7 +164,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblCurProgress",
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                        "Height", "Label", "PositionX", "PositionY", "Step", "Width"
                     },
                     new Object[]
                     {
@@ -174,11 +174,11 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             insertButton("cmdCancel", 10000, this,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH, PropertyNames.PROPERTY_LABEL
+                        "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"
                     },
                     new Object[]
                     {
-                        new Integer(14), HelpIds.getHelpIdString(34321), new Integer(74), new Integer(58), new Integer(0), new Short((short) 1), new Integer(40), sStop
+                        new Integer(14), "HID:34321", new Integer(74), new Integer(58), new Integer(0), new Short((short) 1), new Integer(40), sStop
                     });
             createWindowPeer(CurReportDocument.getWizardParent());
             calculateDialogPosition(CurReportDocument.getFrame().getComponentWindow().getPosSize());

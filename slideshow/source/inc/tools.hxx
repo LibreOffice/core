@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,9 +54,9 @@
 namespace com { namespace sun { namespace star { namespace beans {
     struct NamedValue;
 } } } }
-namespace basegfx
-{
-    class B2DRange;
+namespace basegfx 
+{ 
+    class B2DRange; 
     class B2DVector;
     class B2IVector;
     class B2DHomMatrix;
@@ -91,7 +91,7 @@ namespace slideshow
                 reinterpret_cast< ::std::ptrdiff_t >(p) );
             return d + (d >> 3);
         }
-
+    
         // xxx todo: shift to namespace com::sun::star::uno when
         //           1.33 is available
         template <typename T>
@@ -115,68 +115,68 @@ namespace slideshow
             /// loop, but play backwards from end to start
             CYCLE_PINGPONGLOOP
         };
-
-
+        
+    
         // Value extraction from Any
         // =========================
 
         /// extract unary double value from Any
-        bool extractValue( double&                              o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
-                           const boost::shared_ptr<Shape>&      rShape,
-                           const basegfx::B2DVector&            rSlideBounds );
+        bool extractValue( double&								o_rValue, 
+                           const ::com::sun::star::uno::Any& 	rSourceAny, 
+                           const boost::shared_ptr<Shape>&		rShape,
+                           const basegfx::B2DVector&			rSlideBounds );
 
         /// extract int from Any
-        bool extractValue( sal_Int32&                           o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
-                           const boost::shared_ptr<Shape>&      rShape,
-                           const basegfx::B2DVector&            rSlideBounds );
+        bool extractValue( sal_Int32&							o_rValue, 
+                           const ::com::sun::star::uno::Any& 	rSourceAny, 
+                           const boost::shared_ptr<Shape>&		rShape,
+                           const basegfx::B2DVector&			rSlideBounds );
 
         /// extract enum/constant group value from Any
-        bool extractValue( sal_Int16&                           o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
-                           const boost::shared_ptr<Shape>&      rShape,
-                           const basegfx::B2DVector&            rSlideBounds );
+        bool extractValue( sal_Int16&							o_rValue, 
+                           const ::com::sun::star::uno::Any& 	rSourceAny, 
+                           const boost::shared_ptr<Shape>&		rShape,
+                           const basegfx::B2DVector&			rSlideBounds );
 
         /// extract color value from Any
-        bool extractValue( RGBColor&                            o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
-                           const boost::shared_ptr<Shape>&      rShape,
-                           const basegfx::B2DVector&            rSlideBounds );
+        bool extractValue( RGBColor&							o_rValue, 
+                           const ::com::sun::star::uno::Any& 	rSourceAny, 
+                           const boost::shared_ptr<Shape>&		rShape,
+                           const basegfx::B2DVector&			rSlideBounds );
 
         /// extract color value from Any
-        bool extractValue( HSLColor&                            o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
-                           const boost::shared_ptr<Shape>&      rShape,
-                           const basegfx::B2DVector&            rSlideBounds );
+        bool extractValue( HSLColor&							o_rValue, 
+                           const ::com::sun::star::uno::Any& 	rSourceAny, 
+                           const boost::shared_ptr<Shape>&		rShape,
+                           const basegfx::B2DVector&			rSlideBounds );
 
         /// extract plain string from Any
-        bool extractValue( ::rtl::OUString&                     o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
-                           const boost::shared_ptr<Shape>&      rShape,
-                           const basegfx::B2DVector&            rSlideBounds );
+        bool extractValue( ::rtl::OUString&						o_rValue, 
+                           const ::com::sun::star::uno::Any& 	rSourceAny, 
+                           const boost::shared_ptr<Shape>&		rShape,
+                           const basegfx::B2DVector&			rSlideBounds );
 
         /// extract bool value from Any
-        bool extractValue( bool&                                o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
-                           const boost::shared_ptr<Shape>&      rShape,
-                           const basegfx::B2DVector&            rSlideBounds );
+        bool extractValue( bool&								o_rValue, 
+                           const ::com::sun::star::uno::Any& 	rSourceAny, 
+                           const boost::shared_ptr<Shape>&		rShape,
+                           const basegfx::B2DVector&			rSlideBounds );
 
         /// extract double 2-tuple from Any
-        bool extractValue( basegfx::B2DTuple&                   o_rPair,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
-                           const boost::shared_ptr<Shape>&      rShape,
-                           const basegfx::B2DVector&            rSlideBounds );
+        bool extractValue( basegfx::B2DTuple&					o_rPair, 
+                           const ::com::sun::star::uno::Any& 	rSourceAny, 
+                           const boost::shared_ptr<Shape>&		rShape,
+                           const basegfx::B2DVector&			rSlideBounds );
 
         /** Search a sequence of NamedValues for a given element.
 
             @return true, if the sequence contains the specified
             element.
          */
-        bool findNamedValue( ::com::sun::star::uno::Sequence<
-                                 ::com::sun::star::beans::NamedValue > const& rSequence,
-                             const ::com::sun::star::beans::NamedValue& rSearchKey );
-
+        bool findNamedValue( ::com::sun::star::uno::Sequence< 
+                                 ::com::sun::star::beans::NamedValue > const& rSequence, 
+                             const ::com::sun::star::beans::NamedValue&	rSearchKey );
+        
         /** Search a sequence of NamedValues for an element with a given name.
 
             @param o_pRet
@@ -186,10 +186,10 @@ namespace slideshow
             @return true, if the sequence contains the specified
             element.
          */
-        bool findNamedValue( ::com::sun::star::beans::NamedValue*       o_pRet,
-                             const ::com::sun::star::uno::Sequence<
-                                 ::com::sun::star::beans::NamedValue >&     rSequence,
-                             const ::rtl::OUString&                     rSearchString );
+        bool findNamedValue( ::com::sun::star::beans::NamedValue* 		o_pRet, 
+                             const ::com::sun::star::uno::Sequence< 
+                                 ::com::sun::star::beans::NamedValue >& 	rSequence, 
+                             const ::rtl::OUString&						rSearchString );
 
         basegfx::B2DRange calcRelativeShapeBounds( const basegfx::B2DVector& rPageSize,
                                                    const basegfx::B2DRange&  rShapeBounds );
@@ -199,12 +199,12 @@ namespace slideshow
             @param rBounds
             Original shape bound rect (to substitute default attribute
             layer values)
-
+            
             @param pAttr
             Attribute set. Might be NULL (then, rBounds is used to set
             a simple scale and translate of the unit rect to rBounds).
         */
-        basegfx::B2DHomMatrix getShapeTransformation(
+        basegfx::B2DHomMatrix getShapeTransformation( 
             const basegfx::B2DRange&                      rBounds,
             const boost::shared_ptr<ShapeAttributeLayer>& pAttr );
 
@@ -212,7 +212,7 @@ namespace slideshow
 
             @param rPixelSize
             Pixel size of the sprite
-
+            
             @param rOrigSize
             Original shape size (i.e. the size of the actual sprite
             content, in the user coordinate system)
@@ -223,7 +223,7 @@ namespace slideshow
 
             @return the transformation to be applied to the sprite.
         */
-        basegfx::B2DHomMatrix getSpriteTransformation(
+        basegfx::B2DHomMatrix getSpriteTransformation( 
             const basegfx::B2DVector&                     rPixelSize,
             const basegfx::B2DVector&                     rOrigSize,
             const boost::shared_ptr<ShapeAttributeLayer>& pAttr );
@@ -246,9 +246,9 @@ namespace slideshow
             @param pAttr
             Current shape attributes
          */
-        basegfx::B2DRange getShapeUpdateArea(
+        basegfx::B2DRange getShapeUpdateArea( 
             const basegfx::B2DRange&                      rUnitBounds,
-            const basegfx::B2DHomMatrix&                  rShapeTransform,
+            const basegfx::B2DHomMatrix&                  rShapeTransform, 
             const boost::shared_ptr<ShapeAttributeLayer>& pAttr );
 
         /** Calc update area for a shape.
@@ -280,7 +280,7 @@ namespace slideshow
             it as if aBounds.getMinimum() is the output position and
             aBounds.getRange() the scaling of the shape.
          */
-        basegfx::B2DRange getShapePosSize(
+        basegfx::B2DRange getShapePosSize( 
             const basegfx::B2DRange&                      rOrigBounds,
             const boost::shared_ptr<ShapeAttributeLayer>& pAttr );
 
@@ -290,7 +290,7 @@ namespace slideshow
         /** Convert an IntSRGBA to plain UNO API 32 bit int
          */
         sal_Int32 RGBAColor2UnoColor( cppcanvas::Color::IntSRGBA );
-
+        
         /** Fill a plain rectangle on the given canvas with the given color
          */
         void fillRect( const boost::shared_ptr< cppcanvas::Canvas >& rCanvas,
@@ -301,14 +301,14 @@ namespace slideshow
          */
         void initSlideBackground( const boost::shared_ptr< cppcanvas::Canvas >& rCanvas,
                                   const basegfx::B2IVector&                     rSize );
-
+    
         /// Gets a random ordinal [0,n)
         inline ::std::size_t getRandomOrdinal( const ::std::size_t n )
         {
             return static_cast< ::std::size_t >(
                 double(n) * rand() / (RAND_MAX + 1.0) );
         }
-
+    
         /// To work around ternary operator in initializer lists
         /// (Solaris compiler problems)
         template <typename T>
@@ -320,12 +320,12 @@ namespace slideshow
             else
                 return arg2;
         }
-
+    
         template <typename ValueType>
         inline bool getPropertyValue(
-            ValueType & rValue,
+            ValueType & rValue, 
             com::sun::star::uno::Reference<
-            com::sun::star::beans::XPropertySet> const & xPropSet,
+            com::sun::star::beans::XPropertySet> const & xPropSet, 
             rtl::OUString const & propName )
         {
             try {
@@ -343,11 +343,11 @@ namespace slideshow
 #endif
                 return bRet;
             }
-            catch (com::sun::star::uno::RuntimeException &)
+            catch (com::sun::star::uno::RuntimeException &) 
             {
                 throw;
             }
-            catch (com::sun::star::uno::Exception &)
+            catch (com::sun::star::uno::Exception &) 
             {
                 return false;
             }
@@ -355,18 +355,18 @@ namespace slideshow
 
         template <typename ValueType>
         inline bool getPropertyValue(
-            com::sun::star::uno::Reference< ValueType >& rIfc,
+            com::sun::star::uno::Reference< ValueType >& rIfc, 
             com::sun::star::uno::Reference<
-            com::sun::star::beans::XPropertySet> const & xPropSet,
+            com::sun::star::beans::XPropertySet> const & xPropSet, 
             rtl::OUString const & propName )
         {
-            try
+            try 
             {
-                const com::sun::star::uno::Any& a(
+                const com::sun::star::uno::Any& a( 
                     xPropSet->getPropertyValue( propName ));
                 rIfc.set( a,
                           com::sun::star::uno::UNO_QUERY );
-
+                
                 bool const bRet = rIfc.is();
 #if OSL_DEBUG_LEVEL > 0
                 if( !bRet )
@@ -379,27 +379,23 @@ namespace slideshow
 #endif
                 return bRet;
             }
-            catch (com::sun::star::uno::RuntimeException &)
+            catch (com::sun::star::uno::RuntimeException &) 
             {
                 throw;
             }
-            catch (com::sun::star::uno::Exception &)
+            catch (com::sun::star::uno::Exception &) 
             {
                 return false;
             }
         }
 
         /// Get the content of the BoundRect shape property
-        basegfx::B2DRange getAPIShapeBounds( const ::com::sun::star::uno::Reference<
+        basegfx::B2DRange getAPIShapeBounds( const ::com::sun::star::uno::Reference< 
                                                 ::com::sun::star::drawing::XShape >& xShape );
 
-/*
-        TODO(F1): When ZOrder someday becomes usable enable this
-
         /// Get the content of the ZOrder shape property
-        double getAPIShapePrio( const ::com::sun::star::uno::Reference<
+        double getAPIShapePrio( const ::com::sun::star::uno::Reference< 
                                       ::com::sun::star::drawing::XShape >& xShape );
-*/
 
         basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector&         rSize,
                                               const boost::shared_ptr<UnoView>& pView );

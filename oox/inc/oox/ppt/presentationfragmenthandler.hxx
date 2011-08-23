@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include "oox/ppt/slidepersist.hxx"
 #include "oox/core/fragmenthandler.hxx"
 #include "oox/core/relations.hxx"
-#include "oox/ppt/customshowlistcontext.hxx"
+#include "customshowlistcontext.hxx"
 
 #include <stack>
 #include <vector>
@@ -65,7 +65,7 @@ private:
     ::com::sun::star::awt::Size maSlideSize;
     ::com::sun::star::awt::Size maNotesSize;
 
-    std::vector< CustomShow >   maCustomShowList;
+    std::vector< CustomShow >	maCustomShowList;
 };
 
 } }

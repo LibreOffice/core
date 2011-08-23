@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,19 +44,19 @@
 #include <automation/communi.hxx>
 
 
-/*  Um den Destruktor protected zu machen wurde unten das delete entfernt.
+/*	Um den Destruktor protected zu machen wurde unten das delete entfernt.
     Die Methode wird ohnehin hucht benutzt.
-//              delete *((AE*)pData+n);
+//				delete *((AE*)pData+n);
 */
 
 #undef  SV_IMPL_PTRARR_SORT
 #define SV_IMPL_PTRARR_SORT( nm,AE )\
 _SV_IMPL_SORTAR_ALG( nm,AE )\
-    void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL ) { \
+    void nm::DeleteAndDestroy( USHORT nP, USHORT nL ) { \
         if( nL ) {\
             DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
-            for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
-                OSL_FAIL("Das Element der Liste wurde nicht gelï¿½scht"); \
+            for( USHORT n=nP; n < nP + nL; n++ ) \
+                DBG_ERROR("Das Element der Liste wurde nicht gelöscht"); \
             SvPtrarr::Remove( nP, nL ); \
         } \
     } \
@@ -67,14 +67,14 @@ _SV_SEEK_PTR( nm, AE )
 
 SV_IMPL_PTRARR_SORT( CommunicationLinkList, CommunicationLink* );
 
-osl::Mutex *pMPostUserEvent=NULL;       // Notwendig, da nicht threadfest
+osl::Mutex *pMPostUserEvent=NULL;		// Notwendig, da nicht threadfest
 
 CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pMan, osl::StreamSocket* pSocket )
 : SimpleCommunicationLinkViaSocket( pMan, pSocket )
 , nConnectionClosedEventId( 0 )
 , nDataReceivedEventId( 0 )
-, bShutdownStarted( sal_False )
-, bDestroying( sal_False )
+, bShutdownStarted( FALSE )
+, bDestroying( FALSE )
 {
     SetPutDataReceivedHdl(LINK( this, CommunicationLinkViaSocket, PutDataReceivedHdl ));
     if ( !pMPostUserEvent )
@@ -88,7 +88,7 @@ CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pM
 
 CommunicationLinkViaSocket::~CommunicationLinkViaSocket()
 {
-    bDestroying = sal_True;
+    bDestroying = TRUE;
     StopCommunication();
     while ( nConnectionClosedEventId || nDataReceivedEventId )
         GetpApp()->Yield();
@@ -98,8 +98,8 @@ CommunicationLinkViaSocket::~CommunicationLinkViaSocket()
         {
             GetpApp()->RemoveUserEvent( nConnectionClosedEventId );
             nConnectionClosedEventId = 0;
-            INFO_MSG( CByteString("Event gelï¿½scht"),
-                CByteString( "ConnectionClosedEvent aus Queue gelï¿½scht"),
+            INFO_MSG( CByteString("Event gelöscht"),
+                CByteString( "ConnectionClosedEvent aus Queue gelöscht"),
                 CM_MISC, NULL );
         }
     }
@@ -110,14 +110,14 @@ CommunicationLinkViaSocket::~CommunicationLinkViaSocket()
             GetpApp()->RemoveUserEvent( nDataReceivedEventId );
             nDataReceivedEventId = 0;
             delete GetServiceData();
-            INFO_MSG( CByteString("Event gelï¿½scht"),
-                CByteString( "DataReceivedEvent aus Queue gelï¿½scht"),
+            INFO_MSG( CByteString("Event gelöscht"),
+                CByteString( "DataReceivedEvent aus Queue gelöscht"),
                 CM_MISC, NULL );
         }
     }
 }
 
-sal_Bool CommunicationLinkViaSocket::ShutdownCommunication()
+BOOL CommunicationLinkViaSocket::ShutdownCommunication()
 {
     if ( isRunning() )
     {
@@ -126,10 +126,10 @@ sal_Bool CommunicationLinkViaSocket::ShutdownCommunication()
         if ( GetStreamSocket() )
             GetStreamSocket()->shutdown();
 
-        if ( GetStreamSocket() )    // Mal wieder nach oben verschoben, da sonst nicht vom Read runtergesprungen wird.
+        if ( GetStreamSocket() )	// Mal wieder nach oben verschoben, da sonst nicht vom Read runtergesprungen wird.
             GetStreamSocket()->close();
 
-        resume();   // So daï¿½ das run auch die Schleife verlassen kann
+        resume();	// So daß das run auch die Schleife verlassen kann
 
         join();
 
@@ -137,7 +137,7 @@ sal_Bool CommunicationLinkViaSocket::ShutdownCommunication()
         SetStreamSocket( NULL );
         delete pTempSocket;
 
-//      ConnectionClosed();     Wird am Ende des Thread gerufen
+//		ConnectionClosed();		Wird am Ende des Thread gerufen
 
     }
     else
@@ -145,10 +145,10 @@ sal_Bool CommunicationLinkViaSocket::ShutdownCommunication()
         join();
     }
 
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool CommunicationLinkViaSocket::StopCommunication()
+BOOL CommunicationLinkViaSocket::StopCommunication()
 {
     if ( !bShutdownStarted )
     {
@@ -157,7 +157,7 @@ sal_Bool CommunicationLinkViaSocket::StopCommunication()
     else
     {
         WaitForShutdown();
-        return sal_True;
+        return TRUE;
     }
 }
 
@@ -174,10 +174,10 @@ void CommunicationLinkViaSocket::WaitForShutdown()
 {
     if ( !bShutdownStarted )
     {
-        aShutdownTimer.SetTimeout( 30000 );     // Should be 30 Seconds
+        aShutdownTimer.SetTimeout( 30000 );		// Should be 30 Seconds
         aShutdownTimer.SetTimeoutHdl( LINK( this, CommunicationLinkViaSocket, ShutdownLink ) );
         aShutdownTimer.Start();
-        bShutdownStarted = sal_True;
+        bShutdownStarted = TRUE;
     }
     if ( bDestroying )
     {
@@ -191,21 +191,21 @@ void CommunicationLinkViaSocket::WaitForShutdown()
     }
 }
 
-sal_Bool CommunicationLinkViaSocket::IsCommunicationError()
+BOOL CommunicationLinkViaSocket::IsCommunicationError()
 {
     return !isRunning() || SimpleCommunicationLinkViaSocket::IsCommunicationError();
 }
 
 void CommunicationLinkViaSocket::run()
 {
-    sal_Bool bWasError = sal_False;
+    BOOL bWasError = FALSE;
     while ( schedule() && !bWasError && GetStreamSocket() )
     {
         if ( bWasError |= !DoReceiveDataStream() )
             continue;
 
         TimeValue sNochEins = {0, 1000000};
-        while ( schedule() && bIsInsideCallback )   // solange der letzte Callback nicht beendet ist
+        while ( schedule() && bIsInsideCallback )	// solange der letzte Callback nicht beendet ist
             wait( sNochEins );
         SetNewPacketAsCurrent();
         StartCallback();
@@ -216,7 +216,7 @@ void CommunicationLinkViaSocket::run()
         }
     }
     TimeValue sNochEins = {0, 1000000};
-    while ( schedule() && bIsInsideCallback )   // solange der letzte Callback nicht beendet ist
+    while ( schedule() && bIsInsideCallback )	// solange der letzte Callback nicht beendet ist
         wait( sNochEins );
 
     StartCallback();
@@ -227,10 +227,10 @@ void CommunicationLinkViaSocket::run()
     }
 }
 
-sal_Bool CommunicationLinkViaSocket::DoTransferDataStream( SvStream *pDataStream, CMProtocol nProtocol )
+BOOL CommunicationLinkViaSocket::DoTransferDataStream( SvStream *pDataStream, CMProtocol nProtocol )
 {
     if ( !isRunning() )
-        return sal_False;
+        return FALSE;
 
     return SimpleCommunicationLinkViaSocket::DoTransferDataStream( pDataStream, nProtocol );
 }
@@ -240,7 +240,7 @@ long CommunicationLinkViaSocket::ConnectionClosed( void* EMPTYARG )
 {
     {
         osl::MutexGuard aGuard( aMConnectionClosed );
-        nConnectionClosedEventId = 0;   // Achtung!! alles andere muï¿½ oben gemacht werden.
+        nConnectionClosedEventId = 0;	// Achtung!! alles andere muß oben gemacht werden.
     }
     ShutdownCommunication();
     return CommunicationLink::ConnectionClosed( );
@@ -251,7 +251,7 @@ long CommunicationLinkViaSocket::DataReceived( void* EMPTYARG )
 {
     {
         osl::MutexGuard aGuard( aMDataReceived );
-        nDataReceivedEventId = 0;   // Achtung!! alles andere muï¿½ oben gemacht werden.
+        nDataReceivedEventId = 0;	// Achtung!! alles andere muß oben gemacht werden.
     }
     return CommunicationLink::DataReceived( );
 }
@@ -264,9 +264,9 @@ IMPL_LINK( CommunicationLinkViaSocket, PutDataReceivedHdl, CommunicationLinkViaS
 
 
 
-MultiCommunicationManager::MultiCommunicationManager( sal_Bool bUseMultiChannel )
+MultiCommunicationManager::MultiCommunicationManager( BOOL bUseMultiChannel )
 : CommunicationManager( bUseMultiChannel )
-, bGracefullShutdown( sal_True )
+, bGracefullShutdown( TRUE )
 {
     ActiveLinks = new CommunicationLinkList;
     InactiveLinks = new CommunicationLinkList;
@@ -281,8 +281,8 @@ MultiCommunicationManager::~MultiCommunicationManager()
         Timer aTimeout;
         aTimeout.SetTimeout( 40000 );
         aTimeout.Start();
-        sal_uInt16 nLinkCount = 0;
-        sal_uInt16 nNewLinkCount = 0;
+        USHORT nLinkCount = 0;
+        USHORT nNewLinkCount = 0;
         while ( aTimeout.IsActive() )
         {
             GetpApp()->Yield();
@@ -297,9 +297,9 @@ MultiCommunicationManager::~MultiCommunicationManager()
         }
     }
 
-    // Alles weghauen, was nicht rechtzeitig auf die Bï¿½ume gekommen ist
-    // Was bei StopCommunication ï¿½brig geblieben ist, da es sich asynchron austragen wollte
-    sal_uInt16 i = ActiveLinks->Count();
+    // Alles weghauen, was nicht rechtzeitig auf die Bäume gekommen ist
+    // Was bei StopCommunication übrig geblieben ist, da es sich asynchron austragen wollte
+    USHORT i = ActiveLinks->Count();
     while ( i-- )
     {
         CommunicationLinkRef rTempLink = ActiveLinks->GetObject( i );
@@ -310,7 +310,7 @@ MultiCommunicationManager::~MultiCommunicationManager()
     delete ActiveLinks;
 
     /// Die Links zwischen ConnectionClosed und Destruktor.
-    /// Hier NICHT gerefcounted, da sie sich sonst im Kreis festhaten wï¿½rden,
+    /// Hier NICHT gerefcounted, da sie sich sonst im Kreis festhaten würden,
     /// da die Links sich erst in ihrem Destruktor austragen
     i = InactiveLinks->Count();
     while ( i-- )
@@ -322,44 +322,44 @@ MultiCommunicationManager::~MultiCommunicationManager()
     delete InactiveLinks;
 }
 
-sal_Bool MultiCommunicationManager::StopCommunication()
+BOOL MultiCommunicationManager::StopCommunication()
 {
     // Alle Verbindungen abbrechen
     // ConnectionClosed entfernt die Links aus der Liste. Je nach Implementation syncron
-    // oder asyncron. Daher Von oben nach unten Abrï¿½umen, so daï¿½ sich nichts verschiebt.
-    sal_uInt16 i = ActiveLinks->Count();
+    // oder asyncron. Daher Von oben nach unten Abräumen, so daß sich nichts verschiebt.
+    USHORT i = ActiveLinks->Count();
     int nFail = 0;
     while ( i )
     {
         if ( !ActiveLinks->GetObject(i-1)->StopCommunication() )
-            nFail++;    // Hochzï¿½hlen, da Verbindung sich nicht (sofort) beenden lï¿½sst.
+            nFail++;    // Hochzählen, da Verbindung sich nicht (sofort) beenden lässt.
         i--;
     }
 
     return nFail == 0;
 }
 
-sal_Bool MultiCommunicationManager::IsLinkValid( CommunicationLink* pCL )
+BOOL MultiCommunicationManager::IsLinkValid( CommunicationLink* pCL )
 {
     if ( ActiveLinks->Seek_Entry( pCL ) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
-sal_uInt16 MultiCommunicationManager::GetCommunicationLinkCount()
+USHORT MultiCommunicationManager::GetCommunicationLinkCount()
 {
     return ActiveLinks->Count();
 }
 
-CommunicationLinkRef MultiCommunicationManager::GetCommunicationLink( sal_uInt16 nNr )
+CommunicationLinkRef MultiCommunicationManager::GetCommunicationLink( USHORT nNr )
 {
     return ActiveLinks->GetObject( nNr );
 }
 
 void MultiCommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 {
-    CommunicationLinkRef rHold(pCL);    // Hï¿½lt den Zeiger bis zum Ende des calls
+    CommunicationLinkRef rHold(pCL);	// Hält den Zeiger bis zum Ende des calls
     ActiveLinks->C40_PTR_INSERT(CommunicationLink, pCL);
     rHold->AddRef();
 
@@ -368,28 +368,28 @@ void MultiCommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 
 void MultiCommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
 {
-    CommunicationLinkRef rHold(pCL);    // Hï¿½lt denm Zeiger bis zum Ende des calls
+    CommunicationLinkRef rHold(pCL);	// Hält denm Zeiger bis zum Ende des calls
 
     CommunicationManager::CallConnectionClosed( pCL );
 
-    sal_uInt16 nPos;
+    USHORT nPos;
     if ( ActiveLinks->Seek_Entry( pCL, &nPos ) )
     {
-        InactiveLinks->C40_PTR_INSERT(CommunicationLink, pCL);  // Ohne Reference
+        InactiveLinks->C40_PTR_INSERT(CommunicationLink, pCL);	// Ohne Reference
         ActiveLinks->Remove( nPos );
     }
     pCL->ReleaseReference();
 
     bIsCommunicationRunning = ActiveLinks->Count() > 0;
-//  delete pCL;
+//	delete pCL;
 #if OSL_DEBUG_LEVEL > 1
-        rHold->bFlag = sal_True;
+        rHold->bFlag = TRUE;
 #endif
 }
 
 void MultiCommunicationManager::DestroyingLink( CommunicationLink *pCL )
 {
-    sal_uInt16 nPos;
+    USHORT nPos;
     if ( InactiveLinks->Seek_Entry( pCL, &nPos ) )
         InactiveLinks->Remove( nPos );
     pCL->InvalidateManager();
@@ -397,7 +397,7 @@ void MultiCommunicationManager::DestroyingLink( CommunicationLink *pCL )
 
 
 
-CommunicationManagerClient::CommunicationManagerClient( sal_Bool bUseMultiChannel )
+CommunicationManagerClient::CommunicationManagerClient( BOOL bUseMultiChannel )
 : MultiCommunicationManager( bUseMultiChannel )
 {
     ByteString aApplication("Something inside ");
@@ -407,7 +407,7 @@ CommunicationManagerClient::CommunicationManagerClient( sal_Bool bUseMultiChanne
 
 
 
-CommunicationManagerServerViaSocket::CommunicationManagerServerViaSocket( sal_uLong nPort, sal_uInt16 nMaxCon, sal_Bool bUseMultiChannel )
+CommunicationManagerServerViaSocket::CommunicationManagerServerViaSocket( ULONG nPort, USHORT nMaxCon, BOOL bUseMultiChannel )
 : CommunicationManagerServer( bUseMultiChannel )
 , nPortToListen( nPort )
 , nMaxConnections( nMaxCon )
@@ -420,15 +420,15 @@ CommunicationManagerServerViaSocket::~CommunicationManagerServerViaSocket()
     StopCommunication();
 }
 
-sal_Bool CommunicationManagerServerViaSocket::StartCommunication()
+BOOL CommunicationManagerServerViaSocket::StartCommunication()
 {
     if ( !pAcceptThread )
         pAcceptThread = new CommunicationManagerServerAcceptThread( this, nPortToListen, nMaxConnections );
-    return sal_True;
+    return TRUE;
 }
 
 
-sal_Bool CommunicationManagerServerViaSocket::StopCommunication()
+BOOL CommunicationManagerServerViaSocket::StopCommunication()
 {
     // Erst den Acceptor anhalten
     delete pAcceptThread;
@@ -445,7 +445,7 @@ void CommunicationManagerServerViaSocket::AddConnection( CommunicationLink *pNew
 }
 
 
-CommunicationManagerServerAcceptThread::CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, sal_uLong nPort, sal_uInt16 nMaxCon )
+CommunicationManagerServerAcceptThread::CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, ULONG nPort, USHORT nMaxCon )
 : pMyServer( pServer )
 , pAcceptorSocket( NULL )
 , nPortToListen( nPort )
@@ -461,16 +461,16 @@ CommunicationManagerServerAcceptThread::CommunicationManagerServerAcceptThread( 
 
 CommunicationManagerServerAcceptThread::~CommunicationManagerServerAcceptThread()
 {
-#ifndef aUNX        // Weil das Accept nicht abgebrochen werden kann, so terminiert wenigstens das Prog
+#ifndef aUNX		// Weil das Accept nicht abgebrochen werden kann, so terminiert wenigstens das Prog
     // #62855# pl: gilt auch bei anderen Unixen
     // die richtige Loesung waere natuerlich, etwas auf die pipe zu schreiben,
     // was der thread als Abbruchbedingung erkennt
     // oder wenigstens ein kill anstatt join
     terminate();
     if ( pAcceptorSocket )
-        pAcceptorSocket->close();   // Dann das Accept unterbrechen
+        pAcceptorSocket->close();	// Dann das Accept unterbrechen
 
-    join();     // Warten bis fertig
+    join();		// Warten bis fertig
 
     if ( pAcceptorSocket )
     {
@@ -478,7 +478,7 @@ CommunicationManagerServerAcceptThread::~CommunicationManagerServerAcceptThread(
         pAcceptorSocket = NULL;
     }
 #else
-    DEBUGPRINTF ("Destructor CommunicationManagerServerAcceptThread ï¿½bersprungen!!!! (wegen Solaris BUG)\n");
+    DEBUGPRINTF ("Destructor CommunicationManagerServerAcceptThread Übersprungen!!!! (wegen Solaris BUG)\n");
 #endif
     {
         osl::MutexGuard aGuard( aMAddConnection );
@@ -487,11 +487,11 @@ CommunicationManagerServerAcceptThread::~CommunicationManagerServerAcceptThread(
             GetpApp()->RemoveUserEvent( nAddConnectionEventId );
             nAddConnectionEventId = 0;
             CommunicationLinkRef xNewConnection = GetNewConnection();
-            INFO_MSG( CByteString("Event gelï¿½scht"),
-                CByteString( "AddConnectionEvent aus Queue gelï¿½scht"),
+            INFO_MSG( CByteString("Event gelöscht"),
+                CByteString( "AddConnectionEvent aus Queue gelöscht"),
                 CM_MISC, xNewConnection );
             xNewConnection->InvalidateManager();
-            xNewConnection.Clear(); // sollte das Objekt hier lï¿½schen
+            xNewConnection.Clear();	// sollte das Objekt hier löschen
         }
     }
 }
@@ -527,7 +527,7 @@ void CommunicationManagerServerAcceptThread::run()
                 pStreamSocket->setOption( osl_Socket_OptionTcpNoDelay, 1 );
 
                 TimeValue sNochEins = {0, 100};
-                while ( schedule() && xmNewConnection.Is() )    // Solange die letzte Connection nicht abgeholt wurde warten wir
+                while ( schedule() && xmNewConnection.Is() )	// Solange die letzte Connection nicht abgeholt wurde warten wir
                     wait( sNochEins );
                 xmNewConnection = new CommunicationLinkViaSocket( pMyServer, pStreamSocket );
                 xmNewConnection->StartCallback();
@@ -567,14 +567,24 @@ IMPL_LINK( CommunicationManagerServerAcceptThread, AddConnection, void*, EMPTYAR
     return 1;
 }
 
-CommunicationManagerClientViaSocket::CommunicationManagerClientViaSocket( ByteString aHost, sal_uLong nPort, sal_Bool bUseMultiChannel )
+
+#define GETSET(aVar, KeyName, Dafault)                 \
+    aVar = aConf.ReadKey(KeyName,"No Entry");          \
+    if ( aVar == "No Entry" )                          \
+    {                                                  \
+        aVar = Dafault;                                \
+        aConf.WriteKey(KeyName, aVar);                 \
+    }
+
+
+CommunicationManagerClientViaSocket::CommunicationManagerClientViaSocket( ByteString aHost, ULONG nPort, BOOL bUseMultiChannel )
 : CommunicationManagerClient( bUseMultiChannel )
 , aHostToTalk( aHost )
 , nPortToTalk( nPort )
 {
 }
 
-CommunicationManagerClientViaSocket::CommunicationManagerClientViaSocket( sal_Bool bUseMultiChannel )
+CommunicationManagerClientViaSocket::CommunicationManagerClientViaSocket( BOOL bUseMultiChannel )
 : CommunicationManagerClient( bUseMultiChannel )
 , aHostToTalk( "" )
 , nPortToTalk( 0 )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
     if( ! xSource.is())
         return InterpretedData();
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
     lcl_ShowDataSource( xSource );
 #endif
 
@@ -330,6 +330,7 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
 
 // convenience methods
 
+// static
 OUString DataInterpreter::GetRole( const Reference< data::XDataSequence > & xSeq )
 {
     OUString aResult;
@@ -348,6 +349,7 @@ OUString DataInterpreter::GetRole( const Reference< data::XDataSequence > & xSeq
     return aResult;
 }
 
+// static
 void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, const OUString & rRole )
 {
     if( ! xSeq.is())
@@ -363,6 +365,7 @@ void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, co
     }
 }
 
+// static
 uno::Any DataInterpreter::GetProperty(
     const Sequence< beans::PropertyValue > & aArguments,
     const OUString & rName )
@@ -375,6 +378,7 @@ uno::Any DataInterpreter::GetProperty(
     return uno::Any();
 }
 
+// static
 bool DataInterpreter::HasCategories(
     const Sequence< beans::PropertyValue > & rArguments,
     const Sequence< Reference< data::XLabeledDataSequence > > & rData )
@@ -389,14 +393,6 @@ bool DataInterpreter::HasCategories(
                            GetRole( rData[nLSeqIdx]->getValues()).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("categories")));
 
     return bHasCategories;
-}
-
-bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > & rArguments )
-{
-    bool bUseCategoriesAsX = true;
-    if( rArguments.getLength() > 0 )
-        GetProperty( rArguments, C2U(("UseCategoriesAsX"))) >>= bUseCategoriesAsX;
-    return bUseCategoriesAsX;
 }
 
 // ------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ import java.util.GregorianCalendar;
  *
  */
 public class FatDataBaseOutProducer extends DataBaseOutProducer {
-
+    
 
     /** Creates a new instance of APIDataBaseOutProducer */
     public FatDataBaseOutProducer(Hashtable param) {
@@ -74,7 +74,7 @@ public class FatDataBaseOutProducer extends DataBaseOutProducer {
 
     protected boolean prepareDataBase(LogWriter log) {
         executeSQLCommand("SHOW TABLES");
-
+        
         executeSQLCommand("SELECT id AS \"test_run.id\", api_version_id, description, date FROM test_run" +
                           " WHERE date = \"$date\" AND description = \"$test_run.description\";", true);
         String id = (String)mSqlInput.get("test_run.id");
@@ -133,15 +133,15 @@ public class FatDataBaseOutProducer extends DataBaseOutProducer {
                 executeSQLCommand("UPDATE test_state SET status = \"$EntryState\""+
                                   " WHERE test_run_id = $test_run.id AND entry_id = $entry.id;");
             }
-        }
+        } 
         return true;
     }
 
     public Object getWatcher() {
         return null;
     }
-
+    
     public void setWatcher(Object watcher) {
     }
-
+    
 }

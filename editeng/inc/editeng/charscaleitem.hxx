@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,10 +51,10 @@ public:
     SvxCharScaleWidthItem( sal_uInt16 nValue /*= 100*/,
                             const sal_uInt16 nId );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&       Store( SvStream& , sal_uInt16 nItemVersion ) const;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	Create(SvStream &, USHORT) const;
+    virtual SvStream&		Store( SvStream& , USHORT nItemVersion ) const;
+    virtual USHORT			GetVersion( USHORT nFileVersion ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -62,8 +62,10 @@ public:
                                     String &rText,
                                     const IntlWrapper * = 0 ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool     PutValue( const com::sun::star::uno::Any& rVal,
+                                    BYTE nMemberId );
+    virtual bool     QueryValue( com::sun::star::uno::Any& rVal,
+                                BYTE nMemberId ) const;
 
     inline SvxCharScaleWidthItem& operator=(const SvxCharScaleWidthItem& rItem )
     {

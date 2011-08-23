@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 TYPEINIT1( TTProperties, ApplicationProperty )
 
-sal_Bool TTProperties::RequestProperty( sal_uInt16 nRequest )
+BOOL TTProperties::RequestProperty( USHORT nRequest )
 {
     if ( (( nRequest & TT_PR_ONCE ) == 0) || (nDonePRs & (nRequest & 0x0ff)) == 0 )
     {
@@ -44,17 +44,17 @@ sal_Bool TTProperties::RequestProperty( sal_uInt16 nRequest )
         GetpApp()->Property( *this );
         return nActualPR == 0;
     }
-    return sal_True;
+    return TRUE;
 }
 
 
-sal_Bool TTProperties::GetSlots()
+BOOL TTProperties::GetSlots()
 {
     RequestProperty( TT_PR_SLOTS );
     return HasSlots();
 }
 
-sal_uInt16 TTProperties::ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs, sal_uInt16 nMode )
+USHORT TTProperties::ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs, USHORT nMode )
 {
     mnSID = nSID;
     mppArgs = ppArgs;
@@ -64,16 +64,16 @@ sal_uInt16 TTProperties::ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs,
     return nActualPR;
 }
 
-sal_Bool TTProperties::Img( Bitmap *pBmp )
+BOOL TTProperties::Img( Bitmap *pBmp )
 {
-    sal_Bool bRet;
+    BOOL bRet;
     mpBmp = pBmp;
     bRet = RequestProperty( TT_PR_IMG );
     mpBmp = NULL;
     return bRet;
 }
 
-SvtResId TTProperties::GetSvtResId( sal_uInt16 nId )
+SvtResId TTProperties::GetSvtResId( USHORT nId )
 {
     return SvtResId( nId );
 }

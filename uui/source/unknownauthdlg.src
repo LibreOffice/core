@@ -1,7 +1,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,26 +50,25 @@ ModalDialog DLG_UUI_UNKNOWNAUTH
     {
         Pos = MAP_APPFONT( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP );
         Size = MAP_APPFONT( DLG_WARMIMG_WIDTH , DLG_WARMIMG_HEIGHT );
-
+        
         Fixed = Image
         {
             /* ImageBitmap = Bitmap { File = "certificate_40x56.png"; }; */
             MaskColor = Color{Red=0xffff;Green=0x0000;Blue=0xffff;};
         };
-
+        
     };
-
-
+    
+        
     PushButton PB_VIEW__CERTIFICATE
     {
-        HelpID = "uui:PushButton:DLG_UUI_UNKNOWNAUTH:PB_VIEW__CERTIFICATE";
         Pos = MAP_APPFONT( DLG_TEXT_START_X, RSC_SP_DLG_INNERBORDER_TOP + DLG_TEXT_1_HEIGHT + RSC_SP_CTRL_GROUP_Y );
         Size = MAP_APPFONT( 70, RSC_CD_PUSHBUTTON_HEIGHT );
 
         Text [ en-US ] = "Examine Certificate...";
 
     };
-
+    
     HelpButton PB_HELP
     {
         Pos = MAP_APPFONT( DLG_CTLBTN_HELP_START_X, DLG_CTLBTN_START_Y  );
@@ -81,7 +80,6 @@ ModalDialog DLG_UUI_UNKNOWNAUTH
 
     PushButton PB_OK
     {
-        HelpID = "uui:PushButton:DLG_UUI_UNKNOWNAUTH:PB_OK";
         Pos = MAP_APPFONT( DLG_CTLBTN_OK_START_X, DLG_CTLBTN_START_Y );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
 
@@ -98,7 +96,6 @@ ModalDialog DLG_UUI_UNKNOWNAUTH
 
     RadioButton RB_ACCEPT_1
     {
-        HelpID = "uui:RadioButton:DLG_UUI_UNKNOWNAUTH:RB_ACCEPT_1";
         Pos = MAP_APPFONT( DLG_TEXT_START_X, DLG_RADIOBTN_START_Y );
         Size = MAP_APPFONT( 182, RSC_CD_RADIOBUTTON_HEIGHT );
 
@@ -109,7 +106,6 @@ ModalDialog DLG_UUI_UNKNOWNAUTH
 
     RadioButton RB_DONTACCEPT_2
     {
-        HelpID = "uui:RadioButton:DLG_UUI_UNKNOWNAUTH:RB_DONTACCEPT_2";
         Pos = MAP_APPFONT( DLG_TEXT_START_X, DLG_RADIOBTN_START_Y + RSC_CD_RADIOBUTTON_HEIGHT  );
         Size = MAP_APPFONT( 182, RSC_CD_RADIOBUTTON_HEIGHT );
 
@@ -128,12 +124,12 @@ ModalDialog DLG_UUI_UNKNOWNAUTH
         WordBreak = TRUE;
 
     };
-
+    
     FixedLine FL_LINE
     {
         Pos = MAP_APPFONT( 0, DLG_CTLBTN_START_Y - RSC_SP_FLGR_INNERBORDER_TOP -  RSC_CD_FIXEDLINE_HEIGHT );
         Size = MAP_APPFONT( DLG_WIDTH , RSC_CD_FIXEDLINE_HEIGHT );
     };
-
+   
 };
 

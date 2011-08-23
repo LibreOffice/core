@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,28 +67,28 @@ namespace basebmp
             sal_Int64 mnX;
             sal_Int64 mnXDelta;
 
-            bool      mbDownwards; // needed for nonzero winding rule
+            bool 	  mbDownwards; // needed for nonzero winding rule
                                    // fills
 
-            Vertex() :
-                mnYCounter(0),
+            Vertex() : 
+                mnYCounter(0), 
                 mnX(0),
                 mnXDelta(0),
                 mbDownwards(true)
             {}
-            Vertex( basegfx::B2DPoint const& rPt1,
-                    basegfx::B2DPoint const& rPt2,
-                    bool                     bDownwards ) :
-                mnYCounter( basegfx::fround(rPt2.getY()) -
-                            basegfx::fround(rPt1.getY()) ),
+            Vertex( basegfx::B2DPoint const& rPt1, 
+                    basegfx::B2DPoint const& rPt2, 
+                    bool                     bDownwards ) : 
+                mnYCounter( basegfx::fround(rPt2.getY()) - 
+                            basegfx::fround(rPt1.getY()) ), 
                 mnX( toFractional( basegfx::fround(rPt1.getX()) )),
                 mnXDelta( toFractional(
-                              ((rPt2.getX() - rPt1.getX()) /
+                              ((rPt2.getX() - rPt1.getX()) / 
                                (double)mnYCounter) )),
                 mbDownwards(bDownwards)
             {}
         };
-
+    
         typedef std::vector< std::vector<Vertex> > VectorOfVectorOfVertices;
         typedef std::vector< Vertex* >             VectorOfVertexPtr;
 
@@ -139,12 +139,12 @@ namespace basebmp
         @param rClipRect
         Clipping rectangle, relative to the begin iterator. No pixel outside
         this clip rect will be modified.
-
+        
         @param rPoly
         Polygon to fill
      */
     template< class DestIterator, class DestAccessor, typename T >
-    void renderClippedPolyPolygon( DestIterator                   begin,
+    void renderClippedPolyPolygon( DestIterator                   begin, 
                                    DestAccessor                   ad,
                                    T                              fillColor,
                                    const basegfx::B2IRange&       rClipRect,
@@ -160,8 +160,8 @@ namespace basebmp
 
         basegfx::B2DRange const aPolyBounds( basegfx::tools::getRange(rPoly) );
 
-        const sal_Int32 nMinY( basegfx::fround(aPolyBounds.getMinY()) );
-        const sal_Int32 nMaxY(
+        const sal_Int32	nMinY( basegfx::fround(aPolyBounds.getMinY()) );
+        const sal_Int32	nMaxY( 
             std::min(
                 nClipY2-1,
                 basegfx::fround(aPolyBounds.getMaxY())));
@@ -192,7 +192,7 @@ namespace basebmp
         // current scanline - initially, points to first scanline
         // within the clip rect, or to the polygon's first scanline
         // (whichever is greater)
-        DestIterator aScanline( begin +
+        DestIterator aScanline( begin + 
                                 vigra::Diff2D(
                                     0,
                                     std::max(nMinY,
@@ -213,14 +213,14 @@ namespace basebmp
                 detail::VectorOfVectorOfVertices::value_type::iterator const end=aGET[y-nMinY].end();
                 while( vertex != end )
                 {
-                    // find insertion pos by binary search, and put ptr
-                    // into active edge vector
+                    // find insertion pos by binary search, and put ptr 
+                    // into active edge vector  
                     pAET->insert( std::lower_bound( pAET->begin(),
                                                     pAET->end(),
                                                     &(*vertex),
                                                     aComp ),
                                   &(*vertex) );
-
+                    
                     ++vertex;
                 }
             }
@@ -228,7 +228,7 @@ namespace basebmp
             // with less than two active edges, no fill visible
             if( pAET->size() >= 2 )
             {
-                typename vigra::IteratorTraits<DestIterator>::row_iterator
+                typename vigra::IteratorTraits<DestIterator>::row_iterator 
                     rowIter( aScanline.rowIterator() );
 
                 // process each span in current scanline, with
@@ -249,9 +249,9 @@ namespace basebmp
 
                     // calc fill status for both rules. might save a
                     // few percent runtime to specialize here...
-                    const bool bEvenOddFill(
+                    const bool bEvenOddFill( 
                         eFillRule == basegfx::FillRule_EVEN_ODD && !(nCrossedEdges & 0x01) );
-                    const bool bNonZeroWindingFill(
+                    const bool bNonZeroWindingFill( 
                         eFillRule == basegfx::FillRule_NONZERO_WINDING_NUMBER && nWindingNumber != 0 );
 
                     // is span visible?
@@ -261,18 +261,18 @@ namespace basebmp
                         rV2.mnX > nClipX1_frac )
                     {
                         // clip span to horizontal bounds
-                        sal_Int32 const nStartX(
+                        sal_Int32 const nStartX( 
                             std::max( nClipX1,
                                       std::min( nClipX2-1,
                                                 detail::toRoundedInteger(rV1.mnX) )));
-                        sal_Int32 const nEndX(
+                        sal_Int32 const nEndX( 
                             std::max( nClipX1,
                                       std::min( nClipX2,
                                                 detail::toRoundedInteger(rV2.mnX) )));
 
-                        typename vigra::IteratorTraits<DestIterator>::row_iterator
+                        typename vigra::IteratorTraits<DestIterator>::row_iterator 
                             currPix( rowIter + nStartX);
-                        typename vigra::IteratorTraits<DestIterator>::row_iterator
+                        typename vigra::IteratorTraits<DestIterator>::row_iterator 
                             rowEnd( rowIter + nEndX );
 
                         // TODO(P2): Provide specialized span fill methods on the
@@ -284,7 +284,7 @@ namespace basebmp
                     // step vertices
                     rV1.mnX += rV1.mnXDelta;
                     --rV1.mnYCounter;
-
+                    
                     ++nCrossedEdges;
                 }
 
@@ -353,7 +353,7 @@ namespace basebmp
                     if( !bFallbackTaken && (*currVertex)->mnYCounter > 0 )
                         pAETOther->push_back( *currVertex );
                 }
-
+                
                 std::swap( pAET, pAETOther );
             }
 

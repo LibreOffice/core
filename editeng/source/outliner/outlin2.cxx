@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,6 +36,7 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <tools/list.hxx>
 #include <svl/style.hxx>
 #include <vcl/mapmod.hxx>
 
@@ -56,18 +57,18 @@ DBG_NAMEEX(Outliner)
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
-// ======================================================================
-// ======================   Simple pass-through   =======================
+// =====================================================================
+// ======================   Einfache Durchreicher =======================
 // ======================================================================
 
-void Outliner::SetUpdateMode( sal_Bool bUpdate )
+void Outliner::SetUpdateMode( BOOL bUpdate )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetUpdateMode( bUpdate );
 }
 
 
-sal_Bool Outliner::GetUpdateMode() const
+BOOL Outliner::GetUpdateMode() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetUpdateMode();
@@ -79,19 +80,19 @@ const SfxItemSet& Outliner::GetEmptyItemSet() const
     return pEditEngine->GetEmptyItemSet();
 }
 
-void Outliner::EnableUndo( sal_Bool bEnable )
+void Outliner::EnableUndo( BOOL bEnable )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->EnableUndo( bEnable );
 }
 
-sal_Bool Outliner::IsUndoEnabled() const
+BOOL Outliner::IsUndoEnabled() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsUndoEnabled();
 }
 
-MapMode Outliner::GetRefMapMode() const
+MapMode	Outliner::GetRefMapMode() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetRefMapMode();
@@ -122,13 +123,13 @@ void Outliner::ClearModifyFlag()
     pEditEngine->ClearModifyFlag();
 }
 
-sal_Bool Outliner::IsModified() const
+BOOL Outliner::IsModified() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsModified();
 }
 
-sal_uLong Outliner::GetTextHeight() const
+ULONG Outliner::GetTextHeight() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetTextHeight();
@@ -176,31 +177,31 @@ Link Outliner::GetStatusEventHdl() const
     return pEditEngine->GetStatusEventHdl();
 }
 
-void Outliner::SetDefTab( sal_uInt16 nTab )
+void Outliner::SetDefTab( USHORT nTab )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetDefTab( nTab );
 }
 
-sal_uInt16 Outliner::GetDefTab() const
+USHORT Outliner::GetDefTab() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetDefTab();
 }
 
-sal_Bool Outliner::IsFlatMode() const
+BOOL Outliner::IsFlatMode() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsFlatMode();
 }
 
-sal_Bool Outliner::UpdateFields()
+BOOL Outliner::UpdateFields()
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->UpdateFields();
 }
 
-void Outliner::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
+void Outliner::RemoveFields( BOOL bKeepFieldText, TypeId aType )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->RemoveFields( bKeepFieldText, aType );
@@ -218,7 +219,7 @@ String Outliner::GetWordDelimiters() const
     return pEditEngine->GetWordDelimiters();
 }
 
-String Outliner::GetWord( sal_uInt16 nPara, sal_uInt16 nIndex )
+String Outliner::GetWord( USHORT nPara, USHORT nIndex )
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetWord( nPara, nIndex );
@@ -303,7 +304,7 @@ void Outliner::SetMaxAutoPaperSize( const Size& rSz )
     pEditEngine->SetMaxAutoPaperSize( rSz );
 }
 
-sal_Bool Outliner::IsExpanded( Paragraph* pPara ) const
+BOOL Outliner::IsExpanded( Paragraph* pPara ) const
 {
     DBG_CHKTHIS(Outliner,0);
     return pParaList->HasVisibleChilds( pPara );
@@ -315,7 +316,7 @@ Paragraph* Outliner::GetParent( Paragraph* pParagraph ) const
     return pParaList->GetParent( pParagraph );
 }
 
-sal_uLong Outliner::GetChildCount( Paragraph* pParent ) const
+ULONG Outliner::GetChildCount( Paragraph* pParent ) const
 {
     DBG_CHKTHIS(Outliner,0);
     return pParaList->GetChildCount( pParent );
@@ -327,16 +328,10 @@ Size Outliner::CalcTextSize()
     return Size(pEditEngine->CalcTextWidth(),pEditEngine->GetTextHeight());
 }
 
-Size Outliner::CalcTextSizeNTP()
-{
-    DBG_CHKTHIS(Outliner,0);
-    return Size(pEditEngine->CalcTextWidth(),pEditEngine->GetTextHeightNTP());
-}
-
 Point Outliner::GetDocPos( Paragraph* pPara )
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetDocPosTopLeft( (sal_uInt16)pParaList->GetAbsPos( pPara ) );
+    return pEditEngine->GetDocPosTopLeft( (USHORT)pParaList->GetAbsPos( pPara ) );
 }
 
 void Outliner::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
@@ -351,73 +346,73 @@ SfxStyleSheetPool* Outliner::GetStyleSheetPool()
     return pEditEngine->GetStyleSheetPool();
 }
 
-SfxStyleSheet* Outliner::GetStyleSheet( sal_uLong nPara )
+SfxStyleSheet* Outliner::GetStyleSheet( ULONG nPara )
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetStyleSheet( (sal_uInt16)nPara );
+    return pEditEngine->GetStyleSheet( (USHORT)nPara );
 }
 
-sal_Bool Outliner::IsInSelectionMode() const
+BOOL Outliner::IsInSelectionMode() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsInSelectionMode();
 }
 
-void Outliner::SetControlWord( sal_uLong nWord )
+void Outliner::SetControlWord( ULONG nWord )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetControlWord( nWord );
 }
 
-sal_uLong Outliner::GetControlWord() const
+ULONG Outliner::GetControlWord() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetControlWord();
 }
 
-void Outliner::SetAsianCompressionMode( sal_uInt16 n )
+void Outliner::SetAsianCompressionMode( USHORT n )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetAsianCompressionMode( n );
 }
 
-sal_uInt16 Outliner::GetAsianCompressionMode() const
+USHORT Outliner::GetAsianCompressionMode() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetAsianCompressionMode();
 }
 
-void Outliner::SetKernAsianPunctuation( sal_Bool b )
+void Outliner::SetKernAsianPunctuation( BOOL b )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetKernAsianPunctuation( b );
 }
 
-sal_Bool Outliner::IsKernAsianPunctuation() const
+BOOL Outliner::IsKernAsianPunctuation() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsKernAsianPunctuation();
 }
 
-void Outliner::SetAddExtLeading( sal_Bool bExtLeading )
+void Outliner::SetAddExtLeading( BOOL bExtLeading )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetAddExtLeading( bExtLeading );
 }
 
-sal_Bool Outliner::IsAddExtLeading() const
+BOOL Outliner::IsAddExtLeading() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsAddExtLeading();
 }
 
-void Outliner::UndoActionStart( sal_uInt16 nId )
+void Outliner::UndoActionStart( USHORT nId )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->UndoActionStart( nId );
 }
 
-void Outliner::UndoActionEnd( sal_uInt16 nId )
+void Outliner::UndoActionEnd( USHORT nId )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->UndoActionEnd( nId );
@@ -425,35 +420,37 @@ void Outliner::UndoActionEnd( sal_uInt16 nId )
 
 void Outliner::InsertUndo( EditUndo* pUndo )
 {
+#ifndef SVX_LIGHT
     DBG_CHKTHIS(Outliner,0);
-    pEditEngine->GetUndoManager().AddUndoAction( pUndo, sal_False );
+    pEditEngine->GetUndoManager().AddUndoAction( pUndo, FALSE );
+#endif
 }
 
-sal_Bool Outliner::IsInUndo()
+BOOL Outliner::IsInUndo()
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsInUndo();
 }
 
-sal_uLong Outliner::GetLineCount( sal_uLong nParagraph ) const
+ULONG Outliner::GetLineCount( ULONG nParagraph ) const
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetLineCount( (sal_uInt16)nParagraph );
+    return pEditEngine->GetLineCount( (USHORT)nParagraph );
 }
 
-sal_uInt16 Outliner::GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const
+USHORT Outliner::GetLineLen( ULONG nParagraph, USHORT nLine ) const
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetLineLen( (sal_uInt16)nParagraph, nLine );
+    return pEditEngine->GetLineLen( (USHORT)nParagraph, nLine );
 }
 
-sal_uLong Outliner::GetLineHeight( sal_uLong nParagraph, sal_uLong nLine )
+ULONG Outliner::GetLineHeight( ULONG nParagraph, ULONG nLine )
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetLineHeight( (sal_uInt16)nParagraph, (sal_uInt16)nLine );
+    return pEditEngine->GetLineHeight( (USHORT)nParagraph, (USHORT)nLine );
 }
 
-void Outliner::QuickRemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich )
+void Outliner::QuickRemoveCharAttribs( USHORT nPara, USHORT nWhich )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->QuickRemoveCharAttribs( nPara, nWhich );
@@ -471,10 +468,10 @@ sal_Bool Outliner::HasConvertibleTextPortion( LanguageType nLang )
     return pEditEngine->HasConvertibleTextPortion( nLang );
 }
 
-sal_Bool Outliner::ConvertNextDocument()
+BOOL Outliner::ConvertNextDocument()
 {
     DBG_CHKTHIS(Outliner,0);
-    return sal_False;
+    return FALSE;
 }
 
 void Outliner::SetDefaultLanguage( LanguageType eLang )
@@ -489,7 +486,7 @@ LanguageType Outliner::GetDefaultLanguage() const
     return pEditEngine->GetDefaultLanguage();
 }
 
-sal_Bool Outliner::HasOnlineSpellErrors() const
+BOOL Outliner::HasOnlineSpellErrors() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->HasOnlineSpellErrors();
@@ -501,7 +498,7 @@ void Outliner::CompleteOnlineSpelling()
     pEditEngine->CompleteOnlineSpelling();
 }
 
-sal_Bool Outliner::HasText( const SvxSearchItem& rSearchItem )
+BOOL Outliner::HasText( const SvxSearchItem& rSearchItem )
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->HasText( rSearchItem );
@@ -519,10 +516,10 @@ SfxItemPool* Outliner::GetEditTextObjectPool() const
     return pEditEngine->GetEditTextObjectPool();
 }
 
-sal_Bool Outliner::SpellNextDocument()
+BOOL Outliner::SpellNextDocument()
 {
     DBG_CHKTHIS(Outliner,0);
-    return sal_False;
+    return FALSE;
 }
 
 
@@ -568,16 +565,16 @@ OutputDevice* Outliner::GetRefDevice() const
     return pEditEngine->GetRefDevice();
 }
 
-sal_uInt16 Outliner::GetFirstLineOffset( sal_uLong nParagraph )
+USHORT Outliner::GetFirstLineOffset( ULONG nParagraph )
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetFirstLineOffset( (sal_uInt16)nParagraph );
+    return pEditEngine->GetFirstLineOffset( (USHORT)nParagraph );
 }
 
-sal_uLong Outliner::GetTextHeight( sal_uLong nParagraph ) const
+ULONG Outliner::GetTextHeight( ULONG nParagraph ) const
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetTextHeight((sal_uInt16)nParagraph );
+    return pEditEngine->GetTextHeight((USHORT)nParagraph );
 }
 
 Point Outliner::GetDocPos( const Point& rPaperPos ) const
@@ -586,35 +583,35 @@ Point Outliner::GetDocPos( const Point& rPaperPos ) const
     return pEditEngine->GetDocPos( rPaperPos );
 }
 
-Point Outliner::GetDocPosTopLeft( sal_uLong nParagraph )
+Point Outliner::GetDocPosTopLeft( ULONG nParagraph )
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetDocPosTopLeft( (sal_uInt16)nParagraph );
+    return pEditEngine->GetDocPosTopLeft( (USHORT)nParagraph );
 }
 
-sal_Bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
+BOOL Outliner::IsTextPos( const Point& rPaperPos, USHORT nBorder )
 {
     return IsTextPos( rPaperPos, nBorder, NULL );
 }
 
-sal_Bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, sal_Bool* pbBullet )
+BOOL Outliner::IsTextPos( const Point& rPaperPos, USHORT nBorder, BOOL* pbBullet )
 {
     DBG_CHKTHIS(Outliner,0);
     if ( pbBullet)
-        *pbBullet = sal_False;
-    sal_Bool bTextPos = pEditEngine->IsTextPos( rPaperPos, nBorder );
+        *pbBullet = FALSE;
+    BOOL bTextPos = pEditEngine->IsTextPos( rPaperPos, nBorder );
     if ( !bTextPos )
     {
         Point aDocPos = GetDocPos( rPaperPos );
-        sal_uInt16 nPara = pEditEngine->FindParagraph( aDocPos.Y() );
+        USHORT nPara = pEditEngine->FindParagraph( aDocPos.Y() );
         if ( ( nPara != EE_PARA_NOT_FOUND ) && ImplHasBullet( nPara ) )
         {
-            Rectangle aBulArea = ImpCalcBulletArea( nPara, sal_True, sal_True );
+            Rectangle aBulArea = ImpCalcBulletArea( nPara, TRUE, TRUE );
             if ( aBulArea.IsInside( rPaperPos ) )
             {
-                bTextPos = sal_True;
+                bTextPos = TRUE;
                 if ( pbBullet)
-                    *pbBullet = sal_True;
+                    *pbBullet = TRUE;
             }
         }
     }
@@ -630,50 +627,50 @@ void Outliner::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
 
 void Outliner::QuickInsertText( const XubString& rText, const ESelection& rSel )
 {
-    bFirstParaIsEmpty = sal_False;
+    bFirstParaIsEmpty = FALSE;
     pEditEngine->QuickInsertText( rText, rSel );
 }
 
 void Outliner::QuickDelete( const ESelection& rSel )
 {
-    bFirstParaIsEmpty = sal_False;
+    bFirstParaIsEmpty = FALSE;
     pEditEngine->QuickDelete( rSel );
 }
 
 void Outliner::QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel )
 {
     DBG_CHKTHIS(Outliner,0);
-    bFirstParaIsEmpty = sal_False;
+    bFirstParaIsEmpty = FALSE;
     pEditEngine->QuickInsertField( rFld, rSel );
 }
 
 void Outliner::QuickInsertLineBreak( const ESelection& rSel )
 {
     DBG_CHKTHIS(Outliner,0);
-    bFirstParaIsEmpty = sal_False;
+    bFirstParaIsEmpty = FALSE;
     pEditEngine->QuickInsertLineBreak( rSel );
 }
 
-void Outliner::QuickFormatDoc( sal_Bool bFull )
+void Outliner::QuickFormatDoc( BOOL bFull )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->QuickFormatDoc( bFull );
 }
 
-void Outliner::SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY )
+void Outliner::SetGlobalCharStretching( USHORT nX, USHORT nY )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetGlobalCharStretching( nX, nY );
 }
 
-void Outliner::GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY )
+void Outliner::GetGlobalCharStretching( USHORT& rX, USHORT& rY )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->GetGlobalCharStretching( rX, rY );
 }
 
 
-void Outliner::DoStretchChars( sal_uInt16 nX, sal_uInt16 nY )
+void Outliner::DoStretchChars( USHORT nX, USHORT nY )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->DoStretchChars( nX, nY );
@@ -685,43 +682,43 @@ void Outliner::EraseVirtualDevice()
     pEditEngine->EraseVirtualDevice();
 }
 
-void Outliner::SetBigTextObjectStart( sal_uInt16 nStartAtPortionCount )
+void Outliner::SetBigTextObjectStart( USHORT nStartAtPortionCount )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetBigTextObjectStart( nStartAtPortionCount );
 }
 
-sal_uInt16 Outliner::GetBigTextObjectStart() const
+USHORT Outliner::GetBigTextObjectStart() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetBigTextObjectStart();
 }
 
-sal_Bool Outliner::ShouldCreateBigTextObject() const
+BOOL Outliner::ShouldCreateBigTextObject() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->ShouldCreateBigTextObject();
 }
 
-void Outliner::SetVertical( sal_Bool b )
+void Outliner::SetVertical( BOOL b )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetVertical( b );
 }
 
-sal_Bool Outliner::IsVertical() const
+BOOL Outliner::IsVertical() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsVertical();
 }
 
-void Outliner::SetFixedCellHeight( sal_Bool bUseFixedCellHeight )
+void Outliner::SetFixedCellHeight( BOOL bUseFixedCellHeight )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetFixedCellHeight( bUseFixedCellHeight );
 }
 
-sal_Bool Outliner::IsFixedCellHeight() const
+BOOL Outliner::IsFixedCellHeight() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsFixedCellHeight();
@@ -739,13 +736,13 @@ EEHorizontalTextDirection Outliner::GetDefaultHorizontalTextDirection() const
     return pEditEngine->GetDefaultHorizontalTextDirection();
 }
 
-sal_uInt16 Outliner::GetScriptType( const ESelection& rSelection ) const
+USHORT Outliner::GetScriptType( const ESelection& rSelection ) const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetScriptType( rSelection );
 }
 
-LanguageType Outliner::GetLanguage( sal_uInt16 nPara, sal_uInt16 nPos ) const
+LanguageType Outliner::GetLanguage( USHORT nPara, USHORT nPos ) const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetLanguage( nPara, nPos );
@@ -757,50 +754,60 @@ void Outliner::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemovePara
     pEditEngine->RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
 }
 
-void Outliner::EnableAutoColor( sal_Bool b )
+void Outliner::EnableAutoColor( BOOL b )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->EnableAutoColor( b );
 }
 
-sal_Bool Outliner::IsAutoColorEnabled() const
+BOOL Outliner::IsAutoColorEnabled() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsAutoColorEnabled();
 }
 
-void Outliner::ForceAutoColor( sal_Bool b )
+void Outliner::ForceAutoColor( BOOL b )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->ForceAutoColor( b );
 }
 
-sal_Bool Outliner::IsForceAutoColor() const
+BOOL Outliner::IsForceAutoColor() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsForceAutoColor();
 }
+/*-- 13.10.2003 16:56:23---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void Outliner::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
     pEditEngine->StartSpelling(rEditView, bMultipleDoc);
 }
+/*-- 13.10.2003 16:56:23---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void Outliner::EndSpelling()
 {
     pEditEngine->EndSpelling();
 }
+/*-- 13.10.2003 16:56:23---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 bool Outliner::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking )
 {
     return pEditEngine->SpellSentence(rEditView, rToFill, bIsGrammarChecking );
 }
+/*-- 08.09.2008 11:39:05---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void Outliner::PutSpellingToSentenceStart( EditView& rEditView )
 {
     pEditEngine->PutSpellingToSentenceStart( rEditView );
 }
+/*-- 13.10.2003 16:56:25---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void Outliner::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck )
 {
     pEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck );

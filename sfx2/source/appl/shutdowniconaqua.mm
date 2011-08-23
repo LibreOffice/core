@@ -450,7 +450,7 @@ void aqua_init_systray()
                 if( [NSApp respondsToSelector: @selector(setDockIconClickHandler:)] )
                     [NSApp performSelector:@selector(setDockIconClickHandler:) withObject: pExecute];
                 else
-                    OSL_FAIL( "setDockIconClickHandler selector failed on NSApp\n" );
+                    DBG_ERROR( "setDockIconClickHandler selector failed on NSApp\n" );
 
             }
             
@@ -497,10 +497,10 @@ void aqua_init_systray()
                 [NSApp performSelector:@selector(addDockMenuItem:) withObject: pDockSubMenu];
             }
             else
-                OSL_FAIL( "addDockMenuItem selector failed on NSApp\n" );
+                DBG_ERROR( "addDockMenuItem selector failed on NSApp\n" );
         }
         else
-            OSL_FAIL( "addFallbackMenuItem selector failed on NSApp\n" );
+            DBG_ERROR( "addFallbackMenuItem selector failed on NSApp\n" );
     }
 }
 

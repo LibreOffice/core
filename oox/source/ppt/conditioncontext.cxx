@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,11 +38,13 @@
 #include <com/sun/star/animations/EventTrigger.hpp>
 
 #include "oox/helper/attributelist.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/core/contexthandler.hxx"
 #include "oox/ppt/animationspersist.hxx"
 #include "animationtypes.hxx"
 
 #include "timetargetelementcontext.hxx"
+#include "tokens.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -53,7 +55,7 @@ namespace oox { namespace ppt {
 
     CondContext::CondContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs,
                 const TimeNodePtr & pNode, AnimationCondition & aValue )
-        :  TimeNodeContext( rParent, PPT_TOKEN( cond ), xAttribs, pNode )
+        :  TimeNodeContext( rParent, NMSP_PPT|XML_cond, xAttribs, pNode )
         , maCond( aValue )
     {
         maEvent.Trigger =  EventTrigger::NONE;
@@ -122,7 +124,7 @@ namespace oox { namespace ppt {
 
         switch( aElementToken )
         {
-        case PPT_TOKEN( rtn ):
+        case NMSP_PPT|XML_rtn:
         {
             // ST_TLTriggerRuntimeNode { first, last, all }
             sal_Int32 aTok;
@@ -146,7 +148,7 @@ namespace oox { namespace ppt {
             maCond.maValue = makeAny( nEnum );
             break;
         }
-        case PPT_TOKEN( tn ):
+        case NMSP_PPT|XML_tn:
         {
             maCond.mnType = aElementToken;
             AttributeList attribs( xAttribs );
@@ -154,7 +156,7 @@ namespace oox { namespace ppt {
             maCond.maValue = makeAny( nId );
             break;
         }
-        case PPT_TOKEN( tgtEl ):
+        case NMSP_PPT|XML_tgtEl:
             // CT_TLTimeTargetElement
             xRet.set( new TimeTargetElementContext( *this, maCond.getTarget() ) );
             break;
@@ -193,7 +195,7 @@ namespace oox { namespace ppt {
 
         switch( aElement )
         {
-        case PPT_TOKEN( cond ):
+        case NMSP_PPT|XML_cond:
             // add a condition to the list
             maConditions.push_back( AnimationCondition() );
             xRet.set( new CondContext( *this, xAttribs, mpNode, maConditions.back() ) );

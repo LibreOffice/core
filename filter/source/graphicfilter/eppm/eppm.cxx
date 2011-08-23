@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,6 +36,9 @@
 #include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
+#include "strings.hrc"
+#include "dlgeppm.hrc"
+#include "dlgeppm.hxx"
 
 //============================ PPMWriter ==================================
 
@@ -43,33 +46,32 @@ class PPMWriter {
 
 private:
 
-    SvStream& m_rOStm;          // Die auszugebende PPM-Datei
-    sal_uInt16              mpOStmOldModus;
+    SvStream*			mpOStm; 			// Die auszugebende PPM-Datei
+    USHORT				mpOStmOldModus;
 
-    sal_Bool                mbStatus;
-    sal_Int32           mnMode;
-    BitmapReadAccess*   mpAcc;
-    sal_uLong               mnWidth, mnHeight;  // Bildausmass in Pixeln
+    BOOL				mbStatus;
+    sal_Int32			mnMode;
+    BitmapReadAccess*	mpAcc;
+    ULONG				mnWidth, mnHeight;	// Bildausmass in Pixeln
 
-    sal_Bool                ImplWriteHeader();
-    void                ImplWriteBody();
-    void                ImplWriteNumber( sal_Int32 );
+    BOOL				ImplWriteHeader();
+    void				ImplWriteBody();
+    void				ImplWriteNumber( sal_Int32 );
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
 public:
-                        PPMWriter(SvStream &rStrm);
+                        PPMWriter();
                         ~PPMWriter();
 
-    sal_Bool                WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
+    BOOL				WritePPM( const Graphic& rGraphic, SvStream& rPPM, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PPMWriter ==============================
 
-PPMWriter::PPMWriter(SvStream &rStrm)
-    : m_rOStm(rStrm)
-    , mbStatus  ( sal_True )
-    , mpAcc     ( NULL )
+PPMWriter::PPMWriter() :
+    mbStatus	( TRUE ),
+    mpAcc		( NULL )
 {
 }
 
@@ -81,8 +83,11 @@ PPMWriter::~PPMWriter()
 
 // ------------------------------------------------------------------------
 
-sal_Bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
+BOOL PPMWriter::WritePPM( const Graphic& rGraphic, SvStream& rPPM, FilterConfigItem* pFilterConfigItem )
 {
+
+    mpOStm = &rPPM;
+
     if ( pFilterConfigItem )
     {
         mnMode = pFilterConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
@@ -95,12 +100,12 @@ sal_Bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilter
         }
     }
 
-    BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
-    Bitmap      aBmp = aBmpEx.GetBitmap();
+    BitmapEx	aBmpEx( rGraphic.GetBitmapEx() );
+    Bitmap		aBmp = aBmpEx.GetBitmap();
     aBmp.Convert( BMP_CONVERSION_24BIT );
 
-    mpOStmOldModus = m_rOStm.GetNumberFormatInt();
-    m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    mpOStmOldModus = mpOStm->GetNumberFormatInt();
+    mpOStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
     mpAcc = aBmp.AcquireReadAccess();
     if( mpAcc )
@@ -112,9 +117,9 @@ sal_Bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilter
         aBmp.ReleaseAccess( mpAcc );
     }
     else
-        mbStatus = sal_False;
+        mbStatus = FALSE;
 
-    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
+    mpOStm->SetNumberFormatInt( mpOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -124,26 +129,26 @@ sal_Bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilter
 
 // ------------------------------------------------------------------------
 
-sal_Bool PPMWriter::ImplWriteHeader()
+BOOL PPMWriter::ImplWriteHeader()
 {
     mnWidth = mpAcc->Width();
     mnHeight = mpAcc->Height();
     if ( mnWidth && mnHeight )
     {
         if ( mnMode == 0 )
-            m_rOStm << "P6\x0a";
+            *mpOStm << "P6\x0a";
         else
-            m_rOStm << "P3\x0a";
+            *mpOStm << "P3\x0a";
 
         ImplWriteNumber( mnWidth );
-        m_rOStm << (sal_uInt8)32;
+        *mpOStm << (BYTE)32;
         ImplWriteNumber( mnHeight );
-        m_rOStm << (sal_uInt8)32;
-        ImplWriteNumber( 255 );         // max. col.
-        m_rOStm << (sal_uInt8)10;
+        *mpOStm << (BYTE)32;
+        ImplWriteNumber( 255 ); 		// max. col.
+        *mpOStm << (BYTE)10;
     }
     else
-        mbStatus = sal_False;
+        mbStatus = FALSE;
 
     return mbStatus;
 }
@@ -154,29 +159,29 @@ void PPMWriter::ImplWriteBody()
 {
     if ( mnMode == 0 )
     {
-        for ( sal_uLong y = 0; y < mnHeight; y++ )
+        for ( ULONG y = 0; y < mnHeight; y++ )
         {
-            for ( sal_uLong x = 0; x < mnWidth; x++ )
+            for ( ULONG x = 0; x < mnWidth; x++ )
             {
                 const BitmapColor& rColor = mpAcc->GetPixel( y, x );
-                m_rOStm << rColor.GetRed();
-                m_rOStm << rColor.GetGreen();
-                m_rOStm << rColor.GetBlue();
+                *mpOStm << rColor.GetRed();
+                *mpOStm << rColor.GetGreen();
+                *mpOStm << rColor.GetBlue();
             }
         }
     }
     else
     {
-        for ( sal_uLong y = 0; y < mnHeight; y++ )
+        for ( ULONG y = 0; y < mnHeight; y++ )
         {
             int nCount = 70;
-            for ( sal_uLong x = 0; x < mnWidth; x++ )
+            for ( ULONG x = 0; x < mnWidth; x++ )
             {
-                sal_uInt8 i, nDat[3], nNumb;
+                BYTE i, nDat[3], nNumb;
                 if ( nCount < 0 )
                 {
                     nCount = 69;
-                    m_rOStm << (sal_uInt8)10;
+                    *mpOStm << (BYTE)10;
                 }
                 nDat[0] = mpAcc->GetPixel( y, x ).GetRed();
                 nDat[1] = mpAcc->GetPixel( y, x ).GetGreen();
@@ -186,12 +191,12 @@ void PPMWriter::ImplWriteBody()
                     nNumb = nDat[ i ] / 100;
                     if ( nNumb )
                     {
-                        m_rOStm << (sal_uInt8)( nNumb + '0' );
+                        *mpOStm << (BYTE)( nNumb + '0' );
                         nDat[ i ] -= ( nNumb * 100 );
                         nNumb = nDat[ i ] / 10;
-                        m_rOStm << (sal_uInt8)( nNumb + '0' );
+                        *mpOStm << (BYTE)( nNumb + '0' );
                         nDat[ i ] -= ( nNumb * 10 );
-                        m_rOStm << (sal_uInt8)( nDat[ i ] + '0' );
+                        *mpOStm << (BYTE)( nDat[ i ] + '0' );
                         nCount -= 4;
                     }
                     else
@@ -199,21 +204,21 @@ void PPMWriter::ImplWriteBody()
                         nNumb = nDat[ i ] / 10;
                         if ( nNumb )
                         {
-                            m_rOStm << (sal_uInt8)( nNumb + '0' );
+                            *mpOStm << (BYTE)( nNumb + '0' );
                             nDat[ i ] -= ( nNumb * 10 );
-                            m_rOStm << (sal_uInt8)( nDat[ i ] + '0' );
+                            *mpOStm << (BYTE)( nDat[ i ] + '0' );
                             nCount -= 3;
                         }
                         else
                         {
-                            m_rOStm << (sal_uInt8)( nDat[ i ] + '0' );
+                            *mpOStm << (BYTE)( nDat[ i ] + '0' );
                             nCount -= 2;
                         }
                     }
-                    m_rOStm << (sal_uInt8)' ';
+                    *mpOStm << (BYTE)' ';
                 }
             }
-            m_rOStm << (sal_uInt8)10;
+            *mpOStm << (BYTE)10;
         }
     }
 }
@@ -226,7 +231,7 @@ void PPMWriter::ImplWriteNumber( sal_Int32 nNumber )
     const ByteString aNum( ByteString::CreateFromInt32( nNumber ) );
 
     for( sal_Int16 n = 0, nLen = aNum.Len(); n < nLen; n++  )
-        m_rOStm << aNum.GetChar( n );
+        *mpOStm << aNum.GetChar( n );
 
 }
 
@@ -236,13 +241,65 @@ void PPMWriter::ImplWriteNumber( sal_Int32 nNumber )
 // - exported function -
 // ---------------------
 
-extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
+extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
 {
-    PPMWriter aPPMWriter(rStream);
-    return aPPMWriter.WritePPM( rGraphic, pFilterConfigItem );
+    PPMWriter aPPMWriter;
+    return aPPMWriter.WritePPM( rGraphic, rStream, pFilterConfigItem );
 }
 
 // ------------------------------------------------------------------------
 
+extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
+{
+    BOOL bRet = FALSE;
+
+    if ( rPara.pWindow )
+    {
+        ByteString	aResMgrName( "epp" );
+        ResMgr*	pResMgr;
+
+        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+
+        if( pResMgr )
+        {
+            rPara.pResMgr = pResMgr;
+            bRet = ( DlgExportEPPM( rPara ).Execute() == RET_OK );
+            delete pResMgr;
+        }
+        else
+            bRet = TRUE;
+    }
+
+    return bRet;
+}
+
+// ------------------------------------------------------------------------
+
+// ---------------
+// - Win16 trash -
+// ---------------
+
+#ifdef WIN
+
+static HINSTANCE hDLLInst = 0;
+
+extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
+{
+    if ( nHeap )
+        UnlockData( 0 );
+
+    hDLLInst = hDLL;
+
+    return TRUE;
+}
+
+// ------------------------------------------------------------------------
+
+extern "C" int CALLBACK WEP( int )
+{
+    return 1;
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

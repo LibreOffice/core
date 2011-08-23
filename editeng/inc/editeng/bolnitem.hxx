@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,26 +41,24 @@
 
 
 /*
-[Description]
-This Item transports a editeng::SvxBorderLine.
+[Beschreibung]
+Dieses Item transportiert eine SvxBorderLine.
 */
 
-namespace editeng {
-    class SvxBorderLine;
-}
+class SvxBorderLine;
 
 class EDITENG_DLLPUBLIC SvxLineItem : public SfxPoolItem
 {
 public:
     TYPEINFO();
 
-    SvxLineItem( const sal_uInt16 nId );
+    SvxLineItem( const USHORT nId );
     SvxLineItem( const SvxLineItem& rCpy );
     ~SvxLineItem();
     SvxLineItem &operator=( const SvxLineItem& rLine );
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -68,16 +66,16 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
+    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
     virtual bool             ScaleMetrics( long nMult, long nDiv );
     virtual bool             HasMetrics() const;
 
-    const   editeng::SvxBorderLine*  GetLine     () const { return pLine; }
-    void                    SetLine     ( const editeng::SvxBorderLine *pNew );
+    const   SvxBorderLine*  GetLine     () const { return pLine; }
+    void                    SetLine     ( const SvxBorderLine *pNew );
 
 private:
-    editeng::SvxBorderLine*  pLine;
+    SvxBorderLine*  pLine;
 };
 
 

@@ -33,6 +33,17 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 use Cwd;
 
+#### script id #####
+
+( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
+
+$id_str = ' $Revision: 1.12 $ ';
+$id_str =~ /Revision:\s+(\S+)\s+\$/
+  ? ($script_rev = $1) : ($script_rev = "-");
+
+print STDERR "$script_name -- version: $script_rev\n";
+print STDERR "Multi Platform Enabled Edition\n";
+
 #########################
 #                       #
 #   Globale Variablen   #

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,9 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
+/* -----------------------------12.10.00 11:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
 namespace utl
 {
     class SourceViewConfig_Impl;

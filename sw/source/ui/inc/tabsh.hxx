@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,8 @@ class SwWrtShell;
 
 SW_DLLPUBLIC void ItemSetToTableParam( const SfxItemSet& rSet, SwWrtShell &rSh );
 
-extern const sal_uInt16 aUITableAttrRange[];
-SW_DLLPUBLIC const sal_uInt16* SwuiGetUITableAttrRange();
+extern const USHORT __FAR_DATA aUITableAttrRange[];
+SW_DLLPUBLIC const USHORT* SwuiGetUITableAttrRange();
 
 class SwTableShell: public SwBaseShell
 {
@@ -45,13 +45,13 @@ public:
     SFX_DECL_INTERFACE(SW_TABSHELL)
     TYPEINFO();
 
-    void    Execute(SfxRequest &);
-    void    GetState(SfxItemSet &);
-    void    GetFrmBorderState(SfxItemSet &rSet);
-    void    GetLineStyleState(SfxItemSet &rSet);
-    void    ExecTableStyle(SfxRequest& rReq);
+    void	Execute(SfxRequest &);
+    void	GetState(SfxItemSet &);
+    void	GetFrmBorderState(SfxItemSet &rSet);
+    void 	GetLineStyleState(SfxItemSet &rSet);
+    void	ExecTableStyle(SfxRequest& rReq);
 
-    void    ExecNumberFormat(SfxRequest& rReq);
+    void	ExecNumberFormat(SfxRequest& rReq);
 
             SwTableShell(SwView &rView);
 };

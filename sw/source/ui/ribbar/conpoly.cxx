@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,11 +62,11 @@ ConstPolygon::ConstPolygon(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* p
 
 
 
-sal_Bool ConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL ConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn;
+    BOOL bReturn;
 
-    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == sal_True)
+    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == TRUE)
         aLastPos = rMEvt.GetPosPixel();
 
     return (bReturn);
@@ -80,9 +80,9 @@ sal_Bool ConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
 
 
-sal_Bool ConstPolygon::MouseMove(const MouseEvent& rMEvt)
+BOOL ConstPolygon::MouseMove(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     bReturn = SwDrawBase::MouseMove(rMEvt);
 
@@ -97,9 +97,9 @@ sal_Bool ConstPolygon::MouseMove(const MouseEvent& rMEvt)
 
 
 
-sal_Bool ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     if (m_pSh->IsDrawCreate())
     {
@@ -110,7 +110,7 @@ sal_Bool ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 m_pSh->BreakCreate();
                 EnterSelectMode(rMEvt);
-                return sal_True;
+                return TRUE;
             }
         }
         else
@@ -137,7 +137,7 @@ sal_Bool ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 
 
 
-void ConstPolygon::Activate(const sal_uInt16 nSlotId)
+void ConstPolygon::Activate(const USHORT nSlotId)
 {
     switch (nSlotId)
     {

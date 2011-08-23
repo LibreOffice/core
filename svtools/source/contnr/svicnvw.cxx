@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <svimpicn.hxx>
 #include <svtools/svlbitm.hxx>
 
-#define ICNVW_BLOCK_ENTRYINS    0x0001
+#define ICNVW_BLOCK_ENTRYINS	0x0001
 
 SvIcnVwDataEntry::SvIcnVwDataEntry()
     : nIcnVwFlags(0),eTextMode(ShowTextDontKnow)
@@ -48,6 +48,7 @@ SvIcnVwDataEntry::~SvIcnVwDataEntry()
 SvIconView::SvIconView( Window* pParent, WinBits nWinStyle ) :
     SvLBox( pParent, nWinStyle | WB_BORDER )
 {
+    nWinBits = nWinStyle;
     nIcnVwFlags = 0;
     pImp = new SvImpIconView( this, GetModel(), nWinStyle | WB_ICON );
     pImp->mpViewData = 0;
@@ -69,6 +70,8 @@ SvIconView::SvIconView( Window* pParent , const ResId& rResId ) :
     SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
     SetDefaultFont();
     pImp->SetSelectionMode( GetSelectionMode() );
+    pImp->SetWindowBits( nWindowStyle );
+    nWinBits = nWindowStyle;
 }
 
 SvIconView::~SvIconView()
@@ -104,7 +107,7 @@ void SvIconView::DisconnectFromModel()
 
 
 SvLBoxEntry* SvIconView::InsertEntry( const XubString& rText,
-    SvLBoxEntry* pParent, sal_Bool bChildsOnDemand, sal_uLong nPos )
+    SvLBoxEntry* pParent, BOOL bChildsOnDemand, ULONG nPos )
 {
     SvLBoxEntry* pEntry = CreateEntry(
         rText, aCollapsedEntryBmp, aExpandedEntryBmp );
@@ -120,7 +123,7 @@ SvLBoxEntry* SvIconView::InsertEntry( const XubString& rText,
 SvLBoxEntry* SvIconView::InsertEntry( const XubString& rText,
     const Image& rExpEntryBmp,
     const Image& rCollEntryBmp,
-    SvLBoxEntry* pParent, sal_Bool bChildsOnDemand, sal_uLong nPos)
+    SvLBoxEntry* pParent, BOOL bChildsOnDemand, ULONG nPos)
 {
     SvLBoxEntry* pEntry = CreateEntry(
         rText, rCollEntryBmp, rExpEntryBmp );
@@ -216,7 +219,7 @@ SvLBoxEntry* SvIconView::CloneEntry( SvLBoxEntry* pSource )
 }
 
 
-sal_uInt16 SvIconView::IsA()
+USHORT SvIconView::IsA()
 {
     return SV_LISTBOX_ID_ICONVIEW;
 }
@@ -224,61 +227,61 @@ sal_uInt16 SvIconView::IsA()
 void SvIconView::RequestingChilds( SvLBoxEntry* pParent )
 {
     if ( !pParent->HasChilds() )
-        InsertEntry( String::CreateFromAscii("<dummy>"), pParent, sal_False, LIST_APPEND );
+        InsertEntry( String::CreateFromAscii("<dummy>"), pParent, FALSE, LIST_APPEND );
 }
 
-void SvIconView::Paint( const Rectangle& rRect )
+void __EXPORT SvIconView::Paint( const Rectangle& rRect )
 {
     pImp->Paint( rRect );
 }
 
-void SvIconView::MouseButtonDown( const MouseEvent& rMEvt )
+void __EXPORT SvIconView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     pImp->MouseButtonDown( rMEvt );
 }
 
-void SvIconView::MouseButtonUp( const MouseEvent& rMEvt )
+void __EXPORT SvIconView::MouseButtonUp( const MouseEvent& rMEvt )
 {
     pImp->MouseButtonUp( rMEvt );
 }
 
-void SvIconView::MouseMove( const MouseEvent& rMEvt )
+void __EXPORT SvIconView::MouseMove( const MouseEvent& rMEvt )
 {
     pImp->MouseMove( rMEvt );
 }
 
-void SvIconView::KeyInput( const KeyEvent& rKEvt )
+void __EXPORT SvIconView::KeyInput( const KeyEvent& rKEvt )
 {
     // unter OS/2 bekommen wir auch beim Editieren Key-Up/Down
     if( IsEditingActive() )
         return;
 
     nImpFlags |= SVLBOX_IS_TRAVELSELECT;
-    sal_Bool bKeyUsed = pImp->KeyInput( rKEvt );
+    BOOL bKeyUsed = pImp->KeyInput( rKEvt );
     if ( !bKeyUsed )
         SvLBox::KeyInput( rKEvt );
     nImpFlags &= ~SVLBOX_IS_TRAVELSELECT;
 }
 
-void SvIconView::Resize()
+void __EXPORT SvIconView::Resize()
 {
     pImp->Resize();
     SvLBox::Resize();
 }
 
-void SvIconView::GetFocus()
+void __EXPORT SvIconView::GetFocus()
 {
     pImp->GetFocus();
     SvLBox::GetFocus();
 }
 
-void SvIconView::LoseFocus()
+void __EXPORT SvIconView::LoseFocus()
 {
     pImp->LoseFocus();
     SvLBox::LoseFocus();
 }
 
-void SvIconView::SetUpdateMode( sal_Bool bUpdate )
+void SvIconView::SetUpdateMode( BOOL bUpdate )
 {
     Control::SetUpdateMode( bUpdate );
     if ( bUpdate )
@@ -299,46 +302,46 @@ void SvIconView::SetModel( SvLBoxTreeList* pNewModel, SvLBoxEntry* pParent )
     pImp->SetModel( pNewModel, pParent );
 }
 
-void SvIconView::ModelHasCleared()
+void __EXPORT SvIconView::ModelHasCleared()
 {
     SvLBox::ModelHasCleared();
     pImp->Clear();
 }
 
-void SvIconView::ModelHasInserted( SvListEntry* pEntry )
+void __EXPORT SvIconView::ModelHasInserted( SvListEntry* pEntry )
 {
     if( !(nIcnVwFlags & ICNVW_BLOCK_ENTRYINS ) )
         pImp->EntryInserted( (SvLBoxEntry*)pEntry );
 }
 
-void SvIconView::ModelHasInsertedTree( SvListEntry* pEntry )
+void __EXPORT SvIconView::ModelHasInsertedTree( SvListEntry* pEntry )
 {
     pImp->TreeInserted( (SvLBoxEntry*)pEntry );
 }
 
-void SvIconView::ModelIsMoving(SvListEntry* pSource,
-        SvListEntry* /* pTargetParent */ , sal_uLong /* nChildPos */ )
+void __EXPORT SvIconView::ModelIsMoving(SvListEntry* pSource,
+        SvListEntry* /* pTargetParent */ , ULONG /* nChildPos */ )
 {
     pImp->MovingEntry( (SvLBoxEntry*)pSource );
 }
 
-void SvIconView::ModelHasMoved(SvListEntry* pSource )
+void __EXPORT SvIconView::ModelHasMoved(SvListEntry* pSource )
 {
     pImp->EntryMoved( (SvLBoxEntry*)pSource );
 }
 
-void SvIconView::ModelIsRemoving( SvListEntry* pEntry )
+void __EXPORT SvIconView::ModelIsRemoving( SvListEntry* pEntry )
 {
     pImp->RemovingEntry( (SvLBoxEntry*)pEntry );
     NotifyRemoving( (SvLBoxEntry*)pEntry );
 }
 
-void SvIconView::ModelHasRemoved( SvListEntry* /* pEntry */ )
+void __EXPORT SvIconView::ModelHasRemoved( SvListEntry* /* pEntry */ )
 {
     pImp->EntryRemoved();
 }
 
-void SvIconView::ModelHasEntryInvalidated( SvListEntry* pEntry )
+void __EXPORT SvIconView::ModelHasEntryInvalidated( SvListEntry* pEntry )
 {
     // die einzelnen Items des Entries reinitialisieren
     SvLBox::ModelHasEntryInvalidated( pEntry );
@@ -346,7 +349,7 @@ void SvIconView::ModelHasEntryInvalidated( SvListEntry* pEntry )
     pImp->ModelHasEntryInvalidated( pEntry );
 }
 
-void SvIconView::ShowTargetEmphasis( SvLBoxEntry* pEntry, sal_Bool bShow )
+void SvIconView::ShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL bShow )
 {
     pImp->ShowTargetEmphasis( pEntry, bShow );
 }
@@ -358,10 +361,10 @@ Point SvIconView::GetEntryPosition( SvLBoxEntry* pEntry ) const
 
 void SvIconView::SetEntryPosition( SvLBoxEntry* pEntry, const Point& rPos)
 {
-    pImp->SetEntryPosition( pEntry, rPos, sal_False, sal_True );
+    pImp->SetEntryPosition( pEntry, rPos, FALSE, TRUE );
 }
 
-void SvIconView::SetEntryPosition( SvLBoxEntry* pEntry, const Point& rPos, sal_Bool bAdjustAtGrid )
+void SvIconView::SetEntryPosition( SvLBoxEntry* pEntry, const Point& rPos, BOOL bAdjustAtGrid )
 {
     pImp->SetEntryPosition( pEntry, rPos, bAdjustAtGrid );
 }
@@ -369,7 +372,7 @@ void SvIconView::SetEntryPosition( SvLBoxEntry* pEntry, const Point& rPos, sal_B
 void SvIconView::SetFont( const Font& rFont )
 {
     Font aTempFont( rFont );
-    aTempFont.SetTransparent( sal_True );
+    aTempFont.SetTransparent( TRUE );
     SvLBox::SetFont( aTempFont );
     RecalcViewData();
     pImp->ChangedFont();
@@ -385,7 +388,7 @@ SvLBoxEntry* SvIconView::GetDropTarget( const Point& rPos )
     return pImp->GetDropTarget( rPos );
 }
 
-SvLBoxEntry* SvIconView::GetEntry( const Point& rPixPos, sal_Bool ) const
+SvLBoxEntry* SvIconView::GetEntry( const Point& rPixPos, BOOL ) const
 {
     Point aPos( rPixPos );
     aPos -= GetMapMode().GetOrigin();
@@ -398,11 +401,10 @@ SvLBoxEntry* SvIconView::GetEntryFromLogicPos( const Point& rDocPos ) const
 }
 
 
-void SvIconView::StateChanged( StateChangedType i_nStateChange )
+void SvIconView::SetWindowBits( WinBits nWinStyle )
 {
-    SvLBox::StateChanged( i_nStateChange );
-    if ( i_nStateChange == STATE_CHANGE_STYLE )
-        pImp->SetStyle( GetStyle() );
+    nWinBits = nWinStyle;
+    pImp->SetWindowBits( nWinStyle );
 }
 
 void SvIconView::PaintEntry( SvLBoxEntry* pEntry )
@@ -438,10 +440,10 @@ void SvIconView::SetSelectionMode( SelectionMode eSelectMode )
     pImp->SetSelectionMode( eSelectMode );
 }
 
-sal_Bool SvIconView::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
+BOOL SvIconView::Select( SvLBoxEntry* pEntry, BOOL bSelect )
 {
     EndEditing();
-    sal_Bool bRetVal = SvListView::Select( pEntry, bSelect );
+    BOOL bRetVal = SvListView::Select( pEntry, bSelect );
     if( bRetVal )
     {
         pImp->EntrySelected( pEntry, bSelect );
@@ -451,7 +453,7 @@ sal_Bool SvIconView::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
     return bRetVal;
 }
 
-void SvIconView::SelectAll( sal_Bool bSelect, sal_Bool )
+void SvIconView::SelectAll( BOOL bSelect, BOOL )
 {
     SvLBoxEntry* pEntry = pImp->GetCurParent();
     pEntry = FirstChild( pEntry );
@@ -465,7 +467,6 @@ void SvIconView::SelectAll( sal_Bool bSelect, sal_Bool )
 void SvIconView::SetCurEntry( SvLBoxEntry* _pEntry )
 {
     pImp->SetCursor( _pEntry );
-    OnCurrentEntryChanged();
 }
 
 SvLBoxEntry* SvIconView::GetCurEntry() const
@@ -476,7 +477,7 @@ SvLBoxEntry* SvIconView::GetCurEntry() const
 void SvIconView::Arrange()
 {
 #ifdef DBG_UTIL
-    sal_uInt16 n=1;
+    USHORT n=1;
     if( n == 1 && n-1 == 0 )
     {
         pImp->Arrange();
@@ -496,20 +497,20 @@ void SvIconView::SetSpaceBetweenEntries( long nX, long nY )
     pImp->SetSpaceBetweenEntries( nX, nY );
 }
 
-sal_Bool SvIconView::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-    SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
+BOOL SvIconView::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+    SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos )
 {
     return pImp->NotifyMoving(pTarget,pEntry,rpNewParent,rNewChildPos);
 }
 
-sal_Bool SvIconView::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-    SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
+BOOL SvIconView::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+    SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos )
 {
     return pImp->NotifyCopying(pTarget,pEntry,rpNewParent,rNewChildPos);
 }
 
 
-void SvIconView::EnableInplaceEditing( sal_Bool bEnable )
+void SvIconView::EnableInplaceEditing( BOOL bEnable )
 {
     SvLBox::EnableInplaceEditing( bEnable );
 }
@@ -522,7 +523,7 @@ void SvIconView::EditingRequest( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
         Selection aSel( SELECTION_MIN, SELECTION_MAX );
         if ( EditingEntry( pEntry, aSel ) )
         {
-            SelectAll( sal_False );
+            SelectAll( FALSE );
             EditItemText( pEntry, (SvLBoxString*)pItem, aSel );
         }
     }
@@ -535,7 +536,7 @@ void SvIconView::EditItemText( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
     DBG_ASSERT(pEntry&&pItem,"EditItemText:Params?");
     pCurEdEntry = pEntry;
     pCurEdItem = pItem;
-    Rectangle aRect( pImp->CalcTextRect( pEntry, (SvLBoxString*)pItem,0,sal_True ));
+    Rectangle aRect( pImp->CalcTextRect( pEntry, (SvLBoxString*)pItem,0,TRUE ));
 
     aRect.Bottom() += 4;
     pImp->MakeVisible( aRect ); // vor der Umrechnung in Pixel-Koord. rufen!
@@ -547,6 +548,9 @@ void SvIconView::EditItemText( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
 
     aRect.Bottom() += 2; // sieht huebscher aus
 
+#ifdef WIN
+    aRect.Bottom() += 4;
+#endif
 #ifdef OS2
 
 #if OS2_SINGLE_LINE_EDIT
@@ -562,7 +566,7 @@ void SvIconView::EditItemText( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
 #endif
 
 #endif // OS2
-    EditText( ((SvLBoxString*)pItem)->GetText(), aRect, rSel, sal_True );
+    EditText( ((SvLBoxString*)pItem)->GetText(), aRect, rSel, TRUE );
 }
 
 void SvIconView::EditEntry( SvLBoxEntry* pEntry )
@@ -577,7 +581,7 @@ void SvIconView::EditEntry( SvLBoxEntry* pEntry )
             Selection aSel( SELECTION_MIN, SELECTION_MAX );
             if( EditingEntry( pEntry, aSel ) )
             {
-                SelectAll( sal_False );
+                SelectAll( FALSE );
                 EditItemText( pEntry, pItem, aSel );
             }
         }
@@ -597,14 +601,14 @@ void SvIconView::EditedText( const XubString& rStr )
 }
 
 
-sal_Bool SvIconView::EditingEntry( SvLBoxEntry*, Selection& )
+BOOL SvIconView::EditingEntry( SvLBoxEntry*, Selection& )
 {
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SvIconView::EditedEntry( SvLBoxEntry*, const XubString& )
+BOOL SvIconView::EditedEntry( SvLBoxEntry*, const XubString& )
 {
-    return sal_True;
+    return TRUE;
 }
 
 
@@ -657,9 +661,9 @@ Region SvIconView::GetDragRegion() const
     return aRegion;
 }
 
-sal_uLong SvIconView::GetSelectionCount() const
+ULONG SvIconView::GetSelectionCount() const
 {
-    return (sal_uLong)(pImp->GetSelectionCount());
+    return (ULONG)(pImp->GetSelectionCount());
 }
 
 void SvIconView::SetGrid( long nDX, long nDY )
@@ -667,18 +671,18 @@ void SvIconView::SetGrid( long nDX, long nDY )
     pImp->SetGrid( nDX, nDY );
 }
 
-void SvIconView::ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,
-    SvListEntry* pEntry2, sal_uLong nPos )
+void SvIconView::ModelNotification( USHORT nActionId, SvListEntry* pEntry1,
+    SvListEntry* pEntry2, ULONG nPos )
 {
     SvLBox::ModelNotification( nActionId, pEntry1, pEntry2, nPos );
     switch( nActionId )
     {
         case LISTACTION_RESORTING:
-            SetUpdateMode( sal_False );
+            SetUpdateMode( FALSE );
             break;
 
         case LISTACTION_RESORTED:
-            SetUpdateMode( sal_True );
+            SetUpdateMode( TRUE );
             Arrange();
             break;
 
@@ -690,9 +694,9 @@ void SvIconView::ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,
 }
 
 
-void SvIconView::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
+void SvIconView::Scroll( long nDeltaX, long nDeltaY, USHORT )
 {
-    pImp->Scroll( nDeltaX, nDeltaY, sal_False );
+    pImp->Scroll( nDeltaX, nDeltaY, FALSE );
 }
 
 void SvIconView::PrepareCommandEvent( const CommandEvent& rCEvt )
@@ -703,7 +707,7 @@ void SvIconView::PrepareCommandEvent( const CommandEvent& rCEvt )
 void SvIconView::StartDrag( sal_Int8 nAction, const Point& rPos )
 {
     pImp->SttDrag( rPos );
-    SvLBoxEntry* pEntry = GetEntry( rPos, sal_True );
+    SvLBoxEntry* pEntry = GetEntry( rPos, TRUE );
     pImp->mpViewData = pEntry;
     SvLBox::StartDrag( nAction, rPos );
 }
@@ -749,14 +753,14 @@ void SvIconView::HideShowDDIcon( SvLBoxEntry* pRefEntry, const Point& rPos )
     pImp->HideShowDDIcon( pRefEntry, rPos );
 }
 
-void SvIconView::SelectRect( const Rectangle& rRect, sal_Bool bAdd,
+void SvIconView::SelectRect( const Rectangle& rRect, BOOL bAdd,
     SvPtrarr* pRects, short nOffs )
 {
     pImp->SelectRect( rRect, bAdd, pRects, nOffs );
 }
 
 void SvIconView::CalcScrollOffsets( const Point& rRefPosPixel, long& rX, long& rY,
-    sal_Bool b, sal_uInt16 nBorderWidth )
+    BOOL b, USHORT nBorderWidth )
 {
     pImp->CalcScrollOffsets( rRefPosPixel, rX, rY, b, nBorderWidth );
 }
@@ -780,7 +784,7 @@ void SvIconView::AdjustAtGrid( SvLBoxEntry* pEntry )
     pImp->AdjustAtGrid( pEntry );
 }
 
-void SvIconView::LockEntryPos( SvLBoxEntry* pEntry, sal_Bool bLock )
+void SvIconView::LockEntryPos( SvLBoxEntry* pEntry, BOOL bLock )
 {
     SvIcnVwDataEntry* pViewData = (SvIcnVwDataEntry*)GetViewData( pEntry );
     if( bLock )
@@ -789,7 +793,7 @@ void SvIconView::LockEntryPos( SvLBoxEntry* pEntry, sal_Bool bLock )
         pViewData->ClearVwFlags( ICNVW_FLAG_POS_LOCKED );
 }
 
-sal_Bool SvIconView::IsEntryPosLocked( const SvLBoxEntry* pEntry ) const
+BOOL SvIconView::IsEntryPosLocked( const SvLBoxEntry* pEntry ) const
 {
     const SvIcnVwDataEntry* pViewData = (const SvIcnVwDataEntry*)GetViewData( (SvListEntry*)pEntry );
     return pViewData->IsEntryPosLocked();
@@ -805,14 +809,14 @@ SvIconViewTextMode SvIconView::GetTextMode( const SvLBoxEntry* pEntry ) const
     return pImp->GetTextMode( pEntry );
 }
 
-SvLBoxEntry* SvIconView::GetNextEntry( const Point& rPixPos, SvLBoxEntry* pCurEntry, sal_Bool  ) const
+SvLBoxEntry* SvIconView::GetNextEntry( const Point& rPixPos, SvLBoxEntry* pCurEntry, BOOL  ) const
 {
     Point aPos( rPixPos );
     aPos -= GetMapMode().GetOrigin();
     return ((SvIconView*)this)->pImp->GetNextEntry( aPos, pCurEntry );
 }
 
-SvLBoxEntry* SvIconView::GetPrevEntry( const Point& rPixPos, SvLBoxEntry* pCurEntry, sal_Bool  ) const
+SvLBoxEntry* SvIconView::GetPrevEntry( const Point& rPixPos, SvLBoxEntry* pCurEntry, BOOL  ) const
 {
     Point aPos( rPixPos );
     aPos -= GetMapMode().GetOrigin();

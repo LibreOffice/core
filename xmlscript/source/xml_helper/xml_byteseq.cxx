@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,11 +34,11 @@
 #include <xmlscript/xml_helper.hxx>
 
 
+using namespace rtl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-using ::rtl::ByteSequence;
 
 namespace xmlscript
 {
@@ -49,14 +49,14 @@ class BSeqInputStream
 {
     ByteSequence _seq;
     sal_Int32 _nPos;
-
+    
 public:
     inline BSeqInputStream( ByteSequence const & rSeq )
         SAL_THROW( () )
         : _seq( rSeq )
         , _nPos( 0 )
         {}
-
+    
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(
         Sequence< sal_Int8 > & rData, sal_Int32 nBytesToRead )
@@ -80,7 +80,7 @@ sal_Int32 BSeqInputStream::readBytes(
     nBytesToRead = ((nBytesToRead > _seq.getLength() - _nPos)
                     ? _seq.getLength() - _nPos
                     : nBytesToRead);
-
+    
     ByteSequence aBytes( _seq.getConstArray() + _nPos, nBytesToRead );
     rData = toUnoSequence( aBytes );
     _nPos += nBytesToRead;
@@ -118,13 +118,13 @@ class BSeqOutputStream
     : public ::cppu::WeakImplHelper1< io::XOutputStream >
 {
     ByteSequence * _seq;
-
+    
 public:
     inline BSeqOutputStream( ByteSequence * seq )
         SAL_THROW( () )
         : _seq( seq )
         {}
-
+    
     // XOutputStream
     virtual void SAL_CALL writeBytes(
         Sequence< sal_Int8 > const & rData )

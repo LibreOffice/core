@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,14 +39,18 @@
 
 /*************************************************************************
 |*
-|*    RscTypCont::FillNameIdList()
+|*	  RscTypCont::FillNameIdList()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 07.05.91
+|*	  Letzte Aenderung	MM 30.05.91
 |*
 *************************************************************************/
 REResourceList * InsertList( Atom nClassName, const RscId& rId,
-                             REResourceList * pList ) {
-    REResourceList  *   pSubList;
-    const char *        pStrClass;
-    ByteString          aStrClass;
+                             REResourceList * pList ){
+    REResourceList	*	pSubList;
+    const char *				pStrClass;
+    ByteString			aStrClass;
 
     pStrClass = pHS->getString( nClassName ).getStr();
     if( pStrClass )
@@ -56,15 +60,16 @@ REResourceList * InsertList( Atom nClassName, const RscId& rId,
 
     pSubList = new REResourceList( pList, aStrClass, rId );
 
-    return pSubList;
+    pList->Insert( pSubList, 0xFFFFFFFF );
+    return( pSubList );
 }
 
 void FillSubList( RSCINST & rInst, REResourceList * pList )
 {
-    sal_uInt32      nCount, i;
-    SUBINFO_STRUCT  aInfo;
+    sal_uInt32		nCount, i;
+    SUBINFO_STRUCT	aInfo;
     REResourceList* pSubList;
-    RSCINST         aTmpI;
+    RSCINST 		aTmpI;
 
     nCount = rInst.pClass->GetCount( rInst );
     for( i = 0; i < nCount; i++ ){
@@ -77,11 +82,11 @@ void FillSubList( RSCINST & rInst, REResourceList * pList )
 }
 
 void FillListObj( ObjNode * pObjNode, RscTop * pRscTop,
-                  REResourceList * pList, sal_uLong lFileKey )
+                  REResourceList * pList, ULONG lFileKey )
 {
     if( pObjNode ){
         if( pObjNode->GetFileKey() == lFileKey ){
-            RSCINST         aTmpI;
+            RSCINST 		aTmpI;
             REResourceList* pSubList;
 
             FillListObj( (ObjNode*)pObjNode->Left(), pRscTop,
@@ -100,7 +105,7 @@ void FillListObj( ObjNode * pObjNode, RscTop * pRscTop,
     };
 }
 
-void FillList( RscTop * pRscTop, REResourceList * pList, sal_uLong lFileKey ){
+void FillList( RscTop * pRscTop, REResourceList * pList, ULONG lFileKey ){
     if( pRscTop ){
         FillList( (RscTop*)pRscTop->Left(), pList, lFileKey );
 
@@ -110,7 +115,7 @@ void FillList( RscTop * pRscTop, REResourceList * pList, sal_uLong lFileKey ){
     };
 }
 
-void RscTypCont::FillNameIdList( REResourceList * pList, sal_uLong lFileKey ){
+void RscTypCont::FillNameIdList( REResourceList * pList, ULONG lFileKey ){
     FillList( pRoot, pList, lFileKey );
 }
 

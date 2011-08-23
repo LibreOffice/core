@@ -1,34 +1,4 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
- * Version: MPL 1.1 / GPLv3+ / LGPLv3+
- *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License or as specified alternatively below. You may obtain a copy of
- * the License at http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- * The Initial Developer of the Original Code is
- *       Fong Lin <pflin@novell.com>
- * Portions created by the Initial Developer are Copyright (C) 2010 the
- * Initial Developer. All Rights Reserved.
- *
- * Contributor(s):
- *       Fong Lin <pflin@novell.com>
- *       Noel Power <noel.power@novell.com>
- *
- * For minor contributions see the git repository.
- *
- * Alternatively, the contents of this file may be used under the terms of
- * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
- * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
- * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
- * instead of those above.
- */
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <rtl/tencinfo.h>
@@ -99,7 +69,7 @@ private:
     std::vector< OUString > m_vStringChunks;
     SvStream& m_InputStream;
 
-    bool CheckValidData( sal_Int8 nChar ) const
+    bool CheckValidData( sal_Int8 nChar )
     {
         if( ( nChar >= 0x20 && nChar <= 0x7E ) && ( nChar != 0X40 ) )
             return  true;
@@ -156,8 +126,8 @@ private:
 
     void parseDoc()
     {
-        sal_uInt8 nDelim, nDummy, nLen, nData;
-        sal_uInt16 nOpcode;
+        UINT8 nDelim, nDummy, nLen, nData;
+        UINT16 nOpcode;
         OUStringBuffer sBuf( MAXCHARS );
         sal_Int32 nChars = 0;
 
@@ -173,7 +143,7 @@ private:
                         m_InputStream >> nLen >> nDummy;
                         while( nLen > 0 && !m_InputStream.IsEof() )
                         {
-                            sal_uInt8 nChar;
+                            UINT8 nChar;
                             m_InputStream >> nChar;
                             if( CheckValidData( nChar ) )
                             {
@@ -317,13 +287,14 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
 
     OUString sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "" ) );
     sal_Int32 nLength = Descriptor.getLength();
+    sal_Int32 location = nLength;
     OUString sURL;
     const PropertyValue * pValue = Descriptor.getConstArray();
     uno::Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ) )
-            pValue[i].Value >>= sTypeName;
+            location=i;
         else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
             pValue[i].Value >>= xInputStream;
         else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
@@ -349,10 +320,9 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
 
     Sequence< ::sal_Int8 > aData;
     sal_Int32 nLen = SAL_N_ELEMENTS( header );
-    if ( !( ( nLen == xInputStream->readBytes( aData, nLen ) )
-                && ( memcmp( ( void* )header, (void*) aData.getConstArray(), nLen ) == 0 ) ) )
-        sTypeName = ::rtl::OUString();
-
+    if ( ( nLen == xInputStream->readBytes(  aData, nLen ) ) )
+        if ( memcmp( ( void* )header, (void*) aData.getConstArray(), nLen ) == 0 )
+            sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_LotusWordPro_Document" ) );
     return sTypeName;
 }
 
@@ -395,7 +365,7 @@ Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
-//  Sequence < OUString > aRet(1);
+//	Sequence < OUString > aRet(1);
         OUString* pArray = aRet.getArray();
         pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
     pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );

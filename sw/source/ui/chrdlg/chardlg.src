@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,7 +120,6 @@ TabPage TP_CHAR_URL
     };
     Edit ED_URL
     {
-        HelpID = "sw:Edit:TP_CHAR_URL:ED_URL";
         Pos = MAP_APPFONT ( 88 , 15 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;
         Border = TRUE ;
@@ -128,7 +127,6 @@ TabPage TP_CHAR_URL
     };
     PushButton PB_URL
     {
-        HelpID = "sw:PushButton:TP_CHAR_URL:PB_URL";
         Pos = MAP_APPFONT ( 198 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -142,7 +140,6 @@ TabPage TP_CHAR_URL
     };
     Edit ED_TEXT
     {
-        HelpID = "sw:Edit:TP_CHAR_URL:ED_TEXT";
         Pos = MAP_APPFONT ( 88 , 31 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;
         Border = TRUE ;
@@ -157,7 +154,6 @@ TabPage TP_CHAR_URL
     };
     Edit ED_NAME
     {
-        HelpID = "sw:Edit:TP_CHAR_URL:ED_NAME";
         Pos = MAP_APPFONT ( 88 , 47 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;
         Border = TRUE ;
@@ -172,7 +168,6 @@ TabPage TP_CHAR_URL
     };
     ComboBox LB_TARGET
     {
-        HelpID = "sw:ComboBox:TP_CHAR_URL:LB_TARGET";
         Pos = MAP_APPFONT ( 88 , 63 ) ;
         Size = MAP_APPFONT ( 104 , 60 ) ;
         TabStop = TRUE ;
@@ -182,7 +177,6 @@ TabPage TP_CHAR_URL
     };
     PushButton PB_EVENT
     {
-        HelpID = "sw:PushButton:TP_CHAR_URL:PB_EVENT";
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -202,7 +196,6 @@ TabPage TP_CHAR_URL
     };
     ListBox LB_VISITED
     {
-        HelpID = "sw:ListBox:TP_CHAR_URL:LB_VISITED";
         Pos = MAP_APPFONT ( 88 , 113 ) ;
         Size = MAP_APPFONT ( 104 , 60 ) ;
         Border = TRUE ;
@@ -219,7 +212,6 @@ TabPage TP_CHAR_URL
     };
     ListBox LB_NOT_VISITED
     {
-        HelpID = "sw:ListBox:TP_CHAR_URL:LB_NOT_VISITED";
         Pos = MAP_APPFONT ( 88 , 129 ) ;
         Size = MAP_APPFONT ( 104 , 60 ) ;
         Border = TRUE ;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,23 +35,24 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/list.hxx>
 #include <svl/itemprop.hxx>
 #include <svtools/unoevent.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 
 #include <cppuhelper/implbase2.hxx>
-#include <svx/unofill.hxx>
+#include <unofill.hxx>
 #include <editeng/unonrule.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <sfx2/sfx.hrc>
-#include <svx/unoapi.hxx>
+#include <unoapi.hxx>
 
 #include <svx/svdmodel.hxx>
-#include "svx/globl3d.hxx"
+#include "globl3d.hxx"
 #include <svx/svdtypes.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unopage.hxx>
@@ -79,10 +80,12 @@ using namespace ::com::sun::star;
 
 //-////////////////////////////////////////////////////////////////////
 
+#ifndef SVX_LIGHT
+
 class SvxUnoDrawPagesAccess : public ::cppu::WeakImplHelper2< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo >
 {
 private:
-    SvxUnoDrawingModel& mrModel;
+    SvxUnoDrawingModel&	mrModel;
 
 public:
     SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel ) throw();
@@ -105,8 +108,10 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 };
+#endif
 //-////////////////////////////////////////////////////////////////////
 
+#ifndef SVX_LIGHT
 const SvEventDescription* ImplGetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
@@ -118,13 +123,14 @@ const SvEventDescription* ImplGetSupportedMacroItems()
 
     return aMacroDescriptionsImpl;
 }
+#endif
 
 //-////////////////////////////////////////////////////////////////////
 
 /** fills the given EventObject from the given SdrHint.
     @returns
-        true    if the SdrHint could be translated to an EventObject<br>
-        false   if not
+        true	if the SdrHint could be translated to an EventObject<br>
+        false	if not
 */
 sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdrHint, ::com::sun::star::document::EventObject& aEvent )
 {
@@ -133,36 +139,36 @@ sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* 
 
     switch( pSdrHint->GetKind() )
     {
-//              case HINT_LAYERCHG:             // Layerdefinition geaendert
-//              case HINT_LAYERORDERCHG:        // Layerreihenfolge geaendert (Insert/Remove/ChangePos)
-//              case HINT_LAYERSETCHG:          // Layerset geaendert
-//              case HINT_LAYERSETORDERCHG:     // Layersetreihenfolge geaendert (Insert/Remove/ChangePos)
+//				case HINT_LAYERCHG:				// Layerdefinition geaendert
+//				case HINT_LAYERORDERCHG:		// Layerreihenfolge geaendert (Insert/Remove/ChangePos)
+//				case HINT_LAYERSETCHG:			// Layerset geaendert
+//				case HINT_LAYERSETORDERCHG:		// Layersetreihenfolge geaendert (Insert/Remove/ChangePos)
 
 // #115423#
-//      case HINT_PAGECHG:              // Page geaendert
-//          aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageModified" ) );
-//          pPage = pSdrHint->GetPage();
-//          break;
-        case HINT_PAGEORDERCHG:         // Reihenfolge der Seiten (Zeichenseiten oder Masterpages) geaendert (Insert/Remove/ChangePos)
+//		case HINT_PAGECHG:				// Page geaendert
+//			aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageModified" ) );
+//			pPage = pSdrHint->GetPage();
+//			break;
+        case HINT_PAGEORDERCHG:			// Reihenfolge der Seiten (Zeichenseiten oder Masterpages) geaendert (Insert/Remove/ChangePos)
             aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOrderModified" ) );
             pPage = pSdrHint->GetPage();
             break;
-        case HINT_OBJCHG:               // Objekt geaendert
+        case HINT_OBJCHG:				// Objekt geaendert
             aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ShapeModified" ) );
             pObj = pSdrHint->GetObject();
             break;
-        case HINT_OBJINSERTED:          // Neues Zeichenobjekt eingefuegt
+        case HINT_OBJINSERTED:			// Neues Zeichenobjekt eingefuegt
             aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ShapeInserted" ) );
             pObj = pSdrHint->GetObject();
             break;
-        case HINT_OBJREMOVED:           // Zeichenobjekt aus Liste entfernt
+        case HINT_OBJREMOVED:			// Zeichenobjekt aus Liste entfernt
             aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ShapeRemoved" ) );
             pObj = pSdrHint->GetObject();
             break;
-//                HINT_DEFAULTTABCHG,   // Default Tabulatorweite geaendert
-//                HINT_DEFFONTHGTCHG,   // Default FontHeight geaendert
-//                HINT_SWITCHTOPAGE,    // #94278# UNDO/REDO at an object evtl. on another page
-//                HINT_OBJLISTCLEAR     // Is called before an SdrObjList will be cleared
+//				  HINT_DEFAULTTABCHG,   // Default Tabulatorweite geaendert
+//				  HINT_DEFFONTHGTCHG,   // Default FontHeight geaendert
+//				  HINT_SWITCHTOPAGE,    // #94278# UNDO/REDO at an object evtl. on another page
+//				  HINT_OBJLISTCLEAR		// Is called before an SdrObjList will be cleared
         default:
             return sal_False;
     }
@@ -187,8 +193,8 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
         sal_uInt32 nType = UHashMap::getId( rServiceSpecifier );
         if( nType != UHASHMAP_NOTFOUND )
         {
-            sal_uInt16 nT = (sal_uInt16)(nType & ~E3D_INVENTOR_FLAG);
-            sal_uInt32 nI = (nType & E3D_INVENTOR_FLAG)?E3dInventor:SdrInventor;
+            UINT16 nT = (UINT16)(nType & ~E3D_INVENTOR_FLAG);
+            UINT32 nI = (nType & E3D_INVENTOR_FLAG)?E3dInventor:SdrInventor;
 
             return uno::Reference< uno::XInterface >( (drawing::XShape*) SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI ) );
         }
@@ -242,6 +248,8 @@ uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence
 }
 
 
+#ifndef SVX_LIGHT
+
 ///
 SvxUnoDrawingModel::SvxUnoDrawingModel( SdrModel* pDoc ) throw()
 : mpDoc( pDoc )
@@ -285,7 +293,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  ) throw(uno::
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
 
-        const sal_Int32 nOwnTypes = 4;      // !DANGER! Keep this updated!
+        const sal_Int32 nOwnTypes = 4;		// !DANGER! Keep this updated!
 
         maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
@@ -317,7 +325,7 @@ void SAL_CALL SvxUnoDrawingModel::lockControllers(  )
     throw(uno::RuntimeException)
 {
     if( mpDoc )
-        mpDoc->setLock(true);
+        mpDoc->setLock( sal_True );
 }
 
 void SAL_CALL SvxUnoDrawingModel::unlockControllers(  )
@@ -325,7 +333,7 @@ void SAL_CALL SvxUnoDrawingModel::unlockControllers(  )
 {
     if( mpDoc && mpDoc->isLocked() )
     {
-        mpDoc->setLock(false);
+        mpDoc->setLock( sal_False );
     }
 }
 
@@ -580,7 +588,7 @@ uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SvxUnoDrawingModel::
 //=============================================================================
 
 SvxUnoDrawPagesAccess::SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel )  throw()
-:   mrModel(rMyModel)
+:	mrModel(rMyModel)
 {
 }
 
@@ -743,5 +751,7 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
 }
 
 ///////////////////////////////////////////////////////////////////////
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

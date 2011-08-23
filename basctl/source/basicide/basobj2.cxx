@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,29 +31,23 @@
 
 #include <ide_pch.hxx>
 
-#include "basobj.hxx"
-#include "iderdll.hxx"
-#include "iderdll2.hxx"
-#include "iderid.hxx"
-#include "macrodlg.hxx"
-#include "moduldlg.hxx"
-#include "basidesh.hxx"
-#include "basidesh.hrc"
-#include "baside2.hxx"
-#include "basicmod.hxx"
-#include "basdoc.hxx"
-
-#include <com/sun/star/document/XEmbeddedScripts.hpp>
-#include <com/sun/star/document/XScriptInvocationContext.hpp>
-
-#include <basic/sbx.hxx>
-#include <framework/documentundoguard.hxx>
-#include <tools/diagnose_ex.h>
-#include <unotools/moduleoptions.hxx>
-
 #include <vector>
 #include <algorithm>
-#include <memory>
+#include <basic/sbx.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
+#include <basobj.hxx>
+#include <iderdll.hxx>
+#include <iderdll2.hxx>
+#include <iderid.hxx>
+#include <macrodlg.hxx>
+#include <moduldlg.hxx>
+#include <basidesh.hxx>
+#include <basidesh.hrc>
+#include <baside2.hxx>
+#include <basicmod.hxx>
+#include <basdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -63,7 +57,7 @@ using namespace ::com::sun::star::container;
 //----------------------------------------------------------------------------
 
 extern "C" {
-    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, sal_Bool bChooseOnly, rtl_uString* pMacroDesc )
+    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, BOOL bChooseOnly, rtl_uString* pMacroDesc )
     {
         ::rtl::OUString aMacroDesc( pMacroDesc );
         Reference< frame::XModel > aDocument( static_cast< frame::XModel* >( pOnlyInDocument_AsXModel ) );
@@ -73,7 +67,7 @@ extern "C" {
 
         return pScriptURL;
     }
-    SAL_DLLPUBLIC_EXPORT void basicide_macro_organizer( sal_Int16 nTabId )
+    SAL_DLLPUBLIC_EXPORT void basicide_macro_organizer( INT16 nTabId )
     {
         OSL_TRACE("in basicide_macro_organizer");
         BasicIDE::Organize( nTabId );
@@ -84,7 +78,7 @@ namespace BasicIDE
 {
 //----------------------------------------------------------------------------
 
-void Organize( sal_Int16 tabId )
+void Organize( INT16 tabId )
 {
     BasicIDEDLL::Init();
 
@@ -105,21 +99,21 @@ void Organize( sal_Int16 tabId )
 
 //----------------------------------------------------------------------------
 
-sal_Bool IsValidSbxName( const String& rName )
+BOOL IsValidSbxName( const String& rName )
 {
-    for ( sal_uInt16 nChar = 0; nChar < rName.Len(); nChar++ )
+    for ( USHORT nChar = 0; nChar < rName.Len(); nChar++ )
     {
-        sal_Bool bValid = ( ( rName.GetChar(nChar) >= 'A' && rName.GetChar(nChar) <= 'Z' ) ||
+        BOOL bValid = (	( rName.GetChar(nChar) >= 'A' && rName.GetChar(nChar) <= 'Z' ) ||
                         ( rName.GetChar(nChar) >= 'a' && rName.GetChar(nChar) <= 'z' ) ||
                         ( rName.GetChar(nChar) >= '0' && rName.GetChar(nChar) <= '9' && nChar ) ||
                         ( rName.GetChar(nChar) == '_' ) );
         if ( !bValid )
-            return sal_False;
+            return FALSE;
     }
-    return sal_True;
+    return TRUE;
 }
 
-static sal_Bool StringCompareLessThan( const String& rStr1, const String& rStr2 )
+static BOOL StringCompareLessThan( const String& rStr1, const String& rStr2 )
 {
     return (rStr1.CompareIgnoreCaseToAscii( rStr2 ) == COMPARE_LESS);
 }
@@ -173,7 +167,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
 {
     if ( !rDocument.hasModule( rLibName, rOldName ) )
     {
-        OSL_FAIL( "BasicIDE::RenameModule: old module name is invalid!" );
+        OSL_ENSURE( false, "BasicIDE::RenameModule: old module name is invalid!" );
         return false;
     }
 
@@ -198,7 +192,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     if ( pIDEShell )
     {
-        IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rNewName, BASICIDE_TYPE_MODULE, sal_True );
+        IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rNewName, BASICIDE_TYPE_MODULE, TRUE );
         if ( pWin )
         {
             // set new name in window
@@ -209,11 +203,11 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
             pModWin->SetSbModule( (SbModule*)pModWin->GetBasic()->FindModule( rNewName ) );
 
             // update tabwriter
-            sal_uInt16 nId = (sal_uInt16)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
+            USHORT nId = (USHORT)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
             DBG_ASSERT( nId, "No entry in Tabbar!" );
             if ( nId )
             {
-                BasicIDETabBar* pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
+                BasicIDETabBar*	pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
                 pTabBar->SetPageText( nId, rNewName );
                 pTabBar->Sort();
                 pTabBar->MakeVisible( pTabBar->GetCurPageId() );
@@ -223,66 +217,22 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     return true;
 }
 
-
 //----------------------------------------------------------------------------
 
-namespace
-{
-    struct MacroExecutionData
-    {
-        ScriptDocument  aDocument;
-        SbMethodRef     xMethod;
-
-        MacroExecutionData()
-            :aDocument( ScriptDocument::NoDocument )
-            ,xMethod( NULL )
-        {
-        }
-    };
-
-    class MacroExecution
-    {
-    public:
-        DECL_STATIC_LINK( MacroExecution, ExecuteMacroEvent, MacroExecutionData* );
-    };
-
-
-    IMPL_STATIC_LINK( MacroExecution, ExecuteMacroEvent, MacroExecutionData*, i_pData )
-    {
-        (void)pThis;
-        ENSURE_OR_RETURN( i_pData, "wrong MacroExecutionData", 0L );
-        // take ownership of the data
-        ::std::auto_ptr< MacroExecutionData > pData( i_pData );
-
-        DBG_ASSERT( pData->xMethod->GetParent()->GetFlags() & SBX_EXTSEARCH, "Kein EXTSEARCH!" );
-
-        // in case this is a document-local macro, try to protect the document's Undo Manager from
-        // flawed scripts
-        ::std::auto_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
-        if ( pData->aDocument.isDocument() )
-            pUndoGuard.reset( new ::framework::DocumentUndoGuard( pData->aDocument.getDocument() ) );
-
-        BasicIDE::RunMethod( pData->xMethod );
-
-        return 1L;
-    }
-}
-
-//----------------------------------------------------------------------------
-
-::rtl::OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, sal_Bool bChooseOnly, const ::rtl::OUString& rMacroDesc )
+::rtl::OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
 {
     (void)rMacroDesc;
 
     BasicIDEDLL::Init();
 
-    IDE_DLL()->GetExtraData()->ChoosingMacro() = sal_True;
+    IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
+    SFX_APP()->EnterBasicCall();
 
     String aScriptURL;
-    sal_Bool bError = sal_False;
+    BOOL bError = FALSE;
     SbMethod* pMethod = NULL;
 
-    ::std::auto_ptr< MacroChooser > pChooser( new MacroChooser( NULL, sal_True ) );
+    MacroChooser* pChooser = new MacroChooser( NULL, TRUE );
     if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
         pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
 
@@ -292,7 +242,7 @@ namespace
 
     short nRetValue = pChooser->Execute();
 
-    IDE_DLL()->GetExtraData()->ChoosingMacro() = sal_False;
+    IDE_DLL()->GetExtraData()->ChoosingMacro() = FALSE;
 
     switch ( nRetValue )
     {
@@ -302,95 +252,103 @@ namespace
             if ( !pMethod && pChooser->GetMode() == MACROCHOOSER_RECORDING )
                 pMethod = pChooser->CreateMacro();
 
-            if ( !pMethod )
-                break;
-
-            SbModule* pModule = pMethod->GetModule();
-            ENSURE_OR_BREAK( pModule, "BasicIDE::ChooseMacro: No Module found!" );
-
-            StarBASIC* pBasic = (StarBASIC*)pModule->GetParent();
-            ENSURE_OR_BREAK( pBasic, "BasicIDE::ChooseMacro: No Basic found!" );
-
-            BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
-            ENSURE_OR_BREAK( pBasMgr, "BasicIDE::ChooseMacro: No BasicManager found!" );
-
-            // name
-            String aName;
-            aName += pBasic->GetName();
-            aName += '.';
-            aName += pModule->GetName();
-            aName += '.';
-            aName += pMethod->GetName();
-
-            // language
-            String aLanguage = String::CreateFromAscii("Basic");
-
-            // location
-            String aLocation;
-            ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
-            if ( aDocument.isDocument() )
+            if ( pMethod )
             {
-                // document basic
-                aLocation = String::CreateFromAscii("document");
-
-                if ( rxLimitToDocument.is() )
+                SbModule* pModule = pMethod->GetModule();
+                DBG_ASSERT(pModule, "BasicIDE::ChooseMacro: No Module found!");
+                if ( pModule )
                 {
-                    uno::Reference< frame::XModel > xLimitToDocument( rxLimitToDocument );
+                    StarBASIC* pBasic = (StarBASIC*)pModule->GetParent();
+                    DBG_ASSERT(pBasic, "BasicIDE::ChooseMacro: No Basic found!");
+                    if ( pBasic )
+                    {
+                        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
+                        DBG_ASSERT(pBasMgr, "BasicIDE::ChooseMacro: No BasicManager found!");
+                        if ( pBasMgr )
+                        {
+                            // name
+                            String aName;
+                            aName += pBasic->GetName();
+                            aName += '.';
+                            aName += pModule->GetName();
+                            aName += '.';
+                            aName += pMethod->GetName();
 
-                    uno::Reference< document::XEmbeddedScripts > xScripts( rxLimitToDocument, UNO_QUERY );
-                    if ( !xScripts.is() )
-                    {   // the document itself does not support embedding scripts
-                        uno::Reference< document::XScriptInvocationContext > xContext( rxLimitToDocument, UNO_QUERY );
-                        if ( xContext.is() )
-                            xScripts = xContext->getScriptContainer();
-                        if ( xScripts.is() )
-                        {   // but it is able to refer to a document which actually does support this
-                            xLimitToDocument.set( xScripts, UNO_QUERY );
-                            if ( !xLimitToDocument.is() )
+                            // language
+                            String aLanguage = String::CreateFromAscii("Basic");
+
+                            // location
+                            String aLocation;
+                            ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
+                            if ( aDocument.isDocument() )
                             {
-                                OSL_ENSURE( false, "BasicIDE::ChooseMacro: a script container which is no document!?" );
-                                xLimitToDocument = rxLimitToDocument;
+                                // document basic
+                                aLocation = String::CreateFromAscii("document");
+
+                                if ( rxLimitToDocument.is() )
+                                {
+                                    uno::Reference< frame::XModel > xLimitToDocument( rxLimitToDocument );
+
+                                    uno::Reference< document::XEmbeddedScripts > xScripts( rxLimitToDocument, UNO_QUERY );
+                                    if ( !xScripts.is() )
+                                    {   // the document itself does not support embedding scripts
+                                        uno::Reference< document::XScriptInvocationContext > xContext( rxLimitToDocument, UNO_QUERY );
+                                        if ( xContext.is() )
+                                            xScripts = xContext->getScriptContainer();
+                                        if ( xScripts.is() )
+                                        {   // but it is able to refer to a document which actually does support this
+                                            xLimitToDocument.set( xScripts, UNO_QUERY );
+                                            if ( !xLimitToDocument.is() )
+                                            {
+                                                OSL_ENSURE( false, "BasicIDE::ChooseMacro: a script container which is no document!?" );
+                                                xLimitToDocument = rxLimitToDocument;
+                                            }
+                                        }
+                                    }
+
+                                    if ( xLimitToDocument != aDocument.getDocument() )
+                                    {
+                                        // error
+                                        bError = TRUE;
+                                        ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORCHOOSEMACRO ) ) ).Execute();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // application basic
+                                aLocation = String::CreateFromAscii("application");
+                            }
+
+                            // script URL
+                            if ( !bError )
+                            {
+                                aScriptURL = String::CreateFromAscii("vnd.sun.star.script:");
+                                aScriptURL += aName;
+                                aScriptURL += String::CreateFromAscii("?language=");
+                                aScriptURL += aLanguage;
+                                aScriptURL += String::CreateFromAscii("&location=");
+                                aScriptURL += aLocation;
                             }
                         }
                     }
-
-                    if ( xLimitToDocument != aDocument.getDocument() )
-                    {
-                        // error
-                        bError = sal_True;
-                        ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORCHOOSEMACRO ) ) ).Execute();
-                    }
                 }
             }
-            else
-            {
-                // application basic
-                aLocation = String::CreateFromAscii("application");
-            }
 
-            // script URL
-            if ( !bError )
+            if ( pMethod && !rxLimitToDocument.is() )
             {
-                aScriptURL = String::CreateFromAscii("vnd.sun.star.script:");
-                aScriptURL += aName;
-                aScriptURL += String::CreateFromAscii("?language=");
-                aScriptURL += aLanguage;
-                aScriptURL += String::CreateFromAscii("&location=");
-                aScriptURL += aLocation;
-            }
-
-            if ( !rxLimitToDocument.is() )
-            {
-                MacroExecutionData* pExecData = new MacroExecutionData;
-                pExecData->aDocument = aDocument;
-                pExecData->xMethod = pMethod;   // keep alive until the event has been processed
-                Application::PostUserEvent( STATIC_LINK( NULL, MacroExecution, ExecuteMacroEvent ), pExecData );
+                pMethod->AddRef();	// festhalten, bis Event abgearbeitet.
+                Application::PostUserEvent( LINK( IDE_DLL()->GetExtraData(), BasicIDEData, ExecuteMacroEvent ), pMethod );
             }
         }
         break;
     }
 
-    return aScriptURL;
+    delete pChooser;
+
+    SFX_APP()->LeaveBasicCall();
+
+    return ::rtl::OUString( aScriptURL );
 }
 
 //----------------------------------------------------------------------------
@@ -406,9 +364,9 @@ Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, con
     {
         SbModuleRef xModule = new SbModule( rModName );
         xModule->SetSource32( aOUSource );
-        sal_uInt16 nCount = xModule->GetMethods()->Count();
-        sal_uInt16 nRealCount = nCount;
-        for ( sal_uInt16 i = 0; i < nCount; i++ )
+        USHORT nCount = xModule->GetMethods()->Count();
+        USHORT nRealCount = nCount;
+        for ( USHORT i = 0; i < nCount; i++ )
         {
             SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
             if( pMethod->IsHidden() )
@@ -416,8 +374,8 @@ Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, con
         }
         aSeqMethods.realloc( nRealCount );
 
-        sal_uInt16 iTarget = 0;
-        for ( sal_uInt16 i = 0 ; i < nCount; ++i )
+        USHORT iTarget = 0;
+        for ( USHORT i = 0 ; i < nCount; ++i )
         {
             SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
             if( pMethod->IsHidden() )
@@ -432,9 +390,9 @@ Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, con
 
 //----------------------------------------------------------------------------
 
-sal_Bool HasMethod( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, const String& rMethName )
+BOOL HasMethod( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, const String& rMethName )
 {
-    sal_Bool bHasMethod = sal_False;
+    BOOL bHasMethod = FALSE;
 
     ::rtl::OUString aOUSource;
     if ( rDocument.hasModule( rLibName, rModName ) && rDocument.getModule( rLibName, rModName, aOUSource ) )
@@ -446,7 +404,7 @@ sal_Bool HasMethod( const ScriptDocument& rDocument, const String& rLibName, con
         {
             SbMethod* pMethod = (SbMethod*)pMethods->Find( rMethName, SbxCLASS_METHOD );
             if ( pMethod && !pMethod->IsHidden() )
-                bHasMethod = sal_True;
+                bHasMethod = TRUE;
         }
     }
 

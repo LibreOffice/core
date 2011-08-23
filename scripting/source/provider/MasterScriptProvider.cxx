@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,6 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
-#include <tools/diagnose_ex.h>
-
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -63,6 +61,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::document;
 using namespace ::sf_misc;
+using namespace ::scripting_util;
 
 namespace func_provider
 {
@@ -97,9 +96,10 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
         m_xContext( xContext ), m_bIsValid( false ), m_bInitialised( false ),
         m_bIsPkgMSP( false ), m_pPCache( 0 )
 {
-    ENSURE_OR_THROW( m_xContext.is(), "MasterScriptProvider::MasterScriptProvider: No context available\n" );
+    validateXRef( m_xContext, "MasterScriptProvider::MasterScriptProvider: No context available\n" );
     m_xMgr = m_xContext->getServiceManager();
-    ENSURE_OR_THROW( m_xMgr.is(), "MasterScriptProvider::MasterScriptProvider: No service manager available\n" );
+    validateXRef( m_xMgr,
+                  "MasterScriptProvider::MasterScriptProvider: No service manager available\n" );
     m_bIsValid = true;
 }
 
@@ -273,11 +273,11 @@ throw ( provider::ScriptFrameworkErrorException,
     // need to get the language from the string
 
     Reference< uri::XUriReferenceFactory > xFac (
-         m_xMgr->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.uri.UriReferenceFactory")), m_xContext ) , UNO_QUERY );
+         m_xMgr->createInstanceWithContext( rtl::OUString::createFromAscii(
+            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
     if ( !xFac.is() )
     {
-        ::rtl::OUString message(RTL_CONSTASCII_USTRINGPARAM("Failed to instantiate  UriReferenceFactory"));
+        ::rtl::OUString message = ::rtl::OUString::createFromAscii("Failed to instantiate  UriReferenceFactory");
         throw provider::ScriptFrameworkErrorException(
             message, Reference< XInterface >(),
             scriptURI, ::rtl::OUString(),
@@ -299,8 +299,8 @@ throw ( provider::ScriptFrameworkErrorException,
             provider::ScriptFrameworkErrorType::UNKNOWN );
     }
 
-    ::rtl::OUString langKey(RTL_CONSTASCII_USTRINGPARAM("language"));
-    ::rtl::OUString locKey(RTL_CONSTASCII_USTRINGPARAM("location"));
+    ::rtl::OUString langKey = ::rtl::OUString::createFromAscii( "language" );
+    ::rtl::OUString locKey = ::rtl::OUString::createFromAscii( "location" );
 
     if ( sfUri->hasParameter( langKey ) == sal_False ||
          sfUri->hasParameter( locKey ) == sal_False ||
@@ -319,7 +319,8 @@ throw ( provider::ScriptFrameworkErrorException,
 
     // if script us located in uno pkg
     sal_Int32 index = -1;
-    ::rtl::OUString pkgTag(RTL_CONSTASCII_USTRINGPARAM(":uno_packages"));
+    ::rtl::OUString pkgTag =
+        ::rtl::OUString::createFromAscii( ":uno_packages" );
     // for languages other than basic,  scripts located in uno packages
     // are merged into the user/share location context.
     // For other languages the location attribute in script url has the form
@@ -818,8 +819,8 @@ MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
     }
     else
     {
-        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM(
-            "MasterScriptProvider::getAllProviders, cache not initialised"));
+        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii(
+            "MasterScriptProvider::getAllProviders, cache not initialised");
         throw RuntimeException( errorMsg.concat( errorMsg ),
             Reference< XInterface >() );
     }
@@ -920,9 +921,9 @@ Reference< XInterface > SAL_CALL urihelper_create(
 Sequence< ::rtl::OUString > urihelper_getSupportedServiceNames( )
     SAL_THROW( () )
 {
-    ::rtl::OUString serviceNameList[] = {
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.script.provider.ScriptURIHelper" )) };
+    ::rtl::OUString serviceNameList[] = { 
+        ::rtl::OUString::createFromAscii(
+            "com.sun.star.script.provider.ScriptURIHelper" ) };
 
     Sequence< ::rtl::OUString > serviceNames = Sequence <
         ::rtl::OUString > ( serviceNameList, 1 );
@@ -933,8 +934,8 @@ Sequence< ::rtl::OUString > urihelper_getSupportedServiceNames( )
 ::rtl::OUString urihelper_getImplementationName( )
     SAL_THROW( () )
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.script.provider.ScriptURIHelper"));
+    return ::rtl::OUString::createFromAscii(
+        "com.sun.star.script.provider.ScriptURIHelper");
 }
 
 static struct cppu::ImplementationEntry s_entries [] =
@@ -979,6 +980,42 @@ extern "C"
     {
         (void)ppEnv;
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+    }
+
+    /**
+     * This function creates an implementation section in the registry and another subkey
+     *
+     * for each supported service.
+     * @param pServiceManager   the service manager
+     * @param pRegistryKey      the registry key
+     */
+    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
+            lang::XMultiServiceFactory * pServiceManager,
+            registry::XRegistryKey * pRegistryKey )
+    {
+        if (::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey,
+            ::scripting_runtimemgr::s_entries ))
+        {
+            try
+            {
+                // MasterScriptProviderFactory Mangager singleton
+                registry::XRegistryKey * pKey =
+                    reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
+
+                Reference< registry::XRegistryKey >xKey = pKey->createKey(
+                    OUSTR("com.sun.star.script.provider.MasterScriptProviderFactory/UNO/SINGLETONS/com.sun.star.script.provider.theMasterScriptProviderFactory"));
+                xKey->setStringValue( OUSTR("com.sun.star.script.provider.MasterScriptProviderFactory") );
+                // BrowseNodeFactory Mangager singleton
+                xKey = pKey->createKey(
+                    OUSTR("com.sun.star.script.browse.BrowseNodeFactory/UNO/SINGLETONS/com.sun.star.script.browse.theBrowseNodeFactory"));
+                xKey->setStringValue( OUSTR("com.sun.star.script.browse.BrowseNodeFactory") );
+                return sal_True;
+            }
+            catch (Exception &)
+            {
+            }
+        }
+        return sal_False;
     }
 
     /**

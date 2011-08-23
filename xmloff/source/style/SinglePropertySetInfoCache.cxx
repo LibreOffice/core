@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ using ::com::sun::star::lang::XTypeProvider;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 
-sal_Bool SinglePropertySetInfoCache::hasProperty(
+sal_Bool SinglePropertySetInfoCache::hasProperty( 
         const Reference< XPropertySet >& rPropSet,
         Reference< XPropertySetInfo >& rPropSetInfo )
 {

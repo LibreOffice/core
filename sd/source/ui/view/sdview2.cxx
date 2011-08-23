@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,15 +103,15 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 {
     DropTargetHelper&       mrTargetHelper;
     ::sd::Window* mpTargetWindow;
-    sal_uInt16                  mnPage;
-    sal_uInt16                  mnLayer;
+    USHORT					mnPage;
+    USHORT					mnLayer;
 
     SdNavigatorDropEvent (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow,
-        sal_uInt16 nPage,
-        sal_uInt16 nLayer )
+        USHORT nPage,
+        USHORT nLayer )
         : ExecuteDropEvent( rEvt ),
           mrTargetHelper( rTargetHelper ),
           mpTargetWindow( pTargetWindow ),
@@ -126,7 +126,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 {
     // since SdTransferable::CopyToClipboard is called, this
     // dynamically created object ist destroyed automatically
-    SdTransferable* pTransferable = new SdTransferable( mpDoc, NULL, sal_False );
+    SdTransferable* pTransferable = new SdTransferable( mpDoc, NULL, FALSE );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
 
     SD_MOD()->pTransferClip = pTransferable;
@@ -135,13 +135,13 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     pTransferable->SetWorkDocument( (SdDrawDocument*) GetAllMarkedModel() );
     mpDoc->CreatingDataObj( NULL );
 
-    const Rectangle                 aMarkRect( GetAllMarkedRect() );
-    TransferableObjectDescriptor    aObjDesc;
-    String                          aDisplayName;
-    SdrOle2Obj*                     pSdrOleObj = NULL;
-    SdrPageView*                    pPgView = GetSdrPageView();
-    SdPage*                         pOldPage = pPgView ? ( (SdPage*) pPgView->GetPage() ) : NULL;
-    SdPage*                         pNewPage = (SdPage*) pTransferable->GetWorkDocument()->GetPage( 0 );
+    const Rectangle					aMarkRect( GetAllMarkedRect() );
+    TransferableObjectDescriptor	aObjDesc;
+    String							aDisplayName;
+    SdrOle2Obj*						pSdrOleObj = NULL;
+    SdrPageView*					pPgView = GetSdrPageView();
+    SdPage*							pOldPage = pPgView ? ( (SdPage*) pPgView->GetPage() ) : NULL;
+    SdPage*							pNewPage = (SdPage*) pTransferable->GetWorkDocument()->GetPage( 0 );
 
     if( pOldPage )
     {
@@ -188,14 +188,14 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, ::Window& rWindow, const Point& rDragPos )
 {
-    SdTransferable* pTransferable = new SdTransferable( mpDoc, pWorkView, sal_False );
+    SdTransferable* pTransferable = new SdTransferable( mpDoc, pWorkView, FALSE );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
 
     SD_MOD()->pTransferDrag = pTransferable;
 
-    TransferableObjectDescriptor    aObjDesc;
-    String                          aDisplayName;
-    SdrOle2Obj*                     pSdrOleObj = NULL;
+    TransferableObjectDescriptor	aObjDesc;
+    String							aDisplayName;
+    SdrOle2Obj*						pSdrOleObj = NULL;
 
     if( GetMarkedObjectCount() == 1 )
     {
@@ -226,7 +226,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     aObjDesc.maSize = GetAllMarkedRect().GetSize();
     aObjDesc.maDragStartPos = rDragPos;
     aObjDesc.maDisplayName = aDisplayName;
-    aObjDesc.mbCanLink = sal_False;
+    aObjDesc.mbCanLink = FALSE;
 
     pTransferable->SetStartPos( rDragPos );
     pTransferable->SetObjectDescriptor( aObjDesc );
@@ -239,11 +239,11 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView, ::Window& rWindow )
 {
-    SdTransferable*                 pTransferable = new SdTransferable( mpDoc, pWorkView, sal_True );
+    SdTransferable*                 pTransferable = new SdTransferable( mpDoc, pWorkView, TRUE );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
-    TransferableObjectDescriptor    aObjDesc;
-    const Rectangle                 aMarkRect( GetAllMarkedRect() );
-    String                          aDisplayName;
+    TransferableObjectDescriptor	aObjDesc;
+    const Rectangle					aMarkRect( GetAllMarkedRect() );
+    String							aDisplayName;
 
     SD_MOD()->pTransferSelection = pTransferable;
 
@@ -264,7 +264,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
 // -----------------------------------------------------------------------------
 
-void View::UpdateSelectionClipboard( sal_Bool bForceDeselect )
+void View::UpdateSelectionClipboard( BOOL bForceDeselect )
 {
     if( mpViewSh && mpViewSh->GetActiveWindow() )
     {
@@ -326,9 +326,9 @@ void View::DoPaste (::Window* pWindow)
     {
         const_cast< OutlinerView* >(pOLV)->PasteSpecial();
 
-        SdrObject*  pObj = GetTextEditObject();
-        SdPage*     pPage = (SdPage*)( pObj ? pObj->GetPage() : NULL );
-        ::Outliner* pOutliner = pOLV->GetOutliner();
+        SdrObject*	pObj = GetTextEditObject();
+        SdPage*		pPage = (SdPage*)( pObj ? pObj->GetPage() : NULL );
+        ::Outliner*	pOutliner = pOLV->GetOutliner();
 
         if( pOutliner)
         {
@@ -337,18 +337,18 @@ void View::DoPaste (::Window* pWindow)
                 // remove all hard linebreaks from the title
                 if( pOutliner && pOutliner->GetParagraphCount() > 1 )
                 {
-                    sal_Bool bOldUpdateMode = pOutliner->GetUpdateMode();
+                    BOOL bOldUpdateMode = pOutliner->GetUpdateMode();
 
-                    pOutliner->SetUpdateMode( sal_False );
+                    pOutliner->SetUpdateMode( FALSE );
 
                     const EditEngine& rEdit = pOutliner->GetEditEngine();
                     const int nParaCount = rEdit.GetParagraphCount();
 
                     for( int nPara = nParaCount - 2; nPara >= 0; nPara-- )
                     {
-                        const sal_uInt16 nParaLen = (sal_uInt16)rEdit.GetTextLen( (sal_uInt16)nPara );
-                        pOutliner->QuickDelete( ESelection( (sal_uInt16)nPara, nParaLen, (sal_uInt16)nPara+1, 0 ) );
-                        pOutliner->QuickInsertLineBreak( ESelection( (sal_uInt16)nPara, nParaLen, (sal_uInt16)nPara, nParaLen ) );
+                        const USHORT nParaLen = (USHORT)rEdit.GetTextLen( (USHORT)nPara );
+                        pOutliner->QuickDelete( ESelection( (USHORT)nPara, nParaLen, (USHORT)nPara+1, 0 ) );
+                        pOutliner->QuickInsertLineBreak( ESelection( (USHORT)nPara, nParaLen, (USHORT)nPara, nParaLen ) );
                     }
 
                     DBG_ASSERT( rEdit.GetParagraphCount() <= 1, "Titelobjekt contains hard line breaks" );
@@ -359,7 +359,7 @@ void View::DoPaste (::Window* pWindow)
             if( !mpDoc->IsChanged() )
             {
                 if( pOutliner && pOutliner->IsModified() )
-                    mpDoc->SetChanged( sal_True );
+                    mpDoc->SetChanged( TRUE );
             }
         }
     }
@@ -375,9 +375,9 @@ void View::DoPaste (::Window* pWindow)
 
         if (pDrViewSh != NULL)
         {
-            if( !InsertData( aDataHelper, aPos, nDnDAction, sal_False ) )
+            if( !InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
             {
-                INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
+                INetBookmark	aINetBookmark( aEmptyStr, aEmptyStr );
 
                 if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
                       aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
@@ -449,7 +449,7 @@ void View::DragFinished( sal_Int8 nDropAction )
         if( bUndo )
             BegUndo();
 
-        sal_uLong nm, nAnz = mpDragSrcMarkList->GetMarkCount();
+        ULONG nm, nAnz = mpDragSrcMarkList->GetMarkCount();
 
          for( nm = nAnz; nm>0; )
         {
@@ -466,12 +466,12 @@ void View::DragFinished( sal_Int8 nDropAction )
             nm--;
             SdrMark* pM=mpDragSrcMarkList->GetMark(nm);
             SdrObject* pObj=pM->GetMarkedSdrObj();
-            sal_uInt32 nOrdNum=pObj->GetOrdNumDirect();
+            UINT32 nOrdNum=pObj->GetOrdNumDirect();
 
             if( pObj && pObj->GetPage() )
             {
 #ifdef DBG_UTIL
-                SdrObject* pChkObj =
+                SdrObject* pChkObj = 
 #endif
                     pObj->GetPage()->RemoveObject(nOrdNum);
                 DBG_ASSERT(pChkObj==pObj,"pChkObj!=pObj beim RemoveObject()");
@@ -483,7 +483,7 @@ void View::DragFinished( sal_Int8 nDropAction )
     }
 
     if( pDragTransferable )
-        pDragTransferable->SetInternalMove( sal_False );
+        pDragTransferable->SetInternalMove( FALSE );
 
     if( bUndo )
         EndUndo();
@@ -495,12 +495,12 @@ void View::DragFinished( sal_Int8 nDropAction )
 // -----------------------------------------------------------------------------
 
 sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                             ::sd::Window*, sal_uInt16, sal_uInt16 nLayer )
+                             ::sd::Window*, USHORT, USHORT nLayer )
 {
-    String          aLayerName( GetActiveLayer() );
-    SdrPageView*    pPV = GetSdrPageView();
-    sal_Int8        nDropAction = rEvt.mnAction;
-    sal_Int8        nRet = DND_ACTION_NONE;
+    String			aLayerName( GetActiveLayer() );
+    SdrPageView*	pPV = GetSdrPageView();
+    sal_Int8		nDropAction = rEvt.mnAction;
+    sal_Int8		nRet = DND_ACTION_NONE;
 
     if( nLayer != SDRLAYER_NOTFOUND )
     {
@@ -511,7 +511,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
     if( mbIsDropAllowed && !pPV->IsLayerLocked( aLayerName ) && pPV->IsLayerVisible( aLayerName ) )
     {
         const OutlinerView* pOLV = GetTextEditOutlinerView();
-        sal_Bool                bIsInsideOutlinerView = sal_False;
+        BOOL				bIsInsideOutlinerView = FALSE;
 
         if( pOLV )
         {
@@ -526,7 +526,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
             if( aRect.IsInside( pOLV->GetWindow()->PixelToLogic( rEvt.maPosPixel ) ) )
             {
-                bIsInsideOutlinerView = sal_True;
+                bIsInsideOutlinerView = TRUE;
             }
         }
 
@@ -553,12 +553,12 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
             }
             else
             {
-                const sal_Bool  bDrawing = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING );
-                const sal_Bool  bGraphic = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB );
-                const sal_Bool  bMtf = rTargetHelper.IsDropFormatSupported( FORMAT_GDIMETAFILE );
-                const sal_Bool  bBitmap = rTargetHelper.IsDropFormatSupported( FORMAT_BITMAP );
-                sal_Bool        bBookmark = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
-                sal_Bool        bXFillExchange = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_XFA );
+                const BOOL  bDrawing = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING );
+                const BOOL  bGraphic = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB );
+                const BOOL	bMtf = rTargetHelper.IsDropFormatSupported( FORMAT_GDIMETAFILE );
+                const BOOL	bBitmap = rTargetHelper.IsDropFormatSupported( FORMAT_BITMAP );
+                BOOL	    bBookmark = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
+                BOOL	    bXFillExchange = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_XFA );
 
                 // check handle insert
                 if( !nRet && ( (bXFillExchange && ( SDRDRAG_GRADIENT == GetDragMode() )) || ( SDRDRAG_TRANSPARENCE == GetDragMode() ) ) )
@@ -587,12 +587,12 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                 // check object insert
                 if( !nRet && ( bXFillExchange || ( ( bDrawing || bGraphic || bMtf || bBitmap || bBookmark ) && ( nDropAction & DND_ACTION_LINK ) ) ) )
                 {
-                    SdrObject*      pPickObj = NULL;
-                    SdrPageView*    pPageView = NULL;
+                    SdrObject*		pPickObj = NULL;
+                    SdrPageView*	pPageView = NULL;
                     ::sd::Window* pWindow = mpViewSh->GetActiveWindow();
-                    Point           aPos( pWindow->PixelToLogic( rEvt.maPosPixel ) );
-                    const sal_Bool      bHasPickObj = PickObj( aPos, getHitTolLog(), pPickObj, pPageView );
-                    sal_Bool            bIsPresTarget = sal_False;
+                    Point			aPos( pWindow->PixelToLogic( rEvt.maPosPixel ) );
+                    const BOOL		bHasPickObj = PickObj( aPos, getHitTolLog(), pPickObj, pPageView );
+                    BOOL            bIsPresTarget = FALSE;
 
                     if( bHasPickObj && pPickObj && ( pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall() ) )
                     {
@@ -609,7 +609,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                         {
                             mpDropMarkerObj = pPickObj;
                             ImplClearDrawDropMarker();
-
+                            
                             if(mpDropMarkerObj)
                             {
                                 mpDropMarker = new SdrDropMarkerOverlay(*this, *mpDropMarkerObj);
@@ -619,18 +619,18 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                         nRet = nDropAction;
                     }
                     else
-                        bXFillExchange = sal_False;
+                        bXFillExchange = FALSE;
                 }
 
                 // check normal insert
                 if( !nRet )
                 {
-                    const sal_Bool  bSBAFormat = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH );
-                    const sal_Bool  bEditEngine = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_EDITENGINE );
-                    const sal_Bool  bString = rTargetHelper.IsDropFormatSupported( FORMAT_STRING );
-                    const sal_Bool  bRTF = rTargetHelper.IsDropFormatSupported( FORMAT_RTF );
-                    const sal_Bool  bFile = rTargetHelper.IsDropFormatSupported( FORMAT_FILE );
-                    const sal_Bool  bFileList = rTargetHelper.IsDropFormatSupported( FORMAT_FILE_LIST );
+                    const BOOL  bSBAFormat = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH );
+                    const BOOL  bEditEngine = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_EDITENGINE );
+                    const BOOL  bString = rTargetHelper.IsDropFormatSupported( FORMAT_STRING );
+                    const BOOL  bRTF = rTargetHelper.IsDropFormatSupported( FORMAT_RTF );
+                    const BOOL  bFile = rTargetHelper.IsDropFormatSupported( FORMAT_FILE );
+                    const BOOL  bFileList = rTargetHelper.IsDropFormatSupported( FORMAT_FILE_LIST );
 
                     if( mpDropMarker )
                     {
@@ -639,7 +639,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                     }
 
                     if( bBookmark && bFile && ( nDropAction & DND_ACTION_MOVE ) && mpViewSh && SlideShow::IsRunning(mpViewSh->GetViewShellBase()) )
-                        bBookmark = sal_False;
+                        bBookmark = FALSE;
 
                     if( bDrawing || bGraphic || bMtf || bBitmap || bBookmark || bFile || bFileList || bXFillExchange || bSBAFormat || bEditEngine || bString || bRTF )
                         nRet = nDropAction;
@@ -670,12 +670,12 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 // -----------------------------------------------------------------------------
 
 sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                              ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer )
+                              ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
-    SdrPageView*    pPV = GetSdrPageView();
-    String          aActiveLayer = GetActiveLayer();
-    sal_Int8        nDropAction = rEvt.mnAction;
-    sal_Int8        nRet = DND_ACTION_NONE;
+    SdrPageView*	pPV = GetSdrPageView();
+    String			aActiveLayer = GetActiveLayer();
+    sal_Int8		nDropAction = rEvt.mnAction;
+    sal_Int8		nRet = DND_ACTION_NONE;
 
     // destroy drop marker if it is shown
     if( mpDropMarker )
@@ -687,7 +687,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
     if( !pPV->IsLayerLocked( aActiveLayer ) )
     {
         const OutlinerView* pOLV = GetTextEditOutlinerView();
-        sal_Bool                bIsInsideOutlinerView = sal_False;
+        BOOL				bIsInsideOutlinerView = FALSE;
 
         if( pOLV )
         {
@@ -704,14 +704,14 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
 
             if( aRect.IsInside( aPos ) )
             {
-                bIsInsideOutlinerView = sal_True;
+                bIsInsideOutlinerView = TRUE;
             }
         }
 
         if( !bIsInsideOutlinerView )
         {
-            Point                   aPos;
-            TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
+            Point				    aPos;
+            TransferableDataHelper	aDataHelper( rEvt.maDropEvent.Transferable );
 
             if( pTargetWindow )
                 aPos = pTargetWindow->PixelToLogic( rEvt.maPosPixel );
@@ -737,7 +737,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
 
                                 *xStm >> aFillData;
                                 const Color aColor( ( (XFillColorItem&) aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ) ).GetColorValue() );
-                                static_cast< SdrHdlColor* >( pIAOHandle )->SetColor( aColor, sal_True );
+                                static_cast< SdrHdlColor* >( pIAOHandle )->SetColor( aColor, TRUE );
                                 nRet = nDropAction;
                             }
                         }
@@ -746,14 +746,14 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
             }
 
             // standard insert?
-            if( !nRet && InsertData( aDataHelper, aPos, nDropAction, sal_True, 0, nPage, nLayer ) )
+            if( !nRet && InsertData( aDataHelper, aPos, nDropAction, TRUE, 0, nPage, nLayer ) )
                 nRet = nDropAction;
 
             // special insert?
             if( !nRet && mpViewSh )
             {
-                String          aTmpString1, aTmpString2;
-                INetBookmark    aINetBookmark( aTmpString1, aTmpString2 );
+                String		    aTmpString1, aTmpString2;
+                INetBookmark	aINetBookmark( aTmpString1, aTmpString2 );
 
                 // insert bookmark
                 if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
@@ -773,15 +773,15 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                     }
                     else
                     {
-                        SdrObject*      pPickObj = NULL;
-                        SdrPageView*    pPageView = NULL;
+                        SdrObject*		pPickObj = NULL;
+                        SdrPageView*	pPageView = NULL;
 
                         if( PickObj( aPos, getHitTolLog(), pPickObj, pPageView ) )
                         {
                             // insert as clip action => jump
-                            rtl::OUString       aBookmark( aINetBookmark.GetURL() );
-                            SdAnimationInfo*    pInfo = mpDoc->GetAnimationInfo( pPickObj );
-                            sal_Bool                bCreated = sal_False;
+                            rtl::OUString		aBookmark( aINetBookmark.GetURL() );
+                            SdAnimationInfo*	pInfo = mpDoc->GetAnimationInfo( pPickObj );
+                            BOOL				bCreated = FALSE;
 
                             if( aBookmark.getLength() )
                             {
@@ -803,7 +803,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 if( !pInfo )
                                 {
                                     pInfo = SdDrawDocument::GetShapeUserData( *pPickObj, true );
-                                    bCreated = sal_True;
+                                    bCreated = TRUE;
                                 }
 
                                 // Undo-Action mit alten und neuen Groessen erzeugen
@@ -821,6 +821,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
                                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
                                 pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
+//								pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, TRUE);
                                 pAction->SetVerb(pInfo->mnVerb, pInfo->mnVerb);
                                 pAction->SetSecondEffect(pInfo->meSecondEffect, pInfo->meSecondEffect);
                                 pAction->SetSecondSpeed(pInfo->meSecondSpeed, pInfo->meSecondSpeed);
@@ -856,17 +857,17 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
 
 IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEvent )
 {
-    TransferableDataHelper                  aDataHelper( pSdNavigatorDropEvent->maDropEvent.Transferable );
+    TransferableDataHelper	                aDataHelper( pSdNavigatorDropEvent->maDropEvent.Transferable );
     SdPageObjsTLB::SdPageObjsTransferable*  pPageObjsTransferable = SdPageObjsTLB::SdPageObjsTransferable::getImplementation( aDataHelper.GetXTransferable() );
-    INetBookmark                            aINetBookmark;
+    INetBookmark			                aINetBookmark;
 
     if( pPageObjsTransferable && aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) )
     {
-        Point   aPos;
-        List    aBookmarkList;
-        String  aBookmark;
-        SdPage* pPage = (SdPage*) GetSdrPageView()->GetPage();
-        sal_uInt16  nPgPos = 0xFFFF;
+        Point	aPos;
+        List	aBookmarkList;
+        String	aBookmark;
+        SdPage*	pPage = (SdPage*) GetSdrPageView()->GetPage();
+        USHORT	nPgPos = 0xFFFF;
 
         if( pSdNavigatorDropEvent->mpTargetWindow )
             aPos = pSdNavigatorDropEvent->mpTargetWindow->PixelToLogic( pSdNavigatorDropEvent->maPosPixel );
@@ -887,11 +888,11 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
 
         // Um zu gewaehrleisten, dass alle Seitennamen eindeutig sind, werden
         // die einzufuegenden geprueft und gegebenenfalls in einer Ersatzliste
-        // aufgenommen (bNameOK == sal_False -> Benutzer hat abgebrochen)
-        List*   pExchangeList = NULL;
-        sal_Bool    bLink = ( NAVIGATOR_DRAGTYPE_LINK == pPageObjsTransferable->GetDragType()  ? sal_True : sal_False );
-        sal_Bool    bNameOK = GetExchangeList( pExchangeList, &aBookmarkList, 2 );
-        sal_Bool    bReplace = sal_False;
+        // aufgenommen (bNameOK == FALSE -> Benutzer hat abgebrochen)
+        List*	pExchangeList = NULL;
+        BOOL	bLink = ( NAVIGATOR_DRAGTYPE_LINK == pPageObjsTransferable->GetDragType()  ? TRUE : FALSE );
+        BOOL	bNameOK = GetExchangeList( pExchangeList, &aBookmarkList, 2 );
+        BOOL	bReplace = FALSE;
 
         // Da man hier nicht weiss, ob es sich um eine Seite oder ein Objekt handelt,
         // wird eine Liste sowohl mit Seiten, als auch mit Objekten gefuellt.
@@ -899,12 +900,12 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
         if( bNameOK )
         {
             mpDoc->InsertBookmark( &aBookmarkList, pExchangeList,
-                                  bLink, bReplace, nPgPos, sal_False,
+                                  bLink, bReplace, nPgPos, FALSE,
                                   &pPageObjsTransferable->GetDocShell(),
-                                  sal_True, &aPos );
+                                  TRUE, &aPos );
         }
 
-        // Delete the ExchangeList
+        // Loeschen der ExchangeList
         if( pExchangeList )
         {
             for( void* p = pExchangeList->First(); p; p = pExchangeList->Next() )
@@ -923,19 +924,19 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
 |*
 |* Rueckgabeparameter:
 |* pExchangeList == NULL -> Namen sind alle eindeutig
-|* bNameOK == sal_False -> Benutzer hat abgebrochen
+|* bNameOK == FALSE -> Benutzer hat abgebrochen
 |* nType == 0 -> Seiten
 |* nType == 1 -> Objekte
 |* nType == 2 -> Seiten + Objekte
 |*
 \************************************************************************/
 
-sal_Bool View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, sal_uInt16 nType )
+BOOL View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT nType )
 {
     DBG_ASSERT( !rpExchangeList, "ExchangeList muss NULL sein!");
 
-    sal_Bool bListIdentical = sal_True; // BookmarkList und ExchangeList sind gleich
-    sal_Bool bNameOK = sal_True;        // Name ist eindeutig
+    BOOL bListIdentical = TRUE; // BookmarkList und ExchangeList sind gleich
+    BOOL bNameOK = TRUE;		// Name ist eindeutig
 
     rpExchangeList = new List();
 
@@ -950,7 +951,7 @@ sal_Bool View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, sal_
             if( nType == 0  || nType == 2 )
                 bNameOK = mpDocSh->CheckPageName (
                     mpViewSh->GetActiveWindow(), *pNewName);
-
+            
             if( bNameOK && ( nType == 1  || nType == 2 ) )
             {
                 if( mpDoc->GetObj( *pNewName ) )
@@ -963,7 +964,7 @@ sal_Bool View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, sal_
                     {
                         pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
 
-                        bNameOK = sal_False;
+                        bNameOK = FALSE;
                         pDlg->SetText( aTitle );
 
                         while( !bNameOK && pDlg->Execute() == RET_OK )
@@ -971,7 +972,7 @@ sal_Bool View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, sal_
                             pDlg->GetName( *pNewName );
 
                             if( !mpDoc->GetObj( *pNewName ) )
-                                bNameOK = sal_True;
+                                bNameOK = TRUE;
                         }
 
                         delete pDlg;
@@ -1028,7 +1029,7 @@ SdrModel* View::GetMarkedObjModel() const
     return FmFormView::GetMarkedObjModel();;
 }
 
-sal_Bool View::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* =NULL */, sal_uInt32 nOptions /* =0 */)
+BOOL View::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* =NULL */, UINT32 nOptions /* =0 */)
 {
     return FmFormView::Paste( rMod, rPos, pLst,nOptions );;
 }

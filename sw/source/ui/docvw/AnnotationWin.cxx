@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile:  $
+ * $Revision:  $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -25,6 +28,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 
 #include "precompiled_sw.hxx"
 
@@ -59,9 +63,7 @@
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <SwUndoField.hxx>
-
 
 namespace sw { namespace annotation {
 
@@ -87,7 +89,7 @@ void SwAnnotationWin::SetPostItText()
 {
     // get text from SwPostItField and insert into our textview
     Engine()->SetModifyHdl( Link() );
-    Engine()->EnableUndo( sal_False );
+    Engine()->EnableUndo( FALSE );
     mpFld = static_cast<SwPostItField*>(mpFmtFld->GetFld());
     if( mpFld->GetTextObject() )
         Engine()->SetText( *mpFld->GetTextObject() );
@@ -100,7 +102,7 @@ void SwAnnotationWin::SetPostItText()
 
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();
-    Engine()->EnableUndo( sal_True );
+    Engine()->EnableUndo( TRUE );
     Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     Invalidate();
 }
@@ -115,8 +117,7 @@ void SwAnnotationWin::UpdateData()
         SwField* pOldField = mpFld->Copy();
         mpFld->SetPar2(Engine()->GetEditEngine().GetText());
         mpFld->SetTextObject(Engine()->CreateParaObject());
-        DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo().AppendUndo(
-            new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
+        DocView().GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
         delete pOldField;
         // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
         Mgr().SetLayout();
@@ -246,8 +247,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     SwField* pOldField = mpFld->Copy();
     mpFld->SetPar2(Engine()->GetEditEngine().GetText());
     mpFld->SetTextObject(Engine()->CreateParaObject());
-    DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo().AppendUndo(
-        new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
+    DocView().GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
     delete pOldField;
     Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     Engine()->ClearModifyFlag();
@@ -257,14 +257,14 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
 SvxLanguageItem SwAnnotationWin::GetLanguage(void)
 {
     // set initial language for outliner
-    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );
-    sal_uInt16 nLangWhichId = 0;
+    USHORT nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );
+    USHORT nLangWhichId = 0;
     switch (nScriptType)
     {
         case SCRIPTTYPE_LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
         case SCRIPTTYPE_ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
         case SCRIPTTYPE_COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
-        default: OSL_FAIL("GetLanguage: wrong script type");
+        default: OSL_ENSURE(false, "GetLanguage: wrong script type");
     }
     return SvxLanguageItem(mpFld->GetLanguage(),nLangWhichId);
 }

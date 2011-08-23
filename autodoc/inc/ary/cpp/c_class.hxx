@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,13 +96,13 @@ class Class : public CodeEntity,
                         ~Class();
 
     // OPERATIONS
-    void                Add_BaseClass(
+    void				Add_BaseClass(
                             const S_Classes_Base &
                                                 i_rBaseClass );
     void                Add_TemplateParameterType(
                             const String  &     i_sLocalName,
                             Type_id             i_nIdAsType );
-    void                Add_KnownDerivative(
+    void				Add_KnownDerivative(
                             Ce_id               i_nId )
                                                 { aKnownDerivatives.Add(i_nId); }
 
@@ -141,7 +141,7 @@ class Class : public CodeEntity,
                                                 { return aKnownDerivatives; }
 
     // INQUIRY
-    E_ClassKey          ClassKey() const;
+    E_ClassKey			ClassKey() const;
     E_Protection        Protection() const;
     E_Virtuality        Virtuality() const      { return eVirtuality; }
 
@@ -171,7 +171,7 @@ class Class : public CodeEntity,
     virtual ClassId     get_AryClass() const;
 
     // Interface ary::AryGroup
-    virtual Gid         inq_Id_Group() const;
+    virtual Gid 		inq_Id_Group() const;
     virtual const cpp::CppEntity &
                         inq_RE_Group() const;
     virtual const group::SlotList &
@@ -187,10 +187,10 @@ class Class : public CodeEntity,
                             const List_LocalCe& i_rList,
                             const String  &     i_sName ) const;
     // DATA
-    CeEssentials        aEssentials;
+    CeEssentials		aEssentials;
     node_t              aAssignedNode;
 
-    List_Bases          aBaseClasses;
+    List_Bases			aBaseClasses;
     List_TplParam       aTemplateParameterTypes;
 
     List_LocalCe        aClasses;
@@ -205,8 +205,8 @@ class Class : public CodeEntity,
     IdSequence          aFriendOperations;
     IdSequence          aKnownDerivatives;
 
-    E_ClassKey          eClassKey;
-    E_Protection        eProtection;
+    E_ClassKey			eClassKey;
+    E_Protection		eProtection;
     E_Virtuality        eVirtuality;
 };
 

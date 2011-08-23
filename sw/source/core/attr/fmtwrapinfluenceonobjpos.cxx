@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ SfxPoolItem* SwFmtWrapInfluenceOnObjPos::Clone( SfxItemPool * ) const
     return new SwFmtWrapInfluenceOnObjPos(*this);
 }
 
-bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
@@ -88,14 +88,14 @@ bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId ) co
         }
         break;
         default:
-            OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
+            OSL_ENSURE( false, "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
             bRet = false;
     }
 
     return bRet;
 }
 
-bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, BYTE nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
@@ -106,23 +106,24 @@ bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId 
         {
             sal_Int16 nNewWrapInfluence = 0;
             rVal >>= nNewWrapInfluence;
-            // #i35017# - constant names have changed and
+            // --> OD 2004-10-18 #i35017# - constant names have changed and
             // <ITERATIVE> has been added
             if ( nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
                  nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_CONCURRENT ||
                  nNewWrapInfluence == text::WrapInfluenceOnPosition::ITERATIVE )
+            // <--
             {
                 SetWrapInfluenceOnObjPos( nNewWrapInfluence );
             }
             else
             {
-                OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
+                OSL_ENSURE( false, "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
                 bRet = false;
             }
         }
         break;
         default:
-            OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
+            OSL_ENSURE( false, "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
             bRet = false;
     }
 
@@ -131,21 +132,22 @@ bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId 
 
 void SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition )
 {
-    // #i35017# - constant names have changed and consider
+    // --> OD 2004-10-18 #i35017# - constant names have changed and consider
     // new value <ITERATIVE>
     if ( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
          _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_CONCURRENT ||
          _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ITERATIVE )
+    // <--
     {
         mnWrapInfluenceOnPosition = _nWrapInfluenceOnPosition;
     }
     else
     {
-        OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos(..)> - invalid attribute value" );
+        OSL_ENSURE( false, "<SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos(..)> - invalid attribute value" );
     }
 }
 
-// #i35017# - add parameter <_bIterativeAsOnceConcurrent>
+// --> OD 2004-10-18 #i35017# - add parameter <_bIterativeAsOnceConcurrent>
 // to control, if value <ITERATIVE> has to be treated as <ONCE_CONCURRENT>
 sal_Int16 SwFmtWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
                                 const bool _bIterativeAsOnceConcurrent ) const
@@ -160,5 +162,6 @@ sal_Int16 SwFmtWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
 
     return nWrapInfluenceOnPosition;
 }
+// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define pivotfld_curs_height 32
 #define pivotfld_curs_x_hot 8
 #define pivotfld_curs_y_hot 7
-static unsigned char pivotfld_curs_bits[] = {
+static char pivotfld_curs_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x07, 0x00,
    0x01, 0x00, 0x04, 0x00, 0x01, 0x00, 0x04, 0x00, 0x01, 0x00, 0x04, 0x00,
    0x01, 0x00, 0x04, 0x00, 0x01, 0x01, 0x04, 0x00, 0x01, 0x03, 0x04, 0x00,

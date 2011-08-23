@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,6 +70,7 @@ private: //member
     sal_Int32   m_nDimensionIndex;
 };
 
+//static
 void WrappedAxisAndGridExistenceProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -215,6 +216,8 @@ Any WrappedAxisAndGridExistenceProperty::getPropertyDefault( const Reference< be
 }
 
 //---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
 
 class WrappedAxisTitleExistenceProperty : public WrappedProperty
 {
@@ -237,6 +240,7 @@ private: //member
     TitleHelper::eTitleType             m_eTitleType;
 };
 
+//static
 void WrappedAxisTitleExistenceProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -311,11 +315,11 @@ Any WrappedAxisTitleExistenceProperty::getPropertyValue( const Reference< beans:
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Bool bHasTitle = sal_False;
-
+    
     Reference< chart2::XTitle > xTitle( TitleHelper::getTitle( m_eTitleType, m_spChart2ModelContact->getChartModel() ) );
     if( xTitle.is() && (TitleHelper::getCompleteString( xTitle ).getLength() != 0) )
         bHasTitle = sal_True;
-
+    
     Any aRet;
     aRet <<= bHasTitle;
     return aRet;
@@ -331,6 +335,8 @@ Any WrappedAxisTitleExistenceProperty::getPropertyDefault( const Reference< bean
 }
 
 //---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
 
 class WrappedAxisLabelExistenceProperty : public WrappedProperty
 {
@@ -338,7 +344,7 @@ public:
     WrappedAxisLabelExistenceProperty( bool bMain, sal_Int32 nDimensionIndex
         , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedAxisLabelExistenceProperty();
-
+ 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
@@ -354,6 +360,7 @@ private: //member
     sal_Int32   m_nDimensionIndex;
 };
 
+//static
 void WrappedAxisLabelExistenceProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {

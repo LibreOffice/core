@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,29 +48,29 @@ public:
                     DateTime( const Date& rDate, const Time& rTime ) :
                         Date( rDate ), Time( rTime ) {}
 
-    sal_Bool            IsBetween( const DateTime& rFrom,
+    BOOL            IsBetween( const DateTime& rFrom,
                                const DateTime& rTo ) const;
 
-    sal_Bool            IsEqualIgnore100Sec( const DateTime& rDateTime ) const
+    BOOL            IsEqualIgnore100Sec( const DateTime& rDateTime ) const
                         {
                             if ( Date::operator!=( rDateTime ) )
-                                return sal_False;
+                                return FALSE;
                             return Time::IsEqualIgnore100Sec( rDateTime );
                         }
 
-    sal_Bool            operator ==( const DateTime& rDateTime ) const
+    BOOL            operator ==( const DateTime& rDateTime ) const
                         { return (Date::operator==( rDateTime ) &&
                                   Time::operator==( rDateTime )); }
-    sal_Bool            operator !=( const DateTime& rDateTime ) const
+    BOOL            operator !=( const DateTime& rDateTime ) const
                         { return (Date::operator!=( rDateTime ) ||
                                   Time::operator!=( rDateTime )); }
-    sal_Bool            operator  >( const DateTime& rDateTime ) const;
-    sal_Bool            operator  <( const DateTime& rDateTime ) const;
-    sal_Bool            operator >=( const DateTime& rDateTime ) const;
-    sal_Bool            operator <=( const DateTime& rDateTime ) const;
+    BOOL            operator  >( const DateTime& rDateTime ) const;
+    BOOL            operator  <( const DateTime& rDateTime ) const;
+    BOOL            operator >=( const DateTime& rDateTime ) const;
+    BOOL            operator <=( const DateTime& rDateTime ) const;
 
     long            GetSecFromDateTime( const Date& rDate ) const;
-    void            MakeDateTimeFromSec( const Date& rDate, sal_uIntPtr nSec );
+    void            MakeDateTimeFromSec( const Date& rDate, ULONG nSec );
 
     void            ConvertToUTC()       { *this -= Time::GetUTCOffset(); }
     void            ConvertToLocalTime() { *this += Time::GetUTCOffset(); }
@@ -79,8 +79,8 @@ public:
                         { Date::operator+=( nDays ); return *this; }
     DateTime&       operator -=( long nDays )
                         { Date::operator-=( nDays ); return *this; }
-    DateTime&       operator +=( double fTimeInDays );
-    DateTime&       operator -=( double fTimeInDays )
+    DateTime&		operator +=( double fTimeInDays );
+    DateTime&		operator -=( double fTimeInDays )
                         { return operator+=( -fTimeInDays ); }
     DateTime&       operator +=( const Time& rTime );
     DateTime&       operator -=( const Time& rTime );
@@ -92,8 +92,8 @@ public:
                         { return operator+( rDateTime, -fTimeInDays ); }
     TOOLS_DLLPUBLIC friend DateTime operator +( const DateTime& rDateTime, const Time& rTime );
     TOOLS_DLLPUBLIC friend DateTime operator -( const DateTime& rDateTime, const Time& rTime );
-    TOOLS_DLLPUBLIC friend double   operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 );
-    TOOLS_DLLPUBLIC friend long     operator -( const DateTime& rDateTime, const Date& rDate )
+    TOOLS_DLLPUBLIC friend double	operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 );
+    TOOLS_DLLPUBLIC friend long		operator -( const DateTime& rDateTime, const Date& rDate )
                         { return (const Date&) rDateTime - rDate; }
 
     DateTime&       operator =( const DateTime& rDateTime );

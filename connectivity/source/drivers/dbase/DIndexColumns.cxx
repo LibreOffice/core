@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ sdbcx::ObjectType ODbaseIndexColumns::createObject(const ::rtl::OUString& _rName
                                                     ,sal_False
                                                     ,sal_False
                                                     ,sal_False
-                                                    ,pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
+                                                    ,pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
 
     return xRet;
 }
@@ -83,7 +83,7 @@ void ODbaseIndexColumns::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > ODbaseIndexColumns::createDescriptor()
 {
-    return new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
+    return new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 sdbcx::ObjectType ODbaseIndexColumns::appendObject( const ::rtl::OUString& /*_rForName*/, const Reference< XPropertySet >& descriptor )

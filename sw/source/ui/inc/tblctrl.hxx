@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@ class SwTableOptimizeCtrl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwTableOptimizeCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SwTableOptimizeCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SwTableOptimizeCtrl();
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow* 	CreatePopupWindow();
 
 };
 

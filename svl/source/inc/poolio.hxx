@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,7 @@
  *
  ************************************************************************/
 #include <svl/brdcst.hxx>
-#include <boost/shared_ptr.hpp>
-#include <deque>
+
 
 #ifndef DELETEZ
 #define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }
@@ -36,36 +35,35 @@
 
 struct SfxPoolVersion_Impl
 {
-    sal_uInt16          _nVer;
-    sal_uInt16          _nStart, _nEnd;
-    sal_uInt16*         _pMap;
+    USHORT			_nVer;
+    USHORT			_nStart, _nEnd;
+    USHORT* 		_pMap;
 
-                    SfxPoolVersion_Impl( sal_uInt16 nVer, sal_uInt16 nStart, sal_uInt16 nEnd,
-                                         sal_uInt16 *pMap )
-                    :   _nVer( nVer ),
+                    SfxPoolVersion_Impl( USHORT nVer, USHORT nStart, USHORT nEnd,
+                                         USHORT *pMap )
+                    :	_nVer( nVer ),
                         _nStart( nStart ),
                         _nEnd( nEnd ),
                         _pMap( pMap )
                     {}
                     SfxPoolVersion_Impl( const SfxPoolVersion_Impl &rOrig )
-                    :   _nVer( rOrig._nVer ),
+                    :	_nVer( rOrig._nVer ),
                         _nStart( rOrig._nStart ),
                         _nEnd( rOrig._nEnd ),
                         _pMap( rOrig._pMap )
                     {}
 };
 
-typedef std::deque<SfxPoolItem*> SfxPoolItemArrayBase_Impl;
-
-typedef boost::shared_ptr< SfxPoolVersion_Impl > SfxPoolVersion_ImplPtr;
-typedef std::deque< SfxPoolVersion_ImplPtr > SfxPoolVersionArr_Impl;
+SV_DECL_PTRARR( SfxPoolItemArrayBase_Impl, SfxPoolItem*, 0, 5 )
+SV_DECL_PTRARR_DEL( SfxPoolVersionArr_Impl, SfxPoolVersion_Impl*, 0, 2 )
 
 struct SfxPoolItemArray_Impl: public SfxPoolItemArrayBase_Impl
 {
-    size_t  nFirstFree;
+    USHORT	nFirstFree;
 
-    SfxPoolItemArray_Impl ()
-        : nFirstFree( 0 )
+    SfxPoolItemArray_Impl (USHORT nInitSize = 0)
+        : SfxPoolItemArrayBase_Impl( nInitSize ),
+          nFirstFree( 0 )
     {}
 };
 
@@ -73,20 +71,20 @@ class SfxStyleSheetIterator;
 
 struct SfxItemPool_Impl
 {
-    SfxBroadcaster                  aBC;
-    SfxPoolItemArray_Impl**         ppPoolItems;
-    SfxPoolVersionArr_Impl          aVersions;
-    sal_uInt16                          nVersion;
-    sal_uInt16                          nLoadingVersion;
-    sal_uInt16                          nInitRefCount; // 1, beim Laden ggf. 2
-    sal_uInt16                          nVerStart, nVerEnd; // WhichRange in Versions
-    sal_uInt16                          nStoringStart, nStoringEnd; // zu speichernder Range
-    sal_uInt8                           nMajorVer, nMinorVer; // Pool selbst
+    SfxBroadcaster					aBC;
+    SfxPoolItemArray_Impl**			ppPoolItems;
+    SfxPoolVersionArr_Impl			aVersions;
+    USHORT							nVersion;
+    USHORT							nLoadingVersion;
+    USHORT							nInitRefCount; // 1, beim Laden ggf. 2
+    USHORT							nVerStart, nVerEnd; // WhichRange in Versions
+    USHORT							nStoringStart, nStoringEnd; // zu speichernder Range
+    BYTE							nMajorVer, nMinorVer; // Pool selbst
     SfxMapUnit                      eDefMetric;
     bool                            bInSetItem;
     bool                            bStreaming; // in Load() bzw. Store()
 
-    SfxItemPool_Impl( sal_uInt16 nStart, sal_uInt16 nEnd )
+    SfxItemPool_Impl( USHORT nStart, USHORT nEnd )
         : ppPoolItems (new SfxPoolItemArray_Impl*[ nEnd - nStart + 1])
     {
         memset( ppPoolItems, 0, sizeof( SfxPoolItemArray_Impl* ) * ( nEnd - nStart + 1) );
@@ -99,8 +97,7 @@ struct SfxItemPool_Impl
 
     void DeleteItems()
     {
-        delete[] ppPoolItems;
-        ppPoolItems = 0;
+        delete[] ppPoolItems; ppPoolItems = 0;
     }
 };
 
@@ -127,76 +124,76 @@ struct SfxItemPool_Impl
 #endif
 
 #define CHECK_FILEFORMAT( rStream, nTag ) \
-    {   sal_uInt16 nFileTag; \
+    {   USHORT nFileTag; \
         rStream >> nFileTag; \
         if ( nTag != nFileTag ) \
         { \
-            OSL_FAIL( #nTag ); /*! s.u. */ \
+            DBG_ERROR( #nTag ); /*! s.u. */ \
             /*! error-code setzen und auswerten! */ \
             (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
-            pImp->bStreaming = sal_False; \
+            pImp->bStreaming = FALSE; \
             return rStream; \
         } \
     }
 
 #define CHECK_FILEFORMAT_RELEASE( rStream, nTag, pPointer ) \
-   {   sal_uInt16 nFileTag; \
+   {   USHORT nFileTag; \
        rStream >> nFileTag; \
        if ( nTag != nFileTag ) \
         { \
-           OSL_FAIL( #nTag ); /*! s.u. */ \
+            DBG_ERROR( #nTag ); /*! s.u. */ \
            /*! error-code setzen und auswerten! */ \
            (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
-           pImp->bStreaming = sal_False; \
+           pImp->bStreaming = FALSE; \
            delete pPointer; \
             return rStream; \
         } \
     }
 
 #define CHECK_FILEFORMAT2( rStream, nTag1, nTag2 ) \
-    {   sal_uInt16 nFileTag; \
+    {   USHORT nFileTag; \
         rStream >> nFileTag; \
         if ( nTag1 != nFileTag && nTag2 != nFileTag ) \
         { \
-            OSL_FAIL( #nTag1 ); /*! s.u. */ \
+            DBG_ERROR( #nTag1 ); /*! s.u. */ \
             /*! error-code setzen und auswerten! */ \
             (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
-            pImp->bStreaming = sal_False; \
+            pImp->bStreaming = FALSE; \
             return rStream; \
         } \
     }
 
-#define SFX_ITEMPOOL_VER_MAJOR          sal_uInt8(2)
-#define SFX_ITEMPOOL_VER_MINOR          sal_uInt8(0)
+#define SFX_ITEMPOOL_VER_MAJOR      	BYTE(2)
+#define SFX_ITEMPOOL_VER_MINOR      	BYTE(0)
 
-#define SFX_ITEMPOOL_TAG_STARTPOOL_4    sal_uInt16(0x1111)
-#define SFX_ITEMPOOL_TAG_STARTPOOL_5    sal_uInt16(0xBBBB)
-#define SFX_ITEMPOOL_TAG_ITEMPOOL       sal_uInt16(0xAAAA)
-#define SFX_ITEMPOOL_TAG_ITEMS          sal_uInt16(0x2222)
-#define SFX_ITEMPOOL_TAG_ITEM           sal_uInt16(0x7777)
-#define SFX_ITEMPOOL_TAG_SIZES          sal_uInt16(0x3333)
-#define SFX_ITEMPOOL_TAG_DEFAULTS       sal_uInt16(0x4444)
-#define SFX_ITEMPOOL_TAG_VERSIONMAP     sal_uInt16(0x5555)
-#define SFX_ITEMPOOL_TAG_HEADER         sal_uInt16(0x6666)
-#define SFX_ITEMPOOL_TAG_ENDPOOL        sal_uInt16(0xEEEE)
-#define SFX_ITEMPOOL_TAG_TRICK4OLD      sal_uInt16(0xFFFF)
+#define SFX_ITEMPOOL_TAG_STARTPOOL_4	USHORT(0x1111)
+#define SFX_ITEMPOOL_TAG_STARTPOOL_5	USHORT(0xBBBB)
+#define SFX_ITEMPOOL_TAG_ITEMPOOL 		USHORT(0xAAAA)
+#define SFX_ITEMPOOL_TAG_ITEMS			USHORT(0x2222)
+#define SFX_ITEMPOOL_TAG_ITEM			USHORT(0x7777)
+#define SFX_ITEMPOOL_TAG_SIZES			USHORT(0x3333)
+#define SFX_ITEMPOOL_TAG_DEFAULTS		USHORT(0x4444)
+#define SFX_ITEMPOOL_TAG_VERSIONMAP 	USHORT(0x5555)
+#define SFX_ITEMPOOL_TAG_HEADER 		USHORT(0x6666)
+#define SFX_ITEMPOOL_TAG_ENDPOOL		USHORT(0xEEEE)
+#define SFX_ITEMPOOL_TAG_TRICK4OLD  	USHORT(0xFFFF)
 
-#define SFX_ITEMPOOL_REC                sal_uInt8(0x01)
-#define SFX_ITEMPOOL_REC_HEADER         sal_uInt8(0x10)
-#define SFX_ITEMPOOL_REC_VERSIONMAP     sal_uInt16(0x0020)
-#define SFX_ITEMPOOL_REC_WHICHIDS       sal_uInt16(0x0030)
-#define SFX_ITEMPOOL_REC_ITEMS          sal_uInt16(0x0040)
-#define SFX_ITEMPOOL_REC_DEFAULTS       sal_uInt16(0x0050)
+#define SFX_ITEMPOOL_REC				BYTE(0x01)
+#define SFX_ITEMPOOL_REC_HEADER 	    BYTE(0x10)
+#define SFX_ITEMPOOL_REC_VERSIONMAP 	USHORT(0x0020)
+#define SFX_ITEMPOOL_REC_WHICHIDS   	USHORT(0x0030)
+#define SFX_ITEMPOOL_REC_ITEMS  		USHORT(0x0040)
+#define SFX_ITEMPOOL_REC_DEFAULTS		USHORT(0x0050)
 
-#define SFX_ITEMSET_REC                 sal_uInt8(0x02)
+#define SFX_ITEMSET_REC					BYTE(0x02)
 
-#define SFX_STYLES_REC                  sal_uInt8(0x03)
-#define SFX_STYLES_REC_HEADER       sal_uInt16(0x0010)
-#define SFX_STYLES_REC_STYLES       sal_uInt16(0x0020)
+#define SFX_STYLES_REC                  BYTE(0x03)
+#define SFX_STYLES_REC_HEADER		USHORT(0x0010)
+#define SFX_STYLES_REC_STYLES		USHORT(0x0020)
 
 //========================================================================
 
-inline sal_uInt16 SfxItemPool::GetIndex_Impl(sal_uInt16 nWhich) const
+inline USHORT SfxItemPool::GetIndex_Impl(USHORT nWhich) const
 {
     DBG_CHKTHIS(SfxItemPool, 0);
     DBG_ASSERT(nWhich >= nStart && nWhich <= nEnd, "Which-Id nicht im Pool-Bereich");

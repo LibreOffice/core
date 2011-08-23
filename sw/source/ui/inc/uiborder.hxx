@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ public:
      // SW_BORDER_MODE_TABLE
      // SW_BORDER_MODE_FRAME
 
-     SwBorderDlg(Window* pParent, SfxItemSet& rSet, sal_uInt16 nType);
+     SwBorderDlg(Window* pParent, SfxItemSet& rSet, USHORT nType);
     ~SwBorderDlg();
 };
 

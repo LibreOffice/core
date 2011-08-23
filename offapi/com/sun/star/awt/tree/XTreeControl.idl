@@ -1,7 +1,7 @@
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,12 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_tree_XTreeControl_idl__
-#define __com_sun_star_awt_tree_XTreeControl_idl__
-
-#ifndef __com_sun_star_awt_XControl_idl__
-#include <com/sun/star/awt/XControl.idl>
-#endif
+#ifndef __com_sun_star_awt_tree_XTreeControl_idl__ 
+#define __com_sun_star_awt_tree_XTreeControl_idl__ 
+ 
+#ifndef __com_sun_star_awt_XControl_idl__ 
+#include <com/sun/star/awt/XControl.idl> 
+#endif 
 
 #ifndef __com_sun_star_awt_tree_XTreeExpansionListener_idl__
 #include <com/sun/star/awt/tree/XTreeExpansionListener.idl>
@@ -39,29 +39,29 @@
 #include <com/sun/star/view/XMultiSelectionSupplier.idl>
 #endif
 
-#ifndef __com_sun_star_awt_tree_XTreeEditListener_idl__
+#ifndef __com_sun_star_awt_tree_XTreeEditListener_idl__ 
 #include <com/sun/star/awt/tree/XTreeEditListener.idl>
 #endif
 
-//=============================================================================
-
+//============================================================================= 
+ 
 module com {  module sun {  module star {  module awt { module tree {
 
-//=============================================================================
-
+//============================================================================= 
+ 
 /** An interface to a control that displays a set of hierarchical data as an outline.
 
     @see TreeControl
  */
 interface XTreeControl
-{
-    /** This interfaces provides access to the selection of tree nodes for this control.
-
+{ 
+    /**	This interfaces provides access to the selection of tree nodes for this control.
+    
         <p>valid selection values for this interface are
         <type>XTreeNode</type> or sequence&lt;<type>XTreeNode</type>&gt;.</p>
 
         <method scope="::com::sun::star::view">XSelectionSupplier::getSelection()</method>
-        returns an empty any for no selection, an any with <type>XTreeNode</type> for
+        returns an emtpy any for no selection, an any with <type>XTreeNode</type> for
         a single selection and a sequence&lt;<type>XTreeNode</type>&gt; for a multiselection.
     */
     interface ::com::sun::star::view::XMultiSelectionSupplier;
@@ -88,7 +88,7 @@ interface XTreeControl
     /** Returns <TRUE/> if <var>Node</var> is currently collapsed.
 
         @param Node
-            the <type>XTreeNode</type> specifying the node to check
+            the <type>XTreeNode</type> specifying the node to check 
 
         @returns
             <TRUE/> if <var>Node</var> or at least one of its parent nodes are collapsed,
@@ -154,7 +154,7 @@ interface XTreeControl
         @throws ::com::sun::star::lang::IllegalArgumentException
             if <var>Node</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
 
-        @throws ExpandVetoException
+        @raises ExpandVetoException
             if collapsing <var>Node</var> failed because at least one of the registered
             <type>XTreeExpansionListener</type> raised a <type>ExpandVetoException</type>.
     */
@@ -179,14 +179,14 @@ interface XTreeControl
     /** If the given URL points to a loadable graphic, the graphic is rendered
         before expanded non leaf nodes.
 
-        <p>This can be overridden for individual nodes by <member>XTreeNode::getExpandedGraphicURL()</member></p>
+        <p>This can be overriden for individual nodes by <member>XTreeNode::getExpandedGraphicURL()</member></p>
     */
     [attribute] string DefaultExpandedGraphicURL;
 
     /** If the given URL points to a loadable graphic, the graphic is rendered
         before collapsed non leaf nodes.
 
-        <p>This can be overridden for individual nodes by <member>XTreeNode::getCollapsedGraphicURL()</member></p>
+        <p>This can be overriden for individual nodes by <member>XTreeNode::getCollapsedGraphicURL()</member></p>
     */
     [attribute] string DefaultCollapsedGraphicURL;
 
@@ -275,7 +275,7 @@ interface XTreeControl
     /** Adds a <type>XTreeEditListener</type>.
 
         @param xListener
-            a <type>XTreeEditListener</type> that will be notified
+            a <type>XTreeEditListener</type> that will be notified 
             before and after a tree node is edited.
     */
     void addTreeEditListener( [in] XTreeEditListener Listener );
@@ -286,10 +286,10 @@ interface XTreeControl
             the <type>XTreeEditListener</type> to remove
     */
     void removeTreeEditListener( [in] XTreeEditListener Listener );
-};
-
-//=============================================================================
+}; 
+ 
+//============================================================================= 
 
 }; }; }; }; };
-
-#endif
+ 
+#endif 

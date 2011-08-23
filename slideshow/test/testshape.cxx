@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,10 +26,7 @@
  *
  ************************************************************************/
 
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-
+#include <testshl/simpleheader.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
@@ -40,8 +37,6 @@
 #include "shape.hxx"
 #include "tests.hxx"
 #include "com/sun/star/presentation/XSlideShowView.hpp"
-
-#include <o3tl/compat_functional.hxx>
 
 #include <boost/bind.hpp>
 
@@ -145,7 +140,7 @@ private:
                 maViewLayers.end(),
                 boost::bind( std::equal_to< target::ViewLayerSharedPtr >(),
                              boost::cref( rNewLayer ),
-                             boost::bind( o3tl::select1st<ViewVector::value_type>(),
+                             boost::bind( std::select1st<ViewVector::value_type>(),
                                           _1 ))) == maViewLayers.end() )
             throw std::exception();
 
@@ -155,7 +150,7 @@ private:
                 maViewLayers.end(),
                 boost::bind( std::equal_to< target::ViewLayerSharedPtr >(),
                              boost::cref( rNewLayer ),
-                             boost::bind( o3tl::select1st<ViewVector::value_type>(),
+                             boost::bind( std::select1st<ViewVector::value_type>(),
                                           _1 ))));
         return true;
     }
@@ -221,7 +216,7 @@ private:
 TestShapeSharedPtr createTestShape(const basegfx::B2DRange& rRect,
                                    double                   nPrio)
 {
-    return TestShapeSharedPtr(
+    return TestShapeSharedPtr( 
         comphelper::make_shared_from_UNO(
             new ImplTestShape(rRect,nPrio)) );
 }

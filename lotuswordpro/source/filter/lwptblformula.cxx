@@ -59,13 +59,13 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005           Created
+ Mar 2005		 	Created
  ************************************************************************/
 
-#include    "lwpoverride.hxx"
-#include    "lwptblcell.hxx"
-#include    "lwppara.hxx"
-#include    "lwptblformula.hxx"
+#include	"lwpoverride.hxx"
+#include 	"lwptblcell.hxx"
+#include	"lwppara.hxx"
+#include 	"lwptblformula.hxx"
 
 #include "lwptablelayout.hxx"
 
@@ -93,10 +93,10 @@ LwpFormulaInfo::~LwpFormulaInfo()
 
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	sal_Bool.
 */
 sal_Bool LwpFormulaInfo::ReadConst()
 {
@@ -108,16 +108,16 @@ sal_Bool LwpFormulaInfo::ReadConst()
     return sal_True;
 }
 /**
-*   Need more effort for unicode.
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
+*	Need more effort for unicode.
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	sal_Bool.
 */
 sal_Bool LwpFormulaInfo::ReadText()
 {
-    sal_uInt16 nStrLen;
-    m_pObjStrm->QuickReadInt16(); //Disk Size
+    USHORT nDiskSize,nStrLen;
+    nDiskSize = m_pObjStrm->QuickReadInt16();
     nStrLen = m_pObjStrm->QuickReadInt16();
 
     auto_ptr<char> pBuf(new char[nStrLen+1]);
@@ -133,10 +133,10 @@ sal_Bool LwpFormulaInfo::ReadText()
 }
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	sal_Bool.
 */
 sal_Bool LwpFormulaInfo::ReadCellID()
 {
@@ -153,10 +153,10 @@ sal_Bool LwpFormulaInfo::ReadCellID()
 }
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	sal_Bool.
 */
 sal_Bool LwpFormulaInfo::ReadCellRange()
 {
@@ -182,11 +182,11 @@ sal_Bool LwpFormulaInfo::ReadCellRange()
 }
 
 /**
-*   Read expression from wordpro file
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
+*	Read expression from wordpro file
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	sal_Bool.
 */
 sal_Bool LwpFormulaInfo::ReadExpression()
 {
@@ -194,7 +194,7 @@ sal_Bool LwpFormulaInfo::ReadExpression()
     sal_Bool readSucceeded = sal_True;
 
     /* Read the compiled expression length */
-//  Len = m_pObjStrm->QuickReaduInt16();
+//	Len = m_pObjStrm->QuickReaduInt16();
     m_pObjStrm->SeekRel(2);
 
     while ((TokenType = m_pObjStrm->QuickReaduInt16()) != TK_END)
@@ -212,7 +212,7 @@ sal_Bool LwpFormulaInfo::ReadExpression()
 
             case TK_CELLID:
                 if (!ReadCellID())
-                    readSucceeded = sal_False;
+                    readSucceeded = FALSE;
                 break;
 
             case TK_CELLRANGE:
@@ -228,7 +228,7 @@ sal_Bool LwpFormulaInfo::ReadExpression()
                 {
                     LwpFormulaFunc* pFunc = new LwpFormulaFunc(TokenType);
                     if (!ReadArguments(*pFunc))
-                        readSucceeded = sal_False;
+                        readSucceeded = FALSE;
                     m_aStack.push_back(pFunc);
                 }
                 break;
@@ -265,7 +265,7 @@ sal_Bool LwpFormulaInfo::ReadExpression()
             default:
                 // We don't know what to do with this token, so eat it.
                 m_pObjStrm->SeekRel(DiskLength);
-                readSucceeded = sal_False;
+                readSucceeded = FALSE;
                 break;
         }
         MarkUnsupported(TokenType);
@@ -275,10 +275,10 @@ sal_Bool LwpFormulaInfo::ReadExpression()
 
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return
 */
 void LwpFormulaInfo::MarkUnsupported(sal_uInt16 TokenType)
 {
@@ -296,10 +296,10 @@ void LwpFormulaInfo::MarkUnsupported(sal_uInt16 TokenType)
     }
 }
 /**
-*   Read arguments of functions from wordpro file
-*   @date   03/26/2005
-*   @param  LwpFormulaFunc& aFunc, functions object
-*   @return sal_Bool.
+*	Read arguments of functions from wordpro file
+*	@date	03/26/2005
+*	@param	LwpFormulaFunc& aFunc, functions object
+*	@return	sal_Bool.
 */
 sal_Bool LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
 {
@@ -355,10 +355,10 @@ sal_Bool LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
 
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return
 */
 void LwpFormulaInfo::Read()
 {
@@ -374,7 +374,7 @@ void LwpFormulaInfo::Read()
             assert(false);
         }
     }
-//  sal_uInt8 cFlags = (sal_uInt8) m_pObjStrm->QuickReaduInt16(); // written as a sal_uInt16
+//	sal_uInt8 cFlags = (sal_uInt8) m_pObjStrm->QuickReaduInt16(); // written as a sal_uInt16
     m_pObjStrm->SeekRel(2);//flags, size in file: sal_uInt16
 
     LwpNotifyListPersistent cNotifyList;
@@ -386,11 +386,11 @@ void LwpFormulaInfo::Read()
 }
 
 /**
-*   Make the formula string.
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
+*	Make the formula string.
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	sal_Bool.
 */
 String  LwpFormulaInfo::Convert(LwpTableLayout* pCellsMap)
 {
@@ -411,11 +411,11 @@ String  LwpFormulaInfo::Convert(LwpTableLayout* pCellsMap)
 }
 
 /**
-*   Fill the XFCell content
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
+*	Fill the XFCell content
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	sal_Bool.
 */
 void LwpFormulaInfo::Convert(XFCell * pCell,LwpTableLayout* pCellsMap)
 {
@@ -432,10 +432,10 @@ void LwpFormulaInfo::Convert(XFCell * pCell,LwpTableLayout* pCellsMap)
 
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	sal_Bool.
 */
 LwpFormulaConst::LwpFormulaConst(double dVal)
 {
@@ -444,10 +444,10 @@ LwpFormulaConst::LwpFormulaConst(double dVal)
 
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	sal_Bool.
 */
 String LwpFormulaConst::ToString(LwpTableLayout* /*pCellsMap*/)
 {
@@ -456,10 +456,10 @@ String LwpFormulaConst::ToString(LwpTableLayout* /*pCellsMap*/)
 
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return
 */
 LwpFormulaText::LwpFormulaText( String aText)
 {
@@ -468,10 +468,10 @@ LwpFormulaText::LwpFormulaText( String aText)
 
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return
 */
 LwpFormulaCellAddr::LwpFormulaCellAddr(sal_Int16 aCol, sal_Int16 aRow)
 {
@@ -481,18 +481,18 @@ LwpFormulaCellAddr::LwpFormulaCellAddr(sal_Int16 aCol, sal_Int16 aRow)
 
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return String
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return String
 */
 String LwpFormulaCellAddr::ToString(LwpTableLayout* pCellsMap)
 {
-//  String aCellAddr;
-//  aCellAddr.AppendAscii("<");//&lt;
-//  aCellAddr+=m_aCol;
-//  aCellAddr+=m_aRow;
-//  aCellAddr.AppendAscii(">");//&gt;
+//	String aCellAddr;
+//	aCellAddr.AppendAscii("<");//&lt;
+//	aCellAddr+=m_aCol;
+//	aCellAddr+=m_aRow;
+//	aCellAddr.AppendAscii(">");//&gt;
 
     String aCellAddr;
     aCellAddr.AppendAscii("<");//&lt;
@@ -505,10 +505,10 @@ String LwpFormulaCellAddr::ToString(LwpTableLayout* pCellsMap)
 
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return
 */
 LwpFormulaCellRangeAddr::LwpFormulaCellRangeAddr(sal_Int16 aStartCol,
                                                  sal_Int16 aStartRow,
@@ -522,22 +522,22 @@ LwpFormulaCellRangeAddr::LwpFormulaCellRangeAddr(sal_Int16 aStartCol,
 }
 
 /**
-*   Convert the cell range into a string
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return String.
+*	Convert the cell range into a string
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	String.
 */
 String LwpFormulaCellRangeAddr::ToString(LwpTableLayout* pCellsMap)
 {
-//  String aCellAddr;
-//  aCellAddr.AppendAscii("<");//&lt;
-//  aCellAddr+=m_aStartCol;
-//  aCellAddr+=m_aStartRow;
-//  aCellAddr.AppendAscii(":");
-//  aCellAddr+=m_aEndCol;
-//  aCellAddr+=m_aEndRow;
-//  aCellAddr.AppendAscii(">");//&gt;
+//	String aCellAddr;
+//	aCellAddr.AppendAscii("<");//&lt;
+//	aCellAddr+=m_aStartCol;
+//	aCellAddr+=m_aStartRow;
+//	aCellAddr.AppendAscii(":");
+//	aCellAddr+=m_aEndCol;
+//	aCellAddr+=m_aEndRow;
+//	aCellAddr.AppendAscii(">");//&gt;
 
     String aCellAddr;
     aCellAddr.AppendAscii("<");//&lt;
@@ -553,10 +553,10 @@ String LwpFormulaCellRangeAddr::ToString(LwpTableLayout* pCellsMap)
 
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return
 */
 LwpFormulaFunc::LwpFormulaFunc(sal_uInt16 nTokenType)
 {
@@ -565,10 +565,10 @@ LwpFormulaFunc::LwpFormulaFunc(sal_uInt16 nTokenType)
 
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return
 */
 LwpFormulaFunc::~LwpFormulaFunc()
 {
@@ -587,21 +587,21 @@ LwpFormulaFunc::~LwpFormulaFunc()
 }
 /**
 *
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return
 */
 void LwpFormulaFunc::AddArg(LwpFormulaArg* pArg)
 {
     m_aArgs.push_back(pArg);
 }
 /**
-*   Convert the functions to a string, which is a argument of other formula
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return  String.
+*	Convert the functions to a string, which is a argument of other formula
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	 String.
 */
 String LwpFormulaFunc::ToArgString(LwpTableLayout* pCellsMap)
 {
@@ -612,11 +612,11 @@ String LwpFormulaFunc::ToArgString(LwpTableLayout* pCellsMap)
     return aFormula;
 }
 /**
-*   Convert the function to a formula string.
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
+*	Convert the function to a formula string.
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	sal_Bool.
 */
 String LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
 {
@@ -628,7 +628,7 @@ String LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
 
     //Append args
     vector<LwpFormulaArg*>::iterator aItr;
-    for (aItr=m_aArgs.begin();aItr!=m_aArgs.end();++aItr)
+    for (aItr=m_aArgs.begin();aItr!=m_aArgs.end();aItr++)
     {
         aFormula.Append( (*aItr)->ToArgString(pCellsMap) );
         aFormula.AppendAscii("|");//separator
@@ -648,11 +648,11 @@ String LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
 }
 
 /**
-*   Convert the formula in operators to a string : e.g. 1+2+3
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
+*	Convert the formula in operators to a string : e.g. 1+2+3
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	sal_Bool.
 */
 String LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
 {
@@ -660,7 +660,7 @@ String LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
     if (2==m_aArgs.size())
     {
         vector<LwpFormulaArg*>::iterator aItr = m_aArgs.end();
-        --aItr;
+        aItr--;
         aFormula.Append( (*aItr)->ToArgString(pCellsMap) );
 
         aFormula.AppendAscii(" ");
@@ -670,7 +670,7 @@ String LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
 
         aFormula.AppendAscii(" ");
 
-        --aItr;
+        aItr--;
         aFormula.Append( (*aItr)->ToArgString(pCellsMap) );
     }
     else
@@ -681,11 +681,11 @@ String LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
 }
 
 /**
-*   convert the formula in unary operators into string : e.g. -2
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
+*	convert the formula in unary operators into string : e.g. -2
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	sal_Bool.
 */
 String LwpFormulaUnaryOp::ToString(LwpTableLayout* pCellsMap)
 {
@@ -705,11 +705,11 @@ String LwpFormulaUnaryOp::ToString(LwpTableLayout* pCellsMap)
     return aFormula;
 }
 /**
-*   Get token name
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return String.
+*	Get token name
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	String.
 */
 String LwpFormulaTools::GetName(sal_uInt16 nTokenType)
 {
@@ -784,11 +784,11 @@ String LwpFormulaTools::GetName(sal_uInt16 nTokenType)
 }
 
 /**
-*   Get cell address in String
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return String.
+*	Get cell address in String
+*	@date	03/26/2005
+*	@param
+*	@param
+*	@return	String.
 */
 String LwpFormulaTools::GetCellAddr(sal_Int16 nRow, sal_Int16 nCol, LwpTableLayout* pCellsMap)
 {

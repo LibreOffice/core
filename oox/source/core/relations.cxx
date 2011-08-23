@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,17 +27,14 @@
  ************************************************************************/
 
 #include "oox/core/relations.hxx"
-
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/helper.hxx"
 
-namespace oox {
-namespace core {
-
-// ============================================================================
-
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+
+namespace oox {
+namespace core {
 
 // ============================================================================
 
@@ -72,7 +69,7 @@ const Relation* Relations::getRelationFromRelId( const OUString& rId ) const
 const Relation* Relations::getRelationFromFirstType( const OUString& rType ) const
 {
     for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        if( aIt->second.maType.equalsIgnoreAsciiCase( rType ) )
+        if( aIt->second.maType == rType )
             return &aIt->second;
     return 0;
 }
@@ -81,7 +78,7 @@ RelationsRef Relations::getRelationsFromType( const OUString& rType ) const
 {
     RelationsRef xRelations( new Relations( maFragmentPath ) );
     for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        if( aIt->second.maType.equalsIgnoreAsciiCase( rType ) )
+        if( aIt->second.maType == rType )
             (*xRelations)[ aIt->first ] = aIt->second;
     return xRelations;
 }

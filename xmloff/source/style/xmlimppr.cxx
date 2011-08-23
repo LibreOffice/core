@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlimp.hxx>
 
-#include "xmloff/unoatrcn.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include "unoatrcn.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlerror.hxx"
+#include "xmlerror.hxx"
 #include <tools/debug.hxx>
 
 #include "xmloff/contextid.hxx"
@@ -137,7 +137,7 @@ void SvXMLImportPropertyMapper::importXML(
         sal_Int32 nStartIdx,
         sal_Int32 nEndIdx ) const
 {
-    sal_Int16 nAttr = xAttrList->getLength();
+    INT16 nAttr = xAttrList->getLength();
 
     Reference< XNameContainer > xAttrContainer;
 
@@ -145,11 +145,11 @@ void SvXMLImportPropertyMapper::importXML(
         nStartIdx = 0;
     if( -1 == nEndIdx )
         nEndIdx = maPropMapper->GetEntryCount();
-    for( sal_Int16 i=0; i < nAttr; i++ )
+    for( INT16 i=0; i < nAttr; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName, aPrefix, aNamespace;
-        sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName( rAttrName, &aPrefix,
+        USHORT nPrefix = rNamespaceMap.GetKeyByAttrName( rAttrName, &aPrefix,
                                                     &aLocalName, &aNamespace );
 
         if( XML_NAMESPACE_XMLNS == nPrefix )
@@ -163,7 +163,7 @@ void SvXMLImportPropertyMapper::importXML(
         // GetEntryIndex will start searching with position 0.
         // Otherwise GetEntryIndex will start with the next position specified.
         sal_Int32 nIndex =  nStartIdx - 1;
-        sal_uInt32 nFlags = 0;  // flags of actual property map entry
+        sal_uInt32 nFlags = 0;	// flags of actual property map entry
         sal_Bool bFound = sal_False;
 
         // for better error reporting: this should be set true if no
@@ -268,7 +268,7 @@ void SvXMLImportPropertyMapper::importXML(
                     continue;
                 }
             }
-
+            
             if( !bFound )
             {
                 if( (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) || (XML_NAMESPACE_NONE == nPrefix) || bAlienImport )
@@ -344,6 +344,16 @@ void SvXMLImportPropertyMapper::importXML(
     }
 
     finished( rProperties, nStartIdx, nEndIdx );
+
+    // Have to do if we change from a vector to a list or something like that
+    /*std::vector <XMLPropertyState>::iterator aItr = rProperties.begin();
+    while (aItr != rProperties.end())
+    {
+        if (aItr->mnIndex == -1)
+            aItr = rProperties.erase(aItr);
+        else
+            aItr++;
+    }*/
 }
 
 /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
@@ -359,7 +369,7 @@ bool SvXMLImportPropertyMapper::handleSpecialItem(
         return mxNextMapper->handleSpecialItem( rProperty, rProperties, rValue,
                                                rUnitConverter, rNamespaceMap );
     else
-        return sal_False;
+        return FALSE;
 }
 
 void SvXMLImportPropertyMapper::FillPropertySequence(
@@ -399,7 +409,7 @@ void SvXMLImportPropertyMapper::CheckSpecialContext(
     sal_Int32 nCount = aProperties.size();
 
     Reference< XPropertySetInfo > xInfo(rPropSet->getPropertySetInfo());
-
+    
     for( sal_Int32 i=0; i < nCount; i++ )
     {
         const XMLPropertyState& rProp = aProperties[i];

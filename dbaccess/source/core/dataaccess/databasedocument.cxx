@@ -85,7 +85,6 @@
 #include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 #include <tools/errcode.hxx>
 #include <tools/urlobj.hxx>
 
@@ -94,6 +93,8 @@
 #include <algorithm>
 #include <functional>
 #include <list>
+
+#define MAP_LEN(x) x, sizeof(x) - 1
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
@@ -163,7 +164,7 @@ extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument()
     static ::dba::OAutoRegistration< ODatabaseDocument > aAutoRegistration;
 }
 
-ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl )
+ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl	)
             :ModelDependentComponent( _pImpl )
             ,ODatabaseDocument_OfficeDocument( getMutex() )
             ,m_aModifyListeners( getMutex() )
@@ -206,7 +207,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
         {
             // if the previous incarnation of the DatabaseDocument already had an URL, then creating this incarnation
             // here is effectively loading the document.
-            // #i105505#
+            // #i105505# / 2009-10-01 / frank.schoenheit@sun.com
             m_aViewMonitor.onLoadedDocument();
         }
     }
@@ -253,7 +254,7 @@ void SAL_CALL ODatabaseDocument::release(  ) throw ()
     ODatabaseDocument_OfficeDocument::release();
 }
 
-Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  ) throw (RuntimeException)
+Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(	) throw (RuntimeException)
 {
     Sequence< Type > aTypes = ::comphelper::concatSequences(
         ODatabaseDocument_OfficeDocument::getTypes(),
@@ -554,7 +555,7 @@ namespace
 
             // TODO: clarify: anything else to care for? Both the sub componbents with and without model
             // should support the XModifiable interface, so I think nothing more is needed here.
-            OSL_FAIL( "lcl_hasAnyModifiedSubComponent_throw: anything left to do here?" );
+            OSL_ENSURE( false, "lcl_hasAnyModifiedSubComponent_throw: anything left to do here?" );
         }
 
         return isAnyModified;
@@ -801,7 +802,7 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     if ( bLastControllerGone && !bIsClosing )
     {
         // if this was the last view, close the document as a whole
-        // #i51157#
+        // #i51157# / 2006-03-16 / frank.schoenheit@sun.com
         try
         {
             close( sal_True );
@@ -1055,7 +1056,7 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
 Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const ::rtl::OUString& _rURL ) const
 {
     Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess;
-    m_pImpl->m_aContext.createComponent( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ,xTempAccess);
+    m_pImpl->m_aContext.createComponent( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ,xTempAccess);
     Reference< io::XStream > xStream = xTempAccess->openFileReadWrite( _rURL );
     Reference< io::XTruncate > xTruncate(xStream,UNO_QUERY);
     if ( xTruncate.is() )
@@ -1292,18 +1293,18 @@ void SAL_CALL ODatabaseDocument::notifyDocumentEvent( const ::rtl::OUString& _Ev
 
 Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getPrinter(  ) throw (RuntimeException)
 {
-    OSL_FAIL( "ODatabaseDocument::getPrinter: not supported!" );
+    DBG_ERROR( "ODatabaseDocument::getPrinter: not supported!" );
     return Sequence< PropertyValue >();
 }
 
 void SAL_CALL ODatabaseDocument::setPrinter( const Sequence< PropertyValue >& /*aPrinter*/ ) throw (IllegalArgumentException, RuntimeException)
 {
-    OSL_FAIL( "ODatabaseDocument::setPrinter: not supported!" );
+    DBG_ERROR( "ODatabaseDocument::setPrinter: not supported!" );
 }
 
 void SAL_CALL ODatabaseDocument::print( const Sequence< PropertyValue >& /*xOptions*/ ) throw (IllegalArgumentException, RuntimeException)
 {
-    OSL_FAIL( "ODatabaseDocument::print: not supported!" );
+    DBG_ERROR( "ODatabaseDocument::print: not supported!" );
 }
 
 void ODatabaseDocument::impl_reparent_nothrow( const WeakReference< XNameAccess >& _rxContainer )
@@ -1669,7 +1670,7 @@ void ODatabaseDocument::disposing()
     if ( !m_pImpl.is() )
     {
         // this means that we're already disposed
-        OSL_ENSURE( ODatabaseDocument_OfficeDocument::rBHelper.bDisposed, "ODatabaseDocument::disposing: no impl anymore, but not yet disposed!" );
+        DBG_ASSERT( ODatabaseDocument_OfficeDocument::rBHelper.bDisposed, "ODatabaseDocument::disposing: no impl anymore, but not yet disposed!" );
         return;
     }
 
@@ -1695,7 +1696,7 @@ void ODatabaseDocument::disposing()
     // SYNCHRONIZED ->
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
+    DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
         // normally, nobody should explicitly dispose, but only XCloseable::close the document. And upon
         // closing, our controllers are closed, too
 
@@ -1710,7 +1711,7 @@ void ODatabaseDocument::disposing()
     // the security warning, again.
     m_pImpl->resetMacroExecutionMode();
 
-    // similar arguing for our ViewMonitor
+    // similar argueing for our ViewMonitor
     m_aViewMonitor.reset();
 
     // tell our Impl to forget us
@@ -1718,7 +1719,7 @@ void ODatabaseDocument::disposing()
 
     // now, at the latest, the controller array should be empty. Controllers are
     // expected to listen for our disposal, and disconnect then
-    OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
+    DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
     impl_disposeControllerFrames_nothrow();
 
     aKeepAlive.push_back( m_xModuleManager );
@@ -1759,7 +1760,7 @@ rtl::OUString ODatabaseDocument::getImplementationName(  ) throw(RuntimeExceptio
 
 rtl::OUString ODatabaseDocument::getImplementationName_static(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.ODatabaseDocument"));
+    return rtl::OUString::createFromAscii("com.sun.star.comp.dba.ODatabaseDocument");
 }
 
 Sequence< ::rtl::OUString > ODatabaseDocument::getSupportedServiceNames(  ) throw (RuntimeException)
@@ -1938,7 +1939,7 @@ Reference< XController2 > SAL_CALL ODatabaseDocument::createDefaultViewControlle
 
 Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( const ::rtl::OUString& _ViewName, const Sequence< PropertyValue >& _Arguments, const Reference< XFrame >& _Frame ) throw (IllegalArgumentException, Exception, RuntimeException)
 {
-    if ( !_ViewName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Default" ) ) && !_ViewName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Preview" ) ) )
+    if ( !_ViewName.equalsAscii( "Default" ) && !_ViewName.equalsAscii( "Preview" ) )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
     if ( !_Frame.is() )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 3 );
@@ -1952,7 +1953,7 @@ Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( cons
 
     ::comphelper::NamedValueCollection aInitArgs( _Arguments );
     aInitArgs.put( "Frame", _Frame );
-    if ( _ViewName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Preview" ) ) )
+    if ( _ViewName.equalsAscii( "Preview" ) )
         aInitArgs.put( "Preview", sal_Bool( sal_True ) );
     Reference< XInitialization > xInitController( xController, UNO_QUERY_THROW );
     xInitController->initialize( aInitArgs.getWrappedPropertyValues() );
@@ -1990,6 +1991,7 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
     }
     catch(uno::Exception)
     {
+        // ni
     }
     uno::Reference< frame::XUntitledNumbers > xNumberedControllers;
 
@@ -2001,7 +2003,7 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
         xNumberedControllers.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
 
         pHelper->setOwner          (xThis);
-        //pHelper->setUntitledPrefix (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" : ")));
+        //pHelper->setUntitledPrefix (::rtl::OUString::createFromAscii(" : "));
 
         m_aNumberedControllers.insert(TNumberedController::value_type(sModuleId,xNumberedControllers));
     }
@@ -2086,5 +2088,5 @@ void SAL_CALL ODatabaseDocument::releaseNumberForComponent( const uno::Reference
     return ::rtl::OUString();/*RTL_CONSTASCII_USTRINGPARAM(" : "));*/
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

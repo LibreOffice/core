@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 #include <set>
 #include <map>
@@ -59,7 +62,7 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
 {
     Reference< XMultiServiceFactory > xMan( ::utl::getProcessServiceFactory() );
     Reference< XPluginManager > xPMgr( xMan->createInstance(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager") ) ), UNO_QUERY );
+        rtl::OUString::createFromAscii("com.sun.star.plugin.PluginManager") ), UNO_QUERY );
 
     if ( xPMgr.is() )
     {
@@ -69,14 +72,14 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
 
         Sequence<PluginDescription > aDescriptions( xPMgr->getPluginDescriptions() );
         const PluginDescription * pDescriptions = aDescriptions.getConstArray();
-        for ( sal_uInt32 nPos = aDescriptions.getLength(); nPos--; )
+        for ( UINT32 nPos = aDescriptions.getLength(); nPos--; )
         {
             const PluginDescription & rDescr = pDescriptions[nPos];
 
             StrSet& rTypes = aMap[ rDescr.Description ];
             String aExtension( rDescr.Extension );
 
-            for ( sal_uInt16 nCnt = aExtension.GetTokenCount( ';' ); nCnt--; )
+            for ( USHORT nCnt = aExtension.GetTokenCount( ';' ); nCnt--; )
             {
                 // no default plugins anymore
                 String aExt( aExtension.GetToken( nCnt, ';' ) );
@@ -119,7 +122,7 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
     }
     else
         ShowServiceNotAvailableError( NULL,
-            String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.plugin.PluginManager" ) ), sal_True );
+            String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.plugin.PluginManager" ) ), TRUE );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

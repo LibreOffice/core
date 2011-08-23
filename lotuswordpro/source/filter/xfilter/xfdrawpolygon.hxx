@@ -57,11 +57,15 @@
  * @file
  * Polygon object.
  ************************************************************************/
-#ifndef     _XFPOLYGON_HXX
-#define     _XFPOLYGON_HXX
+/*************************************************************************
+ * Change History
+ * 2004-2-18 create this file.
+ ************************************************************************/
+#ifndef		_XFPOLYGON_HXX
+#define		_XFPOLYGON_HXX
 
-#include    "xfdrawpolyline.hxx"
-#include    <vector>
+#include	"xfdrawpolyline.hxx"
+#include	<vector>
 
 /**
  * @brief
@@ -73,7 +77,7 @@ public:
     XFDrawPolygon();
 
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 #endif

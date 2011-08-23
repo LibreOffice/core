@@ -9,4 +9,3 @@
 mkdir: %_DEST%\inc%_EXT%\unotools
 ..\inc\unotools\*.hxx %_DEST%\inc%_EXT%\unotools\*.hxx
 ..\inc\unotools\unotoolsdllapi.h %_DEST%\inc%_EXT%\unotools\unotoolsdllapi.h
-..\%__SRC%\misc\utl.component %_DEST%\xml%_EXT%\utl.component

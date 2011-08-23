@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 #include "commonlingui.hxx"
 
 #include <cuires.hrc>
@@ -78,7 +80,7 @@ XubString SvxClickInfoCtr::GetText() const
 }
 
 //-----------------------------------------------------------------------------
-SvxClickInfoCtr::~SvxClickInfoCtr()
+__EXPORT SvxClickInfoCtr::~SvxClickInfoCtr()
 {
 }
 
@@ -88,29 +90,33 @@ SvxClickInfoCtr::~SvxClickInfoCtr()
 //-----------------------------------------------------------------------------
 SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
     :Window( _pParent, CUI_RES( RID_SVX_WND_COMMON_LINGU ) )
-    ,aWordText      ( this, CUI_RES( FT_WORD ) )
-    ,aAktWord       ( this, CUI_RES( FT_AKTWORD ) )
-    ,aNewWord       ( this, CUI_RES( FT_NEWWORD ) )
-    ,aNewWordED     ( this, CUI_RES( ED_NEWWORD ) )
-    ,aSuggestionFT  ( this, CUI_RES( FT_SUGGESTION ) )
+    ,aWordText		( this,	CUI_RES( FT_WORD ) )
+    ,aAktWord		( this,	CUI_RES( FT_AKTWORD ) )
+    ,aNewWord		( this,	CUI_RES( FT_NEWWORD ) )
+    ,aNewWordED		( this,	CUI_RES( ED_NEWWORD ) )
+    ,aSuggestionFT	( this, CUI_RES( FT_SUGGESTION ) )
     ,aIgnoreBtn     ( this, CUI_RES( BTN_IGNORE ) )
-    ,aIgnoreAllBtn  ( this, CUI_RES( BTN_IGNOREALL ) )
-    ,aChangeBtn     ( this, CUI_RES( BTN_CHANGE ) )
-    ,aChangeAllBtn  ( this, CUI_RES( BTN_CHANGEALL ) )
-    ,aOptionsBtn    ( this, CUI_RES( BTN_OPTIONS ) )
-    ,aStatusText    ( this, CUI_RES( FT_STATUS ) )
+    ,aIgnoreAllBtn	( this,	CUI_RES( BTN_IGNOREALL ) )
+    ,aChangeBtn		( this,	CUI_RES( BTN_CHANGE ) )
+    ,aChangeAllBtn	( this,	CUI_RES( BTN_CHANGEALL ) )
+    ,aOptionsBtn	( this, CUI_RES( BTN_OPTIONS ) )
+    ,aStatusText	( this, CUI_RES( FT_STATUS ) )
     ,aHelpBtn       ( this, CUI_RES( BTN_SPL_HELP ) )
     ,aCancelBtn     ( this, CUI_RES( BTN_SPL_CANCEL ) )
     ,aAuditBox      ( this, CUI_RES( GB_AUDIT ) )
 {
     FreeResource();
-    aAktWord.SetAccessibleName(aWordText.GetText());
+
+#ifdef FS_PRIV_DEBUG
+    SetType( WINDOW_TABPAGE );
+#endif
+
     SetPosSizePixel( Point( 0, 0 ), _pParent->GetOutputSizePixel() );
     Show();
 }
 
 // -----------------------------------------------------------------------
-PushButton* SvxCommonLinguisticControl::implGetButton( ButtonType _eType  ) const
+PushButton*	SvxCommonLinguisticControl::implGetButton( ButtonType _eType  ) const
 {
     const PushButton* pButton = NULL;
     switch ( _eType )
@@ -144,13 +150,13 @@ void SvxCommonLinguisticControl::EnableButton( ButtonType _eType, sal_Bool _bEna
 // -----------------------------------------------------------------------
 void SvxCommonLinguisticControl::InsertControlGroup( Window& _rFirstGroupWindow, Window& _rLastGroupWindow, ControlGroup _eInsertAfter )
 {
-    Window* pInsertAfter = NULL;    // will be the last window of our own "undividable" group, after which we insert the foreign group
+    Window* pInsertAfter = NULL;	// will be the last window of our own "undividable" group, after which we insert the foreign group
     switch ( _eInsertAfter )
     {
-        case eLeftRightWords    : pInsertAfter = &aNewWordED; break;
-        case eSuggestionLabel   : pInsertAfter = &aSuggestionFT; break;
-        case eActionButtons     : pInsertAfter = &aChangeAllBtn; break;
-        case eDialogButtons     : pInsertAfter = &aCancelBtn; break;
+        case eLeftRightWords	: pInsertAfter = &aNewWordED; break;
+        case eSuggestionLabel	: pInsertAfter = &aSuggestionFT; break;
+        case eActionButtons		: pInsertAfter = &aChangeAllBtn; break;
+        case eDialogButtons		: pInsertAfter = &aCancelBtn; break;
     }
 
     // now loop through the remaining windows of the foreign group
@@ -177,6 +183,52 @@ void SvxCommonLinguisticControl::InsertControlGroup( Window& _rFirstGroupWindow,
     DBG_ASSERT( pInsertBehind == pLoopEnd, "SvxCommonLinguisticControl::InsertControlGroup: controls do not form a group!" );
         // if we did not reach pLoopEnd, then we did not reach _rLastGroupWindow in the loop, then
         // (FirstWindow, LastWindow) was no valid control group
+}
+
+// -----------------------------------------------------------------------
+String SvxCommonLinguisticControl::GetNewEditWord()
+{
+    return aNewWordED.GetText();
+}
+
+// -----------------------------------------------------------------------
+void SvxCommonLinguisticControl::SetNewEditWord( const String& _rNew )
+{
+    aNewWordED.SetText( _rNew );
+}
+
+//-----------------------------------------------------------------------------
+void SvxCommonLinguisticControl::UpdateIgnoreHelp( )
+{
+
+    String aInfoStr( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
+    aInfoStr.Append( GetCurrentText() );
+
+    String aString = GetNonMnemonicString( aIgnoreAllBtn.GetText() );
+    aString.Append( aInfoStr );
+    aIgnoreAllBtn.SetQuickHelpText( aString );
+
+    aString = GetNonMnemonicString( aIgnoreBtn.GetText() );
+    aString.Append( aInfoStr );
+    aIgnoreBtn.SetQuickHelpText( aString );
+}
+
+//-----------------------------------------------------------------------------
+void SvxCommonLinguisticControl::UpdateChangesHelp( const String& _rNewText )
+{
+    String aInfoStr( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
+    aInfoStr.Append( GetCurrentText() );
+    aInfoStr.Append( String( RTL_CONSTASCII_USTRINGPARAM( " -> " ) ) );
+    aInfoStr.Append( _rNewText );
+        // TODO: shouldn't this be part of the resources, for proper localization?
+
+    String aString = GetNonMnemonicString( aChangeAllBtn.GetText() );
+    aString.Append( aInfoStr );
+    aChangeAllBtn.SetQuickHelpText( aString );
+
+    aString = GetNonMnemonicString( aChangeBtn.GetText() );
+    aString.Append( aInfoStr );
+    aChangeBtn.SetQuickHelpText( aString );
 }
 
 //-----------------------------------------------------------------------------

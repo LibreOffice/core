@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 #include "precompiled_sfx2.hxx"
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
+
 #include <sfx2/msg.hxx>
 
 //====================================================================
@@ -44,7 +45,7 @@ SfxSlotKind SfxSlot::GetKind() const
             return (SfxSlotKind) SFX_KIND_ENUM;
         else
         {
-            OSL_FAIL( "invalid slot kind detected" );
+            DBG_ERROR( "invalid slot kind detected" );
             return SFX_KIND_ENUM;
         }
     }
@@ -54,24 +55,12 @@ SfxSlotKind SfxSlot::GetKind() const
 
 //--------------------------------------------------------------------
 
-sal_uInt16 SfxSlot::GetWhich( const SfxItemPool &rPool ) const
+USHORT SfxSlot::GetWhich( const SfxItemPool &rPool ) const
 {
     if ( !nMasterSlotId || nMasterSlotId == USHRT_MAX )
         ((SfxSlot*) this) -> nMasterSlotId = rPool.GetWhich(nSlotId);
     return nMasterSlotId;
 }
 
-::rtl::OString SfxSlot::GetCommand() const
-{
-    rtl::OString sRet(".uno:");
-    sRet += pUnoName;
-    return sRet;
-}
-
-::rtl::OUString SfxSlot::GetCommandString() const
-{
-    rtl::OString aCmd(GetCommand());
-    return rtl::OUString( aCmd, aCmd.getLength(), RTL_TEXTENCODING_UTF8 );
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

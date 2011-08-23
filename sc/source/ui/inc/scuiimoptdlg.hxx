@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@ class ScDelimiterTable;
 class ScImportOptionsDlg : public ModalDialog
 {
 public:
-                ScImportOptionsDlg( Window*                 pParent,
-                                    sal_Bool                    bAscii = sal_True,
-                                    const ScImportOptions*  pOptions = NULL,
-                                    const String*           pStrTitle = NULL,
-                                    sal_Bool                    bMultiByte = false,
-                                    sal_Bool                    bOnlyDbtoolsEncodings = false,
-                                    sal_Bool                    bImport = sal_True );
+                ScImportOptionsDlg( Window* 				pParent,
+                                    BOOL                    bAscii = TRUE,
+                                    const ScImportOptions*	pOptions = NULL,
+                                    const String*			pStrTitle = NULL,
+                                    BOOL                    bMultiByte = FALSE,
+                                    BOOL                    bOnlyDbtoolsEncodings = FALSE,
+                                    BOOL                    bImport = TRUE );
 
                 ~ScImportOptionsDlg();
 
@@ -53,24 +53,23 @@ public:
 
 private:
     FixedLine           aFlFieldOpt;
-    FixedText           aFtFont;
-    SvxTextEncodingBox  aLbFont;
-    FixedText           aFtFieldSep;
-    ComboBox            aEdFieldSep;
-    FixedText           aFtTextSep;
-    ComboBox            aEdTextSep;
-    CheckBox            aCbQuoteAll;
-    CheckBox            aCbShown;
+    FixedText			aFtFont;
+    SvxTextEncodingBox	aLbFont;
+    FixedText			aFtFieldSep;
+    ComboBox			aEdFieldSep;
+    FixedText			aFtTextSep;
+    ComboBox			aEdTextSep;
     CheckBox            aCbFixed;
-    OKButton            aBtnOk;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
+    OKButton			aBtnOk;
+    CancelButton		aBtnCancel;
+    HelpButton			aBtnHelp;
+    CheckBox			aCbShown;
 
-    ScDelimiterTable*   pFieldSepTab;
-    ScDelimiterTable*   pTextSepTab;
+    ScDelimiterTable*	pFieldSepTab;
+    ScDelimiterTable*	pTextSepTab;
 
 private:
-    sal_uInt16 GetCodeFromCombo( const ComboBox& rEd ) const;
+    USHORT GetCodeFromCombo( const ComboBox& rEd ) const;
 
     DECL_LINK( FixedWidthHdl, CheckBox* );
     DECL_LINK( DoubleClickHdl, ListBox* );

@@ -3,6 +3,12 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: sdrattribute3d.cxx,v $
+ *
+ *  $Revision: 1.5 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
+ *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -46,16 +52,16 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32                              mnRefCount;
+            sal_uInt32								mnRefCount;
 
             // 3D light attribute definitions
-            basegfx::BColor                         maAmbientLight;
-            ::std::vector< Sdr3DLightAttribute >    maLightVector;
+            basegfx::BColor							maAmbientLight;
+            ::std::vector< Sdr3DLightAttribute >	maLightVector;
 
             ImpSdrLightingAttribute(
                 const basegfx::BColor& rAmbientLight,
                 const ::std::vector< Sdr3DLightAttribute >& rLightVector)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 maAmbientLight(rAmbientLight),
                 maLightVector(rLightVector)
             {
@@ -70,7 +76,7 @@ namespace drawinglayer
                 return (getAmbientLight() == rCandidate.getAmbientLight()
                     && getLightVector() == rCandidate.getLightVector());
             }
-
+        
             static ImpSdrLightingAttribute* get_global_default()
             {
                 static ImpSdrLightingAttribute* pDefault = 0;
@@ -92,19 +98,19 @@ namespace drawinglayer
         SdrLightingAttribute::SdrLightingAttribute(
             const basegfx::BColor& rAmbientLight,
             const ::std::vector< Sdr3DLightAttribute >& rLightVector)
-        :   mpSdrLightingAttribute(new ImpSdrLightingAttribute(
+        :	mpSdrLightingAttribute(new ImpSdrLightingAttribute(
                 rAmbientLight, rLightVector))
         {
         }
 
         SdrLightingAttribute::SdrLightingAttribute()
-        :   mpSdrLightingAttribute(ImpSdrLightingAttribute::get_global_default())
+        :	mpSdrLightingAttribute(ImpSdrLightingAttribute::get_global_default())
         {
             mpSdrLightingAttribute->mnRefCount++;
         }
 
         SdrLightingAttribute::SdrLightingAttribute(const SdrLightingAttribute& rCandidate)
-        :   mpSdrLightingAttribute(rCandidate.mpSdrLightingAttribute)
+        :	mpSdrLightingAttribute(rCandidate.mpSdrLightingAttribute)
         {
             mpSdrLightingAttribute->mnRefCount++;
         }
@@ -138,7 +144,7 @@ namespace drawinglayer
                 {
                     delete mpSdrLightingAttribute;
                 }
-
+                
                 mpSdrLightingAttribute = rCandidate.mpSdrLightingAttribute;
                 mpSdrLightingAttribute->mnRefCount++;
             }
@@ -161,20 +167,20 @@ namespace drawinglayer
             return (*rCandidate.mpSdrLightingAttribute == *mpSdrLightingAttribute);
         }
 
-        const basegfx::BColor& SdrLightingAttribute::getAmbientLight() const
-        {
-            return mpSdrLightingAttribute->getAmbientLight();
+        const basegfx::BColor& SdrLightingAttribute::getAmbientLight() const 
+        { 
+            return mpSdrLightingAttribute->getAmbientLight(); 
         }
-
-        const ::std::vector< Sdr3DLightAttribute >& SdrLightingAttribute::getLightVector() const
-        {
-            return mpSdrLightingAttribute->getLightVector();
+        
+        const ::std::vector< Sdr3DLightAttribute >& SdrLightingAttribute::getLightVector() const 
+        { 
+            return mpSdrLightingAttribute->getLightVector(); 
         }
 
         // color model solver
         basegfx::BColor SdrLightingAttribute::solveColorModel(
-            const basegfx::B3DVector& rNormalInEyeCoordinates,
-            const basegfx::BColor& rColor, const basegfx::BColor& rSpecular,
+            const basegfx::B3DVector& rNormalInEyeCoordinates, 
+            const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, 
             const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity) const
         {
             // initialize with emissive color
@@ -185,13 +191,13 @@ namespace drawinglayer
 
             // prepare light access. Is there a light?
             const sal_uInt32 nLightCount(mpSdrLightingAttribute->getLightVector().size());
-
+            
             if(nLightCount && !rNormalInEyeCoordinates.equalZero())
             {
                 // prepare normal
                 basegfx::B3DVector aEyeNormal(rNormalInEyeCoordinates);
                 aEyeNormal.normalize();
-
+                
                 for(sal_uInt32 a(0L); a < nLightCount; a++)
                 {
                     const Sdr3DLightAttribute& rLight(mpSdrLightingAttribute->getLightVector()[a]);

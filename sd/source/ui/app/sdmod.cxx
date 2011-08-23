@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
 \************************************************************************/
 
 SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
-:   SfxModule( SfxApplication::CreateResManager("sd"), sal_False,
+:   SfxModule( SfxApplication::CreateResManager("sd"), FALSE,
                   pFact1, pFact2, NULL ),
     pTransferClip(NULL),
     pTransferDrag(NULL),
@@ -95,10 +95,10 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pDrawOptions(NULL),
     pSearchItem(NULL),
     pNumberFormatter( NULL ),
-    bWaterCan(sal_False),
+    bWaterCan(FALSE),
     mpResourceContainer(new ::sd::SdGlobalResourceContainer())
 {
-    SetName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarDraw" ) ) );  // Nicht uebersetzen!
+    SetName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarDraw" ) ) );	// Nicht uebersetzen!
     pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
     pSearchItem->SetAppFlag(SVX_SEARCHAPP_DRAW);
     StartListening( *SFX_APP() );
@@ -157,6 +157,57 @@ SdModule::~SdModule()
 
 /*************************************************************************
 |*
+|* Statusbar erzeugen
+|*
+\************************************************************************/
+
+#define AUTOSIZE_WIDTH  180
+#define TEXT_WIDTH(s)   rStatusBar.GetTextWidth((s))
+
+void SdModule::FillStatusBar(StatusBar& rStatusBar)
+{
+    // Hinweis
+    rStatusBar.InsertItem( SID_CONTEXT, TEXT_WIDTH( String().Fill( 30, 'x' ) ), // vorher 52
+                            SIB_IN | SIB_LEFT | SIB_AUTOSIZE );
+
+    // Groesse und Position
+    rStatusBar.InsertItem( SID_ATTR_SIZE, SvxPosSizeStatusBarControl::GetDefItemWidth(rStatusBar), // vorher 42
+                            SIB_IN | SIB_USERDRAW );
+                            // SIB_AUTOSIZE | SIB_LEFT | SIB_OWNERDRAW );
+
+    // Massstab
+    rStatusBar.InsertItem( SID_ATTR_ZOOM, SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar), SIB_IN | SIB_CENTER );
+/*
+    // Einfuege- / Uberschreibmodus
+    rStatusBar.InsertItem( SID_ATTR_INSERT, TEXT_WIDTH( "EINFG" ),
+                            SIB_IN | SIB_CENTER );
+
+    // Selektionsmodus
+    rStatusBar.InsertItem( SID_STATUS_SELMODE, TEXT_WIDTH( "ERG" ),
+                            SIB_IN | SIB_CENTER );
+*/
+    // Dokument geaendert
+    rStatusBar.InsertItem( SID_DOC_MODIFIED, SvxModifyControl::GetDefItemWidth(rStatusBar) );
+
+    // signatures
+    rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
+    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
+
+
+
+    // Seite
+    rStatusBar.InsertItem( SID_STATUS_PAGE, TEXT_WIDTH( String().Fill( 24, 'X' ) ),
+                            SIB_IN | SIB_LEFT );
+
+    // Praesentationslayout
+    rStatusBar.InsertItem( SID_STATUS_LAYOUT, TEXT_WIDTH( String().Fill( 10, 'X' ) ),
+                            SIB_IN | SIB_LEFT | SIB_AUTOSIZE );
+}
+
+
+
+/*************************************************************************
+|*
 |* get notifications
 |*
 \************************************************************************/
@@ -197,7 +248,7 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
     }
     if( pOptions )
     {
-        sal_uInt16 nMetric = pOptions->GetMetric();
+        UINT16 nMetric = pOptions->GetMetric();
 
         ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
         SdDrawDocument* pDoc = NULL;
@@ -222,13 +273,13 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
 SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
                                               SdOptionStreamMode eMode )
 {
-    ::sd::DrawDocShell*     pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
-    SvStorageStreamRef  xStm;
+    ::sd::DrawDocShell*		pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
+    SvStorageStreamRef	xStm;
 
     if( pDocSh )
     {
-        DocumentType    eType = pDocSh->GetDoc()->GetDocumentType();
-        String          aStmName;
+        DocumentType	eType = pDocSh->GetDoc()->GetDocumentType();
+        String			aStmName;
 
         if( !xOptionStorage.Is() )
         {
@@ -239,7 +290,7 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
             SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE );
 
             if( pStm )
-                xOptionStorage = new SvStorage( pStm, sal_True );
+                xOptionStorage = new SvStorage( pStm, TRUE );
         }
 
         if( DOCUMENT_TYPE_DRAW == eType )
@@ -256,6 +307,10 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
     return xStm;
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 SvNumberFormatter* SdModule::GetNumberFormatter()
 {
     if( !pNumberFormatter )
@@ -263,6 +318,10 @@ SvNumberFormatter* SdModule::GetNumberFormatter()
 
     return pNumberFormatter;
 }
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 OutputDevice* SdModule::GetVirtualRefDevice (void)
 {

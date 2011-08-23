@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,29 +65,29 @@ class VCL_DLLPUBLIC SvtGraphicStroke
 {
 public:
     /// Style for open stroke ends
-    enum CapType
+    enum CapType 
     {
         /// No additional cap
-        capButt=0,
+        capButt=0, 
         /// Half-round cap at the line end, the center lying at the end point
-        capRound,
+        capRound, 
         /// Half-square cap at the line end, the center lying at the end point
         capSquare
     };
     /// Style for joins of individual stroke segments
-    enum JoinType
+    enum JoinType 
     {
         /// Extend segment edges, until they cross
-        joinMiter=0,
+        joinMiter=0, 
         /// Connect segments by a filled round arc
-        joinRound,
+        joinRound, 
         /// Connect segments by a direct straight line
-        joinBevel,
+        joinBevel, 
         /// Perform no join, leads to visible gaps between thick line segments
         joinNone
     };
     enum
-    {
+    { 
         /// Width of stroke start/end arrow to exactly fit the joining stroke
         normalizedArrowWidth=65536
     };
@@ -98,19 +98,19 @@ public:
 
         See accessor method descriptions for argument description
      */
-    SvtGraphicStroke( const Polygon&        rPath,
-                      const PolyPolygon&    rStartArrow,
-                      const PolyPolygon&    rEndArrow,
-                      double                fTransparency,
-                      double                fStrokeWidth,
-                      CapType               aCap,
-                      JoinType              aJoin,
-                      double                fMiterLimit,
-                      const DashArray&      rDashArray  );      // TODO: Dash array offset (position where to start, see PS)
+    SvtGraphicStroke( const Polygon& 		rPath,
+                      const PolyPolygon&	rStartArrow,
+                      const PolyPolygon&	rEndArrow,
+                      double				fTransparency,
+                      double 				fStrokeWidth,
+                      CapType				aCap,
+                      JoinType				aJoin,
+                      double 				fMiterLimit,
+                      const DashArray&		rDashArray	);		// TODO: Dash array offset (position where to start, see PS)
 
     // accessors
     /// Query path to stroke
-    void            getPath             ( Polygon& ) const;
+    void		 	getPath				( Polygon& ) const;
     /** Get the polygon that is put at the start of the line
 
         The polygon is in a special normalized position: the center of
@@ -124,7 +124,7 @@ public:
         width, it has to fit every stroke with every stroke width
         exactly.
      */
-    void            getStartArrow       ( PolyPolygon& ) const;
+    void		 	getStartArrow		( PolyPolygon& ) const;
     /** Get the polygon that is put at the end of the line
 
         The polygon is in a special normalized position, and already
@@ -138,28 +138,28 @@ public:
         arrow does have this width, it has to fit every stroke with
         every stroke width exactly.
      */
-    void            getEndArrow         ( PolyPolygon& ) const;
+    void		 	getEndArrow			( PolyPolygon& ) const;
     /** Get stroke transparency
 
         @return the transparency, ranging from 0.0 (opaque) to 1.0 (fully translucent)
      */
-    double          getTransparency     () const;
+    double 			getTransparency		() const;
     /// Get width of the stroke
-    double          getStrokeWidth      () const;
+    double			getStrokeWidth		() const;
     /// Get the style in which open stroke ends are drawn
-    CapType         getCapType          () const;
+    CapType			getCapType			() const;
     /// Get the style in which the stroke segments are joined
-    JoinType        getJoinType         () const;
+    JoinType		getJoinType			() const;
     /// Get the maximum length of mitered joins
-    double          getMiterLimit       () const;
+    double			getMiterLimit		() const;
     /// Get an array of "on" and "off" lengths for stroke dashing
-    void            getDashArray        ( DashArray& ) const;
+    void			getDashArray		( DashArray& ) const;
     /// Query a textual representation of the object's content
-    ::rtl::OString  toString            () const;
+    ::rtl::OString	toString			() const;
 
     // mutators
     /// Set path to stroke
-    void    setPath             ( const Polygon& );
+    void	setPath				( const Polygon& );
     /** Set the polygon that is put at the start of the line
 
         The polygon has to be in a special normalized position, and
@@ -173,7 +173,7 @@ public:
         arrow does have this width, it will fit every stroke with
         every stroke width exactly.
      */
-    void    setStartArrow       ( const PolyPolygon& );
+    void	setStartArrow		( const PolyPolygon& );
     /** Set the polygon that is put at the end of the line
 
         The polygon has to be in a special normalized position, and
@@ -187,38 +187,38 @@ public:
         arrow does have this width, it will fit every stroke with
         every stroke width exactly.
      */
-    void    setEndArrow         ( const PolyPolygon& );
+    void	setEndArrow			( const PolyPolygon& );
     /** Set stroke transparency
 
         @param fTrans
         The transparency, ranging from 0.0 (opaque) to 1.0 (fully translucent)
      */
-    void    setTransparency     ( double fTrans );
+    void	setTransparency		( double fTrans );
     /// Set width of the stroke
-    void    setStrokeWidth      ( double );
+    void	setStrokeWidth		( double );
     /// Set the style in which open stroke ends are drawn
-    void    setCapType          ( CapType );
+    void 	setCapType			( CapType );
     /// Set the style in which the stroke segments are joined
-    void    setJoinType         ( JoinType );
+    void	setJoinType			( JoinType );
     /// Set the maximum length of mitered joins
-    void    setMiterLimit       ( double );
+    void	setMiterLimit		( double );
     /// Set the array of "on" and "off" lengths for stroke dashing
-    void    setDashArray        ( const DashArray& );
+    void	setDashArray		( const DashArray& );
 
 private:
     // friends
     VCL_DLLPUBLIC friend SvStream& operator<<( SvStream& rOStm, const SvtGraphicStroke& rClass );
     VCL_DLLPUBLIC friend SvStream& operator>>( SvStream& rIStm, SvtGraphicStroke& rClass );
 
-    Polygon         maPath;
-    PolyPolygon     maStartArrow;
-    PolyPolygon     maEndArrow;
-    double          mfTransparency;
-    double          mfStrokeWidth;
-    CapType         maCapType;
-    JoinType        maJoinType;
-    double          mfMiterLimit;
-    DashArray       maDashArray;
+    Polygon			maPath;
+    PolyPolygon		maStartArrow;
+    PolyPolygon		maEndArrow;
+    double			mfTransparency;
+    double			mfStrokeWidth;
+    CapType			maCapType;
+    JoinType		maJoinType;
+    double 			mfMiterLimit;
+    DashArray		maDashArray;
 };
 
 /** Encapsulates geometry and associated attributes of a filled area
@@ -249,7 +249,7 @@ public:
             one. The part of the scanline where the winding number is
             non-zero gets filled.
          */
-        fillNonZero=0,
+        fillNonZero=0, 
         /** Even-odd fill rule
 
             Fill shape scanline-wise. Starting at the left, count the
@@ -262,11 +262,11 @@ public:
     enum FillType
     {
         /// Fill with a specified solid color
-        fillSolid=0,
+        fillSolid=0, 
         /// Fill with the specified gradient
-        fillGradient,
+        fillGradient, 
         /// Fill with the specified hatch
-        fillHatch,
+        fillHatch, 
         /// Fill with the specified texture (a Graphic object)
         fillTexture
     };
@@ -274,9 +274,9 @@ public:
     enum HatchType
     {
         /// horizontal parallel lines, one unit apart
-        hatchSingle=0,
+        hatchSingle=0, 
         /// horizontal and verticall orthogonally crossing lines, one unit apart
-        hatchDouble,
+        hatchDouble, 
         /// three crossing lines, like HatchType::hatchDouble, but
         /// with an additional diagonal line, rising to the upper
         /// right corner. The first diagonal line goes through the
@@ -313,40 +313,40 @@ public:
 
         See accessor method descriptions for argument description
      */
-    SvtGraphicFill( const PolyPolygon&  rPath,
-                    Color               aFillColor,
-                    double              fTransparency,
-                    FillRule            aFillRule,
-                    FillType            aFillType,              // TODO: Multitexturing
-                    const Transform&    aFillTransform,
-                    bool                bTiling,
-                    HatchType           aHatchType,             // TODO: vector of directions and start points
-                    Color               aHatchColor,
-                    GradientType        aGradientType,          // TODO: Transparent gradients (orthogonal to normal ones)
-                    Color               aGradient1stColor,      // TODO: vector of colors and offsets
-                    Color               aGradient2ndColor,
-                    int                 aGradientStepCount,     // numbers of steps to render the gradient. gradientStepsInfinite means infinitely many.
-                    const Graphic&      aFillGraphic );
+    SvtGraphicFill( const PolyPolygon& 	rPath,
+                    Color				aFillColor,
+                    double				fTransparency,
+                    FillRule			aFillRule,
+                    FillType			aFillType,				// TODO: Multitexturing
+                    const Transform&	aFillTransform,
+                    bool				bTiling,
+                    HatchType			aHatchType,				// TODO: vector of directions and start points
+                    Color				aHatchColor,
+                    GradientType		aGradientType,			// TODO: Transparent gradients (orthogonal to normal ones)
+                    Color				aGradient1stColor,		// TODO: vector of colors and offsets
+                    Color				aGradient2ndColor,
+                    int					aGradientStepCount,		// numbers of steps to render the gradient. gradientStepsInfinite means infinitely many.
+                    const Graphic&		aFillGraphic );
 
     // accessors
     /// Query path to fill
-    void            getPath             ( PolyPolygon& ) const;
+    void		 	getPath				( PolyPolygon& ) const;
     /// Get color used for solid fills
-    Color           getFillColor        () const;
+    Color		 	getFillColor		() const;
     /** Get stroke transparency
 
         @return the transparency, ranging from 0.0 (opaque) to 1.0 (fully translucent)
      */
-    double          getTransparency     () const;
+    double 			getTransparency		() const;
     /// Get fill rule used
-    FillRule        getFillRule         () const;
+    FillRule		getFillRule			() const;
     /** Get fill type used
 
         Currently, only one of the fill types can be used
         simultaneously. If you specify e.g. FillRule::fillGradient,
         hatching, texture and solid fill color are ignored.
      */
-    FillType        getFillType         () const;
+    FillType		getFillType			() const;
     /** Get transformation applied to hatch, gradient or texture during fill
 
         A fill operation generally starts at the top left position of
@@ -358,29 +358,29 @@ public:
         top left corner plus the translation components.
 
      */
-    void            getTransform        ( Transform& ) const;
+    void			getTransform		( Transform& ) const;
     /// deprecated
-    bool            IsTiling            () const;
+    bool			IsTiling			() const;
     /** Query state of texture tiling
 
         @return true, if texture is tiled, false, if output only once.
      */
-    bool            isTiling            () const;
+    bool			isTiling			() const;
     /// Get type of hatch used
-    HatchType       getHatchType        () const;
+    HatchType		getHatchType		() const;
     /// Get color used for drawing the hatch
-    Color           getHatchColor       () const;
+    Color			getHatchColor		() const;
     /// Get type of gradient used
-    GradientType    getGradientType     () const;
+    GradientType	getGradientType		() const;
     /// Get start color of the gradient
-    Color           getGradient1stColor () const;
+    Color			getGradient1stColor	() const;
     /// Get end color of the gradient
-    Color           getGradient2ndColor () const;
-    /** Get the numbers of steps to render the gradient.
+    Color			getGradient2ndColor	() const;
+    /** Get the numbers of steps to render the gradient. 
 
         @return the step count. gradientStepsInfinite means infinitely many.
     */
-    int             getGradientStepCount() const;
+    int				getGradientStepCount() const;
     /** Get the texture graphic used
 
         The Graphic object returned is used to fill the geometry, if
@@ -388,76 +388,76 @@ public:
         assumed to be of size 1x1, the transformation is used to scale
         it to the appropriate size.
      */
-    void            getGraphic          ( Graphic& ) const;
+    void			getGraphic			( Graphic& ) const;
     /// Query a textual representation of the object's content
-    ::rtl::OString  toString            () const;
+    ::rtl::OString	toString			() const;
 
     // mutators
     /// Set path to fill
-    void    setPath             ( const PolyPolygon& rPath );
-    /// Set color used for solid fills
-    void    setFillColor        ( Color aFillColor );
+    void 	setPath				( const PolyPolygon& rPath );
+    /// Set color used for solid fills    
+    void 	setFillColor		( Color aFillColor );
     /** Set stroke transparency
 
         @param fTransparency
         The transparency, ranging from 0.0 (opaque) to 1.0 (fully translucent)
      */
-    void    setTransparency     ( double fTransparency );
+    void	setTransparency		( double fTransparency );
     /// Set fill rule used
-    void    setFillRule         ( FillRule aFillRule );
+    void	setFillRule			( FillRule aFillRule );
     /** Set fill type used
 
         Currently, only one of the fill types can be used
         simultaneously. If you specify e.g. FillRule::fillGradient,
         hatching, texture and solid fill color are ignored.
      */
-    void    setFillType         ( FillType aFillType );
+    void	setFillType			( FillType aFillType );
     /// Set transformation applied to hatch, gradient or texture during fill
-    void    setTransform        ( const Transform& pTransform );
+    void	setTransform		( const Transform& pTransform );
     /** Set state of texture tiling
 
         @param bTiling
         If set to true, texture is tiled, if set to false, texture is output only once.
      */
-    void    setTiling           ( bool bTiling = true );
+    void	setTiling			( bool bTiling = true );
     /// Set type of hatch used
-    void    setHatchType        ( HatchType aHatchType );
+    void	setHatchType		( HatchType aHatchType );
     /// Set color used for drawing the hatch
-    void    setHatchColor       ( Color aHatchColor );
+    void	setHatchColor		( Color aHatchColor );
     /// Set type of gradient used
-    void    setGradientType     ( GradientType aGradType );
+    void	setGradientType		( GradientType aGradType );
     /// Set start color of the gradient
-    void    setGradient1stColor ( Color aColor );
+    void	setGradient1stColor	( Color aColor );
     /// Set end color of the gradient
-    void    setGradient2ndColor ( Color aColor );
-    /** Set the numbers of steps to render the gradient.
+    void	setGradient2ndColor	( Color aColor );
+    /** Set the numbers of steps to render the gradient. 
 
         @param aCount
         The step count. gradientStepsInfinite means use infinitely many.
     */
-    void    setGradientStepCount( int aCount );
+    void	setGradientStepCount( int aCount );
     /// Set the texture graphic used
-    void    setGraphic          ( const Graphic& rGraphic );
+    void	setGraphic			( const Graphic& rGraphic );
 
 private:
     // friends
     VCL_DLLPUBLIC friend SvStream& operator<<( SvStream& rOStm, const SvtGraphicFill& rClass );
     VCL_DLLPUBLIC friend SvStream& operator>>( SvStream& rIStm, SvtGraphicFill& rClass );
 
-    PolyPolygon     maPath;
-    Color           maFillColor;
-    double          mfTransparency;
-    FillRule        maFillRule;
-    FillType        maFillType;
-    Transform       maFillTransform;
-    bool            mbTiling;
-    HatchType       maHatchType;
-    Color           maHatchColor;
-    GradientType    maGradientType;
-    Color           maGradient1stColor;
-    Color           maGradient2ndColor;
-    int             maGradientStepCount;
-    Graphic         maFillGraphic;
+    PolyPolygon 	maPath;
+    Color			maFillColor;
+    double			mfTransparency;
+    FillRule		maFillRule;
+    FillType		maFillType;
+    Transform		maFillTransform;
+    bool			mbTiling;
+    HatchType		maHatchType;
+    Color			maHatchColor;
+    GradientType	maGradientType;
+    Color			maGradient1stColor;
+    Color			maGradient2ndColor;
+    int				maGradientStepCount;
+    Graphic			maFillGraphic;
 };
 
 #endif /* _VCL_GRAPHICTOOLS_HXX_ */

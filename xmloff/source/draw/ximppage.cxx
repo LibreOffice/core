@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlstyle.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include "ximppage.hxx"
 #include "ximpshap.hxx"
 #include "animimp.hxx"
@@ -75,9 +75,9 @@ class DrawAnnotationContext : public SvXMLImportContext
 {
 
 public:
-    DrawAnnotationContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess );
+    DrawAnnotationContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess );
 
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
 
 private:
@@ -88,7 +88,7 @@ private:
     OUStringBuffer maDateBuffer;
 };
 
-DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess )
+DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess )
 : SvXMLImportContext( rImport, nPrfx, rLocalName )
 , mxAnnotation( xAnnotationAccess->createAndInsertAnnotation() )
 {
@@ -142,7 +142,7 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, sal_uInt16 n
     }
 }
 
-SvXMLImportContext * DrawAnnotationContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext * DrawAnnotationContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
     SvXMLImportContext * pContext = NULL;
 
@@ -213,11 +213,11 @@ void DrawAnnotationContext::EndElement()
 
 TYPEINIT1( SdXMLGenericPageContext, SvXMLImportContext );
 
-SdXMLGenericPageContext::SdXMLGenericPageContext(
+SdXMLGenericPageContext::SdXMLGenericPageContext( 
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx, const OUString& rLocalName,
+    USHORT nPrfx, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList>& xAttrList,
-    Reference< drawing::XShapes >& rShapes)
+    Reference< drawing::XShapes >& rShapes) 
 : SvXMLImportContext( rImport, nPrfx, rLocalName )
 , mxShapes( rShapes )
 , mxAnnotationAccess( rShapes, UNO_QUERY )
@@ -228,7 +228,7 @@ SdXMLGenericPageContext::SdXMLGenericPageContext(
     {
         OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        sal_uInt16 nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         if( (nPrefix == XML_NAMESPACE_DRAW) && IsXMLToken( aLocalName, XML_NAV_ORDER ) )
         {
             msNavOrder = xAttrList->getValueByIndex( i );
@@ -255,7 +255,7 @@ void SdXMLGenericPageContext::StartElement( const Reference< ::com::sun::star::x
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( USHORT nPrefix,
     const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList>& xAttrList )
 {
@@ -345,9 +345,9 @@ void SdXMLGenericPageContext::EndElement()
 
                         if( pStyles )
                         {
-                            const SdXMLNumberFormatImportContext* pSdNumStyle =
+                            const SdXMLNumberFormatImportContext* pSdNumStyle = 
                                 dynamic_cast< const SdXMLNumberFormatImportContext* >( pStyles->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, aDateTimeFormat, sal_True ) );
-
+                        
                             if( pSdNumStyle )
                             {
                                 xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("DateTimeFormat") ),
@@ -361,7 +361,7 @@ void SdXMLGenericPageContext::EndElement()
         catch( uno::Exception& e )
         {
             (void)e;
-            OSL_FAIL("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception cought!");
+            DBG_ERROR("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception cought!");
         }
     }
 
@@ -372,7 +372,7 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
 {
     // set PageProperties?
     if(rStyleName.getLength())
-    {
+    {	
         try
         {
             const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetAutoStylesContext();
@@ -388,7 +388,7 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
                     if(pStyle && pStyle->ISA(XMLPropStyleContext))
                     {
                         XMLPropStyleContext* pPropStyle = (XMLPropStyleContext*)pStyle;
-
+                    
                         Reference <beans::XPropertySet> xPropSet1(mxShapes, uno::UNO_QUERY);
                         if(xPropSet1.is())
                         {
@@ -407,9 +407,9 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
                                         xBackgroundSet = Reference< beans::XPropertySet >::query(
                                             xServiceFact->createInstance(
                                             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"))));
-                                    }
+                                    }					
                                 }
-
+                                
                                 if( xBackgroundSet.is() )
                                     xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xBackgroundSet );
                             }
@@ -428,7 +428,7 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
         }
         catch( uno::Exception )
         {
-            OSL_FAIL( "SdXMLGenericPageContext::SetStyle(): uno::Exception catched!" );
+            DBG_ERROR( "SdXMLGenericPageContext::SetStyle(): uno::Exception catched!" );
         }
     }
 }
@@ -490,7 +490,7 @@ void SdXMLGenericPageContext::DeleteAllShapes()
     {
         Reference< drawing::XShape > xShape;
         uno::Any aAny(mxShapes->getByIndex(0L));
-
+        
         aAny >>= xShape;
 
         if(xShape.is())
@@ -624,7 +624,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
         {
             if( !aEnumerator.getNextToken(sId) )
                 break;
-
+            
             aShapes[nIndex] = Reference< XShape >( rIdMapper.getReference( sId ), UNO_QUERY );
         }
 
@@ -632,7 +632,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
         {
             if( !aShapes[nIndex].is() )
             {
-                OSL_FAIL("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), draw:nav-order attribute incomplete!");
+                DBG_ERROR("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), draw:nav-order attribute incomplete!");
                 // todo: warning?
                 return;
             }
@@ -643,7 +643,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), unexpected exception cought while importing shape navigation order!");
+        DBG_ERROR("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), unexpected exception cought while importing shape navigation order!");
     }
 }
 

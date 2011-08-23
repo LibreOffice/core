@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,7 +137,7 @@ private:
         (UNO_JAVA_JFW_USER_DATA, UNO_JAVA_JFW_SHARED_DATA,
         UNO_JAVA_JFW_INSTALL_DATA) and m_layer, unless the file already exists
         (see createSettingsDocument).
-
+        
         @return
         JFW_E_CONFIG_READWRITE
     */
@@ -146,7 +146,7 @@ private:
     /** helper function for prepareSettingsDocument.
     */
     void createSettingsDocument() const;
-
+    
     /** returns the system path to the data file which is to be used. The value
         depends on
         the the member m_layer and the bootstrap paramters UNO_JAVA_JFW_USER_DATA,
@@ -155,7 +155,7 @@ private:
     ::rtl::OString getSettingsPath() const;
 
     /** returns the file URL to the data file which is to be used. See getSettingsPath.
-    */
+    */  
     ::rtl::OUString getSettingsURL() const;
 
     /** Verifies if the respective settings file exist. In case UNO_JAVA_JFW_INSTALL_DATA
@@ -163,7 +163,7 @@ private:
         exist and wipe its contents. Then still FILE_DOES_NOT_EXIST is returned.
      */
     jfw::FileStatus checkSettingsFileStatus() const;
-
+    
     /** Determines the layer for which the instance the loads and writes the
         data.
     */
@@ -195,34 +195,6 @@ private:
         after a call to load.
     */
     boost::optional< ::std::vector< ::rtl::OUString> > m_JRELocations;
-
-    /** Only in INSTALL mode. Then NodeJava.write writes a <modified> element
-        which contains the seconds value of the TimeValue (osl/time.h), obtained
-        with osl_getSystemTime.
-        It returns 0 if the value cannot be obtained.
-        This is used to fix the problem that the modified time of the settings
-        file is incorrect because it resides on an NFS volume where the NFS
-        server and NFS client do not have the same system time. For example if
-        the server time is ahead of the client time then checkSettingsFileStatus
-        deleted the settings. So even if javaldx determined a Java
-        (jfw_findAndSelectJRE) then jfw_startVM returned a JFW_E_NO_SELECT. Then
-        it looked again for a java by calling jfw_findAndSelectJRE, which
-        returned a JFW_E_NONE. But the following jfw_startVM returned again
-        JFW_E_NO_SELECT. So it looped. (see issue i114509)
-
-        NFS server and NFS client should have the same time. It is common
-        practise to enforce this in networks. We actually should not work
-        around a malconfigured network. We must however, make sure that we do
-        not loop. Maybe a better approach is, that:
-        - assume that mtime and system time are reliable
-        - checkSettingsFile uses system time and mtime of the settings file,
-        instset of using getModifiedTime.
-        - allow a small error margin
-        - jfw_startVM must return a JFW_E_EXPIRED_SETTINGS
-        - XJavaVM::startVM should prevent the loop by processing the new return+        value
-
-    */
-    sal_uInt32 getModifiedTime() const;
 
 public:
 
@@ -293,8 +265,8 @@ public:
 };
 
 /** merges the settings for shared, user and installation during construction.
-    The class uses a simple merge mechanism for the javasettings.xml files in share and
-    user. The following elements completly overwrite the corresponding elements
+    The class uses a simple merge mechanism for the javasettings.xml files in share and 
+    user. The following elements completly overwrite the corresponding elements 
     from share:
     /java/enabled
     /java/userClassPath
@@ -328,7 +300,7 @@ private:
     ::std::vector< ::rtl::OUString> m_vmParams;
 
     ::std::vector< ::rtl::OUString> m_JRELocations;
-
+    
     CNodeJavaInfo m_javaInfo;
 
 public:
@@ -386,7 +358,7 @@ public:
     ~VersionInfo();
 
     void addExcludeVersion(const ::rtl::OUString& sVersion);
-
+    
     ::rtl::OUString sMinVersion;
     ::rtl::OUString sMaxVersion;
 
@@ -394,7 +366,7 @@ public:
         does not need to release the strings.
         The array exists as long as this object exists.
     */
-
+    
     rtl_uString** getExcludeVersions();
     sal_Int32 getExcludeVersionSize();
 };

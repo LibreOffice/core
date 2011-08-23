@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,8 @@
 namespace chart
 {
 //.............................................................................
+//using namespace ::com::sun::star;
+//using namespace ::com::sun::star::chart2;
 
 CategoryPositionHelper::CategoryPositionHelper( double fSeriesCount, double fCategoryWidth )
     : m_fSeriesCount(fSeriesCount)
@@ -56,7 +58,7 @@ CategoryPositionHelper::~CategoryPositionHelper()
 {
 }
 
-double CategoryPositionHelper::getScaledSlotWidth() const
+double CategoryPositionHelper::getSlotWidth() const
 {
     double fWidth = m_fCategoryWidth /
                 (  m_fSeriesCount
@@ -65,14 +67,14 @@ double CategoryPositionHelper::getScaledSlotWidth() const
     return fWidth;
 }
 
-double CategoryPositionHelper::getScaledSlotPos( double fScaledXPos, double fSeriesNumber ) const
+double CategoryPositionHelper::getSlotPos( double fCategoryX, double fSeriesNumber ) const
 {
     //the returned position is in the middle of the rect
     //fSeriesNumber 0...n-1
-    double fPos = fScaledXPos
-           - (m_fCategoryWidth/2.0)
-           + (m_fOuterDistance/2.0 + fSeriesNumber*(1.0+m_fInnerDistance)) * getScaledSlotWidth()
-           + getScaledSlotWidth()/2.0;
+    double fPos = fCategoryX - (m_fCategoryWidth/2.0)
+           + (m_fOuterDistance/2.0 + fSeriesNumber*(1.0+m_fInnerDistance)) * getSlotWidth()
+           + getSlotWidth()/2.0;
+
     return fPos;
 }
 
@@ -92,11 +94,6 @@ void CategoryPositionHelper::setOuterDistance( double fOuterDistance )
     if( fOuterDistance > 6.0 )
         fOuterDistance = 6.0;
     m_fOuterDistance = fOuterDistance;
-}
-
-void CategoryPositionHelper::setCategoryWidth( double fCategoryWidth )
-{
-    m_fCategoryWidth = fCategoryWidth;
 }
 
 //.............................................................................

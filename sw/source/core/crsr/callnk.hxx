@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,29 +32,28 @@
 
 class SwCrsrShell;
 class SwTxtNode;
-class SwRootFrm;
 
 class SwCallLink
 {
 public:
     SwCrsrShell & rShell;
-    sal_uLong nNode;
+    ULONG nNode;
     xub_StrLen nCntnt;
-    sal_uInt8 nNdTyp;
+    BYTE nNdTyp;
     long nLeftFrmPos;
     bool bHasSelection;
 
     SwCallLink( SwCrsrShell & rSh );
-    SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCntnt,
-                                    sal_uInt8 nAktNdTyp, long nLRPos,
+    SwCallLink( SwCrsrShell & rSh, ULONG nAktNode, xub_StrLen nAktCntnt,
+                                    BYTE nAktNdTyp, long nLRPos,
                                     bool bAktSelection );
     ~SwCallLink();
 
-    static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm );
+    static long GetFrm( SwTxtNode& rNd, xub_StrLen nCntPos, BOOL bCalcFrm );
 };
 
 
 
-#endif  // _CALLNK_HXX
+#endif	// _CALLNK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

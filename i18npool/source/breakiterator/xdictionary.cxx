@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
+using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -62,6 +61,12 @@ xdictionary::xdictionary(const sal_Char *lang) :
     hModule( NULL ),
     boundary(),
     japaneseWordBreak( sal_False )
+#if USE_CELL_BOUNDARY_CODE
+    // For CTL breakiterator, where the word boundary should not be inside cell.
+    ,
+    useCellBoundary( sal_False ),
+    cellBoundary( NULL )
+#endif
 {
     index1 = 0;
 #ifdef SAL_DLLPREFIX
@@ -74,15 +79,15 @@ xdictionary::xdictionary(const sal_Char *lang) :
         hModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
         if( hModule ) {
             sal_IntPtr (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getExistMark")).pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getExistMark").pData );
             existMark = (sal_uInt8*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getIndex1")).pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getIndex1").pData );
             index1 = (sal_Int16*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getIndex2")).pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getIndex2").pData );
             index2 = (sal_Int32*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getLenArray")).pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getLenArray").pData );
             lenArray = (sal_Int32*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getDataArea")).pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getDataArea").pData );
             dataArea = (sal_Unicode*) (*func)();
         }
         else
@@ -97,13 +102,17 @@ xdictionary::xdictionary(const sal_Char *lang) :
         for (sal_Int32 i = 0; i < CACHE_MAX; i++)
             cache[i].size = 0;
 
+#if USE_CELL_BOUNDARY_CODE
+        useCellBoundary = sal_False;
+        cellBoundary = NULL;
+#endif
         japaneseWordBreak = sal_False;
 }
 
 xdictionary::~xdictionary() {
         osl_unloadModule(hModule);
         for (sal_Int32 i = 0; i < CACHE_MAX; i++) {
-            if (cache[i].size > 0) {
+            if (cache[i].size > 0) {    
                 delete cache[i].contents;
                 delete cache[i].wordboundary;
             }
@@ -165,7 +174,7 @@ WordBreakCache::WordBreakCache() :
     wordboundary( NULL ),
     size( 0 )
 {
-}
+}    
 
 /*
  * Compare two unicode string,
@@ -187,7 +196,7 @@ sal_Bool WordBreakCache::equals(const sal_Unicode* str, Boundary& boundary) {
  * @param pos : Position of the given character.
  * @return true if CJK.
  */
-sal_Bool xdictionary::seekSegment(const rtl::OUString &rText, sal_Int32 pos,
+sal_Bool xdictionary::seekSegment(const rtl::OUString &rText, sal_Int32 pos, 
     Boundary& segBoundary)
 {
     sal_Int32 indexUtf16;
@@ -219,7 +228,7 @@ sal_Bool xdictionary::seekSegment(const rtl::OUString &rText, sal_Int32 pos,
 }
 
 #define KANJA       1
-#define KATAKANA    2
+#define KATAKANA    2   
 #define HIRAKANA    3
 
 static sal_Int16 JapaneseCharType(sal_Unicode c)
@@ -247,7 +256,7 @@ WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary& wordBou
                 delete aCache.wordboundary;
                 aCache.size = len;
             }
-            else
+            else 
                 aCache.size = len > DEFAULT_SIZE ? len : DEFAULT_SIZE;
             aCache.contents = new sal_Unicode[aCache.size + 1];
             aCache.wordboundary = new sal_Int32[aCache.size + 2];
@@ -286,12 +295,28 @@ WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary& wordBou
                 if (count) {
                     aCache.wordboundary[i+1] = aCache.wordboundary[i] + count;
                     i++;
+
+#if USE_CELL_BOUNDARY_CODE
+                    if (useCellBoundary) {
+                        sal_Int32 cBoundary = cellBoundary[aCache.wordboundary[i] + wordBoundary.startPos - 1];
+                        if (cBoundary > 0)
+                            aCache.wordboundary[i] = cBoundary - wordBoundary.startPos;
+                    }
+#endif
                 }
             }
 
             if (len) {
                 aCache.wordboundary[i+1] = aCache.wordboundary[i] + len;
                 i++;
+
+#if USE_CELL_BOUNDARY_CODE
+                if (useCellBoundary) {
+                    sal_Int32 cBoundary = cellBoundary[aCache.wordboundary[i] + wordBoundary.startPos - 1];
+                    if (cBoundary > 0)
+                        aCache.wordboundary[i] = cBoundary - wordBoundary.startPos;
+                }
+#endif
             }
         }
         aCache.wordboundary[i + 1] = aCache.length + 1;
@@ -366,6 +391,14 @@ Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, s
 
         return boundary;
 }
+
+#if USE_CELL_BOUNDARY_CODE
+void xdictionary::setCellBoundary(sal_Int32* cellArray)
+{
+        useCellBoundary = sal_True;
+        cellBoundary = cellArray;
+}
+#endif
 
 } } } }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -190,7 +190,7 @@ public class _XStorable extends MultiMethodTest {
     * Has <b> OK </b> status if:
     * <ol>
     *  <li>component was stored, object is not readonly and has location</li>
-    *  <li>exception occurred because of component is readonly
+    *  <li>exception occured because of component is readonly
     *  and wasn't stored</li>
     * </ol>
     */

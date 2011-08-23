@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC ModuleRes : public ::ResId
     {
     public:
-        ModuleRes( sal_uInt16 _nId, OComponentResourceModule& _rModule ) : ResId( _nId, *_rModule.getResManager() ) { }
+        ModuleRes( USHORT _nId, OComponentResourceModule& _rModule ) : ResId( _nId, *_rModule.getResManager() ) { }
     };
 
     //====================================================================
@@ -120,7 +120,7 @@ namespace utl
         typedef ::utl::ModuleRes    BaseClass; \
     \
     public: \
-        ResClass( sal_uInt16 _nId ) : BaseClass( _nId, ModuleClass::getInstance() ) \
+        ResClass( USHORT _nId ) : BaseClass( _nId, ModuleClass::getInstance() ) \
         { \
         } \
     }; \

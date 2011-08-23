@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class DrawViewShell;
 class Window;
 
 
-class FuConstructBezierPolygon
+class FuConstructBezierPolygon 
     : public FuConstruct
 {
 public:
@@ -51,32 +51,33 @@ public:
     virtual void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 
     virtual void SelectionHasChanged();
 
-    void    SetEditMode(sal_uInt16 nMode);
-    sal_uInt16  GetEditMode() { return nEditMode; }
+    void    SetEditMode(USHORT nMode);
+    USHORT  GetEditMode() { return nEditMode; }
 
+    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 protected:
     FuConstructBezierPolygon (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
+        ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq);
 
-    sal_uInt16      nEditMode;
+    USHORT      nEditMode;
 
-    ::com::sun::star::uno::Any maTargets;   // used for creating a path for custom animations
+    ::com::sun::star::uno::Any maTargets;	// used for creating a path for custom animations
 };
 
 } // end of namespace sd

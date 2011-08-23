@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 #define EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYCOMPOSER_HXX
 
 #include "pcrcommon.hxx"
+#include "formbrowsertools.hxx"
 #include "composeduiupdate.hxx"
 #include "formbrowsertools.hxx"
 

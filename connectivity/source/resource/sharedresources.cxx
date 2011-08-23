@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -157,17 +157,17 @@ namespace connectivity
         size_t lcl_substitute( ::rtl::OUString& _inout_rString,
             const sal_Char* _pAsciiPattern, const ::rtl::OUString& _rReplace )
         {
-            size_t nOccurrences = 0;
+            size_t nOccurences = 0;
 
             ::rtl::OUString sPattern( ::rtl::OUString::createFromAscii( _pAsciiPattern ) );
             sal_Int32 nIndex = 0;
             while ( ( nIndex = _inout_rString.indexOf( sPattern ) ) > -1 )
             {
-                ++nOccurrences;
+                ++nOccurences;
                 _inout_rString = _inout_rString.replaceAt( nIndex, sPattern.getLength(), _rReplace );
             }
 
-            return nOccurrences;
+            return nOccurences;
         }
     }
 
@@ -232,8 +232,8 @@ namespace connectivity
         ::std::list< ::std::pair<const sal_Char* , ::rtl::OUString > >::const_iterator aIter = _aStringToSubstitutes.begin();
         ::std::list< ::std::pair<const sal_Char* , ::rtl::OUString > >::const_iterator aEnd  = _aStringToSubstitutes.end();
         for(;aIter != aEnd; ++aIter)
-            OSL_VERIFY( lcl_substitute( sString, aIter->first, aIter->second ) );
-
+            OSL_VERIFY( lcl_substitute( sString, aIter->first, aIter->second ) );        
+        
         return sString;
     }
 

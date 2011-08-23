@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,6 @@
 #include <tools/fsys.hxx>
 #include <vcl/button.hxx>
 #include <vcl/unohelp.hxx>
-#include <vector>
 
 class FixedText;
 class Edit;
@@ -57,7 +56,7 @@ struct ImpFilterItem
     }
 };
 
-typedef ::std::vector< ImpFilterItem* > ImpFilterList;
+DECLARE_LIST( ImpFilterList, ImpFilterItem* )
 #include <vcl/lstbox.hxx>
 
 class KbdListBox : public ListBox
@@ -78,51 +77,55 @@ class ImpPathDialog
     friend class ImpFileDialog;
 
 private:
-    PathDialog*         pSvPathDialog;
-    Edit*               pEdit;
+    PathDialog*			pSvPathDialog;
+    Edit*			    pEdit;
     FixedText*          pDirTitel;
     KbdListBox*         pDirList;
     FixedText*          pDirPath;
-    ListBox*            pDriveList;
-    FixedText*          pDriveTitle;
+    ListBox*			pDriveList;
+    FixedText*			pDriveTitle;
     PushButton*         pLoadBtn;
     PushButton*         pOkBtn;
     PushButton*         pCancelBtn;
     PushButton*         pHomeBtn;
     PushButton*         pNewDirBtn;
 
-    sal_uInt16              nOwnChilds;
+    USHORT 				nOwnChilds;
 
     DirEntry            aPath;          // aktuell angewaehlter Pfad
-    sal_uInt16              nDirCount;      // Anzahl der Verzeichnis-
+    USHORT              nDirCount;      // Anzahl der Verzeichnis-
                                         // Verschachtelungen
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
+                        xCollator;
+
 protected:
 
-    virtual void        UpdateEntries( const sal_Bool bWithDirs );
-    void                UpdateDirs( const DirEntry& rTmpPath );
+    virtual	void		UpdateEntries( const BOOL bWithDirs );
+    void				UpdateDirs( const DirEntry& rTmpPath );
 
-    sal_Bool                IsFileOk( const DirEntry& rDirEntry );
-    void                InitControls();
+    BOOL            	IsFileOk( const DirEntry& rDirEntry );
+    void				InitControls();
 
-    DECL_LINK(          SelectHdl, ListBox * );
-    DECL_LINK(          DblClickHdl, ListBox * );
-    DECL_LINK(          ClickHdl, Button * );
+    DECL_LINK( 			SelectHdl, ListBox * );
+    DECL_LINK( 			DblClickHdl, ListBox * );
+    DECL_LINK( 			ClickHdl, Button * );
 
 public:
-                        ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, sal_Bool bCreateDir );
-    virtual             ~ImpPathDialog();
+                        ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, BOOL bCreateDir );
+    virtual 			~ImpPathDialog();
 
-    virtual void        SetPath( const String& rPath );
-    virtual void        SetPath( const Edit& rEdit );
-    virtual String      GetPath() const;
+    virtual	void		SetPath( const String& rPath );
+    virtual void    	SetPath( const Edit& rEdit );
+    virtual	String		GetPath() const;
 
-    virtual void        PreExecute();
-    virtual void        PostExecute();
+    virtual	void		PreExecute();
+    virtual void 		PostExecute();
 
-    PathDialog*     GetPathDialog() const   { return pSvPathDialog; }
+    PathDialog*		GetPathDialog() const	{ return pSvPathDialog; }
 
-    void            SetOkButtonText( const String& rText ) { pOkBtn->SetText( rText ); }
-    void            SetCancelButtonText( const String& rText ) { pCancelBtn->SetText( rText ); }
+    void			SetOkButtonText( const String& rText ) { pOkBtn->SetText( rText ); }
+    void			SetCancelButtonText( const String& rText ) { pCancelBtn->SetText( rText ); }
 
 };
 
@@ -133,82 +136,82 @@ private:
     FixedText*          pFileTitel;
     ListBox*            pFileList;
     FixedText*          pTypeTitel;
-    ListBox*            pTypeList;
+    ListBox*		    pTypeList;
 
     WildCard            aMask;          // aktuelle Maske
 
-    ImpFilterList       aFilterList;    // Filterliste
-    sal_uInt16              nCurFilter;     // aktueller Filter
+    ImpFilterList		aFilterList;    // Filterliste
+    USHORT              nCurFilter;     // aktueller Filter
 
-    sal_Bool                bOpen;          // sal_True = Open; sal_False = SAVEAS
+    BOOL                bOpen;          // TRUE = Open; FALSE = SAVEAS
 
 protected:
-    void                InitControls();
+    void				InitControls();
 
-    String              ExtendFileName( DirEntry aEntry ) const;
+    String 				ExtendFileName( DirEntry aEntry ) const;
 
-    DECL_LINK(          SelectHdl, ListBox * );
-    DECL_LINK(          DblClickHdl, ListBox * );
-    DECL_LINK(          ClickHdl, Button * );
+    DECL_LINK( 			SelectHdl, ListBox * );
+    DECL_LINK( 			DblClickHdl, ListBox * );
+    DECL_LINK( 			ClickHdl, Button * );
 
-    virtual void        UpdateEntries( const sal_Bool bWithDirs );
-    sal_Bool                IsFileOk( const DirEntry& rDirEntry );
+    virtual	void		UpdateEntries( const BOOL bWithDirs );
+    BOOL            	IsFileOk( const DirEntry& rDirEntry );
 
 public:
                         ImpFileDialog( PathDialog* pDlg, WinBits nStyle, RESOURCE_TYPE nType );
-    virtual             ~ImpFileDialog();
+    virtual 			~ImpFileDialog();
 
-    void                AddFilter( const String& rFilter, const String& rMask );
-    void                RemoveFilter( const String& rFilter );
-    void                RemoveAllFilter();
-    void                SetCurFilter( const String& rFilter );
-    String              GetCurFilter() const;
+    void				AddFilter( const String& rFilter, const String& rMask );
+    void				RemoveFilter( const String& rFilter );
+    void				RemoveAllFilter();
+    void				SetCurFilter( const String& rFilter );
+    String				GetCurFilter() const;
 
-    size_t              GetFilterCount() const  { return aFilterList.size(); }
-    inline String       GetFilterName( size_t nPos ) const;
-    inline String       GetFilterType( size_t nPos ) const;
+    USHORT				GetFilterCount() const	{ return (USHORT)aFilterList.Count(); }
+    inline String		GetFilterName( USHORT nPos ) const;
+    inline String		GetFilterType( USHORT nPos ) const;
 
-    virtual void        SetPath( const String& rPath );
-    virtual void        SetPath( const Edit& rEdit );
-    virtual String      GetPath() const;
+    virtual	void		SetPath( const String& rPath );
+    virtual void 		SetPath( const Edit& rEdit );
+    virtual	String		GetPath() const;
 
-    virtual void        PreExecute();
+    virtual	void		PreExecute();
 
-    FileDialog*     GetFileDialog() const { return (FileDialog*)GetPathDialog(); }
+    FileDialog*		GetFileDialog() const { return (FileDialog*)GetPathDialog(); }
 };
 
-inline String ImpFileDialog::GetFilterName( size_t nPos ) const
+inline String ImpFileDialog::GetFilterName( USHORT nPos ) const
 {
     String aName;
-    if ( nPos < aFilterList.size() ) {
-        aName = aFilterList[ nPos ]->aName;
-    }
+    ImpFilterItem* pItem = aFilterList.GetObject( nPos );
+    if ( pItem )
+        aName = pItem->aName;
     return aName;
 }
 
-inline String ImpFileDialog::GetFilterType( size_t nPos ) const
+inline String ImpFileDialog::GetFilterType( USHORT nPos ) const
 {
     String aFilterMask;
-    if ( nPos < aFilterList.size() ) {
-        aFilterMask = aFilterList[ nPos ]->aMask;
-    }
+    ImpFilterItem* pItem = aFilterList.GetObject( nPos );
+    if ( pItem )
+        aFilterMask = pItem->aMask;
     return aFilterMask;
 }
 
 class ImpSvFileDlg
 {
 private:
-    ImpPathDialog*  pDlg;
+    ImpPathDialog* 	pDlg;
 
 public:
-                    ImpSvFileDlg()      { pDlg = 0; }
-                    ~ImpSvFileDlg()     { delete pDlg; }
+                    ImpSvFileDlg() 		{ pDlg = 0; }
+                    ~ImpSvFileDlg() 	{ delete pDlg; }
 
-    ImpPathDialog*  GetDialog() const   { return pDlg; }
-    void            CreateDialog( PathDialog* pCreateFrom, WinBits nStyle, RESOURCE_TYPE nType, sal_Bool bCreate );
+    ImpPathDialog* 	GetDialog() const 	{ return pDlg; }
+    void			CreateDialog( PathDialog* pCreateFrom, WinBits nStyle, RESOURCE_TYPE nType, BOOL bCreate );
 
-    void            SetOkButtonText( const String& rText ) { pDlg->SetOkButtonText( rText ); }  // ihr habts ja nicht anders gewollt
-    void            SetCancelButtonText( const String& rText ) { pDlg->SetCancelButtonText( rText ); }
+    void			SetOkButtonText( const String& rText ) { pDlg->SetOkButtonText( rText ); }	// ihr habts ja nicht anders gewollt
+    void			SetCancelButtonText( const String& rText ) { pDlg->SetCancelButtonText( rText ); }
 
 };
 

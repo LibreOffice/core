@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,6 @@
 #include <svtools/imgdef.hxx>
 #include "browserids.hxx"
 #include <connectivity/dbtools.hxx>
-#include <osl/diagnose.h>
 //......................................................................
 namespace dbaui
 {
@@ -60,8 +59,8 @@ namespace dbaui
     //------------------------------------------------------------------
     sal_Bool operator ==(const OIndexField& _rLHS, const OIndexField& _rRHS)
     {
-        return  (_rLHS.sFieldName == _rRHS.sFieldName)
-            &&  (_rLHS.bSortAscending == _rRHS.bSortAscending);
+        return	(_rLHS.sFieldName == _rRHS.sFieldName)
+            &&	(_rLHS.bSortAscending == _rRHS.bSortAscending);
     }
 
     //------------------------------------------------------------------
@@ -79,7 +78,7 @@ namespace dbaui
         ConstIndexFieldsIterator aLeft = _rLHS.begin();
         ConstIndexFieldsIterator aLeftEnd = _rLHS.end();
         ConstIndexFieldsIterator aRight = _rRHS.begin();
-        for (; aLeft != aLeftEnd; ++aLeft, ++aRight)
+        for	(; aLeft != aLeftEnd; ++aLeft, ++aRight)
         {
             if (*aLeft != *aRight)
                 return sal_False;
@@ -117,9 +116,9 @@ namespace dbaui
                 ::rtl::OUString sNewName(_rNewText);
                 ::rtl::OUString sAlias = ::dbtools::convertName2SQLName(sNewName,xMeta->getExtraNameCharacters());
                 if ( ( xMeta->supportsMixedCaseQuotedIdentifiers() )
-                        ?
-                        sAlias != sNewName
-                        :
+                        ? 
+                        sAlias != sNewName 
+                        : 
                 !sNewName.equalsIgnoreAsciiCase(sAlias))
                     return sal_False;
             }
@@ -146,14 +145,14 @@ namespace dbaui
     //------------------------------------------------------------------
     void DbaIndexList::enableSelectHandler()
     {
-        OSL_ENSURE(m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
+        DBG_ASSERT(m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
         m_bSuspendSelectHdl = sal_False;
     }
 
     //------------------------------------------------------------------
     void DbaIndexList::disableSelectHandler()
     {
-        OSL_ENSURE(!m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
+        DBG_ASSERT(!m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
         m_bSuspendSelectHdl = sal_True;
     }
 
@@ -181,23 +180,23 @@ namespace dbaui
     //==================================================================
 DBG_NAME(DbaIndexDialog)
 //------------------------------------------------------------------
-    DbaIndexDialog::DbaIndexDialog( Window* _pParent, const Sequence< ::rtl::OUString >& _rFieldNames,
-                                    const Reference< XNameAccess >& _rxIndexes,
+    DbaIndexDialog::DbaIndexDialog(	Window* _pParent, const Sequence< ::rtl::OUString >& _rFieldNames, 
+                                    const Reference< XNameAccess >& _rxIndexes, 
                                     const Reference< XConnection >& _rxConnection,
                                     const Reference< XMultiServiceFactory >& _rxORB,sal_Int32 _nMaxColumnsInIndex)
         :ModalDialog( _pParent, ModuleRes(DLG_INDEXDESIGN))
         ,m_xConnection(_rxConnection)
-        ,m_aGeometrySettings(E_DIALOG, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbaccess.tabledesign.indexdialog")))
-        ,m_aActions                         (this, ModuleRes(TLB_ACTIONS))
-        ,m_aIndexes                         (this, ModuleRes(CTR_INDEXLIST))
-        ,m_aIndexDetails                    (this, ModuleRes(FL_INDEXDETAILS))
-        ,m_aDescriptionLabel                (this, ModuleRes(FT_DESC_LABEL))
-        ,m_aDescription                     (this, ModuleRes(FT_DESCRIPTION))
-        ,m_aUnique                          (this, ModuleRes(CB_UNIQUE))
-        ,m_aFieldsLabel                     (this, ModuleRes(FT_FIELDS))
-        ,m_pFields(new IndexFieldsControl   (this, ModuleRes(CTR_FIELDS),_nMaxColumnsInIndex,::dbtools::getBooleanDataSourceSetting( m_xConnection, "AddIndexAppendix" )))
-        ,m_aClose                           (this, ModuleRes(PB_CLOSE))
-        ,m_aHelp                            (this, ModuleRes(HB_HELP))
+        ,m_aGeometrySettings(E_DIALOG, ::rtl::OUString::createFromAscii("dbaccess.tabledesign.indexdialog"))
+        ,m_aActions							(this, ModuleRes(TLB_ACTIONS))
+        ,m_aIndexes							(this, ModuleRes(CTR_INDEXLIST))
+        ,m_aIndexDetails					(this, ModuleRes(FL_INDEXDETAILS))
+        ,m_aDescriptionLabel				(this, ModuleRes(FT_DESC_LABEL))
+        ,m_aDescription						(this, ModuleRes(FT_DESCRIPTION))
+        ,m_aUnique							(this, ModuleRes(CB_UNIQUE))
+        ,m_aFieldsLabel						(this, ModuleRes(FT_FIELDS))
+        ,m_pFields(new IndexFieldsControl	(this, ModuleRes(CTR_FIELDS),_nMaxColumnsInIndex,::dbtools::getBooleanDataSourceSetting( m_xConnection, "AddIndexAppendix" )))
+        ,m_aClose							(this, ModuleRes(PB_CLOSE))
+        ,m_aHelp							(this, ModuleRes(HB_HELP))
         ,m_pIndexes(NULL)
         ,m_pPreviousSelection(NULL)
         ,m_bEditAgain(sal_False)
@@ -230,7 +229,7 @@ DBG_NAME(DbaIndexDialog)
         }
         catch(Exception&)
         {
-            OSL_FAIL("DbaIndexDialog::DbaIndexDialog: could not retrieve basic information from the UNO collection!");
+            OSL_ENSURE(sal_False, "DbaIndexDialog::DbaIndexDialog: could not retrieve basic information from the UNO collection!");
         }
 
         fillIndexList();
@@ -240,10 +239,18 @@ DBG_NAME(DbaIndexDialog)
 
         m_aClose.SetClickHdl(LINK(this, DbaIndexDialog, OnCloseDialog));
 
+        // get our most recent geometry settings
+//		if (m_aGeometrySettings.Exists())
+//		{
+//			Point aPos;
+//			m_aGeometrySettings.GetPosition(aPos.X(), aPos.Y());
+//			SetPosPixel(aPos);
+//		}
+
         // if all of the indexes have an empty description, we're not interested in displaying it
         Indexes::const_iterator aCheck;
 
-        for (   aCheck = m_pIndexes->begin();
+        for (	aCheck = m_pIndexes->begin();
                 aCheck != m_pIndexes->end();
                 ++aCheck
             )
@@ -287,7 +294,7 @@ DBG_NAME(DbaIndexDialog)
 
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
         sal_Bool bSelectedAnything = NULL != pSelected;
-
+        
 
         if (pSelected)
         {
@@ -309,7 +316,8 @@ DBG_NAME(DbaIndexDialog)
     //------------------------------------------------------------------
     void DbaIndexDialog::fillIndexList()
     {
-        Image aPKeyIcon(ModuleRes( IMG_PKEYICON ));
+        sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+        Image aPKeyIcon(ModuleRes( bHiContrast ? IMG_PKEYICON_SCH : IMG_PKEYICON));
         // fill the list with the index names
         m_aIndexes.Clear();
         Indexes::iterator aIndexLoop = m_pIndexes->begin();
@@ -335,13 +343,17 @@ DBG_NAME(DbaIndexDialog)
         delete m_pIndexes;
         delete m_pFields;
 
+        // save our geometry settings
+//		Point aPos = GetPosPixel();
+//		m_aGeometrySettings.SetPosition(aPos.X(), aPos.Y());
+    
         DBG_DTOR(DbaIndexDialog,NULL);
     }
 
     //------------------------------------------------------------------
     sal_Bool DbaIndexDialog::implCommit(SvLBoxEntry* _pEntry)
     {
-        OSL_ENSURE(_pEntry, "DbaIndexDialog::implCommit: invalid entry!");
+        DBG_ASSERT(_pEntry, "DbaIndexDialog::implCommit: invalid entry!");
 
         Indexes::iterator aCommitPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
 
@@ -396,7 +408,7 @@ DBG_NAME(DbaIndexDialog)
         }
         if ((i>0x7FFFFFFF) || (i<0))
         {
-            OSL_FAIL("DbaIndexDialog::OnNewIndex: no free index name found!");
+            DBG_ERROR("DbaIndexDialog::OnNewIndex: no free index name found!");
             // can't do anything ... of course we try another base, but this could end with the same result ...
             return;
         }
@@ -409,7 +421,7 @@ DBG_NAME(DbaIndexDialog)
         for (SvLBoxEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
         {
             Indexes::iterator aAfterInsertPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
-            OSL_ENSURE(aAfterInsertPos != m_pIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with on of the entries!");
+            DBG_ASSERT(aAfterInsertPos != m_pIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with on of the entries!");
             pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterInsertPos - m_pIndexes->begin())));
         }
 
@@ -425,7 +437,7 @@ DBG_NAME(DbaIndexDialog)
     {
         // the selected index
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
-        OSL_ENSURE(pSelected, "DbaIndexDialog::OnDropIndex: invalid call!");
+        DBG_ASSERT(pSelected, "DbaIndexDialog::OnDropIndex: invalid call!");
         if (pSelected)
         {
             // let the user confirm the drop
@@ -451,7 +463,7 @@ DBG_NAME(DbaIndexDialog)
     {
         // do the drop
         Indexes::iterator aDropPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
-        OSL_ENSURE(aDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: did not find the index in my collection!");
+        DBG_ASSERT(aDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: did not find the index in my collection!");
 
         SQLExceptionInfo aExceptionInfo;
         sal_Bool bSuccess = sal_False;
@@ -481,7 +493,7 @@ DBG_NAME(DbaIndexDialog)
             for (SvLBoxEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
             {
                 Indexes::iterator aAfterDropPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
-                OSL_ENSURE(aAfterDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: problems with on of the remaining entries!");
+                DBG_ASSERT(aAfterDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: problems with on of the remaining entries!");
                 pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterDropPos - m_pIndexes->begin())));
             }
 
@@ -502,7 +514,7 @@ DBG_NAME(DbaIndexDialog)
     {
         // the selected index
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
-        OSL_ENSURE(pSelected, "DbaIndexDialog::OnRenameIndex: invalid call!");
+        DBG_ASSERT(pSelected, "DbaIndexDialog::OnRenameIndex: invalid call!");
 
         // save the changes made 'til here
         // Upon leaving the edit mode, the control will be re-initialized with the
@@ -531,7 +543,7 @@ DBG_NAME(DbaIndexDialog)
     {
         // the selected index
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
-        OSL_ENSURE(pSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
+        DBG_ASSERT(pSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
 
         Indexes::iterator aResetPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
 
@@ -540,7 +552,7 @@ DBG_NAME(DbaIndexDialog)
             OnDropIndex(sal_False);
             return;
         }
-
+        
         SQLExceptionInfo aExceptionInfo;
         try
         {
@@ -589,7 +601,7 @@ DBG_NAME(DbaIndexDialog)
     {
         if (m_aIndexes.IsEditingActive())
         {
-            OSL_ENSURE(!m_bEditAgain, "DbaIndexDialog::OnCloseDialog: somebody was faster than hell!");
+            DBG_ASSERT(!m_bEditAgain, "DbaIndexDialog::OnCloseDialog: somebody was faster than hell!");
                 // this means somebody entered a new name, which was invalid, which cause us to posted us an event,
                 // and before the event arrived the user clicked onto "close". VERY fast, this user ....
             m_aIndexes.EndEditing(sal_False);
@@ -600,14 +612,14 @@ DBG_NAME(DbaIndexDialog)
 
         // the currently selected entry
         const SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
-        OSL_ENSURE(pSelected == m_pPreviousSelection, "DbaIndexDialog::OnCloseDialog: inconsistence!");
+        DBG_ASSERT(pSelected == m_pPreviousSelection, "DbaIndexDialog::OnCloseDialog: inconsistence!");
 
         sal_Int32 nResponse = RET_NO;
         if (pSelected)
         {
             // the descriptor
             Indexes::const_iterator aSelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
-
+            
             if (aSelected->isModified() || aSelected->isNew())
             {
                 QueryBox aQuestion(this, ModuleRes(QUERY_SAVE_CURRENT_INDEX));
@@ -644,8 +656,8 @@ DBG_NAME(DbaIndexDialog)
     IMPL_LINK( DbaIndexDialog, OnEntryEdited, SvLBoxEntry*, _pEntry )
     {
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
-
-        OSL_ENSURE(aPosition >= m_pIndexes->begin() && aPosition < m_pIndexes->end(),
+        
+        DBG_ASSERT(aPosition >= m_pIndexes->begin() && aPosition < m_pIndexes->end(),
             "DbaIndexDialog::OnEntryEdited: invalid entry!");
 
         String sNewName = m_aIndexes.GetEntryText(_pEntry);
@@ -727,7 +739,7 @@ DBG_NAME(DbaIndexDialog)
         // no double fields
         DECLARE_STL_STDKEY_SET( String, StringBag );
         StringBag aExistentFields;
-        for (   ConstIndexFieldsIterator aFieldCheck = _rPos->aFields.begin();
+        for (	ConstIndexFieldsIterator aFieldCheck = _rPos->aFields.begin();
                 aFieldCheck != _rPos->aFields.end();
                 ++aFieldCheck
             )
@@ -769,7 +781,7 @@ DBG_NAME(DbaIndexDialog)
     //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnModified, void*, /*NOTINTERESTEDIN*/ )
     {
-        OSL_ENSURE(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
+        DBG_ASSERT(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
 
         aPosition->setModified(sal_True);
@@ -818,7 +830,7 @@ DBG_NAME(DbaIndexDialog)
 
         // commit the old data
         if (m_aIndexes.FirstSelected() != m_pPreviousSelection)
-        {   // (this call may happen in case somebody ended an in-place edit with 'return', so we need to check this before committing)
+        {	// (this call may happen in case somebody ended an in-place edit with 'return', so we need to check this before committing)
             if (!implCommitPreviouslySelected())
             {
                 m_aIndexes.SelectNoHandlerCall(m_pPreviousSelection);
@@ -859,7 +871,7 @@ DBG_NAME(DbaIndexDialog)
         {
             // The physical toolbar changed its outlook and shows another logical toolbar!
             // We have to set the correct high contrast mode on the new tbx manager.
-            //  pMgr->SetHiContrast( IsHiContrastMode() );
+            //	pMgr->SetHiContrast( IsHiContrastMode() );
             checkImageList();
         }
     }
@@ -868,34 +880,37 @@ DBG_NAME(DbaIndexDialog)
     {
         ModalDialog::DataChanged( rDCEvt );
 
-        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
-            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
-            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS	)	||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY	))	&&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE		))
         {
             // Check if we need to get new images for normal/high contrast mode
             checkImageList();
         }
     }
     //------------------------------------------------------------------
-    ImageList DbaIndexDialog::getImageList(sal_Int16 _eBitmapSet) const
+    ImageList DbaIndexDialog::getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
     {
         sal_Int16 nN = IMG_INDEX_DLG_SC;
-        if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
+        sal_Int16 nH = IMG_INDEX_DLG_SCH;
+        if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )	 	 
         {
             nN = IMG_INDEX_DLG_LC;
-        }
-        return ImageList( nN );
+            nH = IMG_INDEX_DLG_LCH;
+        } // if ( _eBitmapSet == SFX_SYMBOLS_LARGE )
+        return ImageList(ModuleRes( _bHiContast ? nH : nN ));
     }
     //------------------------------------------------------------------
     void DbaIndexDialog::resizeControls(const Size& _rDiff)
     {
         // we use large images so we must change them
+        Size aTbNewSize = m_aActions.GetSizePixel();
         if ( _rDiff.Width() || _rDiff.Height() )
         {
             Size aDlgSize = GetSizePixel();
             // adjust size of dlg
             SetSizePixel(Size(aDlgSize.Width() + _rDiff.Width(),
-                              aDlgSize.Height() + _rDiff.Height())
+                              aDlgSize.Height() + _rDiff.Height())	
                         );
             Size aIndexSize = m_aIndexes.GetSizePixel();
             m_aIndexes.SetPosSizePixel(m_aIndexes.GetPosPixel() + Point(0,_rDiff.Height()),
@@ -919,7 +934,7 @@ DBG_NAME(DbaIndexDialog)
     }
 
 //......................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

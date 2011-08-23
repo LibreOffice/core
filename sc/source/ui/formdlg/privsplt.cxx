@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,16 +34,16 @@
 #include "privsplt.hxx"
 
 /*************************************************************************
-#*  Member:     ScPrivatSplit
+#*	Member:		ScPrivatSplit								Datum:13.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     MD_Test
+#*  Klasse:		MD_Test
 #*
-#*  Funktion:   Konstruktor der Klasse ScPrivatSplit
+#*  Funktion:	Konstruktor der Klasse ScPrivatSplit
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -64,7 +64,7 @@ ScPrivatSplit::ScPrivatSplit( Window* pParent, const ResId& rResId,
 
     aWinPointer=GetPointer();
 
-    aMovingFlag=false;
+    aMovingFlag=FALSE;
     if(eScSplit==SC_SPLIT_HORZ)
     {
         aWinPointer=Pointer(POINTER_HSPLIT);
@@ -78,17 +78,17 @@ ScPrivatSplit::ScPrivatSplit( Window* pParent, const ResId& rResId,
 
 
 /*************************************************************************
-#*  Member:     MouseButtonDown
+#*	Member:		MouseButtonDown							Datum:13.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScPrivatSplit
+#*  Klasse:		ScPrivatSplit
 #*
-#*  Funktion:   Reagiert auf einen einzelnen Mouse-Event. Nach Aufruf
-#*              werden alle Mauseingaben an dieses Control weitergeleitet.
+#*  Funktion:	Reagiert auf einen einzelnen Mouse-Event. Nach Aufruf
+#*				werden alle Mauseingaben an dieses Control weitergeleitet.
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -103,18 +103,18 @@ void ScPrivatSplit::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 /*************************************************************************
-#*  Member:     MouseButtonUp
+#*	Member:		MouseButtonUp							Datum:13.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScPrivatSplit
+#*  Klasse:		ScPrivatSplit
 #*
-#*  Funktion:   Ende einer Benutzeraktion mit der Maus. Es werden
-#*              die aktuelle Maus- Koordinaten ermittelt und fuer
-#*              die Verschiebung des Fensters verwendet.
+#*  Funktion:	Ende einer Benutzeraktion mit der Maus. Es werden
+#*				die aktuelle Maus- Koordinaten ermittelt und fuer
+#*				die Verschiebung des Fensters verwendet.
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -165,18 +165,18 @@ void ScPrivatSplit::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 /*************************************************************************
-#*  Member:     MouseMove
+#*	Member:		MouseMove									Datum:13.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScPrivatSplit
+#*  Klasse:		ScPrivatSplit
 #*
-#*  Funktion:   Reagiert kontinuierlich auf Mausbewegungen. Es werden
-#*              die aktuelle Maus- Koordinaten ermittelt und fuer
-#*              die Verschiebung des Fensters verwendet.
+#*  Funktion:	Reagiert kontinuierlich auf Mausbewegungen. Es werden
+#*				die aktuelle Maus- Koordinaten ermittelt und fuer
+#*				die Verschiebung des Fensters verwendet.
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -230,16 +230,16 @@ void ScPrivatSplit::MouseMove( const MouseEvent& rMEvt )
 }
 
 /*************************************************************************
-#*  Member:     SetYRange
+#*	Member:		SetYRange									Datum:14.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScPrivatSplit
+#*  Klasse:		ScPrivatSplit
 #*
-#*  Funktion:   Setzt den Range fuer die Y- Verschiebung
+#*  Funktion:	Setzt den Range fuer die Y- Verschiebung
 #*
-#*  Input:      neuer Bereich
+#*  Input:		neuer Bereich
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 void ScPrivatSplit::SetYRange(Range cRgeY)
@@ -250,16 +250,16 @@ void ScPrivatSplit::SetYRange(Range cRgeY)
 
 
 /*************************************************************************
-#*  Member:     GetDeltaY
+#*	Member:		GetDeltaY									Datum:13.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScPrivatSplit
+#*  Klasse:		ScPrivatSplit
 #*
-#*  Funktion:   Liefert die relative x-Verschiebung zurueck
+#*  Funktion:	Liefert die relative x-Verschiebung zurueck
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 short ScPrivatSplit::GetDeltaX()
@@ -268,16 +268,16 @@ short ScPrivatSplit::GetDeltaX()
 }
 
 /*************************************************************************
-#*  Member:     GetDeltaY
+#*	Member:		GetDeltaY									Datum:13.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScPrivatSplit
+#*  Klasse:		ScPrivatSplit
 #*
-#*  Funktion:   Liefert die relative y-Verschiebung zurueck
+#*  Funktion:	Liefert die relative y-Verschiebung zurueck
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 short ScPrivatSplit::GetDeltaY()
@@ -286,17 +286,17 @@ short ScPrivatSplit::GetDeltaY()
 }
 
 /*************************************************************************
-#*  Member:     CtrModified
+#*	Member:		CtrModified									Datum:13.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScPrivatSplit
+#*  Klasse:		ScPrivatSplit
 #*
-#*  Funktion:   Teilt einem installierten Handler mit, dass
-#*              eine Veraenderung eingetreten ist.
+#*  Funktion:	Teilt einem installierten Handler mit, dass
+#*				eine Veraenderung eingetreten ist.
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 void ScPrivatSplit::CtrModified()
@@ -350,7 +350,7 @@ void ScPrivatSplit::MoveSplitTo(Point aPos)
 }
 
 
-void ScPrivatSplit::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+void ScPrivatSplit::ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -389,17 +389,17 @@ void ScPrivatSplit::StateChanged( StateChangedType nType )
     if ( (nType == STATE_CHANGE_ZOOM) ||
          (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, false, false );
+        ImplInitSettings( TRUE, FALSE, FALSE );
         Invalidate();
     }
     if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( false, sal_True, false );
+        ImplInitSettings( FALSE, TRUE, FALSE );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( false, false, sal_True );
+        ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
     }
 
@@ -413,7 +413,7 @@ void ScPrivatSplit::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( TRUE, TRUE, TRUE );
         Invalidate();
     }
     else

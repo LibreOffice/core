@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ java_io_Reader::~java_io_Reader()
 
 jclass java_io_Reader::getMyClass() const
 {
-    // the class must be fetched only once, therefore static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/io/Reader");
     return theClass;
@@ -70,11 +70,11 @@ sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::Not
 {
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
         static const char * cSignature = "()Z";
         static const char * cMethodName = "available";
-        // Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallBooleanMethod( object, mID);
@@ -94,12 +94,12 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< s
     OSL_ENSURE(aData.getLength() < nBytesToRead," Sequence is smaller than BytesToRead");
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
         jcharArray pCharArray = t.pEnv->NewCharArray(nBytesToRead);
         static const char * cSignature = "([CII)I";
         static const char * cMethodName = "read";
-        // Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallIntMethod( object, mID, pCharArray, 0, nBytesToRead );

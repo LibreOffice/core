@@ -17,4 +17,5 @@ Gallery_InsertSdrObj
 Gallery_GetThemeNameFromId
 Gallery_BeginLocking
 Gallery_EndLocking
+component_writeInfo
 component_getFactory

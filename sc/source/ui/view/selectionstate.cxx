@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ ScSelectionState::ScSelectionState( ScViewData& rViewData ) :
         if( rMarkData.IsMultiMarked() )
         {
             meType = SC_SELECTTYPE_SHEET;
-            rMarkData.FillRangeListWithMarks( &maSheetSel, false );
+            rMarkData.FillRangeListWithMarks( &maSheetSel, FALSE );
         }
         // else type is SC_SELECTTYPE_NONE - already initialized
     }
@@ -70,10 +70,10 @@ bool operator==( const ScSelectionState& rL, const ScSelectionState& rR )
     if( bEqual ) switch( rL.GetSelectionType() )
     {
         case SC_SELECTTYPE_EDITCELL:
-            bEqual &= ( rL.GetEditSelection().IsEqual( rR.GetEditSelection() ) != false );
+            bEqual &= ( rL.GetEditSelection().IsEqual( rR.GetEditSelection() ) != FALSE );
         // run through!
         case SC_SELECTTYPE_SHEET:
-            bEqual &= (rL.GetSheetSelection() == rR.GetSheetSelection()) == sal_True;
+            bEqual &= (rL.GetSheetSelection() == rR.GetSheetSelection()) == TRUE;
         // run through!
         case SC_SELECTTYPE_NONE:
             bEqual &= rL.GetCellCursor() == rR.GetCellCursor();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,17 +39,20 @@
 #include <signal.h>
 #include <setjmp.h>
 
-#define printTypeSize(Type,Name)    printf( "sizeof(%s)\t\t= %d\n", Name, (int) sizeof (Type) )
+#define printTypeSize(Type,Name)	printf(	"sizeof(%s)\t\t= %d\n", Name, (int) sizeof (Type) )
 
-#define isSignedType(Type)  (((Type)-1) < 0)
-#define printTypeSign(Type,Name)    printf( "%s\t\t= %s %s\n", Name, ( isSignedType(Type) ? "signed" : "unsigned" ), Name )
+#define isSignedType(Type)	(((Type)-1) < 0)
+#define printTypeSign(Type,Name)	printf(	"%s\t\t= %s %s\n", Name, ( isSignedType(Type) ? "signed" : "unsigned" ), Name )
 
 
 /*************************************************************************
 |*
-|*  IsBigEndian()
+|*	IsBigEndian()
 |*
-|*  Beschreibung        True, wenn CPU BigEndian ist
+|*	Beschreibung		True, wenn CPU BigEndian ist
+|*
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int IsBigEndian()
@@ -60,7 +63,7 @@ int IsBigEndian()
 
 /*************************************************************************
 |*
-|*  Typdeclarations for memory access test functions
+|*	Typdeclarations for memory access test functions
 |*
 *************************************************************************/
 typedef enum { t_char, t_short, t_int, t_long, t_double } Type;
@@ -69,9 +72,12 @@ typedef int (*TestFunc)( Type, void* );
 
 /*************************************************************************
 |*
-|*  PrintArgs()
+|*	PrintArgs()
 |*
-|*  Beschreibung        Testfunktion fuer variable Parameter
+|*	Beschreibung		Testfunktion fuer variable Parameter
+|*
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 void PrintArgs( int p, ... )
@@ -92,9 +98,12 @@ void PrintArgs( int p, ... )
 
 /*************************************************************************
 |*
-|*  SignalHdl()
+|*	SignalHdl()
 |*
-|*  Beschreibung        faengt SIGBUS und SIGSEGV in check() ab
+|*	Beschreibung		faengt SIGBUS und SIGSEGV in check() ab
+|*
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 
@@ -110,9 +119,12 @@ void SignalHdl( int sig )
 
 /*************************************************************************
 |*
-|*  check()
+|*	check()
 |*
-|*  Beschreibung        Testet MemoryZugriff (read/write)
+|*	Beschreibung		Testet MemoryZugriff (read/write)
+|*
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int check( TestFunc func, Type eT, void* p )
@@ -141,9 +153,12 @@ int check( TestFunc func, Type eT, void* p )
 
 /*************************************************************************
 |*
-|*  GetAtAddress()
+|*	GetAtAddress()
 |*
-|*  Beschreibung        memory read access
+|*	Beschreibung		memory read access
+|*
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 #if defined(IA64) || defined(ARM32) || defined(HPPA) || defined(AXP)
@@ -163,11 +178,11 @@ int GetAtAddress( Type eT, void* p )
 {
   switch ( eT )
   {
-  case t_char:      return *((char*)p);
-  case t_short:     if ((long)p % sizeof(short)) return forceerror(); else return *((short*)p);
-  case t_int:       if ((long)p % sizeof(int)) return forceerror(); else return *((int*)p);
-  case t_long:      if ((long)p % sizeof(long)) return forceerror(); else return *((long*)p);
-  case t_double:    if ((long)p % sizeof(double)) return forceerror(); else return *((double*)p);
+  case t_char:		return *((char*)p);
+  case t_short:		if ((long)p % sizeof(short)) return forceerror(); else return *((short*)p);
+  case t_int:		if ((long)p % sizeof(int)) return forceerror(); else return *((int*)p);
+  case t_long:		if ((long)p % sizeof(long)) return forceerror(); else return *((long*)p);
+  case t_double:	if ((long)p % sizeof(double)) return forceerror(); else return *((double*)p);
   }
   abort();
 }
@@ -197,20 +212,23 @@ int dummy(void* unused)
 #endif
 /*************************************************************************
 |*
-|*  SetAtAddress()
+|*	SetAtAddress()
 |*
-|*  Beschreibung        memory write access
+|*	Beschreibung		memory write access
+|*
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int SetAtAddress( Type eT, void* p )
 {
   switch ( eT )
   {
-  case t_char:      return *((char*)p)  = 0;
-  case t_short:     return *((short*)p) = 0;
-  case t_int:       return *((int*)p)   = 0;
-  case t_long:      return *((long*)p)  = 0;
-  case t_double:    return *((double*)p)= 0;
+  case t_char:		return *((char*)p)	= 0;
+  case t_short:		return *((short*)p)	= 0;
+  case t_int:		return *((int*)p)	= 0;
+  case t_long:		return *((long*)p)	= 0;
+  case t_double:	return *((double*)p)= 0;
   }
   abort();
 }
@@ -219,21 +237,24 @@ char* TypeName( Type eT )
 {
   switch ( eT )
   {
-  case t_char:      return "char";
-  case t_short:     return "short";
-  case t_int:       return "int";
-  case t_long:      return "long";
-  case t_double:    return "double";
+  case t_char:		return "char";
+  case t_short:		return "short";
+  case t_int:		return "int";
+  case t_long:		return "long";
+  case t_double:	return "double";
   }
   abort();
 }
 
 /*************************************************************************
 |*
-|*  Check(Get|Set)Access()
+|*	Check(Get|Set)Access()
 |*
-|*  Beschreibung        Testet MemoryZugriff (read/write)
-|*                      Zugriffsverletzungen werden abgefangen
+|*	Beschreibung		Testet MemoryZugriff (read/write)
+|*						Zugriffsverletzungen werden abgefangen
+|*
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int CheckGetAccess( Type eT, void* p )
@@ -262,16 +283,19 @@ int CheckSetAccess( Type eT, void* p )
 
 /*************************************************************************
 |*
-|*  GetAlignment()
+|*	GetAlignment()
 |*
-|*  Beschreibung        Bestimmt das Alignment verschiedener Typen
+|*	Beschreibung		Bestimmt das Alignment verschiedener Typen
+|*
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int GetAlignment( Type eT )
 {
-  char  a[ 16*8 ];
-  long  p = (long)(void*)a;
-  int   i;
+  char	a[ 16*8 ];
+  long	p = (long)(void*)a;
+  int	i;
 
   /* clear a[...] to set legal value for double access */
   for ( i = 0; i < 16*8; i++ )
@@ -286,27 +310,33 @@ int GetAlignment( Type eT )
 
 /*************************************************************************
 |*
-|*  struct Description
+|*	struct Description
 |*
-|*  Beschreibung        Beschreibt die Parameter der Architektur
+|*	Beschreibung		Beschreibt die Parameter der Architektur
+|*
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 struct Description
 {
-  int   bBigEndian;
-  int   nAlignment[3];  /* 2,4,8 */
+  int	bBigEndian;
+  int	nAlignment[3];	/* 2,4,8 */
 };
 
 /*************************************************************************
 |*
-|*  Description_Ctor()
+|*	Description_Ctor()
 |*
-|*  Beschreibung        Bestimmt die Parameter der Architektur
+|*	Beschreibung		Bestimmt die Parameter der Architektur
+|*
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 void Description_Ctor( struct Description* pThis )
 {
-  pThis->bBigEndian         = IsBigEndian();
+  pThis->bBigEndian			= IsBigEndian();
 
   if ( sizeof(short) != 2 )
     abort();
@@ -315,7 +345,7 @@ void Description_Ctor( struct Description* pThis )
     abort();
   pThis->nAlignment[1] = GetAlignment( t_int );
 
-  if      ( sizeof(long) == 8 )
+  if	  ( sizeof(long) == 8 )
     pThis->nAlignment[2] = GetAlignment( t_long );
   else if ( sizeof(double) == 8 )
     pThis->nAlignment[2] = GetAlignment( t_double );
@@ -325,9 +355,12 @@ void Description_Ctor( struct Description* pThis )
 
 /*************************************************************************
 |*
-|*  Description_Print()
+|*	Description_Print()
 |*
-|*  Beschreibung        Schreibt die Parameter der Architektur als Header
+|*	Beschreibung		Schreibt die Parameter der Architektur als Header
+|*
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 void Description_Print( struct Description* pThis, char* name )
@@ -361,9 +394,12 @@ void Description_Print( struct Description* pThis, char* name )
 
 /*************************************************************************
 |*
-|*  InfoMemoryAccess()
+|*	InfoMemoryAccess()
 |*
-|*  Beschreibung        Informeller Bytezugriffstest
+|*	Beschreibung		Informeller Bytezugriffstest
+|*
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 void InfoMemoryAccess( char* p )
@@ -381,9 +417,12 @@ void InfoMemoryAccess( char* p )
 
 /*************************************************************************
 |*
-|*  InfoMemoryTypeAccess()
+|*	InfoMemoryTypeAccess()
 |*
-|*  Beschreibung        Informeller Zugriffstest verschiedener Typen
+|*	Beschreibung		Informeller Zugriffstest verschiedener Typen
+|*
+|*	Ersterstellung		EG 15.08.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 void InfoMemoryTypeAccess( Type eT )
@@ -405,7 +444,7 @@ void InfoMemoryTypeAccess( Type eT )
 }
 /************************************************************************
  *
- *  Use C code to determine the characteristics of the building platform.
+ * 	Use C code to determine the characteristics of the building platform.
  *
  ************************************************************************/
 int main( int argc, char* argv[] )

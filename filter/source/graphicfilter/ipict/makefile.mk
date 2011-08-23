@@ -41,18 +41,19 @@ DEPTARGET=vipict
 CDEFS+= -DEDITDEBUG
 .ENDIF
 .IF "$(L10N_framework)"==""
-SLOFILES =  $(SLO)$/ipict.obj $(SLO)$/shape.obj
+SLOFILES =  $(EXCEPTIONSFILES)
+EXCEPTIONSFILES = $(SLO)$/ipict.obj
 
 # ==========================================================================
 
 SHL1TARGET=     ipt$(DLLPOSTFIX)
 SHL1IMPLIB=     ipict
-SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB) $(BASEGFXLIB)
+SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1LIBS=       $(SLB)$/ipict.lib
 
 .IF "$(GUI)" != "UNX"
 .IF "$(COM)" != "GCC"
-SHL1OBJS=       $(SLOFILES)
+SHL1OBJS=       $(SLO)$/ipict.obj
 .ENDIF
 .ENDIF
 

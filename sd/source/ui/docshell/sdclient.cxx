@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,6 +36,13 @@
 #include <svx/svdpagv.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
+
+
+#include "misc.hxx"
+
+#ifdef STARIMAGE_AVAILABLE
+#include <sim2/simdll.hxx>
+#endif
 
 #include "strings.hrc"
 #include "ViewShell.hxx"
@@ -141,6 +148,12 @@ void Client::ObjectAreaChanged()
     }
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void Client::ViewChanged()
 {
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
@@ -182,8 +195,8 @@ void Client::ViewChanged()
                                                 static_cast< long >( GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
 
             // react to the change if the difference is bigger than one pixel
-            Size aPixelDiff =
-                Application::GetDefaultDevice()->LogicToPixel(
+            Size aPixelDiff = 
+                Application::GetDefaultDevice()->LogicToPixel( 
                     Size( aLogicRect.GetWidth() - aScaledSize.Width(),
                           aLogicRect.GetHeight() - aScaledSize.Height() ),
                     aMap100 );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,20 +50,20 @@ import org.xml.sax.SAXException;
  *      Spreadsheets created with Calc          (application/vnd.sun.xml.calc)
  *      Text created with Writer                (application/vnd.sun.xml.writer)
  *      Drawings created with Draw              (application/vnd.sun.xml.draw)
- *      Presentations created with Impress      (application/vnd.sun.xml.impress)
+ *      Presentations created with Impress      (application/vnd.sun.xml.impress)    
  *
  * These object types are stored using a combination of content, settings and styles
  * XML files.
  */
 public class EmbeddedXMLObject extends EmbeddedObject {
-
+    
     // Entries for the subdocuments that constitute this object;
     protected Document contentDOM  = null;
     protected Document settingsDOM = null;
     protected Document stylesDOM   = null;
-
+    
     private DocumentBuilder builder = null;
-
+    
     /**
      * Constructor for an embedded object stored using an XML representation.
      *
@@ -71,11 +71,11 @@ public class EmbeddedXMLObject extends EmbeddedObject {
      * @param   type    The mime-type of the object.  See the class summary.
      */
     public EmbeddedXMLObject(String name, String type) {
-        super(name, type);
+        super(name, type);       
     }
-
+    
     /**
-     * Package private constructor for use when reading an object from a
+     * Package private constructor for use when reading an object from a 
      * compressed SX? file.
      *
      * @param   name    The name of the object.
@@ -83,11 +83,11 @@ public class EmbeddedXMLObject extends EmbeddedObject {
      * @param   source  The OfficeZip representation of the SX? file that stores
      *                  the object.
      */
-    EmbeddedXMLObject(String name, String type, OfficeZip source) {
+    EmbeddedXMLObject(String name, String type, OfficeZip source) {              
         super(name, type, source);
     }
-
-
+       
+    
     /**
      * Returns the content data for this embedded object.
      *
@@ -97,15 +97,15 @@ public class EmbeddedXMLObject extends EmbeddedObject {
      * @throws  IOException     If any IO error occurs
      */
     public Document getContentDOM() throws SAXException, IOException {
-
+        
         if (contentDOM == null) {
             contentDOM = getNamedDOM("content.xml");
         }
-
+        
         return contentDOM;
     }
-
-
+    
+    
     /**
      * Sets the content data for the embedded object.
      *
@@ -115,8 +115,8 @@ public class EmbeddedXMLObject extends EmbeddedObject {
         contentDOM = content;
         hasChanged = true;
     }
-
-
+    
+    
     /**
      * Returns the settings data for this embedded object.
      *
@@ -124,28 +124,28 @@ public class EmbeddedXMLObject extends EmbeddedObject {
      *
      * @throws  SAXException    If any parser error occurs
      * @throws  IOException     If any IO error occurs
-     */
+     */   
     public Document getSettingsDOM() throws SAXException, IOException {
-
+        
         if (settingsDOM == null) {
             settingsDOM = getNamedDOM("settings.xml");
         }
-
+        
         return settingsDOM;
     }
-
-
+    
+    
     /**
      * Sets the settings data for the embedded object.
      *
-     * @param   settings     DOM representation of the object's styles.
+     * @param   styles     DOM representation of the object's styles.
      */
     public void setSettingsDOM(Document settings) {
         settingsDOM = settings;
         hasChanged = true;
     }
 
-
+    
     /**
      * Returns the style data for this embedded object.
      *
@@ -153,17 +153,17 @@ public class EmbeddedXMLObject extends EmbeddedObject {
      *
      * @throws  SAXException    If any parser error occurs
      * @throws  IOException     If any IO error occurs
-     */
+     */       
     public Document getStylesDOM() throws SAXException, IOException {
-
+        
         if (stylesDOM == null) {
             stylesDOM = getNamedDOM("styles.xml");
         }
-
+        
         return stylesDOM;
     }
-
-
+    
+    
     /**
      * Sets the styles data for the embedded object.
      *
@@ -174,7 +174,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
         hasChanged = true;
     }
 
-
+    
     /**
      * This method extracts the data for the given XML file from the SX? file
      * and creates a DOM representation of it.
@@ -187,7 +187,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
      * @throws  SAXException    If any parser error occurs
      * @throws  IOException     If any IO error occurs
      */
-    private Document getNamedDOM(String name) throws SAXException, IOException {
+    private Document getNamedDOM(String name) throws SAXException, IOException {        
         if (zipFile == null) {
             return null;
         }
@@ -195,11 +195,11 @@ public class EmbeddedXMLObject extends EmbeddedObject {
         try {
             if (builder == null) {
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
+            
                 factory.setValidating(false);
                 builder = factory.newDocumentBuilder();
             }
-
+        
             byte[] data = zipFile.getNamedBytes(new String(objName + "/" + name));
             if (data != null) {
                 return OfficeDocument.parse(builder, data);
@@ -207,7 +207,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
             else {
                 return null;
             }
-
+            
         }
         catch (SAXException se) {
             throw se;
@@ -219,9 +219,9 @@ public class EmbeddedXMLObject extends EmbeddedObject {
             throw new SAXException(pce);
         }
     }
-
-
-    /**
+    
+    
+    /** 
      * Package private method for writing the data of the EmbeddedObject to a
      * SX? file.
      *
@@ -231,7 +231,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
     void write(OfficeZip zip) throws IOException {
         if (hasChanged == true) {
             if (contentDOM != null) {
-                zip.setNamedBytes(new String(objName + "/content.xml"),
+                zip.setNamedBytes(new String(objName + "/content.xml"), 
                                         OfficeDocument.docToBytes(contentDOM));
             }
             if (settingsDOM != null) {
@@ -244,8 +244,8 @@ public class EmbeddedXMLObject extends EmbeddedObject {
             }
         }
     }
-
-    /**
+    
+    /** 
      * Package private method that constructs the manifest.xml entries for this
      * embedded object.
      *
@@ -253,43 +253,43 @@ public class EmbeddedXMLObject extends EmbeddedObject {
      */
     void writeManifestData(Document manifestDoc) throws DOMException {
         Node root = manifestDoc.getDocumentElement();
-
+        
         if (contentDOM != null) {
             Element contentNode = manifestDoc.createElement(OfficeConstants.TAG_MANIFEST_FILE);
-
+            
             contentNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
-            contentNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH,
+            contentNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH,    
                                         new String(objName + "/content.xml"));
-
+            
             root.appendChild(contentNode);
         }
-
+        
         if (settingsDOM != null) {
             Element settingsNode = manifestDoc.createElement(OfficeConstants.TAG_MANIFEST_FILE);
-
+            
             settingsNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
             settingsNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH,
                                         new String(objName + "/settings.xml"));
-
+            
             root.appendChild(settingsNode);
         }
-
+        
         if (stylesDOM != null) {
             Element stylesNode = manifestDoc.createElement(OfficeConstants.TAG_MANIFEST_FILE);
-
+            
             stylesNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
-            stylesNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH,
+            stylesNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH, 
                                         new String(objName + "/styles.xml"));
         }
-
-
+            
+        
         Element objectNode = manifestDoc.createElement(OfficeConstants.TAG_MANIFEST_FILE);
-
+        
         objectNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_TYPE, objType);
         objectNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH,
                                     new String(objName + "/"));
-
+        
         root.appendChild(objectNode);
     }
-
+    
 }

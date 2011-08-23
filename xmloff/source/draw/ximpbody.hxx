@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,21 +39,21 @@
 
 class SdXMLDrawPageContext : public SdXMLGenericPageContext
 {
-    rtl::OUString               maName;
-    rtl::OUString               maMasterPageName;
-    rtl::OUString               maStyleName;
-    rtl::OUString               maHREF;
+    rtl::OUString				maName;
+    rtl::OUString				maMasterPageName;
+    rtl::OUString				maStyleName;
+    rtl::OUString				maHREF;
 
-    bool                        mbHadSMILNodes;
+    bool						mbHadSMILNodes;
 public:
-    SdXMLDrawPageContext( SdXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+    SdXMLDrawPageContext( SdXMLImport& rImport, USHORT nPrfx,
+        const rtl::OUString& rLocalName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLDrawPageContext();
 
-    virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+    virtual SvXMLImportContext *CreateChildContext( 
+        USHORT nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
 
@@ -68,15 +68,15 @@ class SdXMLBodyContext : public SvXMLImportContext
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
 public:
-    SdXMLBodyContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName );
+    SdXMLBodyContext( SdXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLocalName );
     virtual ~SdXMLBodyContext();
 
-    virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+    virtual SvXMLImportContext *CreateChildContext( 
+        USHORT nPrefix, const rtl::OUString& rLocalName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
 
 
-#endif  //  _XIMPBODY_HXX
+#endif	//  _XIMPBODY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

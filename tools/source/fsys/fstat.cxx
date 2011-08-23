@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
+#if defined( WIN)
+#include <stdio.h>
+#include <dos.h>
+#endif
+
 #ifdef UNX
 #include <errno.h>
 #endif
@@ -43,16 +48,20 @@
 |*
 |*    FileStat::FileStat()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 11.06.91
+|*    Letzte Aenderung  MI 11.06.91
+|*
 *************************************************************************/
 
 FileStat::FileStat()
-:   // don't use Default-Ctors!
-    aDateCreated( sal_uIntPtr(0) ),
-    aTimeCreated( sal_uIntPtr(0) ),
-    aDateModified( sal_uIntPtr(0) ),
-    aTimeModified( sal_uIntPtr(0) ),
-    aDateAccessed( sal_uIntPtr(0) ),
-    aTimeAccessed( sal_uIntPtr(0) )
+:	// don't use Default-Ctors!
+    aDateCreated( ULONG(0) ),
+    aTimeCreated( ULONG(0) ),
+    aDateModified( ULONG(0) ),
+    aTimeModified( ULONG(0) ),
+    aDateAccessed( ULONG(0) ),
+    aTimeAccessed( ULONG(0) )
 {
     nSize = 0;
     nKindFlags = FSYS_KIND_UNKNOWN;
@@ -63,19 +72,23 @@ FileStat::FileStat()
 |*
 |*    FileStat::FileStat()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 11.06.91
+|*    Letzte Aenderung  MI 11.06.91
+|*
 *************************************************************************/
 
 FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
-:   // don't use Default-Ctors!
-    aDateCreated( sal_uIntPtr(0) ),
-    aTimeCreated( sal_uIntPtr(0) ),
-    aDateModified( sal_uIntPtr(0) ),
-    aTimeModified( sal_uIntPtr(0) ),
-    aDateAccessed( sal_uIntPtr(0) ),
-    aTimeAccessed( sal_uIntPtr(0) )
+:	// don't use Default-Ctors!
+    aDateCreated( ULONG(0) ),
+    aTimeCreated( ULONG(0) ),
+    aDateModified( ULONG(0) ),
+    aTimeModified( ULONG(0) ),
+    aDateAccessed( ULONG(0) ),
+    aTimeAccessed( ULONG(0) )
 {
-    sal_Bool bCached = FSYS_ACCESS_CACHED == (nAccess & FSYS_ACCESS_CACHED);
-    sal_Bool bFloppy = FSYS_ACCESS_FLOPPY == (nAccess & FSYS_ACCESS_FLOPPY);
+    BOOL bCached = FSYS_ACCESS_CACHED == (nAccess & FSYS_ACCESS_CACHED);
+    BOOL bFloppy = FSYS_ACCESS_FLOPPY == (nAccess & FSYS_ACCESS_FLOPPY);
 
 #ifdef FEAT_FSYS_DOUBLESPEED
     const FileStat *pStatFromDir = bCached ? rDirEntry.ImpGetStat() : 0;
@@ -102,31 +115,38 @@ FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
 |*
 |*    FileStat::IsYounger()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MA 11.11.91
+|*    Letzte Aenderung  MA 11.11.91
+|*
 *************************************************************************/
 
-// sal_True  wenn die Instanz j"unger als rIsOlder ist.
-// sal_False wenn die Instanz "alter oder gleich alt wie rIsOlder ist.
+// TRUE  wenn die Instanz j"unger als rIsOlder ist.
+// FALSE wenn die Instanz "alter oder gleich alt wie rIsOlder ist.
 
-sal_Bool FileStat::IsYounger( const FileStat& rIsOlder ) const
+BOOL FileStat::IsYounger( const FileStat& rIsOlder ) const
 {
     if ( aDateModified > rIsOlder.aDateModified )
-        return sal_True;
+        return TRUE;
     if ( ( aDateModified == rIsOlder.aDateModified ) &&
          ( aTimeModified > rIsOlder.aTimeModified ) )
-        return sal_True;
+        return TRUE;
 
-    return sal_False;
+    return FALSE;
 }
 
 /*************************************************************************
 |*
 |*    FileStat::IsKind()
 |*
+|*    Ersterstellung    MA 11.11.91 (?)
+|*    Letzte Aenderung  KH 16.01.95
+|*
 *************************************************************************/
 
-sal_Bool FileStat::IsKind( DirEntryKind nKind ) const
+BOOL FileStat::IsKind( DirEntryKind nKind ) const
 {
-    sal_Bool bRet = ( ( nKind == FSYS_KIND_UNKNOWN ) &&
+    BOOL bRet = ( ( nKind == FSYS_KIND_UNKNOWN ) &&
                   ( nKindFlags == FSYS_KIND_UNKNOWN ) ) ||
                    ( ( nKindFlags & nKind ) == nKind );
     return bRet;
@@ -136,14 +156,17 @@ sal_Bool FileStat::IsKind( DirEntryKind nKind ) const
 |*
 |*    FileStat::HasReadOnlyFlag()
 |*
+|*    Ersterstellung    MI 06.03.97
+|*    Letzte Aenderung  UT 01.07.98
+|*
 *************************************************************************/
 
-sal_Bool FileStat::HasReadOnlyFlag()
+BOOL FileStat::HasReadOnlyFlag()
 {
 #if defined WNT || defined UNX || defined OS2
-    return sal_True;
+    return TRUE;
 #else
-    return sal_False;
+    return FALSE;
 #endif
 }
 
@@ -151,9 +174,12 @@ sal_Bool FileStat::HasReadOnlyFlag()
 |*
 |*    FileStat::GetReadOnlyFlag()
 |*
+|*    Ersterstellung    MI 06.03.97
+|*    Letzte Aenderung  UT 02.07.98
+|*
 *************************************************************************/
 
-sal_Bool FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
+BOOL FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 {
 
     ByteString aFPath(rEntry.GetFull(), osl_getThreadTextEncoding());
@@ -169,17 +195,17 @@ sal_Bool FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
         case NO_ERROR:
             return FILE_READONLY == ( aFileStat.attrFile & FILE_READONLY );
         default:
-            return sal_False;
+            return FALSE;
     }
 #elif defined UNX
     /* could we stat the object? */
     struct stat aBuf;
     if (stat(aFPath.GetBuffer(), &aBuf))
-        return sal_False;
+        return FALSE;
     /* jupp, is writable for user? */
     return((aBuf.st_mode & S_IWUSR) != S_IWUSR);
 #else
-    return sal_False;
+    return FALSE;
 #endif
 }
 
@@ -187,9 +213,12 @@ sal_Bool FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 |*
 |*    FileStat::SetReadOnlyFlag()
 |*
+|*    Ersterstellung    MI 06.03.97
+|*    Letzte Aenderung  UT 01.07.98
+|*
 *************************************************************************/
 
-sal_uIntPtr FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
+ULONG FileStat::SetReadOnlyFlag( const DirEntry &rEntry, BOOL bRO )
 {
 
     ByteString aFPath(rEntry.GetFull(), osl_getThreadTextEncoding());
@@ -259,6 +288,9 @@ sal_uIntPtr FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
 |*
 |*    FileStat::SetDateTime
 |*
+|*    Ersterstellung	PB  27.06.97
+|*    Letzte Aenderung
+|*
 *************************************************************************/
 #if defined WNT || defined OS2
 
@@ -288,28 +320,28 @@ void FileStat::SetDateTime( const String& rFileName,
 
         if ( nDiff > 0 )
         {
-            aNewTime += aDiff;                  // Stundenkorrektur
+            aNewTime += aDiff;					// Stundenkorrektur
 
             // bei "Uberlauf korrigieren
             if ( aNewTime >= Time( 24, 0 ) )
                 aNewTime -= Time( 24, 0 );
 
             // Tages"uberlauf?
-            if ( aOldTime == Time( 0, 0 ) ||    // 00:00 -> 01:00
-                 aNewTime < aOldTime )          // 23:00 -> 00:00 | 01:00 ...
+            if ( aOldTime == Time( 0, 0 ) ||	// 00:00 -> 01:00
+                 aNewTime < aOldTime ) 			// 23:00 -> 00:00 | 01:00 ...
                 aNewDate++;
         }
         else if ( nDiff < 0 )
         {
-            aNewTime -= aDiff;                  // Stundenkorrektur
+            aNewTime -= aDiff;					// Stundenkorrektur
 
             // negative Zeit (-1:00) korrigieren: 23:00
             if (aNewTime < Time( 0, 0 ) )
                 aNewTime += Time( 24, 0 );
 
             // Tagesunterlauf ?
-            if ( aOldTime == Time( 0, 0 ) ||    // 00:00 -> 23:00
-                 aNewTime > aOldTime )          // 01:00 -> 23:00 | 22:00 ...
+            if ( aOldTime == Time( 0, 0 ) ||	// 00:00 -> 23:00
+                 aNewTime > aOldTime )			// 01:00 -> 23:00 | 22:00 ...
                 aNewDate--;
         }
     }
@@ -340,10 +372,10 @@ void FileStat::SetDateTime( const String& rFileName,
     // open file
     ULONG nAction = FILE_EXISTED;
     HFILE hFile = 0;
-    ULONG nFlags = OPEN_FLAGS_WRITE_THROUGH |
-                   OPEN_FLAGS_FAIL_ON_ERROR | OPEN_FLAGS_NO_CACHE   |
-                   OPEN_FLAGS_RANDOM        | OPEN_FLAGS_NOINHERIT  |
-                   OPEN_SHARE_DENYNONE      | OPEN_ACCESS_READWRITE;
+    ULONG nFlags = OPEN_FLAGS_WRITE_THROUGH	|
+                   OPEN_FLAGS_FAIL_ON_ERROR	| OPEN_FLAGS_NO_CACHE	|
+                   OPEN_FLAGS_RANDOM		| OPEN_FLAGS_NOINHERIT	|
+                   OPEN_SHARE_DENYNONE		| OPEN_ACCESS_READWRITE;
 
     APIRET nRet = DosOpen((PSZ)aFileName.GetBuffer(), &hFile, (PULONG)&nAction,
                           0/*size*/, FILE_NORMAL,

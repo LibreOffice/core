@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,17 @@ public:
              );
     virtual ~AreaChart();
 
-    virtual void createShapes();
+    //-------------------------------------------------------------------------
+    // chart2::XPlotter
+    //-------------------------------------------------------------------------
+
+    virtual void SAL_CALL createShapes();
+    /*
+    virtual ::rtl::OUString SAL_CALL getCoordinateSystemTypeID(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setScales( const ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::ExplicitScaleData >& rScales ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTransformation( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToLogicTarget, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToFinalPage ) throw (::com::sun::star::uno::RuntimeException);
+    */
+
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
 
     //-------------------
@@ -66,13 +76,14 @@ public:
     //-------------------------------------------------------------------------
     // MinimumAndMaximumSupplier
     //-------------------------------------------------------------------------
+    virtual double getMinimumX();
     virtual double getMaximumX();
     virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex );
     virtual bool isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
 
     //-------------------------------------------------------------------------
 
-    virtual LegendSymbolStyle getLegendSymbolStyle();
+    virtual ::com::sun::star::chart2::LegendSymbolStyle getLegendSymbolStyle();
     virtual ::com::sun::star::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ );
 
     //-------------------------------------------------------------------------
@@ -94,13 +105,13 @@ private: //methods
 private: //member
     PlottingPositionHelper*             m_pMainPosHelper;
 
-    bool                                m_bArea;//false -> line or symbol only
-    bool                                m_bLine;
-    bool                                m_bSymbol;
+    bool								m_bArea;//false -> line or symbol only
+    bool								m_bLine;
+    bool								m_bSymbol;
     bool                                m_bIsPolarCooSys;//used e.g. for net chart (the data labels need to be placed different)
-    bool                                m_bConnectLastToFirstPoint;//used e.g. for net chart
+    bool								m_bConnectLastToFirstPoint;//used e.g. for net chart
     bool                                m_bExpandIfValuesCloseToBorder; // e.g. false for net charts
-
+    
     sal_Int32                           m_nKeepAspectRatio; //0->no 1->yes other value->automatic
     ::com::sun::star::drawing::Direction3D m_aGivenAspectRatio; //only used if nKeepAspectRatio==1
 

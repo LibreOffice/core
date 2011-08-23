@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ DBG_NAME(OColumnControlWindow)
 //========================================================================
 OColumnControlWindow::OColumnControlWindow(Window* pParent
                                            ,const Reference<XMultiServiceFactory>& _rxFactory)
-            : OFieldDescControl(pParent,NULL)
+            : OFieldDescControl(pParent,NULL) 
             , m_xORB(_rxFactory)
             , m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
             , m_bAutoIncrementEnabled(sal_True)
@@ -73,6 +73,7 @@ void OColumnControlWindow::ActivateAggregate( EControlType eType )
     {
         case tpFormat:
         case tpDefault:
+//		case tpAutoIncrement:
         case tpColumnName:
             break;
         default:
@@ -86,6 +87,7 @@ void OColumnControlWindow::DeactivateAggregate( EControlType eType )
     {
         case tpFormat:
         case tpDefault:
+//		case tpAutoIncrement:
         case tpColumnName:
             break;
         default:
@@ -93,12 +95,12 @@ void OColumnControlWindow::DeactivateAggregate( EControlType eType )
     }
 }
 // -----------------------------------------------------------------------------
-void OColumnControlWindow::CellModified(long /*nRow*/, sal_uInt16 /*nColId*/ )
+void OColumnControlWindow::CellModified(long /*nRow*/, USHORT /*nColId*/ )
 {
     saveCurrentFieldDescData();
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::lang::Locale  OColumnControlWindow::GetLocale() const
+::com::sun::star::lang::Locale	OColumnControlWindow::GetLocale() const
 {
     return m_aLocale;
 }
@@ -129,7 +131,7 @@ TOTypeInfoSP OColumnControlWindow::getTypeInfo(sal_Int32 _nPos)
     return ( _nPos >= 0 && _nPos < static_cast<sal_Int32>(m_aDestTypeInfoIndex.size())) ? m_aDestTypeInfoIndex[_nPos]->second : TOTypeInfoSP();
 }
 // -----------------------------------------------------------------------------
-const OTypeInfoMap* OColumnControlWindow::getTypeInfo() const
+const OTypeInfoMap*	OColumnControlWindow::getTypeInfo() const
 {
     return &m_aDestTypeInfo;
 }

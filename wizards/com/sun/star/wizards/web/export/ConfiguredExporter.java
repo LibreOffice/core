@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,12 @@
  *
  ************************************************************************/
 
+/*
+ * Created on 31.10.2003
+ *
+ * To change the template for this generated file go to
+ * Window>Preferences>Java>Code Generation>Code and Comments
+ */
 package com.sun.star.wizards.web.export;
 
 import java.util.Iterator;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,15 +145,15 @@ public class ScStyleFamilyObj extends TestCase {
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Exception occurred while getting StyleFamily", e);
+                "Exception occured while getting StyleFamily", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Exception occurred while getting StyleFamily", e);
+                "Exception occured while getting StyleFamily", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Exception occurred while getting StyleFamily", e);
+                "Exception occured while getting StyleFamily", e);
         }
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());

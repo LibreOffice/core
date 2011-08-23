@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -215,7 +215,7 @@ namespace dbmm
         DocumentLogs::const_iterator docPos = m_pData->aDocumentLogs.find( _nDocID );
         if ( docPos == m_pData->aDocumentLogs.end() )
         {
-            OSL_FAIL( "MigrationLog::getNewLibraryName: document is not known!" );
+            OSL_ENSURE( false, "MigrationLog::getNewLibraryName: document is not known!" );
             return s_sEmptyString;
         }
 
@@ -231,7 +231,7 @@ namespace dbmm
                 return lib->sNewName;
         }
 
-        OSL_FAIL( "MigrationLog::getNewLibraryName: doc is known, but library isn't!" );
+        OSL_ENSURE( false, "MigrationLog::getNewLibraryName: doc is known, but library isn't!" );
         return s_sEmptyString;
     }
 
@@ -373,7 +373,7 @@ namespace dbmm
                 break;
 
             case ERR_NEW_STYLE_REPORT:
-                pAsciiErrorDescription = "#doc# could not be processed, since you don't have the Oracle Report Builder (TM) extension installed.";
+                pAsciiErrorDescription = "#doc# could not be processed, since you don't have the Sun Report Builder (TM) extension installed.";
                 aAsciiParameterNames.push_back( "#doc#" );
                 break;
 
@@ -398,7 +398,7 @@ namespace dbmm
         }
 
         //----------------------------------------------------------------
-        void lcl_describeErrors( ::rtl::OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const sal_uInt16 _nHeadingResId )
+        void lcl_describeErrors( ::rtl::OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const USHORT _nHeadingResId )
         {
             _rBuffer.appendAscii( "=== " );
             _rBuffer.append     ( String( MacroMigrationResId( _nHeadingResId ) ) );
@@ -433,7 +433,7 @@ namespace dbmm
         DocumentLogs::const_iterator docPos = m_pData->aDocumentLogs.find( _nDocID );
         if ( docPos == m_pData->aDocumentLogs.end() )
         {
-            OSL_FAIL( "MigrationLog::movedAnyLibrary: document is not known!" );
+            OSL_ENSURE( false, "MigrationLog::movedAnyLibrary: document is not known!" );
             return false;
         }
         return !docPos->second.aMovedLibraries.empty();

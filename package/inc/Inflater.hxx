@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,22 +29,19 @@
 #define _INFLATER_HXX_
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include "packagedllapi.hxx"
 
-struct z_stream_s;
-
-namespace ZipUtils {
-
-class DLLPUBLIC_PACKAGE Inflater
+extern "C"
 {
     typedef struct z_stream_s z_stream;
-
+}
+class Inflater
+{
 protected:
-    sal_Bool                bFinish, bFinished, bSetParams, bNeedDict;
-    sal_Int32               nOffset, nLength, nLastInflateError;
-    z_stream*               pStream;
-    com::sun::star::uno::Sequence < sal_Int8 >  sInBuffer;
-    sal_Int32   doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
+    sal_Bool				bFinish, bFinished, bSetParams, bNeedDict;
+    sal_Int32				nOffset, nLength, nLastInflateError;
+    z_stream*				pStream;
+    com::sun::star::uno::Sequence < sal_Int8 > 	sInBuffer;
+    sal_Int32	doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
     Inflater(sal_Bool bNoWrap = sal_False);
@@ -57,8 +54,6 @@ public:
 
     sal_Int32 getLastInflateError() { return nLastInflateError; }
 };
-
-}
 
 #endif
 

@@ -59,10 +59,9 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
-#include <boost/scoped_ptr.hpp>
 
 #include "lwpparastyle.hxx"
 #include "lwpfilehdr.hxx"
@@ -112,25 +111,25 @@ void LwpParaStyle::Read()
     if (LwpFileHeader::m_nFileRevision < 0x000B)
     {
         // read many overrides
-        LwpAlignmentOverride    aAlignOverride;
+        LwpAlignmentOverride	aAlignOverride;
         aAlignOverride.Read(m_pObjStrm);
 
-        LwpSpacingOverride  aSpacingOverride;
+        LwpSpacingOverride	aSpacingOverride;
         aSpacingOverride.Read(m_pObjStrm);
 
-        LwpIndentOverride       aIndentOverride;
+        LwpIndentOverride		aIndentOverride;
         aIndentOverride.Read(m_pObjStrm);
 
-        LwpParaBorderOverride   aPBOverride;
+        LwpParaBorderOverride	aPBOverride;
         aPBOverride.Read(m_pObjStrm);
 
-        LwpBreaksOverride   aBreaksOverride;
+        LwpBreaksOverride	aBreaksOverride;
         aBreaksOverride.Read(m_pObjStrm);
 
-        LwpNumberingOverride    aNumberingOverride;
+        LwpNumberingOverride	aNumberingOverride;
         aNumberingOverride.Read(m_pObjStrm);
 
-        LwpTabOverride      aTabOverride;
+        LwpTabOverride		aTabOverride;
         aTabOverride.Read(m_pObjStrm);
 
     }
@@ -157,15 +156,15 @@ void LwpParaStyle::Read()
     }
 }
 
-void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
+void	LwpParaStyle::Apply(XFParaStyle *pParaStyle)
 {
     assert(pParaStyle);
-    LwpVirtualPiece *pPiece = NULL;
+    LwpVirtualPiece	*pPiece = NULL;
     //alignment:
     pPiece = (LwpVirtualPiece*)m_AlignmentStyle.obj();
     if( pPiece )
     {
-        LwpAlignmentOverride    *pAlign = (LwpAlignmentOverride*)pPiece->GetOverride();
+        LwpAlignmentOverride	*pAlign = (LwpAlignmentOverride*)pPiece->GetOverride();
         if( pAlign )
                 ApplyAlignment(pParaStyle,pAlign);
     }
@@ -174,15 +173,17 @@ void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
     pPiece = (LwpVirtualPiece*)m_IndentStyle.obj();
     if( pPiece )
     {
-        LwpIndentOverride   *pIndent = (LwpIndentOverride*)pPiece->GetOverride();
+        LwpIndentOverride	*pIndent = (LwpIndentOverride*)pPiece->GetOverride();
         if( pIndent )
         {
             if (!m_pBulletOverride->IsInValid())//Add by ,for remove bullet indent in named bullet style
             {
-                boost::scoped_ptr<LwpIndentOverride> pNewIndent(pIndent->clone());
+                LwpIndentOverride* pNewIndent = new LwpIndentOverride;
+                *pNewIndent = *pIndent;
                 pNewIndent->SetMFirst(0);
                 pNewIndent->SetMRest(0);
-                ApplyIndent(NULL, pParaStyle, pNewIndent.get());
+                ApplyIndent(NULL,pParaStyle,pNewIndent);
+                delete pNewIndent;
             }
             else
                 ApplyIndent(NULL,pParaStyle,pIndent);
@@ -202,7 +203,7 @@ void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
     pPiece = (LwpVirtualPiece*)m_SpacingStyle.obj();
     if (pPiece)
     {
-        LwpSpacingOverride  *pSpacing = (LwpSpacingOverride*)pPiece->GetOverride();
+        LwpSpacingOverride	*pSpacing = (LwpSpacingOverride*)pPiece->GetOverride();
         if( pSpacing)
             ApplySpacing(NULL,pParaStyle,pSpacing);
     }
@@ -220,10 +221,10 @@ void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
         }
     }
 
-
+    // 01/28/2005
     //add tab style
     pPiece = (LwpVirtualPiece*)m_TabStyle.obj();
-    if( pPiece  )
+    if( pPiece	)
     {
         LwpTabOverride *pTab=(LwpTabOverride*)pPiece->GetOverride();
         if(pTab)
@@ -231,8 +232,9 @@ void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
             ApplyTab(pParaStyle,pTab);
         }
     }
+    //add by  2005/02/16
     pPiece = (LwpVirtualPiece*)m_BreaksStyle.obj();
-    if( pPiece  )
+    if( pPiece	)
     {
         LwpBreaksOverride *pBreak=(LwpBreaksOverride*)pPiece->GetOverride();
         if(pBreak)
@@ -240,7 +242,7 @@ void    LwpParaStyle::Apply(XFParaStyle *pParaStyle)
             ApplyBreaks(pParaStyle,pBreak);
         }
     }
-
+    //add end
 }
 
 void LwpParaStyle::ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::BorderType eType, XFBorders* pXFBorders)
@@ -264,9 +266,9 @@ void LwpParaStyle::ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::
         break;
     }
 
-    LwpColor    aColor = pBorderStuff->GetSideColor(eType);
-    float       fWidth = pBorderStuff->GetSideWidth(eType);
-    sal_uInt16  nType = pBorderStuff->GetSideType(eType);
+    LwpColor	aColor = pBorderStuff->GetSideColor(eType);
+    float		fWidth = pBorderStuff->GetSideWidth(eType);
+    sal_uInt16	nType = pBorderStuff->GetSideType(eType);
 
     switch (nType)
     {
@@ -281,7 +283,7 @@ void LwpParaStyle::ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::
         pXFBorders->SetWidthOutter(eXFBorderSide, static_cast<float>(fWidth*0.333));
         pXFBorders->SetWidthSpace(eXFBorderSide, static_cast<float>(fWidth*0.334));
         pXFBorders->SetWidthInner(eXFBorderSide, static_cast<float>(fWidth*0.333));
-//      pXFBorders->SetWidth(eXFBorderSide, fWidth);
+//		pXFBorders->SetWidth(eXFBorderSide, fWidth);
         break;
     case 0x18: //thick-thin
         pXFBorders->SetDoubleLine(eXFBorderSide, sal_True, sal_False);
@@ -311,8 +313,8 @@ void LwpParaStyle::ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverrid
     if( pShadow )
     {
         LwpColor color = pShadow->GetColor();
-        float   offsetX = pShadow->GetOffsetX();
-        float   offsetY = pShadow->GetOffsetY();
+        float	offsetX = pShadow->GetOffsetX();
+        float	offsetY = pShadow->GetOffsetY();
 
         if( offsetX && offsetY && color.IsValidColor() )
         {
@@ -341,10 +343,10 @@ void LwpParaStyle::ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverrid
     }
 
     //convert to XFBorders obejct:
-    LwpBorderStuff  *pBorderStuff = pBorder->GetBorderStuff();
+    LwpBorderStuff	*pBorderStuff = pBorder->GetBorderStuff();
     if( pBorderStuff && pBorderStuff->GetSide() != 0 )
     {
-        XFBorders   *pXFBorders = new XFBorders();
+        XFBorders	*pXFBorders = new XFBorders();
         pParaStyle->SetBorders(pXFBorders);
 
         LwpMargins* pMargins = pBorder->GetMargins();
@@ -442,13 +444,13 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
     else
         pParentPara = NULL;
 
-    std::auto_ptr<LwpIndentOverride> pTotalIndent(new LwpIndentOverride);
+    LwpIndentOverride* pTotalIndent = new LwpIndentOverride;
     if (pIndent->IsUseRelative() && pParentPara)
     {
         LwpIndentOverride* pParentIndent = pParentPara->GetIndent();
         if (!pParentIndent)
             return;
-        pTotalIndent.reset(pIndent->clone());
+        *pTotalIndent = *pIndent;
 
         //add by ,for bullet only
         if (pPara)
@@ -459,7 +461,7 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
                 pTotalIndent->SetMRight(pParentIndent->GetMRight()+ pTotalIndent->GetMRight());
                 pParaStyle->SetMargins(LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(
                     pTotalIndent->GetMAll())), pTotalIndent->GetRight());
-                pPara->SetIndent(pTotalIndent.release());
+                pPara->SetIndent(pTotalIndent);
                 return;
             }
         }
@@ -477,21 +479,21 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
 
         pParaStyle->SetIndent(pTotalIndent->GetFirst());
         pParaStyle->SetMargins(pTotalIndent->GetLeft(), pTotalIndent->GetRight());
-        pPara->SetIndent(pTotalIndent.release());
+        pPara->SetIndent(pTotalIndent);
 
     }
     else
     {
-        pTotalIndent.reset(pIndent->clone());
+        *pTotalIndent = *pIndent;
         //add by
         if (pPara)
         {
             if (pPara->GetBulletFlag())
             {
-//              pParaStyle->SetIndent(LwpTools::ConvertFromUnits(pIndent->GetMAll()));
+//				pParaStyle->SetIndent(LwpTools::ConvertFromUnits(pIndent->GetMAll()));
                 pParaStyle->SetMargins(LwpTools::ConvertToMetric(
                     LwpTools::ConvertFromUnits(pIndent->GetMAll())), pIndent->GetRight());
-                pPara->SetIndent(pTotalIndent.release());
+                pPara->SetIndent(pTotalIndent);
                 return;
             }
         }
@@ -501,7 +503,7 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
         pParaStyle->SetMargins(pIndent->GetLeft(), pIndent->GetRight());
         if (pPara)
         {
-            pPara->SetIndent(pTotalIndent.release());
+            pPara->SetIndent(pTotalIndent);
         }
     }
 }
@@ -656,20 +658,20 @@ void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRid
         double fLen = LwpTools::ConvertFromUnitsToMetric(nPos) - dMarginLeft;
 
         //get leader type
-        sal_Unicode cLeader = 0x00;
+        sal_Unicode cLeader;
         LwpTab::LeaderType leader= pTab->GetLeaderType();
         switch(leader)
         {
         case LwpTab::TL_NONE:
-            cLeader = 0x20;     //space
+            cLeader = 0x20;		//space
             break;
-        case LwpTab::TL_HYPHEN: //'-'
+        case LwpTab::TL_HYPHEN:	//'-'
             cLeader = 0xAD;
             break;
-        case LwpTab::TL_DOT:    //'.'
+        case LwpTab::TL_DOT:	//'.'
             cLeader = 0x2E;
             break;
-        case LwpTab::TL_LINE:   //'_'
+        case LwpTab::TL_LINE:	//'_'
             cLeader = 0x5F;
             break;
         }
@@ -702,7 +704,7 @@ void LwpParaStyle::RegisterStyle()
     LwpStyleManager* pStyleMgr = m_pFoundry->GetStyleManager();
     pStyleMgr->AddStyle(*GetObjectID(), pStyle);
 
-/*  // add list style for bullet
+/*	// add list style for bullet
     if (!m_pBulletOverride)
     {
         return;

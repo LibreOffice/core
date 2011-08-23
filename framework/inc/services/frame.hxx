@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_SERVICES_FRAME_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <classes/framecontainer.hxx>
@@ -49,7 +49,7 @@
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -80,7 +80,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <unotools/cmdoptions.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -88,42 +88,40 @@
 #include <rtl/string.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//	exported const
 //_________________________________________________________________________________________________________________
 
 // This enum can be used to set differnt active states of frames
 enum EActiveState
 {
-    E_INACTIVE      ,   // I'am not a member of active path in tree and i don't have the focus.
-    E_ACTIVE        ,   // I'am in the middle of an active path in tree and i don't have the focus.
-    E_FOCUS             // I have the focus now. I must a member of an active path!
+    E_INACTIVE		,	// I'am not a member of active path in tree and i don't have the focus.
+    E_ACTIVE		,	// I'am in the middle of an active path in tree and i don't have the focus.
+    E_FOCUS				// I have the focus now. I must a member of an active path!
 };
 
-class WindowCommandDispatch;
-
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//	exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short      implements a normal frame of hierarchy
+    @short		implements a normal frame of hierarchy
     @descr      An instance of these class can be a normal node in frame tree. A frame support influencing of his
                 subtree, find of subframes, activate- and deactivate-mechanism as well as
                 set/get of a frame window, component or controller.
 
-    @attention  This implementation supports three states: a)uninitialized, b)working, c)disposed
+    @attention	This implementation supports three states: a)uninitialized, b)working, c)disposed
                 If you call wrong methods in modes a) or c) ... you will get some exceptions.
                 How you should work with this service:
-                    i)      create it by using "xServiceManager->createInstance(...)"
-                    ii)     call XInitialization::initialize() with a valid window reference or use createInstanceWithArguments() at i)
-                    iii)    works with object
-                    iv)     dispose object by calling XComponent::dispose()
+                    i) 		create it by using "xServiceManager->createInstance(...)"
+                    ii)		call XInitialization::initialize() with a valid window reference or use createInstanceWithArguments() at i)
+                    iii)	works with object
+                    iv)		dispose object by calling XComponent::dispose()
                 After iv) all further requests are rejected by exceptions! (DisposedException)
 
     @base       ThreadHelpBase
@@ -136,21 +134,21 @@ class WindowCommandDispatch;
     @base       OWeakObject
                     provides the refcount and XInterface, XWeak
 
-    @devstatus  ready to use
-    @threadsafe yes
+    @devstatus	ready to use
+    @threadsafe	yes
     @modified   04.10.2004 10:47, as96863
 *//*-*************************************************************************************************************/
-class Frame :   // interfaces
-                public  css::lang::XTypeProvider                    ,
-                public  css::lang::XServiceInfo                     ,
-                public  css::frame::XFramesSupplier                 ,   // => XFrame => XComponent
-                public  css::frame::XDispatchProvider               ,
-                public  css::frame::XDispatchProviderInterception   ,
-                public  css::frame::XDispatchInformationProvider    ,
-                public  css::task::XStatusIndicatorFactory          ,
-                public  css::awt::XWindowListener                   ,   // => XEventListener
-                public  css::awt::XTopWindowListener                ,
-                public  css::awt::XFocusListener                    ,
+class Frame	:	// interfaces
+                public	css::lang::XTypeProvider					,
+                public	css::lang::XServiceInfo						,
+                public	css::frame::XFramesSupplier					,	// => XFrame => XComponent
+                public	css::frame::XDispatchProvider				,
+                public	css::frame::XDispatchProviderInterception	,
+                public	css::frame::XDispatchInformationProvider	,
+                public	css::task::XStatusIndicatorFactory			,
+                public	css::awt::XWindowListener					,	// => XEventListener
+                public	css::awt::XTopWindowListener				,
+                public	css::awt::XFocusListener					,
                 public  css::document::XActionLockable              ,
                 public  css::util::XCloseable                       ,   // => XCloseBroadcaster
                 public  css::frame::XComponentLoader                ,
@@ -161,22 +159,22 @@ class Frame :   // interfaces
                 public  ThreadHelpBase                              ,
                 public  TransactionBase                             ,
                 public  PropertySetHelper                           ,   // helper implements ThreadHelpbase, TransactionBase, XPropertySet, XPropertySetInfo
-                public  ::cppu::OWeakObject                             // helper implements XInterface, XWeak
+                public	::cppu::OWeakObject								// helper implements XInterface, XWeak
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
-                  Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
-        virtual ~Frame(                                                                         );
+                  Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory	);
+        virtual	~Frame(																			);
 
         //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider, XServiceInfo
+        //	XInterface, XTypeProvider, XServiceInfo
         //---------------------------------------------------------------------------------------------------------
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
@@ -194,100 +192,100 @@ class Frame :   // interfaces
 
 
         //---------------------------------------------------------------------------------------------------------
-        //  XFramesSupplier
+        //	XFramesSupplier
         //---------------------------------------------------------------------------------------------------------
-        virtual css::uno::Reference< css::frame::XFrames >          SAL_CALL getFrames                          (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual css::uno::Reference< css::frame::XFrame >           SAL_CALL getActiveFrame                     (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL setActiveFrame                     (   const   css::uno::Reference< css::frame::XFrame >&                          xFrame              ) throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::frame::XFrames >			SAL_CALL getFrames	  						(																									) throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::frame::XFrame > 			SAL_CALL getActiveFrame						(																									) throw( css::uno::RuntimeException );
+        virtual void									  			SAL_CALL setActiveFrame						(	const	css::uno::Reference< css::frame::XFrame >&							xFrame				) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XFrame
+        //	XFrame
         //---------------------------------------------------------------------------------------------------------
-        virtual void                                                SAL_CALL initialize                         (   const   css::uno::Reference< css::awt::XWindow >&                           xWindow             ) throw( css::uno::RuntimeException );
-        virtual css::uno::Reference< css::awt::XWindow >            SAL_CALL getContainerWindow                 (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL setCreator                         (   const   css::uno::Reference< css::frame::XFramesSupplier >&                 xCreator            ) throw( css::uno::RuntimeException );
-        virtual css::uno::Reference< css::frame::XFramesSupplier >  SAL_CALL getCreator                         (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual ::rtl::OUString                                     SAL_CALL getName                            (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL setName                            (   const   ::rtl::OUString&                                                    sName               ) throw( css::uno::RuntimeException );
-        virtual css::uno::Reference< css::frame::XFrame >           SAL_CALL findFrame                          (   const   ::rtl::OUString&                                                    sTargetFrameName    ,
-                                                                                                                            sal_Int32                                                           nSearchFlags        ) throw( css::uno::RuntimeException );
-        virtual sal_Bool                                            SAL_CALL isTop                              (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL activate                           (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL deactivate                         (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual sal_Bool                                            SAL_CALL isActive                           (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL contextChanged                     (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual sal_Bool                                            SAL_CALL setComponent                       (   const   css::uno::Reference< css::awt::XWindow >&                           xComponentWindow    ,
-                                                                                                                    const   css::uno::Reference< css::frame::XController >&                     xController         ) throw( css::uno::RuntimeException );
-        virtual css::uno::Reference< css::awt::XWindow >            SAL_CALL getComponentWindow                 (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual css::uno::Reference< css::frame::XController >      SAL_CALL getController                      (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL addFrameActionListener             (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL removeFrameActionListener          (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           ) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL initialize							(	const	css::uno::Reference< css::awt::XWindow >&							xWindow				) throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::awt::XWindow >			SAL_CALL getContainerWindow					(																									) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL setCreator							(	const	css::uno::Reference< css::frame::XFramesSupplier >&					xCreator			) throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::frame::XFramesSupplier >	SAL_CALL getCreator							(																									) throw( css::uno::RuntimeException );
+        virtual ::rtl::OUString										SAL_CALL getName							(																									) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL setName							(	const	::rtl::OUString&													sName				) throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::frame::XFrame >			SAL_CALL findFrame							(	const	::rtl::OUString&													sTargetFrameName	,
+                                                                                                                            sal_Int32															nSearchFlags		) throw( css::uno::RuntimeException );
+        virtual sal_Bool											SAL_CALL isTop								(																									) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL activate							(																									) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL deactivate							(																									) throw( css::uno::RuntimeException );
+        virtual sal_Bool											SAL_CALL isActive							(																									) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL contextChanged						(																									) throw( css::uno::RuntimeException );
+        virtual sal_Bool											SAL_CALL setComponent						(	const	css::uno::Reference< css::awt::XWindow >&							xComponentWindow	,
+                                                                                                                    const	css::uno::Reference< css::frame::XController >&						xController			) throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::awt::XWindow >			SAL_CALL getComponentWindow					(																									) throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::frame::XController >		SAL_CALL getController						(																									) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL addFrameActionListener				(	const	css::uno::Reference< css::frame::XFrameActionListener >&			xListener			) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL removeFrameActionListener			(	const	css::uno::Reference< css::frame::XFrameActionListener >&			xListener			) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XComponent
+        //	XComponent
         //---------------------------------------------------------------------------------------------------------
-        virtual void                                                SAL_CALL dispose                            (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL addEventListener                   (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL removeEventListener                (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           ) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL dispose							(																									) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL addEventListener					(	const	css::uno::Reference< css::lang::XEventListener >&					xListener			) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL removeEventListener				(	const	css::uno::Reference< css::lang::XEventListener >&					xListener			) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XStatusIndicatorFactory
+        //	XStatusIndicatorFactory
         //---------------------------------------------------------------------------------------------------------
-        virtual css::uno::Reference< css::task::XStatusIndicator >  SAL_CALL createStatusIndicator              (                                                                                                   ) throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::task::XStatusIndicator >	SAL_CALL createStatusIndicator				(																									) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XDispatchProvider
+        //	XDispatchProvider
         //---------------------------------------------------------------------------------------------------------
-        virtual css::uno::Reference< css::frame::XDispatch >        SAL_CALL queryDispatch                      (   const   css::util::URL&                                                     aURL                ,
-                                                                                                                    const   ::rtl::OUString&                                                    sTargetFrameName    ,
-                                                                                                                            sal_Int32                                                           nSearchFlags        ) throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::frame::XDispatch >		SAL_CALL queryDispatch						(	const	css::util::URL&														aURL				,
+                                                                                                                    const	::rtl::OUString&													sTargetFrameName	,
+                                                                                                                            sal_Int32															nSearchFlags		) throw( css::uno::RuntimeException );
         virtual css::uno::Sequence<
-                    css::uno::Reference< css::frame::XDispatch > >  SAL_CALL queryDispatches                    (   const   css::uno::Sequence< css::frame::DispatchDescriptor >&               lDescriptor         ) throw( css::uno::RuntimeException );
+                    css::uno::Reference< css::frame::XDispatch > >	SAL_CALL queryDispatches					(	const	css::uno::Sequence< css::frame::DispatchDescriptor >&				lDescriptor	   		) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XDispatchProviderInterception
+        //	XDispatchProviderInterception
         //---------------------------------------------------------------------------------------------------------
-        virtual void                                                SAL_CALL registerDispatchProviderInterceptor(   const   css::uno::Reference< css::frame::XDispatchProviderInterceptor >&    xInterceptor        ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL releaseDispatchProviderInterceptor (   const   css::uno::Reference< css::frame::XDispatchProviderInterceptor >&    xInterceptor        ) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL registerDispatchProviderInterceptor(	const	css::uno::Reference< css::frame::XDispatchProviderInterceptor >&	xInterceptor		) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL releaseDispatchProviderInterceptor	(	const	css::uno::Reference< css::frame::XDispatchProviderInterceptor >&	xInterceptor		) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XDispatchInformationProvider
+        //	XDispatchInformationProvider
         //---------------------------------------------------------------------------------------------------------
         virtual css::uno::Sequence< sal_Int16 >                       SAL_CALL getSupportedCommandGroups         (                       ) throw (css::uno::RuntimeException);
         virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup) throw (css::uno::RuntimeException);
 
         //---------------------------------------------------------------------------------------------------------
-        //  XWindowListener
+        //	XWindowListener
         //  Attention: windowResized() and windowShown() are implement only! All other are empty!
         //---------------------------------------------------------------------------------------------------------
-        virtual void                                                SAL_CALL windowResized                      (   const   css::awt::WindowEvent&                                              aEvent              ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL windowMoved                        (   const   css::awt::WindowEvent&                                              /*aEvent*/          ) throw( css::uno::RuntimeException ) {};
+        virtual void												SAL_CALL windowResized						(	const	css::awt::WindowEvent&												aEvent				) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL windowMoved						(	const	css::awt::WindowEvent&												/*aEvent*/     		) throw( css::uno::RuntimeException ) {};
         virtual void                                                SAL_CALL windowShown                        (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL windowHidden                       (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XFocusListener
-        //  Attention: focusLost() not implemented yet!
+        //	XFocusListener
+        //	Attention: focusLost() not implemented yet!
         //---------------------------------------------------------------------------------------------------------
-        virtual void                                                SAL_CALL focusGained                        (   const   css::awt::FocusEvent&                                               aEvent              ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL focusLost                          (   const   css::awt::FocusEvent&                                               /*aEvent*/          ) throw( css::uno::RuntimeException ) {};
+        virtual void												SAL_CALL focusGained						(	const	css::awt::FocusEvent&												aEvent				) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL focusLost							(	const	css::awt::FocusEvent&												/*aEvent*/			) throw( css::uno::RuntimeException ) {};
 
         //---------------------------------------------------------------------------------------------------------
-        //  XTopWindowListener
+        //	XTopWindowListener
         //  Attention: windowActivated(), windowDeactivated() and windowClosing() are implement only! All other are empty!
         //---------------------------------------------------------------------------------------------------------
-        virtual void                                                SAL_CALL windowActivated                    (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL windowDeactivated                  (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL windowOpened                       (   const   css::lang::EventObject&                                             /*aEvent*/          ) throw( css::uno::RuntimeException ) {};
+        virtual void												SAL_CALL windowActivated					(	const	css::lang::EventObject&												aEvent				) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL windowDeactivated					(	const	css::lang::EventObject&												aEvent				) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL windowOpened						(	const	css::lang::EventObject&												/*aEvent*/			) throw( css::uno::RuntimeException ) {};
         virtual void                                                SAL_CALL windowClosing                      (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL windowClosed                       (   const   css::lang::EventObject&                                             /*aEvent*/          ) throw( css::uno::RuntimeException ) {};
-        virtual void                                                SAL_CALL windowMinimized                    (   const   css::lang::EventObject&                                             /*aEvent*/          ) throw( css::uno::RuntimeException ) {};
-        virtual void                                                SAL_CALL windowNormalized                   (   const   css::lang::EventObject&                                             /*aEvent*/          ) throw( css::uno::RuntimeException ) {};
+        virtual void												SAL_CALL windowMinimized					(	const	css::lang::EventObject&												/*aEvent*/     		) throw( css::uno::RuntimeException ) {};
+        virtual void												SAL_CALL windowNormalized					(	const	css::lang::EventObject&												/*aEvent*/			) throw( css::uno::RuntimeException ) {};
 
         //---------------------------------------------------------------------------------------------------------
         //  XEventListener
         //---------------------------------------------------------------------------------------------------------
-        virtual void                                                SAL_CALL disposing                          (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
+        virtual void												SAL_CALL disposing							(	const	css::lang::EventObject&												aEvent				) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XActionLockable
@@ -323,7 +321,7 @@ class Frame :   // interfaces
         virtual void SAL_CALL removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListenr ) throw (css::uno::RuntimeException);
 
         //---------------------------------------------------------------------------------------------------------
-        //  PropertySetHelper => XPropertySet, XPropertySetInfo
+        //	PropertySetHelper => XPropertySet, XPropertySetInfo
         //---------------------------------------------------------------------------------------------------------
     private:
 
@@ -337,14 +335,14 @@ class Frame :   // interfaces
                                                                    sal_Int32        nHandle  );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short      helper methods
-            @descr      Follow methods are needed at different points of our code (more then ones!).
+            @short		helper methods
+            @descr		Follow methods are needed at different points of our code (more then ones!).
 
             @attention  Threadsafe methods are signed by "implts_..."!
         *//*-*****************************************************************************************************/
@@ -357,7 +355,7 @@ class Frame :   // interfaces
         void                                                    implts_stopWindowListening      (                                                                        );
         void                                                    implts_saveWindowAttributes     (                                                                        );
         void                                                    implts_checkSuicide             (                                                                        );
-        void                                                    implts_forgetSubFrames          (                                                                        );
+        void													implts_forgetSubFrames			(																		 );
         DECL_LINK( implts_windowClosing, void* );
         css::uno::Reference< css::awt::XTopWindow >             impl_searchTopWindow            ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
 
@@ -369,26 +367,26 @@ class Frame :   // interfaces
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor(                                                                        );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
+    //	debug methods
+    //	(should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
+            @short		debug-method to check incoming parameter of some other mehods of this class
+            @descr		The following methods are used to check parameters for other methods
                         of this class. The return value is used directly for an ASSERT(...).
 
-            @attention  This methods are static and can't use our member directly! It's better for threadsafe code...
+            @attention	This methods are static and can't use our member directly! It's better for threadsafe code...
                         because we call it with references or pointer to check variables ... and must make it safe
                         by himself!
 
-            @seealso    ASSERTs in implementation!
+            @seealso	ASSERTs in implementation!
 
-            @param      references to checking variables
-            @return     sal_True  ,on invalid parameter
-            @return     sal_False ,otherwise
+            @param		references to checking variables
+            @return		sal_True  ,on invalid parameter
+            @return		sal_False ,otherwise
 
-            @onerror    We return sal_True
+            @onerror	We return sal_True
         *//*-*****************************************************************************************************/
 
     #ifdef ENABLE_ASSERTIONS
@@ -407,11 +405,11 @@ class Frame :   // interfaces
         static sal_Bool implcp_windowDeactivated                   (   const   css::lang::EventObject&                                             aEvent              );
         static sal_Bool implcp_disposing                           (   const   css::lang::EventObject&                                             aEvent              );
 
-    #endif  // #ifdef ENABLE_ASSERTIONS
+    #endif	// #ifdef ENABLE_ASSERTIONS
 
     //*************************************************************************************************************
-    //  variables
-    //  -threadsafe by own read/write lock "m_aLock"
+    //	variables
+    //	-threadsafe by own read/write lock "m_aLock"
     //*************************************************************************************************************
     private:
 
@@ -439,8 +437,6 @@ class Frame :   // interfaces
         css::uno::Reference< ::com::sun::star::frame::XLayoutManager >    m_xLayoutManager                    ;   /// is used to layout the child windows of the frame.
         css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper               ;
         css::uno::Reference< css::frame::XTitle >                               m_xTitleHelper                      ;
-
-        WindowCommandDispatch*                                                  m_pWindowCommandDispatch            ;
 
     protected:
 
@@ -476,10 +472,10 @@ class Frame :   // interfaces
             return m_xParent;
         }
 
-};      // class Frame
+};		// class Frame
 
-}       // namespace framework
+}		// namespace framework
 
-#endif  // #ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
+#endif	// #ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svx/ActionDescriptionProvider.hxx"
-#include "svx/svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "ActionDescriptionProvider.hxx"
+#include "svdglob.hxx"
+#include "svdstr.hrc"
 
 ::rtl::OUString ActionDescriptionProvider::createDescription( ActionType eActionType
                         , const ::rtl::OUString& rObjectName )
 {
-    sal_uInt16 nResID=0;
+    USHORT nResID=0;
     switch( eActionType )
     {
     case INSERT:

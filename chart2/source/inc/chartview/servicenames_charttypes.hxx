@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,14 +33,14 @@ namespace chart
 {
 //.............................................................................
 
-#define CHART2_VIEW_BARCHART_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.view.BarChart_Impl" ))
-#define CHART2_VIEW_BARCHART_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.view.BarChart" ))
+#define CHART2_VIEW_BARCHART_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.view.BarChart_Impl")
+#define CHART2_VIEW_BARCHART_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.view.BarChart")
 
-#define CHART2_VIEW_PIECHART_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.view.PieChart_Impl" ))
-#define CHART2_VIEW_PIECHART_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.view.PieChart" ))
+#define CHART2_VIEW_PIECHART_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.view.PieChart_Impl")
+#define CHART2_VIEW_PIECHART_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.view.PieChart")
 
-#define CHART2_VIEW_AREACHART_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.view.AreaChart_Impl" ))
-#define CHART2_VIEW_AREACHART_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.view.AreaChart" ))
+#define CHART2_VIEW_AREACHART_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.view.AreaChart_Impl")
+#define CHART2_VIEW_AREACHART_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.view.AreaChart")
 
 //.............................................................................
 } //namespace chart

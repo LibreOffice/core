@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <svtools/itemdel.hxx>
+#include "itemdel.hxx"
 #include <vcl/svapp.hxx>
 #include <tools/errcode.hxx>
 #include <limits.h>
@@ -47,7 +47,7 @@ DBG_NAME(SfxItemDesruptor_Impl);
 class SfxItemDesruptor_Impl
 {
     SfxPoolItem *pItem;
-    Link         aLink;
+    Link		 aLink;
 
 private:
                  DECL_LINK( Delete, void * );
@@ -125,7 +125,7 @@ void DeleteOnIdleItems()
      = ImpSvtData::GetSvtData().pItemDesruptList;
     if ( rpList )
     {
-        sal_uInt16 n;
+        USHORT n;
         while ( 0 != ( n = rpList->Count() ) )
             // Remove ist implizit im Dtor
             delete rpList->GetObject( n-1 );

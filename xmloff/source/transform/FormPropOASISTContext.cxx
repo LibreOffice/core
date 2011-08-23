@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include "MutableAttrList.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include "ActionMapTypesOASIS.hxx"
 #include "AttrTransformerAction.hxx"
@@ -42,17 +42,17 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-TYPEINIT1( XMLFormPropOASISTransformerContext,
+TYPEINIT1( XMLFormPropOASISTransformerContext, 
                 XMLRenameElemTransformerContext );
 
-XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType(
+XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType( 
                 const OUString& rValue )
 {
     XMLTokenEnum eRet = XML_DOUBLE;
     sal_Bool bNeg = sal_False;
     sal_uInt32 nVal = 0;
 
-    sal_Int32 nPos = 0;
+    sal_Int32 nPos = 0L;
     sal_Int32 nLen = rValue.getLength();
 
     // skip white space
@@ -95,11 +95,11 @@ XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType(
     return eRet;
 }
 
-XMLFormPropOASISTransformerContext::XMLFormPropOASISTransformerContext(
-        XMLTransformerBase& rImp,
+XMLFormPropOASISTransformerContext::XMLFormPropOASISTransformerContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
         XMLTokenEnum eLocalName ) :
-    XMLRenameElemTransformerContext( rImp, rQName, XML_NAMESPACE_FORM,
+    XMLRenameElemTransformerContext( rImp, rQName, XML_NAMESPACE_FORM, 
                                        XML_PROPERTY ),
     m_bIsList( XML_LIST_PROPERTY == eLocalName),
     m_bIsListValue( XML_LIST_VALUE == eLocalName)
@@ -110,7 +110,7 @@ XMLFormPropOASISTransformerContext::~XMLFormPropOASISTransformerContext()
 {
 }
 
-void XMLFormPropOASISTransformerContext::StartElement(
+void XMLFormPropOASISTransformerContext::StartElement( 
     const Reference< XAttributeList >& rAttrList )
 {
 
@@ -118,7 +118,7 @@ void XMLFormPropOASISTransformerContext::StartElement(
         GetTransformer().GetUserDefinedActions( OASIS_FORM_PROP_ACTIONS );
     OSL_ENSURE( pActions, "go no actions" );
 
-    XMLMutableAttributeList *pMutableAttrList =
+    XMLMutableAttributeList *pMutableAttrList = 
         new XMLMutableAttributeList( rAttrList );
     Reference< XAttributeList > xAttrList( pMutableAttrList );
 
@@ -131,7 +131,7 @@ void XMLFormPropOASISTransformerContext::StartElement(
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, 
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -156,10 +156,10 @@ void XMLFormPropOASISTransformerContext::StartElement(
                     }
                 }
                 {
-                    OUString aNewAttrQName(
-                        GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                (*aIter).second.GetQNamePrefixFromParam1(),
-                                ::xmloff::token::GetXMLToken(
+                    OUString aNewAttrQName( 
+                        GetTransformer().GetNamespaceMap().GetQNameByKey( 
+                                (*aIter).second.GetQNamePrefixFromParam1(), 
+                                ::xmloff::token::GetXMLToken( 
                                     (*aIter).second.GetQNameTokenFromParam1()) ) );
                     pMutableAttrList->RenameAttributeByIndex( i, aNewAttrQName );
                 }
@@ -179,9 +179,9 @@ void XMLFormPropOASISTransformerContext::StartElement(
     }
     if( m_bIsList )
     {
-        OUString aNewAttrQName(
-                GetTransformer().GetNamespaceMap().GetQNameByKey(
-                    XML_NAMESPACE_FORM,
+        OUString aNewAttrQName( 
+                GetTransformer().GetNamespaceMap().GetQNameByKey( 
+                    XML_NAMESPACE_FORM, 
                     GetXMLToken( XML_PROPERTY_IS_LIST ) ) );
         pMutableAttrList->AddAttribute( aNewAttrQName,
                                         GetXMLToken( XML_TRUE ) );
@@ -195,22 +195,22 @@ void XMLFormPropOASISTransformerContext::StartElement(
         XMLRenameElemTransformerContext::StartElement( xAttrList );
     if( !m_bIsList )
     {
-        pMutableAttrList =
+        pMutableAttrList = 
             new XMLMutableAttributeList;
         xAttrList = pMutableAttrList;
         if( bIsVoid )
         {
-            OUString aNewAttrQName(
-                GetTransformer().GetNamespaceMap().GetQNameByKey(
+            OUString aNewAttrQName( 
+                GetTransformer().GetNamespaceMap().GetQNameByKey( 
                     XML_NAMESPACE_FORM, GetXMLToken( XML_PROPERTY_IS_VOID ) ) );
             pMutableAttrList->AddAttribute( aNewAttrQName,
                                         GetXMLToken( XML_TRUE ) );
         }
 
-        OUString aValueElemQName(
-            GetTransformer().GetNamespaceMap().GetQNameByKey(
+        OUString aValueElemQName( 
+            GetTransformer().GetNamespaceMap().GetQNameByKey( 
                     XML_NAMESPACE_FORM, GetXMLToken( XML_PROPERTY_VALUE ) ) );
-        GetTransformer().GetDocHandler()->startElement( aValueElemQName,
+        GetTransformer().GetDocHandler()->startElement( aValueElemQName, 
                                                         xAttrList );
         GetTransformer().GetDocHandler()->characters( aValue );
         GetTransformer().GetDocHandler()->endElement( aValueElemQName );

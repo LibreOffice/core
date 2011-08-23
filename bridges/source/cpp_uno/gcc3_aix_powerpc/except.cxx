@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: except.cxx,v $
+ * $Revision: 1.7 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -32,7 +35,7 @@
 #include <stdio.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -102,7 +105,7 @@ static OUString toUNOname( char const * p ) SAL_THROW( () )
 //==================================================================================================
 class RTTI
 {
-    typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
+    typedef hash_map< OUString, type_info *, OUStringHash > t_rtti_map;
 
     Mutex m_mutex;
         t_rtti_map m_rttis;

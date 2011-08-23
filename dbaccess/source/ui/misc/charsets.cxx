@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_dbaccess.hxx"
 
 #include "charsets.hxx"
-#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include "dbu_misc.hrc"
 #include <rtl/tencinfo.h>
 #include <tools/rcid.h>
@@ -122,7 +122,7 @@ namespace dbaui
         :CharsetDisplayDerefHelper_Base(_rBase)
         ,m_sDisplayName(_rDisplayName)
     {
-        OSL_ENSURE( m_sDisplayName.getLength(), "CharsetDisplayDerefHelper::CharsetDisplayDerefHelper: invalid display name!" );
+        DBG_ASSERT( m_sDisplayName.getLength(), "CharsetDisplayDerefHelper::CharsetDisplayDerefHelper: invalid display name!" );
     }
 
     //=========================================================================
@@ -133,7 +133,7 @@ namespace dbaui
         :m_pContainer(_pContainer)
         ,m_aPosition(_rPosition)
     {
-        OSL_ENSURE(m_pContainer, "OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator : invalid container!");
+        DBG_ASSERT(m_pContainer, "OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator : invalid container!");
     }
 
     //-------------------------------------------------------------------------
@@ -146,7 +146,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     CharsetDisplayDerefHelper OCharsetDisplay::ExtendedCharsetIterator::operator*() const
     {
-        OSL_ENSURE( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator* : invalid position!");
+        DBG_ASSERT( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator* : invalid position!");
 
         rtl_TextEncoding eEncoding = (*m_aPosition).getEncoding();
         return CharsetDisplayDerefHelper(
@@ -156,18 +156,18 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator++()
+    const OCharsetDisplay::ExtendedCharsetIterator&	OCharsetDisplay::ExtendedCharsetIterator::operator++()
     {
-        OSL_ENSURE( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator++ : invalid position!");
+        DBG_ASSERT( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator++ : invalid position!");
         if ( m_aPosition != m_pContainer->OCharsetDisplay_Base::end() )
             ++m_aPosition;
         return *this;
     }
 
     //-------------------------------------------------------------------------
-    const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator--()
+    const OCharsetDisplay::ExtendedCharsetIterator&	OCharsetDisplay::ExtendedCharsetIterator::operator--()
     {
-        OSL_ENSURE( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin(), "OCharsetDisplay::ExtendedCharsetIterator::operator-- : invalid position!");
+        DBG_ASSERT( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin(), "OCharsetDisplay::ExtendedCharsetIterator::operator-- : invalid position!");
         if ( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin() )
             --m_aPosition;
         return *this;
@@ -180,7 +180,7 @@ namespace dbaui
     }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

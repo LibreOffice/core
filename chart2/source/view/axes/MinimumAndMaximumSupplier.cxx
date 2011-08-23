@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,6 @@
 #include "precompiled_chart2.hxx"
 
 #include "MinimumAndMaximumSupplier.hxx"
-
-#include <com/sun/star/chart/TimeUnit.hpp>
-
 #include <rtl/math.hxx>
 #include <com/sun/star/awt/Size.hpp>
 
@@ -198,24 +195,6 @@ bool MergedMinimumAndMaximumSupplier::isSeperateStackingForDifferentSigns( sal_I
 void MergedMinimumAndMaximumSupplier::clearMinimumAndMaximumSupplierList()
 {
     m_aMinimumAndMaximumSupplierList.clear();
-}
-
-long MergedMinimumAndMaximumSupplier::calculateTimeResolutionOnXAxis()
-{
-    long nRet = ::com::sun::star::chart::TimeUnit::YEAR;
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-    {
-        long nCurrent = (*aIt)->calculateTimeResolutionOnXAxis();
-        if(nRet>nCurrent)
-            nRet=nCurrent;
-    }
-    return nRet;
-}
-
-void MergedMinimumAndMaximumSupplier::setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate )
-{
-    for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        (*aIt)->setTimeResolutionOnXAxis( nTimeResolution, rNullDate );
 }
 
 //.............................................................................

@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: b2dmultirange.cxx,v $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,10 +43,10 @@
 #include <algorithm>
 #include <vector>
 
-static basegfx::B2VectorOrientation flipOrientation(
+static basegfx::B2VectorOrientation flipOrientation( 
     basegfx::B2VectorOrientation eOrient)
 {
-    return eOrient == basegfx::ORIENTATION_POSITIVE ?
+    return eOrient == basegfx::ORIENTATION_POSITIVE ? 
         basegfx::ORIENTATION_NEGATIVE : basegfx::ORIENTATION_POSITIVE;
 }
 
@@ -149,11 +152,11 @@ namespace basegfx
 
         void appendPolyRange(const ImplB2DPolyRange& rPolyRange)
         {
-            maRanges.insert(maRanges.end(),
-                            rPolyRange.maRanges.begin(),
+            maRanges.insert(maRanges.end(), 
+                            rPolyRange.maRanges.begin(), 
                             rPolyRange.maRanges.end());
-            maOrient.insert(maOrient.end(),
-                            rPolyRange.maOrient.begin(),
+            maOrient.insert(maOrient.end(), 
+                            rPolyRange.maOrient.begin(), 
                             rPolyRange.maOrient.end());
             updateBounds();
         }
@@ -198,7 +201,7 @@ namespace basegfx
             // cannot use boost::bind here, since isInside is overloaded.
             // It is currently not possible to resolve the overload
             // by considering one of the other template arguments.
-            std::vector<B2DRange>::const_iterator       aCurr( maRanges.begin() );
+            std::vector<B2DRange>::const_iterator 		aCurr( maRanges.begin() );
             const std::vector<B2DRange>::const_iterator aEnd ( maRanges.end() );
             while( aCurr != aEnd )
                 if( aCurr->isInside( rValue ) )
@@ -213,7 +216,7 @@ namespace basegfx
                 return false;
 
             const std::vector<B2DRange>::const_iterator aEnd( maRanges.end() );
-            return std::find_if( maRanges.begin(),
+            return std::find_if( maRanges.begin(), 
                                  aEnd,
                                  boost::bind<bool>( boost::mem_fn( &B2DRange::overlaps ),
                                                     _1,
@@ -258,8 +261,8 @@ namespace basegfx
         }
 
     private:
-        B2DRange                         maBounds;
-        std::vector<B2DRange>            maRanges;
+        B2DRange						 maBounds;
+        std::vector<B2DRange>			 maRanges;
         std::vector<B2VectorOrientation> maOrient;
     };
 
@@ -273,7 +276,7 @@ namespace basegfx
     B2DPolyRange::B2DPolyRange( const ElementType& rElem ) :
         mpImpl( ImplB2DPolyRange( rElem ) )
     {}
-
+    
     B2DPolyRange::B2DPolyRange( const B2DRange& rRange, B2VectorOrientation eOrient ) :
         mpImpl( ImplB2DPolyRange( rRange, eOrient ) )
     {}
@@ -380,7 +383,7 @@ namespace basegfx
     {
         return mpImpl->isInside(rTuple);
     }
-
+    
     bool B2DPolyRange::isInside( const B2DRange& rRange ) const
     {
         return mpImpl->isInside(rRange);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace dbaui
     class OFieldDescription;
     //==================================================================
     // Ableitung von TabPage ist ein Trick von TH,
-    // um Aenderungen der Systemfarben zu bemerken
+    // um Aenderungen der Systemfarben zu bemerken (Bug #53905)
     class OTableFieldDescWin : public TabPage
                                 ,public IClipboardTest
     {
@@ -51,10 +51,10 @@ namespace dbaui
             NONE
         };
     private:
-        OTableDesignHelpBar*    m_pHelpBar;
-        OFieldDescGenWin*       m_pGenPage;
-        FixedText*              m_pHeader;
-        ChildFocusState         m_eChildFocus;
+        OTableDesignHelpBar*	m_pHelpBar;
+        OFieldDescGenWin*		m_pGenPage;
+        FixedText*				m_pHeader;
+        ChildFocusState			m_eChildFocus;
 
         IClipboardTest* getActiveChild() const;
 
@@ -70,23 +70,23 @@ namespace dbaui
 
         void DisplayData( OFieldDescription* pFieldDescr );
         void SaveData( OFieldDescription* pFieldDescr );
-        void SetReadOnly( sal_Bool bReadOnly );
+        void SetReadOnly( BOOL bReadOnly );
 
         // window overloads
         virtual long PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
         virtual void LoseFocus();
 
-        void SetControlText( sal_uInt16 nControlId, const String& rText )
+        void SetControlText( USHORT nControlId, const String& rText )
                 { m_pGenPage->SetControlText(nControlId,rText); }
-        String GetControlText( sal_uInt16 nControlId )
+        String GetControlText( USHORT nControlId )
                 { return m_pGenPage->GetControlText(nControlId); }
 
-        //  short GetFormatCategory(OFieldDescription* pFieldDescr) { return m_pGenPage ? m_pGenPage->GetFormatCategory(pFieldDescr) : -1; }
+        //	short GetFormatCategory(OFieldDescription* pFieldDescr) { return m_pGenPage ? m_pGenPage->GetFormatCategory(pFieldDescr) : -1; }
             // liefert zum am Feld eingestellten Format einen der CAT_xxx-Werte (CAT_NUMBER, CAT_DATE ...)
 
-        String  BoolStringPersistent(const String& rUIString) const { return m_pGenPage->BoolStringPersistent(rUIString); }
-        String  BoolStringUI(const String& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }
+        String	BoolStringPersistent(const String& rUIString) const { return m_pGenPage->BoolStringPersistent(rUIString); }
+        String	BoolStringUI(const String& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }
 
         // IClipboardTest
         virtual sal_Bool isCutAllowed();
@@ -99,7 +99,7 @@ namespace dbaui
         virtual void paste();
 
         inline OFieldDescGenWin* getGenPage() const { return m_pGenPage; }
-        inline OTableDesignHelpBar* getHelpBar() const { return m_pHelpBar; }
+        inline OTableDesignHelpBar*	getHelpBar() const { return m_pHelpBar; }
 
     };
 }

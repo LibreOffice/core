@@ -48,7 +48,7 @@ SHL1OBJS=  \
     $(SLO)$/test_comtools.obj
 
 SHL1TARGET= test_comtools
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) uuid.lib
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB) uuid.lib
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -66,4 +66,5 @@ SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk
+.INCLUDE : _cppunit.mk
+

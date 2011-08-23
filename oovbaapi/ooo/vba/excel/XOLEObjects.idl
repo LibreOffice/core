@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,10 +27,12 @@
 #ifndef __ooo_vba_excel_XOLEObjects_idl__
 #define __ooo_vba_excel_XOLEObjects_idl__
 
+#ifndef __ooo_vba_XCollection_idl__
 #include <ooo/vba/XCollection.idl>
+#endif
 //=============================================================================
 
-module ooo {  module vba {  module excel {
+module ooo {  module vba {  module excel { 
 
 
 //=============================================================================

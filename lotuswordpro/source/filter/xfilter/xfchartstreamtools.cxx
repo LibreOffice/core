@@ -56,7 +56,7 @@
 /*****************************************************************************
 * Change History
 * <<Date>> <<Name of editor>> <<Description>>
-2005/2      draft code for implementation of chart stream helpers
+2005/2		draft code for implementation of chart stream helpers
 ****************************************************************************/
 
 /**
@@ -74,7 +74,7 @@
 /**
 * @short   Parse the xml stream
 * @param  rInpStream the xml stream
-* @param   aHandler xml handler
+* @param   aHandler	xml handler
 */
 void XFChartStreamTools::ParseStream(SvStorageStreamRef rInpStream, Reference<XDocumentHandler> aHandler)
 {
@@ -89,7 +89,7 @@ void XFChartStreamTools::ParseStream(SvStorageStreamRef rInpStream, Reference<XD
             return;
         }
         xParser = uno::Reference< xml::sax::XParser > (
-            xServiceFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
+            xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )),
             uno::UNO_QUERY );
 
         if( ! xParser.is() )
@@ -106,9 +106,9 @@ void XFChartStreamTools::ParseStream(SvStorageStreamRef rInpStream, Reference<XD
 }
 
 /**
-* @short    Parse the xml stream, content.xml & styles.xml for chart
-* @param    rStyleStream    styles xml stream
-* @param    rCntStream  the content xml stream
+* @short	Parse the xml stream, content.xml & styles.xml for chart
+* @param	rStyleStream	styles xml stream
+* @param	rCntStream	the content xml stream
 * @param   pOutputStream the output stream
 */
 void XFChartStreamTools::ParseStream(SvStorageStreamRef rCntStream,IXFStream* pOutputStream)

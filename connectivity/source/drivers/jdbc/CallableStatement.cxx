@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,6 +44,7 @@
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -72,7 +73,7 @@ Any SAL_CALL java_sql_CallableStatement::queryInterface( const Type & rType ) th
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL java_sql_CallableStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< starsdbc::XRow > *)0 ),
+    ::cppu::OTypeCollection aTypes(	::getCppuType( (const ::com::sun::star::uno::Reference< starsdbc::XRow > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< starsdbc::XOutParameters > *)0 ));
 
     return ::comphelper::concatSequences(aTypes.getTypes(),java_sql_PreparedStatement::getTypes());
@@ -164,9 +165,9 @@ Any SAL_CALL java_sql_CallableStatement::getObject( sal_Int32 columnIndex, const
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    callObjectMethodWithIntArg(t.pEnv,"getObject","(I)Ljava/lang/Object;", mID, columnIndex);
-    // WARNING: the caller becomes the owner of the returned pointer
-    return Any();
+    /*jobject out = */callObjectMethodWithIntArg(t.pEnv,"getObject","(I)Ljava/lang/Object;", mID, columnIndex);
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    return Any(); //out==0 ? 0 : new java_lang_Object( t.pEnv, out );
 }
 
 sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
@@ -194,7 +195,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getTime","(I)Ljava/sql/Time;", mID, columnIndex);
-    // WARNING: the caller becomes the owner of the returned pointer
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out ? static_cast <com::sun::star::util::Time> (java_sql_Time( t.pEnv, out )) : ::com::sun::star::util::Time();
 }
 
@@ -204,7 +205,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getTimestamp","(I)Ljava/sql/Timestamp;", mID, columnIndex);
-    // WARNING: the caller becomes the owner of the returned pointer
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out ? static_cast <com::sun::star::util::DateTime> (java_sql_Timestamp( t.pEnv, out )) : ::com::sun::star::util::DateTime();
 }
 
@@ -213,17 +214,17 @@ void SAL_CALL java_sql_CallableStatement::registerOutParameter( sal_Int32 parame
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
         createStatement(t.pEnv);
 
-        // initialize temporary variable
+        // temporaere Variable initialisieren
         static const char * cSignature = "(IILjava/lang/String;)V";
         static const char * cMethodName = "registerOutParameter";
-        // execute Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        // Convert Parameter
+        // Parameter konvertieren
         jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,typeName));
         t.pEnv->CallVoidMethod( object, mID, parameterIndex,sqlType,str.get());
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -234,13 +235,13 @@ void SAL_CALL java_sql_CallableStatement::registerNumericOutParameter( sal_Int32
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
         createStatement(t.pEnv);
-        // initialize temporary variable
+        // temporaere Variable initialisieren
         static const char * cSignature = "(III)V";
         static const char * cMethodName = "registerOutParameter";
-        // execute Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         t.pEnv->CallVoidMethod( object, mID, parameterIndex,sqlType,scale);
@@ -252,7 +253,7 @@ jclass java_sql_CallableStatement::theClass = 0;
 
 jclass java_sql_CallableStatement::getMyClass() const
 {
-    // the class must be fetched only once, therefore static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/CallableStatement");
     return theClass;
@@ -275,7 +276,7 @@ Reference< starsdbc::XArray > SAL_CALL java_sql_CallableStatement::getArray( sal
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getArray","(I)Ljava/sql/Array;", mID, columnIndex);
-    // WARNING: the caller becomes the owner of the returned pointer
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? 0 : new java_sql_Array( t.pEnv, out );
 }
 
@@ -285,7 +286,7 @@ Reference< starsdbc::XClob > SAL_CALL java_sql_CallableStatement::getClob( sal_I
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getClob","(I)Ljava/sql/Clob;", mID, columnIndex);
-    // WARNING: the caller becomes the owner of the returned pointer
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? 0 : new java_sql_Clob( t.pEnv, out );
 }
 Reference< starsdbc::XBlob > SAL_CALL java_sql_CallableStatement::getBlob( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
@@ -294,7 +295,7 @@ Reference< starsdbc::XBlob > SAL_CALL java_sql_CallableStatement::getBlob( sal_I
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getBlob","(I)Ljava/sql/Blob;", mID, columnIndex);
-    // WARNING: the caller becomes the owner of the returned pointer
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? 0 : new java_sql_Blob( t.pEnv, out );
 }
 
@@ -304,7 +305,7 @@ Reference< starsdbc::XRef > SAL_CALL java_sql_CallableStatement::getRef( sal_Int
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getRef","(I)Ljava/sql/Ref;", mID, columnIndex);
-    // WARNING: the caller becomes the owner of the returned pointer
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? 0 : new java_sql_Ref( t.pEnv, out );
 }
 // -----------------------------------------------------------------------------
@@ -326,12 +327,12 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv && !object ){
-        // initialize temporary variable
+        // temporaere Variable initialisieren
         static const char * cSignature = "(Ljava/lang/String;II)Ljava/sql/CallableStatement;";
         static const char * cMethodName = "prepareCall";
-        // execute Java-Call
+        // Java-Call absetzen
         jobject out = NULL;
-        // convert Parameter
+        // Parameter konvertieren
         jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,m_sSqlStatement));
 
         static jmethodID mID(NULL);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_svtools.hxx"
 
 // this file contains code from filectrl.cxx which needs to be compiled with enabled exception hanling
-#include <svtools/filectrl.hxx>
+#include <filectrl.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <vcl/unohelp.hxx>
@@ -49,7 +49,7 @@ void FileControl::ImplBrowseFile( )
     {
         XubString aNewText;
 
-        const ::rtl::OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
+        const ::rtl::OUString sServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" );
 
         Reference< XMultiServiceFactory > xMSF = vcl::unohelper::GetMultiServiceFactory();
         Reference < dialogs::XFilePicker > xFilePicker( xMSF->createInstance( sServiceName ), UNO_QUERY );
@@ -89,7 +89,7 @@ void FileControl::ImplBrowseFile( )
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FileControl::ImplBrowseFile: caught an exception while executing the file picker!" );
+        DBG_ERROR( "FileControl::ImplBrowseFile: caught an exception while executing the file picker!" );
     }
 }
 

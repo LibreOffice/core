@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,18 +25,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-#include "cpp.h"
-
 #include <stdlib.h>
 #include <string.h>
+#include "cpp.h"
 
-#define NSTAK   32
-#define SGN 0
-#define UNS 1
-#define UND 2
+#define	NSTAK	32
+#define	SGN	0
+#define	UNS	1
+#define	UND	2
 
-#define UNSMARK 0x1000
+#define	UNSMARK	0x1000
 
 struct value
 {
@@ -45,12 +43,12 @@ struct value
 };
 
 /* conversion types */
-#define RELAT   1
-#define ARITH   2
-#define LOGIC   3
-#define SPCL    4
-#define SHIFT   5
-#define UNARY   6
+#define	RELAT	1
+#define	ARITH	2
+#define	LOGIC	3
+#define	SPCL	4
+#define	SHIFT	5
+#define	UNARY	6
 
 /* operator priority, arity, and conversion type, indexed by tokentype */
 struct pri
@@ -739,10 +737,10 @@ struct value
                     }
                     else
                     {
-                        static char cvcon[] = "b\bf\fn\nr\rt\tv\v''\"\"??\\\\";
-                        static int  cvlen = sizeof(cvcon) - 1;
+                        static char cvcon[]
+                        = "b\bf\fn\nr\rt\tv\v''\"\"??\\\\";
 
-                        for (i = 0; i < cvlen; i += 2)
+                        for (i = 0; i < (int)sizeof(cvcon); i += 2)
                         {
                             if (*p == cvcon[i])
                             {
@@ -751,8 +749,9 @@ struct value
                             }
                         }
                         p += 1;
-                        if (i >= cvlen)
-                            error(WARNING,"Undefined escape in character constant");
+                        if (i >= (int)sizeof(cvcon))
+                            error(WARNING,
+                               "Undefined escape in character constant");
                     }
             }
             else

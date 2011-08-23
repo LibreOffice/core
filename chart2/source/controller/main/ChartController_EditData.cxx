@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,15 +63,17 @@ void ChartController::executeDispatch_EditData()
         Reference< ::com::sun::star::chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider());
 
         {
+            // /--
             SolarMutexGuard aSolarGuard;
             // using assignment for broken gcc 3.3
             UndoLiveUpdateGuardWithData aUndoGuard = UndoLiveUpdateGuardWithData(
-                String( SchResId( STR_ACTION_EDIT_CHART_DATA )),
-                m_xUndoManager );
+                ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHART_DATA ))),
+                m_xUndoManager, getModel() );
             DataEditor aDataEditorDialog( pParent, xChartDoc, m_xCC );
             // the dialog has no OK/Cancel
             aDataEditorDialog.Execute();
-            aUndoGuard.commit();
+            aUndoGuard.commitAction();
+            // \--
         }
     }
 }

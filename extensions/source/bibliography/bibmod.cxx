@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ using namespace ::com::sun::star::ucb;
 #define C2U(cChar) OUString::createFromAscii(cChar)
 #define C2S(cChar) String::CreateFromAscii(cChar)
 
-HdlBibModul OpenBibModul()
+HdlBibModul	OpenBibModul()
 {
     if(pBibModul==NULL)
     {
@@ -93,12 +93,12 @@ BibModul::~BibModul()
     pBibConfig = 0;
 }
 
-BibDataManager*  BibModul::createDataManager()
+BibDataManager*	 BibModul::createDataManager()
 {
     return new BibDataManager();
 }
 //-----------------------------------------------------------------------------
-BibConfig*  BibModul::GetConfig()
+BibConfig*	BibModul::GetConfig()
 {
     if(! pBibConfig)
         pBibConfig = new BibConfig;
@@ -112,10 +112,13 @@ STATIC_USTRING(FM_PROP_LABEL,C2U("Label"));
 STATIC_USTRING(FM_PROP_CONTROLSOURCE,C2U("DataField"));
 STATIC_USTRING(FM_PROP_NAME,C2U("Name"));
 STATIC_USTRING(FM_PROP_FORMATKEY,C2U("FormatKey"));
+#ifdef TF_SDBAPI
+#else // !TF_SDBAPI
 STATIC_USTRING(FM_PROP_EDITMODE,C2U("RecordMode"));
 STATIC_USTRING(FM_PROP_CURSORSOURCETYPE,C2U("DataSelectionType"));
 STATIC_USTRING(FM_PROP_CURSORSOURCE,C2U("DataSelection"));
 STATIC_USTRING(FM_PROP_DATASOURCE, C2U("DataSource"));
+#endif // !TF_SDBAPI
 STATIC_USTRING(FM_PROP_VALUE,C2U("Value"));
 STATIC_USTRING(FM_PROP_TEXT,C2U("Text"));
 

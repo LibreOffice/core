@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ public:
             using Container::GetObject;
             using Container::GetPos;
 
-            Stack( sal_uInt16 _nInitSize = 16, sal_uInt16 _nReSize = 16 ) :
+            Stack( USHORT _nInitSize = 16, USHORT _nReSize = 16 ) :
                 Container( CONTAINER_MAXBLOCKSIZE, _nInitSize, _nReSize ) {}
             Stack( const Stack& rStack ) : Container( rStack ) {}
 
@@ -56,9 +56,9 @@ public:
     Stack&  operator =( const Stack& rStack )
                 { Container::operator =( rStack ); return *this; }
 
-    sal_Bool    operator ==( const Stack& rStack ) const
+    BOOL    operator ==( const Stack& rStack ) const
                 { return Container::operator ==( rStack ); }
-    sal_Bool    operator !=( const Stack& rStack ) const
+    BOOL    operator !=( const Stack& rStack ) const
                 { return Container::operator !=( rStack ); }
 };
 
@@ -70,11 +70,11 @@ public:
 class ClassName : private Stack                                     \
 {                                                                   \
 public:                                                             \
-                using Stack::Clear;                                 \
-                using Stack::Count;                                 \
+                using Stack::Clear;									\
+                using Stack::Count;									\
                                                                     \
-                ClassName( sal_uInt16 _nInitSize = 16,                  \
-                       sal_uInt16 _nReSize = 16 ) :                     \
+                ClassName( USHORT _nInitSize = 16,                  \
+                       USHORT _nReSize = 16 ) :                     \
                     Stack( _nInitSize, _nReSize ) {}                \
                 ClassName( const ClassName& rClassName ) :          \
                     Stack( rClassName ) {}                          \
@@ -83,12 +83,12 @@ public:                                                             \
     Type        Pop()          { return (Type)Stack::Pop(); }       \
     Type        Top() const    { return (Type)Stack::Top(); }       \
                                                                     \
-    Type        GetObject( sal_uIntPtr nIndex ) const                     \
+    Type        GetObject( ULONG nIndex ) const                     \
                     { return (Type)Stack::GetObject( nIndex ); }    \
-    sal_uIntPtr       GetPos( const Type p ) const                        \
+    ULONG       GetPos( const Type p ) const                        \
                     { return Stack::GetPos( (const void*)p ); }     \
-    sal_uIntPtr       GetPos( const Type p, sal_uIntPtr nStartIndex,            \
-                        sal_Bool bForward = sal_True ) const                \
+    ULONG       GetPos( const Type p, ULONG nStartIndex,            \
+                        BOOL bForward = TRUE ) const                \
                     { return Stack::GetPos( (const void*)p,         \
                                             nStartIndex,            \
                                             bForward ); }           \
@@ -97,9 +97,9 @@ public:                                                             \
                     { Stack::operator =( rClassName );              \
                       return *this; }                               \
                                                                     \
-    sal_Bool        operator ==( const ClassName& rStack ) const        \
+    BOOL        operator ==( const ClassName& rStack ) const        \
                     { return Stack::operator ==( rStack ); }        \
-    sal_Bool        operator !=( const ClassName& rStack ) const        \
+    BOOL        operator !=( const ClassName& rStack ) const        \
                     { return Stack::operator !=( rStack ); }        \
 };
 

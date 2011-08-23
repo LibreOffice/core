@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ struct BrandName : public ::rtl::StaticWithInit<const ::rtl::OUString, BrandName
 class DpGuiResId : public ResId
 {
 public:
-    DpGuiResId( sal_uInt16 nId ):ResId( nId, *DeploymentGuiResMgr::get() ) {}
+    DpGuiResId( USHORT nId ):ResId( nId, *DeploymentGuiResMgr::get() ) {}
 };
 
 } // namespace dp_gui

@@ -2,7 +2,6 @@
 #ifdef __MINGW32__
 #define _GDI32_
 #include "macros.h"
-#include <w32api.h>
 #include <multimon.h>
 extern "C" {
 extern HMODULE hModuleUnicowsDLL;
@@ -10,7 +9,7 @@ extern HMODULE hModuleUnicowsDLL;
 
 EXTERN_C void WINAPI ResolveThunk_UNICOWS( FARPROC *lppfn, LPCSTR lpLibFileName, LPCSTR lpFuncName, FARPROC lpfnFailure )
 {
-    FARPROC lpfnResult = (((LONG)GetVersion()&0x800000ff) == 0x80000004) ? GetProcAddress( hModuleUnicowsDLL, lpFuncName ) : GetProcAddress( LoadLibraryA( lpLibFileName ), lpFuncName );
+    FARPROC	lpfnResult = (((LONG)GetVersion()&0x800000ff) == 0x80000004) ? GetProcAddress( hModuleUnicowsDLL, lpFuncName ) : GetProcAddress( LoadLibraryA( lpLibFileName ), lpFuncName );
 
     if ( !lpfnResult )
         lpfnResult = lpfnFailure;
@@ -24,14 +23,14 @@ static FARPROC WINAPI GetProcAddress_Failure (HINSTANCE,LPCSTR);
 static void GetProcAddress_Thunk()
 {
     ResolveThunk_UNICOWS( &kernel32_GetProcAddress_Ptr, "kernel32.dll", "GetProcAddress", (FARPROC)GetProcAddress_Failure );
-    asm("   movl    %ebp, %esp");
-    asm("   popl    %ebp");
-    asm("   jmp *(%0)"::"m"(kernel32_GetProcAddress_Ptr));
+    asm("	movl	%ebp, %esp");
+    asm("	popl	%ebp");
+    asm("	jmp	*(%0)"::"m"(kernel32_GetProcAddress_Ptr));
 }
 EXTERN_C FARPROC WINAPI Internal_GetProcAddress (HINSTANCE,LPCSTR)
 {
-    asm("   popl    %ebp");
-    asm("   jmp *(%0)"::"m"(kernel32_GetProcAddress_Ptr));
+    asm("	popl	%ebp");
+    asm("	jmp	*(%0)"::"m"(kernel32_GetProcAddress_Ptr));
 }
 static FARPROC WINAPI GetProcAddress_Failure (HINSTANCE,LPCSTR)
 {
@@ -46,14 +45,14 @@ static rettype calltype func##_##Failure params; \
 static void func##_Thunk() \
 { \
     ResolveThunk_UNICOWS( &module##_##func##_Ptr, #module ".dll", #func, (FARPROC)func##_##Failure ); \
-    asm("   movl    %ebp, %esp"); \
-    asm("   popl    %ebp"); \
-    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+    asm("	movl	%ebp, %esp"); \
+    asm("	popl	%ebp"); \
+    asm("	jmp	*(%0)"::"m"(module##_##func##_Ptr)); \
 } \
 EXTERN_C rettype calltype func params \
 { \
-    asm("   popl    %ebp"); \
-    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+    asm("	popl	%ebp"); \
+    asm("	jmp	*(%0)"::"m"(module##_##func##_Ptr)); \
 } \
 static rettype calltype func##_##Failure params \
 { \
@@ -463,11 +462,7 @@ DEFINE_UNICOWS_THUNK( kernel32, BOOL, WINAPI, UpdateResourceW, (HANDLE,LPCWSTR,L
 DEFINE_UNICOWS_THUNK( version, DWORD, WINAPI, VerFindFileW, (DWORD,LPWSTR,LPWSTR,LPWSTR,LPWSTR,PUINT,LPWSTR,PUINT) )
 DEFINE_UNICOWS_THUNK( version, DWORD, WINAPI, VerInstallFileW, (DWORD,LPWSTR,LPWSTR,LPWSTR,LPWSTR,LPWSTR,LPWSTR,PUINT) )
 DEFINE_UNICOWS_THUNK( kernel32, DWORD, WINAPI, VerLanguageNameW, (DWORD,LPWSTR,DWORD) )
-#if ( __W32API_MAJOR_VERSION > 3 ) || ( __W32API_MAJOR_VERSION == 3 && __W32API_MINOR_VERSION > 13 )
-DEFINE_UNICOWS_THUNK( version, BOOL, WINAPI, VerQueryValueW, (const LPVOID,LPCWSTR,LPVOID*,PUINT) )
-#else
 DEFINE_UNICOWS_THUNK( version, BOOL, WINAPI, VerQueryValueW, (const LPVOID,LPWSTR,LPVOID*,PUINT) )
-#endif
 DEFINE_UNICOWS_THUNK( user32, SHORT, WINAPI, VkKeyScanExW, (WCHAR,HKL) )
 DEFINE_UNICOWS_THUNK( user32, SHORT, WINAPI, VkKeyScanW, (WCHAR) )
 DEFINE_UNICOWS_THUNK( user32, DWORD, WINAPI, SetupDecompressOrCopyFileW, (PCWSTR,PCWSTR,PUINT) )

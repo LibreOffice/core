@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,10 +52,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
+using namespace rtl;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
-
-using ::rtl::OUString;
 
 
 // The client
@@ -98,7 +97,7 @@ private:
     // If m_bActive == sal_True then events are fired to XDropTargetListener s,
     // none otherwise. The default value is sal_True.
     sal_Bool m_bActive;
-    sal_Int8    m_nDefaultActions;
+    sal_Int8	m_nDefaultActions;
 
     // This value is set when a XDropTargetListener calls accept or reject on
     // the XDropTargetDropContext or  XDropTargetDragContext.
@@ -110,7 +109,7 @@ private:
     Reference<XTransferable> m_currentData;
     // The current action is used to determine if the USER
     // action has changed (dropActionChanged)
-//  sal_Int8 m_userAction;
+//	sal_Int8 m_userAction;
     // Set by listeners when they call XDropTargetDropContext::dropComplete
     sal_Bool m_bDropComplete;
     // converts IDataObject objects to XTransferable objects.

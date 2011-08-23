@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ module com { module sun { module star { module ucb {
 published struct NumberedSortingInfo
 {
     //-------------------------------------------------------------------------
-    /** sort the result set by this column. Index starts with <code>1</code>.
+    /** sort the resultset by this column. Index starts with <code>1</code>.
     */
     long ColumnIndex;
 

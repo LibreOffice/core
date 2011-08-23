@@ -63,7 +63,7 @@ using namespace ::com::sun::star::uno;
 -(Reference<XAccessibleContext>)accessibleContext;
 @end
 
-static BOOL isPopupMenuOpen = NO;
+static MacOSBOOL isPopupMenuOpen = NO;
 
 @implementation AquaA11yWrapper : NSView
 
@@ -154,7 +154,7 @@ static BOOL isPopupMenuOpen = NO;
 // (getter without parameter) attributeNameHereAttribute
 // (getter with parameter)    attributeNameHereAttributeForParameter:
 // (setter)                   setAttributeNameHereAttributeForElement:to:
--(SEL)selectorForAttribute:(NSString *)attribute asGetter:(BOOL)asGetter withGetterParameter:(BOOL)withGetterParameter {
+-(SEL)selectorForAttribute:(NSString *)attribute asGetter:(MacOSBOOL)asGetter withGetterParameter:(MacOSBOOL)withGetterParameter {
     SEL selector = nil;
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     @try {
@@ -197,7 +197,7 @@ static BOOL isPopupMenuOpen = NO;
     return Reference < XAccessible > ();
 }
 
--(BOOL)isFirstRadioButtonInGroup {
+-(MacOSBOOL)isFirstRadioButtonInGroup {
     Reference < XAccessible > rFirstMateAccessible = [ self getFirstRadioButtonInGroup ];
     if ( rFirstMateAccessible.is() && rFirstMateAccessible -> getAccessibleContext().get() == [ self accessibleContext ] ) {
         return YES;
@@ -693,12 +693,12 @@ static BOOL isPopupMenuOpen = NO;
     return value;
 }
 
--(BOOL)accessibilityIsIgnored {
+-(MacOSBOOL)accessibilityIsIgnored {
     // #i90575# guard NSAccessibility protocol against unwanted access
     if ( isPopupMenuOpen ) {
         return nil;
     }
-    BOOL ignored = NO;
+    MacOSBOOL ignored = NO;
     sal_Int16 nRole = [ self accessibleContext ] -> getAccessibleRole();
     switch ( nRole ) {
         case AccessibleRole::PANEL:
@@ -796,8 +796,8 @@ static BOOL isPopupMenuOpen = NO;
     }
 }
 
--(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
-    BOOL isSettable = NO;
+-(MacOSBOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
+    MacOSBOOL isSettable = NO;
     if ( [ self accessibleText ] != nil ) {
         isSettable = [ AquaA11yTextWrapper isAttributeSettable: attribute forElement: self ];
     }
@@ -830,7 +830,7 @@ static BOOL isPopupMenuOpen = NO;
     return nil; // TODO: to be completed
 }
 
--(BOOL)accessibilitySetOverrideValue:(id)value forAttribute:(NSString *)attribute {
+-(MacOSBOOL)accessibilitySetOverrideValue:(id)value forAttribute:(NSString *)attribute {
     return NO; // TODO
 }
 
@@ -904,7 +904,7 @@ static BOOL isPopupMenuOpen = NO;
     // get some information
     NSString * role = (NSString *) [ self accessibilityAttributeValue: NSAccessibilityRoleAttribute ];
     id enabledAttr = [ self enabledAttribute ];
-    BOOL enabled = [ enabledAttr boolValue ];
+    MacOSBOOL enabled = [ enabledAttr boolValue ];
     NSView * parent = (NSView *) [ self accessibilityAttributeValue: NSAccessibilityParentAttribute ];
     AquaA11yWrapper * parentAsWrapper = nil;
     if ( [ parent isKindOfClass: [ AquaA11yWrapper class ] ] ) {
@@ -947,8 +947,8 @@ static BOOL isPopupMenuOpen = NO;
 #pragma mark -
 #pragma mark Hit Test
 
--(BOOL)isViewElement:(NSObject *)viewElement hitByPoint:(NSPoint)point {
-    BOOL hit = NO;
+-(MacOSBOOL)isViewElement:(NSObject *)viewElement hitByPoint:(NSPoint)point {
+    MacOSBOOL hit = NO;
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     NSValue * position = [ viewElement accessibilityAttributeValue: NSAccessibilityPositionAttribute ];
     NSValue * size = [ viewElement accessibilityAttributeValue: NSAccessibilitySizeAttribute ];
@@ -1127,15 +1127,15 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
     return mDefaultFontsize;
 }
 
--(void)setActsAsRadioGroup:(BOOL)actsAsRadioGroup {
+-(void)setActsAsRadioGroup:(MacOSBOOL)actsAsRadioGroup {
     mActsAsRadioGroup = actsAsRadioGroup;
 }
 
--(BOOL)actsAsRadioGroup {
+-(MacOSBOOL)actsAsRadioGroup {
     return mActsAsRadioGroup;
 }
 
-+(void)setPopupMenuOpen:(BOOL)popupMenuOpen {
++(void)setPopupMenuOpen:(MacOSBOOL)popupMenuOpen {
     isPopupMenuOpen = popupMenuOpen;
 }
 

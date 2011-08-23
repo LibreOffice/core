@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,8 @@
 #include <uno/mapping.h>
 #include <uno/lbnames.h>
 
-using ::rtl::OUString;
+using namespace rtl;
+
 
 namespace pseudo_uno
 {
@@ -45,10 +46,10 @@ namespace pseudo_uno
 //==================================================================================================
 struct pseudo_Mapping : public uno_Mapping
 {
-    oslInterlockedCount     nRef;
+    oslInterlockedCount		nRef;
 
-    uno_ExtEnvironment *    pFrom;
-    uno_ExtEnvironment *    pTo;
+    uno_ExtEnvironment *	pFrom;
+    uno_ExtEnvironment *	pTo;
 
     pseudo_Mapping( uno_ExtEnvironment * pFrom_, uno_ExtEnvironment * pTo_ );
     ~pseudo_Mapping();
@@ -57,13 +58,13 @@ struct pseudo_Mapping : public uno_Mapping
 //==== a uno pseudo proxy =============================================================================
 struct pseudo_unoInterfaceProxy : public uno_Interface
 {
-    oslInterlockedCount                 nRef;
-    pseudo_Mapping *                    pPseudoMapping;
+    oslInterlockedCount					nRef;
+    pseudo_Mapping *					pPseudoMapping;
 
     // mapping information
-    uno_Interface *                     pUnoI; // wrapped interface
-    typelib_InterfaceTypeDescription *  pTypeDescr;
-    OUString                            oid;
+    uno_Interface *						pUnoI; // wrapped interface
+    typelib_InterfaceTypeDescription *	pTypeDescr;
+    OUString							oid;
 
     // ctor
     inline pseudo_unoInterfaceProxy( pseudo_Mapping * pPseudoMapping_,
@@ -244,7 +245,7 @@ pseudo_Mapping::~pseudo_Mapping()
 //##################################################################################################
 extern "C" void SAL_CALL uno_initEnvironment( uno_Environment * pUnoEnv )
 {
-    OSL_FAIL( "### no impl: unexpected call!" );
+    OSL_ENSURE( sal_False, "### no impl: unexpected call!" );
 }
 //##################################################################################################
 extern "C" void SAL_CALL uno_ext_getMapping(
@@ -254,7 +255,7 @@ extern "C" void SAL_CALL uno_ext_getMapping(
     if (ppMapping && pFrom && pTo && pFrom->pExtEnv && pTo->pExtEnv)
     {
         uno_Mapping * pMapping = 0;
-
+        
         if (0 == rtl_ustr_ascii_compare( pFrom->pTypeName->buffer, UNO_LB_UNO ) &&
             0 == rtl_ustr_ascii_compare( pTo->pTypeName->buffer, UNO_LB_UNO ))
         {
@@ -266,7 +267,7 @@ extern "C" void SAL_CALL uno_ext_getMapping(
                                  (uno_Environment *)pTo->pExtEnv,
                                  aMappingPurpose.pData );
         }
-
+        
         if (*ppMapping)
             (*(*ppMapping)->release)( *ppMapping );
         *ppMapping = pMapping;

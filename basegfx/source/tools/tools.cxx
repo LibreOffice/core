@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,18 +41,18 @@ namespace basegfx
     {
         namespace
         {
-            inline double distance( const double&                   nX,
-                                    const double&                   nY,
-                                    const ::basegfx::B2DVector&     rNormal,
-                                    const double&                   nC )
+            inline double distance( const double&					nX,
+                                    const double&					nY,
+                                    const ::basegfx::B2DVector& 	rNormal, 
+                                    const double&					nC )
             {
                 return nX*rNormal.getX() + nY*rNormal.getY() - nC;
             }
 
-            void moveLineOutsideRect( ::basegfx::B2DPoint&          io_rStart,
-                                      ::basegfx::B2DPoint&          io_rEnd,
-                                      const ::basegfx::B2DVector&   rMoveDirection,
-                                      const ::basegfx::B2DRange&    rFitTarget      )
+            void moveLineOutsideRect( ::basegfx::B2DPoint& 			io_rStart,
+                                      ::basegfx::B2DPoint& 			io_rEnd,
+                                      const ::basegfx::B2DVector&	rMoveDirection,
+                                      const ::basegfx::B2DRange&	rFitTarget		)
             {
                 // calc c for normal line form equation n x - c = 0
                 const double nC( rMoveDirection.scalar( io_rStart ) );
@@ -61,17 +61,17 @@ namespace basegfx
                 // rect corners to the line
                 const double nMaxDistance( ::std::max(
                                                0.0,
-                                               ::std::max(
+                                               ::std::max( 
                                                    distance(rFitTarget.getMinX(),
                                                             rFitTarget.getMinY(),
                                                             rMoveDirection,
                                                             nC),
-                                                   ::std::max(
+                                                   ::std::max( 
                                                        distance(rFitTarget.getMinX(),
                                                                 rFitTarget.getMaxY(),
                                                                 rMoveDirection,
                                                                 nC),
-                                                       ::std::max(
+                                                       ::std::max( 
                                                            distance(rFitTarget.getMaxX(),
                                                                     rFitTarget.getMinY(),
                                                                     rMoveDirection,
@@ -89,11 +89,11 @@ namespace basegfx
             }
         }
 
-        void infiniteLineFromParallelogram( ::basegfx::B2DPoint&        io_rLeftTop,
-                                            ::basegfx::B2DPoint&        io_rLeftBottom,
-                                            ::basegfx::B2DPoint&        io_rRightTop,
-                                            ::basegfx::B2DPoint&        io_rRightBottom,
-                                            const ::basegfx::B2DRange&  rFitTarget  )
+        void infiniteLineFromParallelogram( ::basegfx::B2DPoint& 		io_rLeftTop,
+                                            ::basegfx::B2DPoint& 		io_rLeftBottom,
+                                            ::basegfx::B2DPoint& 		io_rRightTop,
+                                            ::basegfx::B2DPoint& 		io_rRightBottom,
+                                            const ::basegfx::B2DRange&	rFitTarget	)
         {
             // For the top and bottom border line of the
             // parallelogram, we determine the distance to all four
@@ -115,7 +115,7 @@ namespace basegfx
 
             const ::basegfx::B2DVector aNormalTop( aDirectionVertical );
             const ::basegfx::B2DVector aNormalBottom( -aDirectionVertical );
-
+            
             // now extend parallelogram, such that the bound rect
             // point are included
             moveLineOutsideRect( io_rLeftTop, io_rRightTop, aNormalTop, rFitTarget );

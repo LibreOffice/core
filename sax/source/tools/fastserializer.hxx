@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,23 +36,17 @@
 #include <cppuhelper/implbase2.hxx>
 
 #include <stack>
-#include <map>
-
-#include <boost/shared_ptr.hpp>
 
 #include "sax/dllapi.h"
 #include "sax/fshelper.hxx"
 
-#define SERIALIZER_IMPLEMENTATION_NAME  "com.sun.star.comp.extensions.xml.sax.FastSerializer"
-#define SERIALIZER_SERVICE_NAME     "com.sun.star.xml.sax.FastSerializer"
+#define SERIALIZER_IMPLEMENTATION_NAME	"com.sun.star.comp.extensions.xml.sax.FastSerializer"
+#define SERIALIZER_SERVICE_NAME		"com.sun.star.xml.sax.FastSerializer"
 
 namespace sax_fastparser {
 
 class SAX_DLLPUBLIC FastSaxSerializer : public ::cppu::WeakImplHelper2< ::com::sun::star::xml::sax::XFastSerializer, ::com::sun::star::lang::XServiceInfo >
 {
-    typedef ::com::sun::star::uno::Sequence< ::sal_Int8 > Int8Sequence;
-    typedef ::com::sun::star::uno::Sequence< ::sal_Int32 > Int32Sequence;
-
 public:
     explicit            FastSaxSerializer(  );
     virtual             ~FastSaxSerializer();
@@ -60,8 +54,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream() {return mxOutputStream;}
 
     // The implementation details
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString >   getSupportedServiceNames_Static(void);
-    static ::rtl::OUString                                      getImplementationName_Static();
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > 	getSupportedServiceNames_Static(void);
+    static ::rtl::OUString 				                        getImplementationName_Static();
 
     // XFastSerializer
     virtual void SAL_CALL startDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -108,7 +102,7 @@ public:
           mergeTopMarks( true ), mergeTopMarks(), /r, /p
         and you are done.
      */
-    void mark( Int32Sequence aOrder = Int32Sequence() );
+    void mark();
 
     /** Merge 2 topmost marks.
 
@@ -131,6 +125,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > mxOutputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxFastTokenHandler;
 
+    typedef ::com::sun::star::uno::Sequence< ::sal_Int8 > Int8Sequence;
     class ForMerge
     {
         Int8Sequence maData;
@@ -138,56 +133,25 @@ private:
 
     public:
         ForMerge() : maData(), maPostponed() {}
-        virtual ~ForMerge() {}
 
-        virtual void setCurrentElement( ::sal_Int32 /*nToken*/ ) {}
-        virtual Int8Sequence& getData();
+        Int8Sequence& getData();
 #if DEBUG
-        virtual void print();
+        void print();
 #endif
 
-        virtual void prepend( const Int8Sequence &rWhat );
-        virtual void append( const Int8Sequence &rWhat );
+        void prepend( const Int8Sequence &rWhat );
+        void append( const Int8Sequence &rWhat );
         void postpone( const Int8Sequence &rWhat );
-
-    protected:
-        void resetData( );
-        static void merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend );
-    };
-
-    class ForSort : public ForMerge
-    {
-        std::map< ::sal_Int32, Int8Sequence > maData;
-        sal_Int32 mnCurrentElement;
-
-        Int32Sequence maOrder;
-
-    public:
-        ForSort( Int32Sequence aOrder ) :
-            ForMerge(),
-            maData(),
-            mnCurrentElement( 0 ),
-            maOrder( aOrder ) {}
-
-        void setCurrentElement( ::sal_Int32 nToken );
-
-        virtual Int8Sequence& getData();
-
-#if DEBUG
-        virtual void print();
-#endif
-
-        virtual void prepend( const Int8Sequence &rWhat );
-        virtual void append( const Int8Sequence &rWhat );
+        
     private:
-        void sort();
+        static void merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend );
     };
 
 #if DEBUG
         void printMarkStack( );
 #endif
 
-    ::std::stack< boost::shared_ptr< ForMerge > > maMarkStack;
+    ::std::stack< ForMerge > maMarkStack;
 
     void writeFastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
     void write( const ::rtl::OUString& s );

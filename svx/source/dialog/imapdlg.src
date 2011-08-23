@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,6 @@
  // RID_SVXDLG_IMAP ----------------------------------------------------
 ModelessDialog RID_SVXDLG_IMAP
 {
-    HelpID = "svx:ModelessDialog:RID_SVXDLG_IMAP";
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -194,7 +193,6 @@ ModelessDialog RID_SVXDLG_IMAP
     };
     ComboBox CBB_URL
     {
-        HelpID = "svx:ComboBox:RID_SVXDLG_IMAP:CBB_URL";
         Pos = MAP_APPFONT ( 39 , 23 ) ;
         Size = MAP_APPFONT ( 225 , 69 ) ;
         TabStop = TRUE ;
@@ -210,7 +208,6 @@ ModelessDialog RID_SVXDLG_IMAP
     };
     Edit EDT_TEXT
     {
-        HelpID = "svx:Edit:RID_SVXDLG_IMAP:EDT_TEXT";
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 39 , 41 ) ;
@@ -229,7 +226,6 @@ ModelessDialog RID_SVXDLG_IMAP
      // nur temporaer
     ComboBox RID_SVXCTL_CBB_TARGET
     {
-        HelpID = "svx:ComboBox:RID_SVXDLG_IMAP:RID_SVXCTL_CBB_TARGET";
         Border = TRUE ;
         Sort = TRUE ;
         Pos = MAP_APPFONT ( 213 , 41 ) ;
@@ -243,20 +239,20 @@ ModelessDialog RID_SVXDLG_IMAP
 #define IMAPDLG_IDLIST \
         IdList =            \
         {                   \
-            TBI_APPLY ; \
-            TBI_OPEN ;  \
-            TBI_SAVEAS ;    \
-            TBI_SELECT ;    \
-            TBI_RECT ;  \
-            TBI_CIRCLE ;    \
-            TBI_POLY ;  \
-            TBI_FREEPOLY ;  \
-            TBI_POLYEDIT ;  \
+            TBI_APPLY ;	\
+            TBI_OPEN ;	\
+            TBI_SAVEAS ;	\
+            TBI_SELECT ;	\
+            TBI_RECT ;	\
+            TBI_CIRCLE ;	\
+            TBI_POLY ;	\
+            TBI_FREEPOLY ;	\
+            TBI_POLYEDIT ;	\
             TBI_POLYMOVE ; \
-            TBI_POLYINSERT ;    \
-            TBI_POLYDELETE ;    \
-            TBI_UNDO ;  \
-            TBI_REDO ;  \
+            TBI_POLYINSERT ;	\
+            TBI_POLYDELETE ;	\
+            TBI_UNDO ;	\
+            TBI_REDO ;	\
             TBI_ACTIVE ; \
             TBI_MACRO ; \
             TBI_PROPERTY ; \
@@ -269,8 +265,13 @@ ModelessDialog RID_SVXDLG_IMAP
         MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
         IMAPDLG_IDLIST
     };
+    ImageList ILH_IMAPDLG
+    {
+        Prefix = "idh";
+        MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
+        IMAPDLG_IDLIST
+    };
 };
-
 Control RID_SVXCTL_IMAP
 {
     Border = TRUE ;

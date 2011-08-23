@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,67 +101,46 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-struct StaticPieChartTypeTemplateDefaults_Initializer
+void lcl_AddDefaultsToMap(
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_OFFSET_MODE, chart2::PieChartOffsetMode_NONE );
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_PIE_TEMPLATE_DEFAULT_OFFSET, 0.5 );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_PIE_TEMPLATE_DIMENSION, 2 );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_USE_RINGS, false );
-    }
-};
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_OFFSET_MODE, chart2::PieChartOffsetMode_NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_PIE_TEMPLATE_DEFAULT_OFFSET, 0.5 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_PIE_TEMPLATE_DIMENSION, 2 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_USE_RINGS, false );
+}
 
-struct StaticPieChartTypeTemplateDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticPieChartTypeTemplateDefaults_Initializer >
+const uno::Sequence< Property > & lcl_GetPropertySequence()
 {
-};
+    static uno::Sequence< Property > aPropSeq;
 
-struct StaticPieChartTypeTemplateInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    uno::Sequence< Property > lcl_GetPropertySequence()
-    {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-};
+    return aPropSeq;
+}
 
-struct StaticPieChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticPieChartTypeTemplateInfoHelper_Initializer >
+::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
 {
-};
+    static ::cppu::OPropertyArrayHelper aArrayHelper(
+        lcl_GetPropertySequence(),
+        /* bSorted = */ sal_True );
 
-struct StaticPieChartTypeTemplateInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticPieChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticPieChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticPieChartTypeTemplateInfo_Initializer >
-{
-};
+    return aArrayHelper;
+}
 
 } // anonymous namespace
 
@@ -190,24 +169,51 @@ PieChartTypeTemplate::~PieChartTypeTemplate()
 uno::Any PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticPieChartTypeTemplateDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
+    static tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
+    }
+
+    tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
         return uno::Any();
+
     return (*aFound).second;
+    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL PieChartTypeTemplate::getInfoHelper()
 {
-    return *StaticPieChartTypeTemplateInfoHelper::get();
+    return lcl_getInfoHelper();
 }
 
+
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+    PieChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticPieChartTypeTemplateInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
+
 
 // ____ ChartTypeTemplate ____
 sal_Int32 PieChartTypeTemplate::getDimension() const
@@ -231,6 +237,11 @@ sal_Int32 PieChartTypeTemplate::getAxisCountByDimension( sal_Int32 /*nDimension*
 {
     return 0;
 }
+
+// void PieChartTypeTemplate::createAxes(
+//     const Sequence< Reference< chart2::XCoordinateSystem > > & rCoordSys )
+// {
+// }
 
 void PieChartTypeTemplate::adaptAxes(
     const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > & /*rCoordSys*/ )
@@ -262,6 +273,8 @@ void PieChartTypeTemplate::adaptScales(
                 aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
                 xAxis->setScaleData( aScaleData );
             }
+
+            //------
 
             xAxis = AxisHelper::getAxis( 0 /*nDimensionIndex*/,0 /*nAxisIndex*/
                     , aCooSysSeq[nCooSysIdx] );
@@ -543,7 +556,7 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
 
         // line style
         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
-
+        
         // vary colors by point
         xProp->setPropertyValue( C2U("VaryColorsByPoint"), uno::makeAny( true ));
     }

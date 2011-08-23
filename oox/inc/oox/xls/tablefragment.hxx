@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,29 +30,32 @@
 #define OOX_XLS_TABLEFRAGMENT_HXX
 
 #include "oox/xls/excelhandlers.hxx"
+#include "oox/xls/tablebuffer.hxx"
 
 namespace oox {
 namespace xls {
 
-class Table;
-
 // ============================================================================
 
-class TableFragment : public WorksheetFragmentBase
+class OoxTableFragment : public OoxWorksheetFragmentBase
 {
 public:
-    explicit            TableFragment(
+    explicit            OoxTableFragment(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
+    // oox.core.ContextHandler2Helper interface -------------------------------
+
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+
+    // oox.core.FragmentHandler2 interface ------------------------------------
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
 private:
-    Table&              mrTable;
+    TableRef            mxTable;        /// Current table.
 };
 
 // ============================================================================

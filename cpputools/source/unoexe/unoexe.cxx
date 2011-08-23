@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,6 +74,7 @@
 #endif
 
 using namespace std;
+using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -83,11 +84,6 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::connection;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::container;
-
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
-using ::rtl::OUStringBuffer;
 
 namespace unoexe
 {
@@ -136,7 +132,7 @@ static sal_Bool s_quiet = false;
 static inline void out( const sal_Char * pText )
 {
     if (! s_quiet)
-        fprintf( stderr, "%s", pText );
+        fprintf( stderr, pText );
 }
 //--------------------------------------------------------------------------------------------------
 static inline void out( const OUString & rText )
@@ -144,7 +140,7 @@ static inline void out( const OUString & rText )
     if (! s_quiet)
     {
         OString aText( OUStringToOString( rText, RTL_TEXTENCODING_ASCII_US ) );
-        fprintf( stderr, "%s", aText.getStr() );
+        fprintf( stderr, aText.getStr() );
     }
 }
 
@@ -280,14 +276,23 @@ void createInstance(
                         OUString( RTL_CONSTASCII_USTRINGPARAM(
                                       "com.sun.star.comp.io.Connector") ),
                         xSF, Reference< XRegistryKey >() ) ) );
+                    // iiop bridge
+                    xSet->insert( makeAny( loadSharedLibComponentFactory(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "remotebridge.uno" SAL_DLLEXTENSION) ),
+                        OUString(),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "com.sun.star.comp.remotebridges."
+                                      "Bridge.various") ),
+                        xSF, Reference< XRegistryKey >() ) ) );
                     // bridge factory
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
                         OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "binaryurp.uno" SAL_DLLEXTENSION) ),
+                                      "bridgefac.uno" SAL_DLLEXTENSION) ),
                         OUString(),
-                        OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.comp.bridge.BridgeFactory") ),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                      "com.sun.star.comp.remotebridges."
+                                      "BridgeFactory") ),
                         xSF, Reference< XRegistryKey >() ) ) );
                 }
                 s_bSet = sal_True;
@@ -474,16 +479,16 @@ class OInstanceProvider
 {
     Reference< XComponentContext > _xContext;
 
-    Mutex                             _aSingleInstanceMutex;
-    Reference< XInterface >           _xSingleInstance;
-    sal_Bool                          _bSingleInstance;
+    Mutex							  _aSingleInstanceMutex;
+    Reference< XInterface >			  _xSingleInstance;
+    sal_Bool						  _bSingleInstance;
 
-    OUString                          _aImplName;
-    OUString                          _aLocation;
-    OUString                          _aServiceName;
-    Sequence< Any >                   _aInitParams;
+    OUString						  _aImplName;
+    OUString						  _aLocation;
+    OUString						  _aServiceName;
+    Sequence< Any >					  _aInitParams;
 
-    OUString                          _aInstanceName;
+    OUString						  _aInstanceName;
 
     inline Reference< XInterface > createInstance() throw (Exception);
 
@@ -531,7 +536,7 @@ Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
         if (_aInstanceName == rName)
         {
             Reference< XInterface > xRet;
-
+            
             if (_aImplName.getLength() == 0 && _aServiceName.getLength() == 0)
             {
                 OSL_ASSERT(
@@ -652,12 +657,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
                 break;
             }
 
-            if (readOption( &aImplName, "c", &nPos, arg)                ||
-                readOption( &aLocation, "l", &nPos, arg)                ||
-                readOption( &aServiceName, "s", &nPos, arg)             ||
-                readOption( &aUnoUrl, "u", &nPos, arg)                  ||
+            if (readOption( &aImplName, "c", &nPos, arg)				||
+                readOption( &aLocation, "l", &nPos, arg)				||
+                readOption( &aServiceName, "s", &nPos, arg)				||
+                readOption( &aUnoUrl, "u", &nPos, arg)					||
                 readOption( &s_quiet, "quiet", &nPos, arg)              ||
-                readOption( &bSingleAccept, "singleaccept", &nPos, arg) ||
+                readOption( &bSingleAccept, "singleaccept", &nPos, arg)	||
                 readOption( &bSingleInstance, "singleinstance", &nPos, arg))
             {
                 continue;
@@ -740,11 +745,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
 
         if (aReadOnlyRegistries.size() > 0 ||
             aReadWriteRegistry.getLength() > 0)
-        {
+        {   
             //#### create registry #############################################
-
+            
             Reference< XSimpleRegistry > xRegistry;
-
+            
             // ReadOnly registries
             for ( size_t nReg = 0; nReg < aReadOnlyRegistries.size(); ++nReg )
             {
@@ -777,7 +782,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
                                  ? nestRegistries( xNewReg, xRegistry )
                                  : xNewReg);
             }
-
+            
             OSL_ASSERT( xRegistry.is() );
             xContext = bootstrap_InitialComponentContext( xRegistry );
         }
@@ -785,7 +790,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
         {
             xContext = defaultBootstrap_InitialComponentContext();
         }
-
+        
         //#### accept, instanciate, etc. ###########################################################
 
         if (aUnoUrl.getLength()) // accepting connections

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,23 +40,23 @@ using namespace ::com::sun::star;
 using namespace ::std;
 
 SvXMLPropertySetContext::SvXMLPropertySetContext(
-    SvXMLImport& rImp, sal_uInt16 nPrfx,
+    SvXMLImport& rImp, USHORT nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     sal_uInt32 nFam,
     vector< XMLPropertyState > &rProps,
     const UniReference < SvXMLImportPropertyMapper >  &rMap,
     sal_Int32 nSIdx, sal_Int32 nEIdx )
-:   SvXMLImportContext( rImp, nPrfx, rLName )
-,   mnStartIdx( nSIdx )
-,   mnEndIdx( nEIdx )
-,   mnFamily( nFam )
-,   mrProperties( rProps )
-,   mxMapper( rMap )
+:	SvXMLImportContext( rImp, nPrfx, rLName )
+,	mnStartIdx( nSIdx )
+,	mnEndIdx( nEIdx )
+,	mnFamily( nFam )
+,	mrProperties( rProps )
+,	mxMapper( rMap )
 {
     mxMapper->importXML( mrProperties, xAttrList,
                         GetImport().GetMM100UnitConverter(),
-                        GetImport().GetNamespaceMap(), mnFamily,
+                        GetImport().GetNamespaceMap(), mnFamily, 
                         mnStartIdx, mnEndIdx );
 }
 
@@ -65,7 +65,7 @@ SvXMLPropertySetContext::~SvXMLPropertySetContext()
 }
 
 SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
-    sal_uInt16 nPrefix,
+    USHORT nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -93,7 +93,7 @@ SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
     SvXMLImportItemMapper with the mid flag MID_FLAG_ELEMENT
 */
 SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
-    sal_uInt16 nPrefix,
+    USHORT nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >&,
     ::std::vector< XMLPropertyState > &,

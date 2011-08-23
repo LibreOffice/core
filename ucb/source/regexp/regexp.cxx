@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ inline Regexp::Regexp(Kind eTheKind, rtl::OUString const & rThePrefix,
     m_bTranslation(bTheTranslation)
 {
     OSL_ASSERT(m_eKind == KIND_DOMAIN
-               || (!m_bEmptyDomain && m_aInfix.getLength() == 0));
+               || !m_bEmptyDomain && m_aInfix.getLength() == 0);
     OSL_ASSERT(m_bTranslation || m_aReversePrefix.getLength() == 0);
 }
 

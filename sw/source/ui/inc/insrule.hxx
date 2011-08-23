@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,18 +31,20 @@
 
 class SwRulerValueSet;
 class ValueSet;
+/*-----------------14.02.97 12.30-------------------
 
+--------------------------------------------------*/
 class SwInsertGrfRulerDlg  : public SfxModalDialog
 {
     FixedLine       aSelectionFL;
-    OKButton        aOkPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
+    OKButton		aOkPB;
+    CancelButton	aCancelPB;
+    HelpButton		aHelpPB;
 
-    List            aGrfNames;
-    String          sSimple;
+    List			aGrfNames;
+    String			sSimple;
     String          sRulers;
-    sal_uInt16          nSelPos;
+    USHORT 			nSelPos;
 
     SwRulerValueSet* pExampleVS;
 
@@ -54,9 +56,9 @@ public:
     SwInsertGrfRulerDlg( Window* pParent );
     ~SwInsertGrfRulerDlg();
 
-    String          GetGraphicName();
-    sal_Bool            IsSimpleLine() {return nSelPos == 1;}
-    sal_Bool            HasImages() const {return 0 != aGrfNames.Count();}
+    String 			GetGraphicName();
+    BOOL			IsSimpleLine() {return nSelPos == 1;}
+    BOOL 			HasImages() const {return 0 != aGrfNames.Count();}
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,9 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-
-
+/*-----------------------------------------------
+    05.03.2004 08:36
+-----------------------------------------------*/
 CacheUpdateListener::CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR        ,
                                          const css::uno::Reference< css::uno::XInterface >&            xConfigAccess,
                                                FilterCache::EItemType                                  eConfigType  )
@@ -64,14 +65,16 @@ CacheUpdateListener::CacheUpdateListener(const css::uno::Reference< css::lang::X
 {
 }
 
-
-
+/*-----------------------------------------------
+    05.03.2004 08:37
+-----------------------------------------------*/
 CacheUpdateListener::~CacheUpdateListener()
 {
 }
 
-
-
+/*-----------------------------------------------
+    07.03.2004 07:59
+-----------------------------------------------*/
 void CacheUpdateListener::startListening()
 {
     // SAFE ->
@@ -96,8 +99,9 @@ void CacheUpdateListener::startListening()
 */
 }
 
-
-
+/*-----------------------------------------------
+    07.03.2004 07:59
+-----------------------------------------------*/
 void CacheUpdateListener::stopListening()
 {
     // SAFE ->
@@ -122,8 +126,9 @@ void CacheUpdateListener::stopListening()
 */
 }
 
-
-
+/*-----------------------------------------------
+    07.03.2004 08:17
+-----------------------------------------------*/
 void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEvent& aEvent)
     throw(css::uno::RuntimeException)
 {
@@ -224,8 +229,9 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
     }
 }
 
-
-
+/*-----------------------------------------------
+    05.03.2004 08:44
+-----------------------------------------------*/
 void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {

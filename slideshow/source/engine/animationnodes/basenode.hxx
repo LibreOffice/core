@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace slideshow {
 namespace internal {
 
 /** Context for every node.
-
+    
     Besides the global AnimationNodeFactory::Context data,
     this struct also contains the current DocTree subset
     for this node. If start and end index of the
@@ -61,13 +61,13 @@ struct NodeContext
           mnStartDelay(0.0),
           mbIsIndependentSubset( true )
         {}
-
-    void dispose()
-    {
-        maContext.dispose();
-        mpMasterShapeSubset.reset();
+    
+    void dispose() 
+    { 
+        maContext.dispose(); 
+        mpMasterShapeSubset.reset(); 
     }
-
+    
     /// Context as passed to createAnimationNode()
     SlideShowContext                 maContext;
 
@@ -76,10 +76,10 @@ struct NodeContext
 
     /// Shape to be used (provided by parent, e.g. for iterations)
     ShapeSubsetSharedPtr             mpMasterShapeSubset;
-
+    
     /// Additional delay to node begin (to offset iterate effects)
     double                           mnStartDelay;
-
+    
     /// When true, subset must be created during slide initialization
     bool                             mbIsIndependentSubset;
 };
@@ -90,44 +90,44 @@ class BaseContainerNode;
     file-private accessor methods.
 */
 class BaseNode : public AnimationNode,
-                 public  ::osl::DebugBase<BaseNode>,
+                 protected ::osl::DebugBase<BaseNode>,
                  private ::boost::noncopyable
 {
 public:
-    BaseNode( ::com::sun::star::uno::Reference<
-              ::com::sun::star::animations::XAnimationNode> const& xNode,
+    BaseNode( ::com::sun::star::uno::Reference< 
+              ::com::sun::star::animations::XAnimationNode> const& xNode, 
               ::boost::shared_ptr<BaseContainerNode> const&        pParent,
               NodeContext const&                                   rContext );
-
+    
     /** Provide the node with a shared_ptr to itself.
-
+        
         Since implementation has to create objects which need
         a shared_ptr to this node, and a pointee cannot
         retrieve a shared_ptr to itself internally, have to
         set that from the outside.
     */
     void setSelf( const ::boost::shared_ptr< BaseNode >& rSelf );
-
-
+    
+    
 #if defined(VERBOSE) && defined(DBG_UTIL)
     virtual void showState() const;
     virtual const char* getDescription() const;
     void showTreeFromWithin() const;
 #endif
-
+    
     const ::boost::shared_ptr< BaseContainerNode >& getParentNode() const
         { return mpParent; }
-
+    
     // Disposable:
     virtual void dispose();
-
+    
     // AnimationNode:
     virtual bool init();
     virtual bool resolve();
     virtual bool activate();
     virtual void deactivate();
     virtual void end();
-    virtual ::com::sun::star::uno::Reference<
+    virtual ::com::sun::star::uno::Reference< 
         ::com::sun::star::animations::XAnimationNode> getXAnimationNode() const;
     virtual NodeState getState() const;
     virtual bool registerDeactivatingListener(
@@ -135,12 +135,12 @@ public:
     // nop:
     virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier );
 
-    bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
+    bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }    
 
 protected:
     void scheduleDeactivationEvent( EventSharedPtr const& pEvent =
                                     EventSharedPtr() );
-
+    
     SlideShowContext const&                 getContext() const { return maContext; }
     ::boost::shared_ptr<BaseNode> const&    getSelf() const { return mpSelf; }
 
@@ -150,7 +150,7 @@ protected:
         OSL_ENSURE( bRet, "### INVALID node!" );
         return bRet;
     }
-
+    
 private:
     // all state affecting methods have "_st" counterparts being called at
     // derived classes when in state transistion: no-ops here at BaseNode...
@@ -158,35 +158,35 @@ private:
     virtual bool resolve_st();
     virtual void activate_st();
     virtual void deactivate_st( NodeState eDestState );
-
+    
 private:
     /// notifies
     /// - all registered deactivation listeners
     /// - single animation end (every node)
     /// - slide animations (if main sequence root node)
     void notifyEndListeners() const;
-
+    
     /// Get the node's restart mode
     sal_Int16 getRestartMode();
-
+    
     /** Get the default restart mode
-
+        
         If this node's default mode is
         AnimationRestart::DEFAULT, this method recursively
         calls the parent node.
     */
     sal_Int16 getRestartDefaultMode() const;
-
+    
     /// Get the node's fill mode
     sal_Int16 getFillMode();
-
+    
     /** Get the default fill mode.
-
+        
         If this node's default mode is AnimationFill::DEFAULT,
         this method recursively calls the parent node.
     */
     sal_Int16 getFillDefaultMode() const;
-
+    
     bool isTransition( NodeState eFromState, NodeState eToState,
                        bool debugAssert = true ) const {
         (void) debugAssert; // avoid warning
@@ -199,17 +199,17 @@ private:
         return ((meCurrState & mask) != 0 ||
                 (meCurrentStateTransition & mask) != 0);
     }
-
+    
     class StateTransition;
     friend class StateTransition;
-
+    
 private:
     SlideShowContext                                   maContext;
-
+    
     typedef ::std::vector< AnimationNodeSharedPtr >    ListenerVector;
-
+    
     ListenerVector                                     maDeactivatingListeners;
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::animations::XAnimationNode > mxAnimationNode;
     ::boost::shared_ptr< BaseContainerNode >           mpParent;
     ::boost::shared_ptr< BaseNode >                    mpSelf;

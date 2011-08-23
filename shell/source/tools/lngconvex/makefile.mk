@@ -58,8 +58,8 @@ APP1STDLIBS= $(SALLIB)\
             $(I18NISOLANGLIB)
 
 .IF "$(COM)"!="GCC"
-APP1STDLIBS+= msvcprt.lib
-#$(TOOLSLIBST) 
+APP1STDLIBS+= $(TOOLSLIBST) \
+            msvcprt.lib
 .ENDIF
 
 # --- Targets ------------------------------------------------------

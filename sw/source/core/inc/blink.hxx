@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _BLINK_HXX
-#define _BLINK_HXX
+#ifndef	_BLINK_HXX
+#define	_BLINK_HXX
 
 class SwLinePortion;
 class SwRootFrm;
@@ -40,11 +40,11 @@ class SwTxtFrm;
 class SwBlinkPortion
 {
     Point               aPos;
-    const SwLinePortion *pPor;
-    const SwRootFrm     *pFrm;
-    sal_uInt16              nDir;
+    const SwLinePortion	*pPor;
+    const SwRootFrm		*pFrm;
+    USHORT              nDir;
 public:
-    SwBlinkPortion( const SwLinePortion* pPortion, sal_uInt16 nDirection )
+    SwBlinkPortion( const SwLinePortion* pPortion, USHORT nDirection )
             { pPor = pPortion; nDir = nDirection; }
     SwBlinkPortion( const SwBlinkPortion* pBlink, const SwLinePortion* pPort )
     {   pPor = pPort; pFrm = pBlink->pFrm; aPos = pBlink->aPos; nDir = pBlink->nDir; }
@@ -53,10 +53,10 @@ public:
     void SetRootFrm( const SwRootFrm* pNew ){ pFrm = pNew; }
     const SwRootFrm* GetRootFrm() const{ return pFrm; }
     const SwLinePortion *GetPortion() const{ return pPor; }
-    sal_uInt16 GetDirection() const { return nDir; }
-    sal_Bool operator<( const SwBlinkPortion& rBlinkPortion ) const
+    USHORT GetDirection() const { return nDir; }
+    BOOL operator<( const SwBlinkPortion& rBlinkPortion ) const
     { return (long)pPor < (long)rBlinkPortion.pPor; }
-    sal_Bool operator==( const SwBlinkPortion& rBlinkPortion ) const
+    BOOL operator==( const SwBlinkPortion& rBlinkPortion ) const
     { return (long)pPor == (long)rBlinkPortion.pPor; }
 };
 
@@ -65,9 +65,9 @@ SV_DECL_PTRARR_SORT_DEL(SwBlinkList, SwBlinkPortionPtr, 0, 10)
 
 class SwBlink
 {
-    SwBlinkList     aList;
-    AutoTimer       aTimer;
-    sal_Bool            bVisible;
+    SwBlinkList		aList;
+    AutoTimer		aTimer;
+    BOOL			bVisible;
 public:
     SwBlink();
     ~SwBlink();
@@ -75,11 +75,11 @@ public:
     DECL_LINK( Blinker, Timer * );
 
     void Insert( const Point& rPoint, const SwLinePortion* pPor,
-                 const SwTxtFrm *pTxtFrm, sal_uInt16 nDir );
+                 const SwTxtFrm *pTxtFrm, USHORT nDir );
     void Replace( const SwLinePortion* pOld, const SwLinePortion* pNew );
     void Delete( const SwLinePortion* pPor );
     void FrmDelete( const SwRootFrm* pRoot );
-    inline sal_Bool IsVisible() const { return bVisible ; }
+    inline BOOL IsVisible() const { return bVisible ; }
 };
 
 // Blink-Manager, globale Variable, in Blink.Cxx angelegt

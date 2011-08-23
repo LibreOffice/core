@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ SFX_IMPL_CHILDWINDOWCONTEXT(NavigatorChildWindow, SID_NAVIGATOR)
 
 NavigatorChildWindow::NavigatorChildWindow (
     ::Window* pParent,
-    sal_uInt16 nId,
+    USHORT nId,
     SfxBindings* pBindings,
-    SfxChildWinInfo* )
+    SfxChildWinInfo* ) 
     : SfxChildWindowContext( nId )
 {
     SdNavigatorWin* pNavWin = new SdNavigatorWin( pParent, this,

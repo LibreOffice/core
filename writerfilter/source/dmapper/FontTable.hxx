@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/LoggedResources.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 
 namespace writerfilter {
@@ -42,7 +42,7 @@ struct FontTable_Impl;
 struct FontEntry
 {
     typedef boost::shared_ptr<FontEntry> Pointer_t;
-
+    
     ::rtl::OUString sFontName;
     ::rtl::OUString sFontName1;
     bool            bTrueType;
@@ -57,52 +57,52 @@ struct FontEntry
     FontEntry() :
         bTrueType(false),
         nPitchRequest( 0 ),
-        nTextEncoding( RTL_TEXTENCODING_DONTKNOW ),
+        nTextEncoding( 0 ),
         nFontFamilyId( 0 ),
         nBaseWeight( 0 ),
         nAltFontIndex( 0 )
         {}
 };
-
-class WRITERFILTER_DLLPRIVATE FontTable : public LoggedProperties, public LoggedTable
-    /*,public BinaryObj*/, public LoggedStream
+class WRITERFILTER_DLLPRIVATE FontTable : public Properties, public Table
+                    /*,public BinaryObj*/, public Stream
 {
     FontTable_Impl   *m_pImpl;
 
- public:
+public:
     FontTable();
     virtual ~FontTable();
 
-    sal_uInt32          size();
-    const FontEntry::Pointer_t  getFontEntry(sal_uInt32 nIndex);
-
- private:
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
-    void resolveSprm(Sprm & r_sprm);
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
 
     // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+
+    // BinaryObj
+//    virtual void data(const sal_Int8* buf, size_t len,
+//                      writerfilter::Reference<Properties>::Pointer_t ref);
 
     // Stream
-    virtual void lcl_startSectionGroup();
-    virtual void lcl_endSectionGroup();
-    virtual void lcl_startParagraphGroup();
-    virtual void lcl_endParagraphGroup();
-    virtual void lcl_startCharacterGroup();
-    virtual void lcl_endCharacterGroup();
-    virtual void lcl_text(const sal_uInt8 * data, size_t len);
-    virtual void lcl_utext(const sal_uInt8 * data, size_t len);
-    virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref);
-    virtual void lcl_table(Id name,
-                           writerfilter::Reference<Table>::Pointer_t ref);
-    virtual void lcl_substream(Id name,
-                               ::writerfilter::Reference<Stream>::Pointer_t ref);
-    virtual void lcl_info(const string & info);
-    virtual void lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual void lcl_endShape( );
+    virtual void startSectionGroup();
+    virtual void endSectionGroup();
+    virtual void startParagraphGroup();
+    virtual void endParagraphGroup();
+    virtual void startCharacterGroup();
+    virtual void endCharacterGroup();
+    virtual void text(const sal_uInt8 * data, size_t len);
+    virtual void utext(const sal_uInt8 * data, size_t len);
+    virtual void props(writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void table(Id name,
+                       writerfilter::Reference<Table>::Pointer_t ref);
+    virtual void substream(Id name,
+                           ::writerfilter::Reference<Stream>::Pointer_t ref);
+    virtual void info(const string & info);
+    virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    virtual void endShape( );
 
+    const FontEntry::Pointer_t  getFontEntry(sal_uInt32 nIndex);
+    sal_uInt32          size();
 };
 typedef boost::shared_ptr< FontTable >          FontTablePtr;
 }}

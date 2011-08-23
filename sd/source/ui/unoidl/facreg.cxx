@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@
 #define INCLUDED_STRING_H
 #endif
 #include <comphelper/stl_types.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <boost/shared_ptr.hpp>
 
+using namespace rtl;
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 
 // Forward declarations of the factories.
 
@@ -255,7 +255,7 @@ enum FactoryId
     SlideLayoutControllerFactoryId,
     InsertSlideControllerFactoryId,
 };
-typedef ::boost::unordered_map<OUString, FactoryId, comphelper::UStringHash, comphelper::UStringEqual> FactoryMap;
+typedef ::std::hash_map<OUString, FactoryId, comphelper::UStringHash, comphelper::UStringEqual> FactoryMap;
 
 
 namespace {
@@ -304,6 +304,115 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+static void SAL_CALL writeInfo(
+    registry::XRegistryKey          * pRegistryKey,
+    const OUString                  & rImplementationName,
+    const uno::Sequence< OUString > & rServices )
+{
+    uno::Reference< registry::XRegistryKey > xNewKey(
+        pRegistryKey->createKey(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + rImplementationName + OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) ) );
+
+    for( sal_Int32 i = 0; i < rServices.getLength(); i++ )
+        xNewKey->createKey( rServices.getConstArray()[i]);
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
+    void * ,
+    void * pRegistryKey )
+{
+    if( pRegistryKey )
+    {
+        try
+        {
+            registry::XRegistryKey *pKey = reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
+
+            writeInfo( pKey, SdHtmlOptionsDialog_getImplementationName(), SdHtmlOptionsDialog_getSupportedServiceNames() );
+            writeInfo( pKey, SdDrawingDocument_getImplementationName(), SdDrawingDocument_getSupportedServiceNames() );
+            writeInfo( pKey, SdPresentationDocument_getImplementationName(), SdPresentationDocument_getSupportedServiceNames() );
+            writeInfo( pKey, SdUnoModule_getImplementationName(), SdUnoModule_getSupportedServiceNames() );
+            writeInfo( pKey, sd::RandomNode__getImplementationName(), sd::RandomNode_getSupportedServiceNames() );
+            writeInfo(
+                pKey,
+                sd::framework::Configuration_getImplementationName(),
+                sd::framework::Configuration_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::framework::ConfigurationController_getImplementationName(),
+                sd::framework::ConfigurationController_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::framework::ModuleController_getImplementationName(),
+                sd::framework::ModuleController_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::framework::BasicPaneFactory_getImplementationName(),
+                sd::framework::BasicPaneFactory_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::framework::BasicToolBarFactory_getImplementationName(),
+                sd::framework::BasicToolBarFactory_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::framework::BasicViewFactory_getImplementationName(),
+                sd::framework::BasicViewFactory_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::framework::TaskPanelFactory_getImplementationName(),
+                sd::framework::TaskPanelFactory_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::toolpanel::ToolPanelFactory_getImplementationName(),
+                sd::toolpanel::ToolPanelFactory_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::framework::ResourceId_getImplementationName(),
+                sd::framework::ResourceId_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::framework::PresentationFactoryProvider_getImplementationName(),
+                sd::framework::PresentationFactoryProvider_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::presenter::SlideRenderer_getImplementationName(),
+                sd::presenter::SlideRenderer_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::presenter::PresenterCanvas_getImplementationName(),
+                sd::presenter::PresenterCanvas_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::presenter::PresenterTextViewService_getImplementationName(),
+                sd::presenter::PresenterTextViewService_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::presenter::PresenterHelperService_getImplementationName(),
+                sd::presenter::PresenterHelperService_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::presenter::PresenterPreviewCache_getImplementationName(),
+                sd::presenter::PresenterPreviewCache_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::slidesorter::SlideSorterService_getImplementationName(),
+                sd::slidesorter::SlideSorterService_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::SlideLayoutController_getImplementationName(),
+                sd::SlideLayoutController_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::InsertSlideController_getImplementationName(),
+                sd::InsertSlideController_getSupportedServiceNames());
+        }
+        catch (registry::InvalidRegistryException &)
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+    return sal_True;
+}
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName,
     void           * pServiceManager,
@@ -348,7 +457,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         SdPresentationDocument_createInstance,
                         SdPresentationDocument_getSupportedServiceNames());
                     break;
-
+                    
                 case SdUnoModuleFactoryId:
                     xFactory = ::cppu::createSingleFactory(
                         xMSF,
@@ -385,7 +494,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         sd::framework::ModuleController_getImplementationName(),
                         sd::framework::ModuleController_getSupportedServiceNames());
                     break;
-
+                    
                 case BasicPaneFactoryFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(
                         sd::framework::BasicPaneFactory_createInstance,
@@ -399,7 +508,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         sd::framework::BasicToolBarFactory_getImplementationName(),
                         sd::framework::BasicToolBarFactory_getSupportedServiceNames());
                     break;
-
+                    
                 case BasicViewFactoryFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(
                         sd::framework::BasicViewFactory_createInstance,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,10 +32,10 @@
 #include "java/lang/Boolean.hxx"
 #include "java/tools.hxx"
 #include "java/lang/String.hxx"
-
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -52,7 +52,7 @@ java_sql_DriverPropertyInfo::~java_sql_DriverPropertyInfo()
 // --------------------------------------------------------------------------------
 jclass java_sql_DriverPropertyInfo::getMyClass() const
 {
-    // the class must be fetched only once, therefore static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/DriverPropertyInfo");
     return theClass;
@@ -75,7 +75,7 @@ java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
 {
     ::rtl::OUString aStr;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
         jfieldID id = t.pEnv->GetFieldID(getMyClass(),"name","Ljava/lang/String;");
         if(id)
@@ -88,7 +88,7 @@ java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
 {
     ::rtl::OUString aStr;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
         jfieldID id = t.pEnv->GetFieldID(getMyClass(),"description","Ljava/lang/String;");
         if(id)
@@ -101,7 +101,7 @@ java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
 {
     ::rtl::OUString aStr;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
         jfieldID id = t.pEnv->GetFieldID(getMyClass(),"value","Ljava/lang/String;");
         if(id)
@@ -114,7 +114,7 @@ sal_Bool java_sql_DriverPropertyInfo::required()
 {
     jboolean out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
         jfieldID id = t.pEnv->GetFieldID(getMyClass(),"required","Z");
         if(id)
@@ -126,7 +126,7 @@ sal_Bool java_sql_DriverPropertyInfo::required()
 Sequence< ::rtl::OUString> java_sql_DriverPropertyInfo::choices()
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
         jfieldID id = t.pEnv->GetFieldID(getMyClass(),"choices","[Ljava/lang/String;");
         if(id)

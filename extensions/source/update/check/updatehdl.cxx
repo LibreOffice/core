@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 #include "com/sun/star/awt/XControl.hpp"
 #include "com/sun/star/awt/XControlContainer.hpp"
 #include "com/sun/star/awt/XMessageBox.hpp"
-#include "com/sun/star/awt/XAnimation.hpp"
+#include "com/sun/star/awt/XThrobber.hpp"
 #include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/awt/XVclWindowPeer.hpp"
 #include "com/sun/star/awt/XVclContainer.hpp"
@@ -70,7 +70,6 @@
 #include <com/sun/star/resource/XResourceBundleLoader.hpp>
 
 #include "updatehdl.hrc"
-#include <tools/urlobj.hxx>
 
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
@@ -160,7 +159,7 @@ void UpdateHandler::setDownloadBtnLabel( bool bAppendDots )
             aLabel += UNISTRING( "..." );
 
         setControlProperty( msButtonIDs[DOWNLOAD_BUTTON], UNISTRING("Label"), uno::Any( aLabel ) );
-        setControlProperty( msButtonIDs[DOWNLOAD_BUTTON], UNISTRING("HelpURL"), uno::Any( UNISTRING( INET_HID_SCHEME ) + rtl::OUString::createFromAscii( HID_CHECK_FOR_UPD_DOWNLOAD2 ) ) );
+        setControlProperty( msButtonIDs[DOWNLOAD_BUTTON], UNISTRING("HelpURL"), uno::Any( UNISTRING( "HID:" ) + rtl::OUString::valueOf( (sal_Int32) HID_CHECK_FOR_UPD_DOWNLOAD2 ) ) );
 
         mbDownloadBtnHasDots = bAppendDots;
     }
@@ -263,7 +262,7 @@ void UpdateHandler::setDownloadFile( const rtl::OUString& rFilePath )
     sal_Int32 nLast = rFilePath.lastIndexOf( '/' );
     if ( nLast != -1 )
     {
-        msDownloadFile = rFilePath.copy( nLast+1 );
+        msDownloadFile = rFilePath.copy( nLast+1 ); 
         const rtl::OUString aDownloadURL = rFilePath.copy( 0, nLast );
         osl::FileBase::getSystemPathFromFileURL( aDownloadURL, msDownloadPath );
     }
@@ -380,7 +379,7 @@ void SAL_CALL UpdateHandler::actionPerformed( awt::ActionEvent const & rEvent )
         case HELP_BUTTON:
             break;
         default:
-            OSL_FAIL( "UpdateHandler::actionPerformed: unknown command!" );
+            OSL_ENSURE( false, "UpdateHandler::actionPerformed: unknown command!" );
     }
 }
 
@@ -398,7 +397,7 @@ void SAL_CALL UpdateHandler::windowClosing( const lang::EventObject& e )
     awt::ActionEvent aActionEvt;
     aActionEvt.ActionCommand = COMMAND_CLOSE;
     aActionEvt.Source = e.Source;
-
+    
     actionPerformed( aActionEvt );
 }
 
@@ -450,8 +449,8 @@ void SAL_CALL UpdateHandler::handle( uno::Reference< task::XInteractionRequest >
             throw uno::RuntimeException( UNISTRING( "UpdateHandler: unable to obtain service manager from component context" ), *this );
 
         mxInteractionHdl = uno::Reference<task::XInteractionHandler> (
-                                xServiceManager->createInstanceWithContext(
-                                    UNISTRING( "com.sun.star.task.InteractionHandler" ),
+                                xServiceManager->createInstanceWithContext( 
+                                    UNISTRING( "com.sun.star.task.InteractionHandler" ), 
                                     mxContext),
                                 uno::UNO_QUERY_THROW);
         if( !mxInteractionHdl.is() )
@@ -515,7 +514,7 @@ void SAL_CALL UpdateHandler::notifyTermination( const lang::EventObject& )
 
         uno::Reference< lang::XComponent > xComponent( mxUpdDlg, uno::UNO_QUERY );
         if ( xComponent.is() )
-            xComponent->dispose();
+            xComponent->dispose(); 
 
         mxUpdDlg.clear();
     }
@@ -650,7 +649,7 @@ rtl::OUString UpdateHandler::loadString( const uno::Reference< resource::XResour
     }
     catch( const uno::Exception& )
     {
-        OSL_FAIL( "UpdateHandler::loadString: caught an exception!" );
+        OSL_ENSURE( false, "UpdateHandler::loadString: caught an exception!" );
         sString = UNISTRING("Missing ") + sKey;
     }
 
@@ -686,7 +685,7 @@ void UpdateHandler::loadStrings()
     }
     catch( const uno::Exception& )
     {
-        OSL_FAIL( "UpdateHandler::loadStrings: could not create the resource loader!" );
+        OSL_ENSURE( false, "UpdateHandler::loadStrings: could not create the resource loader!" );
     }
 
     if ( !xLoader.is() ) return;
@@ -699,7 +698,7 @@ void UpdateHandler::loadStrings()
     }
     catch( const resource::MissingResourceException& )
     {
-        OSL_FAIL( "UpdateHandler::loadStrings: missing the resource bundle!" );
+        OSL_ENSURE( false, "UpdateHandler::loadStrings: missing the resource bundle!" );
     }
 
     if ( !xBundle.is() ) return;
@@ -740,7 +739,7 @@ void UpdateHandler::loadStrings()
     msPauseBtn      = loadString( xBundle, RID_UPDATE_BTN_PAUSE );
     msResumeBtn     = loadString( xBundle, RID_UPDATE_BTN_RESUME );
     msCancelBtn     = loadString( xBundle, RID_UPDATE_BTN_CANCEL );
-
+    
     // all update states before UPDATESTATE_UPDATE_AVAIL don't have a bubble
     // so we can ignore them
     for ( int i=0; i < (int)(UPDATESTATES_COUNT - UPDATESTATE_UPDATE_AVAIL); i++ )
@@ -760,14 +759,14 @@ void UpdateHandler::loadStrings()
 void UpdateHandler::startThrobber( bool bStart )
 {
     uno::Reference< awt::XControlContainer > xContainer( mxUpdDlg, uno::UNO_QUERY );
-    uno::Reference< awt::XAnimation > xThrobber( xContainer->getControl( CTRL_THROBBER ), uno::UNO_QUERY );
+    uno::Reference< awt::XThrobber > xThrobber( xContainer->getControl( CTRL_THROBBER ), uno::UNO_QUERY );
 
     if ( xThrobber.is() )
     {
         if ( bStart )
-            xThrobber->startAnimation();
+            xThrobber->start();
         else
-            xThrobber->stopAnimation();
+            xThrobber->stop();
     }
 
     uno::Reference< awt::XWindow > xWindow( xContainer->getControl( CTRL_THROBBER ), uno::UNO_QUERY );
@@ -792,7 +791,7 @@ void UpdateHandler::setControlProperty( const rtl::OUString &rCtrlName,
     }
     catch( const beans::UnknownPropertyException& )
     {
-        OSL_FAIL( "UpdateHandler::setControlProperty: caught an exception!" );
+        OSL_ENSURE( false, "UpdateHandler::setControlProperty: caught an exception!" );
     }
 }
 
@@ -803,7 +802,7 @@ void UpdateHandler::showControl( const rtl::OUString &rCtrlName, bool bShow )
 
     if ( !xContainer.is() )
     {
-        OSL_FAIL( "UpdateHandler::showControl: could not get control container!" );
+        OSL_ENSURE( false, "UpdateHandler::showControl: could not get control container!" );
         return;
     }
 
@@ -819,7 +818,7 @@ void UpdateHandler::focusControl( DialogControls eID )
 
     if ( !xContainer.is() )
     {
-        OSL_FAIL( "UpdateHandler::focusControl: could not get control container!" );
+        OSL_ENSURE( false, "UpdateHandler::focusControl: could not get control container!" );
         return;
     }
 
@@ -865,13 +864,13 @@ void UpdateHandler::setFullVersion( rtl::OUString& rString )
         throw uno::RuntimeException( UNISTRING( "getProductName: empty component context" ), *this );
 
     uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager() );
-
+    
     if( !xServiceManager.is() )
         throw uno::RuntimeException( UNISTRING( "getProductName: unable to obtain service manager from component context" ), *this );
-
-    uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.configuration.ConfigurationProvider" ), mxContext ),
-        uno::UNO_QUERY_THROW);
+    
+    uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider( 
+        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.configuration.ConfigurationProvider" ), mxContext ), 
+        uno::UNO_QUERY_THROW); 
 
     beans::PropertyValue aProperty;
     aProperty.Name  = UNISTRING( "nodepath" );
@@ -882,7 +881,7 @@ void UpdateHandler::setFullVersion( rtl::OUString& rString )
 
     uno::Reference< uno::XInterface > xConfigAccess;
     xConfigAccess = xConfigurationProvider->createInstanceWithArguments( UNISTRING("com.sun.star.configuration.ConfigurationAccess"),
-                                                                         aArgumentList );
+                                                                         aArgumentList );                                    
 
     uno::Reference< container::XNameAccess > xNameAccess( xConfigAccess, uno::UNO_QUERY_THROW );
 
@@ -943,7 +942,7 @@ bool UpdateHandler::showWarning( const rtl::OUString &rWarningText ) const
 
     uno::Reference< awt::XControl > xControl( mxUpdDlg, uno::UNO_QUERY );
     if ( !xControl.is() ) return bRet;
-
+ 
     uno::Reference< awt::XWindowPeer > xPeer = xControl->getPeer();
     if ( !xPeer.is() ) return bRet;
 
@@ -978,7 +977,7 @@ bool UpdateHandler::showWarning( const rtl::OUString &rWarningText ) const
 
     uno::Reference< lang::XComponent > xComponent( xMsgBox, uno::UNO_QUERY );
     if ( xComponent.is() )
-        xComponent->dispose();
+        xComponent->dispose(); 
 
     return bRet;
 }
@@ -992,7 +991,7 @@ bool UpdateHandler::showWarning( const rtl::OUString &rWarningText,
 
     uno::Reference< awt::XControl > xControl( mxUpdDlg, uno::UNO_QUERY );
     if ( !xControl.is() ) return bRet;
-
+ 
     uno::Reference< awt::XWindowPeer > xPeer = xControl->getPeer();
     if ( !xPeer.is() ) return bRet;
 
@@ -1049,7 +1048,7 @@ bool UpdateHandler::showWarning( const rtl::OUString &rWarningText,
 
     uno::Reference< lang::XComponent > xComponent( xMsgBox, uno::UNO_QUERY );
     if ( xComponent.is() )
-        xComponent->dispose();
+        xComponent->dispose(); 
 
     return bRet;
 }
@@ -1085,8 +1084,8 @@ bool UpdateHandler::showOverwriteWarning() const
 #define EDIT_WIDTH          ( DIALOG_WIDTH - 2 * DIALOG_BORDER )
 #define BOX1_BTN_X          ( DIALOG_BORDER + EDIT_WIDTH - BUTTON_WIDTH - INNER_BORDER )
 #define BOX1_BTN_Y          ( DIALOG_BORDER + LABEL_HEIGHT + INNER_BORDER)
-#define THROBBER_WIDTH      16
-#define THROBBER_HEIGHT     16
+#define THROBBER_WIDTH      14
+#define THROBBER_HEIGHT     14
 #define THROBBER_X_POS      ( DIALOG_BORDER + 8 )
 #define THROBBER_Y_POS      ( DIALOG_BORDER + 23 )
 #define BUTTON_BAR_HEIGHT   24
@@ -1115,7 +1114,7 @@ void UpdateHandler::showControls( short nControls )
         nShiftMe = (short)(nControls >> i);
         showControl( msButtonIDs[i], (bool)(nShiftMe & 0x01) );
     }
-
+        
     nShiftMe = (short)(nControls >> THROBBER_CTRL);
     startThrobber( (bool)(nShiftMe & 0x01) );
 
@@ -1146,10 +1145,10 @@ void UpdateHandler::createDialog()
     }
 
     uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager() );
-
+    
     if( xServiceManager.is() )
     {
-        uno::Reference< frame::XDesktop > xDesktop(
+        uno::Reference< frame::XDesktop > xDesktop( 
                 xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.frame.Desktop"), mxContext ),
                 uno::UNO_QUERY );
         if ( xDesktop.is() )
@@ -1176,7 +1175,7 @@ void UpdateHandler::createDialog()
         xPropSet->setPropertyValue( UNISTRING("PositionY"), uno::Any(sal_Int32( 100 )) );
         xPropSet->setPropertyValue( UNISTRING("Width"), uno::Any(sal_Int32( DIALOG_WIDTH )) );
         xPropSet->setPropertyValue( UNISTRING("Height"), uno::Any(sal_Int32( DIALOG_HEIGHT )) );
-        xPropSet->setPropertyValue( UNISTRING("HelpURL"), uno::Any( UNISTRING( INET_HID_SCHEME ) + rtl::OUString::createFromAscii( HID_CHECK_FOR_UPD_DLG ) ) );
+        xPropSet->setPropertyValue( UNISTRING("HelpURL"), uno::Any( UNISTRING( "HID:" ) + rtl::OUString::valueOf( (sal_Int32) HID_CHECK_FOR_UPD_DLG ) ) );
     }
     {   // Label (fixed text) <status>
         uno::Sequence< beans::NamedValue > aProps(1);
@@ -1203,7 +1202,7 @@ void UpdateHandler::createDialog()
         setProperty( aProps, 3, UNISTRING("MultiLine"), uno::Any( true ) );
         setProperty( aProps, 4, UNISTRING("ReadOnly"), uno::Any( true ) );
         setProperty( aProps, 5, UNISTRING("AutoVScroll"), uno::Any( true ) );
-        setProperty( aProps, 6, UNISTRING("HelpURL"), uno::Any( UNISTRING( INET_HID_SCHEME ) + rtl::OUString::createFromAscii( HID_CHECK_FOR_UPD_STATUS ) ) );
+        setProperty( aProps, 6, UNISTRING("HelpURL"), uno::Any( UNISTRING( "HID:" ) + rtl::OUString::valueOf( (sal_Int32) HID_CHECK_FOR_UPD_STATUS ) ) );
 
         insertControlModel( xControlModel, EDIT_FIELD_MODEL, TEXT_STATUS,
                             awt::Rectangle( DIALOG_BORDER + TEXT_OFFSET,
@@ -1234,7 +1233,7 @@ void UpdateHandler::createDialog()
         setProperty( aProps, 1, UNISTRING("Enabled"), uno::Any( true ) );
         setProperty( aProps, 2, UNISTRING("PushButtonType"), uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) );
         setProperty( aProps, 3, UNISTRING("Label"), uno::Any( msPauseBtn ) );
-        setProperty( aProps, 4, UNISTRING("HelpURL"), uno::Any( UNISTRING( INET_HID_SCHEME ) + rtl::OUString::createFromAscii( HID_CHECK_FOR_UPD_PAUSE ) ) );
+        setProperty( aProps, 4, UNISTRING("HelpURL"), uno::Any( UNISTRING( "HID:" ) + rtl::OUString::valueOf( (sal_Int32) HID_CHECK_FOR_UPD_PAUSE ) ) );
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[PAUSE_BUTTON],
                              awt::Rectangle( BOX1_BTN_X, BOX1_BTN_Y, BUTTON_WIDTH, BUTTON_HEIGHT ),
@@ -1247,7 +1246,7 @@ void UpdateHandler::createDialog()
         setProperty( aProps, 1, UNISTRING("Enabled"), uno::Any( true ) );
         setProperty( aProps, 2, UNISTRING("PushButtonType"), uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) );
         setProperty( aProps, 3, UNISTRING("Label"), uno::Any( msResumeBtn ) );
-        setProperty( aProps, 4, UNISTRING("HelpURL"), uno::Any( UNISTRING( INET_HID_SCHEME ) + rtl::OUString::createFromAscii( HID_CHECK_FOR_UPD_RESUME ) ) );
+        setProperty( aProps, 4, UNISTRING("HelpURL"), uno::Any( UNISTRING( "HID:" ) + rtl::OUString::valueOf( (sal_Int32) HID_CHECK_FOR_UPD_RESUME ) ) );
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[RESUME_BUTTON],
                              awt::Rectangle( BOX1_BTN_X,
@@ -1263,7 +1262,7 @@ void UpdateHandler::createDialog()
         setProperty( aProps, 1, UNISTRING("Enabled"), uno::Any( true ) );
         setProperty( aProps, 2, UNISTRING("PushButtonType"), uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) );
         setProperty( aProps, 3, UNISTRING("Label"), uno::Any( msCancelBtn ) );
-        setProperty( aProps, 4, UNISTRING("HelpURL"), uno::Any( UNISTRING( INET_HID_SCHEME ) + rtl::OUString::createFromAscii( HID_CHECK_FOR_UPD_CANCEL ) ) );
+        setProperty( aProps, 4, UNISTRING("HelpURL"), uno::Any( UNISTRING( "HID:" ) + rtl::OUString::valueOf( (sal_Int32) HID_CHECK_FOR_UPD_CANCEL ) ) );
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[CANCEL_BUTTON],
                              awt::Rectangle( BOX1_BTN_X,
@@ -1297,7 +1296,7 @@ void UpdateHandler::createDialog()
         setProperty( aProps, 3, UNISTRING("MultiLine"), uno::Any( true ) );
         setProperty( aProps, 4, UNISTRING("ReadOnly"), uno::Any( true ) );
         setProperty( aProps, 5, UNISTRING("AutoVScroll"), uno::Any( true ) );
-        setProperty( aProps, 6, UNISTRING("HelpURL"), uno::Any( UNISTRING( INET_HID_SCHEME ) + rtl::OUString::createFromAscii( HID_CHECK_FOR_UPD_DESCRIPTION ) ) );
+        setProperty( aProps, 6, UNISTRING("HelpURL"), uno::Any( UNISTRING( "HID:" ) + rtl::OUString::valueOf( (sal_Int32) HID_CHECK_FOR_UPD_DESCRIPTION ) ) );
 
         insertControlModel( xControlModel, EDIT_FIELD_MODEL, TEXT_DESCRIPTION,
                             awt::Rectangle( DIALOG_BORDER + TEXT_OFFSET,
@@ -1327,7 +1326,7 @@ void UpdateHandler::createDialog()
         // setProperty( aProps, 2, UNISTRING("PushButtonType"), uno::Any( sal_Int16(awt::PushButtonType_CANCEL) ) );
         // [property] string Label // only if PushButtonType_STANDARD
         setProperty( aProps, 3, UNISTRING("Label"), uno::Any( msClose ) );
-        setProperty( aProps, 4, UNISTRING("HelpURL"), uno::Any( UNISTRING( INET_HID_SCHEME ) + rtl::OUString::createFromAscii( HID_CHECK_FOR_UPD_CLOSE ) ) );
+        setProperty( aProps, 4, UNISTRING("HelpURL"), uno::Any( UNISTRING( "HID:" ) + rtl::OUString::valueOf( (sal_Int32) HID_CHECK_FOR_UPD_CLOSE ) ) );
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[ CLOSE_BUTTON ],
                              awt::Rectangle( CLOSE_BTN_X, BUTTON_Y_POS, BUTTON_WIDTH, BUTTON_HEIGHT ),
@@ -1340,7 +1339,7 @@ void UpdateHandler::createDialog()
         setProperty( aProps, 1, UNISTRING("Enabled"), uno::Any( true ) );
         setProperty( aProps, 2, UNISTRING("PushButtonType"), uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) );
         setProperty( aProps, 3, UNISTRING("Label"), uno::Any( msInstall ) );
-        setProperty( aProps, 4, UNISTRING("HelpURL"), uno::Any( UNISTRING( INET_HID_SCHEME ) + rtl::OUString::createFromAscii( HID_CHECK_FOR_UPD_INSTALL ) ) );
+        setProperty( aProps, 4, UNISTRING("HelpURL"), uno::Any( UNISTRING( "HID:" ) + rtl::OUString::valueOf( (sal_Int32) HID_CHECK_FOR_UPD_INSTALL ) ) );
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[INSTALL_BUTTON],
                              awt::Rectangle( INSTALL_BTN_X, BUTTON_Y_POS, BUTTON_WIDTH, BUTTON_HEIGHT ),
@@ -1353,7 +1352,7 @@ void UpdateHandler::createDialog()
         setProperty( aProps, 1, UNISTRING("Enabled"), uno::Any( true ) );
         setProperty( aProps, 2, UNISTRING("PushButtonType"), uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) );
         setProperty( aProps, 3, UNISTRING("Label"), uno::Any( msDownload ) );
-        setProperty( aProps, 4, UNISTRING("HelpURL"), uno::Any( UNISTRING( INET_HID_SCHEME ) + rtl::OUString::createFromAscii( HID_CHECK_FOR_UPD_DOWNLOAD ) ) );
+        setProperty( aProps, 4, UNISTRING("HelpURL"), uno::Any( UNISTRING( "HID:" ) + rtl::OUString::valueOf( (sal_Int32) HID_CHECK_FOR_UPD_DOWNLOAD ) ) );
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[DOWNLOAD_BUTTON],
                              awt::Rectangle( DOWNLOAD_BTN_X, BUTTON_Y_POS, BUTTON_WIDTH, BUTTON_HEIGHT ),
@@ -1373,7 +1372,7 @@ void UpdateHandler::createDialog()
     {   // @see awt/UnoControlThrobberModel.idl
         uno::Sequence< beans::NamedValue > aProps;
 
-        insertControlModel( xControlModel, UNISTRING("com.sun.star.awt.SpinningProgressControlModel"), CTRL_THROBBER,
+        insertControlModel( xControlModel, UNISTRING("com.sun.star.awt.UnoThrobberControlModel"), CTRL_THROBBER,
                             awt::Rectangle( THROBBER_X_POS, THROBBER_Y_POS, THROBBER_WIDTH, THROBBER_HEIGHT),
                             aProps );
     }

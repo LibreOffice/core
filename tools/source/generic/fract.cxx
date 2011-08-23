@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,15 @@
 |*    Beschreibung      Berechnet den groessten gemeinsamen Teiler von
 |*                      nVal1 und nVal2
 |*    Parameter         long nVal1, long nVal2
+|*    Ersterstellung    DV 20.09.90
+|*    Letzte Aenderung  DV 21.12.92
 |*
 *************************************************************************/
 
 // Die Funktion GetGGT berechnet den groessten gemeinsamen Teiler der
 // beiden als Parameter uebergebenen Werte nVal1 und nVal2 nach dem
 // Algorithmus von Euklid. Hat einer der beiden Parameter den Wert 0 oder
-// 1, so wird als Ergebnis der Wert 1 zurï¿½ckgegeben. Da der Algorithmus
+// 1, so wird als Ergebnis der Wert 1 zurŸckgegeben. Da der Algorithmus
 // nur mit positiven Zahlen arbeitet, werden die beiden Parameter
 // entsprechend umgewandelt.
 // Zum Algorithmus: die beiden Parameter werden solange ducheinander
@@ -126,6 +128,10 @@ static void Reduce( BigInt &rVal1, BigInt &rVal2 )
 |*
 |*    Fraction::Fraction()
 |*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    WP 07.03.97
+|*    Letzte Aenderung
+|*
 *************************************************************************/
 
 Fraction::Fraction( long nN1, long nN2, long nD1, long nD2 )
@@ -137,7 +143,7 @@ Fraction::Fraction( long nN1, long nN2, long nD1, long nD2 )
     if( nN2 < 0 ) { i = -i; nN2 = -nN2; }
     if( nD1 < 0 ) { i = -i; nD1 = -nD1; }
     if( nD2 < 0 ) { i = -i; nD2 = -nD2; }
-
+    
     n = GetGGT( nN1, nD1 ); if( n > 1 ) { nN1 /= n; nD1 /= n; }
     n = GetGGT( nN1, nD2 ); if( n > 1 ) { nN1 /= n; nD2 /= n; }
     n = GetGGT( nN2, nD1 ); if( n > 1 ) { nN2 /= n; nD1 /= n; }
@@ -171,6 +177,10 @@ Fraction::Fraction( long nN1, long nN2, long nD1, long nD2 )
 |*
 |*    Fraction::Fraction()
 |*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    DV 20.09.90
+|*    Letzte Aenderung  DV 21.12.92
+|*
 *************************************************************************/
 
 // Zur Initialisierung eines Bruches wird nNum dem Zaehler und nDen dem
@@ -198,6 +208,10 @@ Fraction::Fraction( long nNum, long nDen )
 /*************************************************************************
 |*
 |*    Fraction::Fraction()
+|*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    DV 20.09.90
+|*    Letzte Aenderung  DV 21.12.92
 |*
 *************************************************************************/
 
@@ -237,6 +251,10 @@ Fraction::Fraction( double dVal )
 |*
 |*    Fraction::operator double()
 |*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    DV 20.09.90
+|*    Letzte Aenderung  DV 14.05.91
+|*
 *************************************************************************/
 
 Fraction::operator double() const
@@ -250,6 +268,10 @@ Fraction::operator double() const
 /*************************************************************************
 |*
 |*    Fraction::operator+=()
+|*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    DV 20.09.90
+|*    Letzte Aenderung  DV 21.12.92
 |*
 *************************************************************************/
 
@@ -282,7 +304,7 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
 
     BigInt nD( nDenominator );
     nD *= BigInt( rVal.nDenominator );
-
+    
     Reduce( nN, nD );
 
     if ( nN.bIsBig || nD.bIsBig )
@@ -302,6 +324,10 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
 /*************************************************************************
 |*
 |*    Fraction::operator-=()
+|*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    DV 20.09.90
+|*    Letzte Aenderung  DV 21.12.92
 |*
 *************************************************************************/
 
@@ -355,6 +381,10 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
 |*
 |*    Fraction::operator*=()
 |*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    DV 20.09.90
+|*    Letzte Aenderung  TH 19.08.92
+|*
 *************************************************************************/
 
 // Zunaechst werden die beiden Parameter auf ihre Gueltigkeit ueberprueft.
@@ -402,6 +432,10 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
 /*************************************************************************
 |*
 |*    Fraction::operator/=()
+|*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    DV 20.09.90
+|*    Letzte Aenderung  DV 21.12.92
 |*
 *************************************************************************/
 
@@ -459,6 +493,10 @@ Fraction& Fraction::operator /= ( const Fraction& rVal )
 |*
 |*    Fraction::ReduceInaccurate()
 |*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    JOE 17.09.95
+|*    Letzte Aenderung  kendy 2007-06-13
+|*
 *************************************************************************/
 
 
@@ -474,7 +512,7 @@ const char nbits_table[32] =
 static int impl_NumberOfBits( unsigned long nNum )
 {
     // http://en.wikipedia.org/wiki/De_Bruijn_sequence
-    //
+    // 
     // background paper: Using de Bruijn Sequences to Index a 1 in a
     // Computer Word (1998) Charles E. Leiserson,
     // Harald Prokop, Keith H. Randall
@@ -569,7 +607,7 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     if ( !nMul || !nDiv )
     {
         // Return without reduction
-        OSL_FAIL( "Oops, we reduced too much..." );
+        DBG_ERROR( "Oops, we reduced too much..." );
         return;
     }
 
@@ -589,12 +627,16 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
 |*
 |*    Fraction::operator ==()
 |*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    DV 20.09.90
+|*    Letzte Aenderung  TH 19.08.92
+|*
 *************************************************************************/
 
-bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
+BOOL operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
-        return false;
+        return FALSE;
 
     return rVal1.nNumerator == rVal2.nNumerator
            && rVal1.nDenominator == rVal2.nDenominator;
@@ -603,6 +645,10 @@ bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 /*************************************************************************
 |*
 |*    Fraction::operator <()
+|*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    DV 20.09.90
+|*    Letzte Aenderung  DV 21.12.92
 |*
 *************************************************************************/
 
@@ -613,10 +659,10 @@ bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 // und (c*b) zu vergleichen. Das Ergebnis dieses Vergleichs wird
 // zurueckgegeben.
 
-bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
+BOOL operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
-        return false;
+        return FALSE;
 
     BigInt nN( rVal1.nNumerator );
     nN *= BigInt( rVal2.nDenominator );
@@ -630,6 +676,10 @@ bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 |*
 |*    Fraction::operator >()
 |*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    DV 20.09.90
+|*    Letzte Aenderung  TH 19.08.92
+|*
 *************************************************************************/
 
 // Beide Operanden werden zunaechst auf ihre Gueltigkeit ueberprueft und
@@ -639,10 +689,10 @@ bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 // und (c*b) zu vergleichen. Das Ergebnis dieses Vergleichs wird
 // zurueckgegeben.
 
-bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
+BOOL operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
-        return false;
+        return FALSE;
 
     BigInt nN( rVal1.nNumerator );
     nN *= BigInt( rVal2.nDenominator );
@@ -656,6 +706,10 @@ bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 |*
 |*    SvStream& operator>>( SvStream& rIStream, Fraction& rFract )
 |*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    MM 08.01.96
+|*    Letzte Aenderung  MM 08.01.96
+|*
 *************************************************************************/
 SvStream& operator >> ( SvStream& rIStream, Fraction& rFract )
 {
@@ -667,6 +721,10 @@ SvStream& operator >> ( SvStream& rIStream, Fraction& rFract )
 /*************************************************************************
 |*
 |*    SvStream& operator<<( SvStream& rIStream, Fraction& rFract )
+|*
+|*    Beschreibung      FRACT.SDW
+|*    Ersterstellung    MM 08.01.96
+|*    Letzte Aenderung  MM 08.01.96
 |*
 *************************************************************************/
 SvStream& operator << ( SvStream& rOStream, const Fraction& rFract )

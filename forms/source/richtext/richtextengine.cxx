@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #define ITEMID_LANGUAGE     EE_CHAR_LANGUAGE
 #include <editeng/langitem.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/mapunit.hxx>
+#include <vcl/mapunit.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 #include <unotools/lingucfg.hxx>

@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,6 @@ namespace sfx2
         ,m_aContentWindow( this, WB_DIALOGCONTROL )
         ,m_aBorder( 3, 1, 3, 3 )
         ,m_bLayoutPending( false )
-        ,m_nTitleBarHeight(0)
     {
         impl_construct();
     }
@@ -134,30 +133,30 @@ namespace sfx2
     void TitledDockingWindow::impl_layout()
     {
         m_bLayoutPending = false;
-
+        
         m_aToolbox.ShowItem( 1, !IsFloatingMode() );
 
         const Size aToolBoxSize( m_aToolbox.CalcWindowSizePixel() );
         Size aWindowSize( GetOutputSizePixel() );
 
         // position the tool box
-        m_nTitleBarHeight = GetSettings().GetStyleSettings().GetTitleHeight();
-        if ( aToolBoxSize.Height() > m_nTitleBarHeight )
-            m_nTitleBarHeight = aToolBoxSize.Height();
+        int nTitleBarHeight( GetSettings().GetStyleSettings().GetTitleHeight() );
+        if ( aToolBoxSize.Height() > nTitleBarHeight )
+            nTitleBarHeight = aToolBoxSize.Height();
         m_aToolbox.SetPosSizePixel(
             Point(
                 aWindowSize.Width() - aToolBoxSize.Width(),
-                ( m_nTitleBarHeight - aToolBoxSize.Height() ) / 2
+                ( nTitleBarHeight - aToolBoxSize.Height() ) / 2
             ),
             aToolBoxSize
         );
 
         // Place the content window.
-        if ( m_nTitleBarHeight < aToolBoxSize.Height() )
-            m_nTitleBarHeight = aToolBoxSize.Height();
-        aWindowSize.Height() -= m_nTitleBarHeight;
+        if ( nTitleBarHeight < aToolBoxSize.Height() )
+            nTitleBarHeight = aToolBoxSize.Height();
+        aWindowSize.Height() -= nTitleBarHeight;
         m_aContentWindow.SetPosSizePixel(
-            Point( m_aBorder.Left(), m_nTitleBarHeight + m_aBorder.Top() ),
+            Point( m_aBorder.Left(), nTitleBarHeight + m_aBorder.Top() ),
             Size(
                 aWindowSize.Width() - m_aBorder.Left() - m_aBorder.Right(),
                 aWindowSize.Height() - m_aBorder.Top() - m_aBorder.Bottom()
@@ -177,6 +176,11 @@ namespace sfx2
 
         Push( PUSH_FONT | PUSH_FILLCOLOR | PUSH_LINECOLOR );
 
+        int nTitleBarHeight( GetSettings().GetStyleSettings().GetTitleHeight() );
+        const Size aToolBoxSize = m_aToolbox.CalcWindowSizePixel();
+        if ( aToolBoxSize.Height() > nTitleBarHeight )
+            nTitleBarHeight = aToolBoxSize.Height();
+
         SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
         SetLineColor();
 
@@ -191,15 +195,15 @@ namespace sfx2
         int nInnerLeft = nOuterLeft + m_aBorder.Left() - 1;
         int nOuterRight = aWindowSize.Width() - 1;
         int nInnerRight = nOuterRight - m_aBorder.Right() + 1;
-        int nInnerTop = m_nTitleBarHeight + m_aBorder.Top() - 1;
+        int nInnerTop = nTitleBarHeight + m_aBorder.Top() - 1;
         int nOuterBottom = aWindowSize.Height() - 1;
         int nInnerBottom = nOuterBottom - m_aBorder.Bottom() + 1;
 
         // Paint title bar background.
         Rectangle aTitleBarBox( Rectangle(
             nOuterLeft,
-            0,
-            nOuterRight,
+            0, 
+            nOuterRight, 
             nInnerTop-1
         ) );
         DrawRect( aTitleBarBox );
@@ -247,16 +251,21 @@ namespace sfx2
 
         // Get the closer bitmap and set it as right most button.
         Image aImage( SfxResId( SFX_IMG_CLOSE_DOC ) );
-        m_aToolbox.InsertItem( 1, aImage );
+        Image aImageHC( SfxResId( SFX_IMG_CLOSE_DOC_HC ) );
+        m_aToolbox.InsertItem( 1,
+                GetSettings().GetStyleSettings().GetHighContrastMode()
+            ?   aImageHC 
+            :   aImage
+        );
         m_aToolbox.ShowItem( 1 );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    sal_uInt16 TitledDockingWindow::impl_addDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback )
+    USHORT TitledDockingWindow::impl_addDropDownToolBoxItem( const String& i_rItemText, ULONG i_nHelpId, const Link& i_rCallback )
     {
         // Add the menu before the closer button.
-        const sal_uInt16 nItemCount( m_aToolbox.GetItemCount() );
-        const sal_uInt16 nItemId( nItemCount + 1 );
+        const USHORT nItemCount( m_aToolbox.GetItemCount() );
+        const USHORT nItemId( nItemCount + 1 );
         m_aToolbox.InsertItem( nItemId, i_rItemText, TIB_DROPDOWNONLY, nItemCount > 0 ? nItemCount - 1 : TOOLBOX_APPEND );
         m_aToolbox.SetHelpId( nItemId, i_nHelpId );
         m_aToolbox.SetClickHdl( i_rCallback );
@@ -266,21 +275,21 @@ namespace sfx2
         // resized.
         impl_scheduleLayout();
         Invalidate();
-
+        
         return nItemId;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     IMPL_LINK( TitledDockingWindow, OnToolboxItemSelected, ToolBox*, pToolBox )
     {
-        const sal_uInt16 nId = pToolBox->GetCurItemId();
+        const USHORT nId = pToolBox->GetCurItemId();
 
         if ( nId == 1 )
         {
             // the closer
             EndTracking();
             const sal_uInt16 nChildWindowId( GetChildWindow_Impl()->GetType() );
-            const SfxBoolItem aVisibility( nChildWindowId, sal_False );
+            const SfxBoolItem aVisibility( nChildWindowId, FALSE );
             GetBindings().GetDispatcher()->Execute(
                 nChildWindowId,
                 SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
@@ -305,7 +314,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TitledDockingWindow::EndDocking( const Rectangle& i_rRect, sal_Bool i_bFloatMode )
+    void TitledDockingWindow::EndDocking( const Rectangle& i_rRect, BOOL i_bFloatMode )
     {
         SfxDockingWindow::EndDocking( i_rRect, i_bFloatMode );
 
@@ -334,7 +343,7 @@ namespace sfx2
                 if ( IsControlFont() )
                     aFont.Merge( GetControlFont() );
                 SetZoomedPointFont( aFont );
-
+                
                 // Color.
                 Color aColor;
                 if ( IsControlForeground() )

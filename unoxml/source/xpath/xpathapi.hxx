@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,16 +26,14 @@
  *
  ************************************************************************/
 
-#ifndef XPATH_XPATHAPI_HXX
-#define XPATH_XPATHAPI_HXX
+#ifndef _XPATHAPI_HXX
+#define _XPATHAPI_HXX
 
 #include <map>
 #include <vector>
 
 #include <sal/types.h>
-
 #include <cppuhelper/implbase2.hxx>
-
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
@@ -53,9 +51,11 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include "libxml/tree.h"
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::xpath;
 
@@ -64,40 +64,28 @@ namespace XPath
     typedef std::map<OUString, OUString> nsmap_t;
     typedef std::vector< Reference<XXPathExtension> > extensions_t;
 
-    typedef ::cppu::WeakImplHelper2
-        <   XXPathAPI
-        ,   ::com::sun::star::lang::XServiceInfo
-        > CXPathAPI_Base;
-
     class  CXPathAPI
-        : public CXPathAPI_Base
+        : public ::cppu::WeakImplHelper2< XXPathAPI, XServiceInfo >
     {
 
     private:
-        ::osl::Mutex m_Mutex;
         nsmap_t m_nsmap;
-        const Reference< ::com::sun::star::lang::XMultiServiceFactory > m_aFactory;
+        const Reference < XMultiServiceFactory > m_aFactory;
         extensions_t m_extensions;
 
     public:
         // ctor
-        CXPathAPI(
-            const Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-                rSMgr);
+        CXPathAPI(const Reference< XMultiServiceFactory >& rSMgr);
 
         // call for factory
-        static Reference< XInterface > getInstance(
-            const Reference < ::com::sun::star::lang::XMultiServiceFactory >&
-                xFactory);
+        static Reference< XInterface > getInstance(const Reference < XMultiServiceFactory >& xFactory);
 
         // static helpers for service info and component management
         static const char* aImplementationName;
         static const char* aSupportedServiceNames[];
         static OUString _getImplementationName();
         static Sequence< OUString > _getSupportedServiceNames();
-        static Reference< XInterface > _getInstance(
-            const Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-                rSMgr);
+        static Reference< XInterface > _getInstance(const Reference< XMultiServiceFactory >& rSMgr);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()

@@ -37,7 +37,8 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+= -DX86 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1
+CDEFS+= -DX86 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
+
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
@@ -59,8 +60,12 @@ CC*=gcc
 # flags for C and C++ Compiler
 CFLAGS+=-fmessage-length=0 -c
 
-# flags to enable build with symbols
+# flags to enable build with symbols; required for crashdump feature
+.IF "$(ENABLE_SYMBOLS)"=="SMALL"
+CFLAGSENABLESYMBOLS=-g1
+.ELSE
 CFLAGSENABLESYMBOLS=-g
+.ENDIF
 
 # flags for the C++ Compiler
 CFLAGSCC= -pipe $(ARCH_FLAGS)
@@ -158,6 +163,16 @@ STDSHLGUIMT=-lX11 -lXext -lpthread -lm
 STDSHLCUIMT=-lpthread -lm
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
+
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlport -lstdc++
+LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
+.ELSE
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lstdc++
+LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
+.ENDIF
+
+#FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
 # name of library manager
 LIBMGR=ar

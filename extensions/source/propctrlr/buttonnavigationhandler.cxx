@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,7 +121,7 @@ namespace pcr
         break;
 
         default:
-            OSL_FAIL( "ButtonNavigationHandler::getPropertyState: cannot handle this property!" );
+            DBG_ERROR( "ButtonNavigationHandler::getPropertyState: cannot handle this property!" );
             break;
         }
 
@@ -152,13 +152,13 @@ namespace pcr
         break;
 
         default:
-            OSL_FAIL( "ButtonNavigationHandler::getPropertyValue: cannot handle this property!" );
+            DBG_ERROR( "ButtonNavigationHandler::getPropertyValue: cannot handle this property!" );
             break;
         }
 
         return aReturn;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ButtonNavigationHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
@@ -181,10 +181,10 @@ namespace pcr
         break;
 
         default:
-            OSL_FAIL( "ButtonNavigationHandler::setPropertyValue: cannot handle this id!" );
+            OSL_ENSURE( sal_False, "ButtonNavigationHandler::setPropertyValue: cannot handle this id!" );
         }
     }
-
+    
     //--------------------------------------------------------------------
     bool ButtonNavigationHandler::isNavigationCapableButton( const Reference< XPropertySet >& _rxComponent )
     {
@@ -265,7 +265,7 @@ namespace pcr
         break;
 
         default:
-            OSL_FAIL( "ButtonNavigationHandler::actuatingPropertyChanged: cannot handle this id!" );
+            OSL_ENSURE( sal_False, "ButtonNavigationHandler::actuatingPropertyChanged: cannot handle this id!" );
         }
     }
 

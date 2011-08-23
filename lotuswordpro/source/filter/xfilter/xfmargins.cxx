@@ -57,15 +57,20 @@
  * @file
  * Margins object, include left margin,right margin,top margin and bottom margin.
  ************************************************************************/
+/*************************************************************************
+ * Change History
+ * 2005-01-19 create this file.
+ ************************************************************************/
 
-#include    "xfmargins.hxx"
+
+#include	"xfmargins.hxx"
 
 XFMargins::XFMargins()
 {
     Reset();
 }
 
-void    XFMargins::Reset()
+void	XFMargins::Reset()
 {
     m_fLeft = 0;
     m_fRight = 0;
@@ -74,9 +79,9 @@ void    XFMargins::Reset()
     m_nFlag = 0;
 }
 
-void    XFMargins::ToXml(IXFStream *pStrm)
+void	XFMargins::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     //margin left:
     if( m_nFlag&XFMARGINS_FLAG_LEFT )
     {

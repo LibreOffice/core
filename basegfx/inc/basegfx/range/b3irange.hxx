@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,31 +39,31 @@ namespace basegfx
 {
     class B3IRange
     {
-        typedef ::basegfx::BasicRange< sal_Int32, Int32Traits > MyBasicRange;
+        typedef ::basegfx::BasicRange< sal_Int32, Int32Traits >	MyBasicRange;
 
-        MyBasicRange            maRangeX;
-        MyBasicRange            maRangeY;
-        MyBasicRange            maRangeZ;
+        MyBasicRange			maRangeX;
+        MyBasicRange			maRangeY;
+        MyBasicRange			maRangeZ;
 
-    public:
-        B3IRange()
+    public:		
+        B3IRange() 
         {
         }
-
+        
         explicit B3IRange(const B3ITuple& rTuple)
-        :   maRangeX(rTuple.getX()),
+        :	maRangeX(rTuple.getX()),
             maRangeY(rTuple.getY()),
             maRangeZ(rTuple.getZ())
         {
         }
-
+        
         B3IRange(sal_Int32 x1,
                  sal_Int32 y1,
                  sal_Int32 z1,
                  sal_Int32 x2,
                  sal_Int32 y2,
                  sal_Int32 z2)
-        :   maRangeX(x1),
+        :	maRangeX(x1),
             maRangeY(y1),
             maRangeZ(z1)
         {
@@ -74,7 +74,7 @@ namespace basegfx
 
         B3IRange(const B3ITuple& rTuple1,
                  const B3ITuple& rTuple2)
-        :   maRangeX(rTuple1.getX()),
+        :	maRangeX(rTuple1.getX()),
             maRangeY(rTuple1.getY()),
             maRangeZ(rTuple1.getZ())
         {
@@ -82,44 +82,44 @@ namespace basegfx
         }
 
         B3IRange(const B3IRange& rRange)
-        :   maRangeX(rRange.maRangeX),
+        :	maRangeX(rRange.maRangeX),
             maRangeY(rRange.maRangeY),
             maRangeZ(rRange.maRangeZ)
         {
         }
 
-        bool isEmpty() const
+        bool isEmpty() const 
         {
             return maRangeX.isEmpty() || maRangeY.isEmpty() || maRangeZ.isEmpty();
         }
 
-        void reset()
-        {
-            maRangeX.reset();
-            maRangeY.reset();
-            maRangeZ.reset();
+        void reset() 
+        { 
+            maRangeX.reset(); 
+            maRangeY.reset(); 
+            maRangeZ.reset(); 
         }
-
-        bool operator==( const B3IRange& rRange ) const
-        {
-            return (maRangeX == rRange.maRangeX
+        
+        bool operator==( const B3IRange& rRange ) const 
+        { 
+            return (maRangeX == rRange.maRangeX 
                 && maRangeY == rRange.maRangeY
-                && maRangeZ == rRange.maRangeZ);
+                && maRangeZ == rRange.maRangeZ); 
         }
 
-        bool operator!=( const B3IRange& rRange ) const
-        {
-            return (maRangeX != rRange.maRangeX
+        bool operator!=( const B3IRange& rRange ) const 
+        { 
+            return (maRangeX != rRange.maRangeX 
                 || maRangeY != rRange.maRangeY
-                || maRangeZ != rRange.maRangeZ);
+                || maRangeZ != rRange.maRangeZ); 
         }
 
-        B3IRange& operator=(const B3IRange& rRange)
-        {
-            maRangeX = rRange.maRangeX;
-            maRangeY = rRange.maRangeY;
-            maRangeZ = rRange.maRangeZ;
-            return *this;
+        B3IRange& operator=(const B3IRange& rRange) 
+        { 
+            maRangeX = rRange.maRangeX; 
+            maRangeY = rRange.maRangeY; 
+            maRangeZ = rRange.maRangeZ; 
+            return *this; 
         }
 
         sal_Int32 getMinX() const
@@ -175,7 +175,7 @@ namespace basegfx
                 maRangeZ.getMinimum()
                 );
         }
-
+        
         B3IPoint getMaximum() const
         {
             return B3IPoint(
@@ -193,7 +193,7 @@ namespace basegfx
                 maRangeZ.getRange()
                 );
         }
-
+    
         B3DPoint getCenter() const
         {
             return B3DPoint(
@@ -202,11 +202,11 @@ namespace basegfx
                 maRangeZ.getCenter()
                 );
         }
-
+    
         bool isInside(const B3ITuple& rTuple) const
         {
             return (
-                maRangeX.isInside(rTuple.getX())
+                maRangeX.isInside(rTuple.getX()) 
                 && maRangeY.isInside(rTuple.getY())
                 && maRangeZ.isInside(rTuple.getZ())
                 );
@@ -215,7 +215,7 @@ namespace basegfx
         bool isInside(const B3IRange& rRange) const
         {
             return (
-                maRangeX.isInside(rRange.maRangeX)
+                maRangeX.isInside(rRange.maRangeX) 
                 && maRangeY.isInside(rRange.maRangeY)
                 && maRangeZ.isInside(rRange.maRangeZ)
                 );
@@ -224,7 +224,7 @@ namespace basegfx
         bool overlaps(const B3IRange& rRange) const
         {
             return (
-                maRangeX.overlaps(rRange.maRangeX)
+                maRangeX.overlaps(rRange.maRangeX) 
                 && maRangeY.overlaps(rRange.maRangeY)
                 && maRangeZ.overlaps(rRange.maRangeZ)
                 );
@@ -239,23 +239,23 @@ namespace basegfx
 
         void expand(const B3IRange& rRange)
         {
-            maRangeX.expand(rRange.maRangeX);
-            maRangeY.expand(rRange.maRangeY);
-            maRangeZ.expand(rRange.maRangeZ);
+            maRangeX.expand(rRange.maRangeX); 
+            maRangeY.expand(rRange.maRangeY); 
+            maRangeZ.expand(rRange.maRangeZ); 
         }
 
         void intersect(const B3IRange& rRange)
         {
-            maRangeX.intersect(rRange.maRangeX);
-            maRangeY.intersect(rRange.maRangeY);
-            maRangeZ.intersect(rRange.maRangeZ);
+            maRangeX.intersect(rRange.maRangeX); 
+            maRangeY.intersect(rRange.maRangeY); 
+            maRangeZ.intersect(rRange.maRangeZ); 
         }
 
         void grow(sal_Int32 nValue)
         {
-            maRangeX.grow(nValue);
-            maRangeY.grow(nValue);
-            maRangeZ.grow(nValue);
+            maRangeX.grow(nValue); 
+            maRangeY.grow(nValue); 
+            maRangeZ.grow(nValue); 
         }
     };
 } // end of namespace basegfx

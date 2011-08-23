@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,7 +149,7 @@ class SwTaggedPDFHelper
 
     // This will be incremented for each BeginTag() call.
     // It denotes the number of tags to close during EndStructureElements();
-    sal_uInt8 nEndStructureElement;
+    BYTE nEndStructureElement;
 
     //  If an already existing tag is reopened for follows of flow frames,
     // this value stores the tag id which has to be restored.

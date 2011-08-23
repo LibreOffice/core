@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <oox/export/drawingml.hxx>
 #include <sax/fshelper.hxx>
 #include <vcl/mapmod.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 namespace com { namespace sun { namespace star {
 namespace beans {
@@ -61,11 +61,13 @@ private:
 
     struct ShapeHash
     {
+        std::hash<const char*> maHashFunction;
+
         size_t operator()( const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > ) const;
     };
 
 public:
-    typedef boost::unordered_map< const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
+    typedef std::hash_map< const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
 
 protected:
     sal_Int32           mnShapeIdMax, mnPictureIdMax;

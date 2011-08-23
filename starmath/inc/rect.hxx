@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@
 #include "format.hxx"
 
 
-bool SmGetGlyphBoundRect(const OutputDevice &rDev,
+BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
                          const XubString &rText, Rectangle &rRect);
 
-bool SmIsMathAlpha(const XubString &rText);
+BOOL SmIsMathAlpha(const XubString &rText);
 
 
 inline long SmFromTo(long nFrom, long nTo, double fRelDist)
@@ -60,41 +60,41 @@ inline long SmFromTo(long nFrom, long nTo, double fRelDist)
 //
 
 // possible flags for the 'Draw' function below (just for debugging)
-#define SM_RECT_CORE    0x0001
-#define SM_RECT_ITALIC  0x0002
-#define SM_RECT_LINES   0x0004
-#define SM_RECT_MID     0x0008
+#define SM_RECT_CORE	0x0001
+#define SM_RECT_ITALIC	0x0002
+#define SM_RECT_LINES	0x0004
+#define SM_RECT_MID		0x0008
 
 // possible positions and alignments for the 'AlignTo' function
 enum RectPos
     // (RP_LEFT : align the current object to the left of the argument, ...)
-{   RP_LEFT, RP_RIGHT,
+{	RP_LEFT, RP_RIGHT,
     RP_TOP, RP_BOTTOM,
     RP_ATTRIBUT
 };
 enum RectHorAlign
-{   RHA_LEFT, RHA_CENTER, RHA_RIGHT
+{	RHA_LEFT, RHA_CENTER, RHA_RIGHT
 };
 enum RectVerAlign
-{   RVA_TOP, RVA_MID, RVA_BOTTOM, RVA_BASELINE, RVA_CENTERY,
+{	RVA_TOP, RVA_MID, RVA_BOTTOM, RVA_BASELINE, RVA_CENTERY,
     RVA_ATTRIBUT_HI, RVA_ATTRIBUT_MID, RVA_ATTRIBUT_LO
 };
 
 // different methods of copying baselines and mid's in 'ExtendBy' function
 enum RectCopyMBL
-{   RCP_THIS,   // keep baseline of current object even if it has none
-    RCP_ARG,    // as above but for the argument
-    RCP_NONE,   // result will have no baseline
-    RCP_XOR     // if current object has a baseline keep it else copy
-                //   the arguments baseline (even if it has none)
+{	RCP_THIS,	// keep baseline of current object even if it has none
+    RCP_ARG,	// as above but for the argument
+    RCP_NONE,	// result will have no baseline
+    RCP_XOR		// if current object has a baseline keep it else copy
+                //	 the arguments baseline (even if it has none)
 };
 
 
 class SmRect
 {
-    Point   aTopLeft;
-    Size    aSize;
-    long    nBaseline,
+    Point	aTopLeft;
+    Size	aSize;
+    long	nBaseline,
             nAlignT,
             nAlignM,
             nAlignB,
@@ -104,18 +104,18 @@ class SmRect
             nItalicRightSpace,
             nLoAttrFence,
             nHiAttrFence;
-    sal_uInt16  nBorderWidth;
-    bool    bHasBaseline,
+    USHORT  nBorderWidth;
+    BOOL	bHasBaseline,
             bHasAlignInfo;
 
 protected:
             void BuildRect (const OutputDevice &rDev, const SmFormat *pFormat,
-                            const XubString &rText, sal_uInt16 nBorderWidth);
+                            const XubString &rText, USHORT nBorderWidth);
             void Init(const OutputDevice &rDev, const SmFormat *pFormat,
-                      const XubString &rText, sal_uInt16 nBorderWidth);
+                      const XubString &rText, USHORT nBorderWidth);
 
-            void ClearBaseline()    { bHasBaseline = false; };
-    inline  void CopyMBL(const SmRect& rRect);
+            void ClearBaseline()	{ bHasBaseline = FALSE; };
+    inline	void CopyMBL(const SmRect& rRect);
             void CopyAlignInfo(const SmRect& rRect);
 
             SmRect & Union(const SmRect &rRect);
@@ -128,71 +128,71 @@ public:
             SmRect(const SmRect &rRect);
 
 
-            sal_uInt16  GetBorderWidth() const  { return nBorderWidth; }
+            USHORT  GetBorderWidth() const  { return nBorderWidth; }
 
             void SetItalicSpaces(long nLeftSpace, long nRightSpace);
 
-            void SetWidth(sal_uLong nWidth)     { aSize.Width()  = nWidth; }
-            void SetHeight(sal_uLong nHeight)   { aSize.Height() = nHeight; }
+            void SetWidth(ULONG nWidth)		{ aSize.Width()  = nWidth; }
+            void SetHeight(ULONG nHeight)	{ aSize.Height() = nHeight; }
 
             void SetLeft(long nLeft);
             void SetRight(long nRight);
             void SetBottom(long nBottom);
             void SetTop(long nTop);
 
-            const Point & GetTopLeft() const { return aTopLeft; }
+            const Point	& GetTopLeft() const { return aTopLeft; }
 
-            long GetTop()     const { return GetTopLeft().Y(); }
-            long GetLeft()    const { return GetTopLeft().X(); }
-            long GetBottom()  const { return GetTop() + GetHeight() - 1; }
-            long GetRight()   const { return GetLeft() + GetWidth() - 1; }
-            long GetCenterX() const { return (GetLeft() + GetRight()) / 2L; }
-            long GetCenterY() const { return (GetTop() + GetBottom()) / 2L; }
-            long GetWidth()   const { return GetSize().Width(); }
-            long GetHeight()  const { return GetSize().Height(); }
+            long GetTop()	  const	{ return GetTopLeft().Y(); }
+            long GetLeft()	  const	{ return GetTopLeft().X(); }
+            long GetBottom()  const	{ return GetTop() + GetHeight() - 1; }
+            long GetRight()   const	{ return GetLeft() + GetWidth() - 1; }
+            long GetCenterX() const	{ return (GetLeft() + GetRight()) / 2L; }
+            long GetCenterY() const	{ return (GetTop() + GetBottom()) / 2L; }
+            long GetWidth()   const	{ return GetSize().Width(); }
+            long GetHeight()  const	{ return GetSize().Height(); }
 
             long GetItalicLeftSpace()  const { return nItalicLeftSpace; }
             long GetItalicRightSpace() const { return nItalicRightSpace; }
 
-            void SetHiAttrFence(long nVal)  { nHiAttrFence = nVal; }
-            void SetLoAttrFence(long nVal)  { nLoAttrFence = nVal; }
-            long GetHiAttrFence() const     { return nHiAttrFence; }
-            long GetLoAttrFence() const     { return nLoAttrFence; }
+            void SetHiAttrFence(long nVal)	{ nHiAttrFence = nVal; }
+            void SetLoAttrFence(long nVal)	{ nLoAttrFence = nVal; }
+            long GetHiAttrFence() const 	{ return nHiAttrFence; }
+            long GetLoAttrFence() const 	{ return nLoAttrFence; }
 
-            long GetItalicLeft() const      { return GetLeft() - GetItalicLeftSpace(); }
-            long GetItalicCenterX() const   { return (GetItalicLeft() + GetItalicRight()) / 2; }
-            long GetItalicRight() const     { return GetRight() + GetItalicRightSpace(); }
-            long GetItalicWidth() const     { return GetWidth() + GetItalicLeftSpace() + GetItalicRightSpace(); }
+            long GetItalicLeft() const		{ return GetLeft() - GetItalicLeftSpace(); }
+            long GetItalicCenterX() const	{ return (GetItalicLeft() + GetItalicRight()) / 2; }
+            long GetItalicRight() const		{ return GetRight() + GetItalicRightSpace(); }
+            long GetItalicWidth() const		{ return GetWidth() + GetItalicLeftSpace() + GetItalicRightSpace(); }
 
-            bool HasBaseline() const        { return bHasBaseline; }
-    inline  long GetBaseline() const;
-            long GetBaselineOffset() const  { return GetBaseline() - GetTop(); }
+            BOOL HasBaseline() const		{ return bHasBaseline; }
+    inline	long GetBaseline() const;
+            long GetBaselineOffset() const	{ return GetBaseline() - GetTop(); }
 
             void SetAlignTop(long nVal) { nAlignT = nVal; }
 
-            long GetAlignT() const  { return nAlignT; }
-            long GetAlignM() const  { return nAlignM; }
-            long GetAlignB() const  { return nAlignB; }
+            long GetAlignT() const	{ return nAlignT; }
+            long GetAlignM() const	{ return nAlignM; }
+            long GetAlignB() const	{ return nAlignB; }
 
             void SetAlignT(long nVal) { nAlignT = nVal; }
 
-            const Point  GetCenter() const
-            {   return Point(GetCenterX(), GetCenterY()); }
+            const Point	 GetCenter() const
+            {	return Point(GetCenterX(), GetCenterY()); }
 
-            const Size & GetSize() const    { return aSize; }
+            const Size & GetSize() const	{ return aSize; }
 
-            const Size  GetItalicSize() const
-            {   return Size(GetItalicWidth(), GetHeight()); }
+            const Size	GetItalicSize() const
+            {	return Size(GetItalicWidth(), GetHeight()); }
 
             void Move  (const Point &rPosition);
             void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
 
-            bool IsEmpty() const
+            BOOL IsEmpty() const
             {
-                return GetWidth() == 0  ||  GetHeight() == 0;
+                return GetWidth() == 0	||	GetHeight() == 0;
             }
 
-            bool HasAlignInfo() const { return bHasAlignInfo; }
+            BOOL HasAlignInfo() const { return bHasAlignInfo; }
 
             const Point AlignTo(const SmRect &rRect, RectPos ePos,
                                 RectHorAlign eHor, RectVerAlign eVer) const;
@@ -201,16 +201,20 @@ public:
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
                               long nNewAlignM);
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
-                      bool bKeepVerAlignParams);
+                      BOOL bKeepVerAlignParams);
 
-            long    OrientedDist(const Point &rPoint) const;
-            bool    IsInsideRect(const Point &rPoint) const;
-            bool    IsInsideItalicRect(const Point &rPoint) const;
+            long	OrientedDist(const Point &rPoint) const;
+            BOOL	IsInsideRect(const Point &rPoint) const;
+            BOOL	IsInsideItalicRect(const Point &rPoint) const;
 
-    inline  SmRect & operator = (const SmRect &rRect);
+    inline	SmRect & operator = (const SmRect &rRect);
 
-    inline  Rectangle   AsRectangle() const;
-            SmRect      AsGlyphRect() const;
+    inline	Rectangle	AsRectangle() const;
+            SmRect		AsGlyphRect() const;
+
+#ifdef SM_RECT_DEBUG
+            void 		Draw(OutputDevice &rDev, const Point &rPosition, int nFlags) const;
+#endif
 };
 
 
@@ -226,9 +230,9 @@ inline void SmRect::SetItalicSpaces(long nLeftSpace, long nRightSpace)
 inline void SmRect::CopyMBL(const SmRect &rRect)
     // copy AlignM baseline and value of 'rRect'
 {
-    nBaseline    = rRect.nBaseline;
+    nBaseline	 = rRect.nBaseline;
     bHasBaseline = rRect.bHasBaseline;
-    nAlignM      = rRect.nAlignM;
+    nAlignM		 = rRect.nAlignM;
 }
 
 
@@ -241,7 +245,7 @@ inline long SmRect::GetBaseline() const
 
 inline SmRect & SmRect::operator = (const SmRect &rRect)
 {
-    new (this) SmRect(rRect);   // placement new
+    new (this) SmRect(rRect);	// placement new
     return *this;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaName::ScVbaName(const css::uno::Reference< ov::XHelperInterface >& xParent,
+ScVbaName::ScVbaName(const css::uno::Reference< ov::XHelperInterface >& xParent, 
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
             const css::uno::Reference< css::sheet::XNamedRange >& xName,
             const css::uno::Reference< css::sheet::XNamedRanges >& xNames,
             const css::uno::Reference< css::frame::XModel >& xModel ):
-            NameImpl_BASE(  xParent , xContext ),
+            NameImpl_BASE(  xParent , xContext ), 
             mxModel( xModel ),
             mxNamedRange( xName ),
             mxNames( xNames )
@@ -70,6 +70,8 @@ ScVbaName::getWorkSheet() throw (css::uno::RuntimeException)
 ScVbaName::getName() throw (css::uno::RuntimeException)
 {
     String sName;
+    //sName += UniString( getWorkSheet()->getName()); //liuchen 2009-9-9 resolve the defect that the name get by macro code are not the same with that in UI (for example, if a name of "AA" is found in the UI "Define Names" dialog box, the result of get that name through macro code will be "Sheet1!AA")
+    //sName += String::CreateFromAscii("!");
     sName += UniString ( mxNamedRange->getName() );
     return ::rtl::OUString( sName );
 }
@@ -123,12 +125,12 @@ ScVbaName::getValue(const formula::FormulaGrammar::Grammar eGrammar) throw (css:
     }
     if ( sValue.indexOf('=') != 0 )
     {
-        sValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=")) + sValue;
+        sValue = rtl::OUString::createFromAscii("=") + sValue;
     }
     return sValue;
 }
 
-void
+void 
 ScVbaName::setValue( const ::rtl::OUString & rValue ) throw (css::uno::RuntimeException)
 {
     ::rtl::OUString sValue = rValue;
@@ -143,25 +145,25 @@ ScVbaName::setValue( const ::rtl::OUString & rValue ) throw (css::uno::RuntimeEx
     mxNamedRange->setContent( sValue );
 }
 
-::rtl::OUString
+::rtl::OUString 
 ScVbaName::getRefersTo() throw (css::uno::RuntimeException)
 {
     return getValue();
 }
 
-void
+void 
 ScVbaName::setRefersTo( const ::rtl::OUString & rRefersTo ) throw (css::uno::RuntimeException)
 {
     setValue( rRefersTo );
 }
 
-::rtl::OUString
+::rtl::OUString 
 ScVbaName::getRefersToLocal() throw (css::uno::RuntimeException)
 {
     return getRefersTo();
 }
 
-void
+void 
 ScVbaName::setRefersToLocal( const ::rtl::OUString & rRefersTo ) throw (css::uno::RuntimeException)
 {
     setRefersTo( rRefersTo );
@@ -179,7 +181,7 @@ ScVbaName::setRefersToR1C1( const ::rtl::OUString & rRefersTo ) throw (css::uno:
     setRefersTo( rRefersTo );
 }
 
-::rtl::OUString
+::rtl::OUString 
 ScVbaName::getRefersToR1C1Local() throw (css::uno::RuntimeException)
 {
     return getValue( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
@@ -207,7 +209,7 @@ ScVbaName::setRefersToRange( const css::uno::Reference< ov::excel::XRange > /*rR
 void
 ScVbaName::Delete() throw (css::uno::RuntimeException)
 {
-    mxNames->removeByName( mxNamedRange->getName() );
+    mxNames->removeByName( mxNamedRange->getName() );	
 }
 
 rtl::OUString&

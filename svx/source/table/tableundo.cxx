@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,16 +108,16 @@ void CellUndo::Redo()
     }
 }
 
-sal_Bool CellUndo::Merge( SfxUndoAction *pNextAction )
+BOOL CellUndo::Merge( SfxUndoAction *pNextAction )
 {
     CellUndo* pNext = dynamic_cast< CellUndo* >( pNextAction );
     if( pNext && pNext->mxCell.get() == mxCell.get() )
     {
-        return sal_True;
+        return TRUE;
     }
     else
     {
-        return sal_False;
+        return FALSE;
     }
 }
 
@@ -414,7 +414,7 @@ void TableColumnUndo::Redo()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TableColumnUndo::Merge( SfxUndoAction *pNextAction )
+BOOL TableColumnUndo::Merge( SfxUndoAction *pNextAction )
 {
     TableColumnUndo* pNext = dynamic_cast< TableColumnUndo* >( pNextAction );
     return pNext && pNext->mxCol == mxCol;
@@ -483,7 +483,7 @@ void TableRowUndo::Redo()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TableRowUndo::Merge( SfxUndoAction *pNextAction )
+BOOL TableRowUndo::Merge( SfxUndoAction *pNextAction )
 {
     TableRowUndo* pNext = dynamic_cast< TableRowUndo* >( pNextAction );
     return pNext && pNext->mxRow == mxRow;

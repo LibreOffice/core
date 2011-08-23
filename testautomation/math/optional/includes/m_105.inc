@@ -408,8 +408,7 @@ testcase tToolsCatalog
                     SymboleMath.close
                 catch
                     if ((2=i)AND(11=j))then
-                        '#i42011# 
-                        warnlog "Expected: Timeout on closing Tools->Catalog with this character. (" + i + "/" + iSymbolSets + ")(" + j + "/" + x(i) + ")"
+                        warnlog "#i42011# Expected: Timeout on closing Tools->Catalog with this character. (" + i + "/" + iSymbolSets + ")(" + j + "/" + x(i) + ")"
                     else
                         warnlog "Not Expected! Timeout on closing Tools->Catalog with this character. (" + i + "/" + iSymbolSets + ")(" + j + "/" + x(i) + ")"
                     endif
@@ -449,12 +448,12 @@ testcase tToolsCatalog
                 '///+ insert the copied text into the document ///'
                 DocumentWriter.typeKeys "<Mod1 End> - " + sTemp + ": " + j + "<Tab>"
                 sAllSymbols = sAllSymbols + sTemp
-                listAppend(lAllSymbols(), rtrim(sTemp))
+                listAppend(lAllSymbols(), rTrim(sTemp))
             next j
         next i
 
-    if (listCount(lAllSymbols()) <> 108) then
-        warnlog "There have to be 108 Symbols, but there are: " + listCount(lAllSymbols())
+    if (listCount(lAllSymbols()) <> 106) then
+        warnlog "There have to be 106 Symbols, but there are: " + listCount(lAllSymbols())
     endif
     ' TODO: check sAllSymbols for not allowed characters!
     listCopy(lAllSymbols(),lAllSymbolsSort())
@@ -571,8 +570,7 @@ testcase tToolsCatalogNew
                     try
                         SymbolSet.select "TBOnewSymbolSet"
                     catch
-                        'i64504
-                        qaerrorlog "Symbol set name is not saved on exiting OOo"
+                        qaerrorlog "#i64504# Symbol set name is not saved on exiting OOo"
                         SymbolSet.select ""
                     endcatch
                     SymbolSet.setText "TBOnewSymbolSet"

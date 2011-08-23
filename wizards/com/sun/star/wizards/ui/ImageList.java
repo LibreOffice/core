@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,7 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.IRenderer;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.event.*;
 
 
@@ -164,11 +162,11 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                 {
                     "BackgroundColor",
                     "Border",
-                    PropertyNames.PROPERTY_HEIGHT,
-                    PropertyNames.PROPERTY_POSITION_X,
-                    PropertyNames.PROPERTY_POSITION_Y,
-                    PropertyNames.PROPERTY_STEP,
-                    PropertyNames.PROPERTY_WIDTH
+                    "Height",
+                    "PositionX",
+                    "PositionY",
+                    "Step",
+                    "Width"
                 },
                 new Object[]
                 {
@@ -191,8 +189,8 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
         //XWindow win = (XWindow)UnoRuntime.queryInterface(XWindow.class,lblContainer);
         /*dialog.xWindow.addWindowListener(uiEventListener);
-        String dName = (String)Helper.getUnoPropertyValue(dialog.xDialogModel,PropertyNames.PROPERTY_NAME);
-
+        String dName = (String)Helper.getUnoPropertyValue(dialog.xDialogModel,"Name");
+        
         uiEventListener.add(dName,EventNames.EVENT_WINDOW_SHOWN,"disableContainerMouseEvents",this);
          */
         int selectionWidth = rowSelect ?
@@ -203,12 +201,12 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                 {
                     "BackgroundColor",
                     "Border",
-                    PropertyNames.PROPERTY_HEIGHT,
-                    PropertyNames.PROPERTY_POSITION_X,
-                    PropertyNames.PROPERTY_POSITION_Y,
-                    PropertyNames.PROPERTY_STEP,
+                    "Height",
+                    "PositionX",
+                    "PositionY",
+                    "Step",
                     "Tabstop",
-                    PropertyNames.PROPERTY_WIDTH
+                    "Width"
                 }, new Object[]
                 {
                     TRANSPARENT,
@@ -227,14 +225,14 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
         final String[] pNames1 = new String[]
         {
-            PropertyNames.PROPERTY_HEIGHT,
-            PropertyNames.PROPERTY_HELPURL,
-            PropertyNames.PROPERTY_POSITION_X,
-            PropertyNames.PROPERTY_POSITION_Y,
-            PropertyNames.PROPERTY_STEP,
-            PropertyNames.PROPERTY_TABINDEX,
+            "Height",
+            "HelpURL",
+            "PositionX",
+            "PositionY",
+            "Step",
+            "TabIndex",
             "Tabstop",
-            PropertyNames.PROPERTY_WIDTH
+            "Width"
         };
 
         lblImageText = dialog.insertLabel(name + "_imageText", pNames1, new Object[]
@@ -257,7 +255,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
             btnBack = dialog.insertButton(name + "_btnBack", "prevPage", this, pNames1, new Object[]
                     {
                         btnSize,
-                        HelpIds.getHelpIdString(helpURL++),
+                        "HID:" + helpURL++,
                         new Integer(pos.Width),
                         new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                         step,
@@ -269,7 +267,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
             btnNext = dialog.insertButton(name + "_btnNext", "nextPage", this, pNames1, new Object[]
                     {
                         btnSize,
-                        HelpIds.getHelpIdString(helpURL++),
+                        "HID:" + helpURL++,
                         new Integer(pos.Width + (imageSize.Width + gap.Width) * cols + gap.Width - btnSize.intValue() + 1),
                         new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                         step,
@@ -291,8 +289,8 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                     });
 
             Helper.setUnoPropertyValue(getModel(lblCounter), "Align", new Short((short) 1));
-            Helper.setUnoPropertyValue(getModel(btnBack), PropertyNames.PROPERTY_LABEL, "<");
-            Helper.setUnoPropertyValue(getModel(btnNext), PropertyNames.PROPERTY_LABEL, ">");
+            Helper.setUnoPropertyValue(getModel(btnBack), "Label", "<");
+            Helper.setUnoPropertyValue(getModel(btnNext), "Label", ">");
 
 
         }
@@ -333,15 +331,15 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     {
         "Border",
         "BackgroundColor",
-        PropertyNames.PROPERTY_HEIGHT,
-        PropertyNames.PROPERTY_HELPURL,
-        PropertyNames.PROPERTY_POSITION_X,
-        PropertyNames.PROPERTY_POSITION_Y,
+        "Height",
+        "HelpURL",
+        "PositionX",
+        "PositionY",
         "ScaleImage",
-        PropertyNames.PROPERTY_STEP,
-        PropertyNames.PROPERTY_TABINDEX,
+        "Step",
+        "TabIndex",
         "Tabstop",
-        PropertyNames.PROPERTY_WIDTH
+        "Width"
     };
     //used for optimization
     private Short m_tabIndex;
@@ -356,7 +354,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                     NO_BORDER,
                     BACKGROUND_COLOR,
                     m_imageHeight,
-                    HelpIds.getHelpIdString(helpURL++),
+                    "HID:" + helpURL++,
                     new Integer(getImagePosX(_col)),
                     new Integer(getImagePosY(_row)),
                     scaleImages,
@@ -408,7 +406,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
             {
                 if (oResources.length == 1)
                 {
-                    Helper.setUnoPropertyValue(m_aImages[i].getModel(), PropertyNames.PROPERTY_IMAGEURL, (String) oResources[0]);
+                    Helper.setUnoPropertyValue(m_aImages[i].getModel(), "ImageURL", (String) oResources[0]);
                 }
                 else if (oResources.length == 2)
                 {
@@ -427,7 +425,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     private void refreshCounterText()
     {
-        Helper.setUnoPropertyValue(getModel(lblCounter), PropertyNames.PROPERTY_LABEL, counterRenderer.render(new Counter(pageStart + 1, pageEnd(), listModel.getSize())));
+        Helper.setUnoPropertyValue(getModel(lblCounter), "Label", counterRenderer.render(new Counter(pageStart + 1, pageEnd(), listModel.getSize())));
     }
 
     private int pageEnd()
@@ -457,12 +455,12 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     private void hideSelection()
     {
-        Helper.setUnoPropertyValue(getModel(grbxSelectedImage), PropertyNames.PROPERTY_STEP, HIDE_PAGE);
+        Helper.setUnoPropertyValue(getModel(grbxSelectedImage), "Step", HIDE_PAGE);
         setVisible(grbxSelectedImage, false);
     }
     private final static String[] MOVE_SELECTION = new String[]
     {
-        PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP
+        "PositionX", "PositionY", "Step"
     };
     private Object[] MOVE_SELECTION_VALS = new Object[3];
     /** Utility field holding list of ItemListeners. */
@@ -481,7 +479,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
         Helper.setUnoPropertyValues(getModel(grbxSelectedImage), MOVE_SELECTION, MOVE_SELECTION_VALS);
 
-        if (((Number) Helper.getUnoPropertyValue(dialogModel, PropertyNames.PROPERTY_STEP)).shortValue() == step.shortValue())
+        if (((Number) Helper.getUnoPropertyValue(dialogModel, "Step")).shortValue() == step.shortValue())
         {
             setVisible(grbxSelectedImage, true);        //now focus...
         }
@@ -504,7 +502,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     }
 
     /**
-     *
+     * 
      * @param i
      * @return the Object in the list model corresponding to the given image index.
      */
@@ -522,7 +520,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     }
 
     /**
-     *
+     * 
      * @param i
      * @return the index in the listModel for the given image index.
      */
@@ -600,7 +598,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
      */
     private void fireItemSelected()
     {
-//      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0,
+//      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0, 
 //          getSelectedObject(), java.awt.event.ItemEvent.SELECTED);
         java.util.ArrayList list;
         synchronized(this)
@@ -818,7 +816,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private void refreshImageText()
     {
         Object item = selected >= 0 ? getListModel().getElementAt(selected) : null;
-        Helper.setUnoPropertyValue(getModel(lblImageText), PropertyNames.PROPERTY_LABEL, " " + renderer.render(item));
+        Helper.setUnoPropertyValue(getModel(lblImageText), "Label", " " + renderer.render(item));
     }
 
     /**
@@ -867,7 +865,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     private void enable(Object control, Boolean enable)
     {
-        Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_ENABLED, enable);
+        Helper.setUnoPropertyValue(getModel(control), "Enabled", enable);
     }
 
     private Object getModel(Object control)
@@ -880,15 +878,15 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     System.out.println("mouse enter");
     int i = getImageFromEvent(event);
     //TODO what is when the image does not display an image?
-    if (getIndexFor(i) != selected)
+    if (getIndexFor(i) != selected) 
     setBorder(m_aImages[i],imageBorderMO);
     }
-
+    
     public void mouseExitImage(Object event) {
     //System.out.println("mouse exit");
     int i = getImageFromEvent(event);
     //TODO what is when the image does not display an image?
-    if (getIndexFor(i) != selected)
+    if (getIndexFor(i) != selected) 
     setBorder(m_aImages[i],imageBorder);
     }
      */
@@ -902,7 +900,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private int getImageFromEvent(Object event)
     {
         Object image = ((EventObject) event).Source;
-        String controlName = (String) Helper.getUnoPropertyValue(getModel(image), PropertyNames.PROPERTY_NAME);
+        String controlName = (String) Helper.getUnoPropertyValue(getModel(image), "Name");
         return Integer.valueOf(controlName.substring(6 + name.length())).intValue();
 
     }
@@ -932,9 +930,9 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     {
 
         /**
-         *
+         * 
          * @param listItem
-         * @return two resource ids for an image referenced in the imaglist resourcefile of the
+         * @return two resource ids for an image referenced in the imaglist resourcefile of the 
          * wizards project; The second one of them is designed to be used for High Contrast Mode.
          */
         public Object[] getImageUrls(Object listItem);

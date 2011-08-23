@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "tools/IconCache.hxx"
 
 #include "sdresid.hxx"
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 
@@ -51,17 +51,17 @@ private:
     */
     static IconCache* mpInstance;
 
-    typedef ::boost::unordered_map<sal_uInt16,Image> ImageContainer;
+    typedef ::std::hash_map<USHORT,Image> ImageContainer;
     ImageContainer maContainer;
 
-    Image GetIcon (sal_uInt16 nResourceId);
+    Image GetIcon (USHORT nResourceId);
 };
 
 IconCache* IconCache::Implementation::mpInstance = NULL;
 
 
 
-Image IconCache::Implementation::GetIcon (sal_uInt16 nResourceId)
+Image IconCache::Implementation::GetIcon (USHORT nResourceId)
 {
     Image aResult;
     ImageContainer::iterator iImage;
@@ -81,7 +81,7 @@ Image IconCache::Implementation::GetIcon (sal_uInt16 nResourceId)
 
 //===== IconCache =============================================================
 
-//static
+//static 
 IconCache& IconCache::Instance (void)
 {
     if (Implementation::mpInstance == NULL)
@@ -102,7 +102,7 @@ IconCache& IconCache::Instance (void)
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
 
-    DBG_ASSERT(Implementation::mpInstance!=NULL,
+    DBG_ASSERT(Implementation::mpInstance!=NULL, 
         "IconCache::Instance(): instance is NULL");
     return *Implementation::mpInstance;
 }
@@ -110,7 +110,7 @@ IconCache& IconCache::Instance (void)
 
 
 
-Image IconCache::GetIcon (sal_uInt16 nResourceId)
+Image IconCache::GetIcon (USHORT nResourceId)
 {
     return mpImpl->GetIcon (nResourceId);
 }

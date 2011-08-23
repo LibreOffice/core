@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,9 @@ class SvTabListBox;
 class Edit;
 class String;
 
+typedef SvStringsDtor* (*FNGetRangeHdl)( _SfxMacroTabPage*, const String& rLanguage );
+typedef SvStringsDtor* (*FNGetMacrosOfRangeHdl)( _SfxMacroTabPage*, const String& rLanguage, const String& rRange );
+
 class SfxConfigGroupListBox_Impl;
 class SfxConfigFunctionListBox_Impl;
 class _HeaderTabListBox;
@@ -49,7 +52,7 @@ class _SfxMacroTabPage_Impl;
 
 class _SfxMacroTabPage : public SfxTabPage
 {
-    SvxMacroTableDtor           aTbl;
+    SvxMacroTableDtor			aTbl;
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox * );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox * );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox * );
@@ -57,36 +60,46 @@ class _SfxMacroTabPage : public SfxTabPage
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, DoubleClickHdl_Impl, Control* );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton * );
 
+    DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, ChangeScriptHdl_Impl, RadioButton * );
+    DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, GetFocus_Impl, Edit* );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer* );
 
 protected:
-    _SfxMacroTabPage_Impl*      mpImpl;
+    _SfxMacroTabPage_Impl*		mpImpl;
 
                                 _SfxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
 
-    void                        InitAndSetHandler();
-    void                        FillEvents();
-    void                        FillMacroList();
-    void                        EnableButtons();
+    void						InitAndSetHandler();
+    void						FillEvents();
+    void						FillMacroList();
+    void						EnableButtons( const String& rLanguage );
 
 public:
 
-    virtual                     ~_SfxMacroTabPage();
+    virtual						~_SfxMacroTabPage();
 
-    void                        AddEvent( const String & rEventName, sal_uInt16 nEventId );
+    void						AddEvent( const String & rEventName, USHORT nEventId );
 
-    const SvxMacroTableDtor&    GetMacroTbl() const;
-    void                        SetMacroTbl( const SvxMacroTableDtor& rTbl );
-    void                        ClearMacroTbl();
+    const SvxMacroTableDtor&	GetMacroTbl() const;
+    void						SetMacroTbl( const SvxMacroTableDtor& rTbl );
+    void						ClearMacroTbl();
 
-    virtual void                ScriptChanged();
-    virtual void                PageCreated (SfxAllItemSet aSet);
+    virtual void				ScriptChanged( const String& rLanguage );
+    virtual void				PageCreated (SfxAllItemSet aSet);
+
+    // zum setzen / abfragen der Links
+    void						SetGetRangeLink( FNGetRangeHdl pFn );
+    FNGetRangeHdl				GetGetRangeLink() const;
+    void						SetGetMacrosOfRangeLink( FNGetMacrosOfRangeHdl pFn );
+    FNGetMacrosOfRangeHdl		GetGetMacrosOfRangeLink() const;
 
     // --------- Erben aus der Basis -------------
-    virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
-    virtual void                Reset( const SfxItemSet& rSet );
+    virtual	BOOL				FillItemSet( SfxItemSet& rSet );
+    virtual	void				Reset( const SfxItemSet& rSet );
 
-    sal_Bool                        IsReadOnly() const;
+    void						SetReadOnly( BOOL bSet );
+    BOOL						IsReadOnly() const;
+    void						SelectEvent( const String& rEventName, USHORT nEventId );
 };
 
 inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTbl() const
@@ -125,7 +138,7 @@ public:
         Window* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame,
         const SfxItemSet& rSet );
-    virtual ~SfxMacroAssignDlg();
+    virtual	~SfxMacroAssignDlg();
 };
 
 #endif

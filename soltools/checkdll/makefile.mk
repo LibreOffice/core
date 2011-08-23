@@ -46,7 +46,7 @@ APP1TARGET	= 	checkdll
 APP1OBJS	=	$(OBJ)$/checkdll.obj
 DEPOBJFILES	=	$(APP1OBJS) 
 .IF "$(OS)"!="FREEBSD" && "$(OS)"!="MACOSX" && "$(OS)"!="NETBSD" \
-	&& "$(OS)"!="OPENBSD" && "$(OS)"!="DRAGONFLY"
+	&& "$(OS)"!="OPENBSD"
 STDLIB += -ldl
 .ENDIF
 .IF "$(OS)"=="NETBSD"

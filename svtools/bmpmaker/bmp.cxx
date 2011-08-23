@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ using namespace std;
 #include <vcl/svapp.hxx>
 
 #include "svl/solar.hrc"
-#include <svtools/filedlg.hxx>
+#include "filedlg.hxx"
 #include "bmpcore.hxx"
 #include "bmp.hrc"
 
@@ -52,20 +52,20 @@ class BmpApp : public BmpCreator
 {
 private:
 
-    String          aOutputFileName;
-    sal_uInt8           cExitCode;
+    String	        aOutputFileName;
+    BYTE	        cExitCode;
+                    
+    BOOL	        GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
+    BOOL	        GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rSwitchParams );
 
-    sal_Bool            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
-    sal_Bool            GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rSwitchParams );
-
-    void            SetExitCode( sal_uInt8 cExit )
+    void	        SetExitCode( BYTE cExit )
                     {
                         if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) )
                             cExitCode = cExit;
                     }
     void            ShowUsage();
 
-    virtual void    Message( const String& rText, sal_uInt8 cExitCode );
+    virtual void    Message( const String& rText, BYTE cExitCode );
 
 public:
 
@@ -89,13 +89,13 @@ BmpApp::~BmpApp()
 
 // -----------------------------------------------------------------------
 
-sal_Bool BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam )
+BOOL BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
-        String  aTestStr( '-' );
+        String	aTestStr( '-' );
 
         for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
@@ -103,7 +103,7 @@ sal_Bool BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const S
 
             if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
             {
-                bRet = sal_True;
+                bRet = TRUE;
 
                 if( i < ( nCount - 1 ) )
                     rParam = rArgs[ i + 1 ];
@@ -121,13 +121,13 @@ sal_Bool BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const S
 
 // -----------------------------------------------------------------------
 
-sal_Bool BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rParams )
+BOOL BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rParams )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ); i++ )
     {
-        String  aTestStr( '-' );
+        String	aTestStr( '-' );
 
         for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
@@ -139,7 +139,7 @@ sal_Bool BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const 
                     rParams.push_back( rArgs[ i + 1 ] );
                 else
                     rParams.push_back( String() );
-
+            
                 break;
             }
 
@@ -153,7 +153,7 @@ sal_Bool BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const 
 
 // -----------------------------------------------------------------------
 
-void BmpApp::Message( const String& rText, sal_uInt8 cExit )
+void BmpApp::Message( const String& rText, BYTE cExit )
 {
     if( EXIT_NOERROR != cExit )
         SetExitCode( cExit );
@@ -166,11 +166,11 @@ void BmpApp::Message( const String& rText, sal_uInt8 cExit )
 // -----------------------------------------------------------------------------
 
 void BmpApp::ShowUsage()
-{
+{   
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Usage:" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp srs_inputfile output_dir lang_dir lang_num -i input_dir [-i input_dir ][-f err_file]" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Options:" ) ), EXIT_NOERROR );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -i ...        name of directory to be searched for input files [multiple occurrence is possible]" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -i ...        name of directory to be searched for input files [multiple occurence is possible]" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -f            name of file, output should be written to" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Examples:" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp /home/test.srs /home/out enus 01 -i /home/res -f /home/out/bmp.err" ) ), EXIT_NOERROR );
@@ -187,13 +187,13 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
     if( rArgs.size() >= 6 )
     {
         LangInfo                aLangInfo;
-        sal_uInt16                  nCurCmd = 0;
+        USHORT	                nCurCmd = 0;
         const String            aSrsName( rArgs[ nCurCmd++ ] );
         ::std::vector< String > aInDirVector;
-        ByteString              aLangDir;
-
+        ByteString	            aLangDir;
+        
         aOutName = rArgs[ nCurCmd++ ];
-
+        
         aLangDir = ByteString( rArgs[ nCurCmd++ ], RTL_TEXTENCODING_ASCII_US );
         aLangInfo.mnLangNum = static_cast< sal_uInt16 >( rArgs[ nCurCmd++ ].ToInt32() );
 
@@ -209,11 +209,11 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
         ShowUsage();
         cExitCode = EXIT_COMMONERROR;
     }
-
+    
     if( ( EXIT_NOERROR == cExitCode ) && aOutputFileName.Len() && aOutName.Len() )
     {
-        SvFileStream    aOStm( aOutputFileName, STREAM_WRITE | STREAM_TRUNC );
-        ByteString      aStr( "Successfully generated ImageList(s) in: " );
+        SvFileStream	aOStm( aOutputFileName, STREAM_WRITE | STREAM_TRUNC );
+        ByteString		aStr( "Successfully generated ImageList(s) in: " );
 
         aOStm.WriteLine( aStr.Append( ByteString( aOutName, RTL_TEXTENCODING_UTF8 ) ) );
         aOStm.Close();
@@ -234,7 +234,7 @@ int main( int nArgCount, char* ppArgs[] )
     strcpy( aDisplayVar, "DISPLAY=" );
     putenv( aDisplayVar );
 #endif
-
+    
     ::std::vector< String > aArgs;
     BmpApp                  aBmpApp;
 
@@ -242,7 +242,7 @@ int main( int nArgCount, char* ppArgs[] )
 
     for( int i = 1; i < nArgCount; i++ )
         aArgs.push_back( String( ppArgs[ i ], RTL_TEXTENCODING_ASCII_US ) );
-
+    
     return aBmpApp.Start( aArgs );
 }
 

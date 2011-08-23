@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <osl/mutex.hxx>
 #include "rtl/ustring.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 /** Implementation of a least recently used (lru) cache.
     <br>
@@ -45,22 +45,22 @@ class LRU_Cache
 {
     struct CacheEntry
     {
-        t_Key               aKey;
-        t_Val               aVal;
-        CacheEntry *        pPred;
-        CacheEntry *        pSucc;
+        t_Key				aKey;
+        t_Val				aVal;
+        CacheEntry *		pPred;
+        CacheEntry *		pSucc;
     };
-    typedef ::boost::unordered_map< t_Key, CacheEntry *, t_KeyHash, t_KeyEqual > t_Key2Element;
-
-    mutable ::osl::Mutex        _aCacheMutex;
-    sal_Int32                   _nCachedElements;
-    t_Key2Element               _aKey2Element;
-
-    CacheEntry *                _pBlock;
-    mutable CacheEntry *        _pHead;
-    mutable CacheEntry *        _pTail;
+    typedef ::std::hash_map< t_Key, CacheEntry *, t_KeyHash, t_KeyEqual > t_Key2Element;
+    
+    mutable ::osl::Mutex		_aCacheMutex;
+    sal_Int32					_nCachedElements;
+    t_Key2Element				_aKey2Element;
+    
+    CacheEntry *				_pBlock;
+    mutable CacheEntry *		_pHead;
+    mutable CacheEntry *		_pTail;
     inline void toFront( CacheEntry * pEntry ) const;
-
+    
 public:
     /** Constructor:
         <br>
@@ -71,7 +71,7 @@ public:
         <br>
     */
     inline ~LRU_Cache();
-
+    
     /** Retrieves a value from the cache. Returns default constructed value,
         if none was found.
         <br>
@@ -109,8 +109,8 @@ inline LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::LRU_Cache( sal_Int32 nC
     if (_nCachedElements > 0)
     {
         _pBlock = new CacheEntry[_nCachedElements];
-        _pHead  = _pBlock;
-        _pTail  = _pBlock + _nCachedElements -1;
+        _pHead	= _pBlock;
+        _pTail	= _pBlock + _nCachedElements -1;
         for ( sal_Int32 nPos = _nCachedElements; nPos--; )
         {
             _pBlock[nPos].pPred = _pBlock + nPos -1;
@@ -143,7 +143,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::toFront( CacheEntr
         // push to front
         _pHead->pPred = pEntry;
         pEntry->pSucc = _pHead;
-        _pHead        = pEntry;
+        _pHead		  = pEntry;
     }
 }
 //__________________________________________________________________________________________________
@@ -166,7 +166,7 @@ inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::getValue( const t
         toFront( pEntry );
 #ifdef __CACHE_DIAGNOSE
         OSL_TRACE( "> retrieved element \"" );
-        OSL_TRACE( "%s", ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        OSL_TRACE( ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
         OSL_TRACE( "\" from cache <\n" );
 #endif
         return pEntry->aVal;
@@ -178,11 +178,11 @@ template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
 inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
     const t_Key & rKey, const t_Val & rValue )
 {
-    ::osl::MutexGuard aGuard( _aCacheMutex );
     if (_nCachedElements > 0)
     {
+        ::osl::MutexGuard aGuard( _aCacheMutex );
         const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
-
+        
         CacheEntry * pEntry;
         if (iFind == _aKey2Element.end())
         {
@@ -191,7 +191,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
             if (pEntry->aKey.getLength())
             {
                 OSL_TRACE( "> kicking element \"" );
-                OSL_TRACE( "%s", ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                OSL_TRACE( ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 OSL_TRACE( "\" from cache <\n" );
             }
 #endif
@@ -203,7 +203,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
             pEntry = (*iFind).second;
 #ifdef __CACHE_DIAGNOSE
             OSL_TRACE( "> replacing element \"" );
-            OSL_TRACE( "%s", ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_TRACE( ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
             OSL_TRACE( "\" in cache <\n" );
 #endif
         }
@@ -222,7 +222,6 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::clear()
         _pBlock[nPos].aKey = t_Key();
         _pBlock[nPos].aVal = t_Val();
     }
-    _nCachedElements = 0;
 #ifdef __CACHE_DIAGNOSE
     OSL_TRACE( "> cleared cache <\n" );
 #endif

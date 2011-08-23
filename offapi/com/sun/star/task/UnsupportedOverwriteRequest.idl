@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module task {
+module com { module sun { module star { module task { 
 
 //=============================================================================
 /** this request is used in case a content can't keep files from overwriting
@@ -57,7 +57,7 @@ published exception UnsupportedOverwriteRequest: ClassifiedInteractionRequest
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif
 

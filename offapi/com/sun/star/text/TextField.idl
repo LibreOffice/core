@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,42 +24,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_TextField_idl__
-#define __com_sun_star_text_TextField_idl__
+#ifndef __com_sun_star_text_TextField_idl__ 
+#define __com_sun_star_text_TextField_idl__ 
 
 #ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
 
-#ifndef __com_sun_star_text_TextContent_idl__
-#include <com/sun/star/text/TextContent.idl>
-#endif
+#ifndef __com_sun_star_text_TextContent_idl__ 
+#include <com/sun/star/text/TextContent.idl> 
+#endif 
 
-#ifndef __com_sun_star_text_XTextField_idl__
-#include <com/sun/star/text/XTextField.idl>
-#endif
+#ifndef __com_sun_star_text_XTextField_idl__ 
+#include <com/sun/star/text/XTextField.idl> 
+#endif 
 
 
-//=============================================================================
+//============================================================================= 
 
- module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
+ module com {  module sun {  module star {  module text {  
+ 
+//============================================================================= 
+ 
 /** A <type>TextField</type> is a <type>TextContent</type> which fades its
     textual representation into the text range to which it is anchored.
  */
 published service TextField
-{
-    service com::sun::star::text::TextContent;
-
-
-    /** This interface is used to access the textual representation of
+{ 
+    service com::sun::star::text::TextContent; 
+ 
+     
+    /** This interface is used to access the textual representation of 
         this field.
      */
-    interface com::sun::star::text::XTextField;
-
-    /** makes it possible to access the properties of the field, if any.
+    interface com::sun::star::text::XTextField; 
+ 
+    /** makes it possible to access the properties of the field, if any. 
     */
     [optional] interface com::sun::star::beans::XPropertySet;
 
@@ -67,7 +67,7 @@ published service TextField
 
     /** specifies if the text field is actually used in the document.
 
-        <p>Not all available text fields are used, for example fields
+        <p>Not all available text fields are used, for example fields 
         that are part of unused styles.</p>
 
         @since  OOo 2.0.1
@@ -88,11 +88,11 @@ published service TextField
 
     //-------------------------------------------------------------------------
 
-};
+}; 
 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
 
-//=============================================================================
-
-}; }; }; };
-
-#endif
+#endif 

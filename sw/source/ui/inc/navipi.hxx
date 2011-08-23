@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@ class SwNavigationPI;
 
 class SwNavHelpToolBox : public SwHelpToolBox
 {
-    virtual void    MouseButtonDown(const MouseEvent &rEvt);
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void 	MouseButtonDown(const MouseEvent &rEvt);
+    virtual void	RequestHelp( const HelpEvent& rHEvt );
     public:
         SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId);
 };
@@ -67,46 +67,47 @@ class SwNavigationPI : public Window,
     friend class SwGlobalTree;
 
     // --------- members -----------------------------
-    SwNavHelpToolBox    aContentToolBox;
-    SwHelpToolBox       aGlobalToolBox;
-    ImageList           aContentImageList;
-    SwContentTree       aContentTree;
+    SwNavHelpToolBox   	aContentToolBox;
+    SwHelpToolBox   	aGlobalToolBox;
+    ImageList			aContentImageList;
+    ImageList           aContentImageListH;
+    SwContentTree		aContentTree;
     SwGlobalTree        aGlobalTree;
-    ListBox             aDocListBox;
-    Timer               aPageChgTimer;
-    String              sContentFileName;
-    String              aContextArr[3];
-    String              aStatusArr[4];
-    Point               aBoxBottomLeft; // Pos., wenn Box unten ist
+    ListBox				aDocListBox;
+    Timer 				aPageChgTimer;
+    String				sContentFileName;
+    String				aContextArr[3];
+    String 				aStatusArr[4];
+    Point 				aBoxBottomLeft; // Pos., wenn Box unten ist
 
-    SfxObjectShellLock  *pxObjectShell;
-    SwView              *pContentView;
-    SwWrtShell          *pContentWrtShell;
-    SwView              *pActContView;
-    SwView              *pCreateView;
+    SfxObjectShellLock	*pxObjectShell;
+    SwView				*pContentView;
+    SwWrtShell			*pContentWrtShell;
+    SwView 				*pActContView;
+    SwView				*pCreateView;
     SfxPopupWindow      *pPopupWindow;
     SfxPopupWindow      *pFloatingWindow;
 
     SfxChildWindowContext* pContextWin;
 
-    SwNavigationConfig  *pConfig;
-    SfxBindings         &rBindings;
+    SwNavigationConfig	*pConfig;
+    SfxBindings 		&rBindings;
 
-    long    nDocLBIniHeight;
-    long    nWishWidth;
-    sal_uInt16  nAutoMarkIdx;
-    sal_uInt16  nRegionMode; // 0 - URL, 1 - Bereich mit Link 2 - B. ohne Link
-    short   nZoomIn;
-    short   nZoomOutInit;
-    short   nZoomOut;
+    long 	nDocLBIniHeight;
+    long	nWishWidth;
+    USHORT 	nAutoMarkIdx;
+    USHORT 	nRegionMode; // 0 - URL, 1 - Bereich mit Link 2 - B. ohne Link
+    short  	nZoomIn;
+    short  	nZoomOutInit;
+    short  	nZoomOut;
 
-    sal_Bool    bSmallMode : 1;
-    sal_Bool    bIsZoomedIn : 1;
-    sal_Bool    bPageCtrlsVisible : 1;
-    sal_Bool    bGlobalMode : 1;
+    BOOL 	bSmallMode : 1;
+    BOOL 	bIsZoomedIn : 1;
+    BOOL	bPageCtrlsVisible : 1;
+    BOOL	bGlobalMode : 1;
 
     // --------- methods -----------------------------
-    sal_Bool _IsZoomedIn() const {return bIsZoomedIn;}
+    BOOL _IsZoomedIn() const {return bIsZoomedIn;}
     void _ZoomOut();
     void _ZoomIn();
 
@@ -138,53 +139,53 @@ class SwNavigationPI : public Window,
 
 protected:
 
-    virtual         sal_Bool Close();
-    virtual         void Resize();
+    virtual 		BOOL Close();
+    virtual 		void Resize();
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 
     // zum App-Ende rechtzeitig ObjectShellLock loslassen
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void	Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    NumEditAction&  GetPageEdit();
-    sal_Bool            ToggleTree();
-    void            SetGlobalMode(sal_Bool bSet) {bGlobalMode = bSet;}
+    NumEditAction&	GetPageEdit();
+    BOOL			ToggleTree();
+    void			SetGlobalMode(BOOL bSet) {bGlobalMode = bSet;}
 
 public:
 
     SwNavigationPI(SfxBindings*, SfxChildWindowContext*, Window*);
     ~SwNavigationPI();
 
-    void            GotoPage(); // Seite anspringen; bindbare Funktion
+    void 			GotoPage();	// Seite anspringen; bindbare Funktion
 
-    void            Update() { FillBox(); }
-    void            UpdateListBox();
-    void            MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget, sal_Bool bWithCilds);
+    void        	Update() { FillBox(); }
+    void			UpdateListBox();
+    void        	MoveOutline(USHORT nSource, USHORT nTarget, BOOL bWithCilds);
 
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                             const SfxPoolItem* pState );
 
-    static String   CreateDropFileName( TransferableDataHelper& rData );
-    static void     CleanEntry( String& rEntry );
+    static String 	CreateDropFileName( TransferableDataHelper& rData );
+    static void 	CleanEntry( String& rEntry );
 
-    sal_uInt16          GetRegionDropMode() const {return nRegionMode;}
-    void            SetRegionDropMode(sal_uInt16 nNewMode);
+    USHORT			GetRegionDropMode() const {return nRegionMode;}
+    void			SetRegionDropMode(USHORT nNewMode);
 
-    sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
-    sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
+    sal_Int8 		AcceptDrop( const AcceptDropEvent& rEvt );
+    sal_Int8 		ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-    sal_Bool            IsGlobalDoc() const;
-    sal_Bool            IsGlobalMode() const {return    bGlobalMode;}
+    BOOL 			IsGlobalDoc() const;
+    BOOL			IsGlobalMode() const {return	bGlobalMode;}
 
     SwView*         GetCreateView() const;
-    void            CreateNavigationTool(const Rectangle& rRect, sal_Bool bSetFocus);
+    void            CreateNavigationTool(const Rectangle& rRect, BOOL bSetFocus);
 };
 
 class SwNavigationChild : public SfxChildWindowContext
 {
 public:
     SwNavigationChild( Window* ,
-                        sal_uInt16 nId,
+                        USHORT nId,
                         SfxBindings*,
                         SfxChildWinInfo*  );
 

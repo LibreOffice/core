@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : gregor.hartmann@oracle.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Load the spec template via http and enable macros
 '*
@@ -94,12 +94,10 @@ testcase tBasicSpecTemplate
     printlog( "Load the file again" )
     hFileOpen( cWorkFile )
     hAllowMacroExecution()
-
-    ' This sleep here is needed after loading the document otherwise the document is closed too early during execution of the macros, which results in basic runtime error messagebox, that can not be handled.
-    SLEEP(1)
     
     printlog( "Cleanup: Close the document and delete the file" )
     hDestroyDocument()
     hDeleteFile( cWorkFile )
+
 endcase
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ public class _XCellRangeData extends MultiMethodTest {
 
     public XCellRangeData oObj = null;
     private Object[][] maCRData = null;
-
+    
     /**
     * Test calls the method
     * state is OK if the resulting Object array

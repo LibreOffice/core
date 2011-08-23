@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,14 +116,14 @@ bool ScConversionEngineBase::FindNextConversionCell()
 
         String aNewStr = GetText();
 
-        sal_Bool bMultiTab = (rMark.GetSelectCount() > 1);
+        BOOL bMultiTab = (rMark.GetSelectCount() > 1);
         String aVisibleStr;
         if( bMultiTab )
             mrDoc.GetString( mnCurrCol, mnCurrRow, mnStartTab, aVisibleStr );
 
         for( SCTAB nTab = 0, nTabCount = mrDoc.GetTableCount(); nTab < nTabCount; ++nTab )
         {
-            //  always change the cell on the visible tab,
+            //  #69965# always change the cell on the visible tab,
             //  on the other selected tabs only if they contain the same text
 
             if( (nTab == mnStartTab) ||
@@ -250,7 +250,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
     if( bFound )
     {
         pViewShell->AlignToCursor( nNewCol, nNewRow, SC_FOLLOW_JUMP );
-        pViewShell->SetCursor( nNewCol, nNewRow, sal_True );
+        pViewShell->SetCursor( nNewCol, nNewRow, TRUE );
         mrViewData.GetView()->MakeEditView( this, nNewCol, nNewRow );
         EditView* pEditView = mrViewData.GetSpellingView();
         // maSelState.GetEditSelection() returns (0,0) if not in edit mode -> ok
@@ -330,7 +330,7 @@ void ScSpellingEngine::ConvertAll( EditView& rEditView )
 {
     EESpellState eState = EE_SPELL_OK;
     if( FindNextConversionCell() )
-        eState = rEditView.StartSpeller( static_cast< sal_Bool >( sal_True ) );
+        eState = rEditView.StartSpeller( static_cast< BOOL >( TRUE ) );
 
     DBG_ASSERT( eState != EE_SPELL_NOSPELLER, "ScSpellingEngine::Convert - no spell checker" );
     if( eState == EE_SPELL_NOLANGUAGE )
@@ -341,7 +341,7 @@ void ScSpellingEngine::ConvertAll( EditView& rEditView )
     }
 }
 
-sal_Bool ScSpellingEngine::SpellNextDocument()
+BOOL ScSpellingEngine::SpellNextDocument()
 {
     return FindNextConversionCell();
 }
@@ -370,7 +370,7 @@ void ScSpellingEngine::ShowFinishDialog()
 
 Window* ScSpellingEngine::GetDialogParent()
 {
-    sal_uInt16 nWinId = ScSpellDialogChildWindow::GetChildWindowId();
+    USHORT nWinId = ScSpellDialogChildWindow::GetChildWindowId();
     SfxViewFrame* pViewFrm = mrViewData.GetViewShell()->GetViewFrame();
     if( pViewFrm->HasChildWindow( nWinId ) )
         if( SfxChildWindow* pChild = pViewFrm->GetChildWindow( nWinId ) )
@@ -439,13 +439,13 @@ void ScTextConversionEngine::ConvertAll( EditView& rEditView )
     {
         rEditView.StartTextConversion(
             maConvParam.GetSourceLang(), maConvParam.GetTargetLang(), maConvParam.GetTargetFont(),
-            maConvParam.GetOptions(), maConvParam.IsInteractive(), sal_True );
+            maConvParam.GetOptions(), maConvParam.IsInteractive(), TRUE );
         // #i34769# restore initial cursor position
         RestoreCursorPos();
     }
 }
 
-sal_Bool ScTextConversionEngine::ConvertNextDocument()
+BOOL ScTextConversionEngine::ConvertNextDocument()
 {
     return FindNextConversionCell();
 }

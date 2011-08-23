@@ -40,7 +40,6 @@
             <menu:menuitem menu:id=".uno:Paste"/>
             <menu:menuitem menu:id=".uno:SelectAll"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
         </menu:menupopup>
     </menu:menu>

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,7 @@
 #ifndef _SVX_GRIDCTRL_HXX
 #define _SVX_GRIDCTRL_HXX
 
+#include <tools/list.hxx>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 #include <com/sun/star/sdb/XRowsChangeListener.hpp>
@@ -46,7 +47,6 @@
 #include <comphelper/propmultiplex.hxx>
 #include <svtools/transfer.hxx>
 #include "svx/svxdllapi.h"
-#include <vector>
 
 class DbGridControl;
 class CursorWrapper;
@@ -57,7 +57,7 @@ namespace svxform
 {
     class DataColumn;
 }
-typedef ::std::vector< ::svxform::DataColumn* > DbDataColumns;
+DECLARE_LIST(DbDataColumns, ::svxform::DataColumn*)
 
 enum GridRowStatus
 {
@@ -73,10 +73,10 @@ enum GridRowStatus
 
 class DbGridRow : public SvRefBase
 {
-    ::com::sun::star::uno::Any  m_aBookmark;        // ::com::sun::star::text::Bookmark of the row, can be set
-    DbDataColumns               m_aVariants;
-    GridRowStatus               m_eStatus;
-    sal_Bool                    m_bIsNew;
+    ::com::sun::star::uno::Any						m_aBookmark;		// ::com::sun::star::text::Bookmark of the row, can be set
+    DbDataColumns				m_aVariants;
+    GridRowStatus				m_eStatus;
+    sal_Bool						m_bIsNew;
                                                     // row is no longer valid
                                                     // is removed on the next positioning
 public:
@@ -86,18 +86,19 @@ public:
 
     ~DbGridRow();
 
-    sal_Bool HasField(sal_uInt32 nPos) const { return nPos < m_aVariants.size(); }
-    const ::svxform::DataColumn& GetField(sal_uInt32 nPos) const { return *m_aVariants[ nPos ]; }
+    // Because GetField is tuned on speed, always use hasField first
+    sal_Bool HasField(sal_uInt32 nPos) const {return nPos < m_aVariants.Count();}
+    const ::svxform::DataColumn& GetField(sal_uInt32 nPos) const { return *m_aVariants.GetObject(nPos); }
 
-    void            SetStatus(GridRowStatus _eStat) { m_eStatus = _eStat; }
-    GridRowStatus   GetStatus() const               { return m_eStatus; }
-    void            SetNew(sal_Bool _bNew)              { m_bIsNew = _bNew; }
-    sal_Bool            IsNew() const                   { return m_bIsNew; }
+    void			SetStatus(GridRowStatus _eStat) { m_eStatus = _eStat; }
+    GridRowStatus	GetStatus() const				{ return m_eStatus; }
+    void			SetNew(sal_Bool _bNew)				{ m_bIsNew = _bNew; }
+    sal_Bool			IsNew() const					{ return m_bIsNew; }
 
     const ::com::sun::star::uno::Any& GetBookmark() const { return m_aBookmark; }
 
-    sal_Bool    IsValid() const { return m_eStatus == GRS_CLEAN || m_eStatus == GRS_MODIFIED; }
-    sal_Bool    IsModified() const { return m_eStatus == GRS_MODIFIED; }
+    sal_Bool	IsValid() const { return m_eStatus == GRS_CLEAN || m_eStatus == GRS_MODIFIED; }
+    sal_Bool	IsModified() const { return m_eStatus == GRS_MODIFIED; }
 };
 
 SV_DECL_REF(DbGridRow)
@@ -106,7 +107,7 @@ SV_DECL_REF(DbGridRow)
 // DbGridControl
 //==================================================================
 class DbGridColumn;
-typedef ::std::vector< DbGridColumn* > DbGridColumns;
+DECLARE_LIST(DbGridColumns, DbGridColumn*)
 
 //==================================================================
 class FmGridListener
@@ -133,7 +134,7 @@ enum InitWindowFacet
 //==================================================================
 class FmXGridSourcePropListener;
 class DisposeListenerGridBridge;
-typedef ::svt::EditBrowseBox    DbGridControl_Base;
+typedef ::svt::EditBrowseBox	DbGridControl_Base;
 class SVX_DLLPUBLIC DbGridControl : public DbGridControl_Base
 {
     friend class FmXGridSourcePropListener;
@@ -157,28 +158,28 @@ public:
 
         friend class NavigationBar::AbsolutePos;
 
-        //  zusaetzliche Controls
-        FixedText       m_aRecordText;
-        AbsolutePos     m_aAbsolute;            // absolute positioning
-        FixedText       m_aRecordOf;
-        FixedText       m_aRecordCount;
+        //	zusaetzliche Controls
+        FixedText		m_aRecordText;
+        AbsolutePos		m_aAbsolute;			// absolute positioning
+        FixedText		m_aRecordOf;
+        FixedText		m_aRecordCount;
 
-        ImageButton     m_aFirstBtn;            // ImageButton for 'go to the first record'
-        ImageButton     m_aPrevBtn;         // ImageButton for 'go to the previous record'
-        ImageButton     m_aNextBtn;         // ImageButton for 'go to the next record'
-        ImageButton     m_aLastBtn;         // ImageButton for 'go to the last record'
-        ImageButton     m_aNewBtn;          // ImageButton for 'go to a new record'
-        sal_uInt16      m_nDefaultWidth;
-        sal_Int32       m_nCurrentPos;
+        ImageButton		m_aFirstBtn;			// ImageButton for 'go to the first record'
+        ImageButton		m_aPrevBtn;			// ImageButton for 'go to the previous record'
+        ImageButton		m_aNextBtn;			// ImageButton for 'go to the next record'
+        ImageButton		m_aLastBtn;			// ImageButton for 'go to the last record'
+        ImageButton		m_aNewBtn;			// ImageButton for 'go to a new record'
+        sal_uInt16		m_nDefaultWidth;
+        sal_Int32		m_nCurrentPos;
 
-        sal_Bool            m_bPositioning;     // protect PositionDataSource against recursion
+        sal_Bool			m_bPositioning;		// protect PositionDataSource against recursion
 
     public:
-        //  StatusIds for Controls of the Bar
+        //	StatusIds for Controls of the Bar
         //  important for invalidation
         enum State
         {
-            RECORD_TEXT = 1,
+            RECORD_TEXT	= 1,
             RECORD_ABSOLUTE,
             RECORD_OF,
             RECORD_COUNT,
@@ -217,43 +218,43 @@ public:
     // features can be released, default is readonly which means 0
     enum Option
     {
-        OPT_READONLY    = 0x00,
-        OPT_INSERT      = 0x01,
-        OPT_UPDATE      = 0x02,
-        OPT_DELETE      = 0x04
+        OPT_READONLY	= 0x00,
+        OPT_INSERT		= 0x01,
+        OPT_UPDATE		= 0x02,
+        OPT_DELETE		= 0x04
     };
 
 private:
-    Font            m_aDefaultFont;
-    Link            m_aMasterStateProvider;
-    Link            m_aMasterSlotExecutor;
+    Font			m_aDefaultFont;
+    Link			m_aMasterStateProvider;
+    Link			m_aMasterSlotExecutor;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >        m_xFormatter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > 		m_xFormatter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_xServiceFactory;
 
-    DbGridColumns   m_aColumns;         // Column description
-    NavigationBar   m_aBar;
-    DbGridRowRef    m_xDataRow;         // Row which can be modified
+    DbGridColumns	m_aColumns;			// Column description
+    NavigationBar	m_aBar;
+    DbGridRowRef	m_xDataRow;			// Row which can be modified
                                         // comes from the data cursor
-    DbGridRowRef    m_xSeekRow,         // Row to which the iterator can set
+    DbGridRowRef	m_xSeekRow,			// Row to which the iterator can set
                                         // comes from the data cursor
 
-                    m_xEmptyRow;        // record set to insert
+                    m_xEmptyRow;		// record set to insert
 
-    sal_uInt32          m_nAsynAdjustEvent;
+    sal_uInt32			m_nAsynAdjustEvent;
 
     // if we modify the row for the new record, we automatically insert a "new new row".
     // But if somebody else inserts a new record into the data source, we have to do the same.
     // For that reason we have to listen to some properties of our data source.
-    ::comphelper::OPropertyChangeMultiplexer*       m_pDataSourcePropMultiplexer;
-    FmXGridSourcePropListener*                      m_pDataSourcePropListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowsChangeListener>
+    ::comphelper::OPropertyChangeMultiplexer*		m_pDataSourcePropMultiplexer;
+    FmXGridSourcePropListener*						m_pDataSourcePropListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowsChangeListener>		
                                                     m_xRowSetListener; // get notification when rows were changed
 
-    void*                                           m_pFieldListeners;
+    void*											m_pFieldListeners;
         // property listeners for field values
 
-    DisposeListenerGridBridge*                      m_pCursorDisposeListener;
+    DisposeListenerGridBridge*						m_pCursorDisposeListener;
         // need to know about the diposing of the seek cursor
         // construct analogous to the data source proplistener/multiplexer above :
         // DisposeListenerGridBridge is a bridge from FmXDisposeListener which I don't want to be derived from
@@ -261,49 +262,49 @@ private:
     FmGridListener*                                 m_pGridListener;
 
 protected:
-    CursorWrapper*  m_pDataCursor;      // Cursor for Updates
-    CursorWrapper*  m_pSeekCursor;      // Cursor for Seeking
+    CursorWrapper*	m_pDataCursor;		// Cursor for Updates
+    CursorWrapper*  m_pSeekCursor;		// Cursor for Seeking
 
 private:
     // iteration variables
-    DbGridRowRef        m_xCurrentRow;
-    DbGridRowRef        m_xPaintRow;        // Row to be displayed
-    sal_Int32           m_nSeekPos;         // Position of the SeekCursor
-    sal_Int32           m_nTotalCount;      // is set when the data cursor finished counting the
+    DbGridRowRef		m_xCurrentRow;
+    DbGridRowRef		m_xPaintRow;		// Row to be displayed
+    sal_Int32			m_nSeekPos;			// Position of the SeekCursor
+    sal_Int32			m_nTotalCount;		// is set when the data cursor finished counting the
                                             // records. Initial value is -1
-    osl::Mutex          m_aDestructionSafety;
-    osl::Mutex          m_aAdjustSafety;
+    osl::Mutex			m_aDestructionSafety;
+    osl::Mutex			m_aAdjustSafety;
 
     com::sun::star::util::Date
-                        m_aNullDate;        // NullDate of the Numberformatter;
+                        m_aNullDate;		// NullDate of the Numberformatter;
 
-    BrowserMode         m_nMode;
-    sal_Int32           m_nCurrentPos;      // Current position;
-    sal_uInt32          m_nDeleteEvent;     // EventId for asychronous deletion of rows
-    sal_uInt16          m_nOptions;         // What is the able to do (Insert, Update, Delete)
+    BrowserMode			m_nMode;
+    sal_Int32			m_nCurrentPos;		// Current position;
+    sal_uInt32			m_nDeleteEvent;		// EventId for asychronous deletion of rows
+    sal_uInt16			m_nOptions;			// What is the able to do (Insert, Update, Delete)
                                         // default readonly
-    sal_uInt16          m_nOptionMask;      // the mask of options to be enabled in setDataSource
+    sal_uInt16			m_nOptionMask;		// the mask of options to be enabled in setDataSource
                                         // (with respect to the data source capabilities)
                                         // defaults to (insert | update | delete)
-    sal_uInt16              m_nLastColId;
+    USHORT              m_nLastColId;
     long                m_nLastRowId;
 
-    sal_Bool            m_bDesignMode : 1;      // default = sal_False
-    sal_Bool            m_bRecordCountFinal : 1;
-    sal_Bool            m_bMultiSelection   : 1;
-    sal_Bool            m_bNavigationBar      : 1;
+    sal_Bool			m_bDesignMode : 1;		// default = sal_False
+    sal_Bool			m_bRecordCountFinal : 1;
+    sal_Bool			m_bMultiSelection   : 1;
+    sal_Bool			m_bNavigationBar	  : 1;
 
-    sal_Bool            m_bSynchDisplay : 1;
-    sal_Bool            m_bForceROController : 1;
-    sal_Bool            m_bHandle : 1;
-    sal_Bool            m_bFilterMode : 1;
-    sal_Bool            m_bWantDestruction : 1;
-    sal_Bool            m_bInAdjustDataSource : 1;
-    sal_Bool            m_bPendingAdjustRows : 1;   // if an async adjust is pending, is it for AdjustRows or AdjustDataSource ?
+    sal_Bool			m_bSynchDisplay : 1;
+    sal_Bool			m_bForceROController : 1;
+    sal_Bool			m_bHandle : 1;
+    sal_Bool			m_bFilterMode : 1;
+    sal_Bool			m_bWantDestruction : 1;
+    sal_Bool			m_bInAdjustDataSource : 1;
+    sal_Bool			m_bPendingAdjustRows : 1;	// if an async adjust is pending, is it for AdjustRows or AdjustDataSource ?
     sal_Bool            m_bHideScrollbars : 1;
 
 protected:
-    sal_Bool            m_bUpdating : 1;            // are any updates being executed right now?
+    sal_Bool			m_bUpdating : 1;			// are any updates being executed right now?
 
 protected:
     virtual sal_Bool SeekRow(long nRow);
@@ -336,11 +337,11 @@ protected:
     virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
 
     /// hide a column
-    virtual void    HideColumn(sal_uInt16 nId);
+    virtual void	HideColumn(sal_uInt16 nId);
     /// show a column
-    virtual void    ShowColumn(sal_uInt16 nId);
+    virtual void	ShowColumn(sal_uInt16 nId);
 
-    /** This is called before executing a context menu for a row. rMenu contains the initial entries
+    /**	This is called before executing a context menu for a row. rMenu contains the initial entries
         handled by this base class' method (which always has to be called).
         Derived classes may alter the menu in any way and handle any additional entries in
         PostExecuteColumnContextMenu.
@@ -348,7 +349,7 @@ protected:
         near entries you probably wish to disable ...
     */
     virtual void PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu);
-    /** After executing the context menu for a row this method is called.
+    /**	After executing the context menu for a row this method is called.
     */
     virtual void PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
 
@@ -368,7 +369,7 @@ protected:
     // DragSourceHelper overridables
     virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
-    void    executeRowContextMenu( long _nRow, const Point& _rPreferredPos );
+    void	executeRowContextMenu( long _nRow, const Point& _rPreferredPos );
 
 public:
     DbGridControl(
@@ -383,14 +384,14 @@ public:
     virtual void RemoveRows();
 
     /** GetCellText returns the text at the given position
-        @param  _nRow
+        @param	_nRow
             the number of the row
-        @param  _nColId
+        @param	_nColId
             the ID of the column
         @return
             the text out of the cell
     */
-    virtual String  GetCellText(long _nRow, sal_uInt16 _nColId) const;
+    virtual String	GetCellText(long _nRow, USHORT _nColId) const;
 
     void RemoveRows(sal_Bool bNewCursor);
 
@@ -421,7 +422,7 @@ public:
 
     // the number of columns in the model
     sal_uInt16 GetViewColCount() const { return ColCount() - 1; }
-    sal_uInt16 GetModelColCount() const { return (sal_uInt16)m_aColumns.size(); }
+    sal_uInt16 GetModelColCount() const { return (sal_uInt16)m_aColumns.Count(); }
     // reverse to GetViewColumnPos: Id of position, the first non-handle column has position 0
     sal_uInt16 GetColumnIdFromViewPos( sal_uInt16 nPos ) const { return GetColumnId(nPos + 1); }
     sal_uInt16 GetColumnIdFromModelPos( sal_uInt16 nPos ) const;
@@ -447,7 +448,7 @@ public:
     void SetMultiSelection(sal_Bool bMulti);
     sal_Bool GetMultiSelection() const {return m_bMultiSelection;}
 
-    const com::sun::star::util::Date&   getNullDate() const {return m_aNullDate;}
+    const com::sun::star::util::Date&	getNullDate() const {return m_aNullDate;}
 
     // positioning
     void MoveToPosition(sal_uInt32 nPos);
@@ -518,9 +519,9 @@ public:
         getServiceManager() const { return m_xServiceFactory; }
 
     /// returns <TRUE/> if the text of the given cell can be copied into the clipboard
-    sal_Bool    canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
+    sal_Bool	canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
     /// copies the text of the given cell into the clipboard
-    void        copyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
+    void		copyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
 
     // selectin listener handling
     FmGridListener*             getGridListener() const { return m_pGridListener; }
@@ -570,7 +571,7 @@ public:
 protected:
     void RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_Bool bUpdateCursor);
     sal_Bool SeekCursor(long nRow, sal_Bool bAbsolute = sal_False);
-    void RemoveColumns();       // cleaning of own structures
+    void RemoveColumns();		// cleaning of own structures
     void AdjustRows();
     sal_Int32 AlignSeekCursor();
     sal_Bool SetCurrent(long nNewRow);
@@ -594,7 +595,7 @@ protected:
     const DbGridRowRef& GetSeekRow() const  { return m_xSeekRow;    }
     const DbGridRowRef& GetPaintRow() const { return m_xPaintRow;   }
     CursorWrapper* GetSeekCursor() const    { return m_pSeekCursor; }
-
+    
 
     void ConnectToFields();
     void DisconnectFromFields();

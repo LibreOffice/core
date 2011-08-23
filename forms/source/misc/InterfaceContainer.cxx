@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ lcl_hasVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents  )
     const ScriptEventDescriptor* pEnd = ( pDesc + sEvents.getLength() );
     for ( ; pDesc != pEnd; ++pDesc )
     {
-        if ( pDesc->ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop") ) ) )
+        if ( pDesc->ScriptType.equals( rtl::OUString::createFromAscii( "VBAInterop" ) ) )
             return true;
     }
     return false;
@@ -106,13 +106,13 @@ Sequence< ScriptEventDescriptor >
 lcl_stripVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents )
 {
     Sequence< ScriptEventDescriptor > sStripped( sEvents.getLength() );
-
+    
     const ScriptEventDescriptor* pDesc = sEvents.getConstArray();
     const ScriptEventDescriptor* pEnd = ( pDesc + sEvents.getLength() );
     sal_Int32 nCopied = 0;
     for ( ; pDesc != pEnd; ++pDesc )
     {
-        if ( !pDesc->ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop") ) ) )
+        if ( !pDesc->ScriptType.equals( rtl::OUString::createFromAscii( "VBAInterop" ) ) )
         {
             sStripped[ nCopied++ ] = *pDesc;
         }
@@ -134,12 +134,12 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
                 break;
 
             Reference< XMultiServiceFactory > xDocFac( xDoc, UNO_QUERY_THROW );
-            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.VBACodeNameProvider") ) ), UNO_QUERY );
+            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance( rtl::OUString::createFromAscii( "ooo.vba.VBACodeNameProvider" ) ), UNO_QUERY );
             if ( !xNameQuery.is() )
                 break;
 
             ::osl::MutexGuard aGuard( m_rMutex );
-            bool hasVBABindings = lcl_hasVbaEvents( m_xEventAttacher->getScriptEvents( i_nIndex ) );
+            bool hasVBABindings = lcl_hasVbaEvents( m_xEventAttacher->getScriptEvents( i_nIndex ) );  
             if ( hasVBABindings )
                 break;
 
@@ -152,9 +152,9 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
 
             Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
             ::rtl::OUString sServiceName;
-            xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultControl") ) ) >>= sServiceName;
+            xProps->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl" ) ) >>= sServiceName;
 
-            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.VBAToOOEventDesc") ) ), UNO_QUERY_THROW );
+            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( rtl::OUString::createFromAscii( "ooo.vba.VBAToOOEventDesc" ) ), UNO_QUERY_THROW );
             Reference< XInterface > xInterface = m_xServiceFactory->createInstance( sServiceName );
             Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( xInterface, sCodeName );
             // register the vba script events
@@ -306,7 +306,7 @@ namespace
         _rSave.reserve( _nItemCount );
 
         // copy the events
-        for (sal_Int32 i=0; i<_nItemCount; ++i)
+        for (sal_Int32 i=0; i<_nItemCount; ++i) 
             _rSave.push_back(_rxManager->getScriptEvents( i ));
     }
 
@@ -378,14 +378,14 @@ struct TransformEventTo52Format : public ::std::unary_function< ScriptEventDescr
     void operator()( ScriptEventDescriptor& _rDescriptor )
     {
         if ( 0 == _rDescriptor.ScriptType.compareToAscii( "StarBasic" ) )
-        {   // it's a starbasic macro
+        {	// it's a starbasic macro
             sal_Int32 nPrefixLength = _rDescriptor.ScriptCode.indexOf( ':' );
             if ( 0 <= nPrefixLength )
-            {   // the macro name does not already contain a :
+            {	// the macro name does not already contain a :
 #ifdef DBG_UTIL
                 const ::rtl::OUString sPrefix = _rDescriptor.ScriptCode.copy( 0, nPrefixLength );
-                DBG_ASSERT( 0 == sPrefix.compareToAscii( "document" )
-                        ||  0 == sPrefix.compareToAscii( "application" ),
+                DBG_ASSERT(	0 == sPrefix.compareToAscii( "document" )
+                        ||	0 == sPrefix.compareToAscii( "application" ),
                         "TransformEventTo52Format: invalid (unknown) prefix!" );
 #endif
                 // cut the prefix
@@ -401,9 +401,9 @@ struct TransformEventTo60Format : public ::std::unary_function< ScriptEventDescr
     void operator()( ScriptEventDescriptor& _rDescriptor )
     {
         if ( 0 == _rDescriptor.ScriptType.compareToAscii( "StarBasic" ) )
-        {   // it's a starbasic macro
+        {	// it's a starbasic macro
             if ( _rDescriptor.ScriptCode.indexOf( ':' ) < 0 )
-            {   // the macro name does not already contain a :
+            {	// the macro name does not already contain a :
                 // -> default the type to "document"
                 ::rtl::OUString sNewScriptCode( RTL_CONSTASCII_USTRINGPARAM( "document:" ) );
                 sNewScriptCode += _rDescriptor.ScriptCode;
@@ -434,8 +434,8 @@ void OInterfaceContainer::transformEvents( const EventFormat _eTargetFormat )
             if ( aChildEvents.getLength() )
             {
                 // the "iterators" for the events for this child
-                ScriptEventDescriptor* pChildEvents     =                       aChildEvents.getArray();
-                ScriptEventDescriptor* pChildEventsEnd  =   pChildEvents    +   aChildEvents.getLength();
+                ScriptEventDescriptor* pChildEvents		=						aChildEvents.getArray();
+                ScriptEventDescriptor* pChildEventsEnd	=	pChildEvents	+	aChildEvents.getLength();
 
                 // do the transformation
                 if ( efVersionSO6x == _eTargetFormat )
@@ -482,7 +482,7 @@ void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream
         OInterfaceArray::const_iterator aAttachEnd = m_aItems.end();
         for ( sal_Int32 i=0; aAttach != aAttachEnd; ++aAttach, ++i )
         {
-            Reference< XInterface > xAsIFace( *aAttach, UNO_QUERY );    // important to normalize this ....
+            Reference< XInterface > xAsIFace( *aAttach, UNO_QUERY );	// important to normalize this ....
             Reference< XPropertySet > xAsSet( xAsIFace, UNO_QUERY );
             m_xEventAttacher->attach( i, xAsIFace, makeAny( xAsSet ) );
         }
@@ -554,6 +554,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
 
     // after ::read the object is expected to be in the state it was when ::write was called, so we have
     // to empty ourself here
+    // FS - 71598 - 12.01.00
     while (getCount())
         removeByIndex(0);
 
@@ -582,6 +583,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                 if ( !xObj.is() )
                     // couldn't handle it
                     throw;
+                // 72133 - 09.02.00 - FS
             }
             catch(Exception&)
             {
@@ -599,16 +601,16 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                 try
                 {
                     implInsert(
-                        m_aItems.size(),    // position
-                        xElement,           // element to insert
-                        sal_False,          // no event attacher manager handling
-                        NULL,               // not yet approved - let implInsert do it
-                        sal_True            // fire the event
+                        m_aItems.size(),	// position
+                        xElement,			// element to insert
+                        sal_False,			// no event attacher manager handling
+                        NULL,				// not yet approved - let implInsert do it
+                        sal_True			// fire the event
                     );
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "OInterfaceContainerHelper::read: reading succeeded, but not inserting!" );
+                    DBG_ERROR( "OInterfaceContainerHelper::read: reading succeeded, but not inserting!" );
                     // create a placeholder
                     xElement = xElement.query( lcl_createPlaceHolder( m_xServiceFactory ) );
                     if ( !xElement.is() )
@@ -803,6 +805,18 @@ void OInterfaceContainer::approveNewElement( const Reference< XPropertySet >& _r
     Reference< XChild > xChild( _rxObject, UNO_QUERY );
     if ( !xChild.is() || xChild->getParent().is() )
     {
+#ifdef FS_PRIV_DEBUG
+        ::rtl::OUString sChildName, sParentName;
+        Reference< XNamed > xNamed( xChild, UNO_QUERY );
+        if ( xNamed.is() )
+            sChildName = xNamed->getName();
+        if ( xChild.is() )
+        {
+            xNamed = xNamed.query( xChild->getParent() );
+            if ( xNamed.is() )
+                sParentName = xNamed->getName();
+        }
+#endif
         lcl_throwIllegalArgumentException();
     }
 
@@ -813,7 +827,7 @@ void OInterfaceContainer::approveNewElement( const Reference< XPropertySet >& _r
         _pElement->xPropertySet = _rxObject;
         _pElement->xChild = xChild;
         _pElement->aElementTypeInterface = aCorrectType;
-        _pElement->xInterface = Reference< XInterface >( _rxObject, UNO_QUERY );    // normalized XInterface
+        _pElement->xInterface = Reference< XInterface >( _rxObject, UNO_QUERY );	// normalized XInterface
     }
 }
 
@@ -829,7 +843,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     ::std::auto_ptr< ElementDescription > aAutoDeleteMetaData;
     ElementDescription* pElementMetaData = _pApprovalResult;
     if ( !pElementMetaData )
-    {   // not yet approved by the caller -> do ourself
+    {	// not yet approved by the caller -> do ourself
         pElementMetaData = createElementMetaData();
         DBG_ASSERT( pElementMetaData, "OInterfaceContainer::implInsert: createElementMetaData returned nonsense!" );
 
@@ -881,19 +895,19 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     {
         Reference< XEventAttacherManager > xMgr ( pElementMetaData->xInterface, UNO_QUERY );
         if ( xMgr.is() )
-        {
+        { 
             OInterfaceContainer* pIfcMgr = dynamic_cast< OInterfaceContainer* >( xMgr.get() );
             sal_Int32 nLen = pIfcMgr->getCount();
             for ( sal_Int32 i = 0; (i < nLen) && pIfcMgr ; ++i )
-            {
+            {	
                 // add fake events to the control at index i
                 pIfcMgr->impl_addVbEvents_nolck_nothrow( i );
-            }
+            }	
         }
         else
         {
             // add fake events to the control at index i
-            impl_addVbEvents_nolck_nothrow( _nIndex );
+            impl_addVbEvents_nolck_nothrow( _nIndex );	
         }
     }
 
@@ -1127,15 +1141,15 @@ void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& _rName, c
     }
     catch( const IllegalArgumentException& )
     {
-        throw;  // allowed to leave
+        throw;	// allowed to leave
     }
     catch( const ElementExistException& )
     {
-        throw;  // allowed to leave
+        throw;	// allowed to leave
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OInterfaceContainer::insertByName: caught an exception!" );
+        DBG_ERROR( "OInterfaceContainer::insertByName: caught an exception!" );
     }
     implInsert( m_aItems.size(), xElementProps, sal_True, aElementMetaData.get(), sal_True );
 }
@@ -1352,7 +1366,7 @@ InterfaceRef OFormComponents::getParent() throw( RuntimeException )
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

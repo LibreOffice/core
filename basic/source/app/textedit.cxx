@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,19 +44,19 @@
 TextEditImp::TextEditImp( AppEdit* pParent, const WinBits& aBits )
 : Window( pParent, aBits )
 , pAppEdit( pParent )
-, bHighlightning( sal_False )
-, bDoSyntaxHighlight( sal_False )
-, bDelayHighlight( sal_True )
+, bHighlightning( FALSE )
+, bDoSyntaxHighlight( FALSE )
+, bDelayHighlight( TRUE )
 , nTipId( 0 )
-, bViewMoved( sal_False )
+, bViewMoved( FALSE )
 {
     pTextEngine = new TextEngine();
     pTextEngine->SetMaxTextLen( STRING_MAXLEN );
-    pTextEngine->EnableUndo( sal_True );
+    pTextEngine->EnableUndo( TRUE );
 
     pTextView = new TextView( pTextEngine, this );
     pTextEngine->InsertView( pTextView );
-    pTextEngine->SetModified( sal_False );
+    pTextEngine->SetModified( FALSE );
 
     aSyntaxIdleTimer.SetTimeout( 200 );
     aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, TextEditImp, SyntaxTimerHdl ) );
@@ -66,8 +66,8 @@ TextEditImp::TextEditImp( AppEdit* pParent, const WinBits& aBits )
 
     StartListening( *pTextEngine );
 
-    HideTipTimer.SetTimeout( 5000 );    // 5 seconds
-    ShowTipTimer.SetTimeout( 500 );     // 1/2 seconds
+    HideTipTimer.SetTimeout( 5000 );	// 5 seconds
+    ShowTipTimer.SetTimeout( 500 );		// 1/2 seconds
     HideTipTimer.SetTimeoutHdl( LINK( this, TextEditImp, HideVarContents ) );
     ShowTipTimer.SetTimeoutHdl( LINK( this, TextEditImp, ShowVarContents ) );
 }
@@ -79,16 +79,16 @@ TextEditImp::~TextEditImp()
     delete pTextEngine;
 }
 
-sal_Bool TextEditImp::ViewMoved()
+BOOL TextEditImp::ViewMoved()
 {
-    sal_Bool bOld = bViewMoved;
-    bViewMoved = sal_False;
+    BOOL bOld = bViewMoved;
+    bViewMoved = FALSE;
     return bOld;
 }
 
 void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    (void) rBC; /* avoid warning about unused parameter */
+    (void) rBC; /* avoid warning about unused parameter */ 
     if ( rHint.ISA( TextHint ) )
     {
         const TextHint& rTextHint = (const TextHint&)rHint;
@@ -98,7 +98,7 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             pAppEdit->pVScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
             if ( ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow() )
                 ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->Scroll( 0, ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->GetCurYOffset() - pTextView->GetStartDocPos().Y() );
-            bViewMoved = sal_True;
+            bViewMoved = TRUE;
         }
         else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
@@ -114,12 +114,12 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if( rTextHint.GetId() == TEXT_HINT_TEXTFORMATTED )
         {
-            sal_uIntPtr nWidth = pTextEngine->CalcTextWidth();
-            if ( (sal_uIntPtr)nWidth != pAppEdit->nCurTextWidth )
+            ULONG nWidth = pTextEngine->CalcTextWidth();
+            if ( (ULONG)nWidth != pAppEdit->nCurTextWidth )
             {
                 pAppEdit->nCurTextWidth = nWidth;
                 if ( pAppEdit->pHScroll )
-                {   // Initialization finished?
+                {	// Initialization finished?
                     pAppEdit->pHScroll->SetRange( Range( 0, (long)nWidth) );
                     pAppEdit->pHScroll->SetThumbPos( pTextView->GetStartDocPos().X() );
                 }
@@ -128,12 +128,12 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         else if( rTextHint.GetId() == TEXT_HINT_PARAINSERTED )
         {
             if ( ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow() )
-                ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->AdjustBreakpoints( rTextHint.GetValue()+1, sal_True );
+                ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->AdjustBreakpoints( rTextHint.GetValue()+1, TRUE );
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARAREMOVED )
         {
             if ( ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow() )
-                ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->AdjustBreakpoints( rTextHint.GetValue()+1, sal_False );
+                ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->AdjustBreakpoints( rTextHint.GetValue()+1, FALSE );
 
             // Itchy adaption for two signs at line ends instead of one (hard coded default)
             pTextEngine->SetMaxTextLen( STRING_MAXLEN - pTextEngine->GetParagraphCount() );
@@ -148,20 +148,20 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
-#define TEXTATTR_SPECHIAL   55
+#define TEXTATTR_SPECHIAL	55
 class TextAttribSpechial : public TextAttrib
 {
 private:
-    FontWeight  maFontWeight;
+    FontWeight	maFontWeight;
 
 public:
     TextAttribSpechial( const FontWeight& rFontWeight );
     TextAttribSpechial( const TextAttribSpechial& rAttr );
     ~TextAttribSpechial() {;}
 
-    virtual void            SetFont( Font& rFont ) const;
-    virtual TextAttrib*     Clone() const;
-    virtual int             operator==( const TextAttrib& rAttr ) const;
+    virtual void 			SetFont( Font& rFont ) const;
+    virtual TextAttrib*		Clone() const;
+    virtual int				operator==( const TextAttrib& rAttr ) const;
 };
 
 TextAttribSpechial::TextAttribSpechial( const FontWeight& rFontWeight )
@@ -188,20 +188,20 @@ int TextAttribSpechial::operator==( const TextAttrib& rAttr ) const
                 ( maFontWeight == ((const TextAttribSpechial&)rAttr).maFontWeight ) );
 }
 
-void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
+void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
 {
     SbTextPortions aPortionList;
     pAppEdit->GetBasicFrame()->Basic().Highlight( rSource, aPortionList );
 
-    sal_uInt16 nCount = aPortionList.Count();
+    USHORT nCount = aPortionList.Count();
     if ( !nCount )
         return;
 
     SbTextPortion& rLast = aPortionList[nCount-1];
-    if ( rLast.nStart > rLast.nEnd )    // Only up to the bug of MD repaired
+    if ( rLast.nStart > rLast.nEnd ) 	// Only up to the bug of MD repaired
     {
 #if OSL_DEBUG_LEVEL > 1
-        OSL_FAIL( "MD-Bug is not repaired!" );
+        DBG_ERROR( "MD-Bug is not repaired!" );
 #endif
         nCount--;
         aPortionList.Remove( nCount);
@@ -210,12 +210,13 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
     }
 
     // here is the postprocessing for types for the TestTool
-    sal_uInt16 i;
-    sal_Bool bWasTTControl = sal_False;
+    USHORT i;
+    BOOL bWasTTControl = FALSE;
     for ( i = 0; i < aPortionList.Count(); i++ )
     {
         SbTextPortion& r = aPortionList[i];
-        if ( r.nStart > r.nEnd )    // Only up to the bug of MD repaired
+//		DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
+        if ( r.nStart > r.nEnd ) 	// Only up to the bug of MD repaired
             continue;
 
         SbTextType eType = r.eType;
@@ -228,20 +229,20 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
                     r.eType = pAppEdit->GetBasicFrame()->Basic().GetSymbolType( aSymbol, bWasTTControl );
 
                     if ( r.eType == TT_CONTROL )
-                        bWasTTControl = sal_True;
+                        bWasTTControl = TRUE;
                     else
-                        bWasTTControl = sal_False;
+                        bWasTTControl = FALSE;
                 }
                 break;
             case SB_PUNCTUATION:
                 {
                      String aPunctuation = rSource.Copy( r.nStart, r.nEnd - r.nStart +1 );
                     if ( aPunctuation.CompareToAscii( "." ) != COMPARE_EQUAL )
-                        bWasTTControl = sal_False;
+                        bWasTTControl = FALSE;
                 }
                 break;
             default:
-                bWasTTControl = sal_False;
+                bWasTTControl = FALSE;
         }
     }
 
@@ -257,7 +258,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
             SbTextPortion& r = aPortionList[i];
             DBG_ASSERT( r.nLine == nLine1, "doch mehrere Zeilen ?" );
             DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
-            if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
+            if ( r.nStart > r.nEnd ) 	// Nur bis Bug von MD behoben
                 continue;
 
             if ( r.nStart > nLastEnd )
@@ -271,16 +272,17 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
                 r.nEnd = rSource.Len()-1;
         }
 
-    sal_Bool bWasModified = pTextEngine->IsModified();
+    BOOL bWasModified = pTextEngine->IsModified();
     for ( i = 0; i < aPortionList.Count(); i++ )
     {
         SbTextPortion& r = aPortionList[i];
-        if ( r.nStart > r.nEnd )    // Only up to the bug of MD repaired
+//		DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
+        if ( r.nStart > r.nEnd ) 	// Only up to the bug of MD repaired
             continue;
 
         SbTextType eCol = r.eType;
         Color aColor;
-        sal_uIntPtr nLine = nLineOff+r.nLine-1; // -1, because BASIC starts with 1
+        ULONG nLine = nLineOff+r.nLine-1; // -1, because BASIC starts with 1
         switch ( +eCol )
         {
             case SB_KEYWORD:
@@ -324,7 +326,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
             default:
                 {
                     aColor = Color( RGB_COLORDATA( 0xff, 0x80, 0x80 ) );
-                    OSL_FAIL( "Unknown syntax color" );
+                    DBG_ERROR( "Unknown syntax color" );
                 }
         }
         pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
@@ -333,13 +335,15 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
     pTextEngine->SetModified( bWasModified );
 }
 
-void TextEditImp::DoSyntaxHighlight( sal_uIntPtr nPara )
+void TextEditImp::DoSyntaxHighlight( ULONG nPara )
 {
     // Due to delayed syntax highlight it can happen that the
-    // paragraph does no longer exist
+   // paragraph does no longer exist
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
         // unfortunatly I don't know if exact this line Modified() ...
+//		if ( pProgress )
+//			pProgress->StepProgress();
         pTextEngine->RemoveAttribs( nPara );
         String aSource( pTextEngine->GetText( nPara ) );
         ImpDoHighlight( aSource, nPara );
@@ -350,12 +354,14 @@ void TextEditImp::DoDelayedSyntaxHighlight( xub_StrLen nPara )
 {
     // Paragraph is added to 'List', processed in TimerHdl.
     // => Do not manipulate paragraphs while EditEngine is formatting
+//	if ( pProgress )
+//		pProgress->StepProgress();
 
     if ( !bHighlightning && bDoSyntaxHighlight )
     {
         if ( bDelayHighlight )
         {
-            aSyntaxLineTable.Insert( nPara, (void*)(sal_uIntPtr)1 );
+            aSyntaxLineTable.Insert( nPara, (void*)(ULONG)1 );
             aSyntaxIdleTimer.Start();
         }
         else
@@ -366,35 +372,53 @@ void TextEditImp::DoDelayedSyntaxHighlight( xub_StrLen nPara )
 IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
 {
     DBG_ASSERT( pTextView, "Not yet a View but Syntax-Highlight ?!" );
-    pTextEngine->SetUpdateMode( sal_False );
+    pTextEngine->SetUpdateMode( FALSE );
 
-    bHighlightning = sal_True;
-    sal_uInt16 nLine;
+    bHighlightning = TRUE;
+    USHORT nLine;
     while ( aSyntaxLineTable.First() && !Application::AnyInput( INPUT_MOUSEANDKEYBOARD ) )
     {
-        nLine = (sal_uInt16)aSyntaxLineTable.GetCurKey();
+        nLine = (USHORT)aSyntaxLineTable.GetCurKey();
         DoSyntaxHighlight( nLine );
         aSyntaxLineTable.Remove( nLine );
+/*		if ( Application::AnyInput() )
+        {
+            aSyntaxIdleTimer.Start();		// Launch if we are landing in a dialog
+            pTextView->ShowCursor( TRUE, TRUE );
+            pTextEngine->SetUpdateMode( TRUE );
+            bHighlightning = FALSE;
+            GetpApp()->Reschedule();
+            bHighlightning = TRUE;
+            pTextEngine->SetUpdateMode( FALSE );
+        }*/
     }
 
-    sal_Bool bWasModified = pTextEngine->IsModified();
-    if ( aSyntaxLineTable.Count() > 3 )                 // Without VDev
+    BOOL bWasModified = pTextEngine->IsModified();
+    if ( aSyntaxLineTable.Count() > 3 ) 				// Without VDev
     {
-        pTextEngine->SetUpdateMode( sal_True );
-        pTextView->ShowCursor( sal_True, sal_True );
+        pTextEngine->SetUpdateMode( TRUE );
+        pTextView->ShowCursor( TRUE, TRUE );
     }
     else
-        pTextEngine->SetUpdateMode( sal_True );             // ! With VDev
+        pTextEngine->SetUpdateMode( TRUE );				// ! With VDev
+//	pTextView->ForceUpdate();
 
-    // SetUpdateMode( sal_True ) soll kein Modify setzen
+    // SetUpdateMode( TRUE ) soll kein Modify setzen
     pTextEngine->SetModified( bWasModified );
 
     // SyntaxTimerHdl wird gerufen, wenn Text-Aenderung
     // => gute Gelegenheit, Textbreite zu ermitteln!
-    bHighlightning = sal_False;
+//	long nPrevTextWidth = nCurTextWidth;
+//	nCurTextWidth = pTextEngine->CalcTextWidth();
+//	if ( nCurTextWidth != nPrevTextWidth )
+//		SetScrollBarRanges();
+    bHighlightning = FALSE;
 
     if ( aSyntaxLineTable.First() )
         aImplSyntaxIdleTimer.Start();
+
+//	while ( Application::AnyInput() )
+//		Application::Reschedule();	// Reschedule, because the UserEvent let pass no paints etc.
 
     return 0;
 }
@@ -405,7 +429,7 @@ void TextEditImp::InvalidateSyntaxHighlight()
         DoDelayedSyntaxHighlight( i );
 }
 
-void TextEditImp::SyntaxHighlight( sal_Bool bNew )
+void TextEditImp::SyntaxHighlight( BOOL bNew )
 {
     if ( ( bNew && bDoSyntaxHighlight ) || ( !bNew && !bDoSyntaxHighlight ) )
         return;
@@ -422,12 +446,13 @@ void TextEditImp::SyntaxHighlight( sal_Bool bNew )
     else
     {
         aSyntaxIdleTimer.Stop();
-        pTextEngine->SetUpdateMode( sal_False );
-        for ( sal_uIntPtr i = 0; i < pTextEngine->GetParagraphCount(); i++ )
+        pTextEngine->SetUpdateMode( FALSE );
+        for ( ULONG i = 0; i < pTextEngine->GetParagraphCount(); i++ )
             pTextEngine->RemoveAttribs( i );
 
-        pTextEngine->SetUpdateMode( sal_True );
-        pTextView->ShowCursor(sal_True, sal_True );
+//		pTextEngine->QuickFormatDoc();
+        pTextEngine->SetUpdateMode( TRUE );
+        pTextView->ShowCursor(TRUE, TRUE );
     }
 }
 
@@ -437,15 +462,15 @@ void TextEditImp::SetFont( const Font& rNewFont )
     pTextEngine->SetFont(rNewFont);
 }
 
-sal_Bool TextEditImp::IsModified()
+BOOL TextEditImp::IsModified()
 {
     return pTextEngine->IsModified();
 }
 
 void TextEditImp::KeyInput( const KeyEvent& rKeyEvent )
 {
-    sal_Bool bWasModified = pTextView->GetTextEngine()->IsModified();
-    pTextView->GetTextEngine()->SetModified( sal_False );
+    BOOL bWasModified = pTextView->GetTextEngine()->IsModified();
+    pTextView->GetTextEngine()->SetModified( FALSE );
 
     if ( !pTextView->KeyInput( rKeyEvent ) )
         Window::KeyInput( rKeyEvent );
@@ -456,15 +481,13 @@ void TextEditImp::KeyInput( const KeyEvent& rKeyEvent )
         pTextView->GetTextEngine()->SetModified( bWasModified );
 }
 
-void TextEditImp::Paint( const Rectangle& rRect )
-{
-    pTextView->Paint( rRect );
-}
-
-void TextEditImp::MouseButtonUp( const MouseEvent& rMouseEvent )
-{
-    pTextView->MouseButtonUp( rMouseEvent );
-}
+void TextEditImp::Paint( const Rectangle& rRect ){ pTextView->Paint( rRect );}
+void TextEditImp::MouseButtonUp( const MouseEvent& rMouseEvent ){ pTextView->MouseButtonUp( rMouseEvent );}
+//void TextEditImp::MouseButtonDown( const MouseEvent& rMouseEvent ){ pTextView->MouseButtonDown( rMouseEvent );}
+//void TextEditImp::MouseMove( const MouseEvent& rMouseEvent ){ pTextView->MouseMove( rMouseEvent );}
+//void TextEditImp::Command( const CommandEvent& rCEvt ){ pTextView->Command( rCEvt );}
+//BOOL TextEditImp::Drop( const DropEvent& rEvt ){ return FALSE /*pTextView->Drop( rEvt )*/;}
+//BOOL TextEditImp::QueryDrop( DropEvent& rEvt ){ return FALSE /*pTextView->QueryDrop( rEvt )*/;}
 
 
 void TextEditImp::Command( const CommandEvent& rCEvt )
@@ -519,17 +542,17 @@ SbxBase* TextEditImp::GetSbxAtMousePos( String &aWord )
     Point aDocPos = pTextView->GetDocPos( aPos );
     aWord = pTextEngine->GetWord( pTextEngine->GetPaM( aDocPos ) );
 
-    if ( aWord.Len() )
+    if ( aWord.Len() /*&& !Application::GetAppInternational().IsNumeric( aWord )*/ )
     {
         xub_StrLen nLastChar = aWord.Len()-1;
         String aSuffixes = CUniString( cSuffixes );
         if ( aSuffixes.Search( aWord.GetChar(nLastChar) ) != STRING_NOTFOUND )
             aWord.Erase( nLastChar, 1 );
         // because perhaps TestTools throws an error
-        sal_Bool bWasError = SbxBase::IsError();
-        pAppEdit->GetBasicFrame()->Basic().DebugFindNoErrors( sal_True );
+        BOOL bWasError = SbxBase::IsError();
+        pAppEdit->GetBasicFrame()->Basic().DebugFindNoErrors( TRUE );
         SbxBase* pSBX = StarBASIC::FindSBXInCurrentScope( aWord );
-        pAppEdit->GetBasicFrame()->Basic().DebugFindNoErrors( sal_False );
+        pAppEdit->GetBasicFrame()->Basic().DebugFindNoErrors( FALSE );
         DBG_ASSERT( !( !bWasError && SbxBase::IsError()), "Error generated while retrieving Variable data for viewing" );
         if ( !bWasError && SbxBase::IsError() )
             SbxBase::ResetError();
@@ -620,13 +643,16 @@ Variant(Empty)
             switch ( eType )
             {
                 case SbxBOOL:
+//				case SbxCURRENCY:
+//				case SbxDATE:
                 case SbxDOUBLE:
                 case SbxINTEGER:
                 case SbxLONG:
+//				case SbxOBJECT:		// cannot be edited
                 case SbxSINGLE:
                 case SbxSTRING:
 
-                case SbxVARIANT:    // does not occure, instead SbxEMPTY
+                case SbxVARIANT:	// does not occure, instead SbxEMPTY
                 case SbxEMPTY:
                     {
                         pAppEdit->GetBasicFrame()->SetEditVar( pVar );
@@ -652,8 +678,8 @@ DBG_NAME(TextEdit)
 
 TextEdit::TextEdit( AppEdit* pParent, const WinBits& aBits )
 : pBreakpointWindow( NULL )
-, bFileWasUTF8( sal_False )
-, bSaveAsUTF8( sal_False )
+, bFileWasUTF8( FALSE )
+, bSaveAsUTF8( FALSE )
 , aEdit( pParent, aBits | WB_NOHIDESELECTION )
 {
 DBG_CTOR(TextEdit,0);
@@ -662,7 +688,7 @@ DBG_CTOR(TextEdit,0);
 TextEdit::~TextEdit()
 {DBG_DTOR(TextEdit,0);}
 
-void TextEdit::Highlight( sal_uIntPtr nLine, xub_StrLen nCol1, xub_StrLen nCol2 )
+void TextEdit::Highlight( ULONG nLine, xub_StrLen nCol1, xub_StrLen nCol2 )
 {
     if ( nLine )    // Should not occure but at 'Sub expected' in first line
         nLine--;
@@ -688,7 +714,7 @@ void TextEdit::Highlight( sal_uIntPtr nLine, xub_StrLen nCol1, xub_StrLen nCol2 
     // Because nCol2 *may* point after the current statement
     // (because the next one starts there) there are space
     // that must be removed
-    sal_Bool bColon = sal_False;
+    BOOL bColon = FALSE;
 
     while ( s.GetChar( nCol2 ) == ' ' && nCol2 > nCol1 && !bColon )
     {
@@ -696,7 +722,7 @@ void TextEdit::Highlight( sal_uIntPtr nLine, xub_StrLen nCol1, xub_StrLen nCol2 
         if ( s.GetChar( nCol2 ) == ':' )
         {
             nCol2--;
-            bColon = sal_True;
+            bColon = TRUE;
         }
     }
 
@@ -704,7 +730,7 @@ void TextEdit::Highlight( sal_uIntPtr nLine, xub_StrLen nCol1, xub_StrLen nCol2 
     aEdit.pTextView->SetSelection( TextSelection(TextPaM(nLine,nCol2+1), TextPaM(nLine,nCol1)) );
     if ( aEdit.ViewMoved() )
     {
-        aEdit.pTextView->SetSelection( TextSelection(TextPaM(TEXT_PARA_ALL,1)) );
+        aEdit.pTextView->SetSelection( TextSelection(TextPaM(TEXT_PARA_ALL,1)) );   // fix #105169#
         aEdit.pTextView->SetSelection( TextSelection(TextPaM((nLine>=2?nLine-2:0),nCol2+1)) );
         aEdit.pTextView->SetSelection( TextSelection(TextPaM(nLine,nCol2+1), TextPaM(nLine,nCol1)) );
     }
@@ -721,31 +747,31 @@ String TextEdit::GetSelected(){ return aEdit.pTextView->GetSelected(); }
 TextSelection TextEdit::GetSelection() const{ return aEdit.pTextView->GetSelection(); }
 void TextEdit::SetSelection( const TextSelection& rSelection ){ aEdit.pTextView->SetSelection( rSelection ); }
 
-sal_uInt16 TextEdit::GetLineNr() const
+USHORT TextEdit::GetLineNr() const
 {
-    return sal::static_int_cast< sal_uInt16 >(
+    return sal::static_int_cast< USHORT >(
         aEdit.pTextView->GetSelection().GetEnd().GetPara()+1);
 }
 
 void TextEdit::ReplaceSelected( const String& rStr ){ aEdit.pTextView->InsertText(rStr); }
-sal_Bool TextEdit::IsModified(){ return aEdit.IsModified(); }
+BOOL TextEdit::IsModified(){ return aEdit.IsModified(); }
 
 String TextEdit::GetText() const
 {
     return aEdit.pTextEngine->GetText( GetSystemLineEnd() );
 }
 
-void TextEdit::SetText( const String& rStr ){ aEdit.pTextEngine->SetText(rStr); aEdit.pTextEngine->SetModified( sal_False ); }
+void TextEdit::SetText( const String& rStr ){ aEdit.pTextEngine->SetText(rStr); aEdit.pTextEngine->SetModified( FALSE ); }
 void TextEdit::SetModifyHdl( Link l ){ aEdit.SetModifyHdl(l); }
-sal_Bool TextEdit::HasText() const { return aEdit.pTextEngine->GetTextLen() > 0; }
+BOOL TextEdit::HasText() const { return aEdit.pTextEngine->GetTextLen() > 0; }
 
 // Search from the beginning or at mark + 1
-sal_Bool TextEdit::Find( const String& s )
+BOOL TextEdit::Find( const String& s )
 {
     DBG_CHKTHIS(TextEdit,0);
 
     TextSelection aSelection = aEdit.pTextView->GetSelection();
-    sal_uIntPtr nPara = aSelection.GetStart().GetPara();
+    ULONG nPara = aSelection.GetStart().GetPara();
     xub_StrLen nIndex = aSelection.GetStart().GetIndex();
 
     if ( aSelection.HasRange() )
@@ -759,23 +785,23 @@ sal_Bool TextEdit::Find( const String& s )
         if( nIndex != STRING_NOTFOUND )
         {
             aEdit.pTextView->SetSelection( TextSelection( TextPaM( nPara, nIndex ), TextPaM( nPara, nIndex + s.Len() ) ) );
-            return sal_True;
+            return TRUE;
         }
         nIndex = 0;
         nPara++;
     }
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool TextEdit::Load( const String& aName )
+BOOL TextEdit::Load( const String& aName )
 {
 DBG_CHKTHIS(TextEdit,0);
-    sal_Bool bOk = sal_True;
+    BOOL bOk = TRUE;
     SvFileStream aStrm( aName, STREAM_STD_READ );
     if( aStrm.IsOpen() )
     {
         String aText, aLine, aLineBreak;
-        sal_Bool bIsFirstLine = sal_True;
+        BOOL bIsFirstLine = TRUE;
         aLineBreak += '\n';
         aLineBreak.ConvertLineEnd();
         rtl_TextEncoding aFileEncoding = RTL_TEXTENCODING_IBM_850;
@@ -785,29 +811,29 @@ DBG_CHKTHIS(TextEdit,0);
             if ( bIsFirstLine && IsTTSignatureForUnicodeTextfile( aLine ) )
             {
                 aFileEncoding = RTL_TEXTENCODING_UTF8;
-                bFileWasUTF8 = sal_True;
+                bFileWasUTF8 = TRUE;
             }
             else
             {
                 if ( !bIsFirstLine )
                     aText += aLineBreak;
                 aText += aLine;
-                bIsFirstLine = sal_False;
+                bIsFirstLine = FALSE;
             }
             if( aStrm.GetError() != SVSTREAM_OK )
-                bOk = sal_False;
+                bOk = FALSE;
         }
         SetText( aText );
     }
     else
-        bOk = sal_False;
+        bOk = FALSE;
     return bOk;
 }
 
-sal_Bool TextEdit::Save( const String& aName )
+BOOL TextEdit::Save( const String& aName )
 {
 DBG_CHKTHIS(TextEdit,0);
-    sal_Bool bOk = sal_True;
+    BOOL bOk = TRUE;
     SvFileStream aStrm( aName, STREAM_STD_WRITE | STREAM_TRUNC );
     rtl_TextEncoding aFileEncoding = RTL_TEXTENCODING_IBM_850;
     if( aStrm.IsOpen() )
@@ -822,10 +848,10 @@ DBG_CHKTHIS(TextEdit,0);
         aSave.ConvertLineEnd(LINEEND_LF);
         aStrm << ByteString( aSave, aFileEncoding ).GetBuffer();
         if( aStrm.GetError() != SVSTREAM_OK )
-            bOk = sal_False;
+            bOk = FALSE;
         else
-            aEdit.pTextEngine->SetModified(sal_False);
-    } else bOk = sal_False;
+            aEdit.pTextEngine->SetModified(FALSE);
+    } else bOk = FALSE;
     return bOk;
 }
 

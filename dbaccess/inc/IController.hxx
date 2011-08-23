@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,43 +52,43 @@ namespace dbaui
     {
     public:
         /** executes the given command without checking if it is allowed
-            @param  _rCommand   the URL of the command
+            @param	_rCommand	the URL of the command
         */
         virtual void executeUnChecked(const ::com::sun::star::util::URL& _rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) = 0;
 
         /** executes the given command only when it is allowed
-            @param  _rCommand
+            @param	_rCommand	
                 the URL of the command
         */
         virtual void executeChecked(const ::com::sun::star::util::URL& _rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) = 0;
 
         /** executes the given command without checking if it is allowed
-            @param  _nCommandId
-                the id of the command URL
+            @param	_nCommandId
+                the id of the command URL 
         */
         virtual void executeUnChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) = 0;
 
         /** executes the given command only when it is allowed
-            @param  _nCommandId
-                the id of the command URL
+            @param	_nCommandId
+                the id of the command URL 
         */
         virtual void executeChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) = 0;
 
 
         /** checks if the given Command is enabled
-            @param  _nCommandId
-                the id of the command URL
-
-            @return
+            @param	_nCommandId
+                the id of the command URL 
+            
+            @return	
                 <TRUE/> if the command is allowed, otherwise <FALSE/>.
         */
         virtual sal_Bool isCommandEnabled(sal_uInt16 _nCommandId) const = 0;
 
         /** checks if the given Command is enabled
-            @param  _rCompleteCommandURL
+            @param	_rCompleteCommandURL
                 the URL of the command
-
-            @return
+            
+            @return	
                 <TRUE/> if the command is allowed, otherwise <FALSE/>.
         */
         virtual sal_Bool isCommandEnabled( const ::rtl::OUString& _rCompleteCommandURL ) const = 0;
@@ -108,13 +108,13 @@ namespace dbaui
                         registerCommandURL( const ::rtl::OUString& _rCompleteCommandURL ) = 0;
 
         /** notifyHiContrastChanged will be called when the hicontrast mode changed.
-            @param  _bHiContrast
+            @param	_bHiContrast
                 <TRUE/> when in hicontrast mode.
         */
         virtual void notifyHiContrastChanged() = 0;
 
         /** checks if the selected data source is read only
-            @return
+            @return 
                 <TRUE/> if read only, otherwise <FALSE/>
         */
         virtual sal_Bool isDataSourceReadOnly() const = 0;

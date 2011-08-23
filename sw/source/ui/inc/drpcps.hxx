@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,27 +63,27 @@ class SwDropCapsPage : public SfxTabPage
 {
 friend class SwDropCapsPict;
 
+    CheckBox  		aDropCapsBox;
+    CheckBox  		aWholeWordCB;
+    FixedText		aSwitchText;
+    NumericField  	aDropCapsField;
+    FixedText 		aLinesText;
+    NumericField 	aLinesField;
+    FixedText 		aDistanceText;
+    MetricField 	aDistanceField;
     FixedLine       aSettingsFL;
-    CheckBox        aDropCapsBox;
-    CheckBox        aWholeWordCB;
-    FixedText       aSwitchText;
-    NumericField    aDropCapsField;
-    FixedText       aLinesText;
-    NumericField    aLinesField;
-    FixedText       aDistanceText;
-    MetricField     aDistanceField;
 
+    FixedText      	aTextText;
+    Edit           	aTextEdit;
+    FixedText      	aTemplateText;
+    ListBox        	aTemplateBox;
     FixedLine       aContentFL;
-    FixedText       aTextText;
-    Edit            aTextEdit;
-    FixedText       aTemplateText;
-    ListBox         aTemplateBox;
 
-    SwDropCapsPict  *pPict;
+    SwDropCapsPict 	*pPict;
 
-    sal_Bool            bModified;
-    sal_Bool            bFormat;
-    sal_Bool            bHtmlMode;
+    BOOL 			bModified;
+    BOOL 			bFormat;
+    BOOL			bHtmlMode;
 
     SwWrtShell &rSh;
 
@@ -91,7 +91,7 @@ friend class SwDropCapsPict;
     ~SwDropCapsPage();
 
     virtual int     DeactivatePage(SfxItemSet *pSet);
-    void    FillSet( SfxItemSet &rSet );
+    void 	FillSet( SfxItemSet &rSet );
 
     DECL_LINK( ClickHdl, Button * );
     DECL_LINK( ModifyHdl, Edit * );
@@ -104,12 +104,12 @@ friend class SwDropCapsPict;
 public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
-    static sal_uInt16* GetRanges();
+    static USHORT* GetRanges();
 
-    virtual sal_Bool FillItemSet(      SfxItemSet &rSet);
+    virtual BOOL FillItemSet(      SfxItemSet &rSet);
     virtual void Reset      (const SfxItemSet &rSet);
 
-    void    SetFormat(sal_Bool bSet){bFormat = bSet;}
+    void 	SetFormat(BOOL bSet){bFormat = bSet;}
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@
 #define FT_LOGIN_ERROR          11
 
 #define FT_INFO_LOGIN_REQUEST   20
-#define FT_LOGIN_PATH           21
-#define ED_LOGIN_PATH           22
+#define FT_LOGIN_PATH			21
+#define ED_LOGIN_PATH			22
 #define BTN_LOGIN_PATH          23
 #define FT_LOGIN_USERNAME       24
 #define ED_LOGIN_USERNAME       25
@@ -49,9 +49,9 @@
 #define FL_LOGIN_2              33
 #define FL_BUTTONS              34
 
-#define BTN_LOGIN_OK            50
-#define BTN_LOGIN_CANCEL        51
-#define BTN_LOGIN_HELP          52
+#define BTN_LOGIN_OK			50
+#define BTN_LOGIN_CANCEL		51
+#define BTN_LOGIN_HELP			52
 
 #define STR_LOGIN_REALM         60
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #undef NDEBUG
 
-/*
+/* 
 #include <stdio.h>
 #include <string.h>
 */
@@ -175,11 +175,11 @@ public:
             OSL_ASSERT( xContainer.is() );
             xParent = uno::Reference< awt::XLayoutContainer >( xContainer->getParent(), uno::UNO_QUERY );
         }
-
+        
         mxWidget = WidgetFactory::createWidget( xToolkit, xParent, unoName, nAttrbs );
         OSL_ASSERT( mxWidget.is() );
         mxContainer = uno::Reference< awt::XLayoutContainer >( mxWidget, uno::UNO_QUERY );
-
+        
         mrLabel = mrUnoName = unoName;
         // try to get a nicer label for the widget
         for ( int i = 0; i < WIDGETS_SPECS_LEN; i++ )
@@ -189,11 +189,11 @@ public:
                 mrLabel = rtl::OUString( label, strlen( label ), RTL_TEXTENCODING_UTF8  );
                 break;
             }
-
+        
         // set default Text property
         // TODO: disable editing of text fields, check boxes selected, etc...
 
-
+        
         // store original properties
         {
             PropertyIterator it( this, WINDOW_PROPERTY );
@@ -215,7 +215,7 @@ public:
     ~Widget()
     {
         for ( std::vector< Widget *>::const_iterator it = maChildren.begin();
-             it != maChildren.end(); ++it )
+             it != maChildren.end(); it++ )
             delete *it;
         if ( !mbForeign )
         {
@@ -245,7 +245,7 @@ public:
 
     virtual void setChildProperties( LayoutWidget *pChild, const PropList &rProps )
     {
-        maOriChildProps = rProps;
+        maOriChildProps = rProps;        
         LayoutWidget::setChildProperties( pChild, rProps );
     }
 
@@ -366,18 +366,18 @@ public:
         std::vector< Widget *> aChildChildren = pChild->maChildren;
 
         for ( std::vector< Widget *>::const_iterator it = aChildChildren.begin();
-              it != aChildChildren.end(); ++it )
+              it != aChildChildren.end(); it++ )
             pChild->removeChild( *it );
 
         for ( std::vector< Widget *>::const_iterator it = aChildChildren.begin();
-              it != aChildChildren.end(); ++it )
+              it != aChildChildren.end(); it++ )
             if ( !addChild( *it ) )
             {    // failure
                 for ( std::vector< Widget *>::const_iterator jt = aChildChildren.begin();
-                      jt != it; ++jt )
+                      jt != it; jt++ )
                     removeChild( *jt );
                 for ( std::vector< Widget *>::const_iterator jt = aChildChildren.begin();
-                      jt != aChildChildren.end(); ++jt )
+                      jt != aChildChildren.end(); jt++ )
                     pChild->addChild( *jt );
                 return false;
             }
@@ -397,7 +397,7 @@ public:
     {
         int i = 0;
         for ( std::vector< Widget *>::const_iterator it = maChildren.begin();
-              it != maChildren.end(); ++it, ++i )
+              it != maChildren.end(); it++, i++ )
             if ( *it == pChild )
                 break;
         return i;
@@ -434,7 +434,7 @@ public:
 
     static rtl::OUString findProperty( const PropList &props, rtl::OUString propName )
     {
-        for ( PropList::const_iterator it = props.begin(); it != props.end(); ++it )
+        for ( PropList::const_iterator it = props.begin(); it != props.end(); it++ )
             if ( it->first.equalsIgnoreAsciiCase( propName ) )
                 return it->second;
 #if DEBUG_PRINT
@@ -493,7 +493,7 @@ public:
     }
 
     using LayoutWidget::setProperty;
-
+    
     void setProperty( rtl::OUString rPropName, PropertyKind rKind, uno::Any rValue )
     {
         switch ( rKind ) {
@@ -756,7 +756,7 @@ class PropertiesList : public layout::Table
             void checkProperty()
             {
                 bool flag = mpWidget->isPropertyTouched( maPropName, maPropKind );
-
+                
                 if ( mpFlag && mpFlag->IsChecked() != (BOOL)flag )
                 {
                     CheckFlag( flag, true );
@@ -960,7 +960,7 @@ class PropertiesList : public layout::Table
             void setLabel()
             {
                 SetText( String::CreateFromAscii( IsChecked() ? "true" : "false" ) );
-            }
+            }            
         };
 
         struct AnyListBox : public AnyWidget, layout::ListBox
@@ -1211,7 +1211,7 @@ public:
         Container::Clear();
 
         for ( std::list< PropertyEntry* >::iterator it = maPropertiesList.begin();
-              it != maPropertiesList.end(); ++it)
+              it != maPropertiesList.end(); it++)
             delete *it;
         maPropertiesList.clear();
 
@@ -1690,7 +1690,7 @@ EditorImpl::~EditorImpl()
     delete mpPropertiesList;
     delete mpLayoutTree;
     for ( std::list< layout::PushButton * >::const_iterator i = maCreateButtons.begin();
-          i != maCreateButtons.end(); ++i)
+          i != maCreateButtons.end(); i++)
         delete *i;
     delete pImportButton;
     delete pExportButton;
@@ -1707,7 +1707,7 @@ void EditorImpl::loadFile( const rtl::OUString &aTestFile )
 
 /*
   mxMSF->createInstance
-  ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Layout")) ),
+  ( ::rtl::OUString::createFromAscii( "com.sun.star.awt.Layout" ) ),
   uno::UNO_QUERY );
 */
     if ( !xRoot.is() )
@@ -1770,13 +1770,13 @@ void EditorImpl::widgetSelected( Widget *pWidget )
     if ( !pWidget || pWidget->isContainer() )
     {
         for ( std::list< layout::PushButton *>::const_iterator it = maCreateButtons.begin();
-              it != maCreateButtons.end(); ++it)
+              it != maCreateButtons.end(); it++)
             (*it)->Enable();
     }
     else
     {
         for ( std::list< layout::PushButton *>::const_iterator it = maCreateButtons.begin();
-              it != maCreateButtons.end(); ++it)
+              it != maCreateButtons.end(); it++)
             (*it)->Disable();
     }
 
@@ -1787,7 +1787,7 @@ IMPL_LINK( EditorImpl, CreateWidgetHdl, layout::Button *, pBtn )
 {
     int i = 0;
     for ( std::list< layout::PushButton *>::const_iterator it = maCreateButtons.begin();
-          it != maCreateButtons.end(); ++it, ++i )
+          it != maCreateButtons.end(); it++, i++ )
     {
         if ( pBtn == *it )
             break;

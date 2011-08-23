@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,13 @@
 
 #include "swtypes.hxx"
 
-class SwTxtFrm;     // SwTxtFrmInfo
-class SwPaM;        // SwTxtFrmInfo
-class SwTxtCursor;  // SwTxtFrmInfo
+class SwTxtFrm; 	// SwTxtFrmInfo
+class SwPaM;		// SwTxtFrmInfo
+class SwTxtCursor;	// SwTxtFrmInfo
 
 
 /*************************************************************************
- *                      class SwTxtFrmInfo
+ *						class SwTxtFrmInfo
  *************************************************************************/
 
 class SwTxtFrmInfo
@@ -50,22 +50,22 @@ public:
     inline SwTxtFrmInfo( const SwTxtFrm *pTxtFrm ) : pFrm(pTxtFrm) { }
 
     // Passt der Absatz in eine Zeile?
-    sal_Bool IsOneLine() const;
+    BOOL IsOneLine() const;
 
     // Ist die Zeile zu X% gefuellt?
-    sal_Bool IsFilled( const sal_uInt8 nPercent ) const;
+    BOOL IsFilled( const BYTE nPercent ) const;
 
     // Wo beginnt der Text (ohne whitespaces)? (rel. im Frame !!)
     SwTwips GetLineStart() const;
 
     //returne die mittel Position des n. Charakters
-    SwTwips GetCharPos( xub_StrLen nChar, sal_Bool bCenter = sal_True ) const;
+    SwTwips GetCharPos( xub_StrLen nChar, BOOL bCenter = TRUE ) const;
 
     // Sammelt die whitespaces am Zeilenbeginn und -ende im Pam
-    void GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const;
+    void GetSpaces( SwPaM &rPam, BOOL bWithLineBreak ) const;
 
     // Ist an der ersten Textposition ein Bullet/Symbol etc?
-    sal_Bool IsBullet( xub_StrLen nTxtPos ) const;
+    BOOL IsBullet( xub_StrLen nTxtPos ) const;
 
     // Ermittelt Erstzeileneinzug
     SwTwips GetFirstIndent() const;
@@ -76,7 +76,7 @@ public:
         { pFrm = pNew; return *this; }
 
     // liegt eine Gegenueberstellung vor? (returnt Pos im Frame)
-    sal_uInt16 GetBigIndent( xub_StrLen& rFndPos,
+    USHORT GetBigIndent( xub_StrLen& rFndPos,
                         const SwTxtFrm *pNextFrm = 0 ) const;
 };
 

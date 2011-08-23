@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwPageFtnInfoItem : public SfxPoolItem
 
 public:
 
-    SwPageFtnInfoItem(const sal_uInt16 nId, SwPageFtnInfo& rInfo);
+    SwPageFtnInfoItem(const USHORT nId, SwPageFtnInfo& rInfo);
     SwPageFtnInfoItem(const SwPageFtnInfoItem& rItem );
     ~SwPageFtnInfoItem();
 
@@ -57,12 +57,12 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     SwPageFtnInfo& GetPageFtnInfo()             { return aFtnInfo; }
     const SwPageFtnInfo& GetPageFtnInfo() const { return aFtnInfo; }
-    void SetPageFtnInfo(SwPageFtnInfo& rInf)    { aFtnInfo = rInf; }
+    void SetPageFtnInfo(SwPageFtnInfo& rInf) 	{ aFtnInfo = rInf; }
 };
 
 class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
@@ -70,14 +70,14 @@ class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
     void* pMisc;
 
 public:
-    SwPtrItem( const sal_uInt16 nId = FN_PARAM_GRF_DIALOG, void* pPtr = 0);
+    SwPtrItem( const USHORT nId = FN_PARAM_GRF_DIALOG, void* pPtr = 0);
     SwPtrItem( const SwPtrItem& rItem );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
 
-    void    SetValue(void * pPtr)   { pMisc= pPtr; }
-    void*   GetValue() const        { return pMisc; }
+    void	SetValue(void * pPtr) 	{ pMisc= pPtr; }
+    void*	GetValue() const 		{ return pMisc; }
 };
 
 class SW_DLLPUBLIC SwUINumRuleItem : public SfxPoolItem
@@ -85,24 +85,24 @@ class SW_DLLPUBLIC SwUINumRuleItem : public SfxPoolItem
     SwNumRule* pRule;
 
 public:
-    SwUINumRuleItem( const SwNumRule& rRule, const sal_uInt16 = FN_PARAM_ACT_NUMBER);
+    SwUINumRuleItem( const SwNumRule& rRule, const USHORT = FN_PARAM_ACT_NUMBER);
     SwUINumRuleItem( const SwUINumRuleItem& rItem );
     virtual ~SwUINumRuleItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual	bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    const SwNumRule* GetNumRule() const         { return pRule; }
-          SwNumRule* GetNumRule()               { return pRule; }
+    const SwNumRule* GetNumRule() const 		{ return pRule; }
+          SwNumRule* GetNumRule() 				{ return pRule; }
 };
 
 class SwBackgroundDestinationItem : public SfxUInt16Item
 {
 public:
-    SwBackgroundDestinationItem(sal_uInt16  nWhich, sal_uInt16 nValue);
+    SwBackgroundDestinationItem(USHORT  nWhich, USHORT nValue);
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 };

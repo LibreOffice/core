@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,13 +48,13 @@
 #include "ftools.hxx"
 
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
-    const ScAddress& rOutPos, const CharSet eNach, sal_uInt32 nDifOption )
+    const ScAddress& rOutPos, const CharSet eNach, UINT32 nDifOption )
 {
-    SCCOL       nEndCol;
-    SCROW       nEndRow;
+    SCCOL		nEndCol;
+    SCROW		nEndRow;
     pDoc->GetTableArea( rOutPos.Tab(), nEndCol, nEndRow );
-    ScAddress   aEnd( nEndCol, nEndRow, rOutPos.Tab() );
-    ScAddress   aStart( rOutPos );
+    ScAddress	aEnd( nEndCol, nEndRow, rOutPos.Tab() );
+    ScAddress	aStart( rOutPos );
 
     aStart.PutInOrder( aEnd );
 
@@ -63,7 +63,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* p
 
 
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
-    const ScRange&rRange, const CharSet eCharSet, sal_uInt32 nDifOption )
+    const ScRange&rRange, const CharSet eCharSet, UINT32 nDifOption )
 {
     DBG_ASSERT( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range unsortiert!" );
     DBG_ASSERTWARNING( rRange.aStart.Tab() == rRange.aEnd.Tab(),
@@ -76,11 +76,11 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     sal_Unicode cStrDelim('"');
     ByteString aStrDelimEncoded;    // only used if not Unicode
     UniString aStrDelimDecoded;     // only used if context encoding
-    sal_Bool bContextOrNotAsciiEncoding;
+    BOOL bContextOrNotAsciiEncoding;
     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
     {
         rOut.StartWritingUnicodeText();
-        bContextOrNotAsciiEncoding = false;
+        bContextOrNotAsciiEncoding = FALSE;
     }
     else
     {
@@ -96,28 +96,28 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 aStrDelimDecoded = String( aStrDelimEncoded, eCharSet );
         }
         else
-            bContextOrNotAsciiEncoding = false;
+            bContextOrNotAsciiEncoding = FALSE;
     }
 
-    const sal_Char*     p2DoubleQuotes_LF = "\"\"\n";
-    const sal_Char*     pSpecDataType_LF = "-1,0\n";
-    const sal_Char*     pEmptyData = "1,0\n\"\"\n";
-    const sal_Char*     pStringData = "1,0\n";
-    const sal_Char*     pNumData = "0,";
-    const sal_Char*     pNumDataERROR = "0,0\nERROR\n";
+    const sal_Char*		p2DoubleQuotes_LF = "\"\"\n";
+    const sal_Char*		pSpecDataType_LF = "-1,0\n";
+    const sal_Char*		pEmptyData = "1,0\n\"\"\n";
+    const sal_Char*		pStringData = "1,0\n";
+    const sal_Char*		pNumData = "0,";
+    const sal_Char*		pNumDataERROR = "0,0\nERROR\n";
 
-    FltError            eRet = eERR_OK;
-    String              aOS;
-    String              aString;
-    SCCOL               nEndCol = rRange.aEnd.Col();
-    SCROW               nEndRow = rRange.aEnd.Row();
-    SCCOL               nNumCols = nEndCol - rRange.aStart.Col() + 1;
-    SCROW               nNumRows = nEndRow - rRange.aStart.Row() + 1;
-    SCTAB               nTab = rRange.aStart.Tab();
+    FltError			eRet = eERR_OK;
+    String			    aOS;
+    String				aString;
+    SCCOL				nEndCol = rRange.aEnd.Col();
+    SCROW				nEndRow = rRange.aEnd.Row();
+    SCCOL				nNumCols = nEndCol - rRange.aStart.Col() + 1;
+    SCROW				nNumRows = nEndRow - rRange.aStart.Row() + 1;
+    SCTAB				nTab = rRange.aStart.Tab();
 
-    double              fVal;
+    double				fVal;
 
-    const sal_Bool          bPlain = ( nDifOption == SC_DIFOPT_PLAIN );
+    const BOOL			bPlain = ( nDifOption == SC_DIFOPT_PLAIN );
 
     ScProgress          aPrgrsBar( pDoc->GetDocumentShell(), ScGlobal::GetRscString( STR_LOAD_DOC ), nNumRows );
 
@@ -156,9 +156,9 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     aOS.AppendAscii( p2DoubleQuotes_LF );
     rOut.WriteUnicodeOrByteText( aOS );
 
-    SCCOL               nColCnt;
-    SCROW               nRowCnt;
-    ScBaseCell*         pAkt;
+    SCCOL				nColCnt;
+    SCROW				nRowCnt;
+    ScBaseCell*			pAkt;
 
     for( nRowCnt = rRange.aStart.Row() ; nRowCnt <= nEndRow ; nRowCnt++ )
     {
@@ -185,7 +185,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                             fVal = ( ( ScValueCell * ) pAkt )->GetValue();
                             aOS += String( ::rtl::math::doubleToUString(
                                         fVal, rtl_math_StringFormat_G, 14, '.',
-                                        sal_True));
+                                        TRUE));
                         }
                         else
                         {
@@ -213,7 +213,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                                 fVal = ( ( ScFormulaCell * ) pAkt )->GetValue();
                                 aOS += String( ::rtl::math::doubleToUString(
                                             fVal, rtl_math_StringFormat_G, 14,
-                                            '.', sal_True));
+                                            '.', TRUE));
                             }
                             else
                             {

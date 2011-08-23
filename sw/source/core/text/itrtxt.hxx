@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class SwMarginPortion;
 class SwFlyPortion;
 
 /*************************************************************************
- *                      class SwTxtIter
+ *						class SwTxtIter
  *************************************************************************/
 
 class SwTxtIter : public SwAttrIter
@@ -51,28 +51,23 @@ protected:
     SwLineLayout *pPrev;
     SwTwips nFrameStart;
     SwTwips nY;
-    SwTwips nRegStart;          // Anfangsposition (Y) des Registers
-    xub_StrLen nStart;          // Start im Textstring, Ende = pCurr->GetLen()
-    KSHORT nRegDiff;            // Zeilenabstand des Registers
-    MSHORT nLineNr;             // Zeilennummer
-    sal_Bool bPrev          : 1;
-    sal_Bool bRegisterOn    : 1;    // Registerhaltigkeit
-    sal_Bool bOneBlock      : 1;    // Blocksatz: Einzelwoerter austreiben
-    sal_Bool bLastBlock     : 1;    // Blocksatz: Auch die letzte Zeile
-    sal_Bool bLastCenter    : 1;    // Blocksatz: Letzte Zeile zentrieren
+    SwTwips	nRegStart;			// Anfangsposition (Y) des Registers
+    xub_StrLen nStart;			// Start im Textstring, Ende = pCurr->GetLen()
+    KSHORT nRegDiff;			// Zeilenabstand des Registers
+    MSHORT nLineNr;				// Zeilennummer
+    sal_Bool bPrev			: 1;
+    sal_Bool bRegisterOn	: 1;	// Registerhaltigkeit
+    sal_Bool bOneBlock		: 1;	// Blocksatz: Einzelwoerter austreiben
+    sal_Bool bLastBlock		: 1;	// Blocksatz: Auch die letzte Zeile
+    sal_Bool bLastCenter	: 1;	// Blocksatz: Letzte Zeile zentrieren
 
     SwLineLayout *_GetPrev();
 
     // Zuruecksetzen in die erste Zeile.
     void Init();
     void CtorInitTxtIter( SwTxtFrm *pFrm, SwTxtInfo *pInf );
-    inline SwTxtIter(SwTxtNode* pTxtNode)
-        : SwAttrIter(pTxtNode)
-        , pFrm(NULL)
-        , pInf(NULL)
-        , pCurr(NULL)
-        , pPrev(NULL)
-    {}
+    inline SwTxtIter(SwTxtNode* pTxtNode) : SwAttrIter(pTxtNode) { }
+
 public:
     inline SwTxtIter( SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf ) : SwAttrIter(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtIter( pTxtFrm, pTxtInf ); }
@@ -284,8 +279,8 @@ public:
 
     // calculates baseline for portion rPor
     // bAutoToCentered indicates, if AUTOMATIC mode means CENTERED or BASELINE
-    sal_uInt16 AdjustBaseLine( const SwLineLayout& rLine, const SwLinePortion* pPor,
-                           sal_uInt16 nPorHeight = 0, sal_uInt16 nAscent = 0,
+    USHORT AdjustBaseLine( const SwLineLayout& rLine, const SwLinePortion* pPor,
+                           USHORT nPorHeight = 0, USHORT nAscent = 0,
                            const sal_Bool bAutoToCentered = sal_False ) const;
 
     static inline void SetRightMargin( const sal_Bool bNew ){ bRightMargin = bNew; }
@@ -310,7 +305,7 @@ public:
 };
 
 /*************************************************************************
- *                      Inline-Implementierungen
+ *						Inline-Implementierungen
  *************************************************************************/
 
 inline sal_Bool SwTxtIter::SeekAndChg( SwTxtSizeInfo &rInf )

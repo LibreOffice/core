@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,21 +36,21 @@
 class SbxSimpleCharClass
 {
 public:
-    sal_Bool isAlpha( sal_Unicode c ) const
+    BOOL isAlpha( sal_Unicode c ) const
     {
-        sal_Bool bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+        BOOL bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
         return bRet;
     }
 
-    sal_Bool isDigit( sal_Unicode c ) const
+    BOOL isDigit( sal_Unicode c ) const
     {
-        sal_Bool bRet = (c >= '0' && c <= '9');
+        BOOL bRet = (c >= '0' && c <= '9');
         return bRet;
     }
 
-    sal_Bool isAlphaNumeric( sal_Unicode c ) const
+    BOOL isAlphaNumeric( sal_Unicode c ) const
     {
-        sal_Bool bRet = isDigit( c ) || isAlpha( c );
+        BOOL bRet = isDigit( c ) || isAlpha( c );
         return bRet;
     }
 };
@@ -72,7 +72,7 @@ static const xub_Unicode* SkipWhitespace( const xub_Unicode* p )
 
 static const xub_Unicode* Symbol( const xub_Unicode* p, XubString& rSym, const SbxSimpleCharClass& rCharClass )
 {
-    sal_uInt16 nLen = 0;
+    USHORT nLen = 0;
     // Did we have a nonstandard symbol?
     if( *p == '[' )
     {
@@ -142,7 +142,7 @@ static SbxVariable* QualifiedName
 // a function (with optional parameters).
 
 static SbxVariable* Operand
-    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf, sal_Bool bVar )
+    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf, BOOL bVar )
 {
     static SbxSimpleCharClass aCharClass;
 
@@ -154,7 +154,7 @@ static SbxVariable* Operand
      || *p == '&' ) )
     {
         // A number could be scanned in directly!
-        sal_uInt16 nLen;
+        USHORT nLen;
         if( !refVar->Scan( XubString( p ), &nLen ) )
             refVar.Clear();
         else
@@ -192,12 +192,12 @@ static SbxVariable* Operand
 static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
 {
     const xub_Unicode* p = *ppBuf;
-    SbxVariableRef refVar( Operand( pObj, pGbl, &p, sal_False ) );
+    SbxVariableRef refVar( Operand( pObj, pGbl, &p, FALSE ) );
     p = SkipWhitespace( p );
     while( refVar.Is() && ( *p == '*' || *p == '/' ) )
     {
         xub_Unicode cOp = *p++;
-        SbxVariableRef refVar2( Operand( pObj, pGbl, &p, sal_False ) );
+        SbxVariableRef refVar2( Operand( pObj, pGbl, &p, FALSE ) );
         if( refVar2.Is() )
         {
             // temporary variable!
@@ -256,7 +256,7 @@ static SbxVariable* PlusMinus( SbxObject* pObj, SbxObject* pGbl, const xub_Unico
 static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
 {
     const xub_Unicode* p = *ppBuf;
-    SbxVariableRef refVar( Operand( pObj, pGbl, &p, sal_True ) );
+    SbxVariableRef refVar( Operand( pObj, pGbl, &p, TRUE ) );
     p = SkipWhitespace( p );
     if( refVar.Is() )
     {
@@ -304,7 +304,7 @@ static SbxVariable* Element
     SbxVariableRef refVar;
     if( aSym.Len() )
     {
-        sal_uInt16 nOld = pObj->GetFlags();
+        USHORT nOld = pObj->GetFlags();
         if( pObj == pGbl )
             pObj->SetFlag( SBX_GBLSEARCH );
         refVar = pObj->Find( aSym, t );
@@ -318,7 +318,7 @@ static SbxVariable* Element
             {
                 p++;
                 SbxArrayRef refPar = new SbxArray;
-                sal_uInt16 nArg = 0;
+                USHORT nArg = 0;
                 // We are once relaxed and accept as well
                 // the line- or commandend as delimiter
                 // Search parameter always global!

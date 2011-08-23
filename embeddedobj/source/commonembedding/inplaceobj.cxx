@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ void SAL_CALL OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& 
 
     if ( m_nObjectState != embed::EmbedStates::INPLACE_ACTIVE
       && m_nObjectState != embed::EmbedStates::UI_ACTIVE )
-        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object is not activated inplace!\n" )),
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not activated inplace!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     awt::Rectangle aNewRectToShow = GetRectangleInterception( aPosRect, aClipRect );

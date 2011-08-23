@@ -50,23 +50,33 @@ SRC1FILES =	\
         toolbox.src			\
         strings.src 		\
         res_bmp.src 		\
+        tbx_ww.src			\
         popup.src			\
         sdstring.src
 
-SLOFILES =	\
-        $(EXCEPTIONSFILES)		\
-        $(SLO)$/sdresid.obj
+#OBJFILES = \
+#		$(OBJ)$/sdlib.obj	\
+#		$(OBJ)$/sdresid.obj	\
 
-EXCEPTIONSFILES= \
-        $(SLO)$/optsitem.obj		\
-        $(SLO)$/sddll.obj		\
-        $(SLO)$/sddll1.obj      	\
-        $(SLO)$/sddll2.obj      	\
+SLOFILES =	\
         $(SLO)$/sdmod.obj		\
         $(SLO)$/sdmod1.obj		\
         $(SLO)$/sdmod2.obj		\
+        $(SLO)$/sddll.obj		\
+        $(SLO)$/sddll1.obj      \
+        $(SLO)$/sddll2.obj      \
+        $(SLO)$/tbxww.obj		\
+        $(SLO)$/optsitem.obj	\
+        $(SLO)$/sdresid.obj		\
         $(SLO)$/sdpopup.obj		\
         $(SLO)$/sdxfer.obj		\
+        $(SLO)$/tmplctrl.obj
+
+EXCEPTIONSFILES= \
+        $(SLO)$/sddll1.obj      \
+        $(SLO)$/sddll2.obj      \
+        $(SLO)$/sdxfer.obj		\
+        $(SLO)$/sdmod1.obj		\
         $(SLO)$/tbxww.obj		\
         $(SLO)$/tmplctrl.obj
 
@@ -97,6 +107,7 @@ LOCALIZE_ME =  tbxids_tmpl.src menuids2_tmpl.src menu_tmpl.src menuids_tmpl.src 
 .INCLUDE :  target.mk
 
 $(SRS)$/app.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
+
 
 $(SRS)$/$(SRS1NAME).srs  : $(LOCALIZE_ME_DEST)
 

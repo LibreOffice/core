@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,7 @@
 #include "rtl_Process_Const.h"
 
 using namespace osl;
-
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
+using namespace rtl;
 
 /** print a UNI_CODE String. And also print some comments of the string.
 */
@@ -72,7 +69,7 @@ inline ::rtl::OUString getModulePath( void )
     printUString(suDirPath, "modulePath:");
     suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') );
     suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') + 1);
-    suDirPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bin"));
+    suDirPath += rtl::OUString::createFromAscii("bin");
     return suDirPath;
 }
 
@@ -95,9 +92,9 @@ public:
     void getAppCommandArg_001()
     {
 #if defined(WNT) || defined(OS2)
-    const rtl::OUString EXECUTABLE_NAME(RTL_CONSTASCII_USTRINGPARAM("child_process.exe"));
+    const rtl::OUString EXECUTABLE_NAME = rtl::OUString::createFromAscii("child_process.exe");
 #else
-    const rtl::OUString EXECUTABLE_NAME(RTL_CONSTASCII_USTRINGPARAM("child_process"));
+    const rtl::OUString EXECUTABLE_NAME = rtl::OUString::createFromAscii("child_process");
 #endif
         rtl::OUString suCWD = getModulePath();
         // rtl::OUString suCWD2 = getExecutableDirectory();
@@ -116,7 +113,7 @@ public:
         pParameters[3] = suParam3.pData;
 
         rtl::OUString suFileURL = suCWD;
-        suFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        suFileURL += rtl::OUString::createFromAscii("/");
         suFileURL += EXECUTABLE_NAME;
 
         oslProcessError osl_error = osl_executeProcess(
@@ -219,7 +216,7 @@ public:
     void tearDown()
     {
     }
-    //gets a 16-byte fixed size identifier which is guaranteed not to change    during the current process.
+    //gets a 16-byte fixed size identifier which is guaranteed not to change	during the current process.
     void getGlobalProcessId_001()
     {
         sal_uInt8 pTargetUUID1[16];
@@ -232,9 +229,9 @@ public:
     void getGlobalProcessId_002()
     {
 #if defined(WNT) || defined(OS2)
-    const rtl::OUString EXEC_NAME(RTL_CONSTASCII_USTRINGPARAM("child_process_id.exe"));
+    const rtl::OUString EXEC_NAME = rtl::OUString::createFromAscii("child_process_id.exe");
 #else
-    const rtl::OUString EXEC_NAME(RTL_CONSTASCII_USTRINGPARAM("child_process_id"));
+    const rtl::OUString EXEC_NAME = rtl::OUString::createFromAscii("child_process_id");
 #endif
         sal_uInt8 pTargetUUID1[16];
         rtl_getGlobalProcessId( pTargetUUID1 );
@@ -246,7 +243,7 @@ public:
     rtl::OUString suCWD = getModulePath();
         oslProcess hProcess = NULL;
        rtl::OUString suFileURL = suCWD;
-        suFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        suFileURL += rtl::OUString::createFromAscii("/");
         suFileURL += EXEC_NAME;
     oslFileHandle* pChildOutputRead = new oslFileHandle();
         oslProcessError osl_error = osl_executeProcess_WithRedirectedIO(

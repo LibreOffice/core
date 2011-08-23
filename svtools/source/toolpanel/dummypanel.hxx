@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace svt
         // IToolPanel
         virtual ::rtl::OUString GetDisplayName() const;
         virtual Image GetImage() const;
-        virtual rtl::OString GetHelpID() const;
+        virtual SmartId GetHelpID() const;
         virtual void Activate( Window& i_rParentWindow );
         virtual void Deactivate();
         virtual void SetSizePixel( const Size& i_rPanelWindowSize );

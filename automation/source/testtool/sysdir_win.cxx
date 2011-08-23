@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,12 @@
 
 ////////////////////////////////////////////////////////////////////////////
 ////
-////                  Windows ONLY
+////                  Windows ONLY 
 ////
 ////////////////////////////////////////////////////////////////////////////
 
 
+#include <tools/prewin.h>
 #ifndef _SHOBJ_H
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -46,6 +47,7 @@
 #pragma warning(pop)
 #endif
 #endif
+#include <tools/postwin.h>
 // as we define it ourselves further down the line we remove it here
 #ifdef IS_ERROR
     #undef IS_ERROR
@@ -59,7 +61,7 @@
 
 void _SHFree( void *pv )
 {
-    IMalloc *pMalloc;
+    IMalloc	*pMalloc;
     if( NOERROR == SHGetMalloc(&pMalloc) )
     {
         pMalloc->Free( pv );
@@ -73,9 +75,9 @@ void _SHFree( void *pv )
 UniString _SHGetSpecialFolder( int nFolderID )
 {
 
-    LPITEMIDLIST    pidl;
-    HRESULT         hHdl = SHGetSpecialFolderLocation( NULL, nFolderID, &pidl );
-    UniString       aFolder;
+    LPITEMIDLIST	pidl;
+    HRESULT			hHdl = SHGetSpecialFolderLocation( NULL, nFolderID, &pidl );
+    UniString		aFolder;
 
     if( hHdl == NOERROR )
     {

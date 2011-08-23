@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
  ************************************************************************/
 #define crop_mask_width 32
 #define crop_mask_height 32
-static unsigned char crop_mask_bits[] = {
+static char crop_mask_bits[] = {
    0x00, 0xf8, 0x01, 0x00, 0x00, 0xf8, 0x01, 0x00, 0xfc, 0xff, 0x0f, 0x00,
    0xfc, 0xff, 0x0f, 0x00, 0xfc, 0xff, 0x0f, 0x00, 0xfc, 0xff, 0x0f, 0x00,
    0xfc, 0xff, 0x0f, 0x00, 0xfc, 0xff, 0x0f, 0x00, 0xfc, 0xf8, 0x01, 0x00,

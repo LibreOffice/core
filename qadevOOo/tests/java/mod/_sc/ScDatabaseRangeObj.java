@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ public class ScDatabaseRangeObj extends TestCase {
     * @see com.sun.star.sheet.DatabaseRange
     * @see com.sun.star.table.CellRangeAddress
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
                                                                  PrintWriter log) {
         XInterface oObj = null;
 
@@ -149,10 +149,10 @@ public class ScDatabaseRangeObj extends TestCase {
 
         try {
             Object sheet = sheets.getByName(names[0]);
-            xImp = (XImportable) UnoRuntime.queryInterface(XImportable.class,
+            xImp = (XImportable) UnoRuntime.queryInterface(XImportable.class, 
                                                            sheet);
             dbRanges = (XDatabaseRanges) AnyConverter.toObject(
-                               new Type(XDatabaseRanges.class),
+                               new Type(XDatabaseRanges.class), 
                                docProps.getPropertyValue("DatabaseRanges"));
             _doImport(xImp);
         } catch (com.sun.star.lang.WrappedTargetException e) {
@@ -184,20 +184,20 @@ public class ScDatabaseRangeObj extends TestCase {
 
         try {
             String[] dbNames = dbrNA.getElementNames();
-            xNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+            xNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class, 
                                                         dbrNA.getByName(
                                                                 dbNames[0]));
             xNamed.setName("dbRange");
 
             XCellRangeReferrer aReferrer = (XCellRangeReferrer) UnoRuntime.queryInterface(
-                                                   XCellRangeReferrer.class,
+                                                   XCellRangeReferrer.class, 
                                                    dbrNA.getByName("dbRange"));
             XCellRangeAddressable aRangeA = (XCellRangeAddressable) UnoRuntime.queryInterface(
-                                                    XCellRangeAddressable.class,
+                                                    XCellRangeAddressable.class, 
                                                     aReferrer.getReferredCells());
             aRange = aRangeA.getRangeAddress();
             oObj = (XInterface) AnyConverter.toObject(
-                           new Type(XInterface.class),
+                           new Type(XInterface.class), 
                            dbrNA.getByName("dbRange"));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
@@ -228,12 +228,12 @@ public class ScDatabaseRangeObj extends TestCase {
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                    "Error getting of first spreadsheet from spreadsheet" +
+                    "Error getting of first spreadsheet from spreadsheet" + 
                     " document", e);
         } catch (com.sun.star.container.NoSuchElementException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                    "Error getting of first spreadsheet from spreadsheet" +
+                    "Error getting of first spreadsheet from spreadsheet" + 
                     " document", e);
         }
 

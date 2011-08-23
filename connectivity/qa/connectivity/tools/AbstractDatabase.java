@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,6 +47,18 @@ import java.io.File;
  */
 public abstract class AbstractDatabase implements DatabaseAccess
 {
+    // the service factory
+
+    protected final XMultiServiceFactory m_orb;
+    // the URL of the temporary file used for the database document
+    protected String m_databaseDocumentFile;
+    // the database document
+    protected XOfficeDatabaseDocument m_databaseDocument;
+    // the data source belonging to the database document
+    protected DataSource m_dataSource;
+    // the default connection
+    protected Connection    m_connection;
+
     public AbstractDatabase(final XMultiServiceFactory orb) throws Exception
     {
         m_orb = orb;
@@ -63,12 +75,13 @@ public abstract class AbstractDatabase implements DatabaseAccess
      *
      * Multiple calls to this method return the same connection. The DbaseDatabase object keeps
      * the ownership of the connection, so you don't need to (and should not) dispose/close it.
+     *
      */
     public Connection defaultConnection() throws SQLException
     {
         if ( m_connection == null )
             m_connection = new Connection( m_databaseDocument.getDataSource().getConnection("", "") );
-
+        
         return m_connection;
     }
 
@@ -206,15 +219,4 @@ public abstract class AbstractDatabase implements DatabaseAccess
         closeAndDelete();
         super.finalize();
     }
-
-    // the service factory
-    protected final XMultiServiceFactory m_orb;
-    // the URL of the temporary file used for the database document
-    protected String m_databaseDocumentFile;
-    // the database document
-    protected XOfficeDatabaseDocument m_databaseDocument;
-    // the data source belonging to the database document
-    protected DataSource m_dataSource;
-    // the default connection
-    protected Connection    m_connection;
 }

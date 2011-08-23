@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,27 +40,27 @@ class SwBaseLink : public ::sfx2::SvBaseLink
     friend long GrfNodeChanged( void* pLink, void* pCaller );
 
     SwCntntNode* pCntntNode;
-    sal_Bool bSwapIn : 1;
-    sal_Bool bNoDataFlag : 1;
-    sal_Bool bIgnoreDataChanged : 1;
+    BOOL bSwapIn : 1;
+    BOOL bNoDataFlag : 1;
+    BOOL bIgnoreDataChanged : 1;
     ReReadThread* m_pReReadThread;
 
 protected:
     SwBaseLink(): m_pReReadThread(0) {}
 
-    SwBaseLink( const String& rNm, sal_uInt16 nObjectType, ::sfx2::SvLinkSource* pObj,
+    SwBaseLink( const String& rNm, USHORT nObjectType, ::sfx2::SvLinkSource* pObj,
                  SwCntntNode* pNode = 0 )
         : ::sfx2::SvBaseLink( rNm, nObjectType, pObj ), pCntntNode( pNode ),
-        bSwapIn( sal_False ), bNoDataFlag( sal_False ), bIgnoreDataChanged( sal_False ),
+        bSwapIn( FALSE ), bNoDataFlag( FALSE ), bIgnoreDataChanged( FALSE ),
         m_pReReadThread(0)
     {}
 
 public:
     TYPEINFO();
 
-    SwBaseLink( sal_uInt16 nMode, sal_uInt16 nFormat, SwCntntNode* pNode = 0 )
+    SwBaseLink( USHORT nMode, USHORT nFormat, SwCntntNode* pNode = 0 )
         : ::sfx2::SvBaseLink( nMode, nFormat ), pCntntNode( pNode ),
-        bSwapIn( sal_False ), bNoDataFlag( sal_False ), bIgnoreDataChanged( sal_False ),
+        bSwapIn( FALSE ), bNoDataFlag( FALSE ), bIgnoreDataChanged( FALSE ),
         m_pReReadThread(0)
     {}
     virtual ~SwBaseLink();
@@ -75,20 +75,20 @@ public:
     SwCntntNode *GetCntntNode() { return pCntntNode; }
 
     // nur fuer Grafiken
-    sal_Bool SwapIn( sal_Bool bWaitForData = sal_False, sal_Bool bNativFormat = sal_False );
+    BOOL SwapIn( BOOL bWaitForData = FALSE, BOOL bNativFormat = FALSE );
 
-    sal_Bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    BOOL Connect() { return 0 != SvBaseLink::GetRealObject(); }
 
     // nur fuer Grafik-Links ( zum Umschalten zwischen DDE / Grf-Link)
-    void SetObjType( sal_uInt16 nType ) { SvBaseLink::SetObjType( nType ); }
+    void SetObjType( USHORT nType )	{ SvBaseLink::SetObjType( nType ); }
 
-    sal_Bool IsRecursion( const SwBaseLink* pChkLnk ) const;
-    virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
+    BOOL IsRecursion( const SwBaseLink* pChkLnk ) const;
+    virtual BOOL IsInRange( ULONG nSttNd, ULONG nEndNd, xub_StrLen nStt = 0,
                             xub_StrLen nEnd = STRING_NOTFOUND ) const;
 
-    void SetNoDataFlag()    { bNoDataFlag = sal_True; }
-    sal_Bool ChkNoDataFlag()    { sal_Bool bRet = bNoDataFlag; bNoDataFlag = sal_False; return bRet; }
-    sal_Bool IsNoDataFlag() const           { return bNoDataFlag; }
+    void SetNoDataFlag()	{ bNoDataFlag = TRUE; }
+    BOOL ChkNoDataFlag()	{ BOOL bRet = bNoDataFlag; bNoDataFlag = FALSE; return bRet; }
+    BOOL IsNoDataFlag()	const			{ return bNoDataFlag; }
 };
 
 

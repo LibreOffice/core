@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,16 +29,18 @@
 #define _GLOBALS_HRC
 
 
+// Versions-Definition wie in solar.h und swtypes.hxx
+//#define SW_FILEFORMAT_40 3580
 
 #include "rcid.hrc"
 
 // STRINGS -----------------------------------------------------------
 
-#define STR_DLLNOTFOUND             (RC_GLOBALS_BEGIN + 0)
-#define STR_FMT_STD                 (RC_GLOBALS_BEGIN + 1)
-#define STR_LOAD_GLOBAL_DOC         (RC_GLOBALS_BEGIN + 2)
+#define STR_DLLNOTFOUND     		(RC_GLOBALS_BEGIN + 0)
+#define STR_FMT_STD         		(RC_GLOBALS_BEGIN + 1)
+#define STR_LOAD_GLOBAL_DOC 		(RC_GLOBALS_BEGIN + 2)
 
-#define STR_SEPARATOR               (RC_GLOBALS_BEGIN + 4)
+#define STR_SEPARATOR       		(RC_GLOBALS_BEGIN + 4)
 
 
 #define STR_BASIC_IMPORT            (RC_GLOBALS_BEGIN + 5)
@@ -46,14 +48,14 @@
 #define STR_BASIC_END               (RC_GLOBALS_BEGIN + 7)
 #define STR_BASIC_REC_LIB           (RC_GLOBALS_BEGIN + 8)
 #define STR_TEMPLATE_WILDCARD       (RC_GLOBALS_BEGIN + 9)
-#define STR_DOC_STAT                (RC_GLOBALS_BEGIN + 10)
+#define STR_DOC_STAT       			(RC_GLOBALS_BEGIN + 10)
 
-#define STR_PAGE                    (RC_GLOBALS_BEGIN + 14)
+#define STR_PAGE					(RC_GLOBALS_BEGIN + 14)
 #define STR_PRINTOPTUI              (RC_GLOBALS_BEGIN + 15)
 
 //EventStrings
 
-#define STR_EVENT_OBJECT_SELECT      ( RC_GLOBALS_BEGIN + 17 )
+#define STR_EVENT_OBJECT_SELECT   	 ( RC_GLOBALS_BEGIN + 17 )
 #define STR_EVENT_START_INS_GLOSSARY ( RC_GLOBALS_BEGIN + 18 )
 #define STR_EVENT_END_INS_GLOSSARY   ( RC_GLOBALS_BEGIN + 19 )
 #define STR_EVENT_MOUSEOVER_OBJECT   ( RC_GLOBALS_BEGIN + 20 )
@@ -62,21 +64,21 @@
 #define STR_EVENT_IMAGE_LOAD         ( RC_GLOBALS_BEGIN + 23 )
 #define STR_EVENT_IMAGE_ABORT        ( RC_GLOBALS_BEGIN + 24 )
 #define STR_EVENT_IMAGE_ERROR        ( RC_GLOBALS_BEGIN + 25 )
-#define STR_EVENT_FRM_KEYINPUT_A     ( RC_GLOBALS_BEGIN + 26 )
-#define STR_EVENT_FRM_KEYINPUT_NOA   ( RC_GLOBALS_BEGIN + 27 )
+#define STR_EVENT_FRM_KEYINPUT_A	 ( RC_GLOBALS_BEGIN + 26 )
+#define STR_EVENT_FRM_KEYINPUT_NOA	 ( RC_GLOBALS_BEGIN + 27 )
 #define STR_EVENT_FRM_RESIZE         ( RC_GLOBALS_BEGIN + 28 )
-#define STR_EVENT_FRM_MOVE           ( RC_GLOBALS_BEGIN + 29 )
+#define STR_EVENT_FRM_MOVE			 ( RC_GLOBALS_BEGIN + 29 )
 
 // Strings fuer Rahmenausrichtungen im Popup
-#define STR_TOP_BASE                (RC_GLOBALS_BEGIN + 30)
-#define STR_BOTTOM_BASE             (RC_GLOBALS_BEGIN + 31)
-#define STR_CENTER_BASE             (RC_GLOBALS_BEGIN + 32)
+#define STR_TOP_BASE             	(RC_GLOBALS_BEGIN + 30)
+#define STR_BOTTOM_BASE          	(RC_GLOBALS_BEGIN + 31)
+#define STR_CENTER_BASE          	(RC_GLOBALS_BEGIN + 32)
 #define STR_TOP                   (RC_GLOBALS_BEGIN + 33)
 #define STR_BOTTOM                (RC_GLOBALS_BEGIN + 34)
 #define STR_CENTER_HORI               (RC_GLOBALS_BEGIN + 35)
 #define STR_CENTER_VERT               (RC_GLOBALS_BEGIN + 36)
 
-#define STR_LOAD_HTML_DOC           (RC_GLOBALS_BEGIN + 37)
+#define STR_LOAD_HTML_DOC 			(RC_GLOBALS_BEGIN + 37)
 
 #define STR_AUTH                    (RC_GLOBALS_BEGIN + 38)
 #define STR_TBL                     (RC_GLOBALS_BEGIN + 39)
@@ -87,28 +89,28 @@
 
 // BITMAPS -----------------------------------------------------------
 
-#define RES_TABL                    (RC_GLOBALS_BEGIN + 1)
-#define RES_TABR                    (RC_GLOBALS_BEGIN + 2)
-#define RES_TABD                    (RC_GLOBALS_BEGIN + 3)
-#define RES_TABC                    (RC_GLOBALS_BEGIN + 4)
+#define RES_TABL            		(RC_GLOBALS_BEGIN + 1)
+#define RES_TABR            		(RC_GLOBALS_BEGIN + 2)
+#define RES_TABD            		(RC_GLOBALS_BEGIN + 3)
+#define RES_TABC            		(RC_GLOBALS_BEGIN + 4)
 
 // DIALOGE -----------------------------------------------------------
 
-#define DLG_LISTBOX                 (RC_GLOBALS_BEGIN + 1)
-#define DLG_THESAURUS               (RC_GLOBALS_BEGIN + 2)
-#define DLG_SPECIAL                 (RC_GLOBALS_BEGIN + 3)
+#define DLG_LISTBOX         		(RC_GLOBALS_BEGIN + 1)
+#define DLG_THESAURUS       		(RC_GLOBALS_BEGIN + 2)
+#define DLG_SPECIAL         		(RC_GLOBALS_BEGIN + 3)
 
 // QUERYBOX ---------------------------------------------------------
 
-#define DLG_WRAP                    (RC_GLOBALS_BEGIN + 4)
-#define DLG_BODY                    (RC_GLOBALS_BEGIN + 5)
-#define DLG_PRT_FIELDNAME           (RC_GLOBALS_BEGIN + 6)
+#define DLG_WRAP            		(RC_GLOBALS_BEGIN + 4)
+#define DLG_BODY            		(RC_GLOBALS_BEGIN + 5)
+#define DLG_PRT_FIELDNAME      		(RC_GLOBALS_BEGIN + 6)
 
 // INFOBOX ------------------------------------------------------------
 
-#define ERR_CLPBRD_READ             (RC_GLOBALS_BEGIN + 1)
-#define ERR_CLPBRD_WRITE            (RC_GLOBALS_BEGIN + 2)
-#define MSG_ERROR_PASSWD            (RC_GLOBALS_BEGIN + 3)
+#define ERR_CLPBRD_READ     		(RC_GLOBALS_BEGIN + 1)
+#define ERR_CLPBRD_WRITE    		(RC_GLOBALS_BEGIN + 2)
+#define MSG_ERROR_PASSWD			(RC_GLOBALS_BEGIN + 3)
 
 
 // ACC ---------------------------------------------------------------
@@ -138,68 +140,68 @@
 #define FN_NEXT_SENT_SEL            (RC_GLOBALS_BEGIN + 23)   // NextSentence
 #define FN_PREV_SENT_SEL            (RC_GLOBALS_BEGIN + 24)   // PrevSentence
 
-#define FN_START_OF_NEXT_COLUMN_SEL (RC_GLOBALS_BEGIN + 25)
-#define FN_END_OF_NEXT_COLUMN_SEL   (RC_GLOBALS_BEGIN + 26)
-#define FN_START_OF_PREV_COLUMN_SEL (RC_GLOBALS_BEGIN + 27)
-#define FN_END_OF_PREV_COLUMN_SEL   (RC_GLOBALS_BEGIN + 28)
-#define FN_PAGEUP_SEL               (RC_GLOBALS_BEGIN + 29)
-#define FN_PAGEDOWN_SEL             (RC_GLOBALS_BEGIN + 30)
+#define FN_START_OF_NEXT_COLUMN_SEL	(RC_GLOBALS_BEGIN + 25)
+#define FN_END_OF_NEXT_COLUMN_SEL	(RC_GLOBALS_BEGIN + 26)
+#define FN_START_OF_PREV_COLUMN_SEL	(RC_GLOBALS_BEGIN + 27)
+#define FN_END_OF_PREV_COLUMN_SEL	(RC_GLOBALS_BEGIN + 28)
+#define FN_PAGEUP_SEL            	(RC_GLOBALS_BEGIN + 29)
+#define FN_PAGEDOWN_SEL         	(RC_GLOBALS_BEGIN + 30)
 
 // TABPAGES -----------------------------------------------------------
 
-#define TP_PAGE_STD                 (RC_GLOBALS_BEGIN +  1)
-#define TP_PAGE_EXT                 (RC_GLOBALS_BEGIN +  2)
+#define TP_PAGE_STD            	 	(RC_GLOBALS_BEGIN +  1)
+#define TP_PAGE_EXT             	(RC_GLOBALS_BEGIN +  2)
 
-#define TP_PARA_STD                 (RC_GLOBALS_BEGIN +  3)
-#define TP_PARA_EXT                 (RC_GLOBALS_BEGIN +  4)
+#define TP_PARA_STD            	 	(RC_GLOBALS_BEGIN +  3)
+#define TP_PARA_EXT             	(RC_GLOBALS_BEGIN +  4)
 
-#define TP_FRAME_STD                (RC_GLOBALS_BEGIN +  5)
-#define TP_FRAME_EXT                (RC_GLOBALS_BEGIN +  6)
+#define TP_FRAME_STD            	(RC_GLOBALS_BEGIN +  5)
+#define TP_FRAME_EXT             	(RC_GLOBALS_BEGIN +  6)
 
-#define TP_CHAR_STD                 (RC_GLOBALS_BEGIN +  7)
-#define TP_CHAR_EXT                 (RC_GLOBALS_BEGIN +  8)
+#define TP_CHAR_STD             	(RC_GLOBALS_BEGIN +  7)
+#define TP_CHAR_EXT             	(RC_GLOBALS_BEGIN +  8)
 
-#define TP_TABULATOR                (RC_GLOBALS_BEGIN +  9)
-#define TP_DROPCAPS                 (RC_GLOBALS_BEGIN +  10)
-#define TP_BACKGROUND               (RC_GLOBALS_BEGIN +  11)
-#define TP_BORDER                   (RC_GLOBALS_BEGIN +  12)
-#define TP_COLUMN                   (RC_GLOBALS_BEGIN +  13)
+#define TP_TABULATOR				(RC_GLOBALS_BEGIN +  9)
+#define TP_DROPCAPS             	(RC_GLOBALS_BEGIN +  10)
+#define TP_BACKGROUND             	(RC_GLOBALS_BEGIN +  11)
+#define TP_BORDER             		(RC_GLOBALS_BEGIN +  12)
+#define TP_COLUMN             		(RC_GLOBALS_BEGIN +  13)
 
-#define TP_DOC_STAT                 (RC_GLOBALS_BEGIN +  15)
+#define TP_DOC_STAT          		(RC_GLOBALS_BEGIN +  15)
 
-#define TP_HEADER_PAGE              (RC_GLOBALS_BEGIN +  16)
-#define TP_FOOTER_PAGE              (RC_GLOBALS_BEGIN +  17)
-#define TP_FOOTNOTE_PAGE            (RC_GLOBALS_BEGIN +  18)
+#define TP_HEADER_PAGE      		(RC_GLOBALS_BEGIN +  16)
+#define TP_FOOTER_PAGE          	(RC_GLOBALS_BEGIN +  17)
+#define TP_FOOTNOTE_PAGE          	(RC_GLOBALS_BEGIN +  18)
 
 #define TP_OPTGENERAL_PAGE          (RC_GLOBALS_BEGIN +  19) //Sfx-Seiten
-#define TP_OPTSAVE_PAGE             (RC_GLOBALS_BEGIN +  20)
-#define TP_OPTPATH_PAGE             (RC_GLOBALS_BEGIN +  21)
-#define TP_OPTSPELL_PAGE            (RC_GLOBALS_BEGIN +  22)
+#define TP_OPTSAVE_PAGE          	(RC_GLOBALS_BEGIN +  20)
+#define TP_OPTPATH_PAGE          	(RC_GLOBALS_BEGIN +  21)
+#define TP_OPTSPELL_PAGE          	(RC_GLOBALS_BEGIN +  22)
  //Sw-Seiten
-#define SW_EDIT_OPTIONS_TDLG        (RC_GLOBALS_BEGIN +  23)
+#define SW_EDIT_OPTIONS_TDLG		(RC_GLOBALS_BEGIN +  23)
 #define SW_BROWSER_OPTIONS_TDLG     (RC_GLOBALS_BEGIN +  24)
-#define TP_OPTTEST_PAGE             (RC_GLOBALS_BEGIN +  25)
-#define TP_OPTPRINT_PAGE            (RC_GLOBALS_BEGIN +  26)
-#define TP_OPTCOLOR_PAGE            (RC_GLOBALS_BEGIN +  27)
+#define TP_OPTTEST_PAGE          	(RC_GLOBALS_BEGIN +  25)
+#define TP_OPTPRINT_PAGE          	(RC_GLOBALS_BEGIN +  26)
+#define TP_OPTCOLOR_PAGE          	(RC_GLOBALS_BEGIN +  27)
 
 #define SW_OPTIONS_TDLG             (RC_GLOBALS_BEGIN +  28)
 #define SW_OPTIONS_TDLG_ELEM        (RC_GLOBALS_BEGIN +  29)
 #define SW_OPTIONS_TDLG_PRINT       (RC_GLOBALS_BEGIN +  30)
 
-#define TP_FRM_STD                  (RC_GLOBALS_BEGIN +  31)
+#define TP_FRM_STD					(RC_GLOBALS_BEGIN +  31)
 
-#define TP_OPTGRID_PAGE             (RC_GLOBALS_BEGIN +  33)
+#define TP_OPTGRID_PAGE          	(RC_GLOBALS_BEGIN +  33)
 
-#define TP_FORMAT_TABLE             (RC_GLOBALS_BEGIN +  34)
-#define TP_GRF_EXT                  (RC_GLOBALS_BEGIN +  35)
+#define TP_FORMAT_TABLE          	(RC_GLOBALS_BEGIN +  34)
+#define TP_GRF_EXT          		(RC_GLOBALS_BEGIN +  35)
 
-#define DLG_FRM_STD                 (RC_GLOBALS_BEGIN +  36)
-#define DLG_FRM_GRF                 (RC_GLOBALS_BEGIN +  37)
-#define DLG_FRM_OLE                 (RC_GLOBALS_BEGIN +  38)
+#define DLG_FRM_STD           		(RC_GLOBALS_BEGIN +  36)
+#define DLG_FRM_GRF           		(RC_GLOBALS_BEGIN +  37)
+#define DLG_FRM_OLE           		(RC_GLOBALS_BEGIN +  38)
 
-#define RID_INPUT_TOOLBOX           (RC_GLOBALS_BEGIN +  39)
+#define RID_INPUT_TOOLBOX			(RC_GLOBALS_BEGIN +  39)
 
-#define TP_MACRO_ASSIGN             (RC_GLOBALS_BEGIN +  40)
+#define TP_MACRO_ASSIGN				(RC_GLOBALS_BEGIN +  40)
 #define TP_FRM_URL                  (RC_GLOBALS_BEGIN +  42)
 #define TP_CHAR_URL                 (RC_GLOBALS_BEGIN +  43)
 
@@ -220,7 +222,7 @@
 #define TP_PARA_ALIGN               (RC_GLOBALS_BEGIN +  55)
 #define TP_OPTTABLE_PAGE            (RC_GLOBALS_BEGIN +  56)
 
-#define TP_NUMBER                   (RC_GLOBALS_BEGIN +  57)
+#define TP_NUMBER            		(RC_GLOBALS_BEGIN +  57)
 
 #define DLG_NUM_BULLET              (RC_GLOBALS_BEGIN +  58)
 #define TP_PICK_SINGLE_NUM          (RC_GLOBALS_BEGIN +  59)
@@ -228,50 +230,50 @@
 #define TP_PICK_NUM                 (RC_GLOBALS_BEGIN +  61)
 #define TP_PICK_BMP                 (RC_GLOBALS_BEGIN +  62)
 
-#define TP_FLD_DB                   (RC_GLOBALS_BEGIN +  64)
-#define TP_FLD_DOKINF               (RC_GLOBALS_BEGIN +  65)
-#define TP_FLD_VAR                  (RC_GLOBALS_BEGIN +  66)
-#define TP_FLD_DOK                  (RC_GLOBALS_BEGIN +  67)
-#define TP_FLD_FUNC                 (RC_GLOBALS_BEGIN +  68)
-#define TP_FLD_REF                  (RC_GLOBALS_BEGIN +  69)
+#define TP_FLD_DB               	(RC_GLOBALS_BEGIN +  64)
+#define TP_FLD_DOKINF           	(RC_GLOBALS_BEGIN +  65)
+#define TP_FLD_VAR					(RC_GLOBALS_BEGIN +  66)
+#define TP_FLD_DOK           		(RC_GLOBALS_BEGIN +  67)
+#define TP_FLD_FUNC					(RC_GLOBALS_BEGIN +  68)
+#define TP_FLD_REF					(RC_GLOBALS_BEGIN +  69)
 
-#define TP_OPTSHDWCRSR              (RC_GLOBALS_BEGIN +  70)
+#define TP_OPTSHDWCRSR				(RC_GLOBALS_BEGIN +  70)
 #define TP_NUM_OPTIONS              (RC_GLOBALS_BEGIN +  71)
 #define TP_NUM_POSITION             (RC_GLOBALS_BEGIN +  72)
-#define TP_NUMPARA                  (RC_GLOBALS_BEGIN +  73)
+#define TP_NUMPARA             		(RC_GLOBALS_BEGIN +  73)
 
-#define TP_REDLINE_OPT              (RC_GLOBALS_BEGIN +  74)
+#define TP_REDLINE_OPT         		(RC_GLOBALS_BEGIN +  74)
 
-#define TP_LINENUMBERING            (RC_GLOBALS_BEGIN +  75)
-#define TP_OUTLINE_NUM              (RC_GLOBALS_BEGIN +  76)
+#define TP_LINENUMBERING       		(RC_GLOBALS_BEGIN +  75)
+#define TP_OUTLINE_NUM       		(RC_GLOBALS_BEGIN +  76)
 
 #define TP_OPTINSERT_PAGE           (RC_GLOBALS_BEGIN +  77)
-#define TP_OPTCAPTION_PAGE          (RC_GLOBALS_BEGIN +  78)
+#define TP_OPTCAPTION_PAGE			(RC_GLOBALS_BEGIN +  78)
 #define DLG_SVXTEST_NUM_BULLET      (RC_GLOBALS_BEGIN +  79)
-#define TP_OPTLOAD_PAGE             (RC_GLOBALS_BEGIN +  80)
-#define TP_INSERT_TOX               (RC_GLOBALS_BEGIN +  81)
-#define TP_TOX_FORM_ENTRY           (RC_GLOBALS_BEGIN +  82)
-#define TP_TOX_FORM_STYLES          (RC_GLOBALS_BEGIN +  83)
+#define TP_OPTLOAD_PAGE				(RC_GLOBALS_BEGIN +  80)
+#define TP_INSERT_TOX				(RC_GLOBALS_BEGIN +  81)
+#define TP_TOX_FORM_ENTRY			(RC_GLOBALS_BEGIN +  82)
+#define TP_TOX_FORM_STYLES			(RC_GLOBALS_BEGIN +  83)
 #define DLG_INSERT_TOX_TABDLG       (RC_GLOBALS_BEGIN +  84)
 #define TP_INSERT_SECTION           (RC_GLOBALS_BEGIN +  85)
 #define DLG_INSERT_SECTION          (RC_GLOBALS_BEGIN +  86)
 #define DLG_SECTION_PROPERTIES      (RC_GLOBALS_BEGIN +  87)
 #define DLG_RENAME_XNAMED           (RC_GLOBALS_BEGIN +  88)
-#define DLG_MULTI_TOX               (RC_GLOBALS_BEGIN +  89)
-#define TP_TOX_SELECT               (RC_GLOBALS_BEGIN +  90)
+#define DLG_MULTI_TOX           	(RC_GLOBALS_BEGIN +  89)
+#define TP_TOX_SELECT           	(RC_GLOBALS_BEGIN +  90)
 #define TP_TOX_ENTRY                (RC_GLOBALS_BEGIN +  91)
 #define TP_TOX_STYLES               (RC_GLOBALS_BEGIN +  92)
 #define TP_VISITING_CARDS           (RC_GLOBALS_BEGIN +  93)
 #define DLG_ADD_IDX_STYLES          (RC_GLOBALS_BEGIN +  94)
-#define TP_PRIVATE_DATA             (RC_GLOBALS_BEGIN +  95)
-#define TP_BUSINESS_DATA            (RC_GLOBALS_BEGIN +  96)
-#define TP_SECTION_FTNENDNOTES      (RC_GLOBALS_BEGIN +  97)
-#define TP_CHAR_POS                 (RC_GLOBALS_BEGIN +  98)
-#define TP_CHAR_TWOLN               (RC_GLOBALS_BEGIN +  99)
+#define TP_PRIVATE_DATA          	(RC_GLOBALS_BEGIN +  95)
+#define TP_BUSINESS_DATA          	(RC_GLOBALS_BEGIN +  96)
+#define TP_SECTION_FTNENDNOTES    	(RC_GLOBALS_BEGIN +  97)
+#define TP_CHAR_POS             	(RC_GLOBALS_BEGIN +  98)
+#define TP_CHAR_TWOLN             	(RC_GLOBALS_BEGIN +  99)
 #define TP_PARA_ASIAN               (RC_GLOBALS_BEGIN +  100)
 #define TP_TEXTGRID_PAGE            (RC_GLOBALS_BEGIN +  101)
 #define TP_SECTION_INDENTS          (RC_GLOBALS_BEGIN +  102)
-#define TP_OPTCOMPATIBILITY_PAGE    (RC_GLOBALS_BEGIN +  103)
+#define TP_OPTCOMPATIBILITY_PAGE	(RC_GLOBALS_BEGIN +  103)
 #define TP_MAILCONFIG               (RC_GLOBALS_BEGIN +  104)
 #define TP_TITLEPAGE                (RC_GLOBALS_BEGIN +  105)
 //maximum: RC_GLOBALS_BEGIN +  120

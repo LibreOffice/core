@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,37 +40,39 @@
 
 struct SW_DLLPUBLIC ShellResource : public Resource
 {
-    String          aPostItAuthor;
-    String          aPostItPage;
-    String          aPostItLine;
+    String			aPostItAuthor;
+    String 			aPostItPage;
+    String			aPostItLine;
 
     // Calc Fehlerstrings
-    String          aCalc_Syntax;
-    String          aCalc_ZeroDiv;
-    String          aCalc_Brack;
-    String          aCalc_Pow;
-    String          aCalc_VarNFnd;
-    String          aCalc_Overflow;
-    String          aCalc_WrongTime;
-    String          aCalc_Default;
-    String          aCalc_Error;
+    String			aCalc_Syntax;
+    String			aCalc_ZeroDiv;
+    String			aCalc_Brack;
+    String			aCalc_Pow;
+    String			aCalc_VarNFnd;
+    String			aCalc_Overflow;
+    String			aCalc_WrongTime;
+    String			aCalc_Default;
+    String			aCalc_Error;
 
     // fuers GetRefFeld - oben/unten
     String          aGetRefFld_Up;
     String          aGetRefFld_Down;
+    // --> OD 2007-09-13 #i81002#
     // for GetRefField - referenced item not found
     String          aGetRefFld_RefItemNotFound;
+    // <--
     // fuer dynamisches Menu - String "alle"
-    String          aStrAllPageHeadFoot;
+    String			aStrAllPageHeadFoot;
     // fuer einige Listboxen - String "keine"
-    String          aStrNone;
+    String			aStrNone;
     // fuer Felder, die Fixiert sind
-    String          aFixedStr;
+    String			aFixedStr;
     // custom fields of type css::util::Duration
     String          sDurationFormat;
 
     //names of TOXs
-    String          aTOXIndexName;
+    String 			aTOXIndexName;
     String          aTOXUserName;
     String          aTOXContentName;
     String          aTOXIllustrationsName;
@@ -80,28 +82,27 @@ struct SW_DLLPUBLIC ShellResource : public Resource
 
     String          aHyperlinkClick;
 
-    SvStringsDtor   aDocInfoLst;
+    SvStringsDtor	aDocInfoLst;
+
+    // Fly-Anker Bmps
+//	Bitmap			aAnchorBmp;
+//	Bitmap			aDragAnchorBmp;
 
     // die AutoFormat-Redline-Kommentare
-    inline const SvStringsDtor& GetAutoFmtNameLst() const;
+    inline const SvStringsDtor&	GetAutoFmtNameLst() const;
 
-    enum PageNameMode
-    {
-        NORMAL_PAGE,
-        FIRST_PAGE,
-        FOLLOW_PAGE
-    };
     // returns for the specific filter the new names of pagedescs
     // This method is for the old code of the specific filters with
     // now localized names
-    String GetPageDescName( sal_uInt16 nNo, PageNameMode eMode );
+    String GetPageDescName( USHORT nNo, BOOL bFirst = FALSE,
+                                        BOOL bFollow = FALSE );
 
     ShellResource();
     ~ShellResource();
 
 private:
     void _GetAutoFmtNameLst() const;
-    SvStringsDtor   *pAutoFmtNameLst;
+    SvStringsDtor	*pAutoFmtNameLst;
     String          sPageDescFirstName;
     String          sPageDescFollowName;
     String          sPageDescName;

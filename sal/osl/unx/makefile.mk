@@ -41,6 +41,7 @@ PROJECTPCHSOURCE=cont_pch
 
 TARGETTYPE=CUI
 
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -80,6 +81,8 @@ SLOFILES= \
             $(SLO)$/process_impl.obj\
             $(SLO)$/salinit.obj
 
+
+#.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/diagnose.obj \
             $(OBJ)$/semaphor.obj \
@@ -109,14 +112,15 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/process_impl.obj\
             $(OBJ)$/salinit.obj
             
+#.ENDIF
 
 .IF "$(OS)"=="MACOSX"
 SLOFILES += $(SLO)$/osxlocale.obj
 .ENDIF
 
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || \
-    "$(OS)$(CPU)"=="LINUXS" || "$(OS)"=="MACOSX" || "$(OS)"=="AIX" || \
-    "$(OS)"=="OPENBSD" || "$(OS)"=="DRAGONFLY"
+	"$(OS)$(CPU)"=="LINUXS" || "$(OS)"=="MACOSX" || \
+	"$(OS)"=="AIX" || "$(OS)"=="OPENBSD"
 SLOFILES += $(SLO)$/backtrace.obj
 OBJFILES += $(OBJ)$/backtrace.obj
 .ENDIF
@@ -125,6 +129,12 @@ OBJFILES += $(OBJ)$/backtrace.obj
 
 .IF "$(COM)"=="C50"
 APP1STDLIBS+=-lC
+.ENDIF
+
+.IF "$(OS)" == "LINUX"
+.IF "$(CRYPT_LINK)" == "YES"
+CFLAGS+=-DCRYPT_LINK
+.ENDIF
 .ENDIF
 
 .IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == ""

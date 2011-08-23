@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,15 @@
 #ifndef _LINKDLG_HXX
 #define _LINKDLG_HXX
 
+#include <vcl/lstbox.hxx>
+
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 
-#include <svtools/svmedit.hxx>  // MultiLineEdit
+#include <svtools/svmedit.hxx>	// MultiLineEdit
 #include <svtools/svtabbx.hxx>  // MultiLineEdit
 
 /********************** SvUpdateLinksDialog ******************************
@@ -54,22 +56,21 @@ class SvBaseLinksDlg : public ModalDialog
     FixedText aFtLinks;
     FixedText aFtType;
     FixedText aFtStatus;
-    SvTabListBox aTbLinks;
-    FixedText aFtFiles2;
-    FixedText aFtFullFileName;
-    FixedText aFtSource2;
-    FixedText aFtFullSourceName;
-    FixedText aFtType2;
-    FixedText aFtFullTypeName;
-    FixedText aFtUpdate;
-    RadioButton aRbAutomatic;
-    RadioButton aRbManual;
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;
     PushButton aPbUpdateNow;
     PushButton aPbOpenSource;
     PushButton aPbChangeSource;
     PushButton aPbBreakLink;
+    FixedText aFtFiles2;
+    FixedText aFtSource2;
+    FixedText aFtType2;
+    FixedText aFtUpdate;
+    RadioButton aRbAutomatic;
+    RadioButton aRbManual;
+    FixedText aFtFullFileName;
+    FixedText aFtFullSourceName;
+    FixedText aFtFullTypeName;
     String aStrAutolink;
     String aStrManuallink;
     String aStrBrokenlink;
@@ -79,7 +80,8 @@ class SvBaseLinksDlg : public ModalDialog
     String aStrCloselinkmsgMulti;
     String aStrWaitinglink;
     sfx2::LinkManager*  pLinkMgr;
-    sal_Bool            bHtmlMode;
+    BOOL 			bHtmlMode;
+    SvTabListBox aTbLinks;
     Timer aUpdateTimer;
 
 #if _SOLAR__PRIVATE
@@ -93,37 +95,37 @@ class SvBaseLinksDlg : public ModalDialog
     DECL_LINK( BreakLinkClickHdl, PushButton * );
     DECL_LINK( UpdateWaitingHdl, Timer * );
     DECL_LINK( EndEditHdl, sfx2::SvBaseLink* );
-    sfx2::SvBaseLink* GetSelEntry( sal_uInt16* pPos );
+    sfx2::SvBaseLink* GetSelEntry( USHORT* pPos );
     String ImplGetStateStr( const sfx2::SvBaseLink& );
-    void SetType( sfx2::SvBaseLink& rLink, sal_uInt16 nPos, sal_uInt16 nType );
-    void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uInt16 nPos = LISTBOX_APPEND, sal_Bool bSelect = sal_False);
+    void SetType( sfx2::SvBaseLink& rLink, USHORT nPos, USHORT nType );
+    void InsertEntry( const sfx2::SvBaseLink& rLink, USHORT nPos = LISTBOX_APPEND, sal_Bool bSelect = sal_False);
 #endif
 
-    void StartUpdateTimer()         { aUpdateTimer.Start(); }
+    void StartUpdateTimer()			{ aUpdateTimer.Start(); }
 
-    SvTabListBox&     Links()       { return aTbLinks; }
-    FixedText&      FileName()      { return aFtFullFileName; }
-    FixedText&      SourceName()    { return aFtFullSourceName; }
-    FixedText&      TypeName()      { return aFtFullTypeName; }
-    RadioButton&    Automatic()     { return aRbAutomatic; }
-    RadioButton&    Manual()        { return aRbManual; }
-    PushButton&     UpdateNow()     { return aPbUpdateNow; }
-    PushButton&     OpenSource()    { return aPbOpenSource; }
-    PushButton&     ChangeSource()  { return aPbChangeSource; }
-    PushButton&     BreakLink()     { return aPbBreakLink; }
+    SvTabListBox&	  Links()		{ return aTbLinks; }
+    FixedText&		FileName()		{ return aFtFullFileName; }
+    FixedText&		SourceName()	{ return aFtFullSourceName; }
+    FixedText&		TypeName()		{ return aFtFullTypeName; }
+    RadioButton&	Automatic() 	{ return aRbAutomatic; }
+    RadioButton&	Manual()		{ return aRbManual; }
+    PushButton& 	UpdateNow() 	{ return aPbUpdateNow; }
+    PushButton& 	OpenSource()	{ return aPbOpenSource; }
+    PushButton& 	ChangeSource()	{ return aPbChangeSource; }
+    PushButton& 	BreakLink() 	{ return aPbBreakLink; }
 
-    String&         Autolink()      { return aStrAutolink; }
-    String&         Manuallink()    { return aStrManuallink; }
-    String&         Brokenlink()    { return aStrBrokenlink; }
-    String&         Graphiclink()   { return aStrGraphiclink; }
-    String&         Buttonclose()   { return aStrButtonclose; }
-    String&         Closelinkmsg()  { return aStrCloselinkmsg; }
-    String&         CloselinkmsgMulti() { return aStrCloselinkmsgMulti; }
-    String&         Waitinglink()   { return aStrWaitinglink; }
+    String& 		Autolink()		{ return aStrAutolink; }
+    String& 		Manuallink()	{ return aStrManuallink; }
+    String& 		Brokenlink()	{ return aStrBrokenlink; }
+    String& 		Graphiclink()	{ return aStrGraphiclink; }
+    String& 		Buttonclose()	{ return aStrButtonclose; }
+    String& 		Closelinkmsg()	{ return aStrCloselinkmsg; }
+    String& 		CloselinkmsgMulti()	{ return aStrCloselinkmsgMulti; }
+    String& 		Waitinglink()	{ return aStrWaitinglink; }
     void SetManager( sfx2::LinkManager* );
 
 public:
-    SvBaseLinksDlg( Window * pParent, sfx2::LinkManager*, sal_Bool bHtml = sal_False );
+    SvBaseLinksDlg( Window * pParent, sfx2::LinkManager*, BOOL bHtml = FALSE );
     ~SvBaseLinksDlg();
     void SetActLink( sfx2::SvBaseLink * pLink );
 };

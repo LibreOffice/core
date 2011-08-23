@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,11 +91,11 @@ void lcl_GetFieldData( ScHeaderFieldData& rData )
 //========================================================================
 
 ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLocation eLoc )
-    :   Control( pParent, rResId ),
+    :	Control( pParent, rResId ),
     eLocation(eLoc),
     pAcc(NULL)
 {
-    EnableRTL(false);
+    EnableRTL(FALSE);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
@@ -107,17 +107,17 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
     Size aSize( GetOutputSize() );
     aSize.Height() *= 4;
 
-    pEdEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), sal_True );
+    pEdEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), TRUE );
     pEdEngine->SetPaperSize( aSize );
     pEdEngine->SetRefDevice( this );
 
     ScHeaderFieldData aData;
     lcl_GetFieldData( aData );
 
-        //  Feldbefehle:
+        //	Feldbefehle:
     pEdEngine->SetData( aData );
     pEdEngine->SetControlWord( pEdEngine->GetControlWord() | EE_CNTRL_MARKFIELDS );
-    mbRTL = ScGlobal::IsSystemRTL();
+    mbRTL = ScGlobal::IsSystemRTL(); 
     if (mbRTL)
         pEdEngine->SetDefaultHorizontalTextDirection(EE_HTEXTDIR_R2L);
 
@@ -130,7 +130,7 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
 
 // -----------------------------------------------------------------------
 
-ScEditWindow::~ScEditWindow()
+__EXPORT ScEditWindow::~ScEditWindow()
 {
     // delete Accessible object before deleting EditEngine and EditView
     if (pAcc)
@@ -153,14 +153,14 @@ void ScEditWindow::SetNumType(SvxNumType eNumType)
 
 // -----------------------------------------------------------------------
 
-EditTextObject* ScEditWindow::CreateTextObject()
+EditTextObject* __EXPORT ScEditWindow::CreateTextObject()
 {
-    //  Absatzattribute zuruecksetzen
-    //  (GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
+    //	wegen #38841# die Absatzattribute zuruecksetzen
+    //	(GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
 
     const SfxItemSet& rEmpty = pEdEngine->GetEmptyItemSet();
-    sal_uInt16 nParCnt = pEdEngine->GetParagraphCount();
-    for (sal_uInt16 i=0; i<nParCnt; i++)
+    USHORT nParCnt = pEdEngine->GetParagraphCount();
+    for (USHORT i=0; i<nParCnt; i++)
         pEdEngine->SetParaAttribs( i, rEmpty );
 
     return pEdEngine->CreateTextObject();
@@ -170,15 +170,15 @@ EditTextObject* ScEditWindow::CreateTextObject()
 
 void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
 {
-    SfxItemSet* pSet = new SfxItemSet( pEdEngine->GetEmptyItemSet() );
+    SfxItemSet*	pSet = new SfxItemSet( pEdEngine->GetEmptyItemSet() );
     rPattern.FillEditItemSet( pSet );
-    //  FillEditItemSet adjusts font height to 1/100th mm,
-    //  but for header/footer twips is needed, as in the PatternAttr:
+    //	FillEditItemSet adjusts font height to 1/100th mm,
+    //	but for header/footer twips is needed, as in the PatternAttr:
     pSet->Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
     pSet->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
     pSet->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
     if (mbRTL)
-        pSet->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+        pSet->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );	
     pEdEngine->SetDefaults( pSet );
 }
 
@@ -200,11 +200,11 @@ void ScEditWindow::InsertField( const SvxFieldItem& rFld )
 
 void ScEditWindow::SetCharAttriutes()
 {
-    SfxObjectShell* pDocSh  = SfxObjectShell::Current();
+    SfxObjectShell*	pDocSh	= SfxObjectShell::Current();
 
-    SfxViewShell*       pViewSh = SfxViewShell::Current();
+    SfxViewShell*		pViewSh = SfxViewShell::Current();
 
-    ScTabViewShell* pTabViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell*	pTabViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
 
 
     DBG_ASSERT( pDocSh,  "Current DocShell not found" );
@@ -212,7 +212,7 @@ void ScEditWindow::SetCharAttriutes()
 
     if ( pDocSh && pViewSh )
     {
-        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(sal_True);
+        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(TRUE);
 
         SfxItemSet aSet( pEdView->GetAttribs() );
 
@@ -230,14 +230,14 @@ void ScEditWindow::SetCharAttriutes()
             pEdView->SetAttribs( aSet );
         }
 
-        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(false);
+        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(FALSE);
         delete pDlg;
     }
 }
 
 // -----------------------------------------------------------------------
 
-void ScEditWindow::Paint( const Rectangle& rRec )
+void __EXPORT ScEditWindow::Paint( const Rectangle& rRec )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
@@ -246,21 +246,21 @@ void ScEditWindow::Paint( const Rectangle& rRec )
 
     SetBackground( aBgColor );
 
-    Control::Paint( rRec );
+    Control::Paint(	rRec );
 
     pEdView->Paint( rRec );
 }
 
 // -----------------------------------------------------------------------
 
-void ScEditWindow::MouseMove( const MouseEvent& rMEvt )
+void __EXPORT ScEditWindow::MouseMove( const MouseEvent& rMEvt )
 {
     pEdView->MouseMove( rMEvt );
 }
 
 // -----------------------------------------------------------------------
 
-void ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
+void __EXPORT ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( !HasFocus() )
         GrabFocus();
@@ -270,16 +270,16 @@ void ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 // -----------------------------------------------------------------------
 
-void ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
+void __EXPORT ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     pEdView->MouseButtonUp( rMEvt );
 }
 
 // -----------------------------------------------------------------------
 
-void ScEditWindow::KeyInput( const KeyEvent& rKEvt )
+void __EXPORT ScEditWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    sal_uInt16 nKey =  rKEvt.GetKeyCode().GetModifier()
+    USHORT nKey =  rKEvt.GetKeyCode().GetModifier()
                  + rKEvt.GetKeyCode().GetCode();
 
     if ( nKey == KEY_TAB || nKey == KEY_TAB + KEY_SHIFT )
@@ -301,7 +301,7 @@ void ScEditWindow::Command( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------
 
-void ScEditWindow::GetFocus()
+void __EXPORT ScEditWindow::GetFocus()
 {
     pActiveEdWnd = this;
 
@@ -314,7 +314,7 @@ void ScEditWindow::GetFocus()
         pAcc = NULL;
 }
 
-void ScEditWindow::LoseFocus()
+void __EXPORT ScEditWindow::LoseFocus()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
     if (xTemp.is() && pAcc)
@@ -336,16 +336,19 @@ void ScEditWindow::LoseFocus()
     case Left:
         {
             sName = String(ScResId(STR_ACC_LEFTAREA_NAME));
+//            sDescription = String(ScResId(STR_ACC_LEFTAREA_DESCR));
         }
         break;
     case Center:
         {
             sName = String(ScResId(STR_ACC_CENTERAREA_NAME));
+//            sDescription = String(ScResId(STR_ACC_CENTERAREA_DESCR));
         }
         break;
     case Right:
         {
             sName = String(ScResId(STR_ACC_RIGHTAREA_NAME));
+//            sDescription = String(ScResId(STR_ACC_RIGHTAREA_DESCR));
         }
         break;
     }
@@ -356,13 +359,47 @@ void ScEditWindow::LoseFocus()
     return pAcc;
 }
 
+/*
+class ScExtIButton : public ImageButton
+{
+private:
+
+    Timer			aTimer;
+    ScPopupMenu*	pPopupMenu;
+
+    DECL_LINK( TimerHdl, Timer*);
+
+    void			DrawArrow();
+
+protected:
+
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt);
+
+    virtual void	StartPopup();
+
+public:
+
+    ScExtIButton(Window* pParent, const ResId& rResId );
+
+    void			SetPopupMenu(ScPopupMenu* pPopUp);
+
+    USHORT			GetSelected();
+
+    void            SetMenuHdl( const Link& rLink ) { aFxLink = rLink; }
+    const Link&     GetMenuHdl() const { return aFxLink; }
+
+}
+*/
 ScExtIButton::ScExtIButton(Window* pParent, const ResId& rResId )
-:   ImageButton(pParent,rResId),
+:	ImageButton(pParent,rResId),
     pPopupMenu(NULL)
 {
     nSelected=0;
     aTimer.SetTimeout(600);
-    SetDropDown( true);
+    SetDropDown( TRUE);
+
+//	DrawArrow();
 }
 
 void ScExtIButton::SetPopupMenu(ScPopupMenu* pPopUp)
@@ -370,7 +407,7 @@ void ScExtIButton::SetPopupMenu(ScPopupMenu* pPopUp)
     pPopupMenu=pPopUp;
 }
 
-sal_uInt16 ScExtIButton::GetSelected()
+USHORT ScExtIButton::GetSelected()
 {
     return nSelected;
 }
@@ -405,7 +442,7 @@ void ScExtIButton::StartPopup()
 
     if(pPopupMenu!=NULL)
     {
-        SetPressed( sal_True );
+        SetPressed( TRUE );
         EndSelection();
         Point aPoint(0,0);
         aPoint.Y()=GetOutputSizePixel().Height();
@@ -416,13 +453,13 @@ void ScExtIButton::StartPopup()
         {
             aMLink.Call(this);
         }
-        SetPressed( false);
+        SetPressed( FALSE);
     }
 }
 
 long ScExtIButton::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_uInt16 nSwitch=rNEvt.GetType();
+    USHORT nSwitch=rNEvt.GetType();
     if(nSwitch==EVENT_MOUSEBUTTONUP)
     {
         MouseButtonUp(*rNEvt.GetMouseEvent());
@@ -436,6 +473,95 @@ IMPL_LINK( ScExtIButton, TimerHdl, Timer*, EMPTYARG )
     StartPopup();
     return 0;
 }
+
+/*
+static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack,
+                               BOOL bLeft = FALSE, BOOL bTop = FALSE )
+{
+    Color			aOldFillColor = pBox->GetFillColor();
+    WindowAlign 	eAlign = pBox->meAlign;
+    if ( bLeft )
+        eAlign = WINDOWALIGN_RIGHT;
+    else if ( bTop )
+        eAlign = WINDOWALIGN_BOTTOM;
+
+    switch ( eAlign )
+    {
+        case WINDOWALIGN_LEFT:
+            if ( bBlack )
+                pBox->SetFillColor( Color( COL_BLACK ) );
+            pBox->DrawRect( Rectangle( nX+0, nY+0, nX+0, nY+6 ) );
+            pBox->DrawRect( Rectangle( nX+1, nY+1, nX+1, nY+5 ) );
+            pBox->DrawRect( Rectangle( nX+2, nY+2, nX+2, nY+4 ) );
+            pBox->DrawRect( Rectangle( nX+3, nY+3, nX+3, nY+3 ) );
+            if ( bBlack )
+            {
+                pBox->SetFillColor( aOldFillColor );
+                pBox->DrawRect( Rectangle( nX+1, nY+2, nX+1, nY+4 ) );
+                pBox->DrawRect( Rectangle( nX+2, nY+3, nX+2, nY+3 ) );
+            }
+            break;
+        case WINDOWALIGN_TOP:
+            if ( bBlack )
+                pBox->SetFillColor( Color( COL_BLACK ) );
+            pBox->DrawRect( Rectangle( nX+0, nY+0, nX+6, nY+0 ) );
+            pBox->DrawRect( Rectangle( nX+1, nY+1, nX+5, nY+1 ) );
+            pBox->DrawRect( Rectangle( nX+2, nY+2, nX+4, nY+2 ) );
+            pBox->DrawRect( Rectangle( nX+3, nY+3, nX+3, nY+3 ) );
+            if ( bBlack )
+            {
+                pBox->SetFillColor( aOldFillColor );
+                pBox->DrawRect( Rectangle( nX+2, nY+1, nX+4, nY+1 ) );
+                pBox->DrawRect( Rectangle( nX+3, nY+2, nX+3, nY+2 ) );
+            }
+            break;
+        case WINDOWALIGN_RIGHT:
+            if ( bBlack )
+                pBox->SetFillColor( Color( COL_BLACK ) );
+            pBox->DrawRect( Rectangle( nX+3, nY+0, nX+3, nY+6 ) );
+            pBox->DrawRect( Rectangle( nX+2, nY+1, nX+2, nY+5 ) );
+            pBox->DrawRect( Rectangle( nX+1, nY+2, nX+1, nY+4 ) );
+            pBox->DrawRect( Rectangle( nX+0, nY+3, nX+0, nY+3 ) );
+            if ( bBlack )
+            {
+                pBox->SetFillColor( aOldFillColor );
+                pBox->DrawRect( Rectangle( nX+2, nY+2, nX+2, nY+4 ) );
+                pBox->DrawRect( Rectangle( nX+1, nY+3, nX+1, nY+3 ) );
+            }
+            break;
+        case WINDOWALIGN_BOTTOM:
+            if ( bBlack )
+                pBox->SetFillColor( Color( COL_BLACK ) );
+            pBox->DrawRect( Rectangle( nX+0, nY+3, nX+6, nY+3 ) );
+            pBox->DrawRect( Rectangle( nX+1, nY+2, nX+5, nY+2 ) );
+            pBox->DrawRect( Rectangle( nX+2, nY+1, nX+4, nY+1 ) );
+            pBox->DrawRect( Rectangle( nX+3, nY+0, nX+3, nY+0 ) );
+            if ( bBlack )
+            {
+                pBox->SetFillColor( aOldFillColor );
+                pBox->DrawRect( Rectangle( nX+2, nY+2, nX+4, nY+2 ) );
+                pBox->DrawRect( Rectangle( nX+3, nY+1, nX+3, nY+1 ) );
+            }
+            break;
+    }
+}
+Down
+    - Timer starten
+
+Click
+    - Timer abbrechen
+
+Timer
+    if ( ??? )
+    {
+    - SetPressed( TRUE );
+    - EndSelection();
+    - Menu anzeigen
+    - SetPressed( FALSE );
+    }
+
+
+*/
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

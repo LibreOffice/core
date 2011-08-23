@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
 
 void SdrText::ReformatText()
 {
-    mbPortionInfoChecked=sal_False;
+    mbPortionInfoChecked=FALSE;
     mpOutlinerParaObject->ClearPortionInfo();
 }
 
@@ -141,7 +141,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
 
     if( mpOutlinerParaObject && pOldModel!=NULL && pNewModel!=NULL)
     {
-        bool bHgtSet = GetObjectItemSet().GetItemState(EE_CHAR_FONTHEIGHT, sal_True) == SFX_ITEM_SET;
+        bool bHgtSet = GetObjectItemSet().GetItemState(EE_CHAR_FONTHEIGHT, TRUE) == SFX_ITEM_SET;
 
         MapUnit aOldUnit(pOldModel->GetScaleUnit());
         MapUnit aNewUnit(pNewModel->GetScaleUnit());
@@ -150,10 +150,10 @@ void SdrText::SetModel( SdrModel* pNewModel )
         // !!! Hier muss noch DefTab und RefDevice der beiden Models
         // !!! verglichen werden und dann ggf. AutoGrow zuschlagen !!!
         // !!! fehlende Implementation !!!
-        sal_uIntPtr nOldFontHgt=pOldModel->GetDefaultFontHeight();
-        sal_uIntPtr nNewFontHgt=pNewModel->GetDefaultFontHeight();
-        sal_Bool bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
-        sal_Bool bSetHgtItem=bDefHgtChanged && !bHgtSet;
+        ULONG nOldFontHgt=pOldModel->GetDefaultFontHeight();
+        ULONG nNewFontHgt=pNewModel->GetDefaultFontHeight();
+        BOOL bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
+        BOOL bSetHgtItem=bDefHgtChanged && !bHgtSet;
         if (bSetHgtItem)
         { // #32665#
             // zunaechst das HeightItem festklopfen, damit
@@ -173,7 +173,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
             // Funktioniert nicht richtig:
             // Geht am Outliner leider nur in %
             // double nPercFloat=double(aMetricFactor)*100+0.5;
-            // sal_uInt16 nPerc=(sal_uInt16)nPercFloat;
+            // USHORT nPerc=(USHORT)nPercFloat;
             // rOutliner.DoStretchChars(100,nPerc);
 
             if (bSetHgtItem)
@@ -185,12 +185,12 @@ void SdrText::SetModel( SdrModel* pNewModel )
         }
         SetOutlinerParaObject(rOutliner.CreateParaObject()); // #34494#
         mpOutlinerParaObject->ClearPortionInfo();
-        mbPortionInfoChecked=sal_False;
+        mbPortionInfoChecked=FALSE;
         rOutliner.Clear();
     }
 }
 
-void SdrText::ForceOutlinerParaObject( sal_uInt16 nOutlMode )
+void SdrText::ForceOutlinerParaObject( USHORT nOutlMode )
 {
     if( mpModel && !mpOutlinerParaObject )
     {

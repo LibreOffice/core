@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
 #include "XMLFootnoteBodyImportContext.hxx"
@@ -71,7 +71,7 @@ enum XMLFootnoteChildToken {
     XML_TOK_FTN_NOTE_BODY
 };
 
-static SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_NOTE_CITATION,
       XML_TOK_FTN_NOTE_CITATION },
@@ -85,10 +85,10 @@ XMLFootnoteImportContext::XMLFootnoteImportContext(
     XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx,
     const OUString& rLocalName )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sPropertyReferenceId(RTL_CONSTASCII_USTRINGPARAM("ReferenceId"))
+:	SvXMLImportContext(rImport, nPrfx, rLocalName)
+,	sPropertyReferenceId(RTL_CONSTASCII_USTRINGPARAM("ReferenceId"))
 ,   mbListContextPushed(false)
-,   rHelper(rHlp)
+,	rHelper(rHlp)
 {
 }
 
@@ -204,8 +204,8 @@ SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
         case XML_TOK_FTN_NOTE_CITATION:
         {
             // little hack: we only care for one attribute of the citation
-            //              element. We handle that here, and then return a
-            //              default context.
+            //			  	element. We handle that here, and then return a
+            // 				default context.
             sal_Int16 nLength = xAttrList->getLength();
             for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
             {

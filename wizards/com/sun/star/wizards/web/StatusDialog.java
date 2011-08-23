@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,6 @@ import com.sun.star.awt.XProgressBar;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.IRenderer;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.UnoDialog2;
 import com.sun.star.wizards.ui.event.MethodInvocation;
@@ -84,7 +83,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "Title", PropertyNames.PROPERTY_WIDTH
+                    "Closeable", "Height", "HelpURL", "Moveable", "Name", "PositionX", "PositionY", "Step", "Title", "Width"
                 },
                 new Object[]
                 {
@@ -96,7 +95,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
         lblTaskName = insertLabel("lblTask",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Height", "Label", "PositionX", "PositionY", "TabIndex", "Width"
                 },
                 new Object[]
                 {
@@ -105,7 +104,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
         lblCounter = insertLabel("lblCounter",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Height", "Label", "PositionX", "PositionY", "TabIndex", "Width"
                 },
                 new Object[]
                 {
@@ -114,7 +113,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
         progressBar = insertProgressBar("progress",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Height", "PositionX", "PositionY", "TabIndex", "Width"
                 },
                 new Object[]
                 {
@@ -127,7 +126,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
             btnCancel = insertButton("btnCancel", "performCancel", this,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        "Height", "Label", "PositionX", "PositionY", "TabIndex", "Width"
                     },
                     new Object[]
                     {
@@ -159,7 +158,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
     public void setLabel(String s)
     {
 //      lblTaskName.setText(s);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(lblTaskName), PropertyNames.PROPERTY_LABEL, s);
+        Helper.setUnoPropertyValue(UnoDialog.getModel(lblTaskName), "Label", s);
         xReschedule.reschedule();
     }
 
@@ -209,7 +208,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
         }
         else
         {
-            Helper.setUnoPropertyValue(getModel(btnCancel), PropertyNames.PROPERTY_LABEL, res[2]);
+            Helper.setUnoPropertyValue(getModel(btnCancel), "Label", res[2]);
         }
     }
 
@@ -223,7 +222,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
     }
 
     /**
-     * changes the displayed text.
+     * changes the displayed text. 
      * A renderer is used to render
      * the task's subtask name to a resource string.
      */
@@ -297,7 +296,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
 
     /**
      * sets a method to be invoced when the
-     *
+     * 
      */
     public void setFinishedMethod(MethodInvocation mi)
     {

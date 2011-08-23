@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,18 +42,18 @@
 
 //==================================================================
 
-sal_Bool   ScInsertContentsDlg::bPreviousAllCheck = sal_True;
-sal_uInt16 ScInsertContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
+BOOL   ScInsertContentsDlg::bPreviousAllCheck = TRUE;
+USHORT ScInsertContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
                                                  IDF_NOTE     | IDF_FORMULA |
                                                  IDF_ATTRIB   | IDF_OBJECTS);
-sal_uInt16 ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
-sal_uInt16 ScInsertContentsDlg::nPreviousChecks2 = 0;
-sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
+USHORT ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
+USHORT ScInsertContentsDlg::nPreviousChecks2 = 0;
+USHORT ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;	// enum InsCellCmd
 
 //-----------------------------------------------------------------------
 
-ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
-                                          sal_uInt16        nCheckDefaults,
+ScInsertContentsDlg::ScInsertContentsDlg( Window*		pParent,
+                                          USHORT		nCheckDefaults,
                                           const String* pStrTitle )
 
  :  ModalDialog     ( pParent, ScResId( RID_SCDLG_INSCONT ) ),
@@ -70,11 +70,11 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     aFlSep1         ( this, ScResId( FL_SEP1 ) ),
     aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
     aBtnSkipEmptyCells( this, ScResId(BTN_SKIP_EMPTY ) ),
-    aBtnTranspose   ( this, ScResId( BTN_TRANSPOSE ) ),
+    aBtnTranspose	( this, ScResId( BTN_TRANSPOSE ) ),
     aBtnLink        ( this, ScResId( BTN_LINK ) ),
     aFlOperation    ( this, ScResId( FL_OPERATION ) ),
     aRbNoOp         ( this, ScResId( BTN_OP_NOOP ) ),
-    aRbAdd          ( this, ScResId( BTN_OP_ADD ) ),
+    aRbAdd          ( this, ScResId( BTN_OP_ADD	) ),
     aRbSub          ( this, ScResId( BTN_OP_SUB  ) ),
     aRbMul          ( this, ScResId( BTN_OP_MUL  ) ),
     aRbDiv          ( this, ScResId( BTN_OP_DIV  ) ),
@@ -86,11 +86,11 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-    bOtherDoc       ( false ),
-    bFillMode       ( false ),
-    bChangeTrack    ( false ),
-    bMoveDownDisabled( false ),
-    bMoveRightDisabled( false )
+    bOtherDoc		( FALSE ),
+    bFillMode		( FALSE ),
+    bChangeTrack	( FALSE ),
+    bMoveDownDisabled( FALSE ),
+    bMoveRightDisabled( FALSE )
 {
     if ( pStrTitle )
         SetText( *pStrTitle );
@@ -98,7 +98,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     if ( nCheckDefaults != 0 )
     {
         ScInsertContentsDlg::nPreviousChecks = nCheckDefaults;
-        ScInsertContentsDlg::bPreviousAllCheck = false;
+        ScInsertContentsDlg::bPreviousAllCheck = FALSE;
         ScInsertContentsDlg::nPreviousChecks2 = 0;
     }
 
@@ -120,23 +120,23 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
 
     switch( ScInsertContentsDlg::nPreviousFormulaChecks )
     {
-        case PASTE_NOFUNC: aRbNoOp.Check(sal_True); break;
-        case PASTE_ADD:    aRbAdd.Check(sal_True); break;
-        case PASTE_SUB:    aRbSub.Check(sal_True); break;
-        case PASTE_MUL:    aRbMul.Check(sal_True); break;
-        case PASTE_DIV:    aRbDiv.Check(sal_True); break;
+        case PASTE_NOFUNC: aRbNoOp.Check(TRUE); break;
+        case PASTE_ADD:    aRbAdd.Check(TRUE); break;
+        case PASTE_SUB:    aRbSub.Check(TRUE); break;
+        case PASTE_MUL:    aRbMul.Check(TRUE); break;
+        case PASTE_DIV:    aRbDiv.Check(TRUE); break;
     }
 
     switch( ScInsertContentsDlg::nPreviousMoveMode )
     {
-        case INS_NONE:       aRbMoveNone.Check(sal_True); break;
-        case INS_CELLSDOWN:  aRbMoveDown.Check(sal_True); break;
-        case INS_CELLSRIGHT: aRbMoveRight.Check(sal_True); break;
+        case INS_NONE:  	 aRbMoveNone.Check(TRUE); break;
+        case INS_CELLSDOWN:	 aRbMoveDown.Check(TRUE); break;
+        case INS_CELLSRIGHT: aRbMoveRight.Check(TRUE); break;
     }
 
     aBtnSkipEmptyCells.Check( ( ScInsertContentsDlg::nPreviousChecks2 & INS_CONT_NOEMPTY ) != 0);
-    aBtnTranspose.Check( ( ScInsertContentsDlg::nPreviousChecks2    & INS_CONT_TRANS ) != 0);
-    aBtnLink.Check( ( ScInsertContentsDlg::nPreviousChecks2             & INS_CONT_LINK  ) != 0);
+    aBtnTranspose.Check( ( ScInsertContentsDlg::nPreviousChecks2 	& INS_CONT_TRANS ) != 0);
+    aBtnLink.Check( ( ScInsertContentsDlg::nPreviousChecks2 			& INS_CONT_LINK  ) != 0);
 
     DisableChecks( aBtnInsAll.IsChecked() );
 
@@ -152,7 +152,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
 
 //------------------------------------------------------------------------
 
-sal_uInt16 ScInsertContentsDlg::GetInsContentsCmdBits() const
+USHORT ScInsertContentsDlg::GetInsContentsCmdBits() const
 {
     ScInsertContentsDlg::nPreviousChecks = 0;
 
@@ -192,7 +192,7 @@ InsCellCmd ScInsertContentsDlg::GetMoveMode()
 
 //------------------------------------------------------------------------
 
-void ScInsertContentsDlg::DisableChecks( sal_Bool bInsAllChecked )
+void ScInsertContentsDlg::DisableChecks( BOOL bInsAllChecked )
 {
     if ( bInsAllChecked )
     {
@@ -213,7 +213,7 @@ void ScInsertContentsDlg::DisableChecks( sal_Bool bInsAllChecked )
         aBtnInsNotes.Enable();
         aBtnInsAttrs.Enable();
 
-        //  "Objects" is disabled for "Fill Tables"
+        //	"Objects" is disabled for "Fill Tables"
         if ( bFillMode )
             aBtnInsObjects.Disable();
         else
@@ -243,7 +243,7 @@ void ScInsertContentsDlg::TestModes()
 
         aFlFrame.Disable();
         aBtnInsAll.Disable();
-        DisableChecks(sal_True);
+        DisableChecks(TRUE);
     }
     else
     {
@@ -267,52 +267,52 @@ void ScInsertContentsDlg::TestModes()
     }
 }
 
-void ScInsertContentsDlg::SetOtherDoc( sal_Bool bSet )
+void ScInsertContentsDlg::SetOtherDoc( BOOL bSet )
 {
     if ( bSet != bOtherDoc )
     {
         bOtherDoc = bSet;
         TestModes();
         if ( bSet )
-            aRbMoveNone.Check(sal_True);
+            aRbMoveNone.Check(TRUE);
     }
 }
 
-void ScInsertContentsDlg::SetFillMode( sal_Bool bSet )
+void ScInsertContentsDlg::SetFillMode( BOOL bSet )
 {
     if ( bSet != bFillMode )
     {
         bFillMode = bSet;
         TestModes();
         if ( bSet )
-            aRbMoveNone.Check(sal_True);
+            aRbMoveNone.Check(TRUE);
     }
 }
 
-void ScInsertContentsDlg::SetChangeTrack( sal_Bool bSet )
+void ScInsertContentsDlg::SetChangeTrack( BOOL bSet )
 {
     if ( bSet != bChangeTrack )
     {
         bChangeTrack = bSet;
         TestModes();
         if ( bSet )
-            aRbMoveNone.Check(sal_True);
+            aRbMoveNone.Check(TRUE);
     }
 }
 
 void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
 {
-    sal_Bool bDown = ((nDisable & SC_CELL_SHIFT_DISABLE_DOWN) != 0);
-    sal_Bool bRight = ((nDisable & SC_CELL_SHIFT_DISABLE_RIGHT) != 0);
+    BOOL bDown = ((nDisable & SC_CELL_SHIFT_DISABLE_DOWN) != 0);
+    BOOL bRight = ((nDisable & SC_CELL_SHIFT_DISABLE_RIGHT) != 0);
     if ( bDown != bMoveDownDisabled || bRight != bMoveRightDisabled )
     {
         bMoveDownDisabled = bDown;
         bMoveRightDisabled = bRight;
         TestModes();
         if ( bMoveDownDisabled && aRbMoveDown.IsChecked() )
-            aRbMoveNone.Check(sal_True);
+            aRbMoveNone.Check(TRUE);
         if ( bMoveRightDisabled && aRbMoveRight.IsChecked() )
-            aRbMoveNone.Check(sal_True);
+            aRbMoveNone.Check(TRUE);
     }
 }
 
@@ -333,17 +333,17 @@ IMPL_LINK( ScInsertContentsDlg, LinkBtnHdl, void*, EMPTYARG )
     return 0;
 }
 
-ScInsertContentsDlg::~ScInsertContentsDlg()
+__EXPORT ScInsertContentsDlg::~ScInsertContentsDlg()
 {
     ScInsertContentsDlg::nPreviousChecks2 = 0;
     if(aBtnSkipEmptyCells.IsChecked())
         ScInsertContentsDlg::nPreviousChecks2 |= INS_CONT_NOEMPTY;
-    if( aBtnTranspose.IsChecked())
+    if(	aBtnTranspose.IsChecked())
         ScInsertContentsDlg::nPreviousChecks2 |= INS_CONT_TRANS;
     if( aBtnLink.IsChecked() )
         ScInsertContentsDlg::nPreviousChecks2 |= INS_CONT_LINK;
 
-    if (!bFillMode)     // im FillMode ist None gecheckt und alle 3 disabled
+    if (!bFillMode)		// im FillMode ist None gecheckt und alle 3 disabled
     {
         if ( aRbMoveNone.IsChecked() )
             ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;
@@ -354,7 +354,7 @@ ScInsertContentsDlg::~ScInsertContentsDlg()
     }
 }
 
-sal_uInt16  ScInsertContentsDlg::GetFormulaCmdBits() const
+USHORT	ScInsertContentsDlg::GetFormulaCmdBits() const
 {
     ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
     if(aRbAdd.IsChecked())

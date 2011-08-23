@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sd.hxx"
 
 #include "precompiled_sd.hxx"
 
@@ -32,19 +34,12 @@
 
 #include "PreviewRenderer.hxx"
 #include "view/SlideSorterView.hxx"
+#include "view/SlsPageObjectViewObjectContact.hxx"
 #include "sdpage.hxx"
 #include "Window.hxx"
-#include <drawdoc.hxx>
-#include "DrawDocShell.hxx"
 #include <svx/svdtypes.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bmpacc.hxx>
-#include <vcl/pngwrite.hxx>
-
-const static sal_Int32 gnSuperSampleFactor (2);
-const static bool gbAllowSuperSampling (false);
-
 
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;
@@ -54,7 +49,7 @@ class PageObjectViewObjectContact;
 namespace sd { namespace slidesorter { namespace cache {
 
 BitmapFactory::BitmapFactory (void)
-    : maRenderer(NULL, false)
+    : maRenderer(NULL,false)
 {
 }
 
@@ -68,30 +63,16 @@ BitmapFactory::~BitmapFactory (void)
 
 
 
-Bitmap BitmapFactory::CreateBitmap (
+::boost::shared_ptr<BitmapEx> BitmapFactory::CreateBitmap (
     const SdPage& rPage,
-    const Size& rPixelSize,
-    const bool bDoSuperSampling)
+    const Size& rPixelSize)
 {
-    Size aSize (rPixelSize);
-    if (bDoSuperSampling && gbAllowSuperSampling)
-    {
-        aSize.Width() *= gnSuperSampleFactor;
-        aSize.Height() *= gnSuperSampleFactor;
-    }
-
-    Bitmap aPreview (maRenderer.RenderPage (
+    Image aPreview (maRenderer.RenderPage (
         &rPage,
-        aSize,
-        String(),
-        true,
-        false).GetBitmapEx().GetBitmap());
-    if (bDoSuperSampling && gbAllowSuperSampling)
-    {
-        aPreview.Scale(rPixelSize, BMP_SCALE_INTERPOLATE);
-    }
+        rPixelSize,
+        String()));
 
-    return aPreview;
+    return ::boost::shared_ptr<BitmapEx>(new BitmapEx(aPreview.GetBitmapEx()));
 }
 
 

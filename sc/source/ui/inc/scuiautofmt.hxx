@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,49 +32,49 @@
 class ScAutoFormatDlg : public ModalDialog
 {
 public:
-            ScAutoFormatDlg( Window*                    pParent,
-                             ScAutoFormat*              pAutoFormat,
+            ScAutoFormatDlg( Window*					pParent,
+                             ScAutoFormat*				pAutoFormat,
                              const ScAutoFormatData*    pSelFormatData,
                              ScDocument*                pDoc );
             ~ScAutoFormatDlg();
 
-    sal_uInt16 GetIndex() const { return nIndex; }
+    USHORT GetIndex() const { return nIndex; }
     String GetCurrFormatName();
 
 private:
     FixedLine       aFlFormat;
-    ListBox         aLbFormat;
-    ScAutoFmtPreview*   pWndPreview;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
-    MoreButton      aBtnMore;
+    ListBox			aLbFormat;
+    ScAutoFmtPreview*	pWndPreview;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
+    PushButton		aBtnAdd;
+    PushButton		aBtnRemove;
+    MoreButton		aBtnMore;
     FixedLine       aFlFormatting;
-    CheckBox        aBtnNumFormat;
-    CheckBox        aBtnBorder;
-    CheckBox        aBtnFont;
-    CheckBox        aBtnPattern;
-    CheckBox        aBtnAlignment;
-    CheckBox        aBtnAdjust;
-    PushButton      aBtnRename;
-    String          aStrTitle;
-    String          aStrLabel;
-    String          aStrClose;
-    String          aStrDelTitle;
-    String          aStrDelMsg;
-    String          aStrRename;
+    CheckBox		aBtnNumFormat;
+    CheckBox		aBtnBorder;
+    CheckBox		aBtnFont;
+    CheckBox		aBtnPattern;
+    CheckBox		aBtnAlignment;
+    CheckBox		aBtnAdjust;
+    PushButton		aBtnRename;
+    String			aStrTitle;
+    String			aStrLabel;
+    String			aStrClose;
+    String			aStrDelTitle;
+    String			aStrDelMsg;
+    String			aStrRename;
 
     //------------------------
-    ScAutoFormat*           pFormat;
-    const ScAutoFormatData* pSelFmtData;
-    sal_uInt16                  nIndex;
-    sal_Bool                    bCoreDataChanged;
-    sal_Bool                    bFmtInserted;
+    ScAutoFormat*			pFormat;
+    const ScAutoFormatData*	pSelFmtData;
+    USHORT					nIndex;
+    BOOL					bCoreDataChanged;
+    BOOL					bFmtInserted;
 
-    void Init           ();
-    void UpdateChecks   ();
+    void Init			();
+    void UpdateChecks	();
     //------------------------
     DECL_LINK( CheckHdl, Button * );
     DECL_LINK( AddHdl, void * );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@ private:
     ByteString sGID;
     ByteString sLID;
 
-    sal_Bool bError;
-    sal_Bool bText;
+    BOOL bError;
+    BOOL bText;
 
     bool sLocalized;
 
@@ -75,13 +75,13 @@ public:
 
     int Execute( int nToken, char * pToken );
 
-    void SetError( sal_Bool bErr = sal_True ) { bError = bErr; }
-    sal_Bool GetError() { return bError; }
+    void SetError( BOOL bErr = TRUE ) { bError = bErr; }
+    BOOL GetError() { return bError; }
 };
 
 //
 // class XRMResOutputParser
-//
+// 
 
 class XRMResOutputParser : public XRMResParser
 {
@@ -137,7 +137,7 @@ private:
     ByteString sFilename;
     ResData *pResData;
     std::vector<ByteString> aLanguages;
-
+    
 protected:
     void WorkOnText(
         const ByteString &rOpenTag,

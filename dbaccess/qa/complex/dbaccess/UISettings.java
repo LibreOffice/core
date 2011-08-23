@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,26 +32,37 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.form.runtime.XFormController;
 import com.sun.star.frame.XController;
+import com.sun.star.frame.XModel;
 import com.sun.star.sdb.application.DatabaseObject;
+import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
 import connectivity.tools.CRMDatabase;
 
-// ---------- junit imports -----------------
-import org.junit.Test;
-import static org.junit.Assert.*;
-// ------------------------------------------
-
 public class UISettings extends TestCase
 {
     // --------------------------------------------------------------------------------------------------------
+    public String[] getTestMethodNames()
+    {
+        return new String[] {
+            "checkTableFormattingPersistence",
+            "checkTransparentQueryColumnSettings"
+        };
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    public String getTestObjectName()
+    {
+        return "UISettings";
+    }
+
+    // --------------------------------------------------------------------------------------------------------
     /** verifies that aliases for inner queries work as expected
      */
-    @Test
     public void checkTableFormattingPersistence() throws java.lang.Exception
     {
         // create, load, and connect a DB doc
-        CRMDatabase database = new CRMDatabase( getMSF(), true );
+        CRMDatabase database = new CRMDatabase( getORB(), true );
 
         // display a table
         XFormController tableViewController = UnoRuntime.queryInterface( XFormController.class,
@@ -78,7 +89,7 @@ public class UISettings extends TestCase
         // stay alive, and subsequent requests to load the doc will just reuse it, without really loading it.
         docURL = copyToTempFile( docURL );
         loadDocument( docURL );
-        database = new CRMDatabase( getMSF(), docURL );
+        database = new CRMDatabase( getORB(), docURL );
 
         // display the table, again
         tableViewController = UnoRuntime.queryInterface( XFormController.class,
@@ -87,9 +98,9 @@ public class UISettings extends TestCase
             tableViewController.getCurrentControl().getModel() );
 
         // verify the properties
-        assertEquals( "wrong font name", "Andale Sans UI", (String)tableControlModel.getPropertyValue( "FontName" ) );
-        assertEquals( "wrong font height", (float)20, ((Float)tableControlModel.getPropertyValue( "FontHeight" )).floatValue(), 0 );
-        assertEquals( "wrong font slant", FontSlant.ITALIC, (FontSlant)tableControlModel.getPropertyValue( "FontSlant" ) );
+        assureEquals( "wrong font name", "Andale Sans UI", (String)tableControlModel.getPropertyValue( "FontName" ) );
+        assureEquals( "wrong font height", (float)20, ((Float)tableControlModel.getPropertyValue( "FontHeight" )).floatValue() );
+        assureEquals( "wrong font slant", FontSlant.ITALIC, (FontSlant)tableControlModel.getPropertyValue( "FontSlant" ) );
 
         // close the doc
         database.saveAndClose();
@@ -100,11 +111,10 @@ public class UISettings extends TestCase
      * settings
      * @throws java.lang.Exception
      */
-    @Test
     public void checkTransparentQueryColumnSettings() throws java.lang.Exception
     {
         // create, load, and connect a DB doc
-        CRMDatabase database = new CRMDatabase( getMSF(), true );
+        CRMDatabase database = new CRMDatabase( getORB(), true );
 
         // display a table
         XController tableView = database.loadSubComponent( DatabaseObject.TABLE, "customers" );
@@ -115,7 +125,7 @@ public class UISettings extends TestCase
 
         // change the formatting of a table column
         XPropertySet idColumn = UnoRuntime.queryInterface( XPropertySet.class, tableControlModel.getByName( "ID" ) );
-        assertTrue( "precondition not met: column already centered",
+        assure( "precondition not met: column already centered",
             ((Short)idColumn.getPropertyValue( "Align" )).shortValue() != TextAlign.CENTER );
         idColumn.setPropertyValue( "Align", TextAlign.CENTER );
 
@@ -133,7 +143,7 @@ public class UISettings extends TestCase
             queryViewController.getCurrentControl().getModel() );
         idColumn = UnoRuntime.queryInterface( XPropertySet.class, tableControlModel.getByName( "ID" ) );
 
-        assertTrue( "table column alignment was not propagated to the query column",
+        assure( "table column alignment was not propagated to the query column",
             ((Short)idColumn.getPropertyValue( "Align" )).shortValue() == TextAlign.CENTER );
 
         // save close the database document

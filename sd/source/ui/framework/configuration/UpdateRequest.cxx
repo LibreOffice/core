@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ UpdateRequest::~UpdateRequest (void) throw()
 
 
 
-
+    
 void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>& rxConfiguration)
     throw (RuntimeException)
 {
@@ -70,7 +70,7 @@ void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>& rxConfigu
 OUString SAL_CALL UpdateRequest::getName (void)
     throw (RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("UpdateRequest"));
+    return OUString::createFromAscii("UpdateRequest");
 }
 
 

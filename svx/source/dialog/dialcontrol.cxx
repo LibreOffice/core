@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "svx/dialcontrol.hxx"
+#include "dialcontrol.hxx"
 
 #include <math.h>
 #include <vcl/virdev.hxx>
@@ -77,11 +77,9 @@ private:
 DialControlBmp::DialControlBmp( Window& rParent ) :
     VirtualDevice( rParent, 0, 0 ),
     mrParent( rParent ),
-    mnCenterX(0),
-    mnCenterY(0),
     mbEnabled( true )
 {
-    EnableRTL( sal_False );
+    EnableRTL( FALSE );
 }
 
 void DialControlBmp::InitBitmap( const Size& rSize, const Font& rFont )
@@ -186,7 +184,7 @@ void DialControlBmp::DrawBackground()
     SetFillColor();
     Erase();
 
-    EnableRTL( sal_True ); // draw 3D effect in correct direction
+    EnableRTL( TRUE ); // #107807# draw 3D effect in correct direction
 
     sal_uInt8 nDiff = mbEnabled ? 0x18 : 0x10;
     Color aColor;
@@ -213,7 +211,7 @@ void DialControlBmp::DrawBackground()
     SetFillColor( aColor );
     DrawPie( maRect, maRect.TopLeft(), maRect.LeftCenter() );
 
-    EnableRTL( sal_False );
+    EnableRTL( FALSE );
 
     // *** calibration ***
 
@@ -268,8 +266,6 @@ DialControl_Impl::DialControl_Impl( Window& rParent ) :
     maBmpBuffered( rParent ),
     mpLinkField( 0 ),
     mnAngle( 0 ),
-    mnCenterX( 0 ),
-    mnCenterY( 0 ),
     mbNoRot( false )
 {
 }
@@ -282,7 +278,7 @@ void DialControl_Impl::Init( const Size& rWinSize, const Font& rWinFont )
 
     mnCenterX = maWinSize.Width() / 2;
     mnCenterY = maWinSize.Height() / 2;
-    maWinFont.SetTransparent( sal_True );
+    maWinFont.SetTransparent( TRUE );
 
     maBmpEnabled.DrawBackground( maWinSize, true );
     maBmpDisabled.DrawBackground( maWinSize, false );
@@ -456,7 +452,7 @@ const Link& DialControl::GetModifyHdl() const
 void DialControl::Init( const Size& rWinSize, const Font& rWinFont )
 {
     mpImpl->Init( rWinSize, rWinFont );
-    EnableRTL( sal_False ); // don't mirror mouse handling
+    EnableRTL( FALSE ); // #107807# don't mirror mouse handling
     SetOutputSizePixel( mpImpl->maWinSize );
     SetBackground();
 }

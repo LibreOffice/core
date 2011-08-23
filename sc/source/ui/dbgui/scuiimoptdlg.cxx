@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,34 +45,34 @@ class ScDelimiterTable
 {
 public:
         ScDelimiterTable( const String& rDelTab )
-            :   theDelTab ( rDelTab ),
-                cSep      ( '\t' ),
-                nCount    ( rDelTab.GetTokenCount('\t') ),
-                nIter     ( 0 )
+            :	theDelTab ( rDelTab ),
+                cSep	  ( '\t' ),
+                nCount	  ( rDelTab.GetTokenCount('\t') ),
+                nIter	  ( 0 )
             {}
 
-    sal_uInt16  GetCode( const String& rDelimiter ) const;
-    String  GetDelimiter( sal_Unicode nCode ) const;
+    USHORT	GetCode( const String& rDelimiter ) const;
+    String	GetDelimiter( sal_Unicode nCode ) const;
 
-    String  FirstDel()  { nIter = 0; return theDelTab.GetToken( nIter, cSep ); }
-    String  NextDel()   { nIter +=2; return theDelTab.GetToken( nIter, cSep ); }
+    String	FirstDel()	{ nIter = 0; return theDelTab.GetToken( nIter, cSep ); }
+    String	NextDel()	{ nIter +=2; return theDelTab.GetToken( nIter, cSep ); }
 
 private:
-    const String        theDelTab;
-    const sal_Unicode   cSep;
-    const xub_StrLen    nCount;
-    xub_StrLen          nIter;
+    const String		theDelTab;
+    const sal_Unicode	cSep;
+    const xub_StrLen	nCount;
+    xub_StrLen			nIter;
 };
 
 //------------------------------------------------------------------------
 
-sal_uInt16 ScDelimiterTable::GetCode( const String& rDel ) const
+USHORT ScDelimiterTable::GetCode( const String& rDel ) const
 {
     sal_Unicode nCode = 0;
+    xub_StrLen i = 0;
 
     if ( nCount >= 2 )
     {
-        xub_StrLen i = 0;
         while ( i<nCount )
         {
             if ( rDel == theDelTab.GetToken( i, cSep ) )
@@ -93,10 +93,10 @@ sal_uInt16 ScDelimiterTable::GetCode( const String& rDel ) const
 String ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 {
     String aStrDel;
+    xub_StrLen i = 0;
 
     if ( nCount >= 2 )
     {
-        xub_StrLen i = 0;
         while ( i<nCount )
         {
             if ( nCode == (sal_Unicode) theDelTab.GetToken( i+1, cSep ).ToInt32() )
@@ -118,27 +118,26 @@ String ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 
 ScImportOptionsDlg::ScImportOptionsDlg(
         Window*                 pParent,
-        sal_Bool                    bAscii,
+        BOOL                    bAscii,
         const ScImportOptions*  pOptions,
         const String*           pStrTitle,
-        sal_Bool                    bMultiByte,
-        sal_Bool                    bOnlyDbtoolsEncodings,
-        sal_Bool                    bImport )
+        BOOL                    bMultiByte,
+        BOOL                    bOnlyDbtoolsEncodings,
+        BOOL                    bImport )
 
-    :   ModalDialog ( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
+    :	ModalDialog	( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
         aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
-        aFtFont     ( this, ScResId( FT_FONT ) ),
+        aFtFont		( this, ScResId( FT_FONT ) ),
         aLbFont     ( this, ScResId( bAscii ? DDLB_FONT : LB_FONT ) ),
-        aFtFieldSep ( this, ScResId( FT_FIELDSEP ) ),
-        aEdFieldSep ( this, ScResId( ED_FIELDSEP ) ),
-        aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
-        aEdTextSep  ( this, ScResId( ED_TEXTSEP ) ),
-        aCbQuoteAll ( this, ScResId( CB_QUOTEALL ) ),
-        aCbShown    ( this, ScResId( CB_SAVESHOWN ) ),
+        aFtFieldSep	( this, ScResId( FT_FIELDSEP ) ),
+        aEdFieldSep	( this, ScResId( ED_FIELDSEP ) ),
+        aFtTextSep	( this, ScResId( FT_TEXTSEP ) ),
+        aEdTextSep	( this, ScResId( ED_TEXTSEP ) ),
         aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) ),
-        aBtnOk      ( this, ScResId( BTN_OK ) ),
-        aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp    ( this, ScResId( BTN_HELP ) )
+        aBtnOk		( this, ScResId( BTN_OK ) ),
+        aBtnCancel	( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp	( this, ScResId( BTN_HELP ) ),
+        aCbShown    ( this, ScResId( CB_SAVESHOWN ) )
 {
     // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
     pFieldSepTab = new ScDelimiterTable( String(ScResId(SCSTR_FIELDSEP)) );
@@ -213,11 +212,9 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         SetSizePixel( aWinSize );
         aCbFixed.Show();
         aCbFixed.SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
-        aCbFixed.Check( false );
+        aCbFixed.Check( FALSE );
         aCbShown.Show();
-        aCbShown.Check( sal_True );
-        aCbQuoteAll.Show();
-        aCbQuoteAll.Check( false );
+        aCbShown.Check( TRUE );
     }
     else
     {
@@ -229,7 +226,6 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aEdTextSep.Hide();
         aCbFixed.Hide();
         aCbShown.Hide();
-        aCbQuoteAll.Hide();
         aLbFont.GrabFocus();
         aLbFont.SetDoubleClickHdl( LINK( this, ScImportOptionsDlg, DoubleClickHdl ) );
     }
@@ -246,7 +242,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
 
 //------------------------------------------------------------------------
 
-ScImportOptionsDlg::~ScImportOptionsDlg()
+__EXPORT ScImportOptionsDlg::~ScImportOptionsDlg()
 {
     delete pFieldSepTab;
     delete pTextSepTab;
@@ -264,17 +260,16 @@ void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
         rOptions.nTextSepCode  = GetCodeFromCombo( aEdTextSep );
         rOptions.bFixedWidth = aCbFixed.IsChecked();
         rOptions.bSaveAsShown = aCbShown.IsChecked();
-        rOptions.bQuoteAllText = aCbQuoteAll.IsChecked();
     }
 }
 
 //------------------------------------------------------------------------
 
-sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
+USHORT ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 {
     ScDelimiterTable* pTab;
     String  aStr( rEd.GetText() );
-    sal_uInt16  nCode;
+    USHORT  nCode;
 
     if ( &rEd == &aEdTextSep )
         pTab = pTextSepTab;
@@ -283,14 +278,14 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 
     if ( !aStr.Len() )
     {
-        nCode = 0;          // kein Trennzeichen
+        nCode = 0;			// kein Trennzeichen
     }
     else
     {
         nCode = pTab->GetCode( aStr );
 
         if ( nCode == 0 )
-            nCode = (sal_uInt16)aStr.GetChar(0);
+            nCode = (USHORT)aStr.GetChar(0);
     }
 
     return nCode;
@@ -302,13 +297,12 @@ IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
 {
     if( pCheckBox == &aCbFixed )
     {
-        sal_Bool bEnable = !aCbFixed.IsChecked();
+        BOOL bEnable = !aCbFixed.IsChecked();
         aFtFieldSep.Enable( bEnable );
         aEdFieldSep.Enable( bEnable );
         aFtTextSep.Enable( bEnable );
         aEdTextSep.Enable( bEnable );
         aCbShown.Enable( bEnable );
-        aCbQuoteAll.Enable( bEnable );
     }
     return 0;
 }

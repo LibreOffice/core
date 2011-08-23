@@ -55,6 +55,7 @@ protected:
 
     bool isSystemDependentWindowPeer() const { return m_bWHWND; }
 
+    virtual ::osl::SolarMutex& GetMutexImpl() = 0;
     virtual Window* GetWindowImpl() = 0;
     virtual ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl() = 0;
 
@@ -87,14 +88,15 @@ public:
     virtual void SAL_CALL setDisplay( ::sal_Int32 _display ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException);
 };
 
-//  ----------------------------------------------------
-//  class VCLXTopWindow
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXTopWindow
+//	----------------------------------------------------
 
-class TOOLKIT_DLLPUBLIC VCLXTopWindow: public VCLXTopWindow_Base,
+class VCLXTopWindow: public VCLXTopWindow_Base,
                      public VCLXContainer
 {
 protected:
+    virtual osl::SolarMutex& GetMutexImpl();
     virtual Window* GetWindowImpl();
     virtual ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl();
 
@@ -103,13 +105,13 @@ public:
     ~VCLXTopWindow();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any	SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void						SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void						SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }

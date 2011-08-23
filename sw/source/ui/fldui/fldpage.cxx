@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,6 @@
 #include <cmdid.h>
 #include <globals.hrc>
 #include <sfx2/bindings.hxx>
-#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 
@@ -63,16 +62,16 @@ SwFldPage::SwFldPage( Window *pParent, const ResId &rId,
     :SfxTabPage     (pParent, rId, rAttrSet),
     m_pCurFld       (0),
     m_pWrtShell     (0),
-    m_nPageId       ( static_cast< sal_uInt16 >(rId.GetId()) ),
+    m_nPageId       ( static_cast< USHORT >(rId.GetId()) ),
     m_nTypeSel      (LISTBOX_ENTRY_NOTFOUND),
     m_nSelectionSel (LISTBOX_ENTRY_NOTFOUND),
-    m_bFldEdit      (sal_False),
-    m_bInsert           (sal_True),
-    m_bFldDlgHtmlMode   (sal_False),
-    m_bRefresh          (sal_False),
-    m_bFirstHTMLInit    (sal_True)
+    m_bFldEdit      (FALSE),
+    m_bInsert           (TRUE),
+    m_bFldDlgHtmlMode   (FALSE),
+    m_bRefresh          (FALSE),
+    m_bFirstHTMLInit    (TRUE)
 {
-
+//	FreeResource();
 }
 
 SwFldPage::~SwFldPage()
@@ -80,28 +79,28 @@ SwFldPage::~SwFldPage()
 }
 
 /*--------------------------------------------------------------------
-    Description: initialise TabPage
+    Beschreibung: TabPage initialisieren
  --------------------------------------------------------------------*/
 
 void SwFldPage::Init()
 {
     SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
-    sal_Bool bNewMode = 0 != (::GetHtmlMode(pDocSh) & HTMLMODE_ON);
+    BOOL bNewMode = 0 != (::GetHtmlMode(pDocSh) & HTMLMODE_ON);
 
     m_bFldEdit = 0 == GetTabDialog();
 
-    // newly initialise FieldManager. important for
-    // Dok-Switch (fldtdlg:ReInitTabPage)
+    // FieldManager neu initialisieren wichtig fuer
+    // Dok-Wechsel (fldtdlg:ReInitTabPage)
     m_pCurFld = m_aMgr.GetCurFld();
 
     if( bNewMode != m_bFldDlgHtmlMode )
     {
         m_bFldDlgHtmlMode = bNewMode;
 
-        // initialise Rangelistbox
+        // Bereichslistbox initialisieren
         if( m_bFldDlgHtmlMode && m_bFirstHTMLInit )
         {
-            m_bFirstHTMLInit = sal_False;
+            m_bFirstHTMLInit = FALSE;
             SwWrtShell *pSh = m_pWrtShell;
             if(! pSh)
                 pSh = ::GetActiveWrtShell();
@@ -118,7 +117,7 @@ void SwFldPage::Init()
 }
 
 /*--------------------------------------------------------------------
-     Description: newly initialise page
+     Beschreibung: Seite neu initialisieren
  --------------------------------------------------------------------*/
 
 void SwFldPage::ActivatePage()
@@ -127,34 +126,34 @@ void SwFldPage::ActivatePage()
 }
 
 /*--------------------------------------------------------------------
-     Description: complete reset; edit new field
+     Beschreibung: Kompletter Reset; neues Feld editieren
  --------------------------------------------------------------------*/
 
-void SwFldPage::EditNewField( sal_Bool bOnlyActivate )
+void SwFldPage::EditNewField( BOOL bOnlyActivate )
 {
     if( !bOnlyActivate )
     {
         m_nTypeSel = LISTBOX_ENTRY_NOTFOUND;
     }
     m_nSelectionSel = LISTBOX_ENTRY_NOTFOUND;
-    m_bRefresh = sal_True;
+    m_bRefresh = TRUE;
     Reset(*(SfxItemSet*)0);
-    m_bRefresh = sal_False;
+    m_bRefresh = FALSE;
 }
 
 /*--------------------------------------------------------------------
-     Description: insert field
+     Beschreibung: Feld einfuegen
  --------------------------------------------------------------------*/
 
-sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const String& rPar1,
-                            const String& rPar2, sal_uLong nFormatId,
-                            sal_Unicode cSeparator, sal_Bool bIsAutomaticLanguage)
+BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
+                            const String& rPar2, ULONG nFormatId,
+                            sal_Unicode cSeparator, BOOL bIsAutomaticLanguage)
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     SwView* pView = GetActiveView();
     SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : pView->GetWrtShellPtr();
 
-    if (!IsFldEdit())   // insert new field
+    if (!IsFldEdit())	// Neues Feld einfuegen
     {
         SwInsertFld_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator, bIsAutomaticLanguage );
         //#i26566# provide parent for SwWrtShell::StartInputFldDlg
@@ -165,7 +164,7 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
                 pView->GetViewFrame()->GetBindings().GetRecorder();
         if ( xRecorder.is() )
         {
-            sal_Bool bRecordDB = TYP_DBFLD == nTypeId ||
+            BOOL bRecordDB = TYP_DBFLD == nTypeId ||
                             TYP_DBSETNUMBERFLD == nTypeId ||
                             TYP_DBNUMSETFLD == nTypeId ||
                             TYP_DBNEXTSETFLD == nTypeId ||
@@ -198,17 +197,18 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
         }
 
     }
-    else    // change field
+    else	// Feld aendern
     {
         SwField *const pTmpFld = m_pCurFld->CopyField();
 
         String sPar1(rPar1);
         String sPar2(rPar2);
+        BOOL bDBChanged = FALSE;
         switch( nTypeId )
         {
         case TYP_DATEFLD:
         case TYP_TIMEFLD:
-            nSubType = static_cast< sal_uInt16 >(((nTypeId == TYP_DATEFLD) ? DATEFLD : TIMEFLD) |
+            nSubType = static_cast< USHORT >(((nTypeId == TYP_DATEFLD) ? DATEFLD : TIMEFLD) |
                        ((nSubType == DATE_VAR) ? 0 : FIXEDFLD));
             break;
 
@@ -226,6 +226,7 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
                 sPar1 = rPar1.Copy(nPos);
 
                 ((SwDBNameInfField*)pTmpFld)->SetDBData(aData);
+                bDBChanged = TRUE;
             }
             break;
 
@@ -241,24 +242,26 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
                 SwDBFieldType* pTyp = (SwDBFieldType*)pSh->InsertFldType(
                         SwDBFieldType(pSh->GetDoc(), sColumn, aData));
 
-                SwIterator<SwFmtFld,SwFieldType> aIter( *pOldTyp );
+                SwClientIter aIter( *pOldTyp );
 
-                for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+                for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
+                    pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
                 {
                     if( pFmtFld->GetFld() == m_pCurFld)
                     {
-                        pFmtFld->RegisterToFieldType(*pTyp);
+                        pTyp->Add(pFmtFld);	// Feld auf neuen Typ umhaengen
                         pTmpFld->ChgTyp(pTyp);
                         break;
                     }
                 }
+                bDBChanged = TRUE;
             }
             break;
 
         case TYP_SEQFLD:
             {
                 SwSetExpFieldType* pTyp = (SwSetExpFieldType*)pTmpFld->GetTyp();
-                pTyp->SetOutlineLvl( static_cast< sal_uInt8 >(nSubType & 0xff));
+                pTyp->SetOutlineLvl( static_cast< BYTE >(nSubType & 0xff));
                 pTyp->SetDelimiter(cSeparator);
 
                 nSubType = nsSwGetSetExpType::GSE_SEQ;
@@ -267,9 +270,9 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
 
         case TYP_INPUTFLD:
             {
-                // User- or SetField ?
+                // User- oder SetField ?
                 if (m_aMgr.GetFldType(RES_USERFLD, sPar1) == 0 &&
-                !(pTmpFld->GetSubType() & INP_TXT)) // SETEXPFLD
+                !(pTmpFld->GetSubType() & INP_TXT))	// SETEXPFLD
                 {
                     SwSetExpField* pFld = (SwSetExpField*)pTmpFld;
                     pFld->SetPromptText(sPar2);
@@ -327,7 +330,7 @@ void SwFldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
 
 void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
 {
-    sal_uInt16 nPos = 0;
+    USHORT nPos = 0;
     ListBox* aLBArr [ coLBCount ] = { pLst1, pLst2, pLst3 };
     ListBox** ppLB = aLBArr;
     for( int i = 0; i < coLBCount; ++i, ++ppLB )
@@ -338,7 +341,7 @@ void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
 }
 
 /*--------------------------------------------------------------------
-     Description: Insert new fields
+     Beschreibung: Einfuegen von neuen Feldern
  --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
@@ -350,7 +353,7 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
         pDlg->InsertHdl();
 
         if (pBtn)
-            pBtn->GrabFocus();  // because of InputField-Dlg
+            pBtn->GrabFocus();	// Wegen InputField-Dlg
     }
     else
     {
@@ -362,10 +365,10 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
 }
 
 /*--------------------------------------------------------------------
-     Description: enable/disable "Insert"-Button
+     Beschreibung: "Einfuegen"-Button Enablen/Disablen
  --------------------------------------------------------------------*/
 
-void SwFldPage::EnableInsert(sal_Bool bEnable)
+void SwFldPage::EnableInsert(BOOL bEnable)
 {
     SwFldDlg *pDlg = (SwFldDlg*)GetTabDialog();
 

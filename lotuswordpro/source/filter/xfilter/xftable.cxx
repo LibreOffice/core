@@ -57,11 +57,15 @@
  * @file
  * Table object.
  ************************************************************************/
-#include    "xftable.hxx"
-#include    "xfrow.hxx"
-#include    "xfcolstyle.hxx"
-#include    "xfstylemanager.hxx"
-#include    <cassert>
+/*************************************************************************
+ * Change History
+ * 2005-01-24 create and implements.
+ ************************************************************************/
+#include	"xftable.hxx"
+#include	"xfrow.hxx"
+#include	"xfcolstyle.hxx"
+#include	"xfstylemanager.hxx"
+#include	<cassert>
 
 XFTable::XFTable()
 {
@@ -116,7 +120,7 @@ XFTable& XFTable::operator =(const XFTable& other)
 XFTable::~XFTable()
 {
     std::map<sal_Int32,XFRow*>::iterator it;
-    for( it=m_aRows.begin(); it!=m_aRows.end(); ++it )
+    for( it=m_aRows.begin(); it!=m_aRows.end(); it++ )
     {
         XFRow *pRow = (*it).second;
         if( pRow )
@@ -126,18 +130,18 @@ XFTable::~XFTable()
     m_aColumns.clear();
 }
 
-void    XFTable::SetColumnStyle(sal_Int32 col, rtl::OUString style)
+void	XFTable::SetColumnStyle(sal_Int32 col, rtl::OUString style)
 {
     m_aColumns[col] = style;
 }
 
-void    XFTable::AddRow(XFRow *pRow)
+void	XFTable::AddRow(XFRow *pRow)
 {
     assert(pRow);
     if( !pRow )
         return;
 
-    int row = pRow->GetRow();
+    int	row = pRow->GetRow();
 
     if( row<1 )
         pRow->SetRow(m_aRows.size()+1);
@@ -150,7 +154,7 @@ void    XFTable::AddRow(XFRow *pRow)
     m_aRows[row] = pRow;
 }
 
-void    XFTable::AddHeaderRow(XFRow *pRow)
+void	XFTable::AddHeaderRow(XFRow *pRow)
 {
     if( !pRow )
         return;
@@ -167,11 +171,11 @@ rtl::OUString XFTable::GetTableName()
         return m_strName;
 }
 
-sal_Int32   XFTable::GetRowCount()
+sal_Int32	XFTable::GetRowCount()
 {
-    sal_Int32   rowMax = -1;
+    sal_Int32	rowMax = -1;
     std::map<sal_Int32,XFRow*>::iterator it;
-    for( it=m_aRows.begin(); it!=m_aRows.end(); ++it )
+    for( it=m_aRows.begin(); it!=m_aRows.end(); it++ )
     {
         if( it->first>rowMax )
             rowMax = it->first;
@@ -186,16 +190,16 @@ sal_Int32   XFTable::GetRowCount()
     return it->first;*/
 }
 
-XFRow*  XFTable::GetRow(sal_Int32 row)
+XFRow*	XFTable::GetRow(sal_Int32 row)
 {
     return m_aRows[row];
 }
 
-sal_Int32   XFTable::GetColumnCount()
+sal_Int32	XFTable::GetColumnCount()
 {
-    int     colMax = -1;
+    int		colMax = -1;
     std::map<sal_Int32,rtl::OUString>::iterator it;
-    for( it=m_aColumns.begin(); it!=m_aColumns.end(); ++it )
+    for( it=m_aColumns.begin(); it!=m_aColumns.end(); it++ )
     {
         if( it->first>colMax )
             colMax = it->first;
@@ -221,9 +225,9 @@ enumXFContent XFTable::GetContentType()
     return enumXFContentTable;
 }
 
-void    XFTable::ToXml(IXFStream *pStrm)
+void	XFTable::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     //sub table shouldn't use table name.
@@ -239,16 +243,16 @@ void    XFTable::ToXml(IXFStream *pStrm)
         pStrm->StartElement( A2OUSTR("table:table") );
 
     //test code
-//  sal_Int32 rowMax = GetRowCount();
-//  sal_Int32 colMax = GetColumnCount();
+//	sal_Int32 rowMax = GetRowCount();
+//	sal_Int32 colMax = GetColumnCount();
     //output columns:
     {
-        int lastCol = 0;
+        int	lastCol = 0;
         std::map<sal_Int32,rtl::OUString>::iterator it;
-        for( it=m_aColumns.begin(); it!=m_aColumns.end(); ++it )
+        for( it=m_aColumns.begin(); it!=m_aColumns.end(); it++ )
         {
-            sal_Int32   col = (*it).first;
-            rtl::OUString   style = m_aColumns[col];
+            sal_Int32	col = (*it).first;
+            rtl::OUString	style = m_aColumns[col];
 
             //default col repeated:
             if( col >lastCol+1 )
@@ -283,13 +287,13 @@ void    XFTable::ToXml(IXFStream *pStrm)
     }
     //output rows:
     {
-        int     lastRow = 0;
+        int		lastRow = 0;
         pAttrList = pStrm->GetAttrList();
 
         std::map<sal_Int32,XFRow* >::iterator it = m_aRows.begin();
-        for( ; it!=m_aRows.end(); ++it )
+        for( ; it!=m_aRows.end(); it++ )
         {
-            int row = (*it).first;
+            int	row = (*it).first;
             XFRow *pRow = (*it).second;
 
             //null row repeated:

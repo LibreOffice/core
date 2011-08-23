@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,12 @@
 #include "precompiled_chart2.hxx"
 #include "VPolarGrid.hxx"
 #include "VCartesianGrid.hxx"
-#include "Tickmarks.hxx"
+#include "TickmarkHelper.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
 #include "ObjectIdentifier.hxx"
 #include "macros.hxx"
 #include "CommonConverters.hxx"
-#include "Tickmarks_Equidistant.hxx"
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <vector>
@@ -66,18 +65,19 @@ VPolarGrid::~VPolarGrid()
     m_pPosHelper = NULL;
 }
 
-void VPolarGrid::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )
+void VPolarGrid::setIncrements( const uno::Sequence< ExplicitIncrementData >& rIncrements )
 {
     m_aIncrements = rIncrements;
 }
 
 void VPolarGrid::getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
 {
-    TickFactory aTickFactory(
+    TickmarkHelper aTickmarkHelper( 
             m_pPosHelper->getScales()[nDimensionIndex], m_aIncrements[nDimensionIndex] );
-    aTickFactory.getAllTicks( rAllTickInfos );
+    aTickmarkHelper.getAllTicks( rAllTickInfos );
 }
 
+//static
 void VPolarGrid::createLinePointSequence_ForAngleAxis(
         drawing::PointSequenceSequence& rPoints
         , ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos
@@ -99,8 +99,8 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         if(nTick>=rPoints[0].getLength())
             rPoints[0].realloc(rPoints[0].getLength()+30);
 
-        //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
-        double fLogicAngle = pTickInfo->getUnscaledTickValue();
+        pTickInfo->updateUnscaledValue( xInverseScaling );
+        double fLogicAngle = pTickInfo->fUnscaledTickValue;
 
         drawing::Position3D aScenePosition3D( pPosHelper->transformAngleRadiusToScene( fLogicAngle, fLogicRadius, fLogicZ ) );
         rPoints[0][nTick].X = static_cast<sal_Int32>(aScenePosition3D.PositionX);
@@ -131,7 +131,7 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
 
     double fLogicInnerRadius = m_pPosHelper->getInnerLogicRadius();
     double fLogicOuterRadius = m_pPosHelper->getOuterLogicRadius();
-    double fLogicZ      = 1.0;//as defined
+    double fLogicZ      = -0.5;//as defined
 
     sal_Int32 nLinePropertiesCount = rLinePropertiesList.size();
     ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = rAngleTickInfos.begin();
@@ -154,8 +154,8 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
             if( !rTickInfo.bPaintIt )
                 continue;
 
-            //xxxxx rTickInfo.updateUnscaledValue( xInverseScaling );
-            double fLogicAngle = rTickInfo.getUnscaledTickValue();
+            rTickInfo.updateUnscaledValue( xInverseScaling );
+            double fLogicAngle = rTickInfo.fUnscaledTickValue;
 
             drawing::PointSequenceSequence aPoints(1);
             aPoints[0].realloc(2);
@@ -167,7 +167,7 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
             aPoints[0][1].Y = static_cast<sal_Int32>(aScenePositionEnd.PositionY);
             appendPointSequence( aAllPoints, aPoints );
         }
-
+        
         Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                 xMainTarget, aAllPoints, &rLinePropertiesList[nDepth] );
         //because of this name this line will be used for marking
@@ -221,9 +221,9 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
             if( !rTickInfo.bPaintIt )
                 continue;
 
-            //xxxxx rTickInfo.updateUnscaledValue( xInverseRadiusScaling );
-            double fLogicRadius = rTickInfo.getUnscaledTickValue();
-            double fLogicZ      = 1.0;//as defined
+            rTickInfo.updateUnscaledValue( xInverseRadiusScaling );
+            double fLogicRadius = rTickInfo.fUnscaledTickValue;
+            double fLogicZ      = -0.5;//as defined
 
             drawing::PointSequenceSequence aPoints(1);
             VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, rAngleTickInfos
@@ -231,15 +231,15 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
             if(aPoints[0].getLength())
                 appendPointSequence( aAllPoints, aPoints );
         }
-
+        
         Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                 xTarget, aAllPoints, &rLinePropertiesList[nDepth] );
         //because of this name this line will be used for marking
         m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
     }
 }
-
-void VPolarGrid::createShapes()
+    
+void SAL_CALL VPolarGrid::createShapes()
 {
     DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))

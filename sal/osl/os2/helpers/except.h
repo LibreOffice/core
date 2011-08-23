@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -226,7 +226,7 @@ extern "C" {
                                 (PEXCEPTIONREGISTRATIONRECORD)&(excptstruct.RegRec2)); \
                     } /* end of TRY block */                                    \
                     else                                                        \
-                    { /* exception occurred: */                                  \
+                    { /* exception occured: */                                  \
                         DosUnsetExceptionHandler((PEXCEPTIONREGISTRATIONRECORD)&(excptstruct.RegRec2));
     #endif
 
@@ -235,7 +235,7 @@ extern "C" {
         #define END_CATCH() }
     #else
         #define END_CATCH()                                                     \
-                    } /* end of exception-occurred block */                      \
+                    } /* end of exception-occured block */                      \
                 }
     #endif
 

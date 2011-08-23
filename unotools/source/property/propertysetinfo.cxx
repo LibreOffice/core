@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,12 +81,12 @@ void PropertyMapImpl::add( PropertyMapEntry* pMap ) throw()
         PropertyMap::iterator aIter = maPropertyMap.find( aName );
         if( aIter != maPropertyMap.end() )
         {
-            OSL_FAIL( "Warning: PropertyMapEntry added twice, possible error!" );
+            DBG_ERROR( "Warning: PropertyMapEntry added twice, possible error!" );
         }
 #endif
         if( NULL == pMap->mpType )
         {
-            OSL_FAIL( "No type in PropertyMapEntry!" );
+            DBG_ERROR( "No type in PropertyMapEntry!" );
             pMap->mpType = &::getCppuType((const sal_Int32*)0);
         }
 
@@ -127,8 +127,8 @@ Sequence< Property > PropertyMapImpl::getProperties() throw()
             pProperties->Handle = pEntry->mnWhich;
             pProperties->Type = *pEntry->mpType;
             pProperties->Attributes = pEntry->mnFlags;
-            ++pProperties;
-            ++aIter;
+            pProperties++;
+            aIter++;
         }
     }
 

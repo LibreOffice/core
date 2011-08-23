@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,8 @@
 #ifndef _PGLINK_HXX
 #define _PGLINK_HXX
 
+#ifndef SVX_LIGHT
+
 #include <sfx2/lnkbase.hxx>
 
 class SdPage;
@@ -49,7 +51,13 @@ public:
     bool         Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
 
-#endif     // _PGLINK_HXX
+#else
+
+class SdPageLink;
+
+#endif
+
+#endif	   // _PGLINK_HXX
 
 
 

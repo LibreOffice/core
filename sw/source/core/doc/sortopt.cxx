@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,16 +37,16 @@
 SV_IMPL_PTRARR(SwSortKeys, SwSortKey*)
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Sortier-Schluessel
+    Beschreibung:	Sortier-Schluessel
  --------------------------------------------------------------------*/
 SwSortKey::SwSortKey() :
     eSortOrder( SRT_ASCENDING ),
     nColumnId( 0 ),
-    bIsNumeric( sal_True )
+    bIsNumeric( TRUE )
 {
 }
 
-SwSortKey::SwSortKey(sal_uInt16 nId, const String& rSrtType, SwSortOrder eOrder) :
+SwSortKey::SwSortKey(USHORT nId, const String& rSrtType, SwSortOrder eOrder) :
     sSortType( rSrtType ),
     eSortOrder( eOrder ),
     nColumnId( nId ),
@@ -69,8 +69,8 @@ SwSortOptions::SwSortOptions()
     : eDirection( SRT_ROWS ),
     cDeli( 9 ),
     nLanguage( LANGUAGE_SYSTEM ),
-    bTable( sal_False ),
-    bIgnoreCase( sal_False )
+    bTable( FALSE ),
+    bIgnoreCase( FALSE )
 {
 }
 
@@ -81,7 +81,7 @@ SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
     bTable( rOpt.bTable ),
     bIgnoreCase( rOpt.bIgnoreCase )
 {
-    for( sal_uInt16 i=0; i < rOpt.aKeys.Count(); ++i )
+    for( USHORT i=0; i < rOpt.aKeys.Count(); ++i )
     {
         SwSortKey* pNew = new SwSortKey(*rOpt.aKeys[i]);
         aKeys.C40_INSERT( SwSortKey, pNew, aKeys.Count());

@@ -307,7 +307,7 @@
       </StartDayOfWeek>
       <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
     </Calendar>
-
+    
     <Calendar unoid="gregorian" default="false">
       <DaysOfWeek>
         <Day>

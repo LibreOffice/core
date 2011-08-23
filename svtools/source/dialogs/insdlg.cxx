@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 // include ---------------------------------------------------------------
 
 #include <svtools/insdlg.hxx>
-#include <svtools/sores.hxx>
+#include "sores.hxx"
 #include <svtools/svtdata.hxx>
 
 #include <tools/rc.hxx>
@@ -58,14 +58,14 @@ using namespace ::com::sun::star;
 
 struct OleObjectDescriptor
 {
-    sal_uInt32  cbSize;
-    ClsId       clsid;
-    sal_uInt32  dwDrawAspect;
-    Size        sizel;
-    Point       pointl;
-    sal_uInt32  dwStatus;
-    sal_uInt32  dwFullUserTypeName;
-    sal_uInt32  dwSrcOfCopy;
+    sal_uInt32	cbSize;
+    ClsId		clsid;
+    sal_uInt32	dwDrawAspect;
+    Size		sizel;
+    Point		pointl;
+    sal_uInt32	dwStatus;
+    sal_uInt32	dwFullUserTypeName;
+    sal_uInt32	dwSrcOfCopy;
 };
 
 /********************** SvObjectServerList ********************************
@@ -79,7 +79,7 @@ PRV_SV_IMPL_OWNER_LIST( SvObjectServerList, SvObjectServer )
 *************************************************************************/
 const SvObjectServer * SvObjectServerList::Get( const String & rHumanName ) const
 {
-    for( sal_uLong i = 0; i < Count(); i++ )
+    for( ULONG i = 0; i < Count(); i++ )
     {
         if( rHumanName == GetObject( i ).GetHumanName() )
             return &GetObject( i );
@@ -94,7 +94,7 @@ const SvObjectServer * SvObjectServerList::Get( const String & rHumanName ) cons
 *************************************************************************/
 const SvObjectServer * SvObjectServerList::Get( const SvGlobalName & rName ) const
 {
-    for( sal_uLong i = 0; i < Count(); i++ )
+    for( ULONG i = 0; i < Count(); i++ )
     {
         if( rName == GetObject( i ).GetClassName() )
             return &GetObject( i );
@@ -129,17 +129,19 @@ void SvObjectServerList::FillInsertObjects()
     uno::Reference< lang::XMultiServiceFactory > _globalMSFactory= comphelper::getProcessServiceFactory();
     if( _globalMSFactory.is())
     {
-        ::rtl::OUString sProviderService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ));
+        ::rtl::OUString sProviderService =
+        ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
         uno::Reference< lang::XMultiServiceFactory > sProviderMSFactory(
             _globalMSFactory->createInstance( sProviderService ), uno::UNO_QUERY );
 
         if( sProviderMSFactory.is())
         {
-            ::rtl::OUString sReaderService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
+            ::rtl::OUString sReaderService =
+                ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
             uno::Sequence< uno::Any > aArguments( 1 );
             beans::PropertyValue aPathProp;
-            aPathProp.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
-            aPathProp.Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Embedding/ObjectNames" ));
+            aPathProp.Name = ::rtl::OUString::createFromAscii( "nodepath" );
+            aPathProp.Value <<= ::rtl::OUString::createFromAscii( "/org.openoffice.Office.Embedding/ObjectNames");
             aArguments[0] <<= aPathProp;
 
             uno::Reference< container::XNameAccess > xNameAccess(
@@ -164,13 +166,13 @@ void SvObjectServerList::FillInsertObjects()
                     ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
                 if ( !( aProperty >>= aProductName ) )
                 {
-                    OSL_FAIL( "Coudn't get PRODUCTNAME variable!\n" );
+                    OSL_ENSURE( sal_False, "Coudn't get PRODUCTNAME variable!\n" );
                     aProductName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice" ) );
                 }
                 aProperty = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
                 if ( !( aProperty >>= aProductVersion ) )
                 {
-                    OSL_FAIL( "Coudn't get PRODUCTVERSION variable!\n" );
+                    OSL_ENSURE( sal_False, "Coudn't get PRODUCTVERSION variable!\n" );
                 }
 
                 for( nInd = 0; nInd < seqNames.getLength(); nInd++ )
@@ -181,8 +183,8 @@ void SvObjectServerList::FillInsertObjects()
                     {
                         ::rtl::OUString aUIName;
                         ::rtl::OUString aClassID;
-                        xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectUIName" )) ) >>= aUIName;
-                        xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ClassID" )) ) >>= aClassID;
+                        xEntry->getByName( ::rtl::OUString::createFromAscii("ObjectUIName") ) >>= aUIName;
+                        xEntry->getByName( ::rtl::OUString::createFromAscii("ClassID") ) >>= aClassID;
 
                         if ( aUIName.getLength() )
                         {
@@ -238,7 +240,7 @@ String SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
     struct SotResourcePair
     {
         SotFormatStringId   mnSotId;
-        sal_uInt16              mnResId;
+        USHORT              mnResId;
     };
 
     static const SotResourcePair aSotResourcePairs[] =
@@ -312,7 +314,7 @@ String SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
     };
 
     String aUIName;
-    sal_uInt16 nResId = 0;
+    USHORT nResId = 0;
 
     for( sal_uInt32 i = 0, nCount = SAL_N_ELEMENTS( aSotResourcePairs ); ( i < nCount ) && !nResId; i++ )
     {

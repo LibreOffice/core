@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ protected:
     const SdrPage* mpVisualizedPage;
 
 public:
-    SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode );
+    SdrOutliner( SfxItemPool* pItemPool, USHORT nMode );
     virtual ~SdrOutliner() ;
 
     void  SetTextObj( const SdrTextObj* pObj );
@@ -54,7 +54,7 @@ public:
     void setVisualizedPage(const SdrPage* pPage) { if(pPage != mpVisualizedPage) mpVisualizedPage = pPage; }
     const SdrPage* getVisualizedPage() const { return mpVisualizedPage; }
 
-    virtual String  CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor);
+    virtual String  CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor);
 };
 
 #endif //_SVDOUTL_HXX

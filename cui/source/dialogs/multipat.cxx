@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 #include <tools/debug.hxx>
@@ -53,23 +56,23 @@ using namespace ::com::sun::star::uno;
 
 struct MultiPath_Impl
 {
-    sal_Bool    bEmptyAllowed;
-    sal_Bool    bIsClassPathMode;
+    BOOL	bEmptyAllowed;
+    BOOL	bIsClassPathMode;
     bool    bIsRadioButtonMode;
 
-    MultiPath_Impl( sal_Bool bAllowed ) :
-        bEmptyAllowed( bAllowed ), bIsClassPathMode( sal_False ), bIsRadioButtonMode( false )  {}
+    MultiPath_Impl( BOOL bAllowed ) :
+        bEmptyAllowed( bAllowed ), bIsClassPathMode( FALSE ), bIsRadioButtonMode( false )  {}
 };
 
 // class SvxMultiPathDialog ----------------------------------------------
 
 IMPL_LINK( SvxMultiPathDialog, SelectHdl_Impl, void *, EMPTYARG )
 {
-    sal_uLong nCount = pImpl->bIsRadioButtonMode ? aRadioLB.GetEntryCount() : aPathLB.GetEntryCount();
+    ULONG nCount = pImpl->bIsRadioButtonMode ? aRadioLB.GetEntryCount() : aPathLB.GetEntryCount();
     bool bIsSelected = pImpl->bIsRadioButtonMode
         ? aRadioLB.FirstSelected() != NULL
         : aPathLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
-    sal_Bool bEnable = ( pImpl->bEmptyAllowed || nCount > 1 );
+    BOOL bEnable = ( pImpl->bEmptyAllowed || nCount > 1 );
     aDelBtn.Enable( bEnable && bIsSelected );
     return 0;
 }
@@ -103,7 +106,7 @@ IMPL_LINK( SvxMultiPathDialog, AddHdl_Impl, PushButton *, EMPTYARG )
 
         if ( pImpl->bIsRadioButtonMode )
         {
-            sal_uLong nPos = aRadioLB.GetEntryPos( sInsPath, 1 );
+            ULONG nPos = aRadioLB.GetEntryPos( sInsPath, 1 );
             if ( 0xffffffff == nPos ) //See svtools/source/contnr/svtabbx.cxx SvTabListBox::GetEntryPos
             {
                 String sNewEntry( '\t' );
@@ -129,7 +132,7 @@ IMPL_LINK( SvxMultiPathDialog, AddHdl_Impl, PushButton *, EMPTYARG )
             }
             else
             {
-                sal_uInt16 nPos = aPathLB.InsertEntry( sInsPath, LISTBOX_APPEND );
+                USHORT nPos = aPathLB.InsertEntry( sInsPath, LISTBOX_APPEND );
                 aPathLB.SetEntryData( nPos, (void*)new String( aURL ) );
             }
         }
@@ -147,9 +150,9 @@ IMPL_LINK( SvxMultiPathDialog, DelHdl_Impl, PushButton *, EMPTYARG )
         SvLBoxEntry* pEntry = aRadioLB.FirstSelected();
         delete (String*)pEntry->GetUserData();
         bool bChecked = aRadioLB.GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED;
-        sal_uLong nPos = aRadioLB.GetEntryPos( pEntry );
+        ULONG nPos = aRadioLB.GetEntryPos( pEntry );
         aRadioLB.RemoveEntry( pEntry );
-        sal_uLong nCnt = aRadioLB.GetEntryCount();
+        ULONG nCnt = aRadioLB.GetEntryCount();
         if ( nCnt )
         {
             nCnt--;
@@ -167,9 +170,9 @@ IMPL_LINK( SvxMultiPathDialog, DelHdl_Impl, PushButton *, EMPTYARG )
     }
     else
     {
-        sal_uInt16 nPos = aPathLB.GetSelectEntryPos();
+        USHORT nPos = aPathLB.GetSelectEntryPos();
         aPathLB.RemoveEntry( nPos );
-        sal_uInt16 nCnt = aPathLB.GetEntryCount();
+        USHORT nCnt = aPathLB.GetEntryCount();
 
         if ( nCnt )
         {
@@ -186,7 +189,7 @@ IMPL_LINK( SvxMultiPathDialog, DelHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed ) :
+SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, BOOL bEmptyAllowed ) :
 
     ModalDialog( pParent, CUI_RES( RID_SVXDLG_MULTIPATH ) ),
 
@@ -195,11 +198,11 @@ SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed 
     aRadioLB    ( this, CUI_RES( LB_RADIOBUTTON ) ),
     aRadioFT    ( this, CUI_RES( FT_RADIOBUTTON ) ),
     aAddBtn     ( this, CUI_RES( BTN_ADD_MULTIPATH ) ),
-    aDelBtn     ( this, CUI_RES( BTN_DEL_MULTIPATH ) ),
-    aOKBtn      ( this, CUI_RES( BTN_MULTIPATH_OK ) ),
-    aCancelBtn  ( this, CUI_RES( BTN_MULTIPATH_CANCEL ) ),
-    aHelpButton ( this, CUI_RES( BTN_MULTIPATH_HELP ) ),
-    pImpl       ( new MultiPath_Impl( bEmptyAllowed ) )
+    aDelBtn		( this, CUI_RES( BTN_DEL_MULTIPATH ) ),
+    aOKBtn		( this, CUI_RES( BTN_MULTIPATH_OK ) ),
+    aCancelBtn	( this, CUI_RES( BTN_MULTIPATH_CANCEL ) ),
+    aHelpButton	( this, CUI_RES( BTN_MULTIPATH_HELP ) ),
+    pImpl		( new MultiPath_Impl( bEmptyAllowed ) )
 
 {
     static long aStaticTabs[]= { 2, 0, 12 };
@@ -218,19 +221,16 @@ SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed 
     aDelBtn.SetClickHdl( LINK( this, SvxMultiPathDialog, DelHdl_Impl ) );
 
     SelectHdl_Impl( NULL );
-
-    aAddBtn.SetAccessibleRelationMemberOf(&aPathLB);
-    aDelBtn.SetAccessibleRelationMemberOf(&aPathLB);
 }
 
 // -----------------------------------------------------------------------
 
 SvxMultiPathDialog::~SvxMultiPathDialog()
 {
-    sal_uInt16 nPos = aPathLB.GetEntryCount();
+    USHORT nPos = aPathLB.GetEntryCount();
     while ( nPos-- )
         delete (String*)aPathLB.GetEntryData(nPos);
-    nPos = (sal_uInt16)aRadioLB.GetEntryCount();
+    nPos = (USHORT)aRadioLB.GetEntryCount();
     while ( nPos-- )
     {
         SvLBoxEntry* pEntry = aRadioLB.GetEntry( nPos );
@@ -249,7 +249,7 @@ String SvxMultiPathDialog::GetPath() const
     if ( pImpl->bIsRadioButtonMode )
     {
         String sWritable;
-        for ( sal_uInt16 i = 0; i < aRadioLB.GetEntryCount(); ++i )
+        for ( USHORT i = 0; i < aRadioLB.GetEntryCount(); ++i )
         {
             SvLBoxEntry* pEntry = aRadioLB.GetEntry(i);
             if ( aRadioLB.GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
@@ -267,7 +267,7 @@ String SvxMultiPathDialog::GetPath() const
     }
     else
     {
-        for ( sal_uInt16 i = 0; i < aPathLB.GetEntryCount(); ++i )
+        for ( USHORT i = 0; i < aPathLB.GetEntryCount(); ++i )
         {
             if ( sNewPath.Len() > 0 )
                 sNewPath += cDelim;
@@ -282,9 +282,9 @@ String SvxMultiPathDialog::GetPath() const
 void SvxMultiPathDialog::SetPath( const String& rPath )
 {
     sal_Unicode cDelim = pImpl->bIsClassPathMode ? CLASSPATH_DELIMITER : SVT_SEARCHPATH_DELIMITER;
-    sal_uInt16 nPos, nCount = rPath.GetTokenCount( cDelim );
+    USHORT nPos, nCount = rPath.GetTokenCount( cDelim );
 
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    for ( USHORT i = 0; i < nCount; ++i )
     {
         String sPath = rPath.GetToken( i, cDelim );
         String sSystemPath;
@@ -326,7 +326,7 @@ void SvxMultiPathDialog::SetPath( const String& rPath )
 
 void SvxMultiPathDialog::SetClassPathMode()
 {
-    pImpl->bIsClassPathMode = sal_True;
+    pImpl->bIsClassPathMode = TRUE;
     SetText( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ));
     aPathFL.SetText( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ) );
 }

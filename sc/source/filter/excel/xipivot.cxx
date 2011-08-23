@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -216,6 +216,11 @@ const XclImpPCField* XclImpPCField::GetGroupBaseField() const
     return IsGroupChildField() ? mrPCache.GetField( maFieldInfo.mnGroupBase ) : 0;
 }
 
+sal_uInt16 XclImpPCField::GetItemCount() const
+{
+    return static_cast< sal_uInt16 >( maItems.size() );
+}
+
 const XclImpPCItem* XclImpPCField::GetItem( sal_uInt16 nItemIdx ) const
 {
     return (nItemIdx < maItems.size()) ? maItems[ nItemIdx ].get() : 0;
@@ -419,6 +424,7 @@ void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStri
         if( rBaseFieldName.Len() > 0 )
         {
             // *** create a ScDPSaveGroupItem for each own item, they collect base item names ***
+            typedef ::std::vector< ScDPSaveGroupItem > ScDPSaveGroupItemVec;
             ScDPSaveGroupItemVec aGroupItems;
             aGroupItems.reserve( maItems.size() );
             // initialize with own item names
@@ -498,7 +504,7 @@ ScDPNumGroupInfo XclImpPCField::GetScNumGroupInfo() const
 {
     ScDPNumGroupInfo aNumInfo;
     aNumInfo.Enable = sal_True;
-    aNumInfo.DateValues = false;
+    aNumInfo.DateValues = sal_False;
     aNumInfo.AutoStart = sal_True;
     aNumInfo.AutoEnd = sal_True;
 
@@ -522,7 +528,7 @@ ScDPNumGroupInfo XclImpPCField::GetScDateGroupInfo() const
 {
     ScDPNumGroupInfo aDateInfo;
     aDateInfo.Enable = sal_True;
-    aDateInfo.DateValues = false;
+    aDateInfo.DateValues = sal_False;
     aDateInfo.AutoStart = sal_True;
     aDateInfo.AutoEnd = sal_True;
 
@@ -653,22 +659,6 @@ void XclImpPivotCache::ReadDconref( XclImpStream& rStrm )
         GetAddressConverter().ConvertRange( maSrcRange, aXclRange, 0, 0, true );
 }
 
-void XclImpPivotCache::ReadDConName( XclImpStream& rStrm )
-{
-    maSrcRangeName = rStrm.ReadUniString();
-
-    // This 2-byte value equals the length of string that follows, or if 0 it
-    // indicates that the name has a workbook scope.  For now, we only support
-    // internal defined name with a workbook scope.
-    sal_uInt16 nFlag;
-    rStrm >> nFlag;
-    mbSelfRef = (nFlag == 0);
-
-    if (!mbSelfRef)
-        // External name is not supported yet.
-        maSrcRangeName = OUString();
-}
-
 void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
 {
     if( (mnSrcType != EXC_SXVS_SHEET) && (mnSrcType != EXC_SXVS_EXTERN) )
@@ -682,21 +672,18 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
 
     if( mbSelfRef )
     {
-        if (!maSrcRangeName.getLength())
+        // try to find internal sheet containing the source data
+        nScTab = GetTabInfo().GetScTabFromXclName( maTabName );
+        if( rDoc.HasTable( nScTab ) )
         {
-            // try to find internal sheet containing the source data
-            nScTab = GetTabInfo().GetScTabFromXclName( maTabName );
-            if( rDoc.HasTable( nScTab ) )
-            {
-                // set sheet index to source range
-                maSrcRange.aStart.SetTab( nScTab );
-                maSrcRange.aEnd.SetTab( nScTab );
-            }
-            else
-            {
-                // create dummy sheet for deleted internal sheet
-                bGenerateSource = true;
-            }
+            // set sheet index to source range
+            maSrcRange.aStart.SetTab( nScTab );
+            maSrcRange.aEnd.SetTab( nScTab );
+        }
+        else
+        {
+            // create dummy sheet for deleted internal sheet
+            bGenerateSource = true;
         }
     }
     else
@@ -798,7 +785,7 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
             case EXC_ID_SXSTRING:
             case EXC_ID_SXDATETIME:
             case EXC_ID_SXEMPTY:
-                if( xCurrField )                   // inline items
+                if( xCurrField.is() )                   // inline items
                 {
                     xCurrField->ReadItem( aPCStrm );
                 }
@@ -823,12 +810,12 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
             break;
 
             case EXC_ID_SXNUMGROUP:
-                if( xCurrField )
+                if( xCurrField.is() )
                     xCurrField->ReadSxnumgroup( aPCStrm );
             break;
 
             case EXC_ID_SXGROUPINFO:
-                if( xCurrField )
+                if( xCurrField.is() )
                     xCurrField->ReadSxgroupinfo( aPCStrm );
             break;
 
@@ -845,18 +832,12 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
             break;
 
             default:
-                OSL_TRACE( "XclImpPivotCache::ReadPivotCacheStream - unknown record 0x%04hX", aPCStrm.GetRecId() );
+                DBG_ERROR1( "XclImpPivotCache::ReadPivotCacheStream - unknown record 0x%04hX", aPCStrm.GetRecId() );
         }
     }
 
     DBG_ASSERT( maPCInfo.mnTotalFields == maFields.size(),
         "XclImpPivotCache::ReadPivotCacheStream - field count mismatch" );
-
-    if (HasCacheRecords())
-    {
-        SCROW nNewEnd = maSrcRange.aStart.Row() + maPCInfo.mnSrcRecs;
-        maSrcRange.aEnd.SetRow(nNewEnd);
-    }
 
     // set source range for external source data
     if( bGenerateSource && (nFieldScCol > 0) )
@@ -870,22 +851,9 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
     }
 }
 
-bool XclImpPivotCache::HasCacheRecords() const
-{
-    return static_cast<bool>(maPCInfo.mnFlags & EXC_SXDB_SAVEDATA);
-}
-
 bool XclImpPivotCache::IsRefreshOnLoad() const
 {
-    return static_cast<bool>(maPCInfo.mnFlags & EXC_SXDB_REFRESH_LOAD);
-}
-
-bool XclImpPivotCache::IsValid() const
-{
-    if (maSrcRangeName.getLength())
-        return true;
-
-    return maSrcRange.IsValid();
+    return static_cast<bool>(maPCInfo.mnFlags & 0x0004);
 }
 
 // ============================================================================
@@ -941,7 +909,7 @@ XclImpPTField::XclImpPTField( const XclImpPivotTable& rPTable, sal_uInt16 nCache
 const XclImpPCField* XclImpPTField::GetCacheField() const
 {
     XclImpPivotCacheRef xPCache = mrPTable.GetPivotCache();
-    return xPCache ? xPCache->GetField( maFieldInfo.mnCacheIdx ) : 0;
+    return xPCache.is() ? xPCache->GetField( maFieldInfo.mnCacheIdx ) : 0;
 }
 
 const String& XclImpPTField::GetFieldName() const
@@ -965,6 +933,12 @@ const String* XclImpPTField::GetItemName( sal_uInt16 nItemIdx ) const
 {
     const XclImpPTItem* pItem = GetItem( nItemIdx );
     return pItem ? pItem->GetItemName() : 0;
+}
+
+const String* XclImpPTField::GetVisItemName( sal_uInt16 nItemIdx ) const
+{
+    const XclImpPTItem* pItem = GetItem( nItemIdx );
+    return pItem ? pItem->GetVisItemName() : 0;
 }
 
 // records --------------------------------------------------------------------
@@ -993,7 +967,7 @@ void XclImpPTField::ConvertRowColField( ScDPSaveData& rSaveData ) const
     DBG_ASSERT( maFieldInfo.mnAxes & EXC_SXVD_AXIS_ROWCOL, "XclImpPTField::ConvertRowColField - no row/column field" );
     // special data orientation field?
     if( maFieldInfo.mnCacheIdx == EXC_SXIVD_DATA )
-        rSaveData.GetDataLayoutDimension()->SetOrientation( static_cast< sal_uInt16 >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOL ) ) );
+        rSaveData.GetDataLayoutDimension()->SetOrientation( static_cast< USHORT >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOL ) ) );
     else
         ConvertRCPField( rSaveData );
 }
@@ -1009,10 +983,7 @@ void XclImpPTField::ConvertPageField( ScDPSaveData& rSaveData ) const
 {
     DBG_ASSERT( maFieldInfo.mnAxes & EXC_SXVD_AXIS_PAGE, "XclImpPTField::ConvertPageField - no page field" );
     if( ScDPSaveDimension* pSaveDim = ConvertRCPField( rSaveData ) )
-    {
-        const rtl::OUString aName = *GetItemName( maPageInfo.mnSelItem );
-        pSaveDim->SetCurrentPage( &aName );
-    }
+        pSaveDim->SetCurrentPage( GetItemName( maPageInfo.mnSelItem ) );
 }
 
 // hidden fields --------------------------------------------------------------
@@ -1062,8 +1033,8 @@ void XclImpPTField::ConvertDataField( ScDPSaveData& rSaveData ) const
 
 // private --------------------------------------------------------------------
 
-/**
- * Convert Excel-encoded subtotal name to a Calc-encoded one.
+/** 
+ * Convert Excel-encoded subtotal name to a Calc-encoded one.  
  */
 static OUString lcl_convertExcelSubtotalName(const OUString& rName)
 {
@@ -1097,7 +1068,7 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     ScDPSaveDimension& rSaveDim = *rSaveData.GetNewDimensionByName( rFieldName );
 
     // orientation
-    rSaveDim.SetOrientation( static_cast< sal_uInt16 >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOLPAGE ) ) );
+    rSaveDim.SetOrientation( static_cast< USHORT >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOLPAGE ) ) );
 
     // general field info
     ConvertFieldInfo( rSaveDim );
@@ -1171,7 +1142,7 @@ void XclImpPTField::ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const Xcl
             rSaveDim.SetLayoutName( *pVisName );
 
     // aggregation function
-    rSaveDim.SetFunction( static_cast< sal_uInt16 >( rDataInfo.GetApiAggFunc() ) );
+    rSaveDim.SetFunction( static_cast< USHORT >( rDataInfo.GetApiAggFunc() ) );
 
     // result field reference
     sal_Int32 nRefType = rDataInfo.GetApiRefType();
@@ -1231,6 +1202,13 @@ XclImpPTField* XclImpPivotTable::GetFieldAcc( sal_uInt16 nFieldIdx )
     return (nFieldIdx < maFields.size()) ? maFields[ nFieldIdx ].get() : 0;
 }
 
+const String& XclImpPivotTable::GetFieldName( sal_uInt16 nFieldIdx ) const
+{
+    if( const XclImpPTField* pField = GetField( nFieldIdx ) )
+        return pField->GetFieldName();
+    return EMPTY_STRING;
+}
+
 const XclImpPTField* XclImpPivotTable::GetDataField( sal_uInt16 nDataFieldIdx ) const
 {
     if( nDataFieldIdx < maOrigDataFields.size() )
@@ -1278,13 +1256,13 @@ void XclImpPivotTable::ReadSxvd( XclImpStream& rStrm )
 
 void XclImpPivotTable::ReadSxvi( XclImpStream& rStrm )
 {
-    if( mxCurrField )
+    if( mxCurrField.is() )
         mxCurrField->ReadSxvi( rStrm );
 }
 
 void XclImpPivotTable::ReadSxvdex( XclImpStream& rStrm )
 {
-    if( mxCurrField )
+    if( mxCurrField.is() )
         mxCurrField->ReadSxvdex( rStrm );
 }
 
@@ -1368,7 +1346,7 @@ void XclImpPivotTable::ReadSxViewEx9( XclImpStream& rStrm )
 
 void XclImpPivotTable::Convert()
 {
-    if( !mxPCache || !mxPCache->IsValid() )
+    if( !mxPCache || !mxPCache->GetSourceRange().IsValid() )
         return;
 
     ScDPSaveData aSaveData;
@@ -1377,7 +1355,7 @@ void XclImpPivotTable::Convert()
 
     aSaveData.SetRowGrand( ::get_flag( maPTInfo.mnFlags, EXC_SXVIEW_ROWGRAND ) );
     aSaveData.SetColumnGrand( ::get_flag( maPTInfo.mnFlags, EXC_SXVIEW_COLGRAND ) );
-    aSaveData.SetFilterButton( false );
+    aSaveData.SetFilterButton( FALSE );
     aSaveData.SetDrillDown( ::get_flag( maPTExtInfo.mnFlags, EXC_SXEX_DRILLDOWN ) );
 
     // *** fields ***
@@ -1417,14 +1395,8 @@ void XclImpPivotTable::Convert()
     // *** insert into Calc document ***
 
     // create source descriptor
-    ScSheetSourceDesc aDesc(GetDocPtr());
-    const OUString& rSrcName = mxPCache->GetSourceRangeName();
-    if (rSrcName.getLength())
-        // Range name is the data source.
-        aDesc.SetRangeName(rSrcName);
-    else
-        // Normal cell range.
-        aDesc.SetSourceRange(mxPCache->GetSourceRange());
+    ScSheetSourceDesc aDesc;
+    aDesc.aSourceRange = mxPCache->GetSourceRange();
 
     // adjust output range to include the page fields
     ScRange aOutRange( maOutScRange );
@@ -1446,7 +1418,7 @@ void XclImpPivotTable::Convert()
     pDPObj->SetSaveData( aSaveData );
     pDPObj->SetSheetDesc( aDesc );
     pDPObj->SetOutRange( aOutRange );
-    pDPObj->SetAlive( sal_True );
+    pDPObj->SetAlive( TRUE );
     pDPObj->SetHeaderLayout( maPTViewEx9Info.mnGridLayout == 0 );
 
     GetDoc().GetDPCollection()->InsertNewTable(pDPObj);
@@ -1475,7 +1447,7 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
     aGeometry.setPageFieldCount(maPTInfo.mnPageFields);
     aGeometry.setDataFieldCount(maPTInfo.mnDataFields);
 
-    // Excel includes data layout field in the row field count.  We need to
+    // Excel includes data layout field in the row field count.  We need to 
     // subtract it.
     bool bDataLayout = maPTInfo.mnDataFields > 1;
     aGeometry.setRowFieldCount(maPTInfo.mnRowFields - static_cast<sal_uInt32>(bDataLayout));
@@ -1584,12 +1556,6 @@ void XclImpPivotTableManager::ReadDconref( XclImpStream& rStrm )
 {
     if( !maPCaches.empty() )
         maPCaches.back()->ReadDconref( rStrm );
-}
-
-void XclImpPivotTableManager::ReadDConName( XclImpStream& rStrm )
-{
-    if( !maPCaches.empty() )
-        maPCaches.back()->ReadDConName( rStrm );
 }
 
 // pivot table records --------------------------------------------------------

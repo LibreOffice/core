@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class KDEData : public X11SalData
 public:
     KDEData() {}
     virtual ~KDEData();
-
+    
     virtual void Init();
     virtual void initNWF();
     virtual void deInitNWF();
@@ -57,9 +57,9 @@ class KDESalFrame : public X11SalFrame
 
     struct GraphicsHolder
     {
-        X11SalGraphics*     pGraphics;
-        bool                bInUse;
-        GraphicsHolder()
+        X11SalGraphics*		pGraphics;
+        bool				bInUse;
+        GraphicsHolder() 
                 : pGraphics( NULL ),
                   bInUse( false )
         {}
@@ -68,23 +68,23 @@ class KDESalFrame : public X11SalFrame
     GraphicsHolder m_aGraphics[ nMaxGraphics ];
 
 public:
-    KDESalFrame( SalFrame* pParent, sal_uLong );
+    KDESalFrame( SalFrame* pParent, ULONG nStyle );
     virtual ~KDESalFrame();
 
     virtual SalGraphics* GetGraphics();
     virtual void ReleaseGraphics( SalGraphics *pGraphics );
     virtual void updateGraphics( bool bClear );
     virtual void UpdateSettings( AllSettings& rSettings );
-    virtual void Show( sal_Bool bVisible, sal_Bool bNoActivate );
+    virtual void Show( BOOL bVisible, BOOL bNoActivate );
 };
 
 class KDESalInstance : public X11SalInstance
 {
 public:
-    KDESalInstance( SalYieldMutex* pMutex )
+    KDESalInstance( SalYieldMutex* pMutex ) 
             : X11SalInstance( pMutex ) {}
     virtual ~KDESalInstance() {}
-    virtual SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle );
+    virtual SalFrame* CreateFrame( SalFrame* pParent, ULONG nStyle );
 };
 
 class KDEXLib : public SalXLib
@@ -104,7 +104,7 @@ public:
         {}
     virtual ~KDEXLib();
     virtual void Init();
-
+    
     void doStartup();
 };
 

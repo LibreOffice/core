@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "officeforms.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -66,7 +66,7 @@ namespace xmloff
     }
 
     //-------------------------------------------------------------------------
-    SvXMLImportContext* OFormsRootImport::CreateChildContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+    SvXMLImportContext* OFormsRootImport::CreateChildContext( USHORT _nPrefix, const ::rtl::OUString& _rLocalName,
             const Reference< sax::XAttributeList>& xAttrList )
     {
         return GetImport().GetFormImport()->createContext( _nPrefix, _rLocalName, xAttrList );
@@ -102,7 +102,7 @@ namespace xmloff
         {
             Reference< XPropertySet > xDocProperties(GetImport().GetModel(), UNO_QUERY);
             if ( xDocProperties.is() )
-            {   // an empty model is allowed: when doing a copy'n'paste from e.g. Writer to Calc,
+            {	// an empty model is allowed: when doing a copy'n'paste from e.g. Writer to Calc,
                 // this is done via streaming the controls as XML.
                 Reference< XPropertySetInfo > xDocPropInfo;
                 if (xDocProperties.is())
@@ -114,7 +114,7 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_FAIL("OFormsRootImport::StartElement: caught an exception while setting the document properties!");
+            OSL_ENSURE(sal_False, "OFormsRootImport::StartElement: caught an exception while setting the document properties!");
         }
     }
 
@@ -171,7 +171,7 @@ namespace xmloff
         {
             Reference< XPropertySet > xDocProperties(_rExp.GetModel(), UNO_QUERY);
             if ( xDocProperties.is() )
-            {   // an empty model is allowed: when doing a copy'n'paste from e.g. Writer to Calc,
+            {	// an empty model is allowed: when doing a copy'n'paste from e.g. Writer to Calc,
                 // this is done via streaming the controls as XML.
                 Reference< XPropertySetInfo > xDocPropInfo;
                 if (xDocProperties.is())
@@ -183,12 +183,12 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_FAIL("OFormsRootExport::addModelAttributes: caught an exception while retrieving the document properties!");
+            OSL_ENSURE(sal_False, "OFormsRootExport::addModelAttributes: caught an exception while retrieving the document properties!");
         }
     }
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 

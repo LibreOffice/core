@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,12 +53,12 @@ namespace scripting_runtimemgr
 /**
  * Class responsible for managing the various ScriptRuntime implementations.
  */
-class ScriptRuntimeManager : public
+class ScriptRuntimeManager : public 
     ::cppu::WeakImplHelper3< dcsssf::runtime::XScriptInvocation, css::lang::XServiceInfo,
     dcsssf::runtime::XScriptNameResolver >
 {
 public:
-    explicit ScriptRuntimeManager(
+    explicit ScriptRuntimeManager( 
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
     ~ScriptRuntimeManager();
 
@@ -72,10 +72,10 @@ public:
         throw( css::uno::RuntimeException );
 
     /**
-     * implements XScriptInvocation, invokes the script named in scriptURI
+     * implements XScriptInvocation, invokes the script named in scriptURI 
      * (resolving it first, if necessary), with the args passed.
      *
-     * @param scriptURI the URI, which may not be fully qualified, for the
+     * @param scriptURI the URI, which may not be fully qualified, for the 
      *  script to be invoked
      *
      *************************************************************
@@ -90,20 +90,20 @@ public:
         @param aOutParamIndex out indices
         @param aOutParam out parameters
 
-        @returns
+        @returns 
             the value returned from the function being invoked
 
-        @throws IllegalArgumentException
+        @throws IllegalArgumentException 
             if there is no matching script name
 
-        @throws CannotConvertException
-            if args do not match or cannot be converted the those
+        @throws CannotConvertException 
+            if args do not match or cannot be converted the those 
             of the invokee
-
-        @throws InvocationTargetException
+            
+        @throws InvocationTargetException 
             if the running script throws an exception this information is captured and
-            rethrown as this exception type.
-
+            rethrown as this exception type.  
+                  
     */
     virtual css::uno::Any SAL_CALL invoke(
         const ::rtl::OUString & scriptUri,
@@ -121,9 +121,9 @@ public:
      * passed in
      *
      * @param scriptURI the URI to be resolved
-     * @param invocationCtx  the invocation context contains the
-     * documentStorageID and document reference for use in script name
-     * resolving. On full name resolution it sets the resolvedScriptStorageID to
+     * @param invocationCtx  the invocation context contains the  
+     * documentStorageID and document reference for use in script name 
+     * resolving. On full name resolution it sets the resolvedScriptStorageID to 
      * the actual storage location of the fully resolved script. May or may not * be the
      same as the documentStorageID.
      * @return the resolved URI
@@ -135,7 +135,7 @@ public:
            css::uno::RuntimeException );
 
 private:
-    css::uno::Reference< dcsssf::runtime::XScriptInvocation > SAL_CALL getScriptRuntime(
+    css::uno::Reference< dcsssf::runtime::XScriptInvocation > SAL_CALL getScriptRuntime( 
         const css::uno::Reference< css::uno::XInterface > & scriptInfo )
         throw( css::uno::RuntimeException );
     css::uno::Reference< dcsssf::runtime::XScriptNameResolver > SAL_CALL getScriptNameResolver()

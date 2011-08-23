@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,10 @@
 #include <comphelper/extract.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include "xmlfilter.hxx"
 #include "xmlHelper.hxx"
+#include <tools/debug.hxx>
 
 
 #define XML_LINE_LEFT 0
@@ -120,7 +121,7 @@ void OTableStyleContext::FillPropertySet(
                         pStyle = PTR_CAST(SvXMLNumFormatContext,pMyStyles->
                             FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True));
                     else {
-                        OSL_FAIL("not possible to get style");
+                        DBG_ERROR("not possible to get style");
                     }
                 }
                 if ( pStyle )
@@ -128,6 +129,7 @@ void OTableStyleContext::FillPropertySet(
                     uno::Any aNumberFormat;
                     m_nNumberFormat = pStyle->GetKey();
                     aNumberFormat <<= m_nNumberFormat;
+                    //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormat);
                     AddProperty(CTF_DB_NUMBERFORMAT, aNumberFormat);
                 }
             }
@@ -145,7 +147,7 @@ void OTableStyleContext::SetDefaults()
 void OTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
 {
     sal_Int32 nIndex(static_cast<OTableStylesContext *>(pStyles)->GetIndex(nContextID));
-    OSL_ENSURE(nIndex != -1, "Property not found in Map");
+    DBG_ASSERT(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
     GetProperties().push_back(aPropState); // has to be insertes in a sort order later
 }
@@ -288,7 +290,7 @@ Reference < XNameContainer >
         case XML_STYLE_FAMILY_TABLE_CELL:
             sServiceName = sCellStyleServiceName;
             break;
-
+            
         }
     }
     return sServiceName;

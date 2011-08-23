@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,17 +32,17 @@
 #include <uielement/statusbarwrapper.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
-#include <framework/actiontriggerhelper.hxx>
+#include <helper/actiontriggerhelper.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/statusbar.hxx>
 #include <helpid.hrc>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -53,7 +53,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <toolkit/unohlp.hxx>
@@ -76,7 +76,7 @@ namespace framework
 StatusBarWrapper::StatusBarWrapper(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
     )
- :  UIConfigElementWrapperBase( UIElementType::STATUSBAR,xServiceManager )
+ :	UIConfigElementWrapperBase( UIElementType::STATUSBAR,xServiceManager )
 {
 }
 
@@ -130,7 +130,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
                 Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {
-                    sal_uLong nStyles = WinBits( WB_LEFT | WB_3DLOOK );
+                    ULONG nStyles = WinBits( WB_LEFT | WB_3DLOOK );
 
                     pStatusBar = new FrameworkStatusBar( pWindow, nStyles );
                     pStatusBarManager = new StatusBarManager( m_xServiceFactory, xFrame, m_aResourceURL, pStatusBar );

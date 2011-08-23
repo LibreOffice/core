@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 
 class ModifyListenerForewarder;
 
-typedef cppu::ImplInheritanceHelper5< SfxUnoStyleSheet,
+typedef cppu::ImplInheritanceHelper5< SfxUnoStyleSheet, 
                                     ::com::sun::star::beans::XPropertySet,
                                     ::com::sun::star::lang::XServiceInfo,
                                     ::com::sun::star::beans::XPropertyState,
@@ -60,19 +60,19 @@ typedef cppu::ImplInheritanceHelper5< SfxUnoStyleSheet,
 class SdStyleSheet : public SdStyleSheetBase, private ::cppu::BaseMutex
 {
 public:
-    SdStyleSheet( const rtl::OUString& rDisplayName, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily, sal_uInt16 nMask );
+    SdStyleSheet( const rtl::OUString& rDisplayName, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily, USHORT nMask );
     SdStyleSheet( const SdStyleSheet& );
 
-    virtual sal_Bool        SetParent (const String& rParentName);
+    virtual BOOL		SetParent (const String& rParentName);
     virtual SfxItemSet& GetItemSet();
-    virtual sal_Bool        IsUsed() const;
-    virtual sal_Bool        HasFollowSupport() const;
-    virtual sal_Bool        HasParentSupport() const;
-    virtual sal_Bool        HasClearParentSupport() const;
-    virtual sal_Bool        SetName( const UniString& );
-    virtual void        SetHelpId( const String& r, sal_uLong nId );
+    virtual BOOL		IsUsed() const;
+    virtual BOOL		HasFollowSupport() const;
+    virtual BOOL		HasParentSupport() const;
+    virtual BOOL		HasClearParentSupport() const;
+    virtual BOOL		SetName( const UniString& );
+    virtual void		SetHelpId( const String& r, ULONG nId );
 
-    void        AdjustToFontHeight(SfxItemSet& rSet, sal_Bool bOnlyMissingItems = sal_True);
+    void        AdjustToFontHeight(SfxItemSet& rSet, BOOL bOnlyMissingItems = TRUE);
 
     SdStyleSheet* GetRealStyleSheet() const;
     SdStyleSheet* GetPseudoStyleSheet() const;
@@ -131,17 +131,17 @@ public:
 protected:
     const SfxItemPropertySimpleEntry* getPropertyMapEntry( const ::rtl::OUString& rPropertyName ) const throw();
 
-    virtual void Load (SvStream& rIn, sal_uInt16 nVersion);
+    virtual void Load (SvStream& rIn, USHORT nVersion);
     virtual void Store(SvStream& rOut);
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
-    virtual             ~SdStyleSheet();
+    virtual 			~SdStyleSheet();
 
     void throwIfDisposed() throw (::com::sun::star::uno::RuntimeException);
 
     virtual void disposing();
 
-    rtl::OUString   msApiName;
+    rtl::OUString	msApiName;
     rtl::Reference< SfxStyleSheetBasePool > mxPool;
 
     /** boradcast helper for events */
@@ -150,13 +150,13 @@ protected:
     boost::scoped_ptr< ModifyListenerForewarder > mpModifyListenerForewarder;
 
 private:
-    SdStyleSheet& operator=( const SdStyleSheet& ); // not implemented
+    SdStyleSheet& operator=( const SdStyleSheet& );	// not implemented
 };
 
 typedef rtl::Reference< SdStyleSheet > SdStyleSheetRef;
 typedef std::vector< SdStyleSheetRef > SdStyleSheetVector;
 
-#endif     // _SD_STLSHEET_HXX
+#endif	   // _SD_STLSHEET_HXX
 
 
 

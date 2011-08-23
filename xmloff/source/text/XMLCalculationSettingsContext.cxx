@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 
@@ -46,7 +46,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
-XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImport,
+XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImport, 
                                     sal_uInt16 p_nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<

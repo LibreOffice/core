@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ published constants MacroExecMode
     */
 
     const short NEVER_EXECUTE = 0;
-
+    
     //-------------------------------------------------------------------------
     /** Execute macros from secure list quietly.
-
+        
         <p>
         If a macro is not in the list a conformation for it executing will
         appear.
@@ -75,7 +75,7 @@ published constants MacroExecMode
 
     const short USE_CONFIG = 3;
 
-
+    
     //-------------------------------------------------------------------------
     /** A macro should be executed always no conformation should be provided.
     */

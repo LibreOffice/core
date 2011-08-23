@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include "impframe.hxx"
 #include "objshimp.hxx"
-#include "sfx2/sfxhelp.hxx"
+#include "sfxhelp.hxx"
 #include "workwin.hxx"
 
 #include "sfx2/app.hxx"
@@ -82,13 +82,13 @@ public:
     ~SfxFrameWindow_Impl( );
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void        StateChanged( StateChangedType nStateChange );
-    virtual long        PreNotify( NotifyEvent& rNEvt );
-    virtual long        Notify( NotifyEvent& rEvt );
+    virtual void		StateChanged( StateChangedType nStateChange );
+    virtual long 		PreNotify( NotifyEvent& rNEvt );
+    virtual long		Notify( NotifyEvent& rEvt );
     virtual void        Resize();
     virtual void        GetFocus();
-    void                DoResize();
-    DECL_LINK(          CloserHdl, void* );
+    void				DoResize();
+    DECL_LINK(			CloserHdl, void* );
 };
 
 SfxFrameWindow_Impl::SfxFrameWindow_Impl( SfxFrame* pF, Window& i_rContainerWindow )
@@ -122,21 +122,21 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
     {
         if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !pFrame->IsInPlace() )
         {
-            OSL_TRACE("SfxFrame: GotFocus");
-            pView->MakeActive_Impl( sal_False );
+            DBG_TRACE("SfxFrame: GotFocus");
+            pView->MakeActive_Impl( FALSE );
         }
 
         // TODO/LATER: do we still need this code?
         Window* pWindow = rNEvt.GetWindow();
-        rtl::OString sHelpId;
-        while ( !sHelpId.getLength() && pWindow )
+        ULONG nHelpId  = 0;
+        while ( !nHelpId && pWindow )
         {
-            sHelpId = pWindow->GetHelpId();
+            nHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( sHelpId.getLength() )
-            SfxHelp::OpenHelpAgent( pFrame, sHelpId );
+        if ( nHelpId )
+            SfxHelp::OpenHelpAgent( pFrame, nHelpId );
 
         // if focus was on an external window, the clipboard content might have been changed
         pView->GetBindings().Invalidate( SID_PASTE );
@@ -146,7 +146,7 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
     else if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         if ( pView->GetViewShell()->KeyInput( *rNEvt.GetKeyEvent() ) )
-            return sal_True;
+            return TRUE;
     }
     else if ( rNEvt.GetType() == EVENT_EXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTDISABLE*/ )
     {
@@ -155,6 +155,7 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
     }
     else if ( rNEvt.GetType() == EVENT_ENDEXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTENABLE*/ )
     {
+        //EnableInput( sal_True, sal_True );
         pView->SetModalMode( sal_False );
         return sal_True;
     }
@@ -164,7 +165,7 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
 
 long SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_uInt16 nType = rNEvt.GetType();
+    USHORT nType = rNEvt.GetType();
     if ( nType == EVENT_KEYINPUT || nType == EVENT_KEYUP )
     {
         SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
@@ -199,7 +200,7 @@ long SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 void SfxFrameWindow_Impl::GetFocus()
 {
     if ( pFrame && !pFrame->IsClosing_Impl() && pFrame->GetCurrentViewFrame() && pFrame->GetFrameInterface().is() )
-        pFrame->GetCurrentViewFrame()->MakeActive_Impl( sal_True );
+        pFrame->GetCurrentViewFrame()->MakeActive_Impl( TRUE );
 }
 
 void SfxFrameWindow_Impl::Resize()
@@ -212,7 +213,7 @@ void SfxFrameWindow_Impl::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
-        pFrame->pImp->bHidden = sal_False;
+        pFrame->pImp->bHidden = FALSE;
         if ( pFrame->IsInPlace() )
             // TODO/MBA: workaround for bug in LayoutManager: the final resize does not get through because the
             // LayoutManager works asynchronously and between resize and time execution the DockingAcceptor was exchanged so that
@@ -250,7 +251,7 @@ Reference < XFrame > SfxFrame::CreateBlankFrame()
     return xFrame;
 }
 
-SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nViewId, bool bHidden )
+SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewId, bool bHidden )
 {
     SfxFrame* pFrame = NULL;
     try
@@ -341,7 +342,7 @@ SfxFrame::SfxFrame( Window& i_rContainerWindow, bool i_bHidden )
     pWindow->Show();
 }
 
-void SfxFrame::SetPresentationMode( sal_Bool bSet )
+void SfxFrame::SetPresentationMode( BOOL bSet )
 {
     if ( GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetWindow().SetBorderStyle( bSet ? WINDOW_BORDER_NOBORDER : WINDOW_BORDER_NORMAL );
@@ -362,7 +363,7 @@ void SfxFrame::SetPresentationMode( sal_Bool bSet )
     if ( GetWorkWindow_Impl() )
         GetWorkWindow_Impl()->SetDockingAllowed( !bSet );
     if ( GetCurrentViewFrame() )
-        GetCurrentViewFrame()->GetDispatcher()->Update_Impl( sal_True );
+        GetCurrentViewFrame()->GetDispatcher()->Update_Impl( TRUE );
 }
 
 SystemWindow* SfxFrame::GetSystemWindow() const
@@ -389,14 +390,14 @@ sal_Bool SfxFrame::Close()
     return sal_True;
 }
 
-void SfxFrame::LockResize_Impl( sal_Bool bLock )
+void SfxFrame::LockResize_Impl( BOOL bLock )
 {
     pImp->bLockResize = bLock;
 }
 
 IMPL_LINK( SfxFrameWindow_Impl, CloserHdl, void*, EMPTYARG )
 {
-    if ( pFrame && !pFrame->PrepareClose_Impl( sal_True ) )
+    if ( pFrame && !pFrame->PrepareClose_Impl( TRUE ) )
         return 0L;
 
     if ( pFrame )
@@ -404,7 +405,7 @@ IMPL_LINK( SfxFrameWindow_Impl, CloserHdl, void*, EMPTYARG )
     return 0L;
 }
 
-void SfxFrame::SetMenuBarOn_Impl( sal_Bool bOn )
+void SfxFrame::SetMenuBarOn_Impl( BOOL bOn )
 {
     pImp->bMenuBarOn = bOn;
 
@@ -428,7 +429,7 @@ void SfxFrame::SetMenuBarOn_Impl( sal_Bool bOn )
     }
 }
 
-sal_Bool SfxFrame::IsMenuBarOn_Impl() const
+BOOL SfxFrame::IsMenuBarOn_Impl() const
 {
     return pImp->bMenuBarOn;
 }
@@ -437,6 +438,7 @@ void SfxFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
 {
     Window *pWin = pImp->pExternalContainerWindow;
 
+    // Groesse setzen
     const Size aAppWindow( pImp->pExternalContainerWindow->GetDesktopRectPixel().GetSize() );
     Point aPos( rWinArea.TopLeft() );
     Size aSz( rWinArea.GetSize() );
@@ -471,7 +473,7 @@ void SfxFrame::PrepareForDoc_Impl( SfxObjectShell& i_rDoc )
     // plugin mode
     sal_Int16 nPluginMode = aDocumentArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode && ( nPluginMode != 2 ) )
-        SetInPlace_Impl( sal_True );
+        SetInPlace_Impl( TRUE );
 }
 
 bool SfxFrame::IsMarkedHidden_Impl() const

@@ -58,14 +58,18 @@
  * Frame object style for OOo.
  * You can reference to the XFFrame object.
  ************************************************************************/
-#ifndef     _XFFRAMESTYLE_HXX
-#define     _XFFRAMESTYLE_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-10 create and implements.
+ ************************************************************************/
+#ifndef		_XFFRAMESTYLE_HXX
+#define		_XFFRAMESTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "xfmargins.hxx"
-#include    "xfcolor.hxx"
-#include    "xfpadding.hxx"
+#include	"xfglobal.hxx"
+#include	"xfstyle.hxx"
+#include	"xfmargins.hxx"
+#include	"xfcolor.hxx"
+#include	"xfpadding.hxx"
 
 class XFBorders;
 class XFColumns;
@@ -84,105 +88,105 @@ public:
     virtual ~XFFrameStyle();
 
 public:
-    void    SetWrapType(enumXFWrap wrap, sal_Int32 nParagraphs = 0);
+    void	SetWrapType(enumXFWrap wrap, sal_Int32 nParagraphs = 0);
 
     /**
-     * @descr:  space between frame and paragraph text.
+     * @descr:	space between frame and paragraph text.
      */
-    void    SetMargins(double left, double right=-1,double top=-1, double bottom=-1);
+    void	SetMargins(double left, double right=-1,double top=-1, double bottom=-1);
 
     /**
-     * @descr:  space between frame and text inside frame.
+     * @descr:	space between frame and text inside frame.
      */
-    void    SetPadding(double left, double right=-1,double top=-1, double bottom=-1);
+    void	SetPadding(double left, double right=-1,double top=-1, double bottom=-1);
 
     /**
-     * @descr:  set the border property of the frame.
+     * @descr:	set the border property of the frame.
      */
-    void    SetBorders(XFBorders *pBorders);
+    void	SetBorders(XFBorders *pBorders);
 
     /**
-     * @descr:  set the column property of the frame.
+     * @descr:	set the column property of the frame.
      */
-    void    SetColumns(XFColumns *pColumns);
+    void	SetColumns(XFColumns *pColumns);
 
     /**
-     * @descr:  set the shadow object the frame.
+     * @descr:	set the shadow object the frame.
      */
-    void    SetShadow(XFShadow *pShadow);
+    void	SetShadow(XFShadow *pShadow);
 
     /**
-     * @descr:  set the background image of the frame.
+     * @descr:	set the background image of the frame.
      */
-    void    SetBackImage(XFBGImage *iamge);
+    void	SetBackImage(XFBGImage *iamge);
 
     /**
-     * @descr:  set the background color of the frame.
+     * @descr:	set the background color of the frame.
      */
-    void    SetBackColor(XFColor& color);
+    void	SetBackColor(XFColor& color);
 
     /**
-     * @descr   Set whether frame is protected. There are three properties that can be protected, content,size and position.
+     * @descr	Set whether frame is protected. There are three properties that can be protected, content,size and position.
      */
-    void    SetProtect(sal_Bool content, sal_Bool size, sal_Bool pos);
+    void	SetProtect(sal_Bool content, sal_Bool size, sal_Bool pos);
 
     /**
-     * @descr   Set text dir.
+     * @descr	Set text dir.
      */
-    void    SetTextDir(enumXFTextDir dir);
+    void	SetTextDir(enumXFTextDir dir);
 
     /**
-     * @descr   Set horizontal position type.
+     * @descr	Set horizontal position type.
      */
-    void    SetXPosType(enumXFFrameXPos pos, enumXFFrameXRel rel);
+    void	SetXPosType(enumXFFrameXPos pos, enumXFFrameXRel rel);
 
     /**
-     * @descr   Set vertical position type.
+     * @descr	Set vertical position type.
      */
-    void    SetYPosType(enumXFFrameYPos pos, enumXFFrameYRel rel);
+    void	SetYPosType(enumXFFrameYPos pos, enumXFFrameYRel rel);
 
     /**
-     * @descr   Set frame background.
+     * @descr	Set frame background.
      */
-    void    SetBackGround(sal_Bool bBackground);
+    void	SetBackGround(sal_Bool bBackground);
 
     void SetTransparency(sal_Int16 nTransparency);
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle	GetStyleFamily();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 protected:
-    enumXFWrap  m_eWrap;
-    sal_Int32   m_nWrapLines;
-    XFPadding   m_aPad;
-    XFMargins   m_aMargins;
-    XFBorders   *m_pBorders;
-    XFColumns   *m_pColumns;
-    XFShadow    *m_pShadow;
-    XFBGImage   *m_pBGImage;
-    XFColor     m_aBackColor;
-    sal_Bool    m_bProtectContent;
-    sal_Bool    m_bProtectSize;
-    sal_Bool    m_bProtectPos;
-    sal_Bool    m_bEditable;
-    sal_Bool    m_bPrintable;
-    sal_Bool    m_bBackground;
+    enumXFWrap	m_eWrap;
+    sal_Int32	m_nWrapLines;
+    XFPadding	m_aPad;
+    XFMargins	m_aMargins;
+    XFBorders	*m_pBorders;
+    XFColumns	*m_pColumns;
+    XFShadow	*m_pShadow;
+    XFBGImage	*m_pBGImage;
+    XFColor		m_aBackColor;
+    sal_Bool	m_bProtectContent;
+    sal_Bool	m_bProtectSize;
+    sal_Bool	m_bProtectPos;
+    sal_Bool	m_bEditable;
+    sal_Bool	m_bPrintable;
+    sal_Bool	m_bBackground;
     sal_Int16 m_nTransparency;
 
-    enumXFTextDir   m_eTextDir;
-    enumXFFrameXPos m_eXPos;
-    enumXFFrameXRel m_eXRel;
-    enumXFFrameYPos m_eYPos;
+    enumXFTextDir	m_eTextDir;
+    enumXFFrameXPos	m_eXPos;
+    enumXFFrameXRel	m_eXRel;
+    enumXFFrameYPos	m_eYPos;
     enumXFFrameYRel m_eYRel;
 };
 
-inline void XFFrameStyle::SetWrapType(enumXFWrap wrap, sal_Int32 /*nParagraphs*/)
+inline void	XFFrameStyle::SetWrapType(enumXFWrap wrap, sal_Int32 /*nParagraphs*/)
 {
     m_eWrap = wrap;
 }
 
-inline void XFFrameStyle::SetMargins(double left, double right,double top, double bottom)
+inline void	XFFrameStyle::SetMargins(double left, double right,double top, double bottom)
 {
     if( left != -1 )
         m_aMargins.SetLeft(left);
@@ -194,7 +198,7 @@ inline void XFFrameStyle::SetMargins(double left, double right,double top, doubl
         m_aMargins.SetBottom( bottom );
 }
 
-inline void XFFrameStyle::SetPadding(double left, double right,double top, double bottom)
+inline void	XFFrameStyle::SetPadding(double left, double right,double top, double bottom)
 {
     if( left != -1 )
         m_aPad.SetLeft(left);
@@ -206,30 +210,30 @@ inline void XFFrameStyle::SetPadding(double left, double right,double top, doubl
         m_aPad.SetBottom( bottom );
 }
 
-inline void XFFrameStyle::SetBackColor(XFColor& color)
+inline void	XFFrameStyle::SetBackColor(XFColor& color)
 {
     m_aBackColor = color;
 }
 
-inline void XFFrameStyle::SetTextDir(enumXFTextDir dir)
+inline void	XFFrameStyle::SetTextDir(enumXFTextDir dir)
 {
     m_eTextDir = dir;
 }
 
-inline void XFFrameStyle::SetProtect(sal_Bool content, sal_Bool size, sal_Bool pos)
+inline void	XFFrameStyle::SetProtect(sal_Bool content, sal_Bool size, sal_Bool pos)
 {
     m_bProtectContent = content;
     m_bProtectSize = size;
     m_bProtectPos = pos;
 }
 
-inline void XFFrameStyle::SetXPosType(enumXFFrameXPos pos, enumXFFrameXRel rel)
+inline void	XFFrameStyle::SetXPosType(enumXFFrameXPos pos, enumXFFrameXRel rel)
 {
     m_eXPos = pos;
     m_eXRel = rel;
 }
 
-inline void XFFrameStyle::SetYPosType(enumXFFrameYPos pos, enumXFFrameYRel rel)
+inline void	XFFrameStyle::SetYPosType(enumXFFrameYPos pos, enumXFFrameYRel rel)
 {
     m_eYPos = pos;
     m_eYRel = rel;

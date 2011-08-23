@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,11 +67,11 @@ namespace drawinglayer
             // add fill
             if(!getSdrLFSTAttribute().getFill().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline),
-                        getTransform(),
-                        getSdrLFSTAttribute().getFill(),
+                        basegfx::B2DPolyPolygon(aUnitOutline), 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getFill(), 
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
@@ -79,18 +79,18 @@ namespace drawinglayer
             if(getSdrLFSTAttribute().getLine().isDefault())
             {
                 // create invisible line for HitTest/BoundRect
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createHiddenGeometryPrimitives2D(
                         false,
-                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        basegfx::B2DPolyPolygon(aUnitOutline), 
                         getTransform()));
             }
             else
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createPolygonLinePrimitive(
-                        aUnitOutline,
-                        getTransform(),
+                        aUnitOutline, 
+                        getTransform(), 
                         getSdrLFSTAttribute().getLine(),
                         attribute::SdrLineStartEndAttribute()));
             }
@@ -98,14 +98,14 @@ namespace drawinglayer
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createTextPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline),
-                        getTransform(),
-                        getSdrLFSTAttribute().getText(),
-                        getSdrLFSTAttribute().getLine(),
-                        false,
-                        false,
+                        basegfx::B2DPolyPolygon(aUnitOutline), 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getText(), 
+                        getSdrLFSTAttribute().getLine(), 
+                        false, 
+                        false, 
                         false));
             }
 
@@ -113,7 +113,7 @@ namespace drawinglayer
             if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
-                    aRetval,
+                    aRetval, 
                     getSdrLFSTAttribute().getShadow());
             }
 
@@ -121,9 +121,9 @@ namespace drawinglayer
         }
 
         SdrEllipsePrimitive2D::SdrEllipsePrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform,
+            const basegfx::B2DHomMatrix& rTransform, 
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute)
-        :   BufferedDecompositionPrimitive2D(),
+        :	BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute)
         {
@@ -134,7 +134,7 @@ namespace drawinglayer
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrEllipsePrimitive2D& rCompare = (SdrEllipsePrimitive2D&)rPrimitive;
-
+                
                 return (getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());
             }
@@ -183,11 +183,11 @@ namespace drawinglayer
             // add fill
             if(!getSdrLFSTAttribute().getFill().isDefault() && aUnitOutline.isClosed())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline),
-                        getTransform(),
-                        getSdrLFSTAttribute().getFill(),
+                        basegfx::B2DPolyPolygon(aUnitOutline), 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getFill(), 
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
@@ -195,33 +195,33 @@ namespace drawinglayer
             if(getSdrLFSTAttribute().getLine().isDefault())
             {
                 // create invisible line for HitTest/BoundRect
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createHiddenGeometryPrimitives2D(
                         false,
-                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        basegfx::B2DPolyPolygon(aUnitOutline), 
                         getTransform()));
             }
             else
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createPolygonLinePrimitive(
-                        aUnitOutline,
-                        getTransform(),
-                        getSdrLFSTAttribute().getLine(),
+                        aUnitOutline, 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getLine(), 
                         getSdrLFSTAttribute().getLineStartEnd()));
             }
 
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createTextPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline),
-                        getTransform(),
-                        getSdrLFSTAttribute().getText(),
-                        getSdrLFSTAttribute().getLine(),
-                        false,
-                        false,
+                        basegfx::B2DPolyPolygon(aUnitOutline), 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getText(), 
+                        getSdrLFSTAttribute().getLine(), 
+                        false, 
+                        false, 
                         false));
             }
 
@@ -229,7 +229,7 @@ namespace drawinglayer
             if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
-                    aRetval,
+                    aRetval, 
                     getSdrLFSTAttribute().getShadow());
             }
 
@@ -237,16 +237,16 @@ namespace drawinglayer
         }
 
         SdrEllipseSegmentPrimitive2D::SdrEllipseSegmentPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform,
-            const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-            double fStartAngle,
-            double fEndAngle,
-            bool bCloseSegment,
+            const basegfx::B2DHomMatrix& rTransform, 
+            const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute, 
+            double fStartAngle, 
+            double fEndAngle, 
+            bool bCloseSegment, 
             bool bCloseUsingCenter)
-        :   SdrEllipsePrimitive2D(rTransform, rSdrLFSTAttribute),
+        :	SdrEllipsePrimitive2D(rTransform, rSdrLFSTAttribute),
             mfStartAngle(fStartAngle),
             mfEndAngle(fEndAngle),
-            mbCloseSegment(bCloseSegment),
+            mbCloseSegment(bCloseSegment), 
             mbCloseUsingCenter(bCloseUsingCenter)
         {
         }
@@ -257,9 +257,9 @@ namespace drawinglayer
             {
                 const SdrEllipseSegmentPrimitive2D& rCompare = (SdrEllipseSegmentPrimitive2D&)rPrimitive;
 
-                if( mfStartAngle == rCompare.mfStartAngle
+                if(	mfStartAngle == rCompare.mfStartAngle
                     && mfEndAngle == rCompare.mfEndAngle
-                    && mbCloseSegment == rCompare.mbCloseSegment
+                    && mbCloseSegment == rCompare.mbCloseSegment 
                     && mbCloseUsingCenter == rCompare.mbCloseUsingCenter)
                 {
                     return true;

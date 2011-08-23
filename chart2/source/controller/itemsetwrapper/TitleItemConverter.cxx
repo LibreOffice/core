@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ public:
     virtual ~FormattedStringsConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
+    virtual const USHORT * GetWhichPairs() const;
 };
 
 // ----------------------------------------
@@ -110,7 +110,7 @@ FormattedStringsConverter::~FormattedStringsConverter()
 {
 }
 
-const sal_uInt16 * FormattedStringsConverter::GetWhichPairs() const
+const USHORT * FormattedStringsConverter::GetWhichPairs() const
 {
     return nCharacterPropertyWhichPairs;
 }
@@ -171,7 +171,7 @@ bool TitleItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const sal_uInt16 * TitleItemConverter::GetWhichPairs() const
+const USHORT * TitleItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nTitleWhichPairs;
@@ -191,7 +191,7 @@ bool TitleItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWi
 
 
 bool TitleItemConverter::ApplySpecialItem(
-    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
+    USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -222,7 +222,7 @@ bool TitleItemConverter::ApplySpecialItem(
 }
 
 void TitleItemConverter::FillSpecialItem(
-    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
+    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )

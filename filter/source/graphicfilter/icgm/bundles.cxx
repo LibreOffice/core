@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,7 @@
 
 #include <vcl/salbtype.hxx>
 #include <tools/stream.hxx>
+#include <tools/list.hxx>
 
 Bundle& Bundle::operator=( Bundle& rSource )
 {
@@ -48,7 +49,7 @@ void Bundle::SetColor( sal_uInt32 nColor )
     mnColor = nColor;
 }
 
-sal_uInt32 Bundle::GetColor() const
+sal_uInt32 Bundle::GetColor()
 {
     return mnColor;
 }
@@ -101,10 +102,10 @@ FillBundle& FillBundle::operator=( FillBundle& rSource )
 // ---------------------------------------------------------------
 
 FontEntry::FontEntry() :
-    pFontName       ( NULL ),
-    eCharSetType    ( CST_CCOMPLETE ),
-    pCharSetValue   ( NULL ),
-    nFontType       ( 0 )
+    pFontName		( NULL ),
+    eCharSetType	( CST_CCOMPLETE ),
+    pCharSetValue	( NULL ),
+    nFontType		( 0 )
 {
 }
 
@@ -117,9 +118,9 @@ FontEntry::~FontEntry()
 // ---------------------------------------------------------------
 
 CGMFList::CGMFList() :
-    nFontNameCount      ( 0 ),
-    nCharSetCount       ( 0 ),
-    nFontsAvailable     ( 0 )
+    nFontNameCount		( 0 ),
+    nCharSetCount		( 0 ),
+    nFontsAvailable		( 0 )
 {
     aFontEntryList.Clear();
 }
@@ -134,7 +135,7 @@ CGMFList::~CGMFList()
 CGMFList& CGMFList::operator=( CGMFList& rSource )
 {
     ImplDeleteList();
-    nFontsAvailable = rSource.nFontsAvailable;
+    nFontsAvailable	= rSource.nFontsAvailable;
     nFontNameCount = rSource.nFontNameCount;
     nCharSetCount = rSource.nCharSetCount;
     FontEntry* pPtr = (FontEntry*)rSource.aFontEntryList.First();

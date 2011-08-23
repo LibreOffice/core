@@ -17,17 +17,17 @@ class SfxMacro;
 
 class SfxMacroStatement
 {
-    sal_uInt16              nSlotId;    // ausgef"uhrte Slot-Id oder 0, wenn manuell
+    USHORT				nSlotId;	// ausgef"uhrte Slot-Id oder 0, wenn manuell
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs;      // aktuelle Parameter, falls nSlotId != 0
-    String              aStatement; // Statement in BASIC-Syntax (ggf. mit CR/LF)
-    sal_Bool                bDone;      // auskommentieren wenn kein Done() gerufen
-    void*               pDummy;     // f"ur alle F"alle zum kompatibel bleiben
+    String				aStatement; // Statement in BASIC-Syntax (ggf. mit CR/LF)
+    BOOL				bDone;  	// auskommentieren wenn kein Done() gerufen
+    void*				pDummy;		// f"ur alle F"alle zum kompatibel bleiben
 
 #ifdef _SFXMACRO_HXX
 private:
-    void                GenerateNameAndArgs_Impl( SfxMacro *pMacro,
+    void				GenerateNameAndArgs_Impl( SfxMacro *pMacro,
                                                   const SfxSlot &rSlot,
-                                                  sal_Bool bRequestDone,
+                                                  BOOL bRequestDone,
                                                   ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aArgs );
 #endif
 
@@ -36,28 +36,28 @@ public:
 
                         SfxMacroStatement( const String &rTarget,
                                            const SfxSlot &rSlot,
-                                           sal_Bool bRequestDone,
+                                           BOOL bRequestDone,
                                            ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aArgs );
 
                         SfxMacroStatement( const SfxShell &rShell,
                                            const String &rTarget,
-                                           sal_Bool bAbsolute,
+                                           BOOL bAbsolute,
                                            const SfxSlot &rSlot,
-                                           sal_Bool bRequestDone,
+                                           BOOL bRequestDone,
                                            ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aArgs );
 
                         SfxMacroStatement( const String &rStatment );
                         ~SfxMacroStatement();
 
-    sal_uInt16              GetSlotId() const;
+    USHORT				GetSlotId() const;
     const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& GetArgs() const;
-    sal_Bool                IsDone() const;
-    const String&       GetStatement() const;
+    BOOL				IsDone() const;
+    const String&		GetStatement() const;
 };
 
 //--------------------------------------------------------------------
 
-inline sal_uInt16 SfxMacroStatement::GetSlotId() const
+inline USHORT SfxMacroStatement::GetSlotId() const
 
 /*  [Beschreibung]
 
@@ -77,7 +77,7 @@ inline const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::Property
 /*  [Beschreibung]
 
     Liefert die Parameter mit denen Statement ausgef"uhrt wurde oder 0,
-    falls das Statement manuell (<SFX_SLOT_RECORDMANUAL>) aufgezeichnet
+    falls das Statement	manuell (<SFX_SLOT_RECORDMANUAL>) aufgezeichnet
     wurde.
 
     Der R"uckgabewert geh"ort dem SfxMacroStatement und ist nur im
@@ -90,7 +90,7 @@ inline const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::Property
 
 //--------------------------------------------------------------------
 
-inline sal_Bool SfxMacroStatement::IsDone() const
+inline BOOL	SfxMacroStatement::IsDone() const
 
 /*  [Beschreibung]
 
@@ -128,7 +128,7 @@ inline const String& SfxMacroStatement::GetStatement() const
 
 enum SfxMacroMode
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit diesem enum wird bestimmt, ob eine <SfxMacro>-Instanz zum
     absoluten oder relativen Recorden erzeugt wurde, oder um ein
@@ -136,11 +136,11 @@ enum SfxMacroMode
 */
 
 {
-    SFX_MACRO_EXISTING,         /*  es handelt sich um ein bereits
+    SFX_MACRO_EXISTING,			/*	es handelt sich um ein bereits
                                     exitistierendes Makro, welches lediglich
                                     referenziert wird */
 
-    SFX_MACRO_RECORDINGABSOLUTE,/*  dieses Makro soll aufgezeichnet werden,
+    SFX_MACRO_RECORDINGABSOLUTE,/*	dieses Makro soll aufgezeichnet werden,
                                     wobei die betroffenen Objekte m"oglichst
                                     direkt angesprochen werden sollen
                                     (Beispiel: "[doc.sdc]") */
@@ -156,7 +156,7 @@ enum SfxMacroMode
 
 class SfxMacro
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     "Uber diese Klasse (bzw. genaugenommen ihre Subklassen) wird zum
     einen die Lokation einer BASIC-Funktion (also in welcher Library,
@@ -166,19 +166,19 @@ class SfxMacro
 */
 
 {
-    SfxMacro_Impl*          pImp;
+    SfxMacro_Impl*			pImp;
 
 public:
                             SfxMacro( SfxMacroMode eMode = SFX_MACRO_RECORDINGRELATIVE );
-    virtual                 ~SfxMacro();
+    virtual 				~SfxMacro();
 
-    SfxMacroMode            GetMode() const;
-    void                    Record( SfxMacroStatement *pStatement );
-    void                    Replace( SfxMacroStatement *pStatement );
-    void                    Remove();
+    SfxMacroMode			GetMode() const;
+    void					Record( SfxMacroStatement *pStatement );
+    void					Replace( SfxMacroStatement *pStatement );
+    void					Remove();
     const SfxMacroStatement*GetLastStatement() const;
 
-    String                  GenerateSource() const;
+    String					GenerateSource() const;
 };
 
 #endif

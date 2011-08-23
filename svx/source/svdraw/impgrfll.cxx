@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,20 +35,20 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void ImpCalcBmpFillSizes( Size&            rStartOffset,
-                          Size&            rBmpOutputSize,
+void ImpCalcBmpFillSizes( Size&			   rStartOffset,
+                          Size&			   rBmpOutputSize,
                           const Rectangle& rOutputRect,
                           const MapMode&   rOutputMapMode,
                           const Bitmap&    rFillBitmap,
                           const Size&      rBmpSize,
                           const Size&      rBmpPerCent,
-                          const Size&      rBmpOffPerCent,
-                          sal_Bool             bBmpLogSize,
-                          sal_Bool             bBmpTile,
-                          sal_Bool             bBmpStretch,
+                          const Size&	   rBmpOffPerCent,
+                          BOOL             bBmpLogSize,
+                          BOOL             bBmpTile,
+                          BOOL             bBmpStretch,
                           RECT_POINT       eBmpRectPoint )
 {
-    sal_Bool    bOriginalSize = sal_False, bScaleSize = sal_False;
+    BOOL	bOriginalSize = FALSE, bScaleSize = FALSE;
 
     // Falls keine Groessen gegeben sind ( z.B. alte Dokumente )
     // berechnen wir uns die Groesse selber aus der Bitmap
@@ -58,16 +58,16 @@ void ImpCalcBmpFillSizes( Size&            rStartOffset,
     if( bBmpLogSize )
     {
         if( !rBmpSize.Width() && !rBmpSize.Height() )
-            bOriginalSize = sal_True;
+            bOriginalSize = TRUE;
         else if( !rBmpSize.Width() || !rBmpSize.Height() )
-            bScaleSize = sal_True;
+            bScaleSize = TRUE;
     }
     else
     {
         if( !rBmpPerCent.Width() && !rBmpPerCent.Height() )
-            bOriginalSize = sal_True;
+            bOriginalSize = TRUE;
         else if( !rBmpPerCent.Width() || !rBmpPerCent.Height() )
-            bScaleSize = sal_True;
+            bScaleSize = TRUE;
     }
 
     // entweder Originalgroesse oder angepasste Groesse

@@ -1,8 +1,8 @@
 /*
  * ************************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ import java.io.File;
  *
  * @author ll93751
  */
-public class JPEGCreator extends EnhancedComplexTestCase
+public class JPEGCreator extends EnhancedComplexTestCase 
 {
     // @Override
     public String[] getTestMethodNames()
@@ -53,23 +53,22 @@ public class JPEGCreator extends EnhancedComplexTestCase
     {
         GlobalLogWriter.set(log);
         ParameterHelper aParam = new ParameterHelper(param);
-
+        
         // run through all documents found in Inputpath
         foreachPSorPDFinInputPath(aParam);
     }
-
+    
 
     public void checkOneFile(String _sDocumentName, String _sResult, ParameterHelper _aParams) throws OfficeException
     {
-         GlobalLogWriter.println("  Document: " + _sDocumentName);
-         GlobalLogWriter.println("   results: " + _sResult);
+         GlobalLogWriter.println("Document: " + _sDocumentName + " results: " + _sResult);
 //         IOffice aOffice = new Office(_aParams, _sResult);
 //         aOffice.start();
 //         aOffice.load(_sDocumentName);
 //         aOffice.storeAsPostscript();
 //         aOffice.close();
          String sJPEGNameSchema = createJPEG(_sDocumentName, "", _aParams);
-
+         
          // store information only if jpeg files exists
          int nPages = countPages(sJPEGNameSchema);
          if (nPages > 0)
@@ -264,20 +263,20 @@ private static void convertToWidth340(String _sFrom, String _To)
             String sFileDir = FileHelper.getPath(_sFile);
             String sBasename = FileHelper.getBasename(_sFile);
 //            String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
-
+                
             String sTmpDir = util.utils.getUsersTempDir();
             if (_aParam.getOutputPath() != null)
             {
                 sTmpDir = _aParam.getOutputPath();
             }
-
+            
             String sJPEGNameSchema = "";
             if (_sFile.toLowerCase().endsWith("ps") ||
                 _sFile.toLowerCase().endsWith("prn") ||
                 _sFile.toLowerCase().endsWith("pdf"))
             {
                 // seems to be a Postscript of PDF file
-
+                
                 sJPEGNameSchema = createJPEGsFromPostscript(sTmpDir, sFileDir, sBasename, _aParam.getResolutionInDPI());
             }
             else if (_sFile.toLowerCase().endsWith("jpg") ||
@@ -293,11 +292,11 @@ private static void convertToWidth340(String _sFrom, String _To)
             }
             return sJPEGNameSchema;
         }
-
+    
         private String getJPEGName(String _sOutputPath, String _sBasename, int _nResolutionInDPI, String _sGS_PageOutput)
         {
             // String fs = System.getProperty("file.separator");
-            String sName = _sBasename + "_" + String.valueOf(_nResolutionInDPI) + "DPI_" + _sGS_PageOutput + ".jpg";
+            String sName = _sBasename + "_" + String.valueOf(_nResolutionInDPI) + "DPI_" + _sGS_PageOutput + ".jpg"; 
             String sJPEGName = FileHelper.appendPath(_sOutputPath, sName);
             return sJPEGName;
         }
@@ -305,16 +304,16 @@ private static void convertToWidth340(String _sFrom, String _To)
         /**
      * Create via ghostscript (gs) from the reference file for every page a JPEG file
      *
-     * MUST set:
+     * MUST set: 
      * m_sOutputPath, m_sReferenceFile, m_sReferencePath
      *
      * return exit code from gs command
      */
 
      private static final String m_sGS_PageOutput = "%04d";
-
+     
      private String createJPEGsFromPostscript(String _sOutputPath, String _sSourcePath, String _sSourceFile, int _nResolutionInDPI)
-        {
+        {            
             FileHelper.makeDirectories("", _sOutputPath);
 
             // create a jpeg from original prn
@@ -337,9 +336,9 @@ private static void convertToWidth340(String _sFrom, String _To)
                     sGhostscriptEXE = FileHelper.appendPath(sGhostscriptPath, sGhostscriptEXE);
                 }
             }
-
+            
 //            String sCommand = sGhostscriptEXE + " -dNOPROMPT -dBATCH -sDEVICE=jpeg -r" + String.valueOf(_nResolutionInDPI) + " -dNOPAUSE -sOutputFile=" + StringHelper.doubleQuoteIfNeed(sJPGFilename) + " " + StringHelper.doubleQuoteIfNeed(sOriginalFile);
-            String[] sCommandArray =
+            String[] sCommandArray = 
                 {
                     sGhostscriptEXE,
                     "-dNOPROMPT",
@@ -348,10 +347,10 @@ private static void convertToWidth340(String _sFrom, String _To)
                     "-r" + String.valueOf(_nResolutionInDPI),
                     "-dNOPAUSE",
                     "-sOutputFile=" + sJPEGNameSchema,
-                    sPostscriptOrPDFFile
-
-
-
+                    sPostscriptOrPDFFile                
+                                
+                                
+                                
                 };
             // System.out.println("Start Command array");
             // try
@@ -361,7 +360,7 @@ private static void convertToWidth340(String _sFrom, String _To)
             //     System.out.println("FAILED");
             // }
             // System.out.println("done");
-
+            
 // TODO: gives ghostscript an error we can handle?
             ProcessHandler aHandler = new ProcessHandler(sCommandArray);
             boolean bBackValue = aHandler.executeSynchronously();
@@ -372,7 +371,7 @@ private static void convertToWidth340(String _sFrom, String _To)
             // String sJPEGNameSchema = "";
             if (nExitCode == 0)
             {
-                // TODO: return a real filename, due to the fact we don't know how much files are created, maybe better to return a list
+                // TODO: return a real filename, due to the fact we don't know how much files are created, maybe better to return a list 
                 int nPages = countPages(sJPEGNameSchema);
                 if (nPages == 0)
                 {
@@ -390,7 +389,7 @@ private static void convertToWidth340(String _sFrom, String _To)
             // aList = (String[])m_aFileList.toArray(aList);
             return sJPEGNameSchema; // sNewJPEGFilename;
         }
-
+    
     public static String getFilenameForJPEGSchema(String _sJPEGSchema, int _nPage)
         {
             if (_nPage < 1 || _nPage > 9999)
@@ -430,7 +429,7 @@ private static void convertToWidth340(String _sFrom, String _To)
         }
         return nPages;
     }
-
+    
 //    public static void main(String [] _args)
 //    {
 //// DONE: give an index.ini file ok

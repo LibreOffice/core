@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 
 
 namespace treeview {
-
+    
     class TVFactory:
         public cppu::OWeakObject,
         public com::sun::star::lang::XServiceInfo,
@@ -49,85 +49,85 @@ namespace treeview {
         public com::sun::star::lang::XMultiServiceFactory
     {
     public:
-
+        
         TVFactory( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
 
         ~TVFactory();
-
+        
         // XInterface
         virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& aType )
+        queryInterface( 
+            const com::sun::star::uno::Type& aType ) 
             throw( com::sun::star::uno::RuntimeException);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
+                    
+        virtual void SAL_CALL 
+        acquire( 
+            void ) 
             throw();
-
+        
         virtual void SAL_CALL
         release(
-            void )
+            void ) 
             throw();
-
-
+        
+        
         // XTypeProvider
-
+        
         XTYPEPROVIDER_DECL()
 
 
         // XServiceInfo
         virtual rtl::OUString SAL_CALL
-        getImplementationName(
-            void )
+        getImplementationName(  
+            void ) 
             throw( com::sun::star::uno::RuntimeException );
-
+        
         virtual sal_Bool SAL_CALL
-        supportsService(
+        supportsService( 
             const rtl::OUString& ServiceName )
             throw(com::sun::star::uno::RuntimeException );
-
+      
         virtual com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-        getSupportedServiceNames(
-            void )
+        getSupportedServiceNames( 
+            void ) 
             throw( com::sun::star::uno::RuntimeException );
-
-        // XMultiServiceFactory
-
+        
+        // XMultiServiceFactory 
+        
         virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
         createInstance(
             const rtl::OUString& aServiceSpecifier )
             throw( com::sun::star::uno::Exception,
                    com::sun::star::uno::RuntimeException );
-
+        
         virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
         createInstanceWithArguments(
             const rtl::OUString& ServiceSpecifier,
             const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& Arguments )
             throw( com::sun::star::uno::Exception,
                    com::sun::star::uno::RuntimeException);
-
+        
         virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
         getAvailableServiceNames( )
             throw( com::sun::star::uno::RuntimeException );
-
+        
         // Other
-
+        
         static rtl::OUString SAL_CALL getImplementationName_static();
-
+        
         static com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames_static();
 
         static com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > SAL_CALL
-        createServiceFactory(
+        createServiceFactory( 
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxServiceMgr );
-
+        
         static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
-        CreateInstance(
+        CreateInstance( 
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMultiServiceFactory );
-
+        
 
     private:
-
+        
         // Members
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xMSF;
         com::sun::star::uno::Reference< com::sun::star::uno::XInterface >             m_xHDS;

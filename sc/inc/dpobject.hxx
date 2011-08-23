@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@
 #include "pivot.hxx"
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 
-#include <boost/ptr_container/ptr_list.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/shared_ptr.hpp>
+
+//------------------------------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace sheet {
 
@@ -60,7 +60,7 @@ class ScPivot;
 class ScPivotCollection;
 struct ScPivotParam;
 struct ScImportSourceDesc;
-class ScSheetSourceDesc;
+struct ScSheetSourceDesc;
 class ScStrCollection;
 class TypedScStrCollection;
 struct PivotField;
@@ -69,18 +69,18 @@ class ScDPTableData;
 
 struct ScDPServiceDesc
 {
-    String  aServiceName;
-    String  aParSource;
-    String  aParName;
-    String  aParUser;
-    String  aParPass;
+    String	aServiceName;
+    String	aParSource;
+    String	aParName;
+    String	aParUser;
+    String	aParPass;
 
     ScDPServiceDesc( const String& rServ, const String& rSrc, const String& rNam,
                         const String& rUser, const String& rPass ) :
         aServiceName( rServ ), aParSource( rSrc ), aParName( rNam ),
-        aParUser( rUser ), aParPass( rPass ) {  }
+        aParUser( rUser ), aParPass( rPass ) {	}
 
-    sal_Bool operator== ( const ScDPServiceDesc& rOther ) const
+    BOOL operator==	( const ScDPServiceDesc& rOther ) const
         { return aServiceName == rOther.aServiceName &&
                  aParSource   == rOther.aParSource &&
                  aParName     == rOther.aParName &&
@@ -89,89 +89,97 @@ struct ScDPServiceDesc
 };
 
 
-class SC_DLLPUBLIC ScDPObject
+class SC_DLLPUBLIC ScDPObject : public ScDataObject
 {
 private:
-    ScDocument*             pDoc;
+    ScDocument*				pDoc;
                                             // settings
-    ScDPSaveData*           pSaveData;
-    String                  aTableName;
-    String                  aTableTag;
-    ScRange                 aOutRange;
-    ScSheetSourceDesc*      pSheetDesc;     //  for sheet data
-    ScImportSourceDesc*     pImpDesc;       //  for database data
-    ScDPServiceDesc*        pServDesc;      //  for external service
+    ScDPSaveData*			pSaveData;
+    String					aTableName;
+    String					aTableTag;
+    ScRange					aOutRange;
+    ScSheetSourceDesc*		pSheetDesc;		//	for sheet data
+    ScImportSourceDesc* 	pImpDesc;		//	for database data
+    ScDPServiceDesc*		pServDesc;		//	for external service
     ::boost::shared_ptr<ScDPTableData>  mpTableData;
                                             // cached data
     com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> xSource;
-    ScDPOutput*             pOutput;
-    sal_Bool                    bSettingsChanged;
-    sal_Bool                    bAlive;         // sal_False if only used to hold settings
+    ScDPOutput*				pOutput;
+    BOOL					bSettingsChanged;
+    BOOL					bAlive;			// FALSE if only used to hold settings
     sal_uInt16              mnAutoFormatIndex;
-    sal_Bool                    bAllowMove;
-    long                    nHeaderRows;    // page fields plus filter button
-    bool                    mbHeaderLayout;  // sal_True : grid, sal_False : standard
+    BOOL					bAllowMove;
+    long					nHeaderRows;	// page fields plus filter button
+    bool                    mbHeaderLayout;  // TRUE : grid, FALSE : standard
 
 
     SC_DLLPRIVATE ScDPTableData*    GetTableData();
-    SC_DLLPRIVATE void              CreateObjects();
-    SC_DLLPRIVATE void              CreateOutput();
-    sal_Bool                    bRefresh;
-    long                        mnCacheId;
+    SC_DLLPRIVATE void				CreateObjects();
+    SC_DLLPRIVATE void				CreateOutput();
+    BOOL					bRefresh;
+    long						mnCacheId;
 
 public:
-    ScDPObject(ScDocument* pD);
-    ScDPObject(const ScDPObject& r);
-    ~ScDPObject();
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    inline void SetRefresh() { bRefresh = TRUE; }
+    const        ScDPTableDataCache* GetCache() const;
+    long          GetCacheId() const;
+    void          SetCacheId( long nCacheId );
+    ULONG RefreshCache();
+    // End Comments
+                ScDPObject( ScDocument* pD );
+                ScDPObject(const ScDPObject& r);
+    virtual		~ScDPObject();
 
-    /**
-     * When a DP object is "alive", it has table output on a sheet.  This flag
-     * doesn't really change the behavior of the object, but is used only for
-     * testing purposes.
-     */
-    void                SetAlive(sal_Bool bSet);
-    void                SetAllowMove(sal_Bool bSet);
+    virtual	ScDataObject*	Clone() const;
 
-    void                InvalidateData();
-    void                ClearSource();
+    void				SetAlive(BOOL bSet);
+    void				SetAllowMove(BOOL bSet);
+
+    void				InvalidateData();
+    void				InvalidateSource();
 
 
-    void                Output( const ScAddress& rPos );
-    ScRange             GetNewOutputRange( bool& rOverflow );
+    void				Output( const ScAddress& rPos );
+    ScRange				GetNewOutputRange( BOOL& rOverflow );
     const ScRange       GetOutputRangeByType( sal_Int32 nType );
 
-    void                SetSaveData(const ScDPSaveData& rData);
-    ScDPSaveData*       GetSaveData() const     { return pSaveData; }
+    void				SetSaveData(const ScDPSaveData& rData);
+    ScDPSaveData*		GetSaveData() const		{ return pSaveData; }
 
-    void                SetOutRange(const ScRange& rRange);
-    const ScRange&      GetOutRange() const     { return aOutRange; }
+    void				SetOutRange(const ScRange& rRange);
+    const ScRange&		GetOutRange() const		{ return aOutRange; }
+
+    void                SetAutoFormatIndex (const sal_uInt16 nIndex);
+    sal_uInt16          GetAutoFormatIndex() const; 
 
     void                SetHeaderLayout(bool bUseGrid);
     bool                GetHeaderLayout() const;
 
-    void                SetSheetDesc(const ScSheetSourceDesc& rDesc);
-    void                SetImportDesc(const ScImportSourceDesc& rDesc);
-    void                SetServiceData(const ScDPServiceDesc& rDesc);
+    void				SetSheetDesc(const ScSheetSourceDesc& rDesc);
+    void				SetImportDesc(const ScImportSourceDesc& rDesc);
+    void				SetServiceData(const ScDPServiceDesc& rDesc);
 
-    void                WriteSourceDataTo( ScDPObject& rDest ) const;
-    void                WriteTempDataTo( ScDPObject& rDest ) const;
+    void				WriteSourceDataTo( ScDPObject& rDest ) const;
+    void				WriteTempDataTo( ScDPObject& rDest ) const;
 
-    const ScSheetSourceDesc* GetSheetDesc() const   { return pSheetDesc; }
-    const ScImportSourceDesc* GetImportSourceDesc() const   { return pImpDesc; }
-    const ScDPServiceDesc* GetDPServiceDesc() const { return pServDesc; }
+    const ScSheetSourceDesc* GetSheetDesc() const	{ return pSheetDesc; }
+    const ScImportSourceDesc* GetImportSourceDesc() const	{ return pImpDesc; }
+    const ScDPServiceDesc* GetDPServiceDesc() const	{ return pServDesc; }
 
     com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> GetSource();
 
-    sal_Bool                IsSheetData() const;
-    sal_Bool                IsImportData() const { return(pImpDesc != NULL); }
-    sal_Bool                IsServiceData() const { return(pServDesc != NULL); }
+    BOOL				IsSheetData() const;
+    BOOL				IsImportData() const { return(pImpDesc != NULL); }
+    BOOL				IsServiceData() const { return(pServDesc != NULL); }
 
-    void                SetName(const String& rNew);
-    const String&       GetName() const                 { return aTableName; }
-    void                SetTag(const String& rNew);
-    const String&       GetTag() const                  { return aTableTag; }
+    void				SetName(const String& rNew);
+    const String&		GetName() const					{ return aTableName; }
+    void				SetTag(const String& rNew);
+    const String&		GetTag() const					{ return aTableTag; }
 
-    /**
+    /** 
      *  Data description cell displays the description of a data dimension if
      *  and only if there is only one data dimension.  It's usually located at
      *  the upper-left corner of the table output.
@@ -179,123 +187,113 @@ public:
     bool                IsDataDescriptionCell(const ScAddress& rPos);
 
     bool                IsDimNameInUse(const ::rtl::OUString& rName) const;
-    String              GetDimName( long nDim, sal_Bool& rIsDataLayout, sal_Int32* pFlags = NULL );
-    sal_Bool                IsDuplicated( long nDim );
+    String              GetDimName( long nDim, BOOL& rIsDataLayout, sal_Int32* pFlags = NULL );
+    BOOL                IsDuplicated( long nDim );
     long                GetDimCount();
     void                GetHeaderPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTableHeaderData& rData);
-    long                GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient );
-    sal_Bool                GetHeaderDrag( const ScAddress& rPos, sal_Bool bMouseLeft, sal_Bool bMouseTop,
+    long				GetHeaderDim( const ScAddress& rPos, USHORT& rOrient );
+    BOOL				GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMouseTop,
                                         long nDragDim,
-                                        Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos );
-    sal_Bool                IsFilterButton( const ScAddress& rPos );
+                                        Rectangle& rPosRect, USHORT& rOrient, long& rDimPos );
+    BOOL				IsFilterButton( const ScAddress& rPos );
 
-    sal_Bool                GetPivotData( ScDPGetPivotDataField& rTarget, /* returns result */
+    BOOL                GetPivotData( ScDPGetPivotDataField& rTarget, /* returns result */
                                       const std::vector< ScDPGetPivotDataField >& rFilters );
-    sal_Bool                ParseFilters( ScDPGetPivotDataField& rTarget,
+    BOOL                ParseFilters( ScDPGetPivotDataField& rTarget,
                                       std::vector< ScDPGetPivotDataField >& rFilters,
                                       const String& rFilterList );
 
     void                GetMemberResultNames( ScStrCollection& rNames, long nDimension );
 
-    void                FillPageList( TypedScStrCollection& rStrings, long nField );
+    void				FillPageList( TypedScStrCollection& rStrings, long nField );
 
     void                ToggleDetails(const ::com::sun::star::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 
-    sal_Bool                FillOldParam(ScPivotParam& rParam) const;
-    sal_Bool                FillLabelData(ScPivotParam& rParam);
-    void                InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, sal_Bool bSetSource);
+    BOOL				FillOldParam(ScPivotParam& rParam, BOOL bForFile) const;
+    BOOL				FillLabelData(ScPivotParam& rParam);
+    void				InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, BOOL bSetSource);
 
-    sal_Bool                GetHierarchiesNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xHiers );
-    sal_Bool                GetHierarchies( sal_Int32 nDim, com::sun::star::uno::Sequence< rtl::OUString >& rHiers );
+    BOOL                GetHierarchiesNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xHiers );
+    BOOL                GetHierarchies( sal_Int32 nDim, com::sun::star::uno::Sequence< rtl::OUString >& rHiers );
 
     sal_Int32           GetUsedHierarchy( sal_Int32 nDim );
 
-    sal_Bool                GetMembersNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
-    sal_Bool                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
+    BOOL                GetMembersNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
+    BOOL                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
 
     bool                GetMemberNames( sal_Int32 nDim, ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames );
     bool                GetMembers( sal_Int32 nDim, sal_Int32 nHier, ::std::vector<ScDPLabelData::Member>& rMembers );
 
-    void                UpdateReference( UpdateRefMode eUpdateRefMode,
+    void				UpdateReference( UpdateRefMode eUpdateRefMode,
                                          const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    sal_Bool                RefsEqual( const ScDPObject& r ) const;
-    void                WriteRefsTo( ScDPObject& r ) const;
+    BOOL				RefsEqual( const ScDPObject& r ) const;
+    void				WriteRefsTo( ScDPObject& r ) const;
 
     void                GetPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTablePositionData& rPosData);
 
-    bool                GetDataFieldPositionData(const ScAddress& rPos,
-                                                 ::com::sun::star::uno::Sequence<
+    bool                GetDataFieldPositionData(const ScAddress& rPos, 
+                                                 ::com::sun::star::uno::Sequence< 
                                                     ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters);
 
-    void                GetDrillDownData(const ScAddress& rPos,
-                                         ::com::sun::star::uno::Sequence<
-                                            ::com::sun::star::uno::Sequence<
+    void                GetDrillDownData(const ScAddress& rPos, 
+                                         ::com::sun::star::uno::Sequence< 
+                                            ::com::sun::star::uno::Sequence< 
                                                 ::com::sun::star::uno::Any > >& rTableData);
 
     // apply drop-down attribute, initialize nHeaderRows, without accessing the source
     // (button attribute must be present)
-    void                RefreshAfterLoad();
+    void				RefreshAfterLoad();
 
     void                BuildAllDimensionMembers();
 
-    static sal_Bool         HasRegisteredSources();
+    static BOOL			HasRegisteredSources();
     static com::sun::star::uno::Sequence<rtl::OUString> GetRegisteredSources();
     static com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>
                         CreateSource( const ScDPServiceDesc& rDesc );
 
-    static void         ConvertOrientation( ScDPSaveData& rSaveData,
-                            const ::std::vector<PivotField>& rFields, sal_uInt16 nOrient,
+    static void			ConvertOrientation( ScDPSaveData& rSaveData,
+                            PivotField* pFields, SCSIZE nCount, USHORT nOrient,
+                            ScDocument* pDoc, SCROW nRow, SCTAB nTab,
                             const com::sun::star::uno::Reference<
                                 com::sun::star::sheet::XDimensionsSupplier>& xSource,
-                            ::std::vector<PivotField>* pRefColFields = NULL,
-                            ::std::vector<PivotField>* pRefRowFields = NULL,
-                            ::std::vector<PivotField>* pRefPageFields = NULL );
+                            BOOL bOldDefaults,
+                            PivotField* pRefColFields = NULL, SCSIZE nRefColCount = 0,
+                            PivotField* pRefRowFields = NULL, SCSIZE nRefRowCount = 0,
+                            PivotField* pRefPageFields = NULL, SCSIZE nRefPageCount = 0 );
 
-    static bool         IsOrientationAllowed( sal_uInt16 nOrient, sal_Int32 nDimFlags );
+    static bool         IsOrientationAllowed( USHORT nOrient, sal_Int32 nDimFlags );
 };
 
 
-class ScDPCollection
+// ============================================================================
+
+class ScDPCollection : public ScCollection
 {
 private:
-    typedef ::boost::ptr_vector<ScDPObject> TablesType;
-
-    ScDocument* pDoc;
-    TablesType maTables;
-
+    ScDocument*	pDoc;
 public:
-    ScDPCollection(ScDocument* pDocument);
-    ScDPCollection(const ScDPCollection& r);
-    ~ScDPCollection();
+                ScDPCollection(ScDocument* pDocument);
+                ScDPCollection(const ScDPCollection& r);
+    virtual		~ScDPCollection();
 
-    SC_DLLPUBLIC size_t GetCount() const;
-    SC_DLLPUBLIC ScDPObject* operator[](size_t nIndex);
-    SC_DLLPUBLIC const ScDPObject* operator[](size_t nIndex) const;
+    virtual	ScDataObject*	Clone() const;
 
-    const ScDPObject* GetByName(const String& rName) const;
+    ScDPObject*	operator[](USHORT nIndex) const {return (ScDPObject*)At(nIndex);}
+    ScDPObject*	GetByName(const String& rName) const;
 
-    void DeleteOnTab( SCTAB nTab );
-    void UpdateReference( UpdateRefMode eUpdateRefMode,
-                          const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void        DeleteOnTab( SCTAB nTab );
+    void		UpdateReference( UpdateRefMode eUpdateRefMode,
+                                 const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    bool RefsEqual( const ScDPCollection& r ) const;
-    void WriteRefsTo( ScDPCollection& r ) const;
+    BOOL		RefsEqual( const ScDPCollection& r ) const;
+    void		WriteRefsTo( ScDPCollection& r ) const;
 
-    /**
-     * Create a new name that's not yet used by any existing data pilot
-     * objects.  All data pilot names are 'DataPilot' + <num>, and the nMin
-     * specifies the minimum number allowed.
-     *
-     * @param nMin minimum number allowed.
-     *
-     * @return new name for data pilot object.
-     */
-    String CreateNewName( sal_uInt16 nMin = 1 ) const;
+    String 		CreateNewName( USHORT nMin = 1 ) const;
 
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
 
-    bool HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+    bool        HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
 };
 
 

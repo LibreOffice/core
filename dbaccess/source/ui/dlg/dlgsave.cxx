@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,34 +62,34 @@ namespace dbaui
 class OSaveAsDlgImpl
 {
 public:
-    FixedText           m_aDescription;
-    FixedText           m_aCatalogLbl;
-    OSQLNameComboBox    m_aCatalog;
-    FixedText           m_aSchemaLbl;
-    OSQLNameComboBox    m_aSchema;
-    FixedText           m_aLabel;
-    OSQLNameEdit        m_aTitle;
-    OKButton            m_aPB_OK;
-    CancelButton        m_aPB_CANCEL;
-    HelpButton          m_aPB_HELP;
-    String              m_aQryLabel;
-    String              m_sTblLabel;
+    FixedText			m_aDescription;
+    FixedText			m_aCatalogLbl;
+    OSQLNameComboBox	m_aCatalog;
+    FixedText			m_aSchemaLbl;
+    OSQLNameComboBox	m_aSchema;
+    FixedText			m_aLabel;
+    OSQLNameEdit		m_aTitle;
+    OKButton			m_aPB_OK;
+    CancelButton		m_aPB_CANCEL;
+    HelpButton			m_aPB_HELP;
+    String				m_aQryLabel;
+    String				m_sTblLabel;
     rtl::OUString       m_sCatalog;
-    rtl::OUString       m_sSchema;
-    String              m_aName;
+    rtl::OUString       m_sSchema;	
+    String				m_aName;
     const IObjectNameCheck&
                         m_rObjectNameCheck;
-    String              m_sParentURL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>            m_xMetaData;
-    sal_Int32           m_nType;
-    sal_Int32           m_nFlags;
+    String				m_sParentURL;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>			m_xMetaData;
+    sal_Int32			m_nType;
+    sal_Int32			m_nFlags;
 
-    OSaveAsDlgImpl( Window * pParent,const sal_Int32& _rType,
+    OSaveAsDlgImpl(	Window * pParent,const sal_Int32& _rType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                     const String& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags);
-    OSaveAsDlgImpl( Window * pParent,
+    OSaveAsDlgImpl(	Window * pParent,
                     const String& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags);
@@ -185,7 +185,7 @@ namespace
                     _rList.InsertEntry( sValue );
             }
 
-            sal_uInt16 nPos = _rList.GetEntryPos( String( _rCurrent ) );
+            USHORT nPos = _rList.GetEntryPos( String( _rCurrent ) );
             if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                 _rList.SelectEntryPos( nPos );
             else
@@ -264,15 +264,15 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                     ::rtl::OUString sCatalog,sSchema,sTable;
                     ::dbtools::qualifiedNameComponents(m_pImpl->m_xMetaData,
                                                         m_pImpl->m_aName,
-                                                        sCatalog,
-                                                        sSchema,
+                                                        sCatalog, 
+                                                        sSchema, 
                                                         sTable,
                                                         ::dbtools::eInDataManipulation);
 
-                    sal_uInt16 nPos = m_pImpl->m_aCatalog.GetEntryPos(String(sCatalog));
+                    USHORT nPos = m_pImpl->m_aCatalog.GetEntryPos(String(sCatalog));
                     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                         m_pImpl->m_aCatalog.SelectEntryPos(nPos);
-
+                    
                     if ( sSchema.getLength() )
                     {
                         nPos = m_pImpl->m_aSchema.GetEntryPos(String(sSchema));
@@ -289,7 +289,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_pImpl->m_aPB_CANCEL.SetPosPixel(Point(m_pImpl->m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
                 m_pImpl->m_aPB_HELP.SetPosPixel(Point(m_pImpl->m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
 
-                sal_uInt16 nLength =  m_pImpl->m_xMetaData.is() ? static_cast<sal_uInt16>(m_pImpl->m_xMetaData->getMaxTableNameLength()) : 0;
+                USHORT nLength =  m_pImpl->m_xMetaData.is() ? static_cast<USHORT>(m_pImpl->m_xMetaData->getMaxTableNameLength()) : 0;
                 nLength = nLength ? nLength : EDIT_NOLIMIT;
 
                 m_pImpl->m_aTitle.SetMaxTextLen(nLength);
@@ -300,7 +300,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_pImpl->m_aTitle.setCheck(bCheck); // enable non valid sql chars as well
                 m_pImpl->m_aSchema.setCheck(bCheck); // enable non valid sql chars as well
                 m_pImpl->m_aCatalog.setCheck(bCheck); // enable non valid sql chars as well
-
+                
                 Size aSize = GetSizePixel();
                 aSize.Height() =
                     aPos.Y() + m_pImpl->m_aPB_OK.GetSizePixel().Height() + m_pImpl->m_aTitle.GetSizePixel().Height() / 2;
@@ -309,7 +309,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
             break;
 
         default:
-            OSL_FAIL( "OSaveAsDlg::OSaveAsDlg: Type not supported yet!" );
+            OSL_ENSURE( false, "OSaveAsDlg::OSaveAsDlg: Type not supported yet!" );
     }
 
     implInit();
@@ -326,7 +326,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
 {
     m_pImpl = new OSaveAsDlgImpl(this,rDefault,_rObjectNameCheck,_nFlags);
     implInitOnlyTitle(_sLabel);
-    implInit();
+    implInit();	
 }
 // -----------------------------------------------------------------------------
 OSaveAsDlg::~OSaveAsDlg()
@@ -408,7 +408,7 @@ void OSaveAsDlg::implInit()
         sal_Int32 nMoveUp = m_pImpl->m_aCatalog.GetPosPixel().Y() - m_pImpl->m_aDescription.GetPosPixel().Y();
 
         // loop to all controls and move them ...
-        for (   Window* pChildControl = GetWindow( WINDOW_FIRSTCHILD );
+        for	(	Window* pChildControl = GetWindow( WINDOW_FIRSTCHILD );
                 pChildControl;
                 pChildControl= pChildControl->GetWindow( WINDOW_NEXT )
             )
@@ -434,15 +434,15 @@ void OSaveAsDlg::implInit()
         SetText( String( ModuleRes( STR_TITLE_RENAME ) ) );
         m_pImpl->m_aTitle.SetHelpId(HID_DLG_RENAME);
     }
-
+    
     m_pImpl->m_aPB_OK.SetClickHdl(LINK(this,OSaveAsDlg,ButtonClickHdl));
     m_pImpl->m_aTitle.SetModifyHdl(LINK(this,OSaveAsDlg,EditModifyHdl));
     m_pImpl->m_aTitle.GrabFocus();
     FreeResource();
 }
 // -----------------------------------------------------------------------------
-String OSaveAsDlg::getName() const      { return m_pImpl->m_aName; }
-String OSaveAsDlg::getCatalog() const   { return m_pImpl->m_aCatalog.IsVisible() ? m_pImpl->m_aCatalog.GetText() : String(); }
-String OSaveAsDlg::getSchema() const    { return m_pImpl->m_aSchema.IsVisible() ? m_pImpl->m_aSchema.GetText() : String(); }
+String OSaveAsDlg::getName() const		{ return m_pImpl->m_aName; }
+String OSaveAsDlg::getCatalog() const	{ return m_pImpl->m_aCatalog.IsVisible() ? m_pImpl->m_aCatalog.GetText() : String(); }
+String OSaveAsDlg::getSchema() const	{ return m_pImpl->m_aSchema.IsVisible() ? m_pImpl->m_aSchema.GetText() : String(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

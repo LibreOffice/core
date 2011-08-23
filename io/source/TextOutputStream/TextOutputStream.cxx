@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,8 +75,8 @@ class OTextOutputStream : public TextOutputStreamHelper
     // Encoding
     OUString mEncoding;
     sal_Bool mbEncodingInitialized;
-    rtl_UnicodeToTextConverter  mConvUnicode2Text;
-    rtl_UnicodeToTextContext    mContextUnicode2Text;
+    rtl_UnicodeToTextConverter 	mConvUnicode2Text;
+    rtl_UnicodeToTextContext   	mContextUnicode2Text;
 
     Sequence<sal_Int8> implConvert( const OUString& rSource );
 
@@ -85,23 +85,23 @@ public:
     ~OTextOutputStream();
 
     // Methods XTextOutputStream
-    virtual void SAL_CALL writeString( const OUString& aString )
+    virtual void SAL_CALL writeString( const OUString& aString ) 
         throw(IOException, RuntimeException);
-    virtual void SAL_CALL setEncoding( const OUString& Encoding )
+    virtual void SAL_CALL setEncoding( const OUString& Encoding ) 
         throw(RuntimeException);
 
     // Methods XOutputStream
-    virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& aData )
+    virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& aData ) 
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
-    virtual void SAL_CALL flush(  )
+    virtual void SAL_CALL flush(  ) 
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
-    virtual void SAL_CALL closeOutput(  )
+    virtual void SAL_CALL closeOutput(  ) 
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
 
     // Methods XActiveDataSource
-    virtual void SAL_CALL setOutputStream( const Reference< XOutputStream >& aStream )
+    virtual void SAL_CALL setOutputStream( const Reference< XOutputStream >& aStream ) 
         throw(RuntimeException);
-    virtual Reference< XOutputStream > SAL_CALL getOutputStream(  )
+    virtual Reference< XOutputStream > SAL_CALL getOutputStream(  ) 
         throw(RuntimeException);
 
     // Methods XServiceInfo
@@ -131,7 +131,7 @@ Sequence<sal_Int8> OTextOutputStream::implConvert( const OUString& rSource )
 
     sal_Size nTargetCount = 0;
     sal_Size nSourceCount = 0;
-
+    
     sal_uInt32 uiInfo;
     sal_Size nSrcCvtChars;
 
@@ -142,7 +142,7 @@ Sequence<sal_Int8> OTextOutputStream::implConvert( const OUString& rSource )
 
     Sequence<sal_Int8> seqText( nSeqSize );
     sal_Char *pTarget = (sal_Char *) seqText.getArray();
-    while( sal_True )
+    while( sal_True ) 
     {
         nTargetCount += rtl_convertUnicodeToText(
                                     mConvUnicode2Text,
@@ -156,8 +156,8 @@ Sequence<sal_Int8> OTextOutputStream::implConvert( const OUString& rSource )
                                     &uiInfo,
                                     &nSrcCvtChars);
         nSourceCount += nSrcCvtChars;
-
-        if( uiInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL )
+        
+        if( uiInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL ) 
         {
             nSeqSize *= 2;
             seqText.realloc( nSeqSize );  // double array size
@@ -176,7 +176,7 @@ Sequence<sal_Int8> OTextOutputStream::implConvert( const OUString& rSource )
 //===========================================================================
 // XTextOutputStream
 
-void OTextOutputStream::writeString( const OUString& aString )
+void OTextOutputStream::writeString( const OUString& aString ) 
     throw(IOException, RuntimeException)
 {
     if( !mbEncodingInitialized )
@@ -191,35 +191,35 @@ void OTextOutputStream::writeString( const OUString& aString )
     mxStream->writeBytes( aByteSeq );
 }
 
-void OTextOutputStream::setEncoding( const OUString& Encoding )
+void OTextOutputStream::setEncoding( const OUString& Encoding ) 
     throw(RuntimeException)
 {
     OString aOEncodingStr = OUStringToOString( Encoding, RTL_TEXTENCODING_ASCII_US );
     rtl_TextEncoding encoding = rtl_getTextEncodingFromMimeCharset( aOEncodingStr.getStr() );
-    if( RTL_TEXTENCODING_DONTKNOW == encoding )
+    if( RTL_TEXTENCODING_DONTKNOW == encoding ) 
         return;
 
     mbEncodingInitialized = true;
-    mConvUnicode2Text   = rtl_createUnicodeToTextConverter( encoding );
+    mConvUnicode2Text 	= rtl_createUnicodeToTextConverter( encoding );
     mContextUnicode2Text = rtl_createUnicodeToTextContext( mConvUnicode2Text );
     mEncoding = Encoding;
 }
 
 //===========================================================================
 // XOutputStream
-void OTextOutputStream::writeBytes( const Sequence< sal_Int8 >& aData )
+void OTextOutputStream::writeBytes( const Sequence< sal_Int8 >& aData ) 
     throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     mxStream->writeBytes( aData );
 }
 
-void OTextOutputStream::flush(  )
+void OTextOutputStream::flush(  ) 
     throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     mxStream->flush();
 }
 
-void OTextOutputStream::closeOutput(  )
+void OTextOutputStream::closeOutput(  ) 
     throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     mxStream->closeOutput();
@@ -229,7 +229,7 @@ void OTextOutputStream::closeOutput(  )
 //===========================================================================
 // XActiveDataSource
 
-void OTextOutputStream::setOutputStream( const Reference< XOutputStream >& aStream )
+void OTextOutputStream::setOutputStream( const Reference< XOutputStream >& aStream ) 
     throw(RuntimeException)
 {
     mxStream = aStream;
@@ -278,11 +278,11 @@ sal_Bool OTextOutputStream::supportsService(const OUString& ServiceName) throw()
 {
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-
+    
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
             return sal_True;
-
+        
     return sal_False;
 }
 
@@ -318,6 +318,12 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+//==================================================================================================
+sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager, void * pRegistryKey )
+{
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

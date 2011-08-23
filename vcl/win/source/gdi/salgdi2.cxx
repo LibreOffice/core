@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <svsys.h>
+#include <tools/svwin.h>
 #include <tools/debug.hxx>
 #include <wincomp.hxx>
 #include <salbmp.h>
@@ -39,10 +39,6 @@
 #include <salids.hrc>
 #include <salgdi.h>
 #include <salframe.h>
-
-#include "vcl/salbtype.hxx"
-#include "vcl/bmpacc.hxx"
-#include "vcl/outdata.hxx"
 
 bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
 {
@@ -53,9 +49,6 @@ bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
     {
     case OutDevSupport_TransparentRect:
         bRet = mbVirDev || mbWindow;
-        break;
-    case OutDevSupport_B2DClip:
-        bRet = true;
         break;
     case OutDevSupport_B2DDraw:
         bRet = bAllowForTest;
@@ -68,8 +61,8 @@ bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
 
 void WinSalGraphics::copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics )
 {
-    HDC     hSrcDC;
-    DWORD   nRop;
+    HDC 	hSrcDC;
+    DWORD	nRop;
 
     if ( pSrcGraphics )
         hSrcDC = static_cast<WinSalGraphics*>(pSrcGraphics)->mhDC;
@@ -153,7 +146,7 @@ void ImplCalcOutSideRgn( const RECT& rSrcRect,
 void WinSalGraphics::copyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
                             long nSrcWidth, long nSrcHeight,
-                            sal_uInt16 nFlags )
+                            USHORT nFlags )
 {
     bool    bRestoreClipRgn = false;
     HRGN    hOldClipRgn = 0;
@@ -166,18 +159,18 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
         // compute and invalidate those parts that were either off-screen or covered by other windows
         //  while performing the above BitBlt
         // those regions then have to be invalidated as they contain useless/wrong data
-        RECT    aSrcRect;
-        RECT    aClipRect;
-        RECT    aTempRect;
-        RECT    aTempRect2;
-        HRGN    hTempRgn;
-        HWND    hWnd;
-        int     nRgnType;
+        RECT	aSrcRect;
+        RECT	aClipRect;
+        RECT	aTempRect;
+        RECT	aTempRect2;
+        HRGN	hTempRgn;
+        HWND	hWnd;
+        int 	nRgnType;
 
         // restrict srcRect to this window (calc intersection)
-        aSrcRect.left   = (int)nSrcX;
-        aSrcRect.top    = (int)nSrcY;
-        aSrcRect.right  = aSrcRect.left+(int)nSrcWidth;
+        aSrcRect.left	= (int)nSrcX;
+        aSrcRect.top	= (int)nSrcY;
+        aSrcRect.right	= aSrcRect.left+(int)nSrcWidth;
         aSrcRect.bottom = aSrcRect.top+(int)nSrcHeight;
         GetClientRect( mhWnd, &aClipRect );
         if ( IntersectRect( &aSrcRect, &aSrcRect, &aClipRect ) )
@@ -187,9 +180,9 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
             aPt.x = 0;
             aPt.y = 0;
             ClientToScreen( mhWnd, &aPt );
-            aSrcRect.left   += aPt.x;
-            aSrcRect.top    += aPt.y;
-            aSrcRect.right  += aPt.x;
+            aSrcRect.left	+= aPt.x;
+            aSrcRect.top	+= aPt.y;
+            aSrcRect.right	+= aPt.x;
             aSrcRect.bottom += aPt.y;
             hInvalidateRgn = 0;
 
@@ -216,8 +209,8 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                     aPt2.x = 0;
                     aPt2.y = 0;
                     ClientToScreen( hWndTopWindow, &aPt2 );
-                    aTempRect.left   += aPt2.x;
-                    aTempRect.top    += aPt2.y;
+                    aTempRect.left	 += aPt2.x;
+                    aTempRect.top	 += aPt2.y;
                     aTempRect.right  += aPt2.x;
                     aTempRect.bottom += aPt2.y;
                     IntersectRect( &aTempRect3, &aTempRect3, &aTempRect );
@@ -335,8 +328,8 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
             // MainThread ist, damit es beim Bearbeiten der
             // Paint-Message keinen Deadlock gibt, da der
             // SolarMutex durch diesen Thread schon gelockt ist
-            SalData*    pSalData = GetSalData();
-            DWORD       nCurThreadId = GetCurrentThreadId();
+            SalData*	pSalData = GetSalData();
+            DWORD		nCurThreadId = GetCurrentThreadId();
             if ( pSalData->mnAppThreadId == nCurThreadId )
                 UpdateWindow( mhWnd );
         }
@@ -350,14 +343,14 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
 
 void ImplDrawBitmap( HDC hDC,
                      const SalTwoRect* pPosAry, const WinSalBitmap& rSalBitmap,
-                     sal_Bool bPrinter, int nDrawMode )
+                     BOOL bPrinter, int nDrawMode )
 {
     if( hDC )
     {
-        HGLOBAL     hDrawDIB;
-        HBITMAP     hDrawDDB = rSalBitmap.ImplGethDDB();
-        WinSalBitmap*   pTmpSalBmp = NULL;
-        sal_Bool        bPrintDDB = ( bPrinter && hDrawDDB );
+        HGLOBAL 	hDrawDIB;
+        HBITMAP 	hDrawDDB = rSalBitmap.ImplGethDDB();
+        WinSalBitmap*	pTmpSalBmp = NULL;
+        BOOL		bPrintDDB = ( bPrinter && hDrawDDB );
 
         if( bPrintDDB )
         {
@@ -370,11 +363,11 @@ void ImplDrawBitmap( HDC hDC,
 
         if( hDrawDIB )
         {
-            PBITMAPINFO         pBI = (PBITMAPINFO) GlobalLock( hDrawDIB );
-            PBITMAPINFOHEADER   pBIH = (PBITMAPINFOHEADER) pBI;
-            PBYTE               pBits = (PBYTE) pBI + *(DWORD*) pBI +
+            PBITMAPINFO 		pBI = (PBITMAPINFO) GlobalLock( hDrawDIB );
+            PBITMAPINFOHEADER	pBIH = (PBITMAPINFOHEADER) pBI;
+            PBYTE				pBits = (PBYTE) pBI + *(DWORD*) pBI +
                                         rSalBitmap.ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGBQUAD );
-            const int           nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
+            const int			nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
 
             StretchDIBits( hDC,
                            (int)pPosAry->mnDestX, (int)pPosAry->mnDestY,
@@ -388,31 +381,15 @@ void ImplDrawBitmap( HDC hDC,
         }
         else if( hDrawDDB && !bPrintDDB )
         {
-            HDC         hBmpDC = ImplGetCachedDC( CACHED_HDC_DRAW, hDrawDDB );
-            COLORREF    nOldBkColor = RGB(0xFF,0xFF,0xFF);
-            COLORREF    nOldTextColor = RGB(0,0,0);
-            sal_Bool        bMono = ( rSalBitmap.GetBitCount() == 1 );
+            HDC 		hBmpDC = ImplGetCachedDC( CACHED_HDC_DRAW, hDrawDDB );
+            COLORREF	nOldBkColor = RGB(0xFF,0xFF,0xFF);
+            COLORREF	nOldTextColor = RGB(0,0,0);
+            BOOL		bMono = ( rSalBitmap.GetBitCount() == 1 );
 
             if( bMono )
             {
-                COLORREF nBkColor = RGB( 0xFF, 0xFF, 0xFF );
-                COLORREF nTextColor = RGB( 0x00, 0x00, 0x00 );
-                //fdo#33455 handle 1 bit depth pngs with palette entries
-                //to set fore/back colors
-                if (const BitmapBuffer* pBitmapBuffer = const_cast<WinSalBitmap&>(rSalBitmap).AcquireBuffer(true))
-                {
-                    const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
-                    if (rPalette.GetEntryCount() == 2)
-                    {
-                        SalColor nCol;
-                        nCol = ImplColorToSal(rPalette[0]);
-                        nTextColor = RGB( SALCOLOR_RED(nCol), SALCOLOR_GREEN(nCol), SALCOLOR_BLUE(nCol) );
-                        nCol = ImplColorToSal(rPalette[1]);
-                        nBkColor = RGB( SALCOLOR_RED(nCol), SALCOLOR_GREEN(nCol), SALCOLOR_BLUE(nCol) );
-                    }
-                }
-                nOldBkColor = SetBkColor( hDC, nBkColor );
-                nOldTextColor = ::SetTextColor( hDC, nTextColor );
+                nOldBkColor = SetBkColor( hDC, RGB( 0xFF, 0xFF, 0xFF ) );
+                nOldTextColor = ::SetTextColor( hDC, RGB( 0x00, 0x00, 0x00 ) );
             }
 
             if ( (pPosAry->mnSrcWidth  == pPosAry->mnDestWidth) &&
@@ -474,19 +451,19 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
 
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
-    WinSalBitmap*   pMask = new WinSalBitmap;
+    WinSalBitmap*	pMask = new WinSalBitmap;
     const Point aPoint;
-    const Size  aSize( rSalBitmap.GetSize() );
-    HBITMAP     hMaskBitmap = CreateBitmap( (int) aSize.Width(), (int) aSize.Height(), 1, 1, NULL );
-    HDC         hMaskDC = ImplGetCachedDC( CACHED_HDC_1, hMaskBitmap );
-    const BYTE  cRed = SALCOLOR_RED( nTransparentColor );
-    const BYTE  cGreen = SALCOLOR_GREEN( nTransparentColor );
-    const BYTE  cBlue = SALCOLOR_BLUE( nTransparentColor );
+    const Size	aSize( rSalBitmap.GetSize() );
+    HBITMAP 	hMaskBitmap = CreateBitmap( (int) aSize.Width(), (int) aSize.Height(), 1, 1, NULL );
+    HDC 		hMaskDC = ImplGetCachedDC( CACHED_HDC_1, hMaskBitmap );
+    const BYTE	cRed = SALCOLOR_RED( nTransparentColor );
+    const BYTE	cGreen = SALCOLOR_GREEN( nTransparentColor );
+    const BYTE	cBlue = SALCOLOR_BLUE( nTransparentColor );
 
     if( rSalBitmap.ImplGethDDB() )
     {
-        HDC         hSrcDC = ImplGetCachedDC( CACHED_HDC_2, rSalBitmap.ImplGethDDB() );
-        COLORREF    aOldCol = SetBkColor( hSrcDC, RGB( cRed, cGreen, cBlue ) );
+        HDC 		hSrcDC = ImplGetCachedDC( CACHED_HDC_2, rSalBitmap.ImplGethDDB() );
+        COLORREF	aOldCol = SetBkColor( hSrcDC, RGB( cRed, cGreen, cBlue ) );
 
         BitBlt( hMaskDC, 0, 0, (int) aSize.Width(), (int) aSize.Height(), hSrcDC, 0, 0, SRCCOPY );
 
@@ -495,12 +472,12 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     }
     else
     {
-        WinSalBitmap*   pTmpSalBmp = new WinSalBitmap;
+        WinSalBitmap*	pTmpSalBmp = new WinSalBitmap;
 
         if( pTmpSalBmp->Create( rSalBitmap, this ) )
         {
-            HDC         hSrcDC = ImplGetCachedDC( CACHED_HDC_2, pTmpSalBmp->ImplGethDDB() );
-            COLORREF    aOldCol = SetBkColor( hSrcDC, RGB( cRed, cGreen, cBlue ) );
+            HDC 		hSrcDC = ImplGetCachedDC( CACHED_HDC_2, pTmpSalBmp->ImplGethDDB() );
+            COLORREF	aOldCol = SetBkColor( hSrcDC, RGB( cRed, cGreen, cBlue ) );
 
             BitBlt( hMaskDC, 0, 0, (int) aSize.Width(), (int) aSize.Height(), hSrcDC, 0, 0, SRCCOPY );
 
@@ -531,14 +508,14 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
     const WinSalBitmap& rTransparentBitmap = static_cast<const WinSalBitmap&>(rSTransparentBitmap);
 
-    SalTwoRect  aPosAry = *pPosAry;
-    int         nDstX = (int)aPosAry.mnDestX;
-    int         nDstY = (int)aPosAry.mnDestY;
-    int         nDstWidth = (int)aPosAry.mnDestWidth;
-    int         nDstHeight = (int)aPosAry.mnDestHeight;
-    HDC         hDC = mhDC;
-    HBITMAP     hMemBitmap = 0;
-    HBITMAP     hMaskBitmap = 0;
+    SalTwoRect	aPosAry = *pPosAry;
+    int 		nDstX = (int)aPosAry.mnDestX;
+    int 		nDstY = (int)aPosAry.mnDestY;
+    int 		nDstWidth = (int)aPosAry.mnDestWidth;
+    int 		nDstHeight = (int)aPosAry.mnDestHeight;
+    HDC 		hDC = mhDC;
+    HBITMAP 	hMemBitmap = 0;
+    HBITMAP 	hMaskBitmap = 0;
 
     if( ( nDstWidth > CACHED_HDC_DEFEXT ) || ( nDstHeight > CACHED_HDC_DEFEXT ) )
     {
@@ -577,7 +554,7 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     }
     else
     {
-        BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCAND );
+        BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCAND );       
         // now MemDC contains background with masked-out bitmap area
         ImplDrawBitmap( hMaskDC, &aPosAry, rSalBitmap, FALSE, SRCERASE );
         // now MaskDC contains the bitmap area with black background
@@ -601,7 +578,7 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
 // -----------------------------------------------------------------------
 
 bool WinSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
-                      const SalBitmap&  rSrcBitmap,
+                      const SalBitmap&  rSrcBitmap, 
                       const SalBitmap&  rAlphaBmp )
 {
     (void)rTR; (void)rSrcBitmap; (void)rAlphaBmp;
@@ -613,7 +590,7 @@ bool WinSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 
 // -----------------------------------------------------------------------
 
-bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
+bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth, 
                                     long nHeight, sal_uInt8 nTransparency )
 {
     if( mbPen || !mbBrush || mbXORMode )
@@ -631,7 +608,7 @@ bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
 
     // hMemDC contains a 1x1 bitmap of the right color - stretch-blit
     // that to dest hdc
-    bool bRet = AlphaBlend( mhDC, nX, nY, nWidth, nHeight,
+    bool bRet = AlphaBlend( mhDC, nX, nY, nWidth, nHeight, 
                             hMemDC, 0,0,1,1,
                             aFunc ) == TRUE;
 
@@ -650,13 +627,13 @@ void WinSalGraphics::drawMask( const SalTwoRect* pPosAry,
 
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
-    SalTwoRect  aPosAry = *pPosAry;
-    const BYTE  cRed = SALCOLOR_RED( nMaskColor );
-    const BYTE  cGreen = SALCOLOR_GREEN( nMaskColor );
-    const BYTE  cBlue = SALCOLOR_BLUE( nMaskColor );
-    HDC         hDC = mhDC;
-    HBRUSH      hMaskBrush = CreateSolidBrush( RGB( cRed, cGreen, cBlue ) );
-    HBRUSH      hOldBrush = SelectBrush( hDC, hMaskBrush );
+    SalTwoRect	aPosAry = *pPosAry;
+    const BYTE	cRed = SALCOLOR_RED( nMaskColor );
+    const BYTE	cGreen = SALCOLOR_GREEN( nMaskColor );
+    const BYTE	cBlue = SALCOLOR_BLUE( nMaskColor );
+    HDC 		hDC = mhDC;
+    HBRUSH		hMaskBrush = CreateSolidBrush( RGB( cRed, cGreen, cBlue ) );
+    HBRUSH		hOldBrush = SelectBrush( hDC, hMaskBrush );
 
     // bei Paletten-Displays hat WIN/WNT offenbar ein kleines Problem,
     // die Farben der Maske richtig auf die Palette abzubilden,
@@ -686,10 +663,10 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     nDX = labs( nDX );
     nDY = labs( nDY );
 
-    HDC     hDC = mhDC;
+    HDC 	hDC = mhDC;
     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );
-    HDC     hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
-    sal_Bool    bRet;
+    HDC 	hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
+    BOOL	bRet;
     DWORD err = 0;
 
     bRet = BitBlt( hBmpDC, 0, 0, (int) nDX, (int) nDY, hDC, (int) nX, (int) nY, SRCCOPY ) ? TRUE : FALSE;
@@ -735,10 +712,10 @@ void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
 {
     if ( nFlags & SAL_INVERT_TRACKFRAME )
     {
-        HPEN    hDotPen = CreatePen( PS_DOT, 0, 0 );
-        HPEN    hOldPen = SelectPen( mhDC, hDotPen );
-        HBRUSH  hOldBrush = SelectBrush( mhDC, GetStockBrush( NULL_BRUSH ) );
-        int     nOldROP = SetROP2( mhDC, R2_NOT );
+        HPEN	hDotPen = CreatePen( PS_DOT, 0, 0 );
+        HPEN	hOldPen = SelectPen( mhDC, hDotPen );
+        HBRUSH	hOldBrush = SelectBrush( mhDC, GetStockBrush( NULL_BRUSH ) );
+        int 	nOldROP = SetROP2( mhDC, R2_NOT );
 
         WIN_Rectangle( mhDC, (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
 
@@ -766,24 +743,24 @@ void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
     else
     {
          RECT aRect;
-         aRect.left      = (int)nX;
-         aRect.top       = (int)nY;
-         aRect.right     = (int)nX+nWidth;
-         aRect.bottom    = (int)nY+nHeight;
+         aRect.left 	 = (int)nX;
+         aRect.top		 = (int)nY;
+         aRect.right	 = (int)nX+nWidth;
+         aRect.bottom	 = (int)nY+nHeight;
          ::InvertRect( mhDC, &aRect );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
+void WinSalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
 {
-    HPEN        hPen;
-    HPEN        hOldPen;
-    HBRUSH      hBrush;
-    HBRUSH      hOldBrush = 0;
-    COLORREF    nOldTextColor RGB(0,0,0);
-    int         nOldROP = SetROP2( mhDC, R2_NOT );
+    HPEN		hPen;
+    HPEN		hOldPen;
+    HBRUSH		hBrush;
+    HBRUSH		hOldBrush = 0;
+    COLORREF	nOldTextColor RGB(0,0,0);
+    int 		nOldROP = SetROP2( mhDC, R2_NOT );
 
     if ( nSalFlags & SAL_INVERT_TRACKFRAME )
         hPen = CreatePen( PS_DOT, 0, 0 );

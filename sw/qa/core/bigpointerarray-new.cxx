@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,19 +37,19 @@ BigPtrArray::BigPtrArray()
     //container_.reserve(1000);
 }
 
-sal_uLong BigPtrArray::Count() const
+ULONG BigPtrArray::Count() const
 {
     return container_.size();
 }
 
-void BigPtrArray::Move(sal_uLong fromPos, sal_uLong toPos)
+void BigPtrArray::Move(ULONG fromPos, ULONG toPos)
 {
     DBG_ASSERT(fromPos < container_.size() && toPos < container_.size(), "BigPtrArray.Move precondition violation");
     Insert(container_[fromPos], toPos);
     Remove(toPos < fromPos ? fromPos + 1 : fromPos, 1);
 }
 
-void BigPtrArray::ForEach(sal_uLong fromPos, sal_uLong toPos, FnForEach fn, void* pArgs)
+void BigPtrArray::ForEach(ULONG fromPos, ULONG toPos, FnForEach fn, void* pArgs)
 {
     DBG_ASSERT(fromPos < toPos && fromPos < container_.size() && toPos < container_.size(), "BigPtrArray::ForEach precondition violation");
     Container_t::const_iterator iter = container_.begin() + fromPos;
@@ -66,36 +66,36 @@ void BigPtrArray::ForEach(FnForEach fn, void* pArgs)
         fn(*iter, pArgs);
 }
 
-ElementPtr BigPtrArray::operator[](sal_uLong pos) const
+ElementPtr BigPtrArray::operator[](ULONG pos) const
 {
     DBG_ASSERT(pos < container_.size(), "BigPtrArray::operator[] precondition violation");
     return container_[pos];
 }
 
-void BigPtrArray::Insert(const ElementPtr& rElem, sal_uLong pos)
-{
+void BigPtrArray::Insert(const ElementPtr& rElem, ULONG pos)
+{    
     DBG_ASSERT(pos <= container_.size(), "BigPtrArray::Insert precondition violation");
-
+    
     rElem->pBigPtrArray_ = this;
-    rElem->pos_ = pos;
-
-    if (pos == container_.size())
-        container_.push_back(rElem);
+    rElem->pos_ = pos;    
+    
+    if (pos == container_.size()) 
+        container_.push_back(rElem); 
     else
-    {
+    {        
         container_.insert(container_.begin() + pos, rElem);
-        FixElementIndizes(container_.begin(), container_.end());
+        FixElementIndizes(container_.begin(), container_.end());        
     }
 }
 
-void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
+void BigPtrArray::Remove( ULONG pos, ULONG n )
 {
-    DBG_ASSERT((pos < container_.size()) && ((container_.begin() + pos + n) < container_.end()), "BigPtrArray.Remove precondition violation")
+    DBG_ASSERT((pos < container_.size()) && ((container_.begin() + pos + n) < container_.end()), "BigPtrArray.Remove precondition violation")    
     container_.erase(container_.begin() + pos, container_.begin() + pos + n);
-    FixElementIndizes(container_.begin(), container_.end());
+    FixElementIndizes(container_.begin(), container_.end());    
 }
 
-void BigPtrArray::Replace(sal_uLong pos, const ElementPtr& rElem)
+void BigPtrArray::Replace(ULONG pos, const ElementPtr& rElem)
 {
     DBG_ASSERT(pos < container_.size(), "BigPtrArray::Replace precondition violation");
     rElem->pBigPtrArray_ = this;
@@ -104,7 +104,7 @@ void BigPtrArray::Replace(sal_uLong pos, const ElementPtr& rElem)
 }
 
 void BigPtrArray::FixElementIndizes(Container_t::const_iterator begin, Container_t::const_iterator end) const
-{
+{    
     Container_t::const_iterator iter = begin;
     for (int i = 0; iter != end; ++iter, i++)
         (*iter)->pos_ = i;

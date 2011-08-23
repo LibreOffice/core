@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,13 +40,8 @@
 
 using namespace padmin;
 using namespace osl;
+using namespace rtl;
 using namespace psp;
-
-using ::rtl::OUString;
-using ::rtl::OUStringHash;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
-using ::rtl::OStringHash;
 
 FontNameDlg::FontNameDlg( Window *pParent ) :
         ModalDialog( pParent, PaResId( RID_FONTNAMEDIALOG ) ),
@@ -63,7 +58,7 @@ FontNameDlg::FontNameDlg( Window *pParent ) :
 {
     FreeResource();
 
-    m_aFontBox.EnableMultiSelection( sal_True );
+    m_aFontBox.EnableMultiSelection( TRUE );
 
     m_aOKButton.SetClickHdl( LINK( this, FontNameDlg, ClickBtnHdl ) );
     m_aRenameButton.SetClickHdl( LINK( this, FontNameDlg, ClickBtnHdl ) );
@@ -107,35 +102,35 @@ String FontNameDlg::fillFontEntry( FastPrintFontInfo& rInfo, const String& rFile
     bool bWeight = true, bItalic = true, bWidth = true;
     switch( rInfo.m_eWeight )
     {
-        case weight::Thin:          aEntry.AppendAscii( ", " ); aEntry.Append( aThinTxt ); break;
-        case weight::UltraLight:    aEntry.AppendAscii( ", " ); aEntry.Append( aUltraLightTxt ); break;
-        case weight::Light:         aEntry.AppendAscii( ", " ); aEntry.Append( aLightTxt ); break;
-        case weight::SemiLight:     aEntry.AppendAscii( ", " ); aEntry.Append( aSemiLightTxt ); break;
-        case weight::SemiBold:      aEntry.AppendAscii( ", " ); aEntry.Append( aSemiBoldTxt ); break;
-        case weight::Bold:          aEntry.AppendAscii( ", " ); aEntry.Append( aBoldTxt ); break;
-        case weight::UltraBold:     aEntry.AppendAscii( ", " ); aEntry.Append( aUltraBoldTxt ); break;
+        case weight::Thin:			aEntry.AppendAscii( ", " ); aEntry.Append( aThinTxt ); break;
+        case weight::UltraLight:	aEntry.AppendAscii( ", " ); aEntry.Append( aUltraLightTxt ); break;
+        case weight::Light:			aEntry.AppendAscii( ", " ); aEntry.Append( aLightTxt ); break;
+        case weight::SemiLight:		aEntry.AppendAscii( ", " ); aEntry.Append( aSemiLightTxt ); break;
+        case weight::SemiBold:		aEntry.AppendAscii( ", " ); aEntry.Append( aSemiBoldTxt ); break;
+        case weight::Bold:			aEntry.AppendAscii( ", " ); aEntry.Append( aBoldTxt ); break;
+        case weight::UltraBold:		aEntry.AppendAscii( ", " ); aEntry.Append( aUltraBoldTxt ); break;
         default:
             bWeight = false;
             break;
     }
     switch( rInfo.m_eItalic )
     {
-        case italic::Oblique:       aEntry.AppendAscii( ", " ); aEntry.Append( aObliqueTxt ); break;
-        case italic::Italic:        aEntry.AppendAscii( ", " ); aEntry.Append( aItalicTxt ); break;
+        case italic::Oblique:		aEntry.AppendAscii( ", " ); aEntry.Append( aObliqueTxt ); break;
+        case italic::Italic:		aEntry.AppendAscii( ", " ); aEntry.Append( aItalicTxt ); break;
         default:
             bItalic = false;
             break;
     }
     switch( rInfo.m_eWidth )
     {
-        case width::UltraCondensed: aEntry.AppendAscii( ", " ); aEntry.Append( aUltraCondensedTxt ); break;
-        case width::ExtraCondensed: aEntry.AppendAscii( ", " ); aEntry.Append( aExtraCondensedTxt ); break;
-        case width::Condensed:      aEntry.AppendAscii( ", " ); aEntry.Append( aCondensedTxt ); break;
-        case width::SemiCondensed:  aEntry.AppendAscii( ", " ); aEntry.Append( aSemiCondensedTxt ); break;
-        case width::SemiExpanded:   aEntry.AppendAscii( ", " ); aEntry.Append( aSemiExpandedTxt ); break;
-        case width::Expanded:       aEntry.AppendAscii( ", " ); aEntry.Append( aExpandedTxt ); break;
-        case width::ExtraExpanded:  aEntry.AppendAscii( ", " ); aEntry.Append( aExtraExpandedTxt ); break;
-        case width::UltraExpanded:  aEntry.AppendAscii( ", " ); aEntry.Append( aUltraExpandedTxt ); break;
+        case width::UltraCondensed:	aEntry.AppendAscii( ", " ); aEntry.Append( aUltraCondensedTxt ); break;
+        case width::ExtraCondensed:	aEntry.AppendAscii( ", " ); aEntry.Append( aExtraCondensedTxt ); break;
+        case width::Condensed:		aEntry.AppendAscii( ", " ); aEntry.Append( aCondensedTxt ); break;
+        case width::SemiCondensed:	aEntry.AppendAscii( ", " ); aEntry.Append( aSemiCondensedTxt ); break;
+        case width::SemiExpanded:	aEntry.AppendAscii( ", " ); aEntry.Append( aSemiExpandedTxt ); break;
+        case width::Expanded:		aEntry.AppendAscii( ", " ); aEntry.Append( aExpandedTxt ); break;
+        case width::ExtraExpanded:	aEntry.AppendAscii( ", " ); aEntry.Append( aExtraExpandedTxt ); break;
+        case width::UltraExpanded:	aEntry.AppendAscii( ", " ); aEntry.Append( aUltraExpandedTxt ); break;
         default:
             bWidth = false;
             break;
@@ -176,10 +171,10 @@ void FontNameDlg::init()
     ::std::list< fontID > aFonts;
     m_rFontManager.getFontList( aFonts );
     m_aFontBox.Clear();
-    m_aRemoveButton.Enable( sal_False );
-    m_aRenameButton.Enable( sal_False );
+    m_aRemoveButton.Enable( FALSE );
+    m_aRenameButton.Enable( FALSE );
 
-    ::boost::unordered_map< OUString, int, OUStringHash > aFamilies;
+    ::std::hash_map< OUString, int, OUStringHash > aFamilies;
     ::std::list< fontID >::iterator font_it;
     for( font_it = aFonts.begin(); font_it != aFonts.end(); ++font_it )
     {
@@ -220,8 +215,8 @@ void FontNameDlg::init()
             }
             else
                 aEntry = fillFontEntry( aInfo, String( ByteString( aFile ), osl_getThreadTextEncoding() ), aFamilies[ aInfo.m_aFamilyName ] > 1  );
-            sal_uInt16 nEntry = m_aFontBox.InsertEntry( aEntry );
-            m_aFontBox.SetEntryData( nEntry, (void*)(sal_IntPtr)(*font_it) );
+            USHORT nEntry = m_aFontBox.InsertEntry( aEntry );
+            m_aFontBox.SetEntryData( nEntry, (void*)(*font_it) );
         }
     }
 }
@@ -230,7 +225,7 @@ IMPL_LINK( FontNameDlg, SelectHdl, ListBox*, pBox )
 {
     if( pBox == &m_aFontBox )
     {
-        sal_Bool bEnable = m_aFontBox.GetSelectEntryCount() ? sal_True : sal_False;
+        BOOL bEnable = m_aFontBox.GetSelectEntryCount() ? TRUE : FALSE;
         m_aRemoveButton.Enable( bEnable );
         m_aRenameButton.Enable( bEnable );
     }
@@ -362,7 +357,7 @@ FontImportDialog::FontImportDialog( Window* pParent ) :
 {
     FreeResource();
 
-    m_aNewFontsBox.EnableMultiSelection( sal_True );
+    m_aNewFontsBox.EnableMultiSelection( TRUE );
 
     m_aOKBtn.SetClickHdl( LINK( this, FontImportDialog, ClickBtnHdl ) );
     m_aSelectAllBtn.SetClickHdl( LINK( this, FontImportDialog, ClickBtnHdl ) );
@@ -370,8 +365,8 @@ FontImportDialog::FontImportDialog( Window* pParent ) :
     m_aFromDirEdt.SetModifyHdl( LINK( this, FontImportDialog, ModifyHdl ) );
     m_aRefreshTimer.SetTimeoutHdl( LINK( this, FontImportDialog, RefreshTimeoutHdl ) );
     m_aRefreshTimer.SetTimeout( 2000 );
-    m_aLinkOnlyBox.Check( sal_False );
-    m_aSubDirsBox.Check( sal_True );
+    m_aLinkOnlyBox.Check( FALSE );
+    m_aSubDirsBox.Check( TRUE );
     m_aSubDirsBox.SetToggleHdl( LINK( this, FontImportDialog, ToggleHdl ) );
 
     Config& rPadminRC( getPadminRC() );
@@ -427,10 +422,10 @@ bool FontImportDialog::queryOverwriteFile( const ::rtl::OUString& rFile )
     int nResult = aQueryBox.Execute();
     switch( nResult )
     {
-        case BUTTONID_YES:      bRet = true; break;
-        case BUTTONID_NO:       bRet = false; break;
-        case 20:                bRet = m_bOverwriteAll = true; break;
-        case 21:                bRet = false; m_bOverwriteNone = true; break;
+        case BUTTONID_YES:		bRet = true; break;
+        case BUTTONID_NO:		bRet = false; break;
+        case 20:				bRet = m_bOverwriteAll = true; break;
+        case 21:				bRet = false; m_bOverwriteNone = true; break;
     }
 
     return bRet;
@@ -496,8 +491,8 @@ void FontImportDialog::fillFontBox()
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     m_aNewFontsBox.Clear();
 
-    ::boost::unordered_map< OUString, int, OUStringHash > aFamilies;
-    ::boost::unordered_map< OString, ::std::list< FastPrintFontInfo >, OStringHash >::iterator it;
+    ::std::hash_map< OUString, int, OUStringHash > aFamilies;
+    ::std::hash_map< OString, ::std::list< FastPrintFontInfo >, OStringHash >::iterator it;
     for( it = m_aNewFonts.begin(); it != m_aNewFonts.end(); ++it )
     {
         const OUString& rFamily( it->second.front().m_aFamilyName );
@@ -515,7 +510,7 @@ void FontImportDialog::fillFontBox()
             aEntry = FontNameDlg::fillFontEntry( it->second.front(), aFile, aFamilies[ it->second.front().m_aFamilyName ] > 1 );
         else
             aEntry = FontNameDlg::fillFontEntry( it->second, aFile );
-        sal_uInt16 nPos = m_aNewFontsBox.InsertEntry( aEntry );
+        USHORT nPos = m_aNewFontsBox.InsertEntry( aEntry );
         m_aNewFontsBox.SetEntryData( nPos, (void*)&(it->first) );
     }
 }
@@ -536,12 +531,12 @@ void FontImportDialog::copyFonts()
         m_pProgress = new ProgressDialog( this );
         m_pProgress->setRange( 0, aFiles.size() );
         m_pProgress->startOperation( m_aImportOperation );
-        m_pProgress->Show( sal_True );
+        m_pProgress->Show( TRUE );
         m_pProgress->setValue( 0 );
         m_pProgress->Invalidate();
         m_pProgress->Sync();
         nSuccess = m_rFontManager.importFonts( aFiles, m_aLinkOnlyBox.IsChecked() ? true : false, this );
-        m_pProgress->Show( sal_False );
+        m_pProgress->Show( FALSE );
         delete m_pProgress;
         m_pProgress = NULL;
     }
@@ -569,10 +564,10 @@ IMPL_LINK( FontImportDialog, ClickBtnHdl, Button*, pButton )
     }
     else if( pButton == &m_aSelectAllBtn )
     {
-        m_aNewFontsBox.SetUpdateMode( sal_False );
+        m_aNewFontsBox.SetUpdateMode( FALSE );
         for( int i = 0; i < m_aNewFontsBox.GetEntryCount(); i++ )
-            m_aNewFontsBox.SelectEntryPos( i, sal_True );
-        m_aNewFontsBox.SetUpdateMode( sal_True );
+            m_aNewFontsBox.SelectEntryPos( i, TRUE );
+        m_aNewFontsBox.SetUpdateMode( TRUE );
     }
     return 0;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,26 +27,24 @@
  ************************************************************************/
 
 #include "oox/vml/vmldrawingfragment.hxx"
-
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlinputstream.hxx"
 #include "oox/vml/vmlshapecontext.hxx"
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::io::XInputStream;
+using ::oox::core::ContextHandlerRef;
+using ::oox::core::FragmentHandler2;
+using ::oox::core::XmlFilterBase;
 
 namespace oox {
 namespace vml {
 
 // ============================================================================
 
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
-using namespace ::oox::core;
-
-using ::rtl::OUString;
-
-// ============================================================================
-
 DrawingFragment::DrawingFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, Drawing& rDrawing ) :
-    FragmentHandler2( rFilter, rFragmentPath, false ),  // do not trim whitespace, has been preprocessed by the input stream
+    FragmentHandler2( rFilter, rFragmentPath ),
     mrDrawing( rDrawing )
 {
 }
@@ -63,8 +61,8 @@ ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const At
     {
         // DOCX filter handles plain shape elements with this fragment handler
         case VMLDRAWING_WORD:
-            if ( getNamespace( nElement ) == NMSP_vml )
-                return ShapeContextBase::createShapeContext( *this, mrDrawing.getShapes(), nElement, rAttribs );
+            if ( getNamespace( nElement ) == NMSP_VML )
+                return ShapeContextBase::createShapeContext( *this, nElement, rAttribs, mrDrawing.getShapes() );
         break;
 
         // XLSX and PPTX filters load the entire VML fragment
@@ -76,7 +74,7 @@ ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const At
                     if( nElement == XML_xml ) return this;
                 break;
                 case XML_xml:
-                    return ShapeContextBase::createShapeContext( *this, mrDrawing.getShapes(), nElement, rAttribs );
+                    return ShapeContextBase::createShapeContext( *this, nElement, rAttribs, mrDrawing.getShapes() );
             }
         break;
     }

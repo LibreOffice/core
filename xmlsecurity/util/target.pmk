@@ -26,6 +26,7 @@
 #*************************************************************************
 .IF "$(GUI)" == "WNT"
 CRYPTO_ENGINE = mscrypto
+#CRYPTO_ENGINE = nss
 .ELSE
 CRYPTO_ENGINE = nss
 .ENDIF

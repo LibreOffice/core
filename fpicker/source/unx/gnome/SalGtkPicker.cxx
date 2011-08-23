@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
         gchar *pEncodedFileName = g_filename_from_uri(pIn, NULL, NULL);
         if ( pEncodedFileName )
         {
-            rtl::OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName),
+            rtl::OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName), 
                 osl_getThreadTextEncoding());
             INetURLObject aCurrentURL(sEncoded, INetURLObject::FSYS_UNX);
             aCurrentURL.SetHost(aURL.GetHost());
@@ -130,10 +130,9 @@ extern "C"
     extern GdkDisplay* gdk_x11_lookup_xdisplay (void*xdisplay);
 }
 
-RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit,
-    uno::Reference< frame::XDesktop >& rDesktop ) :
-    cppu::WeakComponentImplHelper2< awt::XTopWindowListener, frame::XTerminateListener >( maLock ),
-    mpDialog(pDialog), mpCreatedParent(NULL), mxToolkit(rToolkit), mxDesktop(rDesktop)
+RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit ) :
+    cppu::WeakComponentImplHelper1< awt::XTopWindowListener >( maLock ),
+    mpDialog(pDialog), mpCreatedParent(NULL), mxToolkit(rToolkit)
 {
     awt::SystemDependentXWindow aWindowHandle;
 
@@ -187,18 +186,6 @@ void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
 }
 
-void SAL_CALL RunDialog::queryTermination( const ::com::sun::star::lang::EventObject& )
-        throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException)
-{
-}
-
-void SAL_CALL RunDialog::notifyTermination( const ::com::sun::star::lang::EventObject& )
-        throw(::com::sun::star::uno::RuntimeException)
-{
-    GdkThreadLock aLock;
-    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
-}
-
 void RunDialog::cancel()
 {
     GdkThreadLock aLock;
@@ -206,18 +193,18 @@ void RunDialog::cancel()
     gtk_widget_hide( mpDialog );
 }
 
-gint RunDialog::run()
-{
+gint RunDialog::run() 
+{ 
     if (mxToolkit.is())
         mxToolkit->addTopWindowListener(this);
 
     GdkThreadLock aLock;
-    gint nStatus = gtk_dialog_run( GTK_DIALOG( mpDialog ) );
+    gint nStatus = gtk_dialog_run( GTK_DIALOG( mpDialog ) ); 
 
     if (mxToolkit.is())
         mxToolkit->removeTopWindowListener(this);
 
-    if (nStatus != 1)   //PLAY
+    if (nStatus != 1)	//PLAY
         gtk_widget_hide( mpDialog );
 
     return nStatus;
@@ -234,19 +221,19 @@ static void lcl_setGTKLanguage(const uno::Reference<lang::XMultiServiceFactory>&
     {
         uno::Reference<lang::XMultiServiceFactory> xConfigMgr =
           uno::Reference<lang::XMultiServiceFactory>(xServiceMgr->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
               UNO_QUERY_THROW );
 
         Sequence< Any > theArgs(1);
-        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Linguistic/General"));
+        theArgs[ 0 ] <<= OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
 
         uno::Reference< container::XNameAccess > xNameAccess =
           uno::Reference< container::XNameAccess >(xConfigMgr->createInstanceWithArguments(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")), theArgs ),
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), theArgs ),
               UNO_QUERY_THROW );
 
         if (xNameAccess.is())
-            xNameAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale"))) >>= sUILocale;
+            xNameAccess->getByName(OUString::createFromAscii("UILocale")) >>= sUILocale;
     } catch (...) {}
 
     if (sUILocale.getLength())
@@ -272,7 +259,7 @@ SalGtkPicker::~SalGtkPicker()
     }
 }
 
-void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirectory )
+void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirectory ) 
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
@@ -292,10 +279,10 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirec
 rtl::OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-
+    
     GdkThreadLock aLock;
 
-    gchar* pCurrentFolder =
+    gchar* pCurrentFolder = 
         gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
     ::rtl::OUString aCurrentFolderName = uritounicode(pCurrentFolder);
     g_free( pCurrentFolder );
@@ -306,7 +293,7 @@ rtl::OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::Runti
 void SAL_CALL SalGtkPicker::implsetTitle( const rtl::OUString& aTitle ) throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-
+    
     ::rtl::OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
 
     GdkThreadLock aLock;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ void PersistentMap::throw_rtexc( int err, char const * pmsg ) const
     buf.append( OUString( msg.getStr(), msg.getLength(),
                           osl_getThreadTextEncoding() ) );
     const OUString msg_(buf.makeStringAndClear());
-    OSL_FAIL( rtl::OUStringToOString(
+    OSL_ENSURE( 0, rtl::OUStringToOString(
                     msg_, RTL_TEXTENCODING_UTF8 ).getStr() );
     throw RuntimeException( msg_, Reference<XInterface>() );
 }
@@ -74,7 +74,7 @@ PersistentMap::~PersistentMap()
     }
     catch (DbException & exc) {
         (void) exc; // avoid warnings
-        OSL_FAIL( DbEnv::strerror( exc.get_errno() ) );
+        OSL_ENSURE( 0, DbEnv::strerror( exc.get_errno() ) );
     }
 }
 
@@ -91,7 +91,7 @@ PersistentMap::PersistentMap( OUString const & url_, bool readOnly )
         OString cstr_sysPath(
             OUStringToOString( m_sysPath, RTL_TEXTENCODING_UTF8 ) );
         char const * pcstr_sysPath = cstr_sysPath.getStr();
-
+        
         u_int32_t flags = DB_CREATE;
         if (readOnly) {
             flags = DB_RDONLY;
@@ -104,7 +104,7 @@ PersistentMap::PersistentMap( OUString const & url_, bool readOnly )
                 flags = DB_CREATE;
             }
         }
-
+        
         int err = m_db.open(
             // xxx todo: DB_THREAD, DB_DBT_MALLOC currently not used
             0, pcstr_sysPath, 0, DB_HASH, flags/* | DB_THREAD*/, 0664 /* fs mode */ );
@@ -218,7 +218,7 @@ t_string2string_map PersistentMap::getEntries() const
         int err = m_db.cursor( 0, &pcurs, 0 );
         if (err != 0)
             throw_rtexc(err);
-
+        
         t_string2string_map ret;
         for (;;) {
             Dbt dbKey, dbData;
@@ -227,15 +227,16 @@ t_string2string_map PersistentMap::getEntries() const
                 break;
             if (err != 0)
                 throw_rtexc(err);
-
-#if OSL_DEBUG_LEVEL > 0
-            ::std::pair<t_string2string_map::iterator, bool> insertion =
-#endif
-            ret.insert(
-                t_string2string_map::value_type(
-                    OString( static_cast<sal_Char const*>(dbKey.get_data()), dbKey.get_size() ),
-                    OString( static_cast<sal_Char const*>(dbData.get_data()), dbData.get_size() )
-                ) );
+            
+            ::std::pair<t_string2string_map::iterator, bool > insertion(
+                ret.insert( t_string2string_map::value_type(
+                                t_string2string_map::value_type(
+                                    OString( static_cast< sal_Char const * >(
+                                                 dbKey.get_data()),
+                                             dbKey.get_size() ),
+                                    OString( static_cast< sal_Char const * >(
+                                                 dbData.get_data()),
+                                             dbData.get_size() ) ) ) ) );
             OSL_ASSERT( insertion.second );
         }
         err = pcurs->close();

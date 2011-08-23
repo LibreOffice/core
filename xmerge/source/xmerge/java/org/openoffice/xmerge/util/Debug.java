@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -269,7 +269,7 @@ public final class Debug {
      *  <p>This logs the message during runtime if debug.info or debug.trace
      *  in the properties file is set to true.</p>
      *
-     *  @param   flag  Log type, one of the Debug constants
+     *  @param   int   Log type, one of the Debug constants
      *                 {@link #INFO}, {@link #TRACE}, {@link #ERROR}
      *                 or a combination of which or'ed together.
      *  @param   msg   The message.
@@ -291,7 +291,7 @@ public final class Debug {
      *  of the exception passed in.  Refer to the other log method
      *  for description.
      *
-     *  @param   flag  Log type, one of the Debug constants
+     *  @param   int   Log type, one of the Debug constants
      *                 {@link #INFO}, {@link #TRACE}, {@link #ERROR}
      *                 or a combination of which or'ed together.
      *  @param   msg   The message.

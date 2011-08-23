@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace formula
 StructListBox::StructListBox(Window* pParent, const ResId& rResId ):
     SvTreeListBox(pParent,rResId )
 {
-    bActiveFlag=sal_False;
+    bActiveFlag=FALSE;
 
     Font aFont( GetFont() );
     Size aSize = aFont.GetSize();
@@ -61,38 +61,42 @@ StructListBox::StructListBox(Window* pParent, const ResId& rResId ):
 
 SvLBoxEntry* StructListBox::InsertStaticEntry(
         const XubString& rText,
-        const Image& rEntryImg,
-        SvLBoxEntry* pParent, sal_uLong nPos, IFormulaToken* pToken )
+        const Image& rEntryImg, const Image& rEntryImgHC,
+        SvLBoxEntry* pParent, ULONG nPos, IFormulaToken* pToken )
 {
-    SvLBoxEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, sal_False, nPos, pToken );
+    SvLBoxEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, FALSE, nPos, pToken );
+    SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
+    DBG_ASSERT( pBmpItem, "StructListBox::InsertStaticEntry - missing item" );
+    pBmpItem->SetBitmap1( rEntryImgHC, BMP_COLOR_HIGHCONTRAST );
+    pBmpItem->SetBitmap2( rEntryImgHC, BMP_COLOR_HIGHCONTRAST );
     return pEntry;
 }
 
-void StructListBox::SetActiveFlag(sal_Bool bFlag)
+void StructListBox::SetActiveFlag(BOOL bFlag)
 {
     bActiveFlag=bFlag;
 }
 
-sal_Bool StructListBox::GetActiveFlag()
+BOOL StructListBox::GetActiveFlag()
 {
     return bActiveFlag;
 }
 
 void StructListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    bActiveFlag=sal_True;
+    bActiveFlag=TRUE;
     SvTreeListBox::MouseButtonDown(rMEvt);
 }
 
 void StructListBox::GetFocus()
 {
-    bActiveFlag=sal_True;
+    bActiveFlag=TRUE;
     SvTreeListBox::GetFocus();
 }
 
 void StructListBox::LoseFocus()
 {
-    bActiveFlag=sal_False;
+    bActiveFlag=FALSE;
     SvTreeListBox::LoseFocus();
 }
 
@@ -100,18 +104,23 @@ void StructListBox::LoseFocus()
 
 StructPage::StructPage(Window* pParent):
     TabPage(pParent,ModuleRes(RID_FORMULATAB_STRUCT)),
-    aFtStruct       ( this, ModuleRes( FT_STRUCT ) ),
-    aTlbStruct      ( this, ModuleRes( TLB_STRUCT ) ),
+    //
+    aFtStruct		( this, ModuleRes( FT_STRUCT ) ),
+    aTlbStruct		( this, ModuleRes( TLB_STRUCT ) ),
     maImgEnd        ( ModuleRes( BMP_STR_END ) ),
     maImgError      ( ModuleRes( BMP_STR_ERROR ) ),
-    pSelectedToken  ( NULL )
+    maImgEndHC      ( ModuleRes( BMP_STR_END_H ) ),
+    maImgErrorHC    ( ModuleRes( BMP_STR_ERROR_H ) ),
+    pSelectedToken	( NULL )
 {
-    aTlbStruct.SetStyle(aTlbStruct.GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|
+    aTlbStruct.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|
                         WB_HASBUTTONS|WB_HSCROLL|WB_NOINITIALSELECTION);
 
     aTlbStruct.SetNodeDefaultImages();
-    aTlbStruct.SetDefaultExpandedEntryBmp(  Image( ModuleRes( BMP_STR_OPEN  ) ) );
+    aTlbStruct.SetDefaultExpandedEntryBmp( Image( ModuleRes( BMP_STR_OPEN ) ) );
     aTlbStruct.SetDefaultCollapsedEntryBmp( Image( ModuleRes( BMP_STR_CLOSE ) ) );
+    aTlbStruct.SetDefaultExpandedEntryBmp( Image( ModuleRes( BMP_STR_OPEN_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aTlbStruct.SetDefaultCollapsedEntryBmp( Image( ModuleRes( BMP_STR_CLOSE_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     FreeResource();
 
@@ -120,26 +129,26 @@ StructPage::StructPage(Window* pParent):
 
 void StructPage::ClearStruct()
 {
-    aTlbStruct.SetActiveFlag(sal_False);
+    aTlbStruct.SetActiveFlag(FALSE);
     aTlbStruct.Clear();
 }
 
 SvLBoxEntry* StructPage::InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
-                                       sal_uInt16 nFlag,sal_uLong nPos,IFormulaToken* pIFormulaToken)
+                                       USHORT nFlag,ULONG nPos,IFormulaToken* pIFormulaToken)
 {
-    aTlbStruct.SetActiveFlag( sal_False );
+    aTlbStruct.SetActiveFlag( FALSE );
 
     SvLBoxEntry* pEntry = NULL;
     switch( nFlag )
     {
         case STRUCT_FOLDER:
-            pEntry = aTlbStruct.InsertEntry( rText, pParent, sal_False, nPos, pIFormulaToken );
+            pEntry = aTlbStruct.InsertEntry( rText, pParent, FALSE, nPos, pIFormulaToken );
         break;
         case STRUCT_END:
-            pEntry = aTlbStruct.InsertStaticEntry( rText, maImgEnd, pParent, nPos, pIFormulaToken );
+            pEntry = aTlbStruct.InsertStaticEntry( rText, maImgEnd, maImgEndHC, pParent, nPos, pIFormulaToken );
         break;
         case STRUCT_ERROR:
-            pEntry = aTlbStruct.InsertStaticEntry( rText, maImgError, pParent, nPos, pIFormulaToken );
+            pEntry = aTlbStruct.InsertStaticEntry( rText, maImgError, maImgErrorHC, pParent, nPos, pIFormulaToken );
         break;
     }
 
@@ -153,7 +162,7 @@ String StructPage::GetEntryText(SvLBoxEntry* pEntry) const
     String aString;
     if(pEntry!=NULL)
         aString=aTlbStruct.GetEntryText(pEntry);
-    return  aString;
+    return	aString;
 }
 
 SvLBoxEntry* StructPage::GetParent(SvLBoxEntry* pEntry) const
@@ -186,7 +195,7 @@ IMPL_LINK( StructPage, SelectHdl, SvTreeListBox*, pTlb )
     {
         if(pTlb==&aTlbStruct)
         {
-            SvLBoxEntry*    pCurEntry=aTlbStruct.GetCurEntry();
+            SvLBoxEntry*	pCurEntry=aTlbStruct.GetCurEntry();
             if(pCurEntry!=NULL)
             {
                 pSelectedToken=(IFormulaToken *)pCurEntry->GetUserData();

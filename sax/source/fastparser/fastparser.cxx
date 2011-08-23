@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,6 +49,7 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
+//using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 
 namespace sax_fastparser {
@@ -57,11 +58,11 @@ namespace sax_fastparser {
 
 struct SaxContextImpl
 {
-    Reference< XFastContextHandler >    mxContext;
-    sal_uInt32      mnNamespaceCount;
-    sal_Int32       mnElementToken;
-    OUString        maNamespace;
-    OUString        maElementName;
+    Reference< XFastContextHandler >	mxContext;
+    sal_uInt32		mnNamespaceCount;
+    sal_Int32		mnElementToken;
+    OUString		maNamespace;
+    OUString		maElementName;
 
     SaxContextImpl() { mnNamespaceCount = 0; mnElementToken = 0; }
     SaxContextImpl( const SaxContextImplPtr& p ) { mnNamespaceCount = p->mnNamespaceCount; mnElementToken = p->mnElementToken; maNamespace = p->maNamespace; }
@@ -71,9 +72,9 @@ struct SaxContextImpl
 
 struct NamespaceDefine
 {
-    OString     maPrefix;
-    sal_Int32   mnToken;
-    OUString    maNamespaceURL;
+    OString		maPrefix;
+    sal_Int32	mnToken;
+    OUString	maNamespaceURL;
 
     NamespaceDefine( const OString& rPrefix, sal_Int32 nToken, const OUString& rNamespaceURL ) : maPrefix( rPrefix ), mnToken( nToken ), maNamespaceURL( rNamespaceURL ) {}
 };
@@ -434,7 +435,7 @@ void FastSaxParser::splitName( const XML_Char *pwName, const XML_Char *&rpPrefix
 * the file-specific initialization work. (During a parser run, external files may be opened)
 *
 ****************/
-void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXException, IOException, RuntimeException)
+void FastSaxParser::parseStream( const InputSource& maStructSource)	throw (SAXException, IOException, RuntimeException)
 {
     // Only one text at one time
     MutexGuard guard( maMutex );
@@ -447,7 +448,7 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
 
     entity.maConverter.setInputStream( entity.maStructSource.aInputStream );
     if( entity.maStructSource.sEncoding.getLength() )
-        entity.maConverter.setEncoding( OUStringToOString( entity.maStructSource.sEncoding, RTL_TEXTENCODING_ASCII_US ) );
+        entity.maConverter.setEncoding(	OUStringToOString( entity.maStructSource.sEncoding, RTL_TEXTENCODING_ASCII_US ) );
 
     // create parser with proper encoding
     entity.mpParser = XML_ParserCreate( 0 );
@@ -456,7 +457,7 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
 
     // set all necessary C-Callbacks
     XML_SetUserData( entity.mpParser, this );
-    XML_SetElementHandler( entity.mpParser, call_callbackStartElement, call_callbackEndElement );
+    XML_SetElementHandler( entity.mpParser,	call_callbackStartElement, call_callbackEndElement );
     XML_SetCharacterDataHandler( entity.mpParser, call_callbackCharacters );
     XML_SetExternalEntityRefHandler( entity.mpParser, call_callbackExternalEntityRef );
 
@@ -550,7 +551,7 @@ Sequence< OUString > FastSaxParser::getSupportedServiceNames_Static(void)
 // XServiceInfo
 OUString FastSaxParser::getImplementationName() throw (RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( PARSER_IMPLEMENTATION_NAME ));
+    return OUString::createFromAscii( PARSER_IMPLEMENTATION_NAME );
 }
 
 // XServiceInfo
@@ -571,7 +572,7 @@ Sequence< OUString > FastSaxParser::getSupportedServiceNames(void) throw (Runtim
 {
 
     Sequence<OUString> seq(1);
-    seq.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( PARSER_SERVICE_NAME ));
+    seq.getArray()[0] = OUString::createFromAscii( PARSER_SERVICE_NAME );
     return seq;
 }
 

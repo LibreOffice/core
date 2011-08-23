@@ -59,12 +59,9 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
-#include <memory>
-
-#include "clone.hxx"
 #include "lwpoverride.hxx"
 #include "lwpfilehdr.hxx"
 #include "lwpatomholder.hxx"
@@ -73,13 +70,6 @@
 #include "lwpbackgroundstuff.hxx"
 
 /*class LwpOverride*/
-LwpOverride::LwpOverride(LwpOverride const& rOther)
-    : m_nValues(rOther.m_nValues)
-    , m_nOverride(rOther.m_nOverride)
-    , m_nApply(rOther.m_nApply)
-{
-}
-
 void LwpOverride::ReadCommon(LwpObjectStream* pStrm)
 {
     pStrm->QuickRead(&m_nValues, 2);
@@ -93,6 +83,13 @@ void LwpOverride::Clear()
     m_nValues = 0;
     m_nOverride = 0;
     m_nApply = 0;
+}
+
+void LwpOverride::operator=(const LwpOverride& rOther)
+{
+    m_nValues = rOther.m_nValues;
+    m_nOverride = rOther.m_nOverride;
+    m_nApply = rOther.m_nApply;
 }
 
 void LwpOverride::Override(sal_uInt16 nBits, STATE eState)
@@ -109,7 +106,7 @@ void LwpOverride::Override(sal_uInt16 nBits, STATE eState)
         {
             m_nValues |= nBits;
         }
-        else    /* State == STATE_OFF */
+        else	/* State == STATE_OFF */
         {
             m_nValues &= ~nBits;
         }
@@ -118,17 +115,6 @@ void LwpOverride::Override(sal_uInt16 nBits, STATE eState)
 }
 
 /*class LwpTextLanguageOverride*/
-LwpTextLanguageOverride::LwpTextLanguageOverride(LwpTextLanguageOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nLanguage(rOther.m_nLanguage)
-{
-}
-
-LwpTextLanguageOverride* LwpTextLanguageOverride::clone() const
-{
-    return new LwpTextLanguageOverride(*this);
-}
-
 void LwpTextLanguageOverride::Read(LwpObjectStream* pStrm)
 {
     if (pStrm->QuickReadBool())
@@ -142,18 +128,6 @@ void LwpTextLanguageOverride::Read(LwpObjectStream* pStrm)
 }
 
 /*class LwpTextAttributeOverride*/
-LwpTextAttributeOverride::LwpTextAttributeOverride(LwpTextAttributeOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nHideLevels(rOther.m_nHideLevels)
-    , m_nBaseLineOffset(rOther.m_nBaseLineOffset)
-{
-}
-
-LwpTextAttributeOverride* LwpTextAttributeOverride::clone() const
-{
-    return new LwpTextAttributeOverride(*this);
-}
-
 void LwpTextAttributeOverride::Read(LwpObjectStream* pStrm)
 {
     if (pStrm->QuickReadBool())
@@ -176,17 +150,6 @@ sal_Bool LwpTextAttributeOverride::IsHighLight()
 }
 
 /*class LwpKinsokuOptsOverride*/
-LwpKinsokuOptsOverride::LwpKinsokuOptsOverride(LwpKinsokuOptsOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nLevels(rOther.m_nLevels)
-{
-}
-
-LwpKinsokuOptsOverride* LwpKinsokuOptsOverride::clone() const
-{
-    return new LwpKinsokuOptsOverride(*this);
-}
-
 void LwpKinsokuOptsOverride::Read(LwpObjectStream* pStrm)
 {
     if (pStrm->QuickReadBool())
@@ -199,18 +162,6 @@ void LwpKinsokuOptsOverride::Read(LwpObjectStream* pStrm)
 }
 
 /*class LwpBulletOverride*/
-LwpBulletOverride::LwpBulletOverride(LwpBulletOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_SilverBullet(rOther.m_SilverBullet)
-    , m_bIsNull(rOther.m_bIsNull)
-{
-}
-
-LwpBulletOverride* LwpBulletOverride::clone() const
-{
-    return new LwpBulletOverride(*this);
-}
-
 void LwpBulletOverride::Read(LwpObjectStream * pStrm)
 {
     if (pStrm->QuickReadBool())
@@ -246,6 +197,15 @@ void LwpBulletOverride::OverrideRightAligned(sal_Bool bOver)
     {
         LwpOverride::Override(BO_RIGHTALIGN,STATE_OFF);
     }
+}
+
+void LwpBulletOverride::operator=(const LwpOverride& rOther)
+{
+    LwpOverride::operator=(rOther);
+    const LwpBulletOverride* pBullet = static_cast<LwpBulletOverride*>((LwpOverride*)&rOther);
+
+    m_SilverBullet = pBullet->m_SilverBullet;
+
 }
 
 void LwpBulletOverride::OverrideSilverBullet(LwpObjectID aID)
@@ -299,19 +259,6 @@ void LwpBulletOverride::Override(LwpBulletOverride* pOther)
 }
 
 /*class LwpAlignmentOverride*/
-LwpAlignmentOverride::LwpAlignmentOverride(LwpAlignmentOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nAlignType(rOther.m_nAlignType)
-    , m_nPosition(rOther.m_nPosition)
-    , m_nAlignChar(rOther.m_nAlignChar)
-{
-}
-
-LwpAlignmentOverride* LwpAlignmentOverride::clone() const
-{
-    return new LwpAlignmentOverride(*this);
-}
-
 void LwpAlignmentOverride::Read(LwpObjectStream * pStrm)
 {
     if (pStrm->QuickReadBool())
@@ -326,19 +273,6 @@ void LwpAlignmentOverride::Read(LwpObjectStream * pStrm)
 }
 
 /*class LwpSpacingCommonOverride*/
-LwpSpacingCommonOverride::LwpSpacingCommonOverride(LwpSpacingCommonOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nSpacingType(rOther.m_nSpacingType)
-    , m_nAmount(rOther.m_nAmount)
-    , m_nMultiple(rOther.m_nMultiple)
-{
-}
-
-LwpSpacingCommonOverride* LwpSpacingCommonOverride::clone() const
-{
-    return new LwpSpacingCommonOverride(*this);
-}
-
 void LwpSpacingCommonOverride::Read(LwpObjectStream* pStrm)
 {
     if (pStrm->QuickReadBool())
@@ -361,6 +295,16 @@ m_pParaSpacingBelow(new LwpSpacingCommonOverride)
 {
 }
 
+LwpSpacingOverride& LwpSpacingOverride::operator=(LwpSpacingOverride& other)
+{
+    LwpOverride::operator=(other);
+    *m_pSpacing = *other.m_pSpacing;
+    *m_pAboveLineSpacing = *other.m_pAboveLineSpacing;
+    *m_pParaSpacingAbove = *other.m_pParaSpacingAbove;
+    *m_pParaSpacingAbove = *other.m_pParaSpacingAbove;
+    return *this;
+}
+
 LwpSpacingOverride::~LwpSpacingOverride()
 {
     if (m_pSpacing)
@@ -381,28 +325,6 @@ LwpSpacingOverride::~LwpSpacingOverride()
     }
 }
 
-LwpSpacingOverride::LwpSpacingOverride(LwpSpacingOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_pSpacing(0)
-    , m_pAboveLineSpacing(0)
-    , m_pParaSpacingAbove(0)
-    , m_pParaSpacingBelow(0)
-{
-    std::auto_ptr<LwpSpacingCommonOverride> pSpacing(::clone(rOther.m_pSpacing));
-    std::auto_ptr<LwpSpacingCommonOverride> pAboveLineSpacing(::clone(rOther.m_pAboveLineSpacing));
-    std::auto_ptr<LwpSpacingCommonOverride> pParaSpacingAbove(::clone(rOther.m_pParaSpacingAbove));
-    std::auto_ptr<LwpSpacingCommonOverride> pParaSpacingBelow(::clone(rOther.m_pParaSpacingBelow));
-    m_pSpacing = pSpacing.release();
-    m_pAboveLineSpacing = pAboveLineSpacing.release();
-    m_pParaSpacingAbove = pParaSpacingAbove.release();
-    m_pParaSpacingBelow = pParaSpacingBelow.release();
-}
-
-LwpSpacingOverride* LwpSpacingOverride::clone() const
-{
-    return new LwpSpacingOverride(*this);
-}
-
 void LwpSpacingOverride::Read(LwpObjectStream* pStrm)
 {
     if (pStrm->QuickReadBool())
@@ -421,20 +343,6 @@ void LwpSpacingOverride::Read(LwpObjectStream* pStrm)
 }
 
 /*class LwpIndentOverride*/
-LwpIndentOverride::LwpIndentOverride(LwpIndentOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_nAll(rOther.m_nAll)
-    , m_nFirst(rOther.m_nFirst)
-    , m_nRest(rOther.m_nRest)
-    , m_nRight(rOther.m_nRight)
-{
-}
-
-LwpIndentOverride* LwpIndentOverride::clone() const
-{
-    return new LwpIndentOverride(*this);
-}
-
 void LwpIndentOverride::Read(LwpObjectStream* pStrm)
 {
     if (pStrm->QuickReadBool())
@@ -463,20 +371,6 @@ LwpAmikakeOverride::~LwpAmikakeOverride()
     {
         delete m_pBackgroundStuff;
     }
-}
-
-LwpAmikakeOverride::LwpAmikakeOverride(LwpAmikakeOverride const& rOther)
-    : LwpOverride(rOther)
-    , m_pBackgroundStuff(0)
-    , m_nType(rOther.m_nType)
-{
-    std::auto_ptr<LwpBackgroundStuff> pBackgroundStuff(::clone(rOther.m_pBackgroundStuff));
-    m_pBackgroundStuff = pBackgroundStuff.release();
-}
-
-LwpAmikakeOverride* LwpAmikakeOverride::clone() const
-{
-    return new LwpAmikakeOverride(*this);
 }
 
 void LwpAmikakeOverride::Read(LwpObjectStream* pStrm)
@@ -508,7 +402,7 @@ void LwpAlignmentOverride::Override(LwpAlignmentOverride* other)//add by  1-24
     {
         other->OverrideAlignment(m_nAlignType);
     }
-/*  if (m_nOverride & AO_POSITION)
+/*	if (m_nOverride & AO_POSITION)
     {
         Other->OverridePosition(GetPosition());
     }
@@ -523,6 +417,16 @@ void LwpAlignmentOverride::OverrideAlignment(AlignType val)//add by  1-24
 {
     m_nAlignType = val;
     m_nOverride |= AO_TYPE;
+}
+
+LwpIndentOverride& LwpIndentOverride::operator=(LwpIndentOverride& other)
+{
+    LwpOverride::operator=(other);
+    m_nAll   = other.m_nAll;
+    m_nFirst = other.m_nFirst;
+    m_nRest  = other.m_nRest;
+    m_nRight = other.m_nRight;
+    return *this;
 }
 
 void LwpIndentOverride::Override(LwpIndentOverride* other)
@@ -613,7 +517,7 @@ void LwpIndentOverride::OverrideRelative(sal_uInt16 relative)
 void LwpSpacingOverride::Override(LwpSpacingOverride* other)
 {
 //    if (IsAlwaysOverridden())
-//      other->SetAlways(IsAlways());//To be done
+//		other->SetAlways(IsAlways());//To be done
     if (other)
     {
         m_pSpacing->Override(other->GetSpacing());

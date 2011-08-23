@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 // include ***************************************************************
 #include <svtools/svmedit.hxx>
 #include <tools/diagnose_ex.h>
@@ -41,6 +44,7 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/evntconf.hxx>
+#include <sfx2/macrconf.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
@@ -68,16 +72,18 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     _SvxMacroTabPage( pParent, CUI_RES(RID_SVXPAGE_EVENTS), rSet ),
     aSaveInText( this, CUI_RES( TXT_SAVEIN ) ),
     aSaveInListBox( this, CUI_RES( LB_SAVEIN ) ),
-    bAppConfig  ( sal_True )
+    bAppConfig	( TRUE )
 {
-    mpImpl->pStrEvent           = new String( CUI_RES( STR_EVENT ));
-    mpImpl->pAssignedMacro      = new String( CUI_RES( STR_ASSMACRO ));
-    mpImpl->pEventLB            = new _HeaderTabListBox( this, CUI_RES( LB_EVENT ));
-    mpImpl->pAssignFT           = new FixedText( this,  CUI_RES( FT_ASSIGN ));
-    mpImpl->pAssignPB           = new PushButton( this, CUI_RES( PB_ASSIGN ));
-    mpImpl->pDeletePB           = new PushButton( this, CUI_RES( PB_DELETE ));
-    mpImpl->pMacroImg           = new Image( CUI_RES( IMG_MACRO) );
-    mpImpl->pComponentImg       = new Image( CUI_RES( IMG_COMPONENT) );
+    mpImpl->pStrEvent			= new String( CUI_RES( STR_EVENT ));
+    mpImpl->pAssignedMacro		= new String( CUI_RES( STR_ASSMACRO ));
+    mpImpl->pEventLB			= new _HeaderTabListBox( this, CUI_RES( LB_EVENT ));
+    mpImpl->pAssignFT			= new FixedText( this,  CUI_RES( FT_ASSIGN ));
+    mpImpl->pAssignPB			= new PushButton( this, CUI_RES( PB_ASSIGN ));
+    mpImpl->pDeletePB			= new PushButton( this, CUI_RES( PB_DELETE ));
+    mpImpl->pMacroImg			= new Image( CUI_RES( IMG_MACRO) );
+    mpImpl->pComponentImg		= new Image( CUI_RES( IMG_COMPONENT) );
+    mpImpl->pMacroImg_h			= new Image( CUI_RES( IMG_MACRO_H) );
+    mpImpl->pComponentImg_h		= new Image( CUI_RES( IMG_COMPONENT_H) );
 
     FreeResource();
 
@@ -91,13 +97,14 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
 
     uno::Reference< document::XEventsSupplier > xSupplier;
 
+//    xSupplier = uno::Reference< document::XEventsSupplier >( new GlobalEventConfig());
     xSupplier = uno::Reference< document::XEventsSupplier > (
         ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.frame.GlobalEventBroadcaster" )) ),
+            OUString::createFromAscii(
+                "com.sun.star.frame.GlobalEventBroadcaster" ) ),
         uno::UNO_QUERY );
 
-    sal_uInt16 nPos(0);
+    USHORT nPos(0);
     if ( xSupplier.is() )
     {
         m_xAppEvents = xSupplier->getEvents();
@@ -106,7 +113,7 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
             utl::ConfigManager::PRODUCTNAME ) >>= label;
         nPos = aSaveInListBox.InsertEntry( label );
         aSaveInListBox.SetEntryData( nPos, new bool(true) );
-        aSaveInListBox.SelectEntryPos( nPos, sal_True );
+        aSaveInListBox.SelectEntryPos( nPos, TRUE );
     }
 }
 
@@ -162,10 +169,10 @@ void SvxEventConfigPage::ImplInitDocument()
             m_xDocumentModifiable = m_xDocumentModifiable.query( xModel );
 
             OUString aTitle = ::comphelper::DocumentInfo::getDocumentTitle( xModel );
-            sal_uInt16 nPos = aSaveInListBox.InsertEntry( aTitle );
+            USHORT nPos = aSaveInListBox.InsertEntry( aTitle );
 
             aSaveInListBox.SetEntryData( nPos, new bool(false) );
-            aSaveInListBox.SelectEntryPos( nPos, sal_True );
+            aSaveInListBox.SelectEntryPos( nPos, TRUE );
 
             bAppConfig = false;
         }
@@ -185,20 +192,20 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     bool* bApp = (bool*) aSaveInListBox.GetEntryData(
             aSaveInListBox.GetSelectEntryPos());
 
-    mpImpl->pEventLB->SetUpdateMode( sal_False );
+    mpImpl->pEventLB->SetUpdateMode( FALSE );
     bAppConfig = *bApp;
     if ( *bApp )
     {
-        SetReadOnly( sal_False );
+        SetReadOnly( FALSE );
         _SvxMacroTabPage::DisplayAppEvents( true );
     }
     else
     {
-        bool isReadonly = sal_False;
+        bool isReadonly = FALSE;
 
         uno::Reference< frame::XFramesSupplier > xFramesSupplier(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
+                OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
             uno::UNO_QUERY );
 
         uno::Reference< frame::XFrame > xFrame =
@@ -221,13 +228,13 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
         _SvxMacroTabPage::DisplayAppEvents( false );
     }
 
-    mpImpl->pEventLB->SetUpdateMode( sal_True );
-    return sal_True;
+    mpImpl->pEventLB->SetUpdateMode( TRUE );
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
+BOOL SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
 {
     return _SvxMacroTabPage::FillItemSet( rSet );
 }

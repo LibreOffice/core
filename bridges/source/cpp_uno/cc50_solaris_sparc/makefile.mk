@@ -44,6 +44,8 @@ CHECKFORPIC=
 
 .IF "$(COM)" == "C52" && "$(CPU)"=="S"
 
+#CFLAGS += -O5 -xO5
+
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA
 .ENDIF

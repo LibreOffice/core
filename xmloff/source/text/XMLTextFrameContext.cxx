@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "XMLAnchorTypePropHdl.hxx"
@@ -51,7 +51,7 @@
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include "XMLReplacementImageContext.hxx"
 #include <xmloff/prstylei.hxx>
-#include "xmloff/i18nmap.hxx"
+#include "i18nmap.hxx"
 #include "xexptran.hxx"
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
@@ -121,7 +121,7 @@ inline XMLTextFrameContextHyperlink_Impl::XMLTextFrameContextHyperlink_Impl(
 {
 }
 
-// Implement Title/Description Elements UI (#i73249#)
+// --> OD 2009-07-22 #i73249#
 class XMLTextFrameTitleOrDescContext_Impl : public SvXMLImportContext
 {
     OUString&   mrTitleOrDesc;
@@ -159,6 +159,7 @@ void XMLTextFrameTitleOrDescContext_Impl::Characters( const OUString& rText )
 {
     mrTitleOrDesc += rText;
 }
+// <--
 
 // ------------------------------------------------------------------------
 
@@ -382,50 +383,53 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     const ::rtl::OUString sAnchorPageNo;
     const ::rtl::OUString sGraphicURL;
     const ::rtl::OUString sGraphicFilter;
+    // --> OD 2009-07-22 #i73249#
+//    const ::rtl::OUString sAlternativeText;
     const ::rtl::OUString sTitle;
     const ::rtl::OUString sDescription;
+    // <--
     const ::rtl::OUString sFrameStyleName;
     const ::rtl::OUString sGraphicRotation;
     const ::rtl::OUString sTextBoxServiceName;
     const ::rtl::OUString sGraphicServiceName;
 
-    ::rtl::OUString sName;
-    ::rtl::OUString sStyleName;
-    ::rtl::OUString sNextName;
-    ::rtl::OUString sHRef;
-    ::rtl::OUString sFilterName;
-    ::rtl::OUString sCode;
-    ::rtl::OUString sObject;
-    ::rtl::OUString sArchive;
-    ::rtl::OUString sMimeType;
+    ::rtl::OUString	sName;
+    ::rtl::OUString	sStyleName;
+    ::rtl::OUString	sNextName;
+    ::rtl::OUString	sHRef;
+    ::rtl::OUString	sFilterName;
+    ::rtl::OUString	sCode;
+    ::rtl::OUString	sObject;
+    ::rtl::OUString	sArchive;
+    ::rtl::OUString	sMimeType;
     ::rtl::OUString sFrameName;
     ::rtl::OUString sAppletName;
-    ::rtl::OUString sFilterService;
+    ::rtl::OUString	sFilterService;
     ::rtl::OUString sBase64CharsLeft;
-    ::rtl::OUString sTblName;
+    ::rtl::OUString	sTblName;
 
     ParamMap aParamMap;
 
-    sal_Int32   nX;
-    sal_Int32   nY;
-    sal_Int32   nWidth;
-    sal_Int32   nHeight;
-    sal_Int32   nZIndex;
-    sal_Int16   nPage;
-    sal_Int16   nRotation;
-    sal_Int16   nRelWidth;
-    sal_Int16   nRelHeight;
+    sal_Int32	nX;
+    sal_Int32	nY;
+    sal_Int32	nWidth;
+    sal_Int32	nHeight;
+    sal_Int32	nZIndex;
+    sal_Int16	nPage;
+    sal_Int16	nRotation;
+    sal_Int16	nRelWidth;
+    sal_Int16	nRelHeight;
 
     sal_uInt16 nType;
-    ::com::sun::star::text::TextContentAnchorType   eAnchorType;
+    ::com::sun::star::text::TextContentAnchorType 	eAnchorType;
 
-    sal_Bool    bMayScript : 1;
-    sal_Bool    bMinWidth : 1;
-    sal_Bool    bMinHeight : 1;
-    sal_Bool    bSyncWidth : 1;
-    sal_Bool    bSyncHeight : 1;
-    sal_Bool    bCreateFailed : 1;
-    sal_Bool    bOwnBase64Stream : 1;
+    sal_Bool	bMayScript : 1;
+    sal_Bool	bMinWidth : 1;
+    sal_Bool	bMinHeight : 1;
+    sal_Bool	bSyncWidth : 1;
+    sal_Bool	bSyncHeight : 1;
+    sal_Bool	bCreateFailed : 1;
+    sal_Bool	bOwnBase64Stream : 1;
 
     void Create( sal_Bool bHRefOrBase64 );
 
@@ -459,10 +463,9 @@ public:
                        const ::rtl::OUString& rName,
                        const ::rtl::OUString& rTargetFrameName,
                        sal_Bool bMap );
-
-    // Implement Title/Description Elements UI (#i73249#)
+    // --> OD 2009-07-22 #i73249#
     void SetTitle( const ::rtl::OUString& rTitle );
-
+    // <--
     void SetDesc( const ::rtl::OUString& rDesc );
 
     ::com::sun::star::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
@@ -812,33 +815,36 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         TextContentAnchorType eATyp,
         sal_uInt16 nNewType,
         const Reference< XAttributeList > & rFrameAttrList )
-:   SvXMLImportContext( rImport, nPrfx, rLName )
+:	SvXMLImportContext( rImport, nPrfx, rLName )
 ,   mbListContextPushed( false )
-,   sWidth(RTL_CONSTASCII_USTRINGPARAM("Width"))
-,   sWidthType(RTL_CONSTASCII_USTRINGPARAM("WidthType"))
-,   sRelativeWidth(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth"))
-,   sHeight(RTL_CONSTASCII_USTRINGPARAM("Height"))
-,   sRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("RelativeHeight"))
-,   sSizeType(RTL_CONSTASCII_USTRINGPARAM("SizeType"))
-,   sIsSyncWidthToHeight(RTL_CONSTASCII_USTRINGPARAM("IsSyncWidthToHeight"))
-,   sIsSyncHeightToWidth(RTL_CONSTASCII_USTRINGPARAM("IsSyncHeightToWidth"))
-,   sHoriOrient(RTL_CONSTASCII_USTRINGPARAM("HoriOrient"))
-,   sHoriOrientPosition(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition"))
-,   sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient"))
-,   sVertOrientPosition(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition"))
-,   sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName"))
-,   sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"))
-,   sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo"))
-,   sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))
-,   sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter"))
+,	sWidth(RTL_CONSTASCII_USTRINGPARAM("Width"))
+,	sWidthType(RTL_CONSTASCII_USTRINGPARAM("WidthType"))
+,	sRelativeWidth(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth"))
+,	sHeight(RTL_CONSTASCII_USTRINGPARAM("Height"))
+,	sRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("RelativeHeight"))
+,	sSizeType(RTL_CONSTASCII_USTRINGPARAM("SizeType"))
+,	sIsSyncWidthToHeight(RTL_CONSTASCII_USTRINGPARAM("IsSyncWidthToHeight"))
+,	sIsSyncHeightToWidth(RTL_CONSTASCII_USTRINGPARAM("IsSyncHeightToWidth"))
+,	sHoriOrient(RTL_CONSTASCII_USTRINGPARAM("HoriOrient"))
+,	sHoriOrientPosition(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition"))
+,	sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient"))
+,	sVertOrientPosition(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition"))
+,	sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName"))
+,	sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"))
+,	sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo"))
+,	sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))
+,	sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter"))
+// --> OD 2009-07-22 #i73249#
+//,   sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText"))
 ,   sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
 ,   sDescription(RTL_CONSTASCII_USTRINGPARAM("Description"))
-,   sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName"))
-,   sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation"))
-,   sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))
-,   sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject"))
-,   nType( nNewType )
-,   eAnchorType( eATyp )
+// <--
+,	sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName"))
+,	sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation"))
+,	sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))
+,	sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject"))
+,	nType( nNewType )
+,	eAnchorType( eATyp )
 {
     nX = 0;
     nY = 0;
@@ -1070,7 +1076,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         ( XML_TEXT_FRAME_APPLET  == nType && !sCode.getLength() ) ||
         ( XML_TEXT_FRAME_PLUGIN == nType &&
           sHRef.getLength() == 0 && sMimeType.getLength() == 0 ) )
-        return; // no URL: no image or OLE object
+        return;	// no URL: no image or OLE object
 
     Create( sal_True );
 }
@@ -1139,13 +1145,15 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
             }
         }
     }
-    // Correction of condition which also avoids warnings. (#i100480#)
+    // --> OD 2009-08-17 #i100480#
+    // correction of condition which also avoids warnings.
     if( !pContext &&
         ( XML_TEXT_FRAME_OBJECT == nType &&
           ( ( XML_NAMESPACE_OFFICE == nPrefix &&
               IsXMLToken( rLocalName, XML_DOCUMENT ) ) ||
             ( XML_NAMESPACE_MATH == nPrefix &&
               IsXMLToken( rLocalName, XML_MATH ) ) ) ) )
+    // <--
     {
         if( !xPropSet.is() && !bCreateFailed )
         {
@@ -1169,7 +1177,7 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
             pContext = pEContext;
         }
     }
-    if( !pContext && xOldTextCursor.is() )  // text-box
+    if( !pContext && xOldTextCursor.is() )	// text-box
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
                             GetImport(), nPrefix, rLocalName, xAttrList,
                             XML_TEXT_TYPE_TEXTBOX );
@@ -1207,7 +1215,7 @@ void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
             if( bOwnBase64Stream && xBase64Stream.is() )
             {
                 OUString sChars;
-                if( sBase64CharsLeft.getLength() )
+                if( sBase64CharsLeft )
                 {
                     sChars = sBase64CharsLeft;
                     sChars += sTrimmedChars;
@@ -1275,7 +1283,7 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
     }
 }
 
-// Implement Title/Description Elements UI (#i73249#)
+// --> OD 2009-07-22 #i73249#
 void XMLTextFrameContext_Impl::SetTitle( const OUString& rTitle )
 {
     if ( xPropSet.is() )
@@ -1299,6 +1307,7 @@ void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
         }
     }
 }
+// <--
 
 //-----------------------------------------------------------------------------------------------------
 
@@ -1334,16 +1343,18 @@ XMLTextFrameContext::XMLTextFrameContext(
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         TextContentAnchorType eATyp )
-:   SvXMLImportContext( rImport, nPrfx, rLName )
-,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
-,   m_pHyperlink( 0 )
-    // Implement Title/Description Elements UI (#i73249#)
+:	SvXMLImportContext( rImport, nPrfx, rLName )
+,	m_xAttrList( new SvXMLAttributeList( xAttrList ) )
+,	m_pHyperlink( 0 )
+// --> OD 2009-07-22 #i73249#
 ,   m_sTitle()
 ,   m_sDesc()
-,   m_eDefaultAnchorType( eATyp )
-    // Shapes in Writer cannot be named via context menu (#i51726#)
+// <--
+,	m_eDefaultAnchorType( eATyp )
+    // --> OD 2006-03-10 #i51726#
 ,   m_HasAutomaticStyleWithoutParentStyle( sal_False )
-,   m_bSupportsReplacement( sal_False )
+    // <--
+,	m_bSupportsReplacement( sal_False )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1353,8 +1364,9 @@ XMLTextFrameContext::XMLTextFrameContext(
         OUString aLocalName;
         sal_uInt16 nPrefix =
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
+        // --> OD 2006-03-10 #i51726#
         // New distinguish attribute between Writer objects and Draw objects is:
-        // Draw objects have an automatic style without a parent style (#i51726#)
+        // Draw objects have an automatic style without a parent style
         if ( XML_NAMESPACE_DRAW == nPrefix &&
              IsXMLToken( aLocalName, XML_STYLE_NAME ) )
         {
@@ -1371,6 +1383,7 @@ XMLTextFrameContext::XMLTextFrameContext(
                 }
             }
         }
+        // <--
         else if ( XML_NAMESPACE_TEXT == nPrefix &&
                   IsXMLToken( aLocalName, XML_ANCHOR_TYPE ) )
         {
@@ -1399,6 +1412,11 @@ void XMLTextFrameContext::EndElement()
     {
         pImpl->CreateIfNotThere();
 
+        // --> OD 2009-07-22 #i73249#
+//        // alternative text
+//        if( m_sDesc.getLength() )
+//            pImpl->SetDesc( m_sDesc );
+        // svg:title
         if( m_sTitle.getLength() )
         {
             pImpl->SetTitle( m_sTitle );
@@ -1407,6 +1425,7 @@ void XMLTextFrameContext::EndElement()
         {
             pImpl->SetDesc( m_sDesc );
         }
+        // <--
 
         if( m_pHyperlink )
         {
@@ -1449,10 +1468,11 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 
             if( USHRT_MAX != nFrameType )
             {
-                // Shapes in Writer cannot be named via context menu (#i51726#)
+                // --> OD 2006-03-10 #i51726#
                 if ( ( XML_TEXT_FRAME_TEXTBOX == nFrameType ||
                        XML_TEXT_FRAME_GRAPHIC == nFrameType ) &&
                      m_HasAutomaticStyleWithoutParentStyle )
+                // <--
                 {
                     Reference < XShapes > xShapes;
                     pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
@@ -1465,8 +1485,8 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                     // check, if we have a media object
                     for( sal_Int16 n = 0, nAttrCount = ( xAttrList.is() ? xAttrList->getLength() : 0 ); n < nAttrCount; ++n )
                     {
-                        OUString    aLocalName;
-                        sal_uInt16  nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( n ), &aLocalName );
+                        OUString 	aLocalName;
+                        sal_uInt16 	nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( n ), &aLocalName );
 
                         if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( aLocalName, XML_MIME_TYPE ) )
                         {
@@ -1498,7 +1518,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                                                         rLocalName, xAttrList,
                                                         m_eDefaultAnchorType,
                                                         nFrameType,
-                                                        m_xAttrList );
+                                                        m_xAttrList	);
                 }
 
                 m_xImplContext = pContext;
@@ -1523,7 +1543,11 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         // the child is a writer frame
         if( XML_NAMESPACE_SVG == p_nPrefix )
         {
-            // Implement Title/Description Elements UI (#i73249#)
+            // --> OD 2009-07-22 #i73249#
+//            bool bOld = SvXMLImport::OOo_2x >= GetImport().getGeneratorVersion();
+//            if( IsXMLToken( rLocalName, bOld ? XML_DESC : XML_TITLE ) )
+//                pContext = new XMLTextFrameDescContext_Impl( GetImport(), p_nPrefix, rLocalName,
+//                                                         xAttrList, m_sDesc );
             const bool bOld = SvXMLImport::OOo_2x >= GetImport().getGeneratorVersion();
             if ( bOld )
             {
@@ -1552,6 +1576,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                                                                         m_sDesc );
                 }
             }
+            // <--
         }
         else if( XML_NAMESPACE_DRAW == p_nPrefix )
         {
@@ -1591,7 +1616,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             }
         }
     }
-    else if( p_nPrefix == XML_NAMESPACE_SVG &&  // #i68101#
+    else if( p_nPrefix == XML_NAMESPACE_SVG &&	// #i68101#
                 (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
     {
         pContext = m_xImplContext->CreateChildContext( p_nPrefix, rLocalName, xAttrList );
@@ -1641,6 +1666,7 @@ Reference < XTextContent > XMLTextFrameContext::GetTextContent() const
     return xTxtCntnt;
 }
 
+// --> OD 2004-08-24 #33242#
 Reference < XShape > XMLTextFrameContext::GetShape() const
 {
     Reference < XShape > xShape;
@@ -1653,5 +1679,6 @@ Reference < XShape > XMLTextFrameContext::GetShape() const
 
     return xShape;
 }
+// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

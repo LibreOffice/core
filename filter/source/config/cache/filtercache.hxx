@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -383,7 +383,7 @@ class FilterCache : public BaseLock
                         cache items seems to be available after calling of "loadAll()"
                         on this cache and first search does not had any valid results.
 
-            @return     sal_True if the required fill state exists for this cache; FALSE
+            @return     TRUE if the required fill state exists for this cache; FALSE
                         otherwise.
          */
         virtual sal_Bool isFillState(EFillState eRequired) const
@@ -587,7 +587,7 @@ class FilterCache : public BaseLock
                         attributes there.
 
             @throw      [css::uno::Exception]
-                        if an internal error occurred.
+                        if an internal error occured.
                         Note: If the item is missing inside the underlying configuration
                         no exception will be thrown. In such case the item is marked as
                         finalized/mandatory automaticly
@@ -740,7 +740,7 @@ class FilterCache : public BaseLock
 
             @return     [css::uno::Any]
                         the value of the requested key.
-                        Can be empty if an internal error occurred or if the requested
+                        Can be empty if an internal error occured or if the requested
                         key does not exists!
          */
         css::uno::Any impl_getDirectCFGValue(const ::rtl::OUString& sDirectKey);
@@ -898,7 +898,7 @@ class FilterCache : public BaseLock
                     the set node name of the requested item.
 
             @return An iterator, which points directly to the new cached item.
-                    Is a valid iterator if no exception occurred here!
+                    Is a valid iterator if no exception occured here!
                     But to improve robustness - it should be checked :-)
 
             @throw  [css::container::NoSuchElementException]
@@ -1032,7 +1032,7 @@ class FilterCache : public BaseLock
             @param  sModule
                     the long name of the module (e.g. "com.sun.star.text.TextDocument").
 
-            @return sal_True if the requested module is installed; sal_False otherwise.
+            @return TRUE if the requested module is installed; FALSE otherwise.
          */
         sal_Bool impl_isModuleInstalled(const ::rtl::OUString& sModule);
 

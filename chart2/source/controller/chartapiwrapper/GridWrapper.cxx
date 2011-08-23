@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,30 +60,30 @@ namespace
 static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.Grid" ));
 
-struct StaticGridWrapperPropertyArray_Initializer
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-    Sequence< Property >* operator()()
+    static Sequence< Property > aPropSeq;
+
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
-        return &aPropSeq;
-    }
-private:
-    Sequence< Property > lcl_GetPropertySequence()
-    {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
+//         ::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
-};
 
-struct StaticGridWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticGridWrapperPropertyArray_Initializer >
-{
-};
+    return aPropSeq;
+}
 
 } // anonymous namespace
 
@@ -105,6 +105,7 @@ GridWrapper::GridWrapper(
 GridWrapper::~GridWrapper()
 {}
 
+// static
 void GridWrapper::getDimensionAndSubGridBool( tGridType eType, sal_Int32& rnDimensionIndex, bool& rbSubGrid )
 {
     rnDimensionIndex = 1;
@@ -112,17 +113,17 @@ void GridWrapper::getDimensionAndSubGridBool( tGridType eType, sal_Int32& rnDime
 
     switch( eType )
     {
-        case X_MAJOR_GRID:
+        case X_MAIN_GRID:
             rnDimensionIndex = 0; rbSubGrid = false; break;
-        case Y_MAJOR_GRID:
+        case Y_MAIN_GRID:
             rnDimensionIndex = 1; rbSubGrid = false; break;
-        case Z_MAJOR_GRID:
+        case Z_MAIN_GRID:
             rnDimensionIndex = 2; rbSubGrid = false; break;
-        case X_MINOR_GRID:
+        case X_SUB_GRID:
             rnDimensionIndex = 0; rbSubGrid = true;  break;
-        case Y_MINOR_GRID:
+        case Y_SUB_GRID:
             rnDimensionIndex = 1; rbSubGrid = true;  break;
-        case Z_MINOR_GRID:
+        case Z_SUB_GRID:
             rnDimensionIndex = 2; rbSubGrid = true;  break;
     }
 }
@@ -179,7 +180,7 @@ Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& GridWrapper::getPropertySequence()
 {
-    return *StaticGridWrapperPropertyArray::get();
+    return lcl_GetPropertySequence();
 }
 
 const std::vector< WrappedProperty* > GridWrapper::createWrappedProperties()

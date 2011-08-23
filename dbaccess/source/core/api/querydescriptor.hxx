@@ -55,7 +55,7 @@ namespace dbaccess
 typedef ::cppu::ImplHelper3<
         ::com::sun::star::sdbcx::XColumnsSupplier,
         ::com::sun::star::lang::XUnoTunnel,
-        ::com::sun::star::lang::XServiceInfo >  OQueryDescriptor_BASE;
+        ::com::sun::star::lang::XServiceInfo >	OQueryDescriptor_BASE;
 
 class OQueryDescriptor_Base
         :public OQueryDescriptor_BASE
@@ -64,24 +64,24 @@ class OQueryDescriptor_Base
         ,public ::connectivity::sdbcx::IRefreshableColumns
 {
 private:
-    sal_Bool        m_bColumnsOutOfDate : 1;    // the columns have to be rebuild on the next getColumns ?
-    ::osl::Mutex&   m_rMutex;
+    sal_Bool		m_bColumnsOutOfDate : 1;	// the columns have to be rebuild on the next getColumns ?
+    ::osl::Mutex&	m_rMutex;
 
 protected:
-    OColumns*       m_pColumns;                 // our column descriptions
+    OColumns*		m_pColumns;					// our column descriptions
     ::rtl::OUString m_sElementName;
     virtual ~OQueryDescriptor_Base();
 
-    void        setColumnsOutOfDate( sal_Bool _bOutOfDate = sal_True );
-    sal_Bool    isColumnsOutOfDate() const { return m_bColumnsOutOfDate; }
+    void		setColumnsOutOfDate( sal_Bool _bOutOfDate = sal_True );
+    sal_Bool	isColumnsOutOfDate() const { return m_bColumnsOutOfDate; }
 
-    sal_Int32   getColumnCount() const { return m_pColumns ? m_pColumns->getCount() : 0; }
-    void        clearColumns( );
+    sal_Int32	getColumnCount() const { return m_pColumns ? m_pColumns->getCount() : 0; }
+    void		clearColumns( );
 
-    void        implAppendColumn( const ::rtl::OUString& _rName, OColumn* _pColumn );
+    void		implAppendColumn( const ::rtl::OUString& _rName, OColumn* _pColumn );
 
 public:
-    OQueryDescriptor_Base(::osl::Mutex& _rMutex,::cppu::OWeakObject& _rMySelf);
+    OQueryDescriptor_Base(::osl::Mutex&	_rMutex,::cppu::OWeakObject& _rMySelf);
     /** constructs the object with a UNO QueryDescriptor. If you use this ctor, the resulting object
         won't have any column informations (the column container will be empty)
     */
@@ -102,7 +102,7 @@ public:
 protected:
 
 // IColumnFactory
-    virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
+    virtual OColumn*	createColumn(const ::rtl::OUString& _rName) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor();
     virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor );
     virtual void columnDropped(const ::rtl::OUString& _sName);
@@ -152,7 +152,7 @@ public:
 
 };
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 
 #endif // _DBA_COREAPI_QUERYDESCRIPTOR_HXX_

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,19 +66,19 @@ using namespace ::comphelper;
 //==================================================================
 ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, bool _bAdabas,SfxItemSet* _pOutputSet)
      :ModalDialog(_pParent, ModuleRes(DLG_DATASOURCE_SELECTION))
-     ,m_aDescription        (this, ModuleRes(FT_DESCRIPTION))
-     ,m_aDatasource         (this, ModuleRes(LB_DATASOURCE))
-     ,m_aOk                 (this, ModuleRes(PB_OK))
-     ,m_aCancel             (this, ModuleRes(PB_CANCEL))
-     ,m_aHelp               (this, ModuleRes(PB_HELP))
+     ,m_aDescription		(this, ModuleRes(FT_DESCRIPTION))
+     ,m_aDatasource			(this, ModuleRes(LB_DATASOURCE))
+     ,m_aOk					(this, ModuleRes(PB_OK))
+     ,m_aCancel				(this, ModuleRes(PB_CANCEL))
+     ,m_aHelp				(this, ModuleRes(PB_HELP))
 #ifdef HAVE_ODBC_ADMINISTRATION
-     ,m_aManageDatasources  (this, ModuleRes(PB_MANAGE))
+     ,m_aManageDatasources	(this, ModuleRes(PB_MANAGE))
 #endif
-     ,m_aCreateAdabasDB     (this, ModuleRes(PB_CREATE))
+     ,m_aCreateAdabasDB		(this, ModuleRes(PB_CREATE))
      ,m_pOutputSet(_pOutputSet)
 {
     if ( _bAdabas )
-    {   // set a new title (indicating that we're browsing local data sources only)
+    {	// set a new title (indicating that we're browsing local data sources only)
         SetText(ModuleRes(STR_LOCAL_DATASOURCES));
         m_aDescription.SetText(ModuleRes(STR_DESCRIPTION2));
 
@@ -149,14 +149,14 @@ IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, /*pButton*/ )
         if ( xCatalog.is() && m_pOutputSet )
         {
             Sequence< Any > aArgs(2);
-            aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateCatalog")), 0, makeAny(xCatalog), PropertyState_DIRECT_VALUE);
+            aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("CreateCatalog"), 0,makeAny(xCatalog) , PropertyState_DIRECT_VALUE);
             aArgs[1] <<= PropertyValue(PROPERTY_PARENTWINDOW, 0, makeAny(VCLUnoHelper::GetInterface(this)), PropertyState_DIRECT_VALUE);
 
             Reference< XExecutableDialog > xDialog(
                 xORB->createInstanceWithArguments(SERVICE_SDB_ADABASCREATIONDIALOG, aArgs), UNO_QUERY);
             if (!xDialog.is())
             {
-                //  ShowServiceNotAvailableError(this, String(SERVICE_SDB_ADABASCREATIONDIALOG), sal_True);
+                //	ShowServiceNotAvailableError(this, String(SERVICE_SDB_ADABASCREATIONDIALOG), sal_True);
                 return 0L;
             }
 
@@ -182,7 +182,7 @@ IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, /*pButton*/ )
                     if ( xPropInfo->hasPropertyByName(PROPERTY_PASSWORD) )
                     {
                         m_pOutputSet->Put(SfxStringItem(DSID_PASSWORD, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_PASSWORD))));
-                        m_pOutputSet->Put(SfxBoolItem(DSID_PASSWORDREQUIRED, sal_True));
+                        m_pOutputSet->Put(SfxBoolItem(DSID_PASSWORDREQUIRED, TRUE));
                     }
                     if ( xPropInfo->hasPropertyByName(PROPERTY_CACHESIZE) )
                         m_pOutputSet->Put(SfxInt32Item(DSID_CONN_CACHESIZE, ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_CACHESIZE))));
@@ -197,11 +197,11 @@ IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, /*pButton*/ )
 }
 
 // -----------------------------------------------------------------------
-sal_Bool ODatasourceSelectDialog::Close()
+BOOL ODatasourceSelectDialog::Close()
 {
 #ifdef HAVE_ODBC_ADMINISTRATION
     if ( m_pODBCManagement.get() && m_pODBCManagement->isRunning() )
-        return sal_False;
+        return FALSE;
 #endif
 
     return ModalDialog::Close();
@@ -249,13 +249,13 @@ IMPL_LINK( ODatasourceSelectDialog, ManageProcessFinished, void*, /**/ )
 #endif
 // -----------------------------------------------------------------------------
 void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
-{
+{ 
     ::rtl::OUString sSelected;
     if (m_aDatasource.GetEntryCount())
          sSelected = m_aDatasource.GetSelectEntry();
     m_aDatasource.Clear();
     // fill the list
-    for (   ConstStringBagIterator aDS = _rDatasources.begin();
+    for (	ConstStringBagIterator aDS = _rDatasources.begin();
             aDS != _rDatasources.end();
             ++aDS
         )
@@ -267,13 +267,13 @@ void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
     {
         if (sSelected.getLength())
             m_aDatasource.SelectEntry(sSelected);
-        else        // select the first entry
+        else  		// select the first entry
             m_aDatasource.SelectEntryPos(0);
     }
 }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

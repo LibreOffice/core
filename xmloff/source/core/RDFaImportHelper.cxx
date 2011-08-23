@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -195,7 +195,7 @@ RDFaReader::ReadCURIE(::rtl::OUString const & i_rCURIE) const
         ::rtl::OUString Namespace;
         sal_uInt16 nKey( GetImport().GetNamespaceMap()._GetKeyByAttrName(
             i_rCURIE, &Prefix, &LocalName, &Namespace) );
-        if (Prefix.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_")))
+        if (Prefix.equalsAscii("_"))
         {
             // eeek, it's a bnode!
             // "_" is not a valid URI scheme => we can identify bnodes
@@ -209,6 +209,7 @@ RDFaReader::ReadCURIE(::rtl::OUString const & i_rCURIE) const
             {
                 // N.B.: empty LocalName is valid!
                 const ::rtl::OUString URI(Namespace + LocalName);
+//                return GetImport().GetAbsoluteReference(URI);
                 return GetAbsoluteReference(URI);
             }
             else
@@ -274,6 +275,7 @@ RDFaReader::ReadURIOrSafeCURIE(::rtl::OUString const & i_rURIOrSafeCURIE) const
         }
         else
         {
+//            return GetImport().GetAbsoluteReference(i_rURIOrSafeCURIE);
             return GetAbsoluteReference(i_rURIOrSafeCURIE);
         }
     }
@@ -308,7 +310,7 @@ RDFaInserter::MakeURI( ::rtl::OUString const & i_rURI) const
         }
         catch (uno::Exception &)
         {
-            OSL_FAIL("MakeURI: cannot create URI");
+            OSL_ENSURE(false, "MakeURI: cannot create URI");
             return 0;
         }
     }
@@ -403,7 +405,7 @@ void RDFaInserter::InsertRDFaEntry(
     }
     catch (uno::Exception &)
     {
-        OSL_FAIL("InsertRDFaEntry: setStatementRDFa failed?");
+        OSL_ENSURE(false, "InsertRDFaEntry: setStatementRDFa failed?");
     }
 }
 
@@ -455,12 +457,12 @@ RDFaImportHelper::AddRDFa(
 {
     if (!i_xObject.is())
     {
-        OSL_FAIL("AddRDFa: invalid arg: null textcontent");
+        OSL_ENSURE(false, "AddRDFa: invalid arg: null textcontent");
         return;
     }
     if (!i_pRDFaAttributes.get())
     {
-        OSL_FAIL("AddRDFa: invalid arg: null RDFa attributes");
+        OSL_ENSURE(false, "AddRDFa: invalid arg: null RDFa attributes");
         return;
     }
     m_RDFaEntries.push_back(RDFaEntry(i_xObject, i_pRDFaAttributes));

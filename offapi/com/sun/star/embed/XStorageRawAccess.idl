@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ published interface XStorageRawAccess
 
         <p>
         This method returns a stream from the package as it is stored there,
-        without any decompression/description and etc. This method can be
+        without any decompression/decription and etc. This method can be
         helpful to check file consistency, for example by signing.
         </p>
 
@@ -96,7 +96,7 @@ published interface XStorageRawAccess
 
         @param sStreamName
             the name of the substream that should be open
-
+    
         @throws ::com::sun::star::embed::InvalidStorageException
             this storage is in invalid state for any reason
 
@@ -104,7 +104,7 @@ published interface XStorageRawAccess
             one of provided arguments is illegal
 
         @throws ::com::sun::star::container::NoSuchElementException
-            there is no element with specified name
+            there is no element with specified name 
 
         @throws ::com::sun::star::io::IOException
             in case of io errors during stream opening
@@ -126,11 +126,11 @@ published interface XStorageRawAccess
         <p>
         This method allows to transport encrypted streams without decryption.
         Mainly this method is introduced to allow to copy one encrypted
-        storage stream to another without decryption. It is not recommended to
+        storage stream to another without decryption. It is not reccomended to
         use this method outside of storage implementation since different
         storages implementation could have different encryption format. If the
         method is used outside of storage implementation the user code is
-        responsible to get sure that the raw format of source and target
+        resposible to get sure that the raw format of source and target
         storages is the same.
         </p>
 
@@ -143,7 +143,7 @@ published interface XStorageRawAccess
 
         @param sStreamName
             the name of the substream that should be open
-
+    
         @param xInputStream
             a raw stream representing encrypted stream
 
@@ -157,7 +157,7 @@ published interface XStorageRawAccess
             the stream is not an encrypted one
 
         @throws ::com::sun::star::container::NoSuchElementException
-            there is no element with specified name
+            there is no element with specified name 
 
         @throws ::com::sun::star::io::IOException
             in case of io errors during stream opening
@@ -179,7 +179,7 @@ published interface XStorageRawAccess
         header.
 
         <p>
-        This method allows to insert a stream retrieved by
+        This method allows to insert a stream retrived by
         <method>XStorageRawAccess::getRawEncrStreamElement()</method> into a
         storage.
         </p>
@@ -187,14 +187,14 @@ published interface XStorageRawAccess
         <p>
         This method allows to transport encrypted streams without decryption.
         Mainly this method is introduced to allow to copy one encrypted
-        storage stream to another without decryption. It is not recommended to
+        storage stream to another without decryption. It is not reccomended to
         use this method outside of storage implementation since different
         storages implementation could have different encryption format.
         </p>
 
         @param sStreamName
             the name of the substream that should be open
-
+    
         @param xInputStream
             a raw stream representing encrypted stream
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,32 +68,32 @@
 
 ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
 
-    :   ModalDialog ( pParent, ScResId( RID_SCDLG_INSERT_TABLE ) ),
+    :	ModalDialog ( pParent, ScResId( RID_SCDLG_INSERT_TABLE ) ),
         //
-        aFlPos          ( this, ScResId( FL_POSITION ) ),
-        aBtnBefore      ( this, ScResId( RB_BEFORE ) ),
-        aBtnBehind      ( this, ScResId( RB_BEHIND ) ),
-        aFlTable        ( this, ScResId( FL_TABLE ) ),
-        aBtnNew         ( this, ScResId( RB_NEW ) ),
+        aBtnBefore		( this, ScResId( RB_BEFORE ) ),
+        aBtnBehind		( this, ScResId( RB_BEHIND ) ),
+        aFlPos			( this, ScResId( FL_POSITION ) ),
+        aBtnNew   		( this, ScResId( RB_NEW ) ),
         aBtnFromFile    ( this, ScResId( RB_FROMFILE ) ),
-        aFtCount        ( this, ScResId( FT_COUNT ) ),
-        aNfCount        ( this, ScResId( NF_COUNT ) ),
-        aFtName         ( this, ScResId( FT_NAME ) ),
-        aEdName         ( this, ScResId( ED_TABNAME ) ),
-        aLbTables       ( this, ScResId( LB_TABLES ) ),
-        aFtPath         ( this, ScResId( FT_PATH ) ),
-        aBtnBrowse      ( this, ScResId( BTN_BROWSE ) ),
-        aBtnLink        ( this, ScResId( CB_LINK ) ),
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        rViewData       ( rData ),
-        rDoc            ( *rData.GetDocument() ),
-        pDocShTables    ( NULL ),
+        aFtCount		( this, ScResId( FT_COUNT ) ),
+        aNfCount		( this, ScResId( NF_COUNT ) ),
+        aFtName			( this, ScResId( FT_NAME ) ),
+        aEdName			( this, ScResId( ED_TABNAME ) ),
+        aLbTables		( this, ScResId( LB_TABLES ) ),
+        aFtPath			( this, ScResId( FT_PATH ) ),
+        aBtnBrowse		( this, ScResId( BTN_BROWSE ) ),
+        aBtnLink		( this, ScResId( CB_LINK ) ),
+        aFlTable    	( this, ScResId( FL_TABLE ) ),
+        aBtnOk			( this, ScResId( BTN_OK ) ),
+        aBtnCancel		( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp		( this, ScResId( BTN_HELP ) ),
+        rViewData		( rData ),
+        rDoc			( *rData.GetDocument() ),
+        pDocShTables	( NULL ),
         pDocInserter    ( NULL ),
         bMustClose      ( false ),
-        nSelTabIndex    ( 0 ),
-        nTableCount     (nTabCount)
+        nSelTabIndex	( 0 ),
+        nTableCount		(nTabCount)
 {
 #if ENABLE_LAYOUT
     SetHelpId (SID_INSERT_TABLE);
@@ -101,12 +101,11 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
 #endif /* ENABLE_LAYOUT */
     Init_Impl( bFromFile );
     FreeResource();
-    aLbTables.SetAccessibleName(aBtnFromFile.GetText());
 }
 
 //------------------------------------------------------------------------
 
-ScInsertTableDlg::~ScInsertTableDlg()
+__EXPORT ScInsertTableDlg::~ScInsertTableDlg()
 {
     if (pDocShTables)
         pDocShTables->DoClose();
@@ -117,12 +116,12 @@ ScInsertTableDlg::~ScInsertTableDlg()
 
 void ScInsertTableDlg::Init_Impl( bool bFromFile )
 {
-    aBtnBrowse      .SetClickHdl( LINK( this, ScInsertTableDlg, BrowseHdl_Impl ) );
-    aBtnNew         .SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
-    aBtnFromFile    .SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
-    aLbTables       .SetSelectHdl( LINK( this, ScInsertTableDlg, SelectHdl_Impl ) );
-    aNfCount        .SetModifyHdl( LINK( this, ScInsertTableDlg, CountHdl_Impl));
-    aBtnOk          .SetClickHdl( LINK( this, ScInsertTableDlg, DoEnterHdl ));
+    aBtnBrowse		.SetClickHdl( LINK( this, ScInsertTableDlg, BrowseHdl_Impl ) );
+    aBtnNew			.SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
+    aBtnFromFile	.SetClickHdl( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
+    aLbTables		.SetSelectHdl( LINK( this, ScInsertTableDlg, SelectHdl_Impl ) );
+    aNfCount		.SetModifyHdl( LINK( this, ScInsertTableDlg, CountHdl_Impl));
+    aBtnOk			.SetClickHdl( LINK( this, ScInsertTableDlg, DoEnterHdl ));
     aBtnBefore.Check();
 
     aNfCount.SetText( String::CreateFromInt32(nTableCount) );
@@ -171,10 +170,10 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
 #define ModalDialog Dialog
 #endif /* ENABLE_LAYOUT */
 
-short ScInsertTableDlg::Execute()
+short __EXPORT ScInsertTableDlg::Execute()
 {
     // set Parent of DocumentInserter and Doc-Manager
-    Window* pOldDefParent = Application::GetDefDialogParent();
+    Window*	pOldDefParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( LAYOUT_THIS_WINDOW (this) );
 
     if ( aBtnFromFile.IsChecked() )
@@ -191,12 +190,12 @@ void ScInsertTableDlg::SetNewTable_Impl()
 {
     if (aBtnNew.IsChecked() )
     {
-        aNfCount    .Enable();
-        aFtCount    .Enable();
-        aLbTables   .Disable();
-        aFtPath     .Disable();
-        aBtnBrowse  .Disable();
-        aBtnLink    .Disable();
+        aNfCount	.Enable();
+        aFtCount	.Enable();
+        aLbTables	.Disable();
+        aFtPath		.Disable();
+        aBtnBrowse	.Disable();
+        aBtnLink	.Disable();
 
         if(nTableCount==1)
         {
@@ -212,14 +211,14 @@ void ScInsertTableDlg::SetFromTo_Impl()
 {
     if (aBtnFromFile.IsChecked() )
     {
-        aEdName     .Disable();
-        aFtName     .Disable();
-        aFtCount    .Disable();
-        aNfCount    .Disable();
-        aLbTables   .Enable();
-        aFtPath     .Enable();
-        aBtnBrowse  .Enable();
-        aBtnLink    .Enable();
+        aEdName		.Disable();
+        aFtName		.Disable();
+        aFtCount	.Disable();
+        aNfCount	.Disable();
+        aLbTables	.Enable();
+        aFtPath		.Enable();
+        aBtnBrowse	.Enable();
+        aBtnLink	.Enable();
     }
 }
 
@@ -227,7 +226,7 @@ void ScInsertTableDlg::SetFromTo_Impl()
 
 void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
 {
-    aLbTables.SetUpdateMode( false );
+    aLbTables.SetUpdateMode( FALSE );
     aLbTables.Clear();
 
     if ( pSrcDoc )
@@ -242,7 +241,7 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
         }
     }
 
-    aLbTables.SetUpdateMode( sal_True );
+    aLbTables.SetUpdateMode( TRUE );
 
     if(aLbTables.GetEntryCount()==1)
         aLbTables.SelectEntryPos(0);
@@ -250,7 +249,7 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
 
 //------------------------------------------------------------------------
 
-const String* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
+const String* ScInsertTableDlg::GetFirstTable( USHORT* pN )
 {
     const String* pStr = NULL;
 
@@ -273,7 +272,7 @@ const String* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
 
 //------------------------------------------------------------------------
 
-const String* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
+const String* ScInsertTableDlg::GetNextTable( USHORT* pN )
 {
     const String* pStr = NULL;
 
@@ -394,7 +393,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             if ( pDocShTables )
                 pDocShTables->DoClose();        // delete passiert beim Zuweisen auf die Ref
 
-            pMed->UseInteractionHandler( sal_True );    // to enable the filter options dialog
+            pMed->UseInteractionHandler( TRUE );    // to enable the filter options dialog
 
             pDocShTables = new ScDocShell;
             aDocShTablesRef = pDocShTables;
@@ -404,7 +403,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             pDocShTables->DoLoad( pMed );
             SetPointer( aOldPtr );
 
-            sal_uLong nErr = pDocShTables->GetErrorCode();
+            ULONG nErr = pDocShTables->GetErrorCode();
             if ( nErr )
                 ErrorHandler::HandleError( nErr );              // auch Warnings
 

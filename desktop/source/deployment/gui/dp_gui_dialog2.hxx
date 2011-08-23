@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,6 @@
 
 #include "svtools/fixedhyper.hxx"
 #include "svtools/prgsbar.hxx"
-#include "svtools/svmedit.hxx"
 
 #include "osl/conditn.hxx"
 #include "osl/mutex.hxx"
@@ -64,7 +63,7 @@ class DialogHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
     Dialog*         m_pVCLWindow;
-    sal_uLong           m_nEventID;
+    ULONG           m_nEventID;
     bool            m_bIsBusy;
 
 public:
@@ -89,12 +88,12 @@ public:
     virtual void    prepareChecking() = 0;
     virtual void    checkEntries() = 0;
 
-    static ResId    getResId( sal_uInt16 nId );
-    static String   getResourceString( sal_uInt16 id );
+    static ResId    getResId( USHORT nId );
+    static String   getResourceString( USHORT id );
     static bool     IsSharedPkgMgr( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &);
     static bool     continueOnSharedExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
                                                Window *pParent,
-                                               const sal_uInt16 nResID,
+                                               const USHORT nResID,
                                                bool &bHadWarning );
 
     void            setBusy( const bool bBusy ) { m_bIsBusy = bBusy; }
@@ -150,7 +149,7 @@ public:
 
     virtual void    Resize();
     virtual long    Notify( NotifyEvent& rNEvt );
-    virtual sal_Bool    Close();
+    virtual BOOL	Close();
 
     virtual void    showProgress( bool bStart );
     virtual void    updateProgress( const ::rtl::OUString &rText,
@@ -220,9 +219,10 @@ public:
                     UpdateRequiredDialog( Window * pParent, TheExtensionManager *pManager );
     virtual        ~UpdateRequiredDialog();
 
-    virtual short   Execute();
+    virtual short	Execute();
     virtual void    Resize();
-    virtual sal_Bool    Close();
+    virtual BOOL	Close();
+//    virtual long    Notify( NotifyEvent& rNEvt );
 
     virtual void    showProgress( bool bStart );
     virtual void    updateProgress( const ::rtl::OUString &rText,
@@ -244,20 +244,6 @@ public:
 
     bool            installForAllUsers( bool &bInstallForAll ) const;
     bool            installExtensionWarn( const ::rtl::OUString &rExtensionURL ) const;
-};
-
-//==============================================================================
-class ShowLicenseDialog : public ModalDialog
-{
-    MultiLineEdit   m_aLicenseText;
-    OKButton        m_aCloseBtn;
-
-public:
-                    ShowLicenseDialog( Window * pParent,
-                                       const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
-    virtual        ~ShowLicenseDialog();
-
-    virtual void    Resize();
 };
 
 //==============================================================================

@@ -59,7 +59,7 @@ namespace framework
 
 DEFINE_XSERVICEINFO_MULTISERVICE        (   PopupMenuController                         ,
                                             OWeakObject                      ,
-                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ) )            ,
+                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ) )	        ,
                                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.framework.PopupMenuController" ) )
                                         )
 
@@ -93,7 +93,7 @@ Any SAL_CALL PopupMenuController::queryInterface( const Type& aType )  throw (Ru
     Any a( ToolboxController::queryInterface( aType ) );
     if ( a.hasValue() )
         return a;
-
+    
     return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ));
 }
 
@@ -137,7 +137,7 @@ void SAL_CALL PopupMenuController::dispose() throw (RuntimeException)
 void SAL_CALL PopupMenuController::statusChanged( const frame::FeatureStateEvent& rEvent ) throw ( RuntimeException )
 {
     svt::ToolboxController::statusChanged(rEvent);
-    enable( rEvent.IsEnabled );
+    enable( rEvent.IsEnabled );	
 }
 
 // --------------------------------------------------------------------
@@ -204,7 +204,7 @@ Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() thro
             return xRet;
 
         // get selected button
-        sal_uInt16 nItemId = pToolBox->GetDownItemId();
+        USHORT nItemId = pToolBox->GetDownItemId();
         if( !nItemId )
             return xRet;
 
@@ -223,10 +223,10 @@ Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() thro
             mxPopupMenuController->updatePopupMenu();
 
         }
-        pToolBox->SetItemDown( nItemId, sal_True );
+        pToolBox->SetItemDown( nItemId, TRUE );
         Reference< awt::XWindowPeer > xPeer( getParent(), UNO_QUERY_THROW );
         mxPopupMenu->execute( xPeer, VCLUnoHelper::ConvertToAWTRect( aRect ), 0 );
-        pToolBox->SetItemDown( nItemId, sal_False );
+        pToolBox->SetItemDown( nItemId, FALSE );
     }
     catch( Exception& )
     {

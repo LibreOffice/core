@@ -2,10 +2,14 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: sdrallattribute.hxx,v $
+ *
+ * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,14 +47,14 @@ namespace drawinglayer
         class SdrLineShadowTextAttribute : public SdrShadowTextAttribute
         {
             // line, shadow, lineStartEnd and text attributes
-            SdrLineAttribute                maLine;                     // line attributes (if used)
-            SdrLineStartEndAttribute        maLineStartEnd;             // line start end (if used)
+            SdrLineAttribute				maLine;						// line attributes (if used)
+            SdrLineStartEndAttribute		maLineStartEnd;				// line start end (if used)
 
         public:
             SdrLineShadowTextAttribute(
-                const SdrLineAttribute& rLine,
-                const SdrLineStartEndAttribute& rLineStartEnd,
-                const SdrShadowAttribute& rShadow,
+                const SdrLineAttribute& rLine, 
+                const SdrLineStartEndAttribute& rLineStartEnd, 
+                const SdrShadowAttribute& rShadow, 
                 const SdrTextAttribute& rTextAttribute);
             SdrLineShadowTextAttribute();
             SdrLineShadowTextAttribute(const SdrLineShadowTextAttribute& rCandidate);

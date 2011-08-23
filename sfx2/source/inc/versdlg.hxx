@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ struct SfxVersionInfo;
 
 class SfxVersionsTabListBox_Impl  : public SvTabListBox
 {
-    virtual void                KeyInput( const KeyEvent& rKeyEvent );
+    virtual void				KeyInput( const KeyEvent& rKeyEvent );
 
 public:
                                 SfxVersionsTabListBox_Impl(
@@ -52,53 +52,53 @@ class SfxVersionTableDtor;
 class SfxVersionDialog : public SfxModalDialog
 {
     FixedLine                   aNewGroup;
-    PushButton                  aSaveButton;
-    CheckBox                    aSaveCheckBox;
+    PushButton					aSaveButton;
+    CheckBox					aSaveCheckBox;
     FixedLine                   aExistingGroup;
-    FixedText                   aDateTimeText;
-    FixedText                   aSavedByText;
-    FixedText                   aCommentText;
-    SfxVersionsTabListBox_Impl  aVersionBox;
-    CancelButton                aCloseButton;
-    PushButton                  aOpenButton;
-    PushButton                  aViewButton;
-    PushButton                  aDeleteButton;
-    PushButton                  aCompareButton;
-    HelpButton                  aHelpButton;
-    SfxViewFrame*               pViewFrame;
+    FixedText					aDateTimeText;
+    FixedText					aSavedByText;
+    FixedText					aCommentText;
+    SfxVersionsTabListBox_Impl	aVersionBox;
+    CancelButton				aCloseButton;
+    PushButton          		aOpenButton;
+    PushButton					aViewButton;
+    PushButton          		aDeleteButton;
+    PushButton					aCompareButton;
+    HelpButton          		aHelpButton;
+    SfxViewFrame*				pViewFrame;
     SfxVersionTableDtor*        mpTable;
     LocaleDataWrapper*          mpLocaleWrapper;
-    sal_Bool                    mbIsSaveVersionOnClose;
+    sal_Bool					mbIsSaveVersionOnClose;
 
-    DECL_LINK(                  DClickHdl_Impl, Control* );
-    DECL_LINK(                  SelectHdl_Impl, Control* );
-    DECL_LINK(                  ButtonHdl_Impl, Button* );
+    DECL_LINK( 					DClickHdl_Impl, Control* );
+    DECL_LINK( 					SelectHdl_Impl, Control* );
+    DECL_LINK( 					ButtonHdl_Impl, Button* );
     void                        Init_Impl();
-    void                        Open_Impl();
+    void						Open_Impl();
     void                        RecalcDateColumn();
 
 public:
                                 SfxVersionDialog ( SfxViewFrame* pFrame, sal_Bool );
-    virtual                     ~SfxVersionDialog ();
-    sal_Bool                    IsSaveVersionOnClose() const { return mbIsSaveVersionOnClose; }
+    virtual 					~SfxVersionDialog ();
+    sal_Bool					IsSaveVersionOnClose() const { return mbIsSaveVersionOnClose; }
 };
 
 class SfxViewVersionDialog_Impl : public SfxModalDialog
 {
-    FixedText                   aDateTimeText;
-    FixedText                   aSavedByText;
-    MultiLineEdit               aEdit;
-    OKButton                    aOKButton;
-    CancelButton                aCancelButton;
-    PushButton                  aCloseButton;
-    HelpButton                  aHelpButton;
-    SfxVersionInfo*             pInfo;
+    FixedText					aDateTimeText;
+    FixedText					aSavedByText;
+    MultiLineEdit				aEdit;
+    OKButton					aOKButton;
+    CancelButton				aCancelButton;
+    PushButton					aCloseButton;
+    HelpButton          		aHelpButton;
+    SfxVersionInfo*				pInfo;
 
-    DECL_LINK(                  ButtonHdl, Button* );
+    DECL_LINK( 					ButtonHdl, Button* );
 
 public:
                                 SfxViewVersionDialog_Impl( Window *pParent,
-                                    SfxVersionInfo& rInfo, sal_Bool bEdit );
+                                    SfxVersionInfo& rInfo, BOOL bEdit );
  };
 
 #endif

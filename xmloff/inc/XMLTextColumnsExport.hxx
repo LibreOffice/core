@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,12 @@
 #define _XMLOFF_XMLTEXTCOLUMNSEXPORT_HXX
 
 namespace com { namespace sun { namespace star { namespace uno {
-    class Any; } } } }
+    class Any; } } } } 
 class SvXMLExport;
 
 class XMLTextColumnsExport
 {
-    SvXMLExport&        rExport;
+    SvXMLExport&		rExport;
 
     const ::rtl::OUString sSeparatorLineIsOn;
     const ::rtl::OUString sSeparatorLineWidth;
@@ -43,16 +43,15 @@ class XMLTextColumnsExport
     const ::rtl::OUString sSeparatorLineVerticalAlignment;
     const ::rtl::OUString sIsAutomatic;
     const ::rtl::OUString sAutomaticDistance;
-    const ::rtl::OUString sSeparatorLineStyle;
 
 protected:
-
+    
     SvXMLExport& GetExport() { return rExport; }
 
 public:
 
     XMLTextColumnsExport( SvXMLExport& rExport );
-
+    
     void exportXML( const ::com::sun::star::uno::Any& rAny );
 };
 

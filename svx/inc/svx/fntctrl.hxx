@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,38 +48,38 @@ class SVX_DLLPUBLIC SvxFontPrevWindow : public Window
 private:
     FontPrevWin_Impl*   pImpl;
 
-    SVX_DLLPRIVATE void             InitSettings( sal_Bool bForeground, sal_Bool bBackground );
+    SVX_DLLPRIVATE void				InitSettings( BOOL bForeground, BOOL bBackground );
 
 public:
                         SvxFontPrevWindow( Window* pParent, const ResId& rId );
-    virtual             ~SvxFontPrevWindow();
+    virtual				~SvxFontPrevWindow();
 
-    virtual void        StateChanged( StateChangedType nStateChange );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void		StateChanged( StateChangedType nStateChange );
+    virtual void		DataChanged( const DataChangedEvent& rDCEvt );
 
     // for reasons of efficiency not const
-    SvxFont&            GetFont();
-    const SvxFont&      GetFont() const;
-    void                SetFont( const SvxFont& rFont );
-    void                SetFont( const SvxFont& rNormalFont, const SvxFont& rCJKFont, const SvxFont& rCTLFont );
-    void                SetCJKFont( const SvxFont& rFont );
-    void                SetCTLFont( const SvxFont& rFont );
+    SvxFont& 			GetFont();
+    const SvxFont& 		GetFont() const;
+    void  				SetFont( const SvxFont& rFont );
+    void  				SetFont( const SvxFont& rNormalFont, const SvxFont& rCJKFont, const SvxFont& rCTLFont );
+    void  				SetCJKFont( const SvxFont& rFont );
+    void  				SetCTLFont( const SvxFont& rFont );
     SvxFont&            GetCJKFont();
-    SvxFont&            GetCTLFont();
-    void                SetColor( const Color& rColor );
+    SvxFont&			GetCTLFont();
+    void  				SetColor( const Color& rColor );
     void                ResetColor();
     void                SetBackColor( const Color& rColor );
-    void                UseResourceText( sal_Bool bUse = sal_True );
-    void                Paint( const Rectangle& );
+    void                UseResourceText( BOOL bUse = TRUE );
+    void  				Paint( const Rectangle& );
 
-    sal_Bool                IsTwoLines() const;
-    void                SetTwoLines(sal_Bool bSet);
+    BOOL				IsTwoLines() const;
+    void				SetTwoLines(BOOL bSet);
 
-    void                SetBrackets(sal_Unicode cStart, sal_Unicode cEnd);
+    void				SetBrackets(sal_Unicode cStart, sal_Unicode cEnd);
 
-    void                SetFontWidthScale( sal_uInt16 nScaleInPercent );
+    void				SetFontWidthScale( UINT16 nScaleInPercent );
 
-    void                AutoCorrectFontColor( void );
+    void				AutoCorrectFontColor( void );
 
     void                SetPreviewText( const ::rtl::OUString& rString );
     void                SetFontNameAsPreviewText();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
     public:\
         bool mClosing;\
         Closing##cls (Window* parent, WinBits bits);\
-        virtual sal_Bool Close ();\
+        virtual BOOL Close ();\
     }
 
 DECLARE_CLOSING_DIALOG (Dialog);

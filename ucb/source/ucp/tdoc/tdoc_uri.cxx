@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ void Uri::init() const
             if ( nSlash != - 1 )
                 m_aInternalPath = m_aPath.copy( nSlash );
             else
-                m_aInternalPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                m_aInternalPath = rtl::OUString::createFromAscii( "/" );
         }
 
         m_eState = VALID;

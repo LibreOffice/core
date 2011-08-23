@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,10 +31,9 @@
 #include "Base64Codec.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
+using namespace rtl;
 using namespace osl;
 using namespace com::sun::star;
-
-using ::rtl::OUStringBuffer;
 
 const
   sal_Char aBase64EncodeTable[] =

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@
 
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase1.hxx>	// helper for implementations
 
 
 namespace linguistic
@@ -52,7 +52,7 @@ class ThesaurusMeaning :
 protected:
     ::rtl::OUString aText;              // one of the found 'meanings' for the looked up text
     ::rtl::OUString aLookUpText;        // text that was looked up in the thesaurus
-    sal_Int16           nLookUpLanguage;    // language of the text that was looked up
+    INT16           nLookUpLanguage;    // language of the text that was looked up
 
     // disallow copy-constructor and assignment-operator for now
     ThesaurusMeaning(const ThesaurusMeaning &);
@@ -60,7 +60,7 @@ protected:
 
 public:
     ThesaurusMeaning(const ::rtl::OUString &rText,
-            const ::rtl::OUString &rLookUpText, sal_Int16 nLookUpLang );
+            const ::rtl::OUString &rLookUpText, INT16 nLookUpLang );
     virtual ~ThesaurusMeaning();
 
     // XMeaning
@@ -72,8 +72,8 @@ public:
             throw(::com::sun::star::uno::RuntimeException) = 0;
 
     // non-interface specific functions
-    const ::rtl::OUString & getLookUpText() const       { return aLookUpText; }
-    short                   getLookUpLanguage() const   { return nLookUpLanguage; }
+    const ::rtl::OUString &	getLookUpText() const		{ return aLookUpText; }
+    short		 			getLookUpLanguage() const	{ return nLookUpLanguage; }
 };
 
 

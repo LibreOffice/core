@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "contentenumeration.hxx"
 #include <svl/urlfilter.hxx>
 #include <svtools/inettbc.hxx>
-#include <svtools/imagemgr.hxx>
+#include "imagemgr.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -60,12 +60,12 @@ namespace svt
 #define ROW_DATE_CREATE     4
 #define ROW_IS_FOLDER       5
 #define ROW_TARGET_URL      6
-#define ROW_IS_HIDDEN       7
-#define ROW_IS_VOLUME       8
-#define ROW_IS_REMOTE       9
-#define ROW_IS_REMOVEABLE   10
-#define ROW_IS_FLOPPY       11
-#define ROW_IS_COMPACTDISC  12
+#define ROW_IS_HIDDEN		7
+#define ROW_IS_VOLUME		8
+#define ROW_IS_REMOTE		9
+#define ROW_IS_REMOVEABLE	10
+#define ROW_IS_FLOPPY		11
+#define ROW_IS_COMPACTDISC	12
 
 #define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
     aToolsDT = ::DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
@@ -103,7 +103,7 @@ namespace svt
         ,m_pFilter               ( NULL            )
         ,m_pTranslator           ( _pTranslator    )
         ,m_bCancelled            ( false           )
-        ,m_rBlackList            ( ::com::sun::star::uno::Sequence< ::rtl::OUString >() )
+        ,m_rBlackList			 ( ::com::sun::star::uno::Sequence< ::rtl::OUString >() )
     {
     }
 
@@ -125,9 +125,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync(
-        const FolderDescriptor& _rFolder,
-        const IUrlFilter* _pFilter,
+    EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync( 
+        const FolderDescriptor& _rFolder, 
+        const IUrlFilter* _pFilter, 
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList )
     {
         {
@@ -170,7 +170,7 @@ namespace svt
     {
         return osl_incrementInterlockedCount( &m_refCount );
     }
-
+    
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL FileViewContentEnumerator::release()
     {
@@ -188,22 +188,22 @@ namespace svt
         EnumerationResult eResult = ERROR;
         try
         {
-
+            
             Reference< XResultSet > xResultSet;
             Sequence< OUString > aProps(12);
 
-            aProps[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
-            aProps[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ));
-            aProps[2] = OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ));
-            aProps[3] = OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ));
-            aProps[4] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ));
-            aProps[5] = OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
-            aProps[6] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ));
-            aProps[7] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVolume" ));
-            aProps[8] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsRemote" ));
-            aProps[9] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsRemoveable" ));
-            aProps[10] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFloppy" ));
-            aProps[11] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsCompactDisc" ));
+            aProps[0] = OUString::createFromAscii( "Title" );
+            aProps[1] = OUString::createFromAscii( "Size" );
+            aProps[2] = OUString::createFromAscii( "DateModified" );
+            aProps[3] = OUString::createFromAscii( "DateCreated" );
+            aProps[4] = OUString::createFromAscii( "IsFolder" );
+            aProps[5] = OUString::createFromAscii( "TargetURL" );
+            aProps[6] = OUString::createFromAscii( "IsHidden" );
+            aProps[7] = OUString::createFromAscii( "IsVolume" );
+            aProps[8] = OUString::createFromAscii( "IsRemote" );
+            aProps[9] = OUString::createFromAscii( "IsRemoveable" );
+            aProps[10] = OUString::createFromAscii( "IsFloppy" );
+            aProps[11] = OUString::createFromAscii( "IsCompactDisc" );
 
             Reference< XCommandEnvironment > xEnvironment;
             try
@@ -299,8 +299,8 @@ namespace svt
                                 ::ucbhelper::Content aCnt( aTargetURL, xEnvironment );
                                 try
                                 {
-                                aCnt.getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" )) ) >>= pData->maSize;
-                                aCnt.getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= aDT;
+                                aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= pData->maSize;
+                                aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDT;
                                 }
                                 catch (...) {}
                             }
@@ -396,14 +396,14 @@ namespace svt
 
     sal_Bool FileViewContentEnumerator::URLOnBlackList ( const ::rtl::OUString& sRealURL )
     {
-        ::rtl::OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ))) +1 );
+        ::rtl::OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( rtl::OUString::createFromAscii("/")) +1 );
 
         for (int i = 0; i < m_rBlackList.getLength() ; i++)
         {
             if ( entryName.equals(  m_rBlackList[i] ) )
                 return true;
         }
-
+        
         return false;
     }
 
@@ -431,7 +431,7 @@ namespace svt
             m_xDocInfo->loadFromURL( _rTargetURL );
             Reference< XPropertySet > xPropSet( m_xDocInfo, UNO_QUERY );
 
-            Any aAny = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" )) );
+            Any aAny = xPropSet->getPropertyValue( OUString::createFromAscii( "Title" ) );
 
             OUString sTitle;
             if ( ( aAny >>= sTitle ) && sTitle.getLength() > 0 )

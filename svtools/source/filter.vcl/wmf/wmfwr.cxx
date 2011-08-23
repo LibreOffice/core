@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
 #include <osl/endian.h>
-#include <i18nutil/unicode.hxx> //unicode::getUnicodeScriptType
+#include <i18nutil/unicode.hxx>	//unicode::getUnicodeScriptType
 
 #include <vcl/metric.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -189,17 +189,17 @@
 #define W_CHINESEBIG5_CHARSET 136
 #define W_OEM_CHARSET         255
 /*WINVER >= 0x0400*/
-#define W_JOHAB_CHARSET      130
-#define W_HEBREW_CHARSET     177
-#define W_ARABIC_CHARSET     178
-#define W_GREEK_CHARSET      161
-#define W_TURKISH_CHARSET    162
+#define W_JOHAB_CHARSET		 130
+#define W_HEBREW_CHARSET	 177
+#define W_ARABIC_CHARSET	 178
+#define W_GREEK_CHARSET		 161
+#define W_TURKISH_CHARSET	 162
 #define W_VIETNAMESE_CHARSET 163
-#define W_THAI_CHARSET       222
+#define W_THAI_CHARSET		 222
 #define W_EASTEUROPE_CHARSET 238
 #define W_RUSSIAN_CHARSET    204
 #define W_MAC_CHARSET        77
-#define W_BALTIC_CHARSET     186
+#define W_BALTIC_CHARSET	 186
 
 #define W_DEFAULT_PITCH       0x00
 #define W_FIXED_PITCH         0x01
@@ -242,9 +242,37 @@
 #define W_HS_CROSS          4
 #define W_HS_DIAGCROSS      5
 
-#define W_MFCOMMENT         15
+#define W_MFCOMMENT			15
 
-#define PRIVATE_ESCAPE_UNICODE          2
+#define PRIVATE_ESCAPE_UNICODE			2
+
+/// copied from writerwordglue.cxx
+
+/*
+    Utility to categorize unicode characters into the best fit windows charset
+    range for exporting to ww6, or as a hint to non \u unicode token aware rtf
+    readers
+*/
+rtl_TextEncoding getScriptClass(sal_Unicode cChar)
+{
+    using namespace com::sun::star::i18n;
+
+    static ScriptTypeList aScripts[] =
+    {
+        { UnicodeScript_kBasicLatin, UnicodeScript_kBasicLatin, RTL_TEXTENCODING_MS_1252},
+        { UnicodeScript_kLatin1Supplement, UnicodeScript_kLatin1Supplement, RTL_TEXTENCODING_MS_1252},
+        { UnicodeScript_kLatinExtendedA, UnicodeScript_kLatinExtendedA, RTL_TEXTENCODING_MS_1250},
+        { UnicodeScript_kLatinExtendedB, UnicodeScript_kLatinExtendedB, RTL_TEXTENCODING_MS_1257},
+        { UnicodeScript_kGreek, UnicodeScript_kGreek, RTL_TEXTENCODING_MS_1253},
+        { UnicodeScript_kCyrillic, UnicodeScript_kCyrillic, RTL_TEXTENCODING_MS_1251},
+        { UnicodeScript_kHebrew, UnicodeScript_kHebrew, RTL_TEXTENCODING_MS_1255},
+        { UnicodeScript_kArabic, UnicodeScript_kArabic, RTL_TEXTENCODING_MS_1256},
+        { UnicodeScript_kThai, UnicodeScript_kThai, RTL_TEXTENCODING_MS_1258},
+        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, RTL_TEXTENCODING_MS_1252}
+    };
+    return unicode::getUnicodeScriptType(cChar, aScripts,
+        RTL_TEXTENCODING_MS_1252);
+}
 
 //========================== Methoden von WMFWriter ==========================
 
@@ -252,7 +280,7 @@ void WMFWriter::MayCallback()
 {
     if ( xStatusIndicator.is() )
     {
-        sal_uLong nPercent;
+        ULONG nPercent;
 
         // Wir gehen mal einfach so davon aus, dass 16386 Actions einer Bitmap entsprechen
         // (in der Regel wird ein Metafile entweder nur Actions oder einige Bitmaps und fast
@@ -273,7 +301,7 @@ void WMFWriter::MayCallback()
 
 void WMFWriter::CountActionsAndBitmaps( const GDIMetaFile & rMTF )
 {
-    sal_uLong nAction, nActionCount;
+    ULONG nAction, nActionCount;
 
     nActionCount = rMTF.GetActionCount();
 
@@ -341,7 +369,7 @@ void WMFWriter::WriteRectangle(const Rectangle & rRect)
 
 void WMFWriter::WriteColor(const Color & rColor)
 {
-    *pWMF << (sal_uInt8) rColor.GetRed() << (sal_uInt8) rColor.GetGreen() << (sal_uInt8) rColor.GetBlue() << (sal_uInt8) 0;
+    *pWMF << (BYTE) rColor.GetRed() << (BYTE) rColor.GetGreen() << (BYTE) rColor.GetBlue() << (BYTE) 0;
 }
 
 
@@ -355,12 +383,12 @@ void WMFWriter::WriteRecordHeader(sal_uInt32 nSizeWords, sal_uInt16 nType)
 
 void WMFWriter::UpdateRecordHeader()
 {
-    sal_uLong nPos;
+    ULONG nPos;
     sal_uInt32 nSize;
 
     nPos=pWMF->Tell(); nSize=nPos-nActRecordPos;
     if ((nSize & 1)!=0) {
-        *pWMF << (sal_uInt8)0;
+        *pWMF << (BYTE)0;
         nPos++; nSize++;
     }
     nSize/=2;
@@ -393,19 +421,19 @@ void WMFWriter::WMFRecord_CreateBrushIndirect(const Color& rColor)
     WriteRecordHeader(0x00000007,W_META_CREATEBRUSHINDIRECT);
 
     if( rColor==Color(COL_TRANSPARENT) )
-        *pWMF << (sal_uInt16) W_BS_HOLLOW;
+        *pWMF << (UINT16) W_BS_HOLLOW;
     else
-        *pWMF << (sal_uInt16) W_BS_SOLID;
+        *pWMF << (UINT16) W_BS_SOLID;
 
     WriteColor( rColor );
-    *pWMF << (sal_uInt16) 0;
+    *pWMF << (UINT16) 0;
 }
 
 
 void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
 {
-    sal_uInt16 nWeight,i;
-    sal_uInt8 nPitchFamily;
+    USHORT nWeight,i;
+    BYTE nPitchFamily;
 
     WriteRecordHeader(0x00000000,W_META_CREATEFONTINDIRECT);
     WriteHeightWidth(Size(rFont.GetSize().Width(),-rFont.GetSize().Height()));
@@ -426,19 +454,19 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
     }
     *pWMF << nWeight;
 
-    if (rFont.GetItalic()==ITALIC_NONE)       *pWMF << (sal_uInt8)0; else  *pWMF << (sal_uInt8)1;
-    if (rFont.GetUnderline()==UNDERLINE_NONE) *pWMF << (sal_uInt8)0; else  *pWMF << (sal_uInt8)1;
-    if (rFont.GetStrikeout()==STRIKEOUT_NONE) *pWMF << (sal_uInt8)0; else  *pWMF << (sal_uInt8)1;
+    if (rFont.GetItalic()==ITALIC_NONE)       *pWMF << (BYTE)0; else  *pWMF << (BYTE)1;
+    if (rFont.GetUnderline()==UNDERLINE_NONE) *pWMF << (BYTE)0; else  *pWMF << (BYTE)1;
+    if (rFont.GetStrikeout()==STRIKEOUT_NONE) *pWMF << (BYTE)0; else  *pWMF << (BYTE)1;
 
-    CharSet     eFontNameEncoding = rFont.GetCharSet();
-    sal_uInt8   nCharSet = rtl_getBestWindowsCharsetFromTextEncoding( eFontNameEncoding );
+    CharSet		eFontNameEncoding = rFont.GetCharSet();
+    sal_uInt8	nCharSet = rtl_getBestWindowsCharsetFromTextEncoding( eFontNameEncoding );
     if ( eFontNameEncoding == RTL_TEXTENCODING_SYMBOL )
         eFontNameEncoding = RTL_TEXTENCODING_MS_1252;
     if ( nCharSet == 1 )
         nCharSet = W_ANSI_CHARSET;
     *pWMF << nCharSet;
 
-    *pWMF << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0;
+    *pWMF << (BYTE)0 << (BYTE)0 << (BYTE)0;
 
     switch (rFont.GetPitch()) {
         case PITCH_FIXED:    nPitchFamily=W_FIXED_PITCH;    break;
@@ -467,7 +495,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
 void WMFWriter::WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo& rLineInfo )
 {
     WriteRecordHeader(0x00000008,W_META_CREATEPENINDIRECT);
-    sal_uInt16 nStyle = rColor == Color( COL_TRANSPARENT ) ? W_PS_NULL : W_PS_SOLID;
+    USHORT nStyle = rColor == Color( COL_TRANSPARENT ) ? W_PS_NULL : W_PS_SOLID;
     switch( rLineInfo.GetStyle() )
     {
         case LINE_DASH :
@@ -500,7 +528,7 @@ void WMFWriter::WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo&
     WriteColor( rColor );
 }
 
-void WMFWriter::WMFRecord_DeleteObject(sal_uInt16 nObjectHandle)
+void WMFWriter::WMFRecord_DeleteObject(USHORT nObjectHandle)
 {
     WriteRecordHeader(0x00000004,W_META_DELETEOBJECT);
     *pWMF << nObjectHandle;
@@ -532,14 +560,14 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
 
     WriteRecordHeader( 3 + 9 + ( ( nLen + 1 ) >> 1 ), W_META_ESCAPE );
     *pWMF << (sal_uInt16)W_MFCOMMENT
-          << (sal_uInt16)( nLen + 14 )  // we will always have a fourteen byte escape header:
-          << (sal_uInt16)0x4f4f         // OO
-          << (sal_uInt32)0xa2c2a        // evil magic number
-          << (sal_uInt32)nCheckSum      // crc32 checksum about nEsc & pData
-          << (sal_uInt32)nEsc;          // escape number
+          << (sal_uInt16)( nLen + 14 )	// we will always have a fourteen byte escape header:
+          << (sal_uInt16)0x4f4f			// OO
+          << (sal_uInt32)0xa2c2a		// evil magic number
+          << (sal_uInt32)nCheckSum		// crc32 checksum about nEsc & pData
+          << (sal_uInt32)nEsc;			// escape number
     pWMF->Write( pData, nLen );
     if ( nLen & 1 )
-        *pWMF << (sal_uInt8)0;          // pad byte
+        *pWMF << (sal_uInt8)0;			// pad byte
 }
 
 /* if return value is true, then a complete unicode string and also a polygon replacement has been written,
@@ -553,49 +581,49 @@ sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String&
     if ( nStringLen )
     {
         // first we will check if a comment is necessary
-        if ( aSrcFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL )     // symbol is always byte character, so there is no unicode loss
+        if ( aSrcFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL )		// symbol is always byte character, so there is no unicode loss
         {
             const sal_Unicode* pBuf = rUniStr.GetBuffer();
             const rtl_TextEncoding aTextEncodingOrg = aSrcFont.GetCharSet();
             ByteString aByteStr( rUniStr, aTextEncodingOrg );
-            String     aUniStr2( aByteStr, aTextEncodingOrg );
-            const sal_Unicode* pConversion = aUniStr2.GetBuffer();  // this is the unicode array after bytestring <-> unistring conversion
+            String	   aUniStr2( aByteStr, aTextEncodingOrg );
+            const sal_Unicode* pConversion = aUniStr2.GetBuffer();	// this is the unicode array after bytestring <-> unistring conversion
             for ( i = 0; i < nStringLen; i++ )
             {
                 if ( *pBuf++ != *pConversion++ )
                     break;
             }
 
-            if  ( i != nStringLen )                             // after conversion the characters are not original,
-            {                                                   // try again, with determining a better charset from unicode char
+            if  ( i != nStringLen )								// after conversion the characters are not original, 
+            {													// try again, with determining a better charset from unicode char
                 pBuf = rUniStr.GetBuffer();
                 const sal_Unicode* pCheckChar = pBuf;
-                rtl_TextEncoding aTextEncoding = getBestMSEncodingByChar(*pCheckChar); // try the first character
+                rtl_TextEncoding aTextEncoding = getScriptClass (*pCheckChar); // try the first character 
                 for ( i = 1; i < nStringLen; i++)
                 {
                     if (aTextEncoding != aTextEncodingOrg) // found something
                         break;
                     pCheckChar++;
-                    aTextEncoding = getBestMSEncodingByChar(*pCheckChar); // try the next character
+                    aTextEncoding = getScriptClass (*pCheckChar); // try the next character 
                 }
 
                 aByteStr = ByteString ( rUniStr,  aTextEncoding );
                 aUniStr2 = String ( aByteStr, aTextEncoding );
-                pConversion = aUniStr2.GetBuffer(); // this is the unicode array after bytestring <-> unistring conversion
+                pConversion = aUniStr2.GetBuffer();	// this is the unicode array after bytestring <-> unistring conversion
                 for ( i = 0; i < nStringLen; i++ )
                 {
                     if ( *pBuf++ != *pConversion++ )
                         break;
                 }
-                if (i == nStringLen)
+                if (i == nStringLen) 
                 {
                     aSrcFont.SetCharSet (aTextEncoding);
                     SetAllAttr();
                 }
             }
 
-            if ( ( i != nStringLen ) || IsStarSymbol( aSrcFont.GetName() ) )    // after conversion the characters are not original, so we
-            {                                                                   // will store the unicode string and a polypoly replacement
+            if ( ( i != nStringLen ) || IsStarSymbol( aSrcFont.GetName() ) )	// after conversion the characters are not original, so we
+            {																	// will store the unicode string and a polypoly replacement
                 Color aOldFillColor( aSrcFillColor );
                 Color aOldLineColor( aSrcLineColor );
                 aSrcLineInfo  = LineInfo();
@@ -658,7 +686,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
     TrueExtTextOut(rPoint,rString,aByteString,pDXAry);
 }
 
-void WMFWriter::TrueExtTextOut( const Point & rPoint, const String & rString,
+void WMFWriter::TrueExtTextOut( const Point & rPoint, const String & rString, 
     const ByteString & rByteString, const sal_Int32 * pDXAry )
 {
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
@@ -721,7 +749,7 @@ void WMFWriter::WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, c
 
 void WMFWriter::WMFRecord_Polygon(const Polygon & rPoly)
 {
-    sal_uInt16 nSize,i;
+    USHORT nSize,i;
 
     Polygon aSimplePoly;
     if ( rPoly.HasFlags() )
@@ -729,7 +757,7 @@ void WMFWriter::WMFRecord_Polygon(const Polygon & rPoly)
     else
         aSimplePoly = rPoly;
     nSize = aSimplePoly.GetSize();
-    WriteRecordHeader(((sal_uLong)nSize)*2+4,W_META_POLYGON);
+    WriteRecordHeader(((ULONG)nSize)*2+4,W_META_POLYGON);
     *pWMF << nSize;
     for (i=0; i<nSize; i++) WritePointXY(aSimplePoly.GetPoint(i));
 }
@@ -737,14 +765,14 @@ void WMFWriter::WMFRecord_Polygon(const Polygon & rPoly)
 
 void WMFWriter::WMFRecord_PolyLine(const Polygon & rPoly)
 {
-    sal_uInt16 nSize,i;
+    USHORT nSize,i;
     Polygon aSimplePoly;
     if ( rPoly.HasFlags() )
         rPoly.AdaptiveSubdivide( aSimplePoly );
     else
         aSimplePoly = rPoly;
     nSize=aSimplePoly.GetSize();
-    WriteRecordHeader(((sal_uLong)nSize)*2+4,W_META_POLYLINE);
+    WriteRecordHeader(((ULONG)nSize)*2+4,W_META_POLYLINE);
     *pWMF << nSize;
     for (i=0; i<nSize; i++) WritePointXY(aSimplePoly.GetPoint(i));
 }
@@ -753,7 +781,7 @@ void WMFWriter::WMFRecord_PolyLine(const Polygon & rPoly)
 void WMFWriter::WMFRecord_PolyPolygon(const PolyPolygon & rPolyPoly)
 {
     const Polygon * pPoly;
-    sal_uInt16 nCount,nSize,i,j;
+    USHORT nCount,nSize,i,j;
 
     nCount=rPolyPoly.Count();
     PolyPolygon aSimplePolyPoly( rPolyPoly );
@@ -768,7 +796,7 @@ void WMFWriter::WMFRecord_PolyPolygon(const PolyPolygon & rPolyPoly)
     }
     WriteRecordHeader(0,W_META_POLYPOLYGON);
     *pWMF << nCount;
-    for (i=0; i<nCount; i++) *pWMF << ((sal_uInt16)(aSimplePolyPoly.GetObject(i).GetSize()));
+    for (i=0; i<nCount; i++) *pWMF << ((USHORT)(aSimplePolyPoly.GetObject(i).GetSize()));
     for (i=0; i<nCount; i++) {
         pPoly=&(aSimplePolyPoly.GetObject(i));
         nSize=pPoly->GetSize();
@@ -806,24 +834,31 @@ void WMFWriter::WMFRecord_SaveDC()
 }
 
 
-void WMFWriter::WMFRecord_SelectObject(sal_uInt16 nObjectHandle)
+void WMFWriter::WMFRecord_SelectObject(USHORT nObjectHandle)
 {
     WriteRecordHeader(0x00000004,W_META_SELECTOBJECT);
     *pWMF << nObjectHandle;
 }
 
 
-void WMFWriter::WMFRecord_SetBkMode(sal_Bool bTransparent)
+void WMFWriter::WMFRecord_SetBkColor(const Color & rColor)
+{
+    WriteRecordHeader(0x00000005,W_META_SETBKCOLOR);
+    WriteColor(rColor);
+}
+
+
+void WMFWriter::WMFRecord_SetBkMode(BOOL bTransparent)
 {
     WriteRecordHeader(0x00000004,W_META_SETBKMODE);
-    if (bTransparent==sal_True) *pWMF << (sal_uInt16)W_TRANSPARENT;
-    else                    *pWMF << (sal_uInt16)W_OPAQUE;
+    if (bTransparent==TRUE) *pWMF << (USHORT)W_TRANSPARENT;
+    else                    *pWMF << (USHORT)W_OPAQUE;
 }
 
 void WMFWriter::WMFRecord_SetStretchBltMode()
 {
     WriteRecordHeader( 0x00000004, W_META_SETSTRETCHBLTMODE );
-    *pWMF << (sal_uInt16) 3; // STRETCH_DELETESCANS
+    *pWMF << (USHORT) 3; // STRETCH_DELETESCANS
 }
 
 void WMFWriter::WMFRecord_SetPixel(const Point & rPoint, const Color & rColor)
@@ -836,7 +871,7 @@ void WMFWriter::WMFRecord_SetPixel(const Point & rPoint, const Color & rColor)
 
 void WMFWriter::WMFRecord_SetROP2(RasterOp eROP)
 {
-    sal_uInt16 nROP2;
+    USHORT nROP2;
 
     switch (eROP) {
         case ROP_INVERT: nROP2=W_R2_NOT;        break;
@@ -848,9 +883,9 @@ void WMFWriter::WMFRecord_SetROP2(RasterOp eROP)
 }
 
 
-void WMFWriter::WMFRecord_SetTextAlign(FontAlign eFontAlign, sal_uInt32 eHorTextAlign)
+void WMFWriter::WMFRecord_SetTextAlign(FontAlign eFontAlign, UINT32 eHorTextAlign)
 {
-    sal_uInt16 nAlign;
+    USHORT nAlign;
 
     switch (eFontAlign) {
         case ALIGN_TOP:    nAlign=W_TA_TOP; break;
@@ -889,7 +924,7 @@ void WMFWriter::WMFRecord_SetWindowOrg(const Point & rPoint)
 void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
                                       const Bitmap & rBitmap, sal_uInt32 nROP )
 {
-    sal_uLong nPosAnf,nPosEnd;
+    ULONG nPosAnf,nPosEnd;
 
     nActBitmapPercent=50;
     MayCallback();
@@ -949,14 +984,14 @@ void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const String & rStr)
 
 void WMFWriter::TrueTextOut(const Point & rPoint, const ByteString& rString)
 {
-    sal_uInt16 nLen,i;
+    USHORT nLen,i;
 
     WriteRecordHeader(0,W_META_TEXTOUT);
     nLen=rString.Len();
     *pWMF << nLen;
     for ( i = 0; i < nLen; i++ )
-        *pWMF << (sal_uInt8)rString.GetChar( i );
-    if ((nLen&1)!=0) *pWMF << (sal_uInt8)0;
+        *pWMF << (BYTE)rString.GetChar( i );
+    if ((nLen&1)!=0) *pWMF << (BYTE)0;
     WritePointYX(rPoint);
     UpdateRecordHeader();
 }
@@ -974,30 +1009,30 @@ void WMFWriter::WMFRecord_IntersectClipRect( const Rectangle& rRect )
 }
 
 
-sal_uInt16 WMFWriter::AllocHandle()
+USHORT WMFWriter::AllocHandle()
 {
-    sal_uInt16 i;
+    USHORT i;
 
     for (i=0; i<MAXOBJECTHANDLES; i++) {
-        if (bHandleAllocated[i]==sal_False) {
-            bHandleAllocated[i]=sal_True;
+        if (bHandleAllocated[i]==FALSE) {
+            bHandleAllocated[i]=TRUE;
             return i;
         }
     }
-    bStatus=sal_False;
+    bStatus=FALSE;
     return 0xffff;
 }
 
 
-void WMFWriter::FreeHandle(sal_uInt16 nObjectHandle)
+void WMFWriter::FreeHandle(USHORT nObjectHandle)
 {
-    if (nObjectHandle<MAXOBJECTHANDLES) bHandleAllocated[nObjectHandle]=sal_False;
+    if (nObjectHandle<MAXOBJECTHANDLES) bHandleAllocated[nObjectHandle]=FALSE;
 }
 
 
 void WMFWriter::CreateSelectDeletePen( const Color& rColor, const LineInfo& rLineInfo )
 {
-    sal_uInt16 nOldHandle;
+    USHORT nOldHandle;
 
     nOldHandle=nDstPenHandle;
     nDstPenHandle=AllocHandle();
@@ -1012,7 +1047,7 @@ void WMFWriter::CreateSelectDeletePen( const Color& rColor, const LineInfo& rLin
 
 void WMFWriter::CreateSelectDeleteFont(const Font & rFont)
 {
-    sal_uInt16 nOldHandle;
+    USHORT nOldHandle;
 
     nOldHandle=nDstFontHandle;
     nDstFontHandle=AllocHandle();
@@ -1027,7 +1062,7 @@ void WMFWriter::CreateSelectDeleteFont(const Font & rFont)
 
 void WMFWriter::CreateSelectDeleteBrush(const Color& rColor)
 {
-    sal_uInt16 nOldHandle;
+    USHORT nOldHandle;
 
     nOldHandle=nDstBrushHandle;
     nDstBrushHandle=AllocHandle();
@@ -1059,7 +1094,7 @@ void WMFWriter::SetLineAndFillAttr()
         CreateSelectDeleteBrush( aDstFillColor );
     }
     if ( bDstIsClipping != bSrcIsClipping ||
-        (bSrcIsClipping==sal_True && aDstClipRegion!=aSrcClipRegion)) {
+        (bSrcIsClipping==TRUE && aDstClipRegion!=aSrcClipRegion)) {
         bDstIsClipping=bSrcIsClipping;
         aDstClipRegion=aSrcClipRegion;
     }
@@ -1144,8 +1179,8 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
 
 void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 {
-    sal_uLong       nA, nACount;
-    MetaAction* pMA;
+    ULONG		nA, nACount;
+    MetaAction*	pMA;
 
     if( bStatus )
     {
@@ -1170,8 +1205,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_POINT_ACTION:
                 {
-                    const MetaPointAction*  pA = (const MetaPointAction*) pMA;
-                    const Point&            rPt = pA->GetPoint();
+                    const MetaPointAction*	pA = (const MetaPointAction*) pMA;
+                    const Point&			rPt = pA->GetPoint();
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_MoveTo( rPt);
@@ -1258,7 +1293,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_POLYLINE_ACTION:
                 {
                     const MetaPolyLineAction* pA = (const MetaPolyLineAction*) pMA;
-                    const Polygon&              rPoly = pA->GetPolygon();
+                    const Polygon&				rPoly = pA->GetPolygon();
 
                     if( rPoly.GetSize() )
                     {
@@ -1322,7 +1357,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_TEXTARRAY_ACTION:
                 {
                     const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pMA;
-
+                    
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
@@ -1371,8 +1406,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_BMPSCALEPART_ACTION:
                 {
-                    const MetaBmpScalePartAction*   pA = (const MetaBmpScalePartAction*) pMA;
-                    Bitmap                          aTmp( pA->GetBitmap() );
+                    const MetaBmpScalePartAction*	pA = (const MetaBmpScalePartAction*) pMA;
+                    Bitmap							aTmp( pA->GetBitmap() );
 
                     if( aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) ) )
                         WMFRecord_StretchDIB( pA->GetDestPoint(), pA->GetDestSize(), aTmp );
@@ -1381,9 +1416,9 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_BMPEX_ACTION:
                 {
-                    const MetaBmpExAction*  pA = (const MetaBmpExAction *) pMA;
-                    Bitmap                  aBmp( pA->GetBitmapEx().GetBitmap() );
-                    Bitmap                  aMsk( pA->GetBitmapEx().GetMask() );
+                    const MetaBmpExAction*	pA = (const MetaBmpExAction *) pMA;
+                    Bitmap					aBmp( pA->GetBitmapEx().GetBitmap() );
+                    Bitmap					aMsk( pA->GetBitmapEx().GetMask() );
 
                     if( !!aMsk )
                     {
@@ -1399,9 +1434,9 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_BMPEXSCALE_ACTION:
                 {
-                    const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pMA;
-                    Bitmap                      aBmp( pA->GetBitmapEx().GetBitmap() );
-                    Bitmap                      aMsk( pA->GetBitmapEx().GetMask() );
+                    const MetaBmpExScaleAction*	pA = (const MetaBmpExScaleAction*) pMA;
+                    Bitmap						aBmp( pA->GetBitmapEx().GetBitmap() );
+                    Bitmap						aMsk( pA->GetBitmapEx().GetMask() );
 
                     if( !!aMsk )
                     {
@@ -1417,11 +1452,11 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_BMPEXSCALEPART_ACTION:
                 {
-                    const MetaBmpExScalePartAction* pA = (const MetaBmpExScalePartAction*) pMA;
-                    BitmapEx                        aBmpEx( pA->GetBitmapEx() );
+                    const MetaBmpExScalePartAction*	pA = (const MetaBmpExScalePartAction*) pMA;
+                    BitmapEx						aBmpEx( pA->GetBitmapEx() );
                     aBmpEx.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
-                    Bitmap                          aBmp( aBmpEx.GetBitmap() );
-                    Bitmap                          aMsk( aBmpEx.GetMask() );
+                    Bitmap							aBmp( aBmpEx.GetBitmap() );
+                    Bitmap							aMsk( aBmpEx.GetMask() );
 
                     if( !!aMsk )
                     {
@@ -1437,8 +1472,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_GRADIENT_ACTION:
                 {
-                    const MetaGradientAction*   pA = (const MetaGradientAction*) pMA;
-                    GDIMetaFile                 aTmpMtf;
+                    const MetaGradientAction*	pA = (const MetaGradientAction*) pMA;
+                    GDIMetaFile					aTmpMtf;
 
                     pVirDev->AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
                     WriteRecords( aTmpMtf );
@@ -1447,8 +1482,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_HATCH_ACTION:
                 {
-                    const MetaHatchAction*  pA = (const MetaHatchAction*) pMA;
-                    GDIMetaFile             aTmpMtf;
+                    const MetaHatchAction*	pA = (const MetaHatchAction*) pMA;
+                    GDIMetaFile				aTmpMtf;
 
                     pVirDev->AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
                     WriteRecords( aTmpMtf );
@@ -1457,10 +1492,10 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_WALLPAPER_ACTION:
                 {
-                    const MetaWallpaperAction*  pA = (const MetaWallpaperAction*) pMA;
-                    const Color&                rColor = pA->GetWallpaper().GetColor();
-                    const Color                 aOldLineColor( aSrcLineColor );
-                    const Color                 aOldFillColor( aSrcFillColor );
+                    const MetaWallpaperAction*	pA = (const MetaWallpaperAction*) pMA;
+                    const Color&				rColor = pA->GetWallpaper().GetColor();
+                    const Color					aOldLineColor( aSrcLineColor );
+                    const Color					aOldFillColor( aSrcFillColor );
 
                     aSrcLineColor = rColor;
                     aSrcFillColor = rColor;
@@ -1584,11 +1619,10 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaFontAction* pA = (const MetaFontAction*) pMA;
                     aSrcFont = pA->GetFont();
 
-                    if ( (aSrcFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW)
-                         || (aSrcFont.GetCharSet() == RTL_TEXTENCODING_UNICODE) )
-                    {
+                    if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
+                        aSrcFont.SetCharSet( GetExtendedTextEncoding( gsl_getSystemTextEncoding() ) );
+                    if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_UNICODE )
                         aSrcFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );
-                    }
                     eSrcTextAlign = aSrcFont.GetAlign();
                     aSrcTextColor = aSrcFont.GetColor();
                     aSrcFont.SetAlign( ALIGN_BASELINE );
@@ -1663,8 +1697,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaEPSAction* pA = (const MetaEPSAction*)pMA;
                     const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
 
-                    sal_Int32 nCount = aGDIMetaFile.GetActionCount();
-                    for ( sal_Int32 i = 0; i < nCount; i++ )
+                    INT32 nCount = aGDIMetaFile.GetActionCount();
+                    for ( INT32 i = 0; i < nCount; i++ )
                     {
                         const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
                         if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )
@@ -1695,15 +1729,15 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_FLOATTRANSPARENT_ACTION:
                 {
                     const MetaFloatTransparentAction* pA = (const MetaFloatTransparentAction*) pMA;
-
-                    GDIMetaFile     aTmpMtf( pA->GetGDIMetaFile() );
-                    Point           aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
-                    const Size      aSrcSize( aTmpMtf.GetPrefSize() );
-                    const Point     aDestPt( pA->GetPoint() );
-                    const Size      aDestSize( pA->GetSize() );
-                    const double    fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
-                    const double    fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
-                    long            nMoveX, nMoveY;
+                    
+                    GDIMetaFile		aTmpMtf( pA->GetGDIMetaFile() );
+                    Point			aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
+                    const Size		aSrcSize( aTmpMtf.GetPrefSize() );
+                    const Point		aDestPt( pA->GetPoint() );
+                    const Size		aDestSize( pA->GetSize() );
+                    const double	fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
+                    const double	fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
+                    long			nMoveX, nMoveY;
 
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
@@ -1743,7 +1777,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_MASKSCALE_ACTION:
                 case META_MASKSCALEPART_ACTION:
                 {
-                    OSL_FAIL( "Unsupported action: MetaMask...Action!" );
+                    DBG_ERROR( "Unsupported action: MetaMask...Action!" );
                 }
                 break;
 
@@ -1752,13 +1786,13 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_ISECTREGIONCLIPREGION_ACTION:
                 {
-                    OSL_FAIL( "Unsupported action: MetaISectRegionClipRegionAction!" );
+                    DBG_ERROR( "Unsupported action: MetaISectRegionClipRegionAction!" );
                 }
                 break;
 
                 case META_MOVECLIPREGION_ACTION:
                 {
-                    OSL_FAIL( "Unsupported action: MetaMoveClipRegionAction!" );
+                    DBG_ERROR( "Unsupported action: MetaMoveClipRegionAction!" );
                 }
                 break;
           }
@@ -1767,9 +1801,9 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
           MayCallback();
 
           if (pWMF->GetError())
-            bStatus=sal_False;
+            bStatus=FALSE;
 
-          if(bStatus==sal_False)
+          if(bStatus==FALSE)
             break;
         }
     }
@@ -1777,13 +1811,13 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
 // ------------------------------------------------------------------------
 
-void WMFWriter::WriteHeader( const GDIMetaFile &, sal_Bool bPlaceable )
+void WMFWriter::WriteHeader( const GDIMetaFile &, BOOL bPlaceable )
 {
     if( bPlaceable )
     {
-        sal_uInt16  nCheckSum, nValue;
-        Size    aSize( pVirDev->LogicToLogic(Size(1,1),MapMode(MAP_INCH), aTargetMapMode) );
-        sal_uInt16  nUnitsPerInch = (sal_uInt16) ( ( aSize.Width() + aSize.Height() ) >> 1 );
+        USHORT	nCheckSum, nValue;
+        Size	aSize( pVirDev->LogicToLogic(Size(1,1),MapMode(MAP_INCH), aTargetMapMode) );
+        USHORT	nUnitsPerInch = (USHORT) ( ( aSize.Width() + aSize.Height() ) >> 1 );
 
         nCheckSum=0;
         nValue=0xcdd7;                              nCheckSum^=nValue; *pWMF << nValue;
@@ -1791,8 +1825,8 @@ void WMFWriter::WriteHeader( const GDIMetaFile &, sal_Bool bPlaceable )
         nValue=0x0000;                              nCheckSum^=nValue; *pWMF << nValue;
         nValue=0x0000;                              nCheckSum^=nValue; *pWMF << nValue;
         nValue=0x0000;                              nCheckSum^=nValue; *pWMF << nValue;
-        nValue=(sal_uInt16) aTargetSize.Width();        nCheckSum^=nValue; *pWMF << nValue;
-        nValue=(sal_uInt16) aTargetSize.Height();       nCheckSum^=nValue; *pWMF << nValue;
+        nValue=(USHORT) aTargetSize.Width();		nCheckSum^=nValue; *pWMF << nValue;
+        nValue=(USHORT) aTargetSize.Height();		nCheckSum^=nValue; *pWMF << nValue;
         nValue=nUnitsPerInch;                       nCheckSum^=nValue; *pWMF << nValue;
         nValue=0x0000;                              nCheckSum^=nValue; *pWMF << nValue;
         nValue=0x0000;                              nCheckSum^=nValue; *pWMF << nValue;
@@ -1803,9 +1837,9 @@ void WMFWriter::WriteHeader( const GDIMetaFile &, sal_Bool bPlaceable )
     *pWMF << (sal_uInt16)0x0001           // Typ: Datei
           << (sal_uInt16)0x0009           // Headerlaenge in Worten
           << (sal_uInt16)0x0300           // Version als BCD-Zahl
-          << (sal_uInt32) 0x00000000      // Dateilaenge (ohne 1. Header), wird spaeter durch UpdateHeader() berichtigt
+          << (sal_uInt32) 0x00000000  	  // Dateilaenge (ohne 1. Header), wird spaeter durch UpdateHeader() berichtigt
           << (sal_uInt16)MAXOBJECTHANDLES // Maximalezahl der gleichzeitigen Objekte
-          << (sal_uInt32) 0x00000000      // Maximale Record-laenge, wird spaeter durch UpdateHeader() berichtigt
+          << (sal_uInt32) 0x00000000  	  // Maximale Record-laenge, wird spaeter durch UpdateHeader() berichtigt
           << (sal_uInt16)0x0000;          // Reserved
 }
 
@@ -1813,13 +1847,13 @@ void WMFWriter::WriteHeader( const GDIMetaFile &, sal_Bool bPlaceable )
 
 void WMFWriter::UpdateHeader()
 {
-    sal_uLong nPos;
+    ULONG nPos;
     sal_uInt32 nFileSize;
 
     nPos=pWMF->Tell();                 // Endposition = Gesammtgroesse der Datei
     nFileSize=nPos-nMetafileHeaderPos; // Groesse des 1. Headers abziehen
     if ((nFileSize&1)!=0) {            // ggf. auf ganze Worte aufrunden
-        *pWMF << (sal_uInt8)0;
+        *pWMF << (BYTE)0;
         nPos++;
         nFileSize++;
     }
@@ -1833,13 +1867,13 @@ void WMFWriter::UpdateHeader()
 
 // ------------------------------------------------------------------------
 
-sal_Bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
-                            FilterConfigItem* pFConfigItem, sal_Bool bPlaceable )
+BOOL WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
+                            FilterConfigItem* pFConfigItem, BOOL bPlaceable )
 {
     WMFWriterAttrStackMember * pAt;
 
-    bEmbedEMF = sal_True;
-    bStatus=sal_True;
+    bEmbedEMF = TRUE;
+    bStatus=TRUE;
     pConvert = 0;
     pVirDev = new VirtualDevice;
 
@@ -1874,8 +1908,8 @@ sal_Bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     {
         aTargetMapMode = MapMode( MAP_INCH );
 
-        const long      nUnit = pVirDev->LogicToPixel( Size( 1, 1 ), aTargetMapMode ).Width();
-        const Fraction  aFrac( 1, nUnit );
+        const long		nUnit = pVirDev->LogicToPixel( Size( 1, 1 ), aTargetMapMode ).Width();
+        const Fraction	aFrac( 1, nUnit );
 
         aTargetMapMode.SetScaleX( aFrac );
         aTargetMapMode.SetScaleY( aFrac );
@@ -1886,8 +1920,8 @@ sal_Bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 
     pAttrStack=NULL;
 
-    for (sal_uInt16 i=0; i<MAXOBJECTHANDLES; i++)
-        bHandleAllocated[i]=sal_False;
+    for (USHORT i=0; i<MAXOBJECTHANDLES; i++)
+        bHandleAllocated[i]=FALSE;
 
     nDstPenHandle=0xffff;
     nDstFontHandle=0xffff;
@@ -1906,7 +1940,7 @@ sal_Bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
         WriteEmbeddedEMF( rMTF );
     WMFRecord_SetWindowOrg(Point(0,0));
     WMFRecord_SetWindowExt(rMTF.GetPrefSize());
-    WMFRecord_SetBkMode( sal_True );
+    WMFRecord_SetBkMode( TRUE );
 
     eDstROP2 = eSrcRasterOp = ROP_OVERPAINT;
     WMFRecord_SetROP2(eDstROP2);
@@ -1919,10 +1953,10 @@ sal_Bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     CreateSelectDeleteBrush( aDstFillColor );
 
     aDstClipRegion = aSrcClipRegion = Region();
-    bDstIsClipping = bSrcIsClipping = sal_False;
+    bDstIsClipping = bSrcIsClipping = FALSE;
 
     Font aFont;
-    aFont.SetCharSet( GetExtendedTextEncoding( RTL_TEXTENCODING_MS_1252 ) );
+    aFont.SetCharSet( GetExtendedTextEncoding( gsl_getSystemTextEncoding() ) );
     aFont.SetColor( Color( COL_WHITE ) );
     aFont.SetAlign( ALIGN_BASELINE );
     aDstFont = aSrcFont = aFont;
@@ -1953,17 +1987,17 @@ sal_Bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
-
+    
     return bStatus;
 }
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
+USHORT WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
                                         const Size& rPrefSize)
 {
-    Fraction    aDivFrac(2, 1);
-    sal_uInt16      nDivisor = 1;
+    Fraction	aDivFrac(2, 1);
+    USHORT		nDivisor = 1;
 
     Size aSize = pVirDev->LogicToLogic( rPrefSize, aSrcMapMode, rMapMode );
 
@@ -1987,10 +2021,10 @@ sal_uInt16 WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
 
 void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
 {
+    EMFWriter aEMFWriter;
     SvMemoryStream aStream;
-    EMFWriter aEMFWriter(aStream);
-
-    if( aEMFWriter.WriteEMF( rMTF ) )
+    
+    if( aEMFWriter.WriteEMF( rMTF, aStream ) )
     {
         sal_Size nTotalSize = aStream.Tell();
         if( nTotalSize > SAL_MAX_UINT32 )
@@ -2025,8 +2059,8 @@ void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
                 nCurSize = nRemainingSize;
                 nRemainingSize = 0;
             }
-            WriteEMFRecord( aStream,
-                            nCurSize,
+            WriteEMFRecord( aStream, 
+                            nCurSize, 
                             nRemainingSize,
                             nTotalSize,
                             nRecCounts,
@@ -2035,18 +2069,18 @@ void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
         }
     }
 }
-
+   
 // ------------------------------------------------------------------------
 
 void WMFWriter::WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, sal_uInt32 nRemainingSize,
                 sal_uInt32 nTotalSize, sal_uInt32 nRecCounts, sal_uInt16 nCheckSum )
 {
    // according to http://msdn.microsoft.com/en-us/library/dd366152%28PROT.13%29.aspx
-   WriteRecordHeader( 0, W_META_ESCAPE );
-   *pWMF << (sal_uInt16)W_MFCOMMENT         // same as META_ESCAPE_ENHANCED_METAFILE
-          << (sal_uInt16)( nCurSize + 34 )  // we will always have a 34 byte escape header:
-          << (sal_uInt32) 0x43464D57        // WMFC
-          << (sal_uInt32) 0x00000001        // Comment type
+   WriteRecordHeader( 0, W_META_ESCAPE ); 
+   *pWMF << (sal_uInt16)W_MFCOMMENT			// same as META_ESCAPE_ENHANCED_METAFILE
+          << (sal_uInt16)( nCurSize + 34 )	// we will always have a 34 byte escape header:
+          << (sal_uInt32) 0x43464D57		// WMFC
+          << (sal_uInt32) 0x00000001		// Comment type
           << (sal_uInt32) 0x00010000        // version
           << nCheckSum                      // check sum
           << (sal_uInt32) 0                 // flags = 0

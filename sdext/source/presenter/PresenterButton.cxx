@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ PresenterButton::PresenterButton (
 
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
+                OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
                 rxComponentContext),
             UNO_QUERY_THROW);
 
@@ -212,7 +212,7 @@ void PresenterButton::SetCenter (const css::geometry::RealPoint2D& rLocation)
             maButtonSize.Width,
             maButtonSize.Height,
             awt::PosSize::POSSIZE);
-
+        
         Invalidate();
     }
     else
@@ -267,7 +267,7 @@ css::geometry::IntegerSize2D PresenterButton::GetSize (void)
 
 
 //----- XWindowListener -------------------------------------------------------
-
+    
 void SAL_CALL PresenterButton::windowResized (const css::awt::WindowEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
@@ -278,7 +278,7 @@ void SAL_CALL PresenterButton::windowResized (const css::awt::WindowEvent& rEven
 
 
 
-
+   
 void SAL_CALL PresenterButton::windowMoved (const css::awt::WindowEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
@@ -324,7 +324,7 @@ void SAL_CALL PresenterButton::windowPaint (const css::awt::PaintEvent& rEvent)
             xBitmap = mxNormalBitmap;
         if ( ! xBitmap.is())
             return;
-
+        
         rendering::ViewState aViewState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
             NULL);
@@ -344,7 +344,7 @@ void SAL_CALL PresenterButton::windowPaint (const css::awt::PaintEvent& rEvent)
 
 
 
-
+    
 //----- XMouseListener --------------------------------------------------------
 
 void SAL_CALL PresenterButton::mousePressed (const css::awt::MouseEvent& rEvent)
@@ -404,7 +404,7 @@ void SAL_CALL PresenterButton::mouseExited (const css::awt::MouseEvent& rEvent)
 
 
 //----- XMouseMotionListener --------------------------------------------------
-
+    
 void SAL_CALL PresenterButton::mouseMoved (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
@@ -491,7 +491,7 @@ void PresenterButton::RenderButton (
     PresenterCanvasHelper::SetDeviceColor(aRenderState, rpFont->mnColor);
     aRenderState.AffineTransform.m02 = (rSize.Width - aTextBBox.X2 + aTextBBox.X1)/2;
     aRenderState.AffineTransform.m12 = (rSize.Height - aTextBBox.Y2 + aTextBBox.Y1)/2 - aTextBBox.Y1;
-
+    
     rxCanvas->drawText(
         aContext,
         rpFont->mxFont,

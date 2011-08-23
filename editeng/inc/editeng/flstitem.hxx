@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@
 class FontList;
 
 /*
-    [Description]
+    [Beschreibung]
 
-    This item serves as a transport medium for a font list. The font list is
-    not copied and not deleted!
+    Dieses Item dient als Transport-Medium fuer eine FontListe.
+    Die Fontliste wird nicht kopiert und nicht geloescht!
 */
 
 class EDITENG_DLLPUBLIC SvxFontListItem : public SfxPoolItem
@@ -56,20 +56,20 @@ public:
     TYPEINFO();
 
     SvxFontListItem( const FontList* pFontLst,
-                     const sal_uInt16 nId  );
+                     const USHORT nId  );
     SvxFontListItem( const SvxFontListItem& rItem );
 
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int				operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual	bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    const FontList*         GetFontList() const { return pFontList; }
+    const FontList*			GetFontList() const { return pFontList; }
 };
 
 

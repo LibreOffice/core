@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ uno::Sequence< sal_Int32 > VPolarCoordinateSystem::getCoordinateSystemResolution
             aResolution[1]/=2;//radius
         }
     }
-
+    
     return aResolution;
 }
 
@@ -81,9 +81,15 @@ void VPolarCoordinateSystem::createVAxisList(
             )
 {
     m_aAxisMap.clear();
-    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    sal_Int32 nDimensionIndex = 0;
 
+    //if(!m_xLogicTargetForAxes.is() || !m_xFinalTarget.is() || !m_xCooSysModel.is() )
+    //    return;
+
+    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
+//     bool bSwapXAndY = this->getPropertySwapXAndYAxis();
+
+    sal_Int32 nDimensionIndex = 0;
+    
     //create angle axis (dimension index 0)
     for( nDimensionIndex = 0; nDimensionIndex < nDimensionCount; nDimensionIndex++ )
     {
@@ -97,11 +103,20 @@ void VPolarCoordinateSystem::createVAxisList(
             aAxisProperties.init();
             if(aAxisProperties.m_bDisplayLabels)
                 aAxisProperties.m_nNumberFormatKey = this->getNumberFormatKeyForAxis( xAxis, xNumberFormatsSupplier );
-
+            //-------------------
             ::boost::shared_ptr< VAxisBase > apVAxis( VPolarAxis::createAxis( aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
             tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );
             m_aAxisMap[aFullAxisIndex] = apVAxis;
 
+            //apVAxis->setExplicitScaleAndIncrement( this->getExplicitScale( nDimensionIndex, nAxisIndex ), this->getExplicitIncrement(nDimensionIndex, nAxisIndex) );
+            //apVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory
+            //    , this->createCIDForAxis( xAxis, nDimensionIndex, nAxisIndex ) );
+            //VPolarAxis* pVPolarAxis = dynamic_cast< VPolarAxis* >( apVAxis.get() );
+            //if( pVPolarAxis )
+            //    pVPolarAxis->setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
+            //if(2==nDimensionCount)
+            //    apVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
+            //apVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );
             apVAxis->initAxisLabelProperties(rFontReferenceSize,rMaximumSpaceForLabels);
         }
     }
@@ -132,7 +147,7 @@ void VPolarCoordinateSystem::initVAxisInList()
                 pVPolarAxis->setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
             if(2==nDimensionCount)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-            pVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );
+            pVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );            
         }
     }
 }
@@ -160,7 +175,7 @@ void VPolarCoordinateSystem::updateScalesAndIncrementsOnAxes()
                 pVPolarAxis->setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
             if(2==nDimensionCount)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-            pVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );
+            pVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );            
         }
     }
 }

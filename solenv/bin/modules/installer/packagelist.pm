@@ -85,6 +85,7 @@ sub analyze_list
 
         push(@allmodules, $onegid);
 
+        # get_children($moduleslist, $onegid, \@allmodules);
         get_children_with_hash($moduleshash, $onegid, \@allmodules);
 
         $onepackage->{'allmodules'} = \@allmodules;
@@ -179,6 +180,8 @@ sub remove_multiple_modules_packages
         my $onepackage = ${$allpackagemodules}[$i];
         my $allmodules = $onepackage->{'allmodules'};
 
+        # print "Modules below $onepackage->{'module'}: $#{$allmodules}\n";
+
         # Comparing each package, with all following packages. If a
         # gid for the module is part of more than one package, it is
         # removed if the number of modules in the package is greater
@@ -237,6 +240,14 @@ sub remove_multiple_modules_packages
 
         $onepackage->{'allmodules'} = \@optimizedpackage;
     }
+
+    # for ( my $i = 0; $i <= $#{$allpackagemodules}; $i++ )
+    # {
+    #   my $onepackage = ${$allpackagemodules}[$i];
+    #   my $allmodules = $onepackage->{'allmodules'};
+    #   print "New: Modules below $onepackage->{'module'}: $#{$allmodules}\n";
+    # }
+
 }
 
 #####################################################################
@@ -640,6 +651,11 @@ sub collectpackages
         if ( $onemodule->{$packageinfo} )   # this is a package module!
         {
             my $modulegid = $onemodule->{'gid'};
+
+            # Only collecting modules with correct language for language packs
+#           if ( $installer::globals::languagepack ) { if ( ! ( $modulegid =~ /_$onelanguage\s*$/ )) { next; } }
+            # Resetting language, if this is no language pack
+#           if ( ! $installer::globals::languagepack ) { $onelanguage = ""; }
 
             my $styles = "";
             if ( $onemodule->{'Styles'} ) { $styles = $onemodule->{'Styles'}; }

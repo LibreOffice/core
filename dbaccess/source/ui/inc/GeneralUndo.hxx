@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,14 @@ namespace dbaui
         OModuleClient    m_aModuleClient;
 
     protected:
-        String                  m_strComment; // undo, redo comment
+        String	                m_strComment; // undo, redo comment
 
     public:
         TYPEINFO();
-        OCommentUndoAction(sal_uInt16 nCommentID) { m_strComment = String(ModuleRes(nCommentID)); }
+        OCommentUndoAction(USHORT nCommentID) { m_strComment = String(ModuleRes(nCommentID)); }
 
-        virtual UniString   GetComment() const { return m_strComment; }
-    };
+        virtual UniString	GetComment() const { return m_strComment; }
+    };															   
 }
 #endif // DBAUI_GENERALUNDO_HXX
 

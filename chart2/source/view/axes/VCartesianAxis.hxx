@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,11 +56,20 @@ public:
 
     virtual ~VCartesianAxis();
 
-    virtual void createMaximumLabels();
-    virtual void createLabels();
-    virtual void updatePositions();
+    //-------------------------------------------------------------------------
+    // partly chart2::XPlotter
+    //-------------------------------------------------------------------------
 
-    virtual void createShapes();
+    /*
+    virtual ::rtl::OUString SAL_CALL getCoordinateSystemTypeID(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTransformation( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToLogicTarget, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToFinalPage ) throw (::com::sun::star::uno::RuntimeException);
+    */
+
+    virtual void SAL_CALL createMaximumLabels();
+    virtual void SAL_CALL createLabels();
+    virtual void SAL_CALL updatePositions();
+
+    virtual void SAL_CALL createShapes();
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
     virtual void createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
@@ -71,8 +80,8 @@ public:
     sal_Int32 getTextLevelCount() const;
 
     //-------------------------------------------------------------------------
-    virtual TickFactory* createTickFactory();
-
+    virtual TickmarkHelper* createTickmarkHelper();
+    
     //-------------------------------------------------------------------------
     double      getLogicValueWhereMainLineCrossesOtherAxis() const;
     double      getLogicValueWhereLabelLineCrossesOtherAxis() const;
@@ -114,16 +123,16 @@ protected: //methods
                        ::com::sun::star::drawing::XShapes >& xTarget
                      , TickIter& rTickIter
                      , AxisLabelProperties& rAxisLabelProperties
-                     , TickFactory_2D* pTickFactory
+                     , TickmarkHelper_2D* pTickmarkHelper
                      , sal_Int32 nScreenDistanceBetweenTicks );
 
-    void    createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory_2D& rTickFactory2D, bool bOnlyAtLabels );
+    void    createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickmarkHelper_2D& rTickmarkHelper2D, bool bOnlyAtLabels );
 
-    TickFactory_2D* createTickFactory2D();
+    TickmarkHelper_2D* createTickmarkHelper2D();
     void    hideIdenticalScreenValues(  ::std::vector< ::std::vector< TickInfo > >& rTickInfos ) const;
 
     void    doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties
-                            , TickFactory_2D* pTickFactory2D );
+                            , TickmarkHelper_2D* pTickmarkHelper2D );
     bool    isAutoStaggeringOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
                             , bool bIsHorizontalAxis, bool bIsVerticalAxis );
     bool    isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis );

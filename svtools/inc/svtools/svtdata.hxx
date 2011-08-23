@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,6 @@
 #ifndef _SVTOOLS_SVTDATA_HXX
 #define _SVTOOLS_SVTDATA_HXX
 
-#include "svtools/svtdllapi.h"
 #include <tools/resid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
@@ -41,11 +40,12 @@ class ImpSvtData
 {
 public:
     SfxItemDesruptorList_Impl * pItemDesruptList;
-    ResMgr *        pResMgr;
+    ResMgr *		pResMgr;
+    ResMgr *		pPatchResMgr;
 
 private:
     ImpSvtData():
-        pItemDesruptList(0), pResMgr(0)
+        pItemDesruptList(0), pResMgr(0), pPatchResMgr(0)
     {}
 
     ~ImpSvtData();
@@ -53,16 +53,32 @@ private:
 public:
     ResMgr * GetResMgr(const ::com::sun::star::lang::Locale aLocale);
     ResMgr * GetResMgr(); // VCL dependant, only available in SVT, not in SVL!
+    ResMgr * GetPatchResMgr();
+    ResMgr * GetPatchResMgr(const ::com::sun::star::lang::Locale& aLocale);
 
     static ImpSvtData & GetSvtData();
 };
 
 //============================================================================
-class SVT_DLLPUBLIC SvtResId: public ResId
+
+class SvpResId: public ResId
 {
 public:
-    SvtResId(sal_uInt16 nId, const ::com::sun::star::lang::Locale aLocale);
-    SvtResId(sal_uInt16 nId);
+    SvpResId( USHORT nId, const ::com::sun::star::lang::Locale aLocale ):
+        ResId( nId, *ImpSvtData::GetSvtData().GetResMgr( aLocale ) ) {}
+
+     // VCL dependant, only available in SVT, not in SVL!
+    SvpResId( USHORT nId );
+};
+
+
+class SvtResId: public ResId
+{
+public:
+    SvtResId(USHORT nId, const ::com::sun::star::lang::Locale aLocale):
+        ResId(nId, *ImpSvtData::GetSvtData().GetResMgr(aLocale)) {}
+
+    SvtResId(USHORT nId): ResId(nId, *ImpSvtData::GetSvtData().GetResMgr()) {}
      // VCL dependant, only available in SVT, not in SVL!
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,6 @@
 #include "ExplicitCategoriesProvider.hxx"
 
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -229,6 +228,7 @@ bool lcl_ShowCategories( const Reference< chart2::XDiagram > & /* xDiagram */ )
 {
     // show categories for all charts
     return true;
+//     return DiagramHelper::isCategoryDiagram( xDiagram );
 }
 
 bool lcl_ShowCategoriesAsDataLabel( const Reference< chart2::XDiagram > & xDiagram )
@@ -442,7 +442,7 @@ void DataBrowserModel::insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex )
 
         if(nAfterColumnIndex<0)
         {
-            OSL_FAIL( "wrong index for category level insertion" );
+            OSL_ENSURE( false, "wrong index for category level insertion" );
             return;
         }
 
@@ -590,7 +590,7 @@ Reference< chart2::XDataSeries >
     return 0;
 }
 
-DataBrowserModel::eCellType DataBrowserModel::getCellType( sal_Int32 nAtColumn, sal_Int32 /* nAtRow */ ) const
+DataBrowserModel::eCellType DataBrowserModel::getCellType( sal_Int32 nAtColumn, sal_Int32 /* nAtRow */ )
 {
     eCellType eResult = TEXT;
     tDataColumnVector::size_type nIndex( nAtColumn );
@@ -618,26 +618,6 @@ double DataBrowserModel::getCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow )
         }
     }
     return fResult;
-}
-
-uno::Any DataBrowserModel::getCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow )
-{
-    uno::Any aResult;
-
-    tDataColumnVector::size_type nIndex( nAtColumn );
-    if( nIndex < m_aColumns.size() &&
-        m_aColumns[ nIndex ].m_xLabeledDataSequence.is())
-    {
-        Reference< chart2::data::XDataSequence > xData(
-            m_aColumns[ nIndex ].m_xLabeledDataSequence->getValues() );
-        if( xData.is() )
-        {
-            Sequence< uno::Any > aValues( xData->getData());
-            if( nAtRow < aValues.getLength())
-                aResult = aValues[nAtRow];
-        }
-    }
-    return aResult;
 }
 
 OUString DataBrowserModel::getCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow )
@@ -821,7 +801,7 @@ void DataBrowserModel::updateFromModel()
                 aCategories.m_aUIRoleName = DialogModel::GetRoleDataLabel();
             else
                 aCategories.m_aUIRoleName = lcl_getUIRoleName( xCategories );
-            aCategories.m_eCellType = TEXTORDATE;
+            aCategories.m_eCellType = TEXT;
             m_aColumns.push_back( aCategories );
             ++nHeaderStart;
         }
@@ -890,7 +870,7 @@ void DataBrowserModel::updateFromModel()
                             }
                             else if( aRole.equals( C2U( "values-x" ) ) )
                                 nSequenceNumberFormatKey = nXAxisNumberFormat;
-
+                            
                             if( ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
                                              lcl_RepresentationsOfLSeqMatch( aLSeqs[nSeqIdx] )) == aSharedSequences.end())
                             {

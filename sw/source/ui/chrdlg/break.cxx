@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,11 +63,11 @@ void SwBreakDlg::Apply()
     else if(aPageBtn.IsChecked())
     {
         nKind = 3;
-        const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
+        const USHORT nPos = aPageCollBox.GetSelectEntryPos();
         if(0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos)
         {
             aTemplate = aPageCollBox.GetSelectEntry();
-            nPgNum = aPageNumBox.IsChecked() ? (sal_uInt16)aPageNumEdit.GetValue() : 0;
+            nPgNum = aPageNumBox.IsChecked() ? (USHORT)aPageNumEdit.GetValue() : 0;
         }
     }
 }
@@ -80,7 +80,7 @@ IMPL_LINK_INLINE_START( SwBreakDlg, ClickHdl, void *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwBreakDlg, ClickHdl, void *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Description:   Handler for Change Page Number
+ Beschreibung:	Handler fuer Aendern Seitenummer
 ------------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
@@ -92,7 +92,7 @@ IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 IMPL_LINK_INLINE_END( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 
 /*------------------------------------------------------------------------
- Description:   By changing the Page number the checkbox is checked.
+ Beschreibung:	Durch Aendern der Seitennummer wird die Checkbox gecheckt.
 ------------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
@@ -103,28 +103,28 @@ IMPL_LINK_INLINE_START( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Description:   Ok-Handler;
-                checks whether pagenumber nPage is a legal pagenumber
-                (left pages with even numbers etc. for a page template
-                with alternating pages)
+ Beschreibung:	Ok-Handler;
+                prueft, ob die Seitenummer nPage eine legale Seitennummer
+                ist (linke Seiten mit geraden Nummern etc. bei einer Seitenvorlage
+                mit wechselnden Seiten)
 ------------------------------------------------------------------------*/
 
 IMPL_LINK( SwBreakDlg, OkHdl, Button *, EMPTYARG )
 {
     if(aPageNumBox.IsChecked()) {
         // In case of differing page descriptions, test validity
-        const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
-        // position 0 says 'Without'.
+        const USHORT nPos = aPageCollBox.GetSelectEntryPos();
+        // auf Position 0 steht 'Ohne'.
         const SwPageDesc *pPageDesc;
         if ( 0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos )
             pPageDesc = rSh.FindPageDescByName( aPageCollBox.GetSelectEntry(),
-                                                sal_True );
+                                                TRUE );
         else
             pPageDesc = &rSh.GetPageDesc(rSh.GetCurPageDesc());
 
         OSL_ENSURE(pPageDesc, "Page description not found.");
-        const sal_uInt16 nUserPage = sal_uInt16(aPageNumEdit.GetValue());
-        sal_Bool bOk = sal_True;
+        const USHORT nUserPage = USHORT(aPageNumEdit.GetValue());
+        BOOL bOk = TRUE;
         switch(pPageDesc->GetUseOn())
         {
             case nsUseOnPage::PD_MIRROR:
@@ -148,7 +148,6 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     SvxStandardDialog( pParent,SW_RES(DLG_BREAK) ),
 
     rSh(rS),
-    aBreakFL(this,SW_RES(FL_BREAK)),
     aLineBtn(this,SW_RES(RB_LINE)),
     aColumnBtn(this,SW_RES(RB_COL)),
     aPageBtn(this,SW_RES(RB_PAGE)),
@@ -156,6 +155,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     aPageCollBox(this, SW_RES(LB_COLL)),
     aPageNumBox(this, SW_RES(CB_PAGENUM)),
     aPageNumEdit(this, SW_RES(ED_PAGENUM)),
+    aBreakFL(this,SW_RES(FL_BREAK)),
 
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
@@ -166,9 +166,6 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
 
     bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
 {
-    aPageNumEdit.SetAccessibleRelationLabeledBy(&aPageNumBox);
-    aPageNumEdit.SetAccessibleName(aPageNumBox.GetText());
-
     Link aLk = LINK(this,SwBreakDlg,ClickHdl);
     aPageBtn.SetClickHdl( aLk );
     aLineBtn.SetClickHdl( aLk );
@@ -181,8 +178,8 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
 
 
     // Insert page description to Listbox
-    const sal_uInt16 nCount = rSh.GetPageDescCnt();
-    sal_uInt16 i;
+    const USHORT nCount = rSh.GetPageDescCnt();
+    USHORT i;
 
     for( i = 0; i < nCount; ++i)
     {
@@ -191,7 +188,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     }
 
     String aFmtName;
-    for(i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
+    for(i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_REGISTER; ++i)
         if(LISTBOX_ENTRY_NOTFOUND == aPageCollBox.GetEntryPos( aFmtName =
                                     SwStyleNameMapper::GetUIName( i, aFmtName )))
             ::InsertStringSorted(aFmtName, aPageCollBox, 1 );
@@ -206,34 +203,34 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
 
 void SwBreakDlg::CheckEnable()
 {
-    sal_Bool bEnable = sal_True;
+    BOOL bEnable = TRUE;
     if ( bHtmlMode )
     {
-        aColumnBtn  .Enable(sal_False);
-        aPageCollBox.Enable(sal_False);
-        bEnable = sal_False;
+        aColumnBtn	.Enable(FALSE);
+        aPageCollBox.Enable(FALSE);
+        bEnable = FALSE;
     }
-    else if(rSh.GetFrmType(0,sal_True)
+    else if(rSh.GetFrmType(0,TRUE)
         & (FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER  | FRMTYPE_FOOTNOTE))
     {
-        aPageBtn.Enable(sal_False);
+        aPageBtn.Enable(FALSE);
         if(aPageBtn.IsChecked())
-            aLineBtn.Check(sal_True);
-        bEnable = sal_False;
+            aLineBtn.Check(TRUE);
+        bEnable = FALSE;
     }
-    const sal_Bool bPage = aPageBtn.IsChecked();
+    const BOOL bPage = aPageBtn.IsChecked();
     aPageCollText.Enable( bPage );
     aPageCollBox.Enable ( bPage );
 
     bEnable &= bPage;
     if ( bEnable )
     {
-        // position 0 says 'Without' page template.
-        const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
+        // auf Position 0 steht 'Ohne' Seitenvorlage.
+        const USHORT nPos = aPageCollBox.GetSelectEntryPos();
         if ( 0 == nPos || LISTBOX_ENTRY_NOTFOUND == nPos )
-            bEnable = sal_False;
+            bEnable = FALSE;
     }
-    aPageNumBox .Enable(bEnable);
+    aPageNumBox	.Enable(bEnable);
     aPageNumEdit.Enable(bEnable);
 }
 

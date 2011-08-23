@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
 {
     SetPool( &pViewSh->GetPool() );
     ScViewData* pViewData = pViewSh->GetViewData();
-    ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !pViewData->GetDocument()->IsUndoEnabled() )
     {
@@ -115,8 +115,8 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                 DBG_ASSERT( pDesc, "no sheet source for DP filter dialog" );
                 if( pDesc )
                 {
-                    aQueryParam = pDesc->GetQueryParam();
-                    nSrcTab = pDesc->GetSourceRange().aStart.Tab();
+                    aQueryParam = pDesc->aQueryParam;
+                    nSrcTab = pDesc->aSourceRange.aStart.Tab();
                 }
 
                 ScViewData* pViewData = pViewShell->GetViewData();
@@ -134,17 +134,17 @@ void ScPivotShell::Execute( SfxRequest& rReq )
 
                 if( pDlg->Execute() == RET_OK )
                 {
-                    ScSheetSourceDesc aNewDesc(pViewData->GetDocument());
+                    ScSheetSourceDesc aNewDesc;
                     if( pDesc )
                         aNewDesc = *pDesc;
 
                     const ScQueryItem& rQueryItem = pDlg->GetOutputItem();
-                    aNewDesc.SetQueryParam(rQueryItem.GetQueryData());
+                    aNewDesc.aQueryParam = rQueryItem.GetQueryData();
 
                     ScDPObject aNewObj( *pDPObj );
                     aNewObj.SetSheetDesc( aNewDesc );
                     ScDBDocFunc aFunc( *pViewData->GetDocShell() );
-                    aFunc.DataPilotUpdate( pDPObj, &aNewObj, sal_True, false );
+                    aFunc.DataPilotUpdate( pDPObj, &aNewObj, TRUE, FALSE );
                     pViewData->GetView()->CursorPosChanged();       // shells may be switched
                 }
                 delete pDlg;
@@ -155,14 +155,14 @@ void ScPivotShell::Execute( SfxRequest& rReq )
 }
 
 //------------------------------------------------------------------------
-void ScPivotShell::GetState( SfxItemSet& rSet )
+void __EXPORT ScPivotShell::GetState( SfxItemSet& rSet )
 {
     ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    sal_Bool bDisable = pDocSh->IsReadOnly() || pDoc->GetChangeTrack();
+    BOOL bDisable = pDocSh->IsReadOnly() || pDoc->GetChangeTrack();
 
     SfxWhichIter aIter(rSet);
-    sal_uInt16 nWhich = aIter.FirstWhich();
+    USHORT nWhich = aIter.FirstWhich();
     while (nWhich)
     {
         switch (nWhich)

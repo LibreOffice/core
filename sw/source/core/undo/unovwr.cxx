@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,26 +29,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <UndoOverwrite.hxx>
-
-#include <tools/resid.hxx>
 
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
-
 #include <comphelper/processfactory.hxx>
-
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
-#include <IShellCursorSupplier.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>			// fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <UndoCore.hxx>
+#include <undobj.hxx>
 #include <rolbck.hxx>
 #include <acorrect.hxx>
 #include <docary.hxx>
 
+#include <tools/resid.hxx>
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
 
@@ -56,8 +50,18 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
+//------------------------------------------------------------------
+
+// zwei Zugriffs-Funktionen
+inline SwPosition* IterPt( SwUndoIter& rUIter )
+{	return rUIter.pAktPam->GetPoint();	}
+inline SwPosition* IterMk( SwUndoIter& rUIter )
+{	return rUIter.pAktPam->GetMark();	}
+
+inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 //------------------------------------------------------------
+
 
 // OVERWRITE
 
@@ -65,14 +69,14 @@ using namespace ::com::sun::star::uno;
 SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
     : SwUndo(UNDO_OVERWRITE),
-      pRedlSaveData( 0 ), bGroup( sal_False )
+      pRedlSaveData( 0 ), bGroup( FALSE )
 {
     if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
     {
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
                     rPos.nNode, rPos.nContent.GetIndex()+1 );
         pRedlSaveData = new SwRedlineSaveDatas;
-        if( !FillSaveData( aPam, *pRedlSaveData, sal_False ))
+        if( !FillSaveData( aPam, *pRedlSaveData, FALSE ))
             delete pRedlSaveData, pRedlSaveData = 0;
     }
 
@@ -82,9 +86,9 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     OSL_ENSURE( pTxtNd, "Overwrite nicht im TextNode?" );
 
-    bInsChar = sal_True;
+    bInsChar = TRUE;
     xub_StrLen nTxtNdLen = pTxtNd->GetTxt().Len();
-    if( nSttCntnt < nTxtNdLen )     // kein reines Einfuegen ?
+    if( nSttCntnt < nTxtNdLen )		// kein reines Einfuegen ?
     {
         aDelStr.Insert( pTxtNd->GetTxt().GetChar( nSttCntnt ) );
         if( !pHistory )
@@ -93,11 +97,11 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode, 0,
                             nTxtNdLen, false );
         rPos.nContent++;
-        bInsChar = sal_False;
+        bInsChar = FALSE;
     }
 
-    sal_Bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
-    pTxtNd->SetIgnoreDontExpand( sal_True );
+    BOOL bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
+    pTxtNd->SetIgnoreDontExpand( TRUE );
 
     pTxtNd->InsertText( cIns, rPos.nContent,
             IDocumentContentOperations::INS_EMPTYEXPAND );
@@ -118,7 +122,7 @@ SwUndoOverwrite::~SwUndoOverwrite()
     delete pRedlSaveData;
 }
 
-sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
+BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
 {
 ///  ?? was ist mit nur eingefuegten Charaktern ???
@@ -126,14 +130,14 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     // es kann nur das Loeschen von einzelnen char's zusammengefasst werden
     if( rPos.nNode != nSttNode || !aInsStr.Len()  ||
         ( !bGroup && aInsStr.Len() != 1 ))
-        return sal_False;
+        return FALSE;
 
     // ist der Node ueberhaupt ein TextNode?
     SwTxtNode * pDelTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( !pDelTxtNd ||
         ( pDelTxtNd->GetTxt().Len() != rPos.nContent.GetIndex() &&
             rPos.nContent.GetIndex() != ( nSttCntnt + aInsStr.Len() )))
-        return sal_False;
+        return FALSE;
 
     CharClass& rCC = GetAppCharClass();
 
@@ -141,23 +145,23 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     if (( CH_TXTATR_BREAKWORD == cIns || CH_TXTATR_INWORD == cIns ) ||
         rCC.isLetterNumeric( String( cIns ), 0 ) !=
         rCC.isLetterNumeric( aInsStr, aInsStr.Len()-1 ) )
-        return sal_False;
+        return FALSE;
 
     {
         SwRedlineSaveDatas* pTmpSav = new SwRedlineSaveDatas;
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
                     rPos.nNode, rPos.nContent.GetIndex()+1 );
 
-        if( !FillSaveData( aPam, *pTmpSav, sal_False ))
+        if( !FillSaveData( aPam, *pTmpSav, FALSE ))
             delete pTmpSav, pTmpSav = 0;
 
-        sal_Bool bOk = ( !pRedlSaveData && !pTmpSav ) ||
+        BOOL bOk = ( !pRedlSaveData && !pTmpSav ) ||
                    ( pRedlSaveData && pTmpSav &&
                         SwUndo::CanRedlineGroup( *pRedlSaveData, *pTmpSav,
                             nSttCntnt > rPos.nContent.GetIndex() ));
         delete pTmpSav;
         if( !bOk )
-            return sal_False;
+            return FALSE;
 
         pDoc->DeleteRedline( aPam, false, USHRT_MAX );
     }
@@ -172,11 +176,11 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
             rPos.nContent++;
         }
         else
-            bInsChar = sal_True;
+            bInsChar = TRUE;
     }
 
-    sal_Bool bOldExpFlg = pDelTxtNd->IsIgnoreDontExpand();
-    pDelTxtNd->SetIgnoreDontExpand( sal_True );
+    BOOL bOldExpFlg = pDelTxtNd->IsIgnoreDontExpand();
+    pDelTxtNd->SetIgnoreDontExpand( TRUE );
 
     pDelTxtNd->InsertText( cIns, rPos.nContent,
             IDocumentContentOperations::INS_EMPTYEXPAND );
@@ -189,19 +193,18 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     }
     pDelTxtNd->SetIgnoreDontExpand( bOldExpFlg );
 
-    bGroup = sal_True;
-    return sal_True;
+    bGroup = TRUE;
+    return TRUE;
 }
 
 
 
 
 
-void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
-    SwPaM *const pAktPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
-
+    SwPaM* pAktPam = rUndoIter.pAktPam;
+    SwDoc* pDoc = pAktPam->GetDoc();
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
     SwTxtNode* pTxtNd = pAktPam->GetNode()->GetTxtNode();
@@ -231,8 +234,8 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         String aTmpStr( '1' );
         sal_Unicode* pTmpStr = aTmpStr.GetBufferAccess();
 
-        sal_Bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
-        pTxtNd->SetIgnoreDontExpand( sal_True );
+        BOOL bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
+        pTxtNd->SetIgnoreDontExpand( TRUE );
 
         rIdx++;
         for( xub_StrLen n = 0; n < aDelStr.Len(); n++  )
@@ -264,27 +267,29 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         SetSaveData( *pDoc, *pRedlSaveData );
 }
 
-void SwUndoOverwrite::RepeatImpl(::sw::RepeatContext & rContext)
+void SwUndoOverwrite::Repeat( SwUndoIter& rUndoIter )
 {
-    SwPaM *const pAktPam = & rContext.GetRepeatPaM();
+    rUndoIter.pLastUndoObj = this;
+    SwPaM* pAktPam = rUndoIter.pAktPam;
     if( !aInsStr.Len() || pAktPam->HasMark() )
         return;
 
-    SwDoc & rDoc = rContext.GetDoc();
+    SwDoc& rDoc = *pAktPam->GetDoc();
 
-    {
-        ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-        rDoc.Overwrite(*pAktPam, aInsStr.GetChar(0));
-    }
+    BOOL bGroupUndo = rDoc.DoesGroupUndo();
+    rDoc.DoGroupUndo( FALSE );
+    rDoc.Overwrite( *pAktPam, aInsStr.GetChar( 0 ));
+    rDoc.DoGroupUndo( bGroupUndo );
     for( xub_StrLen n = 1; n < aInsStr.Len(); ++n )
         rDoc.Overwrite( *pAktPam, aInsStr.GetChar( n ) );
 }
 
-void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
-{
-    SwDoc *const pDoc = & rContext.GetDoc();
-    SwPaM *const pAktPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
 
+
+void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
+{
+    SwPaM* pAktPam = rUndoIter.pAktPam;
+    SwDoc* pDoc = pAktPam->GetDoc();
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
     SwTxtNode* pTxtNd = pAktPam->GetNode()->GetTxtNode();
@@ -301,8 +306,8 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     rIdx.Assign( pTxtNd, aDelStr.Len() ? nSttCntnt+1 : nSttCntnt );
 
-    sal_Bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
-    pTxtNd->SetIgnoreDontExpand( sal_True );
+    BOOL bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
+    pTxtNd->SetIgnoreDontExpand( TRUE );
 
     for( xub_StrLen n = 0; n < aInsStr.Len(); n++  )
     {
@@ -351,10 +356,10 @@ struct _UndoTransliterate_Data
     String          sText;
     SwHistory*      pHistory;
     Sequence< sal_Int32 >*  pOffsets;
-    sal_uLong           nNdIdx;
+    ULONG           nNdIdx;
     xub_StrLen      nStart, nLen;
 
-    _UndoTransliterate_Data( sal_uLong nNd, xub_StrLen nStt, xub_StrLen nStrLen, const String& rTxt )
+    _UndoTransliterate_Data( ULONG nNd, xub_StrLen nStt, xub_StrLen nStrLen, const String& rTxt )
         : sText( rTxt ), pHistory( 0 ), pOffsets( 0 ),
         nNdIdx( nNd ), nStart( nStt ), nLen( nStrLen )
     {}
@@ -363,7 +368,7 @@ struct _UndoTransliterate_Data
     void SetChangeAtNode( SwDoc& rDoc );
 };
 
-SwUndoTransliterate::SwUndoTransliterate(
+SwUndoTransliterate::SwUndoTransliterate( 
     const SwPaM& rPam,
     const utl::TransliterationWrapper& rTrans )
     : SwUndo( UNDO_TRANSLITERATE ), SwUndRng( rPam ), nType( rTrans.getType() )
@@ -376,35 +381,40 @@ SwUndoTransliterate::~SwUndoTransliterate()
         delete aChanges[i];
 }
 
-void SwUndoTransliterate::UndoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
 {
-    SwDoc & rDoc = rContext.GetDoc();
+    SwDoc& rDoc = rUndoIter.GetDoc();
+    BOOL bUndo = rDoc.DoesUndo();
+    rDoc.DoUndo( FALSE );
 
     // since the changes were added to the vector from the end of the string/node towards
-    // the start, we need to revert them from the start towards the end now to keep the
+    // the start, we need to revert them from the start towards the end now to keep the 
     // offset information of the undo data in sync with the changing text.
     // Thus we need to iterate from the end of the vector to the start
     for (sal_Int32 i = aChanges.size() - 1; i >= 0;  --i)
         aChanges[i]->SetChangeAtNode( rDoc );
 
-    AddUndoRedoPaM(rContext, true);
+    rDoc.DoUndo( bUndo );
+    SetPaM( rUndoIter, TRUE );
 }
 
-void SwUndoTransliterate::RedoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoTransliterate::Redo( SwUndoIter& rUndoIter )
 {
-    SwPaM & rPam( AddUndoRedoPaM(rContext) );
-    DoTransliterate(rContext.GetDoc(), rPam);
+/* ??? */	rUndoIter.SetUpdateAttr( TRUE );
+
+    SetPaM( *rUndoIter.pAktPam );
+    Repeat( rUndoIter );
 }
 
-void SwUndoTransliterate::RepeatImpl(::sw::RepeatContext & rContext)
+void SwUndoTransliterate::Repeat( SwUndoIter& rUndoIter )
 {
-    DoTransliterate(rContext.GetDoc(), rContext.GetRepeatPaM());
-}
+    SwPaM& rPam = *rUndoIter.pAktPam;
+    SwDoc& rDoc = rUndoIter.GetDoc();
 
-void SwUndoTransliterate::DoTransliterate(SwDoc & rDoc, SwPaM & rPam)
-{
     utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), nType );
     rDoc.TransliterateText( rPam, aTrans );
+
+    rUndoIter.pLastUndoObj = this;
 }
 
 void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
@@ -459,7 +469,7 @@ void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
                 // same node and have a history?
                 pNew->pHistory = pD->pHistory;
                 pD->pHistory = 0;
-                break;          // more can't exist
+                break;		    // more can't exist
             }
         }
 

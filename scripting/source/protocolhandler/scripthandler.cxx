@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,12 +50,10 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <vcl/abstdlg.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <util/util.hxx>
-#include <framework/documentundoguard.hxx>
 
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uri/XUriReference.hpp"
@@ -72,6 +70,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::script::provider;
 using namespace ::com::sun::star::document;
+using namespace ::scripting_util;
 
 namespace scripting_protocolhandler
 {
@@ -81,7 +80,7 @@ const sal_Char * const MYIMPLNAME = "com.sun.star.comp.ScriptProtocolHandler";
 const sal_Char * MYSCHEME = "vnd.sun.star.script";
 const sal_Int32 MYSCHEME_LEN = 20;
 
-void SAL_CALL ScriptProtocolHandler::initialize(
+void SAL_CALL ScriptProtocolHandler::initialize( 
     const css::uno::Sequence < css::uno::Any >& aArguments )
     throw ( css::uno::Exception )
 {
@@ -99,7 +98,8 @@ void SAL_CALL ScriptProtocolHandler::initialize(
         throw RuntimeException( temp, Reference< XInterface >() );
     }
 
-    ENSURE_OR_THROW( m_xFactory.is(), "ScriptProtocolHandler::initialize: No Service Manager available" );
+    validateXRef( m_xFactory,
+        "ScriptProtocolHandler::initialize: No Service Manager available" );
     m_bInitialised = true;
 }
 
@@ -113,9 +113,9 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     Reference< XDispatch > xDispatcher;
     // get scheme of url
 
-    Reference< uri::XUriReferenceFactory > xFac (
-         m_xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.uri.UriReferenceFactory")) ) , UNO_QUERY );
+    Reference< uri::XUriReferenceFactory > xFac ( 
+         m_xFactory->createInstance( rtl::OUString::createFromAscii( 
+            "com.sun.star.uri.UriReferenceFactory") ) , UNO_QUERY );
     if ( xFac.is() )
     {
         Reference<  uri::XUriReference > uriRef(
@@ -156,14 +156,14 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
     sal_Bool bSuccess = sal_False;
     Any invokeResult;
-    bool bCaughtException = sal_False;
+    bool bCaughtException = FALSE;
     Any aException;
 
     if ( m_bInitialised )
     {
         try
         {
-            bool bIsDocumentScript = ( aURL.Complete.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "document" ) ) !=-1 );
+            bool bIsDocumentScript = ( aURL.Complete.indexOf( ::rtl::OUString::createFromAscii( "document" ) ) !=-1 );
                 // TODO: isn't this somewhat strange? This should be a test for a location=document parameter, shouldn't it?
 
             if ( bIsDocumentScript )
@@ -178,15 +178,15 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                     return;
             }
 
-            // Creates a ScriptProvider ( if one is not created allready )
+            // Creates a ScriptProvider ( if one is not created allready ) 
             createScriptProvider();
 
             Reference< provider::XScript > xFunc =
                 m_xScriptProvider->getScript( aURL.Complete );
-            ENSURE_OR_THROW( xFunc.is(),
+            validateXRef( xFunc,
                 "ScriptProtocolHandler::dispatchWithNotification: validate xFunc - unable to obtain XScript interface" );
 
-
+           
             Sequence< Any > inArgs( 0 );
             Sequence< Any > outArgs( 0 );
             Sequence< sal_Int16 > outIndex;
@@ -202,16 +202,11 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                    if ( lArgs[ index ].Name.compareToAscii("Referer") != 0  ||
                         lArgs[ index ].Name.getLength() == 0 )
                    {
-                       inArgs.realloc( ++argCount );
+                       inArgs.realloc( ++argCount ); 
                        inArgs[ argCount - 1 ] = lArgs[ index ].Value;
                    }
                }
             }
-
-            // attempt to protect the document against the script tampering with its Undo Context
-            ::std::auto_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
-            if ( bIsDocumentScript )
-                pUndoGuard.reset( new ::framework::DocumentUndoGuard( m_xScriptInvocation ) );
 
             bSuccess = sal_False;
             while ( !bSuccess )
@@ -252,14 +247,24 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
             invokeResult <<= reason.concat( aException.getValueTypeName() ).concat( e.Message );
 
-            bCaughtException = sal_True;
+            bCaughtException = TRUE;
         }
+#ifdef _DEBUG
+        catch ( ... )
+        {
+            ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
+                "ScriptProtocolHandler::dispatch: caught unknown exception" );
+
+            invokeResult <<= reason;
+        }
+#endif
+
     }
     else
     {
-        ::rtl::OUString reason(RTL_CONSTASCII_USTRINGPARAM(
+        ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
         "ScriptProtocolHandler::dispatchWithNotification failed, ScriptProtocolHandler not initialised"
-        ));
+        );
         invokeResult <<= reason;
     }
 
@@ -303,7 +308,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         }
         catch(RuntimeException & e)
         {
-            OSL_TRACE(
+            OSL_TRACE( 
             "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
             "while dispatchFinished %s",
             ::rtl::OUStringToOString( e.Message,
@@ -354,11 +359,13 @@ ScriptProtocolHandler::getScriptInvocation()
     return m_xScriptInvocation.is();
 }
 
-void ScriptProtocolHandler::createScriptProvider()
+void
+ScriptProtocolHandler::createScriptProvider() 
 {
     if ( m_xScriptProvider.is() )
-        return;
-
+    {
+        return;	
+    }
     try
     {
         // first, ask the component supporting the XScriptInvocationContext interface
@@ -391,7 +398,6 @@ void ScriptProtocolHandler::createScriptProvider()
                 m_xScriptProvider = xSPS->getScriptProvider();
         }
 
-        // if nothing of this is successful, use the master script provider
         if ( !m_xScriptProvider.is() )
         {
             Reference< XPropertySet > xProps( m_xFactory, UNO_QUERY_THROW );
@@ -402,12 +408,12 @@ void ScriptProtocolHandler::createScriptProvider()
             Reference< XComponentContext > xCtx(
                 xProps->getPropertyValue( dc ), UNO_QUERY_THROW );
 
-            ::rtl::OUString tmspf(RTL_CONSTASCII_USTRINGPARAM(
-                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory"));
+            ::rtl::OUString tmspf = ::rtl::OUString::createFromAscii(
+                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory");
 
             Reference< provider::XScriptProviderFactory > xFac(
                 xCtx->getValueByName( tmspf ), UNO_QUERY_THROW );
-
+                                                                                
             Any aContext;
             if ( getScriptInvocation() )
                 aContext = makeAny( m_xScriptInvocation );
@@ -425,6 +431,15 @@ void ScriptProtocolHandler::createScriptProvider()
         ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createScriptProvider: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
+#ifdef _DEBUG
+    catch ( ... )
+    {
+        throw RuntimeException(
+        OUSTR( "ScriptProtocolHandler::createScriptProvider: UnknownException: " ),
+            Reference< XInterface > () );
+    }
+#endif
+        
 }
 
 ScriptProtocolHandler::ScriptProtocolHandler(
@@ -514,13 +529,34 @@ extern "C"
 
 #undef css
 #define css ::com::sun::star
-
-    void SAL_CALL component_getImplementationEnvironment(
+    
+    void SAL_CALL component_getImplementationEnvironment( 
         const sal_Char** ppEnvironmentTypeName, uno_Environment** ppEnvironment )
     {
         (void)ppEnvironment;
 
         *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
+    }
+
+    sal_Bool SAL_CALL component_writeInfo( void * pServiceManager ,
+                                           void * pRegistryKey )
+    {
+        (void)pServiceManager;
+
+        Reference< css::registry::XRegistryKey > xKey( 
+            reinterpret_cast< css::registry::XRegistryKey* >( pRegistryKey ) ) ;
+
+        ::rtl::OUString aStr = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+        aStr +=
+            ::scripting_protocolhandler::ScriptProtocolHandler::impl_getStaticImplementationName();
+
+        aStr += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ) );
+        Reference< css::registry::XRegistryKey > xNewKey = xKey->createKey( aStr );
+        xNewKey->createKey( 
+            ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYSERVICENAME )
+            );
+
+        return sal_True;
     }
 
     void* SAL_CALL component_getFactory( const sal_Char * pImplementationName ,
@@ -540,7 +576,7 @@ extern "C"
             // Define variables which are used in following macros.
             ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XSingleServiceFactory > xFactory ;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > 
             xServiceManager( reinterpret_cast<
             ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <osl/mutex.hxx>
-
+    
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -116,7 +116,7 @@ void PresenterSlideShowView::LateInit (void)
     Reference<lang::XMultiComponentFactory> xFactory (
         mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
     mxPresenterHelper.set (xFactory->createInstanceWithContext(
-                   OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
+                   OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
                    mxComponentContext),
                UNO_QUERY_THROW);
 
@@ -139,7 +139,7 @@ void PresenterSlideShowView::LateInit (void)
             mxWindow->addPaintListener(this);
             mxWindow->addWindowListener(this);
         }
-
+                
         // The window does not have to paint a background.  We do
         // that ourself.
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY);
@@ -152,7 +152,7 @@ void PresenterSlideShowView::LateInit (void)
     mxViewWindow = CreateViewWindow(mxWindow);
 
     mxViewCanvas = CreateViewCanvas(mxViewWindow);
-
+            
     if (mxViewWindow.is())
     {
         // Register listeners at window.
@@ -214,12 +214,12 @@ void PresenterSlideShowView::disposing (void)
     // Tell all listeners that we are disposed.
     lang::EventObject aEvent;
     aEvent.Source = static_cast<XWeak*>(this);
-
+    
     ::cppu::OInterfaceContainerHelper* pIterator
           = maBroadcaster.getContainer(getCppuType((Reference<lang::XEventListener>*)NULL));
     if (pIterator != NULL)
         pIterator->disposeAndClear(aEvent);
-
+    
     // Do this for
     // XPaintListener, XModifyListener,XMouseListener,XMouseMotionListener,XWindowListener?
 
@@ -545,7 +545,7 @@ void SAL_CALL PresenterSlideShowView::setMouseCursor(::sal_Int16 nPointerShape)
             mxComponentContext, UNO_QUERY);
         if (xFactory.is())
             mxPointer = Reference<awt::XPointer>(
-                xFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Pointer"))),
+                xFactory->createInstance(OUString::createFromAscii("com.sun.star.awt.Pointer")),
                 UNO_QUERY);
     }
 
@@ -687,7 +687,7 @@ void SAL_CALL PresenterSlideShowView::mouseExited (const awt::MouseEvent& rEvent
 
 
 //----- XMouseMotionListener --------------------------------------------------
-
+    
 void SAL_CALL PresenterSlideShowView::mouseDragged (const awt::MouseEvent& rEvent)
     throw (RuntimeException)
 {
@@ -768,7 +768,7 @@ void SAL_CALL PresenterSlideShowView::windowHidden (const lang::EventObject& rEv
 
 
 //----- XView -----------------------------------------------------------------
-
+    
 Reference<XResourceId> SAL_CALL PresenterSlideShowView::getResourceId (void)
     throw(RuntimeException)
 {
@@ -973,7 +973,7 @@ Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
 
         Reference<awt::XToolkit> xToolkit (
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")),
+                OUString::createFromAscii("com.sun.star.awt.Toolkit"),
                 mxComponentContext),
             UNO_QUERY_THROW);
         awt::WindowDescriptor aWindowDescriptor (
@@ -1069,7 +1069,7 @@ void PresenterSlideShowView::Resize (void)
     {
         pIterator->notifyEach(&util::XModifyListener::modified, aEvent);
     }
-
+    
     // Due to constant aspect ratio resizing may lead a preview that changes
     // its position but not its size.  This invalidates the back buffer and
     // we have to enforce a complete repaint.
@@ -1148,7 +1148,7 @@ void PresenterSlideShowView::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterSlideShowView object has already been disposed")),
+            OUString::createFromAscii("PresenterSlideShowView object has already been disposed"),
             static_cast<uno::XWeak*>(this));
     }
 }

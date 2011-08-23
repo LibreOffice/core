@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sdb.application.DatabaseObject;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.common.Properties;
@@ -82,7 +81,7 @@ public class FormWizard extends DatabaseObjectWizard
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Title", PropertyNames.PROPERTY_WIDTH
+                    "Height", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width"
                 },
                 new Object[]
                 {
@@ -231,7 +230,7 @@ public class FormWizard extends DatabaseObjectWizard
         insertLabel("lblBinaryHelpText",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                    "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"
                 },
                 new Object[]
                 {
@@ -246,7 +245,7 @@ public class FormWizard extends DatabaseObjectWizard
         insertLabel("lblSubFormBinaryHelpText",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                    "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"
                 },
                 new Object[]
                 {
@@ -290,7 +289,7 @@ public class FormWizard extends DatabaseObjectWizard
                 FormName = curFinalizer.getName();
                 if (curFormDocument.finalizeForms(CurDataEntrySetter, curFieldLinker, curFormConfiguration))
                 {
-
+                   
                     if (curFinalizer.finish())
                     {
                         m_success = true;
@@ -458,7 +457,7 @@ public class FormWizard extends DatabaseObjectWizard
             curDBCommandFieldSelection.setModified(true);
             boolean benable = curDBCommandFieldSelection.getSelectedFieldNames().length > 0;
             enablefromStep(SOSUBFORM_PAGE, benable);
-            setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
+            setControlProperty("btnWizardNext", "Enabled", new Boolean(benable));
             if (benable)
             {
                 if (curFormConfiguration.hasSubForm())
@@ -471,7 +470,7 @@ public class FormWizard extends DatabaseObjectWizard
                     setStepEnabled(SOFIELDLINKER_PAGE, false);
                 }
             }
-            setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
+            setControlProperty("btnWizardFinish", "Enabled", new Boolean(benable));
         }
     }
 }

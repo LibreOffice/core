@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,10 @@
 #include <io.h>
 #endif
 
-#ifdef  SAL_UNX
-#include <errno.h>
+#ifdef	SAL_UNX
 #include <unistd.h>
 #if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
-    defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY)
+	defined(AIX) || defined(OPENBSD)
 #include <sys/wait.h>
 #else
 #include <wait.h>
@@ -169,7 +168,7 @@ OString makeTempName(const OString& prefix)
     int nDescriptor = mkstemp(tmpFilePattern);
     if( -1 == nDescriptor )
     {
-        fprintf(stderr, "idlc: mkstemp(\"%s\") failed: %s\n", tmpFilePattern, strerror(errno));
+        fprintf( stderr,"idlc: couldn't create temporary file\n" );
         exit( 1 );
     }
     // the file shall later be reopened by stdio functions
@@ -303,9 +302,9 @@ sal_Int32 compileFile(const OString * pathname)
 #ifdef SAL_OS2_00
       char* tok = strtok( (char*)cppArgs.getStr(), " \t\n\r");
       while( tok) {
-         if (tok[strlen(tok)-1] == '\"')
+         if (tok[strlen(tok)-1] == '\"') 
             tok[strlen(tok)-1] = '\0';
-         if (*tok == '\"')
+         if (*tok == '\"') 
             memcpy( tok, tok+1, strlen(tok));
          if (strlen(tok)>0) {
             fputs(tok, pCmdFile);
@@ -329,15 +328,15 @@ sal_Int32 compileFile(const OString * pathname)
 
     sal_Int32 idx= cpp.lastIndexOf(OUString( RTL_CONSTASCII_USTRINGPARAM("idlc")) );
      cpp = cpp.copy(0, idx);
-
+    
 #if defined(SAL_W32) || defined(SAL_OS2)
      cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("idlcpp.exe"));
 #else
     cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("idlcpp"));
 #endif
 
-    oslProcess      hProcess = NULL;
-    oslProcessError procError = osl_Process_E_None;
+    oslProcess		hProcess = NULL;
+    oslProcessError	procError = osl_Process_E_None;
 
     procError = osl_executeProcess(cpp.pData, &cmdArg.pData, 1, osl_Process_WAIT,
                                    0, startDir.pData, 0, 0, &hProcess);

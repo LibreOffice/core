@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,6 +31,33 @@
 #include <sfx2/tbxctrl.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
+/*
+#ifdef _BASIDE_POPUPWINDOWTBX
+
+// class PopupWindowTbx --------------------------------------------------
+
+class PopupWindowTbx : public SfxPopupWindow
+{
+private:
+    SfxToolBoxManager	aTbx;
+    Link				aSelectLink;
+
+    DECL_LINK( SelectHdl, void* );
+
+public:
+    PopupWindowTbx( USHORT nId, WindowAlign eAlign,
+                    ResId aRIdWin, ResId aRIdTbx, SfxBindings& rBind );
+    ~PopupWindowTbx();
+
+    void		 			StartSelection()
+                                { aTbx.GetToolBox().StartSelection(); }
+    void		 			Update();
+
+    virtual SfxPopupWindow*	Clone() const;
+    virtual void			PopupModeEnd();
+};
+#endif
+*/
 //-------------------
 // class TbxControls
 //-------------------
@@ -44,22 +71,22 @@ private:
         bool bDisabled;
     };
 
-    sal_uInt16                  nLastSlot;
+    USHORT					nLastSlot;
 
 protected:
-    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    virtual void			StateChanged( USHORT nSID, SfxItemState eState,
                                           const SfxPoolItem* pState );
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    TbxControls(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    TbxControls(USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~TbxControls() {}
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow*		CreatePopupWindow();
 
-    using                       SfxToolBoxControl::Select;
-    void                        Select( sal_uInt16 nModifier );
+    using						SfxToolBoxControl::Select;
+    void						Select( USHORT nModifier );
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,11 @@
 #include "ChartModelHelper.hxx"
 #include "CommonConverters.hxx"
 #include "macros.hxx"
-#include "NumberFormatterWrapper.hxx"
+#include "chartview/NumberFormatterWrapper.hxx"
 #include "servicenames_charttypes.hxx"
 #include "ResId.hxx"
 #include "Bitmaps.hrc"
+#include "Bitmaps_HC.hrc"
 #include "HelpIds.hrc"
 
 #include <vcl/fixed.hxx>
@@ -64,10 +65,11 @@
 #include <com/sun/star/chart2/XChartType.hpp>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
 
 #include <algorithm>
 #include <functional>
+
+#define SELECT_IMAGE(name,hc) Image( SchResId( hc ? name ## _HC : name ))
 
 /*  BROWSER_COLUMNSELECTION :  single cells may be selected rather than only
                                entire rows
@@ -89,6 +91,7 @@
 // with shift up/down, and entering non-editable cells would be problematic,
 // e.g.  the first cell, or when being in read-only mode
 
+
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -103,7 +106,7 @@ sal_Int32 lcl_getRowInData( long nRow )
     return static_cast< sal_Int32 >( nRow );
 }
 
-sal_Int32 lcl_getColumnInData( sal_uInt16 nCol )
+sal_Int32 lcl_getColumnInData( USHORT nCol )
 {
     return static_cast< sal_Int32 >( nCol ) - 1;
 }
@@ -140,7 +143,6 @@ SeriesHeaderEdit::SeriesHeaderEdit( Window * pParent ) :
         m_nStartColumn( 0 ),
         m_bShowWarningBox( false )
 {}
-
 SeriesHeaderEdit::~SeriesHeaderEdit()
 {}
 
@@ -177,7 +179,8 @@ public:
     void SetPos( const Point & rPos );
     void SetWidth( sal_Int32 nWidth );
     void SetChartType( const Reference< chart2::XChartType > & xChartType,
-                       bool bSwapXAndYAxis );
+                       bool bSwapXAndYAxis,
+                       bool bIsHighContrast );
     void SetSeriesName( const String & rName );
     void SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol );
 
@@ -213,10 +216,11 @@ private:
     DECL_LINK( SeriesNameChanged, void * );
     DECL_LINK( SeriesNameEdited, void * );
 
+    /// @param bHC </TRUE> for hight-contrast image
     static Image GetChartTypeImage(
         const Reference< chart2::XChartType > & xChartType,
-        bool bSwapXAndYAxis
-        );
+        bool bSwapXAndYAxis,
+        bool bHC );
 
     sal_Int32 m_nStartCol, m_nEndCol;
     sal_Int32 m_nWidth;
@@ -238,7 +242,7 @@ SeriesHeader::SeriesHeader( Window * pParent ) :
     m_spSeriesName->EnableUpdateData( 4 * EDIT_UPDATEDATA_TIMEOUT ); // define is in vcl/edit.hxx
     m_spSeriesName->SetUpdateDataHdl( LINK( this, SeriesHeader, SeriesNameChanged ));
     m_spSeriesName->SetModifyHdl( LINK( this, SeriesHeader, SeriesNameEdited ));
-    m_spSeriesName->SetHelpId( HID_SCH_DATA_SERIES_LABEL );
+    m_spSeriesName->SetSmartHelpId( SmartId( HID_SCH_DATA_SERIES_LABEL ));
     Show();
 }
 
@@ -307,6 +311,7 @@ void SeriesHeader::SetWidth( sal_Int32 nWidth )
     SetPos( m_aPos );
 }
 
+
 void SeriesHeader::SetPixelPosX( sal_Int32 nPos )
 {
     Point aPos( m_pDevice->LogicToPixel( m_aPos, MAP_APPFONT ));
@@ -321,10 +326,10 @@ void SeriesHeader::SetPixelWidth( sal_Int32 nWidth )
 
 void SeriesHeader::SetChartType(
     const Reference< chart2::XChartType > & xChartType,
-    bool bSwapXAndYAxis
-)
+    bool bSwapXAndYAxis,
+    bool bIsHighContrast )
 {
-    m_spSymbol->SetImage( GetChartTypeImage( xChartType, bSwapXAndYAxis ) );
+    m_spSymbol->SetImage( GetChartTypeImage( xChartType, bSwapXAndYAxis, bIsHighContrast ));
 }
 
 void SeriesHeader::SetSeriesName( const String & rName )
@@ -383,10 +388,11 @@ bool SeriesHeader::HasFocus() const
     return m_spSeriesName->HasFocus();
 }
 
+// static
 Image SeriesHeader::GetChartTypeImage(
     const Reference< chart2::XChartType > & xChartType,
-    bool bSwapXAndYAxis
-)
+    bool bSwapXAndYAxis,
+    bool bHC )
 {
     Image aResult;
     if( !xChartType.is())
@@ -395,40 +401,40 @@ Image SeriesHeader::GetChartTypeImage(
 
     if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_AREA ))
     {
-        aResult = Image( SchResId( IMG_TYPE_AREA ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_AREA, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ))
     {
         if( bSwapXAndYAxis )
-            aResult = Image( SchResId( IMG_TYPE_BAR ) );
+            aResult = SELECT_IMAGE( IMG_TYPE_BAR, bHC );
         else
-            aResult = Image( SchResId( IMG_TYPE_COLUMN ) );
+            aResult = SELECT_IMAGE( IMG_TYPE_COLUMN, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_LINE ))
     {
-        aResult = Image( SchResId( IMG_TYPE_LINE ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_LINE, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_SCATTER ))
     {
-        aResult = Image( SchResId( IMG_TYPE_XY ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_XY, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_PIE ))
     {
-        aResult = Image( SchResId( IMG_TYPE_PIE ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_PIE, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_NET )
           || aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ) )
     {
-        aResult = Image( SchResId( IMG_TYPE_NET ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_NET, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ))
     {
         // @todo: correct image for candle-stick type
-        aResult = Image( SchResId( IMG_TYPE_STOCK ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_STOCK, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE ))
     {
-        aResult = Image( SchResId( IMG_TYPE_BUBBLE ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_BUBBLE, bHC );
     }
 
     return aResult;
@@ -472,13 +478,13 @@ bool lcl_SeriesHeaderHasFocus(
 }
 
 sal_Int32 lcl_getColumnInDataOrHeader(
-    sal_uInt16 nCol, const ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader )
+    USHORT nCol, const ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader )
 {
     sal_Int32 nColIdx = 0;
     bool bHeaderHasFocus( lcl_SeriesHeaderHasFocus( rSeriesHeader, &nColIdx ));
 
     if( bHeaderHasFocus )
-        nColIdx = lcl_getColumnInData( static_cast< sal_uInt16 >( rSeriesHeader[nColIdx]->GetStartColumn()));
+        nColIdx = lcl_getColumnInData( static_cast< USHORT >( rSeriesHeader[nColIdx]->GetStartColumn()));
     else
         nColIdx = lcl_getColumnInData( nCol );
 
@@ -503,7 +509,7 @@ DataBrowser::DataBrowser( Window* pParent, const ResId& rId, bool bLiveUpdate ) 
     double fNan;
     ::rtl::math::setNan( & fNan );
     m_aNumberEditField.SetDefaultValue( fNan );
-    m_aNumberEditField.TreatAsNumber( sal_True );
+    m_aNumberEditField.TreatAsNumber( TRUE );
     RenewTable();
     SetClean();
 }
@@ -579,10 +585,10 @@ void DataBrowser::RenewTable()
         return;
 
     long   nOldRow     = GetCurRow();
-    sal_uInt16 nOldColId   = GetCurColumnId();
+    USHORT nOldColId   = GetCurColumnId();
 
-    sal_Bool bLastUpdateMode = GetUpdateMode();
-    SetUpdateMode( sal_False );
+    BOOL bLastUpdateMode = GetUpdateMode();
+    SetUpdateMode( FALSE );
 
     if( IsModified() )
         SaveModified();
@@ -610,7 +616,7 @@ void DataBrowser::RenewTable()
 
     RowInserted( 1, nRowCountLocal );
     GoToRow( ::std::min( nOldRow, GetRowCount() - 1 ));
-    GoToColumnId( ::std::min( nOldColId, static_cast< sal_uInt16 >( ColCount() - 1 )));
+    GoToColumnId( ::std::min( nOldColId, static_cast< USHORT >( ColCount() - 1 )));
 
     Window * pWin = this->GetParent();
     if( !pWin )
@@ -621,6 +627,7 @@ void DataBrowser::RenewTable()
     const DataBrowserModel::tDataHeaderVector& aHeaders( m_apDataBrowserModel->getDataHeaders());
     Link aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
+    bool bIsHighContrast = pWin ? (pWin->GetSettings().GetStyleSettings().GetHighContrastMode()) : false;
 
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
          aIt != aHeaders.end(); ++aIt )
@@ -632,7 +639,7 @@ void DataBrowser::RenewTable()
         if( xSeriesProp.is() &&
             ( xSeriesProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Color"))) >>= nColor ))
             spHeader->SetColor( Color( nColor ));
-        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
+        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis, bIsHighContrast );
         spHeader->SetSeriesName(
             String( DataSeriesHelper::getDataSeriesLabel(
                         aIt->m_xDataSeries,
@@ -666,7 +673,7 @@ String DataBrowser::GetRowString( sal_Int32 nRow ) const
     return String::CreateFromInt32( nRow + 1 );
 }
 
-String DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
+String DataBrowser::GetCellText( long nRow, USHORT nColumnId ) const
 {
     String aResult;
 
@@ -691,23 +698,6 @@ String DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
                                       GetNumberFormatKey( nRow, nColumnId ),
                                       fData, nLabelColor, bColorChanged ));
         }
-        else if( m_apDataBrowserModel->getCellType( nColIndex, nRow ) == DataBrowserModel::TEXTORDATE )
-        {
-            uno::Any aAny = m_apDataBrowserModel->getCellAny( nColIndex, nRow );
-            OUString aText;
-            double fDouble=0.0;
-            if( aAny>>=aText )
-                aResult = aText;
-            else if( aAny>>=fDouble )
-            {
-                sal_Int32 nLabelColor;
-                bool bColorChanged = false;
-                sal_Int32 nDateNumberFormat = DiagramHelper::getDateNumberFormat( Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY) );
-                if( ! ::rtl::math::isNan( fDouble ) && m_spNumberFormatterWrapper.get() )
-                    aResult = String( m_spNumberFormatterWrapper->getFormattedString(
-                        nDateNumberFormat, fDouble, nLabelColor, bColorChanged ));
-            }
-        }
         else
         {
             OSL_ASSERT( m_apDataBrowserModel->getCellType( nColIndex, nRow ) == DataBrowserModel::TEXT );
@@ -718,7 +708,7 @@ String DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
     return aResult;
 }
 
-double DataBrowser::GetCellNumber( long nRow, sal_uInt16 nColumnId ) const
+double DataBrowser::GetCellNumber( long nRow, USHORT nColumnId ) const
 {
     double fResult;
     ::rtl::math::setNan( & fResult );
@@ -735,8 +725,8 @@ double DataBrowser::GetCellNumber( long nRow, sal_uInt16 nColumnId ) const
 
 void DataBrowser::Resize()
 {
-    sal_Bool bLastUpdateMode = GetUpdateMode();
-    SetUpdateMode( sal_False );
+    BOOL bLastUpdateMode = GetUpdateMode();
+    SetUpdateMode( FALSE );
 
     ::svt::EditBrowseBox::Resize();
     ImplAdjustHeaderControls();
@@ -865,9 +855,6 @@ void DataBrowser::SetDataFromModel(
     m_spNumberFormatterWrapper.reset(
         new NumberFormatterWrapper(
             Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY )));
-
-    if( m_spNumberFormatterWrapper.get() )
-        m_aNumberEditField.SetFormatter( m_spNumberFormatterWrapper->getSvNumberFormatter() );
 
     RenewTable();
 
@@ -1033,6 +1020,19 @@ void DataBrowser::PaintCell(
     if( ! bEnabled )
         rDev.SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
 
+    // TEST
+//     if( nColumnId == 1 )
+//         // categories
+//         rDev.SetFillColor( Color( 0xff, 0xff, 0xff ));
+//     else if( nColumnId == 2 )
+//         // x-values
+//         rDev.SetFillColor( Color( 0xf0, 0xf0, 0xff ));
+//     else
+//         // y-values
+//         rDev.SetFillColor( Color( 0xff, 0xff, 0xf0 ));
+
+//     rDev.DrawRect( rRect );
+
     // draw the text
     rDev.DrawText( aPos, aText );
 
@@ -1117,7 +1117,7 @@ void DataBrowser::InitController(
     }
     else
     {
-        OSL_FAIL( "Invalid Controller" );
+        DBG_ERROR( "Invalid Controller" );
     }
 }
 
@@ -1136,22 +1136,6 @@ sal_uInt32 DataBrowser::GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) co
     return m_apDataBrowserModel->getNumberFormatKey( lcl_getColumnInData( nCol ), lcl_getRowInData( nRow ));
 }
 
-bool DataBrowser::isDateString( rtl::OUString aInputString, double& fOutDateValue )
-{
-    sal_uInt32 nNumberFormat=0;
-    SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : 0;
-    if( aInputString.getLength() > 0 &&  pSvNumberFormatter && pSvNumberFormatter->IsNumberFormat( aInputString, nNumberFormat, fOutDateValue ) )
-    {
-        Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( m_xChartDoc, uno::UNO_QUERY );
-        Reference< util::XNumberFormats > xNumberFormats;
-        if( xNumberFormatsSupplier.is() )
-             xNumberFormats = Reference< util::XNumberFormats >( xNumberFormatsSupplier->getNumberFormats() );
-        if( DiagramHelper::isDateNumberFormat( nNumberFormat, xNumberFormats ) )
-            return true;
-    }
-    return false;
-}
-
 sal_Bool DataBrowser::SaveModified()
 {
     if( ! IsModified() )
@@ -1164,7 +1148,6 @@ sal_Bool DataBrowser::SaveModified()
 
     DBG_ASSERT( nRow >= 0 || nCol >= 0, "This cell should not be modified!" );
 
-    SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : 0;
     switch( m_apDataBrowserModel->getCellType( nCol, nRow ))
     {
         case DataBrowserModel::NUMBER:
@@ -1174,8 +1157,11 @@ sal_Bool DataBrowser::SaveModified()
             String aText( m_aNumberEditField.GetText());
             // an empty string is valid, if no numberformatter exists, all
             // values are treated as valid
-            if( aText.Len() > 0 && pSvNumberFormatter &&
-                ! pSvNumberFormatter->IsNumberFormat( aText, nDummy, fDummy ) )
+            if( aText.Len() > 0 &&
+                m_spNumberFormatterWrapper.get() &&
+                m_spNumberFormatterWrapper->getSvNumberFormatter() &&
+                ! m_spNumberFormatterWrapper->getSvNumberFormatter()->IsNumberFormat(
+                    aText, nDummy, fDummy ))
             {
                 bChangeValid = sal_False;
             }
@@ -1184,17 +1170,6 @@ sal_Bool DataBrowser::SaveModified()
                 double fData = m_aNumberEditField.GetValue();
                 bChangeValid = m_apDataBrowserModel->setCellNumber( nCol, nRow, fData );
             }
-        }
-        break;
-        case DataBrowserModel::TEXTORDATE:
-        {
-            OUString aText( m_aTextEditField.GetText() );
-            double fDateValue=0.0;
-            bChangeValid = sal_False;
-            if( isDateString( aText, fDateValue ) )
-                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::makeAny( fDateValue ) );
-            if(!bChangeValid)
-                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::makeAny( aText ) );
         }
         break;
         case DataBrowserModel::TEXT:
@@ -1237,20 +1212,22 @@ sal_Int16 DataBrowser::GetFirstVisibleColumNumber() const
     return GetFirstVisibleColNumber();
 }
 
-void DataBrowser::ColumnResized( sal_uInt16 nColId )
+void DataBrowser::ColumnResized( USHORT nColId )
 {
-    sal_Bool bLastUpdateMode = GetUpdateMode();
-    SetUpdateMode( sal_False );
+    BOOL bLastUpdateMode = GetUpdateMode();
+    SetUpdateMode( FALSE );
 
     EditBrowseBox::ColumnResized( nColId );
     ImplAdjustHeaderControls();
     SetUpdateMode( bLastUpdateMode );
 }
 
+// 	virtual void    MouseMove( const MouseEvent& rEvt );
+
 void DataBrowser::EndScroll()
 {
-    sal_Bool bLastUpdateMode = GetUpdateMode();
-    SetUpdateMode( sal_False );
+    BOOL bLastUpdateMode = GetUpdateMode();
+    SetUpdateMode( FALSE );
 
     EditBrowseBox::EndScroll();
     RenewSeriesHeaders();
@@ -1268,6 +1245,7 @@ void DataBrowser::RenewSeriesHeaders()
     DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
     Link aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
+    bool bIsHighContrast = pWin ? (pWin->GetSettings().GetStyleSettings().GetHighContrastMode()) : false;
 
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
          aIt != aHeaders.end(); ++aIt )
@@ -1278,7 +1256,7 @@ void DataBrowser::RenewSeriesHeaders()
         if( xSeriesProp.is() &&
             ( xSeriesProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Color"))) >>= nColor ))
             spHeader->SetColor( Color( nColor ));
-        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
+        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis, bIsHighContrast );
         spHeader->SetSeriesName(
             String( DataSeriesHelper::getDataSeriesLabel(
                         aIt->m_xDataSeries,
@@ -1339,6 +1317,7 @@ IMPL_LINK( DataBrowser, SeriesHeaderGotFocus, impl::SeriesHeaderEdit*, pEdit )
             GoToCell( 0, 0 );
         else
         {
+            //DeactivateCell();
             MakeFieldVisible( GetCurRow(), static_cast< sal_uInt16 >( pEdit->getStartColumn()), true /* bComplete */ );
             ActivateCell();
             m_aCursorMovedHdlLink.Call( this );
@@ -1377,8 +1356,8 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit )
 
 sal_Int32 DataBrowser::GetTotalWidth() const
 {
-    sal_uLong nWidth = 0;
-    for ( sal_uInt16 nCol = 0; nCol < ColCount(); ++nCol )
+    ULONG nWidth = 0;
+    for ( USHORT nCol = 0; nCol < ColCount(); ++nCol )
         nWidth += GetColumnWidth( nCol );
     return static_cast< sal_Int32 >( nWidth );
 }

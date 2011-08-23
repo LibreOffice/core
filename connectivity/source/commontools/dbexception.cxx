@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -221,7 +221,7 @@ void SQLExceptionInfo::prepend( const ::rtl::OUString& _rErrorMessage, const sal
     SQLException aException;
     aException.Message = _rErrorMessage;
     aException.ErrorCode = _nErrorCode;
-    aException.SQLState = _pAsciiSQLState ? ::rtl::OUString::createFromAscii( _pAsciiSQLState ) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "S1000" ));
+    aException.SQLState = ::rtl::OUString::createFromAscii( _pAsciiSQLState ? _pAsciiSQLState : "S1000" );
     aException.NextException = m_aContent;
     m_aContent <<= aException;
 
@@ -239,7 +239,7 @@ void SQLExceptionInfo::append( TYPE _eType, const ::rtl::OUString& _rErrorMessag
     case SQL_WARNING:   aAppend <<= SQLWarning();   break;
     case SQL_CONTEXT:   aAppend <<= SQLContext();   break;
     default:
-        OSL_FAIL( "SQLExceptionInfo::append: invalid exception type: this will crash!" );
+        OSL_ENSURE( false, "SQLExceptionInfo::append: invalid exception type: this will crash!" );
         break;
     }
 
@@ -559,7 +559,7 @@ const sal_Char* getStandardSQLStateAscii( StandardSQLState _eState )
 
 // -----------------------------------------------------------------------------
 //.........................................................................
-}   // namespace dbtools
+}	// namespace dbtools
 //.........................................................................
 
 

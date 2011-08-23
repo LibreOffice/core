@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@
 
 //-------------------------------------------------------------------------
 
-#define SC_DRAWLAYER 0x30334353     // Inventor: "SC30"
+#define SC_DRAWLAYER 0x30334353		// Inventor: "SC30"
 
 // Object-Ids fuer UserData
-#define SC_UD_OBJDATA       1
-#define SC_UD_IMAPDATA      2
-#define SC_UD_MACRODATA     3
+#define SC_UD_OBJDATA		1
+#define SC_UD_IMAPDATA		2
+#define SC_UD_MACRODATA		3
 
 //-------------------------------------------------------------------------
 
@@ -61,33 +61,30 @@ class ScDrawObjData : public SdrObjUserData
 public:
     ScAddress           maStart;
     ScAddress           maEnd;
-    Point               maStartOffset;
-    Point               maEndOffset;
     bool                mbNote;
-    Rectangle           maLastRect;
 
     explicit            ScDrawObjData();
 
 private:
-     virtual ScDrawObjData* Clone( SdrObject* pObj ) const;
+    virtual ScDrawObjData* Clone( SdrObject* pObj ) const;
 };
 
 //-------------------------------------------------------------------------
 
 class ScIMapInfo : public SdrObjUserData
 {
-    ImageMap        aImageMap;
+    ImageMap		aImageMap;
 
 public:
                     ScIMapInfo();
                     ScIMapInfo( const ImageMap& rImageMap );
                     ScIMapInfo( const ScIMapInfo& rIMapInfo );
-    virtual         ~ScIMapInfo();
+    virtual			~ScIMapInfo();
 
-    virtual SdrObjUserData* Clone( SdrObject* pObj ) const;
+    virtual	SdrObjUserData* Clone( SdrObject* pObj ) const;
 
-    void    SetImageMap( const ImageMap& rIMap )    { aImageMap = rIMap; }
-    const ImageMap& GetImageMap() const             { return aImageMap; }
+    void 	SetImageMap( const ImageMap& rIMap )	{ aImageMap = rIMap; }
+    const ImageMap&	GetImageMap() const				{ return aImageMap; }
 };
 
 //-------------------------------------------------------------------------

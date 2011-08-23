@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@ class SdrModel;
 //----------------------
 class SVX_DLLPUBLIC XLineEndItem : public NameOrIndex
 {
-    basegfx::B2DPolyPolygon         maPolyPolygon;
+    basegfx::B2DPolyPolygon			maPolyPolygon;
 
 public:
             TYPEINFO();
-            XLineEndItem(sal_Int32 nIndex = -1);
+            XLineEndItem(INT32 nIndex = -1);
             XLineEndItem(const String& rName, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineEndItem(SfxItemPool* pPool, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineEndItem(SfxItemPool* pPool );
@@ -53,11 +53,11 @@ public:
 
     virtual int             operator==(const SfxPoolItem& rItem) const;
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
+    virtual SvStream&       Store(SvStream& rOut, USHORT nItemVersion ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

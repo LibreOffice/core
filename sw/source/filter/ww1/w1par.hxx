@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 class Ww1Shell : public SwFltShell
 {
 public:
-    Ww1Shell(SwDoc&, SwPaM&, const String& rBaseURL, sal_Bool bNew, sal_uLong nFieldFlags);
+    Ww1Shell(SwDoc&, SwPaM&, const String& rBaseURL, BOOL bNew, ULONG nFieldFlags);
 };
 
 

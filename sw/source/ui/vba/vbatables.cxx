@@ -36,7 +36,7 @@ sal_Bool lcl_isInHeaderFooter( const uno::Reference< text::XTextTable >& xTable 
     uno::Reference< text::XText > xText = xTextContent->getAnchor()->getText();
     uno::Reference< lang::XServiceInfo > xServiceInfo( xText, uno::UNO_QUERY_THROW );
     rtl::OUString aImplName = xServiceInfo->getImplementationName();
-    if( aImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SwXHeadFootText")) )
+    if( aImplName.equalsAscii("SwXHeadFootText") )
         return sal_True;
     return sal_False;
 }
@@ -161,7 +161,11 @@ SwVbaTables::Add( const uno::Reference< word::XRange >& Range, const uno::Any& N
 
     uno::Reference< text::XTextTable > xTable;
     xTable.set( xMsf->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable")) ), uno::UNO_QUERY_THROW );
-
+/*
+    comphelper::ComponentContext aCtx( xMsf );
+    if ( !aCtx.createComponent( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable") ), xTable ) );
+        throw uno::RuntimeException(); // #FIXME better exception??
+*/
     xTable->initialize( nRows, nCols );
     uno::Reference< text::XText > xText = xTextRange->getText();
     uno::Reference< text::XTextContent > xContext( xTable, uno::UNO_QUERY_THROW );

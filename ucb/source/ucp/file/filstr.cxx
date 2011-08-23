@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,9 +110,9 @@ XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_B
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
-    sal_uInt32 nFlags = ( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
+    sal_uInt32 nFlags = ( OpenFlag_Read | OpenFlag_Write );
     if ( !bLock )
-        nFlags |= osl_File_OpenFlag_NoLock;
+        nFlags |= OpenFlag_NoLock;
 
     osl::FileBase::RC err = m_aFile.open( nFlags );
     if(  err != osl::FileBase::E_None )
@@ -136,11 +136,11 @@ XStream_impl::~XStream_impl()
     }
     catch (io::IOException const &)
     {
-        OSL_FAIL("unexpected situation");
+        OSL_ENSURE(false, "unexpected situation");
     }
     catch (uno::RuntimeException const &)
     {
-        OSL_FAIL("unexpected situation");
+        OSL_ENSURE(false, "unexpected situation");
     }
 }
 
@@ -221,13 +221,13 @@ XStream_impl::readBytes(
         if( m_nIsOpen ) m_aFile.close();
         throw io::BufferSizeExceededException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
-
+    
     sal_uInt64 nrc(0);
     if(m_aFile.read( (void* )buffer,sal_uInt64(nBytesToRead),nrc )
        != osl::FileBase::E_None)
     {
         delete[] buffer;
-        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );		
     }
     aData = uno::Sequence< sal_Int8 > ( buffer, (sal_uInt32)nrc );
     delete[] buffer;
@@ -300,14 +300,14 @@ XStream_impl::closeStream(
     if( m_nIsOpen )
     {
         osl::FileBase::RC err = m_aFile.close();
-
+        
         if( err != osl::FileBase::E_None ) {
             io::IOException ex;
-            ex.Message = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "could not close file"));
+            ex.Message = rtl::OUString::createFromAscii(
+                "could not close file");
             throw ex;
         }
-
+        
         m_nIsOpen = false;
     }
 }
@@ -321,7 +321,7 @@ XStream_impl::closeInput(
 {
     osl::MutexGuard aGuard( m_aMutex );
     m_bInputStreamCalled = false;
-
+    
     if( ! m_bOutputStreamCalled )
         closeStream();
 }
@@ -336,7 +336,7 @@ XStream_impl::closeOutput(
 {
     osl::MutexGuard aGuard( m_aMutex );
     m_bOutputStreamCalled = false;
-
+    
     if( ! m_bInputStreamCalled )
         closeStream();
 }

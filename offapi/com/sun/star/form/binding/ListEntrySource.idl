@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ service ListEntrySource
         the <type>ListEntrySource</type> for whatever reasons (e.g. because the data model
         which the binding reflected died). For this reason, a <type>ListEntrySource</type>
         must offer a possibility to be obsoleted by it's owner, and to notify this
-        obsoleteness to other interested parties, such as <type>XListEntrySink</type>s.</p>
+        obsoletion to other interested parties, such as <type>XListEntrySink</type>s.</p>
     */
     interface com::sun::star::lang::XComponent;
 };

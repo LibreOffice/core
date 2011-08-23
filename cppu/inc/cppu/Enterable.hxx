@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "uno/Enterable.h"
 #include "rtl/ustring.hxx"
 
-namespace cppu
+namespace cppu 
 {
 /** C++ wrapper for binary C Enterable
     (http://wiki.services.openoffice.org/wiki/Uno/Cpp/Spec/Environment_Stack)
@@ -51,16 +51,16 @@ public:
     virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) = 0;
     virtual int  v_isValid   (rtl::OUString * pReason)                   = 0;
 
-    virtual ~Enterable() {}
+    virtual ~Enterable() {};
 
 public:
     inline explicit Enterable(void);
 
-    inline void enter(void) {m_enter(this);}
-    inline void leave(void) {m_leave(this);}
+    inline void enter(void) {m_enter(this);};
+    inline void leave(void) {m_leave(this);};
 
-    inline void callInto_v(uno_EnvCallee * pCallee, va_list * pParam) {m_callInto_v(this, pCallee, pParam);}
-    inline void callOut_v (uno_EnvCallee * pCallee, va_list * pParam) {m_callOut_v (this, pCallee, pParam);}
+    inline void callInto_v(uno_EnvCallee * pCallee, va_list * pParam) {m_callInto_v(this, pCallee, pParam);};
+    inline void callOut_v (uno_EnvCallee * pCallee, va_list * pParam) {m_callOut_v (this, pCallee, pParam);};
 
     inline void callInto(uno_EnvCallee * pCallee, ...);
     inline void callOut (uno_EnvCallee * pCallee, ...);
@@ -72,17 +72,17 @@ private:
     Enterable & operator = (Enterable const &);
 };
 
-extern "C" inline void Enterable_call_enter (void * context) { ((Enterable *)context)->v_enter(); }
-extern "C" inline void Enterable_call_leave (void * context) { ((Enterable *)context)->v_leave(); }
-extern "C" inline void Enterable_call_callInto_v(void * context, uno_EnvCallee * pCallee, va_list * pParam)
-    { ((Enterable *)context)->v_callInto_v(pCallee, pParam); }
-extern "C" inline void Enterable_call_callOut_v (void * context, uno_EnvCallee * pCallee, va_list * pParam)
-    { ((Enterable *)context)->v_callOut_v(pCallee, pParam); }
+extern "C" inline void Enterable_call_enter (void * context) { ((Enterable *)context)->v_enter(); };
+extern "C" inline void Enterable_call_leave (void * context) { ((Enterable *)context)->v_leave(); };
+extern "C" inline void Enterable_call_callInto_v(void * context, uno_EnvCallee * pCallee, va_list * pParam) 
+    { ((Enterable *)context)->v_callInto_v(pCallee, pParam); };
+extern "C" inline void Enterable_call_callOut_v (void * context, uno_EnvCallee * pCallee, va_list * pParam) 
+    { ((Enterable *)context)->v_callOut_v(pCallee, pParam); };
 extern "C" inline int  Enterable_call_isValid   (void * context, rtl_uString ** pReason)
     {return ((Enterable *)context)->v_isValid((rtl::OUString *)pReason);}
 
 
-Enterable::Enterable(void)
+Enterable::Enterable(void) 
 {
     m_enter      = Enterable_call_enter;
     m_leave      = Enterable_call_leave;

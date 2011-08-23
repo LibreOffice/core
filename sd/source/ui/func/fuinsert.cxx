@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
-#include <sfx2/msgpool.hxx>
+
 #include <svtools/sores.hxx>
 #include <svtools/insdlg.hxx>
 #include <sfx2/request.hxx>
@@ -76,6 +76,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include "app.hrc"
+#include "misc.hxx"
 #include "sdresid.hxx"
 #include "View.hxx"
 #include "app.hxx"
@@ -129,17 +130,17 @@ FunctionReference FuInsertGraphic::Create( ViewShell* pViewSh, ::sd::Window* pWi
 
 void FuInsertGraphic::DoExecute( SfxRequest&  )
 {
-    SvxOpenGraphicDialog    aDlg(SdResId(STR_INSERTGRAPHIC));
+    SvxOpenGraphicDialog	aDlg(SdResId(STR_INSERTGRAPHIC));
 
     if( aDlg.Execute() == GRFILTER_OK )
     {
-        Graphic     aGraphic;
+        Graphic		aGraphic;
         int nError = aDlg.GetGraphic(aGraphic);
         if( nError == GRFILTER_OK )
         {
             if( mpViewShell && mpViewShell->ISA(DrawViewShell))
             {
-                sal_Int8    nAction = DND_ACTION_COPY;
+                sal_Int8	nAction = DND_ACTION_COPY;
                 SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC );
                 if( pPickObj )
                     nAction = DND_ACTION_LINK;
@@ -169,7 +170,7 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
         }
         else
         {
-            SdGRFFilter::HandleGraphicFilterError( (sal_uInt16)nError, GraphicFilter::GetGraphicFilter()->GetLastError().nStreamError );
+            SdGRFFilter::HandleGraphicFilterError( (USHORT)nError, GraphicFilter::GetGraphicFilter()->GetLastError().nStreamError );
         }
     }
 }
@@ -203,8 +204,8 @@ FunctionReference FuInsertClipboard::Create( ViewShell* pViewSh, ::sd::Window* p
 
 void FuInsertClipboard::DoExecute( SfxRequest&  )
 {
-    TransferableDataHelper                      aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpWindow ) );
-    sal_uLong                                       nFormatId;
+    TransferableDataHelper						aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpWindow ) );
+    ULONG                                       nFormatId;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( mpViewShell->GetActiveWindow() );
@@ -233,7 +234,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
 
             if( !mpView->InsertData( aDataHelper,
                                     mpWindow->PixelToLogic( Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
-                                    nAction, sal_False, nFormatId ) &&
+                                    nAction, FALSE, nFormatId ) &&
                 ( mpViewShell && mpViewShell->ISA( DrawViewShell ) ) )
             {
                 DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(mpViewShell);
@@ -374,7 +375,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
             bool bRet = true;
             if( pPickObj )
-                mpView->ReplaceObjectAtView(pPickObj, *pPV, pOleObj, sal_True );
+                mpView->ReplaceObjectAtView(pPickObj, *pPV, pOleObj, TRUE );
             else
                 bRet = mpView->InsertObjectAtView(pOleObj, *pPV, SDRINSERT_SETDEFLAYER);
 
@@ -393,6 +394,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     pOleObj->SetProgName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarMath" ) ) );
                 }
 
+                //HMHmpView->HideMarkHdl();
                 pOleObj->SetLogicRect(aRect);
                 Size aTmp( OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aUnit ) );
                 awt::Size aVisualSize;
@@ -422,7 +424,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         * Objekt einfuegen
         **********************************************************************/
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-        sal_Bool bCreateNew = sal_False;
+        BOOL bCreateNew = FALSE;
         uno::Reference < embed::XEmbeddedObject > xObj;
         uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
         SvObjectServerList aServerLst;
@@ -457,11 +459,12 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     // intentionally no break!
                 }
                 case SID_INSERT_PLUGIN :
+                case SID_INSERT_APPLET :
                 case SID_INSERT_FLOATINGFRAME :
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     SfxAbstractInsertObjectDialog* pDlg =
-                            pFact->CreateInsertObjectDialog( mpViewShell->GetActiveWindow(), SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommandString(),
+                            pFact->CreateInsertObjectDialog( mpViewShell->GetActiveWindow(), nSlotId,
                             xStorage, &aServerLst );
                     if ( pDlg )
                     {
@@ -505,7 +508,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
                                 if ( xSet.is() )
                                 {
-                                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
+                                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
                                             uno::makeAny( ::rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                                 }
                             }
@@ -530,9 +533,9 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             {
                 //TODO/LATER: needs status for RESIZEONPRINTERCHANGE
                 //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->getStatus( nAspect ) )
-                //    aIPObj->OnDocumentPrinterChanged( mpDocSh->GetPrinter(sal_False) );
+                //    aIPObj->OnDocumentPrinterChanged( mpDocSh->GetPrinter(FALSE) );
 
-                sal_Bool bInsertNewObject = sal_True;
+                BOOL bInsertNewObject = TRUE;
 
                 Size aSize;
                 MapUnit aMapUnit = MAP_100TH_MM;
@@ -587,14 +590,16 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 /**************************************************
                                     * Das leere OLE-Objekt bekommt ein neues IPObj
                                     **************************************************/
-                                bInsertNewObject = sal_False;
-                                pObj->SetEmptyPresObj(sal_False);
+                                bInsertNewObject = FALSE;
+                                pObj->SetEmptyPresObj(FALSE);
                                 ( (SdrOle2Obj*) pObj)->SetOutlinerParaObject(NULL);
                                 ( (SdrOle2Obj*) pObj)->SetObjRef(xObj);
                                 ( (SdrOle2Obj*) pObj)->SetPersistName(aName);
                                 ( (SdrOle2Obj*) pObj)->SetName(aName);
                                 ( (SdrOle2Obj*) pObj)->SetAspect(nAspect);
                                 Rectangle aRect = ( (SdrOle2Obj*) pObj)->GetLogicRect();
+
+                                //HMHmpView->HideMarkHdl();
 
                                 if ( nAspect == embed::Aspects::MSOLE_ICON )
                                 {
@@ -637,7 +642,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                     if( mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER) )
                     {
-                        //  Math objects change their object size during InsertObject.
+                        //  #73279# Math objects change their object size during InsertObject.
                         //  New size must be set in SdrObject, or a wrong scale will be set at
                         //  ActivateObject.
 
@@ -661,6 +666,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                         if (bCreateNew)
                         {
+                            //HMHmpView->HideMarkHdl();
                             pObj->SetLogicRect(aRect);
 
                             if ( nAspect != embed::Aspects::MSOLE_ICON )
@@ -715,9 +721,9 @@ FunctionReference FuInsertAVMedia::Create( ViewShell* pViewSh, ::sd::Window* pWi
 
 void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
 {
-    ::rtl::OUString     aURL;
-    const SfxItemSet*   pReqArgs = rReq.GetArgs();
-    bool                bAPI = false;
+    ::rtl::OUString 	aURL;
+    const SfxItemSet*	pReqArgs = rReq.GetArgs();
+    bool				bAPI = false;
 
     if( pReqArgs )
     {
@@ -747,8 +753,8 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
         }
         else
         {
-            Point       aPos;
-            Size        aSize;
+            Point	    aPos;
+            Size	    aSize;
             sal_Int8    nAction = DND_ACTION_COPY;
 
             if( aPrefSize.Width() && aPrefSize.Height() )

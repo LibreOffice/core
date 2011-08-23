@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,8 @@ ModuleTypeDescriptionImpl::getMembers()
             }
             catch ( NoSuchElementException const & )
             {
-                OSL_FAIL( "ModuleTypeDescriptionImpl::getMembers - "
+                OSL_ENSURE( sal_False,
+                    "ModuleTypeDescriptionImpl::getMembers - "
                     " Caught NoSuchElementException!" );
             }
         }

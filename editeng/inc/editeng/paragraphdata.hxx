@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,10 @@
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
-// Only for internal use, oder some kind like hPara for the few
+// MT 07/00: Only for internal use, oder some kind like hPara for the few
 // functions where you need it outside ( eg. moving paragraphs... )
 //
-// Unfortunately NOT only local (formally in outliner.hxx), but also
+// AW: Unfortunately NOT only local (formally in outliner.hxx), but also
 // used in outlobj.hxx. Moved to own header
 
 class ParagraphData
@@ -45,7 +45,7 @@ class ParagraphData
     friend class OutlinerParaObject;
 
 protected:
-    sal_Int16           nDepth;
+    sal_Int16			nDepth;
     sal_Int16           mnNumberingStartValue;
     sal_Bool            mbParaIsNumberingRestart;
 

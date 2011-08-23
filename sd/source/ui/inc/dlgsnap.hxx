@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #define _SD_DLGSNAP_HXX
 
 
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/group.hxx>
@@ -55,23 +55,23 @@ namespace sd {
 class SdSnapLineDlg : public ModalDialog
 {
 private:
-    FixedLine           aFlPos;
-    FixedText           aFtX;
-    MetricField         aMtrFldX;
-    FixedText           aFtY;
-    MetricField         aMtrFldY;
-    FixedLine           aFlDir;
-    ImageRadioButton    aRbPoint;
-    ImageRadioButton    aRbVert;
-    ImageRadioButton    aRbHorz;
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
-    PushButton          aBtnDelete;
-    long                nXValue;
-    long                nYValue;
-    FieldUnit           eUIUnit;
-    Fraction            aUIScale;
+    FixedLine			aFlPos;
+    FixedText			aFtX;
+    MetricField 		aMtrFldX;
+    FixedText			aFtY;
+    MetricField 		aMtrFldY;
+    FixedLine			aFlDir;
+    ImageRadioButton	aRbPoint;
+    ImageRadioButton 	aRbVert;
+    ImageRadioButton 	aRbHorz;
+    OKButton			aBtnOK;
+    CancelButton		aBtnCancel;
+    HelpButton			aBtnHelp;
+    PushButton			aBtnDelete;
+    long				nXValue;
+    long				nYValue;
+    FieldUnit			eUIUnit;
+    Fraction			aUIScale;
 
     DECL_LINK( ClickHdl, Button * );
 
@@ -82,11 +82,11 @@ public:
 
     void HideRadioGroup();
     void HideDeleteBtn() { aBtnDelete.Hide(); }
-    void SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY);
+    void SetInputFields(BOOL bEnableX, BOOL bEnableY);
 };
 
 
 
-#endif      // _SD_DLGSNAP_HXX
+#endif		// _SD_DLGSNAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

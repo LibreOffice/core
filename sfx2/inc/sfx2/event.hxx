@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,6 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XController2.hpp>
 
 class SfxObjectShell;
 
@@ -45,58 +44,35 @@ class SfxObjectShell;
 
 class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
 {
-    SfxObjectShell*     pObjShell;
-    ::rtl::OUString     aEventName;
-    sal_uInt16              nEventId;
+    SfxObjectShell* 	pObjShell;
+    ::rtl::OUString		aEventName;
+    USHORT				nEventId;
 
 public:
     TYPEINFO();
-    SfxEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj = 0 )
-                        :   pObjShell(pObj),
+    SfxEventHint( USHORT nId, const ::rtl::OUString& aName, SfxObjectShell *pObj = 0 )
+                        :	pObjShell(pObj),
                             aEventName(aName),
                             nEventId(nId)
                         {}
 
-    sal_uInt16              GetEventId() const
+    USHORT				GetEventId() const
                         { return nEventId; }
 
-    ::rtl::OUString     GetEventName() const
+    ::rtl::OUString		GetEventName() const
                         { return aEventName; }
 
-    SfxObjectShell*     GetObjShell() const
+    SfxObjectShell* 	GetObjShell() const
                         { return pObjShell; }
-};
-
-//-------------------------------------------------------------------
-
-class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > xViewController;
-
-public:
-    TYPEINFO();
-
-    SfxViewEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
-                        : SfxEventHint( nId, aName, pObj )
-                        , xViewController( xController, ::com::sun::star::uno::UNO_QUERY )
-                        {}
-
-    SfxViewEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& xController )
-                        : SfxEventHint( nId, aName, pObj )
-                        , xViewController( xController )
-                        {}
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > GetController() const
-                        { return xViewController; }
 };
 
 //-------------------------------------------------------------------
 
 class SfxNamedHint : public SfxHint
 {
-    String              _aEventName;
-    SfxObjectShell*     _pObjShell;
-    String              _aArgs;
+    String				_aEventName;
+    SfxObjectShell* 	_pObjShell;
+    String				_aArgs;
 
 public:
                         TYPEINFO();
@@ -104,26 +80,27 @@ public:
                         SfxNamedHint( const String& rName,
                                       const String& rArgs,
                                       SfxObjectShell *pObj = 0  )
-                        :   _aEventName( rName ),
+                        :	_aEventName( rName ),
                             _pObjShell( pObj),
                             _aArgs( rArgs )
                         {}
 
                         SfxNamedHint( const String& rName,
                                       SfxObjectShell *pObj = 0 )
-                        :   _aEventName( rName ),
+                        :	_aEventName( rName ),
                             _pObjShell( pObj )
                         {}
 
-    const String&       GetArgs() const { return _aArgs;}
-    const String&       GetName() const { return _aEventName; }
+    const String&		GetArgs() const { return _aArgs;}
+    const String&		GetName() const { return _aEventName; }
     SfxObjectShell*     GetObjShell() const { return _pObjShell; }
 };
 
+class PrintDialog;
 class Printer;
 class SfxPrintingHint : public SfxHint
 {
-    sal_Int32           nWhich;
+    sal_Int32			nWhich;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOpts;
 public:
                         TYPEINFO();
@@ -136,7 +113,7 @@ public:
                             : nWhich( nEvent )
                         {}
 
-    sal_Int32           GetWhich() const { return nWhich; }
+    sal_Int32			GetWhich() const { return nWhich; }
     const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& GetOptions() { return aOpts; }
 };
 

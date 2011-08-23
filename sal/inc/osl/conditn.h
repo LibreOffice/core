@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@ extern "C" {
 typedef void* oslCondition;
 
 typedef enum {
-    osl_cond_result_ok,     /* successful completion */
-    osl_cond_result_error,  /* error occurred, check osl_getLastSocketError() for details */
+    osl_cond_result_ok,		/* successful completion */
+    osl_cond_result_error,  /* error occured, check osl_getLastSocketError() for details */
     osl_cond_result_timeout, /* blocking operation timed out */
     osl_cond_result_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslConditionResult;

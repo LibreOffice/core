@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,6 @@
 #include <rtl/textenc.h>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #include "expbase.hxx"
 
@@ -47,26 +46,25 @@ class OutputDevice;
 class ScDrawLayer;
 class SvStringsSortDtor;
 class ScEditCell;
-
-namespace editeng { class SvxBorderLine; }
+class SvxBorderLine;
 
 struct ScHTMLStyle
-{   // Defaults aus StyleSheet
-    Color               aBackgroundColor;
-    String              aFontFamilyName;
-    sal_uInt32              nFontHeight;        // Item-Value
-    sal_uInt16              nFontSizeNumber;    // HTML value 1-7
-    sal_uInt8                nDefaultScriptType; // Font values are valid for the default script type
-    sal_Bool                bInitialized;
+{	// Defaults aus StyleSheet
+    Color				aBackgroundColor;
+    String 				aFontFamilyName;
+    UINT32				nFontHeight;		// Item-Value
+    USHORT              nFontSizeNumber;    // HTML value 1-7
+    BYTE                nDefaultScriptType; // Font values are valid for the default script type
+    BOOL                bInitialized;
 
     ScHTMLStyle() : nFontHeight(0), nFontSizeNumber(2), nDefaultScriptType(0),
         bInitialized(0) {}
 
     const ScHTMLStyle& operator=( const ScHTMLStyle& r )
         {
-            aBackgroundColor    = r.aBackgroundColor;
-            aFontFamilyName     = r.aFontFamilyName;
-            nFontHeight         = r.nFontHeight;
+            aBackgroundColor	= r.aBackgroundColor;
+            aFontFamilyName		= r.aFontFamilyName;
+            nFontHeight			= r.nFontHeight;
             nFontSizeNumber     = r.nFontSizeNumber;
             nDefaultScriptType  = r.nDefaultScriptType;
             bInitialized        = r.bInitialized;
@@ -76,19 +74,20 @@ struct ScHTMLStyle
 
 struct ScHTMLGraphEntry
 {
-    ScRange             aRange;         // ueberlagerter Zellbereich
-    Size                aSize;          // Groesse in Pixeln
-    Size                aSpace;         // Spacing in Pixeln
-    SdrObject*          pObject;
-    sal_Bool                bInCell;        // ob in Zelle ausgegeben wird
-    sal_Bool                bWritten;
+    ScRange				aRange;			// ueberlagerter Zellbereich
+    Size				aSize;			// Groesse in Pixeln
+    Size				aSpace;			// Spacing in Pixeln
+    SdrObject*			pObject;
+    BOOL				bInCell;		// ob in Zelle ausgegeben wird
+    BOOL				bWritten;
 
     ScHTMLGraphEntry( SdrObject* pObj, const ScRange& rRange,
-        const Size& rSize,  sal_Bool bIn, const Size& rSpace ) :
+        const Size& rSize, 	BOOL bIn, const Size& rSpace ) :
         aRange( rRange ), aSize( rSize ), aSpace( rSpace ),
-        pObject( pObj ), bInCell( bIn ), bWritten( false ) {}
+        pObject( pObj ), bInCell( bIn ), bWritten( FALSE ) {}
 };
 
+DECLARE_LIST( ScHTMLGraphList, ScHTMLGraphEntry* )
 
 #define SC_HTML_FONTSIZES 7
 const short nIndentMax = 23;
@@ -96,78 +95,78 @@ const short nIndentMax = 23;
 class ScHTMLExport : public ScExportBase
 {
     // default HtmlFontSz[1-7]
-    static const sal_uInt16 nDefaultFontSize[SC_HTML_FONTSIZES];
+    static const USHORT	nDefaultFontSize[SC_HTML_FONTSIZES];
     // HtmlFontSz[1-7] in s*3.ini [user]
-    static sal_uInt16       nFontSize[SC_HTML_FONTSIZES];
-    static const char*  pFontSizeCss[SC_HTML_FONTSIZES];
-    static const sal_uInt16 nCellSpacing;
-    static const sal_Char sIndentSource[];
+    static USHORT		nFontSize[SC_HTML_FONTSIZES];
+    static const char*	pFontSizeCss[SC_HTML_FONTSIZES];
+    static const USHORT	nCellSpacing;
+    static const sal_Char __FAR_DATA sIndentSource[];
 
-    boost::ptr_vector< ScHTMLGraphEntry > aGraphList;
-    ScHTMLStyle         aHTMLStyle;
+    ScHTMLGraphList		aGraphList;
+    ScHTMLStyle			aHTMLStyle;
     String              aBaseURL;
-    String              aStreamPath;
-    String              aCId;           // Content-Id fuer Mail-Export
-    OutputDevice*       pAppWin;        // fuer Pixelei
-    SvStringsSortDtor*  pSrcArr;        // fuer CopyLocalFileToINet
-    SvStringsSortDtor*  pDestArr;
+    String				aStreamPath;
+    String				aCId;			// Content-Id fuer Mail-Export
+    OutputDevice*		pAppWin;		// fuer Pixelei
+    SvStringsSortDtor*	pSrcArr;		// fuer CopyLocalFileToINet
+    SvStringsSortDtor*	pDestArr;
     String              aNonConvertibleChars;   // collect nonconvertible characters
-    rtl_TextEncoding    eDestEnc;
-    SCTAB               nUsedTables;
-    short               nIndent;
-    sal_Char            sIndent[nIndentMax+1];
-    sal_Bool                bAll;           // ganzes Dokument
-    sal_Bool                bTabHasGraphics;
-    sal_Bool                bTabAlignedLeft;
-    sal_Bool                bCalcAsShown;
-    sal_Bool                bCopyLocalFileToINet;
-    sal_Bool                bTableDataWidth;
-    sal_Bool                bTableDataHeight;
+    rtl_TextEncoding	eDestEnc;
+    SCTAB				nUsedTables;
+    short				nIndent;
+    sal_Char			sIndent[nIndentMax+1];
+    BOOL				bAll;			// ganzes Dokument
+    BOOL				bTabHasGraphics;
+    BOOL				bTabAlignedLeft;
+    BOOL				bCalcAsShown;
+    BOOL				bCopyLocalFileToINet;
+    BOOL                bTableDataWidth;
+    BOOL                bTableDataHeight;
 
-    const SfxItemSet&   PageDefaults( SCTAB nTab );
+    const SfxItemSet&	PageDefaults( SCTAB nTab );
 
     void                WriteBody();
-    void                WriteHeader();
-    void                WriteOverview();
-    void                WriteTables();
-    void                WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    void                WriteGraphEntry( ScHTMLGraphEntry* );
+    void 				WriteHeader();
+    void 				WriteOverview();
+    void 				WriteTables();
+    void 				WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void				WriteGraphEntry( ScHTMLGraphEntry* );
     void                WriteImage( String& rLinkName,
                                     const Graphic&, const ByteString& rImgOptions,
-                                    sal_uLong nXOutFlags = 0 );
+                                    ULONG nXOutFlags = 0 );
                             // nXOutFlags fuer XOutBitmap::WriteGraphic
 
                         // write to stream if and only if URL fields in edit cell
-    sal_Bool                WriteFieldText( const ScEditCell* pCell );
+    BOOL				WriteFieldText( const ScEditCell* pCell );
 
                         // kopiere ggfs. eine lokale Datei ins Internet
-    sal_Bool                CopyLocalFileToINet( String& rFileNm,
-                            const String& rTargetNm, sal_Bool bFileToFile = false );
-    sal_Bool                HasCId() { return aCId.Len() > 0; }
-    void                MakeCIdURL( String& rURL );
+    BOOL 				CopyLocalFileToINet( String& rFileNm,
+                            const String& rTargetNm, BOOL bFileToFile = FALSE );
+    BOOL				HasCId() { return aCId.Len() > 0; }
+    void				MakeCIdURL( String& rURL );
 
-    void                PrepareGraphics( ScDrawLayer*, SCTAB nTab,
+    void				PrepareGraphics( ScDrawLayer*, SCTAB nTab,
                                         SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow );
-    void                FillGraphList( const SdrPage*, SCTAB nTab,
+    void				FillGraphList( const SdrPage*, SCTAB nTab,
                                         SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow );
 
-    void                BorderToStyle( ByteString& rOut, const char* pBorderName,
-                                       const ::editeng::SvxBorderLine* pLine, bool& bInsertSemicolon );
+    void				BorderToStyle( ByteString& rOut, const char* pBorderName,
+                                       const SvxBorderLine* pLine, bool& bInsertSemicolon );
 
-    sal_uInt16              GetFontSizeNumber( sal_uInt16 nHeight );
-    const char*         GetFontSizeCss( sal_uInt16 nHeight );
-    sal_uInt16              ToPixel( sal_uInt16 nTwips );
-    Size                MMToPixel( const Size& r100thMMSize );
-    void                IncIndent( short nVal );
-    const sal_Char*         GetIndentStr() { return sIndent; }
+    USHORT				GetFontSizeNumber( USHORT nHeight );
+    const char*			GetFontSizeCss( USHORT nHeight );
+    USHORT				ToPixel( USHORT nTwips );
+    Size				MMToPixel( const Size& r100thMMSize );
+    void				IncIndent( short nVal );
+    const sal_Char*			GetIndentStr() { return sIndent; }
 
 public:
                         ScHTMLExport( SvStream&, const String&, ScDocument*, const ScRange&,
-                                        sal_Bool bAll, const String& aStreamPath );
-    virtual             ~ScHTMLExport();
-    sal_uLong               Write();
+                                        BOOL bAll, const String& aStreamPath );
+    virtual				~ScHTMLExport();
+    ULONG               Write();
     const String&       GetNonConvertibleChars() const
                             { return aNonConvertibleChars; }
 };

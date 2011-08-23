@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,6 @@
 #include "frmsel.hrc"
 
 #include <tools/rcid.h>
-
-using namespace ::editeng;
 
 namespace svx {
 
@@ -86,7 +84,7 @@ const long FRAMESEL_GEOM_ADD_CLICK_INNER = 2;
 
 // ----------------------------------------------------------------------------
 
-static const frame::Style   OBJ_FRAMESTYLE_DONTCARE( 3, 0, 0, SOLID );
+static const frame::Style   OBJ_FRAMESTYLE_DONTCARE( 3, 0, 0 );
 static const FrameBorder    OBJ_FRAMEBORDER_NONE( FRAMEBORDER_NONE );
 
 // ----------------------------------------------------------------------------
@@ -110,7 +108,7 @@ FrameSelFlags lclGetFlagFromType( FrameBorderType eBorder )
 }
 
 /** Converts an SvxBorderLine line width (in twips) to a pixel line width. */
-inline sal_uInt16 lclGetPixel( sal_uInt16 nWidth )
+inline sal_uInt16 lclGetPixel( USHORT nWidth )
 {
     // convert all core styles expect 0 to a visible UI style (at least 1 pixel), map 1pt to 1pixel
     return nWidth ? std::min< sal_uInt16 >( std::max< sal_uInt16 >( (nWidth + 5) / 20, 1 ), FRAMESEL_GEOM_WIDTH ) : 0;
@@ -218,7 +216,7 @@ void FrameBorder::SetKeyboardNeighbors(
     meKeyBottom = eBottom;
 }
 
-FrameBorderType FrameBorder::GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const
+FrameBorderType FrameBorder::GetKeyboardNeighbor( USHORT nKeyCode ) const
 {
     FrameBorderType eBorder = FRAMEBORDER_NONE;
     switch( nKeyCode )
@@ -425,7 +423,7 @@ void FrameSelectorImpl::InitBorderGeometry()
             aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Bottom() - nDiagFocusOffsY ) );
             aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Bottom() + mnFocusOffs     ) );
             aFocusVec.push_back( Point( aRect.Right() - nDiagFocusOffsX, aRect.Bottom() + mnFocusOffs     ) );
-            maTLBR.AddFocusPolygon( Polygon( static_cast< sal_uInt16 >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
+            maTLBR.AddFocusPolygon( Polygon( static_cast< USHORT >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
 
             aFocusVec.clear();
             aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Top()    + nDiagFocusOffsY ) );
@@ -434,7 +432,7 @@ void FrameSelectorImpl::InitBorderGeometry()
             aFocusVec.push_back( Point( aRect.Left()  - mnFocusOffs,     aRect.Bottom() - nDiagFocusOffsY ) );
             aFocusVec.push_back( Point( aRect.Left()  - mnFocusOffs,     aRect.Bottom() + mnFocusOffs     ) );
             aFocusVec.push_back( Point( aRect.Left()  + nDiagFocusOffsX, aRect.Bottom() + mnFocusOffs     ) );
-            maBLTR.AddFocusPolygon( Polygon( static_cast< sal_uInt16 >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
+            maBLTR.AddFocusPolygon( Polygon( static_cast< USHORT >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
         }
     }
 
@@ -576,7 +574,7 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
     long nTLPos = 0;
     long nBRPos = mnCtrlSize - mnArrowSize;
     Point aPos1, aPos2;
-    sal_uInt16 nImgId1 = 0, nImgId2 = 0;
+    USHORT nImgId1 = 0, nImgId2 = 0;
     switch( rBorder.GetType() )
     {
         case FRAMEBORDER_LEFT:
@@ -605,7 +603,7 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
     }
 
     // Arrow or marker? Do not draw arrows into disabled control.
-    sal_uInt16 nSelectAdd = (mrFrameSel.IsEnabled() && rBorder.IsSelected()) ? 0 : 8;
+    USHORT nSelectAdd = (mrFrameSel.IsEnabled() && rBorder.IsSelected()) ? 0 : 8;
     maVirDev.DrawImage( aPos1, maILArrows.GetImage( nImgId1 + nSelectAdd ) );
     maVirDev.DrawImage( aPos2, maILArrows.GetImage( nImgId2 + nSelectAdd ) );
 }
@@ -629,10 +627,8 @@ void FrameSelectorImpl::DrawAllFrameBorders()
     // Translate core colors to current UI colors (regards current background and HC mode).
     for( FrameBorderIter aIt( maEnabBorders ); aIt.Is(); ++aIt )
     {
-        Color aCoreColorPrim = ((*aIt)->GetState() == FRAMESTATE_DONTCARE) ? maMarkCol : (*aIt)->GetCoreStyle().GetColorOut();
-        Color aCoreColorSecn = ((*aIt)->GetState() == FRAMESTATE_DONTCARE) ? maMarkCol : (*aIt)->GetCoreStyle().GetColorIn();
-        (*aIt)->SetUIColorPrim( GetDrawLineColor( aCoreColorPrim ) );
-        (*aIt)->SetUIColorSecn( GetDrawLineColor( aCoreColorSecn ) );
+        Color aCoreColor = ((*aIt)->GetState() == FRAMESTATE_DONTCARE) ? maMarkCol : (*aIt)->GetCoreStyle().GetColor();
+        (*aIt)->SetUIColor( GetDrawLineColor( aCoreColor ) );
     }
 
     // Copy all frame border styles to the helper array
@@ -641,11 +637,9 @@ void FrameSelectorImpl::DrawAllFrameBorders()
 
     // Invert the style for the right line
     const frame::Style rRightStyle = maRight.GetUIStyle( );
-    frame::Style rInvertedRight( rRightStyle.GetColorPrim(),
-            rRightStyle.GetColorSecn(), rRightStyle.GetColorGap(),
-            rRightStyle.UseGapColor(),
+    frame::Style rInvertedRight( rRightStyle.GetColor(),
             rRightStyle.Secn(), rRightStyle.Dist(), rRightStyle.Prim( ),
-            rRightStyle.Type( ) );
+            rRightStyle.Dashing( ) );
     maArray.SetColumnStyleRight( mbVer ? 1 : 0, rInvertedRight );
 
     maArray.SetRowStyleTop( 0, maTop.GetUIStyle() );
@@ -653,21 +647,17 @@ void FrameSelectorImpl::DrawAllFrameBorders()
     {
         // Invert the style for the hor line to match the real borders
         const frame::Style rHorStyle = maHor.GetUIStyle();
-        frame::Style rInvertedHor( rHorStyle.GetColorPrim(),
-            rHorStyle.GetColorSecn(), rHorStyle.GetColorGap(),
-            rHorStyle.UseGapColor(),
+        frame::Style rInvertedHor( rHorStyle.GetColor(),
             rHorStyle.Secn(), rHorStyle.Dist(), rHorStyle.Prim( ),
-            rHorStyle.Type() );
+            rHorStyle.Dashing() );
         maArray.SetRowStyleTop( 1, rInvertedHor );
     }
 
     // Invert the style for the bottom line
     const frame::Style rBottomStyle = maBottom.GetUIStyle( );
-    frame::Style rInvertedBottom( rBottomStyle.GetColorPrim(),
-            rBottomStyle.GetColorSecn(), rBottomStyle.GetColorGap(),
-            rBottomStyle.UseGapColor(),
+    frame::Style rInvertedBottom( rBottomStyle.GetColor(),
             rBottomStyle.Secn(), rBottomStyle.Dist(), rBottomStyle.Prim( ),
-            rBottomStyle.Type() );
+            rBottomStyle.Dashing() );
     maArray.SetRowStyleBottom( mbHor ? 1 : 0, rInvertedBottom );
 
     for( size_t nCol = 0; nCol < maArray.GetColCount(); ++nCol )
@@ -707,7 +697,7 @@ void FrameSelectorImpl::DrawAllTrackingRects()
         aPPoly.Insert( Polygon( Rectangle( maVirDevPos, maVirDev.GetOutputSizePixel() ) ) );
 
     aPPoly.Optimize( POLY_OPTIMIZE_CLOSE );
-    for( sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx )
+    for( USHORT nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx )
         mrFrameSel.InvertTracking( aPPoly.GetObject( nIdx ), SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
 }
 
@@ -889,7 +879,8 @@ void FrameSelector::HideAllBorders()
         mxImpl->SetBorderState( **aIt, FRAMESTATE_HIDE );
 }
 
-bool FrameSelector::GetVisibleWidth( long& rnWidth, SvxBorderStyle& rnStyle ) const
+bool FrameSelector::GetVisibleWidth( USHORT& rnPrim, USHORT& rnDist, USHORT& rnSecn,
+                        SvxBorderStyle& rnStyle ) const
 {
     VisFrameBorderCIter aIt( mxImpl->maEnabBorders );
     if( !aIt.Is() )
@@ -899,12 +890,16 @@ bool FrameSelector::GetVisibleWidth( long& rnWidth, SvxBorderStyle& rnStyle ) co
     bool bFound = true;
     for( ++aIt; bFound && aIt.Is(); ++aIt )
         bFound =
-            (rStyle.GetWidth() == (*aIt)->GetCoreStyle().GetWidth()) &&
+            (rStyle.GetOutWidth() == (*aIt)->GetCoreStyle().GetOutWidth()) &&
+            (rStyle.GetDistance() == (*aIt)->GetCoreStyle().GetDistance()) &&
+            (rStyle.GetInWidth()  == (*aIt)->GetCoreStyle().GetInWidth()) &&
             (rStyle.GetStyle() == (*aIt)->GetCoreStyle().GetStyle());
 
     if( bFound )
     {
-        rnWidth = rStyle.GetWidth();
+        rnPrim = rStyle.GetOutWidth();
+        rnDist = rStyle.GetDistance();
+        rnSecn = rStyle.GetInWidth();
         rnStyle = rStyle.GetStyle();
     }
     return bFound;
@@ -966,10 +961,13 @@ void FrameSelector::SelectAllVisibleBorders( bool bSelect )
         mxImpl->SelectBorder( **aIt, bSelect );
 }
 
-void FrameSelector::SetStyleToSelection( long nWidth, SvxBorderStyle nStyle )
+void FrameSelector::SetStyleToSelection( USHORT nPrim, USHORT nDist, USHORT nSecn,
+        SvxBorderStyle nStyle )
 {
+    mxImpl->maCurrStyle.SetOutWidth( nPrim );
+    mxImpl->maCurrStyle.SetDistance( nDist );
+    mxImpl->maCurrStyle.SetInWidth( nSecn );
     mxImpl->maCurrStyle.SetStyle( nStyle );
-    mxImpl->maCurrStyle.SetWidth( nWidth );
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
         mxImpl->SetBorderState( **aIt, FRAMESTATE_SHOW );
 }
@@ -1135,7 +1133,7 @@ void FrameSelector::KeyInput( const KeyEvent& rKEvt )
     KeyCode aKeyCode = rKEvt.GetKeyCode();
     if( !aKeyCode.GetModifier() )
     {
-        sal_uInt16 nCode = aKeyCode.GetCode();
+        USHORT nCode = aKeyCode.GetCode();
         switch( nCode )
         {
             case KEY_SPACE:

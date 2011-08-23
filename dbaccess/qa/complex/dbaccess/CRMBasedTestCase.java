@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,16 +26,12 @@
  ************************************************************************/
 package complex.dbaccess;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
+import com.sun.star.uno.UnoRuntime;
 import connectivity.tools.CRMDatabase;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-// ---------- junit imports -----------------
-import org.junit.After;
-import org.junit.Before;
-import static org.junit.Assert.*;
-// ------------------------------------------
 
 public abstract class CRMBasedTestCase extends TestCase
 {
@@ -46,17 +42,16 @@ public abstract class CRMBasedTestCase extends TestCase
     {
         try
         {
-            m_database = new CRMDatabase( getMSF(), false );
+            m_database = new CRMDatabase( getORB(), false );
         }
         catch ( Exception e )
         {
             e.printStackTrace( System.err );
-            fail( "caught an exception (" + e.getMessage() + ") while creating the test case");
+            assure( "caught an exception (" + e.getMessage() + ") while creating the test case", false );
         }
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Before
     @Override
     public void before()
     {
@@ -64,16 +59,13 @@ public abstract class CRMBasedTestCase extends TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @After
     @Override
     public void after()
     {
         try
         {
             if ( m_database != null )
-            {
                 m_database.saveAndClose();
-            }
         }
         catch ( Exception ex )
         {

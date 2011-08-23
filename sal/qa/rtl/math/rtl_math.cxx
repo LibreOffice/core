@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,9 @@
 #endif
 
 #include <math.h>
+#include <testshl/simpleheader.hxx>
 #include <rtl/math.h>
 #include <rtl/string.hxx>
-
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include "valueequal.hxx"
 
@@ -618,7 +615,7 @@ public:
 }; // class test
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_math::test);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_math::test, "rtl_math");
 } // namespace rtl_math
 
 
@@ -626,6 +623,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_math::test);
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-CPPUNIT_PLUGIN_IMPLEMENT();
+NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

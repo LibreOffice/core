@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "XMLSymbolImageContext.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
@@ -50,7 +50,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_SYMBOL_IMAGE_END = XML_TOK_UNKNOWN
 };
 
-static SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
 {
     { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_HREF,     XML_TOK_SYMBOL_IMAGE_HREF    },
     { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_TYPE,     XML_TOK_SYMBOL_IMAGE_TYPE    },

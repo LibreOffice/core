@@ -41,7 +41,6 @@ DLLPRE =
 
 SLOFILES= \
         $(SLO)$/dlgprov.obj \
-        $(SLO)$/DialogModelProvider.obj \
         $(SLO)$/dlgevtatt.obj
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX).uno
@@ -59,7 +58,6 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB) \
         $(COMPHELPERLIB) \
         $(UCBHELPERLIB) \
-        $(VBAHELPERLIB)	\
         $(CPPULIB) \
         $(BASICLIB) \
         $(SALLIB)
@@ -82,11 +80,3 @@ $(MISC)$/$(TARGET).don : $(SOLARBINDIR)$/oovbaapi.rdb
         +$(CPPUMAKER) -O$(INCCOM)$/$(TARGET) -BUCR $(SOLARBINDIR)$/oovbaapi.rdb -X$(SOLARBINDIR)$/types.rdb && echo > $@
         echo $@
  
-
-ALLTAR : $(MISC)/dlgprov.component
-
-$(MISC)/dlgprov.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        dlgprov.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt dlgprov.component

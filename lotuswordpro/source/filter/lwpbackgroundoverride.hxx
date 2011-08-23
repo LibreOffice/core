@@ -53,22 +53,21 @@
  *
  *
  ************************************************************************/
-#ifndef     _LWPBACKGROUNDOVERRIDE_HXX
-#define     _LWPBACKGROUNDOVERRIDE_HXX
+#ifndef		_LWPBACKGROUNDOVERRIDE_HXX
+#define		_LWPBACKGROUNDOVERRIDE_HXX
 
 
-#include    "lwpoverride.hxx"
-#include    "lwpbackgroundstuff.hxx"
+#include	"lwpoverride.hxx"
+#include	"lwpbackgroundstuff.hxx"
 
 class LwpObjectStream;
 class LwpBackgroundOverride : public LwpOverride
 {
 
 public:
-    LwpBackgroundOverride(){}
+    LwpBackgroundOverride(){};
     virtual ~LwpBackgroundOverride(){}
 
-    virtual LwpBackgroundOverride* clone() const;
 
 public:
     virtual void Read(LwpObjectStream *pStrm)
@@ -86,14 +85,8 @@ public:
     LwpColor GetBackColor(){ return m_aStuff.m_aFillColor; }
     LwpBackgroundStuff* GetBGStuff() { return &m_aStuff; }
 
-protected:
-    LwpBackgroundOverride(LwpBackgroundOverride const& rOther);
-
 private:
-    LwpBackgroundOverride& operator=(LwpBackgroundOverride const& rOther); // not implemented
-
-private:
-    LwpBackgroundStuff  m_aStuff;
+    LwpBackgroundStuff	m_aStuff;
 };
 
 #endif

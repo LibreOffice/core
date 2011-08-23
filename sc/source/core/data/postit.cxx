@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,6 +100,7 @@ void ScCaptionUtil::SetCaptionLayer( SdrCaptionObj& rCaption, bool bShown )
 
 void ScCaptionUtil::SetBasicCaptionSettings( SdrCaptionObj& rCaption, bool bShown )
 {
+    ScDrawLayer::SetAnchor( &rCaption, SCA_PAGE );
     SetCaptionLayer( rCaption, bShown );
     rCaption.SetFixedTail();
     rCaption.SetSpecialTextBoxShadow();
@@ -124,21 +125,21 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aTriangle.append( ::basegfx::B2DPoint(  0.0, 30.0 ) );
     aTriangle.append( ::basegfx::B2DPoint( 20.0, 30.0 ) );
     aTriangle.setClosed( true );
-    /*  Line ends are now created with an empty name. The
+    /*  #99319# Line ends are now created with an empty name. The
         checkForUniqueItem() method then finds a unique name for the item's
         value. */
     aItemSet.Put( XLineStartItem( String::EmptyString(), ::basegfx::B2DPolyPolygon( aTriangle ) ) );
     aItemSet.Put( XLineStartWidthItem( 200 ) );
-    aItemSet.Put( XLineStartCenterItem( false ) );
+    aItemSet.Put( XLineStartCenterItem( FALSE ) );
     aItemSet.Put( XFillStyleItem( XFILL_SOLID ) );
     aItemSet.Put( XFillColorItem( String::EmptyString(), ScDetectiveFunc::GetCommentColor() ) );
     aItemSet.Put( SdrCaptionEscDirItem( SDRCAPT_ESCBESTFIT ) );
 
     // shadow
-    /*  SdrShadowItem has sal_False, instead the shadow is set for the
+    /*  SdrShadowItem has FALSE, instead the shadow is set for the
         rectangle only with SetSpecialTextBoxShadow() when the object is
         created (item must be set to adjust objects from older files). */
-    aItemSet.Put( SdrShadowItem( false ) );
+    aItemSet.Put( SdrShadowItem( FALSE ) );
     aItemSet.Put( SdrShadowXDistItem( 100 ) );
     aItemSet.Put( SdrShadowYDistItem( 100 ) );
 
@@ -147,9 +148,9 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aItemSet.Put( SdrTextRightDistItem( 100 ) );
     aItemSet.Put( SdrTextUpperDistItem( 100 ) );
     aItemSet.Put( SdrTextLowerDistItem( 100 ) );
-    aItemSet.Put( SdrTextAutoGrowWidthItem( false ) );
-    aItemSet.Put( SdrTextAutoGrowHeightItem( true ) );
-    // use the default cell style to be able to modify the caption font
+    aItemSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
+    aItemSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
+    // #78943# use the default cell style to be able to modify the caption font
     const ScPatternAttr& rDefPattern = static_cast< const ScPatternAttr& >( rDoc.GetPool()->GetDefaultItem( ATTR_PATTERN ) );
     rDefPattern.FillEditItemSet( &aItemSet );
 
@@ -161,7 +162,7 @@ void ScCaptionUtil::SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& 
     // copy all items
     rCaption.SetMergedItemSet( rItemSet );
     // reset shadow items
-    rCaption.SetMergedItem( SdrShadowItem( false ) );
+    rCaption.SetMergedItem( SdrShadowItem( FALSE ) );
     rCaption.SetMergedItem( SdrShadowXDistItem( 100 ) );
     rCaption.SetMergedItem( SdrShadowYDistItem( 100 ) );
     rCaption.SetSpecialTextBoxShadow();
@@ -566,7 +567,7 @@ OUString ScPostIt::GetText() const
     if( const EditTextObject* pEditObj = GetEditTextObject() )
     {
         OUStringBuffer aBuffer;
-        for( sal_uInt16 nPara = 0, nParaCount = pEditObj->GetParagraphCount(); nPara < nParaCount; ++nPara )
+        for( USHORT nPara = 0, nParaCount = pEditObj->GetParagraphCount(); nPara < nParaCount; ++nPara )
         {
             if( nPara > 0 )
                 aBuffer.append( sal_Unicode( '\n' ) );
@@ -762,13 +763,10 @@ void ScPostIt::RemoveCaption()
         {
             pDrawPage->RecalcObjOrdNums();
             // create drawing undo action (before removing the object to have valid draw page in undo action)
-            bool bRecording = ( pDrawLayer && pDrawLayer->IsRecording() );
-            if( bRecording )
+            if( pDrawLayer && pDrawLayer->IsRecording() )
                 pDrawLayer->AddCalcUndo( pDrawLayer->GetSdrUndoFactory().CreateUndoDeleteObject( *maNoteData.mpCaption ) );
             // remove the object from the drawing page, delete if undo is disabled
-            SdrObject* pObj = pDrawPage->RemoveObject( maNoteData.mpCaption->GetOrdNum() );
-            if( !bRecording )
-                SdrObject::Free( pObj );
+            pDrawPage->RemoveObject( maNoteData.mpCaption->GetOrdNum() );
         }
     }
     maNoteData.mpCaption = 0;
@@ -836,10 +834,10 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         ScCaptionUtil::SetDefaultItems( *pCaption, rDoc );
         // adjust caption size to text size
         long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
-        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( sal_True ) );
+        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( TRUE ) );
         pCaption->SetMergedItem( SdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
         pCaption->SetMergedItem( SdrTextMaxFrameWidthItem( nMaxWidth ) );
-        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( sal_True ) );
+        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( TRUE ) );
         pCaption->AdjustTextFrameWidthAndHeight();
     }
 

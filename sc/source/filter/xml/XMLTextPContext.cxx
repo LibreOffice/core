@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ class ScXMLTextTContext : public SvXMLImportContext
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
-    ScXMLTextTContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLTextTContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -60,7 +60,7 @@ public:
 
 
 ScXMLTextTContext::ScXMLTextTContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -92,7 +92,7 @@ ScXMLTextTContext::~ScXMLTextTContext()
 //------------------------------------------------------------------
 
 ScXMLTextPContext::ScXMLTextPContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xTempAttrList,
@@ -129,7 +129,7 @@ void ScXMLTextPContext::AddSpaces(sal_Int32 nSpaceCount)
     pContentBuffer->appendAscii(pChars, nSpaceCount);
 }
 
-SvXMLImportContext *ScXMLTextPContext::CreateChildContext( sal_uInt16 nTempPrefix,
+SvXMLImportContext *ScXMLTextPContext::CreateChildContext( USHORT nTempPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xTempAttrList )
@@ -150,7 +150,7 @@ SvXMLImportContext *ScXMLTextPContext::CreateChildContext( sal_uInt16 nTempPrefi
                 sSetString = sSimpleContent;
 
             sal_Unicode cNonSpace(0);
-
+            
             sal_Int32 nLength = sSetString.getLength();
             if ( nLength > 0 )
             {

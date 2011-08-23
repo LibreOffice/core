@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,12 +54,12 @@ class SfxItemPool;
 class SVX_DLLPUBLIC SdrAttrObj : public SdrObject
 {
 private:
-    friend class                SdrOutliner;
+    friend class				SdrOutliner;
 
 protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    Rectangle                   maSnapRect;
+    Rectangle					maSnapRect;
 
 protected:
     // Strichstaerke ermitteln. Keine Linie -> 0.
@@ -75,10 +75,10 @@ public:
     TYPEINFO();
 
     // Feststellen, ob bFilledObj && Fuellung!=FillNone
-    sal_Bool HasFill() const;
+    BOOL HasFill() const;
 
     // Feststellen, ob Linie!=LineNone
-    sal_Bool HasLine() const;
+    BOOL HasLine() const;
 
     virtual const Rectangle& GetSnapRect() const;
 

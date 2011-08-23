@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,19 +38,45 @@
 
 //================== GraphicImport - die exportierte Funktion ================
 
-extern "C" sal_Bool __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool )
+extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
     DXFRepresentation aDXF;
     DXF2GDIMetaFile aConverter;
     GDIMetaFile aMTF;
 
-    if ( aDXF.Read( rStream, 0, 60 ) == sal_False )
-        return sal_False;
-    if ( aConverter.Convert( aDXF, aMTF, 60, 100 ) == sal_False )
-        return sal_False;
+    if ( aDXF.Read( rStream, 0, 60 ) == FALSE )
+        return FALSE;
+    if ( aConverter.Convert( aDXF, aMTF, 60, 100 ) == FALSE )
+        return FALSE;
     rGraphic=Graphic(aMTF);
 
-    return sal_True;
+    return TRUE;
 }
+
+//============================= fuer Windows ==================================
+
+#ifdef WIN
+
+static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
+
+extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
+{
+#ifndef WNT
+    if ( nHeap )
+        UnlockData( 0 );
+#endif
+
+    hDLLInst = hDLL;
+
+    return TRUE;
+}
+
+extern "C" int CALLBACK WEP( int )
+{
+    return 1;
+}
+
+#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

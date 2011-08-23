@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,15 +96,11 @@ DBG_NAME(OUserAdminDlg)
     OUserAdminDlg::~OUserAdminDlg()
     {
         if ( m_bOwnConnection )
-        {
             try
             {
                 ::comphelper::disposeComponent(m_xConnection);
             }
-            catch(const Exception&)
-            {
-            }
-        }
+            catch(Exception){}
 
         SetInputSet(NULL);
         DELETEZ(pExampleSet);
@@ -123,12 +119,12 @@ DBG_NAME(OUserAdminDlg)
                 throw SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
             }
         }
-        catch(const SQLException&)
+        catch(const SQLException& e)
         {
             ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), GetParent(), getORB() );
             return RET_CANCEL;
         }
-        catch(const Exception&)
+        catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -138,7 +134,7 @@ DBG_NAME(OUserAdminDlg)
         return nRet;
     }
     //-------------------------------------------------------------------------
-    void OUserAdminDlg::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
+    void OUserAdminDlg::PageCreated(USHORT _nId, SfxTabPage& _rPage)
     {
         // register ourself as modified listener
         static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory(m_pImpl->getORB());
@@ -182,7 +178,7 @@ DBG_NAME(OUserAdminDlg)
         return m_pImpl->getDriver();
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
+    ::rtl::OUString	OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }
@@ -207,7 +203,7 @@ DBG_NAME(OUserAdminDlg)
         return PrepareLeaveCurrentPage();
     }
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

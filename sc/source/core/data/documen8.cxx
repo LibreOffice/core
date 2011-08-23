@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@
 #include "chartlis.hxx"
 #include "chartlock.hxx"
 #include "refupdat.hxx"
-#include "validat.hxx"      // fuer HasMacroCalls
+#include "validat.hxx"		// fuer HasMacroCalls
 #include "markdata.hxx"
 #include "scmod.hxx"
 #include "printopt.hxx"
@@ -96,13 +96,12 @@
 #include "charthelper.hxx"
 #include "macromgr.hxx"
 #include "dpobject.hxx"
-#include "docuno.hxx"
 
-#define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
+#define GET_SCALEVALUE(set,id) 	((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
-//  states for online spelling in the visible range (0 is set initially)
-#define VSPL_START  0
-#define VSPL_DONE   1
+//	states for online spelling in the visible range (0 is set initially)
+#define VSPL_START	0
+#define VSPL_DONE	1
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -126,7 +125,7 @@ void ScDocument::ImplDeleteOptions()
 
 //------------------------------------------------------------------------
 
-SfxPrinter* ScDocument::GetPrinter(sal_Bool bCreateIfNotExist)
+SfxPrinter* ScDocument::GetPrinter(BOOL bCreateIfNotExist)
 {
     if ( !pPrinter && bCreateIfNotExist )
     {
@@ -139,7 +138,7 @@ SfxPrinter* ScDocument::GetPrinter(sal_Bool bCreateIfNotExist)
                             NULL );
 
         ::utl::MiscCfg aMisc;
-        sal_uInt16 nFlags = 0;
+        USHORT nFlags = 0;
         if ( aMisc.IsPaperOrientationWarning() )
             nFlags |= SFX_PRINTER_CHG_ORIENTATION;
         if ( aMisc.IsPaperSizeWarning() )
@@ -162,9 +161,9 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
 {
     if ( pNewPrinter == pPrinter )
     {
-        //  #i6706# SetPrinter is called with the same printer again if
-        //  the JobSetup has changed. In that case just call UpdateDrawPrinter
-        //  (SetRefDevice for drawing layer) because of changed text sizes.
+        //	#i6706# SetPrinter is called with the same printer again if
+        //	the JobSetup has changed. In that case just call UpdateDrawPrinter
+        //	(SetRefDevice for drawing layer) because of changed text sizes.
         UpdateDrawPrinter();
     }
     else
@@ -175,7 +174,7 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
         pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
         delete pOld;
     }
-    InvalidateTextWidth(NULL, NULL, false);     // in both cases
+    InvalidateTextWidth(NULL, NULL, FALSE);     // in both cases
 }
 
 //------------------------------------------------------------------------
@@ -190,7 +189,7 @@ void ScDocument::SetPrintOptions()
         ::utl::MiscCfg aMisc;
         SfxItemSet aOptSet( pPrinter->GetOptions() );
 
-        sal_uInt16 nFlags = 0;
+        USHORT nFlags = 0;
         if ( aMisc.IsPaperOrientationWarning() )
             nFlags |= SFX_PRINTER_CHG_ORIENTATION;
         if ( aMisc.IsPaperSizeWarning() )
@@ -208,6 +207,9 @@ VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
 {
     if (!pVirtualDevice_100th_mm)
     {
+//		pVirtualDevice_100th_mm = new VirtualDevice;
+//		pVirtualDevice_100th_mm->SetMapMode( MAP_100TH_MM );
+
         pVirtualDevice_100th_mm = new VirtualDevice( 1 );
         pVirtualDevice_100th_mm->SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
         MapMode aMapMode( pVirtualDevice_100th_mm->GetMapMode() );
@@ -239,11 +241,11 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
     {
         case SFX_STYLE_FAMILY_PAGE:
             {
-                const sal_uInt16 nOldScale        = GET_SCALEVALUE(rSet,ATTR_PAGE_SCALE);
-                const sal_uInt16 nOldScaleToPages = GET_SCALEVALUE(rSet,ATTR_PAGE_SCALETOPAGES);
+                const USHORT nOldScale		  = GET_SCALEVALUE(rSet,ATTR_PAGE_SCALE);
+                const USHORT nOldScaleToPages = GET_SCALEVALUE(rSet,ATTR_PAGE_SCALETOPAGES);
                 rSet.Put( rChanges );
-                const sal_uInt16 nNewScale        = GET_SCALEVALUE(rSet,ATTR_PAGE_SCALE);
-                const sal_uInt16 nNewScaleToPages = GET_SCALEVALUE(rSet,ATTR_PAGE_SCALETOPAGES);
+                const USHORT nNewScale		  = GET_SCALEVALUE(rSet,ATTR_PAGE_SCALE);
+                const USHORT nNewScaleToPages = GET_SCALEVALUE(rSet,ATTR_PAGE_SCALETOPAGES);
 
                 if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
                     InvalidateTextWidth( rStyleSheet.GetName() );
@@ -251,7 +253,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                 if( SvtLanguageOptions().IsCTLFontEnabled() )
                 {
                     const SfxPoolItem *pItem = NULL;
-                    if( rChanges.GetItemState(ATTR_WRITINGDIR, sal_True, &pItem ) == SFX_ITEM_SET )
+                    if( rChanges.GetItemState(ATTR_WRITINGDIR, TRUE, &pItem ) == SFX_ITEM_SET )
                         ScChartHelper::DoUpdateAllCharts( this );
                 }
             }
@@ -259,19 +261,19 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 
         case SFX_STYLE_FAMILY_PARA:
             {
-                sal_Bool bNumFormatChanged;
+                BOOL bNumFormatChanged;
                 if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
                         rSet, rChanges ) )
                     InvalidateTextWidth( NULL, NULL, bNumFormatChanged );
 
                 for (SCTAB nTab=0; nTab<=MAXTAB; ++nTab)
                     if (pTab[nTab] && pTab[nTab]->IsStreamValid())
-                        pTab[nTab]->SetStreamValid( false );
+                        pTab[nTab]->SetStreamValid( FALSE );
 
-                sal_uLong nOldFormat =
+                ULONG nOldFormat =
                     ((const SfxUInt32Item*)&rSet.Get(
                     ATTR_VALUE_FORMAT ))->GetValue();
-                sal_uLong nNewFormat =
+                ULONG nNewFormat =
                     ((const SfxUInt32Item*)&rChanges.Get(
                     ATTR_VALUE_FORMAT ))->GetValue();
                 LanguageType eNewLang, eOldLang;
@@ -284,14 +286,14 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                 }
 
                 // Bedeutung der Items in rChanges:
-                //  Item gesetzt    - Aenderung uebernehmen
-                //  Dontcare        - Default setzen
-                //  Default         - keine Aenderung
+                //	Item gesetzt	- Aenderung uebernehmen
+                //	Dontcare		- Default setzen
+                //	Default			- keine Aenderung
                 // ("keine Aenderung" geht nicht mit PutExtended, darum Schleife)
-                for (sal_uInt16 nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; nWhich++)
+                for (USHORT nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; nWhich++)
                 {
                     const SfxPoolItem* pItem;
-                    SfxItemState eState = rChanges.GetItemState( nWhich, false, &pItem );
+                    SfxItemState eState = rChanges.GetItemState( nWhich, FALSE, &pItem );
                     if ( eState == SFX_ITEM_SET )
                         rSet.Put( *pItem );
                     else if ( eState == SFX_ITEM_DONTCARE )
@@ -315,7 +317,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 
 void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 {
-    // number format exchange list has to be handled here, too
+    // #b5017505# number format exchange list has to be handled here, too
     NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
     xPoolHelper->GetStylePool()->CopyStdStylesFrom( pSrcDoc->xPoolHelper->GetStylePool() );
 }
@@ -334,16 +336,16 @@ void ScDocument::InvalidateTextWidth( const String& rStyleName )
 
 void ScDocument::InvalidateTextWidth( SCTAB nTab )
 {
-    ScAddress aAdrFrom( 0,    0,        nTab );
+    ScAddress aAdrFrom( 0,	  0,        nTab );
     ScAddress aAdrTo  ( MAXCOL, MAXROW, nTab );
-    InvalidateTextWidth( &aAdrFrom, &aAdrTo, false );
+    InvalidateTextWidth( &aAdrFrom, &aAdrTo, FALSE );
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScDocument::IsPageStyleInUse( const String& rStrPageStyle, SCTAB* pInTab )
+BOOL ScDocument::IsPageStyleInUse( const String& rStrPageStyle, SCTAB* pInTab )
 {
-    sal_Bool         bInUse = false;
+    BOOL		 bInUse = FALSE;
     const SCTAB nCount = GetTableCount();
     SCTAB i;
 
@@ -358,30 +360,30 @@ sal_Bool ScDocument::IsPageStyleInUse( const String& rStrPageStyle, SCTAB* pInTa
 
 //------------------------------------------------------------------------
 
-sal_Bool ScDocument::RemovePageStyleInUse( const String& rStyle )
+BOOL ScDocument::RemovePageStyleInUse( const String& rStyle )
 {
-    sal_Bool bWasInUse = false;
+    BOOL bWasInUse = FALSE;
     const SCTAB nCount = GetTableCount();
 
     for ( SCTAB i=0; i<nCount && pTab[i]; i++ )
         if ( pTab[i]->GetPageStyle() == rStyle )
         {
-            bWasInUse = sal_True;
+            bWasInUse = TRUE;
             pTab[i]->SetPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
         }
 
     return bWasInUse;
 }
 
-sal_Bool ScDocument::RenamePageStyleInUse( const String& rOld, const String& rNew )
+BOOL ScDocument::RenamePageStyleInUse( const String& rOld, const String& rNew )
 {
-    sal_Bool bWasInUse = false;
+    BOOL bWasInUse = FALSE;
     const SCTAB nCount = GetTableCount();
 
     for ( SCTAB i=0; i<nCount && pTab[i]; i++ )
         if ( pTab[i]->GetPageStyle() == rOld )
         {
-            bWasInUse = sal_True;
+            bWasInUse = TRUE;
             pTab[i]->SetPageStyle( rNew );
         }
 
@@ -390,7 +392,7 @@ sal_Bool ScDocument::RenamePageStyleInUse( const String& rOld, const String& rNe
 
 //------------------------------------------------------------------------
 
-sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
+BYTE ScDocument::GetEditTextDirection(SCTAB nTab) const
 {
     EEHorizontalTextDirection eRet = EE_HTEXTDIR_DEFAULT;
 
@@ -409,7 +411,7 @@ sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
         // else (invalid for EditEngine): keep "default"
     }
 
-    return sal::static_int_cast<sal_uInt8>(eRet);
+    return sal::static_int_cast<BYTE>(eRet);
 }
 
 ScMacroManager* ScDocument::GetMacroManager()
@@ -422,9 +424,9 @@ ScMacroManager* ScDocument::GetMacroManager()
 //------------------------------------------------------------------------
 
 void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
-                                      sal_Bool bNumFormatChanged )
+                                      BOOL bNumFormatChanged )
 {
-    sal_Bool bBroadcast = (bNumFormatChanged && GetDocOptions().IsCalcAsShown() && !IsImportingXML() && !IsClipboard());
+    BOOL bBroadcast = (bNumFormatChanged && GetDocOptions().IsCalcAsShown() && !IsImportingXML() && !IsClipboard());
     if ( pAdrFrom && !pAdrTo )
     {
         const SCTAB nTab = pAdrFrom->Tab();
@@ -445,28 +447,35 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
 
 //------------------------------------------------------------------------
 
-#define CALCMAX                 1000    // Berechnungen
-#define ABORT_EVENTS            (INPUT_ANY & ~INPUT_TIMER & ~INPUT_OTHER)
+#define CALCMAX					1000	// Berechnungen
+#define ABORT_EVENTS			(INPUT_ANY & ~INPUT_TIMER & ~INPUT_OTHER)
 
-sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wieder versuchen
+BOOL ScDocument::IdleCalcTextWidth()			// TRUE = demnaechst wieder versuchen
 {
     // #i75610# if a printer hasn't been set or created yet, don't create one for this
-    if ( bIdleDisabled || IsInLinkUpdate() || GetPrinter(false) == NULL )
-        return false;
-    bIdleDisabled = sal_True;
+    if ( bIdleDisabled || IsInLinkUpdate() || GetPrinter(FALSE) == NULL )
+        return FALSE;
+    bIdleDisabled = TRUE;
 
-    const sal_uLong         nStart   = Time::GetSystemTicks();
-    OutputDevice*       pDev     = NULL;
-    MapMode             aOldMap;
-    ScStyleSheet*       pStyle   = NULL;
-    ScColumnIterator*   pColIter = NULL;
-    ScTable*            pTable   = NULL;
-    ScColumn*           pColumn  = NULL;
-    ScBaseCell*         pCell    = NULL;
-    SCTAB               nTab     = aCurTextWidthCalcPos.Tab();
-    SCROW               nRow     = aCurTextWidthCalcPos.Row();
-    SCsCOL              nCol     = aCurTextWidthCalcPos.Col();
-    sal_Bool                bNeedMore= false;
+// ULONG nMs = 0;
+// USHORT nIter = 0;
+
+    const ULONG			nStart	 = Time::GetSystemTicks();
+    double				nPPTX	 = 0.0;
+    double 				nPPTY	 = 0.0;
+    OutputDevice*		pDev	 = NULL;
+    MapMode				aOldMap;
+    ScStyleSheet*		pStyle	 = NULL;
+    ScColumnIterator*	pColIter = NULL;
+    ScTable*			pTable	 = NULL;
+    ScColumn*			pColumn	 = NULL;
+    ScBaseCell*			pCell	 = NULL;
+    SCTAB				nTab  	 = aCurTextWidthCalcPos.Tab();
+    SCROW				nRow   	 = aCurTextWidthCalcPos.Row();
+    SCsCOL				nCol  	 = aCurTextWidthCalcPos.Col();
+    USHORT				nRestart = 0;
+    USHORT 				nZoom	 = 0;
+    BOOL				bNeedMore= FALSE;
 
     if ( !ValidRow(nRow) )
         nRow = 0, nCol--;
@@ -475,12 +484,14 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
     if ( !ValidTab(nTab) || !pTab[nTab] )
         nTab = 0;
 
-    //  SearchMask/Family muss gemerkt werden,
-    //  damit z.B. der Organizer nicht durcheinanderkommt, wenn zwischendurch eine
-    //  Query-Box aufgemacht wird !!!
+//	DBG_ERROR( String("Start = ") + String(nTab) + String(',') + String(nCol) + String(',') + String(nRow)  );
+
+    //	SearchMask/Family muss gemerkt werden,
+    //	damit z.B. der Organizer nicht durcheinanderkommt, wenn zwischendurch eine
+    //	Query-Box aufgemacht wird !!!
 
     ScStyleSheetPool* pStylePool = xPoolHelper->GetStylePool();
-    sal_uInt16 nOldMask = pStylePool->GetSearchMask();
+    USHORT nOldMask = pStylePool->GetSearchMask();
     SfxStyleFamily eOldFam = pStylePool->GetSearchFamily();
 
     pTable = pTab[nTab];
@@ -490,14 +501,12 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
 
     DBG_ASSERT( pStyle, "Missing StyleSheet :-/" );
 
-    sal_Bool bProgress = false;
+    BOOL bProgress = FALSE;
     if ( pStyle && 0 == GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALETOPAGES) )
     {
-        sal_uInt16 nRestart = 0;
-        sal_uInt16 nZoom = 0;
-        sal_uInt16 nCount = 0;
+        USHORT nCount = 0;
 
-        nZoom    = GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALE);
+        nZoom	 = GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALE);
         Fraction aZoomFract( nZoom, 100 );
         pColumn  = &pTable->aCol[nCol];
         pColIter = new ScColumnIterator( pColumn, nRow, MAXROW );
@@ -506,15 +515,13 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
         {
             if ( pColIter->Next( nRow, pCell ) )
             {
-                if ( TEXTWIDTH_DIRTY == pCell->GetTextWidth() )
+                if ( TEXTWIDTH_DIRTY ==	pCell->GetTextWidth() )
                 {
-                    double nPPTX = 0.0;
-                    double nPPTY = 0.0;
                     if ( !pDev )
                     {
                         pDev = GetPrinter();
                         aOldMap = pDev->GetMapMode();
-                        pDev->SetMapMode( MAP_PIXEL );  // wichtig fuer GetNeededSize
+                        pDev->SetMapMode( MAP_PIXEL );	// wichtig fuer GetNeededSize
 
                         Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
                         nPPTX = aPix1000.X() / 1000.0;
@@ -523,23 +530,28 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
                     if ( !bProgress && pCell->GetCellType() == CELLTYPE_FORMULA
                       && ((ScFormulaCell*)pCell)->GetDirty() )
                     {
-                        ScProgress::CreateInterpretProgress( this, false );
-                        bProgress = sal_True;
+                        ScProgress::CreateInterpretProgress( this, FALSE );
+                        bProgress = TRUE;
                     }
 
-                    sal_uInt16 nNewWidth = (sal_uInt16)GetNeededSize( nCol, nRow, nTab,
+//					DBG_ERROR( String("t,c,r = ") + String(nTab) + String(',') + String(nCol) + String(',') + String(nRow)  );
+//					DBG_ERROR( String("nOldWidth = ") + String(pCell->GetTextWidth()) );
+
+                    USHORT nNewWidth = (USHORT)GetNeededSize( nCol, nRow, nTab,
                                                               pDev, nPPTX, nPPTY,
-                                                              aZoomFract,aZoomFract, sal_True,
-                                                              sal_True );   // bTotalSize
+                                                              aZoomFract,aZoomFract, TRUE,
+                                                              TRUE );	// bTotalSize
+
+//					DBG_ERROR( String("nNewWidth = ") + String(nNewWidth) );
 
                     pCell->SetTextWidth( nNewWidth );
 
-                    bNeedMore = sal_True;
+                    bNeedMore = TRUE;
                 }
             }
             else
             {
-                sal_Bool bNewTab = false;
+                BOOL bNewTab = FALSE;
 
                 nRow = 0;
                 nCol--;
@@ -548,14 +560,14 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
                 {
                     nCol = MAXCOL;
                     nTab++;
-                    bNewTab = sal_True;
+                    bNewTab = TRUE;
                 }
 
                 if ( !ValidTab(nTab) || !pTab[nTab] )
                 {
                     nTab = 0;
                     nRestart++;
-                    bNewTab = sal_True;
+                    bNewTab = TRUE;
                 }
 
                 if ( nRestart < 2 )
@@ -576,7 +588,7 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
                         }
                         else
                         {
-                            OSL_FAIL( "Missing StyleSheet :-/" );
+                            DBG_ERROR( "Missing StyleSheet :-/" );
                         }
                     }
 
@@ -592,12 +604,15 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
                 }
             }
 
+// nIter = nCount;
+
             nCount++;
 
             // Idle Berechnung abbrechen, wenn Berechnungen laenger als
             // 50ms dauern, oder nach 32 Berechnungen mal nachschauen, ob
             // bestimmte Events anstehen, die Beachtung wuenschen:
 
+// nMs = SysTicksToMs( GetSysTicks() - nStart );
 
             if (   ( 50L < Time::GetSystemTicks() - nStart )
                 || ( !(nCount&31) && Application::AnyInput( ABORT_EVENTS ) ) )
@@ -612,6 +627,8 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
 
     delete pColIter;
 
+//	DBG_ERROR( String(nCount) + String(" End = ") + String(nTab) + String(',') + String(nCol) + String(',') + String(nRow)  );
+
     if (pDev)
         pDev->SetMapMode(aOldMap);
 
@@ -619,8 +636,10 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
     aCurTextWidthCalcPos.SetRow( nRow );
     aCurTextWidthCalcPos.SetCol( (SCCOL)nCol );
 
+// DBG_ERROR( String(nMs) + String(" ms (") + String(nIter) + String(')') );
+
     pStylePool->SetSearchMask( eOldFam, nOldMask );
-    bIdleDisabled = false;
+    bIdleDisabled = FALSE;
 
     return bNeedMore;
 }
@@ -630,62 +649,62 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
 class ScSpellStatus
 {
 public:
-    sal_Bool    bModified;
+    BOOL	bModified;
 
-    ScSpellStatus() : bModified(false) {};
+    ScSpellStatus() : bModified(FALSE) {};
 
     DECL_LINK (EventHdl, EditStatus*);
 };
 
 IMPL_LINK( ScSpellStatus, EventHdl, EditStatus *, pStatus )
 {
-    sal_uLong nStatus = pStatus->GetStatusWord();
+    ULONG nStatus = pStatus->GetStatusWord();
     if ( nStatus & EE_STAT_WRONGWORDCHANGED )
-        bModified = sal_True;
+        bModified = TRUE;
 
     return 0;
 }
 
-//  SPELL_MAXCELLS muss mindestens 256 sein, solange am Iterator keine
-//  Start-Spalte gesetzt werden kann
+//	SPELL_MAXCELLS muss mindestens 256 sein, solange am Iterator keine
+//	Start-Spalte gesetzt werden kann
 
-//! SPELL_MAXTEST fuer Timer und Idle unterschiedlich ???
+//!	SPELL_MAXTEST fuer Timer und Idle unterschiedlich ???
 
-//  SPELL_MAXTEST now divided between visible and rest of document
+//	SPELL_MAXTEST now divided between visible and rest of document
 
-#define SPELL_MAXTEST_VIS   1
-#define SPELL_MAXTEST_ALL   3
-#define SPELL_MAXCELLS      256
+#define SPELL_MAXTEST_VIS	1
+#define SPELL_MAXTEST_ALL	3
+#define SPELL_MAXCELLS		256
 
-sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpellPos,
-                                     sal_uInt16 nMaxTest )
+BOOL ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpellPos,
+                                     USHORT nMaxTest )
 {
-    ScEditEngineDefaulter* pEngine = NULL;              //! am Dokument speichern
+    ScEditEngineDefaulter* pEngine = NULL;				//! am Dokument speichern
     SfxItemSet* pDefaults = NULL;
     ScSpellStatus aStatus;
 
-    sal_uInt16 nCellCount = 0;          // Zellen insgesamt
-    sal_uInt16 nTestCount = 0;          // Aufrufe Spelling
-    sal_Bool bChanged = false;          // Aenderungen?
+    USHORT nCellCount = 0;			// Zellen insgesamt
+    USHORT nTestCount = 0;			// Aufrufe Spelling
+    BOOL bChanged = FALSE;			// Aenderungen?
 
-    SCCOL nCol = rSpellRange.aStart.Col();      // iterator always starts on the left edge
+    SCCOL nCol = rSpellRange.aStart.Col();		// iterator always starts on the left edge
     SCROW nRow = rSpellPos.Row();
     SCTAB nTab = rSpellPos.Tab();
-    if ( !pTab[nTab] )                          // sheet deleted?
+    if ( !pTab[nTab] )							// sheet deleted?
     {
         nTab = rSpellRange.aStart.Tab();
         nRow = rSpellRange.aStart.Row();
         if ( !pTab[nTab] )
         {
-            //  may happen for visible range
-            return false;
+            //	may happen for visible range
+            return FALSE;
         }
     }
     ScHorizontalCellIterator aIter( this, nTab,
                                     rSpellRange.aStart.Col(), nRow,
                                     rSpellRange.aEnd.Col(), rSpellRange.aEnd.Row() );
     ScBaseCell* pCell = aIter.GetNext( nCol, nRow );
-    //  skip everything left of rSpellPos:
+    //	skip everything left of rSpellPos:
     while ( pCell && nRow == rSpellPos.Row() && nCol < rSpellPos.Col() )
         pCell = aIter.GetNext( nCol, nRow );
 
@@ -700,13 +719,13 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
         {
             if (!pEngine)
             {
-                //  ScTabEditEngine is needed
-                //  because MapMode must be set for some old documents
+                //	#71154# ScTabEditEngine is needed
+                //	because MapMode must be set for some old documents
                 pEngine = new ScTabEditEngine( this );
                 pEngine->SetControlWord( pEngine->GetControlWord() |
                             ( EE_CNTRL_ONLINESPELLING | EE_CNTRL_ALLOWBIGOBJS ) );
                 pEngine->SetStatusEventHdl( LINK( &aStatus, ScSpellStatus, EventHdl ) );
-                //  Delimiters hier wie in inputhdl.cxx !!!
+                //	Delimiters hier wie in inputhdl.cxx !!!
                 pEngine->SetWordDelimiters(
                             ScEditUtil::ModifyDelimiters( pEngine->GetWordDelimiters() ) );
                 pDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
@@ -718,9 +737,9 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
 
             const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
             pPattern->FillEditItemSet( pDefaults );
-            pEngine->SetDefaults( pDefaults, false );               //! noetig ?
+            pEngine->SetDefaults( pDefaults, FALSE );				//! noetig ?
 
-            sal_uInt16 nCellLang = ((const SvxLanguageItem&)
+            USHORT nCellLang = ((const SvxLanguageItem&)
                                     pPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
             if ( nCellLang == LANGUAGE_SYSTEM )
                 nCellLang = Application::GetSettings().GetLanguage();   // never use SYSTEM for spelling
@@ -735,11 +754,11 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
             else
                 pEngine->SetText( *((ScEditCell*)pCell)->GetData() );
 
-            aStatus.bModified = false;
+            aStatus.bModified = FALSE;
             pEngine->CompleteOnlineSpelling();
-            if ( aStatus.bModified )                // Fehler dazu oder weggekommen?
+            if ( aStatus.bModified )				// Fehler dazu oder weggekommen?
             {
-                sal_Bool bNeedEdit = sal_True;                      //  Test auf einfachen Text
+                BOOL bNeedEdit = TRUE;						//	Test auf einfachen Text
                 if ( !pEngine->HasOnlineSpellErrors() )
                 {
                     ScEditAttrTester aTester( pEngine );
@@ -757,33 +776,33 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
                             this, pEngine->GetEditTextObjectPool() ) );
                     delete pNewData;
                 }
-                else                    // einfacher String
+                else					// einfacher String
                     PutCell( nCol, nRow, nTab, new ScStringCell( pEngine->GetText() ) );
 
-                //  Paint
+                //	Paint
                 if (pShell)
                 {
-                    //  Seitenvorschau ist davon nicht betroffen
-                    //  (sollte jedenfalls nicht)
+                    //	#47751# Seitenvorschau ist davon nicht betroffen
+                    //	(sollte jedenfalls nicht)
                     ScPaintHint aHint( ScRange( nCol, nRow, nTab ), PAINT_GRID );
-                    aHint.SetPrintFlag( false );
+                    aHint.SetPrintFlag( FALSE );
                     pShell->Broadcast( aHint );
                 }
 
-                bChanged = sal_True;
+                bChanged = TRUE;
             }
 
-            if ( ++nTestCount >= nMaxTest )             // checked enough text?
+            if ( ++nTestCount >= nMaxTest )				// checked enough text?
                 break;
         }
 
-        if ( ++nCellCount >= SPELL_MAXCELLS )           // seen enough cells?
+        if ( ++nCellCount >= SPELL_MAXCELLS )			// seen enough cells?
             break;
     }
 
     if ( pCell )
     {
-        ++nCol;                                         // continue after last cell
+        ++nCol;											// continue after last cell
         if ( nCol > rSpellRange.aEnd.Col() )
         {
             nCol = rSpellRange.aStart.Col();
@@ -793,7 +812,7 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
         }
     }
 
-    if (!pCell)         // end of range reached -> next sheet
+    if (!pCell)			// end of range reached -> next sheet
     {
         ++nTab;
         if ( nTab > rSpellRange.aEnd.Tab() || !pTab[nTab] )
@@ -801,44 +820,44 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
         nCol = rSpellRange.aStart.Col();
         nRow = rSpellRange.aStart.Row();
 
-        nVisSpellState = VSPL_DONE;     //! only if this is for the visible range
+        nVisSpellState = VSPL_DONE;		//! only if this is for the visible range
     }
     rSpellPos.Set( nCol, nRow, nTab );
 
     delete pDefaults;
-    delete pEngine;         // bevor aStatus out of scope geht
+    delete pEngine;			// bevor aStatus out of scope geht
 
     return bChanged;
 }
 
 
-sal_Bool ScDocument::ContinueOnlineSpelling()
+BOOL ScDocument::ContinueOnlineSpelling()
 {
     if ( bIdleDisabled || !pDocOptions->IsAutoSpell() || (pShell && pShell->IsReadOnly()) )
-        return false;
+        return FALSE;
 
     // #i48433# set bInsertingFromOtherDoc flag so there are no broadcasts when PutCell is called
     // (same behavior as in RemoveAutoSpellObj: just transfer the broadcaster)
-    sal_Bool bOldInserting = IsInsertingFromOtherDoc();
-    SetInsertingFromOtherDoc( sal_True );
+    BOOL bOldInserting = IsInsertingFromOtherDoc();
+    SetInsertingFromOtherDoc( TRUE );
 
-    //! use one EditEngine for both calls
+    //!	use one EditEngine for both calls
 
-    //  first check visible range
-    sal_Bool bResult = OnlineSpellInRange( aVisSpellRange, aVisSpellPos, SPELL_MAXTEST_VIS );
+    //	#41504# first check visible range
+    BOOL bResult = OnlineSpellInRange( aVisSpellRange, aVisSpellPos, SPELL_MAXTEST_VIS );
 
-    //  during first pass through visible range, always continue
+    //	during first pass through visible range, always continue
     if ( nVisSpellState == VSPL_START )
-        bResult = sal_True;
+        bResult = TRUE;
 
     if (bResult)
     {
-        //  if errors found, continue there
+        //	if errors found, continue there
         OnlineSpellInRange( aVisSpellRange, aVisSpellPos, SPELL_MAXTEST_ALL );
     }
     else
     {
-        //  if nothing found there, continue with rest of document
+        //	if nothing found there, continue with rest of document
         ScRange aTotalRange( 0,0,0, MAXCOL,MAXROW,MAXTAB );
         bResult = OnlineSpellInRange( aTotalRange, aOnlineSpellPos, SPELL_MAXTEST_ALL );
     }
@@ -853,18 +872,18 @@ void ScDocument::SetOnlineSpellPos( const ScAddress& rPos )
 {
     aOnlineSpellPos = rPos;
 
-    //  skip visible area for aOnlineSpellPos
+    //	skip visible area for aOnlineSpellPos
     if ( aVisSpellRange.In( aOnlineSpellPos ) )
         aOnlineSpellPos = aVisSpellRange.aEnd;
 }
 
-sal_Bool ScDocument::SetVisibleSpellRange( const ScRange& rNewRange )
+BOOL ScDocument::SetVisibleSpellRange( const ScRange& rNewRange )
 {
-    sal_Bool bChange = ( aVisSpellRange != rNewRange );
+    BOOL bChange = ( aVisSpellRange != rNewRange );
     if (bChange)
     {
-        //  continue spelling through visible range when scrolling down
-        sal_Bool bContDown = ( nVisSpellState == VSPL_START && rNewRange.In( aVisSpellPos ) &&
+        //	continue spelling through visible range when scrolling down
+        BOOL bContDown = ( nVisSpellState == VSPL_START && rNewRange.In( aVisSpellPos ) &&
                             rNewRange.aStart.Row() >  aVisSpellRange.aStart.Row() &&
                             rNewRange.aStart.Col() == aVisSpellRange.aStart.Col() &&
                             rNewRange.aEnd.Col()   == aVisSpellRange.aEnd.Col() );
@@ -877,7 +896,7 @@ sal_Bool ScDocument::SetVisibleSpellRange( const ScRange& rNewRange )
             nVisSpellState = VSPL_START;
         }
 
-        //  skip visible area for aOnlineSpellPos
+        //	skip visible area for aOnlineSpellPos
         if ( aVisSpellRange.In( aOnlineSpellPos ) )
             aOnlineSpellPos = aVisSpellRange.aEnd;
     }
@@ -886,33 +905,23 @@ sal_Bool ScDocument::SetVisibleSpellRange( const ScRange& rNewRange )
 
 void ScDocument::RemoveAutoSpellObj()
 {
-    //  alle Spelling-Informationen entfernen
+    //	alle Spelling-Informationen entfernen
 
     for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
         pTab[nTab]->RemoveAutoSpellObj();
 }
 
-void ScDocument::RepaintRange( const ScRange& rRange )
-{
-    if ( bIsVisible && pShell )
-    {
-        ScModelObj* pModel = ScModelObj::getImplementation( pShell->GetModel() );
-        if ( pModel )
-            pModel->RepaintRange( rRange );     // locked repaints are checked there
-    }
-}
-
 //------------------------------------------------------------------------
 
-sal_Bool ScDocument::IdleCheckLinks()           // sal_True = demnaechst wieder versuchen
+BOOL ScDocument::IdleCheckLinks()			// TRUE = demnaechst wieder versuchen
 {
-    sal_Bool bAnyLeft = false;
+    BOOL bAnyLeft = FALSE;
 
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScDdeLink))
@@ -922,7 +931,7 @@ sal_Bool ScDocument::IdleCheckLinks()           // sal_True = demnaechst wieder 
                 {
                     pDdeLink->TryUpdate();
                     if (pDdeLink->NeedsUpdate())        // war nix?
-                        bAnyLeft = sal_True;
+                        bAnyLeft = TRUE;
                 }
             }
         }
@@ -933,16 +942,16 @@ sal_Bool ScDocument::IdleCheckLinks()           // sal_True = demnaechst wieder 
 
 void ScDocument::SaveDdeLinks(SvStream& rStream) const
 {
-    //  bei 4.0-Export alle mit Modus != DEFAULT weglassen
-    sal_Bool bExport40 = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 );
+    //	bei 4.0-Export alle mit Modus != DEFAULT weglassen
+    BOOL bExport40 = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 );
 
     const ::sfx2::SvBaseLinks& rLinks = GetLinkManager()->GetLinks();
-    sal_uInt16 nCount = rLinks.Count();
+    USHORT nCount = rLinks.Count();
 
-    //  erstmal zaehlen...
+    //	erstmal zaehlen...
 
-    sal_uInt16 nDdeCount = 0;
-    sal_uInt16 i;
+    USHORT nDdeCount = 0;
+    USHORT i;
     for (i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
@@ -951,12 +960,12 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
                 ++nDdeCount;
     }
 
-    //  Header
+    //	Header
 
     ScMultipleWriteHeader aHdr( rStream );
     rStream << nDdeCount;
 
-    //  Links speichern
+    //	Links speichern
 
     for (i=0; i<nCount; i++)
     {
@@ -975,9 +984,9 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
     ScMultipleReadHeader aHdr( rStream );
 
     GetLinkManager();
-    sal_uInt16 nCount;
+    USHORT nCount;
     rStream >> nCount;
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for (USHORT i=0; i<nCount; i++)
     {
         ScDdeLink* pLink = new ScDdeLink( this, rStream, aHdr );
         pLinkManager->InsertDDELink( pLink,
@@ -985,29 +994,29 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
     }
 }
 
-sal_Bool ScDocument::HasDdeLinks() const
+BOOL ScDocument::HasDdeLinks() const
 {
-    if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
+    if (GetLinkManager())			// Clipboard z.B. hat keinen LinkManager
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScDdeLink))
-                return sal_True;
+                return TRUE;
     }
 
-    return false;
+    return FALSE;
 }
 
-void ScDocument::SetInLinkUpdate(sal_Bool bSet)
+void ScDocument::SetInLinkUpdate(BOOL bSet)
 {
-    //  called from TableLink and AreaLink
+    //	called from TableLink and AreaLink
 
     DBG_ASSERT( bInLinkUpdate != bSet, "SetInLinkUpdate twice" );
     bInLinkUpdate = bSet;
 }
 
-sal_Bool ScDocument::IsInLinkUpdate() const
+BOOL ScDocument::IsInLinkUpdate() const
 {
     return bInLinkUpdate || IsInDdeLinkUpdate();
 }
@@ -1018,10 +1027,10 @@ void ScDocument::UpdateExternalRefLinks()
         return;
 
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-    sal_uInt16 nCount = rLinks.Count();
+    USHORT nCount = rLinks.Count();
 
     bool bAny = false;
-    for (sal_uInt16 i = 0; i < nCount; ++i)
+    for (USHORT i = 0; i < nCount; ++i)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
         ScExternalRefLink* pRefLink = dynamic_cast<ScExternalRefLink*>(pBase);
@@ -1040,7 +1049,7 @@ void ScDocument::UpdateExternalRefLinks()
         // #i101960# set document modified, as in TrackTimeHdl for DDE links
         if (!pShell->IsModified())
         {
-            pShell->SetModified( sal_True );
+            pShell->SetModified( TRUE );
             SfxBindings* pBindings = GetViewBindings();
             if (pBindings)
             {
@@ -1056,19 +1065,19 @@ void ScDocument::UpdateDdeLinks()
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
-        sal_uInt16 i;
+        USHORT nCount = rLinks.Count();
+        USHORT i;
 
-        //  falls das Updaten laenger dauert, erstmal alle Werte
+        //  #49226# falls das Updaten laenger dauert, erstmal alle Werte
         //  zuruecksetzen, damit nichts altes (falsches) stehen bleibt
-        sal_Bool bAny = false;
+        BOOL bAny = FALSE;
         for (i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScDdeLink))
             {
                 ((ScDdeLink*)pBase)->ResetValue();
-                bAny = sal_True;
+                bAny = TRUE;
             }
         }
         if (bAny)
@@ -1093,18 +1102,18 @@ void ScDocument::UpdateDdeLinks()
     }
 }
 
-sal_Bool ScDocument::UpdateDdeLink( const String& rAppl, const String& rTopic, const String& rItem )
+BOOL ScDocument::UpdateDdeLink( const String& rAppl, const String& rTopic, const String& rItem )
 {
-    //  fuer refresh() per StarOne Api
-    //  ResetValue() fuer einzelnen Link nicht noetig
-    //! wenn's mal alles asynchron wird, aber auch hier
+    //	fuer refresh() per StarOne Api
+    //	ResetValue() fuer einzelnen Link nicht noetig
+    //!	wenn's mal alles asynchron wird, aber auch hier
 
-    sal_Bool bFound = false;
+    BOOL bFound = FALSE;
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScDdeLink))
@@ -1115,7 +1124,7 @@ sal_Bool ScDocument::UpdateDdeLink( const String& rAppl, const String& rTopic, c
                      pDdeLink->GetItem() == rItem )
                 {
                     pDdeLink->TryUpdate();
-                    bFound = sal_True;          // koennen theoretisch mehrere sein (Mode), darum weitersuchen
+                    bFound = TRUE;          // koennen theoretisch mehrere sein (Mode), darum weitersuchen
                 }
             }
         }
@@ -1129,19 +1138,19 @@ void ScDocument::DisconnectDdeLinks()
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScDdeLink))
-                pBase->Disconnect();            // bleibt im LinkManager eingetragen
+                pBase->Disconnect();			// bleibt im LinkManager eingetragen
         }
     }
 }
 
 void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
 {
-    if (bIsClip)        // aus Stream erzeugen
+    if (bIsClip)		// aus Stream erzeugen
     {
         if (pClipData)
         {
@@ -1152,8 +1161,8 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
     else if (GetLinkManager())              // Links direkt kopieren
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScDdeLink))
@@ -1167,14 +1176,14 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
     }
 }
 
-sal_uInt16 ScDocument::GetDdeLinkCount() const
+USHORT ScDocument::GetDdeLinkCount() const
 {
-    sal_uInt16 nDdeCount = 0;
+    USHORT nDdeCount = 0;
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScDdeLink))
                 ++nDdeCount;
     }
@@ -1191,15 +1200,15 @@ namespace {
     @return  The DDE link, if it exists, otherwise 0. */
 ScDdeLink* lclGetDdeLink(
         const sfx2::LinkManager* pLinkManager,
-        const String& rAppl, const String& rTopic, const String& rItem, sal_uInt8 nMode,
-        sal_uInt16* pnDdePos = NULL )
+        const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode,
+        USHORT* pnDdePos = NULL )
 {
     if( pLinkManager )
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        USHORT nCount = rLinks.Count();
         if( pnDdePos ) *pnDdePos = 0;
-        for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
+        for( USHORT nIndex = 0; nIndex < nCount; ++nIndex )
         {
             ::sfx2::SvBaseLink* pLink = *rLinks[ nIndex ];
             if( ScDdeLink* pDdeLink = PTR_CAST( ScDdeLink, pLink ) )
@@ -1219,14 +1228,14 @@ ScDdeLink* lclGetDdeLink(
 /** Returns a pointer to the specified DDE link.
     @param nDdePos  Index of the DDE link (does not include other links from link manager).
     @return  The DDE link, if it exists, otherwise 0. */
-ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, sal_uInt16 nDdePos )
+ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, USHORT nDdePos )
 {
     if( pLinkManager )
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
-        sal_uInt16 nDdeIndex = 0;       // counts only the DDE links
-        for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
+        USHORT nCount = rLinks.Count();
+        USHORT nDdeIndex = 0;       // counts only the DDE links
+        for( USHORT nIndex = 0; nIndex < nCount; ++nIndex )
         {
             ::sfx2::SvBaseLink* pLink = *rLinks[ nIndex ];
             if( ScDdeLink* pDdeLink = PTR_CAST( ScDdeLink, pLink ) )
@@ -1244,12 +1253,12 @@ ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, sal_uInt16 nDde
 
 // ----------------------------------------------------------------------------
 
-bool ScDocument::FindDdeLink( const String& rAppl, const String& rTopic, const String& rItem, sal_uInt8 nMode, sal_uInt16& rnDdePos )
+bool ScDocument::FindDdeLink( const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode, USHORT& rnDdePos )
 {
     return lclGetDdeLink( GetLinkManager(), rAppl, rTopic, rItem, nMode, &rnDdePos ) != NULL;
 }
 
-bool ScDocument::GetDdeLinkData( sal_uInt16 nDdePos, String& rAppl, String& rTopic, String& rItem ) const
+bool ScDocument::GetDdeLinkData( USHORT nDdePos, String& rAppl, String& rTopic, String& rItem ) const
 {
     if( const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
@@ -1261,7 +1270,7 @@ bool ScDocument::GetDdeLinkData( sal_uInt16 nDdePos, String& rAppl, String& rTop
     return false;
 }
 
-bool ScDocument::GetDdeLinkMode( sal_uInt16 nDdePos, sal_uInt8& rnMode ) const
+bool ScDocument::GetDdeLinkMode( USHORT nDdePos, BYTE& rnMode ) const
 {
     if( const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
@@ -1271,13 +1280,13 @@ bool ScDocument::GetDdeLinkMode( sal_uInt16 nDdePos, sal_uInt8& rnMode ) const
     return false;
 }
 
-const ScMatrix* ScDocument::GetDdeLinkResultMatrix( sal_uInt16 nDdePos ) const
+const ScMatrix* ScDocument::GetDdeLinkResultMatrix( USHORT nDdePos ) const
 {
     const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos );
     return pDdeLink ? pDdeLink->GetResult() : NULL;
 }
 
-bool ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem, sal_uInt8 nMode, ScMatrixRef pResults )
+bool ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode, ScMatrix* pResults )
 {
     /*  Create a DDE link without updating it (i.e. for Excel import), to prevent
         unwanted connections. First try to find existing link. Set result array
@@ -1303,7 +1312,7 @@ bool ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const
     return false;
 }
 
-bool ScDocument::SetDdeLinkResultMatrix( sal_uInt16 nDdePos, ScMatrixRef pResults )
+bool ScDocument::SetDdeLinkResultMatrix( USHORT nDdePos, ScMatrix* pResults )
 {
     if( ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
@@ -1315,18 +1324,18 @@ bool ScDocument::SetDdeLinkResultMatrix( sal_uInt16 nDdePos, ScMatrixRef pResult
 
 //------------------------------------------------------------------------
 
-sal_Bool ScDocument::HasAreaLinks() const
+BOOL ScDocument::HasAreaLinks() const
 {
-    if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
+    if (GetLinkManager())			// Clipboard z.B. hat keinen LinkManager
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScAreaLink))
-                return sal_True;
+                return TRUE;
     }
 
-    return false;
+    return FALSE;
 }
 
 void ScDocument::UpdateAreaLinks()
@@ -1334,8 +1343,8 @@ void ScDocument::UpdateAreaLinks()
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
@@ -1349,7 +1358,7 @@ void ScDocument::DeleteAreaLinksOnTab( SCTAB nTab )
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nPos = 0;
+        USHORT nPos = 0;
         while ( nPos < rLinks.Count() )
         {
             const ::sfx2::SvBaseLink* pBase = *rLinks[nPos];
@@ -1370,8 +1379,8 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
         bool bAnyUpdate = false;
 
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
@@ -1405,7 +1414,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
             // If several links start at the same cell, the one with the lower index is removed
             // (file format specifies only one link definition for a cell).
 
-            sal_uInt16 nFirstIndex = 0;
+            USHORT nFirstIndex = 0;
             while ( nFirstIndex < nCount )
             {
                 bool bFound = false;
@@ -1413,7 +1422,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                 if ( pFirst->ISA(ScAreaLink) )
                 {
                     ScAddress aFirstPos = static_cast<ScAreaLink*>(pFirst)->GetDestArea().aStart;
-                    for ( sal_uInt16 nSecondIndex = nFirstIndex + 1; nSecondIndex < nCount && !bFound; ++nSecondIndex )
+                    for ( USHORT nSecondIndex = nFirstIndex + 1; nSecondIndex < nCount && !bFound; ++nSecondIndex )
                     {
                         ::sfx2::SvBaseLink* pSecond = *rLinks[nSecondIndex];
                         if ( pSecond->ISA(ScAreaLink) &&
@@ -1444,31 +1453,31 @@ void ScDocument::KeyInput( const KeyEvent& )
         apTemporaryChartLock->StartOrContinueLocking();
 }
 
-//  ----------------------------------------------------------------------------
+//	----------------------------------------------------------------------------
 
-sal_Bool ScDocument::CheckMacroWarn()
+BOOL ScDocument::CheckMacroWarn()
 {
-    //  The check for macro configuration, macro warning and disabling is now handled
-    //  in SfxObjectShell::AdjustMacroMode, called by SfxObjectShell::CallBasic.
+    //	The check for macro configuration, macro warning and disabling is now handled
+    //	in SfxObjectShell::AdjustMacroMode, called by SfxObjectShell::CallBasic.
 
-    return sal_True;
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
 
 SfxBindings* ScDocument::GetViewBindings()
 {
-    //  used to invalidate slots after changes to this document
+    //	used to invalidate slots after changes to this document
 
     if ( !pShell )
-        return NULL;        // no ObjShell -> no view
+        return NULL;		// no ObjShell -> no view
 
-    //  first check current view
+    //	first check current view
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    if ( pViewFrame && pViewFrame->GetObjectShell() != pShell )     // wrong document?
+    if ( pViewFrame && pViewFrame->GetObjectShell() != pShell )		// wrong document?
         pViewFrame = NULL;
 
-    //  otherwise use first view for this doc
+    //	otherwise use first view for this doc
     if ( !pViewFrame )
         pViewFrame = SfxViewFrame::GetFirst( pShell );
 
@@ -1482,34 +1491,34 @@ SfxBindings* ScDocument::GetViewBindings()
 
 void lcl_TransliterateEditEngine( ScEditEngineDefaulter& rEngine,
                                 utl::TransliterationWrapper& rTranslitarationWrapper,
-                                sal_Bool bConsiderLanguage, ScDocument* pDoc )
+                                BOOL bConsiderLanguage, ScDocument* pDoc )
 {
-    //! should use TransliterateText method of EditEngine instead, when available!
+    //!	should use TransliterateText method of EditEngine instead, when available!
 
     sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
 
-    sal_uInt16 nParCount = rEngine.GetParagraphCount();
-    for (sal_uInt16 nPar=0; nPar<nParCount; nPar++)
+    USHORT nParCount = rEngine.GetParagraphCount();
+    for (USHORT nPar=0; nPar<nParCount; nPar++)
     {
         SvUShorts aPortions;
-        rEngine.GetPortions( (sal_uInt16)nPar, aPortions );
+        rEngine.GetPortions( (USHORT)nPar, aPortions );
 
-        for ( sal_uInt16 nPos = aPortions.Count(); nPos; )
+        for ( USHORT nPos = aPortions.Count(); nPos; )
         {
             --nPos;
-            sal_uInt16 nEnd = aPortions.GetObject( nPos );
-            sal_uInt16 nStart = nPos ? aPortions.GetObject( nPos - 1 ) : 0;
+            USHORT nEnd = aPortions.GetObject( nPos );
+            USHORT nStart = nPos ? aPortions.GetObject( nPos - 1 ) : 0;
 
             ESelection aSel( nPar, nStart, nPar, nEnd );
             String aOldStr = rEngine.GetText( aSel );
             SfxItemSet aAttr = rEngine.GetAttribs( aSel );
 
-            if ( aAttr.GetItemState( EE_FEATURE_FIELD ) != SFX_ITEM_ON )    // fields are not touched
+            if ( aAttr.GetItemState( EE_FEATURE_FIELD ) != SFX_ITEM_ON )	// fields are not touched
             {
                 if ( bConsiderLanguage )
                 {
-                    sal_uInt8 nScript = pDoc->GetStringScriptType( aOldStr );
-                    sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? EE_CHAR_LANGUAGE_CJK :
+                    BYTE nScript = pDoc->GetStringScriptType( aOldStr );
+                    USHORT nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? EE_CHAR_LANGUAGE_CJK :
                                     ( ( nScript == SCRIPTTYPE_COMPLEX ) ? EE_CHAR_LANGUAGE_CTL :
                                                                             EE_CHAR_LANGUAGE );
                     nLanguage = ((const SvxLanguageItem&)aAttr.Get(nWhich)).GetValue();
@@ -1536,10 +1545,10 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
     DBG_ASSERT( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );
 
     utl::TransliterationWrapper aTranslitarationWrapper( xServiceManager, nType );
-    sal_Bool bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
+    BOOL bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
     sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
 
-    ScEditEngineDefaulter* pEngine = NULL;      // not using pEditEngine member because of defaults
+    ScEditEngineDefaulter* pEngine = NULL;		// not using pEditEngine member because of defaults
 
     SCTAB nCount = GetTableCount();
     for (SCTAB nTab = 0; nTab < nCount; nTab++)
@@ -1548,7 +1557,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
             SCCOL nCol = 0;
             SCROW nRow = 0;
 
-            sal_Bool bFound = rMultiMark.IsCellMarked( nCol, nRow );
+            BOOL bFound = rMultiMark.IsCellMarked( nCol, nRow );
             if (!bFound)
                 bFound = GetNextMarkedCell( nCol, nRow, nTab, rMultiMark );
 
@@ -1565,8 +1574,8 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 
                     if ( bConsiderLanguage )
                     {
-                        sal_uInt8 nScript = GetStringScriptType( aOldStr );     //! cell script type?
-                        sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
+                        BYTE nScript = GetStringScriptType( aOldStr );		//! cell script type?
+                        USHORT nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
                                         ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE :
                                                                                 ATTR_FONT_LANGUAGE );
                         nLanguage = ((const SvxLanguageItem*)GetAttr( nCol, nRow, nTab, nWhich ))->GetValue();
@@ -1587,7 +1596,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
                     SfxItemSet* pDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
                     pPattern->FillEditItemSet( pDefaults );
-                    pEngine->SetDefaults( pDefaults, sal_True );
+                    pEngine->SetDefaults( pDefaults, TRUE );
 
                     const EditTextObject* pData = ((const ScEditCell*)pCell)->GetData();
                     pEngine->SetText( *pData );
@@ -1603,7 +1612,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                         {
                             // remove defaults (paragraph attributes) before creating text object
                             SfxItemSet* pEmpty = new SfxItemSet( pEngine->GetEmptyItemSet() );
-                            pEngine->SetDefaults( pEmpty, sal_True );
+                            pEngine->SetDefaults( pEmpty, TRUE );
 
                             EditTextObject* pNewData = pEngine->CreateTextObject();
                             PutCell( nCol, nRow, nTab,

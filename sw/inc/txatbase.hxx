@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,6 +31,7 @@
 #include <tools/solar.h>
 #include <svl/poolitem.hxx>
 #include <hintids.hxx>
+#include <errhdl.hxx>
 
 #include <boost/utility.hpp>
 
@@ -87,7 +88,7 @@ public:
             const xub_StrLen* GetStart() const  { return & m_nStart; }
 
     /// end position
-    virtual      xub_StrLen* GetEnd();
+    virtual 	 xub_StrLen* GetEnd();
     inline const xub_StrLen* GetEnd() const;
     /// end (if available), else start
     inline const xub_StrLen* GetAnyEnd() const;
@@ -106,19 +107,19 @@ public:
 
     inline const SfxPoolItem& GetAttr() const;
     inline       SfxPoolItem& GetAttr();
-    inline sal_uInt16 Which() const { return GetAttr().Which(); }
+    inline USHORT Which() const { return GetAttr().Which(); }
 
-    virtual int         operator==( const SwTxtAttr& ) const;
+    virtual	int         operator==( const SwTxtAttr& ) const;
 
-    inline const SwFmtCharFmt           &GetCharFmt() const;
+    inline const SwFmtCharFmt			&GetCharFmt() const;
     inline const SwFmtAutoFmt           &GetAutoFmt() const;
-    inline const SwFmtFld               &GetFld() const;
-    inline const SwFmtFtn               &GetFtn() const;
-    inline const SwFmtFlyCnt            &GetFlyCnt() const;
-    inline const SwTOXMark              &GetTOXMark() const;
-    inline const SwFmtRefMark           &GetRefMark() const;
-    inline const SwFmtINetFmt           &GetINetFmt() const;
-    inline const SwFmtRuby              &GetRuby() const;
+    inline const SwFmtFld				&GetFld() const;
+    inline const SwFmtFtn				&GetFtn() const;
+    inline const SwFmtFlyCnt			&GetFlyCnt() const;
+    inline const SwTOXMark				&GetTOXMark() const;
+    inline const SwFmtRefMark			&GetRefMark() const;
+    inline const SwFmtINetFmt			&GetINetFmt() const;
+    inline const SwFmtRuby				&GetRuby() const;
     inline const SwFmtMeta              &GetMeta() const;
 
 };
@@ -129,7 +130,7 @@ protected:
     xub_StrLen m_nEnd;
 
 public:
-    SwTxtAttrEnd( SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
+    SwTxtAttrEnd( SfxPoolItem& rAttr, USHORT nStart, USHORT nEnd );
 
     using SwTxtAttr::GetEnd;
     virtual xub_StrLen* GetEnd();

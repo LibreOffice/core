@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <string.h>     // memcpy()
 
-#include "sot/stg.hxx"
+#include "stg.hxx"
 #include "stgelem.hxx"
 #include "stgcache.hxx"
 #include "stgstrms.hxx"
@@ -55,7 +55,7 @@
 // Problem der Implementation: Keine Hierarchischen commits. Daher nur
 // insgesamt transaktionsorientert oder direkt.
 
-StgDirEntry::StgDirEntry( const void* pFrom, sal_Bool * pbOk ) : StgAvlNode()
+StgDirEntry::StgDirEntry( const void* pFrom, BOOL * pbOk ) : StgAvlNode()
 {
     *pbOk = aEntry.Load( pFrom );
 
@@ -71,25 +71,25 @@ StgDirEntry::StgDirEntry( const StgEntry& r ) : StgAvlNode(), aEntry( r )
 
 void StgDirEntry::InitMembers()
 {
-    aSave       = aEntry;
-    pUp         =
-    pDown       = NULL;
-    ppRoot      = NULL;
-    pStgStrm    = NULL;
-    pCurStrm    =
-    pTmpStrm    = NULL;
-    nPos        =
-    nEntry      =
-    nRefCnt     = 0;
-    nMode       = STREAM_READ;
-    bDirect     = sal_True;
-    bInvalid    =
-    bCreated    =
-    bRenamed    =
-    bRemoved    =
-    bTemp       =
-    bDirty      =
-    bZombie     = sal_False;
+    aSave 		= aEntry;
+    pUp 		=
+    pDown  		= NULL;
+    ppRoot 		= NULL;
+    pStgStrm 	= NULL;
+    pCurStrm	=
+    pTmpStrm	= NULL;
+    nPos		=
+    nEntry 		=
+    nRefCnt 	= 0;
+    nMode  		= STREAM_READ;
+    bDirect 	= TRUE;
+    bInvalid	=
+    bCreated	=
+    bRenamed 	=
+    bRemoved	=
+    bTemp  		=
+    bDirty 		=
+    bZombie     = FALSE;
 }
 
 StgDirEntry::~StgDirEntry()
@@ -114,9 +114,9 @@ short StgDirEntry::Compare( const StgAvlNode* p ) const
 // the TOC tree into the TOC stream. Remember that aSave is
 // stored, not aEntry.
 
-void StgDirEntry::Enum( sal_Int32& n )
+void StgDirEntry::Enum( INT32& n )
 {
-    sal_Int32 nLeft = STG_FREE, nRight = STG_FREE, nDown = STG_FREE;
+    INT32 nLeft = STG_FREE, nRight = STG_FREE, nDown = STG_FREE;
     nEntry = n++;
     if( pLeft )
     {
@@ -138,17 +138,17 @@ void StgDirEntry::Enum( sal_Int32& n )
 // Delete all temporary entries before writing the TOC stream.
 // Until now Deltem is never called with bForce True
 
-void StgDirEntry::DelTemp( sal_Bool bForce )
+void StgDirEntry::DelTemp( BOOL bForce )
 {
     if( pLeft )
-        ((StgDirEntry*) pLeft)->DelTemp( sal_False );
+        ((StgDirEntry*) pLeft)->DelTemp( FALSE );
     if( pRight )
-        ((StgDirEntry*) pRight)->DelTemp( sal_False );
+        ((StgDirEntry*) pRight)->DelTemp( FALSE );
     if( pDown )
     {
         // If the storage is dead, of course all elements are dead, too
         if( bInvalid && aEntry.GetType() == STG_STORAGE )
-            bForce = sal_True;
+            bForce = TRUE;
         pDown->DelTemp( bForce );
     }
     if( ( bForce || bInvalid )
@@ -158,12 +158,12 @@ void StgDirEntry::DelTemp( sal_Bool bForce )
         if( pUp )
         {
             // this deletes the element if refcnt == 0!
-            sal_Bool bDel = nRefCnt == 0;
+            BOOL bDel = nRefCnt == 0;
             StgAvlNode::Remove( (StgAvlNode**) &pUp->pDown, this, bDel );
             if( !bDel )
             {
                 pLeft = pRight = pDown = 0;
-                bInvalid = bZombie = sal_True;
+                bInvalid = bZombie = TRUE;
             }
         }
     }
@@ -171,26 +171,26 @@ void StgDirEntry::DelTemp( sal_Bool bForce )
 
 // Save the tree into the given dir stream
 
-sal_Bool StgDirEntry::Store( StgDirStrm& rStrm )
+BOOL StgDirEntry::Store( StgDirStrm& rStrm )
 {
-    void* pEntry = rStrm.GetEntry( nEntry, sal_True );
+    void* pEntry = rStrm.GetEntry( nEntry, TRUE );
     if( !pEntry )
-        return sal_False;
+        return FALSE;
     // Do not store the current (maybe not commited) entry
     aSave.Store( pEntry );
     if( pLeft )
         if( !((StgDirEntry*) pLeft)->Store( rStrm ) )
-            return sal_False;
+            return FALSE;
     if( pRight )
         if( !((StgDirEntry*) pRight)->Store( rStrm ) )
-            return sal_False;
+            return FALSE;
     if( pDown )
         if( !pDown->Store( rStrm ) )
-            return sal_False;
-    return sal_True;
+            return FALSE;
+    return TRUE;
 }
 
-sal_Bool StgDirEntry::StoreStream( StgIo& rIo )
+BOOL StgDirEntry::StoreStream( StgIo& rIo )
 {
     if( aEntry.GetType() == STG_STREAM || aEntry.GetType() == STG_ROOT )
     {
@@ -207,27 +207,27 @@ sal_Bool StgDirEntry::StoreStream( StgIo& rIo )
         }
         // or write the data stream
         else if( !Tmp2Strm() )
-            return sal_False;
+            return FALSE;
     }
-    return sal_True;
+    return TRUE;
 }
 
 // Save all dirty streams
 
-sal_Bool StgDirEntry::StoreStreams( StgIo& rIo )
+BOOL StgDirEntry::StoreStreams( StgIo& rIo )
 {
     if( !StoreStream( rIo ) )
-        return sal_False;
+        return FALSE;
     if( pLeft )
         if( !((StgDirEntry*) pLeft)->StoreStreams( rIo ) )
-            return sal_False;
+            return FALSE;
     if( pRight )
         if( !((StgDirEntry*) pRight)->StoreStreams( rIo ) )
-            return sal_False;
+            return FALSE;
     if( pDown )
         if( !pDown->StoreStreams( rIo ) )
-            return sal_False;
-    return sal_True;
+            return FALSE;
+    return TRUE;
 }
 
 // Revert all directory entries after failure to write the TOC stream
@@ -245,24 +245,24 @@ void StgDirEntry::RevertAll()
 
 // Look if any element of the tree is dirty
 
-sal_Bool StgDirEntry::IsDirty()
+BOOL StgDirEntry::IsDirty()
 {
     if( bDirty || bInvalid )
-        return sal_True;
+        return TRUE;
     if( pLeft && ((StgDirEntry*) pLeft)->IsDirty() )
-        return sal_True;
+        return TRUE;
     if( pRight && ((StgDirEntry*) pRight)->IsDirty() )
-        return sal_True;
+        return TRUE;
     if( pDown && pDown->IsDirty() )
-        return sal_True;
-    return sal_False;
+        return TRUE;
+    return FALSE;
 }
 
 // Set up a stream.
 
-void StgDirEntry::OpenStream( StgIo& rIo, sal_Bool bForceBig )
+void StgDirEntry::OpenStream( StgIo& rIo, BOOL bForceBig )
 {
-    sal_Int32 nThreshold = (sal_uInt16) rIo.aHdr.GetThreshold();
+    INT32 nThreshold = (USHORT) rIo.aHdr.GetThreshold();
     delete pStgStrm;
     if( !bForceBig && aEntry.GetSize() < nThreshold )
         pStgStrm = new StgSmallStrm( rIo, this );
@@ -272,7 +272,7 @@ void StgDirEntry::OpenStream( StgIo& rIo, sal_Bool bForceBig )
     {
         // This entry has invalid data, so delete that data
         SetSize( 0L );
-//      bRemoved = bInvalid = sal_False;
+//		bRemoved = bInvalid = FALSE;
     }
     nPos = 0;
 }
@@ -286,15 +286,15 @@ void StgDirEntry::Close()
 {
     delete pTmpStrm;
     pTmpStrm = NULL;
-//  nRefCnt  = 0;
+//	nRefCnt	 = 0;
     bInvalid = bTemp;
 }
 
 // Get the current stream size
 
-sal_Int32 StgDirEntry::GetSize()
+INT32 StgDirEntry::GetSize()
 {
-    sal_Int32 n;
+    INT32 n;
     if( pTmpStrm )
         n = pTmpStrm->GetSize();
     else if( pCurStrm )
@@ -305,14 +305,14 @@ sal_Int32 StgDirEntry::GetSize()
 
 // Set the stream size. This means also creating a temp stream.
 
-sal_Bool StgDirEntry::SetSize( sal_Int32 nNewSize )
+BOOL StgDirEntry::SetSize( INT32 nNewSize )
 {
     if (
          !( nMode & STREAM_WRITE ) ||
          (!bDirect && !pTmpStrm && !Strm2Tmp())
        )
     {
-        return sal_False;
+        return FALSE;
     }
 
     if( nNewSize < nPos )
@@ -321,26 +321,26 @@ sal_Bool StgDirEntry::SetSize( sal_Int32 nNewSize )
     {
         pTmpStrm->SetSize( nNewSize );
         pStgStrm->GetIo().SetError( pTmpStrm->GetError() );
-        return sal_Bool( pTmpStrm->GetError() == SVSTREAM_OK );
+        return BOOL( pTmpStrm->GetError() == SVSTREAM_OK );
     }
     else
     {
-        sal_Bool bRes = sal_False;
+        BOOL bRes = FALSE;
         StgIo& rIo = pStgStrm->GetIo();
-        sal_Int32 nThreshold = rIo.aHdr.GetThreshold();
+        INT32 nThreshold = rIo.aHdr.GetThreshold();
         // ensure the correct storage stream!
         StgStrm* pOld = NULL;
-        sal_uInt16 nOldSize = 0;
+        USHORT nOldSize = 0;
         if( nNewSize >= nThreshold && pStgStrm->IsSmallStrm() )
         {
             pOld = pStgStrm;
-            nOldSize = (sal_uInt16) pOld->GetSize();
+            nOldSize = (USHORT) pOld->GetSize();
             pStgStrm = new StgDataStrm( rIo, STG_EOF, 0 );
         }
         else if( nNewSize < nThreshold && !pStgStrm->IsSmallStrm() )
         {
             pOld = pStgStrm;
-            nOldSize = (sal_uInt16) nNewSize;
+            nOldSize = (USHORT) nNewSize;
             pStgStrm = new StgSmallStrm( rIo, STG_EOF, 0 );
         }
         // now set the new size
@@ -352,16 +352,16 @@ sal_Bool StgDirEntry::SetSize( sal_Int32 nNewSize )
                 // if so, we probably need to copy the old data
                 if( nOldSize )
                 {
-                    void* pBuf = new sal_uInt8[ nOldSize ];
+                    void* pBuf = new BYTE[ nOldSize ];
                     pOld->Pos2Page( 0L );
                     pStgStrm->Pos2Page( 0L );
                     if( pOld->Read( pBuf, nOldSize )
                      && pStgStrm->Write( pBuf, nOldSize ) )
-                        bRes = sal_True;
-                    delete[] static_cast<sal_uInt8*>(pBuf);
+                        bRes = TRUE;
+                    delete[] static_cast<BYTE*>(pBuf);
                 }
                 else
-                    bRes = sal_True;
+                    bRes = TRUE;
                 if( bRes )
                 {
                     pOld->SetSize( 0 );
@@ -379,7 +379,7 @@ sal_Bool StgDirEntry::SetSize( sal_Int32 nNewSize )
             else
             {
                 pStgStrm->Pos2Page( nPos );
-                bRes = sal_True;
+                bRes = TRUE;
             }
         }
         return bRes;
@@ -388,7 +388,7 @@ sal_Bool StgDirEntry::SetSize( sal_Int32 nNewSize )
 
 // Seek. On negative values, seek to EOF.
 
-sal_Int32 StgDirEntry::Seek( sal_Int32 nNew )
+INT32 StgDirEntry::Seek( INT32 nNew )
 {
     if( pTmpStrm )
     {
@@ -404,7 +404,7 @@ sal_Int32 StgDirEntry::Seek( sal_Int32 nNew )
     }
     else
     {
-        sal_Int32 nSize = aEntry.GetSize();
+        INT32 nSize = aEntry.GetSize();
 
         if( nNew < 0 )
             nNew = nSize;
@@ -428,7 +428,7 @@ sal_Int32 StgDirEntry::Seek( sal_Int32 nNew )
 
 // Read
 
-sal_Int32 StgDirEntry::Read( void* p, sal_Int32 nLen )
+INT32 StgDirEntry::Read( void* p, INT32 nLen )
 {
     if( nLen <= 0 )
         return 0;
@@ -444,7 +444,7 @@ sal_Int32 StgDirEntry::Read( void* p, sal_Int32 nLen )
 
 // Write
 
-sal_Int32 StgDirEntry::Write( const void* p, sal_Int32 nLen )
+INT32 StgDirEntry::Write( const void* p, INT32 nLen )
 {
     if( nLen <= 0 || !( nMode & STREAM_WRITE ) )
         return 0;
@@ -462,7 +462,7 @@ sal_Int32 StgDirEntry::Write( const void* p, sal_Int32 nLen )
     }
     else
     {
-        sal_Int32 nNew = nPos + nLen;
+        INT32 nNew = nPos + nLen;
         if( nNew > pStgStrm->GetSize() )
         {
             if( !SetSize( nNew ) )
@@ -479,16 +479,16 @@ sal_Int32 StgDirEntry::Write( const void* p, sal_Int32 nLen )
 
 void StgDirEntry::Copy( StgDirEntry& rDest )
 {
-    sal_Int32 n = GetSize();
+    INT32 n = GetSize();
     if( rDest.SetSize( n ) && n )
     {
-        sal_uInt8 aTempBytes[ 4096 ];
+        BYTE aTempBytes[ 4096 ];
         void* p = static_cast<void*>( aTempBytes );
         Seek( 0L );
         rDest.Seek( 0L );
         while( n )
         {
-            sal_Int32 nn = n;
+            INT32 nn = n;
             if( nn > 4096 )
                 nn = 4096;
             if( Read( p, nn ) != nn )
@@ -502,22 +502,22 @@ void StgDirEntry::Copy( StgDirEntry& rDest )
 
 void StgDirEntry::Copy( BaseStorageStream& rDest )
 {
-    sal_Int32 n = GetSize();
+    INT32 n = GetSize();
     if( rDest.SetSize( n ) && n )
     {
-        sal_uLong Pos = rDest.Tell();
-        sal_uInt8 aTempBytes[ 4096 ];
+        ULONG Pos = rDest.Tell();
+        BYTE aTempBytes[ 4096 ];
         void* p = static_cast<void*>( aTempBytes );
         Seek( 0L );
         rDest.Seek( 0L );
         while( n )
         {
-            sal_Int32 nn = n;
+            INT32 nn = n;
             if( nn > 4096 )
                 nn = 4096;
             if( Read( p, nn ) != nn )
                 break;
-            if( sal::static_int_cast<sal_Int32>(rDest.Write( p, nn )) != nn )
+            if( sal::static_int_cast<INT32>(rDest.Write( p, nn )) != nn )
                 break;
             n -= nn;
         }
@@ -527,12 +527,12 @@ void StgDirEntry::Copy( BaseStorageStream& rDest )
 
 // Commit this entry
 
-sal_Bool StgDirEntry::Commit()
+BOOL StgDirEntry::Commit()
 {
     // OSL_ENSURE( nMode & STREAM_WRITE, "Trying to commit readonly stream!" );
 
     aSave = aEntry;
-    sal_Bool bRes = sal_True;
+    BOOL bRes = TRUE;
     if( aEntry.GetType() == STG_STREAM )
     {
         if( pTmpStrm )
@@ -553,7 +553,7 @@ sal_Bool StgDirEntry::Commit()
 
 // Revert the entry
 
-sal_Bool StgDirEntry::Revert()
+BOOL StgDirEntry::Revert()
 {
     aEntry = aSave;
     switch( aEntry.GetType() )
@@ -564,24 +564,24 @@ sal_Bool StgDirEntry::Revert()
             break;
         case STG_STORAGE:
         {
-            sal_Bool bSomeRenamed = sal_False;
+            BOOL bSomeRenamed = FALSE;
             StgIterator aOIter( *this );
             StgDirEntry* op = aOIter.First();
             while( op )
             {
                 op->aEntry = op->aSave;
-                op->bDirty = sal_False;
-                bSomeRenamed = sal_Bool( bSomeRenamed | op->bRenamed );
+                op->bDirty = FALSE;
+                bSomeRenamed = BOOL( bSomeRenamed | op->bRenamed );
                 // Remove any new entries
                 if( op->bCreated )
                 {
-                    op->bCreated = sal_False;
+                    op->bCreated = FALSE;
                     op->Close();
-                    op->bInvalid = sal_True;
+                    op->bInvalid = TRUE;
                 }
                 // Reactivate any removed entries
                 else if( op->bRemoved )
-                    op->bRemoved = op->bInvalid = op->bTemp = sal_False;
+                    op->bRemoved = op->bInvalid = op->bTemp = FALSE;
                 op = aOIter.Next();
             }
             // Resort all renamed entries
@@ -596,12 +596,12 @@ sal_Bool StgDirEntry::Revert()
                         StgAvlNode::Move
                             ( (StgAvlNode**) &p->pUp->pDown,
                               (StgAvlNode**) &p->pUp->pDown, p );
-                        p->bRenamed = sal_False;
+                        p->bRenamed = FALSE;
                     }
                     p = aIter.Next();
                 }
             }
-            DelTemp( sal_False );
+            DelTemp( FALSE );
             break;
         }
         case STG_EMPTY:
@@ -610,23 +610,23 @@ sal_Bool StgDirEntry::Revert()
         case STG_ROOT:
          break;
     }
-    return sal_True;
+    return TRUE;
 }
 
 // Copy the stg stream to the temp stream
 
-sal_Bool StgDirEntry::Strm2Tmp()
+BOOL StgDirEntry::Strm2Tmp()
 {
     if( !pTmpStrm )
     {
-        sal_uLong n = 0;
+        ULONG n = 0;
         if( pCurStrm )
         {
             // It was already commited once
             pTmpStrm = new StgTmpStrm;
             if( pTmpStrm->GetError() == SVSTREAM_OK && pTmpStrm->Copy( *pCurStrm ) )
-                return sal_True;
-            n = 1;  // indicates error
+                return TRUE;
+            n = 1;	// indicates error
         }
         else
         {
@@ -636,15 +636,15 @@ sal_Bool StgDirEntry::Strm2Tmp()
             {
                 if( n )
                 {
-                    sal_uInt8 aTempBytes[ 4096 ];
+                    BYTE aTempBytes[ 4096 ];
                     void* p = static_cast<void*>( aTempBytes );
                     pStgStrm->Pos2Page( 0L );
                     while( n )
                     {
-                        sal_uLong nn = n;
+                        ULONG nn = n;
                         if( nn > 4096 )
                             nn = 4096;
-                        if( (sal_uLong) pStgStrm->Read( p, nn ) != nn )
+                        if( (ULONG) pStgStrm->Read( p, nn ) != nn )
                             break;
                         if( pTmpStrm->Write( p, nn ) != nn )
                             break;
@@ -662,41 +662,41 @@ sal_Bool StgDirEntry::Strm2Tmp()
             pStgStrm->GetIo().SetError( pTmpStrm->GetError() );
             delete pTmpStrm;
             pTmpStrm = NULL;
-            return sal_False;
+            return FALSE;
         }
     }
-    return sal_True;
+    return TRUE;
 }
 
 // Copy the temp stream to the stg stream during the final commit
 
-sal_Bool StgDirEntry::Tmp2Strm()
+BOOL StgDirEntry::Tmp2Strm()
 {
     // We did commit once, but have not written since then
     if( !pTmpStrm )
         pTmpStrm = pCurStrm, pCurStrm = NULL;
     if( pTmpStrm )
     {
-        sal_uLong n = pTmpStrm->GetSize();
+        ULONG n = pTmpStrm->GetSize();
         StgStrm* pNewStrm;
         StgIo& rIo = pStgStrm->GetIo();
-        sal_uLong nThreshold = (sal_uLong) rIo.aHdr.GetThreshold();
+        ULONG nThreshold = (ULONG) rIo.aHdr.GetThreshold();
         if( n < nThreshold )
             pNewStrm = new StgSmallStrm( rIo, STG_EOF, 0 );
         else
             pNewStrm = new StgDataStrm( rIo, STG_EOF, 0 );
         if( pNewStrm->SetSize( n ) )
         {
-            sal_uInt8 p[ 4096 ];
+            BYTE p[ 4096 ];
             pTmpStrm->Seek( 0L );
             while( n )
             {
-                sal_uLong nn = n;
+                ULONG nn = n;
                 if( nn > 4096 )
                     nn = 4096;
                 if( pTmpStrm->Read( p, nn ) != nn )
                     break;
-                if( (sal_uLong) pNewStrm->Write( p, nn ) != nn )
+                if( (ULONG) pNewStrm->Write( p, nn ) != nn )
                     break;
                 n -= nn;
             }
@@ -705,7 +705,7 @@ sal_Bool StgDirEntry::Tmp2Strm()
                 pTmpStrm->Seek( nPos );
                 pStgStrm->GetIo().SetError( pTmpStrm->GetError() );
                 delete pNewStrm;
-                return sal_False;
+                return FALSE;
             }
             else
             {
@@ -721,12 +721,12 @@ sal_Bool StgDirEntry::Tmp2Strm()
             }
         }
     }
-    return sal_True;
+    return TRUE;
 }
 
 // Check if the given entry is contained in this entry
 
-sal_Bool StgDirEntry::IsContained( StgDirEntry* pStg )
+BOOL StgDirEntry::IsContained( StgDirEntry* pStg )
 {
     if( aEntry.GetType() == STG_STORAGE )
     {
@@ -735,25 +735,25 @@ sal_Bool StgDirEntry::IsContained( StgDirEntry* pStg )
         while( p )
         {
             if( !p->aEntry.Compare( pStg->aEntry ) )
-                return sal_False;
+                return FALSE;
             if( p->aEntry.GetType() == STG_STORAGE )
                 if( !p->IsContained( pStg ) )
-                    return sal_False;
+                    return FALSE;
             p = aIter.Next();
         }
     }
-    return sal_True;
+    return TRUE;
 }
 
 // Invalidate all open entries by setting the RefCount to 0. If the bDel
 // flag is set, also set the invalid flag to indicate deletion during the
 // next dir stream flush.
 
-void StgDirEntry::Invalidate( sal_Bool bDel )
+void StgDirEntry::Invalidate( BOOL bDel )
 {
-//  nRefCnt = 0;
+//	nRefCnt = 0;
     if( bDel )
-        bRemoved = bInvalid = sal_True;
+        bRemoved = bInvalid = TRUE;
     switch( aEntry.GetType() )
     {
         case STG_STORAGE:
@@ -808,30 +808,30 @@ StgDirStrm::~StgDirStrm()
 
 // Recursively parse the directory tree during reading the TOC stream
 
-void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
+void StgDirStrm::SetupEntry( INT32 n, StgDirEntry* pUpper )
 {
     void* p = ( n == STG_FREE ) ? NULL : GetEntry( n );
     if( p )
     {
-        sal_Bool bOk(sal_False);
+        BOOL bOk(FALSE);
         StgDirEntry* pCur = new StgDirEntry( p, &bOk );
 
         if( !bOk )
         {
             delete pCur;
             rIo.SetError( SVSTREAM_GENERALERROR );
-            // an error occurred
+            // an error occured
             return;
         }
 
         // better it is
         if( !pUpper )
             pCur->aEntry.SetType( STG_ROOT );
-
-        sal_Int32 nLeft = pCur->aEntry.GetLeaf( STG_LEFT );
-        sal_Int32 nRight = pCur->aEntry.GetLeaf( STG_RIGHT );
+        
+        INT32 nLeft = pCur->aEntry.GetLeaf( STG_LEFT );
+        INT32 nRight = pCur->aEntry.GetLeaf( STG_RIGHT );
         // substorage?
-        sal_Int32 nLeaf = STG_FREE;
+        INT32 nLeaf = STG_FREE;
         if( pCur->aEntry.GetType() == STG_STORAGE || pCur->aEntry.GetType() == STG_ROOT )
         {
             nLeaf = pCur->aEntry.GetLeaf( STG_CHILD );
@@ -866,7 +866,7 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
 
 // Extend or shrink the directory stream.
 
-sal_Bool StgDirStrm::SetSize( sal_Int32 nBytes )
+BOOL StgDirStrm::SetSize( INT32 nBytes )
 {
     // Always allocate full pages
     nBytes = ( ( nBytes + nPageSize - 1 ) / nPageSize ) * nPageSize;
@@ -875,75 +875,72 @@ sal_Bool StgDirStrm::SetSize( sal_Int32 nBytes )
 
 // Save the TOC stream into a new substream after saving all data streams
 
-sal_Bool StgDirStrm::Store()
+BOOL StgDirStrm::Store()
 {
     if( !pRoot->IsDirty() )
-        return sal_True;
+        return TRUE;
     if( !pRoot->StoreStreams( rIo ) )
-        return sal_False;
+        return FALSE;
     // After writing all streams, the data FAT stream has changed,
     // so we have to commit the root again
     pRoot->Commit();
     // We want a completely new stream, so fake an empty stream
-    sal_Int32 nOldStart = nStart;       // save for later deletion
-    sal_Int32 nOldSize  = nSize;
+    INT32 nOldStart = nStart;       // save for later deletion
+    INT32 nOldSize  = nSize;
     nStart = nPage = STG_EOF;
     nSize  = nPos = 0;
     nOffset = 0;
     // Delete all temporary entries
-    pRoot->DelTemp( sal_False );
+    pRoot->DelTemp( FALSE );
     // set the entry numbers
-    sal_Int32 n = 0;
+    INT32 n = 0;
     pRoot->Enum( n );
     if( !SetSize( n * STGENTRY_SIZE ) )
     {
         nStart = nOldStart; nSize = nOldSize;
         pRoot->RevertAll();
-        return sal_False;
+        return FALSE;
     }
     // set up the cache elements for the new stream
     if( !Copy( STG_FREE, nSize ) )
     {
         pRoot->RevertAll();
-        return sal_False;
+        return FALSE;
     }
     // Write the data to the new stream
     if( !pRoot->Store( *this ) )
     {
         pRoot->RevertAll();
-        return sal_False;
+        return FALSE;
     }
     // fill any remaining entries with empty data
-    sal_Int32 ne = nSize / STGENTRY_SIZE;
+    INT32 ne = nSize / STGENTRY_SIZE;
     StgEntry aEmpty;
     aEmpty.Init();
     while( n < ne )
     {
-        void* p = GetEntry( n++, sal_True );
+        void* p = GetEntry( n++, TRUE );
         if( !p )
         {
             pRoot->RevertAll();
-            return sal_False;
+            return FALSE;
         }
         aEmpty.Store( p );
     }
     // Now we can release the old stream
-    pFat->FreePages( nOldStart, sal_True );
+    pFat->FreePages( nOldStart, TRUE );
     rIo.aHdr.SetTOCStart( nStart );
-    return sal_True;
+    return TRUE;
 }
 
 // Get a dir entry.
 
-void* StgDirStrm::GetEntry( sal_Int32 n, sal_Bool bDirty )
+void* StgDirStrm::GetEntry( INT32 n, BOOL bDirty )
 {
-    if( n < 0 )
-        return NULL;
-
     n *= STGENTRY_SIZE;
-    if( n < 0 && n >= nSize )
+    if( n >= nSize )
         return NULL;
-    return GetPtr( n, sal_True, bDirty );
+    return GetPtr( n, TRUE, bDirty );
 }
 
 // Find a dir entry.
@@ -990,9 +987,9 @@ StgDirEntry* StgDirStrm::Create
         }
         pRes->bInvalid =
         pRes->bRemoved =
-        pRes->bTemp    = sal_False;
+        pRes->bTemp    = FALSE;
         pRes->bCreated =
-        pRes->bDirty   = sal_True;
+        pRes->bDirty   = TRUE;
     }
     else
     {
@@ -1002,7 +999,7 @@ StgDirEntry* StgDirStrm::Create
             pRes->pUp    = &rStg;
             pRes->ppRoot = &pRoot;
             pRes->bCreated =
-            pRes->bDirty = sal_True;
+            pRes->bDirty = TRUE;
         }
         else
         {
@@ -1015,44 +1012,44 @@ StgDirEntry* StgDirStrm::Create
 
 // Rename the given entry.
 
-sal_Bool StgDirStrm::Rename( StgDirEntry& rStg, const String& rOld, const String& rNew )
+BOOL StgDirStrm::Rename( StgDirEntry& rStg, const String& rOld, const String& rNew )
 {
     StgDirEntry* p = Find( rStg, rOld );
     if( p )
     {
 
-        if( !StgAvlNode::Remove( (StgAvlNode**) &rStg.pDown, p, sal_False ) )
-            return sal_False;
+        if( !StgAvlNode::Remove( (StgAvlNode**) &rStg.pDown, p, FALSE ) )
+            return FALSE;
         p->aEntry.SetName( rNew );
         if( !StgAvlNode::Insert( (StgAvlNode**) &rStg.pDown, p ) )
-            return sal_False;
-        p->bRenamed = p->bDirty   = sal_True;
-        return sal_True;
+            return FALSE;
+        p->bRenamed = p->bDirty   = TRUE;
+        return TRUE;
     }
     else
     {
         rIo.SetError( SVSTREAM_FILE_NOT_FOUND );
-        return sal_False;
+        return FALSE;
     }
 }
 
 // Move the given entry to a different storage.
 
-sal_Bool StgDirStrm::Move( StgDirEntry& rStg1, StgDirEntry& rStg2, const String& rName )
+BOOL StgDirStrm::Move( StgDirEntry& rStg1, StgDirEntry& rStg2, const String& rName )
 {
     StgDirEntry* p = Find( rStg1, rName );
     if( p )
     {
         if( !StgAvlNode::Move
             ( (StgAvlNode**) &rStg1.pDown, (StgAvlNode**) &rStg2.pDown, p ) )
-            return sal_False;
-        p->bDirty = sal_True;
-        return sal_True;
+            return FALSE;
+        p->bDirty = TRUE;
+        return TRUE;
     }
     else
     {
         rIo.SetError( SVSTREAM_FILE_NOT_FOUND );
-        return sal_False;
+        return FALSE;
     }
 }
 

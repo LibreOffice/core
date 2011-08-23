@@ -2,7 +2,7 @@
 /***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace comphelper {
 static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const ::rtl::OUString& aPassword, const uno::Sequence< sal_Int8 >& aSalt, sal_Int32 nCount, sal_Int32 nHashLength )
 {
     uno::Sequence< sal_Int8 > aResult;
-
+    
     if ( aPassword.getLength() && aSalt.getLength() && nCount && nHashLength )
     {
         ::rtl::OString aBytePass = ::rtl::OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 );
@@ -85,8 +85,15 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
 {
     uno::Sequence< beans::PropertyValue > aResult;
 
-    uno::Sequence< sal_Int8 > aSalt = GenerateRandomByteSequence( 16 );
+    uno::Sequence< sal_Int8 > aSalt( 16 );
     sal_Int32 nCount = 1024;
+
+    TimeValue aTime;
+    osl_getSystemTime( &aTime );
+    rtlRandomPool aRandomPool = rtl_random_createPool ();
+    rtl_random_addBytes ( aRandomPool, &aTime, 8 ); 
+
+    rtl_random_getBytes ( aRandomPool, aSalt.getArray(), 16 );
 
     uno::Sequence< sal_Int8 > aNewHash = GeneratePBKDF2Hash( aPassword, aSalt, nCount, 16 );
     if ( aNewHash.getLength() )
@@ -101,6 +108,9 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
         aResult[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hash" ) );
         aResult[3].Value <<= aNewHash;
     }
+
+    // Clean up random pool memory
+    rtl_random_destroyPool ( aRandomPool );
 
     return aResult;
 }
@@ -147,9 +157,9 @@ sal_Bool DocPasswordHelper::IsModifyPasswordCorrect( const ::rtl::OUString& aPas
 sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
                 const ::rtl::OUString& aUString )
 {
-    static sal_uInt16 pInitialCode[] = {
+    static sal_uInt16 pInitialCode[] = { 
         0xE1F0, // 1
-        0x1D0F, // 2
+        0x1D0F, // 2 
         0xCC9C, // 3
         0x84C0, // 4
         0x110C, // 5
@@ -233,7 +243,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetWordHashAsSequence(
 
     return aResult;
 }
-
+ 
 // ============================================================================
 sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
                 const ::rtl::OUString& aUString,
@@ -271,100 +281,11 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 
     return aResult;
 }
-
-// ============================================================================
-/*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateRandomByteSequence( sal_Int32 nLength )
-{
-    uno::Sequence< sal_Int8 > aResult( nLength );
-
-    TimeValue aTime;
-    osl_getSystemTime( &aTime );
-    rtlRandomPool aRandomPool = rtl_random_createPool ();
-    rtl_random_addBytes ( aRandomPool, &aTime, 8 );
-    rtl_random_getBytes ( aRandomPool, aResult.getArray(), nLength );
-    rtl_random_destroyPool ( aRandomPool );
-
-    return aResult;
-}
-
-
-// ============================================================================
-/*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const ::rtl::OUString& aPassword, const uno::Sequence< sal_Int8 >& aDocId )
-{
-    uno::Sequence< sal_Int8 > aResultKey;
-    if ( aPassword.getLength() && aDocId.getLength() == 16 )
-    {
-        sal_uInt16 pPassData[16];
-        rtl_zeroMemory( pPassData, sizeof(pPassData) );
-
-        sal_Int32 nPassLen = ::std::min< sal_Int32 >( aPassword.getLength(), 15 );
-        rtl_copyMemory( pPassData, aPassword.getStr(), nPassLen * sizeof(pPassData[0]) );
-
-        aResultKey = GenerateStd97Key( pPassData, aDocId );
-    }
-
-    return aResultKey;
-}
-
-// ============================================================================
-/*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const sal_uInt16 pPassData[16], const uno::Sequence< sal_Int8 >& aDocId )
-{
-    uno::Sequence< sal_Int8 > aResultKey;
-    if ( pPassData[0] && aDocId.getLength() == 16 )
-    {
-        sal_uInt8 pKeyData[64];
-        rtl_zeroMemory( pKeyData, sizeof(pKeyData) );
-
-        sal_Int32 nInd = 0;
-
-        // Fill PassData into KeyData.
-        for ( nInd = 0; nInd < 16 && pPassData[nInd]; nInd++)
-        {
-            pKeyData[2*nInd] = sal::static_int_cast< sal_uInt8 >( (pPassData[nInd] >> 0) & 0xff );
-            pKeyData[2*nInd + 1] = sal::static_int_cast< sal_uInt8 >( (pPassData[nInd] >> 8) & 0xff );
-        }
-
-        pKeyData[2*nInd] = 0x80;
-        pKeyData[56] = sal::static_int_cast< sal_uInt8 >( nInd << 4 );
-
-        // Fill raw digest of KeyData into KeyData.
-        rtlDigest hDigest = rtl_digest_create ( rtl_Digest_AlgorithmMD5 );
-        (void)rtl_digest_updateMD5 (
-            hDigest, pKeyData, sizeof(pKeyData));
-        (void)rtl_digest_rawMD5 (
-            hDigest, pKeyData, RTL_DIGEST_LENGTH_MD5);
-
-        // Update digest with KeyData and Unique.
-        for ( nInd = 0; nInd < 16; nInd++ )
-        {
-            rtl_digest_updateMD5( hDigest, pKeyData, 5 );
-            rtl_digest_updateMD5( hDigest, (const sal_uInt8*)aDocId.getConstArray(), aDocId.getLength() );
-        }
-
-        // Update digest with padding.
-        pKeyData[16] = 0x80;
-        rtl_zeroMemory( pKeyData + 17, sizeof(pKeyData) - 17 );
-        pKeyData[56] = 0x80;
-        pKeyData[57] = 0x0a;
-
-        rtl_digest_updateMD5( hDigest, &(pKeyData[16]), sizeof(pKeyData) - 16 );
-
-        // Fill raw digest of above updates
-        aResultKey.realloc( RTL_DIGEST_LENGTH_MD5 );
-        rtl_digest_rawMD5 ( hDigest, (sal_uInt8*)aResultKey.getArray(), aResultKey.getLength() );
-
-        // Erase KeyData array and leave.
-        rtl_zeroMemory( pKeyData, sizeof(pKeyData) );
-    }
-
-    return aResultKey;
-}
-
+ 
 // ============================================================================
 
-/*static*/ ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > DocPasswordHelper::requestAndVerifyDocPassword(
+/*static*/ OUString DocPasswordHelper::requestAndVerifyDocPassword(
         IDocPasswordVerifier& rVerifier,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rMediaEncData,
         const OUString& rMediaPassword,
         const Reference< XInteractionHandler >& rxInteractHandler,
         const OUString& rDocumentName,
@@ -372,7 +293,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         const ::std::vector< OUString >* pDefaultPasswords,
         bool* pbIsDefaultPassword )
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > aEncData;
+    OUString aPassword;
     DocPasswordVerifierResult eResult = DocPasswordVerifierResult_WRONG_PASSWORD;
 
     // first, try provided default passwords
@@ -382,32 +303,23 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     {
         for( ::std::vector< OUString >::const_iterator aIt = pDefaultPasswords->begin(), aEnd = pDefaultPasswords->end(); (eResult == DocPasswordVerifierResult_WRONG_PASSWORD) && (aIt != aEnd); ++aIt )
         {
-            OSL_ENSURE( aIt->getLength() > 0, "DocPasswordHelper::requestAndVerifyDocPassword - unexpected empty default password" );
-            if( aIt->getLength() > 0 )
+            aPassword = *aIt;
+            OSL_ENSURE( aPassword.getLength() > 0, "DocPasswordHelper::requestAndVerifyDocPassword - unexpected empty default password" );
+            if( aPassword.getLength() > 0 )
             {
-                eResult = rVerifier.verifyPassword( *aIt, aEncData );
+                eResult = rVerifier.verifyPassword( aPassword );
                 if( pbIsDefaultPassword )
                     *pbIsDefaultPassword = eResult == DocPasswordVerifierResult_OK;
             }
         }
     }
 
-    // try media encryption data (skip, if result is OK or ABORT)
-    if( eResult == DocPasswordVerifierResult_WRONG_PASSWORD )
-    {
-        if( rMediaEncData.getLength() > 0 )
-        {
-            eResult = rVerifier.verifyEncryptionData( rMediaEncData );
-            if( eResult == DocPasswordVerifierResult_OK )
-                aEncData = rMediaEncData;
-        }
-    }
-
     // try media password (skip, if result is OK or ABORT)
     if( eResult == DocPasswordVerifierResult_WRONG_PASSWORD )
     {
-        if( rMediaPassword.getLength() > 0 )
-            eResult = rVerifier.verifyPassword( rMediaPassword, aEncData );
+        aPassword = rMediaPassword;
+        if( aPassword.getLength() > 0 )
+            eResult = rVerifier.verifyPassword( aPassword );
     }
 
     // request a password (skip, if result is OK or ABORT)
@@ -421,8 +333,9 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
             rxInteractHandler->handle( xRequest );
             if( pRequest->isPassword() )
             {
-                if( pRequest->getPassword().getLength() > 0 )
-                    eResult = rVerifier.verifyPassword( pRequest->getPassword(), aEncData );
+                aPassword = pRequest->getPassword();
+                if( aPassword.getLength() > 0 )
+                    eResult = rVerifier.verifyPassword( aPassword );
             }
             else
             {
@@ -435,17 +348,15 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     {
     }
 
-    return (eResult == DocPasswordVerifierResult_OK) ? aEncData : uno::Sequence< beans::NamedValue >();
+    return (eResult == DocPasswordVerifierResult_OK) ? aPassword : OUString();
 }
 
-/*static*/ ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > DocPasswordHelper::requestAndVerifyDocPassword(
+/*static*/ OUString DocPasswordHelper::requestAndVerifyDocPassword(
         IDocPasswordVerifier& rVerifier,
         MediaDescriptor& rMediaDesc,
         DocPasswordRequestType eRequestType,
         const ::std::vector< OUString >* pDefaultPasswords )
 {
-    uno::Sequence< beans::NamedValue > aMediaEncData = rMediaDesc.getUnpackedValueOrDefault(
-        MediaDescriptor::PROP_ENCRYPTIONDATA(), uno::Sequence< beans::NamedValue >() );
     OUString aMediaPassword = rMediaDesc.getUnpackedValueOrDefault(
         MediaDescriptor::PROP_PASSWORD(), OUString() );
     Reference< XInteractionHandler > xInteractHandler = rMediaDesc.getUnpackedValueOrDefault(
@@ -454,17 +365,14 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         MediaDescriptor::PROP_URL(), OUString() );
 
     bool bIsDefaultPassword = false;
-    uno::Sequence< beans::NamedValue > aEncryptionData = requestAndVerifyDocPassword(
-        rVerifier, aMediaEncData, aMediaPassword, xInteractHandler, aDocumentName, eRequestType, pDefaultPasswords, &bIsDefaultPassword );
-
-    rMediaDesc.erase( MediaDescriptor::PROP_PASSWORD() );
-    rMediaDesc.erase( MediaDescriptor::PROP_ENCRYPTIONDATA() );
+    OUString aPassword = requestAndVerifyDocPassword(
+        rVerifier, aMediaPassword, xInteractHandler, aDocumentName, eRequestType, pDefaultPasswords, &bIsDefaultPassword );
 
     // insert valid password into media descriptor (but not a default password)
-    if( (aEncryptionData.getLength() > 0) && !bIsDefaultPassword )
-        rMediaDesc[ MediaDescriptor::PROP_ENCRYPTIONDATA() ] <<= aEncryptionData;
+    if( (aPassword.getLength() > 0) && !bIsDefaultPassword )
+        rMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= aPassword;
 
-    return aEncryptionData;
+    return aPassword;
 }
 
 // ============================================================================

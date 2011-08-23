@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,30 +30,27 @@
 #include "precompiled_vcl.hxx"
 
 #include "svsys.h"
-#include "rtl/ref.hxx"
 #include "vcl/xconnection.hxx"
 #include "vcl/svdata.hxx"
 #include "vcl/salinst.hxx"
 #include "vcl/svapp.hxx"
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
+using namespace rtl;
 using namespace osl;
 using namespace vcl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
 
-using ::rtl::OUString;
 
 DisplayConnection::DisplayConnection()
 {
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->mpDefInst->SetEventCallback( this, dispatchEvent );
+    pSVData->mpDefInst->SetErrorEventCallback( this, dispatchErrorEvent );
+
     SalInstance::ConnectionIdentifierType eType;
     int nBytes;
-    void* pBytes = ImplGetSVData()->mpDefInst->GetConnectionIdentifier( eType, nBytes );
+    void* pBytes = pSVData->mpDefInst->GetConnectionIdentifier( eType, nBytes );
     switch( eType )
     {
         case SalInstance::AsciiCString:
@@ -66,54 +63,39 @@ DisplayConnection::DisplayConnection()
 }
 
 DisplayConnection::~DisplayConnection()
-{}
-
-void DisplayConnection::start()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mpDefInst->SetEventCallback( this );
-}
-
-void DisplayConnection::terminate()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     if( pSVData )
     {
-        pSVData->mpDefInst->SetEventCallback( NULL );
+        pSVData->mpDefInst->SetEventCallback( NULL, NULL );
+        pSVData->mpDefInst->SetErrorEventCallback( NULL, NULL );
     }
-
-    SolarMutexReleaser aRel;
-
-    MutexGuard aGuard( m_aMutex );
-    Any aEvent;
-    std::list< css::uno::Reference< XEventHandler > > aLocalList( m_aHandlers );
-    for( ::std::list< css::uno::Reference< XEventHandler > >::const_iterator it = aLocalList.begin(); it != aLocalList.end(); ++it )
-        (*it)->handleEvent( aEvent );
 }
 
-void SAL_CALL DisplayConnection::addEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler, sal_Int32 /*eventMask*/ ) throw()
+
+void SAL_CALL DisplayConnection::addEventHandler( const Any& /*window*/, const Reference< XEventHandler >& handler, sal_Int32 /*eventMask*/ ) throw()
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aHandlers.push_back( handler );
 }
 
-void SAL_CALL DisplayConnection::removeEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler ) throw()
+void SAL_CALL DisplayConnection::removeEventHandler( const Any& /*window*/, const Reference< XEventHandler >& handler ) throw()
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aHandlers.remove( handler );
 }
 
-void SAL_CALL DisplayConnection::addErrorHandler( const css::uno::Reference< XEventHandler >& handler ) throw()
+void SAL_CALL DisplayConnection::addErrorHandler( const Reference< XEventHandler >& handler ) throw()
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aErrorHandlers.push_back( handler );
 }
 
-void SAL_CALL DisplayConnection::removeErrorHandler( const css::uno::Reference< XEventHandler >& handler ) throw()
+void SAL_CALL DisplayConnection::removeErrorHandler( const Reference< XEventHandler >& handler ) throw()
 {
     MutexGuard aGuard( m_aMutex );
 
@@ -125,37 +107,52 @@ Any SAL_CALL DisplayConnection::getIdentifier() throw()
     return m_aAny;
 }
 
-bool DisplayConnection::dispatchEvent( void* pData, int nBytes )
+void DisplayConnection::dispatchDowningEvent()
 {
     SolarMutexReleaser aRel;
+    
+    MutexGuard aGuard( m_aMutex );
+    Any aEvent;
+    std::list< Reference< XEventHandler > > aLocalList( m_aHandlers );
+    for( ::std::list< Reference< XEventHandler > >::const_iterator it = aLocalList.begin(); it != aLocalList.end(); ++it )
+        (*it)->handleEvent( aEvent );
+}
+
+bool DisplayConnection::dispatchEvent( void* pThis, void* pData, int nBytes )
+{
+    SolarMutexReleaser aRel;
+
+    DisplayConnection* This = (DisplayConnection*)pThis;
 
     Sequence< sal_Int8 > aSeq( (sal_Int8*)pData, nBytes );
     Any aEvent;
     aEvent <<= aSeq;
-    ::std::list< css::uno::Reference< XEventHandler > > handlers;
+    ::std::list< Reference< XEventHandler > > handlers;
     {
-        MutexGuard aGuard( m_aMutex );
-        handlers = m_aHandlers;
+        MutexGuard aGuard( This->m_aMutex );
+        handlers = This->m_aHandlers;
     }
-    for( ::std::list< css::uno::Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
+    for( ::std::list< Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
         if( (*it)->handleEvent( aEvent ) )
             return true;
     return false;
 }
 
-bool DisplayConnection::dispatchErrorEvent( void* pData, int nBytes )
+bool DisplayConnection::dispatchErrorEvent( void* pThis, void* pData, int nBytes )
 {
     SolarMutexReleaser aRel;
+
+    DisplayConnection* This = (DisplayConnection*)pThis;
 
     Sequence< sal_Int8 > aSeq( (sal_Int8*)pData, nBytes );
     Any aEvent;
     aEvent <<= aSeq;
-    ::std::list< css::uno::Reference< XEventHandler > > handlers;
+    ::std::list< Reference< XEventHandler > > handlers;
     {
-        MutexGuard aGuard( m_aMutex );
-        handlers = m_aErrorHandlers;
+        MutexGuard aGuard( This->m_aMutex );
+        handlers = This->m_aErrorHandlers;
     }
-    for( ::std::list< css::uno::Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
+    for( ::std::list< Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
         if( (*it)->handleEvent( aEvent ) )
             return true;
 

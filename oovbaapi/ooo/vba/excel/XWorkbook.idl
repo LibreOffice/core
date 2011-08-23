@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,17 @@
 #ifndef __ooo_vba_excel_XWorkbook_idl__
 #define __ooo_vba_excel_XWorkbook_idl__
 
-#include <com/sun/star/lang/XUnoTunnel.idl>
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
+#endif
 
 //=============================================================================
 
-module ooo {  module vba {  module excel {
+module ooo {  module vba {  module excel { 
 
 //=============================================================================
 
@@ -40,25 +45,22 @@ interface XWorksheet;
 interface XWorksheets;
 interface XStyles;
 
-interface XWorkbook
+interface XWorkbook : com::sun::star::uno::XInterface
 {
-
-    interface ::com::sun::star::lang::XUnoTunnel;
-
-    [attribute, readonly] boolean ProtectStructure;
+    [attribute, readonly] boolean ProtectStructure; 
     [attribute, readonly] XWorksheet ActiveSheet;
     [attribute, readonly] string  CodeName;
     [attribute, readonly] long FileFormat;
     [attribute] boolean  PrecisionAsDisplayed;
 
-    any  Worksheets( [in] any Index );
-    any  Styles( [in] any Index );
-    any  Sheets( [in] any Index );
-    any  Windows( [in] any Index );
+    any  Worksheets([in] any sheet);
+    any  Styles([in] any Index );
+    any  Sheets([in] any sheet);
+    any  Windows([in] any index );
     void ResetColors() raises (com::sun::star::script::BasicErrorException);
     void Activate();
     any Names( [in] any Index );
-    any Colors( [in] any Index ) raises (com::sun::star::script::BasicErrorException);
+    any Colors([in] any Index) raises (com::sun::star::script::BasicErrorException);
     void SaveCopyAs( [in] string Filename );
     void Protect( [in] any Password );
     void SaveAs([in] string FileName, [in]any FileFormat, [in]any CreateBackup);

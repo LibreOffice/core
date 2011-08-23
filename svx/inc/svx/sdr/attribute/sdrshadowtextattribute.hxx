@@ -2,10 +2,14 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: sdrallattribute.hxx,v $
+ *
+ * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,12 +46,12 @@ namespace drawinglayer
         class SdrShadowTextAttribute
         {
             // shadow and text attributes
-            SdrShadowAttribute          maShadow;                   // shadow attributes (if used)
-            SdrTextAttribute            maTextAttribute;            // text and text attributes (if used)
+            SdrShadowAttribute			maShadow;					// shadow attributes (if used)
+            SdrTextAttribute			maTextAttribute;			// text and text attributes (if used)
 
         public:
             SdrShadowTextAttribute(
-                const SdrShadowAttribute& rShadow,
+                const SdrShadowAttribute& rShadow, 
                 const SdrTextAttribute& rTextAttribute);
             SdrShadowTextAttribute();
             SdrShadowTextAttribute(const SdrShadowTextAttribute& rCandidate);

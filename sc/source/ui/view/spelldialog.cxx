@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 
 SFX_IMPL_CHILDWINDOW( ScSpellDialogChildWindow, SID_SPELL_DIALOG )
 
-ScSpellDialogChildWindow::ScSpellDialogChildWindow( Window* pParentP, sal_uInt16 nId,
+ScSpellDialogChildWindow::ScSpellDialogChildWindow( Window* pParentP, USHORT nId,
         SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
     ::svx::SpellDialogChildWindow( pParentP, nId, pBindings, pInfo ),
     mpViewShell( 0 ),
@@ -149,7 +149,7 @@ void ScSpellDialogChildWindow::Reset()
         }
 
         mpViewData->SetSpellingView( 0 );
-        mpViewShell->KillEditView( sal_True );
+        mpViewShell->KillEditView( TRUE );
         mpDocShell->PostPaintGridAll();
         mpViewShell->UpdateInputHandler();
         mpDoc->DisableIdle( mbOldIdleDisabled );
@@ -221,7 +221,7 @@ void ScSpellDialogChildWindow::Init()
     }
 
     mbOldIdleDisabled = mpDoc->IsIdleDisabled();
-    mpDoc->DisableIdle( true );   // stop online spelling
+    mpDoc->DisableIdle( TRUE );   // #42726# stop online spelling
 
     // *** create Undo/Redo documents *** -------------------------------------
 
@@ -255,7 +255,7 @@ void ScSpellDialogChildWindow::Init()
     Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );
     pEditView->SetOutputArea( aRect );
     mxEngine->SetControlWord( EE_CNTRL_USECHARATTRIBS );
-    mxEngine->EnableUndo( false );
+    mxEngine->EnableUndo( FALSE );
     mxEngine->SetPaperSize( aRect.GetSize() );
     mxEngine->SetText( EMPTY_STRING );
     mxEngine->ClearModifyFlag();

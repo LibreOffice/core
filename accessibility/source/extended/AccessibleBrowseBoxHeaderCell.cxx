@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,7 +131,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
 // -----------------------------------------------------------------------------
 namespace
 {
-    Rectangle getRectangle(IAccessibleTableProvider* _pBrowseBox,sal_Int32 _nRowColIndex, sal_Bool _bOnScreen,sal_Bool _bRowBar)
+    Rectangle getRectangle(IAccessibleTableProvider* _pBrowseBox,sal_Int32 _nRowColIndex, BOOL _bOnScreen,BOOL _bRowBar)
     {
         sal_Int32 nRow  = 0;
         sal_uInt16 nCol =  (sal_uInt16)_nRowColIndex;
@@ -141,20 +141,20 @@ namespace
             nCol = 0;
         }
 
-        Rectangle aRet(_pBrowseBox->GetFieldRectPixelAbs( nRow , nCol, sal_True, _bOnScreen));
+        Rectangle aRet(_pBrowseBox->GetFieldRectPixelAbs( nRow , nCol, TRUE, _bOnScreen));
         return Rectangle(aRet.TopLeft() - Point(0,aRet.GetHeight()),aRet.GetSize());
     }
 }
 
 Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
 {
-    return getRectangle(mpBrowseBox,m_nColumnRowId,sal_False,isRowBarCell());
+    return getRectangle(mpBrowseBox,m_nColumnRowId,FALSE,isRowBarCell());
 }
 // -----------------------------------------------------------------------------
 
 Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
 {
-    return getRectangle(mpBrowseBox,m_nColumnRowId,sal_True,isRowBarCell());
+    return getRectangle(mpBrowseBox,m_nColumnRowId,TRUE,isRowBarCell());
 }
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()

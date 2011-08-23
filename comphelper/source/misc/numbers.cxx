@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ namespace comphelper
 {
 //.........................................................................
 
-namespace starbeans = ::com::sun::star::beans;
-namespace starlang  = ::com::sun::star::lang;
+namespace starbeans	= ::com::sun::star::beans;
+namespace starlang	= ::com::sun::star::lang;
 
 //------------------------------------------------------------------------------
 sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey)
@@ -53,7 +53,7 @@ sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>
         {
             staruno::Reference<starbeans::XPropertySet> xFormat(xFormats->getByKey(nKey));
             if (xFormat.is())
-                xFormat->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ))) >>= nReturn;
+                xFormat->getPropertyValue(rtl::OUString::createFromAscii("Type")) >>= nReturn;
         }
         catch(...)
         {
@@ -83,7 +83,7 @@ staruno::Any getNumberFormatDecimals(const staruno::Reference<starutil::XNumberF
             staruno::Reference<starbeans::XPropertySet> xFormat( xFormats->getByKey(nKey));
             if (xFormat.is())
             {
-                static ::rtl::OUString PROPERTY_DECIMALS( RTL_CONSTASCII_USTRINGPARAM( "Decimals" ));
+                static ::rtl::OUString PROPERTY_DECIMALS = ::rtl::OUString::createFromAscii("Decimals");
                 return xFormat->getPropertyValue(PROPERTY_DECIMALS);
             }
         }
@@ -139,14 +139,14 @@ Any getNumberFormatProperty( const Reference< XNumberFormatter >& _rxFormatter, 
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "::getNumberFormatProperty: caught an exception (did you create the key with another formatter?)!" );
+        OSL_ENSURE( sal_False, "::getNumberFormatProperty: caught an exception (did you create the key with another formatter?)!" );
     }
 
     return aReturn;
 }
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,7 @@ class ViewShell;
 
 class SwHTMLViewShellClient : public SwClient
 {
-protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
 public:
 
@@ -47,7 +46,7 @@ public:
     void Register( ViewShell *pVsh );
     void DeRegister();
 
-    ViewShell *GetViewShell();
+    /*inline*/ ViewShell *GetViewShell(); // im swhtml.cxx
 };
 
 

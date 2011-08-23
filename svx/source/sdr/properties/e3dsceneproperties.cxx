@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <svl/whiter.hxx>
 #include <svx/svddef.hxx>
 #include <svx/scene3d.hxx>
-#include <svx/svditer.hxx>
+#include <svditer.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -42,12 +42,12 @@ namespace sdr
     namespace properties
     {
         E3dSceneProperties::E3dSceneProperties(SdrObject& rObj)
-        :   E3dProperties(rObj)
+        :	E3dProperties(rObj)
         {
         }
 
         E3dSceneProperties::E3dSceneProperties(const E3dSceneProperties& rProps, SdrObject& rObj)
-        :   E3dProperties(rProps, rObj)
+        :	E3dProperties(rProps, rObj)
         {
         }
 
@@ -103,13 +103,13 @@ namespace sdr
                         // and always equal.
                         if(nWhich <= SDRATTR_3DSCENE_FIRST || nWhich >= SDRATTR_3DSCENE_LAST)
                         {
-                            if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, sal_False))
+                            if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, FALSE))
                             {
                                 mpItemSet->InvalidateItem(nWhich);
                             }
                             else
                             {
-                                mpItemSet->MergeValue(rSet.Get(nWhich), sal_True);
+                                mpItemSet->MergeValue(rSet.Get(nWhich), TRUE);
                             }
                         }
 
@@ -132,9 +132,9 @@ namespace sdr
             {
                 // Generate filtered ItemSet which contains all but the SDRATTR_3DSCENE items.
                 // #i50808# Leak fix, Clone produces a new instance and we get ownership here
-                SfxItemSet* pNewSet = rSet.Clone(sal_True);
+                SfxItemSet* pNewSet = rSet.Clone(TRUE);
                 DBG_ASSERT(pNewSet, "E3dSceneProperties::SetMergedItemSet(): Could not clone ItemSet (!)");
-
+                
                 for(sal_uInt16 b(SDRATTR_3DSCENE_FIRST); b <= SDRATTR_3DSCENE_LAST; b++)
                 {
                     pNewSet->ClearItem(b);
@@ -200,9 +200,9 @@ namespace sdr
 
             switch(nWhich)
             {
-                case SDRATTR_3DSCENE_PERSPECTIVE            :
-                case SDRATTR_3DSCENE_DISTANCE               :
-                case SDRATTR_3DSCENE_FOCAL_LENGTH           :
+                case SDRATTR_3DSCENE_PERSPECTIVE			:
+                case SDRATTR_3DSCENE_DISTANCE				:
+                case SDRATTR_3DSCENE_FOCAL_LENGTH			:
                 {
                     // #83387#, #83391#
                     // one common function for the camera attributes
@@ -220,7 +220,7 @@ namespace sdr
                     // for SDRATTR_3DSCENE_DISTANCE:
                     basegfx::B3DPoint aActualPosition(aSceneCam.GetPosition());
                     double fNew = rObj.GetDistance();
-
+                    
                     if(fNew != aActualPosition.getZ())
                     {
                         aSceneCam.SetPosition(basegfx::B3DPoint(aActualPosition.getX(), aActualPosition.getY(), fNew));
@@ -300,7 +300,7 @@ namespace sdr
                 if(pSubList && rObj.GetScene() == &rObj)
                 {
                     SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
-
+                    
                     while(a3DIterator.IsMore())
                     {
                         E3dObject* pObj = (E3dObject*)a3DIterator.Next();
@@ -320,13 +320,13 @@ namespace sdr
             Camera3D aSceneCam(rObj.GetCamera());
 
             // ProjectionType
-            mpItemSet->Put(Svx3DPerspectiveItem((sal_uInt16)aSceneCam.GetProjection()));
+            mpItemSet->Put(Svx3DPerspectiveItem((UINT16)aSceneCam.GetProjection()));
 
             // CamPos
-            mpItemSet->Put(Svx3DDistanceItem((sal_uInt32)(aSceneCam.GetPosition().getZ() + 0.5)));
+            mpItemSet->Put(Svx3DDistanceItem((UINT32)(aSceneCam.GetPosition().getZ() + 0.5)));
 
             // FocalLength
-            mpItemSet->Put(Svx3DFocalLengthItem((sal_uInt32)((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
+            mpItemSet->Put(Svx3DFocalLengthItem((UINT32)((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
         }
     } // end of namespace properties
 } // end of namespace sdr

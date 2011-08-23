@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : gregor.hartmann@oracle.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : Basic form-controls
 '*
@@ -122,7 +122,7 @@ testcase tAllControlsOnDialog( cMajor as string )
         if ( hFindFirstDialog() ) then
             printlog( "First dialog found. Good." )
         else
-            warnlog( "#i115117 - Could not access dialog, accelerator not working? (Test interrupted)" )
+            warnlog( "Could not access dialog, aborting test" )
             hCloseBasicIde()
             hDestroyDocument()
             goto endsub

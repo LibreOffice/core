@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,8 +148,8 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
         }
         catch (::com::sun::star::uno::RuntimeException &)
         {
-            OSL_FAIL(
-                "### RuntimeException occurred udring queryInterface()!" );
+            OSL_ENSURE(
+                0, "### RuntimeException occured udring queryInterface()!" );
         }
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,7 +103,7 @@ namespace vcl
     //--------------------------------------------------------------------
     bool MnemonicEngine::HandleKeyEvent( const KeyEvent& _rKEvt )
     {
-        sal_Bool bAccelKey = _rKEvt.GetKeyCode().IsMod2();
+        BOOL bAccelKey = _rKEvt.GetKeyCode().IsMod2();
         if ( !bAccelKey )
             return false;
 

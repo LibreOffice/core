@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,10 +53,10 @@ module com {  module sun {  module star {  module text {
  */
 published service AccessibleFootnoteView
 {
-    /** This interface gives access to any paragraph fragment and table
+    /** This interface gives access to any paragraph fragment and table 
         fragment that is contained in a footnote and is at least
         partially visible on the screen.
-
+        
         <ul>
             <li>The parent returned by <method scope="::com::sun::star::accessibility"
                 >XAccessibleContext::getAccessibleParent</method>
@@ -65,7 +65,7 @@ published service AccessibleFootnoteView
                 or the accessible page preview of a spreadsheet document.
             <li>The children returned by <method scope="::com::sun::star::accessibility"
                 >XAccessibleContext::getAccessibleChild</method> all
-                support the interface XAccessible. Calling
+                support the interface XAccessible. Calling 
                 <method scope="::com::sun::star::accessibility"
                 >XAccessible::getAccessibleContext</method> for these children returns
                 an object that supports one of the following services.
@@ -116,13 +116,13 @@ published service AccessibleFootnoteView
                         >AccessibleStateType::VISIBLE</const>
                 </ul>
             <li>Depending of the application's region setting, the locale is
-                the western, Asian or complex default language of the document.
+                the western, asian or complex default language of the document.
         </ul>
 
      */
     interface ::com::sun::star::accessibility::XAccessibleContext;
 
-    /** This interface describes the graphical representation of a
+    /** This interface describes the graphical representation of a 
           footnote.
      */
     interface ::com::sun::star::accessibility::XAccessibleComponent;

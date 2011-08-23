@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : gregor.hartmann@oracle.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Import BASIC library via Package Manager GUI as UNO Package
 '*
@@ -102,7 +102,9 @@ testcase tBasicPackageImport
     next iCurrentLib
     cLibraryName = BibliotheksListe.getSelText()
 
-    hClickButton( Hinzufuegen )
+    if ( not hClickButton( Hinzufuegen ) ) then
+        warnlog( "#i64007 - Office crashes on clicking import button" )
+    endif
     
     kontext "OeffnenDlg"
     hCloseDialog( OeffnenDlg, "cancel" )

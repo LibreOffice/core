@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,10 @@
 #include <testshl/simpleheader.hxx>
 
 #define TEST_ENSURE(c, m) CPPUNIT_ASSERT_MESSAGE((m), (c))
-using ::rtl::OString;
+
+
+using namespace rtl;
+
 namespace rtl_OString
 {
     class oldtests : public CppUnit::TestFixture

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <classes/droptargetlistener.hxx>
-#include <framework/acceleratorinfo.hxx>
+#include <helper/acceleratorinfo.hxx>
 #include <targets.h>
 #include <properties.h>
 #include <services.h>
@@ -462,17 +462,17 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // check some required states
     if (m_xFrame.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("already attached")),
+                ::rtl::OUString::createFromAscii("already attached"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (!xFrame.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid frame reference")),
+                ::rtl::OUString::createFromAscii("invalid frame reference"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (!m_xWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("instance seams to be not or wrong initialized")),
+                ::rtl::OUString::createFromAscii("instance seams to be not or wrong initialized"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     // safe the frame reference
@@ -501,27 +501,33 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // disable full screen mode of the frame!
     if (pParent && pParent->IsFullScreenMode())
     {
-        pParent->ShowFullScreenMode(sal_False);
+        pParent->ShowFullScreenMode(FALSE);
         pParent->SetMenuBarMode(MENUBAR_MODE_NORMAL);
     }
 
     // create the menu bar for the backing component
     css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-    xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
+    xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager; 
     if (xLayoutManager.is())
     {
         xLayoutManager->lock();
         xLayoutManager->createElement( DECLARE_ASCII( "private:resource/menubar/menubar"     ));
+        /* #i85963# new backing window comes withoud standard bar and statusbar
+        xLayoutManager->createElement( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
+        xLayoutManager->createElement( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
+        xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
+        xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
+        */
         xLayoutManager->unlock();
-    }
+    }        
 
     if (pWindow)
     {
         // set help ID for our canvas
         pWindow->SetHelpId(HID_BACKINGWINDOW);
     }
-
+    
     // inform BackingWindow about frame
     BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow );
     if( pBack )
@@ -617,10 +623,10 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
     UI user.
 
     @param  bSuspend
-                If its set to sal_True this controller should be suspended.
-                sal_False will resuspend it.
+                If its set to TRUE this controller should be suspended.
+                FALSE will resuspend it.
 
-    @return sal_True if the request could be finished successfully; sal_False otherwise.
+    @return TRUE if the request could be finished successfully; FALSE otherwise.
  */
 
 sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
@@ -652,13 +658,13 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 {
     // Attention: dont free m_pAccExec here! see comments inside dtor and
     // keyPressed() for further details.
-
+    
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
     if (!aEvent.Source.is() || aEvent.Source!=m_xWindow || !m_xWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unexpected source or called twice")),
+                ::rtl::OUString::createFromAscii("unexpected source or called twice"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     m_xWindow = css::uno::Reference< css::awt::XWindow >();
@@ -752,7 +758,7 @@ void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< c
     throw(css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not supported")),
+            ::rtl::OUString::createFromAscii("not supported"),
             static_cast< ::cppu::OWeakObject* >(this));
 }
 
@@ -799,7 +805,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     if (m_xWindow.is())
         throw css::uno::Exception(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("already initialized")),
+                ::rtl::OUString::createFromAscii("already initialized"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     css::uno::Reference< css::awt::XWindow > xParentWindow;
@@ -810,7 +816,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
        )
     {
         throw css::uno::Exception(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wrong or corrupt argument list")),
+                ::rtl::OUString::createFromAscii("wrong or corrupt argument list"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -821,7 +827,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     if (!m_xWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("couldn't create component window")),
+                ::rtl::OUString::createFromAscii("couldn't create component window"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     // start listening for window disposing
@@ -831,7 +837,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
         xBroadcaster->addEventListener(static_cast< css::lang::XEventListener* >(this));
 
     m_xWindow->setVisible(sal_True);
-
+    
     aWriteLock.unlock();
     /* } SAFE */
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,31 +27,26 @@
  ************************************************************************/
 
 #include "oox/helper/binaryinputstream.hxx"
-
 #include <string.h>
 #include <vector>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/binaryoutputstream.hxx"
 
-namespace oox {
-
-// ============================================================================
-
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
-
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::io::XInputStream;
+using ::com::sun::star::io::XSeekable;
 
-namespace {
+namespace oox {
 
 const sal_Int32 INPUTSTREAM_BUFFERSIZE      = 0x8000;
-
-} // namespace
 
 // ============================================================================
 
@@ -209,7 +204,7 @@ void BinaryXInputStream::close()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "BinaryXInputStream::close - closing input stream failed" );
+        OSL_ENSURE( false, "BinaryXInputStream::close - closing input stream failed" );
     }
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,11 +51,11 @@ class AquaBlinker : public Timer
     {
         mpFrame->maBlinkers.push_back( this );
     }
-
+    
     public:
-
+    
     static void Blink( AquaSalFrame*, const Rectangle&, int nTimeout = 80 );
-
+    
     virtual void Timeout()
     {
         Stop();
@@ -219,7 +219,7 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
             if( GetSalData()->mbIsScrollbarDoubleMax )
                 rResultRect.Bottom() += 8;
             else
-                rResultRect.Bottom() += 4;
+                rResultRect.Bottom() += 4;                
             break;
         case PART_TRACK_VERT_LOWER:
             if( GetSalData()->mbIsScrollbarDoubleMax )
@@ -237,13 +237,13 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
 /*
  * IsNativeControlSupported()
  * --------------------------
- * Returns sal_True if the platform supports native
+ * Returns TRUE if the platform supports native
  * drawing of the control defined by nPart.
  *
  */
-sal_Bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
-    bool bOk = sal_False;
+    bool bOk = FALSE;
 
     // Native controls are now defaults
     // If you want to disable experimental native controls code,
@@ -267,25 +267,25 @@ sal_Bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPa
                 nPart == HAS_THREE_BUTTONS )
                 return true;
             break;
-
+            
         case CTRL_SLIDER:
             if( nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA )
                 return true;
             break;
 
-        case CTRL_EDITBOX:
+        case CTRL_EDITBOX: 
             if( nPart == PART_ENTIRE_CONTROL ||
                 nPart == HAS_BACKGROUND_TEXTURE )
                 return true;
             break;
 
-        case CTRL_MULTILINE_EDITBOX:
+        case CTRL_MULTILINE_EDITBOX: 
             if( nPart == PART_ENTIRE_CONTROL ||
                 nPart == HAS_BACKGROUND_TEXTURE )
                 return true;
             break;
 
-        case CTRL_SPINBOX:
+        case CTRL_SPINBOX: 
             if( nPart == PART_ENTIRE_CONTROL ||
                 nPart == PART_ALL_BUTTONS    ||
                 nPart == HAS_BACKGROUND_TEXTURE )
@@ -372,18 +372,18 @@ sal_Bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPa
 /*
  * HitTestNativeControl()
  *
- *  If the return value is sal_True, bIsInside contains information whether
+ *  If the return value is TRUE, bIsInside contains information whether
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
-sal_Bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                        const Point& rPos, sal_Bool& rIsInside )
+BOOL AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+                        const Point& rPos, BOOL& rIsInside )
 {
     if ( nType == CTRL_SCROLLBAR )
     {
         Rectangle aRect;
         bool bValid = AquaGetScrollRect( /* TODO: m_nScreen */ nPart, rControlRegion, aRect );
-        rIsInside = bValid ? aRect.IsInside( rPos ) : sal_False;
+        rIsInside = bValid ? aRect.IsInside( rPos ) : FALSE;
         if( GetSalData()->mbIsScrollbarDoubleMax )
         {
             // in double max mode the actual trough is a little smaller than the track
@@ -394,20 +394,20 @@ sal_Bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart n
                 {
                     // the left 4 pixels are not hit sensitive
                     if( rPos.X() - aRect.Left() < 4 )
-                        rIsInside = sal_False;
+                        rIsInside = FALSE;
                 }
                 else if( nPart == PART_TRACK_VERT_AREA )
                 {
                     // the top 4 pixels are not hit sensitive
                     if( rPos.Y() - aRect.Top() < 4 )
-                        rIsInside = sal_False;
+                        rIsInside = FALSE;
                 }
             }
         }
         return bValid;
     }  //  CTRL_SCROLLBAR
 
-    return sal_False;
+    return FALSE;
 }
 
 /*
@@ -420,14 +420,14 @@ sal_Bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart n
    kThemeStatePressedUp = 2,
    kThemeStatePressedDown = 3
 
-#define CTRL_STATE_ENABLED      0x0001
-#define CTRL_STATE_FOCUSED      0x0002
-#define CTRL_STATE_PRESSED      0x0004
-#define CTRL_STATE_ROLLOVER     0x0008
-#define CTRL_STATE_HIDDEN       0x0010
-#define CTRL_STATE_DEFAULT      0x0020
-#define CTRL_STATE_SELECTED     0x0040
-#define CTRL_CACHING_ALLOWED    0x8000  // set when the control is completely visible (i.e. not clipped)
+#define CTRL_STATE_ENABLED		0x0001
+#define CTRL_STATE_FOCUSED		0x0002
+#define CTRL_STATE_PRESSED		0x0004
+#define CTRL_STATE_ROLLOVER		0x0008
+#define CTRL_STATE_HIDDEN		0x0010
+#define CTRL_STATE_DEFAULT		0x0020
+#define CTRL_STATE_SELECTED		0x0040
+#define CTRL_CACHING_ALLOWED	0x8000  // set when the control is completely visible (i.e. not clipped)
 */
 UInt32 AquaSalGraphics::getState( ControlState nState )
 {
@@ -463,18 +463,18 @@ UInt32 AquaSalGraphics::getTrackState( ControlState nState )
  *
  *  Draws the requested control described by nPart/nState.
  *
- *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
- *  aValue:     An optional value (tristate/numerical/string)
- *  aCaption:   A caption or title string (like button text etc)
+ *  rControlRegion:	The bounding region of the complete control in VCL frame coordinates.
+ *  aValue:		An optional value (tristate/numerical/string)
+ *  aCaption:	A caption or title string (like button text etc)
  */
-sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
+BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                     ControlPart nPart,
                     const Rectangle& rControlRegion,
                     ControlState nState,
                     const ImplControlValue& aValue,
                     const rtl::OUString& aCaption )
 {
-    sal_Bool bOK = sal_False;
+    BOOL bOK = FALSE;
 
     if( ! CheckContext() )
         return false;
@@ -584,22 +584,22 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 if( nState & CTRL_STATE_PRESSED ) {//checked, else it is not displayed (see vcl/source/window/menu.cxx)
                     HIThemeTextInfo aTextInfo;
                     aTextInfo.version = 0;
-                    aTextInfo.state = ((nState & CTRL_STATE_ENABLED)==0) ? kThemeStateInactive: kThemeStateActive;
+                    aTextInfo.state = ((nState & CTRL_STATE_ENABLED)==0) ? kThemeStateInactive: kThemeStateActive; 
                     aTextInfo.fontID = kThemeMenuItemMarkFont;
                     aTextInfo.horizontalFlushness=kHIThemeTextHorizontalFlushCenter;
                     aTextInfo.verticalFlushness=kHIThemeTextVerticalFlushTop;
                     aTextInfo.options=kHIThemeTextBoxOptionNone;
                     aTextInfo.truncationPosition=kHIThemeTextTruncationNone;
                     //aTextInfo.truncationMaxLines unused because of kHIThemeTextTruncationNone
-
+                    
                     if( nState & CTRL_STATE_SELECTED) aTextInfo.state = kThemeStatePressed; //item highlighted
-
+                    
                     UniChar mark=( nPart == PART_MENU_ITEM_CHECK_MARK ) ? kCheckUnicode: kBulletUnicode;//0x2713;
                     CFStringRef cfString = CFStringCreateWithCharactersNoCopy(kCFAllocatorDefault, &mark, 1, kCFAllocatorNull);
-                    HIThemeDrawTextBox(cfString, &rc, &aTextInfo, mrContext, kHIThemeOrientationNormal);
+                    HIThemeDrawTextBox(cfString, &rc, &aTextInfo, mrContext, kHIThemeOrientationNormal); 
                     if (cfString)
                         CFRelease(cfString);
-
+                    
                     bOK = true;
                 }
             }
@@ -620,7 +620,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aPushInfo.animation.time.current = 0;
             PushButtonValue* pPBVal = aValue.getType() == CTRL_PUSHBUTTON ? (PushButtonValue*)&aValue : NULL;
             int nPaintHeight = static_cast<int>(rc.size.height);
-
+            
             if( pPBVal && pPBVal->mbBevelButton )
             {
                 aPushInfo.kind = kThemeRoundedBevelButton;
@@ -634,7 +634,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             {
                 aPushInfo.kind = kThemePushButtonNormal;
                 nPaintHeight = PB_Norm_Height;
-
+                
                 // avoid clipping when focused
                 rc.origin.x += FOCUS_RING_WIDTH/2;
                 rc.size.width -= FOCUS_RING_WIDTH;
@@ -697,11 +697,11 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             bOK = true;
         }
         break;
-
+        
     case CTRL_LISTNODE:
         {
             ButtonValue aButtonValue = aValue.getTristateVal();
-
+    
             if( Application::GetSettings().GetLayoutRTL() && aButtonValue == BUTTONVALUE_OFF )
             {
                 // FIXME: a value of kThemeDisclosureLeft
@@ -709,7 +709,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 // sadly this does not seem to work, so we'll draw a left
                 // grey equilateral triangle here ourselves.
                 // Perhaps some other HIThemeButtonDrawInfo setting would do the trick ?
-
+                
                 CGContextSetShouldAntialias( mrContext, true );
                 float aGrey[] = { 0.45, 0.45, 0.45, 1.0 };
                 CGContextSetFillColor( mrContext, aGrey );
@@ -731,9 +731,9 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aInfo.kind = kThemeDisclosureTriangle;
                 aInfo.value = kThemeDisclosureRight;
                 aInfo.state = getState( nState );
-
+    
                 aInfo.adornment = kThemeAdornmentNone;
-
+                
                 switch( aButtonValue ) {
                     case BUTTONVALUE_ON: aInfo.value = kThemeDisclosureDown;//expanded
                         break;
@@ -749,13 +749,13 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     default:
                         break;
                 }
-
+                
                 HIThemeDrawButton( &rc, &aInfo, mrContext, kHIThemeOrientationNormal, NULL );
             }
             bOK = true;
         }
         break;
-
+        
     case CTRL_PROGRESS:
     case CTRL_INTROPROGRESS:
         {
@@ -779,12 +779,12 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aTrackInfo.enableState          = kThemeTrackActive;
             aTrackInfo.filler1              = 0;
             aTrackInfo.trackInfo.progress.phase   = static_cast<UInt8>(CFAbsoluteTimeGetCurrent()*10.0);
-
+            
             HIThemeDrawTrack( &aTrackInfo, NULL, mrContext, kHIThemeOrientationNormal );
             bOK = true;
         }
         break;
-
+        
     case CTRL_SLIDER:
         {
             SliderValue* pSLVal = (SliderValue*)&aValue;
@@ -869,8 +869,8 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             }
         }
         break;
-
-//#define OLD_TAB_STYLE
+        
+//#define OLD_TAB_STYLE    
 #ifdef OLD_TAB_STYLE
     case CTRL_TAB_PANE:
         {
@@ -879,17 +879,17 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aTabPaneDrawInfo.state = kThemeStateActive;
             aTabPaneDrawInfo.direction=kThemeTabNorth;
             aTabPaneDrawInfo.size=kHIThemeTabSizeNormal;
-
+            
             //the border is outside the rect rc for Carbon
             //but for VCL it should be inside
             rc.origin.x+=1;
             rc.size.width-=2;
-
+            
             HIThemeDrawTabPane(&rc, &aTabPaneDrawInfo, mrContext, kHIThemeOrientationNormal);
             bOK = true;
         }
         break;
-
+        
     case CTRL_TAB_ITEM:
         {
             HIThemeTabDrawInfo aTabItemDrawInfo;
@@ -898,25 +898,25 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aTabItemDrawInfo.direction=kThemeTabNorth;
             aTabItemDrawInfo.size=kHIThemeTabSizeNormal;
             aTabItemDrawInfo.adornment=kHIThemeTabAdornmentNone;
-
+            
             if(nState & CTRL_STATE_SELECTED) {
                 aTabItemDrawInfo.style=kThemeTabFront;
             }
             if(nState & CTRL_STATE_FOCUSED) {
                 aTabItemDrawInfo.adornment=kHIThemeTabAdornmentFocus;
             }
-
+            
             /*if(rc.size.height>=TAB_HEIGHT_NORMAL) rc.size.height=TAB_HEIGHT_NORMAL;
             else if(rc.size.height>=TAB_HEIGHT_SMALL) rc.size.height=TAB_HEIGHT_SMALL;
             else rc.size.height=TAB_HEIGHT_MINI;*/
             //now we only use the default size
             rc.size.height=TAB_HEIGHT_NORMAL;
-
+            
             HIThemeDrawTab(&rc, &aTabItemDrawInfo, mrContext, kHIThemeOrientationNormal, &rc );
-
+            
             bOK=true;
         }
-        break;
+        break;    
 #else
     case CTRL_TAB_PANE:
         {
@@ -926,20 +926,20 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aTabPaneDrawInfo.direction=kThemeTabNorth;
             aTabPaneDrawInfo.size=kHIThemeTabSizeNormal;
             aTabPaneDrawInfo.kind=kHIThemeTabKindNormal;
-
+            
             //the border is outside the rect rc for Carbon
             //but for VCL it should be inside
             rc.origin.x+=1;
             rc.origin.y-=TAB_HEIGHT_NORMAL/2;
             rc.size.height+=TAB_HEIGHT_NORMAL/2;
             rc.size.width-=2;
-
+            
             HIThemeDrawTabPane(&rc, &aTabPaneDrawInfo, mrContext, kHIThemeOrientationNormal);
-
+            
             bOK = true;
         }
         break;
-
+        
     case CTRL_TAB_ITEM:
         {
             HIThemeTabDrawInfo aTabItemDrawInfo;
@@ -948,22 +948,22 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aTabItemDrawInfo.direction=kThemeTabNorth;
             aTabItemDrawInfo.size=kHIThemeTabSizeNormal;
             aTabItemDrawInfo.adornment=kHIThemeTabAdornmentTrailingSeparator;
-            //State
+            //State 
             if(nState & CTRL_STATE_SELECTED) {
                 aTabItemDrawInfo.style=kThemeTabFront;
             }
             if(nState & CTRL_STATE_FOCUSED) {
                 aTabItemDrawInfo.adornment|=kHIThemeTabAdornmentFocus;
             }
-
+            
             //first, last or middle tab
             aTabItemDrawInfo.position=kHIThemeTabPositionMiddle;
-
+            
             TabitemValue* pTabValue = (TabitemValue *) &aValue;
             unsigned int nAlignment = pTabValue->mnAlignment;
             //TABITEM_LEFTALIGNED (and TABITEM_RIGHTALIGNED) for the leftmost (or rightmost) tab
-            //when there are several lines of tabs because there is only one first tab and one
-            //last tab and TABITEM_FIRST_IN_GROUP (and TABITEM_LAST_IN_GROUP) because when the
+            //when there are several lines of tabs because there is only one first tab and one 
+            //last tab and TABITEM_FIRST_IN_GROUP (and TABITEM_LAST_IN_GROUP) because when the 
             //line width is different from window width, there may not be TABITEM_RIGHTALIGNED
             if( ( (nAlignment & TABITEM_LEFTALIGNED)&&(nAlignment & TABITEM_RIGHTALIGNED) ) ||
                 ( (nAlignment & TABITEM_FIRST_IN_GROUP)&&(nAlignment & TABITEM_LAST_IN_GROUP) )
@@ -971,26 +971,26 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aTabItemDrawInfo.position=kHIThemeTabPositionOnly;
             else if((nAlignment & TABITEM_LEFTALIGNED)||(nAlignment & TABITEM_FIRST_IN_GROUP))
                 aTabItemDrawInfo.position=kHIThemeTabPositionFirst;
-            else if((nAlignment & TABITEM_RIGHTALIGNED)||(nAlignment & TABITEM_LAST_IN_GROUP))
+            else if((nAlignment & TABITEM_RIGHTALIGNED)||(nAlignment & TABITEM_LAST_IN_GROUP)) 
                 aTabItemDrawInfo.position=kHIThemeTabPositionLast;
-
+            
             //support for RTL
             //see issue 79748
             if( Application::GetSettings().GetLayoutRTL() ) {
-                if( aTabItemDrawInfo.position == kHIThemeTabPositionFirst )
+                if( aTabItemDrawInfo.position == kHIThemeTabPositionFirst ) 
                         aTabItemDrawInfo.position = kHIThemeTabPositionLast;
-                else if( aTabItemDrawInfo.position == kHIThemeTabPositionLast )
+                else if( aTabItemDrawInfo.position == kHIThemeTabPositionLast ) 
                         aTabItemDrawInfo.position = kHIThemeTabPositionFirst;
             }
-
+            
             rc.size.width+=2;//because VCL has 2 empty pixels between 2 tabs
             rc.origin.x-=1;
-
+            
             HIThemeDrawTab(&rc, &aTabItemDrawInfo, mrContext, kHIThemeOrientationNormal, &rc );
-
+            
             bOK=true;
         }
-        break;
+        break; 
 #endif
 
     case  CTRL_LISTBOX:
@@ -1008,7 +1008,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aListInfo.adornment = kThemeAdornmentDefault;
                 if( (nState & CTRL_STATE_FOCUSED) != 0 )
                     aListInfo.adornment |= kThemeAdornmentFocus;
-
+                
                 HIThemeDrawButton(&rc, &aListInfo, mrContext, kHIThemeOrientationNormal,&rc);
                 bOK = true;
                 break;
@@ -1020,19 +1020,19 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aTextDrawInfo.kind=kHIThemeFrameTextFieldSquare;
                 aTextDrawInfo.state=getState( nState );
                 aTextDrawInfo.isFocused=false;
-
+                
                 rc.size.width+=1;//else there's a white space because aqua theme hasn't a 3D border
                 rc.size.height+=1;
                 HIThemeDrawFrame(&rc, &aTextDrawInfo, mrContext, kHIThemeOrientationNormal);
-
+                
                 if(nState & CTRL_STATE_FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
-
+                
                 bOK=true;
                 break;
             }
         }
         break;
-
+        
     case CTRL_EDITBOX:
     case CTRL_MULTILINE_EDITBOX:
         {
@@ -1041,11 +1041,11 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aTextDrawInfo.kind=kHIThemeFrameTextFieldSquare;
             aTextDrawInfo.state=getState( nState );
             aTextDrawInfo.isFocused=false;
-
+            
             rc.size.width  += 1; // else there may be a white space because aqua theme hasn't a 3D border
             // change rc so that the frame will encompass only the content region
             // see counterpart in GetNativeControlRegion
-            rc.size.width  += 2;
+            rc.size.width  += 2; 
             rc.size.height += 2;
 
             //CGContextSetFillColorWithColor
@@ -1053,13 +1053,13 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             //fill a white background, because drawFrame only draws the border
 
             HIThemeDrawFrame(&rc, &aTextDrawInfo, mrContext, kHIThemeOrientationNormal);
-
+            
             if(nState & CTRL_STATE_FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
-
+            
             bOK=true;
         }
         break;
-
+        
     case CTRL_SPINBOX:
         {
             if(nPart == PART_ENTIRE_CONTROL)
@@ -1070,7 +1070,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aTextDrawInfo.kind=kHIThemeFrameTextFieldSquare;
                 aTextDrawInfo.state=getState( nState );
                 aTextDrawInfo.isFocused=false;
-
+                
                 //rc.size.width contains the full size of the spinbox ie textfield + button
                 //so we remove the button width and the space between the button and the textfield
                 rc.size.width -= SPIN_BUTTON_SPACE + SPIN_BUTTON_WIDTH + 2*FOCUS_RING_WIDTH;
@@ -1082,9 +1082,9 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 //fill a white background, because drawFrame only draws the border
 
                 HIThemeDrawFrame(&rc, &aTextDrawInfo, mrContext, kHIThemeOrientationNormal);
-
+                
                 if(nState & CTRL_STATE_FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
-
+                
                 //buttons:
                 SpinbuttonValue* pSpinButtonVal = (SpinbuttonValue *)&aValue;
                 ControlState nUpperState = CTRL_STATE_ENABLED;//state of the upper button
@@ -1107,17 +1107,17 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                         aSpinInfo.state = kThemeStateInactive;
                     else if((nUpperState & CTRL_STATE_ROLLOVER)||(nLowerState & CTRL_STATE_ROLLOVER))
                         aSpinInfo.state = kThemeStateRollover;
-
+                
                     Rectangle aSpinRect( pSpinButtonVal->maUpperRect );
                     aSpinRect.Union( pSpinButtonVal->maLowerRect );
                     HIRect buttonRc = ImplGetHIRectFromRectangle(aSpinRect);
-
+                    
                     // FIXME: without this fuzz factor there is some unwanted clipping
                     if( Application::GetSettings().GetLayoutRTL() )
                         buttonRc.origin.x -= FOCUS_RING_WIDTH - CLIP_FUZZ;
                     else
                         buttonRc.origin.x += FOCUS_RING_WIDTH + CLIP_FUZZ;
-
+                    
                     switch( aValue.getTristateVal() )
                     {
                         case BUTTONVALUE_ON:        aSpinInfo.value = kThemeButtonOn;
@@ -1125,30 +1125,30 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                         case BUTTONVALUE_OFF:       aSpinInfo.value = kThemeButtonOff;
                                                     break;
                         case BUTTONVALUE_MIXED:
-                        case BUTTONVALUE_DONTKNOW:
+                        case BUTTONVALUE_DONTKNOW: 
                         default:                    aSpinInfo.value = kThemeButtonMixed;
                                                     break;
                     }
-
+                    
                     aSpinInfo.adornment = ( ((nUpperState & CTRL_STATE_DEFAULT) != 0 ) ||
                                             ((nLowerState & CTRL_STATE_DEFAULT) != 0 )) ?
-                                       kThemeAdornmentDefault :
+                                       kThemeAdornmentDefault : 
                                        kThemeAdornmentNone;
                     if( ((nUpperState & CTRL_STATE_FOCUSED) != 0 ) || ((nLowerState & CTRL_STATE_FOCUSED) != 0 ))
                         aSpinInfo.adornment |= kThemeAdornmentFocus;
-
+                    
                     HIThemeDrawButton( &buttonRc, &aSpinInfo, mrContext, kHIThemeOrientationNormal, NULL );
                 }
-
+                
                 bOK=true;
             }
-
+            
         }
         break;
-
+        
     case CTRL_FRAME:
         {
-            sal_uInt16 nStyle = aValue.getNumericVal();
+            USHORT nStyle = aValue.getNumericVal();
             if( nPart == PART_BORDER ) {
                 if(!( nStyle & FRAME_DRAW_MENU ) && !(nStyle & FRAME_DRAW_WINDOWBORDER) )
                 {
@@ -1159,38 +1159,38 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     {
                         CGMutablePathRef rPath = CGPathCreateMutable();
                         CGPathAddRect( rPath, NULL, CGRectMake( 0, 0, mpFrame->maGeometry.nWidth-1, mpFrame->maGeometry.nHeight-1 ) );
-
+    
                         CGContextBeginPath( mrContext );
                         CGContextAddPath( mrContext, rPath );
-                        CGContextClip( mrContext );
+                        CGContextClip( mrContext );                    
                         CGPathRelease( rPath );
                     }
-
+                    
                     HIThemeFrameDrawInfo aTextDrawInfo;
                     aTextDrawInfo.version=0;
                     aTextDrawInfo.kind=kHIThemeFrameListBox;
                     aTextDrawInfo.state=kThemeStateActive;
                     aTextDrawInfo.isFocused=false;
-
+                    
                     HIThemeDrawFrame(&rc, &aTextDrawInfo, mrContext, kHIThemeOrientationNormal);
-
+                    
                     bOK=true;
                 }
             }
         }
         break;
-
+    
     case CTRL_LISTNET:
         {
            //do nothing as there isn't net for listviews on macos
             bOK=true;
         }
         break;
-
+        
     }
 
     CGContextRestoreGState( mrContext );
-
+    
     /* #i90291# in most cases invalidating the whole control region instead
        of just the unclipped part of it is sufficient (and probably faster).
        However for the window background we should not unnecessarily enlarge
@@ -1206,10 +1206,10 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
         if( aRect.size.width != 0 && aRect.size.height != 0 )
             buttonRect.Intersection( Rectangle( Point( static_cast<long int>(aRect.origin.x),
                             static_cast<long int>(aRect.origin.y) ),
-                                                Size(   static_cast<long int>(aRect.size.width),
+                                                Size( 	static_cast<long int>(aRect.size.width),
                             static_cast<long int>(aRect.size.height) ) ) );
     }
-
+    
     RefreshRect( buttonRect.Left(), buttonRect.Top(), buttonRect.GetWidth(), buttonRect.GetHeight() );
 
     return bOK;
@@ -1221,43 +1221,43 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
  *  OPTIONAL.  Draws the requested text for the control described by nPart/nState.
  *     Used if text not drawn by DrawNativeControl().
  *
- *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
- *  aValue:     An optional value (tristate/numerical/string)
- *  aCaption:   A caption or title string (like button text etc)
+ *  rControlRegion:	The bounding region of the complete control in VCL frame coordinates.
+ *  aValue:		An optional value (tristate/numerical/string)
+ *  aCaption:	A caption or title string (like button text etc)
  */
-sal_Bool AquaSalGraphics::drawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+BOOL AquaSalGraphics::drawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
                                                const rtl::OUString& aCaption )
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 
 /*
  * GetNativeControlRegion()
  *
- *  If the return value is sal_True, rNativeBoundingRegion
+ *  If the return value is TRUE, rNativeBoundingRegion
  *  contains the true bounding region covered by the control
  *  including any adornment, while rNativeContentRegion contains the area
  *  within the control that can be safely drawn into without drawing over
  *  the borders of the control.
  *
- *  rControlRegion: The bounding region of the control in VCL frame coordinates.
- *  aValue:     An optional value (tristate/numerical/string)
- *  aCaption:       A caption or title string (like button text etc)
+ *  rControlRegion:	The bounding region of the control in VCL frame coordinates.
+ *  aValue:		An optional value (tristate/numerical/string)
+ *  aCaption:		A caption or title string (like button text etc)
  */
-sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
+BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                const ImplControlValue& aValue, const rtl::OUString& aCaption,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
 
 {
-    sal_Bool toReturn = sal_False;
+    BOOL toReturn = FALSE;
 
     Rectangle aCtrlBoundRect( rControlRegion );
     short x = aCtrlBoundRect.Left();
     short y = aCtrlBoundRect.Top();
     short w, h;
-
+    
     sal_uInt8 nBorderCleanup = 0;
 
     switch (nType)
@@ -1280,13 +1280,13 @@ sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart
                 }
             }
             break;
-
+            
         case CTRL_SCROLLBAR:
             {
                 Rectangle aRect;
                 if( AquaGetScrollRect( /* m_nScreen */ nPart, aCtrlBoundRect, aRect ) )
                 {
-                    toReturn = sal_True;
+                    toReturn = TRUE;
                     rNativeBoundingRegion = aRect;
                     rNativeContentRegion = aRect;
                 }
@@ -1306,17 +1306,17 @@ sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart
                 {
                     // checkbox and radio borders need cleanup after unchecking them
                     nBorderCleanup = 4;
-
+    
                     // TEXT_SEPARATOR to respect Aqua HIG
                     w = BUTTON_WIDTH + TEXT_SEPARATOR;
                     h = BUTTON_HEIGHT;
-
+    
                 }
-
+    
                 rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h + nBorderCleanup) );
                 rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
-
-                toReturn = sal_True;
+    
+                toReturn = TRUE;
             }
             break;
         case CTRL_PROGRESS:
@@ -1328,24 +1328,24 @@ sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart
                     aRect.Bottom() = aRect.Top() + 15; // values taken from HIG for large progress
                 rNativeBoundingRegion = aRect;
                 rNativeContentRegion = aRect;
-                toReturn = sal_True;
+                toReturn = TRUE;
             }
             break;
-
+            
         case CTRL_INTROPROGRESS:
             {
                 Rectangle aRect( aCtrlBoundRect );
                 aRect.Bottom() = aRect.Top() + INTRO_PROGRESS_HEIGHT; // values taken from HIG for medium progress
                 rNativeBoundingRegion = aRect;
                 rNativeContentRegion = aRect;
-                toReturn = sal_True;
+                toReturn = TRUE;
             }
             break;
-
+            
          case CTRL_TAB_ITEM:
-
+         
             w = aCtrlBoundRect.GetWidth() + 2*TAB_TEXT_OFFSET - 2*VCL_TAB_TEXT_OFFSET;
-
+            
 #ifdef OLD_TAB_STYLE
             h = TAB_HEIGHT_NORMAL;
 #else
@@ -1354,10 +1354,10 @@ sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart
             rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
             rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
 
-            toReturn = sal_True;
-
+            toReturn = TRUE;
+         
             break;
-
+            
         case CTRL_EDITBOX:
             {
                 w = aCtrlBoundRect.GetWidth();
@@ -1369,8 +1369,8 @@ sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart
 
                 rNativeContentRegion = Rectangle( Point( x+FOCUS_RING_WIDTH, y+FOCUS_RING_WIDTH ), Size( w-2*(FOCUS_RING_WIDTH+1), h-2*(FOCUS_RING_WIDTH+1) ) );
                 rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
-
-                toReturn = sal_True;
+                
+                toReturn = TRUE;
             }
             break;
         case CTRL_LISTBOX:
@@ -1380,11 +1380,11 @@ sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart
                 {
                     w = aCtrlBoundRect.GetWidth();
                     h = COMBOBOX_HEIGHT_NORMAL;//listboxes and comboxes have the same height
-
+                    
                     rNativeContentRegion = Rectangle( Point( x+FOCUS_RING_WIDTH, y+FOCUS_RING_WIDTH ), Size( w-2*FOCUS_RING_WIDTH, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );
-
-                    toReturn = sal_True;
+                    
+                    toReturn = TRUE;
                 }
                 else if( nPart == PART_BUTTON_DOWN )
                 {
@@ -1392,14 +1392,14 @@ sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart
                 if( w < 3+2*FOCUS_RING_WIDTH )
                     w = 3+2*FOCUS_RING_WIDTH;
                     h = COMBOBOX_HEIGHT_NORMAL;//listboxes and comboxes have the same height
-
+                    
                     x += w-DROPDOWN_BUTTON_WIDTH - FOCUS_RING_WIDTH;
                     y += FOCUS_RING_WIDTH;
                     w = DROPDOWN_BUTTON_WIDTH;
-
+                    
                     rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w+FOCUS_RING_WIDTH, h+2*FOCUS_RING_WIDTH ) );
-
+                    
                     toReturn = true;
                 }
                 else if( nPart == PART_SUB_EDIT )
@@ -1415,10 +1415,10 @@ sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart
                     if( nType == CTRL_LISTBOX )
                         w -= 9; // HIG specifies 9 units distance between dropdown button area and content
                     h -= 4; // don't draw into lower border
-
+                    
                     rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w+FOCUS_RING_WIDTH, h+2*FOCUS_RING_WIDTH ) );
-
+                    
                     toReturn = true;
                 }
             }
@@ -1429,11 +1429,11 @@ sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart
                     if( w < 3+2*FOCUS_RING_WIDTH+SPIN_BUTTON_SPACE+SPIN_BUTTON_WIDTH )
                         w = 3+2*FOCUS_RING_WIDTH+SPIN_BUTTON_SPACE+SPIN_BUTTON_WIDTH;
                     h = TEXT_EDIT_HEIGHT_NORMAL;
-
+                    
                     rNativeContentRegion = Rectangle( Point( x+FOCUS_RING_WIDTH, y ), Size( w-2*FOCUS_RING_WIDTH, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );
-
-                    toReturn = sal_True;
+                    
+                    toReturn = TRUE;
                 }
                 else if( nPart == PART_SUB_EDIT ) {
                     w = aCtrlBoundRect.GetWidth() - SPIN_BUTTON_SPACE - SPIN_BUTTON_WIDTH;
@@ -1442,11 +1442,11 @@ sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart
                     y += 2; // don't draw into upper border
                     w -= 8; // offset for left and right rounded border
                     h -= 4; // don't draw into upper or ower border
-
+                    
                     rNativeContentRegion = Rectangle( Point( x + FOCUS_RING_WIDTH, y + FOCUS_RING_WIDTH ), Size( w - 2* FOCUS_RING_WIDTH, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );
-
-                    toReturn = sal_True;
+                    
+                    toReturn = TRUE;
                 }
                 else if( nPart == PART_BUTTON_UP ) {
                     //aCtrlBoundRect.GetWidth() contains the width of the full control
@@ -1456,66 +1456,66 @@ sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart
                     y += FOCUS_RING_WIDTH - CLIP_FUZZ;
                     w = SPIN_BUTTON_WIDTH + 2*CLIP_FUZZ;
                     h = SPIN_UPPER_BUTTON_HEIGHT + 2*CLIP_FUZZ;
-
+                    
                     rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
-
-                    toReturn = sal_True;
+                    
+                    toReturn = TRUE;
                 }
                 else if( nPart == PART_BUTTON_DOWN ) {
                     x += aCtrlBoundRect.GetWidth() - SPIN_BUTTON_WIDTH - SPIN_BUTTON_SPACE - CLIP_FUZZ;
                     y += SPIN_UPPER_BUTTON_HEIGHT + FOCUS_RING_WIDTH - CLIP_FUZZ;
                     w = SPIN_BUTTON_WIDTH + 2*CLIP_FUZZ;
                     h = SPIN_LOWER_BUTTON_HEIGHT + 2*CLIP_FUZZ;
-
+                    
                     rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
-
-                    toReturn = sal_True;
+                    
+                    toReturn = TRUE;
                 }
             break;
         case CTRL_FRAME:
             {
-                sal_uInt16 nStyle = aValue.getNumericVal();
+                USHORT nStyle = aValue.getNumericVal();
                 if(  ( nPart == PART_BORDER ) &&
                     !( nStyle & (FRAME_DRAW_MENU | FRAME_DRAW_WINDOWBORDER | FRAME_DRAW_BORDERWINDOWBORDER) ) )
                 {
                     Rectangle aRect(aCtrlBoundRect);
                     if( nStyle & FRAME_DRAW_DOUBLEIN )
                     {
-                        aRect.Left()    += 1;
-                        aRect.Top()     += 1;
-                        //rRect.Right() -= 1;
-                        //rRect.Bottom()    -= 1;
+                        aRect.Left()	+= 1;
+                        aRect.Top() 	+= 1;
+                        //rRect.Right()	-= 1;
+                        //rRect.Bottom()	-= 1;
                     }
                     else
                     {
-                        aRect.Left()    += 1;
-                        aRect.Top()     += 1;
-                        aRect.Right()   -= 1;
-                        aRect.Bottom()  -= 1;
+                        aRect.Left()	+= 1;
+                        aRect.Top() 	+= 1;
+                        aRect.Right()	-= 1;
+                        aRect.Bottom()	-= 1;
                     }
 
                     rNativeContentRegion = aRect;
                     rNativeBoundingRegion = aRect;
-
-                    toReturn = sal_True;
+                    
+                    toReturn = TRUE;
                 }
             }
             break;
-
+            
         case CTRL_MENUBAR:
         case CTRL_MENU_POPUP:
             {
                 if(( nPart == PART_MENU_ITEM_CHECK_MARK )||( nPart == PART_MENU_ITEM_RADIO_MARK )) {
-
+                    
                     w=10;
                     h=10;//dimensions of the mark (10px font)
-
+                    
                     rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
-
-                    toReturn = sal_True;
+                    
+                    toReturn = TRUE;
                 }
             }
             break;

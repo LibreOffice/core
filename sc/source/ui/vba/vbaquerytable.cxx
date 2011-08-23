@@ -67,9 +67,9 @@ ScVbaQueryTable::Refresh( const ::com::sun::star::uno::Any& /*aBackgroundQuery*/
     //Get link info
     sfx2::LinkManager *pLinkMng = m_pDocument->GetLinkManager();
     const ::sfx2::SvBaseLinks &rLinks = pLinkMng->GetLinks();
-    sal_uInt16 nCount = rLinks.Count();
+    USHORT nCount = rLinks.Count();
 
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for (USHORT i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScAreaLink))

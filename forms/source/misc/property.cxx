@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ sal_Int32 PropertyInfoService::getPropertyId(const ::rtl::OUString& _rName)
 
     sal_Int32 nHandle = -1;
     if (aPair.first != aPair.second)
-    {   // we found something _and_ we have an identity
+    {	// we found something _and_ we have an identity
         nHandle = aPair.first->nHandle;
     }
 

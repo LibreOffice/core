@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
+#include <tools/list.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <progress.hxx>
@@ -39,7 +40,7 @@
 using namespace padmin;
 
 ProgressDialog::ProgressDialog( Window* pParent,
-                                sal_Bool bCancelable,
+                                BOOL bCancelable,
                                 int nMin, int nMax ) :
         ModelessDialog( pParent, PaResId( RID_PROGRESS_DLG ) ),
         maOperation( this, PaResId( RID_PROGRESS_OPERATION_TXT ) ),
@@ -49,7 +50,7 @@ ProgressDialog::ProgressDialog( Window* pParent,
         maProgressBar( this, PaResId( RID_PROGRESS_STATUSBAR ) ),
         mnMax( nMax ),
         mnMin( nMin ),
-        mbCanceled( sal_False )
+        mbCanceled( FALSE )
 {
     maFilename.SetStyle( maFilename.GetStyle() | WB_PATHELLIPSIS );
     if( ! bCancelable )
@@ -73,9 +74,9 @@ void ProgressDialog::startOperation( const String& rOperation )
 {
     maOperation.SetText( rOperation );
     maProgressBar.SetValue( 0 );
-    mbCanceled = sal_False;
+    mbCanceled = FALSE;
     if( ! IsVisible() )
-        Show( sal_True );
+        Show( TRUE );
 }
 
 void ProgressDialog::setValue( int nValue )
@@ -95,7 +96,7 @@ IMPL_LINK( ProgressDialog, ClickBtnHdl, Button*, pButton )
 {
     if( pButton == &maCancelButton )
     {
-        mbCanceled = sal_True;
+        mbCanceled = TRUE;
     }
     return 0;
 }

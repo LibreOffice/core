@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,19 +33,37 @@
 
 IMAGE RID_IMG_SCALABLEFONT
 {
-    ImageBitmap = Bitmap { File = "scalfont.png" ; };
+    ImageBitmap = Bitmap { File = "scalfont.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+
+IMAGE RID_IMG_SCALABLEFONT_HC
+{
+    ImageBitmap = Bitmap { File = "scalfont_h.bmp" ; };
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
 IMAGE RID_IMG_PRINTERFONT
 {
-    ImageBitmap = Bitmap { File = "prnfont.png" ; };
+    ImageBitmap = Bitmap { File = "prnfont.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+
+IMAGE RID_IMG_PRINTERFONT_HC
+{
+    ImageBitmap = Bitmap { File = "prnfont_h.bmp" ; };
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
 IMAGE RID_IMG_BITMAPFONT
 {
-    ImageBitmap = Bitmap { File = "bmpfont.png" ; };
+    ImageBitmap = Bitmap { File = "bmpfont.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+};
+
+IMAGE RID_IMG_BITMAPFONT_HC
+{
+    ImageBitmap = Bitmap { File = "bmpfont_h.bmp" ; };
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
@@ -55,7 +73,7 @@ String STR_SVT_AUTOMATIC_COLOR
 };
 
 /*
- * resources for CollatorRessource / CollatorRessourceData resp.
+ * ressources for CollatorRessource / CollatorRessourceData resp.
  */
 
 String STR_SVT_COLLATE_ALPHANUMERIC
@@ -183,3 +201,32 @@ String STR_SVT_INDEXENTRY_PHONETIC_LC
 {
     Text [ en-US ] = "Phonetic (alphanumeric last, grouped by consonants)";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

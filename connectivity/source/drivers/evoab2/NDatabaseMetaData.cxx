@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ namespace connectivity
         static ColumnProperty **pFields=NULL;
         static guint        nFields = 0;
 
-        static const char *pBlackList[] =
+        static const char *pBlackList[] = 
         {
             "id",
             "list-show-addresses",
@@ -89,11 +89,11 @@ namespace connectivity
         return evo_addr;
     }
 
-    static void
+    static void 
     splitColumn (ColumnProperty **pToBeFields)
     {
         const SplitEvoColumns* evo_addr( get_evo_addr() );
-        for (int i = 0; i < OTHER_ZIP; i++)
+        for (int i = 0; i < OTHER_ZIP; i++) 
         {
             pToBeFields[nFields] = g_new0(ColumnProperty,1);
             pToBeFields[nFields]->bIsSplittedValue = true;
@@ -135,7 +135,7 @@ namespace connectivity
                                     break;
                                 }
                             }
-                            if( bAdd )
+                            if( bAdd ) 
                             {
                                 pToBeFields[nFields]= g_new0(ColumnProperty,1);
                                 pToBeFields[nFields]->bIsSplittedValue=false;
@@ -147,7 +147,7 @@ namespace connectivity
                             break;
                     }
                 }
-
+            
                 splitColumn(pToBeFields);
                 pFields = pToBeFields;
             }
@@ -192,7 +192,7 @@ namespace connectivity
 
     guint findEvoabField(const rtl::OUString& aColName)
     {
-        guint nRet = (guint)-1;
+        guint nRet = (guint)-1;	
         sal_Bool bFound = sal_False;
         initFields();
         for (guint i=0;(i < nFields) && !bFound;i++)
@@ -213,9 +213,9 @@ namespace connectivity
         switch( getFieldType( nCol ) )
         {
             case DataType::BIT:
-                return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BIT"));
+                return ::rtl::OUString::createFromAscii( "BIT" );
             case DataType::VARCHAR:
-                return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
+                return ::rtl::OUString::createFromAscii( "VARCHAR" );
             default:
                 break;
         }
@@ -236,24 +236,24 @@ namespace connectivity
         return aName;
     }
 
-    void
+    void  
     free_column_resources()
     {
-        for (int i=nFields-1;i > 0;i--)
+        for (int i=nFields-1;i > 0;i--) 
         {
-            if (pFields && pFields[i] )
+            if (pFields && pFields[i] ) 
             {
-                if (pFields[i]->pField)
+                if (pFields[i]->pField) 
                     g_param_spec_unref(pFields[i]->pField);
                 g_free(pFields[i]);
             }
         }
-       if(pFields)
+       if(pFields) 
         {
             g_free(pFields);
             pFields=NULL;
         }
-
+    
     }
 
 
@@ -277,15 +277,15 @@ ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const 
     static ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow  aRow(19);
     aRows.clear();
-
+    
     // ****************************************************
     // Some entries in a row never change, so set them now
     // ****************************************************
-
+    
     // Catalog
-    aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")));
+    aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii(""));
     // Schema
-    aRow[2] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")));
+    aRow[2] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii(""));
     // COLUMN_SIZE
     aRow[7] = new ORowSetValueDecorator(s_nCOLUMN_SIZE);
     // BUFFER_LENGTH, not used
@@ -307,10 +307,10 @@ ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const 
     // CHAR_OCTET_LENGTH, refer to [5]
     aRow[16] = new ORowSetValueDecorator(s_nCHAR_OCTET_LENGTH);
     // IS_NULLABLE
-    aRow[18] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YES")));
+    aRow[18] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii( "YES" ));
 
 
-    aRow[3] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE")));
+    aRow[3] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii( "TABLE" ));
     ::osl::MutexGuard aGuard( m_aMutex );
 
     initFields();
@@ -333,7 +333,7 @@ ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const 
     return aRows ;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString OEvoabDatabaseMetaData::impl_getCatalogSeparator_throw(  )
+::rtl::OUString OEvoabDatabaseMetaData::impl_getCatalogSeparator_throw(  ) 
 {
     return ::rtl::OUString();
 }
@@ -393,7 +393,7 @@ sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxTableNameLength(  ) throw(SQLEx
     return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
-sal_Int32 OEvoabDatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
+sal_Int32 OEvoabDatabaseMetaData::impl_getMaxTablesInSelect_throw(  ) 
 {
     // We only support a single table
     return 1;
@@ -415,7 +415,7 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(S
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool OEvoabDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
+sal_Bool OEvoabDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  ) 
 {
     return sal_False;
 }
@@ -461,10 +461,10 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsNonNullableColumns(  ) throw(S
     return aVal;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString OEvoabDatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
+::rtl::OUString OEvoabDatabaseMetaData::impl_getIdentifierQuoteString_throw(  ) 
 {
     // normally this is "
-    ::rtl::OUString aVal(RTL_CONSTASCII_USTRINGPARAM("\""));
+    ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("\"");
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -1017,7 +1017,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw
     // there exists no possibility to get table types so we have to check
     static ::rtl::OUString sTableTypes[] =
     {
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE")),
+        ::rtl::OUString::createFromAscii("TABLE"),
         // Currently we only support a 'TABLE' nothing more complex
     };
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
@@ -1031,7 +1031,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
         aRow.push_back(new ORowSetValueDecorator(sTableTypes[i]));
-
+               
         // bound row
         aRows.push_back(aRow);
     }
@@ -1042,8 +1042,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw
 // -------------------------------------------------------------------------
 Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
-    /*
-     * Return the proper type information required by evo driver
+    /* 
+     * Return the proper type information required by evo driver  
      */
 
     ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
@@ -1056,7 +1056,7 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.reserve(19);
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"))));
+        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString::createFromAscii("VARCHAR")));
         aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
         aRow.push_back(new ORowSetValueDecorator((sal_Int32)s_nCHAR_OCTET_LENGTH));
         aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
@@ -1078,7 +1078,7 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
 
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR")));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("VARCHAR"));
         aRow[2] = new ORowSetValueDecorator(DataType::VARCHAR);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)65535);
         aRows.push_back(aRow);
@@ -1107,20 +1107,20 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
-
+    
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE
-
-    const ::rtl::OUString aTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-
+    
+    const ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
+    
     sal_Bool bTableFound = sal_True;
     sal_Int32 nLength = types.getLength();
     if(nLength)
         {
             bTableFound = sal_False;
-
+            
             const ::rtl::OUString* pBegin = types.getConstArray();
-            const ::rtl::OUString* pEnd = pBegin + nLength;
+            const ::rtl::OUString* pEnd	= pBegin + nLength;
             for(;pBegin != pEnd;++pBegin)
                 {
                     if(*pBegin == aTable)
@@ -1134,7 +1134,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
         return xRef;
 
     ODatabaseMetaDataResultSet::ORows aRows;
-
+    
     ESourceList *pSourceList;
     if( !e_book_get_addressbooks (&pSourceList, NULL) )
             pSourceList = NULL;

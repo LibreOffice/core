@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,9 @@
 
 #ifndef MACOSX
 
-sal_Bool ImplSVMainHook( int * )
+BOOL ImplSVMainHook( BOOL * )
 {
-    return sal_False;   // indicate that ImplSVMainHook is not implemented
+    return FALSE;   // indicate that ImplSVMainHook is not implemented
 }
 
 #else
@@ -46,7 +46,7 @@ sal_Bool ImplSVMainHook( int * )
 #include <postmac.h>
 #include <unistd.h>
 
-extern sal_Bool ImplSVMain();
+extern BOOL ImplSVMain();
 
 // ============================================================================
 
@@ -57,7 +57,7 @@ static void SourceContextCallBack( void *pInfo )
 
 struct ThreadContext
 {
-    int* pRet;
+    BOOL* pRet;
     CFRunLoopRef* pRunLoopRef;
 };
 
@@ -69,14 +69,14 @@ static void RunSVMain(void *pData)
     // running
     while (!CFRunLoopIsWaiting(*tcx->pRunLoopRef))
         usleep(100);
-
+        
     *tcx->pRet = ImplSVMain();
 
     // Force exit since some JVMs won't shutdown when only exit() is invoked
     _exit( 0 );
 }
 
-sal_Bool ImplSVMainHook( int *pnInit )
+BOOL ImplSVMainHook( BOOL *pbInit )
 {
     // Mac OS X requires that any Cocoa code have a CFRunLoop started in the
     // primordial thread. Since all of the AWT classes in Java 1.4 and higher
@@ -87,7 +87,7 @@ sal_Bool ImplSVMainHook( int *pnInit )
 
     CFRunLoopRef runLoopRef = CFRunLoopGetCurrent();
     ThreadContext tcx;
-    tcx.pRet = pnInit;  // the return value
+    tcx.pRet = pbInit;  // the return value
     tcx.pRunLoopRef = &runLoopRef;
     oslThread hThreadID = osl_createThread(RunSVMain, &tcx);
 
@@ -110,7 +110,7 @@ sal_Bool ImplSVMainHook( int *pnInit )
     osl_joinWithThread( hThreadID );
     osl_destroyThread( hThreadID );
 
-    return sal_True;    // indicate that ImplSVMainHook is implemented
+    return TRUE;    // indicate that ImplSVMainHook is implemented
 }
 
 #endif // MACOSX

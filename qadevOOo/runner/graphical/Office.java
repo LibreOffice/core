@@ -1,8 +1,8 @@
 /*
  * ************************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,14 +41,13 @@ public class Office implements IOffice
     private String m_sDocumentName;
     private String m_sResult;
     private IOffice m_aOffice = null;
-
+    
     public Office(ParameterHelper _aParam, String _sResult)
     {
         m_aParameterHelper = _aParam;
         m_sResult = _sResult;
 
         if (_aParam.getReferenceType().toLowerCase().equals("ooo") ||
-            _aParam.getReferenceType().toLowerCase().equals("o3") ||
             _aParam.getReferenceType().toLowerCase().equals("ps") ||
             _aParam.getReferenceType().toLowerCase().equals("pdf"))
         {
@@ -77,8 +76,8 @@ public class Office implements IOffice
             sDocumentSuffix.toLowerCase().endsWith(".bmp"))
         {
             throw new OfficeException("The given document is not a document type.");
-        }
-
+        }            
+        
         // TODO: we should start the office after we know if we really need an Office.
         if (m_aOffice != null)
         {
@@ -107,7 +106,7 @@ public class Office implements IOffice
                         String sDocumentName = (String)aList.get(i);
                         m_aOffice.load(sDocumentName);
                         m_aOffice.storeAsPostscript();
-
+                        
 
                         // foreach Report found in the .odb file, create an entry 'report'<number> in the original <name>.odb Section
                         // so it is possible to run through all reports by the given .odb name

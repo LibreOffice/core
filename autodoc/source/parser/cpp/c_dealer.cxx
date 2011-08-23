@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,13 @@
 #include <precomp.h>
 #include "c_dealer.hxx"
 
+
 // NOT FULLY DECLARED SERVICES
 #include <ary/cpp/c_gate.hxx>
 #include <ary/loc/locp_le.hxx>
 #include <ary/loc/loc_root.hxx>
 #include <ary/loc/loc_file.hxx>
+//#include <ary/docu.hxx>
 #include <adoc/a_rdocu.hxx>
 #include "all_toks.hxx"
 #include "c_rcode.hxx"

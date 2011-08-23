@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +32,11 @@
 
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <doc.hxx>
-#include <frame.hxx>        // SwChapterFieldType::ChangeExpansion()
-#include <pam.hxx>          // fuer GetBodyTxtNode
+#include <frame.hxx>		// SwChapterFieldType::ChangeExpansion()
+#include <pam.hxx>			// fuer GetBodyTxtNode
 #include <ndtxt.hxx>
 #include <chpfld.hxx>
-#include <expfld.hxx>       // fuer GetBodyTxtNode
+#include <expfld.hxx>		// fuer GetBodyTxtNode
 #include <unofldmid.h>
 #include <numrule.hxx>
 
@@ -74,7 +74,7 @@ String SwChapterField::Expand() const
     String sStr( sNumber );
     switch( GetFormat() )
     {
-        case CF_TITLE:      sStr = sTitle;  break;
+        case CF_TITLE:		sStr = sTitle;	break;
 
         case CF_NUMBER:
         case CF_NUM_TITLE:  sStr.Insert( sPre, 0 );
@@ -83,7 +83,7 @@ String SwChapterField::Expand() const
                                 sStr += sTitle;
                             break;
 
-        case CF_NUM_NOPREPST_TITLE: sStr += sTitle; break;
+        case CF_NUM_NOPREPST_TITLE:	sStr += sTitle;	break;
     }
     return sStr;
 }
@@ -102,7 +102,22 @@ SwField* SwChapterField::Copy() const
     return pTmp;
 }
 
-// #i53420#
+// --> OD 2008-02-14 #i53420#
+//void SwChapterField::ChangeExpansion( const SwFrm* pFrm,
+//                                      const SwTxtNode* pTxtNd,
+//                                      sal_Bool bSrchNum )
+//{
+//    OSL_ENSURE( pFrm, "in welchem Frame stehe ich denn?" )
+//    SwDoc* pDoc = (SwDoc*)pTxtNd->GetDoc();
+//    SwPosition aPos( pDoc->GetNodes().GetEndOfContent() );
+
+//    if( pFrm->IsInDocBody() )
+//        aPos.nNode = *pTxtNd;
+//    else if( 0 == (pTxtNd = GetBodyTxtNode( *pDoc, aPos, *pFrm )) )
+//        // kein TxtNode (Formatierung Kopf/Fusszeile)
+//        return;
+//    ChangeExpansion(*pTxtNd, bSrchNum);
+//}
 void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
                                       const SwCntntNode* pCntntNode,
                                       sal_Bool bSrchNum )
@@ -122,6 +137,7 @@ void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
         ChangeExpansion( *pTxtNode, bSrchNum );
     }
 }
+// <--
 
 void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 {
@@ -135,11 +151,18 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             do {
                 if( pONd && pONd->GetTxtColl() )
                 {
-                    sal_uInt8 nPrevLvl = nLevel;
+                    BYTE nPrevLvl = nLevel;
 
+                    // --> OD 2008-04-02 #refactorlists#
+//                    nLevel = GetRealLevel( pONd->GetTxtColl()->
+//                                            GetOutlineLevel() );
+                    // OSL_ENSURE( pONd->GetOutlineLevel() >= 0 && pONd->GetOutlineLevel() < MAXLEVEL,	//#outline level,zhaojianwei
+                    //        "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
+                    //nLevel = static_cast<BYTE>(pONd->GetOutlineLevel());
                     OSL_ENSURE( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
                             "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
-                    nLevel = static_cast<sal_uInt8>(pONd->GetAttrOutlineLevel());
+                    nLevel = static_cast<BYTE>(pONd->GetAttrOutlineLevel());							//<-end,zhaojianwei
+                    // <--
 
                     if( nPrevLvl < nLevel )
                         nLevel = nPrevLvl;
@@ -163,15 +186,17 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 
         if ( pTxtNd->IsOutline() )
         {
+            // --> OD 2005-11-17 #128041#
             // correction of refactoring done by cws swnumtree:
             // retrieve numbering string without prefix and suffix strings
             // as stated in the above german comment.
             sNumber = pTxtNd->GetNumString( false );
+            // <--
 
             SwNumRule* pRule( pTxtNd->GetNumRule() );
             if ( pTxtNd->IsCountedInList() && pRule )
             {
-                const SwNumFmt& rNFmt = pRule->Get( static_cast<sal_uInt16>(pTxtNd->GetActualListLevel()) );
+                const SwNumFmt& rNFmt = pRule->Get( static_cast<USHORT>(pTxtNd->GetActualListLevel()) );
                 sPost = rNFmt.GetSuffix();
                 sPre = rNFmt.GetPrefix();
             }
@@ -200,7 +225,10 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
     }
 }
 
-bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+/*-----------------05.03.98 16:19-------------------
+
+--------------------------------------------------*/
+bool SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -213,7 +241,7 @@ bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             sal_Int16 nRet;
             switch( GetFormat() )
             {
-                case CF_NUMBER: nRet = text::ChapterFormat::NUMBER; break;
+                case CF_NUMBER:	nRet = text::ChapterFormat::NUMBER; break;
                 case CF_TITLE:  nRet = text::ChapterFormat::NAME; break;
                 case CF_NUMBER_NOPREPST:
                     nRet = text::ChapterFormat::DIGIT;
@@ -222,21 +250,23 @@ bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
                     nRet = text::ChapterFormat::NO_PREFIX_SUFFIX;
                 break;
                 case CF_NUM_TITLE:
-                default:        nRet = text::ChapterFormat::NAME_NUMBER;
+                default:		nRet = text::ChapterFormat::NAME_NUMBER;
             }
             rAny <<= nRet;
         }
         break;
 
     default:
-        OSL_FAIL("illegal property");
+        DBG_ERROR("illegal property");
     }
     return true;
 }
+/*-----------------05.03.98 16:19-------------------
 
-bool SwChapterField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+--------------------------------------------------*/
+bool SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
     switch( nWhichId )
     {
     case FIELD_PROP_BYTE1:
@@ -256,7 +286,7 @@ bool SwChapterField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             rAny >>= nVal;
             switch( nVal )
             {
-                case text::ChapterFormat::NAME: SetFormat(CF_TITLE); break;
+                case text::ChapterFormat::NAME:	SetFormat(CF_TITLE); break;
                 case text::ChapterFormat::NUMBER:  SetFormat(CF_NUMBER); break;
                 case text::ChapterFormat::NO_PREFIX_SUFFIX:
                             SetFormat(CF_NUM_NOPREPST_TITLE);
@@ -264,15 +294,15 @@ bool SwChapterField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
                 case text::ChapterFormat::DIGIT:
                         SetFormat(CF_NUMBER_NOPREPST);
                 break;
-
-                default:        SetFormat(CF_NUM_TITLE);
+                //case text::ChapterFormat::NAME_NUMBER:
+                default:		SetFormat(CF_NUM_TITLE);
             }
         }
         break;
 
     default:
-        OSL_FAIL("illegal property");
-                bRet = false;
+        DBG_ERROR("illegal property");
+        bRet = false;
     }
     return bRet;
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,123 +24,123 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XDockableWindow_idl__
-#define __com_sun_star_awt_XDockableWindow_idl__
-
+#ifndef __com_sun_star_awt_XDockableWindow_idl__ 
+#define __com_sun_star_awt_XDockableWindow_idl__ 
+ 
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
-#ifndef __com_sun_star_awt_XDockableWindowListener_idl__
-#include <com/sun/star/awt/XDockableWindowListener.idl>
-#endif
+#ifndef __com_sun_star_awt_XDockableWindowListener_idl__ 
+#include <com/sun/star/awt/XDockableWindowListener.idl> 
+#endif 
 
 #ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
 #endif
-
-//=============================================================================
-
-module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** specifies the docking interface for a window component.
-
+        
     <p>A window can either be docked where it resides as a child window in
         an application frame window or it can be floating where it will
         reside in its own decorated top level window.
     </p>
  */
 interface XDockableWindow : com::sun::star::uno::XInterface
-{
-
+{ 
+     
     /** adds a docking listener to the object.
         only a single listener may be registered at any time.
      */
-    void addDockableWindowListener( [in] com::sun::star::awt::XDockableWindowListener xListener );
-
-    //-------------------------------------------------------------------------
-
+    void addDockableWindowListener( [in] com::sun::star::awt::XDockableWindowListener xListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** removes the specified docking listener from the object.
      */
-    void removeDockableWindowListener( [in] com::sun::star::awt::XDockableWindowListener xListener );
+    void removeDockableWindowListener( [in] com::sun::star::awt::XDockableWindowListener xListener ); 
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** enable or disable docking, docking is disabled by default
 
         @param bEnable
-            <TRUE/> specifies that docking is enabled
+            <TRUE/> specifies that docking is enabled 
             <FALSE/> specifies that docking is disabled and no
                 <type scope="com::sun::star::awt">XDockableWindowListener</type> will be called
      */
-    void enableDocking( [in] boolean bEnable );
+    void enableDocking( [in] boolean bEnable ); 
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** queries the current window state
         @returns
             <TRUE/> if the window is floating
             <FALSE/> if the window is docked
      */
-    boolean isFloating();
+    boolean isFloating(); 
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** toggle between floating and docked state
         @param bFloating
             specifies the new floating mode:
             <TRUE/> means floating, <FALSE/> means docked
      */
-    void setFloatingMode( [in] boolean bFloating );
+    void setFloatingMode( [in] boolean bFloating ); 
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /** prevents the window from being undocked
+    /** prevents the window from being undocked 
         this has no effect if the window is floating
      */
-    void lock();
+    void lock(); 
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** enables undocking
         this has no effect if the window is floating
      */
     void unlock();
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** queries the current locking state
         @returns
             <TRUE/> if the window is locked
             <FALSE/> if the window is not locked
      */
-    boolean isLocked();
+    boolean isLocked(); 
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** shows the window in a menu like style, i.e. without decoration
         a special indicator will allow for tearing off the window
         see <type scope="com::sun::star::awt">XDockableWindowListener</type> for
         the corresponding events
         @param WindowRect
-            specifies the position and size of the pop-up window in frame coordinates
+            specifies the position and size of the popup window in frame coordinates
      */
-    void startPopupMode( [in] com::sun::star::awt::Rectangle WindowRect );
+    void startPopupMode( [in] com::sun::star::awt::Rectangle WindowRect ); 
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /** queries the current pop-up mode
+    /** queries the current popup mode
         @returns
-            <TRUE/> if the window is in pop-up mode
-            <FALSE/> if the window is not in pop-up mode
+            <TRUE/> if the window is in popup mode
+            <FALSE/> if the window is not in popup mode
      */
-    boolean isInPopupMode();
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    boolean isInPopupMode(); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

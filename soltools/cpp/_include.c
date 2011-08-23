@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-#if (defined(_WIN32) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #   include <io.h>
 #else
 #   include <unistd.h>
@@ -13,6 +13,10 @@
 #include <string.h>
 #include <fcntl.h>
 
+
+#ifdef __hpux
+#   define _HPUX_SOURCE
+#endif
 #if defined(__IBMC__) || defined(__EMX__)
 #   include <fcntl.h>
 #   define PATH_MAX _MAX_PATH

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,7 +129,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleButton, VCLXAccessibleTextCompon
 
 ::rtl::OUString VCLXAccessibleButton::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleButton") );
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleButton" );
 }
 
 // -----------------------------------------------------------------------------
@@ -137,7 +137,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleButton, VCLXAccessibleTextCompon
 Sequence< ::rtl::OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleButton") );
+    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleButton" );
     return aNames;
 }
 
@@ -226,7 +226,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleButton::getAccessibleActionKeyB
 
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
-
+    
     OAccessibleKeyBindingHelper* pKeyBindingHelper = new OAccessibleKeyBindingHelper();
     Reference< XAccessibleKeyBinding > xKeyBinding = pKeyBindingHelper;
 
@@ -293,10 +293,10 @@ sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (Runt
         else if ( nValue > 1 )
             nValue = 1;
 
-        pButton->SetPressed( (sal_Bool) nValue );
+        pButton->SetPressed( (BOOL) nValue );
         bReturn = sal_True;
     }
-
+        
     return bReturn;
 }
 
@@ -308,7 +308,7 @@ Any VCLXAccessibleButton::getMaximumValue(  ) throw (RuntimeException)
 
     Any aValue;
     aValue <<= (sal_Int32) 1;
-
+    
     return aValue;
 }
 
@@ -320,7 +320,7 @@ Any VCLXAccessibleButton::getMinimumValue(  ) throw (RuntimeException)
 
     Any aValue;
     aValue <<= (sal_Int32) 0;
-
+    
     return aValue;
 }
 

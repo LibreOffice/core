@@ -1,6 +1,7 @@
 UDK_3_0_0 {
     global:
         component_getImplementationEnvironment;
+        component_writeInfo;
         component_getFactory;
         Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_openStream;
         Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Ljava_lang_String_2Ljava_lang_String_2_3BII;
@@ -18,7 +19,7 @@ UDK_3_0_0 {
         Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_readInt;
         Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_seek;
         Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_write;
-        Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_writeInt;
+        Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_writeInt;		
         Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_openStream;
         Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_read__Ljava_lang_String_2Ljava_lang_String_2;
         Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_read__Ljava_lang_String_2Ljava_lang_String_2_3BII;

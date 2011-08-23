@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,31 +129,31 @@ LocaleNode::~LocaleNode()
 
 LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttributeList > & attr)
 {
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_INFO")))
+    if (name.equalsAscii("LC_INFO"))
         return new LCInfoNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_CTYPE")))
+    if (name.equalsAscii("LC_CTYPE"))
         return new LCCTYPENode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_FORMAT")))
+    if (name.equalsAscii("LC_FORMAT"))
         return new LCFormatNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_FORMAT_1")))
+    if (name.equalsAscii("LC_FORMAT_1"))
         return new LCFormatNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_CALENDAR")))
+    if (name.equalsAscii("LC_CALENDAR"))
         return new LCCalendarNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_CURRENCY")))
+    if (name.equalsAscii("LC_CURRENCY"))
         return new LCCurrencyNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_TRANSLITERATION")))
+    if (name.equalsAscii("LC_TRANSLITERATION"))
         return new LCTransliterationNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_COLLATION")))
+    if (name.equalsAscii("LC_COLLATION"))
         return new LCCollationNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_INDEX")))
+    if (name.equalsAscii("LC_INDEX"))
         return new LCIndexNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_SEARCH")))
+    if (name.equalsAscii("LC_SEARCH"))
         return new LCSearchNode (name,attr);
-    if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_MISC")))
+    if (name.equalsAscii("LC_MISC"))
         return new LCMiscNode (name,attr);
-      if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_NumberingLevel")))
+      if (name.equalsAscii("LC_NumberingLevel"))
                 return new LCNumberingLevelNode (name, attr);
-      if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LC_OutLineNumberingLevel")))
+      if (name.equalsAscii("LC_OutLineNumberingLevel"))
                 return new LCOutlineNumberingLevelNode (name, attr);
 
     return new LocaleNode(name,attr);
@@ -163,14 +163,12 @@ LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttr
 //   printf(" name: '%s'\n", p->getName().pData->buffer );
 //   printf("value: '%s'\n", p->getValue().pData->buffer );
 
-#define OSTR(s) (OUStringToOString( (s), RTL_TEXTENCODING_UTF8).getStr())
-
 void print_OUString( const OUString& s )
 {
-    printf( "%s", OSTR(s));
+    printf( "%s", OUStringToOString( s, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-bool is_empty_string( const OUString& s )
+bool is_empty( const OUString& s )
 {
      return (s.getLength()==0) || (s.getLength()==1 && s[0]=='\n');
 }
@@ -210,7 +208,7 @@ void print_node( const LocaleNode* p, int depth=0 )
      }
      printf(">");
      printf("\n");
-     if( !is_empty_string( p->getValue() ) )
+     if( !is_empty( p->getValue() ) )
      {
           print_indent( depth+1 );
           printf("value: ");
@@ -235,7 +233,7 @@ void print_node( const LocaleNode* p, int depth=0 )
 void LocaleNode :: generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString aDTD = getAttr().getValueByName("versionDTD");
-    if (!aDTD.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(LOCALE_VERSION_DTD)))
+    if (!aDTD.equalsAscii( LOCALE_VERSION_DTD))
     {
         ++nError;
         fprintf( stderr, "Error: Locale versionDTD is not %s, see comment in locale.dtd\n", LOCALE_VERSION_DTD);
@@ -260,7 +258,7 @@ void LocaleNode :: generateCode (const OFileWriter &of) const
                 pParameterName);
     }
     // write empty data if error
-    of.writeParameter( pParameterName, aVal);
+    of.writeParameter( pParameterName, aVal); 
     sal_Int32 nLen = aVal.getLength();
     if (nLen < nMinLen)
     {
@@ -268,16 +266,16 @@ void LocaleNode :: generateCode (const OFileWriter &of) const
         fprintf( stderr, "Error: less than %ld character%s (%ld) in %s '%s'.\n",
                 sal::static_int_cast< long >(nMinLen), (nMinLen > 1 ? "s" : ""),
                 sal::static_int_cast< long >(nLen),
-                (pNode ? OSTR( pNode->getName()) : ""),
-                OSTR( aVal));
+                (pNode ? OUStringToOString( pNode->getName(), RTL_TEXTENCODING_UTF8).getStr() : ""),
+                OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr());
     }
     else if (nLen > nMaxLen && nMaxLen >= 0)
         fprintf( stderr,
                 "Warning: more than %ld character%s (%ld) in %s %s not supported by application.\n",
                 sal::static_int_cast< long >(nMaxLen), (nMaxLen > 1 ? "s" : ""),
                 sal::static_int_cast< long >(nLen),
-                (pNode ? OSTR( pNode->getName()) : ""),
-                OSTR( aVal));
+                (pNode ? OUStringToOString( pNode->getName(), RTL_TEXTENCODING_UTF8).getStr() : ""),
+                OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr());
     return aVal;
 }
 
@@ -295,7 +293,7 @@ void LocaleNode :: generateCode (const OFileWriter &of) const
         ++nError;
         fprintf( stderr, "Error: node %s not found.\n", pNodeName);
         // write empty data if error
-        of.writeParameter( pParameterName, aVal);
+        of.writeParameter( pParameterName, aVal); 
     }
     return aVal;
 }
@@ -308,7 +306,7 @@ void LocaleNode::incError( const char* pStr ) const
 
 void LocaleNode::incError( const ::rtl::OUString& rStr ) const
 {
-    incError( OSTR( rStr));
+    incError( OUStringToOString( rStr, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 char* LocaleNode::prepareErrorFormat( const char* pFormat, const char* pDefaultConversion ) const
@@ -334,7 +332,8 @@ void LocaleNode::incErrorInt( const char* pStr, int nVal ) const
 void LocaleNode::incErrorStr( const char* pStr, const ::rtl::OUString& rVal ) const
 {
     ++nError;
-    fprintf( stderr, prepareErrorFormat( pStr, ": %s"), OSTR( rVal));
+    fprintf( stderr, prepareErrorFormat( pStr, ": %s"), OUStringToOString(
+                rVal, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void LCInfoNode::generateCode (const OFileWriter &of) const
@@ -438,7 +437,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
         incError( "DateSeparator equals TimeSeparator.");
     if (aDecSep == aThoSep)
         incError( "DecimalSeparator equals ThousandSeparator.");
-    if (aThoSep.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( " ")))
+    if (aThoSep.equalsAscii( " "))
         incError( "ThousandSeparator is an ' ' ordinary space, this should be a non-breaking space U+00A0 instead.");
     if (aListSep == aDecSep)
         fprintf( stderr, "Warning: %s\n",
@@ -494,7 +493,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     if (aDoubleQuoteStart == aDoubleQuoteEnd)
         fprintf( stderr, "Warning: %s\n",
                 "DoubleQuotationStart equals DoubleQuotationEnd. Not necessarily an error, but unusual.");
-    /* TODO: should equalness of single and double quotes be an error? Would
+    /* TODO: should equalness of single and double quotes be an error? Would 
      * need to adapt quite some locales' data. */
     if (aQuoteStart == aDoubleQuoteStart)
         fprintf( stderr, "Warning: %s\n",
@@ -502,64 +501,6 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     if (aQuoteEnd == aDoubleQuoteEnd)
         fprintf( stderr, "Warning: %s\n",
                 "QuotationEnd equals DoubleQuotationEnd. Not necessarily an error, but unusual.");
-    // Known good values, exclude ASCII single (U+0027, ') and double (U+0022, ") quotes.
-    int ic;
-    switch (ic = aQuoteStart.toChar())
-    {
-        case 0x2018:    // LEFT SINGLE QUOTATION MARK
-        case 0x201a:    // SINGLE LOW-9 QUOTATION MARK
-        case 0x201b:    // SINGLE HIGH-REVERSED-9 QUOTATION MARK
-        case 0x2039:    // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-        case 0x203a:    // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-        case 0x300c:    // LEFT CORNER BRACKET (Chinese)
-            ;
-            break;
-        default:
-            fprintf( stderr, "Warning: %s U+%04X %s\n",
-                    "QuotationStart may be wrong:", ic, OSTR( aQuoteStart));
-    }
-    switch (ic = aQuoteEnd.toChar())
-    {
-        case 0x2019:    // RIGHT SINGLE QUOTATION MARK
-        case 0x201a:    // SINGLE LOW-9 QUOTATION MARK
-        case 0x201b:    // SINGLE HIGH-REVERSED-9 QUOTATION MARK
-        case 0x2039:    // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-        case 0x203a:    // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-        case 0x300d:    // RIGHT CORNER BRACKET (Chinese)
-            ;
-            break;
-        default:
-            fprintf( stderr, "Warning: %s U+%04X %s\n",
-                    "QuotationEnd may be wrong:", ic, OSTR( aQuoteEnd));
-    }
-    switch (ic = aDoubleQuoteStart.toChar())
-    {
-        case 0x00ab:    // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
-        case 0x00bb:    // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
-        case 0x201c:    // LEFT DOUBLE QUOTATION MARK
-        case 0x201e:    // DOUBLE LOW-9 QUOTATION MARK
-        case 0x201f:    // DOUBLE HIGH-REVERSED-9 QUOTATION MARK
-        case 0x300e:    // LEFT WHITE CORNER BRACKET (Chinese)
-            ;
-            break;
-        default:
-            fprintf( stderr, "Warning: %s U+%04X %s\n",
-                    "DoubleQuotationStart may be wrong:", ic, OSTR( aDoubleQuoteStart));
-    }
-    switch (ic = aDoubleQuoteEnd.toChar())
-    {
-        case 0x00ab:    // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
-        case 0x00bb:    // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
-        case 0x201d:    // RIGHT DOUBLE QUOTATION MARK
-        case 0x201e:    // DOUBLE LOW-9 QUOTATION MARK
-        case 0x201f:    // DOUBLE HIGH-REVERSED-9 QUOTATION MARK
-        case 0x300f:    // RIGHT WHITE CORNER BRACKET (Chinese)
-            ;
-            break;
-        default:
-            fprintf( stderr, "Warning: %s U+%04X %s\n",
-                    "DoubleQuotationEnd may be wrong:", ic, OSTR( aDoubleQuoteEnd));
-    }
 
     writeParameterCheckLen( of, "TimeAM", "timeAM", 1, -1);
     writeParameterCheckLen( of, "TimePM", "timePM", 1, -1);
@@ -628,7 +569,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         OUString aUsage;
         OUString aType;
         OUString aFormatIndex;
-        //      currNode -> print();
+        //		currNode -> print();
         const Attr &currNodeAttr = currNode->getAttr();
         //printf ("getLen() = %d\n", currNode->getAttr().getLength());
 
@@ -638,7 +579,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         of.writeParameter("FormatKey", str, formatCount);
 
         str = currNodeAttr.getValueByName("default");
-        bool bDefault = str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "true"));
+        bool bDefault = str.equalsAscii( "true");
         of.writeDefaultParameter("FormatElement", str, formatCount);
 
         aType = currNodeAttr.getValueByName("type");
@@ -699,7 +640,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                                         fprintf( stderr,
                                                 "Warning: Can't check separators used in FormatCode due to LC_CTYPE ref=\"%s\".\n"
                                                 "If these two locales use identical format codes, you should consider to use the ref= mechanism also for the LC_FORMAT element, together with replaceFrom= and replaceTo= for the currency.\n",
-                                                OSTR( aRef));
+                                                OUStringToOString( aRef, RTL_TEXTENCODING_UTF8).getStr());
                                     bCtypeIsRef = true;
                                     pCtype = 0;
                                 }
@@ -710,11 +651,11 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                 // Currency formats should be something like [C]###0;-[C]###0
                 // and not parenthesized [C]###0;([C]###0) if not en_US.
                 case cssi::NumberFormatIndex::CURRENCY_1000INT :
-                case cssi::NumberFormatIndex::CURRENCY_1000INT_RED :
-                case cssi::NumberFormatIndex::CURRENCY_1000DEC2 :
-                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_RED :
-                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_CCC :
-                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_DASHED :
+                case cssi::NumberFormatIndex::CURRENCY_1000INT_RED :  
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2 :  
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_RED :  
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_CCC :  
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_DASHED :  
                     if (strcmp( of.getLocale(), "en_US") != 0)
                     {
                         OUString aCode( n->getValue());
@@ -1152,7 +1093,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         LocaleNode * calNode = getChildAt (i);
         OUString calendarID = calNode -> getAttr().getValueByName("unoid");
         of.writeParameter( "calendarID", calendarID, i);
-        bool bGregorian = calendarID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "gregorian"));
+        bool bGregorian = calendarID.equalsAscii( "gregorian");
         if (!bHasGregorian)
             bHasGregorian = bGregorian;
         str = calNode -> getAttr().getValueByName("default");
@@ -1170,7 +1111,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (ref_name.getLength() > 0 && daysNode == NULL) {
-            of.writeParameter("dayRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
+            of.writeParameter("dayRef", OUString::createFromAscii("ref"), i);
             of.writeParameter("dayRefName", ref_name, i);
             nbOfDays[i] = 0;
         } else {
@@ -1184,7 +1125,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 LocaleNode *currNode = daysNode -> getChildAt(j);
                 OUString dayID( currNode->getChildAt(0)->getValue());
                 of.writeParameter("dayID", dayID, i, j);
-                if (j == 0 && bGregorian && !dayID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "sun")))
+                if (j == 0 && bGregorian && !dayID.equalsAscii( "sun"))
                     incError( "First day of a week of a Gregorian calendar must be <DayID>sun</DayID>");
                 of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
                 of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
@@ -1202,7 +1143,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (ref_name.getLength() > 0 && monthsNode == NULL) {
-            of.writeParameter("monthRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
+            of.writeParameter("monthRef", OUString::createFromAscii("ref"), i);
             of.writeParameter("monthRefName", ref_name, i);
             nbOfMonths[i] = 0;
         } else {
@@ -1216,7 +1157,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 LocaleNode *currNode = monthsNode -> getChildAt(j);
                 OUString monthID( currNode->getChildAt(0)->getValue());
                 of.writeParameter("monthID", monthID, i, j);
-                if (j == 0 && bGregorian && !monthID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "jan")))
+                if (j == 0 && bGregorian && !monthID.equalsAscii( "jan"))
                     incError( "First month of a year of a Gregorian calendar must be <MonthID>jan</MonthID>");
                 of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
                 of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
@@ -1234,7 +1175,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (ref_name.getLength() > 0 && erasNode == NULL) {
-            of.writeParameter("eraRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
+            of.writeParameter("eraRef", OUString::createFromAscii("ref"), i);
             of.writeParameter("eraRefName", ref_name, i);
             nbOfEras[i] = 0;
         } else {
@@ -1248,9 +1189,9 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 LocaleNode *currNode = erasNode -> getChildAt(j);
                 OUString eraID( currNode->getChildAt(0)->getValue());
                 of.writeParameter("eraID", eraID, i, j);
-                if (j == 0 && bGregorian && !eraID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "bc")))
+                if (j == 0 && bGregorian && !eraID.equalsAscii( "bc"))
                     incError( "First era of a Gregorian calendar must be <EraID>bc</EraID>");
-                if (j == 1 && bGregorian && !eraID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "ad")))
+                if (j == 1 && bGregorian && !eraID.equalsAscii( "ad"))
                     incError( "Second era of a Gregorian calendar must be <EraID>ad</EraID>");
                 of.writeAsciiString("\n");
                 of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
@@ -1328,10 +1269,10 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         } else {
             for(j = 0; j < nbOfDays[i]; j++) {
                 of.writeAsciiString("\tdayID");
-                of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
+                of.writeInt(i);	of.writeInt(j);	of.writeAsciiString(",\n");
                 of.writeAsciiString("\tdayDefaultAbbrvName");
-                of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
-                of.writeAsciiString("\tdayDefaultFullName");of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
+                of.writeInt(i);	of.writeInt(j);	of.writeAsciiString(",\n");
+                of.writeAsciiString("\tdayDefaultFullName");of.writeInt(i);	of.writeInt(j);	of.writeAsciiString(",\n");
             }
         }
         if (nbOfMonths[i] == 0) {
@@ -1353,13 +1294,13 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             of.writeInt(i); of.writeAsciiString(",\n");
         } else {
             for(j = 0; j < nbOfEras[i]; j++) {
-                of.writeAsciiString("\teraID"); of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
+                of.writeAsciiString("\teraID");	of.writeInt(i);	of.writeInt(j);	of.writeAsciiString(",\n");
                 of.writeAsciiString("\teraDefaultAbbrvName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
                 of.writeAsciiString("\teraDefaultFullName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
             }
         }
-        of.writeAsciiString("\tstartDayOfWeek");of.writeInt(i); of.writeAsciiString(",\n");
-        of.writeAsciiString("\tminimalDaysInFirstWeek");of.writeInt(i); of.writeAsciiString(",\n");
+        of.writeAsciiString("\tstartDayOfWeek");of.writeInt(i);	of.writeAsciiString(",\n");
+        of.writeAsciiString("\tminimalDaysInFirstWeek");of.writeInt(i);	of.writeAsciiString(",\n");
     }
 
     of.writeAsciiString("};\n\n");
@@ -1424,7 +1365,7 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
         of.writeParameter("currencySymbol", str, nbOfCurrencies);
         str = calNode -> findNode ("BankSymbol") -> getValue();
         of.writeParameter("bankSymbol", str, nbOfCurrencies);
-        // BankSymbol currently must be ISO 4217. May change later if
+        // BankSymbol currently must be ISO 4217. May change later if 
         // application always uses CurrencyID instead of BankSymbol.
         if (!bLegacy && !isIso4217(str))
             incError( "BankSymbol is not ISO 4217");

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,11 +99,11 @@ sal_uInt32 ControlContainer::AddControl (::std::auto_ptr<TreeNode> pControl)
 
 
 void ControlContainer::SetExpansionState (
-    sal_uInt32 nIndex,
+    UINT32 nIndex,
     ExpansionState aState)
 {
     ::osl::MutexGuard aGuard (maMutex);
-
+    
     bool bResizeNecessary (false);
 
     if (mbMultiSelection)
@@ -178,7 +178,7 @@ void ControlContainer::SetExpansionState (
             }
 
             // Update the expansion state of all controls.
-            for (sal_uInt32 i=0; i<GetControlCount(); i=GetNextIndex(i))
+            for (UINT32 i=0; i<GetControlCount(); i=GetNextIndex(i))
             {
                 TreeNode* pControl = GetControl(i);
                 bResizeNecessary |= pControl->Expand(i == mnActiveControlIndex);
@@ -219,6 +219,14 @@ sal_uInt32 ControlContainer::GetControlIndex (TreeNode* pControlToExpand) const
 
 
 
+sal_uInt32 ControlContainer::GetActiveControlIndex (void) const
+{
+    return mnActiveControlIndex;
+}
+
+
+
+
 void ControlContainer::ListHasChanged (void)
 {
 }
@@ -238,14 +246,14 @@ sal_uInt32 ControlContainer::GetVisibleControlCount (void) const
 {
     sal_uInt32 nCount (0);
 
-    sal_uInt32 nIndex;
+    UINT32 nIndex;
     sal_uInt32 nAllCount (maControlList.size());
     for (nIndex=0; nIndex<nAllCount; nIndex=GetNextIndex(nIndex,true))
     {
         if (maControlList[nIndex]->GetWindow()->IsVisible())
             nCount += 1;
     }
-
+    
     return nCount;
 }
 
@@ -309,7 +317,7 @@ sal_uInt32 ControlContainer::GetPreviousIndex (
 
         // The candidate does not meet our constraints so do one more loop.
     }
-
+    
     return nCandidate;
 }
 
@@ -361,8 +369,55 @@ sal_uInt32 ControlContainer::GetNextIndex (
 
         // The candidate does not meet our constraints so do one more loop.
     }
-
+    
     return nCandidate;
+}
+
+
+
+
+sal_uInt32 ControlContainer::GetFirstIndex (bool bIncludeHidden)
+{
+    sal_uInt32 nIndex = 0;
+
+    if (maControlList.size() == 0)
+    {
+        // The list is empty so there is no first element.
+        nIndex = maControlList.size();
+    }
+    else if ( ! bIncludeHidden
+        && ! maControlList[nIndex]->GetWindow()->IsVisible())
+    {
+        // The first element is not visible.  Go the next visible one.
+        nIndex = GetNextIndex (nIndex, bIncludeHidden, false);
+    }
+
+    return nIndex;
+}
+
+
+
+
+sal_uInt32 ControlContainer::GetLastIndex (bool bIncludeHidden)
+{
+    sal_uInt32 nIndex;
+
+    if (maControlList.size() == 0)
+    {
+        // The list is empty so there is no last element.
+        nIndex = maControlList.size();
+    }
+    else
+    {
+        nIndex = maControlList.size() - 1;
+        if ( ! bIncludeHidden
+            && ! maControlList[nIndex]->GetWindow()->IsVisible())
+        {
+            // The last element is not visible.  Go the previous visible one.
+            nIndex = GetPreviousIndex (nIndex, bIncludeHidden, false);
+        }
+    }
+    return nIndex;
 }
 
 

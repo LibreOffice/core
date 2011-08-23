@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,6 +55,7 @@
 #include <comphelper/types.hxx>
 
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <svl/filenotation.hxx>
@@ -92,22 +93,22 @@ DBG_NAME(OTextConnectionHelper)
         ,m_aRBAccessOtherFiles      (this, ModuleRes(RB_AUTOACCESSOTHERS))
         ,m_aETOwnExtension          (this, ModuleRes(ET_AUTOOWNEXTENSION))
         ,m_aFTExtensionExample      (this, ModuleRes(FT_AUTOOWNEXTENSIONAPPENDIX))
-        ,m_aLineFormat              (this, ModuleRes(FL_AUTOSEPARATOR2))
-        ,m_aFieldSeparatorLabel     (this, ModuleRes(FT_AUTOFIELDSEPARATOR))
-        ,m_aFieldSeparator          (this, ModuleRes(CM_AUTOFIELDSEPARATOR))
-        ,m_aTextSeparatorLabel      (this, ModuleRes(FT_AUTOTEXTSEPARATOR))
-        ,m_aTextSeparator           (this, ModuleRes(CM_AUTOTEXTSEPARATOR))
-        ,m_aDecimalSeparatorLabel   (this, ModuleRes(FT_AUTODECIMALSEPARATOR))
-        ,m_aDecimalSeparator        (this, ModuleRes(CM_AUTODECIMALSEPARATOR))
-        ,m_aThousandsSeparatorLabel (this, ModuleRes(FT_AUTOTHOUSANDSSEPARATOR))
-        ,m_aThousandsSeparator      (this, ModuleRes(CM_AUTOTHOUSANDSSEPARATOR))
+        ,m_aLineFormat				(this, ModuleRes(FL_AUTOSEPARATOR2))
+        ,m_aFieldSeparatorLabel		(this, ModuleRes(FT_AUTOFIELDSEPARATOR))
+        ,m_aFieldSeparator			(this, ModuleRes(CM_AUTOFIELDSEPARATOR))
+        ,m_aTextSeparatorLabel		(this, ModuleRes(FT_AUTOTEXTSEPARATOR))
+        ,m_aTextSeparator			(this, ModuleRes(CM_AUTOTEXTSEPARATOR))
+        ,m_aDecimalSeparatorLabel	(this, ModuleRes(FT_AUTODECIMALSEPARATOR))
+        ,m_aDecimalSeparator		(this, ModuleRes(CM_AUTODECIMALSEPARATOR))
+        ,m_aThousandsSeparatorLabel	(this, ModuleRes(FT_AUTOTHOUSANDSSEPARATOR))
+        ,m_aThousandsSeparator		(this, ModuleRes(CM_AUTOTHOUSANDSSEPARATOR))
         ,m_aRowHeader               (this, ModuleRes(CB_AUTOHEADER))
         ,m_aCharSetHeader           (this, ModuleRes(FL_DATACONVERT))
         ,m_aCharSetLabel            (this, ModuleRes(FT_CHARSET))
         ,m_aCharSet                 (this, ModuleRes(LB_CHARSET))
-        ,m_aFieldSeparatorList      (ModuleRes(STR_AUTOFIELDSEPARATORLIST))
-        ,m_aTextSeparatorList       (ModuleRes(STR_AUTOTEXTSEPARATORLIST))
-        ,m_aTextNone                (ModuleRes(STR_AUTOTEXT_FIELD_SEP_NONE))
+        ,m_aFieldSeparatorList		(ModuleRes(STR_AUTOFIELDSEPARATORLIST))
+        ,m_aTextSeparatorList		(ModuleRes(STR_AUTOTEXTSEPARATORLIST))
+        ,m_aTextNone				(ModuleRes(STR_AUTOTEXT_FIELD_SEP_NONE))
         ,m_nAvailableSections( _nAvailableSections )
     {
         DBG_CTOR(OTextConnectionHelper,NULL);
@@ -334,59 +335,59 @@ DBG_NAME(OTextConnectionHelper)
         String sExtension = GetExtension();
         String aErrorText;
         Control* pErrorWin = NULL;
-        //  if (!m_aFieldSeparator.GetText().Len())
-            // if this line is compiled under OS2 (in a product environent)
+        //	if (!m_aFieldSeparator.GetText().Len())
+            // bug (#42168) if this line is compiled under OS2 (in a product environent)
             // -> use a temporary variable
         String aDelText(m_aFieldSeparator.GetText());
         if(!aDelText.Len())
-        {   // Kein FeldTrenner
+        {	// Kein FeldTrenner
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MISSING));
             aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
         else if (!m_aDecimalSeparator.GetText().Len())
-        {   // kein Decimaltrenner
+        {	// kein Decimaltrenner
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MISSING));
             aErrorText.SearchAndReplaceAscii("#1",m_aDecimalSeparatorLabel.GetText());
             pErrorWin = &m_aDecimalSeparator;
         }
         else if (m_aTextSeparator.GetText() == m_aFieldSeparator.GetText())
-        {   // Feld und TextTrenner duerfen nicht gleich sein
+        {	// Feld und TextTrenner duerfen nicht gleich sein
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aTextSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aFieldSeparatorLabel.GetText());
             pErrorWin = &m_aTextSeparator;
         }
         else if (m_aDecimalSeparator.GetText() == m_aThousandsSeparator.GetText())
-        {   // Tausender und DecimalTrenner duerfen nicht gleich sein
+        {	// Tausender und DecimalTrenner duerfen nicht gleich sein
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aDecimalSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aThousandsSeparatorLabel.GetText());
             pErrorWin = &m_aDecimalSeparator;
         }
         else if (m_aFieldSeparator.GetText() == m_aThousandsSeparator.GetText())
-        {   // Tausender und FeldTrenner duerfen nicht gleich sein
+        {	// Tausender und FeldTrenner duerfen nicht gleich sein
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aThousandsSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
         else if (m_aFieldSeparator.GetText() == m_aDecimalSeparator.GetText())
-        {   // Zehner und FeldTrenner duerfen nicht gleich sein
+        {	// Zehner und FeldTrenner duerfen nicht gleich sein
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aDecimalSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
         else if (m_aTextSeparator.GetText() == m_aThousandsSeparator.GetText())
-        {   // Tausender und TextTrenner duerfen nicht gleich sein
+        {	// Tausender und TextTrenner duerfen nicht gleich sein
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aTextSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aThousandsSeparatorLabel.GetText());
             pErrorWin = &m_aTextSeparator;
         }
         else if (m_aTextSeparator.GetText() == m_aDecimalSeparator.GetText())
-        {   // Zehner und TextTrenner duerfen nicht gleich sein
+        {	// Zehner und TextTrenner duerfen nicht gleich sein
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aTextSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aDecimalSeparatorLabel.GetText());
@@ -499,8 +500,8 @@ DBG_NAME(OTextConnectionHelper)
     //------------------------------------------------------------------------
     String OTextConnectionHelper::GetSeparator( const ComboBox& rBox, const String& rList )
     {
-        sal_Unicode nTok = '\t';
-        xub_StrLen  nPos(rBox.GetEntryPos( rBox.GetText() ));
+        sal_Unicode	nTok = '\t';
+        xub_StrLen	nPos(rBox.GetEntryPos( rBox.GetText() ));
 
         if( nPos == COMBOBOX_ENTRY_NOTFOUND )
             return rBox.GetText().Copy(0);
@@ -516,13 +517,13 @@ DBG_NAME(OTextConnectionHelper)
     //------------------------------------------------------------------------
     void OTextConnectionHelper::SetSeparator( ComboBox& rBox, const String& rList, const String& rVal )
     {
-        char    nTok = '\t';
-        xub_StrLen  nCnt(rList.GetTokenCount( nTok ));
-        xub_StrLen  i;
+        char	nTok = '\t';
+        xub_StrLen	nCnt(rList.GetTokenCount( nTok ));
+        xub_StrLen	i;
 
         for( i=0 ; i<nCnt ; i+=2 )
         {
-            String  sTVal(
+            String	sTVal(
                 static_cast< sal_Unicode >(
                     rList.GetToken( (i+1), nTok ).ToInt32()));
 
@@ -543,7 +544,7 @@ DBG_NAME(OTextConnectionHelper)
     }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

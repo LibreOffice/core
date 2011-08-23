@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,13 +33,13 @@
 
 class SdrTextAniStartInsideItem: public SdrYesNoItem {
 public:
-    SdrTextAniStartInsideItem(sal_Bool bOn=sal_False): SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE,bOn) {}
+    SdrTextAniStartInsideItem(BOOL bOn=FALSE): SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE,bOn) {}
     SdrTextAniStartInsideItem(SvStream& rIn) : SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE,rIn) {}
 };
 
 class SdrTextAniStopInsideItem: public SdrYesNoItem {
 public:
-    SdrTextAniStopInsideItem(sal_Bool bOn=sal_False): SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE,bOn) {}
+    SdrTextAniStopInsideItem(BOOL bOn=FALSE): SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE,bOn) {}
     SdrTextAniStopInsideItem(SvStream& rIn) : SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE,rIn) {}
 };
 

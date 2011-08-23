@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@
 
 
 
-inline sal_Bool SelectionEngine::ShouldDeselect( sal_Bool bModifierKey1 ) const
+inline BOOL SelectionEngine::ShouldDeselect( BOOL bModifierKey1 ) const
 {
-//  return !( eSelMode == MULTIPLE_SELECTION && bModifierKey1 );
+//	return !( eSelMode == MULTIPLE_SELECTION && bModifierKey1 );
     return eSelMode != MULTIPLE_SELECTION || !bModifierKey1;
 }
 
@@ -50,12 +50,14 @@ inline sal_Bool SelectionEngine::ShouldDeselect( sal_Bool bModifierKey1 ) const
 |*
 |*    SelectionEngine::SelectionEngine()
 |*
+|*    Beschreibung      SELENG.SDW
+|*    Ersterstellung    OV 10.10.94
+|*    Letzte Aenderung  OV 10.10.94
+|*
 *************************************************************************/
 
-SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet,
-                                  sal_uLong nAutoRepeatInterval ) :
-    pWin( pWindow ),
-    nUpdateInterval( nAutoRepeatInterval )
+SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet ) :
+                    pWin( pWindow )
 {
     eSelMode = SINGLE_SELECTION;
     pFunctionSet = pFuncSet;
@@ -63,12 +65,16 @@ SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet,
     nLockedMods = 0;
 
     aWTimer.SetTimeoutHdl( LINK( this, SelectionEngine, ImpWatchDog ) );
-    aWTimer.SetTimeout( nUpdateInterval );
+    aWTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
 
 /*************************************************************************
 |*
 |*    SelectionEngine::~SelectionEngine()
+|*
+|*    Beschreibung      SELENG.SDW
+|*    Ersterstellung    OV 10.10.94
+|*    Letzte Aenderung  OV 10.10.94
 |*
 *************************************************************************/
 
@@ -80,6 +86,10 @@ SelectionEngine::~SelectionEngine()
 /*************************************************************************
 |*
 |*    SelectionEngine::ImpWatchDog()
+|*
+|*    Beschreibung      SELENG.SDW
+|*    Ersterstellung    OV 10.10.94
+|*    Letzte Aenderung  OV 10.10.94
 |*
 *************************************************************************/
 
@@ -94,6 +104,10 @@ IMPL_LINK( SelectionEngine, ImpWatchDog, Timer*, EMPTYARG )
 |*
 |*    SelectionEngine::SetSelectionMode()
 |*
+|*    Beschreibung      SELENG.SDW
+|*    Ersterstellung    OV 10.10.94
+|*    Letzte Aenderung  OV 10.10.94
+|*
 *************************************************************************/
 
 void SelectionEngine::SetSelectionMode( SelectionMode eMode )
@@ -104,6 +118,10 @@ void SelectionEngine::SetSelectionMode( SelectionMode eMode )
 /*************************************************************************
 |*
 |*    SelectionEngine::ActivateDragMode()
+|*
+|*    Beschreibung      SELENG.SDW
+|*    Ersterstellung    OV 10.10.94
+|*    Letzte Aenderung  OV 10.10.94
 |*
 *************************************************************************/
 
@@ -116,9 +134,13 @@ void SelectionEngine::ActivateDragMode()
 |*
 |*    SelectionEngine::CursorPosChanging()
 |*
+|*    Beschreibung      SELENG.SDW
+|*    Ersterstellung    OV 10.10.94
+|*    Letzte Aenderung  GT 2002-04-04
+|*
 *************************************************************************/
 
-void SelectionEngine::CursorPosChanging( sal_Bool bShift, sal_Bool bMod1 )
+void SelectionEngine::CursorPosChanging( BOOL bShift, BOOL bMod1 )
 {
     if ( !pFunctionSet )
         return;
@@ -170,21 +192,25 @@ void SelectionEngine::CursorPosChanging( sal_Bool bShift, sal_Bool bMod1 )
 |*
 |*    SelectionEngine::SelMouseButtonDown()
 |*
+|*    Beschreibung      SELENG.SDW
+|*    Ersterstellung    OV 10.10.94
+|*    Letzte Aenderung  OV 07.06.95
+|*
 *************************************************************************/
 
-sal_Bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
+BOOL SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 {
     nFlags &= (~SELENG_CMDEVT);
     if ( !pFunctionSet || !pWin )
-        return sal_False;
-    const bool bRightClickCursorPositioning =
+        return FALSE;
+    const bool bRightClickCursorPositioning = 
             rMEvt.IsRight() && rMEvt.GetClicks() == 1 && !IsInSelection();
     if ( (rMEvt.GetClicks() > 1 || rMEvt.IsRight()) && !bRightClickCursorPositioning )
-        return sal_False;
+        return FALSE;
 
-    sal_uInt16 nModifier = rMEvt.GetModifier() | nLockedMods;
+    USHORT nModifier = rMEvt.GetModifier() | nLockedMods;
     if ( nModifier & KEY_MOD2 )
-        return sal_False;
+        return FALSE;
     // in SingleSelection: Control-Taste filtern (damit auch
     // mit Ctrl-Click ein D&D gestartet werden kann)
     if ( nModifier == KEY_MOD1 && eSelMode == SINGLE_SELECTION )
@@ -207,14 +233,14 @@ sal_Bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
     {
         case 0:     // KEY_NO_KEY
         {
-            sal_Bool bSelAtPoint = pFunctionSet->IsSelectionAtPoint( aPos );
+            BOOL bSelAtPoint = pFunctionSet->IsSelectionAtPoint( aPos );
             nFlags &= (~SELENG_IN_ADD);
             if ( (nFlags & SELENG_DRG_ENAB) && bSelAtPoint )
             {
                 nFlags |= SELENG_WAIT_UPEVT;
                 nFlags &= ~(SELENG_IN_SEL);
                 pWin->ReleaseMouse();
-                return sal_True;  //auf STARTDRAG-Command-Event warten
+                return TRUE;  //auf STARTDRAG-Command-Event warten
             }
             if ( eSelMode != SINGLE_SELECTION )
             {
@@ -222,14 +248,14 @@ sal_Bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
                     pFunctionSet->DeselectAll();
                 else
                     pFunctionSet->DestroyAnchor();
-                   nFlags &= (~SELENG_HAS_ANCH); // bHasAnchor = sal_False;
+                   nFlags &= (~SELENG_HAS_ANCH); // bHasAnchor = FALSE;
             }
             pFunctionSet->SetCursorAtPoint( aPos );
             // Sonderbehandlung Single-Selection, damit Select+Drag
             // in einem Zug moeglich ist
             if (eSelMode == SINGLE_SELECTION && (nFlags & SELENG_DRG_ENAB))
                 nFlags |= SELENG_WAIT_UPEVT;
-            return sal_True;
+            return TRUE;
         }
 
         case KEY_SHIFT:
@@ -237,7 +263,7 @@ sal_Bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             {
                 pWin->ReleaseMouse();
                 nFlags &= (~SELENG_IN_SEL);
-                return sal_False;
+                return FALSE;
             }
             if ( nFlags & SELENG_ADD_ALW )
                 nFlags |= SELENG_IN_ADD;
@@ -252,7 +278,7 @@ sal_Bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
                 nFlags |= SELENG_HAS_ANCH;
             }
             pFunctionSet->SetCursorAtPoint( aPos );
-            return sal_True;
+            return TRUE;
 
         case KEY_MOD1:
             // Control nur bei Mehrfachselektion erlaubt
@@ -260,7 +286,7 @@ sal_Bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             {
                 nFlags &= (~SELENG_IN_SEL);
                 pWin->ReleaseMouse();
-                return sal_True;  // Mausclick verschlucken
+                return TRUE;  // Mausclick verschlucken
             }
             if ( nFlags & SELENG_HAS_ANCH )
             {
@@ -271,48 +297,52 @@ sal_Bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             if ( pFunctionSet->IsSelectionAtPoint( aPos ) )
             {
                 pFunctionSet->DeselectAtPoint( aPos );
-                pFunctionSet->SetCursorAtPoint( aPos, sal_True );
+                pFunctionSet->SetCursorAtPoint( aPos, TRUE );
             }
             else
             {
                 pFunctionSet->SetCursorAtPoint( aPos );
             }
-            return sal_True;
+            return TRUE;
 
         case KEY_SHIFT + KEY_MOD1:
             if ( eSelMode != MULTIPLE_SELECTION )
             {
                 pWin->ReleaseMouse();
                 nFlags &= (~SELENG_IN_SEL);
-                return sal_False;
+                return FALSE;
             }
-            nFlags |= SELENG_IN_ADD; //bIsInAddMode = sal_True;
+            nFlags |= SELENG_IN_ADD; //bIsInAddMode = TRUE;
             if ( !(nFlags & SELENG_HAS_ANCH) )
             {
                 pFunctionSet->CreateAnchor();
                 nFlags |= SELENG_HAS_ANCH;
             }
             pFunctionSet->SetCursorAtPoint( aPos );
-            return sal_True;
+            return TRUE;
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 /*************************************************************************
 |*
 |*    SelectionEngine::SelMouseButtonUp()
 |*
+|*    Beschreibung      SELENG.SDW
+|*    Ersterstellung    OV 10.10.94
+|*    Letzte Aenderung  OV 10.10.94
+|*
 *************************************************************************/
 
-sal_Bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
+BOOL SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
 {
     aWTimer.Stop();
     //DbgOut("Up");
     if( !pFunctionSet || !pWin )
     {
         nFlags &= ~(SELENG_CMDEVT | SELENG_WAIT_UPEVT | SELENG_IN_SEL);
-        return sal_False;
+        return FALSE;
     }
 
     if( !rMEvt.IsRight() )
@@ -325,7 +355,7 @@ sal_Bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
     {
         // MouseButtonDown in Sel aber kein CommandEvent eingetrudelt
         // ==> deselektieren
-        sal_uInt16 nModifier = aLastMove.GetModifier() | nLockedMods;
+        USHORT nModifier = aLastMove.GetModifier() | nLockedMods;
         if( nModifier == KEY_MOD1 || IsAlwaysAdding() )
         {
             if( !(nModifier & KEY_SHIFT) )
@@ -335,7 +365,7 @@ sal_Bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
             }
             pFunctionSet->DeselectAtPoint( aLastMove.GetPosPixel() );
             nFlags &= (~SELENG_HAS_ANCH); // nix Anker
-            pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel(), sal_True );
+            pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel(), TRUE );
         }
         else
         {
@@ -346,32 +376,36 @@ sal_Bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
     }
 
     nFlags &= ~(SELENG_CMDEVT | SELENG_WAIT_UPEVT | SELENG_IN_SEL);
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************
 |*
 |*    SelectionEngine::SelMouseMove()
 |*
+|*    Beschreibung      SELENG.SDW
+|*    Ersterstellung    OV 10.10.94
+|*    Letzte Aenderung  OV 10.10.94
+|*
 *************************************************************************/
 
-sal_Bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
+BOOL SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
 {
 
     if ( !pFunctionSet || !(nFlags & SELENG_IN_SEL) ||
          (nFlags & (SELENG_CMDEVT | SELENG_WAIT_UPEVT)) )
-        return sal_False;
+        return FALSE;
 
     if( !(nFlags & SELENG_EXPANDONMOVE) )
-        return sal_False; // auf DragEvent warten!
+        return FALSE; // auf DragEvent warten!
 
     aLastMove = rMEvt;
     // wenn die Maus ausserhalb der Area steht, dann wird die
     // Frequenz des SetCursorAtPoint() nur durch den Timer bestimmt
     if( aWTimer.IsActive() && !aArea.IsInside( rMEvt.GetPosPixel() ))
-        return sal_True;
+        return TRUE;
 
-    aWTimer.SetTimeout( nUpdateInterval );
+
     aWTimer.Start();
     if ( eSelMode != SINGLE_SELECTION )
     {
@@ -386,12 +420,16 @@ sal_Bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
     //DbgOut("Move:SetCursor");
     pFunctionSet->SetCursorAtPoint( rMEvt.GetPosPixel() );
 
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************
 |*
 |*    SelectionEngine::SetWindow()
+|*
+|*    Beschreibung      SELENG.SDW
+|*    Ersterstellung    OV 10.10.94
+|*    Letzte Aenderung  OV 10.10.94
 |*
 *************************************************************************/
 
@@ -411,6 +449,10 @@ void SelectionEngine::SetWindow( Window* pNewWin )
 |*
 |*    SelectionEngine::Reset()
 |*
+|*    Beschreibung      SELENG.SDW
+|*    Ersterstellung    OV 07.07.95
+|*    Letzte Aenderung  OV 07.07.95
+|*
 *************************************************************************/
 
 void SelectionEngine::Reset()
@@ -425,6 +467,10 @@ void SelectionEngine::Reset()
 /*************************************************************************
 |*
 |*    SelectionEngine::Command()
+|*
+|*    Beschreibung      SELENG.SDW
+|*    Ersterstellung    OV 07.07.95
+|*    Letzte Aenderung  OV 07.07.95
 |*
 *************************************************************************/
 
@@ -454,30 +500,6 @@ void SelectionEngine::Command( const CommandEvent& rCEvt )
         else
             nFlags &= ~SELENG_CMDEVT;
     }
-}
-
-void SelectionEngine::SetUpdateInterval( sal_uLong nInterval )
-{
-    if (nInterval < SELENG_AUTOREPEAT_INTERVAL_MIN)
-        // Set a lower threshold.  On Windows, setting this value too low
-        // would cause selection to get updated indefinitely.
-        nInterval = SELENG_AUTOREPEAT_INTERVAL_MIN;
-
-    if (nUpdateInterval == nInterval)
-        // no update needed.
-        return;
-
-    if (aWTimer.IsActive())
-    {
-        // reset the timer right away on interval change.
-        aWTimer.Stop();
-        aWTimer.SetTimeout(nInterval);
-        aWTimer.Start();
-    }
-    else
-        aWTimer.SetTimeout(nInterval);
-
-    nUpdateInterval = nInterval;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

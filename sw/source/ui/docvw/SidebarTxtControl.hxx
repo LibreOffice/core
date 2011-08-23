@@ -7,6 +7,10 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile:  $
+ *
+ * $Revision:  $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -34,7 +38,7 @@
 class OutlinerView;
 class SwView;
 class SwPostItMgr;
-struct SpellCallbackInfo;
+class SpellCallbackInfo;
 
 namespace sw { namespace sidebarwindows {
 
@@ -50,14 +54,14 @@ class SidebarTxtControl : public Control
         bool mbMouseOver;
 
     protected:
-        virtual void    Paint( const Rectangle& rRect);
+        virtual void	Paint( const Rectangle& rRect);
         virtual void    KeyInput( const KeyEvent& rKeyEvt );
-        virtual void    MouseMove( const MouseEvent& rMEvt );
-        virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-        virtual void    Command( const CommandEvent& rCEvt );
-        virtual void    LoseFocus();
-        virtual void    RequestHelp(const HelpEvent &rEvt);
+        virtual void	MouseMove( const MouseEvent& rMEvt );
+        virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+        virtual void	Command( const CommandEvent& rCEvt );
+        virtual void 	LoseFocus();
+        virtual void	RequestHelp(const HelpEvent &rEvt);
         virtual XubString GetSurroundingText() const;
         virtual Selection GetSurroundingTextSelection() const;
 

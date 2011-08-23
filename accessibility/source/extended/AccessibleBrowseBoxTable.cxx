@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -240,7 +240,7 @@ OUString SAL_CALL AccessibleBrowseBoxTable::getImplementationName()
 
 Rectangle AccessibleBrowseBoxTable::implGetBoundingBox()
 {
-    return mpBrowseBox->calcTableRect(sal_False);
+    return mpBrowseBox->calcTableRect(FALSE);
 }
 
 Rectangle AccessibleBrowseBoxTable::implGetBoundingBoxOnScreen()
@@ -264,7 +264,7 @@ Reference< XAccessibleTable > AccessibleBrowseBoxTable::implGetHeaderBar(
         }
         catch( lang::IndexOutOfBoundsException& )
         {
-            OSL_FAIL( "implGetHeaderBar - wrong child index" );
+            DBG_ERROR( "implGetHeaderBar - wrong child index" );
         }
         // RuntimeException goes to caller
     }

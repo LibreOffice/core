@@ -35,10 +35,10 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/timer.hxx>
 #include <svtools/colorcfg.hxx>
 #include "edit.hxx"
 #include "node.hxx"
+#include "accessibility.hxx"
 
 class Menu;
 class DataChangedEvent;
@@ -46,7 +46,6 @@ class SmClipboardChangeListener;
 class SmDocShell;
 class SmViewShell;
 class SmPrintUIOptions;
-class SmGraphicAccessible;
 
 /**************************************************************************/
 
@@ -57,19 +56,15 @@ class SmGraphicWindow : public ScrollableWindow
     // old style editing pieces
     Rectangle aCursorRect;
     bool      bIsCursorVisible;
-    bool      bIsLineVisible;
-    AutoTimer aCaretBlinkTimer;
 public:
-    bool IsCursorVisible() const { return bIsCursorVisible; }
-    void ShowCursor(bool bShow);
-    bool IsLineVisible() const { return bIsLineVisible; }
-    void ShowLine(bool bShow);
-    const SmNode * SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol);
+    BOOL IsCursorVisible() const { return bIsCursorVisible; }
+    void ShowCursor(BOOL bShow);
+    const SmNode * SetCursorPos(USHORT nRow, USHORT nCol);
 protected:
-    void        SetIsCursorVisible(bool bVis) { bIsCursorVisible = bVis; }
+    void		SetIsCursorVisible(BOOL bVis) { bIsCursorVisible = bVis; }
     using   Window::SetCursor;
     void        SetCursor(const SmNode *pNode);
-    void        SetCursor(const Rectangle &rRect);
+    void 		SetCursor(const Rectangle &rRect);
     bool        IsInlineEditEnabled() const;
 
 private:
@@ -78,11 +73,11 @@ private:
     SmGraphicAccessible *                                       pAccessible;
 
     SmViewShell    *pViewShell;
-    sal_uInt16          nZoom;
-    short           nModifyCount;
+    USHORT			nZoom;
+    short			nModifyCount;
 
 protected:
-    void        SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }
+    void		SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }
 
     virtual void DataChanged( const DataChangedEvent& );
     virtual void Paint(const Rectangle&);
@@ -91,12 +86,6 @@ protected:
     virtual void StateChanged( StateChangedType eChanged );
     DECL_LINK(MenuSelectHdl, Menu *);
 
-private:
-    void RepaintViewShellDoc();
-    DECL_LINK(CaretBlinkTimerHdl, AutoTimer *);
-    void CaretBlinkInit();
-    void CaretBlinkStart();
-    void CaretBlinkStop();
 public:
     SmGraphicWindow(SmViewShell* pShell);
     ~SmGraphicWindow();
@@ -109,9 +98,9 @@ public:
     SmViewShell *   GetView()   { return pViewShell; }
 
     using   Window::SetZoom;
-    void   SetZoom(sal_uInt16 Factor);
+    void   SetZoom(USHORT Factor);
     using   Window::GetZoom;
-    sal_uInt16 GetZoom() const { return nZoom; }
+    USHORT GetZoom() const { return nZoom; }
 
     const Point &   GetFormulaDrawPos() const { return aFormulaDrawPos; }
 
@@ -135,9 +124,9 @@ class SmGraphicController: public SfxControllerItem
 protected:
     SmGraphicWindow &rGraphic;
 public:
-    SmGraphicController(SmGraphicWindow &, sal_uInt16, SfxBindings & );
-    virtual void StateChanged(sal_uInt16             nSID,
-                              SfxItemState       eState,
+    SmGraphicController(SmGraphicWindow &, USHORT, SfxBindings & );
+    virtual void StateChanged(USHORT			 nSID,
+                              SfxItemState		 eState,
                               const SfxPoolItem* pState);
 };
 
@@ -149,13 +138,13 @@ protected:
     SmEditWindow &rEdit;
 
 public:
-    SmEditController(SmEditWindow &, sal_uInt16, SfxBindings  & );
+    SmEditController(SmEditWindow &, USHORT, SfxBindings  & );
 #if OSL_DEBUG_LEVEL > 1
     virtual ~SmEditController();
 #endif
 
-    virtual void StateChanged(sal_uInt16             nSID,
-                              SfxItemState       eState,
+    virtual void StateChanged(USHORT			 nSID,
+                              SfxItemState		 eState,
                               const SfxPoolItem* pState);
 };
 
@@ -163,9 +152,9 @@ public:
 
 class SmCmdBoxWindow : public SfxDockingWindow
 {
-    SmEditWindow        aEdit;
-    SmEditController    aController;
-    bool                bExiting;
+    SmEditWindow		aEdit;
+    SmEditController	aController;
+    BOOL                bExiting;
 
     Timer               aInitialFocusTimer;
 
@@ -183,12 +172,12 @@ protected :
     virtual SfxChildAlignment CheckAlignment(SfxChildAlignment eActual,
                                              SfxChildAlignment eWish);
 
-    virtual void    ToggleFloatingMode();
+    virtual void	ToggleFloatingMode();
 
 public:
-    SmCmdBoxWindow(SfxBindings    *pBindings,
+    SmCmdBoxWindow(SfxBindings	  *pBindings,
                    SfxChildWindow *pChildWindow,
-                   Window         *pParent);
+                   Window		  *pParent);
 
     virtual ~SmCmdBoxWindow ();
 
@@ -205,9 +194,9 @@ class SmCmdBoxWrapper : public SfxChildWindow
     SFX_DECL_CHILDWINDOW(SmCmdBoxWrapper);
 
 protected:
-    SmCmdBoxWrapper(Window          *pParentWindow,
-                    sal_uInt16           nId,
-                    SfxBindings     *pBindings,
+    SmCmdBoxWrapper(Window			*pParentWindow,
+                    USHORT			 nId,
+                    SfxBindings 	*pBindings,
                     SfxChildWinInfo *pInfo);
 
 #if OSL_DEBUG_LEVEL > 1
@@ -233,16 +222,15 @@ class SmViewShell: public SfxViewShell
     // for handling the PasteClipboardState
     friend class SmClipboardChangeListener;
 
-    SmViewShell_Impl*   pImpl;
-
-    SmGraphicWindow     aGraphic;
+    SmGraphicWindow 	aGraphic;
     SmGraphicController aGraphicController;
-    String              StatusText;
+    String				StatusText;
 
     ::com::sun::star::uno:: Reference <
             ::com::sun::star::lang:: XEventListener > xClipEvtLstnr;
-    SmClipboardChangeListener*  pClipEvtLstnr;
-    bool                bPasteState;
+    SmClipboardChangeListener*	pClipEvtLstnr;
+    SmViewShell_Impl*   pImpl;
+    BOOL				bPasteState;
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -251,34 +239,34 @@ class SmViewShell: public SfxViewShell
      * should be inserted into SmEditWindow or directly into the SmDocShell as done if the
      * visual editor was last to have focus.
      */
-    bool bInsertIntoEditWindow;
+    BOOL bInsertIntoEditWindow;
 protected:
 
     Size GetTextLineSize(OutputDevice& rDevice,
                          const String& rLine);
     Size GetTextSize(OutputDevice& rDevice,
                      const String& rText,
-                     long          MaxWidth);
+                     long		   MaxWidth);
     void DrawTextLine(OutputDevice& rDevice,
-                      const Point&  rPosition,
+                      const Point&	rPosition,
                       const String& rLine);
     void DrawText(OutputDevice& rDevice,
-                  const Point&  rPosition,
+                  const Point&	rPosition,
                   const String& rText,
-                  sal_uInt16        MaxWidth);
+                  USHORT		MaxWidth);
 
-    virtual sal_uInt16 Print(SfxProgress &rProgress, sal_Bool bIsAPI);
-    virtual SfxPrinter *GetPrinter(sal_Bool bCreate = sal_False);
-    virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
-                              sal_uInt16     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
+    virtual USHORT Print(SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0);
+    virtual SfxPrinter *GetPrinter(BOOL bCreate = FALSE);
+    virtual USHORT SetPrinter(SfxPrinter *pNewPrinter,
+                              USHORT     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
 
-    bool        Insert( SfxMedium& rMedium );
-    bool        InsertFrom(SfxMedium &rMedium);
+    BOOL        Insert( SfxMedium& rMedium );
+    BOOL        InsertFrom(SfxMedium &rMedium);
 
-    virtual SfxTabPage *CreatePrintOptionsPage(Window           *pParent,
+    virtual SfxTabPage *CreatePrintOptionsPage(Window			*pParent,
                                                const SfxItemSet &rOptions);
-    virtual void Deactivate(sal_Bool IsMDIActivate);
-    virtual void Activate(sal_Bool IsMDIActivate);
+    virtual void Deactivate(BOOL IsMDIActivate);
+    virtual void Activate(BOOL IsMDIActivate);
     virtual Size GetOptimalSizePixel() const;
     virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
     virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize);
@@ -298,14 +286,14 @@ public:
     }
 
     SmEditWindow * GetEditWindow();
-          SmGraphicWindow & GetGraphicWindow()       { return aGraphic; }
+          SmGraphicWindow & GetGraphicWindow() 		 { return aGraphic; }
     const SmGraphicWindow & GetGraphicWindow() const { return aGraphic; }
 
-    void        SetStatusText(const String& Text);
+    void		SetStatusText(const String& Text);
 
-    void        ShowError( const SmErrorDesc *pErrorDesc );
-    void        NextError();
-    void        PrevError();
+    void		ShowError( const SmErrorDesc *pErrorDesc );
+    void		NextError();
+    void		PrevError();
 
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+2)
     SFX_DECL_VIEWFACTORY(SmViewShell);
@@ -322,7 +310,7 @@ public:
      * so that when text is inserted from catalog or elsewhere we know whether to
      * insert for the visual editor, or the text editor.
      */
-    void SetInsertIntoEditWindow(bool bEditWindowHadFocusLast = true){
+    void SetInsertIntoEditWindow(BOOL bEditWindowHadFocusLast = TRUE){
         bInsertIntoEditWindow = bEditWindowHadFocusLast;
     }
     bool IsInlineEditEnabled() const;

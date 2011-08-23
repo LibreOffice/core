@@ -37,7 +37,6 @@
 #include "CIndexes.hxx"
 
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/container.hxx>
@@ -92,8 +91,8 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::ODBTable" );
     DBG_CTOR(ODBTable, NULL);
-    OSL_ENSURE(getMetaData().is(), "ODBTable::ODBTable : invalid conn !");
-    OSL_ENSURE(_rName.getLength(), "ODBTable::ODBTable : name !");
+    DBG_ASSERT(getMetaData().is(), "ODBTable::ODBTable : invalid conn !");
+    DBG_ASSERT(_rName.getLength(), "ODBTable::ODBTable : name !");
     // TODO : think about collecting the privileges here, as we can't ensure that in getFastPropertyValue, where
     // we do this at the moment, the statement needed can be supplied by the connection (for example the SQL-Server
     // ODBC driver does not allow more than one statement per connection, and in getFastPropertyValue it's more
@@ -188,7 +187,7 @@ void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getFastPropertyValue" );
     if ((PROPERTY_ID_PRIVILEGES == _nHandle) && (-1 == m_nPrivileges))
-    {   // somebody is asking for the privileges an we do not know them, yet
+    {	// somebody is asking for the privileges an we do not know them, yet
         const_cast<ODBTable*>(this)->m_nPrivileges = ::dbtools::getTablePrivileges(getMetaData(),m_CatalogName,m_SchemaName, m_Name);
     }
 
@@ -236,22 +235,22 @@ void ODBTable::construct()
     registerProperty(PROPERTY_TEXTRELIEF, PROPERTY_ID_TEXTRELIEF, PropertyAttribute::BOUND,
                     &m_nFontRelief, ::getCppuType(&m_nFontRelief));
 
-    registerProperty(PROPERTY_FONTNAME,         PROPERTY_ID_FONTNAME,        PropertyAttribute::BOUND,&m_aFont.Name,            ::getCppuType(&m_aFont.Name));
-    registerProperty(PROPERTY_FONTHEIGHT,       PROPERTY_ID_FONTHEIGHT,      PropertyAttribute::BOUND,&m_aFont.Height,          ::getCppuType(&m_aFont.Height));
-    registerProperty(PROPERTY_FONTWIDTH,        PROPERTY_ID_FONTWIDTH,       PropertyAttribute::BOUND,&m_aFont.Width,           ::getCppuType(&m_aFont.Width));
-    registerProperty(PROPERTY_FONTSTYLENAME,    PROPERTY_ID_FONTSTYLENAME,   PropertyAttribute::BOUND,&m_aFont.StyleName,       ::getCppuType(&m_aFont.StyleName));
-    registerProperty(PROPERTY_FONTFAMILY,       PROPERTY_ID_FONTFAMILY,      PropertyAttribute::BOUND,&m_aFont.Family,          ::getCppuType(&m_aFont.Family));
-    registerProperty(PROPERTY_FONTCHARSET,      PROPERTY_ID_FONTCHARSET,     PropertyAttribute::BOUND,&m_aFont.CharSet,         ::getCppuType(&m_aFont.CharSet));
-    registerProperty(PROPERTY_FONTPITCH,        PROPERTY_ID_FONTPITCH,       PropertyAttribute::BOUND,&m_aFont.Pitch,           ::getCppuType(&m_aFont.Pitch));
-    registerProperty(PROPERTY_FONTCHARWIDTH,    PROPERTY_ID_FONTCHARWIDTH,   PropertyAttribute::BOUND,&m_aFont.CharacterWidth,  ::getCppuType(&m_aFont.CharacterWidth));
-    registerProperty(PROPERTY_FONTWEIGHT,       PROPERTY_ID_FONTWEIGHT,      PropertyAttribute::BOUND,&m_aFont.Weight,          ::getCppuType(&m_aFont.Weight));
-    registerProperty(PROPERTY_FONTSLANT,        PROPERTY_ID_FONTSLANT,       PropertyAttribute::BOUND,&m_aFont.Slant,           ::getCppuType(&m_aFont.Slant));
-    registerProperty(PROPERTY_FONTUNDERLINE,    PROPERTY_ID_FONTUNDERLINE,   PropertyAttribute::BOUND,&m_aFont.Underline,       ::getCppuType(&m_aFont.Underline));
-    registerProperty(PROPERTY_FONTSTRIKEOUT,    PROPERTY_ID_FONTSTRIKEOUT,   PropertyAttribute::BOUND,&m_aFont.Strikeout,       ::getCppuType(&m_aFont.Strikeout));
-    registerProperty(PROPERTY_FONTORIENTATION,  PROPERTY_ID_FONTORIENTATION, PropertyAttribute::BOUND,&m_aFont.Orientation,     ::getCppuType(&m_aFont.Orientation));
-    registerProperty(PROPERTY_FONTKERNING,      PROPERTY_ID_FONTKERNING,     PropertyAttribute::BOUND,&m_aFont.Kerning,         ::getCppuType(&m_aFont.Kerning));
-    registerProperty(PROPERTY_FONTWORDLINEMODE, PROPERTY_ID_FONTWORDLINEMODE,PropertyAttribute::BOUND,&m_aFont.WordLineMode,    ::getCppuType(&m_aFont.WordLineMode));
-    registerProperty(PROPERTY_FONTTYPE,         PROPERTY_ID_FONTTYPE,        PropertyAttribute::BOUND,&m_aFont.Type,            ::getCppuType(&m_aFont.Type));
+    registerProperty(PROPERTY_FONTNAME,			PROPERTY_ID_FONTNAME,		 PropertyAttribute::BOUND,&m_aFont.Name,			::getCppuType(&m_aFont.Name));
+    registerProperty(PROPERTY_FONTHEIGHT,		PROPERTY_ID_FONTHEIGHT,		 PropertyAttribute::BOUND,&m_aFont.Height,			::getCppuType(&m_aFont.Height));
+    registerProperty(PROPERTY_FONTWIDTH,		PROPERTY_ID_FONTWIDTH,		 PropertyAttribute::BOUND,&m_aFont.Width,			::getCppuType(&m_aFont.Width));
+    registerProperty(PROPERTY_FONTSTYLENAME,	PROPERTY_ID_FONTSTYLENAME,	 PropertyAttribute::BOUND,&m_aFont.StyleName,		::getCppuType(&m_aFont.StyleName));
+    registerProperty(PROPERTY_FONTFAMILY,		PROPERTY_ID_FONTFAMILY,		 PropertyAttribute::BOUND,&m_aFont.Family,			::getCppuType(&m_aFont.Family));
+    registerProperty(PROPERTY_FONTCHARSET,		PROPERTY_ID_FONTCHARSET,	 PropertyAttribute::BOUND,&m_aFont.CharSet,			::getCppuType(&m_aFont.CharSet));
+    registerProperty(PROPERTY_FONTPITCH,		PROPERTY_ID_FONTPITCH,		 PropertyAttribute::BOUND,&m_aFont.Pitch,			::getCppuType(&m_aFont.Pitch));
+    registerProperty(PROPERTY_FONTCHARWIDTH,	PROPERTY_ID_FONTCHARWIDTH,	 PropertyAttribute::BOUND,&m_aFont.CharacterWidth,	::getCppuType(&m_aFont.CharacterWidth));
+    registerProperty(PROPERTY_FONTWEIGHT,		PROPERTY_ID_FONTWEIGHT,		 PropertyAttribute::BOUND,&m_aFont.Weight,			::getCppuType(&m_aFont.Weight));
+    registerProperty(PROPERTY_FONTSLANT,		PROPERTY_ID_FONTSLANT,		 PropertyAttribute::BOUND,&m_aFont.Slant,			::getCppuType(&m_aFont.Slant));
+    registerProperty(PROPERTY_FONTUNDERLINE,	PROPERTY_ID_FONTUNDERLINE,	 PropertyAttribute::BOUND,&m_aFont.Underline,		::getCppuType(&m_aFont.Underline));
+    registerProperty(PROPERTY_FONTSTRIKEOUT,	PROPERTY_ID_FONTSTRIKEOUT,	 PropertyAttribute::BOUND,&m_aFont.Strikeout,		::getCppuType(&m_aFont.Strikeout));
+    registerProperty(PROPERTY_FONTORIENTATION,	PROPERTY_ID_FONTORIENTATION, PropertyAttribute::BOUND,&m_aFont.Orientation,		::getCppuType(&m_aFont.Orientation));
+    registerProperty(PROPERTY_FONTKERNING,		PROPERTY_ID_FONTKERNING,	 PropertyAttribute::BOUND,&m_aFont.Kerning,			::getCppuType(&m_aFont.Kerning));
+    registerProperty(PROPERTY_FONTWORDLINEMODE, PROPERTY_ID_FONTWORDLINEMODE,PropertyAttribute::BOUND,&m_aFont.WordLineMode,	::getCppuType(&m_aFont.WordLineMode));
+    registerProperty(PROPERTY_FONTTYPE,			PROPERTY_ID_FONTTYPE,		 PropertyAttribute::BOUND,&m_aFont.Type,			::getCppuType(&m_aFont.Type));
 
     refreshColumns();
 }
@@ -263,8 +262,8 @@ void ODBTable::construct()
     describeProperties(aProps);
     if(!_nId)
     {
-        Property* pIter = aProps.getArray();
-        Property* pEnd  = pIter + aProps.getLength();
+        Property* pIter	= aProps.getArray();
+        Property* pEnd	= pIter + aProps.getLength();
         for(;pIter != pEnd;++pIter)
         {
             if (0 == pIter->Name.compareToAscii(PROPERTY_CATALOGNAME))

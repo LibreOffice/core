@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ class ScSolverOptionsString : public SvLBoxString
     sal_Int32   mnIntValue;
 
 public:
-    ScSolverOptionsString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rStr ) :
+    ScSolverOptionsString( SvLBoxEntry* pEntry, USHORT nFlags, const String& rStr ) :
         SvLBoxString( pEntry, nFlags, rStr ),
         mbIsDouble( false ),
         mfDoubleValue( 0.0 ),
@@ -90,10 +90,10 @@ public:
     void      SetDoubleValue( double fNew ) { mbIsDouble = true; mfDoubleValue = fNew; }
     void      SetIntValue( sal_Int32 nNew ) { mbIsDouble = false; mnIntValue = nNew; }
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
+    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry );
 };
 
-void ScSolverOptionsString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* /* pEntry */ )
+void ScSolverOptionsString::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* /* pEntry */ )
 {
     //! move position? (SvxLinguTabPage: aPos.X() += 20)
     String aNormalStr( GetText() );
@@ -146,7 +146,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
 
     maBtnEdit.SetClickHdl( LINK( this, ScSolverOptionsDialog, ButtonHdl ) );
 
-    maLbSettings.SetStyle( maLbSettings.GetStyle()|WB_CLIPCHILDREN|WB_FORCE_MAKEVISIBLE );
+    maLbSettings.SetWindowBits( WB_CLIPCHILDREN|WB_FORCE_MAKEVISIBLE );
     maLbSettings.SetHelpId( HID_SC_SOLVEROPTIONS_LB );
     maLbSettings.SetHighlightRange();
 
@@ -175,7 +175,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
         maProperties.realloc(0);        // don't use options from different engine
     }
     if ( nSelect >= 0 )                 // select in list box
-        maLbEngine.SelectEntryPos( static_cast<sal_uInt16>(nSelect) );
+        maLbEngine.SelectEntryPos( static_cast<USHORT>(nSelect) );
 
     if ( !maProperties.getLength() )
         ReadFromComponent();            // fill maProperties from component (using maEngine)
@@ -208,10 +208,10 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
             SvLBoxEntry* pEntry = pModel->GetEntry(nEntryPos);
 
             bool bHasData = false;
-            sal_uInt16 nItemCount = pEntry->ItemCount();
-            for (sal_uInt16 nItemPos=0; nItemPos<nItemCount && !bHasData; ++nItemPos)
+            USHORT nItemCount = pEntry->ItemCount();
+            for (USHORT nItemPos=0; nItemPos<nItemCount && !bHasData; ++nItemPos)
             {
-                SvLBoxItem* pItem = pEntry->GetItem( nItemPos );
+                SvLBoxItem*	pItem = pEntry->GetItem( nItemPos );
                 ScSolverOptionsString* pStringItem = dynamic_cast<ScSolverOptionsString*>(pItem);
                 if ( pStringItem )
                 {
@@ -231,7 +231,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
     {
         DBG_ERRORFILE( "wrong count" );
     }
-
+    
     return maProperties;
 }
 
@@ -265,7 +265,7 @@ void ScSolverOptionsDialog::FillListBox()
 
     // fill the list box
 
-    maLbSettings.SetUpdateMode(false);
+    maLbSettings.SetUpdateMode(FALSE);
     maLbSettings.Clear();
 
     String sEmpty;
@@ -278,7 +278,7 @@ void ScSolverOptionsDialog::FillListBox()
     for (sal_Int32 nPos=0; nPos<nCount; nPos++)
     {
         rtl::OUString aVisName = aDescriptions[nPos].aDescription;
-
+            
         uno::Any aValue = maProperties[nPos].Value;
         uno::TypeClass eClass = aValue.getValueTypeClass();
         if ( eClass == uno::TypeClass_BOOLEAN )
@@ -318,7 +318,7 @@ void ScSolverOptionsDialog::FillListBox()
         pModel->Insert( pEntry );
     }
 
-    maLbSettings.SetUpdateMode(sal_True);
+    maLbSettings.SetUpdateMode(TRUE);
 }
 
 void ScSolverOptionsDialog::ReadFromComponent()
@@ -331,10 +331,10 @@ void ScSolverOptionsDialog::EditOption()
     SvLBoxEntry* pEntry = maLbSettings.GetCurEntry();
     if (pEntry)
     {
-        sal_uInt16 nItemCount = pEntry->ItemCount();
-        for (sal_uInt16 nPos=0; nPos<nItemCount; ++nPos)
+        USHORT nItemCount = pEntry->ItemCount();
+        for (USHORT nPos=0; nPos<nItemCount; ++nPos)
         {
-            SvLBoxItem* pItem = pEntry->GetItem( nPos );
+            SvLBoxItem*	pItem = pEntry->GetItem( nPos );
             ScSolverOptionsString* pStringItem = dynamic_cast<ScSolverOptionsString*>(pItem);
             if ( pStringItem )
             {
@@ -381,7 +381,7 @@ IMPL_LINK( ScSolverOptionsDialog, SettingsDoubleClickHdl, SvTreeListBox*, EMPTYA
 
 IMPL_LINK( ScSolverOptionsDialog, EngineSelectHdl, ListBox*, EMPTYARG )
 {
-    sal_uInt16 nSelectPos = maLbEngine.GetSelectEntryPos();
+    USHORT nSelectPos = maLbEngine.GetSelectEntryPos();
     if ( nSelectPos < maImplNames.getLength() )
     {
         String aNewEngine( maImplNames[nSelectPos] );
@@ -397,14 +397,14 @@ IMPL_LINK( ScSolverOptionsDialog, EngineSelectHdl, ListBox*, EMPTYARG )
 
 IMPL_LINK( ScSolverOptionsDialog, SettingsSelHdl, SvxCheckListBox*, EMPTYARG )
 {
-    sal_Bool bCheckbox = false;
+    BOOL bCheckbox = FALSE;
 
     SvLBoxEntry* pEntry = maLbSettings.GetCurEntry();
     if (pEntry)
     {
         SvLBoxItem* pItem = pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON);
         if ( pItem && pItem->IsA() == SV_ITEM_ID_LBOXBUTTON )
-            bCheckbox = sal_True;
+            bCheckbox = TRUE;
     }
 
     maBtnEdit.Enable( !bCheckbox );

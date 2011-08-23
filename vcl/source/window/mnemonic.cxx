@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@ MnemonicGenerator::MnemonicGenerator()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
+USHORT MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
 {
-    static sal_uInt16 const aImplMnemonicRangeTab[MNEMONIC_RANGES*2] =
+    static USHORT const aImplMnemonicRangeTab[MNEMONIC_RANGES*2] =
     {
         MNEMONIC_RANGE_1_START, MNEMONIC_RANGE_1_END,
         MNEMONIC_RANGE_2_START, MNEMONIC_RANGE_2_END,
@@ -59,8 +59,8 @@ sal_uInt16 MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
         MNEMONIC_RANGE_4_START, MNEMONIC_RANGE_4_END
     };
 
-    sal_uInt16 nMnemonicIndex = 0;
-    for ( sal_uInt16 i = 0; i < MNEMONIC_RANGES; i++ )
+    USHORT nMnemonicIndex = 0;
+    for ( USHORT i = 0; i < MNEMONIC_RANGES; i++ )
     {
         if ( (c >= aImplMnemonicRangeTab[i*2]) &&
              (c <= aImplMnemonicRangeTab[i*2+1]) )
@@ -107,7 +107,7 @@ void MnemonicGenerator::RegisterMnemonic( const XubString& rKey )
     sal_Unicode cMnemonic = ImplFindMnemonic( aKey );
     if ( cMnemonic )
     {
-        sal_uInt16 nMnemonicIndex = ImplGetMnemonicIndex( cMnemonic );
+        USHORT nMnemonicIndex = ImplGetMnemonicIndex( cMnemonic );
         if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
             maMnemonics[nMnemonicIndex] = 0;
     }
@@ -119,7 +119,7 @@ void MnemonicGenerator::RegisterMnemonic( const XubString& rKey )
         {
             sal_Unicode c = aKey.GetChar( nIndex );
 
-            sal_uInt16 nMnemonicIndex = ImplGetMnemonicIndex( c );
+            USHORT nMnemonicIndex = ImplGetMnemonicIndex( c );
             if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
             {
                 if ( maMnemonics[nMnemonicIndex] && (maMnemonics[nMnemonicIndex] < 0xFF) )
@@ -133,24 +133,24 @@ void MnemonicGenerator::RegisterMnemonic( const XubString& rKey )
 
 // -----------------------------------------------------------------------
 
-sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
+BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
 {
     if ( !rKey.Len() || ImplFindMnemonic( rKey ) )
-        return sal_False;
+        return FALSE;
 
     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     // Don't crash even when we don't have access to i18n service
     if ( !xCharClass.is() )
-        return sal_False;
+        return FALSE;
 
     XubString aKey = xCharClass->toUpper( rKey, 0, rKey.Len(), rLocale );
 
-    sal_Bool bChanged = sal_False;
+    BOOL bChanged = FALSE;
     xub_StrLen nLen = aKey.Len();
 
-    sal_Bool bCJK = sal_False;
+    BOOL bCJK = FALSE;
     switch( Application::GetSettings().GetUILanguage() )
     {
         case LANGUAGE_JAPANESE:
@@ -161,7 +161,7 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
         case LANGUAGE_CHINESE_MACAU:
         case LANGUAGE_KOREAN:
         case LANGUAGE_KOREAN_JOHAB:
-            bCJK = sal_True;
+            bCJK = TRUE;
             break;
         default:
             break;
@@ -173,8 +173,8 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
     // #110720#, avoid CJK-style mnemonics for latin-only strings that do not contain useful mnemonic chars
     if( bCJK )
     {
-        sal_Bool bLatinOnly = sal_True;
-        sal_Bool bMnemonicIndexFound = sal_False;
+        BOOL bLatinOnly = TRUE;
+        BOOL bMnemonicIndexFound = FALSE;
         sal_Unicode     c;
         xub_StrLen      nIndex;
 
@@ -184,19 +184,19 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
             if ( ((c >= 0x3000) && (c <= 0xD7FF)) ||    // cjk
                  ((c >= 0xFF61) && (c <= 0xFFDC)) )     // halfwidth forms
             {
-                bLatinOnly = sal_False;
+                bLatinOnly = FALSE;
                 break;
             }
             if( ImplGetMnemonicIndex( c ) != MNEMONIC_INDEX_NOTFOUND )
-                bMnemonicIndexFound = sal_True;
+                bMnemonicIndexFound = TRUE;
         }
         if( bLatinOnly && !bMnemonicIndexFound )
-            return sal_False;
+            return FALSE;
     }
 
 
     int             nCJK = 0;
-    sal_uInt16          nMnemonicIndex;
+    USHORT          nMnemonicIndex;
     sal_Unicode     c;
     xub_StrLen      nIndex = 0;
     if( !bCJK )
@@ -226,7 +226,7 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
                 {
                     maMnemonics[nMnemonicIndex] = 0;
                     rKey.Insert( MNEMONIC_CHAR, nIndex );
-                    bChanged = sal_True;
+                    bChanged = TRUE;
                     break;
                 }
             }
@@ -247,8 +247,8 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
         // 2) search for a unique/uncommon character
         if ( !bChanged )
         {
-            sal_uInt16      nBestCount = 0xFFFF;
-            sal_uInt16      nBestMnemonicIndex = 0;
+            USHORT      nBestCount = 0xFFFF;
+            USHORT      nBestMnemonicIndex = 0;
             xub_StrLen  nBestIndex = 0;
             nIndex = 0;
             do
@@ -278,7 +278,7 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
             {
                 maMnemonics[nBestMnemonicIndex] = 0;
                 rKey.Insert( MNEMONIC_CHAR, nBestIndex );
-                bChanged = sal_True;
+                bChanged = TRUE;
             }
         }
     }
@@ -326,7 +326,7 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
                             nIndex--;
                     }
                     rKey.Insert( aStr, nIndex );
-                    bChanged = sal_True;
+                    bChanged = TRUE;
                     break;
                 }
             }
@@ -345,16 +345,16 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
 //        do
 //        {
 //            c = aKey.GetChar( nIndex );
-//
+//            
 //            nMnemonicIndex = ImplGetMnemonicIndex( c );
 //            if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
 //            {
 //                maMnemonics[nMnemonicIndex] = 0;
 //                rKey.Insert( MNEMONIC_CHAR, nIndex );
-//                bChanged = sal_True;
+//                bChanged = TRUE;
 //                break;
 //            }
-//
+//            
 //            // Search for next word
 //            do
 //            {
@@ -388,7 +388,7 @@ String MnemonicGenerator::EraseAllMnemonicChars( const String& rStr )
     String      aStr = rStr;
     xub_StrLen  nLen = aStr.Len();
     xub_StrLen  i    = 0;
-
+    
     while ( i < nLen )
     {
         if ( aStr.GetChar( i ) == '~' )
@@ -397,8 +397,8 @@ String MnemonicGenerator::EraseAllMnemonicChars( const String& rStr )
             if( i > 0 && (i+2) < nLen )
             {
                 sal_Unicode c = aStr.GetChar(i+1);
-                if( aStr.GetChar( i-1 ) == '(' &&
-                    aStr.GetChar( i+2 ) == ')' &&
+                if( aStr.GetChar( i-1 ) == '(' && 
+                    aStr.GetChar( i+2 ) == ')' && 
                     c >= MNEMONIC_RANGE_2_START && c <= MNEMONIC_RANGE_2_END )
                 {
                     aStr.Erase( i-1, 4 );

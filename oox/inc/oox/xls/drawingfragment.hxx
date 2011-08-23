@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,24 +32,13 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include "oox/drawingml/shape.hxx"
-#include "oox/drawingml/shapegroupcontext.hxx"
-#include "oox/ole/axcontrol.hxx"
-#include "oox/ole/vbaproject.hxx"
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmldrawingfragment.hxx"
-#include "oox/vml/vmltextbox.hxx"
 #include "oox/xls/excelhandlers.hxx"
-
-namespace oox { namespace ole {
-    struct AxFontData;
-    class AxMorphDataModelBase;
-} }
 
 namespace oox {
 namespace xls {
 
-// ============================================================================
-// DrawingML
 // ============================================================================
 
 /** Absolute position in spreadsheet (in EMUs) independent from cells. */
@@ -112,7 +101,6 @@ public:
     void                importClientData( const AttributeList& rAttribs );
     /** Sets an attribute of the cell-dependent anchor position from xdr:from and xdr:to elements. */
     void                setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const ::rtl::OUString& rValue );
-    /** Imports and converts the VML specific client anchor. */
     void                importVmlAnchor( const ::rtl::OUString& rAnchor );
 
     /** Returns true, if the anchor contains valid position and size settings. */
@@ -144,81 +132,19 @@ typedef ::boost::shared_ptr< ShapeAnchor > ShapeAnchorRef;
 
 // ============================================================================
 
-class ShapeMacroAttacher : public ::oox::ole::VbaMacroAttacherBase
-{
-public:
-    explicit            ShapeMacroAttacher( const ::rtl::OUString& rMacroName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape );
-
-private:
-    virtual void        attachMacro( const ::rtl::OUString& rMacroUrl );
-
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
-};
-
-// ============================================================================
-
-class Shape : public ::oox::drawingml::Shape, public WorksheetHelper
-{
-public:
-    explicit            Shape(
-                            const WorksheetHelper& rHelper,
-                            const AttributeList& rAttribs,
-                            const sal_Char* pcServiceName = 0 );
-
-protected:
-    virtual void        finalizeXShape(
-                            ::oox::core::XmlFilterBase& rFilter,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
-
-private:
-    ::rtl::OUString     maMacroName;
-};
-
-// ============================================================================
-
-/** Context handler for creation of shapes embedded in group shapes. */
-class GroupShapeContext : public ::oox::drawingml::ShapeGroupContext, public WorksheetHelper
-{
-public:
-    explicit            GroupShapeContext(
-                            ::oox::core::ContextHandler& rParent,
-                            const WorksheetHelper& rHelper,
-                            const ::oox::drawingml::ShapePtr& rxParentShape,
-                            const ::oox::drawingml::ShapePtr& rxShape );
-
-    static ::oox::core::ContextHandlerRef
-                        createShapeContext(
-                            ::oox::core::ContextHandler& rParent,
-                            const WorksheetHelper& rHelper,
-                            sal_Int32 nElement,
-                            const AttributeList& rAttribs,
-                            const ::oox::drawingml::ShapePtr& rxParentShape,
-                            ::oox::drawingml::ShapePtr* pxShape = 0 );
-
-protected:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-                        createFastChildContext(
-                            sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-};
-
-// ============================================================================
-
 /** Fragment handler for a complete sheet drawing. */
-class DrawingFragment : public WorksheetFragmentBase
+class OoxDrawingFragment : public OoxWorksheetFragmentBase
 {
 public:
-    explicit            DrawingFragment(
+    explicit            OoxDrawingFragment(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
+    // oox.core.ContextHandler2Helper interface -------------------------------
+
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
-    virtual void        onEndElement();
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
@@ -227,27 +153,6 @@ private:
     AnchorSizeModel     maEmuSheetSize;         /// Sheet size in EMU.
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
     ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.
-};
-
-// ============================================================================
-// VML
-// ============================================================================
-
-class VmlControlMacroAttacher : public ::oox::ole::VbaMacroAttacherBase
-{
-public:
-    explicit            VmlControlMacroAttacher( const ::rtl::OUString& rMacroName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rxCtrlFormIC,
-                            sal_Int32 nCtrlIndex, sal_Int32 nCtrlType, sal_Int32 nDropStyle );
-
-private:
-    virtual void        attachMacro( const ::rtl::OUString& rMacroUrl );
-
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > mxCtrlFormIC;
-    sal_Int32           mnCtrlIndex;
-    sal_Int32           mnCtrlType;
-    sal_Int32           mnDropStyle;
 };
 
 // ============================================================================
@@ -263,55 +168,29 @@ public:
     /** Filters cell note shapes. */
     virtual bool        isShapeSupported( const ::oox::vml::ShapeBase& rShape ) const;
 
-    /** Returns additional base names for automatic shape name creation. */
-    virtual ::rtl::OUString getShapeBaseName( const ::oox::vml::ShapeBase& rShape ) const;
-
     /** Calculates the shape rectangle from a cell anchor string. */
-    virtual bool        convertClientAnchor(
+    virtual bool        convertShapeClientAnchor(
                             ::com::sun::star::awt::Rectangle& orShapeRect,
                             const ::rtl::OUString& rShapeAnchor ) const;
 
-    /** Creates a UNO control shape for legacy drawing controls. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        createAndInsertClientXShape(
-                            const ::oox::vml::ShapeBase& rShape,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
+    /** Converts additional form control properties from the passed VML shape
+        client data. */
+    virtual void        convertControlClientData(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
+                            const ::oox::vml::ShapeClientData& rClientData ) const;
 
     /** Updates the bounding box covering all shapes of this drawing. */
-    virtual void        notifyXShapeInserted(
+    virtual void        notifyShapeInserted(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect,
-                            const ::oox::vml::ShapeBase& rShape, bool bGroupChild );
-
-private:
-    /** Converts the passed VML textbox text color to an OLE color. */
-    sal_uInt32          convertControlTextColor( const ::rtl::OUString& rTextColor ) const;
-    /** Converts the passed VML textbox font to an ActiveX form control font. */
-    void                convertControlFontData(
-                            ::oox::ole::AxFontData& rAxFontData, sal_uInt32& rnOleTextColor,
-                            const ::oox::vml::TextFontModel& rFontModel ) const;
-    /** Converts the caption, the font settings, and the horizontal alignment
-        from the passed VML textbox to ActiveX form control settings. */
-    void                convertControlText(
-                            ::oox::ole::AxFontData& rAxFontData, sal_uInt32& rnOleTextColor, ::rtl::OUString& rCaption,
-                            const ::oox::vml::TextBox* pTextBox, sal_Int32 nTextHAlign ) const;
-    /** Converts the passed VML shape background formatting to ActiveX control formatting. */
-    void                convertControlBackground(
-                            ::oox::ole::AxMorphDataModelBase& rAxModel,
-                            const ::oox::vml::ShapeBase& rShape ) const;
-
-private:
-    ::oox::ole::ControlConverter maControlConv;
-    ::oox::vml::TextFontModel maListBoxFont;
+                            const ::com::sun::star::awt::Rectangle& rShapeRect );
 };
 
 // ============================================================================
 
-class VmlDrawingFragment : public ::oox::vml::DrawingFragment, public WorksheetHelper
+class OoxVmlDrawingFragment : public ::oox::vml::DrawingFragment, public WorksheetHelper
 {
 public:
-    explicit            VmlDrawingFragment(
+    explicit            OoxVmlDrawingFragment(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 

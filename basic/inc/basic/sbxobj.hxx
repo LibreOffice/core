@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@
 #include <svl/lstner.hxx>
 #include <basic/sbxvar.hxx>
 
+///////////////////////////////////////////////////////////////////////////
 
 class SbxProperty;
 class SvDispatch;
@@ -40,11 +41,11 @@ class SbxObjectImpl;
 
 class SbxObject : public SbxVariable, public SfxListener
 {
-    SbxObjectImpl* mpSbxObjectImpl; // Impl data
+    SbxObjectImpl* mpSbxObjectImpl;	// Impl data
 
-    SbxArray* FindVar( SbxVariable*, sal_uInt16& );
+    SbxArray* FindVar( SbxVariable*, USHORT& );
     // AB 23.3.1997, special method for VCPtrRemove (see below)
-    SbxArray* VCPtrFindVar( SbxVariable*, sal_uInt16& );
+    SbxArray* VCPtrFindVar( SbxVariable*, USHORT& );
 protected:
     SbxArrayRef  pMethods;                  // Methods
     SbxArrayRef  pProps;                    // Properties
@@ -52,8 +53,8 @@ protected:
     SbxProperty* pDfltProp;                 // Default-Property
     String       aClassName;                // Classname
     String       aDfltPropName;
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
-    virtual sal_Bool StoreData( SvStream& ) const;
+    virtual BOOL LoadData( SvStream&, USHORT );
+    virtual BOOL StoreData( SvStream& ) const;
     virtual ~SbxObject();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
@@ -67,27 +68,27 @@ public:
     virtual SbxClassType GetClass() const;
     virtual void Clear();
 
-    virtual sal_Bool  IsClass( const String& ) const;
+    virtual BOOL  IsClass( const String& ) const;
     const String& GetClassName() const { return aClassName; }
-    void          SetClassName( const String &rNew ) { aClassName = rNew; }
+    void		  SetClassName( const String &rNew ) { aClassName = rNew; }
     // Default-Property
     SbxProperty* GetDfltProperty();
     void SetDfltProperty( const String& r );
     void SetDfltProperty( SbxProperty* );
     // Search for an element
-    virtual SbxVariable* FindUserData( sal_uInt32 nUserData );
+    virtual SbxVariable* FindUserData( UINT32 nUserData );
     virtual SbxVariable* Find( const String&, SbxClassType );
     SbxVariable* FindQualified( const String&, SbxClassType );
     // Quick-Call-Interface for Methods
-    virtual sal_Bool Call( const String&, SbxArray* = NULL );
+    virtual BOOL Call( const String&, SbxArray* = NULL );
     // Execution of DDE-Commands
     SbxVariable* Execute( const String& );
     // Manage elements
-    virtual sal_Bool GetAll( SbxClassType ) { return sal_True; }
+    virtual BOOL GetAll( SbxClassType ) { return TRUE; }
     SbxVariable* Make( const String&, SbxClassType, SbxDataType );
     virtual SbxObject* MakeObject( const String&, const String& );
     virtual void Insert( SbxVariable* );
-    // AB 23.4.1997, Optimization, Insertion without check for duplicate Entries and
+    // AB 23.4.1997, Optimization, Insertion without check for duplicate Entries and 
     // without Broadcasts, only used in SO2/auto.cxx
     void QuickInsert( SbxVariable* );
     // AB 23.3.1997, Special-Method, allow corresponding controls
@@ -96,21 +97,21 @@ public:
     virtual void Remove( SbxVariable* );
     // AB 23.3.1997, deletion per pointer for controls (duplicate names!)
     void VCPtrRemove( SbxVariable* );
-    void SetPos( SbxVariable*, sal_uInt16 );
+    void SetPos( SbxVariable*, USHORT );
 
     // Macro-Recording
     virtual String GenerateSource( const String &rLinePrefix,
                                    const SbxObject *pRelativeTo );
-    // Direct access on arrays
-    SbxArray* GetMethods()      { return pMethods;  }
-    SbxArray* GetProperties()   { return pProps;    }
-    SbxArray* GetObjects()      { return pObjs;     }
+    // Direct access on arrays 
+    SbxArray* GetMethods()		{ return pMethods;	}
+    SbxArray* GetProperties()	{ return pProps; 	}
+    SbxArray* GetObjects()		{ return pObjs; 	}
     // Hooks
     virtual SvDispatch* GetSvDispatch();
     // Debugging
-    void Dump( SvStream&, sal_Bool bDumpAll=sal_False );
+    void Dump( SvStream&, BOOL bDumpAll=FALSE );
 
-    static void GarbageCollection( sal_uIntPtr nObjects = 0 /* ::= all */ );
+    static void GarbageCollection( ULONG nObjects = 0 /* ::= all */ );
 };
 
 #ifndef __SBX_SBXOBJECTREF_HXX

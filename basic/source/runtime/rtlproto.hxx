@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,11 @@
  ************************************************************************/
 
 #include <basic/sbstar.hxx>
-#include "sbtrace.hxx"
 
-#define RTLFUNC( name ) void SbRtl_##name( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
-#define RTLNAME( name ) &SbRtl_##name
+#define	RTLFUNC( name ) void SbRtl_##name( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
+#define	RTLNAME( name ) &SbRtl_##name
 
-typedef void( *RtlCall ) ( StarBASIC* p, SbxArray& rArgs, sal_Bool bWrite );
+typedef void( *RtlCall ) ( StarBASIC* p, SbxArray& rArgs, BOOL bWrite );
 
 // Properties
 
@@ -286,7 +285,6 @@ extern RTLFUNC(AboutStarBasic);
 extern RTLFUNC(LoadPicture);
 extern RTLFUNC(SavePicture);
 
-extern RTLFUNC(CallByName);
 extern RTLFUNC(CBool); // JSM
 extern RTLFUNC(CByte); // JSM
 extern RTLFUNC(CCur); // JSM
@@ -359,13 +357,8 @@ extern RTLFUNC(CDateToIso);
 extern RTLFUNC(CDateFromIso);
 extern RTLFUNC(CompatibilityMode);
 extern RTLFUNC(CDec);
-extern RTLFUNC(CaptureAssertions);
 
 extern RTLFUNC(Partition); // Fong
-
-#ifdef DBG_TRACE_BASIC
-extern RTLFUNC(TraceCommand);
-#endif
 
 extern double Now_Impl();
 extern void Wait_Impl( bool bDurationBased, SbxArray& rPar );

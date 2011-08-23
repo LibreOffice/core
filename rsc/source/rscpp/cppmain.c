@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,6 +37,10 @@ int main( argc, argv )
     int   argc;
     char *argv[];
 {
+#ifdef TSTCPP
+    ( start_cpp( argc, argv ) );
+    puts("erster teil ist fertig" );
+#endif
     return( start_cpp( argc, argv ) );
 }
 

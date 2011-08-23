@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <svl/adrparse.hxx>
@@ -34,14 +37,14 @@
 #include "hyperdlg.hrc"
 #include "hlmarkwn_def.hxx"
 
-#define STD_DOC_SUBPATH     "internal"
-#define STD_DOC_NAME        "url_transfer.htm"
+#define STD_DOC_SUBPATH		"internal"
+#define STD_DOC_NAME		"url_transfer.htm"
 
-sal_Char const sAnonymous[]    = "anonymous";
-sal_Char const sHTTPScheme[]   = INET_HTTP_SCHEME;
-sal_Char const sHTTPSScheme[]  = INET_HTTPS_SCHEME;
-sal_Char const sFTPScheme[]    = INET_FTP_SCHEME;
-sal_Char const sTelnetScheme[] = INET_TELNET_SCHEME;
+sal_Char __READONLY_DATA sAnonymous[]    = "anonymous";
+sal_Char __READONLY_DATA sHTTPScheme[]   = INET_HTTP_SCHEME;
+sal_Char __READONLY_DATA sHTTPSScheme[]  = INET_HTTPS_SCHEME;
+sal_Char __READONLY_DATA sFTPScheme[]    = INET_FTP_SCHEME;
+sal_Char __READONLY_DATA sTelnetScheme[] = INET_TELNET_SCHEME;
 
 /*************************************************************************
 |*
@@ -54,23 +57,25 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
 :   SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_INTERNET ),
                               rItemSet ) ,
     maGrpLinkTyp           ( this, CUI_RES (GRP_LINKTYPE) ),
-    maRbtLinktypInternet    ( this, CUI_RES (RB_LINKTYP_INTERNET) ),
-    maRbtLinktypFTP         ( this, CUI_RES (RB_LINKTYP_FTP) ),
-    maRbtLinktypTelnet      ( this, CUI_RES (RB_LINKTYP_TELNET) ),
-    maFtTarget              ( this, CUI_RES (FT_TARGET_HTML) ),
-    maCbbTarget             ( this, INET_PROT_HTTP ),
-    maBtBrowse              ( this, CUI_RES (BTN_BROWSE) ),
-    maFtLogin               ( this, CUI_RES (FT_LOGIN) ),
-    maEdLogin               ( this, CUI_RES (ED_LOGIN) ),
-    maBtTarget              ( this, CUI_RES (BTN_TARGET) ),
-    maFtPassword            ( this, CUI_RES (FT_PASSWD) ),
-    maEdPassword            ( this, CUI_RES (ED_PASSWD) ),
-    maCbAnonymous           ( this, CUI_RES (CBX_ANONYMOUS) ),
-    mbMarkWndOpen           ( sal_False )
+    maRbtLinktypInternet	( this, CUI_RES (RB_LINKTYP_INTERNET) ),
+    maRbtLinktypFTP			( this, CUI_RES (RB_LINKTYP_FTP) ),
+    maRbtLinktypTelnet		( this, CUI_RES (RB_LINKTYP_TELNET) ),
+    maFtTarget				( this, CUI_RES (FT_TARGET_HTML) ),
+    maCbbTarget				( this, INET_PROT_HTTP ),
+    maFtLogin				( this, CUI_RES (FT_LOGIN) ),
+    maEdLogin				( this, CUI_RES (ED_LOGIN) ),
+    maFtPassword			( this, CUI_RES (FT_PASSWD) ),
+    maEdPassword			( this, CUI_RES (ED_PASSWD) ),
+    maCbAnonymous			( this, CUI_RES (CBX_ANONYMOUS) ),
+    maBtBrowse				( this, CUI_RES (BTN_BROWSE) ),
+    maBtTarget				( this, CUI_RES (BTN_TARGET) ),
+    mbMarkWndOpen           ( FALSE )
 {
-    // Disable display of bitmap names.
-    maBtBrowse.EnableTextDisplay (sal_False);
-    maBtTarget.EnableTextDisplay (sal_False);
+    // Set HC bitmaps and display display of bitmap names.
+    maBtBrowse.SetModeImage( Image( CUI_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtBrowse.EnableTextDisplay (FALSE);
+    maBtTarget.SetModeImage( Image( CUI_RES( IMG_TARGET_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtTarget.EnableTextDisplay (FALSE);
 
     InitStdControls();
     FreeResource();
@@ -99,12 +104,12 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     ///////////////////////////////////////
     // set defaults
     maRbtLinktypInternet.Check ();
-    maFtLogin.Show( sal_False );
-    maFtPassword.Show( sal_False );
-    maEdLogin.Show( sal_False );
-    maEdPassword.Show( sal_False );
-    maCbAnonymous.Show( sal_False );
-    maBtTarget.Enable( sal_False );
+    maFtLogin.Show( FALSE );
+    maFtPassword.Show( FALSE );
+    maEdLogin.Show( FALSE );
+    maEdPassword.Show( FALSE );
+    maCbAnonymous.Show( FALSE );
+    maBtTarget.Enable( FALSE );
     maBtBrowse.Enable( maStrStdDocURL != aEmptyStr );
 
     ///////////////////////////////////////
@@ -116,17 +121,10 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maCbAnonymous.SetClickHdl       ( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
     maBtBrowse.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickBrowseHdl_Impl ) );
     maBtTarget.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickTargetHdl_Impl ) );
-    maEdLogin.SetModifyHdl          ( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
-    maCbbTarget.SetLoseFocusHdl     ( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
-    maCbbTarget.SetModifyHdl        ( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
-    maTimer.SetTimeoutHdl           ( LINK ( this, SvxHyperlinkInternetTp, TimeoutHdl_Impl ) );
-
-    maFtTarget.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
-    maCbbTarget.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
-    maBtTarget.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
-    maBtTarget.SetAccessibleRelationLabeledBy( &maFtTarget );
-    maBtBrowse.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
-    maBtBrowse.SetAccessibleRelationLabeledBy( &maFtTarget );
+    maEdLogin.SetModifyHdl			( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
+    maCbbTarget.SetLoseFocusHdl		( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
+    maCbbTarget.SetModifyHdl		( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
+    maTimer.SetTimeoutHdl			( LINK ( this, SvxHyperlinkInternetTp, TimeoutHdl_Impl ) );
 }
 
 SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp ()
@@ -189,7 +187,7 @@ void SvxHyperlinkInternetTp::setFTPUser(const String& rUser, const String& rPass
     maFtPassword.Enable ();
     maEdLogin.Enable ();
     maEdPassword.Enable ();
-    maCbAnonymous.Check(sal_False);
+    maCbAnonymous.Check(FALSE);
 }
 
 /*************************************************************************
@@ -307,11 +305,11 @@ void SvxHyperlinkInternetTp::SetScheme( const String& aScheme )
 {
     //if  aScheme is empty or unknown the default beaviour is like it where HTTP
 
-    sal_Bool bFTP = aScheme.SearchAscii( sFTPScheme ) == 0;
-    sal_Bool bTelnet = sal_False;
+    BOOL bFTP = aScheme.SearchAscii( sFTPScheme ) == 0;
+    BOOL bTelnet = FALSE;
     if( !bFTP )
         bTelnet = aScheme.SearchAscii( sTelnetScheme ) == 0;
-    sal_Bool bInternet = !(bFTP || bTelnet);
+    BOOL bInternet = !(bFTP || bTelnet);
 
     //update protocol button selection:
     maRbtLinktypFTP.Check(bFTP);
@@ -460,11 +458,11 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickBrowseHdl_Impl, void *, EMPTYARG )
     SfxStringItem aName( SID_FILE_NAME, maStrStdDocURL );
     SfxStringItem aRefererItem( SID_REFERER, UniString::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
-    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_True );
-    SfxBoolItem aSilent( SID_SILENT, sal_True );
-    SfxBoolItem aReadOnly( SID_DOC_READONLY, sal_True );
+    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, TRUE );
+    SfxBoolItem aSilent( SID_SILENT, TRUE );
+    SfxBoolItem aReadOnly( SID_DOC_READONLY, TRUE );
 
-    SfxBoolItem aBrowse( SID_BROWSE, sal_True );
+    SfxBoolItem aBrowse( SID_BROWSE, TRUE );
 
     const SfxPoolItem *ppItems[] = { &aName, &aNewView, &aSilent, &aReadOnly, &aRefererItem, &aBrowse, NULL };
     (((SvxHpLinkDlg*)mpDialog)->GetBindings())->Execute( SID_OPENDOC, ppItems, 0, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
@@ -530,7 +528,7 @@ void SvxHyperlinkInternetTp::SetMarkStr ( String& aStrMark )
 |*
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::SetOnlineMode( sal_Bool /*bEnable*/ )
+void SvxHyperlinkInternetTp::SetOnlineMode( BOOL /*bEnable*/ )
 {
     // State of target-button in subject to the current url-string
     // ( Can't display any targets in an document, if there is no
@@ -541,9 +539,9 @@ void SvxHyperlinkInternetTp::SetOnlineMode( sal_Bool /*bEnable*/ )
     if( aStrCurrentTarget == aEmptyStr                ||
         aStrCurrentTarget.EqualsIgnoreCaseAscii( sHTTPScheme )  ||
         aStrCurrentTarget.EqualsIgnoreCaseAscii( sHTTPSScheme ) )
-        maBtTarget.Enable( sal_False );
+        maBtTarget.Enable( FALSE );
     else
-        maBtTarget.Enable( sal_True );
+        maBtTarget.Enable( TRUE );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

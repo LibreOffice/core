@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#ifndef SVX_LIGHT
+
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "svx/XPropertyTable.hxx"
+#include "XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
+
+#endif
 
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
@@ -48,15 +52,14 @@
 #define GLOBALOVERFLOW
 
 using namespace com::sun::star;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 sal_Unicode const pszExtBitmap[]  = {'s','o','b'};
 
-static char const aChckBitmap[]  = { 0x04, 0x00, 'S','O','B','L'};  // very old
-static char const aChckBitmap0[] = { 0x04, 0x00, 'S','O','B','0'};  // old
-static char const aChckBitmap1[] = { 0x04, 0x00, 'S','O','B','1'};  // = 5.2
-static char const aChckXML[]     = { 'P', 'K', 0x03, 0x04 };        // = 6.0
+static char const aChckBitmap[]  = { 0x04, 0x00, 'S','O','B','L'};	// very old
+static char const aChckBitmap0[] = { 0x04, 0x00, 'S','O','B','0'};	// old
+static char const aChckBitmap1[] = { 0x04, 0x00, 'S','O','B','1'};	// = 5.2
+static char const aChckXML[]     = { 'P', 'K', 0x03, 0x04 };		// = 6.0
 
 // -------------------
 // class XBitmapTable
@@ -70,7 +73,7 @@ static char const aChckXML[]     = { 'P', 'K', 0x03, 0x04 };        // = 6.0
 
 XBitmapTable::XBitmapTable( const String& rPath,
                             XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
+                            USHORT nInitSize, USHORT nReSize ) :
                 XPropertyTable( rPath, pInPool, nInitSize, nReSize)
 {
     pBmpTable = new Table( nInitSize, nReSize );
@@ -105,35 +108,35 @@ XBitmapEntry* XBitmapTable::GetBitmap(long nIndex) const
 
 /************************************************************************/
 
-sal_Bool XBitmapTable::Load()
+BOOL XBitmapTable::Load()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XBitmapTable::Save()
+BOOL XBitmapTable::Save()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XBitmapTable::Create()
+BOOL XBitmapTable::Create()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XBitmapTable::CreateBitmapsForUI()
+BOOL XBitmapTable::CreateBitmapsForUI()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-Bitmap* XBitmapTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
+Bitmap* XBitmapTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
@@ -150,7 +153,7 @@ Bitmap* XBitmapTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 
 XBitmapList::XBitmapList( const String& rPath,
                             XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
+                            USHORT nInitSize, USHORT nReSize ) :
                 XPropertyList( rPath, pInPool, nInitSize, nReSize)
 {
     // pBmpList = new List( nInitSize, nReSize );
@@ -185,18 +188,18 @@ XBitmapEntry* XBitmapList::GetBitmap(long nIndex) const
 
 /************************************************************************/
 
-sal_Bool XBitmapList::Load()
+BOOL XBitmapList::Load()
 {
     if( bListDirty )
     {
-        bListDirty = sal_False;
+        bListDirty = FALSE;
 
         INetURLObject aURL( aPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return sal_False;
+            return FALSE;
         }
 
         aURL.Append( aName );
@@ -207,19 +210,19 @@ sal_Bool XBitmapList::Load()
         uno::Reference< container::XNameContainer > xTable( SvxUnoXBitmapTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XBitmapList::Save()
+BOOL XBitmapList::Save()
 {
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return sal_False;
+        return FALSE;
     }
 
     aURL.Append( aName );
@@ -234,7 +237,7 @@ sal_Bool XBitmapList::Save()
 /************************************************************************/
 // Umgestellt am 27.07.95 auf XBitmap
 
-sal_Bool XBitmapList::Create()
+BOOL XBitmapList::Create()
 {
     // Array der Bitmap
     //-----------------------
@@ -247,10 +250,10 @@ sal_Bool XBitmapList::Create()
     // 48 49 50 51 52 53 54 55
     // 56 57 58 59 60 61 62 63
 
-    String  aStr( SVX_RES( RID_SVXSTR_BITMAP ) );
-    Color   aColWhite( RGB_Color( COL_WHITE ) );
+    String	aStr( SVX_RES( RID_SVXSTR_BITMAP ) );
+    Color	aColWhite( RGB_Color( COL_WHITE ) );
     xub_StrLen nLen;
-    sal_uInt16  aArray[64];
+    USHORT	aArray[64];
 
     memset( aArray, 0, sizeof( aArray ) );
     aStr.AppendAscii(" 1");
@@ -272,19 +275,19 @@ sal_Bool XBitmapList::Create()
     aStr.SetChar(nLen, sal_Unicode('4'));
     Insert( new XBitmapEntry( XOBitmap( aArray, RGB_Color( COL_LIGHTBLUE ), aColWhite ), aStr ) );
 
-    return( sal_True );
+    return( TRUE );
 }
 
 /************************************************************************/
 
-sal_Bool XBitmapList::CreateBitmapsForUI()
+BOOL XBitmapList::CreateBitmapsForUI()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-Bitmap* XBitmapList::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
+Bitmap* XBitmapList::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }

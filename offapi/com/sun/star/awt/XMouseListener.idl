@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,33 +24,33 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XMouseListener_idl__
-#define __com_sun_star_awt_XMouseListener_idl__
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_MouseEvent_idl__
-#include <com/sun/star/awt/MouseEvent.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_XMouseListener_idl__ 
+#define __com_sun_star_awt_XMouseListener_idl__ 
+ 
+#ifndef __com_sun_star_lang_XEventListener_idl__ 
+#include <com/sun/star/lang/XEventListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_MouseEvent_idl__ 
+#include <com/sun/star/awt/MouseEvent.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to receive events from the mouse in a certain window.
  */
 published interface XMouseListener: com::sun::star::lang::XEventListener
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when a mouse button has been pressed on a window.
 
-        <p>Since mouse presses are usually also used to indicate requests for pop-up menus
+        <p>Since mouse presses are usually also used to indicate requests for popup menus
         (also known as context menus) on objects, you might receive two events
         for a single mouse press: For example, if, on your operating system,
         pressing the right mouse button indicates the request for a context menu,
@@ -59,30 +59,30 @@ published interface XMouseListener: com::sun::star::lang::XEventListener
         the latter, the <member>MouseEvent::PopupTrigger</member> member of the
         event will be set to <TRUE/>.</p>
     */
-    [oneway] void mousePressed( [in] com::sun::star::awt::MouseEvent e );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void mousePressed( [in] com::sun::star::awt::MouseEvent e ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when a mouse button has been released on a window.
      */
-    [oneway] void mouseReleased( [in] com::sun::star::awt::MouseEvent e );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void mouseReleased( [in] com::sun::star::awt::MouseEvent e ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the mouse enters a window.
      */
-    [oneway] void mouseEntered( [in] com::sun::star::awt::MouseEvent e );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void mouseEntered( [in] com::sun::star::awt::MouseEvent e ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the mouse exits a window.
      */
-    [oneway] void mouseExited( [in] com::sun::star::awt::MouseEvent e );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    [oneway] void mouseExited( [in] com::sun::star::awt::MouseEvent e ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

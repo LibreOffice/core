@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 
-VCLXAccessibleDropDownComboBox::VCLXAccessibleDropDownComboBox (VCLXWindow* pVCLWindow)
+VCLXAccessibleDropDownComboBox::VCLXAccessibleDropDownComboBox (VCLXWindow* pVCLWindow) 
     : VCLXAccessibleBox (pVCLWindow, VCLXAccessibleBox::COMBOBOX, true)
 {
 }
@@ -74,7 +74,7 @@ VCLXAccessibleDropDownComboBox::~VCLXAccessibleDropDownComboBox (void)
 bool VCLXAccessibleDropDownComboBox::IsValid (void) const
 {
     return static_cast<ComboBox*>(GetWindow()) != NULL;
-
+ 
 }
 
 
@@ -87,6 +87,28 @@ void VCLXAccessibleDropDownComboBox::ProcessWindowEvent (const VclWindowEvent& r
         case VCLEVENT_DROPDOWN_OPEN:
         case VCLEVENT_DROPDOWN_CLOSE:
         {
+            /*			// child count changed
+            Any aOldValue, aNewValue;
+            // get the listbox child
+            Reference< XAccessible > xChild;
+            if ( !xChild.is() )
+            {
+                try
+                {
+                    // the listbox is the second child
+                    xChild = getAccessibleChild(1);
+                }
+                catch ( IndexOutOfBoundsException& ) {}
+                catch ( RuntimeException& ) {}
+            }
+            if ( rVclWindowEvent.GetId() == VCLEVENT_DROPDOWN_OPEN )
+                aNewValue <<= xChild;
+            else
+                aOldValue <<= xChild;
+            NotifyAccessibleEvent(
+            AccessibleEventId::CHILD, aOldValue, aNewValue
+            );
+            */
             break;
         }
 
@@ -100,22 +122,23 @@ void VCLXAccessibleDropDownComboBox::ProcessWindowEvent (const VclWindowEvent& r
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString VCLXAccessibleDropDownComboBox::getImplementationName()
+::rtl::OUString VCLXAccessibleDropDownComboBox::getImplementationName() 
     throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleDropDownComboBox" ));
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.toolkit.AccessibleDropDownComboBox");
 }
 
 
 
 
-Sequence< ::rtl::OUString > VCLXAccessibleDropDownComboBox::getSupportedServiceNames (void)
+Sequence< ::rtl::OUString > VCLXAccessibleDropDownComboBox::getSupportedServiceNames (void) 
     throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleDropDownComboBox" ));
+    aNames[nLength] = ::rtl::OUString::createFromAscii(
+        "com.sun.star.accessibility.AccessibleDropDownComboBox" );
     return aNames;
 }
 

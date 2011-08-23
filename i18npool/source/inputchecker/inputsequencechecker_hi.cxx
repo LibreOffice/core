@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,11 @@
 
 #include <inputsequencechecker_hi.hxx>
 
-using ::rtl::OUString;
+using namespace rtl;
 
-namespace com {
-namespace sun {
-namespace star {
+namespace com { 
+namespace sun { 
+namespace star { 
 namespace i18n {
 
 InputSequenceChecker_hi::InputSequenceChecker_hi()
@@ -47,24 +47,24 @@ InputSequenceChecker_hi::~InputSequenceChecker_hi()
 {
 }
 /* Non-Defined Class type */
-#define __ND        0
+#define __ND		0
 
 /*
  * Devanagari character type definitions
  */
 #define __UP  1  // ChandraBindu & Anuswar
-#define __NP  2  // Visarg
-#define __IV    3  // Independant Vowels
-#define __CN    4  // Consonants except _CK & _RC
-#define __CK    5  // Consonants that can be followed by Nukta
-#define __RC    6  // Ra
-#define __NM    7  // Matra
-#define __RM    8  // Ra + HAL
-#define __IM    9  // Choti I Matra
-#define __HL    10 // HAL
-#define __NK    11 // Nukta
-#define __VD    12 // Vedic
-#define __HD    13 // Hindu Numerals
+#define	__NP  2  // Visarg
+#define __IV	3  // Independant Vowels
+#define __CN	4  // Consonants except _CK & _RC 
+#define __CK	5  // Consonants that can be followed by Nukta
+#define __RC	6  // Ra
+#define __NM	7  // Matra
+#define __RM	8  // Ra + HAL
+#define __IM	9  // Choti I Matra
+#define __HL	10 // HAL
+#define __NK	11 // Nukta
+#define __VD	12 // Vedic
+#define __HD	13 // Hindu Numerals
 
 /*
  * Devanagari character type table
@@ -119,11 +119,11 @@ sal_Bool _DEV_Composible[2][2] = {
 #define getCharType(x) \
     ((x >= 0x0900 && x < 0x097f) ? devaCT[x - 0x0900] : __ND)
 
-sal_Bool SAL_CALL
-InputSequenceChecker_hi::checkInputSequence(const OUString& Text,
+sal_Bool SAL_CALL 
+InputSequenceChecker_hi::checkInputSequence(const OUString& Text, 
                                             sal_Int32       nStartPos,
-                                            sal_Unicode     inputChar,
-                                            sal_Int16       inputCheckMode)
+                                            sal_Unicode     inputChar, 
+                                            sal_Int16       inputCheckMode) 
   throw(com::sun::star::uno::RuntimeException)
 {
     sal_Unicode currentChar = Text[nStartPos];
@@ -133,16 +133,16 @@ InputSequenceChecker_hi::checkInputSequence(const OUString& Text,
     return (_DEV_Composible[inputCheckMode][dev_cell_check[ch2][ch1]]);
 }
 
-sal_Int32 SAL_CALL
-InputSequenceChecker_hi::correctInputSequence(OUString& Text,
+sal_Int32 SAL_CALL 
+InputSequenceChecker_hi::correctInputSequence(OUString& Text, 
                                             sal_Int32       nStartPos,
-                                            sal_Unicode     inputChar,
-                                            sal_Int16       inputCheckMode)
+                                            sal_Unicode     inputChar, 
+                                            sal_Int16       inputCheckMode) 
   throw(com::sun::star::uno::RuntimeException)
 {
     if (checkInputSequence(Text, nStartPos, inputChar, inputCheckMode))
         Text = Text.replaceAt(++nStartPos, 0, OUString(inputChar));
-    else
+    else 
         nStartPos=Text.getLength();
     return nStartPos;
 }

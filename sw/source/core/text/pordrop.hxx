@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ class SwDropPortionPart
     SwDropPortionPart* pFollow;
     SwFont* pFnt;
     xub_StrLen nLen;
-    sal_uInt16 nWidth;
+    USHORT nWidth;
 
 public:
     SwDropPortionPart( SwFont& rFont, const xub_StrLen nL )
@@ -61,12 +61,12 @@ public:
     inline void SetFollow( SwDropPortionPart* pNew ) { pFollow = pNew; };
     inline SwFont& GetFont() const { return *pFnt; }
     inline xub_StrLen GetLen() const { return nLen; }
-    inline sal_uInt16 GetWidth() const { return nWidth; }
-    inline void SetWidth( sal_uInt16 nNew )  { nWidth = nNew; }
+    inline USHORT GetWidth() const { return nWidth; }
+    inline void SetWidth( USHORT nNew )  { nWidth = nNew; }
 };
 
 /*************************************************************************
- *                      class SwDropPortion
+ *						class SwDropPortion
  *************************************************************************/
 
 class SwDropPortion : public SwTxtPortion
@@ -74,11 +74,11 @@ class SwDropPortion : public SwTxtPortion
     friend class SwDropCapCache;
     SwDropPortionPart* pPart; // due to script / attribute changes
     MSHORT nLines;          // Anzahl der Zeilen
-    KSHORT nDropHeight;     // Hoehe
-    KSHORT nDropDescent;    // Abstand zur naechsten Zeile
-    KSHORT nDistance;       // Abstand zum Text
-    KSHORT nFix;            // Fixposition
-    short nX;               // X-PaintOffset
+    KSHORT nDropHeight; 	// Hoehe
+    KSHORT nDropDescent; 	// Abstand zur naechsten Zeile
+    KSHORT nDistance;		// Abstand zum Text
+    KSHORT nFix;			// Fixposition
+    short nX;				// X-PaintOffset
     short nY;               // Y-Offset
 
     sal_Bool FormatTxt( SwTxtFormatInfo &rInf );

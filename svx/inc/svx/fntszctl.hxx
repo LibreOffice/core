@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,18 +43,18 @@ class FontSizeMenu;
 class SVX_DLLPUBLIC SvxFontSizeMenuControl : public SfxMenuControl
 {
 private:
-    FontSizeMenu*   pMenu;
-    Menu&           rParent;
-    SfxStatusForwarder  aFontNameForwarder;
+    FontSizeMenu*	pMenu;
+    Menu&			rParent;
+    SfxStatusForwarder	aFontNameForwarder;
 
     DECL_LINK( MenuSelect, FontSizeMenu * );
 
 protected:
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    virtual void	StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
 
 public:
-    SvxFontSizeMenuControl( sal_uInt16 nId, Menu&, SfxBindings& );
+    SvxFontSizeMenuControl(	USHORT nId, Menu&, SfxBindings& );
     ~SvxFontSizeMenuControl();
 
     virtual PopupMenu*  GetPopup() const;

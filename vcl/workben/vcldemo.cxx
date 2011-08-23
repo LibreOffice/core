@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ SAL_IMPLEMENT_MAIN()
     tools::extendApplicationEnvironment();
 
     Reference< XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "types.rdb" ) ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
+    xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
     InitVCL( xMS );
     ::Main();
@@ -77,13 +77,13 @@ class MyWin : public WorkWindow
 public:
                 MyWin( Window* pParent, WinBits nWinStyle );
 
-    void        MouseMove( const MouseEvent& rMEvt );
-    void        MouseButtonDown( const MouseEvent& rMEvt );
-    void        MouseButtonUp( const MouseEvent& rMEvt );
-    void        KeyInput( const KeyEvent& rKEvt );
-    void        KeyUp( const KeyEvent& rKEvt );
-    void        Paint( const Rectangle& rRect );
-    void        Resize();
+    void		MouseMove( const MouseEvent& rMEvt );
+    void		MouseButtonDown( const MouseEvent& rMEvt );
+    void		MouseButtonUp( const MouseEvent& rMEvt );
+    void		KeyInput( const KeyEvent& rKEvt );
+    void		KeyUp( const KeyEvent& rKEvt );
+    void		Paint( const Rectangle& rRect );
+    void		Resize();
 };
 
 // -----------------------------------------------------------------------
@@ -173,7 +173,7 @@ void MyWin::Paint( const Rectangle& rRect )
         DrawLine( Point(r.nLeft, r.nTop+i), Point(r.nRight, r.nBottom-i) );
     for(int i=0; i<aSz.Width(); i+=15)
         DrawLine( Point(r.nLeft+i, r.nBottom), Point(r.nRight-i, r.nTop) );
-
+    
     SetTextColor( Color( COL_WHITE ) );
     Font aFont( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ), Size( 0, 25 ) );
     SetFont( aFont );

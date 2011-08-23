@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,7 @@ public:
     E3dPolyScene();
     E3dPolyScene(E3dDefaultAttributes& rDefault);
 
-    virtual sal_uInt16 GetObjIdentifier() const;
-    virtual E3dPolyScene* Clone() const;
+    virtual UINT16 GetObjIdentifier() const;
 };
 
 #endif          // _E3D_POLYSC3D_HXX

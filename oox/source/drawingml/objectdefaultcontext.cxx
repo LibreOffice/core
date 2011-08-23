@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,8 @@
 #include "oox/drawingml/objectdefaultcontext.hxx"
 #include "oox/drawingml/spdefcontext.hxx"
 #include "oox/drawingml/theme.hxx"
+#include "oox/core/namespaces.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -47,11 +49,11 @@ Reference< XFastContextHandler > objectDefaultContext::createFastChildContext( s
 {
     switch( aElementToken )
     {
-        case A_TOKEN( spDef ):
+        case NMSP_DRAWINGML|XML_spDef:
             return new spDefContext( *this, mrTheme.getSpDef() );
-        case A_TOKEN( lnDef ):
+        case NMSP_DRAWINGML|XML_lnDef:
             return new spDefContext( *this, mrTheme.getLnDef() );
-        case A_TOKEN( txDef ):
+        case NMSP_DRAWINGML|XML_txDef:
             return new spDefContext( *this, mrTheme.getTxDef() );
     }
     return 0;

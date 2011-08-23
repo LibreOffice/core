@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,6 +50,10 @@
 |*
 |*    RscConst::RscConst()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 03.05.91
+|*    Letzte Aenderung  MM 03.05.91
+|*
 *************************************************************************/
 RscConst::RscConst( Atom nId, sal_uInt32 nTypeId )
     : RscTop( nId, nTypeId )
@@ -62,6 +66,10 @@ RscConst::RscConst( Atom nId, sal_uInt32 nTypeId )
 |*
 |*    RscConst::~RscConst()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 03.05.91
+|*    Letzte Aenderung  MM 03.05.91
+|*
 *************************************************************************/
 RscConst::~RscConst()
 {
@@ -73,6 +81,10 @@ RscConst::~RscConst()
 |*
 |*    RscConst::GetClassType()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 03.05.91
+|*    Letzte Aenderung  MM 03.05.91
+|*
 *************************************************************************/
 RSCCLASS_TYPE RscConst::GetClassType() const
 {
@@ -83,8 +95,12 @@ RSCCLASS_TYPE RscConst::GetClassType() const
 |*
 |*    RscConst::SetConstance()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 03.04.91
+|*    Letzte Aenderung  MM 03.04.91
+|*
 *************************************************************************/
-ERRTYPE RscConst::SetConstant( Atom nVarName, sal_Int32 lValue ){
+ERRTYPE RscConst::SetConstant( Atom nVarName, INT32 lValue ){
     if( pVarArray )
         pVarArray = (VarEle *)
             rtl_reallocateMemory( (void *)pVarArray,
@@ -103,6 +119,10 @@ ERRTYPE RscConst::SetConstant( Atom nVarName, sal_Int32 lValue ){
 |*
 |*    RscConst::GetConstance()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 15.05.91
+|*    Letzte Aenderung  MM 15.05.91
+|*
 *************************************************************************/
 Atom RscConst::GetConstant( sal_uInt32 nPos ){
      if( nPos < nEntries )
@@ -114,8 +134,12 @@ Atom RscConst::GetConstant( sal_uInt32 nPos ){
 |*
 |*    RscConst::GetConstValue()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 15.05.91
+|*    Letzte Aenderung  MM 15.05.91
+|*
 *************************************************************************/
-sal_Bool RscConst::GetConstValue( Atom nConst, sal_Int32 * pValue ) const
+BOOL RscConst::GetConstValue( Atom nConst, INT32 * pValue ) const
 {
     sal_uInt32 i = 0;
 
@@ -123,17 +147,21 @@ sal_Bool RscConst::GetConstValue( Atom nConst, sal_Int32 * pValue ) const
         if( pVarArray[ i ].nId == nConst )
         {
             *pValue = pVarArray[ i ].lValue;
-            return sal_True;
+            return TRUE;
         }
-    return sal_False;
+    return FALSE;
 }
 
 /*************************************************************************
 |*
 |*    RscConst::GetValueConst()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 15.05.91
+|*    Letzte Aenderung  MM 15.05.91
+|*
 *************************************************************************/
-sal_Bool RscConst::GetValueConst( sal_Int32 lValue, Atom * pConst ) const
+BOOL RscConst::GetValueConst( INT32 lValue, Atom * pConst ) const
 {
     sal_uInt32 i = 0;
 
@@ -141,9 +169,9 @@ sal_Bool RscConst::GetValueConst( sal_Int32 lValue, Atom * pConst ) const
         if( pVarArray[ i ].lValue == lValue )
         {
             *pConst = pVarArray[ i ].nId;
-            return sal_True;
+            return TRUE;
         }
-    return sal_False;
+    return FALSE;
 }
 
 /*************************************************************************
@@ -153,6 +181,8 @@ sal_Bool RscConst::GetValueConst( sal_Int32 lValue, Atom * pConst ) const
 |*    Beschreibung      Sucht die Position der Konstanten
 |*                      Return = nEntries, nicht gefunden
 |*                      Return = Position im Feld
+|*    Ersterstellung    MM 03.04.91
+|*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
 sal_uInt32 RscConst::GetConstPos( Atom nConst )
@@ -171,6 +201,10 @@ sal_uInt32 RscConst::GetConstPos( Atom nConst )
 /*************************************************************************
 |*
 |*    RscEnum::WriteSyntax()
+|*
+|*    Beschreibung
+|*    Ersterstellung    MM 29.05.91
+|*    Letzte Aenderung  MM 29.05.91
 |*
 *************************************************************************/
 void RscConst::WriteSyntax( FILE * fOutput, RscTypCont * pTC )
@@ -207,6 +241,10 @@ void RscConst::WriteRcAccess
 |*
 |*    RscEnum::RscEnum()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 03.04.91
+|*    Letzte Aenderung  MM 03.04.91
+|*
 *************************************************************************/
 RscEnum::RscEnum( Atom nId, sal_uInt32 nTypeId )
             : RscConst( nId, nTypeId )
@@ -218,15 +256,19 @@ RscEnum::RscEnum( Atom nId, sal_uInt32 nTypeId )
 |*
 |*    RscEnum::SetConst()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 03.04.91
+|*    Letzte Aenderung  MM 03.04.91
+|*
 *************************************************************************/
-ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*/ )
+ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, INT32 /*nVal*/ )
 {
     sal_uInt32 i = 0;
 
     if( nEntries != (i = GetConstPos( nConst )) )
     {
         ((RscEnumInst *)rInst.pData)->nValue = i;
-        ((RscEnumInst *)rInst.pData)->bDflt = sal_False;
+        ((RscEnumInst *)rInst.pData)->bDflt = FALSE;
         return( ERR_OK );
     };
 
@@ -237,13 +279,17 @@ ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*
 |*
 |*    RscEnum::SetNumber()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 18.07.91
+|*    Letzte Aenderung  MM 18.07.91
+|*
 *************************************************************************/
-ERRTYPE RscEnum::SetNumber( const RSCINST & rInst, sal_Int32 lValue )
+ERRTYPE RscEnum::SetNumber( const RSCINST & rInst, INT32 lValue )
 {
     sal_uInt32  i = 0;
 
     for( i = 0; i < nEntries; i++ ){
-        if( (sal_Int32)pVarArray[ i ].lValue == lValue )
+        if( (INT32)pVarArray[ i ].lValue == lValue )
             return( SetConst( rInst, pVarArray[ i ].nId, lValue ) );
     };
 
@@ -253,6 +299,10 @@ ERRTYPE RscEnum::SetNumber( const RSCINST & rInst, sal_Int32 lValue )
 /*************************************************************************
 |*
 |*    RscEnum::GetConst()
+|*
+|*    Beschreibung
+|*    Ersterstellung    MM 03.04.91
+|*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
 ERRTYPE RscEnum::GetConst( const RSCINST & rInst, Atom * pH ){
@@ -264,8 +314,12 @@ ERRTYPE RscEnum::GetConst( const RSCINST & rInst, Atom * pH ){
 |*
 |*    RscEnum::GetNumber()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 16.09.91
+|*    Letzte Aenderung  MM 16.09.91
+|*
 *************************************************************************/
-ERRTYPE RscEnum::GetNumber( const RSCINST & rInst, sal_Int32 * pNumber ){
+ERRTYPE RscEnum::GetNumber( const RSCINST & rInst, INT32 * pNumber ){
     *pNumber = pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].lValue;
     return( ERR_OK );
 }
@@ -274,8 +328,12 @@ ERRTYPE RscEnum::GetNumber( const RSCINST & rInst, sal_Int32 * pNumber ){
 |*
 |*    RscEnum::Create()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 03.04.91
+|*    Letzte Aenderung  MM 03.04.91
+|*
 *************************************************************************/
-RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnClass ){
+RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass ){
     RSCINST aInst;
 
     if( !pInst ){
@@ -292,7 +350,7 @@ RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnCl
         memmove( aInst.pData, rDflt.pData, Size() );
     else{
         ((RscEnumInst *)aInst.pData)->nValue = 0;
-        ((RscEnumInst *)aInst.pData)->bDflt = sal_True;
+        ((RscEnumInst *)aInst.pData)->bDflt = TRUE;
     }
 
     return( aInst );
@@ -302,22 +360,30 @@ RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnCl
 |*
 |*    RscEnum::IsValueDefault()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 15.01.92
+|*    Letzte Aenderung  MM 15.01.92
+|*
 *************************************************************************/
-sal_Bool RscEnum::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
+BOOL RscEnum::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
     if( pDef ){
         if( ((RscEnumInst*)rInst.pData)->nValue ==
           ((RscEnumInst*)pDef)->nValue )
         {
-            return sal_True;
+            return TRUE;
         }
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 /*************************************************************************
 |*
 |*    RscEnum::WriteSrc()
+|*
+|*    Beschreibung
+|*    Ersterstellung    MM 08.04.91
+|*    Letzte Aenderung  MM 08.04.91
 |*
 *************************************************************************/
 void RscEnum::WriteSrc( const RSCINST & rInst, FILE * fOutput,
@@ -331,15 +397,19 @@ void RscEnum::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 |*    RscEnum::WriteRc()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 15.04.91
+|*    Letzte Aenderung  MM 15.04.91
+|*
 *************************************************************************/
 ERRTYPE RscEnum::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                          RscTypCont *, sal_uInt32, sal_Bool )
+                          RscTypCont *, sal_uInt32, BOOL )
 {
-    aMem.Put( (sal_Int32)pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].lValue );
+    aMem.Put( (INT32)pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].lValue );
     return( ERR_OK );
 }
 
-RscLangEnum::RscLangEnum()
+RscLangEnum::RscLangEnum() 
         : RscEnum( pHS->getID( "LangEnum" ), RSC_NOTYPE ),
           mnLangId( 0x400 )
 {

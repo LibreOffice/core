@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-#include "sfx2/imagemgr.hxx"
+#include "imagemgr.hxx"
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
@@ -42,7 +42,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
 
-#include "sfx2/imgmgr.hxx"
+#include "imgmgr.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -53,7 +53,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -62,17 +62,13 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::frame;
 
-typedef boost::unordered_map< ::rtl::OUString,
+typedef std::hash_map< ::rtl::OUString,
                        WeakReference< XImageManager >,
                        ::rtl::OUStringHash,
                        ::std::equal_to< ::rtl::OUString > > ModuleIdToImagegMgr;
 
 
-Image SAL_CALL GetImage(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    const ::rtl::OUString& aURL,
-    bool bBig
-)
+Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast )
 {
     // TODO/LATeR: shouldn't this become a method at SfxViewFrame?! That would save the UnoTunnel
     if ( !rFrame.is() )
@@ -91,7 +87,7 @@ Image SAL_CALL GetImage(
     rtl::OUString aCommandURL( aURL );
     if ( nProtocol == INET_PROT_SLOT )
     {
-        sal_uInt16 nId = ( sal_uInt16 ) String(aURL).Copy(5).ToInt32();
+        USHORT nId = ( USHORT ) String(aURL).Copy(5).ToInt32();
         const SfxSlot* pSlot = 0;
         if ( xModel.is() )
         {
@@ -132,6 +128,8 @@ Image SAL_CALL GetImage(
                             ::com::sun::star::ui::ImageType::SIZE_DEFAULT );
     if ( bBig )
         nImageType |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
+    if ( bHiContrast )
+        nImageType |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
 
     if ( xDocImgMgr.is() )
     {
@@ -213,7 +211,7 @@ Image SAL_CALL GetImage(
             if ( !!aImage )
                 return aImage;
             else if ( nProtocol != INET_PROT_UNO && nProtocol != INET_PROT_SLOT )
-                return SvFileInformationManager::GetImageNoDefault( aObj, bBig );
+                return SvFileInformationManager::GetImageNoDefault( aObj, bBig, bHiContrast );
         }
     }
     catch ( Exception& )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,31 +53,31 @@ TriState lclConvertToTriState( bool bKnown, bool bIsKnownFlag, bool bIsUnknownFl
 
 // ----------------------------------------------------------------------------
 
-sal_uInt16 ItemWrapperHelper::GetWhichId( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
+USHORT ItemWrapperHelper::GetWhichId( const SfxItemSet& rItemSet, USHORT nSlot )
 {
     return rItemSet.GetPool()->GetWhich( nSlot );
 }
 
-bool ItemWrapperHelper::IsKnownItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
+bool ItemWrapperHelper::IsKnownItem( const SfxItemSet& rItemSet, USHORT nSlot )
 {
-    return rItemSet.GetItemState( GetWhichId( rItemSet, nSlot ), sal_True ) != SFX_ITEM_UNKNOWN;
+    return rItemSet.GetItemState( GetWhichId( rItemSet, nSlot ), TRUE ) != SFX_ITEM_UNKNOWN;
 }
 
-const SfxPoolItem* ItemWrapperHelper::GetUniqueItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
+const SfxPoolItem* ItemWrapperHelper::GetUniqueItem( const SfxItemSet& rItemSet, USHORT nSlot )
 {
-    sal_uInt16 nWhich = GetWhichId( rItemSet, nSlot );
-    return (rItemSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_DEFAULT) ? rItemSet.GetItem( nWhich, sal_True ) : 0;
+    USHORT nWhich = GetWhichId( rItemSet, nSlot );
+    return (rItemSet.GetItemState( nWhich, TRUE ) >= SFX_ITEM_DEFAULT) ? rItemSet.GetItem( nWhich, TRUE ) : 0;
 }
 
-const SfxPoolItem& ItemWrapperHelper::GetDefaultItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
+const SfxPoolItem& ItemWrapperHelper::GetDefaultItem( const SfxItemSet& rItemSet, USHORT nSlot )
 {
     return rItemSet.GetPool()->GetDefaultItem( GetWhichId( rItemSet, nSlot ) );
 }
 
-void ItemWrapperHelper::RemoveDefaultItem( SfxItemSet& rDestSet, const SfxItemSet& rOldSet, sal_uInt16 nSlot )
+void ItemWrapperHelper::RemoveDefaultItem( SfxItemSet& rDestSet, const SfxItemSet& rOldSet, USHORT nSlot )
 {
-    sal_uInt16 nWhich = GetWhichId( rDestSet, nSlot );
-    if( rOldSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_DEFAULT )
+    USHORT nWhich = GetWhichId( rDestSet, nSlot );
+    if( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
         rDestSet.ClearItem( nWhich );
 }
 
@@ -134,12 +134,12 @@ void CheckBoxWrapper::SetControlDontKnow( bool bSet )
     GetControl().SetState( bSet ? STATE_DONTKNOW : STATE_NOCHECK );
 }
 
-sal_Bool CheckBoxWrapper::GetControlValue() const
+BOOL CheckBoxWrapper::GetControlValue() const
 {
     return GetControl().IsChecked();
 }
 
-void CheckBoxWrapper::SetControlValue( sal_Bool bValue )
+void CheckBoxWrapper::SetControlValue( BOOL bValue )
 {
     GetControl().Check( bValue );
 }
@@ -303,7 +303,7 @@ TriState ItemConnectionBase::GetShowState( bool bKnown ) const
 // Standard connections
 // ============================================================================
 
-DummyItemConnection::DummyItemConnection( sal_uInt16 nSlot, Window& rWindow, ItemConnFlags nFlags ) :
+DummyItemConnection::DummyItemConnection( USHORT nSlot, Window& rWindow, ItemConnFlags nFlags ) :
     ItemConnectionBase( nFlags ),
     DummyWindowWrapper( rWindow ),
     mnSlot( nSlot )

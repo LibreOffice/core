@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,17 +58,44 @@ void * SAL_CALL comp_Layout_component_getFactory( const char * pImplName, void *
         return pRet;
     }
 
+sal_Bool SAL_CALL comp_Layout_component_writeInfo( void * /*serviceManager*/, void * pRegistryKey )
+    {
+        if ( pRegistryKey )
+        {
+            try
+            {
+                uno::Reference< registry::XRegistryKey > xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) );
+                uno::Reference< registry::XRegistryKey >  xNewKey;
+
+                xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+                                           LayoutFactory::impl_staticGetImplementationName() +
+                                           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+
+                const uno::Sequence< ::rtl::OUString > aServices = LayoutFactory::impl_staticGetSupportedServiceNames();
+                for ( sal_Int32 i = 0; i < aServices.getLength(); i++ )
+                    xNewKey->createKey( aServices.getConstArray()[i] );
+
+                return sal_True;
+            }
+            catch (registry::InvalidRegistryException &)
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+        }
+        return sal_False;
+    }
+
 // Component registration
 ::rtl::OUString SAL_CALL LayoutFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.awt.Layout"));
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.awt.Layout" );
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL LayoutFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Layout"));
-    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.awt.Layout"));
+    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.awt.Layout");
+    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.awt.Layout");
     return aRet;
 }
 
@@ -98,7 +125,7 @@ sal_Bool SAL_CALL LayoutFactory::supportsService( const ::rtl::OUString& Service
     for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
         if ( ServiceName.compareTo( aSeq[i] ) == 0 )
             return sal_True;
-
+    
     return sal_False;
 }
 

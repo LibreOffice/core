@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -54,7 +54,7 @@ using namespace ::xmloff::token;
 TYPEINIT1(XMLSectionSourceImportContext, SvXMLImportContext);
 
 XMLSectionSourceImportContext::XMLSectionSourceImportContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rSectPropSet) :
@@ -67,18 +67,18 @@ XMLSectionSourceImportContext::~XMLSectionSourceImportContext()
 {
 }
 
-enum XMLSectionSourceToken
+enum XMLSectionSourceToken 
 {
     XML_TOK_SECTION_XLINK_HREF,
     XML_TOK_SECTION_TEXT_FILTER_NAME,
     XML_TOK_SECTION_TEXT_SECTION_NAME
 };
 
-static SvXMLTokenMapEntry aSectionSourceTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aSectionSourceTokenMap[] =
 {
     { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_SECTION_XLINK_HREF },
     { XML_NAMESPACE_TEXT, XML_FILTER_NAME, XML_TOK_SECTION_TEXT_FILTER_NAME },
-    { XML_NAMESPACE_TEXT, XML_SECTION_NAME,
+    { XML_NAMESPACE_TEXT, XML_SECTION_NAME, 
                                         XML_TOK_SECTION_TEXT_SECTION_NAME },
     XML_TOKEN_MAP_END
 };
@@ -91,13 +91,13 @@ void XMLSectionSourceImportContext::StartElement(
     OUString sURL;
     OUString sFilterName;
     OUString sSectionName;
-
+    
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
                               &sLocalName );
 
         switch (aTokenMap.Get(nPrefix, sLocalName))
@@ -147,7 +147,7 @@ void XMLSectionSourceImportContext::EndElement()
     // this space intentionally left blank.
 }
 
-SvXMLImportContext* XMLSectionSourceImportContext::CreateChildContext(
+SvXMLImportContext* XMLSectionSourceImportContext::CreateChildContext( 
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & )

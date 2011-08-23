@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,25 +33,34 @@
 
 #include "ddemlos2.h"
 
-#define WORD sal_uInt16
-#define DWORD sal_uLong
-#define LPBYTE sal_uInt8*
-#define LPWORD sal_uInt16*
-#define LPDWORD sal_uLong*
+#define WORD USHORT
+#define DWORD ULONG
+#define LPBYTE BYTE*
+#define LPWORD USHORT*
+#define LPDWORD ULONG*
 #define LPCTSTR PCSZ
 
 #else
 
-#include <windows.h>
+#include <tools/prewin.h>
 #include <ddeml.h>
+#include <tools/postwin.h>
 #include "ddewrap.hxx"
 
-#endif
+/*
+extern "C"
+{
+#define BOOL WIN_BOOL
+#define BYTE WIN_BYTE
+#undef BOOL
+#undef BYTE
+};
+*/
 
+#endif
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/shl.hxx>
-#include <vector>
 
 class DdeService;
 class DdeTopic;
@@ -69,7 +78,7 @@ struct Conversation
     DdeTopic*   pTopic;
 };
 
-typedef ::std::vector< Conversation* > ConvList;
+DECLARE_LIST( ConvList, Conversation* );
 
 // ---------------
 // - DdeInternal -
@@ -86,12 +95,12 @@ public:
     static HDDEDATA CALLBACK InfCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
 #else
-#if (defined ( GCC ) && defined ( OS2 )) || defined( ICC )
-    static HDDEDATA CALLBACK CliCallback
+#if defined ( MTW ) || ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
+    static HDDEDATA CALLBACK __EXPORT CliCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
-    static HDDEDATA CALLBACK SvrCallback
+    static HDDEDATA CALLBACK __EXPORT SvrCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
-    static HDDEDATA CALLBACK InfCallback
+    static HDDEDATA CALLBACK __EXPORT InfCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
 #else
     static HDDEDATA CALLBACK _export CliCallback
@@ -132,10 +141,10 @@ public:
 
 struct DdeDataImp
 {
-    HDDEDATA        hData;
-    LPBYTE          pData;
-    long            nData;
-    sal_uLong           nFmt;
+    HDDEDATA		hData;
+    LPBYTE			pData;
+    long			nData;
+    ULONG 			nFmt;
 };
 
 class DdeConnections;
@@ -143,20 +152,20 @@ class DdeServices;
 
 struct DdeInstData
 {
-    sal_uInt16          nRefCount;
-    DdeConnections* pConnections;
+    USHORT			nRefCount;
+    DdeConnections*	pConnections;
     // Server
-    long            hCurConvSvr;
-    DWORD           hDdeInstSvr;
-    short           nInstanceSvr;
-    DdeServices*    pServicesSvr;
+    long 			hCurConvSvr;
+    ULONG			hDdeInstSvr;
+    short			nInstanceSvr;
+    DdeServices*	pServicesSvr;
     // Client
-    DWORD           hDdeInstCli;
-    short           nInstanceCli;
+    ULONG			hDdeInstCli;
+    short			nInstanceCli;
 };
 
 #ifndef SHL_SVDDE
-#define SHL_SVDDE   SHL_SHL2
+#define SHL_SVDDE	SHL_SHL2
 #endif
 
 inline DdeInstData* ImpGetInstData()

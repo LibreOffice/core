@@ -290,8 +290,8 @@ testcase tUndoSpellcheck
     '/// <B>Spellcheck(Autocheck/Spellcheck)</B>
     printlog "- Spellcheck: Autocheck"
     '/// new document ///
-    Call hfileOpenLocally (gTesttoolpath + "writer\optional\input\undo\spellcheck_undo.odt")
-    
+    hfileOpen (gTesttoolpath + "writer\optional\input\undo\spellcheck_undo.odt")
+    Call sMakeReadOnlyDocumentEditable
     '/// Type "This is a testp<End>"
     Call wTypeKeys ( "<End>" )  'This is a testp
     '/// Select word' testp'

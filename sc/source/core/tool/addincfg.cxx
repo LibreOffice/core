@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using namespace com::sun::star;
 #define CFGPATH_ADDINS  "Office.CalcAddIns/AddInInfo"
 
 ScAddInCfg::ScAddInCfg() :
-    ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_ADDINS )) )
+    ConfigItem( rtl::OUString::createFromAscii( CFGPATH_ADDINS ) )
 {
     uno::Sequence<rtl::OUString> aNames(1);     // one entry: empty string
     EnableNotification( aNames );
@@ -56,7 +56,7 @@ ScAddInCfg::ScAddInCfg() :
 
 void ScAddInCfg::Commit()
 {
-    OSL_FAIL("ScAddInCfg shouldn't be modified");
+    DBG_ERROR("ScAddInCfg shouldn't be modified");
 }
 
 void ScAddInCfg::Notify( const uno::Sequence<rtl::OUString>& )

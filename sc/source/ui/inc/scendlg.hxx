@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/ctrlbox.hxx>
 
@@ -42,34 +42,34 @@
 class ScNewScenarioDlg : public ModalDialog
 {
 public:
-        ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bool bEdit = false, sal_Bool bSheetProtected = false );
+        ScNewScenarioDlg( Window* pParent, const String& rName, BOOL bEdit = FALSE, BOOL bSheetProtected = FALSE );
         ~ScNewScenarioDlg();
 
     void SetScenarioData( const String& rName, const String& rComment,
-                            const Color& rColor, sal_uInt16 nFlags );
+                            const Color& rColor, USHORT nFlags );
 
     void GetScenarioData( String& rName, String& rComment,
-                            Color& rColor, sal_uInt16& rFlags ) const;
+                            Color& rColor, USHORT& rFlags ) const;
 
 private:
     FixedLine           aFlName;
-    Edit                aEdName;
+    Edit				aEdName;
     FixedLine           aFlComment;
-    MultiLineEdit       aEdComment;
+    MultiLineEdit		aEdComment;
     FixedLine           aFlOptions;
-    CheckBox            aCbShowFrame;
-    ColorListBox        aLbColor;
-    //CheckBox          aCbPrintFrame;
-    CheckBox            aCbTwoWay;
-    //CheckBox          aCbAttrib;
-    //CheckBox          aCbValue;
-    CheckBox            aCbCopyAll;
+    CheckBox			aCbShowFrame;
+    ColorListBox		aLbColor;
+    //CheckBox			aCbPrintFrame;
+    CheckBox			aCbTwoWay;
+    //CheckBox			aCbAttrib;
+    //CheckBox			aCbValue;
+    CheckBox			aCbCopyAll;
     CheckBox            aCbProtect;
-    OKButton            aBtnOk;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
-    const String        aDefScenarioName;
-    sal_Bool                bIsEdit;
+    OKButton			aBtnOk;
+    CancelButton		aBtnCancel;
+    HelpButton			aBtnHelp;
+    const String		aDefScenarioName;
+    BOOL				bIsEdit;
 
     DECL_LINK( OkHdl, OKButton * );
     DECL_LINK( EnableHdl, CheckBox * );

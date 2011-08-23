@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,6 +36,8 @@
 #include "tools/iparser.hxx"
 #include "tools/geninfo.hxx"
 
+
+
 //
 // class InformationParser
 //
@@ -43,9 +45,9 @@
 #define cKeyLevelChar '\t'
 
 /*****************************************************************************/
-InformationParser::InformationParser( sal_Bool bReplace )
+InformationParser::InformationParser( BOOL bReplace )
 /*****************************************************************************/
-                : bRecover( sal_False ),
+                : bRecover( FALSE ),
                 sOldLine( "" ),
                 bReplaceVariables( bReplace ),
                 nLevel( 0 ),
@@ -72,24 +74,24 @@ ByteString &InformationParser::ReadLine()
     ByteString sLine;
 
     if ( bRecover ) {
-        bRecover = sal_False;
+        bRecover = FALSE;
     }
     else {
          if ( !pActStream->IsEof()) {
             pActStream->ReadLine( sLine );
             xub_StrLen nStart = 0;
             xub_StrLen nEnd = sLine.Len();
-            sal_Bool bCopy = sal_False;
+            BOOL bCopy = FALSE;
             while ( nStart < nEnd && ( sLine.GetChar( nStart ) == ' ' || sLine.GetChar( nStart ) == 0x09 ) )
             {
                 nStart++;
-                bCopy = sal_True;
+                bCopy = TRUE;
             }
 
             while ( nStart < nEnd && ( sLine.GetChar( nEnd-1 ) == ' ' || sLine.GetChar( nEnd-1 ) == 0x09 ) )
             {
                 nEnd--;
-                bCopy = sal_True;
+                bCopy = TRUE;
             }
 
             if ( bCopy )
@@ -112,8 +114,8 @@ ByteString &InformationParser::ReadLine()
             if ( nLevel ) {
                 sLine = "}";
                 fprintf( stdout, "Reached EOF parsing %s. Suplying extra '}'\n",ByteString( sStreamName, gsl_getSystemTextEncoding()).GetBuffer() );
-    //          nErrorCode = IP_UNEXPECTED_EOF;
-    //          nErrorLine = nActLine;
+    //	        nErrorCode = IP_UNEXPECTED_EOF;
+    //	        nErrorLine = nActLine;
             }
             else
                 sLine = "";
@@ -163,7 +165,7 @@ GenericInformation *InformationParser::ReadKey(
     sCurrentComment = "";
 
     // key separated from value by tab?
-    sal_uInt16 nWSPos = sLine.Search( ' ' );
+    USHORT nWSPos = sLine.Search( ' ' );
     if ( sLine.Search( '\t' ) < nWSPos ) {
         nWSPos = sLine.Search( '\t' );
         sLine.SearchAndReplace( "\t", " " );
@@ -212,17 +214,17 @@ GenericInformation *InformationParser::ReadKey(
 void InformationParser::Recover()
 /*****************************************************************************/
 {
-    bRecover = sal_True;
+    bRecover = TRUE;
 }
 
 /*****************************************************************************/
-sal_Bool InformationParser::Save( SvStream &rOutStream,
+BOOL InformationParser::Save( SvStream &rOutStream,
                   const GenericInformationList *pSaveList,
-                  sal_uInt16 level, sal_Bool bStripped )
+                  USHORT level, BOOL bStripped )
 /*****************************************************************************/
 {
-    sal_uInt16 i;
-    sal_uIntPtr nInfoListCount;
+    USHORT i;
+    ULONG nInfoListCount;
     ByteString sTmpStr;
     GenericInformation *pGenericInfo;
     GenericInformationList *pGenericInfoList;
@@ -230,9 +232,9 @@ sal_Bool InformationParser::Save( SvStream &rOutStream,
      static ByteString aKeyLevel;
     aKeyLevel.Expand( level, cKeyLevelChar );
 
-    for ( nInfoListCount = 0; nInfoListCount < pSaveList->size(); nInfoListCount++) {
+    for ( nInfoListCount = 0; nInfoListCount < pSaveList->Count(); nInfoListCount++) {
         // Key-Value Paare schreiben
-        pGenericInfo = (*pSaveList)[ nInfoListCount ];
+        pGenericInfo = pSaveList->GetObject( nInfoListCount );
         sTmpStr = "";
         if ( !bStripped && level )
             sTmpStr.Append( aKeyLevel.GetBuffer(), level );
@@ -249,7 +251,7 @@ sal_Bool InformationParser::Save( SvStream &rOutStream,
         sTmpStr += ' ';
         sTmpStr += pGenericInfo->GetValue();
         if ( !rOutStream.WriteLine( sTmpStr ) )
-              return sal_False;
+              return FALSE;
 
         // wenn vorhanden, bearbeite recursive die Sublisten
         if (( pGenericInfoList = pGenericInfo->GetSubList() ) != NULL ) {
@@ -259,20 +261,20 @@ sal_Bool InformationParser::Save( SvStream &rOutStream,
                 sTmpStr.Append( aKeyLevel.GetBuffer(), level );
               sTmpStr += '{';
               if ( !rOutStream.WriteLine( sTmpStr ) )
-                return sal_False;
+                return FALSE;
               // recursiv die sublist abarbeiten
               if ( !Save( rOutStream, pGenericInfoList, level+1, bStripped ) )
-                return sal_False;
+                return FALSE;
                   // schliessende Klammer
               sTmpStr = "";
             if ( !bStripped && level )
                 sTmpStr.Append( aKeyLevel.GetBuffer(), level );
               sTmpStr += '}';
               if ( !rOutStream.WriteLine( sTmpStr ) )
-                return sal_False;
+                return FALSE;
         }
       }
-      return sal_True;
+      return TRUE;
 }
 
 /*****************************************************************************/
@@ -372,7 +374,7 @@ GenericInformationList *InformationParser::Execute( Dir &rDir,
     else
         pList = new GenericInformationList();
 
-    for ( sal_uInt16 i = 0; i < rDir.Count(); i++ ) {
+    for ( USHORT i = 0; i < rDir.Count(); i++ ) {
 
         // execute this dir
         UniString sNextFile( rDir[i].GetFull());
@@ -396,33 +398,33 @@ GenericInformationList *InformationParser::Execute( Dir &rDir,
 }
 
 /*****************************************************************************/
-sal_Bool InformationParser::Save( SvFileStream &rSourceStream,
+BOOL InformationParser::Save( SvFileStream &rSourceStream,
                   const GenericInformationList *pSaveList )
 /*****************************************************************************/
 {
-    if ( !rSourceStream.IsOpen() || !Save( (SvStream &)rSourceStream, pSaveList, 0, sal_False ))
+    if ( !rSourceStream.IsOpen() || !Save( (SvStream &)rSourceStream, pSaveList, 0, FALSE ))
     {
         printf( "ERROR saving file \"%s\"\n",ByteString( rSourceStream.GetFileName(), gsl_getSystemTextEncoding()).GetBuffer() );
-        return sal_False;
+        return FALSE;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 /*****************************************************************************/
-sal_Bool InformationParser::Save( SvMemoryStream &rSourceStream,
+BOOL InformationParser::Save( SvMemoryStream &rSourceStream,
                   const GenericInformationList *pSaveList )
 /*****************************************************************************/
 {
     Time a;
-    sal_Bool bRet = Save( (SvStream &)rSourceStream, pSaveList, 0, sal_True );
+    BOOL bRet = Save( (SvStream &)rSourceStream, pSaveList, 0, TRUE );
     Time b;
     b = b - a;
     return bRet;
 }
 
 /*****************************************************************************/
-sal_Bool InformationParser::Save( const UniString &rSourceFile,
+BOOL InformationParser::Save( const UniString &rSourceFile,
                   const GenericInformationList *pSaveList )
 /*****************************************************************************/
 {
@@ -430,14 +432,14 @@ sal_Bool InformationParser::Save( const UniString &rSourceFile,
 
   if ( !Save( *pOutFile, pSaveList )) {
     delete pOutFile;
-    return sal_False;
+    return FALSE;
   }
   delete pOutFile;
-  return sal_True;
+  return TRUE;
 }
 
 /*****************************************************************************/
-sal_uInt16 InformationParser::GetErrorCode()
+USHORT InformationParser::GetErrorCode()
 /*****************************************************************************/
 {
     return nErrorCode;
@@ -447,7 +449,7 @@ sal_uInt16 InformationParser::GetErrorCode()
 ByteString &InformationParser::GetErrorText()
 /*****************************************************************************/
 {
-  //    sErrorText = pActStream->GetFileName();
+  //	sErrorText = pActStream->GetFileName();
     sErrorText = ByteString( sStreamName, gsl_getSystemTextEncoding());
     sErrorText += ByteString( " (" );
     sErrorText += ByteString::CreateFromInt64(nErrorLine);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ protected:
     virtual void describeSupportedFeatures();
 
 private:
-    void setInsertObj( sal_uInt16 eObj );
+    void setInsertObj( USHORT eObj );
     SdrObject* createDefaultObject( const sal_uInt16 nID );
 
     bool parseCommandURL( const ::rtl::OUString& rCommandURL, sal_uInt16* pnFeatureId, ::rtl::OUString* pBaseCommand, ::rtl::OUString* pCustomShapeType );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,14 +44,14 @@ class SVL_DLLPUBLIC SfxVisibilityItem: public SfxPoolItem
 public:
     TYPEINFO();
 
-    SfxVisibilityItem(sal_uInt16 which = 0, sal_Bool bVisible = sal_True):
+    SfxVisibilityItem(USHORT which = 0, sal_Bool bVisible = sal_True):
         SfxPoolItem(which)
-    {
+    { 
         m_nValue.bVisible = bVisible;
         DBG_CTOR(SfxVisibilityItem, 0);
     }
 
-    SfxVisibilityItem(sal_uInt16 which, SvStream & rStream);
+    SfxVisibilityItem(USHORT which, SvStream & rStream);
 
     SfxVisibilityItem(const SfxVisibilityItem & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
@@ -70,25 +70,25 @@ public:
                                                 const IntlWrapper * = 0)
         const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                             sal_uInt8 nMemberId = 0 ) const;
+    virtual	bool QueryValue( com::sun::star::uno::Any& rVal,
+                             BYTE nMemberId = 0 ) const;
 
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal,
-                           sal_uInt8 nMemberId = 0 );
+    virtual	bool PutValue( const com::sun::star::uno::Any& rVal,
+                           BYTE nMemberId = 0 );
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const;
 
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
+    virtual SvStream & Store(SvStream & rStream, USHORT) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 
-    virtual sal_uInt16 GetValueCount() const;
+    virtual USHORT GetValueCount() const;
 
-    virtual UniString GetValueTextByVal(sal_Bool bTheValue) const;
+    virtual UniString GetValueTextByVal(BOOL bTheValue) const;
 
-    sal_Bool GetValue() const { return m_nValue.bVisible; }
+    BOOL GetValue() const { return m_nValue.bVisible; }
 
-    void SetValue(sal_Bool bVisible) { m_nValue.bVisible = bVisible; }
+    void SetValue(BOOL bVisible) { m_nValue.bVisible = bVisible; }
 };
 
 #endif // _SFXVISIBILITYITEM_HXX

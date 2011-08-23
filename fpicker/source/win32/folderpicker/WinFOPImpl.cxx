@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,13 +58,13 @@ using osl::FileBase;
 //
 //------------------------------------------------------------------------
 
-const OUString BACKSLASH(RTL_CONSTASCII_USTRINGPARAM( "\\" ));
+const OUString BACKSLASH = OUString::createFromAscii( "\\" );
 
 //------------------------------------------------------------------------
 // ctor
 //------------------------------------------------------------------------
 
-CWinFolderPickerImpl::CWinFolderPickerImpl( CFolderPicker* aFolderPicker ) :
+CWinFolderPickerImpl::CWinFolderPickerImpl( CFolderPicker* aFolderPicker ) : 
    CMtaFolderPicker( BIF_RETURNONLYFSDIRS | BIF_RETURNFSANCESTORS | BIF_EDITBOX | BIF_VALIDATE ),
    m_pFolderPicker( aFolderPicker ),
    m_nLastDlgResult( ::com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL )
@@ -72,42 +72,42 @@ CWinFolderPickerImpl::CWinFolderPickerImpl( CFolderPicker* aFolderPicker ) :
 }
 
 //------------------------------------------------------------------------
-// get directory in URL format, convert it to system format and set the
+// get directory in URL format, convert it to system format and set the 
 // member variable
-// If the given URL for the directory is invalid the function throws an
+// If the given URL for the directory is invalid the function throws an 
 // IllegalArgumentException
 // If the specified path is well formed but invalid for the underlying
-// OS the FolderPicker starts in the root of the file system hierarchie
+// OS the FolderPicker starts in the root of the file system hierarchie 
 //------------------------------------------------------------------------
 
-void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirectory )
+void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirectory ) 
     throw( IllegalArgumentException, RuntimeException )
 {
     OUString sysDir;
 
     if( aDirectory.getLength( ) )
-    {
+    {      
         // assuming that this function succeeds after successful execution
         // of getAbsolutePath
         ::osl::FileBase::RC rc =
             ::osl::FileBase::getSystemPathFromFileURL( aDirectory, sysDir );
-
+     
         if ( ::osl::FileBase::E_None != rc )
-            throw IllegalArgumentException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "directory is not a valid file url" )),
+            throw IllegalArgumentException( 
+                OUString::createFromAscii( "directory is not a valid file url" ),
                 static_cast< XFolderPicker* >( m_pFolderPicker ),
-                1 );
-
+                1 );                             				
+      
         // we ensure that there is a trailing '/' at the end of
         // he given file url, because the windows functions only
         // works correctly when providing "c:\" or an environment
-        // variable like "=c:=c:\.." etc. is set, else the
-        // FolderPicker would stand in the root of the shell
-        // hierarchie which is the desktop folder
+        // variable like "=c:=c:\.." etc. is set, else the 
+        // FolderPicker would stand in the root of the shell 
+        // hierarchie which is the desktop folder        
         if ( sysDir.lastIndexOf( BACKSLASH ) != (sysDir.getLength( ) - 1) )
             sysDir += BACKSLASH;
     }
-
+    
     // call base class method
     CMtaFolderPicker::setDisplayDirectory( sysDir );
 }
@@ -116,7 +116,7 @@ void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirect
 // we return the directory in URL format
 //------------------------------------------------------------------------
 
-OUString CWinFolderPickerImpl::getDisplayDirectory( )
+OUString CWinFolderPickerImpl::getDisplayDirectory( ) 
     throw( RuntimeException )
 {
     // call base class method to get the directory in system format
@@ -125,12 +125,12 @@ OUString CWinFolderPickerImpl::getDisplayDirectory( )
     OUString displayDirectoryURL;
     if ( displayDirectory.getLength( ) )
         ::osl::FileBase::getFileURLFromSystemPath( displayDirectory, displayDirectoryURL );
-
+    
     return displayDirectoryURL;
 }
 
 //------------------------------------------------------------------------
-//
+// 
 //------------------------------------------------------------------------
 
 OUString SAL_CALL CWinFolderPickerImpl::getDirectory( ) throw( RuntimeException )
@@ -145,18 +145,18 @@ OUString SAL_CALL CWinFolderPickerImpl::getDirectory( ) throw( RuntimeException 
 }
 
 //------------------------------------------------------------------------
-//
+// 
 //------------------------------------------------------------------------
 
 sal_Int16 SAL_CALL CWinFolderPickerImpl::execute( ) throw( RuntimeException )
-{
-    return m_nLastDlgResult = CMtaFolderPicker::browseForFolder( ) ?
+{	
+    return m_nLastDlgResult = CMtaFolderPicker::browseForFolder( ) ? 
         ::com::sun::star::ui::dialogs::ExecutableDialogResults::OK :
         ::com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
 //---------------------------------------------------------------------
-//
+// 
 //---------------------------------------------------------------------
 
 void CWinFolderPickerImpl::onSelChanged( const OUString& aNewPath )

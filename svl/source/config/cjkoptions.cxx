@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,11 @@
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
+#define C2U(cChar) OUString::createFromAscii(cChar)
 #define CFG_READONLY_DEFAULT sal_False
+/* -----------------------------10.04.01 12:39--------------------------------
 
+ ---------------------------------------------------------------------------*/
 class SvtCJKOptions_Impl : public utl::ConfigItem
 {
     sal_Bool        bIsLoaded;
@@ -75,8 +77,8 @@ public:
     SvtCJKOptions_Impl();
     ~SvtCJKOptions_Impl();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
-    virtual void    Commit();
+    virtual void 	Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
+    virtual void	Commit();
     void            Load();
 
     sal_Bool IsLoaded()                         { return bIsLoaded;         }
@@ -97,11 +99,13 @@ public:
     void    SetAll(sal_Bool bSet);
     sal_Bool IsReadOnly(SvtCJKOptions::EOption eOption) const;
 };
+/*-- 10.04.01 12:41:57---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 namespace
-{
-    struct PropertyNames
-        : public rtl::Static< Sequence<OUString>, PropertyNames > {};
+{ 
+    struct PropertyNames 
+        : public rtl::Static< Sequence<OUString>, PropertyNames > {}; 
 }
 
 SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
@@ -127,11 +131,15 @@ SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
     bROVerticalCallOut(CFG_READONLY_DEFAULT)
 {
 }
+/*-- 10.04.01 12:41:57---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 SvtCJKOptions_Impl::~SvtCJKOptions_Impl()
 {
 }
+/* -----------------------------20.04.01 14:34--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void    SvtCJKOptions_Impl::SetAll(sal_Bool bSet)
 {
     if (
@@ -161,7 +169,9 @@ void    SvtCJKOptions_Impl::SetAll(sal_Bool bSet)
         NotifyListeners(0);
     }
 }
+/*-- 10.04.01 12:41:56---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SvtCJKOptions_Impl::Load()
 {
     Sequence<OUString> &rPropertyNames = PropertyNames::get();
@@ -214,7 +224,7 @@ void SvtCJKOptions_Impl::Load()
     SvtSystemLanguageOptions aSystemLocaleSettings;
     LanguageType eSystemLanguage = aSystemLocaleSettings.GetWin16SystemLanguage();
     sal_uInt16 nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
-
+    
     sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
     if ( !bCJKFont && (( nScriptType & SCRIPTTYPE_ASIAN )||
              ((eSystemLanguage != LANGUAGE_SYSTEM)  && ( nWinScript & SCRIPTTYPE_ASIAN ))))
@@ -223,13 +233,17 @@ void SvtCJKOptions_Impl::Load()
     }
     bIsLoaded = sal_True;
 }
+/*-- 10.04.01 12:41:57---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void    SvtCJKOptions_Impl::Notify( const Sequence< OUString >& )
 {
     Load();
     NotifyListeners(0);
 }
+/*-- 10.04.01 12:41:57---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void    SvtCJKOptions_Impl::Commit()
 {
     Sequence<OUString> &rPropertyNames = PropertyNames::get();
@@ -352,7 +366,9 @@ void    SvtCJKOptions_Impl::Commit()
     aValues.realloc(nRealCount);
     PutProperties(aNames, aValues);
 }
+/*-- 13.02.2003 12:12---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 sal_Bool SvtCJKOptions_Impl::IsReadOnly(SvtCJKOptions::EOption eOption) const
 {
     sal_Bool bReadOnly = CFG_READONLY_DEFAULT;
@@ -462,19 +478,25 @@ sal_Bool SvtCJKOptions::IsVerticalCallOutEnabled() const
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsVerticalCallOutEnabled();
 }
+/*-- 20.04.01 14:32:04---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void        SvtCJKOptions::SetAll(sal_Bool bSet)
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     pCJKOptions->SetAll(bSet);
 }
+/*-- 20.04.01 14:32:06---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 sal_Bool    SvtCJKOptions::IsAnyEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsAnyEnabled();
 }
+/*-- 13.02.2003 12:11---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 sal_Bool    SvtCJKOptions::IsReadOnly(EOption eOption) const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");

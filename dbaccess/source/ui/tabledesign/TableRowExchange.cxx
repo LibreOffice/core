@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Bool OTableRowExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
-        sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
+        ULONG nFormat = SotExchange::GetFormat(rFlavor);
         if(nFormat == SOT_FORMATSTR_ID_SBA_TABED)
             return SetObject(&m_vTableRow,SOT_FORMATSTR_ID_SBA_TABED,rFlavor);
         return sal_False;
@@ -80,5 +80,12 @@ namespace dbaui
     }
     // -----------------------------------------------------------------------------
 }
+
+
+
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

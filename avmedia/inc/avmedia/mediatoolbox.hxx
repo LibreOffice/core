@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace avmedia
 
 class MediaItem;
 
-class MediaToolBoxControl : public SfxToolBoxControl
+class MediaToolBoxControl : public SfxToolBoxControl 
 {
      friend class MediaToolBoxControl_Impl;
 
@@ -49,16 +49,16 @@ public:
 
                                 SFX_DECL_TOOLBOX_CONTROL();
 
-                                MediaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbX );
+                                MediaToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbX );
                                 ~MediaToolBoxControl();
 
-    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual Window*             CreateItemWindow( Window* pParent );
+    virtual void				StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual Window*				CreateItemWindow( Window* pParent );
 
 private:
 
-    void                        implUpdateMediaControl();
-    void                        implExecuteMediaControl( const MediaItem& rItem );
+    void						implUpdateMediaControl();
+    void 						implExecuteMediaControl( const MediaItem& rItem );
 };
 
 }

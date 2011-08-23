@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,7 @@
 #include "buildlistcontext.hxx"
 #include <rtl/ustring.hxx>
 #include "oox/helper/attributelist.hxx"
+#include "oox/core/namespaces.hxx"
 
 
 using namespace ::oox::core;
@@ -44,7 +45,7 @@ namespace oox { namespace ppt {
         : ContextHandler( rParent )
         , maTimeNodeList( aTimeNodeList )
         , mbInBldGraphic( false )
-        ,   mbBuildAsOne( false )
+        ,	mbBuildAsOne( false )
     {
     }
 
@@ -56,7 +57,7 @@ namespace oox { namespace ppt {
     {
         switch( aElement )
         {
-        case PPT_TOKEN( bldGraphic ):
+        case NMSP_PPT|XML_bldGraphic:
             mbInBldGraphic = false;
             break;
         default:
@@ -72,31 +73,31 @@ namespace oox { namespace ppt {
 
         switch( aElementToken )
         {
-        case PPT_TOKEN( bldAsOne ):
+        case NMSP_PPT|XML_bldAsOne:
             if( mbInBldGraphic )
             {
                 mbBuildAsOne = true;
             }
             break;
-        case PPT_TOKEN( bldSub ):
+        case NMSP_PPT|XML_bldSub:
             if( mbInBldGraphic )
             {
             }
             break;
-        case PPT_TOKEN( bldGraphic ):
+        case NMSP_PPT|XML_bldGraphic:
         {
             mbInBldGraphic = true;
             AttributeList attribs( xAttribs );
             OUString sShapeId = xAttribs->getOptionalValue( XML_spid );
 // TODO
-//      bool uiExpand = attribs.getBool( XML_uiExpand, true );
+//		bool uiExpand = attribs.getBool( XML_uiExpand, true );
                 /* this is unsigned */
-//      sal_uInt32 nGroupId =  attribs.getUnsignedInteger( XML_grpId, 0 );
+//		sal_uInt32 nGroupId =  attribs.getUnsignedInteger( XML_grpId, 0 );
             break;
         }
-        case A_TOKEN( bldDgm ):
-        case A_TOKEN( bldOleChart ):
-        case A_TOKEN( bldP ):
+        case NMSP_DRAWINGML|XML_bldDgm:
+        case NMSP_DRAWINGML|XML_bldOleChart:
+        case NMSP_DRAWINGML|XML_bldP:
 
             break;
         default:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ SV_DECL_REF(SbxMemoryStream)
 class SbxMemoryStream : public SbxBase, public SvMemoryStream
 {
   public:
-    SbxMemoryStream(sal_uIntPtr nInitSize_=512, sal_uIntPtr nResize_=64) :
+    SbxMemoryStream(ULONG nInitSize_=512, ULONG nResize_=64) :
         SvMemoryStream(nInitSize_,nResize_) {}
     ~SbxMemoryStream();
 

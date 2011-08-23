@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,11 +37,9 @@
 #include <pam.hxx>
 #include <pagedesc.hxx>
 #include <charfmt.hxx>
-#include <UndoAttribute.hxx>
-#include <hints.hxx>
+#include <undobj.hxx>
 #include <rolbck.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <ftninfo.hxx>
@@ -52,8 +50,8 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {
     if( rInfo.GetFtnTxtColl() )
         rInfo.GetFtnTxtColl()->Add(this);
-    else if ( GetRegisteredIn())
-        GetRegisteredInNonConst()->Remove(this);
+    else if ( pRegisteredIn)
+        pRegisteredIn->Remove(this);
 
     if ( rInfo.aPageDescDep.GetRegisteredIn() )
         ((SwModify*)rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
@@ -81,7 +79,7 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 }
 
 
-sal_Bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
+BOOL SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
 {
     return  aPageDescDep.GetRegisteredIn() ==
                                 rInfo.aPageDescDep.GetRegisteredIn() &&
@@ -109,8 +107,8 @@ SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
     aFmt( rInfo.aFmt ),
     nFtnOffset( rInfo.nFtnOffset )
 {
-    if( rInfo.aPageDescDep.GetRegisteredIn() )
-        ((SwModify*)rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
+    if( rInfo.GetPageDescDep()->GetRegisteredIn() )
+        ((SwModify*)rInfo.GetPageDescDep()->GetRegisteredIn())->Add( &aPageDescDep );
 
     if( rInfo.aCharFmtDep.GetRegisteredIn() )
         ((SwModify*)rInfo.aCharFmtDep.GetRegisteredIn())->Add( &aCharFmtDep );
@@ -139,18 +137,7 @@ SwPageDesc *SwEndNoteInfo::GetPageDesc( SwDoc &rDoc ) const
             m_bEndNote ? RES_POOLPAGE_ENDNOTE   : RES_POOLPAGE_FOOTNOTE ) );
         pDesc->Add( &((SwClient&)aPageDescDep) );
     }
-
-    return (SwPageDesc*)( aPageDescDep.GetRegisteredIn() );
-}
-
-bool SwEndNoteInfo::KnowsPageDesc() const
-{
-    return (aPageDescDep.GetRegisteredIn() != 0);
-}
-
-bool SwEndNoteInfo::DependsOn( const SwPageDesc* pDesc ) const
-{
-    return ( aPageDescDep.GetRegisteredIn() == pDesc );
+    return (SwPageDesc*)aPageDescDep.GetRegisteredIn();
 }
 
 void SwEndNoteInfo::ChgPageDesc( SwPageDesc *pDesc )
@@ -197,9 +184,9 @@ void SwEndNoteInfo::SetAnchorCharFmt( SwCharFmt* pChFmt )
     pChFmt->Add( &((SwClient&)aAnchorCharFmtDep) );
 }
 
-void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwEndNoteInfo::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
+    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
 
     if( RES_ATTRSET_CHG == nWhich ||
         RES_FMT_CHG == nWhich )
@@ -210,7 +197,7 @@ void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         else
             pDoc = ((SwCharFmt*)aAnchorCharFmtDep.GetRegisteredIn())->GetDoc();
         SwFtnIdxs& rFtnIdxs = pDoc->GetFtnIdxs();
-        for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
+        for( USHORT nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
         {
             SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
             const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -221,7 +208,7 @@ void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
     }
     else
-        CheckRegistration( pOld, pNew );
+        SwClient::Modify( pOld, pNew );
 }
 
 SwFtnInfo& SwFtnInfo::operator=(const SwFtnInfo& rInfo)
@@ -235,9 +222,9 @@ SwFtnInfo& SwFtnInfo::operator=(const SwFtnInfo& rInfo)
 }
 
 
-sal_Bool SwFtnInfo::operator==( const SwFtnInfo& rInfo ) const
+BOOL SwFtnInfo::operator==( const SwFtnInfo& rInfo ) const
 {
-    return  ePos == rInfo.ePos &&
+    return	ePos == rInfo.ePos &&
             eNum == rInfo.eNum &&
             SwEndNoteInfo::operator==(rInfo) &&
             aQuoVadis == rInfo.aQuoVadis &&
@@ -269,49 +256,45 @@ SwFtnInfo::SwFtnInfo(SwTxtFmtColl *pFmt) :
 
 void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 {
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
     if( !(GetFtnInfo() == rInfo) )
     {
         const SwFtnInfo &rOld = GetFtnInfo();
 
-        if (GetIDocumentUndoRedo().DoesUndo())
+        if( DoesUndo() )
         {
-            GetIDocumentUndoRedo().AppendUndo( new SwUndoFootNoteInfo(rOld) );
+            ClearRedo();
+            AppendUndo( new SwUndoFootNoteInfo( rOld ) );
         }
 
-        sal_Bool bFtnPos  = rInfo.ePos != rOld.ePos;
-        sal_Bool bFtnDesc = rOld.ePos == FTNPOS_CHAPTER &&
+        BOOL bFtnPos  = rInfo.ePos != rOld.ePos;
+        BOOL bFtnDesc = rOld.ePos == FTNPOS_CHAPTER &&
                             rInfo.GetPageDesc( *this ) != rOld.GetPageDesc( *this );
-        sal_Bool bExtra   = rInfo.aQuoVadis != rOld.aQuoVadis ||
+        BOOL bExtra   = rInfo.aQuoVadis != rOld.aQuoVadis ||
                             rInfo.aErgoSum != rOld.aErgoSum ||
                             rInfo.aFmt.GetNumberingType() != rOld.aFmt.GetNumberingType() ||
                             rInfo.GetPrefix() != rOld.GetPrefix() ||
                             rInfo.GetSuffix() != rOld.GetSuffix();
         SwCharFmt *pOldChrFmt = rOld.GetCharFmt( *this ),
                   *pNewChrFmt = rInfo.GetCharFmt( *this );
-        sal_Bool bFtnChrFmts = pOldChrFmt != pNewChrFmt;
+        BOOL bFtnChrFmts = pOldChrFmt != pNewChrFmt;
 
         *pFtnInfo = rInfo;
 
-        if (pTmpRoot)
+        if ( GetRootFrm() )
         {
-            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080304
             if ( bFtnPos )
-                //pTmpRoot->RemoveFtns();
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllRemoveFtns));//swmod 080305
+                GetRootFrm()->RemoveFtns();
             else
             {
-                //pTmpRoot->UpdateFtnNums();
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));//swmod 080304
+                GetRootFrm()->UpdateFtnNums();
                 if ( bFtnDesc )
-                    //pTmpRoot->CheckFtnPageDescs( FALSE );
-                    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_False));//swmod 080304
+                    GetRootFrm()->CheckFtnPageDescs( FALSE );
                 if ( bExtra )
                 {
                     //Fuer die Benachrichtung bezueglich ErgoSum usw. sparen wir uns
                     //extra-Code und nutzen die vorhandenen Wege.
                     SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
-                    for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
+                    for( USHORT nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
                     {
                         SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
                         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -320,17 +303,18 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
                     }
                 }
             }
-        }   //swmod 080219
+        }
         if( FTNNUM_PAGE != rInfo.eNum )
             GetFtnIdxs().UpdateAllFtn();
         else if( bFtnChrFmts )
         {
             SwFmtChg aOld( pOldChrFmt );
             SwFmtChg aNew( pNewChrFmt );
-            pFtnInfo->ModifyNotification( &aOld, &aNew );
+            pFtnInfo->Modify( &aOld, &aNew );
         }
 
-        // #i81002# no update during loading
+        // --> OD 2008-01-09 #i81002#
+        // no update during loading
         if ( !IsInReading() )
         {
             UpdateRefFlds(NULL);
@@ -341,16 +325,15 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 
 void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 {
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
     if( !(GetEndNoteInfo() == rInfo) )
     {
-        if(GetIDocumentUndoRedo().DoesUndo())
+        if( DoesUndo() )
         {
-            SwUndo *const pUndo( new SwUndoEndNoteInfo( GetEndNoteInfo() ) );
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            ClearRedo();
+            AppendUndo( new SwUndoEndNoteInfo( GetEndNoteInfo() ) );
         }
 
-        sal_Bool bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
+        BOOL bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
         // this seems to be an optimization: UpdateAllFtn() is only called
         // if the offset changes; if the offset is the same,
         // but type/prefix/suffix changes, just set new numbers.
@@ -360,28 +343,24 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
                 ||  (rInfo.GetPrefix() != GetEndNoteInfo().GetPrefix())
                 ||  (rInfo.GetSuffix() != GetEndNoteInfo().GetSuffix())
                 );
-        sal_Bool bFtnDesc = rInfo.GetPageDesc( *this ) !=
+        BOOL bFtnDesc = rInfo.GetPageDesc( *this ) !=
                             GetEndNoteInfo().GetPageDesc( *this );
         SwCharFmt *pOldChrFmt = GetEndNoteInfo().GetCharFmt( *this ),
                   *pNewChrFmt = rInfo.GetCharFmt( *this );
-        sal_Bool bFtnChrFmts = pOldChrFmt != pNewChrFmt;
+        BOOL bFtnChrFmts = pOldChrFmt != pNewChrFmt;
 
         *pEndNoteInfo = rInfo;
 
-        if ( pTmpRoot )
+        if ( GetRootFrm() )
         {
             if ( bFtnDesc )
-                //pTmpRoot->CheckFtnPageDescs( TRUE );
-            {
-                std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_True));//swmod 080304
-            }
+                GetRootFrm()->CheckFtnPageDescs( TRUE );
             if ( bExtra )
             {
                 //Fuer die Benachrichtung bezueglich ErgoSum usw. sparen wir uns
                 //extra-Code und nutzen die vorhandenen Wege.
                 SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
-                for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
+                for( USHORT nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
                 {
                     SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
                     const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -389,17 +368,18 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
                         pTxtFtn->SetNumber( rFtn.GetNumber(), &rFtn.GetNumStr());
                 }
             }
-        }   //swmod 080219
+        }
         if( bNumChg )
             GetFtnIdxs().UpdateAllFtn();
         else if( bFtnChrFmts )
         {
             SwFmtChg aOld( pOldChrFmt );
             SwFmtChg aNew( pNewChrFmt );
-            pEndNoteInfo->ModifyNotification( &aOld, &aNew );
+            pEndNoteInfo->Modify( &aOld, &aNew );
         }
 
-        // #i81002# no update during loading
+        // --> OD 2008-01-09 #i81002#
+        // no update during loading
         if ( !IsInReading() )
         {
             UpdateRefFlds(NULL);
@@ -413,29 +393,28 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                        sal_uInt16 nNumber, bool bIsEndNote )
 {
     SwFtnIdxs& rFtnArr = GetFtnIdxs();
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
 
     const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
-    const sal_uLong nSttNd = pStt->nNode.GetIndex();
+    const ULONG nSttNd = pStt->nNode.GetIndex();
     const xub_StrLen nSttCnt = pStt->nContent.GetIndex();
-    const sal_uLong nEndNd = pEnd->nNode.GetIndex();
+    const ULONG nEndNd = pEnd->nNode.GetIndex();
     const xub_StrLen nEndCnt = pEnd->nContent.GetIndex();
 
-    sal_uInt16 nPos;
+    USHORT nPos;
     rFtnArr.SeekEntry( pStt->nNode, &nPos );
 
     SwUndoChangeFootNote* pUndo = 0;
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if( DoesUndo() )
     {
-        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
+        ClearRedo();
         pUndo = new SwUndoChangeFootNote( rPam, rNumStr, nNumber, bIsEndNote );
     }
 
     SwTxtFtn* pTxtFtn;
-    sal_uLong nIdx;
-    sal_Bool bChg = sal_False;
-    sal_Bool bTypeChgd = sal_False;
-    sal_uInt16 n = nPos;        // sichern
+    ULONG nIdx;
+    BOOL bChg = FALSE;
+    BOOL bTypeChgd = FALSE;
+    USHORT n = nPos;		// sichern
     while( nPos < rFtnArr.Count() &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ nPos++ ] )))
                 < nEndNd || ( nIdx == nEndNd &&
@@ -444,10 +423,11 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                 nSttCnt <= *pTxtFtn->GetStart() ) )
         {
             const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-            if( rFtn.GetNumStr() != rNumStr ||
+            if( /*rFtn.GetNumber() != nNumber ||*/
+                rFtn.GetNumStr() != rNumStr ||
                 rFtn.IsEndNote() != bIsEndNote )
             {
-                bChg = sal_True;
+                bChg = TRUE;
                 if ( pUndo )
                 {
                     pUndo->GetHistory().Add( *pTxtFtn );
@@ -457,16 +437,16 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                 if( rFtn.IsEndNote() != bIsEndNote )
                 {
                     ((SwFmtFtn&)rFtn).SetEndNote( bIsEndNote );
-                    bTypeChgd = sal_True;
+                    bTypeChgd = TRUE;
                     pTxtFtn->CheckCondColl();
                     //#i11339# dispose UNO wrapper when a footnote is changed to an endnote or vice versa
                     SwPtrMsgPoolItem aMsgHint( RES_FOOTNOTE_DELETED, (void*)&pTxtFtn->GetAttr() );
-                    GetUnoCallBack()->ModifyNotification( &aMsgHint, &aMsgHint );
+                    GetUnoCallBack()->Modify( &aMsgHint, &aMsgHint );
                 }
             }
         }
 
-    nPos = n;       // nach vorne gibt es auch noch welche !
+    nPos = n;		// nach vorne gibt es auch noch welche !
     while( nPos &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ --nPos ] )))
                 > nSttNd || ( nIdx == nSttNd &&
@@ -475,10 +455,11 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
             nEndCnt >= *pTxtFtn->GetStart() ) )
         {
             const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-            if( rFtn.GetNumStr() != rNumStr ||
+            if( /*rFtn.GetNumber() != nNumber ||*/
+                rFtn.GetNumStr() != rNumStr ||
                 rFtn.IsEndNote() != bIsEndNote )
             {
-                bChg = sal_True;
+                bChg = TRUE;
                 if ( pUndo )
                 {
                     pUndo->GetHistory().Add( *pTxtFtn );
@@ -488,7 +469,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                 if( rFtn.IsEndNote() != bIsEndNote )
                 {
                     ((SwFmtFtn&)rFtn).SetEndNote( bIsEndNote );
-                    bTypeChgd = sal_True;
+                    bTypeChgd = TRUE;
                     pTxtFtn->CheckCondColl();
                 }
             }
@@ -499,7 +480,8 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
     {
         if( pUndo )
         {
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            ClearRedo();
+            AppendUndo( pUndo );
         }
 
         if ( bTypeChgd )
@@ -509,12 +491,8 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
             if ( !bTypeChgd )
                 rFtnArr.UpdateAllFtn();
         }
-        else if( pTmpRoot )
-            //
-        {
-            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));
-        }   //swmod 080304pTmpRoot->UpdateFtnNums();    //swmod 080219
+        else if( GetRootFrm() )
+            GetRootFrm()->UpdateFtnNums();
         SetModified();
     }
     else

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -195,10 +195,10 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         styleCat = new StyleCatalog(25);
         NodeList nl = null;
-        String families[] = new String[] {  SxcConstants.COLUMN_STYLE_FAMILY,
+        String families[] = new String[] {	SxcConstants.COLUMN_STYLE_FAMILY,
                                             SxcConstants.ROW_STYLE_FAMILY,
                                             SxcConstants.TABLE_CELL_STYLE_FAMILY };
-        Class classes[]   = new Class[] {   ColumnStyle.class,
+        Class classes[]   = new Class[] {	ColumnStyle.class,
                                             RowStyle.class,
                                             CellStyle.class};
         /*
@@ -408,14 +408,14 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
             } else {
 
-                RowStyle rStyle = ( RowStyle)styleCat.lookup(styleName,
+                RowStyle rStyle = (	RowStyle)styleCat.lookup(styleName,
                                         SxcConstants.ROW_STYLE_FAMILY, null,
                                         RowStyle.class);
 
                 int rowHeight = rStyle.getRowHeight();
 
                 Debug.log(Debug.TRACE, "traverseTableRow() Row Height : " + rowHeight);
-                ColumnRowInfo ri = new ColumnRowInfo(   rowHeight,
+                ColumnRowInfo ri = new ColumnRowInfo(	rowHeight,
                                                             repeatedRows,
                                                             ColumnRowInfo.ROW,
                                                             rowHeight!=0);
@@ -651,6 +651,10 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             }
         }
 
+
+        // for (int j = 0; j < colsRepeated; j++) {
+
+
         if (tableValueTypeNode != null) {
 
             // Make sure we initialize to 0 the width of the current cell
@@ -742,7 +746,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         if(tableFormulaNode != null)
         {
-            if(tableValueTypeNode == null) {            // If there is no value-type Node we must assume string-value
+            if(tableValueTypeNode == null) {			// If there is no value-type Node we must assume string-value
                 fmt.setCategory(CELLTYPE_STRING);
                 Node tableStringValueNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_STRING_VALUE);
                 fmt.setValue(tableStringValueNode.getNodeValue());
@@ -854,6 +858,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             }
 
             String s = buffer.toString();
+            // displayWidth = calculateContentWidth(s);
             addCell(s);
 
         }
@@ -954,6 +959,8 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 if (child.getNodeType() == Node.TEXT_NODE) {
 
                     String s = child.getNodeValue();
+
+                    // displayWidth = calculateContentWidth(s);
 
                     int k = s.lastIndexOf(".");
                     if (k > 0) {

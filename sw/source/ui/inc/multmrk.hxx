@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,15 +31,19 @@
 
 
 #include <svx/stddlg.hxx>
+
 #include <vcl/fixed.hxx>
 #include <svtools/stdctrl.hxx>
+
 #include <vcl/lstbox.hxx>
+#include <vcl/fixed.hxx>
+
 #include <vcl/button.hxx>
 
 class SwTOXMgr;
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Markierung fuer Verzeichniseintrag einfuegen
+     Beschreibung:	Markierung fuer Verzeichniseintrag einfuegen
  --------------------------------------------------------------------*/
 
 class SwMultiTOXMarkDlg : public SvxStandardDialog
@@ -47,17 +51,17 @@ class SwMultiTOXMarkDlg : public SvxStandardDialog
     DECL_LINK( SelectHdl, ListBox * );
 
     FixedLine           aTOXFL;
-    FixedText           aEntryFT;
-    FixedInfo           aTextFT;
-    FixedText           aTOXFT;
-    ListBox             aTOXLB;
-    OKButton            aOkBT;
-    CancelButton        aCancelBT;
+    FixedText 			aEntryFT;
+    FixedInfo 			aTextFT;
+    FixedText 			aTOXFT;
+    ListBox	 			aTOXLB;
+    OKButton 			aOkBT;
+    CancelButton 		aCancelBT;
 
-    SwTOXMgr           &rMgr;
-    sal_uInt16              nPos;
+    SwTOXMgr		   &rMgr;
+    USHORT				nPos;
 
-    void                Apply();
+    void				Apply();
 public:
     SwMultiTOXMarkDlg( Window* pParent, SwTOXMgr &rTOXMgr );
     ~SwMultiTOXMarkDlg();

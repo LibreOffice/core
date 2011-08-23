@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,12 +132,12 @@ public class SmGraphicAccessible extends TestCase {
 
         final XAccessibleComponent xAC = (XAccessibleComponent)
             UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
-
+        
         TestEnvironment tEnv = new TestEnvironment(oObj);
-
-        tEnv.addObjRelation("EditOnly",
+        
+        tEnv.addObjRelation("EditOnly", 
                     "This method isn't supported in this dialog");
-
+        
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){

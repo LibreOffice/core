@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,32 +60,31 @@ namespace
 static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.WallOrFloor" ));
 
-struct StaticWallFloorWrapperPropertyArray_Initializer
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
-        return &aPropSeq;
-    }
+    static Sequence< Property > aPropSeq;
 
-private:
-    Sequence< Property > lcl_GetPropertySequence()
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
+//         ::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
-};
 
-struct StaticWallFloorWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticWallFloorWrapperPropertyArray_Initializer >
-{
-};
+    return aPropSeq;
+}
 
 } // anonymous namespace
 
@@ -116,8 +115,10 @@ void SAL_CALL WallFloorWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
+    // /--
     MutexGuard aGuard( GetMutex());
     clearWrappedPropertySet();
+    // \--
 }
 
 void SAL_CALL WallFloorWrapper::addEventListener(
@@ -155,7 +156,7 @@ Reference< beans::XPropertySet > WallFloorWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& WallFloorWrapper::getPropertySequence()
 {
-    return *StaticWallFloorWrapperPropertyArray::get();
+    return lcl_GetPropertySequence();
 }
 
 const std::vector< WrappedProperty* > WallFloorWrapper::createWrappedProperties()

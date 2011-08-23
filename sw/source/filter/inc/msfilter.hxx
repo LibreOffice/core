@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +32,11 @@
 #include <set>
 #include <map>
 #include <vector>
-#include <swtypes.hxx>       //SwTwips
-#include <tools/string.hxx>  //String
-#include "wwstyles.hxx"      //ww::sti
-#include <rtl/textenc.h>     //rtl_TextEncoding
-#include <tools/gen.hxx>     //Size
+#   include <swtypes.hxx>       //SwTwips
+#   include <tools/string.hxx>  //String
+#   include "wwstyles.hxx"      //ww::sti
+#   include <rtl/textenc.h>     //rtl_TextEncoding
+#   include <tools/gen.hxx>     //Size
 #include <tools/datetime.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 #include <redline.hxx>
@@ -70,13 +70,13 @@ namespace sw
     {
         /** MSOffice appears to set the charset of unicode fonts to MS 932
 
-            Arial Unicode MS for example is a unicode font, but word sets
+            Arial Unicode MS for example is a unicode font, but word sets 
             exported uses of it to the MS 932 charset
 
             @param eTextEncoding
                 the OOo encoding to convert from
 
-            @return
+            @return 
                 a msoffice equivalent charset identifier
 
             @author
@@ -119,7 +119,7 @@ namespace sw
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
-        sal_uLong MSDateTimeFormatToSwFormat(String& rParams, SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri, sal_uInt16 nDocLang);
+        ULONG MSDateTimeFormatToSwFormat(String& rParams, SvNumberFormatter *pFormatter, USHORT &rLang, bool bHijri);
 
         /** Used by MSDateTimeFormatToSwFormat to identify AM time fields
 
@@ -145,10 +145,10 @@ namespace sw
         /// Redlining Authors
         struct AuthorInfo
         {
-            sal_uInt16 nWWAuthorId;
-            sal_uInt16 nOurId;
+            USHORT nWWAuthorId;
+            USHORT nOurId;
 
-            AuthorInfo(sal_uInt16 nWWAuthorId_, sal_uInt16 nOurId_ = 0):
+            AuthorInfo(USHORT nWWAuthorId_, USHORT nOurId_ = 0):
                 nWWAuthorId( nWWAuthorId_ ),
                 nOurId(      nOurId_ )
                 {}
@@ -167,8 +167,8 @@ namespace sw
         /** Clips a value to MAX/MIN 16bit value to make it safe for use
             as a position value to give to writer. i.e. +-57.8cm. Sometimes
             we see ridiculous values for positioning in rtf and word document,
-            this captures such ones and clips them to values which are
-            still outside the document, but of a value that doesn't cause
+            this captures such ones and clips them to values which are 
+            still outside the document, but of a value that doesn't cause 
             problems for writer's layout, e.g. see
             http://www.openoffice.org/issues/show_bug.cgi?id=i9245
 
@@ -186,14 +186,14 @@ namespace sw
             Mapping a word style to a writer style has to consider mapping
             the word builtin styles like "Normal" as the default root style
             to our default root style which is called "Default" in english,
-            and "Normal" in german.
-
+            and "Normal" in german. 
+            
             Additionally it then has to avoid name collisions such as
 
             a) styles "Normal" and "Default" in a single document, where
             we can use the original distinct names "Normal" and "Default" and..
             b) styles "Normal" and "Default" in a single document, where
-            we can not use the original names, and must come up with an
+            we can not use the original names, and must come up with an 
             alternative name for one of them..
 
             And it needs to report to the importer if the style being mapped to
@@ -208,7 +208,7 @@ namespace sw
         {
         private:
             //I hate these things stupid pImpl things, but its warranted here
-            ParaMapper *mpImpl;
+            ParaMapper *mpImpl;     
         public:
             ParaStyleMapper(SwDoc &rDoc);
             ~ParaStyleMapper();
@@ -224,21 +224,21 @@ namespace sw
                 @param rName
                 The name of the word style
 
-                @param eSti
+                @param eSti 
                 The style id of the word style, we are really only interested
                 in knowing if the style has either a builtin standard id, or is
                 a user defined style.
-
+            
                 @return
                 The equivalent writer style packaged as a StyleResult to use
                 for this word style.
-
+                
                 It will only return a failure in the pathological case of
                 catastropic failure elsewhere of there exist already styles
                 rName and WW-rName[0..SAL_MAX_INT32], which is both unlikely
                 and impossible.
             */
-            StyleResult GetStyle(const String& rName, ww::sti eSti);
+            StyleResult GetStyle(const String& rName, ww::sti eSti); 
         };
 
         /** Knows which writer style a given word style should be imported as
@@ -246,14 +246,14 @@ namespace sw
             Mapping a word style to a writer style has to consider mapping
             the word builtin styles like "Normal" as the default root style
             to our default root style which is called "Default" in english,
-            and "Normal" in german.
-
+            and "Normal" in german. 
+            
             Additionally it then has to avoid name collisions such as
 
             a) styles "Normal" and "Default" in a single document, where
             we can use the original distinct names "Normal" and "Default" and..
             b) styles "Normal" and "Default" in a single document, where
-            we can not use the original names, and must come up with an
+            we can not use the original names, and must come up with an 
             alternative name for one of them..
 
             And it needs to report to the importer if the style being mapped to
@@ -268,7 +268,7 @@ namespace sw
         {
         private:
             //I hate these things stupid pImpl things, but its warranted here
-            CharMapper *mpImpl;
+            CharMapper *mpImpl;     
         public:
             CharStyleMapper(SwDoc &rDoc);
             ~CharStyleMapper();
@@ -284,25 +284,25 @@ namespace sw
                 @param rName
                 The name of the word style
 
-                @param eSti
+                @param eSti 
                 The style id of the word style, we are really only interested
                 in knowing if the style has either a builtin standard id, or is
                 a user defined style.
-
+            
                 @return
                 The equivalent writer style packaged as a StyleResult to use
                 for this word style.
-
+                
                 It will only return a failure in the pathological case of
                 catastropic failure elsewhere of there exist already styles
                 rName and WW-rName[0..SAL_MAX_INT32], which is both unlikely
                 and impossible.
             */
-            StyleResult GetStyle(const String& rName, ww::sti eSti);
+            StyleResult GetStyle(const String& rName, ww::sti eSti); 
         };
 
         /** Find suitable names for exporting this font
-
+            
             Given a fontname description find the best primary and secondary
             fallback font to use from MSWord's persp font
 
@@ -319,7 +319,7 @@ namespace sw
             bool HasDistinctSecondary() const;
             FontMapExport(const String &rFontDescription);
         };
-
+        
         class InsertedTableClient : public SwClient
         {
         public:
@@ -328,11 +328,11 @@ namespace sw
         };
 
         /** Handle requirements for table formatting in insert->file mode.
-
+            
             When inserting a table into a document which already has been
             formatted and laid out (e.g using insert->file) then tables
             must be handled in a special way, (or so previous comments and
-            code in the filters leads me to believe).
+            code in the filters leads me to believe). 
 
             Before the document is finalized the new tables need to have
             their layout frms deleted and recalculated. This TableManager
@@ -340,7 +340,7 @@ namespace sw
             a document should be registered with this manager with
             InsertTable, and before finialization DelAndMakeTblFrms should
             be called.
-
+            
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
 
@@ -437,7 +437,7 @@ namespace sw
         protected:
             std::vector<String> maAuthors;          // Array of Sw - Bookmarknames
 
-            sal_uInt16 GetPos( const String& rNm );
+            USHORT GetPos( const String& rNm );
 
             //No copying
             WrtRedlineAuthor(const WrtRedlineAuthor&);
@@ -446,7 +446,7 @@ namespace sw
             WrtRedlineAuthor() {}
             virtual ~WrtRedlineAuthor() {}
 
-            sal_uInt16 AddName( const String& rNm );
+            USHORT AddName( const String& rNm );
             virtual void Write(Writer &rWrt) = 0;
             // std::vector<String> GetNames();
         };
@@ -454,8 +454,8 @@ namespace sw
         /** Given a SwNoTxtNode (ole/graphic) get original size
 
             Get the uncropped and unscaled size of the underlying graphic or
-            ole object associated with a given SwNoTxtNode.
-
+            ole object associated with a given SwNoTxtNode. 
+            
             This function will swap in the graphic if it is swapped out from
             the graphic or object cache, but will swap it out if that was the
             case, i.e.  rNd is logically unchanged before and after
@@ -464,7 +464,7 @@ namespace sw
             @param rNd
                 the SwNoTxtNode whose objects original size we want
 
-            @return
+            @return 
                 the uncropped unscaled size of the SwNoTxtNode
 
             @author
@@ -478,9 +478,9 @@ namespace sw
             sal_uInt16 mnScript;
             rtl_TextEncoding meCharSet;
             bool mbRTL;
-            CharRunEntry(xub_StrLen nEndPos, sal_uInt16 nScript,
-                rtl_TextEncoding eCharSet, bool bRTL)
-            : mnEndPos(nEndPos), mnScript(nScript), meCharSet(eCharSet),
+            CharRunEntry(xub_StrLen nEndPos, sal_uInt16 nScript, 
+                rtl_TextEncoding eCharSet, bool bRTL) 
+            : mnEndPos(nEndPos), mnScript(nScript), meCharSet(eCharSet), 
             mbRTL(bRTL)
             {
             }
@@ -489,7 +489,7 @@ namespace sw
         typedef std::vector<CharRunEntry> CharRuns;
         typedef CharRuns::const_iterator cCharRunIter;
 
-        /** Collect the ranges of Text which share
+        /** Collect the ranges of Text which share 
 
             Word generally requires characters which share the same direction,
             the same script, and occasionally (depending on the format) the
@@ -512,13 +512,13 @@ namespace sw
             @return STL container of CharRuns which describe the shared
             direction, script and optionally script of the contigious sequences
             of characters
-
+            
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
 
             @see #i22537# for example
         */
-        CharRuns GetPseudoCharRuns(const SwTxtNode& rTxtNd,
+        CharRuns GetPseudoCharRuns(const SwTxtNode& rTxtNd, 
             xub_StrLen nStart = 0, bool bSplitOnCharSet = false);
     }
 }

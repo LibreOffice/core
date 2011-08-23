@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include "VAxisOrGridBase.hxx"
 #include "VAxisProperties.hxx"
-#include "Tickmarks.hxx"
+#include "TickmarkHelper.hxx"
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 //.............................................................................
@@ -53,25 +53,25 @@ public:
 
     sal_Int32 getDimensionCount();
 
-    virtual void createMaximumLabels()=0;
-    virtual void createLabels()=0;
-    virtual void updatePositions()=0;
+    virtual void SAL_CALL createMaximumLabels()=0;
+    virtual void SAL_CALL createLabels()=0;
+    virtual void SAL_CALL updatePositions()=0;
 
-    virtual sal_Bool isAnythingToDraw();
-    virtual void initAxisLabelProperties(
+    virtual sal_Bool SAL_CALL isAnythingToDraw();
+    virtual void SAL_CALL initAxisLabelProperties(
                     const ::com::sun::star::awt::Size& rFontReferenceSize
                   , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels );
 
-    virtual void setExplicitScaleAndIncrement(
-            const ExplicitScaleData& rScale
-          , const ExplicitIncrementData& rIncrement )
+    virtual void SAL_CALL setExplicitScaleAndIncrement(
+            const ::com::sun::star::chart2::ExplicitScaleData& rScale
+          , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement )
                 throw (::com::sun::star::uno::RuntimeException);
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
     virtual void createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
 
     void setExrtaLinePositionAtOtherAxis( const double& fCrossingAt );
-
+    
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 protected: //methods
@@ -83,9 +83,6 @@ protected: //methods
     void recordMaximumTextSize( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >& xShape
                     , double fRotationAngleDegree );
-
-    bool isDateAxis() const;
-    bool isComplexCategoryAxis() const;
 
 protected: //member
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;

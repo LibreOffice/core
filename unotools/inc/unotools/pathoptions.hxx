@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class SvtPathOptions_Impl;
 class UNOTOOLS_DLLPUBLIC SvtPathOptions: public utl::detail::Options
 {
 private:
-    SvtPathOptions_Impl*    pImp;
+    SvtPathOptions_Impl*	pImp;
 
 public:
     enum Pathes
@@ -77,63 +77,62 @@ public:
     virtual ~SvtPathOptions();
 
     // get the pathes, not const because of using a mutex
-    const String&   GetAddinPath() const;
-    const String&   GetAutoCorrectPath() const;
-    const String&   GetAutoTextPath() const;
-    const String&   GetBackupPath() const;
-    const String&   GetBasicPath() const;
-    const String&   GetBitmapPath() const;
-    const String&   GetConfigPath() const;
-    const String&   GetDictionaryPath() const;
-    const String&   GetFavoritesPath() const;
-    const String&   GetFilterPath() const;
-    const String&   GetGalleryPath() const;
-    const String&   GetGraphicPath() const;
-    const String&   GetHelpPath() const;
-    const String&   GetLinguisticPath() const;
-    const String&   GetModulePath() const;
-    const String&   GetPalettePath() const;
-    const String&   GetPluginPath() const;
-    const String&   GetStoragePath() const;
-    const String&   GetTempPath() const;
-    const String&   GetTemplatePath() const;
-    const String&   GetUserConfigPath() const;
-    const String&   GetWorkPath() const;
+    const String&	GetAddinPath() const;
+    const String&	GetAutoCorrectPath() const;
+    const String&	GetAutoTextPath() const;
+    const String&	GetBackupPath() const;
+    const String&	GetBasicPath() const;
+    const String&	GetBitmapPath() const;
+    const String&	GetConfigPath() const;
+    const String&	GetDictionaryPath() const;
+    const String&	GetFavoritesPath() const;
+    const String&	GetFilterPath() const;
+    const String&	GetGalleryPath() const;
+    const String&	GetGraphicPath() const;
+    const String&	GetHelpPath() const;
+    const String&	GetLinguisticPath() const;
+    const String&	GetModulePath() const;
+    const String&	GetPalettePath() const;
+    const String&	GetPluginPath() const;
+    const String&	GetStoragePath() const;
+    const String&	GetTempPath() const;
+    const String&	GetTemplatePath() const;
+    const String&	GetUserConfigPath() const;
+    const String&	GetWorkPath() const;
     const String&   GetUIConfigPath() const;
     const String&   GetFingerprintPath() const;
 
-    sal_Bool            IsPathReadonly(Pathes ePath)const;
+    BOOL            IsPathReadonly(Pathes ePath)const;
     const String&   GetPath(Pathes ePath) const;
 
     // set the pathes
-    void            SetAddinPath( const String& rPath );
-    void            SetAutoCorrectPath( const String& rPath );
-    void            SetAutoTextPath( const String& rPath );
-    void            SetBackupPath( const String& rPath );
-    void            SetBasicPath( const String& rPath );
-    void            SetBitmapPath( const String& rPath );
-    void            SetConfigPath( const String& rPath );
-    void            SetDictionaryPath( const String& rPath );
-    void            SetFavoritesPath( const String& rPath );
-    void            SetFilterPath( const String& rPath );
-    void            SetGalleryPath( const String& rPath );
-    void            SetGraphicPath( const String& rPath );
-    void            SetHelpPath( const String& rPath );
-    void            SetLinguisticPath( const String& rPath );
-    void            SetModulePath( const String& rPath );
-    void            SetPalettePath( const String& rPath );
-    void            SetPluginPath( const String& rPath );
-    void            SetStoragePath( const String& rPath );
-    void            SetTempPath( const String& rPath );
-    void            SetTemplatePath( const String& rPath );
-    void            SetUserConfigPath( const String& rPath );
-    void            SetWorkPath( const String& rPath );
+    void			SetAddinPath( const String& rPath );
+    void			SetAutoCorrectPath( const String& rPath );
+    void			SetAutoTextPath( const String& rPath );
+    void			SetBackupPath( const String& rPath );
+    void			SetBasicPath( const String& rPath );
+    void			SetBitmapPath( const String& rPath );
+    void			SetConfigPath( const String& rPath );
+    void			SetDictionaryPath( const String& rPath );
+    void			SetFavoritesPath( const String& rPath );
+    void			SetFilterPath( const String& rPath );
+    void			SetGalleryPath( const String& rPath );
+    void			SetGraphicPath( const String& rPath );
+    void			SetHelpPath( const String& rPath );
+    void			SetLinguisticPath( const String& rPath );
+    void			SetModulePath( const String& rPath );
+    void			SetPalettePath( const String& rPath );
+    void			SetPluginPath( const String& rPath );
+    void			SetStoragePath( const String& rPath );
+    void			SetTempPath( const String& rPath );
+    void			SetTemplatePath( const String& rPath );
+    void			SetUserConfigPath( const String& rPath );
+    void			SetWorkPath( const String& rPath );
     void            SetPath( SvtPathOptions::Pathes ePath, const String& rNewPath );
 
-    String          SubstituteVariable( const String& rVar ) const;
-    String          ExpandMacros( const String& rPath ) const;
-    String          UseVariable( const String& rVar ) const;
-    sal_Bool        SearchFile( String& rIniFile, Pathes ePath = PATH_USERCONFIG );
+    String			SubstituteVariable( const String& rVar );
+    String			UseVariable( const String& rVar );
+    sal_Bool		SearchFile( String& rIniFile, Pathes ePath = PATH_USERCONFIG );
     ::com::sun::star::lang::Locale GetLocale() const;
     sal_Bool        IsReadonly() const;
 };

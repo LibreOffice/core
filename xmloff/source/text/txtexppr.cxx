@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -409,12 +409,13 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pHoriOrientRelState = NULL;
     XMLPropertyState* pHoriOrientRelFrameState = NULL;
     XMLPropertyState* pHoriOrientMirrorState = NULL;
-    // Horizontal position and relation for shapes (#i28749#)
+    // --> OD 2004-08-09 #i28749# - horizontal position and relation for shapes
     XMLPropertyState* pShapeHoriOrientState = NULL;
     XMLPropertyState* pShapeHoriOrientMirroredState = NULL;
     XMLPropertyState* pShapeHoriOrientRelState = NULL;
     XMLPropertyState* pShapeHoriOrientRelFrameState = NULL;
     XMLPropertyState* pShapeHoriOrientMirrorState = NULL;
+    // <--
 
     // vertical position and relation
     XMLPropertyState* pVertOrientState = NULL;
@@ -424,12 +425,13 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pVertOrientRelFrameState = NULL;
     XMLPropertyState* pVertOrientRelAsCharState = NULL;
 
-    // Vertical position and relation for shapes (#i28749#)
+    // --> OD 2004-08-09 #i28749# - vertical position and relation for shapes
     XMLPropertyState* pShapeVertOrientState = NULL;
     XMLPropertyState* pShapeVertOrientAtCharState = NULL;
     XMLPropertyState* pShapeVertOrientRelState = NULL;
     XMLPropertyState* pShapeVertOrientRelPageState = NULL;
     XMLPropertyState* pShapeVertOrientRelFrameState = NULL;
+    // <--
 
     // filter underline color
     XMLPropertyState* pUnderlineState = NULL;
@@ -455,72 +457,72 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
         switch( getPropertySetMapper()->GetEntryContextId( propertie->mnIndex ) )
         {
-        case CTF_CHARHEIGHT:            pCharHeightState = propertie; break;
-        case CTF_CHARHEIGHT_REL:        pCharPropHeightState = propertie; break;
-        case CTF_CHARHEIGHT_DIFF:       pCharDiffHeightState = propertie; break;
-        case CTF_CHARHEIGHT_CJK:        pCharHeightCJKState = propertie; break;
-        case CTF_CHARHEIGHT_REL_CJK:    pCharPropHeightCJKState = propertie; break;
-        case CTF_CHARHEIGHT_DIFF_CJK:   pCharDiffHeightCJKState = propertie; break;
-        case CTF_CHARHEIGHT_CTL:        pCharHeightCTLState = propertie; break;
-        case CTF_CHARHEIGHT_REL_CTL:    pCharPropHeightCTLState = propertie; break;
-        case CTF_CHARHEIGHT_DIFF_CTL:   pCharDiffHeightCTLState = propertie; break;
-        case CTF_PARALEFTMARGIN:        pParaLeftMarginState = propertie; break;
-        case CTF_PARALEFTMARGIN_REL:    pParaLeftMarginRelState = propertie; break;
-        case CTF_PARARIGHTMARGIN:       pParaRightMarginState = propertie; break;
-        case CTF_PARARIGHTMARGIN_REL:   pParaRightMarginRelState = propertie; break;
-        case CTF_PARAFIRSTLINE:         pParaFirstLineState = propertie; break;
-        case CTF_PARAFIRSTLINE_REL:     pParaFirstLineRelState = propertie; break;
-        case CTF_PARATOPMARGIN:         pParaTopMarginState = propertie; break;
-        case CTF_PARATOPMARGIN_REL:     pParaTopMarginRelState = propertie; break;
-        case CTF_PARABOTTOMMARGIN:      pParaBottomMarginState = propertie; break;
-        case CTF_PARABOTTOMMARGIN_REL:  pParaBottomMarginRelState = propertie; break;
-        case CTF_ALLBORDERWIDTH:        pAllBorderWidthState = propertie; break;
-        case CTF_LEFTBORDERWIDTH:       pLeftBorderWidthState = propertie; break;
-        case CTF_RIGHTBORDERWIDTH:      pRightBorderWidthState = propertie; break;
-        case CTF_TOPBORDERWIDTH:        pTopBorderWidthState = propertie; break;
-        case CTF_BOTTOMBORDERWIDTH:     pBottomBorderWidthState = propertie; break;
-        case CTF_ALLBORDERDISTANCE:     pAllBorderDistanceState = propertie; break;
-        case CTF_LEFTBORDERDISTANCE:    pLeftBorderDistanceState = propertie; break;
-        case CTF_RIGHTBORDERDISTANCE:   pRightBorderDistanceState = propertie; break;
-        case CTF_TOPBORDERDISTANCE:     pTopBorderDistanceState = propertie; break;
-        case CTF_BOTTOMBORDERDISTANCE:  pBottomBorderDistanceState = propertie; break;
-        case CTF_ALLBORDER:             pAllBorderState = propertie; break;
-        case CTF_LEFTBORDER:            pLeftBorderState = propertie; break;
-        case CTF_RIGHTBORDER:           pRightBorderState = propertie; break;
-        case CTF_TOPBORDER:             pTopBorderState = propertie; break;
-        case CTF_BOTTOMBORDER:          pBottomBorderState = propertie; break;
+        case CTF_CHARHEIGHT:			pCharHeightState = propertie; break;
+        case CTF_CHARHEIGHT_REL:		pCharPropHeightState = propertie; break;
+        case CTF_CHARHEIGHT_DIFF:		pCharDiffHeightState = propertie; break;
+        case CTF_CHARHEIGHT_CJK:		pCharHeightCJKState = propertie; break;
+        case CTF_CHARHEIGHT_REL_CJK:	pCharPropHeightCJKState = propertie; break;
+        case CTF_CHARHEIGHT_DIFF_CJK:	pCharDiffHeightCJKState = propertie; break;
+        case CTF_CHARHEIGHT_CTL:		pCharHeightCTLState = propertie; break;
+        case CTF_CHARHEIGHT_REL_CTL:	pCharPropHeightCTLState = propertie; break;
+        case CTF_CHARHEIGHT_DIFF_CTL:	pCharDiffHeightCTLState = propertie; break;
+        case CTF_PARALEFTMARGIN:		pParaLeftMarginState = propertie; break;
+        case CTF_PARALEFTMARGIN_REL:	pParaLeftMarginRelState = propertie; break;
+        case CTF_PARARIGHTMARGIN:		pParaRightMarginState = propertie; break;
+        case CTF_PARARIGHTMARGIN_REL:	pParaRightMarginRelState = propertie; break;
+        case CTF_PARAFIRSTLINE:			pParaFirstLineState = propertie; break;
+        case CTF_PARAFIRSTLINE_REL:		pParaFirstLineRelState = propertie; break;
+        case CTF_PARATOPMARGIN:			pParaTopMarginState = propertie; break;
+        case CTF_PARATOPMARGIN_REL:		pParaTopMarginRelState = propertie; break;
+        case CTF_PARABOTTOMMARGIN:		pParaBottomMarginState = propertie; break;
+        case CTF_PARABOTTOMMARGIN_REL:	pParaBottomMarginRelState = propertie; break;
+        case CTF_ALLBORDERWIDTH:		pAllBorderWidthState = propertie; break;
+        case CTF_LEFTBORDERWIDTH:		pLeftBorderWidthState = propertie; break;
+        case CTF_RIGHTBORDERWIDTH:		pRightBorderWidthState = propertie; break;
+        case CTF_TOPBORDERWIDTH:		pTopBorderWidthState = propertie; break;
+        case CTF_BOTTOMBORDERWIDTH:		pBottomBorderWidthState = propertie; break;
+        case CTF_ALLBORDERDISTANCE:		pAllBorderDistanceState = propertie; break;
+        case CTF_LEFTBORDERDISTANCE:	pLeftBorderDistanceState = propertie; break;
+        case CTF_RIGHTBORDERDISTANCE:	pRightBorderDistanceState = propertie; break;
+        case CTF_TOPBORDERDISTANCE:		pTopBorderDistanceState = propertie; break;
+        case CTF_BOTTOMBORDERDISTANCE:	pBottomBorderDistanceState = propertie; break;
+        case CTF_ALLBORDER:				pAllBorderState = propertie; break;
+        case CTF_LEFTBORDER:			pLeftBorderState = propertie; break;
+        case CTF_RIGHTBORDER:			pRightBorderState = propertie; break;
+        case CTF_TOPBORDER:				pTopBorderState = propertie; break;
+        case CTF_BOTTOMBORDER:			pBottomBorderState = propertie; break;
 
-        case CTF_FRAMEHEIGHT_MIN_ABS:   pHeightMinAbsState = propertie; break;
-        case CTF_FRAMEHEIGHT_MIN_REL:   pHeightMinRelState = propertie; break;
-        case CTF_FRAMEHEIGHT_ABS:       pHeightAbsState = propertie; break;
-        case CTF_FRAMEHEIGHT_REL:       pHeightRelState = propertie; break;
-        case CTF_SIZETYPE:              pSizeTypeState = propertie; break;
+        case CTF_FRAMEHEIGHT_MIN_ABS:	pHeightMinAbsState = propertie; break;
+        case CTF_FRAMEHEIGHT_MIN_REL:	pHeightMinRelState = propertie; break;
+        case CTF_FRAMEHEIGHT_ABS:		pHeightAbsState = propertie; break;
+        case CTF_FRAMEHEIGHT_REL:		pHeightRelState = propertie; break;
+        case CTF_SIZETYPE:				pSizeTypeState = propertie; break;
 
-        case CTF_FRAMEWIDTH_MIN_ABS:    pWidthMinAbsState = propertie; break;
-        case CTF_FRAMEWIDTH_MIN_REL:    pWidthMinRelState = propertie; break;
-        case CTF_FRAMEWIDTH_ABS:        pWidthAbsState = propertie; break;
-        case CTF_FRAMEWIDTH_REL:        pWidthRelState = propertie; break;
-        case CTF_FRAMEWIDTH_TYPE:       pWidthTypeState = propertie; break;
+        case CTF_FRAMEWIDTH_MIN_ABS:	pWidthMinAbsState = propertie; break;
+        case CTF_FRAMEWIDTH_MIN_REL:	pWidthMinRelState = propertie; break;
+        case CTF_FRAMEWIDTH_ABS:		pWidthAbsState = propertie; break;
+        case CTF_FRAMEWIDTH_REL:		pWidthRelState = propertie; break;
+        case CTF_FRAMEWIDTH_TYPE:		pWidthTypeState = propertie; break;
 
-        case CTF_WRAP:                  pWrapState = propertie; break;
-        case CTF_WRAP_CONTOUR:          pWrapContourState = propertie; break;
+        case CTF_WRAP:			 		pWrapState = propertie; break;
+        case CTF_WRAP_CONTOUR:	        pWrapContourState = propertie; break;
         case CTF_WRAP_CONTOUR_MODE:     pWrapContourModeState = propertie; break;
         case CTF_WRAP_PARAGRAPH_ONLY:   pWrapParagraphOnlyState = propertie; break;
-        case CTF_ANCHORTYPE:            pAnchorTypeState = propertie; break;
+        case CTF_ANCHORTYPE:			pAnchorTypeState = propertie; break;
 
-        case CTF_HORIZONTALPOS:             pHoriOrientState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_HORIZONTALPOS_MIRRORED:    pHoriOrientMirroredState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_HORIZONTALREL:             pHoriOrientRelState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_HORIZONTALREL_FRAME:       pHoriOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_HORIZONTALMIRROR:          pHoriOrientMirrorState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALPOS:           pVertOrientState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALPOS_ATCHAR:    pVertOrientAtCharState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALREL:           pVertOrientRelState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALREL_PAGE:      pVertOrientRelPageState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALREL_FRAME:     pVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsCharState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_HORIZONTALPOS:  			pHoriOrientState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_HORIZONTALPOS_MIRRORED:	pHoriOrientMirroredState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_HORIZONTALREL:				pHoriOrientRelState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_HORIZONTALREL_FRAME:		pHoriOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_HORIZONTALMIRROR:  		pHoriOrientMirrorState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_VERTICALPOS:  			pVertOrientState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_VERTICALPOS_ATCHAR:	pVertOrientAtCharState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_VERTICALREL:  			pVertOrientRelState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_VERTICALREL_PAGE:  	pVertOrientRelPageState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_VERTICALREL_FRAME:  	pVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_VERTICALREL_ASCHAR: 	pVertOrientRelAsCharState = propertie; bNeedsAnchor = sal_True; break;
 
-        // Handle new CTFs for shape positioning properties (#i28749#)
+        // --> OD 2004-08-09 #i28749# - handle new CTFs for shape positioning properties
         case CTF_SHAPE_HORIZONTALPOS:             pShapeHoriOrientState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_SHAPE_HORIZONTALPOS_MIRRORED:    pShapeHoriOrientMirroredState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_SHAPE_HORIZONTALREL:             pShapeHoriOrientRelState = propertie; bNeedsAnchor = sal_True; break;
@@ -531,32 +533,34 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_SHAPE_VERTICALREL:           pShapeVertOrientRelState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_SHAPE_VERTICALREL_PAGE:      pShapeVertOrientRelPageState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_SHAPE_VERTICALREL_FRAME:     pShapeVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_FONTNAME:              pFontNameState = propertie; break;
-        case CTF_FONTFAMILYNAME:        pFontFamilyNameState = propertie; break;
-        case CTF_FONTSTYLENAME:         pFontStyleNameState = propertie; break;
-        case CTF_FONTFAMILY:            pFontFamilyState = propertie; break;
-        case CTF_FONTPITCH:             pFontPitchState = propertie; break;
-        case CTF_FONTCHARSET:           pFontCharsetState = propertie; break;
+        // <--
 
-        case CTF_FONTNAME_CJK:          pFontNameCJKState = propertie; break;
-        case CTF_FONTFAMILYNAME_CJK:    pFontFamilyNameCJKState = propertie; break;
-        case CTF_FONTSTYLENAME_CJK:     pFontStyleNameCJKState = propertie; break;
-        case CTF_FONTFAMILY_CJK:        pFontFamilyCJKState = propertie; break;
-        case CTF_FONTPITCH_CJK:         pFontPitchCJKState = propertie; break;
-        case CTF_FONTCHARSET_CJK:       pFontCharsetCJKState = propertie; break;
+        case CTF_FONTNAME: 				pFontNameState = propertie; break;
+        case CTF_FONTFAMILYNAME: 		pFontFamilyNameState = propertie; break;
+        case CTF_FONTSTYLENAME: 		pFontStyleNameState = propertie; break;
+        case CTF_FONTFAMILY: 			pFontFamilyState = propertie; break;
+        case CTF_FONTPITCH: 			pFontPitchState = propertie; break;
+        case CTF_FONTCHARSET: 			pFontCharsetState = propertie; break;
 
-        case CTF_FONTNAME_CTL:          pFontNameCTLState = propertie; break;
-        case CTF_FONTFAMILYNAME_CTL:    pFontFamilyNameCTLState = propertie; break;
-        case CTF_FONTSTYLENAME_CTL:     pFontStyleNameCTLState = propertie; break;
-        case CTF_FONTFAMILY_CTL:        pFontFamilyCTLState = propertie; break;
-        case CTF_FONTPITCH_CTL:         pFontPitchCTLState = propertie; break;
-        case CTF_FONTCHARSET_CTL:       pFontCharsetCTLState = propertie; break;
-        case CTF_UNDERLINE:             pUnderlineState = propertie; break;
-        case CTF_UNDERLINE_COLOR:       pUnderlineColorState = propertie; break;
-        case CTF_UNDERLINE_HASCOLOR:    pUnderlineHasColorState = propertie; break;
+        case CTF_FONTNAME_CJK: 			pFontNameCJKState = propertie; break;
+        case CTF_FONTFAMILYNAME_CJK: 	pFontFamilyNameCJKState = propertie; break;
+        case CTF_FONTSTYLENAME_CJK: 	pFontStyleNameCJKState = propertie; break;
+        case CTF_FONTFAMILY_CJK: 		pFontFamilyCJKState = propertie; break;
+        case CTF_FONTPITCH_CJK: 		pFontPitchCJKState = propertie; break;
+        case CTF_FONTCHARSET_CJK: 		pFontCharsetCJKState = propertie; break;
+
+        case CTF_FONTNAME_CTL: 			pFontNameCTLState = propertie; break;
+        case CTF_FONTFAMILYNAME_CTL: 	pFontFamilyNameCTLState = propertie; break;
+        case CTF_FONTSTYLENAME_CTL: 	pFontStyleNameCTLState = propertie; break;
+        case CTF_FONTFAMILY_CTL: 		pFontFamilyCTLState = propertie; break;
+        case CTF_FONTPITCH_CTL: 		pFontPitchCTLState = propertie; break;
+        case CTF_FONTCHARSET_CTL: 		pFontCharsetCTLState = propertie; break;
+        case CTF_UNDERLINE: 			pUnderlineState = propertie; break;
+        case CTF_UNDERLINE_COLOR: 		pUnderlineColorState = propertie; break;
+        case CTF_UNDERLINE_HASCOLOR: 	pUnderlineHasColorState = propertie; break;
         case CTF_NUMBERINGSTYLENAME:    pListStyleName = propertie; break;
-        case CTF_TEXT_CLIP11:           pClip11State = propertie; break;
-        case CTF_TEXT_CLIP:             pClipState = propertie; break;
+        case CTF_TEXT_CLIP11:    		pClip11State = propertie; break;
+        case CTF_TEXT_CLIP:    			pClipState = propertie; break;
         }
     }
 
@@ -698,15 +702,12 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
                 aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
                 aLeft.LineStyle == aRight.LineStyle &&
-                aLeft.LineWidth == aRight.LineWidth &&
                 aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
                 aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
                 aLeft.LineStyle == aTop.LineStyle &&
-                aLeft.LineWidth == aTop.LineWidth &&
                 aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
                 aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance &&
-                aLeft.LineStyle == aBottom.LineStyle &&
-                aLeft.LineWidth == aBottom.LineWidth )
+                aLeft.LineStyle == aBottom.LineStyle )
             {
                 pLeftBorderWidthState->mnIndex = -1;
                 pLeftBorderWidthState->maValue.clear();
@@ -777,14 +778,11 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
                 aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
                 aLeft.LineStyle == aRight.LineStyle &&
-                aLeft.LineWidth == aRight.LineWidth &&
                 aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
                 aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
                 aLeft.LineStyle == aTop.LineStyle  &&
-                aLeft.LineWidth == aTop.LineWidth  &&
                 aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
                 aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance &&
-                aLeft.LineWidth == aBottom.LineWidth &&
                 aLeft.LineStyle == aBottom.LineStyle )
             {
                 pLeftBorderState->mnIndex = -1;
@@ -935,7 +933,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             pVertOrientRelAsCharState->mnIndex = -1;
     }
 
-    // States for shape positioning properties (#i28749#)
+    // --> OD 2004-08-09 #i28749# - states for shape positioning properties
     if ( eAnchor != TextContentAnchorType_AS_CHARACTER &&
          ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 )
     {
@@ -994,6 +992,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if( pShapeVertOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
             pShapeVertOrientRelFrameState->mnIndex = -1;
     }
+    // <--
 
     // list style name: remove list style if it is the default outline style
     if( pListStyleName != NULL )
@@ -1013,7 +1012,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
 bool lcl_IsOutlineStyle(const SvXMLExport &rExport, const OUString & rName)
 {
-    Reference< XChapterNumberingSupplier >
+    Reference< XChapterNumberingSupplier > 
         xCNSupplier(rExport.GetModel(), UNO_QUERY);
 
     OUString sOutlineName;
@@ -1021,9 +1020,9 @@ bool lcl_IsOutlineStyle(const SvXMLExport &rExport, const OUString & rName)
 
     if (xCNSupplier.is())
     {
-        Reference<XPropertySet> xNumRule(
+        Reference<XPropertySet> xNumRule( 
             xCNSupplier->getChapterNumberingRules(), UNO_QUERY );
-        DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" );
+        DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" ); 
         if (xNumRule.is())
         {
             xNumRule->getPropertyValue(sName) >>= sOutlineName;

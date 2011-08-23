@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,9 @@
 #include "precompiled_svtools.hxx"
 #include <svtools/svtdata.hxx>
 #include <svtools/svtools.hrc>
-#include <svtools/indexentryres.hxx>
+
+
+#include <indexentryres.hxx>
 
 // -------------------------------------------------------------------------
 //
@@ -43,24 +45,24 @@ class IndexEntryRessourceData
 {
     friend class IndexEntryRessource;
     private: /* data */
-        String  ma_Name;
-        String  ma_Translation;
+        String 	ma_Name;
+        String 	ma_Translation;
     private: /* member functions */
         IndexEntryRessourceData () {}
     public:
         IndexEntryRessourceData ( const String &r_Algorithm, const String &r_Translation)
                 : ma_Name (r_Algorithm), ma_Translation (r_Translation) {}
 
-        const String&   GetAlgorithm () const { return ma_Name; }
+        const String&	GetAlgorithm () const { return ma_Name; }
 
-        const String&   GetTranslation () const { return ma_Translation; }
+        const String&	GetTranslation () const { return ma_Translation; }
 
         ~IndexEntryRessourceData () {}
 
         IndexEntryRessourceData& operator= (const IndexEntryRessourceData& r_From)
         {
-            ma_Name         = r_From.GetAlgorithm();
-            ma_Translation  = r_From.GetTranslation();
+            ma_Name 		= r_From.GetAlgorithm();
+            ma_Translation 	= r_From.GetTranslation();
             return *this;
         }
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,8 +60,6 @@
 #include "cellform.hxx"
 #include "postit.hxx"
 #include "queryparam.hxx"
-#include "segmenttree.hxx"
-#include "subtotalparam.hxx"
 
 #include <vector>
 
@@ -95,7 +93,7 @@ bool SplitString( const rtl::OUString &sWhole,
     i18n::LocaleDataItem aLocaleItem = ScGlobal::pLocaleData->getLocaleItem();
 
     // Get prefix element
-    rtl::OUString sEmpty, sUser = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-" ));
+    rtl::OUString sEmpty, sUser = rtl::OUString::createFromAscii( "-" );
     ParseResult aPRPre = ScGlobal::pCharClass->parsePredefinedToken(
         KParseType::IDENTNAME, sWhole, 0,
         KParseTokens::ANY_LETTER, sUser, KParseTokens::ANY_LETTER, sUser );
@@ -144,15 +142,15 @@ bool SplitString( const rtl::OUString &sWhole,
     sInput2 is greater.
 */
 short Compare( const String &sInput1, const String &sInput2,
-               const sal_Bool bCaseSens, const ScUserListData* pData, const CollatorWrapper *pCW )
+               const BOOL bCaseSens, const ScUserListData* pData, const CollatorWrapper *pCW )
 {
     rtl::OUString sStr1( sInput1 ), sStr2( sInput2 ), sPre1, sSuf1, sPre2, sSuf2;
 
     do
     {
         double nNum1, nNum2;
-        sal_Bool bNumFound1 = SplitString( sStr1, sPre1, sSuf1, nNum1 );
-        sal_Bool bNumFound2 = SplitString( sStr2, sPre2, sSuf2, nNum2 );
+        BOOL bNumFound1 = SplitString( sStr1, sPre1, sSuf1, nNum1 );
+        BOOL bNumFound2 = SplitString( sStr2, sPre2, sSuf2, nNum2 );
 
         short nPreRes; // Prefix comparison result
         if ( pData )
@@ -204,15 +202,15 @@ short Compare( const String &sInput1, const String &sInput2,
 
 // STATIC DATA -----------------------------------------------------------
 
-const sal_uInt16 nMaxSorts = 3;     // maximale Anzahl Sortierkriterien in aSortParam
+const USHORT nMaxSorts = 3;		// maximale Anzahl Sortierkriterien in aSortParam
 
 struct ScSortInfo
 {
-    ScBaseCell*     pCell;
-    SCCOLROW        nOrg;
+    ScBaseCell*		pCell;
+    SCCOLROW		nOrg;
     DECL_FIXEDMEMPOOL_NEWDEL( ScSortInfo );
 };
-const sal_uInt16 nMemPoolSortInfo = (0x8000 - 64) / sizeof(ScSortInfo);
+const USHORT nMemPoolSortInfo = (0x8000 - 64) / sizeof(ScSortInfo);
 IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo, nMemPoolSortInfo, nMemPoolSortInfo )
 
 // END OF STATIC DATA -----------------------------------------------------
@@ -221,17 +219,17 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo, nMemPoolSortInfo, nMemPoolSortInfo )
 class ScSortInfoArray
 {
 private:
-    ScSortInfo**    pppInfo[nMaxSorts];
-    SCSIZE          nCount;
-    SCCOLROW        nStart;
-    sal_uInt16          nUsedSorts;
+    ScSortInfo**	pppInfo[nMaxSorts];
+    SCSIZE			nCount;
+    SCCOLROW		nStart;
+    USHORT			nUsedSorts;
 
 public:
-                ScSortInfoArray( sal_uInt16 nSorts, SCCOLROW nInd1, SCCOLROW nInd2 ) :
+                ScSortInfoArray( USHORT nSorts, SCCOLROW nInd1, SCCOLROW nInd2 ) :
                         nCount( nInd2 - nInd1 + 1 ), nStart( nInd1 ),
                         nUsedSorts( Min( nSorts, nMaxSorts ) )
                     {
-                        for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
+                        for ( USHORT nSort = 0; nSort < nUsedSorts; nSort++ )
                         {
                             ScSortInfo** ppInfo = new ScSortInfo* [nCount];
                             for ( SCSIZE j = 0; j < nCount; j++ )
@@ -241,7 +239,7 @@ public:
                     }
                 ~ScSortInfoArray()
                     {
-                        for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
+                        for ( USHORT nSort = 0; nSort < nUsedSorts; nSort++ )
                         {
                             ScSortInfo** ppInfo = pppInfo[nSort];
                             for ( SCSIZE j = 0; j < nCount; j++ )
@@ -249,13 +247,13 @@ public:
                             delete [] ppInfo;
                         }
                     }
-    ScSortInfo* Get( sal_uInt16 nSort, SCCOLROW nInd )
+    ScSortInfo*	Get( USHORT nSort, SCCOLROW nInd )
                     { return (pppInfo[nSort])[ nInd - nStart ]; }
-    void        Swap( SCCOLROW nInd1, SCCOLROW nInd2 )
+    void		Swap( SCCOLROW nInd1, SCCOLROW nInd2 )
                     {
                         SCSIZE n1 = static_cast<SCSIZE>(nInd1 - nStart);
                         SCSIZE n2 = static_cast<SCSIZE>(nInd2 - nStart);
-                        for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
+                        for ( USHORT nSort = 0; nSort < nUsedSorts; nSort++ )
                         {
                             ScSortInfo** ppInfo = pppInfo[nSort];
                             ScSortInfo* pTmp = ppInfo[n1];
@@ -263,21 +261,21 @@ public:
                             ppInfo[n2] = pTmp;
                         }
                     }
-    sal_uInt16      GetUsedSorts() { return nUsedSorts; }
-    ScSortInfo**    GetFirstArray() { return pppInfo[0]; }
-    SCCOLROW    GetStart() { return nStart; }
-    SCSIZE      GetCount() { return nCount; }
+    USHORT		GetUsedSorts() { return nUsedSorts; }
+    ScSortInfo**	GetFirstArray() { return pppInfo[0]; }
+    SCCOLROW	GetStart() { return nStart; }
+    SCSIZE		GetCount() { return nCount; }
 };
 
 ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
 {
-    sal_uInt16 nUsedSorts = 1;
+    USHORT nUsedSorts = 1;
     while ( nUsedSorts < nMaxSorts && aSortParam.bDoSort[nUsedSorts] )
         nUsedSorts++;
     ScSortInfoArray* pArray = new ScSortInfoArray( nUsedSorts, nInd1, nInd2 );
     if ( aSortParam.bByRow )
     {
-        for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
+        for ( USHORT nSort = 0; nSort < nUsedSorts; nSort++ )
         {
             SCCOL nCol = static_cast<SCCOL>(aSortParam.nField[nSort]);
             ScColumn* pCol = &aCol[nCol];
@@ -292,7 +290,7 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
     }
     else
     {
-        for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
+        for ( USHORT nSort = 0; nSort < nUsedSorts; nSort++ )
         {
             SCROW nRow = aSortParam.nField[nSort];
             for ( SCCOL nCol = static_cast<SCCOL>(nInd1);
@@ -308,9 +306,9 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
 }
 
 
-sal_Bool ScTable::IsSortCollatorGlobal() const
+BOOL ScTable::IsSortCollatorGlobal() const
 {
-    return  pSortCollator == ScGlobal::GetCollator() ||
+    return	pSortCollator == ScGlobal::GetCollator() ||
             pSortCollator == ScGlobal::GetCaseCollator();
 }
 
@@ -325,7 +323,7 @@ void ScTable::InitSortCollator( const ScSortParam& rPar )
             rPar.aCollatorLocale, (rPar.bCaseSens ? 0 : SC_COLLATOR_IGNORES) );
     }
     else
-    {   // SYSTEM
+    {	// SYSTEM
         DestroySortCollator();
         pSortCollator = (rPar.bCaseSens ? ScGlobal::GetCaseCollator() :
             ScGlobal::GetCollator());
@@ -346,7 +344,7 @@ void ScTable::DestroySortCollator()
 
 void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress& rProgress )
 {
-    sal_Bool bByRow = aSortParam.bByRow;
+    BOOL bByRow = aSortParam.bByRow;
     SCSIZE nCount = pArray->GetCount();
     SCCOLROW nStart = pArray->GetStart();
     ScSortInfo** ppInfo = pArray->GetFirstArray();
@@ -377,7 +375,7 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress& rProgress )
     }
 }
 
-short ScTable::CompareCell( sal_uInt16 nSort,
+short ScTable::CompareCell( USHORT nSort,
             ScBaseCell* pCell1, SCCOL nCell1Col, SCROW nCell1Row,
             ScBaseCell* pCell2, SCCOL nCell2Col, SCROW nCell2Row )
 {
@@ -401,14 +399,14 @@ short ScTable::CompareCell( sal_uInt16 nSort,
     {
         if (pCell2)
         {
-            sal_Bool bStr1 = ( eType1 != CELLTYPE_VALUE );
+            BOOL bStr1 = ( eType1 != CELLTYPE_VALUE );
             if ( eType1 == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell1)->IsValue() )
-                bStr1 = false;
-            sal_Bool bStr2 = ( eType2 != CELLTYPE_VALUE );
+                bStr1 = FALSE;
+            BOOL bStr2 = ( eType2 != CELLTYPE_VALUE );
             if ( eType2 == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell2)->IsValue() )
-                bStr2 = false;
+                bStr2 = FALSE;
 
-            if ( bStr1 && bStr2 )           // nur Strings untereinander als String vergleichen!
+            if ( bStr1 && bStr2 )			// nur Strings untereinander als String vergleichen!
             {
                 String aStr1;
                 String aStr2;
@@ -421,9 +419,9 @@ short ScTable::CompareCell( sal_uInt16 nSort,
                 else
                     GetString(nCell2Col, nCell2Row, aStr2);
 
-                sal_Bool bUserDef     = aSortParam.bUserDef;        // custom sort order
-                sal_Bool bNaturalSort = aSortParam.bNaturalSort;    // natural sort
-                sal_Bool bCaseSens    = aSortParam.bCaseSens;       // case sensitivity
+                BOOL bUserDef     = aSortParam.bUserDef;		// custom sort order
+                BOOL bNaturalSort = aSortParam.bNaturalSort;	// natural sort
+                BOOL bCaseSens    = aSortParam.bCaseSens;		// case sensitivity
 
                 if (bUserDef)
                 {
@@ -444,7 +442,7 @@ short ScTable::CompareCell( sal_uInt16 nSort,
                         }
                     }
                     else
-                        bUserDef = false;
+                        bUserDef = FALSE;
 
                 }
                 if (!bUserDef)
@@ -455,11 +453,11 @@ short ScTable::CompareCell( sal_uInt16 nSort,
                         nRes = static_cast<short>( pSortCollator->compareString( aStr1, aStr2 ) );
                 }
             }
-            else if ( bStr1 )               // String <-> Zahl
-                nRes = 1;                   // Zahl vorne
-            else if ( bStr2 )               // Zahl <-> String
-                nRes = -1;                  // Zahl vorne
-            else                            // Zahlen untereinander
+            else if ( bStr1 )				// String <-> Zahl
+                nRes = 1;					// Zahl vorne
+            else if ( bStr2 )				// Zahl <-> String
+                nRes = -1;					// Zahl vorne
+            else							// Zahlen untereinander
             {
                 double nVal1;
                 double nVal2;
@@ -491,7 +489,7 @@ short ScTable::CompareCell( sal_uInt16 nSort,
         if ( pCell2 )
             nRes = 1;
         else
-            nRes = 0;                   // beide leer
+            nRes = 0;					// beide leer
     }
     return nRes;
 }
@@ -499,7 +497,7 @@ short ScTable::CompareCell( sal_uInt16 nSort,
 short ScTable::Compare( ScSortInfoArray* pArray, SCCOLROW nIndex1, SCCOLROW nIndex2 )
 {
     short nRes;
-    sal_uInt16 nSort = 0;
+    USHORT nSort = 0;
     do
     {
         ScSortInfo* pInfo1 = pArray->Get( nSort, nIndex1 );
@@ -578,8 +576,8 @@ void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
             const ScPatternAttr* pPat2 = GetPattern(nCol2, nRow);
             if (pPat1 != pPat2)
             {
-                SetPattern(nCol1, nRow, *pPat2, sal_True);
-                SetPattern(nCol2, nRow, *pPat1, sal_True);
+                SetPattern(nCol1, nRow, *pPat2, TRUE);
+                SetPattern(nCol2, nRow, *pPat1, TRUE);
             }
         }
     }
@@ -596,8 +594,8 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
             const ScPatternAttr* pPat2 = GetPattern(nCol, nRow2);
             if (pPat1 != pPat2)
             {
-                SetPattern(nCol, nRow1, *pPat2, sal_True);
-                SetPattern(nCol, nRow2, *pPat1, sal_True);
+                SetPattern(nCol, nRow1, *pPat2, TRUE);
+                SetPattern(nCol, nRow2, *pPat1, TRUE);
             }
         }
     }
@@ -618,7 +616,7 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
 short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2)
 {
     short nRes;
-    sal_uInt16 nSort = 0;
+    USHORT nSort = 0;
     if (aSortParam.bByRow)
     {
         do
@@ -643,14 +641,14 @@ short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2)
     return nRes;
 }
 
-sal_Bool ScTable::IsSorted( SCCOLROW nStart, SCCOLROW nEnd )    // ueber aSortParam
+BOOL ScTable::IsSorted( SCCOLROW nStart, SCCOLROW nEnd )    // ueber aSortParam
 {
     for (SCCOLROW i=nStart; i<nEnd; i++)
     {
         if (Compare( i, i+1 ) > 0)
-            return false;
+            return FALSE;
     }
-    return sal_True;
+    return TRUE;
 }
 
 void ScTable::DecoladeRow( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2 )
@@ -664,7 +662,7 @@ void ScTable::DecoladeRow( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2 )
     }
 }
 
-void ScTable::Sort(const ScSortParam& rSortParam, sal_Bool bKeepQuery)
+void ScTable::Sort(const ScSortParam& rSortParam, BOOL bKeepQuery)
 {
     aSortParam = rSortParam;
     InitSortCollator( rSortParam );
@@ -687,7 +685,7 @@ void ScTable::Sort(const ScSortParam& rSortParam, sal_Bool bKeepQuery)
             QuickSort( pArray, nRow1, nLastRow );
             SortReorder( pArray, aProgress );
             delete pArray;
-            // #i59745# update position of caption objects of cell notes
+            // #158377# #i59745# update position of caption objects of cell notes
             ScNoteUtil::UpdateCaptionPositions( *pDocument, ScRange( aSortParam.nCol1, nRow1, nTab, aSortParam.nCol2, nLastRow, nTab ) );
         }
     }
@@ -708,7 +706,7 @@ void ScTable::Sort(const ScSortParam& rSortParam, sal_Bool bKeepQuery)
             QuickSort( pArray, nCol1, nLastCol );
             SortReorder( pArray, aProgress );
             delete pArray;
-            // #i59745# update position of caption objects of cell notes
+            // #158377# #i59745# update position of caption objects of cell notes
             ScNoteUtil::UpdateCaptionPositions( *pDocument, ScRange( nCol1, aSortParam.nRow1, nTab, nLastCol, aSortParam.nRow2, nTab ) );
         }
     }
@@ -716,21 +714,21 @@ void ScTable::Sort(const ScSortParam& rSortParam, sal_Bool bKeepQuery)
 }
 
 
-//      Testen, ob beim Loeschen von Zwischenergebnissen andere Daten mit geloescht werden
-//      (fuer Hinweis-Box)
+//		Testen, ob beim Loeschen von Zwischenergebnissen andere Daten mit geloescht werden
+//		(fuer Hinweis-Box)
 
-sal_Bool ScTable::TestRemoveSubTotals( const ScSubTotalParam& rParam )
+BOOL ScTable::TestRemoveSubTotals( const ScSubTotalParam& rParam )
 {
     SCCOL nStartCol = rParam.nCol1;
-    SCROW nStartRow = rParam.nRow1 + 1;     // Header
+    SCROW nStartRow = rParam.nRow1 + 1;		// Header
     SCCOL nEndCol   = rParam.nCol2;
-    SCROW nEndRow    = rParam.nRow2;
+    SCROW nEndRow	 = rParam.nRow2;
 
     SCCOL nCol;
     SCROW nRow;
     ScBaseCell* pCell;
 
-    sal_Bool bWillDelete = false;
+    BOOL bWillDelete = FALSE;
     for ( nCol=nStartCol; nCol<=nEndCol && !bWillDelete; nCol++ )
     {
         ScColumnIterator aIter( &aCol[nCol],nStartRow,nEndRow );
@@ -742,22 +740,22 @@ sal_Bool ScTable::TestRemoveSubTotals( const ScSubTotalParam& rParam )
                     for (SCCOL nTestCol=0; nTestCol<=MAXCOL; nTestCol++)
                         if (nTestCol<nStartCol || nTestCol>nEndCol)
                             if (aCol[nTestCol].HasDataAt(nRow))
-                                bWillDelete = sal_True;
+                                bWillDelete = TRUE;
                 }
         }
     }
     return bWillDelete;
 }
 
-//      alte Ergebnisse loeschen
-//      rParam.nRow2 wird veraendert !
+//		alte Ergebnisse loeschen
+//		rParam.nRow2 wird veraendert !
 
 void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
 {
     SCCOL nStartCol = rParam.nCol1;
-    SCROW nStartRow = rParam.nRow1 + 1;     // Header
+    SCROW nStartRow = rParam.nRow1 + 1;		// Header
     SCCOL nEndCol   = rParam.nCol2;
-    SCROW nEndRow    = rParam.nRow2;            // wird veraendert
+    SCROW nEndRow	 = rParam.nRow2;			// wird veraendert
 
     SCCOL nCol;
     SCROW nRow;
@@ -779,22 +777,22 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
         }
     }
 
-    rParam.nRow2 = nEndRow;                 // neues Ende
+    rParam.nRow2 = nEndRow;					// neues Ende
 }
 
-//  harte Zahlenformate loeschen (fuer Ergebnisformeln)
+//	harte Zahlenformate loeschen (fuer Ergebnisformeln)
 
 void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
 {
     const ScPatternAttr* pPattern = pTab->GetPattern( nCol, nRow );
-    if ( pPattern->GetItemSet().GetItemState( ATTR_VALUE_FORMAT, false )
+    if ( pPattern->GetItemSet().GetItemState( ATTR_VALUE_FORMAT, FALSE )
             == SFX_ITEM_SET )
     {
         ScPatternAttr aNewPattern( *pPattern );
         SfxItemSet& rSet = aNewPattern.GetItemSet();
         rSet.ClearItem( ATTR_VALUE_FORMAT );
         rSet.ClearItem( ATTR_LANGUAGE_FORMAT );
-        pTab->SetPattern( nCol, nRow, aNewPattern, sal_True );
+        pTab->SetPattern( nCol, nRow, aNewPattern, TRUE );
     }
 }
 
@@ -802,55 +800,55 @@ void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
 // at least MSC needs this at linkage level to be able to use it in a template
 typedef struct lcl_ScTable_DoSubTotals_RowEntry
 {
-    sal_uInt16  nGroupNo;
+    USHORT  nGroupNo;
     SCROW   nSubStartRow;
     SCROW   nDestRow;
     SCROW   nFuncStart;
     SCROW   nFuncEnd;
 } RowEntry;
 
-//      neue Zwischenergebnisse
-//      rParam.nRow2 wird veraendert !
+//		neue Zwischenergebnisse
+//		rParam.nRow2 wird veraendert !
 
-sal_Bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
+BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
 {
     SCCOL nStartCol = rParam.nCol1;
-    SCROW nStartRow = rParam.nRow1 + 1;     // Header
+    SCROW nStartRow = rParam.nRow1 + 1;		// Header
     SCCOL nEndCol   = rParam.nCol2;
-    SCROW nEndRow    = rParam.nRow2;            // wird veraendert
-    sal_uInt16 i;
+    SCROW nEndRow	 = rParam.nRow2;			// wird veraendert
+    USHORT i;
 
-    //  Leerzeilen am Ende weglassen,
-    //  damit alle Ueberlaeufe (MAXROW) bei InsertRow gefunden werden (#35180#)
-    //  Wenn sortiert wurde, sind alle Leerzeilen am Ende.
+    //	Leerzeilen am Ende weglassen,
+    //	damit alle Ueberlaeufe (MAXROW) bei InsertRow gefunden werden (#35180#)
+    //	Wenn sortiert wurde, sind alle Leerzeilen am Ende.
     SCSIZE nEmpty = GetEmptyLinesInBlock( nStartCol, nStartRow, nEndCol, nEndRow, DIR_BOTTOM );
     nEndRow -= nEmpty;
 
-    sal_uInt16 nLevelCount = 0;             // Anzahl Gruppierungen
-    sal_Bool bDoThis = sal_True;
+    USHORT nLevelCount = 0;				// Anzahl Gruppierungen
+    BOOL bDoThis = TRUE;
     for (i=0; i<MAXSUBTOTAL && bDoThis; i++)
         if (rParam.bGroupActive[i])
             nLevelCount = i+1;
         else
-            bDoThis = false;
+            bDoThis = FALSE;
 
-    if (nLevelCount==0)                 // nichts tun
-        return sal_True;
+    if (nLevelCount==0)					// nichts tun
+        return TRUE;
 
-    SCCOL*          nGroupCol = rParam.nField;  // Spalten nach denen
+    SCCOL*			nGroupCol = rParam.nField;	// Spalten nach denen
                                                 // gruppiert wird
 
-    //  Durch (leer) als eigene Kategorie muss immer auf
-    //  Teilergebniszeilen aus den anderen Spalten getestet werden
-    //  (frueher nur, wenn eine Spalte mehrfach vorkam)
-    sal_Bool bTestPrevSub = ( nLevelCount > 1 );
+    //	#44444# Durch (leer) als eigene Kategorie muss immer auf
+    //	Teilergebniszeilen aus den anderen Spalten getestet werden
+    //	(frueher nur, wenn eine Spalte mehrfach vorkam)
+    BOOL bTestPrevSub = ( nLevelCount > 1 );
 
-    String  aSubString;
-    String  aOutString;
+    String	aSubString;
+    String	aOutString;
 
-    sal_Bool bIgnoreCase = !rParam.bCaseSens;
+    BOOL bIgnoreCase = !rParam.bCaseSens;
 
-    String *pCompString[MAXSUBTOTAL];               // Pointer wegen Compiler-Problemen
+    String *pCompString[MAXSUBTOTAL];				// Pointer wegen Compiler-Problemen
     for (i=0; i<MAXSUBTOTAL; i++)
         pCompString[i] = new String;
 
@@ -859,17 +857,17 @@ sal_Bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     ScStyleSheet* pStyle = (ScStyleSheet*) pDocument->GetStyleSheetPool()->Find(
                                 ScGlobal::GetRscString(STR_STYLENAME_RESULT), SFX_STYLE_FAMILY_PARA );
 
-    sal_Bool bSpaceLeft = sal_True;                                         // Erfolg beim Einfuegen?
+    BOOL bSpaceLeft = TRUE;											// Erfolg beim Einfuegen?
 
-    // For performance reasons collect formula entries so their
+    // #90279# For performance reasons collect formula entries so their
     // references don't have to be tested for updates each time a new row is
     // inserted
     RowEntry aRowEntry;
     ::std::vector< RowEntry > aRowVector;
 
-    for (sal_uInt16 nLevel=0; nLevel<=nLevelCount && bSpaceLeft; nLevel++)      // incl. Gesamtergebnis
+    for (USHORT nLevel=0; nLevel<=nLevelCount && bSpaceLeft; nLevel++)		// incl. Gesamtergebnis
     {
-        sal_Bool bTotal = ( nLevel == nLevelCount );
+        BOOL bTotal = ( nLevel == nLevelCount );
         aRowEntry.nGroupNo = bTotal ? 0 : (nLevelCount-nLevel-1);
 
         // how many results per level
@@ -877,7 +875,7 @@ sal_Bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
         // result functions
         ScSubTotalFunc* eResFunc = rParam.pFunctions[aRowEntry.nGroupNo];
 
-        if (nResCount > 0)                                      // sonst nur sortieren
+        if (nResCount > 0)										// sonst nur sortieren
         {
             for (i=0; i<=aRowEntry.nGroupNo; i++)
             {
@@ -886,18 +884,18 @@ sal_Bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     *pCompString[i] = ScGlobal::pCharClass->upper( aSubString );
                 else
                     *pCompString[i] = aSubString;
-            }                                                   // aSubString bleibt auf dem letzten stehen
+            }													// aSubString bleibt auf dem letzten stehen
 
-            sal_Bool bBlockVis = false;             // Gruppe eingeblendet?
+            BOOL bBlockVis = FALSE;				// Gruppe eingeblendet?
             aRowEntry.nSubStartRow = nStartRow;
             for (SCROW nRow=nStartRow; nRow<=nEndRow+1 && bSpaceLeft; nRow++)
             {
-                sal_Bool bChanged;
+                BOOL bChanged;
                 if (nRow>nEndRow)
-                    bChanged = sal_True;
+                    bChanged = TRUE;
                 else
                 {
-                    bChanged = false;
+                    bChanged = FALSE;
                     if (!bTotal)
                     {
                         String aString;
@@ -906,8 +904,8 @@ sal_Bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             GetString( nGroupCol[i], nRow, aString );
                             if (bIgnoreCase)
                                 ScGlobal::pCharClass->toUpper( aString );
-                            //  wenn sortiert, ist "leer" eine eigene Gruppe
-                            //  sonst sind leere Zellen unten erlaubt
+                            //	#41427# wenn sortiert, ist "leer" eine eigene Gruppe
+                            //	sonst sind leere Zellen unten erlaubt
                             bChanged = ( ( aString.Len() || rParam.bDoSort ) &&
                                             aString != *pCompString[i] );
                         }
@@ -920,7 +918,7 @@ sal_Bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             {
                                 if ( iEntry->nDestRow == nRow )
                                 {
-                                    bChanged = false;
+                                    bChanged = FALSE;
                                     break;
                                 }
                             }
@@ -936,7 +934,7 @@ sal_Bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     bSpaceLeft = pDocument->InsertRow( 0, nTab, MAXCOL, nTab,
                             aRowEntry.nDestRow, 1 );
                     DBShowRow( aRowEntry.nDestRow, bBlockVis );
-                    bBlockVis = false;
+                    bBlockVis = FALSE;
                     if ( rParam.bPagebreak && nRow < MAXROW &&
                             aRowEntry.nSubStartRow != nStartRow && nLevel == 0)
                         SetRowBreak(aRowEntry.nSubStartRow, false, true);
@@ -959,29 +957,29 @@ sal_Bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         // collect formula positions
                         aRowVector.push_back( aRowEntry );
 
-                        if (bTotal)     // "Gesamtergebnis"
+                        if (bTotal)		// "Gesamtergebnis"
                             aOutString = ScGlobal::GetRscString( STR_TABLE_GESAMTERGEBNIS );
                         else
-                        {               // " Ergebnis"
+                        {				// " Ergebnis"
                             aOutString = aSubString;
                             if (!aOutString.Len())
                                 aOutString = ScGlobal::GetRscString( STR_EMPTYDATA );
                             aOutString += ' ';
-                            sal_uInt16 nStrId = STR_TABLE_ERGEBNIS;
+                            USHORT nStrId = STR_TABLE_ERGEBNIS;
                             if ( nResCount == 1 )
                                 switch ( eResFunc[0] )
                                 {
-                                    case SUBTOTAL_FUNC_AVE:     nStrId = STR_FUN_TEXT_AVG;      break;
+                                    case SUBTOTAL_FUNC_AVE:		nStrId = STR_FUN_TEXT_AVG;		break;
                                     case SUBTOTAL_FUNC_CNT:
-                                    case SUBTOTAL_FUNC_CNT2:    nStrId = STR_FUN_TEXT_COUNT;    break;
-                                    case SUBTOTAL_FUNC_MAX:     nStrId = STR_FUN_TEXT_MAX;      break;
-                                    case SUBTOTAL_FUNC_MIN:     nStrId = STR_FUN_TEXT_MIN;      break;
-                                    case SUBTOTAL_FUNC_PROD:    nStrId = STR_FUN_TEXT_PRODUCT;  break;
+                                    case SUBTOTAL_FUNC_CNT2:	nStrId = STR_FUN_TEXT_COUNT;	break;
+                                    case SUBTOTAL_FUNC_MAX:		nStrId = STR_FUN_TEXT_MAX;		break;
+                                    case SUBTOTAL_FUNC_MIN:		nStrId = STR_FUN_TEXT_MIN;		break;
+                                    case SUBTOTAL_FUNC_PROD:	nStrId = STR_FUN_TEXT_PRODUCT;	break;
                                     case SUBTOTAL_FUNC_STD:
-                                    case SUBTOTAL_FUNC_STDP:    nStrId = STR_FUN_TEXT_STDDEV;   break;
-                                    case SUBTOTAL_FUNC_SUM:     nStrId = STR_FUN_TEXT_SUM;      break;
+                                    case SUBTOTAL_FUNC_STDP:	nStrId = STR_FUN_TEXT_STDDEV;	break;
+                                    case SUBTOTAL_FUNC_SUM:		nStrId = STR_FUN_TEXT_SUM;		break;
                                     case SUBTOTAL_FUNC_VAR:
-                                    case SUBTOTAL_FUNC_VARP:    nStrId = STR_FUN_TEXT_VAR;      break;
+                                    case SUBTOTAL_FUNC_VARP:	nStrId = STR_FUN_TEXT_VAR;		break;
                                     default:
                                     {
                                         // added to avoid warnings
@@ -1007,6 +1005,10 @@ sal_Bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 }
                 bBlockVis = !RowFiltered(nRow);
             }
+        }
+        else
+        {
+//			DBG_ERROR( "nSubTotals==0 bei DoSubTotals" );
         }
     }
 
@@ -1044,16 +1046,16 @@ sal_Bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             {
                 ApplyStyle( nResCols[nResult], iEntry->nDestRow, *pStyle );
 
-                //  Zahlformat loeschen
+                //	Zahlformat loeschen
                 lcl_RemoveNumberFormat( this, nResCols[nResult], iEntry->nDestRow );
             }
         }
 
     }
 
-    //!     je nach Einstellung Zwischensummen-Zeilen nach oben verschieben ?
+    //!		je nach Einstellung Zwischensummen-Zeilen nach oben verschieben ?
 
-    //!     Outlines direkt erzeugen?
+    //!		Outlines direkt erzeugen?
 
     if (bSpaceLeft)
         DoAutoOutline( nStartCol, nStartRow, nEndCol, nEndRow );
@@ -1061,30 +1063,30 @@ sal_Bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     for (i=0; i<MAXSUBTOTAL; i++)
         delete pCompString[i];
 
-    rParam.nRow2 = nEndRow;                 // neues Ende
+    rParam.nRow2 = nEndRow;					// neues Ende
     return bSpaceLeft;
 }
 
 
-sal_Bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
-        sal_Bool* pSpecial /* =NULL */ , ScBaseCell* pCell /* =NULL */ ,
-        sal_Bool* pbTestEqualCondition /* = NULL */ )
+BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
+        BOOL* pSpecial /* =NULL */ , ScBaseCell* pCell /* =NULL */ ,
+        BOOL* pbTestEqualCondition /* = NULL */ )
 {
     if (!rParam.GetEntry(0).bDoQuery)
-        return sal_True;
+        return TRUE;
 
     //---------------------------------------------------------------
 
     const SCSIZE nFixedBools = 32;
-    sal_Bool aBool[nFixedBools];
-    sal_Bool aTest[nFixedBools];
+    BOOL aBool[nFixedBools];
+    BOOL aTest[nFixedBools];
     SCSIZE nEntryCount = rParam.GetEntryCount();
-    sal_Bool* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new sal_Bool[nEntryCount] );
-    sal_Bool* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new sal_Bool[nEntryCount] );
+    BOOL* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new BOOL[nEntryCount] );
+    BOOL* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new BOOL[nEntryCount] );
 
-    long    nPos = -1;
-    SCSIZE  i    = 0;
-    sal_Bool    bMatchWholeCell = pDocument->GetDocOptions().IsMatchWholeCell();
+    long	nPos = -1;
+    SCSIZE	i	 = 0;
+    BOOL	bMatchWholeCell = pDocument->GetDocOptions().IsMatchWholeCell();
     CollatorWrapper* pCollator = (rParam.bCaseSens ? ScGlobal::GetCaseCollator() :
         ScGlobal::GetCollator());
     ::utl::TransliterationWrapper* pTransliteration = (rParam.bCaseSens ?
@@ -1097,8 +1099,8 @@ sal_Bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
         if ( !pCell || i > 0 )
             pCell = GetCell( static_cast<SCCOL>(rEntry.nField), nRow );
 
-        sal_Bool bOk = false;
-        sal_Bool bTestEqual = false;
+        BOOL bOk = FALSE;
+        BOOL bTestEqual = FALSE;
 
         if ( pSpecial && pSpecial[i] )
         {
@@ -1109,7 +1111,7 @@ sal_Bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
         }
         else if ( !rEntry.bQueryByString && (pCell ? pCell->HasValueData() :
                     HasValueData( static_cast<SCCOL>(rEntry.nField), nRow)))
-        {   // by Value
+        {	// by Value
             double nCellVal;
             if ( pCell )
             {
@@ -1129,11 +1131,11 @@ sal_Bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             else
                 nCellVal = GetValue( static_cast<SCCOL>(rEntry.nField), nRow );
 
-            /* NOTE: lcl_PrepareQuery() prepares a filter query such that if a
-             * date+time format was queried rEntry.bQueryByDate is not set. In
-             * case other queries wanted to use this mechanism they should do
-             * the same, in other words only if rEntry.nVal is an integer value
-             * rEntry.bQueryByDate should be true and the time fraction be
+            /* NOTE: lcl_PrepareQuery() prepares a filter query such that if a 
+             * date+time format was queried rEntry.bQueryByDate is not set. In 
+             * case other queries wanted to use this mechanism they should do 
+             * the same, in other words only if rEntry.nVal is an integer value 
+             * rEntry.bQueryByDate should be true and the time fraction be 
              * stripped here. */
             if (rEntry.bQueryByDate)
             {
@@ -1142,15 +1144,15 @@ sal_Bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 if (pEntry)
                 {
                     short nNumFmtType = pEntry->GetType();
-                    /* NOTE: Omitting the check for absence of
-                     * NUMBERFORMAT_TIME would include also date+time formatted
-                     * values of the same day. That may be desired in some
-                     * cases, querying all time values of a day, but confusing
-                     * in other cases. A user can always setup a standard
+                    /* NOTE: Omitting the check for absence of 
+                     * NUMBERFORMAT_TIME would include also date+time formatted 
+                     * values of the same day. That may be desired in some 
+                     * cases, querying all time values of a day, but confusing 
+                     * in other cases. A user can always setup a standard 
                      * filter query for x >= date AND x < date+1 */
                     if ((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME))
                     {
-                        // The format is of date type.  Strip off the time
+                        // The format is of date type.  Strip off the time 
                         // element.
                         nCellVal = ::rtl::math::approxFloor(nCellVal);
                     }
@@ -1188,60 +1190,60 @@ sal_Bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             }
         }
         else if ( (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL) ||
-                  (rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN ||
+                  (rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN || 
                    rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH ||
                    rEntry.eOp == SC_DOES_NOT_BEGIN_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH) ||
                 (rEntry.bQueryByString && (pCell ? pCell->HasStringData() :
                                            HasStringData(
                                                static_cast<SCCOL>(rEntry.nField),
                                                nRow))))
-        {   // by String
-            String  aCellStr;
+        {	// by String
+            String	aCellStr;
             if( rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN
                 || rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH
                 || rEntry.eOp == SC_DOES_NOT_BEGIN_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
-                bMatchWholeCell = false;
+                bMatchWholeCell = FALSE;
             if ( pCell )
             {
                 if (pCell->GetCellType() != CELLTYPE_NOTE)
                 {
-                    sal_uLong nFormat = GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
+                    ULONG nFormat = GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
                     ScCellFormat::GetInputString( pCell, nFormat, aCellStr, *(pDocument->GetFormatTable()) );
                 }
             }
             else
                 GetInputString( static_cast<SCCOL>(rEntry.nField), nRow, aCellStr );
 
-            sal_Bool bRealRegExp = (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
-                || (rEntry.eOp == SC_NOT_EQUAL) || (rEntry.eOp == SC_CONTAINS)
+            BOOL bRealRegExp = (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
+                || (rEntry.eOp == SC_NOT_EQUAL) || (rEntry.eOp == SC_CONTAINS) 
                 || (rEntry.eOp == SC_DOES_NOT_CONTAIN) || (rEntry.eOp == SC_BEGINS_WITH)
                 || (rEntry.eOp == SC_ENDS_WITH) || (rEntry.eOp == SC_DOES_NOT_BEGIN_WITH)
                 || (rEntry.eOp == SC_DOES_NOT_END_WITH)));
-            sal_Bool bTestRegExp = (pbTestEqualCondition && rParam.bRegExp
+            BOOL bTestRegExp = (pbTestEqualCondition && rParam.bRegExp
                 && ((rEntry.eOp == SC_LESS_EQUAL)
                     || (rEntry.eOp == SC_GREATER_EQUAL)));
             if ( bRealRegExp || bTestRegExp )
             {
                 xub_StrLen nStart = 0;
                 xub_StrLen nEnd   = aCellStr.Len();
-
+                
                 // from 614 on, nEnd is behind the found text
-                sal_Bool bMatch = false;
+                BOOL bMatch = FALSE;
                 if ( rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
                 {
                     nEnd = 0;
                     nStart = aCellStr.Len();
-                    bMatch = (sal_Bool) rEntry.GetSearchTextPtr( rParam.bCaseSens )
+                    bMatch = (BOOL) rEntry.GetSearchTextPtr( rParam.bCaseSens )
                         ->SearchBkwrd( aCellStr, &nStart, &nEnd );
-                }
+                } 
                 else
                 {
-                    bMatch = (sal_Bool) rEntry.GetSearchTextPtr( rParam.bCaseSens )
+                    bMatch = (BOOL) rEntry.GetSearchTextPtr( rParam.bCaseSens )
                         ->SearchFrwrd( aCellStr, &nStart, &nEnd );
                 }
                 if ( bMatch && bMatchWholeCell
                         && (nStart != 0 || nEnd != aCellStr.Len()) )
-                    bMatch = false;    // RegExp must match entire cell string
+                    bMatch = FALSE;    // RegExp must match entire cell string
                 if ( bRealRegExp )
                     switch (rEntry.eOp)
                 {
@@ -1285,7 +1287,7 @@ sal_Bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                         // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
                         // the query value is assigned directly, and the string is empty. In that case,
                         // don't find any string (isEqual would find empty string results in formula cells).
-                        bOk = false;
+                        bOk = FALSE;
                         if ( rEntry.eOp == SC_NOT_EQUAL )
                             bOk = !bOk;
                     }
@@ -1303,7 +1305,7 @@ sal_Bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                         String aQuer( pTransliteration->transliterate(
                             *rEntry.pStr, ScGlobal::eLnge, 0, rEntry.pStr->Len(),
                             NULL ) );
-                        xub_StrLen nIndex = (rEntry.eOp == SC_ENDS_WITH
+                        xub_StrLen nIndex = (rEntry.eOp == SC_ENDS_WITH 
                             || rEntry.eOp == SC_DOES_NOT_END_WITH)? (aCell.Len()-aQuer.Len()):0;
                         xub_StrLen nStrPos = aCell.Search( aQuer, nIndex );
                         switch (rEntry.eOp)
@@ -1372,14 +1374,14 @@ sal_Bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                     (pCell ? pCell->HasValueData() :
                      HasValueData( static_cast<SCCOL>(rEntry.nField), nRow)))
             {
-                bOk = sal_True;
+                bOk = TRUE;
             }
             else if (!rEntry.bQueryByString &&
                     (rEntry.eOp == SC_GREATER || rEntry.eOp == SC_GREATER_EQUAL) &&
                     (pCell ? pCell->HasStringData() :
                      HasStringData( static_cast<SCCOL>(rEntry.nField), nRow)))
             {
-                bOk = sal_True;
+                bOk = TRUE;
             }
         }
 
@@ -1412,7 +1414,7 @@ sal_Bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
         pTest[0] = pTest[0] || pTest[j];
     }
 
-    sal_Bool bRet = pPasst[0];
+    BOOL bRet = pPasst[0];
     if ( pPasst != &aBool[0] )
         delete [] pPasst;
     if ( pbTestEqualCondition )
@@ -1425,7 +1427,7 @@ sal_Bool ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
 
 void ScTable::TopTenQuery( ScQueryParam& rParam )
 {
-    sal_Bool bSortCollatorInitialized = false;
+    BOOL bSortCollatorInitialized = FALSE;
     SCSIZE nEntryCount = rParam.GetEntryCount();
     SCROW nRow1 = (rParam.bHasHeader ? rParam.nRow1 + 1 : rParam.nRow1);
     SCSIZE nCount = static_cast<SCSIZE>(rParam.nRow2 - nRow1 + 1);
@@ -1440,10 +1442,10 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
             case SC_BOTPERC:
             {
                 ScSortParam aLocalSortParam( rParam, static_cast<SCCOL>(rEntry.nField) );
-                aSortParam = aLocalSortParam;       // used in CreateSortInfoArray, Compare
+                aSortParam = aLocalSortParam;		// used in CreateSortInfoArray, Compare
                 if ( !bSortCollatorInitialized )
                 {
-                    bSortCollatorInitialized = sal_True;
+                    bSortCollatorInitialized = TRUE;
                     InitSortCollator( aLocalSortParam );
                 }
                 ScSortInfoArray* pArray = CreateSortInfoArray( nRow1, rParam.nRow2 );
@@ -1462,9 +1464,9 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                 if ( nValidCount > 0 )
                 {
                     if ( rEntry.bQueryByString )
-                    {   // dat wird nix
-                        rEntry.bQueryByString = false;
-                        rEntry.nVal = 10;   // 10 bzw. 10%
+                    {	// dat wird nix
+                        rEntry.bQueryByString = FALSE;
+                        rEntry.nVal = 10;	// 10 bzw. 10%
                     }
                     SCSIZE nVal = (rEntry.nVal >= 1 ? static_cast<SCSIZE>(rEntry.nVal) : 1);
                     SCSIZE nOffset = 0;
@@ -1475,7 +1477,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                             rEntry.eOp = SC_GREATER_EQUAL;
                             if ( nVal > nValidCount )
                                 nVal = nValidCount;
-                            nOffset = nValidCount - nVal;   // 1 <= nVal <= nValidCount
+                            nOffset = nValidCount - nVal;	// 1 <= nVal <= nValidCount
                         }
                         break;
                         case SC_BOTVAL:
@@ -1483,7 +1485,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                             rEntry.eOp = SC_LESS_EQUAL;
                             if ( nVal > nValidCount )
                                 nVal = nValidCount;
-                            nOffset = nVal - 1;     // 1 <= nVal <= nValidCount
+                            nOffset = nVal - 1;		// 1 <= nVal <= nValidCount
                         }
                         break;
                         case SC_TOPPERC:
@@ -1529,7 +1531,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                 else
                 {
                     rEntry.eOp = SC_GREATER_EQUAL;
-                    rEntry.bQueryByString = false;
+                    rEntry.bQueryByString = FALSE;
                     rEntry.nVal = 0;
                 }
                 delete pArray;
@@ -1545,14 +1547,14 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
         DestroySortCollator();
 }
 
-static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rParam, sal_Bool* pSpecial )
+static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rParam, BOOL* pSpecial )
 {
     bool bTopTen = false;
     SCSIZE nEntryCount = rParam.GetEntryCount();
 
     for ( SCSIZE i = 0; i < nEntryCount; ++i )
     {
-        pSpecial[i] = false;
+        pSpecial[i] = FALSE;
         ScQueryEntry& rEntry = rParam.GetEntry(i);
         if ( rEntry.bDoQuery )
         {
@@ -1581,10 +1583,10 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
             }
             else
             {
-                // call from UNO or second call from autofilter
+                // #58736# call from UNO or second call from autofilter
                 if ( rEntry.nVal == SC_EMPTYFIELDS || rEntry.nVal == SC_NONEMPTYFIELDS )
                 {
-                    pSpecial[i] = sal_True;
+                    pSpecial[i] = TRUE;
                 }
             }
             if ( !bTopTen )
@@ -1613,25 +1615,26 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
     }
 }
 
-SCSIZE ScTable::Query(ScQueryParam& rParamOrg, sal_Bool bKeepSub)
+SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
 {
     ScQueryParam    aParam( rParamOrg );
-    ScStrCollection aScStrCollection;
-    StrData*        pStrData = NULL;
+    ScStrCollection	aScStrCollection;
+    StrData*		pStrData = NULL;
 
-    sal_Bool    bStarted = false;
-    sal_Bool    bOldResult = sal_True;
-    SCROW   nOldStart = 0;
-    SCROW   nOldEnd = 0;
+    BOOL	bStarted = FALSE;
+    BOOL	bOldResult = TRUE;
+    SCROW	nOldStart = 0;
+    SCROW	nOldEnd = 0;
 
-    SCSIZE nCount   = 0;
-    SCROW nOutRow   = 0;
+    SCSIZE nCount	= 0;
+    SCROW nOutRow	= 0;
     SCROW nHeader   = aParam.bHasHeader ? 1 : 0;
 
     SCSIZE nEntryCount = aParam.GetEntryCount();
-    sal_Bool* pSpecial = new sal_Bool[nEntryCount];
+    BOOL* pSpecial = new BOOL[nEntryCount];
     lcl_PrepareQuery( pDocument, this, aParam, pSpecial );
 
+    SCROW nEndRow = aParam.bUseDynamicRange ? aParam.nDynamicEndRow : aParam.nRow2;
     if (!aParam.bInplace)
     {
         nOutRow = aParam.nDestRow + nHeader;
@@ -1640,16 +1643,12 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, sal_Bool bKeepSub)
                             aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
     }
 
-
-    if (aParam.bInplace)
-        InitializeNoteCaptions();
-
-    SCROW nRealRow2 = aParam.nRow2;
-    for (SCROW j = aParam.nRow1 + nHeader; j <= nRealRow2; ++j)
+    InitializeNoteCaptions();
+    for (SCROW j=aParam.nRow1 + nHeader; j<=nEndRow; j++)
     {
-        sal_Bool bResult;                                   // Filterergebnis
-        sal_Bool bValid = ValidQuery(j, aParam, pSpecial);
-        if (!bValid && bKeepSub)                        // Subtotals stehenlassen
+        BOOL bResult;									// Filterergebnis
+        BOOL bValid = ValidQuery(j, aParam, pSpecial);
+        if (!bValid && bKeepSub)						// Subtotals stehenlassen
         {
             for (SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2 && !bValid; nCol++)
             {
@@ -1659,13 +1658,13 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, sal_Bool bKeepSub)
                     if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                         if (((ScFormulaCell*)pCell)->IsSubTotal())
                             if (RefVisible((ScFormulaCell*)pCell))
-                                bValid = sal_True;
+                                bValid = TRUE;
             }
         }
         if (bValid)
         {
             if (aParam.bDuplicate)
-                bResult = sal_True;
+                bResult = TRUE;
             else
             {
                 String aStr;
@@ -1678,20 +1677,20 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, sal_Bool bKeepSub)
                 }
                 pStrData = new StrData(aStr);
 
-                sal_Bool bIsUnique = sal_True;
+                BOOL bIsUnique = TRUE;
                 if (pStrData)
                     bIsUnique = aScStrCollection.Insert(pStrData);
                 if (bIsUnique)
-                    bResult = sal_True;
+                    bResult = TRUE;
                 else
                 {
                     delete pStrData;
-                    bResult = false;
+                    bResult = FALSE;
                 }
             }
         }
         else
-            bResult = false;
+            bResult = FALSE;
 
         if (aParam.bInplace)
         {
@@ -1704,7 +1703,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, sal_Bool bKeepSub)
                 nOldStart = nOldEnd = j;
                 bOldResult = bResult;
             }
-            bStarted = sal_True;
+            bStarted = TRUE;
         }
         else
         {
@@ -1721,29 +1720,27 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, sal_Bool bKeepSub)
     if (aParam.bInplace && bStarted)
         DBShowRows(nOldStart,nOldEnd, bOldResult);
 
-    if (aParam.bInplace)
-        SetDrawPageSize();
-
     delete[] pSpecial;
+    SetDrawPageSize();
     return nCount;
 }
 
-sal_Bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam)
+BOOL ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam)
 {
-    sal_Bool    bValid = sal_True;
+    BOOL	bValid = TRUE;
     SCCOL* pFields = new SCCOL[nCol2-nCol1+1];
-    String  aCellStr;
-    SCCOL   nCol = nCol1;
+    String	aCellStr;
+    SCCOL	nCol = nCol1;
     DBG_ASSERT( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
-    SCTAB   nDBTab = (rQueryParam.nTab == SCTAB_MAX ? nTab : rQueryParam.nTab);
-    SCROW   nDBRow1 = rQueryParam.nRow1;
-    SCCOL   nDBCol2 = rQueryParam.nCol2;
+    SCTAB	nDBTab = (rQueryParam.nTab == SCTAB_MAX ? nTab : rQueryParam.nTab);
+    SCROW	nDBRow1 = rQueryParam.nRow1;
+    SCCOL	nDBCol2 = rQueryParam.nCol2;
     // Erste Zeile muessen Spaltenkoepfe sein
     while (bValid && (nCol <= nCol2))
     {
         String aQueryStr;
         GetUpperCellString(nCol, nRow1, aQueryStr);
-        sal_Bool bFound = false;
+        BOOL bFound = FALSE;
         SCCOL i = rQueryParam.nCol1;
         while (!bFound && (i <= nDBCol2))
         {
@@ -1757,18 +1754,18 @@ sal_Bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
         if (bFound)
             pFields[nCol - nCol1] = i;
         else
-            bValid = false;
+            bValid = FALSE;
         nCol++;
     }
     if (bValid)
     {
-        sal_uLong nVisible = 0;
+        ULONG nVisible = 0;
         for ( nCol=nCol1; nCol<=nCol2; nCol++ )
             nVisible += aCol[nCol].VisibleCount( nRow1+1, nRow2 );
 
         if ( nVisible > SCSIZE_MAX / sizeof(void*) )
         {
-            OSL_FAIL("zu viele Filterkritierien");
+            DBG_ERROR("zu viele Filterkritierien");
             nVisible = 0;
         }
 
@@ -1795,7 +1792,7 @@ sal_Bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
                             rQueryParam.GetEntry(nIndex).eConnect = SC_AND;
                     }
                     else
-                        bValid = false;
+                        bValid = FALSE;
                 }
                 nCol++;
             }
@@ -1808,7 +1805,7 @@ sal_Bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
     return bValid;
 }
 
-sal_Bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam)
+BOOL ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam)
 {
     // A valid StarQuery must be at least 4 columns wide. To be precise it
     // should be exactly 4 columns ...
@@ -1819,17 +1816,17 @@ sal_Bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     // range wasn't sufficiently specified data changes wouldn't flag formula
     // cells for recalculation.
     if (nCol2 - nCol1 < 3)
-        return false;
+        return FALSE;
 
-    sal_Bool bValid;
-    sal_Bool bFound;
+    BOOL bValid;
+    BOOL bFound;
     String aCellStr;
     SCSIZE nIndex = 0;
     SCROW nRow = nRow1;
     DBG_ASSERT( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
-    SCTAB   nDBTab = (rQueryParam.nTab == SCTAB_MAX ? nTab : rQueryParam.nTab);
-    SCROW   nDBRow1 = rQueryParam.nRow1;
-    SCCOL   nDBCol2 = rQueryParam.nCol2;
+    SCTAB	nDBTab = (rQueryParam.nTab == SCTAB_MAX ? nTab : rQueryParam.nTab);
+    SCROW	nDBRow1 = rQueryParam.nRow1;
+    SCCOL	nDBCol2 = rQueryParam.nCol2;
 
     SCSIZE nNewEntries = static_cast<SCSIZE>(nRow2-nRow1+1);
     rQueryParam.Resize( nNewEntries );
@@ -1838,7 +1835,7 @@ sal_Bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     {
         ScQueryEntry& rEntry = rQueryParam.GetEntry(nIndex);
 
-        bValid = false;
+        bValid = FALSE;
         // Erste Spalte UND/ODER
         if (nIndex > 0)
         {
@@ -1846,18 +1843,18 @@ sal_Bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
             if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_UND) )
             {
                 rEntry.eConnect = SC_AND;
-                bValid = sal_True;
+                bValid = TRUE;
             }
             else if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_ODER) )
             {
                 rEntry.eConnect = SC_OR;
-                bValid = sal_True;
+                bValid = TRUE;
             }
         }
         // Zweite Spalte FeldName
         if ((nIndex < 1) || bValid)
         {
-            bFound = false;
+            bFound = FALSE;
             GetUpperCellString(nCol1 + 1, nRow, aCellStr);
             for (SCCOL i=rQueryParam.nCol1; (i <= nDBCol2) && (!bFound); i++)
             {
@@ -1870,16 +1867,16 @@ sal_Bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
                 if (bFound)
                 {
                     rEntry.nField = i;
-                    bValid = sal_True;
+                    bValid = TRUE;
                 }
                 else
-                    bValid = false;
+                    bValid = FALSE;
             }
         }
         // Dritte Spalte Operator =<>...
         if (bValid)
         {
-            bFound = false;
+            bFound = FALSE;
             GetUpperCellString(nCol1 + 2, nRow, aCellStr);
             if (aCellStr.GetChar(0) == '<')
             {
@@ -1905,7 +1902,7 @@ sal_Bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         if (bValid)
         {
             GetString(nCol1 + 3, nRow, *rEntry.pStr);
-            rEntry.bDoQuery = sal_True;
+            rEntry.bDoQuery = TRUE;
         }
         nIndex++;
         nRow++;
@@ -1914,7 +1911,7 @@ sal_Bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     return bValid;
 }
 
-sal_Bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam)
+BOOL ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam)
 {
     SCSIZE i, nCount;
     PutInOrder(nCol1, nCol2);
@@ -1925,7 +1922,7 @@ sal_Bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
         rQueryParam.GetEntry(i).Clear();
 
     // Standard QueryTabelle
-    sal_Bool bValid = CreateStarQuery(nCol1, nRow1, nCol2, nRow2, rQueryParam);
+    BOOL bValid = CreateStarQuery(nCol1, nRow1, nCol2, nRow2, rQueryParam);
     // Excel QueryTabelle
     if (!bValid)
         bValid = CreateExcelQuery(nCol1, nRow1, nCol2, nRow2, rQueryParam);
@@ -1933,39 +1930,39 @@ sal_Bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
     nCount = rQueryParam.GetEntryCount();
     if (bValid)
     {
-        //  bQueryByString muss gesetzt sein
+        //	bQueryByString muss gesetzt sein
         for (i=0; i < nCount; i++)
-            rQueryParam.GetEntry(i).bQueryByString = sal_True;
+            rQueryParam.GetEntry(i).bQueryByString = TRUE;
     }
     else
     {
-        //  nix
+        //	nix
         for (i=0; i < nCount; i++)
             rQueryParam.GetEntry(i).Clear();
     }
     return bValid;
 }
 
-sal_Bool ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW /* nEndRow */ )
+BOOL ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW /* nEndRow */ )
 {
     for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
     {
         CellType eType = GetCellType( nCol, nStartRow );
         if (eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
-            return false;
+            return FALSE;
     }
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL /* nEndCol */, SCROW nEndRow )
+BOOL ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL /* nEndCol */, SCROW nEndRow )
 {
     for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
     {
         CellType eType = GetCellType( nStartCol, nRow );
         if (eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
-            return false;
+            return FALSE;
     }
-    return sal_True;
+    return TRUE;
 }
 
 void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings, bool& rHasDates)
@@ -1990,7 +1987,7 @@ void ScTable::GetFilteredFilterEntries(
     }
     nEntryCount = aParam.GetEntryCount();
 
-    sal_Bool* pSpecial = new sal_Bool[nEntryCount];
+    BOOL* pSpecial = new BOOL[nEntryCount];
     lcl_PrepareQuery( pDocument, this, aParam, pSpecial );
     bool bHasDates = false;
     for ( SCROW j = nRow1; j <= nRow2; ++j )
@@ -2007,7 +2004,7 @@ void ScTable::GetFilteredFilterEntries(
     delete[] pSpecial;
 }
 
-sal_Bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, sal_Bool bLimit)
+BOOL ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, BOOL bLimit)
 {
     return aCol[nCol].GetDataEntries( nRow, rStrings, bLimit );
 }
@@ -2017,9 +2014,9 @@ SCSIZE ScTable::GetCellCount(SCCOL nCol) const
     return aCol[nCol].GetCellCount();
 }
 
-sal_uLong ScTable::GetCellCount() const
+ULONG ScTable::GetCellCount() const
 {
-    sal_uLong nCellCount = 0;
+    ULONG nCellCount = 0;
 
     for ( SCCOL nCol=0; nCol<=MAXCOL; nCol++ )
         nCellCount += aCol[nCol].GetCellCount();
@@ -2027,23 +2024,23 @@ sal_uLong ScTable::GetCellCount() const
     return nCellCount;
 }
 
-sal_uLong ScTable::GetWeightedCount() const
+ULONG ScTable::GetWeightedCount() const
 {
-    sal_uLong nCellCount = 0;
+    ULONG nCellCount = 0;
 
     for ( SCCOL nCol=0; nCol<=MAXCOL; nCol++ )
-        if ( aCol[nCol].GetCellCount() )                    // GetCellCount ist inline
+        if ( aCol[nCol].GetCellCount() )					// GetCellCount ist inline
             nCellCount += aCol[nCol].GetWeightedCount();
 
     return nCellCount;
 }
 
-sal_uLong ScTable::GetCodeCount() const
+ULONG ScTable::GetCodeCount() const
 {
-    sal_uLong nCodeCount = 0;
+    ULONG nCodeCount = 0;
 
     for ( SCCOL nCol=0; nCol<=MAXCOL; nCol++ )
-        if ( aCol[nCol].GetCellCount() )                    // GetCellCount ist inline
+        if ( aCol[nCol].GetCellCount() )					// GetCellCount ist inline
             nCodeCount += aCol[nCol].GetCodeCount();
 
     return nCodeCount;
@@ -2058,7 +2055,7 @@ sal_Int32 ScTable::GetMaxStringLen( SCCOL nCol, SCROW nRowStart,
         return 0;
 }
 
-xub_StrLen ScTable::GetMaxNumberStringLen(
+xub_StrLen ScTable::GetMaxNumberStringLen( 
     sal_uInt16& nPrecision, SCCOL nCol, SCROW nRowStart, SCROW nRowEnd ) const
 {
     if ( ValidCol(nCol) )
@@ -2071,9 +2068,9 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark )
 {
-    //  Cursor neben einer Markierung nicht beruecksichtigen:
-    //! nur noch MarkData uebergeben, Cursorposition ggf. hineinselektieren!!!
-    sal_Bool bSingle = ( rMark.IsMarked() || !rMark.IsMultiMarked() );
+    //	Cursor neben einer Markierung nicht beruecksichtigen:
+    //!	nur noch MarkData uebergeben, Cursorposition ggf. hineinselektieren!!!
+    BOOL bSingle = ( rMark.IsMarked() || !rMark.IsMultiMarked() );
 
     // Mehrfachselektion:
 
@@ -2085,7 +2082,7 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
                                                     bSingle && ( nCol >= nStartCol && nCol <= nEndCol ),
                                                     nStartRow, nEndRow );
 
-    //  Einfachselektion (oder Cursor) nur wenn nicht negativ (und s.o.):
+    //	Einfachselektion (oder Cursor) nur wenn nicht negativ (und s.o.):
 
     if ( bSingle && !rMark.IsMarkNegative() )
         for (nCol=nStartCol; nCol<=nEndCol && !rData.bError; nCol++)
@@ -2093,7 +2090,7 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
                 aCol[nCol].UpdateAreaFunction( rData, *mpHiddenRows, nStartRow, nEndRow );
 }
 
-void ScTable::FindConditionalFormat( sal_uLong nKey, ScRangeList& rList )
+void ScTable::FindConditionalFormat( ULONG nKey, ScRangeList& rList )
 {
     SCROW nStartRow = 0, nEndRow = 0;
     for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
@@ -2110,16 +2107,7 @@ void ScTable::FindConditionalFormat( sal_uLong nKey, ScRangeList& rList )
     }
 }
 
-void ScTable::IncRecalcLevel()
-{
-    ++nRecalcLvl;
-}
 
-void ScTable::DecRecalcLevel(bool bUpdateNoteCaptionPos)
-{
-     if (!--nRecalcLvl)
-         SetDrawPageSize(true, bUpdateNoteCaptionPos);
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

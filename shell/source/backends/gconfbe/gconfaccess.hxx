@@ -101,10 +101,9 @@ enum ConfigurationSetting
 
 struct ConfigurationValue
 {
-    const ConfigurationSetting nSettingId;
+    const ConfigurationSetting nSettingId;    
     const gchar *GconfItem;
     const char *OOoConfItem;
-    const sal_Int32 nOOoConfItemLen;
     const sal_Bool bNeedsTranslation;
     const ConfigurationSetting nDependsOn;
 };

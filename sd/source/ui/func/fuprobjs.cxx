@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ TYPEINIT1( FuPresentationObjects, FuPoor );
 
 FuPresentationObjects::FuPresentationObjects (
     ViewShell* pViewSh,
-    ::sd::Window* pWin,
+    ::sd::Window* pWin, 
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
@@ -94,48 +94,42 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     String aLayoutName = (((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue());
     DBG_ASSERT(aLayoutName.Len(), "Layout unbestimmt");
 
-    sal_Bool    bUnique = sal_False;
-    sal_Int16   nDepth, nTmp;
+    BOOL	bUnique = FALSE;
+    sal_Int16	nDepth, nTmp;
     OutlineView* pOlView = static_cast<OutlineView*>(pOutlineViewShell->GetView());
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( (Window*) mpWindow );
     ::Outliner* pOutl = pOutlinerView->GetOutliner();
-
-    std::vector<Paragraph*> aSelList;
-    pOutlinerView->CreateSelectionList(aSelList);
-
-    std::vector<Paragraph*>::const_iterator iter = aSelList.begin();
-    Paragraph* pPara = aSelList.empty() ? NULL : *iter;
-
-    nDepth = pOutl->GetDepth((sal_uInt16)pOutl->GetAbsPos( pPara ) );
+    List* pList = pOutlinerView->CreateSelectionList();
+    Paragraph* pPara = (Paragraph*)pList->First();
+    nDepth = pOutl->GetDepth((USHORT)pOutl->GetAbsPos( pPara ) );
     bool bPage = pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE );
 
-    while( iter != aSelList.end() )
+    while( pPara )
     {
-        pPara = *iter;
-
-        nTmp = pOutl->GetDepth((sal_uInt16) pOutl->GetAbsPos( pPara ) );
+        nTmp = pOutl->GetDepth((USHORT) pOutl->GetAbsPos( pPara ) );
 
         if( nDepth != nTmp )
         {
-            bUnique = sal_False;
+            bUnique = FALSE;
             break;
         }
 
         if( pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) != bPage )
         {
-            bUnique = sal_False;
+            bUnique = FALSE;
             break;
         }
-        bUnique = sal_True;
-        ++iter;
+        bUnique = TRUE;
+
+        pPara = (Paragraph*) pList->Next();
     }
 
     if( bUnique )
     {
         String aStyleName = aLayoutName;
         aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ) );
-        sal_uInt16 nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
-        PresentationObjects ePO;
+        USHORT nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
+        PresentationObjects	ePO;
 
         if( bPage )
         {

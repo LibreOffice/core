@@ -18,14 +18,14 @@ import com.sun.star.task.XInteractionHandler;
 import com.sun.star.task.MasterPasswordRequest;
 import com.sun.star.uno.UnoRuntime;
 
-public class MasterPasswdHandler extends WeakBase
+public class MasterPasswdHandler extends WeakBase 
         implements XInteractionHandler {
     XInteractionHandler m_xHandler;
-
+    
     public MasterPasswdHandler( XInteractionHandler xHandler ) {
         m_xHandler = xHandler;
     }
-
+    
     public void handle( XInteractionRequest xRequest ) {
         try {
             MasterPasswordRequest aMasterPasswordRequest;
@@ -36,16 +36,12 @@ public class MasterPasswdHandler extends WeakBase
                     XInteractionSupplyAuthentication xAuthentication = null;
 
                     for( int i = 0; i < xContinuations.length; ++i ) {
-                        xAuthentication = UnoRuntime.queryInterface(XInteractionSupplyAuthentication.class, xContinuations[i]);
+                        xAuthentication = (XInteractionSupplyAuthentication)UnoRuntime.queryInterface( XInteractionSupplyAuthentication.class, xContinuations[i]);
                         if( xAuthentication != null )
-                        {
                             break;
-                        }
                     }
                     if( xAuthentication.canSetPassword() )
-                    {
-                        xAuthentication.setPassword("abcdefghijklmnopqrstuvwxyz123456");
-                    }
+                        xAuthentication.setPassword( "abcdefghijklmnopqrstuvwxyz123456" );
                     xAuthentication.select();
                 }
             } else {

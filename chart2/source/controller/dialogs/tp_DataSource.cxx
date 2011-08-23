@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,14 +145,14 @@ OUString lcl_GetSequenceNameForLabel( ::chart::SeriesEntry * pEntry )
 }
 
 static long lcl_pRoleListBoxTabs[] =
-    {   3,        // Number of Tabs
+    {	3,        // Number of Tabs
         0, 0, 75
     };
 
 void lcl_ShowChooserButton(
     ::chart::RangeSelectionButton & rChooserButton,
     Edit & rEditField,
-    sal_Bool bShow )
+    BOOL bShow )
 {
     if( rChooserButton.IsVisible() != bShow )
     {
@@ -170,8 +170,8 @@ void lcl_enableRangeChoosing( bool bEnable, Dialog * pDialog )
 {
     if( pDialog )
     {
-        pDialog->Show( bEnable ? sal_False : sal_True );
-        pDialog->SetModalInputMode( bEnable ? sal_False : sal_True );
+        pDialog->Show( bEnable ? FALSE : TRUE );
+        pDialog->SetModalInputMode( bEnable ? FALSE : TRUE );
     }
 }
 
@@ -312,7 +312,7 @@ DataSourceTabPage::DataSourceTabPage(
     // set handlers
     m_apLB_SERIES->SetSelectHdl( LINK( this, DataSourceTabPage, SeriesSelectionChangedHdl ));
 
-    m_aLB_ROLE.SetStyle( m_aLB_ROLE.GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );
+    m_aLB_ROLE.SetWindowBits( WB_HSCROLL | WB_CLIPCHILDREN );
     m_aLB_ROLE.SetSelectionMode( SINGLE_SELECTION );
     m_aLB_ROLE.SetSelectHdl( LINK( this, DataSourceTabPage, RoleSelectionChangedHdl ));
 
@@ -332,7 +332,7 @@ DataSourceTabPage::DataSourceTabPage(
     m_aEDT_CATEGORIES.SetModifyHdl( LINK( this, DataSourceTabPage, RangeModifiedHdl ));
     m_aEDT_RANGE.SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
     m_aEDT_CATEGORIES.SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
-
+    
     // #i75179# enable setting the background to a different color
     m_aEDT_RANGE.SetStyle( m_aEDT_RANGE.GetStyle() | WB_FORCECTRLBACKGROUND );
     m_aEDT_CATEGORIES.SetStyle( m_aEDT_CATEGORIES.GetStyle() | WB_FORCECTRLBACKGROUND );
@@ -360,8 +360,6 @@ DataSourceTabPage::DataSourceTabPage(
     if( m_apLB_SERIES->First())
         m_apLB_SERIES->Select( m_apLB_SERIES->First());
     m_apLB_SERIES->GrabFocus();
-    m_aBTN_UP.SetAccessibleName(String(SchResId(STR_BUTTON_UP)));
-    m_aBTN_DOWN.SetAccessibleName(String(SchResId(STR_BUTTON_DOWN)));
 }
 
 DataSourceTabPage::~DataSourceTabPage()
@@ -462,7 +460,7 @@ void DataSourceTabPage::updateControlsFromDialogModel()
 
 void DataSourceTabPage::fillSeriesListBox()
 {
-    m_apLB_SERIES->SetUpdateMode( sal_False );
+    m_apLB_SERIES->SetUpdateMode( FALSE );
 
     Reference< XDataSeries > xSelected;
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_apLB_SERIES->FirstSelected());
@@ -514,7 +512,7 @@ void DataSourceTabPage::fillSeriesListBox()
     if( bHasSelectedEntry && pSelectedEntry )
         m_apLB_SERIES->Select( pSelectedEntry );
 
-    m_apLB_SERIES->SetUpdateMode( sal_True );
+    m_apLB_SERIES->SetUpdateMode( TRUE );
 }
 
 void DataSourceTabPage::fillRoleListBox()
@@ -523,7 +521,7 @@ void DataSourceTabPage::fillRoleListBox()
     bool bHasSelectedEntry = (pSeriesEntry != 0);
 
     SvLBoxEntry * pRoleEntry =  m_aLB_ROLE.FirstSelected();
-    sal_uLong nRoleIndex = SAL_MAX_UINT32;
+    ULONG nRoleIndex = SAL_MAX_UINT32;
     if( pRoleEntry )
         nRoleIndex = m_aLB_ROLE.GetModel()->GetAbsPos( pRoleEntry );
 
@@ -536,7 +534,7 @@ void DataSourceTabPage::fillRoleListBox()
                 pSeriesEntry->m_xChartType ));
 
         // fill role list
-        m_aLB_ROLE.SetUpdateMode( sal_False );
+        m_aLB_ROLE.SetUpdateMode( FALSE );
         m_aLB_ROLE.Clear();
         m_aLB_ROLE.RemoveSelection();
 
@@ -554,7 +552,7 @@ void DataSourceTabPage::fillRoleListBox()
             m_aLB_ROLE.Select( m_aLB_ROLE.GetEntry( nRoleIndex ));
         }
 
-        m_aLB_ROLE.SetUpdateMode( sal_True );
+        m_aLB_ROLE.SetUpdateMode( TRUE );
     }
 }
 
@@ -581,7 +579,7 @@ void DataSourceTabPage::updateControlState()
 
     m_aFT_DATALABELS.Show(!bHasCategories);
     m_aFT_CATEGORIES.Show( bHasCategories);
-    sal_Bool bShowIB = bHasRangeChooser;
+    BOOL bShowIB = bHasRangeChooser;
     lcl_ShowChooserButton( m_aIMB_RANGE_CAT, m_aEDT_CATEGORIES, bShowIB );
 
     m_aFT_SERIES.Enable();
@@ -1038,6 +1036,11 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                 }
                                 xLabeledSeq->setValues( xNewSeq );
                             }
+                        }
+                        else if( xLabeledSeq.is())
+                        {
+                            // values cannot be deleted. This would also delete the Role (for labels)
+//                             xLabeledSeq->setValues( Reference< data::XDataSequence >());
                         }
                     }
                 }

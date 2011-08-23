@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,8 @@
 #include <ooxml/OOXMLDocument.hxx>
 #include "OOXMLPropertySetImpl.hxx"
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
 #include <resourcemodel/TagLogger.hxx>
-#include <resourcemodel/XPathLogger.hxx>
 #endif
 
 namespace writerfilter {
@@ -53,15 +52,12 @@ class OOXMLParserState
     unsigned int mnContexts;
     unsigned int mnHandle;
     OOXMLDocument * mpDocument;
-    sal_Int32 mnXNoteId;
+    rtl::OUString msXNoteId;
     rtl::OUString msTarget;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
     stack<OOXMLPropertySet::Pointer_t> mCellProps;
     stack<OOXMLPropertySet::Pointer_t> mRowProps;
     stack<OOXMLPropertySet::Pointer_t> mTableProps;
-#if OSL_DEBUG_LEVEL > 1
-    XPathLogger m_xPathLogger;
-#endif
 
 public:
     typedef boost::shared_ptr<OOXMLParserState> Pointer_t;
@@ -71,7 +67,7 @@ public:
 
     bool isInSectionGroup() const;
     void setInSectionGroup(bool bInSectionGroup);
-
+    
     void setLastParagraphInSection(bool bLastParagraphInSection);
     bool isLastParagraphInSection() const;
 
@@ -83,15 +79,15 @@ public:
 
     void setForwardEvents(bool bForwardEvents);
     bool isForwardEvents() const;
-
+    
     const string getHandle() const;
     void setHandle();
 
     void setDocument(OOXMLDocument * pDocument);
     OOXMLDocument * getDocument() const;
 
-    void setXNoteId(const sal_Int32 rId);
-    sal_Int32 getXNoteId() const;
+    void setXNoteId(const rtl::OUString & rId);
+    const rtl::OUString & getXNoteId() const;
 
     const rtl::OUString & getTarget() const;
 
@@ -106,14 +102,14 @@ public:
 
     void startTable();
     void endTable();
-
+    
     void incContextCount();
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
 public:
     unsigned int getContextCount() const;
-    void dumpXml( const TagLogger::Pointer_t& pLogger );
-    XPathLogger & getXPathLogger();
+    string toString() const;
+    XMLTag::Pointer_t toTag() const;
 #endif
 
 };

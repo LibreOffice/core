@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,39 +45,39 @@ void GoStartDoc( SwPosition*);
 void GoEndDoc( SwPosition*);
 void GoStartSection( SwPosition*);
 void GoEndSection( SwPosition*);
-sal_Bool GoInDoc( SwPaM&, SwMoveFn);
-sal_Bool GoInSection( SwPaM&, SwMoveFn);
-sal_Bool GoInNode( SwPaM&, SwMoveFn);
-sal_Bool GoInCntnt( SwPaM&, SwMoveFn);
-sal_Bool GoInCntntCells( SwPaM&, SwMoveFn);
-sal_Bool GoInCntntSkipHidden( SwPaM&, SwMoveFn);
-sal_Bool GoInCntntCellsSkipHidden( SwPaM&, SwMoveFn);
-const SwTxtAttr* GetFrwrdTxtHint( const SwpHints&, sal_uInt16&, xub_StrLen );
-const SwTxtAttr* GetBkwrdTxtHint( const SwpHints&, sal_uInt16&, xub_StrLen );
+BOOL GoInDoc( SwPaM&, SwMoveFn);
+BOOL GoInSection( SwPaM&, SwMoveFn);
+BOOL GoInNode( SwPaM&, SwMoveFn);
+BOOL GoInCntnt( SwPaM&, SwMoveFn);
+BOOL GoInCntntCells( SwPaM&, SwMoveFn);
+BOOL GoInCntntSkipHidden( SwPaM&, SwMoveFn);
+BOOL GoInCntntCellsSkipHidden( SwPaM&, SwMoveFn);
+const SwTxtAttr* GetFrwrdTxtHint( const SwpHints&, USHORT&, xub_StrLen );
+const SwTxtAttr* GetBkwrdTxtHint( const SwpHints&, USHORT&, xub_StrLen );
 
-sal_Bool GoNext(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
-sal_Bool GoPrevious(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
-SW_DLLPUBLIC SwCntntNode* GoNextNds( SwNodeIndex * pIdx, sal_Bool );
-SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, sal_Bool );
+BOOL GoNext(SwNode* pNd, SwIndex * pIdx, USHORT nMode );
+BOOL GoPrevious(SwNode* pNd, SwIndex * pIdx, USHORT nMode );
+SW_DLLPUBLIC SwCntntNode* GoNextNds( SwNodeIndex * pIdx, BOOL );
+SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, BOOL );
 
 // --------- Funktionsdefinitionen fuer die SwCrsrShell --------------
 
-sal_Bool GoPrevPara( SwPaM&, SwPosPara);
-sal_Bool GoCurrPara( SwPaM&, SwPosPara);
-sal_Bool GoNextPara( SwPaM&, SwPosPara);
-sal_Bool GoPrevSection( SwPaM&, SwPosSection);
-sal_Bool GoCurrSection( SwPaM&, SwPosSection);
-sal_Bool GoNextSection( SwPaM&, SwPosSection);
+BOOL GoPrevPara( SwPaM&, SwPosPara);
+BOOL GoCurrPara( SwPaM&, SwPosPara);
+BOOL GoNextPara( SwPaM&, SwPosPara);
+BOOL GoPrevSection( SwPaM&, SwPosSection);
+BOOL GoCurrSection( SwPaM&, SwPosSection);
+BOOL GoNextSection( SwPaM&, SwPosSection);
 
 
 // ------------ Typedefiniton fuer Funktionen ----------------------
 
-typedef sal_Bool (*GoNd)( SwNode*, SwIndex*, sal_uInt16 );
-typedef SwCntntNode* (*GoNds)( SwNodeIndex*, sal_Bool );
+typedef BOOL (*GoNd)( SwNode*, SwIndex*, USHORT );
+typedef SwCntntNode* (*GoNds)( SwNodeIndex*, BOOL );
 typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );
-typedef sal_Bool (SwPosition:: *CmpOp)( const SwPosition& ) const;
-typedef const SwTxtAttr* (*GetHint)( const SwpHints&, sal_uInt16&, xub_StrLen );
+typedef BOOL (SwPosition:: *CmpOp)( const SwPosition& ) const;
+typedef const SwTxtAttr* (*GetHint)( const SwpHints&, USHORT&, xub_StrLen );
 typedef int (utl::TextSearch:: *SearchTxt)( const String&, xub_StrLen*,
                     xub_StrLen*, ::com::sun::star::util::SearchResult* );
 typedef void (SwNodes:: *MvSection)( SwNodeIndex * ) const;
@@ -85,18 +85,18 @@ typedef void (SwNodes:: *MvSection)( SwNodeIndex * ) const;
 
 struct SwMoveFnCollection
 {
-    GoNd      fnNd;
-    GoNds     fnNds;
-    GoDoc     fnDoc;
+    GoNd	  fnNd;
+    GoNds	  fnNds;
+    GoDoc	  fnDoc;
     GoSection fnSections;
-    CmpOp     fnCmpOp;
+    CmpOp	  fnCmpOp;
     GetHint   fnGetHint;
     SearchTxt fnSearch;
     MvSection fnSection;
 };
 
 // --------- Funktionsdefinitionen fuers Suchen --------------
-SwCntntNode* GetNode( SwPaM&, sal_Bool&, SwMoveFn, sal_Bool bInReadOnly = sal_False );
+SwCntntNode* GetNode( SwPaM&, BOOL&, SwMoveFn, BOOL bInReadOnly = FALSE );
 
 
 

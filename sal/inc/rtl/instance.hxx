@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -232,10 +232,10 @@ namespace {
     Some comments:
 
     For any instantiation of rtl_Instance, at most one call to a create method
-    may occur in the program code:  Each occurrence of a create method within
+    may occur in the program code:  Each occurance of a create method within
     the program code is supposed to return a fresh object instance on the
     first call, and that same object instance on subsequent calls; but
-    independent occurrences of create methods are supposed to return
+    independent occurances of create methods are supposed to return
     independent object instances.  Since there is a one-to-one correspondence
     between object instances and instantiations of rtl_Instance, the
     requirement should be clear.  One measure to enforce the requirement is
@@ -245,7 +245,7 @@ namespace {
     needs a funny "hand coded" prefix "rtl_" instead of a proper namespace
     prefix like "::rtl::".
 
-    A known problem with this template is when two occurrences of calls to
+    A known problem with this template is when two occurences of calls to
     create methods with identical template arguments appear in one translation
     unit.  Those two places will share a single object instance.  This can be
     avoided by using different Init structs (see the above code samples) in
@@ -344,7 +344,7 @@ namespace rtl {
 
 /** Helper base class for a late-initialized (default-constructed)
     static variable, implementing the double-checked locking pattern correctly.
-
+    
     @derive
     Derive from this class (common practice), e.g.
     <pre>
@@ -353,7 +353,7 @@ namespace rtl {
     MyType & rStatic = MyStatic::get();
     ...
     </pre>
-
+    
     @tplparam T
               variable's type
     @tplparam Unique
@@ -366,7 +366,7 @@ class Static {
 public:
     /** Gets the static.  Mutual exclusion is performed using the
         osl global mutex.
-
+        
         @return
                 static variable
     */
@@ -387,7 +387,7 @@ private:
 
 /** Helper class for a late-initialized static aggregate, e.g. an array,
     implementing the double-checked locking pattern correctly.
-
+    
     @tplparam T
               aggregate's element type
     @tplparam InitAggregate
@@ -398,7 +398,7 @@ class StaticAggregate {
 public:
     /** Gets the static aggregate, late-initializing.
         Mutual exclusion is performed using the osl global mutex.
-
+        
         @return
                 aggregate
     */
@@ -412,7 +412,7 @@ public:
 
 /** Helper base class for a late-initialized static variable,
     implementing the double-checked locking pattern correctly.
-
+    
     @derive
     Derive from this class (common practice),
     providing an initializer functor class, e.g.
@@ -427,7 +427,7 @@ public:
     MyType & rStatic = MyStatic::get();
     ...
     </pre>
-
+    
     @tplparam T
               variable's type
     @tplparam InitData
@@ -447,7 +447,7 @@ class StaticWithInit {
 public:
     /** Gets the static.  Mutual exclusion is performed using the
         osl global mutex.
-
+        
         @return
                 static variable
     */

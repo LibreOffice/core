@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -230,48 +230,48 @@
 // --------------------------------------------------------------------------
 
 #define SID_BASICIDE_TOGGLEBRKPNT           ( SID_BASICIDE_START +  0 )
-#define SID_BASICIDE_ADDWATCH               ( SID_BASICIDE_START +  1 )
-#define SID_BASICIDE_CHOOSEMACRO            ( SID_BASICIDE_START +  2 )
-#define SID_BASICIDE_EDITMACRO              ( SID_BASICIDE_START +  3 )
-#define SID_BASICIDE_CREATEMACRO            ( SID_BASICIDE_START +  4 )
-#define SID_BASICIDE_MODULEDLG              ( SID_BASICIDE_START +  5 )
-#define SID_BASICIDE_OBJCAT                 ( SID_BASICIDE_START +  6 )
-#define SID_BASICIDE_REMOVEWATCH            ( SID_BASICIDE_START +  7 )
-#define SID_BASICIDE_GOTOCALL               ( SID_BASICIDE_START +  8 )
-#define SID_BASICIDE_SHOWSBX                ( SID_BASICIDE_START +  9 )
-#define SID_BASICIDE_HIDECURPAGE            ( SID_BASICIDE_START + 10 )
-#define SID_BASICIDE_NAMECHANGEDONTAB       ( SID_BASICIDE_START + 11 )
-#define SID_BASICIDE_UPDATEMODULESOURCE     ( SID_BASICIDE_START + 12 )
-#define SID_BASICIDE_STOREMODULESOURCE      ( SID_BASICIDE_START + 13 )
-#define SID_BASICIDE_MATCHGROUP             ( SID_BASICIDE_START + 14 )
-#define SID_BASICIDE_APPEAR                 ( SID_BASICIDE_START + 15 )
-#define SID_BASICIDE_STOREALLMODULESOURCES  ( SID_BASICIDE_START + 16 )
-#define SID_BASICIDE_UPDATEALLMODULESOURCES ( SID_BASICIDE_START + 17 )
-#define SID_BASICIDE_LIBSELECTED            ( SID_BASICIDE_START + 18 )
-#define SID_BASICIDE_LIBSELECTOR            ( SID_BASICIDE_START + 19 )
-#define SID_BASICIDE_NEWDIALOG              ( SID_BASICIDE_START + 20 )
-#define SID_BASICIDE_NEWMODULE              ( SID_BASICIDE_START + 21 )
-#define SID_BASICIDE_DELETECURRENT          ( SID_BASICIDE_START + 22 )
-#define SID_BASICIDE_RENAMECURRENT          ( SID_BASICIDE_START + 23 )
-#define SID_BASICIDE_SBXDELETED             ( SID_BASICIDE_START + 24 )
-#define SID_BASICIDE_SBXINSERTED            ( SID_BASICIDE_START + 25 )
-#define SID_BASICIDE_SBXRENAMED             ( SID_BASICIDE_START + 26 )
-#define SID_BASICIDE_LIBLOADED              ( SID_BASICIDE_START + 27 )
-#define SID_BASICIDE_LIBREMOVED             ( SID_BASICIDE_START + 28 )
-#define SID_BASICIDE_ARG_TABID              ( SID_BASICIDE_START + 30 )
-#define SID_BASICIDE_ARG_SBX                ( SID_BASICIDE_START + 31 )
-#define SID_BASICIDE_ARG_MACROINFO          ( SID_BASICIDE_START + 32 )
-#define SID_BASICIDE_ARG_SEARCHOPTIONS      ( SID_BASICIDE_START + 33 )
-#define SID_BASICIDE_ARG_LIBNAME            ( SID_BASICIDE_START + 34 )
-#define SID_BASICIDE_ARG_MODULENAME         ( SID_BASICIDE_START + 35 )
-#define SID_BASICIDE_BRKPNTSCHANGED         ( SID_BASICIDE_START + 36 )
-#define SID_BASICIDE_STATUSBAR              ( SID_BASICIDE_START + 37 )
-#define SID_BASICIDE_STAT_POS               ( SID_BASICIDE_START + 38 )
-#define SID_BASICIDE_STAT_DATE              ( SID_BASICIDE_START + 39 )
-#define SID_BASICIDE_STAT_TITLE             ( SID_BASICIDE_START + 40 )
-#define SID_BASICIDE_NEWJAVAMODULE          ( SID_BASICIDE_START + 41 )
-#define SID_BASICIDE_IMAGESTART             ( SID_BASICIDE_START + 50 )
-#define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
+#define SID_BASICIDE_ADDWATCH				( SID_BASICIDE_START +  1 )
+#define SID_BASICIDE_CHOOSEMACRO			( SID_BASICIDE_START +  2 )
+#define SID_BASICIDE_EDITMACRO         		( SID_BASICIDE_START +  3 )
+#define SID_BASICIDE_CREATEMACRO      		( SID_BASICIDE_START +  4 )
+#define SID_BASICIDE_MODULEDLG				( SID_BASICIDE_START +  5 )
+#define SID_BASICIDE_OBJCAT					( SID_BASICIDE_START +  6 )
+#define SID_BASICIDE_REMOVEWATCH          	( SID_BASICIDE_START +  7 )
+#define SID_BASICIDE_GOTOCALL				( SID_BASICIDE_START +  8 )
+#define SID_BASICIDE_SHOWSBX				( SID_BASICIDE_START +  9 )
+#define SID_BASICIDE_HIDECURPAGE			( SID_BASICIDE_START + 10 )
+#define SID_BASICIDE_NAMECHANGEDONTAB		( SID_BASICIDE_START + 11 )
+#define SID_BASICIDE_UPDATEMODULESOURCE		( SID_BASICIDE_START + 12 )
+#define SID_BASICIDE_STOREMODULESOURCE		( SID_BASICIDE_START + 13 )
+#define SID_BASICIDE_MATCHGROUP				( SID_BASICIDE_START + 14 )
+#define SID_BASICIDE_APPEAR					( SID_BASICIDE_START + 15 )
+#define SID_BASICIDE_STOREALLMODULESOURCES	( SID_BASICIDE_START + 16 )
+#define SID_BASICIDE_UPDATEALLMODULESOURCES	( SID_BASICIDE_START + 17 )
+#define SID_BASICIDE_LIBSELECTED			( SID_BASICIDE_START + 18 )
+#define SID_BASICIDE_LIBSELECTOR			( SID_BASICIDE_START + 19 )
+#define SID_BASICIDE_NEWDIALOG				( SID_BASICIDE_START + 20 )
+#define SID_BASICIDE_NEWMODULE				( SID_BASICIDE_START + 21 )
+#define SID_BASICIDE_DELETECURRENT			( SID_BASICIDE_START + 22 )
+#define SID_BASICIDE_RENAMECURRENT			( SID_BASICIDE_START + 23 )
+#define SID_BASICIDE_SBXDELETED				( SID_BASICIDE_START + 24 )
+#define SID_BASICIDE_SBXINSERTED			( SID_BASICIDE_START + 25 )
+#define SID_BASICIDE_SBXRENAMED				( SID_BASICIDE_START + 26 )
+#define SID_BASICIDE_LIBLOADED				( SID_BASICIDE_START + 27 )
+#define SID_BASICIDE_LIBREMOVED				( SID_BASICIDE_START + 28 )
+#define SID_BASICIDE_ARG_TABID				( SID_BASICIDE_START + 30 )
+#define SID_BASICIDE_ARG_SBX				( SID_BASICIDE_START + 31 )
+#define SID_BASICIDE_ARG_MACROINFO			( SID_BASICIDE_START + 32 )
+#define SID_BASICIDE_ARG_SEARCHOPTIONS		( SID_BASICIDE_START + 33 )
+#define SID_BASICIDE_ARG_LIBNAME			( SID_BASICIDE_START + 34 )
+#define SID_BASICIDE_ARG_MODULENAME			( SID_BASICIDE_START + 35 )
+#define SID_BASICIDE_BRKPNTSCHANGED			( SID_BASICIDE_START + 36 )
+#define SID_BASICIDE_STATUSBAR				( SID_BASICIDE_START + 37 )
+#define SID_BASICIDE_STAT_POS				( SID_BASICIDE_START + 38 )
+#define SID_BASICIDE_STAT_DATE				( SID_BASICIDE_START + 39 )
+#define SID_BASICIDE_STAT_TITLE				( SID_BASICIDE_START + 40 )
+#define SID_BASICIDE_NEWJAVAMODULE			( SID_BASICIDE_START + 41 )
+#define SID_BASICIDE_IMAGESTART				( SID_BASICIDE_START + 50 )
+#define SID_OPTIONS_TREEDIALOG				( SID_BASICIDE_START + 862)
 
 // --------------------------------------------------------------------------
 // StarBase-Id's
@@ -331,12 +331,12 @@
 #define SID_DASH                            (SID_SD_START+267)
 #define SID_TEXT_FITTOSIZE_VERTICAL         (SID_SD_START+286)
 #define SID_GRID_VISIBLE                    (SID_SD_START+322)
-#define ID_VAL_USEFIRSTROWSTYLE             (SID_SD_START+323)
-#define ID_VAL_USELASTROWSTYLE              (SID_SD_START+324)
-#define ID_VAL_USEBANDINGROWSTYLE           (SID_SD_START+325)
-#define ID_VAL_USEFIRSTCOLUMNSTYLE          (SID_SD_START+326)
-#define ID_VAL_USELASTCOLUMNSTYLE           (SID_SD_START+327)
-#define ID_VAL_USEBANDINGCOLUMNSTYLE        (SID_SD_START+328)
+#define ID_VAL_USEFIRSTROWSTYLE				(SID_SD_START+323)
+#define ID_VAL_USELASTROWSTYLE				(SID_SD_START+324)
+#define ID_VAL_USEBANDINGROWSTYLE			(SID_SD_START+325)
+#define ID_VAL_USEFIRSTCOLUMNSTYLE			(SID_SD_START+326)
+#define ID_VAL_USELASTCOLUMNSTYLE			(SID_SD_START+327)
+#define ID_VAL_USEBANDINGCOLUMNSTYLE		(SID_SD_START+328)
 
 // --------------------------------------------------------------------------
 // Calc-Id's
@@ -701,6 +701,7 @@
 #define SID_BMPMASK_PIPETTE                             ( SID_SVX_START + 351 )
 #define SID_BMPMASK_BMPSELECT                           ( SID_SVX_START + 352 )
 #define SID_BMPMASK_EXEC                                ( SID_SVX_START + 353 )
+//#define SID_HYPERLINK_INSERT                            ( SID_SVX_START + 360 )   -> sfxsids.hrc
 //#define SID_HYPERLINK_GETLINK                           ( SID_SVX_START + 361 )   -> sfxsids.hrc
 //#define SID_HYPERLINK_SETLINK                           ( SID_SVX_START + 362 )   -> sfxsids.hrc
 #define SID_NO_GRAPHICS                                 ( SID_SVX_START + 364 )
@@ -744,11 +745,11 @@
 //#define SID_ZOOM_PREV                                   ( SID_SVX_START + 403 )   -> sfxsids.hrc
 #define SID_BACKGRND_DESTINATION                        ( SID_SVX_START + 404 )
 #define SID_ATTR_FLASH                                  ( SID_SVX_START + 406 )
-#define SID_ATTR_3D_LIGHT                               ( SID_SVX_START + 407 ) /* Slots mit --> koennen demnaechst entfallen */
+#define SID_ATTR_3D_LIGHT                               ( SID_SVX_START + 407 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
 #define SID_ATTR_3D_START                                   SID_ATTR_3D_LIGHT
-#define SID_ATTR_3D_LIGHTINTENSITY                      ( SID_SVX_START + 408 ) /* Slots mit --> koennen demnaechst entfallen */
-#define SID_ATTR_3D_LIGHTCOLOR                          ( SID_SVX_START + 409 ) /* Slots mit --> koennen demnaechst entfallen */
-#define SID_ATTR_3D_AMBIENTINTENSITY                    ( SID_SVX_START + 410 ) /* Slots mit --> koennen demnaechst entfallen */
+#define SID_ATTR_3D_LIGHTINTENSITY                      ( SID_SVX_START + 408 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
+#define SID_ATTR_3D_LIGHTCOLOR                          ( SID_SVX_START + 409 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
+#define SID_ATTR_3D_AMBIENTINTENSITY                    ( SID_SVX_START + 410 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
 #define SID_ATTR_3D_AMBIENTCOLOR                        ( SID_SVX_START + 411 )
 #define SID_IMPORT_GRAPH_LINK                           ( SID_SVX_START + 412 )
 
@@ -769,11 +770,11 @@
 //#define SID_SD_AUTOPILOT                                ( SID_SVX_START + 425 )   -> sfxsids.hrc
 #define SID_AUTOPILOT                                       SID_SD_AUTOPILOT
 
-#define SID_TABLE_INSERT_COL_DLG                        ( SID_SVX_START + 426 )
-#define SID_TABLE_INSERT_ROW_DLG                        ( SID_SVX_START + 427 )
-#define SID_TABLE_PARAM_INSERT_AFTER                    ( SID_SVX_START + 428 )
+#define SID_TABLE_INSERT_COL_DLG						( SID_SVX_START + 426 )
+#define SID_TABLE_INSERT_ROW_DLG						( SID_SVX_START + 427 )
+#define SID_TABLE_PARAM_INSERT_AFTER					( SID_SVX_START + 428 )
 
-#define SID_TABLEDESIGN                                 ( SID_SVX_START + 429 )
+#define SID_TABLEDESIGN									( SID_SVX_START + 429 )
 #define SID_MN_AUTOPILOT                                ( SID_SVX_START + 430 )
 #define SID_GENERAL_OPTIONS                             ( SID_SVX_START + 432 )
 #define SID_SW_EDITOPTIONS                              ( SID_SVX_START + 433 )
@@ -1039,8 +1040,8 @@
 #define SID_FM_CONVERTTO_SCROLLBAR                      ( SID_SVX_START + 770 )
 #define SID_FM_CONVERTTO_SPINBUTTON                     ( SID_SVX_START + 771 )
 #define SID_FM_CONVERTTO_NAVIGATIONBAR                  ( SID_SVX_START + 772 )
-#define SID_FM_SHOW_DATANAVIGATOR                       ( SID_SVX_START + 773 )
-#define SID_FM_DATANAVIGATOR_CONTROL                    ( SID_SVX_START + 774 )
+#define SID_FM_SHOW_DATANAVIGATOR			            ( SID_SVX_START + 773 )
+#define SID_FM_DATANAVIGATOR_CONTROL		            ( SID_SVX_START + 774 )
 #define SID_FM_REFRESH_FORM_CONTROL                     ( SID_SVX_START + 775 )
 #define SID_MORE_FMSLOTS_END                            ( SID_SVX_START + 850 )
 
@@ -1135,8 +1136,8 @@
 #define SID_EXTRUSION_SURFACE                           ( SID_SVX_START + 975 )
 #define SID_EXTRUSION_DEPTH_DIALOG                      ( SID_SVX_START + 976 )
 #define SID_FONTWORK_GALLERY_FLOATER                    ( SID_SVX_START + 977 )
-// free                                                 ( SID_SVX_START + 978 )
-#define SID_FONTWORK_SHAPE_TYPE                         ( SID_SVX_START + 979 )
+// free													( SID_SVX_START + 978 )
+#define SID_FONTWORK_SHAPE_TYPE							( SID_SVX_START + 979 )
 #define SID_FONTWORK_SAME_LETTER_HEIGHTS                ( SID_SVX_START + 980 )
 #define SID_FONTWORK_ALIGNMENT_FLOATER                  ( SID_SVX_START + 981 )
 #define SID_FONTWORK_CHARACTER_SPACING_FLOATER          ( SID_SVX_START + 982 )
@@ -1193,20 +1194,20 @@
 #define SID_PAPER_START                                 ( SID_SVX_START + 1039 )
 #define SID_PAPER_END                                   ( SID_SVX_START + 1040 )
 #define SID_COLLECT_LIST                                ( SID_SVX_START + 1041 )
-#define SID_GROW_FONT_SIZE                              ( SID_SVX_START + 1042 )
-#define SID_SHRINK_FONT_SIZE                            ( SID_SVX_START + 1043 )
+#define SID_GROW_FONT_SIZE								( SID_SVX_START + 1042 )
+#define SID_SHRINK_FONT_SIZE							( SID_SVX_START + 1043 )
 // color subtoolbar on graphictoolbar
 #define SID_COLOR_SETTINGS                              ( SID_SVX_START + 1044 )
 #define SID_FM_MORE_CONTROLS                            ( SID_SVX_START + 1045 )
 #define SID_FM_FORM_DESIGN_TOOLS                        ( SID_SVX_START + 1046 )
-#define SID_DRAWTBX_CS_BASIC                            ( SID_SVX_START + 1047 )
-#define SID_DRAWTBX_CS_SYMBOL                           ( SID_SVX_START + 1048 )
-#define SID_DRAWTBX_CS_ARROW                            ( SID_SVX_START + 1049 )
-#define SID_DRAWTBX_CS_FLOWCHART                        ( SID_SVX_START + 1050 )
-#define SID_DRAWTBX_CS_CALLOUT                          ( SID_SVX_START + 1051 )
-#define SID_DRAWTBX_CS_STAR                             ( SID_SVX_START + 1052 )
-#define SID_DRAW_CS_ID                                  ( SID_SVX_START + 1053 )
-#define SID_FONTWORK_CHARACTER_SPACING_DIALOG           ( SID_SVX_START + 1054 )
+#define SID_DRAWTBX_CS_BASIC							( SID_SVX_START + 1047 )
+#define SID_DRAWTBX_CS_SYMBOL							( SID_SVX_START + 1048 )
+#define SID_DRAWTBX_CS_ARROW							( SID_SVX_START + 1049 )
+#define SID_DRAWTBX_CS_FLOWCHART						( SID_SVX_START + 1050 )
+#define SID_DRAWTBX_CS_CALLOUT							( SID_SVX_START + 1051 )
+#define SID_DRAWTBX_CS_STAR								( SID_SVX_START + 1052 )
+#define SID_DRAW_CS_ID									( SID_SVX_START + 1053 )
+#define SID_FONTWORK_CHARACTER_SPACING_DIALOG			( SID_SVX_START + 1054 )
 #define SID_BORDER_REDUCED_MODE                         ( SID_SVX_START + 1055 )
 #define SID_INSERT_RLM                                  ( SID_SVX_START + 1056 )   /* insert RLM - right to left mark */
 #define SID_INSERT_LRM                                  ( SID_SVX_START + 1057 )   /* insert LRM - left to right mark */
@@ -1223,47 +1224,46 @@
 #define SID_CHAR_DLG_FOR_PARAGRAPH                      ( SID_SVX_START + 1068 )
 #define SID_SET_DOCUMENT_LANGUAGE                       ( SID_SVX_START + 1069 )
 
-#define SID_TABLE_MERGE_CELLS                           (SID_SVX_START+1070)
-#define SID_TABLE_SPLIT_CELLS                           (SID_SVX_START+1071)
-#define SID_OPTIMIZE_TABLE                              (SID_SVX_START+1072)
-#define SID_TABLE_VERT_BOTTOM                           (SID_SVX_START+1073)
-#define SID_TABLE_VERT_CENTER                           (SID_SVX_START+1074)
-#define SID_TABLE_VERT_NONE                             (SID_SVX_START+1075)
-#define SID_TABLE_INSERT_ROW                            (SID_SVX_START+1076)
-#define SID_TABLE_INSERT_COL                            (SID_SVX_START+1077)
-#define SID_TABLE_DELETE_ROW                            (SID_SVX_START+1078)
-#define SID_TABLE_DELETE_COL                            (SID_SVX_START+1079)
-#define SID_TABLE_SELECT_ALL                            (SID_SVX_START+1080)
-#define SID_TABLE_SELECT_COL                            (SID_SVX_START+1081)
-#define SID_TABLE_SELECT_ROW                            (SID_SVX_START+1082)
-#define SID_FORMAT_TABLE_DLG                            (SID_SVX_START+1083)
-#define SID_TABLE_SORT_DIALOG                           (SID_SVX_START+1084)
-#define SID_TABLE_AUTOSUM                               (SID_SVX_START+1085)
-#define SID_TABLE_DISTRIBUTE_COLUMNS                    (SID_SVX_START+1086)
-#define SID_TABLE_DISTRIBUTE_ROWS                       (SID_SVX_START+1087)
-#define SID_TABLE_STYLE                                 (SID_SVX_START+1088)
-#define SID_TABLE_STYLE_SETTINGS                        (SID_SVX_START+1089)
+#define SID_TABLE_MERGE_CELLS							(SID_SVX_START+1070)
+#define SID_TABLE_SPLIT_CELLS							(SID_SVX_START+1071)
+#define SID_OPTIMIZE_TABLE								(SID_SVX_START+1072)
+#define SID_TABLE_VERT_BOTTOM							(SID_SVX_START+1073)
+#define SID_TABLE_VERT_CENTER							(SID_SVX_START+1074)
+#define SID_TABLE_VERT_NONE								(SID_SVX_START+1075)
+#define SID_TABLE_INSERT_ROW							(SID_SVX_START+1076)
+#define SID_TABLE_INSERT_COL							(SID_SVX_START+1077)
+#define SID_TABLE_DELETE_ROW							(SID_SVX_START+1078)
+#define SID_TABLE_DELETE_COL							(SID_SVX_START+1079)
+#define SID_TABLE_SELECT_ALL							(SID_SVX_START+1080)
+#define SID_TABLE_SELECT_COL							(SID_SVX_START+1081)
+#define SID_TABLE_SELECT_ROW							(SID_SVX_START+1082)
+#define SID_FORMAT_TABLE_DLG							(SID_SVX_START+1083)
+#define SID_TABLE_SORT_DIALOG							(SID_SVX_START+1084)
+#define SID_TABLE_AUTOSUM								(SID_SVX_START+1085)
+#define SID_TABLE_DISTRIBUTE_COLUMNS					(SID_SVX_START+1086)
+#define SID_TABLE_DISTRIBUTE_ROWS						(SID_SVX_START+1087)
+#define SID_TABLE_STYLE									(SID_SVX_START+1088)
+#define SID_TABLE_STYLE_SETTINGS						(SID_SVX_START+1089)
 #define SID_CHAR_DLG_PREVIEW_STRING                     (SID_SVX_START+1090)
 #define SID_RECHECK_DOCUMENT                            (SID_SVX_START+1091)
 
 #define SID_OBJECT_MIRROR                               (SID_SVX_START+1093)
 
-#define SID_DELETE_POSTIT                               (SID_SVX_START+1094)
-#define SID_NEXT_POSTIT                                 (SID_SVX_START+1095)
-#define SID_PREVIOUS_POSTIT                             (SID_SVX_START+1096)
-#define SID_DELETEALL_POSTIT                            (SID_SVX_START+1097)
-#define SID_SHOW_POSTIT                                 (SID_SVX_START+1098)
-#define SID_REPLYTO_POSTIT                              (SID_SVX_START+1099)
-#define SID_DELETEALLBYAUTHOR_POSTIT                    (SID_SVX_START+1100)
-#define SID_INSERT_POSTIT                               (SID_SVX_START+1101)
+#define SID_DELETE_POSTIT								(SID_SVX_START+1094)
+#define SID_NEXT_POSTIT									(SID_SVX_START+1095)
+#define SID_PREVIOUS_POSTIT								(SID_SVX_START+1096)
+#define SID_DELETEALL_POSTIT							(SID_SVX_START+1097)
+#define SID_SHOW_POSTIT									(SID_SVX_START+1098)
+#define SID_REPLYTO_POSTIT								(SID_SVX_START+1099)
+#define SID_DELETEALLBYAUTHOR_POSTIT					(SID_SVX_START+1100)
+#define SID_INSERT_POSTIT							    (SID_SVX_START+1101)
 
 #define SID_TRANSLITERATE_SENTENCE_CASE                 (SID_SVX_START+1102)
 #define SID_TRANSLITERATE_TITLE_CASE                    (SID_SVX_START+1103)
 #define SID_TRANSLITERATE_TOGGLE_CASE                   (SID_SVX_START+1104)
-#define SID_TRANSLITERATE_ROTATE_CASE                   (SID_SVX_START+1105)
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_TRANSLITERATE_ROTATE_CASE + 1)
+#define SID_SVX_FIRSTFREE								(SID_TRANSLITERATE_TOGGLE_CASE + 1)
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

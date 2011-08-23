@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace cpp
 {
 
 
-/** This is an interface, which accepts the file scope events that may
+/**	This is an interface, which accepts the file scope events that may
     be important for parsing. It is implementation-dependant, where to
     put or what to do with them.
 */
@@ -64,7 +64,7 @@ class FileScope_EventHandler
 
     // OPERATIONS
     void                SetCurFile(
-                            ary::loc::File &    io_rCurFile );
+                            ary::loc::File &	io_rCurFile );
     void                Event_IncrLineCount();
     void                Event_SwBracketOpen();
     void                Event_SwBracketClose();
@@ -72,7 +72,7 @@ class FileScope_EventHandler
 
   private:
     virtual void        do_SetCurFile(
-                            ary::loc::File &    io_rCurFile ) = 0;
+                            ary::loc::File &	io_rCurFile ) = 0;
     virtual void        do_Event_IncrLineCount() = 0;
     virtual void        do_Event_SwBracketOpen() = 0;
     virtual void        do_Event_SwBracketClose() = 0;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,12 +52,12 @@ public:
         , const ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >& xContext );
     ~ChartTypeDialog();
-
+    
 private:
     FixedLine           m_aFL;
-    OKButton            m_aBtnOK;
-    CancelButton        m_aBtnCancel;
-    HelpButton          m_aBtnHelp;
+    OKButton		    m_aBtnOK;
+    CancelButton	    m_aBtnCancel;
+    HelpButton		    m_aBtnHelp;
 
     ChartTypeTabPage*   m_pChartTypeTabPage;
 

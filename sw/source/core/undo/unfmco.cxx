@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,17 +32,20 @@
 
 
 #include "doc.hxx"
-#include "swundo.hxx"           // fuer die UndoIds
+#include "swundo.hxx"			// fuer die UndoIds
 #include "pam.hxx"
 #include "ndtxt.hxx"
 
-#include <UndoCore.hxx>
+#include "undobj.hxx"
 #include "rolbck.hxx"
 
+
+inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 //--------------------------------------------------
 
 
+// --> OD 2008-04-15 #refactorlists#
 SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
                               SwFmtColl* pColl,
                               const bool bReset,
@@ -53,6 +56,7 @@ SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
       pFmtColl( pColl ),
       mbReset( bReset ),
       mbResetListAttrs( bResetListAttrs )
+// <--
 {
     // --> FME 2004-08-06 #i31191#
     if ( pColl )
@@ -67,43 +71,51 @@ SwUndoFmtColl::~SwUndoFmtColl()
 }
 
 
-void SwUndoFmtColl::UndoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoFmtColl::Undo( SwUndoIter& rUndoIter )
 {
-    // restore old values
-    pHistory->TmpRollback(& rContext.GetDoc(), 0);
+    // die alten Werte wieder zurueck
+    pHistory->TmpRollback( &rUndoIter.GetDoc(), 0 );
     pHistory->SetTmpEnd( pHistory->Count() );
 
-    // create cursor for undo range
-    AddUndoRedoPaM(rContext);
+    // setze noch den Cursor auf den Undo-Bereich
+    SetPaM( rUndoIter );
 }
 
 
-void SwUndoFmtColl::RedoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoFmtColl::Redo( SwUndoIter& rUndoIter )
 {
-    SwPaM & rPam = AddUndoRedoPaM(rContext);
+    // setze Attribut in dem Bereich:
+    SetPaM( rUndoIter );
+    rUndoIter.pLastUndoObj = 0;
 
-    DoSetFmtColl(rContext.GetDoc(), rPam);
+    Repeat( rUndoIter );	// Collection setzen
+
+    rUndoIter.pLastUndoObj = 0;
 }
 
-void SwUndoFmtColl::RepeatImpl(::sw::RepeatContext & rContext)
-{
-    DoSetFmtColl(rContext.GetDoc(), rContext.GetRepeatPaM());
-}
 
-void SwUndoFmtColl::DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM)
+void SwUndoFmtColl::Repeat( SwUndoIter& rUndoIter )
 {
+    if( UNDO_SETFMTCOLL == rUndoIter.GetLastUndoId() &&
+        pFmtColl == ((SwUndoFmtColl*)rUndoIter.pLastUndoObj)->pFmtColl )
+        return;
+
     // es kann nur eine TextFmtColl auf einen Bereich angewendet werden,
     // also erfrage auch nur in dem Array
-    sal_uInt16 const nPos = rDoc.GetTxtFmtColls()->GetPos(
+    USHORT nPos = rUndoIter.GetDoc().GetTxtFmtColls()->GetPos(
                                                      (SwTxtFmtColl*)pFmtColl );
-    // does the format still exist?
+    // ist das Format ueberhaupt noch vorhanden?
     if( USHRT_MAX != nPos )
     {
-        rDoc.SetTxtFmtColl(rPaM,
+        // --> OD 2008-04-15 #refactorlists#
+        rUndoIter.GetDoc().SetTxtFmtColl( *rUndoIter.pAktPam,
                                           (SwTxtFmtColl*)pFmtColl,
                                           mbReset,
                                           mbResetListAttrs );
+        // <--
     }
+
+    rUndoIter.pLastUndoObj = this;
 }
 
 SwRewriter SwUndoFmtColl::GetRewriter() const

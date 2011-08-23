@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,6 +37,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
@@ -50,19 +51,22 @@ class SwNumRule;
 /******************************************************************************
  *
  ******************************************************************************/
+/* -----------------04.05.98 12:28-------------------
+ *
+ * --------------------------------------------------*/
 class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
 <
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::lang::XServiceInfo
 >
 {
-    SwDoc*                      pDoc;
+    SwDoc* 						pDoc;
     const SfxItemPropertySet*   m_pPropertySet;
 protected:
     virtual ~SwXFootnoteProperties();
 public:
     SwXFootnoteProperties(SwDoc* pDoc);
-
+    
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -75,25 +79,28 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    void            Invalidate() {pDoc = 0;}
+    void			Invalidate() {pDoc = 0;}
 };
 
+/* -----------------04.05.98 12:28-------------------
+ *
+ * --------------------------------------------------*/
 class SwXEndnoteProperties : public cppu::WeakAggImplHelper2
 <
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::lang::XServiceInfo
 >
 {
-    SwDoc*                      pDoc;
+    SwDoc* 						pDoc;
     const SfxItemPropertySet*   m_pPropertySet;
 protected:
     virtual ~SwXEndnoteProperties();
 public:
     SwXEndnoteProperties(SwDoc* pDoc);
-
+    
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -106,25 +113,28 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    void            Invalidate() {pDoc = 0;}
+    void			Invalidate() {pDoc = 0;}
 };
 
+/* -----------------04.05.98 12:28-------------------
+ *
+ * --------------------------------------------------*/
 class SwXLineNumberingProperties : public cppu::WeakAggImplHelper2
 <
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::lang::XServiceInfo
 >
 {
-    SwDoc*                      pDoc;
+    SwDoc* 						pDoc;
     const SfxItemPropertySet*   m_pPropertySet;
 protected:
     virtual ~SwXLineNumberingProperties();
 public:
     SwXLineNumberingProperties(SwDoc* pDoc);
-
+    
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -137,12 +147,15 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    void            Invalidate() {pDoc = 0;}
+    void			Invalidate() {pDoc = 0;}
 };
 
+/* -----------------25.05.98 08:21-------------------
+ *
+ * --------------------------------------------------*/
 class SwXNumberingRules : public cppu::WeakAggImplHelper5
 <
     ::com::sun::star::container::XIndexReplace,
@@ -153,26 +166,22 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
 >,
     public SwClient
 {
-    String                      sNewCharStyleNames[MAXLEVEL];
-    String                      sNewBulletFontNames[MAXLEVEL];
-    String                      sCreatedNumRuleName; //connects to a numbering in SwDoc
-    SwDoc*                      pDoc; // wird nur fuers anmelden gebraucht
-    SwDocShell*                 pDocShell; //nur, wenn als ChapterNumbering verwendet
-    SwNumRule*                  pNumRule;
+    String 						sNewCharStyleNames[MAXLEVEL];
+    String 						sNewBulletFontNames[MAXLEVEL];
+    String 						sCreatedNumRuleName; //connects to a numbering in SwDoc
+    SwDoc*						pDoc; // wird nur fuers anmelden gebraucht
+    SwDocShell*					pDocShell; //nur, wenn als ChapterNumbering verwendet
+    SwNumRule*					pNumRule;
     const SfxItemPropertySet*   m_pPropertySet;
-    sal_Bool                    bOwnNumRuleCreated;
-    static String               sInvalidStyle;
+    sal_Bool					bOwnNumRuleCreated;
+    static String				sInvalidStyle;
 protected:
     virtual ~SwXNumberingRules();
-
-    //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
-
 public:
-    SwXNumberingRules(SwDocShell& rDocSh);  // chapter numbering
+    SwXNumberingRules(SwDocShell& rDocSh);	// chapter numbering
     SwXNumberingRules(const SwNumRule& rRule); // NumRule for paragraphs, numbering styles
     SwXNumberingRules(SwDoc& rDoc); //create a new instance
-
+    
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -205,42 +214,50 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue>
+    ::com::sun::star::uno::Sequence< 
+        ::com::sun::star::beans::PropertyValue> 
             GetNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex)const;
-    void    SetNumberingRuleByIndex(SwNumRule& rNumRule,
+    void	SetNumberingRuleByIndex(SwNumRule& rNumRule,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties, sal_Int32 nIndex)
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
-    const String*           GetNewCharStyleNames() const {return sNewCharStyleNames;}
-    const String*           GetBulletFontNames() const {return sNewBulletFontNames;}
-    const SwNumRule*        GetNumRule() {return pNumRule;}
+    //SwClient
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
-    static const String&    GetInvalidStyle();
-    void    Invalidate()    {pDocShell = 0;}
-    const String&           GetCreatedNumRuleName() const{return sCreatedNumRuleName; }
+    const String*			GetNewCharStyleNames() const {return sNewCharStyleNames;}
+    const String*			GetBulletFontNames() const {return sNewBulletFontNames;}
+    const SwNumRule*		GetNumRule() {return pNumRule;}
+
+    static const String&	GetInvalidStyle();
+    void	Invalidate() 	{pDocShell = 0;}
+    const String& 			GetCreatedNumRuleName() const{return sCreatedNumRuleName; }
 };
+/*-----------------12.02.98 08:27-------------------
 
+--------------------------------------------------*/
 class SwXChapterNumbering : public SwXNumberingRules
 {
 protected:
     virtual ~SwXChapterNumbering();
 public:
     SwXChapterNumbering(SwDocShell& rDocSh);
+    
 
-
-    void    Invalidate() {SwXNumberingRules::Invalidate();}
+    void	Invalidate() {SwXNumberingRules::Invalidate();}
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
 };
 
+/* -----------------27.05.98 15:44-------------------
+ *
+ * --------------------------------------------------*/
 class SwXTextColumns : public cppu::WeakAggImplHelper4
 <
 
@@ -250,27 +267,25 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
     ::com::sun::star::lang::XServiceInfo
 >
 {
-    sal_Int32                   nReference;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::text::TextColumn>    aTextColumns;
+    sal_Int32					nReference;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::text::TextColumn>	aTextColumns;
     sal_Bool                    bIsAutomaticWidth;
     sal_Int32                   nAutoDistance;
 
     const SfxItemPropertySet*   m_pPropSet;
 
     //separator line
-    sal_Int32                   nSepLineWidth;
-    sal_Int32                   nSepLineColor;
-    sal_Int8                    nSepLineHeightRelative;
-    sal_Int8                    nSepLineVertAlign;//style::VerticalAlignment
-    sal_Bool                    bSepLineIsOn;
-    sal_Int8                    nSepLineStyle;
-
+    sal_Int32 					nSepLineWidth;
+    sal_Int32 					nSepLineColor;
+    sal_Int8  					nSepLineHeightRelative;
+    sal_Int8					nSepLineVertAlign;//style::VerticalAlignment
+    sal_Bool					bSepLineIsOn;
 protected:
     virtual ~SwXTextColumns();
 public:
     SwXTextColumns(sal_uInt16 nColCount);
     SwXTextColumns(const SwFmtCol& rFmtCol);
-
+    
 
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -296,15 +311,14 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    sal_Int32   GetSepLineWidth() const {return nSepLineWidth;}
-    sal_Int32   GetSepLineColor() const {return     nSepLineColor;}
-    sal_Int8    GetSepLineHeightRelative() const {return    nSepLineHeightRelative;}
-    sal_Int8    GetSepLineVertAlign() const {return     nSepLineVertAlign;}
-    sal_Bool    GetSepLineIsOn() const {return  bSepLineIsOn;}
-    sal_Int8    GetSepLineStyle() const {return nSepLineStyle;}
+    sal_Int32 	GetSepLineWidth() const {return nSepLineWidth;}
+    sal_Int32 	GetSepLineColor() const {return 	nSepLineColor;}
+    sal_Int8  	GetSepLineHeightRelative() const {return 	nSepLineHeightRelative;}
+    sal_Int8	GetSepLineVertAlign() const {return 	nSepLineVertAlign;}
+    sal_Bool	GetSepLineIsOn() const {return 	bSepLineIsOn;}
 
     sal_Bool    IsAutomaticWidth() const {return bIsAutomaticWidth;}
 };

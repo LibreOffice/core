@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,6 +50,7 @@
 #define __uuidof(I) IID_##I
 #endif
 
+using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::datatransfer;
@@ -59,8 +60,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::awt::MouseButton;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
-
-using ::rtl::OUString;
 
 extern rtl_StandardModuleCount g_moduleCount;
 
@@ -78,7 +77,7 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams);
 DragSource::DragSource( const Reference<XMultiServiceFactory>& sf):
     m_serviceFactory( sf),
     WeakComponentImplHelper3< XDragSource, XInitialization, XServiceInfo >(m_mutex),
-//  m_pcurrentContext_impl(0),
+//	m_pcurrentContext_impl(0),
     m_hAppWindow(0),
     m_MouseButton(0),
     m_RunningDndOperationCount(0)
@@ -214,11 +213,13 @@ void SAL_CALL DragSource::startDrag(
     }
     else
     {
+        //OSL_ENSURE(false, "Overlapping Drag&Drop operation rejected!");
+
         cnt = InterlockedDecrement(&m_RunningDndOperationCount);
 
         DragSourceDropEvent dsde;
 
-        dsde.DropAction  = ACTION_NONE;
+        dsde.DropAction	 = ACTION_NONE;
         dsde.DropSuccess = false;
 
         try
@@ -227,7 +228,7 @@ void SAL_CALL DragSource::startDrag(
         }
         catch(RuntimeException&)
         {
-            OSL_FAIL("Runtime exception during event dispatching");
+            OSL_ENSURE(false, "Runtime exception during event dispatching");
         }
     }
 }
@@ -296,7 +297,7 @@ HRESULT STDMETHODCALLTYPE DragSource::QueryContinueDrag(
     {
         if( ( m_MouseButton == MouseButton::RIGHT &&  !(grfKeyState & MK_RBUTTON) ) ||
             ( m_MouseButton == MouseButton::MIDDLE && !(grfKeyState & MK_MBUTTON) ) ||
-            ( m_MouseButton == MouseButton::LEFT && !(grfKeyState & MK_LBUTTON) )   ||
+            ( m_MouseButton == MouseButton::LEFT && !(grfKeyState & MK_LBUTTON)	)   ||
             ( m_MouseButton == 0 && !(grfKeyState & MK_LBUTTON) ) )
         {
             retVal= DRAGDROP_S_DROP;

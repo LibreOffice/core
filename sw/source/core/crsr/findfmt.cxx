@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,11 +34,11 @@
 #include <pamtyp.hxx>
 
 
-sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
-                        const SwPaM *pRegion, sal_Bool bInReadOnly  )
+BOOL SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
+                        const SwPaM *pRegion, BOOL bInReadOnly  )
 {
-    sal_Bool bFound = sal_False;
-    sal_Bool bSrchForward = fnMove == fnMoveForward;
+    BOOL bFound = FALSE;
+    BOOL bSrchForward = fnMove == fnMoveForward;
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
     // Wenn am Anfang/Ende, aus dem Node moven
@@ -46,17 +46,17 @@ sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
         ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetCntntNode()->Len()
         : !pPam->GetPoint()->nContent.GetIndex() )
     {
-        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, sal_False ))
+        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, FALSE ))
         {
             delete pPam;
-            return sal_False;
+            return FALSE;
         }
         SwCntntNode *pNd = pPam->GetPoint()->nNode.GetNode().GetCntntNode();
         xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
         pPam->GetPoint()->nContent.Assign( pNd, nTmpPos );
     }
 
-    sal_Bool bFirst = sal_True;
+    BOOL bFirst = TRUE;
     SwCntntNode* pNode;
     while( !bFound &&
             0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly )))
@@ -67,14 +67,14 @@ sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
             // jedenfall um einen SwCntntNode !!
 
             // FORWARD:  SPoint an das Ende, GetMark zum Anfanf vom Node
-            // BACKWARD: SPoint zum Anfang, GetMark an das Ende vom Node
+            // BACKWARD: SPoint zum Anfang,	GetMark an das Ende vom Node
             // und immer nach der Logik: inkl. Start, exkl. End !!!
             *GetPoint() = *pPam->GetPoint();
             SetMark();
             pNode->MakeEndIndex( &GetPoint()->nContent );
             GetMark()->nContent = 0;
-            if( !bSrchForward )         // rueckwaerts Suche?
-                Exchange();             // SPoint und GetMark tauschen
+            if( !bSrchForward )			// rueckwaerts Suche?
+                Exchange(); 			// SPoint und GetMark tauschen
             break;
         }
     }

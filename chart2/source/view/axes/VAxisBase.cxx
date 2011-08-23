@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "VAxisBase.hxx"
 #include "ShapeFactory.hxx"
 #include "CommonConverters.hxx"
-#include "Tickmarks.hxx"
+#include "TickmarkHelper.hxx"
 #include "macros.hxx"
 
 // header for define DBG_ASSERT
@@ -71,7 +71,7 @@ sal_Int32 VAxisBase::getDimensionCount()
     return m_nDimension;
 }
 
-void VAxisBase::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFontReferenceSize
+void SAL_CALL VAxisBase::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFontReferenceSize
                   , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels )
 {
     m_aAxisLabelProperties.m_aFontReferenceSize = rFontReferenceSize;
@@ -107,15 +107,6 @@ void VAxisBase::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFon
         m_aAxisLabelProperties.eStaggering = SIDE_BY_SIDE;
 }
 
-bool VAxisBase::isDateAxis() const
-{
-    return AxisType::DATE == m_aScale.AxisType;
-}
-bool VAxisBase::isComplexCategoryAxis() const
-{
-    return m_aAxisProperties.m_bComplexCategories && m_bUseTextLabels;
-}
-
 void VAxisBase::recordMaximumTextSize( const Reference< drawing::XShape >& xShape, double fRotationAngleDegree )
 {
     if( m_bRecordMaximumTextSize && xShape.is() )
@@ -140,7 +131,7 @@ void VAxisBase::setExrtaLinePositionAtOtherAxis( const double& fCrossingAt )
     m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis = new double(fCrossingAt);
 }
 
-sal_Bool VAxisBase::isAnythingToDraw()
+sal_Bool SAL_CALL VAxisBase::isAnythingToDraw()
 {
     if( !m_aAxisProperties.m_xAxisModel.is() )
         return false;
@@ -160,7 +151,7 @@ sal_Bool VAxisBase::isAnythingToDraw()
     return true;
 }
 
-void VAxisBase::setExplicitScaleAndIncrement(
+void SAL_CALL VAxisBase::setExplicitScaleAndIncrement(
               const ExplicitScaleData& rScale
             , const ExplicitIncrementData& rIncrement )
             throw (uno::RuntimeException)
@@ -172,11 +163,8 @@ void VAxisBase::setExplicitScaleAndIncrement(
 
 void VAxisBase::createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos )
 {
-    std::auto_ptr< TickFactory > apTickFactory( this->createTickFactory() );
-    if( m_aScale.ShiftedCategoryPosition )
-        apTickFactory->getAllTicksShifted( rAllTickInfos );
-    else
-        apTickFactory->getAllTicks( rAllTickInfos );
+    std::auto_ptr< TickmarkHelper > apTickmarkHelper( this->createTickmarkHelper() );
+    apTickmarkHelper->getAllTicks( rAllTickInfos );
 }
 
 bool VAxisBase::prepareShapeCreation()
@@ -190,7 +178,7 @@ bool VAxisBase::prepareShapeCreation()
         //-----------------------------------------
         //create all scaled tickmark values
         removeTextShapesFromTicks();
-
+        
         createAllTickInfos(m_aAllTickInfos);
         m_bReCreateAllTickInfos = false;
     }
@@ -257,7 +245,7 @@ void VAxisBase::updateUnscaledValuesAtTicks( TickIter& rIter )
     for( TickInfo* pTickInfo = rIter.firstInfo()
         ; pTickInfo; pTickInfo = rIter.nextInfo() )
     {
-        //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
+        pTickInfo->updateUnscaledValue( xInverseScaling );
     }
 }
 

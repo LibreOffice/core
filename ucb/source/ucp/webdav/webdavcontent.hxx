@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,6 @@ namespace webdav_ucp
 
 class ContentProvider;
 class ContentProperties;
-class CachableContentProperties;
 
 class Content : public ::ucbhelper::ContentImplHelper,
                 public com::sun::star::ucb::XContentCreator
@@ -83,8 +82,7 @@ class Content : public ::ucbhelper::ContentImplHelper,
     };
 
     std::auto_ptr< DAVResourceAccess > m_xResAccess;
-    std::auto_ptr< CachableContentProperties >
-                      m_xCachedProps; // locally cached props
+    std::auto_ptr< ContentProperties > m_xCachedProps; // locally cached props
     rtl::OUString     m_aEscapedTitle;
     ResourceType      m_eResourceType;
     ContentProvider*  m_pProvider; // No need for a ref, base class holds object

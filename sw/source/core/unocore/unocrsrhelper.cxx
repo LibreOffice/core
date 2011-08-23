@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,6 @@
 #include <unoframe.hxx>
 #include <unocrsr.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <fmtftn.hxx>
 #include <fmtpdsc.hxx>
@@ -87,7 +86,9 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+// --> OD 2008-11-26 #158694#
 #include <SwNodeNum.hxx>
+// <--
 #include <fmtmeta.hxx>
 
 
@@ -133,8 +134,8 @@ GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
     return xRet;
 }
 
-/* --------------------------------------------------
- *  Read the special properties of the cursor
+/* -----------------16.09.98 12:27-------------------
+* 	Lesen spezieller Properties am Cursor
  * --------------------------------------------------*/
 sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
@@ -148,6 +149,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
     sal_Bool bDone = sal_True;
     switch(rEntry.nWID)
     {
+        // --> OD 2008-11-26 #158694#
         case FN_UNO_PARA_CONT_PREV_SUBTREE:
             if (pAny)
             {
@@ -185,7 +187,24 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 *pAny <<= OUString(sRet);
             }
         break;
-        case RES_PARATR_OUTLINELEVEL:
+        // <--
+        // --> OD 2008-05-20 #outlinelevel# - no longer needed
+//        case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
+//            if (pAny)
+//            {
+//                const SwTxtNode * pTmpNode = pNode;
+
+//                if (!pTmpNode)
+//                    pTmpNode = rPam.GetNode()->GetTxtNode();
+
+//                sal_Int8 nRet = -1;
+//                if (pTmpNode && pTmpNode->GetOutlineLevel() != NO_NUMBERING)
+//                nRet = sal::static_int_cast< sal_Int8 >(pTmpNode->GetOutlineLevel());
+//                *pAny <<= nRet;
+//            }
+//        break;
+        // <--
+        case RES_PARATR_OUTLINELEVEL: //#outlinelevel added by zhaojianwei
             if (pAny)
             {
                 const SwTxtNode * pTmpNode = pNode;
@@ -199,7 +218,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
 
                 *pAny <<= nRet;
             }
-        break;
+        break; //<-end,zhaojianwei
         case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
         case FN_UNO_PARA_STYLE :
         {
@@ -244,13 +263,16 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_NUM_LEVEL  :
         case FN_UNO_IS_NUMBER  :
-        // #i91601#
+        // --> OD 2008-07-14 #i91601#
         case FN_UNO_LIST_ID:
+        // <--
         case FN_NUMBER_NEWSTART:
         {
             // a multi selection is not considered
             const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
+            // --> OD 2010-01-13 #b6912256#
             if ( pTxtNd && pTxtNd->IsInList() )
+            // <--
             {
                 if( pAny )
                 {
@@ -258,18 +280,19 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         *pAny <<= (sal_Int16)(pTxtNd->GetActualListLevel());
                     else if(rEntry.nWID == FN_UNO_IS_NUMBER)
                     {
-                        sal_Bool bIsNumber = pTxtNd->IsCountedInList();
+                        BOOL bIsNumber = pTxtNd->IsCountedInList();
                         pAny->setValue(&bIsNumber, ::getBooleanCppuType());
                     }
-                    // #i91601#
+                    // --> OD 2008-07-14 #i91601#
                     else if ( rEntry.nWID == FN_UNO_LIST_ID )
                     {
                         const String sListId = pTxtNd->GetListId();
                         *pAny <<= OUString(sListId);
                     }
+                    // <--
                     else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                     {
-                        sal_Bool bIsRestart = pTxtNd->IsListRestart();
+                        BOOL bIsRestart = pTxtNd->IsListRestart();
                         pAny->setValue(&bIsRestart, ::getBooleanCppuType());
                     }
                 }
@@ -285,7 +308,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         *pAny <<= static_cast<sal_Int16>( 0 );
                     else if(rEntry.nWID == FN_UNO_IS_NUMBER)
                         *pAny <<= false;
-                    // #i91601#
+                    // --> OD 2008-07-14 #i91601#
                     else if ( rEntry.nWID == FN_UNO_LIST_ID )
                     {
                         *pAny <<= OUString();
@@ -326,7 +349,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 }
             }
             else
-                //also here - indistinguishable
+                //auch hier - nicht zu unterscheiden
                 eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
@@ -361,7 +384,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    SwXTextField* pField = SwXTextField::CreateSwXTextField(*rPam.GetDoc(),
+                    SwXTextField* pField = CreateSwXTextField(*rPam.GetDoc(),
                            pTxtAttr->GetFld());
                     *pAny <<= uno::Reference< XTextField >( pField );
                 }
@@ -370,6 +393,16 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
+/*				laesst sich nicht feststellen
+* 				case FN_UNO_BOOKMARK:
+        {
+            if()
+            {
+                uno::Reference< XBookmark >  xBkm = SwXBookmarks::GetObject(rBkm);
+                rAny.set(&xBkm, ::getCppuType((const XBookmark*)0)());
+            }
+        }
+        break;*/
         case FN_UNO_TEXT_TABLE:
         case FN_UNO_CELL:
         {
@@ -497,26 +530,26 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         {
 
             SwTxtNode* pTxtNode;
-            if((pTxtNode = (SwTxtNode*)rPam.GetNode( sal_True )) == rPam.GetNode(sal_False) &&
+            if((pTxtNode = (SwTxtNode*)rPam.GetNode( TRUE )) == rPam.GetNode(FALSE) &&
                     pTxtNode->GetpSwpHints())
             {
-                sal_uInt16 nPaMStart = rPam.GetPoint()->nContent.GetIndex();
-                sal_uInt16 nPaMEnd = rPam.GetMark() ? rPam.GetMark()->nContent.GetIndex() : nPaMStart;
+                USHORT nPaMStart = rPam.GetPoint()->nContent.GetIndex();
+                USHORT nPaMEnd = rPam.GetMark() ? rPam.GetMark()->nContent.GetIndex() : nPaMStart;
                 if(nPaMStart > nPaMEnd)
                 {
-                    sal_uInt16 nTmp = nPaMStart;
+                    USHORT nTmp = nPaMStart;
                     nPaMStart = nPaMEnd;
                     nPaMEnd = nTmp;
                 }
                 Sequence< ::rtl::OUString> aCharStyles;
                 SwpHints* pHints = pTxtNode->GetpSwpHints();
-                for(sal_uInt16 nAttr = 0; nAttr < pHints->GetStartCount(); nAttr++ )
+                for(USHORT nAttr = 0; nAttr < pHints->GetStartCount(); nAttr++ )
                 {
                     SwTxtAttr* pAttr = pHints->GetStart( nAttr );
                     if(pAttr->Which() != RES_TXTATR_CHARFMT)
                         continue;
-                    sal_uInt16 nAttrStart = *pAttr->GetStart();
-                    sal_uInt16 nAttrEnd = *pAttr->GetEnd();
+                    USHORT nAttrStart = *pAttr->GetStart();
+                    USHORT nAttrEnd = *pAttr->GetEnd();
                     //check if the attribute touches the selection
                     if( ( nAttrEnd > nPaMStart && nAttrStart < nPaMEnd ) ||
                         ( !nAttrStart && !nAttrEnd && !nPaMStart && !nPaMEnd ) )
@@ -556,7 +589,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         }
         break;
         case RES_TXTATR_CHARFMT:
-        // no break here!
+        // kein break hier!
         default: bDone = sal_False;
     }
     if( bDone )
@@ -567,6 +600,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
 sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
 {
     const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
+    // --> OD 2008-02-28 #refactorlists#
     // correction: check, if restart value is set at the text node and use
     // new method <SwTxtNode::GetAttrListRestartValue()> to retrieve the value
     if ( pTxtNd && pTxtNd->GetNumRule() && pTxtNd->IsListRestart() &&
@@ -576,6 +610,7 @@ sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
         sal_Int16 nTmp = sal::static_int_cast< sal_Int16 >(pTxtNd->GetAttrListRestartValue());
         return nTmp;
     }
+    // <--
     eState = PropertyState_DEFAULT_VALUE;
     return -1;
 }
@@ -614,7 +649,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         else
                         {
 
-                            // get CharStyle and set the rule
+                            // CharStyle besorgen und an der Rule setzen
                             sal_uInt16 nChCount = pDoc->GetCharFmts()->Count();
                             SwCharFmt* pCharFmt = 0;
                             for(sal_uInt16 nCharFmt = 0; nCharFmt < nChCount; nCharFmt++)
@@ -632,7 +667,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                                 SfxStyleSheetBasePool* pPool = pDoc->GetDocShell()->GetStyleSheetPool();
                                 SfxStyleSheetBase* pBase;
                                 pBase = pPool->Find(pNewCharStyles[i], SFX_STYLE_FAMILY_CHAR);
-                            // shall it really be created?
+                            // soll das wirklich erzeugt werden?
                                 if(!pBase)
                                     pBase = &pPool->Make(pNewCharStyles[i], SFX_STYLE_FAMILY_PAGE);
                                 pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
@@ -641,7 +676,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                                 aFmt.SetCharFmt(pCharFmt);
                         }
                     }
-                    //Now again for fonts
+                    //jetzt nochmal fuer Fonts
                     if(
                        pBulletFontNames[i] != SwXNumberingRules::GetInvalidStyle() &&
                        (
@@ -654,7 +689,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         const SvxFontListItem* pFontListItem =
                                 (const SvxFontListItem* )pDoc->GetDocShell()
                                                     ->GetItem( SID_ATTR_CHAR_FONTLIST );
-                        const FontList*  pList = pFontListItem->GetFontList();
+                        const FontList*	 pList = pFontListItem->GetFontList();
 
                         FontInfo aInfo = pList->Get(
                             pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE);
@@ -665,22 +700,26 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 }
                 UnoActionContext aAction(pDoc);
 
-                if( rPam.GetNext() != &rPam )           // Multiple selection?
+                if( rPam.GetNext() != &rPam )           // Mehrfachselektion ?
                 {
-                    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+                    pDoc->StartUndo( UNDO_START, NULL );
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
                     for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
                     {
+                        // --> OD 2008-03-17 #refactorlists#
                         // no start of a new list
                         pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
+                        // <--
                     }
-                    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+                    pDoc->EndUndo( UNDO_END, NULL );
                 }
                 else
                 {
+                    // --> OD 2008-03-17 #refactorlists#
                     // no start of a new list
                     pDoc->SetNumRule( rPam, aRule, false );
+                    // <--
                 }
 
 
@@ -691,10 +730,12 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 SwNumRule* pRule = pDoc->FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );
                 if(!pRule)
                     throw RuntimeException();
+                // --> OD 2008-03-17 #refactorlists#
                 // no start of a new list
                 pDoc->SetNumRule( rPam, *pRule, false );
+                // <--
             }
-            // #i103817#
+            // --> OD 2009-08-18 #i103817#
             // outline numbering
             else
             {
@@ -704,6 +745,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     throw RuntimeException();
                 pDoc->SetNumRule( rPam, *pRule, false );
             }
+            // <--
         }
     }
     else if(rValue.getValueType() == ::getVoidCppuType())
@@ -728,13 +770,13 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
 
 void GetCurPageStyle(SwPaM& rPaM, String &rString)
 {
-    const SwPageFrm* pPage = rPaM.GetCntntNode()->getLayoutFrm(rPaM.GetDoc()->GetCurrentLayout())->FindPageFrm();
+    const SwPageFrm* pPage = rPaM.GetCntntNode()->GetFrm()->FindPageFrm();
     if(pPage)
         SwStyleNameMapper::FillProgName( pPage->GetPageDesc()->GetName(), rString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
 }
 
-/* --------------------------------------------------
- * reset special properties of the cursor
+/* -----------------30.03.99 10:52-------------------
+ * spezielle Properties am Cursor zuruecksetzen
  * --------------------------------------------------*/
 void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam)
 {
@@ -742,7 +784,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
     switch(rEntry.nWID)
     {
         case FN_UNO_PARA_STYLE :
-//          lcl_SetTxtFmtColl(aValue, pUnoCrsr);
+//			lcl_SetTxtFmtColl(aValue, pUnoCrsr);
         break;
         case FN_UNO_PAGE_STYLE :
         break;
@@ -750,14 +792,14 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
         {
             UnoActionContext aAction(pDoc);
 
-            if( rPam.GetNext() != &rPam )           // Multiple selection?
+            if( rPam.GetNext() != &rPam )			// Mehrfachselektion ?
             {
-                pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+                pDoc->StartUndo( UNDO_START, NULL );
                 SwPamRanges aRangeArr( rPam );
                 SwPaM aPam( *rPam.GetPoint() );
                 for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
                     pDoc->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), 1 );
-                pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+                pDoc->EndUndo( UNDO_END, NULL );
             }
             else
                 pDoc->SetNodeNumStart( *rPam.GetPoint(), 0 );
@@ -767,7 +809,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
         case FN_UNO_NUM_LEVEL  :
         break;
         case FN_UNO_NUM_RULES:
-//          lcl_setNumberingProperty(aValue, pUnoCrsr);
+//    		lcl_setNumberingProperty(aValue, pUnoCrsr);
         break;
         case FN_UNO_CHARFMT_SEQUENCE:
         {
@@ -880,15 +922,14 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     if( !pMed )
         return;
 
-    // this sourcecode is not responsible for the lifetime of the shell, SfxObjectShellLock should not be used
     SfxObjectShellRef aRef( pDocSh );
 
     pDocSh->RegisterTransfer( *pMed );
-    pMed->DownLoad();   // if necessary: start the download
-    if( aRef.Is() && 1 < aRef->GetRefCount() )  // Ref still valid?
+    pMed->DownLoad();	// ggfs. den DownLoad anstossen
+    if( aRef.Is() && 1 < aRef->GetRefCount() )	// noch gueltige Ref?
     {
         SwReader* pRdr;
-        SfxItemSet* pSet =  pMed->GetItemSet();
+        SfxItemSet* pSet = 	pMed->GetItemSet();
         pSet->Put(SfxBoolItem(FN_API_CALL, sal_True));
         if(sPassword.getLength())
             pSet->Put(SfxStringItem(SID_PASSWORD, sPassword));
@@ -904,7 +945,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
             SwNodeIndex aSave(  pUnoCrsr->GetPoint()->nNode, -1 );
             xub_StrLen nCntnt = pUnoCrsr->GetPoint()->nContent.GetIndex();
 
-            sal_uInt32 nErrno = pRdr->Read( *pRead );   // and paste the document
+            sal_uInt32 nErrno = pRdr->Read( *pRead );   // und Dokument einfuegen
 
             if(!nErrno)
             {
@@ -920,6 +961,13 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
 
             delete pRdr;
 
+            // ggfs. alle Verzeichnisse updaten:
+/*			if( pWrtShell->IsUpdateTOX() )
+            {
+                SfxRequest aReq( *this, FN_UPDATE_TOX );
+                Execute( aReq );
+                pWrtShell->SetUpdateTOX( sal_False );		// wieder zurueck setzen
+            }*/
 
         }
     }
@@ -942,8 +990,6 @@ sal_Bool DocInsertStringSplitCR(
                     IDocumentContentOperations::INS_EMPTYEXPAND)
             : IDocumentContentOperations::INS_EMPTYEXPAND;
 
-    // grouping done in InsertString is intended for typing, not API calls
-    ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     OUString aTxt;
     xub_StrLen nStartIdx = 0;
     SwTxtNode* const pTxtNd =
@@ -964,12 +1010,12 @@ sal_Bool DocInsertStringSplitCR(
         if (aTxt.getLength() &&
             !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
         {
-            OSL_FAIL( "Doc->Insert(Str) failed." );
+            DBG_ERROR( "Doc->Insert(Str) failed." );
             bOK = sal_False;
         }
         if (!rDoc.SplitNode( *rNewCursor.GetPoint(), false ) )
         {
-            OSL_FAIL( "SplitNode failed" );
+            DBG_ERROR( "SplitNode failed" );
             bOK = sal_False;
         }
         nStartIdx = nIdx + 1;
@@ -979,7 +1025,7 @@ sal_Bool DocInsertStringSplitCR(
     if (aTxt.getLength() &&
         !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
     {
-        OSL_FAIL( "Doc->Insert(Str) failed." );
+        DBG_ERROR( "Doc->Insert(Str) failed." );
         bOK = sal_False;
     }
 
@@ -1007,7 +1053,7 @@ void makeRedline( SwPaM& rPaM,
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
     uno::Any aAuthorValue;
     aAuthorValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineAuthor")), aAuthorValue);
-    sal_uInt16 nAuthor = 0;
+    USHORT nAuthor = 0;
     ::rtl::OUString sAuthor;
     if( aAuthorValue >>= sAuthor )
         nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
@@ -1049,7 +1095,7 @@ SwAnyMapHelper::~SwAnyMapHelper()
     }
 }
 
-void SwAnyMapHelper::SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rAny )
+void SwAnyMapHelper::SetValue( USHORT nWhichId, USHORT nMemberId, const uno::Any& rAny )
 {
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
     AnyMapHelper_t::iterator aIt = find( nKey );
@@ -1061,7 +1107,7 @@ void SwAnyMapHelper::SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const 
         insert( value_type(nKey, new uno::Any( rAny )) );
 }
 
-bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& pAny )
+bool    SwAnyMapHelper::FillValue( USHORT nWhichId, USHORT nMemberId, const uno::Any*& pAny )
 {
     bool bRet = false;
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;

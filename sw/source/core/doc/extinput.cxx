@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,23 +29,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <com/sun/star/i18n/ScriptType.hpp>
-
-#include <editeng/langitem.hxx>
-#include <editeng/scripttypeitem.hxx>
-
-#include <vcl/keycodes.hxx>
-#include <vcl/cmdevt.hxx>
 
 #include <hintids.hxx>
+#include <vcl/keycodes.hxx>
+#include <vcl/cmdevt.hxx>
 #include <extinput.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <index.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
 #include <swundo.hxx>
-
+#include <editeng/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 using namespace ::com::sun::star;
 
@@ -53,8 +49,8 @@ SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
     : SwPaM( *rPam.GetPoint(), (SwPaM*)pRing ),
     eInputLanguage(LANGUAGE_DONTKNOW)
 {
-    bIsOverwriteCursor = sal_False;
-    bInsText = sal_True;
+    bIsOverwriteCursor = FALSE;
+    bInsText = TRUE;
 }
 
 SwExtTextInput::~SwExtTextInput()
@@ -83,7 +79,7 @@ SwExtTextInput::~SwExtTextInput()
                 // for CJK/CTL scripts.
                 bool bLang = true;
                 // <--
-                sal_uInt16 nWhich = RES_CHRATR_LANGUAGE;
+                USHORT nWhich = RES_CHRATR_LANGUAGE;
                 switch(GetI18NScriptTypeOfLanguage(eInputLanguage))
                 {
                     case  i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
@@ -111,14 +107,12 @@ SwExtTextInput::~SwExtTextInput()
                     if( bInsText )
                     {
                         rIdx = nSttCnt;
-                        pDoc->GetIDocumentUndoRedo().StartUndo(
-                                UNDO_OVERWRITE, NULL );
+                        pDoc->StartUndo( UNDO_OVERWRITE, NULL );
                         pDoc->Overwrite( *this, sTxt.Copy( 0,
                                                     sOverwriteText.Len() ));
                         pDoc->InsertString( *this,
                             sTxt.Copy( sOverwriteText.Len() ) );
-                        pDoc->GetIDocumentUndoRedo().EndUndo(
-                                UNDO_OVERWRITE, NULL );
+                        pDoc->EndUndo( UNDO_OVERWRITE, NULL );
                     }
                 }
                 else
@@ -212,7 +206,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
     }
 }
 
-void SwExtTextInput::SetOverwriteCursor( sal_Bool bFlag )
+void SwExtTextInput::SetOverwriteCursor( BOOL bFlag )
 {
     bIsOverwriteCursor = bFlag;
 
@@ -265,17 +259,17 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
     SwExtTextInput* pRet = 0;
     if( pExtInputRing )
     {
-        sal_uLong nNdIdx = rNd.GetIndex();
+        ULONG nNdIdx = rNd.GetIndex();
         SwExtTextInput* pTmp = (SwExtTextInput*)pExtInputRing;
         do {
-            sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
+            ULONG nPt = pTmp->GetPoint()->nNode.GetIndex(),
                   nMk = pTmp->GetMark()->nNode.GetIndex();
             xub_StrLen nPtCnt = pTmp->GetPoint()->nContent.GetIndex(),
                          nMkCnt = pTmp->GetMark()->nContent.GetIndex();
 
             if( nPt < nMk || ( nPt == nMk && nPtCnt < nMkCnt ))
             {
-                sal_uLong nTmp = nMk; nMk = nPt; nPt = nTmp;
+                ULONG nTmp = nMk; nMk = nPt; nPt = nTmp;
                 nTmp = nMkCnt; nMkCnt = nPtCnt; nPtCnt = (xub_StrLen)nTmp;
             }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,10 +88,6 @@ MenubarValue::~MenubarValue()
 {
 }
 
-MenupopupValue::~MenupopupValue()
-{
-}
-
 PushButtonValue::~PushButtonValue()
 {
 }
@@ -103,14 +99,14 @@ PushButtonValue::~PushButtonValue()
 
 // -----------------------------------------------------------------------
 
-sal_Bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+BOOL OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     if( !lcl_enableNativeWidget( *this ) )
-        return sal_False;
+        return FALSE;
 
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
-            return sal_False;
+            return FALSE;
 
     return( mpGraphics->IsNativeControlSupported(nType, nPart) );
 }
@@ -118,18 +114,18 @@ sal_Bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart 
 
 // -----------------------------------------------------------------------
 
-sal_Bool OutputDevice::HitTestNativeControl( ControlType nType,
+BOOL OutputDevice::HitTestNativeControl( ControlType nType,
                               ControlPart nPart,
                               const Rectangle& rControlRegion,
                               const Point& aPos,
-                              sal_Bool& rIsInside )
+                              BOOL& rIsInside )
 {
     if( !lcl_enableNativeWidget( *this ) )
-        return sal_False;
+        return FALSE;
 
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
-            return sal_False;
+            return FALSE;
 
     Point aWinOffs( mnOutOffX, mnOutOffY );
     Rectangle screenRegion( rControlRegion );
@@ -205,21 +201,14 @@ static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const Im
     case CTRL_GENERIC:
             aResult.reset( new ImplControlValue( rVal ) );
             break;
-    case CTRL_MENU_POPUP:
-        {
-            const MenupopupValue* pMVal = static_cast<const MenupopupValue*>(&rVal);
-            MenupopupValue* pNew = new MenupopupValue( *pMVal );
-            pNew->maItemRect = rDev.ImplLogicToDevicePixel( pMVal->maItemRect );
-            aResult.reset( pNew );
-        }
-        break;
     default:
-        OSL_FAIL( "unknown ImplControlValue type !" );
+        OSL_ENSURE( 0, "unknown ImplControlValue type !" );
         break;
     }
     return aResult;
 }
-sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
+
+BOOL OutputDevice::DrawNativeControl( ControlType nType,
                             ControlPart nPart,
                             const Rectangle& rControlRegion,
                             ControlState nState,
@@ -227,17 +216,31 @@ sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
                             ::rtl::OUString aCaption )
 {
     if( !lcl_enableNativeWidget( *this ) )
-        return sal_False;
+        return FALSE;
+
+    /*
+    if( !IsInPaint() && IsPaintTransparent() )
+    {
+        // only required if called directly (ie, we're not in Paint() ):
+        // force redraw (Paint()) for transparent controls
+        // to trigger a repaint of the background
+        Region aClipRgn( GetClipRegion() );
+        if( !rControlRegion.IsEmpty() )
+            aClipRgn.Intersect( rControlRegion );
+        Invalidate( aClipRgn, INVALIDATE_UPDATE );
+        return TRUE;
+    }
+    */
 
     // make sure the current clip region is initialized correctly
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
-            return sal_False;
+            return FALSE;
 
     if ( mbInitClipRegion )
         ImplInitClipRegion();
-    if ( mbOutputClipped || rControlRegion.IsEmpty() )
-        return sal_True;
+    if ( mbOutputClipped )
+        return TRUE;
 
     if ( mbInitLineColor )
         ImplInitLineColor();
@@ -253,8 +256,8 @@ sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
     aTestRegion.Intersect( rControlRegion );
     if( aTestRegion == rControlRegion )
         nState |= CTRL_CACHING_ALLOWED;   // control is not clipped, caching allowed
-
-    sal_Bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
+    
+    BOOL bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
 
     return bRet;
 }
@@ -262,7 +265,7 @@ sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
 
 // -----------------------------------------------------------------------
 
-sal_Bool OutputDevice::DrawNativeControlText(ControlType nType,
+BOOL OutputDevice::DrawNativeControlText(ControlType nType,
                             ControlPart nPart,
                             const Rectangle& rControlRegion,
                             ControlState nState,
@@ -270,7 +273,7 @@ sal_Bool OutputDevice::DrawNativeControlText(ControlType nType,
                             ::rtl::OUString aCaption )
 {
     if( !lcl_enableNativeWidget( *this ) )
-        return sal_False;
+        return FALSE;
 
     // make sure the current clip region is initialized correctly
     if ( !mpGraphics )
@@ -292,15 +295,15 @@ sal_Bool OutputDevice::DrawNativeControlText(ControlType nType,
     boost::shared_ptr< ImplControlValue > aScreenCtrlValue( lcl_transformControlValue( aValue, *this ) );
     Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
-    sal_Bool bRet = mpGraphics->DrawNativeControlText(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
-
+    BOOL bRet = mpGraphics->DrawNativeControlText(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
+    
     return bRet;
 }
 
 
 // -----------------------------------------------------------------------
 
-sal_Bool OutputDevice::GetNativeControlRegion(  ControlType nType,
+BOOL OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
                                 const Rectangle& rControlRegion,
                                 ControlState nState,
@@ -310,23 +313,23 @@ sal_Bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 Rectangle &rNativeContentRegion )
 {
     if( !lcl_enableNativeWidget( *this ) )
-        return sal_False;
+        return FALSE;
 
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
-            return sal_False;
+            return FALSE;
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
     boost::shared_ptr< ImplControlValue > aScreenCtrlValue( lcl_transformControlValue( aValue, *this ) );
     Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
-    sal_Bool bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, *aScreenCtrlValue,
+    BOOL bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, *aScreenCtrlValue,
                                 aCaption, rNativeBoundingRegion,
                                 rNativeContentRegion, this );
     if( bRet )
     {
-        // transform back native regions
+        // transform back native regions    
         rNativeBoundingRegion = ImplDevicePixelToLogic( rNativeBoundingRegion );
         rNativeContentRegion = ImplDevicePixelToLogic( rNativeContentRegion );
     }

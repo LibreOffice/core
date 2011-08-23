@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ DBG_NAME(DBTreeView)
 //========================================================================
 // class DBTreeView
 //========================================================================
-DBTreeView::DBTreeView( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nBits)
-                    :   Window( pParent, nBits )
+DBTreeView::DBTreeView(	Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nBits) 
+                    :	Window( pParent, nBits )
                     , m_pTreeListBox(NULL)
 {
     DBG_CTOR(DBTreeView,NULL);
@@ -62,7 +62,7 @@ DBTreeView::DBTreeView( Window* pParent, const Reference< XMultiServiceFactory >
 }
 
 // -----------------------------------------------------------------------------
-
+    
 DBTreeView::~DBTreeView()
 {
     DBG_DTOR(DBTreeView,NULL);
@@ -85,7 +85,7 @@ void DBTreeView::SetPreExpandHandler(const Link& _rHdl)
 }
 
 // -----------------------------------------------------------------------------
-void    DBTreeView::setCopyHandler(const Link& _rHdl)
+void	DBTreeView::setCopyHandler(const Link& _rHdl)
 {
     m_pTreeListBox->setCopyHandler(_rHdl);
 }
@@ -118,7 +118,7 @@ void DBTreeView::GetFocus()
 
 
 // .........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 // .........................................................................
 
 

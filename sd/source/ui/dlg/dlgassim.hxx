@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 class SdPageListControl : public SvTreeListBox
 {
 private:
-    SvLBoxButtonData*   m_pCheckButton;
+    SvLBoxButtonData* 	m_pCheckButton;
 
     SvLBoxEntry* InsertPage( const String& rPageName );
     void InsertTitle( SvLBoxEntry* pEntry, const String& rTitle );
@@ -48,13 +48,26 @@ public:
     void Fill( SdDrawDocument* pDoc );
     void Clear();
 
-    sal_uInt16 GetSelectedPage();
-    sal_Bool IsPageChecked( sal_uInt16 nPage );
+    USHORT GetSelectedPage();
+    BOOL IsPageChecked( USHORT nPage );
 
     DECL_LINK( CheckButtonClickHdl, SvLBoxButtonData * );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
 };
+
+class TemplateCacheInfo;
+
+DECLARE_LIST( TemplateCacheInfoList, TemplateCacheInfo * )
+
+class TemplateCacheDirEntry
+{
+public:
+    String						m_aPath;
+    TemplateCacheInfoList		m_aFiles;
+};
+
+DECLARE_LIST( TemplateCacheDirEntryList, TemplateCacheDirEntry * )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

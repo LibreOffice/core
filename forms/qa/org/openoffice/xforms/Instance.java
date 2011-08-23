@@ -27,9 +27,9 @@ public class Instance
     }
 
     /** creates a new element in the instance
-     *
+     * 
      * The element will be inserted immediately below the root node of the instance.
-     *
+     * 
      * @param _elementName
      *      the name of the to-be-created element
      * @return
@@ -42,9 +42,9 @@ public class Instance
     }
 
     /** creates a new element in the instance
-     *
+     * 
      * The element will be inserted immediately below the root node of the instance.
-     *
+     * 
      * @param _elementName
      *      the name of the to-be-created element
      * @param _initialNodeValue
@@ -59,9 +59,9 @@ public class Instance
     }
 
     /** creates a new element in the instance
-     *
+     * 
      * The element will be inserted immediately below a given XNode.
-     *
+     * 
      * @param _parentElement
      *      the node whose child shall be created
      * @param _elementName
@@ -76,9 +76,9 @@ public class Instance
     }
 
     /** creates a new element in the instance
-     *
+     * 
      * The element will be inserted immediately below a given XNode.
-     *
+     * 
      * @param _parentElement
      *      the node whose child shall be created
      * @param _elementName
@@ -132,7 +132,7 @@ public class Instance
     }
 
     /** creates an attribute for the root node of the instance
-     *
+     * 
      * @param _attribName
      *      the name of the to-be-created attribute
      * @return
@@ -145,7 +145,7 @@ public class Instance
     }
 
     /** creates an attribute for the root node of the instance
-     *
+     * 
      * @param _attribName
      *      the name of the to-be-created attribute
      * @param _initialNodeValue
@@ -160,7 +160,7 @@ public class Instance
     }
 
     /** creates an attribute for the given node
-     *
+     * 
      * @param _parentElement
      *      the element at which the attribute should be created
      * @param _attribName
@@ -175,7 +175,7 @@ public class Instance
     }
 
     /** creates an attribute for the given node
-     *
+     * 
      * @param _parentElement
      *      the element at which the attribute should be created
      * @param _attribName

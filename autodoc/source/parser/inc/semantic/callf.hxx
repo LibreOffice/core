@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 
 
-/** This represents a function to be called, if a specific kind of token
+/**	This represents a function to be called, if a specific kind of token
     arrives in the semantic parser.
 
     @descr This class is only to be used as member of PeStatus<PE>.
@@ -49,20 +49,20 @@ class CallFunction
     typedef void (PE::*F_Tok)(const char *);
 
                         CallFunction(
-                            F_Tok               i_f2Call,
-                            INT16               i_nTokType );
+                            F_Tok				i_f2Call,
+                            INT16				i_nTokType );
 
-    F_Tok               GetF() const;
-    INT16               TokType() const;
+    F_Tok				GetF() const;
+    INT16				TokType() const;
 
   private:
     // DATA
-    F_Tok               f2Call;
-    INT16               nTokType;
+    F_Tok				f2Call;
+    INT16				nTokType;
 };
 
 
-/** One state within a ParseEnvironment.
+/**	One state within a ParseEnvironment.
 
     @template PE
         The owning ParseEnvironment.
@@ -74,27 +74,27 @@ class PeStatus
     typedef typename CallFunction<PE>::F_Tok  F_Tok;
 
                         PeStatus(
-                            PE &                i_rMyPE,
-                            uintt               i_nSize,
-                            F_Tok *             i_pFuncArray,
+                            PE &	  			i_rMyPE,
+                            uintt				i_nSize,
+                            F_Tok *				i_pFuncArray,
                             INT16 *             i_pTokTypeArray,
-                            F_Tok               i_pDefault );
+                            F_Tok				i_pDefault );
     virtual             ~PeStatus();
 
-    virtual void        Call_Handler(
-                            INT16               i_nTokTypeId,
-                            const char *        i_sTokenText ) const;
+    virtual void	   	Call_Handler(
+                            INT16				i_nTokTypeId,
+                            const char *		i_sTokenText ) const;
 
   private:
-    bool                CheckForCall(
-                            uintt               i_nPos,
-                            INT16               i_nTokTypeId,
-                            const char *        i_sTokenText ) const;
+    bool				CheckForCall(
+                            uintt				i_nPos,
+                            INT16				i_nTokTypeId,
+                            const char *		i_sTokenText ) const;
 
-    PE *                pMyPE;
+    PE *	  			pMyPE;
     std::vector< CallFunction<PE> >
                         aBranches;
-    F_Tok               fDefault;
+    F_Tok				fDefault;
 };
 
 
@@ -102,26 +102,26 @@ template <class PE>
 class PeStatusArray
 {
   public:
-    typedef typename PE::E_State    State;
+    typedef typename PE::E_State	State;
 
                         PeStatusArray();
-    void                InsertState(
-                            State               i_ePosition,
-                            DYN PeStatus<PE> &  let_drState );
+    void				InsertState(
+                            State				i_ePosition,
+                            DYN PeStatus<PE> &	let_drState );
                         ~PeStatusArray();
 
     const PeStatus<PE> &
                         operator[](
-                            State               i_ePosition ) const;
+                            State				i_ePosition ) const;
 
-    void                SetCur(
-                            State               i_eCurState );
+    void				SetCur(
+                            State				i_eCurState );
     const PeStatus<PE> &
                         Cur() const;
 
   private:
-    DYN PeStatus<PE> *  aStati[PE::size_of_states];
-    State               eState;
+    DYN PeStatus<PE> *	aStati[PE::size_of_states];
+    State				eState;
 };
 
 
@@ -132,9 +132,9 @@ class PeStatusArray
 // CallFunction
 
 template <class PE>
-CallFunction<PE>::CallFunction( F_Tok   i_f2Call,
-                                INT16   i_nTokType )
-    :   f2Call(i_f2Call),
+CallFunction<PE>::CallFunction(	F_Tok 	i_f2Call,
+                                INT16	i_nTokType )
+    :	f2Call(i_f2Call),
         nTokType(i_nTokType)
 {
 }
@@ -158,18 +158,18 @@ CallFunction<PE>::TokType() const
 // PeStatus
 
 template <class PE>
-PeStatus<PE>::PeStatus( PE &        i_rMyPE,
-                        uintt       i_nSize,
-                        F_Tok *     i_pFuncArray,
+PeStatus<PE>::PeStatus( PE &	  	i_rMyPE,
+                        uintt		i_nSize,
+                        F_Tok *		i_pFuncArray,
                         INT16 *     i_pTokTypeArray,
-                        F_Tok       i_fDefault )
-    :   pMyPE(&i_rMyPE),
+                        F_Tok		i_fDefault )
+    :	pMyPE(&i_rMyPE),
         fDefault(i_fDefault)
 {
     aBranches.reserve(i_nSize);
     for ( uintt i = 0; i < i_nSize; ++i )
     {
-//      csv_assert(i > 0 ? i_pTokTypeArray[i] > i_pTokTypeArray[i-1] : true);
+//		csv_assert(i > 0 ? i_pTokTypeArray[i] > i_pTokTypeArray[i-1] : true);
         aBranches.push_back( CallFunction<PE>( i_pFuncArray[i], i_pTokTypeArray[i]) );
     }  // end for
 }
@@ -182,8 +182,8 @@ PeStatus<PE>::~PeStatus()
 
 template <class PE>
 void
-PeStatus<PE>::Call_Handler( INT16               i_nTokTypeId,
-                            const char *        i_sTokenText ) const
+PeStatus<PE>::Call_Handler( INT16				i_nTokTypeId,
+                            const char *		i_sTokenText ) const
 {
     uintt nSize = aBranches.size();
     uintt nPos = nSize / 2;
@@ -210,9 +210,9 @@ PeStatus<PE>::Call_Handler( INT16               i_nTokTypeId,
 
 template <class PE>
 bool
-PeStatus<PE>::CheckForCall( uintt               i_nPos,
-                            INT16               i_nTokTypeId,
-                            const char *        i_sTokenText ) const
+PeStatus<PE>::CheckForCall(	uintt				i_nPos,
+                            INT16				i_nTokTypeId,
+                            const char *		i_sTokenText ) const
 {
     if ( aBranches[i_nPos].TokType() == i_nTokTypeId )
     {
@@ -226,15 +226,15 @@ PeStatus<PE>::CheckForCall( uintt               i_nPos,
 
 template <class PE>
 PeStatusArray<PE>::PeStatusArray()
-    :   eState(PE::size_of_states)
+    :	eState(PE::size_of_states)
 {
     memset(aStati, 0, sizeof aStati);
 }
 
 template <class PE>
 void
-PeStatusArray<PE>::InsertState( State               i_ePosition,
-                                DYN PeStatus<PE> &  let_drState )
+PeStatusArray<PE>::InsertState(	State 				i_ePosition,
+                                DYN PeStatus<PE> &	let_drState )
 {
     csv_assert(aStati[i_ePosition] == 0);
     aStati[i_ePosition] = &let_drState;

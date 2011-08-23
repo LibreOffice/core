@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,19 +47,19 @@ class SystemFontList
 public:
     SystemFontList();
     ~SystemFontList();
-
+    
     void AnnounceFonts( ImplDevFontList& ) const;
     ImplMacFontData* GetFontDataFromId( ATSUFontID ) const;
 
     ATSUFontFallbacks maFontFallbacks;
 
 private:
-    typedef boost::unordered_map<ATSUFontID,ImplMacFontData*> MacFontContainer;
+    typedef std::hash_map<ATSUFontID,ImplMacFontData*> MacFontContainer;
     MacFontContainer maFontContainer;
 
-    void InitGlyphFallbacks();
+    void InitGlyphFallbacks();	
 };
-
-#endif  // _SV_SALATSUIFONTUTILS_HXX
+                             
+#endif	// _SV_SALATSUIFONTUTILS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

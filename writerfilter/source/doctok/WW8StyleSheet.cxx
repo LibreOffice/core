@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,11 +83,11 @@ rtl::OUString WW8Style::get_xstzName()
     if (nCount > 0)
     {
         Sequence aSeq(mSequence, 0xe, nCount * 2);
-
+        
         rtl_uString * pNew = 0;
         rtl_uString_newFromStr
             (&pNew, reinterpret_cast<const sal_Unicode *>(&aSeq[0]));
-
+        
         return rtl::OUString(pNew);
 
     }
@@ -106,17 +106,17 @@ rtl::OUString WW8Style::get_xstzName1()
         if (nOffset < getCount())
         {
             sal_uInt32 nCount = getU16(nOffset);
-
+            
             if (nCount > 0)
             {
                 Sequence aSeq(mSequence, nOffset + 2, nCount * 2);
-
+                
                 rtl_uString * pNew = 0;
                 rtl_uString_newFromStr
                     (&pNew, reinterpret_cast<const sal_Unicode *>(&aSeq[0]));
-
+                
                 return rtl::OUString(pNew);
-
+                
             }
         }
     }
@@ -137,7 +137,7 @@ sal_uInt32 WW8Style::get_upxstart()
     }
     else
     {
-        WW8StyleSheet * pParentStyleSheet =
+        WW8StyleSheet * pParentStyleSheet = 
             dynamic_cast<WW8StyleSheet *>(mpParent);
 
         nResult = pParentStyleSheet->get_cbSTDBaseInFile() + 2;
@@ -184,15 +184,15 @@ writerfilter::Reference<Properties>::Pointer_t WW8Style::get_upx
         if (nCount > 0)
         {
             aOffset.inc(2);
-
+            
             bool bIsPap = get_cupx() == 2 && nIndex == 0;
-            WW8PropertySet::Pointer_t
-                pProps(new WW8PropertySetImpl(*this, aOffset.get(), nCount,
+            WW8PropertySet::Pointer_t  
+                pProps(new WW8PropertySetImpl(*this, aOffset.get(), nCount, 
                                               bIsPap));
-
-            WW8PropertiesReference * pRef =
+            
+            WW8PropertiesReference * pRef = 
                 new WW8PropertiesReference(pProps);
-
+            
             pResult = writerfilter::Reference<Properties>::Pointer_t(pRef);
         }
     }

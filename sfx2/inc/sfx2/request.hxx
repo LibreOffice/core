@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,9 +57,9 @@ class SFX2_DLLPUBLIC SfxRequest: public SfxHint
 {
 friend struct SfxRequest_Impl;
 
-    sal_uInt16              nSlot;
-    SfxAllItemSet*      pArgs;
-    SfxRequest_Impl*    pImp;
+    USHORT				nSlot;
+    SfxAllItemSet*		pArgs;
+    SfxRequest_Impl*	pImp;
 
     //---------------------------------------------------------------------
 public:
@@ -72,58 +72,58 @@ private:
     //---------------------------------------------------------------------
 
 public:
-                        SfxRequest( SfxViewFrame*, sal_uInt16 nSlotId );
-                        SfxRequest( sal_uInt16 nSlot, sal_uInt16 nCallMode, SfxItemPool &rPool );
+                        SfxRequest( SfxViewFrame*, USHORT nSlotId );
+                        SfxRequest( USHORT nSlot, USHORT nCallMode, SfxItemPool &rPool );
                         SfxRequest( const SfxSlot* pSlot, const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rArgs,
-                                            sal_uInt16 nCallMode, SfxItemPool &rPool );
-                        SfxRequest( sal_uInt16 nSlot, sal_uInt16 nCallMode, const SfxAllItemSet& rSfxArgs );
+                                            USHORT nCallMode, SfxItemPool &rPool );
+                        SfxRequest( USHORT nSlot, USHORT nCallMode, const SfxAllItemSet& rSfxArgs );
                         SfxRequest( const SfxRequest& rOrig );
                         ~SfxRequest();
 
-    sal_uInt16              GetSlot() const { return nSlot; }
-    void                SetSlot(sal_uInt16 nNewSlot) { nSlot = nNewSlot; }
+    USHORT				GetSlot() const { return nSlot; }
+    void				SetSlot(USHORT nNewSlot) { nSlot = nNewSlot; }
 
-    sal_uInt16              GetModifier() const;
-    void                SetModifier( sal_uInt16 nModi );
+    USHORT              GetModifier() const;
+    void                SetModifier( USHORT nModi );
     SAL_DLLPRIVATE void SetInternalArgs_Impl( const SfxAllItemSet& rArgs );
     SAL_DLLPRIVATE const SfxItemSet* GetInternalArgs_Impl() const;
-    const SfxItemSet*   GetArgs() const { return pArgs; }
-    void                SetArgs( const SfxAllItemSet& rArgs );
-    void                AppendItem(const SfxPoolItem &);
-    void                RemoveItem( sal_uInt16 nSlotId );
+    const SfxItemSet* 	GetArgs() const { return pArgs; }
+    void				SetArgs( const SfxAllItemSet& rArgs );
+    void				AppendItem(const SfxPoolItem &);
+    void				RemoveItem( USHORT nSlotId );
 
-    static const SfxPoolItem* GetItem( const SfxItemSet*, sal_uInt16 nSlotId,
+    static const SfxPoolItem* GetItem( const SfxItemSet*, USHORT nSlotId,
                                        bool bDeep = false,
                                        TypeId aType = 0 );
-    const SfxPoolItem*  GetArg( sal_uInt16 nSlotId, bool bDeep = false, TypeId aType = 0 ) const;
+    const SfxPoolItem*  GetArg( USHORT nSlotId, bool bDeep = false, TypeId aType = 0 ) const;
     void                ReleaseArgs();
-    void                SetReturnValue(const SfxPoolItem &);
-    const SfxPoolItem*  GetReturnValue() const;
+    void				SetReturnValue(const SfxPoolItem &);
+    const SfxPoolItem*	GetReturnValue() const;
 
-    static SfxMacro*    GetRecordingMacro();
+    static SfxMacro*	GetRecordingMacro();
     static com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetMacroRecorder( SfxViewFrame* pFrame=NULL );
-    static sal_Bool         HasMacroRecorder( SfxViewFrame* pFrame=NULL );
-    sal_uInt16              GetCallMode() const;
+    static BOOL         HasMacroRecorder( SfxViewFrame* pFrame=NULL );
+    USHORT  			GetCallMode() const;
     bool                IsRecording() const;
-    void                AllowRecording( sal_Bool );
-    sal_Bool                AllowsRecording() const;
-    sal_Bool                IsAPI() const;
-    sal_Bool                IsSynchronCall() const;
-    void                SetSynchronCall( sal_Bool bSynchron );
-    void                SetTarget( const String &rTarget );
+    void                AllowRecording( BOOL );
+    BOOL                AllowsRecording() const;
+    BOOL				IsAPI() const;
+    BOOL                IsSynchronCall() const;
+    void                SetSynchronCall( BOOL bSynchron );
+    void				SetTarget( const String &rTarget );
 
-    sal_Bool                IsDone() const;
-    void                Done( sal_Bool bRemove = sal_False );
+    BOOL				IsDone() const;
+    void				Done( BOOL bRemove = FALSE );
 
-    void                Ignore();
-    void                Cancel();
-    sal_Bool                IsCancelled() const;
+    void				Ignore();
+    void				Cancel();
+    BOOL				IsCancelled() const;
     void                Done(const SfxItemSet &, bool bKeep = true );
 
     void                ForgetAllArgs();
 
 private:
-    const SfxRequest&   operator=(const SfxRequest &); // n.i.!!
+    const SfxRequest&	operator=(const SfxRequest &); // n.i.!!
 };
 
 //------------------------------------------------------------------------

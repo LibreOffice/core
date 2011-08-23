@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -911,7 +911,7 @@ public:
     void                eraseNameList( const ::rtl::OUString& rListName );
     NameListRef         getNameList( const ::rtl::OUString& rListName ) const;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier );
+    ::rtl::OUString     requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier );
     inline bool         isPasswordCancelled() const { return mbPwCancelled; }
 
 protected:
@@ -1012,7 +1012,7 @@ public:
     template< typename Type >
     bool                hasName( const NameListWrapper& rListWrp, Type nKey ) const;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier );
+    ::rtl::OUString     requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier );
     bool                isPasswordCancelled() const;
 
 protected:

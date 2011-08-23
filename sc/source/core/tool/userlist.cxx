@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,12 +50,12 @@
 void ScUserListData::InitTokens()
 {
     sal_Unicode cSep = ScGlobal::cListDelimiter;
-    nTokenCount = (sal_uInt16) aStr.GetTokenCount(cSep);
+    nTokenCount = (USHORT) aStr.GetTokenCount(cSep);
     if (nTokenCount)
     {
         pSubStrings = new String[nTokenCount];
         pUpperSub   = new String[nTokenCount];
-        for (sal_uInt16 i=0; i<nTokenCount; i++)
+        for (USHORT i=0; i<nTokenCount; i++)
         {
             pUpperSub[i] = pSubStrings[i] = aStr.GetToken((xub_StrLen)i,cSep);
             ScGlobal::pCharClass->toUpper(pUpperSub[i]);
@@ -78,7 +78,7 @@ ScUserListData::ScUserListData(const ScUserListData& rData) :
     InitTokens();
 }
 
-ScUserListData::~ScUserListData()
+__EXPORT ScUserListData::~ScUserListData()
 {
     delete[] pSubStrings;
     delete[] pUpperSub;
@@ -93,19 +93,19 @@ void ScUserListData::SetString( const String& rStr )
     InitTokens();
 }
 
-sal_uInt16 ScUserListData::GetSubCount() const
+USHORT ScUserListData::GetSubCount() const
 {
     return nTokenCount;
 }
 
-sal_Bool ScUserListData::GetSubIndex(const String& rSubStr, sal_uInt16& rIndex) const
+BOOL ScUserListData::GetSubIndex(const String& rSubStr, USHORT& rIndex) const
 {
-    sal_uInt16 i;
+    USHORT i;
     for (i=0; i<nTokenCount; i++)
         if (rSubStr == pSubStrings[i])
         {
             rIndex = i;
-            return sal_True;
+            return TRUE;
         }
 
     String aUpStr = rSubStr;
@@ -114,13 +114,13 @@ sal_Bool ScUserListData::GetSubIndex(const String& rSubStr, sal_uInt16& rIndex) 
         if (aUpStr == pUpperSub[i])
         {
             rIndex = i;
-            return sal_True;
+            return TRUE;
         }
 
-    return false;
+    return FALSE;
 }
 
-String ScUserListData::GetSubStr(sal_uInt16 nIndex) const
+String ScUserListData::GetSubStr(USHORT nIndex) const
 {
     if (nIndex < nTokenCount)
         return pSubStrings[nIndex];
@@ -130,10 +130,10 @@ String ScUserListData::GetSubStr(sal_uInt16 nIndex) const
 
 StringCompare ScUserListData::Compare(const String& rSubStr1, const String& rSubStr2) const
 {
-    sal_uInt16 nIndex1;
-    sal_uInt16 nIndex2;
-    sal_Bool bFound1 = GetSubIndex(rSubStr1, nIndex1);
-    sal_Bool bFound2 = GetSubIndex(rSubStr2, nIndex2);
+    USHORT nIndex1;
+    USHORT nIndex2;
+    BOOL bFound1 = GetSubIndex(rSubStr1, nIndex1);
+    BOOL bFound2 = GetSubIndex(rSubStr2, nIndex2);
     if (bFound1)
     {
         if (bFound2)
@@ -156,10 +156,10 @@ StringCompare ScUserListData::Compare(const String& rSubStr1, const String& rSub
 
 StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSubStr2) const
 {
-    sal_uInt16 nIndex1;
-    sal_uInt16 nIndex2;
-    sal_Bool bFound1 = GetSubIndex(rSubStr1, nIndex1);
-    sal_Bool bFound2 = GetSubIndex(rSubStr2, nIndex2);
+    USHORT nIndex1;
+    USHORT nIndex2;
+    BOOL bFound1 = GetSubIndex(rSubStr1, nIndex1);
+    BOOL bFound2 = GetSubIndex(rSubStr2, nIndex2);
     if (bFound1)
     {
         if (bFound2)
@@ -180,8 +180,8 @@ StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSu
         return (StringCompare) ScGlobal::GetpTransliteration()->compareString( rSubStr1, rSubStr2 );
 }
 
-ScUserList::ScUserList(sal_uInt16 nLim, sal_uInt16 nDel) :
-    ScCollection    ( nLim, nDel )
+ScUserList::ScUserList(USHORT nLim, USHORT nDel) :
+    ScCollection	( nLim, nDel )
 {
     using namespace ::com::sun::star;
 
@@ -254,30 +254,30 @@ ScDataObject* ScUserList::Clone() const
 
 ScUserListData* ScUserList::GetData(const String& rSubStr) const
 {
-    sal_uInt16  nIndex;
-    sal_uInt16  i = 0;
+    USHORT	nIndex;
+    USHORT	i = 0;
     for (i=0; i < nCount; i++)
         if (((ScUserListData*)pItems[i])->GetSubIndex(rSubStr, nIndex))
             return (ScUserListData*)pItems[i];
     return NULL;
 }
 
-sal_Bool ScUserList::operator==( const ScUserList& r ) const
+BOOL ScUserList::operator==( const ScUserList& r ) const
 {
-    sal_Bool bEqual = (nCount == r.nCount);
+    BOOL bEqual = (nCount == r.nCount);
 
     if ( bEqual )
     {
         ScUserListData* pMyData    = NULL;
         ScUserListData* pOtherData = NULL;
 
-        for ( sal_uInt16 i=0; i<nCount && bEqual; i++)
+        for ( USHORT i=0; i<nCount && bEqual; i++)
         {
             pMyData    = (ScUserListData*)At(i);
             pOtherData = (ScUserListData*)r.At(i);
 
             bEqual =(   (pMyData->nTokenCount == pOtherData->nTokenCount)
-                     && (pMyData->aStr        == pOtherData->aStr) );
+                     && (pMyData->aStr		  == pOtherData->aStr) );
         }
     }
 
@@ -285,15 +285,15 @@ sal_Bool ScUserList::operator==( const ScUserList& r ) const
 }
 
 
-sal_Bool ScUserList::HasEntry( const String& rStr ) const
+BOOL ScUserList::HasEntry( const String& rStr ) const
 {
-    for ( sal_uInt16 i=0; i<nCount; i++)
+    for ( USHORT i=0; i<nCount; i++)
     {
         const ScUserListData* pMyData = (ScUserListData*) At(i);
         if ( pMyData->aStr == rStr )
-            return sal_True;
+            return TRUE;
     }
-    return false;
+    return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

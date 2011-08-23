@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,6 +57,7 @@
 #include <section.hxx>
 #include <cntfrm.hxx>
 #include <frmatr.hxx>
+#include <docsh.hxx>
 #include <ndole.hxx>
 
 #include <comphelper/classids.hxx>
@@ -85,7 +86,7 @@ public:
     virtual void Commit();
     void Load();
 
-    void SetInUnload( sal_Bool bFlag )  { bInUnload = bFlag; }
+    void SetInUnload( BOOL bFlag ) 	{ bInUnload = bFlag; }
     using SvPtrarr::Count;
 
     void InsertObj( SwOLEObj& rObj );
@@ -93,7 +94,7 @@ public:
 
     void RemovePtr( SwOLEObj* pObj )
     {
-        sal_uInt16 nPos = SvPtrarr::GetPos( pObj );
+        USHORT nPos = SvPtrarr::GetPos( pObj );
         if( USHRT_MAX != nPos )
             SvPtrarr::Remove( nPos );
     }
@@ -162,17 +163,17 @@ void SAL_CALL SwOLEListener_Impl::disposing( const lang::EventObject& ) throw (u
 
 class SwEmbedObjectLink : public sfx2::SvBaseLink
 {
-    SwOLENode*          pOleNode;
+    SwOLENode*			pOleNode;
 
 public:
                         SwEmbedObjectLink(SwOLENode* pNode);
-    virtual             ~SwEmbedObjectLink();
+    virtual				~SwEmbedObjectLink();
 
-    virtual void        Closed();
-    virtual void        DataChanged( const String& rMimeType,
+    virtual void		Closed();
+    virtual void		DataChanged( const String& rMimeType,
                                 const uno::Any & rValue );
 
-    sal_Bool            Connect() { return GetRealObject() != NULL; }
+    sal_Bool			Connect() { return GetRealObject() != NULL; }
 };
 
 // -----------------------------------------------------------------------------
@@ -181,7 +182,7 @@ SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
     ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
     pOleNode(pNode)
 {
-    SetSynchron( sal_False );
+    SetSynchron( FALSE );
 }
 
 // -----------------------------------------------------------------------------
@@ -222,6 +223,8 @@ void SwEmbedObjectLink::DataChanged( const String& ,
     }
 
     pOleNode->GetNewReplacement();
+    // Initiate repainting
+    // pObj->SetChanged();
 }
 
 // -----------------------------------------------------------------------------
@@ -244,7 +247,7 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
     SwNoTxtNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
     aOLEObj( xObj ),
     pGraphic(0),
-    bOLESizeInvalid( sal_False ),
+    bOLESizeInvalid( FALSE ),
     mpObjectLink( NULL )
 {
     aOLEObj.SetNode( this );
@@ -258,7 +261,7 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
     SwNoTxtNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
     aOLEObj( rString, nAspect ),
     pGraphic(0),
-    bOLESizeInvalid( sal_False ),
+    bOLESizeInvalid( FALSE ),
     mpObjectLink( NULL )
 {
     aOLEObj.SetNode( this );
@@ -277,16 +280,21 @@ Graphic* SwOLENode::GetGraphic()
     return pGraphic;
 }
 
+Graphic* SwOLENode::GetHCGraphic()
+{
+    return aOLEObj.xOLERef.GetHCGraphic();
+}
+
 SwCntntNode *SwOLENode::SplitCntntNode( const SwPosition & )
 {
     // OLE-Objecte vervielfaeltigen ??
-    OSL_FAIL( "OleNode: can't split." );
+    OSL_ENSURE( FALSE, "OleNode: can't split." );
     return this;
 }
 
 // Laden eines in den Undo-Bereich verschobenen OLE-Objekts
 
-sal_Bool SwOLENode::RestorePersistentData()
+BOOL SwOLENode::RestorePersistentData()
 {
     DBG_ASSERT( aOLEObj.GetOleRef().is(), "No object to restore!" );
     if ( aOLEObj.xOLERef.is() )
@@ -312,7 +320,7 @@ sal_Bool SwOLENode::RestorePersistentData()
         {
             if ( xChild.is() )
                 xChild->setParent( 0 );
-            OSL_FAIL( "InsertObject failed" );
+            DBG_ERROR( "InsertObject failed" );
         }
         else
         {
@@ -322,11 +330,11 @@ sal_Bool SwOLENode::RestorePersistentData()
         }
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 // OLE object is transported into UNDO area
-sal_Bool SwOLENode::SavePersistentData()
+BOOL SwOLENode::SavePersistentData()
 {
     if( aOLEObj.xOLERef.is() )
     {
@@ -366,7 +374,7 @@ sal_Bool SwOLENode::SavePersistentData()
 
     DisconnectFileLink_Impl();
 
-    return sal_True;
+    return TRUE;
 }
 
 
@@ -424,14 +432,16 @@ Size SwOLENode::GetTwipSize() const
 SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
     // Falls bereits eine SvPersist-Instanz existiert, nehmen wir diese
-    SfxObjectShell* pPersistShell = pDoc->GetPersist();
-    if( !pPersistShell )
+    SfxObjectShell* p = pDoc->GetPersist();
+    if( !p )
     {
-        // TODO/LATER: is EmbeddedObjectContainer not enough?
-        // the created document will be closed by pDoc ( should use SfxObjectShellLock )
-        pPersistShell = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
-        pDoc->SetTmpDocShell( pPersistShell );
-        pPersistShell->DoInitNew( NULL );
+        // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
+        // diesem Dokument?
+        OSL_ENSURE( pDoc->GetRefForDocShell(),
+                        "wo ist die Ref-Klasse fuer die DocShell?");
+        p = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
+        *pDoc->GetRefForDocShell() = p;
+        p->DoInitNew( NULL );
     }
 
     // Wir hauen das Ding auf SvPersist-Ebene rein
@@ -439,7 +449,7 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     ::rtl::OUString aNewName/*( Sw3Io::UniqueName( p->GetStorage(), "Obj" ) )*/;
     SfxObjectShell* pSrc = GetDoc()->GetPersist();
 
-    pPersistShell->GetEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
+    p->GetEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
         pSrc->GetEmbeddedObjectContainer(),
         pSrc->GetEmbeddedObjectContainer().GetEmbeddedObject( aOLEObj.aName ),
         aNewName );
@@ -454,32 +464,32 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     pOLENd->SetContour( HasContour(), HasAutomaticContour() );
     pOLENd->SetAspect( GetAspect() ); // the replacement image must be already copied
 
-    pOLENd->SetOLESizeInvalid( sal_True );
+    pOLENd->SetOLESizeInvalid( TRUE );
     pDoc->SetOLEPrtNotifyPending();
 
     return pOLENd;
 }
 
-sal_Bool SwOLENode::IsInGlobalDocSection() const
+BOOL SwOLENode::IsInGlobalDocSection() const
 {
     // suche den "Body Anchor"
-    sal_uLong nEndExtraIdx = GetNodes().GetEndOfExtras().GetIndex();
+    ULONG nEndExtraIdx = GetNodes().GetEndOfExtras().GetIndex();
     const SwNode* pAnchorNd = this;
     do {
         SwFrmFmt* pFlyFmt = pAnchorNd->GetFlyFmt();
         if( !pFlyFmt )
-            return sal_False;
+            return FALSE;
 
         const SwFmtAnchor& rAnchor = pFlyFmt->GetAnchor();
         if( !rAnchor.GetCntntAnchor() )
-            return sal_False;
+            return FALSE;
 
         pAnchorNd = &rAnchor.GetCntntAnchor()->nNode.GetNode();
     } while( pAnchorNd->GetIndex() < nEndExtraIdx );
 
     const SwSectionNode* pSectNd = pAnchorNd->FindSectionNode();
     if( !pSectNd )
-        return sal_False;
+        return FALSE;
 
     while( pSectNd )
     {
@@ -494,15 +504,18 @@ sal_Bool SwOLENode::IsInGlobalDocSection() const
             pSectNd->GetIndex() > nEndExtraIdx;
 }
 
-sal_Bool SwOLENode::IsOLEObjectDeleted() const
+BOOL SwOLENode::IsOLEObjectDeleted() const
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     if( aOLEObj.xOLERef.is() )
     {
         SfxObjectShell* p = GetDoc()->GetPersist();
-        if( p )     // muss da sein
+        if( p )		// muss da sein
         {
             return !p->GetEmbeddedObjectContainer().HasEmbeddedObject( aOLEObj.aName );
+            //SvInfoObjectRef aRef( p->Find( aOLEObj.aName ) );
+            //if( aRef.Is() )
+            //    bRet = aRef->IsDeleted();
         }
     }
     return bRet;
@@ -644,7 +657,7 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     pListener( 0 ),
     xOLERef( xObj )
 {
-    xOLERef.Lock( sal_True );
+    xOLERef.Lock( TRUE );
     if ( xObj.is() )
     {
         pListener = new SwOLEListener_Impl( this );
@@ -659,7 +672,7 @@ SwOLEObj::SwOLEObj( const String &rString, sal_Int64 nAspect ) :
     pListener( 0 ),
     aName( rString )
 {
-    xOLERef.Lock( sal_True );
+    xOLERef.Lock( TRUE );
     xOLERef.SetViewAspect( nAspect );
 }
 
@@ -699,7 +712,7 @@ SwOLEObj::~SwOLEObj()
 
             // unlock object so that object can be closed in RemoveEmbeddedObject
             // successful closing of the object will automatically clear the reference then
-            xOLERef.Lock(sal_False);
+            xOLERef.Lock(FALSE);
 
             // Always remove object from conteiner it is connected to
             try
@@ -745,7 +758,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
             xChild->setParent( p->GetModel() );
         if (!p->GetEmbeddedObjectContainer().InsertEmbeddedObject( xOLERef.GetObject(), aObjName ) )
         {
-            OSL_FAIL( "InsertObject failed" );
+            DBG_ERROR( "InsertObject failed" );
         if ( xChild.is() )
             xChild->setParent( 0 );
         }
@@ -758,12 +771,12 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
     }
 }
 
-sal_Bool SwOLEObj::IsOleRef() const
+BOOL SwOLEObj::IsOleRef() const
 {
     return xOLERef.is();
 }
 
-const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
+uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
 {
     if( !xOLERef.is() )
     {
@@ -777,7 +790,7 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
         {
             //Das Teil konnte nicht geladen werden (wahrsch. Kaputt).
             Rectangle aArea;
-            SwFrm *pFrm = pOLENd->getLayoutFrm(0);
+            SwFrm *pFrm = pOLENd->GetFrm();
             if ( pFrm )
             {
                 Size aSz( pFrm->Frm().SSize() );
@@ -821,9 +834,12 @@ svt::EmbeddedObjectRef& SwOLEObj::GetObject()
     return xOLERef;
 }
 
-sal_Bool SwOLEObj::UnloadObject()
+BOOL SwOLEObj::UnloadObject()
 {
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
+    //Nicht notwendig im Doc DTor (MM)
+    // OSL_ENSURE( pOLERef && pOLERef->Is() && 1 < (*pOLERef)->GetRefCount(),
+    //        "Falscher RefCount fuers Unload" );
     if ( pOLENd )
     {
         const SwDoc* pDoc = pOLENd->GetDoc();
@@ -833,14 +849,14 @@ sal_Bool SwOLEObj::UnloadObject()
     return bRet;
 }
 
-sal_Bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, const SwDoc* pDoc, sal_Int64 nAspect )
+BOOL SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, const SwDoc* pDoc, sal_Int64 nAspect )
 {
     if ( !pDoc )
-        return sal_False;
+        return FALSE;
 
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
        sal_Int32 nState = xObj.is() ? xObj->getCurrentState() : embed::EmbedStates::LOADED;
-       sal_Bool bIsActive = ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING );
+       BOOL bIsActive = ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING );
     sal_Int64 nMiscStatus = xObj->getStatus( nAspect );
 
        if( nState != embed::EmbedStates::LOADED && !pDoc->IsInDtor() && !bIsActive &&
@@ -861,7 +877,7 @@ sal_Bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, 
                         if ( xPers.is() )
                             xPers->storeOwn();
                         else {
-                            OSL_FAIL("Modified object without persistance in cache!");
+                            DBG_ERROR("Modified object without persistance in cache!");
                         }
                     }
 
@@ -870,11 +886,11 @@ sal_Bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, 
                 }
                 catch ( uno::Exception& )
                 {
-                    bRet = sal_False;
+                    bRet = FALSE;
                 }
             }
             else
-                bRet = sal_False;
+                bRet = FALSE;
         }
     }
 
@@ -937,13 +953,15 @@ void SwOLELRUCache::Load()
     {
         sal_Int32 nVal = 0;
         *pValues >>= nVal;
+        //if( 20 > nVal )
+        //    nVal = 20;
 
         {
             if( nVal < nLRU_InitSize )
             {
                 // size of cache has been changed
-                sal_uInt16 nCount = SvPtrarr::Count();
-                sal_uInt16 nPos = nCount;
+                USHORT nCount = SvPtrarr::Count();
+                USHORT nPos = nCount;
 
                 // try to remove the last entries until new maximum size is reached
                 while( nCount > nVal )
@@ -957,14 +975,14 @@ void SwOLELRUCache::Load()
             }
         }
 
-        nLRU_InitSize = (sal_uInt16)nVal;
+        nLRU_InitSize = (USHORT)nVal;
     }
 }
 
 void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
 {
     SwOLEObj* pObj = &rObj;
-    sal_uInt16 nPos = SvPtrarr::GetPos( pObj );
+    USHORT nPos = SvPtrarr::GetPos( pObj );
     if( nPos )
     {
         // object is currently not the first in cache
@@ -974,7 +992,7 @@ void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
         SvPtrarr::Insert( pObj, 0 );
 
         // try to remove objects if necessary (of course not the freshly inserted one at nPos=0)
-        sal_uInt16 nCount = SvPtrarr::Count();
+        USHORT nCount = SvPtrarr::Count();
         nPos = nCount-1;
         while( nPos && nCount > nLRU_InitSize )
         {
@@ -987,7 +1005,7 @@ void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
 
 void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
 {
-    sal_uInt16 nPos = SvPtrarr::GetPos( &rObj );
+    USHORT nPos = SvPtrarr::GetPos( &rObj );
     if ( nPos != 0xFFFF )
         SvPtrarr::Remove( nPos );
     if( !Count() )

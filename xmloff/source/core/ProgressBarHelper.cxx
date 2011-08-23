@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,6 +102,8 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
                     nValue = nReference;
                 else
                 {
+//                    xStatusIndicator->end();
+//                    xStatusIndicator->start();
                     xStatusIndicator->reset();
                     nValue = 0;
                 }
@@ -119,11 +121,17 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
             xmloff::token::DecRescheduleCount();
 
             // #95181# disabled, because we want to call setValue very often to enable a good reschedule
+//			double fPercent ((fNewValue * 100) / nRange);
+//			if (fPercent >= (fOldPercent + fProgressStep))
+//			{
+//				xStatusIndicator->setValue((sal_Int32)fNewValue);
+//				fOldPercent = fPercent;
+//			}
         }
 #ifdef DBG_UTIL
         else if (!bFailure)
         {
-            OSL_FAIL("tried to set a wrong value on the progressbar");
+            DBG_ERROR("tried to set a wrong value on the progressbar");
             bFailure = sal_True;
         }
 #endif

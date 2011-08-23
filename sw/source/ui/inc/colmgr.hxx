@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,68 +31,69 @@
 #include "swdllapi.h"
 #include <fmtclds.hxx>
 
-SW_DLLPUBLIC void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth);
+SW_DLLPUBLIC void FitToActualSize(SwFmtCol& rCol, USHORT nWidth);
 
 class SW_DLLPUBLIC SwColMgr
 {
 public:
         // lActWidth wird aus den Edits des Seitendialogs
         // direkt uebergeben
-    SwColMgr(const SfxItemSet &rSet, sal_uInt16 nActWidth = USHRT_MAX);
+    SwColMgr(const SfxItemSet &rSet, USHORT nActWidth = USHRT_MAX);
     ~SwColMgr();
 
 
-    inline sal_uInt16       GetCount() const;
-    void                SetCount(sal_uInt16 nCount, sal_uInt16 nGutterWidth);
-    sal_uInt16              GetGutterWidth(sal_uInt16 nPos = USHRT_MAX) const;
-    void                SetGutterWidth(sal_uInt16 nWidth, sal_uInt16 nPos = USHRT_MAX);
+    inline USHORT 		GetCount() const;
+    void 				SetCount(USHORT nCount, USHORT nGutterWidth);
+    USHORT 				GetGutterWidth(USHORT nPos = USHRT_MAX) const;
+    void 				SetGutterWidth(USHORT nWidth, USHORT nPos = USHRT_MAX);
 
-    sal_uInt16              GetColWidth(sal_uInt16 nIdx) const;
-    void                SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWidth);
+    USHORT 				GetColWidth(USHORT nIdx) const;
+    void 				SetColWidth(USHORT nIdx, USHORT nWidth);
 
-    inline sal_Bool         IsAutoWidth() const;
-    void                SetAutoWidth(sal_Bool bOn = sal_True, sal_uInt16 lGutterWidth = 0);
+    inline BOOL 		IsAutoWidth() const;
+    void 				SetAutoWidth(BOOL bOn = TRUE, USHORT lGutterWidth = 0);
 
-    inline sal_Bool         HasLine() const;
-    inline void         SetNoLine();
+    inline BOOL			HasLine() const;
+    inline void 		SetNoLine();
 
-    void                SetLineWidthAndColor(::editeng::SvxBorderStyle eStyle, sal_uLong nWidth, const Color& rCol);
-    inline ::editeng::SvxBorderStyle    GetLineStyle() const;
-    inline sal_uLong        GetLineWidth() const;
+    inline void 		SetLineWidthAndColor(ULONG nWidth, const Color& rCol);
+    inline ULONG		GetLineWidth() const;
     inline const Color& GetLineColor() const;
 
     inline SwColLineAdj GetAdjust() const;
-    inline void         SetAdjust(SwColLineAdj);
+    inline void 		SetAdjust(SwColLineAdj);
 
-    short               GetLineHeightPercent() const;
-    void                SetLineHeightPercent(short nPercent);
+    short 				GetLineHeightPercent() const;
+    void 				SetLineHeightPercent(short nPercent);
 
-    inline void         NoCols();
-    void                Update();
+    inline void			NoCols();
+    void 				Update();
 
-    const SwFmtCol&     GetColumns() const { return aFmtCol; }
+    const SwFmtCol& 	GetColumns() const { return aFmtCol; }
 
-    void                SetActualWidth(sal_uInt16 nW);
-    sal_uInt16              GetActualSize() const { return nWidth; }
+    void				SetActualWidth(USHORT nW);
+    USHORT				GetActualSize() const { return nWidth; }
 
 
 private:
 
-    SwFmtCol            aFmtCol;
-    sal_uInt16              nWidth;
+    SwFmtCol 			aFmtCol;
+    USHORT 				nWidth;
 };
 
 // INLINE METHODE --------------------------------------------------------
-inline  sal_uInt16 SwColMgr::GetCount() const
+inline 	USHORT SwColMgr::GetCount() const
 {
     return aFmtCol.GetNumCols();
 }
 
-inline ::editeng::SvxBorderStyle SwColMgr::GetLineStyle() const
+inline void         SwColMgr::SetLineWidthAndColor(ULONG nLWidth, const Color& rCol)
 {
-    return aFmtCol.GetLineStyle();
+    aFmtCol.SetLineWidth(nLWidth);
+    aFmtCol.SetLineColor(rCol);
 }
-inline sal_uLong        SwColMgr::GetLineWidth() const
+
+inline ULONG		SwColMgr::GetLineWidth() const
 {
     return aFmtCol.GetLineWidth();
 }
@@ -102,29 +103,32 @@ inline const Color& SwColMgr::GetLineColor() const
     return aFmtCol.GetLineColor();
 }
 
-inline  SwColLineAdj SwColMgr::GetAdjust() const
+inline	SwColLineAdj SwColMgr::GetAdjust() const
 {
     return aFmtCol.GetLineAdj();
 }
 
-inline  void SwColMgr::SetAdjust(SwColLineAdj eAdj)
+inline	void SwColMgr::SetAdjust(SwColLineAdj eAdj)
 {
     aFmtCol.SetLineAdj(eAdj);
 }
-inline sal_Bool SwColMgr::IsAutoWidth() const
+
+inline BOOL SwColMgr::IsAutoWidth() const
 {
     return aFmtCol.IsOrtho();
 }
-inline void SwColMgr::SetAutoWidth(sal_Bool bOn, sal_uInt16 nGutterWidth)
+
+inline void SwColMgr::SetAutoWidth(BOOL bOn, USHORT nGutterWidth)
 {
     aFmtCol.SetOrtho(bOn, nGutterWidth, nWidth);
 }
 
-inline void SwColMgr::NoCols()
+inline void	SwColMgr::NoCols()
 {
     aFmtCol.GetColumns().DeleteAndDestroy(0, aFmtCol.GetColumns().Count());
 }
-inline sal_Bool SwColMgr::HasLine() const
+
+inline BOOL SwColMgr::HasLine() const
 {
     return GetAdjust() != COLADJ_NONE;
 }

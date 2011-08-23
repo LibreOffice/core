@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,11 +47,11 @@
 
 using namespace com::sun::star;
 
-#define SC_BREAKITER_SERVICE    "com.sun.star.i18n.BreakIterator"
+#define SC_BREAKITER_SERVICE	"com.sun.star.i18n.BreakIterator"
 
 //
-//  this file is compiled with exceptions enabled
-//  put functions here that need exceptions!
+//	this file is compiled with exceptions enabled
+//	put functions here that need exceptions!
 //
 
 // -----------------------------------------------------------------------
@@ -63,14 +63,14 @@ const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
     if ( !pScriptTypeData->xBreakIter.is() )
     {
         uno::Reference< uno::XInterface > xInterface = xServiceManager->createInstance(
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_BREAKITER_SERVICE )) );
+                            ::rtl::OUString::createFromAscii( SC_BREAKITER_SERVICE ) );
         pScriptTypeData->xBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
         DBG_ASSERT( pScriptTypeData->xBreakIter.is(), "can't get BreakIterator" );
     }
     return pScriptTypeData->xBreakIter;
 }
 
-sal_Bool ScDocument::HasStringWeakCharacters( const String& rString )
+BOOL ScDocument::HasStringWeakCharacters( const String& rString )
 {
     if (rString.Len())
     {
@@ -85,7 +85,7 @@ sal_Bool ScDocument::HasStringWeakCharacters( const String& rString )
             {
                 sal_Int16 nType = xBreakIter->getScriptType( aText, nPos );
                 if ( nType == i18n::ScriptType::WEAK )
-                    return sal_True;                            // found
+                    return TRUE;							// found
 
                 nPos = xBreakIter->endOfScript( aText, nPos, nType );
             }
@@ -93,13 +93,13 @@ sal_Bool ScDocument::HasStringWeakCharacters( const String& rString )
         }
     }
 
-    return false;       // none found
+    return FALSE;		// none found
 }
 
-sal_uInt8 ScDocument::GetStringScriptType( const String& rString )
+BYTE ScDocument::GetStringScriptType( const String& rString )
 {
 
-    sal_uInt8 nRet = 0;
+    BYTE nRet = 0;
     if (rString.Len())
     {
         uno::Reference<i18n::XBreakIterator> xBreakIter = GetBreakIterator();
@@ -133,27 +133,27 @@ sal_uInt8 ScDocument::GetStringScriptType( const String& rString )
     return nRet;
 }
 
-sal_uInt8 ScDocument::GetCellScriptType( ScBaseCell* pCell, sal_uLong nNumberFormat )
+BYTE ScDocument::GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat )
 {
     if ( !pCell )
-        return 0;       // empty
+        return 0;		// empty
 
-    sal_uInt8 nStored = pCell->GetScriptType();
-    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
-        return nStored;                             // use stored value
+    BYTE nStored = pCell->GetScriptType();
+    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )			// stored value valid?
+        return nStored;								// use stored value
 
     String aStr;
     Color* pColor;
     ScCellFormat::GetString( pCell, nNumberFormat, aStr, &pColor, *xPoolHelper->GetFormTable() );
 
-    sal_uInt8 nRet = GetStringScriptType( aStr );
+    BYTE nRet = GetStringScriptType( aStr );
 
-    pCell->SetScriptType( nRet );       // store for later calls
+    pCell->SetScriptType( nRet );		// store for later calls
 
     return nRet;
 }
 
-sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell )
+BYTE ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell )
 {
     // if cell is not passed, take from document
 
@@ -161,14 +161,14 @@ sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseC
     {
         pCell = GetCell( ScAddress( nCol, nRow, nTab ) );
         if ( !pCell )
-            return 0;       // empty
+            return 0;		// empty
     }
 
     // if script type is set, don't have to get number formats
 
-    sal_uInt8 nStored = pCell->GetScriptType();
-    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
-        return nStored;                             // use stored value
+    BYTE nStored = pCell->GetScriptType();
+    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )			// stored value valid?
+        return nStored;								// use stored value
 
     // include number formats from conditional formatting
 
@@ -178,8 +178,9 @@ sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseC
     if ( ((const SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() )
         pCondSet = GetCondResult( nCol, nRow, nTab );
 
-    sal_uLong nFormat = pPattern->GetNumberFormat( xPoolHelper->GetFormTable(), pCondSet );
+    ULONG nFormat = pPattern->GetNumberFormat( xPoolHelper->GetFormTable(), pCondSet );
     return GetCellScriptType( pCell, nFormat );
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

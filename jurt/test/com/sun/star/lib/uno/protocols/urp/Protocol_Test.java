@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,17 +34,20 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.IBridge;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XInterface;
+import complexlib.ComplexTestCase;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.LinkedList;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
-public final class Protocol_Test {
-    @Test public void test() throws Exception {
+public final class Protocol_Test extends ComplexTestCase {
+    public String[] getTestMethodNames() {
+        return new String[] { "test" };
+    }
+
+    public void test() throws Exception {
         IBridge iBridge = new TestBridge();
         PipedInputStream inA = new PipedInputStream();
         PipedOutputStream outA = new PipedOutputStream(inA);
@@ -90,7 +93,7 @@ public final class Protocol_Test {
             new Object[] { "hallo" });
         Message iMessage = iReceiver.readMessage();
         Object[] t_params = iMessage.getArguments();
-        assertEquals("hallo", (String)t_params[0]);
+        assure("", "hallo".equals((String)t_params[0]));
 
         // send a reply
         iReceiver.writeReply(false, new ThreadId(new byte[] { 0, 1 }), null);
@@ -115,7 +118,7 @@ public final class Protocol_Test {
         iReceiver.writeReply(false, new ThreadId(new byte[] { 0, 1 }), null);
         iSender.readMessage();
 
-        assertEquals("testString", ((String [])params[0])[0]);
+        assure("", "testString".equals(((String [])params[0])[0]));
     }
 
     public void testCallWithInOutParameter(
@@ -130,7 +133,7 @@ public final class Protocol_Test {
 
 
         Object[] t_params = iMessage.getArguments();
-        assertEquals("inString", ((String [])t_params[0])[0]);
+        assure("", "inString".equals(((String [])t_params[0])[0]));
 
         // provide reply
         ((String [])t_params[0])[0] = "outString";
@@ -139,7 +142,7 @@ public final class Protocol_Test {
         iReceiver.writeReply(false, new ThreadId(new byte[] { 0, 1 }), null);
         iSender.readMessage();
 
-        assertEquals("outString", ((String [])params[0])[0]);
+        assure("", "outString".equals(((String [])params[0])[0]));
     }
 
     public void testCallWithResult(
@@ -158,7 +161,7 @@ public final class Protocol_Test {
         Message iMessage = iSender.readMessage();
         Object result = iMessage.getResult();
 
-        assertEquals("resultString", result);
+        assure("", "resultString".equals(result));
     }
 
     public void testCallWhichRaisesException(
@@ -178,7 +181,7 @@ public final class Protocol_Test {
 
         Object result = iMessage.getResult();
 
-        assertTrue(result instanceof com.sun.star.uno.RuntimeException);
+        assure("", result instanceof com.sun.star.uno.RuntimeException);
     }
 
     public void testCallWithIn_Out_InOut_Paramters_and_result(
@@ -193,9 +196,9 @@ public final class Protocol_Test {
 
         Object[] t_params = iMessage.getArguments();
 
-        assertEquals("hallo", (String)t_params[0]);
+        assure("", "hallo".equals((String)t_params[0]));
 
-        assertEquals("inOutString", ((String [])t_params[2])[0]);
+        assure("", "inOutString".equals(((String [])t_params[2])[0]));
 
         ((String [])t_params[1])[0] = "outString";
         ((String [])t_params[2])[0] = "inOutString_res";
@@ -206,11 +209,11 @@ public final class Protocol_Test {
         iMessage = iSender.readMessage();
 
         Object result = iMessage.getResult();
-        assertEquals("outString", ((String [])params[1])[0]);
+        assure("", "outString".equals(((String [])params[1])[0]));
 
-        assertEquals("inOutString_res", ((String [])params[2])[0]);
+        assure("", "inOutString_res".equals(((String [])params[2])[0]));
 
-        assertEquals("resultString", result);
+        assure("", "resultString".equals(result));
     }
 
     public void testCallWhichReturnsAny(
@@ -226,11 +229,9 @@ public final class Protocol_Test {
             false, new ThreadId(new byte[] { 0, 1 }), Any.VOID);
         Message iMessage = iSender.readMessage();
         Object result = iMessage.getResult();
-        assertTrue(
-            result instanceof Any &&
-            ((TypeDescription.getTypeDescription(((Any) result).getType()).
-              getZClass()) ==
-             void.class));
+        assure("", result instanceof Any
+               && (TypeDescription.getTypeDescription(((Any) result).getType()).
+                   getZClass() == void.class));
 
         // send an ordinary request
         iSender.writeRequest(
@@ -243,7 +244,7 @@ public final class Protocol_Test {
             new Any(XInterface.class, null));
         iMessage = iSender.readMessage();
         result = iMessage.getResult();
-        assertNull(result);
+        assure("", result == null);
 
         // send an ordinary request
         iSender.writeRequest(
@@ -255,7 +256,7 @@ public final class Protocol_Test {
             false, new ThreadId(new byte[] { 0, 1 }), new Integer(501));
         iMessage = iSender.readMessage();
         result = iMessage.getResult();
-        assertEquals(501, result);
+        assure("", result.equals(new Integer(501)));
     }
 
     private static final class Endpoint {

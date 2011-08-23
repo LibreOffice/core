@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,74 +59,74 @@ enum SwHTMLFrmType
     HTML_FRMTYPE_END
 };
 
-#define HTML_OUT_TBLNODE    0x00
-#define HTML_OUT_GRFNODE    0x01
-#define HTML_OUT_OLENODE    0x02
-#define HTML_OUT_DIV        0x03
-#define HTML_OUT_MULTICOL   0x04
-#define HTML_OUT_SPACER     0x05
-#define HTML_OUT_CONTROL    0x06
-#define HTML_OUT_AMARQUEE   0x07
-#define HTML_OUT_MARQUEE    0x08
-#define HTML_OUT_GRFFRM     0x09
-#define HTML_OUT_OLEGRF     0x0a
-#define HTML_OUT_SPAN       0x0b
-#define HTML_OUT_MASK       0x0f
+#define HTML_OUT_TBLNODE 	0x00
+#define HTML_OUT_GRFNODE	0x01
+#define HTML_OUT_OLENODE	0x02
+#define HTML_OUT_DIV		0x03
+#define HTML_OUT_MULTICOL	0x04
+#define HTML_OUT_SPACER		0x05
+#define HTML_OUT_CONTROL	0x06
+#define HTML_OUT_AMARQUEE	0x07
+#define HTML_OUT_MARQUEE	0x08
+#define HTML_OUT_GRFFRM		0x09
+#define HTML_OUT_OLEGRF		0x0a
+#define HTML_OUT_SPAN		0x0b
+#define HTML_OUT_MASK		0x0f
 
-#define HTML_POS_PREFIX     0x00
-#define HTML_POS_BEFORE     0x10
-#define HTML_POS_INSIDE     0x20
-#define HTML_POS_ANY        0x30
-#define HTML_POS_MASK       0x30
+#define HTML_POS_PREFIX		0x00
+#define HTML_POS_BEFORE		0x10
+#define HTML_POS_INSIDE		0x20
+#define HTML_POS_ANY		0x30
+#define HTML_POS_MASK		0x30
 
-#define HTML_CNTNR_NONE     0x00
-#define HTML_CNTNR_SPAN     0x40
-#define HTML_CNTNR_DIV      0x80
-#define HTML_CNTNR_MASK     0xc0
+#define HTML_CNTNR_NONE		0x00
+#define HTML_CNTNR_SPAN		0x40
+#define HTML_CNTNR_DIV		0x80
+#define HTML_CNTNR_MASK		0xc0
 
 
-const sal_uInt16 MAX_FRMTYPES = HTML_FRMTYPE_END;
-const sal_uInt16 MAX_BROWSERS = 4;
+const USHORT MAX_FRMTYPES = HTML_FRMTYPE_END;
+const USHORT MAX_BROWSERS = 4;
 
-extern sal_uInt8 aHTMLOutFrmPageFlyTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern sal_uInt8 aHTMLOutFrmParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern sal_uInt8 aHTMLOutFrmParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern sal_uInt8 aHTMLOutFrmParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern sal_uInt8 aHTMLOutFrmAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern BYTE aHTMLOutFrmPageFlyTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern BYTE aHTMLOutFrmParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern BYTE aHTMLOutFrmParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern BYTE aHTMLOutFrmParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern BYTE aHTMLOutFrmAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
 
 class SwHTMLPosFlyFrm
 {
-    const SwFrmFmt      *pFrmFmt;       // der Rahmen
-    const SdrObject     *pSdrObject;    // ggf. Sdr-Objekt
-    SwNodeIndex         *pNdIdx;        // Node-Index
-    sal_uInt32              nOrdNum;        // Aus SwPosFlyFrm
-    xub_StrLen          nCntntIdx;      // seine Position im Content
-    sal_uInt8               nOutputMode;    // Ausgabe-Infos
+    const SwFrmFmt 		*pFrmFmt;		// der Rahmen
+    const SdrObject		*pSdrObject;	// ggf. Sdr-Objekt
+    SwNodeIndex 		*pNdIdx;		// Node-Index
+    UINT32 				nOrdNum;		// Aus SwPosFlyFrm
+    xub_StrLen			nCntntIdx;		// seine Position im Content
+    BYTE				nOutputMode;	// Ausgabe-Infos
 
 public:
 
     SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
-                     const SdrObject *pSdrObj, sal_uInt8 nOutMode );
+                     const SdrObject *pSdrObj, BYTE nOutMode );
 
-    sal_Bool operator==( const SwHTMLPosFlyFrm& ) const { return sal_False; }
-    sal_Bool operator<( const SwHTMLPosFlyFrm& ) const;
+    BOOL operator==( const SwHTMLPosFlyFrm& ) const { return FALSE; }
+    BOOL operator<( const SwHTMLPosFlyFrm& ) const;
 
     const SwFrmFmt& GetFmt() const { return *pFrmFmt; }
     const SdrObject *GetSdrObject() const { return pSdrObject; }
 
     const SwNodeIndex& GetNdIndex() const { return *pNdIdx; }
 
-    xub_StrLen GetCntntIndex() const    { return nCntntIdx; }
+    xub_StrLen GetCntntIndex() const 	{ return nCntntIdx; }
 
-    sal_uInt8 GetOutMode() const { return nOutputMode; }
+    BYTE GetOutMode() const { return nOutputMode; }
 
-    static sal_uInt8 GetOutFn( sal_uInt8 nMode ) { return nMode & HTML_OUT_MASK; }
-    static sal_uInt8 GetOutPos( sal_uInt8 nMode ) { return nMode & HTML_POS_MASK; }
-    static sal_uInt8 GetOutCntnr( sal_uInt8 nMode ) { return nMode & HTML_CNTNR_MASK; }
+    static BYTE GetOutFn( BYTE nMode ) { return nMode & HTML_OUT_MASK; }
+    static BYTE GetOutPos( BYTE nMode ) { return nMode & HTML_POS_MASK; }
+    static BYTE GetOutCntnr( BYTE nMode ) { return nMode & HTML_CNTNR_MASK; }
 
-    sal_uInt8 GetOutFn() const { return nOutputMode & HTML_OUT_MASK; }
-    sal_uInt8 GetOutPos() const { return nOutputMode & HTML_POS_MASK; }
-    sal_uInt8 GetOutCntnr() const { return nOutputMode & HTML_CNTNR_MASK; }
+    BYTE GetOutFn() const { return nOutputMode & HTML_OUT_MASK; }
+    BYTE GetOutPos() const { return nOutputMode & HTML_POS_MASK; }
+    BYTE GetOutCntnr() const { return nOutputMode & HTML_CNTNR_MASK; }
 };
 
 typedef SwHTMLPosFlyFrm *SwHTMLPosFlyFrmPtr;

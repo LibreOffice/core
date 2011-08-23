@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ namespace sd { namespace colortoolpanel
         const PropertyValue* pArgEnd = i_rArgs.getConstArray() + i_rArgs.getLength();
         for ( ; pArg != pArgEnd; ++pArg )
         {
-            if ( pArg->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ParentWindow" ) ) )
+            if ( pArg->Name.equalsAscii( "ParentWindow" ) )
             {
                 xParentWindow.set( pArg->Value, UNO_QUERY );
                 break;
@@ -103,7 +103,7 @@ namespace sd { namespace colortoolpanel
         }
         if ( !xParentWindow.is() )
         {
-            OSL_FAIL( "ToolPanelFactory::createUIElement: no parent window in the args!" );
+            OSL_ENSURE( false, "ToolPanelFactory::createUIElement: no parent window in the args!" );
             throw IllegalArgumentException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No parent window provided in the creation arguments. Cannot create tool panel." ) ),
                 *this,
@@ -115,19 +115,19 @@ namespace sd { namespace colortoolpanel
         Reference< XUIElement > xUIElement( new PanelUIElement( m_xContext, xParentWindow, i_rResourceURL, nPanelColor ) );
         return xUIElement;
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ToolPanelFactory::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_static();
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ToolPanelFactory::getImplementationName_static(  ) throw (RuntimeException)
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.example.custompanel.ToolPanelFactory" ) );
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL ToolPanelFactory::supportsService( const ::rtl::OUString& i_rServiceName ) throw (RuntimeException)
     {
@@ -142,7 +142,7 @@ namespace sd { namespace colortoolpanel
         }
         return sal_False;
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ToolPanelFactory::getSupportedServiceNames() throw (RuntimeException)
     {

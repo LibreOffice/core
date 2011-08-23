@@ -57,10 +57,15 @@
 * @file
 * Numbering override of Wordpro.
 ************************************************************************/
-#ifndef     _LWPNUMBERINGOVERRIDE_HXX
-#define     _LWPNUMBERINGOVERRIDE_HXX
+/*************************************************************************
+* Change History
+* 2005-01-12 Create and implement.
+************************************************************************/
 
-#include    "lwpoverride.hxx"
+#ifndef		_LWPNUMBERINGOVERRIDE_HXX
+#define		_LWPNUMBERINGOVERRIDE_HXX
+
+#include	"lwpoverride.hxx"
 
 class LwpObjectStream;
 class LwpNumberingOverride : public LwpOverride
@@ -69,20 +74,19 @@ public:
     LwpNumberingOverride();
     virtual ~LwpNumberingOverride(){}
 
-    virtual LwpNumberingOverride* clone() const;
-
     enum
     {
-        NO_LEVEL        = 0x0001,
-        NO_POSITION     = 0x0002,
-        HEADING         = 0x0004,
-        SMARTLEVEL      = 0x0008
+        NO_LEVEL		= 0x0001,
+        NO_POSITION		= 0x0002,
+        HEADING			= 0x0004,
+        SMARTLEVEL		= 0x0008
     };
 public:
     virtual void Read(LwpObjectStream *pStrm);
 
     //add by , 02/03/2005
     void Override(LwpNumberingOverride* pOther);
+    void operator=(const LwpOverride& rOther);
 
     inline sal_uInt16 GetLevel() const;
     inline sal_uInt16 GetPosition() const;
@@ -104,16 +108,9 @@ public:
     inline void RevertHeading();
     inline void RevertSmartLevel();
     //end add
-
-protected:
-    LwpNumberingOverride(LwpNumberingOverride const& rOther);
-
 private:
-    LwpNumberingOverride& operator=(LwpNumberingOverride const& rOther); // not implemented
-
-private:
-    sal_uInt16  m_nLevel;
-    sal_uInt16  m_nPosition;
+    sal_uInt16	m_nLevel;
+    sal_uInt16	m_nPosition;
 };
 
 inline sal_uInt16 LwpNumberingOverride::GetLevel() const

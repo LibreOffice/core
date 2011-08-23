@@ -52,6 +52,7 @@ SRC1FILES =  \
         fontwork.src \
         frmsel.src \
         hdft.src \
+        hyprlink.src \
         imapdlg.src \
         langbox.src \
         language.src \
@@ -105,6 +106,7 @@ LIB2OBJFILES= \
         $(SLO)$/grfflt.obj \
         $(SLO)$/hdft.obj \
         $(SLO)$/hyperdlg.obj \
+        $(SLO)$/hyprlink.obj \
         $(SLO)$/imapdlg.obj \
         $(SLO)$/imapwnd.obj \
         $(SLO)$/linkwarn.obj \

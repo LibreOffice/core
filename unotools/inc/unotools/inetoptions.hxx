@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,21 +76,27 @@ public:
     enum ProxyType { NONE, AUTOMATIC, MANUAL };
 
     rtl::OUString GetProxyNoProxy() const;
+
     sal_Int32 GetProxyType() const;
 
     rtl::OUString GetProxyFtpName() const;
+
     sal_Int32 GetProxyFtpPort() const;
 
     rtl::OUString GetProxyHttpName() const;
+
     sal_Int32 GetProxyHttpPort() const;
 
     void SetProxyNoProxy(rtl::OUString const & rValue, bool bFlush = false);
+
     void SetProxyType(ProxyType eValue, bool bFlush = false);
 
     void SetProxyFtpName(rtl::OUString const & rValue, bool bFlush = false);
+
     void SetProxyFtpPort(sal_Int32 nValue, bool bFlush = false);
 
     void SetProxyHttpName(rtl::OUString const & rValue, bool bFlush = false);
+
     void SetProxyHttpPort(sal_Int32 nValue, bool bFlush = false);
 
     void flush();

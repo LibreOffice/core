@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -141,7 +141,7 @@ namespace param
                 return pProperties->Name;
         }
 
-        OSL_FAIL( "ParameterWrapper::impl_getPseudoAggregatePropertyName: invalid argument!" );
+        OSL_ENSURE( sal_False, "ParameterWrapper::impl_getPseudoAggregatePropertyName: invalid argument!" );
         return ::rtl::OUString();
     }
 

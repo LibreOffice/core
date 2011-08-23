@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,6 +41,15 @@
 #include <i18npool/paper.hxx>
 #include <svx/flagsdef.hxx>
 
+// enum ------------------------------------------------------------------
+
+//CHINA001 enum SvxModeType
+//CHINA001 {
+//CHINA001 	SVX_PAGE_MODE_STANDARD,
+//CHINA001 	SVX_PAGE_MODE_CENTER,
+//CHINA001 	SVX_PAGE_MODE_PRESENTATION
+//CHINA001 };
+
 // class SvxPageDescPage -------------------------------------------------
 
 /*  {k:\svx\prototyp\dialog\page.bmp}
@@ -76,8 +85,8 @@
         <SvxLRSpaceItem>:       <SID_ATTR_LRSPACE>
 */
 
-struct  SvxPage_Impl;
-typedef sal_uInt16 MarginPosition;
+struct	SvxPage_Impl;
+typedef	USHORT MarginPosition;
 
 class SvxPageDescPage : public SfxTabPage
 {
@@ -100,8 +109,8 @@ class SvxPageDescPage : public SfxTabPage
 
     SvxPageWindow       aBspWin;
 
-    FixedText                   aTextFlowLbl;
-    svx::FrameDirectionListBox  aTextFlowBox;
+    FixedText           		aTextFlowLbl;
+    svx::FrameDirectionListBox	aTextFlowBox;
 
     FixedText           aPaperTrayLbl;
     ListBox             aPaperTrayBox;
@@ -117,14 +126,14 @@ class SvxPageDescPage : public SfxTabPage
     FixedText           aBottomMarginLbl;
     MetricField         aBottomMarginEdit;
 
-    FixedLine           aBottomSeparatorFl;
     // layout settings
     FixedLine           aLayoutFL;
     FixedText           aPageText;
     ListBox             aLayoutBox;
-    FixedText           aNumberFormatText;
+    FixedText			aNumberFormatText;
     ListBox             aNumberFormatBox;
 
+    FixedLine           aBottomSeparatorFl;
 
     //Extras Calc
     FixedText           aTblAlignFT;
@@ -135,71 +144,71 @@ class SvxPageDescPage : public SfxTabPage
     CheckBox            aAdaptBox;
 
     //Register Writer
-    CheckBox            aRegisterCB;
-    FixedText           aRegisterFT;
-    ListBox             aRegisterLB;
+    CheckBox			aRegisterCB;
+    FixedText			aRegisterFT;
+    ListBox				aRegisterLB;
 
-    String              sStandardRegister;
+    String				sStandardRegister;
 
     String              aInsideText;
     String              aOutsideText;
     String              aLeftText;
     String              aRightText;
-    String              aPrintRangeQueryText;
+    String				aPrintRangeQueryText;
 
-    long                nFirstLeftMargin;
-    long                nFirstRightMargin;
-    long                nFirstTopMargin;
-    long                nFirstBottomMargin;
-    long                nLastLeftMargin;
-    long                nLastRightMargin;
-    long                nLastTopMargin;
-    long                nLastBottomMargin;
+    long				nFirstLeftMargin;
+    long				nFirstRightMargin;
+    long				nFirstTopMargin;
+    long				nFirstBottomMargin;
+    long				nLastLeftMargin;
+    long				nLastRightMargin;
+    long				nLastTopMargin;
+    long				nLastBottomMargin;
 
     Size                aMaxSize;
-    sal_Bool                bLandscape;
+    BOOL                bLandscape;
     bool                bBorderModified;
     SvxModeType         eMode;
     Paper               ePaperStart;
     Paper               ePaperEnd;
 
-    SvxPage_Impl*       pImpl;
+    SvxPage_Impl*		pImpl;
 
 #ifdef _SVX_PAGE_CXX
     void                Init_Impl();
-    DECL_LINK(          LayoutHdl_Impl, ListBox* );
-    DECL_LINK(          PaperBinHdl_Impl, ListBox* );
-    DECL_LINK(          SwapOrientation_Impl, RadioButton* );
+    DECL_LINK( 			LayoutHdl_Impl, ListBox* );
+    DECL_LINK( 			PaperBinHdl_Impl, ListBox* );
+    DECL_LINK( 			SwapOrientation_Impl, RadioButton* );
     void                SwapFirstValues_Impl( bool bSet );
-    DECL_LINK(          BorderModify_Impl, MetricField* );
+    DECL_LINK( 			BorderModify_Impl, MetricField* );
     void                InitHeadFoot_Impl( const SfxItemSet& rSet );
-    DECL_LINK(          CenterHdl_Impl, CheckBox* );
+    DECL_LINK( 			CenterHdl_Impl, CheckBox* );
     void                UpdateExample_Impl( bool bResetbackground = false );
 
     // Papiergroesse
-    DECL_LINK(          PaperSizeSelect_Impl, ListBox* );
-    DECL_LINK(          PaperSizeModify_Impl, Edit* );
+    DECL_LINK(			PaperSizeSelect_Impl, ListBox* );
+    DECL_LINK(			PaperSizeModify_Impl, Edit* );
 
-    DECL_LINK(          FrameDirectionModify_Impl, ListBox* );
+    DECL_LINK(			FrameDirectionModify_Impl, ListBox* );
 
     // Hintergrund
     void                ResetBackground_Impl( const SfxItemSet& rSet );
 
     // Grenzwerte
-    DECL_LINK(          RangeHdl_Impl, Edit* );
+    DECL_LINK(			RangeHdl_Impl, Edit* );
     void                CalcMargin_Impl();
 
     // Registerhaltigkeit
-    DECL_LINK(          RegisterModify, CheckBox * );
+    DECL_LINK(			RegisterModify, CheckBox * );
 
     // page direction
     /** Disables vertical page direction entries in the text flow listbox. */
     void                DisableVerticalPageDir();
 
-    bool                IsPrinterRangeOverflow( MetricField& rField, long nFirstMargin,
+    bool				IsPrinterRangeOverflow( MetricField& rField, long nFirstMargin,
                                                 long nLastMargin, MarginPosition nPos );
-    void                CheckMarginEdits( bool _bClear );
-    bool                IsMarginOutOfRange();
+    void				CheckMarginEdits( bool _bClear );
+    bool				IsMarginOutOfRange();
 #endif
 
     SvxPageDescPage( Window* pParent, const SfxItemSet& rSet );
@@ -210,9 +219,9 @@ protected:
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static USHORT*      GetRanges();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rOutSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rOutSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        FillUserData();
 
@@ -222,8 +231,8 @@ public:
     void                SetPaperFormatRanges( Paper eStart, Paper eEnd )
                             { ePaperStart = eStart, ePaperEnd = eEnd; }
 
-    void                SetCollectionList(const List* pList);
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    void				SetCollectionList(const List* pList);
+    virtual void		PageCreated (SfxAllItemSet aSet); //add CHINA001
 };
 
 #endif // #ifndef _SVX_PAGE_HXX

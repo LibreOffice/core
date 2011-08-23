@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@ class SdbColumns
 
 SdbColumns::SdbColumns()
 {
-    OSL_FAIL("WATCOM Hack failed !");
+    DBG_ERROR("WATCOM Hack failed !");
 }
 
 SdbColumns::~SdbColumns()
 {
-    OSL_FAIL("WATCOM Hack failed !");
+    DBG_ERROR("WATCOM Hack failed !");
 }
 
 class SdbRow
@@ -57,12 +57,12 @@ class SdbRow
 
 SdbRow::SdbRow()
 {
-    OSL_FAIL("WATCOM Hack failed !");
+    DBG_ERROR("WATCOM Hack failed !");
 }
 
 SdbRow::~SdbRow()
 {
-    OSL_FAIL("WATCOM Hack failed !");
+    DBG_ERROR("WATCOM Hack failed !");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

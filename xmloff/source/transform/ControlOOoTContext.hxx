@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@
 
 #include "TransformerContext.hxx"
 
-class XMLControlOOoTransformerContext : public XMLTransformerContext
+class XMLControlOOoTransformerContext : public XMLTransformerContext 
 {
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
 
     ::rtl::OUString m_aElemQName;
@@ -41,7 +41,7 @@ class XMLControlOOoTransformerContext : public XMLTransformerContext
 public:
     TYPEINFO();
 
-    XMLControlOOoTransformerContext( XMLTransformerBase& rTransformer,
+    XMLControlOOoTransformerContext( XMLTransformerBase& rTransformer, 
                            const ::rtl::OUString& rQName );
 
     virtual ~XMLControlOOoTransformerContext();
@@ -58,6 +58,6 @@ public:
     virtual void Characters( const ::rtl::OUString& rChars );
 };
 
-#endif  //  _XMLOFF_CONTROLOOOTCONTEXT_HXX
+#endif	//  _XMLOFF_CONTROLOOOTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

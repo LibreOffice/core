@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace ucbhelper_impl
 
 struct PropertyInfo
 {
-    const char* pName;
+    const char*	pName;
     sal_Int32   nHandle;
     sal_Int16   nAttributes;
     const uno::Type& (*pGetCppuType)();
@@ -92,19 +92,19 @@ static const PropertyInfo aPropertyTable[] =
 //=========================================================================
 
 class PropertySetInfo :
-        public cppu::OWeakObject,
-        public lang::XTypeProvider,
+        public cppu::OWeakObject,	
+        public lang::XTypeProvider, 
         public beans::XPropertySetInfo
 {
     uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
-    uno::Sequence< beans::Property >*            m_pProps;
+    uno::Sequence< beans::Property >* 			 m_pProps;
 
 private:
-    sal_Bool queryProperty(
+    sal_Bool queryProperty(	
         const rtl::OUString& aName, beans::Property& rProp );
 
 public:
-    PropertySetInfo(
+    PropertySetInfo( 
         const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
         const PropertyInfo* pProps,
         sal_Int32 nProps );
@@ -119,7 +119,7 @@ public:
     // XPropertySetInfo
     virtual uno::Sequence< beans::Property > SAL_CALL getProperties()
         throw( uno::RuntimeException );
-    virtual beans::Property SAL_CALL getPropertyByName(
+    virtual beans::Property SAL_CALL getPropertyByName( 
             const rtl::OUString& aName )
         throw( beans::UnknownPropertyException, uno::RuntimeException );
     virtual sal_Bool SAL_CALL hasPropertyByName( const rtl::OUString& Name )
@@ -183,24 +183,24 @@ namespace ucbhelper
 
 struct ResultSet_Impl
 {
-    uno::Reference< lang::XMultiServiceFactory >    m_xSMgr;
-    uno::Reference< com::sun::star::ucb::XCommandEnvironment >  m_xEnv;
-    uno::Reference< beans::XPropertySetInfo >       m_xPropSetInfo;
-    uno::Reference< sdbc::XResultSetMetaData >      m_xMetaData;
-    uno::Sequence< beans::Property >                m_aProperties;
-    rtl::Reference< ResultSetDataSupplier >         m_xDataSupplier;
-    osl::Mutex                          m_aMutex;
-    cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
-    PropertyChangeListeners*            m_pPropertyChangeListeners;
-    sal_Int32                           m_nPos;
-    sal_Bool                            m_bWasNull;
-    sal_Bool                            m_bAfterLast;
+    uno::Reference< lang::XMultiServiceFactory > 	m_xSMgr;
+    uno::Reference< com::sun::star::ucb::XCommandEnvironment > 	m_xEnv;
+    uno::Reference< beans::XPropertySetInfo >     	m_xPropSetInfo;
+    uno::Reference< sdbc::XResultSetMetaData >   	m_xMetaData;
+    uno::Sequence< beans::Property >              	m_aProperties;
+    rtl::Reference< ResultSetDataSupplier >	        m_xDataSupplier;
+    osl::Mutex						 	m_aMutex;
+    cppu::OInterfaceContainerHelper* 	m_pDisposeEventListeners;
+    PropertyChangeListeners*			m_pPropertyChangeListeners;
+    sal_Int32						 	m_nPos;
+    sal_Bool 						 	m_bWasNull;
+    sal_Bool 						 	m_bAfterLast;
 
-    inline ResultSet_Impl(
+    inline ResultSet_Impl( 
         const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
         const uno::Sequence< beans::Property >& rProperties,
         const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
-        const uno::Reference< com::sun::star::ucb::XCommandEnvironment >&
+        const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& 
             rxEnv );
     inline ~ResultSet_Impl();
 };
@@ -237,11 +237,11 @@ inline ResultSet_Impl::~ResultSet_Impl()
 //=========================================================================
 //=========================================================================
 
-ResultSet::ResultSet(
+ResultSet::ResultSet( 
     const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
     const uno::Sequence< beans::Property >& rProperties,
     const rtl::Reference< ResultSetDataSupplier >& rDataSupplier )
-: m_pImpl( new ResultSet_Impl(
+: m_pImpl( new ResultSet_Impl( 
                rxSMgr,
                rProperties,
                rDataSupplier,
@@ -251,7 +251,7 @@ ResultSet::ResultSet(
 }
 
 //=========================================================================
-ResultSet::ResultSet(
+ResultSet::ResultSet( 
     const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
     const uno::Sequence< beans::Property >& rProperties,
     const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
@@ -309,8 +309,8 @@ XTYPEPROVIDER_IMPL_9( ResultSet,
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSet,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResultSet")),
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( RESULTSET_SERVICE_NAME )) );
+                    rtl::OUString::createFromAscii( "ResultSet" ),
+                    rtl::OUString::createFromAscii( RESULTSET_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -610,7 +610,7 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
     else if ( row == 0 )
     {
         // @throws SQLException
-        //      ... if row is 0 ...
+        //		... if row is 0 ...
         throw sdbc::SQLException();
     }
     else // row > 0
@@ -649,8 +649,8 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
     Calling relative( 0 ) is valid, but does not change the cursor position.
 
     Calling relative( 1 ) is different from calling next() because it makes
-    sense to call next() when there is no current row, for example, when
-    the cursor is positioned before the first row or after the last row of
+    sense to call next() when there is no current row, for example,	when
+    the cursor is positioned before the first row or after the last	row of
     the result set.
 */
     if ( m_pImpl->m_bAfterLast || ( m_pImpl->m_nPos == 0 ) )
@@ -1148,7 +1148,7 @@ ResultSet::getCharacterStream( sal_Int32 columnIndex )
 
 //=========================================================================
 // virtual
-uno::Any SAL_CALL ResultSet::getObject(
+uno::Any SAL_CALL ResultSet::getObject( 
         sal_Int32 columnIndex,
         const uno::Reference< container::XNameAccess >& typeMap )
     throw( sdbc::SQLException, uno::RuntimeException )
@@ -1173,7 +1173,7 @@ uno::Any SAL_CALL ResultSet::getObject(
 
 //=========================================================================
 // virtual
-uno::Reference< sdbc::XRef > SAL_CALL
+uno::Reference< sdbc::XRef > SAL_CALL 
 ResultSet::getRef( sal_Int32 columnIndex )
     throw( sdbc::SQLException, uno::RuntimeException )
 {
@@ -1197,7 +1197,7 @@ ResultSet::getRef( sal_Int32 columnIndex )
 
 //=========================================================================
 // virtual
-uno::Reference< sdbc::XBlob > SAL_CALL
+uno::Reference< sdbc::XBlob > SAL_CALL 
 ResultSet::getBlob( sal_Int32 columnIndex )
     throw( sdbc::SQLException, uno::RuntimeException )
 {
@@ -1221,7 +1221,7 @@ ResultSet::getBlob( sal_Int32 columnIndex )
 
 //=========================================================================
 // virtual
-uno::Reference< sdbc::XClob > SAL_CALL
+uno::Reference< sdbc::XClob > SAL_CALL 
 ResultSet::getClob( sal_Int32 columnIndex )
     throw( sdbc::SQLException, uno::RuntimeException )
 {
@@ -1245,7 +1245,7 @@ ResultSet::getClob( sal_Int32 columnIndex )
 
 //=========================================================================
 // virtual
-uno::Reference< sdbc::XArray > SAL_CALL
+uno::Reference< sdbc::XArray > SAL_CALL 
 ResultSet::getArray( sal_Int32 columnIndex )
     throw( sdbc::SQLException, uno::RuntimeException )
 {
@@ -1300,7 +1300,7 @@ rtl::OUString SAL_CALL ResultSet::queryContentIdentifierString()
 
 //=========================================================================
 // virtual
-uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL
+uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL 
 ResultSet::queryContentIdentifier()
     throw( uno::RuntimeException )
 {
@@ -1313,7 +1313,7 @@ ResultSet::queryContentIdentifier()
 
 //=========================================================================
 // virtual
-uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
+uno::Reference< com::sun::star::ucb::XContent > SAL_CALL 
 ResultSet::queryContent()
     throw( uno::RuntimeException )
 {
@@ -1330,7 +1330,7 @@ ResultSet::queryContent()
 //=========================================================================
 
 // virtual
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
+uno::Reference< beans::XPropertySetInfo > SAL_CALL 
 ResultSet::getPropertySetInfo()
     throw( uno::RuntimeException )
 {
@@ -1358,13 +1358,13 @@ void SAL_CALL ResultSet::setPropertyValue( const rtl::OUString& aPropertyName,
         throw beans::UnknownPropertyException();
 
     if ( aPropertyName.equals(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) ) )
+                rtl::OUString::createFromAscii( "RowCount" ) ) )
     {
         // property is read-only.
         throw lang::IllegalArgumentException();
     }
     else if ( aPropertyName.equals(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) ) )
+                rtl::OUString::createFromAscii( "IsRowCountFinal" ) ) )
     {
         // property is read-only.
         throw lang::IllegalArgumentException();
@@ -1377,7 +1377,7 @@ void SAL_CALL ResultSet::setPropertyValue( const rtl::OUString& aPropertyName,
 
 //=========================================================================
 // virtual
-uno::Any SAL_CALL ResultSet::getPropertyValue(
+uno::Any SAL_CALL ResultSet::getPropertyValue( 
         const rtl::OUString& PropertyName )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
@@ -1389,12 +1389,12 @@ uno::Any SAL_CALL ResultSet::getPropertyValue(
     uno::Any aValue;
 
     if ( PropertyName.equals(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) ) )
+                rtl::OUString::createFromAscii( "RowCount" ) ) )
     {
         aValue <<= m_pImpl->m_xDataSupplier->currentCount();
     }
     else if ( PropertyName.equals(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) ) )
+                rtl::OUString::createFromAscii( "IsRowCountFinal" ) ) )
     {
         aValue <<= m_pImpl->m_xDataSupplier->isCountFinal();
     }
@@ -1421,9 +1421,9 @@ void SAL_CALL ResultSet::addPropertyChangeListener(
 
     if ( aPropertyName.getLength() &&
          !aPropertyName.equals(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) ) &&
+                rtl::OUString::createFromAscii( "RowCount" ) ) &&
          !aPropertyName.equals(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) ) )
+                rtl::OUString::createFromAscii( "IsRowCountFinal" ) ) )
         throw beans::UnknownPropertyException();
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
@@ -1447,9 +1447,9 @@ void SAL_CALL ResultSet::removePropertyChangeListener(
 
     if ( aPropertyName.getLength() &&
          !aPropertyName.equals(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) ) &&
+                rtl::OUString::createFromAscii( "RowCount" ) ) &&
          !aPropertyName.equals(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) ) )
+                rtl::OUString::createFromAscii( "IsRowCountFinal" ) ) )
         throw beans::UnknownPropertyException();
 
     if ( m_pImpl->m_pPropertyChangeListeners )
@@ -1467,7 +1467,7 @@ void SAL_CALL ResultSet::addVetoableChangeListener(
            lang::WrappedTargetException,
            uno::RuntimeException )
 {
-    //  No constrained props, at the moment.
+    //	No constrained props, at the moment.
 }
 
 //=========================================================================
@@ -1479,7 +1479,7 @@ void SAL_CALL ResultSet::removeVetoableChangeListener(
            lang::WrappedTargetException,
            uno::RuntimeException )
 {
-    //  No constrained props, at the moment.
+    //	No constrained props, at the moment.
 }
 
 //=========================================================================
@@ -1534,12 +1534,12 @@ void ResultSet::rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew )
         return;
 
     propertyChanged(
-        beans::PropertyChangeEvent(
+        beans::PropertyChangeEvent( 
             static_cast< cppu::OWeakObject * >( this ),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")),
+            rtl::OUString::createFromAscii( "RowCount" ),
             sal_False,
             1001,
-            uno::makeAny( nOld ),     // old value
+            uno::makeAny( nOld ),	  // old value
             uno::makeAny( nNew ) ) ); // new value
 }
 
@@ -1550,23 +1550,23 @@ void ResultSet::rowCountFinal()
         return;
 
     propertyChanged(
-        beans::PropertyChangeEvent(
+        beans::PropertyChangeEvent( 
             static_cast< cppu::OWeakObject * >( this ),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")),
+            rtl::OUString::createFromAscii( "IsRowCountFinal" ),
             sal_False,
             1000,
-            uno:: makeAny( sal_False ),   // old value
+            uno:: makeAny( sal_False ),	  // old value
             uno::makeAny( sal_True ) ) ); // new value
 }
 
 //=========================================================================
-const uno::Sequence< beans::Property >& ResultSet::getProperties()
+const uno::Sequence< beans::Property >&	ResultSet::getProperties()
 {
     return m_pImpl->m_aProperties;
 }
 
 //=========================================================================
-const uno::Reference< com::sun::star::ucb::XCommandEnvironment >&
+const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& 
 ResultSet::getEnvironment()
 {
     return m_pImpl->m_xEnv;
@@ -1601,9 +1601,9 @@ PropertySetInfo::PropertySetInfo(
         {
             beans::Property& rProp = pProperties[ n ];
 
-            rProp.Name       = rtl::OUString::createFromAscii( pEntry->pName );
-            rProp.Handle     = pEntry->nHandle;
-            rProp.Type       = pEntry->pGetCppuType();
+            rProp.Name		 = rtl::OUString::createFromAscii( pEntry->pName );
+            rProp.Handle	 = pEntry->nHandle;
+            rProp.Type		 = pEntry->pGetCppuType();
             rProp.Attributes = pEntry->nAttributes;
 
             pEntry++;
@@ -1653,7 +1653,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
 
 //=========================================================================
 // virtual
-beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
+beans::Property SAL_CALL PropertySetInfo::getPropertyByName( 
         const rtl::OUString& aName )
     throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
@@ -1666,7 +1666,7 @@ beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
 
 //=========================================================================
 // virtual
-sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
+sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( 
         const rtl::OUString& Name )
     throw( uno::RuntimeException )
 {

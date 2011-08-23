@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,17 +52,17 @@ static typelib_TypeClass cpp2uno_call(
     bridges::cpp_uno::shared::CppInterfaceProxy * pThis,
     const typelib_TypeDescription * pMemberTypeDescr,
     typelib_TypeDescriptionReference * pReturnTypeRef, // 0 indicates void return
-    sal_Int32 nParams, typelib_MethodParameter * pParams, long r8,
+    sal_Int32 nParams, typelib_MethodParameter * pParams, long r8, 
         void ** gpreg, void ** fpreg, void ** ovrflw,
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "as far as cpp2uno_call\n");
 #endif
 
-    int ng = 0; //number of gpr registers used
+    int ng = 0; //number of gpr registers used 
     int nf = 0; //number of fpr regsiters used
-
+       
     // gpreg:  [ret *], this, [gpr params]
     // fpreg:  [fpr params]
     // ovrflw: [gpr or fpr params (properly aligned)]
@@ -71,10 +71,10 @@ static typelib_TypeClass cpp2uno_call(
     typelib_TypeDescription * pReturnTypeDescr = 0;
     if (pReturnTypeRef)
         TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-
+    
     void * pUnoReturn = 0;
     void * pCppReturn = 0; // complex return ptr: if != 0 && != pUnoReturn, reconversion need
-
+    
     if (pReturnTypeDescr)
     {
         if ( ia64::return_in_hidden_param( pReturnTypeRef ) ) // complex return via ptr passed as hidden parameter reg (pCppReturn)
@@ -82,15 +82,15 @@ static typelib_TypeClass cpp2uno_call(
             pCppReturn = *(void **)gpreg;
             gpreg++;
             ng++;
-
+            
             pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
                           ? alloca( pReturnTypeDescr->nSize )
                           : pCppReturn); // direct way
         }
-        else if ( ia64::return_via_r8_buffer( pReturnTypeRef ) ) // complex return via ptr passed in r8
+        else if ( ia64::return_via_r8_buffer( pReturnTypeRef ) ) // complex return via ptr passed in r8 
         {
             pCppReturn = (void *)r8;
-
+            
             pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
                           ? alloca( pReturnTypeDescr->nSize )
                           : pCppReturn); // direct way
@@ -100,7 +100,7 @@ static typelib_TypeClass cpp2uno_call(
             pUnoReturn = pRegisterReturn; // direct way for simple types
     }
     // pop this
-    gpreg++;
+    gpreg++; 
     ng++;
 
     // stack space
@@ -112,7 +112,7 @@ static typelib_TypeClass cpp2uno_call(
     sal_Int32 * pTempIndizes = (sal_Int32 *)(pUnoArgs + (2 * nParams));
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
-
+    
     sal_Int32 nTempIndizes = 0;
     bool bOverFlowUsed = false;
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
@@ -121,14 +121,14 @@ static typelib_TypeClass cpp2uno_call(
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
         fprintf(stderr, "arg %d of %d\n", nPos, nParams);
 #endif
 
         //I think it is impossible to get UNO to pass structs as parameters by copy
-        if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
+        if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr )) 
         {
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
             fprintf(stderr, "simple\n");
 #endif
 
@@ -175,7 +175,7 @@ static typelib_TypeClass cpp2uno_call(
                 case typelib_TypeClass_LONG:
                 case typelib_TypeClass_UNSIGNED_LONG:
                 default:
-                    if (ng < ia64::MAX_GPR_REGS)
+                    if (ng < ia64::MAX_GPR_REGS) 
                     {
                         pCppArgs[nPos] = pUnoArgs[nPos] = gpreg++;
                         ng++;
@@ -194,13 +194,13 @@ static typelib_TypeClass cpp2uno_call(
         }
         else // ptr to complex value | ref
         {
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
             fprintf(stderr, "complex, ng is %d\n", ng);
 #endif
             void *pCppStack; //temporary stack pointer
 
             if (ng < ia64::MAX_GPR_REGS)
-            {
+            { 
                 pCppArgs[nPos] = pCppStack = *gpreg++;
                 ng++;
             }
@@ -238,45 +238,45 @@ static typelib_TypeClass cpp2uno_call(
         }
     }
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "end of params\n");
 #endif
-
+    
     // ExceptionHolder
     uno_Any aUnoExc; // Any will be constructed by callee
     uno_Any * pUnoExc = &aUnoExc;
 
     // invoke uno dispatch call
     (*pThis->getUnoI()->pDispatcher)( pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
-
-    // in case an exception occurred...
+    
+    // in case an exception occured...
     if (pUnoExc)
     {
         // destruct temporary in/inout params
         for ( ; nTempIndizes--; )
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
-
+            
             if (pParams[nIndex].bIn) // is in/inout => was constructed
                 uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], 0 );
             TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
         }
         if (pReturnTypeDescr)
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
-
-        CPPU_CURRENT_NAMESPACE::raiseException( &aUnoExc, pThis->getBridge()->getUno2Cpp() );
+        
+        CPPU_CURRENT_NAMESPACE::raiseException( &aUnoExc, pThis->getBridge()->getUno2Cpp() ); 
                 // has to destruct the any
         // is here for dummy
         return typelib_TypeClass_VOID;
     }
-    else // else no exception occurred...
+    else // else no exception occured...
     {
         // temporary params
         for ( ; nTempIndizes--; )
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
             typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
-
+            
             if (pParams[nIndex].bOut) // inout/out
             {
                 // convert and assign
@@ -286,7 +286,7 @@ static typelib_TypeClass cpp2uno_call(
             }
             // destroy temp uno param
             uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 );
-
+            
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
         // return
@@ -317,7 +317,7 @@ static typelib_TypeClass cpp2uno_call(
 //==================================================================================================
 static typelib_TypeClass cpp_mediate(
     sal_uInt64 nOffsetAndIndex,
-        void ** gpreg, void ** fpreg, long sp, long r8,
+        void ** gpreg, void ** fpreg, long sp, long r8, 
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
     OSL_ENSURE( sizeof(sal_Int64)==sizeof(void *), "### unexpected!" );
@@ -326,7 +326,7 @@ static typelib_TypeClass cpp_mediate(
     sal_Int32 nFunctionIndex = (nOffsetAndIndex & 0xFFFFFFFF);
 
     void ** ovrflw = (void**)(sp);
-
+    
     // gpreg:  [ret *], this, [other gpr params]
     // fpreg:  [fpr params]
     // ovrflw: [gpr or fpr params (properly aligned)]
@@ -336,25 +336,25 @@ static typelib_TypeClass cpp_mediate(
     {
     nFunctionIndex &= 0x7fffffff;
     pThis = gpreg[1];
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "pThis is gpreg[1]\n");
 #endif
     }
     else
     {
     pThis = gpreg[0];
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "pThis is gpreg[0]\n");
 #endif
     }
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "pThis is %p\n", pThis);
 #endif
-
+    
     pThis = static_cast< char * >(pThis) - nVtableOffset;
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "pThis is now %p\n", pThis);
 #endif
 
@@ -364,23 +364,23 @@ static typelib_TypeClass cpp_mediate(
 
     typelib_InterfaceTypeDescription * pTypeDescr = pCppI->getTypeDescr();
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "indexes are %d %d\n", nFunctionIndex, pTypeDescr->nMapFunctionIndexToMemberIndex);
 #endif
-
+    
     OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
         throw RuntimeException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
+            rtl::OUString::createFromAscii("illegal vtable index!"),
             (XInterface *)pThis );
     }
-
+    
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
     OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!" );
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "members are %d %d\n", nMemberPos, pTypeDescr->nAllMembers);
 #endif
 
@@ -406,9 +406,9 @@ static typelib_TypeClass cpp_mediate(
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
-            aParam.bIn      = sal_True;
-            aParam.bOut     = sal_False;
-
+            aParam.bIn		= sal_True;
+            aParam.bOut		= sal_False;
+            
             eRet = cpp2uno_call(
                 pCppI, aMemberDescr.get(),
                 0, // indicates void return
@@ -439,9 +439,9 @@ static typelib_TypeClass cpp_mediate(
                 XInterface * pInterface = 0;
                 (*pCppI->getBridge()->getCppEnv()->getRegisteredInterface)(
                     pCppI->getBridge()->getCppEnv(),
-                    (void **)&pInterface, pCppI->getOid().pData,
+                    (void **)&pInterface, pCppI->getOid().pData, 
                     (typelib_InterfaceTypeDescription *)pTD );
-
+            
                 if (pInterface)
                 {
                     ::uno_any_construct(
@@ -468,19 +468,19 @@ static typelib_TypeClass cpp_mediate(
     }
     default:
     {
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
         fprintf(stderr, "screwed\n");
 #endif
 
         throw RuntimeException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
+            rtl::OUString::createFromAscii("no member description found!"),
             (XInterface *)pThis );
         // is here for dummy
         eRet = typelib_TypeClass_VOID;
     }
     }
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
         fprintf(stderr, "end of cpp_mediate\n");
 #endif
     return eRet;
@@ -520,7 +520,7 @@ extern "C" ia64::RegReturn cpp_vtable_call(
     register double f14 asm("f14"); fpreg[6] = f14;
     register double f15 asm("f15"); fpreg[7] = f15;
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "cpp_vtable_call called with %lx\n", nOffsetAndIndex);
     fprintf(stderr, "adump is %lx %lx %lx %lx %lx %lx %lx %lx\n", in0, in1, in2, in3, in4, in5, in6, in7);
     fprintf(stderr, "bdump is %f %f %f %f %f %f %f %f\n", f8, f9, f10, f11, f12, f13, f14, f15);
@@ -573,10 +573,10 @@ namespace
 {
 const int codeSnippetSize = 40;
 
-bridges::cpp_uno::shared::VtableFactory::Slot codeSnippet( unsigned char * code, sal_PtrDiff writetoexecdiff, sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
+bridges::cpp_uno::shared::VtableFactory::Slot codeSnippet( unsigned char * code, sal_PtrDiff writetoexecdiff, sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, 
                               bool bHasHiddenParam )
 {
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "size is %d\n", codeSnippetSize);
     fprintf(stderr,"in codeSnippet functionIndex is %x\n", nFunctionIndex);
     fprintf(stderr,"in codeSnippet vtableOffset is %x\n", nVtableOffset);
@@ -632,7 +632,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 {
     (*in_slots) -= functionCount;
     Slot * slots = *in_slots;
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "in addLocalFunctions functionOffset is %x\n",functionOffset);
     fprintf(stderr, "in addLocalFunctions vtableOffset is %x\n",vtableOffset);
 #endif

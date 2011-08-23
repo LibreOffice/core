@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,7 @@
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 namespace
 {
@@ -259,10 +258,10 @@ ContentBroker* ContentBroker::get()
 
 ContentBroker_Impl::~ContentBroker_Impl()
 {
-    Reference< XComponent > xComponent( m_xProvider, UNO_QUERY );
+    Reference< XComponent > xComponent(	m_xProvider, UNO_QUERY );
     if ( xComponent.is() )
     {
-        m_xIdFac       = 0;
+        m_xIdFac 	   = 0;
         m_xProvider    = 0;
         m_xProviderMgr = 0;
 
@@ -286,8 +285,8 @@ bool ContentBroker_Impl::initialize()
                 try
                 {
                     xIfc = m_xSMgr->createInstance(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.ucb.UniversalContentBroker" )) );
+                            OUString::createFromAscii(
+                                "com.sun.star.ucb.UniversalContentBroker" ) );
                 }
                 catch ( Exception const & )
                 {
@@ -320,8 +319,8 @@ bool ContentBroker_Impl::initialize()
                 try
                 {
                     xIfc = m_xSMgr->createInstanceWithArguments(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.ucb.UniversalContentBroker" )),
+                            OUString::createFromAscii(
+                                "com.sun.star.ucb.UniversalContentBroker" ),
                             m_aArguments );
                 }
                 catch ( Exception const & )

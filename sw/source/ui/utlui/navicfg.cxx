@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <swtypes.hxx>  // fuer Pathfinder
+#include <swtypes.hxx>	// fuer Pathfinder
 #include <navicfg.hxx>
 #include <swcont.hxx>
 #include <osl/diagnose.h>
@@ -47,7 +47,7 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "RootType",             //0
+        "RootType",     		//0
         "SelectedPosition",     //1
         "OutlineLevel",         //2
         "InsertMode",           //3
@@ -72,11 +72,12 @@ SwNavigationConfig::SwNavigationConfig() :
     nOutlineLevel(MAXLEVEL),
     nRegionMode(REGION_MODE_NONE),
     nActiveBlock(0),
-    bIsSmall(sal_False),
-    bIsGlobalActive(sal_True)
+    bIsSmall(FALSE),
+    bIsGlobalActive(TRUE)
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
+//	EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
@@ -87,12 +88,12 @@ SwNavigationConfig::SwNavigationConfig() :
             {
                 switch(nProp)
                 {
-                    case 0: pValues[nProp] >>= nRootType;      break;
+                    case 0: pValues[nProp] >>= nRootType;	   break;
                     case 1: pValues[nProp] >>= nSelectedPos;   break;
                     case 2: pValues[nProp] >>= nOutlineLevel;  break;
                     case 3: pValues[nProp] >>= nRegionMode;    break;
-                    case 4: pValues[nProp] >>= nActiveBlock;    break;
-                    case 5: bIsSmall        = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case 4: pValues[nProp] >>= nActiveBlock;	break;
+                    case 5: bIsSmall		= *(sal_Bool*)pValues[nProp].getValue();  break;
                     case 6: bIsGlobalActive = *(sal_Bool*)pValues[nProp].getValue();  break;
                 }
             }
@@ -115,13 +116,13 @@ void SwNavigationConfig::Commit()
     {
         switch(nProp)
         {
-            case 0: pValues[nProp] <<= nRootType;     break;
+            case 0: pValues[nProp] <<= nRootType;	  break;
             case 1: pValues[nProp] <<= nSelectedPos;  break;
             case 2: pValues[nProp] <<= nOutlineLevel; break;
             case 3: pValues[nProp] <<= nRegionMode;   break;
-            case 4: pValues[nProp] <<= nActiveBlock;    break;
-            case 5: pValues[nProp].setValue(&bIsSmall, rType);          break;
-            case 6: pValues[nProp].setValue(&bIsGlobalActive, rType);   break;
+            case 4: pValues[nProp] <<= nActiveBlock;	break;
+            case 5: pValues[nProp].setValue(&bIsSmall, rType);			break;
+            case 6: pValues[nProp].setValue(&bIsGlobalActive, rType);	break;
         }
     }
     PutProperties(aNames, aValues);

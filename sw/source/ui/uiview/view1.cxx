@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/ruler.hxx>
@@ -53,7 +54,7 @@
 
 extern int bDocSzUpdated;
 
-void SwView::Activate(sal_Bool bMDIActivate)
+void SwView::Activate(BOOL bMDIActivate)
 {
     // aktuelle View anmelden an der DocShell
     // die View bleibt solange an der DocShell
@@ -69,29 +70,29 @@ void SwView::Activate(sal_Bool bMDIActivate)
     if(!bDocSzUpdated)
         DocSzChgd(aDocSz);
 
-    // make selection visible
+    // #b6330459# make selection visible
     if(bMakeSelectionVisible)
     {
         pWrtShell->MakeSelVisible();
         bMakeSelectionVisible = sal_False;
     }
-    pHRuler->SetActive( sal_True );
-    pVRuler->SetActive( sal_True );
+    pHRuler->SetActive( TRUE );
+    pVRuler->SetActive( TRUE );
 
     if ( bMDIActivate )
     {
-        pWrtShell->ShGetFcs(sal_False);     // Selektionen sichtbar
+        pWrtShell->ShGetFcs(FALSE);		// Selektionen sichtbar
 
         if( sSwViewData.Len() )
         {
-            ReadUserData( sSwViewData, sal_False );
+            ReadUserData( sSwViewData, FALSE );
             sSwViewData.Erase();
         }
 
         AttrChangedNotify(pWrtShell);
 
         // Flddlg ggf neu initialisieren (z.B. fuer TYP_SETVAR)
-        sal_uInt16 nId = SwFldDlgWrapper::GetChildWindowId();
+        USHORT nId = SwFldDlgWrapper::GetChildWindowId();
         SfxViewFrame* pVFrame = GetViewFrame();
         SwFldDlgWrapper *pWrp = (SwFldDlgWrapper*)pVFrame->GetChildWindow(nId);
         if (pWrp)
@@ -123,19 +124,19 @@ void SwView::Activate(sal_Bool bMDIActivate)
     SfxViewShell::Activate(bMDIActivate);
 }
 
-void SwView::Deactivate(sal_Bool bMDIActivate)
+void SwView::Deactivate(BOOL bMDIActivate)
 {
-    extern sal_Bool bFlushCharBuffer ;
+    extern BOOL bFlushCharBuffer ;
         // Befinden sich noch Zeichen im Input Buffer?
     if( bFlushCharBuffer )
         GetEditWin().FlushInBuffer();
 
     if( bMDIActivate )
     {
-        pWrtShell->ShLooseFcs();    // Selektionen unsichtbar
+        pWrtShell->ShLooseFcs();	// Selektionen unsichtbar
 
-        pHRuler->SetActive( sal_False );
-        pVRuler->SetActive( sal_False );
+        pHRuler->SetActive( FALSE );
+        pVRuler->SetActive( FALSE );
     }
     SfxViewShell::Deactivate(bMDIActivate);
 }

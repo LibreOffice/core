@@ -48,7 +48,7 @@
 
 Sub Get_Position_Size_Attributes
 
-    Printlog "Get_Position_Size_Attributes Starts"
+    Printlog "   Get_Position_Size_Attributes Starts"
 
     FormatPositionAndSize
 
@@ -63,7 +63,7 @@ Sub Get_Position_Size_Attributes
     End Select
     sleep 1
 
-    printlog "Size-values"
+    ' /// Size-values ///'
     PositionWidth = Width.GetText
     PositionHeight = Height.GetText
 
@@ -86,7 +86,7 @@ Sub Get_Position_Size_Attributes
                 sleep 3
                 Printlog "   Get_Position_Size_Attributes Ends"
 
-end sub 'Get_Position_Size_Attributes
+end sub
 
 '-------------------------------------------------------------------------------
 sub Get_Colour_Attributes
@@ -100,7 +100,7 @@ sub Get_Colour_Attributes
     Kontext "TabArea"
 
 
-    printlog "Area"
+    ' /// Area ///'
     FillOptions.Select 2
     if FillOptions.GetSelIndex <> 2 then Errorlog "Couldnt click on 'Color' in FormatArea"
         AreaColourListValue = ColourList.GetSelText
@@ -273,7 +273,7 @@ sub Get_Colour_Attributes
                                     TabArea.Cancel
                                     printlog "   Get_Colour_Attributes ends"
 
-end sub 'Get_Colour_Attributes
+end sub
 
 '-------------------------------------------------------------------------------
 sub Check_Position_Size_Attributes
@@ -355,7 +355,7 @@ sub Check_Position_Size_Attributes
                                             sleep 3
                                             printlog "   Check_Position_Size_Attributes Ends"
 
-end sub 'Check_Position_Size_Attributes
+end sub
 
 '----------------------------------------------------------------------------------------------------
 sub Check_Text_Formatting
@@ -412,10 +412,8 @@ sub Check_Text_Formatting
                                 SetKontextApplication
                                 printlog "   Check_Text_Formatting Ends"
 
-end sub 'Check_Text_Formatting
 
-'-------------------------------------------------------------------------------
-
+                                '----------------------------------------------------------------------------------------------------
 sub Check_Colors_Borders_Attributes
 
     printlog "   Check_Colors_Borders_Attributes Starts"
@@ -427,7 +425,7 @@ sub Check_Colors_Borders_Attributes
     Active.setpage TabArea
     Kontext "TabArea"
 
-    printlog "Area"
+    ' /// Area ///'
     FillOptions.Select 2
     if FillOptions.GetSelIndex <> 2 then Errorlog "Couldnt click on 'Color' in FormatArea"
 
@@ -560,10 +558,26 @@ sub Check_Colors_Borders_Attributes
                                                                                                 ColorModel = Farbmodell.GetSelText
                                                                                                 printlog "   " + ColorModel
 
+                                                                                                select case iSprache      ' Prepared for future language-problematics.
+                                                                                                    if ColorR <> R.GetText then Warnlog "Wrong R-Color. Should be: " + ColorR + " but was: " + R.GetText
+                                                                                                        if ColorG <> G.GetText then Warnlog "Wrong V-Color. Should be: " + ColorG + " but was: " + G.GetText
+                                                                                                            if ColorB <> B.GetText then Warnlog "Wrong B-Color. Should be: " + ColorB + " but was: " + B.GetText
+                                                                                                            Else
                                                                                                                 if ColorC <> C.GetText then Warnlog "Wrong C-Color. Should be: " + ColorC + " but was: " + C.GetText
                                                                                                                     if ColorM <> M.GetText then Warnlog "Wrong M-Color. Should be: " + ColorM + " but was: " + M.GetText
                                                                                                                         if ColorY <> Y.GetText then Warnlog "Wrong J-Color. Should be: " + ColorY + " but was: " + Y.GetText
                                                                                                                             if ColorK <> K.GetText then Warnlog "Wrong N-Color. Should be: " + ColorK + " but was: " + K.GetText
+                                                                                                                            End if
+                                                                                                                            if ColorR <> R.GetText then Warnlog "Wrong R-Color. Should be: " + ColorR + " but was: " + R.GetText
+                                                                                                                                if ColorG <> G.GetText then Warnlog "Wrong G-Color. Should be: " + ColorG + " but was: " + G.GetText
+                                                                                                                                    if ColorB <> B.GetText then Warnlog "Wrong B-Color. Should be: " + ColorB + " but was: " + B.GetText
+                                                                                                                                    Else
+                                                                                                                                        if ColorC <> C.GetText then Warnlog "Wrong C-Color. Should be: " + ColorC + " but was: " + C.GetText
+                                                                                                                                            if ColorM <> M.GetText then Warnlog "Wrong M-Color. Should be: " + ColorM + " but was: " + M.GetText
+                                                                                                                                                if ColorY <> Y.GetText then Warnlog "Wrong Y-Color. Should be: " + ColorY + " but was: " + Y.GetText
+                                                                                                                                                    if ColorK <> K.GetText then Warnlog "Wrong K-Color. Should be: " + ColorK + " but was: " + K.GetText
+                                                                                                                                                    End if
+                                                                                                                                                end select
 
                                                                                                                                                 Kontext
                                                                                                                                                 Active.setpage TabFarbverlaeufe
@@ -610,8 +624,7 @@ sub Check_Colors_Borders_Attributes
                                                                                                                                                 Printlog "End of one application"
 
 
-end sub 'Check_Colors_Borders_Attributes
-   '---------------------------------- Set the Kontext to the current Application ----------------------------------'
+                                                                                                                                                '---------------------------------- Set the Kontext to the current Application ----------------------------------'
 sub SetKontextApplication
 
     sleep 1
@@ -635,7 +648,7 @@ sub SetKontextApplication
     end select
     sleep 1
 
-end sub 'SetKontextApplication
+end sub
 
 '------------------------- Part with "create new windows" ---------------------
 sub New_Draw
@@ -646,7 +659,7 @@ sub New_Draw
     Call hNewDocument
     SetKontextApplication
 
-end sub 'New_Draw
+end sub
 
 '-------------------------------------------------------------------------------
 sub New_Impress
@@ -658,7 +671,7 @@ sub New_Impress
     Call hNewDocument
     SetKontextApplication
 
-end sub 'New_Impress
+end sub
 
 '-------------------------------------------------------------------------------
 sub New_Calc
@@ -670,7 +683,7 @@ sub New_Calc
     Call hNewDocument
     SetKontextApplication
 
-end sub 'New_Calc
+end sub
 
 '-------------------------------------------------------------------------------
 sub New_Writer
@@ -682,10 +695,10 @@ sub New_Writer
     Call hNewDocument
     SetKontextApplication
 
-end sub 'New_Writer
+end sub
 
 '-------------------------------------------------------------------------------
-testcase Choose_Toapplication
+sub Choose_Toapplication
 
     For ToAppCounter = 1 to 4
 
@@ -711,6 +724,6 @@ testcase Choose_Toapplication
     Call hNewDocument
     SetKontextApplication
 
-endcase 'Choose_Toapplication
+end sub
 
 '--------------------------------------------------------------------------------------------------------

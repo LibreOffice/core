@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,8 @@ SwPagePreviewLayout::SwPagePreviewLayout( ViewShell& _rParentViewShell,
     mbBookPreview = false;
     mbBookPreviewModeToggled = false;
 
-    mbPrintEmptyPages = mrParentViewShell.getIDocumentDeviceAccess()->getPrintData().IsPrintEmptyPages();
+    const SwPrintData* pPrintData = mrParentViewShell.getIDocumentDeviceAccess()->getPrintData();
+    mbPrintEmptyPages = pPrintData ? pPrintData->IsPrintEmptyPages() : true;
 }
 
 void SwPagePreviewLayout::_Clear()
@@ -253,7 +254,7 @@ void SwPagePreviewLayout::_ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom )
     if ( aNewViewOptions.GetZoom() != _aNewZoom )
     {
         aNewViewOptions.SetZoom( _aNewZoom );
-        //#i19975# - consider zoom type.
+        // OD 24.09.2003 #i19975# - consider zoom type.
         enum SvxZoomType eZoomType = SVX_ZOOM_PERCENT;
         aNewViewOptions.SetZoomType( eZoomType );
         mrParentViewShell.ApplyViewOptions( aNewViewOptions );
@@ -749,6 +750,8 @@ Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
 
 /** determines, if page with given page number is visible in preview
 
+    OD 12.12.2002 #103492#
+
     @author OD, _nPageNum is absolut!
 */
 bool SwPagePreviewLayout::IsPageVisible( const sal_uInt16 _nPageNum ) const
@@ -758,6 +761,8 @@ bool SwPagePreviewLayout::IsPageVisible( const sal_uInt16 _nPageNum ) const
 }
 
 /** calculate data to bring new selected page into view.
+
+    OD 12.12.2002 #103492#
 
     @author OD, IN/OUT parameters are absolute page numbers!!!
 */
@@ -772,7 +777,7 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
     sal_uInt16 nTmpRelSelPageNum = ConvertAbsoluteToRelativePageNum( mnSelectedPageNum );
     sal_uInt16 nNewRelSelectedPageNum = nTmpRelSelPageNum;
 
-    // leaving left-top-corner blank is controlled
+    // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
     // by <mbBookPreview>.
     if ( mbBookPreview )
     {
@@ -814,7 +819,7 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
     {
         if ( _nHoriMove != 0 && _nVertMove != 0 )
         {
-            OSL_FAIL( "missing implementation for moving preview selected page horizontal AND vertical");
+            OSL_ENSURE( false, "missing implementation for moving preview selected page horizontal AND vertical");
             return false;
         }
 
@@ -823,13 +828,13 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
         sal_Int16 nTotalRows = GetRowOfPage( mnPages );
         if ( (_nHoriMove > 0 || _nVertMove > 0) &&
              mbDoesLayoutRowsFitIntoWindow &&
-             mbDoesLayoutColsFitIntoWindow &&
+             mbDoesLayoutColsFitIntoWindow && // OD 20.02.2003 #107369# - add condition
              nCurrRow > nTotalRows - mnRows )
         {
             // new proposed start page = left-top-corner of last possible
             // preview page.
             nNewStartPage = (nTotalRows - mnRows) * mnCols + 1;
-            // leaving left-top-corner blank is controlled
+            // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
             // by <mbBookPreview>.
             if ( mbBookPreview )
             {
@@ -854,6 +859,8 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
 }
 
 /** checks, if given position is inside a shown document page
+
+    OD 17.12.2002 #103492#
 
     @author OD
 */
@@ -917,6 +924,8 @@ bool SwPagePreviewLayout::IsPrevwPosInDocPrevwPage( const Point  _aPrevwPos,
 
 /** determine window page scroll amount
 
+    OD 17.12.2002 #103492#
+
     @author OD
 */
 SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
@@ -930,14 +939,14 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
     else
         nScrollAmount = _nWinPagesToScroll * maPaintedPrevwDocRect.GetHeight();
 
-    // check, if preview layout size values are valid.
+    // OD 19.02.2003 #107369# - check, if preview layout size values are valid.
     // If not, the checks for an adjustment of the scroll amount aren't useful.
     if ( mbLayoutSizesValid )
     {
         if ( (maPaintedPrevwDocRect.Top() + nScrollAmount) <= 0 )
             nScrollAmount = -maPaintedPrevwDocRect.Top();
 
-        // correct scroll amount
+        // OD 14.02.2003 #107369# - correct scroll amount
         if ( nScrollAmount > 0 &&
              maPaintedPrevwDocRect.Bottom() == maPreviewDocRect.Bottom()
            )
@@ -994,7 +1003,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
     // prepare paint
     if ( maPrevwPages.size() > 0 )
     {
-        mrParentViewShell.Imp()->bFirstPageInvalid = sal_False;
+        mrParentViewShell.Imp()->bFirstPageInvalid = FALSE;
         mrParentViewShell.Imp()->pFirstVisPage =
                 const_cast<SwPageFrm*>(maPrevwPages[0]->pPage);
     }
@@ -1024,6 +1033,8 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
     MapMode aSavedMapMode = aMapMode;
 
     const Font& rEmptyPgFont = SwPageFrm::GetEmptyPageFont();
+
+    Color aEmptyPgShadowBorderColor = SwViewOption::GetFontColor();
 
     for ( std::vector<PrevwPage*>::const_iterator aPageIter = maPrevwPages.begin();
           aPageIter != maPrevwPages.end();
@@ -1062,7 +1073,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                 pOutputDev->SetFont( aOldFont );
                 // paint shadow and border for empty page
                 // use new method to paint page border and shadow
-                SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
+                SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, true );
             }
             else
             {
@@ -1076,7 +1087,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                     SwPageFrm::GetBorderAndShadowBoundRect( SwRect( aPageRect ), &mrParentViewShell, aPageBorderRect, true );
                     const Region aDLRegion(aPageBorderRect.SVRect());
                     mrParentViewShell.DLPrePaint2(aDLRegion);
-                    SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
+                    SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, true );
                     mrParentViewShell.DLPostPaint2(true);
                 }
             }
@@ -1133,7 +1144,7 @@ void SwPagePreviewLayout::Repaint( const Rectangle _aInvalidCoreRect ) const
     // prepare paint
     if ( maPrevwPages.size() > 0 )
     {
-        mrParentViewShell.Imp()->bFirstPageInvalid = sal_False;
+        mrParentViewShell.Imp()->bFirstPageInvalid = FALSE;
         mrParentViewShell.Imp()->pFirstVisPage =
                 const_cast<SwPageFrm*>(maPrevwPages[0]->pPage);
     }
@@ -1376,7 +1387,7 @@ sal_uInt16 SwPagePreviewLayout::ConvertRelativeToAbsolutePageNum( sal_uInt16 _nR
     const SwPageFrm* pTmpPage = static_cast<const SwPageFrm*>(mrLayoutRootFrm.Lower());
     const SwPageFrm* pRet = 0;
 
-    sal_uInt16 i = 0;
+    USHORT i = 0;
     while( pTmpPage && i != _nRelPageNum )
     {
         if ( !pTmpPage->IsEmptyPage() )

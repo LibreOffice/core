@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace formula
 
 // RecalcMode access only via TokenArray SetRecalcMode / IsRecalcMode...
 
-typedef sal_uInt8 ScRecalcMode;
+typedef BYTE ScRecalcMode;
 // Only one of the exclusive bits can be set,
 // handled by TokenArray SetRecalcMode... methods
 #define RECALCMODE_NORMAL       0x01    // exclusive
@@ -75,13 +75,13 @@ class FORMULA_DLLPUBLIC FormulaTokenArray
 protected:
     FormulaToken**  pCode;                  // Token code array
     FormulaToken**  pRPN;                   // RPN array
-    sal_uInt16          nLen;                   // Length of token array
-    sal_uInt16          nRPN;                   // Length of RPN array
-    sal_uInt16          nIndex;                 // Current step index
-    sal_uInt16          nError;                 // Error code
+    USHORT          nLen;                   // Length of token array
+    USHORT          nRPN;                   // Length of RPN array
+    USHORT          nIndex;                 // Current step index
+    USHORT          nError;                 // Error code
     short           nRefs;                  // Count of cell references
     ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
-    bool            bHyperLink;             // If HYPERLINK() occurs in the formula.
+    BOOL            bHyperLink;             // If HYPERLINK() occurs in the formula.
 
 protected:
     void                    Assign( const FormulaTokenArray& );
@@ -118,7 +118,7 @@ public:
     FormulaToken* GetNextColRowName();
     FormulaToken* GetNextOpCodeRPN( OpCode );
     /// Peek at nIdx-1 if not out of bounds, decrements nIdx if successful. Returns NULL if not.
-    FormulaToken* PeekPrev( sal_uInt16 & nIdx );
+    FormulaToken* PeekPrev( USHORT & nIdx );
     FormulaToken* PeekNext();
     FormulaToken* PeekPrevNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
     FormulaToken* PeekNextNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
@@ -128,22 +128,22 @@ public:
     FormulaToken* PrevRPN();
 
     bool    HasExternalRef() const;
-    bool    HasOpCode( OpCode ) const;
-    bool    HasOpCodeRPN( OpCode ) const;
+    BOOL    HasOpCode( OpCode ) const;
+    BOOL    HasOpCodeRPN( OpCode ) const;
     /// Token of type svIndex or opcode ocColRowName
-    bool    HasNameOrColRowName() const;
+    BOOL    HasNameOrColRowName() const;
 
     FormulaToken** GetArray() const  { return pCode; }
     FormulaToken** GetCode()  const  { return pRPN; }
-    sal_uInt16    GetLen() const     { return nLen; }
-    sal_uInt16    GetCodeLen() const { return nRPN; }
+    USHORT    GetLen() const     { return nLen; }
+    USHORT    GetCodeLen() const { return nRPN; }
     void      Reset()            { nIndex = 0; }
-    sal_uInt16    GetCodeError() const      { return nError; }
-    void      SetCodeError( sal_uInt16 n )  { nError = n; }
+    USHORT    GetCodeError() const      { return nError; }
+    void      SetCodeError( USHORT n )  { nError = n; }
     short     GetRefs()  const { return nRefs;  }
     void      IncrementRefs() { ++nRefs; }
-    void      SetHyperLink( bool bVal ) { bHyperLink = bVal; }
-    bool      IsHyperLink() const       { return bHyperLink; }
+    void      SetHyperLink( BOOL bVal ) { bHyperLink = bVal; }
+    BOOL      IsHyperLink() const       { return bHyperLink; }
 
     inline  ScRecalcMode    GetRecalcMode() const { return nMode; }
                             /** Bits aren't set directly but validated and
@@ -168,17 +168,17 @@ public:
                                 { nMode |= RECALCMODE_ONREFMOVE; }
     inline  void            ClearRecalcModeOnRefMove()
                                 { nMode &= ~RECALCMODE_ONREFMOVE; }
-    inline  bool            IsRecalcModeNormal() const
+    inline  BOOL            IsRecalcModeNormal() const
                                 { return (nMode & RECALCMODE_NORMAL) != 0; }
-    inline  bool            IsRecalcModeAlways() const
+    inline  BOOL            IsRecalcModeAlways() const
                                 { return (nMode & RECALCMODE_ALWAYS) != 0; }
-    inline  bool            IsRecalcModeOnLoad() const
+    inline  BOOL            IsRecalcModeOnLoad() const
                                 { return (nMode & RECALCMODE_ONLOAD) != 0; }
-    inline  bool            IsRecalcModeOnLoadOnce() const
+    inline  BOOL            IsRecalcModeOnLoadOnce() const
                                 { return (nMode & RECALCMODE_ONLOAD_ONCE) != 0; }
-    inline  bool            IsRecalcModeForced() const
+    inline  BOOL            IsRecalcModeForced() const
                                 { return (nMode & RECALCMODE_FORCED) != 0; }
-    inline  bool            IsRecalcModeOnRefMove() const
+    inline  BOOL            IsRecalcModeOnRefMove() const
                                 { return (nMode & RECALCMODE_ONREFMOVE) != 0; }
 
                             /** Get OpCode of the most outer function */
@@ -186,7 +186,7 @@ public:
 
                             /** Operators +,-,*,/,^,&,=,<>,<,>,<=,>=
                                 with DoubleRef in Formula? */
-    bool                    HasMatrixDoubleRefOps();
+    BOOL                    HasMatrixDoubleRefOps();
 
     virtual FormulaToken* AddOpCode(OpCode e);
 
@@ -207,7 +207,7 @@ public:
     FormulaToken* AddString( const sal_Unicode* pStr );
     FormulaToken* AddString( const String& rStr );
     FormulaToken* AddDouble( double fVal );
-    FormulaToken* AddName( sal_uInt16 n );
+    FormulaToken* AddName( USHORT n );
     FormulaToken* AddExternal( const sal_Unicode* pStr );
     /** Xcl import may play dirty tricks with OpCode!=ocExternal.
         Others don't use! */
@@ -252,7 +252,7 @@ struct ImpTokenIterator
 class FORMULA_DLLPUBLIC FormulaTokenIterator
 {
     ImpTokenIterator* pCur;
-
+    
 public:
     FormulaTokenIterator( const FormulaTokenArray& );
    ~FormulaTokenIterator();

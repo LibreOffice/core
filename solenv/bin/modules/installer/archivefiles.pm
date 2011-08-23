@@ -36,7 +36,6 @@ use installer::globals;
 use installer::logger;
 use installer::pathanalyzer;
 use installer::systemactions;
-use Cwd;
 
 #################################################################
 # Changing the name for files with flag RENAME_TO_LANGUAGE
@@ -88,7 +87,7 @@ sub get_patch_file_list
     $patchfilestring =~ s/^\s*\///;
     $patchfilestring =~ s/^\s*\\//;
 
-    my $patchfilesarray = installer::converter::convert_stringlist_into_array_without_newline(\$patchfilestring, ",");
+    my $patchfilesarray = installer::converter::convert_stringlist_into_array_without_linebreak_and_quotes(\$patchfilestring, ",");
 
     return $patchfilesarray;
 }
@@ -242,6 +241,9 @@ sub resolving_archive_flag
 
             my $unzipdir;
 
+            # if ($iscommonfile) { $unzipdir = $commonunzipdirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator; }
+            # else { $unzipdir = $platformunzipdirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator; }
+
             $unzipdir = $platformunzipdirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator;
 
             installer::systemactions::create_directory($unzipdir);  # creating language specific subdirectories
@@ -262,13 +264,10 @@ sub resolving_archive_flag
 
             my $counter = 0;
             my $contains_dll = 0;
-            my @dllList = ();
-            my @dirs = ();
             foreach my $member ( $zip->memberNames() )
             {
                 $counter++;
-                if ( $member =~ /.dll\s*$/i ) { $contains_dll = 1; push(@dllList, $member); }
-                if ( $member =~ m/\/$/ ) { push(@dirs, $member); }
+                if ( $member =~ /.dll\s*$/ ) { $contains_dll = 1; }
             }
 
             if (! ( $counter > 0 )) # the zipfile is empty
@@ -285,34 +284,31 @@ sub resolving_archive_flag
 
                     if (( $^O =~ /cygwin/i ) && ( $contains_dll ))
                     {
-                        my $dir = getcwd();
-                        chdir($unzipdir);
-                        my $changed = chmod(0775, @dllList);
-                        $infoline = "Changed mode of $changed files (of ".scalar(@dllList).")\n";
+                        # Make dll's executable
+                        $systemcall = "cd $unzipdir; find . -name \\*.dll -exec chmod 775 \{\} \\\;";
+                        $returnvalue = system($systemcall);
+                        $infoline = "Systemcall: $systemcall\n";
                         push( @installer::globals::logfileinfo, $infoline);
-                        chdir($dir);
 
-                        if ($changed != scalar(@dllList))
+                        if ($returnvalue)
                         {
-                            $infoline = "ERROR: Could not chmod all files!\n";
+                            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
                             push( @installer::globals::logfileinfo, $infoline);
                         }
                     }
 
-                    if ( ! $installer::globals::iswindowsbuild && scalar(@dirs) > 0 )
+                    if ( ! $installer::globals::iswindowsbuild )
                     {
-                        my $dir = getcwd();
-                        chdir($unzipdir);
                         # Setting unix rights to "775" for all created directories inside the package
-                        my $changed = chmod(0775, @dirs);
-                        $infoline = "Changed mode of : $changed; should be: ".scalar(@dirs)."\n";
-                        chdir($dir);
 
+                        $systemcall = "cd $unzipdir; find . -type d -exec chmod 775 \{\} \\\;";
+                        $returnvalue = system($systemcall);
+                        $infoline = "Systemcall: $systemcall\n";
                         push( @installer::globals::logfileinfo, $infoline);
 
-                        if ($changed != scalar(@dirs))
+                        if ($returnvalue)
                         {
-                            $infoline = "ERROR: Could not chmod all files!\n";
+                            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
                             push( @installer::globals::logfileinfo, $infoline);
                         }
                     }
@@ -415,9 +411,13 @@ sub resolving_archive_flag
                                 $newfile{'Styles'} =~ s/\,\s*\,/\,/;
                                 $newfile{'Styles'} =~ s/\(\s*\,/\(/;
                                 $newfile{'Styles'} =~ s/\,\s*\)/\)/;
+                                # $infoline = "Removing PATCH flag from: $zipname\n";
+                                # push( @installer::globals::logfileinfo, $infoline);
                             }
                             else
                             {
+                                # $infoline = "Keeping PATCH flag at: $zipname\n";
+                                # push( @installer::globals::logfileinfo, $infoline);
                                 push( @keptpatchflags, $zipname); # collecting all PATCH flags
                             }
                         }

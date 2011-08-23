@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ public:
         IMediaSample *pSample) = 0;
     virtual HRESULT __stdcall BufferCB(
         double SampleTime,
-        BYTE *pBuffer,
+        WIN_BYTE *pBuffer,
         long BufferLen) = 0;
 };
 
@@ -104,13 +104,13 @@ ISampleGrabber : public IUnknown
 {
 public:
     virtual HRESULT __stdcall SetOneShot(
-        BOOL OneShot) = 0;
+        WIN_BOOL OneShot) = 0;
     virtual HRESULT __stdcall SetMediaType(
         const AM_MEDIA_TYPE *pType) = 0;
     virtual HRESULT __stdcall GetConnectedMediaType(
         AM_MEDIA_TYPE *pType) = 0;
     virtual HRESULT __stdcall SetBufferSamples(
-        BOOL BufferThem) = 0;
+        WIN_BOOL BufferThem) = 0;
     virtual HRESULT __stdcall GetCurrentBuffer(
          long *pBufferSize,
          long *pBuffer) = 0;

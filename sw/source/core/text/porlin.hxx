@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef _PORLIN_HXX
 #define _PORLIN_HXX
 
-#include "possiz.hxx"       // SwPosSize
+#include "possiz.hxx"		// SwPosSize
 
 #if OSL_DEBUG_LEVEL > 1
 #include <libxml/xmlwriter.h>
@@ -51,23 +51,23 @@ class SwPortionHandler;
 #endif
 
 // Portiongruppen
-#define PORGRP_TXT      0x8000
-#define PORGRP_EXP      0x4000
-#define PORGRP_FLD      0x2000
-#define PORGRP_HYPH     0x1000
-#define PORGRP_NUMBER   0x0800
-#define PORGRP_GLUE     0x0400
-#define PORGRP_FIX      0x0200
-#define PORGRP_TAB      0x0100
-#define PORGRP_NOTRECY  0x0080
+#define PORGRP_TXT		0x8000
+#define PORGRP_EXP		0x4000
+#define PORGRP_FLD		0x2000
+#define PORGRP_HYPH		0x1000
+#define PORGRP_NUMBER	0x0800
+#define PORGRP_GLUE		0x0400
+#define PORGRP_FIX		0x0200
+#define PORGRP_TAB		0x0100
+#define PORGRP_NOTRECY	0x0080
 // kleine Spezialgruppen
-#define PORGRP_FIXMARG  0x0040
-//#define PORGRP_?  0x0020
+#define PORGRP_FIXMARG	0x0040
+//#define PORGRP_?	0x0020
 #define PORGRP_TABNOTLFT 0x0010
-#define PORGRP_TOXREF   0x0008
+#define PORGRP_TOXREF	0x0008
 
 /*************************************************************************
- *                      class SwLinePortion
+ *						class SwLinePortion
  *************************************************************************/
 
 class SwLinePortion: public SwPosSize
@@ -77,16 +77,16 @@ protected:
     SwLinePortion *pPortion;
     // Anzahl der Zeichen und Spaces auf der Zeile
     xub_StrLen nLineLength;
-    KSHORT nAscent;      // Maximaler Ascender
+    KSHORT nAscent; 	 // Maximaler Ascender
 
     SwLinePortion();
 private:
-    MSHORT nWhichPor;       // Who's who?
+    MSHORT nWhichPor;		// Who's who?
 
     void _Truncate();
 
 public:
-    inline          SwLinePortion(const SwLinePortion &rPortion);
+    inline 			SwLinePortion(const SwLinePortion &rPortion);
            virtual ~SwLinePortion();
 
     // Zugriffsmethoden
@@ -110,26 +110,26 @@ public:
     virtual SwLinePortion *Insert( SwLinePortion *pPortion );
     virtual SwLinePortion *Append( SwLinePortion *pPortion );
             SwLinePortion *Cut( SwLinePortion *pVictim );
-    inline  void Truncate();
+    inline	void Truncate();
 
     // liefert 0 zurueck, wenn keine Nutzdaten enthalten sind.
     virtual SwLinePortion *Compress();
 
-    inline void SetWhichPor( const MSHORT nNew )    { nWhichPor = nNew; }
+    inline void SetWhichPor( const MSHORT nNew )	{ nWhichPor = nNew; }
     inline MSHORT GetWhichPor( ) const        { return nWhichPor; }
 
 // Gruppenabfragen:
-    inline sal_Bool InTxtGrp( ) const { return nWhichPor & PORGRP_TXT ? sal_True : sal_False; }
-    inline sal_Bool InGlueGrp( )    const { return nWhichPor & PORGRP_GLUE ? sal_True : sal_False;}
-    inline sal_Bool InTabGrp( ) const { return nWhichPor & PORGRP_TAB ? sal_True : sal_False; }
-    inline sal_Bool InHyphGrp( )    const { return nWhichPor & PORGRP_HYPH ? sal_True : sal_False;}
+    inline sal_Bool InTxtGrp( )	const { return nWhichPor & PORGRP_TXT ? sal_True : sal_False; }
+    inline sal_Bool InGlueGrp( )	const { return nWhichPor & PORGRP_GLUE ? sal_True : sal_False;}
+    inline sal_Bool InTabGrp( )	const { return nWhichPor & PORGRP_TAB ? sal_True : sal_False; }
+    inline sal_Bool InHyphGrp( )	const { return nWhichPor & PORGRP_HYPH ? sal_True : sal_False;}
     inline sal_Bool InNumberGrp( )const { return nWhichPor & PORGRP_NUMBER ? sal_True : sal_False;}
-    inline sal_Bool InFixGrp( ) const { return nWhichPor & PORGRP_FIX ? sal_True : sal_False;  }
-    inline sal_Bool InFldGrp( ) const { return nWhichPor & PORGRP_FLD ? sal_True : sal_False;  }
-    inline sal_Bool InToxRefGrp( ) const { return nWhichPor &   PORGRP_TOXREF ? sal_True : sal_False;  }
-    inline sal_Bool InToxRefOrFldGrp( ) const { return nWhichPor &
+    inline sal_Bool InFixGrp( )	const { return nWhichPor & PORGRP_FIX ? sal_True : sal_False;  }
+    inline sal_Bool InFldGrp( )	const { return nWhichPor & PORGRP_FLD ? sal_True : sal_False;  }
+    inline sal_Bool InToxRefGrp( ) const { return nWhichPor &	PORGRP_TOXREF ? sal_True : sal_False;  }
+    inline sal_Bool InToxRefOrFldGrp( )	const { return nWhichPor &
                                 ( PORGRP_FLD | PORGRP_TOXREF ) ? sal_True : sal_False;  }
-    inline sal_Bool InExpGrp( ) const { return nWhichPor & PORGRP_EXP ? sal_True : sal_False;  }
+    inline sal_Bool InExpGrp( )	const { return nWhichPor & PORGRP_EXP ? sal_True : sal_False;  }
     inline sal_Bool InTabnLftGrp( ) const
         { return nWhichPor & PORGRP_TABNOTLFT ? sal_True : sal_False;  }
     inline sal_Bool InFixMargGrp( )const
@@ -139,22 +139,22 @@ public:
 // Individuelle Abfragen:
     inline sal_Bool IsGrfNumPortion( )const{ return nWhichPor == POR_GRFNUM; }
     inline sal_Bool IsFlyCntPortion( )const{ return nWhichPor == POR_FLYCNT; }
-    inline sal_Bool IsBlankPortion( )   const{ return nWhichPor == POR_BLANK; }
-    inline sal_Bool IsBreakPortion( )   const{ return nWhichPor == POR_BRK; }
+    inline sal_Bool IsBlankPortion( )	const{ return nWhichPor == POR_BLANK; }
+    inline sal_Bool IsBreakPortion( )	const{ return nWhichPor == POR_BRK; }
     inline sal_Bool IsErgoSumPortion()const{ return nWhichPor == POR_ERGOSUM;}
     inline sal_Bool IsQuoVadisPortion()const{ return nWhichPor==POR_QUOVADIS;}
     inline sal_Bool IsTabCntPortion( )const{ return nWhichPor==POR_TABCENTER;}
     inline sal_Bool IsTabDecimalPortion() const { return nWhichPor == POR_TABDECIMAL;}
     inline sal_Bool IsTabLeftPortion()const{ return nWhichPor == POR_TABLEFT;}
     inline sal_Bool IsFtnNumPortion( )const{ return nWhichPor == POR_FTNNUM; }
-    inline sal_Bool IsFtnPortion( ) const{ return nWhichPor == POR_FTN; }
+    inline sal_Bool IsFtnPortion( )	const{ return nWhichPor == POR_FTN; }
     inline sal_Bool IsTmpEndPortion( )const{ return nWhichPor == POR_TMPEND; }
-    inline sal_Bool IsDropPortion( )    const{ return nWhichPor == POR_DROP; }
-    inline sal_Bool IsLayPortion( ) const{ return nWhichPor == POR_LAY; }
-    inline sal_Bool IsParaPortion( )    const{ return nWhichPor == POR_PARA; }
+    inline sal_Bool IsDropPortion( )	const{ return nWhichPor == POR_DROP; }
+    inline sal_Bool IsLayPortion( )	const{ return nWhichPor == POR_LAY; }
+    inline sal_Bool IsParaPortion( )	const{ return nWhichPor == POR_PARA; }
     inline sal_Bool IsMarginPortion( )const{ return nWhichPor == POR_MARGIN; }
-    inline sal_Bool IsFlyPortion( ) const{ return nWhichPor == POR_FLY; }
-    inline sal_Bool IsHolePortion( )    const{ return nWhichPor == POR_HOLE; }
+    inline sal_Bool IsFlyPortion( )	const{ return nWhichPor == POR_FLY; }
+    inline sal_Bool IsHolePortion( )	const{ return nWhichPor == POR_HOLE; }
     inline sal_Bool IsSoftHyphPortion()const{ return nWhichPor==POR_SOFTHYPH;}
     inline sal_Bool IsPostItsPortion()const{ return nWhichPor == POR_POSTITS;}
     inline sal_Bool IsCombinedPortion()const{ return nWhichPor==POR_COMBINED;}
@@ -201,14 +201,14 @@ public:
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
 
 #if OSL_DEBUG_LEVEL > 1
-    void dumpPortionAsXml(sal_uInt16 ofs, String& aText, xmlTextWriter* writer);
+    void dumpPortionAsXml(USHORT ofs, String& aText, xmlTextWriter* writer);
 #endif
     OUTPUT_OPERATOR
 };
 
 
 /*************************************************************************
- *                  inline - Implementations
+ *					inline - Implementations
  *************************************************************************/
 
 inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
@@ -245,7 +245,14 @@ inline void SwLinePortion::Truncate()
 
 
 //$ ostream
+#ifdef DBGTXT
+#define CLASSIO( class ) \
+    inline SvStream &operator<<( SvStream &rOs, const class &rClass ) {\
+            return rClass.operator<<( rOs );\
+    }
+#else
 #define CLASSIO( class )
+#endif
 
 CLASSIO( SwLinePortion )
 

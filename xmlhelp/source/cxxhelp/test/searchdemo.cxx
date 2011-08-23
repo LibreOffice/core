@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,10 +57,10 @@ void print_rtl_OUString( const rtl::OUString bla )
     rtl::OString bluber = rtl::OString( bla.getStr(),bla.getLength(),RTL_TEXTENCODING_UTF8 );
     char* bluberChr = new char[ 1+bluber.getLength() ];
     const sal_Char* jux = bluber.getStr();
-
+  
     for( int i = 0; i < bluber.getLength(); ++i )
         bluberChr[i] = jux[i];
-
+    
     bluberChr[ bluber.getLength() ] = 0;
     printf( "%s\n",bluberChr );
     delete[] bluberChr;
@@ -75,27 +75,27 @@ int main( int argc,char* argv[] )
 {
 
     QueryResults* queryResults = 0;
-
+  
     try
     {
-        rtl::OUString installDir(RTL_CONSTASCII_USTRINGPARAM("//./e|/index/"));
+        rtl::OUString installDir = rtl::OUString::createFromAscii( "//./e|/index/" );
         QueryProcessor queryProcessor( installDir );
-
+      
         std::vector<rtl::OUString> Query(2);
-        Query[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "text*" ));
-        Query[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "abbildung" ));
-        rtl::OUString Scope = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "headingheading" ));
+        Query[0] = rtl::OUString::createFromAscii( "text*" );
+        Query[1] = rtl::OUString::createFromAscii( "abbildung" );
+        rtl::OUString Scope = rtl::OUString::createFromAscii( "headingheading" );
         int HitCount = 40;
-
+      
          QueryStatement queryStatement( HitCount,Query,Scope );
         queryResults = queryProcessor.processQuery( queryStatement );
-
+      
         rtl::OUString translations[2];
-        translations[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "#HLP#" ));
-        translations[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ));
-
+        translations[0] = rtl::OUString::createFromAscii( "#HLP#" );
+        translations[1] = rtl::OUString::createFromAscii( "vnd.sun.star.help://" );
+      
         PrefixTranslator* translator =  PrefixTranslator::makePrefixTranslator( translations,2 );
-
+        
         QueryHitIterator* it = queryResults->makeQueryHitIterator();
         sal_Int32 j = 0;
         while( j < 10 && it->next() )
@@ -106,7 +106,7 @@ int main( int argc,char* argv[] )
             print_rtl_OUString( qhd->getDocument() );
             ++j;
         }
-
+      
         delete it;
     }
     catch( ... )

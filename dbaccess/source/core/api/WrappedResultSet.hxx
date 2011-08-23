@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: BookmarkSet.hxx,v $
+ * $Revision: 1.11 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -44,7 +47,7 @@ namespace dbaccess
 
         void updateColumn(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate > _xParameter,const connectivity::ORowSetValue& _rValue);
     public:
-        WrappedResultSet(sal_Int32 i_nMaxRows) : OCacheSet(i_nMaxRows)
+        WrappedResultSet()
         {}
         ~WrappedResultSet()
         {

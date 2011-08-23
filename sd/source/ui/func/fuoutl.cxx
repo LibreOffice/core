@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ TYPEINIT1( FuOutline, FuPoor );
 \************************************************************************/
 
 FuOutline::FuOutline (
-    ViewShell* pViewShell,
-    ::sd::Window* pWindow,
+    ViewShell* pViewShell, 
+    ::sd::Window* pWindow, 
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument* pDoc, 
     SfxRequest& rReq)
     : FuPoor(pViewShell, pWindow, pView, pDoc, rReq),
       pOutlineViewShell (static_cast<OutlineViewShell*>(pViewShell)),
@@ -65,18 +65,18 @@ FuOutline::FuOutline (
 |*
 \************************************************************************/
 
-sal_Bool FuOutline::Command(const CommandEvent& rCEvt)
+BOOL FuOutline::Command(const CommandEvent& rCEvt)
 {
-    sal_Bool bResult = sal_False;
+    BOOL bResult = FALSE;
 
-    OutlinerView* pOlView =
+    OutlinerView* pOlView = 
         static_cast<OutlineView*>(mpView)->GetViewByWindow(mpWindow);
     DBG_ASSERT (pOlView, "keine OutlinerView gefunden");
 
     if (pOlView)
     {
-        pOlView->Command(rCEvt);        // liefert leider keinen Returnwert
-        bResult = sal_True;
+        pOlView->Command(rCEvt);		// liefert leider keinen Returnwert
+        bResult = TRUE;
     }
     return bResult;
 }

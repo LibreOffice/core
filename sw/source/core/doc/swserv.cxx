@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,10 +53,10 @@ SwServerObject::~SwServerObject()
 }
 
 
-sal_Bool SwServerObject::GetData( uno::Any & rData,
-                                const String & rMimeType, sal_Bool )
+BOOL SwServerObject::GetData( uno::Any & rData,
+                                const String & rMimeType, BOOL )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     WriterRef xWrt;
     switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
@@ -103,14 +103,14 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
         {
             // Stream anlegen
             SvMemoryStream aMemStm( 65535, 65535 );
-            SwWriter aWrt( aMemStm, *pPam, sal_False );
+            SwWriter aWrt( aMemStm, *pPam, FALSE );
             if( !IsError( aWrt.Write( xWrt )) )
             {
                 aMemStm << '\0';        // append a zero char
                 rData <<= uno::Sequence< sal_Int8 >(
                                         (sal_Int8*)aMemStm.GetData(),
                                         aMemStm.Seek( STREAM_SEEK_TO_END ) );
-                bRet = sal_True;
+                bRet = TRUE;
             }
 
             delete pPam;
@@ -120,11 +120,11 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
 }
 
 
-sal_Bool SwServerObject::SetData( const String & ,
+BOOL SwServerObject::SetData( const String & ,
                     const uno::Any& )
 {
     // set new data into the "server" -> at first nothing to do
-    return sal_False;
+    return FALSE;
 }
 
 
@@ -133,7 +133,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
     // ist an unseren Aenderungen jemand interessiert ?
     if( HasDataLinks() )
     {
-        int bCall = sal_False;
+        int bCall = FALSE;
         const SwStartNode* pNd = 0;
         switch( eType )
         {
@@ -151,7 +151,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
         }
         if( pNd )
         {
-            sal_uLong nNd = rPos.nNode.GetIndex();
+            ULONG nNd = rPos.nNode.GetIndex();
             bCall = pNd->GetIndex() < nNd && nNd < pNd->EndOfSectionIndex();
         }
 
@@ -162,6 +162,10 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
             SvLinkSource::NotifyDataChanged();
         }
     }
+    // sonst melden wir uns ab !!
+// ????? JP 27.06.95: geht das so ????
+//  else
+//      Closed();
 }
 
 
@@ -170,7 +174,7 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
     // ist an unseren Aenderungen jemand interessiert ?
     if( HasDataLinks() )
     {
-        int bCall = sal_False;
+        int bCall = FALSE;
         const SwStartNode* pNd = 0;
         const SwPosition* pStt = rRange.Start(), *pEnd = rRange.End();
         switch( eType )
@@ -201,12 +205,16 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
             SvLinkSource::NotifyDataChanged();
         }
     }
+    // sonst melden wir uns ab !!
+// ????? JP 27.06.95: geht das so ????
+//  else
+//      Closed();
 }
 
 
-sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
+BOOL SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 {
-    sal_uLong nSttNd = 0, nEndNd = 0;
+    ULONG nSttNd = 0, nEndNd = 0;
     xub_StrLen nStt = 0;
     xub_StrLen nEnd = 0;
     const SwNode* pNd = 0;
@@ -232,7 +240,7 @@ sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
     case SECTION_SERVER:    pNd = CNTNT_TYPE.pSectNd;   break;
 
     case SECTION_SERVER+1:
-        return sal_True;
+        return TRUE;
     }
 
     if( pNd )
@@ -251,8 +259,12 @@ sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 // um Rekursionen zu Verhindern: ServerType umsetzen!
 SwServerObject::ServerModes eSave = eType;
 if( !pChkLnk )
+// sowas sollte man nicht tun, wer weiss schon, wie gross ein enum ist
+// ICC nimmt keinen int
+// #41723#
+//  *((int*)&eType) = SECTION_SERVER+1;
     ((SwServerObject*)this)->eType = NONE_SERVER;
-        for( sal_uInt16 n = rLnks.Count(); n; )
+        for( USHORT n = rLnks.Count(); n; )
         {
             const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
@@ -264,7 +276,7 @@ if( !pChkLnk )
                 {
                     if( pLnk == pChkLnk ||
                         ((SwBaseLink*)pLnk)->IsRecursion( pChkLnk ) )
-                        return sal_True;
+                        return TRUE;
                 }
                 else if( ((SwBaseLink*)pLnk)->IsRecursion( (SwBaseLink*)pLnk ) )
                     ((SwBaseLink*)pLnk)->SetNoDataFlag();
@@ -275,7 +287,7 @@ if( !pChkLnk )
     ((SwServerObject*)this)->eType = eSave;
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 void SwServerObject::SetNoServer()
@@ -283,7 +295,7 @@ void SwServerObject::SetNoServer()
     if(eType == BOOKMARK_SERVER && CNTNT_TYPE.pBkmk)
     {
         ::sw::mark::DdeBookmark* const pDdeBookmark = dynamic_cast< ::sw::mark::DdeBookmark* >(CNTNT_TYPE.pBkmk);
-        if(pDdeBookmark)
+        if(pDdeBookmark) 
         {
             CNTNT_TYPE.pBkmk = 0, eType = NONE_SERVER;
             pDdeBookmark->SetRefObject(NULL);
@@ -301,14 +313,15 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
         pDdeBookmark->SetRefObject(this);
     }
     else
-        OSL_FAIL("SwServerObject::SetNoServer(..)"
+        OSL_ENSURE(false,
+            "SwServerObject::SetNoServer(..)"
             " - setting an bookmark that is not DDE-capable");
 }
 
 /*  */
 
 
-SwDataChanged::SwDataChanged( const SwPaM& rPam, sal_uInt16 nTyp )
+SwDataChanged::SwDataChanged( const SwPaM& rPam, USHORT nTyp )
     : pPam( &rPam ), pPos( 0 ), pDoc( rPam.GetDoc() ), nType( nTyp )
 {
     nNode = rPam.GetPoint()->nNode.GetIndex();
@@ -316,7 +329,7 @@ SwDataChanged::SwDataChanged( const SwPaM& rPam, sal_uInt16 nTyp )
 }
 
 
-SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos, sal_uInt16 nTyp )
+SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos, USHORT nTyp )
     : pPam( 0 ), pPos( &rPos ), pDoc( pDc ), nType( nTyp )
 {
     nNode = rPos.nNode.GetIndex();
@@ -327,11 +340,11 @@ SwDataChanged::~SwDataChanged()
 {
     // JP 09.04.96: nur wenn das Layout vorhanden ist ( also waehrend der
     //              Eingabe)
-    if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
+    if( pDoc->GetRootFrm() )
     {
         const ::sfx2::SvLinkSources& rServers = pDoc->GetLinkManager().GetServers();
 
-        for( sal_uInt16 nCnt = rServers.Count(); nCnt; )
+        for( USHORT nCnt = rServers.Count(); nCnt; )
         {
             ::sfx2::SvLinkSourceRef refObj( rServers[ --nCnt ] );
             // noch jemand am Object interessiert ?

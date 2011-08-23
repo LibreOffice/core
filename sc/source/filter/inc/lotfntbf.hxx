@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,12 +45,12 @@ class LotusFontBuffer
 private:
     struct ENTRY
     {
-        String*             pTmpName;
-        SvxFontItem*        pFont;
-        SvxFontHeightItem*  pHeight;
-        SvxColorItem*       pColor;
-        sal_Int32               nType;      // < 0 -> undefiniert
-        inline              ENTRY( void )
+        String*				pTmpName;
+        SvxFontItem*		pFont;
+        SvxFontHeightItem*	pHeight;
+        SvxColorItem*		pColor;
+        INT32				nType;		// < 0 -> undefiniert
+        inline				ENTRY( void )
                             {
                                 pTmpName = NULL;
                                 pFont = NULL;
@@ -58,7 +58,7 @@ private:
                                 pColor = NULL;
                                 nType = -1;
                             }
-        inline              ~ENTRY()
+        inline				~ENTRY()
                             {
                                 if( pTmpName )
                                     delete pTmpName;
@@ -69,42 +69,42 @@ private:
                                 if( pColor )
                                     delete pColor;
                             }
-        inline void         TmpName( const String &rNew )
+        inline void			TmpName( const String &rNew )
                             {
                                 if( pTmpName )
                                     *pTmpName = rNew;
                                 else
                                     pTmpName = new String( rNew );
                             }
-        inline void         Font( SvxFontItem& rNew )
+        inline void			Font( SvxFontItem& rNew )
                             {
                                 if( pFont )
                                     delete pFont;
                                 pFont = &rNew;
                             }
-        inline void         Height( SvxFontHeightItem& rNew )
+        inline void			Height( SvxFontHeightItem& rNew )
                             {
                                 if( pHeight )
                                     delete pHeight;
                                 pHeight = &rNew;
                             }
-        inline void         Color( SvxColorItem& rNew )
+        inline void			Color( SvxColorItem& rNew )
                             {
                                 if( pColor )
                                     delete pColor;
                                 pColor = &rNew;
                             }
-        inline void         Type( const sal_uInt16 nNew )       { nType = nNew; }
+        inline void			Type( const UINT16 nNew )		{ nType = nNew; }
     };
 
-    ENTRY                   pData[ 8 ];
-    const static sal_uInt16     nSize;
-    void                    MakeFont( ENTRY* pEntry );
+    ENTRY					pData[ 8 ];
+    const static UINT16		nSize;
+    void					MakeFont( ENTRY* pEntry );
 public:
-    void                    Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet );
-    void                    SetName( const sal_uInt16 nIndex, const String& rName );
-    void                    SetHeight( const sal_uInt16 nIndex, const sal_uInt16 nHeight );
-    void                    SetType( const sal_uInt16 nIndex, const sal_uInt16 nType );
+    void					Fill( const UINT8 nIndex, SfxItemSet& rItemSet );
+    void					SetName( const UINT16 nIndex, const String& rName );
+    void					SetHeight( const UINT16 nIndex, const UINT16 nHeight );
+    void					SetType( const UINT16 nIndex, const UINT16 nType );
 };
 
 

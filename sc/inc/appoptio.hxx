@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,91 +43,91 @@ public:
                 ScAppOptions( const ScAppOptions& rCpy );
                 ~ScAppOptions();
 
-    void        SetDefaults();
+    void		SetDefaults();
 
     // Set or get the initial tab count for new spreadsheet, it is used by VBA API currently.
-    void    SetTabCountInNewSpreadsheet( sal_Int16 nCount )  { nTabCountInNewSpreadsheet = nCount; }
-    sal_Int16   GetTabCountInNewSpreadsheet() const              { return nTabCountInNewSpreadsheet;   }
+    void	SetTabCountInNewSpreadsheet( sal_Int16 nCount )  { nTabCountInNewSpreadsheet = nCount; }
+    sal_Int16	GetTabCountInNewSpreadsheet() const              { return nTabCountInNewSpreadsheet;   }
 
-    void        SetAppMetric( FieldUnit eUnit ) { eMetric = eUnit;      }
-    FieldUnit   GetAppMetric() const            { return eMetric;       }
-    void        SetZoom( sal_uInt16 nNew )          { nZoom = nNew;         }
-    sal_uInt16      GetZoom() const                 { return nZoom;         }
-    void        SetZoomType( SvxZoomType eNew ) { eZoomType = eNew;     }
-    SvxZoomType GetZoomType() const             { return eZoomType;     }
-    void        SetSynchronizeZoom( sal_Bool bNew ) { bSynchronizeZoom = bNew; }
-    sal_Bool        GetSynchronizeZoom() const      { return bSynchronizeZoom; }
-    sal_uInt16      GetLRUFuncListCount() const     { return nLRUFuncCount; }
-    sal_uInt16*     GetLRUFuncList() const          { return pLRUList;      }
-    void        SetLRUFuncList( const sal_uInt16* pList,
-                                const sal_uInt16  nCount );
-    void        SetStatusFunc( sal_uInt16 nNew )    { nStatusFunc = nNew;   }
-    sal_uInt16      GetStatusFunc() const           { return nStatusFunc;   }
-    void        SetAutoComplete( sal_Bool bNew )    { bAutoComplete = bNew; }
-    sal_Bool        GetAutoComplete() const         { return bAutoComplete; }
-    void        SetDetectiveAuto( sal_Bool bNew )   { bDetectiveAuto = bNew; }
-    sal_Bool        GetDetectiveAuto() const        { return bDetectiveAuto; }
+    void		SetAppMetric( FieldUnit eUnit )	{ eMetric = eUnit;		}
+    FieldUnit	GetAppMetric() const			{ return eMetric;		}
+    void		SetZoom( USHORT nNew )			{ nZoom = nNew;			}
+    USHORT		GetZoom() const					{ return nZoom;			}
+    void		SetZoomType( SvxZoomType eNew ) { eZoomType = eNew;		}
+    SvxZoomType	GetZoomType() const				{ return eZoomType;		}
+    void        SetSynchronizeZoom( BOOL bNew ) { bSynchronizeZoom = bNew; }
+    BOOL        GetSynchronizeZoom() const      { return bSynchronizeZoom; }
+    USHORT		GetLRUFuncListCount() const		{ return nLRUFuncCount;	}
+    USHORT*		GetLRUFuncList() const			{ return pLRUList;		}
+    void		SetLRUFuncList( const USHORT* pList,
+                                const USHORT  nCount );
+    void		SetStatusFunc( USHORT nNew )	{ nStatusFunc = nNew;	}
+    USHORT		GetStatusFunc() const			{ return nStatusFunc;	}
+    void		SetAutoComplete( BOOL bNew )	{ bAutoComplete = bNew; }
+    BOOL		GetAutoComplete() const			{ return bAutoComplete;	}
+    void		SetDetectiveAuto( BOOL bNew )	{ bDetectiveAuto = bNew; }
+    BOOL		GetDetectiveAuto() const		{ return bDetectiveAuto; }
 
-    void        SetTrackContentColor(sal_uInt32 nNew) { nTrackContentColor = nNew; }
-    sal_uInt32  GetTrackContentColor() const     { return nTrackContentColor; }
-    void        SetTrackInsertColor(sal_uInt32 nNew)  { nTrackInsertColor = nNew;  }
-    sal_uInt32  GetTrackInsertColor() const      { return nTrackInsertColor;  }
-    void        SetTrackDeleteColor(sal_uInt32 nNew)  { nTrackDeleteColor = nNew;  }
-    sal_uInt32  GetTrackDeleteColor() const      { return nTrackDeleteColor;  }
-    void        SetTrackMoveColor(sal_uInt32 nNew)    { nTrackMoveColor = nNew;    }
-    sal_uInt32  GetTrackMoveColor() const        { return nTrackMoveColor;    }
+    void		SetTrackContentColor(sal_uInt32 nNew) { nTrackContentColor = nNew; }
+    sal_uInt32	GetTrackContentColor() const	 { return nTrackContentColor; }
+    void		SetTrackInsertColor(sal_uInt32 nNew)  { nTrackInsertColor = nNew;  }
+    sal_uInt32	GetTrackInsertColor() const		 { return nTrackInsertColor;  }
+    void		SetTrackDeleteColor(sal_uInt32 nNew)  { nTrackDeleteColor = nNew;  }
+    sal_uInt32	GetTrackDeleteColor() const		 { return nTrackDeleteColor;  }
+    void		SetTrackMoveColor(sal_uInt32 nNew)    { nTrackMoveColor = nNew;    }
+    sal_uInt32	GetTrackMoveColor() const		 { return nTrackMoveColor;    }
 
-    ScLkUpdMode GetLinkMode() const             { return eLinkMode ;}
-    void        SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}
+    ScLkUpdMode GetLinkMode() const				{ return eLinkMode ;}
+    void		SetLinkMode( ScLkUpdMode nSet )	{ 	eLinkMode  = nSet;}
 
-    void        SetDefaultObjectSizeWidth(sal_Int32 nNew)   { nDefaultObjectSizeWidth = nNew; }
-    sal_Int32       GetDefaultObjectSizeWidth() const       { return nDefaultObjectSizeWidth; }
-    void        SetDefaultObjectSizeHeight(sal_Int32 nNew)  { nDefaultObjectSizeHeight = nNew; }
-    sal_Int32       GetDefaultObjectSizeHeight() const      { return nDefaultObjectSizeHeight; }
+    void		SetDefaultObjectSizeWidth(INT32 nNew)	{ nDefaultObjectSizeWidth = nNew; }
+    INT32		GetDefaultObjectSizeWidth() const		{ return nDefaultObjectSizeWidth; }
+    void		SetDefaultObjectSizeHeight(INT32 nNew)	{ nDefaultObjectSizeHeight = nNew; }
+    INT32		GetDefaultObjectSizeHeight() const		{ return nDefaultObjectSizeHeight; }
 
-    void        SetShowSharedDocumentWarning( sal_Bool bNew )   { mbShowSharedDocumentWarning = bNew; }
-    sal_Bool        GetShowSharedDocumentWarning() const        { return mbShowSharedDocumentWarning; }
+    void        SetShowSharedDocumentWarning( BOOL bNew )   { mbShowSharedDocumentWarning = bNew; }
+    BOOL        GetShowSharedDocumentWarning() const        { return mbShowSharedDocumentWarning; }
 
 
-    const ScAppOptions& operator=   ( const ScAppOptions& rOpt );
+    const ScAppOptions&	operator=	( const ScAppOptions& rOpt );
 
 private:
-    sal_Int16   nTabCountInNewSpreadsheet;
-    FieldUnit   eMetric;
-    sal_uInt16      nLRUFuncCount;
-    sal_uInt16*     pLRUList;
+    sal_Int16	nTabCountInNewSpreadsheet;
+    FieldUnit	eMetric;
+    USHORT		nLRUFuncCount;
+    USHORT*		pLRUList;
     SvxZoomType eZoomType;
-    sal_uInt16      nZoom;
-    sal_Bool        bSynchronizeZoom;
-    sal_uInt16      nStatusFunc;
-    sal_Bool        bAutoComplete;
-    sal_Bool        bDetectiveAuto;
-    sal_uInt32  nTrackContentColor;
-    sal_uInt32  nTrackInsertColor;
-    sal_uInt32  nTrackDeleteColor;
-    sal_uInt32  nTrackMoveColor;
+    USHORT		nZoom;
+    BOOL        bSynchronizeZoom;
+    USHORT		nStatusFunc;
+    BOOL		bAutoComplete;
+    BOOL		bDetectiveAuto;
+    sal_uInt32	nTrackContentColor;
+    sal_uInt32	nTrackInsertColor;
+    sal_uInt32	nTrackDeleteColor;
+    sal_uInt32	nTrackMoveColor;
     ScLkUpdMode eLinkMode;
-    sal_Int32       nDefaultObjectSizeWidth;
-    sal_Int32       nDefaultObjectSizeHeight;
-    sal_Bool        mbShowSharedDocumentWarning;
+    INT32		nDefaultObjectSizeWidth;
+    INT32		nDefaultObjectSizeHeight;
+    BOOL        mbShowSharedDocumentWarning;
 };
 
 
 //==================================================================
-//  Config Item containing app options
+//	Config Item containing app options
 //==================================================================
 
 class ScAppCfg : public ScAppOptions
 {
-    //  spread about 5 config paths
-    //! split ScAppOptions into different classes
+    //	spread about 5 config paths
+    //!	split ScAppOptions into different classes
 
-    ScLinkConfigItem    aLayoutItem;
-    ScLinkConfigItem    aInputItem;
-    ScLinkConfigItem    aRevisionItem;
-    ScLinkConfigItem    aContentItem;
-    ScLinkConfigItem    aSortListItem;
-    ScLinkConfigItem    aMiscItem;
+    ScLinkConfigItem	aLayoutItem;
+    ScLinkConfigItem	aInputItem;
+    ScLinkConfigItem	aRevisionItem;
+    ScLinkConfigItem	aContentItem;
+    ScLinkConfigItem	aSortListItem;
+    ScLinkConfigItem	aMiscItem;
 
     DECL_LINK( LayoutCommitHdl, void* );
     DECL_LINK( InputCommitHdl, void* );
@@ -146,8 +146,8 @@ class ScAppCfg : public ScAppOptions
 public:
             ScAppCfg();
 
-    void    SetOptions( const ScAppOptions& rNew );
-    void    OptionsChanged();   // after direct access to ScAppOptions base class
+    void	SetOptions( const ScAppOptions& rNew );
+    void	OptionsChanged();	// after direct access to ScAppOptions base class
 };
 
 

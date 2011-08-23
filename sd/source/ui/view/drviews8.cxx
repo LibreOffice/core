@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,6 +47,7 @@
 #include "app.hrc"
 #include "strings.hrc"
 
+#include "misc.hxx"
 #include "fuzoom.hxx"
 #include "fudspord.hxx"
 #include "futransf.hxx"
@@ -77,7 +78,7 @@
 #include "drawview.hxx"
 #include "zoomlist.hxx"
 #include <osl/mutex.hxx>
-#include <vcl/salbtype.hxx>     // FRound
+#include <vcl/salbtype.hxx>		// FRound
 #include <vcl/svapp.hxx>
 
 namespace sd {
@@ -114,7 +115,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         }
         break;
 
-        case SID_CHAR_DLG:  // BASIC
+        case SID_CHAR_DLG:	// BASIC
         {
             SetCurrentFunction( FuChar::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
@@ -188,6 +189,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_INSERT_PLUGIN:
         case SID_INSERT_SOUND:
         case SID_INSERT_VIDEO:
+        case SID_INSERT_APPLET:
         case SID_INSERT_FLOATINGFRAME:
         case SID_INSERT_MATH:
         case SID_INSERT_DIAGRAM:
@@ -204,7 +206,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_COPYOBJECTS:
         {
-            if ( mpDrawView->IsPresObjSelected(sal_False, sal_True) )
+            if ( mpDrawView->IsPresObjSelected(FALSE, TRUE) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
@@ -247,7 +249,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_ZOOM_OUT:
         case SID_ZOOM_PANNING:
         {
-            mbZoomOnPage = sal_False;
+            mbZoomOnPage = FALSE;
             SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
             // Beendet sich selbst, kein Cancel() notwendig!
             Invalidate( SID_ZOOM_TOOLBOX );
@@ -341,7 +343,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_CONNECTION_NEW_ROUTING:
         {
             SfxItemSet aDefAttr( GetPool(), SDRATTR_EDGELINE1DELTA, SDRATTR_EDGELINE3DELTA );
-            GetView()->SetAttributes( aDefAttr, sal_True ); // (ReplaceAll)
+            GetView()->SetAttributes( aDefAttr, TRUE ); // (ReplaceAll)
 
             Cancel();
             rReq.Done();
@@ -350,6 +352,8 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_TWAIN_SELECT:
         {
+            BOOL bDone = FALSE;
+
             if( mxScannerManager.is() )
             {
                 try
@@ -360,7 +364,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
                     if( aContexts.getLength() )
                     {
                         ::com::sun::star::scanner::ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
-                        mxScannerManager->configureScanner( aContext );
+                        bDone = mxScannerManager->configureScanner( aContext );
                     }
                 }
                 catch(...)
@@ -375,7 +379,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_TWAIN_TRANSFER:
         {
-            sal_Bool bDone = sal_False;
+            BOOL bDone = FALSE;
 
             if( mxScannerManager.is() )
             {
@@ -386,7 +390,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
                     if( aContexts.getLength() )
                     {
                         mxScannerManager->startScan( aContexts.getConstArray()[ 0 ], mxScannerListener );
-                        bDone = sal_True;
+                        bDone = TRUE;
                     }
                 }
                 catch( ... )
@@ -397,9 +401,9 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
             if( !bDone )
             {
 #ifndef UNX
-                const sal_uInt16 nId = STR_TWAIN_NO_SOURCE;
+                const USHORT nId = STR_TWAIN_NO_SOURCE;
 #else
-                const sal_uInt16 nId = STR_TWAIN_NO_SOURCE_UNX;
+                const USHORT nId = STR_TWAIN_NO_SOURCE_UNX;
 #endif
 
                 ::sd::Window* pWindow = GetActiveWindow();
@@ -452,8 +456,8 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
 {
     if( mxScannerManager.is() )
     {
-        const ::com::sun::star::scanner::ScannerContext aContext( mxScannerManager->getAvailableScanners().getConstArray()[ 0 ] );
-        const ::com::sun::star::scanner::ScanError      eError = mxScannerManager->getError( aContext );
+        const ::com::sun::star::scanner::ScannerContext	aContext( mxScannerManager->getAvailableScanners().getConstArray()[ 0 ] );
+        const ::com::sun::star::scanner::ScanError		eError = mxScannerManager->getError( aContext );
 
         if( ::com::sun::star::scanner::ScanError_ScanErrorNone == eError )
         {
@@ -502,7 +506,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
                     aPnt += Point( pPage->GetLftBorder(), pPage->GetUppBorder() );
                     Rectangle   aRect( aPnt, aBmpSize );
                     SdrGrafObj* pGrafObj = NULL;
-                    sal_Bool        bInsertNewObject = sal_True;
+                    BOOL        bInsertNewObject = TRUE;
 
                     if( GetView()->AreObjectsMarked() )
                     {
@@ -519,8 +523,8 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
 
                                 if( pGrafObj->IsEmptyPresObj() )
                                 {
-                                    bInsertNewObject = sal_False;
-                                    pGrafObj->SetEmptyPresObj(sal_False);
+                                    bInsertNewObject = FALSE;
+                                    pGrafObj->SetEmptyPresObj(FALSE);
                                     pGrafObj->SetOutlinerParaObject(NULL);
                                     pGrafObj->SetGraphic( Graphic( aScanBmp ) );
                                 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,38 +72,38 @@ using namespace ::com::sun::star::lang;
  --------------------------------------------------------------------*/
 
 NumFormatListBox::NumFormatListBox( Window* pWin, const ResId& rResId,
-                                    short nFormatType, sal_uLong nDefFmt,
-                                    sal_Bool bUsrFmts ) :
-    ListBox             ( pWin, rResId ),
-    nCurrFormatType     (-1),
-    nStdEntry           (0),
-    bOneArea            (sal_False),
-    nDefFormat          (nDefFmt),
-    pVw                 (0),
+                                    short nFormatType, ULONG nDefFmt,
+                                    BOOL bUsrFmts ) :
+    ListBox				( pWin, rResId ),
+    nCurrFormatType 	(-1),
+    nStdEntry			(0),
+    bOneArea			(FALSE),
+    nDefFormat			(nDefFmt),
+    pVw					(0),
     pOwnFormatter       (0),
-    bShowLanguageControl(sal_False),
-    bUseAutomaticLanguage(sal_True)
+    bShowLanguageControl(FALSE),
+    bUseAutomaticLanguage(TRUE)
 {
     Init(nFormatType, bUsrFmts);
 }
 
 NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
                                     const ResId& rResId, short nFormatType,
-                                    sal_uLong nDefFmt, sal_Bool bUsrFmts ) :
-    ListBox             ( pWin, rResId ),
-    nCurrFormatType     (-1),
-    nStdEntry           (0),
-    bOneArea            (sal_False),
-    nDefFormat          (nDefFmt),
-    pVw                 (pView),
+                                    ULONG nDefFmt, BOOL bUsrFmts ) :
+    ListBox				( pWin, rResId ),
+    nCurrFormatType 	(-1),
+    nStdEntry			(0),
+    bOneArea			(FALSE),
+    nDefFormat			(nDefFmt),
+    pVw					(pView),
     pOwnFormatter       (0),
-    bShowLanguageControl(sal_False),
-    bUseAutomaticLanguage(sal_True)
+    bShowLanguageControl(FALSE),
+    bUseAutomaticLanguage(TRUE)
 {
     Init(nFormatType, bUsrFmts);
 }
 
-void NumFormatListBox::Init(short nFormatType, sal_Bool bUsrFmts)
+void NumFormatListBox::Init(short nFormatType, BOOL bUsrFmts)
 {
     SwView *pView = GetView();
 
@@ -112,7 +112,7 @@ void NumFormatListBox::Init(short nFormatType, sal_Bool bUsrFmts)
     else
         eCurLanguage = SvxLocaleToLanguage( SvtSysLocale().GetLocaleData().getLocale() );
 
-    if (bUsrFmts == sal_False)
+    if (bUsrFmts == FALSE)
        {
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         pOwnFormatter = new SvNumberFormatter(xMSF, eCurLanguage);
@@ -140,7 +140,7 @@ SwView* NumFormatListBox::GetView()
 void NumFormatListBox::SetFormatType(const short nFormatType)
 {
     if (nCurrFormatType == -1 ||
-        (nCurrFormatType & nFormatType) == 0)   // Es gibt Mischformate, wie z.B. DateTime
+        (nCurrFormatType & nFormatType) == 0)	// Es gibt Mischformate, wie z.B. DateTime
     {
         SvNumberFormatter* pFormatter;
 
@@ -156,7 +156,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
             pFormatter = rSh.GetNumberFormatter();
         }
 
-        Clear();    // Alle Eintraege in der Listbox entfernen
+        Clear();	// Alle Eintraege in der Listbox entfernen
 
         NfIndexTableOffset eOffsetStart = NF_NUMBER_START;
         NfIndexTableOffset eOffsetEnd = NF_NUMBER_START;
@@ -219,22 +219,22 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
             break;
 
         default:
-            OSL_FAIL("what a format?");
+            OSL_ENSURE(false, "what a format?");
             break;
         }
 
         const SvNumberformat* pFmt;
-        sal_uInt16 nPos, i = 0;
-        sal_uLong  nFormat;
+        USHORT nPos, i = 0;
+        ULONG  nFormat;
         Color* pCol;
         double fVal = GetDefValue( nFormatType );
         String sValue;
 
-        sal_uLong nSysNumFmt = pFormatter->GetFormatIndex(
+        ULONG nSysNumFmt = pFormatter->GetFormatIndex(
                                         NF_NUMBER_SYSTEM, eCurLanguage );
-        sal_uLong nSysShortDateFmt = pFormatter->GetFormatIndex(
+        ULONG nSysShortDateFmt = pFormatter->GetFormatIndex(
                                         NF_DATE_SYSTEM_SHORT, eCurLanguage );
-        sal_uLong nSysLongDateFmt = pFormatter->GetFormatIndex(
+        ULONG nSysLongDateFmt = pFormatter->GetFormatIndex(
                                         NF_DATE_SYSTEM_LONG, eCurLanguage );
 
         for( long nIndex = eOffsetStart; nIndex <= eOffsetEnd; ++nIndex )
@@ -254,8 +254,8 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
                 pFormatter->GetOutputString( sTxt, nFormat, sValue, &pCol);
             }
 
-            if (nFormat != nSysNumFmt       &&
-                nFormat != nSysShortDateFmt &&
+            if (nFormat != nSysNumFmt		&&
+                nFormat != nSysShortDateFmt	&&
                 nFormat != nSysLongDateFmt)
             {
                 nPos = InsertEntry( sValue );
@@ -280,7 +280,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
     }
 }
 
-void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
+void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
 {
     if (nDefFmt == ULONG_MAX)
     {
@@ -305,11 +305,11 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
 
     SetFormatType(nType);
 
-    sal_uLong nFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nDefFmt, eCurLanguage);
+    ULONG nFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nDefFmt, eCurLanguage);
 
-    for (sal_uInt16 i = 0; i < GetEntryCount(); i++)
+    for (USHORT i = 0; i < GetEntryCount(); i++)
     {
-        if (nFormat == (sal_uLong)GetEntryData(i))
+        if (nFormat == (ULONG)GetEntryData(i))
         {
             SelectEntryPos(i);
             nStdEntry = i;
@@ -331,19 +331,20 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
     else
         pFormatter->GetOutputString(fValue, nDefFmt, sValue, &pCol);
 
-    sal_uInt16 nPos = 0;
-    while ((sal_uLong)GetEntryData(nPos) == ULONG_MAX)
+    USHORT nPos = 0;
+    while ((ULONG)GetEntryData(nPos) == ULONG_MAX)
         nPos++;
 
-    sal_uLong nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, eCurLanguage);
-    sal_uLong nSysShortDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eCurLanguage);
-    sal_uLong nSysLongDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eCurLanguage);
-    sal_Bool bSysLang = sal_False;
+//
+    ULONG nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, eCurLanguage);
+    ULONG nSysShortDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eCurLanguage);
+    ULONG nSysLongDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eCurLanguage);
+    BOOL bSysLang = FALSE;
     if( eCurLanguage == GetAppLanguage() )
-        bSysLang = sal_True;
-    sal_uLong nNumFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysNumFmt, LANGUAGE_SYSTEM );
-    sal_uLong nShortDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysShortDateFmt, LANGUAGE_SYSTEM );
-    sal_uLong nLongDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysLongDateFmt, LANGUAGE_SYSTEM );
+        bSysLang = TRUE;
+    ULONG nNumFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysNumFmt, LANGUAGE_SYSTEM );
+    ULONG nShortDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysShortDateFmt, LANGUAGE_SYSTEM );
+    ULONG nLongDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysLongDateFmt, LANGUAGE_SYSTEM );
 
     if (
          nDefFmt == nSysNumFmt ||
@@ -368,16 +369,16 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
     nDefFormat = GetFormat();
 }
 
-sal_uLong NumFormatListBox::GetFormat() const
+ULONG NumFormatListBox::GetFormat() const
 {
-    sal_uInt16 nPos = GetSelectEntryPos();
+    USHORT nPos = GetSelectEntryPos();
 
-    return (sal_uLong)GetEntryData(nPos);
+    return (ULONG)GetEntryData(nPos);
 }
 
 IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
 {
-    sal_uInt16 nPos = pBox->GetSelectEntryPos();
+    USHORT nPos = pBox->GetSelectEntryPos();
     String sDefine(SW_RES( STR_DEFINE_NUMBERFORMAT ));
     SwView *pView = GetView();
 
@@ -397,7 +398,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
 
         double fValue = GetDefValue( nCurrFormatType);
 
-        sal_uLong nFormat = pFormatter->GetStandardFormat( nCurrFormatType, eCurLanguage);
+        ULONG nFormat = pFormatter->GetStandardFormat( nCurrFormatType, eCurLanguage);
         aCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, nFormat ));
 
         aCoreSet.Put( SvxNumberInfoItem( pFormatter, fValue,
@@ -412,7 +413,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aCoreSet,
+        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aCoreSet, 
             GetView()->GetViewFrame()->GetFrame().GetFrameInterface(),
             RC_DLG_SWNUMFMTDLG );
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
@@ -426,15 +427,15 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
             {
                 const sal_uInt32* pDelArr = ((SvxNumberInfoItem*)pItem)->GetDelArray();
 
-                for ( sal_uInt16 i = 0; i < ((SvxNumberInfoItem*)pItem)->GetDelCount(); i++ )
+                for ( USHORT i = 0; i < ((SvxNumberInfoItem*)pItem)->GetDelCount(); i++ )
                     pFormatter->DeleteEntry( pDelArr[i] );
             }
 
             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
             if( SFX_ITEM_SET == pOutSet->GetItemState(
-                SID_ATTR_NUMBERFORMAT_VALUE, sal_False, &pItem ))
+                SID_ATTR_NUMBERFORMAT_VALUE, FALSE, &pItem ))
             {
-                sal_uInt32 nNumberFormat = ((SfxUInt32Item*)pItem)->GetValue();
+                UINT32 nNumberFormat = ((SfxUInt32Item*)pItem)->GetValue();
                 // oj #105473# change order of calls
                 const SvNumberformat* pFmt = pFormatter->GetEntry(nNumberFormat);
                 if( pFmt )
@@ -443,7 +444,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
                 SetDefFormat(nNumberFormat);
             }
             if( bShowLanguageControl && SFX_ITEM_SET == pOutSet->GetItemState(
-                SID_ATTR_NUMBERFORMAT_ADD_AUTO, sal_False, &pItem ))
+                SID_ATTR_NUMBERFORMAT_ADD_AUTO, FALSE, &pItem ))
             {
                 bUseAutomaticLanguage = ((const SfxBoolItem*)pItem)->GetValue();
             }
@@ -470,6 +471,12 @@ double NumFormatListBox::GetDefValue(const short nFormatType) const
         case NUMBERFORMAT_TIME:
             fDefValue = SVX_NUMVAL_TIME;
             break;
+/*		{
+            String sValue("31.8.1997 16:57:34");
+            ULONG nFormat = pFormatter->GetStandardFormat(nFormatType, LANGUAGE_GERMAN);
+            pFormatter->IsNumberFormat( sValue, nFormat, fDefValue );
+        }
+        break;*/
 
         case NUMBERFORMAT_TEXT:
         case NUMBERFORMAT_UNDEFINED:

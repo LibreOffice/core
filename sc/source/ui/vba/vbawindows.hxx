@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <ooo/vba/excel/XWindows.hpp>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-
+ 
 #include "excelvbahelper.hxx"
 #include <vbahelper/vbacollectionimpl.hxx>
 
@@ -42,7 +42,7 @@ typedef CollTestImplHelper< ov::excel::XWindows > ScVbaWindows_BASE;
 class ScVbaWindows : public ScVbaWindows_BASE
 {
 public:
-    //]AE] ScVbaWindows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    ScVbaWindows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
     ScVbaWindows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~ScVbaWindows() {}
 
@@ -53,8 +53,8 @@ public:
 
     // XWindows
     virtual void SAL_CALL Arrange( ::sal_Int32 ArrangeStyle, const css::uno::Any& ActiveWorkbook, const css::uno::Any& SyncHorizontal, const css::uno::Any& SyncVertical ) throw (::com::sun::star::uno::RuntimeException);
-    // ScVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
+    // ScVbaCollectionBaseImpl	
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ); 
 
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();

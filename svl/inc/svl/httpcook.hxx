@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,8 +62,8 @@ struct CntHTTPCookie
     String   m_aDomain;
     String   m_aPath;
     DateTime m_aExpires;
-    sal_uInt16   m_nFlags;
-    sal_uInt16   m_nPolicy;
+    USHORT   m_nFlags;
+    USHORT   m_nPolicy;
 
     CntHTTPCookie (void)
         : m_aExpires (Date(0), Time(0)),
@@ -71,14 +71,14 @@ struct CntHTTPCookie
           m_nPolicy  (CNTHTTP_COOKIE_POLICY_INTERACTIVE)
     {}
 
-    sal_Bool replaces (const CntHTTPCookie& rOther) const
+    BOOL replaces (const CntHTTPCookie& rOther) const
     {
         return ((m_aDomain == rOther.m_aDomain) &&
                 (m_aPath   == rOther.m_aPath  ) &&
                 (m_aName   == rOther.m_aName  )    );
     }
 
-    sal_Bool operator== (const CntHTTPCookie& rOther) const
+    BOOL operator== (const CntHTTPCookie& rOther) const
     {
         return ((m_aName    == rOther.m_aName   ) &&
                 (m_aValue   == rOther.m_aValue  ) &&
@@ -134,10 +134,10 @@ enum CntHTTPCookieRequestType
 
 struct CntHTTPCookieRequest
 {
-    const String&            m_rURL;
-    List&                    m_rCookieList;
+    const String& 			 m_rURL;
+    List&         			 m_rCookieList;
     CntHTTPCookieRequestType m_eType;
-    sal_uInt16                   m_nRet;
+    USHORT					 m_nRet;
 
     CntHTTPCookieRequest (
         const String& rURL,

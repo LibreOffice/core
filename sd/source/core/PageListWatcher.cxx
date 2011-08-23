@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,6 +36,7 @@
 #include <svx/svdmodel.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
+// #109538#
 
 void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
 {
@@ -105,7 +106,7 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
                 pRetval = maPageVectorStandard[nPgNum];
             else
             {
-                DBG_ASSERT(nPgNum <= maPageVectorStandard.size(),
+                DBG_ASSERT(nPgNum <= maPageVectorStandard.size(), 
                     "ImpPageListWatcher::GetSdPage(PK_STANDARD): access out of range");
                 DBG_WARNING2 ("    %d  > %d",
                     nPgNum, nPgNum<maPageVectorStandard.size());
@@ -127,13 +128,15 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
         }
         case PK_HANDOUT:
         {
-//          #11420# for models used to transfer drawing shapes via clipboard its ok to not have a handout page
+//			#11420# for models used to transfer drawing shapes via clipboard its
+//			ok to not have a handout page
+//			DBG_ASSERT(mpHandoutPage, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
             DBG_ASSERT(nPgNum == 0L, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
             if (nPgNum == 0)
                 pRetval = mpHandoutPage;
             else
             {
-                DBG_ASSERT(nPgNum == 0L,
+                DBG_ASSERT(nPgNum == 0L, 
                     "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
             }
             break;

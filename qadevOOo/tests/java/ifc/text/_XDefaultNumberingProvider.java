@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public class _XDefaultNumberingProvider extends MultiMethodTest {
     /**
     * Just gets numberings for "en" locale. <p>
     * Has <b>OK</b> status if not <code>null</code> value returned
-    * and no runtime exceptions occurred.
+    * and no runtime exceptions occured.
     */
     public void _getDefaultOutlineNumberings() {
         XIndexAccess xIA[] = oObj.getDefaultOutlineNumberings(loc) ;
@@ -63,7 +63,7 @@ public class _XDefaultNumberingProvider extends MultiMethodTest {
     /**
     * Just gets numberings for "en" locale. <p>
     * Has <b>OK</b> status if not <code>null</code> value returned
-    * and no runtime exceptions occurred.
+    * and no runtime exceptions occured.
     */
     public void _getDefaultContinuousNumberingLevels() {
         PropertyValue[][] lev = oObj.getDefaultContinuousNumberingLevels(loc) ;

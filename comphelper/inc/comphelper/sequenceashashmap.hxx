@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,10 @@
 //_______________________________________________
 // includes
 
-#include <boost/unordered_map.hpp>
+#ifndef INCLUDED_HASH_MAP
+#include <hash_map>
+#define INCLUDED_HASH_MAP
+#endif
 
 #ifndef INCLUDED_ALGORITHM
 #include <algorithm>
@@ -70,7 +73,7 @@ namespace comphelper{
             such name sequences very easy ...
  */
 
-struct SequenceAsHashMapBase : public ::boost::unordered_map<
+struct SequenceAsHashMapBase : public ::std::hash_map<
     ::rtl::OUString                    ,
     ::com::sun::star::uno::Any         ,
     ::rtl::OUStringHash                ,
@@ -97,7 +100,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
         /** @see    operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&)
          */
         SequenceAsHashMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lSource);
-
+        
         //---------------------------------------
         /** @see    operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&)
          */
@@ -192,7 +195,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @descr  Its made const to prevent using of the
                     return value directly as an in/out parameter!
                     usage: myMethod(stlDequeAdapter.getAsAnyList());
-
+                    
             @param  bAsPropertyValue
                     switch between using of PropertyValue or NamedValue as
                     value type.
@@ -201,7 +204,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     contains all items of this map.
          */
         const ::com::sun::star::uno::Any getAsConstAny(::sal_Bool bAsPropertyValue) const;
-
+        
         //---------------------------------------
         /** @short  return this map instance as a
                     sequence< Any >, which can be
@@ -214,12 +217,12 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  bAsPropertyValue
                     switch between using of PropertyValue or NamedValue as
                     value type.
-
+                    
             @return A const sequence which elements of Any, which
                     contains all items of this map.
          */
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > getAsConstAnyList(::sal_Bool bAsPropertyValue) const;
-
+        
         //---------------------------------------
         /** @short  return this map instance to as a
                     NamedValue sequence, which can be
@@ -332,12 +335,12 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  rCheck
                     the map containing all items for checking.
 
-            @return
+            @return 
                     TRUE if all items of Rcheck could be found
                     in these map; FALSE otherwise.
          */
         sal_Bool match(const SequenceAsHashMap& rCheck) const;
-
+        
         //---------------------------------------
         /** @short  merge all values from the given map into
                     this one.
@@ -350,7 +353,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     the map containing all items for the update.
          */
         void update(const SequenceAsHashMap& rSource);
-
+        
         //---------------------------------------
         /** @short  can be used to generate a file dump of
                     the current content of this instance.

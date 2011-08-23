@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,11 +68,11 @@ class ExpandContentProviderImpl : protected MutexHolder, public t_impl_helper
     uno::Reference< util::XMacroExpander > m_xMacroExpander;
     OUString expandUri(
         uno::Reference< ucb::XContentIdentifier > const & xIdentifier ) const;
-
+    
 protected:
     inline void check() const;
     virtual void SAL_CALL disposing();
-
+    
 public:
     inline ExpandContentProviderImpl(
         uno::Reference< uno::XComponentContext > const & xComponentContext )
@@ -83,7 +83,7 @@ public:
               uno::UNO_QUERY_THROW )
         {}
     virtual ~ExpandContentProviderImpl() throw ();
-
+    
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
@@ -91,7 +91,7 @@ public:
         throw (uno::RuntimeException);
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException);
-
+    
     // XContentProvider
     virtual uno::Reference< ucb::XContent > SAL_CALL queryContent(
         uno::Reference< ucb::XContentIdentifier > const & xIdentifier )
@@ -215,7 +215,7 @@ uno::Reference< ucb::XContent > ExpandContentProviderImpl::queryContent(
 {
     check();
     OUString uri( expandUri( xIdentifier ) );
-
+    
     ::ucbhelper::Content ucb_content;
     if (::ucbhelper::Content::create(
             uri, uno::Reference< ucb::XCommandEnvironment >(), ucb_content ))
@@ -244,8 +244,8 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
     catch (ucb::IllegalIdentifierException & exc)
     {
         (void) exc; // unused
-        OSL_FAIL(
-            ::rtl::OUStringToOString(
+        OSL_ENSURE(
+            0, ::rtl::OUStringToOString(
                 exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return -1;
     }
@@ -272,6 +272,14 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+sal_Bool SAL_CALL component_writeInfo(
+    lang::XMultiServiceFactory * pServiceManager,
+    registry::XRegistryKey * pRegistryKey )
+{
+    return ::cppu::component_writeInfoHelper(
+        pServiceManager, pRegistryKey, s_entries );
 }
 
 void * SAL_CALL component_getFactory(

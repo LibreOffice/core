@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,9 +54,9 @@
 class ScDrawLayer;
 class ScChartCollection;
 
-void ScDBFunc::UpdateCharts( sal_Bool bAllCharts )
+void ScDBFunc::UpdateCharts( BOOL bAllCharts )
 {
-    sal_uInt16 nFound = 0;
+    USHORT nFound = 0;
     ScViewData* pViewData = GetViewData();
     ScDocument* pDoc = pViewData->GetDocument();
 

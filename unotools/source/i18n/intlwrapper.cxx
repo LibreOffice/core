@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ void IntlWrapper::ImplNewCalendar() const
 }
 
 
-void IntlWrapper::ImplNewCollator( sal_Bool bCaseSensitive ) const
+void IntlWrapper::ImplNewCollator( BOOL bCaseSensitive ) const
 {
     CollatorWrapper* p = new CollatorWrapper( xSMgr );
     if ( bCaseSensitive )

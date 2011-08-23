@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
 #include <hintids.hxx>
+#include <tools/list.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <svx/htmlmode.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -65,8 +68,24 @@
 #include <table.hrc>
 #include "swtablerep.hxx"
 
+#ifdef DEBUG_TBLDLG
 
-SwTableRep::SwTableRep( const SwTabCols& rTabCol, sal_Bool bCplx )
+void DbgTColumn(TColumn* pTColumn, USHORT nCount)
+{
+    for(USHORT i = 0; i < nCount; i++)
+    {
+        String sMsg(i);
+        sMsg += pTColumn[i].bVisible ? " v " : " h ";
+        sMsg += pTColumn[i].nWidth;
+        OSL_ENSURE(false, sMsg);
+    }
+}
+#endif
+
+
+/*-----------------20.08.96 09.43-------------------
+--------------------------------------------------*/
+SwTableRep::SwTableRep( const SwTabCols& rTabCol, BOOL bCplx )
     :
     nTblWidth(0),
     nSpace(0),
@@ -75,15 +94,15 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol, sal_Bool bCplx )
     nAlign(0),
     nWidthPercent(0),
     bComplex(bCplx),
-    bLineSelected(sal_False),
-    bWidthChanged(sal_False),
-    bColsChanged(sal_False)
+    bLineSelected(FALSE),
+    bWidthChanged(FALSE),
+    bColsChanged(FALSE)
 {
     nAllCols = nColCount = rTabCol.Count();
     pTColumns = new TColumn[ nColCount + 1 ];
     SwTwips nStart = 0,
             nEnd;
-    for( sal_uInt16 i = 0; i < nAllCols; ++i )
+    for( USHORT i = 0; i < nAllCols; ++i )
     {
         nEnd  = rTabCol[ i ] - rTabCol.GetLeft();
         pTColumns[ i ].nWidth = nEnd - nStart;
@@ -93,30 +112,38 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol, sal_Bool bCplx )
         nStart = nEnd;
     }
     pTColumns[ nAllCols ].nWidth = rTabCol.GetRight() - rTabCol.GetLeft() - nStart;
-    pTColumns[ nAllCols ].bVisible = sal_True;
+    pTColumns[ nAllCols ].bVisible = TRUE;
     nColCount++;
     nAllCols++;
 }
 
+/*-----------------20.08.96 09.43-------------------
+--------------------------------------------------*/
 SwTableRep::~SwTableRep()
 {
     delete[] pTColumns;
 }
 
-sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
+/*-----------------20.08.96 13.33-------------------
+--------------------------------------------------*/
+BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
 {
     long nOldLeft = rTabCols.GetLeft(),
          nOldRight = rTabCols.GetRight();
 
-    sal_Bool bSingleLine = sal_False;
-    sal_uInt16 i;
+    BOOL bSingleLine = FALSE;
+    USHORT i;
 
     for ( i = 0; i < rTabCols.Count(); ++i )
         if(!pTColumns[i].bVisible)
         {
-            bSingleLine = sal_True;
+            bSingleLine = TRUE;
             break;
         }
+
+#ifdef DEBUG_TBLDLG
+#define DbgTColumn(pTColumns, nAllCols);
+#endif
 
     SwTwips nPos = 0;
     SwTwips nLeft = GetLeftSpace();
@@ -125,7 +152,7 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
     {
         // die unsichtbaren Trenner werden aus den alten TabCols genommen
         // die sichtbaren kommen aus pTColumns
-        TColumn*    pOldTColumns = new TColumn[nAllCols + 1];
+        TColumn* 	pOldTColumns = new TColumn[nAllCols + 1];
         SwTwips nStart = 0,
                 nEnd;
         for(i = 0; i < nAllCols - 1; i++)
@@ -136,14 +163,18 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
             nStart = nEnd;
         }
         pOldTColumns[nAllCols - 1].nWidth = rTabCols.GetRight() - rTabCols.GetLeft() - nStart;
-        pOldTColumns[nAllCols - 1].bVisible = sal_True;
+        pOldTColumns[nAllCols - 1].bVisible = TRUE;
 
-        sal_uInt16 nOldPos = 0;
-        sal_uInt16 nNewPos = 0;
+#ifdef DEBUG_TBLDLG
+#define DbgTColumn(pOldTColumns, nAllCols);
+#endif
+
+        USHORT nOldPos = 0;
+        USHORT nNewPos = 0;
         SwTwips nOld = 0;
         SwTwips nNew = 0;
-        sal_Bool bOld = sal_False;
-        sal_Bool bFirst = sal_True;
+        BOOL bOld = FALSE;
+        BOOL bFirst = TRUE;
         i = 0;
 
         while ( i < nAllCols -1 )
@@ -162,10 +193,10 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
                 if(pOldTColumns[nNewPos - 1].bVisible)
                     break;
             }
-            bFirst = sal_False;
+            bFirst = FALSE;
             // sie muessen sortiert eingefuegt werden
             bOld = nOld < nNew;
-            nPos = sal_uInt16(bOld ? nOld : nNew);
+            nPos = USHORT(bOld ? nOld : nNew);
             rTabCols[i] = nPos + nLeft;
             rTabCols.SetHidden( i, bOld );
             i++;

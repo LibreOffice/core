@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,17 +24,17 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #include "cuires.hrc"
 #include "thesdlg.hrc"
 #include "helpid.hrc"
 #include <svx/svxids.hrc> // SID_THESAURUS
-
+ 
 
  // RID_SVXDLG_THES -------------------------------------------------------
 ModalDialog RID_SVXDLG_THESAURUS
 {
-    HelpId = CMD_SID_THESAURUS ;
+    HelpId = SID_THESAURUS ;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 235, 230 ) ;
     Text [ en-US ] = "Thesaurus" ;
@@ -47,10 +47,9 @@ ModalDialog RID_SVXDLG_THESAURUS
         Size = MAP_APPFONT ( 235, 0  ) ;    // correct size will be applied at runtime
         Hide = TRUE;
     };
-
+    
     ImageButton BTN_LEFT
     {
-        HelpID = "cui:ImageButton:RID_SVXDLG_THESAURUS:BTN_LEFT";
         Pos = MAP_APPFONT ( 5 , 15 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         TABSTOP = TRUE ;
@@ -65,19 +64,17 @@ ModalDialog RID_SVXDLG_THESAURUS
     };
     ComboBox CB_WORD
     {
-        HelpID = "cui:ComboBox:RID_SVXDLG_THESAURUS:CB_WORD";
         DropDown = TRUE ;
         Pos = MAP_APPFONT ( 24 , 16 ) ;
-        Size = MAP_APPFONT ( 141 , 60 ) ;   // have drop down space for several lines
+        Size = MAP_APPFONT ( 141 , 60 ) ;   // have drop down space for several lines 
     };
     MenuButton MB_LANGUAGE
     {
-        HelpID = "cui:MenuButton:RID_SVXDLG_THESAURUS:MB_LANGUAGE";
         Pos = MAP_APPFONT ( 170 , 16 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Language" ;
     };
-
+    
     FixedText FT_THES_ALTERNATIVES
     {
         Pos = MAP_APPFONT ( 5 , 33 ) ;
@@ -103,7 +100,6 @@ ModalDialog RID_SVXDLG_THESAURUS
     };
     Edit ED_REPL
     {
-        HelpID = "cui:Edit:RID_SVXDLG_THESAURUS:ED_REPL";
         BORDER = TRUE ;
         Pos = MAP_APPFONT ( 5 , 184 ) ;
         Size = MAP_APPFONT ( 225 , 12 ) ;
@@ -141,6 +137,10 @@ ModalDialog RID_SVXDLG_THESAURUS
     Image IMG_DEFAULT_VENDOR
     {
         ImageBitmap = Bitmap { File = "vendor01.png"; };
+    };
+    Image IMG_DEFAULT_VENDOR_HC
+    {
+        ImageBitmap = Bitmap { File = "vendor01h.png"; };
     };
 };
 

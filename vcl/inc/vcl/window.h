@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #ifndef _SV_POINTR_HXX
 #include <vcl/pointr.hxx>
 #endif
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <vcl/vclevent.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -57,6 +57,7 @@ class VirtualDevice;
 class Cursor;
 class ImplDevFontList;
 class ImplFontCache;
+class SmartId;
 class VCLXWindow;
 class SalFrame;
 class SalObject;
@@ -99,24 +100,10 @@ namespace dnd {
     class XDropTarget;
 } } } } }
 
-namespace vcl {
-    struct ControlLayoutData;
-    struct ExtWindowImpl;
-}
+namespace vcl { struct ControlLayoutData; }
 
 
-// --------------
-// - Prototypes -
-// --------------
 
-long ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, const void* pEvent );
-
-// -----------
-// - HitTest -
-// -----------
-
-#define WINDOW_HITTEST_INSIDE           ((sal_uInt16)0x0001)
-#define WINDOW_HITTEST_TRANSPARENT      ((sal_uInt16)0x0002)
 
 // ---------------
 // - ImplWinData -
@@ -125,15 +112,17 @@ long ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, co
 struct ImplWinData
 {
     UniString*          mpExtOldText;
-    sal_uInt16*             mpExtOldAttrAry;
+    USHORT*             mpExtOldAttrAry;
     Rectangle*          mpCursorRect;
     long                mnCursorExtWidth;
     Rectangle*          mpFocusRect;
     Rectangle*          mpTrackRect;
-    sal_uInt16              mnTrackFlags;
-    sal_uInt16              mnIsTopWindow;
-    sal_Bool                mbMouseOver;          // tracks mouse over for native widget paint effect
-    sal_Bool                mbEnableNativeWidget; // toggle native widget rendering
+    USHORT              mnTrackFlags;
+    USHORT				mnIsTopWindow;
+    BOOL                mbMouseOver;          // tracks mouse over for native widget paint effect
+    BOOL                mbEnableNativeWidget; // toggle native widget rendering
+    SmartId*            mpSmartHelpId;
+    SmartId*            mpSmartUniqueId;
     ::std::list< Window* >
                         maTopWindowChildren;
 };
@@ -147,9 +136,9 @@ struct ImplOverlapData
     VirtualDevice*      mpSaveBackDev;      // Gesicherte Hintergrund-Bitmap
     Region*             mpSaveBackRgn;      // Gesicherte Region, was invalidiert werden muss
     Window*             mpNextBackWin;      // Naechstes Fenster mit Hintergrund-Sicherung
-    sal_uIntPtr               mnSaveBackSize;     // Groesse Bitmap fuer Hintergrund-Sicherung
-    sal_Bool                mbSaveBack;         // sal_True: Background sichern
-    sal_uInt8                mnTopLevel;         // Level for Overlap-Window
+    ULONG               mnSaveBackSize;     // Groesse Bitmap fuer Hintergrund-Sicherung
+    BOOL                mbSaveBack;         // TRUE: Background sichern
+    BYTE                mnTopLevel;         // Level for Overlap-Window
 };
 
 // -----------------
@@ -159,7 +148,7 @@ struct ImplOverlapData
 struct ImplFrameData
 {
     Timer               maPaintTimer;       // paint timer
-    Timer               maResizeTimer;      // resize timer
+    Timer				maResizeTimer;		// resize timer
     InputContext        maOldInputContext;  // Last set Input Context
     Window*             mpNextFrame;        // next frame window
     Window*             mpFirstOverlap;     // first overlap window
@@ -173,9 +162,9 @@ struct ImplFrameData
     sal_Int32           mnDPIX;             // Original Screen Resolution
     sal_Int32           mnDPIY;             // Original Screen Resolution
     ImplMapRes          maMapUnitRes;       // for LogicUnitToPixel
-    sal_uIntPtr               mnAllSaveBackSize;  // Groesse aller Bitmaps fuer Hintergrund-Sicherung
-    sal_uIntPtr               mnFocusId;          // FocusId for PostUserLink
-    sal_uIntPtr               mnMouseMoveId;      // MoveId for PostUserLink
+    ULONG               mnAllSaveBackSize;  // Groesse aller Bitmaps fuer Hintergrund-Sicherung
+    ULONG               mnFocusId;          // FocusId for PostUserLink
+    ULONG               mnMouseMoveId;      // MoveId for PostUserLink
     long                mnLastMouseX;       // last x mouse position
     long                mnLastMouseY;       // last y mouse position
     long                mnBeforeLastMouseX; // last but one x mouse position
@@ -184,23 +173,23 @@ struct ImplFrameData
     long                mnFirstMouseY;      // first y mouse position by mousebuttondown
     long                mnLastMouseWinX;    // last x mouse position, rel. to pMouseMoveWin
     long                mnLastMouseWinY;    // last y mouse position, rel. to pMouseMoveWin
-    sal_uInt16              mnModalMode;        // frame based modal count (app based makes no sense anymore)
-    sal_uIntPtr               mnMouseDownTime;    // mouse button down time for double click
-    sal_uInt16              mnClickCount;       // mouse click count
-    sal_uInt16              mnFirstMouseCode;   // mouse code by mousebuttondown
-    sal_uInt16              mnMouseCode;        // mouse code
-    sal_uInt16              mnMouseMode;        // mouse mode
+    USHORT              mnModalMode;        // frame based modal count (app based makes no sense anymore)
+    ULONG               mnMouseDownTime;    // mouse button down time for double click
+    USHORT              mnClickCount;       // mouse click count
+    USHORT              mnFirstMouseCode;   // mouse code by mousebuttondown
+    USHORT              mnMouseCode;        // mouse code
+    USHORT              mnMouseMode;        // mouse mode
     MapUnit             meMapUnit;          // last MapUnit for LogicUnitToPixel
-    sal_Bool                mbHasFocus;         // focus
-    sal_Bool                mbInMouseMove;      // is MouseMove on stack
-    sal_Bool                mbMouseIn;          // is Mouse inside the frame
-    sal_Bool                mbStartDragCalled;  // is command startdrag called
-    sal_Bool                mbNeedSysWindow;    // set, when FrameSize <= IMPL_MIN_NEEDSYSWIN
-    sal_Bool                mbMinimized;        // set, when FrameSize <= 0
-    sal_Bool                mbStartFocusState;  // FocusState, beim abschicken des Events
-    sal_Bool                mbInSysObjFocusHdl; // Innerhalb vom GetFocus-Handler eines SysChilds
-    sal_Bool                mbInSysObjToTopHdl; // Innerhalb vom ToTop-Handler eines SysChilds
-    sal_Bool                mbSysObjFocus;      // Hat ein SysChild den Focus
+    BOOL                mbHasFocus;         // focus
+    BOOL                mbInMouseMove;      // is MouseMove on stack
+    BOOL                mbMouseIn;          // is Mouse inside the frame
+    BOOL                mbStartDragCalled;  // is command startdrag called
+    BOOL                mbNeedSysWindow;    // set, when FrameSize <= IMPL_MIN_NEEDSYSWIN
+    BOOL                mbMinimized;        // set, when FrameSize <= 0
+    BOOL                mbStartFocusState;  // FocusState, beim abschicken des Events
+    BOOL                mbInSysObjFocusHdl; // Innerhalb vom GetFocus-Handler eines SysChilds
+    BOOL                mbInSysObjToTopHdl; // Innerhalb vom ToTop-Handler eines SysChilds
+    BOOL                mbSysObjFocus;      // Hat ein SysChild den Focus
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > mxDragSource;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > mxDropTarget;
@@ -208,26 +197,8 @@ struct ImplFrameData
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;
 
-    sal_Bool                mbInternalDragGestureRecognizer;
+    BOOL                mbInternalDragGestureRecognizer;
 };
-
-// -----------------------
-// - ImplAccessibleInfos -
-// -----------------------
-
-struct ImplAccessibleInfos
-{
-    sal_uInt16 nAccessibleRole;
-    String* pAccessibleName;
-    String* pAccessibleDescription;
-    Window* pLabeledByWindow;
-    Window* pLabelForWindow;
-    Window* pMemberOfWindow;
-
-    ImplAccessibleInfos();
-    ~ImplAccessibleInfos();
-};
-
 
 // ---------------
 // - WindowImpl -
@@ -265,11 +236,10 @@ public:
     VclEventListeners   maChildEventListeners;
 
     // The canvas interface for this VCL window. Is persistent after the first GetCanvas() call
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::rendering::XCanvas >    mxCanvas;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::rendering::XCanvas > 	mxCanvas;
 
     ImplDelData*        mpFirstDel;
     void*               mpUserData;
-    vcl::ExtWindowImpl* mpExtImpl;
     Cursor*             mpCursor;
     Pointer             maPointer;
     Fraction            maZoom;
@@ -285,8 +255,8 @@ public:
     long                mnY;
     long                mnAbsScreenX;
     Point               maPos;
-    rtl::OString        maHelpId;
-    rtl::OString        maUniqId;
+    ULONG               mnHelpId;
+    ULONG               mnUniqId;
     XubString           maHelpText;
     XubString           maQuickHelpText;
     InputContext        maInputContext;
@@ -305,15 +275,15 @@ public:
     WinBits             mnPrevExtendedStyle;
     WindowType          mnType;
     ControlPart         mnNativeBackground;
-    sal_uInt16              mnWaitCount;
-    sal_uInt16              mnPaintFlags;
-    sal_uInt16              mnGetFocusFlags;
-    sal_uInt16              mnParentClipMode;
-    sal_uInt16              mnActivateMode;
-    sal_uInt16              mnDlgCtrlFlags;
-    sal_uInt16              mnLockCount;
+    USHORT              mnWaitCount;
+    USHORT              mnPaintFlags;
+    USHORT              mnGetFocusFlags;
+    USHORT              mnParentClipMode;
+    USHORT              mnActivateMode;
+    USHORT              mnDlgCtrlFlags;
+    USHORT              mnLockCount;
     AlwaysInputMode     meAlwaysInputMode;
-    sal_Bool                mbFrame:1,
+    BOOL                mbFrame:1,
                         mbBorderWin:1,
                         mbOverlapWin:1,
                         mbSysWin:1,
@@ -386,8 +356,7 @@ public:
                         mbDisableAccessibleLabelForRelation:1,
                         mbDisableAccessibleLabeledByRelation:1,
                         mbHelpTextDynamic:1,
-                        mbFakeFocusSet:1,
-                        mbInterceptChildWindowKeyDown:1;
+                        mbFakeFocusSet:1;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };
@@ -396,9 +365,9 @@ public:
 // - Hilfsmethoden -
 // -----------------
 
-long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouseLeave,
-                           long nX, long nY, sal_uIntPtr nMsgTime,
-                           sal_uInt16 nCode, sal_uInt16 nMode );
+long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
+                           long nX, long nY, ULONG nMsgTime,
+                           USHORT nCode, USHORT nMode );
 void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );
 
 #endif // _SV_WINDOW_H

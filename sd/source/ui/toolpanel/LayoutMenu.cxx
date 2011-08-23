@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ private:
 };
 
 
-SFX_IMPL_INTERFACE(LayoutMenu, SfxShell,
+SFX_IMPL_INTERFACE(LayoutMenu, SfxShell, 
     SdResId(STR_TASKPANELAYOUTMENU))
 {
     SFX_POPUPMENU_REGISTRATION(SdResId(RID_TASKPANE_LAYOUTMENU_POPUP));
@@ -122,57 +122,58 @@ TYPEINIT1(LayoutMenu, SfxShell);
 
 struct snewfoil_value_info
 {
-    sal_uInt16 mnBmpResId;
-    sal_uInt16 mnStrResId;
+    USHORT mnBmpResId;
+    USHORT mnHCBmpResId;
+    USHORT mnStrResId;
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;
 };
 
 static snewfoil_value_info notes[] =
 {
-    {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
+    {BMP_FOILN_01, BMP_FOILN_01_H, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
      AUTOLAYOUT_NOTES},
-    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 static snewfoil_value_info handout[] =
 {
-    {BMP_FOILH_01, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB,
+    {BMP_FOILH_01, BMP_FOILH_01_H, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT1},
-    {BMP_FOILH_02, STR_AUTOLAYOUT_HANDOUT2, WritingMode_LR_TB,
+    {BMP_FOILH_02, BMP_FOILH_02_H, STR_AUTOLAYOUT_HANDOUT2, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT2},
-    {BMP_FOILH_03, STR_AUTOLAYOUT_HANDOUT3, WritingMode_LR_TB,
+    {BMP_FOILH_03, BMP_FOILH_03_H, STR_AUTOLAYOUT_HANDOUT3, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT3},
-    {BMP_FOILH_04, STR_AUTOLAYOUT_HANDOUT4, WritingMode_LR_TB,
+    {BMP_FOILH_04, BMP_FOILH_04_H, STR_AUTOLAYOUT_HANDOUT4, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT4},
-    {BMP_FOILH_06, STR_AUTOLAYOUT_HANDOUT6, WritingMode_LR_TB,
+    {BMP_FOILH_06, BMP_FOILH_06_H, STR_AUTOLAYOUT_HANDOUT6, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT6},
-    {BMP_FOILH_09, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
+    {BMP_FOILH_09, BMP_FOILH_09_H, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT9},
-    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 static snewfoil_value_info standard[] =
 {
-    {BMP_LAYOUT_EMPTY, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
-    {BMP_LAYOUT_HEAD03, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,       AUTOLAYOUT_TITLE},
-    {BMP_LAYOUT_HEAD02, STR_AUTOLAYOUT_CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_ENUM},
-    {BMP_LAYOUT_HEAD02A, STR_AUTOLAYOUT_2CONTENT, WritingMode_LR_TB,       AUTOLAYOUT_2TEXT},
-    {BMP_LAYOUT_HEAD01, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,  AUTOLAYOUT_ONLY_TITLE},
-    {BMP_LAYOUT_TEXTONLY, STR_AUTOLAYOUT_ONLY_TEXT, WritingMode_LR_TB,   AUTOLAYOUT_ONLY_TEXT},
-    {BMP_LAYOUT_HEAD03B, STR_AUTOLAYOUT_2CONTENT_CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_2OBJTEXT},
-    {BMP_LAYOUT_HEAD03C, STR_AUTOLAYOUT_CONTENT_2CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_TEXT2OBJ},
-    {BMP_LAYOUT_HEAD03A, STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT,WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT},
-    {BMP_LAYOUT_HEAD02B, STR_AUTOLAYOUT_CONTENT_OVER_CONTENT, WritingMode_LR_TB, AUTOLAYOUT_OBJOVERTEXT},
-    {BMP_LAYOUT_HEAD04, STR_AUTOLAYOUT_4CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_4OBJ},
-    {BMP_LAYOUT_HEAD06, STR_AUTOLAYOUT_6CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_6CLIPART},
+    {BMP_LAYOUT_EMPTY, BMP_LAYOUT_EMPTY_H, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
+    {BMP_LAYOUT_HEAD03, BMP_LAYOUT_HEAD03_H, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,       AUTOLAYOUT_TITLE},
+    {BMP_LAYOUT_HEAD02, BMP_LAYOUT_HEAD02_H, STR_AUTOLAYOUT_CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_ENUM},   
+    {BMP_LAYOUT_HEAD02A, BMP_LAYOUT_HEAD02A_H, STR_AUTOLAYOUT_2CONTENT, WritingMode_LR_TB,       AUTOLAYOUT_2TEXT},
+    {BMP_LAYOUT_HEAD01, BMP_LAYOUT_HEAD01_H, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,  AUTOLAYOUT_ONLY_TITLE},    
+    {BMP_LAYOUT_TEXTONLY, BMP_LAYOUT_TEXTONLY_H, STR_AUTOLAYOUT_ONLY_TEXT, WritingMode_LR_TB,   AUTOLAYOUT_ONLY_TEXT},
+    {BMP_LAYOUT_HEAD03B, BMP_LAYOUT_HEAD03B_H, STR_AUTOLAYOUT_2CONTENT_CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_2OBJTEXT},
+    {BMP_LAYOUT_HEAD03C, BMP_LAYOUT_HEAD03C_H, STR_AUTOLAYOUT_CONTENT_2CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_TEXT2OBJ},
+    {BMP_LAYOUT_HEAD03A, BMP_LAYOUT_HEAD03A_H, STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT,WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT},    
+    {BMP_LAYOUT_HEAD02B, BMP_LAYOUT_HEAD02B_H, STR_AUTOLAYOUT_CONTENT_OVER_CONTENT, WritingMode_LR_TB, AUTOLAYOUT_OBJOVERTEXT},
+    {BMP_LAYOUT_HEAD04, BMP_LAYOUT_HEAD04_H, STR_AUTOLAYOUT_4CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_4OBJ},   
+    {BMP_LAYOUT_HEAD06, BMP_LAYOUT_HEAD06_H, STR_AUTOLAYOUT_6CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_6CLIPART},
 
     // vertical
-    {BMP_LAYOUT_VERTICAL02, STR_AL_VERT_TITLE_TEXT_CHART, WritingMode_TB_RL,AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART},
-    {BMP_LAYOUT_VERTICAL01, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE},
-    {BMP_LAYOUT_HEAD02, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE},
-    {BMP_LAYOUT_HEAD02A, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART},
-    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
+    {BMP_LAYOUT_VERTICAL02, BMP_LAYOUT_VERTICAL02_H, STR_AL_VERT_TITLE_TEXT_CHART, WritingMode_TB_RL,AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART},
+    {BMP_LAYOUT_VERTICAL01, BMP_LAYOUT_VERTICAL01_H, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE},
+    {BMP_LAYOUT_HEAD02, BMP_LAYOUT_HEAD02_H, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE},
+    {BMP_LAYOUT_HEAD02A, BMP_LAYOUT_HEAD02A_H, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART},
+    {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
 LayoutMenu::LayoutMenu( TreeNode* pParent, ToolPanelViewShell& i_rPanelViewShell )
@@ -221,17 +222,17 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
         | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL
         | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER);
 
-    Window::SetHelpId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS);
+    SetSmartHelpId(SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS));
     SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
-
+    
     Link aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
     mxListener = new ::sd::tools::SlotStateListener(
         aStateChangeLink,
         Reference<frame::XDispatchProvider>(mrBase.GetController()->getFrame(), UNO_QUERY),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:VerticalTextState")));
+        ::rtl::OUString::createFromAscii(".uno:VerticalTextState"));
 
     // Add this new object as shell to the shell factory.
-    GetShellManager()->AddSubShell(SHELLID_SD_TASK_PANE_PREVIEW_LAYOUTS,this,this);
+    GetShellManager()->AddSubShell(HID_SD_TASK_PANE_PREVIEW_LAYOUTS,this,this);
 }
 
 
@@ -241,7 +242,7 @@ LayoutMenu::~LayoutMenu (void)
     // Tell the shell factory that this object is no longer available.
     if (GetShellManager() != NULL)
         GetShellManager()->RemoveSubShell(this);
-
+    
     Reference<lang::XComponent> xComponent (mxListener, UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
@@ -266,7 +267,7 @@ LayoutMenu::~LayoutMenu (void)
 AutoLayout LayoutMenu::GetSelectedAutoLayout (void)
 {
     AutoLayout aResult = AUTOLAYOUT_NONE;
-
+    
     if ( ! IsNoSelection() && GetSelectItemId()!=0)
     {
         AutoLayout* pLayout = static_cast<AutoLayout*>(GetItemData(GetSelectItemId()));
@@ -287,9 +288,9 @@ Size LayoutMenu::GetPreferredSize (void)
 {
     Size aItemSize = CalcItemSizePixel (Size());
     Size aPreferredWindowSize = CalcWindowSizePixel (
-        aItemSize,
-         (sal_uInt16)mnPreferredColumnCount,
-        (sal_uInt16)CalculateRowCount (aItemSize,mnPreferredColumnCount));
+        aItemSize, 
+         (USHORT)mnPreferredColumnCount,
+        (USHORT)CalculateRowCount (aItemSize,mnPreferredColumnCount));
     return aPreferredWindowSize;
 }
 
@@ -388,7 +389,7 @@ void LayoutMenu::UpdateEnabledState (const MasterMode eMode)
                 // expanded.
                 bIsEnabled = true;
                 break;
-
+                
             case ViewShell::ST_DRAW:
             case ViewShell::ST_IMPRESS:
             {
@@ -481,9 +482,9 @@ void LayoutMenu::Resize (void)
                 nColumnCount = 4;
 
             int nRowCount = CalculateRowCount (aItemSize, nColumnCount);
-
-            SetColCount ((sal_uInt16)nColumnCount);
-            SetLineCount ((sal_uInt16)nRowCount);
+            
+            SetColCount ((USHORT)nColumnCount);
+            SetLineCount ((USHORT)nRowCount);
         }
     }
 
@@ -500,11 +501,11 @@ void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
     if (rEvent.IsRight())
     {
         ReleaseMouse();
-        sal_uInt16 nIndex = GetItemId (rEvent.GetPosPixel());
+        USHORT nIndex = GetItemId (rEvent.GetPosPixel());
         if (nIndex > 0)
             SelectItem(nIndex);
     }
-
+    
     ValueSet::MouseButtonDown (rEvent);
 }
 
@@ -697,7 +698,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             pPageSelection.reset(new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
             pPageSelection->push_back(pMainViewShell->GetActualPage());
         }
-
+            
 
         if (pPageSelection->empty())
             break;
@@ -712,7 +713,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
                 SfxRequest aRequest (mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
                 aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATPAGE, ((*iPage)->GetPageNum()-1)/2));
                 aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
-                pMainViewShell->ExecuteSlot (aRequest, sal_Bool(sal_False));
+                pMainViewShell->ExecuteSlot (aRequest, BOOL(FALSE));
             }
     }
     while(false);
@@ -722,7 +723,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
 
 
 SfxRequest LayoutMenu::CreateRequest (
-    sal_uInt16 nSlotId,
+    USHORT nSlotId,
     AutoLayout aLayout)
 {
     SfxRequest aRequest (mrBase.GetViewFrame(), nSlotId);
@@ -730,10 +731,10 @@ SfxRequest LayoutMenu::CreateRequest (
     do
     {
         SdrLayerAdmin& rLayerAdmin (mrBase.GetDocument()->GetLayerAdmin());
-        sal_uInt8 aBackground (rLayerAdmin.GetLayerID(
-            String(SdResId(STR_LAYER_BCKGRND)), sal_False));
-        sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(
-            String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False));
+        BYTE aBackground (rLayerAdmin.GetLayerID(
+            String(SdResId(STR_LAYER_BCKGRND)), FALSE));
+        BYTE aBackgroundObject (rLayerAdmin.GetLayerID(
+            String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
         ViewShell* pViewShell = mrBase.GetMainViewShell().get();
         if (pViewShell == NULL)
             break;
@@ -742,7 +743,7 @@ SfxRequest LayoutMenu::CreateRequest (
             break;
 
         SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
-
+    
         aRequest.AppendItem(
             SfxStringItem (ID_VAL_PAGENAME, String()));//pPage->GetName()));
         aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
@@ -763,10 +764,11 @@ SfxRequest LayoutMenu::CreateRequest (
 
 void LayoutMenu::Fill (void)
 {
+    const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     SvtLanguageOptions aLanguageOptions;
     sal_Bool bVertical = aLanguageOptions.IsVerticalTextEnabled();
     SdDrawDocument* pDocument = mrBase.GetDocument();
-    sal_Bool bRightToLeft = (pDocument!=NULL
+    sal_Bool bRightToLeft = (pDocument!=NULL 
         && pDocument->GetDefaultWritingMode() == WritingMode_RL_TB);
 
     // Get URL of the view in the center pane.
@@ -784,7 +786,7 @@ void LayoutMenu::Fill (void)
     }
     catch (RuntimeException&)
     {}
-
+    
     snewfoil_value_info* pInfo = NULL;
     if (sCenterPaneViewName.equals(framework::FrameworkHelper::msNotesViewURL))
     {
@@ -810,8 +812,10 @@ void LayoutMenu::Fill (void)
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {
-            BitmapEx aBmp(SdResId(pInfo->mnBmpResId));
-
+            BitmapEx aBmp (SdResId (bHighContrast 
+                             ? pInfo->mnHCBmpResId 
+                             : pInfo->mnBmpResId));
+        
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
                 aBmp.Mirror (BMP_MIRROR_HORZ);
 
@@ -829,7 +833,7 @@ void LayoutMenu::Fill (void)
 
 void LayoutMenu::Clear (void)
 {
-    for (sal_uInt16 nId=1; nId<=GetItemCount(); nId++)
+    for (USHORT nId=1; nId<=GetItemCount(); nId++)
         delete static_cast<AutoLayout*>(GetItemData(nId));
     ValueSet::Clear();
 }
@@ -881,7 +885,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                     // When the command event was not caused by a mouse
                     // event (for example a key press instead) then show the
                     // popup menu at the center of the current item.
-                    if (GetSelectItemId() != (sal_uInt16)-1)
+                    if (GetSelectItemId() != (USHORT)-1)
                     {
                         Rectangle aBBox (GetItemRect(GetSelectItemId()));
                         Point aPosition (aBBox.Center());
@@ -922,7 +926,7 @@ void LayoutMenu::UpdateSelection (void)
         ViewShell* pViewShell = mrBase.GetMainViewShell().get();
         if (pViewShell == NULL)
             break;
-
+        
         SdPage* pCurrentPage = pViewShell->getCurrentPage();
         if (pCurrentPage == NULL)
             break;
@@ -933,8 +937,8 @@ void LayoutMenu::UpdateSelection (void)
             break;
 
         // Find the entry of the menu for to the layout.
-        sal_uInt16 nItemCount (GetItemCount());
-        for (sal_uInt16 nId=1; nId<=nItemCount; nId++)
+        USHORT nItemCount (GetItemCount());
+        for (USHORT nId=1; nId<=nItemCount; nId++)
         {
             if (*static_cast<AutoLayout*>(GetItemData(nId)) == aLayout)
             {

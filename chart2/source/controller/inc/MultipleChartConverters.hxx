@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ public:
     virtual ~AllAxisItemConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
+    virtual const USHORT * GetWhichPairs() const;
 };
 
 class AllGridItemConverter : public ::comphelper::MultipleItemConverter
@@ -72,7 +72,7 @@ public:
     virtual ~AllGridItemConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
+    virtual const USHORT * GetWhichPairs() const;
 };
 
 class AllDataLabelItemConverter : public ::comphelper::MultipleItemConverter
@@ -90,7 +90,7 @@ public:
     virtual ~AllDataLabelItemConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
+    virtual const USHORT * GetWhichPairs() const;
 };
 
 class AllTitleItemConverter : public ::comphelper::MultipleItemConverter
@@ -108,7 +108,7 @@ public:
     virtual ~AllTitleItemConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
+    virtual const USHORT * GetWhichPairs() const;
 };
 
 class AllSeriesStatisticsConverter : public ::comphelper::MultipleItemConverter
@@ -121,7 +121,7 @@ public:
     virtual ~AllSeriesStatisticsConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
+    virtual const USHORT * GetWhichPairs() const;
 };
 
 } //  namespace wrapper

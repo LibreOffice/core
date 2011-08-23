@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 STDMETHODIMP EmbedDocument_Impl::GetWindow(HWND *hWnd)
 {
     OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
-
+    
     *hWnd = m_pDocHolder->GetTopMostWinHandle();
     if(*hWnd != NULL)
         return NOERROR;
@@ -84,7 +84,7 @@ STDMETHODIMP EmbedDocument_Impl::UIDeactivate(void)
 STDMETHODIMP EmbedDocument_Impl::SetObjectRects(LPCRECT aRect, LPCRECT aClip)
 {
     OSL_ENSURE(m_pDocHolder,"no document for inplace activation");
-
+    
     return m_pDocHolder->SetObjectRects(aRect,aClip);
 }
 
@@ -93,7 +93,7 @@ STDMETHODIMP EmbedDocument_Impl::ReactivateAndUndo(void)
     return E_NOTIMPL;
 }
 
-// Fix strange warnings about some
+// Fix strange warnings about some 
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
 #if defined(_MSC_VER)

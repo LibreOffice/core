@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,31 +39,44 @@ class ScChartListenerCollection;
 class ScDocument;
 class Rectangle;
 
-struct ScMyToFixupOLE
+struct ScMyToResizeShape
 {
     com::sun::star::uno::Reference <com::sun::star::drawing::XShape> xShape;
-    rtl::OUString sRangeList;
+    rtl::OUString* pRangeList;
+    com::sun::star::table::CellAddress	aEndCell;
+    com::sun::star::table::CellAddress	aStartCell;
+    sal_Int32 nEndX;
+    sal_Int32 nEndY;
+
+    ScMyToResizeShape() : pRangeList(NULL) {}
 };
 
-typedef std::list<ScMyToFixupOLE> ScMyToFixupOLEs;
+typedef std::list<ScMyToResizeShape> ScMyToResizeShapes;
 
-class ScMyOLEFixer
+class ScMyShapeResizer
 {
-    ScXMLImport&                rImport;
-    ScMyToFixupOLEs             aShapes;
-    ScChartListenerCollection*  pCollection;
+    ScXMLImport&				rImport;
+    ScMyToResizeShapes			aShapes;
+    ScChartListenerCollection*	pCollection;
 
+    sal_Bool IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const;
     void CreateChartListener(ScDocument* pDoc,
         const rtl::OUString& rName,
-        const rtl::OUString& rRangeList);
+        const rtl::OUString* pRangeList);
+    void GetNewShapeSizePos(ScDocument* pDoc, const Rectangle& rStartRect,
+                            const com::sun::star::table::CellAddress& rEndCell,
+                            com::sun::star::awt::Point& rPoint, com::sun::star::awt::Size& rSize,
+                            sal_Int32& rEndX, sal_Int32& rEndY) const;
 public:
-    ScMyOLEFixer(ScXMLImport& rImport);
-    ~ScMyOLEFixer();
+    ScMyShapeResizer(ScXMLImport& rImport);
+    ~ScMyShapeResizer();
 
-    static sal_Bool IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape);
-    void    AddOLE(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
-                   const rtl::OUString &rRangeList);
-    void    FixupOLEs();
+    void	AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
+                    rtl::OUString* pRangeList,
+                    com::sun::star::table::CellAddress& rStartAddress,
+                    com::sun::star::table::CellAddress& rEndAddress,
+                    sal_Int32 nEndX, sal_Int32 nEndY);
+    void	ResizeShapes();
 };
 
 #endif

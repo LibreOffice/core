@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,13 +63,13 @@ sal_Int32 SAL_CALL
 Collator_Unicode::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,
     const OUString& str2, sal_Int32 off2, sal_Int32 len2) throw(RuntimeException)
 {
-    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()) + off1, len1, reinterpret_cast<const UChar *>(str2.getStr()) + off2, len2); // UChar != sal_Unicode in MinGW
+    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()) + off1, len1, reinterpret_cast<const UChar *>(str2.getStr()) + off2, len2);	// UChar != sal_Unicode in MinGW
 }
 
 sal_Int32 SAL_CALL
 Collator_Unicode::compareString( const OUString& str1, const OUString& str2) throw(RuntimeException)
 {
-    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), reinterpret_cast<const UChar *>(str2.getStr()));   // UChar != sal_Unicode in MinGW
+    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), reinterpret_cast<const UChar *>(str2.getStr()));	// UChar != sal_Unicode in MinGW
 }
 
 extern "C" { static void SAL_CALL thisModule() {} }
@@ -82,7 +82,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
         UErrorCode status = U_ZERO_ERROR;
         OUString rule = LocaleData().getCollatorRuleByAlgorithm(rLocale, rAlgorithm);
         if (rule.getLength() > 0) {
-            collator = new RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status);   // UChar != sal_Unicode in MinGW
+            collator = new RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status);	// UChar != sal_Unicode in MinGW
             if (! U_SUCCESS(status)) throw RuntimeException();
         }
         if (!collator && OUString::createFromAscii(LOCAL_RULE_LANGS).indexOf(rLocale.Language) >= 0) {
@@ -95,19 +95,19 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             if (hModule) {
                 const sal_uInt8* (*func)() = NULL;
                 aBuf.appendAscii("get_").append(rLocale.Language).appendAscii("_");
-                if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh"))) {
+                if (rLocale.Language.equalsAscii("zh")) {
                     OUString func_base = aBuf.makeStringAndClear();
-                    if (OUString(RTL_CONSTASCII_USTRINGPARAM("TW HK MO")).indexOf(rLocale.Country) >= 0)
-                        func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule,
-                                    (func_base + OUString(RTL_CONSTASCII_USTRINGPARAM("TW_")) + rAlgorithm).pData);
-                    if (!func)
+                    if (OUString::createFromAscii("TW HK MO").indexOf(rLocale.Country) >= 0)
+                        func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule, 
+                                    (func_base + OUString::createFromAscii("TW_") + rAlgorithm).pData);
+                    if (!func) 
                         func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule, (func_base + rAlgorithm).pData);
                 } else {
-                    if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja"))) {
+                    if (rLocale.Language.equalsAscii("ja")) {
                         // replace algrithm name to implementation name.
-                        if (rAlgorithm.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("phonetic (alphanumeric first)")) )
+                        if (rAlgorithm.equalsAscii("phonetic (alphanumeric first)") )
                             aBuf.appendAscii("phonetic_alphanumeric_first");
-                        else if (rAlgorithm.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("phonetic (alphanumeric last)")))
+                        else if (rAlgorithm.equalsAscii("phonetic (alphanumeric last)"))
                             aBuf.appendAscii("phonetic_alphanumeric_last");
                         else
                             aBuf.append(rAlgorithm);

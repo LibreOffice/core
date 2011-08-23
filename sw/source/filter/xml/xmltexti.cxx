@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,6 @@
 #include <ndole.hxx>
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>
-#include <switerator.hxx>
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
@@ -89,16 +88,16 @@ using namespace xml::sax;
 struct XMLServiceMapEntry_Impl
 {
     const sal_Char *sFilterService;
-    sal_Int32      nFilterServiceLen;
+    sal_Int32	   nFilterServiceLen;
 
-    sal_uInt32  n1;
-    sal_uInt16  n2, n3;
-    sal_uInt8   n4, n5, n6, n7, n8, n9, n10, n11;
+    sal_uInt32	n1;
+    sal_uInt16	n2, n3;
+    sal_uInt8	n4, n5, n6, n7, n8, n9, n10, n11;
 };
 
 #define SERVICE_MAP_ENTRY( app, s ) \
     { XML_IMPORT_FILTER_##app, sizeof(XML_IMPORT_FILTER_##app)-1, \
-      SO3_##s##_CLASSID }
+      SO3_##s##_CLASSID	}
 
 const XMLServiceMapEntry_Impl aServiceMap[] =
 {
@@ -154,7 +153,7 @@ static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObjec
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "Couldn't set visual area of the object!\n" );
+            OSL_ASSERT( "Couldn't set visual area of the object!\n" );
         }
     }
 }
@@ -177,8 +176,8 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
 
 SwXMLTextImportHelper::~SwXMLTextImportHelper()
 {
-    // the redline helper destructor sets properties on the document
-    // and may through an exception while doing so... catch this
+    // #90463# the redline helper destructor sets properties on the document
+    //         and may through an exception while doing so... catch this
     try
     {
         delete pRedlineHelper;
@@ -322,8 +321,9 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     {
         // check whether an object with this name already exists in the document
         String aName;
-        SwIterator<SwCntntNode,SwFmtColl> aIter( *pDoc->GetDfltGrfFmtColl() );
-        for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
+        SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
+        for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
+                pNd; pNd = (SwCntntNode*)aIter.Next() )
         {
             SwOLENode* pExistingOLENd = pNd->GetOLENode();
             if( pExistingOLENd )
@@ -331,7 +331,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                 ::rtl::OUString aExistingName = pExistingOLENd->GetOLEObj().GetCurrentPersistName();
                 if ( aExistingName.equals( aObjName ) )
                 {
-                    OSL_FAIL( "The document contains duplicate object references, means it is partially broken, please let developers know how this document was generated!\n" );
+                    OSL_ENSURE( sal_False, "The document contains duplicate object references, means it is partially broken, please let developers know how this document was generated!\n" );
 
                     ::rtl::OUString aTmpName = pDoc->GetPersist()->GetEmbeddedObjectContainer().CreateUniqueObjectName();
                     try
@@ -343,7 +343,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     }
                     catch ( uno::Exception& )
                     {
-                        OSL_FAIL( "Couldn't create a copy of the object!\n" );
+                        OSL_ENSURE( sal_False, "Couldn't create a copy of the object!\n" );
                     }
 
                     break;

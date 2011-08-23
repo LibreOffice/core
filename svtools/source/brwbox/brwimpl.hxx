@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace svt
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    AccessibleRef;
         typedef ::std::map< sal_Int32, AccessibleRef >                                              THeaderCellMap;
 
-        struct  THeaderCellMapFunctorDispose : ::std::unary_function<THeaderCellMap::value_type,void>
+        struct  THeaderCellMapFunctorDispose : ::std::unary_function<THeaderCellMap::value_type,void> 
         {
             inline void operator()(const THeaderCellMap::value_type& _aType)
             {
@@ -57,7 +57,7 @@ namespace svt
                     }
                     catch( const ::com::sun::star::uno::Exception& )
                     {
-                        OSL_FAIL( "THeaderCellMapFunctorDispose: caught an exception!" );
+                        OSL_ENSURE( sal_False, "THeaderCellMapFunctorDispose: caught an exception!" );
                     }
             }
         };
@@ -72,7 +72,7 @@ namespace svt
         BrowseBoxImpl() : m_pAccessible(NULL)
         {
         }
-
+        
 
         /// @see AccessibleBrowseBox::getHeaderBar
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-//      ohne precompiled Headers uebersetzen !!!
+//		ohne precompiled Headers uebersetzen !!!
 
 
 
@@ -53,9 +53,9 @@
 
 ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell ) :
-        SfxTabDialog        ( pParent, ScResId( RID_SCDLG_CHAR ), pAttr ),
-        rOutAttrs           ( *pAttr ),
-        rDocShell           ( *pDocShell )
+        SfxTabDialog		( pParent, ScResId( RID_SCDLG_CHAR ), pAttr ),
+        rOutAttrs			( *pAttr ),
+        rDocShell			( *pDocShell )
 {
     FreeResource();
 
@@ -66,7 +66,7 @@ ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
 
 // -----------------------------------------------------------------------
 
-void ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void __EXPORT ScCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch( nId )
@@ -94,8 +94,8 @@ void ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 // -----------------------------------------------------------------------
 
 ScParagraphDlg::ScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ) :
-        SfxTabDialog        ( pParent, ScResId( RID_SCDLG_PARAGRAPH ), pAttr ),
-        rOutAttrs           ( *pAttr )
+        SfxTabDialog		( pParent, ScResId( RID_SCDLG_PARAGRAPH ), pAttr ),
+        rOutAttrs			( *pAttr )
 {
     FreeResource();
 
@@ -112,7 +112,7 @@ ScParagraphDlg::ScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ) :
 
 // -----------------------------------------------------------------------
 
-void ScParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void __EXPORT ScParagraphDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     switch( nId )
     {

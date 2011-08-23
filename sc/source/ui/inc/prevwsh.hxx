@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,43 +50,43 @@ class CommandEvent;
 
 class ScPreviewShell: public SfxViewShell
 {
-    ScDocShell*     pDocShell;
+    ScDocShell*		pDocShell;
 
-    ScPreview*      pPreview;               // Ausgabe-Fenster
-    ScrollBar*      pHorScroll;
-    ScrollBar*      pVerScroll;
-    Window*         pCorner;
+    ScPreview*		pPreview;				// Ausgabe-Fenster
+    ScrollBar*		pHorScroll;
+    ScrollBar*		pVerScroll;
+    Window*			pCorner;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSourceData;  // ViewData
-    sal_uInt8           nSourceDesignMode;      // form design mode from TabView
-    SvxZoomType     eZoom;
+    BYTE			nSourceDesignMode;		// form design mode from TabView
+    SvxZoomType		eZoom;
     long            nMaxVertPos;
 
-    SfxBroadcaster* pAccessibilityBroadcaster;
+    SfxBroadcaster*	pAccessibilityBroadcaster;
 
 private:
-    void            Construct( Window* pParent );
+    void			Construct( Window* pParent );
     DECL_LINK(ScrollHandler, ScrollBar* );
-    void            DoScroll( sal_uInt16 nMode );
+    void			DoScroll( USHORT nMode );
 
 protected:
-    virtual void    Activate(sal_Bool bMDI);
-    virtual void    Deactivate(sal_Bool bMDI);
+    virtual void	Activate(BOOL bMDI);
+    virtual void	Deactivate(BOOL bMDI);
 
-    virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize );
+    virtual void	AdjustPosSizePixel( const Point &rPos, const Size &rSize );
 
-    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );
-    virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
+    virtual void	InnerResizePixel( const Point &rOfs, const Size &rSize );
+    virtual void	OuterResizePixel( const Point &rOfs, const Size &rSize );
 
-    virtual Size    GetOptimalSizePixel() const;
+    virtual Size	GetOptimalSizePixel() const;
 
     virtual String  GetDescription() const;
 
-    virtual void    WriteUserData(String &, sal_Bool bBrowse = false);
-    virtual void    ReadUserData(const String &, sal_Bool bBrowse = false);
+    virtual void	WriteUserData(String &, BOOL bBrowse = FALSE);
+    virtual void	ReadUserData(const String &, BOOL bBrowse = FALSE);
 
-    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = false );
-    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = false );
+    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
+    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
 
 public:
                     TYPEINFO();
@@ -94,39 +94,43 @@ public:
                     SFX_DECL_INTERFACE(SCID_PREVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScPreviewShell);
 
-                    ScPreviewShell( SfxViewFrame*           pViewFrame,
-                                    SfxViewShell*           pOldSh );
+                    ScPreviewShell( SfxViewFrame*			pViewFrame,
+                                    SfxViewShell*			pOldSh );
 
-    virtual         ~ScPreviewShell();
+    virtual			~ScPreviewShell();
 
-    void            InitStartTable(SCTAB nTab);
+    void			InitStartTable(SCTAB nTab);
 
-    void            UpdateScrollBars();
-    sal_Bool            ScrollCommand( const CommandEvent& rCEvt );
+    void			UpdateScrollBars();
+    BOOL			ScrollCommand( const CommandEvent& rCEvt );
 
-    void            Execute( SfxRequest& rReq );
-    void            GetState( SfxItemSet& rSet );
+    void			Execute( SfxRequest& rReq );
+    void			GetState( SfxItemSet& rSet );
 
-    void            FillFieldData( ScHeaderFieldData& rData );
+    void			FillFieldData( ScHeaderFieldData& rData );
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >
                     GetSourceData() const       { return aSourceData; }
-    sal_uInt8           GetSourceDesignMode() const { return nSourceDesignMode; }
+    BYTE			GetSourceDesignMode() const	{ return nSourceDesignMode; }
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = false );
-    virtual sal_uInt16          SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    virtual SfxPrinter*		GetPrinter( BOOL bCreate = FALSE );
+    virtual USHORT          SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    virtual PrintDialog*	CreatePrintDialog( Window* pParent );
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
+    virtual void			PreparePrint( PrintDialog* pPrintDialog = NULL );
+    virtual ErrCode         DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI );
+    virtual USHORT          Print( SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pPrintDialog = NULL );
 
-    void    AddAccessibilityObject( SfxListener& rObject );
-    void    RemoveAccessibilityObject( SfxListener& rObject );
-    void    BroadcastAccessibility( const SfxHint &rHint );
-    sal_Bool    HasAccessibilityObjects();
+    void	AddAccessibilityObject( SfxListener& rObject );
+    void	RemoveAccessibilityObject( SfxListener& rObject );
+    void	BroadcastAccessibility( const SfxHint &rHint );
+    BOOL	HasAccessibilityObjects();
 
     const ScPreviewLocationData& GetLocationData();
-    ScDocument*     GetDocument();
-    ScPreview*      GetPreview() { return pPreview; }
+    ScDocument*		GetDocument();
+    ScPreview*		GetPreview() { return pPreview; }
 };
 
 

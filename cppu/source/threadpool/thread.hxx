@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace cppu_threadpool {
     class JobQueue;
     class ThreadAdmin;
     typedef boost::shared_ptr<ThreadAdmin> ThreadAdminHolder;
-
+    
     //-----------------------------------------
     // private thread class for the threadpool
     // independent from vos
@@ -54,14 +54,14 @@ namespace cppu_threadpool {
         ~ORequestThread();
 
         void setTask( JobQueue * , const ::rtl::ByteSequence & aThreadId , sal_Bool bAsynchron );
-
+        
         sal_Bool create();
         void join();
         void onTerminated();
         void run();
         inline void setDeleteSelf( sal_Bool b )
             { m_bDeleteSelf = b; }
-
+        
     private:
         oslThread m_thread;
         ThreadAdminHolder m_aThreadAdmin;
@@ -88,6 +88,6 @@ namespace cppu_threadpool {
 } // end cppu_threadpool
 
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

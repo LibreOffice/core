@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,16 +29,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <UndoSection.hxx>
 
 #include <sfx2/linkmgr.hxx>
 #include <fmtcntnt.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>			// fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <UndoCore.hxx>
+#include <undobj.hxx>
 #include <section.hxx>
 #include <rolbck.hxx>
 #include <redline.hxx>
@@ -50,6 +49,8 @@
 #include <calc.hxx>
 
 
+inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
+
 SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 {
     // Attribute des Formate sichern (Spalten, Farbe, ... )
@@ -58,7 +59,7 @@ SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
     SfxItemSet* pAttr = 0;
     if( rSect.GetFmt() )
     {
-        sal_uInt16 nCnt = 1;
+        USHORT nCnt = 1;
         if( rSect.IsProtect() )
             ++nCnt;
 
@@ -122,9 +123,9 @@ SwUndoInsSection::~SwUndoInsSection()
 {
 }
 
-void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoInsSection::Undo( SwUndoIter& rUndoIter )
 {
-    SwDoc & rDoc = rContext.GetDoc();
+    SwDoc& rDoc = rUndoIter.GetDoc();
 
     RemoveIdxFromSection( rDoc, m_nSectionNodePos );
 
@@ -167,23 +168,25 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
         rDoc.GetFtnIdxs().UpdateFtn( aIdx );
     }
 
-    AddUndoRedoPaM(rContext);
+    SetPaM( rUndoIter );
 }
 
-void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
+
+void SwUndoInsSection::Redo( SwUndoIter& rUndoIter )
 {
-    SwDoc & rDoc = rContext.GetDoc();
-    SwPaM & rPam( AddUndoRedoPaM(rContext) );
+    SwDoc& rDoc = rUndoIter.GetDoc();
+    SetPaM( rUndoIter );
 
     const SwTOXBaseSection* pUpdateTOX = 0;
     if (m_pTOXBase.get())
     {
-        pUpdateTOX = rDoc.InsertTableOf( *rPam.GetPoint(),
+        pUpdateTOX = rDoc.InsertTableOf( *rUndoIter.pAktPam->GetPoint(),
                                         *m_pTOXBase, m_pAttrSet.get(), true);
     }
     else
     {
-        rDoc.InsertSwSection(rPam, *m_pSectionData, 0, m_pAttrSet.get(), true);
+        rDoc.InsertSwSection(*rUndoIter.pAktPam,
+                *m_pSectionData, 0, m_pAttrSet.get(), true);
     }
 
     if (m_pHistory.get())
@@ -222,22 +225,23 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
     }
 }
 
-void SwUndoInsSection::RepeatImpl(::sw::RepeatContext & rContext)
+
+void SwUndoInsSection::Repeat( SwUndoIter& rUndoIter )
 {
-    SwDoc & rDoc = rContext.GetDoc();
     if (m_pTOXBase.get())
     {
-        rDoc.InsertTableOf(*rContext.GetRepeatPaM().GetPoint(),
+        rUndoIter.GetDoc().InsertTableOf( *rUndoIter.pAktPam->GetPoint(),
                                         *m_pTOXBase, m_pAttrSet.get(), true);
     }
     else
     {
-        rDoc.InsertSwSection(rContext.GetRepeatPaM(),
+        rUndoIter.GetDoc().InsertSwSection( *rUndoIter.pAktPam,
             *m_pSectionData, 0, m_pAttrSet.get());
     }
 }
 
-void SwUndoInsSection::Join( SwDoc& rDoc, sal_uLong nNode )
+
+void SwUndoInsSection::Join( SwDoc& rDoc, ULONG nNode )
 {
     SwNodeIndex aIdx( rDoc.GetNodes(), nNode );
     SwTxtNode* pTxtNd = aIdx.GetNode().GetTxtNode();
@@ -291,17 +295,15 @@ private:
     ::std::auto_ptr<SwTOXBase> const m_pTOXBase; /// set iff section is TOX
     ::std::auto_ptr<SfxItemSet> const m_pAttrSet;
     ::boost::shared_ptr< ::sfx2::MetadatableUndo > const m_pMetadataUndo;
-    sal_uLong const m_nStartNode;
-    sal_uLong const m_nEndNode;
+    ULONG const m_nStartNode;
+    ULONG const m_nEndNode;
 
 public:
     SwUndoDelSection(
         SwSectionFmt const&, SwSection const&, SwNodeIndex const*const);
-
     virtual ~SwUndoDelSection();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void Undo( SwUndoIter& );
+    virtual void Redo( SwUndoIter& );
 };
 
 SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const& rFormat)
@@ -329,9 +331,9 @@ SwUndoDelSection::~SwUndoDelSection()
 {
 }
 
-void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
 {
-    SwDoc & rDoc = rContext.GetDoc();
+    SwDoc& rDoc = rUndoIter.GetDoc();
 
     if (m_pTOXBase.get())
     {
@@ -382,9 +384,9 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 }
 
-void SwUndoDelSection::RedoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoDelSection::Redo( SwUndoIter& rUndoIter )
 {
-    SwDoc & rDoc = rContext.GetDoc();
+    SwDoc& rDoc = rUndoIter.GetDoc();
 
     SwSectionNode *const pNd =
         rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
@@ -402,17 +404,15 @@ class SwUndoUpdateSection
 private:
     ::std::auto_ptr<SwSectionData> m_pSectionData;
     ::std::auto_ptr<SfxItemSet> m_pAttrSet;
-    sal_uLong const m_nStartNode;
+    ULONG const m_nStartNode;
     bool const m_bOnlyAttrChanged;
 
 public:
     SwUndoUpdateSection(
         SwSection const&, SwNodeIndex const*const, bool const bOnlyAttr);
-
     virtual ~SwUndoUpdateSection();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void Undo( SwUndoIter& );
+    virtual void Redo( SwUndoIter& );
 };
 
 SW_DLLPRIVATE SwUndo *
@@ -437,9 +437,9 @@ SwUndoUpdateSection::~SwUndoUpdateSection()
 {
 }
 
-void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoUpdateSection::Undo( SwUndoIter& rUndoIter )
 {
-    SwDoc & rDoc = rContext.GetDoc();
+    SwDoc& rDoc = rUndoIter.GetDoc();
     SwSectionNode *const pSectNd =
         rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
     OSL_ENSURE( pSectNd, "wo ist mein SectionNode?" );
@@ -453,7 +453,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
         // das Content- und Protect-Item muss bestehen bleiben
         const SfxPoolItem* pItem;
         m_pAttrSet->Put( pFmt->GetFmtAttr( RES_CNTNT ));
-        if( SFX_ITEM_SET == pFmt->GetItemState( RES_PROTECT, sal_True, &pItem ))
+        if( SFX_ITEM_SET == pFmt->GetItemState( RES_PROTECT, TRUE, &pItem ))
         {
             m_pAttrSet->Put( *pItem );
         }
@@ -493,9 +493,9 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 }
 
-void SwUndoUpdateSection::RedoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoUpdateSection::Redo( SwUndoIter& rUndoIter )
 {
-    UndoImpl(rContext);
+    Undo( rUndoIter );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

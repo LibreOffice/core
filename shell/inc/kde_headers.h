@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,8 +31,6 @@
 
 /* ********* Suppress warnings if needed */
 #include "sal/config.h"
-
-#include <cstddef>
 
 #if defined __GNUC__
 #pragma GCC system_header
@@ -92,6 +90,7 @@
 #include <kabc/addressee.h>
 #include <kabc/field.h>
 #include <kabc/stdaddressbook.h>
+
 
 #endif
 

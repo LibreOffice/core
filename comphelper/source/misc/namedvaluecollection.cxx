@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <functional>
 #include <algorithm>
 
@@ -66,7 +66,7 @@ namespace comphelper
     //====================================================================
     //= NamedValueCollection_Impl
     //====================================================================
-    typedef ::boost::unordered_map< ::rtl::OUString, Any, ::rtl::OUStringHash >    NamedValueRepository;
+    typedef ::std::hash_map< ::rtl::OUString, Any, ::rtl::OUStringHash >    NamedValueRepository;
 
     struct NamedValueCollection_Impl
     {
@@ -100,7 +100,21 @@ namespace comphelper
     NamedValueCollection::NamedValueCollection( const Any& _rElements )
         :m_pImpl( new NamedValueCollection_Impl )
     {
-        impl_assign( _rElements );
+        Sequence< NamedValue > aNamedValues;
+        Sequence< PropertyValue > aPropertyValues;
+        NamedValue aNamedValue;
+        PropertyValue aPropertyValue;
+
+        if ( _rElements >>= aNamedValues )
+            impl_assign( aNamedValues );
+        else if ( _rElements >>= aPropertyValues )
+            impl_assign( aPropertyValues );
+        else if ( _rElements >>= aNamedValue )
+            impl_assign( Sequence< NamedValue >( &aNamedValue, 1 ) );
+        else if ( _rElements >>= aPropertyValue )
+            impl_assign( Sequence< PropertyValue >( &aPropertyValue, 1 ) );
+        else
+            OSL_ENSURE( !_rElements.hasValue(), "NamedValueCollection::NamedValueCollection(Any): unsupported type!" );
     }
 
     //--------------------------------------------------------------------
@@ -157,37 +171,6 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    ::std::vector< ::rtl::OUString > NamedValueCollection::getNames() const
-    {
-        ::std::vector< ::rtl::OUString > aNames;
-        for ( NamedValueRepository::const_iterator it = m_pImpl->aValues.begin(), end = m_pImpl->aValues.end(); it != end; ++it )
-        {
-            aNames.push_back( it->first );
-        }
-        return aNames;
-    }
-
-    //--------------------------------------------------------------------
-    void NamedValueCollection::impl_assign( const Any& i_rWrappedElements )
-    {
-        Sequence< NamedValue > aNamedValues;
-        Sequence< PropertyValue > aPropertyValues;
-        NamedValue aNamedValue;
-        PropertyValue aPropertyValue;
-
-        if ( i_rWrappedElements >>= aNamedValues )
-            impl_assign( aNamedValues );
-        else if ( i_rWrappedElements >>= aPropertyValues )
-            impl_assign( aPropertyValues );
-        else if ( i_rWrappedElements >>= aNamedValue )
-            impl_assign( Sequence< NamedValue >( &aNamedValue, 1 ) );
-        else if ( i_rWrappedElements >>= aPropertyValue )
-            impl_assign( Sequence< PropertyValue >( &aPropertyValue, 1 ) );
-        else
-            OSL_ENSURE( !i_rWrappedElements.hasValue(), "NamedValueCollection::impl_assign(Any): unsupported type!" );
-    }
-
-    //--------------------------------------------------------------------
     void NamedValueCollection::impl_assign( const Sequence< Any >& _rArguments )
     {
         {
@@ -212,7 +195,7 @@ namespace comphelper
                 ::rtl::OStringBuffer message;
                 message.append( "NamedValueCollection::impl_assign: encountered a value type which I cannot handle:\n" );
                 message.append( ::rtl::OUStringToOString( pArgument->getValueTypeName(), RTL_TEXTENCODING_ASCII_US ) );
-                OSL_FAIL( message.makeStringAndClear() );
+                OSL_ENSURE( false, message.makeStringAndClear() );
             }
 #endif
         }
@@ -330,7 +313,7 @@ namespace comphelper
             NamedValue operator()( const NamedValueRepository::value_type& _rValue )
             {
                 return NamedValue( _rValue.first, _rValue.second );
-            }
+            }                                     
         };
     }
 

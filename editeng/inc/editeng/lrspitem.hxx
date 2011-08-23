@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,97 +40,98 @@ namespace rtl
 
 // class SvxLRSpaceItem --------------------------------------------------
 
-/*  [Description]
+/*
+[Beschreibung]
+Linker/Rechter Rand sowie Erstzeileneinzug
 
-    Left/Right margin and first line indent
+SvxLRSpaceItem bietet zwei Schnittstellen zur Befragung des linken
+Randes und des Erstzeileneinzuges an. Die Get-Methoden liefern
+die Member zurueck, wie sie das Layout bisher auch erwartete:
+Der linke Rand verschiebt sich beim negativem Erstzeileneinzug
+nach links. Die SetTxt/GetTxt-Methoden setzen voraus, dass der
+linke Rand der 0-Punkt des Erstzeileneinzugs darstellt:
 
-    SvxLRSpaceItem offers two interfaces for views from the left margin and
-    first line indent. The get methods return the member, with the layout also
-    as expected: the left edge shifts to the negative first line indent to the
-    left. The SetTxt/Gettxt methods assume that the left side represents the
-    0 coordinate for the first line indent:
-
-    UI         UI       LAYOUT   UI/TEXT      UI/TEXT    (Where?)
-    SetTxtLeft SetTxtFirst GetLeft  GetTxtLeft  GetTxtFirst  (What?)
-    500       -500        0        500         -500      (How much?)
+     UI         UI       LAYOUT   UI/TEXT      UI/TEXT    (Wo?)
+SetTxtLeft SetTxtFirst GetLeft  GetTxtLeft  GetTxtFirst  (Was?)
+    500       -500        0        500         -500      (Wieviel?)
     500         0        500       500           0
     500       +500       500       500         +500
     700       -500       200       700         -500
 */
 
-#define LRSPACE_16_VERSION      ((sal_uInt16)0x0001)
-#define LRSPACE_TXTLEFT_VERSION ((sal_uInt16)0x0002)
-#define LRSPACE_AUTOFIRST_VERSION ((sal_uInt16)0x0003)
-#define LRSPACE_NEGATIVE_VERSION ((sal_uInt16)0x0004)
+#define	LRSPACE_16_VERSION		((USHORT)0x0001)
+#define	LRSPACE_TXTLEFT_VERSION	((USHORT)0x0002)
+#define	LRSPACE_AUTOFIRST_VERSION ((USHORT)0x0003)
+#define	LRSPACE_NEGATIVE_VERSION ((USHORT)0x0004)
 
 class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
 {
-    short   nFirstLineOfst;     // First-line indent _always_ relative to nTxtLeft
-    long    nTxtLeft;           // We spend a sal_uInt16
-    long    nLeftMargin;        // nLeft or the negative first-line indent
-    long    nRightMargin;       // The unproblematic right edge
+    short	nFirstLineOfst;     // Erstzeileneinzug _immer_ relativ zu nTxtLeft
+    long	nTxtLeft;           // wir spendieren einen USHORT
+    long	nLeftMargin;        // nLeft oder der neg. Erstzeileneinzug
+    long	nRightMargin;		// der unproblematische rechte Rand
 
-    sal_uInt16  nPropFirstLineOfst, nPropLeftMargin, nPropRightMargin;
-    sal_Bool    bAutoFirst  : 1;    // Automatic calculation of the first line indent
+    USHORT	nPropFirstLineOfst, nPropLeftMargin, nPropRightMargin;
+    BOOL 	bAutoFirst	: 1;	// Automatische Berechnung der Erstzeileneinzugs
 
-    void   AdjustLeft();        // nLeftMargin and nTxtLeft are being adjusted.
+    void   AdjustLeft();		// nLeftMargin und nTxtLeft werden angepasst.
 
 public:
     TYPEINFO();
 
-    SvxLRSpaceItem( const sal_uInt16 nId  );
+    SvxLRSpaceItem( const USHORT nId  );
     SvxLRSpaceItem( const long nLeft, const long nRight,
                     const long nTLeft /*= 0*/, const short nOfset /*= 0*/,
-                    const sal_uInt16 nId  );
+                    const USHORT nId  );
     inline SvxLRSpaceItem& operator=( const SvxLRSpaceItem &rCpy );
 
-    // "pure virtual Methods" from SfxPoolItem
-    virtual int              operator==( const SfxPoolItem& ) const;
+    // "pure virtual Methoden" vom SfxPoolItem
+    virtual int 			 operator==( const SfxPoolItem& ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
-    virtual bool                 ScaleMetrics( long nMult, long nDiv );
-    virtual bool                 HasMetrics() const;
+    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	 Create(SvStream &, USHORT) const;
+    virtual SvStream&		 Store(SvStream &, USHORT nItemVersion ) const;
+    virtual USHORT			 GetVersion( USHORT nFileVersion ) const;
+    virtual bool             ScaleMetrics( long nMult, long nDiv );
+    virtual	bool             HasMetrics() const;
 
     // Die "Layout-Schnittstelle":
-    inline void   SetLeft ( const long nL, const sal_uInt16 nProp = 100 );
-    inline void   SetRight( const long nR, const sal_uInt16 nProp = 100 );
+    inline void   SetLeft ( const long nL, const USHORT nProp = 100 );
+    inline void   SetRight( const long nR, const USHORT nProp = 100 );
 
-    // Query/direct setting of the absolute values
+    // abfragen / direktes setzen der absoluten Werte
     inline long GetLeft()  const { return nLeftMargin; }
     inline long GetRight() const { return nRightMargin;}
     inline void SetLeftValue( const long nL ) { nTxtLeft = nLeftMargin = nL; }
     inline void SetRightValue( const long nR ) { nRightMargin = nR; }
-    inline sal_Bool IsAutoFirst()  const { return bAutoFirst; }
-    inline void SetAutoFirst( const sal_Bool bNew ) { bAutoFirst = bNew; }
+    inline BOOL IsAutoFirst()  const { return bAutoFirst; }
+    inline void SetAutoFirst( const BOOL bNew ) { bAutoFirst = bNew; }
 
-    // Query/Setting the percentage values
-    inline void SetPropLeft( const sal_uInt16 nProp = 100 )
+    // abfragen / setzen der Prozent-Werte
+    inline void SetPropLeft( const USHORT nProp = 100 )
                     { nPropLeftMargin = nProp; }
-    inline void SetPropRight( const sal_uInt16 nProp = 100 )
+    inline void SetPropRight( const USHORT nProp = 100 )
                     { nPropRightMargin = nProp;}
-    inline sal_uInt16 GetPropLeft()  const { return nPropLeftMargin; }
-    inline sal_uInt16 GetPropRight() const { return nPropRightMargin;}
+    inline USHORT GetPropLeft()  const { return nPropLeftMargin; }
+    inline USHORT GetPropRight() const { return nPropRightMargin;}
 
-    // The UI/text interface:
-    inline void SetTxtLeft( const long nL, const sal_uInt16 nProp = 100 );
+    // Die "UI/Text-Schnittstelle":
+    inline void SetTxtLeft( const long nL, const USHORT nProp = 100 );
     inline long GetTxtLeft() const { return nTxtLeft; }
 
-    inline void   SetTxtFirstLineOfst( const short nF, const sal_uInt16 nProp = 100 );
+    inline void   SetTxtFirstLineOfst( const short nF, const USHORT nProp = 100 );
     inline short  GetTxtFirstLineOfst() const { return nFirstLineOfst; }
-    inline void SetPropTxtFirstLineOfst( const sal_uInt16 nProp = 100 )
+    inline void SetPropTxtFirstLineOfst( const USHORT nProp = 100 )
                     { nPropFirstLineOfst = nProp; }
-    inline sal_uInt16 GetPropTxtFirstLineOfst() const
+    inline USHORT GetPropTxtFirstLineOfst() const
                     { return nPropFirstLineOfst; }
     inline void SetTxtFirstLineOfstValue( const short nValue )
                     { nFirstLineOfst = nValue; }
@@ -149,26 +150,26 @@ inline SvxLRSpaceItem &SvxLRSpaceItem::operator=( const SvxLRSpaceItem &rCpy )
     return *this;
 }
 
-inline void SvxLRSpaceItem::SetLeft( const long nL, const sal_uInt16 nProp )
+inline void SvxLRSpaceItem::SetLeft( const long nL, const USHORT nProp )
 {
     nLeftMargin = (nL * nProp) / 100;
     nTxtLeft = nLeftMargin;
     nPropLeftMargin = nProp;
 }
-inline void SvxLRSpaceItem::SetRight( const long nR, const sal_uInt16 nProp )
+inline void SvxLRSpaceItem::SetRight( const long nR, const USHORT nProp )
 {
     nRightMargin = (nR * nProp) / 100;
     nPropRightMargin = nProp;
 }
 inline void SvxLRSpaceItem::SetTxtFirstLineOfst( const short nF,
-                                                 const sal_uInt16 nProp )
+                                                 const USHORT nProp )
 {
     nFirstLineOfst = short((long(nF) * nProp ) / 100);
     nPropFirstLineOfst = nProp;
     AdjustLeft();
 }
 
-inline void SvxLRSpaceItem::SetTxtLeft( const long nL, const sal_uInt16 nProp )
+inline void SvxLRSpaceItem::SetTxtLeft( const long nL, const USHORT nProp )
 {
     nTxtLeft = (nL * nProp) / 100;
     nPropLeftMargin = nProp;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,14 +57,14 @@ OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, O
     SetBufferedOverlayAllowed(true);
     SetPageBorderVisible(false);
     SetBordVisible();
-    SetQuickTextEditMode(sal_False);
+    SetQuickTextEditMode(FALSE);
 }
 
 //----------------------------------------------------------------------------
 
 OSectionView::~OSectionView()
 {
-    DBG_DTOR( rpt_OSectionView,NULL);
+    DBG_DTOR( rpt_OSectionView,NULL);	
 }
 
 //----------------------------------------------------------------------------
@@ -73,9 +73,10 @@ void OSectionView::MarkListHasChanged()
 {
     DBG_CHKTHIS( rpt_OSectionView,NULL);
     SdrView::MarkListHasChanged();
-
+    
     if ( m_pReportWindow && m_pSectionWindow && !m_pSectionWindow->getPage()->getSpecialMode() )
     {
+        //m_pReportWindow->unmarkAllObjects(this); // WHY
         DlgEdHint aHint( RPTUI_HINT_SELECTIONCHANGED );
         m_pReportWindow->getReportView()->Broadcast( aHint );
         m_pReportWindow->getReportView()->UpdatePropertyBrowserDelayed(*this);
@@ -162,16 +163,16 @@ void OSectionView::ObjectRemovedInAliveMode( const SdrObject* _pObject )
 {
     DBG_CHKTHIS( rpt_OSectionView,NULL);
     const SdrMarkList& rMarkedList = GetMarkedObjectList();
-    const sal_uLong nMark = rMarkedList.GetMarkCount();
+    const ULONG nMark = rMarkedList.GetMarkCount();
 
-    for( sal_uLong i = 0; i < nMark; i++ )
+    for( ULONG i = 0; i < nMark; i++ )
     {
         SdrObject* pSdrObj = rMarkedList.GetMark(i)->GetMarkedSdrObj();
         if (_pObject == pSdrObj)
         {
             SdrPageView*    pPgView = GetSdrPageView();
             BrkAction();
-            MarkObj( pSdrObj, pPgView, sal_True );
+            MarkObj( pSdrObj, pPgView, TRUE );
             break;
         }
     }
@@ -182,13 +183,13 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 {
     if (AreObjectsMarked())
     {
-        //  #i11702# use SdrUndoObjectLayerChange for undo
-        //  STR_UNDO_SELATTR is "Attributes" - should use a different text later
+        //	#i11702# use SdrUndoObjectLayerChange for undo
+        //	STR_UNDO_SELATTR is "Attributes" - should use a different text later
         BegUndo( );
 
         const SdrMarkList& rMark = GetMarkedObjectList();
-        sal_uLong nCount = rMark.GetMarkCount();
-        for (sal_uLong i=0; i<nCount; i++)
+        ULONG nCount = rMark.GetMarkCount();
+        for (ULONG i=0; i<nCount; i++)
         {
             SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
             if ( pObj->ISA(OCustomShape) )
@@ -209,7 +210,7 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 
         EndUndo();
 
-        // check mark list now instead of later in a timer
+        //	#84073# check mark list now instead of later in a timer
         CheckMarked();
         MarkListHasChanged();
     }
@@ -218,10 +219,10 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 bool OSectionView::OnlyShapesMarked() const
 {
     const SdrMarkList& rMark = GetMarkedObjectList();
-    const sal_uLong nCount = rMark.GetMarkCount();
+    const ULONG nCount = rMark.GetMarkCount();
     if ( !nCount )
         return false;
-    sal_uLong i=0;
+    ULONG i=0;
     for (; i<nCount; i++)
     {
         SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
@@ -229,7 +230,7 @@ bool OSectionView::OnlyShapesMarked() const
         {
             break;
         }
-    }
+    } // for (ULONG i=0; i<nCount; i++)
     return i == nCount;
 }
 
@@ -253,7 +254,7 @@ short OSectionView::GetLayerIdOfMarkedObjects() const
 {
     short nRet = SHRT_MAX;
     const SdrMarkList &rMrkList = GetMarkedObjectList();
-    for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+    for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
         const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         if ( nRet == SHRT_MAX )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,8 @@
 #ifndef _CLONELIST_HXX_
 #define _CLONELIST_HXX_
 
-#include <vector>
-
 #include <sal/types.h>
+#include <tools/list.hxx>
 
 // predeclarations
 class SdrObject;
@@ -40,10 +39,12 @@ class SdrObject;
 // re-creating the connections for contained connectors
 class CloneList
 {
-    std::vector<const SdrObject*> maOriginalList;
-    std::vector<SdrObject*> maCloneList;
+    List						maOriginalList;
+    List						maCloneList;
 
 public:
+    CloneList();
+    ~CloneList();
 
     void AddPair(const SdrObject* pOriginal, SdrObject* pClone);
     sal_uInt32 Count() const;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ public:
 
     SfxStringItem() {}
 
-    SfxStringItem(sal_uInt16 which, const XubString & rValue):
+    SfxStringItem(USHORT which, const XubString & rValue):
         CntUnencodedStringItem(which, rValue) {}
 
-    SfxStringItem(sal_uInt16 nWhich, SvStream & rStream);
+    SfxStringItem(USHORT nWhich, SvStream & rStream);
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const;
 
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
+    virtual SvStream & Store(SvStream & rStream, USHORT) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,16 +53,17 @@ using namespace com::sun::star;
 
 //==================================================================
 
-sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool bAllCharts )
+// static
+USHORT ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL bAllCharts )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return 0;
 
-    sal_uInt16 nFound = 0;
+    USHORT nFound = 0;
 
-    sal_uInt16 nPageCount = pModel->GetPageCount();
-    for (sal_uInt16 nPageNo=0; nPageNo<nPageCount; nPageNo++)
+    USHORT nPageCount = pModel->GetPageCount();
+    for (USHORT nPageNo=0; nPageNo<nPageCount; nPageNo++)
     {
         SdrPage* pPage = pModel->GetPage(nPageNo);
         DBG_ASSERT(pPage,"Page ?");
@@ -74,12 +75,12 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sa
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart( pObject ) )
             {
                 String aName = ((SdrOle2Obj*)pObject)->GetPersistName();
-                sal_Bool bHit = sal_True;
+                BOOL bHit = TRUE;
                 if ( !bAllCharts )
                 {
                     ScRangeList aRanges;
-                    sal_Bool bColHeaders = false;
-                    sal_Bool bRowHeaders = false;
+                    BOOL bColHeaders = FALSE;
+                    BOOL bRowHeaders = FALSE;
                     pDoc->GetOldChartParameters( aName, aRanges, bColHeaders, bRowHeaders );
                     bHit = aRanges.In( rPos );
                 }

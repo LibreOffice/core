@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
 
-extern SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pModel );
+extern SdrOutliner* SdrMakeOutliner( USHORT nOutlinerMode, SdrModel* pModel );
 
 SdrOutlinerCache::SdrOutlinerCache( SdrModel* pModel )
-:   mpModel( pModel ),
+:	mpModel( pModel ),
     mpModeOutline( NULL ),
     mpModeText( NULL )
 {
@@ -86,7 +86,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
 {
     if( pOutliner )
     {
-        sal_uInt16 nOutlMode = pOutliner->GetOutlinerMode();
+        USHORT nOutlMode = pOutliner->GetOutlinerMode();
 
         if( (OUTLINERMODE_OUTLINEOBJECT == nOutlMode) && (NULL == mpModeOutline) )
         {

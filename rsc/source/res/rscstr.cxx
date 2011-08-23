@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,11 @@
 /****************** R s c S t r i n g ************************************/
 /*************************************************************************
 |*
-|*    RscString::RscString()
+|*	  RscString::RscString()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.04.91
+|*	  Letzte Aenderung	MM 25.04.91
 |*
 *************************************************************************/
 RscString::RscString( Atom nId, sal_uInt32 nTypeId )
@@ -58,7 +62,11 @@ RscString::RscString( Atom nId, sal_uInt32 nTypeId )
 
 /*************************************************************************
 |*
-|*    RscString::GetClassType()
+|*	  RscString::GetClassType()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.04.91
+|*	  Letzte Aenderung	MM 25.04.91
 |*
 *************************************************************************/
 RSCCLASS_TYPE RscString::GetClassType() const
@@ -68,15 +76,19 @@ RSCCLASS_TYPE RscString::GetClassType() const
 
 /*************************************************************************
 |*
-|*    RscString::SetNumber()
+|*	  RscString::SetNumber()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.04.91
+|*	  Letzte Aenderung	MM 25.04.91
 |*
 *************************************************************************/
 ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr ){
-    char    * pTmp;
+    char	* pTmp;
     ERRTYPE aError;
 
     if( aError.IsOk() ){
-        ((RscStringInst *)rInst.pData)->bDflt = sal_False;
+        ((RscStringInst *)rInst.pData)->bDflt = FALSE;
 
         pTmp = ((RscStringInst *)rInst.pData)->pStr;
         if( pTmp ){
@@ -85,7 +97,7 @@ ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr ){
         }
 
         if( pStr ){
-            sal_uInt32  nLen = strlen( pStr ) +1;
+            sal_uInt32	nLen = strlen( pStr ) +1;
             pTmp = (char *)rtl_allocateMemory( nLen );
             memcpy( pTmp, pStr, nLen );
         };
@@ -98,7 +110,11 @@ ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr ){
 
 /*************************************************************************
 |*
-|*    RscString::GetString()
+|*	  RscString::GetString()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.04.91
+|*	  Letzte Aenderung	MM 25.04.91
 |*
 *************************************************************************/
 ERRTYPE RscString::GetString( const RSCINST & rInst, char ** ppStr ){
@@ -108,7 +124,11 @@ ERRTYPE RscString::GetString( const RSCINST & rInst, char ** ppStr ){
 
 /*************************************************************************
 |*
-|*    RscString::GetRef()
+|*	  RscString::GetRef()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 22.07.91
+|*	  Letzte Aenderung	MM 22.07.91
 |*
 *************************************************************************/
 ERRTYPE RscString::GetRef( const RSCINST & rInst, RscId * pRscId ){
@@ -118,13 +138,17 @@ ERRTYPE RscString::GetRef( const RSCINST & rInst, RscId * pRscId ){
 
 /*************************************************************************
 |*
-|*    RscString::SetRef()
+|*	  RscString::SetRef()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 15.05.91
+|*	  Letzte Aenderung	MM 15.05.91
 |*
 *************************************************************************/
 ERRTYPE RscString::SetRef( const RSCINST & rInst, const RscId & rRefId ){
     if( pRefClass ){
         ((RscStringInst *)rInst.pData)->aRefId = rRefId;
-        ((RscStringInst *)rInst.pData)->bDflt  = sal_False;
+        ((RscStringInst *)rInst.pData)->bDflt  = FALSE;
     }
     else
         return( ERR_REFNOTALLOWED );
@@ -134,11 +158,15 @@ ERRTYPE RscString::SetRef( const RSCINST & rInst, const RscId & rRefId ){
 
 /*************************************************************************
 |*
-|*    RscString::Create()
+|*	  RscString::Create()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.04.91
+|*	  Letzte Aenderung	MM 25.04.91
 |*
 *************************************************************************/
 RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
-                           sal_Bool bOwnClass )
+                           BOOL bOwnClass )
 {
     RSCINST aInst;
 
@@ -154,7 +182,7 @@ RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
 
     ((RscStringInst *)aInst.pData)->aRefId.Create();
     ((RscStringInst *)aInst.pData)->pStr = NULL;
-    ((RscStringInst *)aInst.pData)->bDflt = sal_True;
+    ((RscStringInst *)aInst.pData)->bDflt = TRUE;
 
     if( bOwnClass ){
         ((RscStringInst *)aInst.pData)->aRefId =
@@ -169,7 +197,11 @@ RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
 
 /*************************************************************************
 |*
-|*    RscString::Destroy()
+|*	  RscString::Destroy()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 15.05.91
+|*	  Letzte Aenderung	MM 15.05.91
 |*
 *************************************************************************/
 void RscString::Destroy( const RSCINST & rInst ){
@@ -180,11 +212,15 @@ void RscString::Destroy( const RSCINST & rInst ){
 
 /*************************************************************************
 |*
-|*    RscString::IsValueDefault()
+|*	  RscString::IsValueDefault()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 15.01.92
+|*	  Letzte Aenderung	MM 15.01.92
 |*
 *************************************************************************/
-sal_Bool RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
-    RscStringInst * pData    = (RscStringInst*)rInst.pData;
+BOOL RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
+    RscStringInst * pData	 = (RscStringInst*)rInst.pData;
     RscStringInst * pDefData = (RscStringInst*)pDef;
 
     if( pDef ){
@@ -196,39 +232,43 @@ sal_Bool RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
                 // Sind die Referenzidentifier gleich
                 if( pData->aRefId.GetNumber() == pDefData->aRefId.GetNumber() )
                 {
-                    return sal_True;
+                    return TRUE;
                 }
             }
         }
         else {
-            sal_Bool bStrEmpty = sal_False;
-            sal_Bool bDefStrEmpty = sal_False;
+            BOOL bStrEmpty = FALSE;
+            BOOL bDefStrEmpty = FALSE;
 
             if( pData->pStr ){
                 bStrEmpty = ('\0' == *pData->pStr);
             }
             else
-                bStrEmpty = sal_True;
+                bStrEmpty = TRUE;
 
             if( pDefData->pStr ){
                 bDefStrEmpty = ('\0' == *pDefData->pStr);
             }
             else
-                bDefStrEmpty = sal_True;
+                bDefStrEmpty = TRUE;
 
             if( !bStrEmpty || !bDefStrEmpty ){
-                return sal_False;
+                return FALSE;
             }
-            return sal_True;
+            return TRUE;
         }
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 /*************************************************************************
 |*
-|*    RscString::WriteSrc()
+|*	  RscString::WriteSrc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.04.91
+|*	  Letzte Aenderung	MM 25.04.91
 |*
 *************************************************************************/
 void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
@@ -244,8 +284,8 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
         RscStringInst * pStrI = ((RscStringInst *)rInst.pData);
         if(  pStrI->pStr ){
             //char *  pChangeTab = RscChar::GetChangeTab();
-            sal_uInt32  n = 0;
-            sal_uInt32  nPos, nSlashPos;
+            sal_uInt32	n = 0;
+            sal_uInt32	nPos, nSlashPos;
 
             do {
                 fputc( '\"', fOutput );
@@ -272,18 +312,22 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 
 /*************************************************************************
 |*
-|*    RscString::WriteRc()
+|*	  RscString::WriteRc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 15.04.91
+|*	  Letzte Aenderung	MM 15.04.91
 |*
 *************************************************************************/
 ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                            RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
+                            RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
 {
     ERRTYPE aError;
-    ObjNode *       pObjNode = NULL;
+    ObjNode *		pObjNode = NULL;
 
 
     if( ((RscStringInst *)rInst.pData)->aRefId.IsId() ){
-        RscId   aId( ((RscStringInst *)rInst.pData)->aRefId );
+        RscId	aId( ((RscStringInst *)rInst.pData)->aRefId );
         RSCINST aTmpI;
 
         aTmpI.pClass = pRefClass;
@@ -305,7 +349,7 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                 {
                     if( pTC )
                     {
-                        ByteString  aMsg( pHS->getString( pRefClass->GetId() ).getStr() );
+                        ByteString	aMsg( pHS->getString( pRefClass->GetId() ).getStr() );
                         aMsg += ' ';
                         aMsg += aId.GetName();
                         aError = WRN_STR_REFNOTFOUND;
@@ -322,7 +366,7 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     {
         if( pObjNode )
         {
-            RSCINST     aRefI;
+            RSCINST 	aRefI;
 
             aRefI = RSCINST( pRefClass, pObjNode->GetRscObj() );
             aError = aRefI.pClass->WriteRc( aRefI, rMem, pTC, nDeep, bExtra );

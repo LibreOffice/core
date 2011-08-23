@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,13 +72,13 @@ SfxPoolItem* SwFmtRefMark::Clone( SfxItemPool* ) const
 }
 
 /*************************************************************************
- *                      class SwTxtRefMark
+ *						class SwTxtRefMark
  *************************************************************************/
 
 // Attribut fuer Inhalts-/Positions-Referenzen im Text
 
 SwTxtRefMark::SwTxtRefMark( SwFmtRefMark& rAttr,
-            xub_StrLen const nStartPos, xub_StrLen const*const pEnd)
+                    xub_StrLen nStartPos, xub_StrLen* pEnd )
     : SwTxtAttrEnd( rAttr, nStartPos, nStartPos )
     , m_pTxtNode( 0 )
     , m_pEnd( 0 )

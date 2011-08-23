@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,7 +137,7 @@ namespace comphelper
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "ResourceBundle_Impl::loadString: caught an exception!" );
+                OSL_ENSURE( false, "ResourceBundle_Impl::loadString: caught an exception!" );
             }
         }
         return sString;
@@ -158,7 +158,7 @@ namespace comphelper
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "ResourceBundle_Impl::hasString: caught an exception!" );
+                OSL_ENSURE( false, "ResourceBundle_Impl::hasString: caught an exception!" );
             }
         }
         return has;
@@ -182,7 +182,7 @@ namespace comphelper
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ResourceBundle_Impl::impl_loadBundle_nopthrow: could not create the resource loader!" );
+            OSL_ENSURE( false, "ResourceBundle_Impl::impl_loadBundle_nopthrow: could not create the resource loader!" );
         }
 
         if ( !xLoader.is() )
@@ -194,7 +194,7 @@ namespace comphelper
         }
         catch( const MissingResourceException& )
         {
-            OSL_FAIL( "ResourceBundle_Impl::impl_loadBundle_nopthrow: missing the given resource bundle!" );
+            OSL_ENSURE( false, "ResourceBundle_Impl::impl_loadBundle_nopthrow: missing the given resource bundle!" );
         }
 
         return m_xBundle.is();

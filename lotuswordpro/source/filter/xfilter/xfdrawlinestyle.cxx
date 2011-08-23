@@ -57,7 +57,11 @@
  * @file
  * Line style of Drawing object.
  ************************************************************************/
-#include    "xfdrawlinestyle.hxx"
+/*************************************************************************
+ * Change History
+ * 2004-02-21 create this file.
+ ************************************************************************/
+#include	"xfdrawlinestyle.hxx"
 
 XFDrawLineStyle::XFDrawLineStyle()
 {
@@ -72,14 +76,14 @@ XFDrawLineStyle::XFDrawLineStyle()
     m_fLength2 = 0;
 }
 
-enumXFStyle XFDrawLineStyle::GetStyleFamily()
+enumXFStyle	XFDrawLineStyle::GetStyleFamily()
 {
     return enumXFStyleStrokeDash;
 }
 
-void    XFDrawLineStyle::ToXml(IXFStream *pStrm)
+void	XFDrawLineStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("draw:name"), GetStyleName());

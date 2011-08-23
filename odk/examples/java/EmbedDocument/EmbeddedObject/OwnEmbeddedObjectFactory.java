@@ -37,15 +37,11 @@ public final class OwnEmbeddedObjectFactory extends WeakBase
         return xFactory;
     }
 
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
-
-//     public static boolean __writeRegistryServiceInfo( XRegistryKey xRegistryKey ) {
-//         return Factory.writeRegistryServiceInfo(m_implementationName,
-//                                                 m_serviceNames,
-//                                                 xRegistryKey);
-//     }
+    public static boolean __writeRegistryServiceInfo( XRegistryKey xRegistryKey ) {
+        return Factory.writeRegistryServiceInfo(m_implementationName,
+                                                m_serviceNames,
+                                                xRegistryKey);
+    }
 
     // com.sun.star.lang.XServiceInfo:
     public String getImplementationName() {
@@ -71,7 +67,7 @@ public final class OwnEmbeddedObjectFactory extends WeakBase
     {
         if ( xStorage == null || sEntName == null || sEntName.length() == 0 )
             throw new com.sun.star.lang.IllegalArgumentException();
-
+    
         if ( nEntryConnectionMode == com.sun.star.embed.EntryInitModes.DEFAULT_INIT )
         {
             if ( aClassID != null && aClassID.length != 0 )

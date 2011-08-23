@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@
 #include "scuitphfedit.hxx"
 //------------------------------------------------------------------
 
-//  macros from docsh4.cxx
-//! use SIDs?
+//	macros from docsh4.cxx
+//!	use SIDs?
 
 #define IS_SHARE_HEADER(set) \
     ((SfxBoolItem&) \
@@ -62,10 +62,10 @@
 //==================================================================
 
 ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
-                          Window*           pParent,
+                          Window*			pParent,
                           const SfxItemSet& rCoreSet,
-                          const String&     rPageStyle,
-                          sal_uInt16            nResIdP )
+                          const String&		rPageStyle,
+                          USHORT            nResIdP )
     :   SfxTabDialog( pFrameP, pParent, ScResId( nResIdP ), &rCoreSet )
 {
     eNumType = ((const SvxPageItem&)rCoreSet.Get(ATTR_PAGE)).GetNumType();
@@ -131,11 +131,11 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
         default:
         case RID_SCDLG_HFEDIT:
             {
-                const SvxPageItem&  rPageItem = (const SvxPageItem&)
+                const SvxPageItem&	rPageItem = (const SvxPageItem&)
                             rCoreSet.Get(
                                 rCoreSet.GetPool()->GetWhich(SID_ATTR_PAGE) );
 
-                sal_Bool bRightPage = ( SVX_PAGE_LEFT !=
+                BOOL bRightPage = ( SVX_PAGE_LEFT !=
                                     SvxPageUsage(rPageItem.GetPageUsage()) );
 
                 if ( bRightPage )
@@ -145,15 +145,15 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                 }
                 else
                 {
-                    //  #69193a# respect "shared" setting
+                    //	#69193a# respect "shared" setting
 
-                    sal_Bool bShareHeader = IS_SHARE_HEADER(rCoreSet);
+                    BOOL bShareHeader = IS_SHARE_HEADER(rCoreSet);
                     if ( bShareHeader )
                         AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
                     else
                         AddTabPage( 1, ScLeftHeaderEditPage::Create, NULL );
 
-                    sal_Bool bShareFooter = IS_SHARE_FOOTER(rCoreSet);
+                    BOOL bShareFooter = IS_SHARE_FOOTER(rCoreSet);
                     if ( bShareFooter )
                         AddTabPage( 2, ScRightFooterEditPage::Create, NULL );
                     else
@@ -168,13 +168,13 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
 
 // -----------------------------------------------------------------------
 
-ScHFEditDlg::~ScHFEditDlg()
+__EXPORT ScHFEditDlg::~ScHFEditDlg()
 {
 }
 
 // -----------------------------------------------------------------------
 
-void ScHFEditDlg::PageCreated( sal_uInt16 /* nId */, SfxTabPage& rPage )
+void __EXPORT ScHFEditDlg::PageCreated( USHORT /* nId */, SfxTabPage& rPage )
 {
     // kann ja nur ne ScHFEditPage sein...
 

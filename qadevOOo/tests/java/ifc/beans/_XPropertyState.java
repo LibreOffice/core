@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,11 +135,11 @@ public class _XPropertyState extends MultiMethodTest {
                 log.println("Default property value is : '" + propDef + "'");
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Exception " + e +
-                    "occurred while getting Property default");
+                    "occured while getting Property default");
                 result=false;
             } catch (com.sun.star.lang.WrappedTargetException e) {
                 log.println("Exception " + e +
-                    "occurred while getting Property default");
+                    "occured while getting Property default");
                 result=false;
             }
             tRes.tested("getPropertyDefault()", result);
@@ -153,12 +153,12 @@ public class _XPropertyState extends MultiMethodTest {
         */
         public void _getPropertyState(){
             boolean result = true ;
-
+            
             String localName = pName;
             if (localName == null) {
                 localName = (propertySetInfo.getProperties()[0]).Name;
-            }
-
+            }            
+            
             try {
                 PropertyState ps = oObj.getPropertyState(localName);
                 if (ps == null) {
@@ -167,7 +167,7 @@ public class _XPropertyState extends MultiMethodTest {
                 }
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Exception " + e +
-                    "occurred while getting Property state");
+                    "occured while getting Property state");
                 result = false;
             }
             tRes.tested("getPropertyState()", result);
@@ -181,12 +181,12 @@ public class _XPropertyState extends MultiMethodTest {
         */
         public void _getPropertyStates(){
             boolean result = true ;
-
+            
             String localName = pName;
             if (localName == null) {
                 localName = (propertySetInfo.getProperties()[0]).Name;
-            }
-
+            }            
+            
             try {
                 PropertyState[] ps = oObj.getPropertyStates
                     (new String[] {localName});
@@ -202,7 +202,7 @@ public class _XPropertyState extends MultiMethodTest {
                 }
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Exception " + e +
-                    "occurred while getting Property state");
+                    "occured while getting Property state");
                 result = false;
             }
 
@@ -222,7 +222,7 @@ public class _XPropertyState extends MultiMethodTest {
         */
         public void _setPropertyToDefault(){
             requiredMethod("getPropertyDefault()") ;
-
+            
             if (pName == null) {
                 log.println("all found properties are read only");
                 tRes.tested("setPropertyToDefault()",Status.skipped(true));
@@ -255,11 +255,11 @@ public class _XPropertyState extends MultiMethodTest {
                 }
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Exception " + e +
-                    "occurred while setting Property to default");
+                    "occured while setting Property to default");
                 result=false;
             } catch (com.sun.star.lang.WrappedTargetException e) {
                 log.println("Exception " + e +
-                    "occurred while testing property value");
+                    "occured while testing property value");
                 result=false;
             }
 

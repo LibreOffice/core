@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -138,7 +138,7 @@ void ConfigurationUpdater::RequestUpdate (
         do
         {
             UpdateConfiguration();
-
+            
             if (mbUpdatePending && IsUpdatePossible())
                 continue;
         }
@@ -213,10 +213,10 @@ void ConfigurationUpdater::UpdateConfiguration (void)
                 if (mnLockCount == 0)
                     UpdateCore(aClassifier);
             }
-            catch(const RuntimeException&)
+            catch(RuntimeException)
             {
             }
-
+            
             // Notify the end of the update.
             aEvent.Type = FrameworkHelper::msConfigurationUpdateEndEvent;
             mpBroadcaster->NotifyListeners(aEvent);
@@ -236,11 +236,11 @@ void ConfigurationUpdater::UpdateConfiguration (void)
 #endif
         }
     }
-    catch(const RuntimeException &)
+    catch (RuntimeException e)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-
+    
 #if defined VERBOSE && VERBOSE>0
     OSL_TRACE("ConfigurationUpdater::UpdateConfiguration)");
     OSL_TRACE("UpdateConfiguration end");
@@ -331,7 +331,7 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
         if (aResourcesToDeactivate.size() > 0)
             mpResourceManager->DeactivateResources(aResourcesToDeactivate, mxCurrentConfiguration);
     }
-    catch(const RuntimeException&)
+    catch(RuntimeException)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -398,7 +398,7 @@ void ConfigurationUpdater::CheckPureAnchors (
                 OUStringToOString(
                     FrameworkHelper::ResourceIdToString(xResourceId),
                     RTL_TEXTENCODING_UTF8).getStr());
-#endif
+#endif            
             // Erase element from current configuration.
             for (sal_Int32 nI=nIndex; nI<nCount-2; ++nI)
                 aResources[nI] = aResources[nI+1];

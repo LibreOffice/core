@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,45 +30,31 @@
 #define OOX_XLS_CONNECTIONSFRAGMENT_HXX
 
 #include "oox/xls/excelhandlers.hxx"
+#include "oox/xls/workbookhelper.hxx"
 
 namespace oox {
 namespace xls {
 
-class Connection;
-
 // ============================================================================
 
-class ConnectionContext : public WorkbookContextBase
+class OoxConnectionsFragment : public OoxWorkbookFragmentBase
 {
 public:
-    explicit            ConnectionContext( WorkbookFragmentBase& rParent, Connection& rConnection );
-
-protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
-
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        onStartRecord( SequenceInputStream& rStrm );
-
-private:
-    Connection&         mrConnection;
-};
-
-// ============================================================================
-
-class ConnectionsFragment : public WorkbookFragmentBase
-{
-public:
-    explicit            ConnectionsFragment(
+    explicit            OoxConnectionsFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual const ::oox::core::RecordInfo* getRecordInfos() const;
-    virtual void        finalizeImport();
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+private:
+    void                importConnection( const AttributeList& rAttribs );
+    void                importWebPr( const AttributeList& rAttribs );
+    void                importTables( const AttributeList& rAttribs );
+    void                importS( const AttributeList& rAttribs );
+    void                importX( const AttributeList& rAttribs );
 };
 
 // ============================================================================

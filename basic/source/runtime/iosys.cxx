@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,6 +40,9 @@
 
 #include "runtime.hxx"
 
+#ifdef _USE_UNO
+
+// <-- encoding
 #include <sal/alloca.h>
 
 #include <ctype.h>
@@ -48,7 +51,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
-
+// encoding -->
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -69,6 +72,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::io;
 using namespace com::sun::star::bridge;
+
+#endif /* _USE_UNO */
 
 #include "iosys.hxx"
 #include "sbintern.hxx"
@@ -134,6 +139,7 @@ IMPL_LINK_INLINE_START( SbiInputDialog, Cancel, Window *, pWindow )
 }
 IMPL_LINK_INLINE_END( SbiInputDialog, Cancel, Window *, pWindow )
 
+//////////////////////////////////////////////////////////////////////////
 
 SbiStream::SbiStream()
     : pStrm( 0 )
@@ -209,13 +215,13 @@ void SbiStream::MapError()
 
 
 // Hack for #83750
-sal_Bool runsInSetup( void );
+BOOL runsInSetup( void );
 
-sal_Bool needSecurityRestrictions( void )
+BOOL needSecurityRestrictions( void )
 {
 #ifdef _USE_UNO
-    static sal_Bool bNeedInit = sal_True;
-    static sal_Bool bRetVal = sal_True;
+    static BOOL bNeedInit = TRUE;
+    static BOOL bRetVal = TRUE;
 
     if( bNeedInit )
     {
@@ -224,11 +230,11 @@ sal_Bool needSecurityRestrictions( void )
         if( runsInSetup() )
         {
             // Setup is not critical
-            bRetVal = sal_False;
+            bRetVal = FALSE;
             return bRetVal;
         }
 
-        bNeedInit = sal_False;
+        bNeedInit = FALSE;
 
         // Get system user to compare to portal user
         oslSecurity aSecurity = osl_getCurrentSecurity();
@@ -237,14 +243,14 @@ sal_Bool needSecurityRestrictions( void )
         if( !bRet )
         {
             // No valid security! -> Secure mode!
-            return sal_True;
+            return TRUE;
         }
 
         Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         if( !xSMgr.is() )
-            return sal_True;
+            return TRUE;
         Reference< XBridgeFactory > xBridgeFac( xSMgr->createInstance
-            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.BridgeFactory" )) ), UNO_QUERY );
+            ( ::rtl::OUString::createFromAscii( "com.sun.star.bridge.BridgeFactory" ) ), UNO_QUERY );
 
         Sequence< Reference< XBridge > > aBridgeSeq;
         sal_Int32 nBridgeCount = 0;
@@ -257,13 +263,13 @@ sal_Bool needSecurityRestrictions( void )
         if( nBridgeCount == 0 )
         {
             // No bridges -> local
-            bRetVal = sal_False;
+            bRetVal = FALSE;
             return bRetVal;
         }
 
         // Iterate through all bridges to find (portal) user property
         const Reference< XBridge >* pBridges = aBridgeSeq.getConstArray();
-        bRetVal = sal_False;    // Now only sal_True if user different from portal user is found
+        bRetVal = FALSE;	// Now only TRUE if user different from portal user is found
         sal_Int32 i;
         for( i = 0 ; i < nBridgeCount ; i++ )
         {
@@ -281,7 +287,7 @@ sal_Bool needSecurityRestrictions( void )
                 else
                 {
                     // Different user -> Secure mode!
-                    bRetVal = sal_True;
+                    bRetVal = TRUE;
                     break;
                 }
             }
@@ -291,47 +297,49 @@ sal_Bool needSecurityRestrictions( void )
 
     return bRetVal;
 #else
-    return sal_False;
+    return FALSE;
 #endif
 }
 
-// Returns sal_True if UNO is available, otherwise the old file
+// Returns TRUE if UNO is available, otherwise the old file
 // system implementation has to be used
 // #89378 New semantic: Don't just ask for UNO but for UCB
-sal_Bool hasUno( void )
+BOOL hasUno( void )
 {
 #ifdef _USE_UNO
-    static sal_Bool bNeedInit = sal_True;
-    static sal_Bool bRetVal = sal_True;
+    static BOOL bNeedInit = TRUE;
+    static BOOL bRetVal = TRUE;
 
     if( bNeedInit )
     {
-        bNeedInit = sal_False;
+        bNeedInit = FALSE;
         Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         if( !xSMgr.is() )
         {
             // No service manager at all
-            bRetVal = sal_False;
+            bRetVal = FALSE;
         }
         else
         {
-            Reference< XContentProviderManager > xManager( xSMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                    ( "com.sun.star.ucb.UniversalContentBroker" )) ), UNO_QUERY );
+            Reference< XContentProviderManager > xManager( xSMgr->createInstance( ::rtl::OUString::createFromAscii
+                    ( "com.sun.star.ucb.UniversalContentBroker" ) ), UNO_QUERY );
 
-            if ( !( xManager.is() && xManager->queryContentProvider( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "file:///" )) ).is() ) )
+            if ( !( xManager.is() && xManager->queryContentProvider( ::rtl::OUString::createFromAscii( "file:///" ) ).is() ) )
             {
                 // No UCB
-                bRetVal = sal_False;
+                bRetVal = FALSE;
             }
         }
     }
     return bRetVal;
 #else
-    return sal_False;
+    return FALSE;
 #endif
 }
 
 
+
+#ifndef _OLD_FILE_IMPL
 
 class OslStream : public SvStream
 {
@@ -341,11 +349,11 @@ class OslStream : public SvStream
 public:
                     OslStream( const String& rName, short nStrmMode );
                     ~OslStream();
-    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos );
-    virtual void    FlushData();
-    virtual void    SetSize( sal_uIntPtr nSize );
+    virtual ULONG	GetData( void* pData, ULONG nSize );
+    virtual ULONG	PutData( const void* pData, ULONG nSize );
+    virtual ULONG	SeekPos( ULONG nPos );
+    virtual void	FlushData();
+    virtual void	SetSize( ULONG nSize );
 };
 
 OslStream::OslStream( const String& rName, short nStrmMode )
@@ -356,21 +364,21 @@ OslStream::OslStream( const String& rName, short nStrmMode )
 
     if( (nStrmMode & (STREAM_READ | STREAM_WRITE)) == (STREAM_READ | STREAM_WRITE) )
     {
-        nFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
+        nFlags = OpenFlag_Read | OpenFlag_Write;
     }
     else if( nStrmMode & STREAM_WRITE )
     {
-        nFlags = osl_File_OpenFlag_Write;
+        nFlags = OpenFlag_Write;
     }
     else //if( nStrmMode & STREAM_READ )
     {
-        nFlags = osl_File_OpenFlag_Read;
+        nFlags = OpenFlag_Read;
     }
 
     osl::FileBase::RC nRet = maFile.open( nFlags );
-    if( nRet == osl::FileBase::E_NOENT && nFlags != osl_File_OpenFlag_Read )
+    if( nRet == osl::FileBase::E_NOENT && nFlags != OpenFlag_Read )
     {
-        nFlags |= osl_File_OpenFlag_Create;
+        nFlags |= OpenFlag_Create;
         nRet = maFile.open( nFlags );
     }
 
@@ -386,60 +394,104 @@ OslStream::~OslStream()
     maFile.close();
 }
 
-sal_uIntPtr OslStream::GetData( void* pData, sal_uIntPtr nSize )
+ULONG OslStream::GetData( void* pData, ULONG nSize )
 {
     sal_uInt64 nBytesRead = nSize;
-    maFile.read( pData, nBytesRead, nBytesRead );
-    return (sal_uIntPtr)nBytesRead;
+    osl::FileBase::RC nRet = osl::FileBase::E_None;
+    nRet = maFile.read( pData, nBytesRead, nBytesRead );
+    return (ULONG)nBytesRead;
 }
 
-sal_uIntPtr OslStream::PutData( const void* pData, sal_uIntPtr nSize )
+ULONG OslStream::PutData( const void* pData, ULONG nSize )
 {
     sal_uInt64 nBytesWritten;
-    maFile.write( pData, (sal_uInt64)nSize, nBytesWritten );
-    return (sal_uIntPtr)nBytesWritten;
+    osl::FileBase::RC nRet = osl::FileBase::E_None;
+    nRet = maFile.write( pData, (sal_uInt64)nSize, nBytesWritten );
+    return (ULONG)nBytesWritten;
 }
 
-sal_uIntPtr OslStream::SeekPos( sal_uIntPtr nPos )
+ULONG OslStream::SeekPos( ULONG nPos )
 {
+    osl::FileBase::RC nRet;
     if( nPos == STREAM_SEEK_TO_END )
-        maFile.setPos( Pos_End, 0 );
+    {
+        nRet = maFile.setPos( Pos_End, 0 );
+    }
     else
-        maFile.setPos( Pos_Absolut, (sal_uInt64)nPos );
-    sal_uInt64 nRealPos(0);
-    maFile.getPos( nRealPos );
-    return sal::static_int_cast<sal_uIntPtr>(nRealPos);
+    {
+        nRet = maFile.setPos( Pos_Absolut, (sal_uInt64)nPos );
+    }
+    sal_uInt64 nRealPos;
+    nRet = maFile.getPos( nRealPos );
+    return sal::static_int_cast<ULONG>(nRealPos);
 }
 
 void OslStream::FlushData()
 {
 }
 
-void OslStream::SetSize( sal_uIntPtr nSize )
+void OslStream::SetSize( ULONG nSize )
 {
-    maFile.setSize( (sal_uInt64)nSize );
+    osl::FileBase::RC nRet = osl::FileBase::E_None;
+    nRet = maFile.setSize( (sal_uInt64)nSize );
 }
+
+#endif
 
 
 #ifdef _USE_UNO
 
 class UCBStream : public SvStream
 {
-    Reference< XInputStream >   xIS;
-    Reference< XOutputStream >  xOS;
-    Reference< XStream >        xS;
-    Reference< XSeekable >      xSeek;
+    Reference< XInputStream >	xIS;
+    Reference< XOutputStream >	xOS;
+    Reference< XStream >		xS;
+    Reference< XSeekable >		xSeek;
 public:
                     UCBStream( Reference< XInputStream > & xIS );
                     UCBStream( Reference< XOutputStream > & xOS );
                     UCBStream( Reference< XStream > & xS );
                     ~UCBStream();
-    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos );
-    virtual void    FlushData();
-    virtual void    SetSize( sal_uIntPtr nSize );
+    virtual ULONG	GetData( void* pData, ULONG nSize );
+    virtual ULONG	PutData( const void* pData, ULONG nSize );
+    virtual ULONG	SeekPos( ULONG nPos );
+    virtual void	FlushData();
+    virtual void	SetSize( ULONG nSize );
 };
+
+/*
+ULONG UCBErrorToSvStramError( ucb::IOErrorCode nError )
+{
+    ULONG eReturn = ERRCODE_IO_GENERAL;
+    switch( nError )
+    {
+        case ucb::IOErrorCode_ABORT:				eReturn = SVSTREAM_GENERALERROR; break;
+        case ucb::IOErrorCode_NOT_EXISTING:			eReturn = SVSTREAM_FILE_NOT_FOUND; break;
+        case ucb::IOErrorCode_NOT_EXISTING_PATH:	eReturn = SVSTREAM_PATH_NOT_FOUND; break;
+        case ucb::IOErrorCode_OUT_OF_FILE_HANDLES:	eReturn = SVSTREAM_TOO_MANY_OPEN_FILES; break;
+        case ucb::IOErrorCode_ACCESS_DENIED:		eReturn = SVSTREAM_ACCESS_DENIED; break;
+        case ucb::IOErrorCode_LOCKING_VIOLATION:	eReturn = SVSTREAM_SHARING_VIOLATION; break;
+
+        case ucb::IOErrorCode_INVALID_ACCESS:		eReturn = SVSTREAM_INVALID_ACCESS; break;
+        case ucb::IOErrorCode_CANT_CREATE:			eReturn = SVSTREAM_CANNOT_MAKE; break;
+        case ucb::IOErrorCode_INVALID_PARAMETER:	eReturn = SVSTREAM_INVALID_PARAMETER; break;
+
+        case ucb::IOErrorCode_CANT_READ:			eReturn = SVSTREAM_READ_ERROR; break;
+        case ucb::IOErrorCode_CANT_WRITE:			eReturn = SVSTREAM_WRITE_ERROR; break;
+        case ucb::IOErrorCode_CANT_SEEK:			eReturn = SVSTREAM_SEEK_ERROR; break;
+        case ucb::IOErrorCode_CANT_TELL:			eReturn = SVSTREAM_TELL_ERROR; break;
+
+        case ucb::IOErrorCode_OUT_OF_MEMORY:		eReturn = SVSTREAM_OUTOFMEMORY; break;
+
+        case SVSTREAM_FILEFORMAT_ERROR:				eReturn = SVSTREAM_FILEFORMAT_ERROR; break;
+        case ucb::IOErrorCode_WRONG_VERSION:		eReturn = SVSTREAM_WRONGVERSION;
+        case ucb::IOErrorCode_OUT_OF_DISK_SPACE:	eReturn = SVSTREAM_DISK_FULL; break;
+
+        case ucb::IOErrorCode_BAD_CRC:				eReturn = ERRCODE_IO_BADCRC; break;
+    }
+    return eReturn;
+}
+*/
 
 UCBStream::UCBStream( Reference< XInputStream > & rStm )
     : xIS( rStm )
@@ -481,7 +533,7 @@ UCBStream::~UCBStream()
     }
 }
 
-sal_uIntPtr UCBStream::GetData( void* pData, sal_uIntPtr nSize )
+ULONG	UCBStream::GetData( void* pData, ULONG nSize )
 {
     try
     {
@@ -510,7 +562,7 @@ sal_uIntPtr UCBStream::GetData( void* pData, sal_uIntPtr nSize )
     return 0;
 }
 
-sal_uIntPtr UCBStream::PutData( const void* pData, sal_uIntPtr nSize )
+ULONG	UCBStream::PutData( const void* pData, ULONG nSize )
 {
     try
     {
@@ -537,13 +589,13 @@ sal_uIntPtr UCBStream::PutData( const void* pData, sal_uIntPtr nSize )
     return 0;
 }
 
-sal_uIntPtr UCBStream::SeekPos( sal_uIntPtr nPos )
+ULONG	UCBStream::SeekPos( ULONG nPos )
 {
     try
     {
         if( xSeek.is() )
         {
-            sal_uIntPtr nLen = sal::static_int_cast<sal_uIntPtr>( xSeek->getLength() );
+            ULONG nLen = sal::static_int_cast<ULONG>( xSeek->getLength() );
             if( nPos > nLen )
                 nPos = nLen;
             xSeek->seek( nPos );
@@ -559,7 +611,7 @@ sal_uIntPtr UCBStream::SeekPos( sal_uIntPtr nPos )
     return 0;
 }
 
-void    UCBStream::FlushData()
+void	UCBStream::FlushData()
 {
     try
     {
@@ -577,11 +629,11 @@ void    UCBStream::FlushData()
     }
 }
 
-void    UCBStream::SetSize( sal_uIntPtr nSize )
+void	UCBStream::SetSize( ULONG nSize )
 {
     (void)nSize;
 
-    OSL_FAIL( "not allowed to call from basic" );
+    DBG_ERROR( "not allowed to call from basic" );
     SetError( ERRCODE_IO_GENERAL );
 }
 
@@ -608,7 +660,7 @@ SbError SbiStream::Open
         if( xSMgr.is() )
         {
             Reference< XSimpleFileAccess >
-                xSFI( xSMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
+                xSFI( xSMgr->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
             if( xSFI.is() )
             {
                 try
@@ -630,6 +682,9 @@ SbError SbiStream::Open
                 {
                     Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
                     pStrm = new UCBStream( xIS );
+                    // Open for writing is not implemented in ucb yet!!!
+                    //Reference< XOutputStream > xIS = xSFI->openFileWrite( aNameStr );
+                    //pStrm = new UCBStream( xIS );
                 }
                 else //if( nStrmMode & STREAM_READ )
                 {
@@ -649,7 +704,11 @@ SbError SbiStream::Open
 #endif
     if( !pStrm )
     {
+#ifdef _OLD_FILE_IMPL
+        pStrm = new SvFileStream( aNameStr, nStrmMode );
+#else
         pStrm = new OslStream( aNameStr, nStrmMode );
+#endif
     }
     if( IsAppend() )
         pStrm->Seek( STREAM_SEEK_TO_END );
@@ -661,8 +720,14 @@ SbError SbiStream::Open
 
 SbError SbiStream::Close()
 {
-    if( pStrm )
+    if(	pStrm )
     {
+        if( !hasUno() )
+        {
+#ifdef _OLD_FILE_IMPL
+            ((SvFileStream *)pStrm)->Close();
+#endif
+        }
         MapError();
         delete pStrm;
         pStrm = NULL;
@@ -671,7 +736,7 @@ SbError SbiStream::Close()
     return nError;
 }
 
-SbError SbiStream::Read( ByteString& rBuf, sal_uInt16 n, bool bForceReadingPerByte )
+SbError SbiStream::Read( ByteString& rBuf, USHORT n, bool bForceReadingPerByte )
 {
     nExpandOnWriteTo = 0;
     if( !bForceReadingPerByte && IsText() )
@@ -710,10 +775,10 @@ void SbiStream::ExpandFile()
 {
     if ( nExpandOnWriteTo )
     {
-        sal_uIntPtr nCur = pStrm->Seek(STREAM_SEEK_TO_END);
+        ULONG nCur = pStrm->Seek(STREAM_SEEK_TO_END);
         if( nCur < nExpandOnWriteTo )
         {
-            sal_uIntPtr nDiff = nExpandOnWriteTo - nCur;
+            ULONG nDiff = nExpandOnWriteTo - nCur;
             char c = 0;
             while( nDiff-- )
                 *pStrm << c;
@@ -726,7 +791,7 @@ void SbiStream::ExpandFile()
     }
 }
 
-SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
+SbError SbiStream::Write( const ByteString& rBuf, USHORT n )
 {
     ExpandFile();
     if( IsAppend() )
@@ -737,7 +802,7 @@ SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
         aLine += rBuf;
         // Raus damit, wenn das Ende ein LF ist, aber CRLF vorher
         // strippen, da der SvStrm ein CRLF anfuegt!
-        sal_uInt16 nLineLen = aLine.Len();
+        USHORT nLineLen = aLine.Len();
         if( nLineLen && aLine.GetBuffer()[ --nLineLen ] == 0x0A )
         {
             aLine.Erase( nLineLen );
@@ -758,6 +823,7 @@ SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
     return nError;
 }
 
+//////////////////////////////////////////////////////////////////////////
 
 // Zugriff auf das aktuelle I/O-System:
 
@@ -767,6 +833,7 @@ SbiIoSystem* SbGetIoSystem()
     return pInst ? pInst->GetIoSystem() : NULL;
 }
 
+//////////////////////////////////////////////////////////////////////////
 
 SbiIoSystem::SbiIoSystem()
 {
@@ -932,7 +999,7 @@ void SbiIoSystem::CloseAll(void)
 
 /***************************************************************************
 *
-*   Console Support
+*	Console Support
 *
 ***************************************************************************/
 
@@ -954,8 +1021,8 @@ void SbiIoSystem::ReadCon( ByteString& rIn )
 void SbiIoSystem::WriteCon( const ByteString& rText )
 {
     aOut += rText;
-    sal_uInt16 n1 = aOut.Search( '\n' );
-    sal_uInt16 n2 = aOut.Search( '\r' );
+    USHORT n1 = aOut.Search( '\n' );
+    USHORT n2 = aOut.Search( '\r' );
     if( n1 != STRING_NOTFOUND || n2 != STRING_NOTFOUND )
     {
         if( n1 == STRING_NOTFOUND ) n1 = n2;

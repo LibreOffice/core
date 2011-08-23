@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,24 +59,24 @@ namespace psp
 {
 class CUPSWrapper
 {
-    oslModule       m_pLib;
-    osl::Mutex      m_aGetPPDMutex;
+    oslModule		m_pLib;
+    osl::Mutex		m_aGetPPDMutex;
     bool            m_bPPDThreadRunning;
 
-    int             (*m_pcupsPrintFile)(const char*, const char*, const char*, int, cups_option_t*);
-    int             (*m_pcupsGetDests)(cups_dest_t**);
-    void            (*m_pcupsSetDests)(int,cups_dest_t*);
-    void            (*m_pcupsFreeDests)(int,cups_dest_t*);
-    const char*     (*m_pcupsGetPPD)(const char*);
-    int             (*m_pcupsMarkOptions)(ppd_file_t*,int,cups_option_t*);
-    int             (*m_pcupsAddOption)(const char*,const char*,int,cups_option_t**);
-    void            (*m_pcupsFreeOptions)(int,cups_option_t*);
-    ppd_file_t*     (*m_pppdOpenFile)(const char* pFile);
-    void            (*m_pppdClose)(ppd_file_t*);
-    const char*     (*m_pcupsServer)();
-    void            (*m_pcupsSetPasswordCB)(const char*(cb)(const char*));
-    const char*     (*m_pcupsUser)();
-    void            (*m_pcupsSetUser)(const char*);
+    int				(*m_pcupsPrintFile)(const char*, const char*, const char*, int, cups_option_t*);
+    int				(*m_pcupsGetDests)(cups_dest_t**);
+    void			(*m_pcupsSetDests)(int,cups_dest_t*);
+    void			(*m_pcupsFreeDests)(int,cups_dest_t*);
+    const char*		(*m_pcupsGetPPD)(const char*);
+    int				(*m_pcupsMarkOptions)(ppd_file_t*,int,cups_option_t*);
+    int				(*m_pcupsAddOption)(const char*,const char*,int,cups_option_t**);
+    void			(*m_pcupsFreeOptions)(int,cups_option_t*);
+    ppd_file_t*		(*m_pppdOpenFile)(const char* pFile);
+    void			(*m_pppdClose)(ppd_file_t*);
+    const char*		(*m_pcupsServer)();
+    void			(*m_pcupsSetPasswordCB)(const char*(cb)(const char*));
+    const char*		(*m_pcupsUser)();
+    void			(*m_pcupsSetUser)(const char*);
     const char*     (*m_pcupsGetOption)(const char*,int,cups_option_t*);
 
     oslGenericFunction loadSymbol( const char* );
@@ -119,33 +119,27 @@ public:
     void ppdClose( ppd_file_t* pPPD )
     { m_pppdClose( pPPD ); }
 
-    const char  *cupsServer(void)
+    const char	*cupsServer(void)
     { return m_pcupsServer(); }
 
-    const char  *cupsUser(void)
+    const char	*cupsUser(void)
     { return m_pcupsUser(); }
-
+    
     void cupsSetPasswordCB(const char *(*cb)(const char *))
     { m_pcupsSetPasswordCB( cb ); }
 
     void cupsSetUser(const char *user)
     { m_pcupsSetUser( user ); }
-
+    
     const char* cupsGetOption(const char* name, int num_options, cups_option_t* options)
     { return m_pcupsGetOption( name, num_options, options ); }
-
+    
 };
 }
 
 using namespace psp;
 using namespace osl;
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringToOString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringHash;
-using ::rtl::OString;
+using namespace rtl;
 
 /*
  *  CUPSWrapper class
@@ -161,7 +155,7 @@ oslGenericFunction CUPSWrapper::loadSymbol( const char* pSymbol )
     return pSym;
 }
 
-CUPSWrapper::CUPSWrapper()
+CUPSWrapper::CUPSWrapper() 
         : m_pLib( NULL ),
           m_bPPDThreadRunning( false )
 {
@@ -183,51 +177,51 @@ CUPSWrapper::CUPSWrapper()
         return;
     }
 
-    m_pcupsPrintFile        = (int(*)(const char*,const char*,const char*,int,cups_option_t*))
+    m_pcupsPrintFile	 	= (int(*)(const char*,const char*,const char*,int,cups_option_t*))
         loadSymbol( "cupsPrintFile" );
-    m_pcupsGetDests         = (int(*)(cups_dest_t**))
+    m_pcupsGetDests			= (int(*)(cups_dest_t**))
         loadSymbol( "cupsGetDests" );
-    m_pcupsSetDests         = (void(*)(int,cups_dest_t*))
+    m_pcupsSetDests			= (void(*)(int,cups_dest_t*))
         loadSymbol( "cupsSetDests" );
-    m_pcupsFreeDests        = (void(*)(int,cups_dest_t*))
+    m_pcupsFreeDests		= (void(*)(int,cups_dest_t*))
         loadSymbol( "cupsFreeDests" );
-    m_pcupsGetPPD           = (const char*(*)(const char*))
+    m_pcupsGetPPD			= (const char*(*)(const char*))
         loadSymbol( "cupsGetPPD" );
-    m_pcupsMarkOptions      = (int(*)(ppd_file_t*,int,cups_option_t*))
+    m_pcupsMarkOptions		= (int(*)(ppd_file_t*,int,cups_option_t*))
         loadSymbol( "cupsMarkOptions" );
-    m_pcupsAddOption        = (int(*)(const char*,const char*,int,cups_option_t**))
+    m_pcupsAddOption		= (int(*)(const char*,const char*,int,cups_option_t**))
         loadSymbol( "cupsAddOption" );
-    m_pcupsFreeOptions      = (void(*)(int,cups_option_t*))
+    m_pcupsFreeOptions		= (void(*)(int,cups_option_t*))
         loadSymbol( "cupsFreeOptions" );
-    m_pppdOpenFile          = (ppd_file_t*(*)(const char*))
+    m_pppdOpenFile			= (ppd_file_t*(*)(const char*))
         loadSymbol( "ppdOpenFile" );
-    m_pppdClose             = (void(*)(ppd_file_t*))
+    m_pppdClose				= (void(*)(ppd_file_t*))
         loadSymbol( "ppdClose" );
-    m_pcupsServer           = (const char*(*)())
+    m_pcupsServer			= (const char*(*)())
         loadSymbol( "cupsServer" );
-    m_pcupsUser             = (const char*(*)())
+    m_pcupsUser				= (const char*(*)())
         loadSymbol( "cupsUser" );
-    m_pcupsSetPasswordCB    = (void(*)(const char*(*)(const char*)))
+    m_pcupsSetPasswordCB	= (void(*)(const char*(*)(const char*)))
         loadSymbol( "cupsSetPasswordCB" );
-    m_pcupsSetUser          = (void(*)(const char*))
+    m_pcupsSetUser			= (void(*)(const char*))
         loadSymbol( "cupsSetUser" );
     m_pcupsGetOption        = (const char*(*)(const char*,int,cups_option_t*))
         loadSymbol( "cupsGetOption" );
 
     if( ! (
-           m_pcupsPrintFile                 &&
-           m_pcupsGetDests                  &&
-           m_pcupsSetDests                  &&
-           m_pcupsFreeDests                 &&
-           m_pcupsGetPPD                    &&
-           m_pcupsMarkOptions               &&
-           m_pcupsAddOption                 &&
-           m_pcupsServer                    &&
-           m_pcupsUser                      &&
-           m_pcupsSetPasswordCB             &&
-           m_pcupsSetUser                   &&
-           m_pcupsFreeOptions               &&
-           m_pppdOpenFile                   &&
+           m_pcupsPrintFile					&&
+           m_pcupsGetDests					&&
+           m_pcupsSetDests					&&
+           m_pcupsFreeDests					&&
+           m_pcupsGetPPD					&&
+           m_pcupsMarkOptions				&&
+           m_pcupsAddOption					&&
+           m_pcupsServer					&&
+           m_pcupsUser						&&
+           m_pcupsSetPasswordCB				&&
+           m_pcupsSetUser					&&
+           m_pcupsFreeOptions				&&
+           m_pppdOpenFile					&&
            m_pppdClose                      &&
            m_pcupsGetOption
            ) )
@@ -252,14 +246,14 @@ typedef const char*(*PPDFunction)(const char*);
 struct GetPPDAttribs
 {
     PPDFunction         m_pFunction;
-    osl::Condition      m_aCondition;
-    OString             m_aParameter;
-    OString             m_aResult;
-    oslThread           m_aThread;
+    osl::Condition		m_aCondition;
+    OString			    m_aParameter;
+    OString			    m_aResult;
+    oslThread			m_aThread;
     int                 m_nRefs;
     bool*               m_pResetRunning;
     osl::Mutex*         m_pSyncMutex;
-
+    
     GetPPDAttribs( PPDFunction pFn, const char * m_pParameter,
                    bool* pResetRunning, osl::Mutex* pSyncMutex )
             : m_pFunction( pFn ),
@@ -270,13 +264,13 @@ struct GetPPDAttribs
         m_nRefs = 2;
         m_aCondition.reset();
     }
-
+    
     ~GetPPDAttribs()
     {
         if( m_aResult.getLength() )
             unlink( m_aResult.getStr() );
     }
-
+    
     void unref()
     {
         if( --m_nRefs == 0 )
@@ -285,7 +279,7 @@ struct GetPPDAttribs
             delete this;
         }
     }
-
+    
     void executeCall()
     {
         // This CUPS method is not at all thread-safe we need
@@ -296,11 +290,11 @@ struct GetPPDAttribs
         m_aCondition.set();
         unref();
     }
-
+    
     OString waitResult( TimeValue *pDelay )
     {
         m_pSyncMutex->release();
-
+        
         if (m_aCondition.wait( pDelay ) != Condition::result_ok
             )
         {
@@ -311,11 +305,11 @@ struct GetPPDAttribs
             #endif
         }
         m_pSyncMutex->acquire();
-
+        
         OString aRetval = m_aResult;
         m_aResult = OString();
         unref();
-
+        
         return aRetval;
     }
 };
@@ -341,7 +335,7 @@ OString CUPSWrapper::cupsGetPPD( const char* pPrinter )
                                                      pPrinter,
                                                      &m_bPPDThreadRunning,
                                                      &m_aGetPPDMutex );
-
+        
         oslThread aThread = osl_createThread( getPPDWorker, pAttribs );
 
         TimeValue aValue;
@@ -361,7 +355,7 @@ OString CUPSWrapper::cupsGetPPD( const char* pPrinter )
 static const char* setPasswordCallback( const char* pIn )
 {
     const char* pRet = NULL;
-
+    
     PrinterInfoManager& rMgr = PrinterInfoManager::get();
     if( rMgr.getType() == PrinterInfoManager::CUPS ) // sanity check
         pRet = static_cast<CUPSManager&>(rMgr).authenticateUser( pIn );
@@ -378,7 +372,7 @@ CUPSManager* CUPSManager::tryLoadCUPS()
     CUPSManager* pManager = NULL;
 #ifdef ENABLE_CUPS
     static const char* pEnv = getenv( "SAL_DISABLE_CUPS" );
-
+    
     if( ! pEnv || ! *pEnv )
     {
         // try to load CUPS
@@ -446,10 +440,11 @@ void CUPSManager::runDests()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "starting cupsGetDests\n" );
 #endif
+    int nDests = 0;
     cups_dest_t* pDests = NULL;
 
     // #i86306# prepare against really broken CUPS installations / missing servers
-
+    
     // install signal handler for SEGV, BUS and ABRT
     struct sigaction act;
     struct sigaction oact[3];
@@ -457,7 +452,7 @@ void CUPSManager::runDests()
     act.sa_handler = lcl_signal_action;
     act.sa_flags   = 0;
     sigemptyset(&(act.sa_mask));
-
+    
     int nSegvSignalInstalled = sigaction(SIGSEGV, &act, &oact[0]);
     int nBusSignalInstalled = sigaction(SIGBUS, &act, &oact[1]);
     int nAbortSignalInstalled = sigaction(SIGABRT, &act, &oact[2]);
@@ -465,11 +460,11 @@ void CUPSManager::runDests()
     // prepare against a signal during FcInit or FcConfigGetCurrent
     if( sigsetjmp( aViolationBuffer, ~0 ) == 0 )
     {
-        int nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
+        nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "came out of cupsGetDests\n" );
         #endif
-
+        
         osl::MutexGuard aGuard( m_aCUPSMutex );
         m_nDests = nDests;
         m_pDests = pDests;
@@ -484,7 +479,7 @@ void CUPSManager::runDests()
         fprintf( stderr, "cupsGetDests crashed, not using CUPS\n" );
         #endif
     }
-
+    
     // restore old signal handlers
     if( nSegvSignalInstalled == 0 )
         sigaction( SIGSEGV, &oact[0], NULL );
@@ -498,12 +493,12 @@ void CUPSManager::initialize()
 {
     // get normal printers, clear printer list
     PrinterInfoManager::initialize();
-
+    
 #ifdef ENABLE_CUPS
     // check whether thread has completed
     // if not behave like old printing system
     osl::MutexGuard aGuard( m_aCUPSMutex );
-
+    
     if( ! m_bNewDests )
         return;
 
@@ -521,7 +516,7 @@ void CUPSManager::initialize()
 
     if( ! (m_nDests && m_pDests ) )
         return;
-
+    
     if( isCUPSDisabled() )
         return;
 
@@ -530,18 +525,12 @@ void CUPSManager::initialize()
     // introduced in dests with 1.2
     // this is needed to check for %%IncludeFeature support
     // (#i65684#, #i65491#)
-    bool bUsePDF = false;
     cups_dest_t* pDest = ((cups_dest_t*)m_pDests);
     const char* pOpt = m_pCUPSWrapper->cupsGetOption( "printer-info",
                                                       pDest->num_options,
                                                       pDest->options );
     if( pOpt )
-    {
         m_bUseIncludeFeature = true;
-        bUsePDF = true;
-        if( m_aGlobalDefaults.m_nPSLevel == 0 && m_aGlobalDefaults.m_nPDFDevice == 0 )
-            m_aGlobalDefaults.m_nPDFDevice = 1;
-    }
     // do not send include JobPatch; CUPS will insert that itself
     // TODO: currently unknwon which versions of CUPS insert JobPatches
     // so currently it is assumed CUPS = don't insert JobPatch files
@@ -549,7 +538,7 @@ void CUPSManager::initialize()
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     int nPrinter = m_nDests;
-
+    
     // reset global default PPD options; these are queried on demand from CUPS
     m_aGlobalDefaults.m_pParser = NULL;
     m_aGlobalDefaults.m_aContext = PPDContext();
@@ -599,14 +588,12 @@ void CUPSManager::initialize()
         // behaviour
         aPrinter.m_aInfo.m_pParser = NULL;
         aPrinter.m_aInfo.m_aContext.setParser( NULL );
-        boost::unordered_map< OUString, PPDContext, OUStringHash >::const_iterator c_it = m_aDefaultContexts.find( aPrinterName );
+        std::hash_map< OUString, PPDContext, OUStringHash >::const_iterator c_it = m_aDefaultContexts.find( aPrinterName );
         if( c_it != m_aDefaultContexts.end() )
         {
             aPrinter.m_aInfo.m_pParser = c_it->second.getParser();
             aPrinter.m_aInfo.m_aContext = c_it->second;
         }
-        if( bUsePDF && aPrinter.m_aInfo.m_nPSLevel == 0 && aPrinter.m_aInfo.m_nPDFDevice == 0 )
-            aPrinter.m_aInfo.m_nPDFDevice = 1;
         aPrinter.m_aInfo.m_aDriverName = aBuf.makeStringAndClear();
         aPrinter.m_bModified = false;
 
@@ -617,7 +604,7 @@ void CUPSManager::initialize()
     // remove everything that is not a CUPS printer and not
     // a special purpose printer (PDF, Fax)
     std::list< OUString > aRemovePrinters;
-    for( boost::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.begin();
+    for( std::hash_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.begin();
          it != m_aPrinters.end(); ++it )
     {
         if( m_aCUPSDestMap.find( it->first ) != m_aCUPSDestMap.end() )
@@ -661,8 +648,8 @@ static void updatePrinterContextInfo( ppd_group_t* pPPDGroup, PPDContext& rConte
 #if OSL_DEBUG_LEVEL > 1
                             fprintf( stderr, "key %s is set to %s\n", pOption->keyword, pChoice->choice );
 #endif
-
-                        }
+                            
+                        }                       
 #if OSL_DEBUG_LEVEL > 1
                         else
                             fprintf( stderr, "key %s is defaulted to %s\n", pOption->keyword, pChoice->choice );
@@ -704,7 +691,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
     {
         if( m_nDests && m_pDests && ! isCUPSDisabled() )
         {
-            boost::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
+            std::hash_map< OUString, int, OUStringHash >::iterator dest_it =
             m_aCUPSDestMap.find( aPrinter );
             if( dest_it != m_aCUPSDestMap.end() )
             {
@@ -725,7 +712,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                         PPDParser* pCUPSParser = new PPDParser( aFileName );
                         pCUPSParser->m_aFile = rPrinter;
                         pNewParser = pCUPSParser;
-
+                        
                         /*int nConflicts =*/ m_pCUPSWrapper->cupsMarkOptions( pPPD, pDest->num_options, pDest->options );
                         #if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "processing the following options for printer %s (instance %s):\n",
@@ -736,7 +723,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                         pDest->options[k].value );
                         #endif
                         PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
-
+                        
                         // remember the default context for later use
                         PPDContext& rContext = m_aDefaultContexts[ aPrinter ];
                         rContext.setParser( pNewParser );
@@ -745,18 +732,18 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                         setDefaultPaper( rContext );
                         for( int i = 0; i < pPPD->num_groups; i++ )
                             updatePrinterContextInfo( pPPD->groups + i, rContext );
-
+                        
                         rInfo.m_pParser = pNewParser;
                         rInfo.m_aContext = rContext;
-
+                        
                         // clean up the mess
-                        m_pCUPSWrapper->ppdClose( pPPD );
+                        m_pCUPSWrapper->ppdClose( pPPD );                        
                     }
                     #if OSL_DEBUG_LEVEL > 1
                     else
                         fprintf( stderr, "ppdOpenFile failed, falling back to generic driver\n" );
                     #endif
-
+                    
                     // remove temporary PPD file
                     unlink( aPPDFile.getStr() );
                 }
@@ -782,9 +769,9 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
     {
         // get the default PPD
         pNewParser = PPDParser::getParser( String( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) );
-
+        
         PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
-
+        
         rInfo.m_pParser = pNewParser;
         rInfo.m_aContext.setParser( pNewParser );
     }
@@ -800,13 +787,13 @@ void CUPSManager::setupJobContextData(
 )
 {
 #ifdef ENABLE_CUPS
-    boost::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
+    std::hash_map< OUString, int, OUStringHash >::iterator dest_it =
         m_aCUPSDestMap.find( rData.m_aPrinterName );
 
     if( dest_it == m_aCUPSDestMap.end() )
         return PrinterInfoManager::setupJobContextData( rData );
 
-    boost::unordered_map< OUString, Printer, OUStringHash >::iterator p_it =
+    std::hash_map< OUString, Printer, OUStringHash >::iterator p_it =
         m_aPrinters.find( rData.m_aPrinterName );
     if( p_it == m_aPrinters.end() ) // huh ?
     {
@@ -833,23 +820,16 @@ void CUPSManager::setupJobContextData(
         p_it->second.m_aInfo.m_aContext = m_aDefaultContexts[ aPrinter ];
     }
 
-    rData.m_pParser     = p_it->second.m_aInfo.m_pParser;
-    rData.m_aContext    = p_it->second.m_aInfo.m_aContext;
+    rData.m_pParser		= p_it->second.m_aInfo.m_pParser;
+    rData.m_aContext	= p_it->second.m_aInfo.m_aContext;
 #endif
 }
 
 FILE* CUPSManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
-    OSL_TRACE( "endSpool: %s, %s",
-               rtl::OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
-              bQuickCommand ? "true" : "false" );
-
     if( m_aCUPSDestMap.find( rPrintername ) == m_aCUPSDestMap.end() )
-    {
-        OSL_TRACE( "defer to PrinterInfoManager::startSpool" );
         return PrinterInfoManager::startSpool( rPrintername, bQuickCommand );
-    }
-
+    
 #ifdef ENABLE_CUPS
     OUString aTmpURL, aTmpFile;
     osl_createTempFile( NULL, NULL, &aTmpURL.pData );
@@ -858,7 +838,7 @@ FILE* CUPSManager::startSpool( const OUString& rPrintername, bool bQuickCommand 
     FILE* fp = fopen( aSysFile.getStr(), "w" );
     if( fp )
         m_aSpoolFiles[fp] = aSysFile;
-
+    
     return fp;
 #else
     return NULL;
@@ -867,14 +847,15 @@ FILE* CUPSManager::startSpool( const OUString& rPrintername, bool bQuickCommand 
 
 struct less_ppd_key : public ::std::binary_function<double, double, bool>
 {
-    bool operator()(const PPDKey* left, const PPDKey* right)
+    bool operator()(const PPDKey* left, const PPDKey* right) 
     { return left->getOrderDependency() < right->getOrderDependency(); }
 };
 
-void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions ) const
+void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOptions, void** rOptions ) const
 {
     rNumOptions = 0;
     *rOptions = NULL;
+    int i;
 
     // emit features ordered to OrderDependency
     // ignore features that are set to default
@@ -882,7 +863,6 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
     // sanity check
     if( rJob.m_pParser == rJob.m_aContext.getParser() && rJob.m_pParser )
     {
-        int i;
         int nKeys = rJob.m_aContext.countValuesModified();
         ::std::vector< const PPDKey* > aKeys( nKeys );
         for(  i = 0; i < nKeys; i++ )
@@ -901,49 +881,30 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
             }
         }
     }
-
-    if( rJob.m_nPDFDevice > 0 && rJob.m_nCopies > 1 )
-    {
-        rtl::OString aVal( rtl::OString::valueOf( sal_Int32( rJob.m_nCopies ) ) );
-        rNumOptions = m_pCUPSWrapper->cupsAddOption( "copies", aVal.getStr(), rNumOptions, (cups_option_t**)rOptions );
-    }
-    if( ! bBanner )
-    {
-        rNumOptions = m_pCUPSWrapper->cupsAddOption( "job-sheets", "none", rNumOptions, (cups_option_t**)rOptions );
-    }
 }
 
-int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner )
+int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData )
 {
-    OSL_TRACE( "endSpool: %s, %s, copy count = %d",
-               rtl::OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
-               rtl::OUStringToOString( rJobTitle, RTL_TEXTENCODING_UTF8 ).getStr(),
-               rDocumentJobData.m_nCopies
-               );
-
     int nJobID = 0;
 
     osl::MutexGuard aGuard( m_aCUPSMutex );
-
-    boost::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
+    
+    std::hash_map< OUString, int, OUStringHash >::iterator dest_it =
         m_aCUPSDestMap.find( rPrintername );
     if( dest_it == m_aCUPSDestMap.end() )
-    {
-        OSL_TRACE( "defer to PrinterInfoManager::endSpool" );
-        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData, bBanner );
-    }
+        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData );
 
     #ifdef ENABLE_CUPS
-    boost::unordered_map< FILE*, OString, FPtrHash >::const_iterator it = m_aSpoolFiles.find( pFile );
+    std::hash_map< FILE*, OString, FPtrHash >::const_iterator it = m_aSpoolFiles.find( pFile );
     if( it != m_aSpoolFiles.end() )
     {
         fclose( pFile );
         rtl_TextEncoding aEnc = osl_getThreadTextEncoding();
-
+        
         // setup cups options
         int nNumOptions = 0;
         cups_option_t* pOptions = NULL;
-        getOptionsFromDocumentSetup( rDocumentJobData, bBanner, nNumOptions, (void**)&pOptions );
+        getOptionsFromDocumentSetup( rDocumentJobData, nNumOptions, (void**)&pOptions );
 
         cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
         nJobID = m_pCUPSWrapper->cupsPrintFile( pDest->name,
@@ -966,7 +927,7 @@ int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
         aCmd = aCmd + OString( " $HOME/cupsprint.ps" );
         system( aCmd.getStr() );
 #endif
-
+        
         unlink( it->second.getStr() );
         m_aSpoolFiles.erase( pFile );
         if( pOptions )
@@ -1009,7 +970,7 @@ bool CUPSManager::checkPrintersChanged( bool bWait )
             // where the user can set SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION
             // (see vcl/unx/source/gdi/salprnpsp.cxx)
             // so that checkPrintersChanged( true ) will never be called
-
+            
             // there is no way to query CUPS whether the printer list has changed
             // so get the dest list anew
             if( m_nDests && m_pDests )
@@ -1032,7 +993,7 @@ bool CUPSManager::checkPrintersChanged( bool bWait )
         if( bChanged )
             m_bNewDests = true;
     }
-
+    
     if( bChanged )
         initialize();
 
@@ -1061,7 +1022,7 @@ bool CUPSManager::setDefaultPrinter( const OUString& rName )
 {
     bool bSuccess = false;
 #ifdef ENABLE_CUPS
-    boost::unordered_map< OUString, int, OUStringHash >::iterator nit =
+    std::hash_map< OUString, int, OUStringHash >::iterator nit =
         m_aCUPSDestMap.find( rName );
     if( nit != m_aCUPSDestMap.end() && m_aCUPSMutex.tryToAcquire() )
     {
@@ -1077,7 +1038,7 @@ bool CUPSManager::setDefaultPrinter( const OUString& rName )
     else
 #endif
         bSuccess = PrinterInfoManager::setDefaultPrinter( rName );
-
+        
     return bSuccess;
 }
 
@@ -1087,14 +1048,14 @@ bool CUPSManager::writePrinterConfig()
     bool bDestModified = false;
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
-    for( boost::unordered_map< OUString, Printer, OUStringHash >::iterator prt =
+    for( std::hash_map< OUString, Printer, OUStringHash >::iterator prt =
              m_aPrinters.begin(); prt != m_aPrinters.end(); ++prt )
     {
-        boost::unordered_map< OUString, int, OUStringHash >::iterator nit =
+        std::hash_map< OUString, int, OUStringHash >::iterator nit =
             m_aCUPSDestMap.find( prt->first );
         if( nit == m_aCUPSDestMap.end() )
             continue;
-
+        
         if( ! prt->second.m_bModified )
             continue;
 
@@ -1106,7 +1067,7 @@ bool CUPSManager::writePrinterConfig()
 
             // create new option list
             int nNewOptions = 0;
-            cups_option_t* pNewOptions = NULL;
+            cups_option_t* pNewOptions = NULL; 
             int nValues = rInfo.m_aContext.countValuesModified();
             for( int i = 0; i < nValues; i++ )
             {
@@ -1148,7 +1109,7 @@ const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
     const char* pRet = NULL;
 
 #ifdef ENABLE_CUPS
-    OUString aLib(RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ));
+    OUString aLib = OUString::createFromAscii( _XSALSET_LIBNAME );
     oslModule pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
     if( pLib )
     {
@@ -1163,12 +1124,12 @@ const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
             OString aServer = m_pCUPSWrapper->cupsServer();
             OString aPassword;
             if( getpw( aServer, aUser, aPassword ) )
-            {
+            {       
                 m_aPassword = aPassword;
                 m_aUser = aUser;
                 m_pCUPSWrapper->cupsSetUser( m_aUser.getStr() );
                 pRet = m_aPassword.getStr();
-            }
+            }   	
         }
         osl_unloadModule( pLib );
     }

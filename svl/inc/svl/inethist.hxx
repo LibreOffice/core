@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ class INetURLHistory : public SfxBroadcaster
     static void NormalizeUrl_Impl (INetURLObject &rUrl);
 
     SVL_DLLPUBLIC void PutUrl_Impl   (const INetURLObject &rUrl);
-    SVL_DLLPUBLIC sal_Bool QueryUrl_Impl (const INetURLObject &rUrl);
+    SVL_DLLPUBLIC BOOL QueryUrl_Impl (const INetURLObject &rUrl);
 
     /** Not implemented.
     */
@@ -77,7 +77,7 @@ public:
 
     /** QueryProtocol.
     */
-    sal_Bool QueryProtocol (INetProtocol eProto) const
+    BOOL QueryProtocol (INetProtocol eProto) const
     {
         return ((eProto == INET_PROT_FILE ) ||
                 (eProto == INET_PROT_FTP  ) ||
@@ -87,22 +87,22 @@ public:
 
     /** QueryUrl.
     */
-    sal_Bool QueryUrl (const INetURLObject &rUrl)
+    BOOL QueryUrl (const INetURLObject &rUrl)
     {
         if (QueryProtocol (rUrl.GetProtocol()))
             return QueryUrl_Impl (rUrl);
         else
-            return sal_False;
+            return FALSE;
     }
 
-    sal_Bool QueryUrl (const String &rUrl)
+    BOOL QueryUrl (const String &rUrl)
     {
         INetProtocol eProto =
             INetURLObject::CompareProtocolScheme (rUrl);
         if (QueryProtocol (eProto))
             return QueryUrl_Impl (INetURLObject (rUrl));
         else
-            return sal_False;
+            return FALSE;
     }
 
     /** PutUrl.

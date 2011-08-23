@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,17 +43,16 @@ class SW_DLLPUBLIC SwTxtINetFmt : public SwTxtAttrNesting, public SwClient
     bool m_bVisited         : 1; // visited link?
     bool m_bVisitedValid    : 1; // is m_bVisited valid?
 
-protected:
-virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    // forbidden and not implemented.
+    SwTxtINetFmt();
 
 public:
     SwTxtINetFmt( SwFmtINetFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtINetFmt();
     TYPEINFO();
 
-    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
-
-    SW_DLLPRIVATE void InitINetFmt(SwTxtNode & rNode);
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
     // get and set TxtNode pointer
     const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }
@@ -70,7 +69,7 @@ public:
     bool IsVisitedValid() const { return m_bVisitedValid; }
     void SetVisitedValid( bool bNew ) { m_bVisitedValid = bNew; }
 
-    sal_Bool IsProtect() const;
+    BOOL IsProtect() const;
 };
 
 inline const SwTxtNode& SwTxtINetFmt::GetTxtNode() const

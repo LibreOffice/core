@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_table_TableSortField_idl__
-#define __com_sun_star_table_TableSortField_idl__
-
-#ifndef __com_sun_star_lang_Locale_idl__
-#include <com/sun/star/lang/Locale.idl>
-#endif
-#ifndef __com_sun_star_table_TableSortFieldType_idl__
-#include <com/sun/star/table/TableSortFieldType.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module table {
-
-//=============================================================================
-/** describes how to sort a single field (row/column) in a tables
+#ifndef __com_sun_star_table_TableSortField_idl__ 
+#define __com_sun_star_table_TableSortField_idl__ 
+ 
+#ifndef __com_sun_star_lang_Locale_idl__ 
+#include <com/sun/star/lang/Locale.idl> 
+#endif 
+#ifndef __com_sun_star_table_TableSortFieldType_idl__ 
+#include <com/sun/star/table/TableSortFieldType.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module table {  
+ 
+//============================================================================= 
+/** describes how to sort a single field (row/column) in a tables 
     sort descriptor.
 
     @see com::sun::star::table::TableSortDescriptor2
@@ -49,59 +49,59 @@ module com {  module sun {  module star {  module table {
  */
 published struct TableSortField
 {
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
     /** index of the row or column in the table to be sorted; 0-based.
      */
-    long Field;
-
-    //-------------------------------------------------------------------------
+    long Field; 
+ 
+    //------------------------------------------------------------------------- 
     /** <TRUE/> if data are sorted in ascending order,
         <FALSE/> if in descending order.
      */
-    boolean IsAscending;
-
-    //-------------------------------------------------------------------------
+    boolean IsAscending; 
+ 
+    //------------------------------------------------------------------------- 
     /** specifies if the case of letters is important when comparing entries.
      */
-    boolean IsCaseSensitive;
+    boolean IsCaseSensitive; 
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
     /** type of contents in the field.
 
-        <p>If the value is
+        <p>If the value is 
         <member scope="com::sun::star::table::TableSortFieldType">AUTOMATIC</member>
         the algorithm used for sorting is application specific.
-        Especially it may or may not use the values given by
-        "CollatorLocale" and "CollatorAlgorithm".</p>
+        Especially it may or may not use the values given by 
+        'CollatorLocale' and 'CollatorAlgorithm'.</p>
      */
-    com::sun::star::table::TableSortFieldType FieldType;
+    com::sun::star::table::TableSortFieldType FieldType; 
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
     /** the locale used by the collator when comparing/sorting text.
-
-        <p>This property will not be used when the "FieldType" is
+        
+        <p>This property will not be used when the 'FieldType' is
         <member scope="com::sun::star::table::TableSortFieldType">NUMERIC</member>
         </p>
 
         @ see   com::sun::star::i18n::XCollator
      */
-    com::sun::star::lang::Locale CollatorLocale;
-
-    //-------------------------------------------------------------------------
+    com::sun::star::lang::Locale CollatorLocale; 
+ 
+    //------------------------------------------------------------------------- 
     /** the algorithm used by the collator when comparing/sorting text.
 
-        <p>This property will not be used when the "FieldType" is
+        <p>This property will not be used when the 'FieldType' is
         <member scope="com::sun::star::table::TableSortFieldType">NUMERIC</member>
         </p>
 
         @ see   com::sun::star::i18n::XCollator
      */
-    string CollatorAlgorithm;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    string CollatorAlgorithm; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

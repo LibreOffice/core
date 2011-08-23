@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,16 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
+#include "odma_inputstream.hxx"
 #include "com/sun/star/io/IOException.hpp"
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <cppuhelper/implbase1.hxx>
-#ifdef WNT
-#include <windows.h>
-#endif
-#include "odma_inputstream.hxx"
 #include "odma_contentprops.hxx"
 #include "odma_provider.hxx"
 
@@ -80,11 +77,11 @@ OOdmaStream::~OOdmaStream()
     }
     catch (io::IOException const &)
     {
-        OSL_FAIL("unexpected situation");
+        OSL_ENSURE(false, "unexpected situation");
     }
     catch (uno::RuntimeException const &)
     {
-        OSL_FAIL("unexpected situation");
+        OSL_ENSURE(false, "unexpected situation");
     }
 }
 // -----------------------------------------------------------------------------
@@ -106,14 +103,14 @@ uno::Reference< io::XOutputStream > SAL_CALL OOdmaStream::getOutputStream(  ) th
     return uno::Reference< io::XOutputStream >( this );
 }
 // -----------------------------------------------------------------------------
-sal_Int32 SAL_CALL OOdmaStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL OOdmaStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) 
     throw( io::NotConnectedException,
            io::BufferSizeExceededException,
            io::IOException,
            uno::RuntimeException)
 {
     ensureInputStream();
-
+    
     return m_xInput->readBytes(aData,nBytesToRead);
 }
 // -----------------------------------------------------------------------------
@@ -161,14 +158,14 @@ void SAL_CALL OOdmaStream::closeStream() throw( io::NotConnectedException,io::IO
     if( m_xInput.is() )
     {
         m_xInput->closeInput();
-        m_xInput        = NULL;
-        m_xInputSeek    = NULL;
+        m_xInput		= NULL;
+        m_xInputSeek	= NULL;
     }
     if(m_xOutput.is())
     {
         m_xOutput->closeOutput();
-        m_xOutput       = NULL;
-        m_xTruncate     = NULL;
+        m_xOutput		= NULL;
+        m_xTruncate		= NULL;
         if(m_bModified)
             m_pProvider->saveDocument(m_aProp->m_sDocumentId);
     }
@@ -181,7 +178,7 @@ void SAL_CALL OOdmaStream::closeInput()
 {
     osl::MutexGuard aGuard( m_aMutex );
     m_bInputStreamCalled = sal_False;
-
+    
     if( ! m_bOutputStreamCalled )
         closeStream();
 }
@@ -193,7 +190,7 @@ void SAL_CALL OOdmaStream::closeOutput()
 {
     osl::MutexGuard aGuard( m_aMutex );
     m_bOutputStreamCalled = sal_False;
-
+    
     if( ! m_bInputStreamCalled )
         closeStream();
 }

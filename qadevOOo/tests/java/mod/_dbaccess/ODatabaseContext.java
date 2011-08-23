@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,15 +120,15 @@ public class ODatabaseContext extends TestCase {
                 UnoRuntime.queryInterface(XPropertySet.class, oInterface) ;
 
             xDSProps.setPropertyValue("URL", "sdbc:dbase:file:///.") ;
-
+            
             XDocumentDataSource xDDS = (XDocumentDataSource)
             UnoRuntime.queryInterface(XDocumentDataSource.class, oInterface);
             XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class,
             xDDS.getDatabaseDocument ());
             String aFile = utils.getOfficeTemp ((XMultiServiceFactory) Param.getMSF ())+"DatabaseContext.odb";
             log.println("store to '" + aFile + "'");
-            store.storeAsURL(aFile,new PropertyValue[]{});
-
+            store.storeAsURL(aFile,new PropertyValue[]{});            
+            
             tEnv.addObjRelation("XNamingService.RegisterObject", oInterface) ;
 
             tEnv.addObjRelation("INSTANCE", oInterface);

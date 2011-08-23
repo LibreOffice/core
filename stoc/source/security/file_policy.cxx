@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include <osl/diagnose.h>
 #include <osl/file.h>
@@ -91,21 +91,21 @@ class FilePolicy
 {
     Reference< XComponentContext > m_xComponentContext;
     AccessControl m_ac;
-
+    
     Sequence< Any > m_defaultPermissions;
-    typedef boost::unordered_map< OUString, Sequence< Any >, OUStringHash > t_permissions;
+    typedef std::hash_map< OUString, Sequence< Any >, OUStringHash > t_permissions;
     t_permissions m_userPermissions;
     bool m_init;
-
+    
 protected:
     virtual void SAL_CALL disposing();
-
+    
 public:
     FilePolicy( Reference< XComponentContext > const & xComponentContext )
         SAL_THROW( () );
     virtual ~FilePolicy()
         SAL_THROW( () );
-
+    
     // XPolicy impl
     virtual Sequence< Any > SAL_CALL getPermissions(
         OUString const & userId )
@@ -114,7 +114,7 @@ public:
         throw (RuntimeException);
     virtual void SAL_CALL refresh()
         throw (RuntimeException);
-
+    
     // XServiceInfo impl
     virtual OUString SAL_CALL getImplementationName()
         throw (RuntimeException);
@@ -157,7 +157,7 @@ Sequence< Any > FilePolicy::getPermissions(
         refresh();
         m_init = true;
     }
-
+    
     MutexGuard guard( m_mutex );
     t_permissions::iterator iFind( m_userPermissions.find( userId ) );
     if (m_userPermissions.end() == iFind)
@@ -178,7 +178,7 @@ Sequence< Any > FilePolicy::getDefaultPermissions()
         refresh();
         m_init = true;
     }
-
+    
     MutexGuard guard( m_mutex );
     return m_defaultPermissions;
 }
@@ -188,34 +188,34 @@ class PolicyReader
 {
     OUString m_fileName;
     oslFileHandle m_file;
-
+    
     sal_Int32 m_linepos;
     ByteSequence m_line;
     sal_Int32 m_pos;
     sal_Unicode m_back;
-
+    
     sal_Unicode get()
         SAL_THROW( (RuntimeException) );
     inline void back( sal_Unicode c ) SAL_THROW( () )
         { m_back = c; }
-
-    inline bool isWhiteSpace( sal_Unicode c ) const SAL_THROW( () )
+    
+    inline bool isWhiteSpace( sal_Unicode c ) SAL_THROW( () )
         { return (' ' == c || '\t' == c || '\n' == c || '\r' == c); }
     void skipWhiteSpace()
         SAL_THROW( (RuntimeException) );
-
-    inline bool isCharToken( sal_Unicode c ) const SAL_THROW( () )
+    
+    inline bool isCharToken( sal_Unicode c ) SAL_THROW( () )
         { return (';' == c || ',' == c || '{' == c || '}' == c); }
-
+    
 public:
     PolicyReader( OUString const & file, AccessControl & ac )
         SAL_THROW( (RuntimeException) );
     ~PolicyReader()
         SAL_THROW( () );
-
+    
     void error( OUString const & msg )
         SAL_THROW( (RuntimeException) );
-
+    
     OUString getToken()
         SAL_THROW( (RuntimeException) );
     OUString assureToken()
@@ -303,7 +303,7 @@ void PolicyReader::skipWhiteSpace()
         c = get();
     }
     while (isWhiteSpace( c )); // seeking next non-whitespace char
-
+    
     if ('/' == c) // C/C++ like comment
     {
         c = get();
@@ -349,7 +349,7 @@ void PolicyReader::skipWhiteSpace()
         while ('\n' != c && '\0' != c); // seek eol/eof
         skipWhiteSpace(); // cont skip on next line
     }
-
+    
     else // is token char
     {
         back( c );
@@ -378,7 +378,7 @@ sal_Unicode PolicyReader::get()
             error( OUSTR("checking eof failed!") );
         if (eof)
             return '\0';
-
+        
         rc = ::osl_readLine( m_file, reinterpret_cast< sal_Sequence ** >( &m_line ) );
         if (osl_File_E_None != rc)
             error( OUSTR("read line failed!") );
@@ -434,16 +434,17 @@ PolicyReader::~PolicyReader()
     }
 }
 
-#define s_grant "grant"
-#define s_user "user"
-#define s_permission "permission"
-#define s_openBrace "{"
-#define s_closingBrace "}"
+static OUString s_grant = OUSTR("grant");
+static OUString s_user = OUSTR("user");
+static OUString s_permission = OUSTR("permission");
+static OUString s_openBrace = OUSTR("{");
+static OUString s_closingBrace = OUSTR("}");
+static OUString s_semi = OUSTR(";");
 
-#define s_filePermission "com.sun.star.io.FilePermission"
-#define s_socketPermission "com.sun.star.connection.SocketPermission"
-#define s_runtimePermission "com.sun.star.security.RuntimePermission"
-#define s_allPermission "com.sun.star.security.AllPermission"
+static OUString s_filePermission = OUSTR("com.sun.star.io.FilePermission");
+static OUString s_socketPermission = OUSTR("com.sun.star.connection.SocketPermission");
+static OUString s_runtimePermission = OUSTR("com.sun.star.security.RuntimePermission");
+static OUString s_allPermission = OUSTR("com.sun.star.security.AllPermission");
 
 //__________________________________________________________________________________________________
 void FilePolicy::refresh()
@@ -459,56 +460,56 @@ void FilePolicy::refresh()
             OUSTR("name of policy file unknown!"),
             (OWeakObject *)this );
     }
-
+    
     PolicyReader reader( fileName, m_ac );
-
+    
     // fill these two
     Sequence< Any > defaultPermissions;
     t_permissions userPermissions;
-
+    
     OUString token( reader.getToken() );
     while (token.getLength())
     {
-        if (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_grant)))
+        if (! token.equals( s_grant ))
             reader.error( OUSTR("expected >grant< token!") );
         OUString userId;
         token = reader.assureToken();
-        if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_user))) // next token is user-id
+        if (token.equals( s_user )) // next token is user-id
         {
             userId = reader.assureQuotedToken();
             token = reader.assureToken();
         }
-        if (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_openBrace)))
+        if (! token.equals( s_openBrace ))
             reader.error( OUSTR("expected opening brace >{<!") );
         token = reader.assureToken();
         // permissions list
-        while (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_closingBrace)))
+        while (! token.equals( s_closingBrace ))
         {
-            if (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_permission)))
+            if (! token.equals( s_permission ))
                 reader.error( OUSTR("expected >permission< or closing brace >}<!") );
-
+            
             token = reader.assureToken(); // permission type
             Any perm;
-            if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_filePermission))) // FilePermission
+            if (token.equals( s_filePermission )) // FilePermission
             {
                 OUString url( reader.assureQuotedToken() );
                 reader.assureToken( ',' );
                 OUString actions( reader.assureQuotedToken() );
                 perm <<= io::FilePermission( url, actions );
-            }
-            else if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_socketPermission))) // SocketPermission
+            }            
+            else if (token.equals( s_socketPermission )) // SocketPermission
             {
                 OUString host( reader.assureQuotedToken() );
                 reader.assureToken( ',' );
                 OUString actions( reader.assureQuotedToken() );
                 perm <<= connection::SocketPermission( host, actions );
             }
-            else if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_runtimePermission))) // RuntimePermission
+            else if (token.equals( s_runtimePermission )) // RuntimePermission
             {
                 OUString name( reader.assureQuotedToken() );
                 perm <<= security::RuntimePermission( name );
             }
-            else if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_allPermission))) // AllPermission
+            else if (token.equals( s_allPermission )) // AllPermission
             {
                 perm <<= security::AllPermission();
             }
@@ -516,9 +517,9 @@ void FilePolicy::refresh()
             {
                 reader.error( OUSTR("expected permission type!") );
             }
-
+            
             reader.assureToken( ';' );
-
+            
             // insert
             if (userId.getLength())
             {
@@ -534,14 +535,14 @@ void FilePolicy::refresh()
                 defaultPermissions.realloc( len +1 );
                 defaultPermissions[ len ] = perm;
             }
-
+            
             token = reader.assureToken(); // next permissions token
         }
-
+        
         reader.assureToken( ';' ); // semi
         token = reader.getToken(); // next grant token
     }
-
+    
     // assign new ones
     MutexGuard guard( m_mutex );
     m_defaultPermissions = defaultPermissions;

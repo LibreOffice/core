@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFmtLayoutSplit : public SfxBoolItem
 {
 public:
-    SwFmtLayoutSplit( sal_Bool bSplit = sal_True ) : SfxBoolItem( RES_LAYOUT_SPLIT, bSplit ) {}
+    SwFmtLayoutSplit( BOOL bSplit = TRUE ) : SfxBoolItem( RES_LAYOUT_SPLIT, bSplit ) {}
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -49,10 +49,10 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const;
 };
 
-inline const SwFmtLayoutSplit &SwAttrSet::GetLayoutSplit(sal_Bool bInP) const
+inline const SwFmtLayoutSplit &SwAttrSet::GetLayoutSplit(BOOL bInP) const
     { return (const SwFmtLayoutSplit&)Get( RES_LAYOUT_SPLIT,bInP); }
 
-inline const SwFmtLayoutSplit &SwFmt::GetLayoutSplit(sal_Bool bInP) const
+inline const SwFmtLayoutSplit &SwFmt::GetLayoutSplit(BOOL bInP) const
     { return aSet.GetLayoutSplit(bInP); }
 
 #endif

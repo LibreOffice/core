@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@ SFX_IMPL_STATUSBAR_CONTROL( SvxZoomSliderControl, SvxZoomSliderItem );
 
 struct SvxZoomSliderControl::SvxZoomSliderControl_Impl
 {
-    sal_uInt16                   mnCurrentZoom;
-    sal_uInt16                   mnMinZoom;
-    sal_uInt16                   mnMaxZoom;
-    sal_uInt16                   mnSliderCenter;
+    USHORT                   mnCurrentZoom;
+    USHORT                   mnMinZoom;
+    USHORT                   mnMaxZoom;
+    USHORT                   mnSliderCenter;
     std::vector< long >      maSnappingPointOffsets;
-    std::vector< sal_uInt16 >    maSnappingPointZooms;
+    std::vector< USHORT >    maSnappingPointZooms;
     Image                    maSliderButton;
     Image                    maIncreaseButton;
     Image                    maDecreaseButton;
@@ -90,10 +90,10 @@ const long nSnappingPointsMinDist = nSnappingEpsilon; // minimum distance of two
 
 // nOffset referes to the origin of the control:
 // + ----------- -
-sal_uInt16 SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
+USHORT SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
 {
     const long nControlWidth = getControlRect().GetWidth();
-    sal_uInt16 nRet = 0;
+    USHORT nRet = 0;
 
     if ( nOffset < nSliderXOffset )
         return mpImpl->mnMinZoom;;
@@ -102,7 +102,7 @@ sal_uInt16 SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
         return mpImpl->mnMaxZoom;
 
     // check for snapping points:
-    sal_uInt16 nCount = 0;
+    USHORT nCount = 0;
     std::vector< long >::iterator aSnappingPointIter;
     for ( aSnappingPointIter = mpImpl->maSnappingPointOffsets.begin();
           aSnappingPointIter != mpImpl->maSnappingPointOffsets.end();
@@ -127,7 +127,7 @@ sal_uInt16 SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
             const long nHalfSliderWidth = nControlWidth/2 - nSliderXOffset;
             const long nZoomPerSliderPixel = (1000 * nFirstHalfRange) / nHalfSliderWidth;
             const long nOffsetToSliderLeft = nOffset - nSliderXOffset;
-            nRet = mpImpl->mnMinZoom + sal_uInt16( nOffsetToSliderLeft * nZoomPerSliderPixel / 1000 );
+            nRet = mpImpl->mnMinZoom + USHORT( nOffsetToSliderLeft * nZoomPerSliderPixel / 1000 );
         }
         else
         {
@@ -136,7 +136,7 @@ sal_uInt16 SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
             const long nHalfSliderWidth = nControlWidth/2 - nSliderXOffset;
             const long nZoomPerSliderPixel = 1000 * nSecondHalfRange / nHalfSliderWidth;
             const long nOffsetToSliderCenter = nOffset - nControlWidth/2;
-            nRet = mpImpl->mnSliderCenter + sal_uInt16( nOffsetToSliderCenter * nZoomPerSliderPixel / 1000 );
+            nRet = mpImpl->mnSliderCenter + USHORT( nOffsetToSliderCenter * nZoomPerSliderPixel / 1000 );
         }
     }
 
@@ -149,7 +149,7 @@ sal_uInt16 SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
 }
 
 // returns the offset to the left control border
-long SvxZoomSliderControl::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
+long SvxZoomSliderControl::Zoom2Offset( USHORT nCurrentZoom ) const
 {
     const long nControlWidth = getControlRect().GetWidth();
     long nRet = nSliderXOffset;
@@ -178,13 +178,14 @@ long SvxZoomSliderControl::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
 
 // -----------------------------------------------------------------------
 
-SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nId, StatusBar& _rStb ) :
+SvxZoomSliderControl::SvxZoomSliderControl( USHORT _nSlotId,  USHORT _nId, StatusBar& _rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, _rStb ),
     mpImpl( new SvxZoomSliderControl_Impl )
 {
-    mpImpl->maSliderButton   = Image( SVX_RES( RID_SVXBMP_SLIDERBUTTON   ) );
-    mpImpl->maIncreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERINCREASE ) );
-    mpImpl->maDecreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERDECREASE ) );
+    const sal_Bool bHC = GetStatusBar().GetSettings().GetStyleSettings().GetHighContrastMode();
+    mpImpl->maSliderButton   = Image( SVX_RES( bHC ? RID_SVXBMP_SLIDERBUTTON_HC : RID_SVXBMP_SLIDERBUTTON ) );
+    mpImpl->maIncreaseButton = Image( SVX_RES( bHC ? RID_SVXBMP_SLIDERINCREASE_HC : RID_SVXBMP_SLIDERINCREASE ) );
+    mpImpl->maDecreaseButton = Image( SVX_RES( bHC ? RID_SVXBMP_SLIDERDECREASE_HC : RID_SVXBMP_SLIDERDECREASE ) );
 }
 
 // -----------------------------------------------------------------------
@@ -196,7 +197,7 @@ SvxZoomSliderControl::~SvxZoomSliderControl()
 
 // -----------------------------------------------------------------------
 
-void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+void SvxZoomSliderControl::StateChanged( USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( (SFX_ITEM_AVAILABLE != eState) || pState->ISA( SfxVoidItem ) )
     {
@@ -213,7 +214,7 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
         mpImpl->mbValuesSet   = true;
 
         if ( mpImpl->mnSliderCenter == mpImpl->mnMaxZoom )
-            mpImpl->mnSliderCenter = mpImpl->mnMinZoom + (sal_uInt16)((mpImpl->mnMaxZoom - mpImpl->mnMinZoom) * 0.5);
+            mpImpl->mnSliderCenter = mpImpl->mnMinZoom + (USHORT)((mpImpl->mnMaxZoom - mpImpl->mnMinZoom) * 0.5);
 
 
         DBG_ASSERT( mpImpl->mnMinZoom <= mpImpl->mnCurrentZoom &&
@@ -227,20 +228,20 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
         mpImpl->maSnappingPointZooms.clear();
 
         // get all snapping points:
-        std::set< sal_uInt16 > aTmpSnappingPoints;
-        for ( sal_uInt16 j = 0; j < rSnappingPoints.getLength(); ++j )
+        std::set< USHORT > aTmpSnappingPoints;
+        for ( USHORT j = 0; j < rSnappingPoints.getLength(); ++j )
         {
             const sal_Int32 nSnappingPoint = rSnappingPoints[j];
-            aTmpSnappingPoints.insert( (sal_uInt16)nSnappingPoint );
+            aTmpSnappingPoints.insert( (USHORT)nSnappingPoint );
         }
 
         // remove snapping points that are to close to each other:
-        std::set< sal_uInt16 >::iterator aSnappingPointIter;
+        std::set< USHORT >::iterator aSnappingPointIter;
         long nLastOffset = 0;
 
         for ( aSnappingPointIter = aTmpSnappingPoints.begin(); aSnappingPointIter != aTmpSnappingPoints.end(); ++aSnappingPointIter )
         {
-            const sal_uInt16 nCurrent = *aSnappingPointIter;
+            const USHORT nCurrent = *aSnappingPointIter;
             const long nCurrentOffset = Zoom2Offset( nCurrent );
 
             if ( nCurrentOffset - nLastOffset >= nSnappingPointsMinDist )
@@ -343,10 +344,10 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
+BOOL SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
 {
     if ( !mpImpl->mbValuesSet )
-        return sal_True;;
+        return TRUE;;
 
     const Rectangle aControlRect = getControlRect();
     const Point aPoint = rEvt.GetPosPixel();
@@ -374,7 +375,7 @@ sal_Bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
         mpImpl->mnCurrentZoom = mpImpl->mnMaxZoom;
 
     if ( nOldZoom == mpImpl->mnCurrentZoom )
-        return sal_True;
+        return TRUE;
 
     if ( GetStatusBar().AreItemsVisible() )
         GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
@@ -395,15 +396,15 @@ sal_Bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
 
     mpImpl->mbOmitPaint = false;
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
+BOOL SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
 {
     if ( !mpImpl->mbValuesSet )
-        return sal_True;;
+        return TRUE;;
 
     const short nButtons = rEvt.GetButtons();
 
@@ -440,7 +441,7 @@ sal_Bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
         }
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

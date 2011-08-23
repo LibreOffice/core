@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,16 +27,13 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/modelbase.hxx"
-
 #include "oox/helper/attributelist.hxx"
+
+using ::rtl::OUString;
 
 namespace oox {
 namespace drawingml {
 namespace chart {
-
-// ============================================================================
-
-using ::rtl::OUString;
 
 // ============================================================================
 

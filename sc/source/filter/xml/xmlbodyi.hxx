@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,22 +39,22 @@ class ScXMLChangeTrackingImportHelper;
 
 class ScXMLBodyContext : public SvXMLImportContext
 {
-    rtl::OUString   sPassword;
+    rtl::OUString	sPassword;
     ScPasswordHash  meHash1;
     ScPasswordHash  meHash2;
-    sal_Bool        bProtected;
+    sal_Bool		bProtected;
     sal_Bool        bHadCalculationSettings;
 
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLBodyContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLBodyContext( ScXMLImport& rImport, USHORT nPrfx, const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual ~ScXMLBodyContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                                     const ::rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

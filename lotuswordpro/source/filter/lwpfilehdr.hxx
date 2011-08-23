@@ -58,13 +58,13 @@
 
 #include "lwpobjid.hxx"
 /**
- * @brief       LWP7 object
+ * @brief		LWP7 object
 */
 class LwpFileHeader
 {
 public:
     LwpFileHeader();
-    ~LwpFileHeader(){}
+    ~LwpFileHeader(){};
 private: //data member
     sal_uInt16 m_nAppRevision;
     sal_uInt16 m_nAppReleaseNo;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,6 +58,9 @@ class SwTable;
 class SwXText;
 
 
+/*-----------------07.04.98 08:15-------------------
+
+--------------------------------------------------*/
 typedef ::cppu::ImplInheritanceHelper10
 <   ::sfx2::MetadatableMixin
 ,   ::com::sun::star::lang::XUnoTunnel
@@ -314,6 +317,9 @@ public:
 };
 
 
+/*-----------------07.04.98 08:10-------------------
+
+--------------------------------------------------*/
 class SwXParagraphEnumeration
     : public SwSimpleEnumeration_Base
 {

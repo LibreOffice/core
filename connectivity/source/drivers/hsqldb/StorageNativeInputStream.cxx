@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,7 +153,7 @@ SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNa
 #endif
 
     if ( n < 0 )
-        ThrowException( env,
+        ThrowException(	env,
                         "java/io/IOException",
                         "n < 0");
 
@@ -191,14 +191,14 @@ SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNa
             }
             catch(Exception& e)
             {
-                OSL_FAIL("Exception catched! : skip();");
+                OSL_ENSURE(0,"Exception catched! : skip();");
                 StorageContainer::throwJavaException(e,env);
             }
         }
     }
     else
     {
-        ThrowException( env,
+        ThrowException(	env,
                         "java/io/IOException",
                         "Stream is not valid");
     }
@@ -234,13 +234,13 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
         }
         catch(Exception& e)
         {
-           OSL_FAIL("Exception caught! : available();");
+           OSL_ENSURE(0,"Exception caught! : available();");
             StorageContainer::throwJavaException(e,env);
         }
     }
     else
     {
-        ThrowException( env,
+        ThrowException(	env,
                         "java/io/IOException",
                         "Stream is not valid");
     }
@@ -278,7 +278,7 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
         }
         catch(Exception& e)
         {
-            OSL_FAIL("Exception catched! : skip();");
+            OSL_ENSURE(0,"Exception catched! : skip();");
             StorageContainer::throwJavaException(e,env);
         }
 

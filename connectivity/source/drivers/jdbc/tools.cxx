@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,6 +41,7 @@
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -49,16 +50,16 @@ void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::O
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     jobject out(0);
-
+    
     {
         jvalue args[2];
-        // Convert Parameter
+        // Parameter konvertieren
         args[0].l = convertwchar_tToJavaString(t.pEnv,key);
         args[1].l = convertwchar_tToJavaString(t.pEnv,value);
-        // Initialize temporary Variables
+        // temporaere Variable initialisieren
         static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
         static const char * cMethodName = "setProperty";
-        // Turn off Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
@@ -69,7 +70,7 @@ void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::O
         if(out)
             t.pEnv->DeleteLocalRef(out);
     } //t.pEnv
-    // WARNING: The caller will be owner of the returned pointers!!!
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
 }
 jclass java_util_Properties::theClass = 0;
 
@@ -78,7 +79,7 @@ java_util_Properties::~java_util_Properties()
 
 jclass java_util_Properties::getMyClass() const
 {
-    // the class needs only be called once, that is why it is static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/util/Properties");
     return theClass;
@@ -90,8 +91,8 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)
     SDBThreadAttach t;
     if( !t.pEnv )
         return;
-    // Turn off Java-Call for the constructor
-    // Initialize temperary Variables
+    // Java-Call fuer den Konstruktor absetzen
+    // temporaere Variable initialisieren
     static const char * cSignature = "()V";
     jobject tempObj;
     static jmethodID mID(NULL);
@@ -115,8 +116,8 @@ jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const ::rtl::OUStr
 java_util_Properties* connectivity::createStringPropertyArray(const Sequence< PropertyValue >& info )  throw(SQLException, RuntimeException)
 {
     java_util_Properties* pProps = new java_util_Properties();
-    const PropertyValue* pBegin = info.getConstArray();
-    const PropertyValue* pEnd   = pBegin + info.getLength();
+    const PropertyValue* pBegin	= info.getConstArray();
+    const PropertyValue* pEnd	= pBegin + info.getLength();
 
     for(;pBegin != pEnd;++pBegin)
     {
@@ -190,7 +191,7 @@ jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< 
     return 0;
 }
 // -----------------------------------------------------------------------------
-sal_Bool connectivity::isExceptionOccurred(JNIEnv *pEnv,sal_Bool _bClear)
+sal_Bool connectivity::isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear)
 {
     if ( !pEnv )
         return sal_False;
@@ -219,12 +220,12 @@ sal_Bool connectivity::isExceptionOccurred(JNIEnv *pEnv,sal_Bool _bClear)
 }
 // -----------------------------------------------------------------------------
 jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length)
-{
+{   
     SDBThreadAttach t;
     if( !t.pEnv || !x.is() )
         return NULL;
-    // Turn off Java-Call for the constructor
-    // Initialize temperary variables
+    // Java-Call fuer den Konstruktor absetzen
+    // temporaere Variable initialisieren
     jclass clazz = java_lang_Object::findMyClass("java/io/ByteArrayInputStream");
     static jmethodID mID(NULL);
     if  ( !mID )
@@ -246,12 +247,12 @@ jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Referen
 }
 // -----------------------------------------------------------------------------
 jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length)
-{
+{   
     SDBThreadAttach t;
     if( !t.pEnv || !x.is() )
         return NULL;
-    // Turn off Java-Call for the constructor
-    // Initialize temperary Variables
+    // Java-Call fuer den Konstruktor absetzen
+    // temporaere Variable initialisieren
     jclass clazz = java_lang_Object::findMyClass("java/io/CharArrayReader");
     static jmethodID mID(NULL);
     if  ( !mID )

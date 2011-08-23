@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class CacheDescriptor
 public:
     ::sd::slidesorter::cache::PageCacheManager::DocumentKey mpDocument;
     Size maPreviewSize;
-
+    
     CacheDescriptor(
         ::sd::slidesorter::cache::PageCacheManager::DocumentKey pDocument,
         const Size& rPreviewSize)
@@ -120,7 +120,7 @@ public:
             return (rElement1.first.Width()*rElement1.first.Height()
                 > rElement2.first.Width()*rElement2.first.Height());
     }
-
+    
 private:
     Size maPreferredSize;
 };
@@ -133,7 +133,7 @@ namespace sd { namespace slidesorter { namespace cache {
 /** Container for the active caches.
 */
 class PageCacheManager::PageCacheContainer
-    : public ::boost::unordered_map<CacheDescriptor,
+    : public ::std::hash_map<CacheDescriptor,
                              ::boost::shared_ptr<PageCacheManager::Cache>,
                              CacheDescriptor::Hash,
                              CacheDescriptor::Equal>
@@ -147,7 +147,7 @@ public:
     class CompareWithCache { public:
         CompareWithCache(const ::boost::shared_ptr<PageCacheManager::Cache>& rpCache)
             : mpCache(rpCache) {}
-        bool operator () (const PageCacheContainer::value_type& rValue) const
+        bool operator () (const PageCacheContainer::value_type& rValue)
         { return rValue.second == mpCache; }
     private:
         ::boost::shared_ptr<PageCacheManager::Cache> mpCache;
@@ -182,7 +182,7 @@ public:
 ::boost::shared_ptr<PageCacheManager> PageCacheManager::Instance (void)
 {
     ::boost::shared_ptr<PageCacheManager> pInstance;
-
+    
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
     pInstance = mpInstance.lock();
@@ -193,7 +193,7 @@ public:
             PageCacheManager::Deleter());
         mpInstance = pInstance;
     }
-
+        
     return pInstance;
 }
 
@@ -241,7 +241,7 @@ PageCacheManager::~PageCacheManager (void)
     // contain previews that are not up-to-date.  Recycle previews from
     // other caches to fill in the holes.
     Recycle(pResult, pDocument,rPreviewSize);
-
+    
     // Put the new (or old) cache into the container.
     if (pResult.get() != NULL)
         mpPageCaches->insert(PageCacheContainer::value_type(aKey, pResult));
@@ -296,13 +296,13 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
         mpPageCaches->begin(),
         mpPageCaches->end(),
         PageCacheContainer::CompareWithCache(rpCache)));
-
+    
     if (iCache != mpPageCaches->end())
     {
         OSL_ASSERT(iCache->second == rpCache);
 
         PutRecentlyUsedCache(iCache->first.mpDocument,iCache->first.maPreviewSize,rpCache);
-
+            
         mpPageCaches->erase(iCache);
     }
 }
@@ -316,7 +316,7 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
     const Size& rNewPreviewSize)
 {
     (void)rOldPreviewSize;
-
+    
     ::boost::shared_ptr<Cache> pResult;
 
     if (rpCache.get() != NULL)
@@ -326,6 +326,7 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
             mpPageCaches->begin(),
             mpPageCaches->end(),
             PageCacheContainer::CompareWithCache(rpCache)));
+        OSL_ASSERT(iCacheToChange != mpPageCaches->end());
         if (iCacheToChange != mpPageCaches->end())
         {
             OSL_ASSERT(iCacheToChange->second == rpCache);
@@ -342,10 +343,6 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
 
             pResult = rpCache;
         }
-        else
-        {
-            OSL_ASSERT(iCacheToChange != mpPageCaches->end());
-        }
     }
 
     return pResult;
@@ -354,12 +351,10 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
 
 
 
-bool PageCacheManager::InvalidatePreviewBitmap (
+void PageCacheManager::InvalidatePreviewBitmap (
     DocumentKey pDocument,
     const SdrPage* pKey)
 {
-    bool bHasChanged (false);
-
     if (pDocument!=NULL)
     {
         // Iterate over all caches that are currently in use and invalidate
@@ -367,7 +362,7 @@ bool PageCacheManager::InvalidatePreviewBitmap (
         PageCacheContainer::iterator iCache;
         for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
             if (iCache->first.mpDocument == pDocument)
-                bHasChanged |= iCache->second->InvalidateBitmap(pKey);
+                iCache->second->InvalidateBitmap(pKey);
 
         // Invalidate the previews in the recently used caches belonging to
         // the given document.
@@ -376,36 +371,8 @@ bool PageCacheManager::InvalidatePreviewBitmap (
         {
             RecentlyUsedQueue::const_iterator iCache2;
             for (iCache2=iQueue->second.begin(); iCache2!=iQueue->second.end(); ++iCache2)
-                bHasChanged |= iCache2->mpCache->InvalidateBitmap(pKey);
+                iCache2->mpCache->InvalidateBitmap(pKey);
         }
-    }
-
-    return bHasChanged;
-}
-
-
-
-
-void PageCacheManager::InvalidateAllPreviewBitmaps (DocumentKey pDocument)
-{
-    if (pDocument == NULL)
-        return;
-
-    // Iterate over all caches that are currently in use and invalidate the
-    // previews in those that belong to the document.
-    PageCacheContainer::iterator iCache;
-    for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
-        if (iCache->first.mpDocument == pDocument)
-            iCache->second->InvalidateCache();
-
-    // Invalidate the previews in the recently used caches belonging to the
-    // given document.
-    RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
-    if (iQueue != mpRecentlyUsedPageCaches->end())
-    {
-        RecentlyUsedQueue::const_iterator iCache2;
-        for (iCache2=iQueue->second.begin(); iCache2!=iQueue->second.end(); ++iCache2)
-            iCache2->mpCache->InvalidateCache();
     }
 }
 
@@ -428,22 +395,12 @@ void PageCacheManager::InvalidateAllCaches (void)
 
 
 
-void PageCacheManager::ReleasePreviewBitmap (const SdrPage* pPage)
-{
-    PageCacheContainer::iterator iCache;
-    for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end(); ++iCache)
-        iCache->second->ReleaseBitmap(pPage);
-}
-
-
-
-
 ::boost::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetRecentlyUsedCache (
     DocumentKey pDocument,
     const Size& rPreviewSize)
 {
     ::boost::shared_ptr<Cache> pCache;
-
+    
     // Look for the cache in the list of recently used caches.
     RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
     if (iQueue != mpRecentlyUsedPageCaches->end())

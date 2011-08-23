@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,13 +86,13 @@ void FuChar::DoExecute( SfxRequest& rReq )
 
         SfxItemSet aNewAttr( mpViewShell->GetPool(),
                                 EE_ITEMS_START, EE_ITEMS_END );
-        aNewAttr.Put( aEditAttr, sal_False );
+        aNewAttr.Put( aEditAttr, FALSE );
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdTabCharDialog( NULL, &aNewAttr, mpDoc->GetDocSh() ) : 0;
         if( pDlg )
         {
-            sal_uInt16 nResult = pDlg->Execute();
+            USHORT nResult = pDlg->Execute();
 
             if( nResult == RET_OK )
             {
@@ -111,7 +111,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
     mpView->SetAttributes(*pArgs);
 
     // invalidieren der Slots, die in der DrTxtObjBar auftauchen
-    static sal_uInt16 SidArray[] = {
+    static USHORT SidArray[] = {
                     SID_ATTR_CHAR_FONT,
                     SID_ATTR_CHAR_POSTURE,
                     SID_ATTR_CHAR_WEIGHT,
@@ -127,9 +127,9 @@ void FuChar::DoExecute( SfxRequest& rReq )
     if( mpDoc->GetOnlineSpell() )
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE, sal_False, &pItem ) ||
-            SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CJK, sal_False, &pItem ) ||
-            SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CTL, sal_False, &pItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE, FALSE, &pItem ) ||
+            SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CJK, FALSE, &pItem ) ||
+            SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CTL, FALSE, &pItem ) )
         {
             mpDoc->StopOnlineSpelling();
             mpDoc->StartOnlineSpelling();

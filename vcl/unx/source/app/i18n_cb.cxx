@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,6 +126,7 @@ Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
         ptext->nLength -= howmuch;
       }
     else
+    // if ( to > pText->nLength )
     {
           // XXX this indicates an error, are we out of sync ?
           fprintf(stderr, "Preedit_DeleteText( from=%i to=%i length=%i )\n",
@@ -282,12 +283,12 @@ Preedit_UpdateAttributes ( preedit_text_t* ptext, XIMFeedback* feedback,
 // Convert the XIM feedback values into appropriate VCL
 // SAL_EXTTEXTINPUT_ATTR values
 // returns an allocate list of attributes, which must be freed by caller
-sal_uInt16*
-Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<sal_uInt16>& rSalAttr )
+USHORT*
+Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<USHORT>& rSalAttr )
 {
-      sal_uInt16 *psalattr;
-      sal_uInt16  nval;
-      sal_uInt16  noldval = 0;
+      USHORT *psalattr;
+      USHORT  nval;
+      USHORT  noldval = 0;
       XIMFeedback nfeedback;
 
       // only work with reasonable length
@@ -297,7 +298,7 @@ Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<sal_uIn
         psalattr = &rSalAttr[0];
     }
       else
-        return (sal_uInt16*)NULL;
+        return (USHORT*)NULL;
 
       for (int npos = 0; npos < nlength; npos++)
     {
@@ -325,6 +326,13 @@ Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<sal_uIn
               if (nfeedback & XIMTertiary) // same as 2ery
                 nval |= SAL_EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
 
+            /*
+            // visibility feedback not supported now
+              if (   (nfeedback & XIMVisibleToForward)
+                  || (nfeedback & XIMVisibleToBackward)
+                  || (nfeedback & XIMVisibleCenter) )
+            { }
+            */
         }
         // copy in list
         psalattr[npos] = nval;
@@ -345,7 +353,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
          || pPreeditData->pFrame == NULL )
         return;
 
-    // Solaris 7 deletes the preedit buffer after commit
+    // #88564# Solaris 7 deletes the preedit buffer after commit
     // since the next call to preeditstart will have the same effect just skip this.
     // if (pPreeditData->eState == ePreeditStatusStartPending && call_data->text == NULL)
     //    return;
@@ -403,7 +411,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
       pPreeditData->aInputEv.mnCursorPos = call_data->caret;
       pPreeditData->aInputEv.maText = String (pPreeditData->aText.pUnicodeBuffer,
                                 pPreeditData->aText.nLength);
-    pPreeditData->aInputEv.mnCursorFlags    = 0; // default: make cursor visible
+    pPreeditData->aInputEv.mnCursorFlags 	= 0; // default: make cursor visible
       pPreeditData->aInputEv.mnDeltaStart = 0; // call_data->chg_first;
       pPreeditData->aInputEv.mbOnlyCursor = False;
 
@@ -501,7 +509,8 @@ PreeditCaretCallback ( XIC, XPointer,XIMPreeditCaretCallbackStruct* )
 Bool
 IsControlCode(sal_Unicode nChar)
 {
-    if ( nChar <= 0x1F /* C0 controls */ )
+    if ( nChar <= 0x1F // C0 controls
+     /* || (0x80 <= nChar && nChar <= 0x9F) C1 controls */ )
         return True;
     else
         return False;
@@ -515,7 +524,7 @@ CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
       XIMUnicodeText *cbtext = (XIMUnicodeText *)call_data;
       sal_Unicode *p_unicode_data = (sal_Unicode*)cbtext->string.utf16_char;
 
-    // filter unexpected pure control events
+    // #86964# filter unexpected pure control events
     if (cbtext->length == 1 && IsControlCode(p_unicode_data[0]) )
     {
         if( pPreeditData->pFrame )
@@ -527,13 +536,13 @@ CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
     {
         if( pPreeditData->pFrame )
         {
-            pPreeditData->aInputEv.mnTime           = 0;
-            pPreeditData->aInputEv.mpTextAttr       = 0;
-            pPreeditData->aInputEv.mnCursorPos      = cbtext->length;
-            pPreeditData->aInputEv.maText           = UniString(p_unicode_data, cbtext->length);
-            pPreeditData->aInputEv.mnCursorFlags    = 0; // default: make cursor visible
-            pPreeditData->aInputEv.mnDeltaStart     = 0;
-            pPreeditData->aInputEv.mbOnlyCursor     = False;
+            pPreeditData->aInputEv.mnTime 			= 0;
+            pPreeditData->aInputEv.mpTextAttr 		= 0;
+            pPreeditData->aInputEv.mnCursorPos 		= cbtext->length;
+            pPreeditData->aInputEv.maText 			= UniString(p_unicode_data, cbtext->length);
+            pPreeditData->aInputEv.mnCursorFlags 	= 0; // default: make cursor visible
+            pPreeditData->aInputEv.mnDeltaStart 	= 0;
+            pPreeditData->aInputEv.mbOnlyCursor 	= False;
 
             pPreeditData->pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pPreeditData->aInputEv);
             pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );

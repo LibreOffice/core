@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ public class UnoControlListBox extends TestCase {
         util.DesktopTools.closeDoc(xTextDoc);
     }
 
-    protected TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param, 
                                                     PrintWriter log) {
         XInterface oObj = null;
         XWindowPeer the_win = null;
@@ -88,18 +88,18 @@ public class UnoControlListBox extends TestCase {
         XControl aControl = null;
 
         //Insert a ControlShape and get the ControlModel
-        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000,
-                                                               4500, 15000,
-                                                               10000,
-                                                               "ListBox",
+        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000, 
+                                                               4500, 15000, 
+                                                               10000, 
+                                                               "ListBox", 
                                                                "UnoControlListBox");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
         XControlModel the_Model = aShape.getControl();
 
-        XControlShape aShape2 = FormTools.createControlShape(xTextDoc, 3000,
-                                                             4500, 5000, 10000,
+        XControlShape aShape2 = FormTools.createControlShape(xTextDoc, 3000, 
+                                                             4500, 5000, 10000, 
                                                              "TextField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape2);
@@ -108,7 +108,7 @@ public class UnoControlListBox extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                                            XControlAccess.class,
+                                            XControlAccess.class, 
                                             xTextDoc.getCurrentController());
 
         //get the ListBoxControl for the needed Object relations
@@ -141,14 +141,14 @@ public class UnoControlListBox extends TestCase {
         tEnv.addObjRelation("MODEL", the_Model);
 
         // adding object relation for XItemListener
-        ifc.awt._XItemListener.TestItemListener listener =
+        ifc.awt._XItemListener.TestItemListener listener = 
                 new ifc.awt._XItemListener.TestItemListener();
-        XListBox list = (XListBox) UnoRuntime.queryInterface(XListBox.class,
+        XListBox list = (XListBox) UnoRuntime.queryInterface(XListBox.class, 
                                                              oObj);
         list.addItemListener(listener);
         tEnv.addObjRelation("TestItemListener", listener);
 
-        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                                 aControl);
 
         tEnv.addObjRelation("XWindow.AnotherWindow", forObjRel);

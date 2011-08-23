@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,11 @@
 #include <svx/svdobj.hxx>
 #include <tools/debug.hxx>
 
+#ifndef SVX_LIGHT
 #include <sfx2/objsh.hxx>
+#else
+class SfxObjectShell;
+#endif
 
 #include <boost/optional.hpp>
 
@@ -50,9 +54,9 @@ TYPEINIT1(FmFormModel, SdrModel);
 
 struct FmFormModelImplData
 {
-    FmXUndoEnvironment*     pUndoEnv;
-    sal_Bool                bOpenInDesignIsDefaulted;
-    sal_Bool                bMovingPage;
+    FmXUndoEnvironment*		pUndoEnv;
+    sal_Bool				bOpenInDesignIsDefaulted;
+    sal_Bool				bMovingPage;
     ::boost::optional< sal_Bool >
                             aControlsUseRefDevice;
 
@@ -77,9 +81,11 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
             ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
 {
+#ifndef SVX_LIGHT
     m_pImpl = new FmFormModelImplData;
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
     m_pImpl->pUndoEnv->acquire();
+#endif
 }
 
 /*************************************************************************
@@ -94,9 +100,11 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectSh
             ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
 {
+#ifndef SVX_LIGHT
     m_pImpl = new FmFormModelImplData;
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
     m_pImpl->pUndoEnv->acquire();
+#endif
 }
 
 /*************************************************************************
@@ -113,9 +121,11 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
             ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
 {
+#ifndef SVX_LIGHT
     m_pImpl = new FmFormModelImplData;
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
     m_pImpl->pUndoEnv->acquire();
+#endif
 }
 
 /*************************************************************************
@@ -131,9 +141,11 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectSh
             ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
 {
+#ifndef SVX_LIGHT
     m_pImpl = new FmFormModelImplData;
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
     m_pImpl->pUndoEnv->acquire();
+#endif
 }
 
 /*************************************************************************
@@ -143,6 +155,7 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectSh
 \************************************************************************/
 FmFormModel::~FmFormModel()
 {
+#ifndef SVX_LIGHT
     if (m_pObjShell && m_pImpl->pUndoEnv->IsListening(*m_pObjShell))
         SetObjectShell(NULL);
 
@@ -153,6 +166,7 @@ FmFormModel::~FmFormModel()
     m_pImpl->pUndoEnv->release();
     delete m_pImpl;
 
+#endif
 }
 
 /*************************************************************************
@@ -172,9 +186,11 @@ SdrPage* FmFormModel::AllocPage(bool bMasterPage)
 \************************************************************************/
 void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 {
+#ifndef SVX_LIGHT
     // hack solange Methode intern
     if (m_pObjShell && !m_pImpl->pUndoEnv->IsListening( *m_pObjShell ))
         SetObjectShell(m_pObjShell);
+#endif
 
     SdrModel::InsertPage( pPage, nPos );
 }
@@ -184,14 +200,18 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 |* MovePage
 |*
 \************************************************************************/
-void FmFormModel::MovePage( sal_uInt16 nPgNum, sal_uInt16 nNewPos )
+void FmFormModel::MovePage( USHORT nPgNum, USHORT nNewPos )
 {
+#ifndef SVX_LIGHT
     m_pImpl->bMovingPage = sal_True;
         // see InsertPage for this
+#endif
 
     SdrModel::MovePage( nPgNum, nNewPos );
 
+#ifndef SVX_LIGHT
     m_pImpl->bMovingPage = sal_False;
+#endif
 }
 
 /*************************************************************************
@@ -204,12 +224,14 @@ SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
     FmFormPage* pToBeRemovedPage = dynamic_cast< FmFormPage* >( GetPage( nPgNum ) );
     OSL_ENSURE( pToBeRemovedPage, "FmFormModel::RemovePage: *which page*?" );
 
+#ifndef SVX_LIGHT
     if ( pToBeRemovedPage )
     {
         Reference< XNameContainer > xForms( pToBeRemovedPage->GetForms( false ) );
         if ( xForms.is() )
             m_pImpl->pUndoEnv->RemoveForms( xForms );
     }
+#endif
 
     FmFormPage* pRemovedPage = (FmFormPage*)SdrModel::RemovePage(nPgNum);
     OSL_ENSURE( pRemovedPage == pToBeRemovedPage, "FmFormModel::RemovePage: inconsistency!" );
@@ -223,9 +245,11 @@ SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
 \************************************************************************/
 void FmFormModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
 {
+#ifndef SVX_LIGHT
     // hack solange Methode intern
     if (m_pObjShell && !m_pImpl->pUndoEnv->IsListening( *m_pObjShell ))
         SetObjectShell(m_pObjShell);
+#endif
 
     SdrModel::InsertMasterPage(pPage, nPos);
 }
@@ -239,12 +263,14 @@ SdrPage* FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
 {
     FmFormPage* pPage = (FmFormPage*)SdrModel::RemoveMasterPage(nPgNum);
 
+#ifndef SVX_LIGHT
     if ( pPage )
     {
         Reference< XNameContainer > xForms( pPage->GetForms( false ) );
         if ( xForms.is() )
             m_pImpl->pUndoEnv->RemoveForms( xForms );
     }
+#endif
 
     return pPage;
 }
@@ -272,14 +298,18 @@ void FmFormModel::implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _
 //------------------------------------------------------------------------
 void FmFormModel::SetOpenInDesignMode( sal_Bool bOpenDesignMode )
 {
+#ifndef SVX_LIGHT
     implSetOpenInDesignMode( bOpenDesignMode, sal_False );
+#endif
 }
 
+#ifndef SVX_LIGHT
 //------------------------------------------------------------------------
 sal_Bool FmFormModel::OpenInDesignModeIsDefaulted( )
 {
     return m_pImpl->bOpenInDesignIsDefaulted;
 }
+#endif
 
 //------------------------------------------------------------------------
 sal_Bool FmFormModel::ControlsUseRefDevice() const
@@ -297,16 +327,19 @@ sal_Bool FmFormModel::ControlsUseRefDevice() const
 //------------------------------------------------------------------------
 void FmFormModel::SetAutoControlFocus( sal_Bool _bAutoControlFocus )
 {
+#ifndef SVX_LIGHT
     if( _bAutoControlFocus != m_bAutoControlFocus )
     {
         m_bAutoControlFocus = _bAutoControlFocus;
         m_pObjShell->SetModified( sal_True );
     }
+#endif
 }
 
 //------------------------------------------------------------------------
 void FmFormModel::SetObjectShell( SfxObjectShell* pShell )
 {
+#ifndef SVX_LIGHT
     if (pShell == m_pObjShell)
         return;
 
@@ -327,10 +360,11 @@ void FmFormModel::SetObjectShell( SfxObjectShell* pShell )
 
         m_pImpl->pUndoEnv->StartListening( *m_pObjShell );
     }
+#endif
 }
 
 //------------------------------------------------------------------------
-FmXUndoEnvironment& FmFormModel::GetUndoEnv()
+FmXUndoEnvironment&	FmFormModel::GetUndoEnv()
 {
     return *m_pImpl->pUndoEnv;
 }

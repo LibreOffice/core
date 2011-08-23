@@ -5,6 +5,13 @@
 
 #include "cpp.h"
 
+/*
+    Nlist *             pMacro;
+    Token *             pTokenWhereMacroBecomesValid;
+    struct macroValidator *
+                        pNext;
+*/
+
 void
 mvl_init(MacroValidatorList * out_pValidators)
 {
@@ -62,6 +69,21 @@ mvl_add( MacroValidatorList *   inout_pValidators,
     pNew->pNext = inout_pValidators->pFirst;
     inout_pValidators->pFirst = pNew;
 }
+
+/*
+void
+mvl_move( MacroValidatorList * inout_pValidators,
+          int                  in_nSpace )
+{
+    MacroValidator * pV;
+    for ( pV = inout_pValidators->pFirst;
+          pV != 0;
+          pV = pV->pNext )
+    {
+        pV->pTokenWhereMacroBecomesValid += in_nSpace;
+    }
+}
+*/
 
 void
 mvl_check(  MacroValidatorList * inout_pValidators,

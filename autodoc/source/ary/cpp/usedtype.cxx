@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace
 {
 
 using namespace ::ary::cpp;
-typedef std::vector< ary::cpp::E_ConVol >   PtrLevelVector;
+typedef std::vector< ary::cpp::E_ConVol >	PtrLevelVector;
 
 
 inline bool
@@ -61,26 +61,26 @@ result2bool( intt i_nResult )
     { return i_nResult < 0; }
 
 
-intt                compare_PtrLevelVector(
+intt 				compare_PtrLevelVector(
                         const PtrLevelVector &
                                             i_r1,
                         const PtrLevelVector &
                                             i_r2 );
 inline intt
-compare_ConVol( E_ConVol i_e1,
+compare_ConVol(	E_ConVol i_e1,
                 E_ConVol i_e2 )
     { return intt(i_e1) - intt(i_e2); }
 
 inline intt
-compare_bool(   bool i_b1,
+compare_bool(	bool i_b1,
                 bool i_b2 )
     { return i_b1 == i_b2
-                    ?   0
-                    :   i_b1
-                            ?   -1
-                            :   +1; }
+                    ?	0
+                    :	i_b1
+                            ?	-1
+                            :	+1; }
 inline intt
-compare_Specialisation( E_TypeSpecialisation i_e1,
+compare_Specialisation(	E_TypeSpecialisation i_e1,
                         E_TypeSpecialisation i_e2 )
     { return intt(i_e1) - intt(i_e2); }
 
@@ -116,7 +116,7 @@ compare_PtrLevelVector( const PtrLevelVector & i_r1,
 }
 
 
-}   // anonymous namespace
+}	// anonymous namespace
 
 
 
@@ -549,15 +549,15 @@ List_TplParameter::Get_Text( StreamStr &                    o_rOut,
 }
 
 intt
-List_TplParameter::Compare( const List_TplParameter & i_rOther ) const
+List_TplParameter::Compare(	const List_TplParameter & i_rOther ) const
 {
     intt nResult = intt(aTplParameters.size()) - intt(i_rOther.aTplParameters.size());
 
     if (nResult != 0)
         return nResult;
 
-    Vector_TplArgument::const_iterator it1      = aTplParameters.begin();
-    Vector_TplArgument::const_iterator it1End   = aTplParameters.end();
+    Vector_TplArgument::const_iterator it1 		= aTplParameters.begin();
+    Vector_TplArgument::const_iterator it1End 	= aTplParameters.end();
     Vector_TplArgument::const_iterator it2      = i_rOther.aTplParameters.begin();
 
     for ( ; it1 != it1End; ++it1, ++it2 )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,18 +53,18 @@ rtl::OUString XSecParser::getIdAttr(const cssu::Reference< cssxs::XAttributeList
 {
     rtl::OUString ouIdAttr = xAttribs->getValueByName(
         rtl::OUString(RTL_ASCII_USTRINGPARAM("id")));
-
-    if (ouIdAttr == NULL)
+        
+    if (ouIdAttr == NULL) 
     {
         ouIdAttr = xAttribs->getValueByName(
             rtl::OUString(RTL_ASCII_USTRINGPARAM("Id")));
     }
-
+    
     return ouIdAttr;
 }
 
 /*
- * XDocumentHandler
+ * XDocumentHandler 
  */
 void SAL_CALL XSecParser::startDocument(  )
     throw (cssxs::SAXException, cssu::RuntimeException)
@@ -75,13 +75,14 @@ void SAL_CALL XSecParser::startDocument(  )
     m_bInSignatureValue = false;
     m_bInDigestValue = false;
     m_bInDate = false;
-
+    //m_bInTime = false;
+    
     if (m_xNextHandler.is())
     {
         m_xNextHandler->startDocument();
     }
 }
-
+    
 void SAL_CALL XSecParser::endDocument(  )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
@@ -103,7 +104,7 @@ void SAL_CALL XSecParser::startElement(
         {
             m_pXSecController->collectToVerify( ouIdAttr );
         }
-
+        
         if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATURE)) )
         {
             m_pXSecController->addSignature();
@@ -116,7 +117,7 @@ void SAL_CALL XSecParser::startElement(
         {
             rtl::OUString ouUri = xAttribs->getValueByName(rtl::OUString(RTL_ASCII_USTRINGPARAM(ATTR_URI)));
             DBG_ASSERT( ouUri != NULL, "URI == NULL" );
-
+            
             if (0 == ouUri.compareTo(rtl::OUString(RTL_ASCII_USTRINGPARAM(CHAR_FRAGMENT)),1))
             {
                 /*
@@ -138,7 +139,7 @@ void SAL_CALL XSecParser::startElement(
             if ( m_bReferenceUnresolved )
             {
                 rtl::OUString ouAlgorithm = xAttribs->getValueByName(rtl::OUString(RTL_ASCII_USTRINGPARAM(ATTR_ALGORITHM)));
-
+                
                 if (ouAlgorithm != NULL && ouAlgorithm == rtl::OUString(RTL_ASCII_USTRINGPARAM(ALGO_C14N)))
                 /*
                 * a xml stream
@@ -151,27 +152,27 @@ void SAL_CALL XSecParser::startElement(
             }
             else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509ISSUERNAME)))
             {
-            m_ouX509IssuerName = rtl::OUString();
+            m_ouX509IssuerName = rtl::OUString::createFromAscii("");
             m_bInX509IssuerName = true;
             }
             else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509SERIALNUMBER)))
             {
-            m_ouX509SerialNumber = rtl::OUString();
+            m_ouX509SerialNumber = rtl::OUString::createFromAscii("");
             m_bInX509SerialNumber = true;
             }
             else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509CERTIFICATE)))
             {
-            m_ouX509Certificate = rtl::OUString();
+            m_ouX509Certificate = rtl::OUString::createFromAscii("");
             m_bInX509Certificate = true;
             }
             else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREVALUE)))
             {
-            m_ouSignatureValue = rtl::OUString();
+            m_ouSignatureValue = rtl::OUString::createFromAscii("");
                 m_bInSignatureValue = true;
             }
             else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_DIGESTVALUE)))
             {
-            m_ouDigestValue = rtl::OUString();
+            m_ouDigestValue = rtl::OUString::createFromAscii("");
                 m_bInDigestValue = true;
             }
             else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTY)) )
@@ -185,10 +186,17 @@ void SAL_CALL XSecParser::startElement(
                         +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
                         +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
             {
-            m_ouDate = rtl::OUString();
+            m_ouDate = rtl::OUString::createFromAscii("");
                 m_bInDate = true;
             }
-
+            /*
+            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TIME)))
+            {
+            m_ouTime = rtl::OUString::createFromAscii("");
+                m_bInTime = true;
+            }
+            */
+            
         if (m_xNextHandler.is())
         {
             m_xNextHandler->startElement(aName, xAttribs);
@@ -209,11 +217,11 @@ void SAL_CALL XSecParser::startElement(
             cssu::Any());
     }
 }
-
-void SAL_CALL XSecParser::endElement( const rtl::OUString& aName )
+    
+void SAL_CALL XSecParser::endElement( const rtl::OUString& aName ) 
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
-    try
+    try 
     {
         if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_DIGESTVALUE)))
             {
@@ -229,7 +237,7 @@ void SAL_CALL XSecParser::endElement( const rtl::OUString& aName )
                 m_pXSecController->addStreamReference( m_currentReferenceURI, sal_True);
                 m_bReferenceUnresolved = false;
             }
-
+            
             m_pXSecController->setDigestValue( m_ouDigestValue );
         }
         else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNEDINFO)) )
@@ -263,6 +271,13 @@ void SAL_CALL XSecParser::endElement( const rtl::OUString& aName )
             m_pXSecController->setDate( m_ouDate );
                 m_bInDate = false;
         }
+        /*
+        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TIME)) )
+        {
+            m_pXSecController->setTime( m_ouTime );
+                m_bInTime = false;
+        }
+        */
 
         if (m_xNextHandler.is())
         {
@@ -284,7 +299,7 @@ void SAL_CALL XSecParser::endElement( const rtl::OUString& aName )
             cssu::Any());
     }
 }
-
+    
 void SAL_CALL XSecParser::characters( const rtl::OUString& aChars )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
@@ -312,13 +327,19 @@ void SAL_CALL XSecParser::characters( const rtl::OUString& aChars )
     {
         m_ouDate += aChars;
     }
-
+    /*
+    else if (m_bInTime)
+    {
+        m_ouTime += aChars;
+    } 
+    */
+    
     if (m_xNextHandler.is())
     {
         m_xNextHandler->characters(aChars);
         }
 }
-
+    
 void SAL_CALL XSecParser::ignorableWhitespace( const rtl::OUString& aWhitespaces )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
@@ -327,7 +348,7 @@ void SAL_CALL XSecParser::ignorableWhitespace( const rtl::OUString& aWhitespaces
         m_xNextHandler->ignorableWhitespace( aWhitespaces );
         }
 }
-
+    
 void SAL_CALL XSecParser::processingInstruction( const rtl::OUString& aTarget, const rtl::OUString& aData )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
@@ -336,7 +357,7 @@ void SAL_CALL XSecParser::processingInstruction( const rtl::OUString& aTarget, c
         m_xNextHandler->processingInstruction(aTarget, aData);
         }
 }
-
+    
 void SAL_CALL XSecParser::setDocumentLocator( const cssu::Reference< cssxs::XLocator >& xLocator )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {

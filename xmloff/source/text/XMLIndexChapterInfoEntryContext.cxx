@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/text/ChapterFormat.hpp>
@@ -81,15 +81,15 @@ XMLIndexChapterInfoEntryContext::~XMLIndexChapterInfoEntryContext()
 
 static const SvXMLEnumMapEntry aChapterDisplayMap[] =
 {
-    { XML_NAME,                     ChapterFormat::NAME },
-    { XML_NUMBER,                   ChapterFormat::NUMBER },
-    { XML_NUMBER_AND_NAME,          ChapterFormat::NAME_NUMBER },
+    { XML_NAME,				    	ChapterFormat::NAME },
+    { XML_NUMBER,					ChapterFormat::NUMBER },
+    { XML_NUMBER_AND_NAME,			ChapterFormat::NAME_NUMBER },
     //---> i89791
     // enabled for ODF 1.2, full index support in 3.0
     { XML_PLAIN_NUMBER_AND_NAME,    ChapterFormat::NO_PREFIX_SUFFIX },
     //<---
-    { XML_PLAIN_NUMBER,             ChapterFormat::DIGIT },
-    { XML_TOKEN_INVALID,            0 }
+    { XML_PLAIN_NUMBER,	    		ChapterFormat::DIGIT },
+    { XML_TOKEN_INVALID,			0 }
 };
 
 void XMLIndexChapterInfoEntryContext::StartElement(
@@ -145,9 +145,7 @@ void XMLIndexChapterInfoEntryContext::StartElement(
     if (bChapterInfoOK)
     {
         nValues++;
-        /* Some of the index chapter information attributes written to ODF 1.1
-           and 1.2 don't reflect the displaying (#i89791#)
-        */
+        // --> OD 2008-06-26 #i89791#
         if ( !bTOC )
         {
             bool bConvert( false );

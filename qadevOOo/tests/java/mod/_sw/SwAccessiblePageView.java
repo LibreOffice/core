@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,12 +110,12 @@ public class SwAccessiblePageView extends TestCase {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't insert lines", e );
         }
-
+        
         // Enumeration
         XEnumerationAccess oEnumA = (XEnumerationAccess)
         UnoRuntime.queryInterface(XEnumerationAccess.class, oText );
         XEnumeration oEnum = oEnumA.createEnumeration();
-
+        
         try {
             para = (XInterface) AnyConverter.toObject(
             new Type(XInterface.class),oEnum.nextElement());
@@ -126,15 +126,15 @@ public class SwAccessiblePageView extends TestCase {
             new Type(XInterface.class),oEnum2.nextElement());
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             e.printStackTrace(log);
-            log.println("Error: exception occurred...");
+            log.println("Error: exception occured...");
         } catch ( com.sun.star.container.NoSuchElementException e ) {
             e.printStackTrace(log);
-            log.println("Error: exception occurred...");
+            log.println("Error: exception occured...");
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             e.printStackTrace(log);
-            log.println("Error: exception occurred...");
+            log.println("Error: exception occured...");
         }
-
+        
         try {
             portP = (XPropertySet)
             UnoRuntime.queryInterface(XPropertySet.class, port);
@@ -142,19 +142,19 @@ public class SwAccessiblePageView extends TestCase {
             UnoRuntime.queryInterface(XPropertySet.class, para);
             paraP.setPropertyValue("BreakType",com.sun.star.style.BreakType.PAGE_AFTER);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error, exception occurred...");
+            log.println("Error, exception occured...");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get Paragraph", e );
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error, exception occurred...");
+            log.println("Error, exception occured...");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get Paragraph", e );
         } catch ( com.sun.star.beans.UnknownPropertyException e ) {
-            log.println("Error, exception occurred...");
+            log.println("Error, exception occured...");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get Paragraph", e );
         } catch ( com.sun.star.beans.PropertyVetoException e ) {
-            log.println("Error, exception occurred...");
+            log.println("Error, exception occured...");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get Paragraph", e );
         }

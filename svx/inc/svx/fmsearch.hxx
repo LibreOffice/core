@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,9 +64,9 @@ SVX_DLLPUBLIC sal_Bool IsSearchableControl( const ::com::sun::star::uno::Referen
 
 struct FmFoundRecordInformation
 {
-    ::com::sun::star::uno::Any      aPosition;  // bookmark of the record in which the text was found
-    sal_Int16       nFieldPos;  // ditto : the relative position of the column (in the string name of the field list in the constructor)
-    sal_Int16       nContext;   // the context in which was searched and found (if the current search knows several contexts)
+    ::com::sun::star::uno::Any		aPosition;	// bookmark of the record in which the text was found
+    sal_Int16		nFieldPos;	// ditto : the relative position of the column (in the string name of the field list in the constructor)
+    sal_Int16		nContext;	// the context in which was searched and found (if the current search knows several contexts)
 };
 
 // ===================================================================================================
@@ -76,13 +76,13 @@ struct FmFoundRecordInformation
 struct FmSearchContext
 {
     // [in]
-    sal_Int16                   nContext;       // the number of the context
+    sal_Int16					nContext;		// the number of the context
     // [out]
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           xCursor;        // the iterator for the context
-    String                  strUsedFields;  // a list of field names separeted by ';'
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>			xCursor;		// the iterator for the context
+    String					strUsedFields;	// a list of field names separeted by ';'
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
-                            arrFields;      // the corresponding text interfaces for the fields in strUsedFields
-    String                  sFieldDisplayNames;     // if not empty : names to be displayed for the searchable fields (must have the same token count as strUsedFields !)
+                            arrFields;		// the corresponding text interfaces for the fields in strUsedFields
+    String					sFieldDisplayNames;		// if not empty : names to be displayed for the searchable fields (must have the same token count as strUsedFields !)
 };
 
 #endif // _FMSEARCH_HXX

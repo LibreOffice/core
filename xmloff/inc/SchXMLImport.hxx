@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,6 +91,13 @@ enum SchXMLSeriesElemTokenMap
     XML_TOK_SERIES_ERROR_INDICATOR
 };
 
+enum SchXMLAxisElemTokenMap
+{
+    XML_TOK_AXIS_TITLE,
+    XML_TOK_AXIS_CATEGORIES,
+    XML_TOK_AXIS_GRID
+};
+
 // ----------------------------------------
 
 enum SchXMLChartAttrMap
@@ -126,6 +133,21 @@ enum SchXMLPlotAreaAttrTokenMap
     XML_TOK_PA_SHADE_MODE,
     XML_TOK_PA_AMBIENT_COLOR,
     XML_TOK_PA_LIGHTING_MODE
+};
+
+enum SchXMLAxisAttrTokenMap
+{
+    XML_TOK_AXIS_DIMENSION,
+    XML_TOK_AXIS_NAME,
+    XML_TOK_AXIS_STYLE_NAME
+};
+
+enum SchXMLLegendAttrMap
+{
+    XML_TOK_LEGEND_POSITION,
+    XML_TOK_LEGEND_X,
+    XML_TOK_LEGEND_Y,
+    XML_TOK_LEGEND_STYLE_NAME
 };
 
 enum SchXMLAutoStyleAttrMap
@@ -173,12 +195,12 @@ protected:
 
 public:
     // #110680#
-    SchXMLImport(
+    SchXMLImport( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_uInt16 nImportFlags = IMPORT_ALL );
 
     // #110680#
-    SchXMLImport(
+    SchXMLImport( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel,
         com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver > &,
@@ -196,6 +218,6 @@ public:
     virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 };
 
-#endif  // SCH_XMLIMPORT_HXX_
+#endif	// SCH_XMLIMPORT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

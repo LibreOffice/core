@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
@@ -351,6 +351,7 @@ SvXMLMetaExport::~SvXMLMetaExport()
 
 void SvXMLMetaExport::Export()
 {
+//    exportDom(xDOM, mrExport); // this would not work (root node, namespaces)
     uno::Reference< xml::sax::XSAXSerializable> xSAXable(mxDocProps,
         uno::UNO_QUERY);
     if (xSAXable.is()) {
@@ -365,7 +366,7 @@ void SvXMLMetaExport::Export()
             } else if (attrname.equalsAsciiL(s_xmlns, strlen(s_xmlns))) {
                 // default initialized empty string
             } else {
-            OSL_FAIL("namespace attribute not starting with xmlns unexpected");
+            DBG_ERROR("namespace attribute not starting with xmlns unexpected");
             }
             ns.Second = rNsMap.GetNameByKey(key);
             namespaces.push_back(ns);

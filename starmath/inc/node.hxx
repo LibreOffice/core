@@ -34,33 +34,53 @@
 #include <iostream>
 #include <stdio.h>
 
+#define j_assert(cond, msg) DBG_ASSERT(cond, msg)
+#if 0
+// easier to read assert macro
+    do{                                                             \
+                                    if(!(cond))                                                 \
+                                    {                                                           \
+                                        std::cerr<<"Failed assertion: "<<msg<<", at line ";     \
+                                        char* f = (char*)__FILE__;                              \
+                                        f += strlen(f);                                         \
+                                        do f--; while(*f != '/');                               \
+                                        do f--; while(*f != '/');                               \
+                                        do f--; while(*f != '/');                               \
+                                        fprintf(stderr, "%d in %s\n", __LINE__, f + 1);         \
+                                    }                                                           \
+                                } while(false)
+#endif
+
+// Comment out below to disable dumpasdot
+//#define DEBUG_ENABLE_DUMPASDOT
+
 #include "parse.hxx"
 #include "types.hxx"
 #include "rect.hxx"
 #include "format.hxx"
 
 
-#define ATTR_BOLD       0x0001
-#define ATTR_ITALIC     0x0002
+#define ATTR_BOLD		0x0001
+#define ATTR_ITALIC		0x0002
 
 
-#define FNTSIZ_ABSOLUT  1
-#define FNTSIZ_PLUS     2
-#define FNTSIZ_MINUS    3
+#define FNTSIZ_ABSOLUT	1
+#define FNTSIZ_PLUS 	2
+#define FNTSIZ_MINUS	3
 #define FNTSIZ_MULTIPLY 4
-#define FNTSIZ_DIVIDE   5
+#define FNTSIZ_DIVIDE	5
 
 // flags to interdict respective status changes
-#define FLG_FONT        0x0001
-#define FLG_SIZE        0x0002
-#define FLG_BOLD        0x0004
-#define FLG_ITALIC      0x0008
-#define FLG_COLOR       0x0010
-#define FLG_VISIBLE     0x0020
-#define FLG_HORALIGN    0x0040
+#define FLG_FONT		0x0001
+#define FLG_SIZE		0x0002
+#define FLG_BOLD   		0x0004
+#define FLG_ITALIC		0x0008
+#define FLG_COLOR		0x0010
+#define FLG_VISIBLE		0x0020
+#define FLG_HORALIGN	0x0040
 
 
-extern SmFormat *pActiveFormat;
+extern SmFormat	*pActiveFormat;
 
 class SmVisitor;
 class SmDocShell;
@@ -73,14 +93,14 @@ typedef std::vector< SmStructureNode * > SmStructureNodeArray;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-enum SmScaleMode    { SCALE_NONE, SCALE_WIDTH, SCALE_HEIGHT };
+enum SmScaleMode	{ SCALE_NONE, SCALE_WIDTH, SCALE_HEIGHT };
 
 enum SmNodeType
 {
-    NTABLE,         NBRACE,         NBRACEBODY,     NOPER,          NALIGN,
-    NATTRIBUT,      NFONT,          NUNHOR,         NBINHOR,        NBINVER,
-    NBINDIAGONAL,   NSUBSUP,        NMATRIX,        NPLACE,         NTEXT,
-    NSPECIAL,       NGLYPH_SPECIAL, NMATH,          NBLANK,         NERROR,
+    NTABLE,			NBRACE,			NBRACEBODY,		NOPER,			NALIGN,
+    NATTRIBUT,		NFONT,			NUNHOR,			NBINHOR,		NBINVER,
+    NBINDIAGONAL,	NSUBSUP,		NMATRIX,		NPLACE,			NTEXT,
+    NSPECIAL,		NGLYPH_SPECIAL,	NMATH,			NBLANK,			NERROR,
     NLINE,          NEXPRESSION,    NPOLYLINE,      NROOT,          NROOTSYMBOL,
     NRECTANGLE,     NVERTICAL_BRACE
 };
@@ -91,18 +111,18 @@ enum SmNodeType
 
 class SmNode : public SmRect
 {
-    SmFace      aFace;
+    SmFace		aFace;
 
-    SmToken     aNodeToken;
-    SmNodeType      eType;
-    SmScaleMode     eScaleMode;
-    RectHorAlign    eRectHorAlign;
-    sal_uInt16          nFlags,
+    SmToken		aNodeToken;
+    SmNodeType		eType;
+    SmScaleMode		eScaleMode;
+    RectHorAlign	eRectHorAlign;
+    USHORT			nFlags,
                     nAttributes;
-    bool            bIsPhantom,
+    BOOL			bIsPhantom,
                     bIsDebug;
 
-    bool            bIsSelected;
+    BOOL            bIsSelected;
 
 protected:
     SmNode(SmNodeType eNodeType, const SmToken &rNodeToken);
@@ -111,39 +131,39 @@ protected:
     sal_Int32       nAccIndex;
 
 public:
-    virtual             ~SmNode();
+    virtual 			~SmNode();
 
-    virtual bool        IsVisible() const;
+    virtual BOOL        IsVisible() const;
 
-    virtual sal_uInt16      GetNumSubNodes() const;
-    virtual SmNode *    GetSubNode(sal_uInt16 nIndex);
-            const SmNode * GetSubNode(sal_uInt16 nIndex) const
+    virtual USHORT      GetNumSubNodes() const;
+    virtual SmNode *    GetSubNode(USHORT nIndex);
+            const SmNode * GetSubNode(USHORT nIndex) const
             {
                 return ((SmNode *) this)->GetSubNode(nIndex);
             }
 
-    virtual SmNode *       GetLeftMost();
+    virtual SmNode * 	   GetLeftMost();
             const SmNode * GetLeftMost() const
             {
                 return ((SmNode *) this)->GetLeftMost();
             }
 
-            sal_uInt16 &    Flags() { return nFlags; }
-            sal_uInt16 &    Attributes() { return nAttributes; }
+            USHORT &	Flags() { return nFlags; }
+            USHORT &	Attributes() { return nAttributes; }
 
-            bool IsDebug() const { return bIsDebug; }
-            bool IsPhantom() const { return bIsPhantom; }
-            void SetPhantom(bool bIsPhantom);
+            BOOL IsDebug() const { return bIsDebug; }
+            BOOL IsPhantom() const { return bIsPhantom; }
+            void SetPhantom(BOOL bIsPhantom);
             void SetColor(const Color &rColor);
 
-            void SetAttribut(sal_uInt16 nAttrib);
-            void ClearAttribut(sal_uInt16 nAttrib);
+            void SetAttribut(USHORT nAttrib);
+            void ClearAttribut(USHORT nAttrib);
 
             const SmFace & GetFont() const { return aFace; };
-                  SmFace & GetFont()       { return aFace; };
+                  SmFace & GetFont()  	   { return aFace; };
 
             void SetFont(const SmFace &rFace);
-            void SetFontSize(const Fraction &rRelSize, sal_uInt16 nType);
+            void SetFontSize(const Fraction &rRelSize, USHORT nType);
             void SetSize(const Fraction &rScale);
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
@@ -153,37 +173,39 @@ public:
             void ToggleDebug() const;
 #endif
 
-    void         SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree = true );
+    void         SetRectHorAlign(RectHorAlign eHorAlign, BOOL bApplyToSubTree = TRUE );
     RectHorAlign GetRectHorAlign() const { return eRectHorAlign; }
 
     const SmRect & GetRect() const { return *this; }
-          SmRect & GetRect()       { return *this; }
+          SmRect & GetRect() 	   { return *this; }
 
     virtual void Move(const Point &rPosition);
     void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
+#ifdef SM_RECT_DEBUG
+    using   SmRect::Draw;
+#endif
+
     virtual void    GetAccessibleText( String &rText ) const;
     sal_Int32       GetAccessibleIndex() const { return nAccIndex; }
     const SmNode *  FindNodeWithAccessibleIndex(xub_StrLen nAccIndex) const;
 
-    sal_uInt16  GetRow() const    { return (sal_uInt16)aNodeToken.nRow; }
-    sal_uInt16  GetColumn() const { return (sal_uInt16)aNodeToken.nCol; }
+    USHORT	GetRow() const	  { return (USHORT)aNodeToken.nRow; }
+    USHORT	GetColumn() const { return (USHORT)aNodeToken.nCol; }
 
-    SmScaleMode     GetScaleMode() const { return eScaleMode; }
-    void            SetScaleMode(SmScaleMode eMode) { eScaleMode = eMode; }
+    SmScaleMode		GetScaleMode() const { return eScaleMode; }
+    void			SetScaleMode(SmScaleMode eMode) { eScaleMode = eMode; }
 
-    virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nWidth);
-    virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
+    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
+    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
-    SmNodeType      GetType() const  { return eType; }
-    const SmToken & GetToken() const { return aNodeToken; }
+    SmNodeType		GetType() const  { return eType; }
+    const SmToken &	GetToken() const { return aNodeToken; }
 
-    const SmNode *  FindTokenAt(sal_uInt16 nRow, sal_uInt16 nCol) const;
-    const SmNode *  FindRectClosestTo(const Point &rPoint) const;
-
-    virtual long    GetFormulaBaseline() const;
+    const SmNode *	FindTokenAt(USHORT nRow, USHORT nCol) const;
+    const SmNode *	FindRectClosestTo(const Point &rPoint) const;
 
     /** Accept a visitor
      * Calls the method for this class on the visitor
@@ -191,8 +213,8 @@ public:
     virtual void Accept(SmVisitor* pVisitor);
 
     /** True if this node is selected */
-    bool IsSelected() const {return bIsSelected;}
-    void SetSelected(bool Selected = true) {bIsSelected = Selected;}
+    BOOL IsSelected() const {return bIsSelected;}
+    void SetSelected(BOOL Selected = true) {bIsSelected = Selected;}
 
 #ifdef DEBUG_ENABLE_DUMPASDOT
     /** The tree as dot graph for graphviz, usable for debugging
@@ -216,8 +238,8 @@ public:
      * Returns -1, if pSubNode isn't a subnode of this.
      */
     int IndexOfSubNode(SmNode* pSubNode){
-        sal_uInt16 nSize = GetNumSubNodes();
-        for(sal_uInt16 i = 0; i < nSize; i++)
+        USHORT nSize = GetNumSubNodes();
+        for(USHORT i = 0; i < nSize; i++)
             if(pSubNode == GetSubNode(i))
                 return i;
         return -1;
@@ -230,8 +252,8 @@ protected:
     /** Sets parent on children of this node */
     void ClaimPaternity(){
         SmNode* pNode;
-        sal_uInt16  nSize = GetNumSubNodes();
-        for (sal_uInt16 i = 0;  i < nSize;  i++)
+        USHORT	nSize = GetNumSubNodes();
+        for (USHORT i = 0;	i < nSize;	i++)
             if (NULL != (pNode = GetSubNode(i)))
                 pNode->SetParent((SmStructureNode*)this); //Cast is valid if we have children
     }
@@ -292,9 +314,9 @@ private:
     /** Node whos children we're iterating over */
     SmNode* pNode;
     /** Size of the node */
-    sal_uInt16 nSize;
+    USHORT nSize;
     /** Current index in the node */
-    sal_uInt16 nIndex;
+    USHORT nIndex;
     /** Move reverse */
     bool bIsReverse;
 };
@@ -312,36 +334,34 @@ class SmStructureNode : public SmNode
 
 protected:
     SmStructureNode(SmNodeType eNodeType, const SmToken &rNodeToken)
-    :   SmNode(eNodeType, rNodeToken)
+    :	SmNode(eNodeType, rNodeToken)
     {}
 
 public:
             SmStructureNode( const SmStructureNode &rNode );
     virtual ~SmStructureNode();
 
-    virtual bool        IsVisible() const;
+    virtual BOOL 		IsVisible() const;
 
-    virtual sal_uInt16      GetNumSubNodes() const;
-            void        SetNumSubNodes(sal_uInt16 nSize) { aSubNodes.resize(nSize); }
+    virtual USHORT		GetNumSubNodes() const;
+            void        SetNumSubNodes(USHORT nSize) { aSubNodes.resize(nSize); }
 
     using   SmNode::GetSubNode;
-    virtual SmNode *    GetSubNode(sal_uInt16 nIndex);
+    virtual	SmNode * 	GetSubNode(USHORT nIndex);
             void SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird = NULL);
             void SetSubNodes(const SmNodeArray &rNodeArray);
 
-    SmStructureNode & operator = ( const SmStructureNode &rNode );
+    virtual SmStructureNode & operator = ( const SmStructureNode &rNode );
 
     virtual void  GetAccessibleText( String &rText ) const;
 
-    void SetSubNode(size_t nIndex, SmNode* pNode)
-    {
-        size_t size = aSubNodes.size();
-        if (size <= nIndex)
-        {
+    void SetSubNode(USHORT nIndex, SmNode* pNode){
+        int size = aSubNodes.size();
+        if(size <= nIndex){
             //Resize subnodes array
             aSubNodes.resize(nIndex + 1);
             //Set new slots to NULL
-            for (size_t i = size; i < nIndex+1; i++)
+            for(int i = size; i < nIndex+1; i++)
                 aSubNodes[i] = NULL;
         }
         aSubNodes[nIndex] = pNode;
@@ -361,15 +381,15 @@ class SmVisibleNode : public SmNode
 {
 protected:
     SmVisibleNode(SmNodeType eNodeType, const SmToken &rNodeToken)
-    :   SmNode(eNodeType, rNodeToken)
+    :	SmNode(eNodeType, rNodeToken)
     {}
 
 public:
 
-    virtual bool        IsVisible() const;
-    virtual sal_uInt16      GetNumSubNodes() const;
+    virtual BOOL 		IsVisible() const;
+    virtual	USHORT		GetNumSubNodes() const;
     using   SmNode::GetSubNode;
-    virtual SmNode *    GetSubNode(sal_uInt16 nIndex);
+    virtual	SmNode * 	GetSubNode(USHORT nIndex);
 };
 
 
@@ -380,7 +400,7 @@ class SmGraphicNode : public SmVisibleNode
 {
 protected:
     SmGraphicNode(SmNodeType eNodeType, const SmToken &rNodeToken)
-    :   SmVisibleNode(eNodeType, rNodeToken)
+    :	SmVisibleNode(eNodeType, rNodeToken)
     {}
 
 public:
@@ -401,13 +421,17 @@ class SmRectangleNode : public SmGraphicNode
 
 public:
     SmRectangleNode(const SmToken &rNodeToken)
-    :   SmGraphicNode(NRECTANGLE, rNodeToken)
+    :	SmGraphicNode(NRECTANGLE, rNodeToken)
     {}
 
-    virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nWidth);
-    virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
+    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
+    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+
+#ifdef SM_RECT_DEBUG
+    using   SmRect::Draw;
+#endif
 
     void CreateTextFromNode(String &rText);
     void Accept(SmVisitor* pVisitor);
@@ -422,21 +446,25 @@ public:
  */
 class SmPolyLineNode : public SmGraphicNode
 {
-    Polygon     aPoly;
-    Size        aToSize;
-    long        nWidth;
+    Polygon		aPoly;
+    Size		aToSize;
+    long		nWidth;
 
 public:
     SmPolyLineNode(const SmToken &rNodeToken);
 
-    long         GetWidth() const { return nWidth; }
+    long		 GetWidth() const { return nWidth; }
     Size         GetToSize() const { return aToSize; }
     Polygon     &GetPolygon() { return aPoly; }
 
-    virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nWidth);
-    virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
+    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
+    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+
+#ifdef SM_RECT_DEBUG
+    using   SmRect::Draw;
+#endif
 
     void Accept(SmVisitor* pVisitor);
 };
@@ -451,7 +479,7 @@ public:
 class SmTextNode : public SmVisibleNode
 {
     XubString   aText;
-    sal_uInt16      nFontDesc;
+    USHORT      nFontDesc;
     /** Index within text where the selection starts
      * @remarks Only valid if SmNode::IsSelected() is true
      */
@@ -462,14 +490,14 @@ class SmTextNode : public SmVisibleNode
     xub_StrLen  nSelectionEnd;
 
 protected:
-    SmTextNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 nFontDescP );
+    SmTextNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT nFontDescP );
 
 public:
-    SmTextNode(const SmToken &rNodeToken, sal_uInt16 nFontDescP );
+    SmTextNode(const SmToken &rNodeToken, USHORT nFontDescP );
 
-    sal_uInt16              GetFontDesc() const { return nFontDesc; }
-    void                SetText(const XubString &rText) { aText = rText; }
-    const XubString &   GetText() const { return aText; }
+    USHORT				GetFontDesc() const { return nFontDesc; }
+    void				SetText(const XubString &rText) { aText = rText; }
+    const XubString &	GetText() const { return aText; }
     /** Change the text of this node, including the underlying token */
     void                ChangeText(const XubString &rText) {
         aText = rText;
@@ -497,6 +525,11 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
+#ifdef SM_RECT_DEBUG
+    using   SmRect::Draw;
+#endif
+
+
     virtual void  GetAccessibleText( String &rText ) const;
     void Accept(SmVisitor* pVisitor);
 };
@@ -516,13 +549,17 @@ class SmSpecialNode : public SmTextNode
     bool    bIsFromGreekSymbolSet;
 
 protected:
-    SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 _nFontDesc);
+    SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT _nFontDesc);
 
 public:
     SmSpecialNode(const SmToken &rNodeToken);
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+
+#ifdef SM_RECT_DEBUG
+    using   SmRect::Draw;
+#endif
 
     void Accept(SmVisitor* pVisitor);
 };
@@ -543,7 +580,7 @@ class SmGlyphSpecialNode : public SmSpecialNode
 {
 public:
     SmGlyphSpecialNode(const SmToken &rNodeToken)
-    :   SmSpecialNode(NGLYPH_SPECIAL, rNodeToken, FNT_MATH)
+    :	SmSpecialNode(NGLYPH_SPECIAL, rNodeToken, FNT_MATH)
     {}
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -561,7 +598,7 @@ class SmMathSymbolNode : public SmSpecialNode
 {
 protected:
     SmMathSymbolNode(SmNodeType eNodeType, const SmToken &rNodeToken)
-    :   SmSpecialNode(eNodeType, rNodeToken, FNT_MATH)
+    :	SmSpecialNode(eNodeType, rNodeToken, FNT_MATH)
     {
         xub_Unicode cChar = GetToken().cMathChar;
         if ((xub_Unicode) '\0' != cChar)
@@ -571,8 +608,8 @@ protected:
 public:
     SmMathSymbolNode(const SmToken &rNodeToken);
 
-    virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nWidth);
-    virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
+    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
+    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -591,16 +628,20 @@ public:
  */
 class SmRootSymbolNode : public SmMathSymbolNode
 {
-    sal_uLong  nBodyWidth;  // width of body (argument) of root sign
+    ULONG  nBodyWidth;  // width of body (argument) of root sign
 
 public:
     SmRootSymbolNode(const SmToken &rNodeToken)
     :   SmMathSymbolNode(NROOTSYMBOL, rNodeToken)
     {}
 
-    sal_uLong GetBodyWidth() const {return nBodyWidth;};
-    virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nHeight);
-    virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
+    ULONG GetBodyWidth() const {return nBodyWidth;};
+    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
+    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
+
+#ifdef SM_RECT_DEBUG
+    using   SmRect::Draw;
+#endif
 
     void Accept(SmVisitor* pVisitor);
 };
@@ -618,7 +659,7 @@ class SmPlaceNode : public SmMathSymbolNode
 {
 public:
     SmPlaceNode(const SmToken &rNodeToken)
-    :   SmMathSymbolNode(NPLACE, rNodeToken)
+    :	SmMathSymbolNode(NPLACE, rNodeToken)
     {
     }
     SmPlaceNode() : SmMathSymbolNode(NPLACE, SmToken(TPLACE, MS_PLACE, "<?>")) {};
@@ -640,7 +681,7 @@ class SmErrorNode : public SmMathSymbolNode
 {
 public:
     SmErrorNode(SmParseError /*eError*/, const SmToken &rNodeToken)
-    :   SmMathSymbolNode(NERROR, rNodeToken)
+    :	SmMathSymbolNode(NERROR, rNodeToken)
     {
         SetText((xub_Unicode) MS_ERROR);
     }
@@ -662,18 +703,15 @@ public:
  */
 class SmTableNode : public SmStructureNode
 {
-    long nFormulaBaseline;
 public:
     SmTableNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NTABLE, rNodeToken)
+    :	SmStructureNode(NTABLE, rNodeToken)
     {}
 
     using   SmNode::GetLeftMost;
     virtual SmNode * GetLeftMost();
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    virtual long GetFormulaBaseline() const;
-
     void Accept(SmVisitor* pVisitor);
 };
 
@@ -687,24 +725,24 @@ public:
  */
 class SmLineNode : public SmStructureNode
 {
-    bool  bUseExtraSpaces;
+    BOOL  bUseExtraSpaces;
 
 protected:
     SmLineNode(SmNodeType eNodeType, const SmToken &rNodeToken)
-    :   SmStructureNode(eNodeType, rNodeToken)
+    :	SmStructureNode(eNodeType, rNodeToken)
     {
-        bUseExtraSpaces = true;
+        bUseExtraSpaces = TRUE;
     }
 
 public:
     SmLineNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NLINE, rNodeToken)
+    :	SmStructureNode(NLINE, rNodeToken)
     {
-        bUseExtraSpaces = true;
+        bUseExtraSpaces = TRUE;
     }
 
-    void  SetUseExtraSpaces(bool bVal) { bUseExtraSpaces = bVal; }
-    bool  IsUseExtraSpaces() const { return bUseExtraSpaces; };
+    void  SetUseExtraSpaces(BOOL bVal) { bUseExtraSpaces = bVal; }
+    BOOL  IsUseExtraSpaces() const { return bUseExtraSpaces; };
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -724,7 +762,7 @@ class SmExpressionNode : public SmLineNode
 {
 public:
     SmExpressionNode(const SmToken &rNodeToken)
-    :   SmLineNode(NEXPRESSION, rNodeToken)
+    :	SmLineNode(NEXPRESSION, rNodeToken)
     {}
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -743,7 +781,7 @@ class SmUnHorNode : public SmStructureNode
 {
 public:
     SmUnHorNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NUNHOR, rNodeToken)
+    :	SmStructureNode(NUNHOR, rNodeToken)
     {
         SetNumSubNodes(2);
     }
@@ -775,7 +813,7 @@ protected:
 
 public:
     SmRootNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NROOT, rNodeToken)
+    :	SmStructureNode(NROOT, rNodeToken)
     {
         SetNumSubNodes(3);
     }
@@ -803,7 +841,7 @@ class SmBinHorNode : public SmStructureNode
 {
 public:
     SmBinHorNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NBINHOR, rNodeToken)
+    :	SmStructureNode(NBINHOR, rNodeToken)
     {
         SetNumSubNodes(3);
     }
@@ -831,7 +869,7 @@ class SmBinVerNode : public SmStructureNode
 {
 public:
     SmBinVerNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NBINVER, rNodeToken)
+    :	SmStructureNode(NBINVER, rNodeToken)
     {
         SetNumSubNodes(3);
     }
@@ -859,16 +897,16 @@ public:
  */
 class SmBinDiagonalNode : public SmStructureNode
 {
-    bool    bAscending;
+    BOOL	bAscending;
 
-    void    GetOperPosSize(Point &rPos, Size &rSize,
+    void 	GetOperPosSize(Point &rPos, Size &rSize,
                            const Point &rDiagPoint, double fAngleDeg) const;
 
 public:
     SmBinDiagonalNode(const SmToken &rNodeToken);
 
-    bool    IsAscending() const { return bAscending; }
-    void    SetAscending(bool bVal)  { bAscending = bVal; }
+    BOOL 	IsAscending() const { return bAscending; }
+    void 	SetAscending(BOOL bVal)  { bAscending = bVal; }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void Accept(SmVisitor* pVisitor);
@@ -884,19 +922,19 @@ public:
  * See graphic for positions at char:
  *
  * \code
- *      CSUP
+ *		CSUP
  *
  * LSUP H  H RSUP
- *      H  H
- *      HHHH
- *      H  H
+ *		H  H
+ *		HHHH
+ *		H  H
  * LSUB H  H RSUB
  *
- *      CSUB
+ *		CSUB
  * \endcode
  */
 enum SmSubSup
-{   CSUB, CSUP, RSUB, RSUP, LSUB, LSUP
+{	CSUB, CSUP, RSUB, RSUP, LSUB, LSUP
 };
 
 /** numbers of entries in the above enum (that is: the number of possible
@@ -920,31 +958,31 @@ enum SmSubSup
  */
 class SmSubSupNode : public SmStructureNode
 {
-    bool  bUseLimits;
+    BOOL  bUseLimits;
 
 public:
     SmSubSupNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NSUBSUP, rNodeToken)
+    :	SmStructureNode(NSUBSUP, rNodeToken)
     {
         SetNumSubNodes(1 + SUBSUP_NUM_ENTRIES);
-        bUseLimits = false;
+        bUseLimits = FALSE;
     }
 
     /** Get body (Not NULL) */
-    SmNode *       GetBody()    { return GetSubNode(0); }
+    SmNode *	   GetBody()	{ return GetSubNode(0); }
     /** Get body (Not NULL) */
     const SmNode * GetBody() const
     {
         return ((SmSubSupNode *) this)->GetBody();
     }
 
-    void  SetUseLimits(bool bVal) { bUseLimits = bVal; }
-    bool  IsUseLimits() const { return bUseLimits; };
+    void  SetUseLimits(BOOL bVal) { bUseLimits = bVal; }
+    BOOL  IsUseLimits() const { return bUseLimits; };
 
     /** Get super- or subscript
      * @remarks this method may return NULL.
      */
-    SmNode * GetSubSup(SmSubSup eSubSup) { return GetSubNode( sal::static_int_cast< sal_uInt16 >(1 + eSubSup) ); };
+    SmNode * GetSubSup(SmSubSup eSubSup) { return GetSubNode( sal::static_int_cast< USHORT >(1 + eSubSup) ); };
 
     /** Set the body */
     void SetBody(SmNode* pBody) { SetSubNode(0, pBody); }
@@ -978,7 +1016,7 @@ class SmBraceNode : public SmStructureNode
 {
 public:
     SmBraceNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NBRACE, rNodeToken)
+    :	SmStructureNode(NBRACE, rNodeToken)
     {
         SetNumSubNodes(3);
     }
@@ -1007,8 +1045,8 @@ class SmBracebodyNode : public SmStructureNode
 public:
     inline SmBracebodyNode(const SmToken &rNodeToken);
 
-    virtual void    Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-    long            GetBodyHeight() const { return nBodyHeight; }
+    virtual void	Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    long		    GetBodyHeight() const { return nBodyHeight; }
     void Accept(SmVisitor* pVisitor);
 };
 
@@ -1039,7 +1077,7 @@ class SmVerticalBraceNode : public SmStructureNode
 public:
     inline SmVerticalBraceNode(const SmToken &rNodeToken);
 
-    virtual void    Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    virtual void	Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void Accept(SmVisitor* pVisitor);
 };
 
@@ -1070,12 +1108,12 @@ class SmOperNode : public SmStructureNode
 {
 public:
     SmOperNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NOPER, rNodeToken)
+    :	SmStructureNode(NOPER, rNodeToken)
     {
         SetNumSubNodes(2);
     }
 
-    SmNode *       GetSymbol();
+    SmNode *	   GetSymbol();
     const SmNode * GetSymbol() const
     {
         return ((SmOperNode *) this)->GetSymbol();
@@ -1096,7 +1134,7 @@ class SmAlignNode : public SmStructureNode
 {
 public:
     SmAlignNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NALIGN, rNodeToken)
+    :	SmStructureNode(NALIGN, rNodeToken)
     {}
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -1120,7 +1158,7 @@ class SmAttributNode : public SmStructureNode
 {
 public:
     SmAttributNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NATTRIBUT, rNodeToken)
+    :	SmStructureNode(NATTRIBUT, rNodeToken)
     {}
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -1137,20 +1175,20 @@ public:
  */
 class SmFontNode : public SmStructureNode
 {
-    sal_uInt16      nSizeType;
-    Fraction    aFontSize;
+    USHORT		nSizeType;
+    Fraction	aFontSize;
 
 public:
     SmFontNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NFONT, rNodeToken)
+    :	SmStructureNode(NFONT, rNodeToken)
     {
         nSizeType = FNTSIZ_MULTIPLY;
         aFontSize = Fraction(1L);
     }
 
-    void SetSizeParameter(const Fraction &rValue, sal_uInt16 nType);
+    void SetSizeParameter(const Fraction &rValue, USHORT nType);
     const Fraction & GetSizeParameter() const {return aFontSize;}
-    const sal_uInt16& GetSizeType() const {return nSizeType;}
+    const USHORT& GetSizeType() const {return nSizeType;}
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -1168,19 +1206,19 @@ public:
  */
 class SmMatrixNode : public SmStructureNode
 {
-    sal_uInt16  nNumRows,
+    USHORT	nNumRows,
             nNumCols;
 
 public:
     SmMatrixNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NMATRIX, rNodeToken)
+    :	SmStructureNode(NMATRIX, rNodeToken)
     {
         nNumRows = nNumCols = 0;
     }
 
-    sal_uInt16 GetNumRows() const {return nNumRows;}
-    sal_uInt16 GetNumCols() const {return nNumCols;}
-    void SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols);
+    USHORT GetNumRows() const {return nNumRows;}
+    USHORT GetNumCols() const {return nNumCols;}
+    void SetRowCol(USHORT nMatrixRows, USHORT nMatrixCols);
 
     using   SmNode::GetLeftMost;
     virtual SmNode * GetLeftMost();
@@ -1199,19 +1237,19 @@ public:
  */
 class SmBlankNode : public SmGraphicNode
 {
-    sal_uInt16  nNum;
+    USHORT	nNum;
 
 public:
     SmBlankNode(const SmToken &rNodeToken)
-    :   SmGraphicNode(NBLANK, rNodeToken)
+    :	SmGraphicNode(NBLANK, rNodeToken)
     {
         nNum = 0;
     }
 
     void         IncreaseBy(const SmToken &rToken);
-    void         Clear() { nNum = 0; }
-    sal_uInt16       GetBlankNum() const { return nNum; }
-    void         SetBlankNum(sal_uInt16 nNumber) { nNum = nNumber; }
+    void		 Clear() { nNum = 0; }
+    USHORT       GetBlankNum() const { return nNum; }
+    void         SetBlankNum(USHORT nNumber) { nNum = nNumber; }
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,18 +82,18 @@
 // <--
 
 /*--------------------------------------------------------------------
-    Description:    KeyEvents
+    Beschreibung:	KeyEvents
  --------------------------------------------------------------------*/
-static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, sal_Bool bBalloon )
+static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBalloon )
 {
-    sal_uInt16 nResId = 0;
+    USHORT nResId = 0;
     switch( rRedl.GetType() )
     {
-    case nsRedlineType_t::REDLINE_INSERT:   nResId = STR_REDLINE_INSERT; break;
-    case nsRedlineType_t::REDLINE_DELETE:   nResId = STR_REDLINE_DELETE; break;
-    case nsRedlineType_t::REDLINE_FORMAT:   nResId = STR_REDLINE_FORMAT; break;
-    case nsRedlineType_t::REDLINE_TABLE:        nResId = STR_REDLINE_TABLE; break;
-    case nsRedlineType_t::REDLINE_FMTCOLL:  nResId = STR_REDLINE_FMTCOLL; break;
+    case nsRedlineType_t::REDLINE_INSERT:	nResId = STR_REDLINE_INSERT; break;
+    case nsRedlineType_t::REDLINE_DELETE:	nResId = STR_REDLINE_DELETE; break;
+    case nsRedlineType_t::REDLINE_FORMAT:	nResId = STR_REDLINE_FORMAT; break;
+    case nsRedlineType_t::REDLINE_TABLE:		nResId = STR_REDLINE_TABLE; break;
+    case nsRedlineType_t::REDLINE_FMTCOLL:	nResId = STR_REDLINE_FMTCOLL; break;
     }
 
     if( nResId )
@@ -112,14 +112,14 @@ static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, sal_Bool b
 void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
-    sal_Bool bQuickBalloon = 0 != (rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ));
+    BOOL bQuickBalloon = 0 != (rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ));
     if(bQuickBalloon && rSh.GetViewOptions()->IsPreventTips())
         return;
-    sal_Bool bWeiter = sal_True;
+    BOOL bWeiter = TRUE;
     SET_CURR_SHELL(&rSh);
     String sTxt;
     Point aPos( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));
-    sal_Bool bBalloon = static_cast< sal_Bool >(rEvt.GetMode() & HELPMODE_BALLOON);
+    BOOL bBalloon = static_cast< BOOL >(rEvt.GetMode() & HELPMODE_BALLOON);
 
     SdrView *pSdrView = rSh.GetDrawView();
 
@@ -136,6 +136,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
     if( bWeiter && bQuickBalloon)
     {
         SwRect aFldRect;
+        USHORT nStyle = 0; // style of quick help
         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD |
                                     SwContentAtPos::SW_INETATTR |
                                     SwContentAtPos::SW_FTN |
@@ -149,9 +150,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 #endif
                                     SwContentAtPos::SW_TABLEBOXFML );
 
-        if( rSh.GetContentAtPos( aPos, aCntntAtPos, sal_False, &aFldRect ) )
+        if( rSh.GetContentAtPos( aPos, aCntntAtPos, FALSE, &aFldRect ) )
         {
-             sal_uInt16 nStyle = 0; // style of quick help
              switch( aCntntAtPos.eCntntAtPos )
             {
             case SwContentAtPos::SW_TABLEBOXFML:
@@ -192,7 +192,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sSuffix.EqualsAscii( pMarkToOLE ))
                     sTxt = sTxt.Copy( 0, nFound - 1);
                 }
-                // #i104300#
+                // --> OD 2009-08-18 #i104300#
                 // special handling if target is a cross-reference bookmark
                 {
                     String sTmpSearchStr = sTxt.Copy( 1, sTxt.Len() );
@@ -223,8 +223,9 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         }
                     }
                 }
-                // #i80029#
-                sal_Bool bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
+                // <--
+                // --> OD 2007-07-26 #i80029#
+                BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
                     SvtSecurityOptions aSecOpts;
@@ -236,6 +237,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
                     }
                 }
+                // <--
                 break;
             }
             case SwContentAtPos::SW_SMARTTAG:
@@ -301,26 +303,45 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         case RES_TABLEFLD:
                         case RES_GETEXPFLD:
                         {
-                            sal_uInt16 nOldSubType = pFld->GetSubType();
+                            USHORT nOldSubType = pFld->GetSubType();
                             ((SwField*)pFld)->SetSubType(nsSwExtendedSubType::SUB_CMD);
-                            sTxt = pFld->ExpandField(true);
+                            sTxt =
+                                pFld->ExpandField(rSh.GetDoc()->IsClipBoard());
                             ((SwField*)pFld)->SetSubType(nOldSubType);
                         }
                         break;
 
                         case RES_POSTITFLD:
                             {
+                                /*
+                                SwPostItMgr* pMgr = rView.GetPostItMgr();
+                                if (pMgr->ShowNotes())
+                                {
+                                    SwFmtFld* pSwFmtFld = 0;
+                                    if (pMgr->ShowPreview(pFld,pSwFmtFld))
+                                    {
+                                        SwPostIt* pPostIt = new SwPostIt(static_cast<Window*>(this),0,pSwFmtFld,pMgr,PB_Preview);
+                                        pPostIt->InitControls();
+                                        pPostIt->SetReadonly(true);
+                                        pMgr->SetColors(pPostIt,static_cast<SwPostItField*>(pSwFmtFld->GetFld()));
+                                        pPostIt->SetVirtualPosSize(rEvt.GetMousePosPixel(),Size(180,70));
+                                        pPostIt->ShowNote();
+                                        SetPointerPosPixel(pPostIt->GetPosPixel() + Point(20,20));
+                                    }
+                                    return;
+                                }
+                                */
                                 break;
                             }
-                        case RES_INPUTFLD:  // BubbleHelp, because the suggestion could be quite long
-                            bBalloon = sal_True;
+                        case RES_INPUTFLD:	// BubbleHelp, da der Hinweis ggf ziemlich lang sein kann
+                            bBalloon = TRUE;
                             /* no break */
                         case RES_JUMPEDITFLD:
                             sTxt = pFld->GetPar2();
                             break;
 
                         case RES_DBFLD:
-                            sTxt = pFld->GetFieldName();
+                            sTxt = ((SwDBField*)pFld)->GetCntnt(TRUE);
                             break;
 
                         case RES_USERFLD:
@@ -337,7 +358,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                         case RES_GETREFFLD:
                         {
-                            // #i85090#
+                            // --> OD 2008-01-09 #i85090#
                             const SwGetRefField* pRefFld( dynamic_cast<const SwGetRefField*>(pFld) );
                             OSL_ENSURE( pRefFld,
                                     "<SwEditWin::RequestHelp(..)> - unexpected type of <pFld>" );
@@ -360,6 +381,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     sTxt = ((SwGetRefField*)pFld)->GetSetRefName();
                                 }
                             }
+                            // <--
                         }
                         break;
                         }
@@ -368,7 +390,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     if( !sTxt.Len() )
                     {
                         aCntntAtPos.eCntntAtPos = SwContentAtPos::SW_REDLINE;
-                        if( rSh.GetContentAtPos( aPos, aCntntAtPos, sal_False, &aFldRect ) )
+                        if( rSh.GetContentAtPos( aPos, aCntntAtPos, FALSE, &aFldRect ) )
                             lcl_GetRedlineHelp( *aCntntAtPos.aFnd.pRedl,
                                                     sTxt, bBalloon );
                     }
@@ -380,7 +402,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     Help::ShowBalloon( this, rEvt.GetMousePosPixel(), sTxt );
                 else
                 {
-                    // the show the help
+                    // dann zeige die Hilfe mal an:
                     Rectangle aRect( aFldRect.SVRect() );
                     Point aPt( OutputToScreenPixel( LogicToPixel( aRect.TopLeft() )));
                     aRect.Left()   = aPt.X();
@@ -392,12 +414,12 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 }
             }
 
-            bWeiter = sal_False;
+            bWeiter = FALSE;
         }
         if( bWeiter )
         {
-            sal_uInt8 nTabCols = rSh.WhichMouseTabCol(aPos);
-            sal_uInt16 nTabRes = 0;
+            BYTE nTabCols = rSh.WhichMouseTabCol(aPos);
+            USHORT nTabRes = 0;
             switch(nTabCols)
             {
                 case SW_TABCOL_HORI:
@@ -408,7 +430,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 case SW_TABROW_VERT:
                     nTabRes = STR_TABLE_ROW_ADJUST;
                     break;
-                // #i32329# Enhanced table selection
+                // --> FME 2004-07-30 #i32329# Enhanced table selection
                 case SW_TABSEL_HORI:
                 case SW_TABSEL_HORI_RTL:
                 case SW_TABSEL_VERT:
@@ -423,6 +445,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 case SW_TABCOLSEL_VERT:
                     nTabRes = STR_TABLE_SELECT_COL;
                     break;
+                // <--
             }
             if(nTabRes)
             {
@@ -431,10 +454,18 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 Rectangle aRect(rEvt.GetMousePosPixel(), aTxtSize);
                 Help::ShowQuickHelp(this, aRect, sTxt);
             }
-            bWeiter = sal_False;
+            bWeiter = FALSE;
         }
     }
 
+/*
+aktuelle Zeichenvorlage anzeigen?
+    if( bWeiter && rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ))
+    {
+        SwCharFmt* pChrFmt = rSh.GetCurCharFmt();
+
+    }
+*/
     if( bWeiter && pSdrView && bQuickBalloon)
     {
         SdrViewEvent aVEvt;
@@ -444,18 +475,18 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
         if ((pField = aVEvt.pURLField) != 0)
         {
-            // hit an URL field
+            // URL-Feld getroffen
             if (pField)
             {
                 pObj = aVEvt.pObj;
                 sTxt = pField->GetURL();
 
-                bWeiter = sal_False;
+                bWeiter = FALSE;
             }
         }
         if (bWeiter && eHit == SDRHIT_TEXTEDIT)
         {
-            // look for URL field in DrawText object that is opened for editing
+            // URL-Feld in zum Editieren ge?ffneten DrawText-Objekt suchen
             OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
             const SvxFieldItem* pFieldItem;
 
@@ -475,7 +506,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 if (pField )
                 {
                     sTxt = ((const SvxURLField*) pField)->GetURL();
-                    bWeiter = sal_False;
+                    bWeiter = FALSE;
                 }
             }
         }
@@ -511,26 +542,45 @@ void SwEditWin::PrePaint()
 
 void  SwEditWin::Paint(const Rectangle& rRect)
 {
+#if defined(MYDEBUG)
+    // StartUp-Statistik
+    if ( pTickList )
+    {
+        SYSTICK( "Start SwEditWin::Paint" );
+        READ_FIRST_TICKS()
+        FLUSH_TICKS()
+    }
+#endif
+
     SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
     if(!pWrtShell)
         return;
-    sal_Bool bPaintShadowCrsr = sal_False;
+    BOOL bPaintShadowCrsr = FALSE;
     if( pShadCrsr )
     {
         Rectangle aRect( pShadCrsr->GetRect());
-        // fully resides inside?
+        // liegt vollstaendig drin?
         if( rRect.IsInside( aRect ) )
             // dann aufheben
             delete pShadCrsr, pShadCrsr = 0;
         else if( rRect.IsOver( aRect ))
         {
-            // resides somewhat above, then everything is clipped outside
-            // and we have to make the "inner part" at the end of the
-            // Paint visible again. Otherwise Paint errors occur!
-            bPaintShadowCrsr = sal_True;
+            // liegt irgendwie drueber, dann ist alles ausserhalb geclippt
+            // und wir muessen den "inneren Teil" am Ende vom Paint
+            // wieder sichtbar machen. Sonst kommt es zu Paintfehlern!
+            bPaintShadowCrsr = TRUE;
         }
     }
+/*
+    //TODO/LATER: what's the replacement for this? Do we need it?
+    SwDocShell* pDocShell = GetView().GetDocShell();
 
+  SvInPlaceEnvironment *pIpEnv =  pDocShell ?
+                                  pDocShell->GetIPEnv() : 0;
+    if ( pIpEnv && pIpEnv->GetRectsChangedLockCount() )
+        //Wir stehen in Groessenverhandlungen (MM), Paint verzoegern
+        Invalidate( rRect );
+    else */
     if ( GetView().GetVisArea().GetWidth()  <= 0 ||
               GetView().GetVisArea().GetHeight() <= 0 )
         Invalidate( rRect );

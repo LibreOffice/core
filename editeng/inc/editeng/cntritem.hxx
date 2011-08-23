@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,9 @@
 
 // class SvxContourItem --------------------------------------------------
 
-/*  [Description]
-    This item describes, if contour is employed.
+/*
+    [Beschreibung]
+    Dieses Item beschreibt, ob Konturschrift eingestellt ist.
 */
 
 class EDITENG_DLLPUBLIC SvxContourItem : public SfxBoolItem
@@ -44,13 +45,13 @@ class EDITENG_DLLPUBLIC SvxContourItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxContourItem( const sal_Bool bContoured /*= sal_False*/,
-                    const sal_uInt16 nId );
+    SvxContourItem( const BOOL bContoured /*= FALSE*/,
+                    const USHORT nId );
 
-    // "pure virtual Methods" from SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
+    virtual SvStream&		Store(SvStream &, USHORT nItemVersion) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

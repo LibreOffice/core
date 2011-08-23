@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -84,13 +84,13 @@ if (-d "$StartDir") {
     my @filelist = ( "install.html",
              "notsupported.html","sdk_styles.css","tools.html",
              "images/arrow-1.gif", "images/arrow-3.gif",
-             "images/odk-footer-logo.gif",
+             "images/odk-footer-logo.gif", 
              "images/bg_table.png","images/bg_table2.png",
              "images/bg_table3.png", "images/nav_down.png",
              "images/nav_home.png","images/nav_left.png",
              "images/nav_right.png","images/nav_up.png",
              "images/sdk_head-1.png", "images/sdk_head-2.png",
-             "images/sdk_line-1.gif", "images/sdk_line-2.gif",
+             "images/sdk_line-1.gif", "images/sdk_line-2.gif", 
              "common/ref/idl.css", "images/nada.gif",
              "images/arrow-2.gif", "images/bluball.gif",
              "images/orc-main-app_32.png", "images/ooo-main-app_32.png");
@@ -265,17 +265,17 @@ if (-d "$StartDir") {
              "_typelib_InterfaceMethodTypeDescription","store","RegistryKey",
              "_typelib_Union_Init","_sal_Sequence","_typelib_Parameter_Init",
              "_typelib_TypeDescription","_uno_Environment",
-             "_typelib_InterfaceAttributeTypeDescription",
+             "_typelib_InterfaceAttributeTypeDescription","uno_Context",
              "_rtl_ModuleCount","_uno_ExtEnvironment",
-             "_typelib_IndirectTypeDescription",
-             "Registry_Api","_oslFileStatus",
+             "_typelib_IndirectTypeDescription","remote_DisposingListener",
+             "remote_Interface","Registry_Api","_oslFileStatus",
              "_typelib_InterfaceMemberTypeDescription","RegistryValueList",
              "RegistryTypeWriter_Api","_rtl_TextEncodingInfo",
-             "namespace_anonymous_1",
+             "namespace_anonymous_1","remote_Connection",
              "_oslVolumeInfo","_uno_Interface",
              "_typelib_InterfaceTypeDescription","_uno_Mapping","Registry",
-             "RegistryTypeReader_Api","_typelib_Uik",
-             "_typelib_ArrayTypeDescription",
+             "RegistryTypeReader_Api","remote_Context","_typelib_Uik",
+             "remote_InstanceProvider","_typelib_ArrayTypeDescription",
              "RegistryKeyArray","RegistryTypeReader","RegistryKeyNames",
              "RTConstValueUnion","_typelib_UnionTypeDescription","_uno_Any",
              "RegistryTypeWriter","_rtl_Locale","_typelib_CompoundMember_Init",
@@ -310,8 +310,8 @@ if (-d "$StartDir") {
         my @dir_list = ( "lib","lib/uno","lib/uno/helper","lib/uno/helper/class-use",
                  "uno","uno/class-use","comp","comp/helper",
                  "comp/helper/class-use");
-
-        foreach $i (@dir_list)
+        
+        foreach $i (@dir_list) 
         {
         if (! -d "$StartDir/docs/java/ref/com/sun/star/$i") {
             $return++;
@@ -343,13 +343,11 @@ if (-d "$StartDir") {
         $return++;
     }
 
-    my @idl_dirlist = ( "accessibility",
+    my @idl_dirlist = ( "accessibility", 
                 "animations",
                 "auth",
                 "awt",
-                "awt/tab",
                 "awt/tree",
-                "awt/grid",
                 "beans",
                 "bridge",
                 "bridge/oleautomation",

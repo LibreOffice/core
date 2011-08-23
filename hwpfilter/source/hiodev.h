@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,8 @@
 /**
  * hwpio.h
  * (C) 1999 Mizi Research, All rights are reserved
+ *
+ * $Id: hiodev.h,v 1.5 2008-04-10 12:05:55 rt Exp $
  */
 
 #ifndef _HIODEV_H_

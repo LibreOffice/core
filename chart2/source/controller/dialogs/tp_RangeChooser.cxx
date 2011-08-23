@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace
 void lcl_ShowChooserButton(
     ::chart::RangeSelectionButton & rChooserButton,
     Edit & rEditField,
-    sal_Bool bShow )
+    BOOL bShow )
 {
     if( rChooserButton.IsVisible() != bShow )
     {
@@ -66,8 +66,8 @@ void lcl_enableRangeChoosing( bool bEnable, Dialog * pDialog )
 {
     if( pDialog )
     {
-        pDialog->Show( bEnable ? sal_False : sal_True );
-        pDialog->SetModalInputMode( bEnable ? sal_False : sal_True );
+        pDialog->Show( bEnable ? FALSE : TRUE );
+        pDialog->SetModalInputMode( bEnable ? FALSE : TRUE );
     }
 }
 void lcl_shiftControlY( Control & rControl, long nYOffset )
@@ -186,7 +186,9 @@ void RangeChooserTabPage::initControlsFromModel()
     m_nChangingControlCalls++;
 
     if(m_pTemplateProvider)
+    {
         m_xCurrentChartTypeTemplate = m_pTemplateProvider->getCurrentTemplate();
+    }
 
     bool bUseColumns = ! m_aRB_Rows.IsChecked();
     bool bFirstCellAsLabel = bUseColumns ? m_aCB_FirstRowAsLabel.IsChecked() : m_aCB_FirstColumnAsLabel.IsChecked();
@@ -246,7 +248,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
             m_xCurrentChartTypeTemplate.set( m_pTemplateProvider->getCurrentTemplate());
         if( !m_xCurrentChartTypeTemplate.is())
         {
-            OSL_FAIL( "Need a template to change data source" );
+            OSL_ENSURE( false, "Need a template to change data source" );
             return;
         }
     }
@@ -340,7 +342,7 @@ bool RangeChooserTabPage::isValid()
         m_aCB_FirstRowAsLabel.Enable( bIsValid );
         m_aCB_FirstColumnAsLabel.Enable( bIsValid );
 }
-    sal_Bool bShowIB = m_rDialogModel.getRangeSelectionHelper()->hasRangeSelection();
+    BOOL bShowIB = m_rDialogModel.getRangeSelectionHelper()->hasRangeSelection();
     lcl_ShowChooserButton( m_aIB_Range, m_aED_Range, bShowIB );
 
     return bIsValid;
@@ -365,7 +367,7 @@ IMPL_LINK( RangeChooserTabPage, ChooseRangeHdl, void *, EMPTYARG )
 {
     rtl::OUString aRange = m_aED_Range.GetText();
     // using assignment for broken gcc 3.3
-    rtl::OUString aTitle = String( SchResId( STR_PAGE_DATA_RANGE ) );
+    rtl::OUString aTitle = ::rtl::OUString( String( SchResId( STR_PAGE_DATA_RANGE ) ));
 
     lcl_enableRangeChoosing( true, m_pParentDialog );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange( aRange, aTitle, *this );

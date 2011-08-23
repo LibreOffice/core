@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,6 @@
 
 #include <toolkit/helper/property.hxx>
 #include <vcl/window.hxx>
-#include <vcl/svapp.hxx>
 
 namespace layoutimpl
 {
@@ -62,7 +61,7 @@ uno::Any LocalizedString::queryInterface( uno::Type const& rType )
 void LocalizedString::setText( OUString const& s )
     throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if ( Window *w = GetWindow() )
         return w->SetText( s );
@@ -71,7 +70,7 @@ void LocalizedString::setText( OUString const& s )
 OUString LocalizedString::getText()
     throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if ( Window *w = GetWindow() )
         return w->GetText();

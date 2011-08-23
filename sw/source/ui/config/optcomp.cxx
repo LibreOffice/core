@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,30 +57,30 @@ using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 using namespace ::std;
 
-#define ASCII_STR(s)        OUString( RTL_CONSTASCII_USTRINGPARAM( s ) )
-#define DEFAULT_ENTRY       COMPATIBILITY_DEFAULT_NAME
-#define USER_ENTRY          ASCII_STR( "_user" )
-#define BUTTON_BORDER       2
+#define ASCII_STR(s)		OUString( RTL_CONSTASCII_USTRINGPARAM( s ) )
+#define DEFAULT_ENTRY		COMPATIBILITY_DEFAULT_NAME
+#define USER_ENTRY			ASCII_STR( "_user" )
+#define BUTTON_BORDER		2
 
 // struct CompatibilityItem ----------------------------------------------
 
 struct CompatibilityItem
 {
-    String      m_sName;
-    String      m_sModule;
-    bool        m_bUsePrtMetrics;
-    bool        m_bAddSpacing;
-    bool        m_bAddSpacingAtPages;
-    bool        m_bUseOurTabStops;
-    bool        m_bNoExtLeading;
-    bool        m_bUseLineSpacing;
-    bool        m_bAddTableSpacing;
-    bool        m_bUseObjPos;
-    bool        m_bUseOurTextWrapping;
-    bool        m_bConsiderWrappingStyle;
+    String		m_sName;
+    String		m_sModule;
+    bool		m_bUsePrtMetrics;
+    bool		m_bAddSpacing;
+    bool		m_bAddSpacingAtPages;
+    bool		m_bUseOurTabStops;
+    bool		m_bNoExtLeading;
+    bool		m_bUseLineSpacing;
+    bool		m_bAddTableSpacing;
+    bool		m_bUseObjPos;
+    bool		m_bUseOurTextWrapping;
+    bool		m_bConsiderWrappingStyle;
     bool        m_bExpandWordSpace;
-    bool        m_bIsDefault;
-    bool        m_bIsUser;
+    bool		m_bIsDefault;
+    bool		m_bIsUser;
 
     CompatibilityItem( const String& _rName, const String& _rModule,
                        bool _bUsePrtMetrics, bool _bAddSpacing, bool _bAddSpacingAtPages,
@@ -89,21 +89,21 @@ struct CompatibilityItem
                        bool _bConsiderWrappingStyle, bool _bExpandWordSpace,
                        bool _bIsDefault, bool _bIsUser ) :
 
-        m_sName                 ( _rName ),
-        m_sModule               ( _rModule ),
-        m_bUsePrtMetrics        ( _bUsePrtMetrics ),
-        m_bAddSpacing           ( _bAddSpacing ),
-        m_bAddSpacingAtPages    ( _bAddSpacingAtPages ),
-        m_bUseOurTabStops       ( _bUseOurTabStops ),
-        m_bNoExtLeading         ( _bNoExtLeading ),
-        m_bUseLineSpacing       ( _bUseLineSpacing ),
-        m_bAddTableSpacing      ( _bAddTableSpacing ),
-        m_bUseObjPos            ( _bUseObjPos ),
-        m_bUseOurTextWrapping   ( _bUseOurTextWrapping ),
+        m_sName					( _rName ),
+        m_sModule				( _rModule ),
+        m_bUsePrtMetrics		( _bUsePrtMetrics ),
+        m_bAddSpacing			( _bAddSpacing ),
+        m_bAddSpacingAtPages	( _bAddSpacingAtPages ),
+        m_bUseOurTabStops		( _bUseOurTabStops ),
+        m_bNoExtLeading			( _bNoExtLeading ),
+        m_bUseLineSpacing		( _bUseLineSpacing ),
+        m_bAddTableSpacing		( _bAddTableSpacing ),
+        m_bUseObjPos			( _bUseObjPos ),
+        m_bUseOurTextWrapping	( _bUseOurTextWrapping ),
         m_bConsiderWrappingStyle( _bConsiderWrappingStyle ),
         m_bExpandWordSpace      ( _bExpandWordSpace ),
-        m_bIsDefault            ( _bIsDefault ),
-        m_bIsUser               ( _bIsUser ) {}
+        m_bIsDefault			( _bIsDefault ),
+        m_bIsUser				( _bIsUser ) {}
 };
 
 #include <vector>
@@ -112,7 +112,7 @@ struct SwCompatibilityOptPage_Impl
 {
     typedef vector< CompatibilityItem > SwCompatibilityItemList;
 
-    SwCompatibilityItemList     m_aList;
+    SwCompatibilityItemList		m_aList;
 };
 
 // class SwCompatibilityOptPage ------------------------------------------
@@ -121,22 +121,22 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
 
     SfxTabPage( pParent, SW_RES( TP_OPTCOMPATIBILITY_PAGE ), rSet ),
 
-    m_aMainFL           ( this, SW_RES( FL_MAIN ) ),
-    m_aFormattingFT     ( this, SW_RES( FT_FORMATTING ) ),
-    m_aFormattingLB     ( this, SW_RES( LB_FORMATTING ) ),
-    m_aOptionsFT        ( this, SW_RES( FT_OPTIONS ) ),
-    m_aOptionsLB        ( this, SW_RES( LB_OPTIONS ) ),
-    m_aResetPB          ( this, SW_RES( PB_RESET ) ),
-    m_aDefaultPB        ( this, SW_RES( PB_DEFAULT ) ),
-    m_sUserEntry        (       SW_RES( STR_USERENTRY ) ),
-    m_sUseAsDefaultQuery(       SW_RES( STR_QRYBOX_USEASDEFAULT ) ),
-    m_pWrtShell         ( NULL ),
-    m_pImpl             ( new SwCompatibilityOptPage_Impl ),
-    m_nSavedOptions     ( 0 )
+    m_aMainFL			( this, SW_RES( FL_MAIN ) ),
+    m_aFormattingFT		( this, SW_RES( FT_FORMATTING ) ),
+    m_aFormattingLB		( this, SW_RES( LB_FORMATTING ) ),
+    m_aOptionsFT		( this, SW_RES( FT_OPTIONS ) ),
+    m_aOptionsLB		( this, SW_RES( LB_OPTIONS ) ),
+    m_aResetPB			( this, SW_RES( PB_RESET ) ),
+    m_aDefaultPB		( this, SW_RES( PB_DEFAULT ) ),
+    m_sUserEntry		( 		SW_RES( STR_USERENTRY ) ),
+    m_sUseAsDefaultQuery( 		SW_RES( STR_QRYBOX_USEASDEFAULT ) ),
+    m_pWrtShell			( NULL ),
+    m_pImpl				( new SwCompatibilityOptPage_Impl ),
+    m_nSavedOptions		( 0 )
 
 {
     // init options strings with local resource ids -> so do it before FreeResource()
-    for ( sal_uInt16 nResId = STR_COMP_OPTIONS_START; nResId < STR_COMP_OPTIONS_END; ++nResId )
+    for ( USHORT nResId = STR_COMP_OPTIONS_START; nResId < STR_COMP_OPTIONS_END; ++nResId )
     {
         String sEntry = String( SW_RES( nResId ) );
         if ( STR_TAB_ALIGNMENT == nResId ||
@@ -148,10 +148,10 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
         if ( pEntry )
         {
             m_aOptionsLB.SetCheckButtonState( pEntry, SV_BUTTON_UNCHECKED );
-            pEntry->SetUserData( (void*)(sal_uLong)nResId );
+            pEntry->SetUserData( (void*)(ULONG)nResId );
         }
     }
-    m_aOptionsLB.SetStyle( m_aOptionsLB.GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
+    m_aOptionsLB.SetWindowBits( m_aOptionsLB.GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
     m_aOptionsLB.SetHighlightRange();
 
     FreeResource();
@@ -211,7 +211,7 @@ void SwCompatibilityOptPage::ReplaceFormatName( String& rEntry )
     }
 }
 
-sal_uLong convertBools2Ulong_Impl
+ULONG convertBools2Ulong_Impl
 (
     bool _bUsePrtMetrics,
     bool _bAddSpacing,
@@ -226,8 +226,8 @@ sal_uLong convertBools2Ulong_Impl
     bool _bExpandWordSpace
 )
 {
-    sal_uLong nRet = 0;
-    sal_uLong nSetBit = 1;
+    ULONG nRet = 0;
+    ULONG nSetBit = 1;
 
     if ( _bUsePrtMetrics )
         nRet |= nSetBit;
@@ -271,7 +271,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     String sDocTitle;
     const SfxPoolItem* pItem = NULL;
     SfxObjectShell* pObjShell = NULL;
-    if ( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_WRTSHELL, sal_False, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_WRTSHELL, FALSE, &pItem ) )
         m_pWrtShell = (SwWrtShell*)( (const SwPtrItem*)pItem )->GetValue();
     if ( m_pWrtShell )
     {
@@ -369,8 +369,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
         if ( sNewEntry.Len() == 0 )
             sNewEntry = sName;
 
-        sal_uInt16 nPos = m_aFormattingLB.InsertEntry( sNewEntry );
-        sal_uLong nOptions = convertBools2Ulong_Impl(
+        USHORT nPos = m_aFormattingLB.InsertEntry( sNewEntry );
+        ULONG nOptions = convertBools2Ulong_Impl(
             bUsePrtMetrics, bAddSpacing, bAddSpacingAtPages,
             bUseOurTabStops, bNoExtLeading, bUseLineSpacing,
             bAddTableSpacing, bUseObjPos, bUseOurTextWrapping,
@@ -399,8 +399,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 
 IMPL_LINK( SwCompatibilityOptPage, SelectHdl, ListBox*, EMPTYARG )
 {
-    sal_uInt16 nPos = m_aFormattingLB.GetSelectEntryPos();
-    sal_uLong nOptions = (sal_uLong)(void*)m_aFormattingLB.GetEntryData( nPos );
+    USHORT nPos = m_aFormattingLB.GetSelectEntryPos();
+    ULONG nOptions = (ULONG)(void*)m_aFormattingLB.GetEntryData( nPos );
     SetCurrentOptions( nOptions );
 
     return 0;
@@ -416,15 +416,15 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
         {
             if ( pItem->m_bIsDefault )
             {
-                sal_uInt16 nCount = static_cast< sal_uInt16 >( m_aOptionsLB.GetEntryCount() );
-                for ( sal_uInt16 i = 0; i < nCount; ++i )
+                USHORT nCount = static_cast< USHORT >( m_aOptionsLB.GetEntryCount() );
+                for ( USHORT i = 0; i < nCount; ++i )
                 {
-                    bool bChecked = ( m_aOptionsLB.IsChecked(i) != sal_False );
+                    bool bChecked = ( m_aOptionsLB.IsChecked(i) != FALSE );
                     CompatibilityOptions eOption = static_cast< CompatibilityOptions >(i);
                     switch ( eOption )
                     {
                         case COPT_USE_PRINTERDEVICE : pItem->m_bUsePrtMetrics = bChecked; break;
-                        case COPT_ADD_SPACING : pItem->m_bAddSpacing = bChecked; break;
+                        case COPT_ADD_SPACING :	pItem->m_bAddSpacing = bChecked; break;
                         case COPT_ADD_SPACING_AT_PAGES : pItem->m_bAddSpacingAtPages = bChecked; break;
                         case COPT_USE_OUR_TABSTOPS : pItem->m_bUseOurTabStops = bChecked; break;
                         case COPT_NO_EXTLEADING : pItem->m_bNoExtLeading = bChecked; break;
@@ -436,7 +436,7 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
                         case COPT_EXPAND_WORDSPACE:  pItem->m_bExpandWordSpace = bChecked; break;
                         default:
                         {
-                            OSL_FAIL("SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
+                            OSL_ENSURE(false, "SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
                         }
                     }
                 }
@@ -450,21 +450,21 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-void SwCompatibilityOptPage::SetCurrentOptions( sal_uLong nOptions )
+void SwCompatibilityOptPage::SetCurrentOptions( ULONG nOptions )
 {
-    sal_uLong nCount = m_aOptionsLB.GetEntryCount();
+    ULONG nCount = m_aOptionsLB.GetEntryCount();
     OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    for ( USHORT i = 0; i < nCount; ++i )
     {
-        sal_Bool bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
+        BOOL bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
         m_aOptionsLB.CheckEntryPos( i, bChecked );
         nOptions = nOptions >> 1;
     }
 }
 
-sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
+ULONG SwCompatibilityOptPage::GetDocumentOptions() const
 {
-    sal_uLong nRet = 0;
+    ULONG nRet = 0;
     if ( m_pWrtShell )
     {
         const IDocumentSettingAccess& rIDocumentSettingAccess = *m_pWrtShell->getIDocumentSettingAccess();
@@ -498,80 +498,80 @@ void SwCompatibilityOptPage::WriteOptions()
             pItem->m_bExpandWordSpace );
 }
 
-SfxTabPage* SwCompatibilityOptPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage*	SwCompatibilityOptPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SwCompatibilityOptPage( pParent, rAttrSet );
 }
 
-sal_Bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
+BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
 {
-    sal_Bool bModified = sal_False;
+    BOOL bModified = FALSE;
     if ( m_pWrtShell )
     {
-        sal_uLong nSavedOptions = m_nSavedOptions;
-        sal_uLong nCount = m_aOptionsLB.GetEntryCount();
+        ULONG nSavedOptions = m_nSavedOptions;
+        ULONG nCount = m_aOptionsLB.GetEntryCount();
         OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
 
         bool bSetParaSpaceMax = false;
 
-        for ( sal_uInt16 i = 0; i < nCount; ++i )
+        for ( USHORT i = 0; i < nCount; ++i )
         {
             CompatibilityOptions nOption = static_cast< CompatibilityOptions >(i);
-            sal_Bool bChecked = m_aOptionsLB.IsChecked(i);
-            sal_Bool bSavedChecked = ( ( nSavedOptions & 0x00000001 ) == 0x00000001 );
+            BOOL bChecked = m_aOptionsLB.IsChecked(i);
+            BOOL bSavedChecked = ( ( nSavedOptions & 0x00000001 ) == 0x00000001 );
             if ( bChecked != bSavedChecked )
             {
                 if ( COPT_USE_PRINTERDEVICE == nOption )
                 {
                     m_pWrtShell->SetUseVirDev( !bChecked );
-                    bModified = sal_True;
+                    bModified = TRUE;
                 }
                 else if ( ( COPT_ADD_SPACING == nOption || COPT_ADD_SPACING_AT_PAGES == nOption ) && !bSetParaSpaceMax )
                     bSetParaSpaceMax = true;
                 else if ( COPT_USE_OUR_TABSTOPS == nOption )
                 {
                     m_pWrtShell->SetTabCompat( !bChecked );
-                    bModified = sal_True;
+                    bModified = TRUE;
                 }
                 else if ( COPT_NO_EXTLEADING == nOption )
                 {
                     m_pWrtShell->SetAddExtLeading( !bChecked );
-                    bModified = sal_True;
+                    bModified = TRUE;
                 }
                 else if ( COPT_USE_LINESPACING == nOption )
                 {
                        m_pWrtShell->SetUseFormerLineSpacing( bChecked );
-                    bModified = sal_True;
+                    bModified = TRUE;
                 }
                 else if ( COPT_ADD_TABLESPACING == nOption )
                 {
                     m_pWrtShell->SetAddParaSpacingToTableCells( bChecked );
-                    bModified = sal_True;
+                    bModified = TRUE;
                 }
                 else if ( COPT_ADD_TABLESPACING == nOption )
                 {
                     m_pWrtShell->SetAddParaSpacingToTableCells( bChecked );
-                    bModified = sal_True;
+                    bModified = TRUE;
                 }
                 else if ( COPT_USE_OBJECTPOSITIONING == nOption )
                 {
                     m_pWrtShell->SetUseFormerObjectPositioning( bChecked );
-                    bModified = sal_True;
+                    bModified = TRUE;
                 }
                 else if ( COPT_USE_OUR_TEXTWRAPPING == nOption )
                 {
                     m_pWrtShell->SetUseFormerTextWrapping( bChecked );
-                    bModified = sal_True;
+                    bModified = TRUE;
                 }
                 else if ( COPT_CONSIDER_WRAPPINGSTYLE == nOption )
                 {
                     m_pWrtShell->SetConsiderWrapOnObjPos( bChecked );
-                    bModified = sal_True;
+                    bModified = TRUE;
                 }
                 else if ( COPT_EXPAND_WORDSPACE == nOption )
                 {
                     m_pWrtShell->SetDoNotJustifyLinesWithManualBreak( !bChecked );
-                    bModified = sal_True;
+                    bModified = TRUE;
                 }
             }
 
@@ -580,9 +580,9 @@ sal_Bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
 
         if ( bSetParaSpaceMax )
         {
-            m_pWrtShell->SetParaSpaceMax( m_aOptionsLB.IsChecked( (sal_uInt16)COPT_ADD_SPACING ) );
-            m_pWrtShell->SetParaSpaceMaxAtPages( m_aOptionsLB.IsChecked( (sal_uInt16)COPT_ADD_SPACING_AT_PAGES ) );
-            bModified = sal_True;
+            m_pWrtShell->SetParaSpaceMax( m_aOptionsLB.IsChecked( (USHORT)COPT_ADD_SPACING ) );
+            m_pWrtShell->SetParaSpaceMaxAtPages( m_aOptionsLB.IsChecked( (USHORT)COPT_ADD_SPACING_AT_PAGES ) );
+            bModified = TRUE;
         }
     }
 
@@ -596,7 +596,7 @@ void SwCompatibilityOptPage::Reset( const SfxItemSet&  )
 {
     m_aOptionsLB.SelectEntryPos( 0 );
 
-    sal_uLong nOptions = GetDocumentOptions();
+    ULONG nOptions = GetDocumentOptions();
     SetCurrentOptions( nOptions );
     m_nSavedOptions = nOptions;
 }

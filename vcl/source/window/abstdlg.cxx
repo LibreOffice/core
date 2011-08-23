@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
     static ::osl::Module aDialogLibrary;
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( RTL_CONSTASCII_USTRINGPARAM( DLL_NAME ) ) ) )
         fp = ( VclAbstractDialogFactory* (__LOADONCALLAPI*)() )
-            aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")) );
+            aDialogLibrary.getFunctionSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
     if ( fp )
         return fp();
     return 0;

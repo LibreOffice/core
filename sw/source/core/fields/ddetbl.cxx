@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,26 +36,26 @@
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <swddetbl.hxx>
-#include <ddefld.hxx>           // fuer den FieldType
+#include <ddefld.hxx>			// fuer den FieldType
 #include <ndindex.hxx>
 #include <fldupde.hxx>
 #include <swtblfmt.hxx>
-#include <fieldhint.hxx>
+
 
 TYPEINIT1( SwDDETable, SwTable );
 
     // Constructor movet alle Lines/Boxen aus der SwTable zu sich.
     // Die SwTable ist danach Leer und muss geloescht werden.
 SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
-                        sal_Bool bUpdate )
+                        BOOL bUpdate )
     : SwTable( rTable ), aDepend( this, pDDEType )
 {
     // Kopiere/move die Daten der Tabelle
     aSortCntBoxes.Insert( &rTable.GetTabSortBoxes(), 0,
                           rTable.GetTabSortBoxes().Count()  ); // move die Inh. Boxen
-    rTable.GetTabSortBoxes().Remove( (sal_uInt16)0, rTable.GetTabSortBoxes().Count() );
+    rTable.GetTabSortBoxes().Remove( (USHORT)0, rTable.GetTabSortBoxes().Count() );
 
-    aLines.Insert( &rTable.GetTabLines(),0 );                       // move die Lines
+    aLines.Insert( &rTable.GetTabLines(),0 );						// move die Lines
     rTable.GetTabLines().Remove( 0, rTable.GetTabLines().Count() );
 
     if( aLines.Count() )
@@ -63,12 +63,10 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
         const SwNode& rNd = *GetTabSortBoxes()[0]->GetSttNd();
         if( rNd.GetNodes().IsDocNodes() )
         {
-            // mba: swclient refactoring - this code shouldn't have done anything!
-            // the ModifyLock Flag is evaluated in SwModify only, though it was accessible via SwClient
-            // This has been fixed now
-//          aDepend.LockModify();
+            // "aktivieren der Updates" (Modify nicht noch mal rufen)
+            aDepend.LockModify();
             pDDEType->IncRefCnt();
-//          aDepend.UnlockModify();
+            aDepend.UnlockModify();
 
             // Setzen der Werte in die einzelnen Boxen
             // update box content only if update flag is set (false in import)
@@ -78,7 +76,7 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
     }
 }
 
-SwDDETable::~SwDDETable()
+__EXPORT SwDDETable::~SwDDETable()
 {
     SwDDEFieldType* pFldTyp = (SwDDEFieldType*)aDepend.GetRegisteredIn();
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
@@ -94,20 +92,12 @@ SwDDETable::~SwDDETable()
     }
 }
 
-void SwDDETable::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwDDETable::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     if( pNew && RES_UPDATEDDETBL == pNew->Which() )
         ChangeContent();
     else
         SwTable::Modify( pOld, pNew );
-}
-
-void SwDDETable::SwClientNotify( const SwModify&, const SfxHint& rHint )
-{
-    const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
-    if ( pHint )
-        // replace DDETable by real table
-        NoDDETable();
 }
 
 void SwDDETable::ChangeContent()
@@ -127,11 +117,11 @@ void SwDDETable::ChangeContent()
     String aExpand = pDDEType->GetExpansion();
     aExpand.EraseAllChars( '\r' );
 
-    for( sal_uInt16 n = 0; n < aLines.Count(); ++n )
+    for( USHORT n = 0; n < aLines.Count(); ++n )
     {
         String aLine = aExpand.GetToken( n, '\n' );
         SwTableLine* pLine = aLines[ n ];
-        for( sal_uInt16 i = 0; i < pLine->GetTabBoxes().Count(); ++i )
+        for( USHORT i = 0; i < pLine->GetTabBoxes().Count(); ++i )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[ i ];
             OSL_ENSURE( pBox->GetSttIdx(), "keine InhaltsBox" );
@@ -160,7 +150,7 @@ SwDDEFieldType* SwDDETable::GetDDEFldType()
     return (SwDDEFieldType*)aDepend.GetRegisteredIn();
 }
 
-sal_Bool SwDDETable::NoDDETable()
+BOOL SwDDETable::NoDDETable()
 {
     // suche den TabellenNode
     OSL_ENSURE( GetFrmFmt(), "Kein FrameFormat" );
@@ -168,11 +158,11 @@ sal_Bool SwDDETable::NoDDETable()
 
     // Stehen wir im richtigen NodesArray (Wegen UNDO)
     if( !aLines.Count() )
-        return sal_False;
+        return FALSE;
     OSL_ENSURE( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
     SwNode* pNd = (SwNode*)GetTabSortBoxes()[0]->GetSttNd();
     if( !pNd->GetNodes().IsDocNodes() )
-        return sal_False;
+        return FALSE;
 
     SwTableNode* pTblNd = pNd->FindTableNode();
     OSL_ENSURE( pTblNd, "wo steht denn die Tabelle ?");
@@ -182,17 +172,17 @@ sal_Bool SwDDETable::NoDDETable()
     // Kopiere/move die Daten der Tabelle
     pNewTbl->GetTabSortBoxes().Insert( &GetTabSortBoxes(), 0,
                           GetTabSortBoxes().Count()  ); // move die Inh. Boxen
-    GetTabSortBoxes().Remove( (sal_uInt16)0, GetTabSortBoxes().Count() );
+    GetTabSortBoxes().Remove( (USHORT)0, GetTabSortBoxes().Count() );
 
     pNewTbl->GetTabLines().Insert( &GetTabLines(),0 );                      // move die Lines
     GetTabLines().Remove( 0, GetTabLines().Count() );
 
-    if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
+    if( pDoc->GetRootFrm() )
         ((SwDDEFieldType*)aDepend.GetRegisteredIn())->DecRefCnt();
 
     pTblNd->SetNewTable( pNewTbl );       // setze die Tabelle
 
-    return sal_True;
+    return TRUE;
 }
 
 

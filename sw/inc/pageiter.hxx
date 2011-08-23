@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@ class SwPageIter {
 public:
     SwPageIter( const SwDoc &rDoc, const SwPosition &rStartPos );
 
-    sal_Bool IsEnd() const { return 0 == pPage; }
-    sal_Bool NextPage();
+    BOOL IsEnd() const { return 0 == pPage; }
+    BOOL NextPage();
     const SwPageDesc* GetPageDesc() const;
-    sal_Bool Seek( const SwPosition &rPos );
-    sal_Bool GetPosition( SwPosition &rPos ) const;
+    BOOL Seek( const SwPosition &rPos );
+    BOOL GetPosition( SwPosition &rPos ) const;
 };
 
 

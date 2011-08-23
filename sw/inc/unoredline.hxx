@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,10 @@
 
 class SwRedline;
 
+/* -----------------------------19.12.00 11:35--------------------------------
+
+ ---------------------------------------------------------------------------*/
+
 /**
  * SwXRedlineText provides an XText which may be used to write
  * directly into a redline node. It got implemented to enable XML
@@ -50,7 +54,7 @@ class SwXRedlineText :
 public:
     SwXRedlineText(SwDoc* pDoc, SwNodeIndex aNodeIndex);
 
-    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual 	::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw(){OWeakObject::acquire();}
     virtual void SAL_CALL release(  ) throw(){OWeakObject::release();}
 
@@ -68,20 +72,22 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 };
+/* ---------------------------------------------------------------------------
 
+ ---------------------------------------------------------------------------*/
 class SwXRedlinePortion : public SwXTextPortion
 {
-    const SwRedline*    pRedline;
+    const SwRedline*	pRedline;
 
     void Validate() throw( ::com::sun::star::uno::RuntimeException );
 
     using SwXTextPortion::GetPropertyValue;
 
 public:
-    SwXRedlinePortion(  const SwRedline* pRed,
+    SwXRedlinePortion(	const SwRedline* pRed,
                         const SwUnoCrsr* pPortionCrsr,
                         ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent,
-                        sal_Bool bIsStart);
+                        BOOL bIsStart);
 
     ~SwXRedlinePortion();
 
@@ -94,7 +100,9 @@ public:
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > CreateRedlineProperties( const SwRedline& rRedline, sal_Bool bIsStart ) throw();
 
 };
+/* -----------------------------11.01.01 16:52--------------------------------
 
+ ---------------------------------------------------------------------------*/
 typedef
 cppu::WeakImplHelper1
 <
@@ -106,15 +114,15 @@ class SwXRedline :
         public SwXText,
         public SwClient
 {
-    SwDoc*      pDoc;
-    SwRedline*  pRedline;
+    SwDoc* 		pDoc;
+    SwRedline* 	pRedline;
 public:
     SwXRedline(SwRedline& rRedline, SwDoc& rDoc);
     ~SwXRedline();
 
     TYPEINFO();
 
-    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual 	::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw(){OWeakObject::acquire();}
     virtual void SAL_CALL release(  ) throw(){OWeakObject::release();}
 
@@ -141,10 +149,10 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    const SwRedline*    GetRedline() const {return pRedline;}
-protected:
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void 		Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+    const SwRedline* 	GetRedline() const {return pRedline;}
 };
 #endif
 

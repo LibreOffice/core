@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@ namespace vcl
 {
     struct UserEvent
     {
-        sal_uLong           m_nWhich;
+        ULONG           m_nWhich;
         void*           m_pData;
     };
 
     class VCL_DLLPUBLIC EventPoster
     {
-        sal_uLong           m_nId;
+        ULONG           m_nId;
         Link            m_aLink;
 
         DECL_DLLPRIVATE_LINK( DoEvent_Impl, UserEvent* );

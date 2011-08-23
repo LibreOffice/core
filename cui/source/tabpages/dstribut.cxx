@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 #include <sfx2/basedlgs.hxx>
 #include <cuires.hrc>
 #include "dstribut.hxx"
@@ -35,7 +38,7 @@
 #include <dialmgr.hxx>
 #include <tools/shl.hxx>
 
-static sal_uInt16 pRanges[] =
+static USHORT pRanges[] =
 {
     SDRATTR_MEASURE_FIRST,
     SDRATTR_MEASURE_LAST,
@@ -53,7 +56,7 @@ SvxDistributeDialog::SvxDistributeDialog(
     const SfxItemSet& rInAttrs,
     SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
-:   SfxSingleTabDialog(pParent, rInAttrs, RID_SVXPAGE_DISTRIBUTE ),
+:	SfxSingleTabDialog(pParent, rInAttrs, RID_SVXPAGE_DISTRIBUTE ),
     mpPage(0L)
 {
     mpPage = new SvxDistributePage(this, rInAttrs, eHor, eVer);
@@ -82,30 +85,39 @@ SvxDistributePage::SvxDistributePage(
     const SfxItemSet& rInAttrs,
     SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
-:   SvxTabPage(pWindow, CUI_RES(RID_SVXPAGE_DISTRIBUTE), rInAttrs),
+:	SvxTabPage(pWindow, CUI_RES(RID_SVXPAGE_DISTRIBUTE), rInAttrs),
     meDistributeHor(eHor),
     meDistributeVer(eVer),
-    maFlHorizontal      (this, CUI_RES(FL_HORIZONTAL    )),
-    maBtnHorNone        (this, CUI_RES(BTN_HOR_NONE     )),
-    maBtnHorLeft        (this, CUI_RES(BTN_HOR_LEFT     )),
-    maBtnHorCenter      (this, CUI_RES(BTN_HOR_CENTER   )),
-    maBtnHorDistance    (this, CUI_RES(BTN_HOR_DISTANCE )),
-    maBtnHorRight       (this, CUI_RES(BTN_HOR_RIGHT    )),
-    maHorLow            (this, CUI_RES(IMG_HOR_LOW      )),
-    maHorCenter         (this, CUI_RES(IMG_HOR_CENTER   )),
-    maHorDistance       (this, CUI_RES(IMG_HOR_DISTANCE )),
-    maHorHigh           (this, CUI_RES(IMG_HOR_HIGH     )),
-    maFlVertical        (this, CUI_RES(FL_VERTICAL      )),
-    maBtnVerNone        (this, CUI_RES(BTN_VER_NONE     )),
-    maBtnVerTop         (this, CUI_RES(BTN_VER_TOP      )),
-    maBtnVerCenter      (this, CUI_RES(BTN_VER_CENTER   )),
-    maBtnVerDistance    (this, CUI_RES(BTN_VER_DISTANCE )),
-    maBtnVerBottom      (this, CUI_RES(BTN_VER_BOTTOM   )),
-    maVerLow            (this, CUI_RES(IMG_VER_LOW      )),
-    maVerCenter         (this, CUI_RES(IMG_VER_CENTER   )),
-    maVerDistance       (this, CUI_RES(IMG_VER_DISTANCE )),
-    maVerHigh           (this, CUI_RES(IMG_VER_HIGH     ))
+    maFlHorizontal		(this, CUI_RES(FL_HORIZONTAL		)),
+    maBtnHorNone		(this, CUI_RES(BTN_HOR_NONE		)),
+    maBtnHorLeft		(this, CUI_RES(BTN_HOR_LEFT		)),
+    maBtnHorCenter		(this, CUI_RES(BTN_HOR_CENTER		)),
+    maBtnHorDistance	(this, CUI_RES(BTN_HOR_DISTANCE	)),
+    maBtnHorRight		(this, CUI_RES(BTN_HOR_RIGHT		)),
+    maHorLow			(this, CUI_RES(IMG_HOR_LOW		)),
+    maHorCenter			(this, CUI_RES(IMG_HOR_CENTER		)),
+    maHorDistance		(this, CUI_RES(IMG_HOR_DISTANCE	)),
+    maHorHigh			(this, CUI_RES(IMG_HOR_HIGH		)),
+    maFlVertical		(this, CUI_RES(FL_VERTICAL		)),
+    maBtnVerNone		(this, CUI_RES(BTN_VER_NONE		)),
+    maBtnVerTop			(this, CUI_RES(BTN_VER_TOP		)),
+    maBtnVerCenter		(this, CUI_RES(BTN_VER_CENTER		)),
+    maBtnVerDistance	(this, CUI_RES(BTN_VER_DISTANCE	)),
+    maBtnVerBottom		(this, CUI_RES(BTN_VER_BOTTOM		)),
+    maVerLow            (this, CUI_RES(IMG_VER_LOW        )),
+    maVerCenter			(this, CUI_RES(IMG_VER_CENTER		)),
+    maVerDistance       (this, CUI_RES(IMG_VER_DISTANCE   )),
+    maVerHigh           (this, CUI_RES(IMG_VER_HIGH       ))
 {
+    maHorLow.SetModeImage( Image( CUI_RES( IMG_HOR_LOW_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maHorCenter.SetModeImage( Image( CUI_RES( IMG_HOR_CENTER_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maHorDistance.SetModeImage( Image( CUI_RES( IMG_HOR_DISTANCE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maHorHigh.SetModeImage( Image( CUI_RES( IMG_HOR_HIGH_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maVerDistance.SetModeImage( Image( CUI_RES( IMG_VER_DISTANCE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maVerLow.SetModeImage( Image( CUI_RES( IMG_VER_LOW_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maVerCenter.SetModeImage( Image( CUI_RES( IMG_VER_CENTER_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maVerHigh.SetModeImage( Image( CUI_RES( IMG_VER_HIGH_H ) ), BMP_COLOR_HIGHCONTRAST );
+
     FreeResource();
 }
 
@@ -137,7 +149,7 @@ SfxTabPage* SvxDistributePage::Create(Window* pWindow, const SfxItemSet& rAttrs,
 |*
 \************************************************************************/
 
-sal_uInt16* SvxDistributePage::GetRanges()
+UINT16*	SvxDistributePage::GetRanges()
 {
     return(pRanges);
 }
@@ -158,36 +170,36 @@ void SvxDistributePage::PointChanged(Window* /*pWindow*/, RECT_POINT /*eRP*/)
 |*
 \************************************************************************/
 
-void SvxDistributePage::Reset(const SfxItemSet& )
+void __EXPORT SvxDistributePage::Reset(const SfxItemSet& )
 {
-    maBtnHorNone.SetState(sal_False);
-    maBtnHorLeft.SetState(sal_False);
-    maBtnHorCenter.SetState(sal_False);
-    maBtnHorDistance.SetState(sal_False);
-    maBtnHorRight.SetState(sal_False);
+    maBtnHorNone.SetState(FALSE);
+    maBtnHorLeft.SetState(FALSE);
+    maBtnHorCenter.SetState(FALSE);
+    maBtnHorDistance.SetState(FALSE);
+    maBtnHorRight.SetState(FALSE);
 
     switch(meDistributeHor)
     {
-        case SvxDistributeHorizontalNone : maBtnHorNone.SetState(sal_True); break;
-        case SvxDistributeHorizontalLeft : maBtnHorLeft.SetState(sal_True); break;
-        case SvxDistributeHorizontalCenter : maBtnHorCenter.SetState(sal_True); break;
-        case SvxDistributeHorizontalDistance : maBtnHorDistance.SetState(sal_True); break;
-        case SvxDistributeHorizontalRight    : maBtnHorRight.SetState(sal_True);    break;
+        case SvxDistributeHorizontalNone : maBtnHorNone.SetState(TRUE); break;
+        case SvxDistributeHorizontalLeft : maBtnHorLeft.SetState(TRUE); break;
+        case SvxDistributeHorizontalCenter : maBtnHorCenter.SetState(TRUE); break;
+        case SvxDistributeHorizontalDistance : maBtnHorDistance.SetState(TRUE); break;
+        case SvxDistributeHorizontalRight : maBtnHorRight.SetState(TRUE); break;
     }
 
-    maBtnVerNone.SetState(sal_False);
-    maBtnVerTop.SetState(sal_False);
-    maBtnVerCenter.SetState(sal_False);
-    maBtnVerDistance.SetState(sal_False);
-    maBtnVerBottom.SetState(sal_False);
+    maBtnVerNone.SetState(FALSE);
+    maBtnVerTop.SetState(FALSE);
+    maBtnVerCenter.SetState(FALSE);
+    maBtnVerDistance.SetState(FALSE);
+    maBtnVerBottom.SetState(FALSE);
 
     switch(meDistributeVer)
     {
-        case SvxDistributeVerticalNone : maBtnVerNone.SetState(sal_True); break;
-        case SvxDistributeVerticalTop : maBtnVerTop.SetState(sal_True); break;
-        case SvxDistributeVerticalCenter : maBtnVerCenter.SetState(sal_True); break;
-        case SvxDistributeVerticalDistance : maBtnVerDistance.SetState(sal_True); break;
-        case SvxDistributeVerticalBottom : maBtnVerBottom.SetState(sal_True); break;
+        case SvxDistributeVerticalNone : maBtnVerNone.SetState(TRUE); break;
+        case SvxDistributeVerticalTop : maBtnVerTop.SetState(TRUE); break;
+        case SvxDistributeVerticalCenter : maBtnVerCenter.SetState(TRUE); break;
+        case SvxDistributeVerticalDistance : maBtnVerDistance.SetState(TRUE); break;
+        case SvxDistributeVerticalBottom : maBtnVerBottom.SetState(TRUE); break;
     }
 }
 
@@ -197,7 +209,7 @@ void SvxDistributePage::Reset(const SfxItemSet& )
 |*
 \************************************************************************/
 
-sal_Bool SvxDistributePage::FillItemSet( SfxItemSet& )
+BOOL SvxDistributePage::FillItemSet( SfxItemSet& )
 {
     SvxDistributeHorizontal eDistributeHor(SvxDistributeHorizontalNone);
     SvxDistributeVertical eDistributeVer(SvxDistributeVerticalNone);
@@ -224,10 +236,10 @@ sal_Bool SvxDistributePage::FillItemSet( SfxItemSet& )
     {
         meDistributeHor = eDistributeHor;
         meDistributeVer = eDistributeVer;
-        return sal_True;
+        return TRUE;
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ import org.openoffice.xmerge.Document;
  *  @author  Martin Maher
  */
 
-public class PalmDocument
+public class PalmDocument 
     implements Document {
 
     /**
@@ -88,7 +88,7 @@ public class PalmDocument
      *  @throws  NullPointerException  If <code>recs</code> is null.
      */
     public PalmDocument(String name, int creatorID, int typeID, int version,
-        short attribute, Record[] recs)
+        short attribute, Record[] recs) 
         throws UnsupportedEncodingException {
         pdb = new PalmDB(name, creatorID, typeID, version, attribute, recs);
         fileName = pdb.getPDBNameString();
@@ -102,7 +102,7 @@ public class PalmDocument
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-
+   
     public void read(InputStream is) throws IOException {
         PdbDecoder decoder = new PdbDecoder();
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -115,12 +115,12 @@ public class PalmDocument
         pdb = decoder.parse(bytearr);
         fileName = pdb.getPDBNameString();
     }
-
+    
 
     /**
      *  Writes the <code>PalmDocument</code> to an <code>OutputStream</code>.
      *
-     *  @param  os  The <code>OutputStream</code> to write the content.
+     *  @param  is  The <code>OutputStream</code> to write the content.
      *
      *  @throws  IOException  If any I/O error occurs.
      */
@@ -136,7 +136,7 @@ public class PalmDocument
      *  @return  The <code>PalmDB</code>.
      */
     public PalmDB getPdb() {
-        return pdb;
+        return pdb;    
     }
 
 
@@ -147,21 +147,21 @@ public class PalmDocument
      *  @param  pdb  The new <code>PalmDB</code> value.
      */
     public void setPdb(PalmDB pdb) {
-        this.pdb = pdb;
+        this.pdb = pdb;    
 
         String name = pdb.getPDBNameString();
         fileName = name;
     }
-
+                          
 
     /**
      *  Returns the name of the file.
-     *
+     *  
      *  @return  The name of the file represented in the
      *           <code>PalmDocument</code>.
      */
     public String getFileName() {
-        return fileName + ".pdb";
+        return fileName + ".pdb";    
     }
 
 

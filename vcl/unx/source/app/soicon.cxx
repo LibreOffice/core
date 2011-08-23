@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,13 +42,13 @@
 #include <salbmp.h>
 #include <vcl/svids.hrc>
 
-sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,sal_uInt16 nIcon, sal_uInt16 iconSize,
+BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,USHORT nIcon, USHORT iconSize,
                           Pixmap& icon_pixmap, Pixmap& icon_mask)
 {
     if( ! ImplGetResMgr() )
-        return sal_False;
-
-    sal_uInt16 nIconSizeOffset;
+        return FALSE;
+    
+    USHORT nIconSizeOffset;
 
     if( iconSize >= 48 )
         nIconSizeOffset = SV_ICON_SIZE48_START;
@@ -57,11 +57,11 @@ sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,sal_uInt16 nIcon
     else if( iconSize >= 16 )
         nIconSizeOffset = SV_ICON_SIZE16_START;
     else
-        return sal_False;
+        return FALSE;
 
     BitmapEx aIcon( ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()));
-    if( sal_True == aIcon.IsEmpty() )
-        return sal_False;
+    if( TRUE == aIcon.IsEmpty() )
+        return FALSE;
 
     SalTwoRect aRect;
     aRect.mnSrcX = 0; aRect.mnSrcY = 0;
@@ -69,7 +69,7 @@ sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,sal_uInt16 nIcon
     aRect.mnDestX = 0; aRect.mnDestY = 0;
     aRect.mnDestWidth = iconSize; aRect.mnDestHeight = iconSize;
 
-    X11SalBitmap *pBitmap = static_cast < X11SalBitmap * >
+    X11SalBitmap *pBitmap = static_cast < X11SalBitmap * > 
         (aIcon.ImplGetBitmapImpBitmap()->ImplGetSalBitmap());
 
     icon_pixmap = XCreatePixmap( pDisplay->GetDisplay(),
@@ -88,7 +88,7 @@ sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,sal_uInt16 nIcon
 
     if( TRANSPARENT_BITMAP == aIcon.GetTransparentType() )
     {
-        icon_mask = XCreatePixmap( pDisplay->GetDisplay(),
+        icon_mask = XCreatePixmap( pDisplay->GetDisplay(), 
                                    pDisplay->GetRootWindow( pDisplay->GetDefaultScreenNumber() ),
                                    iconSize, iconSize, 1);
 
@@ -102,14 +102,14 @@ sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,sal_uInt16 nIcon
         Bitmap aMask = aIcon.GetMask();
         aMask.Invert();
 
-        X11SalBitmap *pMask = static_cast < X11SalBitmap * >
+        X11SalBitmap *pMask = static_cast < X11SalBitmap * > 
             (aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
 
         pMask->ImplDraw(icon_mask, nScreen, 1, aRect, aMonoGC);
         XFreeGC( pDisplay->GetDisplay(), aMonoGC );
     }
-
-    return sal_True;
+    
+    return TRUE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

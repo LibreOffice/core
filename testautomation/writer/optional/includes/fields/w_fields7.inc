@@ -119,8 +119,8 @@ testcase tL10NtestAboveBelow
     Call hNewDocument
     
     '/// Open test file AboveBelow.sxw
-    hFileOpenLocally( sTestFile )
-    
+    Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Check if reference above/below is changed after language is changed
     
@@ -182,6 +182,7 @@ testcase tL10NtestDate
     end if
     
     Dim sTestFile    as String
+    Dim sOriginalFile as string
     Dim sDate()      as String
     Dim iCountry()   as Integer
     Dim i , j        as Integer
@@ -214,7 +215,17 @@ testcase tL10NtestDate
     ExtrasOptionenDlg.Cancel
     Call hCloseDocument
   
-	sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\Date.sxw")
+  	sTestFile   = Convertpath (gOfficepath + "user\work\Date.sxw")
+	sOriginalFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\Date.sxw")
+	' document has to be copied to local file system to avoid opening a read-only file
+	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
+	FileCopy (sOriginalFile, sTestFile)
+	if FileExists ( sTestFile ) = false then
+		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
+		goto endsub
+	end if
+    
+    
     sDate  = Array( _
            "Tuesday, August 3, 2004"    , _
            "mardi 3 août 2004"    , _
@@ -237,7 +248,7 @@ testcase tL10NtestDate
     Call hNewDocument
     
     '/// Open test file Date.sxw
-    hFileOpenLocally( sTestFile )
+    Call hFileOpen(sTestFile)
     
     '/// Check if Date is changed after language is changed
     j = UBound(iCountry)
@@ -293,6 +304,7 @@ testcase tL10NtestTime
     end if
 
     Dim sTestFile as String
+    Dim sOriginalFile as string
     Dim sTime() as String
     Dim iCountry() as Integer
     Dim i as Integer
@@ -326,8 +338,17 @@ testcase tL10NtestTime
     ExtrasOptionenDlg.Cancel
     Call hCloseDocument
   
-
-	sTestFile = gTesttoolpath + "writer\optional\input\fields\Time.sxw"
+  	sTestFile   = Convertpath (gOfficepath + "user\work\Time.sxw")
+	sOriginalFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\Time.sxw")
+	' document has to be copied to local file system to avoid opening a read-only file
+	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
+	FileCopy (sOriginalFile, sTestFile)
+	if FileExists ( sTestFile ) = false then
+		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
+		goto endsub
+	end if
+    
+    
     sTime  = Array( _
                "04:46:08 PM"     , _
                "04:46:08 PM"     , _
@@ -350,7 +371,7 @@ testcase tL10NtestTime
     Call hNewDocument
     
     '/// Open test file Time.sxw
-    hFileOpenLocally( sTestFile )
+    Call hFileOpen(sTestFile)
     
     '/// Check if time is changed after language is changed
     j = UBound(iCountry)

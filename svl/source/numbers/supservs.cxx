@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <tools/stream.hxx>
-#include <svl/strmadpt.hxx>
-#include <svl/instrm.hxx>
+#include <strmadpt.hxx>
+#include "instrm.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::utl;
 
-#define PERSISTENT_SERVICE_NAME     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier"));
+#define PERSISTENT_SERVICE_NAME		::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier");
 
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL SvNumberFormatsSupplierServiceObject_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
@@ -95,7 +95,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
         // maybe you already called a method which needed the formatter
         // you should use XMultiServiceFactory::createInstanceWithArguments to avoid that
     if (m_pOwnFormatter)
-    {   // !!! this is only a emergency handling, normally this should not occur !!!
+    {	// !!! this is only a emergency handling, normally this should not occur !!!
         delete m_pOwnFormatter;
         m_pOwnFormatter = NULL;
         SetNumberFormatter(m_pOwnFormatter);
@@ -117,7 +117,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 #ifdef DBG_UTIL
         else
         {
-            OSL_FAIL("SvNumberFormatsSupplierServiceObject::initialize : unknown argument !");
+            DBG_ERROR("SvNumberFormatsSupplierServiceObject::initialize : unknown argument !");
         }
 #endif
     }
@@ -130,7 +130,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getImplementationName(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject"));
+    return ::rtl::OUString::createFromAscii("com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject");
 }
 
 //-------------------------------------------------------------------------

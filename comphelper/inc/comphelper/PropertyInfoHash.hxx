@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@
 
 #include <rtl/ustring.hxx>
 #include <comphelper/TypeGeneration.hxx>
-#include <boost/unordered_map.hpp>
-namespace comphelper
-{
+#include <hash_map>
+namespace comphelper 
+{ 
     struct PropertyInfo
     {
         const sal_Char* mpName;
@@ -61,13 +61,13 @@ namespace comphelper
     };
 }
 
-typedef boost::unordered_map < ::rtl::OUString,
-                        ::comphelper::PropertyInfo*,
-                        ::rtl::OUStringHash,
+typedef std::hash_map < ::rtl::OUString, 
+                        ::comphelper::PropertyInfo*, 
+                        ::rtl::OUStringHash, 
                         ::comphelper::eqFunc > PropertyInfoHash;
-typedef boost::unordered_map < ::rtl::OUString,
-                        ::comphelper::PropertyData*,
-                        ::rtl::OUStringHash,
+typedef std::hash_map < ::rtl::OUString, 
+                        ::comphelper::PropertyData*, 
+                        ::rtl::OUStringHash, 
                         ::comphelper::eqFunc > PropertyDataHash;
 #endif
 

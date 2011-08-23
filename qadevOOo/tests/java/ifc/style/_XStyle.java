@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ public class _XStyle extends MultiMethodTest {
         try {
             oObj.setParentStyle(oMyStyle.getName());
         } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Exception occurred while method call: " + e);
+            log.println("Exception occured while method call: " + e);
             result = false ;
         }
 

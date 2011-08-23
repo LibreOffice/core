@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -360,7 +360,7 @@
 #include "rtl/instance.hxx"
 #include "rtl/logfile.hxx"
 #include "rtl/random.h"
-#include "rtl/ref.hxx"
+#include "rtl.ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -370,6 +370,7 @@
 #include "rtl/ustring.hxx"
 
 #include "sal/alloca.h"
+#include "sal/main.h"
 
 #include "salhelper/simplereferenceobject.hxx"
 #include "salhelper/singletonref.hxx"
@@ -466,7 +467,7 @@
 #include "vcl/keycod.hxx"
 #include "vcl/keycodes.hxx"
 #include "vcl/lstbox.hxx"
-#include "tools/mapunit.hxx"
+#include "vcl/mapunit.hxx"
 #include "vcl/menu.hxx"
 #include "vcl/mnemonic.hxx"
 #include "vcl/morebtn.hxx"
@@ -485,7 +486,7 @@
 #include "vcl/timer.hxx"
 #include "vcl/wall.hxx"
 #include "vcl/window.hxx"
-#include "tools/wintypes.hxx"
+#include "vcl/wintypes.hxx"
 
 
 

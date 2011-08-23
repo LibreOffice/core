@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 #include "runtime.hxx"
 #include <rtl/ustrbuf.hxx>
 
-// The conversion of an item onto String was handled via the Put-Methods
-// of the several data types to avoid double code.
+// Die Konversion eines Items auf String wird ueber die Put-Methoden
+// der einzelnen Datentypen abgewickelt, um doppelten Code zu vermeiden.
 
 ::rtl::OUString ImpGetString( const SbxValues* p )
 {
@@ -69,7 +69,7 @@
         case SbxDOUBLE:
             ImpPutDouble( &aTmp, p->nDouble ); break;
         case SbxCURRENCY:
-            ImpPutCurrency( &aTmp, p->nInt64 ); break;
+            ImpPutCurrency( &aTmp, p->nLong64 ); break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             ImpPutDecimal( &aTmp, p->pDecimal ); break;
@@ -101,7 +101,7 @@
             break;
         }
         case SbxERROR:
-            // Here will be created the String "Error n"
+            // Hier wird der String "Error n" erzeugt
             aRes = SbxRes( STRING_ERRORMSG );
             aRes += ::rtl::OUString( p->nUShort ); break;
         case SbxDATE:
@@ -127,7 +127,7 @@
         case SbxBYREF | SbxDOUBLE:
             ImpPutDouble( &aTmp, *p->pDouble ); break;
         case SbxBYREF | SbxCURRENCY:
-            ImpPutCurrency( &aTmp, *p->pnInt64 ); break;
+            ImpPutCurrency( &aTmp, *p->pLong64 ); break;
         case SbxBYREF | SbxSALINT64:
             ImpPutInt64( &aTmp, *p->pnInt64 ); break;
         case SbxBYREF | SbxSALUINT64:
@@ -138,19 +138,19 @@
     return aRes;
 }
 
-// From 1997-04-10, new function for SbxValue::GetCoreString()
+// AB 10.4.97, neue Funktion fuer SbxValue::GetCoreString()
 ::rtl::OUString ImpGetCoreString( const SbxValues* p )
 {
-    // For now only for double
+    // Vorerst nur fuer double
     if( ( p->eType & (~SbxBYREF) ) == SbxDOUBLE )
     {
         SbxValues aTmp;
         XubString aRes;
         aTmp.eType = SbxSTRING;
         if( p->eType == SbxDOUBLE )
-            ImpPutDouble( &aTmp, p->nDouble, sal_True );    // true = bCoreString
+            ImpPutDouble( &aTmp, p->nDouble, /*bCoreString=*/TRUE );
         else
-            ImpPutDouble( &aTmp, *p->pDouble, sal_True );   // true = bCoreString
+            ImpPutDouble( &aTmp, *p->pDouble, /*bCoreString=*/TRUE );
         return aRes;
     }
     else
@@ -162,7 +162,7 @@ void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
     SbxValues aTmp;
     aTmp.eType = SbxSTRING;
     ::rtl::OUString* pTmp = NULL;
-    // as a precaution, if a NULL-Ptr appears
+    // Sicherheitshalber, falls ein NULL-Ptr kommt
     if( !n )
         n = pTmp = new ::rtl::OUString;
     aTmp.pOUString = (::rtl::OUString*)n;
@@ -188,8 +188,8 @@ void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
             p->nDouble = ImpGetDate( &aTmp ); break;
         case SbxDOUBLE:
             p->nDouble = ImpGetDouble( &aTmp ); break;
-        case SbxCURRENCY:
-            p->nInt64 = ImpGetCurrency( &aTmp ); break;
+        case SbxULONG64:
+            p->nLong64 = ImpGetCurrency( &aTmp ); break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             releaseDecimalPtr( p->pDecimal );
@@ -228,7 +228,7 @@ void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
         case SbxBYREF | SbxINTEGER:
             *p->pInteger = ImpGetInteger( p ); break;
         case SbxBYREF | SbxBOOL:
-            *p->pUShort = sal::static_int_cast< sal_uInt16 >( ImpGetBool( p ) );
+            *p->pUShort = sal::static_int_cast< UINT16 >( ImpGetBool( p ) );
             break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
@@ -244,17 +244,12 @@ void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = ImpGetDouble( p ); break;
         case SbxBYREF | SbxCURRENCY:
-            *p->pnInt64 = ImpGetCurrency( p ); break;
-        case SbxBYREF | SbxSALINT64:
-            *p->pnInt64 = ImpGetInt64( p ); break;
-        case SbxBYREF | SbxSALUINT64:
-            *p->puInt64 = ImpGetUInt64( p ); break;
+            *p->pLong64 = ImpGetCurrency( p ); break;
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }
     delete pTmp;
 }
-
 
 // Convert string to an array of bytes, preserving unicode (2bytes per character)
 SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
@@ -275,26 +270,26 @@ SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
         pArray->unoAddDim( 0, -1 );
     }
 
-    for( sal_uInt16 i=0; i< nArraySize; i++)
+    for( USHORT	i=0; i< nArraySize; i++)
     {
         SbxVariable* pNew = new SbxVariable( SbxBYTE );
-        sal_uInt8 aByte = static_cast< sal_uInt8 >( i%2 ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
+        BYTE aByte = static_cast< BYTE >( i%2 ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
         pNew->PutByte( aByte );
         pNew->SetFlag( SBX_WRITE );
-        pArray->Put( pNew, i );
+        pArray->Put( pNew, i );	
         if( i%2 )
             pSrc++;
     }
     return pArray;
-}
+}	
 
 // Convert an array of bytes to string (2bytes per character)
 ::rtl::OUString ByteArrayToString(SbxArray* pArr)
 {
-    sal_uInt16 nCount = pArr->Count();
+    USHORT nCount = pArr->Count();
     ::rtl::OUStringBuffer aStrBuf;
     sal_Unicode aChar = 0;
-    for( sal_uInt16 i = 0 ; i < nCount ; i++ )
+    for( USHORT i = 0 ; i < nCount ; i++ )
     {
         sal_Unicode aTempChar = pArr->Get(i)->GetByte();
         if( i%2 )
@@ -305,10 +300,10 @@ SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
         }
         else
         {
-            aChar = aTempChar;
+            aChar = aTempChar;	
         }
     }
-
+    
     if( nCount%2 )
     {
         aStrBuf.append(aChar);
@@ -316,6 +311,5 @@ SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
 
     return aStrBuf.makeStringAndClear();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,21 +34,20 @@
 #include <tools/stream.hxx>
 #include <sfx2/sfx.hrc>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <cppuhelper/implementationentry.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
-#define PIPE_ARG "--splash-pipe="
+#define PIPE_ARG "-splash-pipe="
 
 using namespace ::rtl;
-using namespace ::com::sun::star;
 using namespace ::com::sun::star::registry;
 
 namespace desktop
 {
-    UnxSplashScreen::UnxSplashScreen( const Reference< uno::XComponentContext >& xCtx )
-    : m_xCtx( xCtx ),
+
+UnxSplashScreen::UnxSplashScreen( const Reference< XMultiServiceFactory >& rSMgr )
+    : m_rFactory( rSMgr ),
       m_pOutFd( NULL )
 {
 }
@@ -104,14 +103,14 @@ void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
 {
     if ( m_pOutFd )
     {
-        fprintf( m_pOutFd, "%"SAL_PRIdINT32"%%\n", nValue );
+        fprintf( m_pOutFd, "%d%%\n", nValue );
         fflush( m_pOutFd );
     }
 }
 
 // XInitialize
 void SAL_CALL
-UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& )
+UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
     throw ( RuntimeException )
 {
     for ( sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++ )
@@ -125,72 +124,57 @@ UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::
             int fd = aNum.toInt32();
             m_pOutFd = fdopen( fd, "w" );
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "Got argument '--splash-pipe=%d ('%s') (%p)\n",
+            fprintf( stderr, "Got argument '-splash-pipe=%d ('%s') (%p)\n",
                      fd, (const sal_Char *)rtl::OUStringToOString( aNum, RTL_TEXTENCODING_UTF8 ),
                      m_pOutFd );
 #endif
         }
     }
 }
-}
-
-using namespace desktop;
 
 // get service instance...
-static uno::Reference< uno::XInterface > m_xINSTANCE;
+UnxSplashScreen *UnxSplashScreen::m_pINSTANCE = NULL;
+osl::Mutex UnxSplashScreen::m_aMutex;
 
-uno::Reference< uno::XInterface > SAL_CALL UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception )
+Reference< XInterface > UnxSplashScreen::getInstance( const Reference< XMultiServiceFactory >& rSMgr )
 {
-    static osl::Mutex m_aMutex;
-    if ( !m_xINSTANCE.is() )
+    if ( m_pINSTANCE == NULL )
     {
         osl::MutexGuard guard( m_aMutex );
-        if ( !m_xINSTANCE.is() )
-            m_xINSTANCE = (cppu::OWeakObject*) new UnxSplashScreen( xCtx );
+        if ( m_pINSTANCE == NULL )
+            return (XComponent*) new UnxSplashScreen( rSMgr );
     }
 
-    return m_xINSTANCE;
+    return (XComponent*)NULL;
 }
 
-OUString UnxSplash_getImplementationName()
+// static service info...
+const char* UnxSplashScreen::interfaces[] =
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.comp.PipeSplashScreen" ) );
-}
-
-uno::Sequence< OUString > SAL_CALL UnxSplash_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.PipeSplashScreen" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-::cppu::ImplementationEntry aEntries[] =
-{
-    {
-        UnxSplash_createInstance, UnxSplash_getImplementationName,
-        UnxSplash_getSupportedServiceNames,
-        ::cppu::createSingleComponentFactory,
-        0, 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
+    "com.sun.star.task.XStartusIndicator",
+    "com.sun.star.lang.XInitialization",
+    NULL,
 };
+const sal_Char *UnxSplashScreen::serviceName = "com.sun.star.office.PipeSplashScreen";
+const sal_Char *UnxSplashScreen::implementationName = "com.sun.star.office.comp.PipeSplashScreen";
+const sal_Char *UnxSplashScreen::supportedServiceNames[] = { "com.sun.star.office.PipeSplashScreen", NULL };
 
-extern "C"
+OUString UnxSplashScreen::impl_getImplementationName()
 {
-
-SAL_DLLPUBLIC_EXPORT void SAL_CALL
-component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName,
-                                        uno_Environment ** )
-{ *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME; }
-
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL
-component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
-{
-    return ::cppu::component_getFactoryHelper( pImplName, pServiceManager,
-                                               pRegistryKey, aEntries );
+    return OUString::createFromAscii( implementationName );
 }
 
-} // extern "C"
+Sequence<OUString> UnxSplashScreen::impl_getSupportedServiceNames()
+{
+    Sequence<OUString> aSequence;
+    for ( int i = 0; supportedServiceNames[i] != NULL; i++ )
+    {
+        aSequence.realloc( i+1 );
+        aSequence[i] = OUString::createFromAscii( supportedServiceNames[i] );
+    }
+    return aSequence;
+}
 
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

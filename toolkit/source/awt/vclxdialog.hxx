@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,6 +54,7 @@ private:
     VCLXDialog& operator=( const VCLXDialog& ); // never implemented
 
 protected:
+    osl::SolarMutex& GetMutexImpl();
     Window* GetWindowImpl();
     ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl();
 
@@ -98,7 +99,7 @@ public:
 
     // ::com::sun::star::awt::XDialog2
     void SAL_CALL endDialog( sal_Int32 nResult ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setHelpId( const rtl::OUString& id ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setHelpId( sal_Int32 id ) throw(::com::sun::star::uno::RuntimeException);
 
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class Distributor;
 class Cx_Base : public ::TkpContext
 {
   public:
-    virtual bool        PassNewToken();
+    virtual bool		PassNewToken();
     virtual TkpContext &
                         FollowUpContext();
 
@@ -57,27 +57,27 @@ class Cx_Base : public ::TkpContext
   protected:
     // LIFECYCLE
                         Cx_Base(
-                            TkpContext *        io_pFollowUpContext );
+                            TkpContext *		io_pFollowUpContext );
 
-    void                SetNewToken(
-                            DYN ::TextToken *   let_dpToken );
-    void                SetFollowUpContext(
-                            TkpContext  *       io_pContext );
+    void				SetNewToken(
+                            DYN ::TextToken *	let_dpToken );
+    void				SetFollowUpContext(
+                            TkpContext  *	    io_pContext );
 
     Distributor &       Dealer() const;
 
   private:
     // DATA
-    Distributor *       pDealer;
-    TkpContext *        pFollowUpContext;
-    Dyn< ::TextToken >  pNewToken;
+    Distributor *		pDealer;
+    TkpContext *		pFollowUpContext;
+    Dyn< ::TextToken >	pNewToken;
 };
 
 
 
 
 inline void
-Cx_Base::SetNewToken( DYN ::TextToken * let_dpToken )
+Cx_Base::SetNewToken( DYN ::TextToken *	let_dpToken )
     { pNewToken = let_dpToken; }
 inline void
 Cx_Base::SetFollowUpContext( TkpContext * io_pContext )

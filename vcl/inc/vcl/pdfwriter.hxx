@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,7 @@
 #include <vcl/font.hxx>
 #include <vcl/graphictools.hxx>
 
-#include "com/sun/star/io/XOutputStream.hpp"
-#include "com/sun/star/beans/XMaterialHolder.hpp"
+#include <com/sun/star/io/XOutputStream.hpp>
 
 #include <list>
 #include <vector>
@@ -49,7 +48,6 @@
 class Font;
 class Point;
 class OutputDevice;
-class GDIMetaFile;
 class MapMode;
 class Polygon;
 class LineInfo;
@@ -64,12 +62,20 @@ class Wallpaper;
 namespace vcl
 {
 
-class PDFExtOutDevData;
+struct PDFDocInfo
+{
+    String			Title;			// document title
+    String			Author;			// document author
+    String			Subject;		// subject
+    String			Keywords;		// keywords
+    String			Creator;		// application that created the original document
+    String			Producer;		// OpenOffice
+};
 
 struct PDFNote
 {
-    String          Title;          // optional title for the popup containing the note
-    String          Contents;       // contents of the note
+    String			Title;			// optional title for the popup containing the note
+    String			Contents;		// contents of the note
 };
 
 class VCL_DLLPUBLIC PDFOutputStream
@@ -209,7 +215,7 @@ public:
         // PDF/A does not allow transparency
         Warning_Transparency_Omitted_PDFA,
 
-        // transparent object occurred but is only supported since
+        // transparent object occured but is only supported since
         // PDF 1.4
         Warning_Transparency_Omitted_PDF13,
 
@@ -225,21 +231,21 @@ public:
     struct VCL_DLLPUBLIC AnyWidget
     {
     protected:
-        WidgetType          Type;       // primitive RTTI
+        WidgetType			Type;		// primitive RTTI
     public:
-        rtl::OUString       Name;       // a distinct name to identify the control
-        rtl::OUString       Description;// descriptive text for the contro (e.g. for tool tip)
-        rtl::OUString       Text;       // user text to appear on the control
-        sal_uInt16              TextStyle;  // style flags
-        bool                ReadOnly;
-        Rectangle           Location;   // describes the area filled by the control
-        bool                Border;     // true: widget should have a border, false: no border
-        Color               BorderColor;// COL_TRANSPARENT and Border=true means get color from application settings
-        bool                Background; // true: widget shall draw its background, false: no background
-        Color               BackgroundColor; // COL_TRANSPARENT and Background=true means get color from application settings
-        Font                TextFont;   // an empty font will be replaced by the
+        rtl::OUString		Name;		// a distinct name to identify the control
+        rtl::OUString		Description;// descriptive text for the contro (e.g. for tool tip)
+        rtl::OUString		Text;		// user text to appear on the control
+        USHORT				TextStyle;	// style flags
+        bool				ReadOnly;
+        Rectangle			Location;	// describes the area filled by the control
+        bool				Border;		// true: widget should have a border, false: no border
+        Color				BorderColor;// COL_TRANSPARENT and Border=true means get color from application settings
+        bool				Background; // true: widget shall draw its background, false: no background
+        Color				BackgroundColor; // COL_TRANSPARENT and Background=true means get color from application settings
+        Font				TextFont;	// an empty font will be replaced by the
                                         // appropriate font from the user settings
-        Color               TextColor;  // COL_TRANSPARENT will be replaced by the appropriate color from application settings
+        Color				TextColor;  // COL_TRANSPARENT will be replaced by the appropriate color from application settings
         sal_Int32           TabOrder; // lowest number is first in tab order
 
         /* style flags for text are those for OutputDevice::DrawText
@@ -322,7 +328,7 @@ public:
            will appear literally in the PDF file produced
         */
         sal_Int32           Dest;
-        rtl::OUString       URL;
+        rtl::OUString		URL;
         bool                Submit;
         bool                SubmitGet;
 
@@ -339,8 +345,8 @@ public:
 
     struct CheckBoxWidget : public AnyWidget
     {
-        bool                Checked;
-        bool                ButtonIsLeft;
+        bool				Checked;
+        bool				ButtonIsLeft;
 
         CheckBoxWidget()
                 : AnyWidget( vcl::PDFWriter::CheckBox ),
@@ -356,9 +362,9 @@ public:
 
     struct RadioButtonWidget : public AnyWidget
     {
-        bool                Selected;
-        sal_Int32           RadioGroup;
-        bool                ButtonIsLeft;
+        bool				Selected;
+        sal_Int32			RadioGroup;
+        bool				ButtonIsLeft;
         rtl::OUString       OnValue; // the value of the radio button if it is selected
 
         RadioButtonWidget()
@@ -384,10 +390,10 @@ public:
 
     struct EditWidget : public AnyWidget
     {
-        bool                MultiLine;  // whether multiple lines are allowed
-        bool                Password;   // visible echo off
-        bool                FileSelect; // field is a file selector
-        sal_Int32           MaxLen;     // maximum field length in characters, 0 means unlimited
+        bool				MultiLine;	// whether multiple lines are allowed
+        bool				Password;	// visible echo off
+        bool				FileSelect;	// field is a file selector
+        sal_Int32			MaxLen;		// maximum field length in characters, 0 means unlimited
 
         EditWidget()
                 : AnyWidget( vcl::PDFWriter::Edit ),
@@ -405,10 +411,10 @@ public:
 
     struct ListBoxWidget : public AnyWidget
     {
-        bool                            DropDown;
-        bool                            Sort;
-        bool                            MultiSelect;
-        std::vector<rtl::OUString>      Entries;
+        bool							DropDown;
+        bool							Sort;
+        bool							MultiSelect;
+        std::vector<rtl::OUString>		Entries;
         std::vector<sal_Int32>          SelectedEntries;
          // if MultiSelect is false only the first entry of SelectedEntries
          // will be taken into account. the same is implicit for PDF < 1.4
@@ -430,8 +436,8 @@ public:
     // note: PDF only supports dropdown comboboxes
     struct ComboBoxWidget : public AnyWidget
     {
-        bool                            Sort;
-        std::vector<rtl::OUString>      Entries;
+        bool							Sort;
+        std::vector<rtl::OUString>		Entries;
         // set the current value in AnyWidget::Text
 
         ComboBoxWidget()
@@ -463,7 +469,7 @@ public:
         FitVisible,
         ActionZoom
     };
-// These enums are treated as integer while reading/writing to configuration
+// These emuns are treated as integer while reading/writing to configuration
     enum PDFPageLayout
     {
         DefaultLayout,
@@ -484,71 +490,37 @@ public:
 /*
 The following structure describes the permissions used in PDF security
  */
-    struct PDFEncryptionProperties
+    struct PDFSecPermissions
     {
-
-        bool Security128bit; // true to select 128 bit encryption, false for 40 bit
-        //for both 40 and 128 bit security, see 3.5.2 PDF v 1.4 table 3.15, v 1.5 and v 1.6 table 3.20.
-        bool CanPrintTheDocument;
+//for both 40 and 128 bit security, see 3.5.2 PDF v 1.4 table 3.15, v 1.5 and v 1.6 table 3.20.
+        bool	CanPrintTheDocument;
         bool CanModifyTheContent;
         bool CanCopyOrExtract;
         bool CanAddOrModify;
-        //for revision 3 (bit 128 security) only
+//for revision 3 (bit 128 security) only
         bool CanFillInteractive;
         bool CanExtractForAccessibility;
         bool CanAssemble;
         bool CanPrintFull;
-
-        // encryption will only happen if EncryptionKey is not empty
-        // EncryptionKey is actually a construct out of OValue, UValue and DocumentIdentifier
-        // if these do not match, behavior is undefined, most likely an invalid PDF will be produced
-        // OValue, UValue, EncryptionKey and DocumentIdentifier can be computed from
-        // PDFDocInfo, Owner password and User password used the InitEncryption method which
-        // implements the algorithms described in the PDF reference chapter 3.5: Encryption
-        std::vector<sal_uInt8> OValue;
-        std::vector<sal_uInt8> UValue;
-        std::vector<sal_uInt8> EncryptionKey;
-        std::vector<sal_uInt8> DocumentIdentifier;
-
-        //permission default set for 128 bit, accessibility only
-        PDFEncryptionProperties() :
-            Security128bit              ( true ),
-            CanPrintTheDocument         ( false ),
-            CanModifyTheContent         ( false ),
-            CanCopyOrExtract            ( false ),
-            CanAddOrModify              ( false ),
-            CanFillInteractive          ( false ),
-            CanExtractForAccessibility  ( true ),
-            CanAssemble                 ( false ),
-            CanPrintFull                ( false )
+//permission default set for 128 bit, accessibility only
+        PDFSecPermissions() :
+            CanPrintTheDocument			( false ),
+            CanModifyTheContent			( false ),
+            CanCopyOrExtract			( false ),
+            CanAddOrModify				( false ),
+            CanFillInteractive			( false ),
+            CanExtractForAccessibility	( true ),
+            CanAssemble					( false ),
+            CanPrintFull				( false )
             {}
-
-
-        bool Encrypt() const
-        { return ! OValue.empty() && ! UValue.empty() && ! DocumentIdentifier.empty(); }
-    };
-
-    struct PDFDocInfo
-    {
-        String          Title;          // document title
-        String          Author;         // document author
-        String          Subject;        // subject
-        String          Keywords;       // keywords
-        String          Creator;        // application that created the original document
-        String          Producer;       // OpenOffice
-    };
-
-    enum ColorMode
-    {
-        DrawColor, DrawGreyscale
     };
 
     struct PDFWriterContext
     {
         /* must be a valid file: URL usable by osl */
-        rtl::OUString                   URL;
+        rtl::OUString					URL;
         /* the URL of the document being exported, used for relative links*/
-        rtl::OUString                   BaseURL;
+        rtl::OUString					BaseURL;
         /*if relative to file system should be formed*/
         bool                            RelFsys;//i56629, i49415?, i64585?
         /*the action to set the PDF hyperlink to*/
@@ -560,17 +532,17 @@ The following structure describes the permissions used in PDF security
         bool                            ForcePDFAction;
 
         /* decides the PDF language level to be produced */
-        PDFVersion                      Version;
+        PDFVersion						Version;
         /* valid for PDF >= 1.4
            causes the MarkInfo entry in the document catalog to be set
         */
-        bool                            Tagged;
+        bool							Tagged;
         /* forces the embedding of PDF standard fonts */
         bool                            EmbedStandardFonts;
         /*  determines in which format a form
             will be submitted.
          */
-        PDFWriter::ExportDataFormat     SubmitFormat;
+        PDFWriter::ExportDataFormat		SubmitFormat;
         bool                            AllowDuplicateFieldNames;
         bool                            FieldsUseSystemFonts;
         /* the following data members are used to customize the PDF viewer
@@ -599,13 +571,14 @@ The following structure describes the permissions used in PDF security
         sal_Int32                       InitialPage;
         sal_Int32                       OpenBookmarkLevels; // -1 means all levels
 
-        PDFWriter::PDFEncryptionProperties  Encryption;
-        PDFWriter::PDFDocInfo           DocumentInfo;
+        struct PDFSecPermissions		AccessPermissions;
+
+        bool							Encrypt; // main encryption flag, must be true to encript
+        bool							Security128bit; // true to select 128 bit encryption, false for 40 bit
+        rtl::OUString					OwnerPassword; // owner password for PDF, in clear text
+        rtl::OUString					UserPassword; // user password for PDF, in clear text
 
         com::sun::star::lang::Locale    DocumentLocale; // defines the document default language
-        sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MAP_PIXEL )
-                                                        // 0 here specifies a default handling
-        PDFWriter::ColorMode            ColorMode;
 
         PDFWriterContext() :
                 RelFsys( false ), //i56629, i49415?, i64585?
@@ -632,14 +605,13 @@ The following structure describes the permissions used in PDF security
                 FirstPageLeft( false ),
                 InitialPage( 1 ),
                 OpenBookmarkLevels( -1 ),
-                Encryption(),
-                DPIx( 0 ),
-                DPIy( 0 ),
-                ColorMode( PDFWriter::DrawColor )
+                AccessPermissions( ),
+                Encrypt( false ),
+                Security128bit( true )
         {}
     };
 
-    PDFWriter( const PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& );
+    PDFWriter( const PDFWriterContext& rContext );
     ~PDFWriter();
 
     /** Returns an OutputDevice for formatting
@@ -664,24 +636,17 @@ The following structure describes the permissions used in PDF security
         returns the page id of the new page
     */
     sal_Int32 NewPage( sal_Int32 nPageWidth = 0, sal_Int32 nPageHeight = 0, Orientation eOrientation = Inherit );
-    /** Play a metafile like an outputdevice would do
-    */
-    struct PlayMetafileContext
-    {
-        int     m_nMaxImageResolution;
-        bool    m_bOnlyLosslessCompression;
-        int     m_nJPEGQuality;
-        bool    m_bTransparenciesWereRemoved;
 
-        PlayMetafileContext()
-        : m_nMaxImageResolution( 0 )
-        , m_bOnlyLosslessCompression( false )
-        , m_nJPEGQuality( 90 )
-        , m_bTransparenciesWereRemoved( false )
-        {}
+    /*
+     *  set document info; due to the use of document information in building the PDF document ID, must be called before
+     *  emitting anything.
+     */
+    void SetDocInfo( const PDFDocInfo& rInfo );
 
-    };
-    void PlayMetafile( const GDIMetaFile&, const PlayMetafileContext&, vcl::PDFExtOutDevData* pDevDat = NULL );
+    /*
+     *  get currently set document info
+     */
+    const PDFDocInfo& GetDocInfo() const;
 
     /* sets the document locale originally passed with the context to a new value
      * only affects the output if used before calling <code>Emit/code>.
@@ -692,24 +657,18 @@ The following structure describes the permissions used in PDF security
     bool Emit();
 
     /*
-     * Get a list of errors that occurred during processing
+     * Get a list of errors that occured during processing
      * this should enable the producer to give feedback about
-     * any anomalies that might have occurred
+     * any anomalies that might have occured
      */
     std::set< ErrorCode > GetErrors();
 
     PDFVersion GetVersion() const;
 
-    static com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
-           InitEncryption( const rtl::OUString& i_rOwnerPassword,
-                           const rtl::OUString& i_rUserPassword,
-                           bool b128Bit
-                         );
-
     /* functions for graphics state */
     /* flag values: see vcl/outdev.hxx */
-    void                Push( sal_uInt16 nFlags = 0xffff );
-    void                Pop();
+    void				Push( USHORT nFlags = 0xffff );
+    void				Pop();
 
     void               SetClipRegion();
     void               SetClipRegion( const basegfx::B2DPolyPolygon& rRegion );
@@ -717,9 +676,9 @@ The following structure describes the permissions used in PDF security
     void               IntersectClipRegion( const Rectangle& rRect );
     void               IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
-    void               SetAntialiasing( sal_uInt16 nMode =  0 );
+    void               SetAntialiasing( USHORT nMode =  0 );
 
-    void               SetLayoutMode( sal_uLong nMode );
+    void               SetLayoutMode( ULONG nMode );
     void               SetDigitLanguage( LanguageType eLang );
 
     void               SetLineColor( const Color& rColor );
@@ -744,82 +703,82 @@ The following structure describes the permissions used in PDF security
 
 
     /* actual drawing functions */
-    void                DrawText( const Point& rPos, const String& rText );
+    void				DrawText( const Point& rPos, const String& rText );
 
-    void                DrawTextLine( const Point& rPos, long nWidth,
+    void				DrawTextLine( const Point& rPos, long nWidth,
                                       FontStrikeout eStrikeout,
                                       FontUnderline eUnderline,
                                       FontUnderline eOverline,
-                                      sal_Bool bUnderlineAbove = sal_False );
-    void                DrawTextArray( const Point& rStartPt, const XubString& rStr,
+                                      BOOL bUnderlineAbove = FALSE );
+    void				DrawTextArray( const Point& rStartPt, const XubString& rStr,
                                        const sal_Int32* pDXAry = NULL,
                                        xub_StrLen nIndex = 0,
                                        xub_StrLen nLen = STRING_LEN );
-    void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
+    void				DrawStretchText( const Point& rStartPt, ULONG nWidth,
                                          const XubString& rStr,
                                          xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
-    void                DrawText( const Rectangle& rRect,
-                                  const XubString& rStr, sal_uInt16 nStyle = 0 );
+    void				DrawText( const Rectangle& rRect,
+                                  const XubString& rStr, USHORT nStyle = 0 );
 
-    void                DrawPixel( const Point& rPt, const Color& rColor );
-    void                DrawPixel( const Point& rPt )
+    void				DrawPixel( const Point& rPt, const Color& rColor );
+    void				DrawPixel( const Point& rPt )
     { DrawPixel( rPt, Color( COL_TRANSPARENT ) ); }
-    void                DrawPixel( const Polygon& rPts, const Color* pColors = NULL );
-    void                DrawPixel( const Polygon& rPts, const Color& rColor )
+    void				DrawPixel( const Polygon& rPts, const Color* pColors = NULL );
+    void				DrawPixel( const Polygon& rPts, const Color& rColor )
     { Push(); SetLineColor( rColor ); DrawPixel( rPts ); Pop(); }
 
-    void                DrawLine( const Point& rStartPt, const Point& rEndPt );
-    void                DrawLine( const Point& rStartPt, const Point& rEndPt,
+    void				DrawLine( const Point& rStartPt, const Point& rEndPt );
+    void				DrawLine( const Point& rStartPt, const Point& rEndPt,
                                   const LineInfo& rLineInfo );
-    void                DrawPolyLine( const Polygon& rPoly );
-    void                DrawPolyLine( const Polygon& rPoly,
+    void				DrawPolyLine( const Polygon& rPoly );
+    void				DrawPolyLine( const Polygon& rPoly,
                                       const LineInfo& rLineInfo );
     void                DrawPolyLine( const Polygon& rPoly, const ExtLineInfo& rInfo );
-    void                DrawPolygon( const Polygon& rPoly );
-    void                DrawPolyPolygon( const PolyPolygon& rPolyPoly );
-    void                DrawRect( const Rectangle& rRect );
-    void                DrawRect( const Rectangle& rRect,
-                                  sal_uLong nHorzRount, sal_uLong nVertRound );
-    void                DrawEllipse( const Rectangle& rRect );
-    void                DrawArc( const Rectangle& rRect,
+    void				DrawPolygon( const Polygon& rPoly );
+    void				DrawPolyPolygon( const PolyPolygon& rPolyPoly );
+    void				DrawRect( const Rectangle& rRect );
+    void				DrawRect( const Rectangle& rRect,
+                                  ULONG nHorzRount, ULONG nVertRound );
+    void				DrawEllipse( const Rectangle& rRect );
+    void				DrawArc( const Rectangle& rRect,
                                  const Point& rStartPt, const Point& rEndPt );
-    void                DrawPie( const Rectangle& rRect,
+    void				DrawPie( const Rectangle& rRect,
                                  const Point& rStartPt, const Point& rEndPt );
-    void                DrawChord( const Rectangle& rRect,
+    void				DrawChord( const Rectangle& rRect,
                                    const Point& rStartPt, const Point& rEndPt );
 
-    void                DrawBitmap( const Point& rDestPt,
+    void				DrawBitmap( const Point& rDestPt,
                                     const Bitmap& rBitmap );
-    void                DrawBitmap( const Point& rDestPt, const Size& rDestSize,
+    void				DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                     const Bitmap& rBitmap );
-    void                DrawBitmap( const Point& rDestPt, const Size& rDestSize,
+    void				DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                     const Bitmap& rBitmap );
 
-    void                DrawBitmapEx( const Point& rDestPt,
+    void				DrawBitmapEx( const Point& rDestPt,
                                       const BitmapEx& rBitmapEx );
-    void                DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
+    void				DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const BitmapEx& rBitmapEx );
-    void                DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
+    void				DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                       const BitmapEx& rBitmapEx );
 
-    void                DrawMask( const Point& rDestPt,
+    void				DrawMask( const Point& rDestPt,
                                   const Bitmap& rBitmap, const Color& rMaskColor );
-    void                DrawMask( const Point& rDestPt, const Size& rDestSize,
+    void				DrawMask( const Point& rDestPt, const Size& rDestSize,
                                   const Bitmap& rBitmap, const Color& rMaskColor );
-    void                DrawMask( const Point& rDestPt, const Size& rDestSize,
+    void				DrawMask( const Point& rDestPt, const Size& rDestSize,
                                   const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                   const Bitmap& rBitmap, const Color& rMaskColor );
 
-    void                DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
-    void                DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void				DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
+    void				DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
 
-    void                DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch );
+    void				DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch );
 
-    void                DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
-    void                DrawTransparent( const PolyPolygon& rPolyPoly,
-                                         sal_uInt16 nTransparencePercent );
+    void				DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
+    void				DrawTransparent( const PolyPolygon& rPolyPoly,
+                                         USHORT nTransparencePercent );
 
     /** Start a transparency group
 
@@ -839,7 +798,7 @@ The following structure describes the permissions used in PDF security
     will be ignored if the produced PDF has a lower version. The drawing
     operations will be emitted normally.
     */
-    void                BeginTransparencyGroup();
+    void				BeginTransparencyGroup();
 
     /** End a transparency group with constant transparency factor
 
@@ -852,7 +811,7 @@ The following structure describes the permissions used in PDF security
     @param nTransparencePercent
     The transparency factor
     */
-    void                EndTransparencyGroup( const Rectangle& rBoundRect, sal_uInt16 nTransparencePercent );
+    void				EndTransparencyGroup( const Rectangle& rBoundRect, USHORT nTransparencePercent );
 
     /** End a transparency group with an alpha mask
 
@@ -865,7 +824,7 @@ The following structure describes the permissions used in PDF security
     @param rAlphaMask
     The transparency mask; must be an 8 bit grayscale image
     */
-    void                EndTransparencyGroup( const Rectangle& rBoundRect, const Bitmap& rAlphaMask );
+    void				EndTransparencyGroup( const Rectangle& rBoundRect, const Bitmap& rAlphaMask );
 
     /** Insert a JPG encoded image (optionally with mask)
 
@@ -886,7 +845,7 @@ The following structure describes the permissions used in PDF security
     the same pixel size as the image and
     be either 1 bit black&white or 8 bit grey
     */
-    void                DrawJPGBitmap( SvStream& rJPGData, bool bIsTrueColor, const Size& rSrcSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask );
+    void				DrawJPGBitmap( SvStream& rJPGData, bool bIsTrueColor, const Size& rSrcSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask );
 
     /** Create a new named destination to be used in a link from another PDF document
 
@@ -907,7 +866,7 @@ The following structure describes the permissions used in PDF security
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateNamedDest( const rtl::OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr = -1, DestAreaType eType = XYZ );
+    sal_Int32			CreateNamedDest( const rtl::OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr = -1, DestAreaType eType = XYZ );
     /** Create a new destination to be used in a link
 
     @param rRect
@@ -924,7 +883,7 @@ The following structure describes the permissions used in PDF security
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateDest( const Rectangle& rRect, sal_Int32 nPageNr = -1, DestAreaType eType = XYZ );
+    sal_Int32			CreateDest( const Rectangle& rRect, sal_Int32 nPageNr = -1, DestAreaType eType = XYZ );
     /** Create a new link on a page
 
     @param rRect
@@ -939,7 +898,7 @@ The following structure describes the permissions used in PDF security
     the link id (to be used in SetLinkDest, SetLinkURL) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateLink( const Rectangle& rRect, sal_Int32 nPageNr = -1 );
+    sal_Int32			CreateLink( const Rectangle& rRect, sal_Int32 nPageNr = -1 );
     /** Set the destination for a link
         <p>will change a URL type link to a dest link if necessary</p>
 
@@ -953,7 +912,7 @@ The following structure describes the permissions used in PDF security
         -1 in case the link id does not exist
         -2 in case the dest id does not exist
     */
-    sal_Int32           SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
+    sal_Int32			SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
     /** Set the URL for a link
         <p>will change a dest type link to an URL type link if necessary</p>
         @param nLinkId
@@ -968,7 +927,7 @@ The following structure describes the permissions used in PDF security
         0 for success
         -1 in case the link id does not exist
     */
-    sal_Int32           SetLinkURL( sal_Int32 nLinkId, const rtl::OUString& rURL );
+    sal_Int32			SetLinkURL( sal_Int32 nLinkId, const rtl::OUString& rURL );
     /** Resolve link in logical structure
         <p>
         If a link is created after the corresponding visual appearance was drawn
@@ -998,7 +957,7 @@ The following structure describes the permissions used in PDF security
         the arbitrary id set in a <code>Link</code> structure element to address
         the link with real id <code>nLinkId</code>
      */
-    void                SetLinkPropertyID( sal_Int32 nLinkId, sal_Int32 nPropertyID );
+    void				SetLinkPropertyID( sal_Int32 nLinkId, sal_Int32 nPropertyID );
     /** Create a new outline item
 
         @param nParent

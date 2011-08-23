@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,14 +27,16 @@
 #ifndef __com_sun_star_beans_PropertyValues_idl__
 #define __com_sun_star_beans_PropertyValues_idl__
 
+#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
+#endif
 
 //=============================================================================
 
-module com { module sun { module star { module beans {
+module com { module sun { module star { module beans { 
 
 //=============================================================================
-/** specifies a sequence of <type>PropertyValue</type> instances.
+/**	specifies a sequence of <type>PropertyValue</type> instances.
 
     <p>Such sequences are especially useful for remote interfaces. </p>
 */
@@ -42,6 +44,6 @@ published typedef sequence<PropertyValue> PropertyValues;
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

@@ -59,15 +59,12 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 
 #ifndef _LWPPARAGRAPH_HXX_
 #define _LWPPARAGRAPH_HXX_
-
-#include <boost/scoped_ptr.hpp>
-
 #include "lwpfribheader.hxx"
 #include "lwpobj.hxx"
 #include "lwpobjstrm.hxx"
@@ -94,7 +91,7 @@ class LwpBulletStyleMgr;
 class LwpNotifyListPersistent
 {
 public:
-    LwpNotifyListPersistent(){}
+    LwpNotifyListPersistent(){};
     void Read(LwpObjectStream* pObjStrm);
 protected:
     LwpObjectID m_Head;
@@ -103,7 +100,7 @@ protected:
 class LwpForked3NotifyList
 {
 public:
-    LwpForked3NotifyList(){}
+    LwpForked3NotifyList(){};
 protected:
     LwpNotifyListPersistent m_ExtraList;
     LwpNotifyListPersistent m_PersistentList;
@@ -204,10 +201,10 @@ public:
     // add by  04/13/2005
     LwpVirtualLayout* GetLayoutWithMyStory();
     LwpBulletStyleMgr* GetBulletStyleMgr();
-    sal_uInt32 GetOrdinal(){ return m_nOrdinal;}
+    sal_uInt32 GetOrdinal(){ return m_nOrdinal;};
     sal_Bool operator <(LwpPara& Other);
     sal_Bool ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout);
-//  rtl::OUString RegisterBulletStyle();
+//	rtl::OUString RegisterBulletStyle();
     // end add
 
     sal_Bool IsNumberRight();
@@ -217,19 +214,19 @@ public:
     OUString GetStyleName(){return m_StyleName;}
 
 protected:
-    sal_uInt32  m_nOrdinal; // Ordinal number of this paragraph
-    LwpObjectID m_ParaStyle;    // handle of paragraph style
-    LwpPoint        m_Hint;     // Paragraph hint - width & height
-    LwpObjectID m_Story;        // Story the paragraph is part of
+    sal_uInt32	m_nOrdinal;	// Ordinal number of this paragraph
+    LwpObjectID	m_ParaStyle;	// handle of paragraph style
+    LwpPoint		m_Hint;		// Paragraph hint - width & height
+    LwpObjectID	m_Story;		// Story the paragraph is part of
 
-    sal_uInt16  m_nFlags;
-    sal_uInt16  m_nLevel;
-    LwpFribPtr  m_Fribs;
+    sal_uInt16	m_nFlags;
+    sal_uInt16	m_nLevel;
+    LwpFribPtr	m_Fribs;
     LwpParaProperty*  m_pProps;
-    //LwpForked3NotifyList* m_NotifyList;   //not saved
+    //LwpForked3NotifyList* m_NotifyList;	//not saved
 
     rtl::OUString m_StyleName;
-    rtl::OUString m_ParentStyleName;//Add to support toc
+    rtl::OUString m_ParentStyleName;//Add by ,to support toc,2005/12/13
     LwpBreaksOverride* m_pBreaks;
     rtl::OUString m_AftPageBreakName;
     rtl::OUString m_BefPageBreakName;
@@ -238,14 +235,16 @@ protected:
     rtl::OUString m_BefColumnBreakName;
     LwpIndentOverride* m_pIndentOverride;
     rtl::OUString m_Content;//for silver bullet,get text of first frib, add by  2/1
-    sal_uInt32 m_FontID;//for silver bullet
+    sal_uInt32 m_FontID;//for silver bullet, add by  2/1
     rtl::OUString m_AllText;//get all text in this paragraph
 
+    //add by
     sal_Bool m_bHasBullet;
     LwpObjectID m_aSilverBulletID;
     LwpSilverBullet* m_pSilverBullet;
     LwpBulletOverride* m_pBullOver;
-    boost::scoped_ptr<LwpNumberingOverride> m_pParaNumbering;
+//	LwpNumberingOverride* m_pParaNumbering;
+    LwpNumberingOverride m_aParaNumbering;
     rtl::OUString m_aBulletStyleName;
     sal_Bool m_bBullContinue;
     //end add
@@ -257,30 +256,30 @@ protected:
     LwpDropcapLayout* m_pDropcapLayout;
     double m_BelowSpacing;
 
-    XFContentContainer* m_pXFContainer; //Current container for VO_PARA
+    XFContentContainer* m_pXFContainer;	//Current container for VO_PARA
 
     rtl::OUString m_TabStyleName;
     enum
     {
         /* bit definitions for the paragraph object flags */
-        DEMAND_LOAD     = 0x0001,   // need to demand load this para
-        DATA_DIRTY      = 0x0002,   // paragraph data is dirty
-        SPELLSTARTOVER  = 0x0004,   // need to recheck paragraph
-        SPELLDIRTY      = 0x0008,   // has misspelled word in para
-        SPELLCHECKING   = 0x0010,   // started checking paragraph
-        READING         = 0x0020,   // We're loading this para from disk
-        DISKCHANGED     = 0x0040,   // Read size different from write size
-        USEFLOWBREAKS   = 0x0080,   // Use line breaks provided by filter
-        VALID_LEVEL     = 0x0100,   // cLevel is valid
-        NOUSECOUNT      = 0x0200,   // Don't change the style's use count
-        CHANGED         = 0x0400,   // This para has been edited
-        SPREADBULLET    = 0x0800,   // Para's bullet is in edit-on-page mode
-        NEWBULLET       = 0x1000,   // Bullets should have new font behavior
+        DEMAND_LOAD		= 0x0001,	// need to demand load this para
+        DATA_DIRTY		= 0x0002,	// paragraph data is dirty
+        SPELLSTARTOVER	= 0x0004,	// need to recheck paragraph
+        SPELLDIRTY		= 0x0008,	// has misspelled word in para
+        SPELLCHECKING	= 0x0010,	// started checking paragraph
+        READING			= 0x0020,	// We're loading this para from disk
+        DISKCHANGED		= 0x0040,	// Read size different from write size
+        USEFLOWBREAKS	= 0x0080,	// Use line breaks provided by filter
+        VALID_LEVEL		= 0x0100,	// cLevel is valid
+        NOUSECOUNT		= 0x0200,	// Don't change the style's use count
+        CHANGED			= 0x0400,	// This para has been edited
+        SPREADBULLET	= 0x0800,	// Para's bullet is in edit-on-page mode
+        NEWBULLET		= 0x1000,	// Bullets should have new font behavior
 
         // Don't write these flags out to disk
-        NOWRITEFLAGS    = (READING | DISKCHANGED | CHANGED),
+        NOWRITEFLAGS	= (READING | DISKCHANGED | CHANGED),
 
-        MAX_INDENT_LEVELS   = 10
+        MAX_INDENT_LEVELS	= 10
     };
 private:
     void OverrideAlignment(LwpAlignmentOverride* base,LwpAlignmentOverride* over,XFParaStyle* pOverStyle);//add by  1-24
@@ -292,7 +291,7 @@ private:
     void OverrideParaBullet(LwpParaProperty* pProps);
     void OverrideParaNumbering(LwpParaProperty* pProps);
     void OverrideTab(LwpTabOverride* base,LwpTabOverride* over,XFParaStyle* pOverStyle);
-    sal_Bool IsBadHintsInFile();
+    BOOL IsBadHintsInFile();
 
     //void OutPutSectionTail(IXFStream* pOutputStream);
     //void OutPutBulletTail(LwpBulletStyleMgr* pBulletStyleMgr,IXFStream* pOutputStream);
@@ -410,9 +409,9 @@ inline void LwpPara::SetDropcapLayout(LwpDropcapLayout* pLayout)
 {
     m_pDropcapLayout = pLayout;
 }
-inline sal_Bool LwpPara::IsBadHintsInFile()
+inline BOOL LwpPara::IsBadHintsInFile()
 {
-    return (sal_Bool) ((m_nFlags & DOC_BADFILEPARAHINTS) != 0);
+    return (BOOL) ((m_nFlags & DOC_BADFILEPARAHINTS) != 0);
 }
 inline double LwpPara::GetBelowSpacing()
 {

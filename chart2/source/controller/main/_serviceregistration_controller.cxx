@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,6 +107,13 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+//==================================================================================================
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager, void * pRegistryKey )
+{
+    return ::cppu::component_writeInfoHelper(
+        pServiceManager, pRegistryKey, g_entries_chart2_controller );
 }
 //==================================================================================================
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(

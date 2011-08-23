@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,43 +31,44 @@
 
 //================================================
 // Zahlen-TabPage:
-#define WND_NUMBER_PREVIEW      2
-#define FT_CATEGORY             3
-#define FT_FORMAT               4
-#define FT_OPTIONS              5
-#define FT_EDFORMAT             6
-#define LB_CATEGORY             9
-#define LB_FORMAT               10
+#define WND_NUMBER_PREVIEW		2
+#define FT_CATEGORY				3
+#define FT_FORMAT				4
+#define FT_OPTIONS				5
+#define FT_EDFORMAT				6
+#define LB_CATEGORY				9
+#define LB_FORMAT				10
 #define FL_OPTIONS              11
-#define FT_LANGUAGE             12
-#define LB_LANGUAGE             13
-#define ED_FORMAT               14
-#define BTN_ADD                 15
-#define BTN_REMOVE              16
-#define BMP_CHECK               17
-#define BMP_DCHECK              18
-#define BMP_CROSS               19
-#define BMP_DCROSS              20
-#define FT_DECIMALS             21
-#define ED_DECIMALS             22
-#define FT_LEADZEROES           23
-#define ED_LEADZEROES           24
-#define BTN_NEGRED              25
-#define BTN_THOUSAND            26
-#define FT_COMMENT              27
-#define ED_COMMENT              28
-#define IB_ADD                  29
-#define IB_REMOVE               30
-#define IB_INFO                 31
-#define IL_ICON                 32
-#define LB_CURRENCY             33
+#define FT_LANGUAGE				12
+#define LB_LANGUAGE				13
+#define ED_FORMAT				14
+#define BTN_ADD					15
+#define BTN_REMOVE				16
+#define BMP_CHECK				17
+#define BMP_DCHECK				18
+#define BMP_CROSS				19
+#define BMP_DCROSS				20
+#define FT_DECIMALS				21
+#define ED_DECIMALS				22
+#define FT_LEADZEROES			23
+#define ED_LEADZEROES			24
+#define BTN_NEGRED				25
+#define BTN_THOUSAND			26
+#define FT_COMMENT				27
+#define ED_COMMENT				28
+#define IB_ADD					29
+#define IB_REMOVE				30
+#define IB_INFO					31
+#define	IL_ICON					32
+#define	LB_CURRENCY				33
 #define CB_SOURCEFORMAT         34
+#define IL_ICON_HC				35
 #define STR_AUTO_ENTRY          36
 
-#define TBX_ADDREMOVE           1
-#define IID_ADD                 1
-#define IID_REMOVE              2
-#define IID_INFO                3
+#define TBX_ADDREMOVE			1
+#define IID_ADD					1
+#define IID_REMOVE				2
+#define IID_INFO				3
 
 #endif
 

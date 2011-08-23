@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ public:
 
                     // get special accelerators
     static SvtAcceleratorConfiguration* CreateFromStream( SvStream& rStream );
-    static String   GetStreamName();
+    static String	GetStreamName();
     static SvStream* GetDefaultStream( StreamMode );
 
                     virtual ~SvtAcceleratorConfiguration();
@@ -79,7 +79,7 @@ public:
     void            SetCommand( const SvtAcceleratorConfigItem& rItem );
 
                     // sets several or all configuration items
-                    // if bClear=sal_False, all items not in the sequence remain unchanged
+                    // if bClear=FALSE, all items not in the sequence remain unchanged
     void            SetItems( const SvtAcceleratorItemList& rItems, bool bClear );
 };
 

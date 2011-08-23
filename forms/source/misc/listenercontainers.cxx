@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ namespace frm
             _rxListener->resetted( _rEvent );
             break;
         default:
-            OSL_FAIL( "ResetListeners::implNotify: invalid notification type!" );
+            OSL_ENSURE( sal_False, "ResetListeners::implNotify: invalid notification type!" );
         }
         return true;
     }

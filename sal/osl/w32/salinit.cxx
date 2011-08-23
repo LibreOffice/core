@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ void SAL_CALL sal_detail_initialize(int argc, char ** argv)
     wVersionRequested = MAKEWORD(1, 1);
 
     error = WSAStartup(wVersionRequested, &wsaData);
-    if ( 0 == error )
+    if ( 0 == error ) 
     {
         WORD wMajorVersionRequired = 1;
         WORD wMinorVersionRequired = 1;
@@ -76,13 +76,13 @@ void SAL_CALL sal_detail_initialize(int argc, char ** argv)
         if ((LOBYTE(wsaData.wVersion) <  wMajorVersionRequired) ||
             (LOBYTE(wsaData.wVersion) == wMajorVersionRequired) &&
             ((HIBYTE(wsaData.wVersion) < wMinorVersionRequired)))
-            {
-                // How to handle a very unlikely error ???
+            {    
+                // How to handle a very unlikely error ??? 
             }
     }
     else
     {
-        // How to handle a very unlikely error ???
+        // How to handle a very unlikely error ??? 
     }
 
     osl_setCommandArgs(argc, argv);
@@ -99,7 +99,7 @@ void SAL_CALL sal_detail_deinitialize()
 
 
 #ifdef __cplusplus
-}   // extern "C"
+}	// extern "C"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

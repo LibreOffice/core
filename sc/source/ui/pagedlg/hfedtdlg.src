@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ TabDialog RID_SCDLG_HFED_HEADER
     Size = MAP_APPFONT ( 270 , 140 ) ;
     Text [ en-US ] = "Headers" ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+     //	Closeable = TRUE;
     TabControl 1
     {
         OutputSize = TRUE ;
@@ -70,18 +70,17 @@ TabDialog RID_SCDLG_HFED_HEADER
             {
                 Identifier = 1 ;
                 HEADER_RIGHT
-                PageResID = RID_SCPAGE_HFED_HR ;
+                PageResID = HID_SCPAGE_HFED_HR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 HEADER_LEFT
-                PageResID = RID_SCPAGE_HFED_HL ;
+                PageResID = HID_SCPAGE_HFED_HL ;
             };
         };
     };
 };
-
 TabDialog RID_SCDLG_HFED_FOOTER
 {
     OutputSize = TRUE ;
@@ -89,7 +88,7 @@ TabDialog RID_SCDLG_HFED_FOOTER
     Size = MAP_APPFONT ( 270 , 140 ) ;
     Text [ en-US ] = "Footers" ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+     //	Closeable = TRUE;
     TabControl 1
     {
         OutputSize = TRUE ;
@@ -102,18 +101,17 @@ TabDialog RID_SCDLG_HFED_FOOTER
             {
                 Identifier = 1 ;
                 FOOTER_RIGHT
-                PageResID = RID_SCPAGE_HFED_FR ;
+                PageResID = HID_SCPAGE_HFED_FR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 FOOTER_LEFT
-                PageResID = RID_SCPAGE_HFED_FL ;
+                PageResID = HID_SCPAGE_HFED_FL ;
             };
         };
     };
 };
-
  //------------------------------------------------------------------------
  // Bearbeiten/Kopf-Fusszeile:
  //------------------------------------------------------------------------
@@ -123,7 +121,7 @@ TabDialog RID_SCDLG_HFEDIT_ALL
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+     //	Closeable = TRUE;
     HFEDIT_DLGTITLE
     TabControl 1
     {
@@ -137,37 +135,36 @@ TabDialog RID_SCDLG_HFEDIT_ALL
             {
                 Identifier = 1 ;
                 HEADER_RIGHT
-                PageResID = RID_SCPAGE_HFED_HR ;
+                PageResID = HID_SCPAGE_HFED_HR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 HEADER_LEFT
-                PageResID = RID_SCPAGE_HFED_HL ;
+                PageResID = HID_SCPAGE_HFED_HL ;
             };
             PageItem
             {
                 Identifier = 3 ;
                 FOOTER_RIGHT
-                PageResID = RID_SCPAGE_HFED_FR ;
+                PageResID = HID_SCPAGE_HFED_FR ;
             };
             PageItem
             {
                 Identifier = 4 ;
                 FOOTER_LEFT
-                PageResID = RID_SCPAGE_HFED_FL ;
+                PageResID = HID_SCPAGE_HFED_FL ;
             };
         };
     };
 };
-
 TabDialog RID_SCDLG_HFEDIT_SHDR
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+     //	Closeable = TRUE;
     HFEDIT_DLGTITLE
     TabControl 1
     {
@@ -181,31 +178,30 @@ TabDialog RID_SCDLG_HFEDIT_SHDR
             {
                 Identifier = 1 ;
                 HEADER
-                PageResID = RID_SCPAGE_HFED_HR ;
+                PageResID = HID_SCPAGE_HFED_HR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 FOOTER_RIGHT
-                PageResID = RID_SCPAGE_HFED_FR ;
+                PageResID = HID_SCPAGE_HFED_FR ;
             };
             PageItem
             {
                 Identifier = 3 ;
                 FOOTER_LEFT
-                PageResID = RID_SCPAGE_HFED_FL ;
+                PageResID = HID_SCPAGE_HFED_FL ;
             };
         };
     };
 };
-
 TabDialog RID_SCDLG_HFEDIT_SFTR
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+     //	Closeable = TRUE;
     HFEDIT_DLGTITLE
     TabControl 1
     {
@@ -219,31 +215,30 @@ TabDialog RID_SCDLG_HFEDIT_SFTR
             {
                 Identifier = 1 ;
                 HEADER_RIGHT
-                PageResID = RID_SCPAGE_HFED_HR ;
+                PageResID = HID_SCPAGE_HFED_HR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 HEADER_LEFT
-                PageResID = RID_SCPAGE_HFED_HL ;
+                PageResID = HID_SCPAGE_HFED_HL ;
             };
             PageItem
             {
                 Identifier = 3 ;
                 FOOTER
-                PageResID = RID_SCPAGE_HFED_FR ;
+                PageResID = HID_SCPAGE_HFED_FR ;
             };
         };
     };
 };
-
 TabDialog RID_SCDLG_HFEDIT
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+     //	Closeable = TRUE;
     HFEDIT_DLGTITLE
     TabControl 1
     {
@@ -257,25 +252,24 @@ TabDialog RID_SCDLG_HFEDIT
             {
                 Identifier = 1 ;
                 HEADER
-                PageResID = RID_SCPAGE_HFED_HR ;
+                PageResID = HID_SCPAGE_HFED_HR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 FOOTER
-                PageResID = RID_SCPAGE_HFED_FR ;
+                PageResID = HID_SCPAGE_HFED_FR ;
             };
         };
     };
 };
-
 TabDialog RID_SCDLG_HFEDIT_HEADER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+     //	Closeable = TRUE;
     HFEDIT_DLGTITLE
     TabControl 1
     {
@@ -289,25 +283,24 @@ TabDialog RID_SCDLG_HFEDIT_HEADER
             {
                 Identifier = 1 ;
                 HEADER_RIGHT
-                PageResID = RID_SCPAGE_HFED_HR ;
+                PageResID = HID_SCPAGE_HFED_HR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 HEADER_LEFT
-                PageResID = RID_SCPAGE_HFED_HL ;
+                PageResID = HID_SCPAGE_HFED_HL ;
             };
         };
     };
 };
-
 TabDialog RID_SCDLG_HFEDIT_FOOTER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+     //	Closeable = TRUE;
     HFEDIT_DLGTITLE
     TabControl 1
     {
@@ -321,25 +314,24 @@ TabDialog RID_SCDLG_HFEDIT_FOOTER
             {
                 Identifier = 1 ;
                 FOOTER_RIGHT
-                PageResID = RID_SCPAGE_HFED_FR ;
+                PageResID = HID_SCPAGE_HFED_FR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 FOOTER_LEFT
-                PageResID = RID_SCPAGE_HFED_FL ;
+                PageResID = HID_SCPAGE_HFED_FL ;
             };
         };
     };
 };
-
 TabDialog RID_SCDLG_HFEDIT_RIGHTHEADER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+     //	Closeable = TRUE;
     HFEDIT_DLGTITLE
     TabControl 1
     {
@@ -353,19 +345,18 @@ TabDialog RID_SCDLG_HFEDIT_RIGHTHEADER
             {
                 Identifier = 1 ;
                 HEADER_RIGHT
-                PageResID = RID_SCPAGE_HFED_HR ;
+                PageResID = HID_SCPAGE_HFED_HR ;
             };
         };
     };
 };
-
 TabDialog RID_SCDLG_HFEDIT_LEFTHEADER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+     //	Closeable = TRUE;
     HFEDIT_DLGTITLE
     TabControl 1
     {
@@ -379,19 +370,18 @@ TabDialog RID_SCDLG_HFEDIT_LEFTHEADER
             {
                 Identifier = 1 ;
                 HEADER_LEFT
-                PageResID = RID_SCPAGE_HFED_HL ;
+                PageResID = HID_SCPAGE_HFED_HL ;
             };
         };
     };
 };
-
 TabDialog RID_SCDLG_HFEDIT_RIGHTFOOTER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+     //	Closeable = TRUE;
     HFEDIT_DLGTITLE
     TabControl 1
     {
@@ -405,19 +395,18 @@ TabDialog RID_SCDLG_HFEDIT_RIGHTFOOTER
             {
                 Identifier = 1 ;
                 FOOTER_RIGHT
-                PageResID = RID_SCPAGE_HFED_FR ;
+                PageResID = HID_SCPAGE_HFED_FR ;
             };
         };
     };
 };
-
 TabDialog RID_SCDLG_HFEDIT_LEFTFOOTER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
     Moveable = TRUE ;
-     // Closeable = TRUE;
+     //	Closeable = TRUE;
     HFEDIT_DLGTITLE
     TabControl 1
     {
@@ -431,12 +420,11 @@ TabDialog RID_SCDLG_HFEDIT_LEFTFOOTER
             {
                 Identifier = 1 ;
                 FOOTER_LEFT
-                PageResID = RID_SCPAGE_HFED_FL ;
+                PageResID = HID_SCPAGE_HFED_FL ;
             };
         };
     };
 };
-
  //------------------------------------------------------------------------
  //  ScTpHFEdit
  //------------------------------------------------------------------------
@@ -452,24 +440,62 @@ TabPage RID_HFBASE
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text [ en-US ] = "~Left area" ;
     };
+    /*		"Control" braucht eigene HelpId, darum in der Ableitung:
+    Control WND_LEFT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
+        TabStop = TRUE ;
+    };
+*/
     FixedText FT_CENTER
     {
         Pos = MAP_APPFONT ( 90 , 6 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text [ en-US ] = "~Center area" ;
     };
+    /*		"Control" braucht eigene HelpId, darum in der Ableitung:
+    Control WND_CENTER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
+        TabStop = TRUE ;
+    };
+*/
     FixedText FT_RIGHT
     {
         Pos = MAP_APPFONT ( 174 , 6 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text [ en-US ] = "R~ight area" ;
     };
+    /*		"Control" braucht eigene HelpId, darum in der Ableitung:
+    Control WND_RIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 174 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
+        TabStop = TRUE ;
+    };
+*/
     FixedText FT_HF_DEFINED
     {
         Pos = MAP_APPFONT ( 12 , 102 ) ;
         Size = MAP_APPFONT ( 76 , 10 ) ;
         Text [ en-US ] = "Hea~der" ;
     };
+
+    /* #i84123# list box needs own help id, which is set in the derived tab pages
+    ListBox LB_DEFINED
+    {
+        Border = TRUE ;
+                Pos = MAP_APPFONT ( 90 , 100 ) ;
+                Size = MAP_APPFONT ( 130 , 80 ) ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+    };
+    */
 
     FixedText FT_HF_CUSTOM
     {
@@ -487,11 +513,15 @@ TabPage RID_HFBASE
         QuickHelpText [ en-US ] = "Text Attributes" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "text.png" ; };
+            ImageBitmap = Bitmap { File = "text.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
     };
-
+    Image IMG_TEXT_H
+    {
+        ImageBitmap = Bitmap { File = "text_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
+    };
     ImageButton BTN_FILE
     {
         HelpId = HID_SC_HF_FILE ;
@@ -501,9 +531,14 @@ TabPage RID_HFBASE
         QuickHelpText [ en-US ] = "Title" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "file.png" ; };
+            ImageBitmap = Bitmap { File = "file.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
+    };
+    Image IMG_FILE_H
+    {
+        ImageBitmap = Bitmap { File = "file_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
     };
 
     Menu RID_POPUP_FCOMMAND
@@ -542,11 +577,15 @@ TabPage RID_HFBASE
         QuickHelpText [ en-US ] = "Sheet Name" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "table.png" ; };
+            ImageBitmap = Bitmap { File = "table.bmp" ; };
             MaskColor = STD_MASKCOLOR;
         };
     };
-
+    Image IMG_TABLE_H
+    {
+        ImageBitmap = Bitmap { File = "table_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
+    };
     ImageButton BTN_PAGE
     {
         HelpId = HID_SC_HF_PAGE ;
@@ -556,11 +595,15 @@ TabPage RID_HFBASE
         QuickHelpText [ en-US ] = "Page" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "page.png" ; };
+            ImageBitmap = Bitmap { File = "page.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
     };
-
+    Image IMG_PAGE_H
+    {
+        ImageBitmap = Bitmap { File = "page_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
+    };
     ImageButton BTN_PAGES
     {
         HelpId = HID_SC_HF_PAGES ;
@@ -570,11 +613,15 @@ TabPage RID_HFBASE
         QuickHelpText [ en-US ] = "Pages" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "pages.png" ; };
+            ImageBitmap = Bitmap { File = "pages.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
     };
-
+    Image IMG_PAGES_H
+    {
+        ImageBitmap = Bitmap { File = "pages_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
+    };
     ImageButton BTN_DATE
     {
         HelpId = HID_SC_HF_DATE ;
@@ -584,11 +631,15 @@ TabPage RID_HFBASE
         QuickHelpText [ en-US ] = "Date" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "date.png" ; };
+            ImageBitmap = Bitmap { File = "date.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
     };
-
+    Image IMG_DATE_H
+    {
+        ImageBitmap = Bitmap { File = "date_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
+    };
     ImageButton BTN_TIME
     {
         HelpId = HID_SC_HF_TIME ;
@@ -598,11 +649,15 @@ TabPage RID_HFBASE
         QuickHelpText [ en-US ] = "Time" ;
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "time.png" ; };
+            ImageBitmap = Bitmap { File = "time.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
     };
-
+    Image IMG_TIME_H
+    {
+        ImageBitmap = Bitmap { File = "time_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
+    };
     FixedText FT_INFO
     {
         Pos = MAP_APPFONT ( 12 , 155 ) ;
@@ -617,9 +672,8 @@ TabPage RID_HFBASE
         Text [ en-US ] = "Note" ;
     };
 };
-
- // Kombinationen: Header/Footer links/rechts
- // die Eingabefenster jeweils mit eigener ID, sonst aus RID_HFBASE kopiert
+ //	Kombinationen: Header/Footer links/rechts
+ //	die Eingabefenster jeweils mit eigener ID, sonst aus RID_HFBASE kopiert
 TabPage RID_SCPAGE_HFED_HL < RID_HFBASE
 {
     Hide = TRUE ;
@@ -658,7 +712,6 @@ TabPage RID_SCPAGE_HFED_HL < RID_HFBASE
         TabStop = TRUE ;
     };
 };
-
 TabPage RID_SCPAGE_HFED_HR < RID_HFBASE
 {
     Hide = TRUE ;
@@ -697,7 +750,6 @@ TabPage RID_SCPAGE_HFED_HR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
-
 TabPage RID_SCPAGE_HFED_FL < RID_HFBASE
 {
     Hide = TRUE ;
@@ -736,7 +788,6 @@ TabPage RID_SCPAGE_HFED_FL < RID_HFBASE
         TabStop = TRUE ;
     };
 };
-
 TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
 {
     Hide = TRUE ;
@@ -775,3 +826,4 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
+

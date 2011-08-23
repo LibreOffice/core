@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THR
     {
         OString msg( "### cannot get type description for " );
         msg += OUStringToOString( rType.getTypeName(), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( msg.getStr() );
+        OSL_ENSURE( sal_False, msg.getStr() );
     }
 #endif
 }
@@ -254,8 +254,8 @@ void WeakComponentImplHelperBase::release()
                 dispose();
             }
             catch (RuntimeException const& exc) { // don't break throw ()
-                OSL_FAIL(
-                    OUStringToOString(
+                OSL_ENSURE(
+                    false, OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 static_cast<void>(exc);
             }
@@ -390,8 +390,8 @@ void WeakAggComponentImplHelperBase::release()
                 dispose();
             }
             catch (RuntimeException const& exc) { // don't break throw ()
-                OSL_FAIL(
-                    OUStringToOString(
+                OSL_ENSURE(
+                    false, OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 static_cast<void>(exc);
             }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,31 +24,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_packages_PackageFolderEnumeration_idl__
-#define __com_sun_star_packages_PackageFolderEnumeration_idl__
+#ifndef __com_sun_star_packages_PackageFolderEnumeration_idl__ 
+#define __com_sun_star_packages_PackageFolderEnumeration_idl__ 
+ 
 
-
-#ifndef __com_sun_star_container_XEnumeration_idl__
+#ifndef __com_sun_star_container_XEnumeration_idl__ 
 #include <com/sun/star/container/XEnumeration.idl>
 #endif
 
-//=============================================================================
-
-module com {  module sun {  module star {   module packages {
-
-//=============================================================================
+//============================================================================= 
+ 
+module com {  module sun {  module star {   module packages {  
+ 
+//============================================================================= 
 
 /**
 This service provides an iterator over the contents of a given instance
 of a PackageFolder. This provides a "snapshot" of the contents of the
 PackageFolder at the time of construction. It is the responsibility of the
 caller to ensure that any given member of the enumeration refers to a valid
-PackageStream or PackageFolder.
+PackageStream or PackageFolder. 
 */
 published service PackageFolderEnumeration
 {
     interface com::sun::star::container::XEnumeration;
 };
 }; }; }; };
-
-#endif
+ 
+#endif 

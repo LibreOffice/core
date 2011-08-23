@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,18 +28,18 @@
 
 /*************************************************************************
  *
- *    ATTENTION
- *    This file is intended to work inside and outside the StarOffice environment.
- *    Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
+ *	  ATTENTION
+ *	  This file is intended to work inside and outside the StarOffice environment.
+ *	  Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
  *
  ************************************************************************/
 
 #include <automation/commtypes.hxx>
 
-#define C_ERROR_NONE                0x0001
-#define C_ERROR_PERMANENT           0x0002
-#define C_ERROR_RETRY               0x0003
-#define C_ERROR_TIMEOUT             0x0004
+#define C_ERROR_NONE				0x0001
+#define C_ERROR_PERMANENT			0x0002
+#define C_ERROR_RETRY				0x0003
+#define C_ERROR_TIMEOUT				0x0004
 
 class ITransmiter
 {
@@ -50,7 +50,7 @@ public:
     virtual ~ITransmiter() {}
     virtual comm_USHORT TransferBytes( const void* pBuffer, comm_UINT32 nLen ) = 0;
 
-    comm_ULONG GetLastSent() const { return nLastSent; }
+    comm_ULONG GetLastSent() { return nLastSent; }
 };
 
 class IReceiver
@@ -62,7 +62,7 @@ public:
     virtual ~IReceiver() {;}
     virtual comm_USHORT ReceiveBytes( void* pBuffer, comm_UINT32 nLen ) = 0;
 
-    comm_ULONG GetLastReceived() const { return nLastReceived; }
+    comm_ULONG GetLastReceived() { return nLastReceived; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

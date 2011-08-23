@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ public:
         return static_cast<const SwTxtNode*>(GetRegisteredIn());
     }
           SwTxtNode * GetTxtNode()       {
-        return static_cast<SwTxtNode*>(GetRegisteredInNonConst());
+        return static_cast<SwTxtNode*>(pRegisteredIn);
     }
 
     SwTxtNode & GetTxtNodeOrThrow() {
@@ -177,13 +177,13 @@ public:
             const uno::Sequence< ::rtl::OUString >& rPropertyNames,
             bool bDirectValuesOnly)
         throw (uno::RuntimeException);
-protected:
+
     // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 
 };
 
-void SwXParagraph::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
+void SwXParagraph::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if (!GetRegisteredIn())
@@ -514,14 +514,16 @@ void SAL_CALL SwXParagraph::addPropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
 throw (uno::RuntimeException)
 {
-    OSL_FAIL("SwXParagraph::addPropertiesChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXParagraph::addPropertiesChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXParagraph::removePropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
 throw (uno::RuntimeException)
 {
-    OSL_FAIL("SwXParagraph::removePropertiesChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXParagraph::removePropertiesChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXParagraph::firePropertiesChangeEvent(
@@ -529,7 +531,8 @@ void SAL_CALL SwXParagraph::firePropertiesChangeEvent(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
         throw(uno::RuntimeException)
 {
-    OSL_FAIL("SwXParagraph::firePropertiesChangeEvent(): not implemented");
+    OSL_ENSURE(false,
+        "SwXParagraph::firePropertiesChangeEvent(): not implemented");
 }
 
 /* disabled for #i46921# */
@@ -551,7 +554,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     //SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
     //const SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
-    //sal_uInt16 nAttrCount = rAttrSet.Count();
+    //USHORT nAttrCount = rAttrSet.Count();
 
     const sal_Int32 nProps = rPropertyNames.getLength();
     const OUString *pProp = rPropertyNames.getConstArray();
@@ -603,7 +606,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            OSL_FAIL( "unexpected exception catched" );
+            DBG_ERROR( "unexpected exception catched" );
             pFailed[ nFailed++ ].Result =
                 beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
@@ -756,7 +759,7 @@ throw (uno::RuntimeException)
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            OSL_FAIL( "unexpected exception caught" );
+            DBG_ERROR( "unexpected exception caught" );
             rResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)
@@ -780,7 +783,7 @@ throw (uno::RuntimeException)
 }
 
 bool ::sw::GetDefaultTextContentValue(
-        uno::Any& rAny, const OUString& rPropertyName, sal_uInt16 nWID)
+        uno::Any& rAny, const OUString& rPropertyName, USHORT nWID)
 {
     if(!nWID)
     {
@@ -791,7 +794,7 @@ bool ::sw::GetDefaultTextContentValue(
         else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_TEXT_WRAP)))
             nWID = FN_UNO_TEXT_WRAP;
         else
-            return sal_False;
+            return FALSE;
     }
 
     switch(nWID)
@@ -799,16 +802,16 @@ bool ::sw::GetDefaultTextContentValue(
         case FN_UNO_TEXT_WRAP:  rAny <<= text::WrapTextMode_NONE; break;
         case FN_UNO_ANCHOR_TYPE: rAny <<= text::TextContentAnchorType_AT_PARAGRAPH; break;
         case FN_UNO_ANCHOR_TYPES:
-        {   uno::Sequence<text::TextContentAnchorType> aTypes(1);
+        {	uno::Sequence<text::TextContentAnchorType> aTypes(1);
             text::TextContentAnchorType* pArray = aTypes.getArray();
             pArray[0] = text::TextContentAnchorType_AT_PARAGRAPH;
             rAny.setValue(&aTypes, ::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0));
         }
         break;
         default:
-            return sal_False;
+            return FALSE;
     }
-    return sal_True;
+    return TRUE;
 }
 
 void SAL_CALL
@@ -818,7 +821,8 @@ SwXParagraph::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_FAIL("SwXParagraph::addPropertyChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXParagraph::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -828,7 +832,8 @@ SwXParagraph::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_FAIL("SwXParagraph::removePropertyChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXParagraph::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -838,7 +843,8 @@ SwXParagraph::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_FAIL("SwXParagraph::addVetoableChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXParagraph::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -848,11 +854,12 @@ SwXParagraph::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_FAIL("SwXParagraph::removeVetoableChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXParagraph::removeVetoableChangeListener(): not implemented");
 }
 
 beans::PropertyState lcl_SwXParagraph_getPropertyState(
-//                          SwUnoCrsr& rUnoCrsr,
+//							SwUnoCrsr& rUnoCrsr,
                             const SwTxtNode& rTxtNode,
                             const SwAttrSet** ppSet,
                             const SfxItemPropertySimpleEntry& rEntry,
@@ -903,7 +910,7 @@ throw (beans::UnknownPropertyException)
         break;
     lcl_SwXParagraph_getPropertyStateDEFAULT:
     default:
-        if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rEntry.nWID, sal_False))
+        if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rEntry.nWID, FALSE))
             eRet = beans::PropertyState_DIRECT_VALUE;
         break;
     }
@@ -1283,7 +1290,7 @@ throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
 
-    if (!rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextContent")))
+    if (!rServiceName.equalsAscii("com.sun.star.text.TextContent"))
     {
         throw uno::RuntimeException();
     }

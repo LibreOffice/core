@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,8 +31,9 @@
 
 
 #include "hintids.hxx"
-#include "flyfrm.hxx"     // SwFlyInCntFrm
-#include "viewopt.hxx"  // SwViewOptions
+#include "flyfrm.hxx"	  // SwFlyInCntFrm
+#include "viewopt.hxx"	// SwViewOptions
+#include "errhdl.hxx"
 #include "txtatr.hxx"  // SwINetFmt
 #include <tools/multisel.hxx>
 #include <editeng/escpitem.hxx>
@@ -57,19 +58,20 @@
 
 #include "flyfrms.hxx"
 #include "viewsh.hxx"
+#include "txtcfg.hxx"
 #include "itrpaint.hxx"
 #include "txtfrm.hxx"   // pFrm
 #include "txtfly.hxx"
 #include "swfont.hxx"
 #include "txtpaint.hxx"
 #include "portab.hxx"   // SwTabPortion::IsFilled
-#include "porfly.hxx"     // SwFlyCntPortion
-#include "porfld.hxx"   // SwGrfNumPortion
-#include "frmfmt.hxx"   // LRSpace
+#include "porfly.hxx"	  // SwFlyCntPortion
+#include "porfld.hxx"	// SwGrfNumPortion
+#include "frmfmt.hxx"	// LRSpace
 #include "txatbase.hxx" // SwTxtAttr
 #include "charfmt.hxx"  // SwFmtCharFmt
 #include "redlnitr.hxx" // SwRedlineItr
-#include "porrst.hxx"   // SwArrowPortion
+#include "porrst.hxx"	// SwArrowPortion
 #include "pormulti.hxx"
 
 /*************************************************************************
@@ -91,7 +93,7 @@ sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
 }
 
 /*************************************************************************
- *                  SwTxtPainter::CtorInitTxtPainter()
+ *					SwTxtPainter::CtorInitTxtPainter()
  *************************************************************************/
 void SwTxtPainter::CtorInitTxtPainter( SwTxtFrm *pNewFrm, SwTxtPaintInfo *pNewInf )
 {
@@ -112,7 +114,7 @@ void SwTxtPainter::CtorInitTxtPainter( SwTxtFrm *pNewFrm, SwTxtPaintInfo *pNewIn
 
 
 /*************************************************************************
- *                    SwTxtPainter::CalcPaintOfst()
+ *					  SwTxtPainter::CalcPaintOfst()
  *************************************************************************/
 SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
 {
@@ -131,6 +133,7 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
         while( pPor && GetInfo().X() + pPor->Width() + (pPor->Height()/2)
                        < nPaintOfst )
         {
+            DBG_LOOP;
             if( pPor->InSpaceGrp() && GetInfo().GetSpaceAdd() )
             {
                 long nTmp = GetInfo().X() +pPor->Width() +
@@ -147,7 +150,7 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
         }
 
         // 7529: bei PostIts auch pLast returnen.
-        if( pLast && !pLast->Width() && pLast->IsPostItsPortion() )
+        if( pLast && !pLast->Width() &&	pLast->IsPostItsPortion() )
         {
             pPor = pLast;
             GetInfo().SetIdx( GetInfo().GetIdx() - pPor->GetLen() );
@@ -161,9 +164,9 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
  *
  * Es gibt zwei Moeglichkeiten bei transparenten Font auszugeben:
  * 1) DrawRect auf die ganze Zeile und die DrawText hinterher
- *    (objektiv schnell, subjektiv langsam).
+ *	  (objektiv schnell, subjektiv langsam).
  * 2) Fuer jede Portion ein DrawRect mit anschliessendem DrawText
- *    ausgefuehrt (objektiv langsam, subjektiv schnell).
+ *	  ausgefuehrt (objektiv langsam, subjektiv schnell).
  * Da der User in der Regel subjektiv urteilt, wird die 2. Methode
  * als Default eingestellt.
  *************************************************************************/
@@ -171,8 +174,8 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                                  const sal_Bool bUnderSz )
 {
 #if OSL_DEBUG_LEVEL > 1
-//    sal_uInt16 nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
-//    sal_uInt16 nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
+//    USHORT nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
+//    USHORT nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
 #endif
 
     // Adjustierung ggf. nachholen
@@ -232,13 +235,14 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 #if OSL_DEBUG_LEVEL > 1
         static sal_Bool bClipAlways = sal_False;
         if( bClip && bClipAlways )
-        {   bClip = sal_False;
+        {	bClip = sal_False;
             rClip.ChgClip( rPaint );
         }
 #endif
     }
 
     // Alignment:
+    sal_Bool bPlus = sal_False;
     OutputDevice* pOut = GetInfo().GetOut();
     Point aPnt1( nTmpLeft, GetInfo().GetPos().Y() );
     if ( aPnt1.X() < rPaint.Left() )
@@ -250,7 +254,10 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     if ( aPnt2.X() > rPaint.Right() )
         aPnt2.X() = rPaint.Right();
     if ( aPnt2.Y() > rPaint.Bottom() )
+    {
         aPnt2.Y() = rPaint.Bottom();
+        bPlus = sal_True;
+    }
 
     const SwRect aLineRect( aPnt1, aPnt2 );
 
@@ -261,7 +268,12 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     }
 
     if( !pPor && !bEndPor )
+    {
+#ifdef DBGTXT
+        aDbstream << "PAINTER: done nothing" << endl;
+#endif
         return;
+    }
 
     // Baseline-Ausgabe auch bei nicht-TxtPortions (vgl. TabPor mit Fill)
     // if no special vertical alignment is used,
@@ -308,6 +320,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     while( pPor )
     {
+        DBG_LOOP;
         sal_Bool bSeeked = sal_True;
         GetInfo().SetLen( pPor->GetLen() );
 
@@ -352,7 +365,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         else
             bSeeked = sal_False;
 
-//      bRest = sal_False;
+//		bRest = sal_False;
 
         // Wenn das Ende der Portion hinausragt, wird geclippt.
         // Es wird ein Sicherheitsabstand von Height-Halbe aufaddiert,
@@ -449,7 +462,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         if( !GetNextLine() &&
             GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreView() &&
-            GetInfo().GetOpt().IsParagraph() && !GetTxtFrm()->GetFollow() &&
+            GetInfo().GetOpt().IsParagraph() &&	!GetTxtFrm()->GetFollow() &&
             GetInfo().GetIdx() >= GetInfo().GetTxt().Len() )
         {
             const SwTmpEndPortion aEnd( *pEndTempl );
@@ -606,11 +619,11 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                           rScriptInfo );
 
         xub_StrLen nTmpIdx = nIndx;
-        sal_uLong nSumWidth = 0;
-        sal_uLong nSumHeight = 0;
-        sal_uLong nBold = 0;
-        sal_uInt16 nMaxBaseLineOfst = 0;
-        sal_uInt16 nNumberOfPortions = 0;
+        ULONG nSumWidth = 0;
+        ULONG nSumHeight = 0;
+        ULONG nBold = 0;
+        USHORT nMaxBaseLineOfst = 0;
+        USHORT nNumberOfPortions = 0;
 
         while( nTmpIdx <= nUnderEnd && pPor )
         {
@@ -629,13 +642,13 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
             if ( !aIter.GetFnt()->GetEscapement() )
             {
                 nSumWidth += pPor->Width();
-                const sal_uLong nFontHeight = aIter.GetFnt()->GetHeight();
+                const ULONG nFontHeight = aIter.GetFnt()->GetHeight();
 
                 // If we do not have a common baseline we take the baseline
                 // and the font of the lowest portion.
                 if ( nAdjustBaseLine )
                 {
-                    sal_uInt16 nTmpBaseLineOfst = AdjustBaseLine( *pCurr, pPor );
+                    USHORT nTmpBaseLineOfst = AdjustBaseLine( *pCurr, pPor );
                     if ( nMaxBaseLineOfst < nTmpBaseLineOfst )
                     {
                         nMaxBaseLineOfst = nTmpBaseLineOfst;
@@ -659,14 +672,14 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         // resulting height
         if ( nNumberOfPortions > 1 && nSumWidth )
         {
-            const sal_uLong nNewFontHeight = nAdjustBaseLine ?
+            const ULONG nNewFontHeight = nAdjustBaseLine ?
                                          nSumHeight :
                                          nSumHeight / nSumWidth;
 
             pUnderlineFnt = new SwFont( *GetInfo().GetFont() );
 
             // font height
-            const sal_uInt8 nActual = pUnderlineFnt->GetActual();
+            const BYTE nActual = pUnderlineFnt->GetActual();
             pUnderlineFnt->SetSize( Size( pUnderlineFnt->GetSize( nActual ).Width(),
                                           nNewFontHeight ), nActual );
 

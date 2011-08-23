@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include "controller/SlsTransferable.hxx"
+#include "SlsTransferable.hxx"
 
 #include "SlideSorterViewShell.hxx"
 #include "View.hxx"
@@ -37,19 +37,16 @@
 namespace sd { namespace slidesorter { namespace controller {
 
 Transferable::Transferable (
-    SdDrawDocument* pSrcDoc,
-    ::sd::View* pWorkView,
-    sal_Bool bInitOnGetData,
-    SlideSorterViewShell* pViewShell,
-    const ::std::vector<Representative>& rRepresentatives)
+    SdDrawDocument* pSrcDoc, 
+    ::sd::View* pWorkView, 
+    BOOL bInitOnGetData,
+    SlideSorterViewShell* pViewShell)
     : SdTransferable (pSrcDoc, pWorkView, bInitOnGetData),
-      mpViewShell(pViewShell),
-      maRepresentatives(rRepresentatives)
+      mpViewShell(pViewShell)
 {
     if (mpViewShell != NULL)
         StartListening(*mpViewShell);
 }
-
 
 
 
@@ -91,12 +88,6 @@ void Transferable::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
 }
 
 
-
-
-const ::std::vector<Transferable::Representative>& Transferable::GetRepresentatives (void) const
-{
-    return maRepresentatives;
-}
 
 
 } } } // end of namespace ::sd::slidesorter::controller

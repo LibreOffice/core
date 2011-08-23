@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include "oox/helper/helper.hxx"
-#include "oox/token/namespaces.hxx"
-#include "oox/token/tokens.hxx"
+#include "tokens.hxx"
 
 namespace oox {
 
@@ -45,9 +44,6 @@ namespace oox {
 class AttributeConversion
 {
 public:
-    /** Returns the XML token identifier from the passed string. */
-    static sal_Int32    decodeToken( const ::rtl::OUString& rValue );
-
     /** Returns the decoded string value. All characters in the format
         '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
     static ::rtl::OUString decodeXString( const ::rtl::OUString& rValue );

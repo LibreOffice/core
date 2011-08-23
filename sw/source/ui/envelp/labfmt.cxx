@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,11 @@
 #include <unomid.h>
 
 using namespace utl;
+using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-using ::rtl::OUString;
-
-#define ROUND(x) ((sal_uInt16) ((x) + .5))
+#define ROUND(x) ((USHORT) ((x) + .5))
 
 SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
 
@@ -78,8 +77,8 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
     SetBackground(Wallpaper(rWinColor));
 
     Font aFont = GetFont();
-    aFont.SetTransparent(sal_True);
-    aFont.SetWeight  (WEIGHT_NORMAL);
+    aFont.SetTransparent(TRUE);
+    aFont.SetWeight	 (WEIGHT_NORMAL);
     SetFont(aFont);
 
     const Size aSz(GetOutputSizePixel());
@@ -91,9 +90,9 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
     lHDistWidth  = GetTextWidth(aHDistStr );
     lVDistWidth  = GetTextWidth(aVDistStr );
     lHeightWidth = GetTextWidth(aHeightStr);
-    lLeftWidth   = GetTextWidth(aLeftStr  );
+    lLeftWidth	 = GetTextWidth(aLeftStr  );
     lUpperWidth  = GetTextWidth(aUpperStr );
-    lColsWidth   = GetTextWidth(aColsStr  );
+    lColsWidth	 = GetTextWidth(aColsStr  );
 
     lXHeight = GetTextHeight();
     lXWidth  = GetTextWidth('X');
@@ -125,10 +124,10 @@ void SwLabPreview::Paint(const Rectangle &)
     SetLineColor(rWinColor);
     SetFillColor(aGrayColor);
     Font aPaintFont(GetFont());
-    aPaintFont.SetTransparent(sal_False);
+    aPaintFont.SetTransparent(FALSE);
     SetFont(aPaintFont);
 
-    // size of region to be displayed
+    // Groesse des darzustellenden Bereichs
     long lDispW = ROUND(aItem.lLeft  + aItem.lHDist);
     long lDispH = ROUND(aItem.lUpper + aItem.lVDist);
     if (aItem.nCols == 1)
@@ -140,41 +139,41 @@ void SwLabPreview::Paint(const Rectangle &)
     else
         lDispH += ROUND(aItem.lVDist / 10);
 
-    // Scale factor
+    // Scale factor Skalierungsfaktor
     float fx = (float) lOutWPix23 / Max(1L, lDispW),
           fy = (float) lOutHPix23 / Max(1L, lDispH),
           f  = fx < fy ? fx : fy;
 
-    // zero point
+    // Nullpunkt
     long lOutlineW = ROUND(f * lDispW);
     long lOutlineH = ROUND(f * lDispH);
 
     long lX0 = (lOutWPix - lOutlineW) / 2;
     long lY0 = (lOutHPix - lOutlineH) / 2;
-    long lX1 = ROUND(lX0 + f *  aItem.lLeft );
-    long lY1 = ROUND(lY0 + f *  aItem.lUpper);
+    long lX1 = ROUND(lX0 + f *	aItem.lLeft );
+    long lY1 = ROUND(lY0 + f *	aItem.lUpper);
     long lX2 = ROUND(lX0 + f * (aItem.lLeft  + aItem.lWidth ));
     long lY2 = ROUND(lY0 + f * (aItem.lUpper + aItem.lHeight));
     long lX3 = ROUND(lX0 + f * (aItem.lLeft  + aItem.lHDist ));
     long lY3 = ROUND(lY0 + f * (aItem.lUpper + aItem.lVDist ));
 
-    // draw outline (area)
+    // Umriss zeichnen (Flaeche)
     DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
 
-    // draw outline (border)
+    // Umriss zeichnen (Umrandung)
     SetLineColor(rFieldTextColor);
-    DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Up
-    DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Left
+    DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Oben
+    DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Links
     if (aItem.nCols == 1)
-        DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Right
+        DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Rechts
     if (aItem.nRows == 1)
-        DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Down
+        DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Unten
 
     // Labels
     SetClipRegion (Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
     SetFillColor(rWinColor);
-    for (sal_uInt16 nRow = 0; nRow < Min((sal_uInt16) 2, (sal_uInt16) aItem.nRows); nRow++)
-        for (sal_uInt16 nCol = 0; nCol < Min((sal_uInt16) 2, (sal_uInt16) aItem.nCols); nCol++)
+    for (USHORT nRow = 0; nRow < Min((USHORT) 2, (USHORT) aItem.nRows); nRow++)
+        for (USHORT nCol = 0; nCol < Min((USHORT) 2, (USHORT) aItem.nCols); nCol++)
             DrawRect(Rectangle(
               Point(ROUND(lX0 + f * (aItem.lLeft  + nCol * aItem.lHDist)),
                     ROUND(lY0 + f * (aItem.lUpper + nRow * aItem.lVDist))),
@@ -182,23 +181,23 @@ void SwLabPreview::Paint(const Rectangle &)
                     ROUND(f * aItem.lHeight))));
     SetClipRegion();
 
-    // annotation: left border
+    // Beschritung: Rand links
     if (aItem.lLeft)
     {
         long lX = (lX0 + lX1) / 2;
-        DrawArrow(Point(lX0, lY0 - 5), Point(lX1, lY0 - 5), sal_False);
-        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), sal_True);
+        DrawArrow(Point(lX0, lY0 - 5), Point(lX1, lY0 - 5), FALSE);
+        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), TRUE);
         DrawText(Point(lX1 - lLeftWidth, lY0 - 10 - lXHeight), aLeftStr);
     }
 
-    // annotation: upper border
+    // Beschriftung: Rand oben
     if (aItem.lUpper)
     {
-        DrawArrow(Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), sal_False);
+        DrawArrow(Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), FALSE);
         DrawText(Point(lX0 - 10 - lUpperWidth, ROUND(lY0 + f * aItem.lUpper / 2 - lXHeight / 2)), aUpperStr);
     }
 
-    // annotation: width and height
+    // Beschriftung: Breite und Hoehe
     {
         long lX = lX2 - lXWidth / 2 - lHeightWidth / 2;
         long lY = lY1 + lXHeight;
@@ -210,40 +209,40 @@ void SwLabPreview::Paint(const Rectangle &)
         DrawText(Point(lX - lHeightWidth / 2, lY2 - lXHeight - lXHeight / 2), aHeightStr);
     }
 
-    // annotation: horizontal gap
+    // Beschriftung: Horz. Abstand
     if (aItem.nCols > 1)
     {
         long lX = (lX1 + lX3) / 2;
-        DrawArrow(Point(lX1, lY0 - 5), Point(lX3, lY0 - 5), sal_False);
-        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), sal_True);
+        DrawArrow(Point(lX1, lY0 - 5), Point(lX3, lY0 - 5), FALSE);
+        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), TRUE);
         DrawText(Point(lX - lHDistWidth / 2, lY0 - 10 - lXHeight), aHDistStr);
     }
 
-    // annotation: vertical gap
+    // Beschriftung: Vertikaler Abstand
     if (aItem.nRows > 1)
     {
-        DrawArrow(Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), sal_False);
+        DrawArrow(Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), FALSE);
         DrawText(Point(lX0 - 10 - lVDistWidth, ROUND(lY1 + f * aItem.lVDist / 2 - lXHeight / 2)), aVDistStr);
     }
 
-    // annotation: columns
+    // Beschriftung: Spalten
     {
         long lY = lY0 + lOutlineH + 4;
-        DrawArrow(Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), sal_True);
+        DrawArrow(Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), TRUE);
         DrawText(Point((lX0 + lX0 + lOutlineW - 1) / 2 - lColsWidth / 2, lY + 5), aColsStr);
     }
 
-    // annotation: lines
+    // Beschriftung: Zeilen
     {
         long lX = lX0 + lOutlineW + 4;
-        DrawArrow(Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), sal_True);
+        DrawArrow(Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), TRUE);
         DrawText(Point(lX + 5, (lY0 + lY0 + lOutlineH - 1 - lXHeight / 2) / 2), aRowsStr);
     }
 }
 
 // Arror or interval character --------------------------------------------
 
-void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, sal_Bool bArrow)
+void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, BOOL bArrow)
 {
     DrawLine(rP1, rP2);
 
@@ -324,14 +323,14 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aRowsText    (this, SW_RES(TXT_ROWS  )),
     aRowsField   (this, SW_RES(FLD_ROWS  )),
     aSavePB      (this, SW_RES(PB_SAVE  )),
-    bModified(sal_False),
+    bModified(FALSE),
     aItem        ((const SwLabItem&) rSet.Get(FN_LABEL))
 {
     FreeResource();
     SetExchangeSupport();
 
     // Metrics
-    FieldUnit aMetric = ::GetDfltMetric(sal_False);
+    FieldUnit aMetric = ::GetDfltMetric(FALSE);
     SetMetric(aHDistField , aMetric);
     SetMetric(aVDistField , aMetric);
     SetMetric(aWidthField , aMetric);
@@ -345,20 +344,20 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aVDistField .SetModifyHdl( aLk );
     aWidthField .SetModifyHdl( aLk );
     aHeightField.SetModifyHdl( aLk );
-    aLeftField  .SetModifyHdl( aLk );
+    aLeftField	.SetModifyHdl( aLk );
     aUpperField .SetModifyHdl( aLk );
-    aColsField  .SetModifyHdl( aLk );
-    aRowsField  .SetModifyHdl( aLk );
+    aColsField	.SetModifyHdl( aLk );
+    aRowsField	.SetModifyHdl( aLk );
 
     aLk = LINK(this, SwLabFmtPage, LoseFocusHdl);
     aHDistField .SetLoseFocusHdl( aLk );
     aVDistField .SetLoseFocusHdl( aLk );
     aWidthField .SetLoseFocusHdl( aLk );
     aHeightField.SetLoseFocusHdl( aLk );
-    aLeftField  .SetLoseFocusHdl( aLk );
+    aLeftField	.SetLoseFocusHdl( aLk );
     aUpperField .SetLoseFocusHdl( aLk );
-    aColsField  .SetLoseFocusHdl( aLk );
-    aRowsField  .SetLoseFocusHdl( aLk );
+    aColsField	.SetLoseFocusHdl( aLk );
+    aRowsField	.SetLoseFocusHdl( aLk );
 
     aSavePB.SetClickHdl( LINK (this, SwLabFmtPage, SaveHdl));
     // Set timer
@@ -373,7 +372,7 @@ SwLabFmtPage::~SwLabFmtPage()
 // Modify-handler of MetricFields. start preview timer
 IMPL_LINK_INLINE_START( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
 {
-    bModified = sal_True;
+    bModified = TRUE;
     aPreviewTimer.Start();
     return 0;
 }
@@ -404,14 +403,14 @@ void SwLabFmtPage::ChangeMinMax()
 {
     long lMax = 31748; // 56 cm
 
-    // Min and Max
+    // Min und Max
 
     long lLeft  = static_cast< long >(GETFLDVAL(aLeftField )),
          lUpper = static_cast< long >(GETFLDVAL(aUpperField)),
          lHDist = static_cast< long >(GETFLDVAL(aHDistField)),
          lVDist = static_cast< long >(GETFLDVAL(aVDistField));
 
-    long nMinSize = 10; // 0,1cm
+    long nMinSize = 10;	// 0,1cm
 
     aHDistField .SetMin(nMinSize, FUNIT_CM);
     aVDistField .SetMin(nMinSize, FUNIT_CM);
@@ -425,13 +424,13 @@ void SwLabFmtPage::ChangeMinMax()
     aWidthField .SetMax((long) 100 * (lHDist), FUNIT_TWIP);
     aHeightField.SetMax((long) 100 * (lVDist), FUNIT_TWIP);
 
-    aLeftField  .SetMax((long) 100 * (lMax - (long) aColsField.GetValue() * GETFLDVAL(aHDistField)), FUNIT_TWIP);
+    aLeftField	.SetMax((long) 100 * (lMax - (long) aColsField.GetValue() * GETFLDVAL(aHDistField)), FUNIT_TWIP);
     aUpperField .SetMax((long) 100 * (lMax - (long) aRowsField.GetValue() * GETFLDVAL(aVDistField)), FUNIT_TWIP);
 
-    aColsField  .SetMax((lMax - lLeft ) / Max(1L, lHDist));
-    aRowsField  .SetMax((lMax - lUpper) / Max(1L, lVDist));
+    aColsField	.SetMax((lMax - lLeft ) / Max(1L, lHDist));
+    aRowsField	.SetMax((lMax - lUpper) / Max(1L, lVDist));
 
-    // First and Last
+    // First und Last
 
     aHDistField .SetFirst(aHDistField .GetMin());
     aVDistField .SetFirst(aVDistField .GetMin());
@@ -445,20 +444,20 @@ void SwLabFmtPage::ChangeMinMax()
     aWidthField .SetLast (aWidthField .GetMax());
     aHeightField.SetLast (aHeightField.GetMax());
 
-    aLeftField  .SetLast (aLeftField  .GetMax());
+    aLeftField	.SetLast (aLeftField  .GetMax());
     aUpperField .SetLast (aUpperField .GetMax());
 
-    aColsField  .SetLast (aColsField  .GetMax());
-    aRowsField  .SetLast (aRowsField  .GetMax());
+    aColsField	.SetLast (aColsField  .GetMax());
+    aRowsField	.SetLast (aRowsField  .GetMax());
 
     aHDistField .Reformat();
     aVDistField .Reformat();
     aWidthField .Reformat();
     aHeightField.Reformat();
-    aLeftField  .Reformat();
+    aLeftField	.Reformat();
     aUpperField .Reformat();
-    aColsField  .Reformat();
-    aRowsField  .Reformat();
+    aColsField	.Reformat();
+    aRowsField	.Reformat();
 }
 
 SfxTabPage* SwLabFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
@@ -477,7 +476,7 @@ int SwLabFmtPage::DeactivatePage(SfxItemSet* _pSet)
     if (_pSet)
         FillItemSet(*_pSet);
 
-    return sal_True;
+    return TRUE;
 }
 
 void SwLabFmtPage::FillItem(SwLabItem& rItem)
@@ -493,17 +492,17 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
         rItem.lHeight = rRec.lHeight = static_cast< long >(GETFLDVAL(aHeightField));
         rItem.lLeft   = rRec.lLeft   = static_cast< long >(GETFLDVAL(aLeftField  ));
         rItem.lUpper  = rRec.lUpper  = static_cast< long >(GETFLDVAL(aUpperField ));
-        rItem.nCols   = rRec.nCols   = (sal_uInt16) aColsField.GetValue();
-        rItem.nRows   = rRec.nRows   = (sal_uInt16) aRowsField.GetValue();
+        rItem.nCols   = rRec.nCols	 = (USHORT) aColsField.GetValue();
+        rItem.nRows   = rRec.nRows	 = (USHORT) aRowsField.GetValue();
     }
 }
 
-sal_Bool SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
+BOOL SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(aItem);
     rSet.Put(aItem);
 
-    return sal_True;
+    return TRUE;
 }
 
 void SwLabFmtPage::Reset(const SfxItemSet& )
@@ -515,7 +514,7 @@ void SwLabFmtPage::Reset(const SfxItemSet& )
     aVDistField .SetMax(100 * aItem.lVDist , FUNIT_TWIP);
     aWidthField .SetMax(100 * aItem.lWidth , FUNIT_TWIP);
     aHeightField.SetMax(100 * aItem.lHeight, FUNIT_TWIP);
-    aLeftField  .SetMax(100 * aItem.lLeft  , FUNIT_TWIP);
+    aLeftField	.SetMax(100 * aItem.lLeft  , FUNIT_TWIP);
     aUpperField .SetMax(100 * aItem.lUpper , FUNIT_TWIP);
 
     SETFLDVAL(aHDistField , aItem.lHDist );
@@ -528,8 +527,8 @@ void SwLabFmtPage::Reset(const SfxItemSet& )
     aColsField.SetMax(aItem.nCols);
     aRowsField.SetMax(aItem.nRows);
 
-    aColsField  .SetValue(aItem.nCols);
-    aRowsField  .SetValue(aItem.nRows);
+    aColsField	.SetValue(aItem.nCols);
+    aRowsField	.SetValue(aItem.nRows);
     aMakeFI.SetText(aItem.aMake);
     aTypeFI.SetText(aItem.aType);
     PreviewHdl(0);
@@ -544,18 +543,18 @@ IMPL_LINK( SwLabFmtPage, SaveHdl, PushButton *, EMPTYARG )
     aRec.lHeight = static_cast< long >(GETFLDVAL(aHeightField));
     aRec.lLeft   = static_cast< long >(GETFLDVAL(aLeftField  ));
     aRec.lUpper  = static_cast< long >(GETFLDVAL(aUpperField ));
-    aRec.nCols   = (sal_uInt16) aColsField.GetValue();
-    aRec.nRows   = (sal_uInt16) aRowsField.GetValue();
+    aRec.nCols	 = (USHORT) aColsField.GetValue();
+    aRec.nRows	 = (USHORT) aRowsField.GetValue();
     aRec.bCont = aItem.bCont;
     SwSaveLabelDlg* pSaveDlg = new SwSaveLabelDlg(this, aRec);
     pSaveDlg->SetLabel(aItem.aLstMake, aItem.aLstType);
     pSaveDlg->Execute();
     if(pSaveDlg->GetLabel(aItem))
     {
-        bModified = sal_False;
+        bModified = FALSE;
         const Sequence<OUString>& rMan = GetParent()->GetLabelsConfig().GetManufacturers();
         SvStringsDtor& rMakes = GetParent()->Makes();
-        if(rMakes.Count() < (sal_uInt16)rMan.getLength())
+        if(rMakes.Count() < (USHORT)rMan.getLength())
         {
             rMakes.DeleteAndDestroy(0, rMakes.Count());
             const OUString* pMan = rMan.getConstArray();

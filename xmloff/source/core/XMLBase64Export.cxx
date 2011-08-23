@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include "XMLBase64Export.hxx"
 
 using namespace ::com::sun::star::uno;

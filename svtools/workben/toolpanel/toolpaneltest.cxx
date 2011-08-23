@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2009 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ using ::com::sun::star::accessibility::XAccessible;
 class PanelDemo : public Application
 {
 public:
-    virtual int Main();
+    virtual void Main();
 
 private:
     static Reference< XMultiServiceFactory > createApplicationServiceManager();
@@ -147,7 +147,7 @@ public:
     // IToolPanel
     virtual ::rtl::OUString GetDisplayName() const;
     virtual Image GetImage() const;
-    virtual rtl::OString GetHelpID() const;
+    virtual SmartId GetHelpID() const;
     virtual void Activate( Window& i_rParentWindow );
     virtual void Deactivate();
     virtual void SetSizePixel( const Size& i_rPanelWindowSize );
@@ -274,9 +274,9 @@ Image ColoredPanel::GetImage() const
 }
 
 //-----------------------------------------------------------------------------
-rtl::OString ColoredPanel::GetHelpID() const
+SmartId ColoredPanel::GetHelpID() const
 {
-    return rtl::OString();
+    return SmartId();
 }
 
 //=============================================================================
@@ -343,7 +343,7 @@ public:
                     ~PanelDemoMainWindow();
 
     // window overridables
-    virtual void    Resize();
+    virtual void	Resize();
 
 public:
     // operations
@@ -387,22 +387,22 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
 
-    m_aColors.InsertEntry( Color( COL_BLACK ),         String( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
-    m_aColors.InsertEntry( Color( COL_BLUE ),          String( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
-    m_aColors.InsertEntry( Color( COL_GREEN ),         String( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
-    m_aColors.InsertEntry( Color( COL_CYAN ),          String( RTL_CONSTASCII_USTRINGPARAM( "Cyan" ) ) );
-    m_aColors.InsertEntry( Color( COL_RED ),           String( RTL_CONSTASCII_USTRINGPARAM( "Red" ) ) );
-    m_aColors.InsertEntry( Color( COL_MAGENTA ),       String( RTL_CONSTASCII_USTRINGPARAM( "Magenta" ) ) );
-    m_aColors.InsertEntry( Color( COL_BROWN ),         String( RTL_CONSTASCII_USTRINGPARAM( "Brown" ) ) );
-    m_aColors.InsertEntry( Color( COL_GRAY ),          String( RTL_CONSTASCII_USTRINGPARAM( "Gray" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTGRAY ),     String( RTL_CONSTASCII_USTRINGPARAM( "Light Gray" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTBLUE ),     String( RTL_CONSTASCII_USTRINGPARAM( "Light Blue" ) ) );
+    m_aColors.InsertEntry( Color( COL_BLACK ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
+    m_aColors.InsertEntry( Color( COL_BLUE ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
+    m_aColors.InsertEntry( Color( COL_GREEN ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
+    m_aColors.InsertEntry( Color( COL_CYAN ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Cyan" ) ) );
+    m_aColors.InsertEntry( Color( COL_RED ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Red" ) ) );
+    m_aColors.InsertEntry( Color( COL_MAGENTA ),	   String( RTL_CONSTASCII_USTRINGPARAM( "Magenta" ) ) );
+    m_aColors.InsertEntry( Color( COL_BROWN ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Brown" ) ) );
+    m_aColors.InsertEntry( Color( COL_GRAY ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Gray" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTGRAY ),	   String( RTL_CONSTASCII_USTRINGPARAM( "Light Gray" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTBLUE ),	   String( RTL_CONSTASCII_USTRINGPARAM( "Light Blue" ) ) );
     m_aColors.InsertEntry( Color( COL_LIGHTGREEN ),    String( RTL_CONSTASCII_USTRINGPARAM( "Light Green" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTCYAN ),     String( RTL_CONSTASCII_USTRINGPARAM( "Light Cyan" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTRED ),      String( RTL_CONSTASCII_USTRINGPARAM( "Light Red" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTCYAN ),	   String( RTL_CONSTASCII_USTRINGPARAM( "Light Cyan" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTRED ),	   String( RTL_CONSTASCII_USTRINGPARAM( "Light Red" ) ) );
     m_aColors.InsertEntry( Color( COL_LIGHTMAGENTA ),  String( RTL_CONSTASCII_USTRINGPARAM( "Light Magenta" ) ) );
-    m_aColors.InsertEntry( Color( COL_YELLOW ),        String( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
-    m_aColors.InsertEntry( Color( COL_WHITE ),         String( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
+    m_aColors.InsertEntry( Color( COL_YELLOW ), 	   String( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
+    m_aColors.InsertEntry( Color( COL_WHITE ),		   String( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
     m_aColors.SetDropDownLineCount( 16 );
 
     Window* pControls[] =
@@ -607,13 +607,13 @@ void OptionsWindow::Resize()
 //-----------------------------------------------------------------------------
 void OptionsWindow::PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition )
 {
-    m_aPanelList.InsertEntry( i_pPanel->GetDisplayName(), i_pPanel->GetImage(), sal_uInt16( i_nPosition ) );
+    m_aPanelList.InsertEntry( i_pPanel->GetDisplayName(), i_pPanel->GetImage(), USHORT( i_nPosition ) );
 }
 
 //-----------------------------------------------------------------------------
 void OptionsWindow::PanelRemoved( const size_t i_nPosition )
 {
-    m_aPanelList.RemoveEntry( sal_uInt16( i_nPosition ) );
+    m_aPanelList.RemoveEntry( USHORT( i_nPosition ) );
     impl_updateRemoveButton();
 }
 
@@ -625,7 +625,7 @@ void OptionsWindow::ActivePanelChanged( const ::boost::optional< size_t >& i_rOl
     if ( !i_rNewActive )
         m_aPanelList.SetNoSelection();
     else
-        m_aPanelList.SelectEntryPos( sal_uInt16( *i_rNewActive ) );
+        m_aPanelList.SelectEntryPos( USHORT( *i_rNewActive ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -860,7 +860,7 @@ Reference< XMultiServiceFactory > PanelDemo::createApplicationServiceManager()
 }
 
 //-----------------------------------------------------------------------------
-int PanelDemo::Main()
+void __EXPORT PanelDemo::Main()
 {
     // create service factory
     Reference< XMultiServiceFactory >  xSMgr = createApplicationServiceManager();
@@ -868,14 +868,13 @@ int PanelDemo::Main()
 
     // initialize the UCB
     Sequence< Any > aArgs(2);
-    aArgs[0] <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Local" ));
-    aArgs[1] <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Office" ));
+    aArgs[0] <<= rtl::OUString::createFromAscii( "Local" );
+    aArgs[1] <<= rtl::OUString::createFromAscii( "Office" );
     ::ucbhelper::ContentBroker::initialize( xSMgr, aArgs );
 
     // run the application
     PanelDemoMainWindow aWindow;
     Execute();
-    return EXIT_SUCCESS;
 }
 
 PanelDemo aTheApplication;

@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-Mar 2005            Created
+Mar 2005			Created
  ************************************************************************/
 
 #ifndef _LWPPAGELAYOUT_HXX
@@ -97,10 +97,10 @@ protected:
     double GetWidth();
     double GetHeight();
 protected:
-    LwpAtomHolder*  m_pPrinterBinName;
-    sal_uInt16      m_nPrinterBin;
-    sal_Int32       m_nBdroffset;
-    LwpAtomHolder*  m_pPaperName;
+    LwpAtomHolder*	m_pPrinterBinName;
+    sal_uInt16		m_nPrinterBin;
+    sal_Int32		m_nBdroffset;
+    LwpAtomHolder*	m_pPaperName;
     XFPageMaster* m_pXFPageMaster;
 public:
     sal_Bool HasColumns();
@@ -121,7 +121,6 @@ public:
     LwpHeaderLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpHeaderLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_HEADER_LAYOUT;}
-    using LwpPlacableLayout::RegisterStyle;
     void RegisterStyle( XFPageMaster* pm1 );
     void RegisterStyle( XFMasterPage* mp1 );
 protected:
@@ -147,7 +146,6 @@ public:
     LwpFooterLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpFooterLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_FOOTER_LAYOUT;}
-    using LwpPlacableLayout::RegisterStyle;
     void RegisterStyle(XFPageMaster* pm1);
     void RegisterStyle(XFMasterPage* mp1);
 protected:

@@ -208,23 +208,27 @@ endcase
 '-------------------------------------------------------------------------
 testcase tMozilla
 
-    if ( fCreateMozillaAddressbookDatasource(gOfficePath + "user/work/tt_mozilla.odb") = true) then
-        if ( fOpendatabase(gOfficePath + "user/work/tt_mozilla.odb") = true) then        
-            Kontext "ContainerView"
-                ViewTables
-        else
-            warnlog "mozilla database could not be open."
-
-        endif
+    if(gPlatform = "osx") then
+        qaerrorlog "Mozilla address book not supported under Mac."
     else
-        qaerrorlog "mozilla database could not be created. Maybe you have no mozilla installed."
-    	Kontext "MessageBox"
-    		if (MessageBox.exists(1)) then
-    			MessageBox.OK
-    		endif
+        if ( fCreateMozillaAddressbookDatasource(gOfficePath + "user/work/tt_mozilla.odb") = true) then
+            if ( fOpendatabase(gOfficePath + "user/work/tt_mozilla.odb") = true) then
+                Kontext "ContainerView"
+                    ViewTables
+            else
+                warnlog "mozilla database could not be open."
+
+            endif
+        else
+            qaerrorlog "mozilla database could not be created. Maybe you have no mozilla installed."
+            Kontext "MessageBox"
+                    if (MessageBox.exists(1)) then
+                            MessageBox.OK
+                    endif
+        endif
+            ' try to close the database
+        call fCloseDatabase(false)
     endif
-	' try to close the database    
-    call fCloseDatabase(false)
     
 endcase
 '-------------------------------------------------------------------------

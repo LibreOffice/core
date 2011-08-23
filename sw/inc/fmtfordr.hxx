@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@
 #include <hintids.hxx>
 #include <format.hxx>
 
+//Die FillOrder ---------------------------------
 
 enum SwFillOrder
 {
@@ -49,9 +50,9 @@ public:
     SwFmtFillOrder( SwFillOrder = ATT_TOP_DOWN );
     inline SwFmtFillOrder &operator=( const SwFmtFillOrder &rCpy );
 
-    // "Pure virtual methods" of SfxPoolItem.
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_uInt16          GetValueCount() const;
+    // "pure virtual Methoden" vom SfxPoolItem
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual USHORT			GetValueCount() const;
 
     SwFillOrder GetFillOrder() const { return SwFillOrder(GetValue()); }
 };
@@ -62,10 +63,10 @@ inline SwFmtFillOrder &SwFmtFillOrder::operator=( const SwFmtFillOrder &rCpy )
     return *this;
 }
 
-inline const SwFmtFillOrder &SwAttrSet::GetFillOrder(sal_Bool bInP) const
+inline const SwFmtFillOrder &SwAttrSet::GetFillOrder(BOOL bInP) const
     { return (const SwFmtFillOrder&)Get( RES_FILL_ORDER,bInP); }
 
-inline const SwFmtFillOrder &SwFmt::GetFillOrder(sal_Bool bInP) const
+inline const SwFmtFillOrder &SwFmt::GetFillOrder(BOOL bInP) const
     { return aSet.GetFillOrder(bInP); }
 
 #endif

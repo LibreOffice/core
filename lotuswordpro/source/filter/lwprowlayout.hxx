@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- April 2005         Created
+ April 2005		 	Created
  ************************************************************************/
 #ifndef _LWPROWLAYOUT_HXX
 #define _LWPROWLAYOUT_HXX
@@ -82,22 +82,22 @@ class LwpRowLayout : public LwpVirtualLayout
 public:
     LwpRowLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpRowLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_ROW_LAYOUT;}
-    sal_uInt16 GetRowID() { return crowid;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_ROW_LAYOUT;};
+    sal_uInt16 GetRowID() { return crowid;};
     virtual void RegisterStyle();
-    inline LwpTableLayout * GetParentTableLayout(){return static_cast<LwpTableLayout *>(GetParent()->obj());}
+    inline LwpTableLayout * GetParentTableLayout(){return static_cast<LwpTableLayout *>(GetParent()->obj());};
     void SetRowMap(void);
 protected:
     void Read();
     sal_uInt16 crowid;
-    sal_Int32 cheight;              // Minimum height if height is automatic.
-    sal_uInt8 cLeaderDotCount;  // dfb - # of cells with leader dots
+    sal_Int32 cheight;				// Minimum height if height is automatic.
+    sal_uInt8 cLeaderDotCount;	// dfb - # of cells with leader dots
     sal_Int32 cLeaderDotY;
     sal_uInt8 cRowFlags;
     enum // for cRowFlags
     {
-        RF_HAS_BORDER       = 0x01,
-        RF_VALID_HAS_BORDER = 0x02,
+        RF_HAS_BORDER		= 0x01,
+        RF_VALID_HAS_BORDER	= 0x02,
         RF_LEADER_COUNT_VALID = 0x4
     };
 private:

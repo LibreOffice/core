@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,23 +39,20 @@
 #include <rtl/uri.hxx>
 
 using namespace osl;
+using namespace rtl;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
+#define PATH_DELEMITTER	'/'
 
-#define PATH_DELEMITTER '/'
+#define USER_REGISTRY_NAME_ENV 		"STAR_USER_REGISTRY"
+#define SYSTEM_REGISTRY_NAME_ENV 	"STAR_REGISTRY"
+#define REGISTRY_SYSTEM_NAME	"services.rdb"
 
-#define USER_REGISTRY_NAME_ENV      "STAR_USER_REGISTRY"
-#define SYSTEM_REGISTRY_NAME_ENV    "STAR_REGISTRY"
-#define REGISTRY_SYSTEM_NAME    "services.rdb"
-
-#define REGISTRY_LOCAL_NAME     "user60.rdb"
+#define REGISTRY_LOCAL_NAME		"user60.rdb"
 
 #ifdef SAL_UNX
-#define CONFIG_PATH_PREFIX      "."
+#define CONFIG_PATH_PREFIX		"."
 #else
-#define CONFIG_PATH_PREFIX      ""
+#define CONFIG_PATH_PREFIX		""
 #endif
 
 namespace comphelper
@@ -75,7 +72,7 @@ static sal_Bool retrievePortalUserDir( OUString *pDirectory )
     {
         if ( !osl_getCommandArg(--nArgs, &sArg.pData) )
         {
-            if ( sArg.indexOf(OUString( RTL_CONSTASCII_USTRINGPARAM( "-userid" ))) == 0 )
+            if ( sArg.indexOf(OUString::createFromAscii("-userid")) == 0 )
             {
 
                 bIsPortalUser = sal_True;
@@ -106,7 +103,7 @@ static OUString getDefaultLocalRegistry()
     OUString portalUserDir;
 
     sal_Bool bIsPortalUser = retrievePortalUserDir( &portalUserDir );
-
+    
     if ( bIsPortalUser )
        {
         if(  portalUserDir.getLength() )
@@ -115,7 +112,7 @@ static OUString getDefaultLocalRegistry()
             userRegistryName = portalUserDir;
             userRegistryName += OUString( RTL_CONSTASCII_USTRINGPARAM(
                 "/user/" REGISTRY_LOCAL_NAME ) );
-
+            
             // Directory creation is probably necessary for bootstrapping a new
             // user in the portal environment (the ucb uses this function).
             // This should be solved differently, as
@@ -123,7 +120,7 @@ static OUString getDefaultLocalRegistry()
             OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
             OUString sPath(RTL_CONSTASCII_USTRINGPARAM("file://"));
             FileBase::RC retRC = FileBase::E_None;
-
+            
             sal_Int32 nIndex = 3;
             sPath += userRegistryName.getToken(2, '/', nIndex);
             while( nIndex != -1 )
@@ -158,8 +155,8 @@ static OUString getDefaultLocalRegistry()
 
 OUString getPathToUserRegistry()
 {
-    OUString    userRegistryName;
-    FILE        *f=NULL;
+    OUString  	userRegistryName;
+    FILE  		*f=NULL;
 
     // search the environment STAR_USER_REGISTRY
     OString sBuffer( getenv(USER_REGISTRY_NAME_ENV) );
@@ -187,12 +184,12 @@ OUString getPathToSystemRegistry()
     OUString uBuffer;
     OUString registryBaseName( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_SYSTEM_NAME) );
     OUString systemRegistryName;
-    FILE     *f=NULL;
+    FILE  	 *f=NULL;
 
     // search in the directory of the executable
     if(osl_Process_E_None == osl_getExecutableFile(&uBuffer.pData))
     {
-        sal_uInt32  lastIndex = uBuffer.lastIndexOf(PATH_DELEMITTER);
+        sal_uInt32 	lastIndex = uBuffer.lastIndexOf(PATH_DELEMITTER);
         if (lastIndex > 0)
         {
             uBuffer = uBuffer.copy(0, lastIndex + 1);

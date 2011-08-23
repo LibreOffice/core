@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,22 +29,35 @@
 #ifndef _SWPARRTF_HXX
 #define _SWPARRTF_HXX
 
+#ifndef __SGI_STL_MAP
+#include <map>
+#endif
+#ifndef __SGI_STL_DEQUE
 #include <deque>
+#endif
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
 
+#ifndef _SVSTDARR_HXX
+#define _SVSTDARR_BOOLS
+#include <svl/svstdarr.hxx>
+#endif
 #include <editeng/svxrtf.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <redline.hxx>
-
+#ifndef __SGI_STL_ALGORITHM
+#include <algorithm>
+#endif
 #include <fltshell.hxx>         // fuer den Attribut Stack
 #include <ndindex.hxx>
 #include "../inc/msfilter.hxx"
 #include <svx/svdobj.hxx>
 
 
-extern void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt8 nCol, short nIdx,
-    sal_uInt16 nOOIndex, sal_uInt16 nWWIndex, short *pSize);
+extern void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, BYTE nCol, short nIdx,
+    USHORT nOOIndex, USHORT nWWIndex, short *pSize);
 
 class Font;
 class Graphic;
@@ -67,9 +80,9 @@ struct SvxRTFPictureType;
 
 class RtfReader: public Reader
 {
-    virtual sal_uLong Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
-    virtual sal_uLong Read( SvStream* pStrm, SwDoc &, const String& rBaseURL, SwPaM &);
+    virtual ULONG Read( SvStream* pStrm, SwDoc &, const String& rBaseURL, SwPaM &);
 };
 
 class SwNodeIdx : public SvxNodeIdx
@@ -77,7 +90,7 @@ class SwNodeIdx : public SvxNodeIdx
     SwNodeIndex aIdx;
 public:
     SwNodeIdx( const SwNodeIndex& rIdx ) : aIdx( rIdx ) {}
-    virtual sal_uLong   GetIdx() const;
+    virtual ULONG	GetIdx() const;
     virtual SvxNodeIdx* Clone() const;
 };
 
@@ -100,9 +113,9 @@ class SwxPosition : public SvxPosition
 {
     SwPaM* pPam;
 public:
-    SwxPosition( SwPaM* pCrsr ) : pPam( pCrsr ) {}
+    SwxPosition( SwPaM* pCrsr )	: pPam( pCrsr ) {}
 
-    virtual sal_uLong   GetNodeIdx() const;
+    virtual ULONG	GetNodeIdx() const;
     virtual xub_StrLen GetCntIdx() const;
 
     // erzeuge von sich selbst eine Kopie
@@ -115,11 +128,11 @@ public:
 // zum zwischenspeichern der Flys:
 struct SwFlySave
 {
-    SfxItemSet  aFlySet;
-    SwNodeIndex nSttNd, nEndNd;
-    xub_StrLen  nEndCnt;
-    SwTwips     nPageWidth;
-    sal_uInt16      nDropLines, nDropAnchor;
+    SfxItemSet 	aFlySet;
+    SwNodeIndex	nSttNd, nEndNd;
+    xub_StrLen	nEndCnt;
+    SwTwips		nPageWidth;
+    USHORT 		nDropLines, nDropAnchor;
 
     SwFlySave( const SwPaM& rPam, SfxItemSet& rSet );
     int IsEqualFly( const SwPaM& rPos, SfxItemSet& rSet );
@@ -129,27 +142,27 @@ struct SwFlySave
 struct SwListEntry
 {
     long nListId, nListTemplateId, nListNo;
-    sal_uInt16 nListDocPos;
-    sal_Bool bRuleUsed;
+    USHORT nListDocPos;
+    BOOL bRuleUsed;
 
     SwListEntry()
         : nListId( 0 ), nListTemplateId( 0 ), nListNo( 0 ), nListDocPos( 0 ),
-        bRuleUsed( sal_False )
+        bRuleUsed( FALSE )
     {}
-    SwListEntry( long nLstId, long nLstTmplId, sal_uInt16 nLstDocPos )
+    SwListEntry( long nLstId, long nLstTmplId, USHORT nLstDocPos )
         : nListId( nLstId ), nListTemplateId( nLstTmplId ), nListNo( 0 ),
-        nListDocPos( nLstDocPos ), bRuleUsed( sal_False )
+        nListDocPos( nLstDocPos ), bRuleUsed( FALSE )
     {}
 
     void Clear() { nListId = nListTemplateId = nListNo = 0, nListDocPos = 0;
-                    bRuleUsed = sal_False; }
+                    bRuleUsed = FALSE; }
 };
 
 DECLARE_TABLE( SwRTFStyleTbl, SwTxtFmtColl* )
 DECLARE_TABLE( SwRTFCharStyleTbl, SwCharFmt* )
 typedef SwFlySave* SwFlySavePtr;
 SV_DECL_PTRARR_DEL( SwFlySaveArr, SwFlySavePtr, 0, 20 )
-typedef std::deque< SwListEntry > SwListArr;
+SV_DECL_VARARR( SwListArr, SwListEntry, 0, 20 )
 
 struct DocPageInformation
 {
@@ -237,7 +250,7 @@ private:
     {
         bool bHasHeader, bHasFooter;
         short nSwHLo, nHdUL, nSwFUp, nFtUL, nSwUp,  nSwLo;
-        wwULSpaceData() : bHasHeader(false), bHasFooter(false), nSwHLo(0), nHdUL(0), nSwFUp(0), nFtUL(0), nSwUp(0),  nSwLo(0) {}
+        wwULSpaceData() : bHasHeader(false), bHasFooter(false) {}
     };
 
     void SetSegmentToPageDesc(const rtfSection &rSection, bool bTitlePage,
@@ -249,7 +262,7 @@ private:
         wwULSpaceData& rData);
     void SetPageULSpaceItems(SwFrmFmt &rFmt, wwULSpaceData& rData);
     bool SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
-        sal_uInt16 nNettoWidth);
+        USHORT nNettoWidth);
     void SetHdFt(rtfSection &rSection);
     void CopyFrom(const SwPageDesc &rFrom, SwPageDesc &rDest);
     void MoveFrom(SwPageDesc &rFrom, SwPageDesc &rDest);
@@ -288,8 +301,8 @@ class SwRTFParser : public SvxRTFParser
     sw::util::InsertedTablesManager maInsertedTables;
     SwRTFStyleTbl aTxtCollTbl;
     SwRTFCharStyleTbl aCharFmtTbl;
-    SwFlySaveArr aFlyArr;               // Flys als Letzes im Doc setzen
-    std::vector<bool> aMergeBoxes;      // Flags fuer gemergte Zellen
+    SwFlySaveArr aFlyArr;				// Flys als Letzes im Doc setzen
+    SvBools aMergeBoxes;				// Flags fuer gemergte Zellen
     SwListArr aListArr;
     SvPtrarr aTblFmts;
     SvPtrarr aRubyCharFmts;
@@ -301,9 +314,9 @@ class SwRTFParser : public SvxRTFParser
     SwTableNode* pTableNode, *pOldTblNd; // fuers Lesen von Tabellen: akt. Tab
     SwNodeIndex* pSttNdIdx;
     SwNodeIndex* pRegionEndIdx;
-    SwDoc*  pDoc;
-    SwPaM*  pPam;               // SwPosition duerfte doch reichen, oder ??
-    SwRelNumRuleSpaces* pRelNumRule;    // Liste aller benannten NumRules
+    SwDoc* 	pDoc;
+    SwPaM*	pPam;				// SwPosition duerfte doch reichen, oder ??
+    SwRelNumRuleSpaces* pRelNumRule;	// Liste aller benannten NumRules
 
     String sNestedFieldStr;
     SwFltRedline *pRedlineInsert;
@@ -311,28 +324,30 @@ class SwRTFParser : public SvxRTFParser
 
     String sBaseURL;
 
-    sal_uInt16 nAktPageDesc, nAktFirstPageDesc;
-    sal_uInt16 m_nCurrentBox;
-    sal_uInt16 nInsTblRow;      // beim nach \row kein \pard -> neue Line anlegen
-    sal_uInt16 nNewNumSectDef;  // jeder SectionWechsel kann neue Rules definieren
-    sal_uInt16 nRowsToRepeat;
+    USHORT nAktPageDesc, nAktFirstPageDesc;
+    USHORT nAktBox;			// akt. Box
+    USHORT nInsTblRow;		// beim nach \row kein \pard -> neue Line anlegen
+    USHORT nNewNumSectDef;	// jeder SectionWechsel kann neue Rules definieren
+    USHORT nRowsToRepeat;
 
     bool bSwPageDesc;
-    bool bReadSwFly;        // lese Swg-Fly (wichtig fuer Bitmaps!)
-    bool mbReadCellWhileReadSwFly; // #i83368#
-    bool mbReadNoTbl;       // verhinder Tabelle in Tabelle/FootNote
+    bool bReadSwFly;		// lese Swg-Fly (wichtig fuer Bitmaps!)
+    // --> OD 2008-12-22 #i83368#
+    bool mbReadCellWhileReadSwFly;
+    // <--
+    bool mbReadNoTbl;		// verhinder Tabelle in Tabelle/FootNote
     bool mbIsFootnote;
-    bool bFootnoteAutoNum;  // automatische Numerierung ?
-    bool bStyleTabValid;    // Styles schon erzeugt ?
-    bool bInPgDscTbl;       // beim PageDescTbl lesen
-    bool bNewNumList;       // Word 7.0 NumList gelesen, 6.0 ueberspringen
-    bool bFirstContinue;    // 1.Call ins Continue
+    bool bFootnoteAutoNum;	// automatische Numerierung ?
+    bool bStyleTabValid;	// Styles schon erzeugt ?
+    bool bInPgDscTbl;		// beim PageDescTbl lesen
+    bool bNewNumList;		// Word 7.0 NumList gelesen, 6.0 ueberspringen
+    bool bFirstContinue;	// 1.Call ins Continue
     bool bContainsPara;     // If there is no paragraph in the section
     bool bContainsTablePara;     // If there is an table in this section
     bool bForceNewTable;     // Forces a beginning of a new table
     bool bNestedField;
     bool bTrowdRead;         // True, iff an \trowd definition was read after the last \row
-
+    
     int nReadFlyDepth;
 
     int nZOrder;
@@ -344,7 +359,7 @@ class SwRTFParser : public SvxRTFParser
 
     virtual void InsertPara();
     virtual void InsertText();
-    virtual void MovePos( int bForward = sal_True );
+    virtual void MovePos( int bForward = TRUE );
     virtual void SetEndPrevPara( SvxNodeIdx*& rpNodePos, xub_StrLen& rCntPos );
     void EnterEnvironment();
     void LeaveEnvironment();
@@ -359,10 +374,10 @@ class SwRTFParser : public SvxRTFParser
 
     void ReadUserProperties();
 
-    void ReadListLevel( SwNumRule& rRule, sal_uInt8 nLvl );
+    void ReadListLevel( SwNumRule& rRule, BYTE nLvl );
     void SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine);
     void ReadListTable();
-    sal_uInt16 ReadRevTbl();
+    USHORT ReadRevTbl();
     void ReadShpRslt();
     void ReadShpTxt(String &shpTxt);
     void ReadDrawingObject();
@@ -371,21 +386,21 @@ class SwRTFParser : public SvxRTFParser
     void ReadListOverrideTable();
     SwNumRule *ReadNumSecLevel( int nToken );
     SwNumRule* GetNumRuleOfListNo( long nListNo,
-                                    sal_Bool bRemoveFromList = sal_False );
+                                    BOOL bRemoveFromList = FALSE );
     void RemoveUnusedNumRule( SwNumRule* );
     void RemoveUnusedNumRules();
     const Font* FindFontOfItem( const SvxFontItem& rItem ) const;
 
     // 3 Methoden zum Aufbauen der Styles
-    SwTxtFmtColl* MakeColl( const String&, sal_uInt16 nPos, sal_uInt8 nOutlineLevel,
+    SwTxtFmtColl* MakeColl( const String&, USHORT nPos, BYTE nOutlineLevel,
                             bool& rbCollExist );
-    SwCharFmt* MakeCharFmt( const String& rName, sal_uInt16 nPos,
+    SwCharFmt* MakeCharFmt( const String& rName, USHORT nPos,
                             int& rbCollExist );
     void SetStyleAttr( SfxItemSet& rCollSet,
                         const SfxItemSet& rStyleSet,
                         const SfxItemSet& rDerivedSet );
-    SwTxtFmtColl* MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rStyle );
-    SwCharFmt* MakeCharStyle( sal_uInt16 nNo, const SvxRTFStyleType& rStyle );
+    SwTxtFmtColl* MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle );
+    SwCharFmt* MakeCharStyle( USHORT nNo, const SvxRTFStyleType& rStyle );
     void MakeStyleTab();
 
     int MakeFieldInst( String& rFieldStr );
@@ -397,13 +412,13 @@ class SwRTFParser : public SvxRTFParser
                             SfxItemSet& rSet, const SvxRTFPictureType* = 0  );
 
     void SetFlysInDoc();
-    void GetPageSize( Size& rSize );        // Groesse der PagePrintArea
+    void GetPageSize( Size& rSize );		// Groesse der PagePrintArea
 
     // fuers Einlesen von Tabellen
     void GotoNextBox();
     void NewTblLine();
 
-    void DelLastNode();         // loesche den letzten Node (Tabelle/Fly/Ftn/..)
+    void DelLastNode();			// loesche den letzten Node (Tabelle/Fly/Ftn/..)
 
     void AddNumRule( SwNumRule* pRule );
     void SetNumRelSpaces();
@@ -417,12 +432,12 @@ protected:
     // wird fuer jedes Token gerufen, das in CallParser erkannt wird
     virtual void NextToken( int nToken );
 
-//  virtual void ReadUnknownData();
+//	virtual void ReadUnknownData();
     virtual void ReadBitmapData();
 #ifdef READ_OLE_OBJECT
     virtual void ReadOLEData();
 #endif
-    virtual void SetAttrInDoc( SvxRTFItemStackType &rSet );
+    virtual	void SetAttrInDoc( SvxRTFItemStackType &rSet );
     virtual bool UncompressableStackEntry(const SvxRTFItemStackType &rSet) const;
     // fuer Tokens, die im ReadAttr nicht ausgewertet werden
     virtual void UnknownAttrToken( int nToken, SfxItemSet* pSet );
@@ -451,14 +466,14 @@ public:
             ::com::sun::star::document::XDocumentProperties> i_xDocProps,
         const SwPaM& rCrsr, SvStream& rIn,
         const String& rBaseURL,
-        int bReadNewDoc = sal_True );
+        int bReadNewDoc = TRUE );
 
-    virtual SvParserState CallParser(); // Aufruf des Parsers
+    virtual SvParserState CallParser();	// Aufruf des Parsers
     virtual int IsEndPara( SvxNodeIdx* pNd, xub_StrLen nCnt ) const;
 
     // fuers asynchrone lesen aus dem SvStream
-//  virtual void SaveState( int nToken );
-//  virtual void RestoreState();
+//	virtual void SaveState( int nToken );
+//	virtual void RestoreState();
     virtual void Continue( int nToken );
 };
 

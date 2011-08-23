@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -141,7 +141,7 @@
 #define FT_Y_OFFSET 2
 #define MTR_FLD_X_OFFSET 1
 #define MTR_FLD_Y_OFFSET 2
-#define LB_AREA_TYPE 19
+#define LB_AREA_TYPE 19 
 #define RBT_ROW 6
 #define RBT_COLUMN 7
 #define MTR_FLD_OFFSET 3
@@ -152,40 +152,36 @@
 #define FT_Y_SIZE 11
 #define FT_BITMAPS_HIDDEN 12
 
-#define RBT_TRANS_OFF 8
-#define RBT_TRANS_LINEAR 9
-#define RBT_TRANS_GRADIENT 10
-#define GRP_TRANS_MODE 9
-#define GRP_TRANS_GRADIENT 10
-#define CTL_TRANS_PREVIEW   19
+#define	RBT_TRANS_OFF 8
+#define	RBT_TRANS_LINEAR 9
+#define	RBT_TRANS_GRADIENT 10
+#define	GRP_TRANS_MODE 9
+#define	GRP_TRANS_GRADIENT 10
+#define CTL_TRANS_PREVIEW	19
 
-#define FT_TRGR_TYPE 12
-#define LB_TRGR_GRADIENT_TYPES 3
-#define FT_TRGR_CENTER_X 13
-#define MTR_TRGR_CENTER_X 4
-#define FT_TRGR_CENTER_Y 14
-#define MTR_TRGR_CENTER_Y 5
-#define FT_TRGR_ANGLE 15
-#define MTR_TRGR_ANGLE 6
-#define FT_TRGR_BORDER 16
-#define MTR_TRGR_BORDER 7
-#define FT_TRGR_START_VALUE 17
-#define MTR_TRGR_START_VALUE 8
-#define FT_TRGR_END_VALUE 18
-#define MTR_TRGR_END_VALUE 9
+#define	FT_TRGR_TYPE 12
+#define	LB_TRGR_GRADIENT_TYPES 3
+#define	FT_TRGR_CENTER_X 13
+#define	MTR_TRGR_CENTER_X 4
+#define	FT_TRGR_CENTER_Y 14
+#define	MTR_TRGR_CENTER_Y 5
+#define	FT_TRGR_ANGLE 15
+#define	MTR_TRGR_ANGLE 6
+#define	FT_TRGR_BORDER 16
+#define	MTR_TRGR_BORDER 7
+#define	FT_TRGR_START_VALUE 17
+#define	MTR_TRGR_START_VALUE 8
+#define	FT_TRGR_END_VALUE 18
+#define	MTR_TRGR_END_VALUE 9
 #define MTR_TRANSPARENT 10
 
 #define MTR_SHADOW_TRANSPARENT 11
 
 // Hatch-Background on Area-TabPage
-#define GRP_HATCHBCKGRD         20
-#define CB_HATCHBCKGRD          21
-#define LB_HATCHBCKGRDCOLOR     22
+#define GRP_HATCHBCKGRD			20
+#define CB_HATCHBCKGRD			21
+#define LB_HATCHBCKGRDCOLOR		22
 
 
-#define IMG_LOAD_H  23
-#define IMG_SAVE_H  24
-// IAccessibility2 implementation 2009 ------
-#define STR_CUI_COLORMODEL  5030
-#define STR_LB_HATCHINGSTYLE 5031
-// ------ IAccessibility2 implementation 2009.
+#define IMG_LOAD_H	23
+#define IMG_SAVE_H	24

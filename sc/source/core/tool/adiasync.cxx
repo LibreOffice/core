@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include "brdcst.hxx"
 #include "global.hxx"
 #include "document.hxx"
-#include "sc.hrc"       // FID_DATACHANGED
+#include "sc.hrc"		// FID_DATACHANGED
 #include <osl/thread.h>
 
 
@@ -56,7 +56,7 @@ SV_IMPL_PTRARR_SORT( ScAddInDocs, ScAddInDocPtr );
 extern "C" {
 void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
 {
-    ScAddInAsync::CallBack( sal_uLong( nHandle ), pData );
+    ScAddInAsync::CallBack( ULONG( nHandle ), pData );
 }
 }
 
@@ -65,16 +65,16 @@ void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
 ScAddInAsync::ScAddInAsync() :
     SvtBroadcaster(),
     nHandle( 0 )
-{   // nur fuer aSeekObj !
+{	// nur fuer aSeekObj !
 }
 
 
 
-ScAddInAsync::ScAddInAsync( sal_uLong nHandleP, sal_uInt16 nIndex, ScDocument* pDoc ) :
+ScAddInAsync::ScAddInAsync( ULONG nHandleP, USHORT nIndex, ScDocument* pDoc ) :
     SvtBroadcaster(),
     pStr( NULL ),
     nHandle( nHandleP ),
-    bValid( false )
+    bValid( FALSE )
 {
     pDocs = new ScAddInDocs( 1, 1 );
     pDocs->Insert( pDoc );
@@ -92,7 +92,7 @@ ScAddInAsync::~ScAddInAsync()
     {
         // im dTor wg. theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
         pFuncData->Unadvice( (double)nHandle );
-        if ( eType == PTR_STRING && pStr )      // mit Typvergleich wg. Union!
+        if ( eType == PTR_STRING && pStr )		// mit Typvergleich wg. Union!
             delete pStr;
         delete pDocs;
     }
@@ -100,9 +100,9 @@ ScAddInAsync::~ScAddInAsync()
 
 
 
-ScAddInAsync* ScAddInAsync::Get( sal_uLong nHandleP )
+ScAddInAsync* ScAddInAsync::Get( ULONG nHandleP )
 {
-    sal_uInt16 nPos;
+    USHORT nPos;
     ScAddInAsync* pRet = 0;
     aSeekObj.nHandle = nHandleP;
     if ( theAddInAsyncTbl.Seek_Entry( &aSeekObj, &nPos ) )
@@ -113,7 +113,7 @@ ScAddInAsync* ScAddInAsync::Get( sal_uLong nHandleP )
 
 
 
-void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
+void ScAddInAsync::CallBack( ULONG nHandleP, void* pData )
 {
     ScAddInAsync* p;
     if ( (p = Get( nHandleP )) == NULL )
@@ -138,15 +138,15 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
                 p->pStr = new String( (sal_Char*)pData, osl_getThreadTextEncoding() );
             break;
         default :
-            OSL_FAIL( "unbekannter AsyncType" );
+            DBG_ERROR( "unbekannter AsyncType" );
             return;
     }
-    p->bValid = sal_True;
+    p->bValid = TRUE;
     p->Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
 
     const ScDocument** ppDoc = (const ScDocument**) p->pDocs->GetData();
-    sal_uInt16 nCount = p->pDocs->Count();
-    for ( sal_uInt16 j=0; j<nCount; j++, ppDoc++ )
+    USHORT nCount = p->pDocs->Count();
+    for ( USHORT j=0; j<nCount; j++, ppDoc++ )
     {
         ScDocument* pDoc = (ScDocument*)*ppDoc;
         pDoc->TrackFormulas();
@@ -159,20 +159,20 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
 
 void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
 {
-    sal_uInt16 nPos = theAddInAsyncTbl.Count();
+    USHORT nPos = theAddInAsyncTbl.Count();
     if ( nPos )
     {
         const ScAddInAsync** ppAsync =
             (const ScAddInAsync**) theAddInAsyncTbl.GetData() + nPos - 1;
         for ( ; nPos-- >0; ppAsync-- )
-        {   // rueckwaerts wg. Pointer-Aufrueckerei im Array
+        {	// rueckwaerts wg. Pointer-Aufrueckerei im Array
             ScAddInDocs* p = ((ScAddInAsync*)*ppAsync)->pDocs;
-            sal_uInt16 nFoundPos;
+            USHORT nFoundPos;
             if ( p->Seek_Entry( pDocumentP, &nFoundPos ) )
             {
                 p->Remove( nFoundPos );
                 if ( p->Count() == 0 )
-                {   // dieses AddIn wird nicht mehr benutzt
+                {	// dieses AddIn wird nicht mehr benutzt
                     ScAddInAsync* pAsync = (ScAddInAsync*)*ppAsync;
                     theAddInAsyncTbl.Remove( nPos );
                     delete pAsync;

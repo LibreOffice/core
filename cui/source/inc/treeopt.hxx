@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,12 @@
 
 // static ----------------------------------------------------------------
 
-sal_Bool            EnableSSO();
+BOOL            EnableSSO();
 CreateTabPage   GetSSOCreator( void );
 
 // class OfaOptionsTreeListBox -------------------------------------------
 
+//!#define NUMBER_OF_OPTION_PAGES  12
 class SfxModule;
 class SfxShell;
 class SfxItemSet;
@@ -53,14 +54,14 @@ class OfaOptionsTreeListBox : public SvTreeListBox
     using  SvListView::Collapse;
 
 private:
-    sal_Bool            bInCollapse;
+    BOOL 			bInCollapse;
 
 public:
     OfaOptionsTreeListBox(Window* pParent, const ResId& rResId) :
-        SvTreeListBox( pParent, rResId ), bInCollapse(sal_False) {}
+        SvTreeListBox( pParent, rResId ), bInCollapse(FALSE) {}
 
-    virtual sal_Bool    Collapse( SvLBoxEntry* pParent );
-    sal_Bool            IsInCollapse()const {return bInCollapse;}
+    virtual BOOL    Collapse( SvLBoxEntry* pParent );
+    BOOL			IsInCollapse()const {return bInCollapse;}
 };
 
 // struct OrderedEntry ---------------------------------------------------
@@ -154,7 +155,7 @@ typedef ::std::vector< OptionsNode* > VectorOfNodes;
 
 struct LastPageSaver
 {
-    sal_uInt16          m_nLastPageId;
+    USHORT          m_nLastPageId;
     rtl::OUString   m_sLastPageURL_Tools;
     rtl::OUString   m_sLastPageURL_ExtMgr;
 
@@ -176,39 +177,40 @@ typedef std::vector< ExtensionsTabPage* > VectorOfPages;
 class OfaTreeOptionsDialog : public SfxModalDialog
 {
 private:
-    OKButton        aOkPB;
+    OKButton		aOkPB;
     CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
-    PushButton      aBackPB;
+    HelpButton 		aHelpPB;
+    PushButton 		aBackPB;
 
-    FixedBorder     aHiddenGB;
-    FixedText       aPageTitleFT;
-    FixedLine       aLine1FL;
-    FixedText       aHelpFT;
-    FixedImage      aHelpImg;
+    FixedBorder		aHiddenGB;
+    FixedText 		aPageTitleFT;
+    FixedLine		aLine1FL;
+    FixedText		aHelpFT;
+    FixedImage 		aHelpImg;
 
     ImageList       aPageImages;
+    ImageList       aPageImagesHC;
 
-    ResStringArray  aHelpTextsArr;
+    ResStringArray	aHelpTextsArr;
 
-    OfaOptionsTreeListBox   aTreeLB;
+    OfaOptionsTreeListBox	aTreeLB;
 
-    String          sTitle;
-    String          sNotLoadedError;
+    String 			sTitle;
+    String			sNotLoadedError;
 
     SvLBoxEntry*    pCurrentPageEntry;
 
     // for the ColorTabPage
-    SfxItemSet*     pColorPageItemSet;
-    XColorTable*    pColorTab;
-    sal_uInt16          nChangeType;
-    sal_uInt16          nUnknownType;
-    sal_uInt16          nUnknownPos;
-    sal_Bool            bIsAreaTP;
+    SfxItemSet*		pColorPageItemSet;
+    XColorTable*	pColorTab;
+    USHORT			nChangeType;
+    USHORT 			nUnknownType;
+    USHORT			nUnknownPos;
+    BOOL			bIsAreaTP;
 
-    sal_Bool            bForgetSelection;
-    sal_Bool            bExternBrowserActive;
-    sal_Bool            bImageResized;
+    BOOL			bForgetSelection;
+    BOOL			bExternBrowserActive;
+    BOOL			bImageResized;
     bool            bInSelectHdl_Impl;
     bool            bIsFromExtensionManager;
 
@@ -222,11 +224,11 @@ private:
 
     static LastPageSaver*   pLastPageSaver;
 
-    SfxItemSet*     CreateItemSet( sal_uInt16 nId );
-    void            ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
+    SfxItemSet*		CreateItemSet( USHORT nId );
+    void			ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
     void            InitTreeAndHandler();
     void            Initialize( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame );
-    void            ResizeTreeLB( void );   // resizes dialog so that treelistbox has no horizontal scroll bar
+    void			ResizeTreeLB( void );	// resizes dialog so that treelistbox has no horizontal scroll bar
 
     void            LoadExtensionOptions( const rtl::OUString& rExtensionId );
     rtl::OUString   GetModuleIdentifier( const com::sun::star::uno::Reference<
@@ -262,16 +264,16 @@ public:
     OfaTreeOptionsDialog( Window* pParent, const rtl::OUString& rExtensionId );
     ~OfaTreeOptionsDialog();
 
-    OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const String& rPageName, sal_uInt16 nGroup );
-    sal_uInt16              AddGroup(   const String& rGroupName,  SfxShell* pCreateShell,
-                                    SfxModule* pCreateModule, sal_uInt16 nDialogId );
+    OptionsPageInfo*    AddTabPage( USHORT nId, const String& rPageName, USHORT nGroup );
+    USHORT              AddGroup(   const String& rGroupName,  SfxShell* pCreateShell,
+                                    SfxModule* pCreateModule, USHORT nDialogId );
 
     void                ActivateLastSelection();
-    void                ActivatePage( sal_uInt16 nResId );
+    void                ActivatePage( USHORT nResId );
     void                ActivatePage( const String& rPageURL );
     void                ApplyItemSets();
 
-    sal_uInt16              GetColorChanged() const { return nChangeType; }
+    USHORT              GetColorChanged() const { return nChangeType; }
     XColorTable*        GetColorTable() { return pColorTab; }
 
     // helper functions to call the language settings TabPage from the SpellDialog
@@ -282,34 +284,34 @@ public:
 
 class OfaPageResource : public Resource
 {
-    ResStringArray      aGeneralDlgAry;
-    ResStringArray      aInetDlgAry;
+    ResStringArray		aGeneralDlgAry;
+    ResStringArray	 	aInetDlgAry;
     ResStringArray      aLangDlgAry;
     ResStringArray      aTextDlgAry;
-    ResStringArray      aHTMLDlgAry;
-    ResStringArray      aCalcDlgAry;
-    ResStringArray      aStarMathDlgAry;
-    ResStringArray      aImpressDlgAry;
-    ResStringArray      aDrawDlgAry;
-    ResStringArray      aChartDlgAry;
-    ResStringArray      aFilterDlgAry;
-    ResStringArray      aDatasourcesDlgAry;
+    ResStringArray		aHTMLDlgAry;
+    ResStringArray		aCalcDlgAry;
+    ResStringArray		aStarMathDlgAry;
+    ResStringArray		aImpressDlgAry;
+    ResStringArray		aDrawDlgAry;
+    ResStringArray		aChartDlgAry;
+    ResStringArray		aFilterDlgAry;
+    ResStringArray		aDatasourcesDlgAry;
 
 public:
     OfaPageResource();
 
-    ResStringArray& GetGeneralArray()       {return aGeneralDlgAry;}
-    ResStringArray& GetInetArray()          {return aInetDlgAry;}
-    ResStringArray& GetLangArray()          {return aLangDlgAry;}
-    ResStringArray& GetTextArray()          {return aTextDlgAry;}
-    ResStringArray& GetHTMLArray()          {return aHTMLDlgAry;}
-    ResStringArray& GetCalcArray()          {return aCalcDlgAry;}
-    ResStringArray& GetStarMathArray()      {return aStarMathDlgAry;}
-    ResStringArray& GetImpressArray()       {return aImpressDlgAry;}
-    ResStringArray& GetDrawArray()          {return aDrawDlgAry;}
-    ResStringArray& GetChartArray()         {return aChartDlgAry;}
-    ResStringArray& GetFilterArray()        {return aFilterDlgAry;}
-    ResStringArray& GetDatasourcesArray()   {return aDatasourcesDlgAry;}
+    ResStringArray& GetGeneralArray() 		{return aGeneralDlgAry;}
+    ResStringArray& GetInetArray() 			{return aInetDlgAry;}
+    ResStringArray& GetLangArray()			{return aLangDlgAry;}
+    ResStringArray& GetTextArray() 			{return aTextDlgAry;}
+    ResStringArray& GetHTMLArray() 			{return aHTMLDlgAry;}
+    ResStringArray& GetCalcArray() 			{return aCalcDlgAry;}
+    ResStringArray& GetStarMathArray()		{return aStarMathDlgAry;}
+    ResStringArray& GetImpressArray() 		{return aImpressDlgAry;}
+    ResStringArray& GetDrawArray() 			{return aDrawDlgAry;}
+    ResStringArray& GetChartArray()			{return aChartDlgAry;}
+    ResStringArray& GetFilterArray() 		{return aFilterDlgAry;}
+    ResStringArray& GetDatasourcesArray()	{return aDatasourcesDlgAry;}
 };
 
 // class ExtensionsTabPage -----------------------------------------------
@@ -335,6 +337,12 @@ private:
 
 public:
     ExtensionsTabPage(
+        Window* pParent, const ResId&,
+        const rtl::OUString& rPageURL, const rtl::OUString& rEvtHdl,
+        const com::sun::star::uno::Reference<
+            com::sun::star::awt::XContainerWindowProvider >& rProvider );
+
+    ExtensionsTabPage(
         Window* pParent, WinBits nStyle,
         const rtl::OUString& rPageURL, const rtl::OUString& rEvtHdl,
         const com::sun::star::uno::Reference<
@@ -347,6 +355,7 @@ public:
 
     void            ResetPage();
     void            SavePage();
+    void            HideWindow();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

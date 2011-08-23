@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public final class TextNodeIterator extends NodeIterator {
     /**
      *  Standard constructor.
      *
-     *  @param  node  The initial root <code>Node</code>.
+     *  @param  initial  The initial root <code>Node</code>.
      */
     public TextNodeIterator(Node node) {
         super(null, node);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ SvpSalBitmap::~SvpSalBitmap()
 {
 }
 
-bool SvpSalBitmap::Create( const Size& rSize,
-                           sal_uInt16 nBitCount,
+bool SvpSalBitmap::Create( const Size& rSize, 
+                           USHORT nBitCount, 
                            const BitmapPalette& rPalette )
 {
     sal_uInt32 nFormat = SVP_DEFAULT_BITMAP_FORMAT;
@@ -112,7 +112,7 @@ bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
 }
 
 bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
-                           sal_uInt16 /*nNewBitCount*/ )
+                           USHORT /*nNewBitCount*/ )
 {
     return false;
 }
@@ -135,25 +135,25 @@ Size SvpSalBitmap::GetSize() const
         B2IVector aVec( m_aBitmap->getSize() );
         aSize = Size( aVec.getX(), aVec.getY() );
     }
-
+    
     return aSize;
 }
 
-sal_uInt16 SvpSalBitmap::GetBitCount() const
+USHORT SvpSalBitmap::GetBitCount() const
 {
-    sal_uInt16 nDepth = 0;
+    USHORT nDepth = 0;
     if( m_aBitmap.get() )
         nDepth = getBitCountFromScanlineFormat( m_aBitmap->getScanlineFormat() );
     return nDepth;
 }
-
+                        
 BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
 {
     BitmapBuffer* pBuf = NULL;
     if( m_aBitmap.get() )
     {
         pBuf = new BitmapBuffer();
-        sal_uInt16 nBitCount = 1;
+        USHORT nBitCount = 1;
         switch( m_aBitmap->getScanlineFormat() )
         {
             case Format::ONE_BIT_MSB_GREY:
@@ -222,7 +222,7 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
         pBuf->mnHeight          = aSize.getY();
         pBuf->mnScanlineSize    = m_aBitmap->getScanlineStride();
         pBuf->mnBitCount        = nBitCount;
-        pBuf->mpBits            = (sal_uInt8*)m_aBitmap->getBuffer().get();
+        pBuf->mpBits            = (BYTE*)m_aBitmap->getBuffer().get();
         if( nBitCount <= 8 )
         {
             if( m_aBitmap->getScanlineFormat() == Format::EIGHT_BIT_GREY ||
@@ -261,7 +261,7 @@ void SvpSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
     {
         // palette might have changed, clone device (but recycle
         // memory)
-        sal_uInt16 nBitCount = 0;
+        USHORT nBitCount = 0;
         switch( m_aBitmap->getScanlineFormat() )
         {
             case Format::ONE_BIT_MSB_GREY:
@@ -299,7 +299,7 @@ void SvpSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
             sal_uInt32 nEntries = 1U << nBitCount;
 
             boost::shared_ptr< std::vector<basebmp::Color> > pPal(
-                new std::vector<basebmp::Color>( nEntries,
+                new std::vector<basebmp::Color>( nEntries, 
                                                  basebmp::Color(COL_WHITE)));
             const sal_uInt32 nColors = std::min(
                 (sal_uInt32)pBuffer->maPalette.GetEntryCount(),
@@ -309,9 +309,9 @@ void SvpSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
                 const BitmapColor& rCol = pBuffer->maPalette[i];
                 (*pPal)[i] = basebmp::Color( rCol.GetRed(), rCol.GetGreen(), rCol.GetBlue() );
             }
-
-            m_aBitmap = basebmp::createBitmapDevice( m_aBitmap->getSize(),
-                                                     m_aBitmap->isTopDown(),
+            
+            m_aBitmap = basebmp::createBitmapDevice( m_aBitmap->getSize(), 
+                                                     m_aBitmap->isTopDown(), 
                                                      m_aBitmap->getScanlineFormat(),
                                                      m_aBitmap->getBuffer(),
                                                      pPal );

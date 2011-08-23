@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,13 +34,13 @@
 #include <sfx2/navigat.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include "helpid.hrc"
 
 SFX_IMPL_DOCKINGWINDOW( SfxNavigatorWrapper , SID_NAVIGATOR );
 
 SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParentWnd ,
-                                                sal_uInt16 nId ,
+                                                USHORT nId ,
                                                 SfxBindings* pBindings ,
                                                 SfxChildWinInfo* pInfo )
                     : SfxChildWindow( pParentWnd , nId )
@@ -53,7 +53,7 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParentWnd ,
     pWindow->SetOutputSizePixel( Size( 270, 240 ) );
 
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
-    SetHideNotDelete( sal_True );
+    SetHideNotDelete( TRUE );
 }
 
 SfxNavigator::SfxNavigator( SfxBindings* pBind ,
@@ -81,19 +81,19 @@ void SfxNavigator::Resizing( Size &rSize )
     SfxDockingWindow::Resizing( rSize );
 
     SfxChildWindowContext *pCon = GetChildWindow_Impl()->GetContext_Impl();
-    DBG_ASSERT( pCon, "No Context!" );
+    DBG_ASSERT( pCon, "Kein Context!" );
     if ( pCon )
         pCon->Resizing( rSize );
 }
 
-sal_Bool SfxNavigator::Close()
+BOOL SfxNavigator::Close()
 {
     SfxChildWindowContext *pCon = GetChildWindow_Impl()->GetContext_Impl();
-    DBG_ASSERT( pCon, "No Context!" );
+    DBG_ASSERT( pCon, "Kein Context!" );
     if ( !pCon || pCon->Close() )
         return SfxDockingWindow::Close();
     else
-        return sal_False;
+        return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

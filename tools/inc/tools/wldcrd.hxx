@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ private:
     ByteString      aWildString;
     char            cSepSymbol;
 
-    sal_uInt16          ImpMatch( const char *pWild, const char *pStr ) const;
+    USHORT          ImpMatch( const char *pWild, const char *pStr ) const;
 
 public:
                     WildCard();
@@ -53,11 +53,11 @@ public:
     const String    GetWildCard() const     { return UniString( aWildString, osl_getThreadTextEncoding()); }
     const String    operator ()() const     { return UniString( aWildString, osl_getThreadTextEncoding()); }
 
-    sal_Bool            Matches( const String& rStr ) const;
+    BOOL            Matches( const String& rStr ) const;
 
-    sal_Bool            operator ==( const String& rString ) const
+    BOOL            operator ==( const String& rString ) const
                         { return Matches( rString ); }
-    sal_Bool            operator !=( const String& rString ) const
+    BOOL            operator !=( const String& rString ) const
                         { return !( Matches( rString ) ); }
 
     WildCard&       operator =( const String& rString );

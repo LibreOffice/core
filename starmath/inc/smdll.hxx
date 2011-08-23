@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@ class SfxFilter;
 
 class SmDLL
 {
-    static bool bInitialized;
+    static BOOL bInitialized;
 public:
     static void Init();
     static void Exit();
 
-    static sal_uLong DetectFilter( SfxMedium& rMedium, const SfxFilter **ppFilter,
+    static ULONG DetectFilter( SfxMedium& rMedium, const SfxFilter **ppFilter,
                                SfxFilterFlags nMust, SfxFilterFlags nDont );
 };
 

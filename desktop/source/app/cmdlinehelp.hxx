@@ -6,18 +6,17 @@
 namespace desktop
 {
     void displayCmdlineHelp( void );
-    void displayVersion();
 #ifndef UNX
     class CmdlineHelpDialog : public ModalDialog
     {
     public:
         CmdlineHelpDialog ( void );
 
-        FixedText   m_ftHead;
-        FixedText   m_ftLeft;
-        FixedText   m_ftRight;
-        FixedText   m_ftBottom;
-        OKButton    m_btOk;
+        FixedText	m_ftHead;
+        FixedText	m_ftLeft;
+        FixedText	m_ftRight;
+        FixedText	m_ftBottom;
+        OKButton	m_btOk;
     };
 #endif
 }

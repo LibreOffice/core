@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,10 +29,10 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
-// uno
+// uno 
 import com.sun.star.lib.uno.helper.ComponentBase;
 import com.sun.star.uno.UnoRuntime;
 
@@ -43,10 +43,10 @@ import com.sun.star.lang.XSingleServiceFactory;
 // supported Interfaces
 import com.sun.star.linguistic2.XHyphenator;
 import com.sun.star.linguistic2.XLinguServiceEventBroadcaster;
-import com.sun.star.lang.XInitialization;
+import com.sun.star.lang.XInitialization;		
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XServiceDisplayName;
+import com.sun.star.lang.XServiceInfo;		
+import com.sun.star.lang.XServiceDisplayName;		
 
 // Exceptions
 import com.sun.star.uno.Exception;
@@ -101,10 +101,10 @@ public class SampleHyphenator extends ComponentBase implements
     {
         return aLoc1.Language.equals( aLoc2.Language ) &&
                aLoc1.Country .equals( aLoc2.Country )  &&
-               aLoc1.Variant .equals( aLoc2.Variant );
+               aLoc1.Variant .equals( aLoc2.Variant );  
     }
 
-    private boolean GetValueToUse(
+    private boolean GetValueToUse( 
             String          aPropName,
             boolean         bDefaultVal,
             PropertyValue[] aProps )
@@ -139,11 +139,11 @@ public class SampleHyphenator extends ComponentBase implements
         catch (Exception e) {
             bRes = bDefaultVal;
         }
-
+        
         return bRes;
     }
-
-    private short GetValueToUse(
+                    
+    private short GetValueToUse( 
             String          aPropName,
             short           nDefaultVal,
             PropertyValue[] aProps )
@@ -178,20 +178,20 @@ public class SampleHyphenator extends ComponentBase implements
         catch (Exception e) {
             nRes = nDefaultVal;
         }
-
+        
         return nRes;
     }
-
+    
     // __________ interface methods __________
-
-
+    
+    
     //*****************
     //XSupportedLocales
     //*****************
     public Locale[] getLocales()
         throws com.sun.star.uno.RuntimeException
     {
-        Locale aLocales[] =
+        Locale aLocales[] = 
         {
             new Locale( "de", "DE", "" ),
             new Locale( "en", "US", "" )
@@ -199,23 +199,23 @@ public class SampleHyphenator extends ComponentBase implements
 
         return aLocales;
     }
-
-    public boolean hasLocale( Locale aLocale )
+    
+    public boolean hasLocale( Locale aLocale ) 
         throws com.sun.star.uno.RuntimeException
     {
         boolean bRes = false;
         if ( IsEqual( aLocale, new Locale( "de", "DE", "" ) )  ||
              IsEqual( aLocale, new Locale( "en", "US", "" ) ))
             bRes = true;
-        return bRes;
+        return bRes;        
     }
-
+    
     //***********
     //XHyphenator
     //***********
     public XHyphenatedWord hyphenate(
             String aWord, Locale aLocale,
-            short nMaxLeading, PropertyValue[] aProperties )
+            short nMaxLeading, PropertyValue[] aProperties ) 
         throws com.sun.star.uno.RuntimeException,
                IllegalArgumentException
     {
@@ -239,14 +239,14 @@ public class SampleHyphenator extends ComponentBase implements
         short   nHyphMinWordLen             = GetValueToUse( "HyphMinWordLength", (short)5, aProperties );
 
         XHyphenatedWord xRes = null;
-
+        
         if (aWord.length() >= nHyphMinWordLen)
         {
             String  aHyphenatedWord = aWord;
             short   nHyphenationPos = -1;
             short   nHyphenPos = -1;
 
-            //!! This code needs to be replaced by code calling the actual
+            //!! This code needs to be replaced by code calling the actual 
             //!! implementation of your hyphenator
             if (IsEqual( aLocale, new Locale( "de", "DE", "" ) ) )
             {
@@ -254,7 +254,7 @@ public class SampleHyphenator extends ComponentBase implements
                 {
                     // Note: there is only one position where the word
                     // can be hyphenated...
-
+                    
                     aHyphenatedWord = "Schifffahrt";
                     nHyphenationPos = 4;
                     nHyphenPos = 5;
@@ -267,15 +267,15 @@ public class SampleHyphenator extends ComponentBase implements
             else if (IsEqual( aLocale, new Locale( "en", "US", "" ) ) )
             {
                 int nLast = aWord.length() - 1 - nHyphMinTrailing;
-
-                if ( aWord.equals( "waterfall" ) )
+                
+                if ( aWord.equals( "waterfall" ) ) 
                 {
                     if (4 <= nLast)
                         nHyphenationPos = nHyphenPos = 4;
                     else
                         nHyphenationPos = nHyphenPos = 1;
                 }
-                else if ( aWord.equals( "driving" ) )
+                else if ( aWord.equals( "driving" ) ) 
                 {
                     nHyphenationPos = nHyphenPos = 3;
                 }
@@ -284,19 +284,19 @@ public class SampleHyphenator extends ComponentBase implements
             // check if hyphenation pos is valid,
             // a value of -1 indicates that hyphenation is not possible
             if (  nHyphenationPos != -1 &&
-                !(nHyphenationPos <  nHyphMinLeading) &&
+                !(nHyphenationPos <  nHyphMinLeading) && 
                 !(nHyphenationPos >= aWord.length() - nHyphMinTrailing))
             {
-                xRes = new XHyphenatedWord_impl(aWord, aLocale,
+                xRes = new XHyphenatedWord_impl(aWord, aLocale, 
                                 nHyphenationPos, aHyphenatedWord, nHyphenPos);
             }
         }
         return xRes;
     }
-
+    
     public XHyphenatedWord queryAlternativeSpelling(
             String aWord, Locale aLocale,
-            short nIndex, PropertyValue[] aProperties )
+            short nIndex, PropertyValue[] aProperties ) 
         throws com.sun.star.uno.RuntimeException,
                IllegalArgumentException
     {
@@ -318,10 +318,10 @@ public class SampleHyphenator extends ComponentBase implements
         short   nHyphMinLeading             = GetValueToUse( "HyphMinLeading", (short)2, aProperties );
         short   nHyphMinTrailing            = GetValueToUse( "HyphMinTrailing", (short)2, aProperties );
         short   nHyphMinWordLen             = GetValueToUse( "HyphMinWordLength", (short)5, aProperties );
-
+        
         XHyphenatedWord xRes = null;
 
-        //!! This code needs to be replaced by code calling the actual
+        //!! This code needs to be replaced by code calling the actual 
         //!! implementation of your hyphenator
         if ( IsEqual( aLocale, new Locale( "de", "DE", "" ) ) )
         {
@@ -330,8 +330,8 @@ public class SampleHyphenator extends ComponentBase implements
             // is set.
             if (aWord.equals( "Schiffahrt" ) &&
                 bIsGermanPreReform && nIndex == 4)
-            {
-                xRes = new XHyphenatedWord_impl(aWord, aLocale,
+            {                
+                xRes = new XHyphenatedWord_impl(aWord, aLocale, 
                               (short)4, "Schifffahrt", (short)5 );
             }
         }
@@ -342,16 +342,16 @@ public class SampleHyphenator extends ComponentBase implements
 
         return xRes;
     }
-
+    
     public XPossibleHyphens createPossibleHyphens(
             String aWord, Locale aLocale,
-            PropertyValue[] aProperties )
+            PropertyValue[] aProperties ) 
         throws com.sun.star.uno.RuntimeException,
                IllegalArgumentException
     {
         if (IsEqual( aLocale, new Locale() ) || aWord.length() == 0)
             return null;
-
+        
         // linguistic is currently not allowed to throw exceptions
         // thus we return null which means 'word cannot be hyphenated'
         if (!hasLocale( aLocale ))
@@ -367,15 +367,15 @@ public class SampleHyphenator extends ComponentBase implements
         short   nHyphMinLeading             = GetValueToUse( "HyphMinLeading", (short)2, aProperties );
         short   nHyphMinTrailing            = GetValueToUse( "HyphMinTrailing", (short)2, aProperties );
         short   nHyphMinWordLen             = GetValueToUse( "HyphMinWordLength", (short)5, aProperties );
-
+        
         XPossibleHyphens xRes = null;
 
-        //!! This code needs to be replaced by code calling the actual
+        //!! This code needs to be replaced by code calling the actual 
         //!! implementation of your hyphenator
         if ( IsEqual( aLocale, new Locale( "de", "DE", "" ) ) )
         {
             if (bIsGermanPreReform && aWord.equals( "Schiffahrt" ))
-            {
+            {                
                 short aPos[] = new short[] { (short) 4 };
                 xRes = new XPossibleHyphens_impl(aWord, aLocale,
                             "Schiff=fahrt", aPos);
@@ -389,14 +389,14 @@ public class SampleHyphenator extends ComponentBase implements
         }
         else if ( IsEqual( aLocale, new Locale( "en", "US", "" ) ) )
         {
-            if ( aWord.equals( "waterfall" ) )
+            if ( aWord.equals( "waterfall" ) ) 
             {
                 short aPos[] = new short[]
                         { (short) 1, (short) 4 };
                 xRes = new XPossibleHyphens_impl(aWord, aLocale,
                             "wa=ter=fall", aPos);
             }
-            else if ( aWord.equals( "driving" ) )
+            else if ( aWord.equals( "driving" ) ) 
             {
                 short aPos[] = new short[]
                         { (short) 3 };
@@ -407,7 +407,7 @@ public class SampleHyphenator extends ComponentBase implements
 
         return xRes;
     }
-
+    
     //*****************************
     //XLinguServiceEventBroadcaster
     //*****************************
@@ -415,35 +415,35 @@ public class SampleHyphenator extends ComponentBase implements
             XLinguServiceEventListener xLstnr )
         throws com.sun.star.uno.RuntimeException
     {
-        boolean bRes = false;
+        boolean bRes = false;   
         if (!bDisposing && xLstnr != null)
             bRes = aPropChgHelper.addLinguServiceEventListener( xLstnr );
         return bRes;
     }
-
+    
     public boolean removeLinguServiceEventListener(
-            XLinguServiceEventListener xLstnr )
+            XLinguServiceEventListener xLstnr ) 
         throws com.sun.star.uno.RuntimeException
     {
-        boolean bRes = false;
+        boolean bRes = false;   
         if (!bDisposing && xLstnr != null)
             bRes = aPropChgHelper.removeLinguServiceEventListener( xLstnr );
         return bRes;
-    }
+    }            
 
     //********************
     // XServiceDisplayName
     //********************
-    public String getServiceDisplayName( Locale aLocale )
+    public String getServiceDisplayName( Locale aLocale ) 
         throws com.sun.star.uno.RuntimeException
     {
-        return "Java Samples";
+        return "Java Samples";                                                    
     }
 
     //****************
     // XInitialization
     //****************
-    public void initialize( Object[] aArguments )
+    public void initialize( Object[] aArguments ) 
         throws com.sun.star.uno.Exception,
                com.sun.star.uno.RuntimeException
     {
@@ -457,7 +457,7 @@ public class SampleHyphenator extends ComponentBase implements
         }
     }
 
-
+    
     //*************
     // XServiceInfo
     //*************
@@ -479,17 +479,17 @@ public class SampleHyphenator extends ComponentBase implements
     {
         return _aSvcImplName;
     }
-
+        
     public String[] getSupportedServiceNames()
         throws com.sun.star.uno.RuntimeException
     {
         return getSupportedServiceNames_Static();
     }
-
+    
     // __________ static things __________
 
-    public static String _aSvcImplName = SampleHyphenator.class.getName();
-
+    public static String _aSvcImplName = "com.sun.star.linguistic2.JavaSamples.SampleHyphenator";
+    
     public static String[] getSupportedServiceNames_Static()
     {
         String[] aResult = { "com.sun.star.linguistic2.Hyphenator" };
@@ -531,22 +531,18 @@ public class SampleHyphenator extends ComponentBase implements
      * @param   xRegKey       the registryKey
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
-
-//     public static boolean __writeRegistryServiceInfo(
-//             com.sun.star.registry.XRegistryKey xRegKey )
-//     {
-//         boolean bResult = true;
-//         String[] aServices = getSupportedServiceNames_Static();
-//         int i, nLength = aServices.length;
-//         for( i = 0; i < nLength; ++i )
-//         {
-//             bResult = bResult && com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-//                 _aSvcImplName, aServices[i], xRegKey );
-//         }
-//         return bResult;
-//     }
+    public static boolean __writeRegistryServiceInfo( 
+            com.sun.star.registry.XRegistryKey xRegKey )
+    {
+        boolean bResult = true;
+        String[] aServices = getSupportedServiceNames_Static();
+        int i, nLength = aServices.length;
+        for( i = 0; i < nLength; ++i )
+        {
+            bResult = bResult && com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
+                _aSvcImplName, aServices[i], xRegKey );
+        }
+        return bResult;
+    }
 }
 

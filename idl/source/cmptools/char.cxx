@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idl.hxx"
 
+/****************** I N C L U D E S **************************************/
 #include <ctype.h>
 #include <string.h>
 
@@ -36,6 +37,7 @@
 
 #include <char.hxx>
 
+/****************** D A T E N ********************************************/
 static unsigned char EqualTab[ 256 ] = {
   0,   1,   2,   3,   4,   5,   6,   7,   8,   9,
  10,  11,  12,  13,  14,  15,  16,  17,  18,  19,
@@ -69,6 +71,10 @@ static unsigned char EqualTab[ 256 ] = {
 |*
 |*    RscChar::GetTable()
 |*
+|*    Beschreibung
+|*    Ersterstellung    MM 08.08.91
+|*    Letzte Aenderung  MM 08.08.91
+|*
 *************************************************************************/
 Table *         pCharTable  = NULL;
 unsigned char * pChange     = EqualTab;
@@ -80,20 +86,20 @@ char * SvChar::GetTable( CharSet nSource , CharSet nDest )
     if( !pCharTable )
         pCharTable = new Table();
 
-    sal_uInt8 * pSet;
-    pSet = (sal_uInt8 *)pCharTable->Get( ((sal_uLong)nSource << 16) + (sal_uLong)nDest );
+    BYTE * pSet;
+    pSet = (BYTE *)pCharTable->Get( ((ULONG)nSource << 16) + (ULONG)nDest );
 
     if( !pSet )
     {
-        pSet = new sal_uInt8[ 256 ];
+        pSet = new BYTE[ 256 ];
         memcpy( pSet, EqualTab, sizeof( EqualTab ) );
-        for( sal_uInt16 i = 128; i < 256; i++ )
+        for( USHORT i = 128; i < 256; i++ )
         {
             char c = ByteString::Convert( pSet[i], nSource, nDest );
             if( c )
-                pSet[ i ] = (sal_uInt8)c;
+                pSet[ i ] = (BYTE)c;
         }
-        pCharTable->Insert( ((sal_uLong)nSource << 16) + (sal_uLong)nDest, pSet );
+        pCharTable->Insert( ((ULONG)nSource << 16) + (ULONG)nDest, pSet );
     }
 
     return (char *)pSet;

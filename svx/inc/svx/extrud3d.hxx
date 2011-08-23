@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ private:
     friend class sdr::properties::E3dExtrudeProperties;
 
     // Geometrie, die dieses Objekt bestimmt
-    basegfx::B2DPolyPolygon         maExtrudePolygon;
+    basegfx::B2DPolyPolygon			maExtrudePolygon;
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
@@ -59,40 +59,40 @@ public:
     E3dExtrudeObj();
 
     // PercentDiagonal: 0..100, before 0.0..0.5
-    sal_uInt16 GetPercentDiagonal() const
+    sal_uInt16 GetPercentDiagonal() const 
         { return ((const Svx3DPercentDiagonalItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_PERCENT_DIAGONAL)).GetValue(); }
 
     // BackScale: 0..100, before 0.0..1.0
-    sal_uInt16 GetPercentBackScale() const
+    sal_uInt16 GetPercentBackScale() const 
         { return ((const Svx3DBackscaleItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_BACKSCALE)).GetValue(); }
 
     // BackScale: 0..100, before 0.0..1.0
-    sal_uInt32 GetExtrudeDepth() const
+    sal_uInt32 GetExtrudeDepth() const 
         { return ((const Svx3DDepthItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_DEPTH)).GetValue(); }
 
     // #107245# GetSmoothNormals() for bExtrudeSmoothed
-    sal_Bool GetSmoothNormals() const
+    sal_Bool GetSmoothNormals() const 
         { return ((const Svx3DSmoothNormalsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_SMOOTH_NORMALS)).GetValue(); }
 
     // #107245# GetSmoothLids() for bExtrudeSmoothFrontBack
-    sal_Bool GetSmoothLids() const
+    sal_Bool GetSmoothLids() const 
         { return ((const Svx3DSmoothLidsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_SMOOTH_LIDS)).GetValue(); }
 
     // #107245# GetCharacterMode() for bExtrudeCharacterMode
-    sal_Bool GetCharacterMode() const
+    sal_Bool GetCharacterMode() const 
         { return ((const Svx3DCharacterModeItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CHARACTER_MODE)).GetValue(); }
 
     // #107245# GetCloseFront() for bExtrudeCloseFront
-    sal_Bool GetCloseFront() const
+    sal_Bool GetCloseFront() const 
         { return ((const Svx3DCloseFrontItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_FRONT)).GetValue(); }
 
     // #107245# GetCloseBack() for bExtrudeCloseBack
-    sal_Bool GetCloseBack() const
+    sal_Bool GetCloseBack() const 
         { return ((const Svx3DCloseBackItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK)).GetValue(); }
 
-    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual UINT16 GetObjIdentifier() const;
 
-    virtual E3dExtrudeObj* Clone() const;
+    virtual void operator=(const SdrObject&);
 
     // TakeObjName...() is for the display in the UI (for example "3 frames selected")
     virtual void TakeObjNameSingul(String& rName) const;
@@ -102,10 +102,10 @@ public:
     void SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew);
     const basegfx::B2DPolyPolygon &GetExtrudePolygon() { return maExtrudePolygon; }
 
-    virtual sal_Bool IsBreakObjPossible();
+    virtual BOOL IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };
 
-#endif          // _E3D_EXTRUD3D_HXX
+#endif			// _E3D_EXTRUD3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

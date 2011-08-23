@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
- *                          class DbgRect
+ *							class DbgRect
  *************************************************************************/
 
 class DbgRect
@@ -75,21 +75,21 @@ inline DbgRect::DbgRect( OutputDevice *pOutDev, const Rectangle &rRect,
  * dieser wird in _FrmInit angelegt und in _FrmFinit zerstoert.
  * */
 
-sal_Bool SwRootFrm::FlushVout()
+BOOL SwRootFrm::FlushVout()
 {
     if( SwRootFrm::pVout->IsFlushable() )
     {
         SwRootFrm::pVout->_Flush();
-        return sal_True;
+        return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool SwRootFrm::HasSameRect( const SwRect& rRect )
+BOOL SwRootFrm::HasSameRect( const SwRect& rRect )
 {
     if( SwRootFrm::pVout->IsFlushable() )
         return ( rRect == SwRootFrm::pVout->GetOrgRect() );
-    return sal_False;
+    return FALSE;
 }
 
 /** method to set mapping/pixel offset for virtual output device
@@ -135,18 +135,18 @@ void SetMappingForVirtDev(  const Point&    _rNewOrigin,
 
 
 /*************************************************************************
- *                          SwVOut::DoesFit()
+ *							SwVOut::DoesFit()
  *************************************************************************/
 
 // rSize muss in Pixel-Koordinaten vorliegen!
-sal_Bool SwLayVout::DoesFit( const Size &rNew )
+BOOL SwLayVout::DoesFit( const Size &rNew )
 {
     if( rNew.Height() > VIRTUALHEIGHT )
-        return sal_False;
+        return FALSE;
     if( rNew.Width() <= 0 || rNew.Height() <= 0 )
-        return sal_False;
+        return FALSE;
     if( rNew.Width() <= aSize.Width() )
-        return sal_True;
+        return TRUE;
     if( !pVirDev )
     {
         pVirDev = new VirtualDevice();
@@ -166,21 +166,21 @@ sal_Bool SwLayVout::DoesFit( const Size &rNew )
             delete pVirDev;
             pVirDev = NULL;
             aSize.Width() = 0;
-            return sal_False;
+            return FALSE;
         }
     }
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************
- *                         SwLayVout::Enter
+ *						   SwLayVout::Enter
  *************************************************************************/
 /// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
 ///     in order to return value of class member variable <aRect>, if virtual
 ///     output is used.
 ///     <aRect> contains the rectangle that represents the area the virtual
 ///     output device is used for and that is flushed at the end.
-void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, sal_Bool bOn )
+void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, BOOL bOn )
 {
     Flush();
 
@@ -241,7 +241,7 @@ void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, sal_Bool bOn )
 }
 
 /*************************************************************************
- *                         SwLayVout::Flush()
+ *						   SwLayVout::Flush()
  *************************************************************************/
 
 void SwLayVout::_Flush()

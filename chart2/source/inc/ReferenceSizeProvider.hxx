@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ public:
 
     /** Sets the ReferencePageSize according to the internal settings of this
         class at the XPropertySet, and the adapted font sizes if bAdaptFontSizes
-        is </sal_True>.
+        is </TRUE>.
      */
     SAL_DLLPRIVATE void setValuesAtPropertySet(
         const ::com::sun::star::uno::Reference<

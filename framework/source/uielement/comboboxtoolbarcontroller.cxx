@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,13 +32,13 @@
 #include "uielement/comboboxtoolbarcontroller.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include "uielement/toolbar.hxx"
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -50,7 +50,7 @@
 #include <com/sun/star/util/Color.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/toolboxcontroller.hxx>
 #include <osl/mutex.hxx>
@@ -165,7 +165,7 @@ ComboboxToolbarController::ComboboxToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
-    sal_uInt16                                   nID,
+    USHORT                                   nID,
     sal_Int32                                nWidth,
     const ::rtl::OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
@@ -415,7 +415,7 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
                 com::sun::star::util::Color aColor(0);
                 if ( rControlCommand.Arguments[i].Value >>= aColor )
                 {
-                    ::Color aBackColor( static_cast< sal_uInt32 >( aColor ));
+                    ::Color aBackColor( static_cast< UINT32 >( aColor ));
                     m_pComboBox->SetControlBackground( aBackColor );
                 }
                 break;
@@ -431,7 +431,7 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
                 com::sun::star::util::Color aColor(0);
                 if ( rControlCommand.Arguments[i].Value >>= aColor )
                 {
-                    ::Color aForeColor( static_cast< sal_uInt32 >( aColor ));
+                    ::Color aForeColor( static_cast< UINT32 >( aColor ));
                     m_pComboBox->SetControlForeground( aForeColor );
                 }
                 break;

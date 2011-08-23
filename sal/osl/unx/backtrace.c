@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@
 
 #else
 
-#error Unknown Solaris target platform.
+#error Unknown Solaris target platform. 
 
 #endif /* defined SPARC or INTEL */
 
@@ -105,7 +105,7 @@ int backtrace( void **buffer, int max_frames )
 
 void backtrace_symbols_fd( void **buffer, int size, int fd )
 {
-    FILE    *fp = fdopen( fd, "w" );
+    FILE	*fp = fdopen( fd, "w" );
 
     if ( fp )
     {
@@ -113,8 +113,8 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 
         for ( pFramePtr = buffer; size > 0 && pFramePtr && *pFramePtr; pFramePtr++, size-- )
         {
-            Dl_info     dli;
-            ptrdiff_t   offset;
+            Dl_info		dli;
+            ptrdiff_t	offset;
 
             if ( 0 != dladdr( *pFramePtr, &dli ) )
             {
@@ -140,7 +140,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 #endif /* defined SOLARIS */
 
 
-#if defined FREEBSD || defined NETBSD || defined OPENBSD || defined(DRAGONFLY)
+#if defined FREEBSD || defined NETBSD || defined OPENBSD
 #include <dlfcn.h>
 #include <pthread.h>
 #include <setjmp.h>
@@ -174,15 +174,15 @@ int backtrace( void **buffer, int max_frames )
 
 void backtrace_symbols_fd( void **buffer, int size, int fd )
 {
-    FILE    *fp = fdopen( fd, "w" );
+    FILE	*fp = fdopen( fd, "w" );
 
     if ( fp )
     {
         void **pFramePtr;
         for ( pFramePtr = buffer; size > 0 && pFramePtr && *pFramePtr; pFramePtr++, size-- )
         {
-            Dl_info     dli;
-            ptrdiff_t   offset;
+            Dl_info		dli;
+            ptrdiff_t	offset;
 
             if ( 0 != dladdr( *pFramePtr, &dli ) )
             {
@@ -259,7 +259,7 @@ int backtrace( void **buffer, int max_frames )
 
 void backtrace_symbols_fd( void **buffer, int size, int fd )
 {
-    FILE    *fp = fdopen( fd, "w" );
+    FILE	*fp = fdopen( fd, "w" );
 
     if ( fp )
     {
@@ -267,12 +267,11 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 
         for ( pFramePtr = buffer; size > 0 && pFramePtr && *pFramePtr; pFramePtr++, size-- )
         {
-            Dl_info     dli;
+            Dl_info		dli;
+            ptrdiff_t	offset;
 
             if ( 0 != dladdr( *pFramePtr, &dli ) )
             {
-                ptrdiff_t offset;
-
                 if ( dli.dli_fname && dli.dli_fbase )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
@@ -300,9 +299,9 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 #include <stdio.h>
 #include "backtrace.h"
 
-typedef unsigned     ptrdiff_t;
+typedef unsigned	 ptrdiff_t;
 
-/* glib backtrace is only available on MacOsX 10.5 or higher
+/* glib backtrace is only available on MacOsX 10.5 or higher 
    so we do it on our own */
 
 int backtrace( void **buffer, int max_frames )
@@ -310,7 +309,7 @@ int backtrace( void **buffer, int max_frames )
     void **frame = (void **)__builtin_frame_address(0);
     void **bp = ( void **)(*frame);
     void *ip = frame[1];
-    int i;
+    int	i;
 
     for ( i = 0; bp && ip && i < max_frames; i++ )
     {
@@ -326,7 +325,7 @@ int backtrace( void **buffer, int max_frames )
 
 void backtrace_symbols_fd( void **buffer, int size, int fd )
 {
-    FILE    *fp = fdopen( fd, "w" );
+    FILE	*fp = fdopen( fd, "w" );
 
     if ( fp )
     {
@@ -334,12 +333,11 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 
         for ( pFramePtr = buffer; size > 0 && pFramePtr && *pFramePtr; pFramePtr++, size-- )
         {
-            Dl_info     dli;
+            Dl_info		dli;
+            ptrdiff_t	offset;
 
             if ( 0 != dladdr( *pFramePtr, &dli ) )
             {
-                ptrdiff_t offset;
-
                 if ( dli.dli_fname && dli.dli_fbase )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;

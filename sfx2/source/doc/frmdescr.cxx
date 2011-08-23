@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@
 
 DBG_NAME(SfxFrameDescriptor);
 
-#define VERSION (sal_uInt16) 3
+#define VERSION (USHORT) 3
 
 struct SfxFrameDescriptor_Impl
 {
-    Wallpaper*  pWallpaper;
-    SfxItemSet* pArgs;
-    sal_Bool        bEditable;
+    Wallpaper*	pWallpaper;
+    SfxItemSet*	pArgs;
+    BOOL		bEditable;
 
-    SfxFrameDescriptor_Impl() : pWallpaper( NULL ), pArgs( NULL ), bEditable( sal_True ) {}
+    SfxFrameDescriptor_Impl() : pWallpaper( NULL ), pArgs( NULL ), bEditable( TRUE ) {}
     ~SfxFrameDescriptor_Impl()
     {
         delete pWallpaper;
@@ -62,10 +62,10 @@ SfxFrameDescriptor::SfxFrameDescriptor() :
     eSizeSelector( SIZE_ABS ),
     nHasBorder( BORDER_YES ),
     nItemId( 0 ),
-    bResizeHorizontal( sal_True ),
-    bResizeVertical( sal_True ),
-    bHasUI( sal_True ),
-    bReadOnly( sal_False )
+    bResizeHorizontal( TRUE ),
+    bResizeVertical( TRUE ),
+    bHasUI( TRUE ),
+    bReadOnly( FALSE )
 {
     DBG_CTOR(SfxFrameDescriptor, 0);
 
@@ -109,31 +109,31 @@ void SfxFrameDescriptor::SetActualURL( const INetURLObject& rURL )
     SetActualURL(String(rURL.GetMainURL( INetURLObject::DECODE_TO_IURI )));
 }
 
-void SfxFrameDescriptor::SetEditable( sal_Bool bSet )
+void SfxFrameDescriptor::SetEditable( BOOL bSet )
 {
     pImp->bEditable = bSet;
 }
 
-sal_Bool SfxFrameDescriptor::IsEditable() const
+BOOL SfxFrameDescriptor::IsEditable() const
 {
     return pImp->bEditable;
 }
 
-sal_Bool SfxFrameDescriptor::CompareOriginal( SfxFrameDescriptor& rDescr ) const
+BOOL SfxFrameDescriptor::CompareOriginal( SfxFrameDescriptor& rDescr ) const
 {
     if( aURL != rDescr.aURL )
-        return sal_False;
+        return FALSE;
     else
-        return sal_True;
+        return TRUE;
 }
 
-sal_Bool SfxFrameDescriptor::CheckContent() const
+BOOL SfxFrameDescriptor::CheckContent() const
 {
-    sal_Bool bRet = !( aURL == aActualURL );
+    BOOL bRet = !( aURL == aActualURL );
     return bRet;
 }
 
-void SfxFrameDescriptor::UnifyContent( sal_Bool bTakeActual )
+void SfxFrameDescriptor::UnifyContent( BOOL bTakeActual )
 {
     if ( bTakeActual )
         aURL = aActualURL;
@@ -141,7 +141,7 @@ void SfxFrameDescriptor::UnifyContent( sal_Bool bTakeActual )
         aActualURL = aURL;
 }
 
-SfxFrameDescriptor* SfxFrameDescriptor::Clone( sal_Bool bWithIds ) const
+SfxFrameDescriptor* SfxFrameDescriptor::Clone( BOOL bWithIds ) const
 {
     SfxFrameDescriptor *pFrame = new SfxFrameDescriptor;
 
@@ -162,7 +162,7 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone( sal_Bool bWithIds ) const
         pFrame->pImp->pWallpaper = new Wallpaper( *pImp->pWallpaper );
     if( pImp->pArgs )
     {
-        // Currently in the clone of SfxAllItemSets there is still a bug ...
+        // Aktuell ist im Clone von SfxAllItemSets noch ein Bug...
         pFrame->pImp->pArgs = new SfxAllItemSet( SFX_APP()->GetPool() );
         pFrame->pImp->pArgs->Put(*pImp->pArgs);
     }
@@ -175,9 +175,9 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone( sal_Bool bWithIds ) const
     return pFrame;
 }
 
-sal_uInt16 SfxFrameDescriptor::GetWinBits() const
+USHORT SfxFrameDescriptor::GetWinBits() const
 {
-    sal_uInt16 nBits = 0;
+    USHORT nBits = 0;
     if ( eSizeSelector == SIZE_REL )
         nBits |= SWIB_RELATIVESIZE;
     if ( eSizeSelector == SIZE_PERCENT )
@@ -189,7 +189,7 @@ sal_uInt16 SfxFrameDescriptor::GetWinBits() const
     return nBits;
 }
 
-sal_Bool SfxFrameDescriptor::HasFrameBorder() const
+BOOL SfxFrameDescriptor::HasFrameBorder() const
 {
     return (nHasBorder & BORDER_YES) != 0;
 }
@@ -227,7 +227,7 @@ const Wallpaper* SfxFrameDescriptor::GetWallpaper() const
     return pImp->pWallpaper;
 }
 
-sal_uInt16 SfxFrameDescriptor::GetItemPos() const
+USHORT SfxFrameDescriptor::GetItemPos() const
 {
     return USHRT_MAX;
 }
@@ -248,16 +248,16 @@ SfxFrameProperties::SfxFrameProperties( const SfxFrameDescriptor *pD )
     , bHasBorder( pD->HasFrameBorder() )
     , bBorderSet( pD->IsFrameBorderSet() )
     , bResizable( pD->IsResizable() )
-    , bSetResizable( sal_False )
-    , bIsRootSet( sal_False )
-    , bIsInColSet( sal_False )
-    , bHasBorderInherited( sal_False )
+    , bSetResizable( FALSE )
+    , bIsRootSet( FALSE )
+    , bIsInColSet( FALSE )
+    , bHasBorderInherited( FALSE )
     , pFrame( pD->Clone() )
 {
-    bBorderSet = sal_True;
+    bBorderSet = TRUE;
 }
 
-SfxFrameProperties& SfxFrameProperties::operator =(
+SfxFrameProperties&	SfxFrameProperties::operator =(
     const SfxFrameProperties &rProp )
 {
     aURL = rProp.aURL;
@@ -315,11 +315,11 @@ SfxPoolItem* SfxFrameDescriptorItem::Clone( SfxItemPool* ) const
 SfxItemPresentation SfxFrameDescriptorItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
+    XubString& 			rText,
     const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
     return SFX_ITEM_PRESENTATION_NONE;

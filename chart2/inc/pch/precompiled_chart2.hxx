@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -269,7 +269,7 @@
 #include "unotools/configitem.hxx"
 #include "unotools/eventlisteneradapter.hxx"
 
-#include "tools/fldunit.hxx"
+#include "vcl/fldunit.hxx"
 
 #include "osl/mutex.hxx"
 //---MARKER---

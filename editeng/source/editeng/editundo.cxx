@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,11 +38,11 @@
 
 DBG_NAME( EditUndo )
 
-#define MAX_UNDOS   100     // From this quantity it may be deleted ....
-#define MIN_UNDOS   50      // so much has to be left ...
+#define MAX_UNDOS	100		// ab dieser Menge darf geloescht werden....
+#define MIN_UNDOS	50		// soviel muss stehen bleiben...
 
-#define NO_UNDO         0xFFFF
-#define GROUP_NOTFOUND  0xFFFF
+#define NO_UNDO			0xFFFF
+#define GROUP_NOTFOUND	0xFFFF
 
 TYPEINIT1( EditUndo, SfxUndoAction );
 TYPEINIT1( EditUndoDelContent, EditUndo );
@@ -58,7 +58,7 @@ TYPEINIT1( EditUndoSetAttribs, EditUndo );
 TYPEINIT1( EditUndoTransliteration, EditUndo );
 TYPEINIT1( EditUndoMarkSelection, EditUndo );
 
-void lcl_DoSetSelection( EditView* pView, sal_uInt16 nPara )
+void lcl_DoSetSelection( EditView* pView, USHORT nPara )
 {
     EPaM aEPaM( nPara, 0 );
     EditPaM aPaM( pView->GetImpEditEngine()->CreateEditPaM( aEPaM ) );
@@ -67,15 +67,18 @@ void lcl_DoSetSelection( EditView* pView, sal_uInt16 nPara )
     pView->GetImpEditView()->SetEditSelection( aSel );
 }
 
+// -----------------------------------------------------------------------
+// EditUndoManager
+// ------------------------------------------------------------------------
 EditUndoManager::EditUndoManager( ImpEditEngine* p )
 {
     pImpEE = p;
 }
 
-sal_Bool EditUndoManager::Undo()
+BOOL __EXPORT EditUndoManager::Undo( USHORT nCount )
 {
     if ( GetUndoActionCount() == 0 )
-        return sal_False;
+        return FALSE;
 
     DBG_ASSERT( pImpEE->GetActiveView(), "Active View?" );
 
@@ -85,20 +88,20 @@ sal_Bool EditUndoManager::Undo()
             pImpEE->SetActiveView( pImpEE->GetEditViews().GetObject(0) );
         else
         {
-            OSL_FAIL("Undo in engine is not possible without a View! ");
-            return sal_False;
+            DBG_ERROR( "Undo in Engine ohne View nicht moeglich!" );
+            return FALSE;
         }
     }
 
-    pImpEE->GetActiveView()->GetImpEditView()->DrawSelection(); // Remove the old selection
+    pImpEE->GetActiveView()->GetImpEditView()->DrawSelection();	// alte Selektion entfernen
 
-    pImpEE->SetUndoMode( sal_True );
-    sal_Bool bDone = SfxUndoManager::Undo();
-    pImpEE->SetUndoMode( sal_False );
+    pImpEE->SetUndoMode( TRUE );
+    BOOL bDone = SfxUndoManager::Undo( nCount );
+    pImpEE->SetUndoMode( FALSE );
 
     EditSelection aNewSel( pImpEE->GetActiveView()->GetImpEditView()->GetEditSelection() );
-    DBG_ASSERT( !aNewSel.IsInvalid(), "Invalid selection after Undo () ");
-    DBG_ASSERT( !aNewSel.DbgIsBuggy( pImpEE->GetEditDoc() ), "Broken selection afte Undo () ");
+    DBG_ASSERT( !aNewSel.IsInvalid(), "Ungueltige Selektion nach Undo()" );
+    DBG_ASSERT( !aNewSel.DbgIsBuggy( pImpEE->GetEditDoc() ), "Kaputte Selektion nach Undo()" );
 
     aNewSel.Min() = aNewSel.Max();
     pImpEE->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
@@ -107,10 +110,10 @@ sal_Bool EditUndoManager::Undo()
     return bDone;
 }
 
-sal_Bool EditUndoManager::Redo()
+BOOL __EXPORT EditUndoManager::Redo( USHORT nCount )
 {
     if ( GetRedoActionCount() == 0 )
-        return sal_False;
+        return FALSE;
 
     DBG_ASSERT( pImpEE->GetActiveView(), "Active View?" );
 
@@ -120,20 +123,20 @@ sal_Bool EditUndoManager::Redo()
             pImpEE->SetActiveView( pImpEE->GetEditViews().GetObject(0) );
         else
         {
-            OSL_FAIL( "Redo in Engine ohne View nicht moeglich!" );
-            return sal_False;
+            DBG_ERROR( "Redo in Engine ohne View nicht moeglich!" );
+            return FALSE;
         }
     }
 
-    pImpEE->GetActiveView()->GetImpEditView()->DrawSelection(); // Remove the old selection
+    pImpEE->GetActiveView()->GetImpEditView()->DrawSelection();	// alte Selektion entfernen
 
-    pImpEE->SetUndoMode( sal_True );
-    sal_Bool bDone = SfxUndoManager::Redo();
-    pImpEE->SetUndoMode( sal_False );
+    pImpEE->SetUndoMode( TRUE );
+    BOOL bDone = SfxUndoManager::Redo( nCount );
+    pImpEE->SetUndoMode( FALSE );
 
     EditSelection aNewSel( pImpEE->GetActiveView()->GetImpEditView()->GetEditSelection() );
-    DBG_ASSERT( !aNewSel.IsInvalid(), "Invalid selection after Undo () ");
-    DBG_ASSERT( !aNewSel.DbgIsBuggy( pImpEE->GetEditDoc() ), "Broken selection afte Undo () ");
+    DBG_ASSERT( !aNewSel.IsInvalid(), "Ungueltige Selektion nach Undo()" );
+    DBG_ASSERT( !aNewSel.DbgIsBuggy( pImpEE->GetEditDoc() ), "Kaputte Selektion nach Redo()" );
 
     aNewSel.Min() = aNewSel.Max();
     pImpEE->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
@@ -142,7 +145,10 @@ sal_Bool EditUndoManager::Redo()
     return bDone;
 }
 
-EditUndo::EditUndo( sal_uInt16 nI, ImpEditEngine* p )
+// -----------------------------------------------------------------------
+// EditUndo
+// ------------------------------------------------------------------------
+EditUndo::EditUndo( USHORT nI, ImpEditEngine* p )
 {
     DBG_CTOR( EditUndo, 0 );
     nId = nI;
@@ -154,18 +160,18 @@ EditUndo::~EditUndo()
     DBG_DTOR( EditUndo, 0 );
 }
 
-sal_uInt16 EditUndo::GetId() const
+USHORT __EXPORT EditUndo::GetId() const
 {
     DBG_CHKTHIS( EditUndo, 0 );
     return nId;
 }
 
-sal_Bool EditUndo::CanRepeat(SfxRepeatTarget&) const
+BOOL __EXPORT EditUndo::CanRepeat(SfxRepeatTarget&) const
 {
-    return sal_False;
+    return FALSE;
 }
 
-XubString EditUndo::GetComment() const
+XubString __EXPORT EditUndo::GetComment() const
 {
     XubString aComment;
     if ( pImpEE )
@@ -176,12 +182,15 @@ XubString EditUndo::GetComment() const
     return aComment;
 }
 
-EditUndoDelContent::EditUndoDelContent( ImpEditEngine* _pImpEE, ContentNode* pNode, sal_uInt16 n )
+// -----------------------------------------------------------------------
+// EditUndoDelContent
+// ------------------------------------------------------------------------
+EditUndoDelContent::EditUndoDelContent( ImpEditEngine* _pImpEE, ContentNode* pNode, USHORT n )
                     : EditUndo( EDITUNDO_DELCONTENT, _pImpEE )
 {
     pContentNode = pNode;
     nNode = n;
-    bDelObject = sal_True;
+    bDelObject = TRUE;
 }
 
 EditUndoDelContent::~EditUndoDelContent()
@@ -190,35 +199,35 @@ EditUndoDelContent::~EditUndoDelContent()
         delete pContentNode;
 }
 
-void EditUndoDelContent::Undo()
+void __EXPORT EditUndoDelContent::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     GetImpEditEngine()->InsertContent( pContentNode, nNode );
-    bDelObject = sal_False; // belongs to the Engine again
+    bDelObject = FALSE;	// gehoert wieder der Engine
     EditSelection aSel( EditPaM( pContentNode, 0 ), EditPaM( pContentNode, pContentNode->Len() ) );
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
 }
 
-void EditUndoDelContent::Redo()
+void __EXPORT EditUndoDelContent::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
 
     ImpEditEngine* _pImpEE = GetImpEditEngine();
 
-    // pNode is no longer correct, if the paragraphs where merged
-    // in between Undos
+    // pNode stimmt nicht mehr, falls zwischendurch Undos, in denen
+    // Absaetze verschmolzen sind.
     pContentNode = _pImpEE->GetEditDoc().SaveGetObject( nNode );
     DBG_ASSERT( pContentNode, "EditUndoDelContent::Redo(): Node?!" );
 
     delete _pImpEE->GetParaPortions()[nNode];
     _pImpEE->GetParaPortions().Remove( nNode );
 
-    // Do not delete node, depends on the undo!
+    // Node nicht loeschen, haengt im Undo!
     _pImpEE->GetEditDoc().Remove( nNode );
     if( _pImpEE->IsCallParaInsertedOrDeleted() )
         _pImpEE->GetEditEnginePtr()->ParagraphDeleted( nNode );
 
-    DeletedNodeInfo* pInf = new DeletedNodeInfo( (sal_uLong)pContentNode, nNode );
+    DeletedNodeInfo* pInf = new DeletedNodeInfo( (ULONG)pContentNode, nNode );
     _pImpEE->aDeletedNodes.Insert( pInf, _pImpEE->aDeletedNodes.Count() );
     _pImpEE->UpdateSelections();
 
@@ -228,20 +237,23 @@ void EditUndoDelContent::Redo()
     DBG_ASSERT( pN && ( pN != pContentNode ), "?! RemoveContent !? " );
     EditPaM aPaM( pN, pN->Len() );
 
-    bDelObject = sal_True;  // belongs to the Engine again
+    bDelObject = TRUE;	// gehoert wieder dem Undo
 
     _pImpEE->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
-EditUndoConnectParas::EditUndoConnectParas( ImpEditEngine* _pImpEE, sal_uInt16 nN, sal_uInt16 nSP,
+// -----------------------------------------------------------------------
+// EditUndoConnectParas
+// ------------------------------------------------------------------------
+EditUndoConnectParas::EditUndoConnectParas( ImpEditEngine* _pImpEE, USHORT nN, USHORT nSP,
                                             const SfxItemSet& rLeftParaAttribs, const SfxItemSet& rRightParaAttribs,
-                                            const SfxStyleSheet* pLeftStyle, const SfxStyleSheet* pRightStyle, sal_Bool bBkwrd )
-                    :   EditUndo( EDITUNDO_CONNECTPARAS, _pImpEE ),
+                                            const SfxStyleSheet* pLeftStyle, const SfxStyleSheet* pRightStyle, BOOL bBkwrd )
+                    : 	EditUndo( EDITUNDO_CONNECTPARAS, _pImpEE ),
                         aLeftParaAttribs( rLeftParaAttribs ),
                         aRightParaAttribs( rRightParaAttribs )
 {
-    nNode   = nN;
-    nSepPos = nSP;
+    nNode	= nN;
+    nSepPos	= nSP;
 
     if ( pLeftStyle )
     {
@@ -261,15 +273,16 @@ EditUndoConnectParas::~EditUndoConnectParas()
 {
 }
 
-void EditUndoConnectParas::Undo()
+void __EXPORT EditUndoConnectParas::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
 
-    // For SplitContent ParagraphInserted can not be called yet because the
-    // Outliner relies on the attributes to initialize the depth
+    // Bei SplitContent darf noch kein ParagraphInserted gerufen werden,
+    // weil der Outliner sich auf die Attribute verlaesst um die Tiefe
+    // des Absatzes zu initialisieren
 
-    sal_Bool bCall = GetImpEditEngine()->IsCallParaInsertedOrDeleted();
-    GetImpEditEngine()->SetCallParaInsertedOrDeleted( sal_False );
+    BOOL bCall = GetImpEditEngine()->IsCallParaInsertedOrDeleted();
+    GetImpEditEngine()->SetCallParaInsertedOrDeleted( FALSE );
 
     EditPaM aPaM = GetImpEditEngine()->SplitContent( nNode, nSepPos );
     GetImpEditEngine()->SetParaAttribs( nNode, aLeftParaAttribs );
@@ -279,10 +292,10 @@ void EditUndoConnectParas::Undo()
     if ( GetImpEditEngine()->IsCallParaInsertedOrDeleted() )
         GetImpEditEngine()->GetEditEnginePtr()->ParagraphInserted( nNode+1 );
 
-    if ( GetImpEditEngine()->GetStyleSheetPool() )
+    if ( GetImpEditEngine()->GetStyleSheetPool() ) 
     {
         if ( aLeftStyleName.Len() )
-            GetImpEditEngine()->SetStyleSheet( (sal_uInt16)nNode, (SfxStyleSheet*)GetImpEditEngine()->GetStyleSheetPool()->Find( aLeftStyleName, eLeftStyleFamily ) );
+            GetImpEditEngine()->SetStyleSheet( (USHORT)nNode, (SfxStyleSheet*)GetImpEditEngine()->GetStyleSheetPool()->Find( aLeftStyleName, eLeftStyleFamily ) );
         if ( aRightStyleName.Len() )
             GetImpEditEngine()->SetStyleSheet( nNode+1, (SfxStyleSheet*)GetImpEditEngine()->GetStyleSheetPool()->Find( aRightStyleName, eRightStyleFamily ) );
     }
@@ -290,48 +303,54 @@ void EditUndoConnectParas::Undo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
-void EditUndoConnectParas::Redo()
+void __EXPORT EditUndoConnectParas::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Np Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     EditPaM aPaM = GetImpEditEngine()->ConnectContents( nNode, bBackward );
 
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
-EditUndoSplitPara::EditUndoSplitPara( ImpEditEngine* _pImpEE, sal_uInt16 nN, sal_uInt16 nSP )
+// -----------------------------------------------------------------------
+// EditUndoSplitPara
+// ------------------------------------------------------------------------
+EditUndoSplitPara::EditUndoSplitPara( ImpEditEngine* _pImpEE, USHORT nN, USHORT nSP )
                     : EditUndo( EDITUNDO_SPLITPARA, _pImpEE )
 {
-    nNode   = nN;
-    nSepPos = nSP;
+    nNode	= nN;
+    nSepPos	= nSP;
 }
 
 EditUndoSplitPara::~EditUndoSplitPara()
 {
 }
 
-void EditUndoSplitPara::Undo()
+void __EXPORT EditUndoSplitPara::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    EditPaM aPaM = GetImpEditEngine()->ConnectContents( nNode, sal_False );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
+    EditPaM aPaM = GetImpEditEngine()->ConnectContents( nNode, FALSE );
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
-void EditUndoSplitPara::Redo()
+void __EXPORT EditUndoSplitPara::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     EditPaM aPaM = GetImpEditEngine()->SplitContent( nNode, nSepPos );
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
+// -----------------------------------------------------------------------
+// EditUndoInsertChars
+// ------------------------------------------------------------------------
 EditUndoInsertChars::EditUndoInsertChars( ImpEditEngine* _pImpEE, const EPaM& rEPaM, const XubString& rStr )
                     : EditUndo( EDITUNDO_INSERTCHARS, _pImpEE ),
                         aEPaM( rEPaM ), aText( rStr )
 {
 }
 
-void EditUndoInsertChars::Undo()
+void __EXPORT EditUndoInsertChars::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     EditPaM aPaM( GetImpEditEngine()->CreateEditPaM( aEPaM ) );
     EditSelection aSel( aPaM, aPaM );
     aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.Len();
@@ -339,7 +358,7 @@ void EditUndoInsertChars::Undo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aNewPaM, aNewPaM ) );
 }
 
-void EditUndoInsertChars::Redo()
+void __EXPORT EditUndoInsertChars::Redo()
 {
     DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     EditPaM aPaM( GetImpEditEngine()->CreateEditPaM( aEPaM ) );
@@ -349,31 +368,34 @@ void EditUndoInsertChars::Redo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aNewPaM ) );
 }
 
-sal_Bool EditUndoInsertChars::Merge( SfxUndoAction* pNextAction )
+BOOL __EXPORT EditUndoInsertChars::Merge( SfxUndoAction* pNextAction )
 {
     if ( !pNextAction->ISA( EditUndoInsertChars ) )
-        return sal_False;
+        return FALSE;
 
     EditUndoInsertChars* pNext = (EditUndoInsertChars*)pNextAction;
 
     if ( aEPaM.nPara != pNext->aEPaM.nPara )
-        return sal_False;
+        return FALSE;
 
     if ( ( aEPaM.nIndex + aText.Len() ) == pNext->aEPaM.nIndex )
     {
         aText += pNext->aText;
-        return sal_True;
+        return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
+// -----------------------------------------------------------------------
+// EditUndoRemoveChars
+// ------------------------------------------------------------------------
 EditUndoRemoveChars::EditUndoRemoveChars( ImpEditEngine* _pImpEE, const EPaM& rEPaM, const XubString& rStr )
                     : EditUndo( EDITUNDO_REMOVECHARS, _pImpEE ),
                         aEPaM( rEPaM ), aText( rStr )
 {
 }
 
-void EditUndoRemoveChars::Undo()
+void __EXPORT EditUndoRemoveChars::Undo()
 {
     DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     EditPaM aPaM( GetImpEditEngine()->CreateEditPaM( aEPaM ) );
@@ -383,9 +405,9 @@ void EditUndoRemoveChars::Undo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
 }
 
-void EditUndoRemoveChars::Redo()
+void __EXPORT EditUndoRemoveChars::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     EditPaM aPaM( GetImpEditEngine()->CreateEditPaM( aEPaM ) );
     EditSelection aSel( aPaM, aPaM );
     aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.Len();
@@ -393,11 +415,14 @@ void EditUndoRemoveChars::Redo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewPaM );
 }
 
+// -----------------------------------------------------------------------
+// EditUndoInsertFeature
+// ------------------------------------------------------------------------
 EditUndoInsertFeature::EditUndoInsertFeature( ImpEditEngine* _pImpEE, const EPaM& rEPaM, const SfxPoolItem& rFeature)
                     : EditUndo( EDITUNDO_INSERTFEATURE, _pImpEE ), aEPaM( rEPaM )
 {
     pFeature = rFeature.Clone();
-    DBG_ASSERT( pFeature, "Feature could not be duplicated: EditUndoInsertFeature" );
+    DBG_ASSERT( pFeature, "Feature konnte nicht dupliziert werden: EditUndoInsertFeature" );
 }
 
 EditUndoInsertFeature::~EditUndoInsertFeature()
@@ -405,21 +430,21 @@ EditUndoInsertFeature::~EditUndoInsertFeature()
     delete pFeature;
 }
 
-void EditUndoInsertFeature::Undo()
+void __EXPORT EditUndoInsertFeature::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     EditPaM aPaM( GetImpEditEngine()->CreateEditPaM( aEPaM ) );
     EditSelection aSel( aPaM, aPaM );
-    // Attributes are then corrected implicitly by the document ...
+    // Attribute werden dort implizit vom Dokument korrigiert...
     aSel.Max().GetIndex()++;
-    GetImpEditEngine()->ImpDeleteSelection( aSel );
-    aSel.Max().GetIndex()--;    // For Selection
+    EditPaM aNewPaM = GetImpEditEngine()->ImpDeleteSelection( aSel );
+    aSel.Max().GetIndex()--;	// Fuer Selektion
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
 }
 
-void EditUndoInsertFeature::Redo()
+void __EXPORT EditUndoInsertFeature::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     EditPaM aPaM( GetImpEditEngine()->CreateEditPaM( aEPaM ) );
     EditSelection aSel( aPaM, aPaM );
     GetImpEditEngine()->ImpInsertFeature( aSel, *pFeature );
@@ -429,9 +454,12 @@ void EditUndoInsertFeature::Redo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
 }
 
+// -----------------------------------------------------------------------
+// EditUndoMoveParagraphs
+// ------------------------------------------------------------------------
 EditUndoMoveParagraphs::EditUndoMoveParagraphs
-                            ( ImpEditEngine* _pImpEE, const Range& rParas, sal_uInt16 n )
-                            :   EditUndo( EDITUNDO_MOVEPARAGRAPHS, _pImpEE ),
+                            ( ImpEditEngine* _pImpEE, const Range& rParas, USHORT n )
+                            : 	EditUndo( EDITUNDO_MOVEPARAGRAPHS, _pImpEE ),
                                 nParagraphs( rParas )
 {
     nDest = n;
@@ -441,9 +469,9 @@ EditUndoMoveParagraphs::~EditUndoMoveParagraphs()
 {
 }
 
-void EditUndoMoveParagraphs::Undo()
+void __EXPORT EditUndoMoveParagraphs::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     Range aTmpRange( nParagraphs );
     long nTmpDest = aTmpRange.Min();
 
@@ -460,18 +488,21 @@ void EditUndoMoveParagraphs::Undo()
     else
         nTmpDest += aTmpRange.Len();
 
-    EditSelection aNewSel( GetImpEditEngine()->MoveParagraphs( aTmpRange, (sal_uInt16)nTmpDest, 0 ) );
+    EditSelection aNewSel( GetImpEditEngine()->MoveParagraphs( aTmpRange, (USHORT)nTmpDest, 0 ) );
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
-void EditUndoMoveParagraphs::Redo()
+void __EXPORT EditUndoMoveParagraphs::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     EditSelection aNewSel( GetImpEditEngine()->MoveParagraphs( nParagraphs, nDest, 0 ) );
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
-EditUndoSetStyleSheet::EditUndoSetStyleSheet( ImpEditEngine* _pImpEE, sal_uInt16 nP,
+// -----------------------------------------------------------------------
+// EditUndoSetStyleSheet
+// ------------------------------------------------------------------------
+EditUndoSetStyleSheet::EditUndoSetStyleSheet( ImpEditEngine* _pImpEE, USHORT nP,
                         const XubString& rPrevName, SfxStyleFamily ePrevFam,
                         const XubString& rNewName, SfxStyleFamily eNewFam,
                         const SfxItemSet& rPrevParaAttribs )
@@ -487,23 +518,26 @@ EditUndoSetStyleSheet::~EditUndoSetStyleSheet()
 {
 }
 
-void EditUndoSetStyleSheet::Undo()
+void __EXPORT EditUndoSetStyleSheet::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     GetImpEditEngine()->SetStyleSheet( nPara, (SfxStyleSheet*)GetImpEditEngine()->GetStyleSheetPool()->Find( aPrevName, ePrevFamily ) );
     GetImpEditEngine()->SetParaAttribs( nPara, aPrevParaAttribs );
     lcl_DoSetSelection( GetImpEditEngine()->GetActiveView(), nPara );
 }
 
-void EditUndoSetStyleSheet::Redo()
+void __EXPORT EditUndoSetStyleSheet::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     GetImpEditEngine()->SetStyleSheet( nPara, (SfxStyleSheet*)GetImpEditEngine()->GetStyleSheetPool()->Find( aNewName, eNewFamily ) );
     lcl_DoSetSelection( GetImpEditEngine()->GetActiveView(), nPara );
 }
 
-EditUndoSetParaAttribs::EditUndoSetParaAttribs( ImpEditEngine* _pImpEE, sal_uInt16 nP, const SfxItemSet& rPrevItems, const SfxItemSet& rNewItems )
-    : EditUndo( EDITUNDO_PARAATTRIBS, _pImpEE ),
+// -----------------------------------------------------------------------
+// EditUndoSetParaAttribs
+// ------------------------------------------------------------------------
+EditUndoSetParaAttribs::EditUndoSetParaAttribs( ImpEditEngine* _pImpEE, USHORT nP, const SfxItemSet& rPrevItems, const SfxItemSet& rNewItems )
+    : EditUndo( EDITUNDO_PARAATTRIBS, _pImpEE ), 
       aPrevItems( rPrevItems ),
       aNewItems(rNewItems )
 {
@@ -514,44 +548,49 @@ EditUndoSetParaAttribs::~EditUndoSetParaAttribs()
 {
 }
 
-void EditUndoSetParaAttribs::Undo()
+void __EXPORT EditUndoSetParaAttribs::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     GetImpEditEngine()->SetParaAttribs( nPara, aPrevItems );
     lcl_DoSetSelection( GetImpEditEngine()->GetActiveView(), nPara );
 }
 
-void EditUndoSetParaAttribs::Redo()
+void __EXPORT EditUndoSetParaAttribs::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     GetImpEditEngine()->SetParaAttribs( nPara, aNewItems );
     lcl_DoSetSelection( GetImpEditEngine()->GetActiveView(), nPara );
 }
 
+// -----------------------------------------------------------------------
+// EditUndoSetAttribs
+// ------------------------------------------------------------------------
 EditUndoSetAttribs::EditUndoSetAttribs( ImpEditEngine* _pImpEE, const ESelection& rESel, const SfxItemSet& rNewItems )
-    : EditUndo( EDITUNDO_ATTRIBS, _pImpEE ),
+    : EditUndo( EDITUNDO_ATTRIBS, _pImpEE ), 
       aESel( rESel ),
       aNewAttribs( rNewItems )
 {
-    // When EditUndoSetAttribs actually is a RemoveAttribs this could be
-    // /recognize by the empty itemset, but then it would have to be caught in
-    // its own place, which possible a setAttribs does with an empty itemset.
-    bSetIsRemove = sal_False;
-    bRemoveParaAttribs = sal_False;
+    // Wenn das EditUndoSetAttribs eigentlich ein RemoveAttribs ist, koennte
+    // man das eigentlich an einem leeren ItemSet erkennen, aber dann muesste
+    // an einigen Stellen abgefangen werden, das ggf. ein SetAttribs mit einem
+    // leeren ItemSet gemacht wird.
+    // => Ich habe lieber diesen Member spendiert...
+    bSetIsRemove = FALSE;
+    bRemoveParaAttribs = FALSE;
     nRemoveWhich = 0;
     nSpecial = 0;
 }
 
 EditUndoSetAttribs::~EditUndoSetAttribs()
 {
-    // Get Items from Pool...
+    // Items aus Pool holen...
     SfxItemPool* pPool = aNewAttribs.GetPool();
-    sal_uInt16 nContents = aPrevAttribs.Count();
-    for ( sal_uInt16 n = 0; n < nContents; n++ )
+    USHORT nContents = aPrevAttribs.Count();
+    for ( USHORT n = 0; n < nContents; n++ )
     {
         ContentAttribsInfo* pInf = aPrevAttribs[n];
         DBG_ASSERT( pInf, "Undo_DTOR (SetAttribs): pInf = NULL!" );
-        for ( sal_uInt16 nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
+        for ( USHORT nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
         {
             EditCharAttrib* pX = pInf->GetPrevCharAttribs()[nAttr];
             DBG_ASSERT( pX, "Undo_DTOR (SetAttribs): pX = NULL!" );
@@ -562,32 +601,32 @@ EditUndoSetAttribs::~EditUndoSetAttribs()
     }
 }
 
-void EditUndoSetAttribs::Undo()
+void __EXPORT EditUndoSetAttribs::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     ImpEditEngine* _pImpEE = GetImpEditEngine();
-    sal_Bool bFields = sal_False;
-    for ( sal_uInt16 nPara = aESel.nStartPara; nPara <= aESel.nEndPara; nPara++ )
+    BOOL bFields = FALSE;
+    for ( USHORT nPara = aESel.nStartPara; nPara <= aESel.nEndPara; nPara++ )
     {
-        ContentAttribsInfo* pInf = aPrevAttribs[ (sal_uInt16)(nPara-aESel.nStartPara) ];
+        ContentAttribsInfo* pInf = aPrevAttribs[ (USHORT)(nPara-aESel.nStartPara) ];
         DBG_ASSERT( pInf, "Undo (SetAttribs): pInf = NULL!" );
 
-        // first the paragraph attributes ...
+        // erstmal die Absatzattribute...
         _pImpEE->SetParaAttribs( nPara, pInf->GetPrevParaAttribs() );
 
-        // Then the character attributes ...
-        // Remove all attributes including features, are later re-established.
-        _pImpEE->RemoveCharAttribs( nPara, 0, sal_True );
+        // Dann die Zeichenattribute...
+        // Alle Attribute inkl. Features entfernen, werden wieder neu eingestellt.
+        _pImpEE->RemoveCharAttribs( nPara, 0, TRUE );
         DBG_ASSERT( _pImpEE->GetEditDoc().SaveGetObject( nPara ), "Undo (SetAttribs): pNode = NULL!" );
         ContentNode* pNode = _pImpEE->GetEditDoc().GetObject( nPara );
-        for ( sal_uInt16 nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
+        for ( USHORT nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
         {
             EditCharAttrib* pX = pInf->GetPrevCharAttribs()[nAttr];
             DBG_ASSERT( pX, "Redo (SetAttribs): pX = NULL!" );
-            // is automatically "poolsized"
+            // wird autom. 'eingepoolt'.
             _pImpEE->GetEditDoc().InsertAttrib( pNode, pX->GetStart(), pX->GetEnd(), *pX->GetItem() );
             if ( pX->Which() == EE_FEATURE_FIELD )
-                bFields = sal_True;
+                bFields = TRUE;
         }
     }
     if ( bFields )
@@ -595,9 +634,9 @@ void EditUndoSetAttribs::Undo()
     ImpSetSelection( GetImpEditEngine()->GetActiveView() );
 }
 
-void EditUndoSetAttribs::Redo()
+void __EXPORT EditUndoSetAttribs::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     ImpEditEngine* _pImpEE = GetImpEditEngine();
 
     EditSelection aSel( _pImpEE->CreateSel( aESel ) );
@@ -616,6 +655,9 @@ void EditUndoSetAttribs::ImpSetSelection( EditView* /*pView*/ )
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
 }
 
+// -----------------------------------------------------------------------
+// EditUndoTransliteration
+// ------------------------------------------------------------------------
 EditUndoTransliteration::EditUndoTransliteration( ImpEditEngine* _pImpEE, const ESelection& rESel, sal_Int32 nM )
     : EditUndo( EDITUNDO_TRANSLITERATE, _pImpEE ), aOldESel( rESel )
 {
@@ -628,9 +670,9 @@ EditUndoTransliteration::~EditUndoTransliteration()
     delete pTxtObj;
 }
 
-void EditUndoTransliteration::Undo()
+void __EXPORT EditUndoTransliteration::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
 
     ImpEditEngine* _pImpEE = GetImpEditEngine();
 
@@ -668,9 +710,9 @@ void EditUndoTransliteration::Undo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
-void EditUndoTransliteration::Redo()
+void __EXPORT EditUndoTransliteration::Redo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     ImpEditEngine* _pImpEE = GetImpEditEngine();
 
     EditSelection aSel( _pImpEE->CreateSel( aOldESel ) );
@@ -678,6 +720,9 @@ void EditUndoTransliteration::Redo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
+// -----------------------------------------------------------------------
+// EditUndoMarkSelection
+// ------------------------------------------------------------------------
 EditUndoMarkSelection::EditUndoMarkSelection( ImpEditEngine* _pImpEE, const ESelection& rSel )
     : EditUndo( EDITUNDO_MARKSELECTION, _pImpEE ), aSelection( rSel )
 {
@@ -687,10 +732,10 @@ EditUndoMarkSelection::~EditUndoMarkSelection()
 {
 }
 
-void EditUndoMarkSelection::Undo()
+void __EXPORT EditUndoMarkSelection::Undo()
 {
-    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    if ( GetImpEditEngine()->GetActiveView() )
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
+    if ( GetImpEditEngine()->GetActiveView() ) 
     {
         if ( GetImpEditEngine()->IsFormatted() )
             GetImpEditEngine()->GetActiveView()->SetSelection( aSelection );
@@ -699,9 +744,9 @@ void EditUndoMarkSelection::Undo()
     }
 }
 
-void EditUndoMarkSelection::Redo()
+void __EXPORT EditUndoMarkSelection::Redo()
 {
-    // For redo unimportant, because at the beginning of the undo parentheses
+    // Fuer Redo unwichtig, weil am Anfang der Undo-Klammerung
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

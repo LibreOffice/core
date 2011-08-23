@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,10 @@
 
 using namespace com::sun::star;
 
-sal_uLong SvxImportMSVBasic::SaveOrDelMSVBAStorage( sal_Bool bSaveInto,
+ULONG SvxImportMSVBasic::SaveOrDelMSVBAStorage( BOOL bSaveInto,
                                                 const String& rStorageName )
 {
-    sal_uLong nRet = ERRCODE_NONE;
+    ULONG nRet = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
     String aDstStgName( GetMSBasicStorageName() );
     SotStorageRef xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName,
@@ -70,7 +70,7 @@ sal_uLong SvxImportMSVBasic::SaveOrDelMSVBAStorage( sal_Bool bSaveInto,
 
 // check if the MS-VBA-Storage exists in the RootStorage of the DocShell.
 // If it exists, then return the WarningId for losing the information.
-sal_uLong SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocSh)
+ULONG SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocSh)
 {
     uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
     SvStorageRef xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, GetMSBasicStorageName(),

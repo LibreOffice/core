@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 ModelessDialog RID_SCDLG_NAMES
 {
     OutputSize = TRUE ;
-    HelpId = CMD_FID_DEFINE_NAME ;
+    HelpId = FID_DEFINE_NAME ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 222 , 165 ) ;
+    Size = MAP_APPFONT ( 222 , 142 ) ;
     Text [ en-US ] = "Define Names" ;
     Moveable = TRUE ;
-     // Closeable = TRUE;   // Dieser Dialog hat einen Cancel-Button !
+     // Closeable = TRUE;	// Dieser Dialog hat einen Cancel-Button !
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 166 , 6 ) ;
@@ -56,48 +56,30 @@ ModelessDialog RID_SCDLG_NAMES
     };
     PushButton BTN_ADD
     {
-        HelpID = "sc:PushButton:RID_SCDLG_NAMES:BTN_ADD";
         Pos = MAP_APPFONT ( 166 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     PushButton BTN_REMOVE
     {
-        HelpID = "sc:PushButton:RID_SCDLG_NAMES:BTN_REMOVE";
         Pos = MAP_APPFONT ( 166 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
-
-    FixedText FT_SCOPE
-    {
-        Pos = MAP_APPFONT( 6, 8 );
-        Size = MAP_APPFONT( 40, 8 );
-        Text [ en-US ] = "Scope" ;
-    };
-
-    ListBox LB_SCOPE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 7 ) ;
-        Size = MAP_APPFONT ( 100 , 80 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-    };
-
     FixedLine FL_NAME
     {
-        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 154 , 8 ) ;
         Text [ en-US ] = "Name" ;
     };
     ComboBox ED_NAME
     {
-        HelpID = "sc:ComboBox:RID_SCDLG_NAMES:ED_NAME";
-        Pos = MAP_APPFONT ( 12 , 37 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 145 , 92 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
@@ -105,30 +87,27 @@ ModelessDialog RID_SCDLG_NAMES
     };
     FixedLine FL_ASSIGN
     {
-        Pos = MAP_APPFONT ( 6 , 135 ) ;
+        Pos = MAP_APPFONT ( 6 , 112 ) ;
         Size = MAP_APPFONT ( 154 , 8 ) ;
         Text [ en-US ] = "Assigned to" ;
     };
     Edit ED_ASSIGN
     {
-        HelpID = "sc:Edit:RID_SCDLG_NAMES:ED_ASSIGN";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 146 ) ;
+        Pos = MAP_APPFONT ( 12 , 123 ) ;
         Size = MAP_APPFONT ( 131 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_ASSIGN
     {
-        HelpID = "sc:ImageButton:RID_SCDLG_NAMES:RB_ASSIGN";
-        Pos = MAP_APPFONT ( 145 , 145 ) ;
+        Pos = MAP_APPFONT ( 145 , 122 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
     };
     MoreButton BTN_MORE
     {
-        HelpID = "sc:MoreButton:RID_SCDLG_NAMES:BTN_MORE";
-        Pos = MAP_APPFONT ( 166 , 146 ) ;
+        Pos = MAP_APPFONT ( 166 , 122 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
@@ -136,60 +115,51 @@ ModelessDialog RID_SCDLG_NAMES
     };
     FixedLine FL_TYPE
     {
-        Pos = MAP_APPFONT ( 6 , 168 ) ;
+        Pos = MAP_APPFONT ( 6 , 142 ) ;
         Size = MAP_APPFONT ( 154 , 8 ) ;
         Text [ en-US ] = "Area type" ;
     };
     CheckBox BTN_PRINTAREA
     {
-        HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_PRINTAREA";
-        Pos = MAP_APPFONT ( 12 , 179 ) ;
+        Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "~Print range" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_CRITERIA
     {
-        HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_CRITERIA";
-        Pos = MAP_APPFONT ( 12 , 193 ) ;
+        Pos = MAP_APPFONT ( 12 , 167 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "~Filter" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_ROWHEADER
     {
-        HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_ROWHEADER";
-        Pos = MAP_APPFONT ( 75 , 193 ) ;
+        Pos = MAP_APPFONT ( 75 , 167 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "Repeat ~row" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_COLHEADER
     {
-        HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_COLHEADER";
-        Pos = MAP_APPFONT ( 75 , 179 ) ;
+        Pos = MAP_APPFONT ( 75 , 153 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "Repeat ~column" ;
         TabStop = TRUE ;
     };
-
     String STR_ADD
     {
+        /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
         Text [ en-US ] = "~Add" ;
     };
-
     String STR_MODIFY
     {
+        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~Žndern */
         Text [ en-US ] = "Mod~ify" ;
     };
-
     String STR_INVALIDSYMBOL
     {
+        /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Ausdruck : Ung³ltiger Ausdruck */
         Text [ en-US ] = "Invalid expression" ;
-    };
-
-    String STR_GLOBAL_SCOPE
-    {
-        Text [ en-US ] = "Document (Global)";
     };
 };

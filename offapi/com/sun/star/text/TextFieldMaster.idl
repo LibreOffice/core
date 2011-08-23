@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ published service TextFieldMaster
      */
     [optional] interface com::sun::star::beans::XPropertySet;
     //------------------------------------------------------------------------
-    /** determines the name of the field master. The name is void as long as the
+    /** determins the name of the field master. The name is void as long as the
      instance is not member of the document structure. When the value is being set
      the instance is inserted into the document and the name cannot be changed afterwards.
      That does not apply to the Database text field master.

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,69 +24,69 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_XConnectorShape_idl__
-#define __com_sun_star_drawing_XConnectorShape_idl__
-
-#ifndef __com_sun_star_drawing_XShape_idl__
-#include <com/sun/star/drawing/XShape.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XConnectableShape_idl__
-#include <com/sun/star/drawing/XConnectableShape.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_ConnectionType_idl__
-#include <com/sun/star/drawing/ConnectionType.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_XConnectorShape_idl__ 
+#define __com_sun_star_drawing_XConnectorShape_idl__ 
+ 
+#ifndef __com_sun_star_drawing_XShape_idl__ 
+#include <com/sun/star/drawing/XShape.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_XConnectableShape_idl__ 
+#include <com/sun/star/drawing/XConnectableShape.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_ConnectionType_idl__ 
+#include <com/sun/star/drawing/ConnectionType.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 /** @deprecated
  */
 published interface XConnectorShape: com::sun::star::drawing::XShape
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::drawing::XConnectorShape::connectStart
     /** connects the start of this instance
      */
-    void connectStart( [in] com::sun::star::drawing::XConnectableShape xShape,
-             [in] com::sun::star::drawing::ConnectionType nPos );
-
-    //-------------------------------------------------------------------------
-
+    void connectStart( [in] com::sun::star::drawing::XConnectableShape xShape, 
+             [in] com::sun::star::drawing::ConnectionType nPos ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::drawing::XConnectorShape::connectEnd
     /** connects the end of this instance.
      */
-    void connectEnd( [in] com::sun::star::drawing::XConnectableShape xShape,
-             [in] com::sun::star::drawing::ConnectionType nPos );
-
-    //-------------------------------------------------------------------------
-
+    void connectEnd( [in] com::sun::star::drawing::XConnectableShape xShape, 
+             [in] com::sun::star::drawing::ConnectionType nPos ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::drawing::XConnectorShape::disconnectBegin
     /** disconnects the given <type>Shape</type> from the start of
         this instance.
      */
-    void disconnectBegin( [in] com::sun::star::drawing::XConnectableShape xShape );
-
-    //-------------------------------------------------------------------------
-
+    void disconnectBegin( [in] com::sun::star::drawing::XConnectableShape xShape ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::drawing::XConnectorShape::disconnectEnd
-    /** disconnects the given <type>Shape</type> from the end of
+    /** disconnects the given <type>Shape</type> from the end of 
         this instance.
      */
-    void disconnectEnd( [in] com::sun::star::drawing::XConnectableShape xShape );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void disconnectEnd( [in] com::sun::star::drawing::XConnectableShape xShape ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

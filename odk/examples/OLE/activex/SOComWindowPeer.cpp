@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 // SOComWindowPeer.cpp : Implementation of CHelpApp and DLL registration.
@@ -38,19 +38,18 @@
 #include "stdafx2.h"
 #include "so_activex.h"
 #include "SOComWindowPeer.h"
-#include <sal/macros.h>
 
 /////////////////////////////////////////////////////////////////////////////
 //
 
 STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID* arr[] =
+    static const IID* arr[] = 
     {
         &IID_ISOComWindowPeer,
     };
 
-    for (int i=0;i<SAL_N_ELEMENTS(arr);i++)
+    for (int i=0;i<sizeof(arr)/sizeof(arr[0]);i++)
     {
         if (InlineIsEqualGUID(*arr[i],riid))
             return S_OK;

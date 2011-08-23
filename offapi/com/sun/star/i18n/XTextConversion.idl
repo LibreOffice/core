@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
         @param nStartPos
             The start position in aText for the conversion
         @param nLength
-            The length of the portion in aText for the conversion
+            The length of the partion in aText for the conversion
         @param aLocal
             Locale the conversion is referring to.
         @param nTextConversionType
@@ -84,18 +84,18 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
             or when the locale is not supported.
     */
     TextConversionResult getConversions(
-            [in] string aText,
+            [in] string aText, 
             [in] long nStartPos,
             [in] long nLength,
             [in] ::com::sun::star::lang::Locale aLocale,
             [in] short nTextConversionType,
             [in] long nTextConversionOptions )
-        raises( com::sun::star::lang::IllegalArgumentException,
+        raises( com::sun::star::lang::IllegalArgumentException, 
                 com::sun::star::lang::NoSupportException );
 
     //---------------------------------------------------------------------
-    /** Method to search dictionaries for the conversion candidate, if there
-        are multiple candidates, it will return first one. This is for the
+    /** Method to search dictionaries for the conversion candidate, if there 
+        are multiple candidates, it will return first one. This is for the 
         conversion in non-interactive mode.
 
         @param aText
@@ -103,7 +103,7 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
         @param nStartPos
             The start position in aText for the conversion
         @param nLength
-            The length of the portion in aText for the conversion
+            The length of the partion in aText for the conversion
         @param aLocal
             Locale the conversion is referring to.
         @param nTextConversionType
@@ -118,13 +118,13 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
             or when the locale is not supported.
     */
     string getConversion(
-            [in] string aText,
+            [in] string aText, 
             [in] long nStartPos,
             [in] long nLength,
             [in] ::com::sun::star::lang::Locale aLocale,
             [in] short nTextConversionType,
             [in] long nTextConversionOptions )
-        raises( com::sun::star::lang::IllegalArgumentException,
+        raises( com::sun::star::lang::IllegalArgumentException, 
                 com::sun::star::lang::NoSupportException );
 
     //---------------------------------------------------------------------
@@ -145,11 +145,11 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
             when <var>nConversionDictionaryType</var> is not known by the implementation,
             or when the locale is not supported.
     */
-    boolean interactiveConversion(
+    boolean interactiveConversion( 
             [in] ::com::sun::star::lang::Locale aLocale,
             [in] short nTextConversionType,
             [in] long nTextConversionOptions )
-        raises( com::sun::star::lang::IllegalArgumentException,
+        raises( com::sun::star::lang::IllegalArgumentException, 
                 com::sun::star::lang::NoSupportException );
 };
 

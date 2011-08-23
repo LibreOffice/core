@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,11 +33,23 @@
 
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <svl/poolcach.hxx>
+#include "poolcach.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
 DBG_NAME(SfxItemPoolCache)
+
+
+//------------------------------------------------------------------------
+
+struct SfxItemModifyImpl
+{
+    const SfxSetItem  *pOrigItem;
+    SfxSetItem		  *pPoolItem;
+};
+
+SV_DECL_VARARR( SfxItemModifyArr_Impl, SfxItemModifyImpl, 8, 8 )
+SV_IMPL_VARARR( SfxItemModifyArr_Impl, SfxItemModifyImpl);
 
 //------------------------------------------------------------------------
 
@@ -70,7 +82,7 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
 SfxItemPoolCache::~SfxItemPoolCache()
 {
     DBG_DTOR(SfxItemPoolCache, 0);
-    for ( size_t nPos = 0; nPos < pCache->size(); ++nPos ) {
+    for ( USHORT nPos = 0; nPos < pCache->Count(); ++nPos ) {
         pPool->Remove( *(*pCache)[nPos].pPoolItem );
         pPool->Remove( *(*pCache)[nPos].pOrigItem );
     }
@@ -82,15 +94,15 @@ SfxItemPoolCache::~SfxItemPoolCache()
 
 //------------------------------------------------------------------------
 
-const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, sal_Bool bNew )
+const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, BOOL bNew )
 {
     DBG_CHKTHIS(SfxItemPoolCache, 0);
     DBG_ASSERT( pPool == rOrigItem.GetItemSet().GetPool(), "invalid Pool" );
     DBG_ASSERT( IsDefaultItem( &rOrigItem ) || IsPooledItem( &rOrigItem ),
                 "original not in pool" );
 
-    // Find whether this Transformations ever occurred
-    for ( size_t nPos = 0; nPos < pCache->size(); ++nPos )
+    // Suchen, ob diese Transformations schon einmal vorkam
+    for ( USHORT nPos = 0; nPos < pCache->Count(); ++nPos )
     {
         SfxItemModifyImpl &rMapEntry = (*pCache)[nPos];
         if ( rMapEntry.pOrigItem == &rOrigItem )
@@ -100,7 +112,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, sal_Bo
             {
                 rMapEntry.pPoolItem->AddRef(2); // einen davon fuer den Cache
                 if ( bNew )
-                    pPool->Put( rOrigItem );    //! AddRef??
+                    pPool->Put( rOrigItem );	//! AddRef??
             }
             return *rMapEntry.pPoolItem;
         }
@@ -123,13 +135,13 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, sal_Bo
     // Refernzzaehler anpassen, je einen davon fuer den Cache
     pNewPoolItem->AddRef( pNewPoolItem != &rOrigItem ? 2 : 1 );
     if ( bNew )
-        pPool->Put( rOrigItem );    //! AddRef??
+        pPool->Put( rOrigItem );	//! AddRef??
 
     // die Transformation im Cache eintragen
     SfxItemModifyImpl aModify;
     aModify.pOrigItem = &rOrigItem;
     aModify.pPoolItem = (SfxSetItem*) pNewPoolItem;
-    pCache->push_back( aModify );
+    pCache->Insert( aModify, pCache->Count() );
 
     DBG_ASSERT( !pItemToPut ||
                 &pNewPoolItem->GetItemSet().Get( pItemToPut->Which() ) == pItemToPut,

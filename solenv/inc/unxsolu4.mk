@@ -55,7 +55,7 @@ CC*=cc
 
 CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp
 CFLAGSCC=-xCC $(ARCH_FLAGS)
-CFLAGSCXX= -features=no%altspell $(ARCH_FLAGS)
+CFLAGSCXX= -features=no%altspell -library=stlport4 $(ARCH_FLAGS)
 
 # flags to enable build with symbols; required for crashdump feature
 CFLAGSENABLESYMBOLS=-g0 -xs # was temporarily commented out, reenabled before Beta
@@ -92,7 +92,7 @@ CFLAGSOUTOBJ=-o
 #   (this_type(p).swap(*this))
 # - truncwarn: "conversion of 64 bit type value to smaller type causes
 #   truncation" at least with CC 5.8 is reported only at the end of a
-#   compilation unit that uses boost::unordered_map<sal_Int64, sal_Int64> (see
+#   compilation unit that uses std::hash_map<sal_Int64, sal_Int64> (see
 #   sfx2/source/toolbox/imgmgr.cxx:1.27) and thus unfortunately needs to be
 #   disabled globally
 # - wnoretvalue: "The last statement should return a value." 
@@ -111,7 +111,8 @@ CFLAGSWERRCXX=-xwe
 # Once all modules on this platform compile without warnings, set
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
-MODULES_WITH_WARNINGS :=
+MODULES_WITH_WARNINGS := \
+    soldep
 
 STDOBJVCL=$(L)/salmain.o
 
@@ -138,7 +139,7 @@ LINKFLAGSRUNPATH_BRAND=-R\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../
 LINKFLAGSRUNPATH_OXT=
 LINKFLAGSRUNPATH_BOXT=-R\''$$ORIGIN/../../../basis-link/program'\'
 LINKFLAGSRUNPATH_NONE=
-LINKFLAGS=-m64 -w -mt -z combreloc -PIC -temp=/tmp -norunpath
+LINKFLAGS=-m64 -w -mt -z combreloc -PIC -temp=/tmp -norunpath -library=stlport4
 LINKCFLAGS=-m64 -w -mt -z combreloc -norunpath
 
 # -z text force fatal error if non PIC code is linked into shared library. Such code
@@ -198,6 +199,14 @@ STDSHLGUIMT+=-lX11 -ldl
 # @@@ interposer needed for -Bdirect @@@
 # LIBSALCPPRT*=-z allextract -lsalcpprt -z defaultextract
 LIBSALCPPRT=
+
+.IF "$(USE_STLP_DEBUG)" != ""
+LIBSTLPORT=$(DYNAMIC) -lstlport_sunpro_debug
+LIBSTLPORTST=$(STATIC) -lstlport_sunpro_debug $(DYNAMIC)
+.ELSE
+LIBSTLPORT=$(DYNAMIC) -lstlport_sunpro
+LIBSTLPORTST=$(STATIC) -lstlport_sunpro $(DYNAMIC)
+.ENDIF # "$(USE_STLP_DEBUG)" != ""
 
 LIBMGR=CC
 LIBFLAGS=-xar -o

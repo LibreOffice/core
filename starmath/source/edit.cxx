@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
 
 
 #include "starmath.hrc"
-#define ITEMID_FONT         1
-#define ITEMID_FONTHEIGHT   2
-#define ITEMID_LRSPACE      3
-#define ITEMID_WEIGHT       4
+#define ITEMID_FONT 		1
+#define ITEMID_FONTHEIGHT	2
+#define ITEMID_LRSPACE		3
+#define ITEMID_WEIGHT		4
 
 
 #include <vcl/menu.hxx>
@@ -64,14 +64,13 @@
 #include "view.hxx"
 #include "document.hxx"
 #include "config.hxx"
-#include "accessibility.hxx"
 
-#define SCROLL_LINE         24
+#define SCROLL_LINE 		24
 
-#define MINWIDTH        200
-#define MINHEIGHT       200
-#define MINSPLIT        40
-#define SPLITTERWIDTH   2
+#define MINWIDTH		200
+#define MINHEIGHT		200
+#define MINSPLIT		40
+#define SPLITTERWIDTH	2
 
 
 using namespace com::sun::star::accessibility;
@@ -81,19 +80,19 @@ using namespace com::sun::star::uno;
 ////////////////////////////////////////
 
 
-void SmGetLeftSelectionPart(const ESelection &rSel,
-                            sal_uInt16 &nPara, sal_uInt16 &nPos)
+void SmGetLeftSelectionPart(const ESelection aSel,
+                            USHORT &nPara, USHORT &nPos)
     // returns paragraph number and position of the selections left part
 {
     // compare start and end of selection and use the one that comes first
-    if (    rSel.nStartPara <  rSel.nEndPara
-        ||  (rSel.nStartPara == rSel.nEndPara  &&  rSel.nStartPos < rSel.nEndPos) )
-    {   nPara = rSel.nStartPara;
-        nPos  = rSel.nStartPos;
+    if (	aSel.nStartPara <  aSel.nEndPara
+        ||	(aSel.nStartPara == aSel.nEndPara  &&  aSel.nStartPos < aSel.nEndPos) )
+    {	nPara = aSel.nStartPara;
+        nPos  = aSel.nStartPos;
     }
     else
-    {   nPara = rSel.nEndPara;
-        nPos  = rSel.nEndPos;
+    {	nPara = aSel.nEndPara;
+        nPos  = aSel.nEndPos;
     }
 }
 
@@ -119,7 +118,7 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     SetMapMode(MAP_PIXEL);
 
     // Even RTL languages don't use RTL for math
-    rCmdBox.GetEditWindow()->EnableRTL( false );
+    rCmdBox.GetEditWindow()->EnableRTL( FALSE );
 
     ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
@@ -147,7 +146,7 @@ SmEditWindow::~SmEditWindow()
 
     StartCursorMove();
 
-    // clean up of classes used for accessibility
+    // #112565# clean up of classes used for accessibility
     // must be done before EditView (and thus EditEngine) is no longer
     // available for those classes.
     if (pAccessible)
@@ -248,7 +247,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         //! see also SmDocShell::GetEditEngine() !
         //!
 
-        pEditEngine->SetDefTab( sal_uInt16( GetTextWidth( C2S("XXXX") ) ) );
+        pEditEngine->SetDefTab( USHORT( GetTextWidth( C2S("XXXX") ) ) );
 
         SetEditEngineDefaultFonts( *pEditEngine, *pEditEngineItemPool );
 
@@ -256,7 +255,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         // unfortunately this resets the whole edit engine
         // thus we need to save at least the text
         String aTxt( pEditEngine->GetText( LINEEND_LF ) );
-        pEditEngine->Clear();   //incorrect font size
+        pEditEngine->Clear();	//#77957 incorrect font size
         pEditEngine->SetText( aTxt );
     }
 
@@ -289,7 +288,7 @@ IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
         if (pView)
         {
             // get row and column to look for
-            sal_uInt16  nRow, nCol;
+            USHORT  nRow, nCol;
             SmGetLeftSelectionPart(aNewSelection, nRow, nCol);
             nRow++;
             nCol++;
@@ -352,7 +351,7 @@ void SmEditWindow::MouseButtonDown(const MouseEvent &rEvt)
 
 void SmEditWindow::Command(const CommandEvent& rCEvt)
 {
-    bool bForwardEvt = true;
+    BOOL bForwardEvt = TRUE;
     if (rCEvt.GetCommand() == COMMAND_CONTEXTMENU)
     {
         GetParent()->ToTop();
@@ -360,7 +359,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         Point aPoint = rCEvt.GetMousePosPixel();
         PopupMenu* pPopupMenu = new PopupMenu(SmResId(RID_COMMANDMENU));
 
-        // added for replaceability of context menus
+        // added for replaceability of context menus #96085, #93782
         Menu* pMenu = NULL;
         ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
@@ -380,7 +379,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
 
         pPopupMenu->Execute( this, aPoint );
         delete pPopupMenu;
-        bForwardEvt = false;
+        bForwardEvt = FALSE;
     }
     else if (rCEvt.GetCommand() == COMMAND_WHEEL)
         bForwardEvt = !HandleWheelCommands( rCEvt );
@@ -395,9 +394,9 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
 }
 
 
-bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
+BOOL SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
 {
-    bool bCommandHandled = false;    // true if the CommandEvent needs not
+    BOOL bCommandHandled = FALSE;    // true if the CommandEvent needs not
                                     // to be passed on (because it has fully
                                     // been taken care of).
 
@@ -405,7 +404,7 @@ bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
     if (pWData)
     {
         if (COMMAND_WHEEL_ZOOM == pWData->GetMode())
-            bCommandHandled = true;     // no zooming in Command window
+            bCommandHandled = TRUE;     // no zooming in Command window
         else
             bCommandHandled = HandleScrollCommand( rCEvt, pHScrollBar, pVScrollBar);
     }
@@ -429,7 +428,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
 {
     if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
     {
-        bool bCallBase = true;
+        BOOL bCallBase = TRUE;
         SfxViewShell* pViewShell = GetView();
         if ( pViewShell && pViewShell->ISA(SmViewShell) )
         {
@@ -509,8 +508,8 @@ void SmEditWindow::CreateEditView()
             pScrollBox  = new ScrollBarBox(this);
         pVScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
         pHScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
-        pVScrollBar->EnableDrag( true );
-        pHScrollBar->EnableDrag( true );
+        pVScrollBar->EnableDrag( TRUE );
+        pHScrollBar->EnableDrag( TRUE );
 
         pEditView->SetOutputArea(AdjustScrollBars());
 
@@ -518,7 +517,7 @@ void SmEditWindow::CreateEditView()
 
         pEditView->SetSelection(eSelection);
         Update();
-        pEditView->ShowCursor(true, true);
+        pEditView->ShowCursor(TRUE, TRUE);
 
         pEditEngine->SetStatusEventHdl( LINK(this, SmEditWindow, EditStatusHdl) );
         SetPointer(pEditView->GetPointer());
@@ -670,7 +669,7 @@ void SmEditWindow::GetFocus()
 
     //Let SmViewShell know we got focus
     if(GetView() && IsInlineEditEnabled())
-        GetView()->SetInsertIntoEditWindow(true);
+        GetView()->SetInsertIntoEditWindow(TRUE);
 }
 
 
@@ -692,16 +691,16 @@ void SmEditWindow::LoseFocus()
 }
 
 
-bool SmEditWindow::IsAllSelected() const
+BOOL SmEditWindow::IsAllSelected() const
 {
-    bool bRes = false;
+    BOOL bRes = FALSE;
     EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
     OSL_ENSURE( pEditView, "NULL pointer" );
     OSL_ENSURE( pEditEngine, "NULL pointer" );
     if (pEditEngine  &&  pEditView)
     {
         ESelection eSelection( pEditView->GetSelection() );
-        sal_Int32 nParaCnt = pEditEngine->GetParagraphCount();
+        INT32 nParaCnt = pEditEngine->GetParagraphCount();
         if (!(nParaCnt - 1))
         {
             String Text( pEditEngine->GetText( LINEEND_LF ) );
@@ -725,7 +724,7 @@ void SmEditWindow::SelectAll()
     }
 }
 
-void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
+void SmEditWindow::InsertCommand(USHORT nCommand)
 {
     OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
@@ -764,7 +763,7 @@ void SmEditWindow::MarkError(const Point &rPos)
     if (pEditView)
     {
         const xub_StrLen    nCol = sal::static_int_cast< xub_StrLen >(rPos.X());
-        const sal_uInt16        nRow = sal::static_int_cast< sal_uInt16 >(rPos.Y() - 1);
+        const USHORT        nRow = sal::static_int_cast< USHORT >(rPos.Y() - 1);
 
         pEditView->SetSelection(ESelection(nRow, nCol - 1, nRow, nCol));
         GrabFocus();
@@ -779,10 +778,10 @@ void SmEditWindow::SelNextMark()
     if (pEditEngine  &&  pEditView)
     {
         ESelection eSelection = pEditView->GetSelection();
-        sal_uInt16     Pos        = eSelection.nEndPos;
+        USHORT     Pos        = eSelection.nEndPos;
         String     aMark (C2S("<?>"));
         String     aText;
-        sal_uInt16     nCounts    = pEditEngine->GetParagraphCount();
+        USHORT     nCounts    = pEditEngine->GetParagraphCount();
 
         while (eSelection.nEndPara < nCounts)
         {
@@ -809,15 +808,15 @@ void SmEditWindow::SelPrevMark()
     if (pEditEngine  &&  pEditView)
     {
         ESelection eSelection = pEditView->GetSelection();
-        sal_uInt16     Pos        = STRING_NOTFOUND;
+        USHORT     Pos        = STRING_NOTFOUND;
         xub_StrLen Max        = eSelection.nStartPos;
         String     Text( pEditEngine->GetText( eSelection.nStartPara ) );
         String     aMark (C2S("<?>"));
-        sal_uInt16     nCounts    = pEditEngine->GetParagraphCount();
+        USHORT     nCounts    = pEditEngine->GetParagraphCount();
 
         do
         {
-            sal_uInt16 Fnd = Text.Search(aMark, 0);
+            USHORT Fnd = Text.Search(aMark, 0);
 
             while ((Fnd < Max) && (Fnd != STRING_NOTFOUND))
             {
@@ -842,7 +841,7 @@ void SmEditWindow::SelPrevMark()
     }
 }
 
-bool SmEditWindow::HasMark(const String& rText) const
+BOOL SmEditWindow::HasMark(const String& rText) const
     // returns true iff 'rText' contains a mark
 {
     return rText.SearchAscii("<?>", 0) != STRING_NOTFOUND;
@@ -883,16 +882,17 @@ void SmEditWindow::SetSelection(const ESelection &rSel)
     InvalidateSlots();
 }
 
-bool SmEditWindow::IsEmpty() const
+BOOL SmEditWindow::IsEmpty() const
 {
     EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
-    bool bEmpty = ( pEditEngine ? pEditEngine->GetTextLen() == 0 : false);
+    BOOL bEmpty = sal::static_int_cast< BOOL >(
+                    pEditEngine ? pEditEngine->GetTextLen() == 0 : FALSE);
     return bEmpty;
 }
 
-bool SmEditWindow::IsSelected() const
+BOOL SmEditWindow::IsSelected() const
 {
-    return pEditView ? pEditView->HasSelection() : false;
+    return pEditView ? pEditView->HasSelection() : FALSE;
 }
 
 void SmEditWindow::Cut()
@@ -901,7 +901,7 @@ void SmEditWindow::Cut()
     if (pEditView)
     {
         pEditView->Cut();
-        GetDoc()->SetModified( true );
+        GetDoc()->SetModified( TRUE );
     }
 }
 
@@ -918,7 +918,7 @@ void SmEditWindow::Paste()
     if (pEditView)
     {
         pEditView->Paste();
-        GetDoc()->SetModified( true );
+        GetDoc()->SetModified( TRUE );
     }
 }
 
@@ -928,7 +928,7 @@ void SmEditWindow::Delete()
     if (pEditView)
     {
         pEditView->DeleteSelected();
-        GetDoc()->SetModified( true );
+        GetDoc()->SetModified( TRUE );
     }
 }
 

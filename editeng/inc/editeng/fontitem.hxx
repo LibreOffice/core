@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@ namespace rtl
 
 // class SvxFontItem -----------------------------------------------------
 
-/*  [Description]
-
-    This item describes a Font.
+/*
+    [Beschreibung]
+    Dieses Item beschreibt einen Font.
 */
 
 class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
@@ -56,51 +56,58 @@ class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
     FontPitch ePitch;
     rtl_TextEncoding eTextEncoding;
 
-    static sal_Bool bEnableStoreUnicodeNames;
+    static BOOL bEnableStoreUnicodeNames;
 
 public:
     TYPEINFO();
 
-    SvxFontItem( const sal_uInt16 nId  );
+    SvxFontItem( const USHORT nId  );
     SvxFontItem( const FontFamily eFam, const String& rFamilyName,
         const String& rStyleName,
         const FontPitch eFontPitch /*= PITCH_DONTKNOW*/,
         const rtl_TextEncoding eFontTextEncoding /*= RTL_TEXTENCODING_DONTKNOW*/,
-        const sal_uInt16 nId  );
+        const USHORT nId  );
 
-    // "pure virtual Methods" from SfxPoolItem
-    virtual int              operator==( const SfxPoolItem& ) const;
+    // "pure virtual Methoden" vom SfxPoolItem
+    virtual int 			 operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual SfxPoolItem*	 Create(SvStream &, USHORT) const;
+    virtual SvStream&		 Store(SvStream &, USHORT nItemVersion) const;
+    virtual	bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    // Access methods:
-    void SetFamilyName( const String& rFamilyName ) { aFamilyName = rFamilyName; }
+    // ZugriffsMethoden:
+    inline String &GetFamilyName() { return aFamilyName; }
     inline const String &GetFamilyName() const { return aFamilyName; }
 
-    void SetStyleName(const String &rStyleName ) { aStyleName = rStyleName; }
+    inline String &GetStyleName() { return aStyleName; }
     inline const String &GetStyleName() const { return aStyleName; }
 
-    void SetFamily( FontFamily _eFamily ) { eFamily = _eFamily; }
+    inline FontFamily &GetFamily() { return eFamily; }
     inline FontFamily GetFamily() const { return eFamily; }
 
-    void SetPitch(FontPitch _ePitch ) { ePitch = _ePitch; }
+    inline FontPitch &GetPitch() { return ePitch; }
     inline FontPitch GetPitch() const { return ePitch; }
 
-    void SetCharSet(rtl_TextEncoding _eEncoding) { eTextEncoding = _eEncoding; }
-
+    inline rtl_TextEncoding &GetCharSet() { return eTextEncoding; }
     inline rtl_TextEncoding GetCharSet() const { return eTextEncoding; }
 
-    SvxFontItem& operator=(const SvxFontItem& rFont);
+    inline SvxFontItem& operator=(const SvxFontItem& rFont)
+    {
+        aFamilyName =  rFont.GetFamilyName();
+        aStyleName =   rFont.GetStyleName();
+        eFamily =      rFont.GetFamily();
+        ePitch =   rFont.GetPitch();
+        eTextEncoding = rFont.GetCharSet();
+        return *this;
+    }
 
-    static void EnableStoreUnicodeNames( sal_Bool bEnable );
+    static void EnableStoreUnicodeNames( BOOL bEnable );
 
 };
 

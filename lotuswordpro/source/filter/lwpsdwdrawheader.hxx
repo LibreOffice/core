@@ -53,6 +53,10 @@
  *
  *
  ************************************************************************/
+/*****************************************************************************
+ * Change History
+ * Mar 2005			Created
+ ****************************************************************************/
 /**
  * @file
  * For LWP filter architecture prototype
@@ -71,70 +75,70 @@ const double THRESHOLD = 0.0001;
 enum DrawObjectType
 {
     OT_UNDEFINED,
-    OT_SELECT      = 0,
-    OT_HAND        = 1,
-    OT_LINE        = 2,
-    OT_PERPLINE    = 3,
-    OT_POLYLINE    = 4,
-    OT_POLYGON     = 5,
-    OT_RECT        = 6,
-    OT_SQUARE      = 7,
-    OT_RNDRECT     = 8,
+    OT_SELECT	   = 0,
+    OT_HAND 	   = 1,
+    OT_LINE 	   = 2,
+    OT_PERPLINE	   = 3,
+    OT_POLYLINE	   = 4,
+    OT_POLYGON	   = 5,
+    OT_RECT 	   = 6,
+    OT_SQUARE	   = 7,
+    OT_RNDRECT	   = 8,
     OT_RNDSQUARE   = 9,
-    OT_OVAL        = 10,
-    OT_CIRCLE      = 11,
-    OT_ARC         = 12,
-    OT_TEXT        = 13,
-    OT_GROUP       = 14,
-    OT_CHART       = 15,
-    OT_METAFILE    = 16,
+    OT_OVAL 	   = 10,
+    OT_CIRCLE	   = 11,
+    OT_ARC		   = 12,
+    OT_TEXT 	   = 13,
+    OT_GROUP	   = 14,
+    OT_CHART	   = 15,
+    OT_METAFILE	   = 16,
     OT_METAFILEIMG = 17,
-    OT_BITMAP      = 18,
+    OT_BITMAP	   = 18,
     OT_TEXTART     = 19,
     OT_BIGBITMAP   = 20
 };
 
 enum DrawFillType
 {
-    FT_TRANSPARENT    = 0,
-    FT_VLTGRAY        = 1,
-    FT_LTGRAY         = 2,
-    FT_GRAY           = 3,
-    FT_DKGRAY         = 4,
-    FT_SOLID          = 5,
-    FT_HORZHATCH      = 6,
-    FT_VERTHATCH      = 7,
-    FT_FDIAGHATCH     = 8,
-    FT_BDIAGHATCH     = 9,
-    FT_CROSSHATCH     = 10,
+    FT_TRANSPARENT	  = 0,
+    FT_VLTGRAY		  = 1,
+    FT_LTGRAY		  = 2,
+    FT_GRAY 		  = 3,
+    FT_DKGRAY		  = 4,
+    FT_SOLID		  = 5,
+    FT_HORZHATCH	  = 6,
+    FT_VERTHATCH	  = 7,
+    FT_FDIAGHATCH	  = 8,
+    FT_BDIAGHATCH	  = 9,
+    FT_CROSSHATCH	  = 10,
     FT_DIAGCROSSHATCH = 11,
-    FT_PATTERN        = 12
+    FT_PATTERN		  = 12
 };
 
 enum DrawLineStyle
 {
-    LS_SOLID       = 0,
-    LS_DASH        = 1,
-    LS_DOT         = 2,
-    LS_DASHDOT     = 3,
+    LS_SOLID	   = 0,
+    LS_DASH 	   = 1,
+    LS_DOT		   = 2,
+    LS_DASHDOT	   = 3,
     LS_DASHDOTDOT  = 4,
-    LS_NULL        = 5,
+    LS_NULL 	   = 5,
     LS_INSIDEFRAME = 6
 };
 
 // Text Attributes as stored in Draw files V1.2 and earlier
 enum DrawTextAttribute
 {
-    TA_BOLD           = 0x0001, /* bolded font */
-    TA_ITALIC         = 0x0002, /* italic font */
-    TA_UNDERLINE      = 0x0004, /* underlined font */
-    TA_WORDUNDERLINE  = 0x0008, /* broken underline */
-    TA_ALLCAPS        = 0x0010, /* capitalized font */
-    TA_SMALLCAPS      = 0x0020, /* all small capital letters */
-    TA_DOUBLEUNDER    = 0x0040, /* double underline */
-    TA_STRIKETHRU     = 0x0080, /* strikethru */
-    TA_SUPERSCRIPT    = 0x0100, /* superscript */
-    TA_SUBSCRIPT      = 0x0200  /* subscript */
+    TA_BOLD			  = 0x0001,	/* bolded font */
+    TA_ITALIC		  = 0x0002,	/* italic font */
+    TA_UNDERLINE	  =	0x0004,	/* underlined font */
+    TA_WORDUNDERLINE  =	0x0008,	/* broken underline */
+    TA_ALLCAPS		  = 0x0010,	/* capitalized font */
+    TA_SMALLCAPS	  =	0x0020,	/* all small capital letters */
+    TA_DOUBLEUNDER	  =	0x0040,	/* double underline */
+    TA_STRIKETHRU	  =	0x0080,	/* strikethru */
+    TA_SUPERSCRIPT	  =	0x0100,	/* superscript */
+    TA_SUBSCRIPT	  =	0x0200	/* subscript */
 };
 
 enum DrawArrowHead
@@ -178,15 +182,15 @@ struct SdwClosedObjStyleRec
 
 struct SdwDrawObjHeader
 {
-//  sal_uInt8 nType
-//  sal_uInt8 nFlags;
+//	sal_uInt8 nType
+//	sal_uInt8 nFlags;
     sal_uInt16 nRecLen;
     sal_Int16 nLeft;
     sal_Int16 nTop;
     sal_Int16 nRight;
     sal_Int16 nBottom;
-//  sal_uInt16 nextObj;
-//  sal_uInt16 prevObj;
+//	sal_uInt16 nextObj;
+//	sal_uInt16 prevObj;
 };
 
 struct SdwLineRecord

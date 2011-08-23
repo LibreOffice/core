@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 #ifdef DBG_UTIL
 
-#define DBG_CHECK_RANGES(NUMTYPE, pArr)                                 \
+#define DBG_CHECK_RANGES(NUMTYPE, pArr)									\
     for ( const NUMTYPE *pRange = pArr; *pRange; pRange += 2 )          \
     {                                                                   \
         DBG_ASSERT( pRange[0] <= pRange[1], "ranges must be sorted" );  \
@@ -62,9 +62,9 @@ inline void Swap_Impl(const NUMTYPE *& rp1, const NUMTYPE *& rp2)
 NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
                                NUMTYPE nWh1, NUMTYPE nWh2, NUMTYPE nNull )
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
-    Creates an sal_uInt16-ranges-array in 'rpRanges' using 'nWh1' and 'nWh2' as
+    Creates an USHORT-ranges-array in 'rpRanges' using 'nWh1' and 'nWh2' as
     first range, 'nNull' as terminator or start of 2nd range and 'pArgs' as
     remaider.
 
@@ -74,7 +74,7 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
 
 {
     NUMTYPE nSize = 0, nIns = 0;
-    sal_uInt16 nCnt = 0;
+    USHORT nCnt = 0;
     SvNums aNumArr( 11, 8 );
     aNumArr.Insert( nWh1, nCnt++ );
     aNumArr.Insert( nWh2, nCnt++ );
@@ -87,7 +87,7 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
                   va_arg( pArgs, NUMTYPE_ARG ) ) ) )
     {
         aNumArr.Insert( nIns, nCnt++ );
-        if ( 0 == (nCnt & 1) )       // 4,6,8, usw.
+        if ( 0 == (nCnt & 1) )		 // 4,6,8, usw.
         {
             DBG_ASSERT( aNumArr[ nCnt-2 ] <= nIns, "Ungueltiger Bereich" );
             nSize += nIns - aNumArr[ nCnt-2 ] + 1;
@@ -109,7 +109,7 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
 
 NUMTYPE Count_Impl( const NUMTYPE *pRanges )
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Determines the number of NUMTYPEs in an 0-terminated array of pairs of
     NUMTYPEs. The terminating 0 is not included in the count.
@@ -129,7 +129,7 @@ NUMTYPE Count_Impl( const NUMTYPE *pRanges )
 
 NUMTYPE Capacity_Impl( const NUMTYPE *pRanges )
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Determines the total number of NUMTYPEs described in an 0-terminated
     array of pairs of NUMTYPEs, each representing an range of NUMTYPEs.
@@ -153,7 +153,7 @@ NUMTYPE Capacity_Impl( const NUMTYPE *pRanges )
 
 SfxNumRanges::SfxNumRanges( const SfxNumRanges &rOrig )
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Copy-Ctor.
 */
@@ -173,7 +173,7 @@ SfxNumRanges::SfxNumRanges( const SfxNumRanges &rOrig )
 
 SfxNumRanges::SfxNumRanges( NUMTYPE nWhich1, NUMTYPE nWhich2 )
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Constructs an SfxNumRanges-instance from one range of NUMTYPEs.
 
@@ -192,7 +192,7 @@ SfxNumRanges::SfxNumRanges( NUMTYPE nWhich1, NUMTYPE nWhich2 )
 
 SfxNumRanges::SfxNumRanges( NUMTYPE_ARG nWh0, NUMTYPE_ARG nWh1, NUMTYPE_ARG nNull, ... )
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Constructs an SfxNumRanges-instance from more than one sorted ranges of
     NUMTYPEs terminated with one 0.
@@ -215,7 +215,7 @@ SfxNumRanges::SfxNumRanges( NUMTYPE_ARG nWh0, NUMTYPE_ARG nWh1, NUMTYPE_ARG nNul
 
 SfxNumRanges::SfxNumRanges( const NUMTYPE* pArr )
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Constcurts an SfxNumRanges-instance from an sorted ranges of NUMTYPEs,
     terminates with on 0.
@@ -233,20 +233,20 @@ SfxNumRanges::SfxNumRanges( const NUMTYPE* pArr )
 
 //------------------------------------------------------------------------
 
-sal_Bool SfxNumRanges::operator==( const SfxNumRanges &rOther ) const
+BOOL SfxNumRanges::operator==( const SfxNumRanges &rOther ) const
 {
     // Object pointers equal?
     if ( this == &rOther )
-        return sal_True;
+        return TRUE;
 
     // Ranges pointers equal?
     if ( _pRanges == rOther._pRanges )
-        return sal_True;
+        return TRUE;
 
     // Counts equal?
     NUMTYPE nCount = Count();
     if ( nCount != rOther.Count() )
-        return sal_False;
+        return FALSE;
 
     // Check arrays.
     NUMTYPE n = 0;
@@ -254,12 +254,12 @@ sal_Bool SfxNumRanges::operator==( const SfxNumRanges &rOther ) const
     {
         // Elements at current position equal?
         if ( _pRanges[ n ] != rOther._pRanges[ n ] )
-            return sal_False;
+            return FALSE;
 
         ++n;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -269,7 +269,7 @@ SfxNumRanges& SfxNumRanges::operator =
     const SfxNumRanges &rRanges
 )
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Assigns ranges from 'rRanges' to '*this'.
 */
@@ -301,7 +301,7 @@ SfxNumRanges& SfxNumRanges::operator +=
     const SfxNumRanges &rRanges
 )
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Merges *this with 'rRanges'.
 
@@ -461,7 +461,7 @@ SfxNumRanges& SfxNumRanges::operator -=
     const SfxNumRanges &rRanges
 )
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Removes 'rRanges' from '*this'.
 
@@ -487,10 +487,10 @@ SfxNumRanges& SfxNumRanges::operator -=
     NUMTYPE nPos1 = 0, nPos2 = 0, nTargetPos = 0;
     while( _pRanges[ nPos1 ] )
     {
-        NUMTYPE l1 = _pRanges[ nPos1 ];      // lower bound of interval 1
-        NUMTYPE u1 = _pRanges[ nPos1+1 ];    // upper bound of interval 1
-        NUMTYPE l2 = rRanges._pRanges[ nPos2 ];      // lower bound of interval 2
-        NUMTYPE u2 = rRanges._pRanges[ nPos2+1 ];    // upper bound of interval 2
+        NUMTYPE l1 = _pRanges[ nPos1 ]; 	 // lower bound of interval 1
+        NUMTYPE u1 = _pRanges[ nPos1+1 ];	 // upper bound of interval 1
+        NUMTYPE l2 = rRanges._pRanges[ nPos2 ]; 	 // lower bound of interval 2
+        NUMTYPE u2 = rRanges._pRanges[ nPos2+1 ];	 // upper bound of interval 2
 
         // boundary cases
         // * subtrahend is empty -> copy the minuend
@@ -576,7 +576,7 @@ SfxNumRanges& SfxNumRanges::operator -=
         }
 
         // we should never be here
-        OSL_FAIL( "SfxNumRanges::operator-=: internal error" );
+        DBG_ERROR( "SfxNumRanges::operator-=: internal error" );
     } // while
 
     pTarget[ nTargetPos ] = 0;
@@ -595,6 +595,64 @@ SfxNumRanges& SfxNumRanges::operator -=
 
     delete [] pTarget;
     return *this;
+
+    /* untested code from MI commented out (MDA, 28.01.97)
+    do
+    {
+        // 1st range is smaller than 2nd range?
+        if ( pRange1[1] < pRange2[0] )
+            // => keep 1st range
+            pRange1 += 2;
+
+        // 2nd range is smaller than 1st range?
+        else if ( pRange2[1] < pRange1[0] )
+            // => skip 2nd range
+            pRange2 += 2;
+
+        // 2nd range totally overlaps the 1st range?
+        else if ( pRange2[0] <= pRange1[0] && pRange2[1] >= pRange1[1] )
+            // => remove 1st range
+            memmove( pRange1, pRange1+2, sizeof(NUMTYPE) * (pEndOfTarget-pRange1+2) );
+
+        // 2nd range overlaps only the beginning of 1st range?
+        else if ( pRange2[0] <= pRange1[0] && pRange2[1] < pRange1[1] )
+        {
+            // => cut the beginning of 1st range and goto next 2nd range
+            pRange1[0] = pRange2[1] + 1;
+            pRange2 += 2;
+        }
+
+        // 2nd range overlaps only the end of 1st range?
+        else if ( pRange2[0] > pRange1[0] && pRange2[1] >= pRange1[0] )
+            // => cut the beginning of 1st range
+            pRange1[0] = pRange2[1]+1;
+
+        // 2nd range is a real subset of 1st range
+        else
+        {
+            // => split 1st range and goto next 2nd range
+            memmove( pRange1+3, pRange1+1, sizeof(NUMTYPE) * (pEndOfTarget-pRange1-1) );
+            pRange1[1] = pRange2[0] - 1;
+            pRange1[2] = pRange2[1] + 1;
+            pRange1 += 2;
+            pRange2 += 2;
+        }
+    }
+    while ( *pRange1 && *pRange2 );
+
+    // assign the differentiated ranges
+    delete[] _pRanges;
+    NUMTYPE nUShorts = Count_Impl(pTarget) + 1;
+    if ( 1 != nUShorts )
+    {
+        _pRanges = new NUMTYPE[ nUShorts ];
+        memcpy( _pRanges, pTarget, nUShorts * sizeof(NUMTYPE) );
+        _pRanges[ nUShorts-1 ] = 0;
+    }
+    else
+        _pRanges = 0;
+    return *this;
+    */
 }
 
 //------------------------------------------------------------------------
@@ -604,7 +662,7 @@ SfxNumRanges& SfxNumRanges::operator /=
     const SfxNumRanges &rRanges
 )
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Determines intersection of '*this' with 'rRanges'.
 
@@ -639,10 +697,10 @@ SfxNumRanges& SfxNumRanges::operator /=
     NUMTYPE nPos1 = 0, nPos2 = 0, nTargetPos = 0;
     while( _pRanges[ nPos1 ] != 0 && rRanges._pRanges[ nPos2 ] != 0 )
     {
-        NUMTYPE l1 = _pRanges[ nPos1 ];      // lower bound of interval 1
-        NUMTYPE u1 = _pRanges[ nPos1+1 ];    // upper bound of interval 1
-        NUMTYPE l2 = rRanges._pRanges[ nPos2 ];      // lower bound of interval 2
-        NUMTYPE u2 = rRanges._pRanges[ nPos2+1 ];    // upper bound of interval 2
+        NUMTYPE l1 = _pRanges[ nPos1 ]; 	 // lower bound of interval 1
+        NUMTYPE u1 = _pRanges[ nPos1+1 ];	 // upper bound of interval 1
+        NUMTYPE l2 = rRanges._pRanges[ nPos2 ]; 	 // lower bound of interval 2
+        NUMTYPE u2 = rRanges._pRanges[ nPos2+1 ];	 // upper bound of interval 2
 
         if( u1 < l2 )
         {
@@ -719,21 +777,21 @@ SfxNumRanges& SfxNumRanges::operator /=
 
 //------------------------------------------------------------------------
 
-sal_Bool SfxNumRanges::Intersects( const SfxNumRanges &rRanges ) const
+BOOL SfxNumRanges::Intersects( const SfxNumRanges &rRanges ) const
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Determines if at least one range in 'rRanges' intersects with one
     range in '*this'.
 
-    sal_True, if there is at least one with:
+    TRUE, if there is at least one with:
         this->Contains( n ) && rRanges.Contains( n )
 */
 
 {
     // special cases: one is empty
     if ( rRanges.IsEmpty() || IsEmpty() )
-        return sal_False;
+        return FALSE;
 
     // find at least one intersecting range
     const NUMTYPE *pRange1 = _pRanges;
@@ -753,19 +811,19 @@ sal_Bool SfxNumRanges::Intersects( const SfxNumRanges &rRanges ) const
 
         // the ranges are overlappung
         else
-            return sal_True;
+            return TRUE;
     }
     while ( *pRange2 );
 
     // no intersection found
-    return sal_False;
+    return FALSE;
 }
 
 //------------------------------------------------------------------------
 
 NUMTYPE SfxNumRanges::Count() const
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Determines the number of USHORTs in the set described by the ranges
     of USHORTs in '*this'.
@@ -777,9 +835,9 @@ NUMTYPE SfxNumRanges::Count() const
 
 //------------------------------------------------------------------------
 
-sal_Bool SfxNumRanges::Contains( NUMTYPE n ) const
+BOOL SfxNumRanges::Contains( NUMTYPE n ) const
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Determines if '*this' contains 'n'.
 */
@@ -787,8 +845,8 @@ sal_Bool SfxNumRanges::Contains( NUMTYPE n ) const
 {
     for ( NUMTYPE *pRange = _pRanges; *pRange && *pRange <= n; pRange += 2 )
         if ( pRange[0] <= n && n <= pRange[1] )
-            return sal_True;
-    return sal_False;
+            return TRUE;
+    return FALSE;
 
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController>& rxC
     if (xControllerManager.is())
     {
         mxConfigurationController = xControllerManager->getConfigurationController();
-
+        
         // Tunnel through the controller to obtain a ViewShellBase.
         Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY);
         if (xTunnel.is())
@@ -85,7 +85,7 @@ CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController>& rxC
             mbValid = true;
         }
     }
-
+    
     if (mbValid)
     {
         mxConfigurationController->addConfigurationChangeListener(
@@ -105,7 +105,7 @@ CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController>& rxC
 CenterViewFocusModule::~CenterViewFocusModule (void)
 {
 }
-
+    
 
 
 

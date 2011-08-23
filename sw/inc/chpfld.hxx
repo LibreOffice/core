@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_CHPFLD_HXX
-#define SW_CHPFLD_HXX
+#ifndef _CHPFLD_HXX
+#define _CHPFLD_HXX
 
 #include "fldbas.hxx"
 
@@ -39,55 +39,67 @@ class SwTxtNode;
 enum SwChapterFormat
 {
     CF_BEGIN,
-    CF_NUMBER = CF_BEGIN,       // only the chapter number
-    CF_TITLE,                   // only the title
-    CF_NUM_TITLE,               // number and title
-    CF_NUMBER_NOPREPST,         // only chapter number without post-/prefix
-    CF_NUM_NOPREPST_TITLE,      // chapter number without post-/prefix and title
+    CF_NUMBER = CF_BEGIN,		// nur die Kapitelnummer
+    CF_TITLE,					// nur die "Ueberschrift"
+    CF_NUM_TITLE,				// Kapitelnummer und "Ueberschrift"
+    CF_NUMBER_NOPREPST,			// nur die Kapitelnummer ohne Post/Prefix
+    CF_NUM_NOPREPST_TITLE,		// Kapitelnummer ohne Post/Prefix und "Ueberschrift"
     CF_END
 };
+
+/*--------------------------------------------------------------------
+    Beschreibung: Kapitel
+ --------------------------------------------------------------------*/
 
 class SwChapterFieldType : public SwFieldType
 {
 public:
     SwChapterFieldType();
 
-    virtual SwFieldType*    Copy() const;
+    virtual SwFieldType*	Copy() const;
 
 };
 
+
+
+/*--------------------------------------------------------------------
+    Beschreibung: Kapitelnummer
+ --------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwChapterField : public SwField
 {
     friend class SwChapterFieldType;
-    sal_uInt8 nLevel;
+    BYTE nLevel;
     String sTitle, sNumber, sPre, sPost;
-
-    virtual String   Expand() const;
-    virtual SwField* Copy() const;
-
 public:
     SwChapterField(SwChapterFieldType*, sal_uInt32 nFmt = 0);
 
-    // #i53420#
+    // --> OD 2008-02-14 #i53420#
+//    void ChangeExpansion( const SwFrm*,
+//                          const SwTxtNode*,
+//                          BOOL bSrchNum = FALSE);
     void ChangeExpansion( const SwFrm*,
                           const SwCntntNode*,
-        sal_Bool bSrchNum = sal_False);
-    void ChangeExpansion(const SwTxtNode &rNd, sal_Bool bSrchNum);
+        BOOL bSrchNum = FALSE);
+    // <--
+    void ChangeExpansion(const SwTxtNode &rNd, BOOL bSrchNum);
 
-    inline sal_uInt8 GetLevel() const;
-    inline void SetLevel(sal_uInt8);
+    virtual String	 Expand() const;
+    virtual SwField* Copy() const;
+
+    inline BYTE GetLevel() const;
+    inline void	SetLevel(BYTE);
 
     inline const String& GetNumber() const;
     inline const String& GetTitle() const;
-    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
-inline sal_uInt8 SwChapterField::GetLevel() const   { return nLevel; }
-inline void SwChapterField::SetLevel(sal_uInt8 nLev) { nLevel = nLev; }
+inline BYTE SwChapterField::GetLevel() const 	{ return nLevel; }
+inline void	SwChapterField::SetLevel(BYTE nLev) { nLevel = nLev; }
 inline const String& SwChapterField::GetNumber() const { return sNumber; }
 inline const String& SwChapterField::GetTitle() const { return sTitle; }
 
-#endif // SW_CHPFLD_HXX
+#endif // _CHPFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

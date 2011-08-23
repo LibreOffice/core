@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace rtl
     class OUString;
 }
 
-#define BRUSH_GRAPHIC_VERSION   ((sal_uInt16)0x0001)
+#define	BRUSH_GRAPHIC_VERSION	((USHORT)0x0001)
 
 enum SvxGraphicPosition
 {
@@ -56,39 +56,39 @@ enum SvxGraphicPosition
     GPOS_AREA, GPOS_TILED
 };
 
-#define PARA_DEST_PARA  0
+#define PARA_DEST_PARA	0
 #define PARA_DEST_CHAR  1
 
 class SvxBrushItem_Impl;
 class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
 {
-    Color               aColor;
+    Color 				aColor;
     SvxBrushItem_Impl*  pImpl;
-    String*             pStrLink;
-    String*             pStrFilter;
-    SvxGraphicPosition  eGraphicPos;
-    sal_Bool                bLoadAgain;
+    String*				pStrLink;
+    String*				pStrFilter;
+    SvxGraphicPosition	eGraphicPos;
+    BOOL				bLoadAgain;
 
     void        ApplyGraphicTransparency_Impl();
     DECL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void *);
     // wird nur von Create benutzt
     SvxBrushItem( SvStream& rStrm,
-                  sal_uInt16 nVersion, sal_uInt16 nWhich  );
+                  USHORT nVersion, USHORT nWhich  );
 
 public:
     TYPEINFO();
 
-    SvxBrushItem( sal_uInt16 nWhich );
-    SvxBrushItem( const Color& rColor, sal_uInt16 nWhich  );
+    SvxBrushItem( USHORT nWhich );
+    SvxBrushItem( const Color& rColor, USHORT nWhich  );
 
     SvxBrushItem( const Graphic& rGraphic,
-                  SvxGraphicPosition ePos, sal_uInt16 nWhich );
+                  SvxGraphicPosition ePos, USHORT nWhich );
     SvxBrushItem( const GraphicObject& rGraphicObj,
-                  SvxGraphicPosition ePos, sal_uInt16 nWhich );
+                  SvxGraphicPosition ePos, USHORT nWhich );
     SvxBrushItem( const String& rLink, const String& rFilter,
-                  SvxGraphicPosition ePos, sal_uInt16 nWhich );
+                  SvxGraphicPosition ePos, USHORT nWhich );
     SvxBrushItem( const SvxBrushItem& );
-    SvxBrushItem( const CntWallpaperItem&, sal_uInt16 nWhich );
+    SvxBrushItem( const CntWallpaperItem&, USHORT nWhich );
 
     ~SvxBrushItem();
 
@@ -99,42 +99,42 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual int              operator==( const SfxPoolItem& ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual	bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 nVersion ) const;
-    virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
+    virtual SfxPoolItem*	 Create( SvStream&, USHORT nVersion ) const;
+    virtual SvStream&		 Store( SvStream& , USHORT nItemVersion ) const;
+    virtual USHORT			 GetVersion( USHORT nFileVersion ) const;
 
-    const Color&    GetColor() const                { return aColor; }
-    Color&          GetColor()                      { return aColor; }
-    void            SetColor( const Color& rCol)    { aColor = rCol; }
+    const Color& 	GetColor() const 				{ return aColor; }
+    Color& 			GetColor()  					{ return aColor; }
+    void			SetColor( const Color& rCol)  	{ aColor = rCol; }
 
     void                SetDoneLink( const Link& rLink );
 
-    SvxGraphicPosition  GetGraphicPos() const       { return eGraphicPos; }
+    SvxGraphicPosition	GetGraphicPos() const		{ return eGraphicPos; }
 
     void                PurgeGraphic() const;
     void                PurgeMedium() const;
 
-    const Graphic*          GetGraphic() const;
-    const GraphicObject*    GetGraphicObject() const;
-    const String*           GetGraphicLink() const      { return pStrLink; }
-    const String*           GetGraphicFilter() const    { return pStrFilter; }
+    const Graphic* 			GetGraphic() const;
+    const GraphicObject* 	GetGraphicObject() const;
+    const String* 			GetGraphicLink() const		{ return pStrLink; }
+    const String* 			GetGraphicFilter() const	{ return pStrFilter; }
 
-    void                SetGraphicPos( SvxGraphicPosition eNew );
-    void                SetGraphic( const Graphic& rNew );
-    void                SetGraphicObject( const GraphicObject& rNewObj );
-    void                SetGraphicLink( const String& rNew );
-    void                SetGraphicFilter( const String& rNew );
+    void				SetGraphicPos( SvxGraphicPosition eNew );
+    void 				SetGraphic( const Graphic& rNew );
+    void 				SetGraphicObject( const GraphicObject& rNewObj );
+    void		 		SetGraphicLink( const String& rNew );
+    void		 		SetGraphicFilter( const String& rNew );
 
-    SvxBrushItem&       operator=( const SvxBrushItem& rItem);
+    SvxBrushItem&		operator=( const SvxBrushItem& rItem);
 
-    static SvxGraphicPosition   WallpaperStyle2GraphicPos( WallpaperStyle eStyle );
-    static WallpaperStyle       GraphicPos2WallpaperStyle( SvxGraphicPosition ePos );
-    CntWallpaperItem*           CreateCntWallpaperItem() const;
+    static SvxGraphicPosition 	WallpaperStyle2GraphicPos( WallpaperStyle eStyle );
+    static WallpaperStyle 		GraphicPos2WallpaperStyle( SvxGraphicPosition ePos );
+    CntWallpaperItem*			CreateCntWallpaperItem() const;
 };
 
 #endif // #ifndef _SVX_BRSHITEM_HXX

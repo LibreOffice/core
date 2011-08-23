@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,20 +81,17 @@
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 
 using namespace test;
+using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
-
 //==================================================================================================
 struct TestImpl : public ImplHelper4< CA, DBA, FE, G >
 {
     sal_Int32 nRef;
-
+    
     virtual ~TestImpl()
         { OSL_TRACE( "> TestImpl dtor called... <\n" ); }
 
@@ -104,7 +101,7 @@ struct TestImpl : public ImplHelper4< CA, DBA, FE, G >
         { ++nRef; }
     virtual void SAL_CALL release(  ) throw()
         { if (! --nRef) delete this; }
-
+    
     // A
     virtual OUString SAL_CALL a() throw(RuntimeException)
         { return OUString( RTL_CONSTASCII_USTRINGPARAM("a") ); }
@@ -133,7 +130,7 @@ struct TestWeakAggImpl : public WeakAggImplHelper4< CA, DBA, FE, G >
 {
     virtual ~TestWeakAggImpl()
         { OSL_TRACE( "> TestWeakAggImpl dtor called... <\n" ); }
-
+    
     // A
     virtual OUString SAL_CALL a() throw(RuntimeException)
         { return OUString( RTL_CONSTASCII_USTRINGPARAM("a") ); }
@@ -164,7 +161,7 @@ struct TestWeakImpl : public WeakImplHelper4< CA, DBA, FE, G >
 
     virtual ~TestWeakImpl()
         { OSL_TRACE( "> TestWeakImpl dtor called... <\n" ); }
-
+    
     // A
     virtual OUString SAL_CALL a() throw(RuntimeException)
         { return OUString( RTL_CONSTASCII_USTRINGPARAM("a") ); }
@@ -213,7 +210,7 @@ struct TestWeakComponentImpl : public WeakComponentImplHelper4< CA, DBA, FE, G >
 
     void SAL_CALL disposing()
         { OSL_TRACE( "> TestWeakComponentImpl disposing called... <\n" ); }
-
+    
     // A
     virtual OUString SAL_CALL a() throw(RuntimeException)
         { return OUString( RTL_CONSTASCII_USTRINGPARAM("a") ); }
@@ -249,7 +246,7 @@ struct TestWeakAggComponentImpl : public WeakAggComponentImplHelper4< CA, DBA, F
 
     void SAL_CALL disposing()
         { OSL_TRACE( "> TestWeakAggComponentImpl disposing called... <\n" ); }
-
+    
     // A
     virtual OUString SAL_CALL a() throw(RuntimeException)
         { return OUString( RTL_CONSTASCII_USTRINGPARAM("a") ); }
@@ -298,7 +295,7 @@ struct TestImplInh : public ImplInheritanceHelper2< TestWeakImpl, H, I >
 
     virtual ~TestImplInh()
         { OSL_TRACE( "> TestWeakImplInh dtor called... <\n" ); }
-
+    
     // H
     virtual OUString SAL_CALL h() throw(RuntimeException)
         { return OUString( RTL_CONSTASCII_USTRINGPARAM("h") ); }
@@ -312,7 +309,7 @@ struct TestAggImplInh : public AggImplInheritanceHelper2< TestWeakAggImpl, H, I 
 {
     virtual ~TestAggImplInh()
         { OSL_TRACE( "> TestAggImplInh dtor called... <\n" ); }
-
+    
     // H
     virtual OUString SAL_CALL h() throw(RuntimeException)
         { return OUString( RTL_CONSTASCII_USTRINGPARAM("h2") ); }
@@ -351,7 +348,7 @@ static void dotest( const Reference< XInterface > & xOriginal )
     {
         ::fprintf( stderr, n < 15 ? "%x " : "%x \n", id[ n ] );
     }
-
+    
     Reference< A > xa( xOriginal, UNO_QUERY );
     OSL_ENSURE( xa->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### A failed!" );
     Reference< BA > xba( xa, UNO_QUERY );
@@ -375,14 +372,14 @@ static void dotest( const Reference< XInterface > & xOriginal )
     // type provider
     Reference< lang::XTypeProvider > xProv( xg, UNO_QUERY );
     Sequence< Type > aTypes( xProv->getTypes() );
-
+    
     // CA, DBA, FE, G, XTypeProvider
     OSL_ASSERT( isIn( aTypes, "test.CA" ) );
     OSL_ASSERT( isIn( aTypes, "test.DBA" ) );
     OSL_ASSERT( isIn( aTypes, "test.FE") );
     OSL_ASSERT( isIn( aTypes, "test.G") );
     OSL_ASSERT( isIn( aTypes, "com.sun.star.lang.XTypeProvider") );
-
+    
     Reference< XWeak > xWeak( xg, UNO_QUERY );
     if (xWeak.is())
     {
@@ -393,7 +390,7 @@ static void dotest( const Reference< XInterface > & xOriginal )
     {
         OSL_ASSERT( isIn( aTypes, "com.sun.star.lang.XComponent") );
     }
-
+    
     Reference< XAggregation > xAgg( xg, UNO_QUERY );
     if (xAgg.is())
     {
@@ -409,7 +406,7 @@ static void dotest( const Reference< XInterface > & xOriginal )
     {
         OSL_ASSERT( isIn( aTypes, "test.I") );
     }
-
+    
     OSL_ENSURE( xg == xOriginal, "### root!" );
 }
 
@@ -458,7 +455,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
         xTP3->getImplementationId() != xTP5->getImplementationId() &&
         xTP4->getImplementationId() != xTP5->getImplementationId() );
     //
-
+    
     dotest( xImpl );
     dotest( xWeakImpl );
     dotest( xWeakAggImpl );
@@ -472,7 +469,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
     Reference< I > xI( xH, UNO_QUERY );
     OSL_ASSERT( xH->h().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("h") ) );
     OSL_ASSERT( xI->i().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("i") ) );
-
+    
     xWeakAggImpl = (OWeakObject *)new TestAggImplInh();
     Reference< lang::XTypeProvider > xTP7( xWeakAggImpl, UNO_QUERY );
     dotest( xWeakAggImpl );
@@ -509,7 +506,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
     {
         Any a( getCaughtException() );
         OSL_ASSERT( a == exc );
-
+        
         try
         {
             throwException( a );
@@ -517,7 +514,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
         catch (lang::IllegalAccessException & e)
         {
             OSL_ASSERT( exc.Message == e.Message && exc.Context == e.Context );
-
+            
             try
             {
                 throw_one( exc );
@@ -541,7 +538,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
         }
     }
     OSL_ASSERT( exc_succ );
-
+    
     try
     {
         throwException( makeAny( RuntimeException(
@@ -558,7 +555,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
         }
         catch (lang::IllegalAccessException &)
         {
-            OSL_FAIL( "### unexpected IllegalAccessException exception caught!" );
+            OSL_ENSURE( sal_False, "### unexpected IllegalAccessException exception caught!" );
         }
         catch (Exception & rExc2)
         {
@@ -580,7 +577,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
     catch (...)
     {
     }
-    OSL_FAIL( "### exception test failed!" );
+    OSL_ENSURE( sal_False, "### exception test failed!" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

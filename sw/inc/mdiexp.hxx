@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,39 +41,39 @@ class ViewShell;
 class SwDoc;
 class SwDocShell;
 
-extern void ScrollMDI(ViewShell* pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY);
-extern sal_Bool IsScrollMDI(ViewShell* pVwSh, const SwRect &);
+extern void ScrollMDI(ViewShell* pVwSh, const SwRect &, USHORT nRangeX, USHORT nRangeY);
+extern BOOL IsScrollMDI(ViewShell* pVwSh, const SwRect &);
 extern void SizeNotify(ViewShell* pVwSh, const Size &);
 
-// Update of status bar during an action.
+//Update der Statusleiste, waehrend einer Action.
 extern void PageNumNotify( ViewShell* pVwSh,
-                            sal_uInt16 nPhyNum,
-                            sal_uInt16 nVirtNum,
+                            USHORT nPhyNum,
+                            USHORT nVirtNum,
                            const UniString& rPg );
 
 enum FlyMode { FLY_DRAG_START, FLY_DRAG, FLY_DRAG_END };
 extern void FrameNotify( ViewShell* pVwSh, FlyMode eMode = FLY_DRAG );
 
-SW_DLLPUBLIC void StartProgress    ( sal_uInt16 nMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = 0 );
-SW_DLLPUBLIC void EndProgress      ( SwDocShell *pDocSh = 0 );
+SW_DLLPUBLIC void StartProgress	   ( USHORT nMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = 0 );
+SW_DLLPUBLIC void EndProgress  	   ( SwDocShell *pDocSh = 0 );
 SW_DLLPUBLIC void SetProgressState  ( long nPosition, SwDocShell *pDocShell );
-void SetProgressText   ( sal_uInt16 nMessId, SwDocShell *pDocShell );
+void SetProgressText   ( USHORT nMessId, SwDocShell *pDocShell );
 void RescheduleProgress( SwDocShell *pDocShell );
 
-void EnableCmdInterface(sal_Bool bEnable = sal_True);
+void EnableCmdInterface(BOOL bEnable = TRUE);
 
 LAYOUT_NS Dialog* GetSearchDialog();
 
 void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect );
 
 // ndgrf.cxx
-// Delete all QuickDraw-bitmaps of the specific Document.
+// alle QuickDraw-Bitmaps des speziellen Docs loeschen
 void DelAllGrfCacheEntries( SwDoc* pDoc );
 
-// Read ChgMode for tables from configuration.
+// ChgMode fuer Tabellen aus der Konfiguration lesen
 TblChgMode GetTblChgDefaultMode();
 
-sal_Bool JumpToSwMark( ViewShell* pVwSh, const UniString& rMark );
+BOOL JumpToSwMark( ViewShell* pVwSh, const UniString& rMark );
 
 
 #endif

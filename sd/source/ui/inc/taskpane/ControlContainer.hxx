@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,6 +106,8 @@ public:
     */
     sal_uInt32 GetControlIndex (TreeNode* pControl) const;
 
+    sal_uInt32 GetActiveControlIndex (void) const;
+
     /** Return the number of controls in the container.
     */
     sal_uInt32 GetControlCount (void) const;
@@ -162,6 +164,18 @@ public:
         sal_uInt32 nIndex,
         bool bIncludeHidden=false,
         bool bCycle=false) const;
+
+    /** Return the index of the first control.
+        @param bIncludeHidden
+            When <FALSE/> then the first visible control is returned.
+    */
+    sal_uInt32 GetFirstIndex (bool bIncludeHidden=false);
+
+    /** Return the index of the last control.
+        @param bIncludeHidden
+            When <FALSE/> then the last visible control is returned.
+    */
+    sal_uInt32 GetLastIndex (bool bIncludeHidden=false);
 
     void SetMultiSelection (bool bFlag);
 

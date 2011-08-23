@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef _SV_GRAPHITETEXTSRC_HXX
 #define _SV_GRAPHITETEXTSRC_HXX
 // Description: Implements the Graphite interfaces IGrTextSource and
@@ -40,9 +40,9 @@
 #include <stdexcept>
 // Platform
 
-#ifdef WNT
-#include <windows.h>
-#endif
+#include <tools/svwin.h>
+
+#include <svsys.h>
 
 #include <vcl/salgdi.hxx>
 
@@ -52,9 +52,11 @@
 #include "vcl/dllapi.h"
 
 // Libraries
+#include <preextstl.h>
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/ITextSource.h>
+#include <postextstl.h>
 
 // Module type definitions and forward declarations.
 //
@@ -81,7 +83,7 @@ public:
         virtual float           getVerticalOffset(gr::toffset ich);
         virtual gr::isocode     getLanguage(gr::toffset ich);
 
-        virtual std::pair<gr::toffset, gr::toffset> propertyRange(gr::toffset ich);
+        virtual ext_std::pair<gr::toffset, gr::toffset> propertyRange(gr::toffset ich);
         virtual size_t  getFontFeatures(gr::toffset ich, gr::FeatureSetting * prgfset);
         virtual bool    sameSegment(gr::toffset ich1, gr::toffset ich2);
         virtual bool featureVariations() { return false; }

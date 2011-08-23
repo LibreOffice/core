@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,6 +40,7 @@
 
     This item defines a character relief and has currently the values
     emboss, relief.
+
 */
 
 class EDITENG_DLLPUBLIC SvxCharReliefItem : public SfxEnumItem
@@ -50,13 +51,13 @@ public:
     SvxCharReliefItem( FontRelief eValue /*= RELIEF_NONE*/,
                        const sal_uInt16 nId );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&       Store(SvStream & rStrm, sal_uInt16 nIVer) const;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	Create(SvStream &, USHORT) const;
+    virtual SvStream& 		Store(SvStream & rStrm, USHORT nIVer) const;
+    virtual USHORT			GetVersion( USHORT nFileVersion ) const;
 
-    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
-     virtual sal_uInt16         GetValueCount() const;
+    virtual String			GetValueTextByPos( USHORT nPos ) const;
+     virtual USHORT			GetValueCount() const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -64,8 +65,10 @@ public:
                                     String &rText,
                                     const IntlWrapper * = 0 ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool      PutValue( const com::sun::star::uno::Any& rVal,
+                                    BYTE nMemberId );
+    virtual bool      QueryValue( com::sun::star::uno::Any& rVal,
+                                BYTE nMemberId ) const;
 
     inline SvxCharReliefItem& operator=( const SvxCharReliefItem& rItem )
     {

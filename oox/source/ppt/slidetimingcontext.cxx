@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,10 @@
 #include "oox/ppt/slidefragmenthandler.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/ppt/timenodelistcontext.hxx"
 #include "buildlistcontext.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -71,12 +73,12 @@ Reference< XFastContextHandler > SlideTimingContext::createFastChildContext( sal
 
     switch( aElementToken )
     {
-    case PPT_TOKEN( bldLst ):
+    case NMSP_PPT|XML_bldLst:
         xRet.set( new BuildListContext( *this, xAttribs, maTimeNodeList ) );
         break;
-    case PPT_TOKEN( extLst ):
+    case NMSP_PPT|XML_extLst:
         return xRet;
-    case PPT_TOKEN( tnLst ):
+    case NMSP_PPT|XML_tnLst:
         // timing nodes
     {
         xRet.set( new TimeNodeListContext( *this, maTimeNodeList ) );

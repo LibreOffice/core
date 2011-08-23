@@ -34,23 +34,23 @@
 #include <memory>
 
 #include "salhelper/simplereferenceobject.hxx"
-#include "xmlreader/xmlreader.hxx"
 
-namespace xmlreader { struct Span; }
+#include "xmlreader.hxx"
 
 namespace configmgr {
 
+struct Span;
+
 class Parser: public salhelper::SimpleReferenceObject {
 public:
-    virtual xmlreader::XmlReader::Text getTextMode() = 0;
+    virtual XmlReader::Text getTextMode() = 0;
 
     virtual bool startElement(
-        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name)
-        = 0;
+        XmlReader & reader, XmlReader::Namespace ns, Span const & name) = 0;
 
-    virtual void endElement(xmlreader::XmlReader const & reader) = 0;
+    virtual void endElement(XmlReader const & reader) = 0;
 
-    virtual void characters(xmlreader::Span const & text) = 0;
+    virtual void characters(Span const & text) = 0;
 
 protected:
     Parser() {}

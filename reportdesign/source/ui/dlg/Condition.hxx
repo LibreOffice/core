@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,8 +94,8 @@ namespace rptui
 
         ::svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterFontColor; // updates the color below the toolbar icon
         ::svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterBackgroundColor;
-
-
+        
+        
         size_t                          m_nCondIndex;
         long                            m_nLastKnownWindowWidth;
         bool                            m_bInDestruction;
@@ -113,8 +113,10 @@ namespace rptui
         /** will be called when the id of the image list is needed.
             @param  _eBitmapSet
                 <svtools/imgdef.hxx>
+            @param  _bHiContast
+                <TRUE/> when in high contrast mode.
         */
-        virtual ImageList getImageList(sal_Int16 _eBitmapSet) const;
+        virtual ImageList getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const;
 
         /** will be called when the controls need to be resized.
         */
@@ -147,7 +149,7 @@ namespace rptui
 
         /** forward to the parent class
         */
-        void    ApplyCommand(sal_uInt16 _nCommandId, const ::Color& _aColor );
+        void    ApplyCommand(USHORT _nCommandId, const ::Color& _aColor );
 
         inline ::rptui::OReportController& getController() const { return m_rController; }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ static inline void checkInterface( Type const & rType )
         OUString msg( buf.makeStringAndClear() );
 #if OSL_DEBUG_LEVEL > 0
         OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( str.getStr() );
+        OSL_ENSURE( 0, str.getStr() );
 #endif
         throw RuntimeException( msg, Reference< XInterface >() );
     }
@@ -116,7 +116,7 @@ static inline type_entry * __getTypeEntries( class_data * cd )
                     OUString msg( buf.makeStringAndClear() );
 #if OSL_DEBUG_LEVEL > 0
                     OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
-                    OSL_FAIL( str.getStr() );
+                    OSL_ENSURE( 0, str.getStr() );
 #endif
                     throw RuntimeException( msg, Reference< XInterface >() );
                 }
@@ -229,7 +229,7 @@ static inline void * __queryDeepNoXInterface(
             OUString msg( buf.makeStringAndClear() );
 #if OSL_DEBUG_LEVEL > 0
             OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_FAIL( str.getStr() );
+            OSL_ENSURE( 0, str.getStr() );
 #endif
             throw RuntimeException( msg, Reference< XInterface >() );
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,11 +34,9 @@
 #include <com/sun/star/embed/XExtendedStorageStream.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-#include <comphelper/sequenceashashmap.hxx>
-
 #include <rtl/ref.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <list>
 #include <vector>
 
@@ -52,7 +50,7 @@ struct eqFunc
         return r1 == r2;
     }
 };
-typedef ::boost::unordered_map< ::rtl::OUString,
+typedef ::std::hash_map< ::rtl::OUString,
                          ::rtl::Reference< OHierarchyElement_Impl >,
                          ::rtl::OUStringHash,
                          eqFunc > OHierarchyElementList_Impl;
@@ -93,10 +91,10 @@ public:
     void RemoveElement( const ::rtl::Reference< OHierarchyElement_Impl >& aRef );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream >
-        GetStreamHierarchically( sal_Int32 nStorageMode,
-                                OStringList_Impl& aPath,
-                                sal_Int32 nStreamMode,
-                                const ::comphelper::SequenceAsHashMap& aEncryptionData = ::comphelper::SequenceAsHashMap() );
+                                        GetStreamHierarchically( sal_Int32 nStorageMode,
+                                                                OStringList_Impl& aPath,
+                                                                sal_Int32 nStreamMode,
+                                                                const ::rtl::OUString& aPassword = ::rtl::OUString() );
 
     void RemoveStreamHierarchically( OStringList_Impl& aListPath );
 
@@ -130,10 +128,10 @@ public:
     static OStringList_Impl GetListPathFromString( const ::rtl::OUString& aPath );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream >
-        GetStreamHierarchically( sal_Int32 nStorageMode,
-                                OStringList_Impl& aListPath,
-                                sal_Int32 nStreamMode,
-                                const ::comphelper::SequenceAsHashMap& aEncryptionData = ::comphelper::SequenceAsHashMap() );
+                                        GetStreamHierarchically( sal_Int32 nStorageMode,
+                                                                OStringList_Impl& aListPath,
+                                                                sal_Int32 nStreamMode,
+                                                                const ::rtl::OUString& aPassword = ::rtl::OUString() );
 
     void RemoveStreamHierarchically( OStringList_Impl& aListPath );
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SwZoomControl, SvxZoomItem );
 
-SwZoomControl::SwZoomControl( sal_uInt16 _nSlotId,
-                              sal_uInt16 _nId,
+SwZoomControl::SwZoomControl( USHORT _nSlotId,
+                              USHORT _nId,
                               StatusBar& rStb ) :
     SvxZoomStatusBarControl( _nSlotId, _nId, rStb )
 {
@@ -52,7 +52,7 @@ SwZoomControl::~SwZoomControl()
 {
 }
 
-void SwZoomControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
+void SwZoomControl::StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
     if(SFX_ITEM_AVAILABLE == eState && pState->ISA( SfxStringItem ))

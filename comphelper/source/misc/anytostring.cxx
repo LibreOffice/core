@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ void appendValue( rtl::OUStringBuffer & buf,
         buf.append( rtl::OUString::unacquired( &typeRef->pTypeName ) );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(") ") );
     }
-
+    
     switch (typeRef->eTypeClass) {
     case typelib_TypeClass_INTERFACE: {
         buf.append( static_cast<sal_Unicode>('@') );
@@ -114,7 +114,7 @@ void appendValue( rtl::OUStringBuffer & buf,
                 reinterpret_cast< typelib_CompoundTypeDescription * >(
                     typeDescr );
             sal_Int32 nDescr = compType->nMembers;
-
+            
             if (compType->pBaseTypeDescription) {
                 appendValue(
                     buf, val, reinterpret_cast<
@@ -123,12 +123,12 @@ void appendValue( rtl::OUStringBuffer & buf,
                 if (nDescr > 0)
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
             }
-
+            
             typelib_TypeDescriptionReference ** ppTypeRefs =
                 compType->ppTypeRefs;
             sal_Int32 * memberOffsets = compType->pMemberOffsets;
             rtl_uString ** ppMemberNames = compType->ppMemberNames;
-
+            
             for ( sal_Int32 nPos = 0; nPos < nDescr; ++nPos )
             {
                 buf.append( ppMemberNames[ nPos ] );
@@ -176,7 +176,7 @@ void appendValue( rtl::OUStringBuffer & buf,
                 uno_Sequence * seq =
                     *static_cast< uno_Sequence * const * >(val);
                 sal_Int32 nElements = seq->nElements;
-
+                
                 if (nElements > 0)
                 {
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );

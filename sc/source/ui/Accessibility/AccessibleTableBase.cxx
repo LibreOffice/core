@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@
 #include <vcl/svapp.hxx>
 
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -115,7 +115,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 ::rtl::OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 nRow )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    OSL_FAIL("Here should be a implementation to fill the description");
+    DBG_ERROR("Here should be a implementation to fill the description");
 
     if ((nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
         throw lang::IndexOutOfBoundsException();
@@ -127,7 +127,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 ::rtl::OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int32 nColumn )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    OSL_FAIL("Here should be a implementation to fill the description");
+    DBG_ERROR("Here should be a implementation to fill the description");
 
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0))
         throw lang::IndexOutOfBoundsException();
@@ -198,7 +198,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
                     throw (uno::RuntimeException)
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
-    OSL_FAIL("Here should be a implementation to fill the row headers");
+    DBG_ERROR("Here should be a implementation to fill the row headers");
 
     //CommitChange
     return xAccessibleTable;
@@ -208,7 +208,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
                     throw (uno::RuntimeException)
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
-    OSL_FAIL("Here should be a implementation to fill the column headers");
+    DBG_ERROR("Here should be a implementation to fill the column headers");
 
     //CommitChange
     return xAccessibleTable;
@@ -217,7 +217,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleRows(  )
                     throw (uno::RuntimeException)
 {
-    OSL_FAIL("not implemented yet");
+    DBG_ERROR("not implemented yet");
     uno::Sequence< sal_Int32 > aSequence;
     return aSequence;
 }
@@ -225,7 +225,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessible
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleColumns(  )
                     throw (uno::RuntimeException)
 {
-    OSL_FAIL("not implemented yet");
+    DBG_ERROR("not implemented yet");
     uno::Sequence< sal_Int32 > aSequence;
     return aSequence;
 }
@@ -233,21 +233,21 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessible
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleRowSelected( sal_Int32 /* nRow */ )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    OSL_FAIL("not implemented yet");
-    return false;
+    DBG_ERROR("not implemented yet");
+    return sal_False;
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleColumnSelected( sal_Int32 /* nColumn */ )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    OSL_FAIL("not implemented yet");
-    return false;
+    DBG_ERROR("not implemented yet");
+    return sal_False;
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCellAt( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
                     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    OSL_FAIL("not implemented yet");
+    DBG_ERROR("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
     return xAccessible;
 }
@@ -255,7 +255,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCellA
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCaption(  )
                     throw (uno::RuntimeException)
 {
-    OSL_FAIL("not implemented yet");
+    DBG_ERROR("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
     return xAccessible;
 }
@@ -263,7 +263,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCapti
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleSummary(  )
                     throw (uno::RuntimeException)
 {
-    OSL_FAIL("not implemented yet");
+    DBG_ERROR("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
     return xAccessible;
 }
@@ -271,8 +271,8 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleSumma
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    OSL_FAIL("not implemented yet");
-    return false;
+    DBG_ERROR("not implemented yet");
+    return sal_False;
 }
 
     //=====  XAccessibleExtendedTable  ========================================
@@ -328,7 +328,7 @@ sal_Int32 SAL_CALL
     IsObjectValid();
     return static_cast<sal_Int32>(maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
             (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
-//  return 1;
+//	return 1;
 }
 
 uno::Reference< XAccessible > SAL_CALL
@@ -355,6 +355,10 @@ uno::Reference< XAccessible > SAL_CALL
     throw (uno::RuntimeException)
 {
     String sDesc(ScResId(STR_ACC_TABLE_DESCR));
+/*	String sCoreName;
+    if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
+        sDesc.SearchAndReplaceAscii("%1", sCoreName);
+    sDesc.SearchAndReplaceAscii("%2", String(ScResId(SCSTR_UNKNOWN)));*/
     return rtl::OUString(sDesc);
 }
 
@@ -373,7 +377,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     ScAccessibleTableBase::getAccessibleRelationSet(void)
     throw (uno::RuntimeException)
 {
-    OSL_FAIL("should be implemented in the abrevated class");
+    DBG_ERROR("should be implemented in the abrevated class");
     return uno::Reference<XAccessibleRelationSet>();
 }
 
@@ -381,7 +385,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleTableBase::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    OSL_FAIL("should be implemented in the abrevated class");
+    DBG_ERROR("should be implemented in the abrevated class");
     uno::Reference< XAccessibleStateSet > xAccessibleStateSet;
     return xAccessibleStateSet;
 }
@@ -398,7 +402,8 @@ sal_Bool SAL_CALL
         ScAccessibleTableBase::isAccessibleChildSelected( sal_Int32 nChildIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    // I don't need to guard, because the called functions have a guard
+    // I don't need to guard, because the called funtions have a guard
+//    SolarMutexGuard aGuard;
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
     return isAccessibleSelected(getAccessibleRow(nChildIndex), getAccessibleColumn(nChildIndex));

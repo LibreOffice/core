@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,9 @@ enum XMLPropOOOTransformerAction
     XML_ATACTION_MOVE_PROTECT,
     XML_ATACTION_SIZE_PROTECT,
     XML_ATACTION_PROTECT,
-    // No image transparancy info in lable document (#i50322#)
+    // --> OD 2005-06-10 #i50322#
     XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY,
+    // <--
     XML_PTACTION_END=XML_TACTION_END
 };
 
@@ -76,6 +77,6 @@ extern XMLTransformerActionInit aListLevelPropertyOOoAttrActionTable[];
 extern XMLTransformerActionInit aChartPropertyOOoAttrActionTable[];
 extern XMLTransformerActionInit aChartPropertyOOoElemActionTable[];
 
-#endif  //  _XMLOFF_PROPERTYACTIONSOOO_HXX
+#endif	//  _XMLOFF_PROPERTYACTIONSOOO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

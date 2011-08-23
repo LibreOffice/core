@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,17 +45,14 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
 /** === end UNO includes === **/
 
 #include <connectivity/dbtools.hxx>
 #include <svl/smplhint.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/stl_types.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <vcl/svapp.hxx>
-#include <dbaccess/dbsubcomponentcontroller.hxx>
+#include <dbaccess/singledoccontroller.hxx>
 #include <svx/unoshape.hxx>
 #include <osl/mutex.hxx>
 
@@ -73,36 +70,8 @@ namespace rptui
 //----------------------------------------------------------------------------
 
 
-struct PropertyInfo
-{
-    bool    bIsReadonlyOrTransient;
-
-    PropertyInfo()
-        :bIsReadonlyOrTransient( false )
-    {
-    }
-
-    PropertyInfo( const bool i_bIsTransientOrReadOnly )
-        :bIsReadonlyOrTransient( i_bIsTransientOrReadOnly )
-    {
-    }
-};
-
-typedef ::boost::unordered_map< ::rtl::OUString, PropertyInfo, ::rtl::OUStringHash >    PropertiesInfo;
-
-struct ObjectInfo
-{
-    PropertiesInfo              aProperties;
-    Reference< XPropertySet >   xPropertyIntrospection;
-
-    ObjectInfo()
-        :aProperties()
-        ,xPropertyIntrospection()
-    {
-    }
-};
-
-typedef ::std::map< Reference< XPropertySet >, ObjectInfo, ::comphelper::OInterfaceCompare< XPropertySet > >    PropertySetInfoCache;
+DECLARE_STL_USTRINGACCESS_MAP(bool, AllProperties);
+DECLARE_STL_STDKEY_MAP(uno::Reference< beans::XPropertySet >, AllProperties, PropertySetInfoCache);
 
 // -----------------------------------------------------------------------------
 
@@ -117,9 +86,8 @@ public:
     ConditionUpdater                                    m_aConditionUpdater;
     ::osl::Mutex                                        m_aMutex;
     ::std::vector< uno::Reference< container::XChild> > m_aSections;
-    Reference< XIntrospection >                         m_xIntrospection;
     oslInterlockedCount                                 m_nLocks;
-    sal_Bool                                            m_bReadOnly;
+    sal_Bool	                                        m_bReadOnly;
     sal_Bool                                            m_bIsUndo;
 
     OXUndoEnvironmentImpl(OReportModel& _rModel);
@@ -150,16 +118,16 @@ OXUndoEnvironment::~OXUndoEnvironment()
     DBG_DTOR( rpt_OXUndoEnvironment,NULL);
 }
 // -----------------------------------------------------------------------------
-void OXUndoEnvironment::Lock()
-{
+void OXUndoEnvironment::Lock() 
+{ 
     OSL_ENSURE(m_refCount,"Illegal call to dead object!");
-    osl_incrementInterlockedCount( &m_pImpl->m_nLocks );
+    osl_incrementInterlockedCount( &m_pImpl->m_nLocks ); 
 }
-void OXUndoEnvironment::UnLock()
-{
+void OXUndoEnvironment::UnLock() 
+{ 
     OSL_ENSURE(m_refCount,"Illegal call to dead object!");
 
-    osl_decrementInterlockedCount( &m_pImpl->m_nLocks );
+    osl_decrementInterlockedCount( &m_pImpl->m_nLocks ); 
 }
 sal_Bool OXUndoEnvironment::IsLocked() const { return m_pImpl->m_nLocks != 0; }
 // -----------------------------------------------------------------------------
@@ -187,7 +155,7 @@ void OXUndoEnvironment::Clear(const Accessor& /*_r*/)
     {
         uno::Reference<beans::XPropertySet> xProp(aIter->first,uno::UNO_QUERY);
         xProp->getPropertySetInfo();
-        int nlen = aIter->second.aProperties.size();
+        int nlen = aIter->second.size();
         nlen = nlen;
     }
 #endif
@@ -206,7 +174,7 @@ void OXUndoEnvironment::Clear(const Accessor& /*_r*/)
     {
         OReportPage* pPage = PTR_CAST( OReportPage, m_pImpl->m_rModel.GetMasterPage(i) );
         RemoveSection(pPage);
-    }
+    }    
 
     m_pImpl->m_aSections.clear();
 
@@ -232,7 +200,7 @@ void OXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         ModeChanged();
 }
 // -----------------------------------------------------------------------------
-//  XEventListener
+//	XEventListener
 //------------------------------------------------------------------------------
 void SAL_CALL OXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeException )
 {
@@ -245,6 +213,8 @@ void SAL_CALL OXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeE
             RemoveSection(xSection);
         else
             RemoveElement(xSourceSet);
+        /*if (!m_pImpl->m_aPropertySetCache.empty())
+            m_pImpl->m_aPropertySetCache.erase(xSourceSet);*/
     }
 }
 
@@ -262,83 +232,39 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     if (!xSet.is())
         return;
 
-    dbaui::DBSubComponentController* pController = m_pImpl->m_rModel.getController();
+    dbaui::OSingleDocumentController* pController = m_pImpl->m_rModel.getController();
     if ( !pController )
         return;
 
-    // no Undo for transient and readonly props.
+    // no Undo for transient and readonly props. 
     // let's see if we know something about the set
 #if OSL_DEBUG_LEVEL > 0
     int nlen = m_pImpl->m_aPropertySetCache.size();
     nlen = nlen;
 #endif
-    PropertySetInfoCache::iterator objectPos = m_pImpl->m_aPropertySetCache.find(xSet);
-    if (objectPos == m_pImpl->m_aPropertySetCache.end())
+    PropertySetInfoCache::iterator aSetPos = m_pImpl->m_aPropertySetCache.find(xSet);
+    if (aSetPos == m_pImpl->m_aPropertySetCache.end())
     {
-        objectPos = m_pImpl->m_aPropertySetCache.insert( PropertySetInfoCache::value_type(
-            xSet, ObjectInfo()
-        ) ).first;
-        DBG_ASSERT(objectPos != m_pImpl->m_aPropertySetCache.end(), "OXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
+        AllProperties aNewEntry;
+        aSetPos = m_pImpl->m_aPropertySetCache.insert(PropertySetInfoCache::value_type(xSet,aNewEntry)).first;
+        DBG_ASSERT(aSetPos != m_pImpl->m_aPropertySetCache.end(), "OXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
     }
-    if ( objectPos == m_pImpl->m_aPropertySetCache.end() )
+    if ( aSetPos == m_pImpl->m_aPropertySetCache.end() )
         return;
 
     // now we have access to the cached info about the set
     // let's see what we know about the property
-    ObjectInfo& rObjectInfo = objectPos->second;
-    PropertiesInfo::iterator aPropertyPos = rObjectInfo.aProperties.find( _rEvent.PropertyName );
-    if ( aPropertyPos == rObjectInfo.aProperties.end() )
-    {   // nothing 'til now ... have to change this ....
+    AllProperties& rPropInfos = aSetPos->second;
+    AllPropertiesIterator aPropertyPos = rPropInfos.find( _rEvent.PropertyName );
+    if (aPropertyPos == rPropInfos.end())
+    {	// nothing 'til now ... have to change this ....
         // the attributes
-        Reference< XPropertySetInfo > xPSI( xSet->getPropertySetInfo(), UNO_SET_THROW );
-        sal_Int32 nPropertyAttributes = 0;
-        try
-        {
-            if ( xPSI->hasPropertyByName( _rEvent.PropertyName ) )
-            {
-                nPropertyAttributes = xPSI->getPropertyByName( _rEvent.PropertyName ).Attributes;
-            }
-            else
-            {
-                // it's perfectly valid for a component to notify a change in a property which it doesn't have - as long
-                // as it has an attribute with this name
-                if ( !rObjectInfo.xPropertyIntrospection.is() )
-                {
-                    if ( !m_pImpl->m_xIntrospection.is() )
-                    {
-                        ::comphelper::ComponentContext aContext( m_pImpl->m_rModel.getController()->getORB() );
-                        OSL_VERIFY( aContext.createComponent( "com.sun.star.beans.Introspection", m_pImpl->m_xIntrospection ) );
-                    }
-                    if ( m_pImpl->m_xIntrospection.is() )
-                    {
-                        Reference< XIntrospectionAccess > xIntrospection(
-                            m_pImpl->m_xIntrospection->inspect( makeAny( _rEvent.Source ) ),
-                            UNO_SET_THROW
-                        );
-                        rObjectInfo.xPropertyIntrospection.set( xIntrospection->queryAdapter( XPropertySet::static_type() ), UNO_QUERY_THROW );
-                    }
-                }
-                if ( rObjectInfo.xPropertyIntrospection.is() )
-                {
-                    xPSI.set( rObjectInfo.xPropertyIntrospection->getPropertySetInfo(), UNO_SET_THROW );
-                    nPropertyAttributes = xPSI->getPropertyByName( _rEvent.PropertyName ).Attributes;
-                }
-            }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        const bool bTransReadOnly =
-                    ( ( nPropertyAttributes & PropertyAttribute::READONLY ) != 0 )
-                ||  ( ( nPropertyAttributes & PropertyAttribute::TRANSIENT ) != 0 );
+        INT32 nAttributes = xSet->getPropertySetInfo()->getPropertyByName( _rEvent.PropertyName ).Attributes;
+        bool bTransReadOnly = ((nAttributes & PropertyAttribute::READONLY) != 0) || ((nAttributes & PropertyAttribute::TRANSIENT) != 0);
 
         // insert the new entry
-        aPropertyPos = rObjectInfo.aProperties.insert( PropertiesInfo::value_type(
-            _rEvent.PropertyName,
-            PropertyInfo( bTransReadOnly )
-        ) ).first;
-        DBG_ASSERT(aPropertyPos != rObjectInfo.aProperties.end(), "OXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
+        aPropertyPos = rPropInfos.insert( AllProperties::value_type( _rEvent.PropertyName, bTransReadOnly ) ).first;
+        DBG_ASSERT(aPropertyPos != rPropInfos.end(), "OXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
     }
 
     implSetModified();
@@ -347,7 +273,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     // and are able to decide wether or not we need an undo action
 
     // no UNDO for transient/readonly properties
-    if ( aPropertyPos->second.bIsReadonlyOrTransient )
+    if ( aPropertyPos->second )
         return;
 
     // give components with sub responsibilities a chance
@@ -380,7 +306,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     if ( pUndo == NULL )
         pUndo = new ORptUndoPropertyAction( m_pImpl->m_rModel, _rEvent );
 
-    m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction( pUndo );
+    pController->addUndoActionAndInvalidate(pUndo);
     pController->InvalidateAll();
 }
 // -----------------------------------------------------------------------------
@@ -390,7 +316,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     if ( _xContainer.is() )
     {
         aFind = ::std::find(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),_xContainer);
-
+            
         if ( aFind == m_pImpl->m_aSections.end() )
         {
             Reference<container::XChild> xParent(_xContainer->getParent(),uno::UNO_QUERY);
@@ -416,7 +342,7 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) thro
             Reference< report::XSection > xContainer(evt.Source,uno::UNO_QUERY);
 
             ::std::vector< uno::Reference< container::XChild> >::const_iterator aFind = getSection(xContainer.get());
-
+            
             if ( aFind != m_pImpl->m_aSections.end() )
             {
                 OUndoEnvLock aLock(*this);
@@ -431,7 +357,7 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) thro
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
-
+             
             }
         }
         else
@@ -439,9 +365,12 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) thro
             uno::Reference< report::XFunctions> xContainer(evt.Source,uno::UNO_QUERY);
             if ( xContainer.is() )
             {
-                m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction(
-                    new OUndoContainerAction( m_pImpl->m_rModel, rptui::Inserted, xContainer.get(),
-                        xIface, RID_STR_UNDO_ADDFUNCTION ) );
+                dbaui::OSingleDocumentController* pController = m_pImpl->m_rModel.getController();
+                pController->addUndoActionAndInvalidate(new OUndoContainerAction(m_pImpl->m_rModel
+                                                                                ,rptui::Inserted
+                                                                                ,xContainer.get()
+                                                                                ,xIface
+                                                                                ,RID_STR_UNDO_ADDFUNCTION));
             }
         }
     }
@@ -454,6 +383,7 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) thro
 //------------------------------------------------------------------------------
 void OXUndoEnvironment::implSetModified()
 {
+    //if ( !IsLocked() )
     m_pImpl->m_rModel.SetModified( sal_True );
 }
 
@@ -484,7 +414,7 @@ void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw
     {
         Reference< report::XSection > xContainer(evt.Source,uno::UNO_QUERY);
         ::std::vector< uno::Reference< container::XChild> >::const_iterator aFind = getSection(xContainer.get());
-
+        
         Reference< report::XReportComponent >  xReportComponent( xIface, UNO_QUERY );
         if ( aFind != m_pImpl->m_aSections.end() && xReportComponent.is() )
         {
@@ -506,12 +436,16 @@ void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw
             uno::Reference< report::XFunctions> xFunctions(evt.Source,uno::UNO_QUERY);
             if ( xFunctions.is() )
             {
-                m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction( new OUndoContainerAction(
-                    m_pImpl->m_rModel, rptui::Removed, xFunctions.get(), xIface, RID_STR_UNDO_ADDFUNCTION ) );
+                dbaui::OSingleDocumentController* pController = m_pImpl->m_rModel.getController();
+                pController->addUndoActionAndInvalidate(new OUndoContainerAction(m_pImpl->m_rModel
+                                                                                ,rptui::Removed
+                                                                                ,xFunctions.get()
+                                                                                ,xIface
+                                                                                ,RID_STR_UNDO_ADDFUNCTION));
             }
         }
     }
-
+    
     if ( xIface.is() )
         RemoveElement(xIface);
 
@@ -607,6 +541,7 @@ void OXUndoEnvironment::switchListening( const Reference< XIndexAccess >& _rxCon
 
         // be notified of any changes in the container elements
         Reference< XContainer > xSimpleContainer( _rxContainer, UNO_QUERY );
+        // OSL_ENSURE( xSimpleContainer.is(), "OXUndoEnvironment::switchListening: how are we expected to be notified of changes in the container?" );
         if ( xSimpleContainer.is() )
         {
             if ( _bStartListening )
@@ -651,6 +586,7 @@ void OXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObjec
     }
     catch( const Exception& )
     {
+        //OSL_ENSURE( sal_False, "OXUndoEnvironment::switchListening: caught an exception!" );
     }
 }
 

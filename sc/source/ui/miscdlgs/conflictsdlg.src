@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,17 +49,15 @@ ModalDialog RID_SCDLG_CONFLICTS
         Pos = MAP_APPFONT ( 6 , 34 ) ;
         Size = MAP_APPFONT ( 326 , 104 ) ;
         Border = TRUE ;
-    };
+    };    
     PushButton BTN_KEEPMINE
     {
-        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPMINE";
         Pos = MAP_APPFONT ( 72 , 145 ) ;
         Size = MAP_APPFONT ( 76 , 14 ) ;
         Text [ en-US ] = "Keep ~Mine" ;
     };
     PushButton BTN_KEEPOTHER
     {
-        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPOTHER";
         Pos = MAP_APPFONT ( 190 , 145 ) ;
         Size = MAP_APPFONT ( 76 , 14 ) ;
         Text [ en-US ] = "Keep ~Other" ;
@@ -71,14 +69,12 @@ ModalDialog RID_SCDLG_CONFLICTS
     };
     PushButton BTN_KEEPALLMINE
     {
-        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPALLMINE";
         Pos = MAP_APPFONT ( 6 , 172 ) ;
         Size = MAP_APPFONT ( 104 , 14 ) ;
         Text [ en-US ] = "~Keep All Mine" ;
     };
     PushButton BTN_KEEPALLOTHERS
     {
-        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPALLOTHERS";
         Pos = MAP_APPFONT ( 116 , 172 ) ;
         Size = MAP_APPFONT ( 104 , 14 ) ;
         Text [ en-US ] = "Keep ~All Others" ;
@@ -91,7 +87,7 @@ ModalDialog RID_SCDLG_CONFLICTS
     HelpButton BTN_HELP
     {
         Pos = MAP_APPFONT ( 282 , 172 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;    
     };
     String STR_TITLE_CONFLICT
     {
@@ -110,3 +106,4 @@ ModalDialog RID_SCDLG_CONFLICTS
         Text [ en-US ] = "Unknown User" ;
     };
 };
+

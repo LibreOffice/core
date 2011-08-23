@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@
 class Sd3DChildWindow : public SfxChildWindow
 {
  public:
-    Sd3DChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
+    Sd3DChildWindow( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW(Sd3DChildWindow);
 };
 
-#endif      // _SD_3DCHLD_HXX
+#endif		// _SD_3DCHLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

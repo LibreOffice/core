@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,8 +31,10 @@
 
 
 #include <tools/debug.hxx>
+#ifndef __SGI_STL_SET
 #include <set>
-#include "xmloff/xmlnmspe.hxx"
+#endif
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <com/sun/star/style/XStyle.hpp>
@@ -46,7 +48,7 @@
 
 #include <xmloff/prstylei.hxx>
 #include <xmloff/attrlist.hxx>
-#include "xmloff/xmlerror.hxx"
+#include "xmlerror.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -82,10 +84,10 @@ XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
         sal_Bool bDefault )
-:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault )
-,   msIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
-,   msFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
-,   mxStyles( &rStyles )
+:	SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault )
+,	msIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
+,	msFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
+,	mxStyles( &rStyles )
 {
 }
 
@@ -201,7 +203,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         {
             Sequence< PropertyValue > aValues;
             xImpPrMap->FillPropertySequence( maProperties, aValues );
-
+            
             sal_Int32 nLen = aValues.getLength();
             if( nLen )
             {
@@ -209,25 +211,25 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                 {
                     aValues.realloc( nLen + 2 );
                     PropertyValue *pProps = aValues.getArray() + nLen;
-                    pProps->Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName"));
+                    pProps->Name = rtl::OUString::createFromAscii("ParaStyleName");
                     OUString sParent( GetParentName() );
                     if( sParent.getLength() )
                         sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
                     else
-                        sParent =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+                        sParent =  rtl::OUString::createFromAscii("Standard");
                     pProps->Value <<= sParent;
                     ++pProps;
-                    pProps->Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaConditionalStyleName"));
+                    pProps->Name = rtl::OUString::createFromAscii("ParaConditionalStyleName");
                     pProps->Value <<= sParent;
                 }
-
+                
                 Reference < XAutoStyle > xAutoStyle = xAutoFamily->insertStyle( aValues );
                 if( xAutoStyle.is() )
                 {
                     Sequence< OUString > aPropNames(1);
                     aPropNames[0] = GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ?
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaAutoStyleName")) :
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharAutoStyleName"));
+                        rtl::OUString::createFromAscii("ParaAutoStyleName") :
+                        rtl::OUString::createFromAscii("CharAutoStyleName");
                     Sequence< Any > aAny = xAutoStyle->getPropertyValues( aPropNames );
                     if( aAny.hasElements() )
                     {
@@ -361,7 +363,7 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
         if( sParent.getLength() && !xFamilies->hasByName( sParent ) )
             sParent = OUString();
 
-        if( sParent != mxStyle->getParentStyle() )
+        if(	sParent != mxStyle->getParentStyle() )
         {
             // this may except if setting the parent style forms a
             // circle in the style depencies; especially if the parent

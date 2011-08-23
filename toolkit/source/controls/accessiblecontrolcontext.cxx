@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ namespace toolkit
             m_xControlModel = m_xControlModel.query( xControl->getModel() );
         OSL_ENSURE( m_xControlModel.is(), "OAccessibleControlContext::Init: invalid creator (no control, or control without model!" );
         if ( !m_xControlModel.is() )
-            throw DisposedException();  // caught by the caller (the create method)
+            throw DisposedException();	// caught by the caller (the create method)
 
         // start listening at the model
         startModelListening();
@@ -104,7 +104,7 @@ namespace toolkit
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAccessibleControlContext::create: caught an exception from the late ctor!" );
+            OSL_ENSURE( sal_False, "OAccessibleControlContext::create: caught an exception from the late ctor!" );
         }
         return pNew;
     }
@@ -190,7 +190,7 @@ namespace toolkit
             pStateSet = new ::utl::AccessibleStateSetHelper( implGetForeignControlledStates() );
         }
         else
-        {   // only the DEFUNC state if we're already disposed
+        {	// only the DEFUNC state if we're already disposed
             pStateSet = new ::utl::AccessibleStateSetHelper;
             pStateSet->AddState( AccessibleStateType::DEFUNC );
         }
@@ -215,7 +215,7 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OAccessibleControlContext::getModelStringProperty( const sal_Char* _pPropertyName )
+    ::rtl::OUString	OAccessibleControlContext::getModelStringProperty( const sal_Char* _pPropertyName )
     {
         ::rtl::OUString sReturn;
         try
@@ -229,13 +229,13 @@ namespace toolkit
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAccessibleControlContext::getModelStringProperty: caught an exception!" );
+            OSL_ENSURE( sal_False, "OAccessibleControlContext::getModelStringProperty: caught an exception!" );
         }
         return sReturn;
     }
 
     //--------------------------------------------------------------------
-    Window* OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
+    Window*	OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
     {
         Reference< awt::XControl > xControl( getAccessibleCreator(), UNO_QUERY );
         Reference< awt::XWindow > xWindow;
@@ -256,7 +256,7 @@ namespace toolkit
             // want to do some VCL stuff here ...
         OContextEntryGuard aGuard( this );
 
-        OSL_FAIL( "OAccessibleControlContext::implGetBounds: performance issue: forced to calc the size myself!" );
+        OSL_ENSURE( sal_False, "OAccessibleControlContext::implGetBounds: performance issue: forced to calc the size myself!" );
         // In design mode (and this is what this class is for), the surrounding shape (if any) should handle this call
         // The problem is that in design mode, our size may not be correct (in the drawing layer, controls are
         // positioned/sized for painting only), and that calculation of our position is expensive
@@ -319,7 +319,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL OAccessibleControlContext::grabFocus(  ) throw (RuntimeException)
     {
-        OSL_FAIL( "OAccessibleControlContext::grabFocus: !isFocusTraversable, but grabFocus!" );
+        OSL_ENSURE( sal_False, "OAccessibleControlContext::grabFocus: !isFocusTraversable, but grabFocus!" );
     }
 
     //--------------------------------------------------------------------
@@ -376,7 +376,7 @@ namespace toolkit
     }
 
 //........................................................................
-}   //namespace toolkit
+}	//namespace toolkit
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

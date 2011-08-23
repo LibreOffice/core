@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "ximpstyl.hxx"
 #include "ximpshap.hxx"
@@ -100,7 +100,7 @@ typedef std::map< com::sun::star::uno::Reference < com::sun::star::drawing::XSha
     is a pointer so one can build up a stack of this structs */
 struct XMLShapeImportPageContextImpl
 {
-    ShapeGluePointsMap      maShapeGluePointsMap;
+    ShapeGluePointsMap		maShapeGluePointsMap;
 
     uno::Reference < drawing::XShapes > mxShapes;
 
@@ -111,17 +111,17 @@ struct XMLShapeImportPageContextImpl
 struct XMLShapeImportHelperImpl
 {
     // context for sorting shapes
-    ShapeSortContext*           mpSortContext;
+    ShapeSortContext*			mpSortContext;
 
-    IdShapeMap                  maShapeIds;
+    IdShapeMap					maShapeIds;
 
     std::vector<ConnectionHint> maConnections;
 
     // #88546# possibility to swich progress bar handling on/off
-    sal_Bool                    mbHandleProgressBar;
+    sal_Bool					mbHandleProgressBar;
 
     // stores the capability of the current model to create presentation shapes
-    sal_Bool                    mbIsPresentationShapesSupported;
+    sal_Bool					mbIsPresentationShapesSupported;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -130,7 +130,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImport& rImporter,
         const uno::Reference< frame::XModel>& rModel,
         SvXMLImportPropertyMapper *pExtMapper )
-:   mpPageContext(NULL),
+:	mpPageContext(NULL),
     mxModel(rModel),
 
     mpPropertySetMapper(0L),
@@ -158,7 +158,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpImpl = new XMLShapeImportHelperImpl();
     mpImpl->mpSortContext = 0;
 
-    // #88546# init to sal_False
+    // #88546# init to FALSE
     mpImpl->mbHandleProgressBar = sal_False;
 
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel, rImporter );
@@ -181,6 +181,12 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     // chain text attributes
     mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(rImporter));
     mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaDefaultExtPropMapper(rImporter));
+
+/*
+    // chain form attributes
+    const UniReference< SvXMLImportPropertyMapper> xFormMapper( rImporter.GetFormImport()->getStylePropertyMapper().getBodyPtr() );
+    mpPropertySetMapper->ChainImportMapper(xFormMapper);
+*/
 
     // construct PresPagePropsMapper
     xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, mpSdPropHdlFactory);
@@ -225,7 +231,16 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
 
     if(mpGroupShapeElemTokenMap) delete mpGroupShapeElemTokenMap;
     if(mpFrameShapeElemTokenMap) delete mpFrameShapeElemTokenMap;
-
+/*
+    if(mpShapeAttrTokenMap) delete mpShapeAttrTokenMap;
+    if(mpRectShapeAttrTokenMap) delete mpRectShapeAttrTokenMap;
+    if(mpLineShapeAttrTokenMap) delete mpLineShapeAttrTokenMap;
+    if(mpEllipseShapeAttrTokenMap) delete mpEllipseShapeAttrTokenMap;
+    if(mpTextBoxShapeAttrTokenMap) delete mpTextBoxShapeAttrTokenMap;
+    if(mpControlShapeAttrTokenMap) delete mpControlShapeAttrTokenMap;
+    if(mpPageShapeAttrTokenMap) delete mpPageShapeAttrTokenMap;
+    if(mpGraphicObjectShapeAttrTokenMap) delete mpGraphicObjectShapeAttrTokenMap;
+*/
     if(mpPolygonShapeAttrTokenMap) delete mpPolygonShapeAttrTokenMap;
     if(mpPathShapeAttrTokenMap) delete mpPathShapeAttrTokenMap;
     if(mp3DSceneShapeElemTokenMap) delete mp3DSceneShapeElemTokenMap;
@@ -260,33 +275,33 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()
 {
     if(!mpGroupShapeElemTokenMap)
     {
-        static SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW,           XML_G,              XML_TOK_GROUP_GROUP         },
-    { XML_NAMESPACE_DRAW,           XML_RECT,           XML_TOK_GROUP_RECT          },
-    { XML_NAMESPACE_DRAW,           XML_LINE,           XML_TOK_GROUP_LINE          },
-    { XML_NAMESPACE_DRAW,           XML_CIRCLE,         XML_TOK_GROUP_CIRCLE        },
-    { XML_NAMESPACE_DRAW,           XML_ELLIPSE,        XML_TOK_GROUP_ELLIPSE       },
-    { XML_NAMESPACE_DRAW,           XML_POLYGON,        XML_TOK_GROUP_POLYGON       },
-    { XML_NAMESPACE_DRAW,           XML_POLYLINE,       XML_TOK_GROUP_POLYLINE      },
-    { XML_NAMESPACE_DRAW,           XML_PATH,           XML_TOK_GROUP_PATH          },
+    { XML_NAMESPACE_DRAW,			XML_G,				XML_TOK_GROUP_GROUP			},
+    { XML_NAMESPACE_DRAW,			XML_RECT,			XML_TOK_GROUP_RECT			},
+    { XML_NAMESPACE_DRAW,			XML_LINE,			XML_TOK_GROUP_LINE			},
+    { XML_NAMESPACE_DRAW,			XML_CIRCLE,		    XML_TOK_GROUP_CIRCLE		},
+    { XML_NAMESPACE_DRAW,			XML_ELLIPSE,		XML_TOK_GROUP_ELLIPSE		},
+    { XML_NAMESPACE_DRAW,			XML_POLYGON,		XML_TOK_GROUP_POLYGON		},
+    { XML_NAMESPACE_DRAW,			XML_POLYLINE,		XML_TOK_GROUP_POLYLINE		},
+    { XML_NAMESPACE_DRAW,			XML_PATH,			XML_TOK_GROUP_PATH			},
 
-    { XML_NAMESPACE_DRAW,           XML_CONTROL,        XML_TOK_GROUP_CONTROL       },
-    { XML_NAMESPACE_DRAW,           XML_CONNECTOR,      XML_TOK_GROUP_CONNECTOR     },
-    { XML_NAMESPACE_DRAW,           XML_MEASURE,        XML_TOK_GROUP_MEASURE       },
-    { XML_NAMESPACE_DRAW,           XML_PAGE_THUMBNAIL, XML_TOK_GROUP_PAGE          },
-    { XML_NAMESPACE_DRAW,           XML_CAPTION,        XML_TOK_GROUP_CAPTION       },
+    { XML_NAMESPACE_DRAW,			XML_CONTROL,		XML_TOK_GROUP_CONTROL		},
+    { XML_NAMESPACE_DRAW,			XML_CONNECTOR,		XML_TOK_GROUP_CONNECTOR		},
+    { XML_NAMESPACE_DRAW,			XML_MEASURE,		XML_TOK_GROUP_MEASURE		},
+    { XML_NAMESPACE_DRAW,			XML_PAGE_THUMBNAIL, XML_TOK_GROUP_PAGE			},
+    { XML_NAMESPACE_DRAW,			XML_CAPTION,		XML_TOK_GROUP_CAPTION		},
 
-    { XML_NAMESPACE_CHART,          XML_CHART,          XML_TOK_GROUP_CHART         },
-    { XML_NAMESPACE_DR3D,           XML_SCENE,          XML_TOK_GROUP_3DSCENE       },
+    { XML_NAMESPACE_CHART,			XML_CHART,			XML_TOK_GROUP_CHART			},
+    { XML_NAMESPACE_DR3D,			XML_SCENE,			XML_TOK_GROUP_3DSCENE		},
 
-    { XML_NAMESPACE_DRAW,           XML_FRAME,          XML_TOK_GROUP_FRAME         },
-    { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,   XML_TOK_GROUP_CUSTOM_SHAPE  },
+    { XML_NAMESPACE_DRAW,			XML_FRAME, 			XML_TOK_GROUP_FRAME			},
+    { XML_NAMESPACE_DRAW,			XML_CUSTOM_SHAPE,	XML_TOK_GROUP_CUSTOM_SHAPE	},
 
-    { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,   XML_TOK_GROUP_CUSTOM_SHAPE  },
-    { XML_NAMESPACE_OFFICE,         XML_ANNOTATION,     XML_TOK_GROUP_ANNOTATION    },
-    { XML_NAMESPACE_DRAW,           XML_A,              XML_TOK_GROUP_A             },
-
+    { XML_NAMESPACE_DRAW,			XML_CUSTOM_SHAPE,	XML_TOK_GROUP_CUSTOM_SHAPE	},
+    { XML_NAMESPACE_OFFICE,			XML_ANNOTATION,		XML_TOK_GROUP_ANNOTATION	},
+    { XML_NAMESPACE_DRAW,			XML_A,				XML_TOK_GROUP_A				},
+    
     XML_TOKEN_MAP_END
 };
 
@@ -300,16 +315,16 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetFrameShapeElemTokenMap()
 {
     if(!mpFrameShapeElemTokenMap)
     {
-        static SvXMLTokenMapEntry aFrameShapeElemTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aFrameShapeElemTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW,           XML_TEXT_BOX,       XML_TOK_FRAME_TEXT_BOX      },
-    { XML_NAMESPACE_DRAW,           XML_IMAGE,          XML_TOK_FRAME_IMAGE         },
-    { XML_NAMESPACE_DRAW,           XML_OBJECT,         XML_TOK_FRAME_OBJECT        },
-    { XML_NAMESPACE_DRAW,           XML_OBJECT_OLE,     XML_TOK_FRAME_OBJECT_OLE    },
-    { XML_NAMESPACE_DRAW,           XML_PLUGIN,         XML_TOK_FRAME_PLUGIN        },
-    { XML_NAMESPACE_DRAW,           XML_FLOATING_FRAME, XML_TOK_FRAME_FLOATING_FRAME},
-    { XML_NAMESPACE_DRAW,           XML_APPLET,         XML_TOK_FRAME_APPLET        },
-    { XML_NAMESPACE_TABLE,          XML_TABLE,          XML_TOK_FRAME_TABLE         },
+    { XML_NAMESPACE_DRAW,			XML_TEXT_BOX,		XML_TOK_FRAME_TEXT_BOX		},
+    { XML_NAMESPACE_DRAW,			XML_IMAGE,			XML_TOK_FRAME_IMAGE			},
+    { XML_NAMESPACE_DRAW,			XML_OBJECT,		    XML_TOK_FRAME_OBJECT		},
+    { XML_NAMESPACE_DRAW,			XML_OBJECT_OLE,	    XML_TOK_FRAME_OBJECT_OLE	},
+    { XML_NAMESPACE_DRAW,			XML_PLUGIN,		    XML_TOK_FRAME_PLUGIN		},
+    { XML_NAMESPACE_DRAW,			XML_FLOATING_FRAME, XML_TOK_FRAME_FLOATING_FRAME},
+    { XML_NAMESPACE_DRAW,			XML_APPLET,		    XML_TOK_FRAME_APPLET		},
+    { XML_NAMESPACE_TABLE,			XML_TABLE,			XML_TOK_FRAME_TABLE			},
     XML_TOKEN_MAP_END
 };
 
@@ -326,13 +341,13 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeElemTokenMap()
 {
     if(!mp3DSceneShapeElemTokenMap)
     {
-        static SvXMLTokenMapEntry a3DSceneShapeElemTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry a3DSceneShapeElemTokenMap[] =
 {
-    { XML_NAMESPACE_DR3D,           XML_SCENE,      XML_TOK_3DSCENE_3DSCENE     },
-    { XML_NAMESPACE_DR3D,           XML_CUBE,       XML_TOK_3DSCENE_3DCUBE      },
-    { XML_NAMESPACE_DR3D,           XML_SPHERE,     XML_TOK_3DSCENE_3DSPHERE    },
-    { XML_NAMESPACE_DR3D,           XML_ROTATE,     XML_TOK_3DSCENE_3DLATHE     },
-    { XML_NAMESPACE_DR3D,           XML_EXTRUDE,    XML_TOK_3DSCENE_3DEXTRUDE   },
+    { XML_NAMESPACE_DR3D,			XML_SCENE,		XML_TOK_3DSCENE_3DSCENE		},
+    { XML_NAMESPACE_DR3D,			XML_CUBE,		XML_TOK_3DSCENE_3DCUBE		},
+    { XML_NAMESPACE_DR3D,			XML_SPHERE,	    XML_TOK_3DSCENE_3DSPHERE	},
+    { XML_NAMESPACE_DR3D,			XML_ROTATE,	    XML_TOK_3DSCENE_3DLATHE		},
+    { XML_NAMESPACE_DR3D,			XML_EXTRUDE,	XML_TOK_3DSCENE_3DEXTRUDE	},
     XML_TOKEN_MAP_END
 };
 
@@ -343,16 +358,41 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeElemTokenMap()
 }
 
 //////////////////////////////////////////////////////////////////////////////
+/*
+
+const SvXMLTokenMap& XMLShapeImportHelper::GetShapeAttrTokenMap()
+{
+    if(!mpShapeAttrTokenMap)
+    {
+    static __FAR_DATA SvXMLTokenMapEntry aShapeAttrTokenMap[] =
+{
+    { XML_NAMESPACE_DRAW,			XML_NAME,				XML_TOK_SHAPE_NAME							},
+    { XML_NAMESPACE_DRAW,			XML_STYLE_NAME,		    XML_TOK_SHAPE_DRAWSTYLE_NAME_GRAPHICS		},
+    { XML_NAMESPACE_PRESENTATION,	XML_CLASS,				XML_TOK_SHAPE_PRESENTATION_CLASS			},
+    { XML_NAMESPACE_PRESENTATION,	XML_STYLE_NAME,		    XML_TOK_SHAPE_DRAWSTYLE_NAME_PRESENTATION	},
+    { XML_NAMESPACE_SVG,			XML_TRANSFORM,			XML_TOK_SHAPE_TRANSFORM						},
+    { XML_NAMESPACE_PRESENTATION,	XML_PLACEHOLDER,		XML_TOK_SHAPE_IS_PLACEHOLDER				},
+    { XML_NAMESPACE_PRESENTATION,	XML_USER_TRANSFORMED,	XML_TOK_SHAPE_IS_USER_TRANSFORMED			},
+    XML_TOKEN_MAP_END
+};
+
+        mpShapeAttrTokenMap = new SvXMLTokenMap(aShapeAttrTokenMap);
+        }
+
+    return *mpShapeAttrTokenMap;
+}
+*/
+//////////////////////////////////////////////////////////////////////////////
 
 
 const SvXMLTokenMap& XMLShapeImportHelper::Get3DObjectAttrTokenMap()
 {
     if(!mp3DObjectAttrTokenMap)
     {
-        static SvXMLTokenMapEntry a3DObjectAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry a3DObjectAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW,           XML_STYLE_NAME,         XML_TOK_3DOBJECT_DRAWSTYLE_NAME     },
-    { XML_NAMESPACE_DR3D,           XML_TRANSFORM,          XML_TOK_3DOBJECT_TRANSFORM          },
+    { XML_NAMESPACE_DRAW,			XML_STYLE_NAME,		    XML_TOK_3DOBJECT_DRAWSTYLE_NAME		},
+    { XML_NAMESPACE_DR3D,			XML_TRANSFORM,			XML_TOK_3DOBJECT_TRANSFORM			},
     XML_TOKEN_MAP_END
 };
 
@@ -369,10 +409,10 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DPolygonBasedAttrTokenMap()
 {
     if(!mp3DPolygonBasedAttrTokenMap)
     {
-        static SvXMLTokenMapEntry a3DPolygonBasedAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry a3DPolygonBasedAttrTokenMap[] =
 {
-    { XML_NAMESPACE_SVG,            XML_VIEWBOX,            XML_TOK_3DPOLYGONBASED_VIEWBOX      },
-    { XML_NAMESPACE_SVG,            XML_D,                  XML_TOK_3DPOLYGONBASED_D            },
+    { XML_NAMESPACE_SVG,			XML_VIEWBOX,			XML_TOK_3DPOLYGONBASED_VIEWBOX		},
+    { XML_NAMESPACE_SVG,			XML_D,					XML_TOK_3DPOLYGONBASED_D			},
     XML_TOKEN_MAP_END
 };
 
@@ -389,10 +429,10 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DCubeObjectAttrTokenMap()
 {
     if(!mp3DCubeObjectAttrTokenMap)
     {
-        static SvXMLTokenMapEntry a3DCubeObjectAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry a3DCubeObjectAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DR3D,           XML_MIN_EDGE,           XML_TOK_3DCUBEOBJ_MINEDGE   },
-    { XML_NAMESPACE_DR3D,           XML_MAX_EDGE,           XML_TOK_3DCUBEOBJ_MAXEDGE   },
+    { XML_NAMESPACE_DR3D,			XML_MIN_EDGE,			XML_TOK_3DCUBEOBJ_MINEDGE	},
+    { XML_NAMESPACE_DR3D,			XML_MAX_EDGE,			XML_TOK_3DCUBEOBJ_MAXEDGE	},
     XML_TOKEN_MAP_END
 };
 
@@ -409,10 +449,10 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSphereObjectAttrTokenMap()
 {
     if(!mp3DSphereObjectAttrTokenMap)
     {
-        static SvXMLTokenMapEntry a3DSphereObjectAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry a3DSphereObjectAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DR3D,           XML_CENTER,             XML_TOK_3DSPHEREOBJ_CENTER  },
-    { XML_NAMESPACE_DR3D,           XML_SIZE,               XML_TOK_3DSPHEREOBJ_SIZE    },
+    { XML_NAMESPACE_DR3D,			XML_CENTER, 			XML_TOK_3DSPHEREOBJ_CENTER	},
+    { XML_NAMESPACE_DR3D,			XML_SIZE,				XML_TOK_3DSPHEREOBJ_SIZE	},
     XML_TOKEN_MAP_END
 };
 
@@ -423,16 +463,84 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSphereObjectAttrTokenMap()
 }
 
 //////////////////////////////////////////////////////////////////////////////
+/*
 
+const SvXMLTokenMap& XMLShapeImportHelper::GetRectShapeAttrTokenMap()
+{
+    if(!mpRectShapeAttrTokenMap)
+    {
+    static __FAR_DATA SvXMLTokenMapEntry aRectShapeAttrTokenMap[] =
+{
+    { XML_NAMESPACE_SVG,	XML_X,					XML_TOK_RECTSHAPE_X					},
+    { XML_NAMESPACE_SVG,	XML_Y,					XML_TOK_RECTSHAPE_Y					},
+    { XML_NAMESPACE_SVG,	XML_WIDTH,				XML_TOK_RECTSHAPE_WIDTH				},
+    { XML_NAMESPACE_SVG,	XML_HEIGHT,			    XML_TOK_RECTSHAPE_HEIGHT			},
+    { XML_NAMESPACE_DRAW,	XML_CORNER_RADIUS,		XML_TOK_RECTSHAPE_CORNER_RADIUS		},
+    XML_TOKEN_MAP_END
+};
+
+        mpRectShapeAttrTokenMap = new SvXMLTokenMap(aRectShapeAttrTokenMap);
+        }
+
+    return *mpRectShapeAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+const SvXMLTokenMap& XMLShapeImportHelper::GetLineShapeAttrTokenMap()
+{
+    if(!mpLineShapeAttrTokenMap)
+    {
+    static __FAR_DATA SvXMLTokenMapEntry aLineShapeAttrTokenMap[] =
+{
+    { XML_NAMESPACE_SVG,	XML_X1,             XML_TOK_LINESHAPE_X1				},
+    { XML_NAMESPACE_SVG,	XML_Y1,				XML_TOK_LINESHAPE_Y1				},
+    { XML_NAMESPACE_SVG,	XML_X2,				XML_TOK_LINESHAPE_X2				},
+    { XML_NAMESPACE_SVG,	XML_Y2,				XML_TOK_LINESHAPE_Y2				},
+    XML_TOKEN_MAP_END
+};
+
+        mpLineShapeAttrTokenMap = new SvXMLTokenMap(aLineShapeAttrTokenMap);
+        }
+
+    return *mpLineShapeAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+const SvXMLTokenMap& XMLShapeImportHelper::GetEllipseShapeAttrTokenMap()
+{
+    if(!mpEllipseShapeAttrTokenMap)
+    {
+    static __FAR_DATA SvXMLTokenMapEntry aEllipseShapeAttrTokenMap[] =
+{
+    { XML_NAMESPACE_SVG,	XML_RX,				XML_TOK_ELLIPSESHAPE_RX				},
+    { XML_NAMESPACE_SVG,	XML_RY,				XML_TOK_ELLIPSESHAPE_RY				},
+    { XML_NAMESPACE_SVG,	XML_CX,				XML_TOK_ELLIPSESHAPE_CX				},
+    { XML_NAMESPACE_SVG,	XML_CY,				XML_TOK_ELLIPSESHAPE_CY				},
+    { XML_NAMESPACE_SVG,	XML_R,				XML_TOK_ELLIPSESHAPE_R				},
+    XML_TOKEN_MAP_END
+};
+
+        mpEllipseShapeAttrTokenMap = new SvXMLTokenMap(aEllipseShapeAttrTokenMap);
+        }
+
+    return *mpEllipseShapeAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+*/
 
 const SvXMLTokenMap& XMLShapeImportHelper::GetPolygonShapeAttrTokenMap()
 {
     if(!mpPolygonShapeAttrTokenMap)
     {
-        static SvXMLTokenMapEntry aPolygonShapeAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aPolygonShapeAttrTokenMap[] =
 {
-    { XML_NAMESPACE_SVG,    XML_VIEWBOX,            XML_TOK_POLYGONSHAPE_VIEWBOX        },
-    { XML_NAMESPACE_DRAW,   XML_POINTS,             XML_TOK_POLYGONSHAPE_POINTS         },
+    { XML_NAMESPACE_SVG,	XML_VIEWBOX,			XML_TOK_POLYGONSHAPE_VIEWBOX		},
+    { XML_NAMESPACE_DRAW,	XML_POINTS, 			XML_TOK_POLYGONSHAPE_POINTS			},
     XML_TOKEN_MAP_END
 };
 
@@ -449,10 +557,10 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetPathShapeAttrTokenMap()
 {
     if(!mpPathShapeAttrTokenMap)
     {
-        static SvXMLTokenMapEntry aPathShapeAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aPathShapeAttrTokenMap[] =
 {
-    { XML_NAMESPACE_SVG,    XML_VIEWBOX,            XML_TOK_PATHSHAPE_VIEWBOX           },
-    { XML_NAMESPACE_SVG,    XML_D,                  XML_TOK_PATHSHAPE_D                 },
+    { XML_NAMESPACE_SVG,	XML_VIEWBOX,			XML_TOK_PATHSHAPE_VIEWBOX			},
+    { XML_NAMESPACE_SVG,	XML_D,					XML_TOK_PATHSHAPE_D					},
     XML_TOKEN_MAP_END
 };
 
@@ -461,7 +569,51 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetPathShapeAttrTokenMap()
 
     return *mpPathShapeAttrTokenMap;
 }
+/*
+//////////////////////////////////////////////////////////////////////////////
 
+
+const SvXMLTokenMap& XMLShapeImportHelper::GetTextBoxShapeAttrTokenMap()
+{
+    if(!mpTextBoxShapeAttrTokenMap)
+    {
+    static __FAR_DATA SvXMLTokenMapEntry aTextBoxShapeAttrTokenMap[] =
+{
+    { XML_NAMESPACE_SVG,	XML_X,					XML_TOK_TEXTBOXSHAPE_X				},
+    { XML_NAMESPACE_SVG,	XML_Y,					XML_TOK_TEXTBOXSHAPE_Y				},
+    { XML_NAMESPACE_SVG,	XML_WIDTH,				XML_TOK_TEXTBOXSHAPE_WIDTH			},
+    { XML_NAMESPACE_SVG,	XML_HEIGHT,			    XML_TOK_TEXTBOXSHAPE_HEIGHT			},
+    XML_TOKEN_MAP_END
+};
+
+        mpTextBoxShapeAttrTokenMap = new SvXMLTokenMap(aTextBoxShapeAttrTokenMap);
+        }
+
+    return *mpTextBoxShapeAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+const SvXMLTokenMap& XMLShapeImportHelper::GetControlShapeAttrTokenMap()
+{
+    if(!mpControlShapeAttrTokenMap)
+    {
+    static __FAR_DATA SvXMLTokenMapEntry aControlShapeAttrTokenMap[] =
+{
+    { XML_NAMESPACE_SVG,	XML_X,					XML_TOK_CONTROLSHAPE_X				},
+    { XML_NAMESPACE_SVG,	XML_Y,					XML_TOK_CONTROLSHAPE_Y				},
+    { XML_NAMESPACE_SVG,	XML_WIDTH,				XML_TOK_CONTROLSHAPE_WIDTH			},
+    { XML_NAMESPACE_SVG,	XML_HEIGHT,			    XML_TOK_CONTROLSHAPE_HEIGHT			},
+    XML_TOKEN_MAP_END
+};
+
+        mpControlShapeAttrTokenMap = new SvXMLTokenMap(aControlShapeAttrTokenMap);
+        }
+
+    return *mpControlShapeAttrTokenMap;
+}
+*/
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -469,19 +621,19 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeAttrTokenMap()
 {
     if(!mp3DSceneShapeAttrTokenMap)
     {
-        static SvXMLTokenMapEntry a3DSceneShapeAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry a3DSceneShapeAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DR3D,   XML_TRANSFORM,          XML_TOK_3DSCENESHAPE_TRANSFORM      },
-    { XML_NAMESPACE_DR3D,   XML_VRP,                XML_TOK_3DSCENESHAPE_VRP            },
-    { XML_NAMESPACE_DR3D,   XML_VPN,                XML_TOK_3DSCENESHAPE_VPN            },
-    { XML_NAMESPACE_DR3D,   XML_VUP,                XML_TOK_3DSCENESHAPE_VUP            },
-    { XML_NAMESPACE_DR3D,   XML_PROJECTION,         XML_TOK_3DSCENESHAPE_PROJECTION     },
-    { XML_NAMESPACE_DR3D,   XML_DISTANCE,           XML_TOK_3DSCENESHAPE_DISTANCE       },
-    { XML_NAMESPACE_DR3D,   XML_FOCAL_LENGTH,       XML_TOK_3DSCENESHAPE_FOCAL_LENGTH   },
-    { XML_NAMESPACE_DR3D,   XML_SHADOW_SLANT,       XML_TOK_3DSCENESHAPE_SHADOW_SLANT   },
-    { XML_NAMESPACE_DR3D,   XML_SHADE_MODE,         XML_TOK_3DSCENESHAPE_SHADE_MODE     },
-    { XML_NAMESPACE_DR3D,   XML_AMBIENT_COLOR,      XML_TOK_3DSCENESHAPE_AMBIENT_COLOR  },
-    { XML_NAMESPACE_DR3D,   XML_LIGHTING_MODE,      XML_TOK_3DSCENESHAPE_LIGHTING_MODE  },
+    { XML_NAMESPACE_DR3D,	XML_TRANSFORM,			XML_TOK_3DSCENESHAPE_TRANSFORM		},
+    { XML_NAMESPACE_DR3D,	XML_VRP,				XML_TOK_3DSCENESHAPE_VRP			},
+    { XML_NAMESPACE_DR3D,	XML_VPN,				XML_TOK_3DSCENESHAPE_VPN			},
+    { XML_NAMESPACE_DR3D,	XML_VUP,				XML_TOK_3DSCENESHAPE_VUP			},
+    { XML_NAMESPACE_DR3D,	XML_PROJECTION,		    XML_TOK_3DSCENESHAPE_PROJECTION		},
+    { XML_NAMESPACE_DR3D,	XML_DISTANCE,			XML_TOK_3DSCENESHAPE_DISTANCE		},
+    { XML_NAMESPACE_DR3D,	XML_FOCAL_LENGTH,		XML_TOK_3DSCENESHAPE_FOCAL_LENGTH	},
+    { XML_NAMESPACE_DR3D,	XML_SHADOW_SLANT,		XML_TOK_3DSCENESHAPE_SHADOW_SLANT	},
+    { XML_NAMESPACE_DR3D,	XML_SHADE_MODE,		    XML_TOK_3DSCENESHAPE_SHADE_MODE		},
+    { XML_NAMESPACE_DR3D,	XML_AMBIENT_COLOR,		XML_TOK_3DSCENESHAPE_AMBIENT_COLOR	},
+    { XML_NAMESPACE_DR3D,	XML_LIGHTING_MODE,		XML_TOK_3DSCENESHAPE_LIGHTING_MODE	},
     XML_TOKEN_MAP_END
 };
 
@@ -498,12 +650,12 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DLightAttrTokenMap()
 {
     if(!mp3DLightAttrTokenMap)
     {
-        static SvXMLTokenMapEntry a3DLightAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry a3DLightAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DR3D,   XML_DIFFUSE_COLOR,      XML_TOK_3DLIGHT_DIFFUSE_COLOR       },
-    { XML_NAMESPACE_DR3D,   XML_DIRECTION,          XML_TOK_3DLIGHT_DIRECTION           },
-    { XML_NAMESPACE_DR3D,   XML_ENABLED,            XML_TOK_3DLIGHT_ENABLED             },
-    { XML_NAMESPACE_DR3D,   XML_SPECULAR,           XML_TOK_3DLIGHT_SPECULAR            },
+    { XML_NAMESPACE_DR3D,	XML_DIFFUSE_COLOR,		XML_TOK_3DLIGHT_DIFFUSE_COLOR		},
+    { XML_NAMESPACE_DR3D,	XML_DIRECTION,			XML_TOK_3DLIGHT_DIRECTION			},
+    { XML_NAMESPACE_DR3D,	XML_ENABLED,			XML_TOK_3DLIGHT_ENABLED				},
+    { XML_NAMESPACE_DR3D,	XML_SPECULAR,			XML_TOK_3DLIGHT_SPECULAR			},
     XML_TOKEN_MAP_END
 };
 
@@ -514,11 +666,55 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DLightAttrTokenMap()
 }
 
 //////////////////////////////////////////////////////////////////////////////
+/*
 
+const SvXMLTokenMap& XMLShapeImportHelper::GetPageShapeAttrTokenMap()
+{
+    if(!mpPageShapeAttrTokenMap)
+    {
+    static __FAR_DATA SvXMLTokenMapEntry aPageShapeAttrTokenMap[] =
+{
+    { XML_NAMESPACE_SVG,	XML_X,					XML_TOK_PAGESHAPE_X				},
+    { XML_NAMESPACE_SVG,	XML_Y,					XML_TOK_PAGESHAPE_Y				},
+    { XML_NAMESPACE_SVG,	XML_WIDTH,				XML_TOK_PAGESHAPE_WIDTH			},
+    { XML_NAMESPACE_SVG,	XML_HEIGHT,			    XML_TOK_PAGESHAPE_HEIGHT		},
+    XML_TOKEN_MAP_END
+};
+
+        mpPageShapeAttrTokenMap = new SvXMLTokenMap(aPageShapeAttrTokenMap);
+        }
+
+    return *mpPageShapeAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+const SvXMLTokenMap& XMLShapeImportHelper::GetGraphicObjectShapeAttrTokenMap()
+{
+    if(!mpGraphicObjectShapeAttrTokenMap)
+    {
+    static __FAR_DATA SvXMLTokenMapEntry aGraphicObjectShapeAttrTokenMap[] =
+{
+    { XML_NAMESPACE_SVG,	XML_X,					XML_TOK_GOSHAPE_X					},
+    { XML_NAMESPACE_SVG,	XML_Y,					XML_TOK_GOSHAPE_Y					},
+    { XML_NAMESPACE_SVG,	XML_WIDTH,				XML_TOK_GOSHAPE_WIDTH				},
+    { XML_NAMESPACE_SVG,	XML_HEIGHT, 			XML_TOK_GOSHAPE_HEIGHT				},
+    { XML_NAMESPACE_XLINK,	XML_HREF,				XML_TOK_GOSHAPE_URL					},
+    XML_TOKEN_MAP_END
+};
+
+        mpGraphicObjectShapeAttrTokenMap = new SvXMLTokenMap(aGraphicObjectShapeAttrTokenMap);
+        }
+
+    return *mpGraphicObjectShapeAttrTokenMap;
+}
+*/
+//////////////////////////////////////////////////////////////////////////////
 
 SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
     SvXMLImport& rImport,
-    sal_uInt16 p_nPrefix,
+    USHORT p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
@@ -598,7 +794,7 @@ void XMLShapeImportHelper::SetAutoStylesContext(SvXMLStylesContext* pNew)
 
 SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     SvXMLImport& rImport,
-    sal_uInt16 p_nPrefix,
+    USHORT p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
@@ -647,7 +843,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
         {
             // draw:polygon or draw:polyline inside group context
             pContext = new SdXMLPolygonShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes,
-                rTokenMap.Get(p_nPrefix, rLocalName) == XML_TOK_GROUP_POLYGON ? sal_True : sal_False, bTemporaryShape );
+                rTokenMap.Get(p_nPrefix, rLocalName) == XML_TOK_GROUP_POLYGON ? TRUE : FALSE, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_PATH:
@@ -731,7 +927,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
 // This method is called from SdXMLFrameContext to create children of drawe:frame
 SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
     SvXMLImport& rImport,
-    sal_uInt16 p_nPrefix,
+    USHORT p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& rAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
@@ -774,7 +970,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
             if( rImport.IsTableShapeSupported() )
                 pContext = new SdXMLTableShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes );
             break;
-
+            
         }
         case XML_TOK_FRAME_PLUGIN:
         {
@@ -819,7 +1015,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
 
 SvXMLImportContext *XMLShapeImportHelper::CreateFrameChildContext(
     SvXMLImportContext *pThisContext,
-    sal_uInt16 nPrefix,
+    USHORT nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
@@ -856,19 +1052,18 @@ void XMLShapeImportHelper::finishShape(
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >&,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >&)
 {
-    /* Set property <PositionLayoutDir>
-       to <PositionInHoriL2R>, if it exists and the import states that
-       the shape positioning attributes are in horizontal left-to-right
-       layout. This is the case for the OpenOffice.org file format.
-       This setting is done for Writer documents, because the property
-       only exists at service com::sun::star::text::Shape - the Writer
-       UNO service for shapes.
-       The value indicates that the positioning attributes are given
-       in horizontal left-to-right layout. The property is evaluated
-       during the first positioning of the shape in order to convert
-       the shape position given in the OpenOffice.org file format to
-       the one for the OASIS Open Office file format. (#i28749#, #i36248#)
-    */
+    // --> OD 2004-08-10 #i28749#, #i36248# - set property <PositionLayoutDir>
+    // to <PositionInHoriL2R>, if it exists and the import states that
+    // the shape positioning attributes are in horizontal left-to-right
+    // layout. This is the case for the OpenOffice.org file format.
+    // This setting is done for Writer documents, because the property
+    // only exists at service com::sun::star::text::Shape - the Writer
+    // UNO service for shapes.
+    // The value indicates that the positioning attributes are given
+    // in horizontal left-to-right layout. The property is evaluated
+    // during the first positioning of the shape in order to convert
+    // the shape position given in the OpenOffice.org file format to
+    // the one for the OASIS Open Office file format.
     uno::Reference< beans::XPropertySet > xPropSet(rShape, uno::UNO_QUERY);
     if ( xPropSet.is() )
     {
@@ -899,12 +1094,12 @@ class ShapeSortContext
 {
 public:
     uno::Reference< drawing::XShapes > mxShapes;
-    list<ZOrderHint>              maZOrderList;
-    list<ZOrderHint>              maUnsortedList;
+    list<ZOrderHint>			  maZOrderList;
+    list<ZOrderHint>			  maUnsortedList;
 
-    sal_Int32                     mnCurrentZ;
-    ShapeSortContext*             mpParentContext;
-    const OUString                msZOrder;
+    sal_Int32					  mnCurrentZ;
+    ShapeSortContext*			  mpParentContext;
+    const OUString				  msZOrder;
 
     ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext = NULL );
 
@@ -912,7 +1107,7 @@ public:
 };
 
 ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext )
-:   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext ),
+:	mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext ),
     msZOrder(RTL_CONSTASCII_USTRINGPARAM("ZOrder"))
 {
 }
@@ -938,7 +1133,7 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
                 DBG_ASSERT( (*aIter).nIs >= nDestPos, "Shape sorting failed" );
                 (*aIter).nIs++;
             }
-            ++aIter;
+            aIter++;
         }
 
         aIter = maUnsortedList.begin();
@@ -951,7 +1146,7 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
                 DBG_ASSERT( (*aIter).nIs >= nDestPos, "shape sorting failed" );
                 (*aIter).nIs++;
             }
-            ++aIter;
+            aIter++;
         }
     }
 }
@@ -1043,7 +1238,7 @@ void XMLShapeImportHelper::popGroupAndSort()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL("exception while sorting shapes, sorting failed!");
+        DBG_ERROR("exception while sorting shapes, sorting failed!");
     }
 
     // put parent on top and delete current context, were done
@@ -1114,7 +1309,7 @@ void XMLShapeImportHelper::restoreConnections()
                 // #86637# simply setting these values WILL force the connector to do
                 // an new layout promptly. So the line delta values have to be rescued
                 // and restored around connector changes.
-                uno::Reference< drawing::XShape > xShape(
+                uno::Reference< drawing::XShape > xShape( 
                     mrImporter.getInterfaceToIdentifierMapper().getReference( rHint.aDestShapeId ), uno::UNO_QUERY );
                 if( xShape.is() )
                 {
@@ -1183,7 +1378,7 @@ void XMLShapeImportHelper::moveGluePointMapping( const com::sun::star::uno::Refe
             {
                 if ( (*aShapeIdIter).second != -1 )
                     (*aShapeIdIter).second += n;
-                ++aShapeIdIter;
+                aShapeIdIter++;
             }
         }
     }

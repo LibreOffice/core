@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,25 +27,25 @@
 #ifndef __com_sun_star_drawing_EnhancedCustomShapeExtrusion_idl__
 #define __com_sun_star_drawing_EnhancedCustomShapeExtrusion_idl__
 
-#ifndef __com_sun_star_awt_Size_idl__
+#ifndef __com_sun_star_awt_Size_idl__ 
 #include <com/sun/star/awt/Size.idl>
 #endif
-#ifndef __com_sun_star_awt_Point_idl__
+#ifndef __com_sun_star_awt_Point_idl__ 
 #include <com/sun/star/awt/Point.idl>
 #endif
 #ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
 #endif
-#ifndef __com_sun_star_drawing_Position3D_idl__
+#ifndef __com_sun_star_drawing_Position3D_idl__ 
 #include <com/sun/star/drawing/Position3D.idl>
 #endif
-#ifndef __com_sun_star_drawing_Direction3D_idl__
+#ifndef __com_sun_star_drawing_Direction3D_idl__ 
 #include <com/sun/star/drawing/Direction3D.idl>
 #endif
-#ifndef __com_sun_star_drawing_ProjectionMode_idl__
+#ifndef __com_sun_star_drawing_ProjectionMode_idl__ 
 #include <com/sun/star/drawing/ProjectionMode.idl>
 #endif
-#ifndef __com_sun_star_drawing_ShadeMode_idl__
+#ifndef __com_sun_star_drawing_ShadeMode_idl__ 
 #include <com/sun/star/drawing/ShadeMode.idl>
 #endif
 #ifndef __com_sun_star_drawing_EnhancedCustomShapeParameterPair_idl__
@@ -54,7 +54,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module drawing {
+module com { module sun { module star { module drawing { 
 
 //=============================================================================
 /**
@@ -123,14 +123,14 @@ service EnhancedCustomShapeExtrusion
     /** This property defines the shade mode.
     */
     [optional, property] ::com::sun::star::drawing::ShadeMode ShadeMode;
-
-    /** This attributes specifies the rotation angle about the x-axis in grad.
-        The order of rotation is: z-axis, y-axis and then x-axis. The z-axis is
+    
+    /**	This attributes specifies the rotation angle about the x-axis in grad. 
+        The order of rotation is: z-axis, y-axis and then x-axis. The z-axis is 
         specified by the draw:rotate-angle.
     */
     [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameterPair RotateAngle;
 
-    /** This attribute specifies the position of the rotate center
+    /** This attribute specifies the position of the rotate center 
         in terms of shape size fractions, if the property is omitted, then
         the geometrical center of the shape is used (this is the default).
     */
@@ -141,7 +141,7 @@ service EnhancedCustomShapeExtrusion
     [optional, property] double Shininess;
 
     /** The first value of the draw:extrusion-skew attribute specifies the skew amount of
-        an extrusion in percent. The second parameter specifies the skew-angle. Skew settings
+        an extrusion in	percent. The second parameter specifies the skew-angle. Skew settings
         are only applied if the attribute ProjectionMode is ProjectionMode_PARALLEL.
     */
     [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameterPair Skew;
@@ -170,7 +170,7 @@ service EnhancedCustomShapeExtrusion
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ public:
     /** Remember the specified page to be selected when this command is
         executed.
     */
-    void AddSlide (sal_uInt16 nPageIndex);
+    void AddSlide (USHORT nPageIndex);
 
     /** Execute the command and select the pages added by previous calls to
         AddPages() and AddPage().

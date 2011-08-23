@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,19 +55,19 @@ namespace drawinglayer
     namespace primitive2d
     {
         Primitive2DReference createPolyPolygonFillPrimitive(
-            const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
+            const basegfx::B2DPolyPolygon& rUnitPolyPolygon, 
             const basegfx::B2DHomMatrix& rObjectTransform,
             const attribute::SdrFillAttribute& rFill,
             const attribute::FillGradientAttribute& rFillGradient);
 
         Primitive2DReference createPolygonLinePrimitive(
-            const basegfx::B2DPolygon& rUnitPolygon,
+            const basegfx::B2DPolygon& rUnitPolygon, 
             const basegfx::B2DHomMatrix& rObjectTransform,
             const attribute::SdrLineAttribute& rLine,
             const attribute::SdrLineStartEndAttribute& rStroke);
 
         Primitive2DReference createTextPrimitive(
-            const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
+            const basegfx::B2DPolyPolygon& rUnitPolyPolygon, 
             const basegfx::B2DHomMatrix& rObjectTransform,
             const attribute::SdrTextAttribute& rText,
             const attribute::SdrLineAttribute& rStroke,
@@ -76,7 +76,7 @@ namespace drawinglayer
             bool bClipOnBounds);
 
         Primitive2DSequence createEmbeddedShadowPrimitive(
-            const Primitive2DSequence& rContent,
+            const Primitive2DSequence& rContent, 
             const attribute::SdrShadowAttribute& rShadow);
 
     } // end of namespace primitive2d

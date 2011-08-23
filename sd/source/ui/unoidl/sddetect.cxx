@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,6 +121,7 @@ SdFilterDetect::~SdFilterDetect()
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
     sal_Int32 nPropertyCount = lDescriptor.getLength();
+    sal_Int32 nIndexOfFilterName = -1;
     sal_Int32 nIndexOfInputStream = -1;
     sal_Int32 nIndexOfContent = -1;
     sal_Int32 nIndexOfReadOnlyFlag = -1;
@@ -149,6 +150,10 @@ SdFilterDetect::~SdFilterDetect()
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aPreselectedFilterName = sTemp;
+
+            // if the preselected filter name is not correct, it must be erased after detection
+            // remember index of property to get access to it later
+            nIndexOfFilterName = nProperty;
         }
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
             nIndexOfInputStream = nProperty;
@@ -176,7 +181,7 @@ SdFilterDetect::~SdFilterDetect()
     SfxApplication* pApp = SFX_APP();
     SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
     TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
 
     bWasReadOnly = pItem && pItem->GetValue();
 
@@ -204,8 +209,8 @@ SdFilterDetect::~SdFilterDetect()
     else
     {
         // ctor of SfxMedium uses owner transition of ItemSet
-        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, sal_False, NULL, pSet );
-        aMedium.UseInteractionHandler( sal_True );
+        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
+        aMedium.UseInteractionHandler( TRUE );
         if ( aPreselectedFilterName.Len() )
             pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
         else if( aTypeName.Len() )
@@ -221,7 +226,7 @@ SdFilterDetect::~SdFilterDetect()
             xStream = aMedium.GetInputStream();
             xContent = aMedium.GetContent();
             bReadOnly = aMedium.IsReadOnly();
-            sal_Bool bIsStorage = aMedium.IsStorage();
+            BOOL bIsStorage = aMedium.IsStorage();
 
             if (aMedium.GetError() == SVSTREAM_OK)
             {
@@ -269,7 +274,7 @@ SdFilterDetect::~SdFilterDetect()
                             String sFilterName;
                             if ( pFilter )
                                 sFilterName = pFilter->GetName();
-                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : sal_False, &sFilterName );
+                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : FALSE, &sFilterName );
                         }
                         catch( lang::WrappedTargetException& aWrap )
                         {
@@ -287,16 +292,20 @@ SdFilterDetect::~SdFilterDetect()
                                     if ( !bRepairPackage )
                                     {
                                         // ask the user whether he wants to try to repair
-                                        RequestPackageReparation aRequest( aDocumentTitle );
-                                        xInteraction->handle( aRequest.GetRequest() );
-                                        bRepairAllowed = aRequest.isApproved();
+                                        RequestPackageReparation* pRequest = new RequestPackageReparation( aDocumentTitle );
+                                        uno::Reference< task::XInteractionRequest > xRequest ( pRequest );
+
+                                        xInteraction->handle( xRequest );
+
+                                        bRepairAllowed = pRequest->isApproved();
                                     }
 
                                     if ( !bRepairAllowed )
                                     {
                                         // repair either not allowed or not successful
-                                        NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
-                                        xInteraction->handle( aNotifyRequest.GetRequest() );
+                                        NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
+                                           uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
+                                           xInteraction->handle( xRequest );
                                     }
                                 }
 
@@ -337,7 +346,7 @@ SdFilterDetect::~SdFilterDetect()
                     }
                     else
                     {
-                        SotStorageRef aStorage = new SotStorage ( pStm, sal_False );
+                        SotStorageRef aStorage = new SotStorage ( pStm, FALSE );
                         if ( !aStorage->GetError() )
                         {
                             String aStreamName = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "PowerPoint Document" ) );
@@ -362,7 +371,7 @@ SdFilterDetect::~SdFilterDetect()
                             const String        aFileName( aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
                             GraphicDescriptor   aDesc( *pStm, &aFileName );
                             GraphicFilter*      pGrfFilter = GraphicFilter::GetGraphicFilter();
-                            if( !aDesc.Detect( sal_False ) )
+                            if( !aDesc.Detect( FALSE ) )
                             {
                                 pFilter = 0;
                                 if( SvtModuleOptions().IsImpress() )
@@ -414,7 +423,7 @@ SdFilterDetect::~SdFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("InputStream");
         lDescriptor[nPropertyCount].Value <<= xStream;
         nPropertyCount++;
     }
@@ -423,7 +432,7 @@ SdFilterDetect::~SdFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCBContent"));
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("UCBContent");
         lDescriptor[nPropertyCount].Value <<= xContent;
         nPropertyCount++;
     }
@@ -433,7 +442,7 @@ SdFilterDetect::~SdFilterDetect()
         if ( nIndexOfReadOnlyFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("ReadOnly");
             lDescriptor[nPropertyCount].Value <<= bReadOnly;
             nPropertyCount++;
         }
@@ -444,7 +453,7 @@ SdFilterDetect::~SdFilterDetect()
     if ( !bRepairPackage && bRepairAllowed )
     {
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage"));
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("RepairPackage");
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
 
@@ -458,7 +467,7 @@ SdFilterDetect::~SdFilterDetect()
         if ( nIndexOfTemplateFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
             lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
             nPropertyCount++;
         }
@@ -472,7 +481,7 @@ SdFilterDetect::~SdFilterDetect()
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("DocumentTitle");
             lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
             nPropertyCount++;
         }
@@ -522,14 +531,14 @@ UNOSEQUENCE< UNOOUSTRING > SdFilterDetect::impl_getStaticSupportedServiceNames()
 {
     UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
     UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
+    seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.ExtendedTypeDetection"  );
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 UNOOUSTRING SdFilterDetect::impl_getStaticImplementationName()
 {
-    return UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.draw.FormatDetector" ));
+    return UNOOUSTRING::createFromAscii( "com.sun.star.comp.draw.FormatDetector" );
 }
 
 /* Helper for registry */

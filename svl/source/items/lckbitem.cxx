@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,19 +51,19 @@ SfxLockBytesItem::SfxLockBytesItem()
 
 // -----------------------------------------------------------------------
 
-SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvLockBytes *pLockBytes )
-:   SfxPoolItem( nW ),
+SfxLockBytesItem::SfxLockBytesItem( USHORT nW, SvLockBytes *pLockBytes )
+:	SfxPoolItem( nW ),
     _xVal( pLockBytes )
 {
 }
 
 // -----------------------------------------------------------------------
 
-SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
-:   SfxPoolItem( nW )
+SfxLockBytesItem::SfxLockBytesItem( USHORT nW, SvStream &rStream )
+:	SfxPoolItem( nW )
 {
     rStream.Seek( 0L );
-    _xVal = new SvLockBytes( new SvCacheStream(), sal_True );
+    _xVal = new SvLockBytes( new SvCacheStream(), TRUE );
 
     SvStream aLockBytesStream( _xVal );
     rStream >> aLockBytesStream;
@@ -72,7 +72,7 @@ SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
 // -----------------------------------------------------------------------
 
 SfxLockBytesItem::SfxLockBytesItem( const SfxLockBytesItem& rItem )
-:   SfxPoolItem( rItem ),
+:	SfxPoolItem( rItem ),
     _xVal( rItem._xVal )
 {
 }
@@ -99,18 +99,18 @@ SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-#define MAX_BUF 32000
+#define MAX_BUF	32000
 
-SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
+SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, USHORT ) const
 {
     sal_uInt32 nSize = 0;
-    sal_uLong nActRead = 0;
+    ULONG nActRead = 0;
     sal_Char cTmpBuf[MAX_BUF];
     SvMemoryStream aNewStream;
     rStream >> nSize;
 
     do {
-        sal_uLong nToRead;
+        ULONG nToRead;
         if( (nSize - nActRead) > MAX_BUF )
             nToRead = MAX_BUF;
         else
@@ -124,7 +124,7 @@ SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
+SvStream& SfxLockBytesItem::Store(SvStream &rStream, USHORT ) const
 {
     SvStream aLockBytesStream( _xVal );
     sal_uInt32 nSize = aLockBytesStream.Seek( STREAM_SEEK_TO_END );
@@ -138,7 +138,7 @@ SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
 
 //----------------------------------------------------------------------------
 // virtual
-bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     if ( rVal >>= aSeq )
@@ -149,7 +149,7 @@ bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
             pStream->Write( (void*)aSeq.getConstArray(), aSeq.getLength() );
             pStream->Seek(0);
 
-            _xVal = new SvLockBytes( pStream, sal_True );
+            _xVal = new SvLockBytes( pStream, TRUE );
         }
         else
             _xVal = NULL;
@@ -157,13 +157,13 @@ bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
         return true;
     }
 
-    OSL_FAIL( "SfxLockBytesItem::PutValue - Wrong type!" );
+    DBG_ERROR( "SfxLockBytesItem::PutValue - Wrong type!" );
     return true;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
 {
     if ( _xVal.Is() )
     {
@@ -175,7 +175,7 @@ bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) c
         else
             return false;
 
-        sal_uLong nRead = 0;
+        ULONG nRead = 0;
         com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
 
         _xVal->ReadAt( 0, aSeq.getArray(), nLen, &nRead );

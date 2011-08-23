@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include"xmloff/xmlnmspe.hxx"
+#include"xmlnmspe.hxx"
 #include "ximplink.hxx"
 #include <xmloff/xmltoken.hxx>
 
@@ -42,7 +42,7 @@ using namespace ::xmloff::token;
 
 TYPEINIT1( SdXMLShapeLinkContext, SvXMLImportContext );
 
-SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList>& xAttrList, uno::Reference< drawing::XShapes >& rShapes)
+SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList>& xAttrList, uno::Reference< drawing::XShapes >& rShapes) 
 : SvXMLShapeContext( rImport, nPrfx, rLocalName, false )
 , mxParent( rShapes )
 {
@@ -52,7 +52,7 @@ SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, sal_uInt16 n
     {
         OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         if( (nPrefix == XML_NAMESPACE_XLINK) && IsXMLToken( aLocalName, XML_HREF ) )
         {
             msHyperlink = xAttrList->getValueByIndex( i );
@@ -69,7 +69,7 @@ SdXMLShapeLinkContext::~SdXMLShapeLinkContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext* SdXMLShapeLinkContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext* SdXMLShapeLinkContext::CreateChildContext( USHORT nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {

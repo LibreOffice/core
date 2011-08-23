@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ import com.sun.star.lib.uno.environments.java.java_environment;
 public class ProxyProvider
 {
     static java_environment env= new java_environment(null);
-
+    
     /** Creates a new instance of ProxyProvider */
     public ProxyProvider()
     {
@@ -56,7 +56,7 @@ public class ProxyProvider
         Object retVal= null;
         if (obj == null || iface == null || iface.isInstance(obj) == false )
             return retVal;
-
+        
         Type type= new Type(TypeDescription.getTypeDescription(iface));
         Type evtType= new Type(TypeDescription.getTypeDescription(com.sun.star.lang.XEventListener.class));
         // find the object identifier
@@ -86,7 +86,7 @@ class Proxy implements IQueryInterface, XEventListener
     public String getOid() {
         return oid;
     }
-
+    
     public boolean isSame(Object object) {
         if (object instanceof IQueryInterface)
         {
@@ -99,21 +99,21 @@ class Proxy implements IQueryInterface, XEventListener
                     return false;
             }
         }
-
+        
         String oidObj = UnoRuntime.generateOid(object);
         if (oidObj.equals(oid))
             return true;
         else
             return false;
     }
-
+    
     public Object queryInterface(Type type) {
         return null;
     }
-
+    
     public void disposing(com.sun.star.lang.EventObject eventObject) {
     }
-
+    
 }
 
 
@@ -123,7 +123,7 @@ class Proxy implements IQueryInterface, XEventListener
 //    boolean _virtual;
 //    boolean _forceSynchronous;
 //    boolean _passed = true;
-//
+//    
 //    Object _xEventListenerProxy;
 //    int nDisposingCalled= 0;
 //
@@ -132,9 +132,9 @@ class Proxy implements IQueryInterface, XEventListener
 //        _virtual = virtual;
 //        _forceSynchronous = forceSynchronous;
 //        _xEventListenerProxy= evtListener;
-//
+//        
 //    }
-//
+//    
 //    public Object sendRequest(Object object,
 //    Type type,
 //    String operation,
@@ -142,7 +142,7 @@ class Proxy implements IQueryInterface, XEventListener
 //    Boolean synchron[],
 //    Boolean mustReply[]) throws Throwable
 //    {
-//
+//        
 //        Object result = null;
 //        if (operation.equals("disposing"))
 //        {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define _SVX_ACCESSIBILITY_DG_COLOR_NAME_LOOK_UP_HXX
 
 #include <rtl/ustrbuf.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 namespace accessibility {
 
@@ -53,7 +53,7 @@ class DGColorNameLookUp
 {
 public:
     /** Return the single instance of this class.  Use this to look up
-        color names with the <member>LookUpColor()</member> method.
+        color names with the <member>LookUpColor()</member> method. 
     */
     static DGColorNameLookUp& Instance (void);
 
@@ -71,7 +71,7 @@ public:
 
 private:
     /// Define hash map type to convert numerical color values to names.
-    typedef boost::unordered_map<long int, ::rtl::OUString>
+    typedef std::hash_map<long int, ::rtl::OUString>
         tColorValueToNameMap;
 
     /// This ma translates from numerical color values to names.
@@ -81,7 +81,7 @@ private:
         the <member>Instance</member> is called for the first time.
     */
     static DGColorNameLookUp* mpInstance;
-
+    
     /// Create a new (the only) instance of this class.
     DGColorNameLookUp (void);
 

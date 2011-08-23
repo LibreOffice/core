@@ -57,6 +57,10 @@
  * @file
  * index entry object.
  ************************************************************************/
+/*************************************************************************
+ * Change History
+ * 2005-05-17  create this file.
+ ************************************************************************/
 #include "xfcrossref.hxx"
 
 XFCrossRefStart::XFCrossRefStart()
@@ -69,7 +73,7 @@ XFCrossRefStart::~XFCrossRefStart()
 
 void XFCrossRefStart::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     if( m_nType == CROSSREF_TEXT)

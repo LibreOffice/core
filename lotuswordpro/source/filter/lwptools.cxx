@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwptools.hxx"
@@ -83,7 +83,7 @@ using namespace ::rtl;
 using namespace ::osl;
 
 /**
- * @descr       read lwp unicode string from stream to OUString per aEncoding
+ * @descr		read lwp unicode string from stream to OUString per aEncoding
 */
 sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
         OUString& str, sal_uInt16 strlen, rtl_TextEncoding aEncoding)
@@ -118,12 +118,12 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
         sal_uInt8 readbyte;
         sal_uInt16 readword;
 
-        sal_Bool flag = sal_False;  //switch if unicode part reached
+        BOOL flag = sal_False;	//switch if unicode part reached
         sal_uInt16 sublen = 0;
 
         while(readLen<strlen)
         {
-            if(!flag)   //Not unicode string
+            if(!flag)	//Not unicode string
             {
                 len = pObjStrm->QuickRead(&readbyte, sizeof(readbyte));
                 if(!len) break;
@@ -132,7 +132,7 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
                 if(readbyte == 0x00)
                 {
                     flag = sal_True;
-                    if(sublen>0)    //add it to the strBuf
+                    if(sublen>0)	//add it to the strBuf
                     {
                         strBuf.append( OUString(buf, sublen, aEncoding) ); //try the aEncoding
                         sublen = 0;
@@ -148,7 +148,7 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
                     sublen = 0;
                 }
             }
-            else        //unicode string
+            else		//unicode string
             {
                 len = pObjStrm->QuickRead(&readword, sizeof(readword));
                 if(!len) break;
@@ -176,21 +176,21 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
                 }
             }
         }
-//      if(sublen)
-//      {
-//          unibuf[sublen] = sal_Unicode('\0');
-//          strBuf.append( OUString(unibuf) );
-//          sublen = 0;
-//      }
+//		if(sublen)
+//		{
+//			unibuf[sublen] = sal_Unicode('\0');
+//			strBuf.append( OUString(unibuf) );
+//			sublen = 0;
+//		}
         str = strBuf.makeStringAndClear();
         return readLen;
     }
 }
 
 /**
- * @descr       Judge if the data (len) in object stream is lwp unicode packed
+ * @descr		Judge if the data (len) in object stream is lwp unicode packed
 */
-sal_Bool LwpTools::IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len)
+BOOL LwpTools::IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len)
 {
     sal_uInt8 byte;
     sal_uInt16 oldpos = pObjStrm->GetPos();
@@ -239,7 +239,7 @@ OUString LwpTools::convertToFileUrl(const OString &fileName)
 
 OUString LwpTools::DateTimeToOUString(LtTm & dt)
 {
-    rtl::OUStringBuffer buf;
+    rtl::OUStringBuffer	buf;
     buf.append(dt.tm_year);
     buf.append( A2OUSTR("-") );
     buf.append(dt.tm_mon);
@@ -256,7 +256,7 @@ OUString LwpTools::DateTimeToOUString(LtTm & dt)
 }
 
 /**
- * @descr   get the system date format
+ * @descr	get the system date format
 */
 XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
 {
@@ -265,7 +265,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
         style = icu::DateFormat::FULL;//system full date format
     else
         style = icu::DateFormat::SHORT;//system short date format
-/*  ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLocale();
+/*	::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLocale();
     rtl::OUString strLang = aLocale.Language;
     rtl::OUString strCountry = aLocale.Country;
     strLang = strLang + A2OUSTR("_");
@@ -670,15 +670,15 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
             }
         }
     }
-//  udat_close(fmt);
+//	udat_close(fmt);
     return pDateStyle;
 }
 /**
- * @descr   get the system time format
+ * @descr	get the system time format
 */
 XFTimeStyle* LwpTools::GetSystemTimeStyle()
 {
-/*  ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLocale();
+/*	::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLocale();
     rtl::OUString strLang = aLocale.Language;
     rtl::OUString strCountry = aLocale.Country;
     strLang = strLang + A2OUSTR("_");
@@ -916,7 +916,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
             }
         }
     }
-//  udat_close(fmt);
+//	udat_close(fmt);
     return pTimeStyle;
 }
 

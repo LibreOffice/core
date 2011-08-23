@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,76 +29,65 @@
 #define _SFX_PASSWD_HXX
 
 #include "sal/config.h"
-#include <sfx2/dllapi.h>
+#include "sfx2/dllapi.h"
+
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
-#include <sfx2/app.hxx>
 
 // defines ---------------------------------------------------------------
 
-#define SHOWEXTRAS_NONE      ((sal_uInt16)0x0000)
-#define SHOWEXTRAS_USER      ((sal_uInt16)0x0001)
-#define SHOWEXTRAS_CONFIRM   ((sal_uInt16)0x0002)
-#define SHOWEXTRAS_PASSWORD2 ((sal_uInt16)0x0004)
-#define SHOWEXTRAS_CONFIRM2  ((sal_uInt16)0x0008)
-#define SHOWEXTRAS_ALL       ((sal_uInt16)(SHOWEXTRAS_USER | SHOWEXTRAS_CONFIRM))
+#define SHOWEXTRAS_NONE		((USHORT)0x0000)
+#define SHOWEXTRAS_USER		((USHORT)0x0001)
+#define SHOWEXTRAS_CONFIRM	((USHORT)0x0002)
+#define SHOWEXTRAS_ALL		((USHORT)(SHOWEXTRAS_USER | SHOWEXTRAS_CONFIRM))
 
 // class SfxPasswordDialog -----------------------------------------------
 
 class SFX2_DLLPUBLIC SfxPasswordDialog : public ModalDialog
 {
 private:
+    FixedText		maUserFT;
+    Edit			maUserED;
+    FixedText		maPasswordFT;
+    Edit			maPasswordED;
+    FixedText		maConfirmFT;
+    Edit			maConfirmED;
+    FixedText		maMinLengthFT;
     FixedLine       maPasswordBox;
-    FixedText       maUserFT;
-    Edit            maUserED;
-    FixedText       maPasswordFT;
-    Edit            maPasswordED;
-    FixedText       maConfirmFT;
-    Edit            maConfirmED;
-    FixedText       maMinLengthFT;
-    FixedLine       maPassword2Box;
-    FixedText       maPassword2FT;
-    Edit            maPassword2ED;
-    FixedText       maConfirm2FT;
-    Edit            maConfirm2ED;
 
-    OKButton        maOKBtn;
-    CancelButton    maCancelBtn;
-    HelpButton      maHelpBtn;
+    OKButton		maOKBtn;
+    CancelButton	maCancelBtn;
+    HelpButton		maHelpBtn;
 
-    String          maConfirmStr;
-    String          maMinLenPwdStr;
-    String          maEmptyPwdStr;
-    String          maMainPwdStr;
-    sal_uInt16      mnMinLen;
-    sal_uInt16      mnExtras;
+    String			maConfirmStr;
+    USHORT			mnMinLen;
+    String			maMinLenPwdStr;
+    String			maEmptyPwdStr;
+    String			maMainPwdStr;
+    USHORT			mnExtras;
 
     bool            mbAsciiOnly;
     DECL_DLLPRIVATE_LINK( EditModifyHdl, Edit* );
     DECL_DLLPRIVATE_LINK( OKHdl, OKButton* );
 
-    void            SetPasswdText();
+    void			SetPasswdText();
 
 public:
     SfxPasswordDialog( Window* pParent, const String* pGroupText = NULL );
 
-    String          GetUser() const { return maUserED.GetText(); }
-    String          GetPassword() const { return maPasswordED.GetText(); }
-    String          GetConfirm() const { return maConfirmED.GetText(); }
+    String			GetUser() const	{ return maUserED.GetText(); }
+    String			GetPassword() const { return maPasswordED.GetText(); }
+    String			GetConfirm() const { return maConfirmED.GetText(); }
 
-    String          GetPassword2() const { return maPassword2ED.GetText(); }
-    String          GetConfirm2() const { return maConfirm2ED.GetText(); }
-    void            SetGroup2Text( const String& i_rText ) { maPassword2Box.SetText( i_rText ); }
-
-    void            SetMinLen( sal_uInt16 Len );
-    void            SetMaxLen( sal_uInt16 Len );
-    void            SetEditHelpId( const rtl::OString& rId ) { maPasswordED.SetHelpId( rId ); }
-    void            ShowExtras( sal_uInt16 nExtras ) { mnExtras = nExtras; }
+    void 			SetMinLen( USHORT Len );
+    void            SetMaxLen( USHORT Len );
+    void			SetEditHelpId( ULONG nId ) { maPasswordED.SetHelpId( nId ); }
+    void			ShowExtras( USHORT nExtras ) { mnExtras = nExtras; }
     void            AllowAsciiOnly( bool i_bAsciiOnly = true ) { mbAsciiOnly = i_bAsciiOnly; }
 
-    virtual short   Execute();
+    virtual short	Execute();
 };
 
 #endif // #ifndef _SFX_PASSWD_HXX

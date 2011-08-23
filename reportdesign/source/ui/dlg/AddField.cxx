@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,12 +70,14 @@ using namespace lang;
 using namespace container;
 using namespace ::svx;
 
-class OAddFieldWindowListBox    : public SvTreeListBox
+class OAddFieldWindowListBox	: public SvTreeListBox
 {
     OAddFieldWindow*                    m_pTabWin;
 
     OAddFieldWindowListBox(const OAddFieldWindowListBox&);
     void operator =(const OAddFieldWindowListBox&);
+protected:
+//	virtual void Command( const CommandEvent& rEvt );
 
 public:
     OAddFieldWindowListBox( OAddFieldWindow* _pParent );
@@ -170,8 +172,8 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
             ,m_xRowSet(_xRowSet)
             ,m_aActions(this,ModuleRes(RID_TB_SORTING))
             ,m_pListBox(new OAddFieldWindowListBox( this ))
-            ,m_aFixedLine(this, ModuleRes(ADDFIELD_FL_HELP_SEPARATOR) )
-            ,m_aHelpText(this, ModuleRes(ADDFIELD_HELP_FIELD) )
+            ,m_aFixedLine(this, ModuleRes(ADDFIELD_FL_HELP_SEPARATOR) ) 
+            ,m_aHelpText(this, ModuleRes(ADDFIELD_HELP_FIELD) ) 
             ,m_aInsertButton(this, WB_TABSTOP|WB_CENTER)
             ,m_nCommandType(0)
             ,m_bEscapeProcessing(sal_False)
@@ -189,8 +191,8 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
     m_aActions.SetSelectHdl(LINK(this, OAddFieldWindow, OnSortAction));
     setToolBox(&m_aActions);
     m_aActions.CheckItem(SID_FM_SORTUP);
-    m_aActions.EnableItem(SID_ADD_CONTROL_PAIR, sal_False);
-
+    m_aActions.EnableItem(SID_ADD_CONTROL_PAIR, FALSE);
+    
     m_pListBox->SetDoubleClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
     m_pListBox->SetSelectHdl(LINK( this, OAddFieldWindow, OnSelectHdl ) );
     m_pListBox->SetDeselectHdl(LINK( this, OAddFieldWindow, OnSelectHdl ) );
@@ -205,6 +207,7 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
     m_aHelpText.SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
     SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
+    //Show();
 
     if ( m_xRowSet.is() )
     {
@@ -229,9 +232,9 @@ OAddFieldWindow::~OAddFieldWindow()
 {
     if ( m_pListBox.get() )
     {
-        SvLBoxTreeList* pModel = m_pListBox->GetModel();
-        sal_uLong nCount = pModel->GetEntryCount();
-        for(sal_uLong i = 0; i< nCount;++i)
+        SvLBoxTreeList*	pModel = m_pListBox->GetModel();
+        ULONG nCount = pModel->GetEntryCount();
+        for(ULONG i = 0; i< nCount;++i)
         {
             delete static_cast<ColumnInfo*>(pModel->GetEntry(i)->GetUserData());
         }
@@ -291,7 +294,7 @@ namespace
         const ::rtl::OUString* pEntries = _rEntries.getConstArray();
         sal_Int32 nEntries = _rEntries.getLength();
         for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
-            _rListBox.InsertEntry( *pEntries,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries) );
+            _rListBox.InsertEntry( *pEntries,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries) );
     }
     void lcl_addToList( OAddFieldWindowListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
     {
@@ -305,9 +308,9 @@ namespace
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             if ( sLabel.getLength() )
-                _rListBox.InsertEntry( sLabel,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+                _rListBox.InsertEntry( sLabel,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
             else
-                _rListBox.InsertEntry( *pEntries,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+                _rListBox.InsertEntry( *pEntries,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
         }
     }
 }
@@ -324,12 +327,12 @@ void OAddFieldWindow::Update()
     {
         // ListBox loeschen
         m_pListBox->Clear();
-        const sal_uInt16 nItemCount = m_aActions.GetItemCount();
-        for (sal_uInt16 j = 0; j< nItemCount; ++j)
+        const USHORT nItemCount = m_aActions.GetItemCount();
+        for (USHORT j = 0; j< nItemCount; ++j)
         {
-            m_aActions.EnableItem(m_aActions.GetItemId(j),sal_False);
+            m_aActions.EnableItem(m_aActions.GetItemId(j),FALSE);
         }
-
+        
         String aTitle(ModuleRes(RID_STR_FIELDSELECTION));
         SetText(aTitle);
         if ( m_xRowSet.is() )
@@ -344,8 +347,8 @@ void OAddFieldWindow::Update()
             OSL_VERIFY( m_xRowSet->getPropertyValue( PROPERTY_ESCAPEPROCESSING ) >>= bEscapeProcessing );
             OSL_VERIFY( m_xRowSet->getPropertyValue( PROPERTY_FILTER ) >>= sFilter );
 
-            m_aCommandName  = sCommand;
-            m_nCommandType  = nCommandType;
+            m_aCommandName	= sCommand;
+            m_nCommandType 	= nCommandType;
             m_bEscapeProcessing = bEscapeProcessing;
             m_sFilter = sFilter;
 
@@ -372,7 +375,7 @@ void OAddFieldWindow::Update()
             SetText( aTitle );
             if ( m_aCommandName.getLength() )
             {
-                for (sal_uInt16 i = 0; i < nItemCount; ++i)
+                for (USHORT i = 0; i < nItemCount; ++i)
                 {
                     m_aActions.EnableItem(m_aActions.GetItemId(i));
                 }
@@ -445,7 +448,7 @@ void OAddFieldWindow::fillDescriptor(SvLBoxEntry* _pSelected,::svx::ODataAccessD
                 uno::Reference<frame::XModel> xModel(xDocument->getDatabaseDocument(),uno::UNO_QUERY);
                 if ( xModel.is() )
                     _rDescriptor[ daDatabaseLocation ] <<= xModel->getURL();
-            }
+            } // if ( xDocument.is() )
         }
 
         _rDescriptor[ ::svx::daCommand ]            <<= GetCommand();
@@ -454,6 +457,7 @@ void OAddFieldWindow::fillDescriptor(SvLBoxEntry* _pSelected,::svx::ODataAccessD
         _rDescriptor[ ::svx::daConnection ]         <<= getConnection();
 
         ColumnInfo* pInfo = static_cast<ColumnInfo*>(_pSelected->GetUserData());
+        // ::rtl::OUString sColumnName = m_pListBox->GetEntryText( _pSelected );
         _rDescriptor[ ::svx::daColumnName ]         <<= pInfo->sColumnName;
         if ( m_xColumns->hasByName( pInfo->sColumnName ) )
             _rDescriptor[ ::svx::daColumnObject ] <<= m_xColumns->getByName(pInfo->sColumnName);
@@ -472,9 +476,9 @@ void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             if ( sLabel.getLength() )
-                m_pListBox->InsertEntry( sLabel,NULL,sal_False,LIST_APPEND,new ColumnInfo(sName,sLabel) );
+                m_pListBox->InsertEntry( sLabel,NULL,FALSE,LIST_APPEND,new ColumnInfo(sName,sLabel) );
             else
-                m_pListBox->InsertEntry( sName,NULL,sal_False,LIST_APPEND,new ColumnInfo(sName,sLabel) );
+                m_pListBox->InsertEntry( sName,NULL,FALSE,LIST_APPEND,new ColumnInfo(sName,sLabel) );
         }
     }
 }
@@ -508,12 +512,16 @@ IMPL_LINK( OAddFieldWindow, OnDoubleClickHdl, void* ,/*_pAddFieldDlg*/)
     return 0L;
 }
 //------------------------------------------------------------------------------
-ImageList OAddFieldWindow::getImageList(sal_Int16 _eBitmapSet) const
+ImageList OAddFieldWindow::getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
 {
     sal_Int16 nN = IMG_ADDFIELD_DLG_SC;
+    sal_Int16 nH = IMG_ADDFIELD_DLG_SCH;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
+    {
         nN = IMG_ADDFIELD_DLG_LC;
-    return ImageList(ModuleRes(nN));
+        nH = IMG_ADDFIELD_DLG_LCH;
+    }
+    return ImageList(ModuleRes( _bHiContast ? nH : nN ));
 }
 //------------------------------------------------------------------
 void OAddFieldWindow::resizeControls(const Size& _rDiff)
@@ -527,19 +535,19 @@ void OAddFieldWindow::resizeControls(const Size& _rDiff)
 //------------------------------------------------------------------
 IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
 {
-    const sal_uInt16 nCurItem = m_aActions.GetCurItemId();
+    const USHORT nCurItem = m_aActions.GetCurItemId();
     if ( SID_ADD_CONTROL_PAIR == nCurItem )
         OnDoubleClickHdl(NULL);
     else
     {
         if ( SID_FM_REMOVE_FILTER_SORT == nCurItem || !m_aActions.IsItemChecked(nCurItem) )
         {
-            const sal_uInt16 nItemCount = m_aActions.GetItemCount();
-            for (sal_uInt16 j = 0; j< nItemCount; ++j)
+            const USHORT nItemCount = m_aActions.GetItemCount();
+            for (USHORT j = 0; j< nItemCount; ++j)
             {
-                const sal_uInt16 nItemId = m_aActions.GetItemId(j);
+                const USHORT nItemId = m_aActions.GetItemId(j);
                 if ( nCurItem != nItemId )
-                    m_aActions.CheckItem(nItemId,sal_False);
+                    m_aActions.CheckItem(nItemId,FALSE);
             }
             SvSortMode eSortMode = SortNone;
             if ( SID_FM_REMOVE_FILTER_SORT != nCurItem )
@@ -549,12 +557,12 @@ IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
                     eSortMode = SortAscending;
                 else if ( m_aActions.IsItemChecked(SID_FM_SORTDOWN) )
                     eSortMode = SortDescending;
-            }
-
+            } // if ( SID_FM_REMOVE_FILTER_SORT != nCurItem )
+            
             m_pListBox->GetModel()->SetSortMode(eSortMode);
             if ( SID_FM_REMOVE_FILTER_SORT == nCurItem )
                 Update();
-
+            
             m_pListBox->GetModel()->Resort();
         }
     }

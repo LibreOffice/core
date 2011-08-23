@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ void mygetchar()
 void testPipe( const Reference < XMultiServiceFactory > & rSmgr )
 {
     Reference < XOutputStream > rOut(
-        rSmgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pipe" )) ),
+        rSmgr->createInstance( OUString::createFromAscii( "com.sun.star.io.Pipe" ) ),
         UNO_QUERY );
 
     OSL_ASSERT( rOut.is() );
@@ -109,7 +109,7 @@ void testPipe( const Reference < XMultiServiceFactory > & rSmgr )
         if( ! ( 42 == seq.getArray()[0] ) )
             printf( "wrong element in sequence\n" );
 
-//          OSL_ASSERT( 0 );
+//			OSL_ASSERT( 0 );
     }
 }
 #include<stdio.h>
@@ -195,7 +195,7 @@ void doSomething( const  Reference < XInterface > &r )
     {
         printf( "got the remote naming service !\n" );
         Reference < XInterface > rXsmgr = rName->getRegisteredObject(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ServiceManager" )) );
+            OUString::createFromAscii( "StarOffice.ServiceManager" ) );
 
         Reference < XMultiServiceFactory > rSmgr( rXsmgr , UNO_QUERY );
         if( rSmgr.is() )

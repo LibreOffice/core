@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,10 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-
-#include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/outliner.hxx>
@@ -42,6 +38,7 @@
 #include <svl/urihelper.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <svx/svditer.hxx>
+#include <tools/list.hxx>
 
 #include "sdresid.hxx"
 #include "sdpage.hxx"
@@ -55,6 +52,7 @@
 #include "../ui/inc/strings.hrc"
 #include "../ui/inc/DrawDocShell.hxx"
 
+// #90477#
 #include <tools/tenccvt.hxx>
 #include <svl/itemset.hxx>
 
@@ -67,33 +65,33 @@ extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString&
 
 /*************************************************************************
 |*
-|* SetPresentationLayout, setzt: Layoutnamen, Masterpage-Verknï¿½pfung und
+|* SetPresentationLayout, setzt: Layoutnamen, Masterpage-Verknpfung und
 |* Vorlagen fuer Praesentationsobjekte
 |*
 |* Vorraussetzungen: - Die Seite muss bereits das richtige Model kennen!
-|*                   - Die entsprechende Masterpage muss bereits im Model sein.
-|*                   - Die entsprechenden StyleSheets muessen bereits im
-|*                     im StyleSheetPool sein.
+|*					 - Die entsprechende Masterpage muss bereits im Model sein.
+|*					 - Die entsprechenden StyleSheets muessen bereits im
+|*					   im StyleSheetPool sein.
 |*
-|*  bReplaceStyleSheets = sal_True : Benannte StyleSheets werden ausgetauscht
-|*                        sal_False: Alle StyleSheets werden neu zugewiesen
+|*  bReplaceStyleSheets = TRUE : Benannte StyleSheets werden ausgetauscht
+|*                        FALSE: Alle StyleSheets werden neu zugewiesen
 |*
-|*  bSetMasterPage      = sal_True : MasterPage suchen und zuweisen
+|*  bSetMasterPage      = TRUE : MasterPage suchen und zuweisen
 |*
-|*  bReverseOrder       = sal_False: MasterPages von vorn nach hinten suchen
-|*                        sal_True : MasterPages von hinten nach vorn suchen (fuer Undo-Action)
+|*  bReverseOrder       = FALSE: MasterPages von vorn nach hinten suchen
+|*                        TRUE : MasterPages von hinten nach vorn suchen (fuer Undo-Action)
 |*
 \************************************************************************/
 
 void SdPage::SetPresentationLayout(const String& rLayoutName,
-                                   sal_Bool bReplaceStyleSheets,
-                                   sal_Bool bSetMasterPage,
-                                   sal_Bool bReverseOrder)
+                                   BOOL bReplaceStyleSheets,
+                                   BOOL bSetMasterPage,
+                                   BOOL bReverseOrder)
 {
     /*********************************************************************
     |* Layoutname der Seite
     \********************************************************************/
-    String aOldLayoutName(maLayoutName);    // merken
+    String aOldLayoutName(maLayoutName); 	// merken
     maLayoutName = rLayoutName;
     maLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
     maLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
@@ -105,8 +103,8 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     {
         SdPage* pMaster;
         SdPage* pFoundMaster = 0;
-        sal_uInt16 nMaster = 0;
-        sal_uInt16 nMasterCount = pModel->GetMasterPageCount();
+        USHORT nMaster = 0;
+        USHORT nMasterCount = pModel->GetMasterPageCount();
 
         if( !bReverseOrder )
         {
@@ -149,14 +147,14 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     // Listen mit:
     // - Vorlagenzeigern fuer Gliederungstextobjekt (alte und neue Vorlagen)
     // -Replacedaten fuer OutlinerParaObject
-    std::vector<SfxStyleSheetBase*> aOutlineStyles;
-    std::vector<SfxStyleSheetBase*> aOldOutlineStyles;
-    boost::ptr_vector<StyleReplaceData> aReplList;
-    bool bListsFilled = false;
+    List aOutlineStyles;
+    List aOldOutlineStyles;
+    List aReplList;
+    BOOL bListsFilled = FALSE;
 
-    sal_uLong nObjCount = GetObjCount();
+    ULONG nObjCount = GetObjCount();
 
-    for (sal_uLong nObj = 0; nObj < nObjCount; nObj++)
+    for (ULONG nObj = 0; nObj < nObjCount; nObj++)
     {
         SdrTextObj* pObj = (SdrTextObj*) GetObj(nObj);
 
@@ -181,11 +179,11 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
 
                     pSheet = pStShPool->Find(aOldFullName, SD_STYLE_FAMILY_MASTERPAGE);
                     DBG_ASSERT(pSheet, "alte Gliederungsvorlage nicht gefunden");
-                    aOldOutlineStyles.push_back(pSheet);
+                    aOldOutlineStyles.Insert(pSheet, LIST_APPEND);
 
                     pSheet = pStShPool->Find(aFullName, SD_STYLE_FAMILY_MASTERPAGE);
                     DBG_ASSERT(pSheet, "neue Gliederungsvorlage nicht gefunden");
-                    aOutlineStyles.push_back(pSheet);
+                    aOutlineStyles.Insert(pSheet, LIST_APPEND);
 
                     if (bReplaceStyleSheets && pSheet)
                     {
@@ -195,7 +193,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                         pReplData->nFamily    = pSheet->GetFamily();
                         pReplData->aNewName   = aFullName;
                         pReplData->aName      = aOldFullName;
-                        aReplList.push_back(pReplData);
+                        aReplList.Insert(pReplData, LIST_APPEND);
                     }
                     else
                     {
@@ -206,20 +204,13 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                     }
                 }
 
-                bListsFilled = true;
+                bListsFilled = TRUE;
             }
 
-            SfxStyleSheet* pSheet = NULL;
-            SfxStyleSheet* pOldSheet = NULL;
-
-            std::vector<SfxStyleSheetBase*>::iterator iterOut = aOutlineStyles.begin();
-            std::vector<SfxStyleSheetBase*>::iterator iterOldOut = aOldOutlineStyles.begin();
-
-            while (iterOut != aOutlineStyles.end())
+            SfxStyleSheet* pSheet = (SfxStyleSheet*)aOutlineStyles.First();
+            SfxStyleSheet* pOldSheet = (SfxStyleSheet*)aOldOutlineStyles.First();
+            while (pSheet)
             {
-                pSheet = reinterpret_cast<SfxStyleSheet*>(*iterOut);
-                pOldSheet = reinterpret_cast<SfxStyleSheet*>(*iterOldOut);
-
                 if (pSheet != pOldSheet)
                 {
                     pObj->EndListening(*pOldSheet);
@@ -228,18 +219,19 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                         pObj->StartListening(*pSheet);
                 }
 
-                ++iterOut;
-                ++iterOldOut;
+                pSheet = (SfxStyleSheet*)aOutlineStyles.Next();
+                pOldSheet = (SfxStyleSheet*)aOldOutlineStyles.Next();
             }
 
             OutlinerParaObject* pOPO = ((SdrTextObj*)pObj)->GetOutlinerParaObject();
             if ( bReplaceStyleSheets && pOPO )
             {
-                boost::ptr_vector<StyleReplaceData>::const_iterator it = aReplList.begin();
-                while (it != aReplList.end())
+                StyleReplaceData* pReplData = (StyleReplaceData*) aReplList.First();
+
+                while( pReplData )
                 {
-                    pOPO->ChangeStyleSheets( it->aName, it->nFamily, it->aNewName, it->nNewFamily );
-                    ++it;
+                    pOPO->ChangeStyleSheets( pReplData->aName, pReplData->nFamily, pReplData->aNewName, pReplData->nNewFamily );
+                    pReplData = (StyleReplaceData*) aReplList.Next();
                 }
             }
         }
@@ -252,15 +244,20 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
             SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PRESOBJ_TITLE);
 
             if (pSheet)
-                pObj->SetStyleSheet(pSheet, sal_True);
+                pObj->SetStyleSheet(pSheet, TRUE);
         }
         else
         {
             SfxStyleSheet* pSheet = GetStyleSheetForPresObj(GetPresObjKind(pObj));
 
             if (pSheet)
-                pObj->SetStyleSheet(pSheet, sal_True);
+                pObj->SetStyleSheet(pSheet, TRUE);
         }
+    }
+
+    for (ULONG i = 0; i < aReplList.Count(); i++)
+    {
+        delete (StyleReplaceData*) aReplList.GetObject(i);
     }
 }
 
@@ -282,17 +279,15 @@ void SdPage::EndListenOutlineText()
         DBG_ASSERT(pSPool, "StyleSheetPool nicht gefunden");
         String aTrueLayoutName(maLayoutName);
         aTrueLayoutName.Erase( aTrueLayoutName.SearchAscii( SD_LT_SEPARATOR ));
+        List* pOutlineStyles = pSPool->CreateOutlineSheetList(aTrueLayoutName);
+        for (SfxStyleSheet* pSheet = (SfxStyleSheet*)pOutlineStyles->First();
+             pSheet;
+             pSheet = (SfxStyleSheet*)pOutlineStyles->Next())
+            {
+                pOutlineTextObj->EndListening(*pSheet);
+            }
 
-        SfxStyleSheet *pSheet = NULL;
-        std::vector<SfxStyleSheetBase*> aOutlineStyles;
-        pSPool->CreateOutlineSheetList(aTrueLayoutName,aOutlineStyles);
-
-        std::vector<SfxStyleSheetBase*>::iterator iter;
-        for (iter = aOutlineStyles.begin(); iter != aOutlineStyles.end(); ++iter)
-        {
-            pSheet = reinterpret_cast<SfxStyleSheet*>(*iter);
-            pOutlineTextObj->EndListening(*pSheet);
-        }
+        delete pOutlineStyles;
     }
 }
 
@@ -384,9 +379,9 @@ void SdPage::DisconnectLink()
 \************************************************************************/
 
 SdPage::SdPage(const SdPage& rSrcPage)
-:   FmFormPage(rSrcPage)
-,   SdrObjUserCall()
-,   mpItems(NULL)
+:	FmFormPage(rSrcPage)
+,	SdrObjUserCall()
+,	mpItems(NULL)
 {
     mePageKind           = rSrcPage.mePageKind;
     meAutoLayout         = rSrcPage.meAutoLayout;
@@ -395,21 +390,21 @@ SdPage::SdPage(const SdPage& rSrcPage)
     while((pObj = rSrcPage.maPresentationShapeList.getNextShape(pObj)) != 0)
         InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
 
-    mbSelected           = sal_False;
-    mnTransitionType    = rSrcPage.mnTransitionType;
+    mbSelected           = FALSE;
+    mnTransitionType	= rSrcPage.mnTransitionType;
     mnTransitionSubtype = rSrcPage.mnTransitionSubtype;
     mbTransitionDirection = rSrcPage.mbTransitionDirection;
     mnTransitionFadeColor = rSrcPage.mnTransitionFadeColor;
     mfTransitionDuration = rSrcPage.mfTransitionDuration;
-    mePresChange            = rSrcPage.mePresChange;
+    mePresChange			= rSrcPage.mePresChange;
     mnTime               = rSrcPage.mnTime;
     mbSoundOn            = rSrcPage.mbSoundOn;
     mbExcluded           = rSrcPage.mbExcluded;
 
     maLayoutName         = rSrcPage.maLayoutName;
     maSoundFile          = rSrcPage.maSoundFile;
-    mbLoopSound          = rSrcPage.mbLoopSound;
-    mbStopSound          = rSrcPage.mbStopSound;
+    mbLoopSound			 = rSrcPage.mbLoopSound;
+    mbStopSound			 = rSrcPage.mbStopSound;
     maCreatedPageName    = String();
     maFileName           = rSrcPage.maFileName;
     maBookmarkName       = rSrcPage.maBookmarkName;
@@ -521,7 +516,7 @@ void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
 
 void SdPage::RemoveEmptyPresentationObjects()
 {
-    SdrObjListIter  aShapeIter( *this, IM_DEEPWITHGROUPS );
+    SdrObjListIter	aShapeIter( *this, IM_DEEPWITHGROUPS );
 
     SdrObject* pShape;
     for( pShape = aShapeIter.Next(); pShape; pShape = aShapeIter.Next() )
@@ -535,58 +530,58 @@ void SdPage::RemoveEmptyPresentationObjects()
     }
 }
 
-sal_Int16 SdPage::getTransitionType (void) const
+sal_Int16 SdPage::getTransitionType (void) const 
 {
-    return mnTransitionType;
+    return mnTransitionType; 
 }
 
 void SdPage::setTransitionType( sal_Int16 nTransitionType )
 {
-    mnTransitionType = nTransitionType;
+    mnTransitionType = nTransitionType; 
     ActionChanged();
 }
 
 sal_Int16 SdPage::getTransitionSubtype (void) const
 {
-    return mnTransitionSubtype;
+    return mnTransitionSubtype; 
 }
 
 void SdPage::setTransitionSubtype ( sal_Int16 nTransitionSubtype )
 {
-    mnTransitionSubtype = nTransitionSubtype;
+    mnTransitionSubtype = nTransitionSubtype; 
     ActionChanged();
 }
 
 sal_Bool SdPage::getTransitionDirection (void) const
 {
-    return mbTransitionDirection;
+    return mbTransitionDirection; 
 }
 
 void SdPage::setTransitionDirection ( sal_Bool bTransitionbDirection )
 {
-    mbTransitionDirection = bTransitionbDirection;
+    mbTransitionDirection = bTransitionbDirection; 
     ActionChanged();
 }
 
 sal_Int32 SdPage::getTransitionFadeColor (void) const
 {
-    return mnTransitionFadeColor;
+    return mnTransitionFadeColor; 
 }
 
-void SdPage::setTransitionFadeColor ( sal_Int32 nTransitionFadeColor )
+void SdPage::setTransitionFadeColor ( sal_Int32 nTransitionFadeColor ) 
 {
-    mnTransitionFadeColor = nTransitionFadeColor;
+    mnTransitionFadeColor = nTransitionFadeColor; 
     ActionChanged();
 }
 
 double SdPage::getTransitionDuration (void) const
 {
-    return mfTransitionDuration;
+    return mfTransitionDuration; 
 }
 
 void SdPage::setTransitionDuration ( double fTranstionDuration )
 {
-    mfTransitionDuration = fTranstionDuration;
+    mfTransitionDuration = fTranstionDuration; 
     ActionChanged();
 }
 
@@ -610,7 +605,7 @@ void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIn
     {
         maAnnotations.insert( maAnnotations.begin() + nIndex, xAnnotation );
     }
-
+    
     if( pModel && pModel->IsUndoEnabled() )
     {
         SdrUndoAction* pAction = CreateUndoInsertOrRemoveAnnotation( xAnnotation, true );
@@ -619,7 +614,7 @@ void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIn
     }
 
     SetChanged();
-
+    
     if( pModel )
     {
         pModel->SetChanged();

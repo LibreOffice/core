@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,6 +74,7 @@ IFrameWindow_Impl::IFrameWindow_Impl( Window *pParent, sal_Bool bHasBorder, WinB
         SetBorderStyle( WINDOW_BORDER_NOBORDER );
     else
         SetBorderStyle( WINDOW_BORDER_NORMAL );
+    //SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
 }
 
 void IFrameWindow_Impl::SetBorder( sal_Bool bNewBorder )
@@ -139,9 +140,9 @@ void SAL_CALL IFrameObject::initialize( const uno::Sequence< uno::Any >& aArgume
         aArguments[0] >>= mxObj;
 }
 
-sal_Bool SAL_CALL IFrameObject::load(
+sal_Bool SAL_CALL IFrameObject::load( 
     const uno::Sequence < com::sun::star::beans::PropertyValue >& /*lDescriptor*/,
-    const uno::Reference < frame::XFrame >& xFrame )
+    const uno::Reference < frame::XFrame >& xFrame ) 
 throw( uno::RuntimeException )
 {
     if ( SvtMiscOptions().IsPluginsEnabled() )
@@ -159,7 +160,7 @@ throw( uno::RuntimeException )
         // we must destroy the IFrame before the parent is destroyed
         xWindow->addEventListener( this );
 
-        mxFrame = uno::Reference< frame::XFrame >( mxFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")) ),
+        mxFrame = uno::Reference< frame::XFrame >( mxFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Frame" ) ),
                     uno::UNO_QUERY );
         uno::Reference < awt::XWindow > xWin( pWin->GetComponentInterface(), uno::UNO_QUERY );
         mxFrame->initialize( xWin );
@@ -173,22 +174,22 @@ throw( uno::RuntimeException )
 
         util::URL aTargetURL;
         aTargetURL.Complete = ::rtl::OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-        uno::Reference < util::XURLTransformer > xTrans( mxFact->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), uno::UNO_QUERY );
+        uno::Reference < util::XURLTransformer > xTrans( mxFact->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), uno::UNO_QUERY );
         xTrans->parseStrict( aTargetURL );
 
         uno::Sequence < beans::PropertyValue > aProps(2);
-        aProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMode"));
+        aProps[0].Name = ::rtl::OUString::createFromAscii("PluginMode");
         aProps[0].Value <<= (sal_Int16) 2;
-        aProps[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+        aProps[1].Name = ::rtl::OUString::createFromAscii("ReadOnly");
         aProps[1].Value <<= (sal_Bool) sal_True;
-        uno::Reference < frame::XDispatch > xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")), 0 );
+        uno::Reference < frame::XDispatch > xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_self"), 0 );
         if ( xDisp.is() )
             xDisp->dispatch( aTargetURL, aProps );
 
-        return sal_True;
+        return TRUE;
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 void SAL_CALL IFrameObject::cancel() throw( com::sun::star::uno::RuntimeException )
@@ -249,7 +250,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
             maFrmDescr.SetName( aName );
     }
     break;
-    case WID_FRAME_IS_AUTO_SCROLL:
+    case WID_FRAME_IS_AUTO_SCROLL: 
     {
         sal_Bool bIsAutoScroll = sal_Bool();
         if ( (aAny >>= bIsAutoScroll) && bIsAutoScroll )
@@ -263,19 +264,19 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
             maFrmDescr.SetScrollingMode( bIsScroll ? ScrollingYes : ScrollingNo );
     }
     break;
-    case WID_FRAME_IS_BORDER:
+    case WID_FRAME_IS_BORDER: 
     {
         sal_Bool bIsBorder = sal_Bool();
         if ( aAny >>= bIsBorder )
             maFrmDescr.SetFrameBorder( bIsBorder );
     }
     break;
-    case WID_FRAME_IS_AUTO_BORDER:
+    case WID_FRAME_IS_AUTO_BORDER: 
     {
         sal_Bool bIsAutoBorder = sal_Bool();
         if ( (aAny >>= bIsAutoBorder) )
         {
-            sal_Bool bBorder = maFrmDescr.IsFrameBorderOn();
+            BOOL bBorder = maFrmDescr.IsFrameBorderOn();
             maFrmDescr.ResetBorder();
             if ( bIsAutoBorder )
                 maFrmDescr.SetFrameBorder( bBorder );
@@ -293,7 +294,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
         }
     }
     break;
-    case WID_FRAME_MARGIN_HEIGHT:
+    case WID_FRAME_MARGIN_HEIGHT: 
     {
         sal_Int32 nMargin = 0;
         Size aSize = maFrmDescr.GetMargin();
@@ -317,7 +318,7 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const ::rtl::OUString& aPropert
     uno::Any aAny;
     switch( pEntry->nWID )
     {
-    case WID_FRAME_URL:
+    case WID_FRAME_URL: 
     {
         aAny <<= ::rtl::OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
     }
@@ -327,7 +328,7 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const ::rtl::OUString& aPropert
         aAny <<= ::rtl::OUString( maFrmDescr.GetName() );
     }
     break;
-    case WID_FRAME_IS_AUTO_SCROLL:
+    case WID_FRAME_IS_AUTO_SCROLL: 
     {
         sal_Bool bIsAutoScroll = ( maFrmDescr.GetScrollingMode() == ScrollingAuto );
         aAny <<= bIsAutoScroll;
@@ -351,12 +352,12 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const ::rtl::OUString& aPropert
         aAny <<= bIsAutoBorder;
     }
     break;
-    case WID_FRAME_MARGIN_WIDTH:
+    case WID_FRAME_MARGIN_WIDTH: 
     {
         aAny <<= (sal_Int32 ) maFrmDescr.GetMargin().Width();
     }
     break;
-    case WID_FRAME_MARGIN_HEIGHT:
+    case WID_FRAME_MARGIN_HEIGHT: 
     {
         aAny <<= (sal_Int32 ) maFrmDescr.GetMargin().Height();
     }
@@ -384,7 +385,7 @@ void SAL_CALL IFrameObject::removeVetoableChangeListener(const ::rtl::OUString&,
 ::sal_Int16 SAL_CALL IFrameObject::execute() throw (::com::sun::star::uno::RuntimeException)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    VclAbstractDialog* pDlg = pFact->CreateEditObjectDialog( NULL, rtl::OUString::createFromAscii(".uno:InsertObjectFloatingFrame"), mxObj );
+    VclAbstractDialog* pDlg = pFact->CreateEditObjectDialog( NULL, SID_INSERT_FLOATINGFRAME, mxObj );
     if ( pDlg )
         pDlg->Execute();
     return 0;

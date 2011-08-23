@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,9 @@ ModalDialog DLG_INSERT_ABSTRACT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 239 , 68 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? AutoAbstract erzeugen : AutoAbstrakt erzeugen */
+    /* ### ACHTUNG: Neuer Text in Resource? AutoAbstract erzeugen : AutoAbstrakt erzeugen */
+    /* ### ACHTUNG: Neuer Text in Resource? AutoAbstract erzeugen : AutoAbstrakt erzeugen */
     Moveable = TRUE ;
     FixedLine FL_1
     {
@@ -50,7 +53,6 @@ ModalDialog DLG_INSERT_ABSTRACT
     };
     NumericField NF_LEVEL
     {
-        HelpID = "sw:NumericField:DLG_INSERT_ABSTRACT:NF_LEVEL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 153 , 12 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
@@ -68,11 +70,11 @@ ModalDialog DLG_INSERT_ABSTRACT
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Absätze je Kapitel : Absõtze je Kapitel */
         Text [ en-US ] = "Subpoints per level" ;
     };
     NumericField NF_PARA
     {
-        HelpID = "sw:NumericField:DLG_INSERT_ABSTRACT:NF_PARA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 153 , 27 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
@@ -90,6 +92,7 @@ ModalDialog DLG_INSERT_ABSTRACT
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 165 , 16 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Im Abstrakt erscheint die ausgewählte Anzahl von Absätzen aus den einbezogenen Kapitelebenen. : Im Abstrakt erscheint die ausgewõhlte Anzahl von Absõtzen aus den einbezogenen Kapitelebenen. */
         WordBreak = TRUE ;
         Text [ en-US ] = "The abstract contains the selected number of paragraphs from the included outline levels." ;
     };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1378,7 +1378,7 @@ sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
 // from an traditional symbol font (i.e. U+F020..U+F0FF)
 void ConvertChar::RecodeString( String& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
-    sal_uLong nLastIndex = (sal_uLong)nIndex + nLen;
+    ULONG nLastIndex = (ULONG)nIndex + nLen;
     if( nLastIndex > rStr.Len() )
         nLastIndex = rStr.Len();
 
@@ -1462,7 +1462,7 @@ const ConvertChar* ConvertChar::GetRecodeData( const String& rOrgFontName, const
 //=======================================================================
 
 FontToSubsFontConverter CreateFontToSubsFontConverter(
-    const String& rOrgName, sal_uLong nFlags )
+    const String& rOrgName, ULONG nFlags )
 {
     const ConvertChar* pCvt = NULL;
 

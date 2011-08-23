@@ -39,7 +39,7 @@
 
 #include <vcl/salframe.hxx>
 #include <vcl/svdata.hxx>
-#include <vcl/apptypes.hxx>
+#include <vcl/salatype.hxx>
 #include <vcl/saldatabasic.hxx>
 #include <vcl/solarmutex.hxx>
 #include <sal/types.h>
@@ -74,9 +74,9 @@ SvpSalInstance* SvpSalInstance::s_pDefaultInstance = NULL;
 
 SvpSalInstance::SvpSalInstance()
 {
-    m_aTimeout.tv_sec       = 0;
-    m_aTimeout.tv_usec      = 0;
-    m_nTimeoutMS            = 0;
+    m_aTimeout.tv_sec 		= 0;
+    m_aTimeout.tv_usec		= 0;
+    m_nTimeoutMS 			= 0;
 
     m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
     if (pipe (m_pTimeoutFDS) != -1)
@@ -124,7 +124,7 @@ SvpSalInstance::~SvpSalInstance()
     osl_destroyMutex( m_aEventGuard );
 }
 
-void SvpSalInstance::PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
+void SvpSalInstance::PostEvent( const SalFrame* pFrame, void* pData, USHORT nEvent )
 {
     if( osl_acquireMutex( m_aEventGuard ) )
     {
@@ -134,7 +134,7 @@ void SvpSalInstance::PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 
     Wakeup();
 }
 
-void SvpSalInstance::CancelEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
+void SvpSalInstance::CancelEvent( const SalFrame* pFrame, void* pData, USHORT nEvent )
 {
     if( osl_acquireMutex( m_aEventGuard ) )
     {
@@ -194,7 +194,7 @@ inline int operator >= ( const timeval &t1, const timeval &t2 )
         return t1.tv_usec >= t2.tv_usec;
     return t1.tv_sec > t2.tv_sec;
 }
-inline timeval &operator += ( timeval &t1, sal_uLong t2 )
+inline timeval &operator += ( timeval &t1, ULONG t2 )
 {
     t1.tv_sec  += t2 / 1000;
     t1.tv_usec += t2 ? (t2 % 1000) * 1000 : 500;
@@ -237,12 +237,12 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
     return bRet;
 }
 
-SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle )
+SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, ULONG nStyle )
 {
     return new SvpSalFrame( this, NULL, nStyle, pParent );
 }
 
-SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
+SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, ULONG nStyle )
 {
     return new SvpSalFrame( this, pParent, nStyle );
 }
@@ -252,7 +252,7 @@ void SvpSalInstance::DestroyFrame( SalFrame* pFrame )
     delete pFrame;
 }
 
-SalObject* SvpSalInstance::CreateObject( SalFrame*, SystemWindowData*, sal_Bool )
+SalObject* SvpSalInstance::CreateObject( SalFrame*, SystemWindowData*, BOOL )
 {
     return new SvpSalObject();
 }
@@ -264,7 +264,7 @@ void SvpSalInstance::DestroyObject( SalObject* pObject )
 
 SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics*,
                                                        long nDX, long nDY,
-                                                       sal_uInt16 nBitCount, const SystemGraphicsData* )
+                                                       USHORT nBitCount, const SystemGraphicsData* )
 {
     SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
     pNew->SetSize( nDX, nDY );
@@ -301,13 +301,13 @@ osl::SolarMutex* SvpSalInstance::GetYieldMutex()
     return &m_aYieldMutex;
 }
 
-sal_uLong SvpSalInstance::ReleaseYieldMutex()
+ULONG SvpSalInstance::ReleaseYieldMutex()
 {
     if ( m_aYieldMutex.GetThreadId() ==
          osl::Thread::getCurrentIdentifier() )
     {
-        sal_uLong nCount = m_aYieldMutex.GetAcquireCount();
-        sal_uLong n = nCount;
+        ULONG nCount = m_aYieldMutex.GetAcquireCount();
+        ULONG n = nCount;
         while ( n )
         {
             m_aYieldMutex.release();
@@ -320,7 +320,7 @@ sal_uLong SvpSalInstance::ReleaseYieldMutex()
         return 0;
 }
 
-void SvpSalInstance::AcquireYieldMutex( sal_uLong nCount )
+void SvpSalInstance::AcquireYieldMutex( ULONG nCount )
 {
     while ( nCount )
     {
@@ -329,25 +329,13 @@ void SvpSalInstance::AcquireYieldMutex( sal_uLong nCount )
     }
 }
 
-bool SvpSalInstance::CheckYieldMutex()
-{
-    bool bRet = true;
-
-    if ( m_aYieldMutex.GetThreadId() != ::osl::Thread::getCurrentIdentifier() )
-    {
-        bRet = false;
-    }
-
-    return bRet;
-}
-
 void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     // first, check for already queued events.
 
     // release yield mutex
     std::list< SalUserEvent > aEvents;
-    sal_uLong nAcquireCount = ReleaseYieldMutex();
+    ULONG nAcquireCount = ReleaseYieldMutex();
     if( osl_acquireMutex( m_aEventGuard ) )
     {
         if( ! m_aUserEvents.empty() )
@@ -426,11 +414,29 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-bool SvpSalInstance::AnyInput( sal_uInt16 nType )
+bool SvpSalInstance::AnyInput( USHORT nType )
 {
     if( (nType & INPUT_TIMER) != 0 )
         return CheckTimeout( false );
     return false;
+}
+
+SalMenu* SvpSalInstance::CreateMenu( BOOL )
+{
+    return NULL;
+}
+
+void SvpSalInstance::DestroyMenu( SalMenu* )
+{
+}
+
+SalMenuItem* SvpSalInstance::CreateMenuItem( const SalItemParams* )
+{
+    return NULL;
+}
+
+void SvpSalInstance::DestroyMenuItem( SalMenuItem* )
+{
 }
 
 SalSession* SvpSalInstance::CreateSalSession()
@@ -453,8 +459,8 @@ void* SvpSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
 
 SvpSalYieldMutex::SvpSalYieldMutex()
 {
-    mnCount     = 0;
-    mnThreadId  = 0;
+    mnCount 	= 0;
+    mnThreadId	= 0;
 }
 
 void SvpSalYieldMutex::acquire()
@@ -493,12 +499,12 @@ sal_Bool SvpSalYieldMutex::tryToAcquire()
 
 void SvpSalInstance::StopTimer()
 {
-    m_aTimeout.tv_sec   = 0;
-    m_aTimeout.tv_usec  = 0;
-    m_nTimeoutMS        = 0;
+    m_aTimeout.tv_sec	= 0;
+    m_aTimeout.tv_usec	= 0;
+    m_nTimeoutMS		= 0;
 }
 
-void SvpSalInstance::StartTimer( sal_uLong nMS )
+void SvpSalInstance::StartTimer( ULONG nMS )
 {
     timeval Timeout (m_aTimeout); // previous timeout.
     gettimeofday (&m_aTimeout, 0);
@@ -526,7 +532,7 @@ void SvpSalTimer::Stop()
     m_pInstance->StopTimer();
 }
 
-void SvpSalTimer::Start( sal_uLong nMS )
+void SvpSalTimer::Start( ULONG nMS )
 {
     m_pInstance->StartTimer( nMS );
 }

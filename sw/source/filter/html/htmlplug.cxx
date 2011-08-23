@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,6 +65,7 @@
 #include "htmlfly.hxx"
 #include "swcss1.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <sot/clsids.hxx>
 
@@ -78,53 +79,53 @@ using namespace com::sun::star;
 
 namespace {
 
-static char const sHTML_O_Hidden_False[] = "sal_False";
+static char const sHTML_O_Hidden_False[] = "FALSE";
 
 }
 
-const sal_uLong HTML_FRMOPTS_EMBED_ALL      =
+const ULONG HTML_FRMOPTS_EMBED_ALL		=
     HTML_FRMOPT_ALT |
     HTML_FRMOPT_SIZE |
     HTML_FRMOPT_NAME;
-const sal_uLong HTML_FRMOPTS_EMBED_CNTNR    =
+const ULONG HTML_FRMOPTS_EMBED_CNTNR	=
     HTML_FRMOPTS_EMBED_ALL |
     HTML_FRMOPT_ABSSIZE;
-const sal_uLong HTML_FRMOPTS_EMBED          =
+const ULONG HTML_FRMOPTS_EMBED			=
     HTML_FRMOPTS_EMBED_ALL |
     HTML_FRMOPT_ALIGN |
     HTML_FRMOPT_SPACE |
     HTML_FRMOPT_BRCLEAR |
     HTML_FRMOPT_NAME;
-const sal_uLong HTML_FRMOPTS_HIDDEN_EMBED   =
+const ULONG HTML_FRMOPTS_HIDDEN_EMBED	=
     HTML_FRMOPT_ALT |
     HTML_FRMOPT_NAME;
 
-const sal_uLong HTML_FRMOPTS_APPLET_ALL     =
+const ULONG HTML_FRMOPTS_APPLET_ALL		=
     HTML_FRMOPT_ALT |
     HTML_FRMOPT_SIZE;
-const sal_uLong HTML_FRMOPTS_APPLET_CNTNR   =
+const ULONG HTML_FRMOPTS_APPLET_CNTNR	=
     HTML_FRMOPTS_APPLET_ALL |
     HTML_FRMOPT_ABSSIZE;
-const sal_uLong HTML_FRMOPTS_APPLET         =
+const ULONG HTML_FRMOPTS_APPLET			=
     HTML_FRMOPTS_APPLET_ALL |
     HTML_FRMOPT_ALIGN |
     HTML_FRMOPT_SPACE |
     HTML_FRMOPT_BRCLEAR;
 
-const sal_uLong HTML_FRMOPTS_IFRAME_ALL     =
+const ULONG HTML_FRMOPTS_IFRAME_ALL		=
     HTML_FRMOPT_ALT |
     HTML_FRMOPT_SIZE;
-const sal_uLong HTML_FRMOPTS_IFRAME_CNTNR   =
+const ULONG HTML_FRMOPTS_IFRAME_CNTNR	=
     HTML_FRMOPTS_IFRAME_ALL |
     HTML_FRMOPT_ABSSIZE;
-const sal_uLong HTML_FRMOPTS_IFRAME         =
+const ULONG HTML_FRMOPTS_IFRAME			=
     HTML_FRMOPTS_IFRAME_ALL |
     HTML_FRMOPT_ALIGN |
     HTML_FRMOPT_SPACE |
     HTML_FRMOPT_BORDER |
     HTML_FRMOPT_BRCLEAR;
 
-const sal_uLong HTML_FRMOPTS_OLE_CSS1       =
+const ULONG HTML_FRMOPTS_OLE_CSS1		=
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
 
@@ -132,13 +133,13 @@ const sal_uLong HTML_FRMOPTS_OLE_CSS1       =
 
 void SwHTMLParser::SetFixSize( const Size& rPixSize,
                                const Size& rTwipDfltSize,
-                               sal_Bool bPrcWidth, sal_Bool bPrcHeight,
+                               BOOL bPrcWidth, BOOL bPrcHeight,
                                SfxItemSet& /*rCSS1ItemSet*/,
                                SvxCSS1PropertyInfo& rCSS1PropInfo,
                                SfxItemSet& rFlyItemSet )
 {
     // absolulte Groessenangaben in Twip umrechnen
-    sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
+    BYTE nPrcWidth = 0, nPrcHeight = 0;
     Size aTwipSz( bPrcWidth || USHRT_MAX==rPixSize.Width() ? 0 : rPixSize.Width(),
                   bPrcHeight || USHRT_MAX==rPixSize.Height() ? 0 : rPixSize.Height() );
     if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
@@ -151,7 +152,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     // die Breite bearbeiten
     if( SVX_CSS1_LTYPE_PERCENTAGE == rCSS1PropInfo.eWidthType )
     {
-        nPrcWidth = (sal_uInt8)rCSS1PropInfo.nWidth;
+        nPrcWidth = (BYTE)rCSS1PropInfo.nWidth;
         aTwipSz.Width() = rTwipDfltSize.Width();
     }
     else if( SVX_CSS1_LTYPE_TWIP== rCSS1PropInfo.eWidthType )
@@ -160,7 +161,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     }
     else if( bPrcWidth && rPixSize.Width() )
     {
-        nPrcWidth = (sal_uInt8)rPixSize.Width();
+        nPrcWidth = (BYTE)rPixSize.Width();
         if( nPrcWidth > 100 )
             nPrcWidth = 100;
 
@@ -178,7 +179,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     // Hoehe bearbeiten
     if( SVX_CSS1_LTYPE_PERCENTAGE == rCSS1PropInfo.eHeightType )
     {
-        nPrcHeight = (sal_uInt8)rCSS1PropInfo.nHeight;
+        nPrcHeight = (BYTE)rCSS1PropInfo.nHeight;
         aTwipSz.Height() = rTwipDfltSize.Height();
     }
     else if( SVX_CSS1_LTYPE_TWIP== rCSS1PropInfo.eHeightType )
@@ -187,7 +188,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     }
     else if( bPrcHeight && rPixSize.Height() )
     {
-        nPrcHeight = (sal_uInt8)rPixSize.Height();
+        nPrcHeight = (BYTE)rPixSize.Height();
         if( nPrcHeight > 100 )
             nPrcHeight = 100;
 
@@ -223,12 +224,12 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
             Application::GetDefaultDevice()->PixelToLogic( aTwipSpc,
                                                 MapMode(MAP_TWIP) );
         nLeftSpace = nRightSpace = aTwipSpc.Width();
-        nUpperSpace = nLowerSpace = (sal_uInt16)aTwipSpc.Height();
+        nUpperSpace = nLowerSpace = (USHORT)aTwipSpc.Height();
     }
 
     // linken/rechten Rand setzen
     const SfxPoolItem *pItem;
-    if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, sal_True, &pItem ) )
+    if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, TRUE, &pItem ) )
     {
         // Ggf. den Erstzeilen-Einzug noch plaetten
         const SvxLRSpaceItem *pLRItem = (const SvxLRSpaceItem *)pItem;
@@ -237,12 +238,12 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         if( rCSS1PropInfo.bLeftMargin )
         {
             nLeftSpace = aLRItem.GetLeft();
-            rCSS1PropInfo.bLeftMargin = sal_False;
+            rCSS1PropInfo.bLeftMargin = FALSE;
         }
         if( rCSS1PropInfo.bRightMargin )
         {
             nRightSpace = aLRItem.GetRight();
-            rCSS1PropInfo.bRightMargin = sal_False;
+            rCSS1PropInfo.bRightMargin = FALSE;
         }
         rCSS1ItemSet.ClearItem( RES_LR_SPACE );
     }
@@ -266,19 +267,19 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     }
 
     // oberen/unteren Rand setzen
-    if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, sal_True, &pItem ) )
+    if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, TRUE, &pItem ) )
     {
         // Ggf. den Erstzeilen-Einzug noch plaetten
         const SvxULSpaceItem *pULItem = (const SvxULSpaceItem *)pItem;
         if( rCSS1PropInfo.bTopMargin )
         {
             nUpperSpace = pULItem->GetUpper();
-            rCSS1PropInfo.bTopMargin = sal_False;
+            rCSS1PropInfo.bTopMargin = FALSE;
         }
         if( rCSS1PropInfo.bBottomMargin )
         {
             nLowerSpace = pULItem->GetLower();
-            rCSS1PropInfo.bBottomMargin = sal_False;
+            rCSS1PropInfo.bBottomMargin = FALSE;
         }
         rCSS1ItemSet.ClearItem( RES_UL_SPACE );
     }
@@ -309,7 +310,7 @@ void SwHTMLParser::InsertEmbed()
     String aURL, aType, aName, aAlt, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( USHRT_MAX, USHRT_MAX );
-    sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False, bHidden = sal_False;
+    BOOL bPrcWidth = FALSE, bPrcHeight = FALSE, bHidden = FALSE;
     sal_Int16 eVertOri = text::VertOrientation::NONE;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     SvCommandList aCmdLst;
@@ -318,8 +319,8 @@ void SwHTMLParser::InsertEmbed()
     // Die Optionen werden vorwaerts gelesen, weil die Plugins sie in
     // dieser Reihenfolge erwarten. Trotzdem darf immer nur der erste
     // Wert einer Option beruecksichtigt werden.
-    sal_uInt16 nArrLen = pHTMLOptions->Count();
-    for( sal_uInt16 i=0; i<nArrLen; i++ )
+    USHORT nArrLen = pHTMLOptions->Count();
+    for( USHORT i=0; i<nArrLen; i++ )
     {
         const HTMLOption *pOption = (*pHTMLOptions)[i];
         switch( pOption->GetToken() )
@@ -404,8 +405,8 @@ void SwHTMLParser::InsertEmbed()
     {
         // Size (0,0) wird in SetFrmSize auf (MINFLY, MINFLY) umgebogen
         aSize.Width() = 0; aSize.Height() = 0;
-        aSpace.Width() = 0; aSpace.Height() = 0;
-        bPrcWidth = bPrcHeight = sal_False;
+        aSpace.Width() = 0;	aSpace.Height() = 0;
+        bPrcWidth = bPrcHeight = FALSE;
     }
 
     // die URL aufbereiten
@@ -416,7 +417,7 @@ void SwHTMLParser::InsertEmbed()
                            INetURLObject(sBaseURL), aURL,
                            URIHelper::GetMaybeFileHdl()) );
 
-    // do not insert plugin if it has neither URL nor type
+    // #109761# do not insert plugin if it has neither URL nor type
     bool bHasType = aType.Len() != 0;
     if( !bHasURL && !bHasType )
         return;
@@ -441,6 +442,8 @@ void SwHTMLParser::InsertEmbed()
             aCmdLst.FillSequence( aProps );
             xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")), uno::makeAny( aProps ) );
 
+            // TODO/LATER: EnableSetModified?!
+            //pPlugin->EnableSetModified( TRUE );
         }
     }
 
@@ -514,7 +517,7 @@ void SwHTMLParser::NewObject()
                                      RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
     const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
@@ -673,7 +676,7 @@ void SwHTMLParser::InsertApplet()
     String aCodeBase, aCode, aName, aAlt, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
-    sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False, bMayScript = sal_False;
+    BOOL bPrcWidth = FALSE, bPrcHeight = FALSE, bMayScript = FALSE;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
@@ -683,7 +686,7 @@ void SwHTMLParser::InsertApplet()
     pAppletImpl = new SwApplet_Impl( pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
     const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
@@ -728,7 +731,7 @@ void SwHTMLParser::InsertApplet()
             aSpace.Height() = (long)pOption->GetNumber();
             break;
         case HTML_O_MAYSCRIPT:
-            bMayScript = sal_True;
+            bMayScript = TRUE;
             break;
         }
 
@@ -808,7 +811,7 @@ void SwHTMLParser::InsertParam()
     String aName, aValue;
 
     const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
@@ -837,15 +840,15 @@ void SwHTMLParser::InsertFloatingFrame()
     String aAlt, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
-    sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False;
+    BOOL bPrcWidth = FALSE, bPrcHeight = FALSE;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
     const HTMLOptions *pHTMLOptions = GetOptions();
 
     // Erstmal die Optionen f?r das Writer-Frame-Format holen
-    sal_uInt16 nArrLen = pHTMLOptions->Count();
-    for ( sal_uInt16 i=0; i<nArrLen; i++ )
+    USHORT nArrLen = pHTMLOptions->Count();
+    for ( USHORT i=0; i<nArrLen; i++ )
     {
         const HTMLOption *pOption = (*pHTMLOptions)[i];
         switch( pOption->GetToken() )
@@ -893,6 +896,7 @@ void SwHTMLParser::InsertFloatingFrame()
     ::rtl::OUString aObjName;
     uno::Reference < embed::XEmbeddedObject > xObj = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence(), aObjName );
 
+    //pFrame->EnableSetModified( FALSE );
     try
     {
         // TODO/MBA: testing
@@ -916,8 +920,12 @@ void SwHTMLParser::InsertFloatingFrame()
                     xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")),
                         uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
+                //if ( aFrmDescr.IsFrameBorderSet() )
                 xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")),
                         uno::makeAny( bHasBorder ) );
+                /*else
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder")),
+                        uno::makeAny( sal_True ) );*/
 
                 xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")),
                     uno::makeAny( sal_Int32( aMargin.Width() ) ) );
@@ -930,6 +938,8 @@ void SwHTMLParser::InsertFloatingFrame()
     catch ( uno::Exception& )
     {
     }
+
+    //pFrame->EnableSetModified( TRUE );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
@@ -964,12 +974,95 @@ void SwHTMLParser::InsertFloatingFrame()
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
     RegisterFlyFrm( pFlyFmt );
 
-    bInFloatingFrame = sal_True;
+    bInFloatingFrame = TRUE;
 }
 
 /*  */
 
-sal_uInt16 SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
+/*
+#define SWHTML_OPTTYPE_IGNORE 0
+#define SWHTML_OPTTYPE_TAG 1
+#define SWHTML_OPTTYPE_PARAM 2
+
+
+static USHORT GetOptionType( const String& rName, BOOL bApplet )
+{
+    USHORT nType = bApplet ? SWHTML_OPTTYPE_PARAM : SWHTML_OPTTYPE_TAG;
+
+    switch( rName.GetChar(0) )
+    {
+    case 'A':
+    case 'a':
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_align ) ||
+            rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_alt ) )
+            nType = SWHTML_OPTTYPE_IGNORE;
+        else if( bApplet &&
+                 (rName.EqualsIgnoreCaseAscii( sHTML_O_archive ) ||
+                 rName.EqualsIgnoreCaseAscii( sHTML_O_Archives )) )
+            nType = SWHTML_OPTTYPE_TAG;
+        break;
+    case 'C':
+    case 'c':
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_class ) ||
+            (bApplet && (rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_code ) ||
+                         rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_codebase ))) )
+            nType = SWHTML_OPTTYPE_IGNORE;
+        break;
+    case 'H':
+    case 'h':
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_height ) ||
+            rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_hspace ) ||
+            (!bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SW_HTML_O_Hidden )) )
+            nType = SWHTML_OPTTYPE_IGNORE;
+        break;
+    case 'I':
+    case 'i':
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_id ) )
+            nType = SWHTML_OPTTYPE_IGNORE;
+        break;
+    case 'M':
+    case 'm':
+        if( bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
+            nType = SWHTML_OPTTYPE_IGNORE;
+        break;
+    case 'N':
+    case 'n':
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_name ) )
+            nType = SWHTML_OPTTYPE_IGNORE;
+        break;
+    case 'O':
+    case 'o':
+        if( bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_Object ) )
+            nType = SWHTML_OPTTYPE_TAG;
+        break;
+    case 'S':
+    case 's':
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_style ) ||
+            (!bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_src )) )
+            nType = SWHTML_OPTTYPE_IGNORE;
+        break;
+    case 'T':
+    case 't':
+        if( !bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_type ) )
+            nType = SWHTML_OPTTYPE_IGNORE;
+        break;
+    case 'V':
+    case 'v':
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_vspace ) )
+            nType = SWHTML_OPTTYPE_IGNORE;
+        break;
+    case 'W':
+    case 'w':
+        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_width ) )
+            nType = SWHTML_OPTTYPE_IGNORE;
+        break;
+    }
+
+    return nType;
+}
+*/
+
+USHORT SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
 {
     SwOLEObj& rObj = ((SwOLENode*)rNode.GetOLENode())->GetOLEObj();
 
@@ -992,16 +1085,16 @@ sal_uInt16 SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
     }
 #endif
 
-    return static_cast< sal_uInt16 >(eType);
+    return static_cast< USHORT >(eType);
 }
 
 Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
-                               sal_Bool bInCntnr )
+                               BOOL bInCntnr )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
-    sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
+    ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
     SwOLENode *pOLENd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetOLENode();
 
     OSL_ENSURE( pOLENd, "OLE-Node erwartet" );
@@ -1015,20 +1108,20 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         return rWrt;
 
     uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-    sal_Bool bHiddenEmbed = sal_False;
+    BOOL bHiddenEmbed = FALSE;
 
     if( !xSet.is() )
     {
-        OSL_FAIL("Unknown Object" );
+        DBG_ERROR("Unknown Object" );
         return rWrt;
     }
 
     ByteString aEndTags;
-    sal_uLong nFrmOpts;
+    ULONG nFrmOpts;
 
     // wenn meoglich vor dem "Objekt" einen Zeilen-Umbruch ausgeben
     if( rHTMLWrt.bLFPossible )
-        rHTMLWrt.OutNewLine( sal_True );
+        rHTMLWrt.OutNewLine( TRUE );
 
     if( rFrmFmt.GetName().Len() )
         rHTMLWrt.OutImplicitMark( rFrmFmt.GetName(),
@@ -1074,7 +1167,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             // Das Plugin ist HIDDEN
             (sOut += ' ') += OOO_STRING_SW_HTML_O_Hidden;
             nFrmOpts = HTML_FRMOPTS_HIDDEN_EMBED;
-            bHiddenEmbed = sal_True;
+            bHiddenEmbed = TRUE;
         }
         else
         {
@@ -1172,12 +1265,12 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         SvCommandList aCommands;
         aCommands.FillFromSequence( aProps );
         SvULongs aParams;
-        sal_uLong i = aCommands.Count();
+        ULONG i = aCommands.Count();
         while( i > 0 )
         {
             const SvCommand& rCommand = aCommands[ --i ];
             const String& rName = rCommand.GetCommand();
-            sal_uInt16 nType = SwApplet_Impl::GetOptionType( rName, sal_True );
+            USHORT nType = SwApplet_Impl::GetOptionType( rName, TRUE );
             if( SWHTML_OPTTYPE_TAG == nType )
             {
                 const String& rValue = rCommand.GetArgument();
@@ -1196,7 +1289,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         rHTMLWrt.IncIndentLevel(); // Inhalt von Applet einruecken
 
-        sal_uInt16 ii = aParams.Count();
+        USHORT ii = aParams.Count();
         while( ii > 0  )
         {
             const SvCommand& rCommand = aCommands[ aParams[--ii] ];
@@ -1215,7 +1308,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         rHTMLWrt.DecIndentLevel(); // Inhalt von Applet einruecken
         if( aCommands.Count() )
             rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_applet, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_applet, FALSE );
     }
     else
     if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
@@ -1228,12 +1321,12 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         SvCommandList aCommands;
         aCommands.FillFromSequence( aProps );
-        for( sal_uLong i=0; i<aCommands.Count(); i++ )
+        for( ULONG i=0; i<aCommands.Count(); i++ )
         {
             const SvCommand& rCommand = aCommands[ i ];
             const String& rName = rCommand.GetCommand();
 
-            if( SwApplet_Impl::GetOptionType( rName, sal_False ) == SWHTML_OPTTYPE_TAG )
+            if( SwApplet_Impl::GetOptionType( rName, FALSE ) == SWHTML_OPTTYPE_TAG )
             {
                 const String& rValue = rCommand.GetArgument();
                 rWrt.Strm() << ' ';
@@ -1250,7 +1343,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // ausgeben
 
         rHTMLWrt.Strm() << '>';
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_iframe, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_iframe, FALSE );
     }
 
     if( aEndTags.Len() )
@@ -1260,30 +1353,35 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 }
 
 Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
-                                  sal_Bool bInCntnr )
+                                  BOOL bInCntnr )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
-    sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
+    ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
     SwOLENode *pOLENd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetOLENode();
 
     OSL_ENSURE( pOLENd, "OLE-Node erwartet" );
     if( !pOLENd )
         return rWrt;
 
+    // Inhalt des Nodes als Grafik speichern
+    //uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
+    //GDIMetaFile aPic;
+    //if( xObj.is() && xRef->GetGDIMetaFile( aPic ).GetActionCount() )
     {
+        //Graphic aGrf( aPic );
         Graphic aGrf( *pOLENd->GetGraphic() );
         String aGrfNm;
         const String* pTempFileName = rHTMLWrt.GetOrigFileName();
         if(pTempFileName)
             aGrfNm = *pTempFileName;
 
-        sal_uInt16 nErr = XOutBitmap::WriteGraphic( aGrf, aGrfNm,
+        USHORT nErr = XOutBitmap::WriteGraphic( aGrf, aGrfNm,
                                     String::CreateFromAscii("JPG"),
                                     (XOUTBMP_USE_GIF_IF_POSSIBLE |
                                      XOUTBMP_USE_NATIVE_IF_POSSIBLE) );
-        if( nErr )              // fehlerhaft, da ist nichts auszugeben
+        if( nErr )     			// fehlerhaft, da ist nichts auszugeben
         {
             rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
             return rWrt;
@@ -1291,7 +1389,7 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         aGrfNm = URIHelper::SmartRel2Abs(
             INetURLObject(rWrt.GetBaseURL()), aGrfNm,
             URIHelper::GetMaybeFileHdl() );
-        sal_uLong nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
+        ULONG nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
                                   : HTML_FRMOPTS_GENIMG;
         OutHTML_Image( rWrt, rFrmFmt, aGrfNm,
                        pOLENd->GetTitle(), pOLENd->GetTwipSize(),

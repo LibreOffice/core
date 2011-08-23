@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/obj3d.hxx>
 
-namespace sdr { namespace properties {
+namespace sdr {	namespace properties {
     class BaseProperties;
     class E3dSceneProperties;
 }}
@@ -53,7 +53,7 @@ namespace drawinglayer { namespace geometry {
 class E3DSceneGeoData : public E3DObjGeoData
 {
 public:
-    Camera3D                    aCamera;
+    Camera3D					aCamera;
 
     E3DSceneGeoData() {}
 };
@@ -77,13 +77,13 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
     // transformations
-    B3dCamera                   aCameraSet;
-    Camera3D                    aCamera;
+    B3dCamera					aCameraSet;
+    Camera3D					aCamera;
 
-    Imp3DDepthRemapper*         mp3DDepthRemapper;
+    Imp3DDepthRemapper*			mp3DDepthRemapper;
 
     // Flag to determine if only selected objects should be drawn
-    unsigned                    bDrawOnlySelected       : 1;
+    unsigned					bDrawOnlySelected		: 1;
 
     virtual void NewObjectInserted(const E3dObject* p3DObj);
     virtual void StructureChanged();
@@ -112,7 +112,7 @@ public:
 
     sal_uInt32 RemapOrdNum(sal_uInt32 nOrdNum) const;
 
-    // Perspective: enum ProjectionType { PR_PARALLEL, PR_PERSPECTIVE }
+    // Perspective: enum ProjectionType	{ PR_PARALLEL, PR_PERSPECTIVE }
     ProjectionType GetPerspective() const
         { return (ProjectionType)((const Svx3DPerspectiveItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue(); }
 
@@ -125,7 +125,7 @@ public:
         { return ((const Svx3DFocalLengthItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue(); }
 
     // Two sided lighting:
-    sal_Bool GetTwoSidedLighting() const
+    BOOL GetTwoSidedLighting() const
         { return ((const Svx3DTwoSidedLightingItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue(); }
 
     // Lightcolor:
@@ -151,21 +151,21 @@ public:
         { return ((const Svx3DAmbientcolorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue(); }
 
     // Light on/off:
-    sal_Bool GetLightOnOff1() const
+    BOOL GetLightOnOff1() const
         { return ((const Svx3DLightOnOff1Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue(); }
-    sal_Bool GetLightOnOff2() const
+    BOOL GetLightOnOff2() const
         { return ((const Svx3DLightOnOff2Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue(); }
-    sal_Bool GetLightOnOff3() const
+    BOOL GetLightOnOff3() const
         { return ((const Svx3DLightOnOff3Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue(); }
-    sal_Bool GetLightOnOff4() const
+    BOOL GetLightOnOff4() const
         { return ((const Svx3DLightOnOff4Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue(); }
-    sal_Bool GetLightOnOff5() const
+    BOOL GetLightOnOff5() const
         { return ((const Svx3DLightOnOff5Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue(); }
-    sal_Bool GetLightOnOff6() const
+    BOOL GetLightOnOff6() const
         { return ((const Svx3DLightOnOff6Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue(); }
-    sal_Bool GetLightOnOff7() const
+    BOOL GetLightOnOff7() const
         { return ((const Svx3DLightOnOff7Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue(); }
-    sal_Bool GetLightOnOff8() const
+    BOOL GetLightOnOff8() const
         { return ((const Svx3DLightOnOff8Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue(); }
 
     // Light direction:
@@ -195,23 +195,22 @@ public:
         { return ((const Svx3DShadeModeItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue(); }
 
     // set flag to draw only selected
-    void SetDrawOnlySelected(sal_Bool bNew) { bDrawOnlySelected = bNew; }
+    void SetDrawOnlySelected(BOOL bNew) { bDrawOnlySelected = bNew; }
     bool GetDrawOnlySelected() const { return bDrawOnlySelected; }
-    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual UINT16 GetObjIdentifier() const;
 
-    virtual void    NbcSetSnapRect(const Rectangle& rRect);
-    virtual void    NbcMove(const Size& rSize);
-    virtual void    NbcResize(const Point& rRef, const Fraction& rXFact,
+    virtual void	NbcSetSnapRect(const Rectangle& rRect);
+    virtual void	NbcMove(const Size& rSize);
+    virtual void	NbcResize(const Point& rRef, const Fraction& rXFact,
                                                  const Fraction& rYFact);
-    virtual void    RecalcSnapRect();
+    virtual void	RecalcSnapRect();
 
     virtual E3dScene* GetScene() const;
     void SetCamera(const Camera3D& rNewCamera);
     const Camera3D& GetCamera() const { return aCamera; }
     void removeAllNonSelectedObjects();
 
-    virtual E3dScene* Clone() const;
-    E3dScene& operator=(const E3dScene&);
+    virtual void operator=(const SdrObject&);
 
     virtual SdrObjGeoData *NewGeoData() const;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const;
@@ -231,7 +230,7 @@ public:
     B3dCamera& GetCameraSet() { return aCameraSet; }
 
     // break up
-    virtual sal_Bool IsBreakObjPossible();
+    virtual BOOL IsBreakObjPossible();
 
     basegfx::B3DVector GetShadowPlaneDirection() const;
     void SetShadowPlaneDirection(const basegfx::B3DVector& rVec);
@@ -247,6 +246,6 @@ public:
     virtual void BrkCreate(SdrDragStat& rStat);
 };
 
-#endif          // _E3D_SCENE3D_HXX
+#endif			// _E3D_SCENE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

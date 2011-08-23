@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,21 +44,21 @@ class String;
 class SwTblCalcPara
 {
     const SwTableBox* pLastTblBox;
-    sal_uInt16 nStackCnt, nMaxSize;
+    USHORT nStackCnt, nMaxSize;
 
 public:
-    SwTableSortBoxes *pBoxStk;  // stack for recognizing recursion
-    SwCalc& rCalc;              // current Calculator
-    const SwTable* pTbl;        // current table
+    SwTableSortBoxes *pBoxStk;	// Stack fuers erkennen von Rekursionen !
+    SwCalc& rCalc;				// akt. Calculator
+    const SwTable* pTbl;        // akt. Tabelle
 
     SwTblCalcPara( SwCalc& rCalculator, const SwTable& rTable );
     ~SwTblCalcPara();
 
-    sal_Bool CalcWithStackOverflow();
-    sal_Bool IsStackOverFlow() const        { return nMaxSize == nStackCnt; }
-    sal_Bool IncStackCnt()                  { return nMaxSize == ++nStackCnt; }
-    void DecStackCnt()                  { if( nStackCnt ) --nStackCnt; }
-    void SetLastTblBox( const SwTableBox* pBox )    { pLastTblBox = pBox; }
+    bool CalcWithStackOverflow();
+    bool IsStackOverFlow() const               { return nMaxSize == nStackCnt; }
+    bool IncStackCnt()                                         { return nMaxSize == ++nStackCnt; }
+    void DecStackCnt() 					{ if( nStackCnt ) --nStackCnt; }
+    void SetLastTblBox( const SwTableBox* pBox )	{ pLastTblBox = pBox; }
 };
 
 
@@ -97,14 +97,14 @@ typedef void (SwTableFormula:: *FnScanFormel)( const SwTable&, String&,
 protected:
     enum NameType { EXTRNL_NAME, INTRNL_NAME, REL_NAME };
 
-    String      sFormel;            // current formula
-    NameType    eNmType;            // current display method
-    sal_Bool        bValidValue;        // sal_True: recalculate formula
+    String 		sFormel;			// akt. Formel
+    NameType 	eNmType;			// akt. Darstellungs Art
+    bool               bValidValue;            // TRUE: Formel neu berechnen
 
-    // find the node in which the formula is located
-    //  TextFeld    -> TextNode,
-    //  BoxAttribut -> BoxStartNode
-    // !!! has to be overloaded by every derivation !!!
+    // suche den Node, in dem die Formel steht:
+    //	TextFeld	-> TextNode,
+    //	BoxAttribut	-> BoxStartNode
+    // !!! MUSS VON JEDER ABLEITUNG UEBERLADEN WERDEN !!!
     virtual const SwNode* GetNodeOfFormula() const = 0;
 
     SwTableFormula( const String& rFormel );
@@ -115,11 +115,11 @@ protected:
                             *rCalcPara.pTbl, &rCalcPara );
     }
 
-    static sal_uInt16 GetLnPosInTbl( const SwTable& rTbl, const SwTableBox* pBox );
+    static USHORT GetLnPosInTbl( const SwTable& rTbl, const SwTableBox* pBox );
 
 public:
 
-    SwTableFormula( const SwTableFormula& rCpy )    { *this = rCpy; }
+    SwTableFormula( const SwTableFormula& rCpy )	{ *this = rCpy; }
     virtual ~SwTableFormula();
     SwTableFormula& operator=( const SwTableFormula& rCpy )
         {
@@ -129,22 +129,25 @@ public:
                                     return *this;
         }
 
-    // create from the internal formula (for CORE) the external formula (for UI)
+    // erzeuge aus der internen (fuer CORE) die externe (fuer UI) Formel
     void PtrToBoxNm( const SwTable* pTbl );
-    // create from the external formula the internal
+    // erzeuge aus der externen (fuer UI) die interne (fuer CORE) Formel
     void BoxNmToPtr( const SwTable* pTbl );
-    // create from the external/internal formula the relative formula
+    // erzeuge aus der externen/internen Formel die relative Formel
     void ToRelBoxNm( const SwTable* pTbl );
-    // gets called before/after merging/splitting of tables
+    // wird vorm/nach dem mergen/splitten von Tabellen rerufen
     void ToSplitMergeBoxNm( SwTableFmlUpdate& rTblUpd );
 
+    // ist gerade eine intern Darstellung aktiv
     bool IsIntrnlName() const                  { return eNmType == INTRNL_NAME; }
-    NameType GetNameType() const        { return eNmType; }
+    // erfrage die akt. Darstellung der Formel
+    NameType GetNameType() const		{ return eNmType; }
 
+    // erfrage/setze das Flag, ob der akt. Wert gueltig ist
     bool               IsValid() const                         { return bValidValue; }
     inline void        ChgValid( bool bNew )           { bValidValue = bNew; }
 
-    const String& GetFormula() const        { return sFormel; }
+    const String& GetFormula() const 		{ return sFormel; }
     void SetFormula( const String& rNew )
         {
             sFormel = rNew;
@@ -152,8 +155,8 @@ public:
             eNmType = EXTRNL_NAME;
         }
 
-    sal_uInt16 GetBoxesOfFormula( const SwTable& rTbl, SwSelBoxes& rBoxes );
-    // are all boxes valid which this formula relies on?
+    USHORT GetBoxesOfFormula( const SwTable& rTbl, SwSelBoxes& rBoxes );
+    // sind alle Boxen gueltig, auf die sich die Formel bezieht?
     bool HasValidBoxes() const;
 };
 

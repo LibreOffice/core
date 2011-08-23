@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 // include ---------------------------------------------------------------
 
 #include <vcl/group.hxx>
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <vcl/edit.hxx>
 #include <svtools/stdctrl.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -56,10 +56,10 @@ class SvxPostItDialog : public SfxModalDialog
 {
 public:
     SvxPostItDialog( Window* pParent, const SfxItemSet& rCoreSet,
-                     sal_Bool bPrevNext = sal_False, sal_Bool bRedline = sal_False );
+                     BOOL bPrevNext = FALSE, BOOL bRedline = FALSE );
     ~SvxPostItDialog();
 
-    static sal_uInt16*      GetRanges();
+    static USHORT*      GetRanges();
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
     Link                GetPrevHdl() const { return aPrevHdlLink; }
@@ -69,20 +69,20 @@ public:
     void                SetNextHdl( const Link& rLink )
                             { aNextHdlLink = rLink; }
 
-    void                EnableTravel(sal_Bool bNext, sal_Bool bPrev);
-    inline String       GetNote() { return aEditED.GetText(); }
-    inline void         SetNote(const String& rTxt) { aEditED.SetText(rTxt); }
+    void				EnableTravel(BOOL bNext, BOOL bPrev);
+    inline String		GetNote() { return aEditED.GetText(); }
+    inline void			SetNote(const String& rTxt) { aEditED.SetText(rTxt); }
 
-    void                ShowLastAuthor(const String& rAuthor, const String& rDate);
-    inline void         DontChangeAuthor()  { aAuthorBtn.Enable(sal_False); }
-    inline void         HideAuthor()        { aAuthorBtn.Hide(); }
-    inline void         SetReadonlyPostIt(sal_Bool bDisable)
+    void				ShowLastAuthor(const String& rAuthor, const String& rDate);
+    inline void			DontChangeAuthor()	{ aAuthorBtn.Enable(FALSE); }
+    inline void			HideAuthor()		{ aAuthorBtn.Hide(); }
+    inline void			SetReadonlyPostIt(BOOL bDisable)
                             {
                                 aOKBtn.Enable( !bDisable );
                                 aEditED.SetReadOnly( bDisable );
                                 aAuthorBtn.Enable( !bDisable );
                             }
-    inline sal_Bool         IsOkEnabled() const { return aOKBtn.IsEnabled(); }
+    inline BOOL 		IsOkEnabled() const { return aOKBtn.IsEnabled(); }
 
 private:
     FixedLine           aPostItFL;

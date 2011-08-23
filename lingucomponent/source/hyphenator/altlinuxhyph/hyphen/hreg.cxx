@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 
 
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/factory.hxx>	// helper for factories
 #include <rtl/string.hxx>
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -42,6 +42,9 @@ using namespace com::sun::star::registry;
 ////////////////////////////////////////
 // declaration of external RegEntry-functions defined by the service objects
 //
+
+extern sal_Bool SAL_CALL Hyphenator_writeInfo(
+    void * /*pServiceManager*/, XRegistryKey * pRegistryKey );
 
 extern void * SAL_CALL Hyphenator_getFactory(
     const sal_Char * pImplName,
@@ -54,6 +57,12 @@ extern void * SAL_CALL Hyphenator_getFactory(
 
 extern "C"
 {
+
+sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager, XRegistryKey * pRegistryKey )
+{
+    return Hyphenator_writeInfo( pServiceManager, pRegistryKey );
+}
 
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )

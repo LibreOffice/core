@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@ export SAL_ENABLE_FILE_LOCKING
 sd_cwd="`pwd`"
 if [ -h "$0" ] ; then
     sd_basename=`basename "$0"`
-     sd_script=`ls -l "$0" | sed "s/.*${sd_basename} -> //g"`
+     sd_script=`ls -l "$0" | sed "s/.*${sd_basename} -> //g"` 
     cd "`dirname "$0"`"
     cd "`dirname "$sd_script"`"
 else
@@ -42,21 +42,6 @@ else
 fi
 sd_prog=`pwd`
 cd "$sd_cwd"
-
-case "`uname -s`" in
-    FreeBSD)
-        sd_prog1="$sd_prog/../basis-link/program"
-        sd_prog2="$sd_prog/../basis-link/ure-link/lib"
-        LD_LIBRARY_PATH=$sd_prog1:$sd_prog2${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-        export LD_LIBRARY_PATH
-        ;;
-    AIX)
-        sd_prog1="$sd_prog/../basis-link/program"
-        sd_prog2="$sd_prog/../basis-link/ure-link/lib"
-        LIBPATH=$sd_prog1:$sd_prog2${LIBPATH:+:$LIBPATH}
-        export LIBPATH
-        ;;
-esac
 
 #collect all bootstrap variables specified on the command line
 #so that they can be passed as arguments to javaldx later on

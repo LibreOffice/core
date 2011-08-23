@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,21 +36,14 @@
 namespace oox {
 namespace core {
 
-// ============================================================================
-
-/** Expands to an OUString containing an 'officeDocument' relation type created
+/** Expands to an OUString containing an officeDocument relation type created
     from the passed literal(!) ASCII(!) character array. */
-#define CREATE_OFFICEDOC_RELATION_TYPE( ascii ) \
+#define CREATE_OFFICEDOC_RELATIONSTYPE( ascii ) \
     CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/" ascii )
-
-/** Expands to an OUString containing a 'package' relation type created from
-    the passed literal(!) ASCII(!) character array. */
-#define CREATE_PACKAGE_RELATION_TYPE( ascii ) \
-    CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships/" ascii )
 
 /** Expands to an OUString containing an MS Office specific relation type
     created from the passed literal(!) ASCII(!) character array. */
-#define CREATE_MSOFFICE_RELATION_TYPE( ascii ) \
+#define CREATE_MSOFFICE_RELATIONSTYPE( ascii ) \
     CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/relationships/" ascii )
 
 // ============================================================================

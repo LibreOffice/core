@@ -28,6 +28,7 @@
 PRJ=..$/..$/..$/..
 PRJNAME=shell
 TARGET=util
+#LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ TYPEINIT1(SdUndoGroup, SdUndoAction);
 
 SdUndoGroup::~SdUndoGroup()
 {
-    sal_uLong nLast = aCtn.Count();
-    for (sal_uLong nAction = 0; nAction < nLast; nAction++)
+    ULONG nLast = aCtn.Count();
+    for (ULONG nAction = 0; nAction < nLast; nAction++)
     {
         delete (SdUndoAction*) aCtn.GetObject(nAction);
     }
@@ -57,21 +57,21 @@ SdUndoGroup::~SdUndoGroup()
 |*
 \************************************************************************/
 
-sal_Bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
+BOOL SdUndoGroup::Merge( SfxUndoAction* pNextAction )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     if( pNextAction && pNextAction->ISA( SdUndoAction ) )
     {
         SdUndoAction* pClone = static_cast< SdUndoAction* >( pNextAction )->Clone();
-
+        
         if( pClone )
         {
             AddAction( pClone );
-            bRet = sal_True;
+            bRet = TRUE;
         }
     }
-
+    
     return bRet;
 }
 
@@ -86,7 +86,7 @@ void SdUndoGroup::Undo()
     long nLast = aCtn.Count();
     for (long nAction = nLast - 1; nAction >= 0; nAction--)
     {
-        ((SdUndoAction*)aCtn.GetObject((sal_uLong)nAction))->Undo();
+        ((SdUndoAction*)aCtn.GetObject((ULONG)nAction))->Undo();
     }
 
 }
@@ -99,8 +99,8 @@ void SdUndoGroup::Undo()
 
 void SdUndoGroup::Redo()
 {
-    sal_uLong nLast = aCtn.Count();
-    for (sal_uLong nAction = 0; nAction < nLast; nAction++)
+    ULONG nLast = aCtn.Count();
+    for (ULONG nAction = 0; nAction < nLast; nAction++)
     {
         ((SdUndoAction*)aCtn.GetObject(nAction))->Redo();
     }

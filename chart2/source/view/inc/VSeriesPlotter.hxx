@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,7 @@
 #include "MinimumAndMaximumSupplier.hxx"
 #include "LegendEntryProvider.hxx"
 #include "ExplicitCategoriesProvider.hxx"
+#include <com/sun/star/chart2/LegendSymbolStyle.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 
@@ -163,7 +164,7 @@ public:
     */
     virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
     virtual bool keepAspectRatio() const;
-
+    
     /** this enables you to handle series on the same x axis with different y axis
     the property AttachedAxisIndex at a dataseries indicates which value scale is to use
     (0==AttachedAxisIndex or a not set AttachedAxisIndex property indicates that this series should be scaled at the main y-axis;
@@ -173,10 +174,11 @@ public:
     nAxisIndex must be greater than 0. nAxisIndex==1 referres to the first secondary axis.
     )
     */
-
-    virtual void addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
+    
+    virtual void SAL_CALL addSecondaryValueScale( const 
+            ::com::sun::star::chart2::ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
                 throw (::com::sun::star::uno::RuntimeException);
-
+    
     //-------------------------------------------------------------------------
     // MinimumAndMaximumSupplier
     //-------------------------------------------------------------------------
@@ -196,9 +198,6 @@ public:
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex );
     virtual bool isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
 
-    virtual long calculateTimeResolutionOnXAxis();
-    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate );
-
     //------
 
     void getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const;
@@ -207,9 +206,9 @@ public:
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
-    virtual std::vector< ViewLegendEntry > createLegendEntries(
-            const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
-            ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion,
+    virtual ::com::sun::star::uno::Sequence<
+        ::com::sun::star::chart2::ViewLegendEntry > SAL_CALL createLegendEntries(
+            ::com::sun::star::chart2::LegendExpansion eLegendExpansion,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xTextProperties,
             const ::com::sun::star::uno::Reference<
@@ -218,29 +217,26 @@ public:
                 ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext >& xContext
-                );
+                )
+        throw (::com::sun::star::uno::RuntimeException);
 
 
-    virtual LegendSymbolStyle getLegendSymbolStyle();
-    virtual com::sun::star::awt::Size getPreferredLegendKeyAspectRatio();
-
+    virtual ::com::sun::star::chart2::LegendSymbolStyle getLegendSymbolStyle();
     virtual ::com::sun::star::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > createLegendSymbolForSeries(
-                  const ::com::sun::star::awt::Size& rEntryKeyAspectRatio
-                , const VDataSeries& rSeries
+                  const VDataSeries& rSeries
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > createLegendSymbolForPoint(
-                  const ::com::sun::star::awt::Size& rEntryKeyAspectRatio
-                , const VDataSeries& rSeries
-                , sal_Int32 nPointIndex
+                  const VDataSeries& rSeries
+                , sal_Int32 nPointIndex 
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory );
 
-    virtual std::vector< ViewLegendEntry > createLegendEntriesForSeries(
-            const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
+    virtual std::vector<
+        ::com::sun::star::chart2::ViewLegendEntry > SAL_CALL createLegendEntriesForSeries(
             const VDataSeries& rSeries,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xTextProperties,
@@ -252,7 +248,17 @@ public:
                 ::com::sun::star::uno::XComponentContext >& xContext
                 );
 
-    ::std::vector< VDataSeries* > getAllSeries();
+    virtual std::vector<
+        ::com::sun::star::chart2::ViewLegendEntry > SAL_CALL createLegendEntriesForChartType(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet >& xTextProperties,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::drawing::XShapes >& xTarget,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XComponentContext >& xContext
+                );
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -272,15 +278,15 @@ public:
                         ::com::sun::star::chart2::XColorScheme >& xColorScheme );
 
     void setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider );
-
+    
     //get series names for the z axis labels
     ::com::sun::star::uno::Sequence< rtl::OUString > getSeriesNames() const;
 
     void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
     //better performance for big data
     void setCoordinateSystemResolution( const ::com::sun::star::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
-    bool PointsWereSkipped() const;
-
+    bool PointsWereSkipped() const; 
+    
     //return the depth for a logic 1
     double  getTransformedDepth() const;
 
@@ -374,14 +380,12 @@ protected: //methods
         , const VDataSeries& rVDataSeries
         , sal_Int32 nIndex
         , bool bVertical
-        , double* pfScaledLogicX
         );
 
     virtual void createErrorBar_Y( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
         , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
-        , double* pfScaledLogicX=0 );
+                ::com::sun::star::drawing::XShapes >& xTarget );
 
     virtual void createRegressionCurvesShapes( VDataSeries& rVDataSeries
         , const ::com::sun::star::uno::Reference<
@@ -421,9 +425,7 @@ protected: //member
 
     ::std::vector< ::std::vector< VDataSeriesGroup > >  m_aZSlots;
 
-    bool                                m_bCategoryXAxis;//true->xvalues are indices (this would not be necessary if series for category chart wouldn't have x-values)
-    long m_nTimeResolution;
-    Date m_aNullDate;
+    bool								m_bCategoryXAxis;//true->xvalues are indices (this would not be necessary if series for category chart wouldn't have x-values)
 
     ::std::auto_ptr< NumberFormatterWrapper > m_apNumberFormatterWrapper;
     AxesNumberFormats                         m_aAxesNumberFormats;//direct numberformats on axes, if empty ask the data series instead
@@ -438,7 +440,7 @@ protected: //member
     bool m_bPointsWereSkipped;
 
 private: //member
-    typedef std::map< sal_Int32 , ExplicitScaleData > tSecondaryValueScales;
+    typedef std::map< sal_Int32 , ::com::sun::star::chart2::ExplicitScaleData > tSecondaryValueScales;
     tSecondaryValueScales   m_aSecondaryValueScales;
 
     typedef std::map< sal_Int32 , PlottingPositionHelper* > tSecondaryPosHelperMap;

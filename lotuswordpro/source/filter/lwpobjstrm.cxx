@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwpobjstrm.hxx"
@@ -64,7 +64,7 @@
 /**
  * @descr  ctor() from LwpSvStream
  */
-LwpObjectStream::LwpObjectStream(LwpSvStream *pStrm, sal_Bool isCompressed, sal_uInt16 size)
+LwpObjectStream::LwpObjectStream(LwpSvStream *pStrm, BOOL isCompressed, sal_uInt16 size)
     :m_pContentBuf(NULL), m_nBufSize(size), m_nReadPos(0),
     m_pStrm(pStrm), m_bCompressed(isCompressed)
 {
@@ -189,14 +189,14 @@ void LwpObjectStream::SeekRel(sal_uInt16 pos)
 /**
  * @descr  Seek to pos in object buffer/buffer
  */
-sal_Bool LwpObjectStream::Seek( sal_uInt16 pos)
+BOOL LwpObjectStream::Seek( sal_uInt16 pos)
 {
     if (pos < m_nBufSize)
     {
         m_nReadPos = pos;
-        return sal_True;
+        return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
 /**
@@ -287,7 +287,7 @@ sal_uInt16 LwpObjectStream::CheckExtra()
 }
 /**
  * @descr  decompress data buffer from pSrc to pDst
- *        Refer to the CAmiPro40File::DecompressObject(~) in LWP
+ * 		  Refer to the CAmiPro40File::DecompressObject(~) in LWP
  */
 sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, sal_uInt16 Size)
 {
@@ -360,10 +360,10 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
  */
 OUString LwpObjectStream::QuickReadStringPtr(void)
 {
-    sal_uInt16 diskSize;
+    sal_uInt16 len, diskSize;
 
     diskSize = QuickReaduInt16();
-    QuickReaduInt16(); //len
+    len = QuickReaduInt16();
 
     OUString str;
     rtl_TextEncoding rEncode =  RTL_TEXTENCODING_MS_1252;

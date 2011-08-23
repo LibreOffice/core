@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,6 +48,11 @@
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
+
+//REMOVE	#ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
+//REMOVE	#define SO2_DECL_SVINPLACEOBJECT_DEFINED
+//REMOVE	SO2_DECL_REF(SvInPlaceObject)
+//REMOVE	#endif
 
 #include "document.hxx"
 #include "drwlayer.hxx"
@@ -108,16 +113,16 @@ void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataReceiver >
     {
         uno::Sequence< beans::PropertyValue > aArgs( 4 );
         aArgs[0] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
+            ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
             uno::makeAny( rRanges ), beans::PropertyState_DIRECT_VALUE );
         aArgs[1] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
+            ::rtl::OUString::createFromAscii("HasCategories"), -1,
             uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
         aArgs[2] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
+            ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
             uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
         aArgs[3] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
+            ::rtl::OUString::createFromAscii("DataRowSource"), -1,
             uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
         xReceiver->setArguments( aArgs );
     }
@@ -130,11 +135,11 @@ void ScDocument::UpdateAllCharts()
     if ( !pDrawLayer || !pShell )
         return;
 
-    sal_uInt16 nDataCount = pChartCollection->GetCount();
+    USHORT nDataCount = pChartCollection->GetCount();
     if ( !nDataCount )
-        return ;        // nothing to do
+        return ;		// nothing to do
 
-    sal_uInt16 nPos;
+    USHORT nPos;
 
     for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
     {
@@ -204,7 +209,7 @@ void ScDocument::UpdateAllCharts()
     pChartCollection->FreeAll();
 }
 
-sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName )
+BOOL ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName )
 {
     if (pDrawLayer && pTab[nTab])
     {
@@ -224,7 +229,7 @@ sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pNa
                 {
                     if (pName)
                         *pName = ((SdrOle2Obj*)pObject)->GetPersistName();
-                    return sal_True;
+                    return TRUE;
                 }
             }
             pObject = aIter.Next();
@@ -233,12 +238,12 @@ sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pNa
 
     if (pName)
         pName->Erase();
-    return false;                   // nothing found
+    return FALSE;					// nix gefunden
 }
 
 void ScDocument::UpdateChartArea( const String& rChartName,
-            const ScRange& rNewArea, sal_Bool bColHeaders, sal_Bool bRowHeaders,
-            sal_Bool bAdd )
+            const ScRange& rNewArea, BOOL bColHeaders, BOOL bRowHeaders,
+            BOOL bAdd )
 {
     ScRangeListRef aRLR( new ScRangeList );
     aRLR->Append( rNewArea );
@@ -309,7 +314,7 @@ void ScDocument::SetChartRanges( const String& rChartName, const ::std::vector< 
 }
 
 void ScDocument::GetOldChartParameters( const String& rName,
-            ScRangeList& rRanges, sal_Bool& rColHeaders, sal_Bool& rRowHeaders )
+            ScRangeList& rRanges, BOOL& rColHeaders, BOOL& rRowHeaders )
 {
     // used for undo of changing chart source area
 
@@ -358,8 +363,8 @@ void ScDocument::GetOldChartParameters( const String& rName,
 }
 
 void ScDocument::UpdateChartArea( const String& rChartName,
-            const ScRangeListRef& rNewList, sal_Bool bColHeaders, sal_Bool bRowHeaders,
-            sal_Bool bAdd )
+            const ScRangeListRef& rNewList, BOOL bColHeaders, BOOL bRowHeaders,
+            BOOL bAdd )
 {
     if (!pDrawLayer)
         return;
@@ -396,8 +401,9 @@ void ScDocument::UpdateChartArea( const String& rChartName,
                         aNewRanges = new ScRangeList;
                         aNewRanges->Parse( aRangesStr, this );
 
-                        for ( size_t nAdd = 0, nAddCount = rNewList->size(); nAdd < nAddCount; ++nAdd )
-                            aNewRanges->Append( *(*rNewList)[nAdd] );
+                        ULONG nAddCount = rNewList->Count();
+                        for ( ULONG nAdd=0; nAdd<nAddCount; nAdd++ )
+                            aNewRanges->Append( *rNewList->GetObject(nAdd) );
                     }
                     else
                     {
@@ -433,7 +439,10 @@ void ScDocument::UpdateChartArea( const String& rChartName,
 
                     pChartListenerCollection->ChangeListening( rChartName, aNewRanges );
 
-                    return;         // do not search anymore
+                    // ((SdrOle2Obj*)pObject)->GetNewReplacement();
+                    // pObject->ActionChanged();
+
+                    return;			// nicht weitersuchen
                 }
             }
             pObject = aIter.Next();
@@ -461,12 +470,9 @@ void ScDocument::UpdateChart( const String& rChartName )
     }
 
     // After the update, chart keeps track of its own data source ranges,
-    // the listener doesn't need to listen anymore, except the chart has
-    // an internal data provider.
-    if ( !( xChartDoc.is() && xChartDoc->hasInternalDataProvider() ) && pChartListenerCollection )
-    {
+    // the listener doesn't need to listen anymore.
+    if(pChartListenerCollection)
         pChartListenerCollection->ChangeListening( rChartName, new ScRangeList );
-    }
 }
 
 void ScDocument::RestoreChartListener( const String& rName )
@@ -506,18 +512,17 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
     if (!pDrawLayer)
         return;
 
-    sal_uInt16 nChartCount = pChartListenerCollection->GetCount();
-    for ( sal_uInt16 nIndex = 0; nIndex < nChartCount; nIndex++ )
+    USHORT nChartCount = pChartListenerCollection->GetCount();
+    for ( USHORT nIndex = 0; nIndex < nChartCount; nIndex++ )
     {
         ScChartListener* pChartListener =
             (ScChartListener*) (pChartListenerCollection->At(nIndex));
         ScRangeListRef aRLR( pChartListener->GetRangeList() );
         ScRangeListRef aNewRLR( new ScRangeList );
-        sal_Bool bChanged = false;
-        sal_Bool bDataChanged = false;
-        for ( size_t i = 0, nListSize = aRLR->size(); i < nListSize; ++i )
+        BOOL bChanged = FALSE;
+        BOOL bDataChanged = FALSE;
+        for ( ScRangePtr pR = aRLR->First(); pR; pR = aRLR->Next() )
         {
-            ScRange* pR = (*aRLR)[i];
             SCCOL theCol1 = pR->aStart.Col();
             SCROW theRow1 = pR->aStart.Row();
             SCTAB theTab1 = pR->aStart.Tab();
@@ -532,7 +537,7 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
                 theCol2,theRow2,theTab2 );
             if ( eRes != UR_NOTHING )
             {
-                bChanged = sal_True;
+                bChanged = TRUE;
                 aNewRLR->Append( ScRange(
                     theCol1, theRow1, theTab1,
                     theCol2, theRow2, theTab2 ));
@@ -546,7 +551,7 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
                     || (pR->aEnd.Tab() - pR->aStart.Tab()
                         != theTab2 - theTab1))) )
                 {
-                    bDataChanged = sal_True;
+                    bDataChanged = TRUE;
                 }
             }
             else
@@ -555,6 +560,9 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         if ( bChanged )
         {
             {
+//				SetChartRangeList( pChartListener->GetString(), aNewRLR );
+//				pChartListener->ChangeListening( aNewRLR, bDataChanged );
+
                 // Force the chart to be loaded now, so it registers itself for UNO events.
                 // UNO broadcasts are done after UpdateChartRef, so the chart will get this
                 // reference change.
@@ -563,28 +571,9 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
                 svt::EmbeddedObjectRef::TryRunningState( xIPObj );
 
                 // After the change, chart keeps track of its own data source ranges,
-                // the listener doesn't need to listen anymore, except the chart has
-                // an internal data provider.
-                bool bInternalDataProvider = false;
-                if ( xIPObj.is() )
-                {
-                    try
-                    {
-                        uno::Reference< chart2::XChartDocument > xChartDoc( xIPObj->getComponent(), uno::UNO_QUERY_THROW );
-                        bInternalDataProvider = xChartDoc->hasInternalDataProvider();
-                    }
-                    catch ( uno::Exception& )
-                    {
-                    }
-                }
-                if ( bInternalDataProvider )
-                {
-                    pChartListener->ChangeListening( aNewRLR, bDataChanged );
-                }
-                else
-                {
-                    pChartListener->ChangeListening( new ScRangeList, bDataChanged );
-                }
+                // the listener doesn't need to listen anymore.
+
+                pChartListener->ChangeListening( new ScRangeList, bDataChanged );
             }
         }
     }
@@ -637,12 +626,12 @@ void ScDocument::SetChartRangeList( const String& rChartName,
 }
 
 
-sal_Bool ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
+BOOL ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     if (pTab[nTab])
         return pTab[nTab]->HasData( nCol, nRow );
     else
-        return false;
+        return FALSE;
 }
 
 uno::Reference< embed::XEmbeddedObject >
@@ -651,9 +640,9 @@ uno::Reference< embed::XEmbeddedObject >
     if (!pDrawLayer)
         return uno::Reference< embed::XEmbeddedObject >();
 
-    //  die Seiten hier vom Draw-Layer nehmen,
-    //  weil sie evtl. nicht mit den Tabellen uebereinstimmen
-    //  (z.B. Redo von Tabelle loeschen, Draw-Redo passiert vor DeleteTab).
+    //	die Seiten hier vom Draw-Layer nehmen,
+    //	weil sie evtl. nicht mit den Tabellen uebereinstimmen
+    //	(z.B. Redo von Tabelle loeschen, Draw-Redo passiert vor DeleteTab).
 
     sal_uInt16 nCount = pDrawLayer->GetPageCount();
     for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
@@ -681,25 +670,25 @@ uno::Reference< embed::XEmbeddedObject >
     return uno::Reference< embed::XEmbeddedObject >();
 }
 
-sal_Bool lcl_StringInCollection( const ScStrCollection* pColl, const String& rStr )
+BOOL lcl_StringInCollection( const ScStrCollection* pColl, const String& rStr )
 {
     if ( !pColl )
-        return false;
+        return FALSE;
 
     StrData aData( rStr );
-    sal_uInt16 nDummy;
+    USHORT nDummy;
     return pColl->Search( &aData, nDummy );
 }
 
 void ScDocument::UpdateChartListenerCollection()
 {
-    bChartListenerCollectionNeedsUpdate = false;
+    bChartListenerCollectionNeedsUpdate = FALSE;
     if (!pDrawLayer)
         return;
     else
     {
         ScRange aRange;
-        // Range for searching is not important
+        // Range fuer Suche unwichtig
         ScChartListener aCLSearcher( EMPTY_STRING, this, aRange );
         for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
         {
@@ -719,11 +708,11 @@ void ScDocument::UpdateChartListenerCollection()
                     {
                         String aObjName = ((SdrOle2Obj*)pObject)->GetPersistName();
                         aCLSearcher.SetString( aObjName );
-                        sal_uInt16 nIndex;
+                        USHORT nIndex;
                         if ( pChartListenerCollection->Search( &aCLSearcher, nIndex ) )
                         {
                             ((ScChartListener*) (pChartListenerCollection->
-                                At( nIndex )))->SetUsed( sal_True );
+                                At( nIndex )))->SetUsed( TRUE );
                         }
                         else if ( lcl_StringInCollection( pOtherObjects, aObjName ) )
                         {
@@ -748,21 +737,28 @@ void ScDocument::UpdateChartListenerCollection()
                                 // unable to set the data. So a chart from the
                                 // same document is treated like a chart with
                                 // own data for the time being.
-
+#if 0
                                 // data provider
+                                uno::Reference< chart2::data::XDataProvider > xDataProvider = new
+                                    ScChart2DataProvider( this );
+                                xReceiver->attachDataProvider( xDataProvider );
                                 // number formats supplier
-
+                                uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pShell->GetModel(), uno::UNO_QUERY );
+                                xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
                                 // data ?
                                 // how to set?? Defined in XML-file, which is already loaded!!!
                                 // => we have to do this stuff here, BEFORE the chart is actually loaded
+
+                                bIsChart = true;
+#endif
                             }
 
                             if (!bIsChart)
                             {
-                                //  put into list of other ole objects, so the object doesn't have to
-                                //  be swapped in the next time UpdateChartListenerCollection is called
-                                //! remove names when objects are no longer there?
-                                //  (object names aren't used again before reloading the document)
+                                //	put into list of other ole objects, so the object doesn't have to
+                                //	be swapped in the next time UpdateChartListenerCollection is called
+                                //!	remove names when objects are no longer there?
+                                //	(object names aren't used again before reloading the document)
 
                                 if (!pOtherObjects)
                                     pOtherObjects = new ScStrCollection;
@@ -785,6 +781,7 @@ void ScDocument::AddOLEObjectToCollection(const String& rName)
         pOtherObjects = new ScStrCollection;
     pOtherObjects->Insert( new StrData( rName ) );
 }
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

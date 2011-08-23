@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,6 +52,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
+#define USE_64BIT_INTS
+
 // =======================================================================
 
 DBG_NAMEEX( OutputDevice )
@@ -62,7 +64,7 @@ DBG_NAMEEX( Region )
 // =======================================================================
 
 static long aImplNumeratorAry[MAP_PIXEL+1] =
-    {    1,   1,   5,  50,    1,   1,  1, 1,  1,    1, 1 };
+    {	 1,   1,   5,  50,	  1,   1,  1, 1,  1,	1, 1 };
 static long aImplDenominatorAry[MAP_PIXEL+1] =
      { 2540, 254, 127, 127, 1000, 100, 10, 1, 72, 1440, 1 };
 
@@ -113,10 +115,10 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
 // -----------------------------------------------------------------------
 
 // Fraction.GetNumerator()
-// Fraction.GetDenominator()    > 0
-// rOutRes.nPixPerInch?         > 0
+// Fraction.GetDenominator()	> 0
+// rOutRes.nPixPerInch? 		> 0
 // rMapRes.nMapScNum?
-// rMapRes.nMapScDenom?         > 0
+// rMapRes.nMapScDenom? 		> 0
 
 static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
                                      const ImplMapRes& rMapRes,
@@ -130,9 +132,9 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     else
     {
         // Schwellenwerte fuer BigInt Arithmetik berechnen
-        long    nDenomHalfX = rMapRes.mnMapScDenomX / 2;
-        sal_uLong   nDenomX     = rMapRes.mnMapScDenomX;
-        long    nProductX   = nDPIX * rMapRes.mnMapScNumX;
+        long	nDenomHalfX = rMapRes.mnMapScDenomX / 2;
+        ULONG	nDenomX 	= rMapRes.mnMapScDenomX;
+        long	nProductX	= nDPIX * rMapRes.mnMapScNumX;
 
         if ( !nProductX )
             rThresRes.mnThresLogToPixX = LONG_MAX;
@@ -142,9 +144,9 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         if ( !nDenomX )
             rThresRes.mnThresPixToLogX = LONG_MAX;
         else if ( nProductX >= 0 )
-            rThresRes.mnThresPixToLogX = (long)(((sal_uLong)LONG_MAX - (sal_uLong)( nProductX/2)) / nDenomX);
+            rThresRes.mnThresPixToLogX = (long)(((ULONG)LONG_MAX - (ULONG)( nProductX/2)) / nDenomX);
         else
-            rThresRes.mnThresPixToLogX = (long)(((sal_uLong)LONG_MAX + (sal_uLong)(-nProductX/2)) / nDenomX);
+            rThresRes.mnThresPixToLogX = (long)(((ULONG)LONG_MAX + (ULONG)(-nProductX/2)) / nDenomX);
     }
 
     if ( nDPIY && (LONG_MAX / nDPIY < Abs( rMapRes.mnMapScNumY ) ) ) // #111139# avoid div by zero
@@ -155,9 +157,9 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     else
     {
         // Schwellenwerte fuer BigInt Arithmetik berechnen
-        long    nDenomHalfY = rMapRes.mnMapScDenomY / 2;
-        sal_uLong   nDenomY     = rMapRes.mnMapScDenomY;
-        long    nProductY   = nDPIY * rMapRes.mnMapScNumY;
+        long	nDenomHalfY = rMapRes.mnMapScDenomY / 2;
+        ULONG	nDenomY 	= rMapRes.mnMapScDenomY;
+        long	nProductY	= nDPIY * rMapRes.mnMapScNumY;
 
         if ( !nProductY )
             rThresRes.mnThresLogToPixY = LONG_MAX;
@@ -167,15 +169,17 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         if ( !nDenomY )
             rThresRes.mnThresPixToLogY = LONG_MAX;
         else if ( nProductY >= 0 )
-            rThresRes.mnThresPixToLogY = (long)(((sal_uLong)LONG_MAX - (sal_uLong)( nProductY/2)) / nDenomY);
+            rThresRes.mnThresPixToLogY = (long)(((ULONG)LONG_MAX - (ULONG)( nProductY/2)) / nDenomY);
         else
-            rThresRes.mnThresPixToLogY = (long)(((sal_uLong)LONG_MAX + (sal_uLong)(-nProductY/2)) / nDenomY);
+            rThresRes.mnThresPixToLogY = (long)(((ULONG)LONG_MAX + (ULONG)(-nProductY/2)) / nDenomY);
     }
 
+#ifdef USE_64BIT_INTS
     rThresRes.mnThresLogToPixX /= 2;
     rThresRes.mnThresLogToPixY /= 2;
     rThresRes.mnThresPixToLogX /= 2;
     rThresRes.mnThresPixToLogY /= 2;
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -200,16 +204,16 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             rMapRes.mnMapScDenomY = 254;
             break;
         case MAP_MM:
-            rMapRes.mnMapScNumX   = 5;      // 10
-            rMapRes.mnMapScDenomX = 127;    // 254
-            rMapRes.mnMapScNumY   = 5;      // 10
-            rMapRes.mnMapScDenomY = 127;    // 254
+            rMapRes.mnMapScNumX   = 5;		// 10
+            rMapRes.mnMapScDenomX = 127;	// 254
+            rMapRes.mnMapScNumY   = 5;		// 10
+            rMapRes.mnMapScDenomY = 127;	// 254
             break;
         case MAP_CM:
-            rMapRes.mnMapScNumX   = 50;     // 100
-            rMapRes.mnMapScDenomX = 127;    // 254
-            rMapRes.mnMapScNumY   = 50;     // 100
-            rMapRes.mnMapScDenomY = 127;    // 254
+            rMapRes.mnMapScNumX   = 50; 	// 100
+            rMapRes.mnMapScDenomX = 127;	// 254
+            rMapRes.mnMapScNumY   = 50; 	// 100
+            rMapRes.mnMapScDenomY = 127;	// 254
             break;
         case MAP_1000TH_INCH:
             rMapRes.mnMapScNumX   = 1;
@@ -279,7 +283,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             }
             break;
         default:
-            OSL_FAIL( "unhandled MapUnit" );
+            DBG_ERROR( "unhandled MapUnit" );
             break;
     }
 
@@ -379,6 +383,7 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
 {
     // To "use" it...
     (void) nThres;
+#ifdef USE_64BIT_INTS
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
     {
@@ -406,6 +411,34 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
        }
     }
     return n;
+#else // USE_64BIT_INTS
+    if ( Abs( n ) < nThres )
+    {
+        n *= nDPI * nMapNum;
+        n += n >= 0 ? nMapDenom/2 : -((nMapDenom-1)/2);
+                return (n / nMapDenom);
+    }
+    else
+    {
+        BigInt aTemp( n );
+        aTemp *= BigInt( nDPI );
+        aTemp *= BigInt( nMapNum );
+
+        if ( aTemp.IsNeg() )
+        {
+            BigInt aMapScDenom2( (nMapDenom-1)/2 );
+            aTemp -= aMapScDenom2;
+        }
+        else
+        {
+            BigInt aMapScDenom2( nMapDenom/2 );
+            aTemp += aMapScDenom2;
+        }
+
+        aTemp /= BigInt( nMapDenom );
+        return (long)aTemp;
+    }
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -415,6 +448,7 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
 {
     // To "use" it...
    (void) nThres;
+#ifdef USE_64BIT_INTS
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
         n = (2 * n * nMapDenom) / (nDPI * nMapNum);
@@ -428,6 +462,59 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
     }
     if( n < 0 ) --n; else ++n;
     return (n / 2);
+#else // USE_64BIT_INTS
+    if ( Abs( n ) < nThres )
+    {
+        long nDenom  = nDPI * nMapNum;
+        long nNum    = n * nMapDenom;
+        if( (nNum ^ nDenom) >= 0 )
+            nNum += nDenom/2;
+        else
+            nNum -= nDenom/2;
+        return (nNum / nDenom);
+    }
+    else
+    {
+        BigInt aDenom( nDPI );
+        aDenom *= BigInt( nMapNum );
+
+        BigInt aNum( n );
+        aNum *= BigInt( nMapDenom );
+
+        BigInt aDenom2( aDenom );
+        if ( aNum.IsNeg() )
+        {
+            if ( aDenom.IsNeg() )
+            {
+                aDenom2 /= BigInt(2);
+                aNum += aDenom2;
+            }
+            else
+            {
+                aDenom2 -= 1;
+                aDenom2 /= BigInt(2);
+                aNum -= aDenom2;
+            }
+        }
+        else
+        {
+            if ( aDenom.IsNeg() )
+            {
+                aDenom2 += 1;
+                aDenom2 /= BigInt(2);
+                aNum -= aDenom2;
+            }
+            else
+            {
+                aDenom2 /= BigInt(2);
+                aNum += aDenom2;
+            }
+        }
+
+        aNum  /= aDenom;
+        return (long)aNum;
+    }
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -600,8 +687,8 @@ Polygon OutputDevice::ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const
     if ( !mbMap && !mnOutOffX && !mnOutOffY )
         return rLogicPoly;
 
-    sal_uInt16  i;
-    sal_uInt16  nPoints = rLogicPoly.GetSize();
+    USHORT	i;
+    USHORT	nPoints = rLogicPoly.GetSize();
     Polygon aPoly( rLogicPoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
@@ -644,8 +731,8 @@ PolyPolygon OutputDevice::ImplLogicToDevicePixel( const PolyPolygon& rLogicPolyP
         return rLogicPolyPoly;
 
     PolyPolygon aPolyPoly( rLogicPolyPoly );
-    sal_uInt16      nPoly = aPolyPoly.Count();
-    for( sal_uInt16 i = 0; i < nPoly; i++ )
+    USHORT		nPoly = aPolyPoly.Count();
+    for( USHORT i = 0; i < nPoly; i++ )
     {
         Polygon& rPoly = aPolyPoly[i];
         rPoly = ImplLogicToDevicePixel( rPoly );
@@ -725,12 +812,12 @@ Region OutputDevice::ImplPixelToDevicePixel( const Region& rRegion ) const
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::EnableMapMode( sal_Bool bEnable )
-{
-    mbMap = (bEnable != 0);
+void OutputDevice::EnableMapMode( BOOL bEnable ) 
+{ 
+    mbMap = (bEnable != 0); 
 
     if( mpAlphaVDev )
-        mpAlphaVDev->EnableMapMode( bEnable );
+        mpAlphaVDev->EnableMapMode( bEnable );    
 }
 
 // -----------------------------------------------------------------------
@@ -744,12 +831,12 @@ void OutputDevice::SetMapMode()
 
     if ( mbMap || !maMapMode.IsDefault() )
     {
-        mbMap       = sal_False;
-        maMapMode   = MapMode();
+        mbMap		= FALSE;
+        maMapMode	= MapMode();
 
         // create new objects (clip region werden nicht neu skaliert)
-        mbNewFont   = sal_True;
-        mbInitFont  = sal_True;
+        mbNewFont	= TRUE;
+        mbInitFont	= TRUE;
         if ( GetOutDevType() == OUTDEV_WINDOW )
         {
             if ( ((Window*)this)->mpWindowImpl->mpCursor )
@@ -765,7 +852,7 @@ void OutputDevice::SetMapMode()
     }
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetMapMode();
+        mpAlphaVDev->SetMapMode();    
 }
 
 // -----------------------------------------------------------------------
@@ -774,7 +861,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    sal_Bool bRelMap = (rNewMapMode.GetMapUnit() == MAP_RELATIVE);
+    BOOL bRelMap = (rNewMapMode.GetMapUnit() == MAP_RELATIVE);
 
     if ( mpMetaFile )
     {
@@ -793,7 +880,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         mpAlphaVDev->SetMapMode( rNewMapMode );
 
     // Ist Default-MapMode, dann bereche nichts
-    sal_Bool bOldMap = mbMap;
+    BOOL bOldMap = mbMap;
     mbMap = !rNewMapMode.IsDefault();
     if ( mbMap )
     {
@@ -801,14 +888,14 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         if ( (rNewMapMode.GetMapUnit() == maMapMode.GetMapUnit()) &&
              (rNewMapMode.GetScaleX()  == maMapMode.GetScaleX())  &&
              (rNewMapMode.GetScaleY()  == maMapMode.GetScaleY())  &&
-             (bOldMap                  == mbMap) )
+             (bOldMap				   == mbMap) )
         {
             // Offset setzen
             Point aOrigin = rNewMapMode.GetOrigin();
             maMapRes.mnMapOfsX = aOrigin.X();
             maMapRes.mnMapOfsY = aOrigin.Y();
             maMapMode = rNewMapMode;
-
+            
             // #i75163#
             ImplInvalidateViewTransform();
 
@@ -816,12 +903,12 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         }
         if ( !bOldMap && bRelMap )
         {
-            maMapRes.mnMapScNumX    = 1;
-            maMapRes.mnMapScNumY    = 1;
-            maMapRes.mnMapScDenomX  = mnDPIX;
-            maMapRes.mnMapScDenomY  = mnDPIY;
-            maMapRes.mnMapOfsX      = 0;
-            maMapRes.mnMapOfsY      = 0;
+            maMapRes.mnMapScNumX	= 1;
+            maMapRes.mnMapScNumY	= 1;
+            maMapRes.mnMapScDenomX	= mnDPIX;
+            maMapRes.mnMapScDenomY	= mnDPIY;
+            maMapRes.mnMapOfsX		= 0;
+            maMapRes.mnMapOfsY		= 0;
         }
 
         // Neue MapMode-Aufloesung berechnen
@@ -849,8 +936,8 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         maMapMode = rNewMapMode;
 
     // create new objects (clip region werden nicht neu skaliert)
-    mbNewFont   = sal_True;
-    mbInitFont  = sal_True;
+    mbNewFont	= TRUE;
+    mbInitFont	= TRUE;
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
         if ( ((Window*)this)->mpWindowImpl->mpCursor )
@@ -1014,22 +1101,22 @@ basegfx::B2DHomMatrix OutputDevice::GetInverseViewTransformation() const
 basegfx::B2DHomMatrix OutputDevice::GetViewTransformation( const MapMode& rMapMode ) const
 {
     // #i82615#
-    ImplMapRes          aMapRes;
-    ImplThresholdRes    aThresRes;
+    ImplMapRes			aMapRes;
+    ImplThresholdRes	aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
-
+    
     basegfx::B2DHomMatrix aTransform;
 
     const double fScaleFactorX((double)mnDPIX * (double)aMapRes.mnMapScNumX / (double)aMapRes.mnMapScDenomX);
     const double fScaleFactorY((double)mnDPIY * (double)aMapRes.mnMapScNumY / (double)aMapRes.mnMapScDenomY);
     const double fZeroPointX(((double)aMapRes.mnMapOfsX * fScaleFactorX) + (double)mnOutOffOrigX);
     const double fZeroPointY(((double)aMapRes.mnMapOfsY * fScaleFactorY) + (double)mnOutOffOrigY);
-
+    
     aTransform.set(0, 0, fScaleFactorX);
     aTransform.set(1, 1, fScaleFactorY);
     aTransform.set(0, 2, fZeroPointX);
     aTransform.set(1, 2, fZeroPointY);
-
+    
     return aTransform;
 }
 
@@ -1121,8 +1208,8 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly ) const
     if ( !mbMap )
         return rLogicPoly;
 
-    sal_uInt16  i;
-    sal_uInt16  nPoints = rLogicPoly.GetSize();
+    USHORT	i;
+    USHORT	nPoints = rLogicPoly.GetSize();
     Polygon aPoly( rLogicPoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
@@ -1155,8 +1242,8 @@ PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly ) cons
         return rLogicPolyPoly;
 
     PolyPolygon aPolyPoly( rLogicPolyPoly );
-    sal_uInt16      nPoly = aPolyPoly.Count();
-    for( sal_uInt16 i = 0; i < nPoly; i++ )
+    USHORT		nPoly = aPolyPoly.Count();
+    for( USHORT i = 0; i < nPoly; i++ )
     {
         Polygon& rPoly = aPolyPoly[i];
         rPoly = LogicToPixel( rPoly );
@@ -1196,7 +1283,7 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
     if ( !mbMap || (eType == REGION_EMPTY) || (eType == REGION_NULL) )
         return rLogicRegion;
 
-    Region          aRegion;
+    Region			aRegion;
     const ImplRegion& rImplRegion = *rLogicRegion.ImplGetImplRegion();
     const PolyPolygon* pPolyPoly = rImplRegion.mpPolyPoly;
     const basegfx::B2DPolyPolygon* pB2DPolyPoly = rImplRegion.mpB2DPolyPoly;
@@ -1212,12 +1299,12 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
     }
     else
     {
-        long                nX;
-        long                nY;
-        long                nWidth;
-        long                nHeight;
-        ImplRegionInfo      aInfo;
-        sal_Bool                bRegionRect;
+        long				nX;
+        long				nY;
+        long				nWidth;
+        long				nHeight;
+        ImplRegionInfo		aInfo;
+        BOOL				bRegionRect;
 
         aRegion.ImplBeginAddRect();
         bRegionRect = rLogicRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
@@ -1244,8 +1331,8 @@ Point OutputDevice::LogicToPixel( const Point& rLogicPt,
         return rLogicPt;
 
     // MapMode-Aufloesung berechnen und Umrechnen
-    ImplMapRes          aMapRes;
-    ImplThresholdRes    aThresRes;
+    ImplMapRes			aMapRes;
+    ImplThresholdRes	aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
     return Point( ImplLogicToPixel( rLogicPt.X() + aMapRes.mnMapOfsX, mnDPIX,
@@ -1267,8 +1354,8 @@ Size OutputDevice::LogicToPixel( const Size& rLogicSize,
         return rLogicSize;
 
     // MapMode-Aufloesung berechnen und Umrechnen
-    ImplMapRes          aMapRes;
-    ImplThresholdRes    aThresRes;
+    ImplMapRes			aMapRes;
+    ImplThresholdRes	aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
     return Size( ImplLogicToPixel( rLogicSize.Width(), mnDPIX,
@@ -1290,8 +1377,8 @@ Rectangle OutputDevice::LogicToPixel( const Rectangle& rLogicRect,
         return rLogicRect;
 
     // MapMode-Aufloesung berechnen und Umrechnen
-    ImplMapRes          aMapRes;
-    ImplThresholdRes    aThresRes;
+    ImplMapRes			aMapRes;
+    ImplThresholdRes	aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
     return Rectangle( ImplLogicToPixel( rLogicRect.Left() + aMapRes.mnMapOfsX, mnDPIX,
@@ -1320,12 +1407,12 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
         return rLogicPoly;
 
     // MapMode-Aufloesung berechnen und Umrechnen
-    ImplMapRes          aMapRes;
-    ImplThresholdRes    aThresRes;
+    ImplMapRes			aMapRes;
+    ImplThresholdRes	aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
-    sal_uInt16  i;
-    sal_uInt16  nPoints = rLogicPoly.GetSize();
+    USHORT	i;
+    USHORT	nPoints = rLogicPoly.GetSize();
     Polygon aPoly( rLogicPoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
@@ -1343,7 +1430,7 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
                                     aThresRes.mnThresLogToPixY )+mnOutOffOrigY;
         aPoly[i] = aPt;
     }
-
+    
     return aPoly;
 }
 
@@ -1359,8 +1446,8 @@ PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly,
         return rLogicPolyPoly;
 
     PolyPolygon aPolyPoly( rLogicPolyPoly );
-    sal_uInt16      nPoly = aPolyPoly.Count();
-    for( sal_uInt16 i = 0; i < nPoly; i++ )
+    USHORT		nPoly = aPolyPoly.Count();
+    for( USHORT i = 0; i < nPoly; i++ )
     {
         Polygon& rPoly = aPolyPoly[i];
         rPoly = LogicToPixel( rPoly, rMapMode );
@@ -1403,19 +1490,19 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion,
     if ( rMapMode.IsDefault() || (eType == REGION_EMPTY) || (eType == REGION_NULL) )
         return rLogicRegion;
 
-    Region          aRegion;
-    PolyPolygon*    pPolyPoly = rLogicRegion.ImplGetImplRegion()->mpPolyPoly;
+    Region			aRegion;
+    PolyPolygon*	pPolyPoly = rLogicRegion.ImplGetImplRegion()->mpPolyPoly;
 
     if( pPolyPoly )
         aRegion = Region( LogicToPixel( *pPolyPoly, rMapMode ) );
     else
     {
-        long                nX;
-        long                nY;
-        long                nWidth;
-        long                nHeight;
-        ImplRegionInfo      aInfo;
-        sal_Bool                bRegionRect;
+        long				nX;
+        long				nY;
+        long				nWidth;
+        long				nHeight;
+        ImplRegionInfo		aInfo;
+        BOOL				bRegionRect;
 
         aRegion.ImplBeginAddRect();
         bRegionRect = rLogicRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
@@ -1498,8 +1585,8 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly ) const
     if ( !mbMap )
         return rDevicePoly;
 
-    sal_uInt16  i;
-    sal_uInt16  nPoints = rDevicePoly.GetSize();
+    USHORT	i;
+    USHORT	nPoints = rDevicePoly.GetSize();
     Polygon aPoly( rDevicePoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
@@ -1532,8 +1619,8 @@ PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly ) con
         return rDevicePolyPoly;
 
     PolyPolygon aPolyPoly( rDevicePolyPoly );
-    sal_uInt16      nPoly = aPolyPoly.Count();
-    for( sal_uInt16 i = 0; i < nPoly; i++ )
+    USHORT		nPoly = aPolyPoly.Count();
+    for( USHORT i = 0; i < nPoly; i++ )
     {
         Polygon& rPoly = aPolyPoly[i];
         rPoly = PixelToLogic( rPoly );
@@ -1573,19 +1660,19 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion ) const
     if ( !mbMap || (eType == REGION_EMPTY) || (eType == REGION_NULL) )
         return rDeviceRegion;
 
-    Region          aRegion;
-    PolyPolygon*    pPolyPoly = rDeviceRegion.ImplGetImplRegion()->mpPolyPoly;
+    Region			aRegion;
+    PolyPolygon*	pPolyPoly = rDeviceRegion.ImplGetImplRegion()->mpPolyPoly;
 
     if ( pPolyPoly )
         aRegion = Region( PixelToLogic( *pPolyPoly ) );
     else
     {
-        long                nX;
-        long                nY;
-        long                nWidth;
-        long                nHeight;
-        ImplRegionInfo      aInfo;
-        sal_Bool                bRegionRect;
+        long				nX;
+        long				nY;
+        long				nWidth;
+        long				nHeight;
+        ImplRegionInfo		aInfo;
+        BOOL				bRegionRect;
 
         aRegion.ImplBeginAddRect();
         bRegionRect = rDeviceRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
@@ -1613,8 +1700,8 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt,
         return rDevicePt;
 
     // MapMode-Aufloesung berechnen und Umrechnen
-    ImplMapRes          aMapRes;
-    ImplThresholdRes    aThresRes;
+    ImplMapRes			aMapRes;
+    ImplThresholdRes	aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
     return Point( ImplPixelToLogic( rDevicePt.X(), mnDPIX,
@@ -1637,8 +1724,8 @@ Size OutputDevice::PixelToLogic( const Size& rDeviceSize,
         return rDeviceSize;
 
     // MapMode-Aufloesung berechnen und Umrechnen
-    ImplMapRes          aMapRes;
-    ImplThresholdRes    aThresRes;
+    ImplMapRes			aMapRes;
+    ImplThresholdRes	aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
     return Size( ImplPixelToLogic( rDeviceSize.Width(), mnDPIX,
@@ -1661,8 +1748,8 @@ Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect,
         return rDeviceRect;
 
     // MapMode-Aufloesung berechnen und Umrechnen
-    ImplMapRes          aMapRes;
-    ImplThresholdRes    aThresRes;
+    ImplMapRes			aMapRes;
+    ImplThresholdRes	aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
     return Rectangle( ImplPixelToLogic( rDeviceRect.Left(), mnDPIX,
@@ -1692,12 +1779,12 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
         return rDevicePoly;
 
     // MapMode-Aufloesung berechnen und Umrechnen
-    ImplMapRes          aMapRes;
-    ImplThresholdRes    aThresRes;
+    ImplMapRes			aMapRes;
+    ImplThresholdRes	aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
-    sal_uInt16  i;
-    sal_uInt16  nPoints = rDevicePoly.GetSize();
+    USHORT	i;
+    USHORT	nPoints = rDevicePoly.GetSize();
     Polygon aPoly( rDevicePoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
@@ -1731,8 +1818,8 @@ PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly,
         return rDevicePolyPoly;
 
     PolyPolygon aPolyPoly( rDevicePolyPoly );
-    sal_uInt16      nPoly = aPolyPoly.Count();
-    for( sal_uInt16 i = 0; i < nPoly; i++ )
+    USHORT		nPoly = aPolyPoly.Count();
+    for( USHORT i = 0; i < nPoly; i++ )
     {
         Polygon& rPoly = aPolyPoly[i];
         rPoly = PixelToLogic( rPoly, rMapMode );
@@ -1775,19 +1862,19 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion,
     if ( rMapMode.IsDefault() || (eType == REGION_EMPTY) || (eType == REGION_NULL) )
         return rDeviceRegion;
 
-    Region          aRegion;
-    PolyPolygon*    pPolyPoly = rDeviceRegion.ImplGetImplRegion()->mpPolyPoly;
+    Region			aRegion;
+    PolyPolygon*	pPolyPoly = rDeviceRegion.ImplGetImplRegion()->mpPolyPoly;
 
     if ( pPolyPoly )
         aRegion = Region( PixelToLogic( *pPolyPoly, rMapMode ) );
     else
     {
-        long                nX;
-        long                nY;
-        long                nWidth;
-        long                nHeight;
-        ImplRegionInfo      aInfo;
-        sal_Bool                bRegionRect;
+        long				nX;
+        long				nY;
+        long				nWidth;
+        long				nHeight;
+        ImplRegionInfo		aInfo;
+        BOOL				bRegionRect;
 
         aRegion.ImplBeginAddRect();
         bRegionRect = rDeviceRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
@@ -1805,83 +1892,83 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion,
 
 // -----------------------------------------------------------------------
 
-#define ENTER0( rSource, pMapModeSource, pMapModeDest )                 \
-    if ( !pMapModeSource )                                              \
-        pMapModeSource = &maMapMode;                                    \
-    if ( !pMapModeDest )                                                \
-        pMapModeDest = &maMapMode;                                      \
-    if ( *pMapModeSource == *pMapModeDest )                             \
+#define ENTER0( rSource, pMapModeSource, pMapModeDest ) 				\
+    if ( !pMapModeSource )												\
+        pMapModeSource = &maMapMode;									\
+    if ( !pMapModeDest )												\
+        pMapModeDest = &maMapMode;										\
+    if ( *pMapModeSource == *pMapModeDest ) 							\
         return rSource
 
 // -----------------------------------------------------------------------
 
-#define ENTER1( rSource, pMapModeSource, pMapModeDest )                 \
-    ENTER0( rSource, pMapModeSource, pMapModeDest );                    \
+#define ENTER1( rSource, pMapModeSource, pMapModeDest ) 				\
+    ENTER0( rSource, pMapModeSource, pMapModeDest );					\
                                                                         \
-    ImplMapRes aMapResSource;                                           \
-    ImplMapRes aMapResDest;                                             \
+    ImplMapRes aMapResSource;											\
+    ImplMapRes aMapResDest; 											\
                                                                         \
-    if ( !mbMap || pMapModeSource != &maMapMode )                       \
-    {                                                                   \
-        if ( pMapModeSource->GetMapUnit() == MAP_RELATIVE )             \
-            aMapResSource = maMapRes;                                   \
-        ImplCalcMapResolution( *pMapModeSource,                         \
-                               mnDPIX, mnDPIY, aMapResSource );         \
-    }                                                                   \
-    else                                                                \
-        aMapResSource = maMapRes;                                       \
-    if ( !mbMap || pMapModeDest != &maMapMode )                         \
-    {                                                                   \
-        if ( pMapModeDest->GetMapUnit() == MAP_RELATIVE )               \
-            aMapResDest = maMapRes;                                     \
-        ImplCalcMapResolution( *pMapModeDest,                           \
-                               mnDPIX, mnDPIY, aMapResDest );           \
-    }                                                                   \
-    else                                                                \
+    if ( !mbMap || pMapModeSource != &maMapMode )						\
+    {																	\
+        if ( pMapModeSource->GetMapUnit() == MAP_RELATIVE ) 			\
+            aMapResSource = maMapRes;									\
+        ImplCalcMapResolution( *pMapModeSource, 						\
+                               mnDPIX, mnDPIY, aMapResSource ); 		\
+    }																	\
+    else																\
+        aMapResSource = maMapRes;										\
+    if ( !mbMap || pMapModeDest != &maMapMode ) 						\
+    {																	\
+        if ( pMapModeDest->GetMapUnit() == MAP_RELATIVE )				\
+            aMapResDest = maMapRes; 									\
+        ImplCalcMapResolution( *pMapModeDest,							\
+                               mnDPIX, mnDPIY, aMapResDest );			\
+    }																	\
+    else																\
         aMapResDest = maMapRes
 
 // -----------------------------------------------------------------------
 
-#define ENTER2( eUnitSource, eUnitDest )                                \
-    DBG_ASSERT( eUnitSource != MAP_SYSFONT                              \
-                && eUnitSource != MAP_APPFONT                           \
-                && eUnitSource != MAP_RELATIVE,                         \
+#define ENTER2( eUnitSource, eUnitDest )								\
+    DBG_ASSERT( eUnitSource != MAP_SYSFONT								\
+                && eUnitSource != MAP_APPFONT							\
+                && eUnitSource != MAP_RELATIVE, 						\
                 "Source MapUnit nicht erlaubt" );                       \
-    DBG_ASSERT( eUnitDest != MAP_SYSFONT                                \
-                && eUnitDest != MAP_APPFONT                             \
-                && eUnitDest != MAP_RELATIVE,                           \
+    DBG_ASSERT( eUnitDest != MAP_SYSFONT								\
+                && eUnitDest != MAP_APPFONT 							\
+                && eUnitDest != MAP_RELATIVE,							\
                 "Destination MapUnit nicht erlaubt" );                  \
-    DBG_ASSERTWARNING( eUnitSource != MAP_PIXEL,                        \
+    DBG_ASSERTWARNING( eUnitSource != MAP_PIXEL,						\
                        "MAP_PIXEL mit 72dpi angenaehert" );             \
-    DBG_ASSERTWARNING( eUnitDest != MAP_PIXEL,                          \
+    DBG_ASSERTWARNING( eUnitDest != MAP_PIXEL,							\
                        "MAP_PIXEL mit 72dpi angenaehert" )
 
 // -----------------------------------------------------------------------
 
-#define ENTER3( eUnitSource, eUnitDest )                                \
-    long nNumerator      = 1;       \
-    long nDenominator    = 1;       \
-    DBG_ASSERT( eUnitSource < MAP_LASTENUMDUMMY, "Invalid source map unit");    \
-    DBG_ASSERT( eUnitDest < MAP_LASTENUMDUMMY, "Invalid destination map unit"); \
-    if( (eUnitSource < MAP_LASTENUMDUMMY) && (eUnitDest < MAP_LASTENUMDUMMY) )  \
-    {   \
-        nNumerator   = aImplNumeratorAry[eUnitSource] *             \
-                           aImplDenominatorAry[eUnitDest];              \
-        nDenominator     = aImplNumeratorAry[eUnitDest] *               \
-                           aImplDenominatorAry[eUnitSource];            \
+#define ENTER3( eUnitSource, eUnitDest )								\
+    long nNumerator 	 = 1;		\
+    long nDenominator	 = 1;		\
+    DBG_ASSERT( eUnitSource < MAP_LASTENUMDUMMY, "Invalid source map unit");	\
+    DBG_ASSERT( eUnitDest < MAP_LASTENUMDUMMY, "Invalid destination map unit");	\
+    if( (eUnitSource < MAP_LASTENUMDUMMY) && (eUnitDest < MAP_LASTENUMDUMMY) )	\
+    {	\
+        nNumerator 	 = aImplNumeratorAry[eUnitSource] * 			\
+                           aImplDenominatorAry[eUnitDest];				\
+        nDenominator	 = aImplNumeratorAry[eUnitDest] *				\
+                           aImplDenominatorAry[eUnitSource];			\
     } \
-    if ( eUnitSource == MAP_PIXEL )                                     \
-        nDenominator *= 72;                                             \
-    else if( eUnitDest == MAP_PIXEL )                                   \
+    if ( eUnitSource == MAP_PIXEL ) 									\
+        nDenominator *= 72; 											\
+    else if( eUnitDest == MAP_PIXEL )									\
         nNumerator *= 72
 
 // -----------------------------------------------------------------------
 
-#define ENTER4( rMapModeSource, rMapModeDest )                          \
-    ImplMapRes aMapResSource;                                           \
-    ImplMapRes aMapResDest;                                             \
+#define ENTER4( rMapModeSource, rMapModeDest )							\
+    ImplMapRes aMapResSource;											\
+    ImplMapRes aMapResDest; 											\
                                                                         \
-    ImplCalcMapResolution( rMapModeSource, 72, 72, aMapResSource );     \
+    ImplCalcMapResolution( rMapModeSource, 72, 72, aMapResSource ); 	\
     ImplCalcMapResolution( rMapModeDest, 72, 72, aMapResDest )
 
 // -----------------------------------------------------------------------
@@ -2026,8 +2113,8 @@ static long fn3( const long n1, const long n2, const long n3 )
     } // of if
     else
     {
-        long        n4 = n1 * n2;
-        const long  n3_2 = n3 / 2;
+        long		n4 = n1 * n2;
+        const long	n3_2 = n3 / 2;
 
         if( n4 < 0 )
         {
@@ -2103,7 +2190,7 @@ Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
 
 // -----------------------------------------------------------------------
 
-long* OutputDevice::LogicToLogic( long* pX, sal_uInt16 nCount,
+long* OutputDevice::LogicToLogic( long* pX, USHORT nCount,
                                   const MapMode* pMapModeSource,
                                   const MapMode* pMapModeDest ) const
 {
@@ -2129,7 +2216,7 @@ Point OutputDevice::LogicToLogic( const Point& rPtSource,
         return rPtSource;
 
     MapUnit eUnitSource = rMapModeSource.GetMapUnit();
-    MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
+    MapUnit eUnitDest	= rMapModeDest.GetMapUnit();
     ENTER2( eUnitSource, eUnitDest );
 
     if ( rMapModeSource.mpImplMapMode->mbSimple &&
@@ -2165,7 +2252,7 @@ Size OutputDevice::LogicToLogic( const Size& rSzSource,
         return rSzSource;
 
     MapUnit eUnitSource = rMapModeSource.GetMapUnit();
-    MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
+    MapUnit eUnitDest	= rMapModeDest.GetMapUnit();
     ENTER2( eUnitSource, eUnitDest );
 
     if ( rMapModeSource.mpImplMapMode->mbSimple &&
@@ -2199,7 +2286,7 @@ basegfx::B2DPolygon OutputDevice::LogicToLogic( const basegfx::B2DPolygon& rPoly
         return rPolySource;
 
     MapUnit eUnitSource = rMapModeSource.GetMapUnit();
-    MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
+    MapUnit eUnitDest	= rMapModeDest.GetMapUnit();
     ENTER2( eUnitSource, eUnitDest );
 
     basegfx::B2DHomMatrix aTransform;
@@ -2244,7 +2331,7 @@ basegfx::B2DPolyPolygon OutputDevice::LogicToLogic( const basegfx::B2DPolyPolygo
         return rPolySource;
 
     MapUnit eUnitSource = rMapModeSource.GetMapUnit();
-    MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
+    MapUnit eUnitDest	= rMapModeDest.GetMapUnit();
     ENTER2( eUnitSource, eUnitDest );
 
     basegfx::B2DHomMatrix aTransform;
@@ -2289,7 +2376,7 @@ Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
         return rRectSource;
 
     MapUnit eUnitSource = rMapModeSource.GetMapUnit();
-    MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
+    MapUnit eUnitDest	= rMapModeDest.GetMapUnit();
     ENTER2( eUnitSource, eUnitDest );
 
     if ( rMapModeSource.mpImplMapMode->mbSimple &&
@@ -2382,7 +2469,7 @@ long Window::ImplLogicUnitToPixelX( long nX, MapUnit eUnit )
 
         // Es wird kein BigInt gebraucht, da diese Funktion nur zur Umrechnung
         // von Fensterposition benutzt wird
-        nX  = nX * mnDPIX * pFrameData->maMapUnitRes.mnMapScNumX;
+        nX	= nX * mnDPIX * pFrameData->maMapUnitRes.mnMapScNumX;
         nX += nX >= 0 ?  (pFrameData->maMapUnitRes.mnMapScDenomX/2) :
                         -((pFrameData->maMapUnitRes.mnMapScDenomX-1)/2);
         nX /= pFrameData->maMapUnitRes.mnMapScDenomX;
@@ -2409,7 +2496,7 @@ long Window::ImplLogicUnitToPixelY( long nY, MapUnit eUnit )
 
         // Es wird kein BigInt gebraucht, da diese Funktion nur zur Umrechnung
         // von Fensterposition benutzt wird
-        nY  = nY * mnDPIY * pFrameData->maMapUnitRes.mnMapScNumY;
+        nY	= nY * mnDPIY * pFrameData->maMapUnitRes.mnMapScNumY;
         nY += nY >= 0 ?  (pFrameData->maMapUnitRes.mnMapScDenomY/2) :
                         -((pFrameData->maMapUnitRes.mnMapScDenomY-1)/2);
         nY /= pFrameData->maMapUnitRes.mnMapScDenomY;

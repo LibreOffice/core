@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,13 @@ namespace pdfi
         }
 
         virtual boost::shared_ptr<ElementTreeVisitor> createStyleCollectingVisitor(
-            StyleContainer& rStyles,
+            StyleContainer& rStyles, 
             PDFIProcessor&  rProc ) const
         {
             return boost::shared_ptr<ElementTreeVisitor>(new WriterXmlFinalizer(rStyles,rProc));
         }
 
-        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext, PDFIProcessor&) const
+        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext) const
         {
             return boost::shared_ptr<ElementTreeVisitor>(new WriterXmlEmitter(rEmitContext));
         }
@@ -67,18 +67,16 @@ namespace pdfi
         }
 
         virtual boost::shared_ptr<ElementTreeVisitor> createStyleCollectingVisitor(
-            StyleContainer& rStyles,
+            StyleContainer& rStyles, 
             PDFIProcessor&  rProc ) const
         {
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlFinalizer(rStyles,rProc));
         }
 
-        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext, PDFIProcessor& rProc) const
+        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext) const
         {
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlEmitter(rEmitContext,
-                                                                            DrawXmlEmitter::IMPRESS_DOC,
-                                                                            rProc
-                                                                            ));
+                                                                            DrawXmlEmitter::IMPRESS_DOC));
         }
     };
 
@@ -92,31 +90,29 @@ namespace pdfi
         }
 
         virtual boost::shared_ptr<ElementTreeVisitor> createStyleCollectingVisitor(
-            StyleContainer& rStyles,
+            StyleContainer& rStyles, 
             PDFIProcessor&  rProc ) const
         {
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlFinalizer(rStyles,rProc));
         }
 
-        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext, PDFIProcessor& rProc) const
+        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext) const
         {
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlEmitter(rEmitContext,
-                                                                            DrawXmlEmitter::DRAW_DOC,
-                                                                            rProc
-                                                                            ));
+                                                                            DrawXmlEmitter::DRAW_DOC));
         }
     };
 
-    TreeVisitorFactorySharedPtr createWriterTreeVisitorFactory()
-    {
+    TreeVisitorFactorySharedPtr createWriterTreeVisitorFactory() 
+    { 
         return TreeVisitorFactorySharedPtr(new WriterTreeVisitorFactory());
     }
     TreeVisitorFactorySharedPtr createImpressTreeVisitorFactory()
-    {
+    { 
         return TreeVisitorFactorySharedPtr(new ImpressTreeVisitorFactory());
     }
     TreeVisitorFactorySharedPtr createDrawTreeVisitorFactory()
-    {
+    { 
         return TreeVisitorFactorySharedPtr(new DrawTreeVisitorFactory());
     }
 }

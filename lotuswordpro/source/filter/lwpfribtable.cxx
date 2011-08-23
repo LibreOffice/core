@@ -76,9 +76,9 @@ LwpSuperTableLayout* LwpFribTable::GetSuperTable()
     return static_cast<LwpSuperTableLayout*>(m_objTable.obj());
 }
 
-void LwpFribTable::RegisterNewStyle()
+void LwpFribTable::RegisterStyle()
 {
-    GetSuperTable()->RegisterNewStyle();
+    GetSuperTable()->RegisterStyle();
     XFParaStyle* pOldStyle = m_pPara->GetXFParaStyle();
     if(HasNextFrib())
     {

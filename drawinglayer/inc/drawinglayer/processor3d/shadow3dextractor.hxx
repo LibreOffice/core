@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,30 +63,30 @@ namespace drawinglayer
             BasePrimitive2DVector*                          mpPrimitive2DSequence;
 
             /// object transformation for scene for 2d definition
-            basegfx::B2DHomMatrix                           maObjectTransformation;
+            basegfx::B2DHomMatrix							maObjectTransformation;
 
             /// prepared data (transformations) for 2D/3D shadow calculations
-            basegfx::B3DHomMatrix                           maWorldToEye;
-            basegfx::B3DHomMatrix                           maEyeToView;
-            basegfx::B3DVector                              maLightNormal;
-            basegfx::B3DVector                              maShadowPlaneNormal;
-            basegfx::B3DPoint                               maPlanePoint;
-            double                                          mfLightPlaneScalar;
+            basegfx::B3DHomMatrix							maWorldToEye;
+            basegfx::B3DHomMatrix							maEyeToView;
+            basegfx::B3DVector								maLightNormal;
+            basegfx::B3DVector								maShadowPlaneNormal;
+            basegfx::B3DPoint								maPlanePoint;
+            double											mfLightPlaneScalar;
 
             /*  the shadow color used for sub-primitives. Can stay at black since
                 the encapsulating 2d shadow primitive will contain the color
              */
-            basegfx::BColor                                 maPrimitiveColor;
+            basegfx::BColor									maPrimitiveColor;
 
             /// bitfield
             /// flag if shadow plane projection preparation leaded to valid results
-            unsigned                                        mbShadowProjectionIsValid : 1;
+            unsigned										mbShadowProjectionIsValid : 1;
 
             /// flag if conversion is switched on
-            unsigned                                        mbConvert : 1;
+            unsigned										mbConvert : 1;
 
             /// flag if conversion shall use projection
-            unsigned                                        mbUseProjection : 1;
+            unsigned										mbUseProjection : 1;
 
             /// local helpers
             basegfx::B2DPolygon impDoShadowProjection(const basegfx::B3DPolygon& rSource);

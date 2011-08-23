@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,9 +89,9 @@ namespace
                                 for(sal_uInt32 d(0); d < mnAntiAlialize; d++)
                                 {
                                     const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
-                                    nRed = nRed + rPixel.getRed();
-                                    nGreen = nGreen + rPixel.getGreen();
-                                    nBlue = nBlue + rPixel.getBlue();
+                                    nRed = nRed + rPixel.getRed(); 
+                                    nGreen = nGreen + rPixel.getGreen(); 
+                                    nBlue = nBlue + rPixel.getBlue(); 
                                     nOpacity = nOpacity + rPixel.getOpacity();
                                 }
 
@@ -99,12 +99,12 @@ namespace
                             }
 
                             nOpacity = nOpacity / nDivisor;
-
+                            
                             if(nOpacity)
                             {
                                 pContent->SetPixel(y, x, BitmapColor(
-                                    (sal_uInt8)(nRed / nDivisor),
-                                    (sal_uInt8)(nGreen / nDivisor),
+                                    (sal_uInt8)(nRed / nDivisor), 
+                                    (sal_uInt8)(nGreen / nDivisor), 
                                     (sal_uInt8)(nBlue / nDivisor)));
                                 pAlpha->SetPixel(y, x, BitmapColor(255 - (sal_uInt8)nOpacity));
                             }
@@ -114,7 +114,7 @@ namespace
                 else
                 {
                     sal_uInt32 nIndex(0L);
-
+    
                     for(sal_uInt32 y(0L); y < nHeight; y++)
                     {
                         for(sal_uInt32 x(0L); x < nWidth; x++)
@@ -150,27 +150,27 @@ namespace
 class ZBufferRasterConverter3D : public basegfx::RasterConverter3D
 {
 private:
-    const drawinglayer::processor3d::DefaultProcessor3D&    mrProcessor;
-    basegfx::BZPixelRaster&                                 mrBuffer;
+    const drawinglayer::processor3d::DefaultProcessor3D&	mrProcessor;
+    basegfx::BZPixelRaster&								    mrBuffer;
 
     // interpolators for a single line span
-    basegfx::ip_single                                      maIntZ;
-    basegfx::ip_triple                                      maIntColor;
-    basegfx::ip_triple                                      maIntNormal;
-    basegfx::ip_double                                      maIntTexture;
-    basegfx::ip_triple                                      maIntInvTexture;
+    basegfx::ip_single										maIntZ;
+    basegfx::ip_triple										maIntColor;
+    basegfx::ip_triple										maIntNormal;
+    basegfx::ip_double										maIntTexture;
+    basegfx::ip_triple										maIntInvTexture;
 
     // current material to use for ratsreconversion
     const drawinglayer::attribute::MaterialAttribute3D*     mpCurrentMaterial;
 
     // bitfield
     // some boolean flags for line span interpolator usages
-    unsigned                                                mbModifyColor : 1;
-    unsigned                                                mbUseTex : 1;
-    unsigned                                                mbHasTexCoor : 1;
-    unsigned                                                mbHasInvTexCoor : 1;
-    unsigned                                                mbUseNrm : 1;
-    unsigned                                                mbUseCol : 1;
+    unsigned												mbModifyColor : 1;
+    unsigned												mbUseTex : 1;
+    unsigned												mbHasTexCoor : 1;
+    unsigned												mbHasInvTexCoor : 1;
+    unsigned												mbUseNrm : 1;
+    unsigned												mbUseCol : 1;
 
     void getTextureCoor(basegfx::B2DPoint& rTarget) const
     {
@@ -233,7 +233,7 @@ private:
                 // e.g. bitmap textures have transparent parts
                 mrProcessor.getGeoTexSvx()->modifyBColor(aTexCoor, rColor, fOpacity);
             }
-
+            
             if(basegfx::fTools::more(fOpacity, 0.0) && mrProcessor.getTransparenceGeoTexSvx().get())
             {
                 // calc opacity. Object has a 2nd texture, a transparence texture
@@ -249,10 +249,10 @@ private:
                 {
                     // blend texture with phong
                     rColor = mrProcessor.getSdrLightingAttribute().solveColorModel(
-                        basegfx::B3DVector(maIntNormal.getX().getVal(), maIntNormal.getY().getVal(), maIntNormal.getZ().getVal()),
-                        rColor,
-                        mpCurrentMaterial->getSpecular(),
-                        mpCurrentMaterial->getEmission(),
+                        basegfx::B3DVector(maIntNormal.getX().getVal(), maIntNormal.getY().getVal(), maIntNormal.getZ().getVal()), 
+                        rColor, 
+                        mpCurrentMaterial->getSpecular(), 
+                        mpCurrentMaterial->getEmission(), 
                         mpCurrentMaterial->getSpecularIntensity());
                 }
                 else if(mbUseCol)
@@ -273,10 +273,10 @@ private:
                 {
                     // modify color with phong
                     rColor = mrProcessor.getSdrLightingAttribute().solveColorModel(
-                        basegfx::B3DVector(maIntNormal.getX().getVal(), maIntNormal.getY().getVal(), maIntNormal.getZ().getVal()),
-                        rColor,
-                        mpCurrentMaterial->getSpecular(),
-                        mpCurrentMaterial->getEmission(),
+                        basegfx::B3DVector(maIntNormal.getX().getVal(), maIntNormal.getY().getVal(), maIntNormal.getZ().getVal()), 
+                        rColor, 
+                        mpCurrentMaterial->getSpecular(), 
+                        mpCurrentMaterial->getEmission(), 
                         mpCurrentMaterial->getSpecularIntensity());
                 }
                 else if(mbUseCol)
@@ -359,7 +359,7 @@ private:
                 rCA.getZ().getVal(), (rCB.getZ().getVal() - rCA.getZ().getVal()) * xInvDelta);
         }
     }
-
+    
     virtual void processLineSpan(const basegfx::RasterConversionLineEntry3D& rA, const basegfx::RasterConversionLineEntry3D& rB, sal_Int32 nLine, sal_uInt32 nSpanCount);
 
 public:
@@ -397,11 +397,11 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
 
             if(nXA < nXB)
             {
-                // prepare the span interpolators
+                // prepare the span interpolators 
                 setupLineSpanInterpolators(rA, rB);
 
-                // bring span interpolators to start condition by incrementing with the possible difference of
-                // clamped and non-clamped XStart. Interpolators are setup relying on double precision
+                // bring span interpolators to start condition by incrementing with the possible difference of 
+                // clamped and non-clamped XStart. Interpolators are setup relying on double precision 
                 // X-values, so that difference is the correct value to compensate for possible clampings
                 incrementLineSpanInterpolators(static_cast<double>(nXA) - rA.getX().getVal());
 
@@ -420,7 +420,7 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
                     {
                         // detect color and opacity for this pixel
                         const sal_uInt16 nOpacity(::std::max((sal_Int16)0, static_cast< sal_Int16 >(decideColorAndOpacity(aNewColor) * 255.0)));
-
+                        
                         if(nOpacity > 0)
                         {
                             // avoid color overrun
@@ -444,7 +444,7 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
                                     rDest.setRed((sal_uInt8)(((rDest.getRed() * nTransparence) + ((sal_uInt16)(255.0 * aNewColor.getRed()) * nOpacity)) >> 8));
                                     rDest.setGreen((sal_uInt8)(((rDest.getGreen() * nTransparence) + ((sal_uInt16)(255.0 * aNewColor.getGreen()) * nOpacity)) >> 8));
                                     rDest.setBlue((sal_uInt8)(((rDest.getBlue() * nTransparence) + ((sal_uInt16)(255.0 * aNewColor.getBlue()) * nOpacity)) >> 8));
-
+                                    
                                     if(0xff != rDest.getOpacity())
                                     {
                                         // both are transparent, mix new opacity by using
@@ -479,7 +479,7 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
 // paint transparent rasterprimitives from back to front to ensure that the
 // mixing happens from back to front. For that purpose, transparent
 // rasterprimitives are held in this class during the processing run, remember
-// all data and will be rendered
+// all data and will be rendered 
 
 class RasterPrimitive3D
 {
@@ -604,6 +604,15 @@ namespace drawinglayer
                             aTransform.identity();
                             aTransform.scale(fScaleUp, fScaleUp, 1.0);
 
+                            if(false)
+                            {
+                                // when really want to go to single pixel lines, move to center.
+                                // Without this translation, all hor/ver hairlines will be centered exactly
+                                // between two pixel lines (which looks best)
+                                const double fTranslateToCenter(mnAntiAlialize * 0.5);
+                                aTransform.translate(fTranslateToCenter, fTranslateToCenter, 0.0);
+                            }
+
                             aSnappedHairline.transform(aTransform);
 
                             mpZBufferRasterConverter3D->rasterconvertB3DPolygon(aSnappedHairline, 0, mpBZPixelRaster->getHeight(), mnAntiAlialize);
@@ -651,17 +660,17 @@ namespace drawinglayer
                 }
             }
         }
-
+        
         ZBufferProcessor3D::ZBufferProcessor3D(
             const geometry::ViewInformation3D& rViewInformation3D,
-            const geometry::ViewInformation2D& rViewInformation2D,
+            const geometry::ViewInformation2D& rViewInformation2D, 
             const attribute::SdrSceneAttribute& rSdrSceneAttribute,
             const attribute::SdrLightingAttribute& rSdrLightingAttribute,
             double fSizeX,
             double fSizeY,
             const basegfx::B2DRange& rVisiblePart,
             sal_uInt16 nAntiAlialize)
-        :   DefaultProcessor3D(rViewInformation3D, rSdrSceneAttribute, rSdrLightingAttribute),
+        :	DefaultProcessor3D(rViewInformation3D, rSdrSceneAttribute, rSdrLightingAttribute),
             mpBZPixelRaster(0),
             maInvEyeToView(),
             mpZBufferRasterConverter3D(0),
@@ -709,8 +718,8 @@ namespace drawinglayer
                     // step two:
                     //
                     // bring from [0.0 .. 1.0] in X,Y and Z to view cordinates
-                    //
-                    // #i102611#
+                    // 
+                    // #i102611# 
                     // also: scale Z to [1.5 .. 65534.5]. Normally, a range of [0.0 .. 65535.0]
                     // could be used, but a 'unused' value is needed, so '0' is used what reduces
                     // the range to [1.0 .. 65535.0]. It has also shown that small numerical errors
@@ -765,7 +774,7 @@ namespace drawinglayer
 
             if(mpRasterPrimitive3Ds)
             {
-                OSL_FAIL("ZBufferProcessor3D: destructed, but there are unrendered transparent geometries. Use ZBufferProcessor3D::finish() to render these (!)");
+                OSL_ASSERT("ZBufferProcessor3D: destructed, but there are unrendered transparent geometries. Use ZBufferProcessor3D::finish() to render these (!)");
                 delete mpRasterPrimitive3Ds;
             }
         }
@@ -788,7 +797,7 @@ namespace drawinglayer
                     // paint each one by setting the remembered data and calling
                     // the render method
                     const RasterPrimitive3D& rCandidate = (*mpRasterPrimitive3Ds)[a];
-
+                    
                     mpGeoTexSvx = rCandidate.getGeoTexSvx();
                     mpTransparenceGeoTexSvx = rCandidate.getTransparenceGeoTexSvx();
                     mbModulate = rCandidate.getModulate();
@@ -798,13 +807,13 @@ namespace drawinglayer
                     if(rCandidate.getIsLine())
                     {
                         rasterconvertB3DPolygon(
-                            rCandidate.getMaterial(),
+                            rCandidate.getMaterial(), 
                             rCandidate.getPolyPolygon().getB3DPolygon(0));
                     }
                     else
                     {
                         rasterconvertB3DPolyPolygon(
-                            rCandidate.getMaterial(),
+                            rCandidate.getMaterial(), 
                             rCandidate.getPolyPolygon());
                     }
                 }

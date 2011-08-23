@@ -93,7 +93,7 @@ class EventQueue
                     }
                     catch( Throwable e )
                     {
-                        System.out.println(
+                        System.out.println( 
                             "caught exception during event delivery: " + e );
                         e.printStackTrace();
                     }
@@ -109,7 +109,7 @@ class EventQueue
                 }
             }
             catch (Exception e)
-            {
+            { 
                 // can't wait? odd!
                 System.err.println("Can't wait!");
                 e.printStackTrace();

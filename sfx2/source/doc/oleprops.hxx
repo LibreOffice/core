@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,6 +97,7 @@ const sal_Int32 CLIPFMT_WIN             = -1;
 const sal_Int32 CLIPDATAFMT_DIB         = 8;
 
 // ============================================================================
+// ============================================================================
 
 /** Helper for classes that need text encoding settings.
 
@@ -167,6 +168,8 @@ private:
     void                ImplSaveString16( SvStream& rStrm, const String& rValue ) const;
 };
 
+
+// ============================================================================
 // ============================================================================
 
 /** Base class for all classes related to OLE property sets.
@@ -210,6 +213,7 @@ private:
 };
 
 // ============================================================================
+// ============================================================================
 
 /** Base class for all OLE property objects. */
 class SfxOlePropertyBase : public SfxOleObjectBase
@@ -245,6 +249,7 @@ private:
 };
 
 // ============================================================================
+// ============================================================================
 
 /** Property containing custom names for other properties in the property set. */
 class SfxOleDictionaryProperty : public SfxOlePropertyBase, public SfxOleStringHelper
@@ -271,6 +276,7 @@ private:
     SfxOlePropNameMap   maPropNameMap;
 };
 
+// ============================================================================
 // ============================================================================
 
 /** A section in a property set. Contains properties with unique identifiers. */
@@ -355,6 +361,7 @@ private:
 typedef ::boost::shared_ptr< SfxOleSection > SfxOleSectionRef;
 
 // ============================================================================
+// ============================================================================
 
 /** Enumerates different section types in OLE property sets. */
 enum SfxOleSectionType
@@ -399,5 +406,6 @@ private:
     SfxOleSectionMap    maSectionMap;
 };
 
+//};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

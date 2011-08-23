@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef SFX_VIEWIMP_HXX
-#define SFX_VIEWIMP_HXX
+#ifndef _VIEWIMP_HXX
+#define _VIEWIMP_HXX
 
 // include ---------------------------------------------------------------
 
@@ -57,29 +57,28 @@ struct SfxViewShell_Impl
 {
     ::osl::Mutex                aMutex;
     ::cppu::OInterfaceContainerHelper aInterceptorContainer;
-    bool                        m_bControllerSet;
-    SfxShellArr_Impl            aArr;
+    BOOL						bControllerSet;
+    SfxShellArr_Impl			aArr;
     SvBorder                    aBorder;
     Size                        aOptimalSize;
-    Size                        aMargin;
-    sal_uInt16                      m_nPrinterLocks;
-    bool                        m_bCanPrint;
-    bool                        m_bHasPrintOptions;
-    bool                        m_bPlugInsActive;
-    bool                        m_bIsShowView;
-    // FIXME UNUSED ???
-    //bool                        m_bOwnsMenu;
-    bool                        m_bGotOwnership;
-    bool                        m_bGotFrameOwnership;
-    SfxScrollingMode            m_eScroll;
-    sal_uInt16                      m_nFamily;
-    ::rtl::Reference<SfxBaseController> m_pController;
-    ::std::auto_ptr< ::svt::AcceleratorExecute >    m_pAccExec;
+    Size						aMargin;
+    USHORT						nPrinterLocks;
+    BOOL						bCanPrint;
+    BOOL                        bHasPrintOptions;
+    BOOL						bPlugInsActive;
+    BOOL						bIsShowView;
+    BOOL                        bOwnsMenu;
+    BOOL                        bGotOwnerShip;
+    BOOL                        bGotFrameOwnerShip;
+    SfxScrollingMode			eScroll;
+    USHORT						nFamily;
+    SfxBaseController*          pController;
+    ::svt::AcceleratorExecute*  pAccExec;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;
     ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
     ::boost::shared_ptr< vcl::PrinterController > m_pPrinterController;
 
-    SfxViewShell_Impl(sal_uInt16 const nFlags);
+    SfxViewShell_Impl();
 };
 
 #endif

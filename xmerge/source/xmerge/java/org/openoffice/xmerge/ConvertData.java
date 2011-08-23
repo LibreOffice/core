@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ import java.util.Enumeration;
  *  class.  The <code>ConvertData</code> contains a <code>String</code>
  *  name and a <code>Vector</code> of <code>Document</code> objects.</p>
  *
- *  @author  Martin Maher
+ *  @author  Martin Maher 
  */
 public class ConvertData {
 
@@ -49,7 +49,7 @@ public class ConvertData {
      *  Name of the <code>ConvertData</code> object.
      */
     private String name;
-
+    
 
     /**
      *  Resets ConvertData.  This empties all <code>Document</code>
@@ -60,7 +60,7 @@ public class ConvertData {
         name = null;
                 v.removeAllElements();
     }
-
+        
     /**
      *  Returns the <code>Document</code> name.
      *
@@ -90,7 +90,7 @@ public class ConvertData {
         v.add(doc);
     }
 
-
+    
     /**
      *  Gets an <code>Enumeration</code> to access the <code>Vector</code>
      *  of <code>Document</code> objects.
@@ -105,7 +105,7 @@ public class ConvertData {
 
 
     /**
-     *  Gets the number of <code>Document</code> objects currently stored
+     *  Gets the number of <code>Document</code> objects currently stored 
      *
      *  @return  The number of <code>Document</code> objects currently
      *           stored.

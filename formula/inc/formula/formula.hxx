@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,27 +76,27 @@ protected:
 
 protected:
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual long	PreNotify( NotifyEvent& rNEvt );
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
-    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
-    void            RefInputDoneAfter( sal_Bool bForced = sal_False );
-    rtl::OString    FindFocusWin(Window *pWin);
-    void            SetFocusWin(Window *pWin,const rtl::OString& nUniqueId);
-    void            HighlightFunctionParas(const String& aFormula);
+    void	        RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
+    void	        RefInputDoneAfter( BOOL bForced = FALSE );
+    ULONG			FindFocusWin(Window *pWin);
+    void			SetFocusWin(Window *pWin,ULONG nUniqueId);
+    void			HighlightFunctionParas(const String& aFormula);
 
     void            SetMeText(const String& _sText);
-    FormulaDlgMode SetMeText(const String& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd,sal_Bool bMatrix,sal_Bool _bSelect,sal_Bool _bUpdate);
+    FormulaDlgMode SetMeText(const String& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd,BOOL bMatrix,BOOL _bSelect,BOOL _bUpdate);
     void            Update();
-    sal_Bool            CheckMatrix(String& aFormula /*IN/OUT*/);
+    BOOL            CheckMatrix(String& aFormula /*IN/OUT*/);
     String          GetMeText() const;
     void            Update(const String& _sExp);
     void            CheckMatrix();
-    void            DoEnter(sal_Bool _bOk);
-    sal_Bool            isUserMatrix() const;
-    const IFunctionDescription* getCurrentFunctionDescription() const;
-    sal_Bool            UpdateParaWin(Selection& _rSelection);
+    void            DoEnter(BOOL _bOk);
+    BOOL            isUserMatrix() const;
+    const IFunctionDescription*	getCurrentFunctionDescription() const;
+    BOOL            UpdateParaWin(Selection& _rSelection);
     void            UpdateParaWin(const Selection& _rSelection,const String& _sRefStr);
-    RefEdit*        GetActiveEdit();
+    RefEdit*	    GetActiveEdit();
     void            SetEdSelection();
 
     const FormulaHelper& GetFormulaHelper() const;
@@ -125,27 +125,27 @@ protected:
 
 protected:
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual long	PreNotify( NotifyEvent& rNEvt );
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
-    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
-    void            RefInputDoneAfter( sal_Bool bForced = sal_False );
-    rtl::OString    FindFocusWin(Window *pWin);
-    void            SetFocusWin(Window *pWin,const rtl::OString& nUniqueId);
-    void            HighlightFunctionParas(const String& aFormula);
+    void	        RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
+    void	        RefInputDoneAfter( BOOL bForced = FALSE );
+    ULONG			FindFocusWin(Window *pWin);
+    void			SetFocusWin(Window *pWin,ULONG nUniqueId);
+    void			HighlightFunctionParas(const String& aFormula);
 
     void            SetMeText(const String& _sText);
-    FormulaDlgMode SetMeText(const String& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd,sal_Bool bMatrix,sal_Bool _bSelect,sal_Bool _bUpdate);
+    FormulaDlgMode SetMeText(const String& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd,BOOL bMatrix,BOOL _bSelect,BOOL _bUpdate);
     void            Update();
-    sal_Bool            CheckMatrix(String& aFormula /*IN/OUT*/);
+    BOOL            CheckMatrix(String& aFormula /*IN/OUT*/);
     String          GetMeText() const;
     void            Update(const String& _sExp);
     void            CheckMatrix();
-    void            DoEnter(sal_Bool _bOk);
-    sal_Bool            isUserMatrix() const;
-    const IFunctionDescription* getCurrentFunctionDescription() const;
-    sal_Bool            UpdateParaWin(Selection& _rSelection);
+    void            DoEnter(BOOL _bOk);
+    BOOL            isUserMatrix() const;
+    const IFunctionDescription*	getCurrentFunctionDescription() const;
+    BOOL            UpdateParaWin(Selection& _rSelection);
     void            UpdateParaWin(const Selection& _rSelection,const String& _sRefStr);
-    RefEdit*        GetActiveEdit();
+    RefEdit*	    GetActiveEdit();
     void            SetEdSelection();
 
     const FormulaHelper& GetFormulaHelper() const;

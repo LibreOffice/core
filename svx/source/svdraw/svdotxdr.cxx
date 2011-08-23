@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@
 #include <svx/svddrag.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx> // fuer SetXPolyDirty in MovCreate bei SolidDragging
-#include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // Objektname
+#include "svdglob.hxx"  // Stringcache
+#include "svdstr.hrc"   // Objektname
 #include <svx/svdoashp.hxx>
 #include <tools/bigint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -162,7 +162,7 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
             }
         }
     }
-    if (!ISA(SdrObjCustomShape))        // not justifying for CustomShapes to be able to detect if a shape has to be mirrored
+    if (!ISA(SdrObjCustomShape))		// not justifying for CustomShapes to be able to detect if a shape has to be mirrored
         ImpJustifyRect(aTmpRect);
     return aTmpRect;
 }
@@ -177,21 +177,21 @@ bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
     if(aNewRect.TopLeft() != aRect.TopLeft() && (aGeo.nDrehWink || aGeo.nShearWink))
     {
         Point aNewPos(aNewRect.TopLeft());
-
-        if(aGeo.nShearWink)
+        
+        if(aGeo.nShearWink) 
             ShearPoint(aNewPos,aRect.TopLeft(),aGeo.nTan);
 
-        if(aGeo.nDrehWink)
+        if(aGeo.nDrehWink) 
             RotatePoint(aNewPos,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
 
         aNewRect.SetPos(aNewPos);
     }
 
-    if(aNewRect != aRect)
+    if(aNewRect != aRect) 
     {
           NbcSetLogicRect(aNewRect);
     }
-
+    
     return true;
 }
 
@@ -223,7 +223,7 @@ bool SdrTextObj::MovCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     aRect=aRect1; // fuer ObjName
     SetBoundRectDirty();
-    bSnapRectDirty=sal_True;
+    bSnapRectDirty=TRUE;
     if (HAS_BASE(SdrRectObj,this)) {
         ((SdrRectObj*)this)->SetXPolyDirty();
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,18 +52,18 @@
 class SvpSalYieldMutex : public ::vcl::SolarMutexObject
 {
 protected:
-    sal_uLong                                       mnCount;
-    oslThreadIdentifier mnThreadId;
+    ULONG										mnCount;
+    oslThreadIdentifier	mnThreadId;
 
 public:
                                                 SvpSalYieldMutex();
 
-    virtual void                                acquire();
-    virtual void                                release();
-    virtual sal_Bool                            tryToAcquire();
+    virtual void								acquire();
+    virtual void								release();
+    virtual sal_Bool 							tryToAcquire();
 
-    sal_uLong                                       GetAcquireCount() const { return mnCount; }
-    oslThreadIdentifier GetThreadId() const { return mnThreadId; }
+    ULONG										GetAcquireCount() const { return mnCount; }
+    oslThreadIdentifier	GetThreadId() const { return mnThreadId; }
 };
 
 // ---------------
@@ -78,7 +78,7 @@ public:
     virtual ~SvpSalTimer();
 
     // overload all pure virtual methods
-    virtual void Start( sal_uLong nMS );
+    virtual void Start( ULONG nMS );
     virtual void Stop();
 };
 
@@ -88,19 +88,19 @@ public:
 class SvpSalFrame;
 class SvpSalInstance : public SalInstance
 {
-    timeval             m_aTimeout;
-    sal_uLong               m_nTimeoutMS;
+    timeval			    m_aTimeout;
+    ULONG               m_nTimeoutMS;
     int                 m_pTimeoutFDS[2];
     SvpSalYieldMutex    m_aYieldMutex;
 
     // internal event queue
     struct SalUserEvent
     {
-        const SalFrame*     m_pFrame;
-        void*               m_pData;
-        sal_uInt16         m_nEvent;
-
-        SalUserEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT )
+        const SalFrame*		m_pFrame;
+        void*			    m_pData;
+        USHORT			   m_nEvent;
+        
+        SalUserEvent( const SalFrame* pFrame, void* pData, USHORT nEvent = SALEVENT_USEREVENT ) 
                 : m_pFrame( pFrame ),
                   m_pData( pData ),
                   m_nEvent( nEvent )
@@ -109,7 +109,7 @@ class SvpSalInstance : public SalInstance
 
     oslMutex        m_aEventGuard;
     std::list< SalUserEvent > m_aUserEvents;
-
+    
     std::list< SalFrame* > m_aFrames;
 
     bool isFrameAlive( const SalFrame* pFrame ) const;
@@ -119,84 +119,85 @@ public:
 
     SvpSalInstance();
     virtual ~SvpSalInstance();
-
-    void PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
-    void CancelEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
-
-    void StartTimer( sal_uLong nMS );
+    
+    void PostEvent( const SalFrame* pFrame, void* pData, USHORT nEvent );
+    void CancelEvent( const SalFrame* pFrame, void* pData, USHORT nEvent );
+    
+    void StartTimer( ULONG nMS );
     void StopTimer();
     void Wakeup();
-
+    
     void registerFrame( SalFrame* pFrame ) { m_aFrames.push_back( pFrame ); }
     void deregisterFrame( SalFrame* pFrame );
     const std::list< SalFrame* >& getFrames() const { return m_aFrames; }
-
+    
     bool            CheckTimeout( bool bExecuteTimers = true );
 
     // Frame
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uLong nStyle );
-    virtual void            DestroyFrame( SalFrame* pFrame );
+    virtual SalFrame*      	CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
+    virtual SalFrame*      	CreateFrame( SalFrame* pParent, ULONG nStyle );
+    virtual void			DestroyFrame( SalFrame* pFrame );
 
     // Object (System Child Window)
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
-    virtual void            DestroyObject( SalObject* pObject );
+    virtual SalObject*		CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE );
+    virtual void			DestroyObject( SalObject* pObject );
 
     // VirtualDevice
     // nDX and nDY in Pixel
     // nBitCount: 0 == Default(=as window) / 1 == Mono
     // pData allows for using a system dependent graphics or device context
-    virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
+    virtual SalVirtualDevice*	CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
-                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
-    virtual void                DestroyVirtualDevice( SalVirtualDevice* pDevice );
+                                                     USHORT nBitCount, const SystemGraphicsData *pData = NULL );
+    virtual void				DestroyVirtualDevice( SalVirtualDevice* pDevice );
 
     // Printer
     // pSetupData->mpDriverData can be 0
     // pSetupData must be updatet with the current
     // JobSetup
-    virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
+    virtual SalInfoPrinter*	CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData );
-    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter );
-    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter );
-    virtual void            DestroyPrinter( SalPrinter* pPrinter );
+    virtual void			DestroyInfoPrinter( SalInfoPrinter* pPrinter );
+    virtual SalPrinter*		CreatePrinter( SalInfoPrinter* pInfoPrinter );
+    virtual void			DestroyPrinter( SalPrinter* pPrinter );
 
-    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList );
-    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
-    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
+    virtual void			GetPrinterQueueInfo( ImplPrnQueueList* pList );
+    virtual void			GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
+    virtual void			DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
     virtual String          GetDefaultPrinter();
 
     // SalTimer
-    virtual SalTimer*       CreateSalTimer();
+    virtual SalTimer*		CreateSalTimer();
     // SalI18NImeStatus
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     // SalSystem
-    virtual SalSystem*      CreateSalSystem();
+    virtual SalSystem*		CreateSalSystem();
     // SalBitmap
-    virtual SalBitmap*      CreateSalBitmap();
+    virtual SalBitmap*		CreateSalBitmap();
 
     // YieldMutex
     virtual osl::SolarMutex* GetYieldMutex();
-    virtual sal_uLong           ReleaseYieldMutex();
-    virtual void            AcquireYieldMutex( sal_uLong nCount );
-    virtual bool            CheckYieldMutex();
+    virtual ULONG			ReleaseYieldMutex();
+    virtual void			AcquireYieldMutex( ULONG nCount );
 
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)
     // and timer
-    virtual void            Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual bool            AnyInput( sal_uInt16 nType );
+    virtual void			Yield( bool bWait, bool bHandleAllCurrentEvents );
+    virtual bool			AnyInput( USHORT nType );
+
+                            // Menues
+    virtual SalMenu*        CreateMenu( BOOL bMenuBar );
+    virtual void            DestroyMenu( SalMenu* pMenu);
+    virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData );
+    virtual void            DestroyMenuItem( SalMenuItem* pItem );
 
     // may return NULL to disable session management
-    virtual SalSession*     CreateSalSession();
+    virtual SalSession*		CreateSalSession();
 
-    virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
+    virtual void*			GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
 
     virtual void            AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
-
-    virtual void updatePrinterUpdate();
-    virtual void jobStartedPrinterUpdate();
-    virtual void jobEndedPrinterUpdate();
 };
 
 #endif // _SV_SALINST_HXX

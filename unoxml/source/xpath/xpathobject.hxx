@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,50 +26,40 @@
  *
  ************************************************************************/
 
-#ifndef XPATH_XPATHOBJECT_HXX
-#define XPATH_XPATHOBJECT_HXX
+#ifndef _XPATHOBJECT_HXX
+#define _XPATHOBJECT_HXX
 
-#include <boost/shared_ptr.hpp>
-
-#include <libxml/tree.h>
-#include <libxml/xpath.h>
-
+#include <map>
 #include <sal/types.h>
-#include <rtl/ref.hxx>
-
 #include <cppuhelper/implbase1.hxx>
-
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
-
+#include <libxml/tree.h>
+#include <libxml/xpath.h>
+#include <boost/shared_ptr.hpp>
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::xpath;
-
-
-namespace DOM {
-    class CDocument;
-}
 
 namespace XPath
 {
     class CXPathObject : public cppu::WeakImplHelper1< XXPathObject >
     {
     private:
-        ::rtl::Reference< DOM::CDocument > const m_pDocument;
-        ::osl::Mutex & m_rMutex;
-        boost::shared_ptr<xmlXPathObject> const m_pXPathObj;
-        XPathObjectType const m_XPathObjectType;
+    boost::shared_ptr<xmlXPathObject> m_pXPathObj;
+    const Reference< XNode > m_xContextNode;
+    XPathObjectType m_xPathObjectType;
 
     public:
-        CXPathObject( ::rtl::Reference<DOM::CDocument> const& pDocument,
-            ::osl::Mutex & rMutex,
-            ::boost::shared_ptr<xmlXPathObject> const& pXPathObj);
+    CXPathObject(xmlXPathObjectPtr xpathObj, const Reference< XNode >& contextNode);
 
-    /**
+    /**      
         get object type
     */
     virtual XPathObjectType SAL_CALL getObjectType() throw (RuntimeException);
@@ -77,8 +67,7 @@ namespace XPath
     /**
         get the nodes from a nodelist type object
     */
-    virtual Reference< XNodeList > SAL_CALL getNodeList()
-        throw (RuntimeException);
+    virtual Reference< XNodeList > SAL_CALL getNodeList() throw (RuntimeException);
 
      /**
         get value of a boolean object
@@ -119,7 +108,7 @@ namespace XPath
         get string value
     */
     virtual OUString SAL_CALL getString() throw (RuntimeException);
-
+    
     };
 }
 

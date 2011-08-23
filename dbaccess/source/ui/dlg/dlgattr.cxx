@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ using namespace dbaui;
 
 DBG_NAME(SbaSbAttrDlg)
 //==================================================================
-SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumberFormatter* pFormatter, sal_uInt16 nFlags, sal_Bool bRow)
+SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumberFormatter* pFormatter, USHORT nFlags, BOOL bRow)
              : SfxTabDialog(pParent, ModuleRes( DLG_ATTR ), pCellAttrs )
              ,aTitle(ModuleRes(ST_ROW))
 {
@@ -63,7 +63,8 @@ SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumb
         SetText(aTitle);
     if( nFlags & TP_ATTR_CHAR )
     {
-        OSL_FAIL( "found flag TP_ATTR_CHAR" );
+//        AddTabPage( RID_SVXPAGE_CHAR_STD,String(ModuleRes(TP_ATTR_CHAR)),SvxCharStdPage::Create,            0 );
+        DBG_ERROR( "found flag TP_ATTR_CHAR" );
     }
     if( nFlags & TP_ATTR_NUMBER )
         AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ModuleRes(TP_ATTR_NUMBER)) );
@@ -88,18 +89,21 @@ void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
     {
         case RID_SVXPAGE_NUMBERFORMAT:
         {
-            aSet.Put (SvxNumberInfoItem( pNumberInfoItem->GetNumberFormatter(), (const sal_uInt16)SID_ATTR_NUMBERFORMAT_INFO));
+            aSet.Put (SvxNumberInfoItem( pNumberInfoItem->GetNumberFormatter(), (const USHORT)SID_ATTR_NUMBERFORMAT_INFO));
             rTabPage.PageCreated(aSet);
         }
         break;
 
         case RID_SVXPAGE_CHAR_STD:
         {
+            //	((SvxCharStdPage&)rTabPage).SetFontList(SBA_MOD_EXT()->FontListItem());
         }
         break;
 
         case RID_SVXPAGE_ALIGNMENT:
         {
+//           aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, WBA_NO_ORIENTATION|WBA_NO_LINEBREAK|WBA_NO_GRIDLINES|WBA_NO_VERTICAL|WBA_NO_LEFTINDENT));
+//           rTabPage.PageCreated(aSet);
         }
         break;
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@
 #include "tablelayouter.hxx"
 #include "cell.hxx"
 #include "svx/svdmodel.hxx"
-#include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdstr.hrc"
+#include "svdglob.hxx"
 
 // -----------------------------------------------------------------------------
 
@@ -250,9 +250,9 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::SvmxTableController::GetMergedSelection(), exception caught!");
+        DBG_ERROR("sdr::table::SvmxTableController::GetMergedSelection(), exception caught!");
     }
-    return false;
+    return false;	
 }
 
 // -----------------------------------------------------------------------------
@@ -268,7 +268,7 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
 
     SdrModel* pModel = mxTable->getSdrTableObj()->GetModel();
     const bool bUndo = pModel && mxTable->getSdrTableObj()->IsInserted() && pModel->IsUndoEnabled();
-
+    
     if( bUndo )
         pModel->BegUndo( ImpGetResStr(STR_TABLE_MERGE) );
 
@@ -280,12 +280,12 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::CellCursor::merge(), exception caught!");
+        DBG_ERROR("sdr::table::CellCursor::merge(), exception caught!");
     }
 
     if( bUndo )
         pModel->EndUndo();
-
+    
     if( pModel )
         pModel->SetChanged();
 }
@@ -295,7 +295,7 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
 void CellCursor::split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< sal_Int32 >& rLeftOvers )
 {
     const sal_Int32 nRowCount = mxTable->getRowCount();
-
+    
     sal_Int32 nNewCols = 0, nRow;
 
     // first check how many columns we need to add
@@ -343,7 +343,7 @@ void CellCursor::split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< 
             }
         }
         else
-        {
+        {			
             sal_Int32 nRowSpan = xCell->getRowSpan() - 1;
             sal_Int32 nColSpan = xCell->getColumnSpan() - 1;
 
@@ -411,7 +411,7 @@ void CellCursor::split_horizontal( sal_Int32 nColumns )
 void CellCursor::split_row( sal_Int32 nRow, sal_Int32 nRows, std::vector< sal_Int32 >& rLeftOvers )
 {
     const sal_Int32 nColCount = mxTable->getColumnCount();
-
+    
     sal_Int32 nNewRows = 0, nCol;
 
     // first check how many columns we need to add
@@ -459,7 +459,7 @@ void CellCursor::split_row( sal_Int32 nRow, sal_Int32 nRows, std::vector< sal_In
             }
         }
         else
-        {
+        {			
             sal_Int32 nRowSpan = xCell->getRowSpan() - 1;
             sal_Int32 nColSpan = xCell->getColumnSpan() - 1;
 
@@ -550,13 +550,13 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::CellCursor::split(), exception caught!");
+        DBG_ERROR("sdr::table::CellCursor::split(), exception caught!");
         throw NoSupportException();
     }
 
     if( bUndo )
         pModel->EndUndo();
-
+        
     if( pModel )
         pModel->SetChanged();
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OAdabasTable::OAdabasTable( sdbcx::OCollection* _pTables,
+OAdabasTable::OAdabasTable(	sdbcx::OCollection* _pTables,
                            OAdabasConnection* _pConnection)
     :OTable_TYPEDEF(_pTables,_pConnection,sal_True)
     ,m_pConnection(_pConnection)
@@ -65,14 +65,14 @@ OAdabasTable::OAdabasTable( sdbcx::OCollection* _pTables,
     construct();
 }
 // -------------------------------------------------------------------------
-OAdabasTable::OAdabasTable( sdbcx::OCollection* _pTables,
+OAdabasTable::OAdabasTable(	sdbcx::OCollection* _pTables,
                            OAdabasConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description ,
                     const ::rtl::OUString& _SchemaName,
                     const ::rtl::OUString& _CatalogName
-                ) : OTableHelper(   _pTables,
+                ) : OTableHelper(	_pTables,
                                     _pConnection,
                                     sal_True,
                                     _Name,
@@ -152,27 +152,27 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
             // first check the types
             sal_Int32 nOldType = 0,nNewType = 0,nOldPrec = 0,nNewPrec = 0,nOldScale = 0,nNewScale = 0;
 
-            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))         >>= nOldType;
-            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))    >>= nNewType;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))			>>= nOldType;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))	>>= nNewType;
             // and precsions and scale
-            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))    >>= nOldPrec;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))	>>= nOldPrec;
             descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))>>= nNewPrec;
-            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))        >>= nOldScale;
-            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))   >>= nNewScale;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))		>>= nOldScale;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))	>>= nNewScale;
 
             if(nOldType != nNewType || nOldPrec != nNewPrec || nOldScale != nNewScale)
                 alterColumnType(colName,descriptor);
 
             // second: check the "is nullable" value
             sal_Int32 nOldNullable = 0,nNewNullable = 0;
-            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))       >>= nOldNullable;
-            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))  >>= nNewNullable;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))		>>= nOldNullable;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))	>>= nNewNullable;
             if(nNewNullable != nOldNullable)
                 alterNotNullValue(nNewNullable,colName);
 
             // third: check the default values
             ::rtl::OUString sNewDefault,sOldDefault;
-            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))		>>= sOldDefault;
             descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
 
             if(sOldDefault.getLength())
@@ -193,10 +193,10 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
                 const ::rtl::OUString sQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
                 const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
-                ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "RENAME COLUMN " )) ;
+                ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("RENAME COLUMN ") ;
                 sSql += ::dbtools::quoteName(sQuote,m_SchemaName) + sDot + ::dbtools::quoteName(sQuote,m_Name);
                 sSql += sDot + ::dbtools::quoteName(sQuote,colName);
-                sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TO "));
+                sSql += ::rtl::OUString::createFromAscii(" TO ");
                 sSql += ::dbtools::quoteName(sQuote,sNewColumnName);
 
                 Reference< XStatement > xStmt = m_pConnection->createStatement(  );
@@ -241,7 +241,7 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
 void OAdabasTable::alterColumnType(const ::rtl::OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart(_rColName);
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+    sSql += ::rtl::OUString::createFromAscii(" ");
     sSql += OTables::getColumnSqlType(_xDescriptor);
 
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
@@ -258,11 +258,11 @@ void OAdabasTable::alterNotNullValue(sal_Int32 _nNewNullable,const ::rtl::OUStri
 
     if(_nNewNullable == ColumnValue::NO_NULLS)
     {
-        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT NULL"));
+        sSql += ::rtl::OUString::createFromAscii(" NOT NULL");
     }
     else
     {
-        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DEFAULT NULL"));
+        sSql += ::rtl::OUString::createFromAscii(" DEFAULT NULL");
     }
 
     Reference< XStatement > xStmt = m_pConnection->createStatement();
@@ -276,7 +276,7 @@ void OAdabasTable::alterNotNullValue(sal_Int32 _nNewNullable,const ::rtl::OUStri
 void OAdabasTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart(_rColName);
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER ")) + _sNewDefault;
+    sSql += ::rtl::OUString::createFromAscii(" ALTER ") + _sNewDefault;
 
     Reference< XStatement > xStmt = m_pConnection->createStatement();
     if(xStmt.is())
@@ -289,7 +289,7 @@ void OAdabasTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const :
 void OAdabasTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart(_rColName);
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP DEFAULT"));
+    sSql += ::rtl::OUString::createFromAscii(" DROP DEFAULT");
 
     Reference< XStatement > xStmt = m_pConnection->createStatement();
     if(xStmt.is())
@@ -302,7 +302,7 @@ void OAdabasTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 void OAdabasTable::addDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart(_rColName);
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ADD ")) + _sNewDefault;
+    sSql += ::rtl::OUString::createFromAscii(" ADD ") + _sNewDefault;
 
     Reference< XStatement > xStmt = m_pConnection->createStatement();
     if(xStmt.is())
@@ -319,7 +319,7 @@ void OAdabasTable::beginTransAction()
         Reference< XStatement > xStmt = m_pConnection->createStatement();
         if(xStmt.is())
         {
-            xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SUBTRANS BEGIN")) );
+            xStmt->execute(::rtl::OUString::createFromAscii("SUBTRANS BEGIN") );
             ::comphelper::disposeComponent(xStmt);
         }
     }
@@ -335,7 +335,7 @@ void OAdabasTable::endTransAction()
         Reference< XStatement > xStmt = m_pConnection->createStatement();
         if(xStmt.is())
         {
-            xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SUBTRANS END")) );
+            xStmt->execute(::rtl::OUString::createFromAscii("SUBTRANS END") );
             ::comphelper::disposeComponent(xStmt);
         }
     }
@@ -351,7 +351,7 @@ void OAdabasTable::rollbackTransAction()
         Reference< XStatement > xStmt = m_pConnection->createStatement();
         if(xStmt.is())
         {
-            xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SUBTRANS ROLLBACK")) );
+            xStmt->execute(::rtl::OUString::createFromAscii("SUBTRANS ROLLBACK") );
             ::comphelper::disposeComponent(xStmt);
         }
     }
@@ -362,12 +362,12 @@ void OAdabasTable::rollbackTransAction()
 // -----------------------------------------------------------------------------
 ::rtl::OUString OAdabasTable::getAlterTableColumnPart(const ::rtl::OUString& _rsColumnName )
 {
-    ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
+    ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
     const ::rtl::OUString sQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
     sSql += ::dbtools::quoteName(sQuote,m_SchemaName) + sDot + ::dbtools::quoteName(sQuote,m_Name)
-         + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" COLUMN "))
+         + ::rtl::OUString::createFromAscii(" COLUMN ")
          + ::dbtools::quoteName(sQuote,_rsColumnName);
     return sSql;
 }

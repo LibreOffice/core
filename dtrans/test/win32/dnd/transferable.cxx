@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "transferable.hxx"
 
 //----------------------------------------------------------------
-//  ctor
+//	ctor
 //----------------------------------------------------------------
 
 
@@ -41,29 +41,29 @@ CTransferable::CTransferable( wchar_t* dataString ) :
     m_Data( dataString )
 {
     DataFlavor df;
-
+    
     /*
     df.MimeType = L"text/plain; charset=unicode";
     df.DataType = getCppuType( ( OUString* )0 );
 
     m_seqDFlv[0] = df;
     */
-
+    
     //df.MimeType = L"text/plain; charset=windows1252";
     df.MimeType = L"text/plain";
     df.DataType = getCppuType( ( Sequence< sal_Int8 >* )0 );
 
 
-    m_seqDFlv[0] = df;
+    m_seqDFlv[0] = df;	
 }
 
 //----------------------------------------------------------------
-//  getTransferData
+//	getTransferData
 //----------------------------------------------------------------
 
-Any SAL_CALL CTransferable::getTransferData( const DataFlavor& aFlavor )
+Any SAL_CALL CTransferable::getTransferData( const DataFlavor& aFlavor ) 
     throw(UnsupportedFlavorException, IOException, RuntimeException)
-{
+{	
     Any anyData;
 
     /*if ( aFlavor == m_seqDFlv[0] )
@@ -86,20 +86,20 @@ Any SAL_CALL CTransferable::getTransferData( const DataFlavor& aFlavor )
 }
 
 //----------------------------------------------------------------
-//  getTransferDataFlavors
+//	getTransferDataFlavors
 //----------------------------------------------------------------
 
-Sequence< DataFlavor > SAL_CALL CTransferable::getTransferDataFlavors(  )
+Sequence< DataFlavor > SAL_CALL CTransferable::getTransferDataFlavors(  ) 
     throw(RuntimeException)
 {
     return m_seqDFlv;
 }
 
 //----------------------------------------------------------------
-//  isDataFlavorSupported
+//	isDataFlavorSupported
 //----------------------------------------------------------------
 
-sal_Bool SAL_CALL CTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
+sal_Bool SAL_CALL CTransferable::isDataFlavorSupported( const DataFlavor& aFlavor ) 
     throw(RuntimeException)
 {
     sal_Int32 nLength = m_seqDFlv.getLength( );
@@ -118,10 +118,10 @@ sal_Bool SAL_CALL CTransferable::isDataFlavorSupported( const DataFlavor& aFlavo
 }
 
 //----------------------------------------------------------------
-//  lostOwnership
+//	lostOwnership
 //----------------------------------------------------------------
 
-void SAL_CALL CTransferable::lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans )
+void SAL_CALL CTransferable::lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans ) 
     throw(RuntimeException)
 {
 }

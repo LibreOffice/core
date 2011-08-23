@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_UNDO_FLY_STR_ATTR_HXX
-#define SW_UNDO_FLY_STR_ATTR_HXX
+#ifndef _UNDO_FLY_STR_ATTR_HXX
+#define _UNDO_FLY_STR_ATTR_HXX
 
 #include <undobj.hxx>
 #include <swundo.hxx>
@@ -43,8 +43,9 @@ class SwUndoFlyStrAttr : public SwUndo
                           const String& sNewStr );
         virtual ~SwUndoFlyStrAttr();
 
-        virtual void UndoImpl( ::sw::UndoRedoContext & );
-        virtual void RedoImpl( ::sw::UndoRedoContext & );
+        virtual void Undo( SwUndoIter & rIt );
+        virtual void Redo( SwUndoIter & rIt );
+        virtual void Repeat( SwUndoIter & rIt );
 
         virtual SwRewriter GetRewriter() const;
 
@@ -54,6 +55,6 @@ class SwUndoFlyStrAttr : public SwUndo
         const String msNewStr;
 };
 
-#endif // SW_UNDO_FLY_STR_ATTR_HXX
+#endif // _UNDO_FLY_STR_ATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

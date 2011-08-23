@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ namespace logging
         //----------------------------------------------------------------
         void    lcl_transformFileHandlerSettings_nothrow( const Reference< XLogger >& _rxLogger, const ::rtl::OUString& _rSettingName, Any& _inout_rSettingValue )
         {
-            if ( !_rSettingName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileURL" ) ) )
+            if ( !_rSettingName.equalsAscii( "FileURL" ) )
                 // not interested in this setting
                 return;
 

@@ -56,7 +56,7 @@
 /*****************************************************************************
 * Change History
 * <<Date>> <<Name of editor>> <<Description>>
-2005/2      draft code for chart stream helpers
+2005/2		draft code for chart stream helpers
 ****************************************************************************/
 
 /**
@@ -118,7 +118,7 @@ public:
 
     static INT32 GetStreamLen(SvStream* pStream);
 
-    static void MakeChartStorage(   SvStream* pStream,
+    static void MakeChartStorage(	SvStream* pStream,
         Rectangle aChartRect,
         SvInPlaceObjectRef& xIPObj,
         SvStorageRef& xStorage);
@@ -132,13 +132,13 @@ public:
     static const char* GetChartName(LwpObjectID* pID);
 
 public:
-    static void ParseChart( LwpSvStream* pDocStream,
+    static void ParseChart(	LwpSvStream* pDocStream,
                             LwpObjectID* pID,
                             Rectangle aRectIn100thMM,
                             XFRect aRectInCM,
                             IXFStream* pOutputStream);
     //Added by  for XFConvert refactor, 03/31/2005
-    static void ParseChart( LwpSvStream* pDocStream,
+    static void ParseChart(	LwpSvStream* pDocStream,
                             LwpObjectID* pID,
                             Rectangle aRectIn100thMM,
                             XFRect aRectInCM,

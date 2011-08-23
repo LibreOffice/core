@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include "hints.hxx"
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
-#include "txtfrm.hxx"       //fuer IsLocked()
+#include "txtfrm.hxx"		//fuer IsLocked()
 #include "flyfrms.hxx"
 // OD 2004-01-19 #110582#
 #include <dflyobj.hxx>
@@ -47,13 +47,16 @@ void DeepCalc( const SwFrm *pFrm );
 
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::SwFlyInCntFrm(), ~SwFlyInCntFrm()
+|*	SwFlyInCntFrm::SwFlyInCntFrm(), ~SwFlyInCntFrm()
+|*
+|*	Ersterstellung		MA 01. Dec. 92
+|*	Letzte Aenderung	MA 09. Apr. 99
 |*
 |*************************************************************************/
-SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
-    SwFlyFrm( pFmt, pSib, pAnch )
+SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
+    SwFlyFrm( pFmt, pAnch )
 {
-    bInCnt = bInvalidLayout = bInvalidCntnt = sal_True;
+    bInCnt = bInvalidLayout = bInvalidCntnt = TRUE;
     SwTwips nRel = pFmt->GetVertOrient().GetPos();
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
     Point aRelPos;
@@ -79,7 +82,10 @@ TYPEINIT1(SwFlyInCntFrm,SwFlyFrm);
 // <--
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::SetRefPoint(),
+|*	SwFlyInCntFrm::SetRefPoint(),
+|*
+|*	Ersterstellung		MA 01. Dec. 92
+|*	Letzte Aenderung	MA 06. Aug. 95
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
@@ -103,8 +109,8 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
     if( pNotify )
     {
         InvalidatePage();
-        bValidPos = sal_False;
-        bInvalid  = sal_True;
+        bValidPos = FALSE;
+        bInvalid  = TRUE;
         Calc();
         delete pNotify;
     }
@@ -112,19 +118,22 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
 
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::Modify()
+|*	SwFlyInCntFrm::Modify()
+|*
+|*	Ersterstellung		MA 16. Dec. 92
+|*	Letzte Aenderung	MA 02. Sep. 93
 |*
 |*************************************************************************/
-void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
-    sal_Bool bCallPrepare = sal_False;
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    BOOL bCallPrepare = FALSE;
+    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     if( RES_ATTRSET_CHG == nWhich )
     {
         if( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
-            GetItemState( RES_SURROUND, sal_False ) ||
+            GetItemState( RES_SURROUND, FALSE ) ||
             SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
-            GetItemState( RES_FRMMACRO, sal_False ) )
+            GetItemState( RES_FRMMACRO, FALSE ) )
         {
             SwAttrSetChg aOld( *(SwAttrSetChg*)pOld );
             SwAttrSetChg aNew( *(SwAttrSetChg*)pNew );
@@ -136,19 +145,19 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             if( aNew.Count() )
             {
                 SwFlyFrm::Modify( &aOld, &aNew );
-                bCallPrepare = sal_True;
+                bCallPrepare = TRUE;
             }
         }
         else if( ((SwAttrSetChg*)pNew)->GetChgSet()->Count())
         {
             SwFlyFrm::Modify( pOld, pNew );
-            bCallPrepare = sal_True;
+            bCallPrepare = TRUE;
         }
     }
     else if( nWhich != RES_SURROUND && RES_FRMMACRO != nWhich )
     {
         SwFlyFrm::Modify( pOld, pNew );
-        bCallPrepare = sal_True;
+        bCallPrepare = TRUE;
     }
 
     if ( bCallPrepare && GetAnchorFrm() )
@@ -156,19 +165,21 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 }
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::Format()
+|*	SwFlyInCntFrm::Format()
 |*
-|*  Beschreibung:       Hier wird der Inhalt initial mit Formatiert.
+|*	Beschreibung:		Hier wird der Inhalt initial mit Formatiert.
+|*	Ersterstellung		MA 16. Dec. 92
+|*	Letzte Aenderung	MA 19. May. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 {
     if ( !Frm().Height() )
     {
-        Lock(); //nicht hintenherum den Anker formatieren.
+        Lock();	//nicht hintenherum den Anker formatieren.
         SwCntntFrm *pCntnt = ContainsCntnt();
         while ( pCntnt )
-        {   pCntnt->Calc();
+        {	pCntnt->Calc();
             pCntnt = pCntnt->GetNextCntntFrm();
         }
         Unlock();
@@ -177,11 +188,13 @@ void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 }
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::MakeFlyPos()
+|*	SwFlyInCntFrm::MakeFlyPos()
 |*
-|*  Beschreibung        Im Unterschied zu anderen Frms wird hier nur die
-|*      die RelPos berechnet. Die absolute Position wird ausschliesslich
-|*      per SetAbsPos errechnet.
+|*	Beschreibung		Im Unterschied zu anderen Frms wird hier nur die
+|*		die RelPos berechnet. Die absolute Position wird ausschliesslich
+|*		per SetAbsPos errechnet.
+|*	Ersterstellung		MA 03. Dec. 92
+|*	Letzte Aenderung	MA 12. Apr. 96
 |*
 |*************************************************************************/
 // OD 2004-03-23 #i26791#
@@ -190,7 +203,7 @@ void SwFlyInCntFrm::MakeObjPos()
 {
     if ( !bValidPos )
     {
-        bValidPos = sal_True;
+        bValidPos = TRUE;
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
         //Und ggf. noch die aktuellen Werte im Format updaten, dabei darf
@@ -221,7 +234,10 @@ void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
 // <--
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::NotifyBackground()
+|*	SwFlyInCntFrm::NotifyBackground()
+|*
+|*	Ersterstellung		MA 03. Dec. 92
+|*	Letzte Aenderung	MA 26. Aug. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
@@ -235,7 +251,10 @@ void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
 
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::GetRelPos()
+|*	SwFlyInCntFrm::GetRelPos()
+|*
+|*	Ersterstellung		MA 04. Dec. 92
+|*	Letzte Aenderung	MA 04. Dec. 92
 |*
 |*************************************************************************/
 const Point SwFlyInCntFrm::GetRelPos() const
@@ -246,7 +265,10 @@ const Point SwFlyInCntFrm::GetRelPos() const
 
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::RegistFlys()
+|*	SwFlyInCntFrm::RegistFlys()
+|*
+|*	Ersterstellung		MA 26. Nov. 93
+|*	Letzte Aenderung	MA 26. Nov. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::RegistFlys()
@@ -259,7 +281,10 @@ void SwFlyInCntFrm::RegistFlys()
 
 /*************************************************************************
 |*
-|*  SwFlyInCntFrm::MakeAll()
+|*	SwFlyInCntFrm::MakeAll()
+|*
+|*	Ersterstellung		MA 18. Feb. 94
+|*	Letzte Aenderung	MA 13. Jun. 96
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::MakeAll()
@@ -273,7 +298,7 @@ void SwFlyInCntFrm::MakeAll()
     if ( !GetAnchorFrm() || IsLocked() || IsColLocked() || !FindPageFrm() )
         return;
 
-    Lock(); //Der Vorhang faellt
+    Lock();	//Der Vorhang faellt
 
         //uebernimmt im DTor die Benachrichtigung
     const SwFlyNotify aNotify( this );
@@ -281,14 +306,14 @@ void SwFlyInCntFrm::MakeAll()
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
     if ( IsClipped() )
-        bValidSize = bHeightClipped = bWidthClipped = sal_False;
+        bValidSize = bHeightClipped = bWidthClipped = FALSE;
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
         //Nur einstellen wenn das Flag gesetzt ist!!
         if ( !bValidSize )
         {
-            bValidPrtArea = sal_False;
+            bValidPrtArea = FALSE;
 /*
             // This is also done in the Format function, so I think
             // this code is not necessary anymore:
@@ -326,8 +351,8 @@ void SwFlyInCntFrm::MakeAll()
                  Frm().Width() > pFrm->Prt().Width() )
             {
                 Frm().Width( pFrm->Prt().Width() );
-                bValidPrtArea = sal_False;
-                bWidthClipped = sal_True;
+                bValidPrtArea = FALSE;
+                bWidthClipped = TRUE;
             }
         }
         // <--

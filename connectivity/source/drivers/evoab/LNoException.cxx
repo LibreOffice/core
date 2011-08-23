@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,44 +41,44 @@ xub_StrLen OEvoabString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) 
         return 0;
 
     xub_StrLen nTokCount = 1;
-    sal_Bool bStart = sal_True;     // Are we on the fist character of the token?
-    sal_Bool bInString = sal_False; // Are we within a (cStrDel delimited) string?
+    BOOL bStart = TRUE;		// Stehen wir auf dem ersten Zeichen im Token?
+    BOOL bInString = FALSE;	// Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
-    // Search for the first not-matching character (search ends at the end of string)
+    // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
     for( xub_StrLen i = 0; i < Len(); i++ )
     {
         if (bStart)
         {
-            bStart = sal_False;
-            // First character a string delimiter?
+            bStart = FALSE;
+            // Erstes Zeichen ein String-Delimiter?
             if ((*this).GetChar(i) == cStrDel)
             {
-                bInString = sal_True;   // then we are within a string!
-                continue;           // read next character!
+                bInString = TRUE;	// dann sind wir jetzt INNERHALB des Strings!
+                continue;			// dieses Zeichen ueberlesen!
             }
         }
 
         if (bInString) {
-            // If we see the string delimiter ...
+            // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
             if ( (*this).GetChar(i) == cStrDel )
             {
                 if ((i+1 < Len()) && ((*this).GetChar(i+1) == cStrDel))
                 {
-                    // doubled string-delimiter:
-                    i++;    // no end of string, skip next character.
+                    // Verdoppeltes String-Delimiter-Zeichen:
+                    i++;	// kein String-Ende, naechstes Zeichen ueberlesen.
                 }
                 else
                 {
-                    // end of String
-                    bInString = sal_False;
+                    // String-Ende
+                    bInString = FALSE;
                 }
             }
         } else {
-            // if the token character matches, then raise TokCount
+            // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
             if ( (*this).GetChar(i) == cTok )
             {
                 nTokCount++;
-                bStart = sal_True;
+                bStart = TRUE;
             }
         }
     }
@@ -94,49 +94,51 @@ void OEvoabString::GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Uni
     xub_StrLen nLen = Len();
     if ( nLen )
     {
-        sal_Bool bInString = (nStartPos < nLen) && ((*this).GetChar(nStartPos) == cStrDel); // are we within a (cStrDel delimited) String?
+        BOOL bInString = (nStartPos < nLen) && ((*this).GetChar(nStartPos) == cStrDel);	// Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
-        // Is the first character a String-Delimiter?
+        // Erstes Zeichen ein String-Delimiter?
         if (bInString )
-            ++nStartPos;            // skip the character!
-        // Search until end of string for the first not-matching character
+            ++nStartPos;			// dieses Zeichen ueberlesen!
+        // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
         for( xub_StrLen i = nStartPos; i < nLen; ++i )
         {
             if (bInString)
             {
-                // If we see the String-Delimiter ...
+                // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
                 if ( (*this).GetChar(i) == cStrDel )
                 {
                     if ((i+1 < nLen) && ((*this).GetChar(i+1) == cStrDel))
                     {
-                        // doubled String-Delimiter:
-                        ++i;    // no end of String, skip next character
-                        _rStr += (*this).GetChar(i);    // Character belongs to Result-String
+                        // Verdoppeltes String-Delimiter-Zeichen:
+                        ++i;	// kein String-Ende, naechstes Zeichen ueberlesen.
+
+                        _rStr += (*this).GetChar(i);	// Zeichen gehoert zum Resultat-String
                     }
                     else
                     {
-                        // end of String
-                        bInString = sal_False;
+                        // String-Ende
+                        bInString = FALSE;
                     }
                 }
                 else
                 {
-                    _rStr += (*this).GetChar(i);    // Character belongs to Result-String
+                    _rStr += (*this).GetChar(i);	// Zeichen gehoert zum Resultat-String
                 }
 
             }
             else
             {
-                // Does the Token-character match, then raise nTok
+                // Stimmt das Tokenzeichen ueberein, dann erhoehe nTok
                 if ( (*this).GetChar(i) == cTok )
                 {
-                    // Early termination of loop possible, because we found what we were looking for.
+                    // Vorzeitiger Abbruch der Schleife moeglich, denn
+                    // wir haben, was wir wollten.
                     nStartPos = i+1;
                     break;
                 }
                 else
                 {
-                    _rStr += (*this).GetChar(i);    // Character belongs to Result-String
+                    _rStr += (*this).GetChar(i);	// Zeichen gehoert zum Resultat-String
                 }
             }
         }
@@ -151,7 +153,7 @@ sal_Bool OEvoabTable::checkHeaderLine()
 {
     if (m_nFilePos == 0 && ((OEvoabConnection*)m_pConnection)->isHeaderLine())
     {
-        sal_Bool bRead2;
+        BOOL bRead2;
         do
         {
             bRead2 = m_pFileStream->ReadByteStringLine(m_aCurrentLine,m_pConnection->getTextEncoding());
@@ -173,7 +175,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
         return sal_False;
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
     // ----------------------------------------------------------
-    // prepare positioning:
+    // Positionierung vorbereiten:
     //OSL_TRACE("OEvoabTable::(before SeekRow,m_pFileStriam Exist)m_aCurrentLine = %d\n", ((OUtoCStr(::rtl::OUString(m_aCurrentLine))) ? (OUtoCStr(::rtl::OUString(m_aCurrentLine))):("NULL")) );
 
     m_nFilePos = nCurPos;
@@ -281,7 +283,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
                     aIter = m_aRowToFilePos.upper_bound(nOffset);
                     if(aIter == m_aRowToFilePos.end())
                     {
-                        m_nRowPos   = m_aRowToFilePos.rbegin()->first;
+                        m_nRowPos	= m_aRowToFilePos.rbegin()->first;
                         nCurPos = m_nFilePos = m_aRowToFilePos.rbegin()->second;
                         while(m_nRowPos != nOffset)
                             seekRow(IResultSetHelper::NEXT,1,nCurPos);
@@ -289,8 +291,8 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
                     else
                     {
                         --aIter;
-                        m_nRowPos   = aIter->first;
-                        m_nFilePos  = aIter->second;
+                        m_nRowPos	= aIter->first;
+                        m_nFilePos	= aIter->second;
                         m_pFileStream->Seek(m_nFilePos);
                         if (m_pFileStream->IsEof() || !checkHeaderLine())
                             return sal_False;
@@ -308,7 +310,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
             if (m_pFileStream->IsEof())
                 return sal_False;
 
-            m_nFilePos = m_pFileStream->Tell(); // save Byte-Position in the file (at start of line)
+            m_nFilePos = m_pFileStream->Tell();	// Byte-Position in der Datei merken (am ZeilenANFANG)
             m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
             if (m_pFileStream->IsEof())
                 return sal_False;

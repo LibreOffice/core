@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@ namespace abp
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                 m_xORB;
-        AddressSettings         m_aSettings;
+        AddressSettings			m_aSettings;
 
-        ODataSource             m_aNewDataSource;
-        AddressSourceType       m_eNewDataSourceType;
+        ODataSource				m_aNewDataSource;
+        AddressSourceType		m_eNewDataSourceType;
 
     public:
         /// ctor
@@ -63,14 +63,14 @@ namespace abp
         /// get the service factory which was used to create the dialog
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                 getORB() { return m_xORB; }
-        AddressSettings&        getSettings() { return m_aSettings; }
-        const AddressSettings&  getSettings() const { return m_aSettings; }
+        AddressSettings&		getSettings() { return m_aSettings; }
+        const AddressSettings&	getSettings() const { return m_aSettings; }
 
-        const ODataSource&      getDataSource() const { return m_aNewDataSource; }
+        const ODataSource&		getDataSource() const { return m_aNewDataSource; }
 
-        sal_Bool                connectToDataSource( sal_Bool _bForceReConnect );
+        sal_Bool				connectToDataSource( sal_Bool _bForceReConnect );
 
-        void                    travelNext( ) { OAddessBookSourcePilot_Base::travelNext(); }
+        void					travelNext( ) { OAddessBookSourcePilot_Base::travelNext(); }
 
         /// to be called when the selected type changed
         void                    typeSelectionChanged( AddressSourceType _eType );
@@ -85,7 +85,7 @@ namespace abp
         // RoadmapWizard
         virtual String              getStateDisplayName( WizardState _nState ) const;
 
-        virtual sal_Bool    Close();
+        virtual BOOL	Close();
 
     private:
         DECL_LINK( OnCancelClicked, void* );
@@ -101,16 +101,16 @@ namespace abp
         /// guesses a default for the table name, if no valid table is selected
         void implDefaultTableName();
 
-        inline sal_Bool needAdminInvokationPage( AddressSourceType _eType ) const
+        inline sal_Bool	needAdminInvokationPage( AddressSourceType _eType ) const
         {
-            return  (   ( AST_LDAP == _eType )
-                    ||  ( AST_OTHER == _eType )
+            return	(	( AST_LDAP == _eType )
+                    ||	( AST_OTHER == _eType )
                     );
         }
         /// check if with the current settings, we would need to invoke he administration dialog for more details about the data source
-        inline sal_Bool needAdminInvokationPage() const
+        inline sal_Bool	needAdminInvokationPage() const
         {
-            return  needAdminInvokationPage( m_aSettings.eType );
+            return	needAdminInvokationPage( m_aSettings.eType );
         }
 
         inline sal_Bool needManualFieldMapping( AddressSourceType _eType ) const
@@ -143,7 +143,7 @@ namespace abp
     };
 
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABSPILOT_HXX

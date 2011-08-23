@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@ namespace cppu
         Upon disposing objects of this class, sub-classes receive a disposing()
         call.  Objects of this class can be held weakly, i.e. by a
         ::com::sun::star::uno::WeakReference.
-
+        
         @attention
         The life-cycle of the passed mutex reference has to be longer than objects of this class.
-
+        
         @derive
         Inherit from this class giving your interface(s) to be implemented as template argument(s).
         Your sub class defines method implementations for these interface(s).
@@ -91,53 +91,20 @@ namespace cppu
 #pragma enable_warn
 #endif
 
-    /** Same as WeakComponentImplHelper9, except doesn't implement
-        addEventListener, removeEventListener and dispose.
-
-        This requires derived classes to implement those three methods.
-        This makes it possible to implement classes which are required to
-        implement methods from multiple bases which have different
-        addEventListener/removeEventListener signatures without triggering
-        the g++ overloaded-virtual warning
-    */
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
-    class SAL_NO_VTABLE PartialWeakComponentImplHelper9
-        : public WeakComponentImplHelperBase
-        , public ::com::sun::star::lang::XTypeProvider
-        , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9
-    {
-        /** @internal */
-        struct cd : public rtl::StaticAggregate< class_data, ImplClassData9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, PartialWeakComponentImplHelper9<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9> > > {};
-    public:
-        inline PartialWeakComponentImplHelper9( ::osl::Mutex & rMutex ) throw ()
-            : WeakComponentImplHelperBase( rMutex )
-            {}
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
-            { return WeakComponentImplHelper_query( rType, cd::get(), this, (WeakComponentImplHelperBase *)this ); }
-        virtual void SAL_CALL acquire() throw ()
-            { WeakComponentImplHelperBase::acquire(); }
-        virtual void SAL_CALL release() throw ()
-            { WeakComponentImplHelperBase::release(); }
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
-            { return WeakComponentImplHelper_getTypes( cd::get() ); }
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
-            { return ImplHelper_getImplementationId( cd::get() ); }
-    };
-
     /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
         ::com::sun::star::lang::XComponent.
         Upon disposing objects of this class, sub-classes receive a disposing()
         call.  Objects of this class can be held weakly, i.e. by a
         ::com::sun::star::uno::WeakReference.  Object of this class can be
         aggregated, i.e. incoming queryInterface() calls are delegated.
-
+        
         @attention
         The life-cycle of the passed mutex reference has to be longer than objects of this class.
-
+        
         @derive
         Inherit from this class giving your interface(s) to be implemented as template argument(s).
         Your sub class defines method implementations for these interface(s).
-
+        
         @deprecated
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >

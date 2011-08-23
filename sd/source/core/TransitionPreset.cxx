@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ TransitionPreset::TransitionPreset( const ::com::sun::star::uno::Reference< ::co
     const NamedValue* p = aUserData.getConstArray();
     while( nLength-- )
     {
-        if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-id" ) ) )
+        if( p->Name.equalsAscii( "preset-id" ) )
         {
             p->Value >>= maPresetId;
             break;
@@ -135,7 +135,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             }
             else
                 {
-                    OSL_FAIL( "sd::TransitionPreset::importTransitionPresetList(), misformed xml configuration file, giving up!" );
+                    DBG_ERROR( "sd::TransitionPreset::importTransitionPresetList(), missformed xml configuration file, giving up!" );
                     break;
                 }
         }
@@ -219,7 +219,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
     catch( Exception& e )
     {
         (void)e;
-        OSL_FAIL( "sd::TransitionPreset::importResources(), Exception cought!" );
+        DBG_ERROR( "sd::TransitionPreset::importResources(), Exception cought!" );
     }
 
     return bRet;

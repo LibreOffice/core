@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_LAYFRM_HXX
-#define SW_LAYFRM_HXX
+#ifndef _LAYFRM_HXX
+#define _LAYFRM_HXX
 
 #include "frame.hxx"
 
@@ -59,15 +59,15 @@ protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     virtual void MakeAll();
 
-    SwFrm           *pLower;
+    SwFrm			*pLower;
 
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 
-    long CalcRel( const SwFmtFrmSize &rSz, sal_Bool bWidth ) const;
+    long CalcRel( const SwFmtFrmSize &rSz, BOOL bWidth ) const;
 
 public:
-    // --> #i28701#
+    // --> OD 2004-06-29 #i28701#
     TYPEINFO();
 
     void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
@@ -77,10 +77,10 @@ public:
         //Proportionale Groessenanpassung der untergeordneten.
     void ChgLowersProp( const Size& rOldSize );
 
-    void AdjustColumns( const SwFmtCol *pCol, sal_Bool bAdjustAttributes );
+    void AdjustColumns( const SwFmtCol *pCol, BOOL bAdjustAttributes );
 
     void ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
-        const sal_Bool bChgFtn = sal_False );
+        const BOOL bChgFtn = FALSE );
 
 
         //Painted die Column-Trennlinien fuer die innenliegenden Columns.
@@ -89,7 +89,7 @@ public:
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
-    virtual sal_Bool  GetCrsrOfst( SwPosition *, Point&,
+    virtual BOOL  GetCrsrOfst( SwPosition *, Point&,
                                SwCrsrMoveState* = 0 ) const;
 
     virtual void Cut();
@@ -97,23 +97,23 @@ public:
 
         //sucht den dichtesten Cntnt zum SPoint, wird bei Seiten, Flys und Cells
         //benutzt wenn GetCrsrOfst versagt hat.
-    const SwCntntFrm* GetCntntPos( Point &rPoint, const sal_Bool bDontLeave,
-                                   const sal_Bool bBodyOnly = sal_False,
-                                   const sal_Bool bCalc = sal_False,
+    const SwCntntFrm* GetCntntPos( Point &rPoint, const BOOL bDontLeave,
+                                   const BOOL bBodyOnly = FALSE,
+                                   const BOOL bCalc = FALSE,
                                    const SwCrsrMoveState *pCMS = 0,
-                                   const sal_Bool bDefaultExpand = sal_True ) const;
+                                   const BOOL bDefaultExpand = TRUE ) const;
 
-    SwLayoutFrm( SwFrmFmt*, SwFrm* );
+    SwLayoutFrm( SwFrmFmt* );
     ~SwLayoutFrm();
 
-    virtual void Paint( SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const;
+    virtual	void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
     const SwFrm *Lower() const { return pLower; }
           SwFrm *Lower()       { return pLower; }
     const SwCntntFrm *ContainsCntnt() const;
     inline SwCntntFrm *ContainsCntnt();
     const SwCellFrm *FirstCell() const;
     inline SwCellFrm *FirstCell();
+    // --> OD 2006-02-01 #130797#
     // Method <ContainsAny()> doesn't investigate content of footnotes by default.
     // But under certain circumstances this investigation is intended.
     // Thus, introduce new optional parameter <_bInvestigateFtnForSections>.
@@ -121,20 +121,21 @@ public:
     // investigated for sections.
     const SwFrm *ContainsAny( const bool _bInvestigateFtnForSections = false ) const;
     inline SwFrm *ContainsAny( const bool _bInvestigateFtnForSections = false );
-    sal_Bool IsAnLower( const SwFrm * ) const;
+    // <--
+    BOOL IsAnLower( const SwFrm * ) const;
 
-    virtual const SwFrmFmt *GetFmt() const;
-    virtual       SwFrmFmt *GetFmt();
-    void        SetFrmFmt( SwFrmFmt* );
+    const SwFrmFmt *GetFmt() const { return (const SwFrmFmt*)GetDep(); }
+          SwFrmFmt *GetFmt()	   { return (SwFrmFmt*)GetDep(); }
+    void 			SetFrmFmt( SwFrmFmt* );
 
     //Verschieben der Ftns aller Lower - ab dem StartCntnt.
-    //sal_True wenn mindestens eine Ftn verschoben wurde.
+    //TRUE wenn mindestens eine Ftn verschoben wurde.
     //Ruft das Update der Seitennummer wenn bFtnNums gesetzt ist.
-    sal_Bool MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
-                        SwFtnBossFrm *pNewBoss, const sal_Bool bFtnNums );
+    BOOL MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
+                        SwFtnBossFrm *pNewBoss, const BOOL bFtnNums );
 
-    // --> #i28701# - change purpose of method and its name
-    // --> #i44016# - add parameter <_bUnlockPosOfObjs> to
+    // --> OD 2004-07-01 #i28701# - change purpose of method and its name
+    // --> OD 2005-03-11 #i44016# - add parameter <_bUnlockPosOfObjs> to
     // force an unlockposition call for the lower objects.
     void NotifyLowerObjs( const bool _bUnlockPosOfObjs = false );
     // <--
@@ -155,7 +156,7 @@ public:
     /** method to check relative position of layout frame to
         a given layout frame.
 
-        refactoring of pseudo-local method <lcl_Apres(..)> in
+        OD 08.11.2002 - refactoring of pseudo-local method <lcl_Apres(..)> in
         <txtftn.cxx> for #104840#.
 
         @param _aCheckRefLayFrm
@@ -183,18 +184,20 @@ inline SwCellFrm* SwLayoutFrm::FirstCell()
     return (SwCellFrm*)(((const SwLayoutFrm*)this)->FirstCell());
 }
 
+// --> OD 2006-02-01 #130797#
 inline SwFrm* SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections )
 {
     return (SwFrm*)(((const SwLayoutFrm*)this)->ContainsAny( _bInvestigateFtnForSections ));
 }
+// <--
 
 // Diese SwFrm-inlines sind hier, damit frame.hxx nicht layfrm.hxx includen muss
-inline sal_Bool SwFrm::IsColBodyFrm() const
+inline BOOL SwFrm::IsColBodyFrm() const
 {
     return nType == FRMC_BODY && GetUpper()->IsColumnFrm();
 }
 
-inline sal_Bool SwFrm::IsPageBodyFrm() const
+inline BOOL SwFrm::IsPageBodyFrm() const
 {
     return nType == FRMC_BODY && GetUpper()->IsPageFrm();
 }
@@ -204,6 +207,6 @@ inline SwFrm* SwLayoutFrm::GetLastLower()
     return const_cast<SwFrm*>(static_cast<const SwLayoutFrm*>(this)->GetLastLower());
 }
 
-#endif  // SW_LAYFRM_HXX
+#endif	//_LAYFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

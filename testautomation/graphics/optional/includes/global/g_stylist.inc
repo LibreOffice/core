@@ -38,18 +38,17 @@ testcase tFormatStylistFlyer
     Dim ySize%
 
     printlog "   - Format/Stylist : using all possible things to manipulate the flyer"
-    printlog "open application"
+    '/// open application ///'
     Call  hNewDocument
     Kontext "Gestalter"
-    printlog "Check if stylist is there. Expected: not there"
+    '/// Check if stylist is there. Expected: not there ///'
     if Gestalter.NotExists = false Then
-        qaErrorLog "Expected Stylist to be closed; But is Open. Check tests."
+        qaErrorLog "   - Expected Stylist to be closed; But is Open. Check tests."
     else
         if lcase(gPlatform) = "osx" then
             hTypekeys "<mod1 t>"
         else
-            printlog "open stylist by pressing key [F11]"
-            hTypekeys "<F11>"   
+            hTypekeys "<F11>"   '/// open stylist by pressing key [F11] ///'
         end if
         sleep 1
     end if
@@ -58,51 +57,51 @@ testcase tFormatStylistFlyer
         Warnlog "   No stylist popped up using F11; opening now via slotID"
         FormatStylist
     end if
-    printlog "save stylist position and size"
+    '///+ save stylist position and size ///'
     xPos% = Gestalter.GetPosX
     yPos% = Gestalter.GetPosY
     xSize% = Gestalter.GetSizeX
     ySize% = Gestalter.GetSizeY
-    printlog " if Stylist is docked; undock"
+    '///+ if Stylist is docked; undock ///'
     if Gestalter.IsDocked then Gestalter.UnDock
-    printlog " move stylist"
-    printlog "move stylist to 10,10"
+    printlog "  -   '///move stylist ///"
+    '///+ move stylist to 10,10 ///'
     Gestalter.Move 10, 10
     Sleep 1
-    printlog "move stylist to 300,400"
+    '///+ move stylist to 300,400 ///'
     Gestalter.Move 300, 400
     Sleep 1
-    printlog "move stylist to 590,790"
+    '///+ move stylist to 590,790 ///'
     Gestalter.Move 590, 790
     Sleep 1
-    printlog " move stylist back to saved start position"
+    '///+ move stylist back to saved start position ///'
     Gestalter.Move xPos%, yPos%
     Sleep 1
 
-    printlog "size stylist"
-    printlog "change size to 200,200"
+    printlog "  -   '///size stylist ///"
+    '///+ change size to 200,200 ///'
     Gestalter.Size 200, 200
     Sleep 1
-    printlog "change size to 300,400"
+    '///+ change size to 300,400 ///'
     Gestalter.Size 300, 400
     Sleep 1
-    printlog "change size to 150,250"
+    '///+ change size to 150,250 ///'
     Gestalter.Size 150, 250
     Sleep 1
-    printlog "change size back to saved size"
+    '///+ change size back to saved size ///'
     Gestalter.Size xSize%, ySize%
     Sleep 1
 
-    printlog "Close stylist reopen stylist, check if appearence is same as before"
-    printlog "save stylist position and size"
+    printlog "  -   Close stylist reopen stylist, check if appearence is same as before"
+    '/// save stylist position and size ///'
     xPos% = Gestalter.GetPosX
     yPos% = Gestalter.GetPosY
     xSize% = Gestalter.GetSizeX
     ySize% = Gestalter.GetSizeY
-    printlog "close stylist Format->Stylist"
+    '/// close stylist Format->Stylist ///'
     FormatStylist
     Sleep 1
-    printlog "open stylist Format->Stylist"
+    '/// open stylist Format->Stylist ///'
     FormatStylist
     sleep (1)
     if xPos% <> Gestalter.GetPosX then Warnlog "The x-Pos. has changed : Should be -> '"+ xPos% +  "'  Is -> '"+ Gestalter.GetPosX  +"'."
@@ -111,29 +110,29 @@ testcase tFormatStylistFlyer
     if ySize% <> Gestalter.GetSizeY then Warnlog "The y-Size has changed : Should be -> '"+ ySize% + "'  Is -> '"+ Gestalter.GetSizeY +"'."
 
     printlog "  -   dock stylist"
-    printlog "dock stylist"
+    '/// dock stylist ///'
     Gestalter.Dock
     Sleep 1
     if (NOT Gestalter.IsDocked) then
         warnlog "   stylist not docked but should"
     endif
-    printlog "UNdock stylist"
+    '/// UNdock stylist ///'
     if (Gestalter.IsDocked) Then
         Gestalter.UnDock
     endif
     Sleep 1
 
     printlog "  -   maximize/minimize stylist"
-    printlog "minimize stylist"
+    '/// minimize stylist ///'
     Gestalter.Minimize
     Sleep 1
-    printlog "maximize stylist"
+    '/// maximize stylist ///'
     Gestalter.Maximize
     Sleep 1
     if (NOT Gestalter.IsMax) then
         warnlog "   The stylist did not return to maximized state"
     endif
-    printlog "close stylist"
+    '/// close stylist ///'
     Gestalter.Close
     Call  hCloseDocument
 
@@ -486,8 +485,6 @@ testcase tFormatStylistTemplateNew
 endcase 'tFormatStylistTemplateNew
 '--------------------------------------------------------
 testcase tiFormatStylist
-warnlog "#i116803# - Crash when closing stylist with closer"
-goto endsub
 
     Dim Num1 as integer '  graphics : first line indent ; the one with 0,6cm in the summary
     Dim Num2 as integer '  presentations : background   ; just one tabpage pops up: Area
@@ -521,10 +518,8 @@ goto endsub
         goto endsub
     end select
 
-    printlog "Open new doc"
     Call hNewDocument
     sleep 2
-    printlog "call the navigator"
     Kontext "Gestalter"
     if Gestalter.Exists Then
         Warnlog "- Stylist exists, perhaps not closed last time a Impress doc was open"
@@ -532,18 +527,13 @@ goto endsub
     end if
     sleep 1
 
-
-
     FormatStylist
     Kontext "Gestalter"
-    printlog "opening graphics styles"
     Grafikvorlagen.Click
     sleep 1
-    printlog "Select number 1"
     Vorlagenliste.Select Num1        ' num1
     sleep 1
     Printlog "- open Grafic template Dialogs using the context menue , checking if all resources exist"
-    printlog "Opening context menu"
     Vorlagenliste.OpenContextMenu
     sleep 1
     hMenuSelectNr (2)
@@ -553,7 +543,6 @@ goto endsub
     Messagebox.SetPage TabText
     Kontext "TabText"
     sleep 1
-    printlog "Canceling dialog"
     TabText.Cancel
     sleep 1
 
@@ -561,21 +550,18 @@ goto endsub
         Kontext "Gestalter"
         Printlog "- presentation templates"
         sleep 1
-        printlog "presentation styles"
         Praesentationsvorlagen.Click
-        printlog "Select number 2"
+
         Vorlagenliste.Select Num2
         sleep 1
-        printlog "opening context menu"
         Vorlagenliste.OpenContextMenu
         sleep 1
-        printlog "selecting modify"
         hMenuSelectNr (1)
         sleep 1
         Kontext
         if Messagebox.exists (5) then
             try
-                printlog "Messagebox.SetPage TabArea"
+                '                    Messagebox.SetPage TabArea
                 Kontext "TabArea"
                 if TabArea.Exists = false then
                     warnlog "Where is TabArea?"
@@ -592,115 +578,86 @@ goto endsub
         Kontext "Gestalter"
         sleep 1
 
-        printlog "Select number 3"
         Vorlagenliste.Select Num3
         sleep 1
-        printlog "opening context menu of number 3"
         Vorlagenliste.OpenContextMenu
         sleep 1
         hMenuSelectNr (1)
         sleep 1
-        printlog "Check the styles..."
         call hWalkTheStyles (1,1)
         Kontext
-        printlog "setting tabpage indents and spacing"
         Messagebox.SetPage TabEinzuegeUndAbstaende
         Kontext "TabEinzuegeUndAbstaende"
         sleep 1
-        printlog "Canceling tabpage"
         TabEinzuegeUndAbstaende.Cancel
         sleep 1
         Kontext "Gestalter"
         sleep 1
 
-        printlog "Select number 4"
         Vorlagenliste.Select Num4
         sleep 1
-        printlog "opening context menu of number 4"
         Vorlagenliste.OpenContextMenu
         sleep 1
         hMenuSelectNr (1)
         sleep 1
         Kontext
-        printlog "setting tabpage TabFont"
         Messagebox.SetPage TabFont
         kontext "TabFont"
         Kontext
-        printlog "setting tabpage TabFontEffects"
         Messagebox.SetPage TabFontEffects
         kontext "TabFontEffects"
         Kontext
-        printlog "setting tabpage TabIndents and Spacing"
         Messagebox.SetPage TabEinzuegeUndAbstaende
         kontext "TabEinzuegeUndAbstaende"
         sleep 1
-        printlog "canceling TabIndents and Spacing"
         TabEinzuegeUndAbstaende.Cancel
         sleep 1
         Kontext "Gestalter"
         sleep 1
 
-        printlog "opening context menu of number 5"
         Vorlagenliste.Select Num5
         sleep 1
-        printlog "opening context menu of number 5"
         Vorlagenliste.OpenContextMenu
         sleep 1
         hMenuSelectNr (1)
         sleep 1
         Kontext
-        printlog "setting tabpage Tab Font"
         Messagebox.SetPage TabFont
         kontext "TabFont"
         Kontext
-        printlog "setting tabpage Tab FontEffects"
         Messagebox.SetPage TabFontEffects
         kontext "TabFontEffects"
         Kontext
-        printlog "setting tabpage TabIndents and Spacing"
         Messagebox.SetPage TabEinzuegeUndAbstaende
         kontext "TabEinzuegeUndAbstaende"
         sleep 1
         Kontext
-        printlog "setting tabpage Tab Bullets"
         Messagebox.SetPage TabBullet
         Kontext "TabBullet"
         sleep 1
         Kontext
-        printlog "setting tabpage Tab Numbering Type"
         Messagebox.SetPage TabNumerierungsart
         Kontext "TabNumerierungsart"
         sleep 1
         Kontext
-        printlog "setting tabpage Tab Graphics"
         Messagebox.SetPage TabGrafiken
         Kontext "TabGrafiken"
         sleep 1
         Kontext
-        printlog "setting tabpage Tab Numbering options"
         Messagebox.SetPage TabOptionenNumerierung
         Kontext "TabOptionenNumerierung"
         sleep 1
-        printlog "Canceling..."
         TabOptionenNumerierung.Cancel
         sleep 1
     endif
-
-
-
-
-    kontext "DocumentImpress"
-    printlog "Closing Stylist"
     if lcase(gPlatform) = "osx" then
         hTypekeys "<mod1 t>"
     else
-        Kontext "Gestalter"
-        Gestalter.Close 
+        hTypeKeys "<F11>"
     end if
     sleep 1
     Kontext "Gestalter"
     if Gestalter.Exists Then Warnlog "- Stylist could not be closed pressing F11"
-    printlog "Closing doc."
     Call hCloseDocument
 
 endcase 'tiFormatStylist

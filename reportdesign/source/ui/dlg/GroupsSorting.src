@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ FloatingWindow RID_GROUPS_SORTING
     Moveable = TRUE ;
     Closeable = TRUE ;
     Sizeable = TRUE;
-
+    
     FixedLine FL_SEPARATOR2
     {
         Pos = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( PAGE_WIDTH - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Groups";
     };
-
+    
     Control WND_CONTROL
     {
         Pos = MAP_APPFONT( UNRELATED_CONTROLS, 2*UNRELATED_CONTROLS );
@@ -61,18 +61,62 @@ FloatingWindow RID_GROUPS_SORTING
         Border = TRUE;
         TabStop = TRUE;
     };
-
+    
     FixedText FT_MOVELABEL
     {
         Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 3*UNRELATED_CONTROLS + BROWSER_HEIGHT ) ;
         Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
+//		Text [ en-US ] = "Move group" ;
         Text [ en-US ] = "Group actions" ;
     };
+    
+//     /*
+//       |                                  PAGE_WIDTH                                            |
+//       |                         /-----\            {-------\            /---------\            |
+//       | unreleated FT_MOVELABEL |PB_UP| unreleated |PB_DOWN| unreleated |PD_DELETE| unreleated |
+//       |                         \_____/            \_______/            \_________/            | 
+// 
+//       Don't set any position here, it will be done in OGroupsSortingDialog::Resize()
+// 
+//       Find possible IMAGEBUTTON_* in rscicpx.cxx
+//       Symbol is vclrsc.hxx
+//      */
+// 	ImageButton PB_UP
+// 	{
+// 		Pos = MAP_APPFONT ( PAGE_WIDTH - 3*UNRELATED_CONTROLS - 3*14 - 2*RELATED_CONTROLS, 3*UNRELATED_CONTROLS + BROWSER_HEIGHT -1 ) ;
+// 		Size = MAP_APPFONT ( 14 , 14 ) ;
+// 		TabStop = TRUE;
+// //        Symbol = IMAGEBUTTON_ARROW_UP ; // arrow up
+//         Symbol = IMAGEBUTTON_SPIN_UP ; // triangle up
+// //        Symbol = IMAGEBUTTON_FLOAT;
+// 	};
+// 	
+// 	ImageButton PB_DOWN
+// 	{
+// 		Pos = MAP_APPFONT ( PAGE_WIDTH - 2*UNRELATED_CONTROLS - 2*14 - 2*RELATED_CONTROLS, 3*UNRELATED_CONTROLS + BROWSER_HEIGHT - 1 ) ;
+// 		Size                = MAP_APPFONT ( 14 , 14 ) ;
+// 		TabStop = TRUE;
+// //        Symbol = IMAGEBUTTON_ARROW_DOWN ; // arrow down
+// //        Symbol = IMAGEBUTTON_FIRST ;
+//         Symbol = IMAGEBUTTON_SPIN_DOWN;
+// 
+// 	};
+// 	
+// 	ImageButton PB_DELETE
+// 	{
+// 		Pos = MAP_APPFONT ( PAGE_WIDTH - UNRELATED_CONTROLS - 14, 3*UNRELATED_CONTROLS + BROWSER_HEIGHT - 1 ) ;
+// 		Size                = MAP_APPFONT ( 14 , 14 ) ;
+// 		TabStop = TRUE;
+//         Symbol = IMAGEBUTTON_CLOSE ;
+// 	};
+
 
     ToolBox TB_TOOLBOX
     {
         Pos = MAP_APPFONT ( PAGE_WIDTH - 4*14 - UNRELATED_CONTROLS, 3*UNRELATED_CONTROLS + BROWSER_HEIGHT - 1 ) ;
         ButtonType = BUTTON_SYMBOL;
+// 		Align = BOXALIGN_TOP;
+// 		HelpId = HID_RPT_CONDFORMAT_TB;
         Customize = FALSE;
         ItemList =
         {
@@ -80,17 +124,19 @@ FloatingWindow RID_GROUPS_SORTING
             {
                 Identifier = SID_RPT_GROUPSORT_MOVE_UP ;
                 // Command = ".uno:ReportGroupMoveUp" ; // default_images/res/commandimages/sc_reportgroupmoveup.png
-                HelpID = HID_RPT_GROUPSORT_MOVE_UP ;
+                HelpID = HID_RPT_GROUPSORT_MOVE_UP ; 
                 Text [ en-US ] = "Move up" ;
                 Checkable = TRUE;
+//                Disable              = TRUE;
             };
             ToolBoxItem
             {
                 Identifier = SID_RPT_GROUPSORT_MOVE_DOWN ;
-                // Command = ".uno:ReportGroupMoveDown" ;
+                // Command = ".uno:ReportGroupMoveDown" ; 
                 HelpID = HID_RPT_GROUPSORT_MOVE_DOWN ;
                 Text [ en-US ] = "Move down" ;
                 Checkable = TRUE;
+//                Disable              = TRUE;
             };
             ToolBoxItem
             {
@@ -99,6 +145,7 @@ FloatingWindow RID_GROUPS_SORTING
                 HelpID = HID_RPT_GROUPSORT_DELETE ;
                 Text [ en-US ] = "~Delete" ;
                 Checkable = TRUE;
+//                Disable              = TRUE;
             };
         };
     };
@@ -109,7 +156,7 @@ FloatingWindow RID_GROUPS_SORTING
         Size = MAP_APPFONT ( PAGE_WIDTH - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Properties";
     };
-
+    
     FixedText FT_ORDER
     {
         Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 4*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + FIXEDTEXT_HEIGHT ) ;
@@ -117,10 +164,8 @@ FloatingWindow RID_GROUPS_SORTING
         Hide = TRUE;
         Text [ en-US ] = "Sorting" ;
     };
-
     ListBox LST_ORDER
     {
-        HelpID = "reportdesign:ListBox:RID_GROUPS_SORTING:LST_ORDER";
         Border = TRUE;
         Pos = MAP_APPFONT(2*UNRELATED_CONTROLS + FIXEDTEXT_WIDTH, 4*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + FIXEDTEXT_HEIGHT - 1 );
         Size = MAP_APPFONT( LISTBOX_WIDTH, 60 );
@@ -133,21 +178,18 @@ FloatingWindow RID_GROUPS_SORTING
             < "Ascending" ; 0 ; > ;
             < "Descending" ; 1 ; > ;
         };
-
+        
     };
-
     FixedText FT_HEADER
     {
         Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 5*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 2*FIXEDTEXT_HEIGHT) ;
         Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
         Hide = TRUE;
         Text [ en-US ] = "Group Header" ;
-
+        
     };
-
     ListBox LST_HEADERLST
     {
-        HelpID = "reportdesign:ListBox:RID_GROUPS_SORTING:LST_HEADERLST";
         Border = TRUE;
         Hide = TRUE;
         Pos = MAP_APPFONT( 2*UNRELATED_CONTROLS + FIXEDTEXT_WIDTH, 5*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 2*FIXEDTEXT_HEIGHT -1);
@@ -161,19 +203,16 @@ FloatingWindow RID_GROUPS_SORTING
             < "Not present" ; Default ; > ;
         };
     };
-
     FixedText FT_FOOTER
     {
         Pos = MAP_APPFONT (  UNRELATED_CONTROLS, 6*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 3*FIXEDTEXT_HEIGHT) ;
         Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
         Hide = TRUE;
         Text [ en-US ] = "Group Footer" ;
-
+        
     };
-
     ListBox LST_FOOTERLST
     {
-        HelpID = "reportdesign:ListBox:RID_GROUPS_SORTING:LST_FOOTERLST";
         Border = TRUE;
         Hide = TRUE;
         Pos = MAP_APPFONT( 2*UNRELATED_CONTROLS + FIXEDTEXT_WIDTH, 6*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 3*FIXEDTEXT_HEIGHT -1);
@@ -187,19 +226,16 @@ FloatingWindow RID_GROUPS_SORTING
             < "Not present" ; Default ; > ;
         };
     };
-
     FixedText FT_GROUPON
     {
         Pos = MAP_APPFONT (  UNRELATED_CONTROLS, 7*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 4*FIXEDTEXT_HEIGHT) ;
         Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
         Hide = TRUE;
         Text [ en-US ] = "Group On" ;
-
+        
     };
-
     ListBox LST_GROUPONLST
     {
-        HelpID = "reportdesign:ListBox:RID_GROUPS_SORTING:LST_GROUPONLST";
         Border = TRUE;
         Hide = TRUE;
         Pos = MAP_APPFONT( 2*UNRELATED_CONTROLS + FIXEDTEXT_WIDTH, 7*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 4*FIXEDTEXT_HEIGHT -1);
@@ -212,7 +248,6 @@ FloatingWindow RID_GROUPS_SORTING
             < "Each Value" ; Default ; > ;
         };
     };
-
     FixedText FT_GROUPINTERVAL
     {
         Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 8*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 5*FIXEDTEXT_HEIGHT) ;
@@ -220,17 +255,15 @@ FloatingWindow RID_GROUPS_SORTING
         Hide = TRUE;
         Text [ en-US ] = "Group Interval" ;
     };
-
     NumericField ED_GROUPINTERVALLST
     {
-        HelpID = "reportdesign:NumericField:RID_GROUPS_SORTING:ED_GROUPINTERVALLST";
         Border = TRUE;
         Hide = TRUE;
         Pos = MAP_APPFONT(2*UNRELATED_CONTROLS + FIXEDTEXT_WIDTH , 8*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 5*FIXEDTEXT_HEIGHT -1);
         Size = MAP_APPFONT( LISTBOX_WIDTH, EDIT_HEIGHT );
         TabStop = TRUE;
     };
-
+    
     FixedText FT_KEEPTOGETHER
     {
         Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 9*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 6*FIXEDTEXT_HEIGHT) ;
@@ -240,7 +273,6 @@ FloatingWindow RID_GROUPS_SORTING
     };
     ListBox LST_KEEPTOGETHERLST
     {
-        HelpID = "reportdesign:ListBox:RID_GROUPS_SORTING:LST_KEEPTOGETHERLST";
         Border = TRUE;
         Hide = TRUE;
         Pos = MAP_APPFONT(2*UNRELATED_CONTROLS + FIXEDTEXT_WIDTH , 9*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 6*FIXEDTEXT_HEIGHT -1);
@@ -255,20 +287,30 @@ FloatingWindow RID_GROUPS_SORTING
             < "With First Detail" ; 2 ; > ;
         };
     };
-
+    
     FixedLine FL_SEPARATOR1
     {
         Pos = MAP_APPFONT ( RELATED_CONTROLS , 10*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 7*FIXEDTEXT_HEIGHT) ;
         Size = MAP_APPFONT ( PAGE_WIDTH - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Help";
     };
-
+    
     FixedText HELP_FIELD
     {
         Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 12*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 7*FIXEDTEXT_HEIGHT) ;
         Size = MAP_APPFONT( PAGE_WIDTH - 2*UNRELATED_CONTROLS, 4*FIXEDTEXT_HEIGHT);
         WordBreak = TRUE;
     };
+    
+//BTN 	Image IMG_UP_H
+//BTN 	{
+//BTN 		ImageBitmap = Bitmap { File = "arrow_move_up_hc" ; };
+//BTN 	};
+//BTN 	Image IMG_DOWN_H
+//BTN 	{
+//BTN 		ImageBitmap = Bitmap { File = "arrow_move_down_hc" ; };
+//BTN 	};
+
 
 };
 
@@ -276,52 +318,42 @@ String STR_RPT_EXPRESSION
 {
     Text [ en-US ] = "Field/Expression" ;
 };
-
 String STR_RPT_SORTING
 {
     Text [ en-US ] = "Sort Order" ;
 };
-
 String STR_RPT_PREFIXCHARS
 {
     Text [ en-US ] = "Prefix Characters" ;
 };
-
 String STR_RPT_YEAR
 {
     Text [ en-US ] = "Year" ;
 };
-
 String STR_RPT_QUARTER
 {
     Text [ en-US ] = "Quarter" ;
 };
-
 String STR_RPT_MONTH
 {
     Text [ en-US ] = "Month" ;
 };
-
 String STR_RPT_WEEK
 {
     Text [ en-US ] = "Week" ;
 };
-
 String STR_RPT_DAY
 {
     Text [ en-US ] = "Day" ;
 };
-
 String STR_RPT_HOUR
 {
     Text [ en-US ] = "Hour" ;
 };
-
 String STR_RPT_MINUTE
 {
     Text [ en-US ] = "Minute" ;
 };
-
 String STR_RPT_INTERVAL
 {
     Text [ en-US ] = "Interval" ;
@@ -341,31 +373,42 @@ String STR_RPT_HELP_FOOTER
 {
     Text [ en-US ] = "Display a footer for this group?" ;
 };
-
 String STR_RPT_HELP_GROUPON
 {
     Text [ en-US ] = "Select the value or range of values that starts a new group." ;
 };
-
 String STR_RPT_HELP_INTERVAL
 {
     Text [ en-US ] = "Interval or number of characters to group on." ;
 };
-
 String STR_RPT_HELP_KEEP
 {
     Text [ en-US ] = "Keep group together on one page?" ;
 };
-
 String STR_RPT_HELP_SORT
 {
     Text [ en-US ] = "Select ascending or descending sort order. Ascending means from A to Z or 0 to 9" ;
 };
 
+
 Menu RID_GROUPSROWPOPUPMENU
 {
     ItemList =
     {
+/*	
+        MenuItem
+        {
+            ITEM_EDIT_CUT
+        };
+        MenuItem
+        {
+            ITEM_EDIT_COPY
+        };
+        MenuItem
+        {
+            ITEM_EDIT_PASTE
+        };
+*/
         MenuItem
         {
             ITEM_EDIT_DELETE
@@ -393,3 +436,61 @@ ImageList IMGLST_GROUPSORT_DLG_SC
     prefix = "sc";
     DEF_IL_GROUPSORT ;
 };
+
+ImageList IMGLST_GROUPSORT_DLG_SCH
+{
+    DEF_MASKCOLOR;
+    prefix = "sch";
+    DEF_IL_GROUPSORT ;
+};
+
+
+// Image IMG_GROUPSORT_MOVEUP
+// {
+//     ImageBitmap = Bitmap
+//     {
+//         File = "reportgroupmoveup"; // reportdesign/res/...
+//     };
+//     DEF_MASKCOLOR;
+// };
+// Image IMG_GROUPSORT_MOVEDOWN
+// {
+//     ImageBitmap = Bitmap
+//     {
+//         File = "reportgroupmovedown";
+//     };
+//     DEF_MASKCOLOR;
+// };
+// Image IMG_GROUPSORT_DELETE
+// {
+//     ImageBitmap = Bitmap
+//     {
+//         File = "reportgroupdelete";
+//     };
+//     DEF_MASKCOLOR;
+// };
+// 
+// Image IMG_GROUPSORT_MOVEUP_H
+// {
+//     ImageBitmap = Bitmap
+//     {
+//         File = "reportgroupmoveup_h"; // reportdesign/res/...
+//     };
+//     DEF_MASKCOLOR;
+// };
+// Image IMG_GROUPSORT_MOVEDOWN_H
+// {
+//     ImageBitmap = Bitmap
+//     {
+//         File = "reportgroupmovedown_h";
+//     };
+//     DEF_MASKCOLOR;
+// };
+// Image IMG_GROUPSORT_DELETE_H
+// {
+//     ImageBitmap = Bitmap
+//     {
+//         File = "reportgroupdelete_h";
+//     };
+//     DEF_MASKCOLOR;
+// };

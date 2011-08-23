@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,66 +60,66 @@ inline void dbg_msg( const char* pString, ... )
 }
 
 #define FAIL_SHUTDOWN_STATE( x, y, z ) \
-    if( x != SANE_STATUS_GOOD )                             \
-    {                                                       \
-        dump_state( "%s returned error %d (%s)\n",          \
-                 y, x, p_strstatus( x ) );                  \
-        DeInit();                                           \
-        return z;                                           \
+    if( x != SANE_STATUS_GOOD )								\
+    {														\
+        dump_state( "%s returned error %d (%s)\n",			\
+                 y, x, p_strstatus( x ) );					\
+        DeInit();											\
+        return z;											\
     }
 
 #define FAIL_STATE( x, y, z ) \
-    if( x != SANE_STATUS_GOOD )                             \
-    {                                                       \
-        dump_state( "%s returned error %d (%s)\n",          \
-                 y, x, p_strstatus( x ) );                  \
-        return z;                                           \
+    if( x != SANE_STATUS_GOOD )								\
+    {														\
+        dump_state( "%s returned error %d (%s)\n",			\
+                 y, x, p_strstatus( x ) );					\
+        return z;											\
     }
 
 #define DUMP_STATE( x, y ) \
-    if( x != SANE_STATUS_GOOD )                             \
-    {                                                       \
-        dump_state( "%s returned error %d (%s)\n",          \
-                 y, x, p_strstatus( x ) );                  \
+    if( x != SANE_STATUS_GOOD )								\
+    {														\
+        dump_state( "%s returned error %d (%s)\n",			\
+                 y, x, p_strstatus( x ) );					\
     }
 
 #define CHECK_STATE( x, y ) \
-    if( x != SANE_STATUS_GOOD )                             \
-    {                                                       \
-        dump_state( "%s returned error %d (%s)\n",          \
-                 y, x, p_strstatus( x ) );                  \
-    }                                                       \
+    if( x != SANE_STATUS_GOOD )								\
+    {														\
+        dump_state( "%s returned error %d (%s)\n",			\
+                 y, x, p_strstatus( x ) );					\
+    }														\
     else
 
-int             Sane::nRefCount = 0;
+int				Sane::nRefCount = 0;
 oslModule       Sane::pSaneLib = 0;
-SANE_Int        Sane::nVersion = 0;
-SANE_Device**   Sane::ppDevices = 0;
-int             Sane::nDevices = 0;
+SANE_Int		Sane::nVersion = 0;
+SANE_Device**	Sane::ppDevices = 0;
+int				Sane::nDevices = 0;
 
-SANE_Status     (*Sane::p_init)( SANE_Int*,
+SANE_Status		(*Sane::p_init)( SANE_Int*,
                                  SANE_Auth_Callback ) = 0;
-void            (*Sane::p_exit)() = 0;
-SANE_Status     (*Sane::p_get_devices)( const SANE_Device***,
+void			(*Sane::p_exit)() = 0;
+SANE_Status		(*Sane::p_get_devices)( const SANE_Device***,
                                         SANE_Bool ) = 0;
-SANE_Status     (*Sane::p_open)( SANE_String_Const, SANE_Handle ) = 0;
-void            (*Sane::p_close)( SANE_Handle ) = 0;
+SANE_Status		(*Sane::p_open)( SANE_String_Const, SANE_Handle ) = 0;
+void			(*Sane::p_close)( SANE_Handle ) = 0;
 const SANE_Option_Descriptor* (*Sane::p_get_option_descriptor)(
     SANE_Handle, SANE_Int ) = 0;
-SANE_Status     (*Sane::p_control_option)( SANE_Handle, SANE_Int,
+SANE_Status		(*Sane::p_control_option)( SANE_Handle, SANE_Int,
                                            SANE_Action, void*,
                                            SANE_Int* ) = 0;
-SANE_Status     (*Sane::p_get_parameters)( SANE_Handle,
+SANE_Status		(*Sane::p_get_parameters)( SANE_Handle,
                                            SANE_Parameters* ) = 0;
-SANE_Status     (*Sane::p_start)( SANE_Handle ) = 0;
-SANE_Status     (*Sane::p_read)( SANE_Handle, SANE_Byte*, SANE_Int,
+SANE_Status		(*Sane::p_start)( SANE_Handle ) = 0;
+SANE_Status		(*Sane::p_read)( SANE_Handle, SANE_Byte*, SANE_Int,
                                  SANE_Int* ) = 0;
-void            (*Sane::p_cancel)( SANE_Handle ) = 0;
-SANE_Status     (*Sane::p_set_io_mode)( SANE_Handle, SANE_Bool ) = 0;
-SANE_Status     (*Sane::p_get_select_fd)( SANE_Handle, SANE_Int* ) = 0;
+void			(*Sane::p_cancel)( SANE_Handle ) = 0;
+SANE_Status		(*Sane::p_set_io_mode)( SANE_Handle, SANE_Bool ) = 0;
+SANE_Status		(*Sane::p_get_select_fd)( SANE_Handle, SANE_Int* ) = 0;
 SANE_String_Const (*Sane::p_strstatus)( SANE_Status ) = 0;
 
-static sal_Bool bSaneSymbolLoadFailed = sal_False;
+static BOOL bSaneSymbolLoadFailed = FALSE;
 
 inline oslGenericFunction Sane::LoadSymbol( const char* pSymbolname )
 {
@@ -128,7 +128,7 @@ inline oslGenericFunction Sane::LoadSymbol( const char* pSymbolname )
     {
         fprintf( stderr, "Could not load symbol %s\n",
                  pSymbolname );
-        bSaneSymbolLoadFailed = sal_True;
+        bSaneSymbolLoadFailed = TRUE;
     }
     return pFunction;
 }
@@ -136,8 +136,8 @@ inline oslGenericFunction Sane::LoadSymbol( const char* pSymbolname )
 SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
                                  void* pData )
 {
-    SANE_Status nStatus = SANE_STATUS_GOOD;
-    SANE_Int    nInfo = 0;
+    SANE_Status	nStatus = SANE_STATUS_GOOD;
+    SANE_Int	nInfo = 0;
 
     nStatus = p_control_option( maHandle, (SANE_Int)nOption,
                                 nAction, pData, &nInfo );
@@ -160,6 +160,7 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
                  pAction );
     }
 #endif
+//	if( nInfo & ( SANE_INFO_RELOAD_OPTIONS | SANE_INFO_RELOAD_PARAMS ) )
     if( nInfo &  SANE_INFO_RELOAD_OPTIONS )
         ReloadOptions();
     return nStatus;
@@ -187,24 +188,24 @@ Sane::~Sane()
 
 void Sane::Init()
 {
-    ::rtl::OUString sSaneLibName( RTL_CONSTASCII_USTRINGPARAM( "libsane" SAL_DLLEXTENSION ) );
+    ::rtl::OUString sSaneLibName( ::rtl::OUString::createFromAscii( "libsane" SAL_DLLEXTENSION ) );
     pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     if( ! pSaneLib )
     {
-        sSaneLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "libsane" SAL_DLLEXTENSION ".1" ));
+        sSaneLibName = ::rtl::OUString::createFromAscii( "libsane" SAL_DLLEXTENSION ".1" );
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }
     // try reasonable places that might not be in the library search path
     if( ! pSaneLib )
     {
-        ::rtl::OUString sSaneLibSystemPath( RTL_CONSTASCII_USTRINGPARAM( "/usr/local/lib/libsane" SAL_DLLEXTENSION ) );
+        ::rtl::OUString sSaneLibSystemPath( ::rtl::OUString::createFromAscii( "/usr/local/lib/libsane" SAL_DLLEXTENSION ) );
         osl_getFileURLFromSystemPath( sSaneLibSystemPath.pData, &sSaneLibName.pData );
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }
 
     if( pSaneLib )
     {
-        bSaneSymbolLoadFailed = sal_False;
+        bSaneSymbolLoadFailed = FALSE;
         p_init = (SANE_Status(*)(SANE_Int*, SANE_Auth_Callback ))
             LoadSymbol( "sane_init" );
         p_exit = (void(*)())
@@ -298,17 +299,17 @@ void Sane::ReloadOptions()
         mppOptions[ i ] =  (SANE_Option_Descriptor*)
             p_get_option_descriptor( maHandle, i );
 
-    CheckConsistency( NULL, sal_True );
+    CheckConsistency( NULL, TRUE );
 
     maReloadOptionsLink.Call( this );
 }
 
-sal_Bool Sane::Open( const char* name )
+BOOL Sane::Open( const char* name )
 {
     int i;
 
     SANE_Status nStatus = p_open( (SANE_String_Const)name, &maHandle );
-    FAIL_STATE( nStatus, "sane_open", sal_False );
+    FAIL_STATE( nStatus, "sane_open", FALSE );
 
     ReloadOptions();
 
@@ -325,17 +326,17 @@ sal_Bool Sane::Open( const char* name )
         }
     }
 
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool Sane::Open( int n )
+BOOL Sane::Open( int n )
 {
     if( n >= 0 && n < nDevices )
     {
         mnDevice = n;
         return Open( (char*)ppDevices[n]->name );
     }
-    return sal_False;
+    return FALSE;
 }
 
 void Sane::Close()
@@ -362,48 +363,48 @@ int Sane::GetOptionByName( const char* rName )
     return -1;
 }
 
-sal_Bool Sane::GetOptionValue( int n, sal_Bool& rRet )
+BOOL Sane::GetOptionValue( int n, BOOL& rRet )
 {
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_BOOL )
-        return sal_False;
+        return FALSE;
     SANE_Word nRet;
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, &nRet );
     if( nStatus != SANE_STATUS_GOOD )
-        return sal_False;
+        return FALSE;
 
     rRet = nRet;
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool Sane::GetOptionValue( int n, ByteString& rRet )
+BOOL Sane::GetOptionValue( int n, ByteString& rRet )
 {
-    sal_Bool bSuccess = sal_False;
+    BOOL bSuccess = FALSE;
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
-        return sal_False;
+        return FALSE;
     char* pRet = new char[mppOptions[n]->size+1];
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pRet );
     if( nStatus == SANE_STATUS_GOOD )
     {
-        bSuccess = sal_True;
+        bSuccess = TRUE;
         rRet = pRet;
     }
     delete [] pRet;
     return bSuccess;
 }
 
-sal_Bool Sane::GetOptionValue( int n, double& rRet, int nElement )
+BOOL Sane::GetOptionValue( int n, double& rRet, int nElement )
 {
-    sal_Bool bSuccess = sal_False;
+    BOOL bSuccess = FALSE;
 
     if( ! maHandle  ||  ( mppOptions[n]->type != SANE_TYPE_INT &&
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
-        return sal_False;
+        return FALSE;
 
     SANE_Word* pRet = new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)];
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pRet );
     if( nStatus == SANE_STATUS_GOOD )
     {
-        bSuccess = sal_True;
+        bSuccess = TRUE;
         if( mppOptions[n]->type == SANE_TYPE_INT )
             rRet = (double)pRet[ nElement ];
         else
@@ -413,18 +414,18 @@ sal_Bool Sane::GetOptionValue( int n, double& rRet, int nElement )
     return bSuccess;
 }
 
-sal_Bool Sane::GetOptionValue( int n, double* pSet )
+BOOL Sane::GetOptionValue( int n, double* pSet )
 {
     if( ! maHandle  || ! ( mppOptions[n]->type == SANE_TYPE_FIXED ||
                            mppOptions[n]->type == SANE_TYPE_INT ) )
-        return sal_False;
+        return FALSE;
 
     SANE_Word* pFixedSet = new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)];
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pFixedSet );
     if( nStatus != SANE_STATUS_GOOD )
     {
         delete [] pFixedSet;
-        return sal_False;
+        return FALSE;
     }
     for( size_t i = 0; i <mppOptions[n]->size/sizeof(SANE_Word); i++ )
     {
@@ -434,38 +435,38 @@ sal_Bool Sane::GetOptionValue( int n, double* pSet )
             pSet[i] = (double) pFixedSet[i];
     }
     delete [] pFixedSet;
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool Sane::SetOptionValue( int n, sal_Bool bSet )
+BOOL Sane::SetOptionValue( int n, BOOL bSet )
 {
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_BOOL )
-        return sal_False;
+        return FALSE;
     SANE_Word nRet = bSet ? SANE_TRUE : SANE_FALSE;
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, &nRet );
     if( nStatus != SANE_STATUS_GOOD )
-        return sal_False;
-    return sal_True;
+        return FALSE;
+    return TRUE;
 }
 
-sal_Bool Sane::SetOptionValue( int n, const String& rSet )
+BOOL Sane::SetOptionValue( int n, const String& rSet )
 {
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
-        return sal_False;
+        return FALSE;
     ByteString aSet( rSet, gsl_getSystemTextEncoding() );
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, (void*)aSet.GetBuffer() );
     if( nStatus != SANE_STATUS_GOOD )
-        return sal_False;
-    return sal_True;
+        return FALSE;
+    return TRUE;
 }
 
-sal_Bool Sane::SetOptionValue( int n, double fSet, int nElement )
+BOOL Sane::SetOptionValue( int n, double fSet, int nElement )
 {
-    sal_Bool bSuccess = sal_False;
+    BOOL bSuccess = FALSE;
 
     if( ! maHandle  ||  ( mppOptions[n]->type != SANE_TYPE_INT &&
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
-        return sal_False;
+        return FALSE;
 
     SANE_Status nStatus;
     if( mppOptions[n]->size/sizeof(SANE_Word) > 1 )
@@ -488,16 +489,16 @@ sal_Bool Sane::SetOptionValue( int n, double fSet, int nElement )
 
         nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, &nSetTo );
         if( nStatus == SANE_STATUS_GOOD )
-            bSuccess = sal_True;
+            bSuccess = TRUE;
     }
     return bSuccess;
 }
 
-sal_Bool Sane::SetOptionValue( int n, double* pSet )
+BOOL Sane::SetOptionValue( int n, double* pSet )
 {
     if( ! maHandle  ||  ( mppOptions[n]->type != SANE_TYPE_INT &&
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
-        return sal_False;
+        return FALSE;
     SANE_Word* pFixedSet = new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)];
     for( size_t i = 0; i < mppOptions[n]->size/sizeof(SANE_Word); i++ )
     {
@@ -509,8 +510,8 @@ sal_Bool Sane::SetOptionValue( int n, double* pSet )
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, pFixedSet );
     delete [] pFixedSet;
     if( nStatus != SANE_STATUS_GOOD )
-        return sal_False;
-    return sal_True;
+        return FALSE;
+    return TRUE;
 }
 
 enum FrameStyleType {
@@ -519,25 +520,25 @@ enum FrameStyleType {
 
 #define BYTE_BUFFER_SIZE 32768
 
-static inline sal_uInt8 _ReadValue( FILE* fp, int depth )
+static inline UINT8 _ReadValue( FILE* fp, int depth )
 {
     if( depth == 16 )
     {
-        sal_uInt16 nWord;
+        UINT16 nWord;
         // data always come in native byte order !
         // 16 bits is not really supported by backends as of now
         // e.g. UMAX Astra 1200S delivers 16 bit but in BIGENDIAN
         // against SANE documentation (xscanimage gets the same result
         // as we do
         fread( &nWord, 1, 2, fp );
-        return (sal_uInt8)( nWord / 256 );
+        return (UINT8)( nWord / 256 );
     }
-    sal_uInt8 nByte;
+    UINT8 nByte;
     fread( &nByte, 1, 1, fp );
     return nByte;
 }
 
-sal_Bool Sane::CheckConsistency( const char* pMes, sal_Bool bInit )
+BOOL Sane::CheckConsistency( const char* pMes, BOOL bInit )
 {
     static SANE_Option_Descriptor** pDescArray = NULL;
     static SANE_Option_Descriptor*  pZero = NULL;
@@ -547,15 +548,15 @@ sal_Bool Sane::CheckConsistency( const char* pMes, sal_Bool bInit )
         pDescArray = (SANE_Option_Descriptor**)mppOptions;
         if( mppOptions )
             pZero = (SANE_Option_Descriptor*)mppOptions[0];
-        return sal_True;
+        return TRUE;
     }
 
-    sal_Bool bConsistent = sal_True;
+    BOOL bConsistent = TRUE;
 
     if( pDescArray != mppOptions )
-        bConsistent = sal_False;
+        bConsistent = FALSE;
     if( pZero != mppOptions[0] )
-        bConsistent = sal_False;
+        bConsistent = FALSE;
 
     if( ! bConsistent )
         dbg_msg( "Sane is not consistent. (%s)\n", pMes );
@@ -563,38 +564,38 @@ sal_Bool Sane::CheckConsistency( const char* pMes, sal_Bool bInit )
     return bConsistent;
 }
 
-sal_Bool Sane::Start( BitmapTransporter& rBitmap )
+BOOL Sane::Start( BitmapTransporter& rBitmap )
 {
     int nStream = 0, nLine = 0, i = 0;
-    SANE_Parameters aParams;
+    SANE_Parameters	aParams;
     FrameStyleType eType = FrameStyle_Gray;
-    sal_Bool bSuccess = sal_True;
-    sal_Bool bWidthSet = sal_False;
+    BOOL bSuccess = TRUE;
+    BOOL bWidthSet = FALSE;
 
     if( ! maHandle )
-        return sal_False;
+        return FALSE;
 
-    int nWidthMM    = 0;
-    int nHeightMM   = 0;
+    int nWidthMM	= 0;
+    int nHeightMM	= 0;
     double fTLx, fTLy, fBRx, fBRy, fResl = 0.0;
     int nOption;
-    if( ( nOption = GetOptionByName( "tl-x" ) ) != -1   &&
-        GetOptionValue( nOption, fTLx, 0 )              &&
+    if( ( nOption = GetOptionByName( "tl-x" ) ) != -1	&&
+        GetOptionValue( nOption, fTLx, 0 )				&&
         GetOptionUnit( nOption ) == SANE_UNIT_MM )
     {
-        if( ( nOption = GetOptionByName( "br-x" ) ) != -1   &&
-            GetOptionValue( nOption, fBRx, 0 )              &&
+        if( ( nOption = GetOptionByName( "br-x" ) ) != -1	&&
+            GetOptionValue( nOption, fBRx, 0 )				&&
             GetOptionUnit( nOption ) == SANE_UNIT_MM )
         {
             nWidthMM = (int)fabs(fBRx - fTLx);
         }
     }
-    if( ( nOption = GetOptionByName( "tl-y" ) ) != -1   &&
-        GetOptionValue( nOption, fTLy, 0 )              &&
+    if( ( nOption = GetOptionByName( "tl-y" ) ) != -1	&&
+        GetOptionValue( nOption, fTLy, 0 )				&&
         GetOptionUnit( nOption ) == SANE_UNIT_MM )
     {
-        if( ( nOption = GetOptionByName( "br-y" ) ) != -1   &&
-            GetOptionValue( nOption, fBRy, 0 )              &&
+        if( ( nOption = GetOptionByName( "br-y" ) ) != -1	&&
+            GetOptionValue( nOption, fBRy, 0 )				&&
             GetOptionUnit( nOption ) == SANE_UNIT_MM )
         {
             nHeightMM = (int)fabs(fBRy - fTLy);
@@ -603,7 +604,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
     if( ( nOption = GetOptionByName( "resolution" ) ) != -1 )
         GetOptionValue( nOption, fResl );
 
-    sal_uInt8* pBuffer = NULL;
+    BYTE* pBuffer = NULL;
 
     SANE_Status nStatus = SANE_STATUS_GOOD;
 
@@ -619,19 +620,19 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
     aConverter << (sal_uInt32) 60;
 
     // write BITMAPINFOHEADER
-    aConverter << (sal_uInt32)40;
-    aConverter << (sal_uInt32)0; // fill in width later
-    aConverter << (sal_uInt32)0; // fill in height later
-    aConverter << (sal_uInt16)1;
+    aConverter << (UINT32)40;
+    aConverter << (UINT32)0; // fill in width later
+    aConverter << (UINT32)0; // fill in height later
+    aConverter << (UINT16)1;
     // create header for 24 bits
     // correct later if necessary
-    aConverter << (sal_uInt16)24;
-    aConverter << (sal_uInt32)0;
-    aConverter << (sal_uInt32)0;
-    aConverter << (sal_uInt32)0;
-    aConverter << (sal_uInt32)0;
-    aConverter << (sal_uInt32)0;
-    aConverter << (sal_uInt32)0;
+    aConverter << (UINT16)24;
+    aConverter << (UINT32)0;
+    aConverter << (UINT32)0;
+    aConverter << (UINT32)0;
+    aConverter << (UINT32)0;
+    aConverter << (UINT32)0;
+    aConverter << (UINT32)0;
 
     for( nStream=0; nStream < 3 && bSuccess ; nStream++ )
     {
@@ -645,7 +646,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
             CheckConsistency( "sane_get_parameters" );
             if (nStatus != SANE_STATUS_GOOD || aParams.bytes_per_line == 0)
             {
-                bSuccess = sal_False;
+                bSuccess = FALSE;
                 break;
             }
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
@@ -663,7 +664,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
 #endif
             if( ! pBuffer )
             {
-                pBuffer = new sal_uInt8[ BYTE_BUFFER_SIZE < 4*aParams.bytes_per_line ? 4*aParams.bytes_per_line : BYTE_BUFFER_SIZE ];
+                pBuffer = new BYTE[ BYTE_BUFFER_SIZE < 4*aParams.bytes_per_line ? 4*aParams.bytes_per_line : BYTE_BUFFER_SIZE ];
             }
 
             if( aParams.last_frame )
@@ -688,14 +689,14 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                     fprintf( stderr, "Warning: unknown frame style !!!\n" );
             }
 
-            sal_Bool bSynchronousRead = sal_True;
+            BOOL bSynchronousRead = TRUE;
 
             // should be fail safe, but ... ??
             nStatus = p_set_io_mode( maHandle, SANE_FALSE );
             CheckConsistency( "sane_set_io_mode" );
             if( nStatus != SANE_STATUS_GOOD )
             {
-                bSynchronousRead = sal_False;
+                bSynchronousRead = FALSE;
                 nStatus = p_set_io_mode( maHandle, SANE_TRUE );
                 CheckConsistency( "sane_set_io_mode" );
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
@@ -714,12 +715,12 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 DUMP_STATE( nStatus, "sane_get_select_fd" );
                 CheckConsistency( "sane_get_select_fd" );
                 if( nStatus != SANE_STATUS_GOOD )
-                    bSynchronousRead = sal_True;
+                    bSynchronousRead = TRUE;
             }
             FILE* pFrame = tmpfile();
             if( ! pFrame )
             {
-                bSuccess = sal_False;
+                bSuccess = FALSE;
                 break;
             }
             do {
@@ -749,14 +750,14 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
             if( nStatus != SANE_STATUS_EOF )
             {
                 fclose( pFrame );
-                bSuccess = sal_False;
+                bSuccess = FALSE;
                 break;
             }
 
             int nFrameLength = ftell( pFrame );
             fseek( pFrame, 0, SEEK_SET );
-            sal_uInt32 nWidth = (sal_uInt32) aParams.pixels_per_line;
-            sal_uInt32 nHeight = (sal_uInt32) (nFrameLength / aParams.bytes_per_line);
+            UINT32 nWidth = (UINT32) aParams.pixels_per_line;
+            UINT32 nHeight = (UINT32) (nFrameLength / aParams.bytes_per_line);
             if( ! bWidthSet )
             {
                 if( ! fResl )
@@ -770,12 +771,12 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
 #endif
 
                 aConverter.Seek( 18 );
-                aConverter << (sal_uInt32)nWidth;
-                aConverter << (sal_uInt32)nHeight;
+                aConverter << (UINT32)nWidth;
+                aConverter << (UINT32)nHeight;
                 aConverter.Seek( 38 );
-                aConverter << (sal_uInt32)(1000*nWidth/nWidthMM);
-                aConverter << (sal_uInt32)(1000*nHeight/nHeightMM);
-                bWidthSet = sal_True;
+                aConverter << (UINT32)(1000*nWidth/nWidthMM);
+                aConverter << (UINT32)(1000*nHeight/nHeightMM);
+                bWidthSet = TRUE;
             }
             aConverter.Seek(60);
 
@@ -784,13 +785,13 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 aConverter.Seek( 10 );
                 aConverter << (sal_uInt32)64;
                 aConverter.Seek( 28 );
-                aConverter << (sal_uInt16) 1;
+                aConverter << (UINT16) 1;
                 aConverter.Seek( 54 );
                 // write color table
-                aConverter << (sal_uInt16)0xffff;
-                aConverter << (sal_uInt8)0xff;
-                aConverter << (sal_uInt8)0;
-                aConverter << (sal_uInt32)0;
+                aConverter << (UINT16)0xffff;
+                aConverter << (UINT8)0xff;
+                aConverter << (UINT8)0;
+                aConverter << (UINT32)0;
                 aConverter.Seek( 64 );
             }
             else if( eType == FrameStyle_Gray )
@@ -798,15 +799,15 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                  aConverter.Seek( 10 );
                  aConverter << (sal_uInt32)1084;
                 aConverter.Seek( 28 );
-                aConverter << (sal_uInt16) 8;
+                aConverter << (UINT16) 8;
                 aConverter.Seek( 54 );
                 // write color table
                 for( nLine = 0; nLine < 256; nLine++ )
                 {
-                    aConverter << (sal_uInt8)nLine;
-                    aConverter << (sal_uInt8)nLine;
-                    aConverter << (sal_uInt8)nLine;
-                    aConverter << (sal_uInt8)0;
+                    aConverter << (UINT8)nLine;
+                    aConverter << (UINT8)nLine;
+                    aConverter << (UINT8)nLine;
+                    aConverter << (UINT8)0;
                 }
                 aConverter.Seek( 1084 );
             }
@@ -826,7 +827,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 {
                     for( i = 0; i < (aParams.pixels_per_line); i++ )
                     {
-                        sal_uInt8 nGray = _ReadValue( pFrame, aParams.depth );
+                        UINT8 nGray = _ReadValue( pFrame, aParams.depth );
                         aConverter << nGray;
                     }
                 }
@@ -834,10 +835,10 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 {
                     for( i = 0; i < (aParams.pixels_per_line); i++ )
                     {
-                        sal_uInt8 nRed, nGreen, nBlue;
-                        nRed    = _ReadValue( pFrame, aParams.depth );
-                        nGreen  = _ReadValue( pFrame, aParams.depth );
-                        nBlue   = _ReadValue( pFrame, aParams.depth );
+                        UINT8 nRed, nGreen, nBlue;
+                        nRed	= _ReadValue( pFrame, aParams.depth );
+                        nGreen	= _ReadValue( pFrame, aParams.depth );
+                        nBlue	= _ReadValue( pFrame, aParams.depth );
                         aConverter << nBlue;
                         aConverter << nGreen;
                         aConverter << nRed;
@@ -847,7 +848,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 {
                     for( i = 0; i < (aParams.pixels_per_line); i++ )
                     {
-                        sal_uInt8 nValue = _ReadValue( pFrame, aParams.depth );
+                        UINT8 nValue = _ReadValue( pFrame, aParams.depth );
                         switch( aParams.format )
                         {
                             case SANE_FRAME_RED:
@@ -878,7 +879,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                 break;
         }
         else
-            bSuccess = sal_False;
+            bSuccess = FALSE;
     }
     // get stream length
     aConverter.Seek( STREAM_SEEK_TO_END );
@@ -918,7 +919,7 @@ int Sane::GetRange( int n, double*& rpDouble )
 
     rpDouble = 0;
     int nItems, i;
-    sal_Bool bIsFixed = mppOptions[n]->type == SANE_TYPE_FIXED ? sal_True : sal_False;
+    BOOL bIsFixed = mppOptions[n]->type == SANE_TYPE_FIXED ? TRUE : FALSE;
 
     dbg_msg( "Sane::GetRange of option %s ", mppOptions[n]->name );
     if(mppOptions[n]->constraint_type == SANE_CONSTRAINT_RANGE )
@@ -996,12 +997,12 @@ String Sane::GetOptionUnitName( int n )
     return aText;
 }
 
-sal_Bool Sane::ActivateButtonOption( int n )
+BOOL Sane::ActivateButtonOption( int n )
 {
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, NULL );
     if( nStatus != SANE_STATUS_GOOD )
-        return sal_False;
-    return sal_True;
+        return FALSE;
+    return TRUE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

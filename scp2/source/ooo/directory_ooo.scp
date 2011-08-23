@@ -165,7 +165,7 @@ End
 
 Directory gid_Dir_ShellnewToo
     ParentID = gid_Dir_Program;
-    DosName = "2shellnew";
+    DosName = "shellnew2";
 End
 
 #endif
@@ -457,6 +457,11 @@ End
 Directory gid_Dir_Share_Xslt_Import_Common
     ParentID = gid_Dir_Share_Xslt_Import;
     DosName = "common";
+End
+
+Directory gid_Dir_Share_Xslt_Odfflatxml
+    ParentID = gid_Dir_Share_Xslt;
+    DosName = "odfflatxml";
 End
 
 Directory gid_Dir_Share_Dtd
@@ -1528,4 +1533,3 @@ End
 Directory gid_Dir_Template_Common_Presnt
     ParentID = gid_Dir_Template_Common;
     DosName = "presnt";
-End

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include <sfx2/app.hxx>
-#include "sfx2/docinsert.hxx"
+#include "docinsert.hxx"
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -112,9 +112,9 @@ SfxMedium* DocumentInserter::CreateMedium()
         DBG_ASSERT( m_pURLList->Count() == 1, "DocumentInserter::CreateMedium(): invalid URL list count" );
         String sURL = *( m_pURLList->GetObject(0) );
         pMedium = new SfxMedium(
-                sURL, SFX_STREAM_READONLY, sal_False,
+                sURL, SFX_STREAM_READONLY, FALSE,
                 SFX_APP()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
-        pMedium->UseInteractionHandler( sal_True );
+        pMedium->UseInteractionHandler( TRUE );
         SfxFilterMatcher* pMatcher = NULL;
         if ( m_sDocFactory.Len() )
             pMatcher = new SfxFilterMatcher( m_sDocFactory );
@@ -122,7 +122,7 @@ SfxMedium* DocumentInserter::CreateMedium()
             pMatcher = new SfxFilterMatcher();
 
         const SfxFilter* pFilter = NULL;
-        sal_uInt32 nError = pMatcher->DetectFilter( *pMedium, &pFilter, sal_False );
+        sal_uInt32 nError = pMatcher->DetectFilter( *pMedium, &pFilter, FALSE );
         if ( nError == ERRCODE_NONE && pFilter )
             pMedium->SetFilter( pFilter );
         else
@@ -146,23 +146,23 @@ SfxMediumList* DocumentInserter::CreateMediumList()
         sal_Int32 nCount = m_pURLList->Count();
         for ( ; i < nCount; ++i )
         {
-            String sURL = *( m_pURLList->GetObject( static_cast< sal_uInt16 >(i) ) );
+            String sURL = *( m_pURLList->GetObject( static_cast< USHORT >(i) ) );
             SfxMedium* pMedium = new SfxMedium(
-                    sURL, SFX_STREAM_READONLY, sal_False,
+                    sURL, SFX_STREAM_READONLY, FALSE,
                     SFX_APP()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
 
-            pMedium->UseInteractionHandler( sal_True );
+            pMedium->UseInteractionHandler( TRUE );
 
             SfxFilterMatcher aMatcher( m_sDocFactory );
             const SfxFilter* pFilter = NULL;
-            sal_uInt32 nError = aMatcher.DetectFilter( *pMedium, &pFilter, sal_False );
+            sal_uInt32 nError = aMatcher.DetectFilter( *pMedium, &pFilter, FALSE );
             if ( nError == ERRCODE_NONE && pFilter )
                 pMedium->SetFilter( pFilter );
             else
                 DELETEZ( pMedium );
 
             if( pMedium && CheckPasswd_Impl( 0, SFX_APP()->GetPool(), pMedium ) != ERRCODE_ABORT )
-                pMediumList->push_back( pMedium );
+                pMediumList->Insert( pMedium );
             else
                 delete pMedium;
         }
@@ -181,7 +181,7 @@ void impl_FillURLList( sfx2::FileDialogHelper* _pFileDlg, SvStringsDtor*& _rpURL
     {
         _rpURLList = new SvStringsDtor;
 
-        for ( sal_uInt16 i = 0; i < aPathSeq.getLength(); ++i )
+        for ( USHORT i = 0; i < aPathSeq.getLength(); ++i )
         {
             INetURLObject aPathObj( aPathSeq[i] );
             String* pURL = new String( aPathObj.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -249,7 +249,7 @@ IMPL_LINK( DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG 
             }
             catch( IllegalArgumentException )
             {
-                OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                DBG_ERROR( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
             }
         }
 
@@ -270,7 +270,7 @@ IMPL_LINK( DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG 
                 }
                 catch( IllegalArgumentException )
                 {
-                    OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                    DBG_ERROR( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
                 }
             }
         }

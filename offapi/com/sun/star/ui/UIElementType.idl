@@ -1,13 +1,10 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UIElementType.idl,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,15 +32,15 @@ module com {  module sun {  module star {  module ui {
 /** determine the type of a user interface element which is controlled
     by a layout manager.
 
-    @since OOo 2.0
+    @since OOo 2.0.0
  */
 constants UIElementType
 {
     //-------------------------------------------------------------------------
-    /** unknown user interface element type, which can be used as a wildcard
+    /** unkown user interface element type, which can be used as a wildcard
        to specify all types.
     */
-    const short UNKNOWN         = 0;
+    const short UNKNOWN         = 0;    
 
     //-------------------------------------------------------------------------
     /** specifies a menu bar.
@@ -51,7 +48,7 @@ constants UIElementType
     const short MENUBAR         = 1;
 
     //-------------------------------------------------------------------------
-    /** specifies a pop-up menu.
+    /** specifies a popup menu.
     */
     const short POPUPMENU       = 2;
 
@@ -79,11 +76,6 @@ constants UIElementType
     /** specifies a tool panel
     */
     const short TOOLPANEL       = 7;
-
-    //-------------------------------------------------------------------------
-    /** specifies a window that can be docked.
-    */
-    const short DOCKINGWINDOW   = 7;
 
     //-------------------------------------------------------------------------
     /** specifies the number of constants.

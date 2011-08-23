@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,11 +72,11 @@ void SetJpegPreviewSizeHint( int nWidth, int nHeight )
 
 void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
 {
-    struct jpeg_decompress_struct   cinfo;
-    struct my_error_mgr             jerr;
+    struct jpeg_decompress_struct	cinfo;
+    struct my_error_mgr				jerr;
     struct JPEGCreateBitmapParam    aCreateBitmapParam;
-    HPBYTE                          pDIB;
-    HPBYTE                          pTmp;
+    HPBYTE							pDIB;
+    HPBYTE							pTmp;
     long                            nWidth;
     long                            nHeight;
     long                            nAlignedWidth;
@@ -85,7 +85,7 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     long nScanLineBufferComponents = 0;
     // declare bDecompCreated volatile because of gcc
     // warning: variable 'bDecompCreated' might be clobbered by `longjmp' or `vfork'
-    volatile long                   bDecompCreated = 0;
+    volatile long					bDecompCreated = 0;
 
     /* Falls der Stream nicht ausreicht (IO_PENDING)
      wird ueber ein longjmp in der Schleife nach Exit
@@ -101,13 +101,13 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     jpeg_create_decompress( &cinfo );
     bDecompCreated = 1;
         jpeg_svstream_src( &cinfo, pIStm );
-    jpeg_read_header( &cinfo, sal_True );
+    jpeg_read_header( &cinfo, TRUE );
 
     cinfo.scale_num = 1;
     cinfo.scale_denom = 1;
     cinfo.output_gamma = 1.0;
-    cinfo.raw_data_out = sal_False;
-    cinfo.quantize_colors = sal_False;
+    cinfo.raw_data_out = FALSE;
+    cinfo.quantize_colors = FALSE;
     if ( cinfo.jpeg_color_space == JCS_YCbCr )
         cinfo.out_color_space = JCS_RGB;
     else if ( cinfo.jpeg_color_space == JCS_YCCK )
@@ -139,8 +139,8 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
         if( cinfo.scale_denom > 1 )
         {
             cinfo.dct_method            = JDCT_FASTEST;
-            cinfo.do_fancy_upsampling   = sal_False;
-            cinfo.do_block_smoothing    = sal_False;
+            cinfo.do_fancy_upsampling   = FALSE;
+            cinfo.do_block_smoothing    = FALSE;
         }
     }
 
@@ -198,7 +198,7 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
             /* PENDING ??? */
             if ( cinfo.err->msg_code == 113 )
             break;
-
+            
             pTmp += nAlignedWidth;
         }
     }
@@ -219,14 +219,14 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
                 long nWidth, long nHeight, long bGreys,
                 long nQualityPercent, void* pCallbackData )
 {
-    struct jpeg_compress_struct cinfo;
-    struct my_error_mgr         jerr;
-    void*                       pScanline;
-    long                        nY;
+    struct jpeg_compress_struct	cinfo;
+    struct my_error_mgr			jerr;
+    void*						pScanline;
+    long						nY;
     // declare bCompCreated, bRet volatile because of gcc
     // warning: variable 'bCompCreated' might be clobbered by `longjmp' or `vfork'
-    volatile long               bCompCreated = 0;
-    volatile long               bRet = 0;
+    volatile long				bCompCreated = 0;
+    volatile long				bRet = 0;
 
     if ( setjmp( jerr.setjmp_buffer ) )
         goto Exit;
@@ -254,12 +254,12 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
     }
 
     jpeg_set_defaults( &cinfo );
-    jpeg_set_quality( &cinfo, (int) nQualityPercent, sal_False );
+    jpeg_set_quality( &cinfo, (int) nQualityPercent, FALSE );
 
     if ( ( nWidth > 128 ) || ( nHeight > 128 ) )
         jpeg_simple_progression( &cinfo );
 
-    jpeg_start_compress( &cinfo, sal_True );
+    jpeg_start_compress( &cinfo, TRUE );
 
     for( nY = 0; nY < nHeight; nY++ )
     {

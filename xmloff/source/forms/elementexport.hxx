@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace xmloff
         ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >
                                 m_aEvents;
 
-        SvXMLElementExport*     m_pXMLElement;          // XML element doing the concrete startElement etc.
+        SvXMLElementExport*		m_pXMLElement;			// XML element doing the concrete startElement etc.
 
     public:
         OElementExport(IFormsExportContext& _rContext,
@@ -101,17 +101,17 @@ namespace xmloff
         DECLARE_STL_STDKEY_SET(sal_Int16, Int16Set);
             // used below
 
-        ::rtl::OUString         m_sControlId;           // the control id to use when exporting
-        ::rtl::OUString         m_sReferringControls;   // list of referring controls (i.e. their id's)
-        sal_Int16               m_nClassId;             // class id of the control we're representing
-        ElementType             m_eType;                // (XML) type of the control we're representing
-        sal_Int32               m_nIncludeCommon;       // common control attributes to include
-        sal_Int32               m_nIncludeDatabase;     // common database attributes to include
-        sal_Int32               m_nIncludeSpecial;      // special attributes to include
-        sal_Int32               m_nIncludeEvents;       // events to include
-        sal_Int32               m_nIncludeBindings;     // binding attributes to include
+        ::rtl::OUString			m_sControlId;			// the control id to use when exporting
+        ::rtl::OUString			m_sReferringControls;	// list of referring controls (i.e. their id's)
+        sal_Int16				m_nClassId;				// class id of the control we're representing
+        ElementType				m_eType;				// (XML) type of the control we're representing
+        sal_Int32				m_nIncludeCommon;		// common control attributes to include
+        sal_Int32				m_nIncludeDatabase;		// common database attributes to include
+        sal_Int32				m_nIncludeSpecial;		// special attributes to include
+        sal_Int32				m_nIncludeEvents;		// events to include
+        sal_Int32               m_nIncludeBindings;	    // binding attributes to include
 
-        SvXMLElementExport*     m_pOuterElement;        // XML element doing the concrete startElement etc. for the outer element
+        SvXMLElementExport*		m_pOuterElement;		// XML element doing the concrete startElement etc. for the outer element
 
     public:
         /** constructs an object capable of exporting controls
@@ -162,26 +162,19 @@ namespace xmloff
         */
         void exportSubTags() throw (::com::sun::star::uno::Exception);
 
-        /** adds the attributes which are handled via generic IPropertyHandlers
-
-            <p>In the future, this really should be *all* attribiutes, instead of this shitload of
-            hand-crafted code we have currently ...</p>
-        */
-        void exportGenericHandlerAttributes();
-
-        /** adds common control attributes to the XMLExport context given
+        /**	adds common control attributes to the XMLExport context given
 
             <p>The attribute list of the context is not cleared initially, this is the responsibility of the caller.</p>
         */
         void exportCommonControlAttributes();
 
-        /** adds database attributes to the XMLExport context given
+        /**	adds database attributes to the XMLExport context given
 
             <p>The attribute list of the context is not cleared initially, this is the responsibility of the caller.</p>
         */
         void exportDatabaseAttributes();
 
-        /** adds the XML attributes which are related to binding controls to
+        /**	adds the XML attributes which are related to binding controls to
             external values and/or list sources
         */
         void exportBindingAtributes();
@@ -323,7 +316,7 @@ namespace xmloff
         virtual void exportAttributes();
     };
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_ELEMENTEXPORT_HXX_

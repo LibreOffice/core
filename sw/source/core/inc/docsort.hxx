@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,23 +52,23 @@ namespace com { namespace sun { namespace star { namespace lang {
 /*--------------------------------------------------------------------
     Beschreibung: Liste aller sortierten Elemente
  --------------------------------------------------------------------*/
-typedef const _FndBox*      _FndBoxPtr;
-typedef SwSortElement*      SwSortElementPtr;
-typedef const SwTableBox*   SwMovedBoxPtr;
+typedef const _FndBox* 		_FndBoxPtr;
+typedef SwSortElement* 		SwSortElementPtr;
+typedef const SwTableBox* 	SwMovedBoxPtr;
 
 SV_DECL_PTRARR_SORT(SwSortElements, SwSortElementPtr, 0, 1 )
-SV_DECL_PTRARR(SwMovedBoxes,        SwMovedBoxPtr, 10, 10 )
+SV_DECL_PTRARR(SwMovedBoxes, 		SwMovedBoxPtr, 10, 10 )
 
 /*--------------------------------------------------------------------
     Beschreibung: Funktionen zum Moven von Boxen
  --------------------------------------------------------------------*/
 
 void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox,
-             sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=0);
+             USHORT nS, USHORT nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=0);
 void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox,
-             sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=0);
+             USHORT nS, USHORT nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=0);
 void MoveCell(SwDoc* pDoc, const SwTableBox* pSource,
-              const SwTableBox* pTar, sal_Bool bMovedBefore, SwUndoSort* pUD=0);
+              const SwTableBox* pTar, BOOL bMovedBefore, SwUndoSort* pUD=0);
 
 /*-------------------------------------------------------------------
     Beschreibung: Elemente zum Sortieren von Text und Tabellen-Inhalt
@@ -76,24 +76,24 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource,
 
 struct SwSortElement
 {
-    static SwSortOptions*       pOptions;
-    static SwDoc*               pDoc;
-    static const FlatFndBox*    pBox;
-    static CollatorWrapper*     pSortCollator;
+    static SwSortOptions*		pOptions;
+    static SwDoc*				pDoc;
+    static const FlatFndBox*	pBox;
+    static CollatorWrapper*		pSortCollator;
     static ::com::sun::star::lang::Locale* pLocale;
-    static String*              pLastAlgorithm;
-    static LocaleDataWrapper*   pLclData;
+    static String*				pLastAlgorithm;
+    static LocaleDataWrapper* 	pLclData;
 
     static void Init( SwDoc*, const SwSortOptions& rOpt, FlatFndBox* = 0 );
     static void Finit();
 
     virtual ~SwSortElement();
 
-    virtual String GetKey(sal_uInt16 nKey ) const = 0;
-    virtual double GetValue(sal_uInt16 nKey ) const;
+    virtual	String GetKey(USHORT nKey ) const = 0;
+    virtual	double GetValue(USHORT nKey ) const;
 
-    sal_Bool operator==(const SwSortElement& );
-    sal_Bool operator<(const SwSortElement& );
+    BOOL operator==(const SwSortElement& );
+    BOOL operator<(const SwSortElement& );
 
     double StrToDouble(const String& rStr) const;
 };
@@ -105,13 +105,13 @@ struct SwSortElement
 struct SwSortTxtElement : public SwSortElement
 {
     // fuer Text
-    sal_uLong           nOrg;
-    SwNodeIndex     aPos;
+    ULONG 			nOrg;
+    SwNodeIndex		aPos;
 
     SwSortTxtElement( const SwNodeIndex& rPos );
     virtual ~SwSortTxtElement();
 
-    virtual String GetKey( sal_uInt16 nKey ) const;
+    virtual String GetKey( USHORT nKey ) const;
 };
 
 /*--------------------------------------------------------------------
@@ -120,13 +120,13 @@ struct SwSortTxtElement : public SwSortElement
 
 struct SwSortBoxElement : public SwSortElement
 {
-    sal_uInt16                      nRow;
+    USHORT 						nRow;
 
-    SwSortBoxElement( sal_uInt16 nRC );
+    SwSortBoxElement( USHORT nRC );
     virtual ~SwSortBoxElement();
 
-    virtual String GetKey( sal_uInt16 nKey ) const;
-    virtual double GetValue( sal_uInt16 nKey ) const;
+    virtual String GetKey( USHORT nKey ) const;
+    virtual	double GetValue( USHORT nKey ) const;
 };
 
 
@@ -141,39 +141,39 @@ public:
     FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox);
     ~FlatFndBox();
 
-    sal_Bool                IsSymmetric() const { return bSym;  }
-    sal_uInt16              GetRows()     const { return nRows; }
-    sal_uInt16              GetCols()     const { return nCols; }
+    BOOL 				IsSymmetric() const { return bSym; 	}
+    USHORT				GetRows()	  const { return nRows;	}
+    USHORT				GetCols()	  const { return nCols;	}
 
-    const _FndBox*      GetBox(sal_uInt16 nCol, sal_uInt16 nRow) const;
+    const _FndBox* 		GetBox(USHORT nCol, USHORT nRow) const;
 
-    inline sal_Bool         HasItemSets() const;
-    const SfxItemSet*   GetItemSet(sal_uInt16 nCol, sal_uInt16 nRow) const;
+    inline BOOL			HasItemSets() const;
+    const SfxItemSet* 	GetItemSet(USHORT nCol, USHORT nRow) const;
 
 private:
 
-    sal_Bool                CheckLineSymmetry(const _FndBox& rBox);
-    sal_Bool                CheckBoxSymmetry(const _FndLine& rLn);
-    sal_uInt16              GetColCount(const _FndBox& rBox);
-    sal_uInt16              GetRowCount(const _FndBox& rBox);
-    void                FillFlat(const _FndBox&, sal_Bool bLastBox=sal_False);
+    BOOL 				CheckLineSymmetry(const _FndBox& rBox);
+    BOOL 				CheckBoxSymmetry(const _FndLine& rLn);
+    USHORT 				GetColCount(const _FndBox& rBox);
+    USHORT 				GetRowCount(const _FndBox& rBox);
+    void 		   		FillFlat(const _FndBox&, BOOL bLastBox=FALSE);
 
-    SwDoc*              pDoc;
-    const _FndBox&      rBoxRef;
-    _FndBoxPtr*         pArr;
-    SfxItemSet**        ppItemSets;
+    SwDoc*				pDoc;
+    const _FndBox&		rBoxRef;
+    _FndBoxPtr* 		pArr;
+    SfxItemSet** 		ppItemSets;
 
-    sal_uInt16              nRows;
-    sal_uInt16              nCols;
+    USHORT 	 			nRows;
+    USHORT   	   		nCols;
 
-    sal_uInt16              nRow;
-    sal_uInt16              nCol;
+    USHORT 				nRow;
+    USHORT 				nCol;
 
-    sal_Bool                bSym;
+    BOOL				bSym;
 };
 
 
-inline sal_Bool FlatFndBox::HasItemSets() const { return 0 != ppItemSets; }
+inline BOOL FlatFndBox::HasItemSets() const	{ return 0 != ppItemSets; }
 
 #endif // _NDSORT_HXX
 

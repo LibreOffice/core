@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,24 +34,24 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#define XML_PROGRESSRANGE   "ProgressRange"
-#define XML_PROGRESSMAX     "ProgressMax"
-#define XML_PROGRESSCURRENT "ProgressCurrent"
+#define XML_PROGRESSRANGE	"ProgressRange"
+#define XML_PROGRESSMAX		"ProgressMax"
+#define XML_PROGRESSCURRENT	"ProgressCurrent"
 #define XML_PROGRESSREPEAT  "ProgressRepeat"
 
 class XMLOFF_DLLPUBLIC ProgressBarHelper
 {
-            ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator >   xStatusIndicator;
-            sal_Int32                                                                       nRange;
-            sal_Int32                                                                       nReference;
-            sal_Int32                                                                       nValue;
-            double                                                                          fOldPercent;
-            sal_Bool                                                                        bStrict;
+            ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator > 	xStatusIndicator;
+            sal_Int32																		nRange;
+            sal_Int32																		nReference;
+            sal_Int32																		nValue;
+            double																			fOldPercent;
+            sal_Bool																		bStrict;
             // #96469#; if the value goes over the Range the progressbar starts again
             sal_Bool                                                                        bRepeat;
 
 #ifdef DBG_UTIL
-            sal_Bool                                                                        bFailure;
+            sal_Bool																		bFailure;
 #endif
 public:
             ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator>& xStatusIndicator,

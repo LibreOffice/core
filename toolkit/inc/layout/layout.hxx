@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,10 @@
 #include <tools/string.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/combobox.h>
-#include <tools/fldunit.hxx>
+#include <vcl/fldunit.hxx>
 #include <vcl/lstbox.h>
-#include <tools/wintypes.hxx>
+#include <vcl/smartid.hxx>
+#include <vcl/wintypes.hxx>
 
 class Button;
 class ComboBox;
@@ -60,6 +61,8 @@ class PushButton;
 class RadioButton;
 class ResId;
 struct SfxChildWinInfo;
+//class SvxFontListBox;
+//class SvxLanguageBox;
 class TabControl;
 class TabPage;
 class VCLXRadioButton;
@@ -160,11 +163,15 @@ public:
     String GetText() const;
     void SetStyle( WinBits style );
     void SetUpdateMode( bool mode );
-    void SetHelpId( const rtl::OString& id );
-    const rtl::OString& GetHelpId() const;
+    void SetHelpId( sal_uIntPtr id );
+    sal_uIntPtr GetHelpId() const;
+    void SetSmartHelpId( SmartId const&, SmartIdUpdateMode mode=SMART_SET_SMART );
+    SmartId GetSmartHelpId() const;
     void EnterWait ();
     void LeaveWait ();
     bool IsWait () const;
+    //void Enable (bool enable=true, bool child=true);
+    //void Disable (bool child=true);
     bool IsEnabled () const;
     void EnableInput (bool enable=true, bool child=true);
     bool IsInputEnabled () const;
@@ -261,7 +268,7 @@ public:
     static String GetStandardText (sal_uInt16 button_type);
     void SetText( rtl::OUString const& rStr );
     bool SetModeImage (Image const& image);
-    bool SetModeImage (::Image const& image);
+    bool SetModeImage (::Image const& image, BmpColorMode mode=BMP_COLOR_NORMAL);
     void SetImageAlign( ImageAlign eAlign );
 
     void SetClickHdl( Link const& rLink );
@@ -576,20 +583,20 @@ public:
 #define DECL_MESSAGE_BOX_CTORS(Name)\
     public:\
     Name##Box (::Window *parent, char const* message,\
-               char const* yes=0, char const* no=0, const rtl::OString& help_id=rtl::OString(),\
+               char const* yes=0, char const* no=0, sal_uIntPtr help_id=0,\
                char const* xml_file="message-box.xml", char const* id="message-box");\
     Name##Box (::Window *parent, rtl::OUString const& message,\
                rtl::OUString yes=String (),\
                rtl::OUString no=String (),\
-               const rtl::OString& help_id=rtl::OString(),\
+               sal_uIntPtr help_id=0,\
                char const* xml_file="message-box.xml", char const* id="message-box");\
     Name##Box (::Window *parent, WinBits, char const* message,\
-               char const* yes=0, char const* no=0, const rtl::OString& help_id=rtl::OString(),\
+               char const* yes=0, char const* no=0, sal_uIntPtr help_id=0,\
                char const* xml_file="message-box.xml", char const* id="message-box");\
     Name##Box (::Window *parent, WinBits, rtl::OUString const& message,\
                rtl::OUString yes=String (),\
                rtl::OUString no=String (),\
-               const rtl::OString& help_id=rtl::OString(),\
+               sal_uIntPtr help_id=0,\
                char const* xml_file="message-box.xml", char const* id="message-box")\
 
 class TOOLKIT_DLLPUBLIC MessageBox : public Dialog
@@ -610,10 +617,10 @@ protected:
     YesButton yesButton;
 
     void bits_init (WinBits bits, rtl::OUString const& message,
-                    rtl::OUString yes, rtl::OUString, const rtl::OString& help_id);
+                    rtl::OUString yes, rtl::OUString, sal_uIntPtr help_id);
     void init (rtl::OUString const& message,
-               rtl::OUString const& yes, rtl::OUString const& no, const rtl::OString& help_id);
-    void init (char const* message, char const* yes, char const* no, const rtl::OString& help_id);
+               rtl::OUString const& yes, rtl::OUString const& no, sal_uIntPtr help_id);
+    void init (char const* message, char const* yes, char const* no, sal_uIntPtr help_id);
 };
 
 #define CLASS_MESSAGE_BOX(Name)\
@@ -769,6 +776,7 @@ class PluginImpl;
 class TOOLKIT_DLLPUBLIC Plugin : public Control
 {
     DECL_GET_IMPL( Plugin );
+    //DECL_CONSTRUCTORS( Plugin, Control, 0 );
 public:
     ::Control *mpPlugin;
     Plugin( Context *context, char const* id, ::Control *plugin );
@@ -791,7 +799,7 @@ public:
     operator String();
     String getString ();
     rtl::OUString getOUString ();
-    String GetToken (sal_uInt16 i, sal_Char c);
+    String GetToken (USHORT i, sal_Char c);
 };
 
 class InPlugImpl;

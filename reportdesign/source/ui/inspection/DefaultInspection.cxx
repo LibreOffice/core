@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,20 +38,17 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include "metadata.hxx"
-#include <tools/urlobj.hxx>
 
 //........................................................................
 namespace rptui
 {
 //........................................................................
     //------------------------------------------------------------------------
-    ::rtl::OUString HelpIdUrl::getHelpURL( const rtl::OString& sHelpId )
+    ::rtl::OUString HelpIdUrl::getHelpURL( sal_uInt32 _nHelpId )
     {
         ::rtl::OUStringBuffer aBuffer;
-        ::rtl::OUString aTmp( sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8 );
-        DBG_ASSERT( INetURLObject( aTmp ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
-        aBuffer.appendAscii( INET_HID_SCHEME );
-        aBuffer.append( aTmp.getStr() );
+        aBuffer.appendAscii( "HID:" );
+        aBuffer.append( (sal_Int32)_nHelpId );
         return aBuffer.makeStringAndClear();
     }
 
@@ -64,7 +61,7 @@ namespace rptui
     //====================================================================
     //= DefaultComponentInspectorModel
     //====================================================================
-    DBG_NAME(DefaultComponentInspectorModel)
+    DBG_NAME(DefaultComponentInspectorModel)    
     //--------------------------------------------------------------------
     DefaultComponentInspectorModel::DefaultComponentInspectorModel( const Reference< XComponentContext >& _rxContext)
         :m_xContext( _rxContext )
@@ -75,13 +72,13 @@ namespace rptui
         ,m_nMaxHelpTextLines( 8 )
         ,m_pInfoService(new OPropertyInfoService())
     {
-        DBG_CTOR(DefaultComponentInspectorModel,NULL);
+        DBG_CTOR(DefaultComponentInspectorModel,NULL);        
     }
 
     //------------------------------------------------------------------------
     DefaultComponentInspectorModel::~DefaultComponentInspectorModel()
     {
-        DBG_DTOR(DefaultComponentInspectorModel,NULL);
+        DBG_DTOR(DefaultComponentInspectorModel,NULL);        
     }
 
     //------------------------------------------------------------------------
@@ -127,7 +124,7 @@ namespace rptui
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-
+        
         // service names for all our handlers
         const struct
         {
@@ -138,9 +135,9 @@ namespace rptui
             { "com.sun.star.form.inspection.EditPropertyHandler"},
             { "com.sun.star.report.inspection.DataProviderHandler"},
             { "com.sun.star.report.inspection.GeometryHandler"}
-
+            
             // generic virtual edit properties
-
+            
         };
 
         const size_t nFactories = SAL_N_ELEMENTS( aFactories );
@@ -159,7 +156,7 @@ namespace rptui
         ::osl::MutexGuard aGuard(m_aMutex);
         return m_bHasHelpSection;
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Int32 SAL_CALL DefaultComponentInspectorModel::getMinHelpTextLines() throw (RuntimeException)
     {
@@ -178,7 +175,7 @@ namespace rptui
         ::osl::MutexGuard aGuard(m_aMutex);
         m_bIsReadOnly = _isreadonly;
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Int32 SAL_CALL DefaultComponentInspectorModel::getMaxHelpTextLines() throw (RuntimeException)
     {
@@ -234,8 +231,8 @@ namespace rptui
         const struct
         {
             const sal_Char* programmaticName;
-            sal_uInt16          uiNameResId;
-            rtl::OString    helpId;
+            USHORT          uiNameResId;
+            sal_uInt32      helpId;
         } aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_RPT_PROPDLG_TAB_GENERAL },
             { "Data",       RID_STR_PROPPAGE_DATA,      HID_RPT_PROPDLG_TAB_DATA },

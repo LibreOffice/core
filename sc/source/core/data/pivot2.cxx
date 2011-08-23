@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+
+
 #ifdef _MSC_VER
 #pragma optimize("",off)
 #endif
@@ -51,15 +53,15 @@
 #include "userlist.hxx"
 #include "pivot.hxx"
 #include "rechead.hxx"
-#include "formula/errorcodes.hxx"                           // fuer errNoValue
+#include "formula/errorcodes.hxx"							// fuer errNoValue
 #include "refupdat.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
 
 using ::com::sun::star::sheet::DataPilotFieldReference;
 using ::rtl::OUString;
-using ::std::vector;
 
+// STATIC DATA -----------------------------------------------------------
 // ============================================================================
 
 ScDPName::ScDPName(const OUString& rName, const OUString& rLayoutName) :
@@ -81,7 +83,7 @@ OUString ScDPLabelData::Member::getDisplayName() const
     return maName;
 }
 
-ScDPLabelData::ScDPLabelData( const String& rName, SCCOL nCol, bool bIsValue ) :
+ScDPLabelData::ScDPLabelData( const String& rName, short nCol, bool bIsValue ) :
     maName( rName ),
     mnCol( nCol ),
     mnFuncMask( PIVOT_FUNC_NONE ),
@@ -100,120 +102,15 @@ OUString ScDPLabelData::getDisplayName() const
     return maName;
 }
 
-PivotField::PivotField( SCsCOL nNewCol, sal_uInt16 nNewFuncMask ) :
-    nCol( nNewCol ),
-    nFuncMask( nNewFuncMask ),
-    nFuncCount( 0 )
-{
-}
-
-PivotField::PivotField( const PivotField& r ) :
-    nCol(r.nCol), nFuncMask(r.nFuncMask), nFuncCount(r.nFuncCount), maFieldRef(r.maFieldRef)
-{
-}
-
-bool PivotField::operator==( const PivotField& r ) const
-{
-    return (nCol                            == r.nCol)
-        && (nFuncMask                       == r.nFuncMask)
-        && (nFuncCount                      == r.nFuncCount)
-        && (maFieldRef.ReferenceType        == r.maFieldRef.ReferenceType)
-        && (maFieldRef.ReferenceField       == r.maFieldRef.ReferenceField)
-        && (maFieldRef.ReferenceItemType    == r.maFieldRef.ReferenceItemType)
-        && (maFieldRef.ReferenceItemName    == r.maFieldRef.ReferenceItemName);
-}
-
-ScPivotParam::ScPivotParam()
-    :   nCol(0), nRow(0), nTab(0),
-        bIgnoreEmptyRows(false), bDetectCategories(false),
-        bMakeTotalCol(true), bMakeTotalRow(true)
-{
-}
-
-ScPivotParam::ScPivotParam( const ScPivotParam& r )
-    :   nCol( r.nCol ), nRow( r.nRow ), nTab( r.nTab ),
-        maPageFields(r.maPageFields),
-        maColFields(r.maColFields),
-        maRowFields(r.maRowFields),
-        maDataFields(r.maDataFields),
-        bIgnoreEmptyRows(r.bIgnoreEmptyRows),
-        bDetectCategories(r.bDetectCategories),
-        bMakeTotalCol(r.bMakeTotalCol),
-        bMakeTotalRow(r.bMakeTotalRow)
-{
-    SetLabelData(r.maLabelArray);
-}
-
-ScPivotParam::~ScPivotParam()
-{
-}
-
-void ScPivotParam::ClearPivotArrays()
-{
-    maPageFields.clear();
-    maColFields.clear();
-    maRowFields.clear();
-    maDataFields.clear();
-}
-
-void ScPivotParam::SetLabelData(const vector<ScDPLabelDataRef>& r)
-{
-    vector<ScDPLabelDataRef> aNewArray;
-    aNewArray.reserve(r.size());
-    for (vector<ScDPLabelDataRef>::const_iterator itr = r.begin(), itrEnd = r.end();
-          itr != itrEnd; ++itr)
-    {
-        ScDPLabelDataRef p(new ScDPLabelData(**itr));
-        aNewArray.push_back(p);
-    }
-    maLabelArray.swap(aNewArray);
-}
-
-ScPivotParam& ScPivotParam::operator=( const ScPivotParam& r )
-{
-    nCol              = r.nCol;
-    nRow              = r.nRow;
-    nTab              = r.nTab;
-    bIgnoreEmptyRows  = r.bIgnoreEmptyRows;
-    bDetectCategories = r.bDetectCategories;
-    bMakeTotalCol     = r.bMakeTotalCol;
-    bMakeTotalRow     = r.bMakeTotalRow;
-
-    maPageFields = r.maPageFields;
-    maColFields  = r.maColFields;
-    maRowFields  = r.maRowFields;
-    maDataFields = r.maDataFields;
-    SetLabelData(r.maLabelArray);
-    return *this;
-}
-
-bool ScPivotParam::operator==( const ScPivotParam& r ) const
-{
-    bool bEqual = (nCol == r.nCol)
-                 && (nRow == r.nRow)
-                 && (nTab == r.nTab)
-                 && (bIgnoreEmptyRows  == r.bIgnoreEmptyRows)
-                 && (bDetectCategories == r.bDetectCategories)
-                 && (bMakeTotalCol == r.bMakeTotalCol)
-                 && (bMakeTotalRow == r.bMakeTotalRow)
-                 && (maLabelArray.size() == r.maLabelArray.size())
-                 && maPageFields == r.maPageFields
-                 && maColFields == r.maColFields
-                 && maRowFields == r.maRowFields
-                 && maDataFields == r.maDataFields;
-
-    return bEqual;
-}
-
 // ============================================================================
 
-ScDPFuncData::ScDPFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
+ScDPFuncData::ScDPFuncData( short nCol, USHORT nFuncMask ) :
     mnCol( nCol ),
     mnFuncMask( nFuncMask )
 {
 }
 
-ScDPFuncData::ScDPFuncData( SCCOL nCol, sal_uInt16 nFuncMask, const DataPilotFieldReference& rFieldRef ) :
+ScDPFuncData::ScDPFuncData( short nCol, USHORT nFuncMask, const DataPilotFieldReference& rFieldRef ) :
     mnCol( nCol ),
     mnFuncMask( nFuncMask ),
     maFieldRef( rFieldRef )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,17 +128,17 @@ inline DWORD GetWindowExStyle( HWND hWnd )
     return GetWindowLong( hWnd, GWL_EXSTYLE );
 }
 
-inline BOOL IsMinimized( HWND hWnd )
+inline WIN_BOOL IsMinimized( HWND hWnd )
 {
     return IsIconic( hWnd );
 }
 
-inline BOOL IsMaximized( HWND hWnd )
+inline WIN_BOOL IsMaximized( HWND hWnd )
 {
     return IsZoomed( hWnd );
 }
 
-inline void SetWindowFont( HWND hWnd, HFONT hFont, BOOL bRedraw )
+inline void SetWindowFont( HWND hWnd, HFONT hFont, WIN_BOOL bRedraw )
 {
     SendMessage( hWnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM((UINT)bRedraw,0) );
 }
@@ -150,37 +150,37 @@ inline HFONT GetWindowFont( HWND hWnd )
 
 inline void SetClassCursor( HWND hWnd, HCURSOR hCursor )
 {
-    SetClassLongPtr( hWnd, GCLP_HCURSOR, (LONG_PTR)hCursor );
+    SetClassLong( hWnd, GCL_HCURSOR, (DWORD)hCursor );
 }
 
 inline HCURSOR GetClassCursor( HWND hWnd )
 {
-    return (HCURSOR)GetClassLongPtr( hWnd, GCLP_HCURSOR );
+    return (HCURSOR)GetClassLong( hWnd, GCL_HCURSOR );
 }
 
 inline void SetClassIcon( HWND hWnd, HICON hIcon )
 {
-    SetClassLongPtr( hWnd, GCLP_HICON, (LONG_PTR)hIcon );
+    SetClassLong( hWnd, GCL_HICON, (DWORD)hIcon );
 }
 
 inline HICON GetClassIcon( HWND hWnd )
 {
-    return (HICON)GetClassLongPtr( hWnd, GCLP_HICON );
+    return (HICON)GetClassLong( hWnd, GCL_HICON );
 }
 
 inline HBRUSH SetClassBrush( HWND hWnd, HBRUSH hBrush )
 {
-    return (HBRUSH)SetClassLongPtr( hWnd, GCLP_HBRBACKGROUND, (LONG_PTR)hBrush );
+    return (HBRUSH)SetClassLong( hWnd, GCL_HBRBACKGROUND, (DWORD)hBrush );
 }
 
 inline HBRUSH GetClassBrush( HWND hWnd )
 {
-    return (HBRUSH)GetClassLongPtr( hWnd, GCLP_HBRBACKGROUND );
+    return (HBRUSH)GetClassLong( hWnd, GCL_HBRBACKGROUND );
 }
 
 inline HINSTANCE GetWindowInstance( HWND hWnd )
 {
-    return (HINSTANCE)GetWindowLongPtr( hWnd, GWLP_HINSTANCE );
+    return (HINSTANCE)GetWindowLong( hWnd, GWL_HINSTANCE );
 }
 
 // ------------------------
@@ -190,7 +190,7 @@ inline HINSTANCE GetWindowInstance( HWND hWnd )
 #define MSH_MOUSEWHEEL "MSWHEEL_ROLLMSG"
 
 #define MOUSEZ_CLASSNAME  "MouseZ"            // wheel window class
-#define MOUSEZ_TITLE      "Magellan MSWHEEL"  // wheel window title
+#define MOUSEZ_TITLE	  "Magellan MSWHEEL"  // wheel window title
 
 #define MSH_WHEELMODULE_CLASS (MOUSEZ_CLASSNAME)
 #define MSH_WHEELMODULE_TITLE (MOUSEZ_TITLE)
@@ -198,19 +198,19 @@ inline HINSTANCE GetWindowInstance( HWND hWnd )
 #define MSH_SCROLL_LINES "MSH_SCROLL_LINES_MSG"
 
 #ifndef WHEEL_DELTA
-#define WHEEL_DELTA                 120
+#define WHEEL_DELTA 				120
 #endif
 #ifndef WM_MOUSEWHEEL
-#define WM_MOUSEWHEEL               0x020A
+#define WM_MOUSEWHEEL				0x020A
 #endif
 #ifndef SPI_GETWHEELSCROLLLINES
-#define SPI_GETWHEELSCROLLLINES     104
+#define SPI_GETWHEELSCROLLLINES		104
 #endif
 #ifndef SPI_SETWHEELSCROLLLINES
-#define SPI_SETWHEELSCROLLLINES     105
+#define SPI_SETWHEELSCROLLLINES		105
 #endif
 #ifndef WHEEL_PAGESCROLL
-#define WHEEL_PAGESCROLL            (UINT_MAX)
+#define WHEEL_PAGESCROLL			(UINT_MAX)
 #endif
 
 
@@ -218,9 +218,9 @@ inline HINSTANCE GetWindowInstance( HWND hWnd )
 // - SystemAgent Erweiterungen -
 // -----------------------------
 
-#define ENABLE_AGENT            1
-#define DISABLE_AGENT           2
-#define GET_AGENT_STATUS        3
+#define ENABLE_AGENT			1
+#define DISABLE_AGENT			2
+#define GET_AGENT_STATUS		3
 typedef int (APIENTRY* SysAgt_Enable_PROC)( int );
 
 // ---------------------
@@ -228,10 +228,10 @@ typedef int (APIENTRY* SysAgt_Enable_PROC)( int );
 // ---------------------
 
 #ifndef COLOR_GRADIENTACTIVECAPTION
-#define COLOR_GRADIENTACTIVECAPTION     27
+#define COLOR_GRADIENTACTIVECAPTION 	27
 #endif
 #ifndef COLOR_GRADIENTINACTIVECAPTION
-#define COLOR_GRADIENTINACTIVECAPTION   28
+#define COLOR_GRADIENTINACTIVECAPTION	28
 #endif
 
 #ifndef SPI_GETFLATMENU
@@ -241,7 +241,7 @@ typedef int (APIENTRY* SysAgt_Enable_PROC)( int );
 #define COLOR_MENUBAR       30
 #endif
 #ifndef COLOR_MENUHILIGHT
-#define COLOR_MENUHILIGHT   29
+#define COLOR_MENUHILIGHT   29   
 #endif
 
 #ifndef CS_DROPSHADOW

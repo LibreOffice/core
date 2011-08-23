@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,29 +33,35 @@
 
 class EditView;
 
+//	----------------------------------------------------------------------
+//	class EditSelFunctionSet
+//	----------------------------------------------------------------------
 class EditSelFunctionSet: public FunctionSet
 {
 private:
-    EditView*       pCurView;
+    EditView* 	    pCurView;
 
 public:
                     EditSelFunctionSet();
 
-    virtual void    BeginDrag();
+    virtual void 	BeginDrag();
 
-    virtual void    CreateAnchor();
-    virtual void    DestroyAnchor();
+    virtual void 	CreateAnchor();
+    virtual void	DestroyAnchor();
 
-    virtual sal_Bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = sal_False );
+    virtual BOOL 	SetCursorAtPoint( const Point& rPointPixel, BOOL bDontSelectAtCursor = FALSE );
 
-    virtual sal_Bool    IsSelectionAtPoint( const Point& rPointPixel );
-    virtual void    DeselectAtPoint( const Point& rPointPixel );
-    virtual void    DeselectAll();
+    virtual BOOL 	IsSelectionAtPoint( const Point& rPointPixel );
+    virtual void 	DeselectAtPoint( const Point& rPointPixel );
+    virtual void 	DeselectAll();
 
-    void            SetCurView( EditView* pView )       { pCurView = pView; }
-    EditView*       GetCurView()                        { return pCurView; }
+    void			SetCurView( EditView* pView ) 	    { pCurView = pView; }
+    EditView*	    GetCurView() 					    { return pCurView; }
 };
 
+//	----------------------------------------------------------------------
+//	class EditSelectionEngine
+//	----------------------------------------------------------------------
 class EditSelectionEngine : public SelectionEngine
 {
 private:
@@ -63,8 +69,8 @@ private:
 public:
                     EditSelectionEngine();
 
-    void            SetCurView( EditView* pNewView );
-    EditView*       GetCurView();
+    void			SetCurView( EditView* pNewView );
+    EditView*		GetCurView();
 };
 
 #endif // _EDITSEL_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,10 +64,8 @@ namespace xmloff
             GRID,
             VALUERANGE,
             GENERIC_CONTROL,
-            TIME,
-            DATE,
 
-            UNKNOWN // must be the last element
+            UNKNOWN	// must be the last element
         };
 
     protected:
@@ -81,15 +79,15 @@ namespace xmloff
         /** retrieves the tag name to be used to describe a control of the given type
 
             <p>The retuned string is the pure element name, without any namespace.</p>
-
-            @param  _eType
+            
+            @param	_eType
                 the element type
         */
         static const sal_Char* getElementName(ElementType _eType);
     };
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_CONTROLELEMENT_HXX_

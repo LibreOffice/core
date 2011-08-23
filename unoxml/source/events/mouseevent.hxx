@@ -1,52 +1,28 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
- *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+#ifndef __MOUSEEVENT_HXX
+#define __MOUSEEVENT_HXX
 
-#ifndef EVENT_MOUSEEVENT_HXX
-#define EVENT_MOUSEEVENT_HXX
-
-#include <com/sun/star/xml/dom/events/PhaseType.hpp>
-#include <com/sun/star/xml/dom/events/XMouseEvent.hpp>
-
+#include <sal/types.h>
 #include <cppuhelper/implbase1.hxx>
-
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/xml/dom/events/EventType.hpp>
+#include <com/sun/star/xml/dom/events/PhaseType.hpp>
+#include <com/sun/star/xml/dom/events/AttrChangeType.hpp>
+#include <com/sun/star/xml/dom/events/XEvent.hpp>
+#include <com/sun/star/xml/dom/events/XUIEvent.hpp>
+#include <com/sun/star/xml/dom/events/XMouseEvent.hpp>
+#include "event.hxx"
 #include "uievent.hxx"
-
 
 using ::rtl::OUString;
 
 namespace DOM { namespace events {
 
-typedef ::cppu::ImplInheritanceHelper1< CUIEvent, XMouseEvent >
-    CMouseEvent_Base;
-
-class CMouseEvent
-    : public CMouseEvent_Base
+class CMouseEvent : public cppu::ImplInheritanceHelper1< CUIEvent, XMouseEvent >
 {
+    friend class CEventDispatcher;
 protected:
     sal_Int32 m_screenX;
     sal_Int32 m_screenY;
@@ -60,7 +36,6 @@ protected:
     Reference< XEventTarget > m_relatedTarget;
 
 public:
-    explicit CMouseEvent();
 
     virtual sal_Int32 SAL_CALL getScreenX() throw (RuntimeException);
     virtual sal_Int32 SAL_CALL getScreenY() throw (RuntimeException);
@@ -74,30 +49,30 @@ public:
     virtual Reference< XEventTarget > SAL_CALL getRelatedTarget()  throw(RuntimeException);
 
     virtual void SAL_CALL initMouseEvent(
-                        const OUString& typeArg,
-                        sal_Bool canBubbleArg,
-                        sal_Bool cancelableArg,
-                        const Reference< XAbstractView >& viewArg,
-                        sal_Int32 detailArg,
-                        sal_Int32 screenXArg,
-                        sal_Int32 screenYArg,
-                        sal_Int32 clientXArg,
-                        sal_Int32 clientYArg,
-                        sal_Bool ctrlKeyArg,
-                        sal_Bool altKeyArg,
-                        sal_Bool shiftKeyArg,
-                        sal_Bool metaKeyArg,
-                        sal_Int16 buttonArg,
+                        const OUString& typeArg, 
+                        sal_Bool canBubbleArg, 
+                        sal_Bool cancelableArg, 
+                        const Reference< XAbstractView >& viewArg, 
+                        sal_Int32 detailArg, 
+                        sal_Int32 screenXArg, 
+                        sal_Int32 screenYArg, 
+                        sal_Int32 clientXArg, 
+                        sal_Int32 clientYArg, 
+                        sal_Bool ctrlKeyArg, 
+                        sal_Bool altKeyArg, 
+                        sal_Bool shiftKeyArg, 
+                        sal_Bool metaKeyArg, 
+                        sal_Int16 buttonArg, 
                         const Reference< XEventTarget >& relatedTargetArg)
         throw(RuntimeException);
 
-    // delegate to CUIevent
+    // delegate to CUIevent    
     virtual Reference< XAbstractView > SAL_CALL getView() throw (RuntimeException);
     virtual sal_Int32 SAL_CALL getDetail() throw (RuntimeException);
-    virtual void SAL_CALL initUIEvent(const OUString& typeArg,
-                     sal_Bool canBubbleArg,
-                     sal_Bool cancelableArg,
-                     const Reference< XAbstractView >& viewArg,
+    virtual void SAL_CALL initUIEvent(const OUString& typeArg, 
+                     sal_Bool canBubbleArg, 
+                     sal_Bool cancelableArg, 
+                     const Reference< XAbstractView >& viewArg, 
                      sal_Int32 detailArg) throw (RuntimeException);
     virtual OUString SAL_CALL getType() throw (RuntimeException);
     virtual Reference< XEventTarget > SAL_CALL getTarget() throw (RuntimeException);
@@ -109,10 +84,10 @@ public:
     virtual void SAL_CALL stopPropagation() throw (RuntimeException);
     virtual void SAL_CALL preventDefault() throw (RuntimeException);
     virtual void SAL_CALL initEvent(
-        const OUString& eventTypeArg,
-        sal_Bool canBubbleArg,
-        sal_Bool cancelableArg)
-        throw (RuntimeException);
+        const OUString& eventTypeArg, 
+        sal_Bool canBubbleArg, 
+        sal_Bool cancelableArg) 
+        throw (RuntimeException);    
 };
 }}
 #endif

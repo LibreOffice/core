@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,22 +33,22 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include "accessibility/extended/accessiblebrowseboxcell.hxx"
 #include <cppuhelper/implbase2.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 // ============================================================================
 namespace accessibility
 {
 // ============================================================================
-    typedef ::cppu::ImplHelper2 <   ::com::sun::star::accessibility::XAccessible,
+    typedef ::cppu::ImplHelper2	<	::com::sun::star::accessibility::XAccessible,
                                     ::com::sun::star::accessibility::XAccessibleValue
-                                >   AccessibleCheckBoxCell_BASE;
+                                >	AccessibleCheckBoxCell_BASE;
 
-    class AccessibleCheckBoxCell :   public AccessibleBrowseBoxCell
+    class AccessibleCheckBoxCell :	 public AccessibleBrowseBoxCell
                                     ,public AccessibleCheckBoxCell_BASE
     {
     private:
         TriState m_eState;
-        sal_Bool m_bEnabled;
-        sal_Bool m_bIsTriState;
+        BOOL m_bEnabled;
+        BOOL m_bIsTriState;
 
     protected:
         virtual ~AccessibleCheckBoxCell() {}

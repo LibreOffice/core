@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "VAxisOrGridBase.hxx"
 #include "ShapeFactory.hxx"
 #include "CommonConverters.hxx"
-#include "Tickmarks.hxx"
+#include "TickmarkHelper.hxx"
 
 // header for define DBG_ASSERT
 #include <tools/debug.hxx>
@@ -58,7 +58,7 @@ VAxisOrGridBase::~VAxisOrGridBase()
 {
 }
 
-void VAxisOrGridBase::setExplicitScaleAndIncrement(
+void SAL_CALL VAxisOrGridBase::setExplicitScaleAndIncrement(
               const ExplicitScaleData& rScale
             , const ExplicitIncrementData& rIncrement )
             throw (uno::RuntimeException)
@@ -80,9 +80,18 @@ void VAxisOrGridBase::set3DWallPositions( CuboidPlanePosition eLeftWallPos, Cubo
     m_eBottomPos = eBottomPos;
 }
 
-TickFactory* VAxisOrGridBase::createTickFactory()
+TickmarkHelper* VAxisOrGridBase::createTickmarkHelper()
 {
-    return new TickFactory( m_aScale, m_aIncrement );
+    TickmarkHelper* pRet=NULL;
+    if( 2==m_nDimension )
+    {
+        pRet = new TickmarkHelper( m_aScale, m_aIncrement );
+    }
+    else
+    {
+        pRet = new TickmarkHelper_3D( m_aScale, m_aIncrement );
+    }
+    return pRet;
 }
 
 //.............................................................................

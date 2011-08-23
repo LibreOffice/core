@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ public:
                  ::com::sun::star::uno::XComponentContext > & xContext,
              const std::vector< LegendEntryProvider* >& rLegendEntryProviderList );
 
-    void init( const ::com::sun::star::uno::Reference<
+    void SAL_CALL init( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::drawing::XShapes >& xTargetPage,
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
@@ -90,7 +90,7 @@ private:
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >            m_xTarget;
     ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory>   m_xShapeFactory;
+                    ::com::sun::star::lang::XMultiServiceFactory>	m_xShapeFactory;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XLegend >             m_xLegend;
     ::com::sun::star::uno::Reference<

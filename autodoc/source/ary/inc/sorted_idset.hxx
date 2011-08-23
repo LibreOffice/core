@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ template <class XY> class SortedIdSet;
 class Interface_2s
 {
   public:
-    /// Checks for double occurrences
+    /// Checks for double occurences
     void                Add_ExportingService(
                             Ce_id               i_nId );
     void                Get_ExportingServices(

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,6 +37,7 @@
 
 #include <rsc/rscsfx.hxx>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
@@ -94,7 +95,7 @@ void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
                          const char* pPropName, const String& rValue)
 {
-    OUString uPropName(rtl::OUString::createFromAscii(pPropName));
+    OUString uPropName(C2U(pPropName));
     if(xInfo->hasPropertyByName(uPropName))
     {
         uno::Any aValue;
@@ -105,16 +106,16 @@ void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
 
 void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
-                           sal_uInt16 nId, const String& rValue)
+                           USHORT nId, const String& rValue)
 {
     lcl_SetProp( xInfo, xProps, SW_PROP_NAME_STR(nId), rValue);
 }
 
 void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
-                           sal_uInt16 nId, sal_Int16 nValue )
+                           USHORT nId, sal_Int16 nValue )
 {
-    OUString uPropName(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(nId)));
+    OUString uPropName(C2U(SW_PROP_NAME_STR(nId)));
     if(xInfo->hasPropertyByName(uPropName))
     {
         uno::Any aValue;
@@ -126,9 +127,9 @@ void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
 void lcl_SetBOOLProp(
                 uno::Reference< beans::XPropertySetInfo > & xInfo,
                 uno::Reference< beans::XPropertySet > & xProps,
-                sal_uInt16 nId, sal_Bool bValue )
+                USHORT nId, sal_Bool bValue )
 {
-    OUString uPropName(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(nId)));
+    OUString uPropName(C2U(SW_PROP_NAME_STR(nId)));
     if(xInfo->hasPropertyByName(uPropName))
     {
         uno::Any aValue;
@@ -146,7 +147,7 @@ IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
         SwXTextDocument* pDoc = reinterpret_cast<SwXTextDocument*>(xDocTunnel->getSomething(SwXTextDocument::getUnoTunnelId()));
 
         if( pDoc )
-            pDoc->GetDocShell()->_LoadStyles( *rSh.GetView().GetDocShell(), sal_True );
+            pDoc->GetDocShell()->_LoadStyles( *rSh.GetView().GetDocShell(), TRUE );
 
          uno::Reference< lang::XMultiServiceFactory >  xFact(
                                              xModel, uno::UNO_QUERY);
@@ -178,7 +179,7 @@ IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
     }
     catch(Exception&)
     {
-        OSL_FAIL("::CreateExample() - exception caught");
+        OSL_ENSURE(false, "::CreateExample() - exception caught");
     }
     return 0;
 }
@@ -189,7 +190,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
     if(!pExampleFrame || !pExampleFrame->IsInitialized())
         return;
 
-    const char* IndexServiceNames[] =
+    const char* __FAR_DATA IndexServiceNames[] =
     {
         "com.sun.star.text.DocumentIndex",
         "com.sun.star.text.UserIndex",
@@ -227,7 +228,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
          uno::Reference< text::XTextRange >  xRg(xCrsr, uno::UNO_QUERY);
             xCrsr->getText()->insertTextContent(xRg, xContent, sal_False);
         }
-        OUString uIsVisible(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_VISIBLE)));
+        OUString uIsVisible(C2U(SW_PROP_NAME_STR(UNO_NAME_IS_VISIBLE)));
         for(sal_uInt16 i = 0 ; i <= TOX_AUTHORITIES; i++)
         {
          uno::Reference< beans::XPropertySet >  xSectPr(pxIndexSectionsArr[i]->xContainerSection, uno::UNO_QUERY);
@@ -235,7 +236,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
             if(xSectPr.is())
             {
-                sal_Bool bTemp = i == nTOXIndex;
+                BOOL bTemp = i == nTOXIndex;
                 aVal.setValue(&bTemp, ::getBooleanCppuType());
                 xSectPr->setPropertyValue(uIsVisible, aVal);
             }
@@ -253,10 +254,10 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
             //stylenames
             sal_uInt16  nContentOptions = rDesc.GetContentOptions();
-            if(xInfo->hasPropertyByName(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LEVEL_PARAGRAPH_STYLES))))
+            if(xInfo->hasPropertyByName(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_PARAGRAPH_STYLES))))
             {
                 sal_Bool bOn = 0!=(nContentOptions&nsSwTOXElement::TOX_TEMPLATE    );
-                uno::Any aStyleNames(xIdxProps->getPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LEVEL_PARAGRAPH_STYLES))));
+                uno::Any aStyleNames(xIdxProps->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_PARAGRAPH_STYLES))));
                 uno::Reference< container::XIndexReplace >  xAcc;
                 aStyleNames >>= xAcc;
 
@@ -296,18 +297,18 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
             String aTmpName( SwStyleNameMapper::GetSpecialExtraProgName( rDesc.GetSequenceName() ) );
             lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LABEL_CATEGORY, aTmpName );
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_LABELS,  !rDesc.IsCreateFromObjectNames());
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_LABELS,	!rDesc.IsCreateFromObjectNames());
 
             sal_Int16 nSet = text::ChapterFormat::NAME_NUMBER;
             switch (rDesc.GetCaptionDisplay())
             {
                 case CAPTION_COMPLETE:  nSet = text::ChapterFormat::NAME_NUMBER;break;
-                case CAPTION_NUMBER  :  nSet = text::ChapterFormat::NUMBER; break;
+                case CAPTION_NUMBER  :  nSet = text::ChapterFormat::NUMBER;	break;
                 case CAPTION_TEXT    :  nSet = text::ChapterFormat::NAME;      break;
             }
             lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LABEL_DISPLAY_TYPE, nSet);
 
-            sal_uInt16  nOLEOptions = rDesc.GetOLEOptions();
+            sal_uInt16 	nOLEOptions = rDesc.GetOLEOptions();
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_MATH,   0 != (nsSwTOOElements::TOO_MATH &nOLEOptions           ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CHART,  0 != (nsSwTOOElements::TOO_CHART    &nOLEOptions       ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CALC,   0 != (nsSwTOOElements::TOO_CALC &nOLEOptions           ));
@@ -329,7 +330,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 nEndLevel = pForm->GetFormMax() - 1;
             }
 
-            if(xInfo->hasPropertyByName(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT))))
+            if(xInfo->hasPropertyByName(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT))))
             {
                 for(sal_uInt16 nCurrLevel = nStartLevel; nCurrLevel <= nEndLevel; nCurrLevel++)
                 {
@@ -403,7 +404,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         if(TOKEN_TAB_STOP == aToken.eTokenType)
                         {
                             pPropValArr[2].Name = C2U("TabStopRightAligned");
-                            sal_Bool bTemp = SVX_TAB_ADJUST_END == aToken.eTabAlign;
+                            BOOL bTemp = SVX_TAB_ADJUST_END == aToken.eTabAlign;
                             pPropValArr[2].Value.setValue(&bTemp, ::getBooleanCppuType());
                             pPropValArr[3].Name = C2U("TabStopFillCharacter");
                             pPropValArr[3].Value <<= OUString(aToken.cTabFillChar);
@@ -422,11 +423,11 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         pValues[nTokenIndex] = aPropVals;
                         nTokenIndex++;
 
-                        ++aIt; // #i24377#
+                        aIt++; // #i24377#
                     }
                     aSequPropVals.realloc(nTokenIndex);
 
-                    uno::Any aFormatAccess = xIdxProps->getPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT)));
+                    uno::Any aFormatAccess = xIdxProps->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT)));
                     OSL_ENSURE(aFormatAccess.getValueType() == ::getCppuType((uno::Reference<container::XIndexReplace>*)0),
                         "wrong property type");
 
@@ -472,7 +473,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
     }
     catch(Exception&)
     {
-        OSL_FAIL("::CreateExample() - exception caught");
+        OSL_ENSURE(false, "::CreateExample() - exception caught");
     }
 }
 

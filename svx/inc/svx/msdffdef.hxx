@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <tools/gen.hxx>
 #include "svx/svxdllapi.h"
 
-#define DFF_COMMON_RECORD_HEADER_SIZE           8
+#define DFF_COMMON_RECORD_HEADER_SIZE			8
 
 #define DFF_PSFLAG_CONTAINER 0x0F         // If the version field of a record
                                           //  header takes on this value, the
@@ -272,15 +272,15 @@ enum DFF_TextHeader {
 // Transform
 #define DFF_Prop_Rotation                      4  //  Fixed Point 16.16 degrees
 // Protection
-#define DFF_Prop_LockRotation                119  //  sal_Bool              No rotation
-#define DFF_Prop_LockAspectRatio             120  //  sal_Bool              Don't allow changes in aspect ratio
-#define DFF_Prop_LockPosition                121  //  sal_Bool              Don't allow the shape to be moved
-#define DFF_Prop_LockAgainstSelect           122  //  sal_Bool              Shape may not be selected
-#define DFF_Prop_LockCropping                123  //  sal_Bool              No cropping this shape
-#define DFF_Prop_LockVertices                124  //  sal_Bool              Edit Points not allowed
-#define DFF_Prop_LockText                    125  //  sal_Bool              Do not edit text
-#define DFF_Prop_LockAdjustHandles           126  //  sal_Bool              Do not adjust
-#define DFF_Prop_LockAgainstGrouping         127  //  sal_Bool              Do not group this shape
+#define DFF_Prop_LockRotation                119  //  BOOL              No rotation
+#define DFF_Prop_LockAspectRatio             120  //  BOOL              Don't allow changes in aspect ratio
+#define DFF_Prop_LockPosition                121  //  BOOL              Don't allow the shape to be moved
+#define DFF_Prop_LockAgainstSelect           122  //  BOOL              Shape may not be selected
+#define DFF_Prop_LockCropping                123  //  BOOL              No cropping this shape
+#define DFF_Prop_LockVertices                124  //  BOOL              Edit Points not allowed
+#define DFF_Prop_LockText                    125  //  BOOL              Do not edit text
+#define DFF_Prop_LockAdjustHandles           126  //  BOOL              Do not adjust
+#define DFF_Prop_LockAgainstGrouping         127  //  BOOL              Do not group this shape
 // Text
 #define DFF_Prop_lTxid                       128  //  LONG              id for the text, value determined by the host
 #define DFF_Prop_dxTextLeft                  129  //  LONG              margins relative to shape's inscribed text rectangle (in EMUs)
@@ -294,11 +294,11 @@ enum DFF_TextHeader {
 #define DFF_Prop_cdirFont                    137  //  MSO_CDIR           Font rotation
 #define DFF_Prop_hspNext                     138  //  MSO_HSP            ID of the next shape (used by Word for linked textboxes)
 #define DFF_Prop_txdir                       139  //  MSO_TXDIR          Bi-Di Text direction
-#define DFF_Prop_SelectText                  187  //  sal_Bool              sal_True if single click selects text, sal_False if two clicks
-#define DFF_Prop_AutoTextMargin              188  //  sal_Bool              use host's margin calculations
-#define DFF_Prop_RotateText                  189  //  sal_Bool              Rotate text with shape
-#define DFF_Prop_FitShapeToText              190  //  sal_Bool              Size shape to fit text size
-#define DFF_Prop_FitTextToShape              191  //  sal_Bool              Size text to fit shape size
+#define DFF_Prop_SelectText                  187  //  BOOL              TRUE if single click selects text, FALSE if two clicks
+#define DFF_Prop_AutoTextMargin              188  //  BOOL              use host's margin calculations
+#define DFF_Prop_RotateText                  189  //  BOOL              Rotate text with shape
+#define DFF_Prop_FitShapeToText              190  //  BOOL              Size shape to fit text size
+#define DFF_Prop_FitTextToShape              191  //  BOOL              Size text to fit shape size
 // GeoText
 #define DFF_Prop_gtextUNICODE                192  //  WCHAR*            UNICODE text string
 #define DFF_Prop_gtextRTF                    193  //  char*             RTF text string
@@ -306,22 +306,22 @@ enum DFF_TextHeader {
 #define DFF_Prop_gtextSize                   195  //  LONG              default point size
 #define DFF_Prop_gtextSpacing                196  //  LONG              fixed point 16.16
 #define DFF_Prop_gtextFont                   197  //  WCHAR*            font family name
-#define DFF_Prop_gtextFReverseRows           240  //  sal_Bool  8000        Reverse row order
-#define DFF_Prop_fGtext                      241  //  sal_Bool  4000        Has text effect
-#define DFF_Prop_gtextFVertical              242  //  sal_Bool  2000        Rotate characters
-#define DFF_Prop_gtextFKern                  243  //  sal_Bool  1000        Kern characters
-#define DFF_Prop_gtextFTight                 244  //  sal_Bool   800        Tightening or tracking
-#define DFF_Prop_gtextFStretch               245  //  sal_Bool   400        Stretch to fit shape
-#define DFF_Prop_gtextFShrinkFit             246  //  sal_Bool   200        Char bounding box
-#define DFF_Prop_gtextFBestFit               247  //  sal_Bool   100        Scale text-on-path
-#define DFF_Prop_gtextFNormalize             248  //  sal_Bool    80        Stretch char height
-#define DFF_Prop_gtextFDxMeasure             249  //  sal_Bool    40        Do not measure along path
-#define DFF_Prop_gtextFBold                  250  //  sal_Bool    20        Bold font
-#define DFF_Prop_gtextFItalic                251  //  sal_Bool    10        Italic font
-#define DFF_Prop_gtextFUnderline             252  //  sal_Bool     8        Underline font
-#define DFF_Prop_gtextFShadow                253  //  sal_Bool     4        Shadow font
-#define DFF_Prop_gtextFSmallcaps             254  //  sal_Bool     2        Small caps font
-#define DFF_Prop_gtextFStrikethrough         255  //  sal_Bool     1        Strike through font
+#define DFF_Prop_gtextFReverseRows           240  //  BOOL  8000        Reverse row order
+#define DFF_Prop_fGtext                      241  //  BOOL  4000        Has text effect
+#define DFF_Prop_gtextFVertical              242  //  BOOL  2000        Rotate characters
+#define DFF_Prop_gtextFKern                  243  //  BOOL  1000        Kern characters
+#define DFF_Prop_gtextFTight                 244  //  BOOL   800        Tightening or tracking
+#define DFF_Prop_gtextFStretch               245  //  BOOL   400        Stretch to fit shape
+#define DFF_Prop_gtextFShrinkFit             246  //  BOOL   200        Char bounding box
+#define DFF_Prop_gtextFBestFit               247  //  BOOL   100        Scale text-on-path
+#define DFF_Prop_gtextFNormalize             248  //  BOOL    80        Stretch char height
+#define DFF_Prop_gtextFDxMeasure             249  //  BOOL    40        Do not measure along path
+#define DFF_Prop_gtextFBold                  250  //  BOOL    20        Bold font
+#define DFF_Prop_gtextFItalic                251  //  BOOL    10        Italic font
+#define DFF_Prop_gtextFUnderline             252  //  BOOL     8        Underline font
+#define DFF_Prop_gtextFShadow                253  //  BOOL     4        Shadow font
+#define DFF_Prop_gtextFSmallcaps             254  //  BOOL     2        Small caps font
+#define DFF_Prop_gtextFStrikethrough         255  //  BOOL     1        Strike through font
 // Blip
 #define DFF_Prop_cropFromTop                 256  //  LONG              16.16 fraction times total image width or height, as appropriate.
 #define DFF_Prop_cropFromBottom              257  //  LONG
@@ -341,10 +341,10 @@ enum DFF_TextHeader {
 #define DFF_Prop_pibPrint                    271  //  IMsoBlip*         Blip to display when printing
 #define DFF_Prop_pibPrintName                272  //  WCHAR*            Blip file name
 #define DFF_Prop_pibPrintFlags               273  //  MSO_BLIPFLAGS      Blip flags
-#define DFF_Prop_fNoHitTestPicture           316  //  sal_Bool              Do not hit test the picture
-#define DFF_Prop_pictureGray                 317  //  sal_Bool              grayscale display
-#define DFF_Prop_pictureBiLevel              318  //  sal_Bool              bi-level display
-#define DFF_Prop_pictureActive               319  //  sal_Bool              Server is active (OLE objects only)
+#define DFF_Prop_fNoHitTestPicture           316  //  BOOL              Do not hit test the picture
+#define DFF_Prop_pictureGray                 317  //  BOOL              grayscale display
+#define DFF_Prop_pictureBiLevel              318  //  BOOL              bi-level display
+#define DFF_Prop_pictureActive               319  //  BOOL              Server is active (OLE objects only)
 // Geometry
 #define DFF_Prop_geoLeft                     320  //  LONG              Defines the G (geometry) coordinate space.
 #define DFF_Prop_geoTop                      321  //  LONG
@@ -363,19 +363,19 @@ enum DFF_TextHeader {
 #define DFF_Prop_adjust8Value                334  //  LONG
 #define DFF_Prop_adjust9Value                335  //  LONG
 #define DFF_Prop_adjust10Value               336  //  LONG
-#define DFF_Prop_connectorPoints             337  //  IMsoArray
-#define DFF_Prop_stretchPointX               339  //  LONG
-#define DFF_Prop_stretchPointY               340  //  LONG
-#define DFF_Prop_Handles                     341  //  H*
-#define DFF_Prop_pFormulas                   342  //  LONG
-#define DFF_Prop_textRectangles              343  //  LONG
-#define DFF_Prop_connectorType               344  //  LONG              ->0=none, 1=segments, 2=custom, 3=rect
-#define DFF_Prop_fShadowOK                   378  //  sal_Bool              Shadow may be set
-#define DFF_Prop_f3DOK                       379  //  sal_Bool              3D may be set
-#define DFF_Prop_fLineOK                     380  //  sal_Bool              Line style may be set
-#define DFF_Prop_fGtextOK                    381  //  sal_Bool              Text effect (FontWork) supported
+#define DFF_Prop_connectorPoints			 337  //  IMsoArray
+#define DFF_Prop_stretchPointX				 339  //  LONG
+#define DFF_Prop_stretchPointY				 340  //  LONG
+#define DFF_Prop_Handles				     341  //  H*
+#define DFF_Prop_pFormulas					 342  //  LONG
+#define DFF_Prop_textRectangles			     343  //  LONG
+#define DFF_Prop_connectorType				 344  //  LONG				->0=none, 1=segments, 2=custom, 3=rect
+#define DFF_Prop_fShadowOK                   378  //  BOOL              Shadow may be set
+#define DFF_Prop_f3DOK                       379  //  BOOL              3D may be set
+#define DFF_Prop_fLineOK                     380  //  BOOL              Line style may be set
+#define DFF_Prop_fGtextOK                    381  //  BOOL              Text effect (FontWork) supported
 #define DFF_Prop_fFillShadeShapeOK           382  //  BOOL
-#define DFF_Prop_fFillOK                     383  //  sal_Bool              OK to fill the shape through the UI or VBA?
+#define DFF_Prop_fFillOK                     383  //  BOOL              OK to fill the shape through the UI or VBA?
 // FillStyle
 #define DFF_Prop_fillType                    384  //  MSO_FILLTYPE       Type of fill
 #define DFF_Prop_fillColor                   385  //  MSO_CLR            Foreground color
@@ -406,11 +406,11 @@ enum DFF_TextHeader {
 #define DFF_Prop_fillShapeOriginX            410  //  LONG
 #define DFF_Prop_fillShapeOriginY            411  //  LONG
 #define DFF_Prop_fillShadeType               412  //  MSO_SHADETYPE      Type of shading, if a shaded (gradient) fill.
-#define DFF_Prop_fFilled                     443  //  sal_Bool              Is shape filled?
-#define DFF_Prop_fHitTestFill                444  //  sal_Bool              Should we hit test fill?
-#define DFF_Prop_fillShape                   445  //  sal_Bool              Register pattern on shape
-#define DFF_Prop_fillUseRect                 446  //  sal_Bool              Use the large rect?
-#define DFF_Prop_fNoFillHitTest              447  //  sal_Bool              Hit test a shape as though filled
+#define DFF_Prop_fFilled                     443  //  BOOL              Is shape filled?
+#define DFF_Prop_fHitTestFill                444  //  BOOL              Should we hit test fill?
+#define DFF_Prop_fillShape                   445  //  BOOL              Register pattern on shape
+#define DFF_Prop_fillUseRect                 446  //  BOOL              Use the large rect?
+#define DFF_Prop_fNoFillHitTest              447  //  BOOL              Hit test a shape as though filled
 // LineStyle
 #define DFF_Prop_lineColor                   448  //  MSO_CLR            Color of line
 #define DFF_Prop_lineOpacity                 449  //  LONG              Not implemented
@@ -436,11 +436,11 @@ enum DFF_TextHeader {
 #define DFF_Prop_lineEndArrowLength          469  //  MSO_LINEENDLENGTH  Arrow at end
 #define DFF_Prop_lineJoinStyle               470  //  MSO_LINEJOIN       How to join lines
 #define DFF_Prop_lineEndCapStyle             471  //  MSO_LINECAP        How to end lines
-#define DFF_Prop_fArrowheadsOK               507  //  sal_Bool              Allow arrowheads if prop. is set
-#define DFF_Prop_fLine                       508  //  sal_Bool              Any line?
-#define DFF_Prop_fHitTestLine                509  //  sal_Bool              Should we hit test lines?
-#define DFF_Prop_lineFillShape               510  //  sal_Bool              Register pattern on shape
-#define DFF_Prop_fNoLineDrawDash             511  //  sal_Bool              Draw a dashed line if no line
+#define DFF_Prop_fArrowheadsOK               507  //  BOOL              Allow arrowheads if prop. is set
+#define DFF_Prop_fLine                       508  //  BOOL              Any line?
+#define DFF_Prop_fHitTestLine                509  //  BOOL              Should we hit test lines?
+#define DFF_Prop_lineFillShape               510  //  BOOL              Register pattern on shape
+#define DFF_Prop_fNoLineDrawDash             511  //  BOOL              Draw a dashed line if no line
 // ShadowStyle
 #define DFF_Prop_shadowType                  512  //  MSO_SHADOWTYPE     Type of effect
 #define DFF_Prop_shadowColor                 513  //  MSO_CLR            Foreground color
@@ -460,8 +460,8 @@ enum DFF_TextHeader {
 #define DFF_Prop_shadowWeight                527  //  LONG              scaling factor
 #define DFF_Prop_shadowOriginX               528  //  LONG
 #define DFF_Prop_shadowOriginY               529  //  LONG
-#define DFF_Prop_fShadow                     574  //  sal_Bool              Any shadow?
-#define DFF_Prop_fshadowObscured             575  //  sal_Bool              Excel5-style shadow
+#define DFF_Prop_fShadow                     574  //  BOOL              Any shadow?
+#define DFF_Prop_fshadowObscured             575  //  BOOL              Excel5-style shadow
 // PerspectiveStyle
 #define DFF_Prop_perspectiveType             576  //  MSO_XFORMTYPE      Where transform applies
 #define DFF_Prop_perspectiveOffsetX          577  //  LONG              The LONG values define a transformation matrix, effectively, each value is scaled by the perspectiveWeight parameter.
@@ -475,7 +475,7 @@ enum DFF_TextHeader {
 #define DFF_Prop_perspectiveWeight           585  //  LONG              Scaling factor
 #define DFF_Prop_perspectiveOriginX          586  //  LONG
 #define DFF_Prop_perspectiveOriginY          587  //  LONG
-#define DFF_Prop_fPerspective                639  //  sal_Bool              On/off
+#define DFF_Prop_fPerspective                639  //  BOOL              On/off
 // 3D Object
 #define DFF_Prop_c3DSpecularAmt              640  //  LONG         Fixed-point 16.16
 #define DFF_Prop_c3DDiffuseAmt               641  //  LONG         Fixed-point 16.16
@@ -486,8 +486,8 @@ enum DFF_TextHeader {
 #define DFF_Prop_c3DExtrudePlane             646  //  LONG         Extrusion direction
 #define DFF_Prop_c3DExtrusionColor           647  //  MSO_CLR       Basic color of extruded part of shape; the lighting model used will determine the exact shades used when rendering.
 #define DFF_Prop_c3DCrMod                    648  //  MSO_CLR       Modification for BW views
-#define DFF_Prop_f3D                         700  //  sal_Bool         Does this shape have a 3D effect?
-#define DFF_Prop_fc3DMetallic                701  //  sal_Bool         Use metallic specularity?
+#define DFF_Prop_f3D                         700  //  BOOL         Does this shape have a 3D effect?
+#define DFF_Prop_fc3DMetallic                701  //  BOOL         Use metallic specularity?
 #define DFF_Prop_fc3DUseExtrusionColor       702  //  BOOL
 #define DFF_Prop_fc3DLightFace               703  //  BOOL
 // 3D Style
@@ -520,20 +520,20 @@ enum DFF_TextHeader {
 #define DFF_Prop_c3DFillIntensity            730  //  LONG            Fixed point intensity
 #define DFF_Prop_fc3DConstrainRotation       763  //  BOOL
 #define DFF_Prop_fc3DRotationCenterAuto      764  //  BOOL
-#define DFF_Prop_fc3DParallel                765  //  sal_Bool            Parallel projection?
-#define DFF_Prop_fc3DKeyHarsh                766  //  sal_Bool            Is key lighting harsh?
-#define DFF_Prop_fc3DFillHarsh               767  //  sal_Bool            Is fill lighting harsh?
+#define DFF_Prop_fc3DParallel                765  //  BOOL            Parallel projection?
+#define DFF_Prop_fc3DKeyHarsh                766  //  BOOL            Is key lighting harsh?
+#define DFF_Prop_fc3DFillHarsh               767  //  BOOL            Is fill lighting harsh?
 // Shape
 #define DFF_Prop_hspMaster                   769  //  MSO_HSP          master shape
 #define DFF_Prop_cxstyle                     771  //  MSO_CXSTYLE      Type of connector
 #define DFF_Prop_bWMode                      772  //  MSO_BWMODE       Settings for modifications to be made when in different forms of black-and-white mode.
 #define DFF_Prop_bWModePureBW                773  //  MSO_BWMODE
 #define DFF_Prop_bWModeBW                    774  //  MSO_BWMODE
-#define DFF_Prop_fOleIcon                    826  //  sal_Bool            For OLE objects, whether the object is in icon form
-#define DFF_Prop_fPreferRelativeResize       827  //  sal_Bool            For UI only. Prefer relative resizing.
-#define DFF_Prop_fLockShapeType              828  //  sal_Bool            Lock the shape type (don't allow Change Shape)
+#define DFF_Prop_fOleIcon                    826  //  BOOL            For OLE objects, whether the object is in icon form
+#define DFF_Prop_fPreferRelativeResize       827  //  BOOL            For UI only. Prefer relative resizing.
+#define DFF_Prop_fLockShapeType              828  //  BOOL            Lock the shape type (don't allow Change Shape)
 #define DFF_Prop_fDeleteAttachedObject       830  //  BOOL
-#define DFF_Prop_fBackground                 831  //  sal_Bool            If sal_True, this is the background shape.
+#define DFF_Prop_fBackground                 831  //  BOOL            If TRUE, this is the background shape.
 
 // Callout
 #define DFF_Prop_spcot                       832  //  MSO_SPCOT        Callout type
@@ -542,13 +542,13 @@ enum DFF_TextHeader {
 #define DFF_Prop_spcod                       835  //  MSO_SPCOD        Callout drop type
 #define DFF_Prop_dxyCalloutDropSpecified     836  //  LONG            if mso_spcodSpecified, the actual drop distance
 #define DFF_Prop_dxyCalloutLengthSpecified   837  //  LONG            if fCalloutLengthSpecified, the actual distance
-#define DFF_Prop_fCallout                    889  //  sal_Bool            Is the shape a callout?
-#define DFF_Prop_fCalloutAccentBar           890  //  sal_Bool            does callout have accent bar
-#define DFF_Prop_fCalloutTextBorder          891  //  sal_Bool            does callout have a text border
+#define DFF_Prop_fCallout                    889  //  BOOL            Is the shape a callout?
+#define DFF_Prop_fCalloutAccentBar           890  //  BOOL            does callout have accent bar
+#define DFF_Prop_fCalloutTextBorder          891  //  BOOL            does callout have a text border
 #define DFF_Prop_fCalloutMinusX              892  //  BOOL
 #define DFF_Prop_fCalloutMinusY              893  //  BOOL
-#define DFF_Prop_fCalloutDropAuto            894  //  sal_Bool            If true, then we occasionally invert the drop distance
-#define DFF_Prop_fCalloutLengthSpecified     895  //  sal_Bool            if true, we look at dxyCalloutLengthSpecified
+#define DFF_Prop_fCalloutDropAuto            894  //  BOOL            If true, then we occasionally invert the drop distance
+#define DFF_Prop_fCalloutLengthSpecified     895  //  BOOL            if true, we look at dxyCalloutLengthSpecified
 
 // GroupShape
 #define DFF_Prop_wzName                      896  //  WCHAR*          Shape Name (present only if explicitly set)
@@ -560,23 +560,23 @@ enum DFF_TextHeader {
 #define DFF_Prop_dxWrapDistRight             902  //  LONG            Right wrapping distance from text (Word)
 #define DFF_Prop_dyWrapDistBottom            903  //  LONG            Bottom wrapping distance from text (Word)
 #define DFF_Prop_lidRegroup                  904  //  LONG            Regroup ID
-#define DFF_Prop_tableProperties             927  //  LONG
-#define DFF_Prop_tableRowProperties          928  //  LONG*
-#define DFF_Prop_fEditedWrap                 953  //  sal_Bool            Has the wrap polygon been edited?
-#define DFF_Prop_fBehindDocument             954  //  sal_Bool            Word-only (shape is behind text)
-#define DFF_Prop_fOnDblClickNotify           955  //  sal_Bool            Notify client on a double click
-#define DFF_Prop_fIsButton                   956  //  sal_Bool            A button shape (i.e., clicking performs an action). Set for shapes with attached hyperlinks or macros.
-#define DFF_Prop_fOneD                       957  //  sal_Bool            1D adjustment
-#define DFF_Prop_fHidden                     958  //  sal_Bool            Do not display
-#define DFF_Prop_fPrint                      959  //  sal_Bool            Print this shape
+#define DFF_Prop_tableProperties			 927  //  LONG
+#define DFF_Prop_tableRowProperties			 928  //  LONG*
+#define DFF_Prop_fEditedWrap                 953  //  BOOL            Has the wrap polygon been edited?
+#define DFF_Prop_fBehindDocument             954  //  BOOL            Word-only (shape is behind text)
+#define DFF_Prop_fOnDblClickNotify           955  //  BOOL            Notify client on a double click
+#define DFF_Prop_fIsButton                   956  //  BOOL            A button shape (i.e., clicking performs an action). Set for shapes with attached hyperlinks or macros.
+#define DFF_Prop_fOneD                       957  //  BOOL            1D adjustment
+#define DFF_Prop_fHidden                     958  //  BOOL            Do not display
+#define DFF_Prop_fPrint                      959  //  BOOL            Print this shape
 // entsprechende BitFlags
-#define DFF_PBit_EditedWrap         0x00000040
-#define DFF_PBit_BehindDocument     0x00000020
-#define DFF_PBit_OnDblClickNotify   0x00000010
-#define DFF_PBit_IsButton           0x00000008
-#define DFF_PBit_OneD               0x00000004
-#define DFF_PBit_Hidden             0x00000002
-#define DFF_PBit_Print              0x00000001
+#define DFF_PBit_EditedWrap			0x00000040
+#define DFF_PBit_BehindDocument		0x00000020
+#define DFF_PBit_OnDblClickNotify	0x00000010
+#define DFF_PBit_IsButton			0x00000008
+#define DFF_PBit_OneD				0x00000004
+#define DFF_PBit_Hidden				0x00000002
+#define DFF_PBit_Print				0x00000001
 
 //---------------------------------------------------------------------------
 // linchpin: the shape type
@@ -1005,11 +1005,11 @@ enum MSO_ShadeType {
 
 // MSOLINESTYLE - compound line style
 enum MSO_LineStyle {
-   mso_lineSimple,          // Single line (of width lineWidth)
-   mso_lineDouble,          // Double lines of equal width
-   mso_lineThickThin,       // Double lines, one thick, one thin
-   mso_lineThinThick,       // Double lines, reverse order
-   mso_lineTriple           // Three lines, thin, thick, thin
+   mso_lineSimple,			// Single line (of width lineWidth)
+   mso_lineDouble,			// Double lines of equal width
+   mso_lineThickThin,		// Double lines, one thick, one thin
+   mso_lineThinThick,		// Double lines, reverse order
+   mso_lineTriple			// Three lines, thin, thick, thin
 };
 
 // MSO_LINETYPE - how to "fill" the line contour
@@ -1077,17 +1077,17 @@ enum MSO_LineCap {
 // BStore-Container
 // FBSE - File Blip Store Entry
 typedef struct _MSOF_BSE {
-   sal_uInt8      btWin32;    // Required type on Win32
-   sal_uInt8      btMacOS;    // Required type on Mac
-   sal_uInt8      rgbUid[16]; // Identifier of blip
-   sal_uInt16    tag;        // currently unused
-   sal_uIntPtr     size;       // Blip size in stream
-   sal_uIntPtr     cRef;       // Reference count on the blip
-   sal_uIntPtr /*MSOFO*/ foDelay;    // File offset in the delay stream
-   sal_uInt8      usage;      // How this blip is used (MSOBLIPUSAGE)
-   sal_uInt8      cbName;     // length of the blip name
-   sal_uInt8      unused2;    // for the future
-   sal_uInt8      unused3;    // for the future
+   BYTE      btWin32;    // Required type on Win32
+   BYTE      btMacOS;    // Required type on Mac
+   BYTE      rgbUid[16]; // Identifier of blip
+   USHORT    tag;        // currently unused
+   ULONG     size;       // Blip size in stream
+   ULONG     cRef;       // Reference count on the blip
+   ULONG /*MSOFO*/ foDelay;    // File offset in the delay stream
+   BYTE      usage;      // How this blip is used (MSOBLIPUSAGE)
+   BYTE      cbName;     // length of the blip name
+   BYTE      unused2;    // for the future
+   BYTE      unused3;    // for the future
 } MSO_FBSE;
 
 typedef enum {
@@ -1097,7 +1097,7 @@ typedef enum {
 } MSO_BLIPUSAGE;
 
 typedef enum {                          // GEL provided types...
-   mso_blipERROR = 0,          // An error occurred during loading
+   mso_blipERROR = 0,          // An error occured during loading
    mso_blipUNKNOWN,            // An unknown blip type
    mso_blipEMF,                // Windows Enhanced Metafile
    mso_blipWMF,                // Windows Metafile
@@ -1134,56 +1134,90 @@ typedef enum {
 } MSO_BLIPFILTER;
 
 typedef enum {
-    mso_syscolorButtonFace,             // COLOR_BTNFACE
-    mso_syscolorWindowText,             // COLOR_WINDOWTEXT
-    mso_syscolorMenu,                   // COLOR_MENU
-    mso_syscolorHighlight,              // COLOR_HIGHLIGHT
-    mso_syscolorHighlightText,          // COLOR_HIGHLIGHTTEXT
-    mso_syscolorCaptionText,            // COLOR_CAPTIONTEXT
-    mso_syscolorActiveCaption,          // COLOR_ACTIVECAPTION
-    mso_syscolorButtonHighlight,        // COLOR_BTNHIGHLIGHT
-    mso_syscolorButtonShadow,           // COLOR_BTNSHADOW
-    mso_syscolorButtonText,             // COLOR_BTNTEXT
-    mso_syscolorGrayText,               // COLOR_GRAYTEXT
-    mso_syscolorInactiveCaption,        // COLOR_INACTIVECAPTION
-    mso_syscolorInactiveCaptionText,    // COLOR_INACTIVECAPTIONTEXT
-    mso_syscolorInfoBackground,         // COLOR_INFOBK
-    mso_syscolorInfoText,               // COLOR_INFOTEXT
-    mso_syscolorMenuText,               // COLOR_MENUTEXT
-    mso_syscolorScrollbar,              // COLOR_SCROLLBAR
-    mso_syscolorWindow,                 // COLOR_WINDOW
-    mso_syscolorWindowFrame,            // COLOR_WINDOWFRAME
-    mso_syscolor3DLight,                // COLOR_3DLIGHT
-    mso_syscolorMax,                    // Count of system colors
+    mso_syscolorButtonFace,				// COLOR_BTNFACE
+    mso_syscolorWindowText,				// COLOR_WINDOWTEXT
+    mso_syscolorMenu,					// COLOR_MENU
+    mso_syscolorHighlight,				// COLOR_HIGHLIGHT
+    mso_syscolorHighlightText,			// COLOR_HIGHLIGHTTEXT
+    mso_syscolorCaptionText,			// COLOR_CAPTIONTEXT
+    mso_syscolorActiveCaption,			// COLOR_ACTIVECAPTION
+    mso_syscolorButtonHighlight,		// COLOR_BTNHIGHLIGHT
+    mso_syscolorButtonShadow,			// COLOR_BTNSHADOW
+    mso_syscolorButtonText,				// COLOR_BTNTEXT
+    mso_syscolorGrayText,				// COLOR_GRAYTEXT
+    mso_syscolorInactiveCaption,		// COLOR_INACTIVECAPTION
+    mso_syscolorInactiveCaptionText,	// COLOR_INACTIVECAPTIONTEXT
+    mso_syscolorInfoBackground,			// COLOR_INFOBK
+    mso_syscolorInfoText,				// COLOR_INFOTEXT
+    mso_syscolorMenuText,				// COLOR_MENUTEXT
+    mso_syscolorScrollbar,				// COLOR_SCROLLBAR
+    mso_syscolorWindow,					// COLOR_WINDOW
+    mso_syscolorWindowFrame,			// COLOR_WINDOWFRAME
+    mso_syscolor3DLight,				// COLOR_3DLIGHT
+    mso_syscolorMax,					// Count of system colors
 
-    mso_colorFillColor = 0xF0,          // Use the fillColor property
-    mso_colorLineOrFillColor,           // Use the line color only if there is a line
-    mso_colorLineColor,                 // Use the lineColor property
-    mso_colorShadowColor,               // Use the shadow color
-    mso_colorThis,                      // Use this color (only valid as described below)
-    mso_colorFillBackColor,             // Use the fillBackColor property
-    mso_colorLineBackColor,             // Use the lineBackColor property
-    mso_colorFillThenLine,              // Use the fillColor unless no fill and line
-    mso_colorIndexMask = 0xFF,          // Extract the color index
+    mso_colorFillColor = 0xF0,			// Use the fillColor property
+    mso_colorLineOrFillColor,			// Use the line color only if there is a line
+    mso_colorLineColor,					// Use the lineColor property
+    mso_colorShadowColor,				// Use the shadow color
+    mso_colorThis,						// Use this color (only valid as described below)
+    mso_colorFillBackColor,				// Use the fillBackColor property
+    mso_colorLineBackColor,				// Use the lineBackColor property
+    mso_colorFillThenLine,				// Use the fillColor unless no fill and line
+    mso_colorIndexMask = 0xFF,			// Extract the color index
 
-    mso_colorProcessMask      =0xFFFF00,// All the processing bits
-    mso_colorModificationMask =0x0F00,  // Just the function
-    mso_colorModFlagMask      =0xF000,  // Just the additional flags
-    mso_colorDarken           =0x0100,  // Darken color by parameter/255
-    mso_colorLighten          =0x0200,  // Lighten color by parameter/255
-    mso_colorAdd              =0x0300,  // Add grey level RGB(param,param,param)
-    mso_colorSubtract         =0x0400,  // Subtract grey level RGB(p,p,p)
-    mso_colorReverseSubtract  =0x0500,  // Subtract from grey level RGB(p,p,p)
+    mso_colorProcessMask	  =0xFFFF00,// All the processing bits
+    mso_colorModificationMask =0x0F00,	// Just the function
+    mso_colorModFlagMask      =0xF000,	// Just the additional flags
+    mso_colorDarken           =0x0100,	// Darken color by parameter/255
+    mso_colorLighten          =0x0200,	// Lighten color by parameter/255
+    mso_colorAdd              =0x0300,	// Add grey level RGB(param,param,param)
+    mso_colorSubtract         =0x0400,	// Subtract grey level RGB(p,p,p)
+    mso_colorReverseSubtract  =0x0500,	// Subtract from grey level RGB(p,p,p)
     /* In the following "black" means maximum component value, white minimum.
         The operation is per component, to guarantee white combine with
     mso_colorGray */
-    mso_colorBlackWhite       =0x0600,  // Black if < uParam, else white (>=)
-    mso_colorInvert           =0x2000,  // Invert color (at the *end*)
-    mso_colorInvert128        =0x4000,  // Invert by toggling the top bit
-    mso_colorGray             =0x8000,  // Make the color gray (before the above!)
+    mso_colorBlackWhite       =0x0600,	// Black if < uParam, else white (>=)
+    mso_colorInvert           =0x2000,	// Invert color (at the *end*)
+    mso_colorInvert128        =0x4000,	// Invert by toggling the top bit
+    mso_colorGray             =0x8000,	// Make the color gray (before the above!)
     mso_colorBParamMask       =0xFF0000,// Parameter used as above
-    mso_colorBParamShift = 16           // To extract the parameter value
+    mso_colorBParamShift = 16			// To extract the parameter value
 } MSO_SYSCOLORINDEX;
+
+#ifdef Hier_noch_was_aus_der_Doku
+/* The secondary, or data, UID - should always be set. */
+BYTE  m_rgbUid[16];
+/* The primary UID - this defaults to 0, in which case the primary ID is
+   that of the internal data. NOTE!: The primary UID is only saved to disk
+   if (blip_instance ^ blip_signature == 1). Blip_instance is MSO_FBH.inst and
+   blip_signature is one of the values defined in MSO_BI */
+BYTE  m_rgbUidPrimary[16]; // optional based on the above check
+
+/* Metafile Blip overhead = 34 bytes. m_cb gives the number of
+   bytes required to store an uncompressed version of the file, m_cbSave
+   is the compressed size.  m_mfBounds gives the boundary of all the
+   drawing calls within the metafile (this may just be the bounding box
+   or it may allow some whitespace, for a WMF this comes from the
+   SetWindowOrg and SetWindowExt records of the metafile). */
+int           m_cb;           // Cache of the metafile size
+RECT          m_rcBounds;     // Boundary of metafile drawing commands
+POINT         m_ptSize;       // Size of metafile in EMUs
+int           m_cbSave;       // Cache of saved size (size of m_pvBits)
+BYTE          m_fCompression; // MSO_BLIPCOMPRESSION
+BYTE          m_fFilter;      // always mso_filterNone
+void         *m_pvBits;       // Compressed bits of metafile.
+
+/* The secondary, or data, UID - should always be set. */
+BYTE  m_rgbUid[16];
+/* The primary UID - this defaults to 0, in which case the primary ID is
+   that of the internal data. NOTE!: The primary UID is only saved to disk
+   if (blip_instance ^ blip_signature == 1). Blip_instance is MSO_FBH.finst and
+   blip_signature is one of the values defined in MSO_BI*/
+BYTE  m_rgbUidPrimary[16];    // optional based on the above check
+BYTE  m_bTag;
+void  *m_pvBits;              // raster bits of the blip.
+#endif
 
 #endif
 

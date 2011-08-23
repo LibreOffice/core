@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,6 @@
 #include <bookmrk.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
 #include <unocrsr.hxx>
@@ -118,13 +117,16 @@
 #include <dcontact.hxx>
 #include <dflyobj.hxx>
 #include <crsskip.hxx>
+// OD 2004-05-07 #i28701#
 #include <vector>
+// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 #include <sortopt.hxx>
+
 #include <algorithm>
 #include <iterator>
 #include <boost/bind.hpp>
-#include <switerator.hxx>
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -152,7 +154,7 @@ GetSupportedServiceNamesImpl(
     uno::Sequence< ::rtl::OUString > ret(nServices);
     for (size_t i = 0; i < nServices; ++i)
     {
-        ret[i] = rtl::OUString::createFromAscii(pServices[i]);
+        ret[i] = C2U(pServices[i]);
     }
     return ret;
 }
@@ -185,7 +187,7 @@ void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
 struct FrameDependSortListLess
 {
     bool operator() (FrameDependSortListEntry const& r1,
-                     FrameDependSortListEntry const& r2) const
+                     FrameDependSortListEntry const& r2)
     {
         return  (r1.nIndex <  r2.nIndex)
             || ((r1.nIndex == r2.nIndex) && (r1.nOrder < r2.nOrder));
@@ -198,24 +200,24 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                          const bool _bAtCharAnchoredObjs )
 {
     // _bAtCharAnchoredObjs:
-    // <sal_True>: at-character anchored objects are collected
-    // <sal_False>: at-paragraph anchored objects are collected
+    // <TRUE>: at-character anchored objects are collected
+    // <FALSE>: at-paragraph anchored objects are collected
 
     // alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz
     // gebunden sind
     SwDoc* pDoc = rIdx.GetNode().GetDoc();
 
-    sal_uInt16 nChkType = static_cast< sal_uInt16 >((_bAtCharAnchoredObjs)
+    USHORT nChkType = static_cast< USHORT >((_bAtCharAnchoredObjs)
             ? FLY_AT_CHAR : FLY_AT_PARA);
     const SwCntntFrm* pCFrm;
     const SwCntntNode* pCNd;
-    if( pDoc->GetCurrentViewShell() &&  //swmod 071108//swmod 071225
+    if( pDoc->GetRootFrm() &&
         0 != (pCNd = rIdx.GetNode().GetCntntNode()) &&
-        0 != (pCFrm = pCNd->getLayoutFrm( pDoc->GetCurrentLayout())) )
+        0 != (pCFrm = pCNd->GetFrm()) )
     {
         const SwSortedObjs *pObjs = pCFrm->GetDrawObjs();
         if( pObjs )
-            for( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
+            for( USHORT i = 0; i < pObjs->Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
@@ -237,8 +239,8 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     else
     {
         const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
-        sal_uInt16 nSize = rFmts.Count();
-        for ( sal_uInt16 i = 0; i < nSize; i++)
+        USHORT nSize = rFmts.Count();
+        for ( USHORT i = 0; i < nSize; i++)
         {
             const SwFrmFmt* pFmt = rFmts[ i ];
             const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
@@ -269,7 +271,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
 UnoActionContext::UnoActionContext(SwDoc *const pDoc)
     : m_pDoc(pDoc)
 {
-    SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
+    SwRootFrm *const pRootFrm = m_pDoc->GetRootFrm();
     if (pRootFrm)
     {
         pRootFrm->StartAllAction();
@@ -281,7 +283,7 @@ UnoActionContext::~UnoActionContext()
     // Doc may already have been removed here
     if (m_pDoc)
     {
-        SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
+        SwRootFrm *const pRootFrm = m_pDoc->GetRootFrm();
         if (pRootFrm)
         {
             pRootFrm->EndAllAction();
@@ -295,7 +297,7 @@ UnoActionContext::~UnoActionContext()
 UnoActionRemoveContext::UnoActionRemoveContext(SwDoc *const pDoc)
     : m_pDoc(pDoc)
 {
-    SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
+    SwRootFrm *const pRootFrm = m_pDoc->GetRootFrm();
     if (pRootFrm)
     {
         pRootFrm->UnoRemoveAllActions();
@@ -304,14 +306,14 @@ UnoActionRemoveContext::UnoActionRemoveContext(SwDoc *const pDoc)
 
 UnoActionRemoveContext::~UnoActionRemoveContext()
 {
-    SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
+    SwRootFrm *const pRootFrm = m_pDoc->GetRootFrm();
     if (pRootFrm)
     {
         pRootFrm->UnoRestoreAllActions();
     }
 }
 
-void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     switch( pOld ? pOld->Which() : 0 )
     {
@@ -340,7 +342,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
     UnoActionContext aAction(pDoc);
     if (rPam.GetNext() != &rPam)    // Ring of Cursors
     {
-        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
+        pDoc->StartUndo(UNDO_INSATTR, NULL);
 
         SwPaM *pCurrent = &rPam;
         do
@@ -354,12 +356,12 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
             pCurrent= static_cast<SwPaM *>(pCurrent->GetNext());
         } while (pCurrent != &rPam);
 
-        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
+        pDoc->EndUndo(UNDO_INSATTR, NULL);
     }
     else
     {
-//          if( !HasSelection() )
-//              UpdateAttr();
+//			if( !HasSelection() )
+//				UpdateAttr();
         pDoc->InsertItemSet( rPam, rSet, nFlags );
     }
     //#outline level,add by zhaojianwei
@@ -369,7 +371,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
         if ( pTmpNode )
         {
             rPam.GetDoc()->GetNodes().UpdateOutlineNode( *pTmpNode );
-        }
+        }					
     }
     //<-end,zhaojianwei
 }
@@ -388,8 +390,8 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
     {
         SwPosition const & rStart( *pCurrent->Start() );
         SwPosition const & rEnd( *pCurrent->End() );
-        const sal_uLong nSttNd = rStart.nNode.GetIndex();
-        const sal_uLong nEndNd = rEnd  .nNode.GetIndex();
+        const ULONG nSttNd = rStart.nNode.GetIndex();
+        const ULONG nEndNd = rEnd  .nNode.GetIndex();
 
         if (nEndNd - nSttNd >= nMaxLookup)
         {
@@ -400,7 +402,7 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
 
         // the first node inserts the values into the get set
         // all other nodes merge their values into the get set
-        for (sal_uLong n = nSttNd; n <= nEndNd; ++n)
+        for (ULONG n = nSttNd; n <= nEndNd; ++n)
         {
             SwNode *const pNd = rPam.GetDoc()->GetNodes()[ n ];
             switch (pNd->GetNodeType())
@@ -459,7 +461,7 @@ public:
     /// embedded tables.
     SwStartNode const*const m_pOwnStartNode;
     SwTable const*const     m_pOwnTable;
-    const sal_uLong             m_nEndIndex;
+    const ULONG             m_nEndIndex;
     sal_Int32               m_nFirstParaStart;
     sal_Int32               m_nLastParaEnd;
     bool                    m_bFirstParagraph;
@@ -514,13 +516,13 @@ public:
     uno::Reference< text::XTextContent > NextElement_Impl()
         throw (container::NoSuchElementException, lang::WrappedTargetException,
                 uno::RuntimeException);
-protected:
+
     // SwClient
-    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 
 };
 
-void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void SwXParagraphEnumeration::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -586,7 +588,7 @@ lcl_FindTopLevelTable(
 
     SwTableNode * pLast = pTblNode;
     for (SwTableNode* pTmp = pLast;
-         pTmp != NULL  &&  &pTmp->GetTable() != pOwnTable;  /* we must not go up higher than the own table! */
+         pTmp != NULL  &&  &pTmp->GetTable() != pOwnTable;	/* we must not go up higher than the own table! */
          pTmp = pTmp->StartOfSectionNode()->FindTableNode() )
     {
         pLast = pTmp;
@@ -783,13 +785,13 @@ public:
     }
 
     const ::sw::mark::IMark * GetBookmark() const { return m_pMark; }
-protected:
+
     // SwClient
-    virtual void    Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 
 };
 
-void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void SwXTextRange::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     const bool bAlreadyRegistered = 0 != GetRegisteredIn();
     ClientModify(this, pOld, pNew);
@@ -879,7 +881,7 @@ throw (uno::RuntimeException)
     if (GetPositions(aCursor))
     {
         UnoActionContext aAction(& m_pImpl->m_rDoc);
-        m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
+        m_pImpl->m_rDoc.StartUndo(UNDO_INSERT, NULL);
         if (aCursor.HasMark())
         {
             m_pImpl->m_rDoc.DeleteAndJoin(aCursor);
@@ -891,10 +893,10 @@ throw (uno::RuntimeException)
                     m_pImpl->m_rDoc, aCursor, rText, bForceExpandHints);
 
             SwUnoCursorHelper::SelectPam(aCursor, true);
-            aCursor.Left(rText.getLength(), CRSR_SKIP_CHARS, sal_False, sal_False);
+            aCursor.Left(rText.getLength(), CRSR_SKIP_CHARS, FALSE, FALSE);
         }
         SetPositions(aCursor);
-        m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+        m_pImpl->m_rDoc.EndUndo(UNDO_INSERT, NULL);
     }
 }
 
@@ -1148,7 +1150,7 @@ lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode *const pSttNode,
     const SfxItemSet& rSet = pFrmFmt->GetAttrSet();
     const SfxPoolItem* pItem;
     if (SFX_ITEM_SET == rSet.GetItemState(
-            static_cast<sal_uInt16>(bHeader ? RES_HEADER : RES_FOOTER),
+            static_cast<USHORT>(bHeader ? RES_HEADER : RES_FOOTER),
             sal_True, &pItem))
     {
         SfxPoolItem *const pItemNonConst(const_cast<SfxPoolItem *>(pItem));
@@ -1224,7 +1226,8 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
             SwFrmFmt *const pFmt = pSttNode->GetFlyFmt();
             if (0 != pFmt)
             {
-                SwXTextFrame* pFrame = SwIterator<SwXTextFrame,SwFmt>::FirstElement( *pFmt );
+                SwXTextFrame* pFrame( static_cast<SwXTextFrame*>(
+                    SwClientIter( *pFmt ).First( TYPE( SwXTextFrame ) ) ) );
                 xParentText = pFrame ? pFrame : new SwXTextFrame( *pFmt );
             }
         }
@@ -1305,7 +1308,7 @@ throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
 
-    if (!rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextContent")))
+    if (!rServiceName.equalsAscii("com.sun.star.text.TextContent"))
     {
         throw uno::RuntimeException();
     }
@@ -1316,7 +1319,7 @@ throw (uno::RuntimeException)
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
     const ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
-            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, sal_False));
+            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, FALSE));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1338,7 +1341,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException)
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
     ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
-            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, sal_False));
+            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, FALSE));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1427,7 +1430,8 @@ SwXTextRange::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_FAIL("SwXTextRange::addPropertyChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXTextRange::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1437,7 +1441,8 @@ SwXTextRange::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_FAIL("SwXTextRange::removePropertyChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXTextRange::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1447,7 +1452,8 @@ SwXTextRange::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_FAIL("SwXTextRange::addVetoableChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXTextRange::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1457,7 +1463,8 @@ SwXTextRange::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_FAIL("SwXTextRange::removeVetoableChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXTextRange::removeVetoableChangeListener(): not implemented");
 }
 
 beans::PropertyState SAL_CALL
@@ -1575,13 +1582,13 @@ public:
     }
 
     void MakeRanges();
-protected:
+
     // SwClient
-    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 
 };
 
-void SwXTextRanges::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void SwXTextRanges::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -1635,8 +1642,8 @@ throw (uno::RuntimeException)
 }
 
 /****************************************************************************
- *  Text positions
- *  Bis zum ersten Zugriff auf eine TextPosition wird ein SwCursor gehalten,
+ *	Text positions
+ * 	Bis zum ersten Zugriff auf eine TextPosition wird ein SwCursor gehalten,
  * danach wird ein Array mit uno::Reference< XTextPosition >  angelegt
  *
 ****************************************************************************/
@@ -1708,7 +1715,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     // Start/EndAction
     SwDoc *const pDoc = rCursor.GetDoc();
     UnoActionContext aAction(pDoc);
-    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
+    pDoc->StartUndo(UNDO_INSERT, NULL);
     if (rCursor.HasMark())
     {
         pDoc->DeleteAndJoin(rCursor);
@@ -1721,9 +1728,9 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
         DBG_ASSERT( bSuccess, "DocInsertStringSplitCR" );
         (void) bSuccess;
         SwUnoCursorHelper::SelectPam(rCursor, true);
-        rCursor.Left(rString.getLength(), CRSR_SKIP_CHARS, sal_False, sal_False);
+        rCursor.Left(rString.getLength(), CRSR_SKIP_CHARS, FALSE, FALSE);
     }
-    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+    pDoc->EndUndo(UNDO_INSERT, NULL);
 }
 
 /******************************************************************
@@ -1758,9 +1765,9 @@ public:
         return static_cast<SwUnoCrsr*>(
                 const_cast<SwModify*>(GetRegisteredIn()));
     }
-protected:
+
     // SwClient
-    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 
 };
 
@@ -1769,7 +1776,7 @@ struct InvalidFrameDepend {
     { return !rEntry->GetRegisteredIn(); }
 };
 
-void SwXParaFrameEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void SwXParaFrameEnumeration::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
@@ -1801,7 +1808,9 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     // the format should be valid here, otherwise the client
     // would have been removed in ::Modify
     // check for a shape first
-    SwDrawContact* const pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement( *pFormat );
+    SwClientIter aIter(*pFormat);
+    SwDrawContact * const pContact =
+        static_cast<SwDrawContact*>( aIter.First(TYPE(SwDrawContact)) );
     if (pContact)
     {
         SdrObject * const pSdr = pContact->GetMaster();
@@ -1828,7 +1837,7 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     return o_rNextObject.is();
 }
 
-/* ---------------------------------------------------------------------------
+/* -----------------------------03.04.00 10:15--------------------------------
     Description: Search for a FLYCNT text attribute at the cursor point
                 and fill the frame into the array
  ---------------------------------------------------------------------------*/
@@ -1876,8 +1885,8 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
         {
             SwPosFlyFrms aFlyFrms;
             //get all frames that are bound at paragraph or at character
-            rPaM.GetDoc()->GetAllFlyFmts(aFlyFrms, m_pImpl->GetCursor(), sal_False, sal_True);
-            for(sal_uInt16 i = 0; i < aFlyFrms.Count(); i++)
+            rPaM.GetDoc()->GetAllFlyFmts(aFlyFrms, m_pImpl->GetCursor());
+            for(USHORT i = 0; i < aFlyFrms.Count(); i++)
             {
                 SwPosFlyFrm* pPosFly = aFlyFrms[i];
                 SwFrmFmt *const pFrmFmt =
@@ -1887,6 +1896,20 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
                     new SwDepend(m_pImpl.get(), pFrmFmt);
                 m_pImpl->m_Frames.push_back(
                         ::boost::shared_ptr<SwDepend>(pNewDepend) );
+            }
+            //created from any text range
+            if (m_pImpl->GetCursor()->HasMark())
+            {
+                m_pImpl->GetCursor()->Normalize();
+                do
+                {
+                    lcl_FillFrame(*m_pImpl.get(), *m_pImpl->GetCursor(),
+                            m_pImpl->m_Frames);
+                    m_pImpl->GetCursor()->Right(
+                            1, CRSR_SKIP_CHARS, FALSE, FALSE);
+                }
+                while (*m_pImpl->GetCursor()->GetPoint() <
+                        *m_pImpl->GetCursor()->GetMark());
             }
         }
         lcl_FillFrame(*m_pImpl.get(), *m_pImpl->GetCursor(), m_pImpl->m_Frames);

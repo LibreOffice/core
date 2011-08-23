@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,16 +30,14 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include "uiconfiguration/windowstateconfiguration.hxx"
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
-#include "helper/mischelper.hxx"
-
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -52,15 +50,16 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 #include <tools/debug.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
+//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -71,8 +70,9 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
 
 //_________________________________________________________________________________________________________________
-//  Namespace
+//	Namespace
 //_________________________________________________________________________________________________________________
+//
 
 static const char CONFIGURATION_ROOT_ACCESS[]               = "/org.openoffice.Office.UI.";
 static const char CONFIGURATION_WINDOWSTATE_ACCESS[]        = "/UIElements/States";
@@ -138,7 +138,7 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//  Configuration access class for WindowState supplier implementation
+//	Configuration access class for WindowState supplier implementation
 //*****************************************************************************************************************
 
 class ConfigurationAccess_WindowState : // interfaces
@@ -255,7 +255,7 @@ class ConfigurationAccess_WindowState : // interfaces
         sal_Bool                  impl_initializeConfigAccess();
 
     private:
-        typedef ::boost::unordered_map< ::rtl::OUString,
+        typedef ::std::hash_map< ::rtl::OUString,
                                  WindowStateInfo,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > ResourceURLToInfoCache;
@@ -264,7 +264,6 @@ class ConfigurationAccess_WindowState : // interfaces
         Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
-        Reference< XContainerListener >   m_xConfigListener;
         ResourceURLToInfoCache            m_aResourceURLToInfoCache;
         sal_Bool                          m_bConfigAccessInitialized : 1,
                                           m_bModified : 1;
@@ -272,7 +271,7 @@ class ConfigurationAccess_WindowState : // interfaces
 };
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
+//	XInterface, XTypeProvider
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_7     (   ConfigurationAccess_WindowState                                                   ,
                             OWeakObject                                                                     ,
@@ -322,7 +321,7 @@ ConfigurationAccess_WindowState::~ConfigurationAccess_WindowState()
     ResetableGuard aLock( m_aLock );
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
-        xContainer->removeContainerListener(m_xConfigListener);
+        xContainer->removeContainerListener( this );
 }
 
 // XNameAccess
@@ -366,20 +365,16 @@ throw ( RuntimeException )
 sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasByName( const ::rtl::OUString& rResourceURL )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    // SAFE
-    ResetableGuard aLock( m_aLock );
-
-    ResourceURLToInfoCache::const_iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
-    if ( pIter != m_aResourceURLToInfoCache.end() )
-        return sal_True;
-    else
+    try
     {
-        Any a( impl_getWindowStateFromResourceURL( rResourceURL ) );
-        if ( a == Any() )
-            return sal_False;
-        else
-            return sal_True;
+        getByName( rResourceURL );
     }
+    catch ( NoSuchElementException& )
+    {
+        return sal_False;
+    }
+
+    return sal_True;
 }
 
 // XElementAccess
@@ -587,10 +582,12 @@ void SAL_CALL ConfigurationAccess_WindowState::elementInserted( const ContainerE
 
 void SAL_CALL ConfigurationAccess_WindowState::elementRemoved ( const ContainerEvent& ) throw(RuntimeException)
 {
+    //
 }
 
 void SAL_CALL ConfigurationAccess_WindowState::elementReplaced( const ContainerEvent& ) throw(RuntimeException)
 {
+    //
 }
 
 // lang.XEventListener
@@ -1048,11 +1045,12 @@ Any ConfigurationAccess_WindowState::impl_getWindowStateFromResourceURL( const r
     try
     {
         // Try to ask our configuration access
-        if ( m_xConfigAccess.is() && m_xConfigAccess->hasByName( rResourceURL ) )
+        if ( m_xConfigAccess.is() )
         {
+            Reference< XNameAccess > xNameAccess;
+            Any a( m_xConfigAccess->getByName( rResourceURL ));
 
-            Reference< XNameAccess > xNameAccess( m_xConfigAccess->getByName( rResourceURL ), UNO_QUERY );
-            if ( xNameAccess.is() )
+            if ( a >>= xNameAccess )
                 return impl_insertCacheAndReturnSequence( rResourceURL, xNameAccess );
         }
     }
@@ -1226,7 +1224,7 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
     sal_Int32                 i( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );
     Sequence< PropertyValue > aPropSeq;
-    ::rtl::OUString                  aDelim( RTL_CONSTASCII_USTRINGPARAM(",") );
+    ::rtl::OUString                  aDelim( ::rtl::OUString::createFromAscii( "," ));
 
     for ( i = 0; i < nCount; i++ )
     {
@@ -1326,10 +1324,7 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
             // Add as container listener
             Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
             if ( xContainer.is() )
-            {
-                m_xConfigListener = new WeakContainerListener(this);
-                xContainer->addContainerListener(m_xConfigListener);
-            }
+                xContainer->addContainerListener( this );
         }
 
         return sal_True;
@@ -1346,26 +1341,26 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
 
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_4                    (    WindowStateConfiguration                                                            ,
                                             OWeakObject                                                                     ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                      ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo                                       ),
-                                            DIRECT_INTERFACE( css::container::XNameAccess                                   ),
+                                            DIRECT_INTERFACE( css::container::XNameAccess		                            ),
                                             DERIVED_INTERFACE( css::container::XElementAccess, css::container::XNameAccess  )
                                         )
 
-DEFINE_XTYPEPROVIDER_4                  (   WindowStateConfiguration            ,
-                                            css::lang::XTypeProvider        ,
-                                            css::lang::XServiceInfo         ,
+DEFINE_XTYPEPROVIDER_4                  (   WindowStateConfiguration		    ,
+                                            css::lang::XTypeProvider		,
+                                            css::lang::XServiceInfo			,
                                             css::container::XNameAccess     ,
                                             css::container::XElementAccess
                                         )
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   WindowStateConfiguration                    ,
-                                            ::cppu::OWeakObject                         ,
-                                            SERVICENAME_WINDOWSTATECONFIGURATION        ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   WindowStateConfiguration				    ,
+                                            ::cppu::OWeakObject						    ,
+                                            SERVICENAME_WINDOWSTATECONFIGURATION	    ,
                                             IMPLEMENTATIONNAME_WINDOWSTATECONFIGURATION
                                         )
 
@@ -1379,14 +1374,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
                                                     UNO_QUERY );
     Reference< XNameAccess > xEmptyNameAccess;
     Reference< XNameAccess > xNameAccess( m_xModuleManager, UNO_QUERY_THROW );
-    Sequence< rtl::OUString > aElementNames;
-    try
-    {
-        aElementNames = xNameAccess->getElementNames();
-    }
-    catch (::com::sun::star::uno::RuntimeException &)
-    {
-    }
+    Sequence< rtl::OUString > aElementNames = xNameAccess->getElementNames();
     Sequence< PropertyValue > aSeq;
     ::rtl::OUString                  aModuleIdentifier;
 
@@ -1398,7 +1386,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
             ::rtl::OUString aWindowStateFileStr;
             for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
             {
-                if ( aSeq[y].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooSetupFactoryWindowStateConfigRef")) )
+                if ( aSeq[y].Name.equalsAscii("ooSetupFactoryWindowStateConfigRef") )
                 {
                     aSeq[y].Value >>= aWindowStateFileStr;
                     break;

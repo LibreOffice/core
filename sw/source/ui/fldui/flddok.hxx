@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,36 +41,36 @@
 
 class SwFldDokPage : public SwFldPage
 {
-    FixedText           aTypeFT;
-    ListBox             aTypeLB;
-    FixedText           aSelectionFT;
-    ListBox             aSelectionLB;
-    FixedText           aValueFT;
-    Edit                aValueED;
-    NumericField        aLevelED;
-    NumericField        aDateOffsetED;
-    FixedText           aFormatFT;
-    ListBox             aFormatLB;
-    NumFormatListBox    aNumFormatLB;
-    CheckBox            aFixedCB;
+    FixedText 			aTypeFT;
+    ListBox				aTypeLB;
+    FixedText			aSelectionFT;
+    ListBox				aSelectionLB;
+    FixedText			aValueFT;
+    Edit				aValueED;
+    NumericField		aLevelED;
+    NumericField		aDateOffsetED;
+    FixedText			aFormatFT;
+    ListBox				aFormatLB;
+    NumFormatListBox	aNumFormatLB;
+    CheckBox			aFixedCB;
 
-    String              sDateOffset;
-    String              sTimeOffset;
-    Bitmap              aRootOpened;
-    Bitmap              aRootClosed;
+    String				sDateOffset;
+    String				sTimeOffset;
+    Bitmap				aRootOpened;
+    Bitmap 				aRootClosed;
 
-    sal_uInt16              nOldSel;
-    sal_uLong               nOldFormat;
+    USHORT				nOldSel;
+    ULONG				nOldFormat;
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
     DECL_LINK( FormatHdl, ListBox* pLB = 0 );
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
 
-    void                AddSubType(sal_uInt16 nTypeId);
-    sal_uInt16              FillFormatLB(sal_uInt16 nTypeId);
+    void				AddSubType(USHORT nTypeId);
+    USHORT				FillFormatLB(USHORT nTypeId);
 
 protected:
-    virtual sal_uInt16      GetGroup();
+    virtual USHORT		GetGroup();
 
 public:
                         SwFldDokPage(Window* pWindow, const SfxItemSet& rSet);
@@ -79,10 +79,10 @@ public:
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    virtual void        FillUserData();
+    virtual void		FillUserData();
 };
 
 

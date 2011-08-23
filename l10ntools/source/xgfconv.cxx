@@ -22,7 +22,7 @@ int _cdecl main( int argc, char *argv[] )
 
     ByteString sInput( argv[ 1 ] );
     ByteString sOutput( argv[ 2 ] );
-
+    
     SvFileStream aInput( String( sInput, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
     if ( !aInput.IsOpen()) {
         fprintf( stderr, "ERROR: Unable to open input file!\n" );
@@ -37,18 +37,18 @@ int _cdecl main( int argc, char *argv[] )
     }
 
     ByteString sLine;
-    sal_Bool bFirst = sal_True;
+    BOOL bFirst = TRUE;
     while ( !aInput.IsEof()) {
         aInput.ReadLine( sLine );
         ByteString sLangId = sLine.GetToken( 0, '\t' );
         ByteString sFile = sLine.GetToken( 1, '\t' );
         ByteString sText = sLine.Copy( sLangId.Len() + sFile.Len() + 2 );
 
-        sal_uInt16 nLangId = sLangId.ToInt32();
+        USHORT nLangId = sLangId.ToInt32();
         CharSet aCharSet = Export::GetCharSet( nLangId );
         if ( aCharSet != 0xFFFF && sText.Len()) {
             sText = UTF8Converter::ConvertToUTF8( sText, aCharSet );
-            ByteString sOutput = sFile;
+            ByteString sOutput = sFile; 
             sOutput += "\t";
             sOutput += sText;
             if ( !bFirst ) {
@@ -56,7 +56,7 @@ int _cdecl main( int argc, char *argv[] )
                 aOutput.WriteLine( sEmpty );
             }
             else
-                bFirst = sal_False;
+                bFirst = FALSE;
             aOutput.Write( sOutput.GetBuffer(), sOutput.Len());
         }
     }

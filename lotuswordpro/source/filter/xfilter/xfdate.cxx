@@ -57,7 +57,11 @@
  * @file
  * Date field with date style.
  ************************************************************************/
-#include    "xfdate.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-01-21 create this file.
+ ************************************************************************/
+#include	"xfdate.hxx"
 
 XFDate::XFDate()
 {
@@ -71,9 +75,9 @@ XFDate::~XFDate()
 
 }
 
-void    XFDate::ToXml(IXFStream *pStrm)
+void	XFDate::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     if( GetStyleName().getLength() > 0 )
@@ -92,12 +96,12 @@ void    XFDate::ToXml(IXFStream *pStrm)
 
 void XFDateStart::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     if( GetStyleName().getLength() > 0 )
         pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), GetStyleName() );
-/*  if (m_bValued)
+/*	if (m_bValued)
         pAttrList->AddAttribute( A2OUSTR("text:date-value"), DateTimeToOUString(m_aDateTime) );
     if( m_bFixed )
         pAttrList->AddAttribute( A2OUSTR("text:fixed"), A2OUSTR("true") );

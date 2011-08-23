@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,28 +37,32 @@ using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 
+/*-- 22.02.2007 12:17:53---------------------------------------------------
 
-
+  -----------------------------------------------------------------------*/
 WriterFilterDetection::WriterFilterDetection(
     const uno::Reference< uno::XComponentContext >& rxContext) :
     m_xContext( rxContext )
 {
 }
+/*-- 22.02.2007 12:17:53---------------------------------------------------
 
-
+  -----------------------------------------------------------------------*/
 WriterFilterDetection::~WriterFilterDetection()
 {
 }
+/*-- 22.02.2007 12:11:38---------------------------------------------------
 
-
+  -----------------------------------------------------------------------*/
 OUString WriterFilterDetection_getImplementationName () throw (uno::RuntimeException)
 {
    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.WriterFilterDetector" ) );
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ExtendedTypeDetection"
+/*-- 22.02.2007 12:11:38---------------------------------------------------
 
-
+  -----------------------------------------------------------------------*/
 OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& rDescriptor )
    throw( uno::RuntimeException )
 {
@@ -91,12 +95,12 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
             if ( pStream && SotStorage::IsStorageFile(pStream) )
 
             {
-                SotStorageRef xStg = new SotStorage( pStream, sal_False );
+                SotStorageRef xStg = new SotStorage( pStream, FALSE );
 
-                bool bTable2 = xStg->IsContained( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1Table")));
+                bool bTable2 = xStg->IsContained( rtl::OUString::createFromAscii("1Table" ));
                 SotStorageStreamRef xRef =
 
-                    xStg->OpenSotStream(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordDocument")),
+                    xStg->OpenSotStream(rtl::OUString::createFromAscii("WordDocument"),
 
                             STREAM_STD_READ | STREAM_NOCREATE );
 
@@ -113,7 +117,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
         else
         {
             uno::Reference< embed::XStorage > xDocStorage;
-            if( sURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:stream" ) ) )
+            if( sURL.equalsAscii( "private:stream" ) )
                 xDocStorage = comphelper::OStorageHelper::GetStorageFromInputStream( xInputStream );
             else
                 xDocStorage = comphelper::OStorageHelper::GetStorageFromURL(
@@ -128,7 +132,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
                     {
                         bWord = true;
                         if( !sTypeName.getLength() )
-                            sTypeName = ::rtl::OUString(
+                            sTypeName = ::rtl::OUString( 
                                     RTL_CONSTASCII_STRINGPARAM( "writer_MS_Word_2007" ), RTL_TEXTENCODING_ASCII_US);
                         break;
                     }
@@ -138,20 +142,22 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL("exception while opening storage");
+        OSL_ASSERT("exception while opening storage");
     }
     if( !bWord )
         sTypeName = ::rtl::OUString();
    return sTypeName;
 }
+/*-- 22.02.2007 12:11:38---------------------------------------------------
 
-
+  -----------------------------------------------------------------------*/
 sal_Bool WriterFilterDetection_supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
 {
    return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) );
 }
+/*-- 22.02.2007 12:11:38---------------------------------------------------
 
-
+  -----------------------------------------------------------------------*/
 uno::Sequence< OUString > WriterFilterDetection_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
    uno::Sequence < OUString > aRet(1);
@@ -160,27 +166,31 @@ uno::Sequence< OUString > WriterFilterDetection_getSupportedServiceNames(  ) thr
    return aRet;
 }
 #undef SERVICE_NAME1
+/*-- 22.02.2007 12:11:38---------------------------------------------------
 
-
+  -----------------------------------------------------------------------*/
 uno::Reference< uno::XInterface > WriterFilterDetection_createInstance( const uno::Reference< uno::XComponentContext >& xContext)
                 throw( uno::Exception )
 {
    return (cppu::OWeakObject*) new WriterFilterDetection( xContext );
 }
+/*-- 22.02.2007 12:11:38---------------------------------------------------
 
-
+  -----------------------------------------------------------------------*/
 OUString WriterFilterDetection::getImplementationName(  ) throw (uno::RuntimeException)
 {
    return WriterFilterDetection_getImplementationName();
 }
+/*-- 22.02.2007 12:11:38---------------------------------------------------
 
-
+  -----------------------------------------------------------------------*/
 sal_Bool WriterFilterDetection::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException)
 {
     return WriterFilterDetection_supportsService( rServiceName );
 }
+/*-- 22.02.2007 12:11:38---------------------------------------------------
 
-
+  -----------------------------------------------------------------------*/
 uno::Sequence< OUString > WriterFilterDetection::getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
     return WriterFilterDetection_getSupportedServiceNames();

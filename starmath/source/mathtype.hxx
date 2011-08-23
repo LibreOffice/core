@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,23 +62,23 @@ typedef ::std::set< MathTypeFont, LessMathTypeFont > MathTypeFontSet;
 class MathType
 {
 public:
-    MathType(String &rIn) :
+    MathType(String &rIn) : 
         rRet(rIn), nHAlign(0), nVAlign(0), nDefaultSize(12),
         nLSize(0), nDSize(0), nCurSize(0), nLastSize(0), bIsSilent(sal_False)
     {
         Init();
     }
 
-    MathType(String &rIn,SmNode *pIn) :
+    MathType(String &rIn,SmNode *pIn) : 
         rRet(rIn), pTree(pIn), nHAlign(2), nVAlign(0), nInsertion(0), nDefaultSize(12),
         nLSize(0), nDSize(0), nCurSize(0), nLastSize(0), nSpec(0), bIsSilent(sal_False)
     {
         Init();
     }
-
+    
     int Parse( SotStorage* pStor );
     int ConvertFromStarMath( SfxMedium& rMedium );
-
+    
 private:
 /*Ver 2 Header*/
     sal_uInt8 nVersion;
@@ -108,12 +108,12 @@ private:
         sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation,
         sal_Bool bSilent);
     void HandleNudge();
-    int xfLMOVE(sal_uInt8 nTest) const {return nTest&0x80;}
-    int xfAUTO(sal_uInt8 nTest) const {return nTest&0x10;}
-    int xfEMBELL(sal_uInt8 nTest) const {return nTest&0x20;}
-    int xfNULL(sal_uInt8 nTest) const {return nTest&0x10;}
-    int xfLSPACE(sal_uInt8 nTest) const {return nTest&0x40;}
-    int xfRULER(sal_uInt8 nTest) const {return nTest&0x20;}
+    int xfLMOVE(sal_uInt8 nTest) {return nTest&0x80;}
+    int xfAUTO(sal_uInt8 nTest) {return nTest&0x10;}
+    int xfEMBELL(sal_uInt8 nTest) {return nTest&0x20;}
+    int xfNULL(sal_uInt8 nTest) {return nTest&0x10;}
+    int xfLSPACE(sal_uInt8 nTest) {return nTest&0x40;}
+    int xfRULER(sal_uInt8 nTest) {return nTest&0x20;}
 
     sal_uInt8 HandleNodes(SmNode *pNode,int nLevel=0);
     int StartTemplate(sal_uInt16 nSelector,sal_uInt16 nVariation=0);
@@ -123,7 +123,7 @@ private:
     void HandleRoot(SmNode *pNode,int nLevel);
     void HandleSubSupScript(SmNode *pNode,int nLevel);
     sal_uInt8 HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
-        sal_uLong *pPos=NULL,sal_Bool bTest=sal_True);
+        ULONG *pPos=NULL,sal_Bool bTest=TRUE);
     void HandleFractions(SmNode *pNode,int nLevel);
     void HandleBrace(SmNode *pNode,int nLevel);
     void HandleVerticalBrace(SmNode *pNode,int nLevel);
@@ -142,7 +142,7 @@ private:
     sal_uInt8 nVAlign;
 
     int nPendingAttributes;
-    sal_uLong nInsertion;
+    ULONG nInsertion;
 
     sal_Int16 aSizeTable[7];
     sal_Int16 nDefaultSize;

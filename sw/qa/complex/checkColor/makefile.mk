@@ -25,26 +25,51 @@
 #
 #*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
+PRJ = ..$/..$/..
+TARGET  = CheckChangeColor
+PRJNAME = $(TARGET)
+PACKAGE = complex$/checkColor
 
-PRJ = ../../..
-PRJNAME = sw
-TARGET = qa_complex_checkColor
-
-.IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = complex/checkColor
-JAVATESTFILES = CheckChangeColor.java
-JAVAFILES = $(JAVATESTFILES)
-JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-.END
-
+# --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
 
-ALLTAR : javatest
 
-.END
+#----- compile .java files -----------------------------------------
+
+JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar mysql.jar
+JAVAFILES       = CheckChangeColor.java
+JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+
+#----- make a jar from compiled files ------------------------------
+
+MAXLINELENGTH = 100000
+
+JARCLASSDIRS    = $(PACKAGE)
+JARTARGET       = $(TARGET).jar
+JARCOMPRESS 	= TRUE
+
+# --- Parameters for the test --------------------------------------
+
+# test base is java complex
+CT_TESTBASE = -TestBase java_complex
+
+# test looks something like the.full.package.TestName
+CT_TEST     = -o $(PACKAGE:s\$/\.\).$(JAVAFILES:b)
+
+# start the runner application
+CT_APP      = org.openoffice.Runner
+
+# --- Targets ------------------------------------------------------
+
+.IF "$(depend)" == ""
+ALL :   ALLTAR
+.ELSE
+ALL: 	ALLDEP
+.ENDIF
+
+.INCLUDE :  target.mk
+
+RUN: run
+
+run:
+    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_NOOFFICE) $(CT_TEST)

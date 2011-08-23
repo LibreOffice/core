@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 
 /**
- * Import all text into a string buffer.  Paragraph elements (<text:p>)
+ * Import all text into a string buffer.  Paragraph elements (<text:p>) 
  * are recognized and cause a return character (0x0a) to be added.
  */
 class XMLStringBufferImportContext : public SvXMLImportContext
@@ -48,7 +48,7 @@ public:
     TYPEINFO();
 
     XMLStringBufferImportContext(
-        SvXMLImport& rImport,
+        SvXMLImport& rImport, 
         sal_uInt16 nPrefix,
         const ::rtl::OUString& sLocalName,
         ::rtl::OUStringBuffer& rBuffer);
@@ -56,12 +56,12 @@ public:
     virtual ~XMLStringBufferImportContext();
 
     virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix,
+        USHORT nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    virtual void Characters(
+    virtual void Characters( 
         const ::rtl::OUString& rChars );
 
     virtual void EndElement();

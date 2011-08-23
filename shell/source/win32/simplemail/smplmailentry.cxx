@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_shell.hxx"
 
 //-----------------------------------------------------------------------
-//  includes of other projects
+//	includes of other projects
 //-----------------------------------------------------------------------
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/container/XSet.hpp>
@@ -41,12 +41,12 @@
 // namespace directives
 //-----------------------------------------------------------------------
 
-using namespace ::rtl                       ;
-using namespace ::com::sun::star::uno       ;
-using namespace ::com::sun::star::container ;
-using namespace ::com::sun::star::lang      ;
-using namespace ::com::sun::star::registry  ;
-using namespace ::cppu                      ;
+using namespace ::rtl						;
+using namespace ::com::sun::star::uno		;
+using namespace ::com::sun::star::container	;
+using namespace ::com::sun::star::lang		;
+using namespace ::com::sun::star::registry	;
+using namespace ::cppu					    ;
 using com::sun::star::system::XSimpleMailClientSupplier;
 
 //-----------------------------------------------------------------------
@@ -58,22 +58,22 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 #define COMP_REGKEY_NAME   "/com.sun.star.system.SimpleSystemMail/UNO/SERVICES/com.sun.star.system.SimpleSystemMail"
 
 //-----------------------------------------------------------------------
-//
+// 
 //-----------------------------------------------------------------------
 
 namespace
 {
     Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& )
-    {
+    {		
         return Reference< XInterface >( static_cast< XSimpleMailClientSupplier* >( new CSmplMailSuppl( ) ) );
     }
 }
 
 //-----------------------------------------------------------------------
-// the 3 important functions which will be exported
+// the 3 important functions which will be exported 
 //-----------------------------------------------------------------------
 
-extern "C"
+extern "C" 
 {
 
 //----------------------------------------------------------------------
@@ -86,8 +86,34 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+//-----------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------
+
+sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
+{
+    sal_Bool bRetVal = sal_True;
+
+    if ( pRegistryKey )
+    {
+        try
+        {
+            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );							
+            pXNewKey->createKey( 
+                OUString::createFromAscii( COMP_REGKEY_NAME ) );
+        }
+        catch( InvalidRegistryException& )
+        {			
+            OSL_ENSURE(sal_False, "InvalidRegistryException caught");			
+            bRetVal = sal_False;
+        }
+    }
+
+    return bRetVal;
+}
+
 //----------------------------------------------------------------------
-// component_getFactory
+// component_getFactory 
 // returns a factory to create XFilePicker-Services
 //----------------------------------------------------------------------
 
@@ -98,8 +124,8 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, COMP_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( COMP_SERVICE_NAME ));
-
+        aSNS.getArray( )[0] = OUString::createFromAscii( COMP_SERVICE_NAME );		
+                
         Reference< XSingleServiceFactory > xFactory ( createOneInstanceFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
             OUString::createFromAscii( pImplName ),
@@ -109,7 +135,7 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
         {
             xFactory->acquire();
             pRet = xFactory.get();
-        }
+        }			
     }
 
     return pRet;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,13 +63,13 @@ TYPEINIT1( FuConstruct, FuDraw );
 \************************************************************************/
 
 FuConstruct::FuConstruct (
-    ViewShell*      pViewSh,
-    ::sd::Window*           pWin,
-    ::sd::View*         pView,
-    SdDrawDocument* pDoc,
-    SfxRequest&     rReq)
+    ViewShell*		pViewSh,
+    ::sd::Window*			pWin,
+    ::sd::View*			pView,
+    SdDrawDocument*	pDoc,
+    SfxRequest&		rReq) 
     : FuDraw(pViewSh, pWin, pView, pDoc, rReq),
-      bSelectionChanged(sal_False)
+      bSelectionChanged(FALSE)
 {
 }
 
@@ -84,23 +84,27 @@ void FuConstruct::DoExecute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
+    BOOL bReturn = FuDraw::MouseButtonDown(rMEvt);
 
-    bMBDown = sal_True;
-    bSelectionChanged = sal_False;
+    bMBDown = TRUE;
+    bSelectionChanged = FALSE;
 
     if ( mpView->IsAction() )
     {
-        return sal_True;
+        // #90235# this extra triggering is an error and leads to
+        // erasing the last two points when creating a polygon.
+        // if ( rMEvt.IsRight() )
+        //	mpView->BckAction();
+        return TRUE;
     }
 
-    bFirstMouseMove = sal_True;
+    bFirstMouseMove = TRUE;
     aDragTimer.Start();
 
     aMDPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
-    sal_uInt16 nHitLog = sal_uInt16 (mpWindow->PixelToLogic(Size(HITPIX,0)).Width());
+    USHORT nHitLog = USHORT (mpWindow->PixelToLogic(Size(HITPIX,0)).Width());
 
     if (rMEvt.IsLeft() && mpView->IsExtendedMouseEventDispatcherEnabled())
     {
@@ -110,14 +114,14 @@ sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
         if ( pHdl != NULL || mpView->IsMarkedHit(aMDPos, nHitLog) )
         {
-            sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+            USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
             mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
-            bReturn = sal_True;
+            bReturn = TRUE;
         }
         else if ( mpView->AreObjectsMarked() )
         {
             mpView->UnmarkAll();
-            bReturn = sal_True;
+            bReturn = TRUE;
         }
     }
 
@@ -130,14 +134,14 @@ sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstruct::MouseMove(const MouseEvent& rMEvt)
 {
     FuDraw::MouseMove(rMEvt);
 
     if (aDragTimer.IsActive() )
     {
         if( bFirstMouseMove )
-            bFirstMouseMove = sal_False;
+            bFirstMouseMove = FALSE;
         else
             aDragTimer.Stop();
     }
@@ -151,7 +155,7 @@ sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
         mpView->MovAction(aPnt);
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************
@@ -160,14 +164,14 @@ sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_True;
+    BOOL bReturn = TRUE;
 
     if (aDragTimer.IsActive() )
     {
         aDragTimer.Stop();
-        bIsInDragMode = sal_False;
+        bIsInDragMode = FALSE;
     }
 
     FuDraw::MouseButtonUp(rMEvt);
@@ -177,11 +181,11 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     if ( mpView && mpView->IsDragObj() )
     {
         FrameView* pFrameView = mpViewShell->GetFrameView();
-        sal_Bool bDragWithCopy = (rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
+        BOOL bDragWithCopy = (rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
         if (bDragWithCopy)
         {
-            bDragWithCopy = !mpView->IsPresObjSelected(sal_False, sal_True);
+            bDragWithCopy = !mpView->IsPresObjSelected(FALSE, TRUE);
         }
 
         mpView->SetDragWithCopy(bDragWithCopy);
@@ -193,19 +197,19 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     }
     else
     {
-        bReturn = sal_False;
+        bReturn = FALSE;
     }
 
     if ( mpView &&  !mpView->IsAction() )
     {
         mpWindow->ReleaseMouse();
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
         if ( !mpView->AreObjectsMarked() )
         {
             SdrObject* pObj;
             SdrPageView* pPV;
-            sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+            USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
             if (!mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV))
             {
@@ -223,7 +227,7 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
             * Toggle zw. Selektion und Rotation
             **************************************************************/
             SdrObject* pSingleObj = NULL;
-            sal_uLong nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
+            ULONG nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
 
             if (nMarkCount==1)
             {
@@ -243,14 +247,14 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
         }
     }
 
-    sal_uInt16 nClicks = rMEvt.GetClicks();
+    USHORT nClicks = rMEvt.GetClicks();
 
     if (nClicks == 2 && rMEvt.IsLeft() && bMBDown &&
         !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsShift() )
     {
         DoubleClick(rMEvt);
     }
-    bMBDown = sal_False;
+    bMBDown = FALSE;
 
     return bReturn;
 }
@@ -259,14 +263,14 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstruct::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     if ( !bReturn )
         bReturn = FuDraw::KeyInput(rKEvt);
@@ -309,74 +313,40 @@ void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
     sal_Bool bUseFillStyle, bUseNoFillStyle;
     bUseFillStyle = bUseNoFillStyle = sal_False;
 
-    switch( nSlotId )
-    {
-    case SID_DRAW_RECT:
-    case SID_DRAW_RECT_ROUND:
-    case SID_DRAW_SQUARE:
-    case SID_DRAW_SQUARE_ROUND:
-    case SID_DRAW_ELLIPSE:
-    case SID_DRAW_PIE:
-    case SID_DRAW_ELLIPSECUT:
-    case SID_DRAW_CIRCLE:
-    case SID_DRAW_CIRCLEPIE:
-    case SID_DRAW_CIRCLECUT:
-    case SID_DRAW_POLYGON:
-    case SID_DRAW_XPOLYGON:
-    case SID_DRAW_FREELINE:
-    case SID_DRAW_BEZIER_FILL:
+    if (nSlotId == SID_DRAW_RECT         || // Rechteck
+        nSlotId == SID_DRAW_RECT_ROUND   || // Rechteck, rund
+        nSlotId == SID_DRAW_SQUARE       || // Quadrat
+        nSlotId == SID_DRAW_SQUARE_ROUND || // Quadrat, rund
+        nSlotId == SID_DRAW_ELLIPSE      || // Ellipse
+        nSlotId == SID_DRAW_PIE          || // Ellipsensegment
+        nSlotId == SID_DRAW_ELLIPSECUT   || // Ellipsenabschnitt
+        nSlotId == SID_DRAW_CIRCLE       || // Kreis
+        nSlotId == SID_DRAW_CIRCLEPIE    || // Kreissegment
+        nSlotId == SID_DRAW_CIRCLECUT    || // Ellipsenabschnitt
+        nSlotId == SID_DRAW_POLYGON      || // Polygon
+        nSlotId == SID_DRAW_XPOLYGON     || // 45ø-Polygon
+        nSlotId == SID_DRAW_FREELINE     || // Freihandlinie
+        nSlotId == SID_DRAW_BEZIER_FILL)    // Bezier
     {
         bUseFillStyle = sal_True;
-        break;
     }
-    case  SID_DRAW_RECT_NOFILL:
-    case SID_DRAW_RECT_ROUND_NOFILL:
-    case SID_DRAW_SQUARE_NOFILL:
-    case SID_DRAW_SQUARE_ROUND_NOFILL:
-    case SID_DRAW_ELLIPSE_NOFILL:
-    case SID_DRAW_PIE_NOFILL:
-    case SID_DRAW_ELLIPSECUT_NOFILL:
-    case SID_DRAW_CIRCLE_NOFILL:
-    case SID_DRAW_CIRCLEPIE_NOFILL:
-    case SID_DRAW_CIRCLECUT_NOFILL:
-    case SID_DRAW_POLYGON_NOFILL:
-    case SID_DRAW_XPOLYGON_NOFILL:
-    case SID_DRAW_FREELINE_NOFILL:
-    case SID_DRAW_LINE:
-    case SID_DRAW_XLINE:
-    case SID_CONNECTOR_ARROW_START:
-    case SID_CONNECTOR_ARROW_END:
-    case SID_CONNECTOR_ARROWS:
-    case SID_CONNECTOR_CIRCLE_START:
-    case SID_CONNECTOR_CIRCLE_END:
-    case SID_CONNECTOR_CIRCLES:
-    case SID_CONNECTOR_LINE:
-    case SID_CONNECTOR_LINE_ARROW_START:
-    case SID_CONNECTOR_LINE_ARROW_END:
-    case SID_CONNECTOR_LINE_ARROWS:
-    case SID_CONNECTOR_LINE_CIRCLE_START:
-    case SID_CONNECTOR_LINE_CIRCLE_END:
-    case SID_CONNECTOR_LINE_CIRCLES:
-    case SID_CONNECTOR_CURVE:
-    case SID_CONNECTOR_CURVE_ARROW_START:
-    case SID_CONNECTOR_CURVE_ARROW_END:
-    case SID_CONNECTOR_CURVE_ARROWS:
-    case SID_CONNECTOR_CURVE_CIRCLE_START:
-    case SID_CONNECTOR_CURVE_CIRCLE_END:
-    case SID_CONNECTOR_CURVE_CIRCLES:
-    case SID_CONNECTOR_LINES:
-    case SID_CONNECTOR_LINES_ARROW_START:
-    case SID_CONNECTOR_LINES_ARROW_END:
-    case SID_CONNECTOR_LINES_ARROWS:
-    case SID_CONNECTOR_LINES_CIRCLE_START:
-    case SID_CONNECTOR_LINES_CIRCLE_END:
-    case SID_CONNECTOR_LINES_CIRCLES:
-    case SID_DRAW_BEZIER_NOFILL:
-    case SID_LINE_ARROW_END:
+    else if
+       (nSlotId == SID_DRAW_RECT_NOFILL         || // Rechteck
+        nSlotId == SID_DRAW_RECT_ROUND_NOFILL   || // Rechteck, rund
+        nSlotId == SID_DRAW_SQUARE_NOFILL       || // Quadrat
+        nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL || // Quadrat, rund
+        nSlotId == SID_DRAW_ELLIPSE_NOFILL      || // Ellipse
+        nSlotId == SID_DRAW_PIE_NOFILL          || // Ellipsensegment
+        nSlotId == SID_DRAW_ELLIPSECUT_NOFILL   || // Ellipsenabschnitt
+        nSlotId == SID_DRAW_CIRCLE_NOFILL       || // Kreis
+        nSlotId == SID_DRAW_CIRCLEPIE_NOFILL    || // Kreissegment
+        nSlotId == SID_DRAW_CIRCLECUT_NOFILL    || // Ellipsenabschnitt
+        nSlotId == SID_DRAW_POLYGON_NOFILL      || // Polygon
+        nSlotId == SID_DRAW_XPOLYGON_NOFILL     || // 45ø-Polygon
+        nSlotId == SID_DRAW_FREELINE_NOFILL     || // Freihandlinie
+        nSlotId == SID_DRAW_BEZIER_NOFILL)         // Bezier
     {
         bUseNoFillStyle = sal_True;
-        break;
-    }
     }
     SetStyleSheet( rAttr, pObj, bUseFillStyle, bUseNoFillStyle );
 }
@@ -393,7 +363,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         ***********************************************/
         String aName( pPage->GetLayoutName() );
         String aSep = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ) );
-        sal_uInt16 n = aName.Search(aSep);
+        USHORT n = aName.Search(aSep);
         n = n + aSep.Len();
         aName.Erase(n);
         aName.Append( String ( SdResId( STR_LAYOUT_BACKGROUNDOBJECTS ) ) );
@@ -404,7 +374,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         if (pSheet)
         {
             // applying style sheet for background objects
-            pObj->SetStyleSheet(pSheet, sal_False);
+            pObj->SetStyleSheet(pSheet, FALSE);
             SfxItemSet& rSet = pSheet->GetItemSet();
             const XFillStyleItem& rFillStyle = (const XFillStyleItem&)rSet.Get(XATTR_FILLSTYLE);
             if ( bForceFillStyle )
@@ -422,7 +392,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
     else
     {
         /***********************************
-        * object was created on normal page
+        * object was created on normal page 
         ************************************/
         if ( bForceNoFillStyle )
         {
@@ -433,7 +403,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             DBG_ASSERT(pSheet, "Objektvorlage nicht gefunden");
             if (pSheet)
             {
-                pObj->SetStyleSheet(pSheet, sal_False);
+                pObj->SetStyleSheet(pSheet, FALSE);
                 SfxItemSet aAttr(*mpView->GetDefaultAttr().Clone());
                 aAttr.Put(pSheet->GetItemSet().Get(XATTR_FILLSTYLE));
                 pObj->SetMergedItemSet(aAttr);

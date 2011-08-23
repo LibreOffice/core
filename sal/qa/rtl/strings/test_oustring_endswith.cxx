@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include "testshl/simpleheader.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -53,7 +52,7 @@ private:
 
 } }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::EndsWith);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test::oustring::EndsWith, "alltest");
 
 namespace {
 
@@ -105,7 +104,7 @@ void test::oustring::EndsWith::endsWith()
           RTL_CONSTASCII_STRINGPARAM("b\0c"), true },
         { RTL_CONSTASCII_STRINGPARAM("a\0b\0c"),
           RTL_CONSTASCII_STRINGPARAM("b"), false } };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
+    for (int i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         rtl::OStringBuffer msg;
         appendString(msg, rtl::OString(data[i].str1, data[i].str1Len));
         msg.append(

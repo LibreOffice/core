@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : gregor.hartmann@oracle.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : show all templates as preview in template dialog
 '*

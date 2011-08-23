@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,7 +114,7 @@ namespace frm
               EditView& getView();
 
         // Window overridables
-        virtual void        Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, sal_uLong _nFlags );
+        virtual void        Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, ULONG _nFlags );
 
     protected:
         // Window overridables

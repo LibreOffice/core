@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sfx2.hxx"
 
 #include "appbaslib.hxx"
 
@@ -147,7 +144,7 @@ Reference< XLibraryContainer > SfxBasicManagerHolder::getLibraryContainer( Conta
     case SCRIPTS:   return mxBasicContainer.get();
     case DIALOGS:   return mxDialogContainer.get();
     }
-    OSL_FAIL( "SfxBasicManagerHolder::getLibraryContainer: illegal container type!" );
+    DBG_ERROR( "SfxBasicManagerHolder::getLibraryContainer: illegal container type!" );
     return NULL;
 }
 
@@ -160,7 +157,7 @@ void SfxBasicManagerHolder::impl_releaseContainers()
 sal_Bool
 SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< rtl::OUString >& sModules )
 {
-    if ( mpBasicManager )
+    if ( mpBasicManager ) 
         return mpBasicManager->LegacyPsswdBinaryLimitExceeded( sModules );
     return sal_True;
 }
@@ -178,7 +175,7 @@ Sequence< OUString > SfxApplicationDialogLibraryContainer::impl_getStaticSupport
     if( bNeedsInit )
     {
         OUString* pSeq = seqServiceNames.getArray();
-        pSeq[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.ApplicationDialogLibraryContainer"));
+        pSeq[0] = OUString::createFromAscii( "com.sun.star.script.ApplicationDialogLibraryContainer" );
         bNeedsInit = sal_False;
     }
     return seqServiceNames;
@@ -192,18 +189,18 @@ OUString SfxApplicationDialogLibraryContainer::impl_getStaticImplementationName(
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     if( bNeedsInit )
     {
-        aImplName = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sfx2.ApplicationDialogLibraryContainer"));
+        aImplName = OUString::createFromAscii( "com.sun.star.comp.sfx2.ApplicationDialogLibraryContainer" );
         bNeedsInit = sal_False;
     }
     return aImplName;
 }
 
 Reference< XInterface > SAL_CALL SfxApplicationDialogLibraryContainer::impl_createInstance
-    ( const Reference< XMultiServiceFactory >& )
+    ( const Reference< XMultiServiceFactory >& ) 
         throw( Exception )
 {
     SFX_APP()->GetBasicManager();
-    Reference< XInterface > xRet =
+    Reference< XInterface > xRet = 
         Reference< XInterface >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
     return xRet;
 }
@@ -221,7 +218,7 @@ Sequence< OUString > SfxApplicationScriptLibraryContainer::impl_getStaticSupport
     if( bNeedsInit )
     {
         OUString* pSeq = seqServiceNames.getArray();
-        pSeq[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.ApplicationScriptLibraryContainer"));
+        pSeq[0] = OUString::createFromAscii( "com.sun.star.script.ApplicationScriptLibraryContainer" );
         bNeedsInit = sal_False;
     }
     return seqServiceNames;
@@ -235,7 +232,7 @@ OUString SfxApplicationScriptLibraryContainer::impl_getStaticImplementationName(
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     if( bNeedsInit )
     {
-        aImplName = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sfx2.ApplicationScriptLibraryContainer"));
+        aImplName = OUString::createFromAscii( "com.sun.star.comp.sfx2.ApplicationScriptLibraryContainer" );
         bNeedsInit = sal_False;
     }
     return aImplName;

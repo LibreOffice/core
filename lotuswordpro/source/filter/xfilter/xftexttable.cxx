@@ -57,24 +57,28 @@
  * @file
  * Text table object. It's the table used in writer.
  ************************************************************************/
-#include    "xftexttable.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-03-31 create and implements.
+ ************************************************************************/
+#include	"xftexttable.hxx"
 
 XFTextTable::XFTextTable()
 {
 
 }
 
-void    XFTextTable::SetColCount(sal_Int32 col)
+void	XFTextTable::SetColCount(sal_Int32 col)
 {
     m_nColCount = col;
 }
 
-void    XFTextTable::SetRowCount(sal_Int32 row)
+void	XFTextTable::SetRowCount(sal_Int32 row)
 {
     m_nRowCount = row;
 }
 
-void    XFTextTable::SetCell(sal_Int32 row, sal_Int32 col, XFCell *pCell)
+void	XFTextTable::SetCell(sal_Int32 row, sal_Int32 col, XFCell *pCell)
 {
     if( row<0 || col<0 || !pCell )
         return;
@@ -95,7 +99,7 @@ void    XFTextTable::SetCell(sal_Int32 row, sal_Int32 col, XFCell *pCell)
     pRow->AddCell(pCell);
 }
 
-virtual void    XFTextTable::ToXml(IXFStream *pStrm)
+virtual void	XFTextTable::ToXml(IXFStream *pStrm)
 {
     for( int i=0; i<m_nColCount; i++ )
     {

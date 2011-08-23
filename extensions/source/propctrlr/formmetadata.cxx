@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "formmetadata.hxx"
+#include "propctrlr.hrc"
 #include "formstrings.hxx"
 #include "formresid.hrc"
 #include "propctrlr.hrc"
 #include <svtools/localresaccess.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/extract.hxx>
-#include <sal/macros.h>
+#include <cppuhelper/extract.hxx>
+
 #include <algorithm>
 #include <functional>
 
@@ -51,28 +52,28 @@ namespace pcr
     //========================================================================
     struct OPropertyInfoImpl
     {
-        String          sName;
-        String          sTranslation;
-        rtl::OString    sHelpId;
+        String			sName;
+        String			sTranslation;
+        sal_uInt32      nHelpId;
         sal_Int32       nId;
         sal_uInt16      nPos;
         sal_uInt32      nUIFlags;
 
         OPropertyInfoImpl(
-                        const ::rtl::OUString&      rName,
-                        sal_Int32                   _nId,
-                        const String&               aTranslation,
-                        sal_uInt16                  nPosId,
-                        const rtl::OString&,
+                        const ::rtl::OUString&		rName,
+                        sal_Int32					_nId,
+                        const String&				aTranslation,
+                        sal_uInt16					nPosId,
+                        sal_uInt32					nHelpId,
                         sal_uInt32                  _nUIFlags);
     };
 
     //------------------------------------------------------------------------
     OPropertyInfoImpl::OPropertyInfoImpl(const ::rtl::OUString& _rName, sal_Int32 _nId,
-                                   const String& aString, sal_uInt16 nP, const rtl::OString& sHid, sal_uInt32 _nUIFlags)
+                                   const String& aString, sal_uInt16 nP, sal_uInt32 nHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
        ,sTranslation(aString)
-       ,sHelpId(sHid)
+       ,nHelpId(nHid)
        ,nId(_nId)
        ,nPos(nP)
        ,nUIFlags(_nUIFlags)
@@ -88,7 +89,7 @@ namespace pcr
             return _rLHS.sName.CompareTo( _rRHS.sName ) == COMPARE_LESS;
         }
     };
-
+    
     //========================================================================
     //= OPropertyInfoService
     //========================================================================
@@ -111,8 +112,8 @@ namespace pcr
 #define DEF_INFO_5( ident, uinameres, helpid, flag1, flag2, flag3, flag4, flag5 ) \
     DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 | PROP_FLAG_##flag3 | PROP_FLAG_##flag4 | PROP_FLAG_##flag5 )
 
-    sal_uInt16              OPropertyInfoService::s_nCount = 0;
-    OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = NULL;
+    sal_uInt16				OPropertyInfoService::s_nCount = 0;
+    OPropertyInfoImpl*		OPropertyInfoService::s_pPropertyInfos = NULL;
     //------------------------------------------------------------------------
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo()
     {
@@ -350,16 +351,16 @@ namespace pcr
         DEF_INFO_3( HELPURL,           HELPURL,            HELPURL,           FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( SELECTION_TYPE,    SELECTION_TYPE,     SELECTION_TYPE,                  DIALOG_VISIBLE, ENUM, COMPOSEABLE ),
         DEF_INFO_2( ROOT_DISPLAYED,    ROOT_DISPLAYED,     ROOT_DISPLAYED,                  DIALOG_VISIBLE, COMPOSEABLE ),
-        DEF_INFO_2( SHOWS_HANDLES,     SHOWS_HANDLES,      SHOWS_HANDLES,                   DIALOG_VISIBLE, COMPOSEABLE ),
-        DEF_INFO_2( SHOWS_ROOT_HANDLES, SHOWS_ROOT_HANDLES, SHOWS_ROOT_HANDLES,             DIALOG_VISIBLE, COMPOSEABLE ),
-        DEF_INFO_2( EDITABLE,          EDITABLE,           EDITABLE,                        DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( SHOWS_HANDLES,     SHOWS_HANDLES,      SHOWS_HANDLES,					DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( SHOWS_ROOT_HANDLES, SHOWS_ROOT_HANDLES, SHOWS_ROOT_HANDLES,				DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( EDITABLE,          EDITABLE,           EDITABLE,						DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( INVOKES_STOP_NOT_EDITING, INVOKES_STOP_NOT_EDITING, INVOKES_STOP_NOT_EDITING, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( DECORATION,        DECORATION,         DECORATION,                      DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( NOLABEL,           NOLABEL,            NOLABEL,                         DIALOG_VISIBLE, COMPOSEABLE )
         };
 
         s_pPropertyInfos = aPropertyInfos;
-        s_nCount = SAL_N_ELEMENTS(aPropertyInfos);
+        s_nCount = sizeof(aPropertyInfos) / sizeof(OPropertyInfoImpl);
 
         // sort
         ::std::sort( s_pPropertyInfos, s_pPropertyInfos + s_nCount, PropertyInfoLessByName() );
@@ -396,10 +397,10 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    rtl::OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
+    sal_Int32 OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->sHelpId : rtl::OString();
+        return (pInfo) ? pInfo->nHelpId : 0;
     }
 
     //------------------------------------------------------------------------
@@ -517,7 +518,7 @@ namespace pcr
                 nStringItemsResId = RID_RSC_ENUM_SHEET_ANCHOR_TYPE;
                 break;
             default:
-                OSL_FAIL( "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
+                OSL_ENSURE( sal_False, "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
                 break;
         }
 
@@ -557,7 +558,7 @@ namespace pcr
         // intialisierung
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, "", 0);
+        OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, 0, 0);
 
         const OPropertyInfoImpl* pInfo = ::std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );
@@ -612,7 +613,7 @@ namespace pcr
     {
         return m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL DefaultEnumRepresentation::getValueFromDescription( const ::rtl::OUString& _rDescription, Any& _out_rValue ) const
     {
@@ -651,11 +652,11 @@ namespace pcr
         }
         else
         {
-            OSL_FAIL( "DefaultEnumRepresentation::getValueFromDescription: could not translate the enum string!" );
+            DBG_ERROR( "DefaultEnumRepresentation::getValueFromDescription: could not translate the enum string!" );
             _out_rValue.clear();
         }
     }
-
+    
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL DefaultEnumRepresentation::getDescriptionForValue( const Any& _rEnumValue ) const
     {
@@ -674,18 +675,18 @@ namespace pcr
             sReturn = aEnumStrings[ nIntValue ];
         }
         else
-        {
-            OSL_FAIL( "DefaultEnumRepresentation::getDescriptionForValue: could not translate an enum value" );
+        {	
+            DBG_ERROR( "DefaultEnumRepresentation::getDescriptionForValue: could not translate an enum value" );
         }
         return sReturn;
     }
-
+    
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL DefaultEnumRepresentation::acquire()
     {
         return osl_incrementInterlockedCount( &m_refCount );
     }
-
+    
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL DefaultEnumRepresentation::release()
     {

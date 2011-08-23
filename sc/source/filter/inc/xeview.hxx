@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ private:
 
 private:
     sal_uInt16          mnSplitX;           /// Split X position, or frozen column.
-    sal_uInt32          mnSplitY;           /// Split Y position, or frozen row.
+    sal_uInt16          mnSplitY;           /// Split Y position, or frozen row.
     XclAddress          maSecondXclPos;     /// First visible cell in additional panes.
     sal_uInt8           mnActivePane;       /// Active pane (with cell cursor).
 };

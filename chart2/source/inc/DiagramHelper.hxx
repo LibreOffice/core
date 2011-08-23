@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <utility>
 #include <vector>
@@ -107,11 +105,11 @@ public:
     static StackMode getStackMode(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram > & xDiagram,
-        bool& rbFound, bool& rbAmbiguous
+        bool& rbFound, bool& rbAmbiguous 
         );
 
     /** @param bOnlyAtFirstChartType
-            If </sal_True>, the stacking mode is only set at the series found inside
+            If </TRUE>, the stacking mode is only set at the series found inside
             the first chart type.  This is the standard for all current
             templates (the only template that has more than one chart-type and
             allows stacking is bar/line combi, and for this the stacking only
@@ -126,7 +124,7 @@ public:
 
     /** Retrieves the stackmode of the first DataSeries or none. If the series have differing stack
         modes, rbAmbiguous is set to true. If no series is there rbFound is set to false.
-
+    
         @param xCorrespondingCoordinateSystem
             The coordinate system in which the given chart type xChartType is
             located.  (This is needed for determining percent stacking.  If
@@ -161,7 +159,7 @@ public:
             ::com::sun::star::chart2::XDiagram > & xDiagram,
         sal_Int32 nNewDimensionCount );
 
-    /** Replaces all occurrences of xCooSysToReplace in the tree with
+    /** Replaces all occurences of xCooSysToReplace in the tree with
         xReplacement in the diagram's tree
      */
     SAL_DLLPRIVATE static void replaceCoordinateSystem(
@@ -243,21 +241,6 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XCoordinateSystem > & xCooSys );
 
-    static void switchToDateCategories(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartDocument > & xChartDoc );
-
-    static void switchToTextCategories(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartDocument > & xChartDoc );
-
-    static bool isSupportingDateAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
-    static bool isDateNumberFormat( sal_Int32 nNumberFormat, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& xNumberFormats );
-    static sal_Int32 getDateNumberFormat( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
-
-    static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
-
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType >
         getChartTypeByIndex( const ::com::sun::star::uno::Reference<
@@ -288,7 +271,7 @@ public:
         * @param bForward
         *  Direction of the move to be checked.
         *
-        * @returns </sal_True> if the series can be moved.
+        * @returns </TRUE> if the series can be moved.
         *
         */
     static bool isSeriesMoveable(
@@ -310,7 +293,7 @@ public:
         * @param bForward
         *  Direction in which the series should be moved.
         *
-        * @returns </sal_True> if the series was moved successfully.
+        * @returns </TRUE> if the series was moved successfully.
         *
         */
     static bool moveSeries(

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,11 +49,6 @@ struct CheckFailed {
 
     rtl::OUString message;
 };
-
-::std::ostream& operator<< (::std::ostream& os, const ::rtl::OUString& str)
-{
-    return os << ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
-}
 
 template< typename T > void checkEqual(T const & value, T const & argument) {
     if (argument != value) {
@@ -137,32 +132,32 @@ rtl::OUString testMulti(
             css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
                 multi, css::uno::UNO_QUERY_THROW)->fn11(5));
         checkEqual(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("12" "abc")),
+            rtl::OUString::createFromAscii("12" "abc"),
             css::uno::Reference< test::testtools::bridgetest::XMultiBase1 >(
                 multi, css::uno::UNO_QUERY_THROW)->fn12(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc"))));
+                    rtl::OUString::createFromAscii("abc")));
         checkEqual(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("12" "abc-2")),
+            rtl::OUString::createFromAscii("12" "abc-2"),
             static_cast< test::testtools::bridgetest::XMultiBase2 * >(
-                multi.get())->fn12(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc-2"))));
+                multi.get())->fn12(rtl::OUString::createFromAscii("abc-2")));
         checkEqual(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("12" "abc-2")),
+            rtl::OUString::createFromAscii("12" "abc-2"),
             css::uno::Reference< test::testtools::bridgetest::XMultiBase2 >(
                 multi, css::uno::UNO_QUERY_THROW)->fn12(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc-2"))));
+                    rtl::OUString::createFromAscii("abc-2")));
         checkEqual(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("12" "abc-5")),
+            rtl::OUString::createFromAscii("12" "abc-5"),
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
-                multi.get())->fn12(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc-5"))));
+                multi.get())->fn12(rtl::OUString::createFromAscii("abc-5")));
         checkEqual(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("12" "abc-5")),
+            rtl::OUString::createFromAscii("12" "abc-5"),
             css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
                 multi, css::uno::UNO_QUERY_THROW)->fn12(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc-5"))));
+                    rtl::OUString::createFromAscii("abc-5")));
         checkEqual< sal_Int32 >(21 * 2, multi->fn21(2));
         checkEqual(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("22" "de")),
-            multi->fn22(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de"))));
+            rtl::OUString::createFromAscii("22" "de"),
+            multi->fn22(rtl::OUString::createFromAscii("de")));
         checkEqual< sal_Int32 >(
             31 * 3,
             css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
@@ -202,19 +197,19 @@ rtl::OUString testMulti(
             css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
                 multi, css::uno::UNO_QUERY_THROW)->getatt3());
         checkEqual(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("32" "f")),
+            rtl::OUString::createFromAscii("32" "f"),
             css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
                 multi, css::uno::UNO_QUERY_THROW)->fn32(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("f"))));
+                    rtl::OUString::createFromAscii("f")));
         checkEqual(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("32" "f-5")),
+            rtl::OUString::createFromAscii("32" "f-5"),
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
-                multi.get())->fn32(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("f-5"))));
+                multi.get())->fn32(rtl::OUString::createFromAscii("f-5")));
         checkEqual(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("32" "f-5")),
+            rtl::OUString::createFromAscii("32" "f-5"),
             css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
                 multi, css::uno::UNO_QUERY_THROW)->fn32(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("f-5"))));
+                    rtl::OUString::createFromAscii("f-5")));
         checkEqual< sal_Int32 >(
             33,
             css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
@@ -230,12 +225,12 @@ rtl::OUString testMulti(
         checkEqual< sal_Int32 >(41 * 4, multi->fn41(4));
         checkEqual< sal_Int32 >(61 * 6, multi->fn61(6));
         checkEqual(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("62" "")),
-            multi->fn62(rtl::OUString()));
+            rtl::OUString::createFromAscii("62" ""),
+            multi->fn62(rtl::OUString::createFromAscii("")));
         checkEqual< sal_Int32 >(71 * 7, multi->fn71(7));
         checkEqual(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("72" "g")),
-            multi->fn72(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("g"))));
+            rtl::OUString::createFromAscii("72" "g"),
+            multi->fn72(rtl::OUString::createFromAscii("g")));
         checkEqual< sal_Int32 >(73, multi->fn73());
     } catch (CheckFailed const & f) {
         return f.message;

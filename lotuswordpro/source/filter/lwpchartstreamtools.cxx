@@ -56,7 +56,7 @@
 /*****************************************************************************
 * Change History
 * <<Date>> <<Name of editor>> <<Description>>
-2005/2      draft code for implementation of chart stream helpers
+2005/2		draft code for implementation of chart stream helpers
 ****************************************************************************/
 
 /**
@@ -73,9 +73,9 @@
 /**
 * @short   Get the chart stream from bento layer
 * @descr
-* @param   pDocStream   the document stream
-* @param   pChartName   The name of the requested chart stream
-* @return  pStream      The chart stream, may be  NULL
+* @param   pDocStream	the document stream
+* @param   pChartName	The name of the requested chart stream
+* @return  pStream		The chart stream, may be  NULL
 */
 SvStream* LwpChartStreamTools::GetChartStream(LwpSvStream* pDocStream, const char* pChartName)
 {
@@ -95,8 +95,8 @@ SvStream* LwpChartStreamTools::GetChartStream(LwpSvStream* pDocStream, const cha
 
 /**
 * @short   Output the chart into output stream
-* @param   aChartRect   the rectangle of the chart
-* @param   pXChartStrm  Chart stream
+* @param   aChartRect	the rectangle of the chart
+* @param   pXChartStrm	Chart stream
 * @param   pOutputStream the output stream
 */
 void LwpChartStreamTools::OutputChart(XFRect aChartRect, IXFContent* pXChartStrm, IXFStream* pOutputStream)
@@ -130,7 +130,7 @@ void LwpChartStreamTools::OutputChart(XFRect aChartRect, IXFContent* pXChartStrm
 
 /**
 * @short   Get the stream length
-* @param   pStream  the stream
+* @param   pStream	the stream
 * @param   the stream length
 */
 INT32 LwpChartStreamTools::GetStreamLen(SvStream* pStream)
@@ -144,15 +144,15 @@ INT32 LwpChartStreamTools::GetStreamLen(SvStream* pStream)
 
 /**
 * @short   Make the chart storage object
-* @param   pStream  the chart stream
-* @param   aChartRect   the rectangle of the chart
-* @param   xIPObj   [out]the inplace object
-* @param   xStorage [out]the storage object of the chart
+* @param   pStream	the chart stream
+* @param   aChartRect	the rectangle of the chart
+* @param   xIPObj	[out]the inplace object
+* @param   xStorage	[out]the storage object of the chart
 */
 #include "lwpchartwrapper.hxx"
 void LwpChartStreamTools::MakeChartStorage( SvStream* pStream, Rectangle aChartRect, SvInPlaceObjectRef& xIPObj, SvStorageRef& xStorage)
 {
-    //          SfxItemSet aItemSet( rDoc.GetAttrPool()); //Style of chart area
+    //			SfxItemSet aItemSet( rDoc.GetAttrPool()); //Style of chart area
     INT32 nStrmLen = GetStreamLen(pStream);
     LtcLwpChartWrapper aChart(pStream,nStrmLen);
     aChart.CreateChart(aChartRect,xIPObj,xStorage);
@@ -161,8 +161,8 @@ void LwpChartStreamTools::MakeChartStorage( SvStream* pStream, Rectangle aChartR
 
 /**
 * @short   Translate the storage to XML stream
-* @param   xStorage [out]the storage object of a chart
-* @param   xIPObj   [in]the inplace object
+* @param   xStorage	[out]the storage object of a chart
+* @param   xIPObj	[in]the inplace object
 */
 #include "schxmlwrapper.hxx"
 void LwpChartStreamTools::ChartToXML(SvStorageRef xStorage, SvInPlaceObjectRef xIPObj)
@@ -183,17 +183,17 @@ void LwpChartStreamTools::ChartToXML(SvStorageRef xStorage, SvInPlaceObjectRef x
 
 //void LwpChartStreamTools::ChartToXML(SvStorageRef xStorage, SvInPlaceObjectRef xIPObj)
 //{
-//  xStorage->SetVersion( SOFFICE_FILEFORMAT_60 );
+//	xStorage->SetVersion( SOFFICE_FILEFORMAT_60 );
 //
-//  SfxInPlaceObjectRef aSfxObj( xIPObj );
-//  SfxObjectShell* pSh = aSfxObj->GetObjectShell();
-//  pSh->Save();
+//	SfxInPlaceObjectRef aSfxObj( xIPObj );
+//	SfxObjectShell* pSh = aSfxObj->GetObjectShell();
+//	pSh->Save();
 //}
 
 /**
-* @short    Get the xml stream from the storage
-* @param    xStorage    the storage object
-* @param    aStrmName   the stream name
+* @short	Get the xml stream from the storage
+* @param	xStorage	the storage object
+* @param	aStrmName	the stream name
 */
 SvStorageStreamRef LwpChartStreamTools::GetStream(SvStorageRef xStorage, String aStrmName)
 {
@@ -210,7 +210,7 @@ SvStorageStreamRef LwpChartStreamTools::GetStream(SvStorageRef xStorage, String 
 }
 
 /**
-* @short    Dump the xml stream into a file
+* @short	Dump the xml stream into a file
 */
 void LwpChartStreamTools::DumpStream(SvStorageStreamRef rStream, char* aName)
 {
@@ -223,9 +223,9 @@ void LwpChartStreamTools::DumpStream(SvStorageStreamRef rStream, char* aName)
 }
 
 /**
-* @short    Get the name of chart stream
-* @param    pID the id of the VO_Graphic object, which map to a chart stream.
-* @return   the name of the chart stream
+* @short	Get the name of chart stream
+* @param	pID	the id of the VO_Graphic object, which map to a chart stream.
+* @return	the name of the chart stream
 */
 const char* LwpChartStreamTools::GetChartName(LwpObjectID* pID)
 {
@@ -248,7 +248,7 @@ const char* LwpChartStreamTools::GetChartName(LwpObjectID* pID)
 * @return
 * @todo any error code return are needed?
 */
-void LwpChartStreamTools::ParseChart(   LwpSvStream* pDocStream,
+void LwpChartStreamTools::ParseChart(	LwpSvStream* pDocStream,
                                         LwpObjectID* pID,
                                         Rectangle aRectIn100thMM,
                                         XFRect aRectInCM,
@@ -274,9 +274,9 @@ void LwpChartStreamTools::ParseChart(   LwpSvStream* pDocStream,
 
         MakeChartStorage( pStream, aRectIn100thMM, xIPObj, xStorage);
         ChartToXML(xStorage, xIPObj);
-//      SvStorageStreamRef rStyleStream = GetStream(xStorage,String::CreateFromAscii( "styles.xml" ));
+//		SvStorageStreamRef rStyleStream = GetStream(xStorage,String::CreateFromAscii( "styles.xml" ));
         SvStorageStreamRef rCntStream = GetStream(xStorage,String::CreateFromAscii( "content.xml" ));
-//      DumpStream(rCntStream,"d:\\allinone.xml");
+//		DumpStream(rCntStream,"d:\\allinone.xml");
         if (rCntStream.Is())
         {
             pXFChartStrm->SetChartStream(rCntStream);
@@ -303,7 +303,7 @@ void LwpChartStreamTools::ParseChart(   LwpSvStream* pDocStream,
     }
 }
 
-void LwpChartStreamTools::ParseChart(   LwpSvStream* pDocStream,
+void LwpChartStreamTools::ParseChart(	LwpSvStream* pDocStream,
                                         LwpObjectID* pID,
                                         Rectangle aRectIn100thMM,
                                         XFRect aRectInCM,
@@ -330,9 +330,9 @@ void LwpChartStreamTools::ParseChart(   LwpSvStream* pDocStream,
 
         MakeChartStorage( pStream, aRectIn100thMM, xIPObj, xStorage);
         ChartToXML(xStorage, xIPObj);
-//      SvStorageStreamRef rStyleStream = GetStream(xStorage,String::CreateFromAscii( "styles.xml" ));
+//		SvStorageStreamRef rStyleStream = GetStream(xStorage,String::CreateFromAscii( "styles.xml" ));
         SvStorageStreamRef rCntStream = GetStream(xStorage,String::CreateFromAscii( "content.xml" ));
-//      DumpStream(rCntStream,"d:\\allinone.xml");
+//		DumpStream(rCntStream,"d:\\allinone.xml");
         if (rCntStream.Is())
         {
             pXFChartStrm->SetChartStream(rCntStream);

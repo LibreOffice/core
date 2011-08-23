@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,10 +102,10 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( HierarchyContentProvider,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.comp.ucb.HierarchyContentProvider" )),
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME )) );
+                     rtl::OUString::createFromAscii(
+                         "com.sun.star.comp.ucb.HierarchyContentProvider" ),
+                     rtl::OUString::createFromAscii(
+                         HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -166,7 +166,8 @@ void SAL_CALL HierarchyContentProvider::initialize(
     throw( uno::Exception, uno::RuntimeException )
 {
     if ( aArguments.getLength() > 0 )
-        OSL_FAIL( "HierarchyContentProvider::initialize : not supported!" );
+        OSL_ENSURE( false,
+                    "HierarchyContentProvider::initialize : not supported!" );
 }
 
 //=========================================================================
@@ -200,11 +201,13 @@ HierarchyContentProvider::getConfigProvider(
         }
         catch ( uno::Exception const & )
         {
-//            OSL_FAIL( //                        "HierarchyContentProvider::getConfigProvider - "
+//            OSL_ENSURE( sal_False,
+//                        "HierarchyContentProvider::getConfigProvider - "
 //                        "caught exception!" );
         }
 
-        OSL_FAIL( "HierarchyContentProvider::getConfigProvider - "
+        OSL_ENSURE( sal_False,
+                    "HierarchyContentProvider::getConfigProvider - "
                     "No config provider!" );
 
         return uno::Reference< lang::XMultiServiceFactory >();
@@ -227,7 +230,8 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
         {
             if ( (*it).second.bTriedToGetRootReadAccess ) // #82494#
             {
-                OSL_FAIL( "HierarchyContentProvider::getRootConfigReadNameAccess - "
+                OSL_ENSURE( sal_False,
+                    "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "Unable to read any config data! -> #82494#" );
                 return uno::Reference< container::XHierarchicalNameAccess >();
             }
@@ -268,7 +272,8 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
             {
                 // createInstance, createInstanceWithArguments
 
-                OSL_FAIL( "HierarchyContentProvider::getRootConfigReadNameAccess - "
+                OSL_ENSURE( sal_False,
+                    "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "caught Exception!" );
             }
         }

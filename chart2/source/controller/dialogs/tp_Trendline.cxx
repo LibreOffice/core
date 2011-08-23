@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ SfxTabPage* TrendlineTabPage::Create(
     return new TrendlineTabPage( pParent, rOutAttrs );
 }
 
-sal_Bool TrendlineTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+BOOL TrendlineTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     return m_aTrendlineResources.FillItemSet( rOutAttrs );
 }

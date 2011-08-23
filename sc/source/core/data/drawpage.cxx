@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 
 // -----------------------------------------------------------------------
 
-ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, bool bMasterPage) :
+ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, BOOL bMasterPage) :
     FmFormPage(rNewModel, pBasic, bMasterPage)
 {
     SetSize( Size( LONG_MAX, LONG_MAX ) );
@@ -52,7 +52,7 @@ ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, bool bMasterPa
 
 // -----------------------------------------------------------------------
 
-ScDrawPage::~ScDrawPage()
+__EXPORT ScDrawPage::~ScDrawPage()
 {
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,15 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <tools/resid.hxx>
 
 #include <swcrsr.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <pamtyp.hxx>
 #include <swundo.hxx>
-#include <SwRewriter.hxx>
+#include <undobj.hxx>
 #include <comcore.hrc>
+#include <tools/resid.hxx>
 
 //------------------ Methoden der CrsrShell ---------------------------
 
@@ -50,17 +49,17 @@ struct SwFindParaFmtColl : public SwFindParas
                         const SwTxtFmtColl* pRpColl, SwCursor& rCrsr )
         : pFmtColl( &rFmtColl ), pReplColl( pRpColl ), rCursor( rCrsr )
     {}
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly );
+    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, BOOL bInReadOnly );
     virtual int IsReplaceMode() const;
 };
 
 
 int SwFindParaFmtColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
-                            sal_Bool bInReadOnly )
+                            BOOL bInReadOnly )
 {
     int nRet = FIND_FOUND;
     if( bInReadOnly && pReplColl )
-        bInReadOnly = sal_False;
+        bInReadOnly = FALSE;
 
     if( !pCrsr->Find( *pFmtColl, fnMove, pRegion, bInReadOnly ) )
         nRet = FIND_NOT_FOUND;
@@ -82,8 +81,8 @@ int SwFindParaFmtColl::IsReplaceMode() const
 // Suchen nach Format-Collections
 
 
-sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl,
-                    SwDocPositions nStart, SwDocPositions nEnde, sal_Bool& bCancel,
+ULONG SwCursor::Find( const SwTxtFmtColl& rFmtColl,
+                    SwDocPositions nStart, SwDocPositions nEnde, BOOL& bCancel,
                     FindRanges eFndRngs, const SwTxtFmtColl* pReplFmtColl )
 {
     // OLE-Benachrichtigung abschalten !!
@@ -91,31 +90,27 @@ sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl,
     Link aLnk( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
 
-    bool const bStartUndo =
-        pDoc->GetIDocumentUndoRedo().DoesUndo() && pReplFmtColl;
-    if (bStartUndo)
+    BOOL bSttUndo = pDoc->DoesUndo() && pReplFmtColl;
+    if( bSttUndo )
     {
         SwRewriter aRewriter;
         aRewriter.AddRule(UNDO_ARG1, rFmtColl.GetName());
         aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
         aRewriter.AddRule(UNDO_ARG3, pReplFmtColl->GetName());
 
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_UI_REPLACE_STYLE,
-                &aRewriter );
+        pDoc->StartUndo( UNDO_UI_REPLACE_STYLE, &aRewriter );
     }
 
     SwFindParaFmtColl aSwFindParaFmtColl( rFmtColl, pReplFmtColl, *this );
 
-    sal_uLong nRet = FindAll( aSwFindParaFmtColl, nStart, nEnde, eFndRngs, bCancel );
+    ULONG nRet = FindAll( aSwFindParaFmtColl, nStart, nEnde, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
 
     if( nRet && pReplFmtColl )
         pDoc->SetModified();
 
-    if (bStartUndo)
-    {
-        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
-    }
+    if( bSttUndo )
+        pDoc->EndUndo( UNDO_UI_REPLACE_STYLE, NULL );
     return nRet;
 }
 

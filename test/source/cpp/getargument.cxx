@@ -30,19 +30,14 @@
 #include "rtl/bootstrap.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-
-#include "getargument.hxx"
+#include "test/getargument.hxx"
 
 namespace test {
-
-namespace detail {
 
 bool getArgument(rtl::OUString const & name, rtl::OUString * value) {
     OSL_ASSERT(value != 0);
     return rtl::Bootstrap::get(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("arg-")) + name, *value);
-}
-
 }
 
 }

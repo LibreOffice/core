@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,6 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
 
     PushButton  PB_FIRST
     {
-        HelpID = "sw:PushButton:DLG_MM_PREPAREMERGE_PAGE:PB_FIRST";
         Pos = MAP_APPFONT ( 75 , 55 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = "|<" ;
@@ -65,7 +64,6 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     };
     PushButton  PB_PREV
     {
-        HelpID = "sw:PushButton:DLG_MM_PREPAREMERGE_PAGE:PB_PREV";
         Pos = MAP_APPFONT ( 98 , 55 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = "<" ;
@@ -73,7 +71,6 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     };
     NumericField ED_RECORD
     {
-        HelpID = "sw:NumericField:DLG_MM_PREPAREMERGE_PAGE:ED_RECORD";
         Pos = MAP_APPFONT ( 121 , 56 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
         Border = TRUE ;
@@ -86,7 +83,6 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     };
     PushButton  PB_NEXT
     {
-        HelpID = "sw:PushButton:DLG_MM_PREPAREMERGE_PAGE:PB_NEXT";
         Pos = MAP_APPFONT ( 144 , 55 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = ">" ;
@@ -94,7 +90,6 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     };
     PushButton  PB_LAST
     {
-        HelpID = "sw:PushButton:DLG_MM_PREPAREMERGE_PAGE:PB_LAST";
         Pos = MAP_APPFONT ( 167 , 55 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = ">|" ;
@@ -102,7 +97,6 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     };
     CheckBox CB_EXCLUDE
     {
-        HelpID = "sw:CheckBox:DLG_MM_PREPAREMERGE_PAGE:CB_EXCLUDE";
         Pos = MAP_APPFONT ( 75, 77 ) ;
         Size = MAP_APPFONT ( 179 , 10 ) ;
         Text[ en-US ] = "E~xclude this recipient";
@@ -122,7 +116,6 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     };
     PushButton  PB_EDIT
     {
-        HelpID = "sw:PushButton:DLG_MM_PREPAREMERGE_PAGE:PB_EDIT";
         Pos = MAP_APPFONT ( 90 , 185 ) ;
         Size = MAP_APPFONT ( 80 , 14 ) ;
         Text[ en-US ] = "~Edit Document...";

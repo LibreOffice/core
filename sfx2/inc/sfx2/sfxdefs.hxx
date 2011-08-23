@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,12 @@
 #ifndef _SFXDEFS_HXX
 #define _SFXDEFS_HXX
 
-#define MESSAGEFILE_SDM_EXT "sdm"   // Extension for the new Formats
-#define MESSAGEFILE_EXT     "smd"   // Extension for Single-Mail/News-Files
-#define MESSAGETEMPFILE_EXT "sd~"   // Extension for Mail/News-TempFiles
+#define MESSAGEFILE_SDM_EXT	"sdm"	// Extension des neuen Formats
+#define MESSAGEFILE_EXT		"smd"	// Extension der Single-Mail/News-Files
+#define MESSAGETEMPFILE_EXT	"sd~"	// Extension f"ur Mail/News-TempFiles
 
-#define SfxFilterFlags sal_uLong
-#define PRODUCT_VERSION     "5.0"
+#define SfxFilterFlags ULONG
+#define PRODUCT_VERSION		"5.0"
 
 #endif
 

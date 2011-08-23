@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,11 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml;
 
+// ------------------------------------------------------------------------
 
 TYPEINIT1(SvXMLAttrContainerItem, SfxPoolItem);
 
-SvXMLAttrContainerItem::SvXMLAttrContainerItem( sal_uInt16 _nWhich ) :
+SvXMLAttrContainerItem::SvXMLAttrContainerItem( USHORT _nWhich ) :
     SfxPoolItem( _nWhich )
 {
     pImpl = new SvXMLAttrContainerData;
@@ -84,13 +85,13 @@ SfxItemPresentation SvXMLAttrContainerItem::GetPresentation(
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-sal_uInt16 SvXMLAttrContainerItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
+USHORT SvXMLAttrContainerItem::GetVersion( USHORT /*nFileFormatVersion*/ ) const
 {
     // This item should never be stored
     return USHRT_MAX;
 }
 
-bool SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool  SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     Reference<XNameContainer> xContainer =
         new SvUnoAttributeContainer( new SvXMLAttrContainerData( *pImpl ) );
@@ -99,7 +100,7 @@ bool SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uIn
     return true;
 }
 
-bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     Reference<XInterface> xRef;
     SvUnoAttributeContainer* pContainer = NULL;
@@ -109,7 +110,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
         xRef = *(Reference<XInterface>*)rVal.getValue();
         Reference<XUnoTunnel> xTunnel(xRef, UNO_QUERY);
         if( xTunnel.is() )
-            pContainer = (SvUnoAttributeContainer*)(sal_uLong)xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId());
+            pContainer = (SvUnoAttributeContainer*)(ULONG)xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId());
     }
 
     if( pContainer )
@@ -125,14 +126,14 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
         {
             Reference<XNameContainer> xContainer( xRef, UNO_QUERY );
             if( !xContainer.is() )
-                return sal_False;
+                return FALSE;
 
             const Sequence< ::rtl::OUString > aNameSequence( xContainer->getElementNames() );
             const ::rtl::OUString* pNames = aNameSequence.getConstArray();
-            const sal_Int32 nCount = aNameSequence.getLength();
+            const INT32 nCount = aNameSequence.getLength();
             Any aAny;
             AttributeData* pData;
-            sal_Int32 nAttr;
+            INT32 nAttr;
 
             for( nAttr = 0; nAttr < nCount; nAttr++ )
             {
@@ -140,7 +141,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
 
                 aAny = xContainer->getByName( aName );
                 if( aAny.getValue() == NULL || aAny.getValueType() != ::getCppuType((AttributeData*)0) )
-                    return sal_False;
+                    return FALSE;
 
                 pData = (AttributeData*)aAny.getValue();
                 sal_Int32 pos = aName.indexOf( sal_Unicode(':') );
@@ -188,61 +189,61 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
 }
 
 
-sal_Bool SvXMLAttrContainerItem::AddAttr( const ::rtl::OUString& rLName,
+BOOL SvXMLAttrContainerItem::AddAttr( const ::rtl::OUString& rLName,
                                         const ::rtl::OUString& rValue )
 {
     return pImpl->AddAttr( rLName, rValue );
 }
 
-sal_Bool SvXMLAttrContainerItem::AddAttr( const ::rtl::OUString& rPrefix,
+BOOL SvXMLAttrContainerItem::AddAttr( const ::rtl::OUString& rPrefix,
           const ::rtl::OUString& rNamespace, const ::rtl::OUString& rLName,
           const ::rtl::OUString& rValue )
 {
     return pImpl->AddAttr( rPrefix, rNamespace, rLName, rValue );
 }
 
-sal_uInt16 SvXMLAttrContainerItem::GetAttrCount() const
+USHORT SvXMLAttrContainerItem::GetAttrCount() const
 {
-    return (sal_uInt16)pImpl->GetAttrCount();
+    return (USHORT)pImpl->GetAttrCount();
 }
 
-::rtl::OUString SvXMLAttrContainerItem::GetAttrNamespace( sal_uInt16 i ) const
+::rtl::OUString SvXMLAttrContainerItem::GetAttrNamespace( USHORT i ) const
 {
     return pImpl->GetAttrNamespace( i );
 }
 
-::rtl::OUString SvXMLAttrContainerItem::GetAttrPrefix( sal_uInt16 i ) const
+::rtl::OUString SvXMLAttrContainerItem::GetAttrPrefix( USHORT i ) const
 {
     return pImpl->GetAttrPrefix( i );
 }
 
-const ::rtl::OUString& SvXMLAttrContainerItem::GetAttrLName( sal_uInt16 i ) const
+const ::rtl::OUString& SvXMLAttrContainerItem::GetAttrLName( USHORT i ) const
 {
     return pImpl->GetAttrLName( i );
 }
 
-const ::rtl::OUString& SvXMLAttrContainerItem::GetAttrValue( sal_uInt16 i ) const
+const ::rtl::OUString& SvXMLAttrContainerItem::GetAttrValue( USHORT i ) const
 {
     return pImpl->GetAttrValue( i );
 }
 
 
-sal_uInt16 SvXMLAttrContainerItem::GetFirstNamespaceIndex() const
+USHORT SvXMLAttrContainerItem::GetFirstNamespaceIndex() const
 {
     return pImpl->GetFirstNamespaceIndex();
 }
 
-sal_uInt16 SvXMLAttrContainerItem::GetNextNamespaceIndex( sal_uInt16 nIdx ) const
+USHORT SvXMLAttrContainerItem::GetNextNamespaceIndex( USHORT nIdx ) const
 {
     return pImpl->GetNextNamespaceIndex( nIdx );
 }
 
-const ::rtl::OUString& SvXMLAttrContainerItem::GetNamespace( sal_uInt16 i ) const
+const ::rtl::OUString& SvXMLAttrContainerItem::GetNamespace( USHORT i ) const
 {
     return pImpl->GetNamespace( i );
 }
 
-const ::rtl::OUString& SvXMLAttrContainerItem::GetPrefix( sal_uInt16 i ) const
+const ::rtl::OUString& SvXMLAttrContainerItem::GetPrefix( USHORT i ) const
 {
     return pImpl->GetPrefix( i );
 }

@@ -482,6 +482,7 @@ sub insert_into_config_file
     elsif ( $styles =~ /CFG_NUMERIC/ ) { $valuetype = "int"; }
     elsif ( $styles =~ /CFG_BOOLEAN/ ) { $valuetype = "boolean"; }
     elsif ( $styles =~ /CFG_STRINGLIST/ ) { $valuetype = "string-list"; }
+#   elsif ( $styles =~ /CFG_STRINGLIST/ ) { $valuetype = "string-list oor:separator=\"\|\""; }
     else
     {
         installer::exiter::exit_program("ERROR: Unknown configuration value type: $styles", "insert_into_config_file");
@@ -524,8 +525,8 @@ sub insert_into_config_file
 
     if (( $styles =~ /\bCREATE\b/ ) && (!($isbracketnode)))
     {
-        # $typepart is 'oor:type="xs:VALUETYPE"';
-        # VALUETYPE can be "string", "boolean", ...
+        # my $typepart = 'oor:type="xs:VALUETYPE"'; # VALUETYPE can be "string", "boolean", ...
+
         my $localtypepart = $typepart;
         $localtypepart =~ s/VALUETYPE/$valuetype/;
 
@@ -551,6 +552,8 @@ sub insert_into_config_file
 
     # ToDo: Substituting the setup replace variables
 
+    # replace_setting_variables();
+
     $value =~ s/^\s*\<//;
     $value =~ s/\>\s*$//;
 
@@ -574,12 +577,14 @@ sub insert_into_config_file
 
     if (!($oneconfig->{'isisocode'} ))  # this is the simpe case
     {
+        # my $valueline = '<value SEPARATORPART>VALUECONTENT</value>' . "\n";
         $newvalueline = $valueline;
         $newvalueline =~ s/VALUECONTENT/$value/g;
         $newvalueline =~ s/SEPARATORPART/$separatorpart/;
     }
     else
     {
+        # my $langvalueline = '<value xml:lang="SAVEDLANGUAGE">VALUECONTENT</value>' . "\n";
         $newvalueline = $langvalueline;
         $newvalueline =~ s/VALUECONTENT/$value/;
         my $savedlanguage = $oneconfig->{'Key'};

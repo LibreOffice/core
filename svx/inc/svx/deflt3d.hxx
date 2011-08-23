@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,34 +44,34 @@ class SVX_DLLPUBLIC E3dDefaultAttributes
 {
 private:
     // Compound object
-    Color               aDefaultAmbientColor;
-    sal_Bool                bDefaultCreateNormals;
-    sal_Bool                bDefaultCreateTexture;
+    Color				aDefaultAmbientColor;
+    BOOL				bDefaultCreateNormals;
+    BOOL				bDefaultCreateTexture;
 
     // Cube object
-    basegfx::B3DPoint   aDefaultCubePos;
-    basegfx::B3DVector  aDefaultCubeSize;
-    sal_uInt16              nDefaultCubeSideFlags;
-    sal_Bool                bDefaultCubePosIsCenter;
+    basegfx::B3DPoint	aDefaultCubePos;
+    basegfx::B3DVector	aDefaultCubeSize;
+    UINT16				nDefaultCubeSideFlags;
+    BOOL				bDefaultCubePosIsCenter;
 
     // Sphere object
-    basegfx::B3DPoint   aDefaultSphereCenter;
-    basegfx::B3DVector  aDefaultSphereSize;
+    basegfx::B3DPoint	aDefaultSphereCenter;
+    basegfx::B3DVector	aDefaultSphereSize;
 
     // Lathe object
-    long                nDefaultLatheEndAngle;
-    sal_Bool                bDefaultLatheSmoothed;
-    sal_Bool                bDefaultLatheSmoothFrontBack;
-    sal_Bool                bDefaultLatheCharacterMode;
-    sal_Bool                bDefaultLatheCloseFront;
-    sal_Bool                bDefaultLatheCloseBack;
+    long				nDefaultLatheEndAngle;
+    BOOL				bDefaultLatheSmoothed;
+    BOOL				bDefaultLatheSmoothFrontBack;
+    BOOL				bDefaultLatheCharacterMode;
+    BOOL				bDefaultLatheCloseFront;
+    BOOL				bDefaultLatheCloseBack;
 
     // Extrude object
-    sal_Bool                bDefaultExtrudeSmoothed;
-    sal_Bool                bDefaultExtrudeSmoothFrontBack;
-    sal_Bool                bDefaultExtrudeCharacterMode;
-    sal_Bool                bDefaultExtrudeCloseFront;
-    sal_Bool                bDefaultExtrudeCloseBack;
+    BOOL				bDefaultExtrudeSmoothed;
+    BOOL				bDefaultExtrudeSmoothFrontBack;
+    BOOL				bDefaultExtrudeCharacterMode;
+    BOOL				bDefaultExtrudeCloseFront;
+    BOOL				bDefaultExtrudeCloseBack;
 
 public:
     // Construktor
@@ -84,21 +84,21 @@ public:
     // Compound object
     const Color& GetDefaultAmbientColor() { return aDefaultAmbientColor; }
     void SetDefaultAmbientColor(const Color& rNew) { aDefaultAmbientColor = rNew; }
-
-    sal_Bool GetDefaultCreateNormals() const { return bDefaultCreateNormals; }
-    void SetDefaultCreateNormals(const sal_Bool bNew) { bDefaultCreateNormals = bNew; }
-    sal_Bool GetDefaultCreateTexture() const { return bDefaultCreateTexture; }
-    void SetDefaultCreateTexture(const sal_Bool bNew) { bDefaultCreateTexture = bNew; }
+    
+    BOOL GetDefaultCreateNormals() const { return bDefaultCreateNormals; }
+    void SetDefaultCreateNormals(const BOOL bNew) { bDefaultCreateNormals = bNew; }
+    BOOL GetDefaultCreateTexture() const { return bDefaultCreateTexture; }
+    void SetDefaultCreateTexture(const BOOL bNew) { bDefaultCreateTexture = bNew; }
 
     // Cube object
     const basegfx::B3DPoint& GetDefaultCubePos() { return aDefaultCubePos; }
     void SetDefaultCubePos(const basegfx::B3DPoint& rNew) { aDefaultCubePos = rNew; }
     const basegfx::B3DVector& GetDefaultCubeSize() { return aDefaultCubeSize; }
     void SetDefaultCubeSize(const basegfx::B3DVector& rNew) { aDefaultCubeSize = rNew; }
-    sal_uInt16 GetDefaultCubeSideFlags() const { return nDefaultCubeSideFlags; }
-    void SetDefaultCubeSideFlags(const sal_uInt16 nNew) { nDefaultCubeSideFlags = nNew; }
-    sal_Bool GetDefaultCubePosIsCenter() const { return bDefaultCubePosIsCenter; }
-    void SetDefaultCubePosIsCenter(const sal_Bool bNew) { bDefaultCubePosIsCenter = bNew; }
+    UINT16 GetDefaultCubeSideFlags() const { return nDefaultCubeSideFlags; }
+    void SetDefaultCubeSideFlags(const UINT16 nNew) { nDefaultCubeSideFlags = nNew; }
+    BOOL GetDefaultCubePosIsCenter() const { return bDefaultCubePosIsCenter; }
+    void SetDefaultCubePosIsCenter(const BOOL bNew) { bDefaultCubePosIsCenter = bNew; }
 
     // Sphere object
     const basegfx::B3DPoint& GetDefaultSphereCenter() { return aDefaultSphereCenter; }
@@ -109,30 +109,30 @@ public:
     // Lathe object
     long GetDefaultLatheEndAngle() const { return nDefaultLatheEndAngle; }
     void SetDefaultLatheEndAngle(const long nNew) { nDefaultLatheEndAngle = nNew; }
-    sal_Bool GetDefaultLatheSmoothed() const { return bDefaultLatheSmoothed; }
-    void SetDefaultLatheSmoothed(const sal_Bool bNew) { bDefaultLatheSmoothed = bNew; }
-    sal_Bool GetDefaultLatheSmoothFrontBack() const { return bDefaultLatheSmoothFrontBack; }
-    void SetDefaultLatheSmoothFrontBack(const sal_Bool bNew) { bDefaultLatheSmoothFrontBack = bNew; }
-    sal_Bool GetDefaultLatheCharacterMode() const { return bDefaultLatheCharacterMode; }
-    void SetDefaultLatheCharacterMode(const sal_Bool bNew) { bDefaultLatheCharacterMode = bNew; }
-    sal_Bool GetDefaultLatheCloseFront() const { return bDefaultLatheCloseFront; }
-    void SetDefaultLatheCloseFront(const sal_Bool bNew) { bDefaultLatheCloseFront = bNew; }
-    sal_Bool GetDefaultLatheCloseBack() const { return bDefaultLatheCloseBack; }
-    void SetDefaultLatheCloseBack(const sal_Bool bNew) { bDefaultLatheCloseBack = bNew; }
+    BOOL GetDefaultLatheSmoothed() const { return bDefaultLatheSmoothed; }
+    void SetDefaultLatheSmoothed(const BOOL bNew) { bDefaultLatheSmoothed = bNew; }
+    BOOL GetDefaultLatheSmoothFrontBack() const { return bDefaultLatheSmoothFrontBack; }
+    void SetDefaultLatheSmoothFrontBack(const BOOL bNew) { bDefaultLatheSmoothFrontBack = bNew; }
+    BOOL GetDefaultLatheCharacterMode() const { return bDefaultLatheCharacterMode; }
+    void SetDefaultLatheCharacterMode(const BOOL bNew) { bDefaultLatheCharacterMode = bNew; }
+    BOOL GetDefaultLatheCloseFront() const { return bDefaultLatheCloseFront; }
+    void SetDefaultLatheCloseFront(const BOOL bNew) { bDefaultLatheCloseFront = bNew; }
+    BOOL GetDefaultLatheCloseBack() const { return bDefaultLatheCloseBack; }
+    void SetDefaultLatheCloseBack(const BOOL bNew) { bDefaultLatheCloseBack = bNew; }
 
     // Extrude object
-    sal_Bool GetDefaultExtrudeSmoothed() const { return bDefaultExtrudeSmoothed; }
-    void SetDefaultExtrudeSmoothed(const sal_Bool bNew) { bDefaultExtrudeSmoothed = bNew; }
-    sal_Bool GetDefaultExtrudeSmoothFrontBack() const { return bDefaultExtrudeSmoothFrontBack; }
-    void SetDefaultExtrudeSmoothFrontBack(const sal_Bool bNew) { bDefaultExtrudeSmoothFrontBack = bNew; }
-    sal_Bool GetDefaultExtrudeCharacterMode() const { return bDefaultExtrudeCharacterMode; }
-    void SetDefaultExtrudeCharacterMode(const sal_Bool bNew) { bDefaultExtrudeCharacterMode = bNew; }
-    sal_Bool GetDefaultExtrudeCloseFront() const { return bDefaultExtrudeCloseFront; }
-    void SetDefaultExtrudeCloseFront(const sal_Bool bNew) { bDefaultExtrudeCloseFront = bNew; }
-    sal_Bool GetDefaultExtrudeCloseBack() const { return bDefaultExtrudeCloseBack; }
-    void SetDefaultExtrudeCloseBack(const sal_Bool bNew) { bDefaultExtrudeCloseBack = bNew; }
+    BOOL GetDefaultExtrudeSmoothed() const { return bDefaultExtrudeSmoothed; }
+    void SetDefaultExtrudeSmoothed(const BOOL bNew) { bDefaultExtrudeSmoothed = bNew; }
+    BOOL GetDefaultExtrudeSmoothFrontBack() const { return bDefaultExtrudeSmoothFrontBack; }
+    void SetDefaultExtrudeSmoothFrontBack(const BOOL bNew) { bDefaultExtrudeSmoothFrontBack = bNew; }
+    BOOL GetDefaultExtrudeCharacterMode() const { return bDefaultExtrudeCharacterMode; }
+    void SetDefaultExtrudeCharacterMode(const BOOL bNew) { bDefaultExtrudeCharacterMode = bNew; }
+    BOOL GetDefaultExtrudeCloseFront() const { return bDefaultExtrudeCloseFront; }
+    void SetDefaultExtrudeCloseFront(const BOOL bNew) { bDefaultExtrudeCloseFront = bNew; }
+    BOOL GetDefaultExtrudeCloseBack() const { return bDefaultExtrudeCloseBack; }
+    void SetDefaultExtrudeCloseBack(const BOOL bNew) { bDefaultExtrudeCloseBack = bNew; }
 };
 
-#endif          // _E3D_DEFLT3D_HXX
+#endif			// _E3D_DEFLT3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

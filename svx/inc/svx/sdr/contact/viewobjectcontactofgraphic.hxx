@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace sdr
 
             // Member which takes care for the asynch loading events which may be necessary
             // for asynch graphics loading.
-            sdr::event::AsynchGraphicLoadingEvent*      mpAsynchLoadEvent;
+            sdr::event::AsynchGraphicLoadingEvent*		mpAsynchLoadEvent;
 
             // async graphics loading helpers. Only to be used internally or from the
             // event helper class (in .cxx file)

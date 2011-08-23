@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,14 @@ TYPEINIT1(SlideSorterViewShellBase, ViewShellBase);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new SlideSorterViewShellBase object has been constructed.
 
+/*
+SFX_IMPL_VIEWFACTORY(SlideSorterViewShellBase, SdResId(STR_DEFAULTVIEW))
+{
+    SFX_VIEW_REGISTRATION(DrawDocShell);
+}
+*/
 SfxViewFactory* SlideSorterViewShellBase::pFactory;
-SfxViewShell* SlideSorterViewShellBase::CreateInstance (
+SfxViewShell* __EXPORT SlideSorterViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     SlideSorterViewShellBase* pBase = new SlideSorterViewShellBase(pFrame, pOldView);
@@ -56,8 +62,8 @@ SfxViewShell* SlideSorterViewShellBase::CreateInstance (
 
 
 
-void SlideSorterViewShellBase::RegisterFactory( sal_uInt16 nPrio )
-{
+void SlideSorterViewShellBase::RegisterFactory( USHORT nPrio )
+{ 
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"SlideSorter");
     InitFactory();
@@ -78,7 +84,7 @@ void SlideSorterViewShellBase::InitFactory()
 
 
 SlideSorterViewShellBase::SlideSorterViewShellBase (
-    SfxViewFrame* _pFrame,
+    SfxViewFrame* _pFrame, 
     SfxViewShell* pOldShell)
     : ImpressViewShellBase (_pFrame, pOldShell)
 {

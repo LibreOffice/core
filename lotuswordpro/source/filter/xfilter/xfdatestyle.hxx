@@ -57,27 +57,31 @@
  * @file
  * Date style. The date format for date field.
  ************************************************************************/
-#ifndef     _XFDATESTYLE_HXX
-#define     _XFDATESTYLE_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-20 create this file.
+ ************************************************************************/
+#ifndef		_XFDATESTYLE_HXX
+#define		_XFDATESTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "ixfproperty.hxx"
-#include    "xftimestyle.hxx"
-#include    "xfstylecont.hxx"
-#include    <vector>
+#include	"xfglobal.hxx"
+#include	"xfstyle.hxx"
+#include	"ixfproperty.hxx"
+#include	"xftimestyle.hxx"
+#include	"xfstylecont.hxx"
+#include	<vector>
 
 class XFDatePart : public XFTimePart
 {
 public:
     XFDatePart();
 public:
-    void    SetTexture(sal_Bool bTexture);
+    void	SetTexture(sal_Bool bTexture);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    sal_Bool        m_bTexture;
+    sal_Bool		m_bTexture;
 };
 
 class XFDateStyle : public XFStyle
@@ -89,167 +93,167 @@ public:
 
 public:
 
-    void    SetFixed(sal_Bool fixed);
+    void	SetFixed(sal_Bool fixed);
 
-    void    SetLanguage(rtl::OUString lang);
+    void	SetLanguage(rtl::OUString lang);
 
-    void    SetCountry(rtl::OUString country);
+    void	SetCountry(rtl::OUString country);
 
-    void    SetAutoOrder(sal_Bool bAutoOrder);
+    void	SetAutoOrder(sal_Bool bAutoOrder);
 
-    void    AddYear( sal_Bool bLongFmt = sal_True );
+    void	AddYear( sal_Bool bLongFmt = sal_True );
 
-    void    AddMonth( sal_Bool bLongFmt = sal_True, sal_Bool bTexture = sal_False  );
+    void	AddMonth( sal_Bool bLongFmt = sal_True, sal_Bool bTexture = sal_False  );
 
-    void    AddMonthDay( sal_Bool bLongFmt = sal_True );
+    void	AddMonthDay( sal_Bool bLongFmt = sal_True );
 
-    void    AddWeekDay( sal_Bool bLongFmt = sal_True );
+    void	AddWeekDay( sal_Bool bLongFmt = sal_True );
 
-    void    AddYearWeek();
+    void	AddYearWeek();
 
-    void    AddEra(sal_Bool bLongFmt = sal_False);
+    void	AddEra(sal_Bool bLongFmt = sal_False);
 
-    void    AddQuarter(sal_Bool bLongFmt = sal_False);
+    void	AddQuarter(sal_Bool bLongFmt = sal_False);
 
-    void    AddHour( sal_Bool bLongFmt = sal_True );
+    void	AddHour( sal_Bool bLongFmt = sal_True );
 
-    void    AddMinute( sal_Bool bLongFmt = sal_True );
+    void	AddMinute( sal_Bool bLongFmt = sal_True );
 
-    void    AddSecond( sal_Bool bLongFmt = sal_True, sal_Int16 nDecimalPos = 2);
+    void	AddSecond( sal_Bool bLongFmt = sal_True, sal_Int16 nDecimalPos = 2);
 
-    void    AddAmPm(sal_Bool bAmPm);
+    void	AddAmPm(sal_Bool bAmPm);
 
-    void    AddText( rtl::OUString part );
+    void	AddText( rtl::OUString part );
 
     virtual enumXFStyle GetStyleFamily();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    sal_Bool    m_bFixed;
-    sal_Bool    m_bAutoOrder;
-    rtl::OUString   m_strLanguage;
-    rtl::OUString   m_strCountry;
-    XFStyleContainer    m_aParts;
+    sal_Bool	m_bFixed;
+    sal_Bool	m_bAutoOrder;
+    rtl::OUString	m_strLanguage;
+    rtl::OUString	m_strCountry;
+    XFStyleContainer	m_aParts;
 };
 
-inline void XFDatePart::SetTexture(sal_Bool bTexture)
+inline void	XFDatePart::SetTexture(sal_Bool bTexture)
 {
     m_bTexture = bTexture;
 }
 
-inline void XFDateStyle::SetFixed(sal_Bool fixed)
+inline void	XFDateStyle::SetFixed(sal_Bool fixed)
 {
     m_bFixed = fixed;
 }
 
-inline void XFDateStyle::SetLanguage(rtl::OUString lang)
+inline void	XFDateStyle::SetLanguage(rtl::OUString lang)
 {
     m_strLanguage = lang;
 }
 
-inline void XFDateStyle::SetCountry(rtl::OUString country)
+inline void	XFDateStyle::SetCountry(rtl::OUString country)
 {
     m_strCountry = country;
 }
 
-inline void XFDateStyle::SetAutoOrder(sal_Bool bAutoOrder)
+inline void	XFDateStyle::SetAutoOrder(sal_Bool bAutoOrder)
 {
     m_bAutoOrder = bAutoOrder;
 }
 
-inline void XFDateStyle::AddYear( sal_Bool bLongFmt )
+inline void	XFDateStyle::AddYear( sal_Bool bLongFmt )
 {
-    XFDatePart  *part = new XFDatePart();
+    XFDatePart	*part = new XFDatePart();
     part->SetPartType(enumXFDateYear);
     part->SetLongFmt(bLongFmt);
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddMonth( sal_Bool bLongFmt, sal_Bool bTexture  )
+inline void	XFDateStyle::AddMonth( sal_Bool bLongFmt, sal_Bool bTexture  )
 {
-    XFDatePart  *part = new XFDatePart();
+    XFDatePart	*part = new XFDatePart();
     part->SetPartType(enumXFDateMonth);
     part->SetLongFmt(bLongFmt);
     part->SetTexture(bTexture);
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddMonthDay( sal_Bool bLongFmt )
+inline void	XFDateStyle::AddMonthDay( sal_Bool bLongFmt )
 {
-    XFDatePart  *part = new XFDatePart();
+    XFDatePart	*part = new XFDatePart();
     part->SetPartType(enumXFDateMonthDay);
     part->SetLongFmt(bLongFmt);
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddWeekDay( sal_Bool bLongFmt )
+inline void	XFDateStyle::AddWeekDay( sal_Bool bLongFmt )
 {
-    XFDatePart  *part = new XFDatePart();
+    XFDatePart	*part = new XFDatePart();
     part->SetPartType(enumXFDateWeekDay);
     part->SetLongFmt(bLongFmt);
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddYearWeek()
+inline void	XFDateStyle::AddYearWeek()
 {
-    XFDatePart  *part = new XFDatePart();
+    XFDatePart	*part = new XFDatePart();
     part->SetPartType(enumXFDateYearWeek);
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddEra(sal_Bool bLongFmt)
+inline void	XFDateStyle::AddEra(sal_Bool bLongFmt)
 {
-    XFDatePart  *part = new XFDatePart();
+    XFDatePart	*part = new XFDatePart();
     part->SetPartType(enumXFDateEra);
     part->SetLongFmt(bLongFmt);
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddQuarter(sal_Bool bLongFmt)
+inline void	XFDateStyle::AddQuarter(sal_Bool bLongFmt)
 {
-    XFDatePart  *part = new XFDatePart();
+    XFDatePart	*part = new XFDatePart();
     part->SetPartType(enumXFDateQuarter);
     part->SetLongFmt(bLongFmt);
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddText( rtl::OUString text )
+inline void	XFDateStyle::AddText( rtl::OUString text )
 {
-    XFDatePart  *part = new XFDatePart();
+    XFDatePart	*part = new XFDatePart();
     part->SetPartType(enumXFDateText);
     part->SetText(text);
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddHour( sal_Bool bLongFmt )
+inline void	XFDateStyle::AddHour( sal_Bool bLongFmt )
 {
-    XFDatePart  *part = new XFDatePart();
+    XFDatePart	*part = new XFDatePart();
     part->SetPartType(enumXFDateHour);
     part->SetLongFmt(bLongFmt);
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddMinute( sal_Bool bLongFmt )
+inline void	XFDateStyle::AddMinute( sal_Bool bLongFmt )
 {
-    XFDatePart  *part = new XFDatePart();
+    XFDatePart	*part = new XFDatePart();
     part->SetPartType(enumXFDateMinute);
     part->SetLongFmt(bLongFmt);
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddSecond( sal_Bool bLongFmt, sal_Int16 pos)
+inline void	XFDateStyle::AddSecond( sal_Bool bLongFmt, sal_Int16 pos)
 {
-    XFDatePart  *part = new XFDatePart();
+    XFDatePart	*part = new XFDatePart();
     part->SetPartType(enumXFDateSecond);
     part->SetLongFmt(bLongFmt);
     part->SetDecimalPos(pos);
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddAmPm(sal_Bool /*bAmPm*/)
+inline void	XFDateStyle::AddAmPm(sal_Bool /*bAmPm*/)
 {
-    XFDatePart  *part = new XFDatePart();
+    XFDatePart	*part = new XFDatePart();
     part->SetPartType(enumXFDateAmPm);
     m_aParts.AddStyle(part);
 }

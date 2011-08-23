@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include "sal/types.h"
 #include <tools/errcode.hxx>
 #define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>     // SvUShorts
+#include <svl/svstdarr.hxx>		// SvUShorts
 #include <sfx2/evntconf.hxx>
 
 class SfxMacroInfo;
@@ -56,15 +56,17 @@ class SFX2_DLLPUBLIC SfxMacroInfo
 {
 friend class SfxMacroConfig;
 friend class SfxEventConfiguration;
+friend SvStream& operator >> (SvStream& rStream, SfxMacroInfo& rInfo);
+friend SvStream& operator << (SvStream& rStream, const SfxMacroInfo& rInfo);
 
-    String*                 pHelpText;
+    String*   				pHelpText;
     sal_uInt16                  nRefCnt;
-    sal_Bool                    bAppBasic;
-    String                  aLibName;
-    String                  aModuleName;
-    String                  aMethodName;
-    sal_uInt16                  nSlotId;
-    SfxSlot*                pSlot;
+    sal_Bool					bAppBasic;
+    String					aLibName;
+    String					aModuleName;
+    String					aMethodName;
+    sal_uInt16					nSlotId;
+    SfxSlot*				pSlot;
 
 public:
     SfxMacroInfo( const String& rURL );
@@ -75,29 +77,35 @@ public:
                     const String& rModuleName, const String& rMethodName);
     ~SfxMacroInfo();
     sal_Bool operator==(const SfxMacroInfo& rOther) const;
+    int Load (SvStream&);
+    int Store (SvStream&);
     String              GetMacroName() const;
-    String              GetQualifiedName() const;
-    String              GetFullQualifiedName() const;
-    BasicManager*       GetBasicManager() const;
-    String              GetBasicName() const;
-    String              GetHelpText() const;
-    sal_Bool                IsAppMacro() const
+    String				GetQualifiedName() const;
+    String				GetFullQualifiedName() const;
+    BasicManager*		GetBasicManager() const;
+    String				GetBasicName() const;
+    String				GetHelpText() const;
+    sal_Bool				IsAppMacro() const
                         { return bAppBasic; }
-    const String&       GetModuleName() const
+    const String&		GetModuleName() const
                         { return aModuleName; }
-    const String&       GetLibName() const
+    const String&		GetLibName() const
                         { return aLibName; }
-    const String&       GetMethodName() const
+    const String&		GetMethodName() const
                         { return aMethodName; }
-    sal_uInt16              GetSlotId() const
+    sal_uInt16				GetSlotId() const
                         { return nSlotId; }
-    SfxSlot*            GetSlot() const
+    SfxSlot*			GetSlot() const
                         { return pSlot; }
 
-    sal_Bool                Compare( const SvxMacro& ) const;
-    void                SetHelpText( const String& rText );
+    sal_Bool				Compare( const SvxMacro& ) const;
+    void 				SetHelpText( const String& rText );
     String              GetURL() const;
 };
+
+//ASDBG obsolete >= 582
+//ASDBG class ::com::sun::star::uno::Reference< ::com::sun::star::script::XEngine > ;
+//ASDBG class ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ;
 
 class SFX2_DLLPUBLIC SfxMacroConfig
 {
@@ -105,30 +113,33 @@ friend class SfxEventConfiguration;
 
     SAL_DLLPRIVATE static SfxMacroConfig* pMacroConfig;
 
-    SfxMacroConfig_Impl*    pImp;
+    SfxMacroConfig_Impl* 	pImp;
     SvUShorts               aIdArray;
 
 public:
                             SfxMacroConfig();
                             ~SfxMacroConfig();
 
-    static SfxMacroConfig*  GetOrCreate();
+    static SfxMacroConfig*	GetOrCreate();
 
-    static String           RequestHelp( sal_uInt16 nId );
-    static sal_Bool             IsMacroSlot( sal_uInt16 nId );
-    static sal_Bool             IsBasic( SbxObject*, const String&, BasicManager* );
-    static ErrCode          Call( SbxObject*, const String&, BasicManager*,
+    static String			RequestHelp( sal_uInt16 nId );
+    static sal_Bool 			IsMacroSlot( sal_uInt16 nId );
+    static sal_Bool				IsBasic( SbxObject*, const String&, BasicManager* );
+    static ErrCode			Call( SbxObject*, const String&, BasicManager*,
                                 SbxArray *pArgs=NULL, SbxValue *pRet=NULL );
-    static SbMethod*        GetMethod_Impl( const String&, BasicManager* );
+//ASDBG obsolete >= 582
+//ASDBG 	static void	CallStarScript( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XEngine > & rxEngine, const String & rCode,
+//ASDBG     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rSource, void *pArgs, void *pRet );
+    static SbMethod*		GetMethod_Impl( const String&, BasicManager* );
 
-    sal_uInt16                  GetSlotId(SfxMacroInfoPtr);
-    void                    ReleaseSlotId(sal_uInt16 nId);
-    void                    RegisterSlotId(sal_uInt16 nId);
-    SfxMacroInfo*           GetMacroInfo(sal_uInt16 nId) const;
-    sal_Bool                    ExecuteMacro(sal_uInt16 nId, const String& rArgs ) const;
-    sal_Bool                    ExecuteMacro( SfxObjectShell*, const SvxMacro*, const String& ) const;
-    sal_Bool                    CheckMacro(sal_uInt16 nId) const;
-    sal_Bool                    CheckMacro( SfxObjectShell*, const SvxMacro* ) const;
+    sal_uInt16					GetSlotId(SfxMacroInfoPtr);
+    void					ReleaseSlotId(sal_uInt16 nId);
+    void					RegisterSlotId(sal_uInt16 nId);
+    SfxMacroInfo*     		GetMacroInfo(sal_uInt16 nId) const;
+    sal_Bool					ExecuteMacro(sal_uInt16 nId, const String& rArgs ) const;
+    sal_Bool					ExecuteMacro( SfxObjectShell*, const SvxMacro*, const String& ) const;
+    sal_Bool					CheckMacro(sal_uInt16 nId) const;
+    sal_Bool					CheckMacro( SfxObjectShell*, const SvxMacro* ) const;
 
     SAL_DLLPRIVATE static void Release_Impl();
     SAL_DLLPRIVATE const SfxMacroInfo* GetMacroInfo_Impl( const SvxMacro *pMacro ) const;

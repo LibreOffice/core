@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,14 +44,14 @@
 
 struct MediatorMessage
 {
-    sal_uLong   m_nID;
-    sal_uLong   m_nBytes;
-    char*   m_pBytes;
-    char*   m_pRun;
+    ULONG	m_nID;
+    ULONG	m_nBytes;
+    char*	m_pBytes;
+    char*	m_pRun;
 
     MediatorMessage() : m_nID( 0 ), m_nBytes( 0 ),
         m_pBytes( NULL ), m_pRun( NULL ) {}
-    MediatorMessage( sal_uLong nID, sal_uLong nBytes, char* pBytes ) :
+    MediatorMessage( ULONG nID, ULONG nBytes, char* pBytes ) :
             m_nID( nID ),m_nBytes( nBytes ), m_pRun( NULL )
         {
             m_pBytes = new char[ m_nBytes ];
@@ -64,7 +64,7 @@ struct MediatorMessage
                 delete [] m_pBytes;
         }
 
-    void Set( sal_uLong nBytes, char* pBytes )
+    void Set( ULONG nBytes, char* pBytes )
         {
             if( m_pBytes )
                 delete [] m_pBytes;
@@ -73,13 +73,13 @@ struct MediatorMessage
             memcpy( m_pBytes, pBytes, (size_t)m_nBytes );
         }
 
-    sal_uLong   ExtractULONG();
-    char*   GetString();
-    sal_uInt32  GetUINT32();
-    void*   GetBytes( sal_uLong& );
-    void*   GetBytes() { sal_uLong nBytes; return GetBytes( nBytes ); }
+    ULONG	ExtractULONG();
+    char*	GetString();
+    UINT32	GetUINT32();
+    void*	GetBytes( ULONG& );
+    void*	GetBytes() { ULONG nBytes; return GetBytes( nBytes ); }
 
-    void    Rewind() { m_pRun = NULL; }
+    void	Rewind() { m_pRun = NULL; }
 };
 
 class MediatorListener;
@@ -88,22 +88,22 @@ class Mediator
 {
     friend class MediatorListener;
 protected:
-    int                                 m_nSocket;
+    int									m_nSocket;
 
-    std::vector<MediatorMessage*>       m_aMessageQueue;
+    std::vector<MediatorMessage*>		m_aMessageQueue;
     osl::Mutex m_aQueueMutex;
     osl::Mutex m_aSendMutex;
     // only one thread can send a message at any given time
     osl::Condition                      m_aNewMessageCdtn;
-    MediatorListener*                   m_pListener;
+    MediatorListener*					m_pListener;
     // thread to fill the queue
 
-    sal_uLong                               m_nCurrentID;
+    ULONG								m_nCurrentID;
     // will be constantly increased with each message sent
-    bool                                m_bValid;
+    bool								m_bValid;
 
-    Link                                m_aConnectionLostHdl;
-    Link                                m_aNewMessageHdl;
+    Link								m_aConnectionLostHdl;
+    Link								m_aNewMessageHdl;
 public:
     Mediator( int nSocket );
     ~Mediator();
@@ -113,27 +113,27 @@ public:
     // with error
     void invalidate() { m_bValid = false; }
 
-    sal_uLong SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong nMessageID = 0 );
-    sal_uLong SendMessage( const ByteString& rMessage, sal_uLong nMessageID = 0 )
+    ULONG SendMessage( ULONG nBytes, const char* pBytes, ULONG nMessageID = 0 );
+    ULONG SendMessage( const ByteString& rMessage, ULONG nMessageID = 0 )
         {
             return SendMessage( rMessage.Len(), rMessage.GetBuffer(), nMessageID );
         }
 
-    sal_Bool WaitForMessage( sal_uLong nTimeOut = 5000 );
+    BOOL WaitForMessage( ULONG nTimeOut = 5000 );
     // timeout in ms
     // TRUE:  Message came in
     // FALSE: timed out
     // if timeout is set, WaitForMessage will wait even if there are messages
     // in the queue
 
-    virtual MediatorMessage* WaitForAnswer( sal_uLong nMessageID );
+    virtual MediatorMessage* WaitForAnswer( ULONG nMessageID );
     // wait for an answer message ( ID >= 1 << 24 )
     // the message will be removed from the queue and returned
 
-    MediatorMessage* TransactMessage( sal_uLong nBytes, char* pBytes );
+    MediatorMessage* TransactMessage( ULONG nBytes, char* pBytes );
     // sends a message and waits for an answer
 
-    MediatorMessage* GetNextMessage( sal_Bool bWait = sal_False );
+    MediatorMessage* GetNextMessage( BOOL bWait = FALSE );
 
 
     Link SetConnectionLostHdl( const Link& rLink )
@@ -155,7 +155,7 @@ class MediatorListener : public osl::Thread
 {
     friend class Mediator;
   private:
-    Mediator*       m_pMediator;
+    Mediator*		m_pMediator;
     ::osl::Mutex    m_aMutex;
 
     MediatorListener( Mediator* );

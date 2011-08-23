@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,6 @@
 
 TabPage RID_OFA_TP_INTERNATIONAL
 {
-    HelpID = "cui:TabPage:RID_OFA_TP_INTERNATIONAL";
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( PAGE_SIZE_X, PAGE_SIZE_Y ) ;
     SVLook = TRUE ;
@@ -47,7 +46,6 @@ TabPage RID_OFA_TP_INTERNATIONAL
 
     RadioButton RB_TXTDIR_LEFT2RIGHT
     {
-        HelpID = "cui:RadioButton:RID_OFA_TP_INTERNATIONAL:RB_TXTDIR_LEFT2RIGHT";
         Pos = MAP_APPFONT( COL_1, ROW_1 );
         Size = MAP_APPFONT( WIDTH2END( COL_1 ), HEIGHT_RB );
         Group = TRUE;
@@ -56,7 +54,6 @@ TabPage RID_OFA_TP_INTERNATIONAL
 
     RadioButton RB_TXTDIR_RIGHT2LEFT
     {
-        HelpID = "cui:RadioButton:RID_OFA_TP_INTERNATIONAL:RB_TXTDIR_RIGHT2LEFT";
         Pos = MAP_APPFONT( COL_1, ROW_2 );
         Size = MAP_APPFONT( WIDTH2END( COL_1 ), HEIGHT_RB );
         Text [ en-US ] = "~Right-to-left";
@@ -71,7 +68,6 @@ TabPage RID_OFA_TP_INTERNATIONAL
 
     CheckBox CB_SHTVW_RIGHT2LEFT
     {
-        HelpID = "cui:CheckBox:RID_OFA_TP_INTERNATIONAL:CB_SHTVW_RIGHT2LEFT";
         Pos = MAP_APPFONT( COL_1, ROW_4 );
         Size = MAP_APPFONT( WIDTH2END( COL_1 ), HEIGHT_CB );
         Text [ en-US ] = "Right-~to-left";
@@ -79,9 +75,29 @@ TabPage RID_OFA_TP_INTERNATIONAL
 
     CheckBox CB_SHTVW_CURRENTDOCONLY
     {
-        HelpID = "cui:CheckBox:RID_OFA_TP_INTERNATIONAL:CB_SHTVW_CURRENTDOCONLY";
         Pos = MAP_APPFONT( COL_2, ROW_5 );
         Size = MAP_APPFONT( WIDTH2END( COL_2 ), HEIGHT_CB );
         Text [ en-US ] = "~Current document only";
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

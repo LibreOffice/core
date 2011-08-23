@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,19 +38,19 @@
 
 #define _SVX_SELCTRL_CXX
 
-#include "svx/selctrl.hxx"
+#include "selctrl.hxx"
 #include <svx/dialmgr.hxx>
 
 #include <svx/dialogs.hrc>
 
-#define PAINT_OFFSET    5
+#define PAINT_OFFSET	5
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
 // class SvxSelectionModeControl -----------------------------------------
 
-SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
-                                                  sal_uInt16 _nId,
+SvxSelectionModeControl::SvxSelectionModeControl( USHORT _nSlotId,
+                                                  USHORT _nId,
                                                   StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     nState( 0 )
@@ -59,7 +59,7 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
 
 // -----------------------------------------------------------------------
 
-void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
+void SvxSelectionModeControl::StateChanged( USHORT, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState )
@@ -84,14 +84,14 @@ void SvxSelectionModeControl::Click()
         nState = 0;
 
     ::com::sun::star::uno::Any a;
-    SfxUInt16Item aState( GetSlotId(), nState );
+    SfxUInt16Item aState( GetSlotId(), nState );    
     INetURLObject aObj( m_aCommandURL );
-
+    
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
     aArgs[0].Name  = aObj.GetURLPath();
     aState.QueryValue( a );
     aArgs[0].Value = a;
-
+    
     execute( aArgs );
 }
 
@@ -107,7 +107,7 @@ void SvxSelectionModeControl::Paint( const UserDrawEvent& )
 void SvxSelectionModeControl::DrawItemText_Impl()
 {
     String sTxt;
-    sal_uInt16 _nId = 0;
+    USHORT _nId = 0;
 
     switch ( nState )
     {
@@ -123,7 +123,7 @@ void SvxSelectionModeControl::DrawItemText_Impl()
         case 3:
             _nId = RID_SVXSTR_SELMODE_BLK;
             break;
-        default: OSL_FAIL( "invalid selection mode!" );
+        default: DBG_ERROR( "invalid selection mode!" );
     }
 
     if ( _nId )
@@ -131,7 +131,7 @@ void SvxSelectionModeControl::DrawItemText_Impl()
     GetStatusBar().SetItemText( GetId(), sTxt );
 }
 
-sal_uIntPtr SvxSelectionModeControl::GetDefItemWidth(const StatusBar& rStb)
+ULONG SvxSelectionModeControl::GetDefItemWidth(const StatusBar& rStb)
 {
     long nWidth1 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_SELMODE_STD));
     long nWidth2 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_SELMODE_ER));

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,10 +75,10 @@ rtl::OUString getParentName( const rtl::OUString& aFileName )
     rtl::OUString aParent = aFileName.copy( 0,lastIndex );
 
     if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
-        aParent += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aParent += rtl::OUString::createFromAscii( "/" );
 
     if( 0 == aParent.compareToAscii( "file://" ) )
-        aParent = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
+        aParent = rtl::OUString::createFromAscii( "file:///" );
 
     return aParent;
 }
@@ -199,31 +199,25 @@ String ConstructTempDir_Impl( const String* pParent )
 void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_True )
 {
     // add a suitable tempname
-    // 36 ** 6 == 2176782336
-    unsigned const nRadix = 36;
-    unsigned long const nMax = (nRadix*nRadix*nRadix*nRadix*nRadix*nRadix);
+    // Prefix can have 5 chars, leaving 3 for numbers. 26 ** 3 == 17576
+    // ER 13.07.00  why not radix 36 [0-9A-Z] ?!?
+    const unsigned nRadix = 26;
     String aName( rName );
-    aName += String::CreateFromAscii( "lu" );
+    aName += String::CreateFromAscii( "sv" );
 
     rName.Erase();
-    unsigned long nSeed = Time::GetSystemTicks() % nMax;
-    for ( unsigned long u = nSeed; ++u != nSeed; )
+    static unsigned long u = Time::GetSystemTicks();
+    for ( unsigned long nOld = u; ++u != nOld; )
     {
-        u %= nMax;
+        u %= (nRadix*nRadix*nRadix);
         String aTmp( aName );
-        aTmp += String::CreateFromInt64( static_cast<sal_Int64>(u), nRadix );
+        aTmp += String::CreateFromInt32( (sal_Int32) (unsigned) u, nRadix );
         aTmp += String::CreateFromAscii( ".tmp" );
 
         if ( bDir )
         {
-#ifdef UNX /* RW permission for the user only! */
-            mode_t old_mode = umask(077);
-#endif
             FileBase::RC err = Directory::create( aTmp );
-#ifdef UNX
-            umask(old_mode);
-#endif
-            if ( err == FileBase::E_None )
+            if (  err == FileBase::E_None )
             {
                 // !bKeep: only for creating a name, not a file or directory
                 if ( bKeep || Directory::remove( aTmp ) == FileBase::E_None )
@@ -240,12 +234,13 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
         {
             DBG_ASSERT( bKeep, "Too expensive, use directory for creating name!" );
             File aFile( aTmp );
-#ifdef UNX /* RW permission for the user only! */
-            mode_t old_mode = umask(077);
-#endif
-            FileBase::RC err = aFile.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_NoLock );
 #ifdef UNX
-            umask(old_mode);
+/* RW permission for the user only! */
+ mode_t old_mode = umask(077);
+#endif
+            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
+#ifdef UNX
+umask(old_mode);
 #endif
             if (  err == FileBase::E_None )
             {
@@ -260,8 +255,8 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
 
                  DirectoryItem aTmpItem;
                  FileStatus aTmpStatus( FileStatusMask_Type );
-                 if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
-                   || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
+                 if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None 
+                   || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None 
                    || aTmpStatus.getFileType() != FileStatus::Directory )
                      break;
             }
@@ -325,8 +320,8 @@ umask(old_mode);
 
                 DirectoryItem aTmpItem;
                 FileStatus aTmpStatus( FileStatusMask_Type );
-                if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
-                  || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
+                if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None 
+                  || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None 
                   || aTmpStatus.getFileType() != FileStatus::Directory )
                     break;
             }

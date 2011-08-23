@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ SvXMLImportContext* OXMLTableFilterList::CreateChildContext(
         else if ( IsXMLToken( rLocalName, XML_TABLE_TYPE ) )
             pContext = new OXMLTableFilterPattern( GetImport(), nPrefix, rLocalName,sal_False,*this);
         else if ( IsXMLToken( rLocalName, XML_TABLE_INCLUDE_FILTER ) )
-            pContext = new OXMLTableFilterList( GetImport(), nPrefix, rLocalName );
+            pContext = new OXMLTableFilterList( GetImport(), nPrefix, rLocalName );        
     }
 
     if( !pContext )

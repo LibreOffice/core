@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ public interface IMemberDescription {
     boolean isInterface();
 
     /**
-     * Gives the relative index of this member in the declaring
+     * Gives the relative index of this member in the declaring 
      * interface or struct (including superclasses).
      * <p>
      * @return  the relative index of this member

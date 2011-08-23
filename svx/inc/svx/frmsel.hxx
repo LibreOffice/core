@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,7 @@
 #include <svx/framebordertype.hxx>
 #include "svx/svxdllapi.h"
 
-namespace editeng {
-    class SvxBorderLine;
-}
+class SvxBorderLine;
 
 namespace svx {
 
@@ -117,10 +115,10 @@ public:
     /** Returns the state (visible/hidden/don't care) of the specified frame border. */
     FrameBorderState    GetFrameBorderState( FrameBorderType eBorder ) const;
     /** Returns the style of the specified frame border, if it is visible. */
-    const editeng::SvxBorderLine* GetFrameBorderStyle( FrameBorderType eBorder ) const;
+    const SvxBorderLine* GetFrameBorderStyle( FrameBorderType eBorder ) const;
 
     /** Shows the specified frame border using the passed style, or hides it, if pStyle is 0. */
-    void                ShowBorder( FrameBorderType eBorder, const editeng::SvxBorderLine* pStyle );
+    void                ShowBorder( FrameBorderType eBorder, const SvxBorderLine* pStyle );
     /** Sets the specified frame border to "don't care" state. */
     void                SetBorderDontCare( FrameBorderType eBorder );
 
@@ -131,8 +129,9 @@ public:
 
     /** Returns true, if all visible frame borders have equal widths.
         @descr  Ignores hidden and "don't care" frame borders. On success,
-        returns the width in the passed parameter. */
-    bool                GetVisibleWidth( long& rnWidth, editeng::SvxBorderStyle& rnStyle ) const;
+        returns the widths in the passed parameters. */
+    bool                GetVisibleWidth( USHORT& rnPrim, USHORT& rnDist, USHORT& rnSec,
+                                         SvxBorderStyle& rnStyle ) const;
     /** Returns true, if all visible frame borders have equal color.
         @descr  Ignores hidden and "don't care" frame borders. On success,
         returns the color in the passed parameter. */
@@ -163,7 +162,8 @@ public:
     void                SelectAllVisibleBorders( bool bSelect = true );
 
     /** Sets the passed line widths to all selected frame borders (in twips). */
-    void                SetStyleToSelection( long nWidth, editeng::SvxBorderStyle nStyle );
+    void                SetStyleToSelection( USHORT nPrim, USHORT nDist, USHORT nSec,
+                                             SvxBorderStyle nStyle );
     /** Sets the passed color to all selected frame borders. */
     void                SetColorToSelection( const Color& rColor );
 

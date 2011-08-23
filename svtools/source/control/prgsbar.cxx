@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,21 +33,21 @@
 
 #include <tools/debug.hxx>
 #include <vcl/status.hxx>
-#include <svtools/prgsbar.hxx>
+#include <prgsbar.hxx>
 
 // =======================================================================
 
-#define PROGRESSBAR_OFFSET          3
-#define PROGRESSBAR_WIN_OFFSET      2
+#define PROGRESSBAR_OFFSET			3
+#define PROGRESSBAR_WIN_OFFSET		2
 
 // =======================================================================
 
 void ProgressBar::ImplInit()
 {
-    mnPercent   = 0;
-    mbCalcNew   = sal_True;
+    mnPercent	= 0;
+    mbCalcNew	= TRUE;
 
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( TRUE, TRUE, TRUE );
 }
 
 static WinBits clearProgressBarBorder( Window* pParent, WinBits nOrgStyle )
@@ -86,8 +86,8 @@ ProgressBar::~ProgressBar()
 
 // -----------------------------------------------------------------------
 
-void ProgressBar::ImplInitSettings( sal_Bool bFont,
-                                    sal_Bool bForeground, sal_Bool bBackground )
+void ProgressBar::ImplInitSettings( BOOL bFont,
+                                    BOOL bForeground, BOOL bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -109,8 +109,8 @@ void ProgressBar::ImplInitSettings( sal_Bool bFont,
         {
             if( (GetStyle() & WB_BORDER) )
                 SetBorderStyle( WINDOW_BORDER_REMOVEBORDER );
-            EnableChildTransparentMode( sal_True );
-            SetPaintTransparent( sal_True );
+            EnableChildTransparentMode( TRUE );
+            SetPaintTransparent( TRUE );
             SetBackground();
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
         }
@@ -148,18 +148,18 @@ void ProgressBar::ImplInitSettings( sal_Bool bFont,
 
 // -----------------------------------------------------------------------
 
-void ProgressBar::ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc )
+void ProgressBar::ImplDrawProgress( USHORT nOldPerc, USHORT nNewPerc )
 {
     if ( mbCalcNew )
     {
-        mbCalcNew = sal_False;
+        mbCalcNew = FALSE;
 
         Size aSize = GetOutputSizePixel();
         mnPrgsHeight = aSize.Height()-(PROGRESSBAR_WIN_OFFSET*2);
         mnPrgsWidth = (mnPrgsHeight*2)/3;
         maPos.Y() = PROGRESSBAR_WIN_OFFSET;
         long nMaxWidth = (aSize.Width()-(PROGRESSBAR_WIN_OFFSET*2)+PROGRESSBAR_OFFSET);
-        sal_uInt16 nMaxCount = (sal_uInt16)(nMaxWidth / (mnPrgsWidth+PROGRESSBAR_OFFSET));
+        USHORT nMaxCount = (USHORT)(nMaxWidth / (mnPrgsWidth+PROGRESSBAR_OFFSET));
         if ( nMaxCount <= 1 )
             nMaxCount = 1;
         else
@@ -188,20 +188,20 @@ void ProgressBar::Paint( const Rectangle& )
 
 void ProgressBar::Resize()
 {
-    mbCalcNew = sal_True;
+    mbCalcNew = TRUE;
     if ( IsReallyVisible() )
         Invalidate();
 }
 
 // -----------------------------------------------------------------------
 
-void ProgressBar::SetValue( sal_uInt16 nNewPercent )
+void ProgressBar::SetValue( USHORT nNewPercent )
 {
     DBG_ASSERTWARNING( nNewPercent <= 100, "StatusBar::SetProgressValue(): nPercent > 100" );
 
     if ( nNewPercent < mnPercent )
     {
-        mbCalcNew = sal_True;
+        mbCalcNew = TRUE;
         mnPercent = nNewPercent;
         if ( IsReallyVisible() )
         {
@@ -224,19 +224,19 @@ void ProgressBar::StateChanged( StateChangedType nType )
     if ( (nType == STATE_CHANGE_ZOOM) ||
          (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( TRUE, FALSE, FALSE );
         Invalidate();
     }
     else
 */
     if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( FALSE, TRUE, FALSE );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
     }
 
@@ -250,7 +250,7 @@ void ProgressBar::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( TRUE, TRUE, TRUE );
         Invalidate();
     }
 

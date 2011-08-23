@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include "swtypes.hxx"
 
 class SwTxtNode;
-class SwRegHistory;                 // Is in RolBck.hxx.
+class SwRegHistory;                 // steht im RolBck.hxx
 class SwTxtAttr;
 class SwTxtAttrNesting;
 
@@ -43,16 +43,9 @@ class SfxPoolItem;
 class SfxItemSet;
 class SwDoc;
 
-typedef enum {
-    COPY = true,
-    NEW  = false,
-} CopyOrNew_t;
-
-// if COPY then pTxtNode must be given!
 SW_DLLPRIVATE SwTxtAttr *
 MakeTxtAttr( SwDoc & rDoc, SfxPoolItem & rNew,
-        xub_StrLen const nStt, xub_StrLen const nEnd,
-        CopyOrNew_t const bIsCopy = NEW, SwTxtNode *const pTxtNode = 0);
+        xub_StrLen nStt, xub_StrLen nEnd );
 SW_DLLPRIVATE SwTxtAttr *
 MakeTxtAttr( SwDoc & rDoc, const SfxItemSet & rSet,
         xub_StrLen nStt, xub_StrLen nEnd );
@@ -62,21 +55,26 @@ SW_DLLPRIVATE SwTxtAttr*
 MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr );
 
 
-// Class SwpHints is derived indirectly via SwpHts, because only the
-// class SwTxtNode should be allowed to insert and remove attributes.
-// Other classes like the Frames are given only reading access via
-// the index-operator.
-// Size when created is 1 because an array is created only if
-// also a hint is inserted.
+/*
+ * Ableitung der Klasse SwpHints ueber den Umweg ueber SwpHts, da
+ * lediglich die Klasse SwTxtNode Attribute einfuegen und
+ * loeschen koennen soll. Anderen Klassen wie den Frames steht
+ * lediglich ein lesender Zugriff ueber den Index-Operator zur
+ * Verfuegung.
+ * Groesse beim Anlegen gleich 1, weil nur dann ein Array erzeug wird, wenn
+ * auch ein Hint eingefuegt wird.
+ */
 
- // Class SwpHtStart/End
-
+/*************************************************************************
+ *                      class SwpHtStart/End
+ *************************************************************************/
 
 SV_DECL_PTRARR_SORT(SwpHtStart,SwTxtAttr*,1,1)
 SV_DECL_PTRARR_SORT(SwpHtEnd,SwTxtAttr*,1,1)
 
-// Class SwpHintsArr
-
+/*************************************************************************
+ *                      class SwpHintsArr
+ *************************************************************************/
 
 /// the Hints array
 class SwpHintsArray
@@ -89,40 +87,40 @@ protected:
     //FIXME: why are the non-const methods public?
 public:
     void Insert( const SwTxtAttr *pHt );
-    void DeleteAtPos( const sal_uInt16 nPosInStart );
+    void DeleteAtPos( const USHORT nPosInStart );
     bool Resort();
-    SwTxtAttr * Cut( const sal_uInt16 nPosInStart );
+    SwTxtAttr * Cut( const USHORT nPosInStart );
 
-    inline const SwTxtAttr * GetStart( const sal_uInt16 nPos ) const
+    inline const SwTxtAttr * GetStart( const USHORT nPos ) const
         { return m_HintStarts[nPos]; }
-    inline const SwTxtAttr * GetEnd  ( const sal_uInt16 nPos ) const
+    inline const SwTxtAttr * GetEnd  ( const USHORT nPos ) const
         { return m_HintEnds  [nPos]; }
-    inline       SwTxtAttr * GetStart( const sal_uInt16 nPos )
+    inline       SwTxtAttr * GetStart( const USHORT nPos )
         { return m_HintStarts[nPos]; }
-    inline       SwTxtAttr * GetEnd  ( const sal_uInt16 nPos )
+    inline       SwTxtAttr * GetEnd  ( const USHORT nPos )
         { return m_HintEnds  [nPos]; }
 
-    inline sal_uInt16 GetEndCount()   const { return m_HintEnds  .Count(); }
-    inline sal_uInt16 GetStartCount() const { return m_HintStarts.Count(); }
+    inline USHORT GetEndCount()   const { return m_HintEnds  .Count(); }
+    inline USHORT GetStartCount() const { return m_HintStarts.Count(); }
 
-    inline sal_uInt16 GetStartOf( const SwTxtAttr *pHt ) const;
-    inline sal_uInt16 GetPos( const SwTxtAttr *pHt ) const
+    inline USHORT GetStartOf( const SwTxtAttr *pHt ) const;
+    inline USHORT GetPos( const SwTxtAttr *pHt ) const
         { return m_HintStarts.GetPos( pHt ); }
 
-    inline SwTxtAttr * GetTextHint( const sal_uInt16 nIdx )
+    inline SwTxtAttr * GetTextHint( const USHORT nIdx )
         { return GetStart(nIdx); }
-    inline const SwTxtAttr * operator[]( const sal_uInt16 nIdx ) const
+    inline const SwTxtAttr * operator[]( const USHORT nIdx ) const
         { return m_HintStarts[nIdx]; }
-    inline sal_uInt16 Count() const { return m_HintStarts.Count(); }
+    inline USHORT Count() const { return m_HintStarts.Count(); }
 
 #if OSL_DEBUG_LEVEL > 1
     bool Check() const;
 #endif
 };
 
-
-// Class SwpHints
-
+/*************************************************************************
+ *                      class SwpHints
+ *************************************************************************/
 
 // public interface
 class SwpHints : public SwpHintsArray
@@ -148,7 +146,7 @@ private:
     // Because the TextNode also guarantees removal of the Character for
     // attributes without an end.
     friend class SwTxtNode;
-    void DeleteAtPos( const sal_uInt16 nPos );
+    void DeleteAtPos( const USHORT nPos );
     // Delete the given Hint. The Hint must actually be in the array!
     void Delete( SwTxtAttr* pTxtHt );
 
@@ -196,16 +194,16 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwpHints)
 };
 
-// Output operator for text hints.
+// Ausgabeoperator fuer die Texthints
 SvStream &operator<<(SvStream &aS, const SwpHints &rHints); //$ ostream
 
+/*************************************************************************
+ *                         Inline Implementations
+ *************************************************************************/
 
-// Inline Implementations
-
-
-inline sal_uInt16 SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
+inline USHORT SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
 {
-    sal_uInt16 nPos;
+    USHORT nPos;
     if ( !m_HintStarts.Seek_Entry( pHt, &nPos ) )
     {
         nPos = USHRT_MAX;
@@ -213,7 +211,7 @@ inline sal_uInt16 SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
     return nPos;
 }
 
-inline SwTxtAttr *SwpHintsArray::Cut( const sal_uInt16 nPosInStart )
+inline SwTxtAttr *SwpHintsArray::Cut( const USHORT nPosInStart )
 {
     SwTxtAttr *pHt = GetTextHint(nPosInStart);
     DeleteAtPos( nPosInStart );

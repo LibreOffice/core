@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@
 
 #include <tools/debug.hxx>
 
-#define UNOCONTROL_STREAMVERSION    (short)2
+#define UNOCONTROL_STREAMVERSION	(short)2
 
-//  ----------------------------------------------------
-//  class UnoControlModelEntryList
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlModelEntryList
+//	----------------------------------------------------
 UnoControlModelEntryList::UnoControlModelEntryList()
 {
 }
@@ -56,50 +56,26 @@ UnoControlModelEntryList::~UnoControlModelEntryList()
 
 void UnoControlModelEntryList::Reset()
 {
-    for ( size_t n = maList.size(); n; )
+    for ( sal_uInt32 n = Count(); n; )
         DestroyEntry( --n );
 }
 
-void UnoControlModelEntryList::DestroyEntry( size_t nEntry )
+void UnoControlModelEntryList::DestroyEntry( sal_uInt32 nEntry )
 {
-    UnoControlModelEntryListBase::iterator it = maList.begin();
-    ::std::advance( it, nEntry );
+    UnoControlModelEntry* pEntry = GetObject( nEntry );
 
-    if ( (*it)->bGroup )
-        delete (*it)->pGroup;
+    if ( pEntry->bGroup )
+        delete pEntry->pGroup;
     else
-        delete (*it)->pxControl;
+        delete pEntry->pxControl;
 
-    delete *it;
-    maList.erase( it );
+    Remove( nEntry );
+    delete pEntry;
 }
 
-size_t  UnoControlModelEntryList::size() const {
-    return maList.size();
-}
-
-UnoControlModelEntry* UnoControlModelEntryList::operator[]( size_t i ) const {
-    return ( i < maList.size() ) ? maList[ i ] : NULL;
-}
-
-void UnoControlModelEntryList::push_back( UnoControlModelEntry* item ) {
-    maList.push_back( item );
-}
-
-void UnoControlModelEntryList::insert( size_t i, UnoControlModelEntry* item ) {
-    if ( i < maList.size() ) {
-        UnoControlModelEntryListBase::iterator it = maList.begin();
-        ::std::advance( it, i );
-        maList.insert( it, item );
-    } else {
-        maList.push_back( item );
-    }
-}
-
-
-//  ----------------------------------------------------
-//  class StdTabControllerModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class StdTabControllerModel
+//	----------------------------------------------------
 StdTabControllerModel::StdTabControllerModel()
 {
     mbGroupControl = sal_True;
@@ -112,10 +88,10 @@ StdTabControllerModel::~StdTabControllerModel()
 sal_uInt32 StdTabControllerModel::ImplGetControlCount( const UnoControlModelEntryList& rList ) const
 {
     sal_uInt32 nCount = 0;
-    size_t nEntries = rList.size();
-    for ( size_t n = 0; n < nEntries; n++ )
+    sal_uInt32 nEntries = rList.Count();
+    for ( sal_uInt32 n = 0; n < nEntries; n++ )
     {
-        UnoControlModelEntry* pEntry = rList[ n ];
+        UnoControlModelEntry* pEntry = rList.GetObject( n );
         if ( pEntry->bGroup )
             nCount += ImplGetControlCount( *pEntry->pGroup );
         else
@@ -126,10 +102,10 @@ sal_uInt32 StdTabControllerModel::ImplGetControlCount( const UnoControlModelEntr
 
 void StdTabControllerModel::ImplGetControlModels( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > ** ppRefs, const UnoControlModelEntryList& rList ) const
 {
-    size_t nEntries = rList.size();
-    for ( size_t n = 0; n < nEntries; n++ )
+    sal_uInt32 nEntries = rList.Count();
+    for ( sal_uInt32 n = 0; n < nEntries; n++ )
     {
-        UnoControlModelEntry* pEntry = rList[ n ];
+        UnoControlModelEntry* pEntry = rList.GetObject( n );
         if ( pEntry->bGroup )
             ImplGetControlModels( ppRefs, *pEntry->pGroup );
         else
@@ -150,15 +126,15 @@ void StdTabControllerModel::ImplSetControlModels( UnoControlModelEntryList& rLis
         pNewEntry->bGroup = sal_False;
         pNewEntry->pxControl = new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > ;
         *pNewEntry->pxControl = pRefs[n];
-        rList.push_back( pNewEntry );
+        rList.Insert( pNewEntry, LIST_APPEND );
     }
 }
 
 sal_uInt32 StdTabControllerModel::ImplGetControlPos( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >  xCtrl, const UnoControlModelEntryList& rList ) const
 {
-    for ( size_t n = rList.size(); n; )
+    for ( sal_uInt32 n = rList.Count(); n; )
     {
-        UnoControlModelEntry* pEntry = rList[ --n ];
+        UnoControlModelEntry* pEntry = rList.GetObject( --n );
         if ( !pEntry->bGroup && ( *pEntry->pxControl == xCtrl ) )
             return n;
     }
@@ -173,8 +149,8 @@ void ImplWriteControls( const ::com::sun::star::uno::Reference< ::com::sun::star
     sal_uInt32 nStoredControls = 0;
     sal_Int32 nDataBeginMark = xMark->createMark();
 
-    OutStream->writeLong( 0L ); // DataLen
-    OutStream->writeLong( 0L ); // nStoredControls
+    OutStream->writeLong( 0L );	// DataLen
+    OutStream->writeLong( 0L );	// nStoredControls
 
     sal_uInt32 nCtrls = rCtrls.getLength();
     for ( sal_uInt32 n = 0; n < nCtrls; n++ )
@@ -243,21 +219,21 @@ IMPL_XTYPEPROVIDER_END
 sal_Bool StdTabControllerModel::getGroupControl(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     return mbGroupControl;
 }
 
 void StdTabControllerModel::setGroupControl( sal_Bool GroupControl ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     mbGroupControl = GroupControl;
 }
 
 void StdTabControllerModel::setControlModels( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Controls ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     maControls.Reset();
     ImplSetControlModels( maControls, Controls );
 }
@@ -265,7 +241,7 @@ void StdTabControllerModel::setControlModels( const ::com::sun::star::uno::Seque
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > > StdTabControllerModel::getControlModels(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > > aSeq( ImplGetControlCount( maControls ) );
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > * pRefs = aSeq.getArray();
     ImplGetControlModels( &pRefs, maControls );
@@ -275,7 +251,7 @@ void StdTabControllerModel::setControlModels( const ::com::sun::star::uno::Seque
 void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Group, const ::rtl::OUString& GroupName ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     // Die Controls stehen eventuel flach in der Liste und werden jetzt gruppiert.
     // Verschachtelte Gruppen sind erstmal nicht moeglich...
     // Das erste Element der Gruppe welches auch schon in der flachen Liste
@@ -288,10 +264,10 @@ void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::c
     ImplSetControlModels( *pNewEntry->pGroup, Group );
 
     sal_Bool bInserted = sal_False;
-    size_t nElements = pNewEntry->pGroup->size();
-    for ( size_t n = 0; n < nElements; n++ )
+    sal_uInt32 nElements = pNewEntry->pGroup->Count();
+    for ( sal_uInt32 n = 0; n < nElements; n++ )
     {
-        UnoControlModelEntry* pEntry = (*pNewEntry->pGroup)[ n ];
+        UnoControlModelEntry* pEntry = pNewEntry->pGroup->GetObject( n );
         if ( !pEntry->bGroup )
         {
             sal_uInt32 nPos = ImplGetControlPos( *pEntry->pxControl, maControls );
@@ -302,29 +278,29 @@ void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::c
                 maControls.DestroyEntry( nPos );
                 if ( !bInserted )
                 {
-                    maControls.insert( nPos, pNewEntry );
+                    maControls.Insert( pNewEntry, nPos );
                     bInserted = sal_True;
                 }
             }
         }
     }
     if ( !bInserted )
-        maControls.push_back( pNewEntry );
+        maControls.Insert( pNewEntry, LIST_APPEND );
 }
 
 sal_Int32 StdTabControllerModel::getGroupCount(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     // erstmal nur eine Ebene...
     // Das Model und die Impl-Methoden arbeiten zwar rekursiv, aber das wird
     // erstmal nich nach aussen gegeben.
 
     sal_Int32 nGroups = 0;
-    size_t nEntries = maControls.size();
-    for ( size_t n = 0; n < nEntries; n++ )
+    sal_uInt32 nEntries = maControls.Count();
+    for ( sal_uInt32 n = 0; n < nEntries; n++ )
     {
-        UnoControlModelEntry* pEntry = maControls[ n ];
+        UnoControlModelEntry* pEntry = maControls.GetObject( n );
         if ( pEntry->bGroup )
             nGroups++;
     }
@@ -334,13 +310,13 @@ sal_Int32 StdTabControllerModel::getGroupCount(  ) throw(::com::sun::star::uno::
 void StdTabControllerModel::getGroup( sal_Int32 nGroup, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& rGroup, ::rtl::OUString& rName ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > > aSeq;
     sal_uInt32 nG = 0;
-    size_t nEntries = maControls.size();
-    for ( size_t n = 0; n < nEntries; n++ )
+    sal_uInt32 nEntries = maControls.Count();
+    for ( sal_uInt32 n = 0; n < nEntries; n++ )
     {
-        UnoControlModelEntry* pEntry = maControls[ n ];
+        UnoControlModelEntry* pEntry = maControls.GetObject( n );
         if ( pEntry->bGroup )
         {
             if ( nG == (sal_uInt32)nGroup )
@@ -361,12 +337,12 @@ void StdTabControllerModel::getGroup( sal_Int32 nGroup, ::com::sun::star::uno::S
 void StdTabControllerModel::getGroupByName( const ::rtl::OUString& rName, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& rGroup ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     sal_uInt32 nGroup = 0;
-    size_t nEntries = maControls.size();
-    for ( size_t n = 0; n < nEntries; n++ )
+    sal_uInt32 nEntries = maControls.Count();
+    for ( sal_uInt32 n = 0; n < nEntries; n++ )
     {
-        UnoControlModelEntry* pEntry = maControls[ n ];
+        UnoControlModelEntry* pEntry = maControls.GetObject( n );
         if ( pEntry->bGroup )
         {
             if ( pEntry->pGroup->GetName() == rName )
@@ -390,7 +366,7 @@ void StdTabControllerModel::getGroupByName( const ::rtl::OUString& rName, ::com:
 void StdTabControllerModel::write( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& OutStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XMarkableStream >  xMark( OutStream, ::com::sun::star::uno::UNO_QUERY );
     DBG_ASSERT( xMark.is(), "write: no XMarkableStream!" );
 
@@ -414,7 +390,7 @@ void StdTabControllerModel::write( const ::com::sun::star::uno::Reference< ::com
 void StdTabControllerModel::read( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& InStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > > aSeq = ImplReadControls( InStream );
     setControlModels( aSeq );
 

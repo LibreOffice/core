@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ void AcceleratorConfigurationWriter::flush()
     css::uno::Reference< css::xml::sax::XDocumentHandler >         xCFG        = m_xConfig;
     css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > xExtendedCFG(m_xConfig, css::uno::UNO_QUERY_THROW);
 
-    aReadLock.unlock();
+    aReadLock.unlock();    
     // <- SAFE ----------------------------------
 
     // prepare attribute list
@@ -107,7 +107,7 @@ void AcceleratorConfigurationWriter::flush()
         const css::awt::KeyEvent& rKey     = *pKey;
         const ::rtl::OUString&    rCommand = m_rContainer.getCommandByKey(rKey);
         impl_ts_writeKeyCommandPair(rKey, rCommand, xCFG);
-    }
+    }         
 
     /* TODO write key-command list
     std::vector< SfxAcceleratorConfigItem>::const_iterator p;
@@ -136,16 +136,16 @@ void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt:
     pAttribs->AddAttribute(AL_ATTRIBUTE_URL    , ATTRIBUTE_TYPE_CDATA, sCommand);
 
     if ((aKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT)
-        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_SHIFT, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")));
+        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_SHIFT, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString::createFromAscii("true"));
 
     if ((aKey.Modifiers & css::awt::KeyModifier::MOD1) == css::awt::KeyModifier::MOD1)
-        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD1, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")));
+        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD1, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString::createFromAscii("true"));
 
     if ((aKey.Modifiers & css::awt::KeyModifier::MOD2) == css::awt::KeyModifier::MOD2)
-        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD2, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")));
+        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD2, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString::createFromAscii("true"));
 
     if ((aKey.Modifiers & css::awt::KeyModifier::MOD3) == css::awt::KeyModifier::MOD3)
-        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD3, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")));
+        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD3, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString::createFromAscii("true"));
 
     xConfig->ignorableWhitespace(::rtl::OUString());
     xConfig->startElement(AL_ELEMENT_ITEM, xAttribs);

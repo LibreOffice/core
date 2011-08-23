@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,32 +33,32 @@ class SwLabPage : public SfxTabPage
 {
     SwNewDBMgr*   pNewDBMgr;
     String        sActDBName;
-    SwLabItem     aItem;
+    SwLabItem	  aItem;
 
-    FixedLine     aWritingFL;
-    FixedText     aWritingText;
-    CheckBox      aAddrBox;
+    FixedText	  aWritingText;
+    CheckBox	  aAddrBox;
     MultiLineEdit aWritingEdit;
-    FixedText     aDatabaseFT;
-    ListBox       aDatabaseLB;
-    FixedText     aTableFT;
-    ListBox       aTableLB;
+    FixedText	  aDatabaseFT;
+    ListBox 	  aDatabaseLB;
+    FixedText	  aTableFT;
+    ListBox 	  aTableLB;
     ImageButton   aInsertBT;
-    FixedText     aDBFieldFT;
-    ListBox       aDBFieldLB;
-//  PushButton    aDatabaseButton;
+    FixedText	  aDBFieldFT;
+    ListBox 	  aDBFieldLB;
+//	PushButton	  aDatabaseButton;
+    FixedLine     aWritingFL;
 
-    FixedLine     aFormatFL;
     RadioButton   aContButton;
     RadioButton   aSheetButton;
-    FixedText     aMakeText;
-    ListBox       aMakeBox;
-    FixedText     aTypeText;
-    ListBox       aTypeBox;
+    FixedText	  aMakeText;
+    ListBox 	  aMakeBox;
+    FixedText	  aTypeText;
+    ListBox 	  aTypeBox;
     ListBox       aHiddenSortTypeBox;
     FixedInfo     aFormatInfo;
+    FixedLine     aFormatFL;
 
-    sal_Bool        m_bLabel;
+    sal_Bool		m_bLabel;
 
      SwLabPage(Window* pParent, const SfxItemSet& rSet);
     ~SwLabPage();
@@ -71,7 +71,7 @@ class SwLabPage : public SfxTabPage
     DECL_LINK( MakeHdl, ListBox * );
     DECL_LINK( TypeHdl, ListBox * );
 
-    void DisplayFormat  ();
+    void DisplayFormat	();
     SwLabRec* GetSelectedEntryPos();
 
     using TabPage::ActivatePage;
@@ -90,42 +90,46 @@ public:
 
     SwLabDlg* GetParent() {return (SwLabDlg*) SfxTabPage::GetParent()->GetParent();}
 
-    void    SetToBusinessCard();
+    void 	SetToBusinessCard();
 
     void InitDatabaseBox();
     inline void SetNewDBMgr(SwNewDBMgr* pDBMgr) { pNewDBMgr = pDBMgr; }
     inline SwNewDBMgr* GetNewDBMgr() const { return pNewDBMgr; }
 };
 
+/* -----------------08.07.99 13:48-------------------
+
+ --------------------------------------------------*/
 class SwOneExampleFrame;
 class SwVisitingCardPage : public SfxTabPage
 {
+    SvTreeListBox 	aAutoTextLB;
+    FixedText 		aAutoTextGroupFT;
+    ListBox			aAutoTextGroupLB;
+
     FixedLine       aContentFL;
-    SvTreeListBox   aAutoTextLB;
-    FixedText       aAutoTextGroupFT;
-    ListBox         aAutoTextGroupLB;
 
-    Window          aExampleWIN;
+    Window 			aExampleWIN;
 
-    String          sVisCardGroup;
-    String          sTempURL;
+    String			sVisCardGroup;
+    String			sTempURL;
 
-    SwLabItem       aLabItem;
+    SwLabItem	  	aLabItem;
 
-    SwOneExampleFrame*  pExampleFrame;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    _xAutoText;
+    SwOneExampleFrame*	pExampleFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  	_xAutoText;
 
 
     DECL_LINK( AutoTextSelectHdl, void* );
     DECL_LINK( FrameControlInitializedHdl, void* );
 
-    void            InitFrameControl();
-    void            UpdateFields();
+    void			InitFrameControl();
+    void			UpdateFields();
 
-    void            ClearUserData();
-
+    void			ClearUserData();
+    
     using SfxTabPage::SetUserData;
-    void            SetUserData( sal_uInt32 nCnt,
+    void			SetUserData( sal_uInt32 nCnt,
                                     const rtl::OUString* pNames,
                                     const rtl::OUString* pValues );
 
@@ -144,40 +148,42 @@ public:
     virtual sal_Bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 };
+/* -----------------29.09.99 08:51-------------------
 
+ --------------------------------------------------*/
 class SwPrivateDataPage : public SfxTabPage
 {
     FixedLine       aDataFL;
 
-    FixedText       aNameFT;
-    Edit            aFirstNameED;
-    Edit            aNameED;
-    Edit            aShortCutED;
+    FixedText		aNameFT;
+    Edit			aFirstNameED;
+    Edit			aNameED;
+    Edit			aShortCutED;
 
-    FixedText       aName2FT;
-    Edit            aFirstName2ED;
-    Edit            aName2ED;
-    Edit            aShortCut2ED;
+    FixedText		aName2FT;
+    Edit			aFirstName2ED;
+    Edit			aName2ED;
+    Edit			aShortCut2ED;
 
-    FixedText       aStreetFT;
-    Edit            aStreetED;
-    FixedText       aZipCityFT;
-    Edit            aZipED;
-    Edit            aCityED;
-    FixedText       aCountryStateFT;
-    Edit            aCountryED;
-    Edit            aStateED;
-    FixedText       aTitleProfessionFT;
-    Edit            aTitleED;
-    Edit            aProfessionED;
-    FixedText       aPhoneFT;
-    Edit            aPhoneED;
-    Edit            aMobilePhoneED;
-    FixedText       aFaxFT;
-    Edit            aFaxED;
-    FixedText       aWWWMailFT;
-    Edit            aHomePageED;
-    Edit            aMailED;
+    FixedText		aStreetFT;
+    Edit			aStreetED;
+    FixedText		aZipCityFT;
+    Edit			aZipED;
+    Edit			aCityED;
+    FixedText		aCountryStateFT;
+    Edit			aCountryED;
+    Edit			aStateED;
+    FixedText		aTitleProfessionFT;
+    Edit			aTitleED;
+    Edit			aProfessionED;
+    FixedText		aPhoneFT;
+    Edit			aPhoneED;
+    Edit 			aMobilePhoneED;
+    FixedText		aFaxFT;
+    Edit			aFaxED;
+    FixedText		aWWWMailFT;
+    Edit			aHomePageED;
+    Edit			aMailED;
 
     SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet);
     ~SwPrivateDataPage();
@@ -194,38 +200,40 @@ public:
     virtual sal_Bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 };
+/* -----------------29.09.99 08:51-------------------
 
+ --------------------------------------------------*/
 class SwBusinessDataPage : public SfxTabPage
 {
     FixedLine       aDataFL;
-    FixedText       aCompanyFT;
-    Edit            aCompanyED;
-    FixedText       aCompanyExtFT;
-    Edit            aCompanyExtED;
-    FixedText       aSloganFT;
-    Edit            aSloganED;
+    FixedText		aCompanyFT;
+    Edit			aCompanyED;
+    FixedText		aCompanyExtFT;
+    Edit			aCompanyExtED;
+    FixedText		aSloganFT;
+    Edit			aSloganED;
 
-    FixedText       aStreetFT;
-    Edit            aStreetED;
-    FixedText       aZipCityFT;
-    Edit            aZipED;
-    Edit            aCityED;
-    FixedText       aCountryStateFT;
-    Edit            aCountryED;
-    Edit            aStateED;
+    FixedText		aStreetFT;
+    Edit			aStreetED;
+    FixedText		aZipCityFT;
+    Edit			aZipED;
+    Edit			aCityED;
+    FixedText		aCountryStateFT;
+    Edit			aCountryED;
+    Edit			aStateED;
 
-    FixedText       aPositionFT;
-    Edit            aPositionED;
+    FixedText		aPositionFT;
+    Edit			aPositionED;
 
-    FixedText       aPhoneFT;
-    Edit            aPhoneED;
-    Edit            aMobilePhoneED;
-    FixedText       aFaxFT;
-    Edit            aFaxED;
+    FixedText		aPhoneFT;
+    Edit			aPhoneED;
+    Edit 			aMobilePhoneED;
+    FixedText		aFaxFT;
+    Edit			aFaxED;
 
-    FixedText       aWWWMailFT;
-    Edit            aHomePageED;
-    Edit            aMailED;
+    FixedText		aWWWMailFT;
+    Edit			aHomePageED;
+    Edit			aMailED;
 
     SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet);
     ~SwBusinessDataPage();

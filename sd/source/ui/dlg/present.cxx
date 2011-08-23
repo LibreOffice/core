@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,12 +64,12 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
                 aLbDias                 ( this, SdResId( LB_DIAS ) ),
                 aLbCustomshow           ( this, SdResId( LB_CUSTOMSHOW ) ),
 
-                aGrpKind                ( this, SdResId( GRP_KIND ) ),
-                aRbtStandard            ( this, SdResId( RBT_STANDARD ) ),
-                aRbtWindow              ( this, SdResId( RBT_WINDOW ) ),
-                aRbtAuto                ( this, SdResId( RBT_AUTO ) ),
-                aTmfPause               ( this, SdResId( TMF_PAUSE ) ),
-                aCbxAutoLogo            ( this, SdResId( CBX_AUTOLOGO ) ),
+                aGrpKind				( this, SdResId( GRP_KIND ) ),
+                aRbtStandard			( this, SdResId( RBT_STANDARD ) ),
+                aRbtWindow				( this, SdResId( RBT_WINDOW ) ),
+                aRbtAuto				( this, SdResId( RBT_AUTO ) ),
+                aTmfPause				( this, SdResId( TMF_PAUSE ) ),
+                aCbxAutoLogo			( this, SdResId( CBX_AUTOLOGO ) ),
 
                 aGrpOptions             ( this, SdResId( GRP_OPTIONS ) ),
                 aCbxManuel              ( this, SdResId( CBX_MANUEL ) ),
@@ -80,17 +80,17 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
                 aCbxChangePage          ( this, SdResId( CBX_CHANGE_PAGE ) ),
                 aCbxAlwaysOnTop         ( this, SdResId( CBX_ALWAYS_ON_TOP ) ),
 
-                maGrpMonitor            ( this, SdResId( GRP_MONITOR ) ),
-                maFtMonitor             ( this, SdResId( FT_MONITOR ) ),
-                maLBMonitor             ( this, SdResId( LB_MONITOR ) ),
+                maGrpMonitor			( this, SdResId( GRP_MONITOR ) ),
+                maFtMonitor				( this, SdResId( FT_MONITOR ) ),
+                maLBMonitor				( this, SdResId( LB_MONITOR ) ),
 
                 aBtnOK                  ( this, SdResId( BTN_OK ) ),
                 aBtnCancel              ( this, SdResId( BTN_CANCEL ) ),
                 aBtnHelp                ( this, SdResId( BTN_HELP ) ),
 
-                pCustomShowList         ( pCSList ),
+                pCustomShowList			( pCSList ),
                 rOutAttrs               ( rInAttrs ),
-                mnMonitors              ( 0 ),
+                mnMonitors				( 0 ),
 
                 msPrimaryMonitor( SdResId(STR_PRIMARY_MONITOR ) ),
                 msMonitor( SdResId( STR_MONITOR ) ),
@@ -112,15 +112,9 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aTmfPause.SetModifyHdl( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
     aTmfPause.SetFormat( TIMEF_SEC );
 
-    aLbDias.SetAccessibleRelationLabeledBy( &aRbtAtDia );
-    aLbDias.SetAccessibleName(aRbtAtDia.GetText());
-    aLbCustomshow.SetAccessibleRelationLabeledBy( &aRbtCustomshow );
-    aTmfPause.SetAccessibleRelationLabeledBy( &aRbtAuto );
-    aTmfPause.SetAccessibleName(aRbtAuto.GetText());
-
     // Listbox mit Seitennamen fuellen
     rPageNames.First();
-    for( sal_uInt16 i = 0;
+    for( UINT16 i = 0;
          i < rPageNames.Count();
          i++ )
     {
@@ -130,7 +124,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
 
     if( pCustomShowList )
     {
-        sal_uInt16 nPosToSelect = (sal_uInt16) pCustomShowList->GetCurPos();
+        USHORT nPosToSelect = (USHORT) pCustomShowList->GetCurPos();
         SdCustomShow* pCustomShow;
         // Listbox mit CustomShows fuellen
         for( pCustomShow = (SdCustomShow*) pCustomShowList->First();
@@ -161,9 +155,9 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aCbxChangePage.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_CHANGE_PAGE ) ).GetValue() );
     aCbxAlwaysOnTop.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ALWAYS_ON_TOP ) ).GetValue() );
 
-    const sal_Bool  bEndless = ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ENDLESS ) ).GetValue();
-    const sal_Bool  bWindow = !( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_FULLSCREEN ) ).GetValue();
-    const long  nPause = ( ( const SfxUInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_PAUSE_TIMEOUT ) ).GetValue();
+    const BOOL	bEndless = ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ENDLESS ) ).GetValue();
+    const BOOL	bWindow = !( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_FULLSCREEN ) ).GetValue();
+    const long	nPause = ( ( const SfxUInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_PAUSE_TIMEOUT ) ).GetValue();
 
     aTmfPause.SetTime( Time( 0, 0, nPause ) );
     // set cursor in timefield
@@ -174,11 +168,11 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aCbxAutoLogo.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_SHOW_PAUSELOGO ) ).GetValue() );
 
     if( bWindow )
-        aRbtWindow.Check( sal_True );
+        aRbtWindow.Check( TRUE );
     else if( bEndless )
-        aRbtAuto.Check( sal_True );
+        aRbtAuto.Check( TRUE );
     else
-        aRbtStandard.Check( sal_True );
+        aRbtStandard.Check( TRUE );
 
     InitMonitorSettings();
 
@@ -230,7 +224,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
                 maLBMonitor.InsertEntry( aName );
             }
 
-            if( !bMultiscreen )
+            if( !bMultiscreen )		
                 maLBMonitor.InsertEntry( msAllMonitors );
 
             sal_Int32 nSelected = ( ( const SfxInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_DISPLAY ) ).GetValue();
@@ -239,7 +233,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
             else
                 nSelected--;
 
-            maLBMonitor.SelectEntryPos( (sal_uInt16)nSelected );
+            maLBMonitor.SelectEntryPos( (USHORT)nSelected );
         }
     }
     catch( Exception& )
@@ -267,7 +261,7 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
     rAttr.Put( SfxUInt32Item ( ATTR_PRESENT_PAUSE_TIMEOUT, aTmfPause.GetTime().GetMSFromTime() / 1000 ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_SHOW_PAUSELOGO, aCbxAutoLogo.IsChecked() ) );
 
-    sal_uInt16 nPos = maLBMonitor.GetSelectEntryPos();
+    USHORT nPos = maLBMonitor.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
         rAttr.Put( SfxInt32Item ( ATTR_PRESENT_DISPLAY, nPos + 1 ) );
 
@@ -305,8 +299,8 @@ IMPL_LINK( SdStartPresentationDlg, ClickWindowPresentationHdl, void *, EMPTYARG 
 
     if( bWindow )
     {
-        aCbxAlwaysOnTop.Enable( sal_False );
-        aCbxAlwaysOnTop.Check( sal_False );
+        aCbxAlwaysOnTop.Enable( FALSE );
+        aCbxAlwaysOnTop.Check( FALSE );
     }
     else
         aCbxAlwaysOnTop.Enable();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,6 +55,7 @@ SfxTabPage::SfxTabPage (::Window *parent, char const* xml_file, char const* id, 
 
 void SfxTabPage::FreeResource ()
 {
+    //::Window::FreeResource ();
 }
 
 Size SfxTabPage::GetOptimalSize (WindowSizeType) const

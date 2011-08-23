@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ public:
     */
     virtual void ArrangeGUIElements (void);
 
-    virtual sal_uInt16 PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
+    virtual USHORT PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
 
     virtual long VirtHScrollHdl(ScrollBar* pHScroll);
     virtual long VirtVScrollHdl(ScrollBar* pVHScroll);
@@ -89,13 +89,17 @@ public:
     virtual void AddWindow(::sd::Window* pWin);
     virtual void RemoveWindow(::sd::Window* pWin);
 
-    virtual void Activate( sal_Bool IsMDIActivate );
-    virtual void Deactivate( sal_Bool IsMDIActivate );
+    virtual void Activate( BOOL IsMDIActivate );
+    virtual void Deactivate( BOOL IsMDIActivate );
 
-    virtual SdPage* GetActualPage();
+    virtual SdPage*	GetActualPage();
 
     /// inherited from sd::ViewShell
-    virtual SdPage* getCurrentPage() const;
+    virtual SdPage* getCurrentPage() const; 
+    
+    /** Return a string that describes the currently selected pages.
+    */
+    String GetPageRangeString (void);
 
     void ExecCtrl(SfxRequest &rReq);
     void GetCtrlState(SfxItemSet &rSet);
@@ -113,8 +117,8 @@ public:
 
     virtual void SetZoom(long nZoom);
     virtual void SetZoomRect(const Rectangle& rZoomRect);
-    virtual String  GetSelectionText( sal_Bool bCompleteWords = sal_False );
-    virtual sal_Bool    HasSelection( sal_Bool bText = sal_True ) const;
+    virtual String	GetSelectionText( BOOL bCompleteWords = FALSE );
+    virtual BOOL    HasSelection( BOOL bText = TRUE ) const;
 
     void Execute(SfxRequest& rReq);
 
@@ -122,10 +126,10 @@ public:
     virtual void WriteFrameViewData();
 
     virtual void Command( const CommandEvent& rCEvt, ::sd::Window* pWin );
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
 
-    sal_uLong   Read(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
+    ULONG   Read(SvStream& rInput, const String& rBaseURL, USHORT eFormat);
 
     virtual void WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
@@ -146,7 +150,7 @@ public:
 
     /** Update the preview to show the specified page.
     */
-    virtual void UpdatePreview (SdPage* pPage, sal_Bool bInit = sal_False);
+    virtual void UpdatePreview (SdPage* pPage, BOOL bInit = FALSE);
 
     virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void);
 
@@ -166,9 +170,9 @@ protected:
 
 private:
     OutlineView* pOlView;
-    SdPage*         pLastPage; // Zur performanten Aufbereitung der Preview
+    SdPage*			pLastPage; // Zur performanten Aufbereitung der Preview
     TransferableClipboardListener* pClipEvtLstnr;
-    sal_Bool            bPastePossible;
+    BOOL			bPastePossible;
     bool mbInitialized;
 
     void Construct (DrawDocShell* pDocSh);

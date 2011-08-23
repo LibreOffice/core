@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,57 +49,57 @@ class SVX_DLLPUBLIC SvxHFPage: public SfxTabPage
 
 public:
 
-    virtual sal_Bool    FillItemSet( SfxItemSet& rOutSet );
-    virtual void    Reset( const SfxItemSet& rSet );
+    virtual BOOL 	FillItemSet( SfxItemSet& rOutSet );
+    virtual void	Reset( const SfxItemSet& rSet );
 
-    virtual         ~SvxHFPage();
+    virtual 		~SvxHFPage();
 
-    void            DisableDeleteQueryBox() { bDisableQueryBox = sal_True; }
-    void            EnableBackgroundSelector( sal_Bool bNew ) { bEnableBackgroundSelector = bNew; }
+    void			DisableDeleteQueryBox() { bDisableQueryBox = TRUE; }
+    void			EnableBackgroundSelector( BOOL bNew ) { bEnableBackgroundSelector = bNew; }
     void            EnableDynamicSpacing();
 
 protected:
-    virtual void    ActivatePage( const SfxItemSet& rSet );
-    virtual int     DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void	ActivatePage( const SfxItemSet& rSet );
+    virtual int		DeactivatePage( SfxItemSet* pSet = 0 );
 
-    SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rSet,
-               sal_uInt16 nSetId );
+    SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rSet,
+               USHORT nSetId );
 
-    FixedLine       aFrm;
     CheckBox        aTurnOnBox;
     CheckBox        aCntSharedBox;
     FixedText       aLMLbl;
     MetricField     aLMEdit;
     FixedText       aRMLbl;
     MetricField     aRMEdit;
-    FixedText       aDistFT;
+    FixedText		aDistFT;
     MetricField     aDistEdit;
     CheckBox        aDynSpacingCB;
-    FixedText       aHeightFT;
+    FixedText		aHeightFT;
     MetricField     aHeightEdit;
-    CheckBox        aHeightDynBtn;
-    SvxPageWindow   aBspWin;
-    PushButton      aBackgroundBtn;
+    CheckBox     	aHeightDynBtn;
+    FixedLine       aFrm;
+    SvxPageWindow	aBspWin;
+    PushButton		aBackgroundBtn;
 
-    sal_uInt16          nId;
-    SfxItemSet*     pBBSet;
-    sal_Bool            bDisableQueryBox;
-    sal_Bool            bEnableBackgroundSelector;
+    USHORT			nId;
+    SfxItemSet*		pBBSet;
+    BOOL			bDisableQueryBox;
+    BOOL			bEnableBackgroundSelector;
     bool            bInReset;
 
-    void            InitHandler();
+    void 			InitHandler();
     DECL_LINK( TurnOnHdl, CheckBox*);
     DECL_LINK( DistModify, MetricField*);
     DECL_LINK( HeightModify, MetricField*);
     DECL_LINK( BorderModify, MetricField*);
     DECL_LINK( BackgroundHdl, Button*);
 
-    void            UpdateExample();
+    void			UpdateExample();
     DECL_LINK( RangeHdl, Edit*);
 
 private:
 #ifdef _SVX_HDFT_CXX
-    SVX_DLLPRIVATE void         ResetBackground_Impl( const SfxItemSet& rSet );
+    SVX_DLLPRIVATE void			ResetBackground_Impl( const SfxItemSet& rSet );
 #endif
 };
 
@@ -108,8 +108,8 @@ private:
 class SVX_DLLPUBLIC SvxHeaderPage : public SvxHFPage
 {
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static SfxTabPage* 	Create(	Window* pParent, const SfxItemSet& rSet );
+    static USHORT*		GetRanges();
 
 private:
     SvxHeaderPage( Window* pParent, const SfxItemSet& rSet );
@@ -120,11 +120,11 @@ private:
 class SVX_DLLPUBLIC SvxFooterPage : public SvxHFPage
 {
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static SfxTabPage* 	Create(	Window* pParent, const SfxItemSet& rSet );
+    static USHORT*		GetRanges();
 
 private:
-    SVX_DLLPRIVATE SvxFooterPage(   Window* pParent, const SfxItemSet& rSet );
+    SVX_DLLPRIVATE SvxFooterPage( 	Window* pParent, const SfxItemSet& rSet );
 };
 
 #endif

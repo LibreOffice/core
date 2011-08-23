@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,11 @@ public:
                     JavaChildWindow( Window* pParent, const ResId& rResId );
                    ~JavaChildWindow();
 
-    sal_IntPtr      getParentWindowHandleForJava();
+    sal_IntPtr		getParentWindowHandleForJava();
 
 private:
+
+    SAL_DLLPRIVATE void implTestJavaException( void* pEnv );
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE      JavaChildWindow (const JavaChildWindow &);

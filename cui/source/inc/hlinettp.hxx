@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,36 +41,36 @@
 class SvxHyperlinkInternetTp : public SvxHyperlinkTabPageBase
 {
 private:
-    FixedLine           maGrpLinkTyp;
+    FixedLine			maGrpLinkTyp;
     RadioButton         maRbtLinktypInternet;
     RadioButton         maRbtLinktypFTP;
     RadioButton         maRbtLinktypTelnet;
     FixedText           maFtTarget;
-    SvxHyperURLBox      maCbbTarget;
-    ImageButton         maBtBrowse;
-    FixedText           maFtLogin;
-    Edit                maEdLogin;
-    ImageButton         maBtTarget;
-    FixedText           maFtPassword;
-    Edit                maEdPassword;
-    CheckBox            maCbAnonymous;
+    SvxHyperURLBox		maCbbTarget;
+    FixedText			maFtLogin;
+    Edit				maEdLogin;
+    FixedText			maFtPassword;
+    Edit				maEdPassword;
+    CheckBox			maCbAnonymous;
+    ImageButton			maBtBrowse;
+    ImageButton			maBtTarget;
 
-    String              maStrOldUser;
-    String              maStrOldPassword;
+    String				maStrOldUser;
+    String				maStrOldPassword;
 
-    sal_Bool                mbMarkWndOpen;
+    BOOL				mbMarkWndOpen;
 
-    String              maStrStdDocURL;
+    String				maStrStdDocURL;
 
-    DECL_LINK (Click_SmartProtocol_Impl  , void * );        // Radiobutton clicked: Type Internet, FTP or Telnet
-    DECL_LINK (ClickAnonymousHdl_Impl    , void * );        // Checkbox : Anonymer Benutzer
-    DECL_LINK (ClickBrowseHdl_Impl       , void * );        // Button : Browse
-    DECL_LINK (ClickTargetHdl_Impl       , void * );        // Button : Ziel
-    DECL_LINK (ModifiedLoginHdl_Impl     , void * );        // Contens of editfield "Login" modified
-    DECL_LINK (LostFocusTargetHdl_Impl   , void * );        // Combobox "Target" lost its focus
-    DECL_LINK (ModifiedTargetHdl_Impl    , void * );        // Contens of editfield "Target" modified
+    DECL_LINK (Click_SmartProtocol_Impl  , void * );	    // Radiobutton clicked: Type Internet, FTP or Telnet
+    DECL_LINK (ClickAnonymousHdl_Impl    , void * );		// Checkbox : Anonymer Benutzer
+    DECL_LINK (ClickBrowseHdl_Impl       , void * );		// Button : Browse
+    DECL_LINK (ClickTargetHdl_Impl       , void * );		// Button : Ziel
+    DECL_LINK (ModifiedLoginHdl_Impl     , void * );		// Contens of editfield "Login" modified
+    DECL_LINK (LostFocusTargetHdl_Impl   , void * );		// Combobox "Target" lost its focus
+    DECL_LINK (ModifiedTargetHdl_Impl    , void * );		// Contens of editfield "Target" modified
 
-    DECL_LINK (TimeoutHdl_Impl           , Timer * );       // Handler for timer -timeout
+    DECL_LINK (TimeoutHdl_Impl           , Timer * );		// Handler for timer -timeout
 
 
     void    SetScheme( const String& aScheme );
@@ -85,12 +85,12 @@ private:
     void   RefreshMarkWindow();
 
 protected:
-    virtual void FillDlgFields     ( String& aStrURL );
-    virtual void GetCurentItemData ( String& aStrURL, String& aStrName,
-                                     String& aStrIntName, String& aStrFrame,
+    virtual void FillDlgFields	   ( String& aStrURL );
+    virtual void GetCurentItemData ( String& aStrURL, String& aStrName, 
+                                     String& aStrIntName, String& aStrFrame, 
                                      SvxLinkInsertMode& eMode );
-    virtual sal_Bool ShouldOpenMarkWnd () {return ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() );}
-    virtual void SetMarkWndShouldOpen (sal_Bool bOpen) {mbMarkWndOpen=bOpen;}
+    virtual BOOL ShouldOpenMarkWnd () {return ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() );}
+    virtual void SetMarkWndShouldOpen (BOOL bOpen) {mbMarkWndOpen=bOpen;}
 
 public:
     SvxHyperlinkInternetTp ( Window *pParent, const SfxItemSet& rItemSet);
@@ -98,10 +98,10 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual void        SetMarkStr ( String& aStrMark );
-    virtual void        SetOnlineMode( sal_Bool bEnable );
+    virtual void		SetMarkStr ( String& aStrMark );
+    virtual void		SetOnlineMode( BOOL bEnable );
 
-    virtual void        SetInitFocus();
+    virtual void		SetInitFocus();
 };
 
 

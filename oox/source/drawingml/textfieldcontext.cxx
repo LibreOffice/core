@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,8 @@
 #include "oox/drawingml/textparagraphpropertiescontext.hxx"
 #include "oox/drawingml/textcharacterpropertiescontext.hxx"
 #include "oox/drawingml/textfield.hxx"
+#include "oox/core/namespaces.hxx"
+#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -51,7 +53,7 @@ TextFieldContext::TextFieldContext( ContextHandler& rParent,
 
 void TextFieldContext::endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException)
 {
-    if( aElementToken == (A_TOKEN( t )) )
+    if( aElementToken == (NMSP_DRAWINGML|XML_t) )
     {
         mbIsInText = false;
     }
@@ -71,13 +73,13 @@ Reference< XFastContextHandler > TextFieldContext::createFastChildContext( sal_I
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-    case A_TOKEN( rPr ):
+    case NMSP_DRAWINGML|XML_rPr:
         xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, mrTextField.getTextCharacterProperties() ) );
         break;
-    case A_TOKEN( pPr ):
+    case NMSP_DRAWINGML|XML_pPr:
         xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, mrTextField.getTextParagraphProperties() ) );
         break;
-    case A_TOKEN( t ):
+    case NMSP_DRAWINGML|XML_t:
         mbIsInText = true;
         break;
     }

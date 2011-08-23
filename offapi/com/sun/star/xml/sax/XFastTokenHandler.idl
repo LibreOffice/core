@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,10 @@ module com {  module sun {  module star {  module xml {  module sax {
 
 //============================================================================
 
-/** interface to translate XML strings to integer tokens.
+/** interface to translate xml strings to integer tokens.
 
     <p>An instance of this interface can be registered at a <type>XFastParser</type>.
-    It should be able to translate all XML names (element local names,
+    It should be able to translate all xml names (element local names,
     attribute local names and constant attribute values) to integer tokens.
 
     A token value must be greater or equal to zero and less than
@@ -51,7 +51,7 @@ interface XFastTokenHandler: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    /** returns a integer token for the given string identifier.
+    /**	returns a integer token for the given string identifier.
 
         @returns
             a unique integer token for the given String or <const>FastToken::DONTKNOW</const>
@@ -70,7 +70,7 @@ interface XFastTokenHandler: com::sun::star::uno::XInterface
     /** returns a integer token for the given string
 
         @param Identifier
-            the string given as a byte sequence encoded in UTF-8
+            the string given as a byte sequence encoded in UTF8
 
         @returns
             a unique integer token for the given String or <const>FastToken::DONTKNOW</const>
@@ -81,7 +81,7 @@ interface XFastTokenHandler: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** returns a identifier for the given integer token as a byte
-          sequence encoded in UTF-8.
+          sequence encoded in UTF8.
     */
     sequence< byte > getUTF8Identifier( [in] long Token );
 };

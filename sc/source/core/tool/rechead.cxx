@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,20 +47,20 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
 {
     sal_uInt32 nDataSize;
     rStream >> nDataSize;
-    sal_uLong nDataPos = rStream.Tell();
+    ULONG nDataPos = rStream.Tell();
     nTotalEnd = nDataPos + nDataSize;
     nEntryEnd = nTotalEnd;
 
     rStream.SeekRel(nDataSize);
-    sal_uInt16 nID;
+    USHORT nID;
     rStream >> nID;
     if (nID != SCID_SIZES)
     {
-        OSL_FAIL("SCID_SIZES nicht gefunden");
+        DBG_ERROR("SCID_SIZES nicht gefunden");
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
-        //  alles auf 0, damit BytesLeft() wenigstens abbricht
+        //	alles auf 0, damit BytesLeft() wenigstens abbricht
         pBuf = NULL; pMemStream = NULL;
         nEntryEnd = nDataPos;
     }
@@ -68,7 +68,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     {
         sal_uInt32 nSizeTableLen;
         rStream >> nSizeTableLen;
-        pBuf = new sal_uInt8[nSizeTableLen];
+        pBuf = new BYTE[nSizeTableLen];
         rStream.Read( pBuf, nSizeTableLen );
         pMemStream = new SvMemoryStream( (char*)pBuf, nSizeTableLen, STREAM_READ );
     }
@@ -93,21 +93,21 @@ ScMultipleReadHeader::~ScMultipleReadHeader()
 
 void ScMultipleReadHeader::EndEntry()
 {
-    sal_uLong nPos = rStream.Tell();
+    ULONG nPos = rStream.Tell();
     DBG_ASSERT( nPos <= nEntryEnd, "zuviel gelesen" );
     if ( nPos != nEntryEnd )
     {
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SCWARN_IMPORT_INFOLOST );
-        rStream.Seek( nEntryEnd );          // Rest ueberspringen
+        rStream.Seek( nEntryEnd );			// Rest ueberspringen
     }
 
-    nEntryEnd = nTotalEnd;          // den ganzen Rest, wenn kein StartEntry kommt
+    nEntryEnd = nTotalEnd;			// den ganzen Rest, wenn kein StartEntry kommt
 }
 
 void ScMultipleReadHeader::StartEntry()
 {
-    sal_uLong nPos = rStream.Tell();
+    ULONG nPos = rStream.Tell();
     sal_uInt32 nEntrySize;
     (*pMemStream) >> nEntrySize;
 
@@ -115,13 +115,13 @@ void ScMultipleReadHeader::StartEntry()
     DBG_ASSERT( nEntryEnd <= nTotalEnd, "zuviele Eintraege gelesen" );
 }
 
-sal_uLong ScMultipleReadHeader::BytesLeft() const
+ULONG ScMultipleReadHeader::BytesLeft() const
 {
-    sal_uLong nReadEnd = rStream.Tell();
+    ULONG nReadEnd = rStream.Tell();
     if (nReadEnd <= nEntryEnd)
         return nEntryEnd-nReadEnd;
 
-    OSL_FAIL("Fehler bei ScMultipleReadHeader::BytesLeft");
+    DBG_ERROR("Fehler bei ScMultipleReadHeader::BytesLeft");
     return 0;
 }
 
@@ -140,31 +140,31 @@ ScMultipleWriteHeader::ScMultipleWriteHeader(SvStream& rNewStream, sal_uInt32 nD
 
 ScMultipleWriteHeader::~ScMultipleWriteHeader()
 {
-    sal_uLong nDataEnd = rStream.Tell();
+    ULONG nDataEnd = rStream.Tell();
 
-    rStream << (sal_uInt16) SCID_SIZES;
+    rStream << (USHORT) SCID_SIZES;
     rStream << static_cast<sal_uInt32>(aMemStream.Tell());
     rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
 
-    if ( nDataEnd - nDataPos != nDataSize )                 // Default getroffen?
+    if ( nDataEnd - nDataPos != nDataSize )					// Default getroffen?
     {
         nDataSize = nDataEnd - nDataPos;
-        sal_uLong nPos = rStream.Tell();
+        ULONG nPos = rStream.Tell();
         rStream.Seek(nDataPos-sizeof(sal_uInt32));
-        rStream << nDataSize;                               // Groesse am Anfang eintragen
+        rStream << nDataSize;								// Groesse am Anfang eintragen
         rStream.Seek(nPos);
     }
 }
 
 void ScMultipleWriteHeader::EndEntry()
 {
-    sal_uLong nPos = rStream.Tell();
+    ULONG nPos = rStream.Tell();
     aMemStream << static_cast<sal_uInt32>(nPos - nEntryStart);
 }
 
 void ScMultipleWriteHeader::StartEntry()
 {
-    sal_uLong nPos = rStream.Tell();
+    ULONG nPos = rStream.Tell();
     nEntryStart = nPos;
 }
 

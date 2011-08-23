@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,39 +54,39 @@
 class ScViewData;
 class ScDocument;
 
-#define FLT_DATE_BEFORE     0
-#define FLT_DATE_SINCE      1
-#define FLT_DATE_EQUAL      2
-#define FLT_DATE_NOTEQUAL   3
-#define FLT_DATE_BETWEEN    4
-#define FLT_DATE_SAVE       5
+#define FLT_DATE_BEFORE		0
+#define FLT_DATE_SINCE		1
+#define FLT_DATE_EQUAL		2
+#define FLT_DATE_NOTEQUAL	3
+#define FLT_DATE_BETWEEN	4
+#define FLT_DATE_SAVE		5
 
 
 class ScViewEntryPtr
 {
 private:
-    String*         pAction;
-    String*         pPos;
-    String*         pAuthor;
-    String*         pDate;
-    String*         pComment;
-    void*           pData;
+    String*			pAction;
+    String*			pPos;
+    String*			pAuthor;
+    String*			pDate;
+    String*			pComment;
+    void*			pData;
 
 public:
 
-    String*         GetpAction()    {return pAction; }
-    String*         GetpPos()       {return pPos;    }
-    String*         GetpAuthor()    {return pAuthor; }
-    String*         GetpDate()      {return pDate;   }
-    String*         GetpComment()   {return pComment;}
-    void*           GetpData()      {return pData;   }
+    String*			GetpAction()	{return pAction; }
+    String*			GetpPos()		{return pPos;    }
+    String*			GetpAuthor()	{return	pAuthor; }
+    String*			GetpDate()		{return	pDate;   }
+    String*			GetpComment()	{return	pComment;}
+    void*			GetpData()		{return pData;	 }
 
-    void        SetpAction (String* pString)    {pAction= pString;}
-    void        SetpPos    (String* pString)    {pPos   = pString;}
-    void        SetpAuthor (String* pString)    {pAuthor= pString;}
-    void        SetpDate   (String* pString)    {pDate  = pString;}
-    void        SetpComment(String* pString)    {pComment=pString;}
-    void        SetpData   (void*   pdata)      {pData   =pdata;}
+    void		SetpAction (String* pString)	{pAction= pString;}
+    void		SetpPos    (String* pString)	{pPos	= pString;}
+    void		SetpAuthor (String* pString)	{pAuthor= pString;}
+    void		SetpDate   (String* pString)	{pDate	= pString;}
+    void		SetpComment(String* pString)	{pComment=pString;}
+    void		SetpData   (void*   pdata)		{pData	 =pdata;}
 };
 
 class ScViewEntryPtrList
@@ -94,7 +94,7 @@ class ScViewEntryPtrList
     ScViewEntryPtrList* pNext;
     ScViewEntryPtrList* pLast;
 
-    ScViewEntryPtr* pData;
+    ScViewEntryPtr*	pData;
 };
 
 
@@ -104,16 +104,16 @@ public:
 
                     ScRedlinData();
                     ~ScRedlinData();
-    SCTAB           nTable;
-    SCCOL           nCol;
-    SCROW           nRow;
-    sal_uLong           nActionNo;
-    sal_uLong           nInfo;
-    sal_Bool            bIsRejectable;
-    sal_Bool            bIsAcceptable;
+    SCTAB			nTable;
+    SCCOL			nCol;
+    SCROW			nRow;
+    ULONG			nActionNo;
+    ULONG			nInfo;
+    BOOL			bIsRejectable;
+    BOOL			bIsAcceptable;
 };
 
-typedef long LExpNum;
+typedef	long LExpNum;
 
 //@ Expand-Entrys nicht eindeutig, daher gestrichen
 //DECLARE_TABLE( ScChgTrackExps, LExpNum)
@@ -123,49 +123,49 @@ class ScAcceptChgDlg : public SfxModelessDialog
 {
 private:
 
-    Timer                   aSelectionTimer;
-    Timer                   aReOpenTimer;
-    SvxAcceptChgCtr         aAcceptChgCtr;
-    ScViewData*             pViewData;
-    ScDocument*             pDoc;
-    ScRangeName             aLocalRangeName;
-    Selection               theCurSel;
-    SvxTPFilter*            pTPFilter;
-    SvxTPView*              pTPView;
-    SvxRedlinTable*         pTheView; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
-    Size                    MinSize;
-    ScRangeList             aRangeList;
-    ScChangeViewSettings    aChangeViewSet;
-    String                  aStrInsertCols;
-    String                  aStrInsertRows;
-    String                  aStrInsertTabs;
-    String                  aStrDeleteCols;
-    String                  aStrDeleteRows;
-    String                  aStrDeleteTabs;
-    String                  aStrMove;
-    String                  aStrContent;
-    String                  aStrReject;
-    String                  aUnknown;
-    String                  aStrAllAccepted;
-    String                  aStrAllRejected;
-    String                  aStrNoEntry;
-    String                  aStrContentWithChild;
-    String                  aStrChildContent;
-    String                  aStrChildOrgContent;
-    String                  aStrEmpty;
-    sal_uLong                   nAcceptCount;
-    sal_uLong                   nRejectCount;
-    sal_Bool                    bAcceptEnableFlag;
-    sal_Bool                    bRejectEnableFlag;
-    sal_Bool                    bNeedsUpdate;
-    sal_Bool                    bIgnoreMsg;
-    sal_Bool                    bNoSelection;
-    sal_Bool                    bHasFilterEntry;
-    sal_Bool                    bUseColor;
-    //ScChgTrackExps            aExpandArray;
+    Timer					aSelectionTimer;
+    Timer					aReOpenTimer;
+    SvxAcceptChgCtr 		aAcceptChgCtr;
+    ScViewData*				pViewData;
+    ScDocument*				pDoc;
+    ScRangeName				aLocalRangeName;
+    Selection				theCurSel;
+    SvxTPFilter*			pTPFilter;
+    SvxTPView*				pTPView;
+    SvxRedlinTable*			pTheView; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    Size					MinSize;
+    ScRangeList				aRangeList;
+    ScChangeViewSettings	aChangeViewSet;
+    String					aStrInsertCols;
+    String					aStrInsertRows;
+    String					aStrInsertTabs;
+    String					aStrDeleteCols;
+    String					aStrDeleteRows;
+    String					aStrDeleteTabs;
+    String					aStrMove;
+    String					aStrContent;
+    String					aStrReject;
+    String					aUnknown;
+    String					aStrAllAccepted;
+    String					aStrAllRejected;
+    String					aStrNoEntry;
+    String					aStrContentWithChild;
+    String					aStrChildContent;
+    String					aStrChildOrgContent;
+    String					aStrEmpty;
+    ULONG					nAcceptCount;
+    ULONG					nRejectCount;
+    BOOL					bAcceptEnableFlag;
+    BOOL					bRejectEnableFlag;
+    BOOL					bNeedsUpdate;
+    BOOL					bIgnoreMsg;
+    BOOL					bNoSelection;
+    BOOL					bHasFilterEntry;
+    BOOL					bUseColor;
+    //ScChgTrackExps			aExpandArray;
 
-    void            Init();
-    void            InitFilter();
+    void			Init();
+    void			InitFilter();
 
     DECL_LINK( FilterHandle, SvxTPFilter* );
     DECL_LINK( RefHandle, SvxTPFilter* );
@@ -189,64 +189,64 @@ private:
 
 protected:
 
-    virtual void    Resize();
-    virtual sal_Bool    Close();
+    virtual void	Resize();
+    virtual BOOL	Close();
 
-    void            RejectFiltered();
-    void            AcceptFiltered();
+    void			RejectFiltered();
+    void			AcceptFiltered();
 
-    sal_Bool            IsValidAction(const ScChangeAction* pScChangeAction);
+    BOOL			IsValidAction(const ScChangeAction* pScChangeAction);
 
-    String*         MakeTypeString(ScChangeActionType eType);
+    String*			MakeTypeString(ScChangeActionType eType);
 
-    SvLBoxEntry*    InsertChangeAction(const ScChangeAction* pScChangeAction,ScChangeActionState eState,
-                                    SvLBoxEntry* pParent=NULL,sal_Bool bDelMaster=false,
-                                    sal_Bool bDisabled=false,sal_uLong nPos=LIST_APPEND);
+    SvLBoxEntry*	InsertChangeAction(const ScChangeAction* pScChangeAction,ScChangeActionState eState,
+                                    SvLBoxEntry* pParent=NULL,BOOL bDelMaster=FALSE,
+                                    BOOL bDisabled=FALSE,ULONG nPos=LIST_APPEND);
 
-    SvLBoxEntry*    InsertFilteredAction(const ScChangeAction* pScChangeAction,ScChangeActionState eState,
-                                    SvLBoxEntry* pParent=NULL,sal_Bool bDelMaster=false,
-                                    sal_Bool bDisabled=false,sal_uLong nPos=LIST_APPEND);
+    SvLBoxEntry*	InsertFilteredAction(const ScChangeAction* pScChangeAction,ScChangeActionState eState,
+                                    SvLBoxEntry* pParent=NULL,BOOL bDelMaster=FALSE,
+                                    BOOL bDisabled=FALSE,ULONG nPos=LIST_APPEND);
 
 
-    SvLBoxEntry*    InsertChangeActionContent(const ScChangeActionContent* pScChangeAction,
-                                              SvLBoxEntry* pParent,sal_uLong nSpecial);
+    SvLBoxEntry*	InsertChangeActionContent(const ScChangeActionContent* pScChangeAction,
+                                              SvLBoxEntry* pParent,ULONG nSpecial);
 
-    void            GetDependents( const ScChangeAction* pScChangeAction,
+    void			GetDependents( const ScChangeAction* pScChangeAction,
                                 ScChangeActionTable& aActionTable,
                                 SvLBoxEntry* pEntry);
 
-    sal_Bool            InsertContentChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
+    BOOL			InsertContentChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
 
-    sal_Bool            InsertAcceptedORejected(SvLBoxEntry* pParent);
+    BOOL			InsertAcceptedORejected(SvLBoxEntry* pParent);
 
-    sal_Bool            InsertDeletedChilds(const ScChangeAction *pChangeAction, ScChangeActionTable* pActionTable,
+    BOOL			InsertDeletedChilds(const ScChangeAction *pChangeAction, ScChangeActionTable* pActionTable,
                                         SvLBoxEntry* pParent);
 
-    sal_Bool            InsertChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
+    BOOL			InsertChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
 
-    void            AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction, sal_uLong nEndAction,
-                                    sal_uLong nPos=LIST_APPEND);
+    void			AppendChanges(ScChangeTrack* pChanges,ULONG nStartAction, ULONG nEndAction,
+                                    ULONG nPos=LIST_APPEND);
 
-    void            RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction);
-    void            UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartAction,sal_uLong nEndAction);
+    void			RemoveEntrys(ULONG nStartAction,ULONG nEndAction);
+    void			UpdateEntrys(ScChangeTrack* pChgTrack, ULONG nStartAction,ULONG nEndAction);
 
-    void            UpdateView();
-    void            ClearView();
+    void			UpdateView();
+    void			ClearView();
 
-    sal_Bool            Expand(ScChangeTrack* pChanges,const ScChangeAction* pScChangeAction,
-                            SvLBoxEntry* pEntry, sal_Bool bFilter=false);
+    BOOL			Expand(ScChangeTrack* pChanges,const ScChangeAction* pScChangeAction,
+                            SvLBoxEntry* pEntry, BOOL bFilter=FALSE);
 
 public:
                     ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                               ScViewData*      ptrViewData);
+                               ScViewData*		ptrViewData);
 
                     ~ScAcceptChgDlg();
 
-    void            ReInit(ScViewData* ptrViewData);
+    void			ReInit(ScViewData* ptrViewData);
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual long	PreNotify( NotifyEvent& rNEvt );
 
-    void            Initialize (SfxChildWinInfo* pInfo);
+    void			Initialize (SfxChildWinInfo* pInfo);
     virtual void    FillInfo(SfxChildWinInfo&) const;
 
 };

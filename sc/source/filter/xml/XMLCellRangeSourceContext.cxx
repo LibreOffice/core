@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ ScMyImpCellRangeSource::ScMyImpCellRangeSource() :
 
 ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
         ScXMLImport& rImport,
-        sal_uInt16 nPrfx,
+        USHORT nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList,
         ScMyImpCellRangeSource* pCellRangeSource ) :
@@ -63,15 +63,15 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
 {
     if( !xAttrList.is() ) return;
 
-    sal_Int16               nAttrCount      = xAttrList->getLength();
-    const SvXMLTokenMap&    rAttrTokenMap   = GetScImport().GetTableCellRangeSourceAttrTokenMap();
+    sal_Int16				nAttrCount		= xAttrList->getLength();
+    const SvXMLTokenMap&	rAttrTokenMap	= GetScImport().GetTableCellRangeSourceAttrTokenMap();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( nIndex ));
         const OUString& sValue(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -121,7 +121,7 @@ ScXMLCellRangeSourceContext::~ScXMLCellRangeSourceContext()
 }
 
 SvXMLImportContext *ScXMLCellRangeSourceContext::CreateChildContext(
-        sal_uInt16 nPrefix,
+        USHORT nPrefix,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList>& /* xAttrList */ )
 {

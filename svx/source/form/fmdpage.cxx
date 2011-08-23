@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,8 +96,8 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 {
     ::rtl::OUString aShapeType( xDescr->getShapeType() );
 
-    if  (   aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ShapeControl" ) )   // compatibility
-        ||  aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ControlShape" ) )
+    if  (   aShapeType.equalsAscii( "com.sun.star.drawing.ShapeControl" )   // compatibility
+        ||  aShapeType.equalsAscii( "com.sun.star.drawing.ControlShape" )
         )
         return new FmFormObj( OBJ_FM_CONTROL );
     else

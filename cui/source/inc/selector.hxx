@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_STRINGSDTOR
-#include <svl/svstdarr.hxx>     // SvUShorts
+#include <svl/svstdarr.hxx>		// SvUShorts
 #include <sfx2/minarray.hxx>
 
 #define SVX_CFGGROUP_FUNCTION 1
@@ -51,41 +51,41 @@
 
 struct SvxGroupInfo_Impl
 {
-    sal_uInt16          nKind;
-    sal_uInt16          nOrd;
+    USHORT 		    nKind;
+    USHORT 		    nOrd;
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
                     xBrowseNode;
     ::rtl::OUString sURL;
     ::rtl::OUString sHelpText;
-    sal_Bool            bWasOpened;
+    BOOL		    bWasOpened;
 
-    SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr )
+    SvxGroupInfo_Impl( USHORT n, USHORT nr )
         :nKind( n )
         ,nOrd( nr )
         ,xBrowseNode()
         ,sURL()
         ,sHelpText()
-        ,bWasOpened(sal_False)
+        ,bWasOpened(FALSE)
     {
     }
 
-    SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& _rxNode )
+    SvxGroupInfo_Impl( USHORT n, USHORT nr, const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& _rxNode )
         :nKind( n )
         ,nOrd( nr )
         ,xBrowseNode( _rxNode )
         ,sURL()
         ,sHelpText()
-        ,bWasOpened(sal_False)
+        ,bWasOpened(FALSE)
     {
     }
 
-    SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, const ::rtl::OUString& _rURL, const ::rtl::OUString& _rHelpText )
+    SvxGroupInfo_Impl( USHORT n, USHORT nr, const ::rtl::OUString& _rURL, const ::rtl::OUString& _rHelpText )
         :nKind( n )
         ,nOrd( nr )
         ,xBrowseNode()
         ,sURL( _rURL )
         ,sHelpText( _rHelpText )
-        ,bWasOpened(sal_False)
+        ,bWasOpened(FALSE)
     {
     }
 };
@@ -104,39 +104,44 @@ public:
 class SvxConfigFunctionListBox_Impl : public SvTreeListBox
 {
 friend class SvxConfigGroupListBox_Impl;
-    Timer                           aTimer;
-    SvLBoxEntry*                    pCurEntry;
-    SvxGroupInfoArr_Impl            aArr;
-    SvLBoxEntry*                    m_pDraggingEntry;
+    Timer							aTimer;
+    SvLBoxEntry*					pCurEntry;
+    SvxGroupInfoArr_Impl			aArr;
+    SvLBoxEntry*					m_pDraggingEntry;
 
-    DECL_LINK(                      TimerHdl, Timer* );
-    virtual void                    MouseMove( const MouseEvent& rMEvt );
+    DECL_LINK(						TimerHdl, Timer* );
+    virtual void 					MouseMove( const MouseEvent& rMEvt );
 
 public:
                                     SvxConfigFunctionListBox_Impl( Window*, const ResId& );
                                     ~SvxConfigFunctionListBox_Impl();
-    void                            ClearAll();
-    String                          GetHelpText( SvLBoxEntry *pEntry );
+    void							ClearAll();
+    SvLBoxEntry*					GetEntry_Impl( USHORT nId );
+    SvLBoxEntry*					GetEntry_Impl( const String& );
+    USHORT							GetId( SvLBoxEntry *pEntry );
+    String							GetHelpText( SvLBoxEntry *pEntry );
     using Window::GetHelpText;
-    SvLBoxEntry*                    GetLastSelectedEntry();
-    void                            FunctionSelected();
+    USHORT							GetCurId()
+                                    { return GetId( FirstSelected() ); }
+    SvLBoxEntry*					GetLastSelectedEntry();
+    void							FunctionSelected();
 
     // drag n drop methods
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
 
-    virtual DragDropMode    NotifyStartDrag(
+    virtual DragDropMode	NotifyStartDrag(
         TransferDataContainer&, SvLBoxEntry* );
 
-    virtual void        DragFinished( sal_Int8 );
+    virtual void		DragFinished( sal_Int8 );
 };
 
 class SvxConfigGroupListBox_Impl : public SvTreeListBox
 {
-    SvxGroupInfoArr_Impl            aArr;
+    SvxGroupInfoArr_Impl			aArr;
     bool                            m_bShowSlots;
 
-    SvxConfigFunctionListBox_Impl*  pFunctionListBox;
-    ImageProvider*                  m_pImageProvider;
+    SvxConfigFunctionListBox_Impl*	pFunctionListBox;
+    ImageProvider*					m_pImageProvider;
 
     ::com::sun::star::uno::Reference
         < ::com::sun::star::frame::XFrame > m_xFrame;
@@ -145,21 +150,17 @@ class SvxConfigGroupListBox_Impl : public SvTreeListBox
         < ::com::sun::star::container::XNameAccess > m_xModuleCommands;
 
     Image m_hdImage;
+    Image m_hdImage_hc;
     Image m_libImage;
+    Image m_libImage_hc;
     Image m_macImage;
+    Image m_macImage_hc;
     Image m_docImage;
+    Image m_docImage_hc;
     ::rtl::OUString m_sMyMacros;
     ::rtl::OUString m_sProdMacros;
-    Image GetImage(
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node,
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx,
-        bool bIsRootNode
-    );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx,
-        ::rtl::OUString& docName
-    );
+    Image GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast );
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
 
 private:
     void    fillScriptList(
@@ -169,8 +170,8 @@ private:
     );
 
 protected:
-    virtual void    RequestingChilds( SvLBoxEntry *pEntry);
-    virtual sal_Bool    Expand( SvLBoxEntry* pParent );
+    virtual void	RequestingChilds( SvLBoxEntry *pEntry);
+    virtual BOOL	Expand( SvLBoxEntry* pParent );
     using SvListView::Expand;
 
 public:
@@ -183,63 +184,64 @@ public:
 
             ~SvxConfigGroupListBox_Impl();
 
-    void    Init();
-    void    Open( SvLBoxEntry*, sal_Bool );
-    void    ClearAll();
-    void    GroupSelected();
+    void	Init();
+    void	Open( SvLBoxEntry*, BOOL );
+    void	ClearAll();
+    void	GroupSelected();
 
-    void    SetFunctionListBox( SvxConfigFunctionListBox_Impl *pBox )
+    void 	SetFunctionListBox( SvxConfigFunctionListBox_Impl *pBox )
         { pFunctionListBox = pBox; }
 
-    void    SetImageProvider( ImageProvider* provider )
+    void	SetImageProvider( ImageProvider* provider )
         { m_pImageProvider = provider; }
 };
 
 class SvxScriptSelectorDialog : public ModelessDialog
 {
-    FixedText                       aDialogDescription;
-    FixedText                       aGroupText;
-    SvxConfigGroupListBox_Impl      aCategories;
-    FixedText                       aFunctionText;
-    SvxConfigFunctionListBox_Impl   aCommands;
-    OKButton                        aOKButton;
-    CancelButton                    aCancelButton;
-    HelpButton                      aHelpButton;
-    FixedLine                       aDescription;
-    FixedText                       aDescriptionText;
+    FixedText						aDialogDescription;
+    FixedText						aGroupText;
+    SvxConfigGroupListBox_Impl 		aCategories;
+    FixedText						aFunctionText;
+    SvxConfigFunctionListBox_Impl	aCommands;
+    OKButton						aOKButton;
+    CancelButton					aCancelButton;
+    HelpButton						aHelpButton;
+    FixedLine						aDescription;
+    FixedText						aDescriptionText;
 
-    sal_Bool                            m_bShowSlots;
-    Link                            m_aAddHdl;
+    BOOL							m_bShowSlots;
+    Link							m_aAddHdl;
 
     DECL_LINK( ClickHdl, Button * );
     DECL_LINK( SelectHdl, Control* );
     DECL_LINK( FunctionDoubleClickHdl, Control* );
 
-    void                                UpdateUI();
-    void                                ResizeControls();
+    void								UpdateUI();
+    void								ResizeControls();
 
 public:
 
     SvxScriptSelectorDialog (
         Window* pParent = NULL,
-        sal_Bool bShowSlots = sal_False,
+        BOOL bShowSlots = FALSE,
         const ::com::sun::star::uno::Reference
             < ::com::sun::star::frame::XFrame >& xFrame = 0
     );
 
     ~SvxScriptSelectorDialog ( );
 
-    void        SetAddHdl( const Link& rLink ) { m_aAddHdl = rLink; }
-    const Link& GetAddHdl() const { return m_aAddHdl; }
+    void		SetAddHdl( const Link& rLink ) { m_aAddHdl = rLink; }
+    const Link&	GetAddHdl() const { return m_aAddHdl; }
 
-    void        SetImageProvider( ImageProvider* provider )
+    void		SetImageProvider( ImageProvider* provider )
         { aCategories.SetImageProvider( provider ); }
 
-    String      GetScriptURL() const;
-    String      GetSelectedDisplayName();
-    String      GetSelectedHelpText();
-    void        SetRunLabel();
-    void        SetDialogDescription(const String& rDescription);
+    USHORT		GetSelectedId();
+    String		GetScriptURL() const;
+    String		GetSelectedDisplayName();
+    String		GetSelectedHelpText();
+    void		SetRunLabel();
+    void		SetDialogDescription(const String& rDescription);
 };
 
 #endif

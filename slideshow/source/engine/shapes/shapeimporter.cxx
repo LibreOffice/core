@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,46 +87,46 @@ bool importShapeGraphic(
         // no or empty property - cannot import shape graphic
         return false;
     }
-
-    rtl::OUString const aVndUrl(
+    
+    rtl::OUString const aVndUrl( 
         RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
     sal_Int32 nIndex( aURL.indexOf( aVndUrl ) );
-
-    if(nIndex != -1)
+    
+    if(nIndex != -1) 
     {
         // skip past the end of the "vnd..." prefix
         nIndex += aVndUrl.getLength();
-
-        if(nIndex >= aURL.getLength())
+        
+        if(nIndex >= aURL.getLength()) 
         {
-            OSL_FAIL( "ShapeImporter::importShape(): "
+            OSL_ENSURE( false, "ShapeImporter::importShape(): "
                         "embedded graphic has no graphic ID" );
             return false;
         }
-
+        
         // unique ID string found in URL, extract
         // to separate string
         rtl::OUString const aUniqueId(
             aURL.copy( nIndex, aURL.getLength() - nIndex ) );
-
+        
         // TODO(T2): Creating a GraphicObject is not
         // thread safe (internally calls VCL, and has
         // unguarded internal singleton mpGlobalMgr)
-
+        
         // fetch already loaded graphic from graphic manager.
         ByteString const aOldString( static_cast<String>(aUniqueId),
                                      RTL_TEXTENCODING_UTF8 );
         o_rGraphic = GraphicObject( aOldString );
 
 
-        if( GRAPHIC_DEFAULT == o_rGraphic.GetType()
+        if( GRAPHIC_DEFAULT == o_rGraphic.GetType() 
             || GRAPHIC_NONE == o_rGraphic.GetType() )
         {
             // even the GrfMgr does not seem to know this graphic
             return false;
-        }
+        }        
     }
-    else
+    else 
     {
         // no special string found, graphic must be
         // external. Load via GraphicIm porter
@@ -135,18 +135,18 @@ bool importShapeGraphic(
             utl::UcbStreamHelper::CreateStream(
                 aTmp.GetMainURL( INetURLObject::NO_DECODE ),
                 STREAM_READ ) );
-        if( !pGraphicStream )
+        if( !pGraphicStream ) 
         {
-            OSL_FAIL( "ShapeImporter::importShape(): "
+            OSL_ENSURE( false, "ShapeImporter::importShape(): "
                         "cannot create input stream for graphic" );
             return false;
         }
-
+        
         Graphic aTmpGraphic;
         if( GraphicConverter::Import(
                 *pGraphicStream, aTmpGraphic ) != ERRCODE_NONE )
-        {
-            OSL_FAIL( "ShapeImporter::importShape(): "
+        {        
+            OSL_ENSURE( false, "ShapeImporter::importShape(): "
                         "Failed to import shape graphic from given URL" );
             return false;
         }
@@ -166,7 +166,7 @@ public:
                   uno::Reference<drawing::XShape> const&     xShape,
                   uno::Reference<beans::XPropertySet> const& xPropSet,
                   double                                     nPrio );
-
+    
     // Shape:
     virtual uno::Reference<drawing::XShape> getXShape() const;
     virtual void addViewLayer( ViewLayerSharedPtr const& pNewLayer,
@@ -182,7 +182,7 @@ public:
     virtual bool isVisible() const;
     virtual double getPriority() const;
     virtual bool isBackgroundDetached() const;
-
+    
 private:
     ShapeSharedPtr const                  mpGroupShape;
     uno::Reference<drawing::XShape> const mxShape;
@@ -196,8 +196,8 @@ ShapeOfGroup::ShapeOfGroup( ShapeSharedPtr const&                      pGroupSha
                             uno::Reference<drawing::XShape> const&     xShape,
                             uno::Reference<beans::XPropertySet> const& xPropSet,
                             double                                     nPrio ) :
-    mpGroupShape(pGroupShape),
-    mxShape(xShape),
+    mpGroupShape(pGroupShape), 
+    mxShape(xShape), 
     mnPrio(nPrio)
 {
     // read bound rect
@@ -285,13 +285,13 @@ ShapeSharedPtr ShapeImporter::createShape(
     uno::Reference<beans::XPropertySet> const& xPropSet,
     rtl::OUString const& shapeType ) const
 {
-    if( shapeType.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape") ) ||
-        shapeType.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.MediaShape") ) )
+    if( shapeType.equalsAsciiL( 
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape") ) || 
+        shapeType.equalsAsciiL( 
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.MediaShape") ) ) 
     {
         // Media shape (video etc.). This is a special object
-        return createMediaShape(xCurrShape,
+        return createMediaShape(xCurrShape, 
                                 mnAscendingPrio,
                                 mrContext);
     }
@@ -299,7 +299,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                  RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PluginShape") ))
     {
         // PropertyValues to copy from XShape to plugin
-        static const char* aPropertyValues[] =
+        static const char* aPropertyValues[] = 
             {
                 "PluginURL",
                 "PluginMimeType",
@@ -307,10 +307,10 @@ ShapeSharedPtr ShapeImporter::createShape(
             };
 
         // (Netscape)Plugin shape. This is a special object
-        return createAppletShape( xCurrShape,
+        return createAppletShape( xCurrShape, 
                                   mnAscendingPrio,
-                                  ::rtl::OUString(
-                                      RTL_CONSTASCII_USTRINGPARAM(
+                                  ::rtl::OUString( 
+                                      RTL_CONSTASCII_USTRINGPARAM( 
                                           "com.sun.star.comp.sfx2.PluginObject" )),
                                   aPropertyValues,
                                   sizeof(aPropertyValues)/sizeof(*aPropertyValues),
@@ -320,7 +320,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                  RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.AppletShape") ))
     {
         // PropertyValues to copy from XShape to applet
-        static const char* aPropertyValues[] =
+        static const char* aPropertyValues[] = 
             {
                 "AppletCodeBase",
                 "AppletName",
@@ -330,10 +330,10 @@ ShapeSharedPtr ShapeImporter::createShape(
             };
 
         // (Java)Applet shape. This is a special object
-        return createAppletShape( xCurrShape,
+        return createAppletShape( xCurrShape, 
                                   mnAscendingPrio,
-                                  ::rtl::OUString(
-                                      RTL_CONSTASCII_USTRINGPARAM(
+                                  ::rtl::OUString( 
+                                      RTL_CONSTASCII_USTRINGPARAM( 
                                           "com.sun.star.comp.sfx2.AppletObject" )),
                                   aPropertyValues,
                                   sizeof(aPropertyValues)/sizeof(*aPropertyValues),
@@ -346,7 +346,7 @@ ShapeSharedPtr ShapeImporter::createShape(
     {
         // #i46224# Mark OLE shapes as foreign content - scan them for
         // unsupported actions, and fallback to bitmap, if necessary
-        return DrawShape::create( xCurrShape,
+        return DrawShape::create( xCurrShape, 
                                   mxPage,
                                   mnAscendingPrio,
                                   true,
@@ -357,37 +357,37 @@ ShapeSharedPtr ShapeImporter::createShape(
                      "com.sun.star.drawing.GraphicObjectShape") ) ||
              shapeType.equalsAsciiL(
                  RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.presentation.GraphicObjectShape") ) )
+                     "com.sun.star.presentation.GraphicObjectShape") ) ) 
     {
         GraphicObject aGraphicObject;
-
+        
         // to get hold of GIF animations, inspect Graphic
         // objects more thoroughly (the plain-jane shape
         // metafile of course would only contain the first
         // animation frame)
         if( !importShapeGraphic( aGraphicObject, xPropSet ) )
             return ShapeSharedPtr(); // error loading graphic -
-                                     // no placeholders in
+                                     // #142147# no placeholders in
                                      // slideshow
 
         if( !aGraphicObject.IsAnimated() )
         {
             // no animation - simply utilize plain draw shape import
-
+            
             // import shape as bitmap - either its a bitmap
             // anyway, or its a metafile, which currently the
             // metafile renderer might not display correctly.
-            return DrawShape::create( xCurrShape,
+            return DrawShape::create( xCurrShape, 
                                       mxPage,
                                       mnAscendingPrio,
-                                      true,
+                                      true, 
                                       mrContext );
         }
-
-
+        
+        
         // now extract relevant shape attributes via API
         // ---------------------------------------------
-
+        
         drawing::ColorMode eColorMode( drawing::ColorMode_STANDARD );
         sal_Int16 nLuminance(0);
         sal_Int16 nContrast(0);
@@ -397,7 +397,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         double    nGamma(1.0);
         sal_Int16 nTransparency(0);
         sal_Int32 nRotation(0);
-
+        
         getPropertyValue( eColorMode, xPropSet, OUSTR("GraphicColorMode") );
         getPropertyValue( nLuminance, xPropSet, OUSTR("AdjustLuminance") );
         getPropertyValue( nContrast, xPropSet, OUSTR("AdjustContrast") );
@@ -407,7 +407,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         getPropertyValue( nGamma, xPropSet, OUSTR("Gamma") );
         getPropertyValue( nTransparency, xPropSet, OUSTR("Transparency") );
         getPropertyValue( nRotation, xPropSet, OUSTR("RotateAngle") );
-
+        
         GraphicAttr aGraphAttrs;
         aGraphAttrs.SetDrawMode( (GraphicDrawMode)eColorMode );
         aGraphAttrs.SetLuminance( nLuminance );
@@ -416,37 +416,37 @@ ShapeSharedPtr ShapeImporter::createShape(
         aGraphAttrs.SetChannelG( nGreen );
         aGraphAttrs.SetChannelB( nBlue );
         aGraphAttrs.SetGamma( nGamma );
-        aGraphAttrs.SetTransparency( static_cast<sal_uInt8>(nTransparency) );
-        aGraphAttrs.SetRotation( static_cast<sal_uInt16>(nRotation*10) );
-
+        aGraphAttrs.SetTransparency( static_cast<BYTE>(nTransparency) );
+        aGraphAttrs.SetRotation( static_cast<USHORT>(nRotation*10) );
+        
         text::GraphicCrop aGraphCrop;
-        if( getPropertyValue( aGraphCrop, xPropSet, OUSTR("GraphicCrop") ))
+        if( getPropertyValue( aGraphCrop, xPropSet, OUSTR("GraphicCrop") )) 
         {
             aGraphAttrs.SetCrop( aGraphCrop.Left,
                                  aGraphCrop.Top,
                                  aGraphCrop.Right,
                                  aGraphCrop.Bottom );
         }
-
+        
         // fetch readily transformed and color-modified
         // graphic
         // ---------------------------------------------
-
-        Graphic aGraphic(
+        
+        Graphic aGraphic( 
             aGraphicObject.GetTransformedGraphic(
                 aGraphicObject.GetPrefSize(),
                 aGraphicObject.GetPrefMapMode(),
                 aGraphAttrs ) );
-
-        return DrawShape::create( xCurrShape,
+        
+        return DrawShape::create( xCurrShape, 
                                   mxPage,
                                   mnAscendingPrio,
                                   aGraphic,
                                   mrContext );
     }
-    else
+    else 
     {
-        return DrawShape::create( xCurrShape,
+        return DrawShape::create( xCurrShape, 
                                   mxPage,
                                   mnAscendingPrio,
                                   false,
@@ -463,35 +463,35 @@ bool ShapeImporter::isSkip(
     bool bEmpty = false;
     if( getPropertyValue( bEmpty,
                           xPropSet,
-                          OUSTR("IsEmptyPresentationObject")) &&
+                          OUSTR("IsEmptyPresentationObject")) && 
         bEmpty )
     {
         return true;
     }
-
+    
     //skip shapes which corresponds to annotations
     if(xLayer.is())
     {
         rtl::OUString layerName;
         uno::Reference<beans::XPropertySet> xPropLayerSet(
                                                           xLayer, uno::UNO_QUERY );
-        const uno::Any& a(xPropLayerSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))) );
+        const uno::Any& a(xPropLayerSet->getPropertyValue(rtl::OUString::createFromAscii("Name")) );
         bool const bRet = (a >>= layerName);
         if(bRet)
         {
-            if( layerName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DrawnInSlideshow"))))
+            if( layerName.equals(rtl::OUString::createFromAscii("DrawnInSlideshow")))
             {
-                //Transform shapes into PolyPolygons
+                //Transform shapes into PolyPolygons	
                 importPolygons(xPropSet);
-
+                
                 return true;
             }
         }
     }
-
+    
     // don't export presentation placeholders on masterpage
     // they can be non empty when user edits the default texts
-    if(mbConvertingMasterPage)
+    if(mbConvertingMasterPage) 
     {
         if(shapeType.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation."
@@ -506,19 +506,19 @@ bool ShapeImporter::isSkip(
     return false;
 }
 
-
+    
 void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xPropSet) {
 
     drawing::PointSequenceSequence aRetval;
-    sal_Int32           nLineColor=0;
-    double              fLineWidth;
+    sal_Int32			nLineColor=0;
+    double				fLineWidth;
     getPropertyValue( aRetval, xPropSet, OUSTR("PolyPolygon") );
     getPropertyValue( nLineColor, xPropSet, OUSTR("LineColor") );
     getPropertyValue( fLineWidth, xPropSet, OUSTR("LineWidth") );
 
     drawing::PointSequence* pOuterSequence = aRetval.getArray();
     awt::Point* pInnerSequence = pOuterSequence->getArray();
-
+    
     ::basegfx::B2DPolygon aPoly;
     basegfx::B2DPoint aPoint;
     for( sal_Int32 nCurrPoly=0; nCurrPoly<pOuterSequence->getLength(); ++nCurrPoly, ++pInnerSequence )
@@ -541,24 +541,24 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
                 pPolyPoly->draw();
                 maPolygons.push_back(pPolyPoly);
         }
-        ++aIter;
+        aIter++;
     }
 }
-
+    
 ShapeSharedPtr ShapeImporter::importBackgroundShape() // throw (ShapeLoadFailedException)
 {
     if( maShapesStack.empty() )
         throw ShapeLoadFailedException();
 
     XShapesEntry& rTop = maShapesStack.top();
-    ShapeSharedPtr pBgShape(
+    ShapeSharedPtr pBgShape( 
         createBackgroundShape(mxPage,
                               uno::Reference<drawing::XDrawPage>(
                                   rTop.mxShapes,
                                   uno::UNO_QUERY_THROW),
                               mrContext) );
     mnAscendingPrio += 1.0;
-
+    
     return pBgShape;
 }
 
@@ -566,20 +566,20 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
 {
     ShapeSharedPtr pRet;
     bool bIsGroupShape = false;
-
+    
     while( !maShapesStack.empty() && !pRet )
     {
         XShapesEntry& rTop = maShapesStack.top();
         if( rTop.mnPos < rTop.mnCount )
-        {
+        {    
             uno::Reference<drawing::XShape> const xCurrShape(
                 rTop.mxShapes->getByIndex( rTop.mnPos ), uno::UNO_QUERY );
             ++rTop.mnPos;
             uno::Reference<beans::XPropertySet> xPropSet(
                 xCurrShape, uno::UNO_QUERY );
-            if( !xPropSet.is() )
+            if( !xPropSet.is() ) 
             {
-                // we definitely need the properties of
+                // we definitely need the properties of 
                 // the shape here. This will also fail,
                 // if getByIndex did not return a valid
                 // shape
@@ -593,21 +593,21 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
             if(xLayerSupplier.is())
             {
                 uno::Reference< container::XNameAccess > xNameAccess = xLayerSupplier->getLayerManager();
-
+                
                 uno::Reference< drawing::XLayerManager > xLayerManager(xNameAccess, uno::UNO_QUERY);
-
+    
                    xDrawnInSlideshow = xLayerManager->getLayerForShape(xCurrShape);
             }
 
             rtl::OUString const shapeType( xCurrShape->getShapeType());
-
+            
             // is this shape presentation-invisible?
             if( !isSkip(xPropSet, shapeType, xDrawnInSlideshow) )
             {
                 bIsGroupShape = shapeType.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM(
                         "com.sun.star.drawing.GroupShape") );
-
+                
                 if( rTop.mpGroupShape ) // in group particle mode?
                 {
                     pRet.reset( new ShapeOfGroup(
@@ -615,14 +615,14 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
                                     xCurrShape, xPropSet,
                                     mnAscendingPrio ) );
                 }
-                else
+                else 
                 {
                     pRet = createShape( xCurrShape, xPropSet, shapeType );
                 }
                 mnAscendingPrio += 1.0;
             }
         }
-        if( rTop.mnPos >= rTop.mnCount )
+        if( rTop.mnPos >= rTop.mnCount ) 
         {
             // group or top-level shapes finished:
             maShapesStack.pop();
@@ -633,7 +633,7 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
             maShapesStack.push( XShapesEntry( pRet ) );
         }
     }
-
+    
     return pRet;
 }
 
@@ -646,21 +646,28 @@ PolyPolygonVector ShapeImporter::getPolygons()
 {
     return maPolygons;
 }
-
-ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&          xPage,
+    
+ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&          xPage, 
                               uno::Reference<drawing::XDrawPage> const&          xActualPage,
                               uno::Reference<drawing::XDrawPagesSupplier> const& xPagesSupplier,
                               const SlideShowContext&                            rContext,
                               sal_Int32                                          nOrdNumStart,
                               bool                                               bConvertingMasterPage ) :
     mxPage( xActualPage ),
+#ifdef ENABLE_PRESENTER_EXTRA_UI
     mxPagesSupplier( xPagesSupplier ),
+#else
+    mxPagesSupplier( NULL ),
+#endif
     mrContext( rContext ),
     maPolygons(),
     maShapesStack(),
     mnAscendingPrio( nOrdNumStart ),
     mbConvertingMasterPage( bConvertingMasterPage )
 {
+#ifndef ENABLE_PRESENTER_EXTRA_UI
+    (void)xPagesSupplier;
+#endif
     uno::Reference<drawing::XShapes> const xShapes(
         xPage, uno::UNO_QUERY_THROW );
     maShapesStack.push( XShapesEntry(xShapes) );

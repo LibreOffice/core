@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,7 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
+
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <fldmgr.hxx>
@@ -46,10 +47,10 @@ using namespace ::com::sun::star;
 
 
 /*--------------------------------------------------------------------
-    Description: edit insert-field
+    Beschreibung: Feldeinfuegen bearbeiten
  --------------------------------------------------------------------*/
 sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
-                              SwField* pField, sal_Bool bNextButton ) :
+                              SwField* pField, BOOL bNextButton ) :
 
     SvxStandardDialog(pParent,  SW_RES(DLG_FLD_DROPDOWN)),
     aItemsFL(       this, SW_RES( FL_ITEMS       )),
@@ -93,7 +94,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
         aListItemsLB.SelectEntry(pDropField->GetSelectedItem());
     }
 
-    sal_Bool bEnable = !rSh.IsCrsrReadonly();
+    BOOL bEnable = !rSh.IsCrsrReadonly();
     aOKPB.Enable( bEnable );
 
     aListItemsLB.GrabFocus();
@@ -113,11 +114,12 @@ void sw::DropDownFieldDialog::Apply()
         {
             rSh.StartAllAction();
 
-            ::std::auto_ptr<SwDropDownField> const pCopy(
-                static_cast<SwDropDownField *>( pDropField->CopyField() ) );
+            SwDropDownField * pCopy = (SwDropDownField *) pDropField->Copy();
 
             pCopy->SetPar1(sSelect);
             rSh.SwEditShell::UpdateFlds(*pCopy);
+
+            delete pCopy;
 
             rSh.SetUndoNoResetModified();
             rSh.EndAllAction();

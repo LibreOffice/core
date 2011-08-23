@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_io_XPersistObject_idl__
-#define __com_sun_star_io_XPersistObject_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-#include <com/sun/star/io/IOException.idl>
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module io {
-
- published interface XObjectInputStream;
- published interface XObjectOutputStream;
-
-//=============================================================================
-
+#ifndef __com_sun_star_io_XPersistObject_idl__ 
+#define __com_sun_star_io_XPersistObject_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_IOException_idl__ 
+#include <com/sun/star/io/IOException.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module io {  
+ 
+ published interface XObjectInputStream; 
+ published interface XObjectOutputStream; 
+ 
+//============================================================================= 
+ 
 /** allows to make UNO objects persistent
 
   <p>Every UNO object, that wants to be serializable, should implement
@@ -62,24 +66,24 @@ module com {  module sun {  module star {  module io {
      @see com::sun::star::io::XObjectInputStream
  */
 published interface XPersistObject: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** gives the service name of the object
 
-      @returns
-            the service name that specifies the behavior and the
-            persistent data format of this implementation.
-
+      @returns  
+            the service name that specifies the behavior and the  
+            persistent data format of this implementation.  
+         
         <p>This name is used to create such an object by a factory
         during deserialization. </p>
-
+         
         @see com::sun::star::lang::XServiceInfo::getAvailableServiceNames
      */
-    string getServiceName();
-
-    //-------------------------------------------------------------------------
-
+    string getServiceName(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::io::XPersistObject::write
     /** writes all the persistent data of the object to the stream.
         <p>The implementation
@@ -87,11 +91,11 @@ published interface XPersistObject: com::sun::star::uno::XInterface
         @param OutStream the stream, the data shall be written to. The stream
                supports simple types and other XPersistObject implementations.
      */
-    void write( [in] com::sun::star::io::XObjectOutputStream OutStream )
-            raises( com::sun::star::io::IOException );
-
-    //-------------------------------------------------------------------------
-
+    void write( [in] com::sun::star::io::XObjectOutputStream OutStream ) 
+            raises( com::sun::star::io::IOException ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::io::XPersistObject::read
     /** reads all the persistent data of the object from the stream.
         <p>In case
@@ -99,15 +103,15 @@ published interface XPersistObject: com::sun::star::uno::XInterface
         to create these objects (in general the global service manager).
         <p> The implementation must read the data in the order documented at
         the service specification.
-        @param InStream the stream, the data shall be read from.
+        @param InStream the stream, the data shall be read from. 
      */
-    void read( [in] com::sun::star::io::XObjectInputStream InStream )
-            raises( com::sun::star::io::IOException );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void read( [in] com::sun::star::io::XObjectInputStream InStream ) 
+            raises( com::sun::star::io::IOException ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

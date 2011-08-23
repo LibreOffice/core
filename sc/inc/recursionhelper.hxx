@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ class ScFormulaCell;
 struct ScFormulaRecursionEntry
 {
     ScFormulaCell*  pCell;
-    sal_Bool            bOldRunning;
+    BOOL            bOldRunning;
     ScFormulaResult aPreviousResult;
-    ScFormulaRecursionEntry( ScFormulaCell* p, sal_Bool bR,
+    ScFormulaRecursionEntry( ScFormulaCell* p, BOOL bR,
             const ScFormulaResult & rRes ) :
         pCell(p), bOldRunning(bR), aPreviousResult( rRes)
     {
@@ -58,8 +58,8 @@ class ScRecursionHelper
     ScFormulaRecursionList::iterator    aInsertPos;
     ScFormulaRecursionList::iterator    aLastIterationStart;
     ScRecursionInIterationStack         aRecursionInIterationStack;
-    sal_uInt16                              nRecursionCount;
-    sal_uInt16                              nIteration;
+    USHORT                              nRecursionCount;
+    USHORT                              nIteration;
     bool                                bInRecursionReturn;
     bool                                bDoingRecursion;
     bool                                bInIterationReturn;
@@ -82,7 +82,7 @@ class ScRecursionHelper
     public:
 
     ScRecursionHelper() { Init(); }
-    sal_uInt16  GetRecursionCount() const       { return nRecursionCount; }
+    USHORT  GetRecursionCount() const       { return nRecursionCount; }
     void    IncRecursionCount()             { ++nRecursionCount; }
     void    DecRecursionCount()             { --nRecursionCount; }
     /// A pure recursion return, no iteration.
@@ -97,7 +97,7 @@ class ScRecursionHelper
     }
     bool    IsDoingRecursion() const        { return bDoingRecursion; }
     void    SetDoingRecursion( bool b )     { bDoingRecursion = b; }
-    void    Insert( ScFormulaCell* p, sal_Bool bOldRunning,
+    void    Insert( ScFormulaCell* p, BOOL bOldRunning,
                     const ScFormulaResult & rRes )
     {
         aRecursionFormulas.insert( aInsertPos, ScFormulaRecursionEntry( p,
@@ -119,12 +119,12 @@ class ScRecursionHelper
         bInIterationReturn = b;
     }
     bool    IsDoingIteration() const        { return nIteration > 0; }
-    sal_uInt16  GetIteration() const            { return nIteration; }
+    USHORT  GetIteration() const            { return nIteration; }
     bool &  GetConvergingReference()        { return bConverging; }
     void    StartIteration()
     {
         SetInIterationReturn( false);
-        nIteration = 1;
+        nIteration = 1; 
         bConverging = false;
         aLastIterationStart = GetIterationStart();
     }

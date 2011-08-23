@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,41 +24,41 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_installation_InstallationCheck_idl__
-#define __com_sun_star_installation_InstallationCheck_idl__
-
-#ifndef __com_sun_star_installation_XInstallationCheck_idl__
-#include <com/sun/star/installation/XInstallationCheck.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module installation {
-
-//=============================================================================
-
+#ifndef __com_sun_star_installation_InstallationCheck_idl__ 
+#define __com_sun_star_installation_InstallationCheck_idl__ 
+ 
+#ifndef __com_sun_star_installation_XInstallationCheck_idl__ 
+#include <com/sun/star/installation/XInstallationCheck.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module installation {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: service com::sun::star::installation::InstallationCheck
 /** is a simple implementation of the <type>XInstallationCheck</type>.
-
-    <p> This implementation only checks the fonts "StarBats" and "StarMath".
+    
+    <p>	This implementation only checks the fonts "StarBats" and "StarMath".
     </p>
     <p> When running under Win32 the methods check and checkWithDialog will try to
-    fix any missing Registry Key of fonts which still reside in the font directory.
+    fix any missing RegistryKey of fonts which still reside in the font directory.
     </p>
-    <p>If it is possible to fix, the method returns <TRUE/>.
+    <p>If it is possbile to fix, the method returns <TRUE/>.
     </p>
-
+    
     @see XInstallationCheck
     @deprecated
  */
 published service InstallationCheck
-{
+{ 
     // DocMerge: empty anyway
-    interface com::sun::star::installation::XInstallationCheck;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    interface com::sun::star::installation::XInstallationCheck; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,14 +96,14 @@ void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_Bool bEnable = false;
+    BOOL bEnable = FALSE;
 
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( pObj && pObj->ISA( SdrGrafObj ) && ( ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP ) )
-            bEnable = sal_True;
+            bEnable = TRUE;
     }
 
     if( !bEnable )
@@ -130,8 +130,8 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
 
                 if( pPageView )
                 {
-                    SdrGrafObj* pFilteredObj = (SdrGrafObj*) pObj->Clone();
-                    String      aStr( pView->GetDescriptionOfMarkedObjects() );
+                    SdrGrafObj*	pFilteredObj = (SdrGrafObj*) pObj->Clone();
+                    String		aStr( pView->GetDescriptionOfMarkedObjects() );
 
                     aStr.Append( sal_Unicode(' ') );
                     aStr.Append( String( ScResId( SCSTR_UNDO_GRAFFILTER ) ) );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,21 +27,24 @@
  ************************************************************************/
 
 #include "oox/xls/ooxformulaparser.hxx"
-
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "oox/xls/formulaparser.hxx"
 
+using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::XComponentContext;
+using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::table::CellAddress;
+using ::com::sun::star::sheet::FormulaToken;
+
 namespace oox {
 namespace xls {
-
-// ============================================================================
-
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::table;
-using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -62,7 +65,7 @@ private:
 // ----------------------------------------------------------------------------
 
 OOXMLFormulaParserImpl::OOXMLFormulaParserImpl( const Reference< XMultiServiceFactory >& rxFactory ) :
-    FormulaFinalizer( OpCodeProvider( rxFactory, FILTER_OOXML, BIFF_UNKNOWN, true ) ),
+    FormulaFinalizer( OpCodeProvider( rxFactory, FILTER_OOX, BIFF_UNKNOWN, true ) ),
     maApiParser( rxFactory, *this )
 {
 }
@@ -125,7 +128,7 @@ private:
 // ----------------------------------------------------------------------------
 
 OOXMLFormulaPrinterImpl::OOXMLFormulaPrinterImpl( const Reference< XMultiServiceFactory >& rxFactory ) :
-    OpCodeProvider( rxFactory, FILTER_OOXML, BIFF_UNKNOWN, false ),
+    OpCodeProvider( rxFactory, FILTER_OOX, BIFF_UNKNOWN, false ),
     maApiParser( rxFactory, *this )
 {
 }
@@ -141,7 +144,7 @@ Sequence< OUString > OOXMLFormulaParser_getSupportedServiceNames()
 
 OUString OOXMLFormulaParser_getImplementationName()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.FormulaParser" );
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.OOXMLFormulaParser" );
 }
 
 Reference< XInterface > SAL_CALL OOXMLFormulaParser_createInstance( const Reference< XComponentContext >& ) throw( Exception )

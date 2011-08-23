@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction( SdDrawDocument* pTheDo
     maListOfChildLists.resize( maStyles.size() );
     // Liste mit den Listen der StyleSheet-Kinder erstellen
     std::size_t i = 0;
-    for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter )
+    for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); iter++ )
     {
         maListOfChildLists[i++] = SdStyleSheetPool::CreateChildList( (*iter).get() );
     }
@@ -62,20 +62,20 @@ void SdMoveStyleSheetsUndoAction::Undo()
 
     if (mbMySheets)
     {
-        // the styles have to be inserted in the pool
+        // the styles have to be inserted in the pool	
 
         // first insert all styles to the pool
-        for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter )
+        for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); iter++ )
         {
             pPool->Insert((*iter).get());
         }
 
         // now assign the childs again
         std::vector< SdStyleSheetVector >::iterator childlistiter( maListOfChildLists.begin() );
-        for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter, ++childlistiter )
+        for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); iter++, childlistiter++ )
         {
             String aParent((*iter)->GetName());
-            for( SdStyleSheetVector::iterator childiter = (*childlistiter).begin(); childiter != (*childlistiter).end(); ++childiter )
+            for( SdStyleSheetVector::iterator childiter = (*childlistiter).begin(); childiter != (*childlistiter).end(); childiter++ )
             {
                 (*childiter)->SetParent(aParent);
             }
@@ -84,7 +84,7 @@ void SdMoveStyleSheetsUndoAction::Undo()
     else
     {
         // remove the styles again from the pool
-        for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter )
+        for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); iter++ )
         {
             pPool->Remove((*iter).get());
         }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@
 #include <com/sun/star/document/XMimeTypeInfo.idl>
 #endif
 
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
 
 /** a component that supports this service lets you export pages, shapes, or
     groups of shapes from a DrawingDocument to a file in one of the file formats
@@ -53,12 +53,12 @@ published service GraphicExportFilter
 {
     /** calling <method scope=scope="com::sun::star::document">XFilter::filter
         </method> starts the export of the graphic file. The following properties
-        from the        <type scope="com::sun::star::document">MediaDescriptor
+        from the 		<type scope="com::sun::star::document">MediaDescriptor
         </type> are supported:<p>
 
         <member scope="com::sun::star::document">MediaDescriptor::MediaType
         </member><b>
-
+        
         Depending on the export filters supported by this component this is
         the mime type of the target graphic file. Possible values are<b>
         image/x-MS-bmp<b>
@@ -86,7 +86,7 @@ published service GraphicExportFilter
     */
     interface ::com::sun::star::document::XFilter;
 
-    /** sets the source component for this export filter.
+    /**	sets the source component for this export filter.
         This could either be a <type>DrawPage</type>, a <type>Shape</type>
         or a <type>Shapes</type>.
      */
@@ -96,9 +96,9 @@ published service GraphicExportFilter
     interface ::com::sun::star::document::XMimeTypeInfo;
 };
 
-//=============================================================================
-
-}; }; }; };
+//============================================================================= 
+ 
+}; }; }; };  
 
 #endif
 

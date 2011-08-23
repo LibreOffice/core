@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,18 +62,18 @@
 
 SdModifyFieldDlg::SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) :
     ModalDialog ( pWindow, SdResId( DLG_FIELD_MODIFY ) ),
-    aGrpType    ( this, SdResId( GRP_TYPE ) ),
-    aRbtFix     ( this, SdResId( RBT_FIX ) ),
-    aRbtVar     ( this, SdResId( RBT_VAR ) ),
+    aRbtFix		( this, SdResId( RBT_FIX ) ),
+    aRbtVar		( this, SdResId( RBT_VAR ) ),
+    aGrpType	( this, SdResId( GRP_TYPE ) ),
     maFtLanguage( this, SdResId( FT_LANGUAGE ) ),
     maLbLanguage( this, SdResId( LB_LANGUAGE ) ),
-    aFtFormat   ( this, SdResId( FT_FORMAT ) ),
-    aLbFormat   ( this, SdResId( LB_FORMAT ) ),
+    aFtFormat	( this, SdResId( FT_FORMAT ) ),
+    aLbFormat	( this, SdResId( LB_FORMAT ) ),
     aBtnOK      ( this, SdResId( BTN_OK ) ),
     aBtnCancel  ( this, SdResId( BTN_CANCEL ) ),
     aBtnHelp    ( this, SdResId( BTN_HELP ) ),
-    maInputSet  ( rSet ),
-    pField      ( pInField )
+    maInputSet	( rSet ),
+    pField		( pInField )
 {
     FreeResource();
 
@@ -100,7 +100,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
         if( pField->ISA( SvxDateField ) )
         {
             const SvxDateField* pDateField = (const SvxDateField*) pField;
-            SvxDateType   eType;
+            SvxDateType	  eType;
             SvxDateFormat eFormat;
 
             if( aRbtFix.IsChecked() )
@@ -117,7 +117,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
         else if( pField->ISA( SvxExtTimeField ) )
         {
             const SvxExtTimeField* pTimeField = (const SvxExtTimeField*) pField;
-            SvxTimeType   eType;
+            SvxTimeType	  eType;
             SvxTimeFormat eFormat;
 
             if( aRbtFix.IsChecked() )
@@ -134,7 +134,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
         else if( pField->ISA( SvxExtFileField ) )
         {
             const SvxExtFileField* pFileField = (const SvxExtFileField*) pField;
-            SvxFileType   eType;
+            SvxFileType	  eType;
             SvxFileFormat eFormat;
 
             if( aRbtFix.IsChecked() )
@@ -155,7 +155,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
                 if( pDocSh->HasName() )
                     aName = pDocSh->GetMedium()->GetName();
 
-                // Get current filename, not the one stored in the old field
+                // #91225# Get current filename, not the one stored in the old field
                 pNewField = new SvxExtFileField( aName );
                 ( (SvxExtFileField*) pNewField )->SetType( eType );
                 ( (SvxExtFileField*) pNewField )->SetFormat( eFormat );
@@ -163,7 +163,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
         }
         else if( pField->ISA( SvxAuthorField ) )
         {
-            SvxAuthorType   eType;
+            SvxAuthorType	eType;
             SvxAuthorFormat eFormat;
 
             if( aRbtFix.IsChecked() )
@@ -173,7 +173,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
             eFormat = (SvxAuthorFormat) ( aLbFormat.GetSelectEntryPos() );
 
-            // Get current state of address, not the old one
+            // #91225# Get current state of address, not the old one
             SvtUserOptions aUserOptions;
             pNewField = new SvxAuthorField( aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() );
             ( (SvxAuthorField*) pNewField )->SetType( eType );
@@ -183,6 +183,12 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
     return( pNewField );
 }
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 void SdModifyFieldDlg::FillFormatList()
 {
@@ -195,54 +201,54 @@ void SdModifyFieldDlg::FillFormatList()
         const SvxDateField* pDateField = (const SvxDateField*) pField;
         SvxDateField aDateField( *pDateField );
 
-        //SVXDATEFORMAT_APPDEFAULT,     // Wird nicht benutzt
-        //SVXDATEFORMAT_SYSTEM,         // Wird nicht benutzt
+        //SVXDATEFORMAT_APPDEFAULT, 	// Wird nicht benutzt
+        //SVXDATEFORMAT_SYSTEM, 		// Wird nicht benutzt
         aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_SMALL ) ) );
         aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_BIG ) ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
-        aDateField.SetFormat( SVXDATEFORMAT_A );    // 13.02.96
+        aDateField.SetFormat( SVXDATEFORMAT_A );	// 13.02.96
         aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_B );    // 13.02.1996
+        aDateField.SetFormat( SVXDATEFORMAT_B );	// 13.02.1996
         aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_C );    // 13.Feb 1996
+        aDateField.SetFormat( SVXDATEFORMAT_C );	// 13.Feb 1996
         aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_D );    // 13.Februar 1996
+        aDateField.SetFormat( SVXDATEFORMAT_D );	// 13.Februar 1996
         aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_E );    // Die, 13.Februar 1996
+        aDateField.SetFormat( SVXDATEFORMAT_E );	// Die, 13.Februar 1996
         aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_F );    // Dienstag, 13.Februar 1996
+        aDateField.SetFormat( SVXDATEFORMAT_F );	// Dienstag, 13.Februar 1996
         aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
 
-        aLbFormat.SelectEntryPos( (sal_uInt16) ( pDateField->GetFormat() - 2 ) );
+        aLbFormat.SelectEntryPos( (USHORT) ( pDateField->GetFormat() - 2 ) );
     }
     else if( pField->ISA( SvxExtTimeField ) )
     {
         const SvxExtTimeField* pTimeField = (const SvxExtTimeField*) pField;
         SvxExtTimeField aTimeField( *pTimeField );
 
-        //SVXTIMEFORMAT_APPDEFAULT,     // Wird nicht benutzt
-        //SVXTIMEFORMAT_SYSTEM,         // Wird nicht benutzt
+        //SVXTIMEFORMAT_APPDEFAULT, 	// Wird nicht benutzt
+        //SVXTIMEFORMAT_SYSTEM, 		// Wird nicht benutzt
         aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_NORMAL ) ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    // 13:49
+        aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );	// 13:49
         aLbFormat.InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMS );   // 13:49:38
+        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMS );	// 13:49:38
         aLbFormat.InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMSH );  // 13:49:38.78
+        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMSH );	// 13:49:38.78
         aLbFormat.InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HM );    // 01:49
+        aTimeField.SetFormat( SVXTIMEFORMAT_12_HM );	// 01:49
         aLbFormat.InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMS );   // 01:49:38
+        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMS );	// 01:49:38
         aLbFormat.InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMSH );  // 01:49:38.78
+        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMSH );	// 01:49:38.78
         aLbFormat.InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        //SVXTIMEFORMAT_AM_HM,  // 01:49 PM
-        //SVXTIMEFORMAT_AM_HMS, // 01:49:38 PM
-        //SVXTIMEFORMAT_AM_HMSH // 01:49:38.78 PM
+        //SVXTIMEFORMAT_AM_HM,	// 01:49 PM
+        //SVXTIMEFORMAT_AM_HMS,	// 01:49:38 PM
+        //SVXTIMEFORMAT_AM_HMSH	// 01:49:38.78 PM
 
-        aLbFormat.SelectEntryPos( (sal_uInt16) ( pTimeField->GetFormat() - 2 ) );
+        aLbFormat.SelectEntryPos( (USHORT) ( pTimeField->GetFormat() - 2 ) );
     }
     else if( pField->ISA( SvxExtFileField ) )
     {
@@ -254,20 +260,20 @@ void SdModifyFieldDlg::FillFormatList()
         aLbFormat.InsertEntry( String( SdResId( STR_FILEFORMAT_PATH ) ) );
         aLbFormat.InsertEntry( String( SdResId( STR_FILEFORMAT_NAME ) ) );
 
-        aLbFormat.SelectEntryPos( (sal_uInt16) ( pFileField->GetFormat() ) );
+        aLbFormat.SelectEntryPos( (USHORT) ( pFileField->GetFormat() ) );
     }
     else if( pField->ISA( SvxAuthorField ) )
     {
         const SvxAuthorField* pAuthorField = (const SvxAuthorField*) pField;
         SvxAuthorField aAuthorField( *pAuthorField );
 
-        for( sal_uInt16 i = 0; i < 4; i++ )
+        for( USHORT i = 0; i < 4; i++ )
         {
             aAuthorField.SetFormat( (SvxAuthorFormat) i );
             aLbFormat.InsertEntry( aAuthorField.GetFormatted() );
         }
 
-        aLbFormat.SelectEntryPos( (sal_uInt16) ( pAuthorField->GetFormat() ) );
+        aLbFormat.SelectEntryPos( (USHORT) ( pAuthorField->GetFormat() ) );
 
     }
 
@@ -322,7 +328,7 @@ void SdModifyFieldDlg::FillControls()
     aRbtVar.SaveValue();
 
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == maInputSet.GetItemState(EE_CHAR_LANGUAGE, sal_True, &pItem ) )
+    if( SFX_ITEM_SET == maInputSet.GetItemState(EE_CHAR_LANGUAGE, TRUE, &pItem ) )
         maLbLanguage.SelectLanguage( static_cast<const SvxLanguageItem*>(pItem)->GetLanguage() );
 
     maLbLanguage.SaveValue();

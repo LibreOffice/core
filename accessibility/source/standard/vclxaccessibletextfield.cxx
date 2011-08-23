@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,7 +137,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleTextField::getAccessibleParent( 
 ::rtl::OUString VCLXAccessibleTextField::getImplementationName (void)
     throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleTextField" ));
+    return ::rtl::OUString::createFromAscii ("com.sun.star.comp.toolkit.AccessibleTextField");
 }
 
 
@@ -149,7 +149,8 @@ Sequence< ::rtl::OUString > VCLXAccessibleTextField::getSupportedServiceNames (v
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleTextComponent::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleTextField" ));
+    aNames[nLength] = ::rtl::OUString::createFromAscii(
+        "com.sun.star.accessibility.AccessibleTextField");
     return aNames;
 }
 

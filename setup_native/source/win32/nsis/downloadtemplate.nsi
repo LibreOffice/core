@@ -3,9 +3,8 @@
 !define PRODUCT_PUBLISHER "PUBLISHERPLACEHOLDER"
 !define PRODUCT_WEB_SITE "WEBSITEPLACEHOLDER"
 
-SetCompressor zlib
-SetDatablockOptimize On
-
+SetCompressor lzma
+; SetCompressor zlib
 ; Helpful for debugging, disable for products
 ; RequestExecutionLevel user
 

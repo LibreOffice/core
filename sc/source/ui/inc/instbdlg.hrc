@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,22 +27,26 @@
 
 #include <sc.hrc> // -> RID_SCDLG_INSERT_TABLE
 
-#define BTN_OK                  1
-#define BTN_CANCEL              2
-#define BTN_HELP                3
+//#define RID_SCDLG_INSERT_TABLE 300
 
-#define FL_POSITION             10
-#define RB_BEFORE               11
-#define RB_BEHIND               12
+#define BTN_OK					1
+#define BTN_CANCEL				2
+#define BTN_HELP				3
 
-#define FL_TABLE                20
-#define RB_NEW                  21
-#define FT_COUNT                22
-#define NF_COUNT                23
-#define FT_NAME                 24
-#define ED_TABNAME              25
-#define RB_FROMFILE             26
-#define LB_TABLES               27
-#define BTN_BROWSE              28
-#define CB_LINK                 29
-#define FT_PATH                 30
+#define FL_POSITION				10
+#define RB_BEFORE				11
+#define RB_BEHIND				12
+
+#define FL_TABLE				20
+#define RB_NEW					21
+#define FT_COUNT				22
+#define NF_COUNT				23
+#define FT_NAME					24
+#define ED_TABNAME				25
+#define RB_FROMFILE				26
+#define LB_TABLES				27
+#define BTN_BROWSE				28
+#define CB_LINK					29
+#define FT_PATH					30
+
+

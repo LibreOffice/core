@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,12 +54,12 @@ void X11SalData::Timeout() const
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalXLib::StopTimer()
 {
-    m_aTimeout.tv_sec   = 0;
-    m_aTimeout.tv_usec  = 0;
-    m_nTimeoutMS        = 0;
+    m_aTimeout.tv_sec	= 0;
+    m_aTimeout.tv_usec	= 0;
+    m_nTimeoutMS		= 0;
 }
 
-void SalXLib::StartTimer( sal_uLong nMS )
+void SalXLib::StartTimer( ULONG nMS )
 {
     timeval Timeout (m_aTimeout); // previous timeout.
     gettimeofday (&m_aTimeout, 0);
@@ -90,7 +90,7 @@ void X11SalTimer::Stop()
     GetX11SalData()->GetLib()->StopTimer();
 }
 
-void X11SalTimer::Start( sal_uLong nMS )
+void X11SalTimer::Start( ULONG nMS )
 {
     GetX11SalData()->GetLib()->StartTimer( nMS );
 }

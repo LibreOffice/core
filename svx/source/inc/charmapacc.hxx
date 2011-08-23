@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <osl/mutex.hxx>
+#include <tools/list.hxx>
 #include <tools/color.hxx>
 #include <tools/string.hxx>
 #include <vcl/image.hxx>
@@ -39,18 +40,18 @@ class SvxShowCharSet;
 
 namespace svx
 {
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessible
-                                >   OAccessibleHelper_Base_2;
+    typedef	::cppu::ImplHelper1	<	::com::sun::star::accessibility::XAccessible
+                                >	OAccessibleHelper_Base_2;
 
     class SvxShowCharSetAcc;
-    /** The class SvxShowCharSetVirtualAcc is used as a virtual class which contains the table and the scrollbar.
+    /** The class SvxShowCharSetVirtualAcc is used as a virtual class which contains the table and the scrollbar. 
         In the vcl control, the table and the scrollbar exists in one class. This is not feasible for the accessibility api.
     */
     class SvxShowCharSetVirtualAcc : public ::comphelper::OAccessibleComponentHelper,
                                      public OAccessibleHelper_Base_2
     {
-        SvxShowCharSet*     mpParent; // the vcl control
-        SvxShowCharSetAcc*  m_pTable; // the table, which holds the characters shown by the vcl control
+        SvxShowCharSet*		mpParent; // the vcl control
+        SvxShowCharSetAcc*	m_pTable; // the table, which holds the characters shown by the vcl control
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAcc; // the ref to the table
     protected:
         virtual ~SvxShowCharSetVirtualAcc();
@@ -84,7 +85,7 @@ namespace svx
         virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
-
+        
         // call the fireEvent method from the table when it exists.
         void SAL_CALL fireEvent(
                     const sal_Int16 _nEventId,
@@ -93,7 +94,7 @@ namespace svx
                 );
 
         // simple access methods
-        inline SvxShowCharSetAcc*   getTable() const { return m_pTable; }
+        inline SvxShowCharSetAcc*	getTable() const { return m_pTable; }
         inline SvxShowCharSet* getCharSetControl() const { return mpParent; }
     };
 
@@ -106,15 +107,15 @@ namespace svx
     */
     struct SvxShowCharSetItem
     {
-        SvxShowCharSet&             mrParent;
-        sal_uInt16                      mnId;
-        XubString                   maText;
-        Rectangle                   maRect;
-        SvxShowCharSetItemAcc*      m_pItem;
-        SvxShowCharSetAcc*          m_pParent;
+        SvxShowCharSet&				mrParent;
+        USHORT						mnId;
+        XubString					maText;
+        Rectangle					maRect;
+        SvxShowCharSetItemAcc*		m_pItem;
+        SvxShowCharSetAcc*			m_pParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAcc;
 
-        SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,sal_uInt16 _nPos );
+        SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*	_pParent,USHORT _nPos );
         ~SvxShowCharSetItem();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    GetAccessible();
@@ -123,9 +124,9 @@ namespace svx
 
     // -----------------------------------------------------------------------------
 
-    typedef ::cppu::ImplHelper2 <   ::com::sun::star::accessibility::XAccessible,
+    typedef	::cppu::ImplHelper2	<	::com::sun::star::accessibility::XAccessible,
                                     ::com::sun::star::accessibility::XAccessibleTable
-                                >   OAccessibleHelper_Base;
+                                >	OAccessibleHelper_Base;
     // ---------------
     // - SvxShowCharSetAcc -
     // ---------------
@@ -201,13 +202,13 @@ namespace svx
 
         // OCommonAccessibleSelection
         // return if the specified child is visible => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
-        virtual sal_Bool
-            implIsSelected( sal_Int32 nAccessibleChildIndex )
+        virtual sal_Bool 
+            implIsSelected( sal_Int32 nAccessibleChildIndex ) 
             throw (::com::sun::star::uno::RuntimeException);
 
         // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
         virtual void
-            implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
+            implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect ) 
             throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
         // OCommonAccessibleComponent
@@ -224,7 +225,7 @@ namespace svx
                                   public OAccessibleHelper_Base_2
     {
     private:
-        SvxShowCharSetItem* mpParent;
+        SvxShowCharSetItem*	mpParent;
     protected:
         virtual ~SvxShowCharSetItemAcc();
 
@@ -238,7 +239,7 @@ namespace svx
         DECLARE_XTYPEPROVIDER( )
 
         SvxShowCharSetItemAcc( SvxShowCharSetItem* pParent );
-
+                
         void    ParentDestroyed();
 
         // XAccessibleComponent

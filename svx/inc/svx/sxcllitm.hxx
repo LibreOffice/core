@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public:
 //------------------------------------
 class SdrCaptionFitLineLenItem: public SdrYesNoItem {
 public:
-    SdrCaptionFitLineLenItem(sal_Bool bBestFit=sal_True): SdrYesNoItem(SDRATTR_CAPTIONFITLINELEN,bBestFit) {}
+    SdrCaptionFitLineLenItem(BOOL bBestFit=TRUE): SdrYesNoItem(SDRATTR_CAPTIONFITLINELEN,bBestFit) {}
     SdrCaptionFitLineLenItem(SvStream& rIn)     : SdrYesNoItem(SDRATTR_CAPTIONFITLINELEN,rIn)      {}
 };
 

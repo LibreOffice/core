@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,14 +62,13 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 using namespace std;
+using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::reflection;
-
-using ::rtl::OUString;
 
 //--------------------------------------------------------------------------------------------------
 
@@ -135,7 +134,7 @@ inline sal_Int32 getRTValueAsInt32( const RTConstValue & rVal )
     case RT_TYPE_UINT32:
         return rVal.m_value.aULong;
     default:
-        OSL_FAIL( "### unexpected value type!" );
+        OSL_ENSURE( sal_False, "### unexpected value type!" );
         return 0;
     }
 }
@@ -170,7 +169,7 @@ inline Any getRTValue( const RTConstValue & rVal )
         return Any( &aStr, ::getCppuType( (const OUString *)0 ) );
     }
     default:
-        OSL_FAIL( "### unexpected RTValue!" );
+        OSL_ENSURE( sal_False, "### unexpected RTValue!" );
         return Any();
     }
 }
@@ -178,8 +177,8 @@ inline Any getRTValue( const RTConstValue & rVal )
 //==================================================================================================
 class TypeDescriptionImpl : public WeakImplHelper1< XTypeDescription >
 {
-    TypeClass           _eTypeClass;
-    OUString            _aName;
+    TypeClass			_eTypeClass;
+    OUString			_aName;
 
 public:
     TypeDescriptionImpl( TypeClass eTypeClass, const OUString & rName )
@@ -200,17 +199,17 @@ class InterfaceTypeDescriptionImpl:
     public WeakImplHelper2< XInterfaceTypeDescription2, XPublished >
 {
     com::sun::star::uno::Reference< XHierarchicalNameAccess >  _xTDMgr;
-    Sequence< sal_Int8 >                  _aBytes;
+    Sequence< sal_Int8 >				  _aBytes;
 
-    OUString                              _aName;
+    OUString							  _aName;
 
-    Sequence< OUString >                  _aBaseTypes;
+    Sequence< OUString >				  _aBaseTypes;
     Sequence< com::sun::star::uno::Reference< XTypeDescription > > _xBaseTDs;
-    Sequence< OUString >                  _aOptionalBaseTypes;
+    Sequence< OUString >				  _aOptionalBaseTypes;
     Sequence< com::sun::star::uno::Reference< XTypeDescription > >
     _xOptionalBaseTDs;
 
-    sal_Int32                             _nBaseOffset;
+    sal_Int32							  _nBaseOffset;
     Sequence<
         com::sun::star::uno::Reference< XInterfaceMemberTypeDescription > >
     _members;
@@ -259,15 +258,15 @@ class CompoundTypeDescriptionImpl:
     public WeakImplHelper2< XCompoundTypeDescription, XPublished >
 {
     com::sun::star::uno::Reference< XHierarchicalNameAccess >  _xTDMgr;
-    TypeClass                             _eTypeClass;
-    Sequence< sal_Int8 >                  _aBytes;
-    OUString                              _aName;
+    TypeClass							  _eTypeClass;
+    Sequence< sal_Int8 >				  _aBytes;
+    OUString							  _aName;
 
-    OUString                              _aBaseType;
-    com::sun::star::uno::Reference< XTypeDescription >        _xBaseTD;
+    OUString							  _aBaseType;
+    com::sun::star::uno::Reference< XTypeDescription >		  _xBaseTD;
 
     Sequence< com::sun::star::uno::Reference< XTypeDescription > > * _pMembers;
-    Sequence< OUString > *                _pMemberNames;
+    Sequence< OUString > *				  _pMemberNames;
 
     bool _published;
 
@@ -313,13 +312,13 @@ class EnumTypeDescriptionImpl:
     public WeakImplHelper2< XEnumTypeDescription, XPublished >
 {
     com::sun::star::uno::Reference< XHierarchicalNameAccess >  _xTDMgr;
-    Sequence< sal_Int8 >                  _aBytes;
+    Sequence< sal_Int8 >				  _aBytes;
 
-    OUString                              _aName;
-    sal_Int32                             _nDefaultValue;
+    OUString							  _aName;
+    sal_Int32							  _nDefaultValue;
 
-    Sequence< OUString > *                _pEnumNames;
-    Sequence< sal_Int32 > *               _pEnumValues;
+    Sequence< OUString > *				  _pEnumNames;
+    Sequence< sal_Int32 > *				  _pEnumValues;
 
     bool _published;
 
@@ -360,9 +359,9 @@ class TypedefTypeDescriptionImpl:
     public WeakImplHelper2< XIndirectTypeDescription, XPublished >
 {
     com::sun::star::uno::Reference< XHierarchicalNameAccess > _xTDMgr;
-    OUString                              _aName;
+    OUString							  _aName;
 
-    OUString                              _aRefName;
+    OUString							  _aRefName;
     com::sun::star::uno::Reference< XTypeDescription > _xRefTD;
 
     bool _published;

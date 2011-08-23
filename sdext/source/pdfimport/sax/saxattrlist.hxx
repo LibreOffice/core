@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <cppuhelper/implbase2.hxx>
 
 #include <com/sun/star/util/XCloneable.hpp>
@@ -48,19 +48,19 @@ namespace pdfi
         {
             rtl::OUString m_aName;
             rtl::OUString m_aValue;
-
+            
             AttrEntry( const rtl::OUString& i_rName, const rtl::OUString& i_rValue )
             : m_aName( i_rName ), m_aValue( i_rValue ) {}
         };
         std::vector< AttrEntry >                                    m_aAttributes;
-        boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >   m_aIndexMap;
-
+        std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >   m_aIndexMap;
+    
     public:
         SaxAttrList() {}
-        SaxAttrList( const boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >& );
+        SaxAttrList( const std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >& );
         SaxAttrList( const SaxAttrList& );
         virtual ~SaxAttrList();
-
+    
         // ::com::sun::star::xml::sax::XAttributeList
         virtual sal_Int16 SAL_CALL getLength() throw();
         virtual rtl::OUString SAL_CALL getNameByIndex(sal_Int16 i) throw();
@@ -68,7 +68,7 @@ namespace pdfi
         virtual rtl::OUString SAL_CALL getTypeByName(const ::rtl::OUString& aName) throw();
         virtual rtl::OUString SAL_CALL getValueByIndex(sal_Int16 i) throw();
         virtual rtl::OUString SAL_CALL getValueByName(const ::rtl::OUString& aName) throw();
-
+    
         // ::com::sun::star::util::XCloneable
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone() throw();
     };

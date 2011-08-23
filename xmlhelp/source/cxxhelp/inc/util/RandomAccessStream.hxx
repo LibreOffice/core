@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,33 +31,33 @@
 #include <osl/file.hxx>
 
 namespace xmlsearch {
-
+    
     namespace util {
-
-
+        
+        
         class RandomAccessStream
         {
         public:
 
             virtual ~RandomAccessStream() { };
-
+      
             // The calle is responsible for allocating the buffer
             virtual void seek( sal_Int32 ) = 0;
             virtual sal_Int32 readBytes( sal_Int8*,sal_Int32 ) = 0;
             virtual void writeBytes( sal_Int8*, sal_Int32 ) = 0;
             virtual sal_Int32 length() = 0;
             virtual void close() = 0;
-
-
+      
+      
         protected:
-
-            enum OPENFLAG { Read = osl_File_OpenFlag_Read,
-                            Write = osl_File_OpenFlag_Write,
-                            Create = osl_File_OpenFlag_Create };
-
+      
+            enum OPENFLAG { Read = OpenFlag_Read,
+                            Write = OpenFlag_Write,
+                            Create = OpenFlag_Create };
+      
         };
 
-
+        
     }
 }
 

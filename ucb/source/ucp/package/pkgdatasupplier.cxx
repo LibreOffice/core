@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,7 +114,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
     while ( it != end )
     {
         delete (*it);
-        ++it;
+        it++;
     }
 }
 
@@ -265,7 +265,8 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
 
             if ( !xNamed.is() )
             {
-                OSL_FAIL( "DataSupplier::getResult - Got no XNamed!" );
+                OSL_ENSURE( sal_False,
+                            "DataSupplier::getResult - Got no XNamed!" );
                 break;
             }
 
@@ -273,7 +274,8 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
 
             if ( !aName.getLength() )
             {
-                OSL_FAIL( "DataSupplier::getResult - Empty name!" );
+                OSL_ENSURE( sal_False,
+                            "DataSupplier::getResult - Empty name!" );
                 break;
             }
 
@@ -343,7 +345,8 @@ sal_uInt32 DataSupplier::totalCount()
 
             if ( !xNamed.is() )
             {
-                OSL_FAIL( "DataSupplier::getResult - Got no XNamed!" );
+                OSL_ENSURE( sal_False,
+                            "DataSupplier::getResult - Got no XNamed!" );
                 break;
             }
 
@@ -351,7 +354,8 @@ sal_uInt32 DataSupplier::totalCount()
 
             if ( !aName.getLength() )
             {
-                OSL_FAIL( "DataSupplier::getResult - Empty name!" );
+                OSL_ENSURE( sal_False,
+                            "DataSupplier::getResult - Empty name!" );
                 break;
             }
 
@@ -465,7 +469,7 @@ void DataSupplier::validate()
 ::rtl::OUString DataSupplier::assembleChildURL( const ::rtl::OUString& aName )
 {
     rtl::OUString aURL;
-    rtl::OUString aContURL
+    rtl::OUString aContURL 
         = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
     sal_Int32 nParam = aContURL.indexOf( '?' );
     if ( nParam >= 0 )
@@ -474,7 +478,7 @@ void DataSupplier::validate()
 
         sal_Int32 nPackageUrlEnd = aURL.lastIndexOf( '/' );
         if ( nPackageUrlEnd != aURL.getLength() - 1 )
-            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            aURL += rtl::OUString::createFromAscii( "/" );
 
         aURL += ::ucb_impl::urihelper::encodeSegment( aName );
         aURL += aContURL.copy( nParam );
@@ -485,10 +489,10 @@ void DataSupplier::validate()
 
         sal_Int32 nPackageUrlEnd = aURL.lastIndexOf( '/' );
         if ( nPackageUrlEnd != aURL.getLength() - 1 )
-            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            aURL += rtl::OUString::createFromAscii( "/" );
 
         aURL += ::ucb_impl::urihelper::encodeSegment( aName );
-    }
+    }	
     return aURL;
 }
 

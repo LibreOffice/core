@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 DockingWindow RID_SVXDLG_GALLERYBROWSER
 {
-    HelpId = "SVX_HID_GALLERY_BROWSER" ;
+    HelpId = SID_GALLERY;
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -257,6 +257,19 @@ Image RID_SVXIMG_GALLERY_VIEW_LIST
     MASKCOLOR
 };
 
+Image RID_SVXIMG_GALLERY_VIEW_ICON_HC
+{
+    ImageBitmap = Bitmap { File = "galicon_h.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_GALLERY_VIEW_LIST_HC
+{
+    ImageBitmap = Bitmap { File = "gallist_h.bmp"; };
+    MASKCOLOR
+};
+
+
 /******************************************************************************/
 
 Menu RID_SVXMN_GALLERY1
@@ -395,4 +408,86 @@ Menu RID_SVXMN_GALLERY2
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

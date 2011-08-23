@@ -389,6 +389,11 @@ void ScExternalRefCache::Table::getAllNumberFormats(vector<sal_uInt32>& rNumFmts
     }
 }
 
+const ScRangeList& ScExternalRefCache::Table::getCachedRanges() const
+{
+    return maCachedRanges;
+}
+
 bool ScExternalRefCache::Table::isRangeCached(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
 {
     return maCachedRanges.In(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
@@ -402,7 +407,7 @@ void ScExternalRefCache::Table::setCachedCell(SCCOL nCol, SCROW nRow)
 void ScExternalRefCache::Table::setCachedCellRange(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     ScRange aRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
-    if ( maCachedRanges.empty() )
+    if (!maCachedRanges.Count())
         maCachedRanges.Append(aRange);
     else
         maCachedRanges.Join(aRange);
@@ -580,8 +585,11 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
         }
 
         ScMatrixRef xMat = new ScMatrix(
-            static_cast<SCSIZE>(nDataCol2-nDataCol1+1),
-            static_cast<SCSIZE>(nDataRow2-nDataRow1+1), ScMatrix::SPARSE_EMPTY);
+            static_cast<SCSIZE>(nDataCol2-nDataCol1+1), static_cast<SCSIZE>(nDataRow2-nDataRow1+1));
+
+#if 0
+        // TODO: Switch to this code block once we have support for sparsely-filled
+        // matrices in ScMatrix.
 
         // Only fill non-empty cells, for better performance.
         vector<SCROW> aRows;
@@ -613,11 +621,46 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                 }
             }
         }
+#else
+        vector<SCROW> aRows;
+        pTab->getAllRows(aRows, nDataRow1, nDataRow2);
+        if (aRows.empty())
+            // Cache is empty.
+            return TokenArrayRef();
+        else
+            // Trim the column below the last non-empty row.
+            nDataRow2 = aRows.back();
+
+        // Empty all matrix elements first, and fill only non-empty elements.
+        for (SCROW nRow = nDataRow1; nRow <= nDataRow2; ++nRow)
+        {
+            for (SCCOL nCol = nDataCol1; nCol <= nDataCol2; ++nCol)
+            {
+                TokenRef pToken = pTab->getCell(nCol, nRow);
+                SCSIZE nC = nCol - nCol1, nR = nRow - nRow1;
+                if (!pToken)
+                    return TokenArrayRef();
+
+                switch (pToken->GetType())
+                {
+                    case svDouble:
+                        xMat->PutDouble(pToken->GetDouble(), nC, nR);
+                    break;
+                    case svString:
+                        xMat->PutString(pToken->GetString(), nC, nR);
+                    break;
+                    default:
+                        xMat->PutEmpty(nC, nR);
+                }
+            }
+        }
+#endif
 
         if (!bFirstTab)
             pArray->AddOpCode(ocSep);
 
-        ScMatrixToken aToken(xMat);
+        ScMatrix* pMat2 = xMat;
+        ScMatrixToken aToken(pMat2);
         if (!pArray)
             pArray.reset(new ScTokenArray);
         pArray->AddToken(aToken);
@@ -691,7 +734,7 @@ void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const String& rTabName,
 }
 
 void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRange, const vector<SingleRangeData>& rData,
-                                          const TokenArrayRef& pArray)
+                                          TokenArrayRef pArray)
 {
     using ::std::pair;
     if (rData.empty() || !isDocInitialized(nFileId))
@@ -827,7 +870,7 @@ String ScExternalRefCache::getTableName(sal_uInt16 nFileId, size_t nCacheId) con
     return EMPTY_STRING;
 }
 
-void ScExternalRefCache::getAllTableNames(sal_uInt16 nFileId, vector<OUString>& rTabNames) const
+void ScExternalRefCache::getAllTableNames(sal_uInt16 nFileId, vector<String>& rTabNames) const
 {
     rTabNames.clear();
     DocItem* pDoc = getDocItem(nFileId);
@@ -1086,6 +1129,12 @@ ScExternalRefCache::ReferencedStatus::ReferencedStatus() :
     reset(0);
 }
 
+ScExternalRefCache::ReferencedStatus::ReferencedStatus( size_t nDocs ) :
+    mbAllReferenced(false)
+{
+    reset( nDocs);
+}
+
 void ScExternalRefCache::ReferencedStatus::reset( size_t nDocs )
 {
     if (nDocs)
@@ -1274,21 +1323,24 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
             static_cast<ScEditCell*>(pCell)->GetString(aStr);
             return new formula::FormulaStringToken(aStr);
         }
+        //break;
         case CELLTYPE_STRING:
         {
             String aStr;
             static_cast<ScStringCell*>(pCell)->GetString(aStr);
             return new formula::FormulaStringToken(aStr);
         }
+        //break;
         case CELLTYPE_VALUE:
         {
             double fVal = static_cast<ScValueCell*>(pCell)->GetValue();
             return new formula::FormulaDoubleToken(fVal);
         }
+        //break;
         case CELLTYPE_FORMULA:
         {
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-            sal_uInt16 nError = pFCell->GetErrCode();
+            USHORT nError = pFCell->GetErrCode();
             if (nError)
                 return new FormulaErrorToken( nError);
             else if (pFCell->IsValue())
@@ -1303,8 +1355,9 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
                 return new formula::FormulaStringToken(aStr);
             }
         }
+        //break;
         default:
-            OSL_FAIL("attempted to convert an unknown cell type.");
+            DBG_ERROR("attempted to convert an unknown cell type.");
     }
 
     return NULL;
@@ -1340,8 +1393,7 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
         // Only loop within the data area.
         SCCOL nDataCol1 = nCol1, nDataCol2 = nCol2;
         SCROW nDataRow1 = nRow1, nDataRow2 = nRow2;
-        bool bShrunk;
-        if (!pSrcDoc->ShrinkToUsedDataArea( bShrunk, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, false))
+        if (!pSrcDoc->ShrinkToDataArea(nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2))
             // no data within specified range.
             continue;
 
@@ -1391,7 +1443,7 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
                         case CELLTYPE_FORMULA:
                         {
                             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-                            sal_uInt16 nError = pFCell->GetErrCode();
+                            USHORT nError = pFCell->GetErrCode();
                             if (nError)
                                 xMat->PutDouble( CreateDoubleError( nError), nC, nR);
                             else if (pFCell->IsValue())
@@ -1408,7 +1460,7 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
                         }
                         break;
                         default:
-                            OSL_FAIL("attempted to convert an unknown cell type.");
+                            DBG_ERROR("attempted to convert an unknown cell type.");
                     }
                 }
             }
@@ -1416,7 +1468,8 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
         if (!bFirstTab)
             pArray->AddOpCode(ocSep);
 
-        ScMatrixToken aToken(xMat);
+        ScMatrix* pMat2 = xMat;
+        ScMatrixToken aToken(pMat2);
         pArray->AddToken(aToken);
 
         itrCache->mpRangeData = xMat;
@@ -1444,7 +1497,8 @@ static ScTokenArray* lcl_fillEmptyMatrix(const ScRange& rRange)
         for (SCSIZE j = 0; j < nR; ++j)
             xMat->PutEmpty(i, j);
 
-    ScMatrixToken aToken(xMat);
+    ScMatrix* pMat2 = xMat;
+    ScMatrixToken aToken(pMat2);
     auto_ptr<ScTokenArray> pArray(new ScTokenArray);
     pArray->AddToken(aToken);
     return pArray.release();
@@ -1507,7 +1561,7 @@ ScExternalRefManager::ApiGuard::~ApiGuard()
 
 // ----------------------------------------------------------------------------
 
-void ScExternalRefManager::getAllCachedTableNames(sal_uInt16 nFileId, vector<OUString>& rTabNames) const
+void ScExternalRefManager::getAllCachedTableNames(sal_uInt16 nFileId, vector<String>& rTabNames) const
 {
     maRefCache.getAllTableNames(nFileId, rTabNames);
 }
@@ -1597,101 +1651,6 @@ void ScExternalRefManager::storeRangeNameTokens(sal_uInt16 nFileId, const String
     maRefCache.setRangeNameTokens(nFileId, rName, pArray);
 }
 
-namespace {
-
-/**
- * Put a single cell data into internal cache table.
- *
- * @param pFmt optional cell format index that may need to be stored with
- *             the cell value.
- */
-void putCellDataIntoCache(
-    ScExternalRefCache& rRefCache, const ScExternalRefCache::TokenRef& pToken,
-    sal_uInt16 nFileId, const String& rTabName, const ScAddress& rCell,
-    const ScExternalRefCache::CellFormat* pFmt)
-{
-    // Now, insert the token into cache table but don't cache empty cells.
-    if (pToken->GetType() != formula::svEmptyCell)
-    {
-        sal_uInt32 nFmtIndex = (pFmt && pFmt->mbIsSet) ? pFmt->mnIndex : 0;
-        rRefCache.setCellData(nFileId, rTabName, rCell.Col(), rCell.Row(), pToken, nFmtIndex);
-    }
-}
-
-/**
- * Put the data into our internal cache table.
- *
- * @param rRefCache cache table set.
- * @param pArray single range data to be returned.
- * @param nFileId external file ID
- * @param rTabName name of the table where the data should be cached.
- * @param rCacheData range data to be cached.
- * @param rCacheRange original cache range, including the empty region if
- *                    any.
- * @param rDataRange reduced cache range that includes only the non-empty
- *                   data area.
- */
-void putRangeDataIntoCache(
-    ScExternalRefCache& rRefCache, ScExternalRefCache::TokenArrayRef& pArray,
-    sal_uInt16 nFileId, const String& rTabName,
-    const vector<ScExternalRefCache::SingleRangeData>& rCacheData,
-    const ScRange& rCacheRange, const ScRange& rDataRange)
-{
-    if (pArray)
-        // Cache these values.
-        rRefCache.setCellRangeData(nFileId, rDataRange, rCacheData, pArray);
-    else
-    {
-        // Array is empty.  Fill it with an empty matrix of the required size.
-        pArray.reset(lcl_fillEmptyMatrix(rCacheRange));
-
-        // Make sure to set this range 'cached', to prevent unnecessarily
-        // accessing the src document time and time again.
-        ScExternalRefCache::TableTypeRef pCacheTab =
-            rRefCache.getCacheTable(nFileId, rTabName, true, NULL);
-        if (pCacheTab)
-            pCacheTab->setCachedCellRange(
-                rCacheRange.aStart.Col(), rCacheRange.aStart.Row(), rCacheRange.aEnd.Col(), rCacheRange.aEnd.Row());
-    }
-}
-
-/**
- * When accessing an external document for the first time, we need to
- * populate the cache with all its sheet names (whether they are referenced
- * or not) in the correct order.  Many client codes that use external
- * references make this assumption.
- *
- * @param rRefCache cache table set.
- * @param pSrcDoc source document instance.
- * @param nFileId external file ID associated with the source document.
- */
-void initDocInCache(ScExternalRefCache& rRefCache, const ScDocument* pSrcDoc, sal_uInt16 nFileId)
-{
-    if (!pSrcDoc)
-        return;
-
-    if (rRefCache.isDocInitialized(nFileId))
-        // Already initialized.  No need to do this twice.
-        return;
-
-    SCTAB nTabCount = pSrcDoc->GetTableCount();
-    if (nTabCount)
-    {
-        // Populate the cache with all table names in the source document.
-        vector<String> aTabNames;
-        aTabNames.reserve(nTabCount);
-        for (SCTAB i = 0; i < nTabCount; ++i)
-        {
-            String aName;
-            pSrcDoc->GetName(i, aName);
-            aTabNames.push_back(aName);
-        }
-        rRefCache.initializeDoc(nFileId, aTabNames);
-    }
-}
-
-}
-
 ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     sal_uInt16 nFileId, const String& rTabName, const ScAddress& rCell,
     const ScAddress* pCurPos, SCTAB* pTab, ScExternalRefCache::CellFormat* pFmt)
@@ -1711,6 +1670,8 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     if (pSrcDoc)
     {
         // source document already loaded in memory.  Re-use this instance.
+        // We don't even cache data when the document is loaded.
+
         SCTAB nTab;
         if (!pSrcDoc->GetTable(rTabName, nTab))
         {
@@ -1722,12 +1683,8 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
         if (pTab)
             *pTab = nTab;
 
-        ScExternalRefCache::TokenRef pToken =
-            getSingleRefTokenFromSrcDoc(
-                nFileId, pSrcDoc, ScAddress(rCell.Col(),rCell.Row(),nTab), pFmt);
-
-        putCellDataIntoCache(maRefCache, pToken, nFileId, rTabName, rCell, pFmt);
-        return pToken;
+        return getSingleRefTokenFromSrcDoc(
+            nFileId, pSrcDoc, ScAddress(rCell.Col(),rCell.Row(),nTab), pFmt);
     }
 
     // Check if the given table name and the cell position is cached.
@@ -1763,8 +1720,8 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
 
     SCCOL nDataCol1 = 0, nDataCol2 = MAXCOL;
     SCROW nDataRow1 = 0, nDataRow2 = MAXROW;
-    bool bData = pSrcDoc->ShrinkToDataArea(nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2);
-    if (!bData || rCell.Col() < nDataCol1 || nDataCol2 < rCell.Col() || rCell.Row() < nDataRow1 || nDataRow2 < rCell.Row())
+    pSrcDoc->ShrinkToDataArea(nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2);
+    if (rCell.Col() < nDataCol1 || nDataCol2 < rCell.Col() || rCell.Row() < nDataRow1 || nDataRow2 < rCell.Row())
     {
         // requested cell is outside the data area.  Don't even bother caching
         // this data, but add it to the cached range to prevent accessing the
@@ -1781,7 +1738,10 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     pToken = getSingleRefTokenFromSrcDoc(
         nFileId, pSrcDoc, ScAddress(rCell.Col(),rCell.Row(),nTab), pFmt);
 
-    putCellDataIntoCache(maRefCache, pToken, nFileId, rTabName, rCell, pFmt);
+    // Now, insert the token into cache table but don't cache empty cells.
+    if (pToken->GetType() != formula::svEmptyCell)
+        maRefCache.setCellData(nFileId, rTabName, rCell.Col(), rCell.Row(), pToken, nFmtIndex);
+
     return pToken;
 }
 
@@ -1793,18 +1753,13 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
 
     maybeLinkExternalFile(nFileId);
 
-    ScRange aDataRange(rRange);
+    ScRange aRange(rRange);
     const ScDocument* pSrcDoc = getInMemorySrcDocument(nFileId);
     if (pSrcDoc)
     {
-        // Document already loaded in memory.
+        // Document already loaded.
         vector<ScExternalRefCache::SingleRangeData> aCacheData;
-        ScExternalRefCache::TokenArrayRef pArray =
-            getDoubleRefTokensFromSrcDoc(pSrcDoc, rTabName, aDataRange, aCacheData);
-
-        // Put the data into cache.
-        putRangeDataIntoCache(maRefCache, pArray, nFileId, rTabName, aCacheData, rRange, aDataRange);
-        return pArray;
+        return getDoubleRefTokensFromSrcDoc(pSrcDoc, rTabName, aRange, aCacheData);
     }
 
     // Check if the given table name and the cell position is cached.
@@ -1824,10 +1779,25 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     }
 
     vector<ScExternalRefCache::SingleRangeData> aCacheData;
-    pArray = getDoubleRefTokensFromSrcDoc(pSrcDoc, rTabName, aDataRange, aCacheData);
+    pArray = getDoubleRefTokensFromSrcDoc(pSrcDoc, rTabName, aRange, aCacheData);
 
-    // Put the data into cache.
-    putRangeDataIntoCache(maRefCache, pArray, nFileId, rTabName, aCacheData, rRange, aDataRange);
+    if (pArray)
+        // Cache these values.
+        maRefCache.setCellRangeData(nFileId, aRange, aCacheData, pArray);
+    else
+    {
+        // Array is empty.  Fill it with an empty matrix of the required size.
+        pArray.reset(lcl_fillEmptyMatrix(rRange));
+
+        // Make sure to set this range 'cached', to prevent unnecessarily
+        // accessing the src document time and time again.
+        ScExternalRefCache::TableTypeRef pCacheTab =
+            maRefCache.getCacheTable(nFileId, rTabName, true, NULL);
+        if (pCacheTab)
+            pCacheTab->setCachedCellRange(
+                rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+    }
+
     return pArray;
 }
 
@@ -1843,14 +1813,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(sal_u
     if (pSrcDoc)
     {
         // Document already loaded in memory.
-        ScExternalRefCache::TokenArrayRef pArray =
-            getRangeNameTokensFromSrcDoc(nFileId, pSrcDoc, aName);
-
-        if (pArray)
-            // Cache this range name array.
-            maRefCache.setRangeNameTokens(nFileId, aName, pArray);
-
-        return pArray;
+        return getRangeNameTokensFromSrcDoc(nFileId, pSrcDoc, aName);
     }
 
     ScExternalRefCache::TokenArrayRef pArray = maRefCache.getRangeNameTokens(nFileId, rName);
@@ -2000,7 +1963,12 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
 {
     ScRangeName* pExtNames = pSrcDoc->GetRangeName();
     String aUpperName = ScGlobal::pCharClass->upper(rName);
-    const ScRangeData* pRangeData = pExtNames->findByUpperName(aUpperName);
+    USHORT n;
+    bool bRes = pExtNames->SearchNameUpper(aUpperName, n);
+    if (!bRes)
+        return ScExternalRefCache::TokenArrayRef();
+
+    ScRangeData* pRangeData = (*pExtNames)[n];
     if (!pRangeData)
         return ScExternalRefCache::TokenArrayRef();
 
@@ -2011,28 +1979,28 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
 
     ScExternalRefCache::TokenArrayRef pNew(new ScTokenArray);
 
-    ScTokenArray aCode(*pRangeData->GetCode());
-    for (const FormulaToken* pToken = aCode.First(); pToken; pToken = aCode.Next())
+    ScTokenArray* pCode = pRangeData->GetCode();
+    for (FormulaToken* pToken = pCode->First(); pToken; pToken = pCode->Next())
     {
         bool bTokenAdded = false;
         switch (pToken->GetType())
         {
             case svSingleRef:
             {
-                const ScSingleRefData& rRef = static_cast<const ScToken*>(pToken)->GetSingleRef();
+                const ScSingleRefData& rRef = static_cast<ScToken*>(pToken)->GetSingleRef();
                 String aTabName;
                 pSrcDoc->GetName(rRef.nTab, aTabName);
-                ScExternalSingleRefToken aNewToken(nFileId, aTabName, static_cast<const ScToken*>(pToken)->GetSingleRef());
+                ScExternalSingleRefToken aNewToken(nFileId, aTabName, static_cast<ScToken*>(pToken)->GetSingleRef());
                 pNew->AddToken(aNewToken);
                 bTokenAdded = true;
             }
             break;
             case svDoubleRef:
             {
-                const ScSingleRefData& rRef = static_cast<const ScToken*>(pToken)->GetSingleRef();
+                const ScSingleRefData& rRef = static_cast<ScToken*>(pToken)->GetSingleRef();
                 String aTabName;
                 pSrcDoc->GetName(rRef.nTab, aTabName);
-                ScExternalDoubleRefToken aNewToken(nFileId, aTabName, static_cast<const ScToken*>(pToken)->GetDoubleRef());
+                ScExternalDoubleRefToken aNewToken(nFileId, aTabName, static_cast<ScToken*>(pToken)->GetDoubleRef());
                 pNew->AddToken(aNewToken);
                 bTokenAdded = true;
             }
@@ -2055,7 +2023,6 @@ const ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileI
     if (!pFileName)
         return NULL;
 
-    ScDocument* pSrcDoc = NULL;
     TypeId aType(TYPE(ScDocShell));
     ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType, false));
     while (pShell)
@@ -2068,15 +2035,12 @@ const ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileI
             if (pFileName->EqualsIgnoreCaseAscii(aName))
             {
                 // Found !
-                pSrcDoc = pShell->GetDocument();
-                break;
+                return pShell->GetDocument();
             }
         }
         pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, &aType, false));
     }
-
-    initDocInCache(maRefCache, pSrcDoc, nFileId);
-    return pSrcDoc;
+    return NULL;
 }
 
 const ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
@@ -2090,6 +2054,10 @@ const ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
     if (itr != itrEnd)
     {
         // document already loaded.
+
+        // TODO: Find out a way to access a document that's already open in
+        // memory and re-use that instance, instead of loading it from the
+        // disk again.
 
         SfxObjectShell* p = itr->second.maShell;
         itr->second.maLastAccess = Time();
@@ -2119,7 +2087,21 @@ const ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
     maDocShells.insert(DocShellMap::value_type(nFileId, aSrcDoc));
     SfxObjectShell* p = aSrcDoc.maShell;
     ScDocument* pSrcDoc = static_cast<ScDocShell*>(p)->GetDocument();
-    initDocInCache(maRefCache, pSrcDoc, nFileId);
+
+    SCTAB nTabCount = pSrcDoc->GetTableCount();
+    if (!maRefCache.isDocInitialized(nFileId) && nTabCount)
+    {
+        // Populate the cache with all table names in the source document.
+        vector<String> aTabNames;
+        aTabNames.reserve(nTabCount);
+        for (SCTAB i = 0; i < nTabCount; ++i)
+        {
+            String aName;
+            pSrcDoc->GetName(i, aName);
+            aTabNames.push_back(aName);
+        }
+        maRefCache.initializeDoc(nFileId, aTabNames);
+    }
     return pSrcDoc;
 }
 
@@ -2149,7 +2131,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
     {
         // Generate a relative file path.
         INetURLObject aBaseURL(getOwnDocumentName());
-        aBaseURL.insertName(OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")));
+        aBaseURL.insertName(OUString::createFromAscii("content.xml"));
 
         String aStr = URIHelper::simpleNormalizedMakeRelative(
             aBaseURL.GetMainURL(INetURLObject::NO_DECODE), aFile);
@@ -2162,7 +2144,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
         pSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions));
 
     // make medium hidden to prevent assertion from progress bar
-    pSet->Put( SfxBoolItem( SID_HIDDEN, sal_True ) );
+    pSet->Put( SfxBoolItem( SID_HIDDEN, TRUE ) );
 
     auto_ptr<SfxMedium> pMedium(new SfxMedium(aFile, STREAM_STD_READ, false, pFilter, pSet));
     if (pMedium->GetError() != ERRCODE_NONE)
@@ -2253,7 +2235,7 @@ void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(const String& rO
     // Formulate the absolute file path from the relative path.
     const String& rRelPath = maRelativeName;
     INetURLObject aBaseURL(rOwnDocName);
-    aBaseURL.insertName(OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")));
+    aBaseURL.insertName(OUString::createFromAscii("content.xml"));
     bool bWasAbs = false;
     maRealFileName = aBaseURL.smartRel2Abs(rRelPath, bWasAbs).GetMainURL(INetURLObject::NO_DECODE);
 }
@@ -2474,7 +2456,7 @@ void ScExternalRefManager::addLinkListener(sal_uInt16 nFileId, LinkListener* pLi
             LinkListenerMap::value_type(nFileId, LinkListeners()));
         if (!r.second)
         {
-            OSL_FAIL("insertion of new link listener list failed");
+            DBG_ERROR("insertion of new link listener list failed");
             return;
         }
 

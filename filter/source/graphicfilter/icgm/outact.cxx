@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ CGMOutAct::CGMOutAct( CGM& rCGM )
     mnGroupActCount = mnGroupLevel = 0;
     mpGroupLevel = new sal_uInt32[ CGM_OUTACT_MAX_GROUP_LEVEL ];
     mpPoints = (Point*)new sal_Int8[ 0x2000 * sizeof( Point ) ];
-    mpFlags = new sal_uInt8[ 0x2000 ];
+    mpFlags = new BYTE[ 0x2000 ];
 
     mnIndex = 0;
     mpGradient = NULL;
@@ -111,12 +111,12 @@ void CGMOutAct::EndFigure()
 
 void CGMOutAct::RegPolyLine( Polygon& rPolygon, sal_Bool bReverse )
 {
-    sal_uInt16 nPoints = rPolygon.GetSize();
+    USHORT nPoints = rPolygon.GetSize();
     if ( nPoints )
     {
         if ( bReverse )
         {
-            for ( sal_uInt16 i = 0; i <  nPoints; i++ )
+            for ( USHORT i = 0; i <  nPoints; i++ )
             {
                 mpPoints[ mnIndex + i ] = rPolygon.GetPoint( nPoints - i - 1 );
                 mpFlags[ mnIndex + i ] = (sal_Int8)rPolygon.GetFlags( nPoints - i - 1 );
@@ -124,7 +124,7 @@ void CGMOutAct::RegPolyLine( Polygon& rPolygon, sal_Bool bReverse )
         }
         else
         {
-            for ( sal_uInt16 i = 0; i <  nPoints; i++ )
+            for ( USHORT i = 0; i <  nPoints; i++ )
             {
                 mpPoints[ mnIndex + i ] = rPolygon.GetPoint( i );
                 mpFlags[ mnIndex + i ] = (sal_Int8)rPolygon.GetFlags( i );
@@ -178,7 +178,7 @@ void CGMOutAct::SetGradientStyle( sal_uInt32 nStyle, double /*fRatio*/ )
         break;
         case 4 :
         {
-            mpGradient->Style = awt::GradientStyle_RADIAL;          // CONICAL
+            mpGradient->Style = awt::GradientStyle_RADIAL;			// CONICAL
         }
         break;
         case 3 :

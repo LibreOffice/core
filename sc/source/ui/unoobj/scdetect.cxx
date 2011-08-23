@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,35 +97,35 @@ ScFilterDetect::~ScFilterDetect()
 {
 }
 
-static const sal_Char pFilterSc50[]     = "StarCalc 5.0";
-static const sal_Char pFilterSc50Temp[] = "StarCalc 5.0 Vorlage/Template";
-static const sal_Char pFilterSc40[]     = "StarCalc 4.0";
-static const sal_Char pFilterSc40Temp[] = "StarCalc 4.0 Vorlage/Template";
-static const sal_Char pFilterSc30[]     = "StarCalc 3.0";
-static const sal_Char pFilterSc30Temp[] = "StarCalc 3.0 Vorlage/Template";
-static const sal_Char pFilterSc10[]     = "StarCalc 1.0";
-static const sal_Char pFilterXML[]      = "StarOffice XML (Calc)";
-static const sal_Char pFilterAscii[]        = "Text - txt - csv (StarCalc)";
-static const sal_Char pFilterLotus[]        = "Lotus";
-static const sal_Char pFilterQPro6[]        = "Quattro Pro 6.0";
-static const sal_Char pFilterExcel4[]   = "MS Excel 4.0";
-static const sal_Char pFilterEx4Temp[]  = "MS Excel 4.0 Vorlage/Template";
-static const sal_Char pFilterExcel5[]   = "MS Excel 5.0/95";
-static const sal_Char pFilterEx5Temp[]  = "MS Excel 5.0/95 Vorlage/Template";
-static const sal_Char pFilterExcel95[]  = "MS Excel 95";
-static const sal_Char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
-static const sal_Char pFilterExcel97[]  = "MS Excel 97";
-static const sal_Char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
-static const sal_Char pFilter2003XML[]   = "MS Excel 2003 XML";
-static const sal_Char pFilterDBase[]        = "dBase";
-static const sal_Char pFilterDif[]      = "DIF";
-static const sal_Char pFilterSylk[]     = "SYLK";
-static const sal_Char pFilterHtml[]     = "HTML (StarCalc)";
-static const sal_Char pFilterHtmlWeb[]  = "calc_HTML_WebQuery";
-static const sal_Char pFilterRtf[]      = "Rich Text Format (StarCalc)";
+static const sal_Char __FAR_DATA pFilterSc50[]		= "StarCalc 5.0";
+static const sal_Char __FAR_DATA pFilterSc50Temp[]	= "StarCalc 5.0 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterSc40[]		= "StarCalc 4.0";
+static const sal_Char __FAR_DATA pFilterSc40Temp[]	= "StarCalc 4.0 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterSc30[]		= "StarCalc 3.0";
+static const sal_Char __FAR_DATA pFilterSc30Temp[]	= "StarCalc 3.0 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterSc10[]		= "StarCalc 1.0";
+static const sal_Char __FAR_DATA pFilterXML[]		= "StarOffice XML (Calc)";
+static const sal_Char __FAR_DATA pFilterAscii[]		= "Text - txt - csv (StarCalc)";
+static const sal_Char __FAR_DATA pFilterLotus[]		= "Lotus";
+static const sal_Char __FAR_DATA pFilterQPro6[]		= "Quattro Pro 6.0";
+static const sal_Char __FAR_DATA pFilterExcel4[]	= "MS Excel 4.0";
+static const sal_Char __FAR_DATA pFilterEx4Temp[]	= "MS Excel 4.0 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterExcel5[]	= "MS Excel 5.0/95";
+static const sal_Char __FAR_DATA pFilterEx5Temp[]	= "MS Excel 5.0/95 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterExcel95[]	= "MS Excel 95";
+static const sal_Char __FAR_DATA pFilterEx95Temp[]	= "MS Excel 95 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterExcel97[]	= "MS Excel 97";
+static const sal_Char __FAR_DATA pFilterEx97Temp[]	= "MS Excel 97 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilter2003XML[]   = "MS Excel 2003 XML";
+static const sal_Char __FAR_DATA pFilterDBase[]		= "dBase";
+static const sal_Char __FAR_DATA pFilterDif[]		= "DIF";
+static const sal_Char __FAR_DATA pFilterSylk[]		= "SYLK";
+static const sal_Char __FAR_DATA pFilterHtml[]		= "HTML (StarCalc)";
+static const sal_Char __FAR_DATA pFilterHtmlWeb[]	= "calc_HTML_WebQuery";
+static const sal_Char __FAR_DATA pFilterRtf[]		= "Rich Text Format (StarCalc)";
 
 
-static sal_Bool lcl_MayBeAscii( SvStream& rStream )
+static BOOL lcl_MayBeAscii( SvStream& rStream )
 {
     // ASCII/CSV is considered possible if there are no null bytes, or a Byte
     // Order Mark is present, or if, for Unicode UCS2/UTF-16, all null bytes
@@ -136,12 +136,12 @@ static sal_Bool lcl_MayBeAscii( SvStream& rStream )
     const size_t nBufSize = 2048;
     sal_uInt16 aBuffer[ nBufSize ];
     sal_uInt8* pByte = reinterpret_cast<sal_uInt8*>(aBuffer);
-    sal_uLong nBytesRead = rStream.Read( pByte, nBufSize*2);
+    ULONG nBytesRead = rStream.Read( pByte, nBufSize*2);
 
     if ( nBytesRead >= 2 && (aBuffer[0] == 0xfffe || aBuffer[0] == 0xfeff) )
     {
         // Unicode BOM file may contain null bytes.
-        return sal_True;
+        return TRUE;
     }
 
     const sal_uInt16* p = aBuffer;
@@ -159,13 +159,13 @@ static sal_Bool lcl_MayBeAscii( SvStream& rStream )
     return nMask != 0;
 }
 
-static sal_Bool lcl_MayBeDBase( SvStream& rStream )
+static BOOL lcl_MayBeDBase( SvStream& rStream )
 {
     // Look for dbf marker, see connectivity/source/inc/dbase/DTable.hxx
     // DBFType for values.
-    const sal_uInt8 nValidMarks[] = {
+    const BYTE nValidMarks[] = {
         0x03, 0x04, 0x05, 0x30, 0x43, 0xB3, 0x83, 0x8b, 0x8e, 0xf5 };
-    sal_uInt8 nMark;
+    BYTE nMark;
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
     rStream >> nMark;
     bool bValidMark = false;
@@ -175,24 +175,24 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
             bValidMark = true;
     }
     if ( !bValidMark )
-        return false;
+        return FALSE;
 
     const size_t nHeaderBlockSize = 32;
     // Empty dbf is >= 32*2+1 bytes in size.
     const size_t nEmptyDbf = nHeaderBlockSize * 2 + 1;
 
     rStream.Seek(STREAM_SEEK_TO_END);
-    sal_uLong nSize = rStream.Tell();
+    ULONG nSize = rStream.Tell();
     if ( nSize < nEmptyDbf )
-        return false;
+        return FALSE;
 
     // length of header starts at 8
     rStream.Seek(8);
-    sal_uInt16 nHeaderLen;
+    USHORT nHeaderLen;
     rStream >> nHeaderLen;
 
     if ( nHeaderLen < nEmptyDbf || nSize < nHeaderLen )
-        return false;
+        return FALSE;
 
     // Last byte of header must be 0x0d, this is how it's specified.
     // #i9581#,#i26407# but some applications don't follow the specification
@@ -200,8 +200,8 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     // even boundary. Some (#i88577# ) even pad more or pad using a 0x1a ^Z
     // control character (#i8857#). This results in:
     // Last byte of header must be 0x0d on 32 bytes boundary.
-    sal_uInt16 nBlocks = (nHeaderLen - 1) / nHeaderBlockSize;
-    sal_uInt8 nEndFlag = 0;
+    USHORT nBlocks = (nHeaderLen - 1) / nHeaderBlockSize;
+    BYTE nEndFlag = 0;
     while ( nBlocks > 1 && nEndFlag != 0x0d ) {
         rStream.Seek( nBlocks-- * nHeaderBlockSize );
         rStream >> nEndFlag;
@@ -225,11 +225,11 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
     // there is no parameter that forbids to open as template
-    sal_Bool bOpenAsTemplate = false;
-    sal_Bool bWasReadOnly = false, bReadOnly = false;
+    sal_Bool bOpenAsTemplate = sal_False;
+    sal_Bool bWasReadOnly = sal_False, bReadOnly = sal_False;
 
-    sal_Bool bRepairPackage = false;
-    sal_Bool bRepairAllowed = false;
+    sal_Bool bRepairPackage = sal_False;
+    sal_Bool bRepairAllowed = sal_False;
 
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
@@ -294,7 +294,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
 
     SfxAllItemSet *pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
     TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, false );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
 
     bWasReadOnly = pItem && pItem->GetValue();
 
@@ -317,10 +317,10 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
             pFilter = aMatcher.GetFilter4EA( aTypeName );
 
         // ctor of SfxMedium uses owner transition of ItemSet
-        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, false, NULL, pSet );
-        aMedium.UseInteractionHandler( sal_True );
+        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
+        aMedium.UseInteractionHandler( TRUE );
 
-        sal_Bool bIsStorage = aMedium.IsStorage();
+        BOOL bIsStorage = aMedium.IsStorage();
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
             // remember input stream and content and put them into the descriptor later
@@ -332,7 +332,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
             // maybe that IsStorage() already created an error!
             if ( bIsStorage )
             {
-                uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage( false ));
+                uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage( sal_False ));
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium
@@ -364,7 +364,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                         String aFilterName;
                         if ( pFilter )
                             aFilterName = pFilter->GetName();
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : false, &aFilterName );
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : FALSE, &aFilterName );
                     }
                     catch( lang::WrappedTargetException& aWrap )
                     {
@@ -384,16 +384,20 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 if ( !bRepairPackage )
                                 {
                                     // ask the user whether he wants to try to repair
-                                    RequestPackageReparation aRequest( aDocumentTitle );
-                                    xInteraction->handle( aRequest.GetRequest() );
-                                    bRepairAllowed = aRequest.isApproved();
+                                    RequestPackageReparation* pRequest = new RequestPackageReparation( aDocumentTitle );
+                                    uno::Reference< task::XInteractionRequest > xRequest ( pRequest );
+
+                                    xInteraction->handle( xRequest );
+
+                                    bRepairAllowed = pRequest->isApproved();
                                 }
 
                                 if ( !bRepairAllowed )
                                 {
                                     // repair either not allowed or not successful
-                                    NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
-                                    xInteraction->handle( aNotifyRequest.GetRequest() );
+                                    NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
+                                    uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
+                                       xInteraction->handle( xRequest );
                                 }
                             }
 
@@ -426,22 +430,22 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                 pFilter = 0;
                 if ( pStream )
                 {
-                    SotStorageRef aStorage = new SotStorage ( pStream, false );
+                    SotStorageRef aStorage = new SotStorage ( pStream, FALSE );
                     if ( !aStorage->GetError() )
                     {
                         // Excel-5: detect through contained streams
                         // there are some "excel" formats from 3rd party vendors that need to be distinguished
-                        String aStreamName(RTL_CONSTASCII_USTRINGPARAM("Workbook"));
-                        sal_Bool bExcel97Stream = ( aStorage->IsStream( aStreamName ) );
+                        String aStreamName(RTL_CONSTASCII_STRINGPARAM("Workbook"));
+                        BOOL bExcel97Stream = ( aStorage->IsStream( aStreamName ) );
 
-                        aStreamName = String(RTL_CONSTASCII_USTRINGPARAM("Book"));
-                        sal_Bool bExcel5Stream = ( aStorage->IsStream( aStreamName ) );
+                        aStreamName = String(RTL_CONSTASCII_STRINGPARAM("Book"));
+                        BOOL bExcel5Stream = ( aStorage->IsStream( aStreamName ) );
                         if ( bExcel97Stream || bExcel5Stream )
                         {
                             if ( bExcel97Stream )
                             {
                                 String aOldName;
-                                sal_Bool bIsCalcFilter = sal_True;
+                                BOOL bIsCalcFilter = TRUE;
                                 if ( pPreselectedFilter )
                                 {
                                     // cross filter; now this should be a type detection only, not a filter detection
@@ -470,7 +474,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             else if ( bExcel5Stream )
                             {
                                 String aOldName;
-                                sal_Bool bIsCalcFilter = sal_True;
+                                BOOL bIsCalcFilter = TRUE;
                                 if ( pPreselectedFilter )
                                 {
                                     // cross filter; now this should be a type detection only, not a filter detection
@@ -487,7 +491,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 }
                                 else if ( aOldName.EqualsAscii(pFilterEx97Temp) )
                                 {
-                                    // auto detection has found template -> return Excel5 template
+                                    // #101923# auto detection has found template -> return Excel5 template
                                     pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterEx5Temp) );
                                 }
                                 else
@@ -514,18 +518,18 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
         #define M_ALT(ANZ)  (0x0200+(ANZ))
         #define M_ENDE      0x8000
 
-                        static const sal_uInt16 pLotus[] =      // Lotus 1/1A/2
+                        static const UINT16 pLotus[] =      // Lotus 1/1A/2
                             { 0x0000, 0x0000, 0x0002, 0x0000,
                             M_ALT(2), 0x0004, 0x0006,
                             0x0004, M_ENDE };
 
-                        static const sal_uInt16 pLotusNew[] =   // Lotus >= 9.7
+                        static const UINT16 pLotusNew[] =   // Lotus >= 9.7
                             { 0x0000, 0x0000, M_DC, 0x0000,     // Rec# + Len (0x1a)
                               M_ALT(3), 0x0003, 0x0004, 0x0005, // File Revision Code 97->ME
                               0x0010, 0x0004, 0x0000, 0x0000,
                               M_ENDE };
 
-                        static const sal_uInt16 pExcel1[] =     // Excel BIFF2, BIFF3, BIFF4
+                        static const UINT16 pExcel1[] =     // Excel BIFF2, BIFF3, BIFF4
                             {   0x09,                                   // lobyte of BOF rec ID (0x0009, 0x0209, 0x0409)
                                 M_ALT(3), 0x00, 0x02, 0x04,             // hibyte of BOF rec ID (0x0009, 0x0209, 0x0409)
                                 M_ALT(3), 4, 6, 8,                      // lobyte of BOF rec size (4, 6, 8, 16)
@@ -535,7 +539,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 0x00,                                   // hibyte of data type (0x0010, 0x0020, 0x0040)
                                 M_ENDE };
 
-                        static const sal_uInt16 pExcel2[] =     // Excel BIFF4 Workspace
+                        static const UINT16 pExcel2[] =     // Excel BIFF4 Workspace
                             {   0x09,                                   // lobyte of BOF rec ID (0x0409)
                                 0x04,                                   // hibyte of BOF rec ID (0x0409)
                                 M_ALT(3), 4, 6, 8,                      // lobyte of BOF rec size (4, 6, 8, 16)
@@ -545,7 +549,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 0x01,                                   // hibyte of data type (0x0100)
                                 M_ENDE };
 
-                        static const sal_uInt16 pExcel3[] =     // #i23425# Excel BIFF5, BIFF7, BIFF8 (simple book stream)
+                        static const UINT16 pExcel3[] =     // #i23425# Excel BIFF5, BIFF7, BIFF8 (simple book stream)
                             {   0x09,                                   // lobyte of BOF rec ID (0x0809)
                                 0x08,                                   // hibyte of BOF rec ID (0x0809)
                                 M_ALT(4), 4, 6, 8, 16,                  // lobyte of BOF rec size
@@ -555,7 +559,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 0x00,                                   // hibyte of data type
                                 M_ENDE };
 
-                        static const sal_uInt16 pSc10[] =       // StarCalc 1.0 Dokumente
+                        static const UINT16 pSc10[] =       // StarCalc 1.0 Dokumente
                             { 'B', 'l', 'a', 'i', 's', 'e', '-', 'T', 'a', 'b', 'e', 'l', 'l',
                             'e', 0x000A, 0x000D, 0x0000,    // Sc10CopyRight[16]
                             M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC,
@@ -564,21 +568,21 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             0x0000,
                             M_ENDE };
 
-                        static const sal_uInt16 pLotus2[] =     // Lotus >3
+                        static const UINT16 pLotus2[] =     // Lotus >3
                             { 0x0000, 0x0000, 0x001A, 0x0000,   // Rec# + Len (26)
                             M_ALT(2), 0x0000, 0x0002,         // File Revision Code
                             0x0010,
                             0x0004, 0x0000,                   // File Revision Subcode
                             M_ENDE };
 
-                        static const sal_uInt16 pQPro[] =
+                        static const UINT16 pQPro[] =
                                { 0x0000, 0x0000, 0x0002, 0x0000,
                                  M_ALT(4), 0x0001, 0x0002, // WB1, WB2
                                  0x0006, 0x0007,           // QPro 6/7 (?)
                                  0x0010,
                                  M_ENDE };
 
-                        static const sal_uInt16 pDIF1[] =       // DIF mit CR-LF
+                        static const UINT16 pDIF1[] =       // DIF mit CR-LF
                             {
                             'T', 'A', 'B', 'L', 'E',
                             M_DC, M_DC,
@@ -587,7 +591,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             '\"',
                             M_ENDE };
 
-                        static const sal_uInt16 pDIF2[] =       // DIF mit CR oder LF
+                        static const UINT16 pDIF2[] =       // DIF mit CR oder LF
                             {
                             'T', 'A', 'B', 'L', 'E',
                             M_DC,
@@ -596,13 +600,13 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             '\"',
                             M_ENDE };
 
-                        static const sal_uInt16 pSylk[] =       // Sylk
+                        static const UINT16 pSylk[] =       // Sylk
                             {
                             'I', 'D', ';',
                             M_ALT(3), 'P', 'N', 'E',        // 'P' plus undocumented Excel extensions 'N' and 'E'
                             M_ENDE };
 
-                        static const sal_uInt16 *ppFilterPatterns[] =      // Arrays mit Suchmustern
+                        static const UINT16 *ppFilterPatterns[] =      // Arrays mit Suchmustern
                             {
                             pLotus,
                             pExcel1,
@@ -616,7 +620,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             pLotus2,
                             pQPro
                             };
-                        const sal_uInt16 nFilterCount = SAL_N_ELEMENTS(ppFilterPatterns);
+                        const UINT16 nFilterCount = SAL_N_ELEMENTS(ppFilterPatterns);
 
                         static const sal_Char* const pFilterName[] =     // zugehoerige Filter
                             {
@@ -633,41 +637,43 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             pFilterQPro6
                             };
 
+                        // const UINT16 nByteMask = 0xFF;
+
                         // suchen Sie jetzt!
                         // ... realisiert ueber 'Mustererkennung'
 
-                        sal_uInt8            nAkt;
-                        sal_Bool            bSync;          // Datei und Muster stimmen ueberein
-                        sal_uInt16          nFilter;        // Zaehler ueber alle Filter
-                        const sal_uInt16    *pSearch;       // aktuelles Musterwort
+                        BYTE            nAkt;
+                        BOOL            bSync;          // Datei und Muster stimmen ueberein
+                        USHORT          nFilter;        // Zaehler ueber alle Filter
+                        const UINT16    *pSearch;       // aktuelles Musterwort
 
                         for ( nFilter = 0 ; nFilter < nFilterCount ; nFilter++ )
                         {
                             rStr.Seek( 0 ); // am Anfang war alles Uebel...
                             rStr >> nAkt;
                             pSearch = ppFilterPatterns[ nFilter ];
-                            bSync = sal_True;
+                            bSync = TRUE;
                             while( !rStr.IsEof() && bSync )
                             {
-                                register sal_uInt16 nMuster = *pSearch;
+                                register UINT16 nMuster = *pSearch;
 
                                 if( nMuster < 0x0100 )
                                 { //                                direkter Byte-Vergleich
-                                    if( ( sal_uInt8 ) nMuster != nAkt )
-                                        bSync = false;
+                                    if( ( BYTE ) nMuster != nAkt )
+                                        bSync = FALSE;
                                 }
                                 else if( nMuster & M_DC )
                                 { //                                             don't care
                                 }
                                 else if( nMuster & M_ALT(0) )
                                 { //                                      alternative Bytes
-                                    sal_uInt8 nAnzAlt = ( sal_uInt8 ) nMuster;
-                                    bSync = false;          // zunaechst unsynchron
+                                    BYTE nAnzAlt = ( BYTE ) nMuster;
+                                    bSync = FALSE;          // zunaechst unsynchron
                                     while( nAnzAlt > 0 )
                                     {
                                         pSearch++;
-                                        if( ( sal_uInt8 ) *pSearch == nAkt )
-                                            bSync = sal_True;   // jetzt erst Synchronisierung
+                                        if( ( BYTE ) *pSearch == nAkt )
+                                            bSync = TRUE;   // jetzt erst Synchronisierung
                                         nAnzAlt--;
                                     }
                                 }
@@ -683,12 +689,12 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                     {   // gefundenen Filter einstellen
                                         pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterName[ nFilter ]) );
                                     }
-                                    bSync = false;              // leave inner loop
+                                    bSync = FALSE;              // leave inner loop
                                     nFilter = nFilterCount;     // leave outer loop
                                 }
                                 else
                                 { //                                         Tabellenfehler
-                                    OSL_FAIL( "-ScApplication::DetectFilter(): Fehler in Mustertabelle");
+                                    DBG_ERROR( "-ScApplication::DetectFilter(): Fehler in Mustertabelle");
                                 }
 
                                 pSearch++;
@@ -758,7 +764,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("InputStream");
         lDescriptor[nPropertyCount].Value <<= xStream;
         nPropertyCount++;
     }
@@ -767,7 +773,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCBContent"));
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("UCBContent");
         lDescriptor[nPropertyCount].Value <<= xContent;
         nPropertyCount++;
     }
@@ -777,7 +783,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
         if ( nIndexOfReadOnlyFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("ReadOnly");
             lDescriptor[nPropertyCount].Value <<= bReadOnly;
             nPropertyCount++;
         }
@@ -788,7 +794,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     if ( !bRepairPackage && bRepairAllowed )
     {
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage"));
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("RepairPackage");
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
 
@@ -802,7 +808,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
         if ( nIndexOfTemplateFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
             lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
             nPropertyCount++;
         }
@@ -816,7 +822,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("DocumentTitle");
             lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
             nPropertyCount++;
         }
@@ -829,7 +835,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
         if ( nIndexOfFilterName == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("FilterName");
             lDescriptor[nPropertyCount].Value <<= rtl::OUString(pFilter->GetName());
             nPropertyCount++;
         }
@@ -864,7 +870,7 @@ sal_Bool SAL_CALL ScFilterDetect::supportsService( const UNOOUSTRING& sServiceNa
             return sal_True ;
         }
     }
-    return false ;
+    return sal_False ;
 }
 
 /* XServiceInfo */
@@ -878,14 +884,14 @@ UNOSEQUENCE< UNOOUSTRING > ScFilterDetect::impl_getStaticSupportedServiceNames()
 {
     UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
     UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ExtendedTypeDetection"  ));
+    seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.ExtendedTypeDetection"  );
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 UNOOUSTRING ScFilterDetect::impl_getStaticImplementationName()
 {
-    return UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.calc.FormatDetector" ));
+    return UNOOUSTRING::createFromAscii( "com.sun.star.comp.calc.FormatDetector" );
 }
 
 /* Helper for registry */

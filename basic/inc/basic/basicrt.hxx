@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ public:
     xub_StrLen GetLine();
     xub_StrLen GetCol1();
     xub_StrLen GetCol2();
-    sal_Bool IsRun();
-    sal_Bool IsValid() { return pRun != NULL; }
+    BOOL IsRun();
+    BOOL IsValid() { return pRun != NULL; }
     BasicRuntime GetNextRuntime();
 };
 
@@ -68,12 +68,12 @@ class BasicRuntimeAccess
 public:
     static BasicRuntime GetRuntime();
     static bool HasRuntime();
-    static sal_uInt16 GetStackEntryCount();
-    static BasicErrorStackEntry GetStackEntry( sal_uInt16 nIndex );
-    static sal_Bool HasStack();
+    static USHORT GetStackEntryCount();
+    static BasicErrorStackEntry GetStackEntry( USHORT nIndex );
+    static BOOL HasStack();
     static void DeleteStack();
 
-    static sal_Bool IsRunInit();
+    static BOOL IsRunInit();
 };
 
 #endif

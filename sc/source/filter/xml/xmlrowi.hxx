@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ class ScXMLTableRowContext : public SvXMLImportContext
 
 public:
 
-    ScXMLTableRowContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLTableRowContext( ScXMLImport& rImport, USHORT nPrfx,
                        const ::rtl::OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual ~ScXMLTableRowContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -75,7 +75,7 @@ class ScXMLTableRowsContext : public SvXMLImportContext
 
 public:
 
-    ScXMLTableRowsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLTableRowsContext( ScXMLImport& rImport, USHORT nPrfx,
                        const ::rtl::OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -83,7 +83,7 @@ public:
 
     virtual ~ScXMLTableRowsContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

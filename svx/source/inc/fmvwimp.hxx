@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/componentcontext.hxx>
-#include <rtl/ref.hxx>
 
 //class SdrPageViewWinRec;
 class SdrPageWindow;
@@ -81,27 +80,27 @@ namespace svx {
 }
 
 //==================================================================
-// FormViewPageWindowAdapter
+// FmXPageViewWinRec
 //==================================================================
 typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::container::XIndexAccess
                                 ,   ::com::sun::star::form::runtime::XFormControllerContext
-                                >   FormViewPageWindowAdapter_Base;
+                                >   FmXPageViewWinRec_Base;
 
-class FormViewPageWindowAdapter : public FormViewPageWindowAdapter_Base
+class FmXPageViewWinRec : public FmXPageViewWinRec_Base
 {
     friend class FmXFormView;
 
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > >   m_aControllerList;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >                            m_xControlContainer;
     ::comphelper::ComponentContext                                                                          m_aContext;
-    FmXFormView*                m_pViewImpl;
-    Window*                     m_pWindow;
+    FmXFormView*				m_pViewImpl;
+    Window*						m_pWindow;
 
 protected:
-    ~FormViewPageWindowAdapter();
+    ~FmXPageViewWinRec();
 
 public:
-    FormViewPageWindowAdapter(  const ::comphelper::ComponentContext& _rContext,
+    FmXPageViewWinRec(	const ::comphelper::ComponentContext& _rContext,
         const SdrPageWindow&, FmXFormView* pView);
         //const SdrPageViewWinRec*, FmXFormView* pView);
 
@@ -132,8 +131,7 @@ protected:
     Window* getWindow() const {return m_pWindow;}
 };
 
-typedef ::rtl::Reference< FormViewPageWindowAdapter >   PFormViewPageWindowAdapter;
-typedef ::std::vector< PFormViewPageWindowAdapter >     PageWindowAdapterList;
+typedef ::std::vector<FmXPageViewWinRec*> FmWinRecList;
 typedef ::std::set  <   ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
                     ,   ::comphelper::OInterfaceCompare< ::com::sun::star::form::XForm >
                     >   SetOfForms;
@@ -145,7 +143,7 @@ class SdrModel;
 //==================================================================
 // FmXFormView
 //==================================================================
-class FmXFormView : public ::cppu::WeakImplHelper3<
+class FmXFormView :	public ::cppu::WeakImplHelper3<
                             ::com::sun::star::form::XFormControllerListener,
                             ::com::sun::star::awt::XFocusListener,
                             ::com::sun::star::container::XContainerListener>
@@ -153,32 +151,31 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
     friend class FmFormView;
     friend class FmFormShell;
     friend class FmXFormShell;
-    friend class FormViewPageWindowAdapter;
+    friend class FmXPageViewWinRec;
     class ObjectRemoveListener;
     friend class ObjectRemoveListener;
 
     ::comphelper::ComponentContext                                                      m_aContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>                   m_xWindow;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>					m_xWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xLastCreatedControlModel;
 
-    FmFormObj*      m_pMarkedGrid;
-    FmFormView*     m_pView;
-    sal_uIntPtr     m_nActivationEvent;
-    sal_uIntPtr     m_nErrorMessageEvent;   // event for an asynchronous error message. See also m_aAsyncError
-    sal_uIntPtr     m_nAutoFocusEvent;      // event for asynchronously setting the focus to a control
-    sal_uIntPtr     m_nControlWizardEvent;  // event for asynchronously setting the focus to a control
+    FmFormObj*		m_pMarkedGrid;
+    FmFormView*		m_pView;
+    sal_uIntPtr		m_nActivationEvent;
+    sal_uIntPtr		m_nErrorMessageEvent;	// event for an asynchronous error message. See also m_aAsyncError
+    sal_uIntPtr		m_nAutoFocusEvent;		// event for asynchronously setting the focus to a control
+    sal_uIntPtr		m_nControlWizardEvent;  // event for asynchronously setting the focus to a control
 
     ::com::sun::star::sdb::SQLErrorEvent
-                    m_aAsyncError;          // error event which is to be displayed asyn. See m_nErrorMessageEvent.
+                    m_aAsyncError;			// error event which is to be displayed asyn. See m_nErrorMessageEvent.
 
-    PageWindowAdapterList
-                    m_aPageWindowAdapters;  // to be filled in alive mode only
+    FmWinRecList	m_aWinList;				// to be filled in alive mode only
     MapControlContainerToSetOfForms
                     m_aNeedTabOrderUpdate;
 
     // Liste der markierten Object, dient zur Restauration beim Umschalten von Alive in DesignMode
-    SdrMarkList             m_aMark;
-    ObjectRemoveListener*   m_pWatchStoredList;
+    SdrMarkList				m_aMark;
+    ObjectRemoveListener*	m_pWatchStoredList;
 
     bool            m_bFirstActivation;
     bool            m_isTabOrderUpdateSuspended;
@@ -191,12 +188,12 @@ protected:
     FmXFormView( const ::comphelper::ComponentContext& _rContext, FmFormView* _pView );
     ~FmXFormView();
 
-    void    saveMarkList( sal_Bool _bSmartUnmark = sal_True );
-    void    restoreMarkList( SdrMarkList& _rRestoredMarkList );
-    void    stopMarkListWatching();
-    void    startMarkListWatching();
+    void	saveMarkList( sal_Bool _bSmartUnmark = sal_True );
+    void	restoreMarkList( SdrMarkList& _rRestoredMarkList );
+    void	stopMarkListWatching();
+    void	startMarkListWatching();
 
-    void    notifyViewDying( );
+    void	notifyViewDying( );
         // notifies this impl class that the anti-impl instance (m_pView) is going to die
 
 public:
@@ -219,16 +216,17 @@ public:
     virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
     FmFormView* getView() const {return m_pView;}
-    PFormViewPageWindowAdapter  findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC ) const;
+    FmWinRecList::const_iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC ) const;
+    const FmWinRecList& getWindowList() const {return m_aWinList;}
 
     ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >
             getFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // activation handling
-    inline  bool        hasEverBeenActivated( ) const { return !m_bFirstActivation; }
-    inline  void        setHasBeenActivated( ) { m_bFirstActivation = false; }
+    inline	bool        hasEverBeenActivated( ) const { return !m_bFirstActivation; }
+    inline	void		setHasBeenActivated( ) { m_bFirstActivation = false; }
 
-            void        onFirstViewActivation( const FmFormModel* _pDocModel );
+            void		onFirstViewActivation( const FmFormModel* _pDocModel );
 
     /** suspends the calls to activateTabOrder, which normally happen whenever for any ControlContainer of the view,
         new controls are inserted. Cannot be nested, i.e. you need to call resumeTabOrderUpdate before calling
@@ -249,14 +247,15 @@ public:
             );
 
 private:
+    FmWinRecList::iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
     //void addWindow(const SdrPageViewWinRec*);
     void addWindow(const SdrPageWindow&);
     void removeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
     void Activate(sal_Bool bSync = sal_False);
-    void Deactivate(sal_Bool bDeactivateController = sal_True);
+    void Deactivate(BOOL bDeactivateController = TRUE);
 
-    SdrObject*  implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
-    SdrObject*  implCreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc );
+    SdrObject*	implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
+    SdrObject*	implCreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc );
 
     static bool createControlLabelPair(
         const ::comphelper::ComponentContext& _rContext,
@@ -267,8 +266,8 @@ private:
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID,
         const ::rtl::OUString& _rFieldPostfix,
-        sal_uInt32 _nInventor,
-        sal_uInt16 _nLabelObjectID,
+        UINT32 _nInventor,
+        UINT16 _nLabelObjectID,
         SdrPage* _pLabelPage,
         SdrPage* _pControlPage,
         SdrModel* _pModel,
@@ -295,7 +294,7 @@ private:
     void ObjectRemovedInAliveMode(const SdrObject* pObject);
 
     // asynchronously displays an error message. See also OnDelayedErrorMessage.
-    void    displayAsyncErrorMessage( const ::com::sun::star::sdb::SQLErrorEvent& _rEvent );
+    void	displayAsyncErrorMessage( const ::com::sun::star::sdb::SQLErrorEvent& _rEvent );
 
     // cancels all pending async events
     void cancelEvents();

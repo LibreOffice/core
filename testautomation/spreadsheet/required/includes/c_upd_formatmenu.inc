@@ -58,7 +58,7 @@ end sub
 '-----------------------------------------------------------
 
 testcase tFormatDefaultFormatting
-'///<u><b>Format - Clear Direct Formatting</b></u>
+'///<u><b>Format - Default Formatting</b></u>
 
     '/// Opening new spreadsheet document for getting defined starting environment
     printlog " Opening new spreadsheet document for getting defined starting environment"
@@ -66,8 +66,8 @@ testcase tFormatDefaultFormatting
     '/// Select cell A1:D4
     printlog " Select cell A1:D4"
     call fCalcSelectRange ("A1:D4")
-    '/// Use 'Format – Clear Direct Formatting
-    printlog " Use 'Format – Clear Direct Formatting"
+    '/// Use 'Format – Default Formatting
+    printlog " Use 'Format – Default Formatting"
     FormatDefaultCalc
     '/// Close starting document
     printlog " Close starting document"
@@ -630,8 +630,8 @@ testcase tFormatPage
     end if
     '/// Check that listbox 'Paper tray' has items
     printlog " Check that listbox 'Paper tray' has items"
-    if Schacht.GetItemCount < 1 then
-    warnlog "The paper tray listbox is empty"
+    if Schacht < 1 then
+    warnlog "The text direction listbox is empty"
     end if
     '/// Increase 'Margins Left'
     printlog " Increase 'Margins Left'"

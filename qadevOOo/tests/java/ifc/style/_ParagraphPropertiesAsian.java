@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ public class _ParagraphPropertiesAsian extends MultiPropertyTest {
      */
     protected PropertyTester BooleanTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
-            if ((oldValue != null) &&
+            if ((oldValue != null) && 
                     (oldValue.equals(new Boolean((boolean) false)))) {
                 return new Boolean((boolean) true);
             } else {

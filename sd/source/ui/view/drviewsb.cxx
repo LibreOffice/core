@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,8 @@
 #include <comphelper/processfactory.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svxids.hrc>
-#include <sfx2/msgpool.hxx>
+
+#include <svx/hyprlink.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hlnkitem.hxx>
 #include <tools/urlobj.hxx>
@@ -74,7 +75,7 @@
 #include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
 
-#define RET_DELETE  100
+#define	RET_DELETE	100
 
 namespace sd {
 
@@ -86,7 +87,7 @@ namespace sd {
 
 void DrawViewShell::FuTemp02(SfxRequest& rReq)
 {
-    sal_uInt16 nSId = rReq.GetSlot();
+    USHORT nSId = rReq.GetSlot();
     switch( nSId )
     {
         case SID_INSERTLAYER:
@@ -97,13 +98,13 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             }
 
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-            sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
-            sal_uInt16 nLayer = nLayerCnt - 2 + 1;
+            USHORT nLayerCnt = rLayerAdmin.GetLayerCount();
+            USHORT nLayer = nLayerCnt - 2 + 1;
             String aLayerName ( SdResId(STR_LAYER) ), aLayerTitle, aLayerDesc;
             aLayerName += String::CreateFromInt32( (sal_Int32)nLayer );
-            sal_Bool bIsVisible = sal_False;
-            sal_Bool bIsLocked = sal_False;
-            sal_Bool bIsPrintable = sal_False;
+            BOOL bIsVisible = FALSE;
+            BOOL bIsLocked = FALSE;
+            BOOL bIsPrintable = FALSE;
 
             const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -123,16 +124,16 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, true, String( SdResId( STR_INSERTLAYER ) ) ) : 0;
                 if( pDlg )
                 {
-                    pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
+                    pDlg->SetHelpId( SID_INSERTLAYER );
 
                     // Ueberpruefung auf schon vorhandene Namen
-                    sal_Bool bLoop = sal_True;
+                    BOOL bLoop = TRUE;
                     while( bLoop && pDlg->Execute() == RET_OK )
                     {
                         pDlg->GetAttr( aNewAttr );
-                        aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                        aLayerName	 = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
-                        if( rLayerAdmin.GetLayer( aLayerName, sal_False )
+                        if( rLayerAdmin.GetLayer( aLayerName, FALSE )
                             || aLayerName.Len()==0 )
                         {
                             // Name ist schon vorhanden
@@ -143,7 +144,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                             aWarningBox.Execute();
                         }
                         else
-                            bLoop = sal_False;
+                            bLoop = FALSE;
                     }
                     if( bLoop ) // wurde abgebrochen
                     {
@@ -155,10 +156,12 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     }
                     else
                     {
+                        //pDlg->GetAttr( aNewAttr );
+                        //aLayerName	 = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
                         aLayerTitle  = ((SdAttrLayerTitle &) aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
                         aLayerDesc   = ((SdAttrLayerDesc &) aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
-                        bIsVisible   = ((SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
-                        bIsLocked    = ((SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
+                        bIsVisible	 = ((SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
+                        bIsLocked	 = ((SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
                         bIsPrintable = ((SdAttrLayerPrintable &) aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue () ;
 
                         delete pDlg;
@@ -174,21 +177,21 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                  }
                  else
                  {
-                     SFX_REQUEST_ARG (rReq, pLayerName, SfxStringItem, ID_VAL_LAYERNAME, sal_False);
-                     SFX_REQUEST_ARG (rReq, pIsVisible, SfxBoolItem, ID_VAL_ISVISIBLE, sal_False);
-                     SFX_REQUEST_ARG (rReq, pIsLocked, SfxBoolItem, ID_VAL_ISLOCKED, sal_False);
-                     SFX_REQUEST_ARG (rReq, pIsPrintable, SfxBoolItem, ID_VAL_ISPRINTABLE, sal_False);
+                     SFX_REQUEST_ARG (rReq, pLayerName, SfxStringItem, ID_VAL_LAYERNAME, FALSE);
+                     SFX_REQUEST_ARG (rReq, pIsVisible, SfxBoolItem, ID_VAL_ISVISIBLE, FALSE);
+                     SFX_REQUEST_ARG (rReq, pIsLocked, SfxBoolItem, ID_VAL_ISLOCKED, FALSE);
+                     SFX_REQUEST_ARG (rReq, pIsPrintable, SfxBoolItem, ID_VAL_ISPRINTABLE, FALSE);
 
                      aLayerName   = pLayerName->GetValue ();
                      bIsVisible   = pIsVisible->GetValue ();
-                     bIsLocked    = pIsLocked->GetValue ();
+                     bIsLocked	  = pIsLocked->GetValue ();
                      bIsPrintable = pIsPrintable->GetValue ();
                  }
 
             String aPrevLayer = mpDrawView->GetActiveLayer();
             String aName;
             SdrLayer* pLayer;
-            sal_uInt16 nPrevLayer = 0;
+            USHORT nPrevLayer = 0;
             nLayerCnt = rLayerAdmin.GetLayerCount();
 
             for ( nLayer = 0; nLayer < nLayerCnt; nLayer++ )
@@ -198,12 +201,13 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                 if ( aPrevLayer == aName )
                 {
-                    nPrevLayer = Max(nLayer, (sal_uInt16) 4);
+//                    nPrevLayer = nLayer;
+                    nPrevLayer = Max(nLayer, (USHORT) 4);
                 }
             }
 
             mpDrawView->InsertNewLayer(aLayerName, nPrevLayer + 1);
-            pLayer = rLayerAdmin.GetLayer(aLayerName, sal_False);
+            pLayer = rLayerAdmin.GetLayer(aLayerName, FALSE);
             if( pLayer )
             {
                 pLayer->SetTitle( aLayerTitle );
@@ -218,7 +222,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
             ResetActualLayer();
 
-            GetDoc()->SetChanged(sal_True);
+            GetDoc()->SetChanged(TRUE);
 
             GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHLAYER,
                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
@@ -236,9 +240,9 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             }
 
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-            sal_uInt16 nCurPage = GetLayerTabControl()->GetCurPageId();
+            USHORT nCurPage = GetLayerTabControl()->GetCurPageId();
             String aLayerName( GetLayerTabControl()->GetPageText(nCurPage) );
-            SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, sal_False);
+            SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, FALSE);
 
             String aLayerTitle( pLayer->GetTitle() );
             String aLayerDesc( pLayer->GetDescription() );
@@ -247,10 +251,10 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             String aOldLayerTitle( aLayerTitle );
             String aOldLayerDesc( aLayerDesc );
 
-            sal_Bool bIsVisible, bIsLocked, bIsPrintable;
-            sal_Bool bOldIsVisible = bIsVisible = mpDrawView->IsLayerVisible(aLayerName);
-            sal_Bool bOldIsLocked = bIsLocked = mpDrawView->IsLayerLocked(aLayerName);
-            sal_Bool bOldIsPrintable = bIsPrintable = mpDrawView->IsLayerPrintable(aLayerName);
+            BOOL bIsVisible, bIsLocked, bIsPrintable;
+            BOOL bOldIsVisible = bIsVisible = mpDrawView->IsLayerVisible(aLayerName);
+            BOOL bOldIsLocked = bIsLocked = mpDrawView->IsLayerLocked(aLayerName);
+            BOOL bOldIsPrintable = bIsPrintable = mpDrawView->IsLayerPrintable(aLayerName);
 
 
             const SfxItemSet* pArgs = rReq.GetArgs();
@@ -286,17 +290,17 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, bDelete, String( SdResId( STR_MODIFYLAYER ) ) ) : 0;
                 if( pDlg )
                 {
-                    pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
+                    pDlg->SetHelpId( SID_MODIFYLAYER );
 
                     // Ueberpruefung auf schon vorhandene Namen
-                    sal_Bool    bLoop = sal_True;
-                    sal_uInt16  nRet = 0;
+                    BOOL	bLoop = TRUE;
+                    USHORT	nRet = 0;
                     while( bLoop && ( (nRet = pDlg->Execute()) == RET_OK ) )
                     {
                         pDlg->GetAttr( aNewAttr );
-                        aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                        aLayerName	 = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
-                        if( (rLayerAdmin.GetLayer( aLayerName, sal_False ) &&
+                        if( (rLayerAdmin.GetLayer( aLayerName, FALSE ) &&
                              aLayerName != aOldLayerName) || aLayerName.Len()==0 )
                         {
                             // Name ist schon vorhanden
@@ -307,15 +311,15 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                             aWarningBox.Execute();
                         }
                         else
-                            bLoop = sal_False;
+                            bLoop = FALSE;
                     }
                     switch (nRet)
                     {
                         case RET_OK :
                             aLayerTitle  = ((SdAttrLayerTitle &) aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
                             aLayerDesc   = ((SdAttrLayerDesc &) aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
-                            bIsVisible   = ((const SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
-                            bIsLocked    = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
+                            bIsVisible	 = ((const SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
+                            bIsLocked	 = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
                             bIsPrintable = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue ();
 
                             delete pDlg;
@@ -331,14 +335,14 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             }
             else if (pArgs->Count () == 4)
             {
-                SFX_REQUEST_ARG (rReq, pLayerName, SfxStringItem, ID_VAL_LAYERNAME, sal_False);
-                SFX_REQUEST_ARG (rReq, pIsVisible, SfxBoolItem, ID_VAL_ISVISIBLE, sal_False);
-                SFX_REQUEST_ARG (rReq, pIsLocked, SfxBoolItem, ID_VAL_ISLOCKED, sal_False);
-                SFX_REQUEST_ARG (rReq, pIsPrintable, SfxBoolItem, ID_VAL_ISPRINTABLE, sal_False);
+                SFX_REQUEST_ARG (rReq, pLayerName, SfxStringItem, ID_VAL_LAYERNAME, FALSE);
+                SFX_REQUEST_ARG (rReq, pIsVisible, SfxBoolItem, ID_VAL_ISVISIBLE, FALSE);
+                SFX_REQUEST_ARG (rReq, pIsLocked, SfxBoolItem, ID_VAL_ISLOCKED, FALSE);
+                SFX_REQUEST_ARG (rReq, pIsPrintable, SfxBoolItem, ID_VAL_ISPRINTABLE, FALSE);
 
                 aLayerName   = pLayerName->GetValue ();
                 bIsVisible   = pIsVisible->GetValue ();
-                bIsLocked    = pIsLocked->GetValue ();
+                bIsLocked	 = pIsLocked->GetValue ();
                 bIsPrintable = pIsPrintable->GetValue ();
             }
             else
@@ -349,7 +353,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 break;
             }
 
-            ::svl::IUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
+            SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
             SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
                 GetDoc(),
                 pLayer,
@@ -426,8 +430,8 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                         SfxFrameItem aFrm( SID_DOCFRAME, pFrame );
                         SfxStringItem aReferer( SID_REFERER, aReferName );
 
-                        SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
-                        SfxBoolItem aBrowsing( SID_BROWSE, sal_True );
+                        SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
+                        SfxBoolItem aBrowsing( SID_BROWSE, TRUE );
 
                         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                         if (pViewFrm)
@@ -495,7 +499,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
         case SID_INSERT_FLD_PAGES:
         case SID_INSERT_FLD_FILE:
         {
-            sal_uInt16 nMul = 1;
+            USHORT nMul = 1;
             SvxFieldItem* pFieldItem = 0;
 
             switch( nSId )
@@ -546,6 +550,8 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     String aName;
                     if( GetDocSh()->HasName() )
                         aName = GetDocSh()->GetMedium()->GetName();
+                    //else
+                    //	aName = GetDocSh()->GetName();
                     pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
                 }
                 break;
@@ -579,19 +585,19 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             {
                 Outliner* pOutl = GetDoc()->GetInternalOutliner();
                 pOutl->Init( OUTLINERMODE_TEXTOBJECT );
-                sal_uInt16 nOutlMode = pOutl->GetMode();
+                USHORT nOutlMode = pOutl->GetMode();
                 pOutl->SetStyleSheet( 0, NULL );
                 pOutl->QuickInsertField( *pFieldItem, ESelection() );
                 OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
 
                 SdrRectObj* pRectObj = new SdrRectObj( OBJ_TEXT );
-                pRectObj->SetMergedItem(SdrTextAutoGrowWidthItem(sal_True));
+                pRectObj->SetMergedItem(SdrTextAutoGrowWidthItem(TRUE));
 
                 pOutl->UpdateFields();
-                pOutl->SetUpdateMode( sal_True );
+                pOutl->SetUpdateMode( TRUE );
                 Size aSize( pOutl->CalcTextSize() );
                 aSize.Width() *= nMul;
-                pOutl->SetUpdateMode( sal_False );
+                pOutl->SetUpdateMode( FALSE );
 
                 Point aPos;
                 Rectangle aRect( aPos, GetActiveWindow()->GetOutputSizePixel() );
@@ -632,6 +638,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     AbstractSdModifyFieldDlg* pDlg = pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOLV->GetAttribs() ) : 0;
                     if( pDlg && pDlg->Execute() == RET_OK )
                     {
+                        // #108538#
                         // To make a correct SetAttribs() call at the utlinerView
                         // it is necessary to split the actions here
                         SvxFieldData* pField = pDlg->GetField();
@@ -651,7 +658,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                             pOLV->InsertField( aFieldItem );
 
-                            // select again for eventual SetAttribs call
+                            // #108538# select again for eventual SetAttribs call
                             pOLV->SetSelection( aSel );
                         }
 
@@ -668,7 +675,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                         if(pField)
                         {
-                            // restore selection to original
+                            // #108538# restore selection to original
                             if(bSelectionWasModified)
                             {
                                 aSel.nEndPos--;
@@ -691,7 +698,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
         {
             try
             {
-                com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ui.XSLTFilterDialog"))), com::sun::star::uno::UNO_QUERY);
+                com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), com::sun::star::uno::UNO_QUERY);
                 if( xDialog.is() )
                 {
                     xDialog->execute();
@@ -717,9 +724,9 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
     };
 };
 
-bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const String & rName  )
+bool DrawViewShell::RenameSlide( USHORT nPageId, const String & rName  )
 {
-    sal_Bool   bOutDummy;
+    BOOL   bOutDummy;
     if( GetDoc()->GetPageByName( rName, bOutDummy ) != SDRPAGE_NOTFOUND )
         return false;
 
@@ -733,13 +740,14 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const String & rName  )
         // Undo
         SdPage* pUndoPage = pPageToRename;
         SdrLayerAdmin &  rLayerAdmin = GetDoc()->GetLayerAdmin();
-        sal_uInt8 nBackground = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), sal_False );
-        sal_uInt8 nBgObj = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), sal_False );
+        BYTE nBackground = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), FALSE );
+        BYTE nBgObj = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), FALSE );
         SetOfByte aVisibleLayers = mpActualPage->TRG_GetMasterPageVisibleLayers();
 
-        ::svl::IUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
+        // (#67720#)
+        SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
         ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-            GetDoc(), pUndoPage, rName, pUndoPage->GetAutoLayout(),
+            pManager, GetDoc(), pUndoPage, rName, pUndoPage->GetAutoLayout(),
             aVisibleLayers.IsSet( nBackground ),
             aVisibleLayers.IsSet( nBgObj ));
         pManager->AddUndoAction( pAction );
@@ -761,7 +769,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const String & rName  )
         GetDoc()->RenameLayoutTemplate( pPageToRename->GetLayoutName(), rName );
     }
 
-    bool bSuccess = ( sal_False != rName.Equals( pPageToRename->GetName()));
+    bool bSuccess = ( FALSE != rName.Equals( pPageToRename->GetName()));
 
     if( bSuccess )
     {
@@ -769,10 +777,10 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const String & rName  )
         maTabControl.SetPageText( nPageId, rName );
 
         // set document to modified state
-        GetDoc()->SetChanged( sal_True );
+        GetDoc()->SetChanged( TRUE );
 
         // inform navigator about change
-        SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
+        SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
         GetViewFrame()->GetDispatcher()->Execute(
             SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
@@ -820,12 +828,12 @@ void DrawViewShell::ModifyLayer (
 {
     if( pLayer )
     {
-        const sal_uInt16 nPageCount = GetLayerTabControl()->GetPageCount();
-        sal_uInt16 nCurPage = 0;
-        sal_uInt16 nPos;
+        const USHORT nPageCount = GetLayerTabControl()->GetPageCount();
+        USHORT nCurPage = 0;
+        USHORT nPos;
         for( nPos = 0; nPos < nPageCount; nPos++ )
         {
-            sal_uInt16 nId = GetLayerTabControl()->GetPageId( nPos );
+            USHORT nId = GetLayerTabControl()->GetPageId( nPos );
             if( pLayer->GetName() == GetLayerTabControl()->GetPageText( nId ) )
             {
                 nCurPage = nId;
@@ -840,7 +848,7 @@ void DrawViewShell::ModifyLayer (
         mpDrawView->SetLayerLocked( rLayerName, bIsLocked);
         mpDrawView->SetLayerPrintable(rLayerName, bIsPrintable);
 
-        GetDoc()->SetChanged(sal_True);
+        GetDoc()->SetChanged(TRUE);
 
         GetLayerTabControl()->SetPageText(nCurPage, rLayerName);
 

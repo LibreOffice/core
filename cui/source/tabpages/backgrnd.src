@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <svx/dialogs.hrc>
 
  // define ----------------------------------------------------------------
-#define UNLINKED_IMAGE                      \
+#define UNLINKED_IMAGE						\
     Text [ en-US ] = "Unlinked graphic" ; \
 
  // pragma ----------------------------------------------------------------
@@ -54,7 +54,6 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     ListBox LB_SELECTOR
     {
-        HelpID = "cui:ListBox:RID_SVXPAGE_BACKGROUND:LB_SELECTOR";
         Hide = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 33 , 3 ) ;
@@ -72,11 +71,11 @@ TabPage RID_SVXPAGE_BACKGROUND
         Size = MAP_APPFONT ( 24 , 10 ) ;
         Hide = TRUE ;
         LeftLabel = TRUE ;
+        /* ### ACHTUNG: Neuer Text in Resource? Fü~r : F³~r */
         Text [ en-US ] = "F~or" ;
     };
     ListBox LB_TBL_BOX
     {
-        HelpID = "cui:ListBox:RID_SVXPAGE_BACKGROUND:LB_TBL_BOX";
         Hide = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 172 , 3 ) ;
@@ -91,7 +90,6 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     ListBox LB_PARA_BOX
     {
-        HelpID = "cui:ListBox:RID_SVXPAGE_BACKGROUND:LB_PARA_BOX";
         Hide = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 172 , 3 ) ;
@@ -142,7 +140,6 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     MetricField MF_COL_TRANS
     {
-        HelpID = "cui:MetricField:RID_SVXPAGE_BACKGROUND:MF_COL_TRANS";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 218 , 74 + RSC_SP_CTRL_Y ) ;
         Size = MAP_APPFONT ( 30 , 12) ;
@@ -168,7 +165,6 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     PushButton BTN_BROWSE
     {
-        HelpID = "cui:PushButton:RID_SVXPAGE_BACKGROUND:BTN_BROWSE";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 + RSC_SP_FLGR_INNERBORDER_LEFT , 23 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
@@ -176,7 +172,6 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     CheckBox BTN_LINK
     {
-        HelpID = "cui:CheckBox:RID_SVXPAGE_BACKGROUND:BTN_LINK";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 + RSC_SP_FLGR_INNERBORDER_LEFT + 60 + 2*RSC_SP_CTRL_X, 23 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + 3 ) ;
         Size = MAP_APPFONT ( 78 , 10 ) ;
@@ -198,7 +193,6 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     RadioButton BTN_POSITION
     {
-        HelpID = "cui:RadioButton:RID_SVXPAGE_BACKGROUND:BTN_POSITION";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 89 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
@@ -206,15 +200,14 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     RadioButton BTN_AREA
     {
-        HelpID = "cui:RadioButton:RID_SVXPAGE_BACKGROUND:BTN_AREA";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 103 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Fläche : ~Flõche */
         Text [ en-US ] = "Ar~ea" ;
     };
     RadioButton BTN_TILE
     {
-        HelpID = "cui:RadioButton:RID_SVXPAGE_BACKGROUND:BTN_TILE";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 117 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
@@ -238,7 +231,6 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     MetricField MF_GRAPH_TRANS
     {
-        HelpID = "cui:MetricField:RID_SVXPAGE_BACKGROUND:MF_GRAPH_TRANS";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 168 ) ;
         Size = MAP_APPFONT ( 30 , 12) ;
@@ -262,7 +254,6 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     CheckBox BTN_PREVIEW
     {
-        HelpID = "cui:CheckBox:RID_SVXPAGE_BACKGROUND:BTN_PREVIEW";
         Pos = MAP_APPFONT ( 170 , 23 + 4 + 139 + RSC_SP_CTRL_GROUP_Y ) ;
         Size = MAP_APPFONT ( 141 , 10 ) ;
         Text [ en-US ] = "Pre~view" ;

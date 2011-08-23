@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,9 +35,9 @@
 #endif
 #include <svl/solar.hrc>
 
-#define RID_SVXIMG_COLLAPSEDNODE                    (RID_FORMS_START + 2)
-#define RID_SVXIMG_EXPANDEDNODE                     (RID_FORMS_START + 3)
-#define RID_SVXIMG_FORMS                            (RID_FORMS_START +13)
+#define RID_SVXIMG_COLLAPSEDNODE					(RID_FORMS_START + 2)
+#define RID_SVXIMG_EXPANDEDNODE						(RID_FORMS_START + 3)
+#define RID_SVXIMG_FORMS							(RID_FORMS_START +13)
 
 FloatingWindow RID_NAVIGATOR
 {
@@ -49,7 +49,7 @@ FloatingWindow RID_NAVIGATOR
     Moveable = TRUE ;
     Closeable = TRUE ;
     Sizeable = TRUE;
-
+    
     Control 1
     {
         Pos = MAP_APPFONT( 0, 0 );
@@ -88,6 +88,13 @@ ImageList RID_SVXIMGLIST_RPTEXPL
     NAVIGATOR_IMAGEIDS;
 };
 
+ImageList RID_SVXIMGLIST_RPTEXPL_HC
+{
+    Prefix = "sxh";
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    NAVIGATOR_IMAGEIDS;
+};
+
 String RID_STR_FUNCTIONS
 {
     Text [ en-US ] = "Functions" ;
@@ -103,6 +110,7 @@ Menu RID_MENU_NAVIGATOR
         MenuItem
         {
             Identifier = SID_SORTINGANDGROUPING;
+            HelpId = SID_SORTINGANDGROUPING ;
             Command = ".uno:DbSortingAndGrouping";
             Text [ en-US ] = "Sorting and Grouping...";
         };
@@ -113,6 +121,7 @@ Menu RID_MENU_NAVIGATOR
         MenuItem
         {
             Identifier = SID_PAGEHEADERFOOTER;
+            HelpId = SID_PAGEHEADERFOOTER ;
             Command = ".uno:PageHeaderFooter";
             Checkable = TRUE;
             Text [ en-US ] = "Page Header/Footer...";
@@ -120,6 +129,7 @@ Menu RID_MENU_NAVIGATOR
         MenuItem
         {
             Identifier = SID_REPORTHEADERFOOTER;
+            HelpId = SID_REPORTHEADERFOOTER ;
             Command = ".uno:ReportHeaderFooter";
             Checkable = TRUE;
             Text [ en-US ] = "Report Header/Footer...";
@@ -131,6 +141,7 @@ Menu RID_MENU_NAVIGATOR
         MenuItem
         {
             Identifier = SID_RPT_NEW_FUNCTION;
+            HelpId = SID_RPT_NEW_FUNCTION;
             Command = ".uno:NewFunction";
             Text [ en-US ] = "New Function";
         };
@@ -141,6 +152,7 @@ Menu RID_MENU_NAVIGATOR
         MenuItem
         {
             Identifier = SID_SHOW_PROPERTYBROWSER;
+            HelpId = SID_SHOW_PROPERTYBROWSER ;
             Command = ".uno:FormProperties";
             Text [ en-US ] = "Properties...";
         };
@@ -169,7 +181,7 @@ Menu RID_MENU_NAVIGATOR
         {
             ITEM_EDIT_PASTE
         };
-*/
+*/		
     };
 };
 

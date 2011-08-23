@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,10 @@
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
-#include <boost/unordered_map.hpp>
+#ifndef INCLUDED_HASH_MAP
+#include <hash_map>
+#define INCLUDED_HASH_MAP
+#endif
 
 namespace rtl {
     class OUString;
@@ -54,7 +57,7 @@ public:
     rtl::Reference< Object2 > get(rtl::OUString const & rKey);
 
 private:
-    typedef boost::unordered_map< rtl::OUString,
+    typedef std::hash_map< rtl::OUString,
                            com::sun::star::uno::WeakReference< Object2 >,
                            rtl::OUStringHash >
     Map;

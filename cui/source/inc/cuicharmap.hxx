@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/fixed.hxx> 
+#include <vcl/lstbox.hxx> 
 #include <sfx2/basedlgs.hxx>
 #include <svx/charmap.hxx>
 
@@ -61,7 +61,7 @@ class SvxShowText : public Control
 public:
                     SvxShowText( Window* pParent,
                                  const ResId& rResId,
-                                 sal_Bool bCenter = sal_False );
+                                 BOOL bCenter = FALSE );
                     ~SvxShowText();
 
     void            SetFont( const Font& rFont );
@@ -72,14 +72,14 @@ protected:
 
 private:
     long            mnY;
-    sal_Bool            mbCenter;
+    BOOL            mbCenter;
 
 };
 
 class SvxCharMapData
 {
 public:
-                    SvxCharMapData( class SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr* pResContext );
+                    SvxCharMapData( class SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pResContext );
 
     void            SetCharFont( const Font& rFont );
 
@@ -89,10 +89,12 @@ friend class SvxCharacterMap;
 
     SvxShowCharSet  aShowSet;
     SvxShowText     aShowText;
+//    SvxShowText     aShowShortcut;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
     PushButton      aDeleteBtn;
+//    PushButton		aAssignBtn;
     FixedText       aFontText;
     ListBox         aFontLB;
     FixedText       aSubsetText;
@@ -100,8 +102,9 @@ friend class SvxCharacterMap;
     FixedText       aSymbolText;
     SvxShowText     aShowChar;
     FixedText       aCharCodeText;
+//	FixedText		aAssignText;
     Font            aFont;
-    sal_Bool            bOne;
+    BOOL            bOne;
     const SubsetMap* pSubsetMap;
 
     DECL_LINK( OKHdl, OKButton* );
@@ -121,7 +124,7 @@ private:
     SvxCharMapData* mpCharMapData;
 
 public:
-                    SvxCharacterMap( Window* pParent, sal_Bool bOne=sal_True, const SfxItemSet* pSet=0 );
+                    SvxCharacterMap( Window* pParent, BOOL bOne=TRUE, const SfxItemSet* pSet=0 );
                     ~SvxCharacterMap();
 
     void            DisableFontSelection();
@@ -134,10 +137,10 @@ public:
 
     String          GetCharacters() const;
 
-    virtual short   Execute();
+    virtual short	Execute();
 };
 
 #endif
-
+ 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -375,8 +375,8 @@ testcase tFormatPage_53
     '/// Open test file testColumnVertical.sxw
     '/// + There are 8 columns in the page , and a test
     '/// + word is in 3rd column
-    hFileOpenLocally( sTestFile )
-    
+    Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
 
     '/// formatPage , tabpage page, select right to left (vertical)
     Call fFormatPageWriter("TabSeite")
@@ -763,8 +763,8 @@ testcase tFormatPage_60
     Call hCloseDocument
 
     Call hNewDocument
-    hFileOpen( gOfficepath + "user\work\tFormatPage_60.odt")
-    
+    Call hFileOpen(gOfficepath + "user\work\tFormatPage_60.odt")
+    Call sMakeReadOnlyDocumentEditable
 
     '/// check if the configuration is all right
     fFormatPageWriter("TabUmrandung")

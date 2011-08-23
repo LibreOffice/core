@@ -51,6 +51,7 @@ void usage()
 
 int main(int argc, char *argv[])
 {
+    int     rc;
     int     silent=0;
     void    *phandle;
     char    *(*pfun)(void);
@@ -65,7 +66,7 @@ int main(int argc, char *argv[])
         ++argv, --argc;
     }
 
-    if ( access( argv[1], R_OK ) == -1 ) {
+    if ( (rc = access( argv[1], R_OK )) == -1 ) {
         fprintf(stderr, "%s: ERROR: %s: %s\n",
                 pprog_name, argv[1], strerror(errno));
         return 2;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
     pValueSet->SetSelectHdl (LINK(this, TableDesignPane, implValueSetHdl));
 
     mxControls[FL_STYLE_OPTIONS].reset( new FixedLine( pControlParent, SdResId( FL_STYLE_OPTIONS + 1 ) ) );
-    sal_uInt16 i;
+    USHORT i;
     for( i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
     {
         CheckBox *pCheckBox = new CheckBox( pControlParent, SdResId( i+1 ) );
@@ -143,7 +143,7 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
     try
     {
         mxView = Reference< XDrawView >::query(mrBase.GetController());
-        addListener();
+        addListener();	
 
         Reference< XController > xController( mrBase.GetController(), UNO_QUERY_THROW );
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( xController->getModel(), UNO_QUERY_THROW );
@@ -155,7 +155,7 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
     catch( Exception& e )
     {
         (void)e;
-        OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
+        DBG_ERROR( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
     }
 
     onSelectionChanged();
@@ -241,7 +241,7 @@ void TableDesignPane::ApplyStyle()
             {
                 SfxRequest aReq( SID_TABLE_STYLE, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
                 aReq.AppendItem( SfxStringItem( SID_TABLE_STYLE, sStyleName ) );
-
+                
                 rtl::Reference< sdr::SelectionController > xController( pView->getSelectionController() );
                 if( xController.is() )
                     xController->Execute( aReq );
@@ -263,7 +263,7 @@ void TableDesignPane::ApplyStyle()
     }
     catch( Exception& )
     {
-        OSL_FAIL("TableDesignPane::implValueSetHdl(), exception caught!");
+        DBG_ERROR("TableDesignPane::implValueSetHdl(), exception caught!");
     }
 }
 
@@ -286,14 +286,14 @@ void TableDesignPane::ApplyOptions()
 {
     static sal_uInt16 gParamIds[CB_BANDED_COLUMNS-CB_HEADER_ROW+1] =
     {
-        ID_VAL_USEFIRSTROWSTYLE, ID_VAL_USELASTROWSTYLE, ID_VAL_USEBANDINGROWSTYLE,
+        ID_VAL_USEFIRSTROWSTYLE, ID_VAL_USELASTROWSTYLE, ID_VAL_USEBANDINGROWSTYLE, 
         ID_VAL_USEFIRSTCOLUMNSTYLE, ID_VAL_USELASTCOLUMNSTYLE, ID_VAL_USEBANDINGCOLUMNSTYLE
     };
 
     if( mxSelectedTable.is() )
     {
         SfxRequest aReq( SID_TABLE_STYLE_SETTINGS, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
-
+            
         for( sal_uInt16 i = 0; i < (CB_BANDED_COLUMNS-CB_HEADER_ROW+1); ++i )
         {
             aReq.AppendItem( SfxBoolItem( gParamIds[i], static_cast< CheckBox* >( mxControls[CB_HEADER_ROW+i].get() )->IsChecked() ) );
@@ -344,7 +344,7 @@ void TableDesignPane::onSelectionChanged()
             }
 
             Reference< XShapeDescriptor > xDesc( aSel, UNO_QUERY );
-            if( xDesc.is() &&
+            if( xDesc.is() && 
                 ( xDesc->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.TableShape" ) ) ||
                   xDesc->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.TableShape" ) ) ) )
             {
@@ -354,7 +354,7 @@ void TableDesignPane::onSelectionChanged()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::TableDesignPane::onSelectionChanged(), Exception caught!" );
+        DBG_ERROR( "sd::TableDesignPane::onSelectionChanged(), Exception caught!" );
     }
 
     if( mxSelectedTable != xNewSelection )
@@ -389,7 +389,7 @@ void TableDesignPane::updateLayout()
                 Size aSize( mxControls[nId]->GetSizePixel() );
                 aSize.Width() = aPaneSize.Width() - aOffset.X() - mxControls[nId]->GetPosPixel().X();
                 mxControls[nId]->SetSizePixel( aSize );
-                mxControls[nId]->SetPaintTransparent(sal_True);
+                mxControls[nId]->SetPaintTransparent(TRUE);
                 mxControls[nId]->SetBackground();
             }
             aValueSetSize = Size( pValueSet->GetSizePixel().Width(), nStylesHeight - mxControls[FL_TABLE_STYLES]->GetSizePixel().Height() - mnOrgOffsetY[FL_TABLE_STYLES]  );
@@ -407,7 +407,7 @@ void TableDesignPane::updateLayout()
             Size aItemSize = pValueSet->CalcItemSizePixel(aImage.GetSizePixel());
             pValueSet->SetItemWidth( aItemSize.Width() );
             pValueSet->SetItemHeight( aItemSize.Height() );
-
+            
             aItemSize.Width() += 10;
             aItemSize.Height() += 10;
             int nColumnCount = (aValueSetSize.Width() - pValueSet->GetScrollWidth()) / aItemSize.Width();
@@ -420,11 +420,11 @@ void TableDesignPane::updateLayout()
 
             int nVisibleRowCount = (aValueSetSize.Height()+2) / aItemSize.Height();
 
-            pValueSet->SetLineCount ( (nRowCount < nVisibleRowCount) ? (sal_uInt16)nRowCount : 0 );
+            pValueSet->SetLineCount ( (nRowCount < nVisibleRowCount) ? (USHORT)nRowCount : 0 );
 
-            pValueSet->SetColCount ((sal_uInt16)nColumnCount);
-            pValueSet->SetLineCount ((sal_uInt16)nRowCount);
-
+            pValueSet->SetColCount ((USHORT)nColumnCount);
+            pValueSet->SetLineCount ((USHORT)nRowCount);
+ 
             if( !mbModal )
             {
                 WinBits nStyle = pValueSet->GetStyle() & ~(WB_VSCROLL);
@@ -477,7 +477,7 @@ void TableDesignPane::updateControls()
     const bool bHasTable = mxSelectedTable.is();
     const OUString* pPropNames = getPropertyNames();
 
-    for( sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
+    for( USHORT i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
     {
         sal_Bool bUse = gDefaults[i-CB_HEADER_ROW];
         if( bHasTable ) try
@@ -486,17 +486,17 @@ void TableDesignPane::updateControls()
         }
         catch( Exception& )
         {
-            OSL_FAIL("sd::TableDesignPane::updateControls(), exception caught!");
+            DBG_ERROR("sd::TableDesignPane::updateControls(), exception caught!");
         }
-        static_cast< CheckBox* >( mxControls[i].get() )->Check( bUse ? sal_True : sal_False );
-        mxControls[i]->Enable(bHasTable ? sal_True : sal_False );
+        static_cast< CheckBox* >( mxControls[i].get() )->Check( bUse ? TRUE : FALSE );
+        mxControls[i]->Enable(bHasTable ? TRUE : FALSE );
     }
 
     FillDesignPreviewControl();
     updateLayout();
 
 
-    sal_uInt16 nSelection = 0;
+    USHORT nSelection = 0;
     if( mxSelectedTable.is() )
     {
         Reference< XNamed > xNamed( mxSelectedTable->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TableTemplate" ) ) ), UNO_QUERY );
@@ -512,7 +512,7 @@ void TableDesignPane::updateControls()
                 {
                     if( aNames[nIndex] == sStyleName )
                     {
-                        nSelection = (sal_uInt16)nIndex+1;
+                        nSelection = (USHORT)nIndex+1;
                         break;
                     }
                 }
@@ -648,7 +648,7 @@ static void FillCellInfoVector( const Reference< XIndexAccess >& xTableStyle, Ce
     }
     catch(Exception&)
     {
-        OSL_FAIL("sd::FillCellInfoVector(), exception caught!");
+        DBG_ERROR("sd::FillCellInfoVector(), exception caught!");
     }
 }
 
@@ -700,7 +700,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
                     }
                 }
             }
-
+            
             if( !xCellInfo.get() )
             {
                 if( rSettings.mbUseColumnBanding )
@@ -737,7 +737,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
     CellInfoMatrix aMatrix;
     FillCellInfoMatrix( aCellInfoVector, rSettings, aMatrix );
 
-// bbbbbbbbbbbb w = 12 pixel
+// bbbbbbbbbbbb w = 12 pixel 
 // bccccccccccb h = 7 pixel
 // bccccccccccb b = border color
 // bcttttttttcb c = cell color
@@ -810,9 +810,9 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                     sal_Int32* pDiff = &border_diffs[0];
 
                     // draw top border
-                    for( sal_uInt16 nLine = 0; nLine < 4; ++nLine )
+                    for( USHORT nLine = 0; nLine < 4; ++nLine )
                     {
-                        const ::editeng::SvxBorderLine* pBorderLine = xCellInfo->maBorder.GetLine(nLine);
+                        const SvxBorderLine* pBorderLine = xCellInfo->maBorder.GetLine(nLine);
                         if( !pBorderLine || ((pBorderLine->GetOutWidth() == 0) && (pBorderLine->GetInWidth()==0)) )
                             continue;
 
@@ -824,8 +824,8 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                             boost::shared_ptr< CellInfo > xBorderInfo( aMatrix[nBorderCol][nBorderRow] );
                             if( xBorderInfo.get() )
                             {
-                                const sal_uInt16 nOtherLine = nLine ^ 1;
-                                const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(nOtherLine^1);
+                                const USHORT nOtherLine = nLine ^ 1;
+                                const SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(nOtherLine^1);
                                 if( pBorderLine2 && pBorderLine2->HasPriority(*pBorderLine) )
                                     continue; // other border line wins
                             }
@@ -854,7 +854,7 @@ void TableDesignPane::FillDesignPreviewControl()
 {
     ValueSet* pValueSet = static_cast< ValueSet* >( mxControls[CT_TABLE_STYLES].get() );
 
-    sal_uInt16 nSelectedItem = pValueSet->GetSelectItemId();
+    USHORT nSelectedItem = pValueSet->GetSelectItemId();
     pValueSet->Clear();
     try
     {
@@ -884,16 +884,16 @@ void TableDesignPane::FillDesignPreviewControl()
         {
             Reference< XIndexAccess > xTableStyle( mxTableFamily->getByIndex( nIndex ), UNO_QUERY );
             if( xTableStyle.is() )
-                pValueSet->InsertItem( sal::static_int_cast<sal_uInt16>( nIndex + 1 ), Image( CreateDesignPreview( xTableStyle, aSettings, bIsPageDark ) ) );
+                pValueSet->InsertItem( sal::static_int_cast<USHORT>( nIndex + 1 ), Image( CreateDesignPreview( xTableStyle, aSettings, bIsPageDark ) ) );
         }
         catch( Exception& )
         {
-            OSL_FAIL("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
+            DBG_ERROR("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
         }
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
+        DBG_ERROR("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
     }
     pValueSet->SelectItem(nSelectedItem);
 }
@@ -926,9 +926,9 @@ short TableDesignDialog::Execute()
 
         if( mpDesignPane->isOptionsChanged() )
             mpDesignPane->ApplyOptions();
-        return sal_True;
+        return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
 // ====================================================================

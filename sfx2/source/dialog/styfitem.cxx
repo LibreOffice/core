@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,18 +52,18 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
     Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILY_ITEM ) )
 
 {
-    sal_uIntPtr nMask = ReadLongRes();
+    ULONG nMask = ReadLongRes();
 
     if(nMask & RSC_SFX_STYLE_ITEM_LIST)
     {
-        sal_uIntPtr nCount = ReadLongRes();
-        for( sal_uIntPtr i = 0; i < nCount; i++ )
+        ULONG nCount = ReadLongRes();
+        for( ULONG i = 0; i < nCount; i++ )
         {
             SfxFilterTupel *pTupel = new SfxFilterTupel;
             pTupel->aName = ReadStringRes();
             long lFlags = ReadLongRes();
-            pTupel->nFlags = (sal_uInt16)lFlags;
-            aFilterList.push_back( pTupel );
+            pTupel->nFlags = (USHORT)lFlags;
+            aFilterList.Insert(pTupel, LIST_APPEND);
         }
     }
     if(nMask & RSC_SFX_STYLE_ITEM_BITMAP)
@@ -81,7 +81,7 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
     }
     if(nMask & RSC_SFX_STYLE_ITEM_STYLEFAMILY)
     {
-        nFamily = (sal_uInt16)ReadLongRes();
+        nFamily = (USHORT)ReadLongRes();
     }
     else
         nFamily = SFX_STYLE_FAMILY_PARA;
@@ -96,51 +96,60 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
 
 // -----------------------------------------------------------------------
 
-// Destructor; releases the internal data
+// Destruktor; gibt interne Daten frei
 
 SfxStyleFamilyItem::~SfxStyleFamilyItem()
 {
-    for ( size_t i = 0, n = aFilterList.size(); i < n; ++i )
-        delete aFilterList[ i ];
-    aFilterList.clear();
+    SfxFilterTupel *pTupel = aFilterList.First();
+    while(pTupel)
+    {
+        delete pTupel;
+        pTupel = aFilterList.Next();
+    }
 }
 
 // -----------------------------------------------------------------------
 
-// Implementation of the resource constructor
+// Implementierung des Resource-Konstruktors
 
 SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
-    Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILIES ).SetAutoRelease( false ) )
+
+    Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILIES ).SetAutoRelease( FALSE ) ),
+    aEntryList( 4, 1 )
 {
-    sal_uIntPtr nCount = ReadLongRes();
-    for( sal_uIntPtr i = 0; i < nCount; i++ )
+    ULONG nCount = ReadLongRes();
+    for( ULONG i = 0; i < nCount; i++ )
     {
         const ResId aResId((RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr());
         SfxStyleFamilyItem *pItem = new SfxStyleFamilyItem(aResId);
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
-        aEntryList.push_back( pItem );
+        aEntryList.Insert(pItem, LIST_APPEND);
     }
 
     FreeResource();
 
-    updateImages( rResId );
+    updateImages( rResId, BMP_COLOR_NORMAL );
 }
 
 // -----------------------------------------------------------------------
 
-// Destructor; releases the internal data
+// Destruktor; gibt interne Daten frei
 
 SfxStyleFamilies::~SfxStyleFamilies()
 {
-    for ( size_t i = 0, n = aEntryList.size(); i < n; ++i )
-        delete aEntryList[ i ];
-    aEntryList.clear();
+    SfxStyleFamilyItem *pItem = aEntryList.First();
+
+    while(pItem)
+    {
+        delete pItem;
+        pItem = aEntryList.Next();
+    }
 }
 
 
 // -----------------------------------------------------------------------
 
-sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId )
+sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId, const BmpColorMode _eMode )
 {
     sal_Bool bSuccess = sal_False;
 
@@ -148,23 +157,23 @@ sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId )
         ::svt::OLocalResourceAccess aLocalRes( _rId );
 
         // check if the image list is present
-        ResId aImageListId( (sal_uInt16) 1, *_rId.GetResMgr() );
+        ResId aImageListId( (sal_uInt16)_eMode + 1, *_rId.GetResMgr() );
         aImageListId.SetRT( RSC_IMAGELIST );
 
         if ( aLocalRes.IsAvailableRes( aImageListId ) )
-        {   // there is such a list
+        {	// there is such a list
             ImageList aImages( aImageListId );
 
             // number of styles items/images
             sal_uInt16 nCount = aImages.GetImageCount( );
-            DBG_ASSERT( aEntryList.size() == nCount, "SfxStyleFamilies::updateImages: found the image list, but missing some bitmaps!" );
-            if ( nCount > aEntryList.size() )
-                nCount = aEntryList.size();
+            DBG_ASSERT( Count() == nCount, "SfxStyleFamilies::updateImages: found the image list, but missing some bitmaps!" );
+            if ( nCount > Count() )
+                nCount = Count();
 
             // set the images on the items
-            for ( size_t i = 0; i < nCount; ++i )
+            for ( sal_uInt16 i = 0; i < nCount; ++i )
             {
-                SfxStyleFamilyItem* pItem = aEntryList[ i ];
+                SfxStyleFamilyItem* pItem = static_cast< SfxStyleFamilyItem* >( aEntryList.GetObject( i ) );
                 pItem->SetImage( aImages.GetImage( aImages.GetImageId( i ) ) );
             }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -178,8 +178,8 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
 
         if( pythonPath.getLength() )
             prependPythonPath( pythonPath );
-
-        // initialize python
+        
+        // initialize python 
         Py_Initialize();
         PyEval_InitThreads();
 
@@ -228,6 +228,12 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+//==================================================================================================
+sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager, void * pRegistryKey )
+{
+    return cppu::component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

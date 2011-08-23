@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,11 +55,10 @@ public:
     SFX_DECL_INTERFACE(SD_IF_SDSLIDESORTERVIEWSHELL)
 
     static ::boost::shared_ptr<SlideSorterViewShell> Create(
-        SfxViewFrame* pFrame,
+        SfxViewFrame* pFrame, 
         ViewShellBase& rViewShellBase,
         ::Window* pParentWindow,
-        FrameView* pFrameView,
-        const bool bIsCenterPane);
+        FrameView* pFrameView);
 
     virtual ~SlideSorterViewShell (void);
 
@@ -79,10 +78,10 @@ public:
 
     virtual void GetFocus (void);
     virtual void LoseFocus (void);
-    virtual SdPage* GetActualPage (void);
+    virtual SdPage*	GetActualPage (void);
 
     /// inherited from sd::ViewShell
-    virtual SdPage* getCurrentPage() const;
+    virtual SdPage* getCurrentPage() const; 
 
     void ExecCtrl (SfxRequest& rRequest);
     virtual void GetCtrlState (SfxItemSet &rSet);
@@ -108,6 +107,9 @@ public:
     virtual void SetZoom (long int nZoom);
     virtual void SetZoomRect (const Rectangle& rZoomRect);
 
+    /// forward VCLs PrePaint window event to DrawingLayer
+    virtual void PrePaint();
+
     /** This is a callback method used by the active window to delegate its
         Paint() call to.  This view shell itself delegates it to the view.
     */
@@ -119,8 +121,6 @@ public:
     */
     virtual void ArrangeGUIElements (void);
 
-    virtual void Activate (sal_Bool IsMDIActivate);
-
     //===== Drag and Drop =====================================================
 
     virtual void StartDrag (
@@ -130,16 +130,16 @@ public:
         sal_Int8 nDropAction);
     virtual sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
-        DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
+        DropTargetHelper& rTargetHelper, 
+        ::sd::Window* pTargetWindow = NULL, 
+        USHORT nPage = SDRPAGE_NOTFOUND, 
+        USHORT nLayer = SDRPAGE_NOTFOUND );
     virtual sal_Int8 ExecuteDrop (
-        const ExecuteDropEvent& rEvt,
+        const ExecuteDropEvent& rEvt, 
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        ::sd::Window* pTargetWindow = NULL, 
+        USHORT nPage = SDRPAGE_NOTFOUND, 
+        USHORT nLayer = SDRPAGE_NOTFOUND);
 
     typedef ::std::vector<SdPage*> PageSelection;
 
@@ -193,14 +193,13 @@ protected:
     /** This method is overloaded to handle a missing tool bar correctly.
         This is the case when the slide sorter is not the main view shell.
     */
-    virtual ::svl::IUndoManager* ImpGetUndoManager (void) const;
+    virtual SfxUndoManager* ImpGetUndoManager (void) const;
 
 private:
     ::boost::shared_ptr<SlideSorter> mpSlideSorter;
-    bool mbIsArrangeGUIElementsPending;
 
     SlideSorterViewShell (
-        SfxViewFrame* pFrame,
+        SfxViewFrame* pFrame, 
         ViewShellBase& rViewShellBase,
         ::Window* pParentWindow,
         FrameView* pFrameView);

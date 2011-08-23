@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -247,7 +247,7 @@ SvtInetOptions::Impl::notifyListeners(
             {
                 aEvents.realloc(nCount);
                 aNotifications.
-                    push_back(std::pair< List::value_type::first_type,
+                    push_back(std::make_pair< List::value_type::first_type,
                                               List::value_type::second_type >(
                                   aIt->first, aEvents));
             }
@@ -280,7 +280,8 @@ SvtInetOptions::Impl::Impl():
     for (sal_Int32 i = 0; i < ENTRY_COUNT; ++i)
         aKeys[i] = m_aEntries[i].m_aName;
     if (!EnableNotification(aKeys))
-        OSL_FAIL("SvtInetOptions::Impl::Impl(): Bad EnableNotifications()");
+        OSL_ENSURE(false,
+                   "SvtInetOptions::Impl::Impl(): Bad EnableNotifications()");
 }
 
 //============================================================================
@@ -329,7 +330,8 @@ star::uno::Any SvtInetOptions::Impl::getProperty(Index nPropIndex)
             }
         }
     }
-    OSL_FAIL("SvtInetOptions::Impl::getProperty(): Possible life lock");
+    OSL_ENSURE(false,
+               "SvtInetOptions::Impl::getProperty(): Possible life lock");
     {
         osl::MutexGuard aGuard(m_aMutex);
         return m_aEntries[nPropIndex].m_aValue;

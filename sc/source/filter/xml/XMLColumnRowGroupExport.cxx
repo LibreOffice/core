@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ sal_Bool ScMyColumnRowGroup::operator<(const ScMyColumnRowGroup& rGroup) const
         if (rGroup.nField == nField && rGroup.nLevel > nLevel)
             return sal_True;
         else
-            return false;
+            return sal_False;
 }
 
 ScMyOpenCloseColumnRowGroup::ScMyOpenCloseColumnRowGroup(ScXMLExport& rTempExport, sal_uInt32 nToken)
@@ -83,16 +83,16 @@ void ScMyOpenCloseColumnRowGroup::AddGroup(const ScMyColumnRowGroup& aGroup, con
 
 sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
 {
-    sal_Bool bGroupStart(false);
+    sal_Bool bGroupStart(sal_False);
     if (!aTableStart.empty())
     {
         ScMyColumnRowGroupVec::iterator aItr(aTableStart.begin());
         sal_Int32 nItrField = aItr->nField;
         if ( nItrField < nField )
         {
-            //  when used to find repeated rows at the beginning of a group,
-            //  aTableStart may contain entries before nField. They must be skipped here
-            //  (they will be used for OpenGroups later in the right order).
+            //	#103327# when used to find repeated rows at the beginning of a group,
+            //	aTableStart may contain entries before nField. They must be skipped here
+            //	(they will be used for OpenGroups later in the right order).
 
             ScMyColumnRowGroupVec::iterator aEnd(aTableStart.end());
             while ( aItr != aEnd && nItrField < nField )
@@ -120,7 +120,7 @@ void ScMyOpenCloseColumnRowGroup::OpenGroups(const sal_Int32 nField)
 {
     ScMyColumnRowGroupVec::iterator aItr(aTableStart.begin());
     ScMyColumnRowGroupVec::iterator aEndItr(aTableStart.end());
-    sal_Bool bReady(false);
+    sal_Bool bReady(sal_False);
     while(!bReady && aItr != aEndItr)
     {
         if (aItr->nField == nField)
@@ -135,7 +135,7 @@ void ScMyOpenCloseColumnRowGroup::OpenGroups(const sal_Int32 nField)
 
 sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupEnd(const sal_Int32 nField)
 {
-    sal_Bool bGroupEnd(false);
+    sal_Bool bGroupEnd(sal_False);
     if (!aTableEnd.empty())
     {
         if (*(aTableEnd.begin()) == nField)
@@ -153,7 +153,7 @@ void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
 {
     ScMyFieldGroupVec::iterator aItr(aTableEnd.begin());
     ScMyFieldGroupVec::iterator aEndItr(aTableEnd.end());
-    sal_Bool bReady(false);
+    sal_Bool bReady(sal_False);
     while(!bReady && aItr != aEndItr)
     {
         if (*aItr == nField)

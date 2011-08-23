@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,13 +40,13 @@ typedef struct {
 } KEY_STRUCT;
 
 class RscNameTable {
-    sal_Bool            bSort;      //soll bei jedem einfuegen sortiert werden?
+    BOOL            bSort;      //soll bei jedem einfuegen sortiert werden?
     sal_uInt32          nEntries;   //Anzahl der Eintr�ge
     KEY_STRUCT *    pTable;
 public:
             RscNameTable();
             ~RscNameTable();
-    void    SetSort( sal_Bool bSorted = sal_True );
+    void    SetSort( BOOL bSorted = TRUE );
     Atom  Put( Atom nName, sal_uInt32 nTyp, long nValue );
     Atom  Put( Atom nName, sal_uInt32 nTyp );
     Atom  Put( const char * pName, sal_uInt32 nTyp, long nValue );
@@ -54,8 +54,8 @@ public:
     Atom  Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass );
     Atom  Put( const char * pName, sal_uInt32 nTyp, RscTop * pClass );
 
-            // sal_True, wurde gefunden
-    sal_Bool    Get( Atom nName, KEY_STRUCT * pEle );
+            // TRUE, wurde gefunden
+    BOOL    Get( Atom nName, KEY_STRUCT * pEle );
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,55 +36,55 @@
 class ExcDummy8_00a : public ExcDummyRec
 {
 private:
-    static const sal_uInt8       pMyData[];
+    static const BYTE       pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen() const;
-    virtual const sal_uInt8*     GetData() const;
+    virtual const BYTE*     GetData() const;
 };
 
 
 class ExcDummy8_00b : public ExcDummyRec
 {
 private:
-    static const sal_uInt8       pMyData[];
+    static const BYTE       pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen() const;
-    virtual const sal_uInt8*     GetData() const;
+    virtual const BYTE*     GetData() const;
 };
 
 
 class ExcDummy8_040 : public ExcDummyRec
 {
 private:
-    static const sal_uInt8       pMyData[];
+    static const BYTE       pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen() const;
-    virtual const sal_uInt8*     GetData() const;
+    virtual const BYTE*     GetData() const;
 };
 
 
 class ExcDummy8_041 : public ExcDummyRec
 {
 private:
-    static const sal_uInt8       pMyData[];
+    static const BYTE       pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen() const;
-    virtual const sal_uInt8*     GetData() const;
+    virtual const BYTE*     GetData() const;
 };
 
 
 class ExcDummy8_02 : public ExcDummyRec
 {
 private:
-    static const sal_uInt8       pMyData[];
+    static const BYTE       pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen() const;
-    virtual const sal_uInt8*     GetData() const;
+    virtual const BYTE*     GetData() const;
 };
 
 

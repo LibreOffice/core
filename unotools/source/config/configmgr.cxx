@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,15 +50,11 @@
 //-----------------------------------------------------------------------------
 
 using namespace utl;
+using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
-
-using ::rtl::OUString;
-#if OSL_DEBUG_LEVEL > 0
-using ::rtl::OString;
-#endif
 
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
@@ -94,38 +90,40 @@ namespace
 //-----------------------------------------------------------------------------
 struct ConfigItemListEntry_Impl
 {
-    ConfigItem*                 pConfigItem;
+    ConfigItem* 				pConfigItem;
 
-    ConfigItemListEntry_Impl(ConfigItem*    pItem ) :
+    ConfigItemListEntry_Impl(ConfigItem* 	pItem ) :
         pConfigItem(pItem){}
 };
 typedef std::list<ConfigItemListEntry_Impl> ConfigItemList;
 struct utl::ConfigMgr_Impl
 {
-    ConfigItemList                          aItemList;
+    ConfigItemList 							aItemList;
 };
 
+/* -----------------------------28.08.00 15:35--------------------------------
+
+ ---------------------------------------------------------------------------*/
 ConfigManager::ConfigManager() :
     pMgrImpl(new utl::ConfigMgr_Impl)
 {
     GetConfigurationProvider(); // attempt to create the provider early
 }
+/* -----------------------------17.11.00 13:51--------------------------------
 
+ ---------------------------------------------------------------------------*/
 ConfigManager::ConfigManager(Reference< XMultiServiceFactory > xConfigProv) :
     xConfigurationProvider(xConfigProv),
     pMgrImpl(new utl::ConfigMgr_Impl)
 {
 }
+/* -----------------------------28.08.00 15:35--------------------------------
 
+ ---------------------------------------------------------------------------*/
 ConfigManager::~ConfigManager()
 {
     //check list content -> should be empty!
-#if OSL_DEBUG_LEVEL > 1
-    // I think this is a pointless assertion, the code seems to cope
-    // fine with it being empty, no need to crash in a dbglevel=1
-    // build.
     OSL_ENSURE(pMgrImpl->aItemList.empty(), "some ConfigItems are still alive");
-#endif
     if(!pMgrImpl->aItemList.empty())
     {
         ConfigItemList::iterator aListIter;
@@ -139,7 +137,9 @@ ConfigManager::~ConfigManager()
     delete pMgrImpl;
 
 }
+/* -----------------------------28.08.00 16:17--------------------------------
 
+ ---------------------------------------------------------------------------*/
 Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
 {
     if(!xConfigurationProvider.is())
@@ -154,7 +154,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
                         UNISTRING("com.sun.star.configuration.ConfigurationProvider")),
                      UNO_QUERY);
             }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     catch(Exception& rEx)
     {
         static sal_Bool bMessage = sal_True;
@@ -165,7 +165,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                         RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(sMsg.getStr());
+            OSL_ENSURE(sal_False, sMsg.getStr());
         }
     }
 #else
@@ -175,7 +175,9 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
     }
     return xConfigurationProvider;
 }
+/* -----------------------------03.12.02 -------------------------------------
 
+ ---------------------------------------------------------------------------*/
 namespace
 {
     // helper to achieve exception - safe registration of a ConfigItem under construction
@@ -199,12 +201,16 @@ namespace
         void keep() { pCfgItem = 0; }
     };
 }
+/* -----------------------------12.12.00 17:19--------------------------------
 
+ ---------------------------------------------------------------------------*/
 Reference< XMultiServiceFactory > ConfigManager::GetLocalConfigurationProvider()
 {
     return GetConfigurationProvider();
 }
+/* -----------------------------29.08.00 12:35--------------------------------
 
+ ---------------------------------------------------------------------------*/
 Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigItem& rCfgItem)
 {
     RegisterConfigItemHelper registeredItem(*this,rCfgItem);
@@ -212,26 +218,30 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
     registeredItem.keep();
     return xTree;
 }
+/* -----------------------------21.06.01 12:20--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void    ConfigManager::RegisterConfigItem(utl::ConfigItem& rCfgItem)
 {
     ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
     {
         ConfigItemListEntry_Impl& rEntry = *aListIter;
         if(rEntry.pConfigItem == &rCfgItem)
-            OSL_FAIL("RegisterConfigItem: already inserted!");
+            OSL_ENSURE(sal_False, "RegisterConfigItem: already inserted!");
     }
 #endif
     pMgrImpl->aItemList.insert(aListIter, ConfigItemListEntry_Impl(&rCfgItem));
 }
+/* -----------------------------21.06.01 12:20--------------------------------
 
+ ---------------------------------------------------------------------------*/
 Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& rCfgItem)
 {
-#if OSL_DEBUG_LEVEL > 1
-    sal_Bool bFound = sal_False;
     ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
+#ifdef DBG_UTIL
+    sal_Bool bFound = sal_False;
     for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
     {
         ConfigItemListEntry_Impl& rEntry = *aListIter;
@@ -290,21 +300,23 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
 
                 throw;
             }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
             if(0 == (CONFIG_MODE_IGNORE_ERRORS & rCfgItem.GetMode()))
             {
                 OString sMsg("CreateInstance exception: ");
                 sMsg += OString(rEx.Message.getStr(),
                             rEx.Message.getLength(),
                             RTL_TEXTENCODING_ASCII_US);
-                OSL_FAIL(sMsg.getStr());
+                OSL_ENSURE(sal_False, sMsg.getStr());
             }
 #endif
         }
     }
     return Reference<XHierarchicalNameAccess>(xIFace, UNO_QUERY);
 }
+/* -----------------------------29.08.00 12:35--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void ConfigManager::RemoveConfigItem(utl::ConfigItem& rCfgItem)
 {
     if( !pMgrImpl->aItemList.empty() )
@@ -321,7 +333,9 @@ void ConfigManager::RemoveConfigItem(utl::ConfigItem& rCfgItem)
         }
     }
 }
+/* -----------------------------30.08.00 15:04--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void ConfigManager::StoreConfigItems()
 {
     if(!pMgrImpl->aItemList.empty())
@@ -338,37 +352,47 @@ void ConfigManager::StoreConfigItems()
         }
     }
 }
+/* -----------------------------07.09.00 11:06--------------------------------
 
+ ---------------------------------------------------------------------------*/
 struct theConfigManager : public rtl::Static<ConfigManager, theConfigManager> {};
 
 ConfigManager& ConfigManager::GetConfigManager()
 {
     return theConfigManager::get();
 }
+/* -----------------------------08.09.00 13:22--------------------------------
 
+ ---------------------------------------------------------------------------*/
 rtl::OUString ConfigManager::GetConfigBaseURL()
 {
     return OUString::createFromAscii(pConfigBaseURL);
 }
+/* -----------------------------25.09.00 16:34--------------------------------
 
+ ---------------------------------------------------------------------------*/
 Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 {
     switch(eProp)
     {
         case INSTALLPATH:
-            OSL_FAIL( "ConfigManager::GetDirectConfigProperty: "
+            OSL_ENSURE( false,
+                        "ConfigManager::GetDirectConfigProperty: "
                         "INSTALLPATH no longer supported." );
             return Any();
         case USERINSTALLURL:
-            OSL_FAIL( "ConfigManager::GetDirectConfigProperty: "
+            OSL_ENSURE( false,
+                        "ConfigManager::GetDirectConfigProperty: "
                         "USERINSTALLURL no longer supported." );
             return Any();
         case OFFICEINSTALL:
-            OSL_FAIL( "ConfigManager::GetDirectConfigProperty: "
+            OSL_ENSURE( false,
+                        "ConfigManager::GetDirectConfigProperty: "
                         "OFFICEINSTALL no longer supported." );
             return Any();
         case OFFICEINSTALLURL:
-            OSL_FAIL( "ConfigManager::GetDirectConfigProperty: "
+            OSL_ENSURE( false,
+                        "ConfigManager::GetDirectConfigProperty: "
                         "OFFICEINSTALLURL no longer supported." );
             return Any();
         default:
@@ -381,7 +405,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 #ifdef ENABLE_BROFFICE
     LanguageType nType = MsLangId::getRealLanguage( LANGUAGE_NONE );
     if ( nType == LANGUAGE_PORTUGUESE_BRAZILIAN )
-        sBrandName = OUString(RTL_CONSTASCII_USTRINGPARAM("BrOffice"));
+        sBrandName = OUString::createFromAscii("BrOffice");
     else
 #endif
         sBrandName = BrandName::get();
@@ -451,8 +475,9 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     if (eProp == PRODUCTEXTENSION) {
         rtl::OUString name(
+            rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${BRAND_BASE_DIR}/program/edition/edition.ini"));
+                    "${BRAND_BASE_DIR}/program/edition/edition.ini")));
         rtl::Bootstrap::expandMacros(name);
         if (rtl::Bootstrap(name).getFrom(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EDITIONNAME")),
@@ -465,7 +490,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     OUString sPath = OUString::createFromAscii(pConfigBaseURL);
     switch(eProp)
     {
-        case LOCALE:                        sPath += UNISTRING("Setup/L10N"); break;
+        case LOCALE:						sPath += UNISTRING("Setup/L10N"); break;
 
         case PRODUCTNAME:
         case PRODUCTVERSION:
@@ -476,7 +501,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         case OOOVENDOR:
         case ABOUTBOXPRODUCTVERSION:        sPath += UNISTRING("Setup/Product"); break;
 
-        case DEFAULTCURRENCY:               sPath += UNISTRING("Setup/L10N"); break;
+        case DEFAULTCURRENCY:				sPath += UNISTRING("Setup/L10N"); break;
 
         case WRITERCOMPATIBILITYVERSIONOOO11:
             sPath += UNISTRING("Office.Compatibility/WriterCompatibilityVersion"); break;
@@ -503,17 +528,17 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         OUString sProperty;
         switch(eProp)
         {
-            case LOCALE:                            sProperty = UNISTRING("ooLocale"); break;
-            case PRODUCTNAME:                       sProperty = UNISTRING("ooName"); break;
-            case PRODUCTVERSION:                    sProperty = UNISTRING("ooSetupVersion"); break;
-            case ABOUTBOXPRODUCTVERSION:            sProperty = UNISTRING("ooSetupVersionAboutBox"); break;
+            case LOCALE:							sProperty = UNISTRING("ooLocale"); break;
+            case PRODUCTNAME:						sProperty = UNISTRING("ooName"); break;
+            case PRODUCTVERSION:					sProperty = UNISTRING("ooSetupVersion"); break;
+            case ABOUTBOXPRODUCTVERSION: 			sProperty = UNISTRING("ooSetupVersionAboutBox"); break;
             case OOOVENDOR:                         sProperty = UNISTRING("ooVendor"); break;
-            case PRODUCTEXTENSION:                  sProperty = UNISTRING("ooSetupExtension"); break;
+            case PRODUCTEXTENSION:					sProperty = UNISTRING("ooSetupExtension"); break;
             case PRODUCTXMLFILEFORMATNAME:          sProperty = UNISTRING("ooXMLFileFormatName"); break;
             case PRODUCTXMLFILEFORMATVERSION:       sProperty = UNISTRING("ooXMLFileFormatVersion"); break;
             case OPENSOURCECONTEXT:                 sProperty = UNISTRING("ooOpenSourceContext"); break;
             case DEFAULTCURRENCY:                   sProperty = UNISTRING("ooSetupCurrency"); break;
-            case WRITERCOMPATIBILITYVERSIONOOO11:   sProperty = UNISTRING("OOo11"); break;
+            case WRITERCOMPATIBILITYVERSIONOOO11:	sProperty = UNISTRING("OOo11"); break;
             default:
                 break;
         }
@@ -530,7 +555,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
             aBuf.append( "\" under \"" );
             aBuf.append( rtl::OUStringToOString( sPath, RTL_TEXTENCODING_ASCII_US ) );
             aBuf.append( "\" (caught an exception)!" );
-            OSL_FAIL( aBuf.getStr() );
+            OSL_ENSURE( sal_False, aBuf.getStr() );
             #endif
         }
     }
@@ -611,6 +636,9 @@ void ConfigManager::getBasisAboutBoxProductVersion( OUString& rVersion )
     }
 }
 
+/* -----------------------------12.12.00 17:22--------------------------------
+
+ ---------------------------------------------------------------------------*/
 Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUString& rFullPath)
 {
     Sequence< Any > aArgs(1);
@@ -625,14 +653,14 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
                     OUString::createFromAscii(pAccessSrvc),
                     aArgs);
         }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         catch(Exception& rEx)
         {
             OString sMsg("CreateInstance exception: ");
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                          RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(sMsg.getStr());
+            OSL_ENSURE(sal_False, sMsg.getStr());
         }
 #else
         catch(Exception&){}
@@ -640,7 +668,9 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
     }
     return Reference<XHierarchicalNameAccess>(xIFace, UNO_QUERY);
 }
+/* -----------------------------12.12.00 17:17--------------------------------
 
+ ---------------------------------------------------------------------------*/
 Any ConfigManager::GetLocalProperty(const OUString& rProperty)
 {
     OUString sPath(OUString::createFromAscii(pConfigBaseURL));
@@ -656,21 +686,23 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
         if(xAccess.is())
             aRet = xAccess->getByName(sProperty);
     }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
     catch(Exception& rEx)
     {
         OString sMsg("GetLocalProperty: ");
         sMsg += OString(rEx.Message.getStr(),
                     rEx.Message.getLength(),
                      RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(sMsg.getStr());
+        OSL_ENSURE(sal_False, sMsg.getStr());
     }
 #else
     catch(Exception&){}
 #endif
     return aRet;
 }
+/* -----------------------------12.12.00 17:17--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValue)
 {
     OUString sPath(OUString::createFromAscii(pConfigBaseURL));
@@ -686,22 +718,24 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
         {
             xNodeReplace->replaceByName(sProperty, rValue);
         }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         catch(Exception& rEx)
         {
             OString sMsg("PutLocalProperty: ");
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                          RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(sMsg.getStr());
+            OSL_ENSURE(sal_False, sMsg.getStr());
         }
 #else
         catch(Exception& ){}
 #endif
     }
 }
+/* -----------------------------13.12.00 08:47--------------------------------
 
-sal_Bool    ConfigManager::IsLocalConfigProvider()
+ ---------------------------------------------------------------------------*/
+sal_Bool	ConfigManager::IsLocalConfigProvider()
 {
     return false;
 }

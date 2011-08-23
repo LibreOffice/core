@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ class SdDrawDocument;
 class SdPage;
 class SdrObjListIter;
 
-namespace sd {
+namespace sd { 
 
 class ViewShell;
 
@@ -52,7 +52,7 @@ class IteratorImplBase;
 */
 class IteratorImplBase
 {
-public:
+public: 
     /** The constructor stores the given arguments to be used by the derived
         classes.
         @param pDocument
@@ -141,14 +141,14 @@ protected:
     <p>For documentation of the methods please refere to the base class
     <type>IteratorImplBase</type>.</p>
 */
-class SelectionIteratorImpl
+class SelectionIteratorImpl 
     : public IteratorImplBase
 {
 public:
     SelectionIteratorImpl (
         const ::std::vector< SdrObjectWeakRef >& rObjectList,
         sal_Int32 nObjectIndex,
-        SdDrawDocument* pDocument,
+        SdDrawDocument* pDocument, 
         const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
     SelectionIteratorImpl (const SelectionIteratorImpl& rObject);
@@ -172,7 +172,7 @@ private:
         @return
             Returns <TRUE/> when both iterators point to the same object.
     */
-    virtual bool IsEqual (const IteratorImplBase& rIterator, IteratorType aType) const;
+    virtual bool IsEqual (const IteratorImplBase& rIterator, IteratorType aType) const; 
 
     IteratorImplBase& operator= (const IteratorImplBase& rIterator);
 };
@@ -190,16 +190,16 @@ class ViewIteratorImpl : public IteratorImplBase
 {
 public:
     ViewIteratorImpl (
-        sal_Int32 nPageIndex,
-        SdDrawDocument* pDocument,
+        sal_Int32 nPageIndex, 
+        SdDrawDocument* pDocument, 
         const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
     ViewIteratorImpl (
-        sal_Int32 nPageIndex,
-        SdDrawDocument* pDocument,
+        sal_Int32 nPageIndex, 
+        SdDrawDocument* pDocument, 
         const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
-        bool bDirectionIsForward,
-        PageKind ePageKind,
+        bool bDirectionIsForward, 
+        PageKind ePageKind, 
         EditMode eEditMode);
     virtual ~ViewIteratorImpl (void);
 
@@ -225,8 +225,8 @@ protected:
     void SetPage (sal_Int32 nPageIndex);
 
 private:
-    /// Indicates whether a page changed occurred on switching to current page.
-    bool mbPageChangeOccurred;
+    /// Indicates whether a page changed occured on switching to current page.
+    bool mbPageChangeOccured;
     /// Pointer to the page associated with the current page index. May be NULL.
     SdPage* mpPage;
     /// Iterator of all objects on the current page.
@@ -250,9 +250,9 @@ class DocumentIteratorImpl : public ViewIteratorImpl
 public:
     DocumentIteratorImpl (
         sal_Int32 nPageIndex,
-        PageKind ePageKind,
+        PageKind ePageKind, 
         EditMode eEditMode,
-        SdDrawDocument* pDocument,
+        SdDrawDocument* pDocument, 
         const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
     virtual ~DocumentIteratorImpl (void);

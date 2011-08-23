@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,8 +68,8 @@ namespace swui
 
 SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
     SfxSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), 0, 0),
-    pSh         (rVw.GetWrtShellPtr()),
-    aPrevBT     (this, SW_RES(BTN_FLDEDT_PREV)),
+    pSh			(rVw.GetWrtShellPtr()),
+    aPrevBT		(this, SW_RES(BTN_FLDEDT_PREV)),
     aNextBT     (this, SW_RES(BTN_FLDEDT_NEXT)),
     aAddressBT  (this, SW_RES(PB_FLDEDT_ADDRESS))
 {
@@ -84,21 +84,21 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
     /* #108536# Only create selection if there is none
         already. Normalize PaM instead of swapping. */
     if ( ! pSh->HasSelection() )
-        pSh->Right(CRSR_SKIP_CHARS, sal_True, 1, sal_False );
+        pSh->Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
 
     pSh->NormalizePam();
 
-    sal_uInt16 nGroup = aMgr.GetGroup(sal_False, pCurFld->GetTypeId(), pCurFld->GetSubType());
+    USHORT nGroup = aMgr.GetGroup(FALSE, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
     CreatePage(nGroup);
 
     GetOKButton()->SetClickHdl(LINK(this, SwFldEditDlg, OKHdl));
 
-    // position buttons ourselves because otherwise when font sizes are
-    // varying, they are in the woods, and because PB uses fixed pixel sizes
-    // for its buttons and dialog width in SingleTabDlg.
+    // Buttons selbst positionieren, da sie sonst bei unterschiedlichen
+    // Fontgroessen im Wald stehen, und da PB im SingleTabDlg feste Pixelgroessen
+    // fuer seine Buttons und die Dialogbreite verwendet.
     aPrevBT.SetPosPixel(Point(GetOKButton()->GetPosPixel().X(), aPrevBT.GetPosPixel().Y()));
-    sal_uInt16 nWidth = static_cast< sal_uInt16 >(GetOKButton()->GetOutputSize().Width() / 2 - 3);
+    USHORT nWidth = static_cast< USHORT >(GetOKButton()->GetOutputSize().Width() / 2 - 3);
     Size aNewSize(LogicToPixel(Size(nWidth, GetOKButton()->GetOutputSize().Height())));
     aPrevBT.SetSizePixel(aNewSize);
 
@@ -121,7 +121,7 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
 }
 
 /*--------------------------------------------------------------------
-    Description: initialise controls
+    Beschreibung: Controlls initialisieren
  --------------------------------------------------------------------*/
 void SwFldEditDlg::Init()
 {
@@ -136,11 +136,11 @@ void SwFldEditDlg::Init()
         if(!pCurFld)
             return;
 
-        // Traveling only when more than one field
+        // Traveling nur bei mehr als einem Feld
         pSh->StartAction();
         pSh->CreateCrsr();
 
-        sal_Bool bMove = rMgr.GoNext();
+        BOOL bMove = rMgr.GoNext();
         if( bMove )
             rMgr.GoPrev();
         aNextBT.Enable(bMove);
@@ -160,25 +160,25 @@ void SwFldEditDlg::Init()
                            !pSh->HasReadonlySel() );
 }
 
-SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
+SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
 {
-    // create TabPage
+    // TabPage erzeugen
     SfxTabPage* pTabPage = 0;
-    const char* pHelpId = 0;
+    USHORT nHelpId = 0;
 
     switch (nGroup)
     {
         case GRP_DOC:
             pTabPage = SwFldDokPage::Create(this, *(SfxItemSet*)0);
-            pHelpId = HID_EDIT_FLD_DOK;
+            nHelpId = HID_EDIT_FLD_DOK;
             break;
         case GRP_FKT:
             pTabPage = SwFldFuncPage::Create(this, *(SfxItemSet*)0);
-            pHelpId = HID_EDIT_FLD_FUNC;
+            nHelpId = HID_EDIT_FLD_FUNC;
             break;
         case GRP_REF:
             pTabPage = SwFldRefPage::Create(this, *(SfxItemSet*)0);
-            pHelpId = HID_EDIT_FLD_REF;
+            nHelpId = HID_EDIT_FLD_REF;
             break;
         case GRP_REG:
             {
@@ -192,24 +192,31 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
                 uno::Reference< beans::XPropertySet > xUDProps(
                     xDocProps->getUserDefinedProperties(),
                     uno::UNO_QUERY_THROW);
+//                uno::Reference< beans::XPropertySetInfo > xSetInfo
+//                    = xUDProps->getPropertySetInfo();
+//                const uno::Sequence< beans::Property > props
+//                    = xSetInfo->getProperties();
+//                uno::Sequence< ::rtl::OUString > names(props.getLength());
+//                for (sal_Int32 i = 0; i < props.getLength(); ++i) {
+//                    names[i] = props[i].Name;
+//                }
                 pSet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(xUDProps) ) );
                 pTabPage = SwFldDokInfPage::Create(this, *pSet);
-                pHelpId = HID_EDIT_FLD_DOKINF;
+                nHelpId = HID_EDIT_FLD_DOKINF;
                 break;
             }
         case GRP_DB:
             pTabPage = SwFldDBPage::Create(this, *(SfxItemSet*)0);
             static_cast<SwFldDBPage*>(pTabPage)->SetWrtShell(*pSh);
-            pHelpId = HID_EDIT_FLD_DB;
+            nHelpId = HID_EDIT_FLD_DB;
             break;
         case GRP_VAR:
             pTabPage = SwFldVarPage::Create(this, *(SfxItemSet*)0);
-            pHelpId = HID_EDIT_FLD_VAR;
+            nHelpId = HID_EDIT_FLD_VAR;
             break;
 
     }
-
-    pTabPage->SetHelpId(pHelpId);
+    pTabPage->SetHelpId(nHelpId);
     static_cast<SwFldPage*>(pTabPage)->SetWrtShell(pSh);
 
     SetTabPage(pTabPage);
@@ -228,10 +235,10 @@ SwFldEditDlg::~SwFldEditDlg()
     pSh->EnterStdMode();
 }
 
-void SwFldEditDlg::EnableInsert(sal_Bool bEnable)
+void SwFldEditDlg::EnableInsert(BOOL bEnable)
 {
     if( bEnable && pSh->IsReadOnlyAvailable() && pSh->HasReadonlySel() )
-        bEnable = sal_False;
+        bEnable = FALSE;
     GetOKButton()->Enable( bEnable );
 }
 
@@ -241,7 +248,7 @@ void SwFldEditDlg::InsertHdl()
 }
 
 /*--------------------------------------------------------------------
-     Description: kick off changing of the field
+     Beschreibung: Aendern des Feldes anstossen
  --------------------------------------------------------------------*/
 IMPL_LINK( SwFldEditDlg, OKHdl, Button *, EMPTYARG )
 {
@@ -261,16 +268,16 @@ IMPL_LINK( SwFldEditDlg, OKHdl, Button *, EMPTYARG )
 
 short SwFldEditDlg::Execute()
 {
-    // without TabPage no dialog
+    // Ohne TabPage kein Dialog
     return GetTabPage() ? Dialog::Execute() : RET_CANCEL;
 }
 
 /*--------------------------------------------------------------------
-    Description: Traveling between fields of the same type
+    Beschreibung: Traveling zwishen Feldern gleichen Typs
  --------------------------------------------------------------------*/
 IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 {
-    sal_Bool bNext = pButton == &aNextBT;
+    BOOL bNext = pButton == &aNextBT;
 
     pSh->EnterStdMode();
 
@@ -293,11 +300,11 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     /* #108536# Only create selection if there is none
         already. Normalize PaM instead of swapping. */
     if ( ! pSh->HasSelection() )
-        pSh->Right(CRSR_SKIP_CHARS, sal_True, 1, sal_False );
+        pSh->Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
 
     pSh->NormalizePam();
 
-    sal_uInt16 nGroup = rMgr.GetGroup(sal_False, pCurFld->GetTypeId(), pCurFld->GetSubType());
+    USHORT nGroup = rMgr.GetGroup(FALSE, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
     if (nGroup != pTabPage->GetGroup())
         pTabPage = (SwFldPage*)CreatePage(nGroup);
@@ -319,34 +326,34 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, EMPTYARG )
                         SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS,
                         0L );
 
-    sal_uInt16 nEditPos = UNKNOWN_EDIT;
+    USHORT nEditPos = UNKNOWN_EDIT;
 
     switch(pCurFld->GetSubType())
     {
-        case EU_FIRSTNAME:  nEditPos = FIRSTNAME_EDIT;  break;
-        case EU_NAME:       nEditPos = LASTNAME_EDIT;   break;
-        case EU_SHORTCUT:   nEditPos = SHORTNAME_EDIT;  break;
-        case EU_COMPANY:    nEditPos = COMPANY_EDIT;    break;
-        case EU_STREET:     nEditPos = STREET_EDIT;     break;
-        case EU_TITLE:      nEditPos = TITLE_EDIT;      break;
-        case EU_POSITION:   nEditPos = POSITION_EDIT;   break;
-        case EU_PHONE_PRIVATE:nEditPos = TELPRIV_EDIT;  break;
-        case EU_PHONE_COMPANY:nEditPos = TELCOMPANY_EDIT;   break;
-        case EU_FAX:        nEditPos = FAX_EDIT;        break;
-        case EU_EMAIL:      nEditPos = EMAIL_EDIT;      break;
-        case EU_COUNTRY:    nEditPos = COUNTRY_EDIT;    break;
-        case EU_ZIP:        nEditPos = PLZ_EDIT;        break;
-        case EU_CITY:       nEditPos = CITY_EDIT;       break;
-        case EU_STATE:      nEditPos = STATE_EDIT;      break;
+        case EU_FIRSTNAME:	nEditPos = FIRSTNAME_EDIT;	break;
+        case EU_NAME:   	nEditPos = LASTNAME_EDIT;	break;
+        case EU_SHORTCUT: 	nEditPos = SHORTNAME_EDIT;	break;
+        case EU_COMPANY:  	nEditPos = COMPANY_EDIT;	break;
+        case EU_STREET:		nEditPos = STREET_EDIT;		break;
+        case EU_TITLE:  	nEditPos = TITLE_EDIT;		break;
+        case EU_POSITION: 	nEditPos = POSITION_EDIT;	break;
+        case EU_PHONE_PRIVATE:nEditPos = TELPRIV_EDIT;	break;
+        case EU_PHONE_COMPANY:nEditPos = TELCOMPANY_EDIT;	break;
+        case EU_FAX:		nEditPos = FAX_EDIT;		break;
+        case EU_EMAIL:		nEditPos = EMAIL_EDIT;		break;
+        case EU_COUNTRY:	nEditPos = COUNTRY_EDIT;	break;
+        case EU_ZIP:		nEditPos = PLZ_EDIT;		break;
+        case EU_CITY:		nEditPos = CITY_EDIT;		break;
+        case EU_STATE:		nEditPos = STATE_EDIT;		break;
 
-        default:            nEditPos = UNKNOWN_EDIT;    break;
+        default:			nEditPos = UNKNOWN_EDIT;	break;
 
     }
     aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, nEditPos));
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aSet,
+    SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aSet, 
         pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
         RC_DLG_ADDR );
     OSL_ENSURE(pDlg, "Dialogdiet fail!");

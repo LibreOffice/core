@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,11 +62,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>
 #include <svl/rectitem.hxx>
-#include <svl/slstitm.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
-#include <tools/diagnose_ex.h>
 
 #include "tabvwsh.hxx"
 #include "globstr.hrc"
@@ -86,12 +84,12 @@ using namespace com::sun::star;
 
 void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 {
-    //  wird aus dem Paint gerufen
+    //	wird aus dem Paint gerufen
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     Window* pWin = GetActiveWin();
 
-    //  wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
+    //	#41412# wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
 
     SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
     if ( !pClient )
@@ -104,7 +102,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 
         Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
         Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-        aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+        aScaleWidth.ReduceInaccurate(10);		// kompatibel zum SdrOle2Obj
         aScaleHeight.ReduceInaccurate(10);
         pClient->SetSizeScale(aScaleWidth,aScaleHeight);
 
@@ -117,16 +115,20 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
     }
 }
 
-sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
+BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 {
-    // Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
+    // #41081# Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
     RemoveHintWindow();
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     Window* pWin = GetActiveWin();
     ErrCode nErr = ERRCODE_NONE;
-    sal_Bool bErrorShown = false;
+    BOOL bErrorShown = FALSE;
 
+    // linked objects aren't supported
+//	if ( xIPObj->IsLink() )
+//		nErr = xIPObj->DoVerb(nVerb);			// gelinkt -> ohne Client etc.
+//	else
     {
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
         if ( !pClient )
@@ -143,7 +145,7 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             if ( pClient->GetAspect() != embed::Aspects::MSOLE_ICON
               && ( xObj->getStatus( pClient->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE ) )
             {
-                //  scale must always be 1 - change VisArea if different from client size
+                //	scale must always be 1 - change VisArea if different from client size
 
                 if ( aDrawSize != aOleSize )
                 {
@@ -158,11 +160,11 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             }
             else
             {
-                //  calculate scale from client and VisArea size
+                //	calculate scale from client and VisArea size
 
                 Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
                 Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-                aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+                aScaleWidth.ReduceInaccurate(10);		// kompatibel zum SdrOle2Obj
                 aScaleHeight.ReduceInaccurate(10);
                 pClient->SetSizeScale(aScaleWidth,aScaleHeight);
             }
@@ -175,7 +177,7 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             ((ScClient*)pClient)->SetGrafEdit( NULL );
 
             nErr = pClient->DoVerb( nVerb );
-            bErrorShown = sal_True;
+            bErrorShown = TRUE;
             // SfxViewShell::DoVerb zeigt seine Fehlermeldungen selber an
 
             // attach listener to selection changes in chart that affect cell
@@ -202,7 +204,7 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                     }
                     catch( const uno::Exception & )
                     {
-                        OSL_FAIL( "Exception caught while querying chart" );
+                        DBG_ERROR( "Exception caught while querying chart" );
                     }
                 }
             }
@@ -211,20 +213,21 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     if (nErr != ERRCODE_NONE && !bErrorShown)
         ErrorHandler::HandleError(nErr);
 
-    //! SetDocumentName sollte schon im Sfx passieren ???
+    //!	SetDocumentName sollte schon im Sfx passieren ???
     //TODO/LATER: how "SetDocumentName"?
     //xIPObj->SetDocumentName( GetViewData()->GetDocShell()->GetTitle() );
 
     return ( !(nErr & ERRCODE_ERROR_MASK) );
 }
 
-ErrCode ScTabViewShell::DoVerb(long nVerb)
+ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
 {
     SdrView* pView = GetSdrView();
     if (!pView)
-        return ERRCODE_SO_NOTIMPL;          // soll nicht sein
+        return ERRCODE_SO_NOTIMPL;			// soll nicht sein
 
     SdrOle2Obj* pOle2Obj = NULL;
+    SdrGrafObj* pGrafObj = NULL;
     SdrObject* pObj = NULL;
     ErrCode nErr = ERRCODE_NONE;
 
@@ -234,6 +237,10 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
             pOle2Obj = (SdrOle2Obj*) pObj;
+        else if (pObj->GetObjIdentifier() == OBJ_GRAF)
+        {
+            pGrafObj = (SdrGrafObj*) pObj;
+        }
     }
 
     if (pOle2Obj)
@@ -242,7 +249,7 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
     }
     else
     {
-        OSL_FAIL("kein Objekt fuer Verb gefunden");
+        DBG_ERROR("kein Objekt fuer Verb gefunden");
     }
 
     return nErr;
@@ -262,14 +269,14 @@ void ScTabViewShell::DeactivateOle()
 
 void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 {
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     if (nSlot != SID_OBJECTRESIZE )
     {
         SC_MOD()->InputEnterHandler();
         UpdateInputHandler();
     }
 
-    //  Rahmen fuer Chart einfuegen wird abgebrochen:
+    //	Rahmen fuer Chart einfuegen wird abgebrochen:
     FuPoor* pPoor = GetDrawFuncPtr();
     if ( pPoor && pPoor->GetSlotID() == SID_DRAW_CHART )
         GetViewData()->GetDispatcher().Execute(SID_DRAW_CHART, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
@@ -277,12 +284,13 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     MakeDrawLayer();
 
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
-    ScTabView*   pTabView  = GetViewData()->GetView();
-    Window*      pWin      = pTabView->GetActiveWin();
-    ScDrawView*  pView     = pTabView->GetScDrawView();
-    ScDocShell*  pDocSh    = GetViewData()->GetDocShell();
-    ScDocument*  pDoc      = pDocSh->GetDocument();
-    SdrModel*    pDrModel  = pView->GetModel();
+    ScTabView*	 pTabView  = GetViewData()->GetView();
+    Window* 	 pWin	   = pTabView->GetActiveWin();
+    ScDrawView*	 pView	   = pTabView->GetScDrawView();
+    ScDocShell*	 pDocSh	   = GetViewData()->GetDocShell();
+    ScDocument*	 pDoc	   = pDocSh->GetDocument();
+//	SdrModel*	 pDrModel  = pDocSh->MakeDrawLayer();
+    SdrModel*	 pDrModel  = pView->GetModel();
 
     switch ( nSlot )
     {
@@ -298,12 +306,14 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_INSERT_DIAGRAM:
             FuInsertChart(this, pWin, pView, pDrModel, rReq);
+//?			SC_MOD()->SetFunctionDlg( NULL );//XXX
             break;
 
         case SID_INSERT_OBJECT:
         case SID_INSERT_PLUGIN:
         case SID_INSERT_SOUND:
         case SID_INSERT_VIDEO:
+        case SID_INSERT_APPLET:
         case SID_INSERT_SMATH:
         case SID_INSERT_FLOATINGFRAME:
             FuInsertOLE(this, pWin, pView, pDrModel, rReq);
@@ -311,7 +321,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_OBJECTRESIZE:
             {
-                //          Der Server moechte die Clientgrosse verandern
+                //			Der Server moechte die Clientgrosse verandern
 
                 SfxInPlaceClient* pClient = GetIPClient();
 
@@ -330,7 +340,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                             SdrMark* pMark = rMarkList.GetMark(0);
                             SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+                            UINT16 nSdrObjKind = pObj->GetObjIdentifier();
 
                             if (nSdrObjKind == OBJ_OLE2)
                             {
@@ -362,12 +372,12 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         // #98721#
         case SID_FM_CREATE_FIELDCONTROL:
             {
-                SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, false );
+                SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
                 DBG_ASSERT( pDescriptorItem, "SID_FM_CREATE_FIELDCONTROL: invalid request args!" );
 
                 if(pDescriptorItem)
                 {
-                    //! merge with ScViewFunc::PasteDataFormat (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE)?
+                    //!	merge with ScViewFunc::PasteDataFormat (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE)?
 
                     ScDrawView* pDrView = GetScDrawView();
                     SdrPageView* pPageView = pDrView ? pDrView->GetSdrPageView() : NULL;
@@ -423,13 +433,13 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
 void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
-    sal_Bool bOle = GetViewFrame()->GetFrame().IsInPlace();
-    sal_Bool bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
+    BOOL bOle = GetViewFrame()->GetFrame().IsInPlace();
+    BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     ScDocShell* pDocShell = ( GetViewData() ? GetViewData()->GetDocShell() : NULL );
     bool bShared = ( pDocShell ? pDocShell->IsDocShared() : false );
 
     SfxWhichIter aIter(rSet);
-    sal_uInt16 nWhich = aIter.FirstWhich();
+    USHORT nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
         switch ( nWhich )
@@ -460,6 +470,14 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 break;
 
+            case SID_INSERT_APPLET:
+                //	wenn SOLAR_JAVA nicht definiert ist, immer disablen
+#ifdef SOLAR_JAVA
+                if (bOle || bTabProt)
+#endif
+                    rSet.DisableItem( nWhich );
+                break;
+
             case SID_INSERT_GRAPHIC:
             case SID_INSERT_AVMEDIA:
             case SID_FONTWORK_GALLERY_FLOATER:
@@ -478,99 +496,6 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
     }
 }
 
-
-//------------------------------------------------------------------
-
-void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
-{
-    SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
-    ::svl::IUndoManager* pUndoManager = pSh->GetUndoManager();
-
-    const SfxItemSet* pReqArgs = rReq.GetArgs();
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-
-    sal_uInt16 nSlot = rReq.GetSlot();
-    switch ( nSlot )
-    {
-        case SID_UNDO:
-        case SID_REDO:
-            if ( pUndoManager )
-            {
-                sal_Bool bIsUndo = ( nSlot == SID_UNDO );
-
-                sal_uInt16 nCount = 1;
-                const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
-                    nCount = ((const SfxUInt16Item*)pItem)->GetValue();
-
-                // lock paint for more than one cell undo action (not for editing within a cell)
-                sal_Bool bLockPaint = ( nCount > 1 && pUndoManager == GetUndoManager() );
-                if ( bLockPaint )
-                    pDocSh->LockPaint();
-
-                try
-                {
-                    for (sal_uInt16 i=0; i<nCount; i++)
-                    {
-                        if ( bIsUndo )
-                            pUndoManager->Undo();
-                        else
-                            pUndoManager->Redo();
-                    }
-                }
-                catch ( const uno::Exception& )
-                {
-                    // no need to handle. By definition, the UndoManager handled this by clearing the
-                    // Undo/Redo stacks
-                }
-
-                if ( bLockPaint )
-                    pDocSh->UnlockPaint();
-
-                GetViewFrame()->GetBindings().InvalidateAll(false);
-            }
-            break;
-//      default:
-//          GetViewFrame()->ExecuteSlot( rReq );
-    }
-}
-
-void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
-{
-    SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
-    ::svl::IUndoManager* pUndoManager = pSh->GetUndoManager();
-
-    SfxWhichIter aIter(rSet);
-    sal_uInt16 nWhich = aIter.FirstWhich();
-    while ( nWhich )
-    {
-        switch (nWhich)
-        {
-            case SID_GETUNDOSTRINGS:
-            case SID_GETREDOSTRINGS:
-                {
-                    SfxStringListItem aStrLst( nWhich );
-                    if ( pUndoManager )
-                    {
-                        List* pList = aStrLst.GetList();
-                        sal_Bool bIsUndo = ( nWhich == SID_GETUNDOSTRINGS );
-                        size_t nCount = bIsUndo ? pUndoManager->GetUndoActionCount() : pUndoManager->GetRedoActionCount();
-                        for (size_t i=0; i<nCount; i++)
-                            pList->Insert( new String( bIsUndo ? pUndoManager->GetUndoActionComment(i) :
-                                                                 pUndoManager->GetRedoActionComment(i) ),
-                                           LIST_APPEND );
-                    }
-                    rSet.Put( aStrLst );
-                }
-                break;
-            default:
-                // get state from sfx view frame
-                GetViewFrame()->GetSlotState( nWhich, NULL, &rSet );
-        }
-
-        nWhich = aIter.NextWhich();
-    }
-}
 
 
 

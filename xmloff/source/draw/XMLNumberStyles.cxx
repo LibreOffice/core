@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <tools/debug.hxx>
 #include <XMLNumberStylesExport.hxx>
 #include <XMLNumberStylesImport.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -39,72 +39,71 @@
 #include "sdxmlexp_impl.hxx"
 #include "sdxmlimp_impl.hxx"
 
+using namespace rtl;
 using namespace ::xmloff::token;
-
-using ::rtl::OUString;
 
 struct SdXMLDataStyleNumber
 {
     enum XMLTokenEnum meNumberStyle;
-    sal_Bool    mbLong;
-    sal_Bool    mbTextual;
-    sal_Bool    mbDecimal02;
+    sal_Bool	mbLong;
+    sal_Bool	mbTextual;
+    sal_Bool	mbDecimal02;
     const char* mpText;
 }
     aSdXMLDataStyleNumbers[] =
 {
-    { XML_DAY,          sal_False,      sal_False,      sal_False,      NULL },
-    { XML_DAY,          sal_True,       sal_False,      sal_False,      NULL },
-    { XML_MONTH,        sal_True,       sal_False,      sal_False,      NULL },
-    { XML_MONTH,        sal_False,      sal_True,       sal_False,      NULL },
-    { XML_MONTH,        sal_True,       sal_True,       sal_False,      NULL },
-    { XML_YEAR,         sal_False,      sal_False,      sal_False,      NULL },
-    { XML_YEAR,         sal_True,       sal_False,      sal_False,      NULL },
-    { XML_DAY_OF_WEEK,  sal_False,      sal_False,      sal_False,      NULL },
-    { XML_DAY_OF_WEEK,  sal_True,       sal_False,      sal_False,      NULL },
-    { XML_TEXT,         sal_False,      sal_False,      sal_False,      "."  },
-    { XML_TEXT,         sal_False,      sal_False,      sal_False,      " "  },
-    { XML_TEXT,         sal_False,      sal_False,      sal_False,      ", " },
-    { XML_TEXT,         sal_False,      sal_False,      sal_False,      ". " },
-    { XML_HOURS,        sal_False,      sal_False,      sal_False,      NULL },
-    { XML_MINUTES,      sal_False,      sal_False,      sal_False,      NULL },
-    { XML_TEXT,         sal_False,      sal_False,      sal_False,      ":"  },
-    { XML_AM_PM,        sal_False,      sal_False,      sal_False,      NULL },
-    { XML_SECONDS,      sal_False,      sal_False,      sal_False,      NULL },
-    { XML_SECONDS,      sal_False,      sal_False,      sal_True,       NULL },
+    { XML_DAY,			sal_False,		sal_False,		sal_False,		NULL },
+    { XML_DAY,			sal_True,		sal_False,		sal_False,		NULL },
+    { XML_MONTH,		sal_True,		sal_False,		sal_False,		NULL },
+    { XML_MONTH,		sal_False,		sal_True,		sal_False,		NULL },
+    { XML_MONTH,		sal_True,		sal_True,		sal_False,		NULL },
+    { XML_YEAR,		    sal_False,		sal_False,		sal_False,		NULL },
+    { XML_YEAR,		    sal_True,		sal_False,		sal_False,		NULL },
+    { XML_DAY_OF_WEEK,	sal_False,		sal_False,		sal_False,		NULL },
+    { XML_DAY_OF_WEEK,  sal_True,		sal_False,		sal_False,		NULL },
+    { XML_TEXT,		    sal_False,		sal_False,		sal_False,		"."	 },
+    { XML_TEXT,		    sal_False,		sal_False,		sal_False,		" "  },
+    { XML_TEXT,		    sal_False,		sal_False,		sal_False,		", " },
+    { XML_TEXT,		    sal_False,		sal_False,		sal_False,		". " },
+    { XML_HOURS,		sal_False,		sal_False,		sal_False,		NULL },
+    { XML_MINUTES,		sal_False,		sal_False,		sal_False,		NULL },
+    { XML_TEXT,		    sal_False,		sal_False,		sal_False,		":"  },
+    { XML_AM_PM,		sal_False,		sal_False,		sal_False,		NULL },
+    { XML_SECONDS,		sal_False,		sal_False,		sal_False,		NULL },
+    { XML_SECONDS,		sal_False,		sal_False,		sal_True,		NULL },
     { XML_TOKEN_INVALID,        0,              0,             0,       NULL  }
 };
 
-// date
+// date 
 
-#define DATA_STYLE_NUMBER_END               0
-#define DATA_STYLE_NUMBER_DAY               1   // <number:day/>
-#define DATA_STYLE_NUMBER_DAY_LONG          2   // <number:day number:style="long"/>
-#define DATA_STYLE_NUMBER_MONTH_LONG        3   // <number:month number:style="long"/>
-#define DATA_STYLE_NUMBER_MONTH_TEXT        4   // <number:month number:textual="true"/>
-#define DATA_STYLE_NUMBER_MONTH_LONG_TEXT   5   // <number:month number:style="long" number:textual="true"/>
-#define DATA_STYLE_NUMBER_YEAR              6   // <number:year/>
-#define DATA_STYLE_NUMBER_YEAR_LONG         7   // <number:year number:style="long"/>
-#define DATA_STYLE_NUMBER_DAYOFWEEK         8   // <number:day-of-week/>
-#define DATA_STYLE_NUMBER_DAYOFWEEK_LONG    9   // <number:day-of-week number:style="long"/>
-#define DATA_STYLE_NUMBER_TEXT_POINT        10  // <number:text>.</number:text>
-#define DATA_STYLE_NUMBER_TEXT_SPACE        11  // <number:text> </number:text>
-#define DATA_STYLE_NUMBER_TEXT_COMMASPACE   12  // <number:text>, </number:text>
-#define DATA_STYLE_NUMBER_TEXT_POINTSPACE   13  // <number:text>. </number:text>
-#define DATA_STYLE_NUMBER_HOURS             14  // <number:hours/>
-#define DATA_STYLE_NUMBER_MINUTES           15  // <number:minutes/>
-#define DATA_STYLE_NUMBER_TEXT_COLON        16  // <number:text>:</number:text>
-#define DATA_STYLE_NUMBER_AMPM              17  // <number:am-pm/>
-#define DATA_STYLE_NUMBER_SECONDS           18  // <number:seconds/>
-#define DATA_STYLE_NUMBER_SECONDS_02        19  // <number:seconds number:/>
+#define DATA_STYLE_NUMBER_END				0
+#define DATA_STYLE_NUMBER_DAY				1	// <number:day/>
+#define DATA_STYLE_NUMBER_DAY_LONG			2	// <number:day number:style="long"/>
+#define DATA_STYLE_NUMBER_MONTH_LONG		3	// <number:month number:style="long"/>
+#define DATA_STYLE_NUMBER_MONTH_TEXT		4	// <number:month number:textual="true"/>
+#define DATA_STYLE_NUMBER_MONTH_LONG_TEXT	5	// <number:month number:style="long" number:textual="true"/>
+#define DATA_STYLE_NUMBER_YEAR				6	// <number:year/>
+#define DATA_STYLE_NUMBER_YEAR_LONG			7	// <number:year number:style="long"/>
+#define DATA_STYLE_NUMBER_DAYOFWEEK			8	// <number:day-of-week/>
+#define DATA_STYLE_NUMBER_DAYOFWEEK_LONG	9	// <number:day-of-week number:style="long"/>
+#define DATA_STYLE_NUMBER_TEXT_POINT		10	// <number:text>.</number:text>
+#define DATA_STYLE_NUMBER_TEXT_SPACE		11	// <number:text> </number:text>
+#define DATA_STYLE_NUMBER_TEXT_COMMASPACE	12	// <number:text>, </number:text>
+#define DATA_STYLE_NUMBER_TEXT_POINTSPACE	13	// <number:text>. </number:text>
+#define DATA_STYLE_NUMBER_HOURS				14	// <number:hours/>
+#define DATA_STYLE_NUMBER_MINUTES			15	// <number:minutes/>
+#define DATA_STYLE_NUMBER_TEXT_COLON		16	// <number:text>:</number:text>
+#define DATA_STYLE_NUMBER_AMPM				17	// <number:am-pm/>
+#define DATA_STYLE_NUMBER_SECONDS			18	// <number:seconds/>
+#define DATA_STYLE_NUMBER_SECONDS_02		19	// <number:seconds number:/>
 
 
 struct SdXMLFixedDataStyle
 {
-    const char* mpName;
-    sal_Bool    mbAutomatic;
-    sal_Bool    mbDateStyle;
-    sal_uInt8   mpFormat[8];
+    const char*	mpName;
+    sal_Bool	mbAutomatic;
+    sal_Bool	mbDateStyle;
+    sal_uInt8	mpFormat[8];
 };
 
 const SdXMLFixedDataStyle aSdXML_Standard_Short =
@@ -151,7 +150,7 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_1 =
 const SdXMLFixedDataStyle aSdXML_DateStyle_2 =
 {
     "D4", sal_False, sal_True,
-    {
+    { 
         DATA_STYLE_NUMBER_DAY_LONG,
         DATA_STYLE_NUMBER_TEXT_POINT,
         DATA_STYLE_NUMBER_MONTH_LONG,
@@ -218,7 +217,7 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_6 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_1 =
-{   "T1", sal_True, sal_False,
+{	"T1", sal_True, sal_False,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -231,7 +230,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_1 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_2 =
-{   "T2", sal_False, sal_False,
+{	"T2", sal_False, sal_False,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -241,7 +240,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_2 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_3 =
-{   "T3", sal_False, sal_False,
+{	"T3", sal_False, sal_False,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -253,7 +252,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_3 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_4 =
-{   "T4", sal_False, sal_False,
+{	"T4", sal_False, sal_False,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -265,7 +264,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_4 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_5 =
-{   "T5", sal_False, sal_False,
+{	"T5", sal_False, sal_False,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -276,7 +275,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_5 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_6 =
-{   "T6", sal_False, sal_False,
+{	"T6", sal_False, sal_False,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -289,7 +288,7 @@ const SdXMLFixedDataStyle aSdXML_TimeStyle_6 =
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_7 =
-{   "T7", sal_False, sal_False,
+{	"T7", sal_False, sal_False,
     {
         DATA_STYLE_NUMBER_HOURS,
         DATA_STYLE_NUMBER_TEXT_COLON,
@@ -327,6 +326,8 @@ const SdXMLFixedDataStyle* aSdXMLFixedTimeFormats[SdXMLTimeFormatCount] =
 
 ///////////////////////////////////////////////////////////////////////
 // export
+
+#ifndef SVX_LIGHT
 
 static void SdXMLExportDataStyleNumber( SdXMLExport& rExport, SdXMLDataStyleNumber& rElement )
 {
@@ -490,6 +491,8 @@ OUString SdXMLNumberStylesExporter::getDateStyleName(const sal_Int32 nDateFormat
     }
 }
 
+#endif // #ifndef SVX_LIGHT
+
 
 ///////////////////////////////////////////////////////////////////////
 // import
@@ -509,15 +512,15 @@ private:
 public:
     TYPEINFO();
 
-    SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport,
+    SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, 
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const rtl::OUString& rLocalName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         SdXMLNumberFormatImportContext* pParent,
         SvXMLImportContext* pSlaveContext );
     virtual ~SdXMLNumberFormatMemberImportContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -531,7 +534,7 @@ public:
 TYPEINIT1( SdXMLNumberFormatMemberImportContext, SvXMLImportContext );
 
 SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SdXMLNumberFormatImportContext* pParent, SvXMLImportContext* pSlaveContext )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName),
+:	SvXMLImportContext(rImport, nPrfx, rLocalName),
     mpParent( pParent ),
     maNumberStyle( rLocalName ),
     mpSlaveContext( pSlaveContext )
@@ -539,7 +542,7 @@ SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXM
     mbLong = sal_False;
     mbTextual = sal_False;
     mbDecimal02 = sal_False;
-
+    
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
     {
@@ -571,7 +574,7 @@ SdXMLNumberFormatMemberImportContext::~SdXMLNumberFormatMemberImportContext()
 {
 }
 
-SvXMLImportContext *SdXMLNumberFormatMemberImportContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *SdXMLNumberFormatMemberImportContext::CreateChildContext( USHORT nPrefix,
                            const ::rtl::OUString& rLocalName,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
@@ -600,8 +603,8 @@ void SdXMLNumberFormatMemberImportContext::Characters( const ::rtl::OUString& rC
 TYPEINIT1( SdXMLNumberFormatImportContext, SvXMLImportContext );
 
 
-SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, SvXMLNumImpData* pNewData, sal_uInt16 nNewType, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
-:   SvXMLNumFormatContext(rImport, nPrfx, rLocalName, pNewData, nNewType, xAttrList, rStyles),
+SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx,	const rtl::OUString& rLocalName, SvXMLNumImpData* pNewData, sal_uInt16 nNewType, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
+:	SvXMLNumFormatContext(rImport, nPrfx, rLocalName, pNewData, nNewType, xAttrList, rStyles),
     mrImport( rImport ),
     mbAutomatic( sal_False ),
     mnIndex(0),
@@ -631,14 +634,14 @@ SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext()
 {
 }
 
-void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool   bDecimal02, OUString& rText )
+void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool	bDecimal02, OUString& rText )
 {
     if( mnIndex == -1 || mnIndex == 16 )
     {
         mnIndex = -1;
         return;
     }
-
+    
     const SdXMLDataStyleNumber* pStyleMember = aSdXMLDataStyleNumbers;
     for( sal_uInt8 nIndex = 0; pStyleMember->meNumberStyle != XML_TOKEN_INVALID; nIndex++, pStyleMember++ )
     {
@@ -735,7 +738,7 @@ void SdXMLNumberFormatImportContext::EndElement()
     }
 }
 
-SvXMLImportContext * SdXMLNumberFormatImportContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
+SvXMLImportContext * SdXMLNumberFormatImportContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     return new SdXMLNumberFormatMemberImportContext( GetImport(), nPrefix, rLocalName, xAttrList, this, SvXMLNumFormatContext::CreateChildContext( nPrefix, rLocalName, xAttrList ) );
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <vcl/window.hxx>
 #include <osl/mutex.hxx>
 
-#include <svtools/cliplistener.hxx>
+#include "cliplistener.hxx"
 #include <svtools/transfer.hxx>
 
 using namespace ::com::sun::star;
@@ -69,7 +69,7 @@ void SAL_CALL TransferableClipboardListener::changedContents(
     }
 }
 
-void TransferableClipboardListener::AddRemoveListener( Window* pWin, sal_Bool bAdd )
+void TransferableClipboardListener::AddRemoveListener( Window* pWin, BOOL bAdd )
 {
     try
     {

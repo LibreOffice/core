@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
@@ -63,15 +63,22 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         const sal_Bool bRestartNumberingAtSubList )
-:   SvXMLImportContext( rImport, nPrfx, rLName )
+:	SvXMLImportContext( rImport, nPrfx, rLName )
 ,   mrTxtImport( rTxtImp )
+// --> OD 2008-04-22 #refactorlists#
 ,   msListStyleName()
+// <--
 ,   mxParentListBlock( )
 ,   mnLevel( 0 )
+// --> OD 2008-05-07 #refactorlists#
+//,   mbRestartNumbering( sal_True )
 ,   mbRestartNumbering( sal_False )
+// <--
 ,   mbSetDefaults( sal_False )
+// --> OD 2008-04-22 #refactorlists#
 ,   msListId()
 ,   msContinueListId()
+// <--
 {
     static ::rtl::OUString s_PropNameDefaultListId(
         RTL_CONSTASCII_USTRINGPARAM("DefaultListId"));
@@ -86,6 +93,9 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     // Inherit style name from parent list, as well as the flags whether
     // numbering must be restarted and formats have to be created.
     OUString sParentListStyleName;
+    // --> OD 2008-11-27 #158694#
+    sal_Bool bParentRestartNumbering( sal_False );
+    // <--
     if( mxParentListBlock.Is() )
     {
         XMLTextListBlockContext *pParent =
@@ -94,16 +104,26 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         sParentListStyleName = msListStyleName;
         mxNumRules = pParent->GetNumRules();
         mnLevel = pParent->GetLevel() + 1;
+        // --> OD 2008-05-07 #refactorlists#
+//        mbRestartNumbering = pParent->IsRestartNumbering();
         mbRestartNumbering = pParent->IsRestartNumbering() ||
                              bRestartNumberingAtSubList;
+        // <--
+        // --> OD 2008-11-27 #158694#
+        bParentRestartNumbering = pParent->IsRestartNumbering();
+        // <--
         mbSetDefaults = pParent->mbSetDefaults;
+        // --> OD 2008-04-22 #refactorlists#
         msListId = pParent->GetListId();
         msContinueListId = pParent->GetContinueListId();
+        // <--
     }
 
     const SvXMLTokenMap& rTokenMap = mrTxtImport.GetTextListBlockAttrTokenMap();
 
+    // --> OD 2008-05-07 #refactorlists#
     bool bIsContinueNumberingAttributePresent( false );
+    // <--
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -119,19 +139,23 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         case XML_TOK_TEXT_LIST_BLOCK_XMLID:
             sXmlId = rValue;
 //FIXME: there is no UNO API for lists
-            // xml:id is also the list ID (#i92221#)
+            // --> OD 2008-07-31 #i92221# - xml:id is also the list ID
             if ( mnLevel == 0 ) // root <list> element
             {
                 msListId = rValue;
             }
+            // <--
             break;
         case XML_TOK_TEXT_LIST_BLOCK_CONTINUE_NUMBERING:
             mbRestartNumbering = !IsXMLToken(rValue, XML_TRUE);
+            // --> OD 2008-05-07 #refactorlists#
             bIsContinueNumberingAttributePresent = true;
+            // <--
             break;
         case XML_TOK_TEXT_LIST_BLOCK_STYLE_NAME:
             msListStyleName = rValue;
             break;
+        // --> OD 2008-04-22 #refactorlists#
         case XML_TOK_TEXT_LIST_BLOCK_CONTINUE_LIST:
             if ( mnLevel == 0 ) // root <list> element
             {
@@ -147,10 +171,11 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     if( !mxNumRules.is() )
         return;
 
+    // --> OD 2008-04-23 #refactorlists#
     if ( mnLevel == 0 ) // root <list> element
     {
         XMLTextListsHelper& rTextListsHelper( mrTxtImport.GetTextListHelper() );
-        // Inconsistent behavior regarding lists (#i92811#)
+        // --> OD 2008-08-15 #i92811#
         ::rtl::OUString sListStyleDefaultListId;
         {
             uno::Reference< beans::XPropertySet > xNumRuleProps( mxNumRules, UNO_QUERY );
@@ -169,6 +194,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                 }
             }
         }
+        // <--
         if ( msListId.getLength() == 0 )  // no text:id property found
         {
             sal_Int32 nUPD( 0 );
@@ -177,10 +203,9 @@ XMLTextListBlockContext::XMLTextListBlockContext(
             if ( rImport.IsTextDocInOOoFileFormat() ||
                  ( bBuildIdFound && nUPD == 680 ) )
             {
-                /* handling former documents written by OpenOffice.org:
-                   use default list id of numbering rules instance, if existing
-                   (#i92811#)
-                */
+                // handling former documents written by OpenOffice.org:
+                // use default list id of numbering rules instance, if existing
+                // --> OD 2008-08-15 #i92811#
                 if ( sListStyleDefaultListId.getLength() != 0 )
                 {
                     msListId = sListStyleDefaultListId;
@@ -191,6 +216,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                         mbRestartNumbering = sal_True;
                     }
                 }
+                // <--
             }
             if ( msListId.getLength() == 0 )
             {
@@ -234,12 +260,14 @@ XMLTextListBlockContext::XMLTextListBlockContext(
 
         if ( !rTextListsHelper.IsListProcessed( msListId ) )
         {
-            // Inconsistent behavior regarding lists (#i92811#)
+            // --> OD 2008-08-15 #i92811#
             rTextListsHelper.KeepListAsProcessed(
                 msListId, msListStyleName, msContinueListId,
                 sListStyleDefaultListId );
+            // <--
         }
     }
+    // <--
 
     // Remember this list block.
     mrTxtImport.GetTextListHelper().PushListContext( this );
@@ -295,6 +323,7 @@ SvXMLImportContext *XMLTextListBlockContext::CreateChildContext(
     return pContext;
 }
 
+// --> OD 2008-04-22 #refactorlists#
 const ::rtl::OUString& XMLTextListBlockContext::GetListId() const
 {
     return msListId;
@@ -304,5 +333,6 @@ const ::rtl::OUString& XMLTextListBlockContext::GetContinueListId() const
 {
     return msContinueListId;
 }
+// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

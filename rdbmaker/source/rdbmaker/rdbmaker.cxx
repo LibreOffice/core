@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <io.h>
 #include <direct.h>
 #include <errno.h>
-#endif
+#endif 
 
 #ifdef UNX
 #include <stdlib.h>
@@ -51,23 +51,18 @@
 #include "rdboptions.hxx"
 #include "rdbtype.hxx"
 
-#define PATH_DELEMITTER '/'
+#define PATH_DELEMITTER	'/'
 
+using namespace rtl;
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OUStringToOString;
-using ::rtl::OStringToOUString;
-
-FileStream          listFile;
-RegistryKey         rootKey;
-Registry            regFile;
-sal_Bool            useSpecial;
-TypeManager*        pTypeMgr = NULL;
-StringList          dirEntries;
-StringSet           filterTypes;
+FileStream 			listFile;
+RegistryKey			rootKey;
+Registry			regFile;
+sal_Bool			useSpecial;
+TypeManager*		pTypeMgr = NULL;
+StringList			dirEntries;
+StringSet			filterTypes;
 
 OString getFullNameOfApplicatRdb()
 {
@@ -75,21 +70,21 @@ OString getFullNameOfApplicatRdb()
     OUString uTmpStr;
     if( osl_getExecutableFile(&uTmpStr.pData) == osl_Process_E_None )
     {
-        sal_uInt32  lastIndex = uTmpStr.lastIndexOf(PATH_DELEMITTER);
-        OUString    tmpReg;
+        sal_uInt32 	lastIndex = uTmpStr.lastIndexOf(PATH_DELEMITTER);
+        OUString	tmpReg;
 
         if ( lastIndex > 0 )
         {
-            tmpReg =uTmpStr.copy(0, lastIndex + 1);
+            tmpReg =uTmpStr.copy(0, lastIndex + 1);	
         }
-
+        
         tmpReg += OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb") );
 
         FileBase::getSystemPathFromFileURL(tmpReg, bootReg);
     }
 
-    return OUStringToOString(bootReg, RTL_TEXTENCODING_ASCII_US);
-}
+    return OUStringToOString(bootReg, RTL_TEXTENCODING_ASCII_US);	
+}	
 
 void initFilterTypes(RdbOptions* pOptions)
 {
@@ -102,7 +97,7 @@ void initFilterTypes(RdbOptions* pOptions)
             filterTypes.insert( fOption.getToken( 0, ';', nIndex ).replace('.', '/') );
         }
         while ( nIndex >= 0 );
-    }
+    }	
     if (pOptions->isValid("-F"))
     {
         FILE  *f = fopen(pOptions->getOption("-F").getStr(), "r");
@@ -135,7 +130,7 @@ void initFilterTypes(RdbOptions* pOptions)
             fclose(f);
         }
     }
-}
+}	
 
 sal_Bool checkFilterTypes(const OString& type)
 {
@@ -144,14 +139,14 @@ sal_Bool checkFilterTypes(const OString& type)
     {
         if ( type.indexOf( *iter ) == 0 )
         {
-            return sal_True;
+            return sal_True;			
         }
 
-        ++iter;
+        iter++;
     }
 
     return sal_False;
-}
+}	
 
 void cleanUp( sal_Bool bError)
 {
@@ -166,11 +161,11 @@ void cleanUp( sal_Bool bError)
     {
         pTypeMgr = new RegistryTypeManager();
     }
-
+    
     if ( rootKey.isValid() )
     {
-        rootKey.closeKey();
-    }
+        rootKey.closeKey();	
+    }	
     if ( regFile.isValid() )
     {
         if ( bError )
@@ -180,24 +175,24 @@ void cleanUp( sal_Bool bError)
         {
             regFile.close();
         }
-    }
+    }	
     if ( listFile.isValid() )
     {
-        listFile.close();
+        listFile.close();	
         unlink(listFile.getName().getStr());
-    }
+    }	
 
     StringList::reverse_iterator iter = dirEntries.rbegin();
     while ( iter != dirEntries.rend() )
     {
-        if (rmdir((char*)(*iter).getStr()) == -1)
+           if (rmdir((char*)(*iter).getStr()) == -1)
         {
             break;
         }
-
-        ++iter;
+        
+        iter++;
     }
-}
+}	
 
 OString createFileName(const OString& path)
 {
@@ -211,9 +206,9 @@ OString createFileName(const OString& path)
     fileName = fileName.replace('/', '\\');
     token = '\\';
 #endif
-
+    
     OStringBuffer nameBuffer( path.getLength() );
-
+    
     sal_Int32 nIndex = 0;
     do
     {
@@ -238,39 +233,39 @@ OString createFileName(const OString& path)
         {
             dirEntries.push_back(nameBuffer.getStr());
         }
-
+        
         nameBuffer.append(token);
     }
     while ( nIndex >= 0 );
 
     return fileName;
-}
+}	
 
 sal_Bool produceAllTypes(const OString& typeName,
-                         TypeManager& typeMgr,
+                         TypeManager& typeMgr, 
                          TypeDependency& typeDependencies,
                          RdbOptions* pOptions,
                          sal_Bool bFullScope,
-                         FileStream& o,
+                         FileStream& o, 
                          RegistryKey& regKey,
                          StringSet& filterTypes2)
     throw( CannotDumpException )
 {
-    if (!produceType(typeName, typeMgr, typeDependencies, pOptions, o, regKey, filterTypes2))
+    if (!produceType(typeName, typeMgr,	typeDependencies, pOptions, o, regKey, filterTypes2))
     {
-        fprintf(stderr, "%s ERROR: %s\n",
-                pOptions->getProgramName().getStr(),
+        fprintf(stderr, "%s ERROR: %s\n", 
+                pOptions->getProgramName().getStr(), 
                 OString("cannot dump Type '" + typeName + "'").getStr());
         cleanUp(sal_True);
         exit(99);
     }
 
-    RegistryKey typeKey = typeMgr.getTypeKey(typeName);
+    RegistryKey	typeKey = typeMgr.getTypeKey(typeName);
     RegistryKeyNames subKeys;
-
+    
     if (typeKey.getKeyNames(OUString(), subKeys))
         return sal_False;
-
+    
     OString tmpName;
     for (sal_uInt32 i=0; i < subKeys.getLength(); i++)
     {
@@ -283,7 +278,7 @@ sal_Bool produceAllTypes(const OString& typeName,
 
         if (bFullScope)
         {
-            if (!produceAllTypes(tmpName, typeMgr, typeDependencies, pOptions, sal_True,
+            if (!produceAllTypes(tmpName, typeMgr, typeDependencies, pOptions, sal_True, 
                                  o, regKey, filterTypes2))
                 return sal_False;
         } else
@@ -292,8 +287,8 @@ sal_Bool produceAllTypes(const OString& typeName,
                 return sal_False;
         }
     }
-
-    return sal_True;
+    
+    return sal_True;			
 }
 
 
@@ -305,7 +300,7 @@ int _cdecl main( int argc, char * argv[] )
 {
     RdbOptions options;
 
-    try
+    try 
     {
         if (!options.initOptions(argc, argv))
         {
@@ -320,7 +315,7 @@ int _cdecl main( int argc, char * argv[] )
         exit(99);
     }
 
-    TypeDependency  typeDependencies;
+    TypeDependency	typeDependencies;
 
     OString bootReg;
 
@@ -334,7 +329,7 @@ int _cdecl main( int argc, char * argv[] )
             bootReg = getFullNameOfApplicatRdb();
         }
     }
-
+    
     if ( bootReg.getLength() )
     {
         pTypeMgr = new SpecialTypeManager();
@@ -352,7 +347,7 @@ int _cdecl main( int argc, char * argv[] )
         fprintf(stderr, "%s : init typemanager failed, check your environment for bootstrapping uno.\n", options.getProgramName().getStr());
         cleanUp(sal_True);
         exit(99);
-    }
+    } 
     if ( !useSpecial && !typeMgr.init(!options.isValid("-T"), options.getInputFiles()))
     {
         fprintf(stderr, "%s : init registries failed, check your registry files.\n", options.getProgramName().getStr());
@@ -369,8 +364,8 @@ int _cdecl main( int argc, char * argv[] )
 
     if ( !options.isValid("-O") )
     {
-        fprintf(stderr, "%s ERROR: %s\n",
-                options.getProgramName().getStr(),
+        fprintf(stderr, "%s ERROR: %s\n", 
+                options.getProgramName().getStr(), 
                 "no output file is specified.");
         cleanUp(sal_True);
         exit(99);
@@ -380,11 +375,11 @@ int _cdecl main( int argc, char * argv[] )
     {
         OString fileName = createFileName( options.getOption("-O") );
         listFile.open(fileName);
-
+        
         if ( !listFile.isValid() )
         {
-            fprintf(stderr, "%s ERROR: %s\n",
-                    options.getProgramName().getStr(),
+            fprintf(stderr, "%s ERROR: %s\n", 
+                    options.getProgramName().getStr(), 
                     "could not open output file.");
             cleanUp(sal_True);
             exit(99);
@@ -394,27 +389,27 @@ int _cdecl main( int argc, char * argv[] )
         OUString fileName( OStringToOUString(createFileName( options.getOption("-O") ), RTL_TEXTENCODING_UTF8) );
         if ( regFile.create(fileName) )
         {
-            fprintf(stderr, "%s ERROR: %s\n",
-                    options.getProgramName().getStr(),
+            fprintf(stderr, "%s ERROR: %s\n", 
+                    options.getProgramName().getStr(), 
                     "could not create registry output file.");
             cleanUp(sal_True);
             exit(99);
         }
-
+    
 
         if (options.isValid("-b"))
         {
             RegistryKey tmpKey;
-            regFile.openRootKey(tmpKey);
+            regFile.openRootKey(tmpKey);	
 
             tmpKey.createKey( OStringToOUString(options.getOption("-b"), RTL_TEXTENCODING_UTF8), rootKey);
         } else
         {
-            regFile.openRootKey(rootKey);
+            regFile.openRootKey(rootKey);	
         }
     }
 
-    try
+    try 
     {
         if (options.isValid("-T"))
         {
@@ -431,8 +426,8 @@ int _cdecl main( int argc, char * argv[] )
                 {
                     if (bootReg.getLength())
                     {
-                        fprintf(stderr, "%s ERROR: %s\n",
-                                options.getProgramName().getStr(),
+                        fprintf(stderr, "%s ERROR: %s\n", 
+                                options.getProgramName().getStr(), 
                                 "dumping all types of a scope is not possible if -R option is used.");
                         exit(99);
                     }
@@ -443,7 +438,7 @@ int _cdecl main( int argc, char * argv[] )
                     } else
                     {
                         tmpName = typeName.copy(0, typeName.lastIndexOf('.')).replace('.', '/');
-                        if (tmpName.getLength() == 0)
+                        if (tmpName.getLength() == 0) 
                             tmpName = "/";
                         else
                             tmpName.replace('.', '/');
@@ -453,18 +448,18 @@ int _cdecl main( int argc, char * argv[] )
                 } else
                 {
                     // produce only this type
-                    ret = produceType(typeName.replace('.', '/'), typeMgr, typeDependencies,
+                    ret = produceType(typeName.replace('.', '/'), typeMgr, typeDependencies, 
                                       &options, listFile, rootKey, filterTypes);
                 }
 /*
                 // produce only this type
-                ret = produceType(typeName.replace('.', '/'), typeMgr, typeDependencies,
+                ret = produceType(typeName.replace('.', '/'), typeMgr, typeDependencies, 
                                   &options, listFile, rootKey, filterTypes);
 */
                 if (!ret)
                 {
-                    fprintf(stderr, "%s ERROR: %s\n",
-                            options.getProgramName().getStr(),
+                    fprintf(stderr, "%s ERROR: %s\n", 
+                            options.getProgramName().getStr(), 
                             OString("cannot dump Type '" + typeName + "'").getStr());
                     cleanUp(sal_True);
                     exit(99);
@@ -479,18 +474,18 @@ int _cdecl main( int argc, char * argv[] )
             if (!bootReg.getLength())
             {
                 // produce all types
-                if (!produceAllTypes("/", typeMgr, typeDependencies, &options, sal_True,
+                if (!produceAllTypes("/", typeMgr, typeDependencies, &options, sal_True, 
                                      listFile, rootKey, filterTypes))
                 {
-                    fprintf(stderr, "%s ERROR: %s\n",
-                            options.getProgramName().getStr(),
+                    fprintf(stderr, "%s ERROR: %s\n", 
+                            options.getProgramName().getStr(), 
                             "an error occurs while dumping all types.");
                     exit(99);
                 }
             } else
             {
-                fprintf(stderr, "%s ERROR: %s\n",
-                        options.getProgramName().getStr(),
+                fprintf(stderr, "%s ERROR: %s\n", 
+                        options.getProgramName().getStr(), 
                         "dumping all types is not possible if -R option is used.");
                 exit(99);
             }
@@ -498,8 +493,8 @@ int _cdecl main( int argc, char * argv[] )
     }
     catch( CannotDumpException& e)
     {
-        fprintf(stderr, "%s ERROR: %s\n",
-                options.getProgramName().getStr(),
+        fprintf(stderr, "%s ERROR: %s\n", 
+                options.getProgramName().getStr(), 
                 e.m_message.getStr());
         cleanUp(sal_True);
         exit(99);

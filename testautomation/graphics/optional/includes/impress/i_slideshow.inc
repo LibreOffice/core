@@ -29,30 +29,38 @@
 '*
 '* short description :
 '*
+'*******************************************************************
+'*
+' #1 tSlideShowSlideShow
+' #1 tSlideShowRehearseTimings
+' #1 tSlideShowSlideShowSettings
+' #1 tSlideShowCustomSlideShow
+' #1 tSlideShowSlideTransition
+' #1 tSlideShowShowHideSlide
+'*
 '\******************************************************************
-
 testcase tSlideShowSlideShow
 
     dim bLoaded as boolean
     dim i as integer
-    dim testfile as string
-    dim localtestfile as string
 
-    printlog "open file 'graphics\input\diashow.odp' "
-    testfile = ( gTesttoolPath + "graphics\required\input\diashow.odp" )
-    hFileOpenLocally( testfile )
+    '/// open file 'graphics\\input\\diashow.odp' ///'
+    hFileOpen  ConvertPath (gTesttoolPath + "graphics\required\input\diashow.odp")
     sleep 30
+
+    printlog "check if the document is writable"
+    sMakeReadOnlyDocumentEditable
 
    bLoaded = false
 
    Kontext "Navigator"
    if Navigator.Exists then Navigator.Close
 
-   printlog "Deactivate Start with current page in ToolsOptions "
+   '/// Deactivate "Start with current page" in ToolsOptions ///'
    setStartCurrentPage(FALSE)
 
    try
-   printlog "SlideShow->Slide Show Settings... "
+   '/// SlideShow->Slide Show Settings... ///'
       SlideShowPresentationSettings
       bLoaded = true
    catch
@@ -61,17 +69,17 @@ testcase tSlideShowSlideShow
    if bLoaded then
       Kontext "Bildschirmpraesentation"
 
-      printlog "check Radio button 'Type': 'Window' "
+      '/// check Radio button 'Type': 'Window' ///'
       Fenster.Check
-      printlog "close dialog 'Slide Show' with OK "
+      '/// close dialog 'Slide Show' with OK ///'
       Bildschirmpraesentation.OK
       sleep 3
-      printlog "start the slideshow with 'Slide Show->Slide Show' "
+      '/// start the slideshow with 'Slide Show->Slide Show' ///'
       SlideShowSlideshow
          sleep 3
          Kontext "DocumentPresentation"
          sleep 5
-      printlog "end the presentation by typing [ESCAPE] "
+      '/// end the presentation by typing [ESCAPE] ///'
     DocumentPresentation.TypeKeys "<ESCAPE>"
       sleep 3
         try
@@ -83,7 +91,7 @@ testcase tSlideShowSlideShow
           sleep 3
         endcatch
 
-      printlog "start the slideshow with 'Slide Show->Slide Show' "
+      '/// start the slideshow with 'Slide Show->Slide Show' ///'
       SlideShowSlideshow
       Kontext "DocumentPresentation"
       Printlog "- Check if slideshow runs"
@@ -94,14 +102,14 @@ testcase tSlideShowSlideShow
          Warnlog "Presentation is not running !"
       endcatch
       sleep 5
-      printlog "type the key [SHIFT + F5] to open the navigator "
+      '/// type the key [SHIFT + F5] to open the navigator ///'
       DocumentPresentation.TypeKeys "<MOD1 SHIFT F5>"
       Kontext "NavigatorDraw"
          sleep 1
-         printlog "check in list, if the page changed "
+         '/// check in list, if the page changed ///'
          if Liste.GetSelIndex <> 2 Then Warnlog "- pagedown not working: '" + Liste.GetSelText+"'"
          Kontext "DocumentPresentation"
-         printlog "press key [cursor right] 3 times "
+         '/// press key [cursor right] 3 times ///'
          for i = 1 to 3
             sleep 3
             DocumentPresentation.TypeKeys "<right>"
@@ -124,38 +132,29 @@ testcase tSlideShowSlideShow
       warnlog "Document didn't get loaded"
    endif
    Kontext "DocumentImpress"
-   printlog " Close the Navigator "
+   '///  Close the Navigator ///'
    DocumentImpress.TypeKeys "<MOD1 SHIFT F5>"
-   printlog "Set Start with current page back to default = on, in ToolsOptions "
+   '/// Set "Start with current page" back to default = on, in ToolsOptions ///'
    setStartCurrentPage(TRUE)
-   printlog "close the application "
-    Call hCloseDocument
-    localtestfile = hFileGetLocalPath( gTesttoolPath + "diashow.odp" )
-    printlog localtestfile
-    if (FileExists (localtestfile)) then
-        app.kill (localtestfile)
-        printlog "Deleting used file."
-    else
-        warnlog "File is missing."
-    endif
+   '/// close the application ///'
+   Call hCloseDocument
+   
 endcase 'tSlideShowSlideShow
 
 '-------------------------------------------------------------------------------
 
 testcase tSlideShowRehearseTimings
-
     qaerrorlog "#i64783# - tSlideShowRehearseTimings outcommented due to bug"
     goto endsub
-
     dim bLoaded as boolean
     dim i as integer
 
-   printlog "open file 'graphics\input\diashow.odp' "
+   '/// open file 'graphics\\input\\diashow.odp' ///'
    hFileOpen ConvertPath (gTesttoolPath + "graphics\required\input\diashow.odp")
    sleep 10
-   printlog "check if the document is writable"
+   ' check if the document is writable
    if fIsDocumentWritable = false then
-      printlog "make the document writable and check if it's succesfull"
+      ' make the document writable and check if it's succesfull
       if fMakeDocumentWritable = false then
          warnlog "The document can't be make writeable. Test stopped."
          goto endsub
@@ -165,7 +164,7 @@ testcase tSlideShowRehearseTimings
    if Navigator.Exists then Navigator.Close
    bLoaded = false
    try
-      printlog "SlideShow->Slide Show Settings... "
+      '/// SlideShow->Slide Show Settings... ///'
         SlideShowPresentationSettings
       bLoaded = true
     catch
@@ -173,12 +172,12 @@ testcase tSlideShowRehearseTimings
    endcatch
    if bLoaded then
        Kontext "Bildschirmpraesentation"
-      printlog "check Radio button 'Type': 'Window' "
+      '/// check Radio button 'Type': 'Window' ///'
        Fenster.Check
-      printlog "close dialog 'Slide Show' with OK "
+      '/// close dialog 'Slide Show' with OK ///'
        Bildschirmpraesentation.OK
        sleep 3
-      printlog "start the slideshow with 'Slide Show->Rehearse Timings' "
+      '/// start the slideshow with 'Slide Show->Rehearse Timings' ///'
       SlideShowRehearseTimings
       Kontext "DocumentPresentation"
       if DocumentPresentation.Exists then
@@ -186,7 +185,7 @@ testcase tSlideShowRehearseTimings
       else
         warnlog "bah"
       endif
-     printlog "press key [return] 5 times "
+     '/// press key [return] 5 times ///'
       for i = 1 to 5
          sleep 5
          DocumentPresentation.TypeKeys "<return>"
@@ -206,15 +205,15 @@ testcase tSlideShowRehearseTimings
       warnlog "Documnet didn't get loaded"
    endif
 
-   printlog " check state of navigator ! expected: closed "
+   '///  check state of navigator ! expected: closed ///'
    Kontext "Navigator"
    if Navigator.exists then
-      printlog " close navigator ! "
+      '///+ close navigator ! ///'
       Navigator.Close
    else
       printlog "Navigator: NOT available"
    endif
-   printlog "close the application "
+   '/// close the application ///'
    Call hCloseDocument
    
 endcase 'tSlideShowRehearseTimings
@@ -228,8 +227,6 @@ testcase tSlideShowSlideShowSettings
    dim sTemp as string
    dim saSlideNames(4) as string
    dim bCurrentPage as boolean
-   dim sTestfile as string
-   dim sLocaltestfile as string
 
    S1 = glLocale (2) + " 1"
    S2 = glLocale (2) + " 2"
@@ -244,64 +241,65 @@ testcase tSlideShowSlideShowSettings
    ' the state of the navigator in the normal view is not affected
    ' the navigator that is open in normal view, is not visible in windows presenattions
 
-   printlog "open application "
+   '/// open application ///'
    Call hNewDocument
 
-    printlog " check state of navigator ! expected: closed "
+'///  check state of navigator ! expected: closed ///'
    Kontext "Navigator"
    if Navigator.exists then
-      printlog "close navigator ! "
+      '///+ close navigator ! ///'
       Navigator.Close
       QaErrorLog "Navigator was open. Check earlier tests. Now closed."
    else
       printlog "Navigator: NOT available. Good."
    endif
 
-   printlog "Slide Show -> Slide Show Settings "
+   '/// Slide Show -> Slide Show Settings ///'
     SlideShowPresentationSettings
       Kontext "Bildschirmpraesentation"
-       printlog "check checkbox in section 'Range' - 'From: "
+       '/// check checkbox in section 'Range' - 'From: ///'
        AbDia.Check
-      printlog "get count of slides from listbox 'From:' "
+      '/// get count of slides from listbox 'From:' ///'
       x = AbDiaName.GetItemCount
-      printlog "check if count in listbox 'from' is '0' "
+      '/// check if count in listbox 'from' is '0' ///'
       if (x = 1) Then
          Printlog "  - Slide count in the list: '" + x + "'"
       else
           Warnlog "  - unexpected slide count; should be '1'; is '" + x + "'"
        end if
-   printlog "close dialog 'Slide Show' with OK "
+   '/// close dialog 'Slide Show' with OK ///'
    Bildschirmpraesentation.OK
-   printlog "Insert->Slide... "
+   '/// Insert->Slide... ///'
    InsertSlide
    sleep 2
    hTypekeys "<Pagedown>"
    sleep 2
-   printlog "Slide Show -> Slide Show Settings "
+   '/// Slide Show -> Slide Show Settings ///'
    SlideShowPresentationSettings
       Kontext "Bildschirmpraesentation"
-      Printlog "check if count in listbox 'from' increased"
+      Printlog "'///<b> check if count in listbox 'from' increased </b>///'"
       i = AbDiaName.GetItemCount
       if ((i -1) = x) Then
          Printlog "  - Slide appears in the list; count : '" + i + "'"
       else
           Warnlog "  - Slide not added; is '" + i + "' should: '" + x + "'"
        end if
-   printlog "close dialog 'Slide Show' with CANCEL "
+   '/// close dialog 'Slide Show' with CANCEL ///'
    Bildschirmpraesentation.Cancel
-   printlog "close application "
+   '/// close application ///'
    Call hCloseDocument
    sleep 5
 
-    bLoaded = false
-    printlog "open file 'graphics\input\diashow.odp' (Slide Show with 4 Slides) "
-    sTestfile = ( gTesttoolPath + "graphics\required\input\diashow.odp" )
-    hFileOpenLocally( sTestfile )
+   bLoaded = false
+   '/// open file 'graphics\\input\\diashow.odp' (Slide Show with 4 Slides) ///'
+   hFileOpen   ConvertPath (gTesttoolPath + "graphics\required\input\diashow.odp")
    sleep 10
+   printlog "check if the document is writable"
+   sMakeReadOnlyDocumentEditable
 
    try
       Kontext "DocumentImpress"
-      printlog "Slide Show -> Slide Show Settings "
+      '/// Slide Show -> Slide Show Settings ///'
       Printlog "'--------------------------------------------------------------------------"
       SlideShowPresentationSettings
       bLoaded = true
@@ -319,19 +317,19 @@ testcase tSlideShowSlideShowSettings
       if (NavigatorSichtbar.IsChecked) then
          Warnlog "'Navigator visible' is checked :-("
       endif
-      printlog "check checkbox 'All Slides'"
+      '///<b> check checkbox 'All Slides' </b>///'
       AlleDias.Check
-      printlog "check checkbox 'Window"
+      '///<b> check checkbox 'Window' </b>///'
       Fenster.Check
-      printlog "check checkbox 'Navigator visible"
-      NavigatorSichtbar.Check                 
-      printlog "close dialog 'Slide Show' with OK "
+      '///<b> check checkbox 'Navigator visible' </b>///'
+      NavigatorSichtbar.Check                 '--------------------------------------------------------------------------
+      '/// close dialog 'Slide Show' with OK ///'
       Bildschirmpraesentation.OK
-      printlog "start the slideshow with 'Slide Show->Slide Show' "
+      '/// start the slideshow with 'Slide Show->Slide Show' ///'
       SlideShowSlideshow
       Printlog "'---------------------------- START P -- All -- Window -- Navigator -------------------------"
      sleep 5
-      printlog " check state of navigator ! expected: open "
+      '///  check state of navigator ! expected: open ///'
       Kontext "Navigator"
       if Navigator.exists then
          Printlog "Navigator: open :-)"
@@ -343,7 +341,7 @@ testcase tSlideShowSlideShowSettings
       sleep 1
       Kontext "DocumentPresentation"
       try
-         printlog "press pagedown "
+         '/// press pagedown ///'
          DocumentPresentation.TypeKeys "<pagedown>"
       catch
          Warnlog "presentation is not running !"
@@ -353,8 +351,8 @@ testcase tSlideShowSlideShowSettings
       if Liste.GetSelIndex <> 2 Then
          warnlog "Wrong slide."
       endif
-      printlog "press the key [Page Down] 3 times "
-      printlog "check in Navigator list, if the slide is number: (times key pressed) "
+      '/// press the key [Page Down] 3 times ///'
+      '///+ check in Navigator list, if the slide is number: (times key pressed) ///'
       for i = 2 to 4
          Kontext "Navigator"
          if Navigator.exists then
@@ -369,7 +367,7 @@ testcase tSlideShowSlideShowSettings
          DocumentPresentation.TypeKeys "<pagedown>"
       next i
       sleep (2)
-      printlog "press the key [Page Down] to exit presentation "
+      '/// press the key [Page Down] to exit presentation ///'
       DocumentPresentation.TypeKeys "<pagedown>"
       sleep (5)      
       try
@@ -380,20 +378,20 @@ testcase tSlideShowSlideShowSettings
          DocumentPresentation.TypeKeys "<ESCAPE>"
       endcatch
       sleep 2
-      printlog " check state of navigator ! expected: open "
+      '///  check state of navigator ! expected: open ///'
       Kontext "Navigator"
       if Navigator.exists then
-         printlog "close navigator ! "
+         '///+ close navigator ! ///'
          Navigator.Close
       else
          printlog "Navigator: NOT available"
       endif
-      Printlog "'---------------------------------------------------------------"
+      Printlog "'--------------------------------------------------------------------------"
 
        Kontext "DocumentPresentation"
-      printlog "type the key [MOD1 SHIFT F5] to open the navigator "
+      '/// type the key [MOD1 SHIFT F5] to open the navigator ///' '--------------------------------------------------------------------------
       hTypeKeys "<MOD1 SHIFT F5>"
-      printlog "Slide Show -> Slide Show Settings "
+      '/// Slide Show -> Slide Show Settings ///'
       SlideShowPresentationSettings
          Kontext "Bildschirmpraesentation"
          if (AlleDias.IsChecked = FALSE) then
@@ -408,59 +406,59 @@ testcase tSlideShowSlideShowSettings
          if (DiawechselAufHintergrund.IsChecked = FALSE) then
             Warnlog "'Change slides by clicking on background' is not checked :-("
          endif
-         printlog "check checkbox in section 'Range' - 'From:"
+           '///<b> check checkbox in section 'Range' - 'From: </b>///'
          AbDia.Check
-         printlog "select the 3rd item from the top from listbox 'From:' -> 2 slides to go "
+         '/// select the 3rd item from the top from listbox 'From:' -> 2 slides to go ///'
          AbDiaName.Select 3
          sTemp = AbDiaName.GetSelText
          Printlog "  -  From '" + sTemp + "' will be shown"
-         printlog "check checkbox 'Default'"
+           '///<b> check checkbox 'Default' </b>///'
          Standard.Check
-         printlog "UNcheck checkbox 'Navigator visible'"
+         '/// UNcheck checkbox 'Navigator visible'///'
          NavigatorSichtbar.UnCheck
-         printlog "UNcheck checkbox 'Change slides by clicking on background'"
+         '/// UNcheck checkbox 'Change slides by clicking on background'///'
          DiawechselAufHintergrund.UnCheck
-      printlog "close dialog 'Slide Show' with OK "
+      '/// close dialog 'Slide Show' with OK ///'
       Bildschirmpraesentation.OK
        sleep 3
        Kontext "DocumentPresentation"
-      printlog "start the slideshow with 'Slide Show->Slide Show' "
+      '/// start the slideshow with 'Slide Show->Slide Show' ///'
       SlideShowSlideshow
          Printlog "'---------------------------- START P -- From -- Default -- Click on Bg -----------------------"
          sleep 5
-         printlog " check state of navigator ! expected: closed "
+         '///  check state of navigator ! expected: closed ///'
          Kontext "Navigator"
          if Navigator.exists then
-            printlog "close navigator ! "
+            '///+ close navigator ! ///'
             Navigator.Close
             Warnlog "Navigator: closed"
          else
             Printlog "Navigator: NOT available. Good."
          endif
          sleep 1
-         printlog "type the key [MOD1 SHIFT F5] to open the navigator "
+         '/// type the key [MOD1 SHIFT F5] to open the navigator ///' '--------------------------------------------------------------------------
          Kontext "DocumentPresentation"
          DocumentPresentation.TypeKeys "<MOD1 SHIFT F5>"
           sleep 3
-          printlog "check in Navigator list, if the page is THREE! "
+          '/// check in Navigator list, if the page is THREE! ///'
           fGetSlideName(S3)
-          printlog "click right mouse button "
+          '/// click right mouse button ///'
           sleep 5
           DocumentPresentation.MouseDown 50,50
           DocumentPresentation.MouseUp 50,50
-          printlog "check in Navigator list, if the page is still THREE. If so, change slide with PageDown "
+          '/// check in Navigator list, if the page is still THREE. If so, change slide with PageDown ///'
           if (fGetSlideName(S3) <> S3) then
              Warnlog "'Change slides by clicking on background' disable did not work :-("
           else
              DocumentPresentation.TypeKeys "<PAGEDOWN>"
           endif
-          printlog "check in Navigator list, if the page is FOUR "
+          '/// check in Navigator list, if the page is FOUR ///'
           fGetSlideName(S4)
           sleep 5
-          printlog "press the key [Page Down] "
+          '/// press the key [Page Down] ///'
           DocumentPresentation.TypeKeys "<pagedown>"
           sleep 5
-          printlog "press the key [Space] to exit presentation "
+          '/// press the key [Space] to exit presentation ///'
           DocumentPresentation.TypeKeys "<Space>"
          sleep 10
       try
@@ -472,10 +470,10 @@ testcase tSlideShowSlideShowSettings
          DocumentPresentation.TypeKeys "<ESCAPE>"
          Warnlog "  - Program was still in slideshow mode - ended now ?"
       endcatch
-      printlog " check state of navigator ! expected: open "
+      '///  check state of navigator ! expected: open ///'
       Kontext "Navigator"
       if Navigator.exists then
-         printlog "close navigator ! "
+         '///+ close navigator ! ///'
          Navigator.Close
          printlog "Navigator: closed"
       else
@@ -483,7 +481,7 @@ testcase tSlideShowSlideShowSettings
       endif
       Printlog "'--------------------------------------------------------------------------"
 
-      printlog "Slide Show -> Slide Show Settings "
+      '/// Slide Show -> Slide Show Settings ///'
       SlideShowPresentationSettings
          Kontext "Bildschirmpraesentation"
          if (AbDia.IsChecked = FALSE) then
@@ -498,33 +496,33 @@ testcase tSlideShowSlideShowSettings
          if (DiawechselAufHintergrund.IsChecked) then
             Warnlog "'Change slides by clicking in background' is checked :-("
          endif
-         printlog "check checkbox 'All Slides' "
+         '/// check checkbox 'All Slides' ///'
          AlleDias.Check
-         printlog "check check box 'Auto' -> implies looping of slideshow in fullscreen mode"
+         '///<b> check check box 'Auto' -> implies looping of slideshow in fullscreen mode </b>///'
          Auto.Check
-         printlog "set duration of pause to '00:00:05' "
+         '/// set duration of pause to '00:00:05' ///'
          Zeit.SetText "00:00:05"
-         printlog "check check box 'Show logo' "
+         '/// check check box 'Show logo' ///'
          LogoAnzeigen.Check
-         printlog "check checkbox 'Change slides by clicking on background'"
+         '/// check checkbox 'Change slides by clicking on background'///'
          DiawechselAufHintergrund.Check
-      printlog "close dialog 'Slide Show' with OK "
+      '/// close dialog 'Slide Show' with OK ///'
       Bildschirmpraesentation.OK
-      printlog "start the slideshow with 'Slide Show->Slide Show' "
+      '/// start the slideshow with 'Slide Show->Slide Show' ///'
       SlideShowSlideshow
       Printlog "'---------------------------- START P -- All -- Auto -- :05 -- Logo -----------------------------"
       sleep 3
       Kontext "DocumentPresentation"
-      printlog "type the key [MOD1 SHIFT F5] to open the navigator "
+      '/// type the key [MOD1 SHIFT F5] to open the navigator ///' '--------------------------------------------------------------------------
       DocumentPresentation.TypeKeys "<MOD1 SHIFT F5>"
-      printlog "press the key [Space] 4 times "
-      printlog "check in Navigator list, if the slide is number: [(times key pressed) -1 ] "
+      '/// press the key [Space] 4 times ///'
+      '///+ check in Navigator list, if the slide is number: [(times key pressed) -1 ] ///'
       for i = 1 to 4
          fGetSlideName(saSlideNames(i))
          DocumentPresentation.TypeKeys "<Space>"
          sleep 5
       next i
-        printlog "wait until autopause ended (5 secs) "
+        '/// wait until autopause ended (5 secs) ///'
         sleep 10
       if (fGetSlideName(saSlideNames(1)) = saSlideNames(1)) then
          Printlog "  - Enless loop works"
@@ -532,7 +530,7 @@ testcase tSlideShowSlideShowSettings
          Warnlog " Enless loop does NOT work"
       end if
       sleep 2
-      printlog "type key [excape] to exit presentation "
+      '/// type key [excape] to exit presentation ///'
       Kontext "DocumentPresentation"
       DocumentPresentation.TypeKeys "<ESCAPE>"
       sleep 5
@@ -546,7 +544,7 @@ testcase tSlideShowSlideShowSettings
          DocumentImpress.TypeKeys "<ESCAPE>"
          sleep 5
       endcatch
-      printlog " check state of navigator ! expected: closed "
+      '///  check state of navigator ! expected: closed ///'
       Kontext "Navigator"
       if Navigator.exists then
          Navigator.Close
@@ -557,56 +555,56 @@ testcase tSlideShowSlideShowSettings
       Printlog "'--------------------------------------------------------------------------"
 
       Kontext "DocumentImpress"
-      printlog "Slide Show -> Slide Show Settings "
+      '/// Slide Show -> Slide Show Settings ///'
       SlideShowPresentationSettings
          Kontext "BildschirmPraesentation"
-         printlog "check checkbox 'default' "
+         '/// check checkbox 'default' ///'
          Standard.Check
-         printlog "check checkbox 'Change slides maually'"
-         ' to check this i need an automatic transition somewhere in the presentation !
+         '///<b> check checkbox 'Change slides maually' </b>///'
+         ' to check this i need an automatic transition somewhere in the presentation !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
          DiawechselManuel.Check
-         printlog "check checkbox 'Mouse pointer as pen'"
+         '///<b> check checkbox 'Mouse pointer as pen' </b>///'
          MauszeigerAlsStift.Check
-      printlog "close dialog 'Slide Show' with OK "
+      '/// close dialog 'Slide Show' with OK ///'
       BildschirmPraesentation.Ok
       sleep 1
 
-      printlog "goto the first slide by typing [strg home] "
+      '/// goto the first slide by typing [strg home] ///'
       hTypeKeys "<mod1 home>"
-      printlog "SlideShow->SlideTransition "
+      '///+ -  SlideShow->SlideTransition ///'
       SlideShowSlideTransition
          Kontext "Tasks"
-         printlog "click button 'Extras' "
+         '///+ -  click button 'Extras' ///'
          sleep 1
-          printlog "click button 'Automatic Transition' "
+         '///+ - + click button 'Automatic Transition' ///'
          TransitionAutomaticallyAfter.Check 'click
-         printlog " Set Time to '00:00:01' "
+         '///+ -  + +  Set Time to '00:00:01' ///'
          TransitionAutomaticallyAfterTime.SetText "2"
-         printlog " click button 'Assign' "
+         '///+ -  click button 'Assign' ///'
          TransitionApplyToAllSlides.Click
-         printlog "close dialog 'Slide Transition' "
+         '///+ - close dialog 'Slide Transition' ///'
       sleep 3
 
-      printlog "start the slideshow with keys [STRG F2] "
+      '/// start the slideshow with keys [STRG F2] ///'
        Kontext "DocumentImpress"
       DocumentImpress.TypeKeys "<MOD1 F2>"
       Printlog "'---------------------------- START P -- Default -- Manuel ------------------------------"
-      printlog "wait 10 seconds (to get the dia changed automatical has not to happen !) "
+      '/// wait 10 seconds (to get the dia changed automatical has not to happen !) ///'
       sleep 10
       Kontext "DocumentPresentation"
-         printlog "type the key [MOD1 SHIFT F5] to open the navigator "
+         '/// type the key [MOD1 SHIFT F5] to open the navigator ///' '--------------------------------------------------------------------------
          DocumentPresentation.TypeKeys "<MOD1 SHIFT F5>"
-         printlog "press key [cursor right] 3 times "
+         '/// press key [cursor right] 3 times ///'
          for i = 1 to 4
             sleep 5
             fGetSlideName(saSlideNames(i))
-            printlog "use the left mouse button, to use the pen drawing function "
+            '///+ use the left mouse button, to use the pen drawing function ///'
             DocumentPresentation.MouseDown (10, 10)
             DocumentPresentation.MouseMove (10, 90)
             DocumentPresentation.MouseUp (10, 90)
             DocumentPresentation.TypeKeys "<right>"
          next i
-      printlog "press the key [Page Down] to exit presentation "
+      '/// press the key [Page Down] to exit presentation ///'
       sleep (2)
       DocumentPresentation.TypeKeys "<pagedown>"
       sleep (2)
@@ -617,10 +615,10 @@ testcase tSlideShowSlideShowSettings
          Printlog "- Slideshow ended at the right time"
       endif
       sleep 2
-      printlog " check state of navigator ! expected: closed "
+      '///  check state of navigator ! expected: closed ///'
       Kontext "Navigator"
       if Navigator.exists then
-        printlog "close navigator ! "
+         '///+ close navigator ! ///'
          Navigator.Close
          warnlog "Navigator: closed"
       else
@@ -629,50 +627,50 @@ testcase tSlideShowSlideShowSettings
       Printlog "'--------------------------------------------------------------------------"
 
       Kontext "DocumentImpress"
-      printlog "Slide Show -> Slide Show Settings "
+      '/// Slide Show -> Slide Show Settings ///'
       SlideShowPresentationSettings
          Kontext "BildschirmPraesentation"
-         printlog "check checkbox 'default' "
+         '/// check checkbox 'default' ///'
          Standard.Check
-         printlog "UNcheck checkbox 'Change slides manually'"
+         '///<b> UNcheck checkbox 'Change slides manually' </b>///'
          DiawechselManuel.UNCheck
-         printlog "UNcheck checkbox 'Mouse pointer as pen' "
+         '/// UNcheck checkbox 'Mouse pointer as pen' ///'
          MauszeigerAlsStift.UNCheck
-      printlog "close dialog 'Slide Show' with OK "
+      '/// close dialog 'Slide Show' with OK ///'
       BildschirmPraesentation.Ok
       sleep 1
-      printlog "goto the first slide by typing [strg home] "
+      '/// goto the first slide by typing [strg home] ///'
       hTypeKeys "<MOD1 HOME>"
-      printlog "Set all slides to 'wait 10 seconds' to get the slide changed automatically "
-      printlog "SlideShow->SlideTransition "
+      '/// Set all slides to 'wait 10 seconds' to get the slide changed automatically ///'
+      '///+ -  SlideShow->SlideTransition ///'
       SlideShowSlideTransition
          Kontext "Tasks"
-         printlog "click button 'Extras' "
+         '///+ -  click button 'Extras' ///'
          sleep 1
-         printlog "click button 'Automatic Transition' "
+         '///+ - + click button 'Automatic Transition' ///'
          TransitionAutomaticallyAfter.Check 'click
-         printlog "Set Time to '10sec' "
+         '///+ -  + +  Set Time to '10sec' ///'
          TransitionAutomaticallyAfterTime.SetText "10"
-         printlog "click button 'Apply to all Slides' "
+         '///+ -  click button 'Apply to all Slides' ///'
          TransitionApplyToAllSlides.Click
-         printlog "close dialog 'Slide Transition' "
+         '///+ - close dialog 'Slide Transition' ///'
          sleep (1)
-      printlog "start the slideshow with keys [STRG F2] "
+      '/// start the slideshow with keys [STRG F2] ///'
       Kontext "DocumentImpress"
       DocumentImpress.TypeKeys "<MOD1 F2>"
       Printlog "'---------------------------- START P -- Default -- Automatic -----------------------------"
-      printlog "Wait 6 seconds to see if the Automatic Transition changes the slide. "
+      '/// Wait 6 seconds to see if the Automatic Transition changes the slide. ///'
       sleep 6
       Kontext "DocumentPresentation"
-         printlog "type the key [MOD1 SHIFT F5] to open the navigator "
+         '/// type the key [MOD1 SHIFT F5] to open the navigator ///' '--------------------------------------------------------------------------
          DocumentPresentation.TypeKeys "<MOD1 SHIFT F5>"
-         printlog "press key [cursor right] 3 times "
+         '/// press key [cursor right] 3 times ///'
          for i = 2 to 4
             sleep (5)
             fGetSlideName(saSlideNames(i))
             DocumentPresentation.TypeKeys "<right>"
          next i
-      printlog "press the key [Page Down] to exit presentation "
+      '/// press the key [Page Down] to exit presentation ///'
       sleep (2)
       DocumentPresentation.TypeKeys "<PAGEDOWN>"
       sleep (2)
@@ -683,28 +681,20 @@ testcase tSlideShowSlideShowSettings
          Printlog "- Slideshow ended at the right time"
       endif
       sleep 2
-      printlog " check state of navigator ! expected: closed "
+      '///  check state of navigator ! expected: closed ///'
       Kontext "Navigator"
       if Navigator.exists then
-         printlog "close navigator ! "
+         '///+ close navigator ! ///'
          Navigator.Close
       endif
    else
       warnlog "document didn't get loaded"
    endif
-   printlog "Set Start with current page back to default = on, in ToolsOptions "
+   '/// Set "Start with current page" back to default = on, in ToolsOptions ///'
    setStartCurrentPage(TRUE)
-   printlog "Close the document "
+   '/// Close the document ///'
    call hCloseDocument
-    sLocaltestfile = hFileGetLocalPath(  gTesttoolPath + "diashow.odp" )
-    printlog sLocaltestfile
-    if (FileExists (sLocaltestfile)) then
-        app.kill (sLocaltestfile)
-        printlog "Deleting used file."
-    else
-        warnlog "File is missing."
-    endif
-
+   
 endcase 'tSlideShowSlideShowSettings
 
 '-------------------------------------------------------------------------------
@@ -716,110 +706,110 @@ testcase tSlideShowCustomSlideShow
    dim sTemp as string
 
    Seite = s1
-   printlog "open application "
+   '/// open application ///'
    Call hNewDocument
 
    Kontext "Navigator"
    if Navigator.Exists then Navigator.Close
-   printlog "Deactivate Start with current page in ToolsOptions "
+   '/// Deactivate "Start with current page" in ToolsOptions ///'
    setStartCurrentPage(FALSE)
 
-   printlog "create a rectangle "
+   '/// create a rectangle ///'
    hRechteckErstellen 30,30,60,60
-   printlog "do 2 times : "
+   '/// do 2 times : ///'
    for i = 1 to 2
-      printlog "Insert->Slide... "
+      '///+ Insert->Slide... ///'
       InsertSlide
       sleep 2
       hTypekeys "<Pagedown>"
       sleep 2
-      printlog "create a rectangle "
+      '///+ create a rectangle ///'
       hRechteckErstellen 30,30,70,70
    next i
 
-   printlog "Slide Show -> Slide Show Settings "
+   '/// Slide Show -> Slide Show Settings ///'
    SlideShowPresentationSettings
       Kontext "Bildschirmpraesentation"
       if (Fenster.IsChecked = False) Then Fenster.Check
-      printlog "close dialog 'Slide Show' with OK "
+      '/// close dialog 'Slide Show' with OK ///'
       Bildschirmpraesentation.OK
 
-   printlog "Slide Show -> Custom Slide Show... "
+   '/// Slide Show -> Custom Slide Show... ///'
    SlideShowCustomSlideshow
       Kontext "IndividuellePraesentation"
-      printlog "click button 'New...' "
+      '///<b> click button 'New...' </b>///'
       Neu.Click
 
          Kontext "IndividuellePraesentationDefinieren"
-         printlog "type something in 'Name' "
+         '/// type something in 'Name' ///'
          PraesentationName.SetText "Individually 1"
-         printlog "select the first entry in the list 'Existing Slides' "
+         '/// select the first entry in the list 'Existing Slides' ///'
          SeitenPraesentation.Select 1
-         printlog "click button '>>' "
+         '/// click button '>>' ///'
          Hinzufuegen.Click
          i = SelectedSlides.GetItemCount
          if (i <> 1) Then
             Warnlog "-  Number of slides 'Selected Slides' is not correct. It should be = '1', but it is = '" + i + "'"
          endif
-         printlog "close dialog 'Define Custom Slide Show' with OK "
+         '/// close dialog 'Define Custom Slide Show' with OK ///'
          IndividuellePraesentationDefinieren.OK
       Kontext "IndividuellePraesentation"
-      printlog "click button 'Edit...'"
+      '///<b> click button 'Edit...' </b>///'
       Bearbeiten.Click
          Kontext "IndividuellePraesentationDefinieren"
-         printlog "select an entry in the list 'Selected Slides' "
+         '/// select an entry in the list 'Selected Slides' ///'
          SelectedSlides.TypeKeys "<pagedown>"
-         printlog "click button '<<' "
+         '/// click button '<<' ///'
          Entfernen.Click
          i = SelectedSlides.GetItemCount
          if (i <> 0) Then
             Warnlog "  Removing slides from list 'Selected Slides' does not work It should be = '1', but it is = '" + i + "'"
          endif
-         printlog "select the first entry in the list 'Existing Slides' "
+         '/// select the first entry in the list 'Existing Slides' ///'
          SeitenPraesentation.Select 1
-         printlog "click button '>>' "
+         '/// click button '>>' ///'
          Hinzufuegen.Click
-         printlog "close dialog 'Define Custom Slide Show' with OK "
+         '/// close dialog 'Define Custom Slide Show' with OK ///'
          IndividuellePraesentationDefinieren.OK
       Kontext "IndividuellePraesentation"
 
-      printlog "check checkbox 'Use Custom Slide Show'"
+      '///<b> check checkbox 'Use Custom Slide Show' </b>///' '-------------------------------------------------------
       IndividuellePraesentationBenutzen.Check
-   printlog "click button 'Start..."
+   '///<b> click button 'Start...' </b>///'
    Starten.Click
       sleep 2
       Kontext "DocumentPresentation"
-     printlog "press key [space] 2 times "
+     '/// press key [space] 2 times ///'
       DocumentPresentation.TypeKeys "<space>"
       sleep 2
       DocumentPresentation.TypeKeys "<space>"
       sleep 5
       try
          Kontext "IndividuellePraesentation"
-         printlog "close dialog 'Custom Slide Shows' with button 'Close' "
+         '/// close dialog 'Custom Slide Shows' with button 'Close' ///'
          IndividuellePraesentation.Close
       catch
          Warnlog "- Slideshow did not end after slide 1"
          DocumentPresentation.TypeKeys "<space>"
          sleep 2
       endcatch
-   printlog "Slide Show -> Custom Slide Show... "
+   '/// Slide Show -> Custom Slide Show... ///'
    SlideShowCustomSlideshow
       Kontext "IndividuellePraesentation"
-      printlog "click button 'Edit...' "
+      '/// click button 'Edit...' ///'
       Bearbeiten.Click
          Kontext "IndividuellePraesentationDefinieren"
-         printlog "select 1st entry in the list 'Selected Slides' "
+         '/// select 1st entry in the list 'Selected Slides' ///'
          SelectedSlides.Select 1
-         printlog "click button '<<' "
+         '/// click button '<<' ///'
          Entfernen.Click
          i = SelectedSlides.GetItemCount
          if (i <> 0) Then
             Warnlog "-  Add and remove slides does not work properly. It should be '0', but it is = '"+i+"'"
          endif
-         printlog "select the first entry in the list 'Existing Slides' "
+         '/// select the first entry in the list 'Existing Slides' ///'
          SeitenPraesentation.Select 1
-         printlog "click button '>>'  4 times "
+         '/// click button '>>'  4 times ///'
          for i =1 to 4
             Hinzufuegen.Click
          next i
@@ -830,16 +820,16 @@ testcase tSlideShowCustomSlideShow
                Warnlog "-  Wrong slide added to individual slideshow. Instead of '" + Seite + "', '" + sTemp + "' was added"
             endif
          next i
-         printlog "close dialog 'Define Custom Slide Show' with OK "
+         '/// close dialog 'Define Custom Slide Show' with OK ///'
          IndividuellePraesentationDefinieren.OK
       sleep 1
       Kontext "IndividuellePraesentation"
 
-      printlog "UNcheck checkbox 'Use Custom Slide Show'"
+      '///<b> UNcheck checkbox 'Use Custom Slide Show' </b>///'
       IndividuellePraesentationBenutzen.UnCheck
-      printlog "click button 'Start...' "
-      Starten.Click               
-        printlog "press key [space] 4 times "
+      '/// click button 'Start...' ///'
+      Starten.Click               '---------------------------- START P ----------------------------------------------
+        '/// press key [space] 4 times ///'
          kontext "DocumentPresentation"
          for i = 1 to 4
             sleep 3
@@ -847,19 +837,19 @@ testcase tSlideShowCustomSlideShow
          next i
          sleep 10
       kontext "IndividuellePraesentation"
-   printlog "close dialog 'Custom Slide Shows' with button 'Close' "
+   '/// close dialog 'Custom Slide Shows' with button 'Close' ///'
     if IndividuellePraesentation.exists then
        IndividuellePraesentation.Close
     else
        Warnlog "'IndividuellePraesentation' was closed :-("
     end if
 
-   printlog "Set Start with current page back to default = on, in ToolsOptions "
+   '/// Set "Start with current page" back to default = on, in ToolsOptions ///'
    setStartCurrentPage(TRUE)
-   printlog "close the application "
+   '/// close the application ///'
          Kontext "Navigator"
       if Navigator.exists then
-         printlog "close navigator ! "
+         '///+ close navigator ! ///'
          Navigator.Close
       else
          printlog "Navigator: NOT available"
@@ -881,33 +871,33 @@ testcase tSlideShowSlideTransition
 
    sFile = ConvertPath (gOfficePath + "user\work\diashow")
 
-   printlog "open application "
+'   '/// open application ///'
     call hNewDocument
 
-   printlog "close the navigator"
+   '/// close the navigator///'
    Kontext "Navigator"
    if Navigator.Exists then Navigator.Close
    WaitSlot (3000)
-   printlog "create 3 slides with a rectangle "
+   '/// create 3 slides with a rectangle ///'
    hRechteckErstellen (30,30,60,60)
    for i = 1 to 2
-      printlog " Insert->Slide "
+      '///+  - Insert->Slide ///'
       WaitSlot (1000)
       InsertSlide
       WaitSlot (2000)
       hTypekeys "<Pagedown>"
       WaitSlot (2000)
-      printlog " insert rectangle"
+      '///+ - insert rectangle///'
       hRechteckErstellen (30,30,60,60)
    next i
    Printlog "created 3 slides"
-   printlog "for all 3 slides do: "
+   '/// for all 3 slides do: ///'
    for i = 1 to 3
-      printlog "open navigator with shortcutkey [MOD1 SHIFT F5] "
+      '///+ -  open navigator with shortcutkey [MOD1 SHIFT F5] ///'
       hTypeKeys "<MOD1 SHIFT F5>"
          Sleep (3)
          Kontext "NavigatorDraw"
-         printlog "select the next slide in the list "
+         '///+ -  select the next slide in the list ///'
          if Liste.GetItemCount < 3 then
             warnlog "We have " + Liste.GetItemCount + " entries in the Navigator."
             hTypeKeys "<MOD1 SHIFT F5>"
@@ -915,21 +905,21 @@ testcase tSlideShowSlideTransition
             Kontext "NavigatorDraw"
          end if
          Liste.Select i
-         printlog "press key [return] "
+         '///+ - press key [return] ///'
          Liste.TypeKeys "<return>"
          Kontext "Navigator"
-      printlog "close Navigator "
+      '///+ -  close Navigator ///'
       Navigator.Close
-      printlog " SlideShow->SlideTransition "
+      '///+ -  SlideShow->SlideTransition ///'
       SlideShowSlideTransition
          Kontext "Tasks" '"SlideTransition"' "OL_DIA_Diawechsel"  'OL_DIA_Diawechsel
          TransitionAutomaticPreview.UnCheck
-         printlog "click button 'Effects' "
+         '///+ -  click button 'Effects' ///'
          TransitionApplyToSelectedSlide.typekeys "<pagedown>"
          Sleep (1)
-         printlog "in the listbox 'speed' select the i. one from the top "
+         '///+ -  in the listbox 'speed' select the i. one from the top ///'
          TransitionSpeed.Select i
-         printlog "Select an effect-group from the listbox "
+         '///+ -  Select an effect-group from the listbox ///'
          TransitionApplyToSelectedSlide.typekeys "<home>"
          for q= 1 to (i+2)
             Sleep (2)
@@ -937,13 +927,12 @@ testcase tSlideShowSlideTransition
             Sleep (2)
          next q
          sEffect(i) = TransitionApplyToSelectedSlide.GetSelText
-         printlog "click button 'Extras' "
+         '///+ -  click button 'Extras' ///'
          Sleep (2)
-         printlog "click button 'Automatic Transition' "
          select case i
-            case 1: 
+            case 1: '///+ - + click button 'Automatic Transition' ///'
                     TransitionAutomaticallyAfter.Check
-                    printlog " Set Time to '00:00:01' OR "
+                    '///+ -  + +  Set Time to '00:00:01' OR ///'
                     TransitionAutomaticallyAfterTime.ToMin 'SetText "1" '"00:00:01"
                     TransitionAutomaticallyAfterTime.More
 		            TransitionApplyToSelectedSlide.typekeys "<DOWN>"
@@ -951,8 +940,8 @@ testcase tSlideShowSlideTransition
                     TransitionAutomaticallyAfter.Check
                     Tasks.TypeKeys "<TAB><TAB><TAB>"
                     TimerValue = TransitionAutomaticallyAfterTime.GetText
-		    printlog "TimerValue is now: " + TimerValue
-            case else: printlog "click button 'SemiAutomatic Transition' OR "
+		    printlog "   TimerValue is now: " + TimerValue
+            case else: '///+ - + click button 'SemiAutomatic Transition' OR ///'
                     TransitionOnMouseClick.Check
          end select
        Sleep (3)
@@ -961,26 +950,26 @@ testcase tSlideShowSlideTransition
 
    Kontext "DocumentImpress"
    Sleep (3) 
-   printlog "SlideShow->Slide Show Settings... "
+   '/// SlideShow->Slide Show Settings... ///'
    SlideShowPresentationSettings
       Kontext "Bildschirmpraesentation"
       WaitSlot (2000)
-      printlog "check Radio button 'Type': 'Window' "
+      '/// check Radio button 'Type': 'Window' ///'
       Fenster.Check
-   printlog "close dialog 'Slide Show' "
+   '/// close dialog 'Slide Show' ///'
    Bildschirmpraesentation.OK
    WaitSlot (5000)
    Kontext "DocumentImpress"
-   Printlog "printlog SlideShow->Slide Show"
+   Printlog "'/// SlideShow->Slide Show ///'"
    SlideShowSlideshow
-   printlog "wait 10 sec "
-   sleep (10) 
+   '/// wait 10 sec ///'
+   sleep (10) 'WaitSlot (10000)
    Kontext "DocumentPresentation"
-   printlog "type key [ESCAPE] "
+   '/// type key [ESCAPE] ///'
    DocumentPresentation.TypeKeys "<ESCAPE>"
    WaitSlot (3000)
    try
-      printlog "type key [F11] to open the stylist (to check ending of presenation) "
+      '/// type key [F11] to open the stylist (to check ending of presenation) ///'
       if lcase(gPlatform) = "osx" then
           hTypekeys "<mod1 t>"
       else
@@ -989,7 +978,7 @@ testcase tSlideShowSlideTransition
       Sleep (3)
       Kontext "Gestalter"
       Sleep (3)
-      printlog "close Stylist "
+      '/// close Stylist ///'
       Gestalter.Close
       Printlog "- Slideshow worked"
    catch
@@ -999,33 +988,34 @@ testcase tSlideShowSlideTransition
       Sleep (2)
    endcatch
 
-   printlog "close the navigator"
+   '/// close the navigator///'
    Kontext "Navigator"
    if Navigator.Exists then Navigator.Close
-   Printlog "check the settings in SlideView in the Dia object bar "
+   Printlog "'///+ check the settings in SlideView in the Dia object bar ///'"
    for i = 1 to 3
       Printlog " --------------------- " + i + " ---------------------------"
-      printlog " open navigator with shortcutkey [MOD1 SHIFT F5] "
+      '///+ -  open navigator with shortcutkey [MOD1 SHIFT F5] ///'
       hTypeKeys "<MOD1 SHIFT F5>"
          sleep (3)
          Kontext "NavigatorDraw"
-         printlog " select the next slide in the list "
+         '///+ -  select the next slide in the list ///'
          Liste.Select i
-         printlog " press key [return] "
+         '///+ - press key [return] ///'
          Liste.TypeKeys "<return>"
          Kontext "Navigator"
-        printlog " close Navigator "
+      '///+ -  close Navigator ///'
       Navigator.Close
-      printlog " View->Master View->Slides View "
+      '///+ - View->Master View->Slides View ///'
+'      ViewWorkspaceSlidesView
       Sleep (2)
-      Kontext "Tasks" 
-      printlog "  check 'speed' "
+      Kontext "Tasks" 'SlideViewObjectbar"
+      '///+ - check 'speed' ///'
       if Tasks.Exists = TRUE AND Tasks.IsVisible = TRUE then
          x = TransitionSpeed.GetSelIndex  'TransitionSpeed
          if (x <> i) then
             Warnlog "Speed changed :-( is: '" + x + "' should be: '" + i + "'"
          end if
-         printlog " check 'Transition' "
+         '///+ - check 'Transition' ///'
          x = TransitionApplyToSelectedSlide.GetSelIndex 'Diawechsel.GetSelIndex
          if (x <> (i+3)) then
             Warnlog "Transition changed :-( is: '" + x + "' should be: '" + (i+3) + "'"
@@ -1035,64 +1025,65 @@ testcase tSlideShowSlideTransition
             end if
          end if
 
-         printlog "  check 'effect group' "
+         '///+ - check 'effect group' ///'
          sTemp = TransitionApplyToSelectedSlide.GetSelText
          x = inStr (sTemp,sEffect(i))
          Printlog " Effect tried :-) '" + x + "'"
          if (x < 1) then
             printlog "the string '" + sTemp + "' should contain the words(s): '" + sEffect(i) + "'"
          end if
+'         ViewWorkspaceDrawingView
       else
          warnlog "   SlideViewObjectbar doesnt exists or isnt visible"
       end if
    next i
-   printlog "save file as presentation with name 'user\work\diashow)' "
+   '/// save file as presentation with name '"user\\work\\diashow")' ///'
 
     hFileSaveAsWithFilterKill ((sFile + ".odp") , "impress8" )
     
    Printlog "   saved presentation: '" + sFile + "'"  '." + gImpressFilter + "
-   printlog "close application"
+   '/// close application///'
    hCloseDocument ()
    WaitSlot (10000)
-   printlog "load file again "
+   '/// load file again ///'
    hFileOpen (sFile + ".odp")
    WaitSlot (5000)
-   Printlog "check setings for every slide in the transition dialog "
-   printlog "  for all 3 slides do: "
+   Printlog "   '/// check setings for every slide in the transition dialog ///'"
+   '///+ for all 3 slides do: ///'
    for i = 1 to 3
-        Printlog " --------------------- " + i + " ---------------------------"
-        printlog " open navigator with shortcutkey [MOD1 SHIFT F5] "
-        hTypeKeys "<MOD1 SHIFT F5>"
-        Sleep (3)
-        Kontext "NavigatorDraw"
-        printlog " select the next slide in the list "
-        Liste.Select i
-        printlog " press key [return] "
-        Liste.TypeKeys "<return>"
-        Kontext "Navigator"
-        printlog " close Navigator "
-        Navigator.Close
-        printlog " select the grafik with the key [TAB] "
-        hTypeKeys ("<tab>")
-        printlog " SlideShow->SlideTransition "
-        SlideShowSlideTransition
+      Printlog " --------------------- " + i + " ---------------------------"
+      '///+ -  open navigator with shortcutkey [MOD1 SHIFT F5] ///'
+      hTypeKeys "<MOD1 SHIFT F5>"
+         Sleep (3)
+         Kontext "NavigatorDraw"
+         '///+ -  select the next slide in the list ///'
+         Liste.Select i
+         '///+ - press key [return] ///'
+         Liste.TypeKeys "<return>"
+         Kontext "Navigator"
+      '///+ -  close Navigator ///'
+      Navigator.Close
+      '///+ -  select the grafik with the key [TAB] ///'
+      hTypeKeys ("<tab>")
+      '///+ -  SlideShow->SlideTransition ///'
+      SlideShowSlideTransition
          Kontext "Tasks"
          Sleep (1)
-         printlog " check 'speed' "
+         '///+ - check 'speed' ///'
          x = TransitionSpeed.GetSelIndex
          if (x <> i) then
             Warnlog "   Speed changed :-( is: '" + x + "' should: '" + i + "'"
          end if
-        printlog " check 'effect group' "
+      '///+ - check 'effect group' ///'
          x = TransitionApplyToSelectedSlide.GetSelIndex
          if (x <> (i+3)) then
             Warnlog "   Effect changed :-( is: '" + x + "' should: '" + (i+3) + "'"
          end if
          sleep (1)
          select case i
-            case 1: printlog " click button 'Automatic Transition' "
+            case 1: '///+ - click button 'Automatic Transition' ///'
                     if (TransitionAutomaticallyAfter.IsEnabled) then
-                       printlog " Check Time '1' OR "
+                       '///+ -  + +  Check Time '1' OR ///'
                        sTemp = TransitionAutomaticallyAfterTime.GetText
                        if (sTemp <> TimerValue) then
                           Warnlog "   Time is different :-( is: '" + sTemp + "' should be: '" + TimerValue + "'" '"00:00:01"
@@ -1101,27 +1092,27 @@ testcase tSlideShowSlideTransition
                        Warnlog "   button 'Automatic Transition' not pressed ?"
                     end if
             case 2: if (TransitionAutomaticallyAfter.IsChecked <> FALSE) then
-                        printlog " check button 'SemiAutomatic Transition' OR "
+                       '///+ - + check button 'SemiAutomatic Transition' OR ///'
                        Warnlog "   button 'Automatic Transition' is pressed ?"
                     end if
             case 3: if (TransitionAutomaticallyAfter.IsChecked <> FALSE) then
-                      printlog "click button 'Manual Transition' "
+                      '///+ - + click button 'Manual Transition' ///'
                        Warnlog "   button 'Automatic Transition' is pressed ?"
                     end if
          end select
       Sleep (3)
    next i
    TransitionAutomaticPreview.Check
-   printlog "Set Start with current page back to default = on, in ToolsOptions "
+   '/// Set "Start with current page" back to default = on, in ToolsOptions ///'
    setStartCurrentPage(TRUE)
    Kontext "Navigator"
    if Navigator.exists then
-      printlog " close navigator ! "
+      '///+ close navigator ! ///'
       Navigator.Close
    else
       printlog "Navigator: NOT available"
    end if
-   printlog "Close the document "
+   '/// Close the document ///'
    call hCloseDocument
    
 endcase 'tSlideShowSlideTransition
@@ -1141,7 +1132,7 @@ testcase tSlideShowShowHideSlide
     saSlideNames(3) = S3
     saSlideNames(4) = S4
 
-    printlog "Open file 'graphics\input\diashow.odp' (Slide Show with 4 Slides)"
+    printlog "Open file 'graphics\\input\\diashow.odp' (Slide Show with 4 Slides)"
     hFileOpen   ConvertPath (gTesttoolPath + "graphics\required\input\diashow.odp")
     sleep (10)
     printlog "check if the document is writable"
@@ -1191,7 +1182,7 @@ testcase tSlideShowShowHideSlide
     SlideShowSlideshow
     sleep (1)
     kontext "DocumentPresentation"
-    printlog "type the key [MOD1 SHIFT F5] to open the navigator" 
+    printlog "type the key [MOD1 SHIFT F5] to open the navigator" '--------------------------------------------------------------------------
     DocumentPresentation.TypeKeys "<MOD1 SHIFT F5>"
     sleep (1)
     kontext "NavigatorDraw"

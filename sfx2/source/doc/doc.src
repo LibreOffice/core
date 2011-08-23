@@ -1,7 +1,7 @@
 ﻿/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,6 +43,14 @@ QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
     DefButton = WB_DEF_NO ;
     Message [ en-US ] = "Name already in use.\nDo you want to overwrite document template?" ;
 };
+QueryBox MSG_QUERY_LOAD_TEMPLATE
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    HelpId = MSG_QUERY_LOAD_TEMPLATE;
+
+    Message [ en-US ] = "The Styles in this document do not match your current Styles. Should your current Styles be applied to this document?";
+};
 String STR_DELETE_REGION
 {
     Text [ en-US ] = "Are you sure you want to delete the region \"$1\"?" ;
@@ -63,6 +71,9 @@ String STR_QUERY_SAVE_DOCUMENT
 };
 Bitmap BMP_STYLES_CLOSED { File = "newex.bmp" ; };
 Bitmap BMP_STYLES_OPENED { File = "newex.bmp" ; };
+
+Bitmap BMP_STYLES_CLOSED_HC { File = "newex_h.bmp" ; };
+Bitmap BMP_STYLES_OPENED_HC { File = "newex_h.bmp" ; };
 
 String STR_STYLES
 {
@@ -88,6 +99,11 @@ Bitmap BMP_STYLES_FAMILY1 { File = "styfam1.bmp" ; };
 Bitmap BMP_STYLES_FAMILY2 { File = "styfam2.bmp" ; };
 Bitmap BMP_STYLES_FAMILY3 { File = "styfam3.bmp" ; };
 Bitmap BMP_STYLES_FAMILY4 { File = "styfam4.bmp" ; };
+
+Bitmap BMP_STYLES_FAMILY1_HC { File = "styfam1_h.bmp" ; };
+Bitmap BMP_STYLES_FAMILY2_HC { File = "styfam2_h.bmp" ; };
+Bitmap BMP_STYLES_FAMILY3_HC { File = "styfam3_h.bmp" ; };
+Bitmap BMP_STYLES_FAMILY4_HC { File = "styfam4_h.bmp" ; };
 
 ErrorBox MSG_PRINT_ERROR
 {
@@ -183,6 +199,8 @@ InfoBox MSG_DOCINFO_CANTREAD
 };
 String STR_ERROR_NOSTORAGE
 {
+    /* ### ACHTUNG: Neuer Text in Resource? Die ausgew�hlte Datei besitzt ein falsches Format. : Die ausgew�hlte Datei besitzt ein falsches Format. */
+    /* ### ACHTUNG: Neuer Text in Resource? Die ausgew�hlte Datei besitzt ein falsches Format. : Die ausgew�hlte Datei besitzt ein falsches Format. */
     Text [ en-US ] = "The selected file has an incorrect format." ;
 };
 String STR_QUERY_MUSTOWNFORMAT
@@ -211,6 +229,8 @@ String STR_CLOSEDOC
 };
 String STR_CLOSEDOC_ANDRETURN
 {
+    /* ### ACHTUNG: Neuer Text in Resource? S~chlie�en & zur�ck zu  : S~chlie�en & zur�ck zu  */
+    /* ### ACHTUNG: Neuer Text in Resource? S~chlie�en & zur�ck zu  : S~chlie�en & zur�ck zu  */
     Text [ en-US ] = "~Close & Return to " ;
 };
 String STR_WIZARD
@@ -288,7 +308,7 @@ String STR_FSET_FILTERNAME0
 };
 String STR_FSET_FILTERNAME1
 {
-    // only translate 'Document'
+    // nur 'Dokument' "ubersetzen - only translate 'Document'
     Text [ en-US ] = "%PRODUCTNAME Frame Document" ;
 };
 String STR_TEMPL_MOVED
@@ -358,6 +378,19 @@ String STR_OBJECT
 {
     Text [ en-US ] = "Object" ;
 };
+
+String STR_EDITOBJECT
+{
+    Text [ en-US ] = "~Edit";
+};
+
+// --> PB 2004-08-20 #i33095#
+/* obsolete
+String STR_OPENOBJECT
+{
+    Text [ en-US ] = "~Open";
+};
+*/
 
 QueryBox DLG_MACROQUERY
 {

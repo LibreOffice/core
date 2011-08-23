@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,13 +31,13 @@
 #include <uifactory/addonstoolboxfactory.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <uielement/addonstoolbarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -48,15 +48,16 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
+//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -69,11 +70,11 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   AddonsToolBoxFactory                            ,
-                                            ::cppu::OWeakObject                             ,
-                                            SERVICENAME_TOOLBARFACTORY                      ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   AddonsToolBoxFactory				            ,
+                                            ::cppu::OWeakObject							    ,
+                                            SERVICENAME_TOOLBARFACTORY	                    ,
                                             IMPLEMENTATIONNAME_ADDONSTOOLBARFACTORY
                                         )
 
@@ -176,11 +177,11 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
     {
-        if ( Args[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ConfigurationData" ) ))
+        if ( Args[n].Name.equalsAscii( "ConfigurationData" ))
             Args[n].Value >>= aConfigData;
-        else if ( Args[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Frame" ) ))
+        else if ( Args[n].Name.equalsAscii( "Frame" ))
             Args[n].Value >>= xFrame;
-        else if ( Args[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ResourceURL" ) ))
+        else if ( Args[n].Name.equalsAscii( "ResourceURL" ))
             Args[n].Value >>= aResourceURL;
     }
 

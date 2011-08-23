@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,10 +136,11 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& _xParent
 {
     DBG_CTOR( rpt_OSection,NULL);
     init();
+    //.getSdrModel()->createNewPage(m_xSection);
 }
 //--------------------------------------------------------------------------
-// TODO: VirtualFunctionFinder: This is virtual function!
-//
+// TODO: VirtualFunctionFinder: This is virtual function! 
+// 
 OSection::~OSection()
 {
     DBG_DTOR( rpt_OSection,NULL);
@@ -163,21 +164,43 @@ uno::Any SAL_CALL OSection::queryInterface( const uno::Type& _rType ) throw (uno
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL OSection::dispose() throw(uno::RuntimeException)
+void SAL_CALL OSection::dispose() throw(uno::RuntimeException) 
 {
     OSL_ENSURE(!rBHelper.bDisposed,"Already disposed!");
     SectionPropertySet::dispose();
-    cppu::WeakComponentImplHelperBase::dispose();
-
+    cppu::WeakComponentImplHelperBase::dispose(); 
+    
 }
 // -----------------------------------------------------------------------------
-// TODO: VirtualFunctionFinder: This is virtual function!
-//
+// TODO: VirtualFunctionFinder: This is virtual function! 
+// 
 void SAL_CALL OSection::disposing()
 {
     lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aContainerListeners.disposeAndClear( aDisposeEvent );
     m_xContext.clear();
+    //m_xDrawPage.clear();
+
+    /*uno::Reference< report::XReportDefinition> xReport = getReportDefinition();
+    ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSdrModel(xReport);
+    osl_incrementInterlockedCount( &m_refCount );
+    while( m_xDrawPage.is() && m_xDrawPage->hasElements() )
+    {
+        try
+        {
+            uno::Reference< drawing::XShape> xShape(m_xDrawPage->getByIndex(0),uno::UNO_QUERY);
+            m_xDrawPage->remove(xShape);
+            ::comphelper::disposeComponent(xShape);
+        } 
+        catch(const uno::Exception&)
+        {}
+    }
+    if ( pModel )
+    {
+        uno::Reference< report::XSection> xSection = this;
+        pModel->DeletePage(pModel->getPage(xSection)->GetPageNum());
+    }
+    osl_decrementInterlockedCount( &m_refCount );*/
 }
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSection::getImplementationName(  ) throw(uno::RuntimeException)
@@ -220,7 +243,7 @@ void OSection::init()
                 {
                     ::comphelper::query_aggregation(m_xProxy,m_xDrawPage);
                 }
-
+            
                 // set ourself as delegator
                 {
                     if ( m_xProxy.is() )
@@ -356,7 +379,7 @@ void SAL_CALL OSection::setNewRowOrCol( ::sal_Int16 _newroworcol ) throw (lang::
                         ,1
                         ,m_xContext);
     checkNotPageHeaderFooter();
-
+                       
     set(PROPERTY_NEWROWORCOL,_newroworcol,m_nNewRowOrCol);
 }
 // -----------------------------------------------------------------------------
@@ -373,7 +396,7 @@ void SAL_CALL OSection::setKeepTogether( ::sal_Bool _keeptogether ) throw (lang:
         ::osl::MutexGuard aGuard(m_aMutex);
         checkNotPageHeaderFooter();
     }
-
+    
     set(PROPERTY_KEEPTOGETHER,_keeptogether,m_bKeepTogether);
 }
 // -----------------------------------------------------------------------------
@@ -448,7 +471,7 @@ const ::std::vector< ::rtl::OUString >& lcl_getControlModelMap()
         s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageControl")) );
         s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormattedField")) );
         s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Shape")) );
-    }
+    } // if ( s_sMap.empty() )
     return s_sControlModels;
 
 }
@@ -481,8 +504,9 @@ uno::Reference< report::XReportComponent > SAL_CALL OSection::createReportCompon
             xRet.set(xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape"))),uno::UNO_QUERY);
             break;
         default:
+            //xRet = new OShape(m_xContext);
             break;
-    }
+    } // switch( aRet.begin() - aFind  )
     return xRet;
 }
 // -----------------------------------------------------------------------------
@@ -492,7 +516,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OSection::getAvailableReportComponentN
 
     const ::std::vector< ::rtl::OUString >& aRet = lcl_getControlModelMap();
     const ::rtl::OUString* pRet = aRet.empty() ? 0 : &aRet[0];
-    return uno::Sequence< ::rtl::OUString >(pRet, aRet.size());
+    return uno::Sequence< ::rtl::OUString >(pRet, aRet.size()); 
 }
 // -----------------------------------------------------------------------------
 // XChild

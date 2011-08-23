@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -394,7 +394,7 @@ static const XclFunctionInfo saFuncTable_Odf[] =
     EXC_FUNCENTRY_ODF( ocVariationen2,  2,  2,  0,  "PERMUTATIONA" ),
     EXC_FUNCENTRY_ODF( ocPhi,           1,  1,  0,  "PHI" ),
     EXC_FUNCENTRY_ODF( ocZGZ,           3,  3,  0,  "RRI" ),
-    EXC_FUNCENTRY_ODF( ocTable,         0,  1,  0,  "SHEET" ),
+    EXC_FUNCENTRY_ODF( ocTable,         1,  1,  0,  "SHEET" ),
     EXC_FUNCENTRY_ODF( ocTables,        0,  1,  0,  "SHEETS" ),
     EXC_FUNCENTRY_ODF( ocNoName,        1,  MX, 0,  "SKEWP" ),
     EXC_FUNCENTRY_ODF( ocUnichar,       1,  1,  0,  "UNICHAR" ),
@@ -563,7 +563,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArray& rTokArr )
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArrayRef& rxTokArr )
 {
-    if( rxTokArr )
+    if( rxTokArr.is() )
         rxTokArr->Write( rStrm );
     else
         rStrm << sal_uInt16( 0 );
@@ -601,7 +601,7 @@ void XclTokenArrayIterator::Init()
 
 void XclTokenArrayIterator::Init( const ScTokenArray& rScTokArr, bool bSkipSpaces )
 {
-    sal_uInt16 nTokArrLen = rScTokArr.GetLen();
+    USHORT nTokArrLen = rScTokArr.GetLen();
     mppScTokenBeg = static_cast< const FormulaToken* const* >( nTokArrLen ? rScTokArr.GetArray() : 0 );
     mppScTokenEnd = mppScTokenBeg ? (mppScTokenBeg + nTokArrLen) : 0;
     mppScToken = (mppScTokenBeg != mppScTokenEnd) ? mppScTokenBeg : 0;
@@ -699,7 +699,7 @@ const ScTokenArray* XclTokenArrayHelper::GetSharedFormula( const XclRoot& rRoot,
     if( rScTokArr.GetLen() == 1 )
         if( const FormulaToken* pScToken = rScTokArr.GetArray()[ 0 ] )
             if( pScToken->GetOpCode() == ocName )
-                if( ScRangeData* pData = rRoot.GetNamedRanges().findByIndex( pScToken->GetIndex() ) )
+                if( ScRangeData* pData = rRoot.GetNamedRanges().FindIndex( pScToken->GetIndex() ) )
                     if( pData->HasType( RT_SHARED ) )
                         return pData->GetCode();
     return 0;

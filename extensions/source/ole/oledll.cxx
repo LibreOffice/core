@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #pragma warning (push,1)
 #pragma warning (disable:4548)
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1300) && !defined(_DEBUG_RUNTIME)
+#if defined(_MSC_VER) && (_MSC_VER >= 1300) && !defined(_STLP_DEBUG)
 #undef _DEBUG
 #endif
 #ifdef __MINGW32__

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,16 +66,16 @@ Time::Time( const ResId& rResId )
 
     ResMgr::GetResourceSkipHeader( rResId, &pResMgr );
 
-    sal_uIntPtr nObjMask = (sal_uInt16)pResMgr->ReadLong();
+    ULONG nObjMask = (USHORT)pResMgr->ReadLong();
 
     if ( 0x01 & nObjMask )
-        SetHour( (sal_uInt16)pResMgr->ReadShort() );
+        SetHour( (USHORT)pResMgr->ReadShort() );
     if ( 0x02 & nObjMask )
-        SetMin( (sal_uInt16)pResMgr->ReadShort() );
+        SetMin( (USHORT)pResMgr->ReadShort() );
     if ( 0x04 & nObjMask )
-        SetSec( (sal_uInt16)pResMgr->ReadShort() );
+        SetSec( (USHORT)pResMgr->ReadShort() );
     if ( 0x08 & nObjMask )
-        Set100Sec( (sal_uInt16)pResMgr->ReadShort() );
+        Set100Sec( (USHORT)pResMgr->ReadShort() );
 }
 
 // =======================================================================
@@ -87,14 +87,14 @@ Date::Date( const ResId& rResId ) : nDate(0)
 
     ResMgr::GetResourceSkipHeader( rResId, &pResMgr );
 
-    sal_uIntPtr nObjMask = (sal_uInt16)pResMgr->ReadLong();
+    ULONG nObjMask = (USHORT)pResMgr->ReadLong();
 
     if ( 0x01 & nObjMask )
-        SetYear( (sal_uInt16)pResMgr->ReadShort() );
+        SetYear( (USHORT)pResMgr->ReadShort() );
     if ( 0x02 & nObjMask )
-        SetMonth( (sal_uInt16)pResMgr->ReadShort() );
+        SetMonth( (USHORT)pResMgr->ReadShort() );
     if ( 0x04 & nObjMask )
-        SetDay( (sal_uInt16)pResMgr->ReadShort() );
+        SetDay( (USHORT)pResMgr->ReadShort() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

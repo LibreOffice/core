@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: pptshapecontext.cxx,v $
+ * $Revision: 1.6 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -37,13 +40,13 @@
 #include "oox/ppt/pptshapepropertiescontext.hxx"
 #include "oox/ppt/slidepersist.hxx"
 #include "oox/drawingml/shapestylecontext.hxx"
-#include "oox/token/namespaces.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
-#include <oox/token/tokens.hxx>
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -78,7 +81,7 @@ static oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlacehol
         aShapePtr = findPlaceholder( nMasterPlaceholder, rChildren );
         if ( aShapePtr.get() )
             break;
-        ++aRevIter;
+        aRevIter++;
     }
     return aShapePtr;
 }
@@ -98,7 +101,7 @@ static oox::drawingml::ShapePtr findPlaceholderByIndex( const sal_Int32 nIdx, st
         aShapePtr = findPlaceholderByIndex( nIdx, rChildren );
         if ( aShapePtr.get() )
             break;
-        ++aRevIter;
+        aRevIter++;
     }
     return aShapePtr;
 }
@@ -117,13 +120,13 @@ Reference< XFastContextHandler > PPTGraphicShapeContext::createFastChildContext(
     switch( aElementToken )
     {
     // nvSpPr CT_ShapeNonVisual begin
-//  case NMSP_PPT|XML_drElemPr:
-//      break;
-    case PPT_TOKEN(cNvPr):
+//	case NMSP_PPT|XML_drElemPr:
+//		break;
+    case NMSP_PPT|XML_cNvPr:
         mpShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
         mpShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
         break;
-    case PPT_TOKEN(ph):
+    case NMSP_PPT|XML_ph:
     {
         sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
         mpShapePtr->setSubType( nSubType );
@@ -156,39 +159,39 @@ Reference< XFastContextHandler > PPTGraphicShapeContext::createFastChildContext(
                     sal_Int32 nSecondPlaceholder = 0;
                     switch( nSubType )
                     {
-                        case XML_ctrTitle :     // slide/layout
+                        case XML_ctrTitle :		// slide/layout
                             nFirstPlaceholder = XML_ctrTitle;
                             nSecondPlaceholder = XML_title;
                             break;
-                        case XML_subTitle :     // slide/layout
+                        case XML_subTitle :		// slide/layout
                             nFirstPlaceholder = XML_subTitle;
                             nSecondPlaceholder = XML_title;
                             break;
-                        case XML_obj :          // slide/layout
+                        case XML_obj :			// slide/layout
                             nFirstPlaceholder = XML_body;
                             break;
-                        case XML_dt :           // slide/layout/master/notes/notesmaster/handoutmaster
-                        case XML_sldNum :       // slide/layout/master/notes/notesmaster/handoutmaster
-                        case XML_ftr :          // slide/layout/master/notes/notesmaster/handoutmaster
-                        case XML_hdr :          // notes/notesmaster/handoutmaster
-                        case XML_body :         // slide/layout/master/notes/notesmaster
-                        case XML_title :        // slide/layout/master/
-                        case XML_chart :        // slide/layout
-                        case XML_tbl :          // slide/layout
-                        case XML_clipArt :      // slide/layout
-                        case XML_dgm :          // slide/layout
-                        case XML_media :        // slide/layout
-                        case XML_sldImg :       // notes/notesmaster
-                        case XML_pic :          // slide/layout
+                        case XML_dt :			// slide/layout/master/notes/notesmaster/handoutmaster
+                        case XML_sldNum :		// slide/layout/master/notes/notesmaster/handoutmaster
+                        case XML_ftr :			// slide/layout/master/notes/notesmaster/handoutmaster
+                        case XML_hdr :			// notes/notesmaster/handoutmaster
+                        case XML_body :			// slide/layout/master/notes/notesmaster
+                        case XML_title :		// slide/layout/master/
+                        case XML_chart :		// slide/layout
+                        case XML_tbl :			// slide/layout
+                        case XML_clipArt :		// slide/layout
+                        case XML_dgm :			// slide/layout
+                        case XML_media :		// slide/layout
+                        case XML_sldImg :		// notes/notesmaster
+                        case XML_pic :			// slide/layout
                             nFirstPlaceholder = nSubType;
                         default:
                             break;
                     }
                     if ( nFirstPlaceholder )
                     {
-                        if ( eShapeLocation == Layout )     // for layout objects the referenced object can be found within the same shape tree
+                        if ( eShapeLocation == Layout )		// for layout objects the referenced object can be found within the same shape tree
                             pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, mpSlidePersistPtr->getShapes()->getChildren() );
-                        else if ( eShapeLocation == Slide ) // normal slide shapes have to search within the corresponding master tree for referenced objects
+                        else if ( eShapeLocation == Slide )	// normal slide shapes have to search within the corresponding master tree for referenced objects
                         {
                             SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
                             if ( pMasterPersist.get() )
@@ -210,15 +213,15 @@ Reference< XFastContextHandler > PPTGraphicShapeContext::createFastChildContext(
     }
     // nvSpPr CT_ShapeNonVisual end
 
-    case PPT_TOKEN(spPr):
+    case NMSP_PPT|XML_spPr:
         xRet = new PPTShapePropertiesContext( *this, *mpShapePtr );
         break;
 
-    case PPT_TOKEN(style):
+    case NMSP_PPT|XML_style:
         xRet = new oox::drawingml::ShapeStyleContext( *this, *mpShapePtr );
         break;
 
-    case PPT_TOKEN(txBody):
+    case NMSP_PPT|XML_txBody:
     {
         oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
         mpShapePtr->setTextBody( xTextBody );

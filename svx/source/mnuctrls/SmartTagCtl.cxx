@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
+
 // STATIC DATA -----------------------------------------------------------
 
 SFX_IMPL_MENU_CONTROL(SvxSmartTagsControl, SvxSmartTagItem);
@@ -50,12 +52,12 @@ SFX_IMPL_MENU_CONTROL(SvxSmartTagsControl, SvxSmartTagItem);
 
 SvxSmartTagsControl::SvxSmartTagsControl
 (
-    sal_uInt16          _nId,
-    Menu&           rMenu,
-    SfxBindings&    /*rBindings*/
+    USHORT 			_nId,
+    Menu&			rMenu,
+    SfxBindings&	/*rBindings*/
 ) :
-    mpMenu  ( new PopupMenu ),
-    mrParent    ( rMenu ),
+    mpMenu	( new PopupMenu ),
+    mrParent	( rMenu ),
     mpSmartTagItem( 0 )
 {
     rMenu.SetPopupMenu( _nId, mpMenu );
@@ -63,17 +65,17 @@ SvxSmartTagsControl::SvxSmartTagsControl
 
 //--------------------------------------------------------------------
 
-const sal_uInt16 MN_ST_INSERT_START = 500;
+const USHORT MN_ST_INSERT_START = 500;
 
 void SvxSmartTagsControl::FillMenu()
 {
     if ( !mpSmartTagItem )
         return;
 
-    sal_uInt16 nMenuPos = 0;
-    sal_uInt16 nSubMenuPos = 0;
-    sal_uInt16 nMenuId = 1;
-    sal_uInt16 nSubMenuId = MN_ST_INSERT_START;
+    USHORT nMenuPos = 0;
+    USHORT nSubMenuPos = 0;
+    USHORT nMenuId = 1;
+    USHORT nSubMenuId = MN_ST_INSERT_START;
 
     const Sequence < Sequence< Reference< smarttags::XSmartTagAction > > >& rActionComponentsSequence = mpSmartTagItem->GetActionComponentsSequence();
     const Sequence < Sequence< sal_Int32 > >& rActionIndicesSequence = mpSmartTagItem->GetActionIndicesSequence();
@@ -84,7 +86,7 @@ void SvxSmartTagsControl::FillMenu()
     const Reference<text::XTextRange>& xTextRange = mpSmartTagItem->GetTextRange();
     const Reference<frame::XController>& xController = mpSmartTagItem->GetController();
 
-    for ( sal_uInt16 j = 0; j < rActionComponentsSequence.getLength(); ++j )
+    for ( USHORT j = 0; j < rActionComponentsSequence.getLength(); ++j )
     {
         Reference< container::XStringKeyMap > xSmartTagProperties = rStringKeyMaps[j];
 
@@ -116,13 +118,13 @@ void SvxSmartTagsControl::FillMenu()
         pSbMenu->SetSelectHdl( LINK( this, SvxSmartTagsControl, MenuSelect ) );
 
         // sub-menu starts with smart tag caption and separator
-        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": ")) + aRangeText;
+        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + C2U(": ") + aRangeText;
         nSubMenuPos = 0;
         pSbMenu->InsertItem( nMenuId++, aSmartTagCaption2, MIB_NOSELECT, nSubMenuPos++ );
         pSbMenu->InsertSeparator( nSubMenuPos++ );
 
         // Add subitem for every action reference for the current smart tag type:
-        for ( sal_uInt16 i = 0; i < rActionComponents.getLength(); ++i )
+        for ( USHORT i = 0; i < rActionComponents.getLength(); ++i )
         {
             xAction = rActionComponents[i];
 
@@ -148,7 +150,7 @@ void SvxSmartTagsControl::FillMenu()
 
 //--------------------------------------------------------------------
 
-void SvxSmartTagsControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
+void SvxSmartTagsControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     mrParent.EnableItem( GetId(), SFX_ITEM_DISABLED != eState );
@@ -195,7 +197,7 @@ IMPL_LINK_INLINE_START( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
 
     // ohne dispatcher!!!
     // GetBindings().Execute( GetId(), SFX_CALLMODE_RECORD,meine beiden items, 0L );*/
-    //SfxBoolItem aBool(SID_OPEN_SMARTTAGOPTIONS, sal_True);
+    //SfxBoolItem aBool(SID_OPEN_SMARTTAGOPTIONS, TRUE);
     //GetBindings().GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SFX_CALLMODE_ASYNCHRON, &aBool, 0L );
 
     return 0;

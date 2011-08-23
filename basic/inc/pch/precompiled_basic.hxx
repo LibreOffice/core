@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -213,6 +213,7 @@
 #include "tools/fsys.hxx"
 #include "tools/gen.hxx"
 #include "tools/link.hxx"
+#include "tools/list.hxx"
 #include "tools/rc.hxx"
 #include "tools/rcid.h"
 #include "tools/ref.hxx"
@@ -273,7 +274,7 @@
 #include "vcl/timer.hxx"
 #include "vcl/toolbox.hxx"
 #include "vcl/window.hxx"
-#include "tools/wintypes.hxx"
+#include "vcl/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
 #include "xmlscript/xmldlg_imexp.hxx"

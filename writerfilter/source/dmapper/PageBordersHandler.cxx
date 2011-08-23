@@ -3,8 +3,6 @@
 
 #include <ooxml/resourceids.hxx>
 
-#include "dmapperLoggers.hxx"
-
 namespace writerfilter {
 namespace dmapper {
 
@@ -19,9 +17,8 @@ _PgBorder::~_PgBorder( )
 }
 
 PageBordersHandler::PageBordersHandler( ) :
-LoggedProperties(dmapper_logger, "PageBordersHandler"),
-m_nDisplay( 0 ),
-m_nOffset( 0 )
+    m_nDisplay( 0 ),
+    m_nOffset( 0 )
 {
 }
 
@@ -29,7 +26,7 @@ PageBordersHandler::~PageBordersHandler( )
 {
 }
 
-void PageBordersHandler::lcl_attribute( Id eName, Value& rVal )
+void PageBordersHandler::attribute( Id eName, Value& rVal )
 {
     int nIntValue = rVal.getInt( );
     switch ( eName )
@@ -69,7 +66,7 @@ void PageBordersHandler::lcl_attribute( Id eName, Value& rVal )
     }
 }
 
-void PageBordersHandler::lcl_sprm( Sprm& rSprm )
+void PageBordersHandler::sprm( Sprm& rSprm )
 {
     switch ( rSprm.getId( ) )
     {
@@ -100,7 +97,7 @@ void PageBordersHandler::lcl_sprm( Sprm& rSprm )
                     break;
                     default:;
                 }
-
+                
                 _PgBorder aPgBorder;
                 aPgBorder.m_rLine = pBorderHandler->getBorderLine( );
                 aPgBorder.m_nDistance = pBorderHandler->getLineDistance( );

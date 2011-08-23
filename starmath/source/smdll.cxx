@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,17 +52,19 @@
 
 
 
-bool SmDLL::bInitialized = false;
+BOOL SmDLL::bInitialized = FALSE;
 
-
-// Initialization
-
+/*************************************************************************
+|*
+|* Initialisierung
+|*
+\************************************************************************/
 void SmDLL::Init()
 {
     if ( bInitialized )
         return;
 
-    bInitialized = true;
+    bInitialized = TRUE;
 
     SfxObjectFactory& rFactory = SmDocShell::Factory();
 
@@ -86,15 +88,17 @@ void SmDLL::Init()
     SvxUndoRedoControl::RegisterControl( SID_REDO, pp );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pp );
 
-    SmToolBoxWrapper::RegisterChildWindow(true);
-    SmCmdBoxWrapper::RegisterChildWindow(true);
+    SmToolBoxWrapper::RegisterChildWindow(TRUE);
+    SmCmdBoxWrapper::RegisterChildWindow(TRUE);
 
-    ::sfx2::TaskPaneWrapper::RegisterChildWindow( false, pp );
+    ::sfx2::TaskPaneWrapper::RegisterChildWindow( FALSE, pp );
 }
 
-
-// Deinitialization
-
+/*************************************************************************
+|*
+|* Deinitialisierung
+|*
+\************************************************************************/
 void SmDLL::Exit()
 {
     // the SdModule must be destroyed

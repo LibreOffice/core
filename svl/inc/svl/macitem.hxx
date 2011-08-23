@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,15 +84,15 @@ public:
                 ScriptType eType); //  = STARBASIC entfernt
 
     SvxMacro( SjJSbxObjectBase* _pFunctionObject, const String &rSource );
-    ~SvxMacro();    // noetig fuer pFunctionObject
+    ~SvxMacro();	// noetig fuer pFunctionObject
 
-    const String &GetLibName() const        { return aLibName; }
-    const String &GetMacName() const        { return aMacName; }
+    const String &GetLibName() const 		{ return aLibName; }
+    const String &GetMacName() const 		{ return aMacName; }
     String GetLanguage()const;
 
-    ScriptType GetScriptType() const        { return eType; }
+    ScriptType GetScriptType() const 		{ return eType; }
 
-    sal_Bool HasMacro() const           { return aMacName.Len() ? sal_True : sal_False; }
+    BOOL HasMacro() const 			{ return aMacName.Len() ? TRUE : FALSE; }
 
 #ifdef SOLAR_JAVA
     // JavaScript-Function-Objekt holen
@@ -116,15 +116,15 @@ inline SvxMacro::SvxMacro( SjJSbxObjectBase* _pFunctionObject, const String &rSo
 
 DECLARE_TABLE( _SvxMacroTableDtor, SvxMacro* )
 
-#define SVX_MACROTBL_VERSION31  0
-#define SVX_MACROTBL_VERSION40  1
+#define SVX_MACROTBL_VERSION31	0
+#define SVX_MACROTBL_VERSION40	1
 
-#define SVX_MACROTBL_AKTVERSION SVX_MACROTBL_VERSION40
+#define SVX_MACROTBL_AKTVERSION	SVX_MACROTBL_VERSION40
 
 class SVL_DLLPUBLIC SvxMacroTableDtor : public _SvxMacroTableDtor
 {
 public:
-    inline SvxMacroTableDtor( const sal_uInt16 nInitSz = 0, const sal_uInt16 nReSz = 1 );
+    inline SvxMacroTableDtor( const USHORT nInitSz = 0, const USHORT nReSz = 1 );
     inline SvxMacroTableDtor( const SvxMacroTableDtor &rCpy ) : _SvxMacroTableDtor() { *this = rCpy; }
     inline ~SvxMacroTableDtor() { DelDtor(); }
     SvxMacroTableDtor& operator=( const SvxMacroTableDtor &rCpy );
@@ -132,14 +132,14 @@ public:
     // loescht alle Eintraege
     void DelDtor();
 
-    SvStream&   Read( SvStream &, sal_uInt16 nVersion = SVX_MACROTBL_AKTVERSION );
-    SvStream&   Write( SvStream & ) const;
+    SvStream&	Read( SvStream &, USHORT nVersion = SVX_MACROTBL_AKTVERSION );
+    SvStream&	Write( SvStream & ) const;
 
-    sal_uInt16 GetVersion() const       { return SVX_MACROTBL_AKTVERSION; }
+    USHORT GetVersion() const		{ return SVX_MACROTBL_AKTVERSION; }
 };
 
-inline SvxMacroTableDtor::SvxMacroTableDtor( const sal_uInt16 nInitSz,
-                                             const sal_uInt16 nReSz)
+inline SvxMacroTableDtor::SvxMacroTableDtor( const USHORT nInitSz,
+                                             const USHORT nReSz)
     : _SvxMacroTableDtor( nInitSz, nReSz )
 {}
 
@@ -153,7 +153,7 @@ class SVL_DLLPUBLIC SvxMacroItem: public SfxPoolItem
 public:
     TYPEINFO();
 
-    inline SvxMacroItem ( const sal_uInt16 nId /*= ITEMID_MACRO*/ );
+    inline SvxMacroItem ( const USHORT nId /*= ITEMID_MACRO*/ );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -163,17 +163,17 @@ public:
                                     XubString &rText,
                                     const IntlWrapper * = 0 ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
+    virtual SvStream&		Store(SvStream &, USHORT nItemVersion ) const;
+    virtual USHORT			GetVersion( USHORT nFileFormatVersion ) const;
 
     inline const SvxMacroTableDtor& GetMacroTable() const { return aMacroTable;}
     inline void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aMacroTable = rTbl; }
 
-    inline const SvxMacro& GetMacro( sal_uInt16 nEvent ) const;
-    inline sal_Bool HasMacro( sal_uInt16 nEvent ) const;
-           void SetMacro( sal_uInt16 nEvent, const SvxMacro& );
-    inline sal_Bool DelMacro( sal_uInt16 nEvent );
+    inline const SvxMacro& GetMacro( USHORT nEvent ) const;
+    inline BOOL HasMacro( USHORT nEvent ) const;
+           void SetMacro( USHORT nEvent, const SvxMacro& );
+    inline BOOL DelMacro( USHORT nEvent );
 
 private:
     SvxMacroTableDtor aMacroTable;
@@ -182,7 +182,7 @@ private:
     SvxMacroItem &operator=( const SvxMacroItem & );
 };
 
-inline SvxMacroItem::SvxMacroItem( const sal_uInt16 nId )
+inline SvxMacroItem::SvxMacroItem( const USHORT nId )
     : SfxPoolItem( nId )
 {}
 inline SvxMacroItem::SvxMacroItem( const SvxMacroItem &rCpy )
@@ -190,15 +190,15 @@ inline SvxMacroItem::SvxMacroItem( const SvxMacroItem &rCpy )
     aMacroTable( rCpy.GetMacroTable() )
 {}
 
-inline sal_Bool SvxMacroItem::HasMacro( sal_uInt16 nEvent ) const
+inline BOOL SvxMacroItem::HasMacro( USHORT nEvent ) const
 {
     return aMacroTable.IsKeyValid( nEvent );
 }
-inline const SvxMacro& SvxMacroItem::GetMacro( sal_uInt16 nEvent ) const
+inline const SvxMacro& SvxMacroItem::GetMacro( USHORT nEvent ) const
 {
     return *(aMacroTable.Get(nEvent));
 }
-inline sal_Bool SvxMacroItem::DelMacro( sal_uInt16 nEvent )
+inline BOOL SvxMacroItem::DelMacro( USHORT nEvent )
 {
     SvxMacro *pMacro = aMacroTable.Remove( nEvent );
     delete pMacro;

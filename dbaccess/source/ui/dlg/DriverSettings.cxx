@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sUR
         }
     }
 #endif
-    typedef ::std::pair<sal_uInt16, ::rtl::OUString> TProperties;
+    typedef ::std::pair<USHORT, ::rtl::OUString> TProperties;
     TProperties aProps[] = { TProperties(DSID_SHOWDELETEDROWS,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowDeleted")))
                             ,TProperties(DSID_CHARSET,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet")))
                             ,TProperties(DSID_FIELDDELIMITER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldDelimiter")))

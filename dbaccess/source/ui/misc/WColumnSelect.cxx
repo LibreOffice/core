@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include "WColumnSelect.hxx"
 #include "dbu_misc.hrc"
-#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include "WizardPages.hrc"
 #include "WCopyTable.hxx"
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
@@ -43,7 +43,6 @@
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include "dbustrings.hrc"
 #include <functional>
-#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -126,6 +125,8 @@ void OWizColumnSelect::Reset()
         m_lbOrgColumnNames.SetEntryData(nPos,(*aIter)->second);
     }
 
+    // m_pParent->clearDestColumns();
+
     if(m_lbOrgColumnNames.GetEntryCount())
         m_lbOrgColumnNames.SelectEntryPos(0);
 
@@ -147,7 +148,7 @@ void OWizColumnSelect::ActivatePage( )
     ODatabaseExport::TColumnVector::const_iterator aEnd = pDestColumns->end();
     for(;aIter != aEnd;++aIter)
     {
-        sal_uInt16 nPos = m_lbNewColumnNames.InsertEntry((*aIter)->first);
+        USHORT nPos = m_lbNewColumnNames.InsertEntry((*aIter)->first);
         m_lbNewColumnNames.SetEntryData(nPos,new OFieldDescription(*((*aIter)->second)));
         m_lbOrgColumnNames.RemoveEntry((*aIter)->first);
     }
@@ -160,6 +161,7 @@ sal_Bool OWizColumnSelect::LeavePage()
 {
     DBG_CHKTHIS(OWizColumnSelect,NULL);
 
+    //	m_pParent->getColumns()->clear();
     m_pParent->clearDestColumns();
 
     for(sal_uInt16 i=0 ; i< m_lbNewColumnNames.GetEntryCount();++i)
@@ -212,7 +214,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
 
     Reference< XDatabaseMetaData > xMetaData( m_pParent->m_xDestConnection->getMetaData() );
     ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
-    sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
+    sal_Int32 nMaxNameLen		= m_pParent->getMaxColumnNameLength();
 
     ::comphelper::TStringMixEqualFunctor aCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
     ::std::vector< ::rtl::OUString> aRightColumns;
@@ -262,7 +264,7 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
     // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
     Reference< XDatabaseMetaData >  xMetaData( m_pParent->m_xDestConnection->getMetaData() );
     ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
-    sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
+    sal_Int32 nMaxNameLen		= m_pParent->getMaxColumnNameLength();
 
     ::comphelper::TStringMixEqualFunctor aCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
     ::std::vector< ::rtl::OUString> aRightColumns;
@@ -293,12 +295,12 @@ void OWizColumnSelect::fillColumns(ListBox* pRight,::std::vector< ::rtl::OUStrin
         _rRightColumns.push_back(pRight->GetEntry(i));
 }
 // -----------------------------------------------------------------------------
-void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
+void OWizColumnSelect::createNewColumn(	ListBox* _pListbox,
                                         OFieldDescription* _pSrcField,
                                         ::std::vector< ::rtl::OUString>& _rRightColumns,
-                                        const ::rtl::OUString&  _sColumnName,
-                                        const ::rtl::OUString&  _sExtraChars,
-                                        sal_Int32               _nMaxNameLen,
+                                        const ::rtl::OUString&	_sColumnName,
+                                        const ::rtl::OUString&	_sExtraChars,
+                                        sal_Int32				_nMaxNameLen,
                                         const ::comphelper::TStringMixEqualFunctor& _aCase)
 {
     ::rtl::OUString sConvertedName = m_pParent->convertColumnName(TMultiListBoxEntryFindFunctor(&_rRightColumns,_aCase),
@@ -319,12 +321,12 @@ void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
         m_pParent->showColumnTypeNotSupported(sConvertedName);
 }
 // -----------------------------------------------------------------------------
-void OWizColumnSelect::moveColumn(  ListBox* _pRight,
+void OWizColumnSelect::moveColumn(	ListBox* _pRight,
                                     ListBox* _pLeft,
                                     ::std::vector< ::rtl::OUString>& _rRightColumns,
-                                    const ::rtl::OUString&  _sColumnName,
-                                    const ::rtl::OUString&  _sExtraChars,
-                                    sal_Int32               _nMaxNameLen,
+                                    const ::rtl::OUString&	_sColumnName,
+                                    const ::rtl::OUString&	_sExtraChars,
+                                    sal_Int32				_nMaxNameLen,
                                     const ::comphelper::TStringMixEqualFunctor& _aCase)
 {
     if(_pRight == &m_lbNewColumnNames)
@@ -337,12 +339,12 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
     {
         // find the new column in the dest name mapping to obtain the old column
         OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-                                                                ::o3tl::compose1(
+                                                                ::std::compose1(
                                                                     ::std::bind2nd(_aCase, _sColumnName),
-                                                                    ::o3tl::select2nd<OCopyTableWizard::TNameMapping::value_type>())
+                                                                    ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
                                                                     );
 
-        OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
+        DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
         if ( aIter == m_pParent->m_mNameMapping.end() )
             return; // do nothing
         const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
@@ -355,7 +357,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
             OSL_ENSURE( aPos != pSrcVector->end(),"Invalid position for the iterator here!");
             ODatabaseExport::TColumnVector::size_type nPos = (aPos - pSrcVector->begin()) - adjustColumnPosition(_pLeft, _sColumnName, (aPos - pSrcVector->begin()), _aCase);
 
-            _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, sal::static_int_cast< sal_uInt16 >(nPos)),aSrcIter->second );
+            _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, sal::static_int_cast< USHORT >(nPos)),aSrcIter->second );
             _rRightColumns.push_back((*aIter).first);
             m_pParent->removeColumnNameFromNameMap(_sColumnName);
         }
@@ -364,14 +366,14 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
 // -----------------------------------------------------------------------------
 // Simply returning fields back to their original position is
 // not enough. We need to take into acccount what fields have
-// been removed earlier and adjust accordingly. Based on the
+// been removed earlier and adjust accordingly. Based on the 
 // algorithm employed in moveColumn().
-sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
-                                               const ::rtl::OUString&   _sColumnName,
+USHORT OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
+                                               const ::rtl::OUString&	_sColumnName,
                                                ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                                const ::comphelper::TStringMixEqualFunctor& _aCase)
 {
-    sal_uInt16 nAdjustedPos = 0;
+    USHORT nAdjustedPos = 0;
 
     // if returning all entries to their original position,
     // then there is no need to adjust the positions.
@@ -387,12 +389,12 @@ sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
         {
             // find the new column in the dest name mapping to obtain the old column
             OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-                                                                    ::o3tl::compose1(
+                                                                    ::std::compose1(
                                                                     ::std::bind2nd(_aCase, sColumnString),
-                                                                    ::o3tl::select2nd<OCopyTableWizard::TNameMapping::value_type>())
+                                                                    ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
                                                                     );
 
-            OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
+            DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
             const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
             ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
             if ( aSrcIter != pSrcColumns->end() )

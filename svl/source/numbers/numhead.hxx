@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,73 +33,73 @@
 
 // -----------------------------------------------------------------------
 
-        //  "Automatischer" Record-Header mit Groessenangabe
+        //	"Automatischer" Record-Header mit Groessenangabe
 
-/*                      wird fuer SvNumberFormatter nicht gebraucht
+/* 						wird fuer SvNumberFormatter nicht gebraucht
 class SvNumReadHeader
 {
 private:
-    SvStream&   rStream;
-    sal_uLong       nDataEnd;
+    SvStream&	rStream;
+    ULONG		nDataEnd;
 
 public:
     SvNumReadHeader(SvStream& rNewStream);
     ~SvNumReadHeader();
 
-    sal_uLong   BytesLeft() const;
+    ULONG	BytesLeft() const;
 };
 
 class SvNumWriteHeader
 {
 private:
-    SvStream&   rStream;
-    sal_uLong       nDataPos;
-    sal_uLong       nDataSize;
+    SvStream&	rStream;
+    ULONG		nDataPos;
+    ULONG		nDataSize;
 
 public:
-    SvNumWriteHeader(SvStream& rNewStream, sal_uLong nDefault = 0);
+    SvNumWriteHeader(SvStream& rNewStream, ULONG nDefault = 0);
     ~SvNumWriteHeader();
 };
 
 */
 
-        //  Header mit Groessenangaben fuer mehrere Objekte
+        //	Header mit Groessenangaben fuer mehrere Objekte
 
 class ImpSvNumMultipleReadHeader
 {
 private:
-    SvStream&       rStream;
-    char*           pBuf;
-    SvMemoryStream* pMemStream;
-    sal_uLong           nEndPos;
-    sal_uLong           nEntryEnd;
+    SvStream&		rStream;
+    char*			pBuf;
+    SvMemoryStream*	pMemStream;
+    ULONG			nEndPos;
+    ULONG			nEntryEnd;
 
 public:
     ImpSvNumMultipleReadHeader(SvStream& rNewStream);
     ~ImpSvNumMultipleReadHeader();
 
-    void    StartEntry();
-    void    EndEntry();
-    sal_uLong   BytesLeft() const;
+    void	StartEntry();
+    void	EndEntry();
+    ULONG	BytesLeft() const;
 
-    static void Skip( SvStream& );      // komplett ueberspringen
+    static void Skip( SvStream& );		// komplett ueberspringen
 };
 
 class ImpSvNumMultipleWriteHeader
 {
 private:
-    SvStream&       rStream;
-    SvMemoryStream  aMemStream;
-    sal_uLong           nDataPos;
-    sal_uInt32      nDataSize;
-    sal_uLong           nEntryStart;
+    SvStream&		rStream;
+    SvMemoryStream	aMemStream;
+    ULONG			nDataPos;
+    sal_uInt32		nDataSize;
+    ULONG			nEntryStart;
 
 public:
-    ImpSvNumMultipleWriteHeader(SvStream& rNewStream, sal_uLong nDefault = 0);
+    ImpSvNumMultipleWriteHeader(SvStream& rNewStream, ULONG nDefault = 0);
     ~ImpSvNumMultipleWriteHeader();
 
-    void    StartEntry();
-    void    EndEntry();
+    void	StartEntry();
+    void	EndEntry();
 };
 
 #endif

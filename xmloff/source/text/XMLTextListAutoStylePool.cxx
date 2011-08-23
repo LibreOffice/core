@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlnume.hxx>
-#include "xmloff/XMLTextListAutoStylePool.hxx"
+#include "XMLTextListAutoStylePool.hxx"
 #include <xmloff/xmlexp.hxx>
 
 using ::rtl::OUString;
@@ -54,21 +54,21 @@ int XMLTextListAutoStylePoolNameCmp_Impl( const OUString& r1,
     return (int)r1.compareTo( r2 );
 }
 
-DECLARE_CONTAINER_SORT_DEL( XMLTextListAutoStylePoolNames_Impl,
+DECLARE_CONTAINER_SORT_DEL( XMLTextListAutoStylePoolNames_Impl, 
                             OUString )
-IMPL_CONTAINER_SORT( XMLTextListAutoStylePoolNames_Impl,
+IMPL_CONTAINER_SORT( XMLTextListAutoStylePoolNames_Impl, 
                      OUString,
                      XMLTextListAutoStylePoolNameCmp_Impl )
 
 class XMLTextListAutoStylePoolEntry_Impl
 {
-    OUString    sName;
-    OUString    sInternalName;
+    OUString	sName;
+    OUString	sInternalName;
     Reference < XIndexReplace > xNumRules;
-    sal_uInt32  nPos;
-    sal_Bool    bIsNamed;
-
-
+    sal_uInt32	nPos;
+    sal_Bool	bIsNamed;
+    
+    
 public:
 
     XMLTextListAutoStylePoolEntry_Impl(
@@ -186,15 +186,7 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
 
 XMLTextListAutoStylePool::~XMLTextListAutoStylePool()
 {
-    // The XMLTextListAutoStylePoolEntry_Impl object in the pool need delete explicitly in dtor.
-    sal_uLong nCount = pPool->Count();
-    while ( nCount-- )
-        delete pPool->Remove(nCount);
     delete pPool;
-
-    nCount = pNames->Count();
-    while ( nCount-- )
-        delete pNames->Remove(nCount);
     delete pNames;
 }
 
@@ -204,7 +196,7 @@ void XMLTextListAutoStylePool::RegisterName( const OUString& rName )
     if( !pNames->Insert( pName ) )
         delete pName;
 }
-
+    
 sal_Bool XMLTextListAutoStylePool::HasName( const OUString& rName ) const
 {
     return pNames->Seek_Entry( &rName, 0 );
@@ -212,11 +204,11 @@ sal_Bool XMLTextListAutoStylePool::HasName( const OUString& rName ) const
 
 sal_uInt32 XMLTextListAutoStylePool::Find( XMLTextListAutoStylePoolEntry_Impl* pEntry ) const
 {
-    sal_uLong nPos;
+    ULONG nPos;
     if( !pEntry->IsNamed() && mxNumRuleCompare.is() )
     {
         const sal_uInt32 nCount = pPool->Count();
-
+    
         uno::Any aAny1, aAny2;
         aAny1 <<= pEntry->GetNumRules();
 
@@ -249,17 +241,17 @@ OUString XMLTextListAutoStylePool::Add(
     }
     else
     {
-        XMLTextListAutoStylePoolEntry_Impl *pEntry =
+        XMLTextListAutoStylePoolEntry_Impl *pEntry = 
             new XMLTextListAutoStylePoolEntry_Impl( pPool->Count(),
-                                               rNumRules, *pNames, sPrefix,
+                                               rNumRules, *pNames, sPrefix, 
                                                nName );
         pPool->Insert( pEntry );
         sName = pEntry->GetName();
     }
-
+    
     return sName;
 }
-
+    
 ::rtl::OUString XMLTextListAutoStylePool::Find(
             const Reference < XIndexReplace > & rNumRules ) const
 {
@@ -269,7 +261,7 @@ OUString XMLTextListAutoStylePool::Add(
     sal_uInt32 nPos = Find( &aTmp );
     if( nPos != (sal_uInt32)-1 )
         sName = pPool->GetObject( nPos )->GetName();
-
+    
     return sName;
 }
 
@@ -281,7 +273,7 @@ OUString XMLTextListAutoStylePool::Add(
     sal_uInt32 nPos = Find( &aTmp );
     if( nPos != (sal_uInt32)-1 )
         sName = pPool->GetObject( nPos )->GetName();
-
+    
     return sName;
 }
 

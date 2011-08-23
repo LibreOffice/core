@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,17 +69,17 @@ public:
     }
     virtual ~SwServerObject();
 
-    virtual sal_Bool GetData( ::com::sun::star::uno::Any & rData,
+    virtual BOOL GetData( ::com::sun::star::uno::Any & rData,
                             const String & rMimeType,
-                            sal_Bool bSynchron = sal_False );
+                            BOOL bSynchron = FALSE );
 
-    sal_Bool SetData( const String & rMimeType,
+    BOOL SetData( const String & rMimeType,
                     const ::com::sun::star::uno::Any& rData );
 
     virtual void SendDataChanged( const SwPosition& rPos );
     virtual void SendDataChanged( const SwPaM& rRange );
 
-    sal_Bool IsLinkInServer( const SwBaseLink* ) const;
+    BOOL IsLinkInServer( const SwBaseLink* ) const;
 
     void SetNoServer();
     void SetDdeBookmark( ::sw::mark::IMark& rBookmark);

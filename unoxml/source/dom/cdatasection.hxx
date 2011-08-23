@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,14 +26,14 @@
  *
  ************************************************************************/
 
-#ifndef DOM_CDATASECTION_HXX
-#define DOM_CDATASECTION_HXX
+#ifndef _CDATASECTION_HXX
+#define _CDATASECTION_HXX
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XCDATASection.hpp>
 
-#include <text.hxx>
-
+#include "text.hxx"
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -41,21 +41,16 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1< CText, XCDATASection >
-        CCDATASection_Base;
-
-    class CCDATASection
-        : public CCDATASection_Base
+    class CCDATASection : public cppu::ImplInheritanceHelper1< CText, XCDATASection >
     {
-        friend class CDocument;
-
+        friend class CNode;
     protected:
-        CCDATASection(CDocument const& rDocument, ::osl::Mutex const& rMutex,
-                xmlNodePtr const pNode);
+        CCDATASection(const xmlNodePtr aNodePtr);
 
     public:
 
-        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
+        virtual void SAL_CALL saxify(
+            const Reference< XDocumentHandler >& i_xHandler);
 
         virtual Reference< XText > SAL_CALL splitText(sal_Int32 offset)
              throw (RuntimeException)
@@ -221,7 +216,7 @@ namespace DOM
     virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
         throw (RuntimeException, DOMException)
     {
-        return CText::setNodeValue(nodeValue);
+        return CNode::setNodeValue(nodeValue);
     }
     virtual void SAL_CALL setPrefix(const OUString& prefix)
         throw (RuntimeException, DOMException)

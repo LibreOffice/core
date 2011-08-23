@@ -37,6 +37,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+# --- Define time bomb date. Not active for OOo --------------------
+# --- Change something in evaluation.cxx!!! (e.g. line 313)
+# --- You must use the yyyymmdd format!!! --------------------------
+#CDEFS+=-DTIMEBOMB=20050930
+
 # --- Files --------------------------------------------------------
 
 SLOFILES =	$(SLO)$/evaluation.obj \
@@ -70,10 +75,3 @@ SHL1STDLIBS= \
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(MISC)/socomp.component
-
-$(MISC)/socomp.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        socomp.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt socomp.component

@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 #include <stdio.h>
@@ -78,7 +78,7 @@ public:     // Methods
     virtual sal_Int32 SAL_CALL run( const Sequence< OUString >& aArguments )
         throw(RuntimeException);
 
-
+    
 private: // helper methods
     void testPipe( const Reference < XInterface > & rComponent );
     Reference< XMultiServiceFactory > m_xSMgr;
@@ -107,8 +107,8 @@ void PipeClientMain::testPipe( const Reference< XInterface > & rxInterface )
             printf( "error : Couldn't read the expected number of bytes\n" );
             return;
         }
-
-        if( seqRead.getConstArray()[0] != 5 ||
+        
+        if( seqRead.getConstArray()[0] != 5 || 
             seqRead.getConstArray()[1] != 4 ||
             seqRead.getConstArray()[2] != 3 )
         {
@@ -148,7 +148,7 @@ sal_Int32 PipeClientMain::run( const Sequence< OUString > & aArguments ) throw (
     {
         try {
             Reference < XInterface > r =
-                m_xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.UnoUrlResolver")) );
+                m_xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.bridge.UnoUrlResolver" ) );
             Reference < XUnoUrlResolver > rResolver( r , UNO_QUERY );
 
             // connect to the remote process and retrieve the initial object
@@ -191,7 +191,7 @@ sal_Int32 PipeClientMain::run( const Sequence< OUString > & aArguments ) throw (
     }
     else
     {
-        printf( "usage: (uno remoteclient-component --) uno-url\n"
+        printf( "usage: (uno remoteclient-component --) uno-url\n" 
                 "e.g.:  uno:socket,host=localhost,port=2083;urp;MyPipe\n" );
         return 1;
     }
@@ -212,7 +212,7 @@ Sequence< OUString > getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.example.RemoteClientSample"));
+            seqNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.bridge.example.RemoteClientSample" );
             pNames = &seqNames;
         }
     }
@@ -228,32 +228,57 @@ using namespace remotebridges_officeclient;
 extern "C"
 {
 //==================================================================================================
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
+void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
-
 //==================================================================================================
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager, void * pRegistryKey )
+{
+    if (pRegistryKey)
+    {
+        try
+        {
+            Reference< XRegistryKey > xNewKey(
+                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
+                    OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+            
+            const Sequence< OUString > & rSNL = getSupportedServiceNames();
+            const OUString * pArray = rSNL.getConstArray();
+            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+                xNewKey->createKey( pArray[nPos] );
+            
+            return sal_True;
+        }
+        catch (InvalidRegistryException &)
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+    return sal_False;
+}
+//==================================================================================================
+void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = 0;
-
+    
     if (pServiceManager && rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             CreateInstance, getSupportedServiceNames() ) );
-
+        
         if (xFactory.is())
         {
             xFactory->acquire();
             pRet = xFactory.get();
         }
     }
-
+    
     return pRet;
 }
 }

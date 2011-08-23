@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+
+
 // INCLUDE ---------------------------------------------------------------
+
 #include "xmlcoli.hxx"
 #include "xmlimprt.hxx"
 #include "global.hxx"
@@ -56,7 +59,7 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
@@ -105,12 +108,32 @@ ScXMLTableColContext::~ScXMLTableColContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableColContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLTableColContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = 0;
+/*
+    const SvXMLTokenMap& rTokenMap = GetScImport().GetTableRowElemTokenMap();
+    sal_Bool bHeader = sal_False;
+    switch( rTokenMap.Get( nPrefix, rLName ) )
+    {
+    case XML_TOK_TABLE_ROW_CELL:
+//		if( IsInsertCellPossible() )
+            pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
+                                                      rLName, xAttrList//,
+                                                      //this
+                                                      );
+        break;
+    case XML_TOK_TABLE_ROW_COVERED_CELL:
+//		if( IsInsertCellPossible() )
+            pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
+                                                      rLName, xAttrList//,
+                                                      //this
+                                                      );
+        break;
+    }*/
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
@@ -160,7 +183,7 @@ void ScXMLTableColContext::EndElement()
                 rtl::OUString sVisible(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS));
                 sal_Bool bValue(sal_True);
                 if (!IsXMLToken(sVisibility, XML_VISIBLE))
-                    bValue = false;
+                    bValue = sal_False;
                 xColumnProperties->setPropertyValue(sVisible, uno::makeAny(bValue));
             }
         }
@@ -176,7 +199,7 @@ void ScXMLTableColContext::EndElement()
 }
 
 ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -208,7 +231,7 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
             if (nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(aLocalName, XML_DISPLAY))
             {
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bGroupDisplay = false;
+                    bGroupDisplay = sal_False;
             }
         }
     }
@@ -218,7 +241,7 @@ ScXMLTableColsContext::~ScXMLTableColsContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -231,17 +254,17 @@ SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( sal_uInt16 nPrefi
     case XML_TOK_TABLE_COLS_COL_GROUP:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   false, sal_True );
+                                                   sal_False, sal_True );
         break;
     case XML_TOK_TABLE_COLS_HEADER_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, false );
+                                                   sal_True, sal_False );
         break;
     case XML_TOK_TABLE_COLS_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   false, false );
+                                                   sal_False, sal_False );
         break;
     case XML_TOK_TABLE_COLS_COL:
             pContext = new ScXMLTableColContext( GetScImport(), nPrefix,
@@ -296,7 +319,7 @@ void ScXMLTableColsContext::EndElement()
             ScDocument* pDoc = GetScImport().GetDocument();
             if (pDoc)
             {
-                ScXMLImport::MutexGuard aGuard(GetScImport());
+                rXMLImport.LockSolarMutex();
                 ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(static_cast<SCTAB>(nSheet), sal_True);
                 ScOutlineArray* pColArray = pOutlineTable ? pOutlineTable->GetColArray() : NULL;
                 if (pColArray)
@@ -304,6 +327,7 @@ void ScXMLTableColsContext::EndElement()
                     sal_Bool bResized;
                     pColArray->Insert(static_cast<SCCOL>(nGroupStartCol), static_cast<SCCOL>(nGroupEndCol), bResized, !bGroupDisplay, sal_True);
                 }
+                rXMLImport.UnlockSolarMutex();
             }
         }
     }

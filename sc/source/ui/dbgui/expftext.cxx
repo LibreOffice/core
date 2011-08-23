@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,16 +35,16 @@
 #include <vcl/help.hxx>
 
 /*************************************************************************
-#*  Member:     ScExpandedFixedText
+#*	Member:		ScExpandedFixedText							Datum:18.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     MD_Test
+#*  Klasse:		MD_Test
 #*
-#*  Funktion:   Konstruktor der Klasse SvxCtrDial
+#*  Funktion:	Konstruktor der Klasse SvxCtrDial
 #*
-#*  Input:      Parent- Window, Resource ID
+#*  Input:		Parent- Window, Resource ID
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -56,25 +56,25 @@ ScExpandedFixedText::ScExpandedFixedText( Window* pParent,
 }
 
 /*************************************************************************
-#*  Member:     RequestHelp
+#*	Member:		RequestHelp									Datum:18.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScExpandedFixedText
+#*  Klasse:		ScExpandedFixedText
 #*
-#*  Funktion:   Die Methode wird gerufen, um Hilfe fuer das Fenster
-#*              anzuzeigen. Zeigt das Fenster einen gekuerzten Text
-#*              an, so wird selbiger in voller Laenge angezeigt.
+#*  Funktion:	Die Methode wird gerufen, um Hilfe fuer das Fenster
+#*				anzuzeigen. Zeigt das Fenster einen gekuerzten Text
+#*				an, so wird selbiger in voller Laenge angezeigt.
 #*
-#*  Input:      HelpEvent
+#*  Input:		HelpEvent
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
 void ScExpandedFixedText::RequestHelp(const HelpEvent& rEvt)
 {
-    String  aTxtStr = GetText();
-    long    nTxtWidth = GetTextWidth(aTxtStr);
+    String	aTxtStr = GetText();
+    long	nTxtWidth = GetTextWidth(aTxtStr);
     if ( ( rEvt.GetMode() & HELPMODE_QUICK ) == HELPMODE_QUICK &&
          nTxtWidth > GetSizePixel().Width())
     {

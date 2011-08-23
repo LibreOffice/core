@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,9 @@ using namespace ::xmloff::token;
 #define XML_HINT_HYPERLINK 3
 #define XML_HINT_INDEX_MARK 5
 #define XML_HINT_TEXT_FRAME 6
-// Core impl. of the unification of drawing objects and Writer fly frames (#i26791#)
+// --> DVO, OD 2004-07-14 #i26791#
 #define XML_HINT_DRAW 7
+// <--
 
 class XMLHint_Impl
 {
@@ -94,7 +95,7 @@ public:
 
 class XMLStyleHint_Impl : public XMLHint_Impl
 {
-    OUString                 sStyleName;
+    OUString				 sStyleName;
 
 public:
 
@@ -111,7 +112,7 @@ public:
 
 class XMLReferenceHint_Impl : public XMLHint_Impl
 {
-    OUString                 sRefName;
+    OUString				 sRefName;
 
 public:
 
@@ -129,12 +130,12 @@ public:
 
 class XMLHyperlinkHint_Impl : public XMLHint_Impl
 {
-    OUString                 sHRef;
-    OUString                 sName;
-    OUString                 sTargetFrameName;
-    OUString                 sStyleName;
-    OUString                 sVisitedStyleName;
-    XMLEventsImportContext*  pEvents;
+    OUString				 sHRef;
+    OUString				 sName;
+    OUString				 sTargetFrameName;
+    OUString				 sStyleName;
+    OUString				 sVisitedStyleName;
+    XMLEventsImportContext*	 pEvents;
 
 public:
 
@@ -237,7 +238,7 @@ public:
         return xTxt;
     }
 
-    // Frame "to character": anchor moves from first to last char after saving (#i33242#)
+    // --> OD 2004-08-24 #i33242#
     Reference < drawing::XShape > GetShape() const
     {
         Reference < drawing::XShape > xShape;
@@ -249,6 +250,7 @@ public:
 
         return xShape;
     }
+    // <--
 
     sal_Bool IsBoundAtChar() const
     {
@@ -266,7 +268,7 @@ public:
     }
 };
 
-// Core impl. of the unification of drawing objects and Writer fly frames (#i26791#)
+// --> DVO, OD 2004-07-14 #i26791#
 class XMLDrawHint_Impl : public XMLHint_Impl
 {
     SvXMLImportContextRef xContext;
@@ -284,12 +286,14 @@ public:
     {
     }
 
-    // Frame "to character": anchor moves from first to last char after saving (#i33242#)
+    // --> OD 2004-08-24 #i33242#
     Reference < drawing::XShape > GetShape() const
     {
         return static_cast<SvXMLShapeContext*>(&xContext)->getShape();
     }
+    // <--
 };
+// <--
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

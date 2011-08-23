@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,28 +30,27 @@
 #define _SV_UNOWCNTR_HXX_
 
 #include <cppuhelper/weakref.hxx>
-#include <list>
 
 typedef sal_Bool (*weakref_searchfunc)( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef, void* pSearchData );
 
-typedef ::std::list< ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >* > WeakRefList;
+class WeakRefList;
 
 class SvUnoWeakContainer
 {
 private:
-    WeakRefList maList;
+    WeakRefList*	mpList;
 
 public:
     SvUnoWeakContainer() throw();
     ~SvUnoWeakContainer() throw();
 
     /** inserts the given ref into this container */
-    void insert( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef ) throw();
+    void	insert( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef ) throw();
 
-    /** searches the container for a ref that returns true on the given
+    /** searches the container for a ref that returns true on the given 
         search function
     */
-    sal_Bool findRef( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >& rRef, void* pSearchData, weakref_searchfunc pSearchFunc );
+    sal_Bool findRef( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >& rRef, void* pSearchData, weakref_searchfunc pSearchFunc );	
 
     void dispose();
 };

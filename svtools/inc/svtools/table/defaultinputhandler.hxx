@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,45 +28,44 @@
 #ifndef SVTOOLS_INC_TABLE_DEFAULTINPUTHANDLER_HXX
 #define SVTOOLS_INC_TABLE_DEFAULTINPUTHANDLER_HXX
 
-#include "svtools/table/tableinputhandler.hxx"
-#include "svtools/table/tabletypes.hxx"
+#include <svtools/table/tableinputhandler.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
-//......................................................................................................................
+//........................................................................
 namespace svt { namespace table
 {
-//......................................................................................................................
+//........................................................................
 
     struct DefaultInputHandler_Impl;
 
-    //==================================================================================================================
+    //====================================================================
     //= DefaultInputHandler
-    //==================================================================================================================
+    //====================================================================
     class DefaultInputHandler : public ITableInputHandler
     {
+            friend class TableDataWindow;
     private:
-        ::boost::scoped_ptr< DefaultInputHandler_Impl > m_pImpl;
+        DefaultInputHandler_Impl*   m_pImpl;
+        bool						m_bResize;
 
     public:
         DefaultInputHandler();
         ~DefaultInputHandler();
 
-        virtual bool    MouseMove       ( ITableControl& _rControl, const MouseEvent& rMEvt );
-        virtual bool    MouseButtonDown ( ITableControl& _rControl, const MouseEvent& rMEvt );
-        virtual bool    MouseButtonUp   ( ITableControl& _rControl, const MouseEvent& rMEvt );
-        virtual bool    KeyInput        ( ITableControl& _rControl, const KeyEvent& rKEvt );
-        virtual bool    GetFocus        ( ITableControl& _rControl );
-        virtual bool    LoseFocus       ( ITableControl& _rControl );
-        virtual bool    RequestHelp     ( ITableControl& _rControl, const HelpEvent& rHEvt );
-        virtual bool    Command         ( ITableControl& _rControl, const CommandEvent& rCEvt );
-        virtual bool    PreNotify       ( ITableControl& _rControl, NotifyEvent& rNEvt );
-        virtual bool    Notify          ( ITableControl& _rControl, NotifyEvent& rNEvt );
+        virtual bool    MouseMove       ( IAbstractTableControl& _rControl, const MouseEvent& rMEvt );
+        virtual bool    MouseButtonDown ( IAbstractTableControl& _rControl, const MouseEvent& rMEvt );
+        virtual bool    MouseButtonUp   ( IAbstractTableControl& _rControl, const MouseEvent& rMEvt );
+        virtual bool    KeyInput        ( IAbstractTableControl& _rControl, const KeyEvent& rKEvt );
+        virtual bool    GetFocus        ( IAbstractTableControl& _rControl );
+        virtual bool    LoseFocus       ( IAbstractTableControl& _rControl );
+        virtual bool    RequestHelp     ( IAbstractTableControl& _rControl, const HelpEvent& rHEvt );
+        virtual bool    Command         ( IAbstractTableControl& _rControl, const CommandEvent& rCEvt );
+        virtual bool    PreNotify       ( IAbstractTableControl& _rControl, NotifyEvent& rNEvt );
+        virtual bool    Notify          ( IAbstractTableControl& _rControl, NotifyEvent& rNEvt );
     };
 
-//......................................................................................................................
+//........................................................................
 } } // namespace svt::table
-//......................................................................................................................
+//........................................................................
 
 #endif // SVTOOLS_INC_TABLE_DEFAULTINPUTHANDLER_HXX
 

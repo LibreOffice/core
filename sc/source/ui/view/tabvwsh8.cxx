@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,15 @@
 
 //------------------------------------------------------------------
 
-void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine )
+void ScTabViewShell::SetDefaultFrameLine( const SvxBorderLine* pLine )
 {
     if ( pLine )
     {
         delete pCurFrameLine;
-        pCurFrameLine = new ::editeng::SvxBorderLine( &pLine->GetColor(),
-                                            pLine->GetWidth(),
-                                            pLine->GetStyle() );
+        pCurFrameLine = new SvxBorderLine( &pLine->GetColor(),
+                                            pLine->GetOutWidth(),
+                                            pLine->GetInWidth(),
+                                            pLine->GetDistance() );
     }
     else if ( pCurFrameLine )
     {
@@ -60,13 +61,13 @@ void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine 
 
 //------------------------------------------------------------------
 
-sal_Bool ScTabViewShell::HasSelection( sal_Bool bText ) const
+BOOL __EXPORT ScTabViewShell::HasSelection( BOOL bText ) const
 {
-    sal_Bool bHas = false;
-    ScViewData* pData = (ScViewData*)GetViewData();     // const weggecasted
+    BOOL bHas = FALSE;
+    ScViewData* pData = (ScViewData*)GetViewData();		// const weggecasted
     if ( bText )
     {
-        //  Text enthalten: Anzahl2 >= 1
+        //	Text enthalten: Anzahl2 >= 1
         ScDocument* pDoc = pData->GetDocument();
         ScMarkData& rMark = pData->GetMarkData();
         ScAddress aCursor( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
@@ -81,7 +82,7 @@ sal_Bool ScTabViewShell::HasSelection( sal_Bool bText ) const
         if ( eMarkType == SC_MARK_SIMPLE )
             bHas = ( aRange.aStart != aRange.aEnd );    // more than 1 cell
         else
-            bHas = sal_True;                                // multiple selection or filtered
+            bHas = TRUE;                                // multiple selection or filtered
     }
     return bHas;
 }

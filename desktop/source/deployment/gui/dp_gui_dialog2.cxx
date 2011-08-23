@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,8 @@
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_misc.h"
-#include "dp_ucb.h"
 #include "dp_update.hxx"
 #include "dp_identifier.hxx"
-#include "dp_descriptioninfoset.hxx"
 
 #include "vcl/ctrl.hxx"
 #include "vcl/menu.hxx"
@@ -121,15 +119,14 @@ enum MENU_COMMAND
     CMD_REMOVE  = 1,
     CMD_ENABLE,
     CMD_DISABLE,
-    CMD_UPDATE,
-    CMD_SHOW_LICENSE
+    CMD_UPDATE
 };
 
 class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 {
     Size            m_aOutputSize;
     bool            m_bInterfaceLocked;
-
+    
     PushButton     *m_pOptionsBtn;
     PushButton     *m_pEnableBtn;
     PushButton     *m_pRemoveBtn;
@@ -210,6 +207,8 @@ ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 }
 
 //------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 const Size ExtBoxWithBtns_Impl::GetMinOutputSizePixel() const
 {
     Size aMinSize( ExtensionBox_Impl::GetMinOutputSizePixel() );
@@ -226,10 +225,13 @@ const Size ExtBoxWithBtns_Impl::GetMinOutputSizePixel() const
 // -----------------------------------------------------------------------
 void ExtBoxWithBtns_Impl::RecalcAll()
 {
+    ExtensionBox_Impl::RecalcAll();
+
     const sal_Int32 nActive = getSelIndex();
 
     if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
     {
+        SetButtonPos( GetEntryRect( nActive ) );
         SetButtonStatus( GetEntryData( nActive) );
     }
     else
@@ -238,11 +240,6 @@ void ExtBoxWithBtns_Impl::RecalcAll()
         m_pEnableBtn->Hide();
         m_pRemoveBtn->Hide();
     }
-
-    ExtensionBox_Impl::RecalcAll();
-
-    if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
-        SetButtonPos( GetEntryRect( nActive ) );
 }
 
 
@@ -367,29 +364,28 @@ bool ExtBoxWithBtns_Impl::HandleTabKey( bool bReverse )
 // -----------------------------------------------------------------------
 MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long nPos )
 {
-    if ( nPos >= (long) getItemCount() )
-        return CMD_NONE;
-
-    PopupMenu aPopup;
-
-    aPopup.InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
-
-    if ( ! GetEntryData( nPos )->m_bLocked )
+    if ( ( nPos >= 0 ) && ( nPos < (long) getItemCount() ) )
     {
-        if ( GetEntryData( nPos )->m_bUser )
+        if ( ! GetEntryData( nPos )->m_bLocked )
         {
-            if ( GetEntryData( nPos )->m_eState == REGISTERED )
-                aPopup.InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
-            else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
-                aPopup.InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
+            PopupMenu aPopup;
+
+            aPopup.InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
+
+            if ( GetEntryData( nPos )->m_bUser )
+            {
+                if ( GetEntryData( nPos )->m_eState == REGISTERED )
+                    aPopup.InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
+                else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
+                    aPopup.InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
+            }
+
+            aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
+
+            return (MENU_COMMAND) aPopup.Execute( this, rPos );
         }
-        aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
     }
-
-    if ( GetEntryData( nPos )->m_sLicenseText.Len() )
-        aPopup.InsertItem( CMD_SHOW_LICENSE, DialogHelper::getResourceString( RID_STR_SHOW_LICENSE_CMD ) );
-
-    return (MENU_COMMAND) aPopup.Execute( this, rPos );
+    return CMD_NONE;
 }
 
 //------------------------------------------------------------------------------
@@ -414,12 +410,6 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
                                 break;
             case CMD_REMOVE:    m_pParent->removePackage( GetEntryData( nPos )->m_xPackage );
                                 break;
-            case CMD_SHOW_LICENSE:
-                {
-                    ShowLicenseDialog aLicenseDlg( m_pParent, GetEntryData( nPos )->m_xPackage );
-                    aLicenseDlg.Execute();
-                    break;
-                }
         }
     }
     else if ( rMEvt.IsLeft() )
@@ -441,7 +431,7 @@ long ExtBoxWithBtns_Impl::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         KeyCode         aKeyCode = pKEvt->GetKeyCode();
-        sal_uInt16          nKeyCode = aKeyCode.GetCode();
+        USHORT          nKeyCode = aKeyCode.GetCode();
 
         if ( nKeyCode == KEY_TAB )
             bHandled = HandleTabKey( aKeyCode.IsShift() );
@@ -476,13 +466,13 @@ void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
 IMPL_LINK( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar )
 {
     long nDelta = pScrBar->GetDelta();
-
+    
     Point aNewOptPt( m_pOptionsBtn->GetPosPixel() - Point( 0, nDelta ) );
     Point aNewRemPt( m_pRemoveBtn->GetPosPixel() - Point( 0, nDelta ) );
     Point aNewEnPt( m_pEnableBtn->GetPosPixel() - Point( 0, nDelta ) );
 
     DoScroll( nDelta );
-
+    
     m_pOptionsBtn->SetPosPixel( aNewOptPt );
     m_pRemoveBtn->SetPosPixel( aNewRemPt );
     m_pEnableBtn->SetPosPixel( aNewEnPt );
@@ -498,14 +488,14 @@ IMPL_LINK( ExtBoxWithBtns_Impl, HandleOptionsBtn, void*, EMPTYARG )
     if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-
+    
         if ( pFact )
         {
             OUString sExtensionId = GetEntryData( nActive )->m_xPackage->getIdentifier().Value;
             VclAbstractDialog* pDlg = pFact->CreateOptionsDialog( this, sExtensionId, rtl::OUString() );
-
+    
             pDlg->Execute();
-
+    
             delete pDlg;
         }
     }
@@ -568,14 +558,14 @@ DialogHelper::~DialogHelper()
 }
 
 //------------------------------------------------------------------------------
-ResId DialogHelper::getResId( sal_uInt16 nId )
+ResId DialogHelper::getResId( USHORT nId )
 {
     const SolarMutexGuard guard;
     return ResId( nId, *DeploymentGuiResMgr::get() );
 }
 
 //------------------------------------------------------------------------------
-String DialogHelper::getResourceString( sal_uInt16 id )
+String DialogHelper::getResourceString( USHORT id )
 {
     // init with non-acquired solar mutex:
     BrandName::get();
@@ -599,7 +589,7 @@ bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > 
 //------------------------------------------------------------------------------
 bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::XPackage > &xPackage,
                                               Window *pParent,
-                                              const sal_uInt16 nResID,
+                                              const USHORT nResID,
                                               bool &bHadWarning )
 {
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
@@ -611,7 +601,7 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
         aInfoBox.SetMessText( aMsgText );
 
         bHadWarning = true;
-
+        
         if ( RET_OK == aInfoBox.Execute() )
             return true;
         else
@@ -627,7 +617,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
     if ( ! sURL.getLength() ) // Nothing to do, when the URL is empty
         return;
 
-    try
+    try 
     {
         uno::Reference< XSystemShellExecute > xSystemShellExecute(
             m_xContext->getServiceManager()->createInstanceWithContext( OUSTR( "com.sun.star.system.SystemShellExecute" ), m_xContext), uno::UNO_QUERY_THROW);
@@ -668,8 +658,8 @@ bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
     sMsgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
     aQuery.SetMessText( sMsgText );
 
-    sal_uInt16 nYesBtnID = aQuery.GetButtonId( 0 );
-    sal_uInt16 nNoBtnID = aQuery.GetButtonId( 1 );
+    USHORT nYesBtnID = aQuery.GetButtonId( 0 );
+    USHORT nNoBtnID = aQuery.GetButtonId( 1 );
 
     if ( nYesBtnID != BUTTONDIALOG_BUTTON_NOTFOUND )
         aQuery.SetButtonText( nYesBtnID, getResourceString( RID_STR_INSTALL_FOR_ME ) );
@@ -859,10 +849,10 @@ bool ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &
         return false;
 
     // get the extension with highest version
-    uno::Sequence<uno::Reference<deployment::XPackage> > seqExtensions =
+    uno::Sequence<uno::Reference<deployment::XPackage> > seqExtensions = 
     m_pManager->getExtensionManager()->getExtensionsWithSameIdentifier(
         dp_misc::getIdentifier(xPackage), xPackage->getName(), uno::Reference<ucb::XCommandEnvironment>());
-    uno::Reference<deployment::XPackage> extension =
+    uno::Reference<deployment::XPackage> extension = 
         dp_misc::getExtensionWithHighestVersion(seqExtensions);
     OSL_ASSERT(extension.is());
     std::vector< css::uno::Reference< css::deployment::XPackage > > vEntries;
@@ -915,7 +905,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
             const OUString title( xPackageType->getShortDescription() );
             const ::std::pair< t_string2string::iterator, bool > insertion(
                 title2filter.insert( t_string2string::value_type( title, filter ) ) );
-            if ( ! insertion.second )
+            if ( ! insertion.second ) 
             { // already existing, append extensions:
                 ::rtl::OUStringBuffer buf;
                 buf.append( insertion.first->second );
@@ -939,7 +929,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
             xFilterManager->appendFilter( iPos->first, iPos->second );
         }
         catch (lang::IllegalArgumentException & exc) {
-            OSL_FAIL( ::rtl::OUStringToOString(
+            OSL_ENSURE( 0, ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             (void) exc;
         }
@@ -958,6 +948,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 //------------------------------------------------------------------------------
 IMPL_LINK( ExtMgrDialog, HandleCancelBtn, void*, EMPTYARG )
 {
+    // m_dialog->m_cmdEnv->m_aborted = true;
     if ( m_xAbortChannel.is() )
     {
         try
@@ -966,7 +957,7 @@ IMPL_LINK( ExtMgrDialog, HandleCancelBtn, void*, EMPTYARG )
         }
         catch ( uno::RuntimeException & )
         {
-            OSL_FAIL( "### unexpected RuntimeException!" );
+            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
         }
     }
     return 1;
@@ -1115,7 +1106,7 @@ IMPL_LINK( ExtMgrDialog, TimeOutHdl, Timer*, EMPTYARG )
         }
 
         if ( m_aProgressBar.IsVisible() )
-            m_aProgressBar.SetValue( (sal_uInt16) m_nProgress );
+            m_aProgressBar.SetValue( (USHORT) m_nProgress );
 
         m_aTimeoutTimer.Start();
     }
@@ -1133,7 +1124,7 @@ void ExtMgrDialog::Resize()
 
     Point aPos( RSC_SP_DLG_INNERBORDER_LEFT,
                 aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_BOTTOM - aBtnSize.Height() );
-
+    
     m_aHelpBtn.SetPosPixel( aPos );
 
     aPos.X() = aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - aBtnSize.Width();
@@ -1151,23 +1142,24 @@ void ExtMgrDialog::Resize()
 
     Size aFTSize( m_aGetExtensions.CalcMinimumSize() );
     aPos = Point( RSC_SP_DLG_INNERBORDER_LEFT, aPos.Y() - RSC_CD_FIXEDTEXT_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM );
-
+    
     m_aGetExtensions.SetPosSizePixel( aPos, aFTSize );
 
     aPos.X() = aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - aBtnSize.Width();
     m_aCancelBtn.SetPosPixel( Point( aPos.X(), aPos.Y() - ((aBtnSize.Height()-aFTSize.Height())/2) ) );
-
+    
     // Calc progress height
     long nProgressHeight = aFTSize.Height();
 
     if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
+        bool bNativeOK;
         Rectangle aControlRegion( Point( 0, 0 ), m_aProgressBar.GetSizePixel() );
         Rectangle aNativeControlRegion, aNativeContentRegion;
-        if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+        if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, rtl::OUString(),
-                                                 aNativeControlRegion, aNativeContentRegion ) != sal_False )
+                                                 aNativeControlRegion, aNativeContentRegion ) ) != FALSE )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
         }
@@ -1204,7 +1196,7 @@ long ExtMgrDialog::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         KeyCode         aKeyCode = pKEvt->GetKeyCode();
-        sal_uInt16          nKeyCode = aKeyCode.GetCode();
+        USHORT          nKeyCode = aKeyCode.GetCode();
 
         if ( nKeyCode == KEY_TAB )
         {
@@ -1231,7 +1223,7 @@ long ExtMgrDialog::Notify( NotifyEvent& rNEvt )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool ExtMgrDialog::Close()
+BOOL ExtMgrDialog::Close()
 {
     bool bRet = m_pManager->queryTermination();
     if ( bRet )
@@ -1372,6 +1364,7 @@ bool UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPac
 //------------------------------------------------------------------------------
 IMPL_LINK( UpdateRequiredDialog, HandleCancelBtn, void*, EMPTYARG )
 {
+    // m_dialog->m_cmdEnv->m_aborted = true;
     if ( m_xAbortChannel.is() )
     {
         try
@@ -1380,7 +1373,7 @@ IMPL_LINK( UpdateRequiredDialog, HandleCancelBtn, void*, EMPTYARG )
         }
         catch ( uno::RuntimeException & )
         {
-            OSL_FAIL( "### unexpected RuntimeException!" );
+            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
         }
     }
     return 1;
@@ -1552,7 +1545,7 @@ IMPL_LINK( UpdateRequiredDialog, TimeOutHdl, Timer*, EMPTYARG )
         }
 
         if ( m_aProgressBar.IsVisible() )
-            m_aProgressBar.SetValue( (sal_uInt16) m_nProgress );
+            m_aProgressBar.SetValue( (USHORT) m_nProgress );
 
         m_aTimeoutTimer.Start();
     }
@@ -1569,7 +1562,7 @@ void UpdateRequiredDialog::Resize()
 
     Point aPos( RSC_SP_DLG_INNERBORDER_LEFT,
                 aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_BOTTOM - aBtnSize.Height() );
-
+    
     m_aHelpBtn.SetPosPixel( aPos );
 
     aPos.X() = aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - m_aCloseBtn.GetSizePixel().Width();
@@ -1606,11 +1599,12 @@ void UpdateRequiredDialog::Resize()
     if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
+        bool bNativeOK;
         Rectangle aControlRegion( Point( 0, 0 ), m_aProgressBar.GetSizePixel() );
         Rectangle aNativeControlRegion, aNativeContentRegion;
-        if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+        if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, rtl::OUString(),
-                                                 aNativeControlRegion, aNativeContentRegion ) != sal_False )
+                                                 aNativeControlRegion, aNativeContentRegion ) ) != FALSE )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
         }
@@ -1648,7 +1642,7 @@ short UpdateRequiredDialog::Execute()
 
 //------------------------------------------------------------------------------
 // VCL::Dialog
-sal_Bool UpdateRequiredDialog::Close()
+BOOL UpdateRequiredDialog::Close()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -1688,7 +1682,7 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
     catch ( uno::RuntimeException & ) { throw; }
     catch ( uno::Exception & exc) {
         (void) exc;
-        OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_ENSURE( 0, ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         bRegistered = false;
     }
 
@@ -1723,7 +1717,7 @@ bool UpdateRequiredDialog::hasActiveEntries()
     for ( long nIndex = 0; nIndex < nCount; nIndex++ )
     {
         TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nIndex );
-
+        
         if ( !checkDependencies( pEntry->m_xPackage ) )
         {
             bRet = true;
@@ -1749,45 +1743,9 @@ void UpdateRequiredDialog::disableAllEntries()
     }
 
     setBusy( false );
-
+    
     if ( ! hasActiveEntries() )
         m_aCloseBtn.SetText( m_sCloseText );
-}
-
-//------------------------------------------------------------------------------
-//                             ShowLicenseDialog
-//------------------------------------------------------------------------------
-ShowLicenseDialog::ShowLicenseDialog( Window * pParent,
-                                      const uno::Reference< deployment::XPackage > &xPackage ) :
-    ModalDialog( pParent, DialogHelper::getResId( RID_DLG_SHOW_LICENSE ) ),
-    m_aLicenseText( this, DialogHelper::getResId( ML_LICENSE ) ),
-    m_aCloseBtn( this,    DialogHelper::getResId( RID_EM_BTN_CLOSE ) )
-{
-    FreeResource();
-
-    OUString aText = xPackage->getLicenseText();
-    m_aLicenseText.SetText( aText );
-}
-
-//------------------------------------------------------------------------------
-ShowLicenseDialog::~ShowLicenseDialog()
-{}
-
-//------------------------------------------------------------------------------
-void ShowLicenseDialog::Resize()
-{
-    Size aTotalSize( GetOutputSizePixel() );
-    Size aTextSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT,
-                    aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_TOP - 2*RSC_SP_DLG_INNERBORDER_BOTTOM
-                                        - m_aCloseBtn.GetSizePixel().Height() );
-
-    m_aLicenseText.SetPosSizePixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ),
-                                    aTextSize );
-
-    Point aBtnPos( (aTotalSize.Width() - m_aCloseBtn.GetSizePixel().Width())/2,
-                    aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_BOTTOM
-                                        - m_aCloseBtn.GetSizePixel().Height() );
-    m_aCloseBtn.SetPosPixel( aBtnPos );
 }
 
 //=================================================================================
@@ -1819,6 +1777,8 @@ sal_Int16 UpdateRequiredDialogService::execute() throw ( uno::RuntimeException )
     return nRet;
 }
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 SelectedPackage::~SelectedPackage() {}
 

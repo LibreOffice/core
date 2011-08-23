@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,23 @@
 #ifndef _COM_SUN_STAR_SCRIPTING_UTIL_UTIL_HXX_
 #define _COM_SUN_STAR_SCRIPTING_UTIL_UTIL_HXX_
 
-#define OUSTR(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x) )
+#include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
+#define OUSTR(x) ::rtl::OUString( ::rtl::OUString::createFromAscii(x) )
+
+namespace scripting_util
+{
+    inline void validateXRef(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xRef, const sal_Char* Msg) throw (::com::sun::star::uno::RuntimeException)
+    {
+        OSL_ENSURE( xRef.is(), Msg );
+    
+        if(!xRef.is())
+        {
+            throw ::com::sun::star::uno::RuntimeException(OUSTR(Msg), ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
+        }
+    }
+}
 #endif //_COM_SUN_STAR_SCRIPTING_UTIL_UTIL_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

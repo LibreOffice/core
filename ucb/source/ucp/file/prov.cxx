@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@
 #include <osl/file.hxx>
 #include <osl/socket.h>
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -51,10 +52,63 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::container;
 
 //=========================================================================
+static sal_Bool writeInfo( void * pRegistryKey,
+                           const rtl::OUString & rImplementationName,
+                              Sequence< rtl::OUString > const & rServiceNames )
+{
+    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
+    aKeyName += rImplementationName;
+    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+
+    Reference< registry::XRegistryKey > xKey;
+    try
+    {
+        xKey = static_cast< registry::XRegistryKey * >(
+            pRegistryKey )->createKey( aKeyName );
+    }
+    catch ( registry::InvalidRegistryException const & )
+    {
+    }
+
+    if ( !xKey.is() )
+        return sal_False;
+
+    sal_Bool bSuccess = sal_True;
+
+    for ( sal_Int32 n = 0; n < rServiceNames.getLength(); ++n )
+    {
+        try
+        {
+            xKey->createKey( rServiceNames[ n ] );
+        }
+        catch ( registry::InvalidRegistryException const & )
+        {
+            bSuccess = sal_False;
+            break;
+        }
+    }
+    return bSuccess;
+}
+
+//=========================================================================
 extern "C" void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+//=========================================================================
+extern "C" sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
+{
+    return pRegistryKey &&
+
+    //////////////////////////////////////////////////////////////////////
+    // File Content Provider.
+    //////////////////////////////////////////////////////////////////////
+
+    writeInfo( pRegistryKey,
+               fileaccess::shell::getImplementationName_static(),
+               fileaccess::shell::getSupportedServiceNames_static() );
 }
 
 //=========================================================================
@@ -139,7 +193,7 @@ FileProvider::queryInterface(
     const Type& rType )
     throw( RuntimeException )
 {
-    Any aRet = cppu::queryInterface(
+    Any aRet = cppu::queryInterface( 
         rType,
         SAL_STATIC_CAST( XContentProvider*, this ),
         SAL_STATIC_CAST( XInitialization*, this ),
@@ -162,13 +216,13 @@ void SAL_CALL FileProvider::init()
 
 
 void SAL_CALL
-FileProvider::initialize(
-    const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException)
+FileProvider::initialize( 
+    const Sequence< Any >& aArguments ) 
+    throw (Exception, RuntimeException) 
 {
     if( ! m_pMyShell ) {
         rtl::OUString config;
-        if( aArguments.getLength() > 0 &&
+        if( aArguments.getLength() > 0 && 
             (aArguments[0] >>= config) &&
             config.compareToAscii("NoConfig") == 0 )
             m_pMyShell = new shell( m_xMultiServiceFactory, this, sal_False );
@@ -209,7 +263,7 @@ FileProvider::supportsService(
                   const rtl::OUString& ServiceName )
   throw( RuntimeException )
 {
-  return ServiceName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"));
+  return ServiceName == rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" );
 }
 
 
@@ -231,12 +285,12 @@ FileProvider::createServiceFactory(
    * Create a single service factory.<BR>
    * Note: The function pointer ComponentInstantiation points to a function throws Exception.
    *
-   * @param rServiceManager     the service manager used by the implementation.
-   * @param rImplementationName the implementation name. An empty string is possible.
+   * @param rServiceManager		the service manager used by the implementation.
+   * @param rImplementationName	the implementation name. An empty string is possible.
    * @param ComponentInstantiation the function pointer to create an object.
-   * @param rServiceNames           the service supported by the implementation.
+   * @param rServiceNames			the service supported by the implementation.
    * @return a factory that support the interfaces XServiceProvider, XServiceInfo
-   *            XSingleServiceFactory and XComponent.
+   *			XSingleServiceFactory and XComponent.
    *
    * @see createOneInstanceFactory
    */
@@ -302,7 +356,7 @@ FileProvider::compareContentIds(
     rtl::OUString aUrl1 = Id1->getContentIdentifier();
     rtl::OUString aUrl2 = Id2->getContentIdentifier();
 
-    sal_Int32   iComp = aUrl1.compareTo( aUrl2 );
+    sal_Int32	iComp = aUrl1.compareTo( aUrl2 );
 
     if ( 0 != iComp )
     {
@@ -311,8 +365,8 @@ FileProvider::compareContentIds(
         m_pMyShell->getUnqFromUrl( aUrl1, aPath1 );
         m_pMyShell->getUnqFromUrl( aUrl2, aPath2 );
 
-        osl::FileBase::RC   error;
-        osl::DirectoryItem  aItem1, aItem2;
+        osl::FileBase::RC	error;
+        osl::DirectoryItem	aItem1, aItem2;
 
         error = osl::DirectoryItem::get( aPath1, aItem1 );
         if ( error == osl::FileBase::E_None )
@@ -321,8 +375,8 @@ FileProvider::compareContentIds(
         if ( error != osl::FileBase::E_None )
             return iComp;
 
-        osl::FileStatus aStatus1( FileStatusMask_FileURL );
-        osl::FileStatus aStatus2( FileStatusMask_FileURL );
+        osl::FileStatus	aStatus1( FileStatusMask_FileURL );
+        osl::FileStatus	aStatus2( FileStatusMask_FileURL );
         error = aItem1.getFileStatus( aStatus1 );
         if ( error == osl::FileBase::E_None )
             error = aItem2.getFileStatus( aStatus2 );
@@ -332,7 +386,7 @@ FileProvider::compareContentIds(
             iComp = aStatus1.getFileURL().compareTo( aStatus2.getFileURL() );
 
 // Quick hack for Windows to threat all file systems as case insensitive
-#ifdef  WNT
+#ifdef	WNT
             if ( 0 != iComp )
             {
                 error = osl::FileBase::getSystemPathFromFileURL( aStatus1.getFileURL(), aPath1 );
@@ -414,17 +468,17 @@ private:
 XPropertySetInfoImpl2::XPropertySetInfoImpl2()
     : m_seq( 3 )
 {
-    m_seq[0] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HostName")),
+    m_seq[0] = Property( rtl::OUString::createFromAscii( "HostName" ),
                          -1,
                          getCppuType( static_cast< rtl::OUString* >( 0 ) ),
                          PropertyAttribute::READONLY );
 
-    m_seq[1] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomeDirectory")),
+    m_seq[1] = Property( rtl::OUString::createFromAscii( "HomeDirectory" ),
                          -1,
                          getCppuType( static_cast< rtl::OUString* >( 0 ) ),
                          PropertyAttribute::READONLY );
 
-    m_seq[2] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileSystemNotation")),
+    m_seq[2] = Property( rtl::OUString::createFromAscii( "FileSystemNotation" ),
                          -1,
                          getCppuType( static_cast< sal_Int32* >( 0 ) ),
                          PropertyAttribute::READONLY );
@@ -667,7 +721,7 @@ rtl::OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const rtl::OUStri
     rtl::OUString aNormalizedPath;
     if ( osl::FileBase::getFileURLFromSystemPath( SystemPath,aNormalizedPath ) != osl::FileBase::E_None )
         return rtl::OUString();
-
+    
     return aNormalizedPath;
 }
 

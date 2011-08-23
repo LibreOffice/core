@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,20 +82,18 @@ public:
     enum eCellType
     {
         NUMBER,
-        TEXT,
-        TEXTORDATE
+        TEXT
     };
 
-    eCellType getCellType( sal_Int32 nAtColumn, sal_Int32 nAtRow ) const;
+    eCellType getCellType( sal_Int32 nAtColumn, sal_Int32 nAtRow );
     /// If getCellType( nAtColumn, nAtRow ) returns TEXT, the result will be Nan
     double getCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow );
     ::rtl::OUString getCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow );
-    ::com::sun::star::uno::Any getCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow );
     sal_uInt32 getNumberFormatKey( sal_Int32 nAtColumn, sal_Int32 nAtRow );
 
-    /// returns </sal_True> if the number could successfully be set at the given position
+    /// returns </TRUE> if the number could successfully be set at the given position
     bool setCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow, double fValue );
-    /// returns </sal_True> if the text could successfully be set at the given position
+    /// returns </TRUE> if the text could successfully be set at the given position
     bool setCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow, const ::rtl::OUString & rText );
     bool setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const ::com::sun::star::uno::Any & aValue );
 

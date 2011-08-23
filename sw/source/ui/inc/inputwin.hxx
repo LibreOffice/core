@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,11 +28,11 @@
 #ifndef SW_INPUTWIN_HXX
 #define SW_INPUTWIN_HXX
 
-#include <vcl/edit.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/toolbox.hxx>
 
+#include <vcl/menu.hxx>
 #include <sfx2/childwin.hxx>
+#include <vcl/toolbox.hxx>
+#include <vcl/edit.hxx>
 
 class SwFldMgr;
 class SwWrtShell;
@@ -46,11 +46,11 @@ public:
                     InputEdit(Window* pParent, WinBits nStyle) :
                         Edit(pParent , nStyle){}
 
-    void            UpdateRange(const String& aSel,
+    void			UpdateRange(const String& aSel,
                                 const String& aTblName );
 
 protected:
-    virtual void    KeyInput( const KeyEvent&  );
+    virtual void 	KeyInput( const KeyEvent&  );
 };
 
 //========================================================================
@@ -59,25 +59,24 @@ class SwInputWindow : public ToolBox
 {
 friend class InputEdit;
 
-    Edit            aPos;
-    InputEdit       aEdit;
-    PopupMenu       aPopMenu;
-    SwFldMgr*       pMgr;
-    SwWrtShell*     pWrtShell;
-    SwView*         pView;
+    Edit			aPos;
+    InputEdit		aEdit;
+    PopupMenu		aPopMenu;
+    SwFldMgr*		pMgr;
+    SwWrtShell*		pWrtShell;
+    SwView*			pView;
     SfxBindings*    pBindings;
-    String          aAktTableName, sOldFml;
-    sal_Int32       m_nActionCount;
+    String 			aAktTableName, sOldFml;
+    USHORT 			nActionCnt;
 
-    sal_Bool        bFirst : 1;  //Initialisierungen beim ersten Aufruf
-    sal_Bool        bActive : 1; //fuer Hide/Show beim Dokumentwechsel
-    sal_Bool        bIsTable : 1;
-    sal_Bool        bDelSel : 1;
-    bool            m_bDoesUndo : 1;
-    bool            m_bResetUndo : 1;
-    bool            m_bCallUndo : 1;
+    BOOL			bFirst : 1;  //Initialisierungen beim ersten Aufruf
+    BOOL 			bActive : 1; //fuer Hide/Show beim Dokumentwechsel
+    BOOL 			bIsTable : 1;
+    BOOL 			bDelSel : 1;
+    BOOL 			bDoesUndo : 1;
+    BOOL 			bResetUndo : 1;
+    BOOL			bCallUndo : 1;
 
-    void CleanupUglyHackWithUndo();
 
     void DelBoxCntnt();
     DECL_LINK( ModifyHdl, InputEdit* );
@@ -85,46 +84,46 @@ friend class InputEdit;
     using Window::IsActive;
 
 protected:
-    virtual void    Resize();
-    virtual void    Click();
+    virtual void 	Resize();
+    virtual void 	Click();
     DECL_LINK( MenuHdl, Menu * );
     DECL_LINK( DropdownClickHdl, ToolBox* );
-    void            ApplyFormula();
-    void            CancelFormula();
+    void 			ApplyFormula();
+    void 			CancelFormula();
 
 public:
                     SwInputWindow( Window* pParent, SfxBindings* pBindings );
-    virtual         ~SwInputWindow();
+    virtual			~SwInputWindow();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    void            SelectHdl( ToolBox*);
-
-    void            ShowWin();
-
-    sal_Bool            IsActive(){ return bActive; };
-
+    void			SelectHdl( ToolBox*);
+    
+    void 			ShowWin();
+    
+    BOOL			IsActive(){ return bActive; };
+    
     DECL_LINK( SelTblCellsNotify, SwWrtShell * );
 
-    void            SetFormula( const String& rFormula, sal_Bool bDelSel = sal_True );
-    const SwView*   GetView() const{return pView;}
+    void 			SetFormula( const String& rFormula, BOOL bDelSel = TRUE );
+    const SwView*	GetView() const{return pView;}
 };
 
 class SwInputChild : public SfxChildWindow
 {
-    sal_Bool            bObjVis;
-    SfxDispatcher*  pDispatch;
+    BOOL 			bObjVis;
+    SfxDispatcher* 	pDispatch;
 public:
     SwInputChild( Window* ,
-                        sal_uInt16 nId,
+                        USHORT nId,
                         SfxBindings*,
                         SfxChildWinInfo*  );
     ~SwInputChild();
     SFX_DECL_CHILDWINDOW( SwInputChild );
-    void            SetFormula( const String& rFormula, sal_Bool bDelSel = sal_True )
+    void 			SetFormula( const String& rFormula, BOOL bDelSel = TRUE )
                         { ((SwInputWindow*)pWindow)->SetFormula(
                                     rFormula, bDelSel ); }
-    const SwView*   GetView() const{return ((SwInputWindow*)pWindow)->GetView();}
+    const SwView*	GetView() const{return ((SwInputWindow*)pWindow)->GetView();}
 
 };
 

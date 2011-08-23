@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,10 @@
 #endif
 #pragma warning (push,1)
 #pragma warning (disable:4668)
-#define WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN    
 #include <windows.h>
 #include <winsock2.h>
+#include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
@@ -65,7 +66,6 @@
 #include "nsp_func.hxx"
 
 #include "sal/main.h"
-#include <sal/macros.h>
 
 #include "rtl/process.h"
 #include "rtl/bootstrap.hxx"
@@ -85,6 +85,7 @@
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+#define ARLEN(x) sizeof (x) / sizeof *(x)
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -97,23 +98,23 @@ using namespace ::com::sun::star::uno;
 
 SoPluginInstance* lpInstance[MAX_NODE_NUM];
 
-static  NSP_PIPE_FD la_read_fd = 0;
+static  NSP_PIPE_FD la_read_fd = 0; 
 static char const * progdir = NULL;
 
 
 long int NSP_ReadFromPipe(NSP_PIPE_FD fp, void* buf, unsigned long int len)
 {
     unsigned long int len_unix = 0, len_wnt = 0;
-
+    
     len_unix = NSP_Read_Pipe(fp, buf, len, &len_wnt);
 #ifdef UNIX
     (void)len_wnt;
     return  len_unix;
-#endif //end of UNIX
+#endif //end of UNIX    
 #ifdef WNT
-    return  len_wnt;
-#endif //end of WNT
-
+    return  len_wnt; 
+#endif //end of WNT          
+ 
 }
 
 int find_free_node()
@@ -130,7 +131,7 @@ int find_cur_node(long cur_id)
 {
     for(int i=0; i<MAX_NODE_NUM; i++)
     {
-        if(lpInstance[i] == NULL)
+        if(lpInstance[i] == NULL) 
             continue;
         if(cur_id == lpInstance[i]->GetParent())
             return i;
@@ -143,9 +144,9 @@ sal_Bool dump_plugin_message(PLUGIN_MSG* pMsg)
     if (!pMsg)
         return sal_False;
     debug_fprintf(NSP_LOG_APPEND, "NSPlugin Message: msg_id:%d; instance_id:%d;wnd_id:%d;wnd_x:%d;wnd_y:%d;wnd_w:%d;wnd_h:%d; url:%s\n",
-        pMsg->msg_id, pMsg->instance_id, pMsg->wnd_id,
+        pMsg->msg_id, pMsg->instance_id, pMsg->wnd_id, 
         pMsg->wnd_x, pMsg->wnd_y, pMsg->wnd_w, pMsg->wnd_h, pMsg->url);
-    return sal_True;
+    return sal_True;    
 }
 
 int Set_Window(PLUGIN_MSG* pMsg)
@@ -158,7 +159,7 @@ int Set_Window(PLUGIN_MSG* pMsg)
         pMsg->wnd_x, pMsg->wnd_y, pMsg->wnd_w, pMsg->wnd_h))
         return 0;
     else
-        return -1;
+        return -1;    
 }
 
 int Set_URL(PLUGIN_MSG* pMsg)
@@ -170,7 +171,7 @@ int Set_URL(PLUGIN_MSG* pMsg)
     if(lpInstance[cur_no]->SetURL(pMsg->url))
         return 0;
     else
-        return -1;
+        return -1;    
 }
 
 int New_Instance(PLUGIN_MSG* pMsg, Reference< lang::XMultiServiceFactory > xMSF)
@@ -293,7 +294,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
 #endif //end of WNT
 
         // create default local component context
-        Reference< XComponentContext > xLocalContext(
+        Reference< XComponentContext > xLocalContext( 
             defaultBootstrap_InitialComponentContext() );
         if ( !xLocalContext.is() )
         {
@@ -340,14 +341,14 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
         OSL_ASSERT( buf.getLength() == 0 );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "uno:pipe,name=" ) );
         buf.append( aPluginPipeName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( 
             ";urp;StarOffice.ComponentContext" ) );
         OUString sConnectString( buf.makeStringAndClear() );
 
         try
         {
             // try to connect to office, no need to start instance again if office already started
-            xRemoteContext.set(
+            xRemoteContext.set( 
                 xUrlResolver->resolve( sConnectString ), UNO_QUERY_THROW );
             debug_fprintf(NSP_LOG_APPEND, "Staroffice already start\n");
             return Reference< lang::XMultiServiceFactory >(xRemoteContext->getServiceManager(), UNO_QUERY);
@@ -374,7 +375,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
                    NULL);
             _exit(255);
         }
-#else
+#else 
         (void) read_fd; /* avoid warning about unused parameter */
         Security sec;
         oslProcess hProcess = 0;
@@ -388,7 +389,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
         oslProcessError rc = osl_executeProcess(
             aOfficePath.pData,
             ar_args,
-            SAL_N_ELEMENTS( ar_args ),
+            ARLEN( ar_args ),
             osl_Process_DETACHED,
             sec.getHandle(),
             0, // => current working dir
@@ -412,7 +413,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
             try
             {
                 // try to connect to office
-                xRemoteContext.set(
+                xRemoteContext.set( 
                     xUrlResolver->resolve( sConnectString ), UNO_QUERY_THROW );
                 return Reference< lang::XMultiServiceFactory >(xRemoteContext->getServiceManager(), UNO_QUERY);
             }
@@ -458,7 +459,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fd_pipe[0] = (NSP_PIPE_FD) iPipe[0] ;
     fd_pipe[1] = (NSP_PIPE_FD) iPipe[1] ;
     NSP_Close_Pipe(fd_pipe[1]);
-
+    
     la_read_fd = fd_pipe[0];
     if(la_read_fd < 0)
     {

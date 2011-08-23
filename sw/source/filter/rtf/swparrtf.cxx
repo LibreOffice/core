@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,6 +106,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/paperinf.hxx>
 
+#include <tools/stream.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -119,9 +120,9 @@ using namespace ::com::sun::star;
 
 // einige Hilfs-Funktionen
 // char
-inline const SvxFontHeightItem& GetSize(const SfxItemSet& rSet,sal_Bool bInP=sal_True)
+inline const SvxFontHeightItem& GetSize(const SfxItemSet& rSet,BOOL bInP=TRUE)
     { return (const SvxFontHeightItem&)rSet.Get( RES_CHRATR_FONTSIZE,bInP); }
-inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,sal_Bool bInP=sal_True)
+inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,BOOL bInP=TRUE)
     { return (const SvxLRSpaceItem&)rSet.Get( RES_LR_SPACE,bInP); }
 
 /*  */
@@ -132,15 +133,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
 }
 
 // Aufruf fuer die allg. Reader-Schnittstelle
-sal_uLong RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String &)
+ULONG RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String &)
 {
     if( !pStrm )
     {
-        OSL_FAIL( "RTF-Read ohne Stream" );
+        OSL_ENSURE( FALSE, "RTF-Read ohne Stream" );
         return ERR_SWG_READ_ERROR;
     }
 
-    // Alle Ueberschriften sind normalerweise ohne
+    //JP 18.01.96: Alle Ueberschriften sind normalerweise ohne
     //              Kapitelnummer. Darum hier explizit abschalten
     //              weil das Default jetzt wieder auf AN ist.
     if( !bInsertMode )
@@ -151,7 +152,7 @@ sal_uLong RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, con
         Reader::ResetFrmFmts( rDoc );
     }
 
-    sal_uLong nRet = 0;
+    ULONG nRet = 0;
     SwDocShell *pDocShell(rDoc.GetDocShell());
     DBG_ASSERT(pDocShell, "no SwDocShell");
     uno::Reference<document::XDocumentProperties> xDocProps;
@@ -178,7 +179,7 @@ sal_uLong RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, con
     return nRet;
 }
 
-sal_uLong RtfReader::Read(SvStream* pStream, SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam)
+ULONG RtfReader::Read(SvStream* pStream, SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam)
 {
     pStrm = pStream;
     return Read(rDoc, rBaseURL, rPam, rBaseURL);
@@ -193,6 +194,7 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     maCharStyleMapper(*pD),
     maSegments(*this),
     maInsertedTables(*pD),
+    aMergeBoxes(0, 5),
     aTblFmts(0, 10),
     mpBookmarkStart(0),
     mpRedlineStack(0),
@@ -203,18 +205,19 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     pSttNdIdx(0),
     pRegionEndIdx(0),
     pDoc(pD),
-    pRelNumRule(new SwRelNumRuleSpaces(*pD, static_cast< sal_Bool >(bReadNewDoc))),
+    pRelNumRule(new SwRelNumRuleSpaces(*pD, static_cast< BOOL >(bReadNewDoc))),
     pRedlineInsert(0),
     pRedlineDelete(0),
     sBaseURL( rBaseURL ),
     nAktPageDesc(0),
     nAktFirstPageDesc(0),
-    m_nCurrentBox(0),
+    nAktBox(0),
     nInsTblRow(USHRT_MAX),
     nNewNumSectDef(USHRT_MAX),
     nRowsToRepeat(0),
-    mbReadCellWhileReadSwFly( false ), // #i83368#
-
+    // --> OD 2008-12-22 #i83368#
+    mbReadCellWhileReadSwFly( false ),
+    // <--
     bTrowdRead(0),
     nReadFlyDepth(0),
     nZOrder(0)
@@ -230,11 +233,11 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     pPam = new SwPaM( *rCrsr.GetPoint() );
     SetInsPos( SwxPosition( pPam ) );
     SetChkStyleAttr( 0 != bReadNewDoc );
-    SetCalcValue( sal_False );
-    SetReadDocInfo( sal_True );
+    SetCalcValue( FALSE );
+    SetReadDocInfo( TRUE );
 
     // diese sollen zusaetzlich ueber \pard zurueck gesetzt werden
-    sal_uInt16 temp;
+    USHORT temp;
     temp = RES_TXTATR_CHARFMT;      AddPlainAttr( temp );
     temp = RES_PAGEDESC;            AddPardAttr( temp );
     temp = RES_BREAK;               AddPardAttr( temp );
@@ -263,8 +266,8 @@ bool lcl_UsedPara(SwPaM &rPam)
     if( rPam.GetPoint()->nContent.GetIndex() ||
         ( 0 != ( pCNd = rPam.GetCntntNode()) &&
           0 != ( pSet = pCNd->GetpSwAttrSet()) &&
-         ( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, sal_False ) ||
-           SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, sal_False ))))
+         ( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, FALSE ) ||
+           SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, FALSE ))))
         return true;
     return false;
 }
@@ -273,7 +276,7 @@ void SwRTFParser::Continue( int nToken )
 {
     if( bFirstContinue )
     {
-        bFirstContinue = sal_False;
+        bFirstContinue = FALSE;
 
         if (IsNewDoc())
         {
@@ -295,8 +298,8 @@ void SwRTFParser::Continue( int nToken )
             pDoc->set(IDocumentSettingAccess::USE_FORMER_OBJECT_POS, false);
             pDoc->set(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING, false);
             pDoc->set(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION, true);
-            pDoc->set(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, false); // #i53199#
-
+            pDoc->set(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, false); // --> FME 2005-08-11 #i53199#
+            // --> FME 2006-02-10 #131283#
             pDoc->set(IDocumentSettingAccess::TABLE_ROW_KEEP, true);
             pDoc->set(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, true);
         pDoc->set(IDocumentSettingAccess::INVERT_BORDER_SPACING, true);
@@ -321,7 +324,7 @@ void SwRTFParser::Continue( int nToken )
 
             pPam->Move( fnMoveBackward );
 
-            // split any redline over the insertion point
+            // #106634# split any redline over the insertion point
             aInsertionRangePam.SetMark();
             *aInsertionRangePam.GetPoint() = *pPam->GetPoint();
             aInsertionRangePam.Move( fnMoveBackward );
@@ -331,14 +334,14 @@ void SwRTFParser::Continue( int nToken )
                                  ( RES_POOLCOLL_STANDARD, false ));
 
             // verhinder das einlesen von Tabellen in Fussnoten / Tabellen
-            sal_uLong nNd = pPos->nNode.GetIndex();
+            ULONG nNd = pPos->nNode.GetIndex();
             mbReadNoTbl = 0 != pSttNd->FindTableNode() ||
                         ( nNd < pDoc->GetNodes().GetEndOfInserts().GetIndex() &&
                         pDoc->GetNodes().GetEndOfInserts().StartOfSectionIndex() < nNd );
         }
 
         // Laufbalken anzeigen, aber nur bei synchronem Call
-        sal_uLong nCurrPos = rInput.Tell();
+        ULONG nCurrPos = rInput.Tell();
         rInput.Seek(STREAM_SEEK_TO_END);
         rInput.ResetError();
         ::StartProgress( STR_STATSTR_W4WREAD, 0, rInput.Tell(), pDoc->GetDocShell());
@@ -379,21 +382,21 @@ void SwRTFParser::Continue( int nToken )
 
 #if OSL_DEBUG_LEVEL > 1
             // !!! sollte nicht moeglich sein, oder ??
-            OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( sal_True ).nNode.GetIndex(),
+            OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( TRUE ).nNode.GetIndex(),
                 "Pam.Bound1 steht noch im Node" );
-            OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( sal_False ).nNode.GetIndex(),
+            OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( FALSE ).nNode.GetIndex(),
                 "Pam.Bound2 steht noch im Node" );
 
-if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_True ).nNode.GetIndex() )
+if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( TRUE ).nNode.GetIndex() )
 {
-    xub_StrLen nCntPos = pPam->GetBound( sal_True ).nContent.GetIndex();
-    pPam->GetBound( sal_True ).nContent.Assign( pTxtNode,
+    xub_StrLen nCntPos = pPam->GetBound( TRUE ).nContent.GetIndex();
+    pPam->GetBound( TRUE ).nContent.Assign( pTxtNode,
                     pTxtNode->GetTxt().Len() + nCntPos );
 }
-if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
+if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
 {
-    xub_StrLen nCntPos = pPam->GetBound( sal_False ).nContent.GetIndex();
-    pPam->GetBound( sal_False ).nContent.Assign( pTxtNode,
+    xub_StrLen nCntPos = pPam->GetBound( FALSE ).nContent.GetIndex();
+    pPam->GetBound( FALSE ).nContent.Assign( pTxtNode,
                     pTxtNode->GetTxt().Len() + nCntPos );
 }
 #endif
@@ -412,14 +415,15 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
         // den letzen Bereich wieder zumachen
         if( pRegionEndIdx )
         {
-            // the last section in WW are not a balanced Section.
+            // JP 06.01.00: Task 71411 - the last section in WW are not a
+            //              balanced Section.
             if( !GetVersionNo() )
             {
                 SwSectionNode* pSectNd = pRegionEndIdx->GetNode().
                                     StartOfSectionNode()->GetSectionNode();
                 if( pSectNd )
                     pSectNd->GetSection().GetFmt()->SetFmtAttr(
-                                    SwFmtNoBalancedColumns( sal_True ) );
+                                    SwFmtNoBalancedColumns( TRUE ) );
             }
 
             DelLastNode();
@@ -431,8 +435,8 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
         sal_uInt16 nPageDescOffset = pDoc->GetPageDescCnt();
         maSegments.InsertSegments(IsNewDoc());
         UpdatePageDescs(*pDoc, nPageDescOffset);
-        // following garbage collecting code has been moved from the previous
-        // procedure UpdatePageDescs to here in order to fix a bug
+        //$flr folloing garbe collecting code has been moved from the previous procedure
+        //     UpdatePageDescs to here in order to fix bug #117882#
         rtfSections::myrDummyIter aDEnd = maSegments.maDummyPageNos.rend();
         for (rtfSections::myrDummyIter aI = maSegments.maDummyPageNos.rbegin(); aI != aDEnd; ++aI)
             pDoc->DelPageDesc(*aI);
@@ -445,18 +449,19 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
         if( !pPos->nContent.GetIndex() )
         {
             SwTxtNode* pAktNd;
-            sal_uLong nNodeIdx = pPos->nNode.GetIndex();
+            ULONG nNodeIdx = pPos->nNode.GetIndex();
             if( IsNewDoc() )
             {
                 SwNode* pTmp = pDoc->GetNodes()[ nNodeIdx -1 ];
                 if( pTmp->IsCntntNode() && !pTmp->FindTableNode() )
                 {
-                    // Do not delete the paragraph if it has anchored objects:
+                    // --> FME 2006-02-15 #131200# Do not delete the paragraph
+                    // if it has anchored objects:
                     bool bAnchoredObjs = false;
                     const SwSpzFrmFmts* pFrmFmts = pDoc->GetSpzFrmFmts();
                     if ( pFrmFmts && pFrmFmts->Count() )
                     {
-                        for ( sal_uInt16 nI = pFrmFmts->Count(); nI; --nI )
+                        for ( USHORT nI = pFrmFmts->Count(); nI; --nI )
                         {
                             const SwFmtAnchor & rAnchor = (*pFrmFmts)[ nI - 1 ]->GetAnchor();
                             if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
@@ -521,10 +526,10 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
                 if( pPrev->HasSwAttrSet() )
                     pTxtNode->SetAttr( *pPrev->GetpSwAttrSet() );
 
-                if( &pPam->GetBound(sal_True).nNode.GetNode() == pPrev )
-                    pPam->GetBound(sal_True).nContent.Assign( pTxtNode, 0 );
-                if( &pPam->GetBound(sal_False).nNode.GetNode() == pPrev )
-                    pPam->GetBound(sal_False).nContent.Assign( pTxtNode, 0 );
+                if( &pPam->GetBound(TRUE).nNode.GetNode() == pPrev )
+                    pPam->GetBound(TRUE).nContent.Assign( pTxtNode, 0 );
+                if( &pPam->GetBound(FALSE).nNode.GetNode() == pPrev )
+                    pPam->GetBound(FALSE).nContent.Assign( pTxtNode, 0 );
 
                 pTxtNode->JoinPrev();
             }
@@ -542,10 +547,10 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
 }
 
 bool rtfSections::SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
-    sal_uInt16 nNettoWidth)
+    USHORT nNettoWidth)
 {
     //sprmSCcolumns - Anzahl der Spalten - 1
-    sal_uInt16 nCols = static_cast< sal_uInt16 >(rSection.NoCols());
+    USHORT nCols = static_cast< USHORT >(rSection.NoCols());
 
     if (nCols < 2)
         return false;                   // keine oder bloedsinnige Spalten
@@ -553,7 +558,7 @@ bool rtfSections::SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
     SwFmtCol aCol;                      // Erzeuge SwFmtCol
 
     //sprmSDxaColumns   - Default-Abstand 1.25 cm
-    sal_uInt16 nColSpace = static_cast< sal_uInt16 >(rSection.StandardColSeperation());
+    USHORT nColSpace = static_cast< USHORT >(rSection.StandardColSeperation());
 
     aCol.Init( nCols, nColSpace, nNettoWidth );
 
@@ -561,15 +566,15 @@ bool rtfSections::SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
     if (rSection.maPageInfo.maColumns.size())
     {
         aCol._SetOrtho(false);
-        sal_uInt16 nWishWidth = 0, nHalfPrev = 0;
-        for(sal_uInt16 n=0, i=0; n < rSection.maPageInfo.maColumns.size() && i < nCols; n += 2, ++i )
+        USHORT nWishWidth = 0, nHalfPrev = 0;
+        for(USHORT n=0, i=0; n < rSection.maPageInfo.maColumns.size() && i < nCols; n += 2, ++i )
         {
             SwColumn* pCol = aCol.GetColumns()[ i ];
             pCol->SetLeft( nHalfPrev );
-            sal_uInt16 nSp = static_cast< sal_uInt16 >(rSection.maPageInfo.maColumns[ n+1 ]);
+            USHORT nSp = static_cast< USHORT >(rSection.maPageInfo.maColumns[ n+1 ]);
             nHalfPrev = nSp / 2;
             pCol->SetRight( nSp - nHalfPrev );
-            pCol->SetWishWidth( static_cast< sal_uInt16 >(rSection.maPageInfo.maColumns[ n ]) +
+            pCol->SetWishWidth( static_cast< USHORT >(rSection.maPageInfo.maColumns[ n ]) +
                 pCol->GetLeft() + pCol->GetRight());
             nWishWidth = nWishWidth + pCol->GetWishWidth();
         }
@@ -597,7 +602,7 @@ void rtfSections::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
 
     if (!bIgnoreCols)
     {
-        SetCols(rFmt, rSection, static_cast< sal_uInt16 >(rSection.GetPageWidth() -
+        SetCols(rFmt, rSection, static_cast< USHORT >(rSection.GetPageWidth() -
             rSection.GetPageLeft() - rSection.GetPageRight()));
     }
 
@@ -742,7 +747,10 @@ void rtfSections::SetSegmentToPageDesc(const rtfSection &rSection,
 {
     SwPageDesc &rPage = bTitlePage ? *rSection.mpTitlePage : *rSection.mpPage;
 
+//    SetNumberingType(rSection, rPage);
+
     SwFrmFmt &rFmt = rPage.GetMaster();
+//    mrReader.SetDocumentGrid(rFmt, rSection);
 
     wwULSpaceData aULData;
     GetPageULData(rSection, bTitlePage, aULData);
@@ -782,11 +790,15 @@ void rtfSections::MoveFrom(SwPageDesc &rFrom, SwPageDesc &rDest)
     SwFrmFmt &rFromMaster = rFrom.GetMaster();
     rDestMaster.SetFmtAttr(rFromMaster.GetHeader());
     rDestMaster.SetFmtAttr(rFromMaster.GetFooter());
+    //rFromMaster.SetAttr(SwFmtHeader()); //$flr uncommented due to bug fix #117882#
+    //rFromMaster.SetAttr(SwFmtFooter()); //$flr uncommented due to bug fix #117882#
 
     SwFrmFmt &rDestLeft = rDest.GetLeft();
     SwFrmFmt &rFromLeft = rFrom.GetLeft();
     rDestLeft.SetFmtAttr(rFromLeft.GetHeader());
     rDestLeft.SetFmtAttr(rFromLeft.GetFooter());
+    //rFromLeft.SetAttr(SwFmtHeader()); //$flr uncommented due to bug fix #117882#
+    //rFromLeft.SetAttr(SwFmtFooter()); //$flr uncommented due to bug fix #117882#
 }
 
 void rtfSections::SetHdFt(rtfSection &rSection)
@@ -866,7 +878,7 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
     OSL_ENSURE(pFmt, "impossible");
     if (!pFmt)
         return 0;
-    SetCols(*pFmt, rSection, (sal_uInt16)(nWidth - nLeft - nRight) );
+    SetCols(*pFmt, rSection, (USHORT)(nWidth - nLeft - nRight) );
 
     return pFmt;
 }
@@ -916,8 +928,8 @@ void rtfSections::InsertSegments(bool bNewDoc)
                 }
                 else
                 {
-                    sal_uInt16 nPos = mrReader.pDoc->MakePageDesc(
-                        ViewShell::GetShellRes()->GetPageDescName(nDesc, ShellResource::NORMAL_PAGE)
+                    USHORT nPos = mrReader.pDoc->MakePageDesc(
+                        ViewShell::GetShellRes()->GetPageDescName(nDesc)
                         , 0, false);
                     aIter->mpTitlePage = &mrReader.pDoc->_GetPageDesc(nPos);
                 }
@@ -937,9 +949,9 @@ void rtfSections::InsertSegments(bool bNewDoc)
             }
             else
             {
-                sal_uInt16 nPos = mrReader.pDoc->MakePageDesc(
+                USHORT nPos = mrReader.pDoc->MakePageDesc(
                     ViewShell::GetShellRes()->GetPageDescName(nDesc,
-                        aIter->HasTitlePage() ? ShellResource::FIRST_PAGE : ShellResource::NORMAL_PAGE),
+                        false, aIter->HasTitlePage()),
                         aIter->mpTitlePage, false);
                 aIter->mpPage = &mrReader.pDoc->_GetPageDesc(nPos);
             }
@@ -961,7 +973,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
 
             if (aIter->PageRestartNo() ||
                 ((aIter == aStart) && aIter->PageStartAt() != 1))
-                aPgDesc.SetNumOffset( static_cast< sal_uInt16 >(aIter->PageStartAt()) );
+                aPgDesc.SetNumOffset( static_cast< USHORT >(aIter->PageStartAt()) );
 
             /*
             If its a table here, apply the pagebreak to the table
@@ -1004,7 +1016,8 @@ void rtfSections::InsertSegments(bool bNewDoc)
             }
 
             const SwPosition* pPos  = aSectPaM.GetPoint();
-            SwTxtNode const*const pSttNd = pPos->nNode.GetNode().GetTxtNode();
+            const SwTxtNode* pSttNd =
+                mrReader.pDoc->GetNodes()[ pPos->nNode ]->GetTxtNode();
             const SwTableNode* pTableNd = pSttNd ? pSttNd->FindTableNode() : 0;
             if (pTableNd)
             {
@@ -1050,11 +1063,11 @@ InsertedTableClient::InsertedTableClient(SwTableNode & rNode)
 
 SwTableNode * InsertedTableClient::GetTableNode()
 {
-    return dynamic_cast<SwTableNode *> (GetRegisteredInNonConst());
+    return dynamic_cast<SwTableNode *> (pRegisteredIn);
 }
 
 InsertedTablesManager::InsertedTablesManager(const SwDoc &rDoc)
-    : mbHasRoot(rDoc.GetCurrentLayout())    //swmod 080218
+    : mbHasRoot(rDoc.GetRootFrm())
 {
 }
 
@@ -1173,7 +1186,7 @@ void SwRTFParser::ReadShpTxt(String& s)
 }
 
 /*
- * Very basic support for the "Buchhalternase".
+ * #127429#. Very basic support for the "Buchhalternase".
  */
 void SwRTFParser::ReadDrawingObject()
 {
@@ -1228,7 +1241,15 @@ void SwRTFParser::ReadDrawingObject()
         }
     }
     SkipToken(-1);
-
+    /*
+    const Point aPointC1( 0, 0 );
+    const Point aPointC2( 100, 200 );
+    const Point aPointC3( 300, 400 );
+    XPolygon aPolygonC(3);
+    aPolygonC[0] = aPointC1;
+    aPolygonC[1] = aPointC2;
+    aPolygonC[2] = aPointC3;
+    */
     if(bPolygonActive && aPolygon.count())
     {
         SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, ::basegfx::B2DPolyPolygon(aPolygon));
@@ -1237,15 +1258,54 @@ void SwRTFParser::ReadDrawingObject()
         aSur.SetContour( false );
         aSur.SetOutside(true);
         aFlySet.Put( aSur );
-        SwFmtFollowTextFlow aFollowTextFlow( sal_False );
+        SwFmtFollowTextFlow aFollowTextFlow( FALSE );
         aFlySet.Put( aFollowTextFlow );
-
+        /*
+        sw::util::SetLayer aSetLayer(*pDoc);
+        aSetLayer.SendObjectToHeaven(*pStroke);
+        */
         SwFmtAnchor aAnchor( FLY_AT_PARA );
         aAnchor.SetAnchor( pPam->GetPoint() );
         aFlySet.Put( aAnchor );
 
+        /*
+        text::RelOrientation::FRAME,          // Absatz inkl. Raender
+        text::RelOrientation::PRINT_AREA,     // Absatz ohne Raender
+        text::RelOrientation::CHAR,       // an einem Zeichen
+        text::RelOrientation::PAGE_LEFT,  // im linken Seitenrand
+        text::RelOrientation::PAGE_RIGHT,   // im rechten Seitenrand
+        text::RelOrientation::FRAME_LEFT,   // im linken Absatzrand
+        text::RelOrientation::FRAME_RIGHT,  // im rechten Absatzrand
+        text::RelOrientation::PAGE_FRAME, // Seite inkl. Raender, bei seitengeb. identisch mit text::RelOrientation::FRAME
+        text::RelOrientation::PAGE_PRINT_AREA,    // Seite ohne Raender, bei seitengeb. identisch mit text::RelOrientation::PRTAREA
+        // OD 11.11.2003 #i22341#
+        text::RelOrientation::TEXT_LINE,  // vertical relative to top of text line, only for to-character
+                        // anchored objects.
+
+
+            text::HoriOrientation::NONE,      //Der Wert in nYPos gibt die RelPos direkt an.
+        text::HoriOrientation::RIGHT,     //Der Rest ist fuer automatische Ausrichtung.
+        text::HoriOrientation::CENTER,
+        text::HoriOrientation::LEFT,
+        text::HoriOrientation::INSIDE,
+        text::HoriOrientation::OUTSIDE,
+        text::HoriOrientation::FULL,          //Spezialwert fuer Tabellen
+        text::HoriOrientation::LEFT_AND_WIDTH  //Auch fuer Tabellen
+        */
         SwFmtHoriOrient aHori( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aHori );
+        /*
+        text::VertOrientation::NONE,  //Der Wert in nYPos gibt die RelPos direkt an.
+        text::VertOrientation::TOP,   //Der Rest ist fuer automatische Ausrichtung.
+        text::VertOrientation::CENTER,
+        text::VertOrientation::BOTTOM,
+        text::VertOrientation::CHAR_TOP,      //Ausrichtung _nur_ fuer Zeichengebundene Rahmen
+        text::VertOrientation::CHAR_CENTER,   //wie der Name jew. sagt wird der RefPoint des Rahmens
+        text::VertOrientation::CHAR_BOTTOM,   //entsprechend auf die Oberkante, Mitte oder Unterkante
+        text::VertOrientation::LINE_TOP,      //der Zeile gesetzt. Der Rahmen richtet sich  dann
+        text::VertOrientation::LINE_CENTER,   //entsprechend aus.
+        text::VertOrientation::LINE_BOTTOM
+        */
         SwFmtVertOrient aVert( 0, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aVert );
 
@@ -1256,7 +1316,7 @@ void SwRTFParser::ReadDrawingObject()
 
         pStroke->SetSnapRect(aRect);
 
-        pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
+        /* SwFrmFmt* pRetFrmFmt = */pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
     }
 }
 
@@ -1267,7 +1327,7 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int _nZOrder)
         aSur.SetContour( false );
         aSur.SetOutside(true);
         aFlySet.Put( aSur );
-        SwFmtFollowTextFlow aFollowTextFlow( sal_False );
+        SwFmtFollowTextFlow aFollowTextFlow( FALSE );
         aFlySet.Put( aFollowTextFlow );
 
         SwFmtAnchor aAnchor( FLY_AT_PARA );
@@ -1288,7 +1348,7 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int _nZOrder)
         SdrPage* pDrawPg = pDrawModel->GetPage(0);
         pDrawPg->InsertObject(pStroke);
         pDrawPg->SetObjectOrdNum(pStroke->GetOrdNum(), _nZOrder);
-        pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
+        /* SwFrmFmt* pRetFrmFmt = */pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
 }
 
 ::basegfx::B2DPoint rotate(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd)
@@ -1456,6 +1516,7 @@ void SwRTFParser::ReadShapeObject()
               rOutliner.Read(aStream, String::CreateFromAscii(""), EE_FORMAT_RTF);
               OutlinerParaObject* pParaObject=rOutliner.CreateParaObject();
               pStroke->NbcSetOutlinerParaObject(pParaObject);
+              //delete pParaObject;
               rOutliner.Clear();
             }
             if (txflTextFlow==2) {
@@ -1475,6 +1536,7 @@ void SwRTFParser::ReadShapeObject()
 
             SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, ::basegfx::B2DPolyPolygon(aLine));
             pSdrObject = pStroke;
+            //pStroke->SetSnapRect(aRect);
 
             InsertShpObject(pStroke, this->nZOrder++);
             SfxItemSet aSet(pStroke->GetMergedItemSet());
@@ -1507,14 +1569,15 @@ void SwRTFParser::ReadShapeObject()
     }
 }
 
-extern void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
-                                sal_uInt16& rSubType, sal_uLong &rFmt,
-                                sal_uInt16 nVersion );
+extern void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
+                                USHORT& rSubType, ULONG &rFmt,
+                                USHORT nVersion );
 
-sal_uInt16 SwRTFParser::ReadRevTbl()
+USHORT SwRTFParser::ReadRevTbl()
 {
+    // rStr.Erase( 0 );
     int nNumOpenBrakets = 1, nToken;        // die erste wurde schon vorher erkannt !!
-    sal_uInt16 nAuthorTableIndex = 0;
+    USHORT nAuthorTableIndex = 0;
 
     while( nNumOpenBrakets && IsParserWorking() )
     {
@@ -1542,7 +1605,7 @@ sal_uInt16 SwRTFParser::ReadRevTbl()
         case RTF_TEXTTOKEN:
             aToken.EraseTrailingChars(';');
 
-            sal_uInt16 nSWId = pDoc->InsertRedlineAuthor(aToken);
+            USHORT nSWId = pDoc->InsertRedlineAuthor(aToken);
             // Store matchpair
             if( !pAuthorInfos )
                 pAuthorInfos = new sw::util::AuthorInfos;
@@ -1561,34 +1624,19 @@ sal_uInt16 SwRTFParser::ReadRevTbl()
 
 void SwRTFParser::NextToken( int nToken )
 {
-    sal_uInt16 eDateFmt;
+    USHORT eDateFmt;
 
     switch( nToken )
     {
     case RTF_FOOTNOTE:
-    {
         //We can only insert a footnote if we're not inside a footnote. e.g.
         //#i7713#
-
-        // in insert mode it's also possible to be inside of a footnote!
-        bool bInsertIntoFootnote = false;
-        if( !IsNewDoc() )
-        {
-            SwStartNode* pSttNode = pPam->GetNode()->StartOfSectionNode();
-            while(pSttNode && pSttNode->IsSectionNode())
-            {
-                pSttNode = pSttNode->StartOfSectionNode();
-            }
-            if( SwFootnoteStartNode == pSttNode->GetStartNodeType() )
-                bInsertIntoFootnote = true;
-        }
-        if (!mbIsFootnote && !bInsertIntoFootnote)
+        if (!mbIsFootnote)
         {
             ReadHeaderFooter( nToken );
             SkipToken( -1 );        // Klammer wieder zurueck
         }
-    }
-    break;
+        break;
     case RTF_SWG_PRTDATA:
         ReadPrtData();
         break;
@@ -1636,12 +1684,12 @@ void SwRTFParser::NextToken( int nToken )
             SkipGroup();
         else
         {
-            bStyleTabValid = sal_True;
+            bStyleTabValid = TRUE;
             if (SwNumRule* pRule = ReadNumSecLevel( nToken ))
             {
                 GetAttrSet().Put( SwNumRuleItem( pRule->GetName() ));
 
-                if( SFX_ITEM_SET != GetAttrSet().GetItemState( FN_PARAM_NUM_LEVEL, sal_False ))
+                if( SFX_ITEM_SET != GetAttrSet().GetItemState( FN_PARAM_NUM_LEVEL, FALSE ))
                     GetAttrSet().Put( SfxUInt16Item( FN_PARAM_NUM_LEVEL, 0 ));
             }
         }
@@ -1702,7 +1750,7 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_PAGE:
-        if (pTableNode==NULL) { //A \page command within a table is ignored by Word.
+        if (pTableNode==NULL) { //#117410#: A \page command within a table is ignored by Word.
             if (lcl_UsedPara(*pPam))
                 InsertPara();
             CheckInsNewTblLine();
@@ -1715,7 +1763,9 @@ void SwRTFParser::NextToken( int nToken )
         ReadSectControls( nToken );
         break;
     case RTF_CELL:
-        mbReadCellWhileReadSwFly = bReadSwFly; // #i83368#
+        // --> OD 2008-12-22 #i83368#
+        mbReadCellWhileReadSwFly = bReadSwFly;
+        // <--
         if (CantUseTables())
             InsertPara();
         else
@@ -1732,7 +1782,7 @@ void SwRTFParser::NextToken( int nToken )
         if (!CantUseTables())
         {
             // aus der Line raus
-            m_nCurrentBox = 0;
+            nAktBox = 0;
             pTableNode = 0;
             // noch in der Tabelle drin?
             SwNodeIndex& rIdx = pPam->GetPoint()->nNode;
@@ -1749,8 +1799,8 @@ void SwRTFParser::NextToken( int nToken )
                 rIdx = *pBox->GetSttNd()->EndOfSectionNode();
                 pPam->Move( fnMoveForward, fnGoNode );
             }
-            nInsTblRow = static_cast< sal_uInt16 >(GetOpenBrakets());
-            SetPardTokenRead( sal_False );
+            nInsTblRow = static_cast< USHORT >(GetOpenBrakets());
+            SetPardTokenRead( FALSE );
             SwPaM aTmp(*pPam);
             aTmp.Move( fnMoveBackward, fnGoNode );
         }
@@ -1794,8 +1844,8 @@ void SwRTFParser::NextToken( int nToken )
 
     case RTF_REVAUTH:
         {
-            sw::util::AuthorInfo aEntry( static_cast< sal_uInt16 >(nTokenValue) );
-            sal_uInt16 nPos;
+            sw::util::AuthorInfo aEntry( static_cast< USHORT >(nTokenValue) );
+            USHORT nPos;
 
             if(pRedlineInsert)
             {
@@ -1813,7 +1863,7 @@ void SwRTFParser::NextToken( int nToken )
     case RTF_REVAUTHDEL:
         {
             sw::util::AuthorInfo aEntry( static_cast< short >(nTokenValue) );
-            sal_uInt16 nPos;
+            USHORT nPos;
 
             if(pRedlineDelete)
             {
@@ -1831,7 +1881,7 @@ void SwRTFParser::NextToken( int nToken )
     case RTF_REVDTTM:
         if (pRedlineInsert != NULL)
             pRedlineInsert->aStamp = sw::ms::DTTM2DateTime(nTokenValue);
-
+            
         break;
 
     case RTF_REVDTTMDEL:
@@ -1845,17 +1895,17 @@ void SwRTFParser::NextToken( int nToken )
         {
             // Zeichengebundener Fly in Fly
             ReadHeaderFooter( nToken );
-            SetPardTokenRead( sal_False );
+            SetPardTokenRead( FALSE );
         }
         break;
 
     case RTF_PGDSCNO:
         if( IsNewDoc() && bSwPageDesc &&
-            sal_uInt16(nTokenValue) < pDoc->GetPageDescCnt() )
+            USHORT(nTokenValue) < pDoc->GetPageDescCnt() )
         {
             const SwPageDesc* pPgDsc =
                 &const_cast<const SwDoc *>(pDoc)
-                ->GetPageDesc( sal_uInt16(nTokenValue) );
+                ->GetPageDesc( USHORT(nTokenValue) );
             CheckInsNewTblLine();
             pDoc->InsertPoolItem(*pPam, SwFmtPageDesc( pPgDsc ), 0);
         }
@@ -1876,8 +1926,8 @@ void SwRTFParser::NextToken( int nToken )
     case RTF_CHDATEL:   eDateFmt = DF_LSYS;     goto SETCHDATEFIELD;
 SETCHDATEFIELD:
         {
-            sal_uInt16 nSubType = DATEFLD, nWhich = RES_DATEFLD;
-            sal_uLong nFormat = eDateFmt;
+            USHORT nSubType = DATEFLD, nWhich = RES_DATEFLD;
+            ULONG nFormat = eDateFmt;
             sw3io_ConvertFromOldField( *pDoc, nWhich, nSubType, nFormat, 0x0110 );
 
             SwDateTimeField aDateFld( (SwDateTimeFieldType*)
@@ -1889,8 +1939,8 @@ SETCHDATEFIELD:
 
     case RTF_CHTIME:
         {
-            sal_uInt16 nSubType = TIMEFLD, nWhich = RES_TIMEFLD;
-            sal_uLong nFormat = TF_SSMM_24;
+            USHORT nSubType = TIMEFLD, nWhich = RES_TIMEFLD;
+            ULONG nFormat = TF_SSMM_24;
             sw3io_ConvertFromOldField( *pDoc, nWhich, nSubType, nFormat, 0x0110 );
             SwDateTimeField aTimeFld( (SwDateTimeFieldType*)
                     pDoc->GetSysFldType( RES_DATETIMEFLD ), TIMEFLD, nFormat);
@@ -1910,21 +1960,21 @@ SETCHDATEFIELD:
         break;
 
     case RTF_CHFTN:
-        bFootnoteAutoNum = sal_True;
+        bFootnoteAutoNum = TRUE;
         break;
 
     case RTF_NOFPAGES:
         if( IsNewDoc() && nTokenValue && -1 != nTokenValue )
-            ((SwDocStat&)pDoc->GetDocStat()).nPage = (sal_uInt16)nTokenValue;
+            ((SwDocStat&)pDoc->GetDocStat()).nPage = (USHORT)nTokenValue;
         break;
 
     case RTF_NOFWORDS:
         if( IsNewDoc() && nTokenValue && -1 != nTokenValue )
-            ((SwDocStat&)pDoc->GetDocStat()).nWord = (sal_uInt16)nTokenValue;
+            ((SwDocStat&)pDoc->GetDocStat()).nWord = (USHORT)nTokenValue;
         break;
     case RTF_NOFCHARS:
         if( IsNewDoc() && nTokenValue && -1 != nTokenValue )
-            ((SwDocStat&)pDoc->GetDocStat()).nChar = (sal_uInt16)nTokenValue;
+            ((SwDocStat&)pDoc->GetDocStat()).nChar = (USHORT)nTokenValue;
         break;
     case RTF_LYTPRTMET:
         if (IsNewDoc())
@@ -2067,7 +2117,7 @@ bool SwRTFParser::UncompressableStackEntry(const SvxRTFItemStackType &rSet)
     {
 
         if (SFX_ITEM_SET ==
-                rSet.GetAttrSet().GetItemState(RES_TXTATR_CHARFMT, sal_False))
+                rSet.GetAttrSet().GetItemState(RES_TXTATR_CHARFMT, FALSE))
         {
             bRet = true;
         }
@@ -2081,7 +2131,7 @@ void SwRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos, xub_StrLen& rCntPos )
     SwCntntNode* pNode = pDoc->GetNodes().GoPrevious( &aIdx );
     if( !pNode )
     {
-        OSL_FAIL( "keinen vorherigen ContentNode gefunden" );
+        OSL_ENSURE( FALSE, "keinen vorherigen ContentNode gefunden" );
     }
 
     rpNodePos = new SwNodeIdx( aIdx );
@@ -2090,7 +2140,7 @@ void SwRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos, xub_StrLen& rCntPos )
 
 void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 {
-    sal_uLong nSNd = rSet.GetSttNodeIdx(), nENd = rSet.GetEndNodeIdx();
+    ULONG nSNd = rSet.GetSttNodeIdx(), nENd = rSet.GetEndNodeIdx();
     xub_StrLen nSCnt = rSet.GetSttCnt(), nECnt = rSet.GetEndCnt();
 
     SwPaM aPam( *pPam->GetPoint() );
@@ -2136,7 +2186,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         // aus dem Set loeschen. Sonst sind diese doppelt, was man ja
         // nicht will.
         if( SFX_ITEM_SET == rSet.GetAttrSet().GetItemState(
-            RES_TXTATR_CHARFMT, sal_False, &pCharFmt ) &&
+            RES_TXTATR_CHARFMT, FALSE, &pCharFmt ) &&
             ((SwFmtCharFmt*)pCharFmt)->GetCharFmt() )
         {
             const String& rName = ((SwFmtCharFmt*)pCharFmt)->GetCharFmt()->GetName();
@@ -2149,12 +2199,12 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
                     SfxItemSet &rAttrSet = rSet.GetAttrSet(),
                                &rStyleSet = pStyle->aAttrSet;
                     SfxItemIter aIter( rAttrSet );
-                    sal_uInt16 nWhich = aIter.GetCurItem()->Which();
-                    while( sal_True )
+                    USHORT nWhich = aIter.GetCurItem()->Which();
+                    while( TRUE )
                     {
                         const SfxPoolItem* pI;
                         if( SFX_ITEM_SET == rStyleSet.GetItemState(
-                            nWhich, sal_False, &pI ) && *pI == *aIter.GetCurItem())
+                            nWhich, FALSE, &pI ) && *pI == *aIter.GetCurItem())
                             rAttrSet.ClearItem( nWhich );       // loeschen
 
                         if( aIter.IsAtEnd() )
@@ -2178,22 +2228,22 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     }
 
     if( SFX_ITEM_SET == rSet.GetAttrSet().GetItemState(
-        FN_PARAM_NUM_LEVEL, sal_False, &pItem ))
+        FN_PARAM_NUM_LEVEL, FALSE, &pItem ))
     {
         // dann ueber den Bereich an den Nodes das NodeNum setzen
-        for( sal_uLong n = nSNd; n <= nENd; ++n )
+        for( ULONG n = nSNd; n <= nENd; ++n )
         {
             SwTxtNode* pTxtNd = pDoc->GetNodes()[ n ]->GetTxtNode();
             if( pTxtNd )
             {
-                pTxtNd->SetAttrListLevel((sal_uInt8) ((SfxUInt16Item*)pItem)->GetValue());
+                pTxtNd->SetAttrListLevel((BYTE) ((SfxUInt16Item*)pItem)->GetValue());
                 // Update vom LR-Space abschalten?
             }
         }
     }
 
     if( SFX_ITEM_SET == rSet.GetAttrSet().GetItemState(
-        RES_PARATR_NUMRULE, sal_False, &pItem ))
+        RES_PARATR_NUMRULE, FALSE, &pItem ))
     {
         const SwNumRule* pRule = pDoc->FindNumRulePtr(
                                     ((SwNumRuleItem*)pItem)->GetValue() );
@@ -2202,13 +2252,13 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             // diese Rule hat keinen Level, also muss die Einrueckung
             // erhalten bleiben!
             // dann ueber den Bereich an den Nodes das Flag zuruecksetzen
-            for( sal_uLong n = nSNd; n <= nENd; ++n )
+            for( ULONG n = nSNd; n <= nENd; ++n )
             {
                 SwTxtNode* pTxtNd = pDoc->GetNodes()[ n ]->GetTxtNode();
                 if( pTxtNd )
                 {
                     // Update vom LR-Space abschalten
-                    pTxtNd->SetNumLSpace( sal_False );
+                    pTxtNd->SetNumLSpace( FALSE );
                 }
             }
         }
@@ -2225,7 +2275,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     if (bNoNum)
     {
-        for( sal_uLong n = nSNd; n <= nENd; ++n )
+        for( ULONG n = nSNd; n <= nENd; ++n )
         {
             SwTxtNode* pTxtNd = pDoc->GetNodes()[ n ]->GetTxtNode();
             if( pTxtNd )
@@ -2302,8 +2352,8 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
     {
         SwFmtFrmSize aFrmSize(ATT_FIX_SIZE, rInfo.mnPaperw, rInfo.mnPaperh);
 
-        SvxLRSpaceItem aLR( static_cast< sal_uInt16 >(rInfo.mnMargl), static_cast< sal_uInt16 >(rInfo.mnMargr), 0, 0, RES_LR_SPACE );
-        SvxULSpaceItem aUL( static_cast< sal_uInt16 >(rInfo.mnMargt), static_cast< sal_uInt16 >(rInfo.mnMargb), RES_UL_SPACE );
+        SvxLRSpaceItem aLR( static_cast< USHORT >(rInfo.mnMargl), static_cast< USHORT >(rInfo.mnMargr), 0, 0, RES_LR_SPACE );
+        SvxULSpaceItem aUL( static_cast< USHORT >(rInfo.mnMargt), static_cast< USHORT >(rInfo.mnMargb), RES_UL_SPACE );
 
         UseOnPage eUseOn;
         if (rInfo.mbFacingp)
@@ -2311,7 +2361,7 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
         else
             eUseOn = UseOnPage(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE);
 
-        sal_uInt16 nPgStart = static_cast< sal_uInt16 >(rInfo.mnPgnStart);
+        USHORT nPgStart = static_cast< USHORT >(rInfo.mnPgnStart);
 
         SvxFrameDirectionItem aFrmDir(rInfo.mbRTLdoc ?
             FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR);
@@ -2345,7 +2395,7 @@ void SwRTFParser::SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine)
     int bWeiter = true;
     short nLineThickness = 1;
     short nPageDistance = 0;
-    sal_uInt8 nCol = 0;
+    BYTE nCol = 0;
     short nIdx = 0;
 
     int nToken = GetNextToken();
@@ -2458,10 +2508,10 @@ void SwRTFParser::ReadDocControls( int nToken )
     SwEndNoteInfo aEndInfo;
     bool bSetHyph = false;
 
-    sal_Bool bEndInfoChgd = sal_False, bFtnInfoChgd = sal_False;
+    BOOL bEndInfoChgd = FALSE, bFtnInfoChgd = FALSE;
 
     do {
-        sal_uInt16 nValue = sal_uInt16( nTokenValue );
+        USHORT nValue = USHORT( nTokenValue );
         switch( nToken )
         {
         case RTF_RTLDOC:
@@ -2505,11 +2555,11 @@ void SwRTFParser::ReadDocControls( int nToken )
             break;
         case RTF_ENDDOC:
         case RTF_ENDNOTES:
-            aFtnInfo.ePos = FTNPOS_CHAPTER; bFtnInfoChgd = sal_True;
+            aFtnInfo.ePos = FTNPOS_CHAPTER; bFtnInfoChgd = TRUE;
             break;
         case RTF_FTNTJ:
         case RTF_FTNBJ:
-            aFtnInfo.ePos = FTNPOS_PAGE; bFtnInfoChgd = sal_True;
+            aFtnInfo.ePos = FTNPOS_PAGE; bFtnInfoChgd = TRUE;
             break;
 
         case RTF_AENDDOC:
@@ -2524,60 +2574,60 @@ void SwRTFParser::ReadDocControls( int nToken )
             if( nValue )
             {
                 aFtnInfo.nFtnOffset = nValue-1;
-                bFtnInfoChgd = sal_True;
+                bFtnInfoChgd = TRUE;
             }
             break;
         case RTF_AFTNSTART:
             if( nValue )
             {
                 aEndInfo.nFtnOffset = nValue-1;
-                bEndInfoChgd = sal_True;
+                bEndInfoChgd = TRUE;
             }
             break;
         case RTF_FTNRSTPG:
-            aFtnInfo.eNum = FTNNUM_PAGE; bFtnInfoChgd = sal_True;
+            aFtnInfo.eNum = FTNNUM_PAGE; bFtnInfoChgd = TRUE;
             break;
         case RTF_FTNRESTART:
-            aFtnInfo.eNum = FTNNUM_CHAPTER; bFtnInfoChgd = sal_True;
+            aFtnInfo.eNum = FTNNUM_CHAPTER; bFtnInfoChgd = TRUE;
             break;
         case RTF_FTNRSTCONT:
-            aFtnInfo.eNum = FTNNUM_DOC; bFtnInfoChgd = sal_True;
+            aFtnInfo.eNum = FTNNUM_DOC; bFtnInfoChgd = TRUE;
             break;
 
         case RTF_FTNNAR:
-            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_ARABIC); bFtnInfoChgd = sal_True; break;
+            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_ARABIC); bFtnInfoChgd = TRUE; break;
         case RTF_FTNNALC:
-            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N); bFtnInfoChgd = sal_True; break;
+            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N); bFtnInfoChgd = TRUE; break;
         case RTF_FTNNAUC:
-            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N); bFtnInfoChgd = sal_True; break;
+            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N); bFtnInfoChgd = TRUE; break;
         case RTF_FTNNRLC:
-            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER); bFtnInfoChgd = sal_True; break;
+            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER); bFtnInfoChgd = TRUE; break;
         case RTF_FTNNRUC:
-            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER); bFtnInfoChgd = sal_True; break;
+            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER); bFtnInfoChgd = TRUE; break;
         case RTF_FTNNCHI:
-            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL); bFtnInfoChgd = sal_True; break;
+            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL); bFtnInfoChgd = TRUE; break;
 
         case RTF_AFTNNAR:
-            aEndInfo.aFmt.SetNumberingType(SVX_NUM_ARABIC); bEndInfoChgd = sal_True; break;
+            aEndInfo.aFmt.SetNumberingType(SVX_NUM_ARABIC); bEndInfoChgd = TRUE; break;
         case RTF_AFTNNALC:
             aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N);
-            bEndInfoChgd = sal_True;
+            bEndInfoChgd = TRUE;
             break;
         case RTF_AFTNNAUC:
             aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N);
-            bEndInfoChgd = sal_True;
+            bEndInfoChgd = TRUE;
             break;
         case RTF_AFTNNRLC:
             aEndInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER);
-            bEndInfoChgd = sal_True;
+            bEndInfoChgd = TRUE;
             break;
         case RTF_AFTNNRUC:
             aEndInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER);
-            bEndInfoChgd = sal_True;
+            bEndInfoChgd = TRUE;
             break;
         case RTF_AFTNNCHI:
             aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
-            bEndInfoChgd = sal_True;
+            bEndInfoChgd = TRUE;
             break;
         case RTF_HYPHAUTO:
             if (nTokenValue)
@@ -2617,7 +2667,7 @@ void SwRTFParser::ReadDocControls( int nToken )
                 if( nSkip )
                 {
                     SkipToken( nSkip );     // Ignore wieder zurueck
-                    bWeiter = sal_False;
+                    bWeiter = FALSE;
                 }
             }
             break;
@@ -2627,7 +2677,7 @@ void SwRTFParser::ReadDocControls( int nToken )
                 RTF_UNKNOWNCONTROL == nToken )
                 SvxRTFParser::NextToken( nToken );
             else
-                bWeiter = sal_False;
+                bWeiter = FALSE;
             break;
         }
         if( bWeiter )
@@ -2679,19 +2729,22 @@ void SwRTFParser::MakeStyleTab()
     // dann erzeuge aus der SvxStyle-Tabelle die Swg-Collections
     if( GetStyleTbl().Count() )
     {
-        sal_uInt16 nValidOutlineLevels = 0;
+        USHORT nValidOutlineLevels = 0;
         if( !IsNewDoc() )
         {
             // search all outlined collections
+            //BYTE nLvl;
             const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
-            for( sal_uInt16 n = rColls.Count(); n; )
+            for( USHORT n = rColls.Count(); n; )
+                //if( MAXLEVEL > (nLvl = rColls[ --n ]->GetOutlineLevel() ))//#outline level,zhaojianwei
+                //	nValidOutlineLevels |= 1 << nLvl;
                 if( rColls[ --n ]->IsAssignedToListLevelOfOutlineStyle())
                     nValidOutlineLevels |= 1 << rColls[ n ]->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
         }
 
         SvxRTFStyleType* pStyle = GetStyleTbl().First();
         do {
-            sal_uInt16 nNo = sal_uInt16( GetStyleTbl().GetCurKey() );
+            USHORT nNo = USHORT( GetStyleTbl().GetCurKey() );
             if( pStyle->bIsCharFmt )
             {
                 if( !aCharFmtTbl.Get( nNo ) )
@@ -2705,14 +2758,14 @@ void SwRTFParser::MakeStyleTab()
             }
 
         } while( 0 != (pStyle = GetStyleTbl().Next()) );
-        bStyleTabValid = sal_True;
+        bStyleTabValid = TRUE;
     }
 }
 
-sal_Bool lcl_SetFmtCol( SwFmt& rFmt, sal_uInt16 nCols, sal_uInt16 nColSpace,
+BOOL lcl_SetFmtCol( SwFmt& rFmt, USHORT nCols, USHORT nColSpace,
                     const SvUShorts& rColumns )
 {
-    sal_Bool bSet = sal_False;
+    BOOL bSet = FALSE;
     if( nCols && USHRT_MAX != nCols )
     {
         SwFmtCol aCol;
@@ -2722,13 +2775,13 @@ sal_Bool lcl_SetFmtCol( SwFmt& rFmt, sal_uInt16 nCols, sal_uInt16 nColSpace,
         aCol.Init( nCols, nColSpace, USHRT_MAX );
         if( nCols == ( rColumns.Count() / 2 ) )
         {
-            aCol._SetOrtho( sal_False );
-            sal_uInt16 nWishWidth = 0, nHalfPrev = 0;
-            for( sal_uInt16 n = 0, i = 0; n < rColumns.Count(); n += 2, ++i )
+            aCol._SetOrtho( FALSE );
+            USHORT nWishWidth = 0, nHalfPrev = 0;
+            for( USHORT n = 0, i = 0; n < rColumns.Count(); n += 2, ++i )
             {
                 SwColumn* pCol = aCol.GetColumns()[ i ];
                 pCol->SetLeft( nHalfPrev );
-                sal_uInt16 nSp = rColumns[ n+1 ];
+                USHORT nSp = rColumns[ n+1 ];
                 nHalfPrev = nSp / 2;
                 pCol->SetRight( nSp - nHalfPrev );
                 pCol->SetWishWidth( rColumns[ n ] +
@@ -2738,14 +2791,14 @@ sal_Bool lcl_SetFmtCol( SwFmt& rFmt, sal_uInt16 nCols, sal_uInt16 nColSpace,
             aCol.SetWishWidth( nWishWidth );
         }
         rFmt.SetFmtAttr( aCol );
-        bSet = sal_True;
+        bSet = TRUE;
     }
     return bSet;
 }
 
 void SwRTFParser::DoHairyWriterPageDesc(int nToken)
 {
-    int bWeiter = sal_True;
+    int bWeiter = TRUE;
     do {
         if( '{' == nToken )
         {
@@ -2756,7 +2809,7 @@ void SwRTFParser::DoHairyWriterPageDesc(int nToken)
                     & ~(0xff | RTF_SWGDEFS)) )
                 {
                     SkipToken( -2 );    // Ignore und Token wieder zurueck
-                    bWeiter = sal_False;
+                    bWeiter = FALSE;
                     break;
                 }
                 // kein break, Gruppe ueberspringen
@@ -2776,7 +2829,7 @@ void SwRTFParser::DoHairyWriterPageDesc(int nToken)
 
             default:
                 SkipToken( -1 );            // Ignore wieder zurueck
-                bWeiter = sal_False;
+                bWeiter = FALSE;
                 break;
             }
         }
@@ -2784,7 +2837,7 @@ void SwRTFParser::DoHairyWriterPageDesc(int nToken)
             RTF_UNKNOWNCONTROL == nToken )
             SvxRTFParser::NextToken( nToken );
         else
-            bWeiter = sal_False;
+            bWeiter = FALSE;
         if( bWeiter )
             nToken = GetNextToken();
     } while( bWeiter && IsParserWorking() );
@@ -2820,12 +2873,12 @@ void SwRTFParser::ReadSectControls( int nToken )
     int bWeiter = true;
     bool bKeepFooter = false;
     do {
-        sal_uInt16 nValue = sal_uInt16( nTokenValue );
+        USHORT nValue = USHORT( nTokenValue );
         switch( nToken )
         {
             case RTF_SECT:
                 bNewSection = true;
-                bForceNewTable = true;
+                bForceNewTable = true; // #117882#
                 break;
             case RTF_SECTD: {
                 //Reset to page defaults
@@ -2958,13 +3011,13 @@ void SwRTFParser::ReadSectControls( int nToken )
                     _pKeepHeader = &aNewSection.mpPageHdFt->GetMaster().GetHeader();
                 }
                 bKeepFooter = false;
-                if (!bNewSectionHeader) { // If a header is redefined in a section
-                    bNewSectionHeader=true;           //  a new header must be created.
+                if (!bNewSectionHeader) { //see #117914# topic 2). If a header is redefined in a section
+                    bNewSectionHeader=true;                    //  a new header must be created.
                     aNewSection.mpPageHdFt=NULL;
                 }
                 if (!aNewSection.mpPageHdFt)
                 {
-                    String aName(RTL_CONSTASCII_USTRINGPARAM("rtfHdFt"));
+                    String aName(RTL_CONSTASCII_STRINGPARAM("rtfHdFt"));
                     aName += String::CreateFromInt32(maSegments.size());
                     sal_uInt16 nPageNo = pDoc->MakePageDesc(aName);
                     aNewSection.mpPageHdFt = &pDoc->_GetPageDesc(nPageNo);
@@ -2979,7 +3032,7 @@ void SwRTFParser::ReadSectControls( int nToken )
             case RTF_HEADERF:
                 if (!aNewSection.mpTitlePageHdFt)
                 {
-                    String aTitle(RTL_CONSTASCII_USTRINGPARAM("rtfTitleHdFt"));
+                    String aTitle(RTL_CONSTASCII_STRINGPARAM("rtfTitleHdFt"));
                     aTitle += String::CreateFromInt32(maSegments.size());
                     sal_uInt16 nPageNo = pDoc->MakePageDesc(aTitle);
                     aNewSection.mpTitlePageHdFt = &pDoc->_GetPageDesc(nPageNo);
@@ -3096,8 +3149,8 @@ void SwRTFParser::ReadSectControls( int nToken )
 
     if (bNewSection || maSegments.empty())
     {
-        AttrGroupEnd();
-        if(!bContainsPara && !bContainsTablePara) // bContainsTablePara is set in rtftbl.cxx
+        AttrGroupEnd(); //#106493#
+        if(!bContainsPara && !bContainsTablePara) //#117881#: bContainsTablePara is set in rtftbl.cxx
             pDoc->AppendTxtNode(*pPam->GetPoint());
         bContainsPara = false;
         bContainsTablePara = false;
@@ -3135,7 +3188,7 @@ void SwRTFParser::LeaveEnvironment()
 
 void SwRTFParser::SkipPageDescTbl()
 {
-    // I have to use this glorified SkipGroup because the
+    // M.M. #117907# I have to use this glorified SkipGroup because the
     // SvParser SkipGroup uses nNextCh which is not set correctly <groan>
     int nNumOpenBrakets = 1;
 
@@ -3160,21 +3213,6 @@ void SwRTFParser::SkipPageDescTbl()
     SkipToken( -1 );
 }
 
-
-#define SETPAGEDESC_DEFAULTS() \
-    do {\
-        aSz.SetWidth( a4.Width() ); aSz.SetHeight( a4.Height() );\
-        aLR.SetLeft( 0 );   aLR.SetRight( 0 ); \
-        aUL.SetLower( 0 );  aUL.SetUpper( 0 ); \
-        aHLR.SetLeft( 0 );  aHLR.SetRight( 0 ); \
-        aHUL.SetLower( 0 ); aHUL.SetUpper( 0 ); \
-        aFLR.SetLeft( 0 );  aFLR.SetRight( 0 ); \
-        aFUL.SetLower( 0 ); aFUL.SetUpper( 0 ); \
-        nCols = USHRT_MAX; nColSpace = USHRT_MAX; nAktCol = 0; \
-        aFSz.SetHeightSizeType( ATT_MIN_SIZE ); aFSz.SetHeight( 0 ); \
-        aHSz.SetHeightSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 ); \
-    } while (0)
-
 void SwRTFParser::ReadPageDescTbl()
 {
     // dann erzeuge aus der SvxStyle-Tabelle die Swg-Collections, damit
@@ -3189,10 +3227,10 @@ void SwRTFParser::ReadPageDescTbl()
     int nToken, bSaveChkStyleAttr = IsChkStyleAttr();
     int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
 
-    SetChkStyleAttr(sal_False);     // Attribute nicht gegen die Styles checken
+    SetChkStyleAttr(FALSE);     // Attribute nicht gegen die Styles checken
 
     bInPgDscTbl = true;
-    sal_uInt16 nPos = 0;
+    USHORT nPos = 0;
     SwPageDesc* pPg = 0;
     SwFrmFmt* pPgFmt = 0;
 
@@ -3204,7 +3242,7 @@ void SwRTFParser::ReadPageDescTbl()
 
     SvxFrameDirectionItem aFrmDir(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR);
 
-    sal_uInt16 nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
+    USHORT nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
     SvUShorts aColumns;
 
     while( nNumOpenBrakets && IsParserWorking() )
@@ -3253,14 +3291,25 @@ void SwRTFParser::ReadPageDescTbl()
                 if (nPos != pDoc->MakePageDesc(
                     String::CreateFromInt32(nTokenValue)))
                 {
-                    OSL_FAIL( "PageDesc an falscher Position" );
+                    OSL_ENSURE( FALSE, "PageDesc an falscher Position" );
                 }
             }
             pPg = &pDoc->_GetPageDesc(nPos);
-            pPg->SetLandscape( sal_False );
+            pPg->SetLandscape( FALSE );
             pPgFmt = &pPg->GetMaster();
-
-            SETPAGEDESC_DEFAULTS();
+#ifndef CFRONT
+    SETPAGEDESC_DEFAULTS:
+#endif
+            aSz.SetWidth( a4.Width() ); aSz.SetHeight( a4.Height() );
+            aLR.SetLeft( 0 );   aLR.SetRight( 0 );
+            aUL.SetLower( 0 );  aUL.SetUpper( 0 );
+            aHLR.SetLeft( 0 );  aHLR.SetRight( 0 );
+            aHUL.SetLower( 0 ); aHUL.SetUpper( 0 );
+            aFLR.SetLeft( 0 );  aFLR.SetRight( 0 );
+            aFUL.SetLower( 0 ); aFUL.SetUpper( 0 );
+            nCols = USHRT_MAX; nColSpace = USHRT_MAX; nAktCol = 0;
+            aFSz.SetHeightSizeType( ATT_MIN_SIZE ); aFSz.SetHeight( 0 );
+            aHSz.SetHeightSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 );
             break;
 
         case RTF_PGDSCUSE:
@@ -3298,9 +3347,21 @@ void SwRTFParser::ReadPageDescTbl()
             }
 
             pPgFmt = &pPg->GetLeft();
-
-            SETPAGEDESC_DEFAULTS();
+#ifndef CFRONT
+            goto SETPAGEDESC_DEFAULTS;
+#else
+            aLR.SetLeft( 0 );   aLR.SetRight( 0 );
+            aUL.SetLower( 0 );  aUL.SetUpper( 0 );
+            aHLR.SetLeft( 0 );  aHLR.SetRight( 0 );
+            aHUL.SetLower( 0 ); aHUL.SetUpper( 0 );
+            aFLR.SetLeft( 0 );  aFLR.SetRight( 0 );
+            aFUL.SetLower( 0 ); aFUL.SetUpper( 0 );
+            aSz.SetWidth( a4.Width() ); aSz.SetHeight( a4.Height() ); // DIN A4 default
+            nCols = USHRT_MAX; nColSpace = USHRT_MAX; nAktCol = 0;
+            aFSz.SetHeightSizeType( ATT_MIN_SIZE ); aFSz.SetHeight( 0 );
+            aHSz.SetHeightSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 );
             break;
+#endif
 
         case RTF_RTLSECT:
             aFrmDir.SetValue(FRMDIR_HORI_RIGHT_TOP);
@@ -3312,24 +3373,24 @@ void SwRTFParser::ReadPageDescTbl()
 
         // alt: LI/RI/SA/SB, neu: MARG?SXN
         case RTF_MARGLSXN:
-        case RTF_LI:        aLR.SetLeft( (sal_uInt16)nTokenValue );     break;
+        case RTF_LI:        aLR.SetLeft( (USHORT)nTokenValue );     break;
         case RTF_MARGRSXN:
-        case RTF_RI:        aLR.SetRight( (sal_uInt16)nTokenValue );    break;
+        case RTF_RI:        aLR.SetRight( (USHORT)nTokenValue );    break;
         case RTF_MARGTSXN:
-        case RTF_SA:        aUL.SetUpper( (sal_uInt16)nTokenValue );    break;
+        case RTF_SA:        aUL.SetUpper( (USHORT)nTokenValue );    break;
         case RTF_MARGBSXN:
-        case RTF_SB:        aUL.SetLower( (sal_uInt16)nTokenValue );    break;
+        case RTF_SB:        aUL.SetLower( (USHORT)nTokenValue );    break;
         case RTF_PGWSXN:    aSz.SetWidth( nTokenValue );            break;
         case RTF_PGHSXN:    aSz.SetHeight( nTokenValue );           break;
 
-        case RTF_HEADERY:       aHUL.SetUpper( (sal_uInt16)nTokenValue );   break;
-        case RTF_HEADER_YB:     aHUL.SetLower( (sal_uInt16)nTokenValue );   break;
-        case RTF_HEADER_XL:     aHLR.SetLeft( (sal_uInt16)nTokenValue );    break;
-        case RTF_HEADER_XR:     aHLR.SetRight( (sal_uInt16)nTokenValue );   break;
-        case RTF_FOOTERY:       aFUL.SetLower( (sal_uInt16)nTokenValue );   break;
-        case RTF_FOOTER_YT:     aFUL.SetUpper( (sal_uInt16)nTokenValue );   break;
-        case RTF_FOOTER_XL:     aFLR.SetLeft( (sal_uInt16)nTokenValue );    break;
-        case RTF_FOOTER_XR:     aFLR.SetRight( (sal_uInt16)nTokenValue );   break;
+        case RTF_HEADERY:       aHUL.SetUpper( (USHORT)nTokenValue );   break;
+        case RTF_HEADER_YB:     aHUL.SetLower( (USHORT)nTokenValue );   break;
+        case RTF_HEADER_XL:     aHLR.SetLeft( (USHORT)nTokenValue );    break;
+        case RTF_HEADER_XR:     aHLR.SetRight( (USHORT)nTokenValue );   break;
+        case RTF_FOOTERY:       aFUL.SetLower( (USHORT)nTokenValue );   break;
+        case RTF_FOOTER_YT:     aFUL.SetUpper( (USHORT)nTokenValue );   break;
+        case RTF_FOOTER_XL:     aFLR.SetLeft( (USHORT)nTokenValue );    break;
+        case RTF_FOOTER_XR:     aFLR.SetRight( (USHORT)nTokenValue );   break;
 
         case RTF_HEADER_YH:
                 if( 0 > nTokenValue )
@@ -3337,7 +3398,7 @@ void SwRTFParser::ReadPageDescTbl()
                     aHSz.SetHeightSizeType( ATT_FIX_SIZE );
                     nTokenValue = -nTokenValue;
                 }
-                aHSz.SetHeight( (sal_uInt16)nTokenValue );
+                aHSz.SetHeight( (USHORT)nTokenValue );
                 break;
 
         case RTF_FOOTER_YH:
@@ -3346,22 +3407,22 @@ void SwRTFParser::ReadPageDescTbl()
                     aFSz.SetHeightSizeType( ATT_FIX_SIZE );
                     nTokenValue = -nTokenValue;
                 }
-                aFSz.SetHeight( (sal_uInt16)nTokenValue );
+                aFSz.SetHeight( (USHORT)nTokenValue );
                 break;
 
 
-        case RTF_LNDSCPSXN:     pPg->SetLandscape( sal_True );          break;
+        case RTF_LNDSCPSXN:     pPg->SetLandscape( TRUE );          break;
 
-        case RTF_COLS:          nCols = (sal_uInt16)nTokenValue;        break;
-        case RTF_COLSX:         nColSpace = (sal_uInt16)nTokenValue;    break;
+        case RTF_COLS:          nCols = (USHORT)nTokenValue;        break;
+        case RTF_COLSX:         nColSpace = (USHORT)nTokenValue;    break;
 
         case RTF_COLNO:
-            nAktCol = (sal_uInt16)nTokenValue;
+            nAktCol = (USHORT)nTokenValue;
             if( RTF_COLW == GetNextToken() )
             {
-                sal_uInt16 nWidth = sal_uInt16( nTokenValue ), nSpace = 0;
+                USHORT nWidth = USHORT( nTokenValue ), nSpace = 0;
                 if( RTF_COLSR == GetNextToken() )
-                    nSpace = sal_uInt16( nTokenValue );
+                    nSpace = USHORT( nTokenValue );
                 else
                     SkipToken( -1 );        // wieder zurueck
 
@@ -3399,7 +3460,7 @@ void SwRTFParser::ReadPageDescTbl()
                 pPg->SetName(aToken);
 
                 // sollte es eine Vorlage aus dem Pool sein ??
-                sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(aToken,
+                USHORT n = SwStyleNameMapper::GetPoolIdFromUIName(aToken,
                     nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC);
                 if (USHRT_MAX != n)
                 {
@@ -3440,9 +3501,9 @@ void SwRTFParser::ReadPageDescTbl()
     for( nPos = 0; nPos < pDoc->GetPageDescCnt(); ++nPos )
     {
         SwPageDesc* pPgDsc = &pDoc->_GetPageDesc( nPos );
-        if( (sal_uInt16)(long)pPgDsc->GetFollow() < pDoc->GetPageDescCnt() )
+        if( (USHORT)(long)pPgDsc->GetFollow() < pDoc->GetPageDescCnt() )
             pPgDsc->SetFollow(& const_cast<const SwDoc *>(pDoc)
-                              ->GetPageDesc((sal_uInt16)(long)
+                              ->GetPageDesc((USHORT)(long)
                                             pPgDsc->GetFollow()));
     }
 
@@ -3454,6 +3515,20 @@ void SwRTFParser::ReadPageDescTbl()
     bSwPageDesc = true;
     SkipToken( -1 );
 }
+
+// -------------- Methoden --------------------
+
+/*
+void SwRTFParser::ReadUnknownData()
+{
+    SvRTFParser::ReadUnknownData();
+}
+
+void SwRTFParser::ReadOLEData()
+{
+    SvRTFParser::ReadOLEData();
+}
+*/
 
 void SwRTFParser::ReadPrtData()
 {
@@ -3467,7 +3542,7 @@ void SwRTFParser::ReadPrtData()
     SkipToken( -1 );        // schliessende Klammer wieder zurueck!!
 }
 
-static const SwNodeIndex* SetHeader(SwFrmFmt* pHdFtFmt, sal_Bool bReuseOld)
+static const SwNodeIndex* SetHeader(SwFrmFmt* pHdFtFmt, BOOL bReuseOld)
 {
     OSL_ENSURE(pHdFtFmt, "Impossible, no header");
     const SwFrmFmt* pExisting = bReuseOld ?
@@ -3475,13 +3550,13 @@ static const SwNodeIndex* SetHeader(SwFrmFmt* pHdFtFmt, sal_Bool bReuseOld)
     if (!pExisting)
     {
         //No existing header, create a new one
-        pHdFtFmt->SetFmtAttr(SwFmtHeader(sal_True));
+        pHdFtFmt->SetFmtAttr(SwFmtHeader(TRUE));
         pExisting = pHdFtFmt->GetHeader().GetHeaderFmt();
     }
     return pExisting->GetCntnt().GetCntntIdx();
 }
 
-static const SwNodeIndex* SetFooter(SwFrmFmt* pHdFtFmt, sal_Bool bReuseOld)
+static const SwNodeIndex* SetFooter(SwFrmFmt* pHdFtFmt, BOOL bReuseOld)
 {
     OSL_ENSURE(pHdFtFmt, "Impossible, no footer");
     const SwFrmFmt* pExisting = bReuseOld ?
@@ -3489,7 +3564,7 @@ static const SwNodeIndex* SetFooter(SwFrmFmt* pHdFtFmt, sal_Bool bReuseOld)
     if (!pExisting)
     {
         //No exist footer, create a new one
-        pHdFtFmt->SetFmtAttr(SwFmtFooter(sal_True));
+        pHdFtFmt->SetFmtAttr(SwFmtFooter(TRUE));
         pExisting = pHdFtFmt->GetFooter().GetFooterFmt();
     }
     return pExisting->GetCntnt().GetCntntIdx();
@@ -3500,27 +3575,28 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 {
     OSL_ENSURE( RTF_FOOTNOTE == nToken ||
             RTF_FLY_INPARA == nToken ||
-            pPageDesc, "PageDesc is missing" );
+            pPageDesc, "PageDesc fehlt" );
 
     bool bContainsParaCache = bContainsPara;
-    // backup all important data
+    // alle wichtigen Sachen sichern
     SwPosition aSavePos( *pPam->GetPoint() );
-    SvxRTFItemStack aSaveStack(GetAttrStack());
-    GetAttrStack().clear();
+    SvxRTFItemStack aSaveStack;
+    aSaveStack.Insert( &GetAttrStack(), 0 );
+    GetAttrStack().Remove( 0, GetAttrStack().Count() );
 
     // save the fly array - after read, all flys may be set into
     // the header/footer
     SwFlySaveArr aSaveArray( 255 < aFlyArr.Count() ? aFlyArr.Count() : 255 );
     aSaveArray.Insert( &aFlyArr, 0 );
     aFlyArr.Remove( 0, aFlyArr.Count() );
-    sal_Bool bSetFlyInDoc = sal_True;
+    BOOL bSetFlyInDoc = TRUE;
 
     const SwNodeIndex* pSttIdx = 0;
     SwFrmFmt* pHdFtFmt = 0;
     SwTxtAttr* pTxtAttr = 0;
-    int bDelFirstChar = sal_False;
+    int bDelFirstChar = FALSE;
     bool bOldIsFootnote = mbIsFootnote;
-    sal_Bool bOldGrpStt = sal::static_int_cast< sal_Bool, int >(IsNewGroup());
+    BOOL bOldGrpStt = sal::static_int_cast< BOOL, int >(IsNewGroup());
 
     int nNumOpenBrakets = GetOpenBrakets() - 1;
 
@@ -3542,7 +3618,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
                 nPos--;
                 aFtnNote.SetNumStr( pTxtNd->GetTxt().GetChar( nPos ) );
                 ((String&)pTxtNd->GetTxt()).SetChar( nPos, CH_TXTATR_INWORD );
-                bDelFirstChar = sal_True;
+                bDelFirstChar = TRUE;
             }
 
             pTxtAttr = pTxtNd->InsertItem( aFtnNote, nPos, nPos,
@@ -3556,7 +3632,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
             // wurde an der Position ein Escapement aufgespannt, so entferne
             // das jetzt. Fussnoten sind bei uns immer hochgestellt.
-            SvxRTFItemStackTypePtr pTmp = aSaveStack.empty() ? 0 : aSaveStack.back();
+            SvxRTFItemStackTypePtr pTmp = aSaveStack.Top();
             if( pTmp && pTmp->GetSttNodeIdx() ==
                 pPam->GetPoint()->nNode.GetIndex() &&
                 pTmp->GetSttCnt() == nPos )
@@ -3578,7 +3654,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
             OSL_ENSURE( pTxtAttr, "konnte den Fly nicht einfuegen/finden" );
 
             pSttIdx = pHdFtFmt->GetCntnt().GetCntntIdx();
-            bSetFlyInDoc = sal_False;
+            bSetFlyInDoc = FALSE;
         }
         break;
 
@@ -3586,50 +3662,50 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
     case RTF_HEADER:
         pPageDesc->WriteUseOn( (UseOnPage)(pPageDesc->ReadUseOn() | nsUseOnPage::PD_HEADERSHARE) );
         pHdFtFmt = &pPageDesc->GetMaster();
-        pSttIdx = SetHeader( pHdFtFmt, sal_False );
+        pSttIdx = SetHeader( pHdFtFmt, FALSE );
         break;
 
     case RTF_HEADERL:
         // we cannot have left or right, must have always both
         pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~nsUseOnPage::PD_HEADERSHARE) | nsUseOnPage::PD_ALL));
-        SetHeader( pPageDesc->GetRightFmt(), sal_True );
+        SetHeader( pPageDesc->GetRightFmt(), TRUE );
         pHdFtFmt = pPageDesc->GetLeftFmt();
-        pSttIdx = SetHeader(pHdFtFmt, sal_False );
+        pSttIdx = SetHeader(pHdFtFmt, FALSE );
         break;
 
     case RTF_HEADERR:
         // we cannot have left or right, must have always both
         pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~nsUseOnPage::PD_HEADERSHARE) | nsUseOnPage::PD_ALL));
-        SetHeader( pPageDesc->GetLeftFmt(), sal_True );
+        SetHeader( pPageDesc->GetLeftFmt(), TRUE );
         pHdFtFmt = pPageDesc->GetRightFmt();
-        pSttIdx = SetHeader(pHdFtFmt, sal_False );
+        pSttIdx = SetHeader(pHdFtFmt, FALSE );
         break;
 
     case RTF_FOOTERF:
     case RTF_FOOTER:
         pPageDesc->WriteUseOn( (UseOnPage)(pPageDesc->ReadUseOn() | nsUseOnPage::PD_FOOTERSHARE) );
         pHdFtFmt = &pPageDesc->GetMaster();
-        pSttIdx = SetFooter(pHdFtFmt, sal_False );
+        pSttIdx = SetFooter(pHdFtFmt, FALSE );
         break;
 
     case RTF_FOOTERL:
         // we cannot have left or right, must have always both
         pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~nsUseOnPage::PD_FOOTERSHARE) | nsUseOnPage::PD_ALL));
-        SetFooter( pPageDesc->GetRightFmt(), sal_True );
+        SetFooter( pPageDesc->GetRightFmt(), TRUE );
         pHdFtFmt = pPageDesc->GetLeftFmt();
-        pSttIdx = SetFooter(pHdFtFmt, sal_False );
+        pSttIdx = SetFooter(pHdFtFmt, FALSE );
         break;
 
     case RTF_FOOTERR:
         // we cannot have left or right, must have always both
         pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~nsUseOnPage::PD_FOOTERSHARE) | nsUseOnPage::PD_ALL));
-        SetFooter( pPageDesc->GetLeftFmt(), sal_True );
+        SetFooter( pPageDesc->GetLeftFmt(), TRUE );
         pHdFtFmt = pPageDesc->GetRightFmt();
-        pSttIdx = SetFooter(pHdFtFmt, sal_False );
+        pSttIdx = SetFooter(pHdFtFmt, FALSE );
         break;
     }
 
-    sal_uInt16 nOldFlyArrCnt = aFlyArr.Count();
+    USHORT nOldFlyArrCnt = aFlyArr.Count();
     if( !pSttIdx )
         SkipGroup();
     else
@@ -3649,7 +3725,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         pDoc->SetTxtFmtColl( *pPam, pColl );
 
-        SetNewGroup( sal_True );
+        SetNewGroup( TRUE );
 
         while( !( nNumOpenBrakets == GetOpenBrakets() && !GetStackPos()) && IsParserWorking() )
         {
@@ -3658,7 +3734,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
             case RTF_U:
                 if( bDelFirstChar )
                 {
-                    bDelFirstChar = sal_False;
+                    bDelFirstChar = FALSE;
                     nToken = 0;
                 }
                 break;
@@ -3668,7 +3744,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
                 {
                     if( !aToken.Erase( 0, 1 ).Len() )
                         nToken = 0;
-                    bDelFirstChar = sal_False;
+                    bDelFirstChar = FALSE;
                 }
                 break;
             }
@@ -3706,16 +3782,16 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
         }
     }
 
-    bFootnoteAutoNum = sal_False;       // default auf aus!
+    bFootnoteAutoNum = FALSE;       // default auf aus!
 
     // und alles wieder zurueck
     *pPam->GetPoint() = aSavePos;
     if (mbIsFootnote)
         SetNewGroup( bOldGrpStt );      // Status wieder zurueck
     else
-        SetNewGroup( sal_False );           // { - Klammer war kein Group-Start!
+        SetNewGroup( FALSE );           // { - Klammer war kein Group-Start!
     mbIsFootnote = bOldIsFootnote;
-    GetAttrStack() = aSaveStack;
+    GetAttrStack().Insert( &aSaveStack, 0 );
 
     aFlyArr.Insert( &aSaveArray, 0 );
     aSaveArray.Remove( 0, aSaveArray.Count() );
@@ -3726,7 +3802,7 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
     // Escapement korrigieren
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_ESCAPEMENT, sal_False, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_ESCAPEMENT, FALSE, &pItem ))
     {
         /* prozentuale Veraenderung errechnen !
             * Formel :      (FontSize * 1/20 ) pts      Escapement * 2
@@ -3751,7 +3827,7 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
     }
 
     // TabStops anpassen
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_TABSTOP, sal_False, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_TABSTOP, FALSE, &pItem ))
     {
         const SvxLRSpaceItem& rLR = GetLRSpace( rSet );
         SvxTabStopItem aTStop( *(SvxTabStopItem*)pItem );
@@ -3761,7 +3837,7 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
         {
             // Tabs anpassen !!
             SvxTabStop* pTabs = (SvxTabStop*)aTStop.GetStart();
-            for( sal_uInt16 n = aTStop.Count(); n; --n, ++pTabs)
+            for( USHORT n = aTStop.Count(); n; --n, ++pTabs)
                 if( SVX_TAB_ADJUST_DEFAULT != pTabs->GetAdjustment() )
                     pTabs->GetTabPos() -= nOffset;
 
@@ -3779,7 +3855,7 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
         }
         rSet.Put( aTStop );
     }
-    else if( SFX_ITEM_SET == rSet.GetItemState( RES_LR_SPACE, sal_False, &pItem )
+    else if( SFX_ITEM_SET == rSet.GetItemState( RES_LR_SPACE, FALSE, &pItem )
             && ((SvxLRSpaceItem*)pItem)->GetTxtFirstLineOfst() < 0 )
     {
         // negativer Einzug, dann auf 0 Pos einen Tab setzen
@@ -3788,7 +3864,7 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
 
     // NumRules anpassen
     if( !bStyleTabValid &&
-        SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem ))
+        SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ))
     {
         // dann steht im Namen nur ein Verweis in das ListArray
         SwNumRule* pRule = GetNumRuleOfListNo( ((SwNumRuleItem*)pItem)->
@@ -3800,14 +3876,38 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
 
     }
 
+
+/*
+ ????????????????????????????????????????????????????????????????????
+ ?? muss die LineSpacing Hoehe 200Twip betragen ??
+ ?? in rtfitem.hxx wird es auf 0 defaultet. Wenn ja, dann muss hier
+ ?? ein neues Item gesetzt werden!!!!
+ ????????????????????????????????????????????????????????????????????
+
+    // LineSpacing korrigieren
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_LINESPACING, FALSE, &pItem ))
+    {
+        const SvxLineSpacingItem* pLS = (const SvxLineSpacingItem*)pItem;
+        SvxLineSpacingItem aNew;
+
+        aNew.SetInterLineSpace( pLS->GetInterLineSpace() );
+        aNew.GetLineSpaceRule() = pLS->GetLineSpaceRule();
+        aNew.SetPropLineSpace( pLS->GetPropLineSpace() );
+        aNew.GetInterLineSpaceRule() = pLS->GetInterLineSpaceRule();
+
+        rSet.Put( aNew );
+    }
+?????????????????????????????????????????????????????????????????? */
+
 }
 
 
-SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, sal_uInt16 nPos,
-    sal_uInt8 nOutlineLevel, bool& rbCollExist)
+SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
+    BYTE nOutlineLevel, bool& rbCollExist)
 {
-    if( sal_uInt8(-1) == nOutlineLevel )
-        nOutlineLevel = MAXLEVEL;
+    if( BYTE(-1) == nOutlineLevel )
+        //nOutlineLevel = NO_NUMBERING;
+        nOutlineLevel = MAXLEVEL;//#outline level,zhaojianwei
 
     rbCollExist = false;
     SwTxtFmtColl* pColl;
@@ -3818,10 +3918,11 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, sal_uInt16 nPos,
         if( !nPos )
         {
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
-            if(nOutlineLevel < MAXLEVEL )
+            //pColl->SetOutlineLevel( nOutlineLevel );		//#outline level,removed by zhaojianwei
+            if(nOutlineLevel < MAXLEVEL )							//->add by zhaojianwei
                 pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
             else
-                pColl->DeleteAssignmentToListLevelOfOutlineStyle();
+                pColl->DeleteAssignmentToListLevelOfOutlineStyle();	//<-end,zhaojianwei
             return pColl;
         }
 
@@ -3837,25 +3938,28 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, sal_uInt16 nPos,
     rbCollExist = aResult.second;
     if (IsNewDoc() && rbCollExist)
     {
-        pColl->ResetAllFmtAttr(); // #i73790# - method renamed
+        // --> OD 2007-01-25 #i73790# - method renamed
+        pColl->ResetAllFmtAttr();
+        // <--
         rbCollExist = false;
     }
 
     if (!rbCollExist)
     {
-        if(nOutlineLevel < MAXLEVEL)
+        //pColl->SetOutlineLevel( nOutlineLevel );	//#outline level,removed by zhaojianwei
+        if(nOutlineLevel < MAXLEVEL)						//->add by zhaojianwei
             pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
         else
-            pColl->DeleteAssignmentToListLevelOfOutlineStyle();
+            pColl->DeleteAssignmentToListLevelOfOutlineStyle();	//<-end,zhaojianwei
     }
 
     return pColl;
 }
 
-SwCharFmt* SwRTFParser::MakeCharFmt(const String& rName, sal_uInt16 nPos,
+SwCharFmt* SwRTFParser::MakeCharFmt(const String& rName, USHORT nPos,
                                     int& rbCollExist)
 {
-    rbCollExist = sal_False;
+    rbCollExist = FALSE;
     SwCharFmt* pFmt;
     String aNm( rName );
     if( !aNm.Len() )
@@ -3873,7 +3977,9 @@ SwCharFmt* SwRTFParser::MakeCharFmt(const String& rName, sal_uInt16 nPos,
     rbCollExist = aResult.second;
     if (IsNewDoc() && rbCollExist)
     {
-        pFmt->ResetAllFmtAttr(); // #i73790# - method renamed
+        // --> OD 2007-01-25 #i73790# - method renamed
+        pFmt->ResetAllFmtAttr();
+        // <--
         rbCollExist = false;
     }
     return pFmt;
@@ -3889,10 +3995,10 @@ void SwRTFParser::SetStyleAttr( SfxItemSet& rCollSet,
         // suche alle Attribute, die neu gesetzt werden:
         const SfxPoolItem* pItem;
         SfxItemIter aIter( rDerivedSet );
-        sal_uInt16 nWhich = aIter.GetCurItem()->Which();
-        while( sal_True )
+        USHORT nWhich = aIter.GetCurItem()->Which();
+        while( TRUE )
         {
-            switch( rStyleSet.GetItemState( nWhich, sal_False, &pItem ) )
+            switch( rStyleSet.GetItemState( nWhich, FALSE, &pItem ) )
             {
             case SFX_ITEM_DEFAULT:
                 // auf default zuruecksetzen
@@ -3915,10 +4021,10 @@ void SwRTFParser::SetStyleAttr( SfxItemSet& rCollSet,
     SetSwgValues( rCollSet );
 }
 
-SwTxtFmtColl* SwRTFParser::MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rStyle)
+SwTxtFmtColl* SwRTFParser::MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle)
 {
     bool bCollExist;
-    SwTxtFmtColl* pColl = MakeColl( rStyle.sName, sal_uInt16(nNo),
+    SwTxtFmtColl* pColl = MakeColl( rStyle.sName, USHORT(nNo),
         rStyle.nOutlineNo, bCollExist);
     aTxtCollTbl.Insert( nNo, pColl );
 
@@ -3926,7 +4032,7 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rSt
     if( bCollExist )
         return pColl;
 
-    sal_uInt16 nStyleNo = rStyle.nBasedOn;
+    USHORT nStyleNo = rStyle.nBasedOn;
     if( rStyle.bBasedOnIsSet && nStyleNo != nNo )
     {
         SvxRTFStyleType* pDerivedStyle = GetStyleTbl().Get( nStyleNo );
@@ -3977,17 +4083,17 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rSt
     return pColl;
 }
 
-SwCharFmt* SwRTFParser::MakeCharStyle( sal_uInt16 nNo, const SvxRTFStyleType& rStyle )
+SwCharFmt* SwRTFParser::MakeCharStyle( USHORT nNo, const SvxRTFStyleType& rStyle )
 {
     int bCollExist;
-    SwCharFmt* pFmt = MakeCharFmt( rStyle.sName, sal_uInt16(nNo), bCollExist );
+    SwCharFmt* pFmt = MakeCharFmt( rStyle.sName, USHORT(nNo), bCollExist );
     aCharFmtTbl.Insert( nNo, pFmt );
 
     // in bestehendes Dok einfuegen, dann keine Ableitung usw. setzen
     if( bCollExist )
         return pFmt;
 
-    sal_uInt16 nStyleNo = rStyle.nBasedOn;
+    USHORT nStyleNo = rStyle.nBasedOn;
     if( rStyle.bBasedOnIsSet && nStyleNo != nNo )
     {
         SvxRTFStyleType* pDerivedStyle = GetStyleTbl().Get( nStyleNo );
@@ -4031,10 +4137,10 @@ void SwRTFParser::DelLastNode()
 
     if( !pPam->GetPoint()->nContent.GetIndex() )
     {
-        sal_uLong nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
+        ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
         SwCntntNode* pCNd = pDoc->GetNodes()[ nNodeIdx ]->GetCntntNode();
-        // paragraphs with page break information are not empty!)
-        if(const SfxPoolItem* pItem=&(pCNd->GetAttr( RES_PAGEDESC, sal_False)))
+        // paragraphs with page break information are not empty! see #117914# topic 1)
+        if(const SfxPoolItem* pItem=&(pCNd->GetAttr( RES_PAGEDESC, FALSE)))
         {
             SwFmtPageDesc* pPageDescItem = ((SwFmtPageDesc*)pItem);
             if (pPageDescItem->GetPageDesc()!=NULL)
@@ -4044,12 +4150,12 @@ void SwRTFParser::DelLastNode()
         if( pCNd && pCNd->StartOfSectionIndex()+2 <
             pCNd->EndOfSectionIndex() )
         {
-            if( !GetAttrStack().empty() )
+            if( GetAttrStack().Count() )
             {
                 // Attribut Stack-Eintraege, muessen ans Ende des vorherigen
                 // Nodes verschoben werden.
-                sal_Bool bMove = sal_False;
-                for( size_t n = GetAttrStack().size(); n; )
+                BOOL bMove = FALSE;
+                for( USHORT n = GetAttrStack().Count(); n; )
                 {
                     SvxRTFItemStackType* pStkEntry = (SvxRTFItemStackType*)
                                                     GetAttrStack()[ --n ];
@@ -4058,7 +4164,7 @@ void SwRTFParser::DelLastNode()
                         if( !bMove )
                         {
                             pPam->Move( fnMoveBackward );
-                            bMove = sal_True;
+                            bMove = TRUE;
                         }
                         pStkEntry->SetStartPos( SwxPosition( pPam ) );
                     }
@@ -4086,11 +4192,11 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
                 NewTblLine();           // evt. Line copieren
             else
             {
-                static int _do=0;
+                static int _do=0; //$flr See #117881# for explanation.
                 // Crsr nicht mehr in der Tabelle ?
                 if( !pPam->GetNode()->FindTableNode() && _do )
                 {
-                    sal_uLong nOldPos = pPam->GetPoint()->nNode.GetIndex();
+                    ULONG nOldPos = pPam->GetPoint()->nNode.GetIndex();
 
                     // dann wieder in die letzte Box setzen
                     // (kann durch einlesen von Flys geschehen!)
@@ -4101,7 +4207,7 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
                     // auf die neue Box umsetzen !!
                     SvxRTFItemStack& rAttrStk = GetAttrStack();
                     const SvxRTFItemStackType* pStk;
-                    for( size_t n = 0; n < rAttrStk.size(); ++n )
+                    for( USHORT n = 0; n < rAttrStk.Count(); ++n )
                         if( ( pStk = rAttrStk[ n ])->GetSttNodeIdx() == nOldPos &&
                             !pStk->GetSttCnt() )
                             ((SvxRTFItemStackType*)pStk)->SetStartPos( SwxPosition( pPam ) );
@@ -4125,10 +4231,10 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
 
     case RTF_PGDSCNO:
         if( IsNewDoc() && bSwPageDesc &&
-            sal_uInt16(nTokenValue) < pDoc->GetPageDescCnt() )
+            USHORT(nTokenValue) < pDoc->GetPageDescCnt() )
         {
             const SwPageDesc* pPgDsc = &const_cast<const SwDoc *>(pDoc)
-                ->GetPageDesc( (sal_uInt16)nTokenValue );
+                ->GetPageDesc( (USHORT)nTokenValue );
             pDoc->InsertPoolItem( *pPam, SwFmtPageDesc( pPgDsc ), 0);
         }
         break;
@@ -4151,14 +4257,14 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
                 if( pRule )
                     pSet->Put( SwNumRuleItem( pRule->GetName() ));
 
-                if( SFX_ITEM_SET != pSet->GetItemState( FN_PARAM_NUM_LEVEL, sal_False ))
+                if( SFX_ITEM_SET != pSet->GetItemState( FN_PARAM_NUM_LEVEL, FALSE ))
                     pSet->Put( SfxUInt16Item( FN_PARAM_NUM_LEVEL, 0 ));
             }
             else
             {
                 // wir sind in der Style-Definitions - Phase. Der Name
                 // wird dann spaeter umgesetzt
-                                // pSet->Put( SwNumRuleItem( String::CreateFromInt32( nTokenValue )));
+                                //#117891# pSet->Put( SwNumRuleItem( String::CreateFromInt32( nTokenValue )));
             }
 
         }
@@ -4167,18 +4273,25 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
     case RTF_ILVL:
     case RTF_SOUTLVL:
         {
-            sal_uInt8 nLevel = MAXLEVEL <= nTokenValue ? MAXLEVEL - 1
-                                                  : sal_uInt8( nTokenValue );
+            BYTE nLevel = MAXLEVEL <= nTokenValue ? MAXLEVEL - 1
+                                                  : BYTE( nTokenValue );
             pSet->Put( SfxUInt16Item( FN_PARAM_NUM_LEVEL, nLevel ));
         }
         break;
+
+/*
+    case RTF_SBYS:
+    case RTF_EXPND:
+    case RTF_KEEP:
+    case RTF_KEEPN:
+*/
 
     }
 }
 
 void SwRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 {
-sal_Char const aChkForVerNo[] = "StarWriter";
+sal_Char __READONLY_DATA aChkForVerNo[] = "StarWriter";
 
     // falls nicht schon was vorgegeben wurde, setzen wir unseren Namen
     // rein. Wenn das im Kommentar match, wird im Parser die VersionNummer
@@ -4270,7 +4383,7 @@ bool BookmarkPosition::operator==(const BookmarkPosition rhs)
     return(maMkNode.GetIndex() == rhs.maMkNode.GetIndex() && mnMkCntnt == rhs.mnMkCntnt);
 }
 
-sal_uLong SwNodeIdx::GetIdx() const
+ULONG SwNodeIdx::GetIdx() const
 {
     return aIdx.GetIndex();
 }
@@ -4290,7 +4403,7 @@ SvxNodeIdx* SwxPosition::MakeNodeIdx() const
     return new SwNodeIdx( pPam->GetPoint()->nNode );
 }
 
-sal_uLong   SwxPosition::GetNodeIdx() const
+ULONG   SwxPosition::GetNodeIdx() const
 {
     return pPam->GetPoint()->nNode.GetIndex();
 }

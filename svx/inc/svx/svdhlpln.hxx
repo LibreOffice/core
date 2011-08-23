@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class SdrHelpLine {
 
     // #i27493#
     // Helper method to draw a hor or ver two-colored dashed line
-    void ImpDrawDashedTwoColorLine(OutputDevice& rOut, sal_Int32 nStart, sal_Int32 nEnd, sal_Int32 nFixPos,
+    void ImpDrawDashedTwoColorLine(OutputDevice& rOut, sal_Int32 nStart, sal_Int32 nEnd, sal_Int32 nFixPos, 
         sal_Int32 nStepWidth, Color aColA, Color aColB, sal_Bool bHorizontal) const;
 
 public:
@@ -67,14 +67,14 @@ public:
     const Point&    GetPos() const                    { return aPos; }
 
     Pointer         GetPointer() const;
-    bool            IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;
+    bool            IsHit(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const;
     // OutputDevice wird benoetigt, da Fangpunkte eine feste Pixelgroesse haben
     Rectangle       GetBoundRect(const OutputDevice& rOut) const;
 
     /* returns true if this and the given help line would be rendered at the same pixel position
         of the given OutputDevice. This can be used to avoid drawing multiple help lines with xor
         on same position which could render them invisible */
-    bool            IsVisibleEqual( const SdrHelpLine& rHelpLine, const OutputDevice& rOut ) const;
+    bool			IsVisibleEqual( const SdrHelpLine& rHelpLine, const OutputDevice& rOut ) const;
 };
 
 #define SDRHELPLINE_NOTFOUND 0xFFFF
@@ -82,7 +82,7 @@ public:
 class SVX_DLLPUBLIC SdrHelpLineList {
     Container aList;
 protected:
-    SdrHelpLine* GetObject(sal_uInt16 i) const { return (SdrHelpLine*)(aList.GetObject(i)); }
+    SdrHelpLine* GetObject(USHORT i) const { return (SdrHelpLine*)(aList.GetObject(i)); }
 public:
     SdrHelpLineList(): aList(1024,4,4) {}
     SdrHelpLineList(const SdrHelpLineList& rSrcList): aList(1024,4,4)      { *this=rSrcList; }
@@ -91,13 +91,13 @@ public:
     void               operator=(const SdrHelpLineList& rSrcList);
     bool operator==(const SdrHelpLineList& rCmp) const;
     bool operator!=(const SdrHelpLineList& rCmp) const                 { return !operator==(rCmp); }
-    sal_uInt16             GetCount() const                                    { return sal_uInt16(aList.Count()); }
-    void               Insert(const SdrHelpLine& rHL, sal_uInt16 nPos=0xFFFF)  { aList.Insert(new SdrHelpLine(rHL),nPos); }
-    void               Delete(sal_uInt16 nPos)                                 { delete (SdrHelpLine*)aList.Remove(nPos); } // #i24900#
-    void               Move(sal_uInt16 nPos, sal_uInt16 nNewPos)                   { aList.Insert(aList.Remove(nPos),nNewPos); }
-    SdrHelpLine&       operator[](sal_uInt16 nPos)                             { return *GetObject(nPos); }
-    const SdrHelpLine& operator[](sal_uInt16 nPos) const                       { return *GetObject(nPos); }
-    sal_uInt16             HitTest(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;
+    USHORT             GetCount() const                                    { return USHORT(aList.Count()); }
+    void               Insert(const SdrHelpLine& rHL, USHORT nPos=0xFFFF)  { aList.Insert(new SdrHelpLine(rHL),nPos); }
+    void               Delete(USHORT nPos)                                 { delete (SdrHelpLine*)aList.Remove(nPos); } // #i24900#
+    void               Move(USHORT nPos, USHORT nNewPos)                   { aList.Insert(aList.Remove(nPos),nNewPos); }
+    SdrHelpLine&       operator[](USHORT nPos)                             { return *GetObject(nPos); }
+    const SdrHelpLine& operator[](USHORT nPos) const                       { return *GetObject(nPos); }
+    USHORT             HitTest(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

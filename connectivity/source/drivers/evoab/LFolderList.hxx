@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,30 +41,30 @@ namespace connectivity
     namespace evoab
     {
         //==================================================================
-        // Derivation of String with overloaded GetToken/GetTokenCount methods
-        // Especially for FLAT FILE-Format: Strings can be quoted
+        // Ableitung von String mit ueberladenen GetToken/GetTokenCount-Methoden
+        // Speziell fuer FLAT FILE-Format: Strings koennen gequotet sein
         //==================================================================
 
         class OEvoabConnection;
 
-        class OEvoabFolderList
+        class OEvoabFolderList 
         {
             // maps a row postion to a file position
-            ::std::vector<sal_Int32>        m_aTypes;       // holds all type for columns just to avoid to ask the propertyset
-            ::std::vector<sal_Int32>        m_aPrecisions;  // same as aboth
-            ::std::vector<sal_Int32>        m_aScales;
+            ::std::vector<sal_Int32>		m_aTypes;		// holds all type for columns just to avoid to ask the propertyset
+            ::std::vector<sal_Int32>		m_aPrecisions;	// same as aboth
+            ::std::vector<sal_Int32>		m_aScales;
             QuotedTokenizedString           m_aCurrentLine;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > m_xNumberFormatter;
-            sal_Int32                       m_nFilePos;                 // current IResultSetHelper::Movement
-            SvStream*                       m_pFileStream;
-            OEvoabConnection*               m_pConnection;
-            ::rtl::Reference<OSQLColumns>       m_aColumns;
-            OValueRow                       m_aRow;
-            sal_Bool                        m_bIsNull;
+            sal_Int32						m_nFilePos;					// aktuelle IResultSetHelper::Movement
+            SvStream*						m_pFileStream;
+            OEvoabConnection*				m_pConnection;
+            ::rtl::Reference<OSQLColumns>		m_aColumns;
+            OValueRow						m_aRow;
+            sal_Bool						m_bIsNull;
 
         private:
             void fillColumns(const ::com::sun::star::lang::Locale& _aLocale);
-            sal_Bool CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMemo);
+            BOOL CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo);
 
             sal_Bool fetchRow(OValueRow _rRow,const OSQLColumns& _rCols);
             sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition);

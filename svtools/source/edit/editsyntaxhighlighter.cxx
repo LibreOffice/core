@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,17 +32,17 @@
 #include <svtools/svmedit.hxx>
 #include <svtools/xtextedt.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
-#include <svtools/txtattr.hxx>
+#include "../../inc/txtattr.hxx"
 
 
-MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle,
+MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle, 
     HighlighterLanguage aLanguage): MultiLineEdit(pParent,nWinStyle), mbDoBracketHilight(true)
 {
     EnableUpdateData(300);
     aHighlighter.initialize( aLanguage );
 }
 
-MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, const ResId& rResId ,
+MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, const ResId& rResId , 
     HighlighterLanguage aLanguage): MultiLineEdit(pParent,rResId), mbDoBracketHilight(true)
 {
     EnableUpdateData(300);
@@ -62,25 +62,25 @@ bool MultiLineEditSyntaxHighlight::IsBracketHilight()
 {
     return mbDoBracketHilight;
 }
-
+        
 void MultiLineEditSyntaxHighlight::SetText(const String& rNewText)
 {
     MultiLineEdit::SetText(rNewText);
     UpdateData();
 }
 
-void MultiLineEditSyntaxHighlight::DoBracketHilight(sal_uInt16 aKey)
+void MultiLineEditSyntaxHighlight::DoBracketHilight(USHORT aKey)
 {
     TextSelection aCurrentPos = GetTextView()->GetSelection();
     xub_StrLen aStartPos  = aCurrentPos.GetStart().GetIndex();
-    sal_uLong nStartPara = aCurrentPos.GetStart().GetPara();
-    sal_uInt16 aCount = 0;
+    ULONG nStartPara = aCurrentPos.GetStart().GetPara();
+    USHORT aCount = 0;
     int aChar = -1;
 
     switch (aKey)
     {
-        case '\'':  // no break
-        case '"':
+        case '\'':	// no break
+        case '"': 
         {
             aChar = aKey;
             break;
@@ -110,16 +110,16 @@ void MultiLineEditSyntaxHighlight::DoBracketHilight(sal_uInt16 aKey)
                 continue;
 
             String aLine( GetTextEngine()->GetText( aPara ) );
-            for (sal_uInt16 i = ((unsigned long)aPara==nStartPara) ? aStartPos-1 : (sal_uInt16)(aLine.Len()-1); i>0; --i)
-            {
+            for (USHORT i = ((unsigned long)aPara==nStartPara) ? aStartPos-1 : (USHORT)(aLine.Len()-1); i>0; --i)
+            {	
                 if (aLine.GetChar(i)==aChar)
                 {
                     if (!aCount)
                     {
-                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), aPara, i, i+1, sal_True );
-                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), aPara, i, i+1, sal_True );
-                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nStartPara, aStartPos, aStartPos, sal_True );
-                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nStartPara, aStartPos, aStartPos, sal_True );
+                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), aPara, i, i+1, TRUE );
+                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), aPara, i, i+1, TRUE );
+                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nStartPara, aStartPos, aStartPos, TRUE );
+                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nStartPara, aStartPos, aStartPos, TRUE );
                         return;
                     }
                     else
@@ -149,14 +149,14 @@ Color MultiLineEditSyntaxHighlight::GetColorValue(TokenTypes aToken)
         {
             switch (aToken)
             {
-                case TT_IDENTIFIER: aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLIDENTIFIER).nColor; break;
-                case TT_NUMBER:     aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLNUMBER).nColor; break;
-                case TT_STRING:     aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLSTRING).nColor; break;
-                case TT_OPERATOR:   aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLOPERATOR).nColor; break;
-                case TT_KEYWORDS:   aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLKEYWORD).nColor; break;
+                case TT_IDENTIFIER:	aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLIDENTIFIER).nColor; break;
+                case TT_NUMBER:		aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLNUMBER).nColor; break;
+                case TT_STRING:		aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLSTRING).nColor; break;
+                case TT_OPERATOR:	aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLOPERATOR).nColor; break;
+                case TT_KEYWORDS:	aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLKEYWORD).nColor; break;
                 case TT_PARAMETER:  aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLPARAMETER).nColor; break;
-                case TT_COMMENT:    aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLCOMMENT).nColor; break;
-                default:            aColor = Color(0,0,0);
+                case TT_COMMENT:	aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLCOMMENT).nColor; break;
+                default:			aColor = Color(0,0,0);
             }
             break;
         }
@@ -164,14 +164,14 @@ Color MultiLineEditSyntaxHighlight::GetColorValue(TokenTypes aToken)
         {
             switch (aToken)
             {
-                case TT_IDENTIFIER: aColor = Color(255,0,0); break;
-                case TT_COMMENT:    aColor = Color(0,0,45); break;
-                case TT_NUMBER:     aColor = Color(204,102,204); break;
-                case TT_STRING:     aColor = Color(0,255,45); break;
-                case TT_OPERATOR:   aColor = Color(0,0,100); break;
-                case TT_KEYWORDS:   aColor = Color(0,0,255); break;
-                case TT_ERROR :     aColor = Color(0,255,255); break;
-                default:            aColor = Color(0,0,0);
+                case TT_IDENTIFIER:	aColor = Color(255,0,0); break;
+                case TT_COMMENT:	aColor = Color(0,0,45); break;
+                case TT_NUMBER:		aColor = Color(204,102,204); break;
+                case TT_STRING:		aColor = Color(0,255,45); break;
+                case TT_OPERATOR:	aColor = Color(0,0,100); break;
+                case TT_KEYWORDS:	aColor = Color(0,0,255); break;
+                case TT_ERROR :		aColor = Color(0,255,255); break;
+                default:			aColor = Color(0,0,0);
             }
             break;
         }
@@ -185,19 +185,19 @@ void MultiLineEditSyntaxHighlight::UpdateData()
 {
     // syntax highlighting
     // this must be possible improved by using notifychange correctly
-    sal_Bool bTempModified = GetTextEngine()->IsModified();
+    BOOL bTempModified = GetTextEngine()->IsModified();
     for (unsigned int nLine=0; nLine < GetTextEngine()->GetParagraphCount(); nLine++)
     {
         String aLine( GetTextEngine()->GetText( nLine ) );
-        aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
-
-        GetTextEngine()->RemoveAttribs( nLine, sal_True );
+        Range aChanges = aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
+            
+        GetTextEngine()->RemoveAttribs( nLine, TRUE );
         HighlightPortions aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-        for ( size_t i = 0; i < aPortions.size(); i++ )
+        for ( USHORT i = 0; i < aPortions.Count(); i++ )
         {
             HighlightPortion& r = aPortions[i];
-            GetTextEngine()->SetAttrib( TextAttribFontColor( GetColorValue(r.tokenType) ), nLine, r.nBegin, r.nEnd, sal_True );
+            GetTextEngine()->SetAttrib( TextAttribFontColor( GetColorValue(r.tokenType) ), nLine, r.nBegin, r.nEnd, TRUE );
         }
     }
     GetTextView()->ShowCursor( false, true );

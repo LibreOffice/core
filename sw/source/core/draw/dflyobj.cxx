@@ -44,7 +44,6 @@
 #include "cntfrm.hxx"
 #include "frmatr.hxx"
 #include "doc.hxx"
-#include <IDocumentUndoRedo.hxx>
 #include "dview.hxx"
 #include "dflyobj.hxx"
 #include "flyfrm.hxx"
@@ -55,13 +54,14 @@
 #include "ndnotxt.hxx"
 #include "grfatr.hxx"
 #include "pagefrm.hxx"
-#include "rootfrm.hxx"
 
 
 using namespace ::com::sun::star;
 
 
+// --> OD 2004-11-22 #117958#
 #include <svx/sdr/properties/defaultproperties.hxx>
+// <--
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -74,14 +74,17 @@ using namespace ::com::sun::star;
 
 using namespace ::com::sun::star;
 
-static sal_Bool bInResize = sal_False;
+static BOOL bInResize = FALSE;
 
 TYPEINIT1( SwFlyDrawObj, SdrObject )
 TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
 
 /*************************************************************************
 |*
-|*  SwFlyDrawObj::Ctor
+|*	SwFlyDrawObj::Ctor
+|*
+|*	Ersterstellung		MA 18. Apr. 95
+|*	Letzte Aenderung	MA 28. May. 96
 |*
 *************************************************************************/
 
@@ -127,13 +130,14 @@ namespace sdr
 
 sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
 {
-    // create default properties
+    // --> OD 2004-11-22 #117958# - create default properties
     return new sdr::properties::DefaultProperties(*this);
+    // <--
 }
 
 sdr::contact::ViewContact* SwFlyDrawObj::CreateObjectSpecificViewContact()
 {
-    // needs an own VC since createViewIndependentPrimitive2DSequence()
+    // #i95264# needs an own VC since createViewIndependentPrimitive2DSequence()
     // is called when RecalcBoundRect() is used
     return new sdr::contact::VCOfSwFlyDrawObj(*this);
 }
@@ -148,30 +152,36 @@ SwFlyDrawObj::~SwFlyDrawObj()
 
 /*************************************************************************
 |*
-|*  SwFlyDrawObj::Factory-Methoden
+|*	SwFlyDrawObj::Factory-Methoden
+|*
+|*	Ersterstellung		MA 23. Feb. 95
+|*	Letzte Aenderung	MA 23. Feb. 95
 |*
 *************************************************************************/
 
-sal_uInt32 SwFlyDrawObj::GetObjInventor() const
+UINT32 __EXPORT SwFlyDrawObj::GetObjInventor() const
 {
     return SWGInventor;
 }
 
 
-sal_uInt16 SwFlyDrawObj::GetObjIdentifier() const
+UINT16 __EXPORT SwFlyDrawObj::GetObjIdentifier()	const
 {
     return SwFlyDrawObjIdentifier;
 }
 
 
-sal_uInt16 SwFlyDrawObj::GetObjVersion() const
+UINT16 __EXPORT SwFlyDrawObj::GetObjVersion() const
 {
     return SwDrawFirst;
 }
 
 /*************************************************************************
 |*
-|*  SwVirtFlyDrawObj::CToren, Dtor
+|*	SwVirtFlyDrawObj::CToren, Dtor
+|*
+|*	Ersterstellung		MA 08. Dec. 94
+|*	Letzte Aenderung	MA 28. May. 96
 |*
 *************************************************************************/
 
@@ -186,7 +196,7 @@ namespace drawinglayer
         {
         private:
             const SwVirtFlyDrawObj&                 mrSwVirtFlyDrawObj;
-            const basegfx::B2DRange                 maOuterRange;
+            const basegfx::B2DRange					maOuterRange;
 
         protected:
             // method which is to be used to implement the local decomposition of a 2D primitive
@@ -232,14 +242,14 @@ namespace drawinglayer
             if(!getOuterRange().isEmpty())
             {
                 // currently this SW object has no primitive representation. As long as this is the case,
-                // create invisible geometry to allow corfect HitTest and BoundRect calculations for the
+                // create invisible geometry to allow corfect HitTest and BoundRect calculations for the 
                 // object. Use a filled primitive to get 'inside' as default object hit. The special cases from
                 // the old SwVirtFlyDrawObj::CheckHit implementation are handled now in SwDrawView::PickObj;
                 // this removed the 'hack' to get a view from inside model data or to react on null-tolerance
                 // as it was done in the old implementation
                 const Primitive2DReference aHitTestReference(
                     createHiddenGeometryPrimitives2D(
-                        true,
+                        true, 
                         getOuterRange()));
 
                 aRetval = Primitive2DSequence(&aHitTestReference, 1);
@@ -420,22 +430,25 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
     pFlyFrm( pFly )
 {
     //#110094#-1
-    // bNotPersistent = bNeedColorRestore = bWriterFlyFrame = sal_True;
+    // bNotPersistent = bNeedColorRestore = bWriterFlyFrame = TRUE;
     const SvxProtectItem &rP = pFlyFrm->GetFmt()->GetProtect();
     bMovProt = rP.IsPosProtected();
     bSizProt = rP.IsSizeProtected();
 }
 
 
-SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
+__EXPORT SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
 {
-    if ( GetPage() )    //Der SdrPage die Verantwortung entziehen.
+    if ( GetPage() )	//Der SdrPage die Verantwortung entziehen.
         GetPage()->RemoveObject( GetOrdNum() );
 }
 
 /*************************************************************************
 |*
-|*  SwVirtFlyDrawObj::GetFmt()
+|*	SwVirtFlyDrawObj::GetFmt()
+|*
+|*	Ersterstellung		MA 08. Dec. 94
+|*	Letzte Aenderung	MA 08. Dec. 94
 |*
 *************************************************************************/
 
@@ -452,13 +465,16 @@ SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
 
 /*************************************************************************
 |*
-|*  SwVirtFlyDrawObj::Paint()
+|*	SwVirtFlyDrawObj::Paint()
+|*
+|*	Ersterstellung		MA 20. Dec. 94
+|*	Letzte Aenderung	MA 18. Dec. 95
 |*
 *************************************************************************/
 
 void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 {
-    ViewShell* pShell = pFlyFrm->getRootFrm()->GetCurrShell();
+    ViewShell* pShell = pFlyFrm->GetShell();
 
     // Only paint when we have a current shell and a DrawingLayer paint is in progress.
     // This avcoids evtl. problems with renderers which do processing stuff,
@@ -497,26 +513,32 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 
 /*************************************************************************
 |*
-|*  SwVirtFlyDrawObj::TakeObjInfo()
+|*	SwVirtFlyDrawObj::TakeObjInfo()
+|*
+|*	Ersterstellung		MA 03. May. 95
+|*	Letzte Aenderung	MA 03. May. 95
 |*
 *************************************************************************/
 
-void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
+void __EXPORT SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 {
-    rInfo.bSelectAllowed     = rInfo.bMoveAllowed =
-    rInfo.bResizeFreeAllowed = rInfo.bResizePropAllowed = sal_True;
+    rInfo.bSelectAllowed	 = rInfo.bMoveAllowed =
+    rInfo.bResizeFreeAllowed = rInfo.bResizePropAllowed = TRUE;
 
     rInfo.bRotateFreeAllowed = rInfo.bRotate90Allowed =
     rInfo.bMirrorFreeAllowed = rInfo.bMirror45Allowed =
-    rInfo.bMirror90Allowed   = rInfo.bShearAllowed    =
-    rInfo.bCanConvToPath     = rInfo.bCanConvToPoly   =
-    rInfo.bCanConvToPathLineToArea = rInfo.bCanConvToPolyLineToArea = sal_False;
+    rInfo.bMirror90Allowed   = rInfo.bShearAllowed	  =
+    rInfo.bCanConvToPath	 = rInfo.bCanConvToPoly	  =
+    rInfo.bCanConvToPathLineToArea = rInfo.bCanConvToPolyLineToArea = FALSE;
 }
 
 
 /*************************************************************************
 |*
-|*  SwVirtFlyDrawObj::Groessenermittlung
+|*	SwVirtFlyDrawObj::Groessenermittlung
+|*
+|*	Ersterstellung		MA 12. Jan. 95
+|*	Letzte Aenderung	MA 10. Nov. 95
 |*
 *************************************************************************/
 
@@ -529,38 +551,38 @@ void SwVirtFlyDrawObj::SetRect() const
 }
 
 
-const Rectangle& SwVirtFlyDrawObj::GetCurrentBoundRect() const
+const Rectangle& __EXPORT SwVirtFlyDrawObj::GetCurrentBoundRect() const
 {
     SetRect();
     return aOutRect;
 }
 
-const Rectangle& SwVirtFlyDrawObj::GetLastBoundRect() const
+const Rectangle& __EXPORT SwVirtFlyDrawObj::GetLastBoundRect() const
 {
     return GetCurrentBoundRect();
 }
 
 
-void SwVirtFlyDrawObj::RecalcBoundRect()
+void __EXPORT SwVirtFlyDrawObj::RecalcBoundRect()
 {
     SetRect();
 }
 
 
-void SwVirtFlyDrawObj::RecalcSnapRect()
+void __EXPORT SwVirtFlyDrawObj::RecalcSnapRect()
 {
     SetRect();
 }
 
 
-const Rectangle& SwVirtFlyDrawObj::GetSnapRect()  const
+const Rectangle& __EXPORT SwVirtFlyDrawObj::GetSnapRect()  const
 {
     SetRect();
     return aOutRect;
 }
 
 
-void SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
+void __EXPORT SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
 {
     Rectangle aTmp( GetLastBoundRect() );
     SetRect();
@@ -571,20 +593,20 @@ void SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
 }
 
 
-void SwVirtFlyDrawObj::NbcSetSnapRect(const Rectangle& )
+void __EXPORT SwVirtFlyDrawObj::NbcSetSnapRect(const Rectangle& )
 {
     SetRect();
 }
 
 
-const Rectangle& SwVirtFlyDrawObj::GetLogicRect() const
+const Rectangle& __EXPORT SwVirtFlyDrawObj::GetLogicRect() const
 {
     SetRect();
     return aOutRect;
 }
 
 
-void SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
+void __EXPORT SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
 {
     Rectangle aTmp( GetLastBoundRect() );
     SetRect();
@@ -595,7 +617,7 @@ void SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
 }
 
 
-void SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
+void __EXPORT SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
 {
     SetRect();
 }
@@ -614,11 +636,14 @@ void SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
 
 /*************************************************************************
 |*
-|*  SwVirtFlyDrawObj::Move() und Resize()
+|*	SwVirtFlyDrawObj::Move() und Resize()
+|*
+|*	Ersterstellung		MA 12. Jan. 95
+|*	Letzte Aenderung	MA 26. Jul. 96
 |*
 *************************************************************************/
 
-void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
+void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 {
     MoveRect( aOutRect, rSiz );
     const Point aOldPos( GetFlyFrm()->Frm().Pos() );
@@ -654,19 +679,8 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         long lYDiff = aNewPos.Y() - aOldPos.Y();
         if( GetFlyFrm()->GetAnchorFrm()->IsVertical() )
         {
-            //lXDiff -= rVert.GetPos();
-            //lYDiff += rHori.GetPos();
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-            if ( GetFlyFrm()->GetAnchorFrm()->IsVertLR() )
-            {
-                lXDiff += rVert.GetPos();
-                lXDiff = -lXDiff;
-            }
-            else
-            {
-                lXDiff -= rVert.GetPos();
-                lYDiff += rHori.GetPos();
-            }
+            lXDiff -= rVert.GetPos();
+            lYDiff += rHori.GetPos();
         }
         else
         {
@@ -687,7 +701,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
                                             RES_VERT_ORIENT, RES_HORI_ORIENT );
     SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
     SwFmtVertOrient aVert( pFmt->GetVertOrient() );
-    sal_Bool bPut = sal_False;
+    BOOL bPut = FALSE;
 
     if( !GetFlyFrm()->IsFlyLayFrm() &&
         ::GetHtmlMode(pFmt->GetDoc()->GetDocShell()) )
@@ -696,7 +710,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         //Einzig einen Snap auf Links/Rechts bzw. Linker-/Rechter-Rand koennen
         //wir versuchen.
         const SwFrm* pAnch = GetFlyFrm()->GetAnchorFrm();
-        sal_Bool bNextLine = sal_False;
+        BOOL bNextLine = FALSE;
 
         if( !GetFlyFrm()->IsAutoPos() || text::RelOrientation::PAGE_FRAME != aHori.GetRelationOrient() )
         {
@@ -707,9 +721,9 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             }
             else
             {
-                bNextLine = sal_True;
+                bNextLine = TRUE;
                 //Horizontale Ausrichtung:
-                const sal_Bool bLeftFrm =
+                const BOOL bLeftFrm =
                     aFlyRect.Left() < pAnch->Frm().Left() + pAnch->Prt().Left(),
                     bLeftPrt = aFlyRect.Left() + aFlyRect.Width() <
                                pAnch->Frm().Left() + pAnch->Prt().Width()/2;
@@ -720,7 +734,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
                 }
                 else
                 {
-                    const sal_Bool bRightFrm = aFlyRect.Left() >
+                    const BOOL bRightFrm = aFlyRect.Left() >
                                        pAnch->Frm().Left() + pAnch->Prt().Width();
                     aHori.SetHoriOrient( text::HoriOrientation::RIGHT );
                     aHori.SetRelationOrient( bRightFrm ? text::RelOrientation::FRAME : text::RelOrientation::PRINT_AREA );
@@ -730,7 +744,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         }
         //Vertikale Ausrichtung bleibt grundsaetzlich schlicht erhalten,
         //nur bei nicht automatischer Ausrichtung wird umgeschaltet.
-        sal_Bool bRelChar = text::RelOrientation::CHAR == eRelVert;
+        BOOL bRelChar = text::RelOrientation::CHAR == eRelVert;
         aVert.SetVertOrient( eVert != text::VertOrientation::NONE ? eVert :
                 GetFlyFrm()->IsFlyInCntFrm() ? text::VertOrientation::CHAR_CENTER :
                 bRelChar && bNextLine ? text::VertOrientation::CHAR_TOP : text::VertOrientation::TOP );
@@ -739,7 +753,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         else
             aVert.SetRelationOrient( text::RelOrientation::PRINT_AREA );
         aSet.Put( aVert );
-        bPut = sal_True;
+        bPut = TRUE;
     }
 
     //Automatische Ausrichtungen wollen wir moeglichst nicht verlieren.
@@ -750,14 +764,14 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             aHori.SetHoriOrient( eHori );
             aHori.SetRelationOrient( eRelHori );
             aSet.Put( aHori );
-            bPut = sal_True;
+            bPut = TRUE;
         }
         if ( text::VertOrientation::NONE != eVert )
         {
             aVert.SetVertOrient( eVert );
             aVert.SetRelationOrient( eRelVert );
             aSet.Put( aVert );
-            bPut = sal_True;
+            bPut = TRUE;
         }
     }
     if ( bPut )
@@ -765,7 +779,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 }
 
 
-void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
+void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             const Fraction& xFact, const Fraction& yFact)
 {
     ResizeRect( aOutRect, rRef, xFact, yFact );
@@ -777,9 +791,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
 
     const sal_Bool bRTL = pTmpFrm->IsRightToLeft();
 
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    const bool bVertL2RX = pTmpFrm->IsVertLR();
-    const Point aNewPos( ( bVertX && !bVertL2RX ) || bRTL ?
+    const Point aNewPos( bVertX || bRTL ?
                          aOutRect.Right() + 1 :
                          aOutRect.Left(),
                          aOutRect.Top() );
@@ -797,7 +809,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             const SwFmtCol& rCol = rAttrs.GetAttrSet().GetCol();
             if ( rCol.GetColumns().Count() > 1 )
             {
-                for ( sal_uInt16 i = 0; i < rCol.GetColumns().Count(); ++i )
+                for ( USHORT i = 0; i < rCol.GetColumns().Count(); ++i )
                 {
                     nMin += rCol.GetColumns()[i]->GetLeft() +
                             rCol.GetColumns()[i]->GetRight() +
@@ -818,9 +830,9 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             const SwFrm *pRel = GetFlyFrm()->IsFlyLayFrm() ?
                                 GetFlyFrm()->GetAnchorFrm() :
                                 GetFlyFrm()->GetAnchorFrm()->GetUpper();
-            const ViewShell *pSh = GetFlyFrm()->getRootFrm()->GetCurrShell();
+            const ViewShell *pSh = GetFlyFrm()->GetShell();
             if ( pSh && pRel->IsBodyFrm() &&
-                 pSh->GetViewOptions()->getBrowseMode() &&
+                 pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
                  pSh->VisArea().HasArea() )
             {
                 nRelWidth  = pSh->GetBrowseWidth();
@@ -835,18 +847,19 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             }
             if ( aFrmSz.GetWidthPercent() && aFrmSz.GetWidthPercent() != 0xFF &&
                  aOldFrmSz.GetWidth() != aFrmSz.GetWidth() )
-                aFrmSz.SetWidthPercent( sal_uInt8(aSz.Width() * 100L / nRelWidth + 0.5) );
+                aFrmSz.SetWidthPercent( BYTE(aSz.Width() * 100L / nRelWidth + 0.5) );
             if ( aFrmSz.GetHeightPercent() && aFrmSz.GetHeightPercent() != 0xFF &&
                  aOldFrmSz.GetHeight() != aFrmSz.GetHeight() )
-                aFrmSz.SetHeightPercent( sal_uInt8(aSz.Height() * 100L / nRelHeight + 0.5) );
+                aFrmSz.SetHeightPercent( BYTE(aSz.Height() * 100L / nRelHeight + 0.5) );
             pFmt->GetDoc()->SetAttr( aFrmSz, *pFmt );
         }
     }
 
     //Position kann auch veraendert sein!
-    const Point aOldPos( ( bVertX && !bVertL2RX ) || bRTL ?
+    const Point aOldPos( bVertX || bRTL ?
                          GetFlyFrm()->Frm().TopRight() :
                          GetFlyFrm()->Frm().Pos() );
+
     if ( aNewPos != aOldPos )
     {
         //Kann sich durch das ChgSize veraendert haben!
@@ -854,50 +867,45 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
         {
             if( aOutRect.TopRight() != aNewPos )
             {
-                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                SwTwips nDeltaX;
-                if ( bVertL2RX )
-                    nDeltaX = aNewPos.X() - aOutRect.Left();
-                else
-                    nDeltaX = aNewPos.X() - aOutRect.Right();
+                SwTwips nDeltaX = aNewPos.X() - aOutRect.Right();
                 SwTwips nDeltaY = aNewPos.Y() - aOutRect.Top();
                 MoveRect( aOutRect, Size( nDeltaX, nDeltaY ) );
             }
         }
         else if ( aOutRect.TopLeft() != aNewPos )
             aOutRect.SetPos( aNewPos );
-        bInResize = sal_True;
+        bInResize = TRUE;
         NbcMove( Size( 0, 0 ) );
-        bInResize = sal_False;
+        bInResize = FALSE;
     }
 }
 
 
-void SwVirtFlyDrawObj::Move(const Size& rSiz)
+void __EXPORT SwVirtFlyDrawObj::Move(const Size& rSiz)
 {
     NbcMove( rSiz );
     SetChanged();
-    GetFmt()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+    GetFmt()->GetDoc()->SetNoDrawUndoObj( TRUE );
 }
 
 
-void SwVirtFlyDrawObj::Resize(const Point& rRef,
+void __EXPORT SwVirtFlyDrawObj::Resize(const Point& rRef,
                     const Fraction& xFact, const Fraction& yFact)
 {
     NbcResize( rRef, xFact, yFact );
     SetChanged();
-    GetFmt()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+    GetFmt()->GetDoc()->SetNoDrawUndoObj( TRUE );
 }
 
 
-Pointer  SwVirtFlyDrawObj::GetMacroPointer(
+Pointer  __EXPORT SwVirtFlyDrawObj::GetMacroPointer(
     const SdrObjMacroHitRec& ) const
 {
     return Pointer( POINTER_REFHAND );
 }
 
 
-bool SwVirtFlyDrawObj::HasMacro() const
+bool __EXPORT SwVirtFlyDrawObj::HasMacro() const
 {
     const SwFmtURL &rURL = pFlyFrm->GetFmt()->GetURL();
     return rURL.GetMap() || rURL.GetURL().Len();

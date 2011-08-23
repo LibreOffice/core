@@ -23,22 +23,6 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
-# relevant for non-product builds only, but built unconditionally
-.IF "$(ABORT_ON_ASSERTION)" != ""
-    DBGSV_ERROR_OUT=abort
-    SAL_DIAGNOSE_ABORT=TRUE
-    .EXPORT: SAL_DIAGNOSE_ABORT
-.ELSE
-    DBGSV_ERROR_OUT=shell
-.ENDIF
-.EXPORT: DBGSV_ERROR_OUT
-
-# don't allow to overwrite DBGSV_ERROR_OUT with an INI file. Otherwise, people
-# might be tempted to put an DBGSV_INIT into their .bash_profile which points to a file
-# delcaring to ignore all assertions completely ...
-DBGSV_INIT=
-.EXPORT: DBGSV_INIT
-
 .IF "$(OS)" == "WNT"
 my_file = file:///
 .ELSE
@@ -95,57 +79,45 @@ my_javaenv = \
 # on other platforms, a single installation to solver is created in
 # smoketestoo_native:
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
-OOO_EXTRACT_TO:=$(shell cygpath -m `mktemp -dt ooosmoke.XXXXXX`)
 $(MISC)/$(TARGET)/installation.flag : $(shell \
         ls $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).zip)
-    $(COMMAND_ECHO)$(MKDIRHIER) $(@:d)
-    $(COMMAND_ECHO)unzip -q $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).zip -d "$(OOO_EXTRACT_TO)"
-    $(COMMAND_ECHO)mv "$(OOO_EXTRACT_TO)"/LibO_*_install-arc_$(defaultlangiso) "$(OOO_EXTRACT_TO)"/opt
-    $(COMMAND_ECHO)echo "$(OOO_EXTRACT_TO)" > $@
+    $(MKDIRHIER) $(@:d)
+    my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX)) && \
+    unzip $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).zip \
+        -d "$$my_tmp" && \
+    mv "$$my_tmp"/LibO_*_install-arc_$(defaultlangiso) "$$my_tmp"/opt && \
+    echo "$$my_tmp" > $@
 .END
 
-cpptest .PHONY :
-    $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
-    $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
+cpptest .PHONY : $(MISC)/$(TARGET)/services.rdb
+    $(RM) -r $(MISC)/$(TARGET)/user
+    $(MKDIRHIER) $(MISC)/$(TARGET)/user
     $(CPPUNITTESTER) \
-        -env:UNO_SERVICES=$(my_file)$(SOLARXMLDIR)/ure/services.rdb \
+        -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
         -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
         -env:arg-soffice=$(my_soffice) -env:arg-user=$(MISC)/$(TARGET)/user \
-        $(my_cppenv) $(TEST_ARGUMENTS:^"-env:arg-testarg.") --protector \
-        $(SOLARSHAREDBIN)/unoexceptionprotector$(DLLPOST) \
-        unoexceptionprotector $(CPPTEST_LIBRARY)
-# As a workaround for #i111400#, ignore failure of $(RM):
-    $(COMMAND_ECHO)- $(RM) -r $(MISC)/$(TARGET)/user
-.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
-    $(COMMAND_ECHO)$(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
-cpptest : $(MISC)/$(TARGET)/installation.flag
-.END
-
-.IF "$(SOLAR_JAVA)" == "TRUE" && "$(OOO_JUNIT_JAR)" != ""
-javatest_% .PHONY : $(JAVATARGET)
-    $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
-    $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
-    $(COMMAND_ECHO)$(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
-        '$(OOO_JUNIT_JAR)$(PATH_SEPERATOR)$(CLASSPATH)' \
-        -Dorg.openoffice.test.arg.soffice=$(my_soffice) \
-        -Dorg.openoffice.test.arg.user=$(my_file)$(PWD)/$(MISC)/$(TARGET)/user \
-        $(my_javaenv) $(TEST_ARGUMENTS:^"-Dorg.openoffice.test.arg.testarg.") \
-        org.junit.runner.JUnitCore \
-        $(subst,/,. $(PACKAGE)).$(@:s/javatest_//)
+        $(my_cppenv) $(OOO_CPPTEST_ARGS)
     $(RM) -r $(MISC)/$(TARGET)/user
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
     $(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
-javatest : $(MISC)/$(TARGET)/installation.flag
+cpptest : $(MISC)/$(TARGET)/installation.flag
 .END
+
+$(MISC)/$(TARGET)/services.rdb :
+    $(MKDIRHIER) $(@:d)
+    $(RM) $@
+    $(REGCOMP) -register -r $@ -wop -c bridgefac.uno -c connector.uno \
+        -c remotebridge.uno -c uuresolver.uno
+
+.IF "$(SOLAR_JAVA)" == "TRUE" && "$(OOO_JUNIT_JAR)" != ""
 javatest .PHONY : $(JAVATARGET)
-    $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
-    $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
-    $(COMMAND_ECHO)$(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
+    $(RM) -r $(MISC)/$(TARGET)/user
+    $(MKDIRHIER) $(MISC)/$(TARGET)/user
+    $(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
         '$(OOO_JUNIT_JAR)$(PATH_SEPERATOR)$(CLASSPATH)' \
         -Dorg.openoffice.test.arg.soffice=$(my_soffice) \
         -Dorg.openoffice.test.arg.user=$(my_file)$(PWD)/$(MISC)/$(TARGET)/user \
-        $(my_javaenv) $(TEST_ARGUMENTS:^"-Dorg.openoffice.test.arg.testarg.") \
-        org.junit.runner.JUnitCore \
+        $(my_javaenv) org.junit.runner.JUnitCore \
         $(foreach,i,$(JAVATESTFILES) $(subst,/,. $(PACKAGE)).$(i:s/.java//))
     $(RM) -r $(MISC)/$(TARGET)/user
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
@@ -154,5 +126,5 @@ javatest : $(MISC)/$(TARGET)/installation.flag
 .END
 .ELSE
 javatest .PHONY :
-    @echo 'javatest needs SOLAR_JAVA=TRUE and OOO_JUNIT_JAR'
+    echo 'javatest needs SOLAR_JAVA=TRUE and OOO_JUNIT_JAR'
 .END

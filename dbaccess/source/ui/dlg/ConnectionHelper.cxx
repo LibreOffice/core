@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,6 @@
 #include "dbaccess_helpid.hrc"
 #include "localresaccess.hxx"
 #include <osl/process.h>
-#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include "dbadmin.hxx"
@@ -59,6 +58,7 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include "UITools.hxx"
@@ -70,11 +70,16 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/docfilt.hxx>
-#if !defined(WINDOWS_VISTA_PSDK) && defined(WNT)
+#if !defined(WINDOWS_VISTA_PSDK) && (defined(WIN) || defined(WNT))
 #define _ADO_DATALINK_BROWSE_
 #endif
 
 #ifdef _ADO_DATALINK_BROWSE_
+#if defined( WNT )
+    #include <tools/prewin.h>
+    #include <windows.h>
+    #include <tools/postwin.h>
+#endif
 #include <vcl/sysdata.hxx>
 #include "adodatalinks.hxx"
 #endif //_ADO_DATALINK_BROWSE_
@@ -115,7 +120,7 @@ DBG_NAME(OConnectionHelper)
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
         m_aPB_Connection.SetClickHdl(LINK(this, OConnectionHelper, OnBrowseConnections));
-        OSL_ENSURE(m_pCollection, "OConnectionHelper::OConnectionHelper : really need a DSN type collection !");
+        DBG_ASSERT(m_pCollection, "OConnectionHelper::OConnectionHelper : really need a DSN type collection !");
         m_aConnectionURL.SetTypeCollection(m_pCollection);
     }
 
@@ -138,7 +143,7 @@ DBG_NAME(OConnectionHelper)
         m_aConnectionURL.Show();
         m_aConnectionURL.ShowPrefix( ::dbaccess::DST_JDBC == m_pCollection->determineType(m_eType) );
 
-        sal_Bool bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
+        BOOL bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
         m_aPB_Connection.Show( bEnableBrowseButton );
 
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
@@ -179,7 +184,7 @@ DBG_NAME(OConnectionHelper)
             {
                 try
                 {
-                    ::rtl::OUString sFolderPickerService(SERVICE_UI_FOLDERPICKER);
+                    ::rtl::OUString sFolderPickerService = ::rtl::OUString::createFromAscii(SERVICE_UI_FOLDERPICKER);
                     Reference< XFolderPicker > xFolderPicker(m_xORB->createInstance(sFolderPickerService), UNO_QUERY);
                     if (!xFolderPicker.is())
                     {
@@ -302,27 +307,28 @@ DBG_NAME(OConnectionHelper)
                 sal_Bool bOldFashion = sAdabasConfigDir.getLength() && sAdabasWorkDir.getLength();
 
                 if(!bOldFashion) // we have a normal adabas installation
-                {    // so we check the local database names in $DBROOT/config
-                    sAdabasConfigDir    = sRootDir;
-                    sAdabasWorkDir      = sRootDir;
+                {	 // so we check the local database names in $DBROOT/config
+                    sAdabasConfigDir	= sRootDir;
+                    sAdabasWorkDir		= sRootDir;
                 }
 
                 if(sAdabasConfigDir.getLength() && sAdabasWorkDir.getLength() && sRootDir.getLength())
                 {
 
-                    aInstalledDBs   = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
+                    aInstalledDBs	= getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
 
                     if(!aInstalledDBs.size() && bOldFashion)
                     {
-                        sAdabasConfigDir    = sRootDir;
-                        sAdabasWorkDir      = sRootDir;
-                        aInstalledDBs       = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
+                        sAdabasConfigDir	= sRootDir;
+                        sAdabasWorkDir		= sRootDir;
+                        aInstalledDBs		= getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
                     }
 
                     ODatasourceSelectDialog aSelector(GetParent(), aInstalledDBs, true,m_pItemSetHelper->getWriteOutputSet());
                     if (RET_OK == aSelector.Execute())
                     {
                         setURLNoPrefix(aSelector.GetSelected());
+                        //	checkCreateDatabase( ::dbaccess::DST_ADABAS);
                         SetRoadmapStateValue(sal_True);
                         callModifiedHdl();
                     }
@@ -400,7 +406,7 @@ DBG_NAME(OConnectionHelper)
                         aProfiles.insert(pArray[index]);
 
 
-                    // execute the select dialog
+                    // excute the select dialog
                     ODatasourceSelectDialog aSelector(GetParent(), aProfiles, eType);
                     ::rtl::OUString sOldProfile=getURLNoPrefix();
 
@@ -434,13 +440,13 @@ DBG_NAME(OConnectionHelper)
     void OConnectionHelper::impl_setURL( const String& _rURL, sal_Bool _bPrefix )
     {
         String sURL( _rURL );
-        OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_setURL: have no interpreter for the URLs!" );
+        DBG_ASSERT( m_pCollection, "OConnectionHelper::impl_setURL: have no interpreter for the URLs!" );
 
         if ( m_pCollection && sURL.Len() )
         {
             if ( m_pCollection->isFileSystemBased( m_eType ) )
             {
-                // get the two parts: prefix and file URL
+                // get the tow parts: prefix and file URL
                 String sTypePrefix, sFileURLEncoded;
                 if ( _bPrefix )
                 {
@@ -480,13 +486,13 @@ DBG_NAME(OConnectionHelper)
         // get the pure text
         String sURL = _bPrefix ? m_aConnectionURL.GetText() : m_aConnectionURL.GetTextNoPrefix();
 
-        OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
+        DBG_ASSERT( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
 
         if ( m_pCollection && sURL.Len() )
         {
             if ( m_pCollection->isFileSystemBased( m_eType ) )
             {
-                // get the two parts: prefix and file URL
+                // get the tow parts: prefix and file URL
                 String sTypePrefix, sFileURLDecoded;
                 if ( _bPrefix )
                 {
@@ -554,7 +560,7 @@ DBG_NAME(OConnectionHelper)
                     do
                     {
                         if ( !createDirectoryDeep(_rURL) )
-                        {   // could not create the directory
+                        {	// could not create the directory
                             sQuery = String(ModuleRes(STR_COULD_NOT_CREATE_DIRECTORY));
                             sQuery.SearchAndReplaceAscii("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
 
@@ -578,6 +584,7 @@ DBG_NAME(OConnectionHelper)
                 break;
 
                 case RET_NO:
+                     // SetRoadmapStateValue(sal_False);
                     callModifiedHdl();
                     return RET_OK;
 
@@ -627,7 +634,7 @@ DBG_NAME(OConnectionHelper)
         {
         }
         if (bIsFolder && aAdabasConfigDir.get().is())
-        {   // we have a content for the directory, loop through all entries
+        {	// we have a content for the directory, loop through all entries
             Sequence< ::rtl::OUString > aProperties(1);
             aProperties[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
 
@@ -646,7 +653,7 @@ DBG_NAME(OConnectionHelper)
             }
             catch(Exception&)
             {
-                OSL_FAIL("OConnectionHelper::getInstalledAdabasDBDirs: could not enumerate the adabas config files!");
+                DBG_ERROR("OConnectionHelper::getInstalledAdabasDBDirs: could not enumerate the adabas config files!");
             }
         }
 
@@ -671,8 +678,8 @@ DBG_NAME(OConnectionHelper)
         StringBag aInstalledDBs;
         // collect the names of the installed databases
         StringBag aConfigDBs,aWrkDBs;
-        aConfigDBs  = getInstalledAdabasDBDirs(sAdabasConfigDir,::ucbhelper::INCLUDE_DOCUMENTS_ONLY);
-        aWrkDBs     = getInstalledAdabasDBDirs(sAdabasWorkDir,::ucbhelper::INCLUDE_FOLDERS_ONLY);
+        aConfigDBs	= getInstalledAdabasDBDirs(sAdabasConfigDir,::ucbhelper::INCLUDE_DOCUMENTS_ONLY);
+        aWrkDBs		= getInstalledAdabasDBDirs(sAdabasWorkDir,::ucbhelper::INCLUDE_FOLDERS_ONLY);
         ConstStringBagIterator aOuter = aConfigDBs.begin();
         ConstStringBagIterator aOuterEnd = aConfigDBs.end();
         for(;aOuter != aOuterEnd;++aOuter)
@@ -690,7 +697,7 @@ DBG_NAME(OConnectionHelper)
         }
         return aInstalledDBs;
     }
-    // -----------------------------------------------------------------------------
+    // #106016# -------------------------------------------------------------------
     IS_PATH_EXIST OConnectionHelper::pathExists(const ::rtl::OUString& _rURL, sal_Bool bIsFile) const
     {
         ::ucbhelper::Content aCheckExistence;
@@ -723,19 +730,19 @@ DBG_NAME(OConnectionHelper)
             {
                 case EVENT_GETFOCUS:
                     if (m_aConnectionURL.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
-                    {   // a descendant of the URL edit field got the focus
+                    {	// a descendant of the URL edit field got the focus
                         m_aConnectionURL.SaveValueNoPrefix();
                     }
                     break;
 
                 case EVENT_LOSEFOCUS:
                     if (m_aConnectionURL.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
-                    {   // a descendant of the URL edit field lost the focus
+                    {	// a descendant of the URL edit field lost the focus
                         if (!commitURL())
-                            return 1L;  // handled
+                            return 1L;	// handled
                     }
                     break;
-            }
+            } // switch (_rNEvt.GetType())
         }
 
         return OGenericAdministrationPage::PreNotify( _rNEvt );
@@ -753,14 +760,15 @@ DBG_NAME(OConnectionHelper)
 
         INetProtocol eProtocol = aParser.GetProtocol();
 
-        ::std::vector< ::rtl::OUString > aToBeCreated;  // the to-be-created levels
+        ::std::vector< ::rtl::OUString > aToBeCreated;	// the to-be-created levels
 
         // search a level which exists
+        // #106016# ---------------------
         IS_PATH_EXIST eParentExists = PATH_NOT_EXIST;
         while ( eParentExists == PATH_NOT_EXIST && aParser.getSegmentCount())
         {
-            aToBeCreated.push_back(aParser.getName());  // remember the local name for creation
-            aParser.removeSegment();                    // cut the local name
+            aToBeCreated.push_back(aParser.getName());	// remember the local name for creation
+            aParser.removeSegment();					// cut the local name
             eParentExists = pathExists(aParser.GetMainURL(INetURLObject::NO_DECODE), sal_False);
         }
 
@@ -777,24 +785,24 @@ DBG_NAME(OConnectionHelper)
             ::rtl::OUString sContentType;
             if ( INET_PROT_FILE == eProtocol )
             {
-                sContentType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.staroffice.fsys-folder"));
+                sContentType = ::rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" );
                 // the file UCP currently does not support the ContentType property
             }
             else
             {
-                Any aContentType = aParent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")) );
+                Any aContentType = aParent.getPropertyValue( ::rtl::OUString::createFromAscii( "ContentType" ) );
                 aContentType >>= sContentType;
             }
 
             // the properties which need to be set on the new content
             Sequence< ::rtl::OUString > aNewDirectoryProperties(1);
-            aNewDirectoryProperties[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+            aNewDirectoryProperties[0] = ::rtl::OUString::createFromAscii("Title");
 
             // the values to be set
             Sequence< Any > aNewDirectoryAttributes(1);
 
             // loop
-            for (   ::std::vector< ::rtl::OUString >::reverse_iterator aLocalName = aToBeCreated.rbegin();
+            for (	::std::vector< ::rtl::OUString >::reverse_iterator aLocalName = aToBeCreated.rbegin();
                     aLocalName != aToBeCreated.rend();
                     ++aLocalName
                 )
@@ -839,7 +847,7 @@ DBG_NAME(OConnectionHelper)
         if ( m_pCollection->isFileSystemBased(m_eType) )
         {
             if ( ( sURL != sOldPath ) && ( 0 != sURL.Len() ) )
-            {   // the text changed since entering the control
+            {	// the text changed since entering the control
 
                 // the path may be in system notation ....
                 OFileNotation aTransformer(sURL);
@@ -848,7 +856,7 @@ DBG_NAME(OConnectionHelper)
                 const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
 
                 if ( ( ::dbaccess::DST_CALC == eType) || ( ::dbaccess::DST_MSACCESS == eType) || ( ::dbaccess::DST_MSACCESS_2007 == eType) )
-                {
+                { // #106016# --------------------------
                     if( pathExists(sURL, sal_True) == PATH_NOT_EXIST )
                     {
                         String sFile = String( ModuleRes( STR_FILE_DOES_NOT_EXIST ) );
@@ -899,7 +907,7 @@ DBG_NAME(OConnectionHelper)
     }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

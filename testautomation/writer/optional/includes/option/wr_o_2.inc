@@ -102,8 +102,8 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
 
     '/// use a document to check the font with styles///'
     '///+ use 'input\\writer\\optional\\options\\options2.sxw' ///
-    hFileOpenLocally(  sFileName )
-    
+    Call hFileOpen ( sFileName )
+    Call sMakeReadOnlyDocumentEditable
     printlog "- Tools/Options/Writer: DefaultFont"
 
     printlog ("/// - save states ///")
@@ -239,8 +239,8 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
 
     Printlog "'///  - verify global settings don't affect saved Document ///"
     '///+ use input\\writer\\optional\\options\\options2.sxw ///
-    hFileOpenLocally(  sFileName )
-    
+    Call hFileOpen ( sFileName )
+    Call sMakeReadOnlyDocumentEditable
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Up>", 5
     Call wTypeKeys "<Home><Right>"
@@ -463,8 +463,8 @@ testcase tToolsOptionsWriterPrint1
     '(4) = Seitenende
 
     '/// uses "input\\writer\\optional\\options\\options3.sxw" ///
-    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\options\options3.sxw" )
-    
+    Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options3.sxw" )
+    Call sMakeReadOnlyDocumentEditable
     printlog "'///- Tools/Options/Writer: PrintWriter ///"
 
     printlog ("'/// - save states ///")
@@ -508,13 +508,7 @@ testcase tToolsOptionsWriterPrint1
     if bCheckboxes(10) then LeereSeitenDrucken.UnCheck else LeereSeitenDrucken.Check
     if bCheckboxes(11) then AusDruckereinstellung.UnCheck  else AusDruckereinstellung.Check
 
-    if Keine.IsEnabled then
-        if (Keine.IsChecked = True) then
-            NurNotizen.Check
-        else
-            Keine.Check
-        endif
-    endif
+    if (Keine.IsChecked = True) then NurNotizen.Check else Keine.Check
 
     bTempRadioBut(1) = Keine.IsChecked
     bTempRadioBut(2) = NurNotizen.IsChecked
@@ -593,7 +587,7 @@ testcase tToolsOptionsWriterPrint1
     ExtrasOptionenDlg.OK
     WaitSlot (2)
 	' Notify is saved with document
-    hFileOpen( gOfficePath & "user\work\printtest." & WriterFilterExtension(0) )
+    Call hFileOpen(gOfficepath + "user\work\printtest." & WriterFilterExtension(0) )
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "PRINT" )
 
@@ -618,13 +612,7 @@ testcase tToolsOptionsWriterPrint1
     LeereSeitenDrucken.UnCheck
     AusDruckereinstellung.UnCheck
 
-    if NurNotizen.IsEnabled then
-        if (NurNotizen.IsChecked = True) then
-            Dokumentende.Check
-        else
-            NurNotizen.Check
-        endif
-    endif
+    if (NurNotizen.IsChecked = True) then Dokumentende.Check else NurNotizen.Check
 
     bTempRadioBut(1) = Keine.IsChecked
     bTempRadioBut(2) = NurNotizen.IsChecked
@@ -678,13 +666,7 @@ testcase tToolsOptionsWriterPrint1
     LeereSeitenDrucken.Check
     AusDruckereinstellung.Check
 
-    if Dokumentende.IsEnabled then
-        if (Dokumentende.IsChecked = True) then
-            Seitenende.Check
-        else
-            Dokumentende.Check
-        endif
-    endif
+    if (Dokumentende.IsChecked = True) then Seitenende.Check else Dokumentende.Check
 
     bTempRadioBut(1) = Keine.IsChecked
     bTempRadioBut(2) = NurNotizen.IsChecked

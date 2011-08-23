@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ namespace connectivity
         {
         protected:
             virtual oslGenericFunction  getOdbcFunction(sal_Int32 _nIndex)  const;
-            virtual SQLHANDLE   EnvironmentHandle(::rtl::OUString &_rPath);
+            virtual SQLHANDLE	EnvironmentHandle(::rtl::OUString &_rPath);
         public:
             ORealObdcDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory) {}
         };
@@ -330,7 +330,7 @@ oslGenericFunction ORealObdcDriver::getOdbcFunction(sal_Int32 _nIndex) const
             pFunction = (oslGenericFunction)pODBC3SQLNativeSql;
             break;
         default:
-            OSL_FAIL("Function unknown!");
+            OSL_ENSURE(0,"Function unknown!");
     }
     return pFunction;
 }
@@ -341,20 +341,20 @@ oslGenericFunction ORealObdcDriver::getOdbcFunction(sal_Int32 _nIndex) const
     return *(new ORealObdcDriver(_rxFactory));
 }
 // -----------------------------------------------------------------------------
-// ODBC Environment (common for all Connections):
+// ODBC Environment (gemeinsam fuer alle Connections):
 SQLHANDLE ORealObdcDriver::EnvironmentHandle(::rtl::OUString &_rPath)
 {
-    // Is (for this instance) already a Enviroment made?
+    // Ist (fuer diese Instanz) bereits ein Environment erzeugt worden?
     if (!m_pDriverHandle)
     {
         SQLHANDLE h = SQL_NULL_HANDLE;
-        // allocate Environment
+        // Environment allozieren
 
-        // load ODBC-DLL now:
+        // ODBC-DLL jetzt laden:
         if (!LoadLibrary_ODBC3(_rPath) || N3SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE,&h) != SQL_SUCCESS)
             return SQL_NULL_HANDLE;
 
-        // Save in global Structure
+        // In globaler Struktur merken ...
         m_pDriverHandle = h;
         SQLRETURN nError = N3SQLSetEnvAttr(h, SQL_ATTR_ODBC_VERSION,(SQLPOINTER) SQL_OV_ODBC3, SQL_IS_UINTEGER);
         OSL_UNUSED( nError );

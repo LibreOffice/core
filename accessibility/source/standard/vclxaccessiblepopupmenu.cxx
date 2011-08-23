@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ VCLXAccessiblePopupMenu::~VCLXAccessiblePopupMenu()
 // -----------------------------------------------------------------------------
 
 sal_Bool VCLXAccessiblePopupMenu::IsFocused()
-{
+{   
     return !IsChildHighlighted();
 }
 
@@ -66,7 +66,7 @@ sal_Bool VCLXAccessiblePopupMenu::IsFocused()
 
 ::rtl::OUString VCLXAccessiblePopupMenu::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessiblePopupMenu") );
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessiblePopupMenu" );
 }
 
 // -----------------------------------------------------------------------------
@@ -74,7 +74,7 @@ sal_Bool VCLXAccessiblePopupMenu::IsFocused()
 Sequence< ::rtl::OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessiblePopupMenu") );
+    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessiblePopupMenu" );
     return aNames;
 }
 

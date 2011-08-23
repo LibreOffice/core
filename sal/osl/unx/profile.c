@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,11 +44,11 @@
 #define ENTRIES_ADD     3
 
 
-#define STR_INI_EXTENSION   "rc"
-#define STR_INI_METAHOME    "?~"
-#define STR_INI_METASYS     "?$"
-#define STR_INI_METACFG     "?^"
-#define STR_INI_METAINS     "?#"
+#define STR_INI_EXTENSION	"rc"
+#define STR_INI_METAHOME	"?~"
+#define STR_INI_METASYS		"?$"
+#define STR_INI_METACFG		"?^"
+#define STR_INI_METAINS		"?#"
 
 #define STR_INI_BOOLYES     "yes"
 #define STR_INI_BOOLON      "on"
@@ -57,24 +57,24 @@
 #define STR_INI_BOOLOFF     "off"
 #define STR_INI_BOOLZERO    "0"
 
-#define FLG_USER            0x00FF
-#define FLG_AUTOOPEN        0x0100
-#define FLG_MODIFIED        0x0200
+#define FLG_USER			0x00FF
+#define FLG_AUTOOPEN		0x0100
+#define FLG_MODIFIED		0x0200
 
 #define SVERSION_LOCATION   STR_INI_METACFG
 #define SVERSION_FALLBACK   STR_INI_METASYS
-#define SVERSION_NAME       "sversion"
+#define SVERSION_NAME   	"sversion"
 #define SVERSION_SECTION    "Versions"
 #define SVERSION_SOFFICE    "StarOffice"
 #define SVERSION_PROFILE    "sofficerc"
 #define SVERSION_OPTION     "userid:"
-#define SVERSION_DIRS       { "bin", "program" }
+#define SVERSION_DIRS		{ "bin", "program" }
 #define SVERSION_USER       "user"
 
-#define DEFAULT_PMODE   (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
+#define DEFAULT_PMODE 	(S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
 
-#define _BUILD_STR_(n)  # n
-#define BUILD_STR(n)    _BUILD_STR_(n)
+#define _BUILD_STR_(n)	# n
+#define BUILD_STR(n)	_BUILD_STR_(n)
 
 
 /*#define DEBUG_OSL_PROFILE*/
@@ -93,9 +93,9 @@ typedef enum _osl_TLockMode
 
 typedef struct _osl_TFile
 {
-    int     m_Handle;
-    sal_Char*   m_pReadPtr;
-    sal_Char    m_ReadBuf[512];
+    int		m_Handle;
+    sal_Char*	m_pReadPtr;
+    sal_Char	m_ReadBuf[512];
     sal_Char*   m_pWriteBuf;
     sal_uInt32  m_nWriteBufLen;
     sal_uInt32  m_nWriteBufFree;
@@ -103,19 +103,19 @@ typedef struct _osl_TFile
 
 typedef struct _osl_TProfileEntry
 {
-    sal_uInt32  m_Line;
+    sal_uInt32	m_Line;
     sal_uInt32  m_Offset;
     sal_uInt32  m_Len;
 } osl_TProfileEntry;
 
 typedef struct _osl_TProfileSection
 {
-    sal_uInt32  m_Line;
-    sal_uInt32  m_Offset;
-    sal_uInt32  m_Len;
-    sal_uInt32  m_NoEntries;
-    sal_uInt32  m_MaxEntries;
-    osl_TProfileEntry*  m_Entries;
+    sal_uInt32	m_Line;
+    sal_uInt32	m_Offset;
+    sal_uInt32	m_Len;
+    sal_uInt32	m_NoEntries;
+    sal_uInt32	m_MaxEntries;
+    osl_TProfileEntry*	m_Entries;
 } osl_TProfileSection;
 
 
@@ -124,15 +124,15 @@ typedef struct _osl_TProfileSection
 */
 typedef struct _osl_TProfileImpl
 {
-    sal_uInt32  m_Flags;
-    osl_TFile*  m_pFile;
-    osl_TStamp  m_Stamp;
+    sal_uInt32	m_Flags;
+    osl_TFile*	m_pFile;
+    osl_TStamp	m_Stamp;
     sal_Char    m_FileName[PATH_MAX + 1];
-    sal_uInt32  m_NoLines;
+    sal_uInt32	m_NoLines;
     sal_uInt32  m_MaxLines;
     sal_uInt32  m_NoSections;
     sal_uInt32  m_MaxSections;
-    sal_Char**  m_Lines;
+    sal_Char**	m_Lines;
     osl_TProfileSection* m_Sections;
     pthread_mutex_t m_AccessLock;
     sal_Bool    m_bIsValid;
@@ -195,9 +195,12 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *ustrProfileName, oslProfileOpti
 
 static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfileOption Flags)
 {
-    osl_TFile*        pFile;
+    osl_TFile*		  pFile;
     osl_TProfileImpl* pProfile;
+    sal_Char          Filename[PATH_MAX];
     sal_Bool bRet = sal_False;
+
+    Filename[0] = '\0';
 
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_openProfile\n");
@@ -274,6 +277,7 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 {
     osl_TProfileImpl* pProfile = (osl_TProfileImpl*)Profile;
+    sal_Bool bRet = sal_False;
 
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_closeProfile\n");
@@ -307,9 +311,8 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 
         if ( pProfile != 0 )
         {
-            sal_Bool bRet = storeProfile(pProfile, sal_True);
+            bRet=storeProfile(pProfile, sal_True);
             OSL_ASSERT(bRet);
-            (void)bRet;
         }
     }
     else
@@ -513,6 +516,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 
     if ( pTmpProfile->m_bIsValid == sal_False )
     {
+        OSL_ASSERT(pProfile->m_bIsValid);
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
         OSL_TRACE("Out osl_readProfileString [not valid]\n");
@@ -559,7 +563,6 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 
     bRet=releaseProfile(pProfile);
     OSL_ASSERT(bRet);
-    (void)bRet;
 
     if ( pStr == 0 )
     {
@@ -617,7 +620,7 @@ sal_uInt32 SAL_CALL osl_readProfileIdent(oslProfile Profile,
                               sal_uInt32 FirstId, const sal_Char* Strings[],
                               sal_uInt32 Default)
 {
-    sal_uInt32  i;
+    sal_uInt32	i;
     sal_Char    Line[256];
     Line[0] = '\0';
 
@@ -649,11 +652,11 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
                                const sal_Char* pszSection, const sal_Char* pszEntry,
                                const sal_Char* pszString)
 {
-    sal_uInt32  i;
+    sal_uInt32	i;
     sal_Bool bRet = sal_False;
     sal_uInt32    NoEntry;
     sal_Char* pStr;
-    sal_Char*       Line = 0;
+    sal_Char*		Line = 0;
     osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = 0;
     osl_TProfileImpl*    pTmpProfile = 0;
@@ -1016,7 +1019,6 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
 
     bRet=releaseProfile(pProfile);
     OSL_ASSERT(bRet);
-    (void)bRet;
 
     pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
@@ -1108,7 +1110,6 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
 
     bRet=releaseProfile(pProfile);
     OSL_ASSERT(bRet);
-    (void)bRet;
 
     pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
@@ -1207,7 +1208,7 @@ static sal_Bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
 #else
     /* Mac OSX will return ENOTSUP for webdav drives so we should ignore it */
     if ( fcntl(pFile->m_Handle, F_SETLKW, &lock) == -1 && errno != ENOTSUP )
-#endif  /* MACOSX */
+#endif  /* MACOSX */ 
     {
         OSL_TRACE("fcntl returned -1 (%s)\n",strerror(errno));
 #ifdef TRACE_OSL_PROFILE
@@ -1825,8 +1826,8 @@ static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile, const sal_Char
 {
 static  sal_uInt32    Sect = 0;
         sal_uInt32    i, n;
-        sal_uInt32  Len;
-        const sal_Char* pStr;
+        sal_uInt32	Len;
+        const sal_Char*	pStr;
         osl_TProfileSection* pSec=0;
 
     Len = strlen(Section);
@@ -1873,9 +1874,9 @@ static  sal_uInt32    Sect = 0;
 
 static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
 {
-    sal_uInt32  i;
-    sal_Char*       pStr;
-    sal_Char*       pChar;
+    sal_uInt32	i;
+    sal_Char*		pStr;
+    sal_Char*		pChar;
 
     sal_Char* pLine;
     sal_Char* bWasAdded = NULL;
@@ -2105,6 +2106,7 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 {
     osl_TProfileImpl* pProfile = (osl_TProfileImpl*)Profile;
     oslProfileOption PFlags=0;
+    sal_Bool bRet=sal_False;
 
     if ( bWriteable )
     {
@@ -2149,13 +2151,10 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 
                 if (memcmp(&Stamp, &(pProfile->m_Stamp), sizeof(osl_TStamp)))
                 {
-                    sal_Bool bRet=sal_False;
-
                     pProfile->m_Stamp = Stamp;
 
                     bRet=loadProfile(pProfile->m_pFile, pProfile);
                     OSL_ASSERT(bRet);
-                    (void)bRet;
                 }
             }
             else
@@ -2177,6 +2176,8 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 
 static sal_Bool releaseProfile(osl_TProfileImpl* pProfile)
 {
+    sal_Bool bRet=sal_False;
+
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  releaseProfile\n");
 #endif
@@ -2205,10 +2206,10 @@ static sal_Bool releaseProfile(osl_TProfileImpl* pProfile)
         {
             if (pProfile->m_Flags & FLG_MODIFIED)
             {
-                sal_Bool bRet=storeProfile(pProfile, sal_False);
+                bRet=storeProfile(pProfile, sal_False);
                 OSL_ASSERT(bRet);
-                (void)bRet;
             }
+
 
             closeFileImpl(pProfile->m_pFile,pProfile->m_Flags);
             pProfile->m_pFile = NULL;

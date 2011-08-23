@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,11 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <PropertyMap.hxx>
 #include <FontTable.hxx>
-#include <resourcemodel/LoggedResources.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
+
+#ifdef DEBUG_DOMAINMAPPER
+#include <resourcemodel/TagLogger.hxx>
+#endif
 
 namespace com{ namespace sun { namespace star { namespace text{
     class XTextDocument;
@@ -72,19 +76,21 @@ public:
     ::rtl::OUString sStyleName1;
     PropertyMapPtr  pProperties;
     ::rtl::OUString sConvertedStyleName;
-
+    
+#ifdef DEBUG_DOMAINMAPPER
+    virtual XMLTag::Pointer_t toTag();
+#endif
+    
     StyleSheetEntry();
     virtual ~StyleSheetEntry();
 };
 
 typedef boost::shared_ptr<StyleSheetEntry> StyleSheetEntryPtr;
-typedef ::std::deque<StyleSheetEntryPtr> StyleSheetEntryDeque;
-typedef boost::shared_ptr<StyleSheetEntryDeque> StyleSheetEntryDequePtr;
 
 class DomainMapper;
 class StyleSheetTable :
-        public LoggedProperties,
-        public LoggedTable
+        public Properties,
+        public Table
 {
     StyleSheetTable_Impl   *m_pImpl;
 
@@ -92,6 +98,13 @@ public:
     StyleSheetTable( DomainMapper& rDMapper,
                         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument> xTextDocument );
     virtual ~StyleSheetTable();
+
+    // Properties
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
+
+    // Table
+    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
     void ApplyStyleSheets( FontTablePtr rFontTable );
     const StyleSheetEntryPtr FindStyleSheetByISTD(const ::rtl::OUString& sIndex);
@@ -106,21 +119,14 @@ public:
     ::rtl::OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
 
 private:
-    // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
-
-    // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
-
     void resolveAttributeProperties(Value & val);
     void resolveSprmProps(Sprm & sprm_);
-    void applyDefaults(bool bParaProperties);
+    void applyDefaults(bool bParaProperties); 
 };
 typedef boost::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
 
 
-class WRITERFILTER_DLLPRIVATE TableStyleSheetEntry :
+class WRITERFILTER_DLLPRIVATE TableStyleSheetEntry : 
     public StyleSheetEntry
 {
 private:
@@ -138,13 +144,14 @@ public:
     // fixes some possible properties conflicts, like borders ones.
     void AddTblStylePr( TblStyleType nType, PropertyMapPtr pProps );
 
-    // Gets all the properties
+    // Gets all the properties 
     //     + corresponding to the mask,
     //     + from the parent styles
-    //
-    // @param mask      mask describing which properties to return
-    // @param pStack    already processed StyleSheetEntries
-    PropertyMapPtr GetProperties( sal_Int32 nMask, StyleSheetEntryDequePtr pStack = StyleSheetEntryDequePtr());
+    PropertyMapPtr GetProperties( sal_Int32 nMask );
+    
+#ifdef DEBUG_DOMAINMAPPER
+    virtual XMLTag::Pointer_t toTag();
+#endif
 
     TableStyleSheetEntry( StyleSheetEntry& aEntry, StyleSheetTable* pStyles );
     virtual ~TableStyleSheetEntry( );

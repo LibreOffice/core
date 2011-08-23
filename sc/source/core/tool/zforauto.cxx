@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,25 +37,25 @@
 #include "zforauto.hxx"
 #include "global.hxx"
 
-static const sal_Char pStandardName[] = "Standard";
+static const sal_Char __FAR_DATA pStandardName[] = "Standard";
 
 //------------------------------------------------------------------------
 
 ScNumFormatAbbrev::ScNumFormatAbbrev() :
-    sFormatstring   ( RTL_CONSTASCII_USTRINGPARAM( pStandardName ) ),
-    eLnge           (LANGUAGE_SYSTEM),
-    eSysLnge        (LANGUAGE_GERMAN)       // sonst passt "Standard" nicht
+    sFormatstring	( RTL_CONSTASCII_USTRINGPARAM( pStandardName ) ),
+    eLnge			(LANGUAGE_SYSTEM),
+    eSysLnge		(LANGUAGE_GERMAN)		// sonst passt "Standard" nicht
 {
 }
 
 ScNumFormatAbbrev::ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat) :
-    sFormatstring   (aFormat.sFormatstring),
-    eLnge           (aFormat.eLnge),
-    eSysLnge        (aFormat.eSysLnge)
+    sFormatstring	(aFormat.sFormatstring),
+    eLnge			(aFormat.eLnge),
+    eSysLnge		(aFormat.eSysLnge)
 {
 }
 
-ScNumFormatAbbrev::ScNumFormatAbbrev(sal_uLong nFormat,
+ScNumFormatAbbrev::ScNumFormatAbbrev(ULONG nFormat,
                                      SvNumberFormatter& rFormatter)
 {
     PutFormatIndex(nFormat, rFormatter);
@@ -63,7 +63,7 @@ ScNumFormatAbbrev::ScNumFormatAbbrev(sal_uLong nFormat,
 
 void ScNumFormatAbbrev::Load( SvStream& rStream, CharSet eByteStrSet )
 {
-    sal_uInt16 nSysLang, nLang;
+    USHORT nSysLang, nLang;
     rStream.ReadByteString( sFormatstring, eByteStrSet );
     rStream >> nSysLang >> nLang;
     eLnge = (LanguageType) nLang;
@@ -75,10 +75,10 @@ void ScNumFormatAbbrev::Load( SvStream& rStream, CharSet eByteStrSet )
 void ScNumFormatAbbrev::Save( SvStream& rStream, CharSet eByteStrSet ) const
 {
     rStream.WriteByteString( sFormatstring, eByteStrSet );
-    rStream << (sal_uInt16) eSysLnge << (sal_uInt16) eLnge;
+    rStream << (USHORT) eSysLnge << (USHORT) eLnge;
 }
 
-void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,
+void ScNumFormatAbbrev::PutFormatIndex(ULONG nFormat,
                                        SvNumberFormatter& rFormatter)
 {
     const SvNumberformat* pFormat = rFormatter.GetEntry(nFormat);
@@ -90,17 +90,17 @@ void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,
     }
     else
     {
-        OSL_FAIL("SCNumFormatAbbrev:: unbekanntes Zahlformat");
+        DBG_ERROR("SCNumFormatAbbrev:: unbekanntes Zahlformat");
         eLnge = LANGUAGE_SYSTEM;
-        eSysLnge = LANGUAGE_GERMAN;     // sonst passt "Standard" nicht
+        eSysLnge = LANGUAGE_GERMAN;		// sonst passt "Standard" nicht
         sFormatstring.AssignAscii( RTL_CONSTASCII_STRINGPARAM( pStandardName ) );
     }
 }
 
-sal_uLong ScNumFormatAbbrev::GetFormatIndex( SvNumberFormatter& rFormatter)
+ULONG ScNumFormatAbbrev::GetFormatIndex( SvNumberFormatter& rFormatter)
 {
     short nType;
-    sal_Bool bNewInserted;
+    BOOL bNewInserted;
     xub_StrLen nCheckPos;
     return rFormatter.GetIndexPuttingAndConverting( sFormatstring, eLnge,
             eSysLnge, nType, bNewInserted, nCheckPos);

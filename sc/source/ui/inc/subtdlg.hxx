@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,9 @@
 #ifndef SC_SUBTDLG_HXX
 #define SC_SUBTDLG_HXX
 
+#ifndef _SFX_HXX
+#endif
+
 #include <sfx2/tabdlg.hxx>
 
 #include "scui_def.hxx"
@@ -38,10 +41,10 @@
 class ScSubTotalDlg : public SfxTabDialog
 {
 public:
-                ScSubTotalDlg( Window*              pParent,
-                                const SfxItemSet*   pArgSet );
+                ScSubTotalDlg( Window*				pParent,
+                                const SfxItemSet*	pArgSet );
 private:
-    PushButton  aBtnRemove;
+    PushButton	aBtnRemove;
     DECL_LINK( RemoveHdl, PushButton * );
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ public:
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SwViewLayoutControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
+    SwViewLayoutControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
     ~SwViewLayoutControl();
 
-    virtual void  StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void  StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void  Paint( const UserDrawEvent& rEvt );
-    virtual sal_Bool  MouseButtonDown( const MouseEvent & );
+    virtual BOOL  MouseButtonDown( const MouseEvent & );
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ uno::Sequence< ::rtl::OUString > OZipFileAccess::GetPatternsFromString_Impl( con
     if ( !aString.getLength() )
         return uno::Sequence< ::rtl::OUString >();
 
-    uno::Sequence< ::rtl::OUString > aPattern( 1 );
+    uno::Sequence< ::rtl::OUString > aPattern( 1 );  
     sal_Int32 nInd = 0;
 
     const sal_Unicode* pString = aString.getStr();
@@ -103,7 +103,7 @@ uno::Sequence< ::rtl::OUString > OZipFileAccess::GetPatternsFromString_Impl( con
             }
             else
             {
-                OSL_FAIL( "The backslash is not guarded!\n" );
+                OSL_ENSURE( sal_False, "The backslash is not guarded!\n" );
                 aPattern[nInd] += ::rtl::OUString::valueOf( (sal_Unicode)'\\' );
             }
         }
@@ -118,18 +118,18 @@ uno::Sequence< ::rtl::OUString > OZipFileAccess::GetPatternsFromString_Impl( con
             pString++;
         }
     }
-
+    
     return aPattern;
 }
 
 // ----------------------------------------------------------------
 sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const ::rtl::OUString& aString,
                                                     const uno::Sequence< ::rtl::OUString >& aPattern )
-{
+{ 
     sal_Int32 nInd = aPattern.getLength() - 1;
     if ( nInd < 0 )
         return sal_False;
-
+   
     if ( nInd == 0 )
     {
         if ( !aPattern[0].getLength() )
@@ -143,7 +143,7 @@ sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const ::rtl::OUString& aStri
     if ( nEndInd >= nBeginInd
       && ( nEndInd == aString.getLength() || aString.copy( nEndInd ).equals( aPattern[nInd] ) )
       && ( nBeginInd == 0 || aString.copy( 0, nBeginInd ).equals( aPattern[0] ) ) )
-    {
+    { 
         for ( sal_Int32 nCurInd = aPattern.getLength() - 2; nCurInd > 0; nCurInd-- )
         {
             if ( !aPattern[nCurInd].getLength() )
@@ -218,7 +218,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
 
     if ( !m_xContentStream.is() )
         throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-
+    
     if ( !xSeekable.is() )
     {
         // TODO: after fwkbugfix02 is integrated a helper class can be used to make the stream seekable
@@ -229,7 +229,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     m_pZipFile = new ZipFile(
                 m_xContentStream,
                 m_xFactory,
-                sal_True );
+                sal_True );	
 }
 
 // XNameAccess
@@ -277,11 +277,11 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::getElementNames()
     uno::Sequence< ::rtl::OUString > aNames( m_pZipFile->GetEntryHash().size() );
     sal_Int32 nLen = 0;
 
-    for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); ++aIter )
+    for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); aIter++ )
     {
         if ( aNames.getLength() < ++nLen )
         {
-            OSL_FAIL( "The size must be the same!\n" );
+            OSL_ENSURE( sal_False, "The size must be the same!\n" );
             aNames.realloc( nLen );
         }
 
@@ -290,7 +290,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::getElementNames()
 
     if ( aNames.getLength() != nLen )
     {
-        OSL_FAIL( "The size must be the same!\n" );
+        OSL_ENSURE( sal_False, "The size must be the same!\n" );
         aNames.realloc( nLen );
     }
 
@@ -362,12 +362,12 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
     // Code to compare strings by patterns
     uno::Sequence< ::rtl::OUString > aPattern = GetPatternsFromString_Impl( aPatternString );
 
-    for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); ++aIter )
+    for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); aIter++ )
     {
         if ( StringGoodForPattern_Impl( (*aIter).second.sPath, aPattern ) )
         {
-            uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
-                                                                                        new EncryptionData(),
+            uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second, 
+                                                                                        new EncryptionData(), 
                                                                                         sal_False,
                                                                                         m_aMutexHolder ) );
 
@@ -444,15 +444,15 @@ void SAL_CALL OZipFileAccess::removeEventListener( const uno::Reference< lang::X
 uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.packages.zip.ZipFileAccess") );
-    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.packages.zip.ZipFileAccess") );
+    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.packages.zip.ZipFileAccess");
+    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.packages.zip.ZipFileAccess");
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OZipFileAccess::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.package.zip.ZipFileAccess") );
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.package.zip.ZipFileAccess");
 }
 
 //-------------------------------------------------------------------------

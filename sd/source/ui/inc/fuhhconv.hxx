@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,27 +43,27 @@ class FuHangulHanjaConversion : public FuPoor
 
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
-    void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
-                          const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
+    void StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage, 
+                          const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive );
 
     void StartChineseConversion();
 
-    void ConvertStyles( sal_Int16 nTargetLanguage, const Font *pTargetFont );
+    void ConvertStyles( INT16 nTargetLanguage, const Font *pTargetFont );
 
     Outliner* GetOutliner() const { return pSdOutliner; }
 
  protected:
     ~FuHangulHanjaConversion();
 
-    Outliner*   pSdOutliner;
-    sal_Bool            bOwnOutliner;
+    Outliner* 	pSdOutliner;
+    BOOL			bOwnOutliner;
 
 private:
     FuHangulHanjaConversion (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
+        ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq );
 
 };

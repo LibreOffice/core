@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_xmloff.hxx"
 
 #include <xmloff/xmlscripti.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -63,12 +63,12 @@ private:
     ::rtl::OUString m_aLanguage;
 
 public:
-    XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    XMLScriptChildContext( SvXMLImport& rImport, USHORT nPrfx, const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& rxModel,
         const ::rtl::OUString& rLanguage );
     virtual ~XMLScriptChildContext();
 
-    virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext* CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
@@ -76,7 +76,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, USHORT nPrfx, const ::rtl::OUString& rLName,
         const Reference< frame::XModel >& rxModel, const ::rtl::OUString& rLanguage )
     :SvXMLImportContext( rImport, nPrfx, rLName )
     ,m_xModel( rxModel )
@@ -93,8 +93,8 @@ XMLScriptChildContext::~XMLScriptChildContext()
 
 // -----------------------------------------------------------------------------
 
-SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
-    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+SvXMLImportContext* XMLScriptChildContext::CreateChildContext( 
+    USHORT nPrefix, const ::rtl::OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = NULL;
@@ -110,7 +110,7 @@ SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
 
     if ( !pContext )
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
-
+    
     return pContext;
 }
 
@@ -139,7 +139,7 @@ XMLScriptContext::~XMLScriptContext()
 
 // -----------------------------------------------------------------------------
 
-SvXMLImportContext* XMLScriptContext::CreateChildContext(
+SvXMLImportContext* XMLScriptContext::CreateChildContext( 
     sal_uInt16 nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList )
 {
@@ -177,7 +177,7 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext(
 
     if ( !pContext )
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLName, xAttrList);
-
+    
     return pContext;
 }
 

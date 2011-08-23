@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "sfx2/sfxhelp.hxx"
+#include "sfxhelp.hxx"
 #include "sfxtypes.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -85,9 +85,10 @@
 #include <sfx2/evntconf.hxx>
 #include "appdata.hxx"
 #include "workwin.hxx"
-#include "helper.hxx"   // SfxContentHelper::...
+#include <sfx2/macrconf.hxx>
+#include "helper.hxx"	// SfxContentHelper::...
 #include "app.hrc"
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include "shutdownicon.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -104,7 +105,7 @@ class SfxEventAsyncer_Impl : public SfxListener
 
 public:
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     SfxEventAsyncer_Impl( const SfxEventHint& rHint );
     ~SfxEventAsyncer_Impl();
     DECL_LINK( TimerHdl, Timer*);
@@ -154,7 +155,7 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
     {
         ByteString aTmp( "SfxEvent: ");
         aTmp += ByteString( String( aHint.GetEventName() ), RTL_TEXTENCODING_UTF8 );
-        OSL_TRACE( "%s", aTmp.GetBuffer() );
+        DBG_TRACE( aTmp.GetBuffer() );
     }
 #endif
     SFX_APP()->Broadcast( aHint );
@@ -167,145 +168,148 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
+BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     SfxItemPool &rPool = GetPool();
-    String asal_TrueStr('1');
+    String aTRUEStr('1');
 
-    const sal_uInt16 *pRanges = rSet.GetRanges();
+    const USHORT *pRanges = rSet.GetRanges();
     SvtSaveOptions aSaveOptions;
     SvtUndoOptions aUndoOptions;
     SvtHelpOptions aHelpOptions;
     SvtInetOptions aInetOptions;
-    SvtSecurityOptions  aSecurityOptions;
+    SvtSecurityOptions	aSecurityOptions;
     SvtMiscOptions aMiscOptions;
 
     while ( *pRanges )
     {
-        for(sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
+        for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
         {
             switch(nWhich)
             {
                 case SID_ATTR_BUTTON_OUTSTYLE3D :
                     if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_OUTSTYLE3D ),
                               aMiscOptions.GetToolboxStyle() != TOOLBOX_STYLE_FLAT)))
-                        bRet = sal_True;
+                        bRet = TRUE;
                     break;
                 case SID_ATTR_BUTTON_BIGSIZE :
                 {
                     if( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_BIGSIZE ), aMiscOptions.AreCurrentSymbolsLarge() ) ) )
-                        bRet = sal_True;
+                        bRet = TRUE;
                     break;
                 }
                 case SID_ATTR_BACKUP :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_BACKUP))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BACKUP ),aSaveOptions.IsBackup())))
-                                bRet = sal_False;
+                                bRet = FALSE;
                     }
                     break;
                 case SID_ATTR_PRETTYPRINTING:
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_DOPRETTYPRINTING))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), aSaveOptions.IsPrettyPrinting())))
-                                bRet = sal_False;
+                                bRet = FALSE;
                     }
                     break;
                 case SID_ATTR_WARNALIENFORMAT:
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_WARNALIENFORMAT ), aSaveOptions.IsWarnAlienFormat())))
-                                bRet = sal_False;
+                                bRet = FALSE;
                     }
                     break;
                 case SID_ATTR_AUTOSAVE :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_AUTOSAVE))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_AUTOSAVE ), aSaveOptions.IsAutoSave())))
-                                bRet = sal_False;
+                                bRet = FALSE;
                     }
                     break;
                 case SID_ATTR_AUTOSAVEPROMPT :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_AUTOSAVEPROMPT))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_AUTOSAVEPROMPT ), aSaveOptions.IsAutoSavePrompt())))
-                                bRet = sal_False;
+                                bRet = FALSE;
                     }
                     break;
                 case SID_ATTR_AUTOSAVEMINUTE :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_AUTOSAVETIME))
-                            if (!rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_AUTOSAVEMINUTE ), (sal_uInt16)aSaveOptions.GetAutoSaveTime())))
-                                bRet = sal_False;
+                            if (!rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_AUTOSAVEMINUTE ), (UINT16)aSaveOptions.GetAutoSaveTime())))
+                                bRet = FALSE;
                     }
                     break;
                 case SID_ATTR_DOCINFO :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_DOCINFSAVE))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_DOCINFO ), aSaveOptions.IsDocInfoSave())))
-                                bRet = sal_False;
+                                bRet = FALSE;
                     }
                     break;
                 case SID_ATTR_WORKINGSET :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEWORKINGSET))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_WORKINGSET ), aSaveOptions.IsSaveWorkingSet())))
-                                bRet = sal_False;
+                                bRet = FALSE;
                     }
                     break;
                 case SID_ATTR_SAVEDOCVIEW :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEDOCVIEW))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_SAVEDOCVIEW ), aSaveOptions.IsSaveDocView())))
-                                bRet = sal_False;
+                                bRet = FALSE;
                     }
                     break;
                 case SID_ATTR_METRIC :
+//                    if(rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_METRIC ),
+//                                pOptions->GetMetric() ) ) )
+//                        bRet = TRUE;
                     break;
                 case SID_HELPBALLOONS :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_HELPBALLOONS ),
                                aHelpOptions.IsExtendedHelp() ) ) )
-                        bRet = sal_True;
+                        bRet = TRUE;
                     break;
                 case SID_HELPTIPS :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_HELPTIPS ),
                                aHelpOptions.IsHelpTips() ) ) )
-                        bRet = sal_True;
+                        bRet = TRUE;
                     break;
                 case SID_ATTR_AUTOHELPAGENT :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_ATTR_AUTOHELPAGENT ),
                                aHelpOptions.IsHelpAgentAutoStartMode() ) ) )
-                        bRet = sal_True;
+                        bRet = TRUE;
                     break;
                 case SID_HELPAGENT_TIMEOUT :
                     if ( rSet.Put( SfxInt32Item( rPool.GetWhich( SID_HELPAGENT_TIMEOUT ),
                                                  aHelpOptions.GetHelpAgentTimeoutPeriod() ) ) )
-                        bRet = sal_True;
+                        bRet = TRUE;
                     break;
                 case SID_ATTR_WELCOMESCREEN :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_ATTR_WELCOMESCREEN ),
                                aHelpOptions.IsWelcomeScreen() ) ) )
-                        bRet = sal_True;
+                        bRet = TRUE;
                     break;
                 case SID_HELP_STYLESHEET :
                     if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_HELP_STYLESHEET ),
                                aHelpOptions.GetHelpStyleSheet() ) ) )
-                        bRet = sal_True;
+                        bRet = TRUE;
                 break;
                 case SID_ATTR_UNDO_COUNT :
                     if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_ATTR_UNDO_COUNT ),
-                                 (sal_uInt16)aUndoOptions.GetUndoCount() ) ) )
-                        bRet = sal_True;
+                                 (UINT16)aUndoOptions.GetUndoCount() ) ) )
+                        bRet = TRUE;
                     break;
                 case SID_ATTR_QUICKLAUNCHER :
                 {
@@ -313,74 +317,74 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     {
                         if ( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_QUICKLAUNCHER ),
                                                     ShutdownIcon::GetAutostart() ) ) )
-                            bRet = sal_True;
+                            bRet = TRUE;
                     }
                     else
                     {
                         rSet.DisableItem( rPool.GetWhich( SID_ATTR_QUICKLAUNCHER ) );
-                        bRet = sal_True;
+                        bRet = TRUE;
                     }
                     break;
                 }
                 case SID_SAVEREL_INET :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVERELINET))
                             if (!rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_SAVEREL_INET ), aSaveOptions.IsSaveRelINet() )))
-                                bRet = sal_False;
+                                bRet = FALSE;
                     }
                     break;
                 case SID_SAVEREL_FSYS :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVERELFSYS))
                             if (!rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_SAVEREL_FSYS ), aSaveOptions.IsSaveRelFSys() )))
-                                bRet = sal_False;
+                                bRet = FALSE;
                     }
                     break;
                 case SID_BASIC_ENABLED :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_BASICMODE))
                         {
-                            if ( !rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_BASIC_ENABLED ), sal::static_int_cast< sal_uInt16 >(aSecurityOptions.GetBasicMode()))))
-                                bRet = sal_False;
+                            if ( !rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_BASIC_ENABLED ), sal::static_int_cast< UINT16 >(aSecurityOptions.GetBasicMode()))))
+                                bRet = FALSE;
                         }
                     }
                     break;
                 case SID_INET_EXE_PLUGIN  :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_EXECUTEPLUGINS))
                         {
                             if ( !rSet.Put( SfxBoolItem( SID_INET_EXE_PLUGIN, aSecurityOptions.IsExecutePlugins() ) ) )
-                                bRet = sal_False;
+                                bRet = FALSE;
                         }
                     }
                     break;
                 case SID_MACRO_WARNING :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_WARNING))
                         {
                             if ( !rSet.Put( SfxBoolItem( SID_MACRO_WARNING, aSecurityOptions.IsWarningEnabled() ) ) )
-                                bRet = sal_False;
+                                bRet = FALSE;
                         }
                     }
                     break;
                 case SID_MACRO_CONFIRMATION :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_CONFIRMATION))
                         {
                             if ( !rSet.Put( SfxBoolItem( SID_MACRO_CONFIRMATION, aSecurityOptions.IsConfirmationEnabled() ) ) )
-                                bRet = sal_False;
+                                bRet = FALSE;
                         }
                     }
                     break;
                 case SID_SECURE_URL :
                     {
-                        bRet = sal_True;
+                        bRet = TRUE;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_SECUREURLS))
                         {
                             ::com::sun::star::uno::Sequence< ::rtl::OUString > seqURLs = aSecurityOptions.GetSecureURLs();
@@ -394,7 +398,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                             if( !rSet.Put( SfxStringListItem( rPool.GetWhich(SID_SECURE_URL),
                                     &aList ) ) )
                             {
-                                bRet = sal_False;
+                                bRet = FALSE;
                             }
                             for( nURL=0; nURL<nCount; ++nURL )
                             {
@@ -412,31 +416,31 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_INET_PROXY_TYPE :
                 {
                     if( rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE ),
-                        (sal_uInt16)aInetOptions.GetProxyType() )))
-                            bRet = sal_True;
+                        (UINT16)aInetOptions.GetProxyType() )))
+                            bRet = TRUE;
                     break;
                 }
                 case SID_INET_HTTP_PROXY_NAME :
                 {
                     if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_HTTP_PROXY_NAME ),
                         aInetOptions.GetProxyHttpName() )))
-                            bRet = sal_True;
+                            bRet = TRUE;
                     break;
                 }
                 case SID_INET_HTTP_PROXY_PORT :
                     if ( rSet.Put( SfxInt32Item( rPool.GetWhich(SID_INET_HTTP_PROXY_PORT ),
                         aInetOptions.GetProxyHttpPort() )))
-                            bRet = sal_True;
+                            bRet = TRUE;
                     break;
                 case SID_INET_FTP_PROXY_NAME :
                     if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_FTP_PROXY_NAME ),
                         aInetOptions.GetProxyFtpName() )))
-                            bRet = sal_True;
+                            bRet = TRUE;
                     break;
                 case SID_INET_FTP_PROXY_PORT :
                     if ( rSet.Put( SfxInt32Item ( rPool.GetWhich(SID_INET_FTP_PROXY_PORT ),
                         aInetOptions.GetProxyFtpPort() )))
-                            bRet = sal_True;
+                            bRet = TRUE;
                     break;
                 case SID_INET_SECURITY_PROXY_NAME :
                 case SID_INET_SECURITY_PROXY_PORT :
@@ -447,7 +451,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_INET_NOPROXY :
                     if( rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_NOPROXY),
                         aInetOptions.GetProxyNoProxy() )))
-                            bRet = sal_True;
+                            bRet = TRUE;
                     break;
                 case SID_ATTR_PATHNAME :
                 case SID_ATTR_PATHGROUP :
@@ -455,7 +459,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     SfxAllEnumItem aNames(rPool.GetWhich(SID_ATTR_PATHGROUP));
                     SfxAllEnumItem aValues(rPool.GetWhich(SID_ATTR_PATHNAME));
                     SvtPathOptions aPathCfg;
-                    for ( sal_uInt16 nProp = SvtPathOptions::PATH_ADDIN;
+                    for ( USHORT nProp = SvtPathOptions::PATH_ADDIN;
                           nProp <= SvtPathOptions::PATH_WORK; nProp++ )
                     {
                         const String aName( SfxResId( CONFIG_PATH_START + nProp ) );
@@ -490,7 +494,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     }
 
                     if ( rSet.Put(aNames) || rSet.Put(aValues) )
-                        bRet = sal_True;
+                        bRet = TRUE;
                 }
 
                 default:
@@ -499,7 +503,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
             }
 #ifdef DBG_UTIL
             if ( !bRet )
-                OSL_FAIL( "Putting options failed!" );
+                DBG_ERROR( "Putting options failed!" );
 #endif
         }
         pRanges++;
@@ -509,16 +513,18 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
 }
 
 //--------------------------------------------------------------------
-sal_Bool SfxApplication::IsSecureURL( const INetURLObject& rURL, const String* pReferer ) const
+BOOL SfxApplication::IsSecureURL( const INetURLObject& rURL, const String* pReferer ) const
 {
     return SvtSecurityOptions().IsSecureURL( rURL.GetMainURL( INetURLObject::NO_DECODE ), *pReferer );
 }
 //--------------------------------------------------------------------
-// TODO/CLEANUP: Why two SetOptions Methods?
+// TODO/CLEANUP: wieso zwei SetOptions Methoden?
 void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 {
     const SfxPoolItem *pItem = 0;
     SfxItemPool &rPool = GetPool();
+    BOOL bResetSession = FALSE;
+    BOOL bProxiesModified = FALSE;
 
     SvtSaveOptions aSaveOptions;
     SvtUndoOptions aUndoOptions;
@@ -527,18 +533,18 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     SvtPathOptions aPathOptions;
     SvtInetOptions aInetOptions;
     SvtMiscOptions aMiscOptions;
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_OUTSTYLE3D), sal_True, &pItem) )
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_OUTSTYLE3D), TRUE, &pItem) )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        sal_uInt16 nOutStyle =
+        USHORT nOutStyle =
             ( (const SfxBoolItem *)pItem)->GetValue() ? 0 : TOOLBOX_STYLE_FLAT;
         aMiscOptions.SetToolboxStyle( nOutStyle );
     }
 
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_BIGSIZE), sal_True, &pItem) )
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_BIGSIZE), TRUE, &pItem) )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        sal_Bool bBigSize = ( (const SfxBoolItem*)pItem )->GetValue();
+        BOOL bBigSize = ( (const SfxBoolItem*)pItem )->GetValue();
         aMiscOptions.SetSymbolsSize(
             sal::static_int_cast< sal_Int16 >(
                 bBigSize ? SFX_SYMBOLS_SIZE_LARGE : SFX_SYMBOLS_SIZE_SMALL ) );
@@ -553,162 +559,163 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // Backup
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BACKUP), sal_True, &pItem) )
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BACKUP), TRUE, &pItem) )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetBackup( ( (const SfxBoolItem*)pItem )->GetValue() );
     }
 
     // PrettyPrinting
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), sal_True, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), TRUE, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA( SfxBoolItem ), "BoolItem expected" );
         aSaveOptions.SetPrettyPrinting( static_cast< const SfxBoolItem*> ( pItem )->GetValue() );
     }
 
     // WarnAlienFormat
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ATTR_WARNALIENFORMAT ), sal_True, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ATTR_WARNALIENFORMAT ), TRUE, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA( SfxBoolItem ), "BoolItem expected" );
         aSaveOptions.SetWarnAlienFormat( static_cast< const SfxBoolItem*> ( pItem )->GetValue() );
     }
 
     // AutoSave
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVE), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVE), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetAutoSave( ( (const SfxBoolItem*)pItem )->GetValue() );
     }
 
     // AutoSave-Propt
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVEPROMPT), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVEPROMPT), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetAutoSavePrompt(((const SfxBoolItem *)pItem)->GetValue());
     }
 
     // AutoSave-Time
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVEMINUTE), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVEMINUTE), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
         aSaveOptions.SetAutoSaveTime(((const SfxUInt16Item *)pItem)->GetValue());
     }
 
     // DocInfo
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_DOCINFO), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_DOCINFO), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetDocInfoSave(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // Mark open Documents
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WORKINGSET), sal_True, &pItem))
+    // offende Dokumente merken
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WORKINGSET), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetSaveWorkingSet(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // Save window settings
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_SAVEDOCVIEW), sal_True, &pItem))
+    // Fenster-Einstellung speichern
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_SAVEDOCVIEW), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetSaveDocView(((const SfxBoolItem *)pItem)->GetValue());
     }
 
     // Metric
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_METRIC), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_METRIC), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
+//        pOptions->SetMetric((FieldUnit)((const SfxUInt16Item*)pItem)->GetValue());
     }
 
     // HelpBalloons
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELPBALLOONS), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELPBALLOONS), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aHelpOptions.SetExtendedHelp(((const SfxBoolItem *)pItem)->GetValue());
     }
 
     // HelpTips
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELPTIPS), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELPTIPS), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aHelpOptions.SetHelpTips(((const SfxBoolItem *)pItem)->GetValue());
     }
 
     // AutoHelpAgent
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOHELPAGENT ), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOHELPAGENT ), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aHelpOptions.SetHelpAgentAutoStartMode( ((const SfxBoolItem *)pItem)->GetValue() );
     }
 
     // help agent timeout
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_HELPAGENT_TIMEOUT ), sal_True, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_HELPAGENT_TIMEOUT ), TRUE, &pItem ) )
     {
         DBG_ASSERT(pItem->ISA(SfxInt32Item), "Int32Item expected");
         aHelpOptions.SetHelpAgentTimeoutPeriod( ( (const SfxInt32Item*)pItem )->GetValue() );
     }
 
     // WelcomeScreen
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WELCOMESCREEN ), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WELCOMESCREEN ), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aHelpOptions.SetWelcomeScreen( ((const SfxBoolItem *)pItem)->GetValue() );
     }
 
     // WelcomeScreen
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_WELCOMESCREEN_RESET ), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_WELCOMESCREEN_RESET ), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        sal_Bool bReset = ((const SfxBoolItem *)pItem)->GetValue();
+        BOOL bReset = ((const SfxBoolItem *)pItem)->GetValue();
         if ( bReset )
         {
-            OSL_FAIL( "Not implemented, may be EOL!" );
+            DBG_ERROR( "Not implemented, may be EOL!" );
         }                                                   }
 
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELP_STYLESHEET ), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELP_STYLESHEET ), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
         aHelpOptions.SetHelpStyleSheet( ((const SfxStringItem *)pItem)->GetValue() );
     }
 
     // SaveRelINet
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_SAVEREL_INET), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_SAVEREL_INET), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetSaveRelINet(((const SfxBoolItem *)pItem)->GetValue());
     }
 
     // SaveRelFSys
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_SAVEREL_FSYS), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_SAVEREL_FSYS), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetSaveRelFSys(((const SfxBoolItem *)pItem)->GetValue());
     }
 
     // Undo-Count
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_UNDO_COUNT), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_UNDO_COUNT), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
-        sal_uInt16 nUndoCount = ((const SfxUInt16Item*)pItem)->GetValue();
+        USHORT nUndoCount = ((const SfxUInt16Item*)pItem)->GetValue();
         aUndoOptions.SetUndoCount( nUndoCount );
 
-        // To catch all Undo-Managers: Iterate over all Frames
+        // um alle Undo-Manager zu erwischen: "uber alle Frames iterieren
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();
               pFrame;
               pFrame = SfxViewFrame::GetNext(*pFrame) )
         {
-            // Get the Dispatcher of the Frames
+            // den Dispatcher des Frames rausholen
             SfxDispatcher *pDispat = pFrame->GetDispatcher();
             pDispat->Flush();
 
-            // Iterate over all SfxShells on the Dispatchers Stack
-            sal_uInt16 nIdx = 0;
+            // "uber alle SfxShells auf dem Stack des Dispatchers iterieren
+            USHORT nIdx = 0;
             for ( SfxShell *pSh = pDispat->GetShell(nIdx);
                   pSh;
                   ++nIdx, pSh = pDispat->GetShell(nIdx) )
             {
-                ::svl::IUndoManager *pShUndoMgr = pSh->GetUndoManager();
+                SfxUndoManager *pShUndoMgr = pSh->GetUndoManager();
                 if ( pShUndoMgr )
                     pShUndoMgr->SetMaxUndoActionCount( nUndoCount );
             }
@@ -716,60 +723,73 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // Office autostart
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_QUICKLAUNCHER), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_QUICKLAUNCHER), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        ShutdownIcon::SetAutostart( ( (const SfxBoolItem*)pItem )->GetValue() != sal_False );
+        ShutdownIcon::SetAutostart( ( (const SfxBoolItem*)pItem )->GetValue() != FALSE );
     }
 
     // StarBasic Enable
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_BASIC_ENABLED, sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(SID_BASIC_ENABLED, TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "SfxInt16Item expected");
         aSecurityOptions.SetBasicMode( (EBasicSecurityMode)( (const SfxUInt16Item*)pItem )->GetValue() );
     }
 
     // Execute PlugIns
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_EXE_PLUGIN, sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_EXE_PLUGIN, TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
         aSecurityOptions.SetExecutePlugins( ( (const SfxBoolItem *)pItem )->GetValue() );
+        bResetSession = TRUE;
     }
 
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), TRUE, &pItem))
     {
         DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
         aInetOptions.SetProxyType((SvtInetOptions::ProxyType)( (const SfxUInt16Item*)pItem )->GetValue());
+        bResetSession = TRUE;
+        bProxiesModified = TRUE;
     }
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), sal_True, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), TRUE, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
         aInetOptions.SetProxyHttpName( ((const SfxStringItem *)pItem)->GetValue() );
+        bResetSession = TRUE;
+        bProxiesModified = TRUE;
     }
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), sal_True, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), TRUE, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
         aInetOptions.SetProxyHttpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
+        bResetSession = TRUE;
+        bProxiesModified = TRUE;
     }
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_NAME ), sal_True, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_NAME ), TRUE, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
         aInetOptions.SetProxyFtpName( ((const SfxStringItem *)pItem)->GetValue() );
+        bResetSession = TRUE;
+        bProxiesModified = TRUE;
     }
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_PORT ), sal_True, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_PORT ), TRUE, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
         aInetOptions.SetProxyFtpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
+        bResetSession = TRUE;
+        bProxiesModified = TRUE;
     }
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NOPROXY, sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NOPROXY, TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
         aInetOptions.SetProxyNoProxy(((const SfxStringItem *)pItem)->GetValue());
+        bResetSession = TRUE;
+        bProxiesModified = TRUE;
     }
 
     // Secure-Referers
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_SECURE_URL, sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(SID_SECURE_URL, TRUE, &pItem))
     {
         DELETEZ(pAppData_Impl->pSecureURLs);
 
@@ -784,26 +804,31 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         aSecurityOptions.SetSecureURLs( seqURLs );
     }
 
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_MACRO_WARNING, sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(SID_MACRO_WARNING, TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
         aSecurityOptions.SetWarningEnabled( ( (const SfxBoolItem *)pItem )->GetValue() );
     }
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_MACRO_CONFIRMATION, sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(SID_MACRO_CONFIRMATION, TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
         aSecurityOptions.SetConfirmationEnabled( ( (const SfxBoolItem *)pItem )->GetValue() );
     }
 
     // EnableMetafilePrint
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ENABLE_METAFILEPRINT ), sal_True, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ENABLE_METAFILEPRINT ), TRUE, &pItem ) )
     {
 #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
         DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nsoffice.ini key \"MetafilPrint\" not supported any longer!\n");
 #endif
     }
 
-    // Store changed data
+    // INet Session neu aufsetzen
+    if ( bResetSession )
+    {
+    }
+
+    // geaenderte Daten speichern
     aInetOptions.flush();
 }
 
@@ -812,14 +837,14 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 {
     SvtPathOptions aPathOptions;
 
-    // Data is saved in DocInfo and IniManager
+    // Daten werden in DocInfo und IniManager gespeichert
     const SfxPoolItem *pItem = 0;
     SfxItemPool &rPool = GetPool();
 
     SfxAllItemSet aSendSet( rSet );
 
     // PathName
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_PATHNAME), sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_PATHNAME), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxAllEnumItem), "AllEnumItem expected");
         const SfxAllEnumItem* pEnumItem = (const SfxAllEnumItem *)pItem;
@@ -827,7 +852,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
         String aNoChangeStr( ' ' );
         for( sal_uInt32 nPath=0; nPath<nCount; ++nPath )
         {
-            String sValue = pEnumItem->GetValueTextByPos((sal_uInt16)nPath);
+            String sValue = pEnumItem->GetValueTextByPos((USHORT)nPath);
             if ( sValue != aNoChangeStr )
             {
                 switch( nPath )
@@ -840,14 +865,14 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_AUTOCORRECT:  aPathOptions.SetAutoCorrectPath( sValue );break;
-                    case SvtPathOptions::PATH_AUTOTEXT:     aPathOptions.SetAutoTextPath( sValue );break;
-                    case SvtPathOptions::PATH_BACKUP:       aPathOptions.SetBackupPath( sValue );break;
-                    case SvtPathOptions::PATH_BASIC:        aPathOptions.SetBasicPath( sValue );break;
-                    case SvtPathOptions::PATH_BITMAP:       aPathOptions.SetBitmapPath( sValue );break;
-                    case SvtPathOptions::PATH_CONFIG:       aPathOptions.SetConfigPath( sValue );break;
-                    case SvtPathOptions::PATH_DICTIONARY:   aPathOptions.SetDictionaryPath( sValue );break;
-                    case SvtPathOptions::PATH_FAVORITES:    aPathOptions.SetFavoritesPath( sValue );break;
+                    case SvtPathOptions::PATH_AUTOCORRECT:	aPathOptions.SetAutoCorrectPath( sValue );break;
+                    case SvtPathOptions::PATH_AUTOTEXT:		aPathOptions.SetAutoTextPath( sValue );break;
+                    case SvtPathOptions::PATH_BACKUP:		aPathOptions.SetBackupPath( sValue );break;
+                    case SvtPathOptions::PATH_BASIC:		aPathOptions.SetBasicPath( sValue );break;
+                    case SvtPathOptions::PATH_BITMAP:		aPathOptions.SetBitmapPath( sValue );break;
+                    case SvtPathOptions::PATH_CONFIG:		aPathOptions.SetConfigPath( sValue );break;
+                    case SvtPathOptions::PATH_DICTIONARY:	aPathOptions.SetDictionaryPath( sValue );break;
+                    case SvtPathOptions::PATH_FAVORITES:	aPathOptions.SetFavoritesPath( sValue );break;
                     case SvtPathOptions::PATH_FILTER:
                     {
                         String aTmp;
@@ -855,8 +880,8 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                             aPathOptions.SetFilterPath( aTmp );
                         break;
                     }
-                    case SvtPathOptions::PATH_GALLERY:      aPathOptions.SetGalleryPath( sValue );break;
-                    case SvtPathOptions::PATH_GRAPHIC:      aPathOptions.SetGraphicPath( sValue );break;
+                    case SvtPathOptions::PATH_GALLERY:		aPathOptions.SetGalleryPath( sValue );break;
+                    case SvtPathOptions::PATH_GRAPHIC:		aPathOptions.SetGraphicPath( sValue );break;
                     case SvtPathOptions::PATH_HELP:
                     {
                         String aTmp;
@@ -865,7 +890,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_LINGUISTIC:   aPathOptions.SetLinguisticPath( sValue );break;
+                    case SvtPathOptions::PATH_LINGUISTIC:	aPathOptions.SetLinguisticPath( sValue );break;
                     case SvtPathOptions::PATH_MODULE:
                     {
                         String aTmp;
@@ -874,7 +899,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_PALETTE:      aPathOptions.SetPalettePath( sValue );break;
+                    case SvtPathOptions::PATH_PALETTE:		aPathOptions.SetPalettePath( sValue );break;
                     case SvtPathOptions::PATH_PLUGIN:
                     {
                         String aTmp;
@@ -891,10 +916,10 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_TEMP:         aPathOptions.SetTempPath( sValue );break;
-                    case SvtPathOptions::PATH_TEMPLATE:     aPathOptions.SetTemplatePath( sValue );break;
-                    case SvtPathOptions::PATH_USERCONFIG:   aPathOptions.SetUserConfigPath( sValue );break;
-                    case SvtPathOptions::PATH_WORK:         aPathOptions.SetWorkPath( sValue );break;
+                    case SvtPathOptions::PATH_TEMP:			aPathOptions.SetTempPath( sValue );break;
+                    case SvtPathOptions::PATH_TEMPLATE:		aPathOptions.SetTemplatePath( sValue );break;
+                    case SvtPathOptions::PATH_USERCONFIG:	aPathOptions.SetUserConfigPath( sValue );break;
+                    case SvtPathOptions::PATH_WORK:			aPathOptions.SetWorkPath( sValue );break;
                     default: DBG_ERRORFILE("SfxApplication::SetOptions_Impl()\nInvalid path number found for set directories!");
                 }
             }
@@ -911,13 +936,13 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 
 //--------------------------------------------------------------------
 
-// Save all Documents
+// alle Dokumente speichern
 
-sal_Bool SfxApplication::SaveAll_Impl(sal_Bool bPrompt, sal_Bool bAutoSave)
+BOOL SfxApplication::SaveAll_Impl(BOOL bPrompt, BOOL bAutoSave)
 {
-    bAutoSave = sal_False; // functionality moved to new AutoRecovery Service!
+    bAutoSave = FALSE; // functionality moved to new AutoRecovery Service!
 
-    sal_Bool bFunc = sal_True;
+    BOOL bFunc = TRUE;
     short nRet;
 
     for ( SfxObjectShell *pDoc = SfxObjectShell::GetFirst();
@@ -945,11 +970,11 @@ sal_Bool SfxApplication::SaveAll_Impl(sal_Bool bPrompt, sal_Bool bAutoSave)
                     const SfxPoolItem *pPoolItem = pDoc->ExecuteSlot( aReq );
                     if ( !pPoolItem || !pPoolItem->ISA(SfxBoolItem) ||
                         !( (const SfxBoolItem*) pPoolItem )->GetValue() )
-                        bFunc = sal_False;
+                        bFunc = FALSE;
                 }
                 else if ( nRet == RET_CANCEL )
                 {
-                    bFunc = sal_False;
+                    bFunc = FALSE;
                     break;
                 }
                 else if ( nRet == RET_NO )
@@ -964,12 +989,36 @@ sal_Bool SfxApplication::SaveAll_Impl(sal_Bool bPrompt, sal_Bool bAutoSave)
 
 //--------------------------------------------------------------------
 
+SfxMacroConfig* SfxApplication::GetMacroConfig() const
+{
+    return SfxMacroConfig::GetOrCreate();
+}
+
+//--------------------------------------------------------------------
+SfxEventConfiguration* SfxApplication::GetEventConfig() const
+{
+    if (!pAppData_Impl->pEventConfig)
+        pAppData_Impl->pEventConfig = new SfxEventConfiguration;
+    return pAppData_Impl->pEventConfig;
+}
+
+//--------------------------------------------------------------------
+
 //--------------------------------------------------------------------
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron )
 {
+    //DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
+
     SfxObjectShell *pDoc = rEventHint.GetObjShell();
     if ( pDoc && ( pDoc->IsPreview() || !pDoc->Get_Impl()->bInitialized ) )
         return;
+
+#ifdef DBG_UTIL
+    //::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( rEventHint.GetEventId() );
+    //ByteString aTmp( "SfxEvent: ");
+    //aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
+    //DBG_TRACE( aTmp.GetBuffer() );
+#endif
 
     if ( bSynchron )
     {
@@ -978,7 +1027,7 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron
         {
             ByteString aTmp( "SfxEvent: ");
             aTmp += ByteString( String( rEventHint.GetEventName() ), RTL_TEXTENCODING_UTF8 );
-            OSL_TRACE( "%s", aTmp.GetBuffer() );
+            DBG_TRACE( aTmp.GetBuffer() );
         }
 #endif
         Broadcast(rEventHint);

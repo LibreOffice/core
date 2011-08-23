@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ public class _XMain extends MultiMethodTest{
     /**
      * Just calls the method. <p>
      *
-     * Has <b> OK </b> status if no runtime exceptions occurred.
+     * Has <b> OK </b> status if no runtime exceptions occured.
      */
     public void _run() {
         String[] args = (String[])tEnv.getObjRelation("ARGS");

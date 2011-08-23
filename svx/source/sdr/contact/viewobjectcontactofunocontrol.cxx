@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include "svx/sdrpaintwindow.hxx"
+#include "sdrpaintwindow.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -197,7 +197,7 @@ namespace sdr { namespace contact {
                 m_xControlView.set( m_xControl, UNO_QUERY );
                 if ( !m_xControlWindow.is() || !m_xControlView.is() )
                 {
-                    OSL_FAIL( "ControlHolder::operator=: invalid XControl, missing required interfaces!" );
+                    OSL_ENSURE( false, "ControlHolder::operator=: invalid XControl, missing required interfaces!" );
                     clear();
                 }
             }
@@ -368,10 +368,6 @@ namespace sdr { namespace contact {
         ::basegfx::B2DTuple aViewScale, aViewTranslate;
         double nViewRotate(0), nViewShearX(0);
         _rViewTransformation.decompose( aViewScale, aViewTranslate, nViewRotate, nViewShearX );
-
-        ::basegfx::B2DTuple aZoomScale, aZoomTranslate;
-        double nZoomRotate(0), nZoomShearX(0);
-        _rZoomLevelNormalization.decompose( aZoomScale, aZoomTranslate, nZoomRotate, nZoomShearX );
     #endif
 
         // transform the logic bound rect, using the view transformation, to pixel coordinates
@@ -451,7 +447,7 @@ namespace sdr { namespace contact {
     {
         return m_rPageView.GetView().IsDesignMode();
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XControlContainer > SdrPageViewAccess::getControlContainer( const OutputDevice& _rDevice ) const
     {
@@ -460,7 +456,7 @@ namespace sdr { namespace contact {
             "SdrPageViewAccess::getControlContainer: the output device is known, but there is no control container for it?" );
         return xControlContainer;
     }
-
+    
     //--------------------------------------------------------------------
     bool SdrPageViewAccess::isLayerVisible( SdrLayerID _nLayerID ) const
     {
@@ -494,7 +490,7 @@ namespace sdr { namespace contact {
     {
         return true;
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XControlContainer > InvisibleControlViewAccess::getControlContainer( const OutputDevice& _rDevice ) const
     {
@@ -507,7 +503,7 @@ namespace sdr { namespace contact {
         }
         return m_rControlContainer;
     }
-
+    
     //--------------------------------------------------------------------
     bool InvisibleControlViewAccess::isLayerVisible( SdrLayerID /*_nLayerID*/ ) const
     {
@@ -542,13 +538,13 @@ namespace sdr { namespace contact {
     {
         return true;
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XControlContainer > DummyPageViewAccess::getControlContainer( const OutputDevice& /*_rDevice*/ ) const
     {
         return NULL;
     }
-
+    
     //--------------------------------------------------------------------
     bool DummyPageViewAccess::isLayerVisible( SdrLayerID /*_nLayerID*/ ) const
     {
@@ -984,10 +980,6 @@ namespace sdr { namespace contact {
         aScaleNormalization.set( 0, 0, (double)aCurrentDeviceMapMode.GetScaleX() );
         aScaleNormalization.set( 1, 1, (double)aCurrentDeviceMapMode.GetScaleY() );
         m_aZoomLevelNormalization *= aScaleNormalization;
-
-    #if OSL_DEBUG_LEVEL > 1
-        m_aZoomLevelNormalization.decompose( aScale, aTranslate, fRotate, fShearX );
-    #endif
    }
 
     //--------------------------------------------------------------------
@@ -1063,7 +1055,7 @@ namespace sdr { namespace contact {
                 UnoControlContactHelper::adjustControlGeometry_throw( m_aControl, pUnoObject->GetLogicRect(), _rViewTransformation, m_aZoomLevelNormalization );
             }
             else
-                OSL_FAIL( "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no SdrUnoObj!" );
+                OSL_ENSURE( false, "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no SdrUnoObj!" );
         }
         catch( const Exception& )
         {
@@ -1143,7 +1135,7 @@ namespace sdr { namespace contact {
     {
         if ( m_bCreatingControl )
         {
-            OSL_FAIL( "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: reentrance is not really good here!" );
+            OSL_ENSURE( false, "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: reentrance is not really good here!" );
             // We once had a situation where this was called reentrantly, which lead to all kind of strange effects. All
             // those affected the grid control, which is the only control so far which is visible in design mode (and
             // not only in alive mode).
@@ -1247,15 +1239,16 @@ namespace sdr { namespace contact {
                 _rInitialZoomNormalization
             );
 
-            // set design mode before peer is created,
+            // #107049# set design mode before peer is created,
             // this is also needed for accessibility
             _out_rControl.setDesignMode( _rPageView.isDesignMode() );
 
             // adjust the initial visibility according to the visibility of the layer
+            // 2003-06-03 - #110592# - fs@openoffice.org
             impl_adjustControlVisibilityToLayerVisibility_throw( _out_rControl, _rUnoObject, _rPageView, false, true );
 
             // add the control to the respective control container
-            // do this last
+            // #108327# do this last
             Reference< XControlContainer > xControlContainer( _rPageView.getControlContainer( _rDevice ) );
             if ( xControlContainer.is() )
                 xControlContainer->addControl( sControlServiceName, _out_rControl.getControl() );
@@ -1461,33 +1454,33 @@ namespace sdr { namespace contact {
 
         DBG_ASSERT( Source.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::disposing: Who's this?" );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowResized( const WindowEvent& /*e*/ ) throw(RuntimeException)
     {
         // not interested in
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowMoved( const WindowEvent& /*e*/ ) throw(RuntimeException)
     {
         // not interested in
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowShown( const EventObject& /*e*/ ) throw(RuntimeException)
     {
         VOCGuard aGuard( *this );
         m_bControlIsVisible = true;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowHidden( const EventObject& /*e*/ ) throw(RuntimeException)
     {
         VOCGuard aGuard( *this );
         m_bControlIsVisible = false;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw(RuntimeException)
     {
@@ -1509,22 +1502,23 @@ namespace sdr { namespace contact {
             m_pAntiImpl->propertyChange();
         }
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::modeChanged( const ModeChangeEvent& _rSource ) throw (RuntimeException)
     {
         VOCGuard aGuard( *this );
 
-        DBG_ASSERT( _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "design" ) ) || _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "alive" ) ),
+        DBG_ASSERT( _rSource.NewMode.equalsAscii( "design" ) || _rSource.NewMode.equalsAscii( "alive" ),
             "ViewObjectContactOfUnoControl_Impl::modeChanged: unexpected mode!" );
 
-        m_eControlDesignMode = _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "design" ) ) ? eDesign : eAlive;
+        m_eControlDesignMode = _rSource.NewMode.equalsAscii( "design" ) ? eDesign : eAlive;
 
         impl_switchDesignModeListening_nothrow( impl_isControlDesignMode_nothrow() );
 
         try
         {
             // if the control is part of a invisible layer, we need to explicitly hide it in alive mode
+            // 2003-06-03 - #110592# - fs@openoffice.org
             impl_adjustControlVisibilityToLayerVisibility_throw( false );
         }
         catch( const Exception& )
@@ -1538,7 +1532,7 @@ namespace sdr { namespace contact {
     {
         // not interested in
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
     {
@@ -1554,7 +1548,7 @@ namespace sdr { namespace contact {
         if ( m_aControl == Event.Element )
             impl_dispose_nothrow( false );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
     {
@@ -1825,10 +1819,6 @@ namespace sdr { namespace contact {
             // disposed the control though it doesn't own it. So, /me thinks we should not bother here.
             return drawinglayer::primitive2d::Primitive2DSequence();
 
-        if ( GetObjectContact().getViewInformation2D().getViewTransformation().isIdentity() )
-            // remove this when #i115754# is fixed
-            return drawinglayer::primitive2d::Primitive2DSequence();
-
         // ignore existing controls which are in alive mode and manually switched to "invisible"
         // #102090# / 2009-06-05 / frank.schoenheit@sun.com
         const ControlHolder& rControl( m_pImpl->getExistentControl() );
@@ -1872,7 +1862,7 @@ namespace sdr { namespace contact {
         // call parent
         ViewObjectContactOfSdrObj::ActionChanged();
         const ControlHolder& rControl(m_pImpl->getExistentControl());
-
+        
         if(rControl.is() && !rControl.isDesignMode())
         {
             // #i93180# if layer visibility has changed and control is in live mode, it is necessary

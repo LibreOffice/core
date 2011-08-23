@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,32 +38,32 @@ public:
     CmdStream();
     ~CmdStream();
 
-    void WriteSortedParams( SbxArray* rPar, sal_Bool IsKeyString = sal_False );
+    void WriteSortedParams( SbxArray* rPar, BOOL IsKeyString = FALSE );
 
-    void GenCmdCommand( sal_uInt16 nNr, SbxArray* rPar );
+    void GenCmdCommand( USHORT nNr, SbxArray* rPar );
 
-    void GenCmdSlot( sal_uInt16 nNr, SbxArray* rPar );
+    void GenCmdSlot( USHORT nNr, SbxArray* rPar );
 
     void GenCmdUNOSlot( const String &aURL );
 
-    void GenCmdControl( comm_ULONG nUId, sal_uInt16 nMethodId, SbxArray* rPar );
-    void GenCmdControl( String aUId, sal_uInt16 nMethodId, SbxArray* rPar );
+    void GenCmdControl( comm_ULONG nUId, USHORT nMethodId, SbxArray* rPar );
+    void GenCmdControl( String aUId, USHORT nMethodId, SbxArray* rPar ); 
 
 
-    void GenCmdFlow( sal_uInt16 nArt );
-    void GenCmdFlow( sal_uInt16 nArt, sal_uInt16 nNr1 );
-    void GenCmdFlow( sal_uInt16 nArt, comm_ULONG nNr1 );
-    void GenCmdFlow( sal_uInt16 nArt, String aString1 );
+    void GenCmdFlow( USHORT nArt );
+    void GenCmdFlow( USHORT nArt, USHORT nNr1 );
+    void GenCmdFlow( USHORT nArt, comm_ULONG nNr1 );
+    void GenCmdFlow( USHORT nArt, String aString1 );
 
     void Reset(comm_ULONG nSequence);
 
     SvMemoryStream* GetStream();
 
-    static CNames *pKeyCodes;           // Namen der Sondertasten  MOD1, F1, LEFT ...
-    static ControlDefLoad const arKeyCodes [];
+    static CNames *pKeyCodes;			// Namen der Sondertasten  MOD1, F1, LEFT ...
+    static ControlDefLoad __READONLY_DATA arKeyCodes [];
 
 private:
-    String WandleKeyEventString( String aKeys );    // Nutzt pKeyCodes.  <RETURN> <SHIFT LEFT LEFT>
+    String WandleKeyEventString( String aKeys );	// Nutzt pKeyCodes.  <RETURN> <SHIFT LEFT LEFT>
 
     using CmdBaseStream::Write;
     void Write( comm_USHORT nNr ){CmdBaseStream::Write( nNr );}
@@ -71,7 +71,7 @@ private:
     void Write( const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::Write( aString, nLenInChars );}
     void Write( comm_BOOL bBool ){CmdBaseStream::Write( bBool );}
 //  new
-    void Write( String aString, sal_Bool IsKeyString = sal_False );
+    void Write( String aString, BOOL IsKeyString = FALSE );
 
     SvMemoryStream *pSammel;
 };

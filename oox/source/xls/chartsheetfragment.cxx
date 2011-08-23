@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,32 +27,32 @@
  ************************************************************************/
 
 #include "oox/xls/chartsheetfragment.hxx"
-
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/viewsettings.hxx"
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetsettings.hxx"
 
+using ::rtl::OUString;
+using ::oox::core::ContextHandlerRef;
+using ::oox::core::RecordInfo;
+
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-using namespace ::oox::core;
-
-using ::rtl::OUString;
-
-// ============================================================================
-
-ChartsheetFragment::ChartsheetFragment( const WorkbookHelper& rHelper,
-        const OUString& rFragmentPath, const ISegmentProgressBarRef& rxProgressBar, sal_Int16 nSheet ) :
-    WorksheetFragmentBase( rHelper, rFragmentPath, rxProgressBar, SHEETTYPE_CHARTSHEET, nSheet )
+OoxChartsheetFragment::OoxChartsheetFragment( const WorkbookHelper& rHelper,
+        const OUString& rFragmentPath, ISegmentProgressBarRef xProgressBar, sal_Int16 nSheet ) :
+    OoxWorksheetFragmentBase( rHelper, rFragmentPath, xProgressBar, SHEETTYPE_CHARTSHEET, nSheet )
 {
 }
 
-ContextHandlerRef ChartsheetFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+// oox.core.ContextHandler2Helper interface -----------------------------------
+
+ContextHandlerRef OoxChartsheetFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -87,14 +87,14 @@ ContextHandlerRef ChartsheetFragment::onCreateContext( sal_Int32 nElement, const
                 case XLS_TOKEN( oddHeader ):
                 case XLS_TOKEN( oddFooter ):
                 case XLS_TOKEN( evenHeader ):
-                case XLS_TOKEN( evenFooter ):       return this;    // collect contents in onCharacters()
+                case XLS_TOKEN( evenFooter ):       return this;    // collect contents in onEndElement()
             }
         break;
     }
     return 0;
 }
 
-void ChartsheetFragment::onCharacters( const OUString& rChars )
+void OoxChartsheetFragment::onEndElement( const OUString& rChars )
 {
     switch( getCurrentElement() )
     {
@@ -109,58 +109,60 @@ void ChartsheetFragment::onCharacters( const OUString& rChars )
     }
 }
 
-ContextHandlerRef ChartsheetFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
+ContextHandlerRef OoxChartsheetFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            if( nRecId == BIFF12_ID_WORKSHEET ) return this;
+            if( nRecId == OOBIN_ID_WORKSHEET ) return this;
         break;
 
-        case BIFF12_ID_WORKSHEET:
+        case OOBIN_ID_WORKSHEET:
             switch( nRecId )
             {
-                case BIFF12_ID_CHARTSHEETVIEWS:  return this;
+                case OOBIN_ID_CHARTSHEETVIEWS:  return this;
 
-                case BIFF12_ID_CHARTSHEETPR:    getWorksheetSettings().importChartSheetPr( rStrm );                 break;
-                case BIFF12_ID_CHARTPROTECTION: getWorksheetSettings().importChartProtection( rStrm );              break;
-                case BIFF12_ID_PAGEMARGINS:     getPageSettings().importPageMargins( rStrm );                       break;
-                case BIFF12_ID_CHARTPAGESETUP:  getPageSettings().importChartPageSetup( getRelations(), rStrm );    break;
-                case BIFF12_ID_HEADERFOOTER:    getPageSettings().importHeaderFooter( rStrm );                      break;
-                case BIFF12_ID_PICTURE:         getPageSettings().importPicture( getRelations(), rStrm );           break;
-                case BIFF12_ID_DRAWING:         importDrawing( rStrm );                                             break;
+                case OOBIN_ID_CHARTSHEETPR:     getWorksheetSettings().importChartSheetPr( rStrm );                 break;
+                case OOBIN_ID_CHARTPROTECTION:  getWorksheetSettings().importChartProtection( rStrm );              break;
+                case OOBIN_ID_PAGEMARGINS:      getPageSettings().importPageMargins( rStrm );                       break;
+                case OOBIN_ID_CHARTPAGESETUP:   getPageSettings().importChartPageSetup( getRelations(), rStrm );    break;
+                case OOBIN_ID_HEADERFOOTER:     getPageSettings().importHeaderFooter( rStrm );                      break;
+                case OOBIN_ID_PICTURE:          getPageSettings().importPicture( getRelations(), rStrm );           break;
+                case OOBIN_ID_DRAWING:          importDrawing( rStrm );                                             break;
             }
         break;
 
-        case BIFF12_ID_CHARTSHEETVIEWS:
-            if( nRecId == BIFF12_ID_CHARTSHEETVIEW ) getSheetViewSettings().importChartSheetView( rStrm );
+        case OOBIN_ID_CHARTSHEETVIEWS:
+            if( nRecId == OOBIN_ID_CHARTSHEETVIEW ) getSheetViewSettings().importChartSheetView( rStrm );
         break;
     }
     return 0;
 }
 
-const RecordInfo* ChartsheetFragment::getRecordInfos() const
+// oox.core.FragmentHandler2 interface ----------------------------------------
+
+const RecordInfo* OoxChartsheetFragment::getRecordInfos() const
 {
     static const RecordInfo spRecInfos[] =
     {
-        { BIFF12_ID_CHARTSHEETVIEW,     BIFF12_ID_CHARTSHEETVIEW + 1    },
-        { BIFF12_ID_CHARTSHEETVIEWS,    BIFF12_ID_CHARTSHEETVIEWS + 1   },
-        { BIFF12_ID_CUSTOMCHARTVIEW,    BIFF12_ID_CUSTOMCHARTVIEW + 1   },
-        { BIFF12_ID_CUSTOMCHARTVIEWS,   BIFF12_ID_CUSTOMCHARTVIEWS + 1  },
-        { BIFF12_ID_HEADERFOOTER,       BIFF12_ID_HEADERFOOTER + 1      },
-        { BIFF12_ID_WORKSHEET,          BIFF12_ID_WORKSHEET + 1         },
+        { OOBIN_ID_CHARTSHEETVIEW,      OOBIN_ID_CHARTSHEETVIEW + 1     },
+        { OOBIN_ID_CHARTSHEETVIEWS,     OOBIN_ID_CHARTSHEETVIEWS + 1    },
+        { OOBIN_ID_CUSTOMCHARTVIEW,     OOBIN_ID_CUSTOMCHARTVIEW + 1    },
+        { OOBIN_ID_CUSTOMCHARTVIEWS,    OOBIN_ID_CUSTOMCHARTVIEWS + 1   },
+        { OOBIN_ID_HEADERFOOTER,        OOBIN_ID_HEADERFOOTER + 1       },
+        { OOBIN_ID_WORKSHEET,           OOBIN_ID_WORKSHEET + 1          },
         { -1,                           -1                              }
     };
     return spRecInfos;
 }
 
-void ChartsheetFragment::initializeImport()
+void OoxChartsheetFragment::initializeImport()
 {
     // initial processing in base class WorksheetHelper
     initializeWorksheetImport();
 }
 
-void ChartsheetFragment::finalizeImport()
+void OoxChartsheetFragment::finalizeImport()
 {
     // final processing in base class WorksheetHelper
     finalizeWorksheetImport();
@@ -168,21 +170,21 @@ void ChartsheetFragment::finalizeImport()
 
 // private --------------------------------------------------------------------
 
-void ChartsheetFragment::importDrawing( const AttributeList& rAttribs )
+void OoxChartsheetFragment::importDrawing( const AttributeList& rAttribs )
 {
     setDrawingPath( getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) ) );
 }
 
-void ChartsheetFragment::importDrawing( SequenceInputStream& rStrm )
+void OoxChartsheetFragment::importDrawing( RecordInputStream& rStrm )
 {
-    setDrawingPath( getFragmentPathFromRelId( BiffHelper::readString( rStrm ) ) );
+    setDrawingPath( getFragmentPathFromRelId( rStrm.readString() ) );
 }
 
 // ============================================================================
 
 BiffChartsheetFragment::BiffChartsheetFragment( const BiffWorkbookFragmentBase& rParent,
-        const ISegmentProgressBarRef& rxProgressBar, sal_Int16 nSheet ) :
-    BiffWorksheetFragmentBase( rParent, rxProgressBar, SHEETTYPE_CHARTSHEET, nSheet )
+        ISegmentProgressBarRef xProgressBar, sal_Int16 nSheet ) :
+    BiffWorksheetFragmentBase( rParent, xProgressBar, SHEETTYPE_CHARTSHEET, nSheet )
 {
 }
 
@@ -196,82 +198,80 @@ bool BiffChartsheetFragment::importFragment()
     PageSettings& rPageSett           = getPageSettings();
 
     // process all record in this sheet fragment
-    BiffInputStream& rStrm = getInputStream();
-    while( rStrm.startNextRecord() && (rStrm.getRecId() != BIFF_ID_EOF) )
+    while( mrStrm.startNextRecord() && (mrStrm.getRecId() != BIFF_ID_EOF) )
     {
-        if( BiffHelper::isBofRecord( rStrm ) )
+        if( isBofRecord() )
         {
             // skip unknown embedded fragments (BOF/EOF blocks)
             skipFragment();
         }
         else
         {
-            sal_uInt16 nRecId = rStrm.getRecId();
+            sal_uInt16 nRecId = mrStrm.getRecId();
             switch( nRecId )
             {
                 // records in all BIFF versions
-                case BIFF_ID_BOTTOMMARGIN:  rPageSett.importBottomMargin( rStrm );                  break;
-                case BIFF_ID_CHBEGIN:       BiffHelper::skipRecordBlock( rStrm, BIFF_ID_CHEND );    break;
-                case BIFF_ID_FOOTER:        rPageSett.importFooter( rStrm );                        break;
-                case BIFF_ID_HEADER:        rPageSett.importHeader( rStrm );                        break;
-                case BIFF_ID_LEFTMARGIN:    rPageSett.importLeftMargin( rStrm );                    break;
-                case BIFF_ID_PASSWORD:      rWorksheetSett.importPassword( rStrm );                 break;
-                case BIFF_ID_PROTECT:       rWorksheetSett.importProtect( rStrm );                  break;
-                case BIFF_ID_RIGHTMARGIN:   rPageSett.importRightMargin( rStrm );                   break;
-                case BIFF_ID_TOPMARGIN:     rPageSett.importTopMargin( rStrm );                     break;
+                case BIFF_ID_BOTTOMMARGIN:  rPageSett.importBottomMargin( mrStrm );     break;
+                case BIFF_ID_CHBEGIN:       skipRecordBlock( BIFF_ID_CHEND );           break;
+                case BIFF_ID_FOOTER:        rPageSett.importFooter( mrStrm );           break;
+                case BIFF_ID_HEADER:        rPageSett.importHeader( mrStrm );           break;
+                case BIFF_ID_LEFTMARGIN:    rPageSett.importLeftMargin( mrStrm );       break;
+                case BIFF_ID_PASSWORD:      rWorksheetSett.importPassword( mrStrm );    break;
+                case BIFF_ID_PROTECT:       rWorksheetSett.importProtect( mrStrm );     break;
+                case BIFF_ID_RIGHTMARGIN:   rPageSett.importRightMargin( mrStrm );      break;
+                case BIFF_ID_TOPMARGIN:     rPageSett.importTopMargin( mrStrm );        break;
 
                 // BIFF specific records
                 default: switch( getBiff() )
                 {
                     case BIFF2: switch( nRecId )
                     {
-                        case BIFF2_ID_WINDOW2:      rSheetViewSett.importWindow2( rStrm );          break;
+                        case BIFF2_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm );  break;
                     }
                     break;
 
                     case BIFF3: switch( nRecId )
                     {
-                        case BIFF_ID_HCENTER:       rPageSett.importHorCenter( rStrm );             break;
-                        case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( rStrm );    break;
-                        case BIFF_ID_VCENTER:       rPageSett.importVerCenter( rStrm );             break;
-                        case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( rStrm );          break;
+                        case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
+                        case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
+                        case BIFF_ID_VCENTER:       rPageSett.importVerCenter( mrStrm );            break;
+                        case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm );         break;
 
                     }
                     break;
 
                     case BIFF4: switch( nRecId )
                     {
-                        case BIFF_ID_HCENTER:       rPageSett.importHorCenter( rStrm );             break;
-                        case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( rStrm );    break;
-                        case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( rStrm );             break;
-                        case BIFF_ID_VCENTER:       rPageSett.importVerCenter( rStrm );             break;
-                        case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( rStrm );          break;
+                        case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
+                        case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
+                        case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( mrStrm );            break;
+                        case BIFF_ID_VCENTER:       rPageSett.importVerCenter( mrStrm );            break;
+                        case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm );         break;
                     }
                     break;
 
                     case BIFF5: switch( nRecId )
                     {
-                        case BIFF_ID_HCENTER:       rPageSett.importHorCenter( rStrm );             break;
-                        case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( rStrm );    break;
-                        case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( rStrm );             break;
-                        case BIFF_ID_SCENPROTECT:   rWorksheetSett.importScenProtect( rStrm );      break;
-                        case BIFF_ID_SCL:           rSheetViewSett.importScl( rStrm );              break;
-                        case BIFF_ID_VCENTER:       rPageSett.importVerCenter( rStrm );             break;
-                        case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( rStrm );          break;
+                        case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
+                        case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
+                        case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( mrStrm );            break;
+                        case BIFF_ID_SCENPROTECT:   rWorksheetSett.importScenProtect( mrStrm );     break;
+                        case BIFF_ID_SCL:           rSheetViewSett.importScl( mrStrm );             break;
+                        case BIFF_ID_VCENTER:       rPageSett.importVerCenter( mrStrm );            break;
+                        case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm );         break;
                     }
                     break;
 
                     case BIFF8: switch( nRecId )
                     {
-                        case BIFF_ID_CODENAME:      rWorksheetSett.importCodeName( rStrm );         break;
-                        case BIFF_ID_HCENTER:       rPageSett.importHorCenter( rStrm );             break;
-                        case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( rStrm );    break;
-                        case BIFF_ID_PICTURE:       rPageSett.importPicture( rStrm );               break;
-                        case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( rStrm );             break;
-                        case BIFF_ID_SCL:           rSheetViewSett.importScl( rStrm );              break;
-                        case BIFF_ID_SHEETEXT:      rWorksheetSett.importSheetExt( rStrm );         break;
-                        case BIFF_ID_VCENTER:       rPageSett.importVerCenter( rStrm );             break;
-                        case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( rStrm );          break;
+                        case BIFF_ID_CODENAME:      rWorksheetSett.importCodeName( mrStrm );        break;
+                        case BIFF_ID_HCENTER:       rPageSett.importHorCenter( mrStrm );            break;
+                        case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( mrStrm );   break;
+                        case BIFF_ID_PICTURE:       rPageSett.importPicture( mrStrm );              break;
+                        case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( mrStrm );            break;
+                        case BIFF_ID_SCL:           rSheetViewSett.importScl( mrStrm );             break;
+                        case BIFF_ID_VCENTER:       rPageSett.importVerCenter( mrStrm );            break;
+                        case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm );         break;
                     }
                     break;
 
@@ -283,7 +283,7 @@ bool BiffChartsheetFragment::importFragment()
 
     // final processing in base class WorksheetHelper
     finalizeWorksheetImport();
-    return rStrm.getRecId() == BIFF_ID_EOF;
+    return mrStrm.getRecId() == BIFF_ID_EOF;
 }
 
 // ============================================================================

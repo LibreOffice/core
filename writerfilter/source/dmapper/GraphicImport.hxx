@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef INCLUDED_GRAPHICIMPORT_HXX
 #define INCLUDED_GRAPHICIMPORT_HXX
 
-#include <resourcemodel/LoggedResources.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 
 namespace com{ namespace sun { namespace star {
     namespace uno{
@@ -63,12 +63,12 @@ enum GraphicImportType
 {
     IMPORT_AS_GRAPHIC,
     IMPORT_AS_SHAPE,
-    IMPORT_AS_DETECTED_INLINE,
+    IMPORT_AS_DETECTED_INLINE,  
     IMPORT_AS_DETECTED_ANCHOR
-};
+};    
 
-class WRITERFILTER_DLLPRIVATE GraphicImport : public LoggedProperties, public LoggedTable
-                    ,public BinaryObj, public LoggedStream
+class WRITERFILTER_DLLPRIVATE GraphicImport : public Properties, public Table
+                    ,public BinaryObj, public Stream
 {
     GraphicImport_Impl* m_pImpl;
     ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >    m_xComponentContext;
@@ -78,8 +78,8 @@ class WRITERFILTER_DLLPRIVATE GraphicImport : public LoggedProperties, public Lo
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> m_xShape;
     void ProcessShapeOptions(Value & val);
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > createGraphicObject(
+    
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > createGraphicObject( 
             const ::com::sun::star::beans::PropertyValues& aMediaProperties );
 
 public:
@@ -89,41 +89,37 @@ public:
                   GraphicImportType eGraphicImportType);
     virtual ~GraphicImport();
 
+    // Properties
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
+
+    // Table
+    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+
     // BinaryObj
     virtual void data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t ref);
 
+    // Stream
+    virtual void startSectionGroup();
+    virtual void endSectionGroup();
+    virtual void startParagraphGroup();
+    virtual void endParagraphGroup();
+    virtual void startCharacterGroup();
+    virtual void endCharacterGroup();
+    virtual void text(const sal_uInt8 * data, size_t len);
+    virtual void utext(const sal_uInt8 * data, size_t len);
+    virtual void props(writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void table(Id name,
+                       writerfilter::Reference<Table>::Pointer_t ref);
+    virtual void substream(Id name,
+                           ::writerfilter::Reference<Stream>::Pointer_t ref);
+    virtual void info(const string & info);
+    virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    virtual void endShape( );
+
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > GetGraphicObject();
     bool    IsGraphic() const;
-
- private:
-    // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
-
-    // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
-
-    // Stream
-    virtual void lcl_startSectionGroup();
-    virtual void lcl_endSectionGroup();
-    virtual void lcl_startParagraphGroup();
-    virtual void lcl_endParagraphGroup();
-    virtual void lcl_startCharacterGroup();
-    virtual void lcl_endCharacterGroup();
-    virtual void lcl_text(const sal_uInt8 * data, size_t len);
-    virtual void lcl_utext(const sal_uInt8 * data, size_t len);
-    virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref);
-    virtual void lcl_table(Id name,
-                           writerfilter::Reference<Table>::Pointer_t ref);
-    virtual void lcl_substream(Id name,
-                               ::writerfilter::Reference<Stream>::Pointer_t ref);
-    virtual void lcl_info(const string & info);
-    virtual void lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual void lcl_endShape( );
-
-    void handleWrapTextValue(sal_uInt32 nVal);
 };
-
 typedef boost::shared_ptr< GraphicImport >          GraphicImportPtr;
 }}
 

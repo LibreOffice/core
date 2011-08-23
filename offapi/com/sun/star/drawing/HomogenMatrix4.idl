@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,45 +24,45 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_HomogenMatrix4_idl__
-#define __com_sun_star_drawing_HomogenMatrix4_idl__
-
-#ifndef __com_sun_star_drawing_HomogenMatrixLine4_idl__
-#include <com/sun/star/drawing/HomogenMatrixLine4.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_HomogenMatrix4_idl__ 
+#define __com_sun_star_drawing_HomogenMatrix4_idl__ 
+ 
+#ifndef __com_sun_star_drawing_HomogenMatrixLine4_idl__ 
+#include <com/sun/star/drawing/HomogenMatrixLine4.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: struct com::sun::star::drawing::HomogenMatrix
-/** specifies a homogeneous matrix by four homogeneous lines.
+/** specifies a homogenous matrix by four homogenous lines.
  */
 published struct HomogenMatrix4
 {
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
     // DOCUMENTATION OMITTED FOR HomogenMatrix4::Line1
-    com::sun::star::drawing::HomogenMatrixLine4 Line1;
-
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR HomogenMatrix4::Line2
-    com::sun::star::drawing::HomogenMatrixLine4 Line2;
-
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR HomogenMatrix4::Line3
-    com::sun::star::drawing::HomogenMatrixLine4 Line3;
-
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR HomogenMatrix4::Line4
-    com::sun::star::drawing::HomogenMatrixLine4 Line4;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    com::sun::star::drawing::HomogenMatrixLine4 Line1; 
+ 
+    //------------------------------------------------------------------------- 
+    // DOCUMENTATION OMITTED FOR HomogenMatrix4::Line2 
+    com::sun::star::drawing::HomogenMatrixLine4 Line2; 
+ 
+    //------------------------------------------------------------------------- 
+    // DOCUMENTATION OMITTED FOR HomogenMatrix4::Line3 
+    com::sun::star::drawing::HomogenMatrixLine4 Line3; 
+ 
+    //------------------------------------------------------------------------- 
+    // DOCUMENTATION OMITTED FOR HomogenMatrix4::Line4 
+    com::sun::star::drawing::HomogenMatrixLine4 Line4; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

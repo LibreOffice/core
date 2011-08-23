@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ class SfxProgress;
 class SwLayAction
 {
     SwRootFrm  *pRoot;
-    SwViewImp  *pImp;   //Hier Meldet sich die Action an und ab.
+    SwViewImp  *pImp;	//Hier Meldet sich die Action an und ab.
 
     //Zur Optimierung, damit die Tabellen etwas besser am Crsr kleben beim
     //Return/Backspace davor.
@@ -72,36 +72,36 @@ class SwLayAction
     //Wenn ein Absatz - oder was auch immer - bei der Formatierung mehr
     //als eine Seite rueckwaerts floss traegt er seine neue Seitennummer
     //hier ein. Die Steuerung der InternalAction kann dann geeignet reagieren.
-    sal_uInt16 nPreInvaPage;
+    USHORT nPreInvaPage;
 
-    sal_uLong nStartTicks;  //Startzeitpunkt der Aktion, vergeht zu viel Zeit kann
+    ULONG nStartTicks;	//Startzeitpunkt der Aktion, vergeht zu viel Zeit kann
                         //der WaitCrsr per CheckWaitCrsr() eingeschaltet werden.
 
-    sal_uInt16 nInputType;  //Bei welchem Input soll die Verarbeitung abgebrochen
+    USHORT nInputType;	//Bei welchem Input soll die Verarbeitung abgebrochen
                         //werden?
-    sal_uInt16 nEndPage;    //StatBar Steuerung.
-    sal_uInt16 nCheckPageNum; //CheckPageDesc() wurde verzoegert wenn != USHRT_MAX
+    USHORT nEndPage;	//StatBar Steuerung.
+    USHORT nCheckPageNum; //CheckPageDesc() wurde verzoegert wenn != USHRT_MAX
                           //ab dieser Seite Checken.
 
-    sal_Bool bPaint;        //Painten oder nur Formatieren?
-    sal_Bool bComplete;     //Alles bis zum sichtbaren Bereich Formatieren oder
+    BOOL bPaint; 		//Painten oder nur Formatieren?
+    BOOL bComplete;		//Alles bis zum sichtbaren Bereich Formatieren oder
                         //oder nur den sichtbaren Bereich?
-    sal_Bool bCalcLayout;   //Vollstaendige Reformatierung?
-    sal_Bool bAgain;        //Zur automatisch wiederholten Action wenn Seiten
+    BOOL bCalcLayout;	//Vollstaendige Reformatierung?
+    BOOL bAgain;		//Zur automatisch wiederholten Action wenn Seiten
                         //geloscht werden.
-    sal_Bool bNextCycle;    //Wiederaufsetzen bei der ersten Ungueltigen Seite.
-    sal_Bool bInput;        //Zum Abbrechen der Verarbeitung wenn ein Input anliegt.
-    sal_Bool bIdle;         //True wenn die Layaction vom Idler ausgeloest wurde.
-    sal_Bool bReschedule;   //Soll das Reschedule - abhaengig vom Progress -
+    BOOL bNextCycle;	//Wiederaufsetzen bei der ersten Ungueltigen Seite.
+    BOOL bInput;		//Zum Abbrechen der Verarbeitung wenn ein Input anliegt.
+    BOOL bIdle;			//True wenn die Layaction vom Idler ausgeloest wurde.
+    BOOL bReschedule;	//Soll das Reschedule - abhaengig vom Progress -
                         //gerufen werden?
-    sal_Bool bCheckPages;   //CheckPageDescs() ausfuehren oder verzoegern.
-    sal_Bool bUpdateExpFlds;//Wird gesetzt wenn nach dem Formatierien noch eine
+    BOOL bCheckPages;   //CheckPageDescs() ausfuehren oder verzoegern.
+    BOOL bUpdateExpFlds;//Wird gesetzt wenn nach dem Formatierien noch eine
                         //Runde fuer den ExpFld laufen muss.
-    sal_Bool bBrowseActionStop; //Action fruehzeitig beenden (per bInput) und den
+    BOOL bBrowseActionStop; //Action fruehzeitig beenden (per bInput) und den
                             //Rest dem Idler ueberlassen.
-    sal_Bool bWaitAllowed;      //Wartecursor erlaubt?
-    sal_Bool bPaintExtraData;   //Anzeige von Zeilennumerierung o. ae. eingeschaltet?
-    sal_Bool bActionInProgress; // wird in Action() anfangs gesetzt und zum Schluss geloescht
+    BOOL bWaitAllowed;		//Wartecursor erlaubt?
+    BOOL bPaintExtraData;	//Anzeige von Zeilennumerierung o. ae. eingeschaltet?
+    BOOL bActionInProgress; // wird in Action() anfangs gesetzt und zum Schluss geloescht
 
     // OD 14.04.2003 #106346# - new flag for content formatting on interrupt.
     sal_Bool    mbFormatCntntOnInterrupt;
@@ -110,28 +110,28 @@ class SwLayAction
 
     void PaintCntnt( const SwCntntFrm *, const SwPageFrm *,
                      const SwRect &rOldRect, long nOldBottom );
-    sal_Bool PaintWithoutFlys( const SwRect &, const SwCntntFrm *,
+    BOOL PaintWithoutFlys( const SwRect &, const SwCntntFrm *,
                            const SwPageFrm * );
-    inline sal_Bool _PaintCntnt( const SwCntntFrm *, const SwPageFrm *,
+    inline BOOL _PaintCntnt( const SwCntntFrm *, const SwPageFrm *,
                              const SwRect & );
 
-    sal_Bool FormatLayout( SwLayoutFrm *, sal_Bool bAddRect = sal_True );
-    sal_Bool FormatLayoutTab( SwTabFrm *, sal_Bool bAddRect = sal_True );
-    sal_Bool FormatCntnt( const SwPageFrm* pPage );
+    BOOL FormatLayout( SwLayoutFrm *, BOOL bAddRect = TRUE );
+    BOOL FormatLayoutTab( SwTabFrm *, BOOL bAddRect = TRUE );
+    BOOL FormatCntnt( const SwPageFrm* pPage );
     void _FormatCntnt( const SwCntntFrm* pCntnt,
                        const SwPageFrm* pPage );
-    sal_Bool IsShortCut( SwPageFrm *& );
+    BOOL IsShortCut( SwPageFrm *& );
 
-    sal_Bool TurboAction();
-    sal_Bool _TurboAction( const SwCntntFrm * );
+    BOOL TurboAction();
+    BOOL _TurboAction( const SwCntntFrm * );
     void InternalAction();
 
     SwPageFrm *CheckFirstVisPage( SwPageFrm *pPage );
 
-    sal_Bool RemoveEmptyBrowserPages();
+    BOOL RemoveEmptyBrowserPages();
 
     inline void CheckIdleEnd();
-    inline sal_uLong GetStartTicks() { return nStartTicks; }
+    inline ULONG GetStartTicks() { return nStartTicks; }
 
 #endif
 
@@ -140,63 +140,63 @@ public:
     ~SwLayAction();
 
 #ifdef _LAYACT_CXX
-    void SetIdle            ( sal_Bool bNew )   { bIdle = bNew; }
-    void SetCheckPages      ( sal_Bool bNew )   { bCheckPages = bNew; }
-    void SetBrowseActionStop(sal_Bool bNew  )   { bBrowseActionStop = bNew; }
-    void SetNextCycle       ( sal_Bool bNew )   { bNextCycle = bNew; }
+    void SetIdle			( BOOL bNew )	{ bIdle = bNew; }
+    void SetCheckPages		( BOOL bNew )	{ bCheckPages = bNew; }
+    void SetBrowseActionStop(BOOL bNew  )	{ bBrowseActionStop = bNew; }
+    void SetNextCycle		( BOOL bNew )	{ bNextCycle = bNew; }
 
-    sal_Bool IsWaitAllowed()        const       { return bWaitAllowed; }
-    sal_Bool IsNextCycle()          const       { return bNextCycle; }
-    sal_Bool IsInput()              const       { return bInput; }
-    sal_Bool IsWait()               const       { return 0 != pWait;  }
-    sal_Bool IsPaint()              const       { return bPaint; }
-    sal_Bool IsIdle()               const       { return bIdle;  }
-    sal_Bool IsReschedule()         const       { return bReschedule;  }
-    sal_Bool IsPaintExtraData()     const       { return bPaintExtraData;}
-    sal_Bool IsStopPrt()          const;
-    sal_Bool IsInterrupt()        const { return IsInput() || IsStopPrt(); }
+    BOOL IsWaitAllowed()		const		{ return bWaitAllowed; }
+    BOOL IsNextCycle()			const		{ return bNextCycle; }
+    BOOL IsInput() 				const		{ return bInput; }
+    BOOL IsWait()  				const		{ return 0 != pWait;  }
+    BOOL IsPaint() 				const		{ return bPaint; }
+    BOOL IsIdle()  				const		{ return bIdle;  }
+    BOOL IsReschedule() 		const		{ return bReschedule;  }
+    BOOL IsPaintExtraData()		const 		{ return bPaintExtraData;}
+    BOOL IsStopPrt()          const;
+    BOOL IsInterrupt()        const { return IsInput() || IsStopPrt(); }
 
-    sal_uInt16 GetInputType()    const { return nInputType; }
+    USHORT GetInputType() 	 const { return nInputType; }
 #endif
 
     //Einstellen der Action auf das gewuenschte Verhalten.
-    void SetPaint       ( sal_Bool bNew )   { bPaint = bNew; }
-    void SetComplete    ( sal_Bool bNew )   { bComplete = bNew; }
-    void SetStatBar     ( sal_Bool bNew );
-    void SetInputType   ( sal_uInt16 nNew ) { nInputType = nNew; }
-    void SetCalcLayout  ( sal_Bool bNew )   { bCalcLayout = bNew; }
-    void SetReschedule  ( sal_Bool bNew )   { bReschedule = bNew; }
-    void SetWaitAllowed ( sal_Bool bNew )   { bWaitAllowed = bNew; }
+    void SetPaint		( BOOL bNew )	{ bPaint = bNew; }
+    void SetComplete	( BOOL bNew )	{ bComplete = bNew; }
+    void SetStatBar		( BOOL bNew );
+    void SetInputType	( USHORT nNew )	{ nInputType = nNew; }
+    void SetCalcLayout	( BOOL bNew )	{ bCalcLayout = bNew; }
+    void SetReschedule	( BOOL bNew )	{ bReschedule = bNew; }
+    void SetWaitAllowed	( BOOL bNew )	{ bWaitAllowed = bNew; }
 
-    void SetAgain()         { bAgain = sal_True; }
-    void SetUpdateExpFlds() {bUpdateExpFlds = sal_True; }
+    void SetAgain()			{ bAgain = TRUE; }
+    void SetUpdateExpFlds()	{bUpdateExpFlds = TRUE; }
     void SetProgress(SfxProgress * _pProgress = NULL)
     { pProgress = _pProgress; }
 
-    inline void SetCheckPageNum( sal_uInt16 nNew );
-    inline void SetCheckPageNumDirect( sal_uInt16 nNew ) { nCheckPageNum = nNew; }
+    inline void SetCheckPageNum( USHORT nNew );
+    inline void SetCheckPageNumDirect( USHORT nNew ) { nCheckPageNum = nNew; }
 
-    void Action();  //Jetzt gehts loos...
-    void Reset();   //Zurueck auf CTor-Defaults.
+    void Action();	//Jetzt gehts loos...
+    void Reset();	//Zurueck auf CTor-Defaults.
 
-    sal_Bool IsAgain()      const { return bAgain; }
-    sal_Bool IsComplete()   const { return bComplete; }
-    sal_Bool IsExpFlds()    const { return bUpdateExpFlds; }
-    sal_Bool IsCalcLayout() const { return bCalcLayout;  }
-    sal_Bool IsCheckPages() const { return bCheckPages;  }
-    sal_Bool IsBrowseActionStop() const { return bBrowseActionStop; }
-    sal_Bool IsActionInProgress() const { return bActionInProgress; }
+    BOOL IsAgain()		const { return bAgain; }
+    BOOL IsComplete()	const { return bComplete; }
+    BOOL IsExpFlds()	const { return bUpdateExpFlds; }
+    BOOL IsCalcLayout() const { return bCalcLayout;  }
+    BOOL IsCheckPages() const { return bCheckPages;  }
+    BOOL IsBrowseActionStop() const	{ return bBrowseActionStop; }
+    BOOL IsActionInProgress() const { return bActionInProgress;	}
 
-    sal_uInt16 GetCheckPageNum() const { return nCheckPageNum; }
+    USHORT GetCheckPageNum() const { return nCheckPageNum; }
 
     //Auch andere sollen den Wartecrsr einschalten koennen.
     void CheckWaitCrsr();
 
     // --> OD 2004-06-09 #i28701# - method is now public;
     // delete 2nd parameter, because its not used;
-    sal_Bool FormatLayoutFly( SwFlyFrm * );
+    BOOL FormatLayoutFly( SwFlyFrm * );
     // --> OD 2004-06-09 #i28701# - method is now public
-    sal_Bool _FormatFlyCntnt( const SwFlyFrm * );
+    BOOL _FormatFlyCntnt( const SwFlyFrm * );
 
 };
 
@@ -204,14 +204,14 @@ class SwLayIdle
 {
 
     SwRootFrm *pRoot;
-    SwViewImp  *pImp;           // Hier Meldet sich der Idler an und ab.
-    SwCntntNode *pCntntNode;    // Hier wird die aktuelle Cursorposition
-    xub_StrLen  nTxtPos;        // zwischengespeichert.
-    sal_Bool        bPageValid;     // Konnte die Seite alles validiert werden?
-    sal_Bool        bAllValid;      // Konnte alles validiert werden?
+    SwViewImp  *pImp;			// Hier Meldet sich der Idler an und ab.
+    SwCntntNode *pCntntNode;	// Hier wird die aktuelle Cursorposition
+    xub_StrLen	nTxtPos;		// zwischengespeichert.
+    BOOL		bPageValid;		// Konnte die Seite alles validiert werden?
+    BOOL		bAllValid;      // Konnte alles validiert werden?
 
 #if OSL_DEBUG_LEVEL > 1
-    sal_Bool bIndicator;
+    BOOL bIndicator;
 #endif
 
 #ifdef _LAYACT_CXX
@@ -221,8 +221,8 @@ class SwLayIdle
 #endif
 
     enum IdleJobType{ ONLINE_SPELLING, AUTOCOMPLETE_WORDS, WORD_COUNT, SMART_TAGS };    // SMARTTAGS
-    sal_Bool _DoIdleJob( const SwCntntFrm*, IdleJobType );
-    sal_Bool DoIdleJob( IdleJobType, sal_Bool bVisAreaOnly );
+    BOOL _DoIdleJob( const SwCntntFrm*, IdleJobType );
+    BOOL DoIdleJob( IdleJobType, BOOL bVisAreaOnly );
 
 #endif
 
@@ -231,12 +231,12 @@ public:
     ~SwLayIdle();
 };
 
-inline void SwLayAction::SetCheckPageNum( sal_uInt16 nNew )
+inline void SwLayAction::SetCheckPageNum( USHORT nNew )
 {
     if ( nNew < nCheckPageNum )
         nCheckPageNum = nNew;
 }
 
-#endif  //_LAYACT_HXX
+#endif	//_LAYACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

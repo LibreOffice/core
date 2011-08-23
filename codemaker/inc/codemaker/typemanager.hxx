@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,23 +33,34 @@
 #include "registry/registry.hxx"
 #include "registry/types.h"
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <list>
 
 namespace typereg { class Reader; }
 
-//typedef ::std::list< Registry* >  RegistryList;
-typedef ::std::vector< Registry* >  RegistryList;
-typedef ::std::pair< RegistryKey, sal_Bool >    KeyPair;
-typedef ::std::vector< KeyPair >    RegistryKeyList;
+//typedef ::std::list< Registry* > 	RegistryList;
+typedef ::std::vector< Registry* > 	RegistryList;
+typedef ::std::pair< RegistryKey, sal_Bool > 	KeyPair;
+typedef ::std::vector< KeyPair > 	RegistryKeyList;
 
-typedef ::boost::unordered_map
-<
+#if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
+typedef	::std::__hash_map__
+<	
     ::rtl::OString, // Typename
-    RTTypeClass,    // TypeClass
-    HashString,
+    RTTypeClass, 	// TypeClass
+    HashString, 
+    EqualString, 
+    NewAlloc
+> T2TypeClassMap; 
+#else
+typedef	::std::hash_map
+<	
+    ::rtl::OString, // Typename
+    RTTypeClass, 	// TypeClass
+    HashString, 
     EqualString
-> T2TypeClassMap;
+> T2TypeClassMap; 
+#endif
 
 struct TypeManagerImpl
 {
@@ -57,8 +68,8 @@ struct TypeManagerImpl
         : m_refCount(0)
         {}
 
-    sal_Int32       m_refCount;
-};
+    sal_Int32		m_refCount;
+};	
 
 class TypeManager
 {
@@ -85,19 +96,19 @@ public:
 
     virtual ::rtl::OString getTypeName(RegistryKey&) const
         { return ::rtl::OString(); }
-
-    virtual RegistryKey getTypeKey(const ::rtl::OString&, sal_Bool * = 0 ) const
+    
+    virtual RegistryKey	getTypeKey(const ::rtl::OString&, sal_Bool * = 0 ) const
         { return RegistryKey(); }
-    virtual RegistryKeyList getTypeKeys(const ::rtl::OString&) const
+    virtual RegistryKeyList	getTypeKeys(const ::rtl::OString&) const
         { return RegistryKeyList(); }
     virtual typereg::Reader getTypeReader(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const = 0;
     virtual typereg::Reader getTypeReader(RegistryKey& rTypeKey) const = 0;
-    virtual RTTypeClass getTypeClass(const ::rtl::OString&) const
+    virtual RTTypeClass	getTypeClass(const ::rtl::OString&) const
+        { return RT_TYPE_INVALID; } 
+    virtual RTTypeClass	getTypeClass(RegistryKey&) const
         { return RT_TYPE_INVALID; }
-    virtual RTTypeClass getTypeClass(RegistryKey&) const
-        { return RT_TYPE_INVALID; }
-
+    
     virtual void setBase(const ::rtl::OString&) {}
     virtual ::rtl::OString getBase() const { return ::rtl::OString(); }
 
@@ -115,14 +126,14 @@ protected:
 struct RegistryTypeManagerImpl
 {
     RegistryTypeManagerImpl()
-        : m_base("/")
+        : m_base("/") 
         {}
 
-    T2TypeClassMap  m_t2TypeClass;
-    RegistryList    m_registries;
-    RegistryList    m_extra_registries;
-    ::rtl::OString  m_base;
-};
+    T2TypeClassMap	m_t2TypeClass;
+    RegistryList	m_registries;
+    RegistryList	m_extra_registries;
+    ::rtl::OString 	m_base;
+};	
 
 class RegistryTypeManager : public TypeManager
 {
@@ -140,27 +151,27 @@ public:
     sal_Bool init(const StringVector& regFiles, const StringVector& extraFiles = StringVector() );
 
     ::rtl::OString getTypeName(RegistryKey& rTypeKey) const;
-
-    sal_Bool    isValidType(const ::rtl::OString& name) const
+    
+    sal_Bool  	isValidType(const ::rtl::OString& name) const
         { return searchTypeKey(name, 0).isValid(); }
-    RegistryKey getTypeKey(
+    RegistryKey	getTypeKey(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const
         { return searchTypeKey(name, pIsExtraType); }
-    RegistryKeyList getTypeKeys(const ::rtl::OString& name) const;
+    RegistryKeyList	getTypeKeys(const ::rtl::OString& name) const;
     typereg::Reader getTypeReader(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const;
     typereg::Reader getTypeReader(RegistryKey& rTypeKey) const;
-    RTTypeClass getTypeClass(const ::rtl::OString& name) const;
-    RTTypeClass getTypeClass(RegistryKey& rTypeKey) const;
+    RTTypeClass	getTypeClass(const ::rtl::OString& name) const;
+    RTTypeClass	getTypeClass(RegistryKey& rTypeKey) const;
 
     void setBase(const ::rtl::OString& base);
     ::rtl::OString getBase() const { return m_pImpl->m_base; }
 
     sal_Int32 getSize() const { return m_pImpl->m_t2TypeClass.size(); }
 protected:
-    RegistryKey searchTypeKey(
+    RegistryKey	searchTypeKey(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) const;
-    void        freeRegistries();
+    void		freeRegistries();
 
     void acquire();
     void release();
@@ -168,7 +179,7 @@ protected:
 protected:
     RegistryTypeManagerImpl* m_pImpl;
 };
-
+    
 #endif // INCLUDED_CODEMAKER_TYPEMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

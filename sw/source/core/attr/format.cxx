@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,16 +30,18 @@
 #include "precompiled_sw.hxx"
 
 
-#include <hintids.hxx>          // fuer RES_..
-#include <frame.hxx>            // fuer AttrCache
+#include <hintids.hxx> 			// fuer RES_..
+#include <frame.hxx>			// fuer AttrCache
 #include <format.hxx>
-#include <hints.hxx>            // fuer SwFmtChg
+#include <hints.hxx>			// fuer SwFmtChg
 #include <doc.hxx>
-#include <paratr.hxx>           // fuer SwParaFmt - SwHyphenBug
+#include <paratr.hxx>			// fuer SwParaFmt - SwHyphenBug
 #include <swcache.hxx>
+// --> OD 2006-11-22 #i71574#
 #include <fmtcolfunc.hxx>
+// <--
 
-TYPEINIT1( SwFmt, SwClient );   //rtti fuer SwFmt
+TYPEINIT1( SwFmt, SwClient );	//rtti fuer SwFmt
 
 /*************************************************************************
 |*    SwFmt::SwFmt
@@ -47,7 +49,7 @@ TYPEINIT1( SwFmt, SwClient );   //rtti fuer SwFmt
 
 
 SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-            const sal_uInt16* pWhichRanges, SwFmt *pDrvdFrm, sal_uInt16 nFmtWhich )
+            const USHORT* pWhichRanges, SwFmt *pDrvdFrm, USHORT nFmtWhich )
     : SwModify( pDrvdFrm ),
     aSet( rPool, pWhichRanges ),
     nWhichId( nFmtWhich ),
@@ -57,8 +59,8 @@ SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
     nPoolHlpFileId( UCHAR_MAX )
 {
     aFmtName.AssignAscii( pFmtNm );
-    bWritten = bFmtInDTOR = bAutoUpdateFmt = sal_False; // LAYER_IMPL
-    bAutoFmt = sal_True;
+    bWritten = bFmtInDTOR = bAutoUpdateFmt = FALSE; // LAYER_IMPL
+    bAutoFmt = TRUE;
 
     if( pDrvdFrm )
         aSet.SetParent( &pDrvdFrm->aSet );
@@ -66,7 +68,7 @@ SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
 
 
 SwFmt::SwFmt( SwAttrPool& rPool, const String &rFmtNm,
-            const sal_uInt16* pWhichRanges, SwFmt *pDrvdFrm, sal_uInt16 nFmtWhich )
+            const USHORT* pWhichRanges, SwFmt *pDrvdFrm, USHORT nFmtWhich )
     : SwModify( pDrvdFrm ),
     aFmtName( rFmtNm ),
     aSet( rPool, pWhichRanges ),
@@ -76,8 +78,8 @@ SwFmt::SwFmt( SwAttrPool& rPool, const String &rFmtNm,
     nPoolHelpId( USHRT_MAX ),
     nPoolHlpFileId( UCHAR_MAX )
 {
-    bWritten = bFmtInDTOR = bAutoUpdateFmt = sal_False; // LAYER_IMPL
-    bAutoFmt = sal_True;
+    bWritten = bFmtInDTOR = bAutoUpdateFmt = FALSE; // LAYER_IMPL
+    bAutoFmt = TRUE;
 
     if( pDrvdFrm )
         aSet.SetParent( &pDrvdFrm->aSet );
@@ -94,7 +96,7 @@ SwFmt::SwFmt( const SwFmt& rFmt )
     nPoolHelpId( rFmt.GetPoolHelpId() ),
     nPoolHlpFileId( rFmt.GetPoolHlpFileId() )
 {
-    bWritten = bFmtInDTOR = sal_False; // LAYER_IMPL
+    bWritten = bFmtInDTOR = FALSE; // LAYER_IMPL
     bAutoFmt = rFmt.bAutoFmt;
     bAutoUpdateFmt = rFmt.bAutoUpdateFmt;
 
@@ -107,7 +109,9 @@ SwFmt::SwFmt( const SwFmt& rFmt )
 /*************************************************************************
 |*    SwFmt &SwFmt::operator=(const SwFmt& aFmt)
 |*
-|*    Beschreibung      Dokument 1.14
+|*    Beschreibung		Dokument 1.14
+|*    Ersterstellung    JP 22.11.90
+|*    Letzte Aenderung  JP 05.08.94
 *************************************************************************/
 
 
@@ -121,9 +125,9 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( FALSE );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( FALSE );
 
     // kopiere nur das Attribut-Delta Array
     SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
@@ -139,16 +143,16 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
     {
         SwAttrSetChg aChgOld( aSet, aOld );
         SwAttrSetChg aChgNew( aSet, aNew );
-        ModifyNotification( &aChgOld, &aChgNew );        // alle veraenderten werden verschickt
+        Modify( &aChgOld, &aChgNew );        // alle veraenderten werden verschickt
     }
 
-    if( GetRegisteredIn() != rFmt.GetRegisteredIn() )
+    if( pRegisteredIn != rFmt.pRegisteredIn )
     {
-        if( GetRegisteredIn() )
-            GetRegisteredInNonConst()->Remove(this);
-        if(rFmt.GetRegisteredIn())
+        if( pRegisteredIn )
+            pRegisteredIn->Remove(this);
+        if(rFmt.pRegisteredIn)
         {
-            const_cast<SwFmt&>(rFmt).GetRegisteredInNonConst()->Add(this);
+            rFmt.pRegisteredIn->Add(this);
             aSet.SetParent( &rFmt.aSet );
         }
         else
@@ -167,7 +171,7 @@ void SwFmt::SetName( const String& rNewName, sal_Bool bBroadcast )
         SwStringMsgPoolItem aOld( RES_NAME_CHANGED, aFmtName );
         SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
         aFmtName = rNewName;
-        ModifyNotification( &aOld, &aNew );
+        Modify( &aOld, &aNew );
     }
     else
     {
@@ -183,30 +187,30 @@ void SwFmt::SetName( const String& rNewName, sal_Bool bBroadcast )
  * Basis-Klasse auf 0 defaultet ist.
  *
  * Zusatz: JP 8.4.1994
- *  Wird ueber Dokumentgrenzen kopiert, so muss das neue Dokument
- *  mit angeben werden, in dem this steht. Z.Z. ist das fuers
- *  DropCaps wichtig, dieses haelt Daten, die tief kopiert werden
- *  muessen !!
+ * 	Wird ueber Dokumentgrenzen kopiert, so muss das neue Dokument
+ *	mit angeben werden, in dem this steht. Z.Z. ist das fuers
+ *	DropCaps wichtig, dieses haelt Daten, die tief kopiert werden
+ *	muessen !!
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
 
-void SwFmt::CopyAttrs( const SwFmt& rFmt, sal_Bool bReplace )
+void SwFmt::CopyAttrs( const SwFmt& rFmt, BOOL bReplace )
 {
     // kopiere nur das Attribut-Delta Array
 
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( FALSE );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( FALSE );
 
     // Sonderbehandlung fuer einige Attribute
     SwAttrSet* pChgSet = (SwAttrSet*)&rFmt.aSet;
 
-    if( !bReplace )     // nur die neu, die nicht gesetzt sind ??
+    if( !bReplace )		// nur die neu, die nicht gesetzt sind ??
     {
-        if( pChgSet == (SwAttrSet*)&rFmt.aSet )     // Set hier kopieren
+        if( pChgSet == (SwAttrSet*)&rFmt.aSet )		// Set hier kopieren
             pChgSet = new SwAttrSet( rFmt.aSet );
         pChgSet->Differentiate( aSet );
     }
@@ -226,18 +230,20 @@ void SwFmt::CopyAttrs( const SwFmt& rFmt, sal_Bool bReplace )
 
             SwAttrSetChg aChgOld( aSet, aOld );
             SwAttrSetChg aChgNew( aSet, aNew );
-            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
         }
     }
 
-    if( pChgSet != (SwAttrSet*)&rFmt.aSet )     // Set hier angelegt ?
+    if( pChgSet != (SwAttrSet*)&rFmt.aSet )		// Set hier angelegt ?
         delete pChgSet;
 }
 
 /*************************************************************************
 |*    SwFmt::~SwFmt()
 |*
-|*    Beschreibung      Dokument 1.14
+|*    Beschreibung		Dokument 1.14
+|*    Ersterstellung    JP 22.11.90
+|*    Letzte Aenderung  JP 14.02.91
 *************************************************************************/
 
 
@@ -249,12 +255,12 @@ SwFmt::~SwFmt()
     {
         OSL_ENSURE(DerivedFrom(), "SwFmt::~SwFmt: Def Abhaengige!" );
 
-        bFmtInDTOR = sal_True;
+        bFmtInDTOR = TRUE;
 
         SwFmt *pParentFmt = DerivedFrom();
-        if (!pParentFmt)
+        if (!pParentFmt)		// see #112405#
         {
-            OSL_FAIL( "~SwFmt: parent format missing" );
+            DBG_ERROR( "~SwFmt: parent format missing" );
         }
         else
         {
@@ -264,7 +270,7 @@ SwFmt::~SwFmt()
                 SwFmtChg aNewFmt(pParentFmt);
                 SwClient * pDepend = (SwClient*)GetDepends();
                 pParentFmt->Add(pDepend);
-                pDepend->ModifyNotification(&aOldFmt, &aNewFmt);
+                pDepend->Modify(&aOldFmt, &aNewFmt);
             }
         }
     }
@@ -272,21 +278,23 @@ SwFmt::~SwFmt()
 
 
 /*************************************************************************
-|*    void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
+|*    void SwFmt::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 |*
-|*    Beschreibung      Dokument 1.14
+|*    Beschreibung		Dokument 1.14
+|*    Ersterstellung    JP 22.11.90
+|*    Letzte Aenderung  JP 05.08.94
 *************************************************************************/
 
 
-void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
+void SwFmt::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 {
-    sal_Bool bWeiter = sal_True;    // sal_True = Propagierung an die Abhaengigen
+    BOOL bWeiter = TRUE;	// TRUE = Propagierung an die Abhaengigen
 
-    sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
+    USHORT nWhich = pOldValue ? pOldValue->Which() :
                     pNewValue ? pNewValue->Which() : 0 ;
     switch( nWhich )
     {
-    case 0:     break;          // Which-Id von 0 ???
+    case 0:		break;			// Which-Id von 0 ???
 
     case RES_OBJECTDYING :
         {
@@ -295,9 +303,9 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
             SwFmt * pFmt = (SwFmt *) ((SwPtrMsgPoolItem *)pNewValue)->pObject;
 
             // nicht umhaengen wenn dieses das oberste Format ist !!
-            if( GetRegisteredIn() && GetRegisteredIn() == pFmt )
+            if( pRegisteredIn && pRegisteredIn == pFmt )
             {
-                if( pFmt->GetRegisteredIn() )
+                if( pFmt->pRegisteredIn )
                 {
                     // wenn Parent, dann im neuen Parent wieder anmelden
                     pFmt->DerivedFrom()->Add( this );
@@ -325,8 +333,8 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 
             if( aNew.Count() )
                 // keine mehr gesetzt, dann Ende !!
-            NotifyClients( &aOld, &aNew );
-            bWeiter = sal_False;
+                SwModify::Modify( &aOld, &aNew );
+            bWeiter = FALSE;
         }
         break;
     case RES_FMT_CHG:
@@ -346,13 +354,13 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
         {
             // IsWritten-Flag zuruecksetzen. Hint nur an abhanegige
             // Formate (und keine Frames) propagieren.
-            // mba: the code does the opposite from what is written in the comment!
             ResetWritten();
-            // mba: here we don't use the additional stuff from NotifyClients().
-            // should we?!
-            // mba: move the code that ignores this event to the clients
-            ModifyBroadcast( pOldValue, pNewValue, TYPE(SwFmt) );
-            bWeiter = sal_False;
+            SwClientIter aIter( *this );
+            for( SwClient *pClient = aIter.First( TYPE(SwFmt) ); pClient;
+                        pClient = aIter.Next() )
+                pClient->Modify( pOldValue, pNewValue );
+
+            bWeiter = FALSE;
         }
         break;
 
@@ -360,14 +368,14 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
         {
             // Ist das Attribut in diesem Format definiert, dann auf
             // NICHT weiter propagieren !!
-            if( SFX_ITEM_SET == aSet.GetItemState( nWhich, sal_False ))
+            if( SFX_ITEM_SET == aSet.GetItemState( nWhich, FALSE ))
             {
 // wie finde ich heraus, ob nicht ich die Message versende ??
 // aber wer ruft das hier ????
 // OSL_ENSURE( FALSE, "Modify ohne Absender verschickt" );
 //JP 11.06.96: DropCaps koennen hierher kommen
                 OSL_ENSURE( RES_PARATR_DROP == nWhich, "Modify ohne Absender verschickt" );
-                bWeiter = sal_False;
+                bWeiter = FALSE;
             }
 
         } // default
@@ -376,13 +384,13 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
     if( bWeiter )
     {
         // laufe durch alle abhaengigen Formate
-        NotifyClients( pOldValue, pNewValue );
+        SwModify::Modify( pOldValue, pNewValue );
     }
 
 }
 
 
-sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
+BOOL SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
 {
     if ( pDerFrom )
     {
@@ -391,7 +399,7 @@ sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
         while ( pFmt != 0 )
         {
             if ( pFmt == this )
-                return sal_False;
+                return FALSE;
 
             pFmt=pFmt->DerivedFrom();
         }
@@ -404,7 +412,7 @@ sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
             pDerFrom = pDerFrom->DerivedFrom();
     }
     if ( (pDerFrom == DerivedFrom()) || (pDerFrom == this) )
-        return sal_False;
+        return FALSE;
 
     OSL_ENSURE( Which()==pDerFrom->Which()
             || ( Which()==RES_CONDTXTFMTCOLL && pDerFrom->Which()==RES_TXTFMTCOLL)
@@ -415,44 +423,45 @@ sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( FALSE );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( FALSE );
 
     pDerFrom->Add(this);
     aSet.SetParent( &pDerFrom->aSet );
 
     SwFmtChg aOldFmt(this);
     SwFmtChg aNewFmt(this);
-    ModifyNotification( &aOldFmt, &aNewFmt );
+    Modify( &aOldFmt, &aNewFmt );
 
-    return sal_True;
+    return TRUE;
 }
 
 
-sal_Bool SwFmt::SetFmtAttr(const SfxPoolItem& rAttr )
+BOOL SwFmt::SetFmtAttr(const SfxPoolItem& rAttr )
 {
     if ( IsInCache() || IsInSwFntCache() )
     {
-        const sal_uInt16 nWhich = rAttr.Which();
+        const USHORT nWhich = rAttr.Which();
         CheckCaching( nWhich );
     }
 
     // wenn Modify gelockt ist, werden keine Modifies verschickt;
     // fuer FrmFmt's immer das Modify verschicken!
-    sal_Bool bRet = sal_False;
-    const sal_uInt16 nFmtWhich = Which();
+    BOOL bRet = FALSE;
+    const USHORT nFmtWhich = Which();
     if( IsModifyLocked() || (!GetDepends() &&
         (RES_GRFFMTCOLL == nFmtWhich  ||
          RES_TXTFMTCOLL == nFmtWhich ) ) )
     {
         if( 0 != ( bRet = (0 != aSet.Put( rAttr ))) )
             aSet.SetModifyAtAttr( this );
-        // #i71574#
+        // --> OD 2006-11-22 #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL && rAttr.Which() == RES_PARATR_NUMRULE )
         {
             TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this );
         }
+        // <--
     }
     else
     {
@@ -468,29 +477,29 @@ sal_Bool SwFmt::SetFmtAttr(const SfxPoolItem& rAttr )
 
             SwAttrSetChg aChgOld( aSet, aOld );
             SwAttrSetChg aChgNew( aSet, aNew );
-            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
         }
     }
     return bRet;
 }
 
 
-sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
+BOOL SwFmt::SetFmtAttr( const SfxItemSet& rSet )
 {
     if( !rSet.Count() )
-        return sal_False;
+        return FALSE;
 
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( FALSE );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( FALSE );
 
     // wenn Modify gelockt ist, werden keine Modifies verschickt;
     // fuer FrmFmt's immer das Modify verschicken!
-    sal_Bool bRet = sal_False;
-    const sal_uInt16 nFmtWhich = Which();
+    BOOL bRet = FALSE;
+    const USHORT nFmtWhich = Which();
     if ( IsModifyLocked() ||
          ( !GetDepends() &&
            ( RES_GRFFMTCOLL == nFmtWhich ||
@@ -498,11 +507,12 @@ sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     {
         if( 0 != ( bRet = (0 != aSet.Put( rSet ))) )
             aSet.SetModifyAtAttr( this );
-        // #i71574#
+        // --> OD 2006-11-22 #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL )
         {
             TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this );
         }
+        // <--
     }
     else
     {
@@ -515,7 +525,7 @@ sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
             aSet.SetModifyAtAttr( this );
             SwAttrSetChg aChgOld( aSet, aOld );
             SwAttrSetChg aChgNew( aSet, aNew );
-            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
         }
     }
     return bRet;
@@ -524,17 +534,17 @@ sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
 // Nimmt den Hint mit nWhich aus dem Delta-Array
 
 
-sal_Bool SwFmt::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
+BOOL SwFmt::ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 )
 {
     if( !aSet.Count() )
-        return sal_False;
+        return FALSE;
 
     if( !nWhich2 || nWhich2 < nWhich1 )
-        nWhich2 = nWhich1;      // dann setze auf 1. Id, nur dieses Item
+        nWhich2 = nWhich1;		// dann setze auf 1. Id, nur dieses Item
 
     if ( IsInCache() || IsInSwFntCache() )
     {
-        for( sal_uInt16 n = nWhich1; n < nWhich2; ++n )
+        for( USHORT n = nWhich1; n < nWhich2; ++n )
             CheckCaching( n );
     }
 
@@ -546,22 +556,23 @@ sal_Bool SwFmt::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 
     SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
                 aNew( *aSet.GetPool(), aSet.GetRanges() );
-    sal_Bool bRet = 0 != aSet.ClearItem_BC( nWhich1, nWhich2, &aOld, &aNew );
+    BOOL bRet = 0 != aSet.ClearItem_BC( nWhich1, nWhich2, &aOld, &aNew );
 
     if( bRet )
     {
         SwAttrSetChg aChgOld( aSet, aOld );
         SwAttrSetChg aChgNew( aSet, aNew );
-        ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
     }
     return bRet;
 }
 
 
 
-// #i73790#
+// --> OD 2007-01-24 #i73790#
 // method renamed
-sal_uInt16 SwFmt::ResetAllFmtAttr()
+USHORT SwFmt::ResetAllFmtAttr()
+// <--
 {
     if( !aSet.Count() )
         return 0;
@@ -569,9 +580,9 @@ sal_uInt16 SwFmt::ResetAllFmtAttr()
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( FALSE );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( FALSE );
 
     // wenn Modify gelockt ist, werden keine Modifies verschickt
     if( IsModifyLocked() )
@@ -579,13 +590,13 @@ sal_uInt16 SwFmt::ResetAllFmtAttr()
 
     SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
                 aNew( *aSet.GetPool(), aSet.GetRanges() );
-    sal_Bool bRet = 0 != aSet.ClearItem_BC( 0, &aOld, &aNew );
+    BOOL bRet = 0 != aSet.ClearItem_BC( 0, &aOld, &aNew );
 
     if( bRet )
     {
         SwAttrSetChg aChgOld( aSet, aOld );
         SwAttrSetChg aChgNew( aSet, aNew );
-        ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
     }
     return aNew.Count();
 }
@@ -593,12 +604,16 @@ sal_uInt16 SwFmt::ResetAllFmtAttr()
 
 /*************************************************************************
 |*    void SwFmt::GetInfo( const SfxPoolItem& ) const
+|*
+|*    Beschreibung
+|*    Ersterstellung    JP 18.04.94
+|*    Letzte Aenderung  JP 05.08.94
 *************************************************************************/
 
 
-sal_Bool SwFmt::GetInfo( SfxPoolItem& rInfo ) const
+BOOL SwFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
-    sal_Bool bRet = SwModify::GetInfo( rInfo );
+    BOOL bRet = SwModify::GetInfo( rInfo );
     return bRet;
 }
 
@@ -611,9 +626,9 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( FALSE );
     }
-    SetInSwFntCache( sal_False );
+    SetInSwFntCache( FALSE );
 
     // wenn Modify gelockt ist, werden keine Modifies verschickt
     if( IsModifyLocked() )
@@ -624,18 +639,19 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
 
     SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
                 aNew( *aSet.GetPool(), aSet.GetRanges() );
-    sal_Bool bRet = 0 != aSet.Intersect_BC( rSet, &aOld, &aNew );
+    BOOL bRet = 0 != aSet.Intersect_BC( rSet, &aOld, &aNew );
 
     if( bRet )
     {
         SwAttrSetChg aChgOld( aSet, aOld );
         SwAttrSetChg aChgNew( aSet, aNew );
-        ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
     }
 }
 
-/** SwFmt::IsBackgroundTransparent
+/** SwFmt::IsBackgroundTransparent - for feature #99657#
 
+    OD 22.08.2002
     Virtual method to determine, if background of format is transparent.
     Default implementation returns false. Thus, subclasses have to overload
     method, if the specific subclass can have a transparent background.
@@ -649,11 +665,14 @@ sal_Bool SwFmt::IsBackgroundTransparent() const
     return sal_False;
 }
 
-/** SwFmt::IsShadowTransparent
+/** SwFmt::IsShadowTransparent - for feature #99657#
 
+    OD 22.08.2002
     Virtual method to determine, if shadow of format is transparent.
     Default implementation returns false. Thus, subclasses have to overload
     method, if the specific subclass can have a transparent shadow.
+
+    @author OD
 
     @return false, default implementation
 */

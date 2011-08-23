@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ public class SimpleRegistry extends TestCase {
             copyFile(source, tmpDir + destroyF, log);
             copyFile(source, tmpDir + mergeF, log);
         } catch (java.io.IOException e) {
-            log.println("Exception occurred while copying files");
+            log.println("Exception occured while copying files");
             e.printStackTrace(log);
         }
 

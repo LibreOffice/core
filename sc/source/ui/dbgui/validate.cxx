@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,16 +53,16 @@
 #include "formula/opcode.hxx"
 
 // cell range picker
-#include "tabvwsh.hxx"
+#include "tabvwsh.hxx" 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/childwin.hxx>
 #include "reffact.hxx"
 
 // ============================================================================
 
-static sal_uInt16 pValueRanges[] =
+static USHORT pValueRanges[] =
 {
-    FID_VALID_MODE, FID_VALID_ERRTEXT,
+    FID_VALID_MODE,	FID_VALID_ERRTEXT,
     FID_VALID_LISTTYPE, FID_VALID_LISTTYPE,
     0
 };
@@ -70,7 +70,7 @@ static sal_uInt16 pValueRanges[] =
 
 // ============================================================================
 
-ScValidationDlg::ScValidationDlg( Window*           pParent,
+ScValidationDlg::ScValidationDlg( Window*			pParent,
                                  const SfxItemSet* pArgSet,
                                  ScTabViewShell *pTabViewSh,
                                  SfxBindings *pB /*= NULL*/
@@ -90,12 +90,12 @@ void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pD
 {
     if ( rRange.aStart != rRange.aEnd )
         if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
-            if( m_pRefEdit )
+            if( m_pRefEdit ) 
                 pValidationDlg->RefInputStart( m_pRefEdit );
 
     if ( m_pRefEdit )
     {
-        String  aStr;
+        String	aStr;
         rRange.Format( aStr, SCR_ABS_3D, pDoc );
         m_pRefEdit->SetRefString( aStr );
     }
@@ -104,15 +104,15 @@ void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pD
 void ScTPValidationValue:: SetActiveHdl()
 {
     if ( m_pRefEdit ) m_pRefEdit->GrabFocus();
-
+    
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
-        if( m_pRefEdit )
+        if( m_pRefEdit ) 
         {
             pValidationDlg->RefInputDone();
         }
 }
 
-void            ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton* pButton )
+void			ScTPValidationValue::RefInputStartPreHdl( ScRefEdit* pEdit, ScRefButton* pButton )
 {
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
     {
@@ -131,9 +131,9 @@ void            ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdi
     }
 }
 
-void            ScTPValidationValue::RefInputDonePreHdl()
+void			ScTPValidationValue::RefInputDonePreHdl()
 {
-
+    
     if( m_pRefEdit && m_pRefEdit->GetParent()!= this )
     {
         if( Window *pPreWnd = m_pRefEdit==&maEdMax?&maFtMax:(m_pRefEdit==&maEdMin?&maFtMin:NULL) )
@@ -146,21 +146,21 @@ void            ScTPValidationValue::RefInputDonePreHdl()
 
         m_btnRef.SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to anthor window and restore parent later in order to restore the tab order
     }
-
+    
     if( m_btnRef.GetParent()!=this ) m_btnRef.SetParent( this );
 }
 
-void            ScTPValidationValue::RefInputDonePostHdl()
+void			ScTPValidationValue::RefInputDonePostHdl()
 {
-
-
+    
+    
     if( m_pRefEdit && !m_pRefEdit->HasFocus() )
         m_pRefEdit->GrabFocus();
 
 }
+    
 
-
-sal_Bool ScValidationDlg::Close()
+BOOL ScValidationDlg::Close()
 {
     if( m_bOwnRefHdlr )
         if( SfxTabPage* pPage = GetTabPage( TP_VALIDATION_VALUES ) )
@@ -172,7 +172,7 @@ sal_Bool ScValidationDlg::Close()
 ScValidationDlg::~ScValidationDlg()
 {
     if( m_bOwnRefHdlr )
-        RemoveRefDlg( false );
+        RemoveRefDlg( FALSE );
 }
 
 
@@ -181,9 +181,9 @@ ScValidationDlg::~ScValidationDlg()
 namespace {
 
 /** Converts the passed ScValidationMode to the position in the list box. */
-sal_uInt16 lclGetPosFromValMode( ScValidationMode eValMode )
+USHORT lclGetPosFromValMode( ScValidationMode eValMode )
 {
-    sal_uInt16 nLbPos = SC_VALIDDLG_ALLOW_ANY;
+    USHORT nLbPos = SC_VALIDDLG_ALLOW_ANY;
     switch( eValMode )
     {
         case SC_VALID_ANY:      nLbPos = SC_VALIDDLG_ALLOW_ANY;     break;
@@ -200,7 +200,7 @@ sal_uInt16 lclGetPosFromValMode( ScValidationMode eValMode )
 }
 
 /** Converts the passed list box position to an ScValidationMode. */
-ScValidationMode lclGetValModeFromPos( sal_uInt16 nLbPos )
+ScValidationMode lclGetValModeFromPos( USHORT nLbPos )
 {
     ScValidationMode eValMode = SC_VALID_ANY;
     switch( nLbPos )
@@ -219,12 +219,12 @@ ScValidationMode lclGetValModeFromPos( sal_uInt16 nLbPos )
 }
 
 /** Converts the passed ScConditionMode to the position in the list box. */
-sal_uInt16 lclGetPosFromCondMode( ScConditionMode eCondMode )
+USHORT lclGetPosFromCondMode( ScConditionMode eCondMode )
 {
-    sal_uInt16 nLbPos = SC_VALIDDLG_DATA_EQUAL;
+    USHORT nLbPos = SC_VALIDDLG_DATA_EQUAL;
     switch( eCondMode )
     {
-        case SC_COND_NONE:          // may occur in old XML files after Excel import
+        case SC_COND_NONE:          // #111771# may occur in old XML files after Excel import
         case SC_COND_EQUAL:         nLbPos = SC_VALIDDLG_DATA_EQUAL;        break;
         case SC_COND_LESS:          nLbPos = SC_VALIDDLG_DATA_LESS;         break;
         case SC_COND_GREATER:       nLbPos = SC_VALIDDLG_DATA_GREATER;      break;
@@ -239,7 +239,7 @@ sal_uInt16 lclGetPosFromCondMode( ScConditionMode eCondMode )
 }
 
 /** Converts the passed list box position to an ScConditionMode. */
-ScConditionMode lclGetCondModeFromPos( sal_uInt16 nLbPos )
+ScConditionMode lclGetCondModeFromPos( USHORT nLbPos )
 {
     ScConditionMode eCondMode = SC_COND_EQUAL;
     switch( nLbPos )
@@ -339,7 +339,7 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
     FreeResource();
 
     // list separator in formulas
-    String aListSep = ::ScCompiler::GetNativeSymbol( ocSep );
+    String aListSep = ::GetScCompilerNativeSymbol( ocSep );
     DBG_ASSERT( aListSep.Len() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
     mcFmlaSep = aListSep.Len() ? aListSep.GetChar( 0 ) : ';';
     m_btnRef.Hide(); // cell range picker
@@ -374,7 +374,7 @@ SfxTabPage* ScTPValidationValue::Create( Window* pParent, const SfxItemSet& rArg
     return( new ScTPValidationValue( pParent, rArgSet ) );
 }
 
-sal_uInt16* ScTPValidationValue::GetRanges()
+USHORT* ScTPValidationValue::GetRanges()
 {
     return pValueRanges;
 }
@@ -383,38 +383,38 @@ void ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
 {
     const SfxPoolItem* pItem;
 
-    sal_uInt16 nLbPos = SC_VALIDDLG_ALLOW_ANY;
-    if( rArgSet.GetItemState( FID_VALID_MODE, sal_True, &pItem ) == SFX_ITEM_SET )
+    USHORT nLbPos = SC_VALIDDLG_ALLOW_ANY;
+    if( rArgSet.GetItemState( FID_VALID_MODE, TRUE, &pItem ) == SFX_ITEM_SET )
         nLbPos = lclGetPosFromValMode( static_cast< ScValidationMode >(
             static_cast< const SfxAllEnumItem* >( pItem )->GetValue() ) );
     maLbAllow.SelectEntryPos( nLbPos );
 
     nLbPos = SC_VALIDDLG_DATA_EQUAL;
-    if( rArgSet.GetItemState( FID_VALID_CONDMODE, sal_True, &pItem ) == SFX_ITEM_SET )
+    if( rArgSet.GetItemState( FID_VALID_CONDMODE, TRUE, &pItem ) == SFX_ITEM_SET )
         nLbPos = lclGetPosFromCondMode( static_cast< ScConditionMode >(
             static_cast< const SfxAllEnumItem* >( pItem )->GetValue() ) );
     maLbValue.SelectEntryPos( nLbPos );
 
     // *** check boxes ***
-    sal_Bool bCheck = sal_True;
-    if( rArgSet.GetItemState( FID_VALID_BLANK, sal_True, &pItem ) == SFX_ITEM_SET )
+    BOOL bCheck = TRUE;
+    if( rArgSet.GetItemState( FID_VALID_BLANK, TRUE, &pItem ) == SFX_ITEM_SET )
         bCheck = static_cast< const SfxBoolItem* >( pItem )->GetValue();
     maCbAllow.Check( bCheck );
 
     sal_Int32 nListType = ValidListType::UNSORTED;
-    if( rArgSet.GetItemState( FID_VALID_LISTTYPE, sal_True, &pItem ) == SFX_ITEM_SET )
+    if( rArgSet.GetItemState( FID_VALID_LISTTYPE, TRUE, &pItem ) == SFX_ITEM_SET )
         nListType = static_cast< const SfxInt16Item* >( pItem )->GetValue();
     maCbShow.Check( nListType != ValidListType::INVISIBLE );
     maCbSort.Check( nListType == ValidListType::SORTEDASCENDING );
 
     // *** formulas ***
     String aFmlaStr;
-    if ( rArgSet.GetItemState( FID_VALID_VALUE1, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_VALUE1, TRUE, &pItem ) == SFX_ITEM_SET )
         aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
     SetFirstFormula( aFmlaStr );
 
     aFmlaStr.Erase();
-    if ( rArgSet.GetItemState( FID_VALID_VALUE2, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_VALUE2, TRUE, &pItem ) == SFX_ITEM_SET )
         aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
     SetSecondFormula( aFmlaStr );
 
@@ -422,21 +422,21 @@ void ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
     CheckHdl( NULL );
 }
 
-sal_Bool ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
+BOOL ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
 {
     sal_Int16 nListType = maCbShow.IsChecked() ?
         (maCbSort.IsChecked() ? ValidListType::SORTEDASCENDING : ValidListType::UNSORTED) :
         ValidListType::INVISIBLE;
 
-    rArgSet.Put( SfxAllEnumItem( FID_VALID_MODE, sal::static_int_cast<sal_uInt16>(
+    rArgSet.Put( SfxAllEnumItem( FID_VALID_MODE, sal::static_int_cast<USHORT>(
                     lclGetValModeFromPos( maLbAllow.GetSelectEntryPos() ) ) ) );
-    rArgSet.Put( SfxAllEnumItem( FID_VALID_CONDMODE, sal::static_int_cast<sal_uInt16>(
+    rArgSet.Put( SfxAllEnumItem( FID_VALID_CONDMODE, sal::static_int_cast<USHORT>(
                     lclGetCondModeFromPos( maLbValue.GetSelectEntryPos() ) ) ) );
     rArgSet.Put( SfxStringItem( FID_VALID_VALUE1, GetFirstFormula() ) );
     rArgSet.Put( SfxStringItem( FID_VALID_VALUE2, GetSecondFormula() ) );
     rArgSet.Put( SfxBoolItem( FID_VALID_BLANK, maCbAllow.IsChecked() ) );
     rArgSet.Put( SfxInt16Item( FID_VALID_LISTTYPE, nListType ) );
-    return sal_True;
+    return TRUE;
 }
 
 String ScTPValidationValue::GetFirstFormula() const
@@ -483,7 +483,7 @@ ScValidationDlg * ScTPValidationValue::GetValidationDlg()
     if( Window *pParent = GetParent() )
         do{
             if ( dynamic_cast<ScValidationDlg*>( pParent ) )
-                return static_cast< ScValidationDlg * >( pParent );
+                return static_cast<	ScValidationDlg * >( pParent );
         }while ( NULL != ( pParent = pParent->GetParent() ) );
     return NULL;
 }
@@ -566,11 +566,11 @@ void ScTPValidationValue::TidyListBoxes()
 
         pWnd = GetChild(0);
 
-        while( std::find( alstOrder.begin(), alstOrder.end(), pWnd ) != alstOrder.end() && NULL != ( pWnd = pWnd->GetWindow( WINDOW_NEXT) ) ) ;
+        while( std::find( alstOrder.begin(), alstOrder.end(), pWnd ) != alstOrder.end() && NULL != ( pWnd = pWnd->GetWindow( WINDOW_NEXT) ) ) ; 
 
         if ( pWnd )
         {
-            for ( std::list<Window*>::iterator i = alstOrder.begin(); i!=alstOrder.end(); ++i )
+            for ( std::list<Window*>::iterator i = alstOrder.begin(); i!=alstOrder.end(); i++ )
             {
                 Window *pParent = (*i)->GetParent();
                 (*i)->SetParent( pWnd );
@@ -582,8 +582,8 @@ void ScTPValidationValue::TidyListBoxes()
 
 IMPL_LINK( ScTPValidationValue, EditSetFocusHdl, Edit *, EMPTYARG)
 {
-    sal_uInt16  nPos=maLbAllow.GetSelectEntryPos();
-
+    USHORT  nPos=maLbAllow.GetSelectEntryPos();
+    
     if ( nPos == SC_VALIDDLG_ALLOW_RANGE )
     {
         SetupRefDlg();
@@ -594,7 +594,7 @@ IMPL_LINK( ScTPValidationValue, EditSetFocusHdl, Edit *, EMPTYARG)
 
 IMPL_LINK( ScTPValidationValue, KillFocusHdl, Window *, pWnd )
 {
-    if( pWnd == m_pRefEdit || pWnd == &m_btnRef )
+    if(	pWnd == m_pRefEdit || pWnd == &m_btnRef )
         if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
             if ( (pValidationDlg->IsActive() || pValidationDlg->IsChildFocus() ) && !pValidationDlg->IsRefInputting() )
                 if( ( !m_pRefEdit || !m_pRefEdit->HasFocus()) && !m_btnRef.HasFocus() )
@@ -609,7 +609,7 @@ IMPL_LINK( ScTPValidationValue, KillFocusHdl, Window *, pWnd )
 
 IMPL_LINK( ScTPValidationValue, SelectHdl, ListBox*, EMPTYARG )
 {
-    sal_uInt16 nLbPos = maLbAllow.GetSelectEntryPos();
+    USHORT nLbPos = maLbAllow.GetSelectEntryPos();
     bool bEnable = (nLbPos != SC_VALIDDLG_ALLOW_ANY);
     bool bRange = (nLbPos == SC_VALIDDLG_ALLOW_RANGE);
     bool bList = (nLbPos == SC_VALIDDLG_ALLOW_LIST);
@@ -672,18 +672,18 @@ IMPL_LINK( ScTPValidationValue, CheckHdl, CheckBox*, EMPTYARG )
 //========================================================================
 // Input Help Page
 
-ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
+ScTPValidationHelp::ScTPValidationHelp( Window*			pParent,
                                           const SfxItemSet& rArgSet )
 
-    :   SfxTabPage      ( pParent,
+    :	SfxTabPage		( pParent,
                           ScResId( TP_VALIDATION_INPUTHELP ),
                           rArgSet ),
-        aTsbHelp        ( this, ScResId( TSB_HELP ) ),
+        aTsbHelp		( this, ScResId( TSB_HELP ) ),
         aFlContent      ( this, ScResId( FL_CONTENT ) ),
-        aFtTitle        ( this, ScResId( FT_TITLE ) ),
-        aEdtTitle       ( this, ScResId( EDT_TITLE ) ),
-        aFtInputHelp    ( this, ScResId( FT_INPUTHELP ) ),
-        aEdInputHelp    ( this, ScResId( EDT_INPUTHELP ) ),
+        aFtTitle		( this, ScResId( FT_TITLE ) ),
+        aEdtTitle		( this, ScResId( EDT_TITLE ) ),
+        aFtInputHelp	( this, ScResId( FT_INPUTHELP ) ),
+        aEdInputHelp	( this, ScResId( EDT_INPUTHELP ) ),
 
         mrArgSet            ( rArgSet )
 {
@@ -693,7 +693,7 @@ ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
 
 // -----------------------------------------------------------------------
 
-ScTPValidationHelp::~ScTPValidationHelp()
+__EXPORT ScTPValidationHelp::~ScTPValidationHelp()
 {
 }
 
@@ -701,41 +701,41 @@ ScTPValidationHelp::~ScTPValidationHelp()
 
 void ScTPValidationHelp::Init()
 {
-    aTsbHelp.EnableTriState( false );
+    aTsbHelp.EnableTriState( FALSE );
 }
 
 //------------------------------------------------------------------------
 
-sal_uInt16* ScTPValidationHelp::GetRanges()
+USHORT* __EXPORT ScTPValidationHelp::GetRanges()
 {
     return pValueRanges;
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* ScTPValidationHelp::Create( Window* pParent,
-                                         const SfxItemSet&  rArgSet )
+SfxTabPage* __EXPORT ScTPValidationHelp::Create( Window*	pParent,
+                                         const SfxItemSet&	rArgSet )
 {
     return ( new ScTPValidationHelp( pParent, rArgSet ) );
 }
 
 // -----------------------------------------------------------------------
 
-void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
+void __EXPORT ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
 {
     const SfxPoolItem* pItem;
 
-    if ( rArgSet.GetItemState( FID_VALID_SHOWHELP, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_SHOWHELP, TRUE, &pItem ) == SFX_ITEM_SET )
         aTsbHelp.SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
     else
         aTsbHelp.SetState( STATE_NOCHECK );
 
-    if ( rArgSet.GetItemState( FID_VALID_HELPTITLE, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_HELPTITLE, TRUE, &pItem ) == SFX_ITEM_SET )
         aEdtTitle.SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
         aEdtTitle.SetText( EMPTY_STRING );
 
-    if ( rArgSet.GetItemState( FID_VALID_HELPTEXT, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_HELPTEXT, TRUE, &pItem ) == SFX_ITEM_SET )
         aEdInputHelp.SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
         aEdInputHelp.SetText( EMPTY_STRING );
@@ -743,34 +743,34 @@ void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
+BOOL __EXPORT ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
 {
     rArgSet.Put( SfxBoolItem( FID_VALID_SHOWHELP, aTsbHelp.GetState() == STATE_CHECK ) );
     rArgSet.Put( SfxStringItem( FID_VALID_HELPTITLE, aEdtTitle.GetText() ) );
     rArgSet.Put( SfxStringItem( FID_VALID_HELPTEXT, aEdInputHelp.GetText() ) );
 
-    return sal_True;
+    return TRUE;
 }
 
 //========================================================================
 //========================================================================
 // Error Alert Page
 
-ScTPValidationError::ScTPValidationError( Window*           pParent,
+ScTPValidationError::ScTPValidationError( Window*			pParent,
                                           const SfxItemSet& rArgSet )
 
-    :   SfxTabPage      ( pParent,
+    :	SfxTabPage		( pParent,
                           ScResId( TP_VALIDATION_ERROR ),
                           rArgSet ),
-        aTsbShow        ( this, ScResId( TSB_SHOW ) ),
+        aTsbShow		( this, ScResId( TSB_SHOW ) ),
         aFlContent      ( this, ScResId( FL_CONTENT ) ),
-        aFtAction       ( this, ScResId( FT_ACTION ) ),
-        aLbAction       ( this, ScResId( LB_ACTION ) ),
-        aBtnSearch      ( this, ScResId( BTN_SEARCH ) ),
-        aFtTitle        ( this, ScResId( FT_TITLE ) ),
-        aEdtTitle       ( this, ScResId( EDT_TITLE ) ),
-        aFtError        ( this, ScResId( FT_ERROR ) ),
-        aEdError        ( this, ScResId( EDT_ERROR ) ),
+        aFtAction		( this, ScResId( FT_ACTION ) ),
+        aLbAction		( this, ScResId( LB_ACTION ) ),
+        aBtnSearch		( this, ScResId( BTN_SEARCH ) ),
+        aFtTitle		( this, ScResId( FT_TITLE ) ),
+        aEdtTitle		( this, ScResId( EDT_TITLE ) ),
+        aFtError		( this, ScResId( FT_ERROR ) ),
+        aEdError		( this, ScResId( EDT_ERROR ) ),
 
         mrArgSet            ( rArgSet )
 {
@@ -780,7 +780,7 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
 
 // -----------------------------------------------------------------------
 
-ScTPValidationError::~ScTPValidationError()
+__EXPORT ScTPValidationError::~ScTPValidationError()
 {
 }
 
@@ -792,48 +792,48 @@ void ScTPValidationError::Init()
     aBtnSearch.SetClickHdl( LINK( this, ScTPValidationError, ClickSearchHdl ) );
 
     aLbAction.SelectEntryPos( 0 );
-    aTsbShow.EnableTriState( false );
+    aTsbShow.EnableTriState( FALSE );
 
     SelectActionHdl( NULL );
 }
 
 //------------------------------------------------------------------------
 
-sal_uInt16* ScTPValidationError::GetRanges()
+USHORT* __EXPORT ScTPValidationError::GetRanges()
 {
     return pValueRanges;
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* ScTPValidationError::Create( Window*    pParent,
-                                         const SfxItemSet&  rArgSet )
+SfxTabPage* __EXPORT ScTPValidationError::Create( Window*	pParent,
+                                         const SfxItemSet&	rArgSet )
 {
     return ( new ScTPValidationError( pParent, rArgSet ) );
 }
 
 // -----------------------------------------------------------------------
 
-void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
+void __EXPORT ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 {
     const SfxPoolItem* pItem;
 
-    if ( rArgSet.GetItemState( FID_VALID_SHOWERR, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_SHOWERR, TRUE, &pItem ) == SFX_ITEM_SET )
         aTsbShow.SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
     else
-        aTsbShow.SetState( STATE_CHECK );   // check by default
+        aTsbShow.SetState( STATE_CHECK );   // #111720# check by default
 
-    if ( rArgSet.GetItemState( FID_VALID_ERRSTYLE, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_ERRSTYLE, TRUE, &pItem ) == SFX_ITEM_SET )
         aLbAction.SelectEntryPos( ((const SfxAllEnumItem*)pItem)->GetValue() );
     else
         aLbAction.SelectEntryPos( 0 );
 
-    if ( rArgSet.GetItemState( FID_VALID_ERRTITLE, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_ERRTITLE, TRUE, &pItem ) == SFX_ITEM_SET )
         aEdtTitle.SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
         aEdtTitle.SetText( EMPTY_STRING );
 
-    if ( rArgSet.GetItemState( FID_VALID_ERRTEXT, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_ERRTEXT, TRUE, &pItem ) == SFX_ITEM_SET )
         aEdError.SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
         aEdError.SetText( EMPTY_STRING );
@@ -843,14 +843,14 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
+BOOL __EXPORT ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 {
     rArgSet.Put( SfxBoolItem( FID_VALID_SHOWERR, aTsbShow.GetState() == STATE_CHECK ) );
     rArgSet.Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, aLbAction.GetSelectEntryPos() ) );
     rArgSet.Put( SfxStringItem( FID_VALID_ERRTITLE, aEdtTitle.GetText() ) );
     rArgSet.Put( SfxStringItem( FID_VALID_ERRTEXT, aEdError.GetText() ) );
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -858,7 +858,7 @@ sal_Bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 IMPL_LINK( ScTPValidationError, SelectActionHdl, ListBox*, EMPTYARG )
 {
     ScValidErrorStyle eStyle = (ScValidErrorStyle) aLbAction.GetSelectEntryPos();
-    sal_Bool bMacro = ( eStyle == SC_VALERR_MACRO );
+    BOOL bMacro = ( eStyle == SC_VALERR_MACRO );
 
     aBtnSearch.Enable( bMacro );
     aFtError.Enable( !bMacro );
@@ -894,13 +894,13 @@ bool ScValidationDlg::EnterRefStatus()
 
     if( !pTabViewShell ) return false;
 
-    sal_uInt16 nId  = SLOTID;
+    USHORT nId  = SLOTID;
     SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
     SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
     if ( pWnd && pWnd->GetWindow()!= this ) pWnd = NULL;
 
-    SC_MOD()->SetRefDialog( nId, pWnd ? false : sal_True );
+    SC_MOD()->SetRefDialog( nId, pWnd ? FALSE : TRUE );
 
     return true;
 }
@@ -911,7 +911,7 @@ bool ScValidationDlg::LeaveRefStatus()
 
     if( !pTabViewShell ) return false;
 
-    sal_uInt16 nId  = SLOTID;
+    USHORT nId  = SLOTID;
     SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
     if ( pViewFrm->GetChildWindow( nId ) )
     {
@@ -925,14 +925,14 @@ bool ScValidationDlg::SetupRefDlg()
     if ( m_bOwnRefHdlr ) return false;
     if( EnterRefMode() )
     {
-        SetModal( false );
+        SetModal( FALSE );
         return  m_bOwnRefHdlr = true && EnterRefStatus();
     }
 
     return false;
 }
 
-bool ScValidationDlg::RemoveRefDlg( sal_Bool bRestoreModal /* = sal_True */ )
+bool ScValidationDlg::RemoveRefDlg( BOOL bRestoreModal /* = TRUE */ )
 {
     bool bVisLock = false;
     bool bFreeWindowLock = false;
@@ -948,12 +948,12 @@ bool ScValidationDlg::RemoveRefDlg( sal_Bool bRestoreModal /* = sal_True */ )
     }
 
     if ( !m_bOwnRefHdlr ) return false;
-    if( LeaveRefStatus() && LeaveRefMode() )
+    if( LeaveRefStatus() && LeaveRefMode() ) 
     {
         m_bOwnRefHdlr = false;
 
         if( bRestoreModal )
-            SetModal( sal_True );
+            SetModal( TRUE );		
     }
 
     if ( SfxChildWindow* pWnd = pTabVwSh->GetViewFrame()->GetChildWindow( SID_VALIDITY_REFERENCE ) )
@@ -969,8 +969,8 @@ void ScTPValidationValue::ScRefButtonEx::Click()
 {
     if( ScTPValidationValue *pParent = dynamic_cast< ScTPValidationValue*>( GetParent() ) )
         pParent->OnClick( this );
-
-    formula::RefButton::Click();
+        
+    ScRefButton::Click();
 }
 
 void ScTPValidationValue::OnClick( Button *pBtn )
@@ -979,18 +979,18 @@ void ScTPValidationValue::OnClick( Button *pBtn )
         SetupRefDlg();
 }
 
-sal_Bool ScValidationDlg::IsChildFocus()
+BOOL ScValidationDlg::IsChildFocus()
 {
     if ( const Window *pWin = Application::GetFocusWindow() )
         while( NULL != ( pWin = pWin->GetParent() ) )
             if( pWin == this )
-                return sal_True;
+                return TRUE;
 
-    return false;
+    return FALSE;
 }
 
 
-bool    ScValidationDlg::IsAlive()
+bool	ScValidationDlg::IsAlive()
 {
     return SC_MOD()->IsAliveRefDlg( SLOTID, this );
 }

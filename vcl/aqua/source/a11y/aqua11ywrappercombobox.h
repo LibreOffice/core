@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 -(id)selectedTextRangeAttribute;
 -(id)visibleCharacterRangeAttribute;
 // Accessibility Protocol
--(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute;
+-(MacOSBOOL)accessibilityIsAttributeSettable:(NSString *)attribute;
 -(void)accessibilitySetValue:(id)value forAttribute:(NSString *)attribute;
 -(NSArray *)accessibilityAttributeNames;
 @end

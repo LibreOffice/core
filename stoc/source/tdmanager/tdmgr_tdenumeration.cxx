@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -164,12 +164,14 @@ TypeDescriptionEnumerationImpl::queryCurrentChildEnumeration()
         }
         catch ( reflection::NoSuchTypeNameException const & )
         {
-            OSL_FAIL( "TypeDescriptionEnumerationImpl::queryCurrentChildEnumeration "
+            OSL_ENSURE( sal_False,
+               "TypeDescriptionEnumerationImpl::queryCurrentChildEnumeration "
                "- Caught NoSuchTypeNameException!" );
         }
         catch ( reflection::InvalidTypeNameException const & )
         {
-            OSL_FAIL( "TypeDescriptionEnumerationImpl::queryCurrentChildEnumeration "
+            OSL_ENSURE( sal_False,
+               "TypeDescriptionEnumerationImpl::queryCurrentChildEnumeration "
                "- Caught InvalidTypeNameException!" );
         }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,13 +53,13 @@
 #include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
 
-static sal_Bool bFootnote = sal_True;
+static BOOL bFootnote = TRUE;
 
 /*------------------------------------------------------------------------
- Beschreibung:  Einfuegen der Fussnote durch OK
+ Beschreibung:	Einfuegen der Fussnote durch OK
 ------------------------------------------------------------------------*/
 
-void SwInsFootNoteDlg::Apply()
+void __EXPORT SwInsFootNoteDlg::Apply()
 {
     String aStr;
 
@@ -69,14 +69,14 @@ void SwInsFootNoteDlg::Apply()
     if ( bEdit )
     {
         rSh.StartAction();
-        rSh.Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+        rSh.Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
         rSh.StartUndo( UNDO_START );
         SwFmtFtn aNote( aEndNoteBtn.IsChecked() );
         aNote.SetNumStr( aStr );
 
         if( rSh.SetCurFtn( aNote ) && bExtCharAvailable )
         {
-            rSh.Right(CRSR_SKIP_CHARS, sal_True, 1, sal_False );
+            rSh.Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
             SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
             rSh.GetCurAttr( aSet );
             SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
@@ -85,19 +85,44 @@ void SwInsFootNoteDlg::Apply()
                                eCharSet, RES_CHRATR_FONT );
             aSet.Put( aFont );
             rSh.SetAttr( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
-            rSh.ResetSelect(0, sal_False);
-            rSh.Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+            rSh.ResetSelect(0, FALSE);
+            rSh.Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
         }
         rSh.EndUndo( UNDO_END );
         rSh.EndAction();
     }
     else
     {
+/*
+        rSh.StartUndo( UNDO_UI_INSERT_FOOTNOTE );
+        rSh.InsertFootnote( aStr, aEndNoteBtn.IsChecked(), !bExtCharAvailable );
 
+        if ( bExtCharAvailable )
+        {
+            rSh.Left( CRSR_SKIP_CHARS, TRUE, 1, FALSE );
+            SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
+            rSh.GetAttr( aSet );
+            SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
+            SvxFontItem aFont( rFont.GetFamily(), aFontName,
+                               rFont.GetStyleName(), rFont.GetPitch(),
+                               eCharSet );
+            aSet.Put( aFont );
+            rSh.SetAttr( aSet, SETATTR_DONTEXPAND );
+            // zur Bearbeitung des Fussnotentextes
+            rSh.ResetSelect(0, FALSE);
+            rSh.GotoFtnTxt();
+        }
+        rSh.EndUndo( UNDO_UI_INSERT_FOOTNOTE );
+*/
     }
 
     bFootnote = aFtnBtn.IsChecked();
 }
+
+
+/*------------------------------------------------------------------------
+    Beschreibung:
+------------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberCharHdl, Button *, EMPTYARG )
 {
@@ -107,32 +132,44 @@ IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberCharHdl, Button *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwInsFootNoteDlg, NumberCharHdl, Button *, EMPTYARG )
 
+/*------------------------------------------------------------------------
+    Beschreibung:
+------------------------------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberEditHdl, void *, EMPTYARG )
 {
-    aNumberCharBtn.Check( sal_True );
+    aNumberCharBtn.Check( TRUE );
     aOkBtn.Enable( 0 != aNumberCharEdit.GetText().Len() );
 
     return 0;
 }
 IMPL_LINK_INLINE_END( SwInsFootNoteDlg, NumberEditHdl, void *, EMPTYARG )
 
+/*------------------------------------------------------------------------
+    Beschreibung:
+------------------------------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberAutoBtnHdl, Button *, EMPTYARG )
 {
-    aOkBtn.Enable( sal_True );
+    aOkBtn.Enable( TRUE );
     return 0;
 }
 IMPL_LINK_INLINE_END( SwInsFootNoteDlg, NumberAutoBtnHdl, Button *, EMPTYARG )
 
+/*------------------------------------------------------------------------
+    Beschreibung:
+------------------------------------------------------------------------*/
+
 IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
 {
-    aNumberCharBtn.Check( sal_True );
+    aNumberCharBtn.Check( TRUE );
 
     SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
     rSh.GetCurAttr( aSet );
     const SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
 
     SfxAllItemSet aAllSet( rSh.GetAttrPool() );
-    aAllSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
+    aAllSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
     aAllSet.Put( rFont );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -140,8 +177,8 @@ IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
         rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
     if (RET_OK == pDlg->Execute())
     {
-        SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, sal_False );
-        SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
+        SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, FALSE );
+        SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, FALSE );
         if ( pItem )
         {
             String sExtChars(pItem->GetValue());
@@ -157,7 +194,7 @@ IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
                 aNumberCharEdit.SetFont( aFont  );
             }
 
-            bExtCharAvailable = sal_True;
+            bExtCharAvailable = TRUE;
             aOkBtn.Enable(0 != aNumberCharEdit.GetText().Len());
         }
     }
@@ -166,12 +203,16 @@ IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
     return 0;
 }
 
+/*------------------------------------------------------------------------
+    Beschreibung:
+------------------------------------------------------------------------*/
+
 IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn )
 {
     Apply();
 
     // Hier zur naechsten Fuss/Endnote wandern
-    rSh.ResetSelect(0, sal_False);
+    rSh.ResetSelect(0, FALSE);
     if (pBtn == &aNextBT)
         rSh.GotoNextFtnAnchor();
     else
@@ -182,33 +223,33 @@ IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn )
     return 0;
 }
 
-SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, sal_Bool bEd) :
+/*------------------------------------------------------------------------
+    Beschreibung:
+------------------------------------------------------------------------*/
+
+SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, BOOL bEd) :
 
     SvxStandardDialog(pParent,SW_RES(DLG_INS_FOOTNOTE)),
 
     rSh(rShell),
-    bExtCharAvailable(sal_False),
+    bExtCharAvailable(FALSE),
     bEdit(bEd),
+    aNumberAutoBtn	(this,SW_RES(RB_NUMBER_AUTO)),
+    aNumberCharBtn	(this,SW_RES(RB_NUMBER_CHAR)),
+    aNumberCharEdit	(this,SW_RES(ED_NUMBER_CHAR)),
+    aNumberExtChar	(this,SW_RES(BT_NUMBER_CHAR)),
     aNumberFL      (this,SW_RES(FL_NUMBER)),
-    aNumberAutoBtn  (this,SW_RES(RB_NUMBER_AUTO)),
-    aNumberCharBtn  (this,SW_RES(RB_NUMBER_CHAR)),
-    aNumberCharEdit (this,SW_RES(ED_NUMBER_CHAR)),
-    aNumberExtChar  (this,SW_RES(BT_NUMBER_CHAR)),
 
-    aTypeFL        (this,SW_RES(FL_TYPE)),
     aFtnBtn         (this,SW_RES(RB_TYPE_FTN)),
-    aEndNoteBtn     (this,SW_RES(RB_TYPE_ENDNOTE)),
+    aEndNoteBtn		(this,SW_RES(RB_TYPE_ENDNOTE)),
+    aTypeFL        (this,SW_RES(FL_TYPE)),
 
-    aOkBtn          (this,SW_RES(BT_OK)),
-    aCancelBtn      (this,SW_RES(BT_CANCEL)),
-    aHelpBtn        (this,SW_RES(BT_HELP)),
-    aPrevBT         (this,SW_RES(BT_PREV)),
-    aNextBT         (this,SW_RES(BT_NEXT))
+    aOkBtn			(this,SW_RES(BT_OK)),
+    aCancelBtn		(this,SW_RES(BT_CANCEL)),
+    aHelpBtn		(this,SW_RES(BT_HELP)),
+    aPrevBT			(this,SW_RES(BT_PREV)),
+    aNextBT			(this,SW_RES(BT_NEXT))
 {
-    aNumberCharEdit.SetAccessibleName(String(SW_RES(STR_CHAR)));
-    aNumberExtChar.SetAccessibleRelationMemberOf(&aNumberFL);
-    aNumberCharEdit.SetAccessibleRelationLabeledBy(&aNumberCharBtn);
-
     aNumberAutoBtn.SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberAutoBtnHdl));
     aNumberExtChar.SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberExtCharHdl));
     aNumberCharBtn.SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberCharHdl));
@@ -231,20 +272,29 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, sal_Bool
     }
 }
 
+
+/*------------------------------------------------------------------------
+    Beschreibung:
+------------------------------------------------------------------------*/
+
 SwInsFootNoteDlg::~SwInsFootNoteDlg()
 {
     rSh.SetCareWin(0);
 
     if (bEdit)
-        rSh.ResetSelect(0, sal_False);
+        rSh.ResetSelect(0, FALSE);
 }
+
+/*------------------------------------------------------------------------
+    Beschreibung:
+------------------------------------------------------------------------*/
 
 void SwInsFootNoteDlg::Init()
 {
     SwFmtFtn aFtnNote;
     String sNumStr;
     Font aFont;
-    bExtCharAvailable = sal_False;
+    bExtCharAvailable = FALSE;
 
     rSh.StartAction();
 
@@ -254,7 +304,7 @@ void SwInsFootNoteDlg::Init()
         {
             sNumStr = aFtnNote.GetNumStr();
 
-            rSh.Right(CRSR_SKIP_CHARS, sal_True, 1, sal_False );
+            rSh.Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
             SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
             rSh.GetCurAttr( aSet );
             const SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
@@ -264,14 +314,14 @@ void SwInsFootNoteDlg::Init()
             eCharSet = rFont.GetCharSet();
             aFont.SetName(aFontName);
             aFont.SetCharSet(eCharSet);
-            bExtCharAvailable = sal_True;
-            rSh.Left( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+            bExtCharAvailable = TRUE;
+            rSh.Left( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
         }
         bFootnote = !aFtnNote.IsEndNote();
     }
     aNumberCharEdit.SetFont(aFont);
 
-    sal_Bool bNumChar = sNumStr.Len() != 0;
+    BOOL bNumChar = sNumStr.Len() != 0;
 
     aNumberCharEdit.SetText(sNumStr);
     aNumberCharBtn.Check(bNumChar);
@@ -284,12 +334,12 @@ void SwInsFootNoteDlg::Init()
     else
         aEndNoteBtn.Check();
 
-    sal_Bool bNext = rSh.GotoNextFtnAnchor();
+    BOOL bNext = rSh.GotoNextFtnAnchor();
 
     if (bNext)
         rSh.GotoPrevFtnAnchor();
 
-    sal_Bool bPrev = rSh.GotoPrevFtnAnchor();
+    BOOL bPrev = rSh.GotoPrevFtnAnchor();
 
     if (bPrev)
         rSh.GotoNextFtnAnchor();
@@ -297,7 +347,7 @@ void SwInsFootNoteDlg::Init()
     aPrevBT.Enable(bPrev);
     aNextBT.Enable(bNext);
 
-    rSh.Right(CRSR_SKIP_CHARS, sal_True, 1, sal_False );
+    rSh.Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
 
     rSh.EndAction();
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,6 @@
 #include <sfx2/printer.hxx>
 #include <rtl/logfile.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
@@ -48,12 +47,12 @@
 #include <ndgrf.hxx>
 #include <ndindex.hxx>
 #include <accessibilityoptions.hxx>
-#include <switerator.hxx>
+
 void ViewShell::Init( const SwViewOption *pNewOpt )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::Init" );
 
-    bDocSizeChgd = sal_False;
+    bDocSizeChgd = FALSE;
 
     pFntCache->Flush( );
 
@@ -79,7 +78,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     pDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode( pDShell ) );
 
     if( pDShell && pDShell->IsReadOnly() )
-        pOpt->SetReadonly( sal_True );
+        pOpt->SetReadonly( TRUE );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - before InitPrt" );
 
@@ -89,7 +88,8 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     if ( pOut && pOut->GetPDFWriter() )
         pPDFOut = pOut;
     // #i41075# Only setup the printer if we need one:
-    const bool bBrowseMode = pOpt->getBrowseMode();
+    const IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    const bool bBrowseMode = pIDSA->get(IDocumentSettingAccess::BROWSE_MODE);
     if( pPDFOut )
         InitPrt( pPDFOut );
     // #i44963# Good occasion to check if page sizes in page descriptions
@@ -109,24 +109,12 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
         GetWin()->SetLineColor();
     }
 
-    // Create a new layout, if there is no one available
-    if( !pLayout )
-    {
-        // Here's the code which disables the usage of "multiple" layouts at the moment
-        // If the problems with controls and groups objects are solved,
-        // this code can be removed...
-        ViewShell *pCurrShell = GetDoc()->GetCurrentViewShell();
-        if( pCurrShell )
-            pLayout = pCurrShell->pLayout;
-        // end of "disable multiple layouts"
-        if( !pLayout )
-        {
-            // switched to two step construction because creating the layout in SwRootFrm needs a valid pLayout set
-            pLayout = SwRootFrmPtr(new SwRootFrm( pDoc->GetDfltFrmFmt(), this ));//swmod081016
-            pLayout->Init( pDoc->GetDfltFrmFmt() );
-        }
-    }
-    SizeChgNotify();    //swmod 071108
+    //Layout erzeugen wenn es noch nicht vorhanden ist.
+    SwRootFrm* pRoot = GetDoc()->GetRootFrm();
+    if( !pRoot )
+        GetDoc()->SetRootFrm( pRoot = new SwRootFrm( pDoc->GetDfltFrmFmt(), this ) );
+
+    SizeChgNotify();
 
     // #i31958#
     // XForms mode: initialize XForms mode, based on design mode (draw view)
@@ -169,8 +157,8 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     mbInConstructor = true;
 
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
-    bEndActionByVirDev = sal_False;
-    bPaintWorks = bEnableSmooth = sal_True;
+    bEndActionByVirDev = FALSE;
+    bPaintWorks = bEnableSmooth = TRUE;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
     // #i38810# Do not reset modified state of document, if it's already been modified.
@@ -193,8 +181,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
         SetHiddenFlag( !pOpt->IsShowHiddenField() );
 
     // #i38810#
-    if (   !pDoc->GetIDocumentUndoRedo().IsUndoNoResetModified()
-        && !bIsDocModified )
+    if ( !pDoc->IsUndoNoResetModified() && !bIsDocModified )
     {
         pDoc->ResetModified();
     }
@@ -236,33 +223,28 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     // <SwDrawContact::Changed> during contruction of <ViewShell> instance
     mbInConstructor = true;
 
-    bPaintWorks = bEnableSmooth = sal_True;
+    bPaintWorks = bEnableSmooth = TRUE;
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
-    bEndActionByVirDev = sal_False;
+    bEndActionByVirDev = FALSE;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
-    if( nFlags & VSHELLFLAG_SHARELAYOUT ) //swmod 080125
-        pLayout = rShell.pLayout;//swmod 080125
+
+    if ( bPreView )
+        pImp->InitPagePreviewLayout();
 
     SET_CURR_SHELL( this );
 
     pDoc->acquire();
-    sal_Bool bModified = pDoc->IsModified();
+    BOOL bModified = pDoc->IsModified();
 
     pOutput = pOut;
     Init( rShell.GetViewOptions() );
     pOut = pOutput;
 
-    // OD 12.12.2002 #103492#
-    if ( bPreView )
-        pImp->InitPagePreviewLayout();
-
     ((SwHiddenTxtFieldType*)pDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
             SetHiddenFlag( !pOpt->IsShowHiddenField() );
 
-    if( !bModified && !pDoc->GetIDocumentUndoRedo().IsUndoNoResetModified() )
-    {
+    if( !bModified && !pDoc->IsUndoNoResetModified() )
         pDoc->ResetModified();
-    }
 
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
         SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
@@ -278,7 +260,7 @@ ViewShell::~ViewShell()
 {
     {
         SET_CURR_SHELL( this );
-        bPaintWorks = sal_False;
+        bPaintWorks = FALSE;
 
         // #i9684#Stopping the animated graphics is not
         // necessary during printing or pdf export, because the animation
@@ -297,8 +279,9 @@ ViewShell::~ViewShell()
                 {
                     if( pGNd->IsAnimated() )
                     {
-                        SwIterator<SwFrm,SwGrfNode> aIter( *pGNd );
-                        for( SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+                        SwClientIter aIter( *pGNd );
+                        for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
+                            pFrm; pFrm = (SwFrm*)aIter.Next() )
                         {
                             OSL_ENSURE( pFrm->IsNoTxtFrm(), "GraphicNode with Text?" );
                             ((SwNoTxtFrm*)pFrm)->StopAnimation( pOut );
@@ -312,15 +295,15 @@ ViewShell::~ViewShell()
         }
 
         delete pImp;
-        pImp = 0;   // Set to zero, because ~SwFrm relies on it.
+        pImp = 0;	// Set to zero, because ~SwFrm relies on it.
 
         if ( pDoc )
         {
             if( !pDoc->release() )
                 delete pDoc, pDoc = 0;
             else
-                GetLayout()->ResetNewLayout();
-        }//swmod 080317
+                pDoc->GetRootFrm()->ResetNewLayout();
+        }
 
         delete pOpt;
 
@@ -333,20 +316,15 @@ ViewShell::~ViewShell()
     }
 
     if ( pDoc )
-    {
         GetLayout()->DeRegisterShell( this );
-        if(pDoc->GetCurrentViewShell()==this)
-            pDoc->SetCurrentViewShell( this->GetNext()!=this ?
-            (ViewShell*)this->GetNext() : NULL );
-    }
 
     delete mpTmpRef;
     delete pAccOptions;
 }
 
-sal_Bool ViewShell::HasDrawView() const
+BOOL ViewShell::HasDrawView() const
 {
-    return Imp() ? Imp()->HasDrawView() : 0;
+    return Imp()->HasDrawView();
 }
 
 void ViewShell::MakeDrawView()

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace sdr
             aPolygon.append(getSecondPosition());
             aPolygon.append(getThirdPosition());
             aPolygon.setClosed(true);
-
+            
             const drawinglayer::primitive2d::Primitive2DReference aReference(
                 new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                     basegfx::B2DPolyPolygon(aPolygon),
@@ -67,12 +67,12 @@ namespace sdr
             const basegfx::B2DPoint& rSecondPos,
             const basegfx::B2DPoint& rThirdPos,
             Color aTriangleColor)
-        :   OverlayObjectWithBasePosition(rBasePos, aTriangleColor),
+        :	OverlayObjectWithBasePosition(rBasePos, aTriangleColor),
             maSecondPosition(rSecondPos),
             maThirdPosition(rThirdPos)
         {
         }
-
+        
         OverlayTriangle::~OverlayTriangle()
         {
         }

@@ -210,11 +210,11 @@ sal_Int32 SAL_CALL ToolbarMenuAcc::getAccessibleIndexInParent() throw (RuntimeEx
 {
     const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
-
+    
     Window* pParent = mpParent->mrMenu.GetParent();
     if( pParent )
     {
-        for( sal_uInt16 i = 0, nCount = pParent->GetChildCount(); i < nCount ; i++ )
+        for( USHORT i = 0, nCount = pParent->GetChildCount(); i < nCount ; i++ )
         {
             if( pParent->GetChild( i ) == &mpParent->mrMenu )
                 return i;
@@ -253,7 +253,7 @@ OUString SAL_CALL ToolbarMenuAcc::getAccessibleName() throw (RuntimeException)
 
     if( !aRet.getLength() )
     {
-        Window* pLabel = mpParent->mrMenu.GetAccessibleRelationLabeledBy();
+        Window* pLabel = mpParent->mrMenu.GetLabeledBy();
         if( pLabel && pLabel != &mpParent->mrMenu )
             aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
     }
@@ -327,7 +327,7 @@ void SAL_CALL ToolbarMenuAcc::addEventListener( const Reference< XAccessibleEven
             if( *aIter == rxListener )
                 bFound = true;
             else
-                ++aIter;
+                aIter++;
         }
 
         if (!bFound)
@@ -355,7 +355,7 @@ void SAL_CALL ToolbarMenuAcc::removeEventListener( const Reference< XAccessibleE
                 bFound = true;
             }
             else
-                ++aIter;
+                aIter++;
         }
     }
 }
@@ -382,7 +382,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleAtPoint( const aw
     Reference< XAccessible > xRet;
 
     const Point aVclPoint( aPoint.X, aPoint.Y );
-
+    
     const int nEntryCount = mpParent->maEntryVector.size();
     for( int nEntry = 0; (nEntry < nEntryCount) && !xRet.is(); nEntry++ )
     {
@@ -474,7 +474,7 @@ Any SAL_CALL ToolbarMenuAcc::getAccessibleKeyBinding() throw (RuntimeException)
 sal_Int32 SAL_CALL ToolbarMenuAcc::getForeground() throw (RuntimeException)
 {
     ThrowIfDisposed();
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetMenuTextColor().GetColor();
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetMenuTextColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -483,7 +483,7 @@ sal_Int32 SAL_CALL ToolbarMenuAcc::getForeground() throw (RuntimeException)
 sal_Int32 SAL_CALL ToolbarMenuAcc::getBackground() throw (RuntimeException)
 {
     ThrowIfDisposed();
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetMenuColor().GetColor();
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetMenuColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -886,7 +886,7 @@ void SAL_CALL ToolbarMenuEntryAcc::removeEventListener( const Reference< XAccess
                 bFound = true;
             }
             else
-                ++aIter;
+                aIter++;
         }
     }
 }

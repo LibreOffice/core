@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPSILVERBULLET_HXX
@@ -70,21 +70,24 @@
 #include "lwpdlvlist.hxx"
 #include "lwpobjid.hxx"
 #include "lwpatomholder.hxx"
-#include    "unicode/utypes.h"
+//Added by yanjun for SS merge: 2007-12-21
+#include	"unicode/utypes.h"
+//End
 const sal_uInt16 MAXNUMBERPOSITIONS = 10; //max number of positions
-const sal_uInt16 NUMCHAR_none = 0x00;   //none of numberchar
-const sal_uInt16 NUMCHAR_1 = 0x01;      //index for numberchar "1"
-const sal_uInt16 NUMCHAR_A = 0x02;      //index for numberchar "A"
-const sal_uInt16 NUMCHAR_a = 0x03;      //index for numberchar "a"
-const sal_uInt16 NUMCHAR_I = 0x04;      //index for numberchar "I"
-const sal_uInt16 NUMCHAR_i = 0x05;      //index for numberchar "i"
-const sal_uInt16 NUMCHAR_other= 0x06;   //index for numberchar "other"
-const sal_uInt16 NUMCHAR_01 = 0x0B;     //index for numberchar "01"
+const sal_uInt16 NUMCHAR_none = 0x00;	//none of numberchar
+const sal_uInt16 NUMCHAR_1 = 0x01;		//index for numberchar "1"
+const sal_uInt16 NUMCHAR_A = 0x02;		//index for numberchar "A"
+const sal_uInt16 NUMCHAR_a = 0x03;		//index for numberchar "a"
+const sal_uInt16 NUMCHAR_I = 0x04;		//index for numberchar "I"
+const sal_uInt16 NUMCHAR_i = 0x05;		//index for numberchar "i"
+const sal_uInt16 NUMCHAR_other= 0x06;	//index for numberchar "other"
+const sal_uInt16 NUMCHAR_01 = 0x0B;		//index for numberchar "01"
 
-const sal_uInt16 NUMCHAR_Chinese1 = 0x09;       //index for numberchar "Ò¼"
-const sal_uInt16 NUMCHAR_Chinese2 = 0x08;       //index for numberchar "Ò»"
-const sal_uInt16 NUMCHAR_Chinese3= 0x0A;    //index for numberchar "¼×"
-const sal_uInt16 NUMCHAR_Chinese4 = 0x13;       //index for numberchar "01" in chinese version
+const sal_uInt16 NUMCHAR_Chinese1 = 0x09;		//index for numberchar "Ò¼"
+const sal_uInt16 NUMCHAR_Chinese2 = 0x08;		//index for numberchar "Ò»"
+const sal_uInt16 NUMCHAR_Chinese3= 0x0A;	//index for numberchar "¼×"
+const sal_uInt16 NUMCHAR_Chinese4 = 0x13;		//index for numberchar "01" in chinese version
+//add end
 
 class LwpStory;
 class LwpAtomHolder;
@@ -137,24 +140,24 @@ public:
     rtl::OUString GetSectionName();
 
 private:
-    sal_uInt16      m_nFlags;
-    LwpObjectID     m_aStory;
-    sal_uInt8       m_pResetPositionFlags[MAXNUMBERPOSITIONS];
-    sal_uInt32      m_nUseCount;
-    LwpAtomHolder*  m_pAtomHolder;
+    sal_uInt16		m_nFlags;
+    LwpObjectID		m_aStory;
+    sal_uInt8		m_pResetPositionFlags[MAXNUMBERPOSITIONS];
+    sal_uInt32		m_nUseCount;
+    LwpAtomHolder*	m_pAtomHolder;
 
     LwpPara* m_pBulletPara;
     rtl::OUString m_strStyleName;
     sal_uInt16 m_pHideLevels[10];
 
 private:
-    enum    // For m_pResetPositionFlags
+    enum	// For m_pResetPositionFlags
     {
-        LESSERLEVEL     = 0x01,
-        LESSERSPECIFIC  = 0x02,
-        NEWDIVISION     = 0x04,
-        NEWSECTION      = 0x08,
-        CUMULATIVE      = 0x10
+        LESSERLEVEL		= 0x01,
+        LESSERSPECIFIC	= 0x02,
+        NEWDIVISION		= 0x04,
+        NEWSECTION		= 0x08,
+        CUMULATIVE		= 0x10
     };
 };
 inline rtl::OUString LwpSilverBullet::GetBulletStyleName() const

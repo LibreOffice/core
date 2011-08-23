@@ -127,9 +127,7 @@
             </o:Language>
             <xsl:for-each select="meta:user-defined">
                 <!-- transfer strings to XML QName, necessary to convert several characters -->
-                <!-- &#x7b;&#x7d; -->
-                <xsl:variable name="foo">.,| ~`!@#$%^*()&amp;&lt;&gt;+=[];:&quot;/\?{}'</xsl:variable>
-                <xsl:element name="{concat( 'o:', translate(@meta:name,string($foo),'_'))}">
+                <xsl:element name="{concat( 'o:', translate(@meta:name,'.,| ~`!@#$%^&amp;&lt;&gt;*()+=[]{};:&quot;/\?','_'))}">
                     <xsl:attribute name="dt:dt">string</xsl:attribute>
                     <xsl:value-of select="."/>
                 </xsl:element>

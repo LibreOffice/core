@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
-#include "sfx2/sfxresid.hxx"
-#include "sfx2/sfxhelp.hxx"
+#include "sfxresid.hxx"
+#include "sfxhelp.hxx"
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxdlg.hxx>

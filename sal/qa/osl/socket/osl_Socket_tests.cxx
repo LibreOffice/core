@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,9 +34,7 @@
 //------------------------------------------------------------------------
 #include <osl_Socket_Const.h>
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <testshl/simpleheader.hxx>
 #include <osl/socket.hxx>
 //------------------------------------------------------------------------
 // helper functions
@@ -66,7 +64,7 @@ namespace osl_Socket
         CPPUNIT_TEST_SUITE_END();
     };
 
-    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::tests);
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Socket::tests, "osl_SocketTest");
 }
 
 
@@ -86,7 +84,7 @@ void RegisterAdditionalFunctions( FktRegFuncPtr _pFunc )
 
 #else*/
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+NOADDITIONAL;
 
 //#endif
 

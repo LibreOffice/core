@@ -39,6 +39,7 @@ VISIBILITY_HIDDEN=TRUE
 
 # no "lib" prefix
 DLLPRE =
+UCDSRCEXT = txt
 
 .IF "$(ENABLE_LOCKDOWN)" == "YES"
 CFLAGS+=-DENABLE_LOCKDOWN
@@ -88,10 +89,8 @@ DEF1NAME=$(SHL1TARGET)
 
 .INCLUDE : target.mk
 
-ALLTAR : $(MISC)/gconfbe1.component
+ALLTAR : $(MISC)/$(TARGET)1-ucd.txt
 
-$(MISC)/gconfbe1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        gconfbe1.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt gconfbe1.component
+$(MISC)/$(TARGET)1-ucd.txt : $$(@:b).$(UCDSRCEXT)
+    cat $< | tr -d "\015" > $@
+

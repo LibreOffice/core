@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@
 class SVX_DLLPUBLIC E3dSphereObj : public E3dCompoundObject
 {
 private:
-    basegfx::B3DPoint               aCenter;
-    basegfx::B3DVector              aSize;
+    basegfx::B3DPoint				aCenter;
+    basegfx::B3DVector				aSize;
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
@@ -61,17 +61,17 @@ public:
     E3dSphereObj(int dummy);
 
     // HorizontalSegments:
-    sal_uInt32 GetHorizontalSegments() const
+    sal_uInt32 GetHorizontalSegments() const 
         { return ((const Svx3DHorizontalSegmentsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue(); }
 
     // VerticalSegments:
-    sal_uInt32 GetVerticalSegments() const
+    sal_uInt32 GetVerticalSegments() const 
         { return ((const Svx3DVerticalSegmentsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue(); }
 
-    virtual sal_uInt16 GetObjIdentifier() const;
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual UINT16 GetObjIdentifier() const;
+    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
-    virtual E3dSphereObj* Clone() const;
+    virtual void operator=(const SdrObject&);
 
     void ReSegment(sal_uInt32 nHorzSegments, sal_uInt32 nVertSegments);
     const basegfx::B3DPoint& Center() const { return aCenter; }
@@ -86,6 +86,6 @@ public:
     virtual void TakeObjNamePlural(String& rName) const;
 };
 
-#endif          // _E3D_SPHERE3D_HXX
+#endif			// _E3D_SPHERE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,8 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+//#define SI_VCDRAWOBJ
+
 #include <tools/urlobj.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
@@ -58,7 +60,7 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
                                         const String& rTarget,
                                         const Point* pInsPos )
 {
-    //  Tabelle geschuetzt ?
+    //	Tabelle geschuetzt ?
 
     ScViewData* pViewData = GetViewData();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -71,9 +73,10 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
 
     MakeDrawLayer();
 
-    ScTabView*  pView   = pViewData->GetView();
+    ScTabView*	pView	= pViewData->GetView();
+//	SdrView*	pDrView = pView->GetSdrView();
     ScDrawView* pDrView = pView->GetScDrawView();
-    SdrModel*   pModel  = pDrView->GetModel();
+    SdrModel*	pModel	= pDrView->GetModel();
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(FmFormInventor, OBJ_FM_BUTTON,
                                pDrView->GetSdrPageView()->GetPage(), pModel);
@@ -88,24 +91,25 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     uno::Any aAny;
 
     aAny <<= rtl::OUString(rName);
-    xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" )), aAny );
+    xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "Label" ), aAny );
 
     ::rtl::OUString aTmp = INetURLObject::GetAbsURL( pDoc->GetDocumentShell()->GetMedium()->GetBaseURL(), rURL );
     aAny <<= aTmp;
-    xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )), aAny );
+    xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "TargetURL" ), aAny );
 
     if( rTarget.Len() )
     {
         aAny <<= rtl::OUString(rTarget);
-        xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" )), aAny );
+        xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "TargetFrame" ), aAny );
     }
 
     form::FormButtonType eButtonType = form::FormButtonType_URL;
     aAny <<= eButtonType;
-    xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), aAny );
+    xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "ButtonType" ), aAny );
 
         if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
     {
+        // #105638# OJ
         aAny <<= sal_True;
         xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aAny );
     }
@@ -123,11 +127,12 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
         aPos.X() -= aSize.Width();
 
     pObj->SetLogicRect(Rectangle(aPos, aSize));
+//	pObj->Resize(Point(), Fraction(1, 1), Fraction(1, 1));
 
-    //  am alten VC-Button musste die Position/Groesse nochmal explizit
-    //  gesetzt werden - das scheint mit UnoControls nicht noetig zu sein
+    //	am alten VC-Button musste die Position/Groesse nochmal explizit
+    //	gesetzt werden - das scheint mit UnoControls nicht noetig zu sein
 
-    //  nicht markieren wenn Ole
+    //	nicht markieren wenn Ole
     pDrView->InsertObjectSafe( pObj, *pDrView->GetSdrPageView() );
 }
 

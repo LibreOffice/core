@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,47 +48,47 @@
 //===============================================
 // const
 
-#define RECOVERY_CMDPART_PROTOCOL                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:"))
+#define RECOVERY_CMDPART_PROTOCOL                       ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:")
 
-#define RECOVERY_CMDPART_DO_PREPARE_EMERGENCY_SAVE  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doPrepareEmergencySave"  ))
-#define RECOVERY_CMDPART_DO_EMERGENCY_SAVE          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doEmergencySave"         ))
-#define RECOVERY_CMDPART_DO_RECOVERY                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doAutoRecovery"          ))
-#define RECOVERY_CMDPART_DO_CRASHREPORT             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doCrashReport"           ))
-#define RECOVERY_CMDPART_DO_ENTRY_BACKUP            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doEntryBackup"           ))
-#define RECOVERY_CMDPART_DO_ENTRY_CLEANUP           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doEntryCleanUp"          ))
+#define RECOVERY_CMDPART_DO_PREPARE_EMERGENCY_SAVE      ::rtl::OUString::createFromAscii("/doPrepareEmergencySave"  )
+#define RECOVERY_CMDPART_DO_EMERGENCY_SAVE              ::rtl::OUString::createFromAscii("/doEmergencySave"         )
+#define RECOVERY_CMDPART_DO_RECOVERY                    ::rtl::OUString::createFromAscii("/doAutoRecovery"          )
+#define RECOVERY_CMDPART_DO_CRASHREPORT                 ::rtl::OUString::createFromAscii("/doCrashReport"           )
+#define RECOVERY_CMDPART_DO_ENTRY_BACKUP                ::rtl::OUString::createFromAscii("/doEntryBackup"           )
+#define RECOVERY_CMDPART_DO_ENTRY_CLEANUP               ::rtl::OUString::createFromAscii("/doEntryCleanUp"          )
 
-#define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doPrepareEmergencySave"))
-#define RECOVERY_CMD_DO_EMERGENCY_SAVE              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEmergencySave"       ))
-#define RECOVERY_CMD_DO_RECOVERY                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doAutoRecovery"        ))
-#define RECOVERY_CMD_DO_CRASHREPORT                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doCrashReport"         ))
-#define RECOVERY_CMD_DO_ENTRY_BACKUP                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryBackup"         ))
-#define RECOVERY_CMD_DO_ENTRY_CLEANUP               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryCleanUp"        ))
+#define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE          ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doPrepareEmergencySave")
+#define RECOVERY_CMD_DO_EMERGENCY_SAVE                  ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doEmergencySave"       )
+#define RECOVERY_CMD_DO_RECOVERY                        ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doAutoRecovery"        )
+#define RECOVERY_CMD_DO_CRASHREPORT                     ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doCrashReport"         )
+#define RECOVERY_CMD_DO_ENTRY_BACKUP                    ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doEntryBackup"         )
+#define RECOVERY_CMD_DO_ENTRY_CLEANUP                   ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doEntryCleanUp"        )
 
-#define SERVICENAME_PROGRESSFACTORY                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.StatusIndicatorFactory"))
-#define SERVICENAME_URLTRANSFORMER                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer"        ))
-#define SERVICENAME_RECOVERYCORE                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.AutoRecovery"         ))
-#define SERVICENAME_FOLDERPICKER                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker"    ))
-#define SERVICENAME_DESKTOP                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop"              ))
+#define SERVICENAME_PROGRESSFACTORY                     ::rtl::OUString::createFromAscii("com.sun.star.task.StatusIndicatorFactory")
+#define SERVICENAME_URLTRANSFORMER                      ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer"        )
+#define SERVICENAME_RECOVERYCORE                        ::rtl::OUString::createFromAscii("com.sun.star.frame.AutoRecovery"         )
+#define SERVICENAME_FOLDERPICKER                        ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FolderPicker"    )
+#define SERVICENAME_DESKTOP                             ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"              )
 
-#define PROP_PARENTWINDOW                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window"           ))
-#define PROP_STATUSINDICATOR                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator"  ))
-#define PROP_DISPATCHASYNCHRON                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DispatchAsynchron"))
-#define PROP_SAVEPATH                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SavePath"         ))
-#define PROP_ENTRYID                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "EntryID"          ))
-#define PROP_ALLOWPARENTSHOW                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AllowParentShow"  ))
+#define PROP_PARENTWINDOW                               ::rtl::OUString::createFromAscii("Window"           )
+#define PROP_STATUSINDICATOR                            ::rtl::OUString::createFromAscii("StatusIndicator"  )
+#define PROP_DISPATCHASYNCHRON                          ::rtl::OUString::createFromAscii("DispatchAsynchron")
+#define PROP_SAVEPATH                                   ::rtl::OUString::createFromAscii("SavePath"         )
+#define PROP_ENTRYID                                    ::rtl::OUString::createFromAscii("EntryID"          )
+#define PROP_ALLOWPARENTSHOW                            ::rtl::OUString::createFromAscii("AllowParentShow"  )
 
-#define STATEPROP_ID                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ID"           ))
-#define STATEPROP_STATE                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DocumentState"))
-#define STATEPROP_ORGURL                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OriginalURL"  ))
-#define STATEPROP_TEMPURL                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TempURL"      ))
-#define STATEPROP_FACTORYURL                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FactoryURL"   ))
-#define STATEPROP_TEMPLATEURL                       rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TemplateURL"  ))
-#define STATEPROP_TITLE                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title"        ))
-#define STATEPROP_MODULE                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Module"       ))
+#define STATEPROP_ID                                    ::rtl::OUString::createFromAscii("ID"           )
+#define STATEPROP_STATE                                 ::rtl::OUString::createFromAscii("DocumentState")
+#define STATEPROP_ORGURL                                ::rtl::OUString::createFromAscii("OriginalURL"  )
+#define STATEPROP_TEMPURL                               ::rtl::OUString::createFromAscii("TempURL"      )
+#define STATEPROP_FACTORYURL                            ::rtl::OUString::createFromAscii("FactoryURL"   )
+#define STATEPROP_TEMPLATEURL                           ::rtl::OUString::createFromAscii("TemplateURL"  )
+#define STATEPROP_TITLE                                 ::rtl::OUString::createFromAscii("Title"        )
+#define STATEPROP_MODULE                                ::rtl::OUString::createFromAscii("Module"       )
 
-#define RECOVERY_OPERATIONSTATE_START               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "start" ))
-#define RECOVERY_OPERATIONSTATE_STOP                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stop"  ))
-#define RECOVERY_OPERATIONSTATE_UPDATE              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "update"))
+#define RECOVERY_OPERATIONSTATE_START                   ::rtl::OUString::createFromAscii("start" )
+#define RECOVERY_OPERATIONSTATE_STOP                    ::rtl::OUString::createFromAscii("stop"  )
+#define RECOVERY_OPERATIONSTATE_UPDATE                  ::rtl::OUString::createFromAscii("update")
 
 #define DLG_RET_UNKNOWN                                  -1
 #define DLG_RET_OK                                        1
@@ -180,6 +180,9 @@ struct TURLInfo
 
     /// standard icon
     Image StandardImage;
+
+    /// high contrast icon
+    Image HCImage;
 
     public:
 
@@ -585,14 +588,14 @@ class RecovDocListEntry : public SvLBoxString
         //---------------------------------------
         /** @short TODO */
         RecovDocListEntry(      SvLBoxEntry* pEntry,
-                                sal_uInt16       nFlags,
+                                USHORT       nFlags,
                           const String&      sText );
 
         //---------------------------------------
         /** @short TODO */
         virtual void Paint(const Point&       aPos   ,
                                  SvLBox&      aDevice,
-                                 sal_uInt16       nFlags ,
+                                 USHORT       nFlags ,
                                  SvLBoxEntry* pEntry );
 };
 
@@ -606,6 +609,9 @@ class RecovDocList : public SvxSimpleTable
         Image  m_aGreenCheckImg;
         Image  m_aYellowCheckImg;
         Image  m_aRedCrossImg;
+        Image  m_aGreenCheckImgHC;
+        Image  m_aYellowCheckImgHC;
+        Image  m_aRedCrossImgHC;
 
         String m_aSuccessRecovStr;
         String m_aOrigDocRecovStr;
@@ -799,22 +805,22 @@ class BrokenRecoveryDialog : public ModalDialog
         class ErrorRepWelcomeDialog : public IExtendedTabPage
         {
         private:
-            Window              maTitleWin;
-            FixedText           maTitleFT;
+            Window				maTitleWin;
+            FixedText			maTitleFT;
             FixedLine           maTitleFL;
-            FixedText           maDescrFT;
+            FixedText			maDescrFT;
 
-            FixedLine           maBottomFL;
-            PushButton          maPrevBtn;
-            OKButton            maNextBtn;
-            CancelButton        maCancelBtn;
+            FixedLine			maBottomFL;
+            PushButton			maPrevBtn;
+            OKButton			maNextBtn;
+            CancelButton		maCancelBtn;
 
-            DECL_LINK(          PrevBtnHdl, void* );
-            DECL_LINK(          NextBtnHdl, void* );
-            DECL_LINK(          CancelBtnHdl, void* );
+            DECL_LINK(			PrevBtnHdl, void* );
+            DECL_LINK(			NextBtnHdl, void* );
+            DECL_LINK(			CancelBtnHdl, void* );
         public:
                                 ErrorRepWelcomeDialog( Window* _pParent, sal_Bool _bAllowBack = sal_True );
-            virtual             ~ErrorRepWelcomeDialog();
+            virtual				~ErrorRepWelcomeDialog();
         /** @short  TODO*/
         virtual short execute();
 
@@ -834,13 +840,13 @@ class BrokenRecoveryDialog : public ModalDialog
                 , mbAllowContact( false )
             {}
 
-            String              maHTTPProxyServer;
-            String              maHTTPProxyPort;
-            int                 miHTTPConnectionType;
-            bool                mbAllowContact;
-            String              maReturnAddress;
-            String              maSubject;
-            String              maBody;
+            String				maHTTPProxyServer;
+            String				maHTTPProxyPort;
+            int					miHTTPConnectionType;
+            bool				mbAllowContact;
+            String				maReturnAddress;
+            String				maSubject;
+            String				maBody;
         };
 
         class ErrorDescriptionEdit : public MultiLineEdit
@@ -856,49 +862,49 @@ class BrokenRecoveryDialog : public ModalDialog
         class ErrorRepSendDialog : public IExtendedTabPage
         {
         private:
-            Window              maTitleWin;
-            FixedText           maTitleFT;
+            Window				maTitleWin;
+            FixedText			maTitleFT;
             FixedLine           maTitleFL;
-            FixedText           maDescrFT;
+            FixedText			maDescrFT;
 
-            FixedText           maDocTypeFT;
-            Edit                maDocTypeED;
-            FixedText           maUsingFT;
+            FixedText			maDocTypeFT;
+            Edit				maDocTypeED;
+            FixedText			maUsingFT;
             ErrorDescriptionEdit maUsingML;
-            PushButton          maShowRepBtn;
-            PushButton          maOptBtn;
-            CheckBox            maContactCB;
-            FixedText           maEMailAddrFT;
-            Edit                maEMailAddrED;
+            PushButton			maShowRepBtn;
+            PushButton			maOptBtn;
+            CheckBox			maContactCB;
+            FixedText			maEMailAddrFT;
+            Edit				maEMailAddrED;
 
-            FixedLine           maBottomFL;
-            PushButton          maPrevBtn;
-            OKButton            maNextBtn;
-            CancelButton        maCancelBtn;
+            FixedLine			maBottomFL;
+            PushButton			maPrevBtn;
+            OKButton			maNextBtn;
+            CancelButton		maCancelBtn;
 
-            ErrorRepParams      maParams;
+            ErrorRepParams		maParams;
 
-            DECL_LINK(          ShowRepBtnHdl, void* );
-            DECL_LINK(          OptBtnHdl, void* );
-            DECL_LINK(          ContactCBHdl, void* );
-            DECL_LINK(          PrevBtnHdl, void* );
-            DECL_LINK(          SendBtnHdl, void* );
-            DECL_LINK(          CancelBtnHdl, void* );
+            DECL_LINK(			ShowRepBtnHdl, void* );
+            DECL_LINK(			OptBtnHdl, void* );
+            DECL_LINK(			ContactCBHdl, void* );
+            DECL_LINK(			PrevBtnHdl, void* );
+            DECL_LINK(			SendBtnHdl, void* );
+            DECL_LINK(			CancelBtnHdl, void* );
 
             void                initControls();
 
         public:
                                 ErrorRepSendDialog( Window* _pParent );
-            virtual             ~ErrorRepSendDialog();
+            virtual				~ErrorRepSendDialog();
 
-            String              GetDocType( void ) const;
-            String              GetUsing( void ) const;
-            bool                IsContactAllowed( void ) const;
-            String              GetEMailAddress( void ) const;
+            String				GetDocType( void ) const;
+            String				GetUsing( void ) const;
+            bool				IsContactAllowed( void ) const;
+            String				GetEMailAddress( void ) const;
 
-            bool                ReadParams();
-            bool                SaveParams();
-            bool                SendReport();
+            bool				ReadParams();
+            bool				SaveParams();
+            bool				SendReport();
 
             /** @short  TODO*/
             virtual short execute();
@@ -911,12 +917,12 @@ class BrokenRecoveryDialog : public ModalDialog
         class ErrorRepOptionsDialog : public ModalDialog
         {
         private:
-            FixedLine           maProxyFL;
-            RadioButton         maSystemBtn;
-            RadioButton         maDirectBtn;
-            RadioButton         maManualBtn;
-            FixedText           maProxyServerFT;
-            Edit                maProxyServerEd;
+            FixedLine			maProxyFL;
+            RadioButton			maSystemBtn;
+            RadioButton			maDirectBtn;
+            RadioButton			maManualBtn;
+            FixedText			maProxyServerFT;
+            Edit				maProxyServerEd;
             FixedText           maProxyPortFT;
             Edit                maProxyPortEd;
             FixedText           maDescriptionFT;
@@ -924,15 +930,15 @@ class BrokenRecoveryDialog : public ModalDialog
             OKButton            maOKBtn;
             CancelButton        maCancelBtn;
 
-            ErrorRepParams&     mrParams;
+            ErrorRepParams&		mrParams;
 
-            DECL_LINK(          CancelBtnHdl, void* );
-            DECL_LINK(          OKBtnHdl, void * );
-            DECL_LINK(          ManualBtnHdl, void * );
+            DECL_LINK(			CancelBtnHdl, void* );
+            DECL_LINK(			OKBtnHdl, void * );
+            DECL_LINK(			ManualBtnHdl, void * );
 
         public:
                                 ErrorRepOptionsDialog( Window* _pParent, ErrorRepParams& rParams );
-            virtual             ~ErrorRepOptionsDialog();
+            virtual				~ErrorRepOptionsDialog();
         };
 
         class ErrorRepEdit : public ExtMultiLineEdit
@@ -952,12 +958,12 @@ class BrokenRecoveryDialog : public ModalDialog
 
         public:
                                 ErrorRepPreviewDialog( Window* _pParent );
-            virtual             ~ErrorRepPreviewDialog();
+            virtual				~ErrorRepPreviewDialog();
 
             virtual void        Resize();
         };
-    }   // namespace DocRecovery
-}   // namespace svx
+    }	// namespace DocRecovery
+}	// namespace svx
 
 #undef css
 

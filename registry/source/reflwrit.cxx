@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@
 
 #include "reflcnst.hxx"
 
-using ::rtl::OString;
-
+using namespace rtl;
 
 namespace {
 
+// Throws std::bad_alloc:
 inline rtl::OString toByteString(rtl_uString const * str) {
     return rtl::OString(
         str->buffer, str->length, RTL_TEXTENCODING_UTF8,
@@ -58,11 +58,15 @@ inline rtl::OString toByteString(rtl_uString const * str) {
 
 static sal_Unicode NULL_WSTRING[1] = { 0 };
 
+#if defined ( GCC ) && ( defined ( SCO ) )
+ORealDynamicLoader* ODynamicLoader<RegistryTypeWriter_Api>::m_pLoader = NULL;
+#endif
+
 #define BLOP_OFFSET_MAGIC       0
 #define BLOP_OFFSET_SIZE        (BLOP_OFFSET_MAGIC + sizeof(sal_uInt32))
 #define BLOP_OFFSET_MINOR       (BLOP_OFFSET_SIZE + sizeof(sal_uInt32))
 #define BLOP_OFFSET_MAJOR       (BLOP_OFFSET_MINOR + sizeof(sal_uInt16))
-#define BLOP_OFFSET_N_ENTRIES   (BLOP_OFFSET_MAJOR + sizeof(sal_uInt16))
+#define BLOP_OFFSET_N_ENTRIES	(BLOP_OFFSET_MAJOR + sizeof(sal_uInt16))
 #define BLOP_OFFSET_TYPE_SOURCE (BLOP_OFFSET_N_ENTRIES + sizeof(sal_uInt16))
 #define BLOP_OFFSET_TYPE_CLASS  (BLOP_OFFSET_TYPE_SOURCE + sizeof(sal_uInt16))
 #define BLOP_OFFSET_THIS        (BLOP_OFFSET_TYPE_CLASS + sizeof(sal_uInt16))
@@ -71,16 +75,16 @@ static sal_Unicode NULL_WSTRING[1] = { 0 };
 #define BLOP_OFFSET_FILENAME    (BLOP_OFFSET_DOKU + sizeof(sal_uInt16))
 #define BLOP_HEADER_N_ENTRIES   6
 
-#define BLOP_OFFSET_N_SUPERTYPES    0
-#define BLOP_OFFSET_SUPERTYPES      (BLOP_OFFSET_N_SUPERTYPES + sizeof(sal_uInt16))
+#define BLOP_OFFSET_N_SUPERTYPES 	0
+#define BLOP_OFFSET_SUPERTYPES 		(BLOP_OFFSET_N_SUPERTYPES + sizeof(sal_uInt16))
 
-#define BLOP_FIELD_ENTRY_ACCESS     0
+#define BLOP_FIELD_ENTRY_ACCESS 	0
 #define BLOP_FIELD_ENTRY_NAME       (BLOP_FIELD_ENTRY_ACCESS + sizeof(sal_uInt16))
 #define BLOP_FIELD_ENTRY_TYPE       (BLOP_FIELD_ENTRY_NAME + sizeof(sal_uInt16))
 #define BLOP_FIELD_ENTRY_VALUE      (BLOP_FIELD_ENTRY_TYPE + sizeof(sal_uInt16))
 #define BLOP_FIELD_ENTRY_DOKU       (BLOP_FIELD_ENTRY_VALUE + sizeof(sal_uInt16))
 #define BLOP_FIELD_ENTRY_FILENAME   (BLOP_FIELD_ENTRY_DOKU + sizeof(sal_uInt16))
-#define BLOP_FIELD_N_ENTRIES        6
+#define BLOP_FIELD_N_ENTRIES   		6
 
 #define BLOP_METHOD_SIZE        0
 #define BLOP_METHOD_MODE        (BLOP_METHOD_SIZE + sizeof(sal_uInt16))
@@ -97,7 +101,7 @@ static sal_Unicode NULL_WSTRING[1] = { 0 };
 #define BLOP_REFERENCE_TYPE         0
 #define BLOP_REFERENCE_NAME         (BLOP_REFERENCE_TYPE + sizeof(sal_uInt16))
 #define BLOP_REFERENCE_DOKU         (BLOP_REFERENCE_NAME + sizeof(sal_uInt16))
-#define BLOP_REFERENCE_ACCESS       (BLOP_REFERENCE_DOKU + sizeof(sal_uInt16))
+#define BLOP_REFERENCE_ACCESS   	(BLOP_REFERENCE_DOKU + sizeof(sal_uInt16))
 #define BLOP_REFERENCE_N_ENTRIES    4
 
 sal_uInt32 UINT16StringLen(const sal_uInt8* wstring)
@@ -212,12 +216,12 @@ struct CPInfo
     union
     {
         const sal_Char*     aUtf8;
-        RTUik*              aUik;
+        RTUik*          	aUik;
         RTConstValueUnion   aConst;
     } m_value;
 
-    sal_uInt16      m_index;
-    struct CPInfo*  m_next;
+    sal_uInt16		m_index;
+    struct CPInfo*	m_next;
 
     CPInfo(CPInfoTag tag, struct CPInfo* prev);
 
@@ -458,7 +462,7 @@ class ParamEntry
 {
 public:
 
-    OString     m_typeName;
+    OString    	m_typeName;
     OString     m_name;
     RTParamMode m_mode;
 
@@ -466,7 +470,7 @@ public:
     ~ParamEntry();
 
     void setData(const OString& typeName,
-                 const OString& name,
+                 const OString&	name,
                  RTParamMode    mode);
 };
 
@@ -480,8 +484,8 @@ ParamEntry::~ParamEntry()
 }
 
 void ParamEntry::setData(const OString& typeName,
-                         const OString& name,
-                         RTParamMode    mode)
+                         const OString&	name,
+                         RTParamMode   	mode)
 {
     m_name = name;
     m_typeName = typeName;
@@ -498,18 +502,18 @@ class ReferenceEntry
 {
 public:
 
-    OString         m_name;
-    OString         m_doku;
+    OString     	m_name;
+    OString			m_doku;
     RTReferenceType m_type;
     RTFieldAccess   m_access;
 
     ReferenceEntry();
     ~ReferenceEntry();
 
-    void setData(const OString&     name,
+    void setData(const OString&		name,
                  RTReferenceType    refType,
-                 const OString&     doku,
-                 RTFieldAccess      access);
+                 const OString&   	doku,
+                 RTFieldAccess     	access);
 };
 
 ReferenceEntry::ReferenceEntry()
@@ -543,14 +547,14 @@ class MethodEntry
 {
 public:
 
-    OString         m_name;
-    OString         m_returnTypeName;
+    OString       	m_name;
+    OString       	m_returnTypeName;
     RTMethodMode    m_mode;
     sal_uInt16      m_paramCount;
-    ParamEntry*     m_params;
-    sal_uInt16      m_excCount;
-    OString*        m_excNames;
-    OString         m_doku;
+    ParamEntry* 	m_params;
+    sal_uInt16    	m_excCount;
+    OString*      	m_excNames;
+    OString      	m_doku;
 
     MethodEntry();
     ~MethodEntry();
@@ -588,12 +592,12 @@ MethodEntry::~MethodEntry()
         delete[] m_excNames;
 }
 
-void MethodEntry::setData(const OString&    name,
-                          const OString&    returnTypeName,
-                          RTMethodMode      mode,
+void MethodEntry::setData(const OString&   	name,
+                          const OString&   	returnTypeName,
+                          RTMethodMode  	mode,
                           sal_uInt16        paramCount,
                           sal_uInt16        excCount,
-                          const OString&    doku)
+                          const OString&   	doku)
 {
     m_name = name;
     m_returnTypeName = returnTypeName;
@@ -675,12 +679,12 @@ public:
     sal_uInt32          m_refCount;
     typereg_Version     m_version;
     RTTypeClass         m_typeClass;
-    OString             m_typeName;
-    sal_uInt16          m_nSuperTypes;
+    OString		        m_typeName;
+    sal_uInt16			m_nSuperTypes;
     OString*            m_superTypeNames;
     RTUik*              m_pUik;
-    OString             m_doku;
-    OString             m_fileName;
+    OString		        m_doku;
+    OString		        m_fileName;
     sal_uInt16          m_fieldCount;
     FieldEntry*         m_fields;
     sal_uInt16          m_methodCount;
@@ -694,13 +698,13 @@ public:
     TypeWriter(typereg_Version version,
                rtl::OString const & documentation,
                rtl::OString const & fileName,
-               RTTypeClass      RTTypeClass,
+               RTTypeClass  	RTTypeClass,
                bool             published,
-               const OString&   typeName,
+               const OString& 	typeName,
                sal_uInt16       superTypeCount,
-               sal_uInt16       FieldCount,
-               sal_uInt16       methodCount,
-               sal_uInt16       referenceCount);
+               sal_uInt16  		FieldCount,
+               sal_uInt16   	methodCount,
+               sal_uInt16   	referenceCount);
 
     ~TypeWriter();
 
@@ -712,13 +716,13 @@ public:
 TypeWriter::TypeWriter(typereg_Version version,
                        rtl::OString const & documentation,
                        rtl::OString const & fileName,
-                       RTTypeClass      RTTypeClass,
+                       RTTypeClass  	RTTypeClass,
                        bool             published,
-                       const OString&   typeName,
+                       const OString& 	typeName,
                        sal_uInt16       superTypeCount,
-                       sal_uInt16       fieldCount,
-                       sal_uInt16       methodCount,
-                       sal_uInt16       referenceCount)
+                       sal_uInt16   	fieldCount,
+                       sal_uInt16   	methodCount,
+                       sal_uInt16   	referenceCount)
     : m_refCount(1)
     , m_version(version)
     , m_typeClass(
@@ -944,11 +948,11 @@ void TypeWriter::createBlop()
         for (sal_uInt16 i = 0; i < m_methodCount; i++)
         {
             pMethodEntrySize[i] = (sal_uInt16)
-                ( blopMethodEntrySize +                                 // header
-                  sizeof(sal_uInt16) +                                  // parameterCount
-                  (m_methods[i].m_paramCount * blopParamEntrySize) +    // exceptions
-                  sizeof(sal_uInt16) +                                  // exceptionCount
-                  (m_methods[i].m_excCount * sizeof(sal_uInt16)) );     // exceptions
+                ( blopMethodEntrySize +                   				// header
+                  sizeof(sal_uInt16) +                                 	// parameterCount
+                  (m_methods[i].m_paramCount * blopParamEntrySize) + 	// exceptions
+                  sizeof(sal_uInt16) +                                 	// exceptionCount
+                  (m_methods[i].m_excCount * sizeof(sal_uInt16)) );   	// exceptions
 
             blopMethodsSize += pMethodEntrySize[i];
         }
@@ -1052,7 +1056,7 @@ void TypeWriter::createBlop()
     {
         sal_uInt16 cpIndexName = 0;
         sal_uInt16 cpIndexDoku2 = 0;
-
+        
         // nReferenceEntries + n references
         blopReferenceSize = entrySize + (m_referenceCount * blopReferenceEntrySize);
 
@@ -1263,14 +1267,14 @@ sal_Bool typereg_writer_setFieldData(
 }
 
 static void TYPEREG_CALLTYPE setFieldData(TypeWriterImpl    hEntry,
-                                          sal_uInt16        index,
-                                          rtl_uString*      name,
-                                          rtl_uString*      typeName,
-                                          rtl_uString*      doku,
-                                          rtl_uString*      fileName,
-                                          RTFieldAccess     access,
+                                          sal_uInt16       	index,
+                                          rtl_uString*     	name,
+                                          rtl_uString*     	typeName,
+                                          rtl_uString*     	doku,
+                                          rtl_uString*     	fileName,
+                                          RTFieldAccess    	access,
                                           RTValueType       valueType,
-                                          RTConstValueUnion constValue)
+                                          RTConstValueUnion	constValue)
 {
     typereg_writer_setFieldData(
         hEntry, index, doku, fileName, access, name, typeName, valueType,
@@ -1296,12 +1300,12 @@ sal_Bool typereg_writer_setMethodData(
 
 static void TYPEREG_CALLTYPE setMethodData(TypeWriterImpl   hEntry,
                                            sal_uInt16       index,
-                                           rtl_uString*     name,
-                                           rtl_uString*     returnTypeName,
-                                           RTMethodMode     mode,
+                                           rtl_uString*  	name,
+                                           rtl_uString*  	returnTypeName,
+                                           RTMethodMode 	mode,
                                            sal_uInt16       paramCount,
                                            sal_uInt16       excCount,
-                                           rtl_uString*     doku)
+                                           rtl_uString*  	doku)
 {
     typereg_writer_setMethodData(
         hEntry, index, doku, mode, name, returnTypeName, paramCount, excCount);
@@ -1323,11 +1327,11 @@ sal_Bool typereg_writer_setMethodParameterData(
 }
 
 static void TYPEREG_CALLTYPE setParamData(TypeWriterImpl    hEntry,
-                                          sal_uInt16        index,
-                                          sal_uInt16        paramIndex,
-                                          rtl_uString*      type,
-                                          rtl_uString*      name,
-                                          RTParamMode       mode)
+                                          sal_uInt16       	index,
+                                          sal_uInt16  		paramIndex,
+                                          rtl_uString*     	type,
+                                          rtl_uString*     	name,
+                                          RTParamMode      	mode)
 {
     typereg_writer_setMethodParameterData(
         hEntry, index, paramIndex, mode, name, type);
@@ -1350,7 +1354,7 @@ sal_Bool typereg_writer_setMethodExceptionTypeName(
 static void TYPEREG_CALLTYPE setExcData(TypeWriterImpl  hEntry,
                                         sal_uInt16      index,
                                         sal_uInt16      excIndex,
-                                        rtl_uString*    type)
+                                        rtl_uString* 	type)
 {
     typereg_writer_setMethodExceptionTypeName(hEntry, index, excIndex, type);
 }
@@ -1400,10 +1404,10 @@ sal_Bool typereg_writer_setReferenceData(
 
 static void TYPEREG_CALLTYPE setReferenceData(TypeWriterImpl    hEntry,
                                               sal_uInt16        index,
-                                              rtl_uString*      name,
+                                              rtl_uString*   	name,
                                               RTReferenceType   refType,
-                                              rtl_uString*      doku,
-                                              RTFieldAccess     access)
+                                              rtl_uString*   	doku,
+                                              RTFieldAccess 	access)
 {
     typereg_writer_setReferenceData(hEntry, index, doku, refType, access, name);
 }

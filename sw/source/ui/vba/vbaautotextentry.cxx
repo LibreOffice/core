@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,20 +78,21 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
             }
         }
         xEndMarker->setString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("") ) ); // remove marker
+        //xTC->gotoRange( xEndMarker, sal_True );
         xTC = xText->createTextCursorByRange( xEndMarker->getEnd() );
         pWhere->setXTextCursor( xTC );
     }
     return uno::Reference< word::XRange >( pWhere );
 }
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaAutoTextEntry::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaAutoTextEntry") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 SwVbaAutoTextEntry::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;
@@ -117,6 +118,8 @@ SwVbaAutoTextEntries::getElementType() throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration >
 SwVbaAutoTextEntries::createEnumeration() throw (uno::RuntimeException)
 {
+    //uno::Reference< container::XEnumerationAccess > xEnumerationAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
+    //return xEnumerationAccess->createEnumeration();
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }
 
@@ -127,14 +130,14 @@ SwVbaAutoTextEntries::createCollectionObject( const css::uno::Any& aSource )
     return uno::makeAny( uno::Reference< word::XAutoTextEntry >( new SwVbaAutoTextEntry( this, mxContext, xEntry ) ) );
 }
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaAutoTextEntries::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaAutoTextEntries") );
     return sImplName;
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<rtl::OUString> 
 SwVbaAutoTextEntries::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

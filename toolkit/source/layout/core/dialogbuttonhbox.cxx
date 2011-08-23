@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,15 @@
 #include "dialogbuttonhbox.hxx"
 #include "flow.hxx"
 #include "proplist.hxx"
+
+#if TEST_LAYOUT && !defined( DBG_UTIL )
+#undef DBG_ERROR
+#define DBG_ERROR OSL_TRACE
+#undef DBG_ERROR1
+#define DBG_ERROR1 OSL_TRACE
+#undef DBG_ERROR2
+#define DBG_ERROR2 OSL_TRACE
+#endif /* TEST_LAYOUT && !DBG_UTIL */
 
 namespace layoutimpl
 {
@@ -81,7 +90,7 @@ DialogButtonHBox::setOrdering( rtl::OUString const& ordering )
         mnOrdering = WINDOWS;
     else
     {
-        OSL_TRACE( "DialogButtonHBox: no such ordering: %s", OUSTRING_CSTR( ordering ) );
+        DBG_ERROR1( "DialogButtonHBox: no such ordering: %s", OUSTRING_CSTR( ordering ) );
     }
 }
 
@@ -176,7 +185,7 @@ DialogButtonHBox::removeChild( uno::Reference< awt::XLayoutConstrains > const& x
     }
     else
     {
-        OSL_FAIL( "DialogButtonHBox: removeChild: no such child" );
+        DBG_ERROR( "DialogButtonHBox: removeChild: no such child" );
     }
 }
 

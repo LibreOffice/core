@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,17 +70,17 @@ namespace oooimprovement
     LogPacker::LogPacker(const Reference<XMultiServiceFactory>& sf)
         : m_ServiceFactory(sf)
     {}
-
+    
     sal_Int32 LogPacker::pack(const OUString& fileurl)
     {
         Reference<XSimpleFileAccess> file_access(
-            m_ServiceFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
+            m_ServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess")),
             UNO_QUERY_THROW);
 
         Reference<XStorage> storage;
         {
             Reference<XSingleServiceFactory> storage_factory(
-                m_ServiceFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"))),
+                m_ServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.embed.StorageFactory")),
                 UNO_QUERY_THROW);
             Sequence<Any> storage_init_args(2);
             storage_init_args[0] = Any(getZipfileurl(fileurl));
@@ -91,7 +91,7 @@ namespace oooimprovement
         }
 
         Reference<XOutputStream> zipped_stream = storage->openStreamElement(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("logdata.csv")),
+            OUString::createFromAscii("logdata.csv"),
             ElementModes::WRITE)->getOutputStream();
         Reference<XInputStream> unzipped_stream = file_access->openFileRead(fileurl);
         const sal_Int32 bufsize = 1024;
@@ -108,10 +108,10 @@ namespace oooimprovement
         unzipped_stream->closeInput();
         zipped_stream->flush();
         zipped_stream->closeOutput();
-        Reference<XTransactedObject>(storage, UNO_QUERY_THROW)->commit();
+        Reference<XTransactedObject>(storage, UNO_QUERY_THROW)->commit(); 
         file_access->kill(fileurl);
         return logged_events;
     }
-}
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

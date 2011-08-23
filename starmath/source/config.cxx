@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,36 +61,36 @@ SmConfig::~SmConfig()
 
 void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
 {
-    const SfxPoolItem *pItem     = NULL;
+    const SfxPoolItem *pItem	 = NULL;
 
-    sal_uInt16 nU16;
-    bool bVal;
-    if (rSet.GetItemState(SID_PRINTSIZE, sal_True, &pItem) == SFX_ITEM_SET)
-    {   nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
+    UINT16 nU16;
+    BOOL bVal;
+    if (rSet.GetItemState(SID_PRINTSIZE, TRUE, &pItem) == SFX_ITEM_SET)
+    {	nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
         SetPrintSize( (SmPrintSize) nU16 );
     }
-    if (rSet.GetItemState(SID_PRINTZOOM, sal_True, &pItem) == SFX_ITEM_SET)
-    {   nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
+    if (rSet.GetItemState(SID_PRINTZOOM, TRUE, &pItem) == SFX_ITEM_SET)
+    {	nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
         SetPrintZoomFactor( nU16 );
     }
-    if (rSet.GetItemState(SID_PRINTTITLE, sal_True, &pItem) == SFX_ITEM_SET)
-    {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
+    if (rSet.GetItemState(SID_PRINTTITLE, TRUE, &pItem) == SFX_ITEM_SET)
+    {	bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetPrintTitle( bVal );
     }
-    if (rSet.GetItemState(SID_PRINTTEXT, sal_True, &pItem) == SFX_ITEM_SET)
-    {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
+    if (rSet.GetItemState(SID_PRINTTEXT, TRUE, &pItem) == SFX_ITEM_SET)
+    {	bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetPrintFormulaText( bVal );
     }
-    if (rSet.GetItemState(SID_PRINTFRAME, sal_True, &pItem) == SFX_ITEM_SET)
-    {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
+    if (rSet.GetItemState(SID_PRINTFRAME, TRUE, &pItem) == SFX_ITEM_SET)
+    {	bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetPrintFrame( bVal );
     }
-    if (rSet.GetItemState(SID_AUTOREDRAW, sal_True, &pItem) == SFX_ITEM_SET)
-    {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
+    if (rSet.GetItemState(SID_AUTOREDRAW, TRUE, &pItem) == SFX_ITEM_SET)
+    {	bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetAutoRedraw( bVal );
     }
-    if (rSet.GetItemState(SID_NO_RIGHT_SPACES, sal_True, &pItem) == SFX_ITEM_SET)
-    {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
+    if (rSet.GetItemState(SID_NO_RIGHT_SPACES, TRUE, &pItem) == SFX_ITEM_SET)
+    {	bVal = ((const SfxBoolItem *) pItem)->GetValue();
         if (IsIgnoreSpacesRight() != bVal)
         {
             SetIgnoreSpacesRight( bVal );
@@ -99,10 +99,6 @@ void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
             // Das erreichen wir mit:
             Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
         }
-    }
-    if (rSet.GetItemState(SID_SAVE_ONLY_USED_SYMBOLS, sal_True, &pItem) == SFX_ITEM_SET)
-    {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
-        SetSaveOnlyUsedSymbols( bVal );
     }
 
     SaveOther();
@@ -114,16 +110,15 @@ void SmConfig::ConfigToItemSet(SfxItemSet &rSet) const
     const SfxItemPool *pPool = rSet.GetPool();
 
     rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_PRINTSIZE),
-                           (sal_uInt16) GetPrintSize()));
+                           (UINT16) GetPrintSize()));
     rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_PRINTZOOM),
-                           (sal_uInt16) GetPrintZoomFactor()));
+                           (UINT16) GetPrintZoomFactor()));
 
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTITLE), IsPrintTitle()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTEXT),  IsPrintFormulaText()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTFRAME), IsPrintFrame()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_AUTOREDRAW), IsAutoRedraw()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_NO_RIGHT_SPACES), IsIgnoreSpacesRight()));
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), IsSaveOnlyUsedSymbols()));
 }
 
 

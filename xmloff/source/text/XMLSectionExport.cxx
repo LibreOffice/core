@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp> //i90246
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/families.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -87,67 +87,67 @@ using ::com::sun::star::uno::XInterface;
 XMLSectionExport::XMLSectionExport(
     SvXMLExport& rExp,
     XMLTextParagraphExport& rParaExp)
-:   sCondition(RTL_CONSTASCII_USTRINGPARAM("Condition"))
-,   sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM("CreateFromChapter"))
-,   sCreateFromEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromEmbeddedObjects"))
-,   sCreateFromGraphicObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromGraphicObjects"))
-,   sCreateFromLabels(RTL_CONSTASCII_USTRINGPARAM("CreateFromLabels"))
-,   sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks"))
-,   sCreateFromOtherEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromOtherEmbeddedObjects"))
-,   sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM("CreateFromOutline"))
-,   sCreateFromStarCalc(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarCalc"))
-,   sCreateFromStarChart(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarChart"))
-,   sCreateFromStarDraw(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarDraw"))
-,   sCreateFromStarImage(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarImage"))
-,   sCreateFromStarMath(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarMath"))
-,   sCreateFromTables(RTL_CONSTASCII_USTRINGPARAM("CreateFromTables"))
-,   sCreateFromTextFrames(RTL_CONSTASCII_USTRINGPARAM("CreateFromTextFrames"))
-,   sDdeCommandElement(RTL_CONSTASCII_USTRINGPARAM("DDECommandElement"))
-,   sDdeCommandFile(RTL_CONSTASCII_USTRINGPARAM("DDECommandFile"))
-,   sDdeCommandType(RTL_CONSTASCII_USTRINGPARAM("DDECommandType"))
-,   sFileLink(RTL_CONSTASCII_USTRINGPARAM("FileLink"))
-,   sIsCaseSensitive(RTL_CONSTASCII_USTRINGPARAM("IsCaseSensitive"))
-,   sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected"))
-,   sIsVisible(RTL_CONSTASCII_USTRINGPARAM("IsVisible"))
-,   sLabelCategory(RTL_CONSTASCII_USTRINGPARAM("LabelCategory"))
-,   sLabelDisplayType(RTL_CONSTASCII_USTRINGPARAM("LabelDisplayType"))
-,   sLevel(RTL_CONSTASCII_USTRINGPARAM("Level"))
-,   sLevelFormat(RTL_CONSTASCII_USTRINGPARAM("LevelFormat"))
-,   sLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM("LevelParagraphStyles"))
-,   sLinkRegion(RTL_CONSTASCII_USTRINGPARAM("LinkRegion"))
-,   sMainEntryCharacterStyleName(RTL_CONSTASCII_USTRINGPARAM("MainEntryCharacterStyleName"))
-,   sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM("ParaStyleHeading"))
-,   sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel"))
-,   sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
-,   sName(RTL_CONSTASCII_USTRINGPARAM("Name"))
-,   sUseAlphabeticalSeparators(RTL_CONSTASCII_USTRINGPARAM("UseAlphabeticalSeparators"))
-,   sUseCombinedEntries(RTL_CONSTASCII_USTRINGPARAM("UseCombinedEntries"))
-,   sUseDash(RTL_CONSTASCII_USTRINGPARAM("UseDash"))
-,   sUseKeyAsEntry(RTL_CONSTASCII_USTRINGPARAM("UseKeyAsEntry"))
-,   sUseLevelFromSource(RTL_CONSTASCII_USTRINGPARAM("UseLevelFromSource"))
-,   sUsePP(RTL_CONSTASCII_USTRINGPARAM("UsePP"))
-,   sUseUpperCase(RTL_CONSTASCII_USTRINGPARAM("UseUpperCase"))
-,   sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated"))
-,   sIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticUpdate"))
-,   sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM("IsRelativeTabstops"))
-,   sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM("CreateFromLevelParagraphStyles"))
-,   sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex"))
-,   sContentSection(RTL_CONSTASCII_USTRINGPARAM("ContentSection"))
-,   sHeaderSection(RTL_CONSTASCII_USTRINGPARAM("HeaderSection"))
+:	sCondition(RTL_CONSTASCII_USTRINGPARAM("Condition"))
+,	sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM("CreateFromChapter"))
+,	sCreateFromEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromEmbeddedObjects"))
+,	sCreateFromGraphicObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromGraphicObjects"))
+,	sCreateFromLabels(RTL_CONSTASCII_USTRINGPARAM("CreateFromLabels"))
+,	sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks"))
+,	sCreateFromOtherEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromOtherEmbeddedObjects"))
+,	sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM("CreateFromOutline"))
+,	sCreateFromStarCalc(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarCalc"))
+,	sCreateFromStarChart(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarChart"))
+,	sCreateFromStarDraw(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarDraw"))
+,	sCreateFromStarImage(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarImage"))
+,	sCreateFromStarMath(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarMath"))
+,	sCreateFromTables(RTL_CONSTASCII_USTRINGPARAM("CreateFromTables"))
+,	sCreateFromTextFrames(RTL_CONSTASCII_USTRINGPARAM("CreateFromTextFrames"))
+,	sDdeCommandElement(RTL_CONSTASCII_USTRINGPARAM("DDECommandElement"))
+,	sDdeCommandFile(RTL_CONSTASCII_USTRINGPARAM("DDECommandFile"))
+,	sDdeCommandType(RTL_CONSTASCII_USTRINGPARAM("DDECommandType"))
+,	sFileLink(RTL_CONSTASCII_USTRINGPARAM("FileLink"))
+,	sIsCaseSensitive(RTL_CONSTASCII_USTRINGPARAM("IsCaseSensitive"))
+,	sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected"))
+,	sIsVisible(RTL_CONSTASCII_USTRINGPARAM("IsVisible"))
+,	sLabelCategory(RTL_CONSTASCII_USTRINGPARAM("LabelCategory"))
+,	sLabelDisplayType(RTL_CONSTASCII_USTRINGPARAM("LabelDisplayType"))
+,	sLevel(RTL_CONSTASCII_USTRINGPARAM("Level"))
+,	sLevelFormat(RTL_CONSTASCII_USTRINGPARAM("LevelFormat"))
+,	sLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM("LevelParagraphStyles"))
+,	sLinkRegion(RTL_CONSTASCII_USTRINGPARAM("LinkRegion"))
+,	sMainEntryCharacterStyleName(RTL_CONSTASCII_USTRINGPARAM("MainEntryCharacterStyleName"))
+,	sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM("ParaStyleHeading"))
+,	sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel"))
+,	sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
+,	sName(RTL_CONSTASCII_USTRINGPARAM("Name"))
+,	sUseAlphabeticalSeparators(RTL_CONSTASCII_USTRINGPARAM("UseAlphabeticalSeparators"))
+,	sUseCombinedEntries(RTL_CONSTASCII_USTRINGPARAM("UseCombinedEntries"))
+,	sUseDash(RTL_CONSTASCII_USTRINGPARAM("UseDash"))
+,	sUseKeyAsEntry(RTL_CONSTASCII_USTRINGPARAM("UseKeyAsEntry"))
+,	sUseLevelFromSource(RTL_CONSTASCII_USTRINGPARAM("UseLevelFromSource"))
+,	sUsePP(RTL_CONSTASCII_USTRINGPARAM("UsePP"))
+,	sUseUpperCase(RTL_CONSTASCII_USTRINGPARAM("UseUpperCase"))
+,	sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated"))
+,	sIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticUpdate"))
+,	sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM("IsRelativeTabstops"))
+,	sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM("CreateFromLevelParagraphStyles"))
+,	sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex"))
+,	sContentSection(RTL_CONSTASCII_USTRINGPARAM("ContentSection"))
+,	sHeaderSection(RTL_CONSTASCII_USTRINGPARAM("HeaderSection"))
 
-,   sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection"))
-,   sIsGlobalDocumentSection(RTL_CONSTASCII_USTRINGPARAM("IsGlobalDocumentSection"))
-,   sProtectionKey(RTL_CONSTASCII_USTRINGPARAM("ProtectionKey"))
-,   sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM("SortAlgorithm"))
-,   sLocale(RTL_CONSTASCII_USTRINGPARAM("Locale"))
-,   sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName"))
+,	sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection"))
+,	sIsGlobalDocumentSection(RTL_CONSTASCII_USTRINGPARAM("IsGlobalDocumentSection"))
+,	sProtectionKey(RTL_CONSTASCII_USTRINGPARAM("ProtectionKey"))
+,	sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM("SortAlgorithm"))
+,	sLocale(RTL_CONSTASCII_USTRINGPARAM("Locale"))
+,	sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName"))
 
-,   sIsCurrentlyVisible(RTL_CONSTASCII_USTRINGPARAM("IsCurrentlyVisible"))
-,   sHeadingStyleName(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName"))
+,	sIsCurrentlyVisible(RTL_CONSTASCII_USTRINGPARAM("IsCurrentlyVisible"))
+,	sHeadingStyleName(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName"))
 
-,   rExport(rExp)
-,   rParaExport(rParaExp)
-,   bHeadingDummiesExported( sal_False )
+,	rExport(rExp)
+,	rParaExport(rParaExp)
+,	bHeadingDummiesExported( sal_False )
 {
 }
 
@@ -270,7 +270,7 @@ void XMLSectionExport::ExportSectionEnd(
             if (xIndex.is())
             {
                 // index end: close index body element
-                GetExport().EndElement( XML_NAMESPACE_TEXT, XML_INDEX_BODY,
+                GetExport().EndElement( XML_NAMESPACE_TEXT,	XML_INDEX_BODY,
                                         sal_True );
                 GetExport().IgnorableWhitespace();
 
@@ -305,7 +305,7 @@ void XMLSectionExport::ExportSectionEnd(
                         break;
 
                     default:
-                        OSL_FAIL("unknown index type");
+                        OSL_ENSURE(false, "unknown index type");
                         // default: skip index!
                         break;
                 }
@@ -326,12 +326,12 @@ void XMLSectionExport::ExportSectionEnd(
             GetExport().CheckAttrList();
 
             // element surrounded by whitespace
-            GetExport().EndElement( XML_NAMESPACE_TEXT, eElement, sal_True);
+            GetExport().EndElement( XML_NAMESPACE_TEXT,	eElement, sal_True);
             GetExport().IgnorableWhitespace();
         }
         else
         {
-            OSL_FAIL("Need element name!");
+            OSL_ENSURE(false, "Need element name!");
         }
     }
     // else: autostyles -> ignore
@@ -375,7 +375,7 @@ void XMLSectionExport::ExportIndexStart(
 
         default:
             // skip index
-            OSL_FAIL("unknown index type");
+            OSL_ENSURE(false, "unknown index type");
             break;
     }
 }
@@ -393,7 +393,7 @@ void XMLSectionExport::ExportIndexHeaderStart(
 }
 
 
-SvXMLEnumStringMapEntry const aIndexTypeMap[] =
+SvXMLEnumStringMapEntry __READONLY_DATA aIndexTypeMap[] =
 {
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.ContentIndex", TEXT_SECTION_TYPE_TOC ),
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.DocumentIndex", TEXT_SECTION_TYPE_ALPHABETICAL ),
@@ -810,13 +810,13 @@ void XMLSectionExport::ExportBaseIndexStart(
 
 static const XMLTokenEnum aTypeSourceElementNameMap[] =
 {
-    XML_TABLE_OF_CONTENT_SOURCE,        // TOC
-    XML_TABLE_INDEX_SOURCE,         // table index
-    XML_ILLUSTRATION_INDEX_SOURCE,      // illustration index
-    XML_OBJECT_INDEX_SOURCE,            // object index
-    XML_USER_INDEX_SOURCE,              // user index
-    XML_ALPHABETICAL_INDEX_SOURCE,      // alphabetical index
-    XML_BIBLIOGRAPHY_SOURCE         // bibliography
+    XML_TABLE_OF_CONTENT_SOURCE,		// TOC
+    XML_TABLE_INDEX_SOURCE,			// table index
+    XML_ILLUSTRATION_INDEX_SOURCE,		// illustration index
+    XML_OBJECT_INDEX_SOURCE,			// object index
+    XML_USER_INDEX_SOURCE,				// user index
+    XML_ALPHABETICAL_INDEX_SOURCE,		// alphabetical index
+    XML_BIBLIOGRAPHY_SOURCE			// bibliography
 };
 
 void XMLSectionExport::ExportBaseIndexSource(
@@ -896,7 +896,7 @@ void XMLSectionExport::ExportBaseIndexSource(
         aAny = xLevelTemplates->getByIndex(i);
         aAny >>= aTemplateSequence;
 
-        // export the sequence (abort export if an error occurred; #91214#)
+        // export the sequence (abort export if an error occured; #91214#)
         sal_Bool bResult =
             ExportIndexTemplate(eType, i, rPropertySet, aTemplateSequence);
         if ( !bResult )
@@ -987,13 +987,13 @@ static const XMLTokenEnum aLevelNameBibliographyMap[] =
 
 static const XMLTokenEnum* aTypeLevelNameMap[] =
 {
-    aLevelNameTOCMap,           // TOC
-    aLevelNameTableMap,         // table index
-    aLevelNameTableMap,         // illustration index
-    aLevelNameTableMap,         // object index
-    aLevelNameTOCMap,           // user index
-    aLevelNameAlphaMap,         // alphabetical index
-    aLevelNameBibliographyMap   // bibliography
+    aLevelNameTOCMap,			// TOC
+    aLevelNameTableMap,			// table index
+    aLevelNameTableMap,			// illustration index
+    aLevelNameTableMap,			// object index
+    aLevelNameTOCMap,			// user index
+    aLevelNameAlphaMap,			// alphabetical index
+    aLevelNameBibliographyMap	// bibliography
 };
 
 static const sal_Char* aLevelStylePropNameTOCMap[] =
@@ -1020,35 +1020,35 @@ static const sal_Char* aLevelStylePropNameBibliographyMap[] =
 
 static const sal_Char** aTypeLevelStylePropNameMap[] =
 {
-    aLevelStylePropNameTOCMap,          // TOC
-    aLevelStylePropNameTableMap,        // table index
-    aLevelStylePropNameTableMap,        // illustration index
-    aLevelStylePropNameTableMap,        // object index
-    aLevelStylePropNameTOCMap,          // user index
-    aLevelStylePropNameAlphaMap,        // alphabetical index
-    aLevelStylePropNameBibliographyMap  // bibliography
+    aLevelStylePropNameTOCMap,			// TOC
+    aLevelStylePropNameTableMap,		// table index
+    aLevelStylePropNameTableMap,		// illustration index
+    aLevelStylePropNameTableMap,		// object index
+    aLevelStylePropNameTOCMap,			// user index
+    aLevelStylePropNameAlphaMap,		// alphabetical index
+    aLevelStylePropNameBibliographyMap	// bibliography
 };
 
 static const XMLTokenEnum aTypeLevelAttrMap[] =
 {
-    XML_OUTLINE_LEVEL,      // TOC
-    XML_TOKEN_INVALID,      // table index
-    XML_TOKEN_INVALID,      // illustration index
-    XML_TOKEN_INVALID,      // object index
-    XML_OUTLINE_LEVEL,      // user index
-    XML_OUTLINE_LEVEL,      // alphabetical index
-    XML_BIBLIOGRAPHY_TYPE   // bibliography
+    XML_OUTLINE_LEVEL,		// TOC
+    XML_TOKEN_INVALID,		// table index
+    XML_TOKEN_INVALID,		// illustration index
+    XML_TOKEN_INVALID,		// object index
+    XML_OUTLINE_LEVEL,		// user index
+    XML_OUTLINE_LEVEL,		// alphabetical index
+    XML_BIBLIOGRAPHY_TYPE	// bibliography
 };
 
 static const XMLTokenEnum aTypeElementNameMap[] =
 {
-    XML_TABLE_OF_CONTENT_ENTRY_TEMPLATE,    // TOC
-    XML_TABLE_INDEX_ENTRY_TEMPLATE,     // table index
-    XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE,  // illustration index
-    XML_OBJECT_INDEX_ENTRY_TEMPLATE,        // object index
-    XML_USER_INDEX_ENTRY_TEMPLATE,          // user index
-    XML_ALPHABETICAL_INDEX_ENTRY_TEMPLATE,  // alphabetical index
-    XML_BIBLIOGRAPHY_ENTRY_TEMPLATE     // bibliography
+    XML_TABLE_OF_CONTENT_ENTRY_TEMPLATE,	// TOC
+    XML_TABLE_INDEX_ENTRY_TEMPLATE,		// table index
+    XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE,	// illustration index
+    XML_OBJECT_INDEX_ENTRY_TEMPLATE,		// object index
+    XML_USER_INDEX_ENTRY_TEMPLATE,			// user index
+    XML_ALPHABETICAL_INDEX_ENTRY_TEMPLATE,	// alphabetical index
+    XML_BIBLIOGRAPHY_ENTRY_TEMPLATE		// bibliography
 };
 
 
@@ -1093,7 +1093,7 @@ sal_Bool XMLSectionExport::ExportIndexTemplate(
         }
 
         // paragraph level style name
-        const sal_Char* pPropName(
+        const sal_Char* pPropName( 
             aTypeLevelStylePropNameMap[eType-TEXT_SECTION_TYPE_TOC][nOutlineLevel]);
         OSL_ENSURE(NULL != pPropName, "can't find property name");
         if (NULL != pPropName)
@@ -1159,7 +1159,7 @@ enum TemplateParamEnum
     TOK_TPARAM_BIBLIOGRAPHY_DATA
 };
 
-SvXMLEnumStringMapEntry const aTemplateTypeMap[] =
+SvXMLEnumStringMapEntry __READONLY_DATA aTemplateTypeMap[] =
 {
     ENUM_STRING_MAP_ENTRY( "TokenEntryNumber",  TOK_TTYPE_ENTRY_NUMBER ),
     ENUM_STRING_MAP_ENTRY( "TokenEntryText",    TOK_TTYPE_ENTRY_TEXT ),
@@ -1168,12 +1168,12 @@ SvXMLEnumStringMapEntry const aTemplateTypeMap[] =
     ENUM_STRING_MAP_ENTRY( "TokenPageNumber",   TOK_TTYPE_PAGE_NUMBER ),
     ENUM_STRING_MAP_ENTRY( "TokenChapterInfo",  TOK_TTYPE_CHAPTER_INFO ),
     ENUM_STRING_MAP_ENTRY( "TokenHyperlinkStart", TOK_TTYPE_HYPERLINK_START ),
-    ENUM_STRING_MAP_ENTRY( "TokenHyperlinkEnd", TOK_TTYPE_HYPERLINK_END ),
+    ENUM_STRING_MAP_ENTRY( "TokenHyperlinkEnd",	TOK_TTYPE_HYPERLINK_END ),
     ENUM_STRING_MAP_ENTRY( "TokenBibliographyDataField", TOK_TTYPE_BIBLIOGRAPHY ),
     ENUM_STRING_MAP_END()
 };
 
-SvXMLEnumStringMapEntry const aTemplateParamMap[] =
+SvXMLEnumStringMapEntry __READONLY_DATA aTemplateParamMap[] =
 {
     ENUM_STRING_MAP_ENTRY( "TokenType",             TOK_TPARAM_TOKEN_TYPE ),
     ENUM_STRING_MAP_ENTRY( "CharacterStyleName",    TOK_TPARAM_CHAR_STYLE ),
@@ -1189,39 +1189,39 @@ SvXMLEnumStringMapEntry const aTemplateParamMap[] =
     ENUM_STRING_MAP_END()
 };
 
-SvXMLEnumMapEntry const aBibliographyDataFieldMap[] =
+SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataFieldMap[] =
 {
-    { XML_ADDRESS,              BibliographyDataField::ADDRESS },
-    { XML_ANNOTE,               BibliographyDataField::ANNOTE },
-    { XML_AUTHOR,               BibliographyDataField::AUTHOR },
+    { XML_ADDRESS,				BibliographyDataField::ADDRESS },
+    { XML_ANNOTE,				BibliographyDataField::ANNOTE },
+    { XML_AUTHOR,				BibliographyDataField::AUTHOR },
     { XML_BIBLIOGRAPHY_TYPE,    BibliographyDataField::BIBILIOGRAPHIC_TYPE },
-    { XML_BOOKTITLE,            BibliographyDataField::BOOKTITLE },
-    { XML_CHAPTER,              BibliographyDataField::CHAPTER },
-    { XML_CUSTOM1,              BibliographyDataField::CUSTOM1 },
-    { XML_CUSTOM2,              BibliographyDataField::CUSTOM2 },
-    { XML_CUSTOM3,              BibliographyDataField::CUSTOM3 },
-    { XML_CUSTOM4,              BibliographyDataField::CUSTOM4 },
-    { XML_CUSTOM5,              BibliographyDataField::CUSTOM5 },
-    { XML_EDITION,              BibliographyDataField::EDITION },
-    { XML_EDITOR,               BibliographyDataField::EDITOR },
-    { XML_HOWPUBLISHED,         BibliographyDataField::HOWPUBLISHED },
-    { XML_IDENTIFIER,           BibliographyDataField::IDENTIFIER },
-    { XML_INSTITUTION,          BibliographyDataField::INSTITUTION },
-    { XML_ISBN,                 BibliographyDataField::ISBN },
-    { XML_JOURNAL,              BibliographyDataField::JOURNAL },
-    { XML_MONTH,                BibliographyDataField::MONTH },
-    { XML_NOTE,                 BibliographyDataField::NOTE },
-    { XML_NUMBER,               BibliographyDataField::NUMBER },
-    { XML_ORGANIZATIONS,        BibliographyDataField::ORGANIZATIONS },
-    { XML_PAGES,                BibliographyDataField::PAGES },
-    { XML_PUBLISHER,            BibliographyDataField::PUBLISHER },
-    { XML_REPORT_TYPE,          BibliographyDataField::REPORT_TYPE },
-    { XML_SCHOOL,               BibliographyDataField::SCHOOL },
-    { XML_SERIES,               BibliographyDataField::SERIES },
-    { XML_TITLE,                BibliographyDataField::TITLE },
-    { XML_URL,                  BibliographyDataField::URL },
-    { XML_VOLUME,               BibliographyDataField::VOLUME },
-    { XML_YEAR,                 BibliographyDataField::YEAR },
+    { XML_BOOKTITLE,			BibliographyDataField::BOOKTITLE },
+    { XML_CHAPTER,				BibliographyDataField::CHAPTER },
+    { XML_CUSTOM1,				BibliographyDataField::CUSTOM1 },
+    { XML_CUSTOM2,				BibliographyDataField::CUSTOM2 },
+    { XML_CUSTOM3,				BibliographyDataField::CUSTOM3 },
+    { XML_CUSTOM4,				BibliographyDataField::CUSTOM4 },
+    { XML_CUSTOM5,				BibliographyDataField::CUSTOM5 },
+    { XML_EDITION,				BibliographyDataField::EDITION },
+    { XML_EDITOR,				BibliographyDataField::EDITOR },
+    { XML_HOWPUBLISHED,		    BibliographyDataField::HOWPUBLISHED },
+    { XML_IDENTIFIER,			BibliographyDataField::IDENTIFIER },
+    { XML_INSTITUTION,			BibliographyDataField::INSTITUTION },
+    { XML_ISBN,				    BibliographyDataField::ISBN },
+    { XML_JOURNAL,				BibliographyDataField::JOURNAL },
+    { XML_MONTH,				BibliographyDataField::MONTH },
+    { XML_NOTE,				    BibliographyDataField::NOTE },
+    { XML_NUMBER,				BibliographyDataField::NUMBER },
+    { XML_ORGANIZATIONS,		BibliographyDataField::ORGANIZATIONS },
+    { XML_PAGES,				BibliographyDataField::PAGES },
+    { XML_PUBLISHER,			BibliographyDataField::PUBLISHER },
+    { XML_REPORT_TYPE,			BibliographyDataField::REPORT_TYPE },
+    { XML_SCHOOL,				BibliographyDataField::SCHOOL },
+    { XML_SERIES,				BibliographyDataField::SERIES },
+    { XML_TITLE,				BibliographyDataField::TITLE },
+    { XML_URL,					BibliographyDataField::URL },
+    { XML_VOLUME,				BibliographyDataField::VOLUME },
+    { XML_YEAR,				    BibliographyDataField::YEAR },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -1241,6 +1241,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
 
     // tab position
     sal_Bool bRightAligned = sal_False;
+    sal_Bool bRightAlignedOK = sal_False;
 
     // tab position
     sal_Int32 nTabPosition = 0;
@@ -1314,6 +1315,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
                 case TOK_TPARAM_TAB_RIGHT_ALIGNED:
                     bRightAligned =
                         *(sal_Bool *)rValues[i].Value.getValue();
+                    bRightAlignedOK = sal_True;
                     break;
 
                 case TOK_TPARAM_TAB_POSITION:
@@ -1374,10 +1376,10 @@ void XMLSectionExport::ExportIndexTemplateElement(
         case TOK_TTYPE_PAGE_NUMBER:
             eElement = XML_INDEX_ENTRY_PAGE_NUMBER;
             break;
-        case TOK_TTYPE_CHAPTER_INFO:    // keyword index
+        case TOK_TTYPE_CHAPTER_INFO:	// keyword index
             eElement = XML_INDEX_ENTRY_CHAPTER;
             break;
-        case TOK_TTYPE_ENTRY_NUMBER:    // table of content
+        case TOK_TTYPE_ENTRY_NUMBER:	// table of content
             eElement = XML_INDEX_ENTRY_CHAPTER;
             break;
         case TOK_TTYPE_HYPERLINK_START:
@@ -1872,7 +1874,7 @@ sal_Bool XMLSectionExport::IsInSection(
                 while (!bRet && xSection.is());
             }
             else
-                bRet = sal_False;   // no section -> can't be inside
+                bRet = sal_False;	// no section -> can't be inside
         }
         // else: no TextSection property -> return default
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@ static char *pt (unsigned char *md, int length)
  * main.
  */
 #ifdef WIN32
-int __cdecl main (void)
+int __cdecl main (int argc, char **argv)
 #else
-int main (void)
+int main (int argc, char **argv)
 #endif
 {
     rtlRandomPool pool;

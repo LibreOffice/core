@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <map>
 
 #include <osl/diagnose.h>
@@ -72,6 +72,7 @@
 
 #define NLOOP 200000000
 
+using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -82,12 +83,8 @@ using namespace com::sun::star::bridge;
 using namespace com::sun::star::container;
 using namespace com::sun::star::test::performance;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
-
-#define SERVICENAME     "com.sun.star.test.performance.PerformanceTest"
-#define IMPLNAME        "com.sun.star.comp.performance.PerformanceTest"
+#define SERVICENAME		"com.sun.star.test.performance.PerformanceTest"
+#define IMPLNAME		"com.sun.star.comp.performance.PerformanceTest"
 
 namespace benchmark_test
 {
@@ -97,18 +94,18 @@ static inline sal_uInt32 getSystemTicks()
 #ifdef SAL_W32
     return (sal_uInt32)GetTickCount();
 #else // only UNX supported for now
-    static sal_uInt32   nImplTicksPerSecond = 0;
-    static double       dImplTicksPerSecond;
-    static double       dImplTicksULONGMAX;
+    static sal_uInt32	nImplTicksPerSecond = 0;
+    static double		dImplTicksPerSecond;
+    static double		dImplTicksULONGMAX;
 
-    struct tms          aTms;
+    struct tms			aTms;
     sal_uInt32 nTicks = (sal_uInt32)times( &aTms );
 
     if ( !nImplTicksPerSecond )
     {
         nImplTicksPerSecond = sysconf(_SC_CLK_TCK);
         dImplTicksPerSecond = nImplTicksPerSecond;
-        dImplTicksULONGMAX  = (double)(sal_uInt32)ULONG_MAX;
+        dImplTicksULONGMAX	= (double)(sal_uInt32)ULONG_MAX;
     }
 
     double fTicks = nTicks;
@@ -371,10 +368,10 @@ static void createInstance( Reference< T > & rxOut,
                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.bridge.UnoUrlResolver") ),
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // java loader
-//                      xSet->insert( makeAny( loadLibComponentFactory(
-//                          OUString( RTL_CONSTASCII_USTRINGPARAM("javaloader") ),
-//                          OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.JavaComponentLoader") ),
-//                          xMgr, Reference< XRegistryKey >() ) ) );
+//  					xSet->insert( makeAny( loadLibComponentFactory(
+//  						OUString( RTL_CONSTASCII_USTRINGPARAM("javaloader") ),
+//  						OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.JavaComponentLoader") ),
+//  						xMgr, Reference< XRegistryKey >() ) ) );
                 }
                 s_bSet = sal_True;
             }
@@ -525,8 +522,8 @@ Reference< XInterface > TestImpl::resolveObject( const OUString & rUnoUrl )
 //==================================================================================================
 class TimeEntry
 {
-    sal_Int64           nLoop;
-    sal_uInt32          nTicks;
+    sal_Int64			nLoop;
+    sal_uInt32			nTicks;
 
 public:
     TimeEntry()
@@ -561,7 +558,7 @@ typedef std::map< std::string, TimeEntry > t_TimeEntryMap;
 //==================================================================================================
 struct TimingSheet
 {
-    t_TimeEntryMap      _entries;
+    t_TimeEntryMap		_entries;
     void insert( const sal_Char * pText, sal_Int64 nLoop, sal_uInt32 nTicks );
 };
 //__________________________________________________________________________________________________
@@ -571,7 +568,7 @@ void TimingSheet::insert( const sal_Char * pText, sal_Int64 nLoop, sal_uInt32 nT
 }
 
 //==================================================================================================
-typedef boost::unordered_map< std::string, TimingSheet > t_TimingSheetMap;
+typedef std::hash_map< std::string, TimingSheet > t_TimingSheetMap;
 
 //--------------------------------------------------------------------------------------------------
 static void benchmark(
@@ -925,12 +922,12 @@ static void benchmark(
     rSheet.insert( "Ad: set struct attribute", nLoop, tEnd - tStart );
 
     // load
-//      i = nLoop;
-//      tStart = getSystemTicks();
-//      while (i--)
-//          xBench->setSequence( aSeq );
-//      tEnd = getSystemTicks();
-//      rSheet.insert( "transfer of exisiting objects", nLoop, tEnd - tStart );
+//  	i = nLoop;
+//  	tStart = getSystemTicks();
+//  	while (i--)
+//  		xBench->setSequence( aSeq );
+//  	tEnd = getSystemTicks();
+//  	rSheet.insert( "transfer of exisiting objects", nLoop, tEnd - tStart );
 
     // exceptions
     i = nLoop;
@@ -1310,7 +1307,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_FAIL( "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;

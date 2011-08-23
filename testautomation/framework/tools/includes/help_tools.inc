@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : gregor.hartmann@oracle.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : Replacements for routines in t_lists.inc adds some
 '*

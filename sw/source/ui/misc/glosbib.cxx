@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,19 +58,17 @@
 
 
 #define PATH_CASE_SENSITIVE 0x01
-#define PATH_READONLY       0x02
+#define PATH_READONLY 		0x02
 
-#define RENAME_TOKEN_DELIM      (sal_Unicode)1
+#define RENAME_TOKEN_DELIM		(sal_Unicode)1
 
 SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
                         const SvStrings* pPathArr,
                         SwGlossaryHdl *pHdl) :
     SvxStandardDialog(pParent, SW_RES(DLG_BIB_BASE)),
-    aBibFT(     this, SW_RES(FT_BIB)),
-    aNameED(    this, SW_RES(ED_NAME)),
-    aPathFT(     this, SW_RES(FT_PATH)),
-    aPathLB(    this, SW_RES(LB_PATH)),
-    aSelectFT(   this, SW_RES(FT_SELECT)),
+
+    aNameED( 	this, SW_RES(ED_NAME)),
+    aPathLB(	this, SW_RES(LB_PATH)),
     aGroupTLB(  this, SW_RES(TLB_GROUPS)),
 
     aOkPB(      this, SW_RES(BT_OK)),
@@ -79,24 +77,27 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     aNewPB(     this, SW_RES(PB_NEW)),
     aDelPB(     this, SW_RES(PB_DELETE)),
     aRenamePB(  this, SW_RES(PB_RENAME)),
+    aBibFT(     this, SW_RES(FT_BIB)),
+    aPathFT(     this, SW_RES(FT_PATH)),
+    aSelectFT(   this, SW_RES(FT_SELECT)),
 
     pRemovedArr(0),
     pInsertedArr(0),
     pRenamedArr(0),
     pGlosHdl(pHdl)
 {
-    sal_uInt16 i;
+    USHORT i;
 
     FreeResource();
 
     long nTabs[] =
-    {   2, // Number of Tabs
+    {	2, // Number of Tabs
         0, 160
     };
 
     aGroupTLB.SetHelpId(HID_GLOS_GROUP_TREE);
     aGroupTLB.SetTabs( &nTabs[0], MAP_APPFONT );
-    aGroupTLB.SetStyle(aGroupTLB.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN|WB_SORT);
+    aGroupTLB.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN|WB_SORT);
     aGroupTLB.SetSelectHdl(LINK(this, SwGlossaryGroupDlg, SelectHdl));
     aGroupTLB.GetModel()->SetSortMode(SortAscending);
     aNewPB.SetClickHdl(LINK(this, SwGlossaryGroupDlg, NewHdl));
@@ -110,7 +111,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         INetURLObject aTempURL(sPath);
         sPath = aTempURL.GetMainURL(INetURLObject::DECODE_WITH_CHARSET );
         aPathLB.InsertEntry(sPath);
-        sal_uLong nCaseReadonly = 0;
+        ULONG nCaseReadonly = 0;
         utl::TempFile aTempFile(&sPath);
         aTempFile.EnableKillingFile();
         if(!aTempFile.IsValid())
@@ -120,9 +121,9 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         aPathLB.SetEntryData(i, (void*)nCaseReadonly);
     }
     aPathLB.SelectEntryPos(0);
-    aPathLB.Enable(sal_True);
+    aPathLB.Enable(TRUE);
 
-    const sal_uInt16 nCount = pHdl->GetGroupCnt();
+    const USHORT nCount = pHdl->GetGroupCnt();
     for(i = 0; i < nCount; ++i)
     {
         String sTitle;
@@ -133,8 +134,9 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         pData->sGroupName = sGroup;
         pData->sGroupTitle = sTitle;
         String sTemp(sTitle);
+        //sGroup.GetToken(0, GLOS_DELIM)
         sTemp += '\t';
-        pData->sPath = aPathLB.GetEntry((sal_uInt16)sGroup.GetToken(1, GLOS_DELIM).ToInt32());
+        pData->sPath = aPathLB.GetEntry((USHORT)sGroup.GetToken(1, GLOS_DELIM).ToInt32());
         sTemp += pData->sPath;
         SvLBoxEntry* pEntry = aGroupTLB.InsertEntry(sTemp);
         pEntry->SetUserData(pData);
@@ -164,7 +166,7 @@ SwGlossaryGroupDlg::~SwGlossaryGroupDlg()
 
 }
 
-void SwGlossaryGroupDlg::Apply()
+void __EXPORT SwGlossaryGroupDlg::Apply()
 {
     if(aNewPB.IsEnabled())
         NewHdl(&aNewPB);
@@ -173,8 +175,8 @@ void SwGlossaryGroupDlg::Apply()
 
     if(pRemovedArr && pRemovedArr->Count())
     {
-        sal_uInt16 nCount = pRemovedArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        USHORT nCount = pRemovedArr->Count();
+        for(USHORT i = 0; i < nCount; ++i)
         {
             const String* pDelEntry = (*pRemovedArr)[i];
             const String sDelGroup = pDelEntry->GetToken(0, '\t');
@@ -205,8 +207,8 @@ void SwGlossaryGroupDlg::Apply()
     //erst umbenennen, falls es schon eins gab
     if(pRenamedArr && pRenamedArr->Count())
     {
-        sal_uInt16 nCount = pRenamedArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        USHORT nCount = pRenamedArr->Count();
+        for(USHORT i = 0; i < nCount; ++i)
         {
             String * pEntry = (*pRenamedArr)[i];
             xub_StrLen nStrSttPos = 0;
@@ -220,8 +222,8 @@ void SwGlossaryGroupDlg::Apply()
     }
     if(pInsertedArr && pInsertedArr->Count())
     {
-        sal_uInt16 nCount = pInsertedArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        USHORT nCount = pInsertedArr->Count();
+        for(USHORT i = 0; i < nCount; ++i)
         {
             String sNewGroup = *(*pInsertedArr)[i];
             String sNewTitle = sNewGroup.GetToken(0, GLOS_DELIM);
@@ -237,15 +239,15 @@ void SwGlossaryGroupDlg::Apply()
 
 IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
 {
-    aNewPB.Enable(sal_False);
+    aNewPB.Enable(FALSE);
     SvLBoxEntry* pFirstEntry = aGroupTLB.FirstSelected();
     if(pFirstEntry)
     {
         GlosBibUserData* pUserData = (GlosBibUserData*)pFirstEntry->GetUserData();
         String sEntry(pUserData->sGroupName);
         String sName(aNameED.GetText());
-        sal_Bool bExists = sal_False;
-        sal_uLong nPos = aGroupTLB.GetEntryPos(sName, 0);
+        BOOL bExists = FALSE;
+        ULONG nPos = aGroupTLB.GetEntryPos(sName, 0);
         if( 0xffffffff > nPos)
         {
             SvLBoxEntry* pEntry = aGroupTLB.GetEntry(nPos);
@@ -263,6 +265,7 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
 IMPL_LINK( SwGlossaryGroupDlg, NewHdl, Button*, EMPTYARG )
 {
     String sGroup(aNameED.GetText());
+//	sGroup.ToLower();
     sGroup += GLOS_DELIM;
     sGroup += String::CreateFromInt32(aPathLB.GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
@@ -270,6 +273,7 @@ IMPL_LINK( SwGlossaryGroupDlg, NewHdl, Button*, EMPTYARG )
         pInsertedArr = new SvStrings;
     pInsertedArr->Insert(new String(sGroup), pInsertedArr->Count());
     String sTemp(aNameED.GetText());
+//	sTemp.ToLower();
     sTemp += '\t';
     sTemp += aPathLB.GetSelectEntry();
     SvLBoxEntry* pEntry = aGroupTLB.InsertEntry(sTemp);
@@ -290,24 +294,24 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     SvLBoxEntry* pEntry = aGroupTLB.FirstSelected();
     if(!pEntry)
     {
-        pButton->Enable(sal_False);
+        pButton->Enable(FALSE);
         return 0;
     }
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
     String sEntry(pUserData->sGroupName);
     // befindet sich der zu loeschende Name schon unter den
     // den neuen - dann weg damit
-    sal_Bool bDelete = sal_True;
+    BOOL bDelete = TRUE;
     if(pInsertedArr && pInsertedArr->Count())
     {
-        sal_uInt16 nCount = pInsertedArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        USHORT nCount = pInsertedArr->Count();
+        for(USHORT i = 0; i < nCount; ++i)
         {
             const String* pTemp = (*pInsertedArr)[i];
             if(*pTemp == sEntry)
             {
                 pInsertedArr->Remove(i);
-                bDelete = sal_False;
+                bDelete = FALSE;
                 break;
             }
 
@@ -318,15 +322,15 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     {
         if(pRenamedArr && pRenamedArr->Count())
         {
-            sal_uInt16 nCount = pRenamedArr->Count();
-            for(sal_uInt16 i = 0; i < nCount; ++i)
+            USHORT nCount = pRenamedArr->Count();
+            for(USHORT i = 0; i < nCount; ++i)
             {
                 const String* pTemp = (*pRenamedArr)[i];
                 String sTemp( pTemp->GetToken(0, RENAME_TOKEN_DELIM ));
                 if(sTemp == sEntry)
                 {
                     pRenamedArr->Remove(i);
-                    bDelete = sal_False;
+                    bDelete = FALSE;
                     break;
                 }
             }
@@ -344,7 +348,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     delete pUserData;
     aGroupTLB.GetModel()->Remove(pEntry);
     if(!aGroupTLB.First())
-        pButton->Enable(sal_False);
+        pButton->Enable(FALSE);
     //the content must be deleted - otherwise the new handler would be called in Apply()
     aNameED.SetText(aEmptyStr);
     return 0;
@@ -366,18 +370,18 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
 
     // befindet sich der umzubenennende Name unter den
     // den neuen - dann austauschen
-    sal_Bool bDone = sal_False;
+    BOOL bDone = FALSE;
     if(pInsertedArr && pInsertedArr->Count())
     {
-        sal_uInt16 nCount = pInsertedArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        USHORT nCount = pInsertedArr->Count();
+        for(USHORT i = 0; i < nCount; ++i)
         {
             const String* pTemp = (*pInsertedArr)[i];
             if(*pTemp == sEntry)
             {
                 pInsertedArr->Remove(i);
                 pInsertedArr->Insert(new String(sNewName), pInsertedArr->Count());
-                bDone = sal_True;
+                bDone = TRUE;
                 break;
             }
         }
@@ -395,6 +399,7 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
     delete (GlosBibUserData*)pEntry->GetUserData();
     aGroupTLB.GetModel()->Remove(pEntry);
     String sTemp(aNameED.GetText());
+//	sTemp.ToLower();
     sTemp += '\t';
     sTemp += aPathLB.GetSelectEntry();
     pEntry = aGroupTLB.InsertEntry(sTemp);
@@ -412,17 +417,18 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
 IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
 {
     String sEntry(aNameED.GetText());
-    sal_Bool bEnableNew = sal_True;
-    sal_Bool bEnableDel = sal_False;
-    sal_uLong nCaseReadonly =
-            (sal_uLong)aPathLB.GetEntryData(aPathLB.GetSelectEntryPos());
-    sal_Bool bDirReadonly = 0 != (nCaseReadonly&PATH_READONLY);
+//	sEntry.ToLower();
+    BOOL bEnableNew = TRUE;
+    BOOL bEnableDel = FALSE;
+    ULONG nCaseReadonly =
+            (ULONG)aPathLB.GetEntryData(aPathLB.GetSelectEntryPos());
+    BOOL bDirReadonly = 0 != (nCaseReadonly&PATH_READONLY);
 
     if(!sEntry.Len() || bDirReadonly)
-        bEnableNew = sal_False;
+        bEnableNew = FALSE;
     else if(sEntry.Len())
     {
-        sal_uLong nPos = 0xffffffff;
+        ULONG nPos = 0xffffffff;
 
 
         nPos = aGroupTLB.GetEntryPos(sEntry, 0);
@@ -430,12 +436,12 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
         if( 0xffffffff == nPos)
         {
             const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-            for(sal_uInt16 i = 0; i < aGroupTLB.GetEntryCount(); i++)
+            for(USHORT i = 0; i < aGroupTLB.GetEntryCount(); i++)
             {
                 String sTemp = aGroupTLB.GetEntryText( i, 0 );
-                nCaseReadonly = (sal_uLong)aPathLB.GetEntryData(
+                nCaseReadonly = (ULONG)aPathLB.GetEntryData(
                     aPathLB.GetEntryPos(aGroupTLB.GetEntryText(i,1)));
-                sal_Bool bCase = 0 != (nCaseReadonly & PATH_CASE_SENSITIVE);
+                BOOL bCase = 0 != (nCaseReadonly & PATH_CASE_SENSITIVE);
 
                 if( !bCase && rSCmp.isEqual( sTemp, sEntry ))
                 {
@@ -446,7 +452,7 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
         }
         if( 0xffffffff > nPos)
         {
-            bEnableNew = sal_False;
+            bEnableNew = FALSE;
             aGroupTLB.Select(aGroupTLB.GetEntry( nPos ));
             aGroupTLB.MakeVisible(aGroupTLB.GetEntry( nPos ));
         }
@@ -456,6 +462,11 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
     {
         GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
         bEnableDel = IsDeleteAllowed(pUserData->sGroupName);
+
+//		String sGroup = aGroupTLB.GetEntryText(pEntry, 0);
+//		sGroup += GLOS_DELIM;
+//		sGroup += String::CreateFromInt32(aPathLB.GetEntryPos(aGroupTLB.GetEntryText(pEntry, 1)));
+//		bEnableDel = IsDeleteAllowed(sGroup);
     }
 
     aDelPB.Enable(bEnableDel);
@@ -464,23 +475,23 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
     return 0;
 }
 
-sal_Bool SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
+BOOL SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
 {
-    sal_Bool bDel = (!pGlosHdl->IsReadOnly(&rGroup));
+    BOOL bDel = (!pGlosHdl->IsReadOnly(&rGroup));
 
     // OM: befindet sich der Name unter den den neuen Bereichsnamen,
     // dann ist er auch loeschbar! Bei noch nicht existenten Bereichsnamen
-    // liefert ReadOnly naemlich sal_True.
+    // liefert ReadOnly naemlich TRUE.
 
     if(pInsertedArr && pInsertedArr->Count())
     {
-        sal_uInt16 nCount = pInsertedArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        USHORT nCount = pInsertedArr->Count();
+        for(USHORT i = 0; i < nCount; ++i)
         {
             const String* pTemp = (*pInsertedArr)[i];
             if(*pTemp == rGroup)
             {
-                bDel = sal_True;
+                bDel = TRUE;
                 break;
             }
         }
@@ -499,7 +510,7 @@ void FEdit::KeyInput( const KeyEvent& rKEvent )
         Edit::KeyInput( rKEvent );
 }
 
-void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
+void 	SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
 {
     Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
     SvLBoxEntry* pEntry = GetEntry( aPos );

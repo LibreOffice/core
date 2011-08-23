@@ -163,12 +163,12 @@ class SelectionView
                 }
 
                 XAccessibleStateSet aChildStateSet = mxContext.getAccessibleStateSet();
-                aChild.setSelected (aChildStateSet!=null
+                aChild.setSelected (aChildStateSet!=null 
                     && aChildStateSet.contains(AccessibleStateType.SELECTED));
 
                 aChild.addActionListener (this);
                 maChildrenSelector.add (aChild);
-
+                
             }
             catch (IndexOutOfBoundsException e)
             {
@@ -186,7 +186,7 @@ class SelectionView
     {
         mxSelection.clearAccessibleSelection();
     }
-
+        
 
     /** Call the function associated with the pressed button.
     */

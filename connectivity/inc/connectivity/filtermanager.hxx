@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,7 @@
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 /** === end UNO includes === **/
-
-#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
 
 #include <vector>
 #include "connectivity/dbtoolsdllapi.hxx"
@@ -113,10 +112,10 @@ namespace dbtools
 
         /** appends one filter component to the statement in our composer
         */
-        void    appendFilterComponent( ::rtl::OUStringBuffer& io_appendTo, const ::rtl::OUString& i_component ) const;
+        void    appendFilterComponent( ::rtl::OUString& /* [inout] */ _rAppendTo, const ::rtl::OUString& _rComponent ) const;
 
         /// checks whether there is only one (or even no) non-empty filter component
-        bool    isThereAtMostOneComponent( ::rtl::OUStringBuffer& o_singleComponent ) const;
+        bool    isThereAtMostOneComponent( ::rtl::OUString& _rOnlyComponent ) const;
 
         /// returns the index of the first filter component which should be considered when building the composed filter
         inline  sal_Int32   getFirstApplicableFilterIndex() const

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@
 
 TYPEINIT1(SdLayerModifyUndoAction, SdUndoAction);
 
-SdLayerModifyUndoAction::SdLayerModifyUndoAction(
+SdLayerModifyUndoAction::SdLayerModifyUndoAction( 
     SdDrawDocument* _pDoc, SdrLayer* pLayer,
     const String& rOldLayerName, const String& rOldLayerTitle, const String& rOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
     const String& rNewLayerName, const String& rNewLayerTitle, const String& rNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable )
-:   SdUndoAction( _pDoc ),
+:	SdUndoAction( _pDoc ),
     mpLayer( pLayer ),
     maOldLayerName( rOldLayerName ),
     maOldLayerTitle( rOldLayerTitle ),
@@ -67,7 +67,7 @@ void SdLayerModifyUndoAction::Undo()
     ::sd::DrawDocShell* mpDocSh = mpDoc->GetDocSh();
     if( mpDocSh )
     {
-        ::sd::DrawViewShell* pDrViewSh =
+        ::sd::DrawViewShell* pDrViewSh = 
               PTR_CAST(::sd::DrawViewShell, mpDocSh->GetViewShell() );
         if( pDrViewSh )
         {
@@ -81,7 +81,7 @@ void SdLayerModifyUndoAction::Redo()
     ::sd::DrawDocShell* mpDocSh = mpDoc->GetDocSh();
     if( mpDocSh )
     {
-        ::sd::DrawViewShell* pDrViewSh =
+        ::sd::DrawViewShell* pDrViewSh = 
               PTR_CAST(::sd::DrawViewShell, mpDocSh->GetViewShell() );
         if( pDrViewSh )
         {

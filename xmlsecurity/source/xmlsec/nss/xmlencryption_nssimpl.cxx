@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ Reference< XXMLEncryptionTemplate >
 SAL_CALL XMLEncryption_NssImpl :: encrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
-) throw( com::sun::star::xml::crypto::XMLEncryptionException,
+) throw( com::sun::star::xml::crypto::XMLEncryptionException, 
          com::sun::star::uno::SecurityException )
 {
     xmlSecKeysMngrPtr pMngr = NULL ;
@@ -99,12 +99,18 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
          throw RuntimeException() ;
     }
 
+#if 0
+    XMLSecurityContext_NssImpl* pSecCtxt = ( XMLSecurityContext_NssImpl* )xSecTunnel->getSomething( XMLSecurityContext_NssImpl::getUnoTunnelId() ) ;
+    if( pSecCtxt == NULL )
+        throw RuntimeException() ;
+#endif
+
     SecurityEnvironment_NssImpl* pSecEnv =
         reinterpret_cast<SecurityEnvironment_NssImpl*>(
             sal::static_int_cast<sal_uIntPtr>(xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ))) ;
     if( pSecEnv == NULL )
         throw RuntimeException() ;
-
+        
     //Get the encryption template
     Reference< XXMLElementWrapper > xTemplate = aTemplate->getTemplate() ;
     if( !xTemplate.is() ) {
@@ -124,7 +130,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
         throw RuntimeException() ;
     }
 
-    // Get the element to be encrypted
+    //MM : Get the element to be encrypted
     Reference< XXMLElementWrapper > xTarget = aTemplate->getTarget() ;
     if( !xTarget.is() ) {
         throw XMLEncryptionException() ;
@@ -144,10 +150,16 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     }
 
     pContent = pTarget->getNativeElement() ;
+    //MM : end
 
     if( pContent == NULL ) {
         throw XMLEncryptionException() ;
     }
+    
+    /* MM : remove the following 2 lines
+    xmlUnlinkNode(pContent);
+    xmlAddNextSibling(pEncryptedData, pContent);
+    */
 
     //remember the position of the element to be signed
     sal_Bool isParentRef = sal_True;
@@ -183,14 +195,40 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
 
     pEncryptedData = pTemplate->getNativeElement() ;
 
-    //Find the element to be encrypted.
+    //Find the element to be encrypted. 
+    /* MM : remove the old method to get the target element
+    //This element is wrapped in the CipherValue sub-element.
+    xmlNodePtr pCipherData = pEncryptedData->children;
+    while (pCipherData != NULL && stricmp((const char *)(pCipherData->name), "CipherData"))
+    {
+        pCipherData = pCipherData->next;
+    }
+
+    if( pCipherData == NULL ) {
+        xmlSecEncCtxDestroy( pEncCtx ) ;
+        throw XMLEncryptionException() ;
+    }
+
+    xmlNodePtr pCipherValue = pCipherData->children;
+    while (pCipherValue != NULL && stricmp((const char *)(pCipherValue->name), "CipherValue"))
+    {
+        pCipherValue = pCipherValue->next;
+    }
+
+    if( pCipherValue == NULL ) {
+        xmlSecEncCtxDestroy( pEncCtx ) ;
+        throw XMLEncryptionException() ;
+    }
+
+    pContent = pCipherValue->children;
+    */
 
     //Encrypt the template
-    if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 )
+    if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 ) 
     {
         xmlSecEncCtxDestroy( pEncCtx ) ;
         pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-
+        
         //throw XMLEncryptionException() ;
         clearErrorRecorder();
         return aTemplate;
@@ -217,7 +255,7 @@ Reference< XXMLEncryptionTemplate >
 SAL_CALL XMLEncryption_NssImpl :: decrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
-) throw( com::sun::star::xml::crypto::XMLEncryptionException ,
+) throw( com::sun::star::xml::crypto::XMLEncryptionException , 
          com::sun::star::uno::SecurityException) {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecEncCtxPtr pEncCtx = NULL ;
@@ -266,32 +304,32 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
     }
 
      setErrorRecorder( );
-
+        
     sal_Int32 nSecurityEnvironment = aSecurityCtx->getSecurityEnvironmentNumber();
     sal_Int32 i;
-
+    
     for (i=0; i<nSecurityEnvironment; ++i)
     {
         Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
-
+        
         //Get Keys Manager
         Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
         if( !aEnvironment.is() ) {
              throw RuntimeException() ;
         }
-
+    
         SecurityEnvironment_NssImpl* pSecEnv =
             reinterpret_cast<SecurityEnvironment_NssImpl*>(
                 sal::static_int_cast<sal_uIntPtr>(
                     xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() )));
         if( pSecEnv == NULL )
             throw RuntimeException() ;
-
+            
         pMngr = pSecEnv->createKeysManager() ; //i39448
         if( !pMngr ) {
             throw RuntimeException() ;
         }
-
+            
         //Create Encryption context
         pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
         if( pEncCtx == NULL )
@@ -310,11 +348,11 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
             //Destroy the encryption context
             xmlSecEncCtxDestroy( pEncCtx ) ;
             pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-
+        
             //get the decrypted element
             XMLElementWrapper_XmlSecImpl * ret = new XMLElementWrapper_XmlSecImpl(isParentRef?
                 (referenceNode->children):(referenceNode->next));
-
+        
             //return ret;
             aTemplate->setTemplate(ret);
             break;
@@ -361,12 +399,12 @@ Sequence< OUString > SAL_CALL XMLEncryption_NssImpl :: getSupportedServiceNames(
 Sequence< OUString > XMLEncryption_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLEncryption")) ;
+    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.XMLEncryption" ) ;
     return seqServiceNames ;
 }
 
 OUString XMLEncryption_NssImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_NssImpl")) ;
+    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_NssImpl" ) ;
 }
 
 //Helper for registry

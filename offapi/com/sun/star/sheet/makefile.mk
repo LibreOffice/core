@@ -66,7 +66,6 @@ IDLFILES=\
     CellsEnumeration.idl\
     ComplexReference.idl\
     ConditionOperator.idl\
-    ConditionOperator2.idl\
     ConsolidationDescriptor.idl\
     DDEItemInfo.idl\
     DDELink.idl\
@@ -199,7 +198,6 @@ IDLFILES=\
     SpreadsheetDocumentSettings.idl\
     SpreadsheetDrawPage.idl\
     SpreadsheetView.idl\
-    SpreadsheetViewObjectsMode.idl\
     SpreadsheetViewPane.idl\
     SpreadsheetViewPanesEnumeration.idl\
     SpreadsheetViewSettings.idl\
@@ -316,7 +314,6 @@ IDLFILES=\
     XSheetCellRangeContainer.idl\
     XSheetCellRanges.idl\
     XSheetCondition.idl\
-    XSheetCondition2.idl\
     XSheetConditionalEntries.idl\
     XSheetConditionalEntry.idl\
     XSheetFilterDescriptor.idl\

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
  */
 
 ByteGrabber::ByteGrabber(uno::Reference  < io::XInputStream > xIstream)
-: xStream(xIstream)
+: xStream(xIstream) 
 , xSeek (xIstream, uno::UNO_QUERY )
 , aSequence ( 4 )
 {
@@ -58,8 +58,8 @@ void ByteGrabber::setInputStream (uno::Reference < io::XInputStream > xNewStream
 }
 
 // XInputStream chained
-sal_Int32 SAL_CALL ByteGrabber::readBytes( uno::Sequence< sal_Int8 >& aData,
-                                        sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL ByteGrabber::readBytes( uno::Sequence< sal_Int8 >& aData, 
+                                        sal_Int32 nBytesToRead ) 
     throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -67,7 +67,7 @@ sal_Int32 SAL_CALL ByteGrabber::readBytes( uno::Sequence< sal_Int8 >& aData,
 }
 
 // XSeekable chained...
-sal_Int64 SAL_CALL ByteGrabber::seek( sal_Int64 location )
+sal_Int64 SAL_CALL ByteGrabber::seek( sal_Int64 location ) 
     throw(lang::IllegalArgumentException, io::IOException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -80,12 +80,12 @@ sal_Int64 SAL_CALL ByteGrabber::seek( sal_Int64 location )
             location = nLen;
         xSeek->seek( location );
         return location;
-    }
+    }		
     else
         throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
-sal_Int64 SAL_CALL ByteGrabber::getPosition(  )
+sal_Int64 SAL_CALL ByteGrabber::getPosition(  ) 
         throw(io::IOException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -123,8 +123,8 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int16& rInt16)
     else
     {
         pSequence = aSequence.getConstArray();
-        rInt16 = static_cast <sal_Int16>
-               ( (pSequence[0] & 0xFF)
+        rInt16 = static_cast <sal_Int16> 
+               ( (pSequence[0] & 0xFF) 
               | (pSequence[1] & 0xFF) << 8);
     }
     return *this;
@@ -139,9 +139,9 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int32& rInt32)
     else
     {
         pSequence = aSequence.getConstArray();
-        rInt32 = static_cast < sal_Int32 >
+        rInt32 = static_cast < sal_Int32 > 
                 ( (pSequence[0] & 0xFF)
-              | ( pSequence[1] & 0xFF ) << 8
+              | ( pSequence[1] & 0xFF ) << 8 
               | ( pSequence[2] & 0xFF ) << 16
               | ( pSequence[3] & 0xFF ) << 24 );
     }
@@ -167,8 +167,8 @@ ByteGrabber& ByteGrabber::operator >> (sal_uInt16& rInt16)
     else
     {
         pSequence = aSequence.getConstArray();
-        rInt16 = static_cast <sal_uInt16>
-               ( (pSequence[0] & 0xFF)
+        rInt16 = static_cast <sal_uInt16> 
+               ( (pSequence[0] & 0xFF) 
               | (pSequence[1] & 0xFF) << 8);
     }
     return *this;
@@ -182,9 +182,9 @@ ByteGrabber& ByteGrabber::operator >> (sal_uInt32& ruInt32)
     else
     {
         pSequence = aSequence.getConstArray();
-        ruInt32 = static_cast < sal_uInt32 >
+        ruInt32 = static_cast < sal_uInt32 > 
                 ( (pSequence[0] & 0xFF)
-              | ( pSequence[1] & 0xFF ) << 8
+              | ( pSequence[1] & 0xFF ) << 8 
               | ( pSequence[2] & 0xFF ) << 16
               | ( pSequence[3] & 0xFF ) << 24 );
     }

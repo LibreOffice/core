@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,56 +28,80 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
+
 #include <helper/titlebarupdate.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
+
 #include <pattern/window.hxx>
+
 #include <threadhelp/writeguard.hxx>
+
 #include <threadhelp/readguard.hxx>
+
 #include <macros/generic.hxx>
+
 #include <services.h>
+
 #include <properties.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
+
 #include <com/sun/star/awt/XWindow.hpp>
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
+
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 #include <com/sun/star/frame/XModuleManager.hpp>
+
 #include <com/sun/star/container/XNameAccess.hpp>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
+
 #include <com/sun/star/beans/NamedValue.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
+
 #include <comphelper/sequenceashashmap.hxx>
+
 #include <unotools/configmgr.hxx>
+
 #include <unotools/bootstrap.hxx>
+
 #include <vcl/window.hxx>
+
 #include <vcl/syswin.hxx>
+
 #include <toolkit/unohlp.hxx>
+
 #include <vcl/svapp.hxx>
+
 #include <vcl/wrkwin.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 
 static const ::sal_Int32 INVALID_ICON_ID = -1;
 static const ::sal_Int32 DEFAULT_ICON_ID =  0;
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
@@ -122,21 +146,21 @@ void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any
                 DECLARE_ASCII("Empty argument list!"),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
-
+                
     lArguments[0] >>= xFrame;
     if (!xFrame.is())
         throw css::lang::IllegalArgumentException(
                 DECLARE_ASCII("No valid frame specified!"),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
-
+                
     // SYNCHRONIZED ->
     WriteGuard aWriteLock(m_aLock);
     // hold the frame as weak reference(!) so it can die everytimes :-)
     m_xFrame = xFrame;
     aWriteLock.unlock();
     // <- SYNCHRONIZED
-
+    
     // start listening
     xFrame->addFrameActionListener(this);
 
@@ -207,30 +231,30 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         rtl::OUString aModuleId = xModuleManager->identify(xFrame);
         rtl::OUString sDesktopName;
 
-        if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) ||
-             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.GlobalDocument")) ||
-             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.WebDocument")) ||
-             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.xforms.XMLFormDocument")) )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer"));
-        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")) )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc"));
-        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationDocument")) )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress"));
-        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DrawingDocument")) )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw"));
-        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.formula.FormulaProperties")) )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math"));
-        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DatabaseDocument")) ||
-                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")) ||
-                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.RelationDesign")) ||
-                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.QueryDesign")) ||
-                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.TableDesign")) ||
-                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DataSourceBrowser")) )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("base"));
-        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.StartModule")) )
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
+        if ( aModuleId.equalsAscii( "com.sun.star.text.TextDocument" ) ||
+             aModuleId.equalsAscii( "com.sun.star.text.GlobalDocument" ) ||
+             aModuleId.equalsAscii( "com.sun.star.text.WebDocument" ) ||
+             aModuleId.equalsAscii( "com.sun.star.xforms.XMLFormDocument" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("writer");
+        else if ( aModuleId.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("calc");
+        else if ( aModuleId.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("impress");
+        else if ( aModuleId.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("draw");
+        else if ( aModuleId.equalsAscii( "com.sun.star.formula.FormulaProperties" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("math");
+        else if ( aModuleId.equalsAscii( "com.sun.star.sdb.DatabaseDocument" ) ||
+                  aModuleId.equalsAscii( "com.sun.star.sdb.OfficeDatabaseDocument" ) ||
+                  aModuleId.equalsAscii( "com.sun.star.sdb.RelationDesign" ) ||
+                  aModuleId.equalsAscii( "com.sun.star.sdb.QueryDesign" ) ||
+                  aModuleId.equalsAscii( "com.sun.star.sdb.TableDesign" ) ||
+                  aModuleId.equalsAscii( "com.sun.star.sdb.DataSourceBrowser" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("base");
+        else if ( aModuleId.equalsAscii( "com.sun.star.frame.StartModule" ) )
+            sDesktopName = ::rtl::OUString::createFromAscii("startcenter");
         else
-            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
+            sDesktopName = ::rtl::OUString::createFromAscii("startcenter");
         sApplicationID = aProductName.toAsciiLowerCase();
         sApplicationID += ::rtl::OUString(sal_Unicode('-'));
         sApplicationID += sDesktopName;
@@ -249,6 +273,9 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
        )
     {
         WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
+#ifdef COPY_TO_TITLE_FOR_DEBUG
+        pWorkWindow->SetText( sApplicationID );
+#endif
         pWorkWindow->SetApplicationID( sApplicationID );
     }
     // <- VCL SYNCHRONIZED
@@ -267,23 +294,23 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SYNCHRONIZED
-
+    
     try
     {
         css::uno::Reference< css::frame::XModuleManager > xModuleManager(
             xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
             css::uno::UNO_QUERY_THROW);
-
+    
         css::uno::Reference< css::container::XNameAccess > xConfig(
             xModuleManager,
             css::uno::UNO_QUERY_THROW);
-
+    
                                         rInfo.sID = xModuleManager->identify(xFrame);
         ::comphelper::SequenceAsHashMap lProps    = xConfig->getByName (rInfo.sID);
-
+        
         rInfo.sUIName = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_UINAME, ::rtl::OUString());
         rInfo.nIcon   = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_ICON  , INVALID_ICON_ID  );
-
+    
         // Note: If we could retrieve a module id ... everything is OK.
         // UIName and Icon ID are optional values !
         ::sal_Bool bSuccess = (rInfo.sID.getLength () > 0);
@@ -291,7 +318,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     }
     catch(const css::uno::Exception&)
         {}
-
+    
     return sal_False;
 }
 
@@ -308,7 +335,7 @@ void TitleBarUpdate::impl_forceUpdate()
     // frame already gone ? We hold it weak only ...
     if ( ! xFrame.is())
         return;
-
+    
     // no window -> no chance to set/update title and icon
     css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow();
     if ( ! xWindow.is())
@@ -332,7 +359,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
         ( ! xWindow.is()     )
        )
         return;
-
+    
     // a) set default value to an invalid one. So we can start further searches for right icon id, if
     //    first steps failed!
     sal_Int32 nIcon = INVALID_ICON_ID;

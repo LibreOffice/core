@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,6 +50,11 @@
 #include "misc.hrc"
 #include "helpid.h"
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
 SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     SfxModalDialog(pParent, SW_RES(DLG_INSERT_RULER)),
     aSelectionFL(this, SW_RES(FL_SEL     )),
@@ -76,7 +81,7 @@ SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     pExampleVS->InsertItem( 1, 1);
     pExampleVS->SetItemText( 1, sSimple);
 
-    for(sal_uInt16 i = 1; i <= aGrfNames.Count(); i++)
+    for(USHORT i = 1; i <= aGrfNames.Count(); i++)
     {
         pExampleVS->InsertItem( i + 1, i);
         pExampleVS->SetItemText( i + 1, *((String*)aGrfNames.GetObject(i-1)));
@@ -84,6 +89,9 @@ SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     pExampleVS->Show();
 
 }
+/*-----------------14.02.97 13.18-------------------
+
+--------------------------------------------------*/
 
 SwInsertGrfRulerDlg::~SwInsertGrfRulerDlg()
 {
@@ -91,16 +99,24 @@ SwInsertGrfRulerDlg::~SwInsertGrfRulerDlg()
     delete pExampleVS;
 }
 
+/*-----------------14.02.97 13.17-------------------
+
+--------------------------------------------------*/
+
 String SwInsertGrfRulerDlg::GetGraphicName()
 {
     String sRet;
-    sal_uInt16 nSel = nSelPos - 2; //align selection position with ValueSet index
+    USHORT nSel = nSelPos - 2; //align selection position with ValueSet index
     if(nSel < aGrfNames.Count())
         sRet = URIHelper::SmartRel2Abs(
             INetURLObject(), *(String*) aGrfNames.GetObject(nSel),
             URIHelper::GetMaybeFileHdl());
     return sRet;
 }
+
+/*-----------------14.02.97 13.20-------------------
+
+--------------------------------------------------*/
 
 IMPL_LINK(SwInsertGrfRulerDlg, SelectHdl, ValueSet*, pVS)
 {
@@ -109,21 +125,28 @@ IMPL_LINK(SwInsertGrfRulerDlg, SelectHdl, ValueSet*, pVS)
     return 0;
 }
 
+/*-----------------14.02.97 14.17-------------------
+
+--------------------------------------------------*/
 SwRulerValueSet::SwRulerValueSet(   Window* pParent, const ResId& rResId ) :
     SvxBmpNumValueSet(pParent, rResId)
 {
     SetStyle(  GetStyle() & ~WB_ITEMBORDER     );
 }
+/*-----------------14.02.97 14.17-------------------
 
+--------------------------------------------------*/
 SwRulerValueSet::~SwRulerValueSet()
 {
 }
+/*-----------------14.02.97 13.42-------------------
 
-void SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
+--------------------------------------------------*/
+void __EXPORT SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     Rectangle aRect = rUDEvt.GetRect();
     OutputDevice*  pDev = rUDEvt.GetDevice();
-    sal_uInt16  nItemId = rUDEvt.GetItemId();
+    USHORT	nItemId = rUDEvt.GetItemId();
     Point aBLPos = aRect.TopLeft();
 
     // Itemzaehlung beginnt bei 1, und die 1. ist die einfache Linie
@@ -165,7 +188,7 @@ void SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         }
         else
         {
-            SetGrfNotFound(sal_True);
+            SetGrfNotFound(TRUE);
         }
     }
     else
@@ -189,6 +212,10 @@ void SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         pDev->SetFont(aOldFont);
     }
 }
+
+/*-----------------15.02.97 10.03-------------------
+
+--------------------------------------------------*/
 
 IMPL_LINK(SwInsertGrfRulerDlg, DoubleClickHdl, ValueSet*, EMPTYARG)
 {

@@ -3,7 +3,6 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
  * Copyright 2010 Miklos Vajna.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +68,7 @@ public:
     /// Export the sdr object as Sdr.
     ///
     /// Call this when you need to export the object as Sdr in RTF.
-    sal_uInt32 AddSdrObject( const SdrObject& rObj );
+    UINT32 AddSdrObject( const SdrObject& rObj );
 
 protected:
     /// Add an attribute to the generated shape element.
@@ -94,14 +93,14 @@ protected:
 
 private:
 
-    virtual void OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance = 0 );
+    virtual void OpenContainer( UINT16 nEscherContainer, int nRecInstance = 0 );
     virtual void CloseContainer();
 
     using EscherEx::EnterGroup;
-    virtual sal_uInt32 EnterGroup( const String& rShapeName, const Rectangle* pBoundRect = 0 );
+    virtual UINT32 EnterGroup( const String& rShapeName, const Rectangle* pBoundRect = 0 );
     virtual void LeaveGroup();
 
-    virtual void AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0 );
+    virtual void AddShape( UINT32 nShapeType, UINT32 nShapeFlags, UINT32 nShapeId = 0 );
 
 private:
     /// Add starting and ending point of a line to the m_pShapeAttrList.

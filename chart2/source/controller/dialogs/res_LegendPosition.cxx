@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,13 @@
 
 #include <svtools/controldims.hrc>
 #include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart/ChartLegendExpansion.hpp>
+#include <com/sun/star/chart2/LegendExpansion.hpp>
 
 //itemset stuff
 #include "chartview/ChartSfxItemIds.hxx"
-#include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
+#include <svx/chrtitem.hxx>
+// header for class SfxItemPool
+#include <svl/itempool.hxx>
 
 //.............................................................................
 namespace chart
@@ -59,8 +60,8 @@ LegendPositionResources::LegendPositionResources( Window* pWindow )
     : m_xCC() //unused in this scenario
     , m_aCbxShow( pWindow ) //unused in this scenario
     , m_aRbtLeft( pWindow, SchResId(RBT_LEFT) )
-    , m_aRbtRight( pWindow, SchResId(RBT_RIGHT) )
     , m_aRbtTop( pWindow, SchResId(RBT_TOP) )
+    , m_aRbtRight( pWindow, SchResId(RBT_RIGHT) )
     , m_aRbtBottom( pWindow, SchResId(RBT_BOTTOM) )
 {
     m_aCbxShow.Check();//legend is assumed to be visible in this scenario
@@ -71,17 +72,12 @@ LegendPositionResources::LegendPositionResources( Window* pWindow, const uno::Re
     : m_xCC( xCC )
     , m_aCbxShow( pWindow, SchResId(CBX_SHOWLEGEND) )
     , m_aRbtLeft( pWindow, SchResId(RBT_LEFT) )
-    , m_aRbtRight( pWindow, SchResId(RBT_RIGHT) )
     , m_aRbtTop( pWindow, SchResId(RBT_TOP) )
+    , m_aRbtRight( pWindow, SchResId(RBT_RIGHT) )
     , m_aRbtBottom( pWindow, SchResId(RBT_BOTTOM) )
 {
     m_aCbxShow.SetToggleHdl( LINK( this, LegendPositionResources, PositionEnableHdl ) );
     impl_setRadioButtonToggleHdl();
-    m_aCbxShow.SetAccessibleRelationMemberOf(&m_aCbxShow);
-    m_aRbtLeft.SetAccessibleRelationMemberOf(&m_aCbxShow);
-    m_aRbtRight.SetAccessibleRelationMemberOf(&m_aCbxShow);
-    m_aRbtTop.SetAccessibleRelationMemberOf(&m_aCbxShow);
-    m_aRbtBottom.SetAccessibleRelationMemberOf(&m_aCbxShow);
 }
 
 void LegendPositionResources::impl_setRadioButtonToggleHdl()
@@ -89,7 +85,7 @@ void LegendPositionResources::impl_setRadioButtonToggleHdl()
     m_aRbtLeft.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
     m_aRbtTop.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
     m_aRbtRight.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
-    m_aRbtBottom.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
+    m_aRbtBottom.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );    
 }
 
 LegendPositionResources::~LegendPositionResources()
@@ -154,23 +150,23 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
 
             //position
             chart2::LegendPosition eNewPos;
-            ::com::sun::star::chart::ChartLegendExpansion eExp = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
+            chart2::LegendExpansion eExp = chart2::LegendExpansion_HIGH;
 
             if( m_aRbtLeft.IsChecked() )
                 eNewPos = chart2::LegendPosition_LINE_START;
             else if( m_aRbtRight.IsChecked() )
-            {
+            {            
                 eNewPos = chart2::LegendPosition_LINE_END;
             }
             else if( m_aRbtTop.IsChecked() )
             {
                 eNewPos = chart2::LegendPosition_PAGE_START;
-                eExp = ::com::sun::star::chart::ChartLegendExpansion_WIDE;
+                eExp = chart2::LegendExpansion_WIDE;
             }
             else if( m_aRbtBottom.IsChecked() )
             {
                 eNewPos = chart2::LegendPosition_PAGE_END;
-                eExp = ::com::sun::star::chart::ChartLegendExpansion_WIDE;
+                eExp = chart2::LegendExpansion_WIDE;
             }
 
             xProp->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( eNewPos ));
@@ -186,7 +182,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
 
 IMPL_LINK( LegendPositionResources, PositionEnableHdl, void*, EMPTYARG )
 {
-    sal_Bool bEnable = m_aCbxShow.IsChecked();
+    BOOL bEnable = m_aCbxShow.IsChecked();
 
     m_aRbtLeft.Enable( bEnable );
     m_aRbtTop.Enable( bEnable );
@@ -200,50 +196,51 @@ IMPL_LINK( LegendPositionResources, PositionEnableHdl, void*, EMPTYARG )
 
 void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
 {
-    const SfxPoolItem* pPoolItem = NULL;
-    if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, sal_True, &pPoolItem ) == SFX_ITEM_SET )
-    {
-        sal_Int32 nLegendPosition = ((const SfxInt32Item*)pPoolItem)->GetValue();
-        switch( nLegendPosition )
-        {
-            case chart2::LegendPosition_LINE_START:
-                m_aRbtLeft.Check(sal_True);
-                break;
-            case chart2::LegendPosition_PAGE_START:
-                m_aRbtTop.Check(sal_True);
-                break;
-            case chart2::LegendPosition_LINE_END:
-                m_aRbtRight.Check(sal_True);
-                break;
-            case chart2::LegendPosition_PAGE_END:
-                m_aRbtBottom.Check(sal_True);
-                break;
-            default:
-                break;
-        }
-    }
+    SvxChartLegendPos ePos = CHLEGEND_NONE;
 
-    if( rInAttrs.GetItemState( SCHATTR_LEGEND_SHOW, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    const SfxPoolItem* pPoolItem = NULL;
+    if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS,
+                               TRUE, &pPoolItem ) != SFX_ITEM_SET )
+        pPoolItem = &(rInAttrs.GetPool()->GetDefaultItem( SCHATTR_LEGEND_POS ));
+
+    if( pPoolItem )
+        ePos = ((const SvxChartLegendPosItem*)pPoolItem)->GetValue();
+
+    switch( ePos )
     {
-        bool bShow = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-        m_aCbxShow.Check(bShow);
+        case CHLEGEND_LEFT:
+            m_aRbtLeft.Check(TRUE);
+            break;
+        case CHLEGEND_TOP:
+            m_aRbtTop.Check(TRUE);
+            break;
+        case CHLEGEND_RIGHT:
+            m_aRbtRight.Check(TRUE);
+            break;
+        case CHLEGEND_BOTTOM:
+            m_aRbtBottom.Check(TRUE);
+            break;
+        default:
+            break;
     }
 }
 
 void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
 {
-    sal_Int32 nLegendPosition = chart2::LegendPosition_CUSTOM;
-    if( m_aRbtLeft.IsChecked() )
-        nLegendPosition = chart2::LegendPosition_LINE_START;
-    else if( m_aRbtTop.IsChecked() )
-        nLegendPosition = chart2::LegendPosition_PAGE_START;
-    else if( m_aRbtRight.IsChecked() )
-        nLegendPosition = chart2::LegendPosition_LINE_END;
-    else if( m_aRbtBottom.IsChecked() )
-        nLegendPosition = chart2::LegendPosition_PAGE_END;
-    rOutAttrs.Put(SfxInt32Item(SCHATTR_LEGEND_POS, nLegendPosition ));
+    SvxChartLegendPos ePos;
 
-    rOutAttrs.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, m_aCbxShow.IsChecked()) );
+    if( m_aRbtLeft.IsChecked() )
+        ePos = CHLEGEND_LEFT;
+    else if( m_aRbtTop.IsChecked() )
+        ePos = CHLEGEND_TOP;
+    else if( m_aRbtRight.IsChecked() )
+        ePos = CHLEGEND_RIGHT;
+    else if( m_aRbtBottom.IsChecked() )
+        ePos = CHLEGEND_BOTTOM;
+    else
+        ePos = CHLEGEND_NONE;
+
+    rOutAttrs.Put(SvxChartLegendPosItem( ePos, SCHATTR_LEGEND_POS ));
 }
 
 IMPL_LINK( LegendPositionResources, PositionChangeHdl, RadioButton*, pRadio )
@@ -259,14 +256,6 @@ IMPL_LINK( LegendPositionResources, PositionChangeHdl, RadioButton*, pRadio )
 void LegendPositionResources::SetChangeHdl( const Link& rLink )
 {
     m_aChangeLink = rLink;
-}
-
-void LegendPositionResources::SetAccessibleRelationMemberOf(Window* pMemberOf)
-{
-    m_aRbtLeft.SetAccessibleRelationMemberOf(pMemberOf);
-    m_aRbtRight.SetAccessibleRelationMemberOf(pMemberOf);
-    m_aRbtTop.SetAccessibleRelationMemberOf(pMemberOf);
-    m_aRbtBottom.SetAccessibleRelationMemberOf(pMemberOf);
 }
 
 //.............................................................................

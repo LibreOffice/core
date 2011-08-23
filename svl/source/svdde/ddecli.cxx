@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
     if( self )
     {
         DdeTransaction* t;
-        sal_Bool bFound = sal_False;
+        BOOL bFound = FALSE;
         for( t = self->aTransactions.First(); t; t = self->aTransactions.Next() )
         {
             switch( nCode )
@@ -96,9 +96,9 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
                     if( (DWORD)t->nId == nInfo1 )
                     {
                         nCode = t->nType & (XCLASS_MASK | XTYP_MASK);
-                        t->bBusy = sal_False;
+                        t->bBusy = FALSE;
                         t->Done( 0 != hData );
-                        bFound = sal_True;
+                        bFound = TRUE;
                     }
                     break;
 
@@ -109,11 +109,11 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
                                     : DdeGetLastError( pInst->hDdeInstCli );
                     t = 0;
                     nRet = 0;
-                    bFound = sal_True;
+                    bFound = TRUE;
                     break;
 
                 case XTYP_ADVDATA:
-                    bFound = sal_Bool( *t->pName == hText2 );
+                    bFound = BOOL( *t->pName == hText2 );
                     break;
             }
             if( bFound )
@@ -223,7 +223,7 @@ DdeConnection::~DdeConnection()
 
 // --- DdeConnection::IsConnected() --------------------------------
 
-sal_Bool DdeConnection::IsConnected()
+BOOL DdeConnection::IsConnected()
 {
     CONVINFO c;
 #ifdef OS2
@@ -232,13 +232,13 @@ sal_Bool DdeConnection::IsConnected()
     c.cb = sizeof( c );
 #endif
     if ( DdeQueryConvInfo( pImp->hConv, QID_SYNC, &c ) )
-        return sal_True;
+        return TRUE;
     else
     {
         DdeInstData* pInst = ImpGetInstData();
         pImp->hConv = DdeReconnect( pImp->hConv );
         pImp->nStatus = pImp->hConv ? DMLERR_NO_ERROR : DdeGetLastError( pInst->hDdeInstCli );
-        return sal_Bool( pImp->nStatus == DMLERR_NO_ERROR );
+        return BOOL( pImp->nStatus == DMLERR_NO_ERROR );
     }
 }
 
@@ -281,7 +281,7 @@ DdeTransaction::DdeTransaction( DdeConnection& d, const String& rItemName,
     nTime = n;
     nId   = 0;
     nType = 0;
-    bBusy = sal_False;
+    bBusy = FALSE;
 
     rDde.aTransactions.Insert( this );
 }
@@ -307,7 +307,7 @@ void DdeTransaction::Execute()
     HSZ     hItem = *pName;
     void*   pData = (void*)(const void *)aDdeData;
     DWORD   nData = (DWORD)(long)aDdeData;
-    sal_uLong   nIntFmt = aDdeData.pImp->nFmt;
+    ULONG  	nIntFmt = aDdeData.pImp->nFmt;
     UINT    nExtFmt  = DdeData::GetExternalFormat( nIntFmt );
     DdeInstData* pInst = ImpGetInstData();
 
@@ -343,7 +343,7 @@ void DdeTransaction::Execute()
         if ( nId && rDde.pImp->hConv )
             DdeAbandonTransaction( pInst->hDdeInstCli, rDde.pImp->hConv, nId);
         nId = 0;
-        bBusy = sal_True;
+        bBusy = TRUE;
         HDDEDATA hRet = DdeClientTransaction( (unsigned char*)pData, nData,
                                             rDde.pImp->hConv, hItem, nExtFmt,
                                             (UINT)nType, TIMEOUT_ASYNC,
@@ -363,7 +363,7 @@ const String& DdeTransaction::GetName() const
 // --- DdeTransaction::Data() --------------------------------------
 
 
-void DdeTransaction::Data( const DdeData* p )
+void __EXPORT DdeTransaction::Data( const DdeData* p )
 {
     if ( ::tools::SolarMutex::Acquire() )
     {
@@ -374,7 +374,7 @@ void DdeTransaction::Data( const DdeData* p )
 
 // --- DdeTransaction::Done() --------------------------------------
 
-void DdeTransaction::Done( sal_Bool bDataValid )
+void __EXPORT DdeTransaction::Done( BOOL bDataValid )
 {
     aDone.Call( (void*)bDataValid );
 }
@@ -390,13 +390,13 @@ DdeLink::DdeLink( DdeConnection& d, const String& aItemName, long n ) :
 
 DdeLink::~DdeLink()
 {
-    nType = (sal_uInt16)XTYP_ADVSTOP;
+    nType = (USHORT)XTYP_ADVSTOP;
     nTime = 0;
 }
 
 // --- DdeLink::Notify() -----------------------------------------
 
-void DdeLink::Notify()
+void __EXPORT DdeLink::Notify()
 {
     aNotify.Call( NULL );
 }
@@ -428,7 +428,7 @@ DdeHotLink::DdeHotLink( DdeConnection& d, const String& i, long n ) :
 // --- DdePoke::DdePoke() ------------------------------------------
 
 DdePoke::DdePoke( DdeConnection& d, const String& i, const char* p,
-                  long l, sal_uLong f, long n ) :
+                  long l, ULONG f, long n ) :
             DdeTransaction( d, i, n )
 {
     aDdeData = DdeData( p, l, f );
@@ -441,7 +441,7 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const String& rData,
                   long n ) :
             DdeTransaction( d, i, n )
 {
-//  ByteString aByteStr( rData, osl_getThreadTextEncoding() );
+//	ByteString aByteStr( rData, osl_getThreadTextEncoding() );
     aDdeData = DdeData( (void*) rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len()), CF_TEXT );
     nType = XTYP_POKE;
 }
@@ -461,7 +461,7 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const DdeData& rData,
 DdeExecute::DdeExecute( DdeConnection& d, const String& rData, long n ) :
                 DdeTransaction( d, String(), n )
 {
-//  ByteString aByteStr( rData, osl_getThreadTextEncoding() );
+//	ByteString aByteStr( rData, osl_getThreadTextEncoding() );
     aDdeData = DdeData( (void*)rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len() + 1), CF_TEXT );
     nType = XTYP_EXECUTE;
 }

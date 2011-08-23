@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 
 namespace sd {
 
-#define TABCONTROL_INITIAL_SIZE     500
+#define TABCONTROL_INITIAL_SIZE 	500
 
 /*************************************************************************
 |*
@@ -64,9 +64,9 @@ namespace sd {
 |*
 \************************************************************************/
 
-sal_Bool DrawViewShell::GotoBookmark(const String& rBookmark)
+BOOL DrawViewShell::GotoBookmark(const String& rBookmark)
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     ::sd::DrawDocShell* pDocSh = GetDocSh();
     if( pDocSh )
     {
@@ -85,7 +85,7 @@ sal_Bool DrawViewShell::GotoBookmark(const String& rBookmark)
 
 void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 {
-    // In older versions, if in X or Y the size of the object was
+    // #98568# In older versions, if in X or Y the size of the object was
     // smaller than the visible area, the user-defined zoom was
     // changed. This was decided to be a bug for 6.x, thus I developed a
     // version which instead handles X/Y bigger/smaller and visibility
@@ -117,7 +117,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
         }
         else
         {
-            // allow a mode for move-only visibility without zooming.
+            // #98568# allow a mode for move-only visibility without zooming.
             const sal_Int32 nPercentBorder(30);
             const Rectangle aInnerRectangle(
                 aVisArea.Left() + ((aVisAreaSize.Width() * nPercentBorder) / 200),
@@ -148,7 +148,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 
                 while(rRect.Right() > aNewPos.X() + aVisAreaSize.Width())
                     aNewPos.X() += nFreeSpaceX;
-
+                
                 while(rRect.Left() < aNewPos.X())
                     aNewPos.X() -= nFreeSpaceX;
             }
@@ -174,7 +174,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 
                 while(rRect.Bottom() > aNewPos.Y() + aVisAreaSize.Height())
                     aNewPos.Y() += nFreeSpaceY;
-
+                
                 while(rRect.Top() < aNewPos.Y())
                     aNewPos.Y() -= nFreeSpaceY;
             }

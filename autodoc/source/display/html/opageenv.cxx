@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -357,7 +357,7 @@ OuputPage_Environment::SetFile_AllDefs()
 void
 OuputPage_Environment::SetFile_Index( char i_cLetter )
 {
-    csv_assert( ( 'A' <= i_cLetter AND i_cLetter <= 'Z' ) OR i_cLetter == '_' );
+    csv_assert( 'A' <= i_cLetter AND i_cLetter <= 'Z' OR i_cLetter == '_' );
 
     static StreamStr sIndexFileName(40);
     sIndexFileName.seekp(0);

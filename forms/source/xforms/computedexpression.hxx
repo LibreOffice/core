@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 // forward declaractions
 namespace com { namespace sun { namespace star
-{
+{ 
     namespace xml
     {
         namespace dom { class XNode; }
@@ -128,7 +128,7 @@ public:
     // get the result of this expression as string/bool/...
     // (Results will be based on the last call of evaluate(..). The caller
     // must call evaluate to ensure current results.)
-    com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathObject> getXPath() const;
+    com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathObject> getXPath();
     bool getBool( bool bDefault = false ) const;
     rtl::OUString getString( const rtl::OUString& rDefault = rtl::OUString() ) const;
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,10 @@
 
 #undef SC_DLLIMPLEMENTATION
 
+
+
 //------------------------------------------------------------------
+
 #include <vcl/msgbox.hxx>
 
 #include "global.hxx"
@@ -53,10 +56,10 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-#define CR  (sal_Unicode)13
-#define LF  (sal_Unicode)10
+#define CR	(sal_Unicode)13
+#define LF	(sal_Unicode)10
 
-static sal_uInt16 pUserListsRanges[] =
+static USHORT pUserListsRanges[] =
 {
     SID_SCUSERLISTS,
     SID_SCUSERLISTS,
@@ -70,39 +73,40 @@ static const sal_Unicode cDelimiter = ',';
 // Benutzerdefinierte Listen:
 
 
-ScTpUserLists::ScTpUserLists( Window*               pParent,
-                              const SfxItemSet&     rCoreAttrs )
+ScTpUserLists::ScTpUserLists( Window*				pParent,
+                              const SfxItemSet& 	rCoreAttrs )
 
-    :   SfxTabPage      ( pParent,
+    :	SfxTabPage		( pParent,
                           ScResId( RID_SCPAGE_USERLISTS ),
                           rCoreAttrs ),
-        aFtLists        ( this, ScResId( FT_LISTS ) ),
-        aLbLists        ( this, ScResId( LB_LISTS ) ),
-        aFtEntries      ( this, ScResId( FT_ENTRIES ) ),
-        aEdEntries      ( this, ScResId( ED_ENTRIES ) ),
-        aFtCopyFrom     ( this, ScResId( FT_COPYFROM ) ),
-        aEdCopyFrom     ( this, ScResId( ED_COPYFROM ) ),
-        aBtnNew         ( this, ScResId( BTN_NEW ) ),
-        aBtnAdd         ( this, ScResId( BTN_ADD ) ),
-        aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
-        aBtnCopy        ( this, ScResId( BTN_COPY ) ),
+        aFtLists		( this, ScResId( FT_LISTS ) ),
+        aLbLists		( this, ScResId( LB_LISTS ) ),
+        aFtEntries		( this, ScResId( FT_ENTRIES ) ),
+        aEdEntries		( this, ScResId( ED_ENTRIES ) ),
+        aFtCopyFrom 	( this, ScResId( FT_COPYFROM ) ),
+        aEdCopyFrom 	( this, ScResId( ED_COPYFROM ) ),
+        aBtnNew 		( this, ScResId( BTN_NEW ) ),
+        aBtnAdd 		( this, ScResId( BTN_ADD ) ),
+        aBtnRemove		( this, ScResId( BTN_REMOVE ) ),
+        aBtnCopy		( this, ScResId( BTN_COPY ) ),
         aStrQueryRemove ( ScResId( STR_QUERYREMOVE ) ),
-        aStrNew         ( aBtnNew.GetText() ),
-        aStrCancel      ( ScResId( STR_DISMISS ) ),
-        aStrAdd         ( ScResId( SCSTR_ADD ) ),
-        aStrModify      ( ScResId( SCSTR_MODIFY ) ),
-        aStrCopyList    ( ScResId( STR_COPYLIST ) ),
-        aStrCopyFrom    ( ScResId( STR_COPYFROM ) ),
-        aStrCopyErr     ( ScResId( STR_COPYERR ) ),
+        aStrNew 		( aBtnNew.GetText() ),
+        aStrCancel		( ScResId( STR_DISMISS ) ),
+        aStrAdd 		( ScResId( SCSTR_ADD ) ),
+        aStrModify		( ScResId( SCSTR_MODIFY ) ),
+        aStrCopyList	( ScResId( STR_COPYLIST ) ),
+        aStrCopyFrom	( ScResId( STR_COPYFROM ) ),
+        aStrCopyErr		( ScResId( STR_COPYERR ) ),
+        //
         nWhichUserLists ( GetWhich( SID_SCUSERLISTS ) ),
-        pUserLists      ( NULL ),
-        pDoc            ( NULL ),
-        pViewData       ( NULL ),
-        pRangeUtil      ( new ScRangeUtil ),
-        bModifyMode     ( false ),
-        bCancelMode     ( false ),
-        bCopyDone       ( false ),
-        nCancelPos      ( 0 )
+        pUserLists		( NULL ),
+        pDoc			( NULL ),
+        pViewData		( NULL ),
+        pRangeUtil		( new ScRangeUtil ),
+        bModifyMode 	( FALSE ),
+        bCancelMode 	( FALSE ),
+        bCopyDone		( FALSE ),
+        nCancelPos		( 0 )
 {
     SetExchangeSupport();
     Init();
@@ -111,7 +115,7 @@ ScTpUserLists::ScTpUserLists( Window*               pParent,
 
 // -----------------------------------------------------------------------
 
-ScTpUserLists::~ScTpUserLists()
+__EXPORT ScTpUserLists::~ScTpUserLists()
 {
     delete pUserLists;
     delete pRangeUtil;
@@ -121,31 +125,31 @@ ScTpUserLists::~ScTpUserLists()
 
 void ScTpUserLists::Init()
 {
-    SfxViewShell*   pSh = SfxViewShell::Current();
+    SfxViewShell*	pSh = SfxViewShell::Current();
     ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, pSh);
 
-    aLbLists.SetSelectHdl   ( LINK( this, ScTpUserLists, LbSelectHdl ) );
-    aBtnNew.SetClickHdl     ( LINK( this, ScTpUserLists, BtnClickHdl ) );
-    aBtnNew.SetClickHdl     ( LINK( this, ScTpUserLists, BtnClickHdl ) );
-    aBtnAdd.SetClickHdl     ( LINK( this, ScTpUserLists, BtnClickHdl ) );
-    aBtnRemove.SetClickHdl  ( LINK( this, ScTpUserLists, BtnClickHdl ) );
-    aEdEntries.SetModifyHdl ( LINK( this, ScTpUserLists, EdEntriesModHdl ) );
+    aLbLists.SetSelectHdl	( LINK( this, ScTpUserLists, LbSelectHdl ) );
+    aBtnNew.SetClickHdl		( LINK( this, ScTpUserLists, BtnClickHdl ) );
+    aBtnNew.SetClickHdl		( LINK( this, ScTpUserLists, BtnClickHdl ) );
+    aBtnAdd.SetClickHdl		( LINK( this, ScTpUserLists, BtnClickHdl ) );
+    aBtnRemove.SetClickHdl	( LINK( this, ScTpUserLists, BtnClickHdl ) );
+    aEdEntries.SetModifyHdl	( LINK( this, ScTpUserLists, EdEntriesModHdl ) );
 
 
     if ( pViewSh )
     {
-        SCTAB   nStartTab   = 0;
-        SCTAB   nEndTab     = 0;
-        SCCOL   nStartCol   = 0;
-        SCROW   nStartRow   = 0;
-        SCCOL   nEndCol     = 0;
-        SCROW   nEndRow     = 0;
+        SCTAB	nStartTab	= 0;
+        SCTAB	nEndTab 	= 0;
+        SCCOL	nStartCol	= 0;
+        SCROW	nStartRow	= 0;
+        SCCOL	nEndCol 	= 0;
+        SCROW	nEndRow 	= 0;
 
         pViewData = pViewSh->GetViewData();
         pDoc = pViewData->GetDocument();
 
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
-                                  nEndCol,   nEndRow,  nEndTab );
+                                  nEndCol,	 nEndRow,  nEndTab );
 
         PutInOrder( nStartCol, nEndCol );
         PutInOrder( nStartRow, nEndRow );
@@ -163,29 +167,31 @@ void ScTpUserLists::Init()
         aFtCopyFrom.Disable();
         aEdCopyFrom.Disable();
     }
+
+//	aLbLists.GrabFocus();
 }
 
 // -----------------------------------------------------------------------
 
-sal_uInt16* ScTpUserLists::GetRanges()
+USHORT* __EXPORT ScTpUserLists::GetRanges()
 {
     return pUserListsRanges;
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* ScTpUserLists::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* __EXPORT ScTpUserLists::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new ScTpUserLists( pParent, rAttrSet ) );
 }
 
 // -----------------------------------------------------------------------
 
-void ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
+void __EXPORT ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
 {
     const ScUserListItem& rUserListItem = (const ScUserListItem&)
                                            rCoreAttrs.Get( nWhichUserLists );
-    const ScUserList*     pCoreList     = rUserListItem.GetUserList();
+    const ScUserList*	  pCoreList 	= rUserListItem.GetUserList();
 
     DBG_ASSERT( pCoreList, "UserList not found :-/" );
 
@@ -209,11 +215,11 @@ void ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
 
     if ( aLbLists.GetEntryCount() == 0 )
     {
-        aFtLists    .Disable();
-        aLbLists    .Disable();
-        aFtEntries  .Disable();
-        aEdEntries  .Disable();
-        aBtnRemove  .Disable();
+        aFtLists	.Disable();
+        aLbLists	.Disable();
+        aFtEntries	.Disable();
+        aEdEntries	.Disable();
+        aBtnRemove	.Disable();
     }
 
     aBtnNew.SetText( aStrNew );
@@ -224,13 +230,15 @@ void ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
     {
         aFtCopyFrom .Enable();
         aEdCopyFrom .Enable();
-        aBtnCopy    .Enable();
+        aBtnCopy	.Enable();
     }
+
+//	aLbLists.GrabFocus();
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
+BOOL __EXPORT ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     // Modifikationen noch nicht uebernommen?
     // -> Click auf Add-Button simulieren
@@ -241,19 +249,19 @@ sal_Bool ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
     const ScUserListItem& rUserListItem = (const ScUserListItem&)
                                            GetItemSet().Get( nWhichUserLists );
 
-    ScUserList* pCoreList       = rUserListItem.GetUserList();
-    sal_Bool        bDataModified   = false;
+    ScUserList* pCoreList		= rUserListItem.GetUserList();
+    BOOL		bDataModified	= FALSE;
 
     if ( (pUserLists == NULL) && (pCoreList == NULL) )
     {
-        bDataModified = false;
+        bDataModified = FALSE;
     }
     else if ( pUserLists != NULL )
     {
         if ( pCoreList != NULL )
             bDataModified = (*pUserLists != *pCoreList);
         else
-            bDataModified = sal_True;
+            bDataModified = TRUE;
     }
 
     if ( bDataModified )
@@ -271,7 +279,7 @@ sal_Bool ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
 
 // -----------------------------------------------------------------------
 
-int ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
+int __EXPORT ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
         FillItemSet( *pSetP );
@@ -281,7 +289,7 @@ int ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ScTpUserLists::UpdateUserListBox()
+USHORT ScTpUserLists::UpdateUserListBox()
 {
     aLbLists.Clear();
 
@@ -289,12 +297,12 @@ sal_uInt16 ScTpUserLists::UpdateUserListBox()
 
     //----------------------------------------------------------
 
-    sal_uInt16  nCount = pUserLists->GetCount();
-    String  aEntry;
+    USHORT	nCount = pUserLists->GetCount();
+    String	aEntry;
 
     if ( nCount > 0 )
     {
-        for ( sal_uInt16 i=0; i<nCount; i++ )
+        for ( USHORT i=0; i<nCount; i++ )
         {
             aEntry = (*pUserLists)[i]->GetString();
             DBG_ASSERT( aEntry.Len() > 0, "Empty UserList-entry :-/" );
@@ -307,7 +315,7 @@ sal_uInt16 ScTpUserLists::UpdateUserListBox()
 
 // -----------------------------------------------------------------------
 
-void ScTpUserLists::UpdateEntries( sal_uInt16 nList )
+void ScTpUserLists::UpdateEntries( USHORT nList )
 {
     if ( !pUserLists ) return;
 
@@ -315,11 +323,11 @@ void ScTpUserLists::UpdateEntries( sal_uInt16 nList )
 
     if ( nList < pUserLists->GetCount() )
     {
-        ScUserListData* pList     = (*pUserLists)[nList];
-        sal_uInt16          nSubCount = pList->GetSubCount();
-        String          aEntryListStr;
+        ScUserListData* pList	  = (*pUserLists)[nList];
+        USHORT			nSubCount = pList->GetSubCount();
+        String			aEntryListStr;
 
-        for ( sal_uInt16 i=0; i<nSubCount; i++ )
+        for ( USHORT i=0; i<nSubCount; i++ )
         {
             if ( i!=0 )
                 aEntryListStr += CR;
@@ -331,7 +339,7 @@ void ScTpUserLists::UpdateEntries( sal_uInt16 nList )
     }
     else
     {
-        OSL_FAIL( "Invalid ListIndex :-/" );
+        DBG_ERROR( "Invalid ListIndex :-/" );
     }
 }
 
@@ -339,13 +347,14 @@ void ScTpUserLists::UpdateEntries( sal_uInt16 nList )
 
 void ScTpUserLists::MakeListStr( String& rListStr )
 {
-    String  aInputStr(rListStr);
-    String  aStr;
+    String	aInputStr(rListStr);
+    String	aStr;
 
-    xub_StrLen  nLen    = aStr.Len();
-    xub_StrLen  c       = 0;
+    xub_StrLen	nLen	= aStr.Len();
+    xub_StrLen	c		= 0;
 
     aInputStr.ConvertLineEnd( LINEEND_LF );
+    //aStr.EraseAllChars( ' ' );
 
     xub_StrLen nToken=rListStr.GetTokenCount(LF);
 
@@ -357,6 +366,18 @@ void ScTpUserLists::MakeListStr( String& rListStr )
         aStr+=aString;
         aStr+=cDelimiter;
     }
+
+    /*
+    // '\n' durch cDelimiter ersetzen:
+    for ( c=0;
+          (c < nLen) && (nFound != STRING_NOTFOUND);
+          c++ )
+    {
+        nFound = aStr.Search( LF, nFound );
+        if ( nFound != STRING_NOTFOUND )
+            aStr[nFound] = cDelimiter;
+    }
+    */
 
     aStr.EraseLeadingChars( cDelimiter );
     aStr.EraseTrailingChars( cDelimiter );
@@ -395,7 +416,7 @@ void ScTpUserLists::AddNewList( const String& rEntriesStr )
 
     if ( !pUserLists->Insert( new ScUserListData( theEntriesStr ) ) )
     {
-        OSL_FAIL( "Entry could not be inserted :-/" );
+        DBG_ERROR( "Entry could not be inserted :-/" );
     }
 }
 
@@ -408,16 +429,16 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
     //----------------------------------------------------------
 
-    SCTAB   nTab            = rStartPos.Tab();
-    SCCOL   nStartCol       = rStartPos.Col();
-    SCROW   nStartRow       = rStartPos.Row();
-    SCCOL   nEndCol         = rEndPos.Col();
-    SCROW   nEndRow         = rEndPos.Row();
-    sal_uInt16  nCellDir        = SCRET_COLS;
-    sal_Bool    bValueIgnored   = false;
+    SCTAB	nTab			= rStartPos.Tab();
+    SCCOL	nStartCol		= rStartPos.Col();
+    SCROW	nStartRow		= rStartPos.Row();
+    SCCOL	nEndCol			= rEndPos.Col();
+    SCROW	nEndRow			= rEndPos.Row();
+    USHORT	nCellDir		= SCRET_COLS;
+    BOOL	bValueIgnored	= FALSE;
 
     if ( (nStartCol != nEndCol) && (nStartRow != nEndRow) )
-    {
+    {	
         nCellDir = ScColOrRowDlg( this, aStrCopyList, aStrCopyFrom ).Execute();
     }
     else if ( nStartCol != nEndCol )
@@ -427,8 +448,8 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
     if ( nCellDir != RET_CANCEL )
     {
-        String  aStrList;
-        String  aStrField;
+        String	aStrList;
+        String	aStrField;
 
         if ( nCellDir == SCRET_COLS )
         {
@@ -447,7 +468,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
                         }
                     }
                     else
-                        bValueIgnored = sal_True;
+                        bValueIgnored = TRUE;
                 }
                 if ( aStrList.Len() > 0 )
                     AddNewList( aStrList );
@@ -471,7 +492,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
                         }
                     }
                     else
-                        bValueIgnored = sal_True;
+                        bValueIgnored = TRUE;
                 }
                 if ( aStrList.Len() > 0 )
                     AddNewList( aStrList );
@@ -487,14 +508,14 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
     //----------------------------------------------------------
 
-    bCopyDone = sal_True;
-
+    bCopyDone = TRUE;
+    
 }
 
 // -----------------------------------------------------------------------
 
-void ScTpUserLists::ModifyList( sal_uInt16          nSelList,
-                                const String&   rEntriesStr )
+void ScTpUserLists::ModifyList( USHORT			nSelList,
+                                const String&	rEntriesStr )
 {
     if ( !pUserLists ) return;
 
@@ -509,7 +530,7 @@ void ScTpUserLists::ModifyList( sal_uInt16          nSelList,
 
 // -----------------------------------------------------------------------
 
-void ScTpUserLists::RemoveList( sal_uInt16 nList )
+void ScTpUserLists::RemoveList( USHORT nList )
 {
     if ( pUserLists ) pUserLists->AtFree( nList );
 }
@@ -522,13 +543,13 @@ IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox*, pLb )
 {
     if ( pLb == &aLbLists )
     {
-        sal_uInt16 nSelPos = aLbLists.GetSelectEntryPos();
+        USHORT nSelPos = aLbLists.GetSelectEntryPos();
         if ( nSelPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            if ( !aFtEntries.IsEnabled() )  aFtEntries.Enable();
-            if ( !aEdEntries.IsEnabled() )  aEdEntries.Enable();
-            if ( !aBtnRemove.IsEnabled() )  aBtnRemove.Enable();
-            if (  aBtnAdd.IsEnabled() )     aBtnAdd.Disable();
+            if ( !aFtEntries.IsEnabled() )	aFtEntries.Enable();
+            if ( !aEdEntries.IsEnabled() )	aEdEntries.Enable();
+            if ( !aBtnRemove.IsEnabled() )	aBtnRemove.Enable();
+            if (  aBtnAdd.IsEnabled() ) 	aBtnAdd.Disable();
 
             UpdateEntries( nSelPos );
         }
@@ -565,7 +586,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
                 aEdCopyFrom.Disable();
             }
             aBtnNew.SetText( aStrCancel );
-            bCancelMode = sal_True;
+            bCancelMode = TRUE;
         }
         else // if ( bCancelMode )
         {
@@ -592,8 +613,8 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
                 aEdCopyFrom.Enable();
             }
             aBtnNew.SetText( aStrNew );
-            bCancelMode = false;
-            bModifyMode = false;
+            bCancelMode = FALSE;
+            bModifyMode = FALSE;
         }
     }
     else if ( pBtn == &aBtnAdd )
@@ -625,13 +646,13 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             aBtnAdd.Disable();
             aBtnRemove.Enable();
             aBtnNew.SetText( aStrNew );
-            bCancelMode = false;
+            bCancelMode = FALSE;
         }
         else // if ( bModifyMode )
         {
-            sal_uInt16 nSelList = aLbLists.GetSelectEntryPos();
+            USHORT nSelList = aLbLists.GetSelectEntryPos();
 
-            DBG_ASSERT( nSelList != LISTBOX_ENTRY_NOTFOUND, "Modify without List :-/" );
+            DBG_ASSERT( nSelList != LISTBOX_ENTRY_NOTFOUND,	"Modify without List :-/" );
 
             if ( theEntriesStr.Len() > 0 )
             {
@@ -645,8 +666,8 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
                 LbSelectHdl( &aLbLists );
             }
 
-            aBtnNew.SetText( aStrNew ); bCancelMode = false;
-            aBtnAdd.SetText( aStrAdd ); bModifyMode = false;
+            aBtnNew.SetText( aStrNew ); bCancelMode = FALSE;
+            aBtnAdd.SetText( aStrAdd ); bModifyMode = FALSE;
             aBtnAdd.Disable();
             aBtnRemove.Enable();
             aFtLists.Enable();
@@ -664,8 +685,8 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
     {
         if ( aLbLists.GetEntryCount() > 0 )
         {
-            sal_uInt16 nRemovePos   = aLbLists.GetSelectEntryPos();
-            String aMsg         ( aStrQueryRemove.GetToken( 0, '#' ) );
+            USHORT nRemovePos	= aLbLists.GetSelectEntryPos();
+            String aMsg 		( aStrQueryRemove.GetToken( 0, '#' ) );
 
             aMsg += aLbLists.GetEntry( nRemovePos );
             aMsg += aStrQueryRemove.GetToken( 1, '#' );
@@ -715,8 +736,8 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
 
         ScRefAddress theStartPos;
         ScRefAddress theEndPos;
-        String      theAreaStr( aEdCopyFrom.GetText() );
-        sal_Bool        bAreaOk = false;
+        String		theAreaStr( aEdCopyFrom.GetText() );
+        BOOL		bAreaOk = FALSE;
 
         if ( theAreaStr.Len() > 0 )
         {
@@ -745,10 +766,10 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             UpdateUserListBox();
             aLbLists.SelectEntryPos( aLbLists.GetEntryCount()-1 );
             LbSelectHdl( &aLbLists );
-            aEdCopyFrom .SetText( theAreaStr );
-            aEdCopyFrom .Disable();
-            aBtnCopy    .Disable();
-            aFtCopyFrom .Disable();
+            aEdCopyFrom	.SetText( theAreaStr );
+            aEdCopyFrom	.Disable();
+            aBtnCopy	.Disable();
+            aFtCopyFrom	.Disable();
         }
         else
         {
@@ -774,17 +795,17 @@ IMPL_LINK( ScTpUserLists, EdEntriesModHdl, MultiLineEdit*, pEd )
 
     if ( aBtnCopy.IsEnabled() )
     {
-        aBtnCopy    .Disable();
-        aFtCopyFrom .Disable();
-        aEdCopyFrom .Disable();
+        aBtnCopy	.Disable();
+        aFtCopyFrom	.Disable();
+        aEdCopyFrom	.Disable();
     }
 
     if ( aEdEntries.GetText().Len() > 0 )
     {
         if ( !bCancelMode && !bModifyMode )
         {
-            aBtnNew.SetText( aStrCancel );  bCancelMode = sal_True;
-            aBtnAdd.SetText( aStrModify );  bModifyMode = sal_True;
+            aBtnNew.SetText( aStrCancel );	bCancelMode = TRUE;
+            aBtnAdd.SetText( aStrModify );	bModifyMode = TRUE;
             aBtnAdd.Enable();
             aBtnRemove.Disable();
             aFtLists.Disable();

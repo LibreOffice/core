@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <classes/fwktabwindow.hxx>
 #include "framework.hrc"
-#include <classes/fwkresid.hxx>
+#include <classes/fwlresid.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
@@ -46,16 +46,16 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/stream.hxx>
-#include <tools/diagnose_ex.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
 #include <vcl/msgbox.hxx>
 
-const ::rtl::OUString SERVICENAME_WINPROVIDER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.ContainerWindowProvider"));
-const ::rtl::OUString EXTERNAL_EVENT(RTL_CONSTASCII_USTRINGPARAM("external_event"));
-const ::rtl::OUString BACK_METHOD(RTL_CONSTASCII_USTRINGPARAM("back"));
-const ::rtl::OUString INITIALIZE_METHOD(RTL_CONSTASCII_USTRINGPARAM("initialize"));
-const ::rtl::OUString OK_METHOD(RTL_CONSTASCII_USTRINGPARAM("ok"));
+const ::rtl::OUString SERVICENAME_WINPROVIDER
+                                        = ::rtl::OUString::createFromAscii("com.sun.star.awt.ContainerWindowProvider");
+const ::rtl::OUString EXTERNAL_EVENT    = ::rtl::OUString::createFromAscii("external_event");
+const ::rtl::OUString BACK_METHOD       = ::rtl::OUString::createFromAscii("back");
+const ::rtl::OUString INITIALIZE_METHOD = ::rtl::OUString::createFromAscii("initialize");
+const ::rtl::OUString OK_METHOD         = ::rtl::OUString::createFromAscii("ok");
 
 using namespace ::com::sun::star;
 
@@ -71,10 +71,10 @@ FwkTabControl::FwkTabControl( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-void FwkTabControl::BroadcastEvent( sal_uLong nEvent )
+void FwkTabControl::BroadcastEvent( ULONG nEvent )
 {
     if ( VCLEVENT_TABPAGE_ACTIVATE == nEvent || VCLEVENT_TABPAGE_DEACTIVATE == nEvent )
-        ImplCallEventListeners( nEvent, (void*)(sal_uIntPtr)GetCurPageId() );
+        ImplCallEventListeners( nEvent, (void*)(ULONG)GetCurPageId() );
     else
     {
         DBG_ERRORFILE( "FwkTabControl::BroadcastEvent(): illegal event" );
@@ -119,7 +119,7 @@ void FwkTabPage::CreateDialog()
         m_xPage = uno::Reference < awt::XWindow >(
             m_xWinProvider->createContainerWindow(
                 m_sPageURL, rtl::OUString(), xParent, xHandler ), uno::UNO_QUERY );
-
+    
         uno::Reference< awt::XControl > xPageControl( m_xPage, uno::UNO_QUERY );
         if ( xPageControl.is() )
         {
@@ -157,7 +157,7 @@ sal_Bool FwkTabPage::CallMethod( const rtl::OUString& rMethod )
         }
         catch ( uno::Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_ERRORFILE( "FwkTabPage::CallMethod(): exception of XDialogEventHandler::callHandlerMethod()" );
         }
     }
     return bRet;
@@ -195,7 +195,8 @@ void FwkTabPage::Resize()
 {
     if ( m_xPage.is () )
     {
-        Size aSize = GetSizePixel();
+        Size  aSize = GetSizePixel ();
+        Point aPos  = GetPosPixel  ();
 
         m_xPage->setPosSize( 0, 0, aSize.Width()-1 , aSize.Height()-1, awt::PosSize::POSSIZE );
     }
@@ -205,9 +206,9 @@ void FwkTabPage::Resize()
 
 FwkTabWindow::FwkTabWindow( Window* pParent ) :
 
-    Window( pParent, FwkResId( WIN_TABWINDOW ) ),
+    Window( pParent, FwlResId( WIN_TABWINDOW ) ),
 
-    m_aTabCtrl  ( this, FwkResId( TC_TABCONTROL ) )
+    m_aTabCtrl  ( this, FwlResId( TC_TABCONTROL ) )
 {
     uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     m_xWinProvider = uno::Reference < awt::XContainerWindowProvider >(
@@ -289,7 +290,7 @@ TabEntry* FwkTabWindow::FindEntry( sal_Int32 nIndex ) const
 
 IMPL_LINK( FwkTabWindow, ActivatePageHdl, TabControl *, EMPTYARG )
 {
-    const sal_uInt16 nId = m_aTabCtrl.GetCurPageId();
+    const USHORT nId = m_aTabCtrl.GetCurPageId();
     FwkTabPage* pTabPage = static_cast< FwkTabPage* >( m_aTabCtrl.GetTabPage( nId ) );
     if ( !pTabPage )
     {
@@ -321,6 +322,7 @@ IMPL_LINK( FwkTabWindow, DeactivatePageHdl, TabControl *, EMPTYARG )
 
 IMPL_LINK( FwkTabWindow, CloseHdl, PushButton *, EMPTYARG )
 {
+//    Close();
     return 0;
 }
 
@@ -351,23 +353,23 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
         beans::NamedValue aValue = rProperties[i];
         ::rtl::OUString sName = aValue.Name;
 
-        if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title")) )
+        if ( sName.equalsAscii("Title") )
             aValue.Value >>= sTitle;
-        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ToolTip")) )
+        else if ( sName.equalsAscii("ToolTip") )
             aValue.Value >>= sToolTip;
-        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PageURL")) )
+        else if ( sName.equalsAscii("PageURL") )
             aValue.Value >>= sPageURL;
-        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EventHdl")) )
+        else if ( sName.equalsAscii("EventHdl") )
             aValue.Value >>= xEventHdl;
-        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Image")) )
+        else if ( sName.equalsAscii("Image") )
             aValue.Value >>= xImage;
-        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Disabled")) )
+        else if ( sName.equalsAscii("Disabled") )
             aValue.Value >>= bDisabled;
     }
 
     TabEntry* pEntry = new TabEntry( nIndex, sPageURL, xEventHdl );
     m_TabList.push_back( pEntry );
-    sal_uInt16 nIdx = static_cast< sal_uInt16 >( nIndex );
+    USHORT nIdx = static_cast< USHORT >( nIndex );
     m_aTabCtrl.InsertPage( nIdx, sTitle );
     if ( sToolTip.getLength() > 0 )
         m_aTabCtrl.SetHelpText( nIdx, sToolTip );
@@ -375,7 +377,7 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
         m_aTabCtrl.SetPageImage( nIdx, Image( xImage ) );
     if ( bDisabled )
         m_aTabCtrl.EnablePage( nIdx, false );
-
+    
     return pEntry->m_pPage;
 }
 
@@ -383,7 +385,7 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
 
 void FwkTabWindow::ActivatePage( sal_Int32 nIndex )
 {
-    m_aTabCtrl.SetCurPageId( static_cast< sal_uInt16 >( nIndex ) );
+    m_aTabCtrl.SetCurPageId( static_cast< USHORT >( nIndex ) );
     ActivatePageHdl( &m_aTabCtrl );
 }
 
@@ -394,7 +396,7 @@ void FwkTabWindow::RemovePage( sal_Int32 nIndex )
     TabEntry* pEntry = FindEntry(nIndex);
     if ( pEntry )
     {
-        m_aTabCtrl.RemovePage( static_cast< sal_uInt16 >( nIndex ) );
+        m_aTabCtrl.RemovePage( static_cast< USHORT >( nIndex ) );
         if (RemoveEntry(nIndex))
             delete pEntry;
     }

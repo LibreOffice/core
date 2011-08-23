@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+/* $Id: hutil.h,v 1.4 2008-06-04 10:00:41 vg Exp $ */
 
 #ifndef _UTIL_H_
 #define _UTIL_H_

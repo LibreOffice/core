@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,7 +114,7 @@ namespace pcr
             if ( ( KEY_DELETE == nKey ) || ( KEY_BACKSPACE == nKey ) )
                 // silence this, we don't want to propagate this outside the property
                 // browser, as it will probably do harm there
-                // #i63285#
+                // #i63285# / 2006-12-06 / frank.schoenheit@sun.com
                 return 1;
         }
         return Window::Notify( _rNEvt );
@@ -138,7 +138,7 @@ namespace pcr
         }
         return ::com::sun::star::awt::Size( aSize.Width(), aSize.Height() );
     }
-
+    
 //............................................................................
 } // namespace pcr
 //............................................................................

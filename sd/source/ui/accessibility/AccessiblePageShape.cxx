@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
 
@@ -103,7 +103,7 @@ uno::Reference<XAccessible> SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("page shape has no children") ),
+        ::rtl::OUString::createFromAscii ("page shape has no children"),
         static_cast<uno::XWeak*>(this));
 }
 
@@ -196,7 +196,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")));
+            aColor = aSet->getPropertyValue (::rtl::OUString::createFromAscii ("LineColor"));
             aColor >>= nColor;
         }
     }
@@ -247,7 +247,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
             if (xBGSet.is())
             {
                 uno::Any aColor;
-                aColor = xBGSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")));
+                aColor = xBGSet->getPropertyValue (::rtl::OUString::createFromAscii ("FillColor"));
                 aColor >>= nColor;
             }
             else
@@ -354,7 +354,7 @@ void AccessiblePageShape::dispose (void)
     catch (beans::UnknownPropertyException&)
     {
     }
-
+    
     return CreateAccessibleBaseName()+A2S(": ")+sCurrentSlideName;
 }
 

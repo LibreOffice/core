@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,8 +55,8 @@ class SW_DLLPUBLIC SwPageGridExample : public SwPageExample
     sal_Bool            m_bVertical;
 protected:
     virtual void DrawPage( const Point& rPoint,
-                           const sal_Bool bSecond,
-                           const sal_Bool bEnabled );
+                           const BOOL bSecond,
+                           const BOOL bEnabled );
 public:
     SwPageGridExample(Window* pPar, const ResId& rResId ) :
                                 SwPageExample(pPar, rResId ),
@@ -68,14 +68,14 @@ public:
 
 class SW_DLLPUBLIC SwColExample : public SwPageExample
 {
-    SwColMgr*   pColMgr;
-
+    SwColMgr* 	pColMgr;
+    
     using SwPageExample::UpdateExample;
 
 protected:
     virtual void DrawPage( const Point& rPoint,
-                           const sal_Bool bSecond,
-                           const sal_Bool bEnabled );
+                           const BOOL bSecond,
+                           const BOOL bEnabled );
 
 public:
         SwColExample(Window* pPar, const ResId& rResId ) :

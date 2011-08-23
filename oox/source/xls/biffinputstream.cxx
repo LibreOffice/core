@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,19 +27,16 @@
  ************************************************************************/
 
 #include "oox/xls/biffinputstream.hxx"
-
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
-
-namespace oox {
-namespace xls {
-
-// ============================================================================
 
 using ::rtl::OString;
 using ::rtl::OStringToOUString;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+
+namespace oox {
+namespace xls {
 
 // ============================================================================
 

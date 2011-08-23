@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,10 +32,10 @@
 
 #include "sbintern.hxx"
 #include "sbunoobj.hxx"
-#include "token.hxx"                // Tokenizer
-#include "symtbl.hxx"               // Symbolverwaltung
-#include "parser.hxx"               // Parser
-#include "codegen.hxx"              // Code-Generator
+#include "token.hxx"				// Tokenizer
+#include "symtbl.hxx"				// Symbolverwaltung
+#include "parser.hxx"				// Parser
+#include "codegen.hxx" 				// Code-Generator
 #include <basic/basmgr.hxx>
 
 SV_IMPL_PTRARR(SbErrorStack, SbErrorStackEntry*)
@@ -62,13 +62,13 @@ SbiGlobals::SbiGlobals()
     nCode = 0;
     nLine = 0;
     nCol1 = nCol2 = 0;
-    bCompiler = sal_False;
-    bGlobalInitErr = sal_False;
-    bRunInit = sal_False;
+    bCompiler = FALSE;
+    bGlobalInitErr = FALSE;
+    bRunInit = FALSE;
     eLanguageMode = SB_LANG_BASIC;
     pErrStack = NULL;
     pTransliterationWrapper = NULL;
-    bBlockCompilerError = sal_False;
+    bBlockCompilerError = FALSE;
     pAppBasMgr = NULL;
     pMSOMacroRuntimLib = NULL;
 }

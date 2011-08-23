@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,17 +137,31 @@ public:
     virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable (void);
 
     /// Forwarded to the print manager.
-    virtual SfxPrinter* GetPrinter (sal_Bool bCreate = sal_False);
+    virtual SfxPrinter* GetPrinter (BOOL bCreate = FALSE);
 
     /// Forwarded to the print manager.
-    virtual sal_uInt16 SetPrinter (
+    virtual USHORT SetPrinter (
         SfxPrinter* pNewPrinter,
-        sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false);
+        USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false);
+
+    /// Forwarded to the print manager.
+    virtual PrintDialog* CreatePrintDialog (::Window *pParent);
 
     /// Forwarded to the print manager.
     virtual SfxTabPage* CreatePrintOptionsPage (
         ::Window *pParent,
         const SfxItemSet &rOptions);
+
+    /// Forwarded to the print manager.
+    virtual USHORT Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pDialog);
+
+    /// Forwarded to the print manager.
+    virtual ErrCode DoPrint (
+        SfxPrinter *pPrinter,
+        PrintDialog *pPrintDialog,
+        BOOL bSilent, BOOL bIsAPI );
+
+    virtual void PreparePrint (PrintDialog* pPrintDialog);
 
     /// Forward methods to main sub shell.
     virtual void WriteUserDataSequence (
@@ -166,14 +180,14 @@ public:
 
     virtual void UIActivating( SfxInPlaceClient* );
     virtual void UIDeactivated( SfxInPlaceClient* );
-    virtual void Activate (sal_Bool IsMDIActivate);
-    virtual void Deactivate (sal_Bool IsMDIActivate);
+    virtual void Activate (BOOL IsMDIActivate);
+    virtual void Deactivate (BOOL IsMDIActivate);
     virtual void SetZoomFactor (
         const Fraction &rZoomX,
         const Fraction &rZoomY);
-    virtual sal_uInt16 PrepareClose (sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False);
-    virtual void WriteUserData (String&, sal_Bool bBrowse = sal_False);
-    virtual void ReadUserData (const String&, sal_Bool bBrowse = sal_False);
+    virtual USHORT PrepareClose (BOOL bUI = TRUE, BOOL bForBrowsing = FALSE);
+    virtual void WriteUserData (String&, BOOL bBrowse = FALSE);
+    virtual void ReadUserData (const String&, BOOL bBrowse = FALSE);
     virtual SdrView* GetDrawView (void) const;
     virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize);
 
@@ -195,7 +209,7 @@ public:
         This is done by adding the border used by the ViewShellBase itself
         with the border used by the main view shell.
 
-        @param bForce   if true the borders are also updated if old border
+        @param bForce	if true the borders are also updated if old border
                         and new border are same.
     */
     void UpdateBorder ( bool bForce = false );
@@ -236,7 +250,7 @@ public:
         of that window remains with the called ViewShellBase object.
     */
     ::Window* GetViewWindow (void);
-
+    
     /** returns the ui descriptive name for the given uno slot. The result is taken from the configuration
         and not cached, so do not use it excessive (f.e. in status updates) */
     ::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const;

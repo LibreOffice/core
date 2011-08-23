@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ import javax.accessibility.Accessible;
 
 
 public class AccessBridge {
-    //
+    // 
     protected static java.util.Hashtable topWindowMap = new java.util.Hashtable();
 
     private static java.awt.Window getTopWindowImpl(XAccessible xAccessible) {
-        // Because it can not be garantied that
-        // WindowsAccessBridgeAdapter.registerTopWindow() is called
-        // before windowOpened(), we have to make this operation
+        // Because it can not be garantied that 
+        // WindowsAccessBridgeAdapter.registerTopWindow() is called 
+        // before windowOpened(), we have to make this operation 
         // atomic.
         synchronized (topWindowMap) {
             String oid = UnoRuntime.generateOid(xAccessible);
@@ -85,13 +85,13 @@ public class AccessBridge {
                     case AccessibleRole.ROOT_PANE:
                     case AccessibleRole.POPUP_MENU:
                         return getTopWindow(xAccessibleContext.getAccessibleParent());
-
+                        
                     case AccessibleRole.WINDOW:
                     case AccessibleRole.FRAME:
                     case AccessibleRole.DIALOG:
                     case AccessibleRole.ALERT:
                         return getTopWindowImpl(xAccessible);
-
+                        
                     default:
                         break;
                 }
@@ -112,12 +112,12 @@ public class AccessBridge {
                     case AccessibleRole.ROOT_PANE:
                     case AccessibleRole.POPUP_MENU:
                         return removeTopWindow(xAccessibleContext.getAccessibleParent());
-
+                        
                     case AccessibleRole.WINDOW:
                     case AccessibleRole.FRAME:
                     case AccessibleRole.DIALOG:
                         return (java.awt.Window) topWindowMap.remove(UnoRuntime.generateOid(xAccessible));
-
+                        
                     default:
                         break;
                 }
@@ -140,6 +140,11 @@ public class AccessBridge {
         }
 
         return xSingleServiceFactory;
+    }
+
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
+        return FactoryHelper.writeRegistryServiceInfo(AccessBridge.class.getName(),
+            _AccessBridge._serviceName, regKey);
     }
 
     static public class _AccessBridge implements XTopWindowListener,
@@ -166,7 +171,7 @@ public class AccessBridge {
                     unoToolkit.addTopWindowListener(this);
 
                     String os = (String) System.getProperty("os.name");
-
+                    
                     // Try to initialize the WindowsAccessBridgeAdapter
                     if (os.startsWith("Windows")) {
                         WindowsAccessBridgeAdapter.attach(xComponentContext);
@@ -219,17 +224,17 @@ public class AccessBridge {
 
         public void disposing(com.sun.star.lang.EventObject event) {
         }
-
+    
         /*
         * XComponent
         */
-
+        
         public void addEventListener(com.sun.star.lang.XEventListener listener) {
         }
-
+        
         public void removeEventListener(com.sun.star.lang.XEventListener listener) {
         }
-
+        
         public void dispose() {
             try {
                 java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().invokeAndWait(

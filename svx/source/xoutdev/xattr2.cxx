@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <svx/dialogs.hrc>
-#include "svx/xattr.hxx"
+#include "xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
 #include <editeng/itemtype.hxx>
@@ -53,18 +53,26 @@ TYPEINIT1_AUTOFACTORY(XLineTransparenceItem, SfxUInt16Item);
 
 /*************************************************************************
 |*
-|*    XLineTransparenceItem::XLineTransparenceItem(sal_uInt16)
+|*	  XLineTransparenceItem::XLineTransparenceItem(USHORT)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
-XLineTransparenceItem::XLineTransparenceItem(sal_uInt16 nLineTransparence) :
+XLineTransparenceItem::XLineTransparenceItem(USHORT nLineTransparence) :
     SfxUInt16Item(XATTR_LINETRANSPARENCE, nLineTransparence)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineTransparenceItem::XLineTransparenceItem(SvStream& rIn)
+|*	  XLineTransparenceItem::XLineTransparenceItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
@@ -75,7 +83,11 @@ XLineTransparenceItem::XLineTransparenceItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineTransparenceItem::Clone(SfxItemPool* pPool) const
+|*	  XLineTransparenceItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
@@ -86,11 +98,15 @@ SfxPoolItem* XLineTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
-SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XLineTransparenceItem(rIn);
 }
@@ -100,10 +116,10 @@ SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
 SfxItemPresentation XLineTransparenceItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -115,7 +131,7 @@ SfxItemPresentation XLineTransparenceItem::GetPresentation
             rText = XubString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) );
             rText.AppendAscii(": ");
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += XubString( UniString::CreateFromInt32((sal_uInt16) GetValue()) );
+            rText += XubString( UniString::CreateFromInt32((USHORT) GetValue()) );
             rText += sal_Unicode('%');
             return ePres;
         default:
@@ -124,7 +140,7 @@ SfxItemPresentation XLineTransparenceItem::GetPresentation
 }
 
 //-----------------------
-// class XLineJointItem -
+// class XLineJointItem	-
 //-----------------------
 
 TYPEINIT1_AUTOFACTORY(XLineJointItem, SfxEnumItem);
@@ -132,7 +148,7 @@ TYPEINIT1_AUTOFACTORY(XLineJointItem, SfxEnumItem);
 // -----------------------------------------------------------------------------
 
 XLineJointItem::XLineJointItem( XLineJoint eLineJoint ) :
-    SfxEnumItem(XATTR_LINEJOINT, sal::static_int_cast< sal_uInt16 >(eLineJoint))
+    SfxEnumItem(XATTR_LINEJOINT, sal::static_int_cast< USHORT >(eLineJoint))
 {
 }
 
@@ -145,14 +161,14 @@ XLineJointItem::XLineJointItem( SvStream& rIn ) :
 
 // -----------------------------------------------------------------------------
 
-sal_uInt16 XLineJointItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
+USHORT XLineJointItem::GetVersion( USHORT /*nFileFormatVersion*/) const
 {
     return 1;
 }
 
 // -----------------------------------------------------------------------------
 
-SfxPoolItem* XLineJointItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
+SfxPoolItem* XLineJointItem::Create( SvStream& rIn, USHORT nVer ) const
 {
     XLineJointItem* pRet = new XLineJointItem( rIn );
 
@@ -171,7 +187,7 @@ SfxPoolItem* XLineJointItem::Clone(SfxItemPool* /*pPool*/) const
 
 // -----------------------------------------------------------------------------
 
-SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
+SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres,	SfxMapUnit /*eCoreUnit*/,
                                                      SfxMapUnit /*ePresUnit*/, XubString& rText, const IntlWrapper*) const
 {
     rText.Erase();
@@ -183,7 +199,7 @@ SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, 
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
-            sal_uInt16 nId = 0;
+            USHORT nId = 0;
 
             switch( GetValue() )
             {
@@ -223,7 +239,7 @@ SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, 
 
 // -----------------------------------------------------------------------------
 
-bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     ::com::sun::star::drawing::LineJoint eJoint = ::com::sun::star::drawing::LineJoint_NONE;
 
@@ -244,7 +260,7 @@ bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*n
         eJoint = ::com::sun::star::drawing::LineJoint_ROUND;
         break;
     default:
-        OSL_FAIL( "Unknown LineJoint enum value!" );
+        DBG_ERROR( "Unknown LineJoint enum value!" );
     }
 
     rVal <<= eJoint;
@@ -253,7 +269,7 @@ bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*n
 
 // -----------------------------------------------------------------------------
 
-bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     XLineJoint eJoint = XLINEJOINT_NONE;
     ::com::sun::star::drawing::LineJoint eUnoJoint;
@@ -285,14 +301,14 @@ bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
         break;
     }
 
-    SetValue( sal::static_int_cast< sal_uInt16 >( eJoint ) );
+    SetValue( sal::static_int_cast< USHORT >( eJoint ) );
 
     return true;
 }
 
 // -----------------------------------------------------------------------------
 
-sal_uInt16 XLineJointItem::GetValueCount() const
+USHORT XLineJointItem::GetValueCount() const
 {
     // don't forget to update the api interface also
     return 5;
@@ -305,18 +321,26 @@ TYPEINIT1_AUTOFACTORY(XFillTransparenceItem, SfxUInt16Item);
 
 /*************************************************************************
 |*
-|*    XFillTransparenceItem::XFillTransparenceItem(sal_uInt16)
+|*	  XFillTransparenceItem::XFillTransparenceItem(USHORT)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
-XFillTransparenceItem::XFillTransparenceItem(sal_uInt16 nFillTransparence) :
+XFillTransparenceItem::XFillTransparenceItem(USHORT nFillTransparence) :
     SfxUInt16Item(XATTR_FILLTRANSPARENCE, nFillTransparence)
 {
 }
 
 /*************************************************************************
 |*
-|*    XFillTransparenceItem::XFillTransparenceItem(SvStream& rIn)
+|*	  XFillTransparenceItem::XFillTransparenceItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
@@ -327,7 +351,11 @@ XFillTransparenceItem::XFillTransparenceItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFillTransparenceItem::Clone(SfxItemPool* pPool) const
+|*	  XFillTransparenceItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
@@ -338,11 +366,15 @@ SfxPoolItem* XFillTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillTransparenceItem(rIn);
 }
@@ -352,10 +384,10 @@ SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
 SfxItemPresentation XFillTransparenceItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -367,7 +399,7 @@ SfxItemPresentation XFillTransparenceItem::GetPresentation
             rText = XubString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) );
             rText.AppendAscii(": ");
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += XubString( UniString::CreateFromInt32((sal_uInt16) GetValue() ));
+            rText += XubString( UniString::CreateFromInt32((USHORT) GetValue() ));
             rText += sal_Unicode('%');
             return ePres;
         default:
@@ -382,18 +414,26 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowTranspItem, SfxUInt16Item);
 
 /*************************************************************************
 |*
-|*    XFormTextShadowTranspItem::XFormTextShadowTranspItem(sal_uInt16)
+|*	  XFormTextShadowTranspItem::XFormTextShadowTranspItem(USHORT)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	09.11.95 KA
+|*	  Letzte Aenderung	09.11.95 KA
 |*
 *************************************************************************/
 
-XFormTextShadowTranspItem::XFormTextShadowTranspItem(sal_uInt16 nShdwTransparence) :
+XFormTextShadowTranspItem::XFormTextShadowTranspItem(USHORT nShdwTransparence) :
     SfxUInt16Item(XATTR_FORMTXTSHDWTRANSP, nShdwTransparence)
 {
 }
 
 /*************************************************************************
 |*
-|*    XFormTextShadowTranspItem::XFormTextShadowTranspItem(SvStream& rIn)
+|*	  XFormTextShadowTranspItem::XFormTextShadowTranspItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	09.11.95 KA
+|*	  Letzte Aenderung	09.11.95 KA
 |*
 *************************************************************************/
 
@@ -404,7 +444,11 @@ XFormTextShadowTranspItem::XFormTextShadowTranspItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowTranspItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextShadowTranspItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	09.11.95 KA
+|*	  Letzte Aenderung	09.11.95 KA
 |*
 *************************************************************************/
 
@@ -415,11 +459,15 @@ SfxPoolItem* XFormTextShadowTranspItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	09.11.95 KA
+|*	  Letzte Aenderung	09.11.95 KA
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextShadowTranspItem(rIn);
 }
@@ -432,18 +480,26 @@ TYPEINIT1_AUTOFACTORY(XGradientStepCountItem, SfxUInt16Item);
 
 /*************************************************************************
 |*
-|*    XGradientStepCountItem::XGradientStepCountItem( sal_uInt16 )
+|*	  XGradientStepCountItem::XGradientStepCountItem( USHORT )
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
-XGradientStepCountItem::XGradientStepCountItem( sal_uInt16 nStepCount ) :
+XGradientStepCountItem::XGradientStepCountItem( USHORT nStepCount ) :
     SfxUInt16Item( XATTR_GRADIENTSTEPCOUNT, nStepCount )
 {
 }
 
 /*************************************************************************
 |*
-|*    XGradientStepCountItem::XGradientStepCountItem( SvStream& rIn )
+|*	  XGradientStepCountItem::XGradientStepCountItem( SvStream& rIn )
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
@@ -454,7 +510,11 @@ XGradientStepCountItem::XGradientStepCountItem( SvStream& rIn ) :
 
 /*************************************************************************
 |*
-|*    XGradientStepCountItem::Clone( SfxItemPool* pPool ) const
+|*	  XGradientStepCountItem::Clone( SfxItemPool* pPool ) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
@@ -465,11 +525,15 @@ SfxPoolItem* XGradientStepCountItem::Clone( SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
-SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XGradientStepCountItem( rIn );
 }
@@ -479,10 +543,10 @@ SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) 
 SfxItemPresentation XGradientStepCountItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -491,10 +555,10 @@ SfxItemPresentation XGradientStepCountItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NONE:
             return ePres;
         case SFX_ITEM_PRESENTATION_COMPLETE:
-//          rText = XubString( ResId( RID_SVXSTR_GRADIENTSTEPCOUNT, DIALOG_MGR() ) );
-//          rText += ": ";
+//			rText = XubString( ResId( RID_SVXSTR_GRADIENTSTEPCOUNT, DIALOG_MGR() ) );
+//			rText += ": ";
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += XubString( UniString::CreateFromInt32((sal_uInt16) GetValue() ));
+            rText += XubString( UniString::CreateFromInt32((USHORT) GetValue() ));
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;
@@ -507,33 +571,87 @@ SfxItemPresentation XGradientStepCountItem::GetPresentation
 //------------------------------
 TYPEINIT1_AUTOFACTORY( XFillBmpTileItem, SfxBoolItem );
 
-XFillBmpTileItem::XFillBmpTileItem( sal_Bool bTile ) :
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+XFillBmpTileItem::XFillBmpTileItem( BOOL bTile ) :
             SfxBoolItem( XATTR_FILLBMP_TILE, bTile )
 {
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
 
 XFillBmpTileItem::XFillBmpTileItem( SvStream& rIn ) :
             SfxBoolItem( XATTR_FILLBMP_TILE, rIn )
 {
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxPoolItem* XFillBmpTileItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpTileItem( *this );
 }
 
-SfxPoolItem* XFillBmpTileItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+SfxPoolItem* XFillBmpTileItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillBmpTileItem( rIn );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxItemPresentation XFillBmpTileItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -555,33 +673,87 @@ SfxItemPresentation XFillBmpTileItem::GetPresentation
 //------------------------------
 TYPEINIT1_AUTOFACTORY( XFillBmpPosItem, SfxEnumItem );
 
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 XFillBmpPosItem::XFillBmpPosItem( RECT_POINT eRP ) :
-    SfxEnumItem( XATTR_FILLBMP_POS, sal::static_int_cast< sal_uInt16 >( eRP ) )
+    SfxEnumItem( XATTR_FILLBMP_POS, sal::static_int_cast< USHORT >( eRP ) )
 {
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
 
 XFillBmpPosItem::XFillBmpPosItem( SvStream& rIn ) :
             SfxEnumItem( XATTR_FILLBMP_POS, rIn )
 {
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxPoolItem* XFillBmpPosItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpPosItem( *this );
 }
 
-SfxPoolItem* XFillBmpPosItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+SfxPoolItem* XFillBmpPosItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillBmpPosItem( rIn );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxItemPresentation XFillBmpPosItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -597,7 +769,13 @@ SfxItemPresentation XFillBmpPosItem::GetPresentation
     }
 }
 
-sal_uInt16 XFillBmpPosItem::GetValueCount() const
+/******************************************************************************
+|*
+|*
+|*
+\******************************************************************************/
+
+USHORT XFillBmpPosItem::GetValueCount() const
 {
     return 9;
 }
@@ -608,86 +786,87 @@ sal_uInt16 XFillBmpPosItem::GetValueCount() const
 //------------------------------
 TYPEINIT1_AUTOFACTORY( XFillBmpSizeXItem, SfxMetricItem );
 
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 XFillBmpSizeXItem::XFillBmpSizeXItem( long nSizeX ) :
             SfxMetricItem( XATTR_FILLBMP_SIZEX, nSizeX )
 {
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
 
 XFillBmpSizeXItem::XFillBmpSizeXItem( SvStream& rIn ) :
             SfxMetricItem( XATTR_FILLBMP_SIZEX, rIn )
 {
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxPoolItem* XFillBmpSizeXItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpSizeXItem( *this );
 }
 
-SfxPoolItem* XFillBmpSizeXItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+SfxPoolItem* XFillBmpSizeXItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillBmpSizeXItem( rIn );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxItemPresentation XFillBmpSizeXItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
-{
-    rText.Erase();
-
-    switch ( ePres )
-    {
-        case SFX_ITEM_PRESENTATION_NONE:
-            return ePres;
-        case SFX_ITEM_PRESENTATION_COMPLETE:
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-            return ePres;
-        default:
-            return SFX_ITEM_PRESENTATION_NONE;
-    }
-}
-
-bool XFillBmpSizeXItem::HasMetrics() const
-{
-    return GetValue() > 0L;
-}
-
-
-//------------------------------
-// class XFillBmpTileSizeYItem
-//------------------------------
-TYPEINIT1_AUTOFACTORY( XFillBmpSizeYItem, SfxMetricItem );
-
-XFillBmpSizeYItem::XFillBmpSizeYItem( long nSizeY ) :
-            SfxMetricItem( XATTR_FILLBMP_SIZEY, nSizeY )
-{
-}
-
-XFillBmpSizeYItem::XFillBmpSizeYItem( SvStream& rIn ) :
-            SfxMetricItem( XATTR_FILLBMP_SIZEY, rIn )
-{
-}
-
-SfxPoolItem* XFillBmpSizeYItem::Clone( SfxItemPool* /*pPool*/) const
-{
-    return new XFillBmpSizeYItem( *this );
-}
-
-SfxPoolItem* XFillBmpSizeYItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillBmpSizeYItem( rIn );
-}
-
-SfxItemPresentation XFillBmpSizeYItem::GetPresentation
-(
-    SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -706,6 +885,126 @@ SfxItemPresentation XFillBmpSizeYItem::GetPresentation
 
 /*************************************************************************
 |*
+|*	  Beschreibung
+|*	  Ersterstellung	05.11.96 KA
+|*	  Letzte Aenderung	05.11.96 KA
+|*
+\*************************************************************************/
+
+bool XFillBmpSizeXItem::HasMetrics() const
+{
+    return GetValue() > 0L;
+}
+
+
+//------------------------------
+// class XFillBmpTileSizeYItem
+//------------------------------
+TYPEINIT1_AUTOFACTORY( XFillBmpSizeYItem, SfxMetricItem );
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+XFillBmpSizeYItem::XFillBmpSizeYItem( long nSizeY ) :
+            SfxMetricItem( XATTR_FILLBMP_SIZEY, nSizeY )
+{
+}
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+XFillBmpSizeYItem::XFillBmpSizeYItem( SvStream& rIn ) :
+            SfxMetricItem( XATTR_FILLBMP_SIZEY, rIn )
+{
+}
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+SfxPoolItem* XFillBmpSizeYItem::Clone( SfxItemPool* /*pPool*/) const
+{
+    return new XFillBmpSizeYItem( *this );
+}
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+SfxPoolItem* XFillBmpSizeYItem::Create( SvStream& rIn, USHORT /*nVer*/) const
+{
+    return new XFillBmpSizeYItem( rIn );
+}
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+SfxItemPresentation XFillBmpSizeYItem::GetPresentation
+(
+    SfxItemPresentation ePres,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
+    XubString&          rText, const IntlWrapper *
+)	const
+{
+    rText.Erase();
+
+    switch ( ePres )
+    {
+        case SFX_ITEM_PRESENTATION_NONE:
+            return ePres;
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+            return ePres;
+        default:
+            return SFX_ITEM_PRESENTATION_NONE;
+    }
+}
+
+
+/*************************************************************************
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	05.11.96 KA
+|*	  Letzte Aenderung	05.11.96 KA
+|*
 \*************************************************************************/
 
 bool XFillBmpSizeYItem::HasMetrics() const
@@ -719,33 +1018,87 @@ bool XFillBmpSizeYItem::HasMetrics() const
 //------------------------------
 TYPEINIT1_AUTOFACTORY( XFillBmpSizeLogItem, SfxBoolItem );
 
-XFillBmpSizeLogItem::XFillBmpSizeLogItem( sal_Bool bLog ) :
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+XFillBmpSizeLogItem::XFillBmpSizeLogItem( BOOL bLog ) :
             SfxBoolItem( XATTR_FILLBMP_SIZELOG, bLog )
 {
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
 
 XFillBmpSizeLogItem::XFillBmpSizeLogItem( SvStream& rIn ) :
             SfxBoolItem( XATTR_FILLBMP_SIZELOG, rIn )
 {
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxPoolItem* XFillBmpSizeLogItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpSizeLogItem( *this );
 }
 
-SfxPoolItem* XFillBmpSizeLogItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+SfxPoolItem* XFillBmpSizeLogItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillBmpSizeLogItem( rIn );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxItemPresentation XFillBmpSizeLogItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -767,33 +1120,87 @@ SfxItemPresentation XFillBmpSizeLogItem::GetPresentation
 //------------------------------
 TYPEINIT1_AUTOFACTORY( XFillBmpTileOffsetXItem, SfxUInt16Item );
 
-XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( sal_uInt16 nOffX ) :
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( USHORT nOffX ) :
             SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETX, nOffX )
 {
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
 
 XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( SvStream& rIn ) :
             SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETX, rIn )
 {
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxPoolItem* XFillBmpTileOffsetXItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpTileOffsetXItem( *this );
 }
 
-SfxPoolItem* XFillBmpTileOffsetXItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+SfxPoolItem* XFillBmpTileOffsetXItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillBmpTileOffsetXItem( rIn );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxItemPresentation XFillBmpTileOffsetXItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -815,33 +1222,87 @@ SfxItemPresentation XFillBmpTileOffsetXItem::GetPresentation
 //------------------------------
 TYPEINIT1_AUTOFACTORY( XFillBmpTileOffsetYItem, SfxUInt16Item );
 
-XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( sal_uInt16 nOffY ) :
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( USHORT nOffY ) :
             SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETY, nOffY )
 {
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
 
 XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( SvStream& rIn ) :
             SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETY, rIn )
 {
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxPoolItem* XFillBmpTileOffsetYItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpTileOffsetYItem( *this );
 }
 
-SfxPoolItem* XFillBmpTileOffsetYItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+SfxPoolItem* XFillBmpTileOffsetYItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillBmpTileOffsetYItem( rIn );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxItemPresentation XFillBmpTileOffsetYItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -863,33 +1324,87 @@ SfxItemPresentation XFillBmpTileOffsetYItem::GetPresentation
 //------------------------------
 TYPEINIT1_AUTOFACTORY( XFillBmpStretchItem, SfxBoolItem );
 
-XFillBmpStretchItem::XFillBmpStretchItem( sal_Bool bStretch ) :
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+XFillBmpStretchItem::XFillBmpStretchItem( BOOL bStretch ) :
             SfxBoolItem( XATTR_FILLBMP_STRETCH, bStretch )
 {
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
 
 XFillBmpStretchItem::XFillBmpStretchItem( SvStream& rIn ) :
             SfxBoolItem( XATTR_FILLBMP_STRETCH, rIn )
 {
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxPoolItem* XFillBmpStretchItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpStretchItem( *this );
 }
 
-SfxPoolItem* XFillBmpStretchItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
+SfxPoolItem* XFillBmpStretchItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillBmpStretchItem( rIn );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
+|*
+*************************************************************************/
+
 SfxItemPresentation XFillBmpStretchItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -911,33 +1426,87 @@ SfxItemPresentation XFillBmpStretchItem::GetPresentation
 //------------------------------
 TYPEINIT1_AUTOFACTORY( XFillBmpPosOffsetXItem, SfxUInt16Item );
 
-XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( sal_uInt16 nOffPosX ) :
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
+|*
+*************************************************************************/
+
+XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( USHORT nOffPosX ) :
             SfxUInt16Item( XATTR_FILLBMP_POSOFFSETX, nOffPosX )
 {
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
+|*
+*************************************************************************/
 
 XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( SvStream& rIn ) :
             SfxUInt16Item( XATTR_FILLBMP_POSOFFSETX, rIn )
 {
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
+|*
+*************************************************************************/
+
 SfxPoolItem* XFillBmpPosOffsetXItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpPosOffsetXItem( *this );
 }
 
-SfxPoolItem* XFillBmpPosOffsetXItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
+|*
+*************************************************************************/
+
+SfxPoolItem* XFillBmpPosOffsetXItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillBmpPosOffsetXItem( rIn );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
+|*
+*************************************************************************/
+
 SfxItemPresentation XFillBmpPosOffsetXItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -959,33 +1528,87 @@ SfxItemPresentation XFillBmpPosOffsetXItem::GetPresentation
 //------------------------------
 TYPEINIT1_AUTOFACTORY( XFillBmpPosOffsetYItem, SfxUInt16Item );
 
-XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( sal_uInt16 nOffPosY ) :
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
+|*
+*************************************************************************/
+
+XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( USHORT nOffPosY ) :
             SfxUInt16Item( XATTR_FILLBMP_POSOFFSETY, nOffPosY )
 {
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
+|*
+*************************************************************************/
 
 XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( SvStream& rIn ) :
             SfxUInt16Item( XATTR_FILLBMP_POSOFFSETY, rIn )
 {
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
+|*
+*************************************************************************/
+
 SfxPoolItem* XFillBmpPosOffsetYItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpPosOffsetYItem( *this );
 }
 
-SfxPoolItem* XFillBmpPosOffsetYItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
+|*
+*************************************************************************/
+
+SfxPoolItem* XFillBmpPosOffsetYItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillBmpPosOffsetYItem( rIn );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
+|*
+*************************************************************************/
+
 SfxItemPresentation XFillBmpPosOffsetYItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -1008,18 +1631,26 @@ TYPEINIT1_AUTOFACTORY(XFillBackgroundItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XFillBackgroundItem::XFillBackgroundItem( sal_Bool )
+|*	  XFillBackgroundItem::XFillBackgroundItem( BOOL )
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	19.11.96 KA
+|*	  Letzte Aenderung
 |*
 *************************************************************************/
 
-XFillBackgroundItem::XFillBackgroundItem( sal_Bool bFill ) :
+XFillBackgroundItem::XFillBackgroundItem( BOOL bFill ) :
     SfxBoolItem( XATTR_FILLBACKGROUND, bFill )
 {
 }
 
 /*************************************************************************
 |*
-|*    XFillBackgroundItem::XFillBackgroundItem( SvStream& rIn )
+|*	  XFillBackgroundItem::XFillBackgroundItem( SvStream& rIn )
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
@@ -1030,7 +1661,11 @@ XFillBackgroundItem::XFillBackgroundItem( SvStream& rIn ) :
 
 /*************************************************************************
 |*
-|*    XFillBackgroundItem::Clone( SfxItemPool* pPool ) const
+|*	  XFillBackgroundItem::Clone( SfxItemPool* pPool ) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
@@ -1041,11 +1676,15 @@ SfxPoolItem* XFillBackgroundItem::Clone( SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillBackgroundItem( rIn );
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,6 @@ import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.SystemDialog;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.UCB;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
@@ -54,11 +53,10 @@ import com.sun.star.wizards.ui.event.DataAware;
 import com.sun.star.wizards.ui.event.UnoDataAware;
 import com.sun.star.wizards.web.data.CGPublish;
 import com.sun.star.wizards.web.data.CGSettings;
-import com.sun.star.wizards.common.HelpIds;
 
 /**
  * This is the FTP Dialog. <br/>
- * The Dialog enables the user:
+ * The Dialog enables the user: 
  * (*) entering FTP server and user information.
  * (*) testing the connection.
  * (*) choosing a directory on the server.
@@ -77,7 +75,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
 
     /**
      * A Constant used for the setLabel(int) method to change the
-     * status-display. "unknown" is the status when the user first
+     * status-display. "unknown" is the status when the user first 
      * opens the dialog, or changes the servername/username/password.
      */
     private final static int STATUS_UNKONWN = 0;
@@ -125,7 +123,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
      */
     private final static String ICON_UNKNOWN = "ftpunknown.gif";
     /**
-     * The icon url for an icon representing the "connecting" state.
+     * The icon url for an icon representing the "connecting" state. 
      */
     private final static String ICON_CONNECTING = "ftpconnecting.gif";    //GUI Components as Class members.
     //Fixed Line
@@ -180,7 +178,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
      * @param xmsf
      * @param p the publishert object that contains the data
      * for this dialog
-     * @throws Exception
+     * @throws Exception 
      */
     public FTPDialog(XMultiServiceFactory xmsf, CGPublish p) throws Exception
     {
@@ -198,11 +196,11 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "Title", PropertyNames.PROPERTY_WIDTH
+                    "Closeable", "Height", "HelpURL", "Moveable", "Name", "PositionX", "PositionY", "Title", "Width"
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, new Integer(160), HelpIds.getHelpIdString(HID_FTP), Boolean.TRUE, "FTPDialog", new Integer(167), new Integer(82), resources.resFTPDialog_title, new Integer(222)
+                    Boolean.TRUE, new Integer(160), "HID:" + HID_FTP, Boolean.TRUE, "FTPDialog", new Integer(167), new Integer(82), resources.resFTPDialog_title, new Integer(222)
                 });
 
         //add controls to dialog
@@ -220,15 +218,15 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     {
         final String[] PROPNAMES_LABEL = new String[]
         {
-            PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+            "Height", "Label", "Name", "PositionX", "PositionY", "TabIndex", "Width"
         };
         final String[] PROPNAMES_BUTTON = new String[]
         {
-            PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+            "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "TabIndex", "Width"
         };
         final String[] PROPNAMES_BUTTON2 = new String[]
         {
-            PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "PushButtonType", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+            "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "PushButtonType", "TabIndex", "Width"
         };
 
         ln1 = insertFixedLine("ln1",
@@ -246,11 +244,11 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         txtHost = insertTextField("txtHost", "disconnect",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Width"
                 },
                 new Object[]
                 {
-                    INTEGER_12, HelpIds.getHelpIdString(HID_FTP_SERVER), "txtIP", new Integer(110), new Integer(18), new Short((short) 2), new Integer(106)
+                    INTEGER_12, "HID:" + HID_FTP_SERVER, "txtIP", new Integer(110), new Integer(18), new Short((short) 2), new Integer(106)
                 });
         lblUsername = insertLabel("lblUsername",
                 PROPNAMES_LABEL,
@@ -261,11 +259,11 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         txtUsername = insertTextField("txtUsername", "disconnect",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Width"
                 },
                 new Object[]
                 {
-                    INTEGER_12, HelpIds.getHelpIdString(HID_FTP_USERNAME), "txtUsername", new Integer(110), new Integer(34), new Short((short) 4), new Integer(106)
+                    INTEGER_12, "HID:" + HID_FTP_USERNAME, "txtUsername", new Integer(110), new Integer(34), new Short((short) 4), new Integer(106)
                 });
         lblPassword = insertLabel("lblPassword",
                 PROPNAMES_LABEL,
@@ -276,11 +274,11 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         txtPassword = insertTextField("txtPassword", "disconnect",
                 new String[]
                 {
-                    "EchoChar", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "EchoChar", "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Width"
                 },
                 new Object[]
                 {
-                    new Short((short) 42), INTEGER_12, HelpIds.getHelpIdString(HID_FTP_PASS), "txtPassword", new Integer(110), new Integer(50), new Short((short) 6), new Integer(106)
+                    new Short((short) 42), INTEGER_12, "HID:" + HID_FTP_PASS, "txtPassword", new Integer(110), new Integer(50), new Short((short) 6), new Integer(106)
                 });
         ln2 = insertFixedLine("ln2",
                 PROPNAMES_LABEL,
@@ -292,13 +290,13 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGER_14, HelpIds.getHelpIdString(HID_FTP_TEST), resources.resbtnConnect_value, "btnConnect", INTEGER_12, new Integer(80), new Short((short) 8), INTEGER_50
+                    INTEGER_14, "HID:" + HID_FTP_TEST, resources.resbtnConnect_value, "btnConnect", INTEGER_12, new Integer(80), new Short((short) 8), INTEGER_50
                 });
 
         imgStatus = insertImage("imgStatus",
                 new String[]
                 {
-                    "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", "Tabstop", PropertyNames.PROPERTY_WIDTH
+                    "Border", "Height", "PositionX", "PositionY", "ScaleImage", "Tabstop", "Width"
                 },
                 new Object[]
                 {
@@ -322,31 +320,31 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         txtDir = insertTextField("txtDir",
                 null, new String[]
                 {
-                    PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, "Text", PropertyNames.PROPERTY_WIDTH
+                    "Enabled", "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Text", "Width"
                 },
                 new Object[]
                 {
-                    new Boolean(false), INTEGER_12, HelpIds.getHelpIdString(HID_FTP_TXT_PATH), "txtDir", INTEGER_12, new Integer(113), new Short((short) 11), resources.restxtDir_value, new Integer(184)
+                    new Boolean(false), INTEGER_12, "HID:" + HID_FTP_TXT_PATH, "txtDir", INTEGER_12, new Integer(113), new Short((short) 11), resources.restxtDir_value, new Integer(184)
                 });
         btnDir = insertButton("btnDir", "chooseDirectory",
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGER_14, HelpIds.getHelpIdString(HID_FTP_BTN_PATH), resources.resbtnDir_value, "btnDir", new Integer(199), new Integer(112), new Short((short) 12), INTEGER_16
+                    INTEGER_14, "HID:" + HID_FTP_BTN_PATH, resources.resbtnDir_value, "btnDir", new Integer(199), new Integer(112), new Short((short) 12), INTEGER_16
                 });
 
         btnOK = insertButton("btnOK", null,
                 PROPNAMES_BUTTON2,
                 new Object[]
                 {
-                    INTEGER_14, HelpIds.getHelpIdString(HID_FTP_OK), resources.resbtnOK_value, "btnOK", new Integer(165), new Integer(142), new Short((short) PushButtonType.OK_value), new Short((short) 13), INTEGER_50
+                    INTEGER_14, "HID:" + HID_FTP_OK, resources.resbtnOK_value, "btnOK", new Integer(165), new Integer(142), new Short((short) PushButtonType.OK_value), new Short((short) 13), INTEGER_50
                 });
 
         btnCancel = insertButton("btnCancel",
                 null, PROPNAMES_BUTTON2,
                 new Object[]
                 {
-                    INTEGER_14, HelpIds.getHelpIdString(HID_FTP_CANCEL), resources.resbtnCancel_value, "btnCancel", new Integer(113), new Integer(142), new Short((short) PushButtonType.CANCEL_value), new Short((short) 14), INTEGER_50
+                    INTEGER_14, "HID:" + HID_FTP_CANCEL, resources.resbtnCancel_value, "btnCancel", new Integer(113), new Integer(142), new Short((short) PushButtonType.CANCEL_value), new Short((short) 14), INTEGER_50
                 });
 
         btnHelp = insertButton("btnHelp", null,
@@ -410,8 +408,8 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     }
 
     /**
-     * extract the hostname out of the url used by the
-     * publisher. This url does not include the username:password string.
+     * extract the hostname out of the url used by the 
+     * publisher. This url does not include the username:password string. 
      * @param ftpUrl
      * @return
      */
@@ -618,7 +616,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     /**
      * changes the status label to disconnected status, and
      * disables the ok and choose-dir buttons.
-     * This method is called also when the hostname, username
+     * This method is called also when the hostname, username 
      * and passwordtext fields change.
      */
     public void disconnect()
@@ -695,15 +693,15 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     }
 
     /**
-     * changes the text of the status label and
+     * changes the text of the status label and 
      * (TODO) the status image.
      * @param label
      * @param color
      */
     private void setLabel(String label, String image)
     {
-        Helper.setUnoPropertyValue(getModel(lblStatus), PropertyNames.PROPERTY_LABEL, label);
-        Helper.setUnoPropertyValue(getModel(imgStatus), PropertyNames.PROPERTY_IMAGEURL, imageUrl(image));
+        Helper.setUnoPropertyValue(getModel(lblStatus), "Label", label);
+        Helper.setUnoPropertyValue(getModel(imgStatus), "ImageURL", imageUrl(image));
     }
 
     private String imageUrl(String s)
@@ -715,7 +713,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     }
 
     /**
-     * called when the user clicks
+     * called when the user clicks 
      * the choose-dir button. ("...")
      * Opens the pickFolder dialog.
      * checks if the returned folder is an ftp folder.

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ service CellValueBinding
         method must be instances of <type scope="com::sun::star::beans">NamedValue</type>, where
         the <member scope"com::sun::star::beans">NamedValue::Name</member> denotes the type of information
         to initialize, and the <member scope"com::sun::star::beans">NamedValue::Value</member>
-        the initial value.</p>
+        the inital value.</p>
 
         <p>The following aspects of the components can be initialized:<br/>
             <ul><li><b>BoundCell</b><br/>

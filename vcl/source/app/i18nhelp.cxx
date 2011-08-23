@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,16 +87,16 @@ LocaleDataWrapper& vcl::I18nHelper::ImplGetLocaleDataWrapper() const
     return *mpLocaleDataWrapper;
 }
 
-const ::com::sun::star::lang::Locale& vcl::I18nHelper::getLocale() const
+const ::com::sun::star::lang::Locale& vcl::I18nHelper::getLocale() const 
 {
-    return maLocale;
+    return maLocale; 
 }
 
 inline bool is_formatting_mark( sal_Unicode c )
 {
-    if( (c >= 0x200B) && (c <= 0x200F) )    // BiDi and zero-width-markers
+    if( (c >= 0x200B) && (c <= 0x200F) )	// BiDi and zero-width-markers
         return true;
-    if( (c >= 0x2028) && (c <= 0x202E) )    // BiDi and paragraph-markers
+    if( (c >= 0x2028) && (c <= 0x202E) )	// BiDi and paragraph-markers
         return true;
     return false;
 }
@@ -105,7 +105,7 @@ inline bool is_formatting_mark( sal_Unicode c )
    the transliteration. The real solution would have been an additional TransliterationModule
    to ignore these marks during transliteration; however changin the code in i18npool that actually
    implements this could produce unwanted side effects.
-
+   
    Of course this copying around is not really good, but looking at i18npool, one more time
    will not hurt.
 */
@@ -131,12 +131,12 @@ sal_Int32 vcl::I18nHelper::CompareString( const String& rStr1, const String& rSt
     {
         // Change mbTransliterateIgnoreCase and destroy the warpper, next call to
         // ImplGetTransliterationWrapper() will create a wrapper with the correct bIgnoreCase
-        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = sal_False;
+        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = FALSE;
         delete ((vcl::I18nHelper*)this)->mpTransliterationWrapper;
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
     }
 
-
+    
     String aStr1( filterFormattingChars(rStr1) );
     String aStr2( filterFormattingChars(rStr2) );
     return ImplGetTransliterationWrapper().compareString( aStr1, aStr2 );
@@ -150,7 +150,7 @@ sal_Bool vcl::I18nHelper::MatchString( const String& rStr1, const String& rStr2 
     {
         // Change mbTransliterateIgnoreCase and destroy the warpper, next call to
         // ImplGetTransliterationWrapper() will create a wrapper with the correct bIgnoreCase
-        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = sal_True;
+        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = TRUE;
         delete ((vcl::I18nHelper*)this)->mpTransliterationWrapper;
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
     }
@@ -164,8 +164,8 @@ sal_Bool vcl::I18nHelper::MatchMnemonic( const String& rString, sal_Unicode cMne
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
 
-    sal_Bool bEqual = sal_False;
-    sal_uInt16 n = rString.Search( '~' );
+    BOOL bEqual = FALSE;
+    USHORT n = rString.Search( '~' );
     if ( n != STRING_NOTFOUND )
     {
         String aMatchStr( rString, n+1, STRING_LEN );   // not only one char, because of transliteration...
@@ -182,7 +182,7 @@ String vcl::I18nHelper::GetDate( const Date& rDate ) const
     return ImplGetLocaleDataWrapper().getDate( rDate );
 }
 
-String vcl::I18nHelper::GetNum( long nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep, sal_Bool bTrailingZeros ) const
+String vcl::I18nHelper::GetNum( long nNumber, USHORT nDecimals, BOOL bUseThousandSep, BOOL bTrailingZeros ) const
 {
     return ImplGetLocaleDataWrapper().getNum( nNumber, nDecimals, bUseThousandSep, bTrailingZeros );
 }

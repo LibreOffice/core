@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -102,7 +102,7 @@ static OUString toUNOname( char const * p ) SAL_THROW( () )
 //==================================================================================================
 class RTTI
 {
-    typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
+    typedef hash_map< OUString, type_info *, OUStringHash > t_rtti_map;
 
     Mutex m_mutex;
     t_rtti_map m_rttis;

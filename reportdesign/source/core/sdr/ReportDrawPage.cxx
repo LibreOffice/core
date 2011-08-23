@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                 uno::Reference < embed::XEmbeddedObject > xObj;
                 ::rtl::OUString sName;
-                xObj = pObj->GetModel()->GetPersist()->getEmbeddedObjectContainer().CreateEmbeddedObject(
+                xObj = pObj->GetModel()->GetPersist()->getEmbeddedObjectContainer().CreateEmbeddedObject( 
                     ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("80243D39-6741-46C5-926E-069164FF87BB"))), sName );
                 OSL_ENSURE(xObj.is(),"Embedded Object could not be created!");
@@ -119,7 +119,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
                 /**************************************************
                 * Das leere OLE-Objekt bekommt ein neues IPObj
                 **************************************************/
-                pObj->SetEmptyPresObj(sal_False);
+                pObj->SetEmptyPresObj(FALSE);
                 pOle2Obj->SetOutlinerParaObject(NULL);
                 pOle2Obj->SetObjRef(xObj);
                 pOle2Obj->SetPersistName(sName);
@@ -134,6 +134,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
             SvxOle2Shape* pShape = new SvxOle2Shape( pObj );
             xShape.set(*pShape,uno::UNO_QUERY);
             pShape->setShapeKind(pObj->GetObjIdentifier());
+            //xShape = new SvxOle2Shape( pOle2Obj );
         }
 
         if ( !xShape.is() )

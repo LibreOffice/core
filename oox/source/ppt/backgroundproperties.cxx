@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,8 @@
 #include "oox/ppt/backgroundproperties.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/core/namespaces.hxx"
+#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -50,7 +52,7 @@ Reference< XFastContextHandler > BackgroundPropertiesContext::createFastChildCon
 
     switch( aElementToken )
     {
-    case PPT_TOKEN( fill ): // a:CT_FillEffect
+    case NMSP_PPT|XML_fill:	// a:CT_FillEffect
         break;
     }
 

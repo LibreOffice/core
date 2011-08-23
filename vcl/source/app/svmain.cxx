@@ -30,9 +30,10 @@
 #include "precompiled_vcl.hxx"
 
 #ifdef WNT
-#include <svsys.h>
+#include <tools/prewin.h>
 #include <process.h>    // for _beginthreadex
 #include <ole2.h>   // for _beginthreadex
+#include <tools/postwin.h>
 #endif
 
 // [ed 5/14/02 Add in explicit check for quartz graphics.  OS X will define
@@ -89,8 +90,11 @@
 #include "rtl/strbuf.hxx"
 #endif
 
-using ::rtl::OUString;
-using namespace ::com::sun::star;
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+
+
 
 // =======================================================================
 
@@ -152,7 +156,7 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 }
 
 // =======================================================================
-int ImplSVMain()
+BOOL ImplSVMain()
 {
     // The 'real' SVMain()
     RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::SVMain" );
@@ -161,23 +165,26 @@ int ImplSVMain()
 
     DBG_ASSERT( pSVData->mpApp, "no instance of class Application" );
 
-    uno::Reference<lang::XMultiServiceFactory> xMS;
+    Reference<XMultiServiceFactory> xMS;
 
-    int nReturn = EXIT_FAILURE;
 
-    sal_Bool bInit = InitVCL( xMS );
+    BOOL bInit = InitVCL( xMS );
 
     if( bInit )
     {
         // Application-Main rufen
-        pSVData->maAppData.mbInAppMain = sal_True;
-        nReturn = pSVData->mpApp->Main();
-        pSVData->maAppData.mbInAppMain = sal_False;
+        pSVData->maAppData.mbInAppMain = TRUE;
+        pSVData->mpApp->Main();
+        pSVData->maAppData.mbInAppMain = FALSE;
     }
 
     if( pSVData->mxDisplayConnection.is() )
     {
-        pSVData->mxDisplayConnection->terminate();
+        vcl::DisplayConnection* pConnection =
+            dynamic_cast<vcl::DisplayConnection*>(pSVData->mxDisplayConnection.get());
+
+        if( pConnection )
+            pConnection->dispatchDowningEvent();
         pSVData->mxDisplayConnection.clear();
     }
 
@@ -186,27 +193,27 @@ int ImplSVMain()
     // be some events in the AWT EventQueue, which need the SolarMutex which
     // - on the other hand - is destroyed in DeInitVCL(). So empty the queue
     // here ..
-    uno::Reference< lang::XComponent > xComponent(pSVData->mxAccessBridge, uno::UNO_QUERY);
+    Reference< XComponent > xComponent(pSVData->mxAccessBridge, UNO_QUERY);
     if( xComponent.is() )
     {
-      sal_uLong nCount = Application::ReleaseSolarMutex();
+      ULONG nCount = Application::ReleaseSolarMutex();
       xComponent->dispose();
       Application::AcquireSolarMutex(nCount);
       pSVData->mxAccessBridge.clear();
     }
 
     DeInitVCL();
-    return nReturn;
+    return bInit;
 }
 
-int SVMain()
+BOOL SVMain()
 {
     // #i47888# allow for alternative initialization as required for e.g. MacOSX
-    extern sal_Bool ImplSVMainHook( int* );
+    extern BOOL ImplSVMainHook( BOOL* );
 
-    int nRet;
-    if( ImplSVMainHook( &nRet ) )
-        return nRet;
+    BOOL bInit;
+    if( ImplSVMainHook( &bInit ) )
+        return bInit;
     else
         return ImplSVMain();
 }
@@ -219,7 +226,7 @@ oslSignalHandler   pExceptionHandler = NULL;
 class Application_Impl : public Application
 {
 public:
-    int                Main() { return EXIT_SUCCESS; };
+    void                Main(){};
 };
 
 class DesktopEnvironmentContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >
@@ -236,13 +243,13 @@ private:
     com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_xNextContext;
 };
 
-uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString& Name) throw (uno::RuntimeException)
+Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString& Name) throw (RuntimeException)
 {
-    uno::Any retVal;
+    Any retVal;
 
-    if (Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("system.desktop-environment")))
+    if ( 0 == Name.compareToAscii( "system.desktop-environment" ) )
     {
-        retVal = uno::makeAny( Application::GetDesktopEnvironment() );
+        retVal = makeAny( Application::GetDesktopEnvironment() );
     }
     else if( m_xNextContext.is() )
     {
@@ -252,12 +259,12 @@ uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString
     return retVal;
 }
 
-sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
+BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
 {
     RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::InitVCL" );
 
     if( pExceptionHandler != NULL )
-        return sal_False;
+        return FALSE;
 
     if( ! ImplGetSVData() )
         ImplInitSVData();
@@ -286,7 +293,7 @@ sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ ::CreateSalInstance" );
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
-        return sal_False;
+        return FALSE;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} ::CreateSalInstance" );
 
     // Desktop Environment context (to be able to get value of "system.desktop-environment" as soon as possible)
@@ -311,7 +318,7 @@ sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang
 
     // Initialize global data
     pSVData->maGDIData.mpScreenFontList     = new ImplDevFontList;
-    pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache( sal_False );
+    pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache( FALSE );
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
     // Exception-Handler setzen
@@ -320,40 +327,13 @@ sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang
     // Debug-Daten initialisieren
     DBGGUI_INIT();
 
-    return sal_True;
-}
-
-namespace
-{
-
-/** Serves for destroying the VCL UNO wrapper as late as possible. This avoids
-  crash at exit in some special cases when a11y is enabled (e.g., when
-  a bundled extension is registered/deregistered during startup, forcing exit
-  while the app is still in splash screen.)
- */
-class VCLUnoWrapperDeleter : public cppu::WeakImplHelper1<com::sun::star::lang::XEventListener>
-{
-    virtual void SAL_CALL disposing(lang::EventObject const& rSource) throw(uno::RuntimeException);
-};
-
-void
-VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
-    throw(uno::RuntimeException)
-{
-    ImplSVData* const pSVData = ImplGetSVData();
-    if (pSVData && pSVData->mpUnoWrapper)
-    {
-        pSVData->mpUnoWrapper->Destroy();
-        pSVData->mpUnoWrapper = NULL;
-    }
-}
-
+    return TRUE;
 }
 
 void DeInitVCL()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mbDeInit = sal_True;
+    pSVData->mbDeInit = TRUE;
 
     vcl::DeleteOnDeinitBase::ImplDeleteOnDeInit();
 
@@ -412,6 +392,11 @@ void DeInitVCL()
         delete pSVData->maWinData.mpMsgBoxImgList;
         pSVData->maWinData.mpMsgBoxImgList = NULL;
     }
+    if ( pSVData->maWinData.mpMsgBoxHCImgList )
+    {
+        delete pSVData->maWinData.mpMsgBoxHCImgList;
+        pSVData->maWinData.mpMsgBoxHCImgList = NULL;
+    }
     if ( pSVData->maCtrlData.mpCheckImgList )
     {
         delete pSVData->maCtrlData.mpCheckImgList;
@@ -452,10 +437,20 @@ void DeInitVCL()
         delete pSVData->maCtrlData.mpDisclosurePlus;
         pSVData->maCtrlData.mpDisclosurePlus = NULL;
     }
+    if ( pSVData->maCtrlData.mpDisclosurePlusHC )
+    {
+        delete pSVData->maCtrlData.mpDisclosurePlusHC;
+        pSVData->maCtrlData.mpDisclosurePlusHC = NULL;
+    }
     if ( pSVData->maCtrlData.mpDisclosureMinus )
     {
         delete pSVData->maCtrlData.mpDisclosureMinus;
         pSVData->maCtrlData.mpDisclosureMinus = NULL;
+    }
+    if ( pSVData->maCtrlData.mpDisclosureMinusHC )
+    {
+        delete pSVData->maCtrlData.mpDisclosureMinusHC;
+        pSVData->maCtrlData.mpDisclosureMinusHC = NULL;
     }
     if ( pSVData->mpDefaultWin )
     {
@@ -463,21 +458,11 @@ void DeInitVCL()
         pSVData->mpDefaultWin = NULL;
     }
 
+    // #114285# Moved here from ImplDeInitSVData...
     if ( pSVData->mpUnoWrapper )
     {
-        try
-        {
-            uno::Reference<lang::XComponent> const xDesktop(
-                    comphelper::createProcessComponent(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
-                    uno::UNO_QUERY_THROW)
-                ;
-            xDesktop->addEventListener(new VCLUnoWrapperDeleter());
-        }
-        catch (uno::Exception const&)
-        {
-            // ignore
-        }
+        pSVData->mpUnoWrapper->Destroy();
+        pSVData->mpUnoWrapper = NULL;
     }
 
     pSVData->maAppData.mxMSF.clear();

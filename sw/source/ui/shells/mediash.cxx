@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,15 +90,15 @@ SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell, SW_RES(STR_SHELLNAME_MEDIA))
 void SwMediaShell::ExecMedia(SfxRequest &rReq)
 {
     SwWrtShell* pSh = &GetShell();
-    SdrView*    pSdrView = pSh->GetDrawView();
+    SdrView*	pSdrView = pSh->GetDrawView();
 
     if( pSdrView )
     {
         const SfxItemSet*   pArgs = rReq.GetArgs();
-        sal_uInt16              nSlotId = rReq.GetSlot();
-        sal_Bool                bChanged = pSdrView->GetModel()->IsChanged();
+        USHORT		        nSlotId = rReq.GetSlot();
+        BOOL                bChanged = pSdrView->GetModel()->IsChanged();
 
-        pSdrView->GetModel()->SetChanged( sal_False );
+        pSdrView->GetModel()->SetChanged( FALSE );
 
         switch( nSlotId )
         {
@@ -121,9 +121,9 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
             {
                 if( pSh->IsObjSelected() )
                 {
-                    const SfxPoolItem*  pItem;
+                    const SfxPoolItem*	pItem;
 
-                    if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, sal_False, &pItem ) ) )
+                    if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, FALSE, &pItem ) ) )
                         pItem = NULL;
 
                     if( pItem )
@@ -154,22 +154,22 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
         if( pSdrView->GetModel()->IsChanged() )
             GetShell().SetModified();
         else if( bChanged )
-            pSdrView->GetModel()->SetChanged(sal_True);
+            pSdrView->GetModel()->SetChanged(TRUE);
     }
 }
 
 void SwMediaShell::GetMediaState(SfxItemSet &rSet)
 {
-    SfxWhichIter    aIter( rSet );
-    sal_uInt16          nWhich = aIter.FirstWhich();
+    SfxWhichIter	aIter( rSet );
+    USHORT			nWhich = aIter.FirstWhich();
 
     while( nWhich )
     {
         if( SID_AVMEDIA_TOOLBOX == nWhich )
         {
-            SwWrtShell& rSh = GetShell();
-            SdrView*    pView = rSh.GetDrawView();
-            bool        bDisable = true;
+            SwWrtShell&	rSh = GetShell();
+            SdrView*	pView = rSh.GetDrawView();
+            bool		bDisable = true;
 
             if( pView )
             {

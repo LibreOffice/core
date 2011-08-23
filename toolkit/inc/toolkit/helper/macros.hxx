@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference<
 
 // -------------------------------------------------------------------------------------
 
-#define IMPL_IMPLEMENTATION_ID( ClassName ) \
+#define IMPL_IMPLEMENTATION_ID( ClassName )	\
 ::com::sun::star::uno::Sequence< sal_Int8 > ClassName::getImplementationId() throw(::com::sun::star::uno::RuntimeException) \
 { \
     static ::cppu::OImplementationId* pId = NULL; \
@@ -109,7 +109,7 @@ ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference<
     return (*pId).getImplementationId(); \
 }
 
-#define IMPL_XTYPEPROVIDER_START( ClassName )   \
+#define IMPL_XTYPEPROVIDER_START( ClassName )	\
 IMPL_IMPLEMENTATION_ID( ClassName ) \
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > ClassName::getTypes() throw(::com::sun::star::uno::RuntimeException) \
 { \
@@ -139,10 +139,10 @@ class ClassName : public ListenerMultiplexerBase, public InterfaceName \
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException); \
-    void                        SAL_CALL acquire() throw()  { ListenerMultiplexerBase::acquire(); } \
-    void                        SAL_CALL release() throw()  { ListenerMultiplexerBase::release(); } \
-    void                        SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any	SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException); \
+    void						SAL_CALL acquire() throw()	{ ListenerMultiplexerBase::acquire(); } \
+    void						SAL_CALL release() throw()	{ ListenerMultiplexerBase::release(); } \
+    void						SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
 // -------------------------------------------------------------------------------------
 
@@ -151,10 +151,10 @@ class TOOLKIT_DLLPUBLIC ClassName : public ListenerMultiplexerBase, public Inter
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException); \
-    void                        SAL_CALL acquire() throw()  { ListenerMultiplexerBase::acquire(); } \
-    void                        SAL_CALL release() throw()  { ListenerMultiplexerBase::release(); } \
-    void                        SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any	SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException); \
+    void						SAL_CALL acquire() throw()	{ ListenerMultiplexerBase::acquire(); } \
+    void						SAL_CALL release() throw()	{ ListenerMultiplexerBase::release(); } \
+    void						SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
 // -------------------------------------------------------------------------------------
 
@@ -185,61 +185,10 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e )    \
         ::rtl::OString sMessage( #ClassName "::" #MethodName ": caught an exception!\n" ); \
         sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US ); \
-        OSL_FAIL( sMessage.getStr() );
+        OSL_ENSURE( sal_False, sMessage.getStr() );
 #else
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e )
 #endif
-
-#define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_2PARAM( ClassName, InterfaceName, MethodName, ParamType1, ParamType2 ) \
-{ \
-    ParamType1 aMulti( evt ); \
-    ParamType2 aMulti2( evt2 ); \
-    ::cppu::OInterfaceIteratorHelper aIt( *this ); \
-    while( aIt.hasMoreElements() ) \
-    { \
-        ::com::sun::star::uno::Reference< InterfaceName > xListener( \
-            static_cast< InterfaceName* >( aIt.next() ) ); \
-        try \
-        { \
-            xListener->MethodName( aMulti, aMulti2 ); \
-        } \
-        catch( ::com::sun::star::lang::DisposedException e ) \
-        { \
-            OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
-            if ( e.Context == xListener || !e.Context.is() ) \
-                aIt.remove(); \
-        } \
-        catch( ::com::sun::star::uno::RuntimeException e ) \
-        { \
-            DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
-        } \
-    } \
-}
-
-#define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( ClassName, InterfaceName, MethodName, ParamType1 ) \
-{ \
-    ParamType1 aMulti( evt ); \
-    ::cppu::OInterfaceIteratorHelper aIt( *this ); \
-    while( aIt.hasMoreElements() ) \
-    { \
-        ::com::sun::star::uno::Reference< InterfaceName > xListener( \
-            static_cast< InterfaceName* >( aIt.next() ) ); \
-        try \
-        { \
-            xListener->MethodName( aMulti ); \
-        } \
-        catch( ::com::sun::star::lang::DisposedException e ) \
-        { \
-            OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
-            if ( e.Context == xListener || !e.Context.is() ) \
-                aIt.remove(); \
-        } \
-        catch( ::com::sun::star::uno::RuntimeException e ) \
-        { \
-            DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
-        } \
-    } \
-}
 
 #define IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodName, EventType ) \
 { \
@@ -292,8 +241,8 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 // -------------------------------------------------------------------------------------
 
 #define DECLIMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.Toolkit." #ImplName )); } \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
+    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii( "stardiv.Toolkit." #ImplName ); } \
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)	\
                             { \
                                 ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = BaseClass::getSupportedServiceNames( ); \
                                 aNames.realloc( aNames.getLength() + 1 ); \
@@ -304,8 +253,8 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 // -------------------------------------------------------------------------------------
 
 #define DECLIMPL_SERVICEINFO( ImplName, ServiceName ) \
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.Toolkit." #ImplName )); } \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
+    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii( "stardiv.Toolkit." #ImplName ); } \
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)	\
                             { \
                                 ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames( 1 ); \
                                 aNames[ 0 ] = ::rtl::OUString::createFromAscii( ServiceName ); \

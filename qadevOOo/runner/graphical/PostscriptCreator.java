@@ -1,8 +1,8 @@
 /*
  * ************************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,17 +50,16 @@ public class PostscriptCreator extends EnhancedComplexTestCase
     {
         GlobalLogWriter.set(log);
         ParameterHelper aParam = new ParameterHelper(param);
-
+        
         param.put(util.PropertyName.OFFICE_CLOSE_TIME_OUT, 2000);
         // run through all documents found in Inputpath
         foreachDocumentinInputPath(aParam);
     }
-
+    
 
     public void checkOneFile(String _sDocumentName, String _sResult, ParameterHelper _aParams) throws OfficeException
     {
-        GlobalLogWriter.println("  Document: " + _sDocumentName);
-        GlobalLogWriter.println("   results: " + _sResult);
+        GlobalLogWriter.println("Document: " + _sDocumentName + " results: " + _sResult);
         IOffice aOffice = new Office(_aParams, _sResult);
 
         PerformanceContainer a = new PerformanceContainer();
@@ -70,9 +69,9 @@ public class PostscriptCreator extends EnhancedComplexTestCase
         a.startTime(PerformanceContainer.OfficeStart);
         aOffice.start();
         a.stopTime(PerformanceContainer.OfficeStart);
-
+        
         // _aParams.getTestParameters().put(util.PropertyName.DEBUG_IS_ACTIVE, Boolean.FALSE);
-
+        
         // This force an error! _sDocumentName = helper.StringHelper.doubleQuote(_sDocumentName);
         try
         {
@@ -96,9 +95,9 @@ public class PostscriptCreator extends EnhancedComplexTestCase
         }
     }
 
-
-
-
+    
+    
+    
 //    public static void main(String [] _args)
 //    {
 //        String args[] = {

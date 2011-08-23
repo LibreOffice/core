@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace logging
 //........................................................................
 
     //====================================================================
-    //=
+    //= 
     //====================================================================
     class LogHandlerHelper
     {
@@ -123,13 +123,13 @@ namespace logging
 
         /** retrieves our formatter's heading, encoded with our encoding
 
-            @return <TRUE/> in case of success, <FALSE/> if any error occurred
+            @return <TRUE/> in case of success, <FALSE/> if any error occured
         */
         bool    getEncodedHead( ::rtl::OString& _out_rHead ) const;
 
         /** retrieves our formatter's tail, encoded with our encoding
 
-            @return <TRUE/> in case of success, <FALSE/> if any error occurred
+            @return <TRUE/> in case of success, <FALSE/> if any error occured
         */
         bool    getEncodedTail( ::rtl::OString& _out_rTail ) const;
 

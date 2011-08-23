@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,10 +26,10 @@
  *
  ************************************************************************/
 
+#include "tokens.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/shapes.hxx"
 #include "oox/export/utils.hxx"
-#include <oox/token/tokens.hxx>
 
 #include <cstdio>
 #include <com/sun/star/awt/CharSet.hpp>
@@ -103,6 +103,8 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::sax_fastparser::FSHelperPtr;
 
+DBG(extern void dump_pset(Reference< XPropertySet > rXPropSet));
+
 #define IDS(x) (OString(#x " ") + OString::valueOf( mnShapeIdMax++ )).getStr()
 
 struct CustomShapeTypeTranslationTable
@@ -111,7 +113,7 @@ struct CustomShapeTypeTranslationTable
     const char* sMSO;
 };
 
-static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] =
+static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] = 
 {
     // { "non-primitive", mso_sptMin },
     { "rectangle", "rect" },
@@ -318,14 +320,6 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "mso-spt202", "rect" }
 };
 
-struct StringHash
-{
-    size_t operator()( const char* s ) const
-    {
-        return rtl_str_hashCode(s);
-    }
-};
-
 struct StringCheck
 {
     bool operator()( const char* s1, const char* s2 ) const
@@ -334,7 +328,7 @@ struct StringCheck
     }
 };
 
-typedef boost::unordered_map< const char*, const char*, StringHash, StringCheck> CustomShapeTypeTranslationHashMap;
+typedef std::hash_map< const char*, const char*, std::hash<const char*>, StringCheck> CustomShapeTypeTranslationHashMap;
 static CustomShapeTypeTranslationHashMap* pCustomShapeTypeTranslationHashMap = NULL;
 
 static const char* lcl_GetPresetGeometry( const char* sShapeType )
@@ -407,26 +401,9 @@ awt::Size ShapeExport::MapSize( const awt::Size& rSize ) const
 
 sal_Bool ShapeExport::NonEmptyText( Reference< XShape > xShape )
 {
-    Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
-    sal_Bool bIsEmptyPresObj = sal_False;
-    if( xPropSet.is() && ( xPropSet->getPropertyValue( S( "IsEmptyPresentationObject" ) ) >>= bIsEmptyPresObj ) ) {
-        DBG(printf("empty presentation object %d, props:\n", bIsEmptyPresObj));
-        if( bIsEmptyPresObj )
-            return sal_True;
-    }
-    sal_Bool bIsPresObj = sal_False;
-    if( xPropSet.is() && ( xPropSet->getPropertyValue( S( "IsPresentationObject" ) ) >>= bIsPresObj ) ) {
-        DBG(printf("presentation object %d, props:\n", bIsPresObj));
-        if( bIsPresObj )
-            return sal_True;
-    }
-
     Reference< XSimpleText > xText( xShape, UNO_QUERY );
 
-    if( xText.is() )
-        return xText->getString().getLength();
-
-    return sal_False;
+    return ( xText.is() && xText->getString().getLength() );
 }
 
 ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool bClosed )
@@ -438,11 +415,9 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool
 
     PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     Rectangle aRect( aPolyPolygon.GetBoundRect() );
-
-#if OSL_DEBUG_LEVEL > 0
     awt::Size size = MapSize( awt::Size( aRect.GetWidth(), aRect.GetHeight() ) );
+
     DBG(printf("poly count %d\nsize: %d x %d", aPolyPolygon.Count(), int( size.Width ), int( size.Height )));
-#endif
 
     // non visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
@@ -477,12 +452,12 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool
 
 ShapeExport& ShapeExport::WriteClosedBezierShape( Reference< XShape > xShape )
 {
-    return WriteBezierShape( xShape, sal_True );
+    return WriteBezierShape( xShape, TRUE );
 }
 
 ShapeExport& ShapeExport::WriteOpenBezierShape( Reference< XShape > xShape )
 {
-    return WriteBezierShape( xShape, sal_False );
+    return WriteBezierShape( xShape, FALSE );
 }
 
 ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
@@ -492,7 +467,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     Reference< XPropertySet > rXPropSet( xShape, UNO_QUERY );
     SdrObjCustomShape* pShape = (SdrObjCustomShape*) GetSdrObjectFromXShape( xShape );
     sal_Bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape );
-    sal_Bool bPredefinedHandlesUsed = sal_True;
+    sal_Bool bPredefinedHandlesUsed = TRUE;
     OUString sShapeType;
     sal_uInt32 nMirrorFlags = 0;
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
@@ -511,11 +486,11 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
                 const PropertyValue& rProp = aGeometrySeq[ i ];
                 DBG(printf("geometry property: %s\n", USS( rProp.Name )));
 
-                if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AdjustmentValues" ) ))
+                if( rProp.Name.equalsAscii( "AdjustmentValues" ))
                     nAdjustmentValuesIndex = i;
-                else if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Handles" ) )) {
+                else if( rProp.Name.equalsAscii( "Handles" )) {
                     if( !bIsDefaultObject )
-                        bPredefinedHandlesUsed = sal_False;
+                        bPredefinedHandlesUsed = FALSE;
                     // TODO: update nAdjustmentsWhichNeedsToBeConverted here
                 }
             }
@@ -624,7 +599,7 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
     FSHelperPtr pFS = GetFS();
 
     pFS->startElementNS( mnXmlNamespace, XML_pic, FSEND );
-
+               
     pFS->startElementNS( mnXmlNamespace, XML_nvPicPr, FSEND );
 
     OUString sName, sDescr;
@@ -647,7 +622,7 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
     pFS->endElementNS( mnXmlNamespace, XML_nvPicPr );
 
     pFS->startElementNS( mnXmlNamespace, XML_blipFill, FSEND );
-
+    
     WriteBlip( xShapeProps, sGraphicURL );
 
     bool bStretch = false;
@@ -662,8 +637,6 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
     WriteShapeTransformation( xShape, XML_a );
     WritePresetShape( "rect" );
-    // graphic object can come with the frame (bnc#654525)
-    WriteOutline( xShapeProps );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     pFS->endElementNS( mnXmlNamespace, XML_pic );
@@ -718,13 +691,13 @@ ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
 
     Rectangle aRect( Point( aStartPoint.X, aStartPoint.Y ), Point( aEndPoint.X, aEndPoint.Y ) );
     if( aRect.getWidth() < 0 ) {
-        bFlipH = sal_True;
+        bFlipH = TRUE;
         aRect.setX( aEndPoint.X );
         aRect.setWidth( aStartPoint.X - aEndPoint.X );
     }
 
     if( aRect.getHeight() < 0 ) {
-        bFlipV = sal_True;
+        bFlipV = TRUE;
         aRect.setY( aEndPoint.Y );
         aRect.setHeight( aStartPoint.Y - aEndPoint.Y );
     }
@@ -877,7 +850,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 }
 
 typedef ShapeExport& (ShapeExport::*ShapeConverter)( Reference< XShape > );
-typedef boost::unordered_map< const char*, ShapeConverter, StringHash, StringCheck> NameToConvertMapType;
+typedef std::hash_map< const char*, ShapeConverter, std::hash<const char*>, StringCheck> NameToConvertMapType;
 
 static const NameToConvertMapType& lcl_GetConverters()
 {
@@ -993,7 +966,7 @@ ShapeExport& ShapeExport::WriteUnknownShape( Reference< XShape > )
 
 size_t ShapeExport::ShapeHash::operator()( const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > rXShape ) const
 {
-    return rXShape->getShapeType().hashCode();
+    return maHashFunction( USS( rXShape->getShapeType() ) );
 }
 
 sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape )

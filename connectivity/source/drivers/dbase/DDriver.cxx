@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ using namespace ::com::sun::star::lang;
 //------------------------------------------------------------------------------
 rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.dbase.ODriver"));
+    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.dbase.ODriver");
 }
 
 //------------------------------------------------------------------
@@ -81,7 +81,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url ) throw(SQLException, RuntimeException)
 {
-    return !url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:")),11);
+    return !url.compareTo(::rtl::OUString::createFromAscii("sdbc:dbase:"),11);
 }
 // -----------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
@@ -115,7 +115,7 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::O
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
                 ,aBoolean)
                 );
-        return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size()); 
     }
 
     SharedResources aResources;

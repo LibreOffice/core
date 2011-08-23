@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,11 @@ namespace connectivity
         // ------------------------------------------------
         virtual double getValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _rxVariant,
-            const ::com::sun::star::util::Date& rNullDate ) const;
+            const ::com::sun::star::util::Date& rNullDate,
+            sal_Int16 nKeyType) const;
 
         // ------------------------------------------------
-        virtual ::rtl::OUString getFormattedValue(
+        virtual ::rtl::OUString getValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::util::Date& _rNullDate,
@@ -66,7 +67,7 @@ namespace connectivity
             sal_Int16 _nKeyType) const;
 
         // ------------------------------------------------
-        virtual ::rtl::OUString getFormattedValue(
+        virtual ::rtl::OUString getValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& _rxFormatter,
             const ::com::sun::star::lang::Locale& _rLocale,
@@ -93,7 +94,7 @@ namespace connectivity
 
         // ------------------------------------------------
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getRowSetConnection(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet)
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet) 
                 const SAL_THROW ( (::com::sun::star::uno::RuntimeException) );
 
         // ------------------------------------------------
@@ -152,19 +153,19 @@ namespace connectivity
 
         // ------------------------------------------------
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
-            @param      _rxCursorSet    the property set
+            @param		_rxCursorSet	the property set
         */
         virtual sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
         // ------------------------------------------------
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
-            @param      _rxCursorSet    the property set
+            @param		_rxCursorSet	the property set
         */
         virtual sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
         // ------------------------------------------------
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
-            @param      _rxCursorSet    the property set
+            @param		_rxCursorSet	the property set
         */
         virtual sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
@@ -176,7 +177,7 @@ namespace connectivity
                 const ::rtl::OUString& _rCommand,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
-            )   SAL_THROW( ( ) );
+            )	SAL_THROW( ( ) );
 
         // ------------------------------------------------
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
@@ -185,7 +186,7 @@ namespace connectivity
                 const sal_Int32 _nCommandType,
                 const ::rtl::OUString& _rCommand,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
-            )   SAL_THROW( ( ) );
+            )	SAL_THROW( ( ) );
 
         // ------------------------------------------------
         virtual bool isEmbeddedInDatabase(
@@ -200,7 +201,7 @@ namespace connectivity
     };
 
 //........................................................................
-}   // namespace connectivity
+}	// namespace connectivity
 //........................................................................
 
 #endif // CONNECTIVITY_STATIC_DBTOOLS_SIMPLE_HXX

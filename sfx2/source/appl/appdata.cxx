@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 #include <sfx2/request.hxx>
 #include "referers.hxx"
 #include "app.hrc"
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include "objshimp.hxx"
 #include <sfx2/appuno.hxx>
 #include "imestatuswindow.hxx"
@@ -97,9 +97,11 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* ) :
         pTopFrames( new SfxFrameArr_Impl ),
         pInitLinkList(0),
         pMatcher( 0 ),
+        pLabelResMgr( 0 ),
         pAppDispatch(NULL),
         pTemplates( 0 ),
         pPool(0),
+        pEventConfig(0),
         pDisabledSlotList( 0 ),
         pSecureURLs(0),
         pSaveOptions( 0 ),
@@ -109,6 +111,7 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* ) :
         pTemplateCommon( 0 ),
         nDocModalMode(0),
         nAutoTabPageId(0),
+        nBasicCallLevel(0),
         nRescheduleLocks(0),
         nInReschedule(0),
         nAsynchronCalls(0),

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -207,7 +207,7 @@ public class _XDocumentTemplates extends MultiMethodTest {
                 statRes.next();
             }
         } catch (com.sun.star.sdbc.SQLException e) {
-            log.println("Exception occurred:" + e);
+            log.println("Exception occured:" + e);
         }
 
         return ret;
@@ -218,7 +218,7 @@ public class _XDocumentTemplates extends MultiMethodTest {
         try {
             statResSet = getDynaResultSet(content).getStaticResultSet();
         } catch(com.sun.star.ucb.ListenerAlreadySetException e) {
-            log.println("Exception occurred:" + e);
+            log.println("Exception occured:" + e);
         }
         return statResSet;
     }
@@ -267,7 +267,7 @@ public class _XDocumentTemplates extends MultiMethodTest {
                 statRes.next();
             }
         } catch(com.sun.star.sdbc.SQLException e) {
-            log.println("Exception occurred:" + e);
+            log.println("Exception occured:" + e);
         }
 
         return subContent;

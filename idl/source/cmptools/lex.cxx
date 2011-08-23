@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,6 +39,14 @@
 #include <globals.hxx>
 #include <tools/bigint.hxx>
 
+/****************** SvToken **********************************************/
+/*************************************************************************
+|*
+|*    SvToken::Print()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
 ByteString SvToken::GetTokenAsString() const
 {
     ByteString aStr;
@@ -65,7 +73,7 @@ ByteString SvToken::GetTokenAsString() const
             aStr = cChar;
             break;
         case SVTOKEN_RTTIBASE:
-            aStr = "RTTIBASE";
+            aStr = "RTTIBASE";//(ULONG)pComplexObj;
             break;
         case SVTOKEN_EOF:
         case SVTOKEN_HASHID:
@@ -75,42 +83,91 @@ ByteString SvToken::GetTokenAsString() const
     return aStr;
 }
 
+/*************************************************************************
+|*
+|*    SvToken::SvToken()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
 SvToken::SvToken( const SvToken & rObj )
 {
     nLine = rObj.nLine;
     nColumn = rObj.nColumn;
     nType = rObj.nType;
     aString = rObj.aString;
-    nLong = rObj.nLong;
+/*
+    if( SVTOKEN_RTTIBASE = nType )
+    {
+        pComplexObj = rObj.pComplexObj;
+        pComplexObj->AddRef();
+    }
+    else
+*/
+        nLong = rObj.nLong;
 }
 
+/*************************************************************************
+|*
+|*    SvToken::operator = ()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
 SvToken & SvToken::operator = ( const SvToken & rObj )
 {
     if( this != &rObj )
     {
+/*
+        if( SVTOKEN_RTTIBASE = nType )
+            pComplexObj->ReleaseRef();
+*/
         nLine = rObj.nLine;
         nColumn = rObj.nColumn;
         nType = rObj.nType;
         aString = rObj.aString;
-        nLong = rObj.nLong;
+/*
+        if( SVTOKEN_RTTIBASE = nType )
+        {
+            pComplexObj = rObj.pComplexObj;
+            pComplexObj->AddRef();
+        }
+        else
+*/
+            nLong = rObj.nLong;
     }
     return *this;
 }
 
+/****************** SvTokenStream ****************************************/
+/*************************************************************************
+|*    SvTokenStream::InitCtor()
+|*
+|*    Beschreibung
+*************************************************************************/
 void SvTokenStream::InitCtor()
 {
+#ifdef DOS
+    SetCharSet( CHARSET_ANSI );
+#else
     SetCharSet( gsl_getSystemTextEncoding() );
-    aStrTrue    = "TRUE";
-    aStrFalse   = "FALSE";
+#endif
+    aStrTrue	= "TRUE";
+    aStrFalse	= "FALSE";
     nLine       = nColumn = 0;
     nBufPos     = 0;
     nTabSize    = 4;
-    pCurToken   = NULL;
-    nMaxPos     = 0;
+    pCurToken	= NULL;
+    nMaxPos		= 0;
     c           = GetNextChar();
     FillTokenList();
 }
 
+/*************************************************************************
+|*    SvTokenStream::SvTokenStream()
+|*
+|*    Beschreibung
+*************************************************************************/
 SvTokenStream::SvTokenStream( const String & rFileName )
     : pInStream( new SvFileStream( rFileName, STREAM_STD_READ | STREAM_NOCREATE ) )
     , rInStream( *pInStream )
@@ -120,6 +177,11 @@ SvTokenStream::SvTokenStream( const String & rFileName )
     InitCtor();
 }
 
+/*************************************************************************
+|*    SvTokenStream::SvTokenStream()
+|*
+|*    Beschreibung
+*************************************************************************/
 SvTokenStream::SvTokenStream( SvStream & rStream, const String & rFileName )
     : pInStream( NULL )
     , rInStream( rStream )
@@ -129,6 +191,11 @@ SvTokenStream::SvTokenStream( SvStream & rStream, const String & rFileName )
     InitCtor();
 }
 
+/*************************************************************************
+|*    SvTokenStream::~SvTokenStream()
+|*
+|*    Beschreibung
+*************************************************************************/
 SvTokenStream::~SvTokenStream()
 {
     delete pInStream;
@@ -140,6 +207,11 @@ SvTokenStream::~SvTokenStream()
     }
 }
 
+/*************************************************************************
+|*    SvTokenStream::FillTokenList()
+|*
+|*    Beschreibung
+*************************************************************************/
 void SvTokenStream::FillTokenList()
 {
     SvToken * pToken = new SvToken();
@@ -171,12 +243,27 @@ void SvTokenStream::FillTokenList()
     pCurToken = aTokList.First();
 }
 
+/*************************************************************************
+|*    SvTokenStrem::SetCharSet()
+|*
+|*    Beschreibung
+*************************************************************************/
 void SvTokenStream::SetCharSet( CharSet nSet )
 {
     nCharSet = nSet;
+
+#ifdef DOS
+    pCharTab = SvChar::GetTable( nSet, CHARSET_ANSI );
+#else
     pCharTab = SvChar::GetTable( nSet, gsl_getSystemTextEncoding() );
+#endif
 }
 
+/*************************************************************************
+|*    SvTokeStream::GetNextChar()
+|*
+|*    Beschreibung
+*************************************************************************/
 int SvTokenStream::GetNextChar()
 {
     int nChar;
@@ -196,14 +283,19 @@ int SvTokenStream::GetNextChar()
             return '\0';
         }
     }
-    nChar = aBufStr.GetChar( (sal_uInt16)nBufPos++ );
+    nChar = aBufStr.GetChar( (USHORT)nBufPos++ );
     nColumn += nChar == '\t' ? nTabSize : 1;
     return nChar;
 }
 
-sal_uLong SvTokenStream::GetNumber()
+/*************************************************************************
+|*    SvTokenStrem::GetNumber()
+|*
+|*    Beschreibung
+*************************************************************************/
+ULONG SvTokenStream::GetNumber()
 {
-    sal_uLong   l = 0;
+    ULONG   l = 0;
     short   nLog = 10;
 
     if( '0' == c )
@@ -239,13 +331,21 @@ sal_uLong SvTokenStream::GetNumber()
     return( l );
 }
 
-sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
+/*************************************************************************
+|*    SvTokenStream::MakeToken()
+|*
+|*    Beschreibung
+*************************************************************************/
+BOOL SvTokenStream::MakeToken( SvToken & rToken )
 {
+    int             c1;
+    USHORT          i;
+
     do
     {
         if( 0 == c )
             c = GetNextChar();
-        // skip whitespace
+        // Leerzeichen ueberlesen
         while( isspace( c ) || 26 == c )
         {
             c = GetFastNextChar();
@@ -254,46 +354,54 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
     }
     while( 0 == c && !IsEof() && ( SVSTREAM_OK == rInStream.GetError() ) );
 
-    sal_uLong nLastLine     = nLine;
-    sal_uLong nLastColumn   = nColumn;
-    // comment
+    ULONG nLastLine		= nLine;
+    ULONG nLastColumn	= nColumn;
+    // Kommentar
     if( '/' == c )
     {
-        // time optimization, no comments
-        int c1 = c;
+        // Zeit Optimierung, keine Kommentare
+        //ByteString aComment( (char)c );
+        c1 = c;
         c = GetFastNextChar();
         if( '/' == c )
         {
             while( '\0' != c )
             {
+                //aComment += (char)c;
                 c = GetFastNextChar();
             }
             c = GetNextChar();
-            rToken.nType    = SVTOKEN_COMMENT;
+            rToken.nType 	= SVTOKEN_COMMENT;
+            //rToken.aString	= aComment;
         }
         else if( '*' == c )
         {
+            //aComment += (char)c;
             c = GetFastNextChar();
             do
             {
+                //aComment += (char)c;
                 while( '*' != c )
                 {
                     if( '\0' == c )
                     {
                         c = GetNextChar();
                         if( IsEof() )
-                            return sal_False;
+                            return FALSE;
                     }
                     else
                         c = GetFastNextChar();
+                    //aComment += (char)c;
                 }
                 c = GetFastNextChar();
             }
             while( '/' != c && !IsEof() && ( SVSTREAM_OK == rInStream.GetError() ) );
             if( IsEof() || ( SVSTREAM_OK != rInStream.GetError() ) )
-                return sal_False;
+                return FALSE;
+            //aComment += (char)c;
             c = GetNextChar();
             rToken.nType = SVTOKEN_COMMENT;
+            //rToken.aString = aComment;
             CalcColumn();
         }
         else
@@ -305,17 +413,18 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
     else if( c == '"' )
     {
         ByteString          aStr;
-        sal_Bool bDone = sal_False;
+        i = 0;
+        BOOL bDone = FALSE;
         while( !bDone && !IsEof() && c )
         {
             c = GetFastNextChar();
             if( '\0' == c )
             {
-                // read strings beyond end of line
+                // Strings auch "uber das Zeilenende hinauslesen
                 aStr += '\n';
                 c = GetNextChar();
                 if( IsEof() )
-                    return sal_False;
+                    return FALSE;
             }
             if( c == '"' )
             {
@@ -326,7 +435,7 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
                     aStr += '"';
                 }
                 else
-                    bDone = sal_True;
+                    bDone = TRUE;
             }
             else if( c == '\\' )
             {
@@ -339,7 +448,7 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
                 aStr += (char)c;
         }
         if( IsEof() || ( SVSTREAM_OK != rInStream.GetError() ) )
-            return sal_False;
+            return FALSE;
         char * pStr = (char *)aStr.GetBuffer();
         while( *pStr )
         {
@@ -367,16 +476,16 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
         if( aStr.EqualsIgnoreCaseAscii( aStrTrue ) )
         {
             rToken.nType = SVTOKEN_BOOL;
-            rToken.bBool = sal_True;
+            rToken.bBool = TRUE;
         }
         else if( aStr.EqualsIgnoreCaseAscii( aStrFalse ) )
         {
             rToken.nType = SVTOKEN_BOOL;
-            rToken.bBool = sal_False;
+            rToken.bBool = FALSE;
         }
         else
         {
-            sal_uInt32 nHashId;
+            UINT32 nHashId;
             if( IDLAPP->pHashTable->Test( aStr, &nHashId ) )
                 rToken.SetHash( IDLAPP->pHashTable->Get( nHashId ) );
             else

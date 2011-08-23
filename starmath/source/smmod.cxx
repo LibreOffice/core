@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ TYPEINIT1( SmModule, SfxModule );
 
 
 
-SmResId::SmResId( sal_uInt16 nId )
+SmResId::SmResId( USHORT nId )
     : ResId(nId, *SM_MOD()->GetResMgr())
 {
 }
@@ -72,7 +72,7 @@ SmResId::SmResId( sal_uInt16 nId )
 
 SmLocalizedSymbolData::SmLocalizedSymbolData() :
     Resource( SmResId(RID_LOCALIZED_NAMES) ),
-    aUiSymbolNamesAry       ( SmResId(RID_UI_SYMBOL_NAMES) ),
+    aUiSymbolNamesAry		( SmResId(RID_UI_SYMBOL_NAMES) ),
     aExportSymbolNamesAry   ( SmResId(RID_EXPORT_SYMBOL_NAMES) ),
     aUiSymbolSetNamesAry    ( SmResId(RID_UI_SYMBOLSET_NAMES) ),
     aExportSymbolSetNamesAry( SmResId(RID_EXPORT_SYMBOLSET_NAMES) ),
@@ -99,8 +99,8 @@ const String SmLocalizedSymbolData::GetUiSymbolName( const String &rExportName )
     const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
-    sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
-    for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    USHORT nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
+    for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
         if (rExportName == rExportNames.GetString(i))
         {
@@ -120,8 +120,8 @@ const String SmLocalizedSymbolData::GetExportSymbolName( const String &rUiName )
     const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
-    sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
-    for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    USHORT nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
+    for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
         if (rUiName == rUiNames.GetString(i))
         {
@@ -141,8 +141,8 @@ const String SmLocalizedSymbolData::GetUiSymbolSetName( const String &rExportNam
     const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
-    sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
-    for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    USHORT nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
+    for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
         if (rExportName == rExportNames.GetString(i))
         {
@@ -162,8 +162,8 @@ const String SmLocalizedSymbolData::GetExportSymbolSetName( const String &rUiNam
     const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
-    sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
-    for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    USHORT nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
+    for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
         if (rUiName == rUiNames.GetString(i))
         {
@@ -232,7 +232,7 @@ SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
 
 
 SmModule::SmModule(SfxObjectFactory* pObjFact) :
-    SfxModule(SfxApplication::CreateResManager("sm"), sal_False, pObjFact, NULL),
+    SfxModule(SfxApplication::CreateResManager("sm"), FALSE, pObjFact, NULL),
     pColorConfig( 0 ),
     pConfig( 0 ),
     pLocSymbolData( 0 ),
@@ -327,7 +327,7 @@ void SmModule::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
 
-    for (sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich())
+    for (USHORT nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich())
         switch (nWh)
         {
             case SID_CONFIGEVENT :
@@ -336,36 +336,45 @@ void SmModule::GetState(SfxItemSet &rSet)
         }
 }
 
-SfxItemSet*  SmModule::CreateItemSet( sal_uInt16 nId )
+void SmModule::FillStatusBar(StatusBar &rBar)
 {
-    SfxItemSet*  pRet = 0;
+    rBar.InsertItem(SID_TEXTSTATUS, 300, SIB_LEFT | SIB_IN);
+    rBar.InsertItem(SID_ATTR_ZOOM, rBar.GetTextWidth(C2S(" 100% ")));
+    rBar.InsertItem(SID_MODIFYSTATUS, rBar.GetTextWidth(C2S(" * ")));
+    rBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rBar ), SIB_USERDRAW );
+    rBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
+
+}
+
+SfxItemSet*	 SmModule::CreateItemSet( USHORT nId )
+{
+    SfxItemSet*	 pRet = 0;
     if(nId == SID_SM_EDITOPTIONS)
     {
         pRet = new SfxItemSet(GetPool(),
                              //TP_SMPRINT
-                             SID_PRINTSIZE,         SID_PRINTSIZE,
-                             SID_PRINTZOOM,         SID_PRINTZOOM,
-                             SID_PRINTTITLE,        SID_PRINTTITLE,
-                             SID_PRINTTEXT,         SID_PRINTTEXT,
-                             SID_PRINTFRAME,        SID_PRINTFRAME,
-                             SID_NO_RIGHT_SPACES,   SID_NO_RIGHT_SPACES,
-                             SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
+                             SID_PRINTSIZE, 		SID_PRINTSIZE,
+                             SID_PRINTZOOM, 		SID_PRINTZOOM,
+                             SID_PRINTTITLE,		SID_PRINTTITLE,
+                             SID_PRINTTEXT, 		SID_PRINTTEXT,
+                             SID_PRINTFRAME,		SID_PRINTFRAME,
+                             SID_NO_RIGHT_SPACES,	SID_NO_RIGHT_SPACES,
                              0 );
 
             GetConfig()->ConfigToItemSet(*pRet);
     }
     return pRet;
 }
-void SmModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
+void SmModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 {
     if(nId == SID_SM_EDITOPTIONS)
     {
         GetConfig()->ItemSetToConfig(rSet);
     }
 }
-SfxTabPage*  SmModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )
+SfxTabPage*	 SmModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
 {
-    SfxTabPage*  pRet = 0;
+    SfxTabPage*	 pRet = 0;
     if(nId == SID_SM_TP_PRINTOPTIONS)
         pRet = SmPrintOptionsTabPage::Create( pParent, rSet );
     return pRet;

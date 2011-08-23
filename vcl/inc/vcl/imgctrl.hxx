@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,29 +41,30 @@
 class VCL_DLLPUBLIC ImageControl : public FixedImage
 {
 private:
+    BitmapEx		maBmp;
+    BitmapEx		maBmpHC;
     ::sal_Int16     mnScaleMode;
 
 public:
                     ImageControl( Window* pParent, WinBits nStyle = 0 );
-                    ImageControl( Window* pParent, const ResId& rResId );
 
     // set/get the scale mode. This is one of the css.awt.ImageScaleMode constants
     void            SetScaleMode( const ::sal_Int16 _nMode );
     ::sal_Int16     GetScaleMode() const { return mnScaleMode; }
 
-    virtual void    Resize();
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
+    virtual void	Resize();
+    virtual void	UserDraw( const UserDrawEvent& rUDEvt );
     virtual void    Paint( const Rectangle& rRect );
     virtual void    GetFocus();
     virtual void    LoseFocus();
 
-protected:
-    void    ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize ) const;
-private:
-    sal_Bool        SetModeBitmap( const BitmapEx& rBitmap );
-    const BitmapEx& GetModeBitmap( ) const;
+    void			SetBitmap( const BitmapEx& rBmp );
+    using OutputDevice::GetBitmap;
+    const BitmapEx& GetBitmap() const { return maBmp; }
+    BOOL            SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode = BMP_COLOR_NORMAL );
+    const BitmapEx& GetModeBitmap( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
 };
 
-#endif  // _SV_IMGCTRL_HXX
+#endif	// _SV_IMGCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

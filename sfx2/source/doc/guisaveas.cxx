@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,14 +73,13 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
-#include <comphelper/mimeconfighelper.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
 #include <sfx2/sfxsids.hrc>
 #include <doc.hrc>
-#include <sfx2/sfxresid.hxx>
+#include <sfxresid.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/app.hxx>
@@ -95,18 +94,18 @@
 #define DOCPROPSNUM 17
 
 // flags that specify requested operation
-#define EXPORT_REQUESTED            1
-#define PDFEXPORT_REQUESTED         2
-#define PDFDIRECTEXPORT_REQUESTED   4
-#define WIDEEXPORT_REQUESTED        8
-#define SAVE_REQUESTED              16
-#define SAVEAS_REQUESTED            32
+#define EXPORT_REQUESTED 			1
+#define PDFEXPORT_REQUESTED			2
+#define PDFDIRECTEXPORT_REQUESTED	4
+#define WIDEEXPORT_REQUESTED		8
+#define SAVE_REQUESTED				16
+#define SAVEAS_REQUESTED			32
 
 // possible statuses of save operation
-#define STATUS_NO_ACTION            0
-#define STATUS_SAVE                 1
-#define STATUS_SAVEAS               2
-#define STATUS_SAVEAS_STANDARDNAME  3
+#define STATUS_NO_ACTION			0
+#define STATUS_SAVE					1
+#define STATUS_SAVEAS				2
+#define STATUS_SAVEAS_STANDARDNAME	3
 
 const ::rtl::OUString aFilterNameString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
 const ::rtl::OUString aFilterOptionsString(RTL_CONSTASCII_USTRINGPARAM("FilterOptions"));
@@ -142,15 +141,15 @@ static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
 static sal_uInt8 getStoreModeFromSlotName( const ::rtl::OUString& aSlotName )
 {
     sal_uInt8 nResult = 0;
-    if ( aSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportTo" ) ) )
+    if ( aSlotName.equalsAscii( "ExportTo" ) )
         nResult = EXPORT_REQUESTED;
-    else if ( aSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportToPDF" ) ) )
+    else if ( aSlotName.equalsAscii( "ExportToPDF" ) )
         nResult = EXPORT_REQUESTED | PDFEXPORT_REQUESTED;
-    else if ( aSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportDirectToPDF" ) ) )
+    else if ( aSlotName.equalsAscii( "ExportDirectToPDF" ) )
         nResult = EXPORT_REQUESTED | PDFEXPORT_REQUESTED | PDFDIRECTEXPORT_REQUESTED;
-    else if ( aSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Save" ) ) )
+    else if ( aSlotName.equalsAscii( "Save" ) )
         nResult = SAVE_REQUESTED;
-    else if ( aSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SaveAs" ) ) )
+    else if ( aSlotName.equalsAscii( "SaveAs" ) )
         nResult = SAVEAS_REQUESTED;
     else
         throw task::ErrorCodeIOException( ::rtl::OUString(),
@@ -195,7 +194,7 @@ public:
         try
         {
             uno::Reference< lang::XMultiServiceFactory > xDocSettingsSupplier( xModel, uno::UNO_QUERY_THROW );
-            m_xDocumentSettings.set(
+            m_xDocumentSettings.set( 
                 xDocSettingsSupplier->createInstance(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ),
                 uno::UNO_QUERY_THROW );
@@ -231,7 +230,7 @@ public:
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL( "Unexpected exception!" );
+                OSL_ASSERT( "Unexpected exception!" );
             }
         }
     }
@@ -273,7 +272,7 @@ public:
 
     ::comphelper::SequenceAsHashMap& GetMediaDescr() { return m_aMediaDescrHM; }
 
-    sal_Bool IsRecommendReadOnly() const { return m_bRecommendReadOnly; }
+    sal_Bool IsRecommendReadOnly() { return m_bRecommendReadOnly; }
 
     const ::comphelper::SequenceAsHashMap& GetDocProps();
 
@@ -510,7 +509,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( sa
     aSearchRequest[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService"));
     aSearchRequest[0].Value <<= GetDocServiceName();
 
-    return ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
+    return SfxStoringHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
 }
 
 //-------------------------------------------------------------------------
@@ -530,7 +529,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
         aSearchRequest[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService"));
         aSearchRequest[1].Value <<= GetDocServiceName();
 
-        aFilterProps = ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
+        aFilterProps = SfxStoringHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
     }
     else
     {
@@ -754,7 +753,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const ::rtl::OUString& aFilterName )
         return STATUS_SAVEAS_STANDARDNAME;
     }
     else if ( ( !( nFiltFlags & SFX_FILTER_OWN ) || ( nFiltFlags & SFX_FILTER_ALIEN ) )
-           && aDefFiltPropsHM.size()
+           && !( nFiltFlags & SFX_FILTER_SILENTEXPORT ) && aDefFiltPropsHM.size()
            && ( nDefFiltFlags & SFX_FILTER_EXPORT ) && !( nDefFiltFlags & SFX_FILTER_INTERNAL ))
     {
         // the default filter is acceptable and the old filter is alian one
@@ -883,11 +882,11 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
             pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rBlackList );
         }
 
-        if( aDocServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) )
+        if( aDocServiceName.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
                eCtxt = sfx2::FileDialogHelper::SD_EXPORT;
-        if( aDocServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
+        if( aDocServiceName.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
                eCtxt = sfx2::FileDialogHelper::SI_EXPORT;
-        if( aDocServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ) )
+        if( aDocServiceName.equalsAscii( "com.sun.star.text.TextDocument" ) )
             eCtxt = sfx2::FileDialogHelper::SW_EXPORT;
 
         if ( eCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT )
@@ -986,11 +985,12 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                          NULL );
 
     const SfxPoolItem* pItem = NULL;
-    if ( bPreselectPassword && aDialogParams.GetItemState( SID_ENCRYPTIONDATA, sal_True, &pItem ) != SFX_ITEM_SET )
+    if ( bPreselectPassword && aDialogParams.GetItemState( SID_PASSWORD, sal_True, &pItem ) != SFX_ITEM_SET )
     {
-        // the file dialog preselects the password checkbox if the provided mediadescriptor has encryption data entry
-        // after dialog execution the password interaction flag will be either removed or not
-        aDialogParams.Put( SfxBoolItem( SID_PASSWORDINTERACTION, sal_True ) );
+        // the file dialog preselects the password checkbox if the provided mediadescriptor has password entry
+        // after dialog execution the password entry will be either removed or replaced with the password
+        // entered by the user
+        aDialogParams.Put( SfxStringItem( SID_PASSWORD, String() ) );
     }
 
     // aStringTypeFN is a pure output parameter, pDialogParams is an in/out parameter
@@ -1002,7 +1002,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     }
 
     ::rtl::OUString aFilterName = aStringTypeFN;
-
+    
     // the following two arguments can not be converted in MediaDescriptor,
     // so they should be removed from the ItemSet after retrieving
     SFX_ITEMSET_ARG( pDialogParams, pRecommendReadOnly, SfxBoolItem, SID_RECOMMENDREADONLY, sal_False );
@@ -1407,13 +1407,13 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
             }
             catch( lang::IllegalArgumentException& )
             {
-                OSL_FAIL( "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
+                OSL_ENSURE( sal_False, "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
                 aModelData.GetStorable()->store();
             }
         }
         else
         {
-            OSL_FAIL( "XStorable2 is not supported by the model!\n" );
+            OSL_ENSURE( sal_False, "XStorable2 is not supported by the model!\n" );
             aModelData.GetStorable()->store();
         }
 
@@ -1494,7 +1494,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         if ( aStdDirIter != aModelData.GetMediaDescr().end() )
             aStdDirIter->second >>= sStandardDir;
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >  aBlackList;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >	aBlackList;
 
         ::comphelper::SequenceAsHashMap::const_iterator aBlackListIter =
             aModelData.GetMediaDescr().find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BlackList")) );
@@ -1597,7 +1597,6 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
 
     DocumentSettingsGuard aSettingsGuard( aModelData.GetModel(), aModelData.IsRecommendReadOnly(), nStoreMode & EXPORT_REQUESTED );
 
-    OSL_ENSURE( aModelData.GetMediaDescr().find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ) ) == aModelData.GetMediaDescr().end(), "The Password property of MediaDescriptor should not be used here!" );
     if ( aOptions.IsDocInfoSave()
       && ( !aModelData.GetStorable()->hasLocation()
           || INetURLObject( aModelData.GetStorable()->getLocation() ) != aURL ) )
@@ -1618,7 +1617,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
             bDialogUsed = sal_True;
         else
         {
-            OSL_FAIL( "Can't execute document info dialog!\n" );
+            DBG_ERROR( "Can't execute document info dialog!\n" );
         }
 
         try {
@@ -1654,6 +1653,47 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
     }
 
     return bDialogUsed;
+}
+
+//-------------------------------------------------------------------------
+// static
+uno::Sequence< beans::PropertyValue > SfxStoringHelper::SearchForFilter(
+                                                        const uno::Reference< container::XContainerQuery >& xFilterQuery,
+                                                        const uno::Sequence< beans::NamedValue >& aSearchRequest,
+                                                        sal_Int32 nMustFlags,
+                                                        sal_Int32 nDontFlags )
+{
+    uno::Sequence< beans::PropertyValue > aFilterProps;
+    uno::Reference< container::XEnumeration > xFilterEnum =
+                                            xFilterQuery->createSubSetEnumerationByProperties( aSearchRequest );
+
+    // the first default filter will be taken,
+    // if there is no filter with flag default the first acceptable filter will be taken
+    if ( xFilterEnum.is() )
+    {
+        while ( xFilterEnum->hasMoreElements() )
+        {
+            uno::Sequence< beans::PropertyValue > aProps;
+            if ( xFilterEnum->nextElement() >>= aProps )
+            {
+                ::comphelper::SequenceAsHashMap aPropsHM( aProps );
+                sal_Int32 nFlags = aPropsHM.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")),
+                                                                        (sal_Int32)0 );
+                if ( ( ( nFlags & nMustFlags ) == nMustFlags ) && !( nFlags & nDontFlags ) )
+                {
+                    if ( ( nFlags & SFX_FILTER_DEFAULT ) == SFX_FILTER_DEFAULT )
+                    {
+                        aFilterProps = aProps;
+                        break;
+                    }
+                    else if ( !aFilterProps.getLength() )
+                        aFilterProps = aProps;
+                }
+            }
+        }
+    }
+
+    return aFilterProps;
 }
 
 //-------------------------------------------------------------------------
@@ -1765,6 +1805,7 @@ sal_Bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::
     return aDlg.Execute() == RET_OK;
 }
 
+// static
 void SfxStoringHelper::ExecuteFilterDialog( SfxStoringHelper& _rStorageHelper
                                             ,const ::rtl::OUString& _sFilterName
                                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _xModel
@@ -1775,6 +1816,7 @@ void SfxStoringHelper::ExecuteFilterDialog( SfxStoringHelper& _rStorageHelper
         _rArgsSequence = aModelData.GetMediaDescr().getAsConstPropertyValueList();
 }
 
+// static
 Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )
 {
     Window* pWin = 0;

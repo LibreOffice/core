@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,34 +33,37 @@
 #include <vcl/window.hxx>
 
 class SwNumRule;
+/*-----------------02.12.97 10:31-------------------
+
+--------------------------------------------------*/
 
 class NumberingPreview : public Window
 {
-    const SwNumRule*    pActNum;
-    Font                aStdFont;
-    long                nPageWidth;
-    const String*       pOutlineNames;
-    sal_Bool                bPosition;
-    sal_uInt16              nActLevel;
+    const SwNumRule* 	pActNum;
+    Font 				aStdFont;
+    long				nPageWidth;
+    const String* 		pOutlineNames;
+    BOOL				bPosition;
+    UINT16 				nActLevel;
 
     protected:
-        virtual void        Paint( const Rectangle& rRect );
+        virtual void		Paint( const Rectangle& rRect );
 
     public:
         NumberingPreview(Window* pParent, const ResId& rResId ) :
             Window(pParent, rResId),
-            pActNum(0),nPageWidth(0), pOutlineNames(0), bPosition(sal_False), nActLevel(USHRT_MAX) {}
+            pActNum(0),nPageWidth(0), pOutlineNames(0), bPosition(FALSE), nActLevel(USHRT_MAX) {}
         ~NumberingPreview();
 
-        void    SetNumRule(const SwNumRule* pNum)
+        void	SetNumRule(const SwNumRule* pNum)
                     {pActNum = pNum; Invalidate();};
-        void    SetPageWidth(long nPgWidth)
+        void	SetPageWidth(long nPgWidth)
                                 {nPageWidth = nPgWidth;}
-        void    SetOutlineNames(const String* pNames)
+        void	SetOutlineNames(const String* pNames)
                         {pOutlineNames = pNames;}
-        void    SetPositionMode()
-                        { bPosition = sal_True;}
-        void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
+        void	SetPositionMode()
+                        { bPosition = TRUE;}
+        void	SetLevel(USHORT nSet) {nActLevel = nSet;}
 
 };
 

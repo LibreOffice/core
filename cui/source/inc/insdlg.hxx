@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <svtools/insdlg.hxx>
@@ -39,7 +40,7 @@
 #include <vcl/field.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/svmedit.hxx>  // MultiLineEdit
+#include <svtools/svmedit.hxx>	// MultiLineEdit
 #include <comphelper/embeddedobjectcontainer.hxx>
 
 class INetURLObject;
@@ -56,18 +57,18 @@ public:
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject()
                         { return m_xObj; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( ::rtl::OUString* pGraphicMediaType );
-    virtual sal_Bool IsCreateNew() const;
+    virtual BOOL IsCreateNew() const;
 };
 
 class SvInsertOleDlg : public InsertObjectDialog_Impl
 {
     RadioButton aRbNewObject;
     RadioButton aRbObjectFromfile;
-    FixedLine aGbObject;
     ListBox aLbObjecttype;
     Edit aEdFilepath;
     PushButton aBtnFilepath;
     CheckBox aCbFilelink;
+    FixedLine aGbObject;
     OKButton aOKButton1;
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;
@@ -85,10 +86,12 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     ListBox&            GetObjectTypes()
                         { return aLbObjecttype; }
     String              GetFilePath() const { return aEdFilepath.GetText(); }
-    sal_Bool                IsLinked() const    { return aCbFilelink.IsChecked(); }
-    sal_Bool                IsCreateNew() const { return aRbNewObject.IsChecked(); }
+    BOOL                IsLinked() const    { return aCbFilelink.IsChecked(); }
+    BOOL                IsCreateNew() const { return aRbNewObject.IsChecked(); }
 
 public:
+    static void			FillObjectServerList( SvObjectServerList* );
+
                         SvInsertOleDlg( Window* pParent,
                             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
                             const SvObjectServerList* pServers = NULL );
@@ -103,11 +106,11 @@ public:
 class SvInsertPlugInDialog : public InsertObjectDialog_Impl
 {
 private:
-    FixedLine aGbFileurl;
     Edit aEdFileurl;
     PushButton aBtnFileurl;
-    FixedLine aGbPluginsOptions;
+    FixedLine aGbFileurl;
     MultiLineEdit aEdPluginsOptions;
+    FixedLine aGbPluginsOptions;
     OKButton aOKButton1;
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;
@@ -168,31 +171,30 @@ public:
 class SfxInsertFloatingFrameDialog : public InsertObjectDialog_Impl
 {
 private:
-    FixedText               aFTName;
-    Edit                    aEDName;
-    FixedText               aFTURL;
-    Edit                    aEDURL;
-    PushButton              aBTOpen;
+    FixedText           	aFTName;
+    Edit		        	aEDName;
+    FixedText	        	aFTURL;
+    Edit		        	aEDURL;
+    PushButton				aBTOpen;
 
+    RadioButton		    	aRBScrollingOn;
+    RadioButton		    	aRBScrollingOff;
+    RadioButton		    	aRBScrollingAuto;
     FixedLine               aFLScrolling;
-    RadioButton             aRBScrollingOn;
-    RadioButton             aRBScrollingOff;
-    RadioButton             aRBScrollingAuto;
-
 
     FixedLine               aFLSepLeft;
-    FixedLine               aFLFrameBorder;
     RadioButton             aRBFrameBorderOn;
-    RadioButton             aRBFrameBorderOff;
+    RadioButton 	    	aRBFrameBorderOff;
+    FixedLine               aFLFrameBorder;
 
     FixedLine               aFLSepRight;
-    FixedLine               aFLMargin;
     FixedText               aFTMarginWidth;
-    NumericField            aNMMarginWidth;
-    CheckBox                aCBMarginWidthDefault;
-    FixedText               aFTMarginHeight;
-    NumericField            aNMMarginHeight;
-    CheckBox                aCBMarginHeightDefault;
+    NumericField	    	aNMMarginWidth;
+    CheckBox				aCBMarginWidthDefault;
+    FixedText		    	aFTMarginHeight;
+    NumericField	    	aNMMarginHeight;
+    CheckBox				aCBMarginHeightDefault;
+    FixedLine               aFLMargin;
 
     OKButton aOKButton1;
     CancelButton aCancelButton1;

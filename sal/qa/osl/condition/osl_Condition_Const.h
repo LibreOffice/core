@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,23 +26,29 @@
  *
  ************************************************************************/
 
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+
 #ifndef _OSL_CONDITION_CONST_H_
 #define _OSL_CONDITION_CONST_H_
+
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-#ifndef _OSL_THREAD_HXX_
+#ifndef	_OSL_THREAD_HXX_
 #include <osl/thread.hxx>
 #endif
 #include <osl/mutex.hxx>
 #include <osl/pipe.hxx>
 
-#ifndef _OSL_SEMAPHOR_HXX_
+#ifndef	_OSL_SEMAPHOR_HXX_
 #include <osl/semaphor.hxx>
 #endif
 
-#ifndef _OSL_CONDITION_HXX_
+#ifndef	_OSL_CONDITION_HXX_
 #include <osl/conditn.hxx>
 #endif
 #include <osl/time.h>
@@ -51,9 +57,7 @@
 #include <unistd.h>
 #endif
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <testshl/simpleheader.hxx>
 
 #define OSLTEST_DECLARE_USTRING( str_name, str_value ) \
     ::rtl::OUString a##str_name = rtl::OUString::createFromAscii( str_value )

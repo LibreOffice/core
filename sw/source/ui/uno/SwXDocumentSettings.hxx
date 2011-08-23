@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,10 +53,10 @@ class SwXDocumentSettings :
         public cppu::OWeakObject
 {
 protected:
-    com::sun::star::uno::Reference< com::sun::star::text::XTextDocument >       mxModel;
-    SwXTextDocument*        mpModel;
-    SwDocShell*             mpDocSh;
-    SwDoc*                  mpDoc;
+    com::sun::star::uno::Reference< com::sun::star::text::XTextDocument >		mxModel;
+    SwXTextDocument*		mpModel;
+    SwDocShell* 			mpDocSh;
+    SwDoc* 					mpDoc;
 
     /** the printer should be set only once; since there are several
      * printer-related properties, remember the last printer and set it in

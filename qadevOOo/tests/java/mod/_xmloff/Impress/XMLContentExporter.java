@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -179,7 +179,7 @@ public class XMLContentExporter extends TestCase {
     /**
      * This class checks the XML for tags and data required and returns
      * checking result to <code>XFilter</code> interface test. All
-     * the information about errors occurred in XML data is written
+     * the information about errors occured in XML data is written
      * to log specified.
      * @see ifc.document._XFilter
      */
@@ -198,7 +198,7 @@ public class XMLContentExporter extends TestCase {
          * which returns the result of XML checking.
          * @return <code>true</code> if the XML data exported was
          * valid (i.e. all necessary tags and character data exists),
-         * <code>false</code> if some errors occurred.
+         * <code>false</code> if some errors occured.
          */
         public boolean checkFilter() {
             return check() ;

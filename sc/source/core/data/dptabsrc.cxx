@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@
 #include <algorithm>
 #include <vector>
 #include <set>
-#include <boost/unordered_set.hpp>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
+#include <hash_set>
 
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
@@ -57,7 +57,7 @@
 #include "dptabdat.hxx"
 #include "global.hxx"
 #include "collect.hxx"
-#include "datauno.hxx"      // ScDataUnoConversion
+#include "datauno.hxx"		// ScDataUnoConversion
 #include "miscuno.hxx"
 #include "unonames.hxx"
 
@@ -77,6 +77,8 @@
 using namespace com::sun::star;
 using ::std::vector;
 using ::std::set;
+using ::std::hash_map;
+using ::std::hash_set;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -85,7 +87,7 @@ using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
-#define SC_MINCOUNT_LIMIT   1000000
+#define SC_MINCOUNT_LIMIT	1000000
 
 // -----------------------------------------------------------------------
 
@@ -102,19 +104,19 @@ SC_SIMPLE_SERVICE_INFO( ScDPMember,      "ScDPMember",      "com.sun.star.sheet.
 // -----------------------------------------------------------------------
 
 // property maps for PropertySetInfo
-//  DataDescription / NumberFormat are internal
+//	DataDescription / NumberFormat are internal
 
 // -----------------------------------------------------------------------
 
-//! move to a header?
-sal_Bool lcl_GetBoolFromAny( const uno::Any& aAny )
+//!	move to a header?
+BOOL lcl_GetBoolFromAny( const uno::Any& aAny )
 {
     if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
         return *(sal_Bool*)aAny.getValue();
-    return false;
+    return FALSE;
 }
 
-void lcl_SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
+void lcl_SetBoolInAny( uno::Any& rAny, BOOL bValue )
 {
     rAny.setValue( &bValue, getBooleanCppuType() );
 }
@@ -128,17 +130,17 @@ ScDPSource::ScDPSource( ScDPTableData* pD ) :
     nRowDimCount( 0 ),
     nDataDimCount( 0 ),
     nPageDimCount( 0 ),
-    bColumnGrand( sal_True ),       // default is true
-    bRowGrand( sal_True ),
-    bIgnoreEmptyRows( false ),
-    bRepeatIfEmpty( false ),
+    bColumnGrand( TRUE ),		// default is true
+    bRowGrand( TRUE ),
+    bIgnoreEmptyRows( FALSE ),
+    bRepeatIfEmpty( FALSE ),
     nDupCount( 0 ),
     pResData( NULL ),
     pColResRoot( NULL ),
     pRowResRoot( NULL ),
     pColResults( NULL ),
     pRowResults( NULL ),
-    bResultOverflow( false ),
+    bResultOverflow( FALSE ),
     mpGrandTotalName(NULL)
 {
     pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
@@ -147,9 +149,9 @@ ScDPSource::ScDPSource( ScDPTableData* pD ) :
 ScDPSource::~ScDPSource()
 {
     if (pDimensions)
-        pDimensions->release();     // ref-counted
+        pDimensions->release();		// ref-counted
 
-    //! free lists
+    //!	free lists
 
     delete[] pColResults;
     delete[] pRowResults;
@@ -159,12 +161,17 @@ ScDPSource::~ScDPSource()
     delete pResData;
 }
 
+void ScDPSource::SetGrandTotalName(const ::rtl::OUString& rName)
+{
+    mpGrandTotalName.reset(new ::rtl::OUString(rName));
+}
+
 const ::rtl::OUString* ScDPSource::GetGrandTotalName() const
 {
     return mpGrandTotalName.get();
 }
 
-sal_uInt16 ScDPSource::GetOrientation(long nColumn)
+USHORT ScDPSource::GetOrientation(long nColumn)
 {
     long i;
     for (i=0; i<nColDimCount; i++)
@@ -223,33 +230,33 @@ long ScDPSource::GetPosition(long nColumn)
     return 0;
 }
 
-sal_Bool lcl_TestSubTotal( sal_Bool& rAllowed, long nColumn, long* pArray, long nCount, ScDPSource* pSource )
+BOOL lcl_TestSubTotal( BOOL& rAllowed, long nColumn, long* pArray, long nCount, ScDPSource* pSource )
 {
     for (long i=0; i<nCount; i++)
         if (pArray[i] == nColumn)
         {
-            //  no subtotals for data layout dim, no matter where
+            //	no subtotals for data layout dim, no matter where
             if ( pSource->IsDataLayoutDimension(nColumn) )
-                rAllowed = false;
+                rAllowed = FALSE;
             else
             {
-                //  no subtotals if no other dim but data layout follows
+                //	no subtotals if no other dim but data layout follows
                 long nNextIndex = i+1;
                 if ( nNextIndex < nCount && pSource->IsDataLayoutDimension(pArray[nNextIndex]) )
                     ++nNextIndex;
                 if ( nNextIndex >= nCount )
-                    rAllowed = false;
+                    rAllowed = FALSE;
             }
 
-            return sal_True;    // found
+            return TRUE;	// found
         }
-    return false;
+    return FALSE;
 }
 
-sal_Bool ScDPSource::SubTotalAllowed(long nColumn)
+BOOL ScDPSource::SubTotalAllowed(long nColumn)
 {
-    //! cache this at ScDPResultData
-    sal_Bool bAllowed = sal_True;
+    //!	cache this at ScDPResultData
+    BOOL bAllowed = TRUE;
     if ( lcl_TestSubTotal( bAllowed, nColumn, nColDims, nColDimCount, this ) )
         return bAllowed;
     if ( lcl_TestSubTotal( bAllowed, nColumn, nRowDims, nRowDimCount, this ) )
@@ -269,9 +276,9 @@ void lcl_RemoveDim( long nRemove, long* pDims, long& rCount )
         }
 }
 
-void ScDPSource::SetOrientation(long nColumn, sal_uInt16 nNew)
+void ScDPSource::SetOrientation(long nColumn, USHORT nNew)
 {
-    //! change to no-op if new orientation is equal to old?
+    //!	change to no-op if new orientation is equal to old?
 
     // remove from old list
     lcl_RemoveDim( nColumn, nColDims, nColDimCount );
@@ -294,28 +301,35 @@ void ScDPSource::SetOrientation(long nColumn, sal_uInt16 nNew)
         case sheet::DataPilotFieldOrientation_PAGE:
             nPageDims[nPageDimCount++] = nColumn;
             break;
+            // Wang Xu Ming -- 2009-9-1
             // DataPilot Migration - Cache&&Performance
         case sheet::DataPilotFieldOrientation_HIDDEN:
             break;
-        default:
-            OSL_FAIL( "ScDPSource::SetOrientation: unexpected orientation" );
+            // End Comments
+        default: 
+            DBG_ERROR( "ScDPSource::SetOrientation: unexpected orientation" );
             break;
     }
 }
 
-sal_Bool ScDPSource::IsDataLayoutDimension(long nDim)
+BOOL ScDPSource::IsDataLayoutDimension(long nDim)
 {
     return nDim == pData->GetColumnCount();
 }
 
-sal_uInt16 ScDPSource::GetDataLayoutOrientation()
+USHORT ScDPSource::GetDataLayoutOrientation()
 {
     return GetOrientation(pData->GetColumnCount());
 }
 
-sal_Bool ScDPSource::IsDateDimension(long nDim)
+BOOL ScDPSource::IsDateDimension(long nDim)
 {
     return pData->IsDateDimension(nDim);
+}
+
+UINT32	ScDPSource::GetNumberFormat(long nDim)
+{
+    return pData->GetNumberFormat( nDim );
 }
 
 ScDPDimensions* ScDPSource::GetDimensionsObject()
@@ -323,7 +337,7 @@ ScDPDimensions* ScDPSource::GetDimensionsObject()
     if (!pDimensions)
     {
         pDimensions = new ScDPDimensions(this);
-        pDimensions->acquire();                     // ref-counted
+        pDimensions->acquire();						// ref-counted
     }
     return pDimensions;
 }
@@ -342,7 +356,7 @@ ScDPDimension* ScDPSource::AddDuplicated(long /* nSource */, const String& rNewN
 {
     DBG_ASSERT( pDimensions, "AddDuplicated without dimensions?" );
 
-    //  re-use
+    //	re-use
 
     long nOldDimCount = pDimensions->getCount();
     for (long i=0; i<nOldDimCount; i++)
@@ -350,20 +364,20 @@ ScDPDimension* ScDPSource::AddDuplicated(long /* nSource */, const String& rNewN
         ScDPDimension* pDim = pDimensions->getByIndex(i);
         if (pDim && String(pDim->getName()) == rNewName)
         {
-            //! test if pDim is a duplicate of source
+            //!	test if pDim is a duplicate of source
             return pDim;
         }
     }
 
     SetDupCount( nDupCount + 1 );
-    pDimensions->CountChanged();        // uses nDupCount
+    pDimensions->CountChanged();		// uses nDupCount
 
     return pDimensions->getByIndex( pDimensions->getCount() - 1 );
 }
 
 long ScDPSource::GetSourceDim(long nDim)
 {
-    //  original source dimension or data layout dimension?
+    //	original source dimension or data layout dimension?
     if ( nDim <= pData->GetColumnCount() )
         return nDim;
 
@@ -378,33 +392,33 @@ long ScDPSource::GetSourceDim(long nDim)
         }
     }
 
-    OSL_FAIL("GetSourceDim: wrong dim");
+    DBG_ERROR("GetSourceDim: wrong dim");
     return nDim;
 }
 
 uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResults()
                                                             throw(uno::RuntimeException)
 {
-    CreateRes_Impl();       // create pColResRoot and pRowResRoot
+    CreateRes_Impl();		// create pColResRoot and pRowResRoot
 
-    if ( bResultOverflow )      // set in CreateRes_Impl
+    if ( bResultOverflow )		// set in CreateRes_Impl
     {
-        //  no results available
+        //	no results available
         throw uno::RuntimeException();
     }
 
     long nColCount = pColResRoot->GetSize(pResData->GetColStartMeasure());
     long nRowCount = pRowResRoot->GetSize(pResData->GetRowStartMeasure());
 
-    //  allocate full sequence
-    //! leave out empty rows???
+    //	allocate full sequence
+    //!	leave out empty rows???
 
     uno::Sequence< uno::Sequence<sheet::DataResult> > aSeq( nRowCount );
     uno::Sequence<sheet::DataResult>* pRowAry = aSeq.getArray();
     for (long nRow = 0; nRow < nRowCount; nRow++)
     {
         uno::Sequence<sheet::DataResult> aColSeq( nColCount );
-        //  use default values of DataResult
+        //	use default values of DataResult
         pRowAry[nRow] = aColSeq;
     }
 
@@ -422,13 +436,13 @@ void SAL_CALL ScDPSource::refresh() throw(uno::RuntimeException)
 void SAL_CALL ScDPSource::addRefreshListener( const uno::Reference<util::XRefreshListener >& )
                                                 throw(uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");    //! exception?
+    DBG_ERROR("not implemented");	//! exception?
 }
 
 void SAL_CALL ScDPSource::removeRefreshListener( const uno::Reference<util::XRefreshListener >& )
                                                 throw(uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");    //! exception?
+    DBG_ERROR("not implemented");	//! exception?
 }
 
 Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<sheet::DataPilotFieldFilter>& aFilters)
@@ -436,7 +450,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
 {
     long nColumnCount = GetData()->GetColumnCount();
 
-    typedef boost::unordered_map<String, long, ScStringHashCode> FieldNameMapType;
+    typedef hash_map<String, long, ScStringHashCode> FieldNameMapType;
     FieldNameMapType aFieldNames;
     for (long i = 0; i < nColumnCount; ++i)
     {
@@ -479,7 +493,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
     aResVisData.fillFieldFilters(aFilterCriteria);
 
     Sequence< Sequence<Any> > aTabData;
-    boost::unordered_set<sal_Int32> aCatDims;
+    hash_set<sal_Int32> aCatDims;
     GetCategoryDimensionIndices(aCatDims);
     pData->GetDrillDownData(aFilterCriteria, aCatDims, aTabData);
     return aTabData;
@@ -487,63 +501,63 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
 
 String ScDPSource::getDataDescription()
 {
-    CreateRes_Impl();       // create pResData
+    CreateRes_Impl();		// create pResData
 
     String aRet;
     if ( pResData->GetMeasureCount() == 1 )
     {
         bool bTotalResult = false;
-        aRet = pResData->GetMeasureString( 0, sal_True, SUBTOTAL_FUNC_NONE, bTotalResult );
+        aRet = pResData->GetMeasureString( 0, TRUE, SUBTOTAL_FUNC_NONE, bTotalResult );
     }
 
-    //  empty for more than one measure
+    //	empty for more than one measure
 
     return aRet;
 }
 
-sal_Bool ScDPSource::getColumnGrand() const
+BOOL ScDPSource::getColumnGrand() const
 {
     return bColumnGrand;
 }
 
-void ScDPSource::setColumnGrand(sal_Bool bSet)
+void ScDPSource::setColumnGrand(BOOL bSet)
 {
     bColumnGrand = bSet;
 }
 
-sal_Bool ScDPSource::getRowGrand() const
+BOOL ScDPSource::getRowGrand() const
 {
     return bRowGrand;
 }
 
-void ScDPSource::setRowGrand(sal_Bool bSet)
+void ScDPSource::setRowGrand(BOOL bSet)
 {
     bRowGrand = bSet;
 }
 
-sal_Bool ScDPSource::getIgnoreEmptyRows() const
+BOOL ScDPSource::getIgnoreEmptyRows() const
 {
     return bIgnoreEmptyRows;
 }
 
-void ScDPSource::setIgnoreEmptyRows(sal_Bool bSet)
+void ScDPSource::setIgnoreEmptyRows(BOOL bSet)
 {
     bIgnoreEmptyRows = bSet;
     pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
 }
 
-sal_Bool ScDPSource::getRepeatIfEmpty() const
+BOOL ScDPSource::getRepeatIfEmpty() const
 {
     return bRepeatIfEmpty;
 }
 
-void ScDPSource::setRepeatIfEmpty(sal_Bool bSet)
+void ScDPSource::setRepeatIfEmpty(BOOL bSet)
 {
     bRepeatIfEmpty = bSet;
     pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
 }
 
-void ScDPSource::validate()     //! ???
+void ScDPSource::validate()		//! ???
 {
     CreateRes_Impl();
 }
@@ -552,7 +566,7 @@ void ScDPSource::disposeData()
 {
     if ( pResData )
     {
-        //  reset all data...
+        //	reset all data...
 
         DELETEZ(pColResRoot);
         DELETEZ(pRowResRoot);
@@ -561,32 +575,32 @@ void ScDPSource::disposeData()
         delete[] pRowResults;
         pColResults = NULL;
         pRowResults = NULL;
-        aColLevelList.clear();
-        aRowLevelList.clear();
+        aColLevelList.Clear();
+        aRowLevelList.Clear();
     }
 
     if ( pDimensions )
     {
-        pDimensions->release(); // ref-counted
-        pDimensions = NULL;     //  settings have to be applied (from SaveData) again!
+        pDimensions->release();	// ref-counted
+        pDimensions = NULL;		//	settings have to be applied (from SaveData) again!
     }
     SetDupCount( 0 );
 
-    //! Test ????
+    //!	Test ????
     nColDimCount = nRowDimCount = nDataDimCount = nPageDimCount = 0;
 
-    pData->DisposeData();   // cached entries etc.
-    bResultOverflow = false;
+    pData->DisposeData();	// cached entries etc.
+    bResultOverflow = FALSE;
 }
 
 long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLevel, long nLevels )
 {
-    //  Calculate the product of the member count for those consecutive levels that
-    //  have the "show all" flag, one following level, and the data layout dimension.
+    //	Calculate the product of the member count for those consecutive levels that
+    //	have the "show all" flag, one following level, and the data layout dimension.
 
     long nTotal = 1;
     long nDataCount = 1;
-    sal_Bool bWasShowAll = sal_True;
+    BOOL bWasShowAll = TRUE;
     long nPos = nLevels;
     while ( nPos > 0 )
     {
@@ -594,25 +608,25 @@ long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vector<ScDPL
 
         if ( nPos+1 < nLevels && ppDim[nPos] == ppDim[nPos+1] )
         {
-            OSL_FAIL("lcl_CountMinMembers: multiple levels from one dimension not implemented");
+            DBG_ERROR("lcl_CountMinMembers: multiple levels from one dimension not implemented");
             return 0;
         }
 
-        sal_Bool bDo = false;
+        BOOL bDo = FALSE;
         if ( ppDim[nPos]->getIsDataLayoutDimension() )
         {
-            //  data layout dim doesn't interfere with "show all" flags
+            //	data layout dim doesn't interfere with "show all" flags
             nDataCount = ppLevel[nPos]->GetMembersObject()->getCount();
             if ( nDataCount == 0 )
                 nDataCount = 1;
         }
         else if ( bWasShowAll )     // "show all" set for all following levels?
         {
-            bDo = sal_True;
+            bDo = TRUE;
             if ( !ppLevel[nPos]->getShowEmpty() )
             {
-                //  this level is counted, following ones are not
-                bWasShowAll = false;
+                //	this level is counted, following ones are not
+                bWasShowAll = FALSE;
             }
         }
         if ( bDo )
@@ -620,21 +634,21 @@ long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vector<ScDPL
             long nThisCount = ppLevel[nPos]->GetMembersObject()->getMinMembers();
             if ( nThisCount == 0 )
             {
-                nTotal = 1;         //  empty level -> start counting from here
-                                    //! start with visible elements in this level?
+                nTotal = 1;         //	empty level -> start counting from here
+                                    //!	start with visible elements in this level?
             }
             else
             {
                 if ( nTotal >= LONG_MAX / nThisCount )
-                    return LONG_MAX;                        //  overflow
+                    return LONG_MAX;                        //	overflow
                 nTotal *= nThisCount;
             }
         }
     }
 
-    //  always include data layout dim, even after restarting
+    //	always include data layout dim, even after restarting
     if ( nTotal >= LONG_MAX / nDataCount )
-        return LONG_MAX;                        //  overflow
+        return LONG_MAX;                        //	overflow
     nTotal *= nDataCount;
 
     return nTotal;
@@ -665,10 +679,10 @@ void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool 
         ScDPLevels* pLevels = pDim->GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
         long nCount = pLevels->getCount();
 
-        //! Test
+        //!	Test
         if ( pDim->getIsDataLayoutDimension() && nDataDimCount < 2 )
             nCount = 0;
-        //! Test
+        //!	Test
 
         for (long j = 0; j < nCount; ++j)
         {
@@ -676,10 +690,10 @@ void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool 
             pLevel->EvaluateSortOrder();
 
             // no layout flags for column fields, only for row fields
-            pLevel->SetEnableLayout( bIsRow );
+            pLevel->SetEnableLayout( bIsRow );           
 
             if ( pLevel->GetAutoShow().IsEnabled )
-                rHasAutoShow = sal_True;
+                rHasAutoShow = TRUE;
 
             if (bIsRow)
             {
@@ -699,9 +713,9 @@ void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool 
     }
 }
 
-void ScDPSource::GetCategoryDimensionIndices(boost::unordered_set<sal_Int32>& rCatDims)
+void ScDPSource::GetCategoryDimensionIndices(hash_set<sal_Int32>& rCatDims)
 {
-    boost::unordered_set<sal_Int32> aCatDims;
+    hash_set<sal_Int32> aCatDims;
     for (long i = 0; i < nColDimCount; ++i)
     {
         sal_Int32 nDim = static_cast<sal_Int32>(nColDims[i]);
@@ -743,7 +757,7 @@ void ScDPSource::FilterCacheTableByPageDimensions()
         ScDPCacheTable::Criterion aFilter;
         aFilter.mnFieldIndex = static_cast<sal_Int32>(nField);
         aFilter.mpFilter.reset(new ScDPCacheTable::GroupFilter(/*rSharedString*/));
-        ScDPCacheTable::GroupFilter* pGrpFilter =
+        ScDPCacheTable::GroupFilter* pGrpFilter = 
             static_cast<ScDPCacheTable::GroupFilter*>(aFilter.mpFilter.get());
         for (long j = 0; j < nMemCount; ++j)
         {
@@ -771,7 +785,7 @@ void ScDPSource::FilterCacheTableByPageDimensions()
     }
     if (!aCriteria.empty())
     {
-        boost::unordered_set<sal_Int32> aCatDims;
+        hash_set<sal_Int32> aCatDims;
         GetCategoryDimensionIndices(aCatDims);
         pData->FilterCacheTable(aCriteria, aCatDims);
     }
@@ -781,11 +795,11 @@ void ScDPSource::CreateRes_Impl()
 {
     if ( !pResData )
     {
-        sal_uInt16 nDataOrient = GetDataLayoutOrientation();
+        USHORT nDataOrient = GetDataLayoutOrientation();
         if ( nDataDimCount > 1 && ( nDataOrient != sheet::DataPilotFieldOrientation_COLUMN &&
                                     nDataOrient != sheet::DataPilotFieldOrientation_ROW ) )
         {
-            //  if more than one data dimension, data layout orientation must be set
+            //	if more than one data dimension, data layout orientation must be set
             SetOrientation( pData->GetColumnCount(), sheet::DataPilotFieldOrientation_ROW );
             nDataOrient = sheet::DataPilotFieldOrientation_ROW;
         }
@@ -796,7 +810,7 @@ void ScDPSource::CreateRes_Impl()
         String* pDataNames = NULL;
         sheet::DataPilotFieldReference* pDataRefValues = NULL;
         ScSubTotalFunc eDataFunctions[SC_DAPI_MAXFIELDS];
-        sal_uInt16 nDataRefOrient[SC_DAPI_MAXFIELDS];
+        USHORT nDataRefOrient[SC_DAPI_MAXFIELDS];
         if (nDataDimCount)
         {
             pDataNames = new String[nDataDimCount];
@@ -806,9 +820,9 @@ void ScDPSource::CreateRes_Impl()
         ScDPTableData::CalcInfo aInfo;
 
 
-        //  LateInit (initialize only those rows/children that are used) can be used unless
-        //  any data dimension needs reference values from column/row dimensions
-        sal_Bool bLateInit = sal_True;
+        //	LateInit (initialize only those rows/children that are used) can be used unless
+        //	any data dimension needs reference values from column/row dimensions
+        BOOL bLateInit = TRUE;
 
         // Go through all data dimensions (i.e. fields) and build their meta data
         // so that they can be passed on to ScDPResultData instance later.
@@ -822,7 +836,7 @@ void ScDPSource::CreateRes_Impl()
             sheet::GeneralFunction eUser = (sheet::GeneralFunction)pDim->getFunction();
             if (eUser == sheet::GeneralFunction_AUTO)
             {
-                //! test for numeric data
+                //!	test for numeric data
                 eUser = sheet::GeneralFunction_SUM;
             }
 
@@ -831,7 +845,7 @@ void ScDPSource::CreateRes_Impl()
 
             // Get reference field/item information.
             pDataRefValues[i] = pDim->GetReferenceValue();
-            nDataRefOrient[i] = sheet::DataPilotFieldOrientation_HIDDEN;    // default if not used
+            nDataRefOrient[i] = sheet::DataPilotFieldOrientation_HIDDEN;	// default if not used
             sal_Int32 eRefType = pDataRefValues[i].ReferenceType;
             if ( eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE ||
                  eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE ||
@@ -843,24 +857,24 @@ void ScDPSource::CreateRes_Impl()
                 if ( nColumn >= 0 )
                 {
                     nDataRefOrient[i] = GetOrientation( nColumn );
-                    //  need fully initialized results to find reference values
-                    //  (both in column or row dimensions), so updated values or
-                    //  differences to 0 can be displayed even for empty results.
-                    bLateInit = false;
+                    //	need fully initialized results to find reference values
+                    //	(both in column or row dimensions), so updated values or
+                    //	differences to 0 can be displayed even for empty results.
+                    bLateInit = FALSE;
                 }
             }
 
-            pDataNames[i] = String( pDim->getName() );  //! label?
+            pDataNames[i] = String( pDim->getName() );	//! label?
 
-            //  asterisk is added to duplicated dimension names by ScDPSaveData::WriteToSource
-            //! modify user visible strings as in ScDPResultData::GetMeasureString instead!
+            //	asterisk is added to duplicated dimension names by ScDPSaveData::WriteToSource
+            //!	modify user visible strings as in ScDPResultData::GetMeasureString instead!
 
             pDataNames[i].EraseTrailingChars('*');
 
-            //! if the name is overridden by user, a flag must be set
-            //! so the user defined name replaces the function string and field name.
+            //!	if the name is overridden by user, a flag must be set
+            //!	so the user defined name replaces the function string and field name.
 
-            //! the complete name (function and field) must be stored at the dimension
+            //!	the complete name (function and field) must be stored at the dimension
 
             long nSource = ((ScDPDimension*)pDim)->GetSourceDim();
             if (nSource >= 0)
@@ -892,8 +906,8 @@ void ScDPSource::CreateRes_Impl()
                 aInitState.AddMember( nPageDims[i], GetMemberId( nPageDims[i],  pDim->GetSelectedData() ) );
         }
 
-        pColResRoot = new ScDPResultMember( pResData, bColumnGrand );
-        pRowResRoot = new ScDPResultMember( pResData, bRowGrand );
+        pColResRoot = new ScDPResultMember( pResData, /*NULL, NULL, NULL, */bColumnGrand );
+        pRowResRoot = new ScDPResultMember( pResData, /*NULL, NULL, NULL, */bRowGrand );
 
         FillCalcInfo(false, aInfo, bHasAutoShow);
         long nColLevelCount = aInfo.aColLevels.size();
@@ -907,7 +921,7 @@ void ScDPSource::CreateRes_Impl()
         if ( nRowLevelCount > 0 )
         {
             // disable layout flags for the innermost row field (level)
-            aInfo.aRowLevels[nRowLevelCount-1]->SetEnableLayout( false );
+            aInfo.aRowLevels[nRowLevelCount-1]->SetEnableLayout( FALSE );
         }
 
         pRowResRoot->InitFrom( aInfo.aRowDims, aInfo.aRowLevels, 0, aInitState );
@@ -927,18 +941,18 @@ void ScDPSource::CreateRes_Impl()
                 pLevels->getByIndex(j)->GetMembersObject();             // initialize for groups
         }
 
-        //  pre-check: calculate minimum number of result columns / rows from
-        //  levels that have the "show all" flag set
+        //	pre-check: calculate minimum number of result columns / rows from
+        //	levels that have the "show all" flag set
 
         long nMinColMembers = lcl_CountMinMembers( aInfo.aColDims, aInfo.aColLevels, nColLevelCount );
         long nMinRowMembers = lcl_CountMinMembers( aInfo.aRowDims, aInfo.aRowLevels, nRowLevelCount );
 
         if ( nMinColMembers > MAXCOLCOUNT/*SC_MINCOUNT_LIMIT*/ || nMinRowMembers > SC_MINCOUNT_LIMIT )
         {
-            //  resulting table is too big -> abort before calculating
-            //  (this relies on late init, so no members are allocated in InitFrom above)
+            //	resulting table is too big -> abort before calculating
+            //	(this relies on late init, so no members are allocated in InitFrom above)
 
-            bResultOverflow = sal_True;
+            bResultOverflow = TRUE;
         }
         else
         {
@@ -969,8 +983,8 @@ void ScDPSource::CreateRes_Impl()
 
                 //  Reset all results to empty, so they can be built again with data for the
                 //  desired members only.
-                pColResRoot->ResetResults( sal_True );
-                pRowResRoot->ResetResults( sal_True );
+                pColResRoot->ResetResults( TRUE );
+                pRowResRoot->ResetResults( TRUE );
                 pData->CalcResults(aInfo, true);
 
                 //  Call UpdateDataResults again, with the new (limited) values.
@@ -998,9 +1012,9 @@ void ScDPSource::CreateRes_Impl()
 }
 
 
-void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*> &rList )
+void ScDPSource::FillLevelList( USHORT nOrientation, List& rList )
 {
-    rList.clear();
+    rList.Clear();
 
     long nDimCount = 0;
     long* pDimIndex = NULL;
@@ -1023,12 +1037,12 @@ void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*>
             nDimCount = nPageDimCount;
             break;
         default:
-            OSL_FAIL( "ScDPSource::FillLevelList: unexpected orientation" );
+            DBG_ERROR( "ScDPSource::FillLevelList: unexpected orientation" );
             break;
     }
     if (!pDimIndex)
     {
-        OSL_FAIL("invalid orientation");
+        DBG_ERROR("invalid orientation");
         return;
     }
 
@@ -1048,7 +1062,7 @@ void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*>
         for (long nLev=0; nLev<nLevCount; nLev++)
         {
             ScDPLevel* pLevel = pLevels->getByIndex(nLev);
-            rList.push_back(pLevel);
+            rList.Insert( pLevel, LIST_APPEND );
         }
     }
 }
@@ -1059,15 +1073,15 @@ void ScDPSource::FillMemberResults()
     {
         CreateRes_Impl();
 
-        if ( bResultOverflow )      // set in CreateRes_Impl
+        if ( bResultOverflow )		// set in CreateRes_Impl
         {
-            //  no results available -> abort (leave empty)
-            //  exception is thrown in ScDPSource::getResults
+            //	no results available -> abort (leave empty)
+            //	exception is thrown in ScDPSource::getResults
             return;
         }
 
         FillLevelList( sheet::DataPilotFieldOrientation_COLUMN, aColLevelList );
-        long nColLevelCount = aColLevelList.size();
+        long nColLevelCount = aColLevelList.Count();
         if (nColLevelCount)
         {
             long nColDimSize = pColResRoot->GetSize(pResData->GetColStartMeasure());
@@ -1075,13 +1089,15 @@ void ScDPSource::FillMemberResults()
             for (long i=0; i<nColLevelCount; i++)
                 pColResults[i].realloc(nColDimSize);
 
+            // ScDPResultDimension* pColResDim = pColResRoot->GetChildDimension();
+            // pColResDim->FillMemberResults( pColResults, 0, pResData->GetColStartMeasure() );
             long nPos = 0;
             pColResRoot->FillMemberResults( pColResults, nPos, pResData->GetColStartMeasure(),
-                                            sal_True, NULL, NULL );
+                                            TRUE, NULL, NULL );
         }
 
         FillLevelList( sheet::DataPilotFieldOrientation_ROW, aRowLevelList );
-        long nRowLevelCount = aRowLevelList.size();
+        long nRowLevelCount = aRowLevelList.Count();
         if (nRowLevelCount)
         {
             long nRowDimSize = pRowResRoot->GetSize(pResData->GetRowStartMeasure());
@@ -1089,9 +1105,11 @@ void ScDPSource::FillMemberResults()
             for (long i=0; i<nRowLevelCount; i++)
                 pRowResults[i].realloc(nRowDimSize);
 
+            // ScDPResultDimension* pRowResDim = pRowResRoot->GetChildDimension();
+            // pRowResDim->FillMemberResults( pRowResults, 0, pResData->GetRowStartMeasure() );
             long nPos = 0;
             pRowResRoot->FillMemberResults( pRowResults, nPos, pResData->GetRowStartMeasure(),
-                                            sal_True, NULL, NULL );
+                                            TRUE, NULL, NULL );
         }
     }
 }
@@ -1100,18 +1118,18 @@ const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( ScDPLeve
 {
     FillMemberResults();
 
-    long i = 0;
-    long nColCount = aColLevelList.size();
+    long i;
+    long nColCount = aColLevelList.Count();
     for (i=0; i<nColCount; i++)
     {
-        ScDPLevel* pColLevel = aColLevelList[i];
+        ScDPLevel* pColLevel = (ScDPLevel*)aColLevelList.GetObject(i);
         if ( pColLevel == pLevel )
             return pColResults+i;
     }
-    long nRowCount = aRowLevelList.size();
+    long nRowCount = aRowLevelList.Count();
     for (i=0; i<nRowCount; i++)
     {
-        ScDPLevel* pRowLevel = aRowLevelList[i];
+        ScDPLevel* pRowLevel = (ScDPLevel*)aRowLevelList.GetObject(i);
         if ( pRowLevel == pLevel )
             return pRowResults+i;
     }
@@ -1128,11 +1146,11 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
 
     static SfxItemPropertyMapEntry aDPSourceMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_COLGRAND), 0,  &getBooleanCppuType(),              0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DATADESC), 0,  &getCppuType((rtl::OUString*)0),    beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_IGNOREEM), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
-        {MAP_CHAR_LEN(SC_UNO_REPEATIF), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
-        {MAP_CHAR_LEN(SC_UNO_ROWGRAND), 0,  &getBooleanCppuType(),              0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_COLGRAND),	0,	&getBooleanCppuType(),				0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DATADESC),	0,	&getCppuType((rtl::OUString*)0),	beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_IGNOREEM),	0,	&getBooleanCppuType(),				0, 0 },		// for sheet data only
+        {MAP_CHAR_LEN(SC_UNO_REPEATIF),	0,	&getBooleanCppuType(),				0, 0 },		// for sheet data only
+        {MAP_CHAR_LEN(SC_UNO_ROWGRAND),	0,	&getBooleanCppuType(),				0, 0 },
         {MAP_CHAR_LEN(SC_UNO_ROWFIELDCOUNT),    0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_COLUMNFIELDCOUNT), 0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_DATAFIELDCOUNT),   0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
@@ -1166,8 +1184,8 @@ void SAL_CALL ScDPSource::setPropertyValue( const rtl::OUString& aPropertyName, 
     }
     else
     {
-        OSL_FAIL("unknown property");
-        //! THROW( UnknownPropertyException() );
+        DBG_ERROR("unknown property");
+        //!	THROW( UnknownPropertyException() );
     }
 }
 
@@ -1185,7 +1203,7 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const rtl::OUString& aPropertyNa
         lcl_SetBoolInAny( aRet, getIgnoreEmptyRows() );
     else if ( aNameStr.EqualsAscii( SC_UNO_REPEATIF ) )
         lcl_SetBoolInAny( aRet, getRepeatIfEmpty() );
-    else if ( aNameStr.EqualsAscii( SC_UNO_DATADESC ) )             // read-only
+    else if ( aNameStr.EqualsAscii( SC_UNO_DATADESC ) )				// read-only
         aRet <<= rtl::OUString( getDataDescription() );
     else if ( aNameStr.EqualsAscii( SC_UNO_ROWFIELDCOUNT ) )        // read-only
         aRet <<= static_cast<sal_Int32>(nRowDimCount);
@@ -1200,8 +1218,8 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const rtl::OUString& aPropertyNa
     }
     else
     {
-        OSL_FAIL("unknown property");
-        //! THROW( UnknownPropertyException() );
+        DBG_ERROR("unknown property");
+        //!	THROW( UnknownPropertyException() );
     }
     return aRet;
 }
@@ -1214,7 +1232,7 @@ ScDPDimensions::ScDPDimensions( ScDPSource* pSrc ) :
     pSource( pSrc ),
     ppDims( NULL )
 {
-    //! hold pSource
+    //!	hold pSource
 
     // include data layout dimension and duplicated dimensions
     nDimCount = pSource->GetData()->GetColumnCount() + 1 + pSource->GetDupCount();
@@ -1222,13 +1240,13 @@ ScDPDimensions::ScDPDimensions( ScDPSource* pSrc ) :
 
 ScDPDimensions::~ScDPDimensions()
 {
-    //! release pSource
+    //!	release pSource
 
     if (ppDims)
     {
         for (long i=0; i<nDimCount; i++)
             if ( ppDims[i] )
-                ppDims[i]->release();           // ref-counted
+                ppDims[i]->release();			// ref-counted
         delete[] ppDims;
     }
 }
@@ -1243,13 +1261,13 @@ void ScDPDimensions::CountChanged()
         long nCopy = Min( nNewCount, nDimCount );
         ScDPDimension** ppNew = new ScDPDimension*[nNewCount];
 
-        for (i=0; i<nCopy; i++)             // copy existing dims
+        for (i=0; i<nCopy; i++)				// copy existing dims
             ppNew[i] = ppDims[i];
-        for (i=nCopy; i<nNewCount; i++)     // clear additional pointers
+        for (i=nCopy; i<nNewCount; i++)		// clear additional pointers
             ppNew[i] = NULL;
-        for (i=nCopy; i<nDimCount; i++)     // delete old dims if count is decreased
+        for (i=nCopy; i<nDimCount; i++)		// delete old dims if count is decreased
             if ( ppDims[i] )
-                ppDims[i]->release();       // ref-counted
+                ppDims[i]->release();		// ref-counted
 
         delete[] ppDims;
         ppDims = ppNew;
@@ -1292,8 +1310,8 @@ sal_Bool SAL_CALL ScDPDimensions::hasByName( const rtl::OUString& aName ) throw(
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
         if ( getByIndex(i)->getName() == aName )
-            return sal_True;
-    return false;
+            return TRUE;
+    return FALSE;
 }
 
 uno::Type SAL_CALL ScDPDimensions::getElementType() throw(uno::RuntimeException)
@@ -1310,7 +1328,7 @@ sal_Bool SAL_CALL ScDPDimensions::hasElements() throw(uno::RuntimeException)
 
 long ScDPDimensions::getCount() const
 {
-    //  in tabular data, every column of source data is a dimension
+    //	in tabular data, every column of source data is a dimension
 
     return nDimCount;
 }
@@ -1328,13 +1346,13 @@ ScDPDimension* ScDPDimensions::getByIndex(long nIndex) const
         if ( !ppDims[nIndex] )
         {
             ppDims[nIndex] = new ScDPDimension( pSource, nIndex );
-            ppDims[nIndex]->acquire();      // ref-counted
+            ppDims[nIndex]->acquire();		// ref-counted
         }
 
         return ppDims[nIndex];
     }
 
-    return NULL;    //! exception?
+    return NULL;	//! exception?
 }
 
 // -----------------------------------------------------------------------
@@ -1344,23 +1362,23 @@ ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     nDim( nD ),
     pHierarchies( NULL ),
     nUsedHier( 0 ),
-    nFunction( SUBTOTAL_FUNC_SUM ),     // sum is default
+    nFunction( SUBTOTAL_FUNC_SUM ),		// sum is default
     mpLayoutName(NULL),
     mpSubtotalName(NULL),
     nSourceDim( -1 ),
-    bHasSelectedPage( false ),
+    bHasSelectedPage( FALSE ),
     pSelectedData( NULL ),
     mbHasHiddenMember(false)
 {
-    //! hold pSource
+    //!	hold pSource
 }
 
 ScDPDimension::~ScDPDimension()
 {
-    //! release pSource
+    //!	release pSource
 
     if ( pHierarchies )
-        pHierarchies->release();    // ref-counted
+        pHierarchies->release();	// ref-counted
 
     delete pSelectedData;
 }
@@ -1370,7 +1388,7 @@ ScDPHierarchies* ScDPDimension::GetHierarchiesObject()
     if (!pHierarchies)
     {
         pHierarchies = new ScDPHierarchies( pSource, nDim );
-        pHierarchies->acquire();        // ref-counted
+        pHierarchies->acquire();		// ref-counted
     }
     return pHierarchies;
 }
@@ -1401,16 +1419,16 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPDimension::getHierarchies()
 
 void SAL_CALL ScDPDimension::setName( const ::rtl::OUString& rNewName ) throw(uno::RuntimeException)
 {
-    //  used after cloning
+    //	used after cloning
     aName = String( rNewName );
 }
 
-sal_uInt16 ScDPDimension::getOrientation() const
+USHORT ScDPDimension::getOrientation() const
 {
     return pSource->GetOrientation( nDim );
 }
 
-void ScDPDimension::setOrientation(sal_uInt16 nNew)
+void ScDPDimension::setOrientation(USHORT nNew)
 {
     pSource->SetOrientation( nDim, nNew );
 }
@@ -1422,20 +1440,20 @@ long ScDPDimension::getPosition() const
 
 void ScDPDimension::setPosition(long /* nNew */)
 {
-    //! ...
+    //!	...
 }
 
-sal_Bool ScDPDimension::getIsDataLayoutDimension() const
+BOOL ScDPDimension::getIsDataLayoutDimension() const
 {
     return pSource->GetData()->getIsDataLayoutDimension( nDim );
 }
 
-sal_uInt16 ScDPDimension::getFunction() const
+USHORT ScDPDimension::getFunction() const
 {
     return nFunction;
 }
 
-void ScDPDimension::setFunction(sal_uInt16 nNew)
+void ScDPDimension::setFunction(USHORT nNew)
 {
     nFunction = nNew;
 }
@@ -1448,19 +1466,20 @@ long ScDPDimension::getUsedHierarchy() const
 void ScDPDimension::setUsedHierarchy(long /* nNew */)
 {
     // #i52547# don't use the incomplete date hierarchy implementation - ignore the call
+    // nUsedHier = nNew;
 }
 
 ScDPDimension* ScDPDimension::CreateCloneObject()
 {
     DBG_ASSERT( nSourceDim < 0, "recursive duplicate - not implemented" );
 
-    //! set new name here, or temporary name ???
+    //!	set new name here, or temporary name ???
     String aNewName = aName;
 
     ScDPDimension* pNew = pSource->AddDuplicated( nDim, aNewName );
 
-    pNew->aName = aNewName;             //! here or in source?
-    pNew->nSourceDim = nDim;            //! recursive?
+    pNew->aName = aNewName;				//! here or in source?
+    pNew->nSourceDim = nDim;			//! recursive?
 
     return pNew;
 }
@@ -1470,7 +1489,7 @@ uno::Reference<util::XCloneable> SAL_CALL ScDPDimension::createClone() throw(uno
     return CreateCloneObject();
 }
 
-sal_Bool ScDPDimension::isDuplicated() const
+BOOL ScDPDimension::isDuplicated() const
 {
     return (nSourceDim >= 0);
 }
@@ -1486,7 +1505,7 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
     {
         // find the named member to initialize pSelectedData from it, with name and value
 
-        long nLevel = 0;        // same as in ScDPObject::FillPageList
+        long nLevel = 0;		// same as in ScDPObject::FillPageList
 
         long nHierarchy = getUsedHierarchy();
         if ( nHierarchy >= GetHierarchiesObject()->getCount() )
@@ -1511,12 +1530,25 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
         }
 
         if ( !pSelectedData )
-            pSelectedData = new ScDPItemData( aSelectedPage, 0.0, false );      // default - name only
+            pSelectedData = new ScDPItemData( aSelectedPage, 0.0, FALSE );		// default - name only
     }
 
     return *pSelectedData;
 }
 
+BOOL ScDPDimension::IsVisible( const ScDPItemData& rData )
+{
+    if( ScDPMembers* pMembers = this->GetHierarchiesObject()->getByIndex(0)->
+        GetLevelsObject()->getByIndex(0)->GetMembersObject() )
+    {
+        for( long i = pMembers->getCount()-1; i>=0; i-- )
+            if( ScDPMember *pDPMbr = pMembers->getByIndex( i ) )
+                if( rData.IsCaseInsEqual( pDPMbr->GetItemData() ) && !pDPMbr->getIsVisible() )
+                    return FALSE;
+    }
+
+    return TRUE;
+}
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetInfo()
@@ -1526,16 +1558,16 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
 
     static SfxItemPropertyMapEntry aDPDimensionMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_FILTER),   0,  &getCppuType((uno::Sequence<sheet::TableFilterField>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_FILTER),	0,	&getCppuType((uno::Sequence<sheet::TableFilterField>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_FLAGS),    0,  &getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_FUNCTION), 0,  &getCppuType((sheet::GeneralFunction*)0),   0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_ISDATALA), 0,  &getBooleanCppuType(),                      beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_NUMBERFO), 0,  &getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_ORIENTAT), 0,  &getCppuType((sheet::DataPilotFieldOrientation*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_ORIGINAL), 0,  &getCppuType((uno::Reference<container::XNamed>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_POSITION), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_REFVALUE), 0,  &getCppuType((sheet::DataPilotFieldReference*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_USEDHIER), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_FUNCTION),	0,	&getCppuType((sheet::GeneralFunction*)0),	0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_ISDATALA),	0,	&getBooleanCppuType(),						beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_NUMBERFO),	0,	&getCppuType((sal_Int32*)0),				beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_ORIENTAT),	0,	&getCppuType((sheet::DataPilotFieldOrientation*)0),	0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_ORIGINAL),	0,	&getCppuType((uno::Reference<container::XNamed>*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_POSITION),	0,	&getCppuType((sal_Int32*)0),				0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_REFVALUE),	0,	&getCppuType((sheet::DataPilotFieldReference*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_USEDHIER),	0,	&getCppuType((sal_Int32*)0),				0, 0 },
         {MAP_CHAR_LEN(SC_UNO_LAYOUTNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_FIELD_SUBTOTALNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_HAS_HIDDEN_MEMBER), 0, &getBooleanCppuType(), 0, 0 },
@@ -1554,13 +1586,13 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
     String aNameStr = aPropertyName;
     if ( aNameStr.EqualsAscii( SC_UNO_POSITION ) )
     {
-        sal_Int32 nInt = 0;
+        INT32 nInt = 0;
         if (aValue >>= nInt)
             setPosition( nInt );
     }
     else if ( aNameStr.EqualsAscii( SC_UNO_USEDHIER ) )
     {
-        sal_Int32 nInt = 0;
+        INT32 nInt = 0;
         if (aValue >>= nInt)
             setUsedHierarchy( nInt );
     }
@@ -1568,19 +1600,19 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
     {
         sheet::DataPilotFieldOrientation eEnum;
         if (aValue >>= eEnum)
-            setOrientation( sal::static_int_cast<sal_uInt16>(eEnum) );
+            setOrientation( sal::static_int_cast<USHORT>(eEnum) );
     }
     else if ( aNameStr.EqualsAscii( SC_UNO_FUNCTION ) )
     {
         sheet::GeneralFunction eEnum;
         if (aValue >>= eEnum)
-            setFunction( sal::static_int_cast<sal_uInt16>(eEnum) );
+            setFunction( sal::static_int_cast<USHORT>(eEnum) );
     }
     else if ( aNameStr.EqualsAscii( SC_UNO_REFVALUE ) )
         aValue >>= aReferenceValue;
     else if ( aNameStr.EqualsAscii( SC_UNO_FILTER ) )
     {
-        sal_Bool bDone = false;
+        BOOL bDone = FALSE;
         uno::Sequence<sheet::TableFilterField> aSeq;
         if (aValue >>= aSeq)
         {
@@ -1588,8 +1620,8 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
             if ( nLength == 0 )
             {
                 aSelectedPage.Erase();
-                bHasSelectedPage = false;
-                bDone = sal_True;
+                bHasSelectedPage = FALSE;
+                bDone = TRUE;
             }
             else if ( nLength == 1 )
             {
@@ -1597,17 +1629,17 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
                 if ( rField.Field == 0 && rField.Operator == sheet::FilterOperator_EQUAL && !rField.IsNumeric )
                 {
                     aSelectedPage = rField.StringValue;
-                    bHasSelectedPage = sal_True;
-                    bDone = sal_True;
+                    bHasSelectedPage = TRUE;
+                    bDone = TRUE;
                 }
             }
         }
         if ( !bDone )
         {
-            OSL_FAIL("Filter property is not a single string");
+            DBG_ERROR("Filter property is not a single string");
             throw lang::IllegalArgumentException();
         }
-        DELETEZ( pSelectedData );       // invalid after changing aSelectedPage
+        DELETEZ( pSelectedData );		// invalid after changing aSelectedPage
     }
     else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
     {
@@ -1625,8 +1657,8 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
         aValue >>= mbHasHiddenMember;
     else
     {
-        OSL_FAIL("unknown property");
-        //! THROW( UnknownPropertyException() );
+        DBG_ERROR("unknown property");
+        //!	THROW( UnknownPropertyException() );
     }
 }
 
@@ -1652,7 +1684,7 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
     }
     else if ( aNameStr.EqualsAscii( SC_UNO_REFVALUE ) )
         aRet <<= aReferenceValue;
-    else if ( aNameStr.EqualsAscii( SC_UNO_ISDATALA ) )                 // read-only properties
+    else if ( aNameStr.EqualsAscii( SC_UNO_ISDATALA ) )					// read-only properties
         lcl_SetBoolInAny( aRet, getIsDataLayoutDimension() );
     else if ( aNameStr.EqualsAscii( SC_UNO_NUMBERFO ) )
     {
@@ -1693,16 +1725,16 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
         {
             // single filter field: first field equal to selected string
             sheet::TableFilterField aField( sheet::FilterConnection_AND, 0,
-                    sheet::FilterOperator_EQUAL, false, 0.0, aSelectedPage );
+                    sheet::FilterOperator_EQUAL, sal_False, 0.0, aSelectedPage );
             aRet <<= uno::Sequence<sheet::TableFilterField>( &aField, 1 );
         }
         else
             aRet <<= uno::Sequence<sheet::TableFilterField>(0);
     }
     else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
-        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString::createFromAscii("");
     else if (aNameStr.EqualsAscii(SC_UNO_FIELD_SUBTOTALNAME))
-        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString::createFromAscii("");
     else if (aNameStr.EqualsAscii(SC_UNO_HAS_HIDDEN_MEMBER))
         aRet <<= mbHasHiddenMember;
     else if (aNameStr.EqualsAscii(SC_UNO_FLAGS))
@@ -1712,8 +1744,8 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
     }
     else
     {
-        OSL_FAIL("unknown property");
-        //! THROW( UnknownPropertyException() );
+        DBG_ERROR("unknown property");
+        //!	THROW( UnknownPropertyException() );
     }
     return aRet;
 }
@@ -1727,9 +1759,16 @@ ScDPHierarchies::ScDPHierarchies( ScDPSource* pSrc, long nD ) :
     nDim( nD ),
     ppHiers( NULL )
 {
-    //! hold pSource
+    //!	hold pSource
 
-    //  date columns have 3 hierarchies (flat/quarter/week), other columns only one
+#if 0
+    //	date columns have 3 hierarchies (flat/quarter/week), other columns only one
+    long nSrcDim = pSource->GetSourceDim( nDim );
+    if ( pSource->IsDateDimension( nSrcDim ) )
+        nHierCount = SC_DAPI_DATE_HIERARCHIES;
+    else
+        nHierCount = 1;
+#endif
 
     // #i52547# don't offer the incomplete date hierarchy implementation
     nHierCount = 1;
@@ -1737,13 +1776,13 @@ ScDPHierarchies::ScDPHierarchies( ScDPSource* pSrc, long nD ) :
 
 ScDPHierarchies::~ScDPHierarchies()
 {
-    //! release pSource
+    //!	release pSource
 
     if (ppHiers)
     {
         for (long i=0; i<nHierCount; i++)
             if ( ppHiers[i] )
-                ppHiers[i]->release();      // ref-counted
+                ppHiers[i]->release();		// ref-counted
         delete[] ppHiers;
     }
 }
@@ -1765,6 +1804,7 @@ uno::Any SAL_CALL ScDPHierarchies::getByName( const rtl::OUString& aName )
         }
 
     throw container::NoSuchElementException();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDPHierarchies::getElementNames() throw(uno::RuntimeException)
@@ -1782,8 +1822,8 @@ sal_Bool SAL_CALL ScDPHierarchies::hasByName( const rtl::OUString& aName ) throw
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
         if ( getByIndex(i)->getName() == aName )
-            return sal_True;
-    return false;
+            return TRUE;
+    return FALSE;
 }
 
 uno::Type SAL_CALL ScDPHierarchies::getElementType() throw(uno::RuntimeException)
@@ -1805,8 +1845,8 @@ long ScDPHierarchies::getCount() const
 
 ScDPHierarchy* ScDPHierarchies::getByIndex(long nIndex) const
 {
-    //  pass hierarchy index to new object in case the implementation
-    //  will be extended to more than one hierarchy
+    //	pass hierarchy index to new object in case the implementation
+    //	will be extended to more than one hierarchy
 
     if ( nIndex >= 0 && nIndex < nHierCount )
     {
@@ -1819,13 +1859,13 @@ ScDPHierarchy* ScDPHierarchies::getByIndex(long nIndex) const
         if ( !ppHiers[nIndex] )
         {
             ppHiers[nIndex] = new ScDPHierarchy( pSource, nDim, nIndex );
-            ppHiers[nIndex]->acquire();         // ref-counted
+            ppHiers[nIndex]->acquire();			// ref-counted
         }
 
         return ppHiers[nIndex];
     }
 
-    return NULL;    //! exception?
+    return NULL;	//! exception?
 }
 
 // -----------------------------------------------------------------------
@@ -1836,15 +1876,15 @@ ScDPHierarchy::ScDPHierarchy( ScDPSource* pSrc, long nD, long nH ) :
     nHier( nH ),
     pLevels( NULL )
 {
-    //! hold pSource
+    //!	hold pSource
 }
 
 ScDPHierarchy::~ScDPHierarchy()
 {
-    //! release pSource
+    //!	release pSource
 
     if (pLevels)
-        pLevels->release();     // ref-counted
+        pLevels->release();		// ref-counted
 }
 
 ScDPLevels* ScDPHierarchy::GetLevelsObject()
@@ -1852,7 +1892,7 @@ ScDPLevels* ScDPHierarchy::GetLevelsObject()
     if (!pLevels)
     {
         pLevels = new ScDPLevels( pSource, nDim, nHier );
-        pLevels->acquire();     // ref-counted
+        pLevels->acquire();		// ref-counted
     }
     return pLevels;
 }
@@ -1865,20 +1905,20 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
 
 ::rtl::OUString SAL_CALL ScDPHierarchy::getName() throw(uno::RuntimeException)
 {
-    String aRet;        //! globstr-ID !!!!
+    String aRet;		//!	globstr-ID !!!!
     switch (nHier)
     {
         case SC_DAPI_HIERARCHY_FLAT:
             aRet = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("flat"));
-            break;  //! name ???????
+            break;	//! name ???????
         case SC_DAPI_HIERARCHY_QUARTER:
             aRet = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Quarter"));
-            break;  //! name ???????
+            break;	//! name ???????
         case SC_DAPI_HIERARCHY_WEEK:
             aRet = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Week"));
-            break;  //! name ???????
+            break;	//! name ???????
         default:
-            OSL_FAIL( "ScDPHierarchy::getName: unexpected hierarchy" );
+            DBG_ERROR( "ScDPHierarchy::getName: unexpected hierarchy" );
             break;
     }
     return aRet;
@@ -1886,7 +1926,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
 
 void SAL_CALL ScDPHierarchy::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");        //! exception?
+    DBG_ERROR("not implemented");		//! exception?
 }
 
 // -----------------------------------------------------------------------
@@ -1897,20 +1937,20 @@ ScDPLevels::ScDPLevels( ScDPSource* pSrc, long nD, long nH ) :
     nHier( nH ),
     ppLevs( NULL )
 {
-    //! hold pSource
+    //!	hold pSource
 
-    //  text columns have only one level
+    //	text columns have only one level
 
     long nSrcDim = pSource->GetSourceDim( nDim );
     if ( pSource->IsDateDimension( nSrcDim ) )
     {
         switch ( nHier )
         {
-            case SC_DAPI_HIERARCHY_FLAT:    nLevCount = SC_DAPI_FLAT_LEVELS;    break;
-            case SC_DAPI_HIERARCHY_QUARTER: nLevCount = SC_DAPI_QUARTER_LEVELS; break;
-            case SC_DAPI_HIERARCHY_WEEK:    nLevCount = SC_DAPI_WEEK_LEVELS;    break;
+            case SC_DAPI_HIERARCHY_FLAT:	nLevCount = SC_DAPI_FLAT_LEVELS;	break;
+            case SC_DAPI_HIERARCHY_QUARTER:	nLevCount = SC_DAPI_QUARTER_LEVELS;	break;
+            case SC_DAPI_HIERARCHY_WEEK:	nLevCount = SC_DAPI_WEEK_LEVELS;	break;
             default:
-                OSL_FAIL("wrong hierarchy");
+                DBG_ERROR("wrong hierarchy");
                 nLevCount = 0;
         }
     }
@@ -1920,13 +1960,13 @@ ScDPLevels::ScDPLevels( ScDPSource* pSrc, long nD, long nH ) :
 
 ScDPLevels::~ScDPLevels()
 {
-    //! release pSource
+    //!	release pSource
 
     if (ppLevs)
     {
         for (long i=0; i<nLevCount; i++)
             if ( ppLevs[i] )
-                ppLevs[i]->release();   // ref-counted
+                ppLevs[i]->release();	// ref-counted
         delete[] ppLevs;
     }
 }
@@ -1948,6 +1988,7 @@ uno::Any SAL_CALL ScDPLevels::getByName( const rtl::OUString& aName )
         }
 
     throw container::NoSuchElementException();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDPLevels::getElementNames() throw(uno::RuntimeException)
@@ -1965,8 +2006,8 @@ sal_Bool SAL_CALL ScDPLevels::hasByName( const rtl::OUString& aName ) throw(uno:
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
         if ( getByIndex(i)->getName() == aName )
-            return sal_True;
-    return false;
+            return TRUE;
+    return FALSE;
 }
 
 uno::Type SAL_CALL ScDPLevels::getElementType() throw(uno::RuntimeException)
@@ -1999,13 +2040,13 @@ ScDPLevel* ScDPLevels::getByIndex(long nIndex) const
         if ( !ppLevs[nIndex] )
         {
             ppLevs[nIndex] = new ScDPLevel( pSource, nDim, nHier, nIndex );
-            ppLevs[nIndex]->acquire();      // ref-counted
+            ppLevs[nIndex]->acquire();		// ref-counted
         }
 
         return ppLevs[nIndex];
     }
 
-    return NULL;    //! exception?
+    return NULL;	//! exception?
 }
 
 // -----------------------------------------------------------------------
@@ -2013,19 +2054,19 @@ ScDPLevel* ScDPLevels::getByIndex(long nIndex) const
 class ScDPGlobalMembersOrder
 {
     ScDPLevel&  rLevel;
-    sal_Bool        bAscending;
+    BOOL        bAscending;
 
 public:
-            ScDPGlobalMembersOrder( ScDPLevel& rLev, sal_Bool bAsc ) :
+            ScDPGlobalMembersOrder( ScDPLevel& rLev, BOOL bAsc ) :
                 rLevel(rLev),
                 bAscending(bAsc)
             {}
             ~ScDPGlobalMembersOrder() {}
 
-    sal_Bool operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
+    BOOL operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
 };
 
-sal_Bool ScDPGlobalMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
+BOOL ScDPGlobalMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
 {
     sal_Int32 nCompare = 0;
     // seems that some ::std::sort() implementations pass the same index twice
@@ -2047,22 +2088,22 @@ ScDPLevel::ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL ) :
     nHier( nH ),
     nLev( nL ),
     pMembers( NULL ),
-    bShowEmpty( false ),
+    bShowEmpty( FALSE ),
     aSortInfo( EMPTY_STRING, sal_True, sheet::DataPilotFieldSortMode::NAME ),   // default: sort by name
     nSortMeasure( 0 ),
     nAutoMeasure( 0 ),
-    bEnableLayout( false )
+    bEnableLayout( FALSE )
 {
-    //! hold pSource
-    //  aSubTotals is empty
+    //!	hold pSource
+    //	aSubTotals is empty
 }
 
 ScDPLevel::~ScDPLevel()
 {
-    //! release pSource
+    //!	release pSource
 
     if ( pMembers )
-        pMembers->release();    // ref-counted
+        pMembers->release();	// ref-counted
 }
 
 void ScDPLevel::EvaluateSortOrder()
@@ -2093,12 +2134,13 @@ void ScDPLevel::EvaluateSortOrder()
                 ScDPMembers* pLocalMembers = GetMembersObject();
                 long nCount = pLocalMembers->getCount();
 
+//                DBG_ASSERT( aGlobalOrder.empty(), "sort twice?" );
                 aGlobalOrder.resize( nCount );
                 for (long nPos=0; nPos<nCount; nPos++)
                     aGlobalOrder[nPos] = nPos;
 
                 // allow manual or name (manual is always ascending)
-                sal_Bool bAscending = ( aSortInfo.Mode == sheet::DataPilotFieldSortMode::MANUAL || aSortInfo.IsAscending );
+                BOOL bAscending = ( aSortInfo.Mode == sheet::DataPilotFieldSortMode::MANUAL || aSortInfo.IsAscending );
                 ScDPGlobalMembersOrder aComp( *this, bAscending );
                 ::std::sort( aGlobalOrder.begin(), aGlobalOrder.end(), aComp );
             }
@@ -2124,7 +2166,7 @@ void ScDPLevel::EvaluateSortOrder()
     }
 }
 
-void ScDPLevel::SetEnableLayout( sal_Bool bSet )
+void ScDPLevel::SetEnableLayout( BOOL bSet )
 {
     bEnableLayout = bSet;
 }
@@ -2134,7 +2176,7 @@ ScDPMembers* ScDPLevel::GetMembersObject()
     if (!pMembers)
     {
         pMembers = new ScDPMembers( pSource, nDim, nHier, nLev );
-        pMembers->acquire();    // ref-counted
+        pMembers->acquire();	// ref-counted
     }
     return pMembers;
 }
@@ -2150,7 +2192,7 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
     if (pRes)
         return *pRes;
 
-    return uno::Sequence<sheet::MemberResult>(0);       //! Error?
+    return uno::Sequence<sheet::MemberResult>(0);		//! Error?
 }
 
 ::rtl::OUString SAL_CALL ScDPLevel::getName() throw(uno::RuntimeException)
@@ -2158,7 +2200,7 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
     long nSrcDim = pSource->GetSourceDim( nDim );
     if ( pSource->IsDateDimension( nSrcDim ) )
     {
-        String aRet;        //! globstr-ID !!!!
+        String aRet;		//!	globstr-ID !!!!
 
         if ( nHier == SC_DAPI_HIERARCHY_QUARTER )
         {
@@ -2177,7 +2219,7 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
                     aRet = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Day"));
                     break;
                 default:
-                    OSL_FAIL( "ScDPLevel::getName: unexpected level" );
+                    DBG_ERROR( "ScDPLevel::getName: unexpected level" );
                     break;
             }
         }
@@ -2195,7 +2237,7 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
                     aRet = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Weekday"));
                     break;
                 default:
-                    OSL_FAIL( "ScDPLevel::getName: unexpected level" );
+                    DBG_ERROR( "ScDPLevel::getName: unexpected level" );
                     break;
             }
         }
@@ -2212,12 +2254,12 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
 
 void SAL_CALL ScDPLevel::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");        //! exception?
+    DBG_ERROR("not implemented");		//! exception?
 }
 
 uno::Sequence<sheet::GeneralFunction> ScDPLevel::getSubTotals() const
 {
-    //! separate functions for settings and evaluation?
+    //!	separate functions for settings and evaluation?
 
     long nSrcDim = pSource->GetSourceDim( nDim );
     if ( !pSource->SubTotalAllowed( nSrcDim ) )
@@ -2229,15 +2271,15 @@ uno::Sequence<sheet::GeneralFunction> ScDPLevel::getSubTotals() const
 void ScDPLevel::setSubTotals(const uno::Sequence<sheet::GeneralFunction>& rNew)
 {
     aSubTotals = rNew;
-    //! set "manual change" flag?
+    //!	set "manual change" flag?
 }
 
-sal_Bool ScDPLevel::getShowEmpty() const
+BOOL ScDPLevel::getShowEmpty() const
 {
     return bShowEmpty;
 }
 
-void ScDPLevel::setShowEmpty(sal_Bool bSet)
+void ScDPLevel::setShowEmpty(BOOL bSet)
 {
     bShowEmpty = bSet;
 }
@@ -2252,11 +2294,11 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
     static SfxItemPropertyMapEntry aDPLevelMap_Impl[] =
     {
         //! change type of AutoShow/Layout/Sorting to API struct when available
-        {MAP_CHAR_LEN(SC_UNO_AUTOSHOW), 0,  &getCppuType((sheet::DataPilotFieldAutoShowInfo*)0),     0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_LAYOUT),   0,  &getCppuType((sheet::DataPilotFieldLayoutInfo*)0),       0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_SHOWEMPT), 0,  &getBooleanCppuType(),                                   0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_SORTING),  0,  &getCppuType((sheet::DataPilotFieldSortInfo*)0),         0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_SUBTOTAL), 0,  &getCppuType((uno::Sequence<sheet::GeneralFunction>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_AUTOSHOW),	0,	&getCppuType((sheet::DataPilotFieldAutoShowInfo*)0),     0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LAYOUT),	0,	&getCppuType((sheet::DataPilotFieldLayoutInfo*)0),       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_SHOWEMPT),	0,	&getBooleanCppuType(),									 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_SORTING),	0,	&getCppuType((sheet::DataPilotFieldSortInfo*)0),         0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_SUBTOTAL),	0,	&getCppuType((uno::Sequence<sheet::GeneralFunction>*)0), 0, 0 },
         {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -2286,7 +2328,8 @@ void SAL_CALL ScDPLevel::setPropertyValue( const rtl::OUString& aPropertyName, c
         aValue >>= aLayoutInfo;
     else
     {
-        OSL_FAIL("unknown property");
+        DBG_ERROR("unknown property");
+        //!	THROW( UnknownPropertyException() );
     }
 }
 
@@ -2300,7 +2343,7 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const rtl::OUString& aPropertyNam
         lcl_SetBoolInAny( aRet, getShowEmpty() );
     else if ( aNameStr.EqualsAscii( SC_UNO_SUBTOTAL ) )
     {
-        uno::Sequence<sheet::GeneralFunction> aSeq = getSubTotals();        //! avoid extra copy?
+        uno::Sequence<sheet::GeneralFunction> aSeq = getSubTotals();		//! avoid extra copy?
         aRet <<= aSeq;
     }
     else if ( aNameStr.EqualsAscii( SC_UNO_SORTING ) )
@@ -2325,7 +2368,8 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const rtl::OUString& aPropertyNam
     }
     else
     {
-        OSL_FAIL("unknown property");
+        DBG_ERROR("unknown property");
+        //!	THROW( UnknownPropertyException() );
     }
     return aRet;
 }
@@ -2341,7 +2385,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
     nLev( nL ),
     ppMbrs( NULL )
 {
-    //! hold pSource
+    //!	hold pSource
 
     long nSrcDim = pSource->GetSourceDim( nDim );
     if ( pSource->IsDataLayoutDimension(nSrcDim) )
@@ -2355,6 +2399,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
             {
                 case SC_DAPI_LEVEL_YEAR:
                     {
+                        // Wang Xu Ming - DataPilot migration
                         const ScDPItemData* pLastNumData = NULL;
                         for ( SCROW n = 0 ;n <GetSrcItemsCount() ; n-- )
                         {
@@ -2364,6 +2409,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
                             else
                                 pLastNumData = pData;
                         }
+                        // End Comments
 
                         if ( pLastNumData )
                         {
@@ -2381,14 +2427,14 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
                             nMbrCount = nLastYear + 1 - nFirstYear;
                         }
                         else
-                            nMbrCount = 0;      // no values
+                            nMbrCount = 0;		// no values
                     }
                     break;
-                case SC_DAPI_LEVEL_QUARTER: nMbrCount = 4;  break;
-                case SC_DAPI_LEVEL_MONTH:   nMbrCount = 12; break;
-                case SC_DAPI_LEVEL_DAY:     nMbrCount = 31; break;
+                case SC_DAPI_LEVEL_QUARTER:	nMbrCount = 4;	break;
+                case SC_DAPI_LEVEL_MONTH:	nMbrCount = 12;	break;
+                case SC_DAPI_LEVEL_DAY:		nMbrCount = 31;	break;
                 default:
-                    OSL_FAIL( "ScDPMembers::ScDPMembers: unexpected level" );
+                    DBG_ERROR( "ScDPMembers::ScDPMembers: unexpected level" );
                     break;
             }
         }
@@ -2396,11 +2442,11 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
         {
             switch (nLev)
             {
-                case SC_DAPI_LEVEL_YEAR:    nMbrCount = 1;  break;      //! get years from source
-                case SC_DAPI_LEVEL_WEEK:    nMbrCount = 53; break;
-                case SC_DAPI_LEVEL_WEEKDAY: nMbrCount = 7;  break;
+                case SC_DAPI_LEVEL_YEAR:	nMbrCount = 1;	break;		//! get years from source
+                case SC_DAPI_LEVEL_WEEK:	nMbrCount = 53;	break;
+                case SC_DAPI_LEVEL_WEEKDAY:	nMbrCount = 7;	break;
                 default:
-                    OSL_FAIL( "ScDPMembers::ScDPMembers: unexpected level" );
+                    DBG_ERROR( "ScDPMembers::ScDPMembers: unexpected level" );
                     break;
             }
         }
@@ -2411,13 +2457,13 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
 
 ScDPMembers::~ScDPMembers()
 {
-    //! release pSource
+    //!	release pSource
 
     if (ppMbrs)
     {
         for (long i=0; i<nMbrCount; i++)
             if ( ppMbrs[i] )
-                ppMbrs[i]->release();   // ref-counted
+                ppMbrs[i]->release();	// ref-counted
         delete[] ppMbrs;
     }
 }
@@ -2456,6 +2502,7 @@ uno::Any SAL_CALL ScDPMembers::getByName( const rtl::OUString& aName )
     }
 
     throw container::NoSuchElementException();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDPMembers::getElementNames() throw(uno::RuntimeException)
@@ -2509,22 +2556,22 @@ long ScDPMembers::getMinMembers() const
     {
         for (long i=0; i<nMbrCount; i++)
         {
-            //  count only visible with details (default is true for both)
+            //	count only visible with details (default is true for both)
             const ScDPMember* pMbr = ppMbrs[i];
             if ( !pMbr || ( pMbr->getIsVisible() && pMbr->getShowDetails() ) )
                 ++nVisCount;
         }
     }
     else
-        nVisCount = nMbrCount;      // default for all
+        nVisCount = nMbrCount;		// default for all
 
     return nVisCount;
 }
 
 ScDPMember* ScDPMembers::getByIndex(long nIndex) const
 {
-    //  result of GetColumnEntries must not change between ScDPMembers ctor
-    //  and all calls to getByIndex
+    //	result of GetColumnEntries must not change between ScDPMembers ctor
+    //	and all calls to getByIndex
 
     if ( nIndex >= 0 && nIndex < nMbrCount )
     {
@@ -2548,38 +2595,40 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                 long nVal = 0;
                 String aName;
 
-                if ( nLev == SC_DAPI_LEVEL_YEAR )   // YEAR is in both hierarchies
+                if ( nLev == SC_DAPI_LEVEL_YEAR )	// YEAR is in both hierarchies
                 {
-                    //! cache year range here!
-
+                    //!	cache year range here!
+                    
+                    // Wang Xu Ming - DataPilot migration
                     double fFirstVal = pSource->GetData()->GetMemberByIndex( nSrcDim, 0 )->GetValue();
                     long nFirstYear = pSource->GetData()->GetDatePart(
                                         (long)::rtl::math::approxFloor( fFirstVal ),
                                         nHier, nLev );
 
+                    // End Comments
                     nVal = nFirstYear + nIndex;
                 }
                 else if ( nHier == SC_DAPI_HIERARCHY_WEEK && nLev == SC_DAPI_LEVEL_WEEKDAY )
                 {
-                    nVal = nIndex;              // DayOfWeek is 0-based
+                    nVal = nIndex;				// DayOfWeek is 0-based
                     aName = ScGlobal::GetCalendar()->getDisplayName(
                         ::com::sun::star::i18n::CalendarDisplayIndex::DAY,
                         sal::static_int_cast<sal_Int16>(nVal), 0 );
                 }
                 else if ( nHier == SC_DAPI_HIERARCHY_QUARTER && nLev == SC_DAPI_LEVEL_MONTH )
                 {
-                    nVal = nIndex;              // Month is 0-based
+                    nVal = nIndex;				// Month is 0-based
                     aName = ScGlobal::GetCalendar()->getDisplayName(
                         ::com::sun::star::i18n::CalendarDisplayIndex::MONTH,
                         sal::static_int_cast<sal_Int16>(nVal), 0 );
                 }
                 else
-                    nVal = nIndex + 1;          // Quarter, Day, Week are 1-based
+                    nVal = nIndex + 1;			// Quarter, Day, Week are 1-based
 
                 if ( !aName.Len() )
                     aName = String::CreateFromInt32(nVal);
-
-                            ScDPItemData  rData( aName, nVal, sal_True, 0 ) ;
+                   
+                            ScDPItemData  rData( aName, nVal, TRUE, 0 ) ;
                     pNew = new ScDPMember( pSource, nDim, nHier, nLev, pSource->GetCache()->GetAdditionalItemID(rData));
             }
             else
@@ -2587,7 +2636,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                      const std::vector< SCROW >& memberIndexs = pSource->GetData()->GetColumnEntries( nSrcDim );
                     pNew = new ScDPMember( pSource, nDim, nHier, nLev, memberIndexs[nIndex]   );
             }
-            pNew->acquire();            // ref-counted
+            pNew->acquire();			// ref-counted
             ppMbrs[nIndex] = pNew;
         }
 
@@ -2596,13 +2645,13 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
         return ppMbrs[nIndex];
     }
 
-    return NULL;    //! exception?
+    return NULL;	//! exception?
 }
 
 // -----------------------------------------------------------------------
 
 ScDPMember::ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
-                        SCROW nIndex /*const String& rN, double fV, sal_Bool bHV*/ ) :
+                        SCROW nIndex /*const String& rN, double fV, BOOL bHV*/ ) :
     pSource( pSrc ),
     nDim( nD ),
     nHier( nH ),
@@ -2610,22 +2659,38 @@ ScDPMember::ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
     mnDataId( nIndex ),
     mpLayoutName(NULL),
     nPosition( -1 ),
-    bVisible( sal_True ),
-    bShowDet( sal_True )
+    bVisible( TRUE ),
+    bShowDet( TRUE )
 {
-    //! hold pSource
+    //!	hold pSource
 }
 
 ScDPMember::~ScDPMember()
 {
-    //! release pSource
+    //!	release pSource
 }
 
-sal_Bool ScDPMember::IsNamedItem( SCROW    nIndex ) const
+BOOL ScDPMember::IsNamedItem( const ScDPItemData& r ) const
+{
+    long nSrcDim = pSource->GetSourceDim( nDim );
+    if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) && r.IsValue() )
+    {
+        long nComp = pSource->GetData()->GetDatePart(
+                                        (long)::rtl::math::approxFloor( r.GetValue() ),
+                                        nHier, nLev );
+
+        //	fValue is converted from integer, so simple comparison works
+        return nComp == GetItemData().GetValue();
+    }
+
+    return r.IsCaseInsEqual( GetItemData() );
+}
+
+BOOL ScDPMember::IsNamedItem( SCROW    nIndex ) const
 {
     long nSrcDim = pSource->GetSourceDim( nDim );
     if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) )
-    {
+    { 
         const ScDPItemData* pData =  pSource->GetCache()->GetItemDataById( (SCCOL) nSrcDim, nIndex );
         if (  pData->IsValue()  )
         {
@@ -2667,7 +2732,7 @@ sal_Int32 ScDPMember::Compare( const ScDPMember& rOther ) const
 
 void ScDPMember::FillItemData( ScDPItemData& rData ) const
 {
-    //! handle date hierarchy...
+    //!	handle date hierarchy...
 
     rData = GetItemData() ;
 }
@@ -2689,29 +2754,29 @@ String ScDPMember::GetNameStr() const
 
 void SAL_CALL ScDPMember::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");        //! exception?
+    DBG_ERROR("not implemented");		//! exception?
 }
 
-sal_Bool ScDPMember::getIsVisible() const
+BOOL ScDPMember::getIsVisible() const
 {
     return bVisible;
 }
 
-void ScDPMember::setIsVisible(sal_Bool bSet)
+void ScDPMember::setIsVisible(BOOL bSet)
 {
     bVisible = bSet;
-    //! set "manual change" flag
+    //!	set "manual change" flag
 }
 
-sal_Bool ScDPMember::getShowDetails() const
+BOOL ScDPMember::getShowDetails() const
 {
     return bShowDet;
 }
 
-void ScDPMember::setShowDetails(sal_Bool bSet)
+void ScDPMember::setShowDetails(BOOL bSet)
 {
     bShowDet = bSet;
-    //! set "manual change" flag
+    //!	set "manual change" flag
 }
 
 sal_Int32 ScDPMember::getPosition() const
@@ -2733,9 +2798,9 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
 
     static SfxItemPropertyMapEntry aDPMemberMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_ISVISIBL), 0,  &getBooleanCppuType(),              0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_ISVISIBL),	0,	&getBooleanCppuType(),				0, 0 },
         {MAP_CHAR_LEN(SC_UNO_POSITION), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_SHOWDETA), 0,  &getBooleanCppuType(),              0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_SHOWDETA),	0,	&getBooleanCppuType(),				0, 0 },
         {MAP_CHAR_LEN(SC_UNO_LAYOUTNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
         {0,0,0,0,0,0}
     };
@@ -2768,7 +2833,8 @@ void SAL_CALL ScDPMember::setPropertyValue( const rtl::OUString& aPropertyName, 
     }
     else
     {
-        OSL_FAIL("unknown property");
+        DBG_ERROR("unknown property");
+        //!	THROW( UnknownPropertyException() );
     }
 }
 
@@ -2788,7 +2854,8 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const rtl::OUString& aPropertyNa
         aRet <<= mpLayoutName.get() ? *mpLayoutName : rtl::OUString();
     else
     {
-        OSL_FAIL("unknown property");
+        DBG_ERROR("unknown property");
+        //!	THROW( UnknownPropertyException() );
     }
     return aRet;
 }
@@ -2796,10 +2863,10 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const rtl::OUString& aPropertyNa
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPMember )
 
 
-const ScDPCache* ScDPSource::GetCache()
+ScDPTableDataCache* ScDPSource::GetCache()
 {
     DBG_ASSERT( GetData() , "empty ScDPTableData pointer");
-    return ( GetData()!=NULL) ? GetData()->GetCacheTable().getCache() : NULL ;
+    return ( GetData()!=NULL) ? GetData()->GetCacheTable().GetCache() : NULL ;
 }
 
 const ScDPItemData& ScDPMember::GetItemData() const
@@ -2809,7 +2876,7 @@ const ScDPItemData& ScDPMember::GetItemData() const
 
 const ScDPItemData* ScDPSource::GetItemDataById(long nDim, long nId)
 {
-    long nSrcDim = GetSourceDim( nDim );
+    long nSrcDim = GetSourceDim( nDim ); 
     const ScDPItemData* pItemData = GetData()->GetMemberById(  nSrcDim,  nId );
     if ( !pItemData )
    { //todo:
@@ -2823,7 +2890,7 @@ const ScDPItemData* ScDPSource::GetItemDataById(long nDim, long nId)
 SCROW  ScDPSource::GetMemberId(  long  nDim, const ScDPItemData& rData )
 {
     long nSrcDim = GetSourceDim( nDim );
-       return  GetCache()->GetIdByItemData(  nSrcDim, rData );
+       return  GetCache()->GetIdByItemData(  nSrcDim, rData ); 
 }
 
 const ScDPItemData* ScDPMembers::GetSrcItemDataByIndex( SCROW nIndex)
@@ -2831,7 +2898,7 @@ const ScDPItemData* ScDPMembers::GetSrcItemDataByIndex( SCROW nIndex)
     const std::vector< SCROW >& memberIds = pSource->GetData()->GetColumnEntries( nDim );
     if ( nIndex >= (long )(memberIds.size()) || nIndex < 0 )
         return NULL;
-    SCROW nId =  memberIds[ nIndex ];
+    SCROW nId =  memberIds[ nIndex ];                  
     return pSource->GetItemDataById( nDim, nId );
 }
 
@@ -2839,5 +2906,6 @@ const ScDPItemData* ScDPMembers::GetSrcItemDataByIndex( SCROW nIndex)
  {
     return pSource->GetData()->GetColumnEntries( nDim ).size();
  }
+// End Comments
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

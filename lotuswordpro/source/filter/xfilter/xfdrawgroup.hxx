@@ -57,12 +57,16 @@
  * @file
  * Group of drawing objects.
  ************************************************************************/
-#ifndef     _XFDRAWGROUP_HXX
-#define     _XFDRAWGROUP_HXX
+/*************************************************************************
+ * Change History
+ * 2004-2-21 create this file.
+ ************************************************************************/
+#ifndef		_XFDRAWGROUP_HXX
+#define		_XFDRAWGROUP_HXX
 
-#include    "xfdrawobj.hxx"
-#include    "xfframe.hxx"
-#include    "xfcontentcontainer.hxx"
+#include	"xfdrawobj.hxx"
+#include	"xfframe.hxx"
+#include	"xfcontentcontainer.hxx"
 
 /**
  * @brief
@@ -74,20 +78,18 @@ public:
     XFDrawGroup(){}
 
 public:
-    using XFDrawObject::Add;
-
     /**
-     * @descr   Add a drawing object to the group.
+     * @descr	Add a drawing object to the group.
      */
-    void    Add(XFFrame *pFrame);
+    void	Add(XFFrame *pFrame);
 
     /**
-     * @descr   Output group obejct and all it's children.
+     * @descr	Output group obejct and all it's children.
      */
     virtual void ToXml(IXFStream *pStrm);
 
 private:
-    XFContentContainer  m_aChildren;
+    XFContentContainer	m_aChildren;
 };
 
 inline void XFDrawGroup::Add(XFFrame *pFrame)
@@ -98,7 +100,7 @@ inline void XFDrawGroup::Add(XFFrame *pFrame)
 
 inline void XFDrawGroup::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     XFDrawObject::ToXml(pStrm);

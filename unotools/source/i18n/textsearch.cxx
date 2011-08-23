@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@ namespace utl
 
 SearchParam::SearchParam( const String &rText,
                                 SearchType eType,
-                                sal_Bool bCaseSensitive,
-                                sal_Bool bWrdOnly,
-                                sal_Bool bSearchInSel )
+                                BOOL bCaseSensitive,
+                                BOOL bWrdOnly,
+                                BOOL bSearchInSel )
 {
     sSrchStr        = rText;
     eSrchType       = eType;
@@ -63,7 +63,7 @@ SearchParam::SearchParam( const String &rText,
     nTransliterationFlags = 0;
 
     // Werte fuer "Gewichtete Levenshtein-Distanz"
-    bLEV_Relaxed    = sal_True;
+    bLEV_Relaxed    = TRUE;
     nLEV_OtherX     = 2;
     nLEV_ShorterY   = 1;
     nLEV_LongerZ    = 3;
@@ -184,7 +184,7 @@ void TextSearch::Init( const SearchParam & rParam,
             aSOpt.searchFlag |= SearchFlags::LEV_RELAXED;
         break;
 
-//  case SearchParam::SRCH_NORMAL:
+//	case SearchParam::SRCH_NORMAL:
     default:
         aSOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
         if( rParam.IsSrchWordOnly() )
@@ -304,9 +304,9 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
         {
             if( rReplaceStr.GetChar( nPos ) == '&')
             {
-                sal_uInt16 nStart = (sal_uInt16)(rResult.startOffset[0]);
-                sal_uInt16 nLength = (sal_uInt16)(rResult.endOffset[0] - rResult.startOffset[0]);
-                rReplaceStr.Erase( nPos, 1 );   // delete ampersand
+                USHORT nStart = (USHORT)(rResult.startOffset[0]);
+                USHORT nLength = (USHORT)(rResult.endOffset[0] - rResult.startOffset[0]);
+                rReplaceStr.Erase( nPos, 1 );	// delete ampersand
                 // replace by found string
                 rReplaceStr.Insert( rStr, nStart, nLength, nPos );
                 // jump over
@@ -330,21 +330,21 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
                         case '8':
                         case '9':
                         {
-                            rReplaceStr.Erase( nPos, 2 );   // delete both
-                            int i = sFndChar - '0'; // index
+                            rReplaceStr.Erase( nPos, 2 );	// delete both
+                            int i = sFndChar - '0';	// index
                             if(i < rResult.subRegExpressions)
                             {
-                                sal_uInt16 nSttReg = (sal_uInt16)(rResult.startOffset[i]);
-                                sal_uInt16 nRegLen = (sal_uInt16)(rResult.endOffset[i]);
+                                USHORT nSttReg = (USHORT)(rResult.startOffset[i]);
+                                USHORT nRegLen = (USHORT)(rResult.endOffset[i]);
                                 if( nRegLen > nSttReg )
                                     nRegLen = nRegLen - nSttReg;
                                 else
                                 {
                                     nRegLen = nSttReg - nRegLen;
-                                    nSttReg = (sal_uInt16)(rResult.endOffset[i]);
+                                    nSttReg = (USHORT)(rResult.endOffset[i]);
                                 }
                                 // Copy reference from found string
-                                sTmp = rStr.Copy((sal_uInt16)nSttReg, (sal_uInt16)nRegLen);
+                                sTmp = rStr.Copy((USHORT)nSttReg, (USHORT)nRegLen);
                                 // insert
                                 rReplaceStr.Insert( sTmp, nPos );
                                 // and step over
@@ -374,10 +374,10 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
                             rReplaceStr.Erase( nPos, 1 );
                             nPos++;
                         break;
-                        case 't':
+                        case 't': 
                             rReplaceStr.Erase( nPos, 2 ); // delete both
                             rReplaceStr.Insert( sTab, nPos ); // insert tabulator
-                            nPos++; // step over
+                            nPos++;	// step over
                         break;
                         default:
                             nPos += 2; // ignore both characters
@@ -398,7 +398,7 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
 #endif
 
 // ............................................................................
-}   // namespace utl
+}	// namespace utl
 // ............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

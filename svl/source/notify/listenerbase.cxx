@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,11 @@
 #include "precompiled_svl.hxx"
 
 #include <tools/debug.hxx>
+
 #include "listenerbase.hxx"
-#include <svl/listeneriter.hxx>
-#include <svl/listener.hxx>
-#include <svl/broadcast.hxx>
+#include "listeneriter.hxx"
+#include "listener.hxx"
+#include "broadcast.hxx"
 
 
 SvtListenerBase::SvtListenerBase( SvtListener& rLst,

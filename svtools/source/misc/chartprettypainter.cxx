@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,9 +134,9 @@ bool ChartPrettyPainter::DoPrettyPaintChart( uno::Reference< frame::XModel > xCh
     catch( uno::Exception& e )
     {
         (void)e;
-        OSL_FAIL( "Chart cannot be painted pretty!" );
+        DBG_ERROR( "Chart cannot be painted pretty!" );
     }
-    return false;
+    return false; 
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

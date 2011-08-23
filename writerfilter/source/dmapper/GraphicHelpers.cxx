@@ -9,8 +9,6 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 
-#include "dmapperLoggers.hxx"
-
 #include <iostream>
 using namespace std;
 
@@ -20,7 +18,7 @@ namespace dmapper {
 using namespace com::sun::star;
 
 PositionHandler::PositionHandler( ) :
-LoggedProperties(dmapper_logger, "PositionHandler")
+    Properties( )
 {
     m_nOrient = text::VertOrientation::NONE;
     m_nRelation = text::RelOrientation::FRAME;
@@ -31,7 +29,7 @@ PositionHandler::~PositionHandler( )
 {
 }
 
-void PositionHandler::lcl_attribute( Id aName, Value& rVal )
+void PositionHandler::attribute( Id aName, Value& rVal )
 {
     sal_Int32 nIntValue = rVal.getInt( );
     switch ( aName )
@@ -47,14 +45,14 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_line
                 };
 
-                static sal_Int16 pVertRelations[] =
+                static sal_Int16 pVertRelations[] = 
                 {
                     text::RelOrientation::PAGE_PRINT_AREA,
                     text::RelOrientation::PAGE_FRAME,
                     text::RelOrientation::FRAME,
                     text::RelOrientation::TEXT_LINE
                 };
-
+                
                 for ( int i = 0; i < 4; i++ )
                 {
                     if ( pVertRelValues[i] == sal_uInt32( nIntValue ) )
@@ -73,14 +71,14 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_character
                 };
 
-                static sal_Int16 pHoriRelations[] =
+                static sal_Int16 pHoriRelations[] = 
                 {
                     text::RelOrientation::PAGE_PRINT_AREA,
                     text::RelOrientation::PAGE_FRAME,
                     text::RelOrientation::FRAME,
                     text::RelOrientation::CHAR,
                 };
-
+                
                 for ( int i = 0; i < 4; i++ )
                 {
                     if ( pHoriRelValues[i] == sal_uInt32( nIntValue ) )
@@ -88,24 +86,20 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                 }
             }
             break;
-        default:
-#ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->element("unhandled");
-#endif
-            break;
+        default:;
     }
 }
 
-void PositionHandler::lcl_sprm( Sprm& rSprm )
+void PositionHandler::sprm( Sprm& rSprm )
 {
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
-
+    
     switch ( rSprm.getId( ) )
     {
         case NS_ooxml::LN_CT_PosV_align:
             {
-                static Id pVertValues[] =
+                static Id pVertValues[] = 
                 {
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignV_top,
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignV_bottom,
@@ -132,7 +126,7 @@ void PositionHandler::lcl_sprm( Sprm& rSprm )
             break;
         case NS_ooxml::LN_CT_PosH_align:
             {
-                static Id pHoriValues[] =
+                static Id pHoriValues[] = 
                 {
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignH_left,
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignH_right,
@@ -160,16 +154,12 @@ void PositionHandler::lcl_sprm( Sprm& rSprm )
         case NS_ooxml::LN_CT_PosH_posOffset:
         case NS_ooxml::LN_CT_PosV_posOffset:
             m_nPosition = ConversionHelper::convertEMUToMM100( nIntValue );
-        default:
-#ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->element("unhandled");
-#endif
-            break;
+        default:;
     }
 }
 
 WrapHandler::WrapHandler( ) :
-LoggedProperties(dmapper_logger, "WrapHandler"),
+    Properties( ),
     m_nType( 0 ),
     m_nSide( 0 )
 {
@@ -179,7 +169,7 @@ WrapHandler::~WrapHandler( )
 {
 }
 
-void WrapHandler::lcl_attribute( Id aName, Value& rVal )
+void WrapHandler::attribute( Id aName, Value& rVal )
 {
     switch ( aName )
     {
@@ -188,12 +178,12 @@ void WrapHandler::lcl_attribute( Id aName, Value& rVal )
             break;
         case NS_ooxml::LN_CT_Wrap_side:
             m_nSide = sal_Int32( rVal.getInt( ) );
-            break;
+            break; 
         default:;
     }
 }
 
-void WrapHandler::lcl_sprm( Sprm& )
+void WrapHandler::sprm( Sprm& )
 {
 }
 

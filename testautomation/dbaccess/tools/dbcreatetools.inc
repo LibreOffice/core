@@ -1375,10 +1375,8 @@ function fRegisterDatabaseFile( sFileName, sName)
         NewBtn.Click
     sleep(1)
     Kontext "CreateDatabaseLink"
-    
+        DatabaseFile.setText(sFileName)    
         RegisteredName.setText(sName)
-        DatabaseFile.setText(sFileName)
-
         CreateDatabaseLink.OK
         
     sleep(1)

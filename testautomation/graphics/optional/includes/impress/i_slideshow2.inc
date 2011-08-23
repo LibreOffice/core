@@ -30,29 +30,33 @@
 '* short description :
 '*
 '*******************************************************************
+'*
+' #1 tPraesentationAnimation
+' #1 tPraesentationEffekt
+' #1 tSlideShowInteraction
+' #1 tAendernObjektBenennen
+' #1 tSlideshowBackgroundAllSlides
+' #1 tSlideshowBackgroundSelectedSlide
+'*
+'\******************************************************************
 
 testcase tPraesentationAnimation
-
     Dim i
-
     Printlog "- Slideshow/Animation"
-    printlog "new document "
+
     Call hNewDocument
-    Call sSelectEmptyLayout
-    sleep 2
-    printlog "insert graphic"
-    InsertGraphicsFromFile
-    Kontext "OeffnenDlg"
-    Dateiname.SetText ConvertPath (gTesttoolPath + "global/input/graf_inp/desp.bmp")
-    sleep 2
-    Oeffnen.Click
-    sleep 2
+    Call sSelectEmptyLayout									'/// new document  ///'
+  sleep 2
+    InsertGraphicsFromFile								'/// insert graphic ///'
+     Kontext "OeffnenDlg"
+     Dateiname.SetText ConvertPath (gTesttoolPath + "global/input/graf_inp/desp.bmp")
+     sleep 2
+     Oeffnen.Click
+     sleep 2
 
-    printlog "deselect graphic"
-  gMouseClick 90,90									
+  gMouseClick 90,90									'/// deselect graphic ///'
 
-  printlog "insert 2nd graphic"
-  InsertGraphicsFromFile								
+  InsertGraphicsFromFile								'/// insert 2nd graphic ///'
   Kontext "OeffnenDlg"
   Dateiname.SetText ConvertPath (gTesttoolPath + "global/input/graf_inp/borabora.jpg")
   sleep 2
@@ -61,18 +65,15 @@ testcase tPraesentationAnimation
 
   Call hTypekeys "<TAB>"
 
-    printlog "open animation dialogue"
-  Opl_SD_EffekteZulassen						                
+  Opl_SD_EffekteZulassen						                '/// open animation dialogue ///'
   Kontext "Animation"
 
     for i=1 to 10
-        printlog "add graphic 10 times"
-        BildAufnehmen.Click								
+        BildAufnehmen.Click								'/// add graphic 10 times ///'
     next i
 
     sleep 1
-    printlog "get number of frames (should be 10) "
-     if AnzahlBilder.GetText <> "10" Then						
+     if AnzahlBilder.GetText <> "10" Then						'/// get number of frames (should be 10)  ///'
         WarnLog "  - Adding pictures did not work"
      else
         PrintLog "  Pictures added"
@@ -80,63 +81,52 @@ testcase tPraesentationAnimation
 
      if AlleAufnehmen.IsEnabled Then WarnLog "  - Add all should not be enabled because only 1 object is selected"
 
-    Kontext "DocumentImpress"
-    printlog "select both graphics in document "
-    EditSelectAll
+  Kontext "DocumentImpress"
+  EditSelectAll							'/// select both graphics in document  ///'
 
-    Kontext "Animation"
+  Kontext "Animation"
 
-    printlog "add them 5 times (10 frames)"
     for i=1 to 5
-        printlog i
-        AlleAufnehmen.Click								
+    printlog i
+        AlleAufnehmen.Click								'/// add them 5 times (10 frames) ///'
     next i
 
     sleep 1
-    printlog "compare total numbers of frame"
-     if AnzahlBilder.GetText <> "20" Then						
+     if AnzahlBilder.GetText <> "20" Then						'/// compare total numbers of frame ///'
         WarnLog "  - Adding pics does not work"
      else
         PrintLog "  all pics added"
      end if
 
-     printlog "jump to 1st frame"
-  ErstesBild.Click									
+  ErstesBild.Click									'/// jump to 1st frame ///'
 
-    printlog "get number index of selected frame"
-     if AnzahlBilder.GetText <> "1" Then						
+     if AnzahlBilder.GetText <> "1" Then						'/// get number index of selected frame ///'
         WarnLog "  - Jump back to beginning does not work"
      else
         PrintLog "  Jump back to beginning works"
      end if
 
-    printlog "jump to last frame"
-    LetztesBild.Click
+  LetztesBild.Click									'/// jump to last frame ///'
 
-    printlog "control number index of selected frame"
-    if AnzahlBilder.GetText <> "20" Then
+     if AnzahlBilder.GetText <> "20" Then						'/// control number index of selected frame ///'
         WarnLog "  - Jump to end does not work"
      else
         PrintLog "  Jumped to end"
      end if
    sleep 1
-   printlog "play animation"
-  Abspielen.Click									
+  Abspielen.Click									'/// play animation ///'
     sleep 10
   Kontext "DocumentImpress"
-  printlog "delete graphics in document "
-  EditSelectAll							
+  EditSelectAll							'/// delete graphics in document  ///'
   DocumentImpress.TypeKeys "<DELETE>"
   sleep 2
   Kontext "Animation"
-  printlog "create animation"
-  Erstellen.Click									
+  Erstellen.Click									'/// create animation ///'
   sleep 10
 
   Kontext "DocumentImpress"
     try
-        printlog "try to copy created animation to make sure it is created"
-       EditCopy										
+       EditCopy										'/// try to copy created animation to make sure it is created ///'
        PrintLog "  Animation created"
     catch
        WarnLog "  - Animation not created"
@@ -144,8 +134,7 @@ testcase tPraesentationAnimation
 
   Kontext "Animation"
 
-  printlog "set duration time of frames"
-     if AnimationsgruppeGruppenobjekt.IsChecked = True Then				
+     if AnimationsgruppeGruppenobjekt.IsChecked = True Then				'/// set duration time of frames ///'
         try
             AnzeigedauerProBild.SetText "1"
             WarnLog "  - Control should be disabled"
@@ -154,14 +143,11 @@ testcase tPraesentationAnimation
         endcatch
      end if
 
-     printlog "check group object"
-  AnimationsgruppeBitmapobjekt.Check							
+  AnimationsgruppeBitmapobjekt.Check							'/// check group object ///'
 
-  printlog "set frame visibility time to 3"
-  AnzeigedauerProBild.SetText "3"							
+  AnzeigedauerProBild.SetText "3"							'/// set frame visibility time to 3 ///'
   SetClipboard AnzeigedauerProBild.GetText
-  printlog "raise value for frame time"
-  AnzeigedauerProBild.More								
+  AnzeigedauerProBild.More								'/// raise value for frame time ///'
    if AnzeigedauerProBild.GetText<> GetClipboardText Then
       PrintLog "  Duration per frame works"
    else
@@ -169,8 +155,7 @@ testcase tPraesentationAnimation
    end if
 
   Dim Zaehler
-  printlog "test different settings for pass amount"
-  Zaehler = AnzahlDurchlaeufe.GetItemCount						
+  Zaehler = AnzahlDurchlaeufe.GetItemCount						'/// test different settings for pass amount ///'
    for i=1 to Zaehler
        AnzahlDurchlaeufe.Select i
    next i
@@ -182,43 +167,36 @@ testcase tPraesentationAnimation
        Anpassung.Select i
    next i
 
-   printlog "delete 1 frame"
- BildLoeschen.Click									
+ BildLoeschen.Click									'/// delete 1 frame ///'
   if AnzahlBilder = "20" Then
      WarnLog "  - Deleting pictures does not work"
   else
      PrintLog "  Picture No.20 deleted"
   end if
 
-  printlog "delete all frames"
- AlleLoeschen.Click									
+ AlleLoeschen.Click									'/// delete all frames ///'
  Kontext "Active"
  Active.Yes
  sleep 3
 
  Kontext "Animation"
- printlog "check if play button is still active"
-  if Abspielen.IsEnabled = true Then							
+  if Abspielen.IsEnabled = true Then							'/// check if play button is still active ///'
     WarnLog "  - Not all pics are deleted"
   else
     PrintLog "  All pics deleted"
   end if
  sleep 2
- printlog "close animation flyer"
- Animation.Close									
+ Animation.Close									'/// close animation flyer ///'
  sleep 2
- printlog "close document "
- Call hCloseDocument									
-endcase 'tPraesentationAnimation
+ Call hCloseDocument									'/// close document  ///'
+endcase
 
 '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 testcase tPraesentationEffekt
-
     qaerrorlog "Test not yet ready."
     goto endsub
-
-    
+    Printlog "- Slideshow/Effect"
  Dim i
  Dim j
  Dim k
@@ -230,14 +208,11 @@ testcase tPraesentationEffekt
  Dim ZaehlerText
  Dim ZaehlerTon
  Dim Zufall
-
- Printlog "- Slideshow/Effect"
- printlog "new document "
- Call hNewDocument									
-  printlog " check state of navigator ! expected: closed"
+ Call hNewDocument									'/// new document  ///'
+  '///  check state of navigator ! expected: closed ///'
    Kontext "Navigator"
    if Navigator.exists then
-      printlog " close navigator !"
+      '///+ close navigator ! ///'
       Navigator.Close
       Warnlog "Navigator was open. Check earlier tests. Now closed."
    else
@@ -246,22 +221,17 @@ testcase tPraesentationEffekt
  sleep 2
  kontext "DocumentImpress"
  gMouseClick 50,50
- printlog "create rectangle"
- hRechteckErstellen (20,20,50,50)							
+ hRechteckErstellen (20,20,50,50)							'/// create rectangle ///'
   sleep 3
   Kontext "Effekt"
     Printlog "  - Test effects"
-    printlog "deselect rectangle"
-  gMouseClick 90,90									
+  gMouseClick 90,90									'/// deselect rectangle ///'
   sleep 1
-  printlog "select rectangle "
-  DocumentImpress.TypeKeys "<TAB>"							
+  DocumentImpress.TypeKeys "<TAB>"							'/// select rectangle  ///'
   sleep 1
-  printlog "go into text edit mode (F2)"
-  DocumentImpress.TypeKeys "<F2>"							
+  DocumentImpress.TypeKeys "<F2>"							'/// go into text edit mode (F2) ///'
   sleep 1
-  printlog "type text into the rectangle"
-  DocumentImpress.TypeKeys "test text to test text effects"				
+  DocumentImpress.TypeKeys "test text to test text effects"				'/// type text into the rectangle ///'
   sleep 1
   DocumentImpress.TypeKeys "<ESCAPE>"
   sleep 2
@@ -272,8 +242,7 @@ testcase tPraesentationEffekt
   sleep 3
   Effekte.Click
   Zaehler=Effekteliste.GetItemCount
-    printlog "Start from the second entry since the first one is No effect"
-    for i=2 to Zaehler                              
+    for i=2 to Zaehler                              '/// Start from the second entry since the first one is "No effect" ///'
     Effekteliste.Select i
     SetClipboard Effekteliste.GetSelText
     Effekt.TypeKeys "<TAB>"
@@ -429,7 +398,7 @@ testcase tPraesentationEffekt
   Effekt.Close
  sleep 1
  Call hCloseDocument
-endcase 'tPraesentationEffekt
+endcase
 
 '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -441,15 +410,14 @@ testcase tSlideShowInteraction
 
    Datei$ = ConvertPath (gOfficePath + "user\work\interac.odp")
 
-   printlog "open application"
+   '/// open application ///'
    Call hNewDocument
    Call sSelectEmptyLayout
    sleep 5
-   printlog "Set start with current page to ON"
-   setStartCurrentPage(TRUE)   
+   setStartCurrentPage(TRUE)   '/// Set "start with current page to ON ///'
 
-   printlog "call 'Insert->Slide' three times and name the slides 2, 3, 4 and create a rectangle on it "
-   printlog "we now have 4 slides"
+   '/// call 'Insert->Slide' three times and name the slides 2, 3, 4 and create a rectangl� on it  ///'
+   '///+ we now have 4 slides ?! :-) ///'
    Kontext "DocumentImpress"
    for i = 2 to 4
       InsertSlide
@@ -462,7 +430,7 @@ testcase tSlideShowInteraction
       sleep 2
    next i
 
-   printlog " check state of navigator ! expected: closed -> open navigator"
+   '///  check state of navigator ! expected: closed -> open navigator ///'
    Kontext "Navigator"
    if Navigator.exists then
       qaerrorlog "Navigator: already open :-("
@@ -474,7 +442,7 @@ testcase tSlideShowInteraction
    endif
    sleep 3
 
-   printlog "Slide Show->Interaction"
+   '/// Slide Show->Interaction ///'
    SlideShowInteraction
       Kontext "TabInteraktion"
       sleep 1
@@ -690,7 +658,7 @@ testcase tSlideShowInteraction
        endif
          sleep 6
 
-   printlog "Do Page down + Page up due to focusing-problems"
+   '/// Do Page down + Page up due to focusing-problems ///'
    kontext "Slides"
    hTypeKeys "<PAGEDOWN>"
    hTypeKeys "<PAGEUP>"
@@ -860,21 +828,20 @@ testcase tSlideShowInteraction
       endcatch
 
    Kontext "DocumentImpress"
-   printlog "Close the Navigator"
+   '/// Close the Navigator ///'
    DocumentImpress.TypeKeys "<MOD1 SHIFT F5>"
    sleep 3
-   printlog "Set start with current page to ON = Default"
+   '/// Set "start with current page to ON = Default ///'
    setStartCurrentPage(TRUE)
    Call hCloseDocument
-endcase 'tSlideShowInteraction
+endcase
 
 '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 testcase tAendernObjektBenennen
   Printlog "- Context/Name object"
-  printlog "new document "
  Call hNewDocument
- Call sSelectEmptyLayout									
+ Call sSelectEmptyLayout									'/// new document  ///'
 
   sleep 1
   Kontext "DocumentImpress"
@@ -933,7 +900,7 @@ testcase tAendernObjektBenennen
    sleep 2
    Call hCloseDocument
    sleep 2
-endcase 'tAendernObjektBenennen
+endcase
 
 '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -945,23 +912,23 @@ testcase tSlideshowBackgroundAllSlides
     Background$ = ConvertPath(gOfficeBasisPath + "share\gallery\www-back\chocolate.jpg")
     Datei$ = ConvertPath (gOfficePath + "user\work\background.odp")
 
-    printlog "Create a new document"
+    '/// Create a new document ///'
     Printlog "- SlideshowBackground"
     Call hNewDocument
 
-    printlog "Insert a new Slide"
+    '/// Insert a new Slide ///'
     Kontext "DocumentImpress"
     InsertSlide
 
-    printlog "Open the Contextmenu"
+    '/// Open the Contextmenu ///'
     DocumentImpress.OpenContextMenu  
 
-    printlog "Select the entry Slide"
+    '/// Select the entry "Slide" ///'
     hMenuFindSelect (".uno:PageMenu", true, 1, true)
-    printlog "Select the entry Background"
+    '/// Select the entry "Background" ///'
     hMenuSelectNr (4)
 
-    printlog "In the open-file dialogue, choose and open a graphic-file you wish to have as a background"
+    '/// In the open-file dialogue, choose and open a graphic-file you wish to have as a background ///'
     kontext "GrafikEinfuegenDlg"
     If GrafikEinfuegenDlg.Exists Then
         DateiName.SetText (Background$)
@@ -970,7 +937,7 @@ testcase tSlideshowBackgroundAllSlides
         warnlog "GrafikEinfuegenDlg not existent... check why."
     End if
 
-    printlog "If an active-message shows up, press yes to apply this background to all slides."
+    '/// If an "active"-message shows up, press "yes" to apply this background to all slides. ///'
     kontext "Active"
     if Active.Exists then
         Active.Yes
@@ -978,20 +945,19 @@ testcase tSlideshowBackgroundAllSlides
         QaErrorLog "No dialogue considering if we wish to apply the background to all slides."
     end if
 
-    printlog "Save the document"
+    '/// Save the document ///'
     Call hFileSaveAsKill (Datei$)
-    printlog "Close the document"
+    '/// Close the document ///'
     Call hCloseDocument
-    printlog "Open the document"
+    '/// Open the document ///'
     Call hFileOpen (Datei$)
-    printlog "Close the document"
+    '/// Close the document ///'
     Call hCloseDocument
-endcase 'tSlideshowBackgroundAllSlides
+endcase
 
 '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 testcase tSlideshowBackgroundSelectedSlide
-
     Dim Datei$ as string
     Dim Background$ as string
     Dim i as integer
@@ -999,23 +965,23 @@ testcase tSlideshowBackgroundSelectedSlide
     Background$ = ConvertPath(gOfficeBasisPath + "share\gallery\www-back\chocolate.jpg")
     Datei$ = ConvertPath (gOfficePath + "user\work\background.odp")
 
-    printlog "Create a new document"
+    '/// Create a new document ///'
     Printlog "- SlideshowBackground"
     Call hNewDocument
 
-    printlog "Insert a new Slide"
+    '/// Insert a new Slide ///'
     Kontext "DocumentImpress"
     InsertSlide
 
-    printlog "Open the Contextmenu"
+    '/// Open the Contextmenu ///'
     DocumentImpress.OpenContextMenu  
 
-    printlog "Select the entry Slide"
+    '/// Select the entry "Slide" ///'
     hMenuFindSelect (".uno:PageMenu", true, 1, true)
-    printlog "Select the entry Background"
+    '/// Select the entry "Background" ///'
     hMenuSelectNr (4)
 
-    printlog "In the open-file dialogue, choose and open a graphic-file you wish to have as a background"
+    '/// In the open-file dialogue, choose and open a graphic-file you wish to have as a background ///'
     kontext "GrafikEinfuegenDlg"
     If GrafikEinfuegenDlg.Exists Then
         DateiName.SetText (Background$)
@@ -1024,7 +990,7 @@ testcase tSlideshowBackgroundSelectedSlide
         warnlog "GrafikEinfuegenDlg not existent... check why."
     End if
 
-    printlog "If an active-message shows up, press No to only apply this background to the selected slide."
+    '/// If an "active"-message shows up, press "No" to only apply this background to the selected slide. ///'
     kontext "Active"
     if Active.Exists then
         Active.No
@@ -1032,14 +998,14 @@ testcase tSlideshowBackgroundSelectedSlide
         QaErrorLog "No dialogue considering if we wish to apply the background to all slides."
     end if
 
-    printlog "Save the document"
+    '/// Save the document ///'
     Call hFileSaveAsKill (Datei$)
-    printlog "Close the document"
+    '/// Close the document ///'
     Call hCloseDocument
-    printlog "Open the document"
+    '/// Open the document ///'
     Call hFileOpen (Datei$)
-    printlog "Close the document"
+    '/// Close the document ///'
     Call hCloseDocument
-endcase 'tSlideshowBackgroundSelectedSlide
+endcase
 
 '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

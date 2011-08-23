@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -297,9 +297,7 @@ public class FormDocument extends TextDocument
 
     public ControlForm[] getControlForms()
     {
-        ControlForm[] aResult = new ControlForm[oControlForms.size()];
-        oControlForms.toArray( aResult );
-        return aResult;
+        return (ControlForm[]) oControlForms.toArray();
     }
 
     public boolean finalizeForms(DataEntrySetter _curDataEntrySetter, FieldLinker _curFieldLinker, FormConfiguration _curFormConfiguration)

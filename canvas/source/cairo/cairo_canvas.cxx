@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,6 +48,12 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
+#ifdef WNT
+# include <tools/prewin.h>
+# include <windows.h> 
+# include <tools/postwin.h>
+#endif
+
 #include <vcl/sysdata.hxx>
 
 #include "cairo_canvas.hxx"
@@ -82,16 +88,16 @@ namespace cairocanvas
 
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
                              maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER &&
-                             maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE,
+                             maArguments[5].getValueTypeClass() == uno::TypeClass_SEQUENCE, 
                              "Canvas::initialize: wrong number of arguments, or wrong types" );
 
         // We expect a single Any here, containing a pointer to a valid
         // VCL output device, on which to output (mostly needed for text)
         sal_Int64 nPtr = 0;
         maArguments[0] >>= nPtr;
-        OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
-
-        ENSURE_ARG_OR_THROW( pOutDev != NULL,
+        OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr); 
+        
+        ENSURE_ARG_OR_THROW( pOutDev != NULL, 
                              "Canvas::initialize: invalid OutDev pointer" );
 
         awt::Rectangle aBounds;
@@ -105,10 +111,10 @@ namespace cairocanvas
             throw lang::NoSupportException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                      "Passed SystemGraphicsData invalid!")),
-                NULL);
+                NULL);        
 
         bool bHasXRender = IsCairoWorking(pOutDev);
-        ENSURE_ARG_OR_THROW( bHasXRender == true,
+        ENSURE_ARG_OR_THROW( bHasXRender == true, 
                              "SpriteCanvas::SpriteCanvas: No RENDER extension" );
 
         // setup helper
@@ -119,7 +125,7 @@ namespace cairocanvas
                              *this, this );
 
         // forward surface to render on to canvashelper
-        maCanvasHelper.setSurface(
+        maCanvasHelper.setSurface( 
             maDeviceHelper.getSurface(),
             false );
 
@@ -148,7 +154,7 @@ namespace cairocanvas
 
     bool Canvas::repaint( const SurfaceSharedPtr&       pSurface,
                           const rendering::ViewState&   viewState,
-                          const rendering::RenderState& renderState )
+                          const rendering::RenderState&	renderState )
     {
         return maCanvasHelper.repaint( pSurface, viewState, renderState );
     }

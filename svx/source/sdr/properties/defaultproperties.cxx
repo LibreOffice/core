@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,18 +52,18 @@ namespace sdr
         }
 
         DefaultProperties::DefaultProperties(SdrObject& rObj)
-        :   BaseProperties(rObj),
+        :	BaseProperties(rObj),
             mpItemSet(0L)
         {
         }
 
         DefaultProperties::DefaultProperties(const DefaultProperties& rProps, SdrObject& rObj)
-        :   BaseProperties(rObj),
+        :	BaseProperties(rObj),
             mpItemSet(0L)
         {
             if(rProps.mpItemSet)
             {
-                mpItemSet = rProps.mpItemSet->Clone(sal_True);
+                mpItemSet = rProps.mpItemSet->Clone(TRUE);
 
                 // do not keep parent info, this may be changed by later construrtors.
                 // This class just copies the ItemSet, ignore parent.
@@ -87,7 +87,7 @@ namespace sdr
                 mpItemSet = 0L;
             }
         }
-
+        
         const SfxItemSet& DefaultProperties::GetObjectItemSet() const
         {
             if(!mpItemSet)
@@ -104,12 +104,12 @@ namespace sdr
         void DefaultProperties::SetObjectItem(const SfxPoolItem& rItem)
         {
             const sal_uInt16 nWhichID(rItem.Which());
-
+     
             if(AllowItemChange(nWhichID, &rItem))
             {
                 ItemChange(nWhichID, &rItem);
                 PostItemChange(nWhichID);
-
+     
                 SfxItemSet aSet(*GetSdrObject().GetObjectItemPool(), nWhichID, nWhichID);
                 aSet.Put(rItem);
                 ItemSetChanged(aSet);
@@ -119,7 +119,7 @@ namespace sdr
         void DefaultProperties::SetObjectItemDirect(const SfxPoolItem& rItem)
         {
             const sal_uInt16 nWhichID(rItem.Which());
-
+     
             if(AllowItemChange(nWhichID, &rItem))
             {
                 ItemChange(nWhichID, &rItem);
@@ -163,7 +163,7 @@ namespace sdr
 
             while(nWhich)
             {
-                if(SFX_ITEM_SET == rSet.GetItemState(nWhich, sal_False, &pPoolItem))
+                if(SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE, &pPoolItem))
                 {
                     if(AllowItemChange(nWhich, pPoolItem))
                     {
@@ -176,7 +176,7 @@ namespace sdr
 
                 nWhich = aWhichIter.NextWhich();
             }
-
+     
             if(bDidChange)
             {
                 std::vector< sal_uInt16 >::iterator aIter = aPostItemChangeList.begin();
@@ -185,9 +185,9 @@ namespace sdr
                 while(aIter != aEnd)
                 {
                     PostItemChange(*aIter);
-                    ++aIter;
+                    aIter++;
                 }
-
+     
                 ItemSetChanged(aSet);
             }
         }

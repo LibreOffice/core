@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdstr.hrc"
+#include "svdglob.hxx"
 #include <tools/poly.hxx>
 #include <svx/svdpage.hxx>
-#include "svx/globl3d.hxx"
+#include "globl3d.hxx"
 #include <svx/lathe3d.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svxids.hrc>
@@ -73,7 +73,7 @@ TYPEINIT1(E3dLatheObj, E3dCompoundObject);
 \************************************************************************/
 
 E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon rPoly2D)
-:   E3dCompoundObject(rDefault),
+:	E3dCompoundObject(rDefault),
     maPolyPoly2D(rPoly2D)
 {
     // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
@@ -97,7 +97,7 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyP
         {
             nSegCnt -= 1;
         }
-
+    
         GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
     }
 }
@@ -131,14 +131,26 @@ void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-sal_uInt16 E3dLatheObj::GetObjIdentifier() const
+UINT16 E3dLatheObj::GetObjIdentifier() const
 {
     return E3D_LATHEOBJ_ID;
 }
 
-E3dLatheObj* E3dLatheObj::Clone() const
+/*************************************************************************
+|*
+|* Zuweisungsoperator
+|*
+\************************************************************************/
+
+void E3dLatheObj::operator=(const SdrObject& rObj)
 {
-    return CloneHelper< E3dLatheObj >();
+    // erstmal alle Childs kopieren
+    E3dCompoundObject::operator=(rObj);
+
+    // weitere Parameter kopieren
+    const E3dLatheObj& r3DObj = (const E3dLatheObj&)rObj;
+
+    maPolyPoly2D  = r3DObj.maPolyPoly2D;
 }
 
 /*************************************************************************
@@ -147,7 +159,7 @@ E3dLatheObj* E3dLatheObj::Clone() const
 |*
 \************************************************************************/
 
-SdrObject *E3dLatheObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
+SdrObject *E3dLatheObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
 {
     return NULL;
 }
@@ -192,10 +204,10 @@ void E3dLatheObj::SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew)
             {
                 nSegCnt -= 1;
             }
-
+        
             GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
         }
-
+        
         ActionChanged();
     }
 }
@@ -237,9 +249,9 @@ void E3dLatheObj::TakeObjNamePlural(XubString& rName) const
 |*
 \************************************************************************/
 
-sal_Bool E3dLatheObj::IsBreakObjPossible()
+BOOL E3dLatheObj::IsBreakObjPossible()
 {
-    return sal_True;
+    return TRUE;
 }
 
 SdrAttrObj* E3dLatheObj::GetBreakObj()

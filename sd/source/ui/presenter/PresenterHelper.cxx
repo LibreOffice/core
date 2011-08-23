@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ Reference<XInterface> SAL_CALL PresenterHelperService_createInstance (
 ::rtl::OUString PresenterHelperService_getImplementationName (void)
     throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper"));
+    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper");
 }
 
 
@@ -71,7 +71,7 @@ Sequence<rtl::OUString> SAL_CALL PresenterHelperService_getSupportedServiceNames
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterHelper")));
+        ::rtl::OUString::createFromAscii("com.sun.star.drawing.PresenterHelper"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -103,7 +103,7 @@ void SAL_CALL PresenterHelper::initialize (const Sequence<Any>& rArguments)
 {
     (void)rArguments;
 }
-
+    
 
 
 
@@ -136,7 +136,7 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
         // Make the frame window transparent and make the parent able to
         // draw behind it.
         if (pParentWindow != NULL)
-            pParentWindow->EnableChildTransparentMode(sal_True);
+            pParentWindow->EnableChildTransparentMode(TRUE);
     }
 
     if (pWindow != NULL)
@@ -148,12 +148,12 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
         if ( ! bEnableParentClip)
         {
             pWindow->SetParentClipMode(PARENTCLIPMODE_NOCLIP);
-            pWindow->SetPaintTransparent(sal_True);
+            pWindow->SetPaintTransparent(TRUE);
         }
         else
         {
             pWindow->SetParentClipMode(PARENTCLIPMODE_CLIP);
-            pWindow->SetPaintTransparent(sal_False);
+            pWindow->SetPaintTransparent(FALSE);
         }
 
     }
@@ -177,10 +177,10 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createSharedCanvas (
         || ! rxWindow.is())
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("illegal argument")),
+            OUString::createFromAscii("illegal argument"),
             Reference<XInterface>(static_cast<XWeak*>(this)));
     }
-
+        
     if (rxWindow == rxSharedWindow)
         return rxSharedCanvas;
     else
@@ -209,21 +209,21 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
     if (pWindow != NULL)
     {
         Sequence<Any> aArg (5);
-
+        
         // common: first any is VCL pointer to window (for VCL canvas)
         aArg[0] = makeAny(reinterpret_cast<sal_Int64>(pWindow));
         aArg[1] = Any();
         aArg[2] = makeAny(::com::sun::star::awt::Rectangle());
         aArg[3] = makeAny(sal_False);
         aArg[4] = makeAny(rxWindow);
-
+        
         Reference<lang::XMultiServiceFactory> xFactory (
             mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
         return Reference<rendering::XCanvas>(
             xFactory->createInstanceWithArguments(
                 rsOptionalCanvasServiceName.getLength()>0
                     ? rsOptionalCanvasServiceName
-                    : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.VCLCanvas")),
+                    : OUString::createFromAscii("com.sun.star.rendering.VCLCanvas"),
                 aArg),
             UNO_QUERY);
     }
@@ -256,7 +256,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
 {
     if ( ! rxCanvas.is())
         return NULL;
-
+    
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
     if (mpGraphicFilter.get() == NULL)

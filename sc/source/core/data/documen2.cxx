@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,6 +49,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <tools/tenccvt.hxx>
+#include <tools/list.hxx>
 #include <rtl/crc.h>
 #include <basic/basmgr.hxx>
 
@@ -77,7 +78,7 @@
 #include "validat.hxx"
 #include "progress.hxx"
 #include "detdata.hxx"
-#include "sc.hrc"               // FID_DATACHANGED
+#include "sc.hrc"				// FID_DATACHANGED
 #include "ddelink.hxx"
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
@@ -124,7 +125,7 @@ private:
 
 // STATIC DATA -----------------------------------------------------------
 
-ScDocument::ScDocument( ScDocumentMode  eMode,
+ScDocument::ScDocument( ScDocumentMode	eMode,
                         SfxObjectShell* pDocShell ) :
         xServiceManager( ::comphelper::getProcessServiceFactory() ),
         mpUndoManager( NULL ),
@@ -139,7 +140,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pCondFormList( NULL ),
         pValidationList( NULL ),
         pFormatExchangeList( NULL ),
-        pRangeName(NULL),
         pDPCollection( NULL ),
         pLinkManager( NULL ),
         pFormulaTree( NULL ),
@@ -170,7 +170,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nUnoObjectId( 0 ),
         nRangeOverflowType( 0 ),
         aCurTextWidthCalcPos(MAXCOL,0,0),
-        aTableOpList( 0 ),
         nFormulaCodeInTree(0),
         nXMLImportedFormulaCount( 0 ),
         nInterpretLevel(0),
@@ -184,39 +183,40 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nVisibleTab( 0 ),
         eLinkMode(LM_UNKNOWN),
         bAutoCalc( eMode == SCDOCMODE_DOCUMENT ),
-        bAutoCalcShellDisabled( false ),
-        bForcedFormulaPending( false ),
-        bCalculatingFormulaTree( false ),
+        bAutoCalcShellDisabled( FALSE ),
+        bForcedFormulaPending( FALSE ),
+        bCalculatingFormulaTree( FALSE ),
         bIsClip( eMode == SCDOCMODE_CLIP ),
         bIsUndo( eMode == SCDOCMODE_UNDO ),
-        bIsVisible( false ),
-        bIsEmbedded( false ),
-        bNoSetDirty( false ),
-        bInsertingFromOtherDoc( false ),
+        bIsVisible( FALSE ),
+        bIsEmbedded( FALSE ),
+//		bNoSetDirty( TRUE ),
+        bNoSetDirty( FALSE ),
+        bInsertingFromOtherDoc( FALSE ),
         bLoadingMedium( false ),
         bImportingXML( false ),
-        bXMLFromWrapper( false ),
-        bCalcingAfterLoad( false ),
-        bNoListening( false ),
-        bIdleDisabled( false ),
-        bInLinkUpdate( false ),
-        bChartListenerCollectionNeedsUpdate( false ),
-        bHasForcedFormulas( false ),
-        bInDtorClear( false ),
-        bExpandRefs( false ),
-        bDetectiveDirty( false ),
+        bXMLFromWrapper( FALSE ),
+        bCalcingAfterLoad( FALSE ),
+        bNoListening( FALSE ),
+        bIdleDisabled( FALSE ),
+        bInLinkUpdate( FALSE ),
+        bChartListenerCollectionNeedsUpdate( FALSE ),
+        bHasForcedFormulas( FALSE ),
+        bInDtorClear( FALSE ),
+        bExpandRefs( FALSE ),
+        bDetectiveDirty( FALSE ),
         nMacroCallMode( SC_MACROCALL_ALLOWED ),
-        bHasMacroFunc( false ),
+        bHasMacroFunc( FALSE ),
         nVisSpellState( 0 ),
         nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
         nAsianKerning(SC_ASIANKERNING_INVALID),
-        bSetDrawDefaults( false ),
-        bPastingDrawFromOtherDoc( false ),
+        bSetDrawDefaults( FALSE ),
+        bPastingDrawFromOtherDoc( FALSE ),
         nInDdeLinkUpdate( 0 ),
-        bInUnoBroadcast( false ),
-        bInUnoListenerCall( false ),
+        bInUnoBroadcast( FALSE ),
+        bInUnoListenerCall( FALSE ),
         eGrammar( formula::FormulaGrammar::GRAM_NATIVE ),
-        bStyleSheetUsageInvalid( sal_True ),
+        bStyleSheetUsageInvalid( TRUE ),
         mbUndoEnabled( true ),
         mbAdjustHeightEnabled( true ),
         mbExecuteLinkEnabled( true ),
@@ -242,8 +242,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     }
     else
     {
-        pTab[0]     = NULL;
-        pBASM       = NULL;
+        pTab[0]		= NULL;
+        pBASM		= NULL;
         pChartListenerCollection = NULL;
         pRefreshTimerControl = NULL;
     }
@@ -251,7 +251,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     for (SCTAB i=1; i<=MAXTAB; i++)
         pTab[i] = NULL;
 
-    pDBCollection = new ScDBCollection( 4, 4, false, this );
+    pRangeName = new ScRangeName( 4, 4, FALSE, this );
+    pDBCollection = new ScDBCollection( 4, 4, FALSE, this );
     pSelectionAttr = NULL;
     pChartCollection = new ScChartCollection;
     apTemporaryChartLock = std::auto_ptr< ScTemporaryChartLock >( new ScTemporaryChartLock(this) );
@@ -265,13 +266,13 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     aTrackTimer.SetTimeout( 100 );
 }
 
-sfx2::LinkManager*  ScDocument::GetLinkManager()  const
-{
+sfx2::LinkManager*	ScDocument::GetLinkManager()  const
+{ 
     if ( bAutoCalc && !pLinkManager && pShell)
     {
         pLinkManager = new sfx2::LinkManager( pShell );
     }
-    return pLinkManager;
+    return pLinkManager; 
 }
 
 
@@ -293,10 +294,10 @@ void ScDocument::SetStorageGrammar( formula::FormulaGrammar::Grammar eGram )
 }
 
 
-void ScDocument::SetDocVisible( sal_Bool bSet )
+void ScDocument::SetDocVisible( BOOL bSet )
 {
-    //  called from view ctor - only for a visible document,
-    //  each new sheet's RTL flag is initialized from the locale
+    //	called from view ctor - only for a visible document,
+    //	each new sheet's RTL flag is initialized from the locale
     bIsVisible = bSet;
 }
 
@@ -335,21 +336,21 @@ void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
 
 IMPL_LINK( ScDocument, TrackTimeHdl, Timer*, EMPTYARG )
 {
-    if ( ScDdeLink::IsInUpdate() )      // nicht verschachteln
+    if ( ScDdeLink::IsInUpdate() )		// nicht verschachteln
     {
-        aTrackTimer.Start();            // spaeter nochmal versuchen
+        aTrackTimer.Start();			// spaeter nochmal versuchen
     }
-    else if (pShell)                    // ausfuehren
+    else if (pShell)					// ausfuehren
     {
         TrackFormulas();
         pShell->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
         ResetChanged( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB) );
 
-            //  modified...
+            //	modified...
 
         if (!pShell->IsModified())
         {
-            pShell->SetModified( sal_True );
+            pShell->SetModified( TRUE );
             SfxBindings* pBindings = GetViewBindings();
             if (pBindings)
             {
@@ -364,7 +365,7 @@ IMPL_LINK( ScDocument, TrackTimeHdl, Timer*, EMPTYARG )
 
 void ScDocument::StartTrackTimer()
 {
-    if (!aTrackTimer.IsActive())        // nicht ewig aufschieben
+    if (!aTrackTimer.IsActive())		// nicht ewig aufschieben
         aTrackTimer.Start();
 }
 
@@ -372,11 +373,11 @@ ScDocument::~ScDocument()
 {
     DBG_ASSERT( !bInLinkUpdate, "bInLinkUpdate in dtor" );
 
-    bInDtorClear = sal_True;
+    bInDtorClear = TRUE;
 
     // first of all disable all refresh timers by deleting the control
     if ( pRefreshTimerControl )
-    {   // To be sure there isn't anything running do it with a protector,
+    {	// To be sure there isn't anything running do it with a protector,
         // this ensures also that nothing needs the control anymore.
         ScRefreshTimerProtector aProt( GetRefreshTimerControlAddress() );
         delete pRefreshTimerControl, pRefreshTimerControl = NULL;
@@ -387,7 +388,7 @@ ScDocument::~ScDocument()
     if ( GetLinkManager() )
     {
         // BaseLinks freigeben
-        for ( sal_uInt16 n = pLinkManager->GetServers().Count(); n; )
+        for ( USHORT n = pLinkManager->GetServers().Count(); n; )
             pLinkManager->GetServers()[ --n ]->Closed();
 
         if ( pLinkManager->GetLinks().Count() )
@@ -405,19 +406,19 @@ ScDocument::~ScDocument()
     DELETEZ( pLookupCacheMapImpl);  // before pBASM because of listeners
     // BroadcastAreas vor allen Zellen zerstoeren um unnoetige
     // Einzel-EndListenings der Formelzellen zu vermeiden
-    delete pBASM;       // BroadcastAreaSlotMachine
+    delete pBASM;		// BroadcastAreaSlotMachine
     pBASM = NULL;
 
     if (pUnoBroadcaster)
     {
-        delete pUnoBroadcaster;     // broadcasted nochmal SFX_HINT_DYING
+        delete pUnoBroadcaster;		// broadcasted nochmal SFX_HINT_DYING
         pUnoBroadcaster = NULL;
     }
 
     delete pUnoRefUndoList;
     delete pUnoListenerCalls;
 
-    Clear( sal_True );              // sal_True = from destructor (needed for SdrModel::ClearModel)
+    Clear( sal_True );              // TRUE = from destructor (needed for SdrModel::ClearModel)
 
     if (pCondFormList)
     {
@@ -441,12 +442,12 @@ ScDocument::~ScDocument()
     delete pConsolidateDlgData;
     delete pLinkManager;
     delete pClipData;
-    delete pDetOpList;                  // loescht auch die Eintraege
+    delete pDetOpList;					// loescht auch die Eintraege
     delete pChangeTrack;
     delete pEditEngine;
     delete pNoteEngine;
     SfxItemPool::Free(pNoteItemPool);
-    delete pChangeViewSettings;         // und weg damit
+    delete pChangeViewSettings;			// und weg damit
     delete pVirtualDevice_100th_mm;
 
     delete pDPCollection;
@@ -485,8 +486,8 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
     xPoolHelper = pSourceDoc->xPoolHelper;
 
-    //  bedingte Formate / Gueltigkeiten
-    //! Vorlagen kopieren?
+    //	bedingte Formate / Gueltigkeiten
+    //!	Vorlagen kopieren?
     const ScConditionalFormatList* pSourceCond = pSourceDoc->pCondFormList;
     if ( pSourceCond )
         pCondFormList = new ScConditionalFormatList(this, *pSourceCond);
@@ -530,8 +531,8 @@ ScFieldEditEngine& ScDocument::GetEditEngine()
     if ( !pEditEngine )
     {
         pEditEngine = new ScFieldEditEngine( GetEnginePool(), GetEditPool() );
-        pEditEngine->SetUpdateMode( false );
-        pEditEngine->EnableUndo( false );
+        pEditEngine->SetUpdateMode( FALSE );
+        pEditEngine->EnableUndo( FALSE );
         pEditEngine->SetRefMapMode( MAP_100TH_MM );
         pEditEngine->SetForbiddenCharsTable( xForbiddenCharacters );
     }
@@ -543,8 +544,8 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
     if ( !pNoteEngine )
     {
         pNoteEngine = new ScNoteEditEngine( GetEnginePool(), GetEditPool() );
-        pNoteEngine->SetUpdateMode( false );
-        pNoteEngine->EnableUndo( false );
+        pNoteEngine->SetUpdateMode( FALSE );
+        pNoteEngine->EnableUndo( FALSE );
         pNoteEngine->SetRefMapMode( MAP_100TH_MM );
         pNoteEngine->SetForbiddenCharsTable( xForbiddenCharacters );
                 const SfxItemSet& rItemSet = GetDefPattern()->GetItemSet();
@@ -575,7 +576,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
     }
     else
     {
-        OSL_FAIL("ResetClip");
+        DBG_ERROR("ResetClip");
     }
 }
 
@@ -593,26 +594,26 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
     }
     else
     {
-        OSL_FAIL("ResetClip");
+        DBG_ERROR("ResetClip");
     }
 }
 
 void ScDocument::DeleteNumberFormat( const sal_uInt32* /* pDelKeys */, sal_uInt32 /* nCount */ )
 {
 /*
-    for (sal_uLong i = 0; i < nCount; i++)
+    for (ULONG i = 0; i < nCount; i++)
         xPoolHelper->GetFormTable()->DeleteEntry(pDelKeys[i]);
 */
 }
 
 void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                          ScBaseCell* pCell, sal_uLong nFormatIndex, sal_Bool bForceTab )
+                          ScBaseCell* pCell, ULONG nFormatIndex, BOOL bForceTab )
 {
     if (VALIDTAB(nTab))
     {
         if ( bForceTab && !pTab[nTab] )
         {
-            sal_Bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
+            BOOL bExtras = !bIsUndo;		// Spaltenbreiten, Zeilenhoehen, Flags
 
             pTab[nTab] = new ScTable(this, nTab,
                                 String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
@@ -625,20 +626,20 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
 }
 
 
-sal_Bool ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
-                                sal_Bool bNotes ) const
+BOOL ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
+                                BOOL bNotes ) const
 {
     if (ValidTab(nTab) && pTab[nTab])
     {
-        sal_Bool bAny = pTab[nTab]->GetPrintArea( rEndCol, rEndRow, bNotes );
+        BOOL bAny = pTab[nTab]->GetPrintArea( rEndCol, rEndRow, bNotes );
         if (pDrawLayer)
         {
             ScRange aDrawRange(0,0,nTab, MAXCOL,MAXROW,nTab);
-            if (DrawGetPrintArea( aDrawRange, sal_True, sal_True ))
+            if (DrawGetPrintArea( aDrawRange, TRUE, TRUE ))
             {
                 if (aDrawRange.aEnd.Col()>rEndCol) rEndCol=aDrawRange.aEnd.Col();
                 if (aDrawRange.aEnd.Row()>rEndRow) rEndRow=aDrawRange.aEnd.Row();
-                bAny = sal_True;
+                bAny = TRUE;
             }
         }
         return bAny;
@@ -646,66 +647,66 @@ sal_Bool ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
 
     rEndCol = 0;
     rEndRow = 0;
-    return false;
+    return FALSE;
 }
 
-sal_Bool ScDocument::GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,
-                                        SCCOL& rEndCol, sal_Bool bNotes ) const
+BOOL ScDocument::GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,
+                                        SCCOL& rEndCol, BOOL bNotes ) const
 {
     if (ValidTab(nTab) && pTab[nTab])
     {
-        sal_Bool bAny = pTab[nTab]->GetPrintAreaHor( nStartRow, nEndRow, rEndCol, bNotes );
+        BOOL bAny = pTab[nTab]->GetPrintAreaHor( nStartRow, nEndRow, rEndCol, bNotes );
         if (pDrawLayer)
         {
             ScRange aDrawRange(0,nStartRow,nTab, MAXCOL,nEndRow,nTab);
-            if (DrawGetPrintArea( aDrawRange, sal_True, false ))
+            if (DrawGetPrintArea( aDrawRange, TRUE, FALSE ))
             {
                 if (aDrawRange.aEnd.Col()>rEndCol) rEndCol=aDrawRange.aEnd.Col();
-                bAny = sal_True;
+                bAny = TRUE;
             }
         }
         return bAny;
     }
 
     rEndCol = 0;
-    return false;
+    return FALSE;
 }
 
-sal_Bool ScDocument::GetPrintAreaVer( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol,
-                                        SCROW& rEndRow, sal_Bool bNotes ) const
+BOOL ScDocument::GetPrintAreaVer( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol,
+                                        SCROW& rEndRow, BOOL bNotes ) const
 {
     if (ValidTab(nTab) && pTab[nTab])
     {
-        sal_Bool bAny = pTab[nTab]->GetPrintAreaVer( nStartCol, nEndCol, rEndRow, bNotes );
+        BOOL bAny = pTab[nTab]->GetPrintAreaVer( nStartCol, nEndCol, rEndRow, bNotes );
         if (pDrawLayer)
         {
             ScRange aDrawRange(nStartCol,0,nTab, nEndCol,MAXROW,nTab);
-            if (DrawGetPrintArea( aDrawRange, false, sal_True ))
+            if (DrawGetPrintArea( aDrawRange, FALSE, TRUE ))
             {
                 if (aDrawRange.aEnd.Row()>rEndRow) rEndRow=aDrawRange.aEnd.Row();
-                bAny = sal_True;
+                bAny = TRUE;
             }
         }
         return bAny;
     }
 
     rEndRow = 0;
-    return false;
+    return FALSE;
 }
 
-sal_Bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) const
+BOOL ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) const
 {
     if (ValidTab(nTab) && pTab[nTab])
     {
-        sal_Bool bAny = pTab[nTab]->GetDataStart( rStartCol, rStartRow );
+        BOOL bAny = pTab[nTab]->GetDataStart( rStartCol, rStartRow );
         if (pDrawLayer)
         {
             ScRange aDrawRange(0,0,nTab, MAXCOL,MAXROW,nTab);
-            if (DrawGetPrintArea( aDrawRange, sal_True, sal_True ))
+            if (DrawGetPrintArea( aDrawRange, TRUE, TRUE ))
             {
                 if (aDrawRange.aStart.Col()<rStartCol) rStartCol=aDrawRange.aStart.Col();
                 if (aDrawRange.aStart.Row()<rStartRow) rStartRow=aDrawRange.aStart.Row();
-                bAny = sal_True;
+                bAny = TRUE;
             }
         }
         return bAny;
@@ -713,13 +714,13 @@ sal_Bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRo
 
     rStartCol = 0;
     rStartRow = 0;
-    return false;
+    return FALSE;
 }
 
-sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
+BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
-    if (nOldPos == nNewPos) return false;
-    sal_Bool bValid = false;
+    if (nOldPos == nNewPos) return FALSE;
+    BOOL bValid = FALSE;
     if (VALIDTAB(nOldPos))
     {
         if (pTab[nOldPos])
@@ -727,21 +728,20 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
             SCTAB nTabCount = GetTableCount();
             if (nTabCount > 1)
             {
-                sal_Bool bOldAutoCalc = GetAutoCalc();
-                SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
-                SetNoListening( sal_True );
+                BOOL bOldAutoCalc = GetAutoCalc();
+                SetAutoCalc( FALSE );	// Mehrfachberechnungen vermeiden
+                SetNoListening( TRUE );
                 ScProgress* pProgress = new ScProgress( GetDocumentShell(),
                     ScGlobal::GetRscString(STR_UNDO_MOVE_TAB), GetCodeCount() );
                 if (nNewPos == SC_TAB_APPEND)
                     nNewPos = nTabCount-1;
 
-                //  Referenz-Updaterei
-                //! mit UpdateReference zusammenfassen!
+                //	Referenz-Updaterei
+                //!	mit UpdateReference zusammenfassen!
 
                 SCsTAB nDz = ((SCsTAB)nNewPos) - (SCsTAB)nOldPos;
                 ScRange aSourceRange( 0,0,nOldPos, MAXCOL,MAXROW,nOldPos );
-                if (pRangeName)
-                    pRangeName->UpdateTabRef(nOldPos, 3, nNewPos);
+                pRangeName->UpdateTabRef(nOldPos, 3, nNewPos);
                 pDBCollection->UpdateMoveTab( nOldPos, nNewPos );
                 xColNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
                 xRowNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
@@ -771,15 +771,15 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->UpdateMoveTab( nOldPos, nNewPos, i, *pProgress );
-                delete pProgress;   // freimachen fuer evtl. andere
+                delete pProgress;	// freimachen fuer evtl. andere
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->UpdateCompile();
-                SetNoListening( false );
+                SetNoListening( FALSE );
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->StartAllListeners();
-                // sheet names of references may not be valid until sheet is moved
+                // #81844# sheet names of references may not be valid until sheet is moved
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
                 SetDirty();
                 SetAutoCalc( bOldAutoCalc );
@@ -787,35 +787,35 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 if (pDrawLayer)
                     DrawMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
-                bValid = sal_True;
+                bValid = TRUE;
             }
         }
     }
     return bValid;
 }
 
-sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyMarked )
+BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyMarked )
 {
     if (SC_TAB_APPEND == nNewPos ) nNewPos = nMaxTableNumber;
     String aName;
     GetName(nOldPos, aName);
 
-    //  vorneweg testen, ob der Prefix als gueltig erkannt wird
-    //  wenn nicht, nur doppelte vermeiden
-    sal_Bool bPrefix = ValidTabName( aName );
+    //	vorneweg testen, ob der Prefix als gueltig erkannt wird
+    //	wenn nicht, nur doppelte vermeiden
+    BOOL bPrefix = ValidTabName( aName );
     DBG_ASSERT(bPrefix, "ungueltiger Tabellenname");
     SCTAB nDummy;
 
     CreateValidTabName(aName);
 
-    sal_Bool bValid;
+    BOOL bValid;
     if (bPrefix)
         bValid = ( ValidNewTabName(aName) && (nMaxTableNumber <= MAXTAB) );
     else
         bValid = ( !GetTable( aName, nDummy ) && (nMaxTableNumber <= MAXTAB) );
 
-    sal_Bool bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
+    BOOL bOldAutoCalc = GetAutoCalc();
+    SetAutoCalc( FALSE );	// Mehrfachberechnungen vermeiden
     if (bValid)
     {
         if (nNewPos == nMaxTableNumber)
@@ -827,13 +827,12 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
         {
             if (VALIDTAB(nNewPos) && (nNewPos < nMaxTableNumber))
             {
-                SetNoListening( sal_True );
+                SetNoListening( TRUE );
 
                 ScRange aRange( 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
-                if (pRangeName)
-                    pRangeName->UpdateTabRef(nNewPos, 1);
+                pRangeName->UpdateTabRef(nNewPos, 1);
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
                 if (pDPCollection)
@@ -855,36 +854,39 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
                     nOldPos++;
                 pTab[nNewPos] = new ScTable(this, nNewPos, aName);
                 ++nMaxTableNumber;
-                bValid = sal_True;
+                bValid = TRUE;
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i] && i != nOldPos && i != nNewPos)
                         pTab[i]->UpdateCompile();
-                SetNoListening( false );
+                SetNoListening( FALSE );
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i] && i != nOldPos && i != nNewPos)
                         pTab[i]->StartAllListeners();
 
-                //  update conditional formats after table is inserted
+                //	update conditional formats after table is inserted
                 if ( pCondFormList )
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if ( pValidationList )
                     pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
-                // sheet names of references may not be valid until sheet is copied
+                // #81844# sheet names of references may not be valid until sheet is copied
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
             }
             else
-                bValid = false;
+                bValid = FALSE;
         }
     }
     if (bValid)
     {
-        SetNoListening( sal_True );     // noch nicht bei CopyToTable/Insert
+        SetNoListening( TRUE );		// noch nicht bei CopyToTable/Insert
         pTab[nOldPos]->CopyToTable(0, 0, MAXCOL, MAXROW, IDF_ALL, (pOnlyMarked != NULL),
                                         pTab[nNewPos], pOnlyMarked );
         pTab[nNewPos]->SetTabBgColor(pTab[nOldPos]->GetTabBgColor());
 
         SCsTAB nDz;
-        nDz = ((short)nNewPos) - (short)nOldPos;
+/*		if (nNewPos < nOldPos)
+            nDz = ((short)nNewPos) - (short)nOldPos + 1;
+        else
+*/			nDz = ((short)nNewPos) - (short)nOldPos;
         pTab[nNewPos]->UpdateReference(URM_COPY, 0, 0, nNewPos , MAXCOL, MAXROW,
                                         nNewPos, 0, 0, nDz, NULL);
 
@@ -892,8 +894,8 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
         pTab[nOldPos]->UpdateInsertTab(nNewPos);
 
         pTab[nOldPos]->UpdateCompile();
-        pTab[nNewPos]->UpdateCompile( true );   //  maybe already compiled in Clone, but used names need recompilation
-        SetNoListening( false );
+        pTab[nNewPos]->UpdateCompile( TRUE );	// #67996# maybe already compiled in Clone, but used names need recompilation
+        SetNoListening( FALSE );
         pTab[nOldPos]->StartAllListeners();
         pTab[nNewPos]->StartAllListeners();
         SetDirty();
@@ -912,41 +914,41 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
 
 void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sModuleSource );
 
-sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
-                                SCTAB nDestPos, sal_Bool bInsertNew,
-                                sal_Bool bResultsOnly )
+ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
+                                SCTAB nDestPos, BOOL bInsertNew,
+                                BOOL bResultsOnly )
 {
-    sal_uLong nRetVal = 1;                      // 0 => Fehler 1 = ok
+    ULONG nRetVal = 1;						// 0 => Fehler 1 = ok
                                             // 2 => RefBox, 3 => NameBox
                                             // 4 => beides
-    sal_Bool bValid = sal_True;
-    if (bInsertNew)             // neu einfuegen
+    BOOL bValid = TRUE;
+    if (bInsertNew)				// neu einfuegen
     {
         String aName;
         pSrcDoc->GetName(nSrcPos, aName);
         CreateValidTabName(aName);
         bValid = InsertTab(nDestPos, aName);
     }
-    else                        // bestehende Tabelle ersetzen
+    else						// bestehende Tabelle ersetzen
     {
         if (VALIDTAB(nDestPos) && pTab[nDestPos])
         {
             pTab[nDestPos]->DeleteArea( 0,0, MAXCOL,MAXROW, IDF_ALL );
         }
         else
-            bValid = false;
+            bValid = FALSE;
     }
 
     if (bValid)
     {
-        sal_Bool bOldAutoCalcSrc = false;
-        sal_Bool bOldAutoCalc = GetAutoCalc();
-        SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
-        SetNoListening( sal_True );
+        BOOL bOldAutoCalcSrc = FALSE;
+        BOOL bOldAutoCalc = GetAutoCalc();
+        SetAutoCalc( FALSE );	// Mehrfachberechnungen vermeiden
+        SetNoListening( TRUE );
         if ( bResultsOnly )
         {
             bOldAutoCalcSrc = pSrcDoc->GetAutoCalc();
-            pSrcDoc->SetAutoCalc( sal_True );   // falls was berechnet werden muss
+            pSrcDoc->SetAutoCalc( TRUE );	// falls was berechnet werden muss
         }
 
         {
@@ -957,94 +959,98 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 ScBulkBroadcast aBulkBroadcast( pBASM);
                 pSrcDoc->pTab[nSrcPos]->CopyToTable(0, 0, MAXCOL, MAXROW,
                         ( bResultsOnly ? IDF_ALL & ~IDF_FORMULA : IDF_ALL),
-                        false, pTab[nDestPos] );
+                        FALSE, pTab[nDestPos] );
             }
         }
         pTab[nDestPos]->SetTabNo(nDestPos);
 
         if ( !bResultsOnly )
         {
-            bool bNamesLost = false;
-            // array containing range names which might need update of indices.
-            // The instances inserted into this vector are managed by the
-            // range name container of this document, so no need to delete
-            // them afterward.
-            ::std::vector<ScRangeData*> aSrcRangeNames;
-
+            BOOL bNamesLost = FALSE;
+            USHORT nSrcRangeNames = pSrcDoc->pRangeName->GetCount();
+            // array containing range names which might need update of indices
+            ScRangeData** pSrcRangeNames = nSrcRangeNames ? new ScRangeData* [nSrcRangeNames] : NULL;
             // the index mapping thereof
             ScRangeData::IndexMap aSrcRangeMap;
-            bool bRangeNameReplace = false;
+            BOOL bRangeNameReplace = FALSE;
 
             // find named ranges that are used in the source sheet
-            std::set<sal_uInt16> aUsedNames;
+            std::set<USHORT> aUsedNames;
             pSrcDoc->pTab[nSrcPos]->FindRangeNamesInUse( 0, 0, MAXCOL, MAXROW, aUsedNames );
 
-            if (pSrcDoc->pRangeName)
+            for (USHORT i = 0; i < nSrcRangeNames; i++)		//! DB-Bereiche Pivot-Bereiche auch !!!
             {
-                ScRangeName::const_iterator itr = pSrcDoc->pRangeName->begin(), itrEnd = pSrcDoc->pRangeName->end();
-                for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch !!!
+                ScRangeData* pSrcData = (*pSrcDoc->pRangeName)[i];
+                USHORT nOldIndex = pSrcData->GetIndex();
+                bool bInUse = ( aUsedNames.find(nOldIndex) != aUsedNames.end() );
+                if (bInUse)
                 {
-                    sal_uInt16 nOldIndex = itr->GetIndex();
-                    bool bInUse = ( aUsedNames.find(nOldIndex) != aUsedNames.end() );
-                    if (bInUse)
+                    USHORT nExisting = 0;
+                    if ( pRangeName->SearchName( pSrcData->GetName(), nExisting ) )
                     {
-                        const ScRangeData* pExistingData = GetRangeName()->findByName(itr->GetName());
-                        if (pExistingData)
+                        // the name exists already in the destination document
+                        // -> use the existing name, but show a warning
+                        // (when refreshing links, the existing name is used and the warning not shown)
+
+                        ScRangeData* pExistingData = (*pRangeName)[nExisting];
+                        USHORT nExistingIndex = pExistingData->GetIndex();
+
+                        pSrcRangeNames[i] = NULL;       // don't modify the named range
+                        aSrcRangeMap.insert(
+                            ScRangeData::IndexMap::value_type(nOldIndex, nExistingIndex));
+                        bRangeNameReplace = TRUE;
+                        bNamesLost = TRUE;
+                    }
+                    else
+                    {
+                        ScRangeData* pData = new ScRangeData( *pSrcData );
+                        pData->SetDocument(this);
+                        if ( pRangeName->FindIndex( pData->GetIndex() ) )
+                            pData->SetIndex(0);		// need new index, done in Insert
+                        if (!pRangeName->Insert(pData))
                         {
-                            // the name exists already in the destination document
-                            // -> use the existing name, but show a warning
-                            // (when refreshing links, the existing name is used and the warning not shown)
-
-                            sal_uInt16 nExistingIndex = pExistingData->GetIndex();
-
-                            // don't modify the named range
-                            aSrcRangeMap.insert(
-                                ScRangeData::IndexMap::value_type(nOldIndex, nExistingIndex));
-                            bRangeNameReplace = true;
-                            bNamesLost = true;
+                            DBG_ERROR("can't insert name");     // shouldn't happen
+                            delete pData;
                         }
                         else
                         {
-                            ScRangeData* pData = new ScRangeData( *itr );
-                            pData->SetDocument(this);
-                            if ( pRangeName->findByIndex( pData->GetIndex() ) )
-                                pData->SetIndex(0);     // need new index, done in Insert
-                            if (!pRangeName->insert(pData))
-                            {
-                                OSL_FAIL("can't insert name");     // shouldn't happen
-                                delete pData;
-                            }
-                            else
-                            {
-                                pData->TransferTabRef( nSrcPos, nDestPos );
-                                aSrcRangeNames.push_back(pData);
-                                sal_uInt16 nNewIndex = pData->GetIndex();
-                                aSrcRangeMap.insert(
-                                    ScRangeData::IndexMap::value_type(nOldIndex, nNewIndex));
-                                if ( !bRangeNameReplace )
-                                    bRangeNameReplace = ( nOldIndex != nNewIndex );
-                            }
+                            pData->TransferTabRef( nSrcPos, nDestPos );
+                            pSrcRangeNames[i] = pData;
+                            USHORT nNewIndex = pData->GetIndex();
+                            aSrcRangeMap.insert(
+                                ScRangeData::IndexMap::value_type(nOldIndex, nNewIndex));
+                            if ( !bRangeNameReplace )
+                                bRangeNameReplace = ( nOldIndex != nNewIndex );
                         }
                     }
+                }
+                else
+                {
+                    pSrcRangeNames[i] = NULL;
+                    //aSrcRangeMap.SetPair( i, 0, 0 );		// not needed, defaulted
                 }
             }
             if ( bRangeNameReplace )
             {
                 // first update all inserted named formulas if they contain other
                 // range names and used indices changed
-                for (size_t i = 0, n = aSrcRangeNames.size(); i < n; ++i)       //! DB-Bereiche Pivot-Bereiche auch
-                    aSrcRangeNames[i]->ReplaceRangeNamesInUse( aSrcRangeMap );
-
+                for (USHORT i = 0; i < nSrcRangeNames; i++)		//! DB-Bereiche Pivot-Bereiche auch
+                {
+                    if ( pSrcRangeNames[i] )
+                        pSrcRangeNames[i]->ReplaceRangeNamesInUse( aSrcRangeMap );
+                }
                 // then update the formulas, they might need the just updated range names
                 pTab[nDestPos]->ReplaceRangeNamesInUse( 0, 0, MAXCOL, MAXROW, aSrcRangeMap );
             }
+            if ( pSrcRangeNames )
+                delete [] pSrcRangeNames;
 
             SCsTAB nDz = ((SCsTAB)nDestPos) - (SCsTAB)nSrcPos;
             pTab[nDestPos]->UpdateReference(URM_COPY, 0, 0, nDestPos,
                                                      MAXCOL, MAXROW, nDestPos,
                                                      0, 0, nDz, NULL);
             // Test for outside absolute references for info box
-            sal_Bool bIsAbsRef = pSrcDoc->pTab[nSrcPos]->TestTabRefAbs(nSrcPos);
+            BOOL bIsAbsRef = pSrcDoc->pTab[nSrcPos]->TestTabRefAbs(nSrcPos);
             // Readjust self-contained absolute references to this sheet
             pTab[nDestPos]->TestTabRefAbs(nSrcPos);
             if (bIsAbsRef)
@@ -1060,7 +1066,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             pTab[nDestPos]->CompileAll();
         }
 
-        SetNoListening( false );
+        SetNoListening( FALSE );
         if ( !bResultsOnly )
             pTab[nDestPos]->StartAllListeners();
         SetDirty( ScRange( 0, 0, nDestPos, MAXCOL, MAXROW, nDestPos));
@@ -1069,7 +1075,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             pSrcDoc->SetAutoCalc( bOldAutoCalcSrc );
         SetAutoCalc( bOldAutoCalc );
 
-        //  Drawing kopieren
+        //	Drawing kopieren
 
         if (bInsertNew)
             TransferDrawPage( pSrcDoc, nSrcPos, nDestPos );
@@ -1078,7 +1084,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     }
     if (!bValid)
         nRetVal = 0;
-    sal_Bool bVbaEnabled = IsInVBAMode();
+    BOOL bVbaEnabled = IsInVBAMode();
 
     if ( bVbaEnabled  )
     {
@@ -1092,7 +1098,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 aLibName = pSrcShell->GetBasicManager()->GetName();
                 pStarBASIC = pSrcShell->GetBasicManager()->GetLib( aLibName );
             }
-
+    
             String sCodeName;
             String sSource;
             uno::Reference< script::XLibraryContainer > xLibContainer = pSrcShell->GetBasicContainer();
@@ -1110,7 +1116,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 rtl::OUString sRTLSource;
                 xLib->getByName( sSrcCodeName ) >>= sRTLSource;
                 sSource = sRTLSource;
-            }
+            } 
             VBA_InsertModule( *this, nDestPos, sCodeName, sSource );
         }
     }
@@ -1118,63 +1124,44 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     return nRetVal;
 }
 
-//  ----------------------------------------------------------------------------
+//	----------------------------------------------------------------------------
 
-void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError)
+void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const USHORT nError)
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
             pTab[nTab]->SetError( nCol, nRow, nError );
 }
 
-namespace {
-
-bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[], sal_uInt16 nLevel)
+void ScDocument::EraseNonUsedSharedNames(USHORT nLevel)
 {
-    if (!pRangeName)
-        return false;
-
-    ScRangeName::iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
-    for (; itr != itrEnd; ++itr)
+    for (USHORT i = 0; i < pRangeName->GetCount(); i++)
     {
-        if (!itr->HasType(RT_SHARED))
-            continue;
-
-        String aName;
-        itr->GetName(aName);
-        aName.Erase(0, 6);                      // !!! vgl. Table4, FillFormula !!
-        sal_uInt16 nInd = static_cast<sal_uInt16>(aName.ToInt32());
-        if (nInd > nLevel)
-            continue;
-
-        sal_uInt16 nIndex = itr->GetIndex();
-
-        bool bInUse = false;
-        for (SCTAB j = 0; !bInUse && (j <= MAXTAB); ++j)
+        ScRangeData* pRangeData = (*pRangeName)[i];
+        if (pRangeData && pRangeData->HasType(RT_SHARED))
         {
-            if (pTab[j])
-                bInUse = pTab[j]->IsRangeNameInUse(0, 0, MAXCOL-1, MAXROW-1, nIndex);
-        }
-        if (!bInUse)
-        {
-            pRangeName->erase(itr);
-            return true;
+            String aName;
+            pRangeData->GetName(aName);
+            aName.Erase(0, 6);						// !!! vgl. Table4, FillFormula !!
+            USHORT nInd = (USHORT) aName.ToInt32();
+            if (nInd <= nLevel)
+            {
+                USHORT nIndex = pRangeData->GetIndex();
+                BOOL bInUse = FALSE;
+                for (SCTAB j = 0; !bInUse && (j <= MAXTAB); j++)
+                {
+                    if (pTab[j])
+                        bInUse = pTab[j]->IsRangeNameInUse(0, 0, MAXCOL-1, MAXROW-1,
+                                                           nIndex);
+                }
+                if (!bInUse)
+                    pRangeName->AtFree(i);
+            }
         }
     }
-    return false;
 }
 
-}
-
-void ScDocument::EraseNonUsedSharedNames(sal_uInt16 nLevel)
-{
-    if (!pRangeName)
-        return;
-    while (eraseUnusedSharedName(pRangeName, pTab, nLevel))
-        ;
-}
-
-//  ----------------------------------------------------------------------------
+//	----------------------------------------------------------------------------
 
 void ScDocument::SetConsolidateDlgData( const ScConsolidateParam* pData )
 {
@@ -1196,7 +1183,7 @@ void ScDocument::SetChangeViewSettings(const ScChangeViewSettings& rNew)
     *pChangeViewSettings=rNew;
 }
 
-//  ----------------------------------------------------------------------------
+//	----------------------------------------------------------------------------
 
 ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
 {
@@ -1204,16 +1191,16 @@ ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
     if (!pCacheFieldEditEngine)
     {
         pNewEditEngine = new ScFieldEditEngine( GetEnginePool(),
-            GetEditPool(), false );
+            GetEditPool(), FALSE );
     }
     else
     {
         if ( !bImportingXML )
         {
             // #i66209# previous use might not have restored update mode,
-            // ensure same state as for a new EditEngine (UpdateMode = sal_True)
+            // ensure same state as for a new EditEngine (UpdateMode = TRUE)
             if ( !pCacheFieldEditEngine->GetUpdateMode() )
-                pCacheFieldEditEngine->SetUpdateMode(sal_True);
+                pCacheFieldEditEngine->SetUpdateMode(TRUE);
         }
 
         pNewEditEngine = pCacheFieldEditEngine;
@@ -1234,14 +1221,15 @@ void ScDocument::DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine)
     rpEditEngine = NULL;
 }
 
-//  ----------------------------------------------------------------------------
+//	----------------------------------------------------------------------------
 
+// static
 ScRecursionHelper* ScDocument::CreateRecursionHelperInstance()
 {
     return new ScRecursionHelper;
 }
 
-//  ----------------------------------------------------------------------------
+//	----------------------------------------------------------------------------
 
 ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
 {

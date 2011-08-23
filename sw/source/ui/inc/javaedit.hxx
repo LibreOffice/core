@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 #include <vcl/button.hxx>
 
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 
 class SwWrtShell;
 class SwFldMgr;
@@ -52,11 +52,11 @@ class SwJavaEditDialog : public SvxStandardDialog
 {
 private:
     FixedText           aTypeFT;
-    Edit                aTypeED;
+    Edit				aTypeED;
     RadioButton         aUrlRB;
     RadioButton         aEditRB;
-    PushButton          aUrlPB;
-    Edit                aUrlED;
+    PushButton			aUrlPB;
+    Edit				aUrlED;
     MultiLineEdit       aEditED;
     FixedLine           aPostItFL;
 
@@ -69,8 +69,8 @@ private:
     String              aText;
     String              aType;
 
-    sal_Bool                bNew;
-    sal_Bool                bIsUrl;
+    BOOL				bNew;
+    BOOL                bIsUrl;
 
     SwScriptField*          pFld;
     SwFldMgr*               pMgr;
@@ -85,10 +85,10 @@ private:
     DECL_LINK( InsertFileHdl, PushButton * );
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper * );
 
-    virtual void    Apply();
+    virtual void 	Apply();
 
-    void            CheckTravel();
-    void            SetFld();
+    void			CheckTravel();
+    void			SetFld();
 
     using Window::GetText;
     using Window::GetType;
@@ -98,12 +98,12 @@ public:
     ~SwJavaEditDialog();
 
     String              GetText() { return aText; }
-
+    
     String              GetType() { return aType; }
-
-    sal_Bool                IsUrl() { return bIsUrl; }
-    sal_Bool                IsNew() { return bNew; }
-    sal_Bool                IsUpdate();
+    
+    BOOL                IsUrl() { return bIsUrl; }
+    BOOL                IsNew() { return bNew; }
+    BOOL                IsUpdate();
 };
 
 

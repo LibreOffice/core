@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,40 +53,40 @@ enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 class SwAutoFormatDlg : public SfxModalDialog
 {
     FixedLine       aFlFormat;
-    ListBox         aLbFormat;
+    ListBox			aLbFormat;
+    CheckBox		aBtnNumFormat;
+    CheckBox		aBtnBorder;
+    CheckBox		aBtnFont;
+    CheckBox		aBtnPattern;
+    CheckBox		aBtnAlignment;
     FixedLine       aFlFormats;
-    CheckBox        aBtnNumFormat;
-    CheckBox        aBtnBorder;
-    CheckBox        aBtnFont;
-    CheckBox        aBtnPattern;
-    CheckBox        aBtnAlignment;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
-    PushButton      aBtnRename;
-    MoreButton      aBtnMore;
-    String          aStrTitle;
-    String          aStrLabel;
-    String          aStrClose;
-    String          aStrDelTitle;
-    String          aStrDelMsg;
-    String          aStrRenameTitle;
-    String          aStrInvalidFmt;
-    AutoFmtPreview* pWndPreview;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
+    PushButton		aBtnAdd;
+    PushButton		aBtnRemove;
+    PushButton		aBtnRename;
+    MoreButton		aBtnMore;
+    String			aStrTitle;
+    String			aStrLabel;
+    String			aStrClose;
+    String			aStrDelTitle;
+    String			aStrDelMsg;
+    String			aStrRenameTitle;
+    String			aStrInvalidFmt;
+    AutoFmtPreview*	pWndPreview;
 
     //------------------------
-    SwWrtShell*             pShell;
-    SwTableAutoFmtTbl*      pTableTbl;
-    sal_uInt8                   nIndex;
-    sal_uInt8                   nDfltStylePos;
-    sal_Bool                    bCoreDataChanged : 1;
-    sal_Bool                    bSetAutoFmt : 1;
+    SwWrtShell* 			pShell;
+    SwTableAutoFmtTbl*		pTableTbl;
+    BYTE					nIndex;
+    BYTE					nDfltStylePos;
+    BOOL					bCoreDataChanged : 1;
+    BOOL					bSetAutoFmt : 1;
 
 
     void Init( const SwTableAutoFmt* pSelFmt );
-    void UpdateChecks( const SwTableAutoFmt&, sal_Bool bEnableBtn );
+    void UpdateChecks( const SwTableAutoFmt&, BOOL bEnableBtn );
     //------------------------
     DECL_LINK( CheckHdl, Button * );
     DECL_LINK( OkHdl, Button * );
@@ -97,7 +97,7 @@ class SwAutoFormatDlg : public SfxModalDialog
 
 public:
     SwAutoFormatDlg( Window* pParent, SwWrtShell* pShell,
-                        sal_Bool bSetAutoFmt = sal_True,
+                        BOOL bSetAutoFmt = TRUE,
                         const SwTableAutoFmt* pSelFmt = 0 );
     virtual ~SwAutoFormatDlg();
 

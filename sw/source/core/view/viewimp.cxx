@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,7 @@
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
 #include "viewimp.hxx"
+#include "errhdl.hxx"
 #include "viewopt.hxx"
 #include "flyfrm.hxx"
 #include "frmfmt.hxx"
@@ -59,7 +60,7 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
 {
     OSL_ENSURE( pDrawView, "SwViewImp::Init without DrawView" );
     //Now create the page view if it does not exist.
-    SwRootFrm *pRoot = pSh->GetLayout();    //swmod 071108//swmod 071225
+    SwRootFrm *pRoot = pSh->getIDocumentLayoutAccess()->GetRootFrm();
     if ( !pSdrPageView )
     {
         IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
@@ -90,9 +91,9 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
         pDrawView->SetWorkArea( pRoot->Frm().SVRect() );
 
     if ( GetShell()->IsPreView() )
-        pDrawView->SetAnimationEnabled( sal_False );
+        pDrawView->SetAnimationEnabled( FALSE );
 
-    pDrawView->SetUseIncompatiblePathCreateInterface( sal_False );
+    pDrawView->SetUseIncompatiblePathCreateInterface( FALSE );
     pDrawView->SetSolidMarkHdl(pNewOpt->IsSolidMarkHdl());
 
     // it's a JOE interface !
@@ -113,8 +114,8 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     mpPgPrevwLayout( 0 )
 {
     bResetHdlHiddenPaint =
-    bSmoothUpdate = bStopSmooth = bStopPrt = sal_False;
-    bFirstPageInvalid = sal_True;
+    bSmoothUpdate = bStopSmooth = bStopPrt = FALSE;
+    bFirstPageInvalid = TRUE;
 }
 
 SwViewImp::~SwViewImp()
@@ -139,16 +140,16 @@ void SwViewImp::DelRegion()
     DELETEZ(pRegion);
 }
 
-sal_Bool SwViewImp::AddPaintRect( const SwRect &rRect )
+BOOL SwViewImp::AddPaintRect( const SwRect &rRect )
 {
     if ( rRect.IsOver( pSh->VisArea() ) )
     {
         if ( !pRegion )
             pRegion = new SwRegionRects( pSh->VisArea() );
         (*pRegion) -= rRect;
-        return sal_True;
+        return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
 void SwViewImp::CheckWaitCrsr()
@@ -157,21 +158,21 @@ void SwViewImp::CheckWaitCrsr()
         pLayAct->CheckWaitCrsr();
 }
 
-sal_Bool SwViewImp::IsCalcLayoutProgress() const
+BOOL SwViewImp::IsCalcLayoutProgress() const
 {
     if ( pLayAct )
         return pLayAct->IsCalcLayout();
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool SwViewImp::IsUpdateExpFlds()
+BOOL SwViewImp::IsUpdateExpFlds()
 {
     if ( pLayAct && pLayAct->IsCalcLayout() )
     {
         pLayAct->SetUpdateExpFlds();
-        return sal_True;
+        return TRUE;
     }
-     return sal_False;
+     return FALSE;
 }
 
 void SwViewImp::SetFirstVisPage()
@@ -206,7 +207,7 @@ void SwViewImp::SetFirstVisPage()
         }
         pFirstVisPage = pPage ? pPage : (SwPageFrm*)pSh->GetLayout()->Lower();
     }
-    bFirstPageInvalid = sal_False;
+    bFirstPageInvalid = FALSE;
 }
 
 void SwViewImp::MakeDrawView()
@@ -246,7 +247,18 @@ void SwViewImp::MakeDrawView()
         // #i68597# If document is read-only, we will not profit from overlay, so switch it off.
         if(pDrawView && pDrawView->IsBufferedOverlayAllowed())
         {
-            if(pSwViewOption->IsReadonly())
+            bool bIsReadOnly(pSwViewOption->IsReadonly());
+
+#if OSL_DEBUG_LEVEL > 1
+            // add test possibilities
+            static bool bAlwaysActivateForTest(false);
+            if(bAlwaysActivateForTest && bIsReadOnly)
+            {
+                bIsReadOnly = false;
+            }
+#endif
+
+            if(bIsReadOnly)
             {
                 pDrawView->SetBufferedOverlayAllowed(false);
             }
@@ -260,7 +272,7 @@ Color SwViewImp::GetRetoucheColor() const
     const ViewShell &rSh = *GetShell();
     if ( rSh.GetWin() )
     {
-        if ( rSh.GetViewOptions()->getBrowseMode() &&
+        if ( rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
              COL_TRANSPARENT != rSh.GetViewOptions()->GetRetoucheColor().GetColor() )
             aRet = rSh.GetViewOptions()->GetRetoucheColor();
         else if(rSh.GetViewOptions()->IsPagePreview()  &&
@@ -284,10 +296,10 @@ void SwViewImp::UpdateAccessible()
     // We require a layout and an XModel to be accessible.
     IDocumentLayoutAccess* pIDLA = GetShell()->getIDocumentLayoutAccess();
     Window *pWin = GetShell()->GetWin();
-    OSL_ENSURE( GetShell()->GetLayout(), "no layout, no access" );  //swmod 071108//swmod 071225
+    OSL_ENSURE( pIDLA->GetRootFrm(), "no layout, no access" );
     OSL_ENSURE( pWin, "no window, no access" );
 
-    if( IsAccessible() && pIDLA->GetCurrentViewShell() && pWin )    //swmod 071108//swmod 071225
+    if( IsAccessible() && pIDLA->GetRootFrm() && pWin )
         GetAccessibleMap().GetDocumentView();
 }
 
@@ -341,7 +353,7 @@ void SwViewImp::InvalidateAccessibleCursorPosition( const SwFrm *pFrm )
 }
 
 void SwViewImp::InvalidateAccessibleEditableState( sal_Bool bAllShells,
-                                                      const SwFrm *pFrm )
+                                                      const SwFrm *pFrm	)
 {
     if( bAllShells )
     {
@@ -468,7 +480,7 @@ void SwViewImp::FireAccessibleEvents()
 
 IMPL_LINK(SwViewImp, SetStopPrt, void *, EMPTYARG)
 {
-    bStopPrt = sal_True;
+    bStopPrt = TRUE;
 
     return 0;
 }

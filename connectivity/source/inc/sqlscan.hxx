@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@ namespace connectivity
     */
     class OOO_DLLPUBLIC_DBTOOLS OSQLScanner
     {
-        const IParseContext*    m_pContext;                 // context for parse, knows all international stuff
-        ::rtl::OString          m_sStatement;               // statement to parse
-        ::rtl::OUString         m_sErrorMessage;
+        const IParseContext*	m_pContext;					// context for parse, knows all international stuff
+        ::rtl::OString			m_sStatement;			    // statement to parse
+        ::rtl::OUString			m_sErrorMessage;
 
-        sal_Int32               m_nCurrentPos;             // next position to read from the statement
-        sal_Bool                m_bInternational;          // do we have a statement which may uses
-        sal_Int32               m_nRule;                   // rule to be set
+        sal_Int32				m_nCurrentPos;             // next position to read from the statement
+        sal_Bool				m_bInternational;		   // do we have a statement which may uses
+        sal_Int32				m_nRule;				   // rule to be set
 
     public:
         OSQLScanner();
@@ -64,8 +64,8 @@ namespace connectivity
 
         virtual sal_Int32 SQLyygetc(void);
         virtual void SQLyyerror(char *fmt);
-        virtual void output(sal_Int32) { OSL_FAIL("Internal error in sdblex.l: output not possible"); }
-        virtual void ECHO(void) { OSL_FAIL("Internal error in sdblex.l: ECHO not possible"); }
+        virtual void output(sal_Int32) { OSL_ASSERT("Internal error in sdblex.l: output not possible"); }
+        virtual void ECHO(void) { OSL_ASSERT("Internal error in sdblex.l: ECHO not possible"); }
         virtual IParseContext::InternationalKeyCode getInternationalTokenID(const char* sToken) const;
 
         // setting the new information before scanning
@@ -78,12 +78,12 @@ namespace connectivity
         void setScanner(sal_Bool _bNull=sal_False);
         // rules settings
         void SetRule(sal_Int32 nRule) {m_nRule = nRule;}
-        sal_Int32   GetCurrentRule() const;
-        sal_Int32   GetGERRule() const;
-        sal_Int32   GetENGRule() const;
-        sal_Int32   GetSQLRule() const;
-        sal_Int32   GetDATERule() const;
-        sal_Int32   GetSTRINGRule() const;
+        sal_Int32	GetCurrentRule() const;
+        sal_Int32	GetGERRule() const;
+        sal_Int32	GetENGRule() const;
+        sal_Int32	GetSQLRule() const;
+        sal_Int32	GetDATERule() const;
+        sal_Int32	GetSTRINGRule() const;
         inline sal_Int32 GetCurrentPos() const { return m_nCurrentPos; }
     };
 }

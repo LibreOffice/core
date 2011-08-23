@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,6 @@
 #include <editsh.hxx>
 #include <edimp.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <ndtxt.hxx>
 #include <paratr.hxx>
 #include <swundo.hxx>
@@ -56,25 +55,25 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
 {
     SwPamRange aRg( rIdx1.GetIndex(), rIdx2.GetIndex() );
     if( aRg.nEnd < aRg.nStart )
-    {   aRg.nStart = aRg.nEnd; aRg.nEnd = rIdx1.GetIndex(); }
+    {	aRg.nStart = aRg.nEnd; aRg.nEnd = rIdx1.GetIndex(); }
 
-    sal_uInt16 nPos = 0;
+    USHORT nPos = 0;
     const SwPamRange* pTmp;
-    if( Count() && Seek_Entry( aRg, &nPos ))        // suche Insert Position
+    if( Count() && Seek_Entry( aRg, &nPos ))		// suche Insert Position
     {
         // ist der im Array stehende kleiner ??
         if( ( pTmp = GetData()+ nPos )->nEnd < aRg.nEnd )
         {
             aRg.nEnd = pTmp->nEnd;
-            Remove( nPos, 1 );      // zusammenfassen
+            Remove( nPos, 1 );		// zusammenfassen
         }
         else
-            return;     // ende, weil schon alle zusammengefasst waren
+            return;		// ende, weil schon alle zusammengefasst waren
     }
 
-    sal_Bool bEnde;
+    BOOL bEnde;
     do {
-        bEnde = sal_True;
+        bEnde = TRUE;
 
         // mit dem Vorgaenger zusammenfassen ??
         if( nPos > 0 )
@@ -83,8 +82,8 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
                 || pTmp->nEnd+1 == aRg.nStart )
             {
                 aRg.nStart = pTmp->nStart;
-                bEnde = sal_False;
-                Remove( --nPos, 1 );        // zusammenfassen
+                bEnde = FALSE;
+                Remove( --nPos, 1 );		// zusammenfassen
             }
             // SSelection im Bereich ??
             else if( pTmp->nStart <= aRg.nStart && aRg.nEnd <= pTmp->nEnd )
@@ -97,8 +96,8 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
                 pTmp->nStart == aRg.nEnd+1 )
             {
                 aRg.nEnd = pTmp->nEnd;
-                bEnde = sal_False;
-                Remove( nPos, 1 );      // zusammenfassen
+                bEnde = FALSE;
+                Remove( nPos, 1 );		// zusammenfassen
             }
 
             // SSelection im Bereich ??
@@ -112,9 +111,9 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
 
 
 
-SwPaM& SwPamRanges::SetPam( sal_uInt16 nArrPos, SwPaM& rPam )
+SwPaM& SwPamRanges::SetPam( USHORT nArrPos, SwPaM& rPam )
 {
-    OSL_ASSERT( nArrPos < Count() );
+    ASSERT_ID( nArrPos < Count(), ERR_VAR_IDX );
     const SwPamRange& rTmp = *(GetData() + nArrPos );
     rPam.GetPoint()->nNode = rTmp.nStart;
     rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), 0 );
@@ -131,7 +130,7 @@ SwPaM& SwPamRanges::SetPam( sal_uInt16 nArrPos, SwPaM& rPam )
 
 void SwEditShell::SetOutlineNumRule(const SwNumRule& rRule)
 {
-    StartAllAction();       // Klammern fuers Updaten !!
+    StartAllAction();		// Klammern fuers Updaten !!
     GetDoc()->SetOutlineNumRule(rRule);
     EndAllAction();
 }
@@ -147,20 +146,20 @@ const SwNumRule* SwEditShell::GetOutlineNumRule() const
 
 // Absaetze ohne Numerierung, aber mit Einzuegen
 
-sal_Bool SwEditShell::NoNum()
+BOOL SwEditShell::NoNum()
 {
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )			// Mehrfachselektion ?
     {
-        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
+        for( USHORT n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->NoNum( aRangeArr.SetPam( n, aPam ));
-        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
         bRet = GetDoc()->NoNum( *pCrsr );
@@ -171,9 +170,9 @@ sal_Bool SwEditShell::NoNum()
 // Loeschen, Splitten der Aufzaehlungsliste
 
 // -> #i29560#
-sal_Bool SwEditShell::HasNumber() const
+BOOL SwEditShell::HasNumber() const
 {
-    sal_Bool bResult = sal_False;
+    BOOL bResult = FALSE;
 
     const SwTxtNode * pTxtNd =
         GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
@@ -182,21 +181,23 @@ sal_Bool SwEditShell::HasNumber() const
     {
         bResult = pTxtNd->HasNumber();
 
+        // --> OD 2005-10-26 #b6340308#
         // special case: outline numbered, not counted paragraph
         if ( bResult &&
              pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
              !pTxtNd->IsCountedInList() )
         {
-            bResult = sal_False;
+            bResult = FALSE;
         }
+        // <--
     }
 
     return bResult;
 }
 
-sal_Bool SwEditShell::HasBullet() const
+BOOL SwEditShell::HasBullet() const
 {
-    sal_Bool bResult = sal_False;
+    BOOL bResult = FALSE;
 
     const SwTxtNode * pTxtNd =
         GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
@@ -215,16 +216,16 @@ void SwEditShell::DelNumRules()
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )			// Mehrfachselektion ?
     {
-        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
+        for( USHORT n = 0; n < aRangeArr.Count(); ++n )
         {
             GetDoc()->DelNumRules( aRangeArr.SetPam( n, aPam ) );
         }
-        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
         GetDoc()->DelNumRules( *pCrsr );
@@ -233,9 +234,10 @@ void SwEditShell::DelNumRules()
     // ueberfluessig sein, aber VB hatte darueber eine Bugrep.
     CallChgLnk();
 
-    // cursor can not be anymore in front of a label,
-    // because numbering/bullet is deleted.
-    SetInFrontOfLabel( sal_False );
+    // --> OD 2005-10-24 #126346# - cursor can not be anymore in
+    // front of a label, because numbering/bullet is deleted.
+    SetInFrontOfLabel( FALSE );
+    // <--
 
     GetDoc()->SetModified();
     EndAllAction();
@@ -244,22 +246,22 @@ void SwEditShell::DelNumRules()
 // Hoch-/Runterstufen
 
 
-sal_Bool SwEditShell::NumUpDown( sal_Bool bDown )
+BOOL SwEditShell::NumUpDown( BOOL bDown )
 {
     StartAllAction();
 
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr )         // keine Mehrfachselektion ?
+    if( pCrsr->GetNext() == pCrsr )			// keine Mehrfachselektion ?
         bRet = GetDoc()->NumUpDown( *pCrsr, bDown );
     else
     {
-        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
+        for( USHORT n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->NumUpDown( aRangeArr.SetPam( n, aPam ), bDown );
-        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     GetDoc()->SetModified();
 
@@ -274,9 +276,9 @@ sal_Bool SwEditShell::NumUpDown( sal_Bool bDown )
     return bRet;
 }
 // -> #i23726#
-sal_Bool SwEditShell::IsFirstOfNumRule() const
+BOOL SwEditShell::IsFirstOfNumRule() const
 {
-    sal_Bool bResult = sal_False;
+    BOOL bResult = FALSE;
 
     SwPaM * pCrsr = GetCrsr();
     if (pCrsr->GetNext() == pCrsr)
@@ -287,9 +289,9 @@ sal_Bool SwEditShell::IsFirstOfNumRule() const
     return bResult;
 }
 
-sal_Bool SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
+BOOL SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
 {
-    sal_Bool bResult = sal_False;
+    BOOL bResult = FALSE;
 
     SwPosition aPos(*rPaM.GetPoint());
     bResult = GetDoc()->IsFirstOfNumRule(aPos);
@@ -315,8 +317,10 @@ void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
         aRule.ChangeIndent( nDiff );
         // <--
 
+        // --> OD 2008-03-17 #refactorlists#
         // no start of new list
         SetCurNumRule( aRule, false );
+        // <--
     }
 
     EndAllAction();
@@ -337,9 +341,13 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
         SwTxtNode * pTxtNode = aPaM.GetNode()->GetTxtNode();
 
         // --> OD 2008-06-09 #i90078#
+//        int nLevel = -1;
+//        int nReferenceLevel = pTxtNode->GetActualListLevel();
+//        if (! IsFirstOfNumRule(aPaM))
+//            nLevel = nReferenceLevel;
 
         SwNumRule aRule(*pCurNumRule);
-
+//        aRule.ChangeIndent(nIndent, nLevel, nReferenceLevel, FALSE);
         if ( IsFirstOfNumRule() )
         {
             aRule.SetIndentOfFirstListLevelAndChangeOthers( nIndent );
@@ -347,12 +355,13 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
         else if ( pTxtNode->GetActualListLevel() >= 0  )
         {
             aRule.SetIndent( nIndent,
-                             static_cast<sal_uInt16>(pTxtNode->GetActualListLevel()) );
+                             static_cast<USHORT>(pTxtNode->GetActualListLevel()) );
         }
         // <--
 
         // --> OD 2005-02-18 #i42921# - 3rd parameter = false in order to
         // suppress setting of num rule at <aPaM>.
+        // --> OD 2008-03-17 #refactorlists#
         // do not apply any list
         GetDoc()->SetNumRule( aPaM, aRule, false, String(), sal_False );
         // <--
@@ -362,7 +371,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
 }
 // <- #i23725#
 
-sal_Bool SwEditShell::MoveParagraph( long nOffset )
+BOOL SwEditShell::MoveParagraph( long nOffset )
 {
     StartAllAction();
 
@@ -374,7 +383,7 @@ sal_Bool SwEditShell::MoveParagraph( long nOffset )
         pCrsr->DeleteMark();
     }
 
-    sal_Bool bRet = GetDoc()->MoveParagraph( *pCrsr, nOffset );
+    BOOL bRet = GetDoc()->MoveParagraph( *pCrsr, nOffset );
 
     GetDoc()->SetModified();
     EndAllAction();
@@ -401,11 +410,11 @@ void SwEditShell::GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower 
     aCrsr.SetMark();
     if( pCrsr->HasMark() )
         *aCrsr.GetPoint() = *pCrsr->End();
-    GetDoc()->GotoNextNum( *aCrsr.GetPoint(), sal_False,
+    GetDoc()->GotoNextNum( *aCrsr.GetPoint(), FALSE,
                             &rUpper, &rLower );
 }
 
-sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
+BOOL SwEditShell::MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft )
 {
     StartAllAction();
 
@@ -417,9 +426,9 @@ sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
     if( pCrsr->HasMark() )
         *aCrsr.GetPoint() = *pCrsr->End();
 
-    sal_Bool bRet = sal_False;
-    sal_uInt8 nUpperLevel, nLowerLevel;
-    if( GetDoc()->GotoNextNum( *aCrsr.GetPoint(), sal_False,
+    BOOL bRet = FALSE;
+    BYTE nUpperLevel, nLowerLevel;
+    if( GetDoc()->GotoNextNum( *aCrsr.GetPoint(), FALSE,
                                 &nUpperLevel, &nLowerLevel ))
     {
         if( bUpperLower )
@@ -428,15 +437,15 @@ sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
             long nOffset = 0;
             const SwNode* pNd;
 
-            if( bUpperLeft )        // verschiebe nach oben
+            if( bUpperLeft )		// verschiebe nach oben
             {
                 SwPosition aPos( *aCrsr.GetMark() );
-                if( GetDoc()->GotoPrevNum( aPos, sal_False ) )
+                if( GetDoc()->GotoPrevNum( aPos, FALSE ) )
                     nOffset = aPos.nNode.GetIndex() -
                             aCrsr.GetMark()->nNode.GetIndex();
                 else
                 {
-                    sal_uLong nStt = aPos.nNode.GetIndex(), nIdx = nStt - 1;
+                    ULONG nStt = aPos.nNode.GetIndex(), nIdx = nStt - 1;
                     while( nIdx && (
                         ( pNd = GetDoc()->GetNodes()[ nIdx ])->IsSectionNode() ||
                         ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode())))
@@ -445,13 +454,13 @@ sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
                         nOffset = nIdx - nStt;
                 }
             }
-            else                    // verschiebe nach unten
+            else					// verschiebe nach unten
             {
-                const SwNumRule* pOrig = aCrsr.GetNode(sal_False)->GetTxtNode()->GetNumRule();
+                const SwNumRule* pOrig = aCrsr.GetNode(FALSE)->GetTxtNode()->GetNumRule();
                 if( aCrsr.GetNode()->IsTxtNode() &&
                     pOrig == aCrsr.GetNode()->GetTxtNode()->GetNumRule() )
                 {
-                    sal_uLong nStt = aCrsr.GetPoint()->nNode.GetIndex(), nIdx = nStt+1;
+                    ULONG nStt = aCrsr.GetPoint()->nNode.GetIndex(), nIdx = nStt+1;
 
                     while (nIdx < GetDoc()->GetNodes().Count()-1)
                     {
@@ -499,23 +508,23 @@ sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
     return bRet;
 }
 
-sal_Bool SwEditShell::OutlineUpDown( short nOffset )
+BOOL SwEditShell::OutlineUpDown( short nOffset )
 {
     StartAllAction();
 
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr )         // keine Mehrfachselektion ?
+    if( pCrsr->GetNext() == pCrsr )			// keine Mehrfachselektion ?
         bRet = GetDoc()->OutlineUpDown( *pCrsr, nOffset );
     else
     {
-        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
+        for( USHORT n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->OutlineUpDown(
                                     aRangeArr.SetPam( n, aPam ), nOffset );
-        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     GetDoc()->SetModified();
     EndAllAction();
@@ -523,25 +532,25 @@ sal_Bool SwEditShell::OutlineUpDown( short nOffset )
 }
 
 
-sal_Bool SwEditShell::MoveOutlinePara( short nOffset )
+BOOL SwEditShell::MoveOutlinePara( short nOffset )
 {
     StartAllAction();
-    sal_Bool bRet = GetDoc()->MoveOutlinePara( *GetCrsr(), nOffset );
+    BOOL bRet = GetDoc()->MoveOutlinePara( *GetCrsr(), nOffset );
     EndAllAction();
     return bRet;
 }
 
 // Outlines and SubOutline are ReadOnly?
-sal_Bool SwEditShell::IsProtectedOutlinePara() const
+BOOL SwEditShell::IsProtectedOutlinePara() const
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     const SwNode& rNd = GetCrsr()->Start()->nNode.GetNode();
     if( rNd.IsTxtNode() )
     {
         const SwOutlineNodes& rOutlNd = GetDoc()->GetNodes().GetOutLineNds();
         SwNodePtr pNd = (SwNodePtr)&rNd;
-        sal_Bool bFirst = sal_True;
-        sal_uInt16 nPos;
+        BOOL bFirst = TRUE;
+        USHORT nPos;
         int nLvl(0);
         if( !rOutlNd.Seek_Entry( pNd, &nPos ) && nPos )
             --nPos;
@@ -550,22 +559,26 @@ sal_Bool SwEditShell::IsProtectedOutlinePara() const
         {
             SwNodePtr pTmpNd = rOutlNd[ nPos ];
 
+            // --> OD 2008-04-02 #refactorlists#
+//            BYTE nTmpLvl = GetRealLevel( pTmpNd->GetTxtNode()->
+//                                    GetTxtColl()->GetOutlineLevel() );
+ //           int nTmpLvl = pTmpNd->GetTxtNode()->GetOutlineLevel();//#outline level,zhaojianwei
             int nTmpLvl = pTmpNd->GetTxtNode()->GetAttrOutlineLevel();
-
-            OSL_ENSURE( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,
+ //           OSL_ENSURE( nTmpLvl >= 0 && nTmpLvl < MAXLEVEL,
+            OSL_ENSURE( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,			//<-end,zhaojianwei
                     "<SwEditShell::IsProtectedOutlinePara()>" );
-
+            // <--
             if( bFirst )
             {
                 nLvl = nTmpLvl;
-                bFirst = sal_False;
+                bFirst = FALSE;
             }
             else if( nLvl >= nTmpLvl )
                 break;
 
             if( pTmpNd->IsProtect() )
             {
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             }
         }
@@ -586,7 +599,7 @@ sal_Bool SwEditShell::IsProtectedOutlinePara() const
  * 2) outline must not be within table
  * 3) if bCopy is set, outline must not be write protected
  */
-sal_Bool lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, sal_uInt16 nIdx, bool bCopy )
+BOOL lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, USHORT nIdx, bool bCopy )
 {
     const SwNodes& rNds = pDoc->GetNodes();
     const SwNode* pNd = rNds.GetOutLineNds()[ nIdx ];
@@ -595,35 +608,36 @@ sal_Bool lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, sal_uInt16 nIdx, bool 
             ( bCopy || !pNd->IsProtect() );                         // 3) write
 }
 
-sal_Bool SwEditShell::IsOutlineMovable( sal_uInt16 nIdx ) const
+BOOL SwEditShell::IsOutlineMovable( USHORT nIdx ) const
 {
     return lcl_IsOutlineMoveAndCopyable( GetDoc(), nIdx, false );
 }
 
-sal_Bool SwEditShell::IsOutlineCopyable( sal_uInt16 nIdx ) const
+BOOL SwEditShell::IsOutlineCopyable( USHORT nIdx ) const
 {
     return lcl_IsOutlineMoveAndCopyable( GetDoc(), nIdx, true );
 }
 
 
-sal_Bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, sal_Bool bChkStart )
+BOOL SwEditShell::NumOrNoNum( BOOL bNumOn, BOOL bChkStart ) // #115901#
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
         ( !bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()) )
     {
-        StartAllAction();       // Klammern fuers Updaten !!
+        StartAllAction();		// Klammern fuers Updaten !!
+        // #115901#
         bRet = GetDoc()->NumOrNoNum( pCrsr->GetPoint()->nNode, !bNumOn ); // #i29560#
         EndAllAction();
     }
     return bRet;
 }
 
-sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
+BOOL SwEditShell::IsNoNum( BOOL bChkStart ) const
 {
     // ein Backspace im Absatz ohne Nummer wird zum Delete
-    sal_Bool bResult = sal_False;
+    BOOL bResult = FALSE;
     SwPaM* pCrsr = GetCrsr();
 
     if (pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
@@ -640,26 +654,32 @@ sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
     return bResult;
 }
 
-sal_uInt8 SwEditShell::GetNumLevel() const
+// --> OD 2008-02-29 #refactorlists# - removed <pHasChilds>
+BYTE SwEditShell::GetNumLevel() const
 {
     // gebe die akt. Ebene zurueck, auf der sich der Point vom Cursor befindet
-    sal_uInt8 nLevel = MAXLEVEL;        //end,zhaojianwei
+    //BYTE nLevel = NO_NUMBERING;	//#outline level,zhaojianwei
+    BYTE nLevel = MAXLEVEL;		//end,zhaojianwei
 
     SwPaM* pCrsr = GetCrsr();
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
 
+    // --> FME 2005-09-12 #124972# Made code robust:
     OSL_ENSURE( pTxtNd, "GetNumLevel() without text node" );
     if ( !pTxtNd )
         return nLevel;
+    // <--
 
     const SwNumRule* pRule = pTxtNd->GetNumRule();
     if(pRule)
     {
+        // --> OD 2008-05-09 #refactorlists#
         const int nListLevelOfTxtNode( pTxtNd->GetActualListLevel() );
         if ( nListLevelOfTxtNode >= 0 )
         {
-            nLevel = static_cast<sal_uInt8>( nListLevelOfTxtNode );
+            nLevel = static_cast<BYTE>( nListLevelOfTxtNode );
         }
+        // <--
     }
 
     return nLevel;
@@ -670,6 +690,8 @@ const SwNumRule* SwEditShell::GetCurNumRule() const
     return GetDoc()->GetCurrNumRule( *GetCrsr()->GetPoint() );
 }
 
+// OD 2008-02-08 #newlistlevelattrs# - add handling of parameter <bResetIndentAttrs>
+// --> OD 2008-03-17 #refactorlists#
 void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
                                  const bool bCreateNewList,
                                  const String sContinuedListId,
@@ -677,35 +699,43 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
 {
     StartAllAction();
 
-    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
-
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )			// Mehrfachselektion ?
     {
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
+        for( USHORT n = 0; n < aRangeArr.Count(); ++n )
           {
             aRangeArr.SetPam( n, aPam );
+            // --> OD 2008-02-08 #newlistlevelattrs#
+            // --> OD 2008-03-17 #refactorlists#
             GetDoc()->SetNumRule( aPam, rRule,
                                   bCreateNewList, sContinuedListId,
                                   sal_True, bResetIndentAttrs );
+            // <--
             GetDoc()->SetCounted( aPam, true );
           }
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
     {
+        GetDoc()->StartUndo( UNDO_START, NULL );
+
+        // --> OD 2008-02-08 #newlistlevelattrs#
+        // --> OD 2008-03-17 #refactorlists#
         GetDoc()->SetNumRule( *pCrsr, rRule,
                               bCreateNewList, sContinuedListId,
                               sal_True, bResetIndentAttrs );
         GetDoc()->SetCounted( *pCrsr, true );
+
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
-    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
 
     EndAllAction();
 }
 
-String SwEditShell::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) const
+String SwEditShell::GetUniqueNumRuleName( const String* pChkStr, BOOL bAutoNum ) const
 {
     return GetDoc()->GetUniqueNumRuleName( pChkStr, bAutoNum );
 }
@@ -717,27 +747,27 @@ void SwEditShell::ChgNumRuleFmts( const SwNumRule& rRule )
     EndAllAction();
 }
 
-sal_Bool SwEditShell::ReplaceNumRule( const String& rOldRule, const String& rNewRule )
+BOOL SwEditShell::ReplaceNumRule( const String& rOldRule, const String& rNewRule )
 {
     StartAllAction();
-    sal_Bool bRet = GetDoc()->ReplaceNumRule( *GetCrsr()->GetPoint(), rOldRule, rNewRule );
+    BOOL bRet = GetDoc()->ReplaceNumRule( *GetCrsr()->GetPoint(), rOldRule, rNewRule );
     EndAllAction();
     return bRet;
 }
 
-void SwEditShell::SetNumRuleStart( sal_Bool bFlag )
+void SwEditShell::SetNumRuleStart( BOOL bFlag )
 {
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )			// Mehrfachselektion ?
     {
-        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
+        for( USHORT n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->SetNumRuleStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), bFlag );
-        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
         GetDoc()->SetNumRuleStart( *pCrsr->GetPoint(), bFlag );
@@ -745,28 +775,28 @@ void SwEditShell::SetNumRuleStart( sal_Bool bFlag )
     EndAllAction();
 }
 
-sal_Bool SwEditShell::IsNumRuleStart() const
+BOOL SwEditShell::IsNumRuleStart() const
 {
-    sal_Bool bResult = sal_False;
+    BOOL bResult = FALSE;
     const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
     if( pTxtNd )
-        bResult = pTxtNd->IsListRestart() ? sal_True : sal_False;
+        bResult = pTxtNd->IsListRestart() ? TRUE : FALSE;
     return bResult;
 }
 
-void SwEditShell::SetNodeNumStart( sal_uInt16 nStt )
+void SwEditShell::SetNodeNumStart( USHORT nStt )
 {
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )			// Mehrfachselektion ?
     {
-        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
+        for( USHORT n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), nStt );
-        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
         GetDoc()->SetNodeNumStart( *pCrsr->GetPoint(), nStt );
@@ -774,19 +804,25 @@ void SwEditShell::SetNodeNumStart( sal_uInt16 nStt )
     EndAllAction();
 }
 
-sal_uInt16 SwEditShell::GetNodeNumStart() const
+USHORT SwEditShell::GetNodeNumStart() const
 {
     const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
+    // --> OD 2008-02-28 #refactorlists#
     // correction: check, if list restart value is set at text node and
     // use new method <SwTxtNode::GetAttrListRestartValue()>.
     // return USHRT_MAX, if no list restart value is found.
     if ( pTxtNd && pTxtNd->HasAttrListRestartValue() )
     {
-        return static_cast<sal_uInt16>(pTxtNd->GetAttrListRestartValue());
+        return static_cast<USHORT>(pTxtNd->GetAttrListRestartValue());
     }
     return USHRT_MAX;
+    // <--
 }
 
+/*-- 26.08.2005 14:47:17---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+// --> OD 2008-03-18 #refactorlists#
 const SwNumRule * SwEditShell::SearchNumRule( const bool bForward,
                                               const bool bNum,
                                               const bool bOutline,
@@ -797,5 +833,6 @@ const SwNumRule * SwEditShell::SearchNumRule( const bool bForward,
                                     bForward, bNum, bOutline, nNonEmptyAllowed,
                                     sListId );
 }
+// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

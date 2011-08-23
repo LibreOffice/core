@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,15 +73,15 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
+                                              USHORT nPrfx,
                                                    const ::rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sPassword(),
     meHash1(PASSHASH_SHA1),
     meHash2(PASSHASH_UNSPECIFIED),
-    bProtected(false),
-    bHadCalculationSettings(false),
+    bProtected(sal_False),
+    bHadCalculationSettings(sal_False),
     pChangeTrackingImportHelper(NULL)
 {
     ScDocument* pDoc = GetScImport().GetDocument();
@@ -115,7 +115,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -137,7 +137,7 @@ ScXMLBodyContext::~ScXMLBodyContext()
 {
 }
 
-SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -157,18 +157,18 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
 //    sal_Bool bHeading = sal_False;
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
-//  case XML_TOK_TEXT_H:
-//      bHeading = sal_True;
-//  case XML_TOK_TEXT_P:
-//      pContext = new SwXMLParaContext( GetSwImport(),nPrefix, rLocalName,
-//                                       xAttrList, bHeading );
-//      break;
-//  case XML_TOK_TEXT_ORDERED_LIST:
-//      bOrdered = sal_True;
-//  case XML_TOK_TEXT_UNORDERED_LIST:
-//      pContext = new SwXMLListBlockContext( GetSwImport(),nPrefix, rLocalName,
-//                                            xAttrList, bOrdered );
-//      break;
+//	case XML_TOK_TEXT_H:
+//		bHeading = TRUE;
+//	case XML_TOK_TEXT_P:
+//		pContext = new SwXMLParaContext( GetSwImport(),nPrefix, rLocalName,
+//										 xAttrList, bHeading );
+//		break;
+//	case XML_TOK_TEXT_ORDERED_LIST:
+//		bOrdered = TRUE;
+//	case XML_TOK_TEXT_UNORDERED_LIST:
+//		pContext = new SwXMLListBlockContext( GetSwImport(),nPrefix, rLocalName,
+//											  xAttrList, bOrdered );
+//		break;
     case XML_TOK_BODY_TRACKED_CHANGES :
     {
         pChangeTrackingImportHelper = GetScImport().GetChangeTrackingImportHelper();
@@ -201,9 +201,8 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
         }
         break;
     case XML_TOK_BODY_NAMED_EXPRESSIONS:
-        pContext = new ScXMLNamedExpressionsContext (
-            GetScImport(), nPrefix, rLocalName, xAttrList,
-            new ScXMLNamedExpressionsContext::GlobalInserter(GetScImport()) );
+        pContext = new ScXMLNamedExpressionsContext ( GetScImport(), nPrefix, rLocalName,
+                                                        xAttrList );
         break;
     case XML_TOK_BODY_DATABASE_RANGES:
         pContext = new ScXMLDatabaseRangesContext ( GetScImport(), nPrefix, rLocalName,
@@ -269,12 +268,10 @@ void ScXMLBodyContext::EndElement()
         SvXMLImportContext *pContext = new ScXMLCalculationSettingsContext( GetScImport(), XML_NAMESPACE_TABLE, GetXMLToken(XML_CALCULATION_SETTINGS), NULL );
         pContext->EndElement();
     }
-
-    ScXMLImport::MutexGuard aGuard(GetScImport());
-
-    ScMyImpDetectiveOpArray*    pDetOpArray = GetScImport().GetDetectiveOpArray();
-    ScDocument*                 pDoc        = GetScImport().GetDocument();
-    ScMyImpDetectiveOp          aDetOp;
+    GetScImport().LockSolarMutex();
+    ScMyImpDetectiveOpArray*	pDetOpArray	= GetScImport().GetDetectiveOpArray();
+    ScDocument*					pDoc		= GetScImport().GetDocument();
+    ScMyImpDetectiveOp			aDetOp;
 
     if (pDoc && GetScImport().GetModel().is())
     {
@@ -307,6 +304,7 @@ void ScXMLBodyContext::EndElement()
             pDoc->SetDocProtection(pProtection.get());
         }
     }
+    GetScImport().UnlockSolarMutex();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

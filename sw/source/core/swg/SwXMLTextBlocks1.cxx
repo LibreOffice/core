@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,6 +47,7 @@
 #include <SwXMLBlockExport.hxx>
 #include <swevent.hxx>
 #include <swerror.h>
+#include <errhdl.hxx>
 
 
 #define STREAM_STGREAD  ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE )
@@ -63,7 +64,7 @@ using ::xmloff::token::XML_BLOCK_LIST;
 using ::xmloff::token::XML_UNFORMATTED_TEXT;
 using ::xmloff::token::GetXMLToken;
 
-sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
+ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
 {
     String aFolderName ( GetPackageName ( nIdx ) );
 
@@ -77,7 +78,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             ReadXML->SetBlockMode( sal_True );
             aReader.Read( *ReadXML );
             ReadXML->SetBlockMode( sal_False );
-            // Ole objects fails to display when inserted into document
+            // Ole objects fails to display when inserted into document 
             // because the ObjectReplacement folder ( and contents are missing )
             rtl::OUString sObjReplacements( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
             if ( xRoot->hasByName( sObjReplacements ) )
@@ -157,7 +158,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
                 // re throw ?
             }
 
-            bInfoChanged = sal_False;
+            bInfoChanged = FALSE;
             MakeBlockText(aCur);
         }
         catch( uno::Exception& )
@@ -173,12 +174,12 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
 // taken from unocore/unoevents.cxx or ui/unotxt.cxx
 const struct SvEventDescription aAutotextEvents[] =
 {
-    { SW_EVENT_START_INS_GLOSSARY,  "OnInsertStart" },
-    { SW_EVENT_END_INS_GLOSSARY,    "OnInsertDone" },
+    { SW_EVENT_START_INS_GLOSSARY,	"OnInsertStart" },
+    { SW_EVENT_END_INS_GLOSSARY,	"OnInsertDone" },
     { 0, NULL }
 };
 
-sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
+ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
                                       SvxMacroTableDtor& rMacroTbl,
                                       sal_Bool bFileAlreadyOpen )
 {
@@ -188,13 +189,13 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
     aLong = aNames[ nIdx ]->aLong;
     aPackageName = aNames[ nIdx ]->aPackageName;
 
-    sal_uLong nRet = 0;
+    ULONG nRet = 0;
 
     // open stream in proper sub-storage
     if( !bFileAlreadyOpen )
     {
         CloseFile();
-        nRet = OpenFile ( sal_True );
+        nRet = OpenFile ( TRUE );
     }
     if ( 0 == nRet )
     {
@@ -312,9 +313,9 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 }
 
 
-sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
+ULONG SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
 {
-    sal_uLong n = 0;
+    ULONG n = 0;
     sal_Bool bTextOnly = sal_True;
     String aFolderName;
     GeneratePackageName ( rShort, aFolderName );
@@ -385,13 +386,13 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
     }
     catch ( uno::Exception& )
     {
-        OSL_FAIL( "Tried to open non-existent folder or stream!");
+        OSL_ENSURE( sal_False, "Tried to open non-existent folder or stream!");
     }
 
     return n;
 }
 
-sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
+ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
                                      const String& rText,  const String& rPackageName )
 {
     GetIndex ( rShort );
@@ -417,7 +418,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
        uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
        DBG_ASSERT(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
-    sal_uLong nRes = 0;
+    ULONG nRes = 0;
 
     try
     {
@@ -464,14 +465,14 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
 
     //TODO/LATER: error handling
     /*
-    sal_uLong nErr = xBlkRoot->GetError();
-    sal_uLong nRes = 0;
+    ULONG nErr = xBlkRoot->GetError();
+    ULONG nRes = 0;
     if( nErr == SVSTREAM_DISK_FULL )
         nRes = ERR_W4W_WRITE_FULL;
     else if( nErr != SVSTREAM_OK )
         nRes = ERR_SWG_WRITE_ERROR;
     */
-    if( !nRes )         // damit ueber GetText & nCur aufs Doc zugegriffen
+    if( !nRes )			// damit ueber GetText & nCur aufs Doc zugegriffen
         MakeBlockText( rText );
 
     return nRes;
@@ -544,7 +545,7 @@ void SwXMLTextBlocks::ReadInfo( void )
 }
 void SwXMLTextBlocks::WriteInfo( void )
 {
-    if ( xBlkRoot.is() || 0 == OpenFile ( sal_False ) )
+    if ( xBlkRoot.is() || 0 == OpenFile ( FALSE ) )
     {
         uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
@@ -597,13 +598,13 @@ void SwXMLTextBlocks::WriteInfo( void )
         {
         }
 
-        bInfoChanged = sal_False;
+        bInfoChanged = FALSE;
         return;
     }
 }
 
-sal_uLong SwXMLTextBlocks::SetMacroTable(
-    sal_uInt16 nIdx,
+ULONG SwXMLTextBlocks::SetMacroTable(
+    USHORT nIdx,
     const SvxMacroTableDtor& rMacroTbl,
     sal_Bool bFileAlreadyOpen )
 {
@@ -613,7 +614,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
     aPackageName = aNames[ nIdx ]->aPackageName;
 
     // start XML autotext event export
-    sal_uLong nRes = 0;
+    ULONG nRes = 0;
 
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
         comphelper::getProcessServiceFactory();
@@ -632,8 +633,8 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
     // open stream in proper sub-storage
     if( !bFileAlreadyOpen )
     {
-        CloseFile();    // close (it may be open in read-only-mode)
-        nRes = OpenFile ( sal_False );
+        CloseFile();	// close (it may be open in read-only-mode)
+        nRes = OpenFile ( FALSE );
     }
 
     if ( 0 == nRes )

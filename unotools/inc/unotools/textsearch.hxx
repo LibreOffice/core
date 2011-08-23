@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,12 +62,12 @@ public:
 
 private:
     String sSrchStr;            // the search string
-    String sReplaceStr;         // the replace string
+    String sReplaceStr;			// the replace string
 
     SearchType eSrchType;       // search normal/regular/LevDist
 
-    int bWordOnly   : 1;        // used by normal search
-    int bSrchInSel  : 1;        // search only in the selection
+    int bWordOnly	: 1;		// used by normal search
+    int bSrchInSel	: 1;		// search only in the selection
     int bCaseSense  : 1;        //
 
     // values for the "weight Levenshtein-Distance"
@@ -82,49 +82,49 @@ private:
 public:
     SearchParam( const String &rText,
                     SearchType eSrchType = SearchParam::SRCH_NORMAL,
-                    sal_Bool bCaseSens = sal_True,
-                    sal_Bool bWrdOnly = sal_False,
-                    sal_Bool bSrchInSel = sal_False );
+                    BOOL bCaseSens = TRUE,
+                    BOOL bWrdOnly = FALSE,
+                    BOOL bSrchInSel = FALSE );
     SearchParam( const SearchParam& );
 
-    const String&   GetSrchStr() const          { return sSrchStr; }
-    const String&   GetReplaceStr() const       { return sReplaceStr; }
+    const String& 	GetSrchStr() const			{ return sSrchStr; }
+    const String& 	GetReplaceStr() const		{ return sReplaceStr; }
     SearchType      GetSrchType() const         { return eSrchType; }
 
     int             IsCaseSensitive() const     { return bCaseSense; }
-    int             IsSrchInSelection() const   { return bSrchInSel; }
-    int             IsSrchWordOnly() const      { return bWordOnly; }
+    int				IsSrchInSelection() const	{ return bSrchInSel; }
+    int 			IsSrchWordOnly() const		{ return bWordOnly; }
 
 
-    void SetSrchStr( const String& rStr )       { sSrchStr = rStr; }
-    void SetReplaceStr( const String& rStr )    { sReplaceStr = rStr; }
+    void SetSrchStr( const String& rStr ) 		{ sSrchStr = rStr; }
+    void SetReplaceStr( const String& rStr )	{ sReplaceStr = rStr; }
     void SetSrchType( SearchType eType )        { eSrchType = eType; }
 
     void SetCaseSensitive( int bFlag )          { bCaseSense = bFlag; }
     void SetSrchInSelection( int bFlag )        { bSrchInSel = bFlag; }
     void SetSrchWordOnly( int bFlag )           { bWordOnly = bFlag; }
 
-    int             IsSrchRelaxed() const       { return bLEV_Relaxed; }
-    int             GetLEVOther() const         { return nLEV_OtherX; }
-    int             GetLEVShorter() const       { return nLEV_ShorterY; }
-    int             GetLEVLonger() const        { return nLEV_LongerZ; }
+    int 			IsSrchRelaxed() const		{ return bLEV_Relaxed; }
+    int				GetLEVOther() const			{ return nLEV_OtherX; }
+    int				GetLEVShorter() const		{ return nLEV_ShorterY; }
+    int				GetLEVLonger() const		{ return nLEV_LongerZ; }
 
     void SetSrchRelaxed( int bFlag )            { bLEV_Relaxed = bFlag; }
-    void SetLEVOther( int nValue )              { nLEV_OtherX = nValue; }
-    void SetLEVShorter( int nValue )            { nLEV_ShorterY = nValue; }
-    void SetLEVLonger( int nValue )             { nLEV_LongerZ = nValue; }
+    void SetLEVOther( int nValue )				{ nLEV_OtherX = nValue; }
+    void SetLEVShorter( int nValue )			{ nLEV_ShorterY = nValue; }
+    void SetLEVLonger( int nValue )				{ nLEV_LongerZ = nValue; }
 
-    long GetTransliterationFlags() const        { return nTransliterationFlags; }
-    void SetTransliterationFlags( long nValue ) { nTransliterationFlags = nValue; }
+    long GetTransliterationFlags() const		{ return nTransliterationFlags; }
+    void SetTransliterationFlags( long nValue )	{ nTransliterationFlags = nValue; }
 };
 
-//  Klasse zum Suchen eines Strings in einem String.
-//  Unterstuetzt werden folgende Verfahren:
-//      - normalen Text (Bayer/Moore)
-//      - regulaere Ausdruecke
-//      - gewichtete Levenshtein Distanz
+//	Klasse zum Suchen eines Strings in einem String.
+//	Unterstuetzt werden folgende Verfahren:
+//		- normalen Text (Bayer/Moore)
+//		- regulaere Ausdruecke
+// 		- gewichtete Levenshtein Distanz
 //
-//  Es kann Vorwaerts und Rueckwaerts gesucht werden!
+//	Es kann Vorwaerts und Rueckwaerts gesucht werden!
 
 class UNOTOOLS_DLLPUBLIC TextSearch
 {
@@ -148,17 +148,17 @@ public:
 
     /* search in the (selected) text the search string:
         rScrTxt - the text, in in which we search
-        pStart  - start position for the search
+        pStart	- start position for the search
         pEnde   - end position for the search
 
-        RETURN values   ==  sal_True: something is found
+        RETURN values   ==  TRUE: something is found
                         - pStart start pos of the found text,
                         - pStart end pos of the found text,
                         - pSrchResult - the search result with all found
                              positions. Is only filled with more positions
                              if the regular expression handles groups.
 
-                        == sal_False: nothing found, pStart,pEnde unchanged.
+                        == FALSE: nothing found, pStart,pEnde unchanged.
 
         Definitions: start pos always inclusive, end pos always exclusive!
                      The position must always in the right direction!
@@ -181,7 +181,7 @@ public:
 };
 
 // ............................................................................
-}   // namespace utl
+}	// namespace utl
 // ............................................................................
 
 #endif

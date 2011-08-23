@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ class KDEXLib : public QObject, public SalXLib
         QHash< int, SocketData > socketData; // key is fd
         QTimer timeoutTimer;
         QTimer userEventTimer;
-        enum { LibreOfficeEventLoop, GlibEventLoop, QtUnixEventLoop } eventLoopType;
+        enum { LibreOfficeEventLoop, GlibEventLoop } eventLoopType;
 
     private:
         void setupEventLoop();
@@ -74,7 +74,7 @@ class KDEXLib : public QObject, public SalXLib
         void startTimeoutTimerSignal();
         void startUserEventTimerSignal();
         void processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
-
+        
     public:
         KDEXLib();
         virtual ~KDEXLib();
@@ -83,11 +83,11 @@ class KDEXLib : public QObject, public SalXLib
         virtual void Yield( bool bWait, bool bHandleAllCurrentEvents );
         virtual void Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle );
         virtual void Remove( int fd );
-        virtual void StartTimer( sal_uLong nMS );
+        virtual void StartTimer( ULONG nMS );
         virtual void StopTimer();
         virtual void Wakeup();
         virtual void PostUserEvent();
-
+            
         void doStartup();
 };
 

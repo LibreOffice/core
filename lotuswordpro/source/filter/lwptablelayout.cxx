@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005           Created
+ Mar 2005		 	Created
  ************************************************************************/
 #include "lwpglobalmgr.hxx"
 #include "lwptablelayout.hxx"
@@ -82,7 +82,7 @@
 #include "xfilter/xfcolstyle.hxx"
 #include "xfilter/xfframestyle.hxx"
 #include "xfilter/xfframe.hxx"
-#include    "xfilter/xffloatframe.hxx"
+#include	"xfilter/xffloatframe.hxx"
 #include "lwpframelayout.hxx"
 #include "xfilter/xfparastyle.hxx"
 
@@ -160,7 +160,7 @@ LwpTableHeadingLayout* LwpSuperTableLayout::GetTableHeadingLayout()
 /**
  * @short   Register super table layout style
  */
-void LwpSuperTableLayout::RegisterNewStyle()
+void LwpSuperTableLayout::RegisterStyle()
 {
     // if this layout is style of real table entry
     LwpTableLayout* pTableLayout = GetTableLayout();
@@ -200,8 +200,8 @@ sal_Bool LwpSuperTableLayout::IsJustifiable()
 double LwpSuperTableLayout::GetWidth()
 {
     double dWidth = GetTableWidth();
-    double dLeft    = GetMarginsValue(MARGIN_LEFT);
-    double dRight   = GetMarginsValue(MARGIN_RIGHT);
+    double dLeft	= GetMarginsValue(MARGIN_LEFT);
+    double dRight	= GetMarginsValue(MARGIN_RIGHT);
 
     return (dWidth + dLeft + dRight);
 }
@@ -253,8 +253,8 @@ double LwpSuperTableLayout::GetTableWidth()
         return dWidth;
     }
 
-    double dLeft    = GetMarginsValue(MARGIN_LEFT);
-    double dRight   = GetMarginsValue(MARGIN_RIGHT);
+    double dLeft	= GetMarginsValue(MARGIN_LEFT);
+    double dRight	= GetMarginsValue(MARGIN_RIGHT);
     return LwpTools::ConvertFromUnitsToMetric(nWidth)-dLeft-dRight;
 
 }
@@ -732,7 +732,7 @@ void LwpTableLayout::RegisterStyle()
         && !pSuper->GetContainerLayout()->IsCell())
     {
         //with para above
-//      pSuper->ApplyBackColor(pTableStyle);
+//		pSuper->ApplyBackColor(pTableStyle);
         pSuper->ApplyBackGround(pTableStyle);
         pSuper->ApplyWatermark(pTableStyle);
         pSuper->ApplyShadow(pTableStyle);
@@ -758,12 +758,12 @@ void LwpTableLayout::RegisterStyle()
     RegisterRows();
 
     // Parse table
-    ParseTable();
+    Parse();
 
 
     //Comment:The old code doesn't check if the LwpFoundry pointer is NULL,
-    //        So the NULL pointer cause sodc frozee. Add code to check the
-    //        the pointer.
+    //		  So the NULL pointer cause sodc frozee. Add code to check the
+    //		  the pointer.
     //New Code
     if( GetFoundry() && GetTable() )
 
@@ -773,7 +773,7 @@ void LwpTableLayout::RegisterStyle()
  * @short   read table layout
  * @param   none
  */
-void LwpTableLayout::ParseTable()
+void LwpTableLayout::Parse()
 {
     // get super table layout
     LwpSuperTableLayout * pSuper = GetSuperTableLayout();
@@ -852,6 +852,7 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
 {
     sal_uInt16 nContentRow;
     sal_uInt8 nCol = static_cast<sal_uInt8>(GetTable()->GetColumn());
+    sal_uInt8 nFirstColSpann = 1;
     XFTable* pTmpTable = new XFTable;
     XFRow* pXFRow;
 
@@ -870,7 +871,6 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
     }
     else
     {
-        sal_uInt8 nFirstColSpann = 1;
         bFindFlag = FindSplitColMark(pTmpTable,CellMark,nFirstColSpann);
 
         if (bFindFlag)//split to 2 cells
@@ -1073,8 +1073,9 @@ sal_Bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMar
 void LwpTableLayout::ConvertTable(XFTable* pXFTable,sal_uInt16 nStartRow,
                 sal_uInt16 nEndRow,sal_uInt8 nStartCol,sal_uInt8 nEndCol)
 {
-    //out put column info TO BE CHANGED
+    //out put column info TO BE CHANGED,note by ,2005/4/4
     ConvertColumn(pXFTable,nStartCol,nEndCol);
+    //note end
 
     std::map<sal_uInt16,LwpRowLayout*>::iterator iter;
 
@@ -1112,8 +1113,8 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
 {
 
     //Comment:The old code doesn't check if the LwpFoundry pointer is NULL,
-    //        So the NULL pointer cause sodc frozee. Add code to check the
-    //        the pointer.
+    //		  So the NULL pointer cause sodc frozee. Add code to check the
+    //		  the pointer.
     //New Code
     if( !pFoundry ) return;
 
@@ -1193,9 +1194,11 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
     if(pCellLayout)
     {
         XFParagraph * pXFPara = NULL;
+        //mod by ,fix bug 2759,2006/3/22
         pXFPara = static_cast<XFParagraph*>(pCell->FindFirstContent(enumXFContentPara));
         if (!pXFPara)
             return;
+        //mod end
         XFColor aColor;
         XFColor aNullColor = XFColor();
 
@@ -1391,7 +1394,7 @@ XFCell* LwpTableLayout::GetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol)
     pos.first = nRow;
     pos.second = nCol;
     std::map<std::pair<sal_uInt16,sal_uInt8>,XFCell*>::iterator iter;
-    iter =  m_CellsMap.find(pos);
+    iter = 	m_CellsMap.find(pos);
     if (iter == m_CellsMap.end())
         return NULL;
     return iter->second;
@@ -1431,8 +1434,8 @@ void LwpColumnLayout::Read()
 
     sal_uInt16 colid;
 
-    colid = pStrm->QuickReaduInt16();   // forced to lushort
-    ccolid = (sal_uInt8)colid;  // Phillip
+    colid = pStrm->QuickReaduInt16();	// forced to lushort
+    ccolid = (sal_uInt8)colid;	// Phillip
     cwidth = pStrm->QuickReadInt32();
 
     pStrm->SkipExtra();

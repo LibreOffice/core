@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,10 @@ class SwTableLines;
 class SwTable;
 class SwHTMLTableLayout;
 class SvxBrushItem;
-
-namespace editeng { class SvxBorderLine; }
+class SvxBorderLine;
 
 //---------------------------------------------------------------------------
-//       Code aus dem HTML-Filter fuers schreiben von Tabellen
+// 		 Code aus dem HTML-Filter fuers schreiben von Tabellen
 //---------------------------------------------------------------------------
 
 #define COLFUZZY 20
@@ -58,51 +57,51 @@ namespace editeng { class SvxBorderLine; }
 
 class SwWriteTableCell
 {
-    const SwTableBox *pBox;     // SwTableBox der Zelle
-    const SvxBrushItem *pBackground;    // geerbter Hintergrund einer Zeile
+    const SwTableBox *pBox;		// SwTableBox der Zelle
+    const SvxBrushItem *pBackground;	// geerbter Hintergrund einer Zeile
 
-    long nHeight;               // fixe/Mindest-Hoehe der Zeile
+    long nHeight;				// fixe/Mindest-Hoehe der Zeile
 
-    sal_uInt32 nWidthOpt;          // Breite aus Option;
+    USHORT nWidthOpt;			// Breite aus Option;
 
-    sal_uInt16 nRow;                // Start-Zeile
-    sal_uInt16 nCol;                // Start-Spalte
+    USHORT nRow;				// Start-Zeile
+    USHORT nCol;				// Start-Spalte
 
-    sal_uInt16 nRowSpan;            // ueberspannte Zeilen
-    sal_uInt16 nColSpan;            // ueberspannte Spalten
+    USHORT nRowSpan;			// ueberspannte Zeilen
+    USHORT nColSpan;			// ueberspannte Spalten
 
 
-    sal_Bool bPrcWidthOpt;
+    BOOL bPrcWidthOpt;
 
 public:
 
-    SwWriteTableCell(const SwTableBox *pB, sal_uInt16 nR, sal_uInt16 nC, sal_uInt16 nRSpan,
-        sal_uInt16 nCSpan, long nHght, const SvxBrushItem *pBGround)
+    SwWriteTableCell(const SwTableBox *pB, USHORT nR, USHORT nC, USHORT nRSpan,
+        USHORT nCSpan, long nHght, const SvxBrushItem *pBGround)
     : pBox( pB ), pBackground( pBGround ), nHeight( nHght ), nWidthOpt( 0 ),
     nRow( nR ), nCol( nC ), nRowSpan( nRSpan ), nColSpan( nCSpan ),
-    bPrcWidthOpt( sal_False )
+    bPrcWidthOpt( FALSE )
     {}
 
     const SwTableBox *GetBox() const { return pBox; }
 
-    sal_uInt16 GetRow() const { return nRow; }
-    sal_uInt16 GetCol() const { return nCol; }
+    USHORT GetRow() const { return nRow; }
+    USHORT GetCol() const { return nCol; }
 
-    sal_uInt16 GetRowSpan() const { return nRowSpan; }
-    sal_uInt16 GetColSpan() const { return nColSpan; }
+    USHORT GetRowSpan() const { return nRowSpan; }
+    USHORT GetColSpan() const { return nColSpan; }
 
     long GetHeight() const { return nHeight; }
     sal_Int16 GetVertOri() const;
 
     const SvxBrushItem *GetBackground() const { return pBackground; }
 
-    void SetWidthOpt( sal_uInt16 nWidth, sal_Bool bPrc )
+    void SetWidthOpt( USHORT nWidth, BOOL bPrc )
     {
         nWidthOpt = nWidth; bPrcWidthOpt = bPrc;
     }
 
-    sal_uInt32 GetWidthOpt() const { return nWidthOpt; }
-    sal_Bool HasPrcWidthOpt() const { return bPrcWidthOpt; }
+    USHORT GetWidthOpt() const { return nWidthOpt; }
+    BOOL HasPrcWidthOpt() const { return bPrcWidthOpt; }
 };
 
 typedef SwWriteTableCell *SwWriteTableCellPtr;
@@ -113,11 +112,11 @@ SV_DECL_PTRARR_DEL( SwWriteTableCells, SwWriteTableCellPtr, 5, 5 )
 
 class SwWriteTableRow
 {
-    SwWriteTableCells aCells;       // Alle Zellen der Rows
+    SwWriteTableCells aCells;		// Alle Zellen der Rows
     const SvxBrushItem *pBackground;// Hintergrund
 
-    long nPos;                  // End-Position (twips) der Zeile
-    sal_Bool mbUseLayoutHeights;
+    long nPos;					// End-Position (twips) der Zeile
+    BOOL mbUseLayoutHeights;
 
     // Forbidden and not implemented.
     SwWriteTableRow();
@@ -130,17 +129,17 @@ protected:
 
 public:
 
-    sal_uInt16 nTopBorder;              // Dicke der oberen/unteren Umrandugen
-    sal_uInt16 nBottomBorder;
+    USHORT nTopBorder;				// Dicke der oberen/unteren Umrandugen
+    USHORT nBottomBorder;
 
-    sal_Bool bTopBorder : 1;            // Welche Umrandungen sind da?
-    sal_Bool bBottomBorder : 1;
+    BOOL bTopBorder : 1;			// Welche Umrandungen sind da?
+    BOOL bBottomBorder : 1;
 
-    SwWriteTableRow( long nPos, sal_Bool bUseLayoutHeights );
+    SwWriteTableRow( long nPos, BOOL bUseLayoutHeights );
 
     SwWriteTableCell *AddCell( const SwTableBox *pBox,
-                                 sal_uInt16 nRow, sal_uInt16 nCol,
-                                 sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
+                                 USHORT nRow, USHORT nCol,
+                                 USHORT nRowSpan, USHORT nColSpan,
                                  long nHeight,
                                  const SvxBrushItem *pBackground );
 
@@ -150,11 +149,11 @@ public:
     }
     const SvxBrushItem *GetBackground() const { return pBackground; }
 
-    sal_Bool HasTopBorder() const                   { return bTopBorder; }
-    sal_Bool HasBottomBorder() const                { return bBottomBorder; }
+    BOOL HasTopBorder() const 					{ return bTopBorder; }
+    BOOL HasBottomBorder() const 				{ return bBottomBorder; }
 
-    long GetPos() const                         { return nPos; }
-    const SwWriteTableCells& GetCells() const   { return aCells; }
+    long GetPos() const							{ return nPos; }
+    const SwWriteTableCells& GetCells() const	{ return aCells; }
 
     inline int operator==( const SwWriteTableRow& rRow ) const;
     inline int operator<( const SwWriteTableRow& rRow2 ) const;
@@ -182,39 +181,39 @@ SV_DECL_PTRARR_SORT_DEL( SwWriteTableRows, SwWriteTableRowPtr, 5, 5 )
 
 class SwWriteTableCol
 {
-    sal_uInt32 nPos;                        // End Position der Spalte
+    USHORT nPos;						// End Position der Spalte
 
-    sal_uInt32 nWidthOpt;
+    USHORT nWidthOpt;
 
-    sal_Bool bRelWidthOpt : 1;
-    sal_Bool bOutWidth : 1;                 // Spaltenbreite ausgeben?
+    BOOL bRelWidthOpt : 1;
+    BOOL bOutWidth : 1;					// Spaltenbreite ausgeben?
 
 public:
-    sal_Bool bLeftBorder : 1;               // Welche Umrandungen sind da?
-    sal_Bool bRightBorder : 1;
+    BOOL bLeftBorder : 1;				// Welche Umrandungen sind da?
+    BOOL bRightBorder : 1;
 
-    SwWriteTableCol( sal_uInt32 nPosition );
+    SwWriteTableCol( USHORT nPosition );
 
-    sal_uInt32 GetPos() const                       { return nPos; }
+    USHORT GetPos() const 						{ return nPos; }
 
-    void SetLeftBorder( sal_Bool bBorder )          { bLeftBorder = bBorder; }
-    sal_Bool HasLeftBorder() const                  { return bLeftBorder; }
+    void SetLeftBorder( BOOL bBorder ) 			{ bLeftBorder = bBorder; }
+    BOOL HasLeftBorder() const 					{ return bLeftBorder; }
 
-    void SetRightBorder( sal_Bool bBorder )         { bRightBorder = bBorder; }
-    sal_Bool HasRightBorder() const                 { return bRightBorder; }
+    void SetRightBorder( BOOL bBorder )			{ bRightBorder = bBorder; }
+    BOOL HasRightBorder() const					{ return bRightBorder; }
 
-    void SetOutWidth( sal_Bool bSet )               { bOutWidth = bSet; }
-    sal_Bool GetOutWidth() const                    { return bOutWidth; }
+    void SetOutWidth( BOOL bSet ) 				{ bOutWidth = bSet; }
+    BOOL GetOutWidth() const 					{ return bOutWidth; }
 
     inline int operator==( const SwWriteTableCol& rCol ) const;
     inline int operator<( const SwWriteTableCol& rCol ) const;
 
-    void SetWidthOpt( sal_uInt32 nWidth, sal_Bool bRel )
+    void SetWidthOpt( USHORT nWidth, BOOL bRel )
     {
         nWidthOpt = nWidth; bRelWidthOpt = bRel;
     }
-    sal_uInt32 GetWidthOpt() const                 { return nWidthOpt; }
-    sal_Bool HasRelWidthOpt() const                 { return bRelWidthOpt; }
+    USHORT GetWidthOpt() const					{ return nWidthOpt; }
+    BOOL HasRelWidthOpt() const 				{ return bRelWidthOpt; }
 };
 
 inline int SwWriteTableCol::operator==( const SwWriteTableCol& rCol ) const
@@ -240,73 +239,73 @@ SV_DECL_PTRARR_SORT_DEL( SwWriteTableCols, SwWriteTableColPtr, 5, 5 )
 class SW_DLLPUBLIC SwWriteTable
 {
 protected:
-    SwWriteTableCols aCols; // alle Spalten
-    SwWriteTableRows aRows; // alle Zellen
+    SwWriteTableCols aCols;	// alle Spalten
+    SwWriteTableRows aRows;	// alle Zellen
 
-    sal_uInt32 nBorderColor;        // Umrandungsfarbe
+    UINT32 nBorderColor;		// Umrandungsfarbe
 
-    sal_uInt16 nCellSpacing;        // Dicke der inneren Umrandung
-    sal_uInt16 nCellPadding;        // Absatnd Umrandung-Inhalt
+    USHORT nCellSpacing;		// Dicke der inneren Umrandung
+    USHORT nCellPadding;		// Absatnd Umrandung-Inhalt
 
-    sal_uInt16 nBorder;             // Dicke der ausseren Umrandung
-    sal_uInt16 nInnerBorder;        // Dicke der inneren Umrandung
-    sal_uInt32 nBaseWidth;            // Bezugsgroesse fur Breiten SwFmtFrmSize
+    USHORT nBorder;				// Dicke der ausseren Umrandung
+    USHORT nInnerBorder;		// Dicke der inneren Umrandung
+    USHORT nBaseWidth;			// Bezugsgroesse fur Breiten SwFmtFrmSize
 
-    sal_uInt16 nHeadEndRow;         // letzte Zeile des Tabellen-Kopfes
+    USHORT nHeadEndRow;			// letzte Zeile des Tabellen-Kopfes
 
-    sal_uInt16 nLeftSub;
-    sal_uInt16 nRightSub;
+    USHORT nLeftSub;
+    USHORT nRightSub;
 
-    sal_uInt32 nTabWidth;              // Absolute/Relative Breite der Tabelle
+    long nTabWidth;				// Absolute/Relative Breite der Tabelle
 
-    sal_Bool bRelWidths : 1;        // Breiten relativ ausgeben?
-    sal_Bool bUseLayoutHeights : 1; // Layout zur Hoehenbestimmung nehmen?
+    BOOL bRelWidths : 1;		// Breiten relativ ausgeben?
+    BOOL bUseLayoutHeights : 1;	// Layout zur Hoehenbestimmung nehmen?
 #if OSL_DEBUG_LEVEL > 1
-    sal_Bool bGetLineHeightCalled : 1;
+    BOOL bGetLineHeightCalled : 1;
 #endif
 
-    sal_Bool bColsOption : 1;
-    sal_Bool bColTags : 1;
-    sal_Bool bLayoutExport : 1;
-    sal_Bool bCollectBorderWidth : 1;
+    BOOL bColsOption : 1;
+    BOOL bColTags : 1;
+    BOOL bLayoutExport : 1;
+    BOOL bCollectBorderWidth : 1;
 
-    virtual sal_Bool ShouldExpandSub( const SwTableBox *pBox,
-                                sal_Bool bExpandedBefore, sal_uInt16 nDepth ) const;
+    virtual BOOL ShouldExpandSub( const SwTableBox *pBox,
+                                BOOL bExpandedBefore, USHORT nDepth ) const;
 
-    void CollectTableRowsCols( long nStartRPos, sal_uInt32 nStartCPos,
+    void CollectTableRowsCols( long nStartRPos, USHORT nStartCPos,
                                long nParentLineHeight,
-                               sal_uInt32 nParentLineWidth,
+                               USHORT nParentLineWidth,
                                const SwTableLines& rLines,
-                               sal_uInt16 nDepth );
+                               USHORT nDepth );
 
-    void FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
-                            sal_uInt32 nStartCPos, sal_uInt16 nStartCol,
+    void FillTableRowsCols( long nStartRPos, USHORT nStartRow,
+                            USHORT nStartCPos, USHORT nStartCol,
                             long nParentLineHeight,
-                            sal_uInt32 nParentLineWidth,
+                            USHORT nParentLineWidth,
                             const SwTableLines& rLines,
                             const SvxBrushItem* pLineBrush,
-                            sal_uInt16 nDepth,
+                            USHORT nDepth,
                             sal_uInt16 nNumOfHeaderRows );
 
-    void MergeBorders( const editeng::SvxBorderLine* pBorderLine, sal_Bool bTable );
+    void MergeBorders( const SvxBorderLine* pBorderLine, BOOL bTable );
 
-    sal_uInt16 MergeBoxBorders( const SwTableBox *pBox, sal_uInt16 nRow, sal_uInt16 nCol,
-                            sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
-                            sal_uInt16 &rTopBorder, sal_uInt16 &rBottomBorder );
+    USHORT MergeBoxBorders( const SwTableBox *pBox, USHORT nRow, USHORT nCol,
+                            USHORT nRowSpan, USHORT nColSpan,
+                            USHORT &rTopBorder, USHORT &rBottomBorder );
 
-    sal_uInt32 GetBaseWidth() const { return nBaseWidth; }
+    USHORT GetBaseWidth() const { return nBaseWidth; }
 
-    sal_Bool HasRelWidths() const { return bRelWidths; }
+    BOOL HasRelWidths() const { return bRelWidths; }
 
 public:
-    static sal_uInt32 GetBoxWidth( const SwTableBox *pBox );
+    static long GetBoxWidth( const SwTableBox *pBox );
+    
+    USHORT GetRawWidth( USHORT nCol, USHORT nColSpan ) const;
+    USHORT GetAbsWidth( USHORT nCol, USHORT nColSpan ) const;
+    USHORT GetRelWidth( USHORT nCol, USHORT nColSpan ) const;
+    USHORT GetPrcWidth( USHORT nCol, USHORT nColSpan ) const;
 
-    sal_uInt32 GetRawWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
-    sal_uInt16 GetAbsWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
-    sal_uInt16 GetRelWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
-    sal_uInt16 GetPrcWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
-
-    long GetAbsHeight( long nRawWidth, sal_uInt16 nRow, sal_uInt16 nRowSpan ) const;
+    long GetAbsHeight( long nRawWidth, USHORT nRow, USHORT nRowSpan ) const;
 protected:
 
     long GetLineHeight( const SwTableLine *pLine );
@@ -314,14 +313,14 @@ protected:
     const SvxBrushItem *GetLineBrush( const SwTableBox *pBox,
                                       SwWriteTableRow *pRow );
 
-    sal_uInt16 GetLeftSpace( sal_uInt16 nCol ) const;
-    sal_uInt16 GetRightSpace( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
+    USHORT GetLeftSpace( USHORT nCol ) const;
+    USHORT GetRightSpace( USHORT nCol, USHORT nColSpan ) const;
 
 
 public:
-    SwWriteTable( const SwTableLines& rLines, long nWidth, sal_uInt32 nBWidth,
-                    sal_Bool bRel, sal_uInt16 nMaxDepth = USHRT_MAX,
-                    sal_uInt16 nLeftSub=0, sal_uInt16 nRightSub=0, sal_uInt32 nNumOfRowsToRepeat=0 );
+    SwWriteTable( const SwTableLines& rLines, long nWidth, USHORT nBWidth,
+                    BOOL bRel, USHORT nMaxDepth = USHRT_MAX,
+                    USHORT nLeftSub=0, USHORT nRightSub=0, sal_uInt32 nNumOfRowsToRepeat=0 );
     SwWriteTable( const SwHTMLTableLayout *pLayoutInfo );
     virtual ~SwWriteTable();
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@ protected:
 
 public:
 
-    TokenContext( SvXMLImport& rImport,
-                  sal_uInt16 nPrefix,
+    TokenContext( SvXMLImport& rImport, 
+                  USHORT nPrefix,
                   const ::rtl::OUString& rLocalName,
                   const SvXMLTokenMapEntry* pAttributes = NULL,
                   const SvXMLTokenMapEntry* pChildren = NULL );
@@ -77,15 +77,15 @@ public:
     /** call HandleAttribute for each attribute in the token map;
      * create a warning for all others. Classes that wish to override
      * StartElement need to call the parent method. */
-    virtual void StartElement(
+    virtual void StartElement( 
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     /** call HandleChild for each child element in the token map;
      * create a warning for all others. Classes that wish to override
      * CreateChildCotnenxt may want to call the parent method for
      * handling of defaults. */
-    virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix,
+    virtual SvXMLImportContext* CreateChildContext( 
+        USHORT nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -97,12 +97,12 @@ public:
 
 protected:
     /** will be called for each attribute */
-    virtual void HandleAttribute(
-        sal_uInt16 nToken,
+    virtual void HandleAttribute( 
+        sal_uInt16 nToken, 
         const rtl::OUString& rValue ) = 0;
 
     /** will be called for each child element */
-    virtual SvXMLImportContext* HandleChild(
+    virtual SvXMLImportContext* HandleChild( 
         sal_uInt16 nToken,
 
         // the following attributes are mainly to be used for child

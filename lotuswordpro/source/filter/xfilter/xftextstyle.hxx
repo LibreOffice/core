@@ -58,14 +58,20 @@
  * Style for <text:p> or <text:h> or <text:span>
  * Now we have only font attributes.
  ************************************************************************/
-#ifndef     _XFTEXTSTYLE_HXX
-#define     _XFTEXTSTYLE_HXX
+/*************************************************************************
+ * Change History
+ * 2004-12-26 create this file.
+ * 2005-01-04 Change the static style id.
+ * 2005-01-20 Get rid of the static id.
+ ************************************************************************/
+#ifndef		_XFTEXTSTYLE_HXX
+#define		_XFTEXTSTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
+#include	"xfglobal.hxx"
+#include	"xfstyle.hxx"
 
-class   IXFStream;
-class   XFFont;
+class	IXFStream;
+class	XFFont;
 
 class XFTextStyle : public XFStyle
 {
@@ -76,21 +82,21 @@ public:
 
 public:
     /**
-     * @descr:  set the font for the text span.
+     * @descr:	set the font for the text span.
      */
-    void    SetFont(XFFont *font);
+    void	SetFont(XFFont *font);
 
-    XFFont* GetFont(){ return m_pFont; }
+    XFFont*	GetFont(){ return m_pFont; }
 
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle	GetStyleFamily();
 
-    virtual sal_Bool    Equal(IXFStyle *pStyle);
+    virtual sal_Bool	Equal(IXFStyle *pStyle);
 
-    virtual void        ToXml(IXFStream *strm);
+    virtual void		ToXml(IXFStream *strm);
 
 private:
-    XFFont              *m_pFont;
+    XFFont				*m_pFont;
 };
 
 #endif

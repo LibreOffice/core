@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,35 +29,38 @@
 #ifndef _RSCLST_HXX
 #define _RSCLST_HXX
 
+#include <tools/list.hxx>
 #include <rscall.h>
 
 class REResourceList;
 
-class REResourceList
+DECLARE_LIST( RESubResourceList, REResourceList * )
+
+class REResourceList : public RESubResourceList
 {
 protected:
     REResourceList*  pParent;
-    RscId            aRscId;    //Id und Name des Resourceobjektes
-    ByteString       aClassName;
-    sal_Bool             bVisible;
+    RscId			 aRscId;	//Id und Name des Resourceobjektes
+    ByteString		 aClassName;
+    BOOL			 bVisible;
 
 public:
                      REResourceList();
                      REResourceList( REResourceList * pParentList,
                                      ByteString& rClassName,
                                      const RscId & rResourceID,
-                                     sal_Bool   bVisible = sal_False );
+                                     BOOL	bVisible = FALSE );
                      ~REResourceList();
 
-    REResourceList*  GetParent()     { return pParent; }
-    ByteString       GetObjName()    { return aRscId.GetName(); }
-    ByteString       GetClassName()  { return aClassName; }
-    RscId            GetRscId()      { return aRscId; }
-    void             SetRscId( const RscId & rId ){ aRscId = rId; }
+    REResourceList*  GetParent()	 { return pParent; }
+    ByteString		 GetObjName()	 { return aRscId.GetName(); }
+    ByteString		 GetClassName()  { return aClassName; }
+    RscId			 GetRscId() 	 { return aRscId; }
+    void			 SetRscId( const RscId & rId ){ aRscId = rId; }
 
-    void             SetVisible( sal_Bool bVis )
+    void			 SetVisible( BOOL bVis )
                                      { bVisible = bVis; }
-    sal_Bool             IsVisible()     { return bVisible; }
+    BOOL			 IsVisible()	 { return bVisible; }
 };
 
 #endif // _RSCLST_HXX

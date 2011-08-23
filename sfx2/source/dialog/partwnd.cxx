@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
 )
     : SfxChildWindow( pParentWnd, nId )
 {
-    // Create Window
+    // Window erzeugen
     pWindow = new SfxPartDockWnd_Impl( pBindings, this, pParentWnd, WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK );
     eChildAlignment = SFX_ALIGN_TOP;
     if ( pInfo )
@@ -81,7 +81,7 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
     pWindow->SetSizePixel( Size( 175, 175 ) );
 
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
-    SetHideNotDelete( sal_True );
+    SetHideNotDelete( TRUE );
 }
 
 SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
@@ -95,9 +95,37 @@ SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
     // and we need a valid pMgr for further operations ...
 
     SfxPartDockWnd_Impl* pWin = (SfxPartDockWnd_Impl*) pWindow;
-
+//    if( pWin != NULL && !xFrame.is() )
+//        pWin->ReleaseChildWindow_Impl();
+/*
+    // Release frame and window.
+    // If frame reference is valid here ... start dieing from inside by calling dispose().
+    SetFrame( NULL );
+    pWindow = NULL;
+*/
     if ( pWin && xFrame == pWin->GetBindings().GetActiveFrame() )
         pWin->GetBindings().SetActiveFrame( NULL );
+/*
+    if( xFrame.is() )
+    {
+        try
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > xCloseable  ( xFrame, ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDisposeable( xFrame, ::com::sun::star::uno::UNO_QUERY );
+            if (xCloseable.is())
+                xCloseable->close(sal_True);
+            else
+            if (xDisposeable.is())
+                xDisposeable->dispose();
+        }
+        catch( ::com::sun::star::util::CloseVetoException& )
+        {
+        }
+        catch( ::com::sun::star::lang::DisposedException& )
+        {
+        }
+    }
+ */
 }
 
 sal_Bool SfxPartChildWnd_Impl::QueryClose()
@@ -123,13 +151,13 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
             DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), ::com::sun::star::uno::UNO_QUERY );
     xFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet(
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet( 
         xFrame, ::com::sun::star::uno::UNO_QUERY );
     try
     {
         const ::rtl::OUString aLayoutManager( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xLMPropSet;
-
+        
         ::com::sun::star::uno::Any a = xPropSet->getPropertyValue( aLayoutManager );
         if ( a >>= xLMPropSet )
         {
@@ -154,7 +182,7 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
             xSupp->getFrames()->append( xFrame );
     }
     else {
-        OSL_FAIL("Bindings without Dispatcher!");
+        DBG_ERROR("Bindings without Dispatcher!");
     }
 }
 
@@ -173,9 +201,8 @@ Rectangle impl_Rectangle_Struct2Object( const ::com::sun::star::awt::Rectangle& 
 
 void SfxPartDockWnd_Impl::Resize()
 
-/*  [Description]
-
-    Adjusting the size of the controls wrt the new window size
+/*	[Beschreibung]
+    Anpassung der Gr"osse der Controls an die neue Windowgr"osse
 */
 
 {

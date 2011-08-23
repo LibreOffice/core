@@ -7,6 +7,10 @@
  
   OpenOffice.org - a multi-platform office productivity suite
  
+  $RCSfile: fastresources_wml.xsl,v $
+ 
+  $Revision: 1.3 $
+ 
   This file is part of OpenOffice.org.
  
   OpenOffice.org is free software: you can redistribute it and/or modify
@@ -65,18 +69,19 @@
 
 <xsl:template name="factoryactiondecls">
     <xsl:variable name="ns" select="@name"/>
-    <xsl:for-each select="resource/action[not(@name='characters')]">
+    <xsl:for-each select="resource/action">
         <xsl:sort select="@name"/>
         <xsl:if test="generate-id(key('actions', @name)[ancestor::namespace/@name=$ns][1]) = generate-id(.)">
             <xsl:text>
     void </xsl:text>
             <xsl:value-of select="@name"/>
             <xsl:text>Action(OOXMLFastContextHandler * pHandler</xsl:text>
+            <xsl:if test="@name='characters'">
+                <xsl:text>, const ::rtl::OUString &amp; sText</xsl:text>
+            </xsl:if>
             <xsl:text>);</xsl:text>
         </xsl:if>
     </xsl:for-each>
-    <xsl:text>
-    virtual void charactersAction(OOXMLFastContextHandler * pHandler, const ::rtl::OUString &amp; sText);</xsl:text>
 </xsl:template>
 
 <!-- factorydecl -->
@@ -101,10 +106,6 @@ public:
     virtual string getDefineName(Id nId) const;</xsl:text>
     <xsl:call-template name="factoryactiondecls"/>
     virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
-
-#ifdef DEBUG_FACTORY
-    virtual string getName() const;
-#endif
     <xsl:text>
     
     virtual ~</xsl:text>

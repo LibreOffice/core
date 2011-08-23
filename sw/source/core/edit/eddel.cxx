@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,15 +32,15 @@
 
 #include <hintids.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <editsh.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>		// fuer die UndoIds
 #include <edimp.hxx>
 #include <IMark.hxx>
 #include <docary.hxx>
 #include <SwRewriter.hxx>
+#include <undobj.hxx>
 #include <globals.hrc>
 
 #include <comcore.hrc>
@@ -50,7 +50,7 @@
  * Loeschen
  ************************************************************/
 
-void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
+void SwEditShell::DeleteSel( SwPaM& rPam, BOOL* pUndo )
 {
     // nur bei Selektion
     if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark())
@@ -59,18 +59,18 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
     // besteht eine Selection in einer Tabelle ?
     // dann nur den Inhalt der selektierten Boxen loeschen
     // jetzt gibt es 2 Faelle die beachtet werden muessen:
-    //  1. Point und Mark stehen in einer Box, Selection normal loeschen
-    //  2. Point und Mark stehen in unterschiedlichen Boxen, alle
+    //	1. Point und Mark stehen in einer Box, Selection normal loeschen
+    //	2. Point und Mark stehen in unterschiedlichen Boxen, alle
     // selektierten Boxen suchen in den Inhalt loeschen
     if( rPam.GetNode()->FindTableNode() &&
         rPam.GetNode()->StartOfSectionNode() !=
-        rPam.GetNode(sal_False)->StartOfSectionNode() )
+        rPam.GetNode(FALSE)->StartOfSectionNode() )
     {
         // in Tabellen das Undo gruppieren
         if( pUndo && !*pUndo )
         {
-            GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
-            *pUndo = sal_True;
+            GetDoc()->StartUndo( UNDO_START, NULL );
+            *pUndo = TRUE;
         }
         SwPaM aDelPam( *rPam.Start() );
         const SwPosition* pEndSelPos = rPam.End();
@@ -81,7 +81,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
             if( pEndSelPos->nNode.GetIndex() <= rEndNd.GetIndex() )
             {
                 *aDelPam.GetPoint() = *pEndSelPos;
-                pEndSelPos = 0;     // Pointer als Flag missbrauchen
+                pEndSelPos = 0;		// Pointer als Flag missbrauchen
             }
             else
             {
@@ -91,22 +91,22 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
             }
                 // geschuetze Boxen ueberspringen !
             if( !pNd->IsCntntNode() ||
-                !((SwCntntNode*)pNd)->getLayoutFrm( GetLayout() )->IsProtected() )
+                !((SwCntntNode*)pNd)->GetFrm()->IsProtected() )
             {
                 // alles loeschen
                 GetDoc()->DeleteAndJoin( aDelPam );
                 SaveTblBoxCntnt( aDelPam.GetPoint() );
             }
 
-            if( !pEndSelPos )               // am Ende der Selection
+            if( !pEndSelPos )				// am Ende der Selection
                 break;
             aDelPam.DeleteMark();
-            aDelPam.Move( fnMoveForward, fnGoCntnt );   // naechste Box
+            aDelPam.Move( fnMoveForward, fnGoCntnt );	// naechste Box
         } while( pEndSelPos );
     }
     else
     {
-            // alles loeschen
+            // alles loeschen		
         GetDoc()->DeleteAndJoin( rPam );
         SaveTblBoxCntnt( rPam.GetPoint() );
     }
@@ -124,13 +124,13 @@ long SwEditShell::Delete()
     {
         StartAllAction();
 
-        sal_Bool bUndo = GetCrsr()->GetNext() != GetCrsr();
+        BOOL bUndo = GetCrsr()->GetNext() != GetCrsr();
         if( bUndo )     // mehr als eine Selection ?
         {
             SwRewriter aRewriter;
             aRewriter.AddRule(UNDO_ARG1, String(SW_RES(STR_MULTISEL)));
 
-            GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_DELETE, &aRewriter);
+            GetDoc()->StartUndo( UNDO_DELETE, &aRewriter );
         }
 
         FOREACHPAM_START(this)
@@ -139,9 +139,7 @@ long SwEditShell::Delete()
 
         // falls eine Undo-Klammerung, dann hier beenden
         if( bUndo )
-        {
-            GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
-        }
+            GetDoc()->EndUndo( UNDO_DELETE, NULL );
         EndAllAction();
         nRet = 1;
     }
@@ -162,7 +160,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     {
         SwPosition * pPos = 0;
         boost::shared_ptr<SwPosition> pInsertPos;
-        sal_uInt16 nMove = 0;
+        USHORT nMove = 0;
         FOREACHPAM_START(this)
 
             if( !pPos )
@@ -178,12 +176,12 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
                     pPos = pDestShell->GetCrsr()->GetPoint();
             }
             if( IsBlockMode() )
-            {   // In block mode different insert positions will be calculated
+            {	// In block mode different insert positions will be calculated
                 // by simulated cursor movements from the given first insert position
                 if( nMove )
                 {
                     SwCursor aCrsr( *pPos, 0, false);
-                    if( aCrsr.UpDown( sal_False, nMove, 0, 0 ) )
+                    if( aCrsr.UpDown( FALSE, nMove, 0, 0 ) )
                     {
                         pInsertPos.reset( new SwPosition( *aCrsr.GetPoint() ) );
                         aInsertList.push_back( pInsertPos );
@@ -195,22 +193,22 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             }
             SwPosition *pTmp = IsBlockMode() ? pInsertPos.get() : pPos;
             // Check if a selection would be copied into itself
-            if( pDestShell->GetDoc() == GetDoc() &&
+            if( pDestShell->GetDoc() == GetDoc() && 
                 *PCURCRSR->Start() <= *pTmp && *pTmp < *PCURCRSR->End() )
-                return sal_False;
+                return FALSE;
         FOREACHPAM_END()
     }
 
     pDestShell->StartAllAction();
     SwPosition *pPos = 0;
-    sal_Bool bRet = sal_False;
-    sal_Bool bFirstMove = sal_True;
+    BOOL bRet = FALSE;
+    BOOL bFirstMove = TRUE;
     SwNodeIndex aSttNdIdx( pDestShell->GetDoc()->GetNodes() );
     xub_StrLen nSttCntIdx = 0;
     // For block selection this list is filled with the insert positions
     std::list< boost::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
 
-    pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+    pDestShell->GetDoc()->StartUndo( UNDO_START, NULL );
     FOREACHPAM_START(this)
 
         if( !pPos )
@@ -246,7 +244,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             // Anfangs-Position vom neuen Bereich merken
             aSttNdIdx = pPos->nNode.GetIndex()-1;
             nSttCntIdx = pPos->nContent.GetIndex();
-            bFirstMove = sal_False;
+            bFirstMove = FALSE;
         }
 
         const bool bSuccess( GetDoc()->CopyRange( *PCURCRSR, *pPos, false ) );
@@ -256,7 +254,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         SwPaM aInsertPaM(*pPos, SwPosition(aSttNdIdx));
         pDestShell->GetDoc()->MakeUniqueNumRules(aInsertPaM);
 
-        bRet = sal_True;
+        bRet = TRUE;
     FOREACHPAM_END()
 
 
@@ -284,15 +282,15 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         OSL_ENSURE( pCmp->GetPoint()->nContent.GetIdxReg()
                     == pCmp->GetCntntNode(), "Point im falschen Node" );
         OSL_ENSURE( pCmp->GetMark()->nContent.GetIdxReg()
-                    == pCmp->GetCntntNode(sal_False), "Mark im falschen Node" );
-        sal_Bool bTst = *pCmp->GetPoint() == *pCmp->GetMark();
+                    == pCmp->GetCntntNode(FALSE), "Mark im falschen Node" );
+        BOOL bTst = *pCmp->GetPoint() == *pCmp->GetMark();
         (void) bTst;
     } while( pDestShell->GetCrsr() != ( pCmp = (SwPaM*)pCmp->GetNext() ) );
 }
 #endif
 
     // Undo-Klammerung hier beenden
-    pDestShell->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    pDestShell->GetDoc()->EndUndo( UNDO_END, NULL );
     pDestShell->EndAllAction();
 
     pDestShell->SaveTblBoxCntnt( pDestShell->GetCrsr()->GetPoint() );
@@ -304,18 +302,18 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     // Ersetz einen selektierten Bereich in einem TextNode mit dem
     // String. Ist fuers Suchen&Ersetzen gedacht.
     // bRegExpRplc - ersetze Tabs (\\t) und setze den gefundenen String
-    //               ein ( nicht \& )
-    //              z.B.: Fnd: "zzz", Repl: "xx\t\\t..&..\&"
-    //                      --> "xx\t<Tab>..zzz..&"
-sal_Bool SwEditShell::Replace( const String& rNewStr, sal_Bool bRegExpRplc )
+    //				 ein ( nicht \& )
+    // 				z.B.: Fnd: "zzz", Repl: "xx\t\\t..&..\&"
+    //						--> "xx\t<Tab>..zzz..&"
+BOOL SwEditShell::Replace( const String& rNewStr, BOOL bRegExpRplc )
 {
     SET_CURR_SHELL( this );
 
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     if( !HasReadonlySel() )
     {
         StartAllAction();
-        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
 
         FOREACHPAM_START(this)
             if( PCURCRSR->HasMark() && *PCURCRSR->GetMark() != *PCURCRSR->GetPoint() )
@@ -327,7 +325,7 @@ sal_Bool SwEditShell::Replace( const String& rNewStr, sal_Bool bRegExpRplc )
         FOREACHPAM_END()
 
         // Undo-Klammerung hier beenden
-        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
         EndAllAction();
     }
     return bRet;
@@ -335,9 +333,9 @@ sal_Bool SwEditShell::Replace( const String& rNewStr, sal_Bool bRegExpRplc )
 
 
     // Special-Methode fuer JOE's- Wizzards
-sal_Bool SwEditShell::DelFullPara()
+BOOL SwEditShell::DelFullPara()
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     if( !IsTableMode() )
     {
         SwPaM* pCrsr = GetCrsr();

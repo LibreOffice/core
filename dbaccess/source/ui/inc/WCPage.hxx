@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,24 +45,24 @@ namespace dbaui
     class OCopyTable : public OWizardPage
     {
     protected:
-        FixedText                               m_ftTableName;
-        Edit                                    m_edTableName;
+        FixedText								m_ftTableName;
+        Edit									m_edTableName;
         FixedLine                               m_aFL_Options;
-        RadioButton                             m_aRB_DefData;
-        RadioButton                             m_aRB_Def;
-        RadioButton                             m_aRB_View;
-        RadioButton                             m_aRB_AppendData;
-        CheckBox                                m_aCB_UseHeaderLine;
-        CheckBox                                m_aCB_PrimaryColumn;
-        FixedText                               m_aFT_KeyName;
-        Edit                                    m_edKeyName;
+        RadioButton								m_aRB_DefData;
+        RadioButton								m_aRB_Def;
+        RadioButton								m_aRB_View;
+        RadioButton								m_aRB_AppendData;
+        CheckBox								m_aCB_UseHeaderLine;
+        CheckBox								m_aCB_PrimaryColumn;
+        FixedText								m_aFT_KeyName;
+        Edit									m_edKeyName;
         sal_Int16                               m_nOldOperation;
 
-        OWizColumnSelect*                       m_pPage2;
-        OWizNormalExtend*                       m_pPage3;
+        OWizColumnSelect*						m_pPage2;
+        OWizNormalExtend*						m_pPage3;
 
-        sal_Bool                                    m_bPKeyAllowed;
-        sal_Bool                                    m_bUseHeaderAllowed;
+        BOOL									m_bPKeyAllowed;
+        BOOL                                    m_bUseHeaderAllowed;
 
 
         DECL_LINK( AppendDataClickHdl, Button* );
@@ -70,22 +70,24 @@ namespace dbaui
         DECL_LINK( KeyClickHdl, Button* );
 
         sal_Bool checkAppendData();
+        //--------dyf add
         void SetAppendDataRadio();
+        //--------add end
 
     public:
-        virtual void            Reset();
-        virtual void            ActivatePage();
-        virtual sal_Bool            LeavePage();
-        virtual String          GetTitle() const ;
+        virtual	void			Reset();
+        virtual void			ActivatePage();
+        virtual BOOL			LeavePage();
+        virtual String			GetTitle() const ;
 
         OCopyTable( Window * pParent );
         virtual ~OCopyTable();
 
-        inline sal_Bool IsOptionDefData()       const { return m_aRB_DefData.IsChecked(); }
-        inline sal_Bool IsOptionDef()           const { return m_aRB_Def.IsChecked(); }
-        inline sal_Bool IsOptionAppendData()    const { return m_aRB_AppendData.IsChecked(); }
-        inline sal_Bool IsOptionView()          const { return m_aRB_View.IsChecked(); }
-        inline sal_Bool UseHeaderLine()         const { return m_aCB_UseHeaderLine.IsChecked(); }
+        inline BOOL IsOptionDefData()		const { return m_aRB_DefData.IsChecked(); }
+        inline BOOL IsOptionDef()			const { return m_aRB_Def.IsChecked(); }
+        inline BOOL IsOptionAppendData()	const { return m_aRB_AppendData.IsChecked(); }
+        inline BOOL IsOptionView()			const { return m_aRB_View.IsChecked(); }
+        inline BOOL UseHeaderLine()			const { return m_aCB_UseHeaderLine.IsChecked(); }
         String      GetKeyName()            const { return m_edKeyName.GetText(); }
 
         void setCreateStyleAction();
@@ -95,7 +97,7 @@ namespace dbaui
         }
         inline void disallowUseHeaderLine()
         {
-            m_bUseHeaderAllowed = sal_False;
+            m_bUseHeaderAllowed = FALSE;
             m_aCB_UseHeaderLine.Disable();
         }
 

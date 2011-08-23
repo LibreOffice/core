@@ -42,13 +42,20 @@ DEPTARGET=veos2met
 CDEFS+= -DEDITDEBUG
 .ENDIF
 
+SRS1NAME=$(TARGET)
+SRC1FILES= 	dlgeos2.src	\
+            eos2mstr.src
 .IF "$(L10N_framework)"==""
-SLOFILES =  $(SLO)$/eos2met.obj
-
+SLOFILES = $(EXCEPTIONSFILES)
+EXCEPTIONSFILES= \
+            $(SLO)$/eos2met.obj \
+            $(SLO)$/dlgeos2.obj
 
 .ENDIF
 # ==========================================================================
 
+RESLIB1NAME=$(TARGET2)
+RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 .IF "$(L10N_framework)"==""
 SHL1TARGET=     eme$(DLLPOSTFIX)
 SHL1IMPLIB=     eos2met

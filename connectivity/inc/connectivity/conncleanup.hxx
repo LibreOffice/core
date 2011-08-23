@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,17 +43,17 @@ namespace dbtools
     //=====================================================================
     //= OAutoConnectionDisposer
     //=====================================================================
-    typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::beans::XPropertyChangeListener,
+    typedef ::cppu::WeakImplHelper2	<	::com::sun::star::beans::XPropertyChangeListener,
                                         ::com::sun::star::sdbc::XRowSetListener
-                                    >   OAutoConnectionDisposer_Base;
+                                    >	OAutoConnectionDisposer_Base;
 
     class OOO_DLLPUBLIC_DBTOOLS OAutoConnectionDisposer : public OAutoConnectionDisposer_Base
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     m_xOriginalConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > m_xRowSet; // needed to add as listener
-        sal_Bool    m_bRSListening          : 1; // true when we're listening on rowset
-        sal_Bool    m_bPropertyListening    : 1; // true when we're listening for property changes
+        sal_Bool	m_bRSListening			: 1; // true when we're listening on rowset 
+        sal_Bool	m_bPropertyListening	: 1; // true when we're listening for property changes
 
     public:
         /** constructs an object
@@ -81,17 +81,17 @@ namespace dbtools
     private:
         void clearConnection();
 
-        void        startRowSetListening();
-        void        stopRowSetListening();
-        sal_Bool    isRowSetListening() const { return m_bRSListening; }
+        void		startRowSetListening();
+        void		stopRowSetListening();
+        sal_Bool	isRowSetListening() const { return m_bRSListening; }
 
-        void        startPropertyListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps );
-        void        stopPropertyListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxEventSource );
-        sal_Bool    isPropertyListening() const { return m_bPropertyListening; }
+        void		startPropertyListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps );
+        void		stopPropertyListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxEventSource );
+        sal_Bool	isPropertyListening() const { return m_bPropertyListening; }
     };
 
 //.........................................................................
-}   // namespace dbtools
+}	// namespace dbtools
 //.........................................................................
 
 #endif // _CONNECTIVITY_CONNCLEANUP_HXX_

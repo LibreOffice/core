@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace connectivity
         class WpADOColumn : public WpOLEBase<_ADOColumn>
         {
         public:
-            WpADOColumn(_ADOColumn* pInt=NULL)  :   WpOLEBase<_ADOColumn>(pInt){}
+            WpADOColumn(_ADOColumn* pInt=NULL)	:	WpOLEBase<_ADOColumn>(pInt){}
             WpADOColumn(const WpADOColumn& rhs){operator=(rhs);}
 
             void Create();

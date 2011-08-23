@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 module com { module sun { module star { module rendering {
 
 /** A collection of tags for the individual components of a color.<p>
-
-    Color components usually correspond to physical attributes like the
+    
+    Color components usually corrspond to physical attributes like the
     amount of red colorant contained in an output color. This constant
     field enumerates the most common ones.
 
@@ -69,7 +69,7 @@ constants ColorComponentTag
     /// Green colorant from hexachrome color space
     const byte CMYKOG_GREEN=9;
 
-    /// Arbitrary extra spot color, e.g. Pantone
+    /// Arbitray extra spot color, e.g. pantone
     const byte SPOT=10;
 
     /// Index into palette

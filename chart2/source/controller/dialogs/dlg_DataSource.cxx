@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,8 @@ void DataSourceTabControl::EnableTabToggling()
 
 // ----------------------------------------
 
-sal_uInt16 DataSourceDialog::m_nLastPageId = 0;
+// static
+USHORT DataSourceDialog::m_nLastPageId = 0;
 
 DataSourceDialog::DataSourceDialog(
     Window * pParent,
@@ -221,7 +222,7 @@ void DataSourceDialog::setInvalidPage( TabPage * pTabPage )
 
     if( ! (m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid ))
     {
-        m_aBtnOK.Enable( sal_False );
+        m_aBtnOK.Enable( FALSE );
         OSL_ASSERT( m_pTabControl );
         // note: there seems to be no suitable mechanism to address pages by
         // identifier, at least it is unclear what the page identifiers are.
@@ -243,7 +244,7 @@ void DataSourceDialog::setValidPage( TabPage * pTabPage )
 
     if( m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid )
     {
-        m_aBtnOK.Enable( sal_True );
+        m_aBtnOK.Enable( TRUE );
         OSL_ASSERT( m_pTabControl );
         m_pTabControl->EnableTabToggling();
     }

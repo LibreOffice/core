@@ -28,6 +28,8 @@ PRJ=..$/..$/..
 
 PRJNAME=sal
 TARGET=qa_rtl_doublelock
+# this is removed at the moment because we need some enhancements
+# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -51,7 +53,7 @@ SHL1OBJS=  \
     $(SLO)$/rtl_doublelocking.obj
 
 SHL1TARGET= rtl_doublelocking
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
@@ -67,4 +69,4 @@ SLOFILES=$(SHL1OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk
+.INCLUDE : _cppunit.mk

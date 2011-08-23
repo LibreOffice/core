@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 //------------------------------
 class SdrLayerIdItem: public SfxUInt16Item {
 public:
-    SdrLayerIdItem(sal_uInt16 nId=0): SfxUInt16Item(SDRATTR_LAYERID,nId)  {}
+    SdrLayerIdItem(USHORT nId=0): SfxUInt16Item(SDRATTR_LAYERID,nId)  {}
     SdrLayerIdItem(SvStream& rIn): SfxUInt16Item(SDRATTR_LAYERID,rIn) {}
     SdrLayerID GetValue() const { return (SdrLayerID)SfxUInt16Item::GetValue(); }
 };

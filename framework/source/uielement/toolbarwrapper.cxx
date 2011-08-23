@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 
 #include <uielement/toolbarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <framework/actiontriggerhelper.hxx>
+#include <helper/actiontriggerhelper.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/toolbarmanager.hxx>
@@ -43,7 +43,7 @@
 #include <uielement/toolbar.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -55,7 +55,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #include <toolkit/unohlp.hxx>
@@ -175,7 +175,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {
-                    sal_uLong nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
+                    ULONG nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
 
                     pToolBar = new ToolBar( pWindow, nStyles );
                     m_xToolBarWindow = VCLUnoHelper::GetInterface( pToolBar );
@@ -194,7 +194,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                     // Fill toolbar with container contents
                     pToolBarManager->FillToolbar( m_xConfigData );
                     pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
-                    pToolBar->EnableCustomize( sal_True );
+                    pToolBar->EnableCustomize( TRUE );
                     ::Size aActSize( pToolBar->GetSizePixel() );
                     ::Size aSize( pToolBar->CalcWindowSizePixel() );
                     aSize.Width() = aActSize.Width();
@@ -209,7 +209,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 if ( pToolBar && pToolBarManager )
                 {
                     pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
-                    pToolBar->EnableCustomize( sal_True );
+                    pToolBar->EnableCustomize( TRUE );
                     ::Size aActSize( pToolBar->GetSizePixel() );
                     ::Size aSize( pToolBar->CalcWindowSizePixel() );
                     aSize.Width() = aActSize.Width();

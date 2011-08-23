@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,11 +88,11 @@ public class _XFramesSupplier extends MultiMethodTest {
                        log.println("Can't convert any");
                    }
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                   log.println("Exception occurred while calling getByIndex() method :") ;
+                   log.println("Exception occured while calling getByIndex() method :") ;
                    e.printStackTrace(log) ;
                    return;
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                   log.println("Exception occurred while calling getByIndex() method :") ;
+                   log.println("Exception occured while calling getByIndex() method :") ;
                    e.printStackTrace(log) ;
                    return;
                 }
@@ -136,11 +136,11 @@ public class _XFramesSupplier extends MultiMethodTest {
                     result = false ;
                 }
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occurred while calling getByIndex() method :") ;
+                    log.println("Exception occured while calling getByIndex() method :") ;
                     e.printStackTrace(log) ;
                     return;
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                    log.println("Exception occurred while calling getByIndex() method :") ;
+                    log.println("Exception occured while calling getByIndex() method :") ;
                     e.printStackTrace(log) ;
                     return;
             }
@@ -172,7 +172,7 @@ public class _XFramesSupplier extends MultiMethodTest {
                                 new Type(XFrame.class),frames.getByIndex(0));
                    } catch (com.sun.star.lang.IllegalArgumentException iae) {
                        log.println("Can't convert any");
-                   }
+                   }                    
                 else
                    try {
                        sFrame = (XFrame) AnyConverter.toObject(
@@ -181,11 +181,11 @@ public class _XFramesSupplier extends MultiMethodTest {
                        log.println("Can't convert any");
                    }
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occurred while calling getByIndex() method :") ;
+                    log.println("Exception occured while calling getByIndex() method :") ;
                     e.printStackTrace(log) ;
                     return;
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                    log.println("Exception occurred while calling getByIndex() method :") ;
+                    log.println("Exception occured while calling getByIndex() method :") ;
                     e.printStackTrace(log) ;
                     return;
             }

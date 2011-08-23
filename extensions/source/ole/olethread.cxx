@@ -54,7 +54,7 @@ void o2u_attachCurrentThread()
 
     if ((sal_Bool)(sal_IntPtr)oleThreadData.getData() != sal_True)
     {
-        HINSTANCE inst= LoadLibrary( _T("ole32.dll"));
+        HINSTANCE inst=	LoadLibrary( _T("ole32.dll"));
         if( inst )
         {
             HRESULT hr;

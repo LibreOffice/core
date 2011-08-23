@@ -32,13 +32,7 @@ TARGET=evoab
 
 VISIBILITY_HIDDEN=TRUE
 
-.IF "$(ENABLE_EVOAB2)"=="TRUE"
-dummy:
-    @echo "Evolution 1.x Addressbook build disabled in favour of Evolution 2.x Addressbook"
-.ELSE
-
 # --- Settings ----------------------------------
-
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
@@ -75,7 +69,7 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 
 # --- Library -----------------------------------
-
+#SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1TARGET=	$(EVOAB_TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
@@ -106,8 +100,5 @@ DEF1NAME=	$(SHL1TARGET)
 dummy:
     @echo "Nothing to build for GUI $(GUI)"
 .ENDIF
-.ENDIF
-
 # --- Targets ----------------------------------
-
 .INCLUDE : $(PRJ)$/target.pmk

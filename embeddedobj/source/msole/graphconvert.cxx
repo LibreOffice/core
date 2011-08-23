@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 
 using namespace ::com::sun::star;
 
-
+            
 sal_Bool ConvertBufferToFormat( void* pBuf,
                                 sal_uInt32 nBufSize,
                                 const ::rtl::OUString& aMimeType,
@@ -63,22 +63,22 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
         uno::Reference < io::XInputStream > xIn = new comphelper::SequenceInputStream( aData );
         try
         {
-            uno::Reference < graphic::XGraphicProvider > xGraphicProvider( comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")) ), uno::UNO_QUERY );
+            uno::Reference < graphic::XGraphicProvider > xGraphicProvider( comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.graphic.GraphicProvider") ), uno::UNO_QUERY );
             if( xGraphicProvider.is() )
             {
                 uno::Sequence< beans::PropertyValue > aMediaProperties( 1 );
-                aMediaProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "InputStream" ));
+                aMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "InputStream" );
                 aMediaProperties[0].Value <<= xIn;
                 uno::Reference< graphic::XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties  ) );
                 if( xGraphic.is() )
                 {
                     SvMemoryStream aNewStream( 65535, 65535 );
-//                  uno::Reference < io::XOutputStream > xOut = new utl::OOutputStreamHelper( aNewStream.GetLockBytes() );
-                    uno::Reference < io::XStream > xOut = new utl::OStreamWrapper( aNewStream );
+//					uno::Reference < io::XOutputStream > xOut = new utl::OOutputStreamHelper( aNewStream.GetLockBytes() );
+                    uno::Reference < io::XStream > xOut = new utl::OStreamWrapper( aNewStream );				
                     uno::Sequence< beans::PropertyValue > aOutMediaProperties( 2 );
-                    aOutMediaProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ));
+                    aOutMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
                     aOutMediaProperties[0].Value <<= xOut;
-                    aOutMediaProperties[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MimeType" ));
+                    aOutMediaProperties[1].Name = ::rtl::OUString::createFromAscii( "MimeType" );
                     aOutMediaProperties[1].Value <<= aMimeType;
 
                     xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );

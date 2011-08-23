@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,17 +53,23 @@ TYPEINIT1(PresentationViewShellBase, ViewShellBase);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new PresentationViewShellBase object has been constructed.
 
+/*
+SFX_IMPL_VIEWFACTORY(PresentationViewShellBase, SdResId(STR_DEFAULTVIEW))
+{
+    SFX_VIEW_REGISTRATION(DrawDocShell);
+}
+*/
 SfxViewFactory* PresentationViewShellBase::pFactory;
-SfxViewShell* PresentationViewShellBase::CreateInstance (
+SfxViewShell* __EXPORT PresentationViewShellBase::CreateInstance (
     SfxViewFrame *_pFrame, SfxViewShell *pOldView)
 {
-    PresentationViewShellBase* pBase =
+    PresentationViewShellBase* pBase = 
         new PresentationViewShellBase(_pFrame, pOldView);
     pBase->LateInit(framework::FrameworkHelper::msPresentationViewURL);
     return pBase;
 }
-void PresentationViewShellBase::RegisterFactory( sal_uInt16 nPrio )
-{
+void PresentationViewShellBase::RegisterFactory( USHORT nPrio )
+{ 
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"FullScreenPresentation");
     InitFactory();
@@ -77,7 +83,7 @@ void PresentationViewShellBase::InitFactory()
 
 
 PresentationViewShellBase::PresentationViewShellBase (
-    SfxViewFrame* _pFrame,
+    SfxViewFrame* _pFrame, 
     SfxViewShell* pOldShell)
     : ViewShellBase (_pFrame, pOldShell)
 {
@@ -92,12 +98,12 @@ PresentationViewShellBase::PresentationViewShellBase (
         if (xFrameSet.is())
         {
             Reference<beans::XPropertySet> xLayouterSet (
-                xFrameSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))),
+                xFrameSet->getPropertyValue(::rtl::OUString::createFromAscii("LayoutManager")),
                 UNO_QUERY);
             if (xLayouterSet.is())
             {
                 xLayouterSet->setPropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticToolbars")),
+                    ::rtl::OUString::createFromAscii("AutomaticToolbars"),
                     makeAny(sal_False));
             }
         }
@@ -110,6 +116,7 @@ PresentationViewShellBase::PresentationViewShellBase (
 PresentationViewShellBase::~PresentationViewShellBase (void)
 {
 }
+
 
 
 

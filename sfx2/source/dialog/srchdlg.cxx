@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "srchdlg.hxx"
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 
 #include "srchdlg.hrc"
@@ -44,8 +44,8 @@ using namespace ::com::sun::star::uno;
 
 namespace sfx2 {
 
-#define USERITEM_NAME       DEFINE_CONST_OUSTRING("UserItem")
-#define MAX_SAVE_COUNT      (sal_uInt16)10
+#define USERITEM_NAME		DEFINE_CONST_OUSTRING("UserItem")
+#define MAX_SAVE_COUNT		(USHORT)10
 
 // ============================================================================
 // SearchDialog
@@ -55,17 +55,17 @@ SearchDialog::SearchDialog( Window* pWindow, const ::rtl::OUString& rConfigName 
 
     ModelessDialog( pWindow, SfxResId( RID_DLG_SEARCH ) ),
 
-    m_aSearchLabel      ( this, SfxResId( FT_SEARCH ) ),
-    m_aSearchEdit       ( this, SfxResId( ED_SEARCH ) ),
-    m_aWholeWordsBox    ( this, SfxResId( CB_WHOLEWORDS ) ),
-    m_aMatchCaseBox     ( this, SfxResId( CB_MATCHCASE ) ),
-    m_aWrapAroundBox    ( this, SfxResId( CB_WRAPAROUND ) ),
-    m_aBackwardsBox     ( this, SfxResId( CB_BACKWARDS ) ),
-    m_aFindBtn          ( this, SfxResId( PB_FIND ) ),
-    m_aCancelBtn        ( this, SfxResId( PB_CANCELFIND ) ),
-    m_sToggleText       (       SfxResId( STR_TOGGLE ) ),
-    m_sConfigName       ( rConfigName ),
-    m_bIsConstructed    ( false )
+    m_aSearchLabel		( this, SfxResId( FT_SEARCH ) ),
+    m_aSearchEdit		( this, SfxResId( ED_SEARCH ) ),
+    m_aWholeWordsBox	( this, SfxResId( CB_WHOLEWORDS ) ),
+    m_aMatchCaseBox		( this, SfxResId( CB_MATCHCASE ) ),
+    m_aWrapAroundBox	( this, SfxResId( CB_WRAPAROUND ) ),
+    m_aBackwardsBox		( this, SfxResId( CB_BACKWARDS ) ),
+    m_aFindBtn			( this, SfxResId( PB_FIND ) ),
+    m_aCancelBtn		( this, SfxResId( PB_CANCELFIND ) ),
+    m_sToggleText		(		SfxResId( STR_TOGGLE ) ),
+    m_sConfigName		( rConfigName ),
+    m_bIsConstructed	( false )
 
 {
     FreeResource();
@@ -114,7 +114,7 @@ void SearchDialog::LoadConfig()
         }
     }
     else
-        m_aWrapAroundBox.Check( sal_True );
+        m_aWrapAroundBox.Check( TRUE );
 }
 
 void SearchDialog::SaveConfig()
@@ -122,7 +122,7 @@ void SearchDialog::SaveConfig()
     SvtViewOptions aViewOpt( E_DIALOG, m_sConfigName );
     aViewOpt.SetWindowState( rtl::OUString::createFromAscii( m_sWinState.GetBuffer() ) );
     String sUserData;
-    sal_uInt16 i = 0, nCount = Min( m_aSearchEdit.GetEntryCount(), MAX_SAVE_COUNT );
+    USHORT i = 0, nCount = Min( m_aSearchEdit.GetEntryCount(), MAX_SAVE_COUNT );
     for ( ; i < nCount; ++i )
     {
         sUserData += m_aSearchEdit.GetEntry(i);
@@ -145,7 +145,7 @@ void SearchDialog::SaveConfig()
 IMPL_LINK( SearchDialog, FindHdl, PushButton*, EMPTYARG )
 {
     String sSrchTxt = m_aSearchEdit.GetText();
-    sal_uInt16 nPos = m_aSearchEdit.GetEntryPos( sSrchTxt );
+    USHORT nPos = m_aSearchEdit.GetEntryPos( sSrchTxt );
     if ( nPos > 0 && nPos != COMBOBOX_ENTRY_NOTFOUND )
         m_aSearchEdit.RemoveEntry( nPos );
     if ( nPos > 0 )
@@ -169,9 +169,9 @@ void SearchDialog::SetFocusOnEdit()
     m_aSearchEdit.GrabFocus();
 }
 
-sal_Bool SearchDialog::Close()
+BOOL SearchDialog::Close()
 {
-    sal_Bool bRet = ModelessDialog::Close();
+    BOOL bRet = ModelessDialog::Close();
     m_aCloseHdl.Call( this );
     return bRet;
 }
@@ -182,7 +182,7 @@ void SearchDialog::StateChanged( StateChangedType nStateChange )
     {
         if ( m_sWinState.Len() )
             SetWindowState( m_sWinState );
-        m_bIsConstructed = sal_True;
+        m_bIsConstructed = TRUE;
     }
 
     ModelessDialog::StateChanged( nStateChange );

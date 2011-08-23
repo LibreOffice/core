@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,50 +24,50 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_XStatisticDisplay_idl__
-#define __com_sun_star_chart_XStatisticDisplay_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module chart {
-
-//=============================================================================
-
+#ifndef __com_sun_star_chart_XStatisticDisplay_idl__ 
+#define __com_sun_star_chart_XStatisticDisplay_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module chart {  
+ 
+//============================================================================= 
+ 
 /** gives access to statistical elements for the chart.
 
     <p>Statistical elements are used by a
     <type>StockDiagram</type>.</p>
-
+    
     @see XChartDocument
     @see StockDiagram
  */
 published interface XStatisticDisplay: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** @returns
             the properties of the up bars of a stock chart which has
             <member>StockDiagram::UpDown</member> set to <TRUE/>.
-
+                 
         <p>The <em>UpBar</em> is the box that is drawn between the
         open and close value of a stock, when the closing value is
         above the opening value, i.e., the stock price rose.</p>
 
         @see ChartArea
      */
-    com::sun::star::beans::XPropertySet getUpBar();
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::beans::XPropertySet getUpBar(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** @returns
             the properties of the down bars of a stock chart which has
             <member>StockDiagram::UpDown</member> set to <TRUE/>.
@@ -78,22 +78,22 @@ published interface XStatisticDisplay: com::sun::star::uno::XInterface
 
         @see ChartArea
      */
-    com::sun::star::beans::XPropertySet getDownBar();
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::beans::XPropertySet getDownBar(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** @returns
             the properties of the lines that are drawn between the
             lowest and highest stock value during a day.
-
+                 
         @see ChartLine
      */
-    com::sun::star::beans::XPropertySet getMinMaxLine();
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    com::sun::star::beans::XPropertySet getMinMaxLine(); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

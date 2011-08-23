@@ -40,7 +40,6 @@
 #include <unotxdoc.hxx>
 #include <doc.hxx>
 #include <view.hxx>
-#include <viewsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -96,8 +95,7 @@ uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame
 sal_Int32 getPageCount( const uno::Reference< frame::XModel>& xModel ) throw (uno::RuntimeException)
 {
     SwDocShell* pDocShell = getDocShell( xModel );
-    ViewShell* pViewSh = pDocShell ? pDocShell->GetDoc()->GetCurrentViewShell() : 0;
-    return pViewSh ? pViewSh->GetPageCount() : 0;
+    return pDocShell ? pDocShell->GetDoc()->GetPageCount() : 0;
 }
 
 uno::Reference< style::XStyle > getDefaultParagraphStyle( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)

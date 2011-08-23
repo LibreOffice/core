@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ namespace dbaui
                                 ,   ::com::sun::star::sdb::application::XDatabaseDocumentUI
                                 ,   ::com::sun::star::ui::XContextMenuInterception
                                 ,   ::com::sun::star::view::XSelectionSupplier
-                                >   OApplicationController_Base;
+                                >	OApplicationController_Base;
 
     class SelectionNotifier;
 
@@ -103,14 +103,14 @@ namespace dbaui
 
     private:
 
-        OTableCopyHelper::DropDescriptor            m_aAsyncDrop;
+        OTableCopyHelper::DropDescriptor			m_aAsyncDrop;
 
         SharedConnection        m_xDataSourceConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
                                 m_xMetaData;
 
-        OModuleClient           m_aModuleClient;
-        TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
+        OModuleClient	        m_aModuleClient;
+        TransferableDataHelper	m_aSystemClipboard;		// content of the clipboard
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                 m_xDataSource;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
@@ -120,21 +120,21 @@ namespace dbaui
         ::cppu::OInterfaceContainerHelper
                                 m_aContextMenuInterceptors;
 
-        TContainerVector        m_aCurrentContainers;       // the containers where we are listener on
+        TContainerVector		m_aCurrentContainers;	    // the containers where we are listener on
         ::rtl::Reference< SubComponentManager >
                                 m_pSubComponentManager;
-        ::dbaccess::ODsnTypeCollection
+        ::dbaccess::ODsnTypeCollection		
                                 m_aTypeCollection;
         OTableCopyHelper        m_aTableCopyHelper;
         TransferableClipboardListener*
-                                m_pClipbordNotifier;        // notifier for changes in the clipboard
-        sal_uLong                   m_nAsyncDrop;
+                                m_pClipbordNotifier;		// notifier for changes in the clipboard
+        ULONG					m_nAsyncDrop;
         OAsyncronousLink        m_aControllerConnectedEvent;
         OAsyncronousLink        m_aSelectContainerEvent;
-        PreviewMode             m_ePreviewMode;             // the mode of the preview
-        ElementType             m_eCurrentType;
-        sal_Bool                m_bNeedToReconnect;         // true when the settings of the data source were modified and the connection is no longer up to date
-        sal_Bool                m_bSuspended;               // is true when the controller was already suspended
+        PreviewMode				m_ePreviewMode;				// the mode of the preview
+        ElementType				m_eCurrentType;
+        sal_Bool				m_bNeedToReconnect;			// true when the settings of the data source were modified and the connection is no longer up to date
+        sal_Bool				m_bSuspended;	            // is true when the controller was already suspended
 
         ::std::auto_ptr< SelectionNotifier >
                                 m_pSelectionNotifier;
@@ -143,7 +143,7 @@ namespace dbaui
 
     private:
 
-        OApplicationView*       getContainer() const;
+        OApplicationView*		getContainer() const;
 
 
         /** returns the database name
@@ -159,17 +159,17 @@ namespace dbaui
         ::rtl::OUString getStrippedDatabaseName() const;
 
         /** return the element type for given container
-            @param  _xContainer The container where the element type has to be found
-            @return the element type coressponding to the given container
+            @param	_xContainer	The container where the element type has to be found
+            @return	the element type coressponding to the given container
         */
         ElementType getElementType(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer) const;
 
         /** opens a new frame with either the table or the query or report or form or view
-            @param  _sName
+            @param	_sName
                 The name of the object to open
-            @param  _eType
+            @param	_eType
                 Defines the type to open
-            @param  _eOpenMode
+            @param	_eOpenMode
                 denotes the mode in which to open the object
             @param _nInstigatorCommand
                 denotes the command which instigated the action. Might be 0.
@@ -193,9 +193,9 @@ namespace dbaui
         );
 
         /** opens a new frame for creation or auto pilot
-            @param  _eType
+            @param	_eType
                 Defines the type to open
-            @param  i_rAdditionalArguments
+            @param	i_rAdditionalArguments
                 Additional arguments to pass when creating the component
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
@@ -215,7 +215,7 @@ namespace dbaui
         void newElementWithPilot( ElementType _eType );
 
         /** converts the query to a view
-            @param  _sName
+            @param	_sName
                 The name of the query.
         */
         void convertToView(const ::rtl::OUString& _sName);
@@ -236,19 +236,19 @@ namespace dbaui
         void renameEntry();
 
         /** deletes queries, forms, or reports
-            @param  _eType
+            @param	_eType
                 the type of the objects
-            @param  _rList
+            @param	_rList
                 The names of the elements to delete
-            @param  _bConfirm
+            @param	_bConfirm
                 determines whether the user must confirm the deletion
         */
-        void deleteObjects( ElementType _eType,
+        void deleteObjects(	ElementType _eType,
                             const ::std::vector< ::rtl::OUString>& _rList,
                             bool _bConfirm );
 
         /** deletes tables.
-            @param  _rList
+            @param	_rList
                 The list of tables.
         */
         void deleteTables(const ::std::vector< ::rtl::OUString>& _rList);
@@ -260,9 +260,9 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getElements(ElementType _eType);
 
         /** returns the document access for the specific type
-            @param  _eType
+            @param	_eType
                 the type
-            @return ::std::auto_ptr<OLinkedDocumentsAccess>
+            @return	::std::auto_ptr<OLinkedDocumentsAccess>
         */
         ::std::auto_ptr<OLinkedDocumentsAccess> getDocumentsAccess(ElementType _eType);
 
@@ -270,19 +270,19 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer> getQueryDefintions() const;
 
         /** pastes a special format from the system clipboard to the currently selected object types
-            @param  _nFormatId
+            @param	_nFormatId
                 The format to be copied.
         */
         void pasteFormat(sal_uInt32 _nFormatId);
 
         /** pastes a query, form or report into the data source
-            @param  _eType
+            @param	_eType
                 The type of the object to paste.
-            @param  _rPasteData
+            @param	_rPasteData
                 The data descriptor.
-            @param  _sParentFolder
+            @param	_sParentFolder
                 The name of the parent folder if it exists.
-            @param  _bMove
+            @param	_bMove
                 if <TRUE/> the name of the content must be inserted without any change, otherwise not.
             @return
                 <TRUE/> if the paste opertions was successfull, otherwise <FALSE/>.
@@ -296,21 +296,21 @@ namespace dbaui
         sal_Bool isTableFormat() const;
 
         /** fills the vector with all supported formats
-            @param  _eType
+            @param	_eType
                 The type for which we need the formats
-            @param  _rFormatIds
+            @param	_rFormatIds
                 The vector to be filled up.
         */
         void getSupportedFormats(ElementType _eType,::std::vector<SotFormatStringId>& _rFormatIds) const;
 
         /** adds a listener to the current name access.
-            @param  _xCollection
+            @param	_xCollection
                 The collection where we want to listen on.
         */
         void addContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xCollection);
 
         /** opens a uno dialog withthe currently selected data source as initialize argument
-            @param  _sServiceName
+            @param	_sServiceName
                 The serivce name of the dialog to be executed.
         */
         void openDialog(const ::rtl::OUString& _sServiceName);
@@ -344,35 +344,35 @@ namespace dbaui
         );
 
         /** Inserts a new object into the hierachy given be the type.
-            @param  _eType
+            @param	_eType
                 Where to insert the new item.
-            @param  _sParentFolder
+            @param	_sParentFolder
                 The name of the parent folder if it exists.
-            @param  _xContent
+            @param	_xContent
                 The content to insert.
-            @param  _bMove
+            @param	_bMove
                 if <TRUE/> the name of the content must be inserted without any change, otherwise not.
             @return
                 <TRUE/> if the insert opertions was successfull, otherwise <FALSE/>.
         */
-        sal_Bool insertHierachyElement(  ElementType _eType
+        sal_Bool insertHierachyElement(	 ElementType _eType
                                     ,const String& _sParentFolder
                                     ,sal_Bool _bCollection = sal_True
                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>()
                                     ,sal_Bool _bMove = sal_False);
         /** checks if delete command or rename comamnd is allowed
-            @param  _eType
+            @param	_eType
                 The element type.
-            @param  _bDelete
+            @param	_bDelete
                 If <TRUE> then the delete command should be checked.
             @return
                 <TRUE> if the command is allowed
         */
         sal_Bool isRenameDeleteAllowed(ElementType _eType,sal_Bool _bDelete) const;
         /** all selected entries will be opened, or edited, or converted to a view
-            @param  _nId
+            @param	_nId
                 The slot which should be executed.
-            @param  _eOpenMode
+            @param	_eOpenMode
                 Defines the mode of opening. @see ElementOpenMode
         */
         void doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMode);
@@ -413,12 +413,12 @@ namespace dbaui
         /** forces usage of a connection which we do not own
             <p>To be used from within XInitialization::initialize only.</p>
         */
-        void                    initializeConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxForeignConn );
+        void					initializeConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxForeignConn );
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId) const;
+        virtual FeatureState	GetState(sal_uInt16 nId) const;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void			Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         // OGenericUnoController
         virtual void            onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );
@@ -531,9 +531,9 @@ namespace dbaui
 
         // IControlActionListener overridables
         virtual sal_Bool        requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const;
-        virtual sal_Bool        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
-        virtual sal_Int8        queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
-        virtual sal_Int8        executeDrop( const ExecuteDropEvent& _rEvt );
+        virtual sal_Bool		requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+        virtual sal_Int8		queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
+        virtual sal_Int8		executeDrop( const ExecuteDropEvent& _rEvt );
 
         // IContextMenuProvider (base of IApplicationController)
         virtual PopupMenu*      getContextMenu( Control& _rControl ) const;
@@ -555,11 +555,11 @@ namespace dbaui
 
         /** disconnects from our XConnection, and cleans up this connection
         */
-        virtual void        disconnect();
+        virtual void		disconnect();
 
         // late construction
-        virtual sal_Bool    Construct(Window* pParent);
-        virtual void        describeSupportedFeatures();
+        virtual sal_Bool	Construct(Window* pParent);
+        virtual void		describeSupportedFeatures();
 
     protected:
         // XEventListener
@@ -570,7 +570,7 @@ namespace dbaui
     };
 
 //........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //........................................................................
 
 #endif // DBAUI_APPCONTROLLER_HXX

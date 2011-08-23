@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,15 +30,15 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/tabarea.hxx>
-#include <svx/flagsdef.hxx>
-#include <svx/svxdlg.hxx>
-#include <editeng/svxenum.hxx>
+#include <svx/flagsdef.hxx> 
+#include <svx/svxdlg.hxx> 
+#include <editeng/svxenum.hxx> 
 #include "dlgpage.hxx"
 #include "ModuleHelper.hxx"
 #include "RptResId.hrc"
-#include <svl/intitem.hxx>
+#include <svl/intitem.hxx> //add CHINA001 
 #include <svl/cjkoptions.hxx>
-#include <svl/aeitem.hxx>
+#include <svl/aeitem.hxx> 
 
 namespace rptui
 {
@@ -48,35 +48,39 @@ namespace rptui
 |*
 \************************************************************************/
 
-ORptPageDialog::ORptPageDialog( Window* pParent, const SfxItemSet* pAttr,sal_uInt16 _nPageId) :
+ORptPageDialog::ORptPageDialog( Window* pParent, const SfxItemSet* pAttr,USHORT _nPageId) :
 SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
-        rOutAttrs           ( *pAttr )
-{
-    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet fail!");
+        rOutAttrs			( *pAttr )
+{	
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create(); 
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
     switch( _nPageId )
     {
         case RID_PAGEDIALOG_BACKGROUND:
             AddTabPage( RID_SVXPAGE_BACKGROUND,String(ModuleRes(1)));
             break;
         case RID_PAGEDIALOG_PAGE:
+            //AddTabPage( RID_SVXPAGE_PAGE,String(ModuleRes(1)));
+   //         AddTabPage( RID_SVXPAGE_BACKGROUND,String(ModuleRes(1)));
             AddTabPage(RID_SVXPAGE_PAGE, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), 0 );
-            AddTabPage(RID_SVXPAGE_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
+            AddTabPage(RID_SVXPAGE_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 ); 
             break;
         case RID_PAGEDIALOG_CHAR:
             AddTabPage(RID_PAGE_CHAR, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
-            AddTabPage(RID_PAGE_EFFECTS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
-            AddTabPage(RID_PAGE_POSITION, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
-            AddTabPage(RID_PAGE_TWOLN, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), 0 );
+            AddTabPage(RID_PAGE_EFFECTS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 ); 
+            AddTabPage(RID_PAGE_POSITION, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 ); 
+            AddTabPage(RID_PAGE_TWOLN, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), 0 ); 
             AddTabPage(RID_PAGE_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
             AddTabPage(RID_PAGE_ALIGNMENT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), 0 );
-
+            
             break;
         case RID_PAGEDIALOG_LINE:
             AddTabPage( RID_SVXPAGE_LINE,pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE ), 0 );
+            //AddTabPage( RID_SVXPAGE_LINE_DEF,pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE_DEF ), 0 );
+            //AddTabPage( RID_SVXPAGE_LINEEND_DEF,pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINEEND_DEF ), 0 );
             break;
         default:
-            OSL_FAIL("Unknown page id");
+            OSL_ENSURE(0,"Unknown page id");
     }
 
     SvtCJKOptions aCJKOptions;

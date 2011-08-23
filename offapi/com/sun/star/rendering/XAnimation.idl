@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,12 @@
 #ifndef __com_sun_star_rendering_XAnimation_idl__
 #define __com_sun_star_rendering_XAnimation_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_rendering_ViewState_idl__
 #include <com/sun/star/rendering/ViewState.idl>
 #endif
@@ -58,7 +58,7 @@ module com { module sun { module star { module rendering {
     is used by the <type>XCanvas</type> interface to render generic
     animations.<p>
 
-    @since OOo 2.0
+    @since OOo 2.0.0
  */
 interface XAnimation : ::com::sun::star::uno::XInterface
 {
@@ -67,12 +67,12 @@ interface XAnimation : ::com::sun::star::uno::XInterface
 
         Note that it is perfectly legal to e.g. map t in a nonlinear
         fashion to internal frames, for example to achieve
-        acceleration or deceleration effects. It is required that the
+        acceleration or decceleration effects. It is required that the
         render method has const semantics, i.e. when called with the
         same parameter set, identical output must be generated. This
         is because e.g. a Sprite might decide arbitrarily to render an
         animation once and cache the result, or repaint it via
-        XAnimation::render everytime.<p>
+        XAnimation::render everytime.<p> 
 
         The rendered content, although, must be exactly the same for
         identical viewState, canvas and t values. Or, for that
@@ -101,8 +101,8 @@ interface XAnimation : ::com::sun::star::uno::XInterface
         if one of the passed parameters does not lie in the specified,
         permissible range.
      */
-    void                    render( [in] XCanvas canvas, [in] ViewState viewState, [in] double t )
-        raises (com::sun::star::lang::IllegalArgumentException);
+    void 					render( [in] XCanvas canvas, [in] ViewState viewState, [in] double t )
+        raises (com::sun::star::lang::IllegalArgumentException); 
 
     //-------------------------------------------------------------------------
 
@@ -115,7 +115,7 @@ interface XAnimation : ::com::sun::star::uno::XInterface
         @returns the requested <type>AnimationAttributes</type>
         structure.
      */
-    AnimationAttributes     getAnimationAttributes();
+    AnimationAttributes		getAnimationAttributes();
 };
 
 }; }; }; };

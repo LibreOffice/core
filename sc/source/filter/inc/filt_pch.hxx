@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-//  ItemID-Defines etc. muessen immer ganz vorne stehen
+//	ItemID-Defines etc. muessen immer ganz vorne stehen
 
 #include "scitems.hxx"
 
@@ -50,6 +50,7 @@
 #include <rtl/locale.h>
 #include <tools/contnr.hxx>
 #include <i18npool/lang.h>
+#include <tools/list.hxx>
 #include <global.hxx>
 #include <tools/stream.hxx>
 #include <tools/errinf.hxx>
@@ -122,7 +123,7 @@
 #include <tools/fract.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/mapmod.hxx>
-#include <tools/mapunit.hxx>
+#include <vcl/mapunit.hxx>
 #include <vcl/region.hxx>
 #include <svl/lstner.hxx>
 #include <patattr.hxx>
@@ -132,6 +133,7 @@
 #include <svl/intitem.hxx>
 #include <svl/cintitem.hxx>
 #include <svl/brdcst.hxx>
+#include <sot/sotref.hxx>
 #include <tools/globname.hxx>
 #include <sot/factory.hxx>
 #include <sot/object.hxx>
@@ -174,7 +176,7 @@
 #include <vcl/window.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/event.hxx>
 #include <tools/ownlist.hxx>
@@ -244,7 +246,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/combobox.h>
-#include <tools/fldunit.hxx>
+#include <vcl/fldunit.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrame.hdl>
 #include <com/sun/star/awt/XWindow.hpp>

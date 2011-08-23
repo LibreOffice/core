@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <sfx2/newstyle.hxx>
 #include "dialog.hrc"
 #include "newstyle.hrc"
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 
 // PRIVATE METHODES ------------------------------------------------------
 
@@ -76,11 +76,11 @@ SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool 
 
     ModalDialog( pParent, SfxResId( DLG_NEW_STYLE_BY_EXAMPLE ) ),
 
-    aColFL              ( this, SfxResId( FL_COL ) ),
-    aColBox             ( this, SfxResId( LB_COL ) ),
-    aOKBtn              ( this, SfxResId( BT_OK ) ),
-    aCancelBtn          ( this, SfxResId( BT_CANCEL ) ),
-    aQueryOverwriteBox  ( this, SfxResId( MSG_OVERWRITE ) ),
+    aColFL				( this, SfxResId( FL_COL ) ),
+    aColBox				( this, SfxResId( LB_COL ) ),
+    aOKBtn				( this, SfxResId( BT_OK ) ),
+    aCancelBtn			( this, SfxResId( BT_CANCEL ) ),
+    aQueryOverwriteBox	( this, SfxResId( MSG_OVERWRITE ) ),
 
     rPool( rInPool )
 
@@ -90,7 +90,6 @@ SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool 
     aOKBtn.SetClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
     aColBox.SetModifyHdl(LINK(this, SfxNewStyleDlg, ModifyHdl));
     aColBox.SetDoubleClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
-    aColBox.SetAccessibleName(SfxResId(FL_COL));
 
     SfxStyleSheetBase *pStyle = rPool.First();
     while ( pStyle )
@@ -102,7 +101,7 @@ SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool 
 
 // -----------------------------------------------------------------------
 
-SfxNewStyleDlg::~SfxNewStyleDlg()
+__EXPORT SfxNewStyleDlg::~SfxNewStyleDlg()
 {
 }
 

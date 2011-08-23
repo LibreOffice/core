@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,33 +55,33 @@ TextUndoManager::~TextUndoManager()
 {
 }
 
-sal_Bool TextUndoManager::Undo()
+BOOL __EXPORT TextUndoManager::Undo( USHORT nCount )
 {
     if ( GetUndoActionCount() == 0 )
-        return sal_False;
+        return FALSE;
 
     UndoRedoStart();
 
-    mpTextEngine->SetIsInUndo( sal_True );
-    sal_Bool bDone = SfxUndoManager::Undo();
-    mpTextEngine->SetIsInUndo( sal_False );
+    mpTextEngine->SetIsInUndo( TRUE );
+    BOOL bDone = SfxUndoManager::Undo( nCount );
+    mpTextEngine->SetIsInUndo( FALSE );
 
     UndoRedoEnd();
 
     return bDone;
 }
 
-sal_Bool TextUndoManager::Redo()
+BOOL __EXPORT TextUndoManager::Redo( USHORT nCount )
 {
     if ( GetRedoActionCount() == 0 )
-        return sal_False;
+        return FALSE;
 
 
     UndoRedoStart();
 
-    mpTextEngine->SetIsInUndo( sal_True );
-    sal_Bool bDone = SfxUndoManager::Redo();
-    mpTextEngine->SetIsInUndo( sal_False );
+    mpTextEngine->SetIsInUndo( TRUE );
+    BOOL bDone = SfxUndoManager::Redo( nCount );
+    mpTextEngine->SetIsInUndo( FALSE );
 
     UndoRedoEnd();
 
@@ -92,8 +92,8 @@ void TextUndoManager::UndoRedoStart()
 {
     DBG_ASSERT( GetView(), "Undo/Redo: Active View?" );
 
-//  if ( GetView() )
-//      GetView()->HideSelection();
+//	if ( GetView() )
+//		GetView()->HideSelection();
 }
 
 void TextUndoManager::UndoRedoEnd()
@@ -111,8 +111,9 @@ void TextUndoManager::UndoRedoEnd()
 }
 
 
-TextUndo::TextUndo( TextEngine* p )
+TextUndo::TextUndo( USHORT nI, TextEngine* p )
 {
+    mnId = nI;
     mpTextEngine = p;
 }
 
@@ -120,9 +121,15 @@ TextUndo::~TextUndo()
 {
 }
 
-XubString TextUndo::GetComment() const
+USHORT __EXPORT TextUndo::GetId() const
 {
-//  return mpTextEngine->GetUndoComment( this );
+    //nId sollte mal entfallen => GetId ueberall ueberladen...
+    return mnId;
+}
+
+XubString __EXPORT TextUndo::GetComment() const
+{
+//	return mpTextEngine->GetUndoComment( this );
     return String();
 }
 
@@ -133,12 +140,12 @@ void TextUndo::SetSelection( const TextSelection& rSel )
 }
 
 
-TextUndoDelPara::TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uLong nPara )
-                    : TextUndo( pTextEngine )
+TextUndoDelPara::TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, ULONG nPara )
+                    : TextUndo( TEXTUNDO_DELCONTENT, pTextEngine )
 {
     mpNode = pNode;
     mnPara = nPara;
-    mbDelObject = sal_True;
+    mbDelObject = TRUE;
 }
 
 TextUndoDelPara::~TextUndoDelPara()
@@ -147,10 +154,10 @@ TextUndoDelPara::~TextUndoDelPara()
         delete mpNode;
 }
 
-void TextUndoDelPara::Undo()
+void __EXPORT TextUndoDelPara::Undo()
 {
     GetTextEngine()->InsertContent( mpNode, mnPara );
-    mbDelObject = sal_False;    // gehoert wieder der Engine
+    mbDelObject = FALSE;	// gehoert wieder der Engine
 
     if ( GetView() )
     {
@@ -159,7 +166,7 @@ void TextUndoDelPara::Undo()
     }
 }
 
-void TextUndoDelPara::Redo()
+void __EXPORT TextUndoDelPara::Redo()
 {
     // pNode stimmt nicht mehr, falls zwischendurch Undos, in denen
     // Absaetze verschmolzen sind.
@@ -172,10 +179,10 @@ void TextUndoDelPara::Redo()
     GetDoc()->GetNodes().Remove( mnPara );
     GetTextEngine()->ImpParagraphRemoved( mnPara );
 
-    mbDelObject = sal_True; // gehoert wieder dem Undo
+    mbDelObject = TRUE;	// gehoert wieder dem Undo
 
-    sal_uLong nParas = GetDoc()->GetNodes().Count();
-    sal_uLong n = mnPara < nParas ? mnPara : (nParas-1);
+    ULONG nParas = GetDoc()->GetNodes().Count();
+    ULONG n = mnPara < nParas ? mnPara : (nParas-1);
     TextNode* pN = GetDoc()->GetNodes().GetObject( n );
     TextPaM aPaM( n, pN->GetText().Len() );
     SetSelection( aPaM );
@@ -184,8 +191,8 @@ void TextUndoDelPara::Redo()
 // -----------------------------------------------------------------------
 // TextUndoConnectParas
 // ------------------------------------------------------------------------
-TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nPos )
-                    :   TextUndo( pTextEngine )
+TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, ULONG nPara, USHORT nPos )
+                    : 	TextUndo( TEXTUNDO_CONNECTPARAS, pTextEngine )
 {
     mnPara = nPara;
     mnSepPos = nPos;
@@ -195,21 +202,21 @@ TextUndoConnectParas::~TextUndoConnectParas()
 {
 }
 
-void TextUndoConnectParas::Undo()
+void __EXPORT TextUndoConnectParas::Undo()
 {
     TextPaM aPaM = GetTextEngine()->SplitContent( mnPara, mnSepPos );
     SetSelection( aPaM );
 }
 
-void TextUndoConnectParas::Redo()
+void __EXPORT TextUndoConnectParas::Redo()
 {
     TextPaM aPaM = GetTextEngine()->ConnectContents( mnPara );
     SetSelection( aPaM );
 }
 
 
-TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nPos )
-                    : TextUndo( pTextEngine )
+TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, ULONG nPara, USHORT nPos )
+                    : TextUndo( TEXTUNDO_SPLITPARA, pTextEngine )
 {
     mnPara = nPara;
     mnSepPos = nPos;
@@ -219,13 +226,13 @@ TextUndoSplitPara::~TextUndoSplitPara()
 {
 }
 
-void TextUndoSplitPara::Undo()
+void __EXPORT TextUndoSplitPara::Undo()
 {
     TextPaM aPaM = GetTextEngine()->ConnectContents( mnPara );
     SetSelection( aPaM );
 }
 
-void TextUndoSplitPara::Redo()
+void __EXPORT TextUndoSplitPara::Redo()
 {
     TextPaM aPaM = GetTextEngine()->SplitContent( mnPara, mnSepPos );
     SetSelection( aPaM );
@@ -233,12 +240,12 @@ void TextUndoSplitPara::Redo()
 
 
 TextUndoInsertChars::TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const XubString& rStr )
-                    : TextUndo( pTextEngine ),
+                    : TextUndo( TEXTUNDO_INSERTCHARS, pTextEngine ),
                         maTextPaM( rTextPaM ), maText( rStr )
 {
 }
 
-void TextUndoInsertChars::Undo()
+void __EXPORT TextUndoInsertChars::Undo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
     aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.Len();
@@ -246,7 +253,7 @@ void TextUndoInsertChars::Undo()
     SetSelection( aPaM );
 }
 
-void TextUndoInsertChars::Redo()
+void __EXPORT TextUndoInsertChars::Redo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
     GetTextEngine()->ImpInsertText( aSel, maText );
@@ -255,32 +262,32 @@ void TextUndoInsertChars::Redo()
     SetSelection( TextSelection( aSel.GetStart(), aNewPaM ) );
 }
 
-sal_Bool TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
+BOOL __EXPORT TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
 {
     if ( !pNextAction->ISA( TextUndoInsertChars ) )
-        return sal_False;
+        return FALSE;
 
     TextUndoInsertChars* pNext = (TextUndoInsertChars*)pNextAction;
 
     if ( maTextPaM.GetPara() != pNext->maTextPaM.GetPara() )
-        return sal_False;
+        return FALSE;
 
     if ( ( maTextPaM.GetIndex() + maText.Len() ) == pNext->maTextPaM.GetIndex() )
     {
         maText += pNext->maText;
-        return sal_True;
+        return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
 
 TextUndoRemoveChars::TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const XubString& rStr )
-                    : TextUndo( pTextEngine ),
+                    : TextUndo( TEXTUNDO_REMOVECHARS, pTextEngine ),
                         maTextPaM( rTextPaM ), maText( rStr )
 {
 }
 
-void TextUndoRemoveChars::Undo()
+void __EXPORT TextUndoRemoveChars::Undo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
     GetTextEngine()->ImpInsertText( aSel, maText );
@@ -288,7 +295,7 @@ void TextUndoRemoveChars::Undo()
     SetSelection( aSel );
 }
 
-void TextUndoRemoveChars::Redo()
+void __EXPORT TextUndoRemoveChars::Redo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
     aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.Len();
@@ -298,13 +305,13 @@ void TextUndoRemoveChars::Redo()
 
 
 TextUndoSetAttribs::TextUndoSetAttribs( TextEngine* pTextEngine, const TextSelection& rSel )
-    : TextUndo( pTextEngine ), maSelection( rSel )
+    : TextUndo( TEXTUNDO_ATTRIBS, pTextEngine ), maSelection( rSel )
 {
     maSelection.Justify();
-//  aNewAttribs.Set( rNewItems );
-//  mbSetIsRemove = sal_False;
-//  mnRemoveWhich = 0;
-//  mnSpecial = 0;
+// 	aNewAttribs.Set( rNewItems );
+//	mbSetIsRemove = FALSE;
+//	mnRemoveWhich = 0;
+//	mnSpecial = 0;
 }
 
 TextUndoSetAttribs::~TextUndoSetAttribs()
@@ -312,27 +319,27 @@ TextUndoSetAttribs::~TextUndoSetAttribs()
     // ...............
 }
 
-void TextUndoSetAttribs::Undo()
+void __EXPORT TextUndoSetAttribs::Undo()
 {
-    for ( sal_uLong nPara = maSelection.GetStart().GetPara(); nPara <= maSelection.GetEnd().GetPara(); nPara++ )
+    for ( ULONG nPara = maSelection.GetStart().GetPara(); nPara <= maSelection.GetEnd().GetPara(); nPara++ )
     {
-//      ContentAttribsInfo* pInf = aPrevAttribs[ (sal_uInt16)(nPara-aESel.nStartPara) ];
-//      GetTextEngine()->RemoveCharAttribs( nPara );
-//      TextNode* pNode = GetTextEngine()->GetTextDoc().GetObject( nPara );
-//      for ( sal_uInt16 nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
-//      {
-//          GetTextEngine()->GetTextDoc().InsertAttrib( pNode, pX->GetStart(), pX->GetEnd(), *pX->GetItem() );
-//      }
+//		ContentAttribsInfo* pInf = aPrevAttribs[ (USHORT)(nPara-aESel.nStartPara) ];
+//		GetTextEngine()->RemoveCharAttribs( nPara );
+//		TextNode* pNode = GetTextEngine()->GetTextDoc().GetObject( nPara );
+//		for ( USHORT nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
+//		{
+//			GetTextEngine()->GetTextDoc().InsertAttrib( pNode, pX->GetStart(), pX->GetEnd(), *pX->GetItem() );
+//		}
     }
     SetSelection( maSelection );
 }
 
-void TextUndoSetAttribs::Redo()
+void __EXPORT TextUndoSetAttribs::Redo()
 {
-//  if ( !bSetIsRemove )
-//      GetTextEngine()->SetAttribs( aSel, aNewAttribs, nSpecial );
-//  else
-//      GetTextEngine()->RemoveCharAttribs( aSel, bRemoveParaAttribs, nRemoveWhich );
+//	if ( !bSetIsRemove )
+//		GetTextEngine()->SetAttribs( aSel, aNewAttribs, nSpecial );
+//	else
+//		GetTextEngine()->RemoveCharAttribs( aSel, bRemoveParaAttribs, nRemoveWhich );
     SetSelection( maSelection );
 }
 

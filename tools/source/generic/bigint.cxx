@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ static const long MY_MINSHORT = -MY_MAXSHORT;
  * sind diese Algorithmen im Kapitel 4.3.1. The Classical Algorithms.
  */
 
-// Muss auf sal_uInt16/INT16/sal_uInt32/sal_Int32 umgestellt werden !!! W.P.
+// Muss auf UINT16/INT16/UINT32/INT32 umgestellt werden !!! W.P.
 
 // -----------------------------------------------------------------------
 
@@ -78,7 +78,12 @@ void BigInt::MakeBigInt( const BigInt& rVal )
 
         nNum[0] = (sal_uInt16)(nTmp & 0xffffL);
         nNum[1] = (sal_uInt16)(nTmp >> 16);
+#ifndef _WIN16
         if ( nTmp & 0xffff0000L )
+#else
+        long l = 0xffff0000L;
+        if ( nTmp & l )
+#endif
             nLen = 2;
         else
             nLen = 1;
@@ -645,7 +650,7 @@ BigInt::BigInt( sal_uInt32 nValue )
 
 // -----------------------------------------------------------------------
 
-BigInt::operator sal_uIntPtr() const
+BigInt::operator ULONG() const
 {
     if ( !bIsBig )
         return (sal_uInt32)nVal;
@@ -871,7 +876,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
     {
         if ( rVal.nVal == 0 )
         {
-            OSL_FAIL( "BigInt::operator/ --> divide by zero" );
+            DBG_ERROR( "BigInt::operator/ --> divide by zero" );
             return *this;
         }
 
@@ -932,7 +937,7 @@ void BigInt::DivMod( const BigInt& rVal, BigInt& rMod )
     {
         if ( rVal.nVal == 0 )
         {
-            OSL_FAIL( "BigInt::operator/ --> divide by zero" );
+            DBG_ERROR( "BigInt::operator/ --> divide by zero" );
             return;
         }
 
@@ -1001,7 +1006,7 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
     {
         if ( rVal.nVal == 0 )
         {
-            OSL_FAIL( "BigInt::operator/ --> divide by zero" );
+            DBG_ERROR( "BigInt::operator/ --> divide by zero" );
             return *this;
         }
 

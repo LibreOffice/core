@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 //-----------------------------------------------
 // include own files
 
@@ -34,10 +37,10 @@
 #include <dialmgr.hxx>
 
 #include <sfx2/msg.hxx>
+#include <sfx2/macrconf.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/minfitem.hxx>
-#include <sfx2/sfxresid.hxx>
 #include <svl/stritem.hxx>
 
 #include <sal/macros.h>
@@ -54,6 +57,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/form/XReset.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
@@ -91,25 +95,25 @@ using namespace com::sun::star;
 // definitions
 
 //-----------------------------------------------
-static ::rtl::OUString SERVICE_STORAGEFACTORY           (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"                        ));
-static ::rtl::OUString SERVICE_UICONFIGMGR              (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager"              ));
-static ::rtl::OUString SERVICE_DESKTOP                  (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"                               ));
-static ::rtl::OUString SERVICE_MODULEMANAGER            (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"                  ));
-static ::rtl::OUString SERVICE_GLOBALACCCFG             (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.GlobalAcceleratorConfiguration"      ));
-static ::rtl::OUString SERVICE_MODULEUICONFIGSUPPLIER   (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"));
-static ::rtl::OUString SERVICE_UICMDDESCRIPTION         (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription"             ));
+static ::rtl::OUString SERVICE_STORAGEFACTORY           = ::rtl::OUString::createFromAscii("com.sun.star.embed.StorageFactory"                          );
+static ::rtl::OUString SERVICE_UICONFIGMGR              = ::rtl::OUString::createFromAscii("com.sun.star.ui.UIConfigurationManager"              );
+static ::rtl::OUString SERVICE_DESKTOP                  = ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"                                 );
+static ::rtl::OUString SERVICE_MODULEMANAGER            = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager"                    );
+static ::rtl::OUString SERVICE_GLOBALACCCFG             = ::rtl::OUString::createFromAscii("com.sun.star.ui.GlobalAcceleratorConfiguration"      );
+static ::rtl::OUString SERVICE_MODULEUICONFIGSUPPLIER   = ::rtl::OUString::createFromAscii("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
+static ::rtl::OUString SERVICE_UICMDDESCRIPTION         = ::rtl::OUString::createFromAscii("com.sun.star.frame.UICommandDescription"             );
 
-static ::rtl::OUString MODULEPROP_SHORTNAME             (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryShortName"                                  ));
-static ::rtl::OUString MODULEPROP_UINAME                (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryUIName"                                     ));
-static ::rtl::OUString CMDPROP_UINAME                   (RTL_CONSTASCII_USTRINGPARAM("Name"                                                     ));
+static ::rtl::OUString MODULEPROP_SHORTNAME             = ::rtl::OUString::createFromAscii("ooSetupFactoryShortName"                                    );
+static ::rtl::OUString MODULEPROP_UINAME                = ::rtl::OUString::createFromAscii("ooSetupFactoryUIName"                                       );
+static ::rtl::OUString CMDPROP_UINAME                   = ::rtl::OUString::createFromAscii("Name"                                                       );
 
-static ::rtl::OUString FOLDERNAME_UICONFIG              (RTL_CONSTASCII_USTRINGPARAM("Configurations2"                                          ));
+static ::rtl::OUString FOLDERNAME_UICONFIG              = ::rtl::OUString::createFromAscii("Configurations2"                                            );
 
-static ::rtl::OUString MEDIATYPE_PROPNAME               (RTL_CONSTASCII_USTRINGPARAM("MediaType"                                                ));
-static ::rtl::OUString MEDIATYPE_UICONFIG               (RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.ui.configuration"                 ));
+static ::rtl::OUString MEDIATYPE_PROPNAME               = ::rtl::OUString::createFromAscii("MediaType"                                                  );
+static ::rtl::OUString MEDIATYPE_UICONFIG               = ::rtl::OUString::createFromAscii("application/vnd.sun.xml.ui.configuration"                   );
 
 //-----------------------------------------------
-static sal_uInt16 KEYCODE_ARRAY[] =
+static USHORT __FAR_DATA KEYCODE_ARRAY[] =
 {
     KEY_F1       ,
     KEY_F2       ,
@@ -123,10 +127,6 @@ static sal_uInt16 KEYCODE_ARRAY[] =
     KEY_F10      ,
     KEY_F11      ,
     KEY_F12      ,
-    KEY_F13      ,
-    KEY_F14      ,
-    KEY_F15      ,
-    KEY_F16      ,
 
     KEY_DOWN     ,
     KEY_UP       ,
@@ -142,18 +142,18 @@ static sal_uInt16 KEYCODE_ARRAY[] =
     KEY_INSERT   ,
     KEY_DELETE   ,
 
-    KEY_OPEN        ,
-    KEY_CUT         ,
-    KEY_COPY        ,
-    KEY_PASTE       ,
-    KEY_UNDO        ,
-    KEY_REPEAT      ,
-    KEY_FIND        ,
-    KEY_PROPERTIES  ,
-    KEY_FRONT       ,
+    KEY_OPEN		,
+    KEY_CUT			,
+    KEY_COPY		,
+    KEY_PASTE		,
+    KEY_UNDO		,
+    KEY_REPEAT		,
+    KEY_FIND		,
+    KEY_PROPERTIES	,
+    KEY_FRONT		,
     KEY_CONTEXTMENU ,
-    KEY_MENU        ,
-    KEY_HELP        ,
+    KEY_MENU		,
+    KEY_HELP		,
 
     KEY_F1        | KEY_SHIFT,
     KEY_F2        | KEY_SHIFT,
@@ -167,10 +167,6 @@ static sal_uInt16 KEYCODE_ARRAY[] =
     KEY_F10       | KEY_SHIFT,
     KEY_F11       | KEY_SHIFT,
     KEY_F12       | KEY_SHIFT,
-    KEY_F13       | KEY_SHIFT,
-    KEY_F14       | KEY_SHIFT,
-    KEY_F15       | KEY_SHIFT,
-    KEY_F16       | KEY_SHIFT,
 
     KEY_DOWN      | KEY_SHIFT,
     KEY_UP        | KEY_SHIFT,
@@ -239,10 +235,6 @@ static sal_uInt16 KEYCODE_ARRAY[] =
     KEY_F10       | KEY_MOD1 ,
     KEY_F11       | KEY_MOD1 ,
     KEY_F12       | KEY_MOD1 ,
-    KEY_F13       | KEY_MOD1 ,
-    KEY_F14       | KEY_MOD1 ,
-    KEY_F15       | KEY_MOD1 ,
-    KEY_F16       | KEY_MOD1 ,
 
     KEY_DOWN      | KEY_MOD1 ,
     KEY_UP        | KEY_MOD1 ,
@@ -315,10 +307,6 @@ static sal_uInt16 KEYCODE_ARRAY[] =
     KEY_F10       | KEY_SHIFT | KEY_MOD1,
     KEY_F11       | KEY_SHIFT | KEY_MOD1,
     KEY_F12       | KEY_SHIFT | KEY_MOD1,
-    KEY_F13       | KEY_SHIFT | KEY_MOD1,
-    KEY_F14       | KEY_SHIFT | KEY_MOD1,
-    KEY_F15       | KEY_SHIFT | KEY_MOD1,
-    KEY_F16       | KEY_SHIFT | KEY_MOD1,
 
     KEY_DOWN      | KEY_SHIFT | KEY_MOD1,
     KEY_UP        | KEY_SHIFT | KEY_MOD1,
@@ -386,10 +374,6 @@ static sal_uInt16 KEYCODE_ARRAY[] =
     KEY_F10       | KEY_MOD2 ,
     KEY_F11       | KEY_MOD2 ,
     KEY_F12       | KEY_MOD2 ,
-    KEY_F13       | KEY_MOD2 ,
-    KEY_F14       | KEY_MOD2 ,
-    KEY_F15       | KEY_MOD2 ,
-    KEY_F16       | KEY_MOD2 ,
 
     KEY_DOWN      | KEY_MOD2 ,
     KEY_UP        | KEY_MOD2 ,
@@ -457,10 +441,6 @@ static sal_uInt16 KEYCODE_ARRAY[] =
     KEY_F10       | KEY_SHIFT | KEY_MOD2,
     KEY_F11       | KEY_SHIFT | KEY_MOD2,
     KEY_F12       | KEY_SHIFT | KEY_MOD2,
-    KEY_F13       | KEY_SHIFT | KEY_MOD2,
-    KEY_F14       | KEY_SHIFT | KEY_MOD2,
-    KEY_F15       | KEY_SHIFT | KEY_MOD2,
-    KEY_F16       | KEY_SHIFT | KEY_MOD2,
 
     KEY_DOWN      | KEY_SHIFT | KEY_MOD2,
     KEY_UP        | KEY_SHIFT | KEY_MOD2,
@@ -525,10 +505,6 @@ static sal_uInt16 KEYCODE_ARRAY[] =
     KEY_F10       | KEY_MOD1 | KEY_MOD2 ,
     KEY_F11       | KEY_MOD1 | KEY_MOD2 ,
     KEY_F12       | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F13       | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F14       | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F15       | KEY_MOD1 | KEY_MOD2 ,
-    KEY_F16       | KEY_MOD1 | KEY_MOD2 ,
 
     KEY_DOWN      | KEY_MOD1 | KEY_MOD2 ,
     KEY_UP        | KEY_MOD1 | KEY_MOD2 ,
@@ -596,10 +572,6 @@ static sal_uInt16 KEYCODE_ARRAY[] =
     KEY_F10       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
     KEY_F11       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
     KEY_F12       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F13       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F14       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F15       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
-    KEY_F16       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
 
     KEY_DOWN      | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
     KEY_UP        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
@@ -616,7 +588,7 @@ static sal_uInt16 KEYCODE_ARRAY[] =
     KEY_DELETE    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2
 };
 
-static sal_uInt16 KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
+static USHORT KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
 
 //-----------------------------------------------
 // seems to be needed to layout the list box, which shows all
@@ -633,20 +605,20 @@ class SfxAccCfgLBoxString_Impl : public SvLBoxString
 {
     public:
     SfxAccCfgLBoxString_Impl(      SvLBoxEntry* pEntry,
-                                   sal_uInt16       nFlags,
+                                   USHORT       nFlags,
                              const String&      sText );
 
     virtual ~SfxAccCfgLBoxString_Impl();
 
     virtual void Paint(const Point&       aPos   ,
                              SvLBox&      rDevice,
-                             sal_uInt16       nFlags ,
+                             USHORT       nFlags ,
                              SvLBoxEntry* pEntry );
 };
 
 //-----------------------------------------------
 SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(      SvLBoxEntry* pEntry,
-                                                         sal_uInt16       nFlags,
+                                                         USHORT       nFlags,
                                                    const String&      sText )
         : SvLBoxString(pEntry, nFlags, sText)
 {
@@ -660,9 +632,14 @@ SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
 //-----------------------------------------------
 void SfxAccCfgLBoxString_Impl::Paint(const Point&       aPos   ,
                                            SvLBox&      rDevice,
-                                           sal_uInt16       /*nFlags*/,
+                                           USHORT       /*nFlags*/,
                                            SvLBoxEntry* pEntry )
 {
+    /*/ ??? realy needed !!!
+    Font aOldFont(rDevice.GetFont());
+    Font aNewFont(aOldFont         );
+    rDevice.SetFont( aFont );
+    */
 
     if (!pEntry)
         return;
@@ -676,6 +653,7 @@ void SfxAccCfgLBoxString_Impl::Paint(const Point&       aPos   ,
     else
         rDevice.DrawCtrlText(aPos, GetText(), 0, STRING_LEN, TEXT_DRAW_DISABLE);
 
+    //rDev.SetFont( aOldFont );
 }
 
 //-----------------------------------------------
@@ -695,8 +673,8 @@ void SfxAccCfgTabListBox_Impl::InitEntry(      SvLBoxEntry* pEntry ,
 void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
 {
     KeyCode aCode1 = aKey.GetKeyCode();
-    sal_uInt16  nCode1 = aCode1.GetCode();
-    sal_uInt16  nMod1  = aCode1.GetModifier();
+    USHORT  nCode1 = aCode1.GetCode();
+    USHORT  nMod1  = aCode1.GetModifier();
 
     // is it related to our list box ?
     if (
@@ -714,8 +692,8 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
             TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
             if (pUserData)
             {
-                sal_uInt16 nCode2 = pUserData->m_aKey.GetCode();
-                sal_uInt16 nMod2  = pUserData->m_aKey.GetModifier();
+                USHORT nCode2 = pUserData->m_aKey.GetCode();
+                USHORT nMod2  = pUserData->m_aKey.GetModifier();
                 if (
                     (nCode1 == nCode2) &&
                     (nMod1  == nMod2 )
@@ -755,19 +733,18 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     , aKeyBox                 (this   , CUI_RES(BOX_ACC_KEY             ))
     , aFunctionsGroup         (this   , CUI_RES(GRP_ACC_FUNCTIONS       ))
     , aLoadButton             (this   , CUI_RES(BTN_LOAD                ))
-    , aSaveButton             (this   , CUI_RES(BTN_SAVE                ))
-    , aResetButton            (this   , CUI_RES(BTN_RESET               ))
-    , aLoadAccelConfigStr             ( CUI_RES( STR_LOADACCELCONFIG ) )
-    , aSaveAccelConfigStr             ( CUI_RES( STR_SAVEACCELCONFIG ) )
-    , aFilterCfgStr                   ( CUI_RES( STR_FILTERNAME_CFG ) )
+    , aSaveButton 		      (this   , CUI_RES(BTN_SAVE                ))
+    , aResetButton		      (this   , CUI_RES(BTN_RESET               ))
+    , aLoadAccelConfigStr			  ( CUI_RES( STR_LOADACCELCONFIG ) )
+    , aSaveAccelConfigStr			  ( CUI_RES( STR_SAVEACCELCONFIG ) )
+    , aFilterAllStr					  ( CUI_RES( STR_SFX_FILTERNAME_ALL ) )
+    , aFilterCfgStr					  ( CUI_RES( STR_FILTERNAME_CFG ) )
     , m_bStylesInfoInitialized(sal_False)
     , m_xGlobal               ()
     , m_xModule               ()
     , m_xAct                  ()
 {
     FreeResource();
-
-    aFilterAllStr = String( SfxResId( STR_SFX_FILTERNAME_ALL ) );
 
 // install handler functions
     aChangeButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, ChangeHdl ));
@@ -783,7 +760,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     aModuleButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
 
     // initialize Entriesbox
-    aEntriesBox.SetStyle(aEntriesBox.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
+    aEntriesBox.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN);
     aEntriesBox.SetSelectionMode(SINGLE_SELECTION);
     aEntriesBox.SetTabs(&AccCfgTabs[0], MAP_APPFONT);
     aEntriesBox.Resize(); // OS: Hack for right selection
@@ -792,7 +769,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
 
     // detect max keyname width
     long nMaxWidth  = 0;
-    for ( sal_uInt16 i = 0; i < KEYCODE_ARRAY_SIZE; ++i )
+    for ( USHORT i = 0; i < KEYCODE_ARRAY_SIZE; ++i )
     {
         long nTmp = GetTextWidth( KeyCode( KEYCODE_ARRAY[i] ).GetName() );
         if ( nTmp > nMaxWidth )
@@ -807,7 +784,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     pGroupLBox->SetFunctionListBox(pFunctionBox);
 
     // initialize KeyBox
-    aKeyBox.SetStyle(aKeyBox.GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
+    aKeyBox.SetWindowBits(WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
 }
 
 //-----------------------------------------------
@@ -925,9 +902,9 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     // Insert all editable accelerators into list box. It is possible
     // that some accelerators are not mapped on the current system/keyboard
     // but we don't want to lose these mappings.
-    sal_uInt16 c1       = KEYCODE_ARRAY_SIZE;
-    sal_uInt16 i1       = 0;
-    sal_uInt16 nListPos = 0;
+    USHORT c1       = KEYCODE_ARRAY_SIZE;
+    USHORT i1       = 0;
+    USHORT nListPos = 0;
     for (i1=0; i1<c1; ++i1)
     {
         KeyCode aKey = KEYCODE_ARRAY[i1];
@@ -943,7 +920,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     css::uno::Sequence< css::awt::KeyEvent > lKeys = xAccMgr->getAllKeyEvents();
     sal_Int32                                c2    = lKeys.getLength();
     sal_Int32                                i2    = 0;
-    sal_uInt16                                   nCol  = aEntriesBox.TabCount()-1;
+    USHORT                                   nCol  = aEntriesBox.TabCount()-1;
 
     for (i2=0; i2<c2; ++i2)
     {
@@ -951,7 +928,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
               ::rtl::OUString     sCommand = xAccMgr->getCommandByKeyEvent(aAWTKey);
               String              sLabel   = GetLabel4Command(sCommand);
               KeyCode             aKeyCode = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
-              sal_uInt16              nPos     = MapKeyCodeToPos(aKeyCode);
+              USHORT              nPos     = MapKeyCodeToPos(aKeyCode);
 
         if (nPos == LISTBOX_ENTRY_NOTFOUND)
             continue;
@@ -967,12 +944,12 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     }
 
     // Map the VCL hardcoded key codes and mark them as not changeable
-    sal_uLong c3 = Application::GetReservedKeyCodeCount();
-    sal_uLong i3 = 0;
+    ULONG c3 = Application::GetReservedKeyCodeCount();
+    ULONG i3 = 0;
     for (i3=0; i3<c3; ++i3)
     {
         const KeyCode* pKeyCode = Application::GetReservedKeyCode(i3);
-              sal_uInt16   nPos     = MapKeyCodeToPos(*pKeyCode);
+              USHORT   nPos     = MapKeyCodeToPos(*pKeyCode);
 
         if (nPos == LISTBOX_ENTRY_NOTFOUND)
             continue;
@@ -1052,10 +1029,10 @@ IMPL_LINK(SfxAcceleratorConfigPage, Default, PushButton*, EMPTYARG)
     if (xReset.is())
         xReset->reset();
 
-    aEntriesBox.SetUpdateMode(sal_False);
+    aEntriesBox.SetUpdateMode(FALSE);
     ResetConfig();
     Init(m_xAct);
-    aEntriesBox.SetUpdateMode(sal_True);
+    aEntriesBox.SetUpdateMode(TRUE);
     aEntriesBox.Invalidate();
     aEntriesBox.Select(aEntriesBox.GetEntry(0, 0));
 
@@ -1065,7 +1042,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, Default, PushButton*, EMPTYARG)
 //-----------------------------------------------
 IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button*, EMPTYARG )
 {
-    sal_uInt16    nPos        = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+    USHORT    nPos        = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     TAccInfo* pEntry      = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
     String    sNewCommand = pFunctionBox->GetCurCommand();
     String    sLabel      = pFunctionBox->GetCurLabel();
@@ -1073,7 +1050,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button*, EMPTYARG )
         sLabel = GetLabel4Command(sNewCommand);
 
     pEntry->m_sCommand = sNewCommand;
-    sal_uInt16 nCol = aEntriesBox.TabCount() - 1;
+    USHORT nCol = aEntriesBox.TabCount() - 1;
     aEntriesBox.SetEntryText(sLabel, nPos, nCol);
 
     ((Link &) pFunctionBox->GetSelectHdl()).Call( pFunctionBox );
@@ -1084,11 +1061,11 @@ IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button*, EMPTYARG )
 IMPL_LINK( SfxAcceleratorConfigPage, RemoveHdl, Button *, EMPTYARG )
 {
     // get selected entry
-    sal_uInt16    nPos   = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+    USHORT    nPos   = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     TAccInfo* pEntry = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
 
     // remove function name from selected entry
-    sal_uInt16 nCol = aEntriesBox.TabCount() - 1;
+    USHORT nCol = aEntriesBox.TabCount() - 1;
     aEntriesBox.SetEntryText( String(), nPos, nCol );
     pEntry->m_sCommand = ::rtl::OUString();
 
@@ -1103,17 +1080,17 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     Help::ShowBalloon( this, Point(), String() );
     if ( pListBox == &aEntriesBox )
     {
-        sal_uInt16          nPos                = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+        USHORT          nPos                = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
         TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
         ::rtl::OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
 
-        aRemoveButton.Enable( sal_False );
-        aChangeButton.Enable( sal_False );
+        aRemoveButton.Enable( FALSE );
+        aChangeButton.Enable( FALSE );
 
         if (pEntry->m_bIsConfigurable)
         {
             if (pEntry->isConfigured())
-                aRemoveButton.Enable( sal_True );
+                aRemoveButton.Enable( TRUE );
             aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
         }
     }
@@ -1121,25 +1098,25 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     {
         pGroupLBox->GroupSelected();
         if ( !pFunctionBox->FirstSelected() )
-            aChangeButton.Enable( sal_False );
+            aChangeButton.Enable( FALSE );
     }
     else if ( pListBox == pFunctionBox )
     {
-        aRemoveButton.Enable( sal_False );
-        aChangeButton.Enable( sal_False );
+        aRemoveButton.Enable( FALSE );
+        aChangeButton.Enable( FALSE );
 
         // #i36994 First selected can return zero!
         SvLBoxEntry*    pLBEntry = aEntriesBox.FirstSelected();
         if ( pLBEntry != 0 )
         {
-            sal_uInt16          nPos                = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( pLBEntry );
+            USHORT          nPos                = (USHORT) aEntriesBox.GetModel()->GetRelPos( pLBEntry );
             TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
             ::rtl::OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
 
             if (pEntry->m_bIsConfigurable)
             {
                 if (pEntry->isConfigured())
-                    aRemoveButton.Enable( sal_True );
+                    aRemoveButton.Enable( TRUE );
                 aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
             }
 
@@ -1152,9 +1129,9 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
                 if ( pUserData && pUserData->m_sCommand == sPossibleNewCommand )
                 {
                     TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
-                    SvLBoxEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, sal_True, LIST_APPEND );
+                    SvLBoxEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, TRUE, LIST_APPEND );
                     pE1->SetUserData(pU1);
-                    pE1->EnableChildsOnDemand( sal_False );
+                    pE1->EnableChildsOnDemand( FALSE );
                 }
                 pIt = aEntriesBox.Next(pIt);
             }
@@ -1165,7 +1142,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         // goto selected "key" entry of the key box
         SvLBoxEntry* pE2 = 0;
         TAccInfo*    pU2 = 0;
-        sal_uInt16       nP2 = LISTBOX_ENTRY_NOTFOUND;
+        USHORT       nP2 = LISTBOX_ENTRY_NOTFOUND;
         SvLBoxEntry* pE3 = 0;
 
         pE2 = aKeyBox.FirstSelected();
@@ -1199,10 +1176,10 @@ IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, EMPTYARG )
     if ( m_xAct.is() && ( xOld == m_xAct ) )
         return 0;
 
-    aEntriesBox.SetUpdateMode( sal_False );
+    aEntriesBox.SetUpdateMode( FALSE );
     ResetConfig();
     Init(m_xAct);
-    aEntriesBox.SetUpdateMode( sal_True );
+    aEntriesBox.SetUpdateMode( TRUE );
     aEntriesBox.Invalidate();
 
      pGroupLBox->Init(m_xSMGR, m_xFrame, m_sModuleLongName);
@@ -1271,10 +1248,10 @@ IMPL_LINK( SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, EMPTYARG 
             // open the configuration and update our UI
             css::uno::Reference< css::ui::XAcceleratorConfiguration > xTempAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
 
-            aEntriesBox.SetUpdateMode(sal_False);
+            aEntriesBox.SetUpdateMode(FALSE);
             ResetConfig();
             Init(xTempAccMgr);
-            aEntriesBox.SetUpdateMode(sal_True);
+            aEntriesBox.SetUpdateMode(TRUE);
             aEntriesBox.Invalidate();
             aEntriesBox.Select(aEntriesBox.GetEntry(0, 0));
 
@@ -1405,6 +1382,133 @@ IMPL_LINK( SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, EMPTYARG 
     return 0;
 }
 
+::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL )
+{
+    ::rtl::OUString aLabel;
+    if ( aCmdURL.getLength() )
+    {
+        try
+        {
+            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+            if ( xNameAccess.is() )
+            {
+                uno::Reference< container::XNameAccess > xUICommandLabels;
+                const ::rtl::OUString aModule( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) );
+                uno::Any a = xNameAccess->getByName( aModule );
+                uno::Reference< container::XNameAccess > xUICommands;
+                a >>= xUICommandLabels;
+                rtl::OUString aStr;
+                uno::Sequence< beans::PropertyValue > aPropSeq;
+                a = xUICommandLabels->getByName( aCmdURL );
+                if ( a >>= aPropSeq )
+                {
+                    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                    {
+                        if ( aPropSeq[i].Name.equalsAscii( "Name" ))
+                        {
+                            aPropSeq[i].Value >>= aStr;
+                            break;
+                        }
+                    }
+                }
+                aLabel = aStr;
+            }
+        }
+        catch ( uno::Exception& )
+        {
+        }
+    }
+
+    return aLabel;
+}
+
+
+//-----------------------------------------------
+String SfxAcceleratorConfigPage::GetFunctionName(KeyFuncType eType) const
+{
+    ::rtl::OUStringBuffer sName(256);
+    sName.appendAscii("\"");
+    switch(eType)
+    {
+        case KEYFUNC_NEW :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:NewDoc") ) );
+            break;
+
+        case KEYFUNC_OPEN :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Open") ) );
+            break;
+                
+        case KEYFUNC_SAVE :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Save") ) );
+            break;
+
+        case KEYFUNC_SAVEAS :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:SaveAs") ) );
+            break;
+
+        case KEYFUNC_PRINT :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Print") ) );
+            break;
+
+        case KEYFUNC_CLOSE :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Close") ) );
+            break;
+
+        case KEYFUNC_QUIT :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Quit") ) );
+            break;
+
+        case KEYFUNC_CUT :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Cut") ) );
+            break;
+
+        case KEYFUNC_COPY :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Copy") ) );
+            break;
+
+        case KEYFUNC_PASTE :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Paste") ) );
+            break;
+
+        case KEYFUNC_UNDO :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Undo") ) );
+            break;
+
+        case KEYFUNC_REDO :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Redo") ) );
+            break;
+
+        case KEYFUNC_DELETE :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Delete") ) );
+            break;
+
+        case KEYFUNC_REPEAT :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Repeat") ) );
+            break;
+
+        case KEYFUNC_FIND :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Search") ) );
+            break;
+
+        case KEYFUNC_FINDBACKWARD :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:SearchBackwards") ) );
+            break;
+
+        case KEYFUNC_PROPERTIES :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Options") ) );
+            break;
+
+        case KEYFUNC_FRONT :
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:ToFront") ) );
+            break;
+
+        default:
+            break;
+    }
+    sName.appendAscii("\"");
+    return String(sName.makeStringAndClear());
+}
+
 //-----------------------------------------------
 void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTitle )
 {
@@ -1416,7 +1520,8 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTi
     m_pFileDlg = new sfx2::FileDialogHelper( nDialogType, 0 );
 
     m_pFileDlg->SetTitle( rTitle );
-    m_pFileDlg->AddFilter( aFilterAllStr, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+//  m_pFileDlg->SetDialogHelpId( bSave ? HID_CONFIG_SAVE : HID_CONFIG_LOAD );
+    m_pFileDlg->AddFilter( aFilterAllStr, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) ); 
     m_pFileDlg->AddFilter( aFilterCfgStr, DEFINE_CONST_UNICODE( "*.cfg" ) );
 
     Link aDlgClosedLink = bSave ? LINK( this, SfxAcceleratorConfigPage, SaveHdl )
@@ -1425,7 +1530,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTi
 }
 
 //-----------------------------------------------
-sal_Bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
+BOOL SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
 {
     Apply(m_xAct);
     try
@@ -1435,9 +1540,9 @@ sal_Bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }
     catch(const css::uno::Exception&)
-        { return sal_False; }
+        { return FALSE; }
 
-    return sal_True;
+    return TRUE;
 }
 
 //-----------------------------------------------
@@ -1465,7 +1570,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
     RadioHdl(0);
 
     const SfxPoolItem* pMacroItem=0;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_MACROINFO, sal_True, &pMacroItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_MACROINFO, TRUE, &pMacroItem ) )
     {
         m_pMacroInfoItem = PTR_CAST( SfxMacroInfoItem, pMacroItem );
         pGroupLBox->SelectMacro( m_pMacroInfoItem );
@@ -1473,28 +1578,62 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
     else
     {
         const SfxPoolItem* pStringItem=0;
-        if( SFX_ITEM_SET == rSet.GetItemState( SID_CHARMAP, sal_True, &pStringItem ) )
+        if( SFX_ITEM_SET == rSet.GetItemState( SID_CHARMAP, TRUE, &pStringItem ) )
             m_pStringItem = PTR_CAST( SfxStringItem, pStringItem );
 
         const SfxPoolItem* pFontItem=0;
-        if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_SPECIALCHAR, sal_True, &pFontItem ) )
+        if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_SPECIALCHAR, TRUE, &pFontItem ) )
             m_pFontItem = PTR_CAST( SfxStringItem, pFontItem );
+
+        if ( m_pStringItem )
+            pGroupLBox->AddAndSelect( m_pStringItem, m_pFontItem );
     }
 }
 
 //-----------------------------------------------
-sal_uInt16 SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
+void SfxAcceleratorConfigPage::SelectMacro(const SfxMacroInfoItem *pItem)
 {
-    sal_uInt16       nCode1 = aKey.GetCode()+aKey.GetModifier();
+    m_pMacroInfoItem = pItem;
+    pGroupLBox->SelectMacro( pItem );
+}
+
+//-----------------------------------------------
+void SfxAcceleratorConfigPage::CopySource2Target(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xSourceAccMgr,
+                                                 const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xTargetAccMgr)
+{
+    const css::uno::Sequence< css::awt::KeyEvent > lKeys = xSourceAccMgr->getAllKeyEvents();
+          sal_Int32                                c     = lKeys.getLength();
+          sal_Int32                                i     = 0;
+    for (i=0; i<c; ++i)
+    {
+        const css::awt::KeyEvent& rKey     = lKeys[i];
+              ::rtl::OUString     sCommand = xSourceAccMgr->getCommandByKeyEvent(rKey);
+        xTargetAccMgr->setKeyEvent(rKey, sCommand);
+    }
+}
+
+//-----------------------------------------------
+KeyCode SfxAcceleratorConfigPage::MapPosToKeyCode(USHORT nPos) const
+{
+    TAccInfo* pEntry = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
+    KeyCode aCode(KEYCODE_ARRAY[pEntry->m_nKeyPos] & 0xFFF                 ,
+                  KEYCODE_ARRAY[pEntry->m_nKeyPos] & (KEY_SHIFT | KEY_MOD2));
+    return aCode;
+}
+
+//-----------------------------------------------
+USHORT SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
+{
+    USHORT       nCode1 = aKey.GetCode()+aKey.GetModifier();
     SvLBoxEntry* pEntry = aEntriesBox.First();
-    sal_uInt16       i      = 0;
+    USHORT       i      = 0;
 
     while (pEntry)
     {
         TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
         if (pUserData)
         {
-            sal_uInt16 nCode2 = pUserData->m_aKey.GetCode()+pUserData->m_aKey.GetModifier();
+            USHORT nCode2 = pUserData->m_aKey.GetCode()+pUserData->m_aKey.GetModifier();
             if (nCode1 == nCode2)
                 return i;
         }

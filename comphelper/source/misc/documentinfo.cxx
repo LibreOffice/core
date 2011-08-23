@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,7 +166,7 @@ namespace comphelper {
 
             // 5.
             // <-- #i88104# (05-16-08) TKR: use the new XTitle Interface to get the Title -->
-
+                
             Reference< XTitle > xTitle( _rxDocument, UNO_QUERY );
             if ( xTitle.is() )
             {
@@ -187,7 +187,7 @@ namespace comphelper {
             sMessage += "\nin function:\n";
             sMessage += BOOST_CURRENT_FUNCTION;
             sMessage += "\n";
-            OSL_FAIL( sMessage );
+            OSL_ENSURE( false, sMessage );
         }
 
         return sTitle;

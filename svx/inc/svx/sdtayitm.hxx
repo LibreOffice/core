@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,10 +35,10 @@
 class SVX_DLLPUBLIC SdrTextAniDelayItem: public SfxUInt16Item {
 public:
     TYPEINFO();
-    SdrTextAniDelayItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANIDELAY,nVal) {}
+    SdrTextAniDelayItem(UINT16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANIDELAY,nVal) {}
     SdrTextAniDelayItem(SvStream& rIn): SfxUInt16Item(SDRATTR_TEXT_ANIDELAY,rIn)  {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
 };
 

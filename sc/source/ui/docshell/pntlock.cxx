@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@
 
 //------------------------------------------------------------------------
 
-ScPaintLockData::ScPaintLockData(sal_uInt16 nNewMode) :
+ScPaintLockData::ScPaintLockData(USHORT nNewMode) :
     nMode( nNewMode ),
     nLevel( 0 ),
     nDocLevel( 0 ),
     nParts( 0 ),
-    bModified( false )
+    bModified( FALSE )
 {
 }
 
@@ -48,7 +48,7 @@ ScPaintLockData::~ScPaintLockData()
 {
 }
 
-void ScPaintLockData::AddRange( const ScRange& rRange, sal_uInt16 nP )
+void ScPaintLockData::AddRange( const ScRange& rRange, USHORT nP )
 {
     if (!xRangeList.Is())
         xRangeList = new ScRangeList;

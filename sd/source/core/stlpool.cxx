@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 
 #include <svx/svdattr.hxx>
 #include "eetext.hxx"
-#include <svx/xtable.hxx>           // fuer RGB_Color
+#include <svx/xtable.hxx>			// fuer RGB_Color
 #include <editeng/bulitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/adjitem.hxx>
@@ -75,7 +75,6 @@
 #include "sdpage.hxx"
 #include "helpids.h"
 #include <svl/itemset.hxx>
-#include "app.hrc"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -86,9 +85,9 @@ using namespace ::com::sun::star::container;
 // ----------------------------------------------------------
 
 SdStyleSheetPool::SdStyleSheetPool(SfxItemPool const& _rPool, SdDrawDocument* pDocument)
-:   SdStyleSheetPoolBase( _rPool )
-,   mpActualStyleSheet(NULL)
-,   mpDoc(pDocument)
+:	SdStyleSheetPoolBase( _rPool )
+,	mpActualStyleSheet(NULL)
+,	mpDoc(pDocument)
 {
     if( mpDoc )
     {
@@ -97,17 +96,18 @@ SdStyleSheetPool::SdStyleSheetPool(SfxItemPool const& _rPool, SdDrawDocument* pD
         // create graphics family
         mxGraphicFamily = new SdStyleFamily( xPool, SD_STYLE_FAMILY_GRAPHICS );
         mxCellFamily = new SdStyleFamily( xPool, SD_STYLE_FAMILY_CELL );
-
+        
         mxTableFamily = sdr::table::CreateTableDesignFamily();
         Reference< XNamed > xNamed( mxTableFamily, UNO_QUERY );
         if( xNamed.is() )
             msTableFamilyName = xNamed->getName();
-
+        
         // create presentation families, one for each master page
         const sal_uInt16 nCount = mpDoc->GetMasterSdPageCount(PK_STANDARD);
         for( sal_uInt16 nPage = 0; nPage < nCount; ++nPage )
             AddStyleFamily( mpDoc->GetMasterSdPage(nPage,PK_STANDARD) );
 
+//		StartListening( *mpDoc );
     }
 }
 
@@ -120,7 +120,7 @@ SdStyleSheetPool::~SdStyleSheetPool()
 
 // ----------------------------------------------------------
 
-SfxStyleSheetBase* SdStyleSheetPool::Create(const String& rName, SfxStyleFamily eFamily, sal_uInt16 _nMask )
+SfxStyleSheetBase* SdStyleSheetPool::Create(const String& rName, SfxStyleFamily eFamily, USHORT _nMask )
 {
     return new SdStyleSheet(rName, *this, eFamily, _nMask);
 }
@@ -150,22 +150,21 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const String& rLayoutName)
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles)
+List* SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName)
 {
     String aName(rLayoutName);
     aName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
     aName += String(SdResId(STR_LAYOUT_OUTLINE));
-
-    for (sal_uInt16 nSheet = 1; nSheet < 10; nSheet++)
+    List* pList = new List;
+    for (USHORT nSheet = 1; nSheet < 10; nSheet++)
     {
         String aFullName(aName);
         aFullName.Append( sal_Unicode( ' ' ));
         aFullName.Append( String::CreateFromInt32( (sal_Int32)nSheet ));
         SfxStyleSheetBase* pSheet = Find(aFullName, SD_STYLE_FAMILY_MASTERPAGE);
-
-        if (pSheet)
-            rOutlineStyles.push_back(pSheet);
+        pList->Insert(pSheet, LIST_APPEND);
     }
+    return pList;
 }
 
 /*************************************************************************
@@ -212,7 +211,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     SfxStyleSheetBase* pParent = NULL;
     SvxLRSpaceItem aSvxLRSpaceItem( EE_PARA_LRSPACE );
     SvxULSpaceItem aSvxULSpaceItem( EE_PARA_ULSPACE );
-    sal_uInt16 nLevel;
+    USHORT nLevel;
 
     for( nLevel = 1; nLevel < 10; nLevel++)
     {
@@ -247,17 +246,17 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 rSet.Put( SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
                 rSet.Put( SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE ) );
                 rSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
-                rSet.Put( SvxShadowedItem(sal_False, EE_CHAR_SHADOW ) );
-                rSet.Put( SvxContourItem(sal_False, EE_CHAR_OUTLINE ) );
+                rSet.Put( SvxShadowedItem(FALSE, EE_CHAR_SHADOW ) );
+                rSet.Put( SvxContourItem(FALSE, EE_CHAR_OUTLINE ) );
                 rSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK ) );
                 rSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF) );
                 rSet.Put( SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR) );
                 rSet.Put( XLineStyleItem(XLINE_NONE) );
                 rSet.Put( XFillStyleItem(XFILL_NONE) );
                 rSet.Put( SdrTextFitToSizeTypeItem(SDRTEXTFIT_AUTOFIT) );
-                rSet.Put( SdrTextAutoGrowHeightItem(sal_False) );
+                rSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
                 // #i16874# enable kerning by default but only for new documents
-                rSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+                rSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
 
                 if( nLevel == 1 )
                 {
@@ -266,8 +265,10 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 }
             }
 
-            sal_uLong nFontSize = 20;
-            sal_uInt16 nLower = 100;
+            ULONG nFontSize = 20;
+            short nFirstIndent = -600;
+//			USHORT nIndent = nLevel * 1200;
+            USHORT nLower = 100;
 
             switch (nLevel)
             {
@@ -275,6 +276,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 {
                     nFontSize = 32;
                     nLower = 500;
+                    nFirstIndent = -900;
                 }
                 break;
 
@@ -282,6 +284,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 {
                     nFontSize = 28;
                     nLower = 400;
+                    nFirstIndent = -800;
                 }
                 break;
 
@@ -300,15 +303,31 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
             }
 
             // FontSize
-            nFontSize = (sal_uInt16)((nFontSize * 2540L) / 72);  // Pt --> 1/100 mm
+            nFontSize = (USHORT)((nFontSize * 2540L) / 72);  // Pt --> 1/100 mm
             SfxItemSet& rOutlineSet = pSheet->GetItemSet();
             rOutlineSet.Put( SvxFontHeightItem( nFontSize, 100, EE_CHAR_FONTHEIGHT ) );
             rOutlineSet.Put( SvxFontHeightItem( nFontSize, 100, EE_CHAR_FONTHEIGHT_CJK ) );
             rOutlineSet.Put( SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( nFontSize ), 100, EE_CHAR_FONTHEIGHT_CTL ) );
 
-            // Line distance (downwards). Stuff around here cleaned up in i35937
+            // Einzuege
+/* i35937
+            aSvxLRSpaceItem.SetTxtFirstLineOfst(nFirstIndent);
+            aSvxLRSpaceItem.SetTxtLeft(nIndent);
+            aSvxLRSpaceItem.SetRight(0);
+            aSvxLRSpaceItem.SetBulletFI(TRUE);
+            pSheet->GetItemSet().Put(aSvxLRSpaceItem);
+*/
+            // Zeilendurchschuss (Abstand nach unten)
             aSvxULSpaceItem.SetLower(nLower);
             pSheet->GetItemSet().Put(aSvxULSpaceItem);
+
+/* i35937
+            if (nLevel == 1)
+            {
+                SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 1); // Bullets sichtbar
+                pSheet->GetItemSet().Put(aBulletStateItem);
+            }
+*/
         }
     }
 
@@ -362,23 +381,24 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rTitleSet.Put(SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
         rTitleSet.Put(SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
         rTitleSet.Put(SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
-        rTitleSet.Put(SvxFontHeightItem( 1552, 100, EE_CHAR_FONTHEIGHT ) );                 // 44 pt
-        rTitleSet.Put(SvxFontHeightItem( 1552, 100, EE_CHAR_FONTHEIGHT_CJK ) );                 // 44 pt
-        rTitleSet.Put(SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( 1552 ), 100, EE_CHAR_FONTHEIGHT_CTL ) );                   // 44 pt
+        rTitleSet.Put(SvxFontHeightItem( 1552, 100, EE_CHAR_FONTHEIGHT ) );		            // 44 pt
+        rTitleSet.Put(SvxFontHeightItem( 1552, 100, EE_CHAR_FONTHEIGHT_CJK ) );		            // 44 pt
+        rTitleSet.Put(SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( 1552 ), 100, EE_CHAR_FONTHEIGHT_CTL ) );		            // 44 pt
         rTitleSet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE ));
         rTitleSet.Put(SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE ));
         rTitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
-        rTitleSet.Put(SvxShadowedItem(sal_False, EE_CHAR_SHADOW ));
-        rTitleSet.Put(SvxContourItem(sal_False, EE_CHAR_OUTLINE ));
+        rTitleSet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
+        rTitleSet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
         rTitleSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK ) );
         rTitleSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF ) );
         rTitleSet.Put(SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ));
         rTitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
         rTitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
+//		rTitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         // #i16874# enable kerning by default but only for new documents
-        rTitleSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+        rTitleSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
 
-        aBulletFont.SetSize(Size(0,1552));                  // 44 pt
+        aBulletFont.SetSize(Size(0,1552));					// 44 pt
         PutNumBulletItem( pSheet, aBulletFont );
     }
 
@@ -407,26 +427,27 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rSubtitleSet.Put(SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
         rSubtitleSet.Put(SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
         rSubtitleSet.Put(SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
-        rSubtitleSet.Put( SvxFontHeightItem( 1129, 100, EE_CHAR_FONTHEIGHT ) );     // 32 pt
+        rSubtitleSet.Put( SvxFontHeightItem( 1129, 100, EE_CHAR_FONTHEIGHT ) );	    // 32 pt
         rSubtitleSet.Put( SvxFontHeightItem( 1129, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 32 pt
         rSubtitleSet.Put( SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( 1129 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 32 pt
         rSubtitleSet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE ));
         rSubtitleSet.Put(SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE ));
         rSubtitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
-        rSubtitleSet.Put(SvxShadowedItem(sal_False, EE_CHAR_SHADOW ));
-        rSubtitleSet.Put(SvxContourItem(sal_False, EE_CHAR_OUTLINE ));
+        rSubtitleSet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
+        rSubtitleSet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
         rSubtitleSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK ) );
         rSubtitleSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF ) );
         rSubtitleSet.Put(SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ));
         rSubtitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
+//		rSubtitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         // #i16874# enable kerning by default but only for new documents
-        rSubtitleSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+        rSubtitleSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
         aSvxLRSpaceItem.SetTxtLeft(0);
         rSubtitleSet.Put(aSvxLRSpaceItem);
 
         Font aTmpFont( GetBulletFont() );
-        aTmpFont.SetSize(Size(0, 1129));        // 32 pt
+        aTmpFont.SetSize(Size(0, 1129));		// 32 pt
         PutNumBulletItem( pSheet, aTmpFont );
     }
 
@@ -455,22 +476,30 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rNotesSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
         rNotesSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
         rNotesSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
-        rNotesSet.Put( SvxFontHeightItem( 705, 100, EE_CHAR_FONTHEIGHT ) );     // 20 pt
+        rNotesSet.Put( SvxFontHeightItem( 705, 100, EE_CHAR_FONTHEIGHT ) );	    // 20 pt
         rNotesSet.Put( SvxFontHeightItem( 705, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 20 pt
         rNotesSet.Put( SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( 705 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 20 pt
         rNotesSet.Put( SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
         rNotesSet.Put( SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE ) );
         rNotesSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
-        rNotesSet.Put( SvxShadowedItem(sal_False, EE_CHAR_SHADOW ) );
-        rNotesSet.Put( SvxContourItem(sal_False, EE_CHAR_OUTLINE ) );
+        rNotesSet.Put( SvxShadowedItem(FALSE, EE_CHAR_SHADOW ) );
+        rNotesSet.Put( SvxContourItem(FALSE, EE_CHAR_OUTLINE ) );
         rNotesSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK ) );
         rNotesSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF) );
         rNotesSet.Put( SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ) );
+//		rNotesSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         rNotesSet.Put( SvxLRSpaceItem( 0, 0, 600, -600, EE_PARA_LRSPACE  ) );
         // #i16874# enable kerning by default but only for new documents
-        rNotesSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+        rNotesSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
 
-/* #i35937# */
+/* #i35937#
+        SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) rNotesSet.Get(EE_PARA_NUMBULLET) );
+
+        EditEngine::ImportBulletItem( aNumBullet, 0, NULL,
+                                &(const SvxLRSpaceItem&) rNotesSet.Get( EE_PARA_LRSPACE ) );
+
+        ( (SfxItemSet&) rNotesSet).Put( aNumBullet );
+*/
 
     }
 
@@ -488,13 +517,12 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
         pSheet->SetParent(String());
         SfxItemSet& rBackgroundObjectsSet = pSheet->GetItemSet();
-        rBackgroundObjectsSet.Put(SdrShadowItem(sal_False));
+        rBackgroundObjectsSet.Put(SdrShadowItem(FALSE));
         rBackgroundObjectsSet.Put(SdrShadowColorItem(String(), Color(COL_GRAY)));
-        rBackgroundObjectsSet.Put(SdrShadowXDistItem(200)); // 3 mm Schattendistanz
-        rBackgroundObjectsSet.Put(SdrShadowYDistItem(200));
+        rBackgroundObjectsSet.Put(SdrShadowXDistItem(300));	// 3 mm Schattendistanz
+        rBackgroundObjectsSet.Put(SdrShadowYDistItem(300));
         // #i16874# enable kerning by default but only for new documents
-        rBackgroundObjectsSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
-        rBackgroundObjectsSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
+        rBackgroundObjectsSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
     }
 
     /**************************************************************************
@@ -514,7 +542,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rBackgroundSet.Put(XLineStyleItem(XLINE_NONE));
         rBackgroundSet.Put(XFillStyleItem(XFILL_NONE));
         // #i16874# enable kerning by default but only for new documents
-        rBackgroundSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+        rBackgroundSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
     }
 
     DBG_ASSERT( !bCheck || !bCreated, "missing layout style sheets detected!" );
@@ -525,7 +553,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 |* Graphik-StyleSheets  aus dem Quellpool in diesen Pool kopieren
 |*
 |* (rSourcePool kann nicht const sein, weil SfxStyleSheetPoolBase::Find
-|*  nicht const ist)
+|*	nicht const ist)
 |*
 \************************************************************************/
 
@@ -548,7 +576,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
     if( xSource.is() && xFactory.is() && mxTableFamily.is() )
     {
         for( sal_Int32 nIndex = 0; nIndex < xSource->getCount(); nIndex++ ) try
-        {
+        {	
             Reference< XStyle > xSourceTableStyle( xSource->getByIndex( nIndex ), UNO_QUERY );
             if( xSourceTableStyle.is() )
             {
@@ -574,7 +602,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
                         }
                         catch( Exception& )
                         {
-                            OSL_FAIL( "sd::SdStyleSheetPool::CopyTableStyles(), exception caught!" );
+                            DBG_ERROR( "sd::SdStyleSheetPool::CopyTableStyles(), exception caught!" );
                         }
 
                         if( xTargetStyle.is() )
@@ -591,7 +619,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
         }
         catch( Exception& )
         {
-            OSL_FAIL("sd::SdStyleSheetPool::CopyTableStyles(), exception caught!");
+            DBG_ERROR("sd::SdStyleSheetPool::CopyTableStyles(), exception caught!");
         }
     }
 }
@@ -617,7 +645,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 
                 xNewSheet->SetMask( xSheet->GetMask() );
 
-                // Also set parent relation for copied style sheets
+                // #91588# Also set parent relation for copied style sheets
                 String aParent( xSheet->GetParent() );
                 if( aParent.Len() )
                     aNewStyles.push_back( std::pair< rtl::Reference< SfxStyleSheetBase >, String >( xNewSheet, aParent ) );
@@ -630,7 +658,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 
     // set parents on newly added stylesheets
     std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, String > >::iterator aIter;
-    for( aIter = aNewStyles.begin(); aIter != aNewStyles.end(); ++aIter )
+    for( aIter = aNewStyles.begin(); aIter != aNewStyles.end(); aIter++ )
     {
         DBG_ASSERT( rSourcePool.Find( (*aIter).second, eFamily ), "StyleSheet has invalid parent: Family mismatch" );
         (*aIter).first->SetParent( (*aIter).second );
@@ -647,7 +675,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 |* StyleSheets gefuellt.
 |*
 |* (rSourcePool kann nicht const sein, weil SfxStyleSheetPoolBase::Find
-|*  nicht const ist)
+|*	nicht const ist)
 |*
 \************************************************************************/
 
@@ -657,51 +685,44 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
 
     String aOutlineTag(SdResId(STR_LAYOUT_OUTLINE));
 
-    std::vector<String> aNameList;
-    CreateLayoutSheetNames(rLayoutName,aNameList);
+    List* pNameList = CreateLayoutSheetNames(rLayoutName);
 
     String sEmpty;
-    for (std::vector<String>::const_iterator it = aNameList.begin(); it != aNameList.end(); ++it)
+    String* pName = (String*)pNameList->First();
+    while (pName)
     {
-        pSheet = Find(*it, SD_STYLE_FAMILY_MASTERPAGE);
+        pSheet = Find(*pName, SD_STYLE_FAMILY_MASTERPAGE);
         if (!pSheet)
         {
-            SfxStyleSheetBase* pSourceSheet = rSourcePool.Find(*it, SD_STYLE_FAMILY_MASTERPAGE);
+            SfxStyleSheetBase* pSourceSheet = rSourcePool.Find(*pName, SD_STYLE_FAMILY_MASTERPAGE);
             DBG_ASSERT(pSourceSheet, "CopyLayoutSheets: Quellvorlage nicht gefunden");
             if (pSourceSheet)
             {
                 // falls einer mit Methusalem-Doks. ankommt
-                SfxStyleSheetBase& rNewSheet = Make(*it, SD_STYLE_FAMILY_MASTERPAGE);
+                SfxStyleSheetBase& rNewSheet = Make(*pName, SD_STYLE_FAMILY_MASTERPAGE);
                 rNewSheet.SetHelpId( sEmpty, pSourceSheet->GetHelpId( sEmpty ) );
                 rNewSheet.GetItemSet().Put(pSourceSheet->GetItemSet());
                 rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( &rNewSheet ) ) );
             }
         }
+        delete pName;
+        pName = (String*)pNameList->Next();
     }
+    delete pNameList;
 
     // Sonderbehandlung fuer Gliederungsvorlagen: Parentbeziehungen aufbauen
-    std::vector<SfxStyleSheetBase*> aOutlineSheets;
-    CreateOutlineSheetList(rLayoutName,aOutlineSheets);
-
-    std::vector<SfxStyleSheetBase*>::iterator it = aOutlineSheets.begin();
-
-    SfxStyleSheetBase* pParent = *it;
-    ++it;
-
-    while (it != aOutlineSheets.end())
+    List* pOutlineSheets = CreateOutlineSheetList(rLayoutName);
+    SfxStyleSheetBase* pParent = (SfxStyleSheetBase*)pOutlineSheets->First();
+    pSheet = (SfxStyleSheetBase*)pOutlineSheets->Next();
+    while (pSheet)
     {
-        pSheet = *it;
-
-        if (!pSheet)
-            break;
-
+        // kein Parent?
         if (pSheet->GetParent().Len() == 0)
             pSheet->SetParent(pParent->GetName());
-
         pParent = pSheet;
-
-        ++it;
+        pSheet = (SfxStyleSheetBase*)pOutlineSheets->Next();
     }
+    delete pOutlineSheets;
 }
 
 /*************************************************************************
@@ -711,43 +732,47 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName, std::vector<String> &aNameList) const
+List* SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName) const
 {
     String aPrefix(rLayoutName);
     String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
     aPrefix.Insert(aSep);
 
-    String aName(SdResId(STR_LAYOUT_OUTLINE));
-    String aStr;
+    List* pNameList = new List;
 
-    for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
+    String aName(SdResId(STR_LAYOUT_OUTLINE));
+    String* pName = NULL;
+
+    for (USHORT nLevel = 1; nLevel < 10; nLevel++)
     {
-        aStr = String( aPrefix );
-        aStr.Append(aName);
-        aStr.Append( sal_Unicode( ' ' ));
-        aStr.Append( String::CreateFromInt32( sal_Int32( nLevel )));
-        aNameList.push_back(aStr);
+        pName = new String(aName);
+        pName->Append( sal_Unicode( ' ' ));
+        pName->Append( String::CreateFromInt32( sal_Int32( nLevel )));
+        pName->Insert(aPrefix, 0);
+        pNameList->Insert(pName, LIST_APPEND);
     }
 
-    aStr = String(SdResId(STR_LAYOUT_TITLE));
-    aStr.Insert(aPrefix, 0);
-    aNameList.push_back(aStr);
+    pName = new String(SdResId(STR_LAYOUT_TITLE));
+    pName->Insert(aPrefix, 0);
+    pNameList->Insert(pName, LIST_APPEND);
 
-    aStr = String(SdResId(STR_LAYOUT_SUBTITLE));
-    aStr.Insert(aPrefix, 0);
-    aNameList.push_back(aStr);
+    pName = new String(SdResId(STR_LAYOUT_SUBTITLE));
+    pName->Insert(aPrefix, 0);
+    pNameList->Insert(pName, LIST_APPEND);
 
-    aStr = String(SdResId(STR_LAYOUT_NOTES));
-    aStr.Insert(aPrefix, 0);
-    aNameList.push_back(aStr);
+    pName = new String(SdResId(STR_LAYOUT_NOTES));
+    pName->Insert(aPrefix, 0);
+    pNameList->Insert(pName, LIST_APPEND);
 
-    aStr = String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
-    aStr.Insert(aPrefix, 0);
-    aNameList.push_back(aStr);
+    pName = new String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
+    pName->Insert(aPrefix, 0);
+    pNameList->Insert(pName, LIST_APPEND);
 
-    aStr = String(SdResId(STR_LAYOUT_BACKGROUND));
-    aStr.Insert(aPrefix, 0);
-    aNameList.push_back(aStr);
+    pName = new String(SdResId(STR_LAYOUT_BACKGROUND));
+    pName->Insert(aPrefix, 0);
+    pNameList->Insert(pName, LIST_APPEND);
+
+    return pNameList;
 }
 
 /*************************************************************************
@@ -761,7 +786,7 @@ void SdStyleSheetPool::CreateLayoutSheetList(const String& rLayoutName, SdStyleS
 {
     String aLayoutNameWithSep(rLayoutName);
     aLayoutNameWithSep.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
-    sal_uInt16 nLen = aLayoutNameWithSep.Len();
+    USHORT nLen = aLayoutNameWithSep.Len();
 
     SfxStyleSheetIterator aIter(this, SD_STYLE_FAMILY_MASTERPAGE);
     SfxStyleSheetBase* pSheet = aIter.First();
@@ -787,7 +812,8 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     SfxStyleSheetBase* pSheet = NULL;
     SfxStyleSheetBase* pParent = NULL;
 
-    sal_uInt16 nUsedMask = SFXSTYLEBIT_USED;
+    //USHORT nUsedMask = SFXSTYLEBIT_ALL & ~SFXSTYLEBIT_USERDEF;
+    USHORT nUsedMask = SFXSTYLEBIT_USED;
 
     aName = String(SdResId(STR_PSEUDOSHEET_TITLE));
     if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
@@ -837,7 +863,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     pParent = NULL;
     SetSearchMask(SD_STYLE_FAMILY_PSEUDO);
     aName = String(SdResId(STR_PSEUDOSHEET_OUTLINE));
-    for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
+    for (USHORT nLevel = 1; nLevel < 10; nLevel++)
     {
         String aLevelName(aName);
         aLevelName.Append( sal_Unicode( ' ' ));
@@ -878,33 +904,33 @@ void SdStyleSheetPool::UpdateStdNames()
 
         if( !pStyle->IsUserDefined() )
         {
-            String aOldName     = pStyle->GetName();
-            sal_uLong nHelpId       = pStyle->GetHelpId( aHelpFile );
-            SfxStyleFamily eFam = pStyle->GetFamily();
+            String aOldName		= pStyle->GetName();
+            ULONG nHelpId		= pStyle->GetHelpId( aHelpFile );
+            SfxStyleFamily eFam	= pStyle->GetFamily();
 
-            sal_Bool bHelpKnown = sal_True;
+            BOOL bHelpKnown = TRUE;
             String aNewName;
-            sal_uInt16 nNameId = 0;
+            USHORT nNameId = 0;
             switch( nHelpId )
             {
-                case HID_STANDARD_STYLESHEET_NAME:  nNameId = STR_STANDARD_STYLESHEET_NAME; break;
-                case HID_POOLSHEET_OBJWITHARROW:    nNameId = STR_POOLSHEET_OBJWITHARROW;   break;
-                case HID_POOLSHEET_OBJWITHSHADOW:   nNameId = STR_POOLSHEET_OBJWITHSHADOW;  break;
-                case HID_POOLSHEET_OBJWITHOUTFILL:  nNameId = STR_POOLSHEET_OBJWITHOUTFILL; break;
-                case HID_POOLSHEET_TEXT:            nNameId = STR_POOLSHEET_TEXT;           break;
-                case HID_POOLSHEET_TEXTBODY:        nNameId = STR_POOLSHEET_TEXTBODY;       break;
+                case HID_STANDARD_STYLESHEET_NAME:	nNameId = STR_STANDARD_STYLESHEET_NAME;	break;
+                case HID_POOLSHEET_OBJWITHARROW:	nNameId = STR_POOLSHEET_OBJWITHARROW;	break;
+                case HID_POOLSHEET_OBJWITHSHADOW:	nNameId = STR_POOLSHEET_OBJWITHSHADOW;	break;
+                case HID_POOLSHEET_OBJWITHOUTFILL:	nNameId = STR_POOLSHEET_OBJWITHOUTFILL;	break;
+                case HID_POOLSHEET_TEXT:			nNameId = STR_POOLSHEET_TEXT;			break;
+                case HID_POOLSHEET_TEXTBODY:		nNameId = STR_POOLSHEET_TEXTBODY;		break;
                 case HID_POOLSHEET_TEXTBODY_JUSTIFY:nNameId = STR_POOLSHEET_TEXTBODY_JUSTIFY;break;
-                case HID_POOLSHEET_TEXTBODY_INDENT: nNameId = STR_POOLSHEET_TEXTBODY_INDENT;break;
-                case HID_POOLSHEET_TITLE:           nNameId = STR_POOLSHEET_TITLE;          break;
-                case HID_POOLSHEET_TITLE1:          nNameId = STR_POOLSHEET_TITLE1;         break;
-                case HID_POOLSHEET_TITLE2:          nNameId = STR_POOLSHEET_TITLE2;         break;
-                case HID_POOLSHEET_HEADLINE:        nNameId = STR_POOLSHEET_HEADLINE;       break;
-                case HID_POOLSHEET_HEADLINE1:       nNameId = STR_POOLSHEET_HEADLINE1;      break;
-                case HID_POOLSHEET_HEADLINE2:       nNameId = STR_POOLSHEET_HEADLINE2;      break;
-                case HID_POOLSHEET_MEASURE:         nNameId = STR_POOLSHEET_MEASURE;        break;
+                case HID_POOLSHEET_TEXTBODY_INDENT:	nNameId = STR_POOLSHEET_TEXTBODY_INDENT;break;
+                case HID_POOLSHEET_TITLE:			nNameId = STR_POOLSHEET_TITLE;			break;
+                case HID_POOLSHEET_TITLE1:			nNameId = STR_POOLSHEET_TITLE1;			break;
+                case HID_POOLSHEET_TITLE2:			nNameId = STR_POOLSHEET_TITLE2;			break;
+                case HID_POOLSHEET_HEADLINE:		nNameId = STR_POOLSHEET_HEADLINE;		break;
+                case HID_POOLSHEET_HEADLINE1:		nNameId = STR_POOLSHEET_HEADLINE1;		break;
+                case HID_POOLSHEET_HEADLINE2:		nNameId = STR_POOLSHEET_HEADLINE2;		break;
+                case HID_POOLSHEET_MEASURE:			nNameId = STR_POOLSHEET_MEASURE;		break;
 
-                case HID_PSEUDOSHEET_TITLE:         nNameId = STR_PSEUDOSHEET_TITLE;        break;
-                case HID_PSEUDOSHEET_SUBTITLE:      nNameId = STR_PSEUDOSHEET_SUBTITLE;     break;
+                case HID_PSEUDOSHEET_TITLE:			nNameId = STR_PSEUDOSHEET_TITLE; 		break;
+                case HID_PSEUDOSHEET_SUBTITLE:	 	nNameId = STR_PSEUDOSHEET_SUBTITLE; 	break;
                 case HID_PSEUDOSHEET_OUTLINE1:
                 case HID_PSEUDOSHEET_OUTLINE2:
                 case HID_PSEUDOSHEET_OUTLINE3:
@@ -913,21 +939,21 @@ void SdStyleSheetPool::UpdateStdNames()
                 case HID_PSEUDOSHEET_OUTLINE6:
                 case HID_PSEUDOSHEET_OUTLINE7:
                 case HID_PSEUDOSHEET_OUTLINE8:
-                case HID_PSEUDOSHEET_OUTLINE9:      nNameId = STR_PSEUDOSHEET_OUTLINE;      break;
-                case HID_PSEUDOSHEET_BACKGROUNDOBJECTS: nNameId = STR_PSEUDOSHEET_BACKGROUNDOBJECTS; break;
-                case HID_PSEUDOSHEET_BACKGROUND:    nNameId = STR_PSEUDOSHEET_BACKGROUND;   break;
-                case HID_PSEUDOSHEET_NOTES:         nNameId = STR_PSEUDOSHEET_NOTES;        break;
+                case HID_PSEUDOSHEET_OUTLINE9:		nNameId = STR_PSEUDOSHEET_OUTLINE; 		break;
+                case HID_PSEUDOSHEET_BACKGROUNDOBJECTS:	nNameId = STR_PSEUDOSHEET_BACKGROUNDOBJECTS; break;
+                case HID_PSEUDOSHEET_BACKGROUND:	nNameId = STR_PSEUDOSHEET_BACKGROUND; 	break;
+                case HID_PSEUDOSHEET_NOTES:			nNameId = STR_PSEUDOSHEET_NOTES; 		break;
 
-                case HID_SD_CELL_STYLE_DEFAULT:         nNameId = STR_STANDARD_STYLESHEET_NAME; break;
-                case HID_SD_CELL_STYLE_BANDED:          nNameId = STR_POOLSHEET_BANDED_CELL; break;
-                case HID_SD_CELL_STYLE_HEADER:          nNameId = STR_POOLSHEET_HEADER; break;
-                case HID_SD_CELL_STYLE_TOTAL:           nNameId = STR_POOLSHEET_TOTAL; break;
-                case HID_SD_CELL_STYLE_FIRST_COLUMN:    nNameId = STR_POOLSHEET_FIRST_COLUMN; break;
-                case HID_SD_CELL_STYLE_LAST_COLUMN:     nNameId = STR_POOLSHEET_LAST_COLUMN; break;
+                case HID_SD_CELL_STYLE_DEFAULT:			nNameId = STR_STANDARD_STYLESHEET_NAME; break;
+                case HID_SD_CELL_STYLE_BANDED:			nNameId = STR_POOLSHEET_BANDED_CELL; break;
+                case HID_SD_CELL_STYLE_HEADER:			nNameId = STR_POOLSHEET_HEADER; break;
+                case HID_SD_CELL_STYLE_TOTAL:			nNameId = STR_POOLSHEET_TOTAL; break;
+                case HID_SD_CELL_STYLE_FIRST_COLUMN:	nNameId = STR_POOLSHEET_FIRST_COLUMN; break;
+                case HID_SD_CELL_STYLE_LAST_COLUMN:		nNameId = STR_POOLSHEET_LAST_COLUMN; break;
 
                 default:
                     // 0 oder falsche (alte) HelpId
-                    bHelpKnown = sal_False;
+                    bHelpKnown = FALSE;
             }
             if( bHelpKnown )
             {
@@ -948,7 +974,7 @@ void SdStyleSheetPool::UpdateStdNames()
                     if ( !pSheetFound )
                     {
                         // Sheet existiert noch nicht: Altes Sheet wird umbenannt
-                        pStyle->SetName( aNewName );    // setzt auch Parents um
+                        pStyle->SetName( aNewName );	// setzt auch Parents um
                     }
                     else
                     {
@@ -968,7 +994,7 @@ void SdStyleSheetPool::UpdateStdNames()
     if ( pEraseList )
     {
         // Styles, welche nicht umbenannt werden konnten, muessen entfernt werden
-        for ( sal_uLong i = 0; i < pEraseList->Count(); i++ )
+        for ( ULONG i = 0; i < pEraseList->Count(); i++ )
         {
             SfxStyleSheetBase* pEraseSheet = ( SfxStyleSheetBase* ) pEraseList->GetObject( i );
             Remove( pEraseSheet );
@@ -986,7 +1012,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                                          Font& rBulletFont )
 {
     String aHelpFile;
-    sal_uLong nHelpId = pSheet->GetHelpId( aHelpFile );
+    ULONG nHelpId = pSheet->GetHelpId( aHelpFile );
     SfxItemSet& rSet = pSheet->GetItemSet();
 
     switch ( nHelpId )
@@ -1002,9 +1028,13 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             aNumberFormat.SetStart(1);
             aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
-            SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , sal_False);
+            SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , FALSE);
+            aNumberFormat.SetLSpace( 0 );
+            aNumberFormat.SetAbsLSpace( 0 );
+            aNumberFormat.SetFirstLineOffset( 0 );
+            aNumRule.SetLevel( 0, aNumberFormat );
 
-            for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
+            for( USHORT i = 1; i < aNumRule.GetLevelCount(); i++ )
             {
                 const short nLSpace = (i + 1) * 600;
                 aNumberFormat.SetLSpace(nLSpace);
@@ -1019,7 +1049,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
         break;
 
         case HID_PSEUDOSHEET_TITLE:
-            /* title gets same bullet as subtitle and not that page symbol anymore */
+            /* #84013# title gets same bullet as subtitle and not that page symbol anymore */
         case HID_PSEUDOSHEET_SUBTITLE :
         {
             // Untertitel-Vorlage
@@ -1028,14 +1058,11 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 
             if(pDefaultRule)
             {
-                SvxNumRule aNumRule(pDefaultRule->GetFeatureFlags(), 10, sal_False);
-                for(sal_uInt16 i=0; i < aNumRule.GetLevelCount(); i++)
+                SvxNumRule aNumRule(pDefaultRule->GetFeatureFlags(), 10, FALSE);
+                for(USHORT i=0; i < aNumRule.GetLevelCount(); i++)
                 {
                     SvxNumberFormat aFrmt( pDefaultRule->GetLevel(i) );
                     aFrmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
-                    // #i93908# clear suffix for bullet lists
-                    aFrmt.SetPrefix(::rtl::OUString());
-                    aFrmt.SetSuffix(::rtl::OUString());
                     aFrmt.SetStart(1);
                     aFrmt.SetBulletRelSize(45);
                     aFrmt.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
@@ -1058,8 +1085,8 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
             SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE|NUM_SYMBOL_ALIGNMENT,
-                                 10, sal_False );
-            for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
+                                 10, FALSE );
+            for( UINT16 i = 0; i < aNumRule.GetLevelCount(); i++ )
             {
                 aNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
                 aNumberFormat.SetBulletRelSize(45);
@@ -1068,7 +1095,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                 aNumberFormat.SetAbsLSpace(nLSpace);
                 short nFirstLineOffset = -600;
 
-                sal_uLong nFontSize = 20;
+                ULONG nFontSize = 20;
                 switch(i)
                 {
                     case 0:
@@ -1103,8 +1130,8 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                 }
 
                 aNumberFormat.SetFirstLineOffset(nFirstLineOffset);
-                nFontSize = (sal_uInt16)((nFontSize * 2540L) / 72);  // Pt --> 1/100 mm
-                rBulletFont.SetSize(Size(0,846));       // 24 pt
+                nFontSize = (USHORT)((nFontSize * 2540L) / 72);  // Pt --> 1/100 mm
+                rBulletFont.SetSize(Size(0,846));		// 24 pt
                 aNumberFormat.SetBulletFont(&rBulletFont);
                 aNumRule.SetLevel( i, aNumberFormat );
             }
@@ -1131,10 +1158,10 @@ Font SdStyleSheetPool::GetBulletFont() const
     aBulletFont.SetOverline(UNDERLINE_NONE);
     aBulletFont.SetStrikeout(STRIKEOUT_NONE);
     aBulletFont.SetItalic(ITALIC_NONE);
-    aBulletFont.SetOutline(sal_False);
-    aBulletFont.SetShadow(sal_False);
+    aBulletFont.SetOutline(FALSE);
+    aBulletFont.SetShadow(FALSE);
     aBulletFont.SetColor(Color(COL_AUTO));
-    aBulletFont.SetTransparent(sal_True);
+    aBulletFont.SetTransparent(TRUE);
 
     return aBulletFont;
 }
@@ -1232,7 +1259,7 @@ Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName ) throw(NoSuchEl
 Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames() throw(RuntimeException)
 {
     throwIfDisposed();
-
+    
     Sequence< OUString > aNames( maStyleFamilyMap.size() + 3 );
     OUString* pNames = aNames.getArray();
 
@@ -1351,7 +1378,7 @@ void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
         SdStyleFamilyMap aTempMap;
         aTempMap.swap( maStyleFamilyMap );
 
-        for( SdStyleFamilyMap::iterator iter( aTempMap.begin() ); iter != aTempMap.end(); ++iter ) try
+        for( SdStyleFamilyMap::iterator iter( aTempMap.begin() ); iter != aTempMap.end(); iter++ ) try
         {
             (*iter).second->dispose();
         }
@@ -1359,6 +1386,7 @@ void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
         {
         }
 
+//		EndListening( *mpDoc );
         mpDoc = 0;
 
         Clear();
@@ -1383,10 +1411,10 @@ SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
 {
     SdStyleSheetVector aResult;
 
-    sal_uInt16 nListenerCount = pSheet->GetListenerCount();
+    USHORT nListenerCount = pSheet->GetListenerCount();
     if (nListenerCount > 0)
     {
-        for (sal_uInt16 n = 0; n < nListenerCount; n++)
+        for (USHORT n = 0; n < nListenerCount; n++)
         {
             SdStyleSheet* pChild = dynamic_cast< SdStyleSheet* >( pSheet->GetListener(n) );
             if(pChild && pChild->GetParent() == pSheet->GetName())

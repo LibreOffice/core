@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include "IdentityMapping.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <set>
 #include <algorithm>
 
@@ -57,11 +57,9 @@
 
 using namespace std;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star::uno;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
+
 
 namespace cppu
 {
@@ -71,7 +69,7 @@ class Mapping
     uno_Mapping * _pMapping;
 
 public:
-    inline explicit Mapping( uno_Mapping * pMapping = 0 ) SAL_THROW( () );
+    inline Mapping( uno_Mapping * pMapping = 0 ) SAL_THROW( () );
     inline Mapping( const Mapping & rMapping ) SAL_THROW( () );
     inline ~Mapping() SAL_THROW( () );
     inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping ) SAL_THROW( () );
@@ -116,10 +114,10 @@ inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) SAL_THROW( () )
 //==================================================================================================
 struct MappingEntry
 {
-    sal_Int32           nRef;
-    uno_Mapping *       pMapping;
-    uno_freeMappingFunc freeMapping;
-    OUString            aMappingName;
+    sal_Int32			nRef;
+    uno_Mapping *		pMapping;
+    uno_freeMappingFunc	freeMapping;
+    OUString			aMappingName;
 
     MappingEntry(
         uno_Mapping * pMapping_, uno_freeMappingFunc freeMapping_,
@@ -144,9 +142,9 @@ struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
         { return (size_t)pKey; }
 };
 
-typedef boost::unordered_map<
+typedef hash_map<
     OUString, MappingEntry *, FctOUStringHash, equal_to< OUString > > t_OUString2Entry;
-typedef boost::unordered_map<
+typedef hash_map<
     uno_Mapping *, MappingEntry *, FctPtrHash, equal_to< uno_Mapping * > > t_Mapping2Entry;
 
 typedef set< uno_getMappingFunc > t_CallbackSet;
@@ -155,15 +153,15 @@ typedef set< OUString > t_OUStringSet;
 //==================================================================================================
 struct MappingsData
 {
-    Mutex               aMappingsMutex;
-    t_OUString2Entry    aName2Entry;
-    t_Mapping2Entry     aMapping2Entry;
+    Mutex				aMappingsMutex;
+    t_OUString2Entry	aName2Entry;
+    t_Mapping2Entry		aMapping2Entry;
 
-    Mutex               aCallbacksMutex;
-    t_CallbackSet       aCallbacks;
+    Mutex				aCallbacksMutex;
+    t_CallbackSet		aCallbacks;
 
-    Mutex               aNegativeLibsMutex;
-    t_OUStringSet       aNegativeLibs;
+    Mutex				aNegativeLibsMutex;
+    t_OUStringSet		aNegativeLibs;
 };
 //--------------------------------------------------------------------------------------------------
 static MappingsData & getMappingsData() SAL_THROW( () )
@@ -188,15 +186,15 @@ static MappingsData & getMappingsData() SAL_THROW( () )
  */
 struct uno_Mediate_Mapping : public uno_Mapping
 {
-    sal_Int32   nRef;
+    sal_Int32	nRef;
 
     Environment aFrom;
     Environment aTo;
 
-    Mapping     aFrom2Uno;
-    Mapping     aUno2To;
+    Mapping		aFrom2Uno;
+    Mapping		aUno2To;
 
-    OUString    aAddPurpose;
+    OUString	aAddPurpose;
 
     uno_Mediate_Mapping(
         const Environment & rFrom_, const Environment & rTo_,
@@ -285,9 +283,9 @@ uno_Mediate_Mapping::uno_Mediate_Mapping(
     , aUno2To( rUno2To_ )
     , aAddPurpose( rAddPurpose_ )
 {
-    uno_Mapping::acquire        = mediate_acquire;
-    uno_Mapping::release        = mediate_release;
-    uno_Mapping::mapInterface   = mediate_mapInterface;
+    uno_Mapping::acquire		= mediate_acquire;
+    uno_Mapping::release		= mediate_release;
+    uno_Mapping::mapInterface	= mediate_mapInterface;
 }
 
 //==================================================================================================
@@ -542,9 +540,9 @@ void SAL_CALL uno_getMapping(
     }
 
     // See if an identity mapping does fit.
-    if (!aRet.is() && pFrom == pTo && !aAddPurpose.getLength())
+    if (!aRet.is() && pFrom == pTo && !aAddPurpose.getLength()) 
         aRet = createIdentityMapping(pFrom);
-
+        
     if (!aRet.is())
     {
         getCascadeMapping(ppMapping, pFrom, pTo, pAddPurpose);

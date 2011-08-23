@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,11 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 
+// class SvxWritingModeItem -------------------------------------------------
 
 TYPEINIT1_FACTORY(SvxWritingModeItem, SfxUInt16Item, new SvxWritingModeItem(com::sun::star::text::WritingMode_LR_TB, 0));
 
-SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, sal_uInt16 _nWhich )
+SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, USHORT _nWhich )
     : SfxUInt16Item( _nWhich, (sal_uInt16)eValue )
 {
 }
@@ -63,19 +64,19 @@ SfxPoolItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
     return new SvxWritingModeItem( *this );
 }
 
-SfxPoolItem* SvxWritingModeItem::Create( SvStream & , sal_uInt16  ) const
+SfxPoolItem* SvxWritingModeItem::Create( SvStream & , USHORT  ) const
 {
-    OSL_FAIL("SvxWritingModeItem should not be streamed!");
+    DBG_ERROR("SvxWritingModeItem should not be streamed!");
     return NULL;
 }
 
-SvStream& SvxWritingModeItem::Store( SvStream & rStrm, sal_uInt16  ) const
+SvStream& SvxWritingModeItem::Store( SvStream & rStrm, USHORT  ) const
 {
-    OSL_FAIL("SvxWritingModeItem should not be streamed!");
+    DBG_ERROR("SvxWritingModeItem should not be streamed!");
     return rStrm;
 }
 
-sal_uInt16 SvxWritingModeItem::GetVersion( sal_uInt16 /*nFVer*/ ) const
+USHORT SvxWritingModeItem::GetVersion( USHORT /*nFVer*/ ) const
 {
     return USHRT_MAX;
 }
@@ -104,7 +105,7 @@ SfxItemPresentation SvxWritingModeItem::GetPresentation( SfxItemPresentation ePr
     return eRet;
 }
 
-bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     sal_Int32 nVal = 0;
     bool bRet = ( rVal >>= nVal );
@@ -140,7 +141,7 @@ bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uIn
 }
 
 bool SvxWritingModeItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                            sal_uInt8 ) const
+                                            BYTE ) const
 {
     rVal <<= (WritingMode)GetValue();
     return true;

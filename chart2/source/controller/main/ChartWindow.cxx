@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,14 +60,14 @@ ChartWindow::ChartWindow( WindowController* pWindowController, Window* pParent, 
         , m_pWindowController( pWindowController )
         , m_bInPaint(false)
 {
-    this->SetHelpId( HID_SCH_WIN_DOCUMENT );
+    this->SetSmartHelpId( SmartId( HID_SCH_WIN_DOCUMENT ) );
     this->SetMapMode( MapMode(MAP_100TH_MM) );
     adjustHighContrastMode();
     // chart does not depend on exact pixel painting => enable antialiased drawing
     SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | GetAntialiasing() );
-    EnableRTL( sal_False );
+    EnableRTL( FALSE );
     if( pParent )
-        pParent->EnableRTL( sal_False );// #i96215# necessary for a correct position of the context menu in rtl mode
+        pParent->EnableRTL( FALSE );// #i96215# necessary for a correct position of the context menu in rtl mode
 }
 
 ChartWindow::~ChartWindow()
@@ -248,19 +248,19 @@ void ChartWindow::ForceInvalidate()
 {
     ::Window::Invalidate();
 }
-void ChartWindow::Invalidate( sal_uInt16 nFlags )
+void ChartWindow::Invalidate( USHORT nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
     ::Window::Invalidate( nFlags );
 }
-void ChartWindow::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
+void ChartWindow::Invalidate( const Rectangle& rRect, USHORT nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
     ::Window::Invalidate( rRect, nFlags );
 }
-void ChartWindow::Invalidate( const Region& rRegion, sal_uInt16 nFlags )
+void ChartWindow::Invalidate( const Region& rRegion, USHORT nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;

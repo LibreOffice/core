@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,13 +56,13 @@ namespace drawinglayer
         {
         private:
             /// hold the last decompositon since it's expensive
-            Primitive3DSequence                         maLast3DDecomposition;
+            Primitive3DSequence							maLast3DDecomposition;
 
             /// visualisation parameters
-            double                                      mfRadius;
-            double                                      mfDegreeStepWidth;
-            double                                      mfMiterMinimumAngle;
-            basegfx::B2DLineJoin                        maLineJoin;
+            double										mfRadius;
+            double										mfDegreeStepWidth;
+            double										mfMiterMinimumAngle;
+            basegfx::B2DLineJoin					    maLineJoin;
 
         protected:
             /** access methods to maLast3DDecomposition. The usage of this methods may allow
@@ -78,7 +78,7 @@ namespace drawinglayer
         public:
             /// constructor
             PolygonTubePrimitive3D(
-                const basegfx::B3DPolygon& rPolygon,
+                const basegfx::B3DPolygon& rPolygon, 
                 const basegfx::BColor& rBColor,
                 double fRadius, basegfx::B2DLineJoin aLineJoin,
                 double fDegreeStepWidth = 10.0 * F_PI180,
@@ -93,7 +93,7 @@ namespace drawinglayer
             /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            /** local decomposition. Use own buffering since we are not derived from
+            /** local decomposition. Use own buffering since we are not derived from 
                 BufferedDecompositionPrimitive3D
              */
             virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;

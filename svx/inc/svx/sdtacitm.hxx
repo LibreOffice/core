@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 // Number of loops. 0=infinite.
 class SdrTextAniCountItem: public SfxUInt16Item {
 public:
-    SdrTextAniCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,nVal) {}
+    SdrTextAniCountItem(UINT16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,nVal) {}
     SdrTextAniCountItem(SvStream& rIn): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,rIn)  {}
 };
 

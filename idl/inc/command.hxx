@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,16 +29,18 @@
 #ifndef _COMMAND_HXX
 #define _COMMAND_HXX
 
+
+#include <tools/list.hxx>
 #include <tools/string.hxx>
-#include <vector>
 
 #ifndef STRING_LIST
 #define STRING_LIST
-typedef ::std::vector< String* > StringList;
+DECLARE_LIST( StringList, String * )
 #endif
 
-typedef ::std::vector< ByteString* > ByteStringList;
+DECLARE_LIST( ByteStringList, ByteString* )
 
+/******************** class SvCommand ************************************/
 class SvCommand
 {
 public:
@@ -61,8 +63,8 @@ public:
     String      aCSVFile;
     String      aExportFile;
     String      aDocuFile;
-    sal_uInt32      nVerbosity;
-    sal_uInt32      nFlags;
+    UINT32      nVerbosity;
+    UINT32      nFlags;
 
                 SvCommand( int argc, char ** argv );
                 ~SvCommand();
@@ -70,7 +72,7 @@ public:
 
 void Init();
 class SvIdlWorkingBase;
-sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand );
+BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand );
 void DeInit();
 
 #endif // _COMMAND_HXX

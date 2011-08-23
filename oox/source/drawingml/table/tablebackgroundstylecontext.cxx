@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,9 @@
 
 #include "oox/drawingml/table/tablebackgroundstylecontext.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
-
+#include "tokens.hxx"
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -60,14 +61,14 @@ TableBackgroundStyleContext::createFastChildContext( ::sal_Int32 aElementToken, 
     switch( aElementToken )
     {
         // EG_ThemeableFillStyle (choice)
-        case A_TOKEN( fill ):       // CT_FillProperties
+        case NMSP_DRAWINGML|XML_fill:		// CT_FillProperties
             {
                 boost::shared_ptr< FillProperties >& rxFillProperties = mrTableStyle.getBackgroundFillProperties();
                 rxFillProperties.reset( new FillProperties );
                 xRet.set( new FillPropertiesContext( *this, *rxFillProperties ) );
             }
             break;
-        case A_TOKEN( fillRef ):    // CT_StyleMatrixReference
+        case NMSP_DRAWINGML|XML_fillRef:	// CT_StyleMatrixReference
             {
                 ShapeStyleRef& rStyleRef = mrTableStyle.getBackgroundFillStyleRef();
                 rStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
@@ -76,9 +77,9 @@ TableBackgroundStyleContext::createFastChildContext( ::sal_Int32 aElementToken, 
             break;
 
         // EG_ThemeableEffectStyle (choice)
-        case A_TOKEN( effect ):     // CT_EffectProperties
+        case NMSP_DRAWINGML|XML_effect:		// CT_EffectProperties
             break;
-        case A_TOKEN( effectRef ):  // CT_StyleMatrixReference
+        case NMSP_DRAWINGML|XML_effectRef:	// CT_StyleMatrixReference
             break;
     }
     if( !xRet.is() )

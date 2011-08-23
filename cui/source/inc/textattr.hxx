@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,40 +48,40 @@ class SdrView;
 class SvxTextAttrPage : public SvxTabPage
 {
 private:
-    FixedLine           aFlText;
+    FixedLine			aFlText;
     TriStateBox         aTsbAutoGrowWidth;
     TriStateBox         aTsbAutoGrowHeight;
-    TriStateBox         aTsbFitToSize;
-    TriStateBox         aTsbContour;
+    TriStateBox			aTsbFitToSize;
+    TriStateBox			aTsbContour;
     TriStateBox         aTsbWordWrapText;
     TriStateBox         aTsbAutoGrowSize;
 
 
-    FixedLine           aFlDistance;
-    FixedText           aFtLeft;
-    MetricField         aMtrFldLeft;
-    FixedText           aFtRight;
-    MetricField         aMtrFldRight;
-    FixedText           aFtTop;
-    MetricField         aMtrFldTop;
-    FixedText           aFtBottom;
-    MetricField         aMtrFldBottom;
+    FixedLine			aFlDistance;
+    FixedText			aFtLeft;
+    MetricField			aMtrFldLeft;
+    FixedText			aFtRight;
+    MetricField			aMtrFldRight;
+    FixedText			aFtTop;
+    MetricField			aMtrFldTop;
+    FixedText			aFtBottom;
+    MetricField			aMtrFldBottom;
 
-    FixedLine           aFlSeparator;
+    FixedLine			aFlSeparator;
 
-    FixedLine           aFlPosition;
-    SvxRectCtl          aCtlPosition;
-    TriStateBox         aTsbFullWidth;
+    FixedLine			aFlPosition;
+    SvxRectCtl			aCtlPosition;
+    TriStateBox			aTsbFullWidth;
 
-    const SfxItemSet&   rOutAttrs;
-    const SdrView*      pView;
+    const SfxItemSet&	rOutAttrs;
+    const SdrView*		pView;
 
-    sal_Bool                bAutoGrowSizeEnabled;
-    sal_Bool                bContourEnabled;
-    sal_Bool                bAutoGrowWidthEnabled;
-    sal_Bool                bAutoGrowHeightEnabled;
-    sal_Bool                bWordWrapTextEnabled;
-    sal_Bool                bFitToSizeEnabled;
+    BOOL				bAutoGrowSizeEnabled;
+    BOOL				bContourEnabled;
+    BOOL                bAutoGrowWidthEnabled;
+    BOOL                bAutoGrowHeightEnabled;
+    BOOL                bWordWrapTextEnabled;
+    BOOL                bFitToSizeEnabled;
 
 
 #ifdef _SVX_TEXTATTR_CXX
@@ -89,8 +89,8 @@ private:
     DECL_LINK( ClickHdl_Impl, void * );
 #endif
 
-    /** Return whether the text direction is from left to right (</sal_True>) or
-        top to bottom (</sal_False>).
+    /** Return whether the text direction is from left to right (</TRUE>) or
+        top to bottom (</FALSE>).
     */
     bool IsTextDirectionLeftToRight (void) const;
 
@@ -98,16 +98,16 @@ public:
     SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs );
     ~SvxTextAttrPage();
 
-    static SfxTabPage*  Create( Window*, const SfxItemSet& );
-    static  sal_uInt16*     GetRanges();
+    static SfxTabPage* 	Create( Window*, const SfxItemSet& );
+    static  USHORT*	    GetRanges();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet & );
+    virtual BOOL 		FillItemSet( SfxItemSet& );
+    virtual void 		Reset( const SfxItemSet & );
 
-    virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual void 		PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void         Construct();
-    void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
+    void 		 Construct();
+    void		 SetView( const SdrView* pSdrView ) { pView = pSdrView; }
     virtual void         PageCreated(SfxAllItemSet aSet);
 };
 

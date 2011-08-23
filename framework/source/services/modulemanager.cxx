@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@
 namespace framework
 {
 
-static const ::rtl::OUString CFGPATH_FACTORIES    (RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Office/Factories"));
-static const ::rtl::OUString MODULEPROP_IDENTIFIER(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryModuleIdentifier"));
+static const ::rtl::OUString CFGPATH_FACTORIES     = ::rtl::OUString::createFromAscii("/org.openoffice.Setup/Office/Factories");
+static const ::rtl::OUString MODULEPROP_IDENTIFIER = ::rtl::OUString::createFromAscii("ooSetupFactoryModuleIdentifier" );
 
 /*-----------------------------------------------
     04.12.2003 09:32
@@ -146,7 +146,7 @@ ModuleManager::~ModuleManager()
        )
     {
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Given module is not a frame nor a window, controller or model.")),
+                ::rtl::OUString::createFromAscii("Given module is not a frame nor a window, controller or model."),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
     }
@@ -163,7 +163,7 @@ ModuleManager::~ModuleManager()
     // Means: model -> controller -> window
     // No fallbacks to higher components are allowed !
     // Note : A frame provides access to module components only ... but it's not a module by himself.
-
+    
     ::rtl::OUString sModule;
     if (xModel.is())
         sModule = implts_identify(xModel);
@@ -173,12 +173,12 @@ ModuleManager::~ModuleManager()
     else
     if (xWindow.is())
         sModule = implts_identify(xWindow);
-
+    
     if (sModule.getLength() < 1)
         throw css::frame::UnknownModuleException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant find suitable module for the given component.")),
+                ::rtl::OUString::createFromAscii("Cant find suitable module for the given component."),
                 static_cast< ::cppu::OWeakObject* >(this));
-
+    
     return sModule;
 }
 
@@ -196,7 +196,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     if (lProps.empty() )
     {
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No properties given to replace part of module.")),
+                ::rtl::OUString::createFromAscii("No properties given to replace part of module."),
                 static_cast< css::container::XNameAccess* >(this),
                 2);
     }
@@ -210,7 +210,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     // get access to the element
     // Note: Dont use impl_getConfig() method here. Because it creates a readonly access only, further
     // it cache it as a member of this module manager instance. If we change some props there ... but dont
-    // flush changes (because an error occurred) we will read them later. If we use a different config access
+    // flush changes (because an error occured) we will read them later. If we use a different config access
     // we can close it without a flush ... and our read data wont be affected .-)
     css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
                                                                         xSMGR,
@@ -223,7 +223,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Was not able to get write access to the requested module entry inside configuration.")),
+                ::rtl::OUString::createFromAscii("Was not able to get write access to the requested module entry inside configuration."),
                 static_cast< css::container::XNameAccess* >(this));
     }
 
@@ -234,7 +234,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     {
         const ::rtl::OUString& sPropName  = pProp->first;
         const css::uno::Any&   aPropValue = pProp->second;
-
+    
         // let "NoSuchElementException" out ! We support the same API ...
         // and without a flush() at the end all changed data before will be ignored !
         xModule->replaceByName(sPropName, aPropValue);
@@ -258,7 +258,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const ::rtl::OUString& sName)
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Was not able to get write access to the requested module entry inside configuration.")),
+                ::rtl::OUString::createFromAscii("Was not able to get write access to the requested module entry inside configuration."),
                 static_cast< css::container::XNameAccess* >(this));
     }
 
@@ -344,14 +344,14 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
         {
             const ::rtl::OUString&                sModule      = lModules[i];
                   ::comphelper::SequenceAsHashMap lModuleProps = getByName(sModule);
-
+        
             if (lModuleProps.match(lSearchProps))
                 lResult.push_back(css::uno::makeAny(lModuleProps.getAsConstPropertyValueList()));
         }
         catch(const css::uno::Exception&)
             {}
     }
-
+    
     ::comphelper::OAnyEnumeration*                      pEnum = new ::comphelper::OAnyEnumeration(lResult.getAsConstList());
     css::uno::Reference< css::container::XEnumeration > xEnum(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY_THROW);
     return xEnum;
@@ -403,7 +403,7 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
     if (xModule.is())
         return xModule->getIdentifier();
 
-    // detect modules in a generic way ...
+    // detect modules in a generic way ...          
     // comparing service names with configured entries ...
     css::uno::Reference< css::lang::XServiceInfo > xInfo(xComponent, css::uno::UNO_QUERY);
     if (!xInfo.is())
@@ -413,7 +413,7 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
     const ::rtl::OUString*                      pKnownModules = lKnownModules.getConstArray();
           sal_Int32                             c             = lKnownModules.getLength();
           sal_Int32                             i             = 0;
-
+      
     for (i=0; i<c; ++i)
     {
         if (xInfo->supportsService(pKnownModules[i]))

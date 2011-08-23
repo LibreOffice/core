@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <sax/tools/converter.hxx>
-#include "oox/token/tokens.hxx"
+#include "tokens.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;

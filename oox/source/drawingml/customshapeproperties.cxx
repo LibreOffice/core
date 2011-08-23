@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,9 @@
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/core/namespaces.hxx"
+#include "properties.hxx"
+#include "tokens.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -48,8 +51,8 @@ using namespace ::com::sun::star::drawing;
 namespace oox { namespace drawingml {
 
 CustomShapeProperties::CustomShapeProperties()
-: mbMirroredX   ( sal_False )
-, mbMirroredY   ( sal_False )
+: mbMirroredX	( sal_False )
+, mbMirroredY	( sal_False )
 {
 }
 CustomShapeProperties::~CustomShapeProperties()
@@ -129,7 +132,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                                         aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
                                         aAdjustmentSeq[ nAdjustmentIndex ] = aAdjustmentVal;
                                     }
-                                } else if ( aAdjustmentSeq.getLength() > 0 ) {
+                                } else {
                                     EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
                                     aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
                                     aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
@@ -159,7 +162,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         awt::Size aSize( xShape->getSize() );
         awt::Rectangle aViewBox( 0, 0, aSize.Width * 360, aSize.Height * 360 );
         if ( maPath2DList.size() )
-        {   // TODO: each polygon may have its own size, but I think it is rather been used
+        {	// TODO: each polygon may have its own size, but I think it is rather been used
             // so we are only taking care of the first
             if ( maPath2DList[ 0 ].w )
                 aViewBox.Width = static_cast< sal_Int32 >( maPath2DList[ 0 ].w );
@@ -233,13 +236,13 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                     // so the handles will not work after save/reload
                     sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef1.get() );
                     if ( nIndex >= 0 )
-                        aHandle[ PROP_RefX ] <<= nIndex;
+                        aHandle[ PROP_RefX ] <<= nIndex; 
                 }
                 if ( maAdjustHandleList[ i ].gdRef2.has() )
                 {
                     sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef2.get() );
                     if ( nIndex >= 0 )
-                        aHandle[ PROP_RefY ] <<= nIndex;
+                        aHandle[ PROP_RefY ] <<= nIndex; 
                 }
                 if ( maAdjustHandleList[ i ].min1.has() )
                     aHandle[ PROP_RangeXMinimum ] <<= maAdjustHandleList[ i ].min1.get();

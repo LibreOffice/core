@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,9 +82,9 @@ static sal_Int32 ImplStringCompareWithoutZero( const STRCODE* pStr1, const STRCO
 
 static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2 )
 {
-    sal_Int32   nRet;
-    STRCODE     c1;
-    STRCODE     c2;
+    sal_Int32	nRet;
+    STRCODE 	c1;
+    STRCODE 	c2;
     do
     {
         // Ist das Zeichen zwischen 'A' und 'Z' dann umwandeln
@@ -111,9 +111,9 @@ static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2 
 static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2,
                                      xub_StrLen nCount )
 {
-    sal_Int32   nRet = 0;
-    STRCODE     c1;
-    STRCODE     c2;
+    sal_Int32	nRet = 0;
+    STRCODE 	c1;
+    STRCODE 	c2;
     do
     {
         if ( !nCount )
@@ -144,9 +144,9 @@ static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2,
 static sal_Int32 ImplStringICompareWithoutZero( const STRCODE* pStr1, const STRCODE* pStr2,
                                                 sal_Int32 nCount )
 {
-    sal_Int32   nRet = 0;
-    STRCODE     c1;
-    STRCODE     c2;
+    sal_Int32	nRet = 0;
+    STRCODE 	c1;
+    STRCODE 	c2;
     do
     {
         if ( !nCount )
@@ -189,10 +189,10 @@ const char* DBGCHECKSTRING( const void* pString )
 static STRINGDATA* ImplAllocData( sal_Int32 nLen )
 {
     // Dann kopiere die Daten
-    STRINGDATA* pData   = (STRINGDATA*)rtl_allocateMemory( sizeof(STRINGDATA)+(nLen*sizeof( STRCODE )) );
-    pData->mnRefCount   = 1;
-    pData->mnLen        = nLen;
-    pData->maStr[nLen]  = 0;
+    STRINGDATA* pData	= (STRINGDATA*)rtl_allocateMemory( sizeof(STRINGDATA)+(nLen*sizeof( STRCODE )) );
+    pData->mnRefCount	= 1;
+    pData->mnLen		= nLen;
+    pData->maStr[nLen]	= 0;
     return pData;
 }
 
@@ -200,8 +200,8 @@ static STRINGDATA* ImplAllocData( sal_Int32 nLen )
 
 static STRINGDATA* _ImplCopyData( STRINGDATA* pData )
 {
-    unsigned int    nSize       = sizeof(STRINGDATA)+(pData->mnLen*sizeof( STRCODE ));
-    STRINGDATA*     pNewData    = (STRINGDATA*)rtl_allocateMemory( nSize );
+    unsigned int	nSize		= sizeof(STRINGDATA)+(pData->mnLen*sizeof( STRCODE ));
+    STRINGDATA* 	pNewData	= (STRINGDATA*)rtl_allocateMemory( nSize );
     memcpy( pNewData, pData, nSize );
     pNewData->mnRefCount = 1;
     STRING_RELEASE((STRING_TYPE *)pData);
@@ -247,7 +247,7 @@ inline sal_Int32 ImplGetCopyLen( sal_Int32 nStrLen, sal_Int32 nCopyLen )
 
 // =======================================================================
 
-STRING::STRING()
+STRING::STRING() 
     : mpData(NULL)
 {
     DBG_CTOR( STRING, DBGCHECKSTRING );
@@ -355,7 +355,7 @@ STRING::STRING( const STRCODE* pCharStr, xub_StrLen nLen )
         {
             if ( !pCharStr[i] )
             {
-                OSL_FAIL( "String::String() : nLen is wrong" );
+                DBG_ERROR( "String::String() : nLen is wrong" );
             }
         }
     }
@@ -459,7 +459,7 @@ STRING& STRING::Assign( const STRCODE* pCharStr, xub_StrLen nLen )
         {
             if ( !pCharStr[i] )
             {
-                OSL_FAIL( "String::Assign() : nLen is wrong" );
+                DBG_ERROR( "String::Assign() : nLen is wrong" );
             }
         }
     }
@@ -590,7 +590,7 @@ STRING& STRING::Append( const STRCODE* pCharStr, xub_StrLen nCharLen )
         {
             if ( !pCharStr[i] )
             {
-                OSL_FAIL( "String::Append() : nLen is wrong" );
+                DBG_ERROR( "String::Append() : nLen is wrong" );
             }
         }
     }
@@ -1091,7 +1091,7 @@ STRING& STRING::ToLowerAscii()
 
     sal_Int32 nIndex = 0;
     sal_Int32 nLen = mpData->mnLen;
-    STRCODE*    pStr = mpData->maStr;
+    STRCODE*	pStr = mpData->maStr;
     while ( nIndex < nLen )
     {
         // Ist das Zeichen zwischen 'A' und 'Z' dann umwandeln
@@ -1117,7 +1117,7 @@ STRING& STRING::ToUpperAscii()
 
     sal_Int32 nIndex = 0;
     sal_Int32 nLen = mpData->mnLen;
-    STRCODE*    pStr = mpData->maStr;
+    STRCODE*	pStr = mpData->maStr;
     while ( nIndex < nLen )
     {
         // Ist das Zeichen zwischen 'a' und 'z' dann umwandeln
@@ -1142,11 +1142,11 @@ STRING& STRING::ConvertLineEnd( LineEnd eLineEnd )
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
     // Zeilenumbrueche ermitteln und neue Laenge berechnen
-    sal_Bool            bConvert    = sal_False;            // Muss konvertiert werden
-    const STRCODE*  pStr        = mpData->maStr;    // damit es schneller geht
-    xub_StrLen      nLineEndLen = (eLineEnd == LINEEND_CRLF) ? 2 : 1;
-    xub_StrLen      nLen        = 0;                // Ziel-Laenge
-    xub_StrLen      i           = 0;                // Source-Zaehler
+    BOOL			bConvert	= FALSE;			// Muss konvertiert werden
+    const STRCODE*	pStr		= mpData->maStr;	// damit es schneller geht
+    xub_StrLen		nLineEndLen = (eLineEnd == LINEEND_CRLF) ? 2 : 1;
+    xub_StrLen		nLen		= 0;				// Ziel-Laenge
+    xub_StrLen		i			= 0;				// Source-Zaehler
 
     while ( i < mpData->mnLen )
     {
@@ -1165,7 +1165,7 @@ STRING& STRING::ConvertLineEnd( LineEnd eLineEnd )
                       ((pStr[i] == _CR) || (pStr[i+1] == _CR))) ||
                      ((eLineEnd == LINEEND_CR) &&
                       ((pStr[i] == _LF) || (pStr[i+1] == _LF))) )
-                    bConvert = sal_True;
+                    bConvert = TRUE;
             }
 
             // \r\n oder \n\r, dann Zeichen ueberspringen
@@ -1187,7 +1187,7 @@ STRING& STRING::ConvertLineEnd( LineEnd eLineEnd )
     {
         // Neuen String anlegen
         STRINGDATA* pNewData = ImplAllocData( nLen );
-        xub_StrLen  j = 0;
+        xub_StrLen	j = 0;
         i = 0;
         while ( i < mpData->mnLen )
         {
@@ -1196,7 +1196,7 @@ STRING& STRING::ConvertLineEnd( LineEnd eLineEnd )
             {
                 if ( eLineEnd == LINEEND_CRLF )
                 {
-                    pNewData->maStr[j]   = _CR;
+                    pNewData->maStr[j]	 = _CR;
                     pNewData->maStr[j+1] = _LF;
                     j += 2;
                 }
@@ -1328,18 +1328,18 @@ StringCompare STRING::CompareIgnoreCaseToAscii( const STRCODE* pCharStr,
 
 // -----------------------------------------------------------------------
 
-sal_Bool STRING::Equals( const STRING& rStr ) const
+BOOL STRING::Equals( const STRING& rStr ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
     // Sind die Daten gleich
     if ( mpData == rStr.mpData )
-        return sal_True;
+        return TRUE;
 
     // Gleiche Laenge
     if ( mpData->mnLen != rStr.mpData->mnLen )
-        return sal_False;
+        return FALSE;
 
     // String vergleichen
     return (ImplStringCompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
@@ -1347,7 +1347,7 @@ sal_Bool STRING::Equals( const STRING& rStr ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool STRING::Equals( const STRCODE* pCharStr ) const
+BOOL STRING::Equals( const STRCODE* pCharStr ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
@@ -1356,18 +1356,18 @@ sal_Bool STRING::Equals( const STRCODE* pCharStr ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr ) const
+BOOL STRING::EqualsIgnoreCaseAscii( const STRING& rStr ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
     // Sind die Daten gleich
     if ( mpData == rStr.mpData )
-        return sal_True;
+        return TRUE;
 
     // Gleiche Laenge
     if ( mpData->mnLen != rStr.mpData->mnLen )
-        return sal_False;
+        return FALSE;
 
     // String vergleichen
     return (ImplStringICompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
@@ -1375,7 +1375,7 @@ sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr ) const
+BOOL STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
@@ -1384,7 +1384,7 @@ sal_Bool STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
+BOOL STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
@@ -1396,7 +1396,7 @@ sal_Bool STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen 
     if ( nMaxLen < nLen )
     {
         if ( rStr.mpData->mnLen != nMaxLen )
-            return sal_False;
+            return FALSE;
         nLen = static_cast< xub_StrLen >(nMaxLen);
     }
 
@@ -1406,7 +1406,7 @@ sal_Bool STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen 
 
 // -----------------------------------------------------------------------
 
-sal_Bool STRING::Equals( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen ) const
+BOOL STRING::Equals( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
@@ -1419,7 +1419,7 @@ sal_Bool STRING::Equals( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen 
 
 // -----------------------------------------------------------------------
 
-sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
+BOOL STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
@@ -1431,7 +1431,7 @@ sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, x
     if ( nMaxLen < nLen )
     {
         if ( rStr.mpData->mnLen != nMaxLen )
-            return sal_False;
+            return FALSE;
         nLen = static_cast< xub_StrLen >(nMaxLen);
     }
 
@@ -1441,7 +1441,7 @@ sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, x
 
 // -----------------------------------------------------------------------
 
-sal_Bool STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen ) const
+BOOL STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
@@ -1464,9 +1464,9 @@ xub_StrLen STRING::Match( const STRING& rStr ) const
         return STRING_MATCH;
 
     // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
-    const STRCODE*  pStr1 = mpData->maStr;
-    const STRCODE*  pStr2 = rStr.mpData->maStr;
-    xub_StrLen      i = 0;
+    const STRCODE*	pStr1 = mpData->maStr;
+    const STRCODE*	pStr2 = rStr.mpData->maStr;
+    xub_StrLen		i = 0;
     while ( i < mpData->mnLen )
     {
         // Stimmt das Zeichen nicht ueberein, dann abbrechen
@@ -1491,8 +1491,8 @@ xub_StrLen STRING::Match( const STRCODE* pCharStr ) const
         return STRING_MATCH;
 
     // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
-    const STRCODE*  pStr = mpData->maStr;
-    xub_StrLen      i = 0;
+    const STRCODE*	pStr = mpData->maStr;
+    xub_StrLen		i = 0;
     while ( i < mpData->mnLen )
     {
         // Stimmt das Zeichen nicht ueberein, dann abbrechen
@@ -1512,8 +1512,8 @@ xub_StrLen STRING::Search( STRCODE c, xub_StrLen nIndex ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
-    sal_Int32       nLen = mpData->mnLen;
-    const STRCODE*  pStr = mpData->maStr;
+    sal_Int32		nLen = mpData->mnLen;
+    const STRCODE*	pStr = mpData->maStr;
     pStr += nIndex;
     while ( nIndex < nLen )
     {
@@ -1580,7 +1580,7 @@ xub_StrLen STRING::Search( const STRCODE* pCharStr, xub_StrLen nIndex ) const
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
     sal_Int32 nLen = mpData->mnLen;
-    xub_StrLen nStrLen  = ImplStringLen( pCharStr );
+    xub_StrLen nStrLen	= ImplStringLen( pCharStr );
 
     // Falls die Laenge des uebergebenen Strings 0 ist oder der Index
     // hinter dem String liegt, dann wurde der String nicht gefunden
@@ -1646,13 +1646,13 @@ xub_StrLen STRING::SearchChar( const STRCODE* pChars, xub_StrLen nIndex ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
-    sal_Int32       nLen = mpData->mnLen;
-    const STRCODE*  pStr = mpData->maStr;
+    sal_Int32		nLen = mpData->mnLen;
+    const STRCODE*	pStr = mpData->maStr;
     pStr += nIndex;
     while ( nIndex < nLen )
     {
-        STRCODE         c = *pStr;
-        const STRCODE*  pCompStr = pChars;
+        STRCODE 		c = *pStr;
+        const STRCODE*	pCompStr = pChars;
         while ( *pCompStr )
         {
             if ( *pCompStr == c )
@@ -1683,8 +1683,8 @@ xub_StrLen STRING::SearchCharBackward( const STRCODE* pChars, xub_StrLen nIndex 
         nIndex--;
         pStr--;
 
-        STRCODE         c =*pStr;
-        const STRCODE*  pCompStr = pChars;
+        STRCODE 		c =*pStr;
+        const STRCODE*	pCompStr = pChars;
         while ( *pCompStr )
         {
             if ( *pCompStr == c )
@@ -1702,8 +1702,8 @@ xub_StrLen STRING::SearchAndReplace( STRCODE c, STRCODE cRep, xub_StrLen nIndex 
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
-    sal_Int32       nLen = mpData->mnLen;
-    const STRCODE*  pStr = mpData->maStr;
+    sal_Int32		nLen = mpData->mnLen;
+    const STRCODE*	pStr = mpData->maStr;
     pStr += nIndex;
     while ( nIndex < nLen )
     {
@@ -1757,9 +1757,9 @@ void STRING::SearchAndReplaceAll( STRCODE c, STRCODE cRep )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
-    sal_Int32       nLen    = mpData->mnLen;
-    const STRCODE*  pStr    = mpData->maStr;
-    sal_Int32       nIndex  = 0;
+    sal_Int32		nLen	= mpData->mnLen;
+    const STRCODE*	pStr	= mpData->maStr;
+    sal_Int32		nIndex	= 0;
     while ( nIndex < nLen )
     {
         if ( *pStr == c )
@@ -1816,10 +1816,10 @@ xub_StrLen STRING::GetTokenCount( STRCODE cTok ) const
     if ( !mpData->mnLen )
         return 0;
 
-    xub_StrLen      nTokCount       = 1;
-    sal_Int32       nLen            = mpData->mnLen;
-    const STRCODE*  pStr            = mpData->maStr;
-    sal_Int32       nIndex          = 0;
+    xub_StrLen		nTokCount		= 1;
+    sal_Int32		nLen			= mpData->mnLen;
+    const STRCODE*	pStr			= mpData->maStr;
+    sal_Int32		nIndex			= 0;
     while ( nIndex < nLen )
     {
         // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
@@ -1840,11 +1840,11 @@ void STRING::SetToken( xub_StrLen nToken, STRCODE cTok, const STRING& rStr,
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    const STRCODE*  pStr            = mpData->maStr;
-    xub_StrLen      nLen            = (xub_StrLen)mpData->mnLen;
-    xub_StrLen      nTok            = 0;
-    xub_StrLen      nFirstChar      = nIndex;
-    xub_StrLen      i               = nFirstChar;
+    const STRCODE*	pStr			= mpData->maStr;
+    xub_StrLen		nLen			= (xub_StrLen)mpData->mnLen;
+    xub_StrLen		nTok			= 0;
+    xub_StrLen		nFirstChar		= nIndex;
+    xub_StrLen		i				= nFirstChar;
 
     // Bestimme die Token-Position und Laenge
     pStr += i;
@@ -1878,11 +1878,11 @@ STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, xub_StrLen& rIndex ) c
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
-    const STRCODE*  pStr            = mpData->maStr;
-    xub_StrLen      nLen            = (xub_StrLen)mpData->mnLen;
-    xub_StrLen      nTok            = 0;
-    xub_StrLen      nFirstChar      = rIndex;
-    xub_StrLen      i               = nFirstChar;
+    const STRCODE*	pStr			= mpData->maStr;
+    xub_StrLen		nLen			= (xub_StrLen)mpData->mnLen;
+    xub_StrLen		nTok			= 0;
+    xub_StrLen		nFirstChar		= rIndex;
+    xub_StrLen		i				= nFirstChar;
 
     // Bestimme die Token-Position und Laenge
     pStr += i;
@@ -1934,13 +1934,13 @@ xub_StrLen STRING::GetQuotedTokenCount( const STRING& rQuotedPairs, STRCODE cTok
     if ( !mpData->mnLen )
         return 0;
 
-    xub_StrLen      nTokCount       = 1;
-    sal_Int32       nLen            = mpData->mnLen;
-    xub_StrLen      nQuotedLen      = rQuotedPairs.Len();
-    STRCODE         cQuotedEndChar  = 0;
-    const STRCODE*  pQuotedStr      = rQuotedPairs.mpData->maStr;
-    const STRCODE*  pStr            = mpData->maStr;
-    sal_Int32       nIndex          = 0;
+    xub_StrLen		nTokCount		= 1;
+    sal_Int32		nLen			= mpData->mnLen;
+    xub_StrLen		nQuotedLen		= rQuotedPairs.Len();
+    STRCODE 		cQuotedEndChar	= 0;
+    const STRCODE*	pQuotedStr		= rQuotedPairs.mpData->maStr;
+    const STRCODE*	pStr			= mpData->maStr;
+    sal_Int32		nIndex			= 0;
     while ( nIndex < nLen )
     {
         STRCODE c = *pStr;
@@ -1987,14 +1987,14 @@ STRING STRING::GetQuotedToken( xub_StrLen nToken, const STRING& rQuotedPairs,
     DBG_ASSERT( !(rQuotedPairs.Len()%2), "String::GetQuotedToken() - QuotedString%2 != 0" );
     DBG_ASSERT( rQuotedPairs.Search(cTok) == STRING_NOTFOUND, "String::GetQuotedToken() - cTok in QuotedString" );
 
-    const STRCODE*  pStr            = mpData->maStr;
-    const STRCODE*  pQuotedStr      = rQuotedPairs.mpData->maStr;
-    STRCODE         cQuotedEndChar  = 0;
-    xub_StrLen      nQuotedLen      = rQuotedPairs.Len();
-    xub_StrLen      nLen            = (xub_StrLen)mpData->mnLen;
-    xub_StrLen      nTok            = 0;
-    xub_StrLen      nFirstChar      = rIndex;
-    xub_StrLen      i               = nFirstChar;
+    const STRCODE*	pStr			= mpData->maStr;
+    const STRCODE*	pQuotedStr		= rQuotedPairs.mpData->maStr;
+    STRCODE 		cQuotedEndChar	= 0;
+    xub_StrLen		nQuotedLen		= rQuotedPairs.Len();
+    xub_StrLen		nLen			= (xub_StrLen)mpData->mnLen;
+    xub_StrLen		nTok			= 0;
+    xub_StrLen		nFirstChar		= rIndex;
+    xub_StrLen		i				= nFirstChar;
 
     // Bestimme die Token-Position und Laenge
     pStr += i;

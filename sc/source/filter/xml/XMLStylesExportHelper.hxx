@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,81 +38,78 @@
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-#include <mdds/flat_segment_tree.hpp>
-
 class ScDocument;
 class ScXMLExport;
 
 struct ScMyValidation
 {
-    rtl::OUString               sName;
-    rtl::OUString               sErrorMessage;
-    rtl::OUString               sErrorTitle;
-    rtl::OUString               sImputMessage;
-    rtl::OUString               sImputTitle;
-    rtl::OUString               sFormula1;
-    rtl::OUString               sFormula2;
-    com::sun::star::table::CellAddress          aBaseCell;
-    com::sun::star::sheet::ValidationAlertStyle aAlertStyle;
-    com::sun::star::sheet::ValidationType       aValidationType;
-    com::sun::star::sheet::ConditionOperator    aOperator;
+    rtl::OUString				sName;
+    rtl::OUString				sErrorMessage;
+    rtl::OUString				sErrorTitle;
+    rtl::OUString				sImputMessage;
+    rtl::OUString				sImputTitle;
+    rtl::OUString				sFormula1;
+    rtl::OUString				sFormula2;
+    com::sun::star::table::CellAddress			aBaseCell;
+    com::sun::star::sheet::ValidationAlertStyle	aAlertStyle;
+    com::sun::star::sheet::ValidationType		aValidationType;
+    com::sun::star::sheet::ConditionOperator	aOperator;
     sal_Int16                   nShowList;
-    sal_Bool                    bShowErrorMessage;
-    sal_Bool                    bShowImputMessage;
-    sal_Bool                    bIgnoreBlanks;
+    sal_Bool					bShowErrorMessage;
+    sal_Bool					bShowImputMessage;
+    sal_Bool					bIgnoreBlanks;
 
                                 ScMyValidation();
                                 ~ScMyValidation();
 
-    sal_Bool                    IsEqual(const ScMyValidation& aVal) const;
+    sal_Bool					IsEqual(const ScMyValidation& aVal) const;
 };
 
-typedef std::vector<ScMyValidation>         ScMyValidationVec;
+typedef std::vector<ScMyValidation>			ScMyValidationVec;
 
 class ScMyValidationsContainer
 {
 private:
-    ScMyValidationVec           aValidationVec;
-    const rtl::OUString         sEmptyString;
-    const rtl::OUString         sERRALSTY;
-    const rtl::OUString         sIGNOREBL;
+    ScMyValidationVec			aValidationVec;
+    const rtl::OUString			sEmptyString;
+    const rtl::OUString			sERRALSTY;
+    const rtl::OUString			sIGNOREBL;
     const rtl::OUString         sSHOWLIST;
-    const rtl::OUString         sTYPE;
-    const rtl::OUString         sSHOWINP;
-    const rtl::OUString         sSHOWERR;
-    const rtl::OUString         sINPTITLE;
-    const rtl::OUString         sINPMESS;
-    const rtl::OUString         sERRTITLE;
-    const rtl::OUString         sERRMESS;
-    const rtl::OUString         sOnError;
-    const rtl::OUString         sEventType;
-    const rtl::OUString         sStarBasic;
-    const rtl::OUString         sScript;
-    const rtl::OUString         sLibrary;
-    const rtl::OUString         sMacroName;
+    const rtl::OUString			sTYPE;
+    const rtl::OUString			sSHOWINP;
+    const rtl::OUString			sSHOWERR;
+    const rtl::OUString			sINPTITLE;
+    const rtl::OUString			sINPMESS;
+    const rtl::OUString			sERRTITLE;
+    const rtl::OUString			sERRMESS;
+    const rtl::OUString			sOnError;
+    const rtl::OUString			sEventType;
+    const rtl::OUString			sStarBasic;
+    const rtl::OUString			sScript;
+    const rtl::OUString			sLibrary;
+    const rtl::OUString			sMacroName;
 
 public:
                                 ScMyValidationsContainer();
                                 ~ScMyValidationsContainer();
-    sal_Bool                    AddValidation(const com::sun::star::uno::Any& aAny,
+    sal_Bool					AddValidation(const com::sun::star::uno::Any& aAny,
                                     sal_Int32& nValidationIndex);
-    rtl::OUString               GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation);
-    rtl::OUString               GetBaseCellAddress(ScDocument* pDoc, const com::sun::star::table::CellAddress& aCell);
-    void                        WriteMessage(ScXMLExport& rExport,
+    rtl::OUString				GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation);
+    rtl::OUString				GetBaseCellAddress(ScDocument* pDoc, const com::sun::star::table::CellAddress& aCell);
+    void						WriteMessage(ScXMLExport& rExport,
                                     const rtl::OUString& sTitle, const rtl::OUString& sMessage,
                                     const sal_Bool bShowMessage, const sal_Bool bIsHelpMessage);
-    void                        WriteValidations(ScXMLExport& rExport);
-    const rtl::OUString&        GetValidationName(const sal_Int32 nIndex);
+    void						WriteValidations(ScXMLExport& rExport);
+    const rtl::OUString&		GetValidationName(const sal_Int32 nIndex);
 };
 
 //==============================================================================
 
 struct ScMyDefaultStyle
 {
-    sal_Int32   nIndex;
-    sal_Int32   nRepeat;
-    sal_Bool    bIsAutoStyle;
+    sal_Int32	nIndex;
+    sal_Int32	nRepeat;
+    sal_Bool	bIsAutoStyle;
 
     ScMyDefaultStyle() : nIndex(-1), nRepeat(1),
         bIsAutoStyle(sal_True) {}
@@ -142,30 +139,31 @@ public:
         const sal_Int32 nLastRow, const sal_Int32 nLastCol,
         const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc);
 
-    const ScMyDefaultStyleList* GetRowDefaults() const { return pRowDefaults; }
-    const ScMyDefaultStyleList* GetColDefaults() const { return pColDefaults; }
+    const ScMyDefaultStyleList* GetRowDefaults() { return pRowDefaults; }
+    const ScMyDefaultStyleList* GetColDefaults() { return pColDefaults; }
 };
 
 struct ScMyRowFormatRange
 {
-    sal_Int32   nStartColumn;
-    sal_Int32   nRepeatColumns;
-    sal_Int32   nRepeatRows;
-    sal_Int32   nIndex;
-    sal_Int32   nValidationIndex;
-    sal_Bool    bIsAutoStyle;
+    sal_Int32	nStartColumn;
+    sal_Int32	nRepeatColumns;
+    sal_Int32	nRepeatRows;
+    sal_Int32	nIndex;
+    sal_Int32	nValidationIndex;
+    sal_Bool	bIsAutoStyle;
 
     ScMyRowFormatRange();
     sal_Bool operator<(const ScMyRowFormatRange& rRange) const;
 };
 
+typedef std::list<ScMyRowFormatRange> ScMyRowFormatRangesList;
+
 class ScRowFormatRanges
 {
-    typedef std::list<ScMyRowFormatRange> ScMyRowFormatRangesList;
-    ScMyRowFormatRangesList     aRowFormatRanges;
-    const ScMyDefaultStyleList* pRowDefaults;
-    const ScMyDefaultStyleList* pColDefaults;
-    sal_uInt32                  nSize;
+    ScMyRowFormatRangesList		aRowFormatRanges;
+    const ScMyDefaultStyleList*	pRowDefaults;
+    const ScMyDefaultStyleList*	pColDefaults;
+    sal_uInt32					nSize;
 
     void AddRange(const sal_Int32 nPrevStartCol, const sal_Int32 nRepeat, const sal_Int32 nPrevIndex,
         const sal_Bool bPrevAutoStyle, const ScMyRowFormatRange& rFormatRange);
@@ -180,35 +178,35 @@ public:
     void Clear();
     void AddRange(ScMyRowFormatRange& rFormatRange, const sal_Int32 nStartRow);
     sal_Bool GetNext(ScMyRowFormatRange& rFormatRange);
-    sal_Int32 GetMaxRows() const;
-    sal_Int32 GetSize() const;
+    sal_Int32 GetMaxRows();
+    sal_Int32 GetSize();
     void Sort();
 };
 
-typedef std::vector<rtl::OUString*>     ScMyOUStringVec;
+typedef std::vector<rtl::OUString*>		ScMyOUStringVec;
 
 struct ScMyFormatRange
 {
     com::sun::star::table::CellRangeAddress aRangeAddress;
-    sal_Int32                               nStyleNameIndex;
-    sal_Int32                               nValidationIndex;
-    sal_Int32                               nNumberFormat;
-    sal_Bool                                bIsAutoStyle;
+    sal_Int32								nStyleNameIndex;
+    sal_Int32								nValidationIndex;
+    sal_Int32								nNumberFormat;
+    sal_Bool								bIsAutoStyle;
 
     ScMyFormatRange();
     sal_Bool operator< (const ScMyFormatRange& rRange) const;
 };
 
+typedef std::list<ScMyFormatRange>			ScMyFormatRangeAddresses;
+typedef std::vector<ScMyFormatRangeAddresses*>	ScMyFormatRangeListVec;
+
 class ScFormatRangeStyles
 {
-    typedef std::list<ScMyFormatRange>          ScMyFormatRangeAddresses;
-    typedef std::vector<ScMyFormatRangeAddresses*>  ScMyFormatRangeListVec;
-
-    ScMyFormatRangeListVec      aTables;
-    ScMyOUStringVec             aStyleNames;
-    ScMyOUStringVec             aAutoStyleNames;
-    const ScMyDefaultStyleList* pRowDefaults;
-    const ScMyDefaultStyleList* pColDefaults;
+    ScMyFormatRangeListVec		aTables;
+    ScMyOUStringVec				aStyleNames;
+    ScMyOUStringVec				aAutoStyleNames;
+    const ScMyDefaultStyleList*	pRowDefaults;
+    const ScMyDefaultStyleList*	pColDefaults;
 
 public:
     ScFormatRangeStyles();
@@ -235,7 +233,7 @@ public:
 
 class ScColumnRowStylesBase
 {
-    ScMyOUStringVec             aStyleNames;
+    ScMyOUStringVec				aStyleNames;
 
 public:
     ScColumnRowStylesBase();
@@ -250,17 +248,19 @@ public:
 
 struct ScColumnStyle
 {
-    sal_Int32   nIndex;
-    sal_Bool    bIsVisible;
+    sal_Int32	nIndex;
+    sal_Bool	bIsVisible;
 
     ScColumnStyle() : nIndex(-1), bIsVisible(sal_True) {}
 };
 
+
+typedef std::vector<ScColumnStyle>	ScMyColumnStyleVec;
+typedef std::vector<ScMyColumnStyleVec>	ScMyColumnVectorVec;
+
 class ScColumnStyles : public ScColumnRowStylesBase
 {
-    typedef std::vector<ScColumnStyle>  ScMyColumnStyleVec;
-    typedef std::vector<ScMyColumnStyleVec> ScMyColumnVectorVec;
-    ScMyColumnVectorVec             aTables;
+    ScMyColumnVectorVec				aTables;
 
 public:
     ScColumnStyles();
@@ -273,21 +273,12 @@ public:
     virtual rtl::OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField);
 };
 
+typedef std::vector<sal_Int32>	ScMysalInt32Vec;
+typedef std::vector<ScMysalInt32Vec>	ScMyRowVectorVec;
+
 class ScRowStyles : public ScColumnRowStylesBase
 {
-    typedef ::mdds::flat_segment_tree<sal_Int32, sal_Int32> StylesType;
-    ::boost::ptr_vector<StylesType> aTables;
-    struct Cache
-    {
-        sal_Int32 mnTable;
-        sal_Int32 mnStart;
-        sal_Int32 mnEnd;
-        sal_Int32 mnStyle;
-        Cache();
-
-        bool hasCache(sal_Int32 nTable, sal_Int32 nField) const;
-    };
-    Cache maCache;
+    ScMyRowVectorVec				aTables;
 
 public:
     ScRowStyles();

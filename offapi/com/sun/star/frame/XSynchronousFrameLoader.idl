@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ published interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
     /** starts the loading of the specified resource into the specified <type>Frame</type>.
 
         @param Descriptor
-            describes the resource which should be loaded
+            describes the ressource which should be loaded
             It use a <type scope="com::sun::star::document">MediaDescriptor</type> for that.
 
         @param Frame

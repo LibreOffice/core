@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ namespace dbmm
         bool                                    bMigrationFailure;
         bool                                    bMigrationSuccess;
 
-        MacroMigrationDialog_Data(
+        MacroMigrationDialog_Data( 
                 const ::comphelper::ComponentContext& _rContext,
                 const Reference< XOfficeDatabaseDocument >& _rxDocument )
             :aContext( _rContext )
@@ -214,10 +214,10 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    sal_Bool MacroMigrationDialog::Close()
+    BOOL MacroMigrationDialog::Close()
     {
         if ( m_pData->bMigrationIsRunning )
-            return sal_False;
+            return FALSE;
         return MacroMigrationDialog_Base::Close();
     }
 
@@ -271,7 +271,7 @@ namespace dbmm
             break;
 
         default:
-            OSL_FAIL( "MacroMigrationDialog::enterState: unhandled state!" );
+            OSL_ENSURE( false, "MacroMigrationDialog::enterState: unhandled state!" );
         }
     }
 
@@ -296,7 +296,7 @@ namespace dbmm
         case STATE_SUMMARY:
             break;
         default:
-            OSL_FAIL( "MacroMigrationDialog::prepareLeaveCurrentState: unhandled state!" );
+            OSL_ENSURE( false, "MacroMigrationDialog::prepareLeaveCurrentState: unhandled state!" );
         }
 
         return sal_True;
@@ -535,7 +535,7 @@ namespace dbmm
                 if ( !xController->suspend( sal_True ) )
                 {   // ouch. There shouldn't be any modal dialogs and such, so there
                     // really is no reason why suspending shouldn't work.
-                    OSL_FAIL( "MacroMigrationDialog::impl_reloadDocument_nothrow: could not suspend a controller!" );
+                    OSL_ENSURE( false, "MacroMigrationDialog::impl_reloadDocument_nothrow: could not suspend a controller!" );
                     // ignoring this would be at the cost of a crash (potentially)
                     // so, we cannot continue here.
                     throw CloseVetoException();

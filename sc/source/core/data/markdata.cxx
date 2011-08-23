@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ ScMarkData::ScMarkData() :
     pMultiSel( NULL )
 {
     for (SCTAB i=0; i<=MAXTAB; i++)
-        bTabMarked[i] = false;
+        bTabMarked[i] = FALSE;
 
     ResetMark();
 }
@@ -57,10 +57,10 @@ ScMarkData::ScMarkData(const ScMarkData& rData) :
     aMultiRange( rData.aMultiRange ),
     pMultiSel( NULL )
 {
-    bMarked      = rData.bMarked;
+    bMarked		 = rData.bMarked;
     bMultiMarked = rData.bMultiMarked;
-    bMarking     = rData.bMarking;
-    bMarkIsNeg   = rData.bMarkIsNeg;
+    bMarking	 = rData.bMarking;
+    bMarkIsNeg	 = rData.bMarkIsNeg;
 
     for (SCTAB i=0; i<=MAXTAB; i++)
         bTabMarked[i] = rData.bTabMarked[i];
@@ -73,7 +73,7 @@ ScMarkData::ScMarkData(const ScMarkData& rData) :
     }
 }
 
-ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
+ScMarkData&	ScMarkData::operator=(const ScMarkData& rData)
 {
     if ( &rData == this )
         return *this;
@@ -81,12 +81,12 @@ ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
     delete[] pMultiSel;
     pMultiSel = NULL;
 
-    aMarkRange   = rData.aMarkRange;
+    aMarkRange	 = rData.aMarkRange;
     aMultiRange  = rData.aMultiRange;
-    bMarked      = rData.bMarked;
+    bMarked		 = rData.bMarked;
     bMultiMarked = rData.bMultiMarked;
-    bMarking     = rData.bMarking;
-    bMarkIsNeg   = rData.bMarkIsNeg;
+    bMarking	 = rData.bMarking;
+    bMarkIsNeg	 = rData.bMarkIsNeg;
 
     for (SCTAB i=0; i<=MAXTAB; i++)
         bTabMarked[i] = rData.bTabMarked[i];
@@ -111,8 +111,8 @@ void ScMarkData::ResetMark()
     delete[] pMultiSel;
     pMultiSel = NULL;
 
-    bMarked = bMultiMarked = false;
-    bMarking = bMarkIsNeg = false;
+    bMarked = bMultiMarked = FALSE;
+    bMarking = bMarkIsNeg = FALSE;
 }
 
 void ScMarkData::SetMarkArea( const ScRange& rRange )
@@ -121,18 +121,18 @@ void ScMarkData::SetMarkArea( const ScRange& rRange )
     aMarkRange.Justify();
     if ( !bMarked )
     {
-        // Upon creation of a document ScFormatShell GetTextAttrState
+        // #77987# Upon creation of a document ScFormatShell GetTextAttrState
         // may query (default) attributes although no sheet is marked yet.
         // => mark that one.
         if ( !GetSelectCount() )
-            bTabMarked[ aMarkRange.aStart.Tab() ] = sal_True;
-        bMarked = sal_True;
+            bTabMarked[ aMarkRange.aStart.Tab() ] = TRUE;
+        bMarked = TRUE;
     }
 }
 
 void ScMarkData::GetMarkArea( ScRange& rRange ) const
 {
-    rRange = aMarkRange;        //! inline ?
+    rRange = aMarkRange;		//! inline ?
 }
 
 void ScMarkData::GetMultiMarkArea( ScRange& rRange ) const
@@ -140,7 +140,7 @@ void ScMarkData::GetMultiMarkArea( ScRange& rRange ) const
     rRange = aMultiRange;
 }
 
-void ScMarkData::SetMultiMarkArea( const ScRange& rRange, sal_Bool bMark )
+void ScMarkData::SetMultiMarkArea( const ScRange& rRange, BOOL bMark )
 {
     if (!pMultiSel)
     {
@@ -149,8 +149,8 @@ void ScMarkData::SetMultiMarkArea( const ScRange& rRange, sal_Bool bMark )
         // if simple mark range is set, copy to multi marks
         if ( bMarked && !bMarkIsNeg )
         {
-            bMarked = false;
-            SetMultiMarkArea( aMarkRange, sal_True );
+            bMarked = FALSE;
+            SetMultiMarkArea( aMarkRange, TRUE );
         }
     }
 
@@ -165,7 +165,7 @@ void ScMarkData::SetMultiMarkArea( const ScRange& rRange, sal_Bool bMark )
     for (nCol=nStartCol; nCol<=nEndCol; nCol++)
         pMultiSel[nCol].SetMarkArea( nStartRow, nEndRow, bMark );
 
-    if ( bMultiMarked )                 // aMultiRange updaten
+    if ( bMultiMarked )					// aMultiRange updaten
     {
         if ( nStartCol < aMultiRange.aStart.Col() )
             aMultiRange.aStart.SetCol( nStartCol );
@@ -178,8 +178,8 @@ void ScMarkData::SetMultiMarkArea( const ScRange& rRange, sal_Bool bMark )
     }
     else
     {
-        aMultiRange = rRange;           // neu
-        bMultiMarked = sal_True;
+        aMultiRange = rRange;			// neu
+        bMultiMarked = TRUE;
     }
 }
 
@@ -213,7 +213,7 @@ SCTAB ScMarkData::GetFirstSelected() const
         if (bTabMarked[i])
             return i;
 
-    OSL_FAIL("GetFirstSelected: keine markiert");
+    DBG_ERROR("GetFirstSelected: keine markiert");
     return 0;
 }
 
@@ -222,9 +222,9 @@ void ScMarkData::MarkToMulti()
     if ( bMarked && !bMarking )
     {
         SetMultiMarkArea( aMarkRange, !bMarkIsNeg );
-        bMarked = false;
+        bMarked = FALSE;
 
-        //  check if all multi mark ranges have been removed
+        //	check if all multi mark ranges have been removed
         if ( bMarkIsNeg && !HasAnyMultiMarks() )
             ResetMark();
     }
@@ -236,7 +236,7 @@ void ScMarkData::MarkToSimple()
         return;
 
     if ( bMultiMarked && bMarked )
-        MarkToMulti();                  // may result in bMarked and bMultiMarked reset
+        MarkToMulti();					// may result in bMarked and bMultiMarked reset
 
     if ( bMultiMarked )
     {
@@ -244,7 +244,7 @@ void ScMarkData::MarkToSimple()
 
         ScRange aNew = aMultiRange;
 
-        sal_Bool bOk = false;
+        BOOL bOk = FALSE;
         SCCOL nStartCol = aNew.aStart.Col();
         SCCOL nEndCol   = aNew.aEnd.Col();
 
@@ -253,16 +253,16 @@ void ScMarkData::MarkToSimple()
         while ( nStartCol < nEndCol && !pMultiSel[nEndCol].HasMarks() )
             --nEndCol;
 
-        //  Zeilen werden nur aus MarkArray genommen
+        //	Zeilen werden nur aus MarkArray genommen
         SCROW nStartRow, nEndRow;
         if ( pMultiSel[nStartCol].HasOneMark( nStartRow, nEndRow ) )
         {
-            bOk = sal_True;
+            bOk = TRUE;
             SCROW nCmpStart, nCmpEnd;
             for (SCCOL nCol=nStartCol+1; nCol<=nEndCol && bOk; nCol++)
                 if ( !pMultiSel[nCol].HasOneMark( nCmpStart, nCmpEnd )
                         || nCmpStart != nStartRow || nCmpEnd != nEndRow )
-                    bOk = false;
+                    bOk = FALSE;
         }
 
         if (bOk)
@@ -274,96 +274,96 @@ void ScMarkData::MarkToSimple()
 
             ResetMark();
             aMarkRange = aNew;
-            bMarked = sal_True;
-            bMarkIsNeg = false;
+            bMarked = TRUE;
+            bMarkIsNeg = FALSE;
         }
     }
 }
 
-sal_Bool ScMarkData::IsCellMarked( SCCOL nCol, SCROW nRow, sal_Bool bNoSimple ) const
+BOOL ScMarkData::IsCellMarked( SCCOL nCol, SCROW nRow, BOOL bNoSimple ) const
 {
     if ( bMarked && !bNoSimple && !bMarkIsNeg )
         if ( aMarkRange.aStart.Col() <= nCol && aMarkRange.aEnd.Col() >= nCol &&
              aMarkRange.aStart.Row() <= nRow && aMarkRange.aEnd.Row() >= nRow )
-            return sal_True;
+            return TRUE;
 
     if (bMultiMarked)
     {
-        //! hier auf negative Markierung testen ?
+        //!	hier auf negative Markierung testen ?
 
         DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
         return pMultiSel[nCol].GetMark( nRow );
     }
 
-    return false;
+    return FALSE;
 }
 
-sal_Bool ScMarkData::IsColumnMarked( SCCOL nCol ) const
+BOOL ScMarkData::IsColumnMarked( SCCOL nCol ) const
 {
-    //  bMarkIsNeg inzwischen auch fuer Spaltenkoepfe
-    //! GetMarkColumnRanges fuer komplett markierte Spalten
+    //	bMarkIsNeg inzwischen auch fuer Spaltenkoepfe
+    //!	GetMarkColumnRanges fuer komplett markierte Spalten
 
     if ( bMarked && !bMarkIsNeg &&
                     aMarkRange.aStart.Col() <= nCol && aMarkRange.aEnd.Col() >= nCol &&
-                    aMarkRange.aStart.Row() == 0    && aMarkRange.aEnd.Row() == MAXROW )
-        return sal_True;
+                    aMarkRange.aStart.Row() == 0	&& aMarkRange.aEnd.Row() == MAXROW )
+        return TRUE;
 
     if ( bMultiMarked && pMultiSel[nCol].IsAllMarked(0,MAXROW) )
-        return sal_True;
+        return TRUE;
 
-    return false;
+    return FALSE;
 }
 
-sal_Bool ScMarkData::IsRowMarked( SCROW nRow ) const
+BOOL ScMarkData::IsRowMarked( SCROW nRow ) const
 {
-    //  bMarkIsNeg inzwischen auch fuer Zeilenkoepfe
-    //! GetMarkRowRanges fuer komplett markierte Zeilen
+    //	bMarkIsNeg inzwischen auch fuer Zeilenkoepfe
+    //!	GetMarkRowRanges fuer komplett markierte Zeilen
 
     if ( bMarked && !bMarkIsNeg &&
-                    aMarkRange.aStart.Col() == 0    && aMarkRange.aEnd.Col() == MAXCOL &&
+                    aMarkRange.aStart.Col() == 0	&& aMarkRange.aEnd.Col() == MAXCOL &&
                     aMarkRange.aStart.Row() <= nRow && aMarkRange.aEnd.Row() >= nRow )
-        return sal_True;
+        return TRUE;
 
     if ( bMultiMarked )
     {
         DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
         for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
             if (!pMultiSel[nCol].GetMark(nRow))
-                return false;
-        return sal_True;
+                return FALSE;
+        return TRUE;
     }
 
-    return false;
+    return FALSE;
 }
 
-void ScMarkData::MarkFromRangeList( const ScRangeList& rList, sal_Bool bReset )
+void ScMarkData::MarkFromRangeList( const ScRangeList& rList, BOOL bReset )
 {
     if (bReset)
     {
         for (SCTAB i=0; i<=MAXTAB; i++)
-            bTabMarked[i] = false;              // Tabellen sind nicht in ResetMark
+            bTabMarked[i] = FALSE;				// Tabellen sind nicht in ResetMark
         ResetMark();
     }
 
-    size_t nCount = rList.size();
+    ULONG nCount = rList.Count();
     if ( nCount == 1 && !bMarked && !bMultiMarked )
     {
-        ScRange aRange = *rList[ 0 ];
+        ScRange aRange = *rList.GetObject(0);
         SetMarkArea( aRange );
-        SelectTable( aRange.aStart.Tab(), sal_True );
+        SelectTable( aRange.aStart.Tab(), TRUE );
     }
     else
     {
-        for (size_t i=0; i < nCount; i++)
+        for (ULONG i=0; i<nCount; i++)
         {
-            ScRange aRange = *rList[ i ];
-            SetMultiMarkArea( aRange, true );
-            SelectTable( aRange.aStart.Tab(), true );
+            ScRange aRange = *rList.GetObject(i);
+            SetMultiMarkArea( aRange, TRUE );
+            SelectTable( aRange.aStart.Tab(), TRUE );
         }
     }
 }
 
-void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, sal_Bool bClear ) const
+void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, BOOL bClear ) const
 {
     if (!pList)
         return;
@@ -371,7 +371,7 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, sal_Bool bClear ) c
     if (bClear)
         pList->RemoveAll();
 
-    //!     bei mehreren selektierten Tabellen mehrere Ranges eintragen !!!
+    //!		bei mehreren selektierten Tabellen mehrere Ranges eintragen !!!
 
     if ( bMultiMarked )
     {
@@ -406,14 +406,15 @@ void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
         return;
 
     ScRangeList aOldList(*pList);
-    pList->RemoveAll();                 //! oder die vorhandenen unten weglassen
+    pList->RemoveAll();					//!	oder die vorhandenen unten weglassen
 
     for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
         if (bTabMarked[nTab])
         {
-            for ( size_t i=0, nCount = aOldList.size(); i<nCount; i++)
+            ULONG nCount = aOldList.Count();
+            for (ULONG i=0; i<nCount; i++)
             {
-                ScRange aRange = *aOldList[ i ];
+                ScRange aRange = *aOldList.GetObject(i);
                 aRange.aStart.SetTab(nTab);
                 aRange.aEnd.SetTab(nTab);
                 pList->Append( aRange );
@@ -483,8 +484,8 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
     const SCCOLROW nMultiStart = aMultiRange.aStart.Row();
     const SCCOLROW nMultiEnd = aMultiRange.aEnd.Row();
 
-    sal_Bool*   bRowMarked = new sal_Bool[MAXROWCOUNT];
-    memset( bRowMarked, 0, sizeof(sal_Bool) * MAXROWCOUNT);
+    BOOL*   bRowMarked = new BOOL[MAXROWCOUNT];
+    memset( bRowMarked, 0, sizeof(BOOL) * MAXROWCOUNT);
     SCROW  nRow;
     SCCOL  nCol;
 
@@ -494,7 +495,7 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
         ScMarkArrayIter aMarkIter( &pMultiSel[nCol] );
         while (aMarkIter.Next( nTop, nBottom ))
             for (nRow=nTop; nRow<=nBottom; nRow++)
-                bRowMarked[nRow] = sal_True;
+                bRowMarked[nRow] = TRUE;
         if (nTop == nMultiStart && nBottom == nMultiEnd)
             break;  // for, all relevant rows marked
     }
@@ -535,10 +536,10 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
     return nRangeCnt;
 }
 
-sal_Bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
+BOOL ScMarkData::IsAllMarked( const ScRange& rRange ) const
 {
     if ( !bMultiMarked )
-        return false;
+        return FALSE;
 
     DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
 
@@ -546,15 +547,15 @@ sal_Bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
     SCROW nStartRow = rRange.aStart.Row();
     SCCOL nEndCol = rRange.aEnd.Col();
     SCROW nEndRow = rRange.aEnd.Row();
-    sal_Bool bOk = sal_True;
+    BOOL bOk = TRUE;
     for (SCCOL nCol=nStartCol; nCol<=nEndCol && bOk; nCol++)
         if ( !pMultiSel[nCol].IsAllMarked( nStartRow, nEndRow ) )
-            bOk = false;
+            bOk = FALSE;
 
     return bOk;
 }
 
-SCsROW ScMarkData::GetNextMarked( SCCOL nCol, SCsROW nRow, sal_Bool bUp ) const
+SCsROW ScMarkData::GetNextMarked( SCCOL nCol, SCsROW nRow, BOOL bUp ) const
 {
     if ( !bMultiMarked )
         return nRow;
@@ -564,42 +565,42 @@ SCsROW ScMarkData::GetNextMarked( SCCOL nCol, SCsROW nRow, sal_Bool bUp ) const
     return pMultiSel[nCol].GetNextMarked( nRow, bUp );
 }
 
-sal_Bool ScMarkData::HasMultiMarks( SCCOL nCol ) const
+BOOL ScMarkData::HasMultiMarks( SCCOL nCol ) const
 {
     if ( !bMultiMarked )
-        return false;
+        return FALSE;
 
     DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
 
     return pMultiSel[nCol].HasMarks();
 }
 
-sal_Bool ScMarkData::HasAnyMultiMarks() const
+BOOL ScMarkData::HasAnyMultiMarks() const
 {
     if ( !bMultiMarked )
-        return false;
+        return FALSE;
 
     DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
 
     for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
         if ( pMultiSel[nCol].HasMarks() )
-            return sal_True;
+            return TRUE;
 
-    return false;       // nix
+    return FALSE;		// nix
 }
 
 void ScMarkData::InsertTab( SCTAB nTab )
 {
     for (SCTAB i=MAXTAB; i>nTab; i--)
         bTabMarked[i] = bTabMarked[i-1];
-    bTabMarked[nTab] = false;
+    bTabMarked[nTab] = FALSE;
 }
 
 void ScMarkData::DeleteTab( SCTAB nTab )
 {
     for (SCTAB i=nTab; i<MAXTAB; i++)
         bTabMarked[i] = bTabMarked[i+1];
-    bTabMarked[MAXTAB] = false;
+    bTabMarked[MAXTAB] = FALSE;
 }
 
 

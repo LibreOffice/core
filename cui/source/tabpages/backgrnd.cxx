@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,12 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 // include ---------------------------------------------------------------
 #include <unotools/pathoptions.hxx>
+#include <svl/intitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/objsh.hxx>
@@ -47,9 +51,9 @@
 #include <editeng/eerdll.hxx>
 
 // Tabellenhintergrund
-#define TBL_DEST_CELL   0
-#define TBL_DEST_ROW    1
-#define TBL_DEST_TBL    2
+#define TBL_DEST_CELL 	0
+#define TBL_DEST_ROW 	1
+#define TBL_DEST_TBL	2
 
 #include <editeng/brshitem.hxx>
 #include "backgrnd.hxx"
@@ -67,7 +71,7 @@
 using namespace ::com::sun::star;
 // static ----------------------------------------------------------------
 
-static sal_uInt16 pRanges[] =
+static USHORT pRanges[] =
 {
     SID_VIEW_FLD_PIC, SID_VIEW_FLD_PIC,
     SID_ATTR_BRUSH, SID_ATTR_BRUSH,
@@ -77,13 +81,13 @@ static sal_uInt16 pRanges[] =
 
 struct SvxBackgroundTable_Impl
 {
-    SvxBrushItem*   pCellBrush;
-    SvxBrushItem*   pRowBrush;
-    SvxBrushItem*   pTableBrush;
-    sal_uInt16          nCellWhich;
-    sal_uInt16          nRowWhich;
-    sal_uInt16          nTableWhich;
-    sal_uInt16          nActPos;
+    SvxBrushItem*	pCellBrush;
+    SvxBrushItem*	pRowBrush;
+    SvxBrushItem*	pTableBrush;
+    USHORT          nCellWhich;
+    USHORT          nRowWhich;
+    USHORT          nTableWhich;
+    USHORT          nActPos;
 
     SvxBackgroundTable_Impl() :
         pCellBrush(NULL), pRowBrush(NULL), pTableBrush(NULL),
@@ -92,10 +96,10 @@ struct SvxBackgroundTable_Impl
 
 struct SvxBackgroundPara_Impl
 {
-    SvxBrushItem*   pParaBrush;
-    SvxBrushItem*   pCharBrush;
+    SvxBrushItem*	pParaBrush;
+    SvxBrushItem*	pCharBrush;
 
-    sal_uInt16          nActPos;
+    USHORT 			nActPos;
 
     SvxBackgroundPara_Impl() :
         pParaBrush(NULL), pCharBrush(NULL) {}
@@ -104,18 +108,20 @@ struct SvxBackgroundPara_Impl
 struct SvxBackgroundPage_Impl
 {
     Timer*          pLoadTimer;
-    sal_Bool            bIsImportDlgInExecute;
+    BOOL            bIsImportDlgInExecute;
 
     SvxBackgroundPage_Impl() :
-        pLoadTimer(NULL), bIsImportDlgInExecute(sal_False) {}
+        pLoadTimer(NULL), bIsImportDlgInExecute(FALSE) {}
 };
+/* -----------------------------15.08.2002 12:21------------------------------
 
-inline sal_uInt8 lcl_PercentToTransparency(long nPercent)
+ ---------------------------------------------------------------------------*/
+inline BYTE lcl_PercentToTransparency(long nPercent)
 {
     //0xff must not be returned!
-    return sal_uInt8(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);
+    return BYTE(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);
 }
-inline sal_uInt8 lcl_TransparencyToPercent(sal_uInt8 nTrans)
+inline BYTE lcl_TransparencyToPercent(BYTE nTrans)
 {
     return (nTrans * 100 + 127) / 254;
 }
@@ -127,11 +133,15 @@ void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
 }
 //-------------------------------------------------------------------------
 
-sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
+/*	[Beschreibung]
+
+*/
+
+USHORT GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
 {
-    sal_Bool    bFound = sal_False;
-    sal_uInt16  nCount = rValueSet.GetItemCount();
-    sal_uInt16  n      = 1;
+    BOOL	bFound = FALSE;
+    USHORT	nCount = rValueSet.GetItemCount();
+    USHORT	n	   = 1;
 
     while ( !bFound && n <= nCount )
     {
@@ -149,7 +159,7 @@ sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
 
 // class BackgroundPreview -----------------------------------------------
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Vorschaufenster f"ur Brush oder Bitmap
 */
@@ -158,23 +168,23 @@ class BackgroundPreviewImpl : public Window
 {
 public:
     BackgroundPreviewImpl( Window* pParent,
-                           const ResId& rResId, sal_Bool bIsBmpPreview );
+                           const ResId& rResId, BOOL bIsBmpPreview );
     ~BackgroundPreviewImpl();
 
-    void            NotifyChange( const Color&  rColor );
-    void            NotifyChange( const Bitmap* pBitmap );
+    void			NotifyChange( const Color&  rColor );
+    void			NotifyChange( const Bitmap* pBitmap );
 
 protected:
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void	Paint( const Rectangle& rRect );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 private:
-    const sal_Bool      bIsBmp;
-    Bitmap*         pBitmap;
-    Point           aDrawPos;
-    Size            aDrawSize;
-    Rectangle       aDrawRect;
-    sal_uInt8            nTransparency;
+    const BOOL		bIsBmp;
+    Bitmap*			pBitmap;
+    Point			aDrawPos;
+    Size			aDrawSize;
+    Rectangle		aDrawRect;
+    BYTE            nTransparency;
 };
 
 //-----------------------------------------------------------------------
@@ -183,13 +193,17 @@ BackgroundPreviewImpl::BackgroundPreviewImpl
 (
     Window* pParent,
     const ResId& rResId,
-    sal_Bool bIsBmpPreview
+    BOOL bIsBmpPreview
 ) :
+
+/*	[Beschreibung]
+
+*/
 
     Window( pParent, rResId ),
 
-    bIsBmp   ( bIsBmpPreview ),
-    pBitmap  ( NULL ),
+    bIsBmp	 ( bIsBmpPreview ),
+    pBitmap	 ( NULL ),
     aDrawRect( Point(0,0), GetOutputSizePixel() ),
     nTransparency(0)
 
@@ -201,6 +215,11 @@ BackgroundPreviewImpl::BackgroundPreviewImpl
 //-----------------------------------------------------------------------
 
 BackgroundPreviewImpl::~BackgroundPreviewImpl()
+
+/*	[Beschreibung]
+
+*/
+
 {
     delete pBitmap;
 }
@@ -222,6 +241,10 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
 //-----------------------------------------------------------------------
 
 void BackgroundPreviewImpl::NotifyChange( const Bitmap* pNewBitmap )
+/*	[Beschreibung]
+
+*/
+
 {
     if ( bIsBmp && (pNewBitmap || pBitmap) )
     {
@@ -291,11 +314,13 @@ void BackgroundPreviewImpl::Paint( const Rectangle& )
         {
             Size aSize = GetOutputSizePixel();
             DrawLine( Point(0,0),               Point(aSize.Width(),aSize.Height()) );
-            DrawLine( Point(0,aSize.Height()),  Point(aSize.Width(),0) );
+            DrawLine( Point(0,aSize.Height()),	Point(aSize.Width(),0) );
         }
     }
 }
+/* -----------------------------27.02.2002 11:07------------------------------
 
+ ---------------------------------------------------------------------------*/
 void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -313,49 +338,51 @@ void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
                                             const SfxItemSet& rCoreSet ) :
 
+/*	[Beschreibung]
+
+*/
+
     SvxTabPage( pParent, CUI_RES( RID_SVXPAGE_BACKGROUND ), rCoreSet ),
 
-    aSelectTxt          ( this, CUI_RES( FT_SELECTOR ) ),
-    aLbSelect           ( this, CUI_RES( LB_SELECTOR ) ),
+    aBorderWin			( this, CUI_RES(CT_BORDER) ),
+    aBackgroundColorSet ( &aBorderWin, CUI_RES( SET_BGDCOLOR ) ),
+    aBackgroundColorBox ( this, CUI_RES( GB_BGDCOLOR ) ),
+    pPreviewWin1        ( new BackgroundPreviewImpl(
+                            this, CUI_RES( WIN_PREVIEW1 ), FALSE ) ),
+    aColTransFT         ( this, CUI_RES( FT_COL_TRANS ) ),
+    aColTransMF         ( this, CUI_RES( MF_COL_TRANS ) ),
+    aBtnBrowse	        ( this, CUI_RES( BTN_BROWSE ) ),
+    aBtnLink	        ( this, CUI_RES( BTN_LINK ) ),
+    aBtnPreview	        ( this, CUI_RES( BTN_PREVIEW ) ),
+    aFtFile		        ( this, CUI_RES( FT_FILE ) ),
+    aGbFile		        ( this, CUI_RES( GB_FILE ) ),
+    aBtnPosition        ( this, CUI_RES( BTN_POSITION ) ),
+    aBtnArea	        ( this, CUI_RES( BTN_AREA ) ),
+    aBtnTile	        ( this, CUI_RES( BTN_TILE ) ),
+    aWndPosition		( this, CUI_RES( WND_POSITION ), RP_MM ),
+    aGbPosition			( this, CUI_RES( GB_POSITION ) ),
+    aGraphTransFL       ( this, CUI_RES( FL_GRAPH_TRANS ) ),
+    aGraphTransMF       ( this, CUI_RES( MF_GRAPH_TRANS ) ),
+    pPreviewWin2        ( new BackgroundPreviewImpl(
+                            this, CUI_RES( WIN_PREVIEW2 ), TRUE ) ),
+    aSelectTxt			( this, CUI_RES( FT_SELECTOR ) ),
+    aLbSelect			( this, CUI_RES( LB_SELECTOR ) ),
     aStrBrowse          ( CUI_RES( STR_BROWSE ) ),
     aStrUnlinked        ( CUI_RES( STR_UNLINKED ) ),
     aTblDesc            ( this, CUI_RES( FT_TBL_DESC ) ),
     aTblLBox            ( this, CUI_RES( LB_TBL_BOX ) ),
     aParaLBox           ( this, CUI_RES( LB_PARA_BOX ) ),
-
-    aBorderWin          ( this, CUI_RES(CT_BORDER) ),
-    aBackgroundColorSet ( &aBorderWin, CUI_RES( SET_BGDCOLOR ) ),
-    aBackgroundColorBox ( this, CUI_RES( GB_BGDCOLOR ) ),
-    pPreviewWin1        ( new BackgroundPreviewImpl( this, CUI_RES( WIN_PREVIEW1 ), sal_False ) ),
-
-    aColTransFT         ( this, CUI_RES( FT_COL_TRANS ) ),
-    aColTransMF         ( this, CUI_RES( MF_COL_TRANS ) ),
-    aBtnPreview         ( this, CUI_RES( BTN_PREVIEW ) ),
-    aGbFile             ( this, CUI_RES( GB_FILE ) ),
-    aBtnBrowse          ( this, CUI_RES( BTN_BROWSE ) ),
-    aBtnLink            ( this, CUI_RES( BTN_LINK ) ),
-    aGbPosition         ( this, CUI_RES( GB_POSITION ) ),
-    aBtnPosition        ( this, CUI_RES( BTN_POSITION ) ),
-    aBtnArea            ( this, CUI_RES( BTN_AREA ) ),
-    aBtnTile            ( this, CUI_RES( BTN_TILE ) ),
-    aWndPosition        ( this, CUI_RES( WND_POSITION ), RP_MM ),
-    aFtFile             ( this, CUI_RES( FT_FILE ) ),
-    aGraphTransFL       ( this, CUI_RES( FL_GRAPH_TRANS ) ),
-    aGraphTransMF       ( this, CUI_RES( MF_GRAPH_TRANS ) ),
-    pPreviewWin2        ( new BackgroundPreviewImpl(
-                            this, CUI_RES( WIN_PREVIEW2 ), sal_True ) ),
-
     nHtmlMode           ( 0 ),
-    bAllowShowSelector  ( sal_True ),
-    bIsGraphicValid     ( sal_False ),
-    bLinkOnly           ( sal_False ),
-    bResized            ( sal_False ),
-    bColTransparency    ( sal_False ),
-    bGraphTransparency  ( sal_False ),
+    bAllowShowSelector	( TRUE ),
+    bIsGraphicValid		( FALSE ),
+    bLinkOnly			( FALSE ),
+    bResized            ( FALSE ),
+    bColTransparency    ( FALSE ),
+    bGraphTransparency  ( FALSE ),
 
     pPageImpl           ( new SvxBackgroundPage_Impl ),
-    pImportDlg          ( NULL ),
-    pTableBck_Impl      ( NULL ),
+    pImportDlg			( NULL ),
+    pTableBck_Impl		( NULL ),
     pParaBck_Impl       ( NULL )
 
 {
@@ -365,7 +392,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
 
-    if ( SFX_ITEM_SET == rCoreSet.GetItemState( SID_HTML_MODE, sal_False, &pItem )
+    if ( SFX_ITEM_SET == rCoreSet.GetItemState( SID_HTML_MODE, FALSE, &pItem )
          || ( 0 != ( pShell = SfxObjectShell::Current()) &&
               0 != ( pItem = pShell->GetItem( SID_HTML_MODE ) ) ) )
     {
@@ -376,16 +403,16 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
 
     aBackgroundColorSet.SetSelectHdl( HDL(BackgroundColorHdl_Impl) );
     FreeResource();
-
-    aBtnBrowse.SetAccessibleRelationMemberOf(&aGbFile);
-    aWndPosition.SetAccessibleRelationMemberOf(&aGbPosition);
-    aWndPosition.SetAccessibleRelationLabeledBy(&aBtnPosition);
-    aBackgroundColorSet.SetAccessibleRelationLabeledBy(&aBackgroundColorBox);
 }
 
 //------------------------------------------------------------------------
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
+
+/*	[Beschreibung]
+
+*/
+
 {
     delete pPreviewWin1;
     delete pPreviewWin2;
@@ -411,9 +438,9 @@ SvxBackgroundTabPage::~SvxBackgroundTabPage()
 
 //------------------------------------------------------------------------
 
-sal_uInt16* SvxBackgroundTabPage::GetRanges()
+USHORT* SvxBackgroundTabPage::GetRanges()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     gibt den Bereich der Which-Werte zur"uck
 */
@@ -427,7 +454,7 @@ sal_uInt16* SvxBackgroundTabPage::GetRanges()
 SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Create-Methode f"ur den TabDialog
 */
@@ -439,12 +466,17 @@ SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
 //------------------------------------------------------------------------
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
+
+/*	[Beschreibung]
+
+*/
+
 {
 // os: So ein Unsinn! Irgendwo laesst sich so ein Item immer finden,
-//      es muss aber im rSet vorhanden sein!
-//  const SfxPoolItem* pX = GetOldItem( rSet, SID_VIEW_FLD_PIC );
-//  if( pX && pX->ISA(SfxWallpaperItem))
-    if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(GetWhich(SID_VIEW_FLD_PIC), sal_False))
+//		es muss aber im rSet vorhanden sein!
+//	const SfxPoolItem* pX = GetOldItem( rSet, SID_VIEW_FLD_PIC );
+// 	if( pX && pX->ISA(SfxWallpaperItem))
+    if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(GetWhich(SID_VIEW_FLD_PIC), FALSE))
     {
         ResetFromWallpaperItem( rSet );
         return;
@@ -455,17 +487,17 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
     aBtnPreview.Check( aUserData.Len() && sal_Unicode('1') == aUserData.GetChar( 0 ) );
 
     // nach Reset kein ShowSelector() mehr aufrufen d"urfen
-    bAllowShowSelector = sal_False;
+    bAllowShowSelector = FALSE;
 
 
     // Input-BrushItem besorgen und auswerten
     const SvxBrushItem* pBgdAttr = NULL;
-    sal_uInt16 nSlot = SID_ATTR_BRUSH;
+    USHORT nSlot = SID_ATTR_BRUSH;
     const SfxPoolItem* pItem;
-    sal_uInt16 nDestValue = USHRT_MAX;
+    USHORT nDestValue = USHRT_MAX;
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_BACKGRND_DESTINATION,
-                                            sal_False, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState(	SID_BACKGRND_DESTINATION,
+                                            FALSE, &pItem ) )
     {
         nDestValue = ((const SfxUInt16Item*)pItem)->GetValue();
         aTblLBox.SelectEntryPos(nDestValue);
@@ -484,11 +516,11 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
         }
     }
     else if( SFX_ITEM_SET == rSet.GetItemState(
-                SID_PARA_BACKGRND_DESTINATION, sal_False, &pItem ) )
+                SID_PARA_BACKGRND_DESTINATION, FALSE, &pItem ) )
     {
         nDestValue = ((const SfxUInt16Item*)pItem)->GetValue();
         // ist gerade Zeichen aktiviert?
-        sal_uInt16 nParaSel  = aParaLBox.GetSelectEntryPos();
+        USHORT nParaSel  = aParaLBox.GetSelectEntryPos();
         if(1 == nParaSel)
         {
             // dann war das ein "Standard" - Aufruf
@@ -509,9 +541,9 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
     //#111173# the destination item is missing when the parent style has been changed
     if(USHRT_MAX == nDestValue && (aParaLBox.IsVisible()||aTblLBox.IsVisible()))
         nDestValue = 0;
-    sal_uInt16 nWhich = GetWhich( nSlot );
+    USHORT nWhich = GetWhich( nSlot );
 
-    if ( rSet.GetItemState( nWhich, sal_False ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich, FALSE ) >= SFX_ITEM_AVAILABLE )
         pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
 
     aBtnTile.Check();
@@ -538,7 +570,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
     {
         if(aTblLBox.IsVisible())
         {
-            sal_uInt16 nValue = aTblLBox.GetSelectEntryPos();
+            USHORT nValue = aTblLBox.GetSelectEntryPos();
 
             if ( pTableBck_Impl )
             {
@@ -552,21 +584,21 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             pTableBck_Impl->nActPos = nValue;
 
             nWhich = GetWhich( SID_ATTR_BRUSH );
-            if ( rSet.GetItemState( nWhich, sal_False ) >= SFX_ITEM_AVAILABLE )
+            if ( rSet.GetItemState( nWhich, FALSE ) >= SFX_ITEM_AVAILABLE )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
                 pTableBck_Impl->pCellBrush = new SvxBrushItem(*pBgdAttr);
             }
             pTableBck_Impl->nCellWhich = nWhich;
 
-            if ( rSet.GetItemState( SID_ATTR_BRUSH_ROW, sal_False ) >= SFX_ITEM_AVAILABLE )
+            if ( rSet.GetItemState( SID_ATTR_BRUSH_ROW, FALSE ) >= SFX_ITEM_AVAILABLE )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( SID_ATTR_BRUSH_ROW ) );
                 pTableBck_Impl->pRowBrush = new SvxBrushItem(*pBgdAttr);
             }
             pTableBck_Impl->nRowWhich = SID_ATTR_BRUSH_ROW;
 
-            if ( rSet.GetItemState( SID_ATTR_BRUSH_TABLE, sal_False ) >= SFX_ITEM_AVAILABLE )
+            if ( rSet.GetItemState( SID_ATTR_BRUSH_TABLE, FALSE ) >= SFX_ITEM_AVAILABLE )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( SID_ATTR_BRUSH_TABLE ) );
                 pTableBck_Impl->pTableBrush = new SvxBrushItem(*pBgdAttr);
@@ -578,7 +610,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
         }
         else
         {
-            sal_uInt16 nValue = aParaLBox.GetSelectEntryPos();
+            USHORT nValue = aParaLBox.GetSelectEntryPos();
 
             if ( pParaBck_Impl )
             {
@@ -591,16 +623,16 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             pParaBck_Impl->nActPos = nValue;
 
             nWhich = GetWhich( SID_ATTR_BRUSH );
-            if ( rSet.GetItemState( nWhich, sal_False ) >= SFX_ITEM_AVAILABLE )
+            if ( rSet.GetItemState( nWhich, FALSE ) >= SFX_ITEM_AVAILABLE )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
                 pParaBck_Impl->pParaBrush = new SvxBrushItem(*pBgdAttr);
             }
 
             nWhich = GetWhich( SID_ATTR_BRUSH_CHAR );
-            rSet.GetItemState( nWhich, sal_True );
-            rSet.GetItemState( nWhich, sal_False );
-            if ( rSet.GetItemState( nWhich, sal_True ) > SFX_ITEM_AVAILABLE )
+            SfxItemState eState = rSet.GetItemState( nWhich, TRUE );
+            eState = rSet.GetItemState( nWhich, FALSE );
+            if ( rSet.GetItemState( nWhich, TRUE ) > SFX_ITEM_AVAILABLE )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
                 pParaBck_Impl->pCharBrush = new SvxBrushItem(*pBgdAttr);
@@ -626,7 +658,6 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             aPos.Y()  = nY;
             pPreviewWin1->SetPosPixel(aPos);
             aBackgroundColorBox.Hide();
-            aBackgroundColorSet.SetAccessibleRelationLabeledBy(&aBackgroundColorSet);
         }
     }
 }
@@ -641,12 +672,12 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 
     // Input-BrushItem besorgen und auswerten
     const SvxBrushItem* pBgdAttr = NULL;
-    sal_uInt16 nSlot = SID_VIEW_FLD_PIC;
-    sal_uInt16 nWhich = GetWhich( nSlot );
+    USHORT nSlot = SID_VIEW_FLD_PIC;
+    USHORT nWhich = GetWhich( nSlot );
     SvxBrushItem* pTemp = 0;
     const CntWallpaperItem* pItem = 0;
 
-    if ( rSet.GetItemState( nWhich, sal_False ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich, FALSE ) >= SFX_ITEM_AVAILABLE )
     {
         pItem = (const CntWallpaperItem*)&rSet.Get( nWhich );
         pTemp = new SvxBrushItem( *pItem, nWhich );
@@ -662,7 +693,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
         if( aBgdColor != pBgdAttr->GetColor() )
         {
             aBgdColor = pBgdAttr->GetColor();
-            sal_uInt16 nCol = GetItemId_Impl( aBackgroundColorSet, aBgdColor );
+            USHORT nCol = GetItemId_Impl( aBackgroundColorSet, aBgdColor );
             aBackgroundColorSet.SelectItem( nCol );
             pPreviewWin1->NotifyChange( aBgdColor );
         }
@@ -678,11 +709,11 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     }
 
     // We now have always a link to the background
-    bLinkOnly = sal_True;
-    aBtnLink.Check( sal_True );
-    aBtnLink.Show( sal_False );
-//  if( !pItem || !pItem->GetWallpaper(sal_False).IsBitmap() )
-//      aBtnLink.Check();
+    bLinkOnly = TRUE;
+    aBtnLink.Check( TRUE );
+    aBtnLink.Show( FALSE );
+//	if( !pItem || !pItem->GetWallpaper(FALSE).IsBitmap() )
+//		aBtnLink.Check();
 
     delete pTemp;
 }
@@ -693,7 +724,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 
 void SvxBackgroundTabPage::FillUserData()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Beim Destruieren einer SfxTabPage wird diese virtuelle Methode gerufen,
     damit die TabPage interne Informationen sichern kann.
@@ -707,7 +738,12 @@ void SvxBackgroundTabPage::FillUserData()
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
+BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
+
+/*	[Beschreibung]
+
+*/
+
 {
     if ( pPageImpl->pLoadTimer && pPageImpl->pLoadTimer->IsActive() )
     {
@@ -715,15 +751,15 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         LoadTimerHdl_Impl( pPageImpl->pLoadTimer );
     }
 // os: So ein Unsinn! Irgendwo laesst sich so ein Item immer finden,
-//      es muss aber im rSet vorhanden sein!
+//		es muss aber im rSet vorhanden sein!
 
-//  const SfxPoolItem* pX = GetOldItem( rCoreSet, SID_VIEW_FLD_PIC );
-//  if( pX && pX->ISA(SfxWallpaperItem))
-    if(SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(GetWhich(SID_VIEW_FLD_PIC), sal_False))
+//	const SfxPoolItem* pX = GetOldItem( rCoreSet, SID_VIEW_FLD_PIC );
+//	if( pX && pX->ISA(SfxWallpaperItem))
+    if(SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(GetWhich(SID_VIEW_FLD_PIC), FALSE))
         return FillItemSetWithWallpaperItem( rCoreSet, SID_VIEW_FLD_PIC );
 
-    sal_Bool bModified = sal_False;
-    sal_uInt16 nSlot = SID_ATTR_BRUSH;
+    BOOL bModified = FALSE;
+    USHORT nSlot = SID_ATTR_BRUSH;
 
     if ( aTblLBox.IsVisible() )
     {
@@ -752,18 +788,18 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             break;
         }
     }
-    sal_uInt16 nWhich = GetWhich( nSlot );
+    USHORT nWhich = GetWhich( nSlot );
 
     const SfxPoolItem* pOld = GetOldItem( rCoreSet, nSlot );
-    SfxItemState eOldItemState = rCoreSet.GetItemState(nSlot, sal_False);
+    SfxItemState eOldItemState = rCoreSet.GetItemState(nSlot, FALSE);
     const SfxItemSet& rOldSet = GetItemSet();
 
-    sal_Bool bGraphTransparencyChanged = bGraphTransparency && (aGraphTransMF.GetText() != aGraphTransMF.GetSavedValue());
+    BOOL bGraphTransparencyChanged = bGraphTransparency && (aGraphTransMF.GetText() != aGraphTransMF.GetSavedValue());
     if ( pOld )
     {
-        const SvxBrushItem& rOldItem    = (const SvxBrushItem&)*pOld;
-        SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
-        const sal_Bool          bIsBrush    = ( 0 == aLbSelect.GetSelectEntryPos() );
+        const SvxBrushItem& rOldItem	= (const SvxBrushItem&)*pOld;
+        SvxGraphicPosition	eOldPos		= rOldItem.GetGraphicPos();
+        const BOOL 			bIsBrush	= ( 0 == aLbSelect.GetSelectEntryPos() );
 
         // transparency has to be set if enabled, the color not already set to "No fill" and
         if( bColTransparency &&
@@ -782,19 +818,19 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 if ( rOldItem.GetColor() != aBgdColor ||
                         (SFX_ITEM_AVAILABLE >= eOldItemState && !aBackgroundColorSet.IsNoSelection()))
                 {
-                    bModified = sal_True;
+                    bModified = TRUE;
                     rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
                 }
-                else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
+                else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
                     rCoreSet.ClearItem( nWhich );
             }
             else
             {
                 // Bitmap-Behandlung:
 
-                SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
-                const sal_Bool          bIsLink  = aBtnLink.IsChecked();
-                const sal_Bool          bWasLink = (NULL != rOldItem.GetGraphicLink() );
+                SvxGraphicPosition	eNewPos  = GetGraphicPosition_Impl();
+                const BOOL			bIsLink  = aBtnLink.IsChecked();
+                const BOOL			bWasLink = (NULL != rOldItem.GetGraphicLink() );
 
 
                 if ( !bIsLink && !bIsGraphicValid )
@@ -809,7 +845,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                                       != aBgdGraphic.GetBitmap() )
                    )
                 {
-                    bModified = sal_True;
+                    bModified = TRUE;
 
                     SvxBrushItem aTmpBrush(nWhich);
                     if ( bIsLink )
@@ -827,7 +863,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
                     rCoreSet.Put(aTmpBrush);
                 }
-                else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
+                else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
                     rCoreSet.ClearItem( nWhich );
             }
         }
@@ -868,7 +904,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
     else if ( SID_ATTR_BRUSH_CHAR == nSlot && aBgdColor != Color( COL_WHITE ) )
     {
         rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
-        bModified = sal_True;
+        bModified = TRUE;
     }
 
     if( aTblLBox.IsVisible() )
@@ -882,7 +918,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             if ( *pTableBck_Impl->pCellBrush != *pOldCell )
             {
                 rCoreSet.Put( *pTableBck_Impl->pCellBrush );
-                bModified |= sal_True;
+                bModified |= TRUE;
             }
         }
 
@@ -894,7 +930,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             if ( *pTableBck_Impl->pRowBrush != *pOldRow )
             {
                 rCoreSet.Put( *pTableBck_Impl->pRowBrush );
-                bModified |= sal_True;
+                bModified |= TRUE;
             }
         }
 
@@ -906,7 +942,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             if ( *pTableBck_Impl->pTableBrush != *pOldTable )
             {
                 rCoreSet.Put( *pTableBck_Impl->pTableBrush );
-                bModified |= sal_True;
+                bModified |= TRUE;
             }
         }
 
@@ -914,7 +950,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             rCoreSet.Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
                                          aTblLBox.GetSelectEntryPos() ) );
-            bModified |= sal_True;
+            bModified |= TRUE;
         }
     }
     else if(aParaLBox.GetData() == &aParaLBox)
@@ -928,7 +964,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             if ( *pParaBck_Impl->pParaBrush != *pOldPara )
             {
                 rCoreSet.Put( *pParaBck_Impl->pParaBrush );
-                bModified |= sal_True;
+                bModified |= TRUE;
             }
         }
 
@@ -944,7 +980,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 *pParaBck_Impl->pCharBrush != SvxBrushItem(SID_ATTR_BRUSH_CHAR)))
             {
                 rCoreSet.Put( *pParaBck_Impl->pCharBrush );
-                bModified |= sal_True;
+                bModified |= TRUE;
             }
         }
 
@@ -952,23 +988,23 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             rCoreSet.Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
                                          aParaLBox.GetSelectEntryPos() ) );
-            bModified |= sal_True;
+            bModified |= TRUE;
         }
     }
     return bModified;
 }
 
-sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, sal_uInt16 nSlot)
+BOOL SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, USHORT nSlot)
 {
-    sal_uInt16 nWhich = GetWhich( nSlot );
+    USHORT nWhich = GetWhich( nSlot );
     const SfxPoolItem* pOld = GetOldItem( rCoreSet, nSlot );
     const SfxItemSet& rOldSet = GetItemSet();
     DBG_ASSERT(pOld,"FillItemSetWithWallpaperItem: Item not found");
 
-    SvxBrushItem        rOldItem( (const CntWallpaperItem&)*pOld, nWhich );
-    SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
-    const sal_Bool          bIsBrush    = ( 0 == aLbSelect.GetSelectEntryPos() );
-    sal_Bool                bModified = sal_False;
+    SvxBrushItem 		rOldItem( (const CntWallpaperItem&)*pOld, nWhich );
+    SvxGraphicPosition	eOldPos		= rOldItem.GetGraphicPos();
+    const BOOL 			bIsBrush	= ( 0 == aLbSelect.GetSelectEntryPos() );
+    BOOL				bModified = FALSE;
 
     if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
         || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap gewechselt?
@@ -980,34 +1016,34 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
             // Brush-Behandlung:
             if ( rOldItem.GetColor() != aBgdColor )
             {
-                bModified = sal_True;
+                bModified = TRUE;
                 CntWallpaperItem aItem( nWhich );
                 aItem.SetColor( aBgdColor );
                 rCoreSet.Put( aItem );
             }
-            else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
+            else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
                 rCoreSet.ClearItem( nWhich );
         }
         else
         {
             // Bitmap-Behandlung:
-            SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
+            SvxGraphicPosition	eNewPos  = GetGraphicPosition_Impl();
 
             int bBitmapChanged = ( ( eNewPos != eOldPos ) ||
                                    ( *rOldItem.GetGraphicLink() != aBgdGraphicPath ) );
             int bBrushChanged = ( rOldItem.GetColor() != aBgdColor );
             if( bBitmapChanged || bBrushChanged )
             {
-                bModified = sal_True;
+                bModified = TRUE;
 
                 CntWallpaperItem aItem( nWhich );
                 WallpaperStyle eWallStyle = SvxBrushItem::GraphicPos2WallpaperStyle(eNewPos);
-                aItem.SetStyle( sal::static_int_cast< sal_uInt16 >( eWallStyle ) );
+                aItem.SetStyle( sal::static_int_cast< USHORT >( eWallStyle ) );
                 aItem.SetColor( aBgdColor );
                 aItem.SetBitmapURL( aBgdGraphicPath );
                 rCoreSet.Put( aItem );
             }
-            else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
+            else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
                 rCoreSet.ClearItem( nWhich );
         }
     }
@@ -1023,13 +1059,13 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
         {
             WallpaperStyle eWallStyle =
                 SvxBrushItem::GraphicPos2WallpaperStyle( GetGraphicPosition_Impl() );
-            aItem.SetStyle( sal::static_int_cast< sal_uInt16 >( eWallStyle ) );
+            aItem.SetStyle( sal::static_int_cast< USHORT >( eWallStyle ) );
             aItem.SetColor( aBgdColor );
             aItem.SetBitmapURL( aBgdGraphicPath );
             rCoreSet.Put( aItem );
         }
 
-        bModified = sal_True;
+        bModified = TRUE;
     }
     return bModified;
 }
@@ -1038,7 +1074,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
 
 int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     virtuelle Methode, wird beim Deaktivieren gerufen
 */
@@ -1056,6 +1092,11 @@ int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 //-----------------------------------------------------------------------
 
 void SvxBackgroundTabPage::PointChanged( Window* , RECT_POINT  )
+
+/*	[Beschreibung]
+
+*/
+
 {
     // muss implementiert werden, damit Position-Control funktioniert
 }
@@ -1063,6 +1104,11 @@ void SvxBackgroundTabPage::PointChanged( Window* , RECT_POINT  )
 //-----------------------------------------------------------------------
 
 void SvxBackgroundTabPage::ShowSelector()
+
+/*	[Beschreibung]
+
+*/
+
 {
     if( bAllowShowSelector)
     {
@@ -1082,13 +1128,13 @@ void SvxBackgroundTabPage::ShowSelector()
         pPageImpl->pLoadTimer->SetTimeoutHdl(
             LINK( this, SvxBackgroundTabPage, LoadTimerHdl_Impl ) );
 
-        bAllowShowSelector = sal_False;
+        bAllowShowSelector = FALSE;
 
         if(nHtmlMode & HTMLMODE_ON)
         {
             if(!(nHtmlMode & HTMLMODE_GRAPH_POS))
-                aBtnPosition.Enable(sal_False);
-            aBtnArea.Enable(sal_False);
+                aBtnPosition.Enable(FALSE);
+            aBtnArea.Enable(FALSE);
         }
     }
 }
@@ -1097,6 +1143,11 @@ void SvxBackgroundTabPage::ShowSelector()
 
 
 void SvxBackgroundTabPage::RaiseLoadError_Impl()
+
+/*	[Beschreibung]
+
+*/
+
 {
     SfxErrorContext aContext( ERRCTX_SVX_BACKGROUND,
                               String(),
@@ -1111,9 +1162,14 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
+BOOL SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
+
+/*	[Beschreibung]
+
+*/
+
 {
-    sal_Bool bResult = ( aBgdGraphicPath.Len() > 0 ) &&
+    BOOL bResult = ( aBgdGraphicPath.Len() > 0 ) &&
                    ( GRFILTER_OK == GraphicFilter::LoadGraphic( aBgdGraphicPath,
                                                  aBgdGraphicFilter,
                                                  aBgdGraphic ) );
@@ -1125,7 +1181,7 @@ sal_Bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
 
 void SvxBackgroundTabPage::FillColorValueSets_Impl()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     F"ullen des Farb-Sets
 */
@@ -1135,41 +1191,40 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     const SfxPoolItem* pItem = NULL;
     XColorTable* pColorTable = NULL;
     const Size aSize15x15 = Size( 15, 15 );
-    bool bOwn = false;
+    bool bOwn = FALSE;
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
 
     if ( !pColorTable )
     {
-        bOwn = true;
+        bOwn = TRUE;
         pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
     }
 
     if ( pColorTable )
     {
-        short i = 0;
-        long nCount = pColorTable->Count();
-        XColorEntry* pEntry = NULL;
+        short i	= 0;
+        long nCount	= pColorTable->Count();
+        XColorEntry* pEntry	= NULL;
         Color aColWhite( COL_WHITE );
         String aStrWhite( EditResId( RID_SVXITEMS_COLOR_WHITE ) );
         WinBits nBits = ( aBackgroundColorSet.GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD );
         aBackgroundColorSet.SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
         aBackgroundColorSet.SetStyle( nBits );
-        aBackgroundColorSet.SetAccessibleName(aBackgroundColorBox.GetText());
         for ( i = 0; i < nCount; i++ )
         {
             pEntry = pColorTable->GetColor(i);
-            aBackgroundColorSet.InsertItem( i + 1, pEntry->GetColor(), pEntry->GetName() );
+            aBackgroundColorSet.InsertItem(	i + 1, pEntry->GetColor(), pEntry->GetName() );
         }
 
-        while ( i < 104 )
+        while ( i < 80 )
         {
             aBackgroundColorSet.InsertItem( i + 1, aColWhite, aStrWhite );
             i++;
         }
 
-        if ( nCount > 104 )
+        if ( nCount > 80 )
         {
             aBackgroundColorSet.SetStyle( nBits | WB_VSCROLL );
         }
@@ -1178,8 +1233,8 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     if ( bOwn )
         delete pColorTable;
 
-    aBackgroundColorSet.SetColCount( 8 );
-    aBackgroundColorSet.SetLineCount( 13 );
+    aBackgroundColorSet.SetColCount( 10 );
+    aBackgroundColorSet.SetLineCount( 10 );
     aBackgroundColorSet.CalcWindowSizePixel( aSize15x15 );
 
 }
@@ -1192,7 +1247,7 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
 
 void SvxBackgroundTabPage::ShowColorUI_Impl()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die Controls f"ur das Einstellen der Grafik ausblenden und die
     Controls f"ur die Farbeinstellung einblenden.
@@ -1216,8 +1271,8 @@ void SvxBackgroundTabPage::ShowColorUI_Impl()
         aWndPosition.Hide();
         aGbPosition.Hide();
         pPreviewWin2->Hide();
-        aGraphTransFL.Show(sal_False);
-        aGraphTransMF.Show(sal_False);
+        aGraphTransFL.Show(FALSE);
+        aGraphTransMF.Show(FALSE);
         if(bColTransparency)
         {
             aColTransFT.Show();
@@ -1230,7 +1285,7 @@ void SvxBackgroundTabPage::ShowColorUI_Impl()
 
 void SvxBackgroundTabPage::ShowBitmapUI_Impl()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die Controls f"ur die Farbeinstellung ausblenden und die
     Controls f"ur das Einstellen der Grafik einblenden.
@@ -1264,8 +1319,8 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
             aGraphTransFL.Show();
             aGraphTransMF.Show();
         }
-        aColTransFT.Show(sal_False);
-        aColTransMF.Show(sal_False);
+        aColTransFT.Show(FALSE);
+        aColTransMF.Show(FALSE);
     }
 }
 
@@ -1273,7 +1328,7 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
 
 void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die Controls f"ur die Grafikposition einstellen.
 */
@@ -1303,15 +1358,15 @@ void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
 
             switch ( ePos )
             {
-                case GPOS_MM:   break;
-                case GPOS_LT:   eNewPos = RP_LT; break;
-                case GPOS_MT:   eNewPos = RP_MT; break;
-                case GPOS_RT:   eNewPos = RP_RT; break;
-                case GPOS_LM:   eNewPos = RP_LM; break;
-                case GPOS_RM:   eNewPos = RP_RM; break;
-                case GPOS_LB:   eNewPos = RP_LB; break;
-                case GPOS_MB:   eNewPos = RP_MB; break;
-                case GPOS_RB:   eNewPos = RP_RB; break;
+                case GPOS_MM:	break;
+                case GPOS_LT:	eNewPos = RP_LT; break;
+                case GPOS_MT:	eNewPos = RP_MT; break;
+                case GPOS_RT:	eNewPos = RP_RT; break;
+                case GPOS_LM:	eNewPos = RP_LM; break;
+                case GPOS_RM:	eNewPos = RP_RM; break;
+                case GPOS_LB:	eNewPos = RP_LB; break;
+                case GPOS_MB:	eNewPos = RP_MB; break;
+                case GPOS_RB:	eNewPos = RP_RB; break;
                 default: ;//prevent warning
             }
             aWndPosition.SetActualRP( eNewPos );
@@ -1325,7 +1380,7 @@ void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
 
 SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die Position der Grafik zur"uckgeben.
 */
@@ -1339,15 +1394,15 @@ SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
     {
         switch ( aWndPosition.GetActualRP() )
         {
-            case RP_LT: return GPOS_LT;
-            case RP_MT: return GPOS_MT;
-            case RP_RT: return GPOS_RT;
-            case RP_LM: return GPOS_LM;
-            case RP_MM: return GPOS_MM;
-            case RP_RM: return GPOS_RM;
-            case RP_LB: return GPOS_LB;
-            case RP_MB: return GPOS_MB;
-            case RP_RB: return GPOS_RB;
+            case RP_LT:	return GPOS_LT;
+            case RP_MT:	return GPOS_MT;
+            case RP_RT:	return GPOS_RT;
+            case RP_LM:	return GPOS_LM;
+            case RP_MM:	return GPOS_MM;
+            case RP_RM:	return GPOS_RM;
+            case RP_LB:	return GPOS_LB;
+            case RP_MB:	return GPOS_MB;
+            case RP_RB:	return GPOS_RB;
         }
     }
     return GPOS_MM;
@@ -1362,11 +1417,11 @@ IMPL_LINK( SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, EMPTYARG )
     Handler, called when color selection is changed
 */
 {
-    sal_uInt16 nItemId = aBackgroundColorSet.GetSelectItemId();
+    USHORT nItemId = aBackgroundColorSet.GetSelectItemId();
     Color aColor = nItemId ? ( aBackgroundColorSet.GetItemColor( nItemId ) ) : Color( COL_TRANSPARENT );
     aBgdColor = aColor;
     pPreviewWin1->NotifyChange( aBgdColor );
-    sal_Bool bEnableTransp = aBgdColor.GetTransparency() < 0xff;
+    BOOL bEnableTransp = aBgdColor.GetTransparency() < 0xff;
     aColTransFT.Enable(bEnableTransp);
     aColTransMF.Enable(bEnableTransp);
     return 0;
@@ -1375,6 +1430,11 @@ IMPL_LINK( SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, EMPTYARG )
 //------------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, SelectHdl_Impl, ListBox*, EMPTYARG )
+
+/*	[Beschreibung]
+
+*/
+
 {
     if ( 0 == aLbSelect.GetSelectEntryPos() )
     {
@@ -1384,7 +1444,7 @@ IMPL_LINK( SvxBackgroundTabPage, SelectHdl_Impl, ListBox*, EMPTYARG )
     else
     {
         ShowBitmapUI_Impl();
-        aParaLBox.Enable(sal_False);// Zeichenhintergrund kann keine Bitmap sein
+        aParaLBox.Enable(FALSE);// Zeichenhintergrund kann keine Bitmap sein
     }
     return 0;
 }
@@ -1392,6 +1452,11 @@ IMPL_LINK( SvxBackgroundTabPage, SelectHdl_Impl, ListBox*, EMPTYARG )
 //------------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
+
+/*	[Beschreibung]
+
+*/
+
 {
     if ( &aBtnLink == pBox )
     {
@@ -1423,7 +1488,7 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
             else
             {
                 if ( aBgdGraphicPath.Len() > 0 ) // nur bei gelinkter Grafik
-                    RaiseLoadError_Impl();       // ein Fehler
+                    RaiseLoadError_Impl();		 // ein Fehler
                 pPreviewWin2->NotifyChange( NULL );
             }
         }
@@ -1436,6 +1501,11 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
 //------------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
+
+/*	[Beschreibung]
+
+*/
+
 {
     if ( pBtn == &aBtnPosition )
     {
@@ -1457,7 +1527,7 @@ IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
 
 IMPL_LINK( SvxBackgroundTabPage, BrowseHdl_Impl, PushButton* , EMPTYARG )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Handler, gerufen durch das Dr"ucken des Durchsuchen-Buttons.
     Grafik/Einf"ugen-Dialog erzeugen, Pfad setzen und starten.
@@ -1466,16 +1536,16 @@ IMPL_LINK( SvxBackgroundTabPage, BrowseHdl_Impl, PushButton* , EMPTYARG )
 {
     if ( pPageImpl->pLoadTimer->IsActive() )
         return 0;
-    sal_Bool bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
+    BOOL bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
 
     pImportDlg = new SvxOpenGraphicDialog( aStrBrowse );
     if ( bHtml || bLinkOnly )
         pImportDlg->EnableLink(sal_False);
     pImportDlg->SetPath( aBgdGraphicPath, aBtnLink.IsChecked() );
 
-    pPageImpl->bIsImportDlgInExecute = sal_True;
+    pPageImpl->bIsImportDlgInExecute = TRUE;
     short nErr = pImportDlg->Execute();
-    pPageImpl->bIsImportDlgInExecute = sal_False;
+    pPageImpl->bIsImportDlgInExecute = FALSE;
 
     if( !nErr )
     {
@@ -1485,7 +1555,7 @@ IMPL_LINK( SvxBackgroundTabPage, BrowseHdl_Impl, PushButton* , EMPTYARG )
         // dann die Vorschau aktivieren, damit der Anwender sieht,
         // welche Grafik er ausgew"ahlt hat
         if ( !aBtnLink.IsChecked() && !aBtnPreview.IsChecked() )
-            aBtnPreview.Check( sal_True );
+            aBtnPreview.Check( TRUE );
         // timer-verz"ogertes Laden der Grafik
         pPageImpl->pLoadTimer->Start();
     }
@@ -1498,7 +1568,7 @@ IMPL_LINK( SvxBackgroundTabPage, BrowseHdl_Impl, PushButton* , EMPTYARG )
 
 IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Verz"ogertes Laden der Grafik.
     Grafik wird nur dann geladen, wenn sie unterschiedlich zur
@@ -1518,8 +1588,8 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
             {
                 // neue Datei gew"ahlt
                 aBgdGraphicPath   = pImportDlg->GetPath();
-                aBgdGraphicFilter = pImportDlg->GetCurrentFilter();
-                sal_Bool bLink = ( nHtmlMode & HTMLMODE_ON ) || bLinkOnly ? sal_True : pImportDlg->IsAsLink();
+                aBgdGraphicFilter =	pImportDlg->GetCurrentFilter();
+                BOOL bLink = ( nHtmlMode & HTMLMODE_ON ) || bLinkOnly ? TRUE : pImportDlg->IsAsLink();
                 aBtnLink.Check( bLink );
                 aBtnLink.Enable();
 
@@ -1527,17 +1597,17 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
                 {
                     if( !pImportDlg->GetGraphic(aBgdGraphic) )
                     {
-                        bIsGraphicValid = sal_True;
+                        bIsGraphicValid = TRUE;
                     }
                     else
                     {
                         aBgdGraphicFilter.Erase();
                         aBgdGraphicPath.Erase();
-                        bIsGraphicValid = sal_False;
+                        bIsGraphicValid = FALSE;
                     }
                 }
                 else
-                    bIsGraphicValid = sal_False; // Grafik erst beim Preview-Click laden
+                    bIsGraphicValid = FALSE; // Grafik erst beim Preview-Click laden
 
                 if ( aBtnPreview.IsChecked() && bIsGraphicValid )
                 {
@@ -1558,16 +1628,21 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
 //-----------------------------------------------------------------------
 
 void SvxBackgroundTabPage::ShowTblControl()
+
+/*	[Beschreibung]
+
+*/
+
 {
-    aTblLBox            .SetSelectHdl( HDL(TblDestinationHdl_Impl) );
-    aTblLBox            .SelectEntryPos(0);
+    aTblLBox			.SetSelectHdl( HDL(TblDestinationHdl_Impl) );
+    aTblLBox			.SelectEntryPos(0);
     aTblDesc.Show();
     aTblLBox.Show();
 }
 
 //-----------------------------------------------------------------------
 
-void SvxBackgroundTabPage::ShowParaControl(sal_Bool bCharOnly)
+void SvxBackgroundTabPage::ShowParaControl(BOOL bCharOnly)
 {
     aParaLBox.SetSelectHdl(HDL(ParaDestinationHdl_Impl));
     aParaLBox.SelectEntryPos(0);
@@ -1581,12 +1656,17 @@ void SvxBackgroundTabPage::ShowParaControl(sal_Bool bCharOnly)
 //-----------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
+
+/*	[Beschreibung]
+
+*/
+
 {
-    sal_uInt16 nSelPos = pBox->GetSelectEntryPos();
+    USHORT nSelPos = pBox->GetSelectEntryPos();
     if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)
     {
         SvxBrushItem** pActItem = new (SvxBrushItem*);
-        sal_uInt16 nWhich = 0;
+        USHORT nWhich = 0;
         switch(pTableBck_Impl->nActPos)
         {
             case TBL_DEST_CELL:
@@ -1611,8 +1691,8 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
         }
         else
         {
-                SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
-                const sal_Bool          bIsLink  = aBtnLink.IsChecked();
+                SvxGraphicPosition	eNewPos  = GetGraphicPosition_Impl();
+                const BOOL			bIsLink  = aBtnLink.IsChecked();
 
                 if ( !bIsLink && !bIsGraphicValid )
                     bIsGraphicValid = LoadLinkedGraphic_Impl();
@@ -1661,7 +1741,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
 
 IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
 {
-    sal_uInt16 nSelPos = pBox->GetSelectEntryPos();
+    USHORT nSelPos = pBox->GetSelectEntryPos();
     if( pParaBck_Impl && pParaBck_Impl->nActPos != nSelPos)
     {
         SvxBrushItem** pActItem = new (SvxBrushItem*);
@@ -1677,13 +1757,13 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
         pParaBck_Impl->nActPos = nSelPos;
         if(0 == aLbSelect.GetSelectEntryPos())  // Brush ausgewaehlt
         {
-            sal_uInt16 nWhich = (*pActItem)->Which();
+            USHORT nWhich = (*pActItem)->Which();
             **pActItem = SvxBrushItem( aBgdColor, nWhich );
         }
         else
         {
-                SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
-                const sal_Bool          bIsLink  = aBtnLink.IsChecked();
+                SvxGraphicPosition	eNewPos  = GetGraphicPosition_Impl();
+                const BOOL			bIsLink  = aBtnLink.IsChecked();
 
                 if ( !bIsLink && !bIsGraphicValid )
                     bIsGraphicValid = LoadLinkedGraphic_Impl();
@@ -1707,7 +1787,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
             case PARA_DEST_CHAR:
             {
                 *pActItem = pParaBck_Impl->pCharBrush;
-                aLbSelect.Enable(sal_False);
+                aLbSelect.Enable(FALSE);
             }
             break;
         }
@@ -1722,14 +1802,19 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
 
 void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
                                               const String& rUserData )
+
+/*	[Beschreibung]
+
+*/
+
 {
-    SvxGraphicPosition  ePos = rBgdAttr.GetGraphicPos();
+    SvxGraphicPosition	ePos = rBgdAttr.GetGraphicPos();
     const Color& rColor = rBgdAttr.GetColor();
     if(bColTransparency)
     {
         aColTransMF.SetValue(lcl_TransparencyToPercent(rColor.GetTransparency()));
         aColTransMF.SaveValue();
-        sal_Bool bEnableTransp = rColor.GetTransparency() < 0xff;
+        BOOL bEnableTransp = rColor.GetTransparency() < 0xff;
         aColTransFT.Enable(bEnableTransp);
         aColTransMF.Enable(bEnableTransp);
         //the default setting should be "no transparency"
@@ -1744,7 +1829,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         Color aTrColor( COL_TRANSPARENT );
         aBgdColor = rColor;
 
-        sal_uInt16 nCol = ( aTrColor != aBgdColor ) ?
+        USHORT nCol = ( aTrColor != aBgdColor ) ?
             GetItemId_Impl( aBackgroundColorSet, aBgdColor ) : 0;
 
         if( aTrColor != aBgdColor && nCol == 0)
@@ -1763,17 +1848,17 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             aBgdGraphicPath.Erase();
 
             if ( !rUserData.Len() )
-                aBtnPreview.Check( sal_False );
-            aBtnLink.Check( sal_False );
+                aBtnPreview.Check( FALSE );
+            aBtnLink.Check( FALSE );
             aBtnLink.Disable();
             pPreviewWin2->NotifyChange( NULL );
-            SetGraphicPosition_Impl( GPOS_TILED );  // Kacheln als Default
+            SetGraphicPosition_Impl( GPOS_TILED );	// Kacheln als Default
         }
     }
     else
     {
-        const String*   pStrLink   = rBgdAttr.GetGraphicLink();
-        const String*   pStrFilter = rBgdAttr.GetGraphicFilter();
+        const String*	pStrLink   = rBgdAttr.GetGraphicLink();
+        const String*	pStrFilter = rBgdAttr.GetGraphicFilter();
 
         aLbSelect.SelectEntryPos( 1 );
         ShowBitmapUI_Impl();
@@ -1785,13 +1870,13 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
 #endif
             aBgdGraphicPath = *pStrLink;
-            aBtnLink.Check( sal_True );
+            aBtnLink.Check( TRUE );
             aBtnLink.Enable();
         }
         else
         {
             aBgdGraphicPath.Erase();
-            aBtnLink.Check( sal_False );
+            aBtnLink.Check( FALSE );
             aBtnLink.Disable();
         }
 
@@ -1824,7 +1909,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             else if ( pGraphic )
             {
                 aBgdGraphic = *pGraphic;
-                bIsGraphicValid = sal_True;
+                bIsGraphicValid = TRUE;
 
                 if ( !rUserData.Len() )
                     aBtnPreview.Check();
@@ -1832,10 +1917,10 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             else
             {
                 RaiseLoadError_Impl();
-                bIsGraphicValid = sal_False;
+                bIsGraphicValid = FALSE;
 
                 if ( !rUserData.Len() )
-                    aBtnPreview.Check( sal_False );
+                    aBtnPreview.Check( FALSE );
             }
         }
 
@@ -1850,8 +1935,10 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         SetGraphicPosition_Impl( ePos );
     }
 }
+/* -----------------------------09.08.2002 14:04------------------------------
 
-void SvxBackgroundTabPage::EnableTransparency(sal_Bool bColor, sal_Bool bGraphic)
+ ---------------------------------------------------------------------------*/
+void SvxBackgroundTabPage::EnableTransparency(BOOL bColor, BOOL bGraphic)
 {
     bColTransparency  = bColor;
     bGraphTransparency = bGraphic;
@@ -1878,7 +1965,7 @@ void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
     if (pFlagItem)
     {
-        sal_uInt32 nFlags=pFlagItem->GetValue();
+        UINT32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SVX_SHOW_TBLCTL ) == SVX_SHOW_TBLCTL )
             ShowTblControl();
         if ( ( nFlags & SVX_SHOW_PARACTL ) == SVX_SHOW_PARACTL )
@@ -1886,7 +1973,7 @@ void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
         if ( ( nFlags & SVX_SHOW_SELECTOR ) == SVX_SHOW_SELECTOR )
             ShowSelector();
         if ( ( nFlags & SVX_ENABLE_TRANSPARENCY ) == SVX_ENABLE_TRANSPARENCY )
-            EnableTransparency(sal_True, sal_True);
+            EnableTransparency(TRUE, TRUE);
     }
 }
 

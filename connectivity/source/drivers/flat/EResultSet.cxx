@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
-
+//	using namespace com::sun::star::container;
+//	using namespace com::sun::star::util;
 //------------------------------------------------------------------------------
-OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator& _aSQLIterator)
+OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&	_aSQLIterator)
                 : file::OResultSet(pStmt,_aSQLIterator)
                 ,m_bBookmarkable(sal_True)
 {
@@ -56,14 +57,14 @@ OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTr
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OFlatResultSet::getImplementationName(  ) throw ( RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.flat.ResultSet"));
+    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.flat.ResultSet");
 }
 // -------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OFlatResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
-    aSupported[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ResultSet"));
+    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ResultSet");
+    aSupported[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.ResultSet");
     return aSupported;
 }
 // -------------------------------------------------------------------------
@@ -92,7 +93,7 @@ Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  ) throw( RuntimeException)
 {
     Sequence< Type > aTypes = OResultSet::getTypes();
     ::std::vector<Type> aOwnTypes;
-    aOwnTypes.reserve(aTypes.getLength());
+    aOwnTypes.reserve(aTypes.getLength());	
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)
@@ -123,7 +124,7 @@ sal_Bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark ) throw( 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+        
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 
@@ -134,7 +135,7 @@ sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+        
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 

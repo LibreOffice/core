@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
-#include <tools/gen.hxx>
 
 #include <vcl/vclenum.hxx>
 
@@ -56,17 +55,17 @@ class SvStream;
 class Impl_Gradient
 {
 public:
-    sal_uLong           mnRefCount;
+    ULONG           mnRefCount;
     GradientStyle   meStyle;
     Color           maStartColor;
     Color           maEndColor;
-    sal_uInt16          mnAngle;
-    sal_uInt16          mnBorder;
-    sal_uInt16          mnOfsX;
-    sal_uInt16          mnOfsY;
-    sal_uInt16          mnIntensityStart;
-    sal_uInt16          mnIntensityEnd;
-    sal_uInt16          mnStepCount;
+    USHORT          mnAngle;
+    USHORT          mnBorder;
+    USHORT          mnOfsX;
+    USHORT          mnOfsY;
+    USHORT          mnIntensityStart;
+    USHORT          mnIntensityEnd;
+    USHORT          mnStepCount;
 
     friend SvStream& operator>>( SvStream& rIStm, Impl_Gradient& rImplGradient );
     friend SvStream& operator<<( SvStream& rOStm, const Impl_Gradient& rImplGradient );
@@ -81,9 +80,9 @@ public:
 
 class VCL_DLLPUBLIC Gradient
 {
-private:
-    Impl_Gradient*  mpImplGradient;
-    void            MakeUnique();
+private:	
+    Impl_Gradient*	mpImplGradient;
+    void			MakeUnique();
 
 public:
                     Gradient();
@@ -102,31 +101,29 @@ public:
     void            SetEndColor( const Color& rColor );
     const Color&    GetEndColor() const { return mpImplGradient->maEndColor; }
 
-    void            SetAngle( sal_uInt16 nAngle );
-    sal_uInt16          GetAngle() const { return mpImplGradient->mnAngle; }
+    void            SetAngle( USHORT nAngle );
+    USHORT          GetAngle() const { return mpImplGradient->mnAngle; }
 
-    void            SetBorder( sal_uInt16 nBorder );
-    sal_uInt16          GetBorder() const { return mpImplGradient->mnBorder; }
-    void            SetOfsX( sal_uInt16 nOfsX );
-    sal_uInt16          GetOfsX() const { return mpImplGradient->mnOfsX; }
-    void            SetOfsY( sal_uInt16 nOfsY );
-    sal_uInt16          GetOfsY() const { return mpImplGradient->mnOfsY; }
+    void            SetBorder( USHORT nBorder );
+    USHORT          GetBorder() const { return mpImplGradient->mnBorder; }
+    void            SetOfsX( USHORT nOfsX );
+    USHORT          GetOfsX() const { return mpImplGradient->mnOfsX; }
+    void            SetOfsY( USHORT nOfsY );
+    USHORT          GetOfsY() const { return mpImplGradient->mnOfsY; }
 
-    void            SetStartIntensity( sal_uInt16 nIntens );
-    sal_uInt16          GetStartIntensity() const { return mpImplGradient->mnIntensityStart; }
-    void            SetEndIntensity( sal_uInt16 nIntens );
-    sal_uInt16          GetEndIntensity() const { return mpImplGradient->mnIntensityEnd; }
+    void            SetStartIntensity( USHORT nIntens );
+    USHORT          GetStartIntensity() const { return mpImplGradient->mnIntensityStart; }
+    void            SetEndIntensity( USHORT nIntens );
+    USHORT          GetEndIntensity() const { return mpImplGradient->mnIntensityEnd; }
 
-    void            SetSteps( sal_uInt16 nSteps );
-    sal_uInt16          GetSteps() const { return mpImplGradient->mnStepCount; }
-
-    void            GetBoundRect( const Rectangle& rRect, Rectangle &rBoundRect, Point& rCenter ) const;
+    void            SetSteps( USHORT nSteps );
+    USHORT          GetSteps() const { return mpImplGradient->mnStepCount; }
 
     Gradient&       operator=( const Gradient& rGradient );
-    sal_Bool            operator==( const Gradient& rGradient ) const;
-    sal_Bool            operator!=( const Gradient& rGradient ) const
+    BOOL            operator==( const Gradient& rGradient ) const;
+    BOOL            operator!=( const Gradient& rGradient ) const
                         { return !(Gradient::operator==( rGradient )); }
-    sal_Bool            IsSameInstance( const Gradient& rGradient ) const
+    BOOL            IsSameInstance( const Gradient& rGradient ) const
                         { return (mpImplGradient == rGradient.mpImplGradient); }
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, Gradient& rGradient );

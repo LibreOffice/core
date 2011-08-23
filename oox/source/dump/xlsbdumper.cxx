@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,13 +27,12 @@
  ************************************************************************/
 
 #include "oox/dump/xlsbdumper.hxx"
-
 #include <com/sun/star/io/XTextInputStream.hpp>
-#include "oox/core/filterbase.hxx"
 #include "oox/dump/biffdumper.hxx"
 #include "oox/dump/oledumper.hxx"
 #include "oox/dump/pptxdumper.hxx"
 #include "oox/helper/zipstorage.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/ole/olestorage.hxx"
 #include "oox/xls/biffhelper.hxx"
 #include "oox/xls/formulabase.hxx"
@@ -41,31 +40,34 @@
 
 #if OOX_INCLUDE_DUMPER
 
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::util::DateTime;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::io::XInputStream;
+using ::comphelper::MediaDescriptor;
+using ::oox::core::FilterBase;
+
+using namespace ::oox::xls;
+
 namespace oox {
 namespace dump {
 namespace xlsb {
 
 // ============================================================================
 
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
-using namespace ::oox::xls;
-
-using ::comphelper::MediaDescriptor;
-using ::oox::core::FilterBase;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
-// ============================================================================
-
 namespace {
 
-const sal_uInt8 BIFF12_STRINGFLAG_FONTS         = 0x01;
-const sal_uInt8 BIFF12_STRINGFLAG_PHONETICS     = 0x02;
+const sal_uInt8 OOBIN_STRINGFLAG_FONTS          = 0x01;
+const sal_uInt8 OOBIN_STRINGFLAG_PHONETICS      = 0x02;
 
-const sal_uInt16 BIFF12_OLEOBJECT_LINKED        = 0x0001;
+const sal_uInt8 OOBIN_TOK_ARRAY_DOUBLE          = 0;
+const sal_uInt8 OOBIN_TOK_ARRAY_STRING          = 1;
+const sal_uInt8 OOBIN_TOK_ARRAY_BOOL            = 2;
+const sal_uInt8 OOBIN_TOK_ARRAY_ERROR           = 4;
+
+const sal_uInt16 OOBIN_OLEOBJECT_LINKED         = 0x0001;
 
 } // namespace
 
@@ -81,7 +83,7 @@ RecordObjectBase::~RecordObjectBase()
 
 void RecordObjectBase::construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
-    mxBiffStrm.reset( new SequenceInputStream( getRecordDataSequence() ) );
+    mxBiffStrm.reset( new RecordInputStream( getRecordDataSequence() ) );
     SequenceRecordObjectBase::construct( rParent, rxStrm, rSysFileName, mxBiffStrm, "RECORD-NAMES", "SIMPLE-RECORDS" );
     if( SequenceRecordObjectBase::implIsValid() )
         mxErrCodes = cfg().getNameList( "ERRORCODES" );
@@ -199,11 +201,11 @@ OUString RecordObjectBase::dumpString( const String& rName, bool bRich, bool b32
 {
     sal_uInt8 nFlags = bRich ? dumpHex< sal_uInt8 >( "flags", "STRING-FLAGS" ) : 0;
 
-    OUString aString = BiffHelper::readString( *mxBiffStrm, b32BitLen );
+    OUString aString = mxBiffStrm->readString( b32BitLen );
     writeStringItem( rName( "text" ), aString );
 
     // --- formatting ---
-    if( getFlag( nFlags, BIFF12_STRINGFLAG_FONTS ) )
+    if( getFlag( nFlags, OOBIN_STRINGFLAG_FONTS ) )
     {
         IndentGuard aIndGuard( mxOut );
         FontPortionModelList aPortions;
@@ -212,7 +214,7 @@ OUString RecordObjectBase::dumpString( const String& rName, bool bRich, bool b32
     }
 
     // --- phonetic text ---
-    if( getFlag( nFlags, BIFF12_STRINGFLAG_PHONETICS ) )
+    if( getFlag( nFlags, OOBIN_STRINGFLAG_PHONETICS ) )
     {
         IndentGuard aIndGuard( mxOut );
         dumpString( "phonetic-text" );
@@ -488,7 +490,7 @@ void FormulaObject::constructFmlaObj()
 {
     if( RecordObjectBase::implIsValid() )
     {
-        mxFuncProv.reset( new FunctionProvider( FILTER_OOXML, BIFF_UNKNOWN, true ) );
+        mxFuncProv.reset( new FunctionProvider( FILTER_OOX, BIFF_UNKNOWN, true ) );
 
         Config& rCfg = cfg();
         mxClasses   = rCfg.getNameList( "TOKENCLASSES" );
@@ -566,7 +568,7 @@ OUString FormulaObject::writeFuncIdItem( sal_uInt16 nFuncId, const FunctionInfo*
     ItemGuard aItem( mxOut, "func-id" );
     writeHexItem( EMPTY_STRING, nFuncId, "FUNCID" );
     OUStringBuffer aBuffer;
-    const FunctionInfo* pFuncInfo = mxFuncProv->getFuncInfoFromBiff12FuncId( nFuncId );
+    const FunctionInfo* pFuncInfo = mxFuncProv->getFuncInfoFromOobFuncId( nFuncId );
     if( pFuncInfo )
         aBuffer.append( pFuncInfo->maOoxFuncName );
     else
@@ -587,9 +589,9 @@ OUString FormulaObject::writeFuncIdItem( sal_uInt16 nFuncId, const FunctionInfo*
 sal_Int32 FormulaObject::dumpTokenCol( const String& rName, bool& rbRelC, bool& rbRelR )
 {
     sal_uInt16 nCol = dumpHex< sal_uInt16 >( rName, mxRelFlags );
-    rbRelC = getFlag( nCol, BIFF12_TOK_REF_COLREL );
-    rbRelR = getFlag( nCol, BIFF12_TOK_REF_ROWREL );
-    nCol &= BIFF12_TOK_REF_COLMASK;
+    rbRelC = getFlag( nCol, OOBIN_TOK_REF_COLREL );
+    rbRelR = getFlag( nCol, OOBIN_TOK_REF_ROWREL );
+    nCol &= OOBIN_TOK_REF_COLMASK;
     return nCol;
 }
 
@@ -820,17 +822,17 @@ bool FormulaObject::dumpTableToken()
     StringHelper::appendIndex( aColRange, mxOut->getLastItemValue() );
     OUStringBuffer aParams;
     size_t nParams = 0;
-    if( getFlag( nFlags, BIFF12_TOK_TABLE_ALL ) && ++nParams )
+    if( getFlag( nFlags, OOBIN_TOK_TABLE_ALL ) && ++nParams )
         StringHelper::appendToken( aParams, CREATE_OUSTRING( "[#All]" ) );
-    if( getFlag( nFlags, BIFF12_TOK_TABLE_HEADERS ) && ++nParams )
+    if( getFlag( nFlags, OOBIN_TOK_TABLE_HEADERS ) && ++nParams )
         StringHelper::appendToken( aParams, CREATE_OUSTRING( "[#Headers]" ) );
-    if( getFlag( nFlags, BIFF12_TOK_TABLE_DATA ) && ++nParams )
+    if( getFlag( nFlags, OOBIN_TOK_TABLE_DATA ) && ++nParams )
         StringHelper::appendToken( aParams, CREATE_OUSTRING( "[#Data]" ) );
-    if( getFlag( nFlags, BIFF12_TOK_TABLE_TOTALS ) && ++nParams )
+    if( getFlag( nFlags, OOBIN_TOK_TABLE_TOTALS ) && ++nParams )
         StringHelper::appendToken( aParams, CREATE_OUSTRING( "[#Totals]" ) );
-    if( getFlag( nFlags, BIFF12_TOK_TABLE_THISROW ) && ++nParams )
+    if( getFlag( nFlags, OOBIN_TOK_TABLE_THISROW ) && ++nParams )
         StringHelper::appendToken( aParams, CREATE_OUSTRING( "[#This Row]" ) );
-    if( (getFlag( nFlags, BIFF12_TOK_TABLE_COLUMN ) || getFlag( nFlags, BIFF12_TOK_TABLE_COLRANGE )) && ++nParams )
+    if( (getFlag( nFlags, OOBIN_TOK_TABLE_COLUMN ) || getFlag( nFlags, OOBIN_TOK_TABLE_COLRANGE )) && ++nParams )
         StringHelper::appendToken( aParams, aColRange.makeStringAndClear() );
     OUStringBuffer aOp;
     StringHelper::appendIndexedText( aOp, CREATE_OUSTRING( "TABLE" ), nTabId );
@@ -848,13 +850,13 @@ bool FormulaObject::dumpAttrToken()
     sal_uInt8 nType = dumpHex< sal_uInt8 >( "type", mxAttrTypes );
     switch( nType )
     {
-        case BIFF_TOK_ATTR_VOLATILE:
+        case OOBIN_TOK_ATTR_VOLATILE:
             dumpUnused( 2 );
         break;
-        case BIFF_TOK_ATTR_IF:
+        case OOBIN_TOK_ATTR_IF:
             dumpDec< sal_uInt16 >( "skip" );
         break;
-        case BIFF_TOK_ATTR_CHOOSE:
+        case OOBIN_TOK_ATTR_CHOOSE:
         {
             sal_uInt16 nCount = dumpDec< sal_uInt16 >( "choices" );
             mxOut->resetItemIndex();
@@ -863,22 +865,22 @@ bool FormulaObject::dumpAttrToken()
             dumpDec< sal_uInt16 >( "skip-err" );
         }
         break;
-        case BIFF_TOK_ATTR_SKIP:
+        case OOBIN_TOK_ATTR_SKIP:
             dumpDec< sal_uInt16 >( "skip" );
         break;
-        case BIFF_TOK_ATTR_SUM:
+        case OOBIN_TOK_ATTR_SUM:
             dumpUnused( 2 );
             mxStack->pushFuncOp( CREATE_OUSTRING( "SUM" ), OUString( OOX_DUMP_BASECLASS ), 1 );
         break;
-        case BIFF_TOK_ATTR_ASSIGN:
+        case OOBIN_TOK_ATTR_ASSIGN:
             dumpUnused( 2 );
         break;
-        case BIFF_TOK_ATTR_SPACE:
-        case BIFF_TOK_ATTR_SPACE | BIFF_TOK_ATTR_VOLATILE:
+        case OOBIN_TOK_ATTR_SPACE:
+        case OOBIN_TOK_ATTR_SPACE | BIFF_TOK_ATTR_VOLATILE:
             dumpDec< sal_uInt8 >( "char-type", mxSpTypes );
             dumpDec< sal_uInt8 >( "char-count" );
         break;
-        case BIFF_TOK_ATTR_IFERROR:
+        case OOBIN_TOK_ATTR_IFERROR:
             dumpDec< sal_uInt16 >( "skip" );
         break;
         default:
@@ -966,19 +968,19 @@ OUString FormulaObject::dumpaddDataArrayValue()
     OUStringBuffer aValue;
     switch( dumpDec< sal_uInt8 >( "type", "ARRAYVALUE-TYPE" ) )
     {
-        case BIFF_TOK_ARRAY_DOUBLE:
+        case OOBIN_TOK_ARRAY_DOUBLE:
             dumpDec< double >( "value" );
             aValue.append( mxOut->getLastItemValue() );
         break;
-        case BIFF_TOK_ARRAY_STRING:
+        case OOBIN_TOK_ARRAY_STRING:
             aValue.append( dumpString( "value", false, false ) );
             StringHelper::enclose( aValue, OOX_DUMP_STRQUOTE );
         break;
-        case BIFF_TOK_ARRAY_BOOL:
+        case OOBIN_TOK_ARRAY_BOOL:
             dumpBoolean( "value" );
             aValue.append( mxOut->getLastItemValue() );
         break;
-        case BIFF_TOK_ARRAY_ERROR:
+        case OOBIN_TOK_ARRAY_ERROR:
             dumpErrorCode( "value" );
             aValue.append( mxOut->getLastItemValue() );
             dumpUnused( 3 );
@@ -1005,22 +1007,18 @@ void RecordStreamObject::implDumpRecordBody()
 {
     switch( getRecId() )
     {
-        case BIFF12_ID_ARRAY:
+        case OOBIN_ID_ARRAY:
             dumpRange( "array-range" );
             dumpHex< sal_uInt8 >( "flags", "ARRAY-FLAGS" );
             mxFmlaObj->dumpCellFormula();
         break;
 
-        case BIFF12_ID_AUTOFILTER:
-            dumpRange( "filter-range" );
-        break;
-
-        case BIFF12_ID_BINARYINDEXBLOCK:
+        case OOBIN_ID_BINARYINDEXBLOCK:
             dumpRowRange( "row-range" );
             dumpUnknown( 12 );
         break;
 
-        case BIFF12_ID_BINARYINDEXROWS:
+        case OOBIN_ID_BINARYINDEXROWS:
         {
             sal_uInt32 nUsedRows = dumpBin< sal_uInt32 >( "used-rows" );
             dumpDec< sal_Int64 >( "stream-offset" );
@@ -1030,7 +1028,7 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF12_ID_BORDER:
+        case OOBIN_ID_BORDER:
             dumpHex< sal_uInt8 >( "flags", "BORDER-FLAGS" );
             dumpDec< sal_uInt16 >( "top-style", "BORDERSTYLES" );
             dumpColor( "top-color" );
@@ -1044,7 +1042,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpColor( "diag-color" );
         break;
 
-        case BIFF12_ID_BRK:
+        case OOBIN_ID_BRK:
             dumpDec< sal_Int32 >( "id" );
             dumpDec< sal_Int32 >( "min" );
             dumpDec< sal_Int32 >( "max" );
@@ -1052,7 +1050,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< sal_Int32 >( "pivot-break", "BOOLEAN" );
         break;
 
-        case BIFF12_ID_CALCPR:
+        case OOBIN_ID_CALCPR:
             dumpDec< sal_Int32 >( "calc-id" );
             dumpDec< sal_Int32 >( "calc-mode", "CALCPR-CALCMODE" );
             dumpDec< sal_Int32 >( "iteration-count" );
@@ -1061,46 +1059,46 @@ void RecordStreamObject::implDumpRecordBody()
             dumpHex< sal_uInt16 >( "flags", "CALCPR-FLAGS" );
         break;
 
-        case BIFF12_ID_CELL_BLANK:
+        case OOBIN_ID_CELL_BLANK:
             dumpCellHeader( true );
         break;
 
-        case BIFF12_ID_CELL_BOOL:
+        case OOBIN_ID_CELL_BOOL:
             dumpCellHeader( true );
             dumpBoolean();
         break;
 
-        case BIFF12_ID_CELL_DOUBLE:
+        case OOBIN_ID_CELL_DOUBLE:
             dumpCellHeader( true );
             dumpDec< double >( "value" );
         break;
 
-        case BIFF12_ID_CELL_ERROR:
+        case OOBIN_ID_CELL_ERROR:
             dumpCellHeader( true );
             dumpErrorCode();
         break;
 
-        case BIFF12_ID_CELL_RK:
+        case OOBIN_ID_CELL_RK:
             dumpCellHeader( true );
             dumpRk( "value" );
         break;
 
-        case BIFF12_ID_CELL_RSTRING:
+        case OOBIN_ID_CELL_RSTRING:
             dumpCellHeader( true );
             dumpString( "value", true );
         break;
 
-        case BIFF12_ID_CELL_SI:
+        case OOBIN_ID_CELL_SI:
             dumpCellHeader( true );
             dumpDec< sal_Int32 >( "string-id" );
         break;
 
-        case BIFF12_ID_CELL_STRING:
+        case OOBIN_ID_CELL_STRING:
             dumpCellHeader( true );
             dumpString( "value" );
         break;
 
-        case BIFF12_ID_CELLSTYLE:
+        case OOBIN_ID_CELLSTYLE:
             dumpDec< sal_Int32 >( "xf-id" );
             dumpHex< sal_uInt16 >( "flags", "CELLSTYLE-FLAGS" );
             dumpDec< sal_uInt8 >( "builtin-id", "CELLSTYLE-BUILTIN" );
@@ -1108,11 +1106,11 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "name" );
         break;
 
-        case BIFF12_ID_CFCOLOR:
+        case OOBIN_ID_CFCOLOR:
             dumpColor();
         break;
 
-        case BIFF12_ID_CFRULE:
+        case OOBIN_ID_CFRULE:
         {
             // type/subtype/operator is a mess...
             dumpDec< sal_Int32 >( "type", "CFRULE-TYPE" );
@@ -1156,7 +1154,7 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF12_ID_CHARTPAGESETUP:
+        case OOBIN_ID_CHARTPAGESETUP:
             dumpDec< sal_Int32 >( "paper-size", "PAGESETUP-PAPERSIZE" );
             dumpDec< sal_Int32 >( "horizontal-res", "PAGESETUP-DPI" );
             dumpDec< sal_Int32 >( "vertical-res", "PAGESETUP-DPI" );
@@ -1166,110 +1164,75 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "printer-settings-rel-id" );
         break;
 
-        case BIFF12_ID_CHARTPROTECTION:
+        case OOBIN_ID_CHARTPROTECTION:
             dumpHex< sal_uInt16 >( "password-hash" );
             // no flags field for the boolean flags?!?
             dumpDec< sal_Int32 >( "content-locked", "BOOLEAN" );
             dumpDec< sal_Int32 >( "objects-locked", "BOOLEAN" );
         break;
 
-        case BIFF12_ID_CHARTSHEETPR:
+        case OOBIN_ID_CHARTSHEETPR:
             dumpHex< sal_uInt16 >( "flags", "CHARTSHEETPR-FLAGS" );
             dumpColor( "tab-color" );
             dumpString( "codename" );
         break;
 
-        case BIFF12_ID_CHARTSHEETVIEW:
+        case OOBIN_ID_CHARTSHEETVIEW:
             dumpHex< sal_uInt16 >( "flags", "CHARTSHEETVIEW-FLAGS" );
             dumpDec< sal_Int32 >( "zoom-scale", "CONV-PERCENT" );
             dumpDec< sal_Int32 >( "workbookview-id" );
         break;
 
-        case BIFF12_ID_COL:
+        case OOBIN_ID_COL:
             dumpColRange();
             dumpDec< sal_Int32 >( "col-width", "CONV-COLWIDTH" );
             dumpDec< sal_Int32 >( "custom-xf-id" );
             dumpHex< sal_uInt16 >( "flags", "COL-FLAGS" );
         break;
 
-        case BIFF12_ID_COLBREAKS:
+        case OOBIN_ID_COLBREAKS:
             dumpDec< sal_Int32 >( "count" );
             dumpDec< sal_Int32 >( "manual-count" );
         break;
 
-        case BIFF12_ID_COLOR:
+        case OOBIN_ID_COLOR:
             dumpColor();
         break;
 
-        case BIFF12_ID_COMMENT:
+        case OOBIN_ID_COMMENT:
             dumpDec< sal_Int32 >( "author-id" );
             dumpRange( "ref" );
             dumpGuid();
         break;
 
-        case BIFF12_ID_COMMENTAUTHOR:
+        case OOBIN_ID_COMMENTAUTHOR:
             dumpString( "author" );
         break;
 
-        case BIFF12_ID_COMMENTTEXT:
+        case OOBIN_ID_COMMENTTEXT:
             dumpString( "text", true );
         break;
 
-        case BIFF12_ID_CONDFORMATTING:
+        case OOBIN_ID_CONDFORMATTING:
             dumpDec< sal_Int32 >( "cfrule-count" );
             dumpDec< sal_Int32 >( "pivot-table", "BOOLEAN" );
             dumpRangeList();
         break;
 
-        case BIFF12_ID_CONNECTION:
-        {
-            dumpDec< sal_uInt8 >( "refreshed-version" );
-            dumpDec< sal_uInt8 >( "min-refresh-version" );
-            dumpDec< sal_uInt8 >( "save-password", "CONNECTION-SAVEPASSWORD" );
-            dumpUnused( 1 );
-            dumpDec< sal_uInt16 >( "refresh-interval", "CONNECTION-INTERVAL" );
-            dumpHex< sal_uInt16 >( "flags", "CONNECTION-FLAGS" );
-            sal_uInt16 nStrFlags = dumpHex< sal_uInt16 >( "string-flags", "CONNECTION-STRINGFLAGS" );
-            dumpDec< sal_Int32 >( "data-source-type", "CONNECTION-SOURCETYPE" );
-            dumpDec< sal_Int32 >( "reconnect-type", "CONNECTION-RECONNECTTYPE" );
-            dumpDec< sal_Int32 >( "id" );
-            dumpDec< sal_uInt8 >( "credentials", "CONNECTION-CREDENTIALS" );
-            if( nStrFlags & 0x0001 ) dumpString( "source-file" );
-            if( nStrFlags & 0x0002 ) dumpString( "source-conn-file" );
-            if( nStrFlags & 0x0004 ) dumpString( "description" );
-            if( nStrFlags & 0x0008 ) dumpString( "name" );
-            if( nStrFlags & 0x0010 ) dumpString( "sso-id" );
-        }
-        break;
-
-        case BIFF12_ID_CONTROL:
+        case OOBIN_ID_CONTROL:
             dumpDec< sal_Int32 >( "shape-id" );
             dumpString( "rel-id" );
             dumpString( "name" );
         break;
 
-        case BIFF12_ID_CUSTOMFILTER:
-        {
-            sal_uInt8 nType = dumpDec< sal_uInt8 >( "data-type", "CUSTOMFILTER-DATATYPE" );
-            dumpDec< sal_uInt8 >( "operator", "CUSTOMFILTER-OPERATOR" );
-            switch( nType )
-            {
-                case 4:     dumpDec< double >( "value" );               break;
-                case 6:     dumpUnused( 8 ); dumpString( "value" );     break;
-                case 8:     dumpBoolean( "value" ); dumpUnused( 7 );    break;
-                default:    dumpUnused( 8 );
-            }
-        }
-        break;
-
-        case BIFF12_ID_DATATABLE:
+        case OOBIN_ID_DATATABLE:
             dumpRange( "table-range" );
             dumpAddress( "ref1" );
             dumpAddress( "ref2" );
             dumpHex< sal_uInt8 >( "flags", "DATATABLE-FLAGS" );
         break;
 
-        case BIFF12_ID_DATAVALIDATION:
+        case OOBIN_ID_DATAVALIDATION:
             dumpHex< sal_uInt32 >( "flags", "DATAVALIDATION-FLAGS" );
             dumpRangeList();
             dumpString( "error-title" );
@@ -1280,7 +1243,7 @@ void RecordStreamObject::implDumpRecordBody()
             mxFmlaObj->dumpNameFormula( "formula2" );
         break;
 
-        case BIFF12_ID_DATAVALIDATIONS:
+        case OOBIN_ID_DATAVALIDATIONS:
             dumpHex< sal_uInt16 >( "flags", "DATAVALIDATIONS-FLAGS" );
             dumpDec< sal_Int32 >( "input-x" );
             dumpDec< sal_Int32 >( "input-y" );
@@ -1288,16 +1251,16 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< sal_Int32 >( "count" );
         break;
 
-        case BIFF12_ID_DDEITEMVALUES:
+        case OOBIN_ID_DDEITEMVALUES:
             dumpDec< sal_Int32 >( "rows" );
             dumpDec< sal_Int32 >( "columns" );
         break;
 
-        case BIFF12_ID_DDEITEM_STRING:
+        case OOBIN_ID_DDEITEM_STRING:
             dumpString( "value" );
         break;
 
-        case BIFF12_ID_DEFINEDNAME:
+        case OOBIN_ID_DEFINEDNAME:
             dumpHex< sal_uInt32 >( "flags", "DEFINEDNAME-FLAGS" );
             dumpChar( "accelerator", RTL_TEXTENCODING_ISO_8859_1 );
             dumpDec< sal_Int32 >( "sheet-id", "DEFINEDNAME-SHEETID" );
@@ -1310,24 +1273,15 @@ void RecordStreamObject::implDumpRecordBody()
             if( mxStrm->getRemaining() >= 4 ) dumpString( "statusbar-text" );
         break;
 
-        case BIFF12_ID_DIMENSION:
+        case OOBIN_ID_DIMENSION:
             dumpRange( "used-range" );
         break;
 
-        case BIFF12_ID_DISCRETEFILTER:
-            dumpString( "value" );
-        break;
-
-        case BIFF12_ID_DISCRETEFILTERS:
-            dumpBool< sal_Int32 >( "show-blank" );
-            dumpDec< sal_Int32 >( "calendar-type", "DISCRETEFILTERS-CALTYPE" );
-        break;
-
-        case BIFF12_ID_DRAWING:
+        case OOBIN_ID_DRAWING:
             dumpString( "rel-id" );
         break;
 
-        case BIFF12_ID_DXF:
+        case OOBIN_ID_DXF:
             dumpHex< sal_uInt32 >( "flags", "DXF-FLAGS" );
             for( sal_uInt16 nIndex = 0, nCount = dumpDec< sal_uInt16 >( "subrec-count" ); !mxStrm->isEof() && (nIndex < nCount); ++nIndex )
             {
@@ -1424,27 +1378,27 @@ void RecordStreamObject::implDumpRecordBody()
             }
         break;
 
-        case BIFF12_ID_EXTCELL_BOOL:
+        case OOBIN_ID_EXTCELL_BOOL:
             dumpColIndex();
             dumpBoolean();
         break;
 
-        case BIFF12_ID_EXTCELL_DOUBLE:
+        case OOBIN_ID_EXTCELL_DOUBLE:
             dumpColIndex();
             dumpDec< double >( "value" );
         break;
 
-        case BIFF12_ID_EXTCELL_ERROR:
+        case OOBIN_ID_EXTCELL_ERROR:
             dumpColIndex();
             dumpErrorCode();
         break;
 
-        case BIFF12_ID_EXTCELL_STRING:
+        case OOBIN_ID_EXTCELL_STRING:
             dumpColIndex();
             dumpString( "value" );
         break;
 
-        case BIFF12_ID_EXTERNALBOOK:
+        case OOBIN_ID_EXTERNALBOOK:
             switch( dumpDec< sal_uInt16 >( "type", "EXTERNALBOOK-TYPE" ) )
             {
                 case 0:
@@ -1462,21 +1416,21 @@ void RecordStreamObject::implDumpRecordBody()
             }
         break;
 
-        case BIFF12_ID_EXTERNALNAME:
+        case OOBIN_ID_EXTERNALNAME:
             dumpString( "name" );
         break;
 
-        case BIFF12_ID_EXTERNALNAMEFLAGS:
+        case OOBIN_ID_EXTERNALNAMEFLAGS:
             dumpHex< sal_uInt16 >( "flags", "EXTERNALNAMEFLAGS-FLAGS" );
             dumpDec< sal_Int32 >( "sheet-id" );
             dumpBoolean( "is-dde-ole" );
         break;
 
-        case BIFF12_ID_EXTERNALREF:
+        case OOBIN_ID_EXTERNALREF:
             dumpString( "rel-id" );
         break;
 
-        case BIFF12_ID_EXTERNALSHEETS:
+        case OOBIN_ID_EXTERNALSHEETS:
         {
             sal_Int32 nCount = dumpDec< sal_Int32 >( "ref-count" );
             TableGuard aTabGuard( mxOut, 13, 17, 24 );
@@ -1492,28 +1446,28 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF12_ID_EXTROW:
+        case OOBIN_ID_EXTROW:
             dumpRowIndex();
         break;
 
-        case BIFF12_ID_EXTSHEETDATA:
+        case OOBIN_ID_EXTSHEETDATA:
             dumpDec< sal_Int32 >( "sheet-id" );
             dumpHex< sal_uInt8 >( "flags", "EXTSHEETDATA-FLAGS" );
         break;
 
-        case BIFF12_ID_EXTSHEETNAMES:
+        case OOBIN_ID_EXTSHEETNAMES:
             mxOut->resetItemIndex();
             for( sal_Int32 nSheet = 0, nCount = dumpDec< sal_Int32 >( "sheet-count" ); !mxStrm->isEof() && (nSheet < nCount); ++nSheet )
                 dumpString( "#sheet-name" );
         break;
 
-        case BIFF12_ID_FILESHARING:
+        case OOBIN_ID_FILESHARING:
             dumpBool< sal_uInt16 >( "recommend-read-only" );
             dumpHex< sal_uInt16 >( "password-hash" );
             dumpString( "password-creator" );
         break;
 
-        case BIFF12_ID_FILL:
+        case OOBIN_ID_FILL:
             dumpDec< sal_Int32 >( "fill-pattern", "FILLPATTERNS" );
             dumpColor( "fg-color" );
             dumpColor( "bg-color" );
@@ -1528,7 +1482,7 @@ void RecordStreamObject::implDumpRecordBody()
             }
         break;
 
-        case BIFF12_ID_FILEVERSION:
+        case OOBIN_ID_FILEVERSION:
             dumpGuid( "codename" );
             dumpString( "app-name" );
             dumpString( "last-edited" );
@@ -1536,12 +1490,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "build-version" );
         break;
 
-        case BIFF12_ID_FILTERCOLUMN:
-            dumpDec< sal_Int32 >( "column-index" );
-            dumpHex< sal_uInt16 >( "flags", "FILTERCOLUMN-FLAGS" );
-        break;
-
-        case BIFF12_ID_FONT:
+        case OOBIN_ID_FONT:
             dumpDec< sal_uInt16 >( "height", "CONV-TWIP-TO-PT" );
             dumpHex< sal_uInt16 >( "flags", "FONT-FLAGS" );
             dumpDec< sal_uInt16 >( "weight", "FONT-WEIGHT" );
@@ -1555,39 +1504,39 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "name" );
         break;
 
-        case BIFF12_ID_FORMULA_BOOL:
+        case OOBIN_ID_FORMULA_BOOL:
             dumpCellHeader( true );
             dumpBoolean();
             dumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
             mxFmlaObj->dumpCellFormula();
         break;
 
-        case BIFF12_ID_FORMULA_DOUBLE:
+        case OOBIN_ID_FORMULA_DOUBLE:
             dumpCellHeader( true );
             dumpDec< double >( "value" );
             dumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
             mxFmlaObj->dumpCellFormula();
         break;
 
-        case BIFF12_ID_FORMULA_ERROR:
+        case OOBIN_ID_FORMULA_ERROR:
             dumpCellHeader( true );
             dumpErrorCode();
             dumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
             mxFmlaObj->dumpCellFormula();
         break;
 
-        case BIFF12_ID_FORMULA_STRING:
+        case OOBIN_ID_FORMULA_STRING:
             dumpCellHeader( true );
             dumpString( "value" );
             dumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
             mxFmlaObj->dumpCellFormula();
         break;
 
-        case BIFF12_ID_FUNCTIONGROUP:
+        case OOBIN_ID_FUNCTIONGROUP:
             dumpString( "name" );
         break;
 
-        case BIFF12_ID_HEADERFOOTER:
+        case OOBIN_ID_HEADERFOOTER:
             dumpHex< sal_uInt16 >( "flags", "HEADERFOOTER-FLAGS" );
             dumpString( "odd-header" );
             dumpString( "odd-footer" );
@@ -1597,7 +1546,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "first-footer" );
         break;
 
-        case BIFF12_ID_HYPERLINK:
+        case OOBIN_ID_HYPERLINK:
             dumpRange();
             dumpString( "rel-id" );
             dumpString( "location" );
@@ -1605,84 +1554,84 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "display" );
         break;
 
-        case BIFF12_ID_INPUTCELLS:
+        case OOBIN_ID_INPUTCELLS:
             dumpAddress( "pos" );
             dumpUnused( 8 );
             dumpDec< sal_uInt16 >( "numfmt-id" );
             dumpString( "value" );
         break;
 
-        case BIFF12_ID_LEGACYDRAWING:
+        case OOBIN_ID_LEGACYDRAWING:
             dumpString( "rel-id" );
         break;
 
-        case BIFF12_ID_MERGECELL:
+        case OOBIN_ID_MERGECELL:
             dumpRange();
         break;
 
-        case BIFF12_ID_MULTCELL_BLANK:
+        case OOBIN_ID_MULTCELL_BLANK:
             dumpCellHeader( false );
         break;
 
-        case BIFF12_ID_MULTCELL_BOOL:
+        case OOBIN_ID_MULTCELL_BOOL:
             dumpCellHeader( false );
             dumpBoolean();
         break;
 
-        case BIFF12_ID_MULTCELL_DOUBLE:
+        case OOBIN_ID_MULTCELL_DOUBLE:
             dumpCellHeader( false );
             dumpDec< double >( "value" );
         break;
 
-        case BIFF12_ID_MULTCELL_ERROR:
+        case OOBIN_ID_MULTCELL_ERROR:
             dumpCellHeader( false );
             dumpErrorCode();
         break;
 
-        case BIFF12_ID_MULTCELL_RK:
+        case OOBIN_ID_MULTCELL_RK:
             dumpCellHeader( false );
             dumpRk( "value" );
         break;
 
-        case BIFF12_ID_MULTCELL_RSTRING:
+        case OOBIN_ID_MULTCELL_RSTRING:
             dumpCellHeader( false );
             dumpString( "value", true );
         break;
 
-        case BIFF12_ID_MULTCELL_SI:
+        case OOBIN_ID_MULTCELL_SI:
             dumpCellHeader( false );
             dumpDec< sal_Int32 >( "string-id" );
         break;
 
-        case BIFF12_ID_MULTCELL_STRING:
+        case OOBIN_ID_MULTCELL_STRING:
             dumpCellHeader( false );
             dumpString( "value" );
         break;
 
-        case BIFF12_ID_NUMFMT:
+        case OOBIN_ID_NUMFMT:
             dumpDec< sal_uInt16 >( "numfmt-id" );
             dumpString( "format" );
         break;
 
-        case BIFF12_ID_OLEOBJECT:
+        case OOBIN_ID_OLEOBJECT:
         {
             dumpDec< sal_Int32 >( "aspect", "OLEOBJECT-ASPECT" );
             dumpDec< sal_Int32 >( "update", "OLEOBJECT-UPDATE" );
             dumpDec< sal_Int32 >( "shape-id" );
             sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "OLEOBJECT-FLAGS" );
             dumpString( "prog-id" );
-            if( getFlag( nFlags, BIFF12_OLEOBJECT_LINKED ) )
+            if( getFlag( nFlags, OOBIN_OLEOBJECT_LINKED ) )
                 mxFmlaObj->dumpNameFormula( "link" );
             else
                 dumpString( "rel-id" );
         }
         break;
 
-        case BIFF12_ID_OLESIZE:
+        case OOBIN_ID_OLESIZE:
             dumpRange( "visible-range" );
         break;
 
-        case BIFF12_ID_PAGEMARGINS:
+        case OOBIN_ID_PAGEMARGINS:
             dumpDec< double >( "left-margin" );
             dumpDec< double >( "right-margin" );
             dumpDec< double >( "top-margin" );
@@ -1691,7 +1640,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< double >( "footer-margin" );
         break;
 
-        case BIFF12_ID_PAGESETUP:
+        case OOBIN_ID_PAGESETUP:
             dumpDec< sal_Int32 >( "paper-size", "PAGESETUP-PAPERSIZE" );
             dumpDec< sal_Int32 >( "scaling", "CONV-PERCENT" );
             dumpDec< sal_Int32 >( "horizontal-res", "PAGESETUP-DPI" );
@@ -1704,7 +1653,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "printer-settings-rel-id" );
         break;
 
-        case BIFF12_ID_PANE:
+        case OOBIN_ID_PANE:
             dumpDec< double >( "x-split-pos" );
             dumpDec< double >( "y-split-pos" );
             dumpAddress( "second-top-left" );
@@ -1712,7 +1661,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpHex< sal_uInt8 >( "flags", "PANE-FLAGS" );
         break;
 
-        case BIFF12_ID_PCDEFINITION:
+        case OOBIN_ID_PCDEFINITION:
         {
             dumpDec< sal_uInt8 >( "refreshed-version" );
             dumpDec< sal_uInt8 >( "min-refresh-version" );
@@ -1727,7 +1676,7 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF12_ID_PCDFIELD:
+        case OOBIN_ID_PCDFIELD:
         {
             sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "PCDFIELD-FLAGS" );
             dumpDec< sal_Int32 >( "numfmt-id" );
@@ -1747,12 +1696,12 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF12_ID_PCDFIELDGROUP:
+        case OOBIN_ID_PCDFIELDGROUP:
             dumpDec< sal_Int32 >( "parent-field" );
             dumpDec< sal_Int32 >( "base-field" );
         break;
 
-        case BIFF12_ID_PCDFRANGEPR:
+        case OOBIN_ID_PCDFRANGEPR:
             dumpDec< sal_uInt8 >( "group-by", "PCDFRANGEPR-GROUPBY" );
             dumpHex< sal_uInt8 >( "flags", "PCDFRANGEPR-FLAGS" );
             dumpDec< double >( "start-value" );
@@ -1760,7 +1709,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< double >( "interval" );
         break;
 
-        case BIFF12_ID_PCDFSHAREDITEMS:
+        case OOBIN_ID_PCDFSHAREDITEMS:
         {
             sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "PCDFSHAREDITEMS-FLAGS" );
             dumpDec< sal_Int32 >( "count" );
@@ -1769,7 +1718,7 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF12_ID_PCDSHEETSOURCE:
+        case OOBIN_ID_PCDSHEETSOURCE:
         {
             sal_uInt8 nIsDefName = dumpBoolean( "is-def-name" );
             dumpBoolean( "is-builtin-def-name" );
@@ -1780,12 +1729,12 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF12_ID_PCDSOURCE:
+        case OOBIN_ID_PCDSOURCE:
             dumpDec< sal_Int32 >( "source-type", "PCDSOURCE-TYPE" );
             dumpDec< sal_Int32 >( "connection-id" );
         break;
 
-        case BIFF12_ID_PCITEM_ARRAY:
+        case OOBIN_ID_PCITEM_ARRAY:
         {
             sal_uInt16 nType = dumpDec< sal_uInt16 >( "type", "PCITEM_ARRAY-TYPE" );
             sal_Int32 nCount = dumpDec< sal_Int32 >( "count" );
@@ -1804,97 +1753,97 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF12_ID_PCITEM_BOOL:
+        case OOBIN_ID_PCITEM_BOOL:
             dumpBoolean( "value" );
         break;
 
-        case BIFF12_ID_PCITEM_DATE:
+        case OOBIN_ID_PCITEM_DATE:
             dumpPivotDateTime( "value" );
         break;
 
-        case BIFF12_ID_PCITEM_DOUBLE:
+        case OOBIN_ID_PCITEM_DOUBLE:
             dumpDec< double >( "value" );
             // TODO: server formatting
         break;
 
-        case BIFF12_ID_PCITEM_ERROR:
+        case OOBIN_ID_PCITEM_ERROR:
             dumpErrorCode( "value" );
             // TODO: server formatting
         break;
 
-        case BIFF12_ID_PCITEM_INDEX:
+        case OOBIN_ID_PCITEM_INDEX:
             dumpDec< sal_Int32 >( "index" );
         break;
 
-        case BIFF12_ID_PCITEM_MISSING:
+        case OOBIN_ID_PCITEM_MISSING:
             // TODO: server formatting
         break;
 
 
-        case BIFF12_ID_PCITEM_STRING:
+        case OOBIN_ID_PCITEM_STRING:
             dumpString( "value" );
             // TODO: server formatting
         break;
 
-        case BIFF12_ID_PCITEMA_BOOL:
+        case OOBIN_ID_PCITEMA_BOOL:
             dumpBoolean( "value" );
             // TODO: additional info
         break;
 
-        case BIFF12_ID_PCITEMA_DATE:
+        case OOBIN_ID_PCITEMA_DATE:
             dumpPivotDateTime( "value" );
             // TODO: additional info
         break;
 
-        case BIFF12_ID_PCITEMA_DOUBLE:
+        case OOBIN_ID_PCITEMA_DOUBLE:
             dumpDec< double >( "value" );
             // TODO: additional info
         break;
 
-        case BIFF12_ID_PCITEMA_ERROR:
+        case OOBIN_ID_PCITEMA_ERROR:
             dumpErrorCode( "value" );
             // TODO: additional info
         break;
 
-        case BIFF12_ID_PCITEMA_MISSING:
+        case OOBIN_ID_PCITEMA_MISSING:
             // TODO: additional info
         break;
 
-        case BIFF12_ID_PCITEMA_STRING:
+        case OOBIN_ID_PCITEMA_STRING:
             dumpString( "value" );
             // TODO: additional info
         break;
 
-        case BIFF12_ID_PHONETICPR:
+        case OOBIN_ID_PHONETICPR:
             dumpDec< sal_uInt16 >( "font-id", "FONTNAMES" );
             dumpDec< sal_Int32 >( "type", "PHONETICPR-TYPE" );
             dumpDec< sal_Int32 >( "alignment", "PHONETICPR-ALIGNMENT" );
         break;
 
-        case BIFF12_ID_PICTURE:
+        case OOBIN_ID_PICTURE:
             dumpString( "rel-id" );
         break;
 
-        case BIFF12_ID_PIVOTAREA:
+        case OOBIN_ID_PIVOTAREA:
             dumpDec< sal_Int32 >( "field" );
             dumpDec< sal_uInt8 >( "type", "PIVOTAREA-TYPE" );
             dumpHex< sal_uInt8 >( "flags-1", "PIVOTAREA-FLAGS1" );
             dumpHex< sal_uInt16 >( "flags-2", "PIVOTAREA-FLAGS2" );
         break;
 
-        case BIFF12_ID_PIVOTCACHE:
+        case OOBIN_ID_PIVOTCACHE:
             dumpDec< sal_Int32 >( "cache-id" );
             dumpString( "rel-id" );
         break;
 
-        case BIFF12_ID_PTCOLFIELDS:
+        case OOBIN_ID_PTCOLFIELDS:
             dumpDec< sal_Int32 >( "count" );
             mxOut->resetItemIndex();
             while( mxStrm->getRemaining() >= 4 )
                 dumpDec< sal_Int32 >( "#field", "PT-FIELDINDEX" );
         break;
 
-        case BIFF12_ID_PTDATAFIELD:
+        case OOBIN_ID_PTDATAFIELD:
             dumpDec< sal_Int32 >( "field" );
             dumpDec< sal_Int32 >( "subtotal", "PTDATAFIELD-SUBTOTAL" );
             dumpDec< sal_Int32 >( "show-data-as", "PTDATAFIELD-SHOWDATAAS" );
@@ -1905,7 +1854,7 @@ void RecordStreamObject::implDumpRecordBody()
                 dumpString( "name" );
         break;
 
-        case BIFF12_ID_PTDEFINITION:
+        case OOBIN_ID_PTDEFINITION:
         {
             dumpDec< sal_uInt8 >( "created-version" );
             dumpHex< sal_uInt8 >( "flags-1", "PTDEFINITION-FLAGS1" );
@@ -1935,7 +1884,7 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF12_ID_PTFIELD:
+        case OOBIN_ID_PTFIELD:
             dumpHex< sal_uInt32 >( "flags-1", "PTFIELD-FLAGS1" );
             dumpDec< sal_Int32 >( "num-fmt" );
             dumpHex< sal_uInt32 >( "flags-2", "PTFIELD-FLAGS2" );
@@ -1943,7 +1892,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< sal_Int32 >( "autoshow-datafield-idx" );
         break;
 
-        case BIFF12_ID_PTFILTER:
+        case OOBIN_ID_PTFILTER:
         {
             dumpDec< sal_Int32 >( "field" );
             dumpDec< sal_Int32 >( "member-prop-field" );
@@ -1960,7 +1909,7 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF12_ID_PTFITEM:
+        case OOBIN_ID_PTFITEM:
         {
             dumpDec< sal_uInt8 >( "type", "PTFITEM-TYPE" );
             sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "PTFITEM-FLAGS" );
@@ -1969,7 +1918,7 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF12_ID_PTLOCATION:
+        case OOBIN_ID_PTLOCATION:
             dumpRange( "location" );
             dumpDec< sal_Int32 >( "first-header-row" );
             dumpDec< sal_Int32 >( "first-data-row" );
@@ -1978,7 +1927,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< sal_Int32 >( "page-col-count" );
         break;
 
-        case BIFF12_ID_PTPAGEFIELD:
+        case OOBIN_ID_PTPAGEFIELD:
         {
             dumpDec< sal_Int32 >( "field" );
             dumpDec< sal_Int32 >( "cache-item", "PTPAGEFIELD-ITEM" );
@@ -1989,28 +1938,21 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
-        case BIFF12_ID_PTREFERENCE:
+        case OOBIN_ID_PTREFERENCE:
             dumpDec< sal_Int32 >( "field", "PT-FIELDINDEX" );
             dumpDec< sal_Int32 >( "item-count" );
             dumpHex< sal_uInt16 >( "flags-1", "PTREFERENCE-FLAGS1" );
             dumpHex< sal_uInt8 >( "flags-2", "PTREFERENCE-FLAGS2" );
         break;
 
-        case BIFF12_ID_PTROWFIELDS:
+        case OOBIN_ID_PTROWFIELDS:
             dumpDec< sal_Int32 >( "count" );
             mxOut->resetItemIndex();
             while( mxStrm->getRemaining() >= 4 )
                 dumpDec< sal_Int32 >( "#field", "PT-FIELDINDEX" );
         break;
 
-        case BIFF12_ID_QUERYTABLE:
-            dumpHex< sal_uInt32 >( "flags", "QUERYTABLE-FLAGS" );
-            dumpDec< sal_uInt16 >( "autoformat-id" );
-            dumpDec< sal_Int32 >( "connection-id" );
-            dumpString( "defined-name" );
-        break;
-
-        case BIFF12_ID_ROW:
+        case OOBIN_ID_ROW:
             dumpRowIndex();
             dumpDec< sal_Int32 >( "custom-xf-id" );
             dumpDec< sal_uInt16 >( "height", "CONV-TWIP-TO-PT" );
@@ -2021,12 +1963,12 @@ void RecordStreamObject::implDumpRecordBody()
                 dumpRowRange( "#row-spans" );
         break;
 
-        case BIFF12_ID_ROWBREAKS:
+        case OOBIN_ID_ROWBREAKS:
             dumpDec< sal_Int32 >( "count" );
             dumpDec< sal_Int32 >( "manual-count" );
         break;
 
-        case BIFF12_ID_SCENARIO:
+        case OOBIN_ID_SCENARIO:
             dumpDec< sal_uInt16 >( "cell-count" );
             // two longs instead of flag field
             dumpDec< sal_Int32 >( "locked", "BOOLEAN" );
@@ -2036,32 +1978,32 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "user" );
         break;
 
-        case BIFF12_ID_SCENARIOS:
+        case OOBIN_ID_SCENARIOS:
             dumpDec< sal_uInt16 >( "selected" );
             dumpDec< sal_uInt16 >( "shown" );
             dumpRangeList( "result-cells" );
         break;
 
-        case BIFF12_ID_SELECTION:
+        case OOBIN_ID_SELECTION:
             dumpDec< sal_Int32 >( "pane", "PANE-ID" );
             dumpAddress( "active-cell" );
             dumpDec< sal_Int32 >( "active-cell-id" );
             dumpRangeList( "selection" );
         break;
 
-        case BIFF12_ID_SHAREDFMLA:
+        case OOBIN_ID_SHAREDFMLA:
             dumpRange( "formula-range" );
             mxFmlaObj->dumpCellFormula();
         break;
 
-        case BIFF12_ID_SHEET:
+        case OOBIN_ID_SHEET:
             dumpDec< sal_Int32 >( "sheet-state", "SHEET-STATE" );
             dumpDec< sal_Int32 >( "sheet-id" );
             dumpString( "rel-id" );
             dumpString( "sheet-name" );
         break;
 
-        case BIFF12_ID_SHEETFORMATPR:
+        case OOBIN_ID_SHEETFORMATPR:
             dumpDec< sal_Int32 >( "default-col-width", "CONV-COLWIDTH" );
             dumpDec< sal_uInt16 >( "base-col-width" );
             dumpDec< sal_uInt16 >( "default-row-height", "CONV-TWIP-TO-PT" );
@@ -2070,7 +2012,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt8 >( "max-col-outline" );
         break;
 
-        case BIFF12_ID_SHEETPR:
+        case OOBIN_ID_SHEETPR:
             dumpHex< sal_uInt16 >( "flags1", "SHEETPR-FLAGS1" );
             dumpHex< sal_uInt8 >( "flags2", "SHEETPR-FLAGS2" );
             dumpColor( "tab-color" );
@@ -2078,7 +2020,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "codename" );
         break;
 
-        case BIFF12_ID_SHEETPROTECTION:
+        case OOBIN_ID_SHEETPROTECTION:
             dumpHex< sal_uInt16 >( "password-hash" );
             // no flags field for all these boolean flags?!?
             dumpDec< sal_Int32 >( "sheet-locked", "BOOLEAN" );
@@ -2099,7 +2041,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< sal_Int32 >( "select-unlocked-cells-locked", "BOOLEAN" );
         break;
 
-        case BIFF12_ID_SHEETVIEW:
+        case OOBIN_ID_SHEETVIEW:
             dumpHex< sal_uInt16 >( "flags", "SHEETVIEW-FLAGS" );
             dumpDec< sal_Int32 >( "view-type", "SHEETVIEW-TYPE" );
             dumpAddress( "top-left" );
@@ -2111,16 +2053,16 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< sal_Int32 >( "workbookview-id" );
         break;
 
-        case BIFF12_ID_SI:
+        case OOBIN_ID_SI:
             dumpString( "string", true );
         break;
 
-        case BIFF12_ID_SST:
+        case OOBIN_ID_SST:
             dumpDec< sal_Int32 >( "string-cell-count" );
             dumpDec< sal_Int32 >( "sst-size" );
         break;
 
-        case BIFF12_ID_TABLE:
+        case OOBIN_ID_TABLE:
             dumpRange();
             dumpDec< sal_Int32 >( "type", "TABLE-TYPE" );
             dumpDec< sal_Int32 >( "id" );
@@ -2142,51 +2084,41 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "totalsrow-cell-style" );
         break;
 
-        case BIFF12_ID_TABLEPART:
+        case OOBIN_ID_TABLEPART:
             dumpString( "rel-id" );
         break;
 
-        case BIFF12_ID_TABLESTYLEINFO:
+        case OOBIN_ID_TABLESTYLEINFO:
             dumpHex< sal_uInt16 >( "flags", "TABLESTYLEINFO-FLAGS" );
             dumpString( "style-name" );
         break;
 
-        case BIFF12_ID_TOP10FILTER:
+        case OOBIN_ID_TOP10FILTER:
             dumpHex< sal_uInt8 >( "flags", "TOP10FILTER-FLAGS" );
             dumpDec< double >( "value" );
             dumpDec< double >( "cell-value" );
         break;
 
-        case BIFF12_ID_VOLTYPEMAIN:
+        case OOBIN_ID_VOLTYPEMAIN:
             dumpString( "first" );
         break;
 
-        case BIFF12_ID_VOLTYPESTP:
+        case OOBIN_ID_VOLTYPESTP:
             dumpString( "topic-value" );
         break;
 
-        case BIFF12_ID_VOLTYPETR:
+        case OOBIN_ID_VOLTYPETR:
             dumpAddress( "ref" );
             dumpDec< sal_Int32 >( "sheet-id" );
         break;
 
-        case BIFF12_ID_WEBPR:
-        {
-            dumpHex< sal_uInt32 >( "flags", "WEBPR-FLAGS" );
-            sal_uInt8 nStrFlags = dumpHex< sal_uInt8 >( "string-flags", "WEBPR-STRINGFLAGS" );
-            if( nStrFlags & 0x04 ) dumpString( "url" );
-            if( nStrFlags & 0x01 ) dumpString( "post-method" );
-            if( nStrFlags & 0x02 ) dumpString( "edit-page" );
-        }
-        break;
-
-        case BIFF12_ID_WORKBOOKPR:
+        case OOBIN_ID_WORKBOOKPR:
             dumpHex< sal_uInt32 >( "flags", "WORKBBOKPR-FLAGS" );
             dumpDec< sal_Int32 >( "default-theme-version" );
             dumpString( "codename" );
         break;
 
-        case BIFF12_ID_WORKBOOKVIEW:
+        case OOBIN_ID_WORKBOOKVIEW:
             dumpDec< sal_Int32 >( "x-window" );
             dumpDec< sal_Int32 >( "y-window" );
             dumpDec< sal_Int32 >( "win-width" );
@@ -2197,7 +2129,7 @@ void RecordStreamObject::implDumpRecordBody()
             dumpHex< sal_uInt8 >( "flags", "WORKBOOKVIEW-FLAGS" );
         break;
 
-        case BIFF12_ID_XF:
+        case OOBIN_ID_XF:
             dumpDec< sal_uInt16 >( "parent-xf-id" );
             dumpDec< sal_uInt16 >( "numfmt-id" );
             dumpDec< sal_uInt16 >( "font-id", "FONTNAMES" );
@@ -2270,31 +2202,30 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
     }
     else if( aExt.equalsIgnoreAsciiCaseAscii( "bin" ) )
     {
-        if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl" ) ) && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "vbaProject.bin" ) ) )
+        if( rStrgPath.equalsAscii( "xl" ) && rStrmName.equalsAscii( "vbaProject.bin" ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, false ) );
             VbaProjectStorageObject( *this, xStrg, rSysFileName ).dump();
         }
-        else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/embeddings" ) ) )
+        else if( rStrgPath.equalsAscii( "xl/embeddings" ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, false ) );
             OleStorageObject( *this, xStrg, rSysFileName ).dump();
         }
         else if(
-            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl" ) ) ||
-            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/chartsheets" ) ) ||
-            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/dialogsheets" ) ) ||
-            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/externalLinks" ) ) ||
-            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/macrosheets" ) ) ||
-            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/pivotCache" ) ) ||
-            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/pivotTables" ) ) ||
-            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/queryTables" ) ) ||
-            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/tables" ) ) ||
-            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/worksheets" ) ) )
+            rStrgPath.equalsAscii( "xl" ) ||
+            rStrgPath.equalsAscii( "xl/chartsheets" ) ||
+            rStrgPath.equalsAscii( "xl/dialogsheets" ) ||
+            rStrgPath.equalsAscii( "xl/externalLinks" ) ||
+            rStrgPath.equalsAscii( "xl/macrosheets" ) ||
+            rStrgPath.equalsAscii( "xl/pivotCache" ) ||
+            rStrgPath.equalsAscii( "xl/pivotTables" ) ||
+            rStrgPath.equalsAscii( "xl/tables" ) ||
+            rStrgPath.equalsAscii( "xl/worksheets" ) )
         {
             RecordStreamObject( *this, rxStrm, rSysFileName ).dump();
         }
-        else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/activeX" ) ) )
+        else if( rStrgPath.equalsAscii( "xl/activeX" ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, true ) );
             ActiveXStorageObject( *this, xStrg, rSysFileName ).dump();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,8 @@
 #ifndef SW_WRITERWORDGLUE
 #define SW_WRITERWORDGLUE
 
-#include "needed_cast.hxx"
-#include "types.hxx"
+#   include "needed_cast.hxx"
+#   include "types.hxx"
 
 class SwFrmFmt;
 class SfxItemSet;
@@ -141,7 +141,7 @@ namespace sw
             bool HasHeader() const { return mbHasHeader; }
             bool HasFooter() const { return mbHasFooter; }
 
-            /** Is the top of the page the same in both objects
+            /** Is the top of the page the same in both objects 
 
                 Ignoring the difference in header and footers, will the main
                 document text have the same top/bottom bounds in word between

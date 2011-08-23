@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,16 +27,13 @@
  ************************************************************************/
 
 #include "oox/xls/sharedstringsbuffer.hxx"
-
 #include "oox/xls/biffinputstream.hxx"
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::text::XText;
 
 namespace oox {
 namespace xls {
-
-// ============================================================================
-
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
 
 // ============================================================================
 

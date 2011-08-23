@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,11 +28,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
+#include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <vcl/accel.h>
 #include <vcl/accel.hxx>
 #include <vcl/accmgr.hxx>
+
+
+
+// =======================================================================
+
+DECLARE_LIST( ImplAccelList, Accelerator* )
 
 // =======================================================================
 
@@ -50,20 +56,21 @@ ImplAccelManager::~ImplAccelManager()
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
+BOOL ImplAccelManager::InsertAccel( Accelerator* pAccel )
 {
-    if ( !mpAccelList ) {
+    if ( !mpAccelList )
         mpAccelList = new ImplAccelList;
-    } else {
-        for ( size_t i = 0, n = mpAccelList->size(); i < n; ++i ) {
-            if ( (*mpAccelList)[ i ] == pAccel ) {
-                return sal_False;
-            }
-        }
+    else
+    {
+        // Gibts den schon ?
+        if ( mpAccelList->GetPos( pAccel ) != LIST_ENTRY_NOTFOUND )
+            return FALSE;
     }
 
-    mpAccelList->insert( mpAccelList->begin(), pAccel );
-    return sal_True;
+    // Am Anfang der Liste einfuegen
+    mpAccelList->Insert( pAccel, (ULONG)0 );
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -77,53 +84,47 @@ void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
     //e.g. #i90599#. Someone starts typing a sequence in a dialog, but doesn't
     //end it, and then closes the dialog, deleting the accelerators. So if
     //we're removing an accelerator that a sub-accelerator which is in the
-    //sequence list, throw away the entire sequence
-    if ( mpSequenceList ) {
-        for (sal_uInt16 i = 0; i < pAccel->GetItemCount(); ++i) {
-            Accelerator* pSubAccel = pAccel->GetAccel( pAccel->GetItemId(i) );
-            for ( size_t j = 0, n = mpSequenceList->size(); j < n; ++j ) {
-                if ( (*mpSequenceList)[ j ] == pSubAccel ) {
-                    EndSequence( true );
-                    i = pAccel->GetItemCount();
-                    break;
-                }
+    //sequence list, throw away the entire sequence 
+    if ( mpSequenceList )
+    {
+        for (USHORT i = 0; i < pAccel->GetItemCount(); ++i)
+        {
+            Accelerator* pSubAccel = pAccel->GetAccel(pAccel->GetItemId(i));
+            if ( mpSequenceList->GetPos( pSubAccel ) != LIST_ENTRY_NOTFOUND )
+            {
+                EndSequence( true );
+                break;
             }
         }
     }
 
     // Raus damit
-    for ( ImplAccelList::iterator it = mpAccelList->begin();
-          it < mpAccelList->end();
-          ++it
-    ) {
-        if ( *it == pAccel ) {
-            mpAccelList->erase( it );
-            break;
-        }
-    }
+    mpAccelList->Remove( pAccel );
 }
 
 // -----------------------------------------------------------------------
 
-void ImplAccelManager::EndSequence( sal_Bool bCancel )
+void ImplAccelManager::EndSequence( BOOL bCancel )
 {
     // Sind wir ueberhaupt in einer Sequenz ?
     if ( !mpSequenceList )
         return;
 
     // Alle Deactivate-Handler der Acceleratoren in der Sequenz rufen
-    for ( size_t i = 0, n = mpSequenceList->size(); i < n; ++i )
+    Accelerator* pTempAccel = mpSequenceList->First();
+    while( pTempAccel )
     {
-        Accelerator* pTempAccel = (*mpSequenceList)[ i ];
-        sal_Bool bDel = sal_False;
+        BOOL bDel = FALSE;
         pTempAccel->mbIsCancel = bCancel;
         pTempAccel->mpDel = &bDel;
         pTempAccel->Deactivate();
         if ( !bDel )
         {
-            pTempAccel->mbIsCancel = sal_False;
+            pTempAccel->mbIsCancel = FALSE;
             pTempAccel->mpDel = NULL;
         }
+
+        pTempAccel = mpSequenceList->Next();
     }
 
     // Sequenz-Liste loeschen
@@ -133,20 +134,20 @@ void ImplAccelManager::EndSequence( sal_Bool bCancel )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
+BOOL ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, USHORT nRepeat )
 {
     Accelerator* pAccel;
 
     // Haben wir ueberhaupt Acceleratoren ??
     if ( !mpAccelList )
-        return sal_False;
-    if ( mpAccelList->empty() )
-        return sal_False;
+        return FALSE;
+    if ( !mpAccelList->Count() )
+        return FALSE;
 
     // Sind wir in einer Sequenz ?
     if ( mpSequenceList )
     {
-        pAccel = mpSequenceList->empty() ? NULL : (*mpSequenceList)[ 0 ];
+        pAccel = mpSequenceList->GetObject( 0 );
         DBG_CHKOBJ( pAccel, Accelerator, NULL );
 
         // Nicht Gefunden ?
@@ -154,7 +155,7 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
         {
             // Sequenz abbrechen
             FlushAccel();
-            return sal_False;
+            return FALSE;
         }
 
         // Ist der Eintrag da drin ?
@@ -168,11 +169,11 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
             {
                 DBG_CHKOBJ( pNextAccel, Accelerator, NULL );
 
-                mpSequenceList->insert( mpSequenceList->begin(), pNextAccel );
+                mpSequenceList->Insert( pNextAccel, (ULONG)0 );
 
                 // Activate-Handler vom Neuen rufen
                 pNextAccel->Activate();
-                return sal_True;
+                return TRUE;
             }
             else
             {
@@ -184,7 +185,7 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
 
                     // Dem Accelerator das aktuelle Item setzen
                     // und Handler rufen
-                    sal_Bool bDel = sal_False;
+                    BOOL bDel = FALSE;
                     pAccel->maCurKeyCode    = rKeyCode;
                     pAccel->mnCurId         = pEntry->mnId;
                     pAccel->mnCurRepeat     = nRepeat;
@@ -201,14 +202,14 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
                         pAccel->mpDel           = NULL;
                     }
 
-                    return sal_True;
+                    return TRUE;
                 }
                 else
                 {
                     // Sequenz abbrechen, weil Acceleraor disabled
                     // Taste wird weitergeleitet (ans System)
                     FlushAccel();
-                    return sal_False;
+                    return FALSE;
                 }
             }
         }
@@ -216,14 +217,14 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
         {
             // Sequenz abbrechen wegen falscher Taste
             FlushAccel();
-            return sal_False;
+            return FALSE;
         }
     }
 
     // Durch die Liste der Acceleratoren wuehlen
-    for ( size_t i = 0, n = mpAccelList->size(); i < n; ++i )
+    pAccel = mpAccelList->First();
+    while ( pAccel )
     {
-        pAccel = (*mpAccelList)[ i ];
         DBG_CHKOBJ( pAccel, Accelerator, NULL );
 
         // Ist der Eintrag da drin ?
@@ -239,13 +240,13 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
 
                 // Sequenz-Liste erzeugen
                 mpSequenceList = new ImplAccelList;
-                mpSequenceList->insert( mpSequenceList->begin(), pAccel     );
-                mpSequenceList->insert( mpSequenceList->begin(), pNextAccel );
+                mpSequenceList->Insert( pAccel, (ULONG)0 );
+                mpSequenceList->Insert( pNextAccel, (ULONG)0 );
 
                 // Activate-Handler vom Neuen rufen
                 pNextAccel->Activate();
 
-                return sal_True;
+                return TRUE;
             }
             else
             {
@@ -258,7 +259,7 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
 
                     // Dem Accelerator das aktuelle Item setzen
                     // und Handler rufen
-                    sal_Bool bDel = sal_False;
+                    BOOL bDel = FALSE;
                     pAccel->maCurKeyCode    = rKeyCode;
                     pAccel->mnCurId         = pEntry->mnId;
                     pAccel->mnCurRepeat     = nRepeat;
@@ -275,15 +276,18 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
                         pAccel->mpDel           = NULL;
                     }
 
-                    return sal_True;
+                    return TRUE;
                 }
                 else
-                    return sal_False;
+                    return FALSE;
             }
         }
+
+        // Nicht gefunden, vielleicht im naechsten Accelerator
+        pAccel = mpAccelList->Next();
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

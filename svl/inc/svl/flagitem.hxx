@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 class SvStream;
 
-extern sal_uInt16 nSfxFlagVal[16];
+extern USHORT nSfxFlagVal[16];
 
 // -----------------------------------------------------------------------
 
@@ -43,39 +43,39 @@ DBG_NAMEEX_VISIBILITY(SfxFlagItem, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC SfxFlagItem: public SfxPoolItem
 {
-    sal_uInt16                   nVal;
+    USHORT					 nVal;
 
 public:
                              TYPEINFO();
 
-                             SfxFlagItem( sal_uInt16 nWhich = 0, sal_uInt16 nValue = 0 );
-                             SfxFlagItem( sal_uInt16 nWhich, SvStream & );
+                             SfxFlagItem( USHORT nWhich = 0, USHORT nValue = 0 );
+                             SfxFlagItem( USHORT nWhich, SvStream & );
                              SfxFlagItem( const SfxFlagItem& );
 
                              ~SfxFlagItem() {
                                 DBG_DTOR(SfxFlagItem, 0); }
 
-    virtual sal_uInt8            GetFlagCount() const;
-    virtual XubString        GetFlagText( sal_uInt8 nFlag ) const;
+    virtual BYTE			 GetFlagCount() const;
+    virtual XubString		 GetFlagText( BYTE nFlag ) const;
 
-    virtual int              operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nVersion) const;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*     Create(SvStream &, USHORT nVersion) const;
+    virtual SvStream&		 Store(SvStream &, USHORT nItemVersion) const;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     XubString &rText,
                                     const IntlWrapper * = 0 ) const;
-            sal_uInt16           GetValue() const { return nVal; }
-            void             SetValue( sal_uInt16 nNewVal ) {
+            USHORT           GetValue() const { return nVal; }
+            void			 SetValue( USHORT nNewVal ) {
                                  DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
                                  nVal = nNewVal;
                              }
-            int              GetFlag( sal_uInt8 nFlag ) const {
+            int 			 GetFlag( BYTE nFlag ) const {
                                  return ( (nVal & nSfxFlagVal[nFlag]) != 0 ); }
-            void             SetFlag( sal_uInt8 nFlag, int bVal );
+            void			 SetFlag( BYTE nFlag, int bVal );
 };
 
 #endif

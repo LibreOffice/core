@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include "rtl/ustring.hxx"
 
-namespace jfw_plugin {
+namespace jfw_plugin { 
 // Define OSL_DEBUG_LEVEL >= 2 to run a test when this lib is loaded
 
 /* SunVersion is used to compare java versions based on a string, as taken
@@ -46,7 +46,7 @@ namespace jfw_plugin {
 
    This class supports also a FreeBSD Java. This is currently necessary because
    it also has the vendor string "Sun Microsystems Inc.".
-
+   
    An object acts as holder for the version string. That string may be present
    even if the version could not be parsed. Then the version may not be compatible
    to a SUN Java version.
@@ -54,7 +54,7 @@ namespace jfw_plugin {
    An invalid object, that is, operator bool returns false, will always be
    the lower version in a comparison. If two invalid objects are compared
    then they are considered equal.
-
+   
    To test if the version is ok, that is this object can be compared to others,
    use the bool conversion operator.
  */
@@ -104,7 +104,7 @@ public:
 
     /** Test if the version is compatible tu SUN's versioning scheme
      */
-    operator bool ();
+    operator bool (); 
 
     /** Will always contain a value if the object has been constructed with
         a version string.
@@ -123,7 +123,7 @@ protected:
     PreRelease getPreRelease(const char *szRel);
 };
 
-}
+} 
 
 #endif // INCLUDED_JVMACCESS_SUNVERSION_HXX
 

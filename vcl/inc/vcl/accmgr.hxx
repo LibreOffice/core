@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,12 +30,10 @@
 #define _SV_ACCMGR_HXX
 
 #include <vcl/sv.h>
-#include <vector>
 
+class ImplAccelList;
 class Accelerator;
 class KeyCode;
-
-typedef ::std::vector< Accelerator* > ImplAccelList;
 
 // --------------------
 // - ImplAccelManager -
@@ -55,13 +53,13 @@ public:
                         }
                         ~ImplAccelManager();
 
-    sal_Bool                InsertAccel( Accelerator* pAccel );
+    BOOL                InsertAccel( Accelerator* pAccel );
     void                RemoveAccel( Accelerator* pAccel );
 
-    void                EndSequence( sal_Bool bCancel = sal_False );
-    void                FlushAccel() { EndSequence( sal_True ); }
+    void                EndSequence( BOOL bCancel = FALSE );
+    void                FlushAccel() { EndSequence( TRUE ); }
 
-    sal_Bool                IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat );
+    BOOL                IsAccelKey( const KeyCode& rKeyCode, USHORT nRepeat );
 };
 
 #endif  // _SV_ACCMGR_HXX

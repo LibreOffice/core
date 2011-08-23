@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -231,7 +231,7 @@ sal_Bool DocumentDigitalSignatures::ImplViewSignatures(
         {
             if ( aSignaturesDialog.SignaturesChanged() )
             {
-                bChanges = sal_True;
+                bChanges = TRUE;
                 // If we have a storage and no stream, we are responsible for commit
                 if ( rxStorage.is() && !xSignStream.is() )
                 {
@@ -320,7 +320,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             if (!rSigInfo.Signer.is())
                 rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
 
-            // Time support again (#i38744#)
+            // --> PB 2004-12-14 #i38744# time support again
             Date aDate( rInfo.stDateTime.Day, rInfo.stDateTime.Month, rInfo.stDateTime.Year );
             Time aTime( rInfo.stDateTime.Hours, rInfo.stDateTime.Minutes,
                         rInfo.stDateTime.Seconds, rInfo.stDateTime.HundredthSeconds );
@@ -340,7 +340,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
                     rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(rSigInfo.Signer,
                         Sequence<Reference<css::security::XCertificate> >());
                 } catch (SecurityException& ) {
-                    OSL_FAIL("Verification of certificate failed");
+                    OSL_ENSURE(0, "Verification of certificate failed");
                     rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
                 }
             }
@@ -398,7 +398,7 @@ void DocumentDigitalSignatures::showCertificate(
 
     if ( bInit )
     {
-        CertificateViewer aViewer( NULL, aSignatureHelper.GetSecurityEnvironment(), _Certificate, sal_False );
+        CertificateViewer aViewer( NULL, aSignatureHelper.GetSecurityEnvironment(), _Certificate, FALSE );
         aViewer.Execute();
     }
 
@@ -441,7 +441,7 @@ void DocumentDigitalSignatures::showCertificate(
 
     //warning free code
     //if ( aLocObj.GetProtocol() == INET_PROT_FILE && ( pBroker = ::ucbhelper::ContentBroker::get() ) )
-    //  xContentProvider = pBroker->getContentProviderInterface();
+    //	xContentProvider = pBroker->getContentProviderInterface();
     if ( aLocObj.GetProtocol() == INET_PROT_FILE)
     {
         pBroker = ::ucbhelper::ContentBroker::get();

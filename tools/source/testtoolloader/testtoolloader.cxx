@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,8 @@
 
 #include <comphelper/uieventslogger.hxx>
 
-using ::rtl::OUString;
+using namespace rtl;
+
 namespace tools
 {
     typedef void ( *pfunc_CreateRemoteControl)();
@@ -48,7 +49,7 @@ namespace tools
     typedef void ( *pfunc_CreateEventLogger)();
     typedef void ( *pfunc_DestroyEventLogger)();
 
-static oslModule    aTestToolModule = 0;
+static oslModule	aTestToolModule	= 0;
 // are we to be automated at all?
 static bool bAutomate = false;
 static bool bLoggerStarted = false;
@@ -67,7 +68,7 @@ String GetCommandLineParam( sal_uInt32 nParam )
         return String( aParam );
     else
     {
-        OSL_FAIL( "Unable to get CommandLineParam" );
+        DBG_ERROR( "Unable to get CommandLineParam" );
         return String();
     }
 }
@@ -103,7 +104,7 @@ void InitTestToolLib()
 
     if ( bAutomate )
     {
-        OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateRemoteControl" ));
+        OUString	aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateRemoteControl" ));
 
         LoadLib();
         if ( aTestToolModule )
@@ -114,18 +115,18 @@ void InitTestToolLib()
                 (reinterpret_cast< pfunc_CreateRemoteControl >(pInitFunc))();
             else
             {
-                OSL_TRACE( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+                DBG_ERROR1( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
             }
         }
         else
         {
-            OSL_TRACE( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            DBG_ERROR1( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
         }
     }
 
     if ( ::comphelper::UiEventsLogger::isEnabled() )
     {
-        OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateEventLogger" ));
+        OUString	aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateEventLogger" ));
 
         LoadLib();
         if ( aTestToolModule )
@@ -135,16 +136,16 @@ void InitTestToolLib()
             if ( pInitFunc )
             {
                 (reinterpret_cast< pfunc_CreateEventLogger >(pInitFunc))();
-                bLoggerStarted = sal_True;
+                bLoggerStarted = TRUE;
             }
             else
             {
-                OSL_TRACE( "Unable to get Symbol 'CreateEventLogger' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+                DBG_ERROR1( "Unable to get Symbol 'CreateEventLogger' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
             }
         }
         else
         {
-            OSL_TRACE( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            DBG_ERROR1( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
         }
     }
 }
@@ -155,7 +156,7 @@ void DeInitTestToolLib()
     {
         if ( bAutomate )
         {
-            OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyRemoteControl" ));
+            OUString	aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyRemoteControl" ));
 
             oslGenericFunction pDeInitFunc = osl_getFunctionSymbol(
                 aTestToolModule, aFuncName.pData );
@@ -165,14 +166,14 @@ void DeInitTestToolLib()
 
         if ( bLoggerStarted /*::comphelper::UiEventsLogger::isEnabled()*/ )
         {
-            OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyEventLogger" ));
+            OUString	aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyEventLogger" ));
 
             oslGenericFunction pDeInitFunc = osl_getFunctionSymbol(
                 aTestToolModule, aFuncName.pData );
             if ( pDeInitFunc )
             {
                 (reinterpret_cast< pfunc_DestroyEventLogger >(pDeInitFunc))();
-                bLoggerStarted = sal_False;
+                bLoggerStarted = FALSE;
             }
         }
 

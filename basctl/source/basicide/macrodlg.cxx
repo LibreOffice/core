@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <macrodlg.hrc>
 #include <basidesh.hrc>
 #include <basidesh.hxx>
-#include <baside2.hrc>      // ID's fuer Imagese
+#include <baside2.hrc>		// ID's fuer Imagese
 #include <basobj.hxx>
 #include <baside3.hxx>
 
@@ -56,41 +56,40 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 
-#include <map>
-using ::std::map;
-using ::std::pair;
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-MacroChooser::MacroChooser( Window* pParnt, sal_Bool bCreateEntries ) :
-        SfxModalDialog(     pParnt, IDEResId( RID_MACROCHOOSER ) ),
-        aMacroNameTxt(      this,   IDEResId( RID_TXT_MACRONAME ) ),
-        aMacroNameEdit(     this,   IDEResId( RID_ED_MACRONAME ) ),
-        aMacroFromTxT(      this,   IDEResId( RID_TXT_MACROFROM ) ),
-        aMacrosSaveInTxt(   this,   IDEResId( RID_TXT_SAVEMACRO ) ),
-        aBasicBox(          this,   IDEResId( RID_CTRL_LIB ) ),
-        aMacrosInTxt(       this,   IDEResId( RID_TXT_MACROSIN ) ),
-        aMacroBox(          this,   IDEResId( RID_CTRL_MACRO ) ),
-        aRunButton(         this,   IDEResId( RID_PB_RUN ) ),
-        aCloseButton(       this,   IDEResId( RID_PB_CLOSE ) ),
-        aAssignButton(      this,   IDEResId( RID_PB_ASSIGN ) ),
-        aEditButton(        this,   IDEResId( RID_PB_EDIT ) ),
-        aNewDelButton(      this,   IDEResId( RID_PB_DEL ) ),
-        aOrganizeButton(    this,   IDEResId( RID_PB_ORG ) ),
-        aHelpButton(        this,   IDEResId( RID_PB_HELP ) ),
-        aNewLibButton(      this,   IDEResId( RID_PB_NEWLIB ) ),
-        aNewModButton(      this,   IDEResId( RID_PB_NEWMOD ) )
+
+DECLARE_LIST( MacroList, SbMethod* )
+
+MacroChooser::MacroChooser( Window* pParnt, BOOL bCreateEntries ) :
+        SfxModalDialog( 	pParnt,	IDEResId( RID_MACROCHOOSER ) ),
+        aMacroNameTxt(		this,	IDEResId( RID_TXT_MACRONAME ) ),
+        aMacroNameEdit(		this,	IDEResId( RID_ED_MACRONAME ) ),
+        aMacroFromTxT(		this,	IDEResId( RID_TXT_MACROFROM ) ),
+        aMacrosSaveInTxt(	this,	IDEResId( RID_TXT_SAVEMACRO ) ),
+        aBasicBox(			this,	IDEResId( RID_CTRL_LIB ) ),
+        aMacrosInTxt(		this,	IDEResId( RID_TXT_MACROSIN ) ),
+        aMacroBox(			this,	IDEResId( RID_CTRL_MACRO ) ),
+        aRunButton(			this,	IDEResId( RID_PB_RUN ) ),
+        aCloseButton(	    this,	IDEResId( RID_PB_CLOSE ) ),
+        aAssignButton(		this,	IDEResId( RID_PB_ASSIGN ) ),
+        aEditButton(		this,	IDEResId( RID_PB_EDIT ) ),
+        aNewDelButton(		this,	IDEResId( RID_PB_DEL ) ),
+        aOrganizeButton(	this,	IDEResId( RID_PB_ORG ) ),
+        aHelpButton(		this,	IDEResId( RID_PB_HELP ) ),
+        aNewLibButton(	    this,	IDEResId( RID_PB_NEWLIB ) ),
+        aNewModButton(	    this,	IDEResId( RID_PB_NEWMOD ) )
 {
     FreeResource();
 
     nMode = MACROCHOOSER_ALL;
-    bNewDelIsDel = sal_True;
+    bNewDelIsDel = TRUE;
 
     // Der Sfx fragt den BasicManager nicht, ob modified
     // => Speichern anschmeissen, wenn Aenderung, aber kein Sprung in
     // die BasicIDE.
-    bForceStoreBasic = sal_False;
+    bForceStoreBasic = FALSE;
 
     aMacrosInTxtBaseStr = aMacrosInTxt.GetText();
 
@@ -107,9 +106,9 @@ MacroChooser::MacroChooser( Window* pParnt, sal_Bool bCreateEntries ) :
     // Buttons only for MACROCHOOSER_RECORDING
     aNewLibButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     aNewModButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
-    aNewLibButton.Hide();       // default
-    aNewModButton.Hide();       // default
-    aMacrosSaveInTxt.Hide();    // default
+    aNewLibButton.Hide();		// default
+    aNewModButton.Hide();		// default
+    aMacrosSaveInTxt.Hide();	// default
 
     aMacrosInTxt.SetStyle( WB_NOMULTILINE | WB_PATHELLIPSIS );
 
@@ -121,10 +120,9 @@ MacroChooser::MacroChooser( Window* pParnt, sal_Bool bCreateEntries ) :
     aMacroBox.SetSelectHdl( LINK( this, MacroChooser, MacroSelectHdl ) );
 
     aBasicBox.SetMode( BROWSEMODE_MODULES );
-    aBasicBox.SetStyle( WB_TABSTOP | WB_BORDER |
-                        WB_HASLINES | WB_HASLINESATROOT |
-                        WB_HASBUTTONS | WB_HASBUTTONSATROOT |
-                        WB_HSCROLL );
+    aBasicBox.SetWindowBits( WB_HASLINES | WB_HASLINESATROOT | 
+                             WB_HASBUTTONS | WB_HASBUTTONSATROOT |
+                             WB_HSCROLL );
 
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
@@ -188,7 +186,7 @@ void MacroChooser::RestoreMacroDescription()
     {
         // find entry in macro box
         SvLBoxEntry* pEntry = 0;
-        sal_uLong nPos = 0;
+        ULONG nPos = 0;
         SvLBoxEntry* pE = aMacroBox.GetEntry( nPos );
         while ( pE )
         {
@@ -210,7 +208,7 @@ void MacroChooser::RestoreMacroDescription()
     }
 }
 
-short MacroChooser::Execute()
+short __EXPORT MacroChooser::Execute()
 {
     RestoreMacroDescription();
     aRunButton.GrabFocus();
@@ -224,7 +222,7 @@ short MacroChooser::Execute()
     if( rSelectedDoc.isDocument() && !rSelectedDoc.isActive() )
     {
         // Search for the right entry
-        sal_uLong nRootPos = 0;
+        ULONG nRootPos = 0;
         SvLBoxEntry* pRootEntry = aBasicBox.GetEntry( nRootPos );
         while( pRootEntry )
         {
@@ -262,7 +260,7 @@ short MacroChooser::Execute()
 }
 
 
-void MacroChooser::EnableButton( Button& rButton, sal_Bool bEnable )
+void MacroChooser::EnableButton( Button& rButton, BOOL bEnable )
 {
     if ( bEnable )
     {
@@ -333,10 +331,10 @@ void MacroChooser::DeleteMacro()
         SbModule* pModule = pMethod->GetModule();
         DBG_ASSERT( pModule, "DeleteMacro: Kein Modul?!" );
         ::rtl::OUString aSource( pModule->GetSource32() );
-        sal_uInt16 nStart, nEnd;
+        USHORT nStart, nEnd;
         pMethod->GetLineRange( nStart, nEnd );
         pModule->GetMethods()->Remove( pMethod );
-        CutLines( aSource, nStart-1, nEnd-nStart+1, sal_True );
+        CutLines( aSource, nStart-1, nEnd-nStart+1, TRUE );
         pModule->SetSource32( aSource );
 
         // update module in library
@@ -347,7 +345,7 @@ void MacroChooser::DeleteMacro()
         SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
         DBG_ASSERT( pEntry, "DeleteMacro: Entry ?!" );
         aMacroBox.GetModel()->Remove( pEntry );
-        bForceStoreBasic = sal_True;
+        bForceStoreBasic = TRUE;
     }
 }
 
@@ -391,13 +389,13 @@ SbMethod* MacroChooser::CreateMacro()
                 aModName = aModName.GetToken( 0, ' ', nIndex );
             }
             pModule = pBasic->FindModule( aModName );
-        }
+        }    
         else if ( pBasic->GetModules()->Count() )
             pModule = (SbModule*)pBasic->GetModules()->Get( 0 );
 
         if ( !pModule )
         {
-            pModule = createModImpl( static_cast<Window*>( this ),
+            pModule = createModImpl( static_cast<Window*>( this ), 
                 aDocument, aBasicBox, aLibName, aModName );
         }
 
@@ -423,14 +421,14 @@ void MacroChooser::SaveSetCurEntry( SvTreeListBox& rBox, SvLBoxEntry* pEntry )
 
 void MacroChooser::CheckButtons()
 {
-    SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+    SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();    
     BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
     SvLBoxEntry* pMacroEntry = aMacroBox.FirstSelected();
     SbMethod* pMethod = GetMacro();
 
     // check, if corresponding libraries are readonly
-    sal_Bool bReadOnly = sal_False;
-    sal_uInt16 nDepth = pCurEntry ? aBasicBox.GetModel()->GetDepth( pCurEntry ) : 0;
+    BOOL bReadOnly = FALSE;
+    USHORT nDepth = pCurEntry ? aBasicBox.GetModel()->GetDepth( pCurEntry ) : 0;
     if ( nDepth == 1 || nDepth == 2 )
     {
         ScriptDocument aDocument( aDesc.GetDocument() );
@@ -440,26 +438,26 @@ void MacroChooser::CheckButtons()
         if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
                 ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
         {
-            bReadOnly = sal_True;
+            bReadOnly = TRUE;
         }
     }
 
     if ( nMode != MACROCHOOSER_RECORDING )
     {
         // Run...
-        sal_Bool bEnable = pMethod ? sal_True : sal_False;
+        BOOL bEnable = pMethod ? TRUE : FALSE;
         if ( ( nMode != MACROCHOOSER_CHOOSEONLY ) && StarBASIC::IsRunning() )
-            bEnable = sal_False;
+            bEnable = FALSE;
         EnableButton( aRunButton, bEnable );
     }
 
     // Organisieren immer moeglich ?
 
     // Assign...
-    EnableButton( aAssignButton, pMethod ? sal_True : sal_False );
+    EnableButton( aAssignButton, pMethod ? TRUE : FALSE );
 
     // Edit...
-    EnableButton( aEditButton, pMacroEntry ? sal_True : sal_False );
+    EnableButton( aEditButton, pMacroEntry ? TRUE : FALSE );
 
     // aOrganizeButton
     EnableButton( aOrganizeButton, !StarBASIC::IsRunning() && ( nMode == MACROCHOOSER_ALL ));
@@ -469,8 +467,8 @@ void MacroChooser::CheckButtons()
     bool bShare = ( aDesc.GetLocation() == LIBRARY_LOCATION_SHARE );
     EnableButton( aNewDelButton,
         !StarBASIC::IsRunning() && ( nMode == MACROCHOOSER_ALL ) && !bProtected && !bReadOnly && !bShare );
-    sal_Bool bPrev = bNewDelIsDel;
-    bNewDelIsDel = pMethod ? sal_True : sal_False;
+    BOOL bPrev = bNewDelIsDel;
+    bNewDelIsDel = pMethod ? TRUE : FALSE;
     if ( ( bPrev != bNewDelIsDel ) && ( nMode == MACROCHOOSER_ALL ) )
     {
         String aBtnText( bNewDelIsDel ? IDEResId( RID_STR_BTNDEL) : IDEResId( RID_STR_BTNNEW ) );
@@ -554,25 +552,40 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
 
         // Die Macros sollen in der Reihenfolge angezeigt werden,
         // wie sie im Modul stehen.
-
-        map< sal_uInt16, SbMethod* > aMacros;
-        size_t nMacroCount = pModule->GetMethods()->Count();
-        for ( size_t iMeth = 0; iMeth  < nMacroCount; iMeth++ )
+        MacroList aMacros;
+        USHORT nMacroCount = pModule->GetMethods()->Count();
+        USHORT nRealMacroCount = 0;
+        USHORT iMeth;
+        for ( iMeth = 0; iMeth  < nMacroCount; iMeth++ )
         {
             SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Get( iMeth );
             if( pMethod->IsHidden() )
                 continue;
+            ++nRealMacroCount;
             DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
+            ULONG nPos = LIST_APPEND;
             // Eventuell weiter vorne ?
-            sal_uInt16 nStart, nEnd;
+            USHORT nStart, nEnd;
             pMethod->GetLineRange( nStart, nEnd );
-            aMacros.insert( map< sal_uInt16, SbMethod*>::value_type( nStart, pMethod ) );
+            for ( ULONG n = 0; n < aMacros.Count(); n++ )
+            {
+                USHORT nS, nE;
+                SbMethod* pM = aMacros.GetObject( n );
+                DBG_ASSERT( pM, "Macro nicht in Liste ?!" );
+                pM->GetLineRange( nS, nE );
+                if ( nS > nStart )
+                {
+                    nPos = n;
+                    break;
+                }
+            }
+            aMacros.Insert( pMethod, nPos );
         }
 
-        aMacroBox.SetUpdateMode( sal_False );
-        for ( map< sal_uInt16, SbMethod* >::iterator it = aMacros.begin(); it != aMacros.end(); ++it )
-            aMacroBox.InsertEntry( (*it).second->GetName() );
-        aMacroBox.SetUpdateMode( sal_True );
+        aMacroBox.SetUpdateMode( FALSE );
+        for ( iMeth = 0; iMeth < nRealMacroCount; iMeth++ )
+            aMacroBox.InsertEntry( aMacros.GetObject( iMeth )->GetName() );
+        aMacroBox.SetUpdateMode( TRUE );
 
         if ( aMacroBox.GetEntryCount() )
         {
@@ -598,7 +611,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
     if ( pCurEntry )
     {
-        sal_uInt16 nDepth = aBasicBox.GetModel()->GetDepth( pCurEntry );
+        USHORT nDepth = aBasicBox.GetModel()->GetDepth( pCurEntry );
         if ( ( nDepth == 1 ) && ( aBasicBox.IsEntryProtected( pCurEntry ) ) )
         {
             // Dann auf die entsprechende Std-Lib stellen...
@@ -622,15 +635,15 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
         if ( aMacroBox.GetEntryCount() )
         {
             String aEdtText( aMacroNameEdit.GetText() );
-            sal_Bool bFound = sal_False;
-            for ( sal_uInt16 n = 0; n < aMacroBox.GetEntryCount(); n++ )
+            BOOL bFound = FALSE;
+            for ( USHORT n = 0; n < aMacroBox.GetEntryCount(); n++ )
             {
                 SvLBoxEntry* pEntry = aMacroBox.GetEntry( n );
                 DBG_ASSERT( pEntry, "Entry ?!" );
                 if ( aMacroBox.GetEntryText( pEntry ).CompareIgnoreCaseToAscii( aEdtText ) == COMPARE_EQUAL )
                 {
                     SaveSetCurEntry( aMacroBox, pEntry );
-                    bFound = sal_True;
+                    bFound = TRUE;
                     break;
                 }
             }
@@ -639,7 +652,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
                 SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
                 // Wenn es den Eintrag gibt ->Select ->Desription...
                 if ( pEntry )
-                    aMacroBox.Select( pEntry, sal_False );
+                    aMacroBox.Select( pEntry, FALSE );
             }
         }
     }
@@ -676,7 +689,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         }
         else if ( nMode == MACROCHOOSER_RECORDING )
         {
-            sal_Bool bValid = BasicIDE::IsValidSbxName( aMacroNameEdit.GetText() );
+            BOOL bValid = BasicIDE::IsValidSbxName( aMacroNameEdit.GetText() );
             if ( !bValid )
             {
                 ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
@@ -748,12 +761,12 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 }
                 CheckButtons();
                 UpdateFields();
-                //if ( aMacroBox.GetCurEntry() )    // OV-Bug ?
-                //  aMacroBox.Select( aMacroBox.GetCurEntry() );
+                //if ( aMacroBox.GetCurEntry() )	// OV-Bug ?
+                //	aMacroBox.Select( aMacroBox.GetCurEntry() );
             }
             else
             {
-                sal_Bool bValid = BasicIDE::IsValidSbxName( aMacroNameEdit.GetText() );
+                BOOL bValid = BasicIDE::IsValidSbxName( aMacroNameEdit.GetText() );
                 if ( !bValid )
                 {
                     ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
@@ -819,7 +832,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         ScriptDocument aDocument( aDesc.GetDocument() );
         String aLibName( aDesc.GetLibName() );
         String aModName;
-        createModImpl( static_cast<Window*>( this ), aDocument,
+        createModImpl( static_cast<Window*>( this ), aDocument, 
             aBasicBox, aLibName, aModName, true );
     }
     else if ( pButton == &aOrganizeButton )
@@ -828,10 +841,10 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 
         BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( aBasicBox.FirstSelected() ) );
         OrganizeDialog* pDlg = new OrganizeDialog( this, 0, aDesc );
-        sal_uInt16 nRet = pDlg->Execute();
+        USHORT nRet = pDlg->Execute();
         delete pDlg;
 
-        if ( nRet ) // Nicht einfach nur geschlossen
+        if ( nRet )	// Nicht einfach nur geschlossen
         {
             EndDialog( MACRO_EDIT );
             return 0;
@@ -839,7 +852,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 
         BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
         if ( pIDEShell && pIDEShell->IsAppBasicModified() )
-            bForceStoreBasic = sal_True;
+            bForceStoreBasic = TRUE;
 
         aBasicBox.UpdateEntries();
     }
@@ -850,34 +863,34 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 
 void MacroChooser::UpdateFields()
 {
-    SvLBoxEntry*    pMacroEntry = aMacroBox.GetCurEntry();
-    String          aEmptyStr;
+    SvLBoxEntry*	pMacroEntry = aMacroBox.GetCurEntry();
+    String			aEmptyStr;
 
     aMacroNameEdit.SetText( aEmptyStr );
     if ( pMacroEntry )
         aMacroNameEdit.SetText( aMacroBox.GetEntryText( pMacroEntry ) );
 }
 
-void MacroChooser::SetMode( sal_uInt16 nM )
+void MacroChooser::SetMode( USHORT nM )
 {
     nMode = nM;
     if ( nMode == MACROCHOOSER_ALL )
     {
         aRunButton.SetText( String( IDEResId( RID_STR_RUN ) ) );
-        EnableButton( aNewDelButton, sal_True );
-        EnableButton( aOrganizeButton, sal_True );
+        EnableButton( aNewDelButton, TRUE );
+        EnableButton( aOrganizeButton, TRUE );
     }
     else if ( nMode == MACROCHOOSER_CHOOSEONLY )
     {
         aRunButton.SetText( String( IDEResId( RID_STR_CHOOSE ) ) );
-        EnableButton( aNewDelButton, sal_False );
-        EnableButton( aOrganizeButton, sal_False );
+        EnableButton( aNewDelButton, FALSE );
+        EnableButton( aOrganizeButton, FALSE );
     }
     else if ( nMode == MACROCHOOSER_RECORDING )
     {
         aRunButton.SetText( String( IDEResId( RID_STR_RECORD ) ) );
-        EnableButton( aNewDelButton, sal_False );
-        EnableButton( aOrganizeButton, sal_False );
+        EnableButton( aNewDelButton, FALSE );
+        EnableButton( aOrganizeButton, FALSE );
 
         aAssignButton.Hide();
         aEditButton.Hide();

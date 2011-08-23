@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@
 
 //==================================================================
 
-String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
+String __EXPORT ScTabViewShell::GetSelectionText( BOOL bWholeWord )
 {
     String aStrSelection;
 
@@ -75,7 +75,7 @@ String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
             if ( bInFormatDialog && aRange.aStart.Row() != aRange.aEnd.Row() )
             {
                 // Range auf eine Datenzeile begrenzen
-                // (nur wenn der Aufruf aus einem Format-Dialog kommt)
+                // (#48613# nur wenn der Aufruf aus einem Format-Dialog kommt)
                 ScHorizontalCellIterator aIter( pDoc, aRange.aStart.Tab(),
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(), aRange.aEnd.Row() );
@@ -92,15 +92,13 @@ String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
             }
             else
             {
-                // #i111531# with 1M rows it was necessary to limit the range
+                // #i111531# with 1M rows it was necessary to limit the range 
                 // to the actually used data area.
                 SCCOL nCol1, nCol2;
                 SCROW nRow1, nRow2;
                 SCTAB nTab1, nTab2;
                 aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-                bool bShrunk;
-                pDoc->ShrinkToUsedDataArea( bShrunk, nTab1, nCol1, nRow1, nCol2, nRow2, false);
-                if (bShrunk)
+                if (pDoc->ShrinkToUsedDataArea( nTab1, nCol1, nRow1, nCol2, nRow2, false))
                 {
                     aRange.aStart.SetCol( nCol1 );
                     aRange.aStart.SetRow( nRow1 );
@@ -117,10 +115,10 @@ String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
 
             aStrSelection.ConvertLineEnd( LINEEND_CR );
 
-            //  Tab/CR durch Space ersetzen, wenn fuer Dialog oder per Basic/SelectionTextExt,
-            //  oder wenn es eine einzelne Zeile ist.
-            //  Sonst mehrzeilig mit Tabs beibehalten (z.B. Mail oder Basic/SelectionText).
-            //  Fuer Mail werden die Tabs dann spaeter in (mehrere) Spaces gewandelt.
+            //	Tab/CR durch Space ersetzen, wenn fuer Dialog oder per Basic/SelectionTextExt,
+            //	oder wenn es eine einzelne Zeile ist.
+            //	Sonst mehrzeilig mit Tabs beibehalten (z.B. Mail oder Basic/SelectionText).
+            //	Fuer Mail werden die Tabs dann spaeter in (mehrere) Spaces gewandelt.
 
             if ( bInFormatDialog || bWholeWord || aRange.aEnd.Row() == aRange.aStart.Row() )
             {
@@ -141,29 +139,29 @@ String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
 //------------------------------------------------------------------------
 
 void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const String& rTarget,
-                                sal_uInt16 nMode )
+                                USHORT nMode )
 {
     SvxLinkInsertMode eMode = (SvxLinkInsertMode) nMode;
-    sal_Bool bAsText = ( eMode != HLINK_BUTTON );       // Default ist jetzt Text
+    BOOL bAsText = ( eMode != HLINK_BUTTON );		// Default ist jetzt Text
 
     if ( bAsText )
     {
         if ( GetViewData()->IsActive() )
         {
-            //  if the view is active, always use InsertURLField, which starts EditMode
-            //  and selects the URL, so it can be changed from the URL bar / dialog
+            //	if the view is active, always use InsertURLField, which starts EditMode
+            //	and selects the URL, so it can be changed from the URL bar / dialog
 
             InsertURLField( rName, rURL, rTarget );
         }
         else
         {
-            //  if the view is not active, InsertURLField doesn't work
-            //  -> use InsertBookmark to directly manipulate cell content
-            //  bTryReplace=sal_True -> if cell contains only one URL, replace it
+            //	#91216# if the view is not active, InsertURLField doesn't work
+            //	-> use InsertBookmark to directly manipulate cell content
+            //	bTryReplace=TRUE -> if cell contains only one URL, replace it
 
             SCCOL nPosX = GetViewData()->GetCurX();
             SCROW nPosY = GetViewData()->GetCurY();
-            InsertBookmark( rName, rURL, nPosX, nPosY, &rTarget, sal_True );
+            InsertBookmark( rName, rURL, nPosX, nPosY, &rTarget, TRUE );
         }
     }
     else
@@ -182,7 +180,7 @@ void lcl_SelectFieldAfterInsert( EditView& rView )
     ESelection aSel = rView.GetSelection();
     if ( aSel.nStartPos == aSel.nEndPos && aSel.nStartPos > 0 )
     {
-        //  Cursor is behind the inserted field -> extend selection to the left
+        //	Cursor is behind the inserted field -> extend selection to the left
 
         --aSel.nStartPos;
         rView.SetSelection( aSel );
@@ -195,11 +193,11 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
     aURLField.SetTargetFrame( rTarget );
     SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
 
-    ScViewData*     pViewData   = GetViewData();
-    ScModule*       pScMod      = SC_MOD();
-    ScInputHandler* pHdl        = pScMod->GetInputHdl( pViewData->GetViewShell() );
+    ScViewData*		pViewData	= GetViewData();
+    ScModule*		pScMod		= SC_MOD();
+    ScInputHandler*	pHdl		= pScMod->GetInputHdl( pViewData->GetViewShell() );
 
-    sal_Bool bSelectFirst = false;
+    BOOL bSelectFirst = FALSE;
     if ( !pScMod->IsEditMode() )
     {
         if ( !SelectionEditable() )
@@ -214,8 +212,8 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
         pScMod->SetInputMode( SC_INPUT_TABLE );
     }
 
-    EditView*       pTopView    = pHdl->GetTopView();
-    EditView*       pTableView  = pHdl->GetTableView();
+    EditView*		pTopView	= pHdl->GetTopView();
+    EditView*		pTableView	= pHdl->GetTableView();
     DBG_ASSERT( pTopView || pTableView, "No EditView" );
 
     if ( bSelectFirst )
@@ -244,22 +242,22 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
 
 void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 {
-    const SfxItemSet*   pReqArgs    = rReq.GetArgs();
-    sal_uInt16              nSlot       = rReq.GetSlot();
-    const SfxPoolItem*  pItem;
+    const SfxItemSet*	pReqArgs	= rReq.GetArgs();
+    USHORT				nSlot		= rReq.GetSlot();
+    const SfxPoolItem*	pItem;
 
     switch ( nSlot )
     {
         case FID_SEARCH_NOW:
             {
                 if ( pReqArgs &&
-                     SFX_ITEM_SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem) )
+                     SFX_ITEM_SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, FALSE, &pItem) )
                 {
                     DBG_ASSERT( pItem->ISA(SvxSearchItem), "falsches Item" );
                     const SvxSearchItem* pSearchItem = (const SvxSearchItem*) pItem;
 
                     ScGlobal::SetSearchItem( *pSearchItem );
-                    SearchAndReplace( pSearchItem, sal_True, rReq.IsAPI() );
+                    SearchAndReplace( pSearchItem, TRUE, rReq.IsAPI() );
                     rReq.Done();
                 }
             }
@@ -267,15 +265,15 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
         case SID_SEARCH_ITEM:
             if (pReqArgs && SFX_ITEM_SET ==
-                            pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem))
+                            pReqArgs->GetItemState(SID_SEARCH_ITEM, FALSE, &pItem))
             {
-                //  Search-Item merken
+                //	Search-Item merken
                 DBG_ASSERT( pItem->ISA(SvxSearchItem), "falsches Item" );
                 ScGlobal::SetSearchItem( *(const SvxSearchItem*) pItem );
             }
             else
             {
-                OSL_FAIL("SID_SEARCH_ITEM ohne Parameter");
+                DBG_ERROR("SID_SEARCH_ITEM ohne Parameter");
             }
             break;
         case FID_SEARCH:
@@ -283,16 +281,16 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
         case FID_REPLACE_ALL:
         case FID_SEARCH_ALL:
             {
-                if (pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState(nSlot, false, &pItem))
+                if (pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState(nSlot, FALSE, &pItem))
                 {
-                    //  SearchItem holen
+                    //	SearchItem holen
 
                     SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
 
-                    //  SearchItem fuellen
+                    //	SearchItem fuellen
 
                     aSearchItem.SetSearchString(((SfxStringItem*)pItem)->GetValue());
-                    if(SFX_ITEM_SET == pReqArgs->GetItemState(FN_PARAM_1, false, &pItem))
+                    if(SFX_ITEM_SET == pReqArgs->GetItemState(FN_PARAM_1, FALSE, &pItem))
                         aSearchItem.SetReplaceString(((SfxStringItem*)pItem)->GetValue());
 
                     if (nSlot == FID_SEARCH)
@@ -304,7 +302,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     else
                         aSearchItem.SetCommand(SVX_SEARCHCMD_FIND_ALL);
 
-                    //  Request ausfuehren (dabei wird das SearchItem gespeichert)
+                    //	Request ausfuehren (dabei wird das SearchItem gespeichert)
 
                     aSearchItem.SetWhich(SID_SEARCH_ITEM);
                     GetViewData()->GetDispatcher().Execute( FID_SEARCH_NOW,
@@ -321,7 +319,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
             break;
         case FID_REPEAT_SEARCH:
             {
-                //  nochmal mit ScGlobal::GetSearchItem()
+                //	nochmal mit ScGlobal::GetSearchItem()
 
                 SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
                 aSearchItem.SetWhich(SID_SEARCH_ITEM);
@@ -331,7 +329,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                         &aSearchItem, 0L );
             }
             break;
-//      case FID_SEARCH_COUNT:
+//		case FID_SEARCH_COUNT:
     }
 }
 

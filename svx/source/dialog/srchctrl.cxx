@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,19 +36,19 @@
 
 #include <svx/svxids.hrc>
 
-#define _SVX_SRCHDLG_CXX // so that private methods from SrchDlgare known
+#define _SVX_SRCHDLG_CXX // damit private-Methoden vom SrchDlg bekannt sind
 
 
 
 #include "srchctrl.hxx"
-#include "svx/srchdlg.hxx"
+#include "srchdlg.hxx"
 #include <svl/srchitem.hxx>
 
 // class SvxSearchFamilyControllerItem -----------------------------------
 
 SvxSearchController::SvxSearchController
 (
-    sal_uInt16 _nId,
+    USHORT _nId,
     SfxBindings& rBind,
     SvxSearchDialog& rDlg
 ) :
@@ -60,7 +60,7 @@ SvxSearchController::SvxSearchController
 
 // -----------------------------------------------------------------------
 
-void SvxSearchController::StateChanged( sal_uInt16 nSID, SfxItemState eState,
+void SvxSearchController::StateChanged( USHORT nSID, SfxItemState eState,
                                         const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE == eState )
@@ -75,7 +75,7 @@ void SvxSearchController::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         else if ( SID_SEARCH_OPTIONS == nSID )
         {
             DBG_ASSERT( pState->ISA(SfxUInt16Item), "wrong item type" );
-            sal_uInt16 nFlags = (sal_uInt16)( (SfxUInt16Item*)pState )->GetValue();
+            USHORT nFlags = (USHORT)( (SfxUInt16Item*)pState )->GetValue();
             rSrchDlg.EnableControls_Impl( nFlags );
         }
         else if ( SID_SEARCH_ITEM == nSID )

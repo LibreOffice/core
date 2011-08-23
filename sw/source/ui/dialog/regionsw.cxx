@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 #include <view.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>                   // for Undo-Ids
+#include <swundo.hxx>               	// fuer Undo-Ids
 #include <column.hxx>
 #include <fmtfsize.hxx>
 #include <swunodef.hxx>
@@ -91,7 +91,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         long nWidth = aRect.Width();
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
 
-        // height=width for more consistent preview (analog to edit region)
+        // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -107,7 +107,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         const SfxPoolItem *pItem = 0;
         String aTmpStr;
         if ( SFX_ITEM_SET ==
-                pSet->GetItemState(FN_PARAM_REGION_NAME, sal_True, &pItem) )
+                pSet->GetItemState(FN_PARAM_REGION_NAME, TRUE, &pItem) )
             aTmpStr = rSh.GetUniqueSectionName(
                     &((const SfxStringItem *)pItem)->GetValue() );
         else
@@ -117,36 +117,36 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         rReq.SetReturnValue(SfxStringItem(FN_INSERT_REGION, aTmpStr));
 
         aSet.Put( *pSet );
-        if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_COLUMNS, sal_False, &pItem)||
-            SFX_ITEM_SET == pSet->GetItemState(FN_INSERT_REGION, sal_False, &pItem))
+        if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_COLUMNS, FALSE, &pItem)||
+            SFX_ITEM_SET == pSet->GetItemState(FN_INSERT_REGION, FALSE, &pItem))
         {
             SwFmtCol aCol;
             SwRect aRect;
             rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
             long nWidth = aRect.Width();
 
-            sal_uInt16 nCol = ((SfxUInt16Item *)pItem)->GetValue();
+            USHORT nCol = ((SfxUInt16Item *)pItem)->GetValue();
             if(nCol)
             {
-                aCol.Init( nCol, 0, static_cast< sal_uInt16 >(nWidth) );
+                aCol.Init( nCol, 0, static_cast< USHORT >(nWidth) );
                 aSet.Put(aCol);
             }
         }
-        else if(SFX_ITEM_SET == pSet->GetItemState(RES_COL, sal_False, &pItem))
+        else if(SFX_ITEM_SET == pSet->GetItemState(RES_COL, FALSE, &pItem))
         {
             aSet.Put(*pItem);
         }
 
-        const sal_Bool bHidden = SFX_ITEM_SET ==
-            pSet->GetItemState(FN_PARAM_REGION_HIDDEN, sal_True, &pItem)?
-            (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
-        const sal_Bool bProtect = SFX_ITEM_SET ==
-            pSet->GetItemState(FN_PARAM_REGION_PROTECT, sal_True, &pItem)?
-            (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
+        const BOOL bHidden = SFX_ITEM_SET ==
+            pSet->GetItemState(FN_PARAM_REGION_HIDDEN, TRUE, &pItem)?
+            (BOOL)((const SfxBoolItem *)pItem)->GetValue():FALSE;
+        const BOOL bProtect = SFX_ITEM_SET ==
+            pSet->GetItemState(FN_PARAM_REGION_PROTECT, TRUE, &pItem)?
+            (BOOL)((const SfxBoolItem *)pItem)->GetValue():FALSE;
         // #114856# edit in readonly sections
-        const sal_Bool bEditInReadonly = SFX_ITEM_SET ==
-            pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, sal_True, &pItem)?
-            (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
+        const BOOL bEditInReadonly = SFX_ITEM_SET ==
+            pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, TRUE, &pItem)?
+            (BOOL)((const SfxBoolItem *)pItem)->GetValue():FALSE;
 
         aSection.SetProtectFlag(bProtect);
         aSection.SetHidden(bHidden);
@@ -154,16 +154,16 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         aSection.SetEditInReadonlyFlag(bEditInReadonly);
 
         if(SFX_ITEM_SET ==
-                pSet->GetItemState(FN_PARAM_REGION_CONDITION, sal_True, &pItem))
+                pSet->GetItemState(FN_PARAM_REGION_CONDITION, TRUE, &pItem))
             aSection.SetCondition(((const SfxStringItem *)pItem)->GetValue());
 
         String aFile, aSub;
         if(SFX_ITEM_SET ==
-                pSet->GetItemState(FN_PARAM_1, sal_True, &pItem))
+                pSet->GetItemState(FN_PARAM_1, TRUE, &pItem))
             aFile = ((const SfxStringItem *)pItem)->GetValue();
 
         if(SFX_ITEM_SET ==
-                pSet->GetItemState(FN_PARAM_3, sal_True, &pItem))
+                pSet->GetItemState(FN_PARAM_3, TRUE, &pItem))
             aSub = ((const SfxStringItem *)pItem)->GetValue();
 
 
@@ -174,7 +174,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             sLinkFileName.SetToken(0, sfx2::cTokenSeperator,aFile);
 
             if(SFX_ITEM_SET ==
-                    pSet->GetItemState(FN_PARAM_2, sal_True, &pItem))
+                    pSet->GetItemState(FN_PARAM_2, TRUE, &pItem))
                 sLinkFileName.SetToken(1, sfx2::cTokenSeperator,
                     ((const SfxStringItem *)pItem)->GetValue());
 
@@ -202,7 +202,7 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
         pThis->CalcBoundRect(aRect, FLY_AS_CHAR);
         long nWidth = aRect.Width();
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
-        // height=width for more consistent preview (analog to edit region)
+        // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -220,10 +220,10 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
 void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     const SfxPoolItem* pItem = 0;
     if(pArgs)
-        pArgs->GetItemState(nSlot, sal_False, &pItem);
+        pArgs->GetItemState(nSlot, FALSE, &pItem);
     SwWrtShell& rWrtShell = GetShell();
 
     switch ( nSlot )
@@ -231,7 +231,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
         case FN_EDIT_REGION:
         {
             Window* pParentWin = &GetView().GetViewFrame()->GetWindow();
-            sal_Bool bStart = sal_True;
+            BOOL bStart = TRUE;
             if(bStart)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

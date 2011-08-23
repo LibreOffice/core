@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,18 +41,18 @@
 #include <malloc.h>
 #include <strsafe.h>
 
-// MinGW doesn't know anything about RegDeleteKeyExW if WINVER < 0x0502.
+// 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyExW if WINVER < 0x0502.
 extern "C" {
-WINADVAPI LONG WINAPI RegDeleteKeyExW(HKEY,LPCWSTR,REGSAM,DWORD);
+WINADVAPI LONG WINAPI RegDeleteKeyExW(HKEY,LPCWSTR,REGSAM,DWORD); 
 }
 
-// to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
-// in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
+// 06.11.2009 tkr: to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
+// in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems. 
 // Also defined in setup_native\source\win32\customactions\reg64\reg64.cxx,source\win32\customactions\shellextensions\shellextensions.cxx and
 // extensions\source\activex\main\so_activex.cpp
 
 #ifndef KEY_WOW64_64KEY
-    #define KEY_WOW64_64KEY (0x0100)
+    #define KEY_WOW64_64KEY	(0x0100)
 #endif
 
 
@@ -87,7 +87,7 @@ static inline void OutputDebugStringFormat( const wchar_t*, ... )
 bool WriteRegistry( MSIHANDLE & hMSI, OPERATION op, const wchar_t* componentName)
 {
     INSTALLSTATE current_state;
-    INSTALLSTATE comp_state;
+    INSTALLSTATE comp_state; 
     UINT ret = MsiGetComponentState( hMSI, componentName, &current_state, &comp_state );
     if ( ERROR_SUCCESS == ret )
     {
@@ -153,7 +153,7 @@ BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
         pStr1++, pStr2++;
 
     return ( *pStr1 == 0 && *pStr2 == 0 );
-}
+} 
 
 BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 {
@@ -174,11 +174,11 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 
         return TRUE;
     } else if (ret  == ERROR_INVALID_HANDLE)
-    {
+    {	
         OutputDebugStringFormat(L"GetMsiProp - ERROR_INVALID_HANDLE" );
     } else if (ret == ERROR_INVALID_PARAMETER)
     {
-        OutputDebugStringFormat(L"GetMsiProp - ERROR_INVALID_PARAMETER" );
+        OutputDebugStringFormat(L"GetMsiProp - ERROR_INVALID_PARAMETER" );		
     } else if (ret == ERROR_SUCCESS)
     {
         OutputDebugStringFormat(L"GetMsiProp - ERROR_SUCCESS" );
@@ -187,7 +187,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 
     OutputDebugStringFormat(L"GetMsiProp - ENDE\n" );
     return FALSE;
-}
+} 
 
 bool IsInstallForAllUsers( MSIHANDLE hMSI )
 {
@@ -207,6 +207,7 @@ bool IsInstallForAllUsers( MSIHANDLE hMSI )
 wchar_t* GetBasisInstallLocation( MSIHANDLE hMSI )
 {
     OutputDebugStringFormat(L"GetBasisInstallLocation - START\n" );
+    bool bResult = FALSE;
     wchar_t* pVal = NULL;
     GetMsiProp( hMSI, L"INSTALLLOCATION", &pVal);
 
@@ -214,9 +215,9 @@ wchar_t* GetBasisInstallLocation( MSIHANDLE hMSI )
 
     return pVal;
 }
+ 
 
-
-bool QueryReg64Table(MSIHANDLE& rhDatabase, MSIHANDLE& rhView)
+bool QueryReg64Table(MSIHANDLE& rhDatabase, MSIHANDLE& rhView) 
 {
     OutputDebugStringFormat(L"QueryReg64Table - START\n" );
     int const arraysize = 400;
@@ -253,6 +254,13 @@ bool DeleteRegistryKey(HKEY RootKey, const wchar_t* KeyName)
     return (ERROR_SUCCESS == rc);
 }
 
+
+
+
+//---------------------------------------
+//
+//---------------------------------------
+
 bool SetRegistryKey(HKEY RootKey, const wchar_t* KeyName, const wchar_t* ValueName, const wchar_t* Value)
 {
     HKEY hSubKey;
@@ -279,9 +287,9 @@ bool SetRegistryKey(HKEY RootKey, const wchar_t* KeyName, const wchar_t* ValueNa
 bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
 {
     OutputDebugStringFormat(L"DoRegEntries - START\n" );
-
+    
     MSIHANDLE hRecord;
-
+    
     long lRoot;
     wchar_t  szKey[255];
     wchar_t  szName[255];
@@ -291,28 +299,28 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
     /// read records until there are no more records
     while (MsiViewFetch(rhView,&hRecord) == ERROR_SUCCESS)
     {
-        DWORD    dwKey = 255;
-        DWORD    dwName = 255;
-        DWORD    dwValue = 1024;
-        DWORD    dwComponent = 255;
-
+        DWORD	 dwKey = 255;
+        DWORD	 dwName = 255;
+        DWORD	 dwValue = 1024;
+        DWORD	 dwComponent = 255;
+        
         szKey[0] = '\0';
         szName[0] = '\0';
         szValue[0] = '\0';
         szComponent[0] = '\0';
-
+        
         lRoot = MsiRecordGetInteger(hRecord,2);
         MsiRecordGetString(hRecord,3,szKey,&dwKey);
-
-        if (!MsiRecordIsNull(hRecord, 4))
+        
+        if (!MsiRecordIsNull(hRecord, 4)) 
             MsiRecordGetString(hRecord,4,szName,&dwName);
-
+        
         if (!MsiRecordIsNull(hRecord, 5))
         {
-            MsiRecordGetString(hRecord,5,szValue,&dwValue);
-
-
-
+            MsiRecordGetString(hRecord,5,szValue,&dwValue);			
+                
+            
+    
             wchar_t* nPos = wcsstr(szValue , INSTALLLOCATION);
             if ( NULL != nPos)
             {
@@ -328,21 +336,21 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
 
                 // prefix
                 wcsncpy(newValue, szValue, nPrefixSize);
-
+                
                 // basis location
                 wcsncat(newValue, sBasisInstallLocation, nPropSize * sizeof( wchar_t ));
 
                 // postfix
                 wcsncat(newValue, nPos + ( wcslen( INSTALLLOCATION ) ), nPropSize * sizeof( wchar_t ));
-
+                
                 wcsncpy(szValue, newValue, nNewValueBytes <=1024? nNewValueBytes: 1024);
 
                 free(newValue);
             }
-
+            
         }
-
-
+        
+    
         MsiRecordGetString(hRecord,6,szComponent,&dwComponent);
 
         OutputDebugStringFormat(L"****** DoRegEntries *******" );
@@ -382,7 +390,7 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
                     OutputDebugStringFormat(L"Unknown Root!" );
                 break;
         }
-
+        
         OutputDebugStringFormat(L"Key:");
         OutputDebugStringFormat( szKey );
         OutputDebugStringFormat(L"Name:");
@@ -395,14 +403,14 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
         switch (op)
         {
             case SET:
-
+                    
                     if (WriteRegistry(rhMSI, SET, szComponent))
                     {
                         OutputDebugStringFormat(L"DoRegEntries - Write\n" );
                         SetRegistryKey(key, szKey, szName, szValue);
                     }
                 break;
-            case REMOVE:
+            case REMOVE: 
                     OutputDebugStringFormat(L"DoRegEntries - PreRemove\n" );
                     if (WriteRegistry(rhMSI, REMOVE, szComponent))
                     {
@@ -414,10 +422,10 @@ bool DoRegEntries( MSIHANDLE& rhMSI, OPERATION op, MSIHANDLE& rhView)
     }
 
     MsiCloseHandle(rhView);
-
-
+    
+    
     OutputDebugStringFormat(L"DoRegEntries - ENDE\n" );
-
+    
     return true;
 }
 
@@ -432,7 +440,7 @@ bool Reg64(MSIHANDLE& rhMSI, OPERATION op)
         OutputDebugStringFormat(L"BASISINSTALLLOCATION is NULL\n" );
         return false;
     }
-
+    
     MSIHANDLE hView;
     MSIHANDLE hDatabase = MsiGetActiveDatabase(rhMSI);
 
@@ -452,7 +460,7 @@ extern "C" UINT __stdcall InstallReg64(MSIHANDLE hMSI)
 {
     OutputDebugStringFormat(L"InstallReg64\n" );
     Reg64(hMSI, SET);
-    return ERROR_SUCCESS;
+    return ERROR_SUCCESS;    
 }
 
 extern "C" UINT __stdcall DeinstallReg64(MSIHANDLE hMSI)

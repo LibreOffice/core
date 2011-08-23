@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,23 +57,23 @@ ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, con
         case XML_ROOT_CONTEXT:
             switch( nElement )
             {
-                case A_TOKEN( theme ):
+                case NMSP_DRAWINGML|XML_theme:
                     return this;
             }
         break;
 
-        case A_TOKEN( theme ):
+        case NMSP_DRAWINGML|XML_theme:
             switch( nElement )
             {
-                case A_TOKEN( themeElements ):              // CT_BaseStyles
+                case NMSP_DRAWINGML|XML_themeElements:              // CT_BaseStyles
                     return new ThemeElementsContext( *this, mrTheme );
-                case A_TOKEN( objectDefaults ):             // CT_ObjectStyleDefaults
+                case NMSP_DRAWINGML|XML_objectDefaults:             // CT_ObjectStyleDefaults
                     return new objectDefaultContext( *this, mrTheme );
-                case A_TOKEN( extraClrSchemeLst ):          // CT_ColorSchemeList
+                case NMSP_DRAWINGML|XML_extraClrSchemeLst:          // CT_ColorSchemeList
                     return 0;
-                case A_TOKEN( custClrLst ):                 // CustomColorList
+                case NMSP_DRAWINGML|XML_custClrLst:                 // CustomColorList
                     return 0;
-                case A_TOKEN( ext ):                        // CT_OfficeArtExtension
+                case NMSP_DRAWINGML|XML_ext:                        // CT_OfficeArtExtension
                     return 0;
             }
         break;

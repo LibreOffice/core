@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,15 +41,15 @@ namespace connectivity
     namespace macab
     {
         /*
-        **  MacabResultSetMetaData
+        **	MacabResultSetMetaData
         */
         typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>   MacabResultSetMetaData_BASE;
 
         class MacabResultSetMetaData : public MacabResultSetMetaData_BASE
         {
-            MacabConnection*                m_pConnection;
-            ::rtl::OUString                 m_sTableName;
-            ::std::vector<sal_Int32>    m_aMacabFields; // for each selected column, contains the number
+            MacabConnection*				m_pConnection;
+            ::rtl::OUString					m_sTableName;
+            ::std::vector<sal_Int32>	m_aMacabFields;	// for each selected column, contains the number
                                                         //  of the corresponding AddressBook field
 
         protected:

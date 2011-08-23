@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <string>
+#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
 #include <vcl/toolbox.hxx>
 #include <sfx2/app.hxx>
@@ -41,10 +41,10 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
-#include "svx/drawitem.hxx"
-#include "svx/xattr.hxx"
+#include "drawitem.hxx"
+#include "xattr.hxx"
 #include <svx/xtable.hxx>
-#include "svx/linectrl.hxx"
+#include "linectrl.hxx"
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 
@@ -59,20 +59,20 @@ using namespace ::com::sun::star::lang;
 
 // STATIC DATA -----------------------------------------------------------
 
-#define RESIZE_VALUE_POPUP(value_set)   \
-{                                                       \
-    Size aSize = GetOutputSizePixel();                  \
-    aSize.Width()  -= 4;                                \
-    aSize.Height() -= 4;                                \
-    (value_set).SetPosSizePixel( Point(2,2), aSize );   \
+#define RESIZE_VALUE_POPUP(value_set)	\
+{														\
+    Size aSize = GetOutputSizePixel();					\
+    aSize.Width()  -= 4;								\
+    aSize.Height() -= 4;								\
+    (value_set).SetPosSizePixel( Point(2,2), aSize );	\
 }
 
 #define CALCSIZE_VALUE_POPUP(value_set,item_size) \
-{                                                                   \
-    Size aSize = (value_set).CalcWindowSizePixel( (item_size) );    \
-    aSize.Width()  += 4;                                            \
-    aSize.Height() += 4;                                            \
-    SetOutputSizePixel( aSize );                                    \
+{																	\
+    Size aSize = (value_set).CalcWindowSizePixel( (item_size) );	\
+    aSize.Width()  += 4;											\
+    aSize.Height() += 4;											\
+    SetOutputSizePixel( aSize );									\
 }
 
 
@@ -87,13 +87,13 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxLineEndToolBoxControl,   SfxBoolItem );
 |*
 \************************************************************************/
 
-SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
-                                                        sal_uInt16 nId,
+SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( USHORT nSlotId,
+                                                        USHORT nId,
                                                         ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pStyleItem      ( NULL ),
-    pDashItem       ( NULL ),
-    bUpdate         ( sal_False )
+    pStyleItem		( NULL ),
+    pDashItem		( NULL ),
+    bUpdate			( FALSE )
 {
     addStatusListener( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )));
     addStatusListener( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DashListState" )));
@@ -111,7 +111,7 @@ SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl()
 
 void SvxLineStyleToolBoxControl::StateChanged (
 
-    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
@@ -139,7 +139,7 @@ void SvxLineStyleToolBoxControl::StateChanged (
                 pDashItem = (XLineDashItem*)pState->Clone();
             }
 
-            bUpdate = sal_True;
+            bUpdate = TRUE;
             Update( pState );
         }
         else if ( nSID != SID_DASH_LIST )
@@ -156,7 +156,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
 {
     if ( pState && bUpdate )
     {
-        bUpdate = sal_False;
+        bUpdate = FALSE;
 
         SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
         DBG_ASSERT( pBox, "Window not found!" );
@@ -197,7 +197,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
             break;
 
             default:
-                OSL_FAIL( "Nicht unterstuetzter Linientyp" );
+                DBG_ERROR( "Nicht unterstuetzter Linientyp" );
                 break;
         }
     }
@@ -231,7 +231,7 @@ Window* SvxLineStyleToolBoxControl::CreateItemWindow( Window *pParent )
 \************************************************************************/
 
 SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
-    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+    USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:MetricUnit" )));
@@ -246,7 +246,7 @@ SvxLineWidthToolBoxControl::~SvxLineWidthToolBoxControl()
 //========================================================================
 
 void SvxLineWidthToolBoxControl::StateChanged(
-    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     SvxMetricField* pFld = (SvxMetricField*)
                            GetToolBox().GetItemWindow( GetId() );
@@ -298,7 +298,7 @@ Window* SvxLineWidthToolBoxControl::CreateItemWindow( Window *pParent )
 \************************************************************************/
 
 SvxLineColorToolBoxControl::SvxLineColorToolBoxControl(
-    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+    USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ColorTableState" )));
@@ -314,7 +314,7 @@ SvxLineColorToolBoxControl::~SvxLineColorToolBoxControl()
 
 void SvxLineColorToolBoxControl::StateChanged(
 
-    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     SvxColorBox* pBox = (SvxColorBox*)GetToolBox().GetItemWindow( GetId() );
@@ -376,19 +376,19 @@ Window* SvxLineColorToolBoxControl::CreateItemWindow( Window *pParent )
 \************************************************************************/
 
 SvxLineEndWindow::SvxLineEndWindow(
-    sal_uInt16 nSlotId,
+    USHORT nSlotId,
     const Reference< XFrame >& rFrame,
     const String& rWndTitle ) :
     SfxPopupWindow( nSlotId,
                     rFrame,
                     WinBits( WB_STDPOPUP ) ),
-    pLineEndList    ( NULL ),
-    aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
-    nCols           ( 2 ),
-    nLines          ( 12 ),
-    nLineEndWidth   ( 400 ),
-    bPopupMode      ( sal_True ),
-    mbInResize      ( false ),
+    pLineEndList	( NULL ),
+    aLineEndSet		( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
+    nCols			( 2 ),
+    nLines			( 12 ),
+    nLineEndWidth	( 400 ),
+    bPopupMode		( TRUE ),
+    mbInResize		( false ),
     mxFrame         ( rFrame )
 {
     SetText( rWndTitle );
@@ -396,7 +396,7 @@ SvxLineEndWindow::SvxLineEndWindow(
 }
 
 SvxLineEndWindow::SvxLineEndWindow(
-    sal_uInt16 nSlotId,
+    USHORT nSlotId,
     const Reference< XFrame >& rFrame,
     Window* pParentWindow,
     const String& rWndTitle ) :
@@ -404,13 +404,13 @@ SvxLineEndWindow::SvxLineEndWindow(
                     rFrame,
                     pParentWindow,
                     WinBits( WB_STDPOPUP ) ),
-    pLineEndList    ( NULL ),
-    aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
-    nCols           ( 2 ),
-    nLines          ( 12 ),
-    nLineEndWidth   ( 400 ),
-    bPopupMode      ( sal_True ),
-    mbInResize      ( false ),
+    pLineEndList	( NULL ),
+    aLineEndSet		( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
+    nCols			( 2 ),
+    nLines			( 12 ),
+    nLineEndWidth	( 400 ),
+    bPopupMode		( TRUE ),
+    mbInResize		( false ),
     mxFrame         ( rFrame )
 {
     SetText( rWndTitle );
@@ -419,8 +419,8 @@ SvxLineEndWindow::SvxLineEndWindow(
 
 void SvxLineEndWindow::implInit()
 {
-    SfxObjectShell*     pDocSh  = SfxObjectShell::Current();
-    const SfxPoolItem*  pItem   = NULL;
+    SfxObjectShell*		pDocSh	= SfxObjectShell::Current();
+    const SfxPoolItem*	pItem 	= NULL;
 
     SetHelpId( HID_POPUP_LINEEND );
     aLineEndSet.SetHelpId( HID_POPUP_LINEEND_CTRL );
@@ -464,27 +464,27 @@ SvxLineEndWindow::~SvxLineEndWindow()
 
 IMPL_LINK( SvxLineEndWindow, SelectHdl, void *, EMPTYARG )
 {
-    XLineEndItem*           pLineEndItem = NULL;
-    XLineStartItem*         pLineStartItem = NULL;
-    sal_uInt16                  nId = aLineEndSet.GetSelectItemId();
+    XLineEndItem*   		pLineEndItem = NULL;
+    XLineStartItem* 		pLineStartItem = NULL;
+    USHORT 					nId = aLineEndSet.GetSelectItemId();
 
     if( nId == 1 )
     {
-        pLineStartItem  = new XLineStartItem();
+        pLineStartItem	= new XLineStartItem();
     }
     else if( nId == 2 )
     {
-        pLineEndItem    = new XLineEndItem();
+        pLineEndItem	= new XLineEndItem();
     }
     else if( nId % 2 ) // LinienAnfang
     {
         XLineEndEntry* pEntry = pLineEndList->GetLineEnd( ( nId - 1 ) / 2 - 1 );
-        pLineStartItem  = new XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() );
+        pLineStartItem	= new XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() );
     }
     else // LinienEnde
     {
         XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nId / 2 - 2 );
-        pLineEndItem    = new XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() );
+        pLineEndItem	= new XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() );
     }
 
     if ( IsInPopupMode() )
@@ -527,9 +527,9 @@ void SvxLineEndWindow::FillValueSet()
 {
     if( pLineEndList )
     {
-        XLineEndEntry*      pEntry  = NULL;
-        Bitmap*             pBmp    = NULL;
-        VirtualDevice       aVD;
+        XLineEndEntry*		pEntry	= NULL;
+        Bitmap*				pBmp	= NULL;
+        VirtualDevice		aVD;
 
         long nCount = pLineEndList->Count();
 
@@ -542,7 +542,7 @@ void SvxLineEndWindow::FillValueSet()
         DBG_ASSERT( pBmp, "UI-Bitmap wurde nicht erzeugt" );
 
         aBmpSize = pBmp->GetSizePixel();
-        aVD.SetOutputSizePixel( aBmpSize, sal_False );
+        aVD.SetOutputSizePixel( aBmpSize, FALSE );
         aBmpSize.Width() = aBmpSize.Width() / 2;
         Point aPt0( 0, 0 );
         Point aPt1( aBmpSize.Width(), 0 );
@@ -561,10 +561,10 @@ void SvxLineEndWindow::FillValueSet()
             DBG_ASSERT( pBmp, "UI-Bitmap wurde nicht erzeugt" );
 
             aVD.DrawBitmap( aPt0, *pBmp );
-            aLineEndSet.InsertItem( (sal_uInt16)((i+1L)*2L+1L), aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
-            aLineEndSet.InsertItem( (sal_uInt16)((i+2L)*2L),    aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
+            aLineEndSet.InsertItem( (USHORT)((i+1L)*2L+1L), aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
+            aLineEndSet.InsertItem( (USHORT)((i+2L)*2L), 	aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
         }
-        nLines = Min( (sal_uInt16)(nCount + 1), (sal_uInt16) MAX_LINES );
+        nLines = Min( (USHORT)(nCount + 1), (USHORT) MAX_LINES );
         aLineEndSet.SetLineCount( nLines );
 
         SetSize();
@@ -599,7 +599,7 @@ void SvxLineEndWindow::Resize()
 
 // -----------------------------------------------------------------------
 
-void SvxLineEndWindow::Resizing( Size& rNewSize )
+void __EXPORT SvxLineEndWindow::Resizing( Size& rNewSize )
 {
     Size aBitmapSize = aBmpSize; // -> Member
     aBitmapSize.Width()  += 6; //
@@ -608,21 +608,21 @@ void SvxLineEndWindow::Resizing( Size& rNewSize )
     Size aItemSize = aLineEndSet.CalcItemSizePixel( aBitmapSize );  // -> Member
     //Size aOldSize = GetOutputSizePixel(); // fuer Breite
 
-    sal_uInt16 nItemCount = aLineEndSet.GetItemCount(); // -> Member
+    USHORT nItemCount = aLineEndSet.GetItemCount(); // -> Member
 
     // Spalten ermitteln
     long nItemW = aItemSize.Width();
     long nW = rNewSize.Width();
-    nCols = (sal_uInt16) Max( ( (sal_uIntPtr)(( nW + nItemW ) / ( nItemW * 2 ) )),
-                                            (sal_uIntPtr) 1L );
+    nCols = (USHORT) Max( ( (ULONG)(( nW + nItemW ) / ( nItemW * 2 ) )),
+                                            (ULONG) 1L );
     nCols *= 2;
 
     // Reihen ermitteln
     long nItemH = aItemSize.Height();
     long nH = rNewSize.Height();
-    nLines = (sal_uInt16) Max( ( ( nH + nItemH / 2 ) / nItemH ), 1L );
+    nLines = (USHORT) Max( ( ( nH + nItemH / 2 ) / nItemH ), 1L );
 
-    sal_uInt16 nMaxCols  = nItemCount / nLines;
+    USHORT nMaxCols  = nItemCount / nLines;
     if( nItemCount % nLines )
         nMaxCols++;
     if( nCols > nMaxCols )
@@ -632,9 +632,9 @@ void SvxLineEndWindow::Resizing( Size& rNewSize )
     // Keine ungerade Anzahl von Spalten
     if( nCols % 2 )
         nCols--;
-    nCols = Max( nCols, (sal_uInt16) 2 );
+    nCols = Max( nCols, (USHORT) 2 );
 
-    sal_uInt16 nMaxLines  = nItemCount / nCols;
+    USHORT nMaxLines  = nItemCount / nCols;
     if( nItemCount % nCols )
         nMaxLines++;
     if( nLines > nMaxLines )
@@ -653,7 +653,7 @@ void SvxLineEndWindow::StartSelection()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxLineEndWindow::Close()
+BOOL SvxLineEndWindow::Close()
 {
     return SfxPopupWindow::Close();
 }
@@ -661,7 +661,7 @@ sal_Bool SvxLineEndWindow::Close()
 // -----------------------------------------------------------------------
 
 void SvxLineEndWindow::StateChanged(
-    sal_uInt16 nSID, SfxItemState, const SfxPoolItem* pState )
+    USHORT nSID, SfxItemState, const SfxPoolItem* pState )
 {
     if ( nSID == SID_LINEEND_LIST )
     {
@@ -687,7 +687,7 @@ void SvxLineEndWindow::PopupModeEnd()
 {
     if ( IsVisible() )
     {
-        bPopupMode = sal_False;
+        bPopupMode = FALSE;
         SetSize();
     }
     SfxPopupWindow::PopupModeEnd();
@@ -700,8 +700,8 @@ void SvxLineEndWindow::SetSize()
     //if( !bPopupMode )
     if( !IsInPopupMode() )
     {
-        sal_uInt16 nItemCount = aLineEndSet.GetItemCount(); // -> Member
-        sal_uInt16 nMaxLines  = nItemCount / nCols; // -> Member ?
+        USHORT nItemCount = aLineEndSet.GetItemCount(); // -> Member
+        USHORT nMaxLines  = nItemCount / nCols; // -> Member ?
         if( nItemCount % nCols )
             nMaxLines++;
 
@@ -739,7 +739,7 @@ void SvxLineEndWindow::GetFocus (void)
 |*
 \************************************************************************/
 
-SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) :
+SvxLineEndToolBoxControl::SvxLineEndToolBoxControl(	USHORT nSlotId, USHORT nId, ToolBox &rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
@@ -761,11 +761,11 @@ SfxPopupWindowType SvxLineEndToolBoxControl::GetPopupWindowType() const
 
 // -----------------------------------------------------------------------
 
-SfxPopupWindow* SvxLineEndToolBoxControl::CreatePopupWindow()
+SfxPopupWindow*	SvxLineEndToolBoxControl::CreatePopupWindow()
 {
     SvxLineEndWindow* pLineEndWin =
         new SvxLineEndWindow( GetId(), m_xFrame, &GetToolBox(), SVX_RESSTR( RID_SVXSTR_LINEEND ) );
-    pLineEndWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS | FLOATWIN_POPUPMODE_ALLOWTEAROFF );
+    pLineEndWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS );
     pLineEndWin->StartSelection();
     SetPopupWindow( pLineEndWin );
     return pLineEndWin;
@@ -773,9 +773,9 @@ SfxPopupWindow* SvxLineEndToolBoxControl::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void SvxLineEndToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* )
+void SvxLineEndToolBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
 {
-    sal_uInt16 nId = GetId();
+    USHORT nId = GetId();
     ToolBox& rTbx = GetToolBox();
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );

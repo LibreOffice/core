@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,11 @@
 #ifndef _TABCOL_HXX
 #define _TABCOL_HXX
 
-#include <tools/solar.h>
+#ifndef _SVSTDARR_HXX
+#define _SVSTDARR_LONGS
+#define _SVSTDARR_BOOLS
+#include <svl/svstdarr.hxx>
+#endif
 
 #ifndef INCLUDED_VECTOR
 #include <vector>
@@ -41,8 +45,8 @@ struct SwTabColsEntry
     long    nPos;
     long    nMin;
     long    nMax;
-    sal_Bool    bHidden;    //Fuer jeden Eintrag ein Flag, Hidden oder nicht.
-                        //Wenn das Flag Hidden sal_True ist liegt der Spalten-
+    BOOL    bHidden;    //Fuer jeden Eintrag ein Flag, Hidden oder nicht.
+                        //Wenn das Flag Hidden TRUE ist liegt der Spalten-
                         //trenner nicht in der aktuellen Zeile; er muss
                         //mit gepflegt werden, darf aber nicht angezeigt
                         //werden.
@@ -52,12 +56,12 @@ typedef std::vector< SwTabColsEntry > SwTabColsEntries;
 
 class SW_DLLPUBLIC SwTabCols
 {
-    long nLeftMin,      //Linker aeusserer Rand (Bezugspunkt) in
+    long nLeftMin,		//Linker aeusserer Rand (Bezugspunkt) in
                         //Dokumentkordinaten.
                         //Alle anderen Werte relativ zu diesem Punkt!
-            nLeft,      //Linker Rand der Tabelle.
-           nRight,      //Rechter Rand der Tabelle.
-           nRightMax;   //Maximaler rechter Rand der Tabelle.
+            nLeft,		//Linker Rand der Tabelle.
+           nRight,		//Rechter Rand der Tabelle.
+           nRightMax;	//Maximaler rechter Rand der Tabelle.
 
     bool bLastRowAllowedToChange;       // if the last row of the table frame
                                         // is split across pages, it may not
@@ -69,38 +73,38 @@ class SW_DLLPUBLIC SwTabCols
     const SwTabColsEntries& GetData() const { return aData; }
 
 public:
-    SwTabCols( sal_uInt16 nSize = 0 );
+    SwTabCols( USHORT nSize = 0 );
     SwTabCols( const SwTabCols& );
     SwTabCols &operator=( const SwTabCols& );
-    sal_Bool operator==( const SwTabCols& rCmp ) const;
-    long& operator[]( sal_uInt16 nPos ) { return aData[nPos].nPos; }
-    long operator[]( sal_uInt16 nPos ) const { return aData[nPos].nPos; }
-    sal_uInt16 Count() const { return sal::static_int_cast< sal_uInt16 >(aData.size()); }
+    BOOL operator==( const SwTabCols& rCmp ) const;
+    long& operator[]( USHORT nPos ) { return aData[nPos].nPos; }
+    long operator[]( USHORT nPos ) const { return aData[nPos].nPos; }
+    USHORT Count() const { return sal::static_int_cast< USHORT >(aData.size()); }
 
-    sal_Bool IsHidden( sal_uInt16 nPos ) const         { return aData[nPos].bHidden; }
-    void SetHidden( sal_uInt16 nPos, sal_Bool bValue ) { aData[nPos].bHidden = bValue; }
+    BOOL IsHidden( USHORT nPos ) const         { return aData[nPos].bHidden; }
+    void SetHidden( USHORT nPos, BOOL bValue ) { aData[nPos].bHidden = bValue; }
 
-    void Insert( long nValue, sal_Bool bValue, sal_uInt16 nPos );
-    void Insert( long nValue, long nMin, long nMax, sal_Bool bValue, sal_uInt16 nPos );
-    void Remove( sal_uInt16 nPos, sal_uInt16 nAnz = 1 );
+    void Insert( long nValue, BOOL bValue, USHORT nPos );
+    void Insert( long nValue, long nMin, long nMax, BOOL bValue, USHORT nPos );
+    void Remove( USHORT nPos, USHORT nAnz = 1 );
 
-    const SwTabColsEntry& GetEntry( sal_uInt16 nPos ) const { return aData[nPos]; }
-          SwTabColsEntry& GetEntry( sal_uInt16 nPos )  { return aData[nPos]; }
+    const SwTabColsEntry& GetEntry( USHORT nPos ) const { return aData[nPos]; }
+          SwTabColsEntry& GetEntry( USHORT nPos )  { return aData[nPos]; }
 
     long GetLeftMin() const { return nLeftMin; }
-    long GetLeft()  const { return nLeft;    }
-    long GetRight() const { return nRight;   }
+    long GetLeft()	const { return nLeft;	 }
+    long GetRight()	const { return nRight;	 }
     long GetRightMax()const { return nRightMax;}
 
-    void SetLeftMin ( long nNew )   { nLeftMin = nNew; }
-    void SetLeft    ( long nNew )   { nLeft = nNew;    }
-    void SetRight   ( long nNew )   { nRight = nNew;   }
-    void SetRightMax( long nNew )   { nRightMax = nNew;}
+    void SetLeftMin ( long nNew )	{ nLeftMin = nNew; }
+    void SetLeft	( long nNew )	{ nLeft = nNew;	   }
+    void SetRight	( long nNew )	{ nRight = nNew;   }
+    void SetRightMax( long nNew )	{ nRightMax = nNew;}
 
     bool IsLastRowAllowedToChange() const { return bLastRowAllowedToChange; }
     void SetLastRowAllowedToChange( bool bNew ) { bLastRowAllowedToChange = bNew; }
 };
 
-#endif  //_TABCOL_HXX
+#endif	//_TABCOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "ChartPlotAreaOASISTContext.hxx"
 #include "TransformerBase.hxx"
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "DeepTContext.hxx"
 #include "ActionMapTypesOASIS.hxx"
@@ -150,7 +150,7 @@ void XMLAxisOASISContext::StartElement(
             }
             else
             {
-                OSL_FAIL( "ChartAxis: Invalid attribute value" );
+                OSL_ENSURE( false, "ChartAxis: Invalid attribute value" );
             }
 
             if( eToken != XML_TOKEN_INVALID )

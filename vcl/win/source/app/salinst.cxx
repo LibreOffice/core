@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 #include "precompiled_vcl.hxx"
 
 #include <string.h>
+#include <tools/svwin.h>
 #ifdef WNT
-#include <svsys.h>
 #include <process.h>
 #endif
 #ifdef __MINGW32__
@@ -48,19 +48,19 @@
 #include <salobj.h>
 #include <vcl/salsys.hxx>
 #include <saltimer.h>
-#include <vcl/apptypes.hxx>
+#include <vcl/salatype.hxx>
 #include <salbmp.h>
 #include <vcl/salimestatus.hxx>
 #include <vcl/timer.hxx>
-#include <wincomp.hxx>  // CS_DROPSHADOW
+#include <wincomp.hxx>	// CS_DROPSHADOW
 #include <tools/solarmutex.hxx>
 #include <vcl/solarmutex.hxx>
 
 #ifndef min
-#define min(a,b)    (((a) < (b)) ? (a) : (b))
+#define min(a,b)	(((a) < (b)) ? (a) : (b))
 #endif
 #ifndef max
-#define max(a,b)    (((a) > (b)) ? (a) : (b))
+#define max(a,b)	(((a) > (b)) ? (a) : (b))
 #endif
 
 #if defined _MSC_VER
@@ -109,7 +109,7 @@ class SalYieldMutex : public vcl::SolarMutexObject
 {
 public: // for ImplSalYield()
     WinSalInstance*             mpInstData;
-    sal_uLong                       mnCount;
+    ULONG                       mnCount;
     DWORD                       mnThreadId;
 
 public:
@@ -119,7 +119,7 @@ public:
     virtual void SAL_CALL       release();
     virtual sal_Bool SAL_CALL   tryToAcquire();
 
-    sal_uLong                       GetAcquireCount( sal_uLong nThreadId );
+    ULONG                       GetAcquireCount( ULONG nThreadId );
 };
 
 // -----------------------------------------------------------------------
@@ -198,7 +198,7 @@ sal_Bool SAL_CALL SalYieldMutex::tryToAcquire()
 
 // -----------------------------------------------------------------------
 
-sal_uLong SalYieldMutex::GetAcquireCount( sal_uLong nThreadId )
+ULONG SalYieldMutex::GetAcquireCount( ULONG nThreadId )
 {
     if ( nThreadId == mnThreadId )
         return mnCount;
@@ -224,7 +224,7 @@ void ImplSalYieldMutexAcquireWithWait()
     {
         // Wenn wir den Mutex nicht bekommen, muessen wir solange
         // warten, bis wir Ihn bekommen
-        sal_Bool bAcquire = FALSE;
+        BOOL bAcquire = FALSE;
         do
         {
             if ( pInst->mpSalYieldMutex->tryToAcquire() )
@@ -257,7 +257,7 @@ void ImplSalYieldMutexAcquireWithWait()
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplSalYieldMutexTryToAcquire()
+BOOL ImplSalYieldMutexTryToAcquire()
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( pInst )
@@ -289,15 +289,15 @@ void ImplSalYieldMutexRelease()
 
 // -----------------------------------------------------------------------
 
-sal_uLong ImplSalReleaseYieldMutex()
+ULONG ImplSalReleaseYieldMutex()
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( !pInst )
         return 0;
 
     SalYieldMutex*  pYieldMutex = pInst->mpSalYieldMutex;
-    sal_uLong           nCount = pYieldMutex->GetAcquireCount( GetCurrentThreadId() );
-    sal_uLong           n = nCount;
+    ULONG           nCount = pYieldMutex->GetAcquireCount( GetCurrentThreadId() );
+    ULONG           n = nCount;
     while ( n )
     {
         pYieldMutex->release();
@@ -309,7 +309,7 @@ sal_uLong ImplSalReleaseYieldMutex()
 
 // -----------------------------------------------------------------------
 
-void ImplSalAcquireYieldMutex( sal_uLong nCount )
+void ImplSalAcquireYieldMutex( ULONG nCount )
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( !pInst )
@@ -325,9 +325,10 @@ void ImplSalAcquireYieldMutex( sal_uLong nCount )
 
 // -----------------------------------------------------------------------
 
-bool WinSalInstance::CheckYieldMutex()
+#ifdef DBG_UTIL
+
+void ImplDbgTestSolarMutex()
 {
-    bool bRet = true;
     SalData*    pSalData = GetSalData();
     DWORD       nCurThreadId = GetCurrentThreadId();
     if ( pSalData->mnAppThreadId != nCurThreadId )
@@ -337,7 +338,7 @@ bool WinSalInstance::CheckYieldMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                bRet = false;
+                DBG_ERROR( "SolarMutex not locked, and not thread save code in VCL is called from outside of the main thread" );
             }
         }
     }
@@ -348,12 +349,13 @@ bool WinSalInstance::CheckYieldMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                bRet = false;
+                DBG_ERROR( "SolarMutex not locked in the main thread" );
             }
         }
     }
-    return bRet;
 }
+
+#endif
 
 // =======================================================================
 
@@ -368,7 +370,7 @@ void SalData::initKeyCodeMap()
     initKey( '+', KEY_ADD );
     initKey( '-', KEY_SUBTRACT );
     initKey( '*', KEY_MULTIPLY );
-    initKey( '/', KEY_DIVIDE );
+    initKey( '/', KEY_DIVIDE );                                             
     initKey( '.', KEY_POINT );
     initKey( ',', KEY_COMMA );
     initKey( '<', KEY_LESS );
@@ -439,13 +441,10 @@ SalData::SalData()
     mpFirstIcon = 0;            // icon cache, points to first icon, NULL if none
     mpTempFontItem = 0;
     mbThemeChanged = FALSE;     // true if visual theme was changed: throw away theme handles
-    mbThemeMenuSupport = FALSE;
 
     // init with NULL
     gdiplusToken = 0;
-    maDwmLib     = 0;
-    mpDwmIsCompositionEnabled = 0;
-
+    
     initKeyCodeMap();
 
     SetSalData( this );
@@ -511,19 +510,27 @@ SalInstance* CreateSalInstance()
     SalData* pSalData = GetSalData();
 
     // determine the windows version
+    aSalShlData.mbWNT        = 0;
     aSalShlData.mbWXP        = 0;
     aSalShlData.mbWPrinter   = 0;
     WORD nVer = (WORD)GetVersion();
+    aSalShlData.mnVersion = (((WORD)LOBYTE(nVer)) * 100) + HIBYTE(nVer);
+    if ( aSalShlData.mnVersion >= 400 )
+        aSalShlData.mbW40 = 1;
     rtl_zeroMemory( &aSalShlData.maVersionInfo, sizeof(aSalShlData.maVersionInfo) );
     aSalShlData.maVersionInfo.dwOSVersionInfoSize = sizeof( aSalShlData.maVersionInfo );
     if ( GetVersionEx( &aSalShlData.maVersionInfo ) )
     {
-        // Windows XP ?
-        if ( aSalShlData.maVersionInfo.dwMajorVersion > 5 ||
-           ( aSalShlData.maVersionInfo.dwMajorVersion == 5 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
-            aSalShlData.mbWXP = 1;
-        if( aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
-            aSalShlData.mbWPrinter = 1;
+        if ( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
+        {
+            aSalShlData.mbWNT = 1;
+            // Windows XP ?
+            if ( aSalShlData.maVersionInfo.dwMajorVersion > 5 ||
+               ( aSalShlData.maVersionInfo.dwMajorVersion == 5 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
+                aSalShlData.mbWXP = 1;
+            if( aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
+                aSalShlData.mbWPrinter = 1;
+        }
     }
 
     pSalData->mnAppThreadId = GetCurrentThreadId();
@@ -531,46 +538,90 @@ SalInstance* CreateSalInstance()
     // register frame class
     if ( !pSalData->mhPrevInst )
     {
-        WNDCLASSEXW aWndClassEx;
-        aWndClassEx.cbSize          = sizeof( aWndClassEx );
-        aWndClassEx.style           = CS_OWNDC;
-        aWndClassEx.lpfnWndProc     = SalFrameWndProcW;
-        aWndClassEx.cbClsExtra      = 0;
-        aWndClassEx.cbWndExtra      = SAL_FRAME_WNDEXTRA;
-        aWndClassEx.hInstance       = pSalData->mhInst;
-        aWndClassEx.hCursor         = 0;
-        aWndClassEx.hbrBackground   = 0;
-        aWndClassEx.lpszMenuName    = 0;
-        aWndClassEx.lpszClassName   = SAL_FRAME_CLASSNAMEW;
-        ImplLoadSalIcon( SAL_RESID_ICON_DEFAULT, aWndClassEx.hIcon, aWndClassEx.hIconSm );
-        if ( !RegisterClassExW( &aWndClassEx ) )
-            return NULL;
+        if ( aSalShlData.mbWNT )
+        {
+            WNDCLASSEXW aWndClassEx;
+            aWndClassEx.cbSize          = sizeof( aWndClassEx );
+            aWndClassEx.style           = CS_OWNDC;
+            aWndClassEx.lpfnWndProc     = SalFrameWndProcW;
+            aWndClassEx.cbClsExtra      = 0;
+            aWndClassEx.cbWndExtra      = SAL_FRAME_WNDEXTRA;
+            aWndClassEx.hInstance       = pSalData->mhInst;
+            aWndClassEx.hCursor         = 0;
+            aWndClassEx.hbrBackground   = 0;
+            aWndClassEx.lpszMenuName    = 0;
+            aWndClassEx.lpszClassName   = SAL_FRAME_CLASSNAMEW;
+            ImplLoadSalIcon( SAL_RESID_ICON_DEFAULT, aWndClassEx.hIcon, aWndClassEx.hIconSm );
+            if ( !RegisterClassExW( &aWndClassEx ) )
+                return NULL;
 
-        aWndClassEx.hIcon           = 0;
-        aWndClassEx.hIconSm         = 0;
-        aWndClassEx.style          |= CS_SAVEBITS;
-        aWndClassEx.lpszClassName   = SAL_SUBFRAME_CLASSNAMEW;
-        if ( !RegisterClassExW( &aWndClassEx ) )
-            return NULL;
+            aWndClassEx.hIcon           = 0;
+            aWndClassEx.hIconSm         = 0;
+            aWndClassEx.style          |= CS_SAVEBITS;
+            aWndClassEx.lpszClassName   = SAL_SUBFRAME_CLASSNAMEW;
+            if ( !RegisterClassExW( &aWndClassEx ) )
+                return NULL;
 
-        // shadow effect for popups on XP
-        if( aSalShlData.mbWXP )
-            aWndClassEx.style       |= CS_DROPSHADOW;
-        aWndClassEx.lpszClassName   = SAL_TMPSUBFRAME_CLASSNAMEW;
-        if ( !RegisterClassExW( &aWndClassEx ) )
-            return NULL;
+            // shadow effect for popups on XP
+            if( aSalShlData.mbWXP )
+                aWndClassEx.style       |= CS_DROPSHADOW;
+            aWndClassEx.lpszClassName   = SAL_TMPSUBFRAME_CLASSNAMEW;
+            if ( !RegisterClassExW( &aWndClassEx ) )
+                return NULL;
 
-        aWndClassEx.style           = 0;
-        aWndClassEx.lpfnWndProc     = SalComWndProcW;
-        aWndClassEx.cbWndExtra      = 0;
-        aWndClassEx.lpszClassName   = SAL_COM_CLASSNAMEW;
-        if ( !RegisterClassExW( &aWndClassEx ) )
-            return NULL;
+            aWndClassEx.style           = 0;
+            aWndClassEx.lpfnWndProc     = SalComWndProcW;
+            aWndClassEx.cbWndExtra      = 0;
+            aWndClassEx.lpszClassName   = SAL_COM_CLASSNAMEW;
+            if ( !RegisterClassExW( &aWndClassEx ) )
+                return NULL;
+        }
+        else
+        {
+            WNDCLASSEXA aWndClassEx;
+            aWndClassEx.cbSize          = sizeof( aWndClassEx );
+            aWndClassEx.style           = CS_OWNDC;
+            aWndClassEx.lpfnWndProc     = SalFrameWndProcA;
+            aWndClassEx.cbClsExtra      = 0;
+            aWndClassEx.cbWndExtra      = SAL_FRAME_WNDEXTRA;
+            aWndClassEx.hInstance       = pSalData->mhInst;
+            aWndClassEx.hCursor         = 0;
+            aWndClassEx.hbrBackground   = 0;
+            aWndClassEx.lpszMenuName    = 0;
+            aWndClassEx.lpszClassName   = SAL_FRAME_CLASSNAMEA;
+            ImplLoadSalIcon( SAL_RESID_ICON_DEFAULT, aWndClassEx.hIcon, aWndClassEx.hIconSm );
+            if ( !RegisterClassExA( &aWndClassEx ) )
+                return NULL;
+
+            aWndClassEx.hIcon           = 0;
+            aWndClassEx.hIconSm         = 0;
+            aWndClassEx.style          |= CS_SAVEBITS;
+            aWndClassEx.lpszClassName   = SAL_SUBFRAME_CLASSNAMEA;
+            if ( !RegisterClassExA( &aWndClassEx ) )
+                return NULL;
+
+            aWndClassEx.style           = 0;
+            aWndClassEx.lpfnWndProc     = SalComWndProcA;
+            aWndClassEx.cbWndExtra      = 0;
+            aWndClassEx.lpszClassName   = SAL_COM_CLASSNAMEA;
+            if ( !RegisterClassExA( &aWndClassEx ) )
+                return NULL;
+        }
     }
 
-    HWND hComWnd = CreateWindowExW( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEW,
-                               L"", WS_POPUP, 0, 0, 0, 0, 0, 0,
-                               pSalData->mhInst, NULL );
+    HWND hComWnd;
+    if ( aSalShlData.mbWNT )
+    {
+        hComWnd = CreateWindowExW( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEW,
+                                   L"", WS_POPUP, 0, 0, 0, 0, 0, 0,
+                                   pSalData->mhInst, NULL );
+    }
+    else
+    {
+        hComWnd = CreateWindowExA( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEA,
+                                   "", WS_POPUP, 0, 0, 0, 0, 0, 0,
+                                   pSalData->mhInst, NULL );
+    }
     if ( !hComWnd )
         return NULL;
 
@@ -636,14 +687,14 @@ osl::SolarMutex* WinSalInstance::GetYieldMutex()
 
 // -----------------------------------------------------------------------
 
-sal_uLong WinSalInstance::ReleaseYieldMutex()
+ULONG WinSalInstance::ReleaseYieldMutex()
 {
     return ImplSalReleaseYieldMutex();
 }
 
 // -----------------------------------------------------------------------
 
-void WinSalInstance::AcquireYieldMutex( sal_uLong nCount )
+void WinSalInstance::AcquireYieldMutex( ULONG nCount )
 {
     ImplSalAcquireYieldMutex( nCount );
 }
@@ -665,22 +716,18 @@ static void ImplSalDispatchMessage( MSG* pMsg )
 
 // -----------------------------------------------------------------------
 
-void ImplSalYield( sal_Bool bWait, sal_Bool bHandleAllCurrentEvents )
+void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
 {
     MSG aMsg;
     bool bWasMsg = false, bOneEvent = false;
-
+    
     int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
     do
     {
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
-            if ( !ImplInterceptChildWindowKeyDown( aMsg ) )
-            {
-                TranslateMessage( &aMsg );
-                ImplSalDispatchMessage( &aMsg );
-            }
-
+            TranslateMessage( &aMsg );
+            ImplSalDispatchMessage( &aMsg );
             bOneEvent = bWasMsg = true;
         }
         else
@@ -691,11 +738,8 @@ void ImplSalYield( sal_Bool bWait, sal_Bool bHandleAllCurrentEvents )
     {
         if ( ImplGetMessage( &aMsg, 0, 0, 0 ) )
         {
-            if ( !ImplInterceptChildWindowKeyDown( aMsg ) )
-            {
-                TranslateMessage( &aMsg );
-                ImplSalDispatchMessage( &aMsg );
-            }
+            TranslateMessage( &aMsg );
+            ImplSalDispatchMessage( &aMsg );
         }
     }
 }
@@ -707,8 +751,8 @@ void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     SalYieldMutex*  pYieldMutex = mpSalYieldMutex;
     SalData*        pSalData = GetSalData();
     DWORD           nCurThreadId = GetCurrentThreadId();
-    sal_uLong           nCount = pYieldMutex->GetAcquireCount( nCurThreadId );
-    sal_uLong           n = nCount;
+    ULONG           nCount = pYieldMutex->GetAcquireCount( nCurThreadId );
+    ULONG           n = nCount;
     while ( n )
     {
         pYieldMutex->release();
@@ -716,7 +760,7 @@ void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
     if ( pSalData->mnAppThreadId != nCurThreadId )
     {
-        // #97739# A SendMessage call blocks until the called thread (here: the main thread)
+        // #97739# A SendMessage call blocks until the called thread (here: the main thread) 
         // returns. During a yield however, messages are processed in the main thread that might
         // result in a new message loop due to opening a dialog. Thus, SendMessage would not
         // return which will block this thread!
@@ -765,7 +809,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_THREADYIELD:
-            ImplSalYield( (sal_Bool)wParam, (sal_Bool)lParam );
+            ImplSalYield( (BOOL)wParam, (BOOL)lParam );
             rDef = FALSE;
             break;
         // If we get this message, because another GetMessage() call
@@ -780,11 +824,11 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_STARTTIMER:
-            ImplSalStartTimer( (sal_uLong) lParam, FALSE );
+            ImplSalStartTimer( (ULONG) lParam, FALSE );
             rDef = FALSE;
             break;
         case SAL_MSG_CREATEFRAME:
-            nRet = (LRESULT)ImplSalCreateFrame( GetSalData()->mpFirstInstance, (HWND)lParam, (sal_uLong)wParam );
+            nRet = (LRESULT)ImplSalCreateFrame( GetSalData()->mpFirstInstance, (HWND)lParam, (ULONG)wParam );
             rDef = FALSE;
             break;
         case SAL_MSG_RECREATEHWND:
@@ -801,10 +845,10 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             break;
         case SAL_MSG_DESTROYHWND:
             //We only destroy the native window here. We do NOT destroy the SalFrame contained
-            //in the structure (GetWindowPtr()).
+            //in the structure (GetWindowPtr()). 
             if (DestroyWindow((HWND)lParam) == 0)
             {
-                OSL_FAIL("DestroyWindow failed!");
+                OSL_ENSURE(0, "DestroyWindow failed!");
                 //Failure: We remove the SalFrame from the window structure. So we avoid that
                 // the window structure may contain an invalid pointer, once the SalFrame is deleted.
                SetWindowPtr((HWND)lParam, 0);
@@ -899,7 +943,7 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 
 // -----------------------------------------------------------------------
 
-bool WinSalInstance::AnyInput( sal_uInt16 nType )
+bool WinSalInstance::AnyInput( USHORT nType )
 {
     MSG aMsg;
 
@@ -941,7 +985,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
             if ( ImplPeekMessage( &aMsg, 0, WM_PAINT, WM_PAINT,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
-
+            
             if ( ImplPeekMessage( &aMsg, 0, WM_SIZE, WM_SIZE,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
@@ -981,7 +1025,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
 
 // -----------------------------------------------------------------------
 
-void SalTimer::Start( sal_uLong nMS )
+void SalTimer::Start( ULONG nMS )
 {
     // Um auf Main-Thread umzuschalten
     SalData* pSalData = GetSalData();
@@ -998,7 +1042,7 @@ void SalTimer::Start( sal_uLong nMS )
 
 // -----------------------------------------------------------------------
 
-SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, sal_uLong nSalFrameStyle )
+SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, ULONG nSalFrameStyle )
 {
     // Um auf Main-Thread umzuschalten
     return (SalFrame*)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)pSystemParentData->hWnd );
@@ -1006,7 +1050,7 @@ SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData,
 
 // -----------------------------------------------------------------------
 
-SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameStyle )
+SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 {
     // Um auf Main-Thread umzuschalten
     HWND hWndParent;
@@ -1028,7 +1072,7 @@ void WinSalInstance::DestroyFrame( SalFrame* pFrame )
 
 SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
                                          SystemWindowData* /*pWindowData*/, // SystemWindowData meaningless on Windows
-                                         sal_Bool /*bShow*/ )
+                                         BOOL /*bShow*/ ) 
 {
     // Um auf Main-Thread umzuschalten
     return (SalObject*)ImplSendMessage( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (LPARAM)static_cast<WinSalFrame*>(pParent) );
@@ -1053,9 +1097,9 @@ void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
 // -----------------------------------------------------------------------
 
 /** Add a file to the system shells recent document list if there is any.
-      This function may have no effect under Unix because there is no
+      This function may have no effect under Unix because there is no 
       standard API among the different desktop managers.
-
+      
       @param aFileUrl
                 The file url of the document.
 */
@@ -1063,11 +1107,11 @@ void WinSalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, cons
 {
     rtl::OUString system_path;
     osl::FileBase::RC rc = osl::FileBase::getSystemPathFromFileURL(rFileUrl, system_path);
-
+    
     OSL_ENSURE(osl::FileBase::E_None == rc, "Invalid file url");
-
+    
     if (osl::FileBase::E_None == rc)
-        SHAddToRecentDocs(SHARD_PATHW, system_path.getStr());
+        SHAddToRecentDocs(SHARD_PATHW, system_path.getStr());        
 }
 
 // -----------------------------------------------------------------------
@@ -1089,7 +1133,7 @@ class WinImeStatus : public SalI18NImeStatus
   public:
     WinImeStatus() {}
     virtual ~WinImeStatus() {}
-
+    
     // asks whether there is a status window available
     // to toggle into menubar
     virtual bool canToggle() { return false; }

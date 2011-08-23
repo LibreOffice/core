@@ -37,10 +37,15 @@ PRJNAME = forms
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar ConnectivityTools.jar
 JAVAFILES       :=  $(shell @$(FIND) org -name "*.java") \
                     $(shell @$(FIND) integration -name "*.java")
+JAVACLASSFILES	:= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(i:d)$/$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
 
+MAXLINELENGTH = 100000
+
+#JARCLASSDIRS    =
 JARTARGET       = $(TARGET).jar
+JARCOMPRESS 	= TRUE
 
 # --- Runner Settings ----------------------------------------------
 
@@ -61,11 +66,14 @@ ALL: 	ALLDEP
 
 .INCLUDE :  target.mk
 
-show_targets: $(CLASSDIR)$/$(JARTARGET)
+test:
+    echo $(SOLARBINDIR)
+
+show_targets:
     +@$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) complexlib.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s/.\$///:s/.java//))
 
-run: $(CLASSDIR)$/$(JARTARGET)
-    +$(COPY) integration$/forms$/*.props $(CLASSDIR) && $(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce forms_all.sce
+run:
+    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && $(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce forms_all.sce
 
-run_%: $(CLASSDIR)$/$(JARTARGET)
-    +$(COPY) integration$/forms$/*.props $(CLASSDIR) && $(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o integration.$(PRJNAME).$(@:s/run_//)
+run_%:
+    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && $(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o integration.$(PRJNAME).$(@:s/run_//)

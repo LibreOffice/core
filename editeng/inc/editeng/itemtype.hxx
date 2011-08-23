@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,14 +49,14 @@ class IntlWrapper;
 static const sal_Unicode cDelim = ',';
 static const sal_Unicode cpDelim[] = { ',' , ' ', '\0' };
 
-EDITENG_DLLPUBLIC String GetSvxString( sal_uInt16 nId );
+EDITENG_DLLPUBLIC String GetSvxString( USHORT nId );
 EDITENG_DLLPUBLIC String GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, const IntlWrapper * pIntl );
 String GetColorString( const Color& rCol );
-EDITENG_DLLPUBLIC sal_uInt16 GetMetricId( SfxMapUnit eUnit );
+EDITENG_DLLPUBLIC USHORT GetMetricId( SfxMapUnit eUnit );
 
 // -----------------------------------------------------------------------
 
-inline String GetBoolString( sal_Bool bVal )
+inline String GetBoolString( BOOL bVal )
 {
     return String( EditResId( bVal ? RID_SVXITEMS_TRUE : RID_SVXITEMS_FALSE ) );
 }

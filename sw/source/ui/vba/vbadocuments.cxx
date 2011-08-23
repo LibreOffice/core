@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 #include "vbadocuments.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <osl/file.hxx>
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -68,7 +68,7 @@ getDocument( uno::Reference< uno::XComponentContext >& xContext, const uno::Refe
     uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
     if( !xModel.is() )
         return uno::Any();
-
+    
     SwVbaDocument *pWb = new SwVbaDocument(  uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext, xModel );
     return uno::Any( uno::Reference< word::XDocument > (pWb) );
 }
@@ -79,8 +79,8 @@ class DocumentEnumImpl : public EnumerationHelperImpl
 public:
     DocumentEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Any& aApplication ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_aApplication( aApplication ) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    {
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException) 
+    { 
         uno::Reference< text::XTextDocument > xDoc( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         return getDocument( m_xContext, xDoc, m_aApplication );
     }
@@ -99,7 +99,7 @@ uno::Reference< container::XEnumeration >
 SwVbaDocuments::createEnumeration() throw (uno::RuntimeException)
 {
     // #FIXME its possible the DocumentEnumImpl here doens't reflect
-    // the state of this object ( although it should ) would be
+    // the state of this object ( although it should ) would be 
     // safer to create an enumeration based on this objects state
     // rather than one effectively based of the desktop component
     uno::Reference< container::XEnumerationAccess > xEnumerationAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
@@ -121,7 +121,7 @@ SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, 
     {
         return  Open( sFileName, uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any());
     }
-    uno::Reference <text::XTextDocument> xTextDoc( createDocument() , uno::UNO_QUERY_THROW );
+    uno::Reference <text::XTextDocument> xTextDoc( VbaDocumentsBase::Add() , uno::UNO_QUERY_THROW );
 
     if( xTextDoc.is() )
         return getDocument( mxContext, xTextDoc, Application() );
@@ -132,7 +132,7 @@ SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, 
 void SAL_CALL
 SwVbaDocuments::Close( const uno::Any& /*SaveChanges*/, const uno::Any& /*OriginalFormat*/, const uno::Any& /*RouteDocument*/ ) throw (uno::RuntimeException)
 {
-    closeDocuments();
+    VbaDocumentsBase::Close();
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
@@ -151,7 +151,7 @@ SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& /*Confirm
 
     uno::Sequence< beans::PropertyValue > sProps(0);
 
-    uno::Reference <text::XTextDocument> xSpreadDoc( openDocument( Filename, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
+    uno::Reference <text::XTextDocument> xSpreadDoc( VbaDocumentsBase::Open( Filename, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
     uno::Any aRet = getDocument( mxContext, xSpreadDoc, Application() );
     uno::Reference< word::XDocument > xDocument( aRet, uno::UNO_QUERY );
     if ( xDocument.is() )
@@ -159,14 +159,33 @@ SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& /*Confirm
     return aRet;
 }
 
-rtl::OUString&
+    // VbaDocumentsBase / XDocumentsBase (to avoid warning C4266 for hiding function on wntmsci)
+uno::Any SAL_CALL
+SwVbaDocuments::Add() throw (uno::RuntimeException)
+{
+    return VbaDocumentsBase::Add();
+}
+
+void SAL_CALL
+SwVbaDocuments::Close(  ) throw (uno::RuntimeException)
+{
+    VbaDocumentsBase::Close();
+}
+
+uno::Any SAL_CALL
+SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (uno::RuntimeException)
+{
+    return VbaDocumentsBase::Open( Filename, ReadOnly, rProps );
+}
+
+rtl::OUString& 
 SwVbaDocuments::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaDocuments") );
     return sImplName;
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<rtl::OUString> 
 SwVbaDocuments::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

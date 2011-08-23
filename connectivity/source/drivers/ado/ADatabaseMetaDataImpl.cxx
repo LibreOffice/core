@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ void ODatabaseMetaData::fillLiterals()
         LiteralInfo aInfo;
         while(!aRecordset.IsAtEOF())
         {
-            WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
+            WpOLEAppendCollection<ADOFields, ADOField, WpADOField>	aFields(aRecordset.GetFields());
             WpADOField aField(aFields.GetItem(1));
             aInfo.pwszLiteralValue = aField.get_Value();
             aField = aFields.GetItem(5);
@@ -128,7 +128,7 @@ sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId)
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()
 {
-    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IS_GRANTABLE")),
+    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("IS_GRANTABLE"),
         ColumnValue::NULLABLE,
         3,3,0,
         DataType::VARCHAR);
@@ -136,31 +136,31 @@ void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
 {
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE_NAME")),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TYPE_NAME"),
         ColumnValue::NO_NULLS,
         0,0,0,
         DataType::VARCHAR);
-    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NULLABLE")),
+    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NULLABLE"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REMARKS")),
+    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("REMARKS"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
-    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COLUMN_DEF")),
+    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_DEF"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
-    m_mColumns[14] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_DATA_TYPE")),
+    m_mColumns[14] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SQL_DATA_TYPE"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[15] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_DATETIME_SUB")),
+    m_mColumns[15] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SQL_DATETIME_SUB"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[16] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CHAR_OCTET_LENGTH")),
+    m_mColumns[16] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("CHAR_OCTET_LENGTH"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
@@ -168,7 +168,7 @@ void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setTablesMap()
 {
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REMARKS")),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("REMARKS"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
@@ -176,7 +176,7 @@ void ODatabaseMetaDataResultSetMetaData::setTablesMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
 {
-    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NULLABLE")),
+    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NULLABLE"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
@@ -184,11 +184,11 @@ void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setPrimaryKeysMap()
 {
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KEY_SEQ")),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("KEY_SEQ"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PK_NAME")),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PK_NAME"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
@@ -196,15 +196,15 @@ void ODatabaseMetaDataResultSetMetaData::setPrimaryKeysMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setIndexInfoMap()
 {
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NON_UNIQUE")),
+    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NON_UNIQUE"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::BIT);
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INDEX_QUALIFIER")),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("INDEX_QUALIFIER"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
-    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ASC_OR_DESC")),
+    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("ASC_OR_DESC"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
@@ -212,11 +212,11 @@ void ODatabaseMetaDataResultSetMetaData::setIndexInfoMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setTablePrivilegesMap()
 {
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PRIVILEGE")),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PRIVILEGE"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IS_GRANTABLE")),
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("IS_GRANTABLE"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
@@ -224,7 +224,7 @@ void ODatabaseMetaDataResultSetMetaData::setTablePrivilegesMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setCrossReferenceMap()
 {
-    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KEY_SEQ")),
+    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("KEY_SEQ"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
@@ -232,27 +232,27 @@ void ODatabaseMetaDataResultSetMetaData::setCrossReferenceMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setTypeInfoMap()
 {
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PRECISION")),
+    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PRECISION"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NULLABLE")),
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NULLABLE"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTO_INCREMENT")),
+    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("AUTO_INCREMENT"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::BIT);
-    m_mColumns[16] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_DATA_TYPE")),
+    m_mColumns[16] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SQL_DATA_TYPE"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[17] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_DATETIME_SUB")),
+    m_mColumns[17] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SQL_DATETIME_SUB"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[18] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUM_PREC_RADIX")),
+    m_mColumns[18] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NUM_PREC_RADIX"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
@@ -260,7 +260,7 @@ void ODatabaseMetaDataResultSetMetaData::setTypeInfoMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setProceduresMap()
 {
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REMARKS")),
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("REMARKS"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
@@ -423,10 +423,10 @@ void OAdoIndex::fillPropertyValues()
 {
     if(m_aIndex.IsValid())
     {
-        m_Name              = m_aIndex.get_Name();
-        m_IsUnique          = m_aIndex.get_Unique();
+        m_Name				= m_aIndex.get_Name();
+        m_IsUnique			= m_aIndex.get_Unique();
         m_IsPrimaryKeyIndex = m_aIndex.get_PrimaryKey();
-        m_IsClustered       = m_aIndex.get_Clustered();
+        m_IsClustered		= m_aIndex.get_Clustered();
     }
 }
 // -----------------------------------------------------------------------------
@@ -452,11 +452,11 @@ void OAdoKey::fillPropertyValues()
 {
     if(m_aKey.IsValid())
     {
-        m_aProps->m_Type            = MapKeyRule(m_aKey.get_Type());
-        m_Name                      = m_aKey.get_Name();
-        m_aProps->m_ReferencedTable = m_aKey.get_RelatedTable();
-        m_aProps->m_UpdateRule      = MapRule(m_aKey.get_UpdateRule());
-        m_aProps->m_DeleteRule      = MapRule(m_aKey.get_DeleteRule());
+        m_aProps->m_Type			= MapKeyRule(m_aKey.get_Type());
+        m_Name			            = m_aKey.get_Name();
+        m_aProps->m_ReferencedTable	= m_aKey.get_RelatedTable();
+        m_aProps->m_UpdateRule		= MapRule(m_aKey.get_UpdateRule());
+        m_aProps->m_DeleteRule		= MapRule(m_aKey.get_DeleteRule());
     }
 }
 // -------------------------------------------------------------------------
@@ -535,7 +535,7 @@ KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum)
             eNum = adKeyUnique;
             break;
         default:
-            OSL_FAIL( "OAdoKey::Map2KeyRule: invalid key type!" );
+            OSL_ENSURE( false, "OAdoKey::Map2KeyRule: invalid key type!" );
     }
     return eNum;
 }
@@ -572,8 +572,8 @@ void OAdoTable::fillPropertyValues()
 {
     if(m_aTable.IsValid())
     {
-        m_Name  = m_aTable.get_Name();
-        m_Type  = m_aTable.get_Type();
+        m_Name	= m_aTable.get_Name();
+        m_Type	= m_aTable.get_Type();
         {
             WpADOCatalog aCat(m_aTable.get_ParentCatalog());
             if(aCat.IsValid())

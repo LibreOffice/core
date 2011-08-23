@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ AlphaMask::AlphaMask( const AlphaMask& rAlphaMask ) :
 
 // -----------------------------------------------------------------------------
 
-AlphaMask::AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency ) :
+AlphaMask::AlphaMask( const Size& rSizePixel, BYTE* pEraseTransparency ) :
     Bitmap( rSizePixel, 8, &Bitmap::GetGreyPalette( 256 ) )
 {
     if( pEraseTransparency )
@@ -108,14 +108,14 @@ Bitmap AlphaMask::GetBitmap() const
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Crop( const Rectangle& rRectPixel )
+BOOL AlphaMask::Crop( const Rectangle& rRectPixel )
 {
     return Bitmap::Crop( rRectPixel );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Expand( sal_uLong nDX, sal_uLong nDY, sal_uInt8* pInitTransparency )
+BOOL AlphaMask::Expand( ULONG nDX, ULONG nDY, BYTE* pInitTransparency )
 {
     Color aColor;
 
@@ -127,15 +127,15 @@ sal_Bool AlphaMask::Expand( sal_uLong nDX, sal_uLong nDY, sal_uInt8* pInitTransp
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
+BOOL AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc, 
                            const AlphaMask* pAlphaSrc )
 {
     // Note: this code is copied from Bitmap::CopyPixel but avoids any palette lookups
     // this optimization is possible because the palettes of AlphaMasks are always identical (8bit GreyPalette, see ctor)
 
-    const Size  aSizePix( GetSizePixel() );
-    Rectangle   aRectDst( rRectDst );
-    sal_Bool        bRet = sal_False;
+    const Size	aSizePix( GetSizePixel() );
+    Rectangle	aRectDst( rRectDst );
+    BOOL		bRet = FALSE;
 
     aRectDst.Intersection( Rectangle( Point(), aSizePix ) );
 
@@ -143,9 +143,9 @@ sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRect
     {
         if( pAlphaSrc && ( *pAlphaSrc != *this ) )
         {
-            Bitmap*         pSrc = (Bitmap*) pAlphaSrc;
-            const Size      aCopySizePix( pSrc->GetSizePixel() );
-            Rectangle       aRectSrc( rRectSrc );
+            Bitmap* 		pSrc = (Bitmap*) pAlphaSrc;
+            const Size		aCopySizePix( pSrc->GetSizePixel() );
+            Rectangle		aRectSrc( rRectSrc );
 
             aRectSrc.Intersection( Rectangle( Point(), aCopySizePix ) );
 
@@ -159,11 +159,11 @@ sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRect
 
                     if( pWriteAcc )
                     {
-                        const long  nWidth = Min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
-                        const long  nHeight = Min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
-                        const long  nSrcEndX = aRectSrc.Left() + nWidth;
-                        const long  nSrcEndY = aRectSrc.Top() + nHeight;
-                        long        nDstY = aRectDst.Top();
+                        const long	nWidth = Min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
+                        const long	nHeight = Min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
+                        const long	nSrcEndX = aRectSrc.Left() + nWidth;
+                        const long	nSrcEndY = aRectSrc.Top() + nHeight;
+                        long		nDstY = aRectDst.Top();
 
                         for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
                             for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
@@ -185,20 +185,20 @@ sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRect
 
             if( !aRectSrc.IsEmpty() && ( aRectSrc != aRectDst ) )
             {
-                BitmapWriteAccess*  pWriteAcc = AcquireWriteAccess();
+                BitmapWriteAccess*	pWriteAcc = AcquireWriteAccess();
 
                 if( pWriteAcc )
                 {
-                    const long  nWidth = Min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
-                    const long  nHeight = Min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
-                    const long  nSrcX = aRectSrc.Left();
-                    const long  nSrcY = aRectSrc.Top();
-                    const long  nSrcEndX1 = nSrcX + nWidth - 1L;
-                    const long  nSrcEndY1 = nSrcY + nHeight - 1L;
-                    const long  nDstX = aRectDst.Left();
-                    const long  nDstY = aRectDst.Top();
-                    const long  nDstEndX1 = nDstX + nWidth - 1L;
-                    const long  nDstEndY1 = nDstY + nHeight - 1L;
+                    const long	nWidth = Min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
+                    const long	nHeight = Min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
+                    const long	nSrcX = aRectSrc.Left();
+                    const long	nSrcY = aRectSrc.Top();
+                    const long	nSrcEndX1 = nSrcX + nWidth - 1L;
+                    const long	nSrcEndY1 = nSrcY + nHeight - 1L;
+                    const long	nDstX = aRectDst.Left();
+                    const long	nDstY = aRectDst.Top();
+                    const long	nDstEndX1 = nDstX + nWidth - 1L;
+                    const long	nDstEndY1 = nDstY + nHeight - 1L;
 
                     if( ( nDstX <= nSrcX ) && ( nDstY <= nSrcY ) )
                     {
@@ -226,7 +226,7 @@ sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRect
                     }
 
                     ReleaseAccess( pWriteAcc );
-                    bRet = sal_True;
+                    bRet = TRUE;
                 }
             }
         }
@@ -238,26 +238,26 @@ sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRect
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Erase( sal_uInt8 cTransparency )
+BOOL AlphaMask::Erase( BYTE cTransparency )
 {
     return Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Invert()
+BOOL AlphaMask::Invert()
 {
-    BitmapWriteAccess*  pAcc = AcquireWriteAccess();
-    sal_Bool                bRet = sal_False;
+    BitmapWriteAccess*	pAcc = AcquireWriteAccess();
+    BOOL				bRet = FALSE;
 
     if( pAcc && pAcc->GetBitCount() == 8 )
     {
-        BitmapColor aCol( 0 );
-        const long  nWidth = pAcc->Width(), nHeight = pAcc->Height();
-        sal_uInt8*      pMap = new sal_uInt8[ 256 ];
+        BitmapColor	aCol( 0 );
+        const long	nWidth = pAcc->Width(),	nHeight = pAcc->Height();
+        BYTE*		pMap = new BYTE[ 256 ];
 
         for( long i = 0; i < 256; i++ )
-            pMap[ i ] = ~(sal_uInt8) i;
+            pMap[ i ] = ~(BYTE) i;
 
         for( long nY = 0L; nY < nHeight; nY++ )
         {
@@ -269,7 +269,7 @@ sal_Bool AlphaMask::Invert()
         }
 
         delete[] pMap;
-        bRet = sal_True;
+        bRet = TRUE;
     }
 
     if( pAcc )
@@ -280,16 +280,16 @@ sal_Bool AlphaMask::Invert()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Mirror( sal_uLong nMirrorFlags )
+BOOL AlphaMask::Mirror( ULONG nMirrorFlags )
 {
     return Bitmap::Mirror( nMirrorFlags );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
+BOOL AlphaMask::Scale( const Size& rNewSize, ULONG nScaleFlag )
 {
-    sal_Bool bRet = Bitmap::Scale( rNewSize, nScaleFlag );
+    BOOL bRet = Bitmap::Scale( rNewSize, nScaleFlag );
 
     if( bRet && ( nScaleFlag == BMP_SCALE_INTERPOLATE ) )
         Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
@@ -299,9 +299,9 @@ sal_Bool AlphaMask::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag )
+BOOL AlphaMask::Scale( const double& rScaleX, const double& rScaleY, ULONG nScaleFlag )
 {
-    sal_Bool bRet = Bitmap::Scale( rScaleX, rScaleY, nScaleFlag );
+    BOOL bRet = Bitmap::Scale( rScaleX, rScaleY, nScaleFlag );
 
     if( bRet && ( nScaleFlag == BMP_SCALE_INTERPOLATE ) )
         Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
@@ -311,25 +311,25 @@ sal_Bool AlphaMask::Scale( const double& rScaleX, const double& rScaleY, sal_uLo
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Rotate( long nAngle10, sal_uInt8 cFillTransparency )
+BOOL AlphaMask::Rotate( long nAngle10, BYTE cFillTransparency )
 {
     return Bitmap::Rotate( nAngle10, Color( cFillTransparency, cFillTransparency, cFillTransparency ) );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
+BOOL AlphaMask::Replace( const Bitmap& rMask, BYTE cReplaceTransparency )
 {
-    BitmapReadAccess*   pMaskAcc = ( (Bitmap&) rMask ).AcquireReadAccess();
-    BitmapWriteAccess*  pAcc = AcquireWriteAccess();
-    sal_Bool                bRet = sal_False;
+    BitmapReadAccess*	pMaskAcc = ( (Bitmap&) rMask ).AcquireReadAccess();
+    BitmapWriteAccess*	pAcc = AcquireWriteAccess();
+    BOOL				bRet = FALSE;
 
     if( pMaskAcc && pAcc )
     {
-        const BitmapColor   aReplace( cReplaceTransparency );
-        const long          nWidth = Min( pMaskAcc->Width(), pAcc->Width() );
-        const long          nHeight = Min( pMaskAcc->Height(), pAcc->Height() );
-        const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
+        const BitmapColor	aReplace( cReplaceTransparency );
+        const long			nWidth = Min( pMaskAcc->Width(), pAcc->Width() );
+        const long			nHeight = Min( pMaskAcc->Height(), pAcc->Height() );
+        const BitmapColor	aMaskWhite( pMaskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
 
         for( long nY = 0L; nY < nHeight; nY++ )
             for( long nX = 0L; nX < nWidth; nX++ )
@@ -345,14 +345,14 @@ sal_Bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong
+BOOL AlphaMask::Replace( BYTE cSearchTransparency, BYTE cReplaceTransparency, ULONG
 #ifdef DBG_UTIL
 nTol
 #endif
 )
 {
-    BitmapWriteAccess*  pAcc = AcquireWriteAccess();
-    sal_Bool                bRet = sal_False;
+    BitmapWriteAccess*	pAcc = AcquireWriteAccess();
+    BOOL				bRet = FALSE;
 
     DBG_ASSERT( !nTol, "AlphaMask::Replace: nTol not used yet" );
 
@@ -375,7 +375,7 @@ nTol
         }
         else
         {
-            BitmapColor aReplace( cReplaceTransparency );
+            BitmapColor	aReplace( cReplaceTransparency );
 
             for( long nY = 0L; nY < nHeight; nY++ )
             {
@@ -387,7 +387,7 @@ nTol
             }
         }
 
-        bRet = sal_True;
+        bRet = TRUE;
     }
 
     if( pAcc )
@@ -398,17 +398,17 @@ nTol
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Replace( sal_uInt8* pSearchTransparencies, sal_uInt8* pReplaceTransparencies,
-                         sal_uLong nColorCount, sal_uLong* pTols )
+BOOL AlphaMask::Replace( BYTE* pSearchTransparencies, BYTE* pReplaceTransparencies,
+                         ULONG nColorCount, ULONG* pTols )
 {
-    Color*  pSearchColors = new Color[ nColorCount ];
-    Color*  pReplaceColors = new Color[ nColorCount ];
-    sal_Bool    bRet;
+    Color*	pSearchColors = new Color[ nColorCount ];
+    Color*	pReplaceColors = new Color[ nColorCount ];
+    BOOL	bRet;
 
-    for( sal_uLong i = 0; i < nColorCount; i++ )
+    for( ULONG i = 0; i < nColorCount; i++ )
     {
-        const sal_uInt8 cSearchTransparency = pSearchTransparencies[ i ];
-        const sal_uInt8 cReplaceTransparency = pReplaceTransparencies[ i ];
+        const BYTE cSearchTransparency = pSearchTransparencies[ i ];
+        const BYTE cReplaceTransparency = pReplaceTransparencies[ i ];
 
         pSearchColors[ i ] = Color( cSearchTransparency, cSearchTransparency, cSearchTransparency );
         pReplaceColors[ i ] = Color( cReplaceTransparency, cReplaceTransparency, cReplaceTransparency );

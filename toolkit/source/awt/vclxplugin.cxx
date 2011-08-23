@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,6 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/property.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/svapp.hxx>
 
 #include "forward.hxx"
 
@@ -56,12 +55,12 @@ VCLXPlugin::~VCLXPlugin()
 void SAL_CALL VCLXPlugin::dispose() throw(uno::RuntimeException)
 {
     {
-        SolarMutexGuard aGuard;
-
+        ::osl::SolarGuard aGuard( GetMutex() );
+        
         lang::EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
     }
-
+    
     VCLXWindow::dispose();
 }
 
@@ -73,7 +72,7 @@ void VCLXPlugin::SetPlugin( ::Control *p )
 awt::Size SAL_CALL VCLXPlugin::getMinimumSize()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::ClearableSolarGuard aGuard( GetMutex() );
     if ( mpPlugin )
         return AWTSize( mpPlugin->GetSizePixel() );
     return awt::Size();

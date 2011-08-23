@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,7 +123,7 @@ published service DatabaseRange
 
     //-------------------------------------------------------------------------
 
-    /** specifies the range where the filter can find the filter criteria.
+    /** specifies the range where the filter can find the filter criterias.
         <p>This is only used if <member>SheetFilterDescriptor::UseFilterCriteriaSource</member> is <TRUE/>.</p>
 
         @since OOo 1.1.2
@@ -134,7 +134,7 @@ published service DatabaseRange
 
     /** specifies the time between two refresh actions in seconds.
 
-        @since OOo 2.0
+        @since OOo 2.0.0
      */
     [optional, property] long RefreshPeriod;
 
@@ -142,7 +142,7 @@ published service DatabaseRange
 
     /** specifies whether the imported data is only a selection of the database.
 
-        @since OOo 2.0
+        @since OOo 2.0.0
      */
     [optional, property] boolean FromSelection;
 

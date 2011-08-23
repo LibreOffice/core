@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "miscuno.hxx"
 
+using namespace rtl;
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
 
 
 
@@ -62,9 +61,9 @@ static void load_FixedWidthList(ScCsvSplits &aSplits)
     const Any *pProperties;
     Sequence<OUString> aNames(1);
     OUString* pNames = aNames.getArray();
-    ScLinkConfigItem aItem( OUString(RTL_CONSTASCII_USTRINGPARAM( SEP_PATH )) );
+    ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
 
-    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH_LIST ));
+    pNames[0] = OUString::createFromAscii( FIXED_WIDTH_LIST );
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getConstArray();
 
@@ -97,9 +96,9 @@ static void save_FixedWidthList(ScCsvSplits aSplits)
     Any *pProperties;
     Sequence<OUString> aNames(1);
     OUString* pNames = aNames.getArray();
-    ScLinkConfigItem aItem( OUString(RTL_CONSTASCII_USTRINGPARAM( SEP_PATH )) );
+    ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
 
-    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH_LIST ));
+    pNames[0] = OUString::createFromAscii( FIXED_WIDTH_LIST );
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();
     pProperties[0] <<= sFixedWidthLists;
@@ -111,7 +110,7 @@ ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
     mnPosCursorLast( 1 )
 {
-    EnableRTL( false ); // RTL
+    EnableRTL( false ); // #107812# RTL
     InitColors();
     InitSizeData();
     maBackgrDev.SetFont( GetFont() );
@@ -129,7 +128,7 @@ ScCsvRuler::~ScCsvRuler()
 // common ruler handling ------------------------------------------------------
 
 void ScCsvRuler::SetPosSizePixel(
-        long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+        long nX, long nY, long nWidth, long nHeight, USHORT nFlags )
 {
     if( nFlags & WINDOW_POSSIZE_HEIGHT )
         nHeight = GetTextHeight() + mnSplitSize + 2;

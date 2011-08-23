@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,11 @@ class TransferableClipboardListener;
 class ScEditShell : public SfxShell
 {
 private:
-    EditView*   pEditView;
-    ScViewData* pViewData;
+    EditView*	pEditView;
+    ScViewData*	pViewData;
     TransferableClipboardListener* pClipEvtLstnr;
-    sal_Bool        bPastePossible;
-    sal_Bool        bIsInsertMode;
+    BOOL		bPastePossible;
+    BOOL		bIsInsertMode;
 
     const SvxURLField* GetURLField();
     ScInputHandler* GetMyInputHdl();
@@ -64,21 +64,21 @@ public:
                     ScEditShell(EditView* pView, ScViewData* pData);
                     ~ScEditShell();
 
-    void    SetEditView(EditView* pView);
+    void	SetEditView(EditView* pView);
     EditView* GetEditView() {return pEditView;}
 
-    void    Execute(SfxRequest& rReq);
-    void    ExecuteTrans(SfxRequest& rReq);
-    void    GetState(SfxItemSet &rSet);
-    void    GetClipState(SfxItemSet& rSet);
+    void	Execute(SfxRequest& rReq);
+    void	ExecuteTrans(SfxRequest& rReq);
+    void	GetState(SfxItemSet &rSet);
+    void	GetClipState(SfxItemSet& rSet);
 
-    void    ExecuteAttr(SfxRequest& rReq);
-    void    GetAttrState(SfxItemSet &rSet);
+    void	ExecuteAttr(SfxRequest& rReq);
+    void	GetAttrState(SfxItemSet &rSet);
 
-    void    ExecuteUndo(SfxRequest& rReq);
-    void    GetUndoState(SfxItemSet &rSet);
+    void	ExecuteUndo(SfxRequest& rReq);
+    void	GetUndoState(SfxItemSet &rSet);
 
-    String  GetSelectionText( sal_Bool bWholeWord );
+    String  GetSelectionText( BOOL bWholeWord );
 };
 
 

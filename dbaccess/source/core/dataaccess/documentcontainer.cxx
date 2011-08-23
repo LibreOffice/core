@@ -106,7 +106,7 @@ void SAL_CALL LocalNameApproval::approveElement( const ::rtl::OUString& _rName, 
 DBG_NAME(ODocumentContainer)
 
 ODocumentContainer::ODocumentContainer(const Reference< XMultiServiceFactory >& _xORB
-                                    ,const Reference< XInterface >& _xParentContainer
+                                    ,const Reference< XInterface >&	_xParentContainer
                                     ,const TContentPtr& _pImpl
                                     , sal_Bool _bFormsContainer
                                     )
@@ -186,7 +186,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
     {
         MutexGuard aGuard(m_aMutex);
 
-        // extract known arguments
+        // extrat known arguments
         ::rtl::OUString sName, sPersistentName, sURL, sMediaType, sDocServiceName;
         Reference< XCommandProcessor > xCopyFrom;
         Reference< XConnection > xConnection;
@@ -421,7 +421,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         OpenCommandArgument2 aOpenCommand;
           if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
-            OSL_FAIL( "Wrong argument type!" );
+            OSL_ENSURE( sal_False, "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -467,7 +467,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         InsertCommandArgument arg;
           if ( !( aCommand.Argument >>= arg ) )
         {
-              OSL_FAIL( "Wrong argument type!" );
+              OSL_ENSURE( sal_False, "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -484,7 +484,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         //////////////////////////////////////////////////////////////////
         Sequence< ::rtl::OUString> aSeq = getElementNames();
         const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+        const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
         for(;pIter != pEnd;++pIter)
             removeByName(*pIter);
 
@@ -566,12 +566,13 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
             xComp.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);
         }
     }
-    catch(const NoSuchElementException&)
+    catch(NoSuchElementException)
     {
         throw IllegalArgumentException();
     }
-    catch(const WrappedTargetException&)
+    catch(WrappedTargetException e)
     {
+        // throw IllegalArgumentException();
         throw;
     }
     return xComp;
@@ -678,7 +679,7 @@ void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const ::rtl::OUStri
         if ( xUnoTunnel.is() )
             pContent = reinterpret_cast<OContentHelper*>(xUnoTunnel->getSomething(OContentHelper::getUnoTunnelImplementationId()));
     }
-    catch(const Exception&)
+    catch(Exception)
     {
     }
     return pContent;
@@ -751,6 +752,8 @@ void SAL_CALL ODocumentContainer::removeByName( const ::rtl::OUString& _rName ) 
     // do the removal
     implRemove(_rName);
 
+    //	disposeComponent(xContent); // no dispose here, the object may be inserted again under a different name
+
     notifyByName( aGuard, _rName, NULL, NULL, E_REMOVED, ContainerListemers );
 }
 
@@ -777,5 +780,5 @@ void SAL_CALL ODocumentContainer::rename( const ::rtl::OUString& newName ) throw
     }
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

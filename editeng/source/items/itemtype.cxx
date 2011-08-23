@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 #include "precompiled_editeng.hxx"
 
 // include ---------------------------------------------------------------
+#include <tools/list.hxx>
 #include <vcl/outdev.hxx>
 #include <editeng/editrids.hrc>
 #include <unotools/intlwrapper.hxx>
@@ -96,7 +97,7 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
                         nVal, (MapUnit)eSrcUnit, (MapUnit)eDestUnit ));
 
         default:
-            OSL_FAIL( "not supported mapunit" );
+            DBG_ERROR( "not supported mapunit" );
             return sRet;
     }
 
@@ -123,6 +124,7 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
         nRet %= nDiff;
         if( 4 == nDigits )
         {
+//            DBG_ASSERT(pIntl, "no IntlWrapper* set")
             if(pIntl)
                 sRet += pIntl->getLocaleData()->getNumDecimalSep();
             else
@@ -145,6 +147,8 @@ XubString GetSvxString( sal_uInt16 nId )
 {
     return EE_RESSTR( nId );
 }
+
+#ifndef SVX_LIGHT
 
 // -----------------------------------------------------------------------
 
@@ -185,6 +189,8 @@ XubString GetColorString( const Color& rCol )
     return sStr;
 }
 
+#endif
+
 // -----------------------------------------------------------------------
 
 sal_uInt16 GetMetricId( SfxMapUnit eUnit )
@@ -223,7 +229,7 @@ sal_uInt16 GetMetricId( SfxMapUnit eUnit )
             break;
 
         default:
-            OSL_FAIL( "not supported mapunit" );
+            DBG_ERROR( "not supported mapunit" );
     }
     return nId;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define INCLUDED_THEMETABLE_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/LoggedResources.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <map>
 
@@ -40,7 +40,7 @@ namespace dmapper
 
 struct ThemeTable_Impl;
 
-class WRITERFILTER_DLLPRIVATE ThemeTable : public LoggedProperties, public LoggedTable
+class WRITERFILTER_DLLPRIVATE ThemeTable : public Properties, public Table
 {
     ThemeTable_Impl *m_pImpl;
 
@@ -48,15 +48,14 @@ public:
     ThemeTable();
     virtual ~ThemeTable();
 
-    const ::rtl::OUString getFontNameForTheme(const Id id) const;
-
- private:
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
 
     // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+    
+    const ::rtl::OUString getFontNameForTheme(const Id id) const;
 };
 typedef boost::shared_ptr< ThemeTable >          ThemeTablePtr;
 }}

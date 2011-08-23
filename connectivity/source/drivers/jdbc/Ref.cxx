@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ java_sql_Ref::~java_sql_Ref()
 
 jclass java_sql_Ref::getMyClass() const
 {
-    // the class must be fetched only once, therefore static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/Ref");
     return theClass;

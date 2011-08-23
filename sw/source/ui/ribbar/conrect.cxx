@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@
 ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
                                 SwView* pSwView )
     : SwDrawBase( pWrtShell, pEditWin, pSwView ),
-    bMarquee(sal_False),
+    bMarquee(FALSE),
     // #93382#
     mbVertical(sal_False)
 {
@@ -71,11 +71,11 @@ ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
 |*
 \************************************************************************/
 
-sal_Bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn;
+    BOOL bReturn;
 
-    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == sal_True
+    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == TRUE
                                     && m_pWin->GetSdrDrawMode() == OBJ_CAPTION)
     {
         m_pView->NoRotate();
@@ -94,11 +94,11 @@ sal_Bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
     Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
 
-    sal_Bool bRet = SwDrawBase::MouseButtonUp(rMEvt);
+    BOOL bRet = SwDrawBase::MouseButtonUp(rMEvt);
     if( bRet )
     {
         SdrView *pSdrView = m_pSh->GetDrawView();
@@ -118,13 +118,13 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                     SfxItemSet aItemSet( pSdrView->GetModel()->GetItemPool(),
                                         SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
 
-                    aItemSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
-                    aItemSet.Put( SdrTextAutoGrowHeightItem( sal_False ) );
+                    aItemSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
+                    aItemSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
                     aItemSet.Put( SdrTextAniKindItem( SDRTEXTANI_SCROLL ) );
                     aItemSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
                     aItemSet.Put( SdrTextAniCountItem( 0 ) );
                     aItemSet.Put( SdrTextAniAmountItem(
-                            (sal_Int16)m_pWin->PixelToLogic(Size(2,1)).Width()) );
+                            (INT16)m_pWin->PixelToLogic(Size(2,1)).Width()) );
 
                     pObj->SetMergedItemSetAndBroadcast(aItemSet);
                 }
@@ -135,10 +135,10 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrTextObj* pText = (SdrTextObj*)pObj;
                 SfxItemSet aSet(pSdrView->GetModel()->GetItemPool());
 
-                pText->SetVerticalWriting(sal_True);
+                pText->SetVerticalWriting(TRUE);
 
-                aSet.Put(SdrTextAutoGrowWidthItem(sal_True));
-                aSet.Put(SdrTextAutoGrowHeightItem(sal_False));
+                aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+                aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
@@ -161,7 +161,7 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 pCaptObj->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pCaptObj->GetOutlinerParaObject();
                 if( pOPO && !pOPO->IsVertical() )
-                    pOPO->SetVertical( sal_True );
+                    pOPO->SetVertical( TRUE );
             }
         }
         break;
@@ -177,9 +177,9 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void ConstRectangle::Activate(const sal_uInt16 nSlotId)
+void ConstRectangle::Activate(const USHORT nSlotId)
 {
-    bMarquee = bCapVertical = sal_False;
+    bMarquee = bCapVertical = FALSE;
     mbVertical = sal_False;
 
     switch (nSlotId)
@@ -197,7 +197,7 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
         break;
 
     case SID_DRAW_TEXT_MARQUEE:
-        bMarquee = sal_True;
+        bMarquee = TRUE;
         m_pWin->SetSdrDrawMode(OBJ_TEXT);
         break;
 
@@ -212,7 +212,7 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
         break;
 
     case SID_DRAW_CAPTION_VERTICAL:
-        bCapVertical = sal_True;
+        bCapVertical = TRUE;
         // no break
     case SID_DRAW_CAPTION:
         m_pWin->SetSdrDrawMode(OBJ_CAPTION);

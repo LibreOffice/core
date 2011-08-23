@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,9 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <com/sun/star/style/XStyle.hpp>
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
 #include <xmloff/xmlstyle.hxx>
 
 struct XMLPropertyState;
@@ -48,7 +50,7 @@ class XMLOFF_DLLPUBLIC XMLPropStyleContext : public SvXMLStyleContext
     const ::rtl::OUString msFollowStyle;
     ::std::vector< XMLPropertyState > maProperties;
     ::com::sun::star::uno::Reference < ::com::sun::star::style::XStyle > mxStyle;
-    SvXMLImportContextRef               mxStyles;
+    SvXMLImportContextRef				mxStyles;
 
     SAL_DLLPRIVATE XMLPropStyleContext(XMLPropStyleContext &); // not defined
     SAL_DLLPRIVATE void operator =(XMLPropStyleContext &); // not defined

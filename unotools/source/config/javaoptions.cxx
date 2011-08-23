@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,11 @@
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
+#define C2U(cChar) OUString::createFromAscii(cChar)
 #define CFG_READONLY_DEFAULT    sal_False
+/* -----------------------------10.04.01 12:39--------------------------------
 
+ ---------------------------------------------------------------------------*/
 class SvtExecAppletsItem_Impl : public utl::ConfigItem
 {
     sal_Bool  bExecute;
@@ -55,7 +57,9 @@ public:
     void     SetExecuteApplets(sal_Bool bSet);
     sal_Bool IsReadOnly() const {return bRO;}
 };
+/* -----------------------------10.02.2003 07:46------------------------------
 
+ ---------------------------------------------------------------------------*/
 void SvtExecAppletsItem_Impl::SetExecuteApplets(sal_Bool bSet)
 {
     OSL_ENSURE(!bRO, "SvtExecAppletsItem_Impl::SetExecuteApplets()\nYou tried to write on a readonly value!\n");
@@ -65,7 +69,9 @@ void SvtExecAppletsItem_Impl::SetExecuteApplets(sal_Bool bSet)
         SetModified();
     }
 }
+/* -----------------------------18.05.01 14:44--------------------------------
 
+ ---------------------------------------------------------------------------*/
 SvtExecAppletsItem_Impl::SvtExecAppletsItem_Impl() :
         utl::ConfigItem(C2U("Office.Common/Java/Applet")),
         bExecute       (sal_False                       ),
@@ -133,7 +139,9 @@ struct SvtJavaOptions_Impl
             pNames[3] = C2U("UserClassPath");
         }
 };
+/* -----------------------------18.05.01 13:28--------------------------------
 
+ ---------------------------------------------------------------------------*/
 SvtJavaOptions::SvtJavaOptions() :
     utl::ConfigItem(C2U("Office.Java/VirtualMachine")),
     pImpl(new SvtJavaOptions_Impl)
@@ -165,12 +173,16 @@ SvtJavaOptions::SvtJavaOptions() :
         pImpl->bROUserClassPath = pROStates[3];
     }
 }
+/* -----------------------------18.05.01 13:28--------------------------------
 
+ ---------------------------------------------------------------------------*/
 SvtJavaOptions::~SvtJavaOptions()
 {
     delete pImpl;
 }
+/*-- 18.05.01 13:28:35---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void    SvtJavaOptions::Commit()
 {
     pImpl->aExecItem.Commit();
@@ -231,27 +243,37 @@ void    SvtJavaOptions::Commit()
     aNames.realloc(nRealCount);
     PutProperties(aNames,aValues);
 }
+/*-- 18.05.01 13:28:35---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 sal_Bool        SvtJavaOptions::IsEnabled() const
 {
     return pImpl->bEnabled;
 }
+/*-- 18.05.01 13:28:35---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 sal_Bool        SvtJavaOptions::IsSecurity()const
 {
     return pImpl->bSecurity;
 }
+/*-- 18.05.01 13:28:35---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 sal_Int32       SvtJavaOptions::GetNetAccess() const
 {
     return pImpl->nNetAccess;
 }
+/*-- 18.05.01 13:28:36---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 rtl::OUString&  SvtJavaOptions::GetUserClassPath()const
 {
     return pImpl->sUserClassPath;
 }
+/*-- 18.05.01 13:28:37---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SvtJavaOptions::SetEnabled(sal_Bool bSet)
 {
     OSL_ENSURE(!pImpl->bROEnabled, "SvtJavaOptions::SetEnabled()\nYou tried to write on a readonly value!\n");
@@ -261,7 +283,9 @@ void SvtJavaOptions::SetEnabled(sal_Bool bSet)
         SetModified();
     }
 }
+/*-- 18.05.01 13:28:38---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SvtJavaOptions::SetSecurity(sal_Bool bSet)
 {
     OSL_ENSURE(!pImpl->bROSecurity, "SvtJavaOptions::SetSecurity()\nYou tried to write on a readonly value!\n");
@@ -271,7 +295,9 @@ void SvtJavaOptions::SetSecurity(sal_Bool bSet)
         SetModified();
     }
 }
+/*-- 18.05.01 13:28:38---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SvtJavaOptions::SetNetAccess(sal_Int32 nSet)
 {
     OSL_ENSURE(!pImpl->bRONetAccess, "SvtJavaOptions::SetNetAccess()\nYou tried to write on a readonly value!\n");
@@ -281,7 +307,9 @@ void SvtJavaOptions::SetNetAccess(sal_Int32 nSet)
         SetModified();
     }
 }
+/*-- 18.05.01 13:28:38---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SvtJavaOptions::SetUserClassPath(const rtl::OUString& rSet)
 {
     OSL_ENSURE(!pImpl->bROUserClassPath, "SvtJavaOptions::SetUserClassPath()\nYou tried to write on a readonly value!\n");
@@ -292,12 +320,16 @@ void SvtJavaOptions::SetUserClassPath(const rtl::OUString& rSet)
     }
 }
 
+/*-- 18.05.01 14:34:32---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 sal_Bool        SvtJavaOptions::IsExecuteApplets() const
 {
     return pImpl->aExecItem.IsExecuteApplets();
 }
+/*-- 18.05.01 14:34:32---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SvtJavaOptions::SetExecuteApplets(sal_Bool bSet)
 {
     if(!pImpl->aExecItem.IsReadOnly() && pImpl->aExecItem.IsExecuteApplets() != bSet)
@@ -306,7 +338,9 @@ void SvtJavaOptions::SetExecuteApplets(sal_Bool bSet)
         SetModified();
     }
 }
+/*--10.02.2003 08:40---------------------------------------------------
 
+-----------------------------------------------------------------------*/
 sal_Bool SvtJavaOptions::IsReadOnly( EOption eOption ) const
 {
     sal_Bool bRO = sal_True;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ public class _XGrid extends MultiMethodTest {
     /**
     * The method called. Then CurrentColumnPosition is obtained, changed
     * and saved.
-    * Has <b> OK </b> status if no exceptions was occurred.
+    * Has <b> OK </b> status if no exceptions was occured.
     */
     public void _setCurrentColumnPosition() {
         log.println("Testing setCurrentColumnPosition()...");

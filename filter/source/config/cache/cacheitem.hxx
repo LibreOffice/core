@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 //_______________________________________________
 // includes
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <deque>
 #include <list>
 #include <com/sun/star/uno/Any.h>
@@ -67,7 +67,7 @@ struct BaseLock
 };
 
 
-typedef ::comphelper::SequenceAsVector< ::rtl::OUString > OUStringList;
+typedef ::comphelper::SequenceAsVector< ::rtl::OUString > OUStringList; 
 
 //_______________________________________________
 
@@ -115,8 +115,8 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @param  lProps
                     contains all properties, which must exist at this item.
 
-            @return sal_True if all given properties exists
-                    at this item; sal_False otherwhise.
+            @return TRUE if all given properties exists
+                    at this item; FALSE otherwhise.
          */
         sal_Bool haveProps(const CacheItem& lProps) const;
 
@@ -132,8 +132,8 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @param  lProps
                     contains all properties, which should not exists at this item.
 
-            @return sal_False if at least on property exists at this item(!);
-                    sal_True otherwhise.
+            @return FALSE if at least on property exists at this item(!);
+                    TRUE otherwhise.
          */
         sal_Bool dontHaveProps(const CacheItem& lProps) const;
 
@@ -149,8 +149,8 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @param  lProps
                     contains all properties, which should be checked.
 
-            @return sal_True if all given properties dont exists
-                    at this item; sal_False otherwhise.
+            @return TRUE if all given properties dont exists
+                    at this item; FALSE otherwhise.
          */
         sal_Bool excludeProps(const CacheItem& lProps) const;
 
@@ -167,12 +167,12 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
                     the list of possible ones.
          */
         void validateUINames(const ::rtl::OUString& sActLocale);
-
+        
         //---------------------------------------
 
         /** @short  convert this structure to a seq< PropertyValue >
                     and ignore all empty properties!
-
+                    
             @descr  Normaly the converter routines of the base class
                     SequenceAsHashMap do this job already.
                     But it doesnt provide a "pack" mechanism to
@@ -190,7 +190,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 /** @short  represent an item list of a FilterCache
             instance.
  */
-typedef ::boost::unordered_map< ::rtl::OUString                    ,
+typedef ::std::hash_map< ::rtl::OUString                    ,
                          CacheItem                          ,
                          ::rtl::OUStringHash                ,
                          ::std::equal_to< ::rtl::OUString > > CacheItemList;
@@ -209,7 +209,7 @@ typedef ::boost::unordered_map< ::rtl::OUString                    ,
             there we need key-value pairs too, which cant be provided
             by a pur vector!
  */
-typedef ::boost::unordered_map< ::rtl::OUString                    ,
+typedef ::std::hash_map< ::rtl::OUString                    ,
                          OUStringList                       ,
                          ::rtl::OUStringHash                ,
                          ::std::equal_to< ::rtl::OUString > > CacheItemRegistration;
@@ -228,22 +228,22 @@ struct  FlatDetectionInfo
 {
     // the internal type name
     ::rtl::OUString sType;
-
+    
     // this type was found by a matching the URL extension
     sal_Bool bMatchByExtension;
-
+    
     // this type was found by a matching URL Pattern
     sal_Bool bMatchByPattern;
-
+    
     // the user selected this type explicitly
     sal_Bool bPreselectedAsType;
-
+    
     // the user selected this type implicit by selecting a corresponding filter
     sal_Bool bPreselectedByFilter;
-
+    
     // the user selected this type implicit by selecting a corresponding office module
     sal_Bool bPreselectedByDocumentService;
-
+    
     FlatDetectionInfo()
         : sType                        (::rtl::OUString())
         , bMatchByExtension            (sal_False        )

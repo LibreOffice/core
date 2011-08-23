@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,6 @@
 
 #include <basebmp/scanlineformats.hxx>
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
 
 #if defined WITH_SVP_LISTENING
 #include <osl/thread.h>
@@ -44,7 +43,7 @@
 #include "svpframe.hxx"
 
 #include <list>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -59,16 +58,16 @@ class SvpElementContainer
     std::list< SvpElement* >        m_aElements;
     int                             m_nSocket;
     oslThread                       m_aThread;
-
+    
     SvpElementContainer();
     ~SvpElementContainer();
     public:
     void registerElement( SvpElement* pElement ) { m_aElements.push_back(pElement); }
     void deregisterElement( SvpElement* pElement ) { m_aElements.remove(pElement); }
-
+    
     void run();
     DECL_LINK(processRequest,void*);
-
+    
     static SvpElementContainer& get();
 };
 
@@ -88,7 +87,7 @@ SvpElementContainer::SvpElementContainer()
     if( m_nSocket >= 0)
     {
         int nOn = 1;
-        if( setsockopt(m_nSocket, SOL_SOCKET, SO_REUSEADDR,
+        if( setsockopt(m_nSocket, SOL_SOCKET, SO_REUSEADDR, 
                        (char*)&nOn, sizeof(nOn)) )
         {
             perror( "SvpElementContainer: changing socket options failed" );
@@ -167,7 +166,7 @@ static const char* matchType( SvpElement* pEle )
 IMPL_LINK( SvpElementContainer, processRequest, void*, pSocket )
 {
     int nFile = (int)pSocket;
-
+    
     rtl::OStringBuffer aBuf( 256 ), aAnswer( 256 );
     char c;
     while( read( nFile, &c, 1 ) && c != '\n' )
@@ -175,14 +174,14 @@ IMPL_LINK( SvpElementContainer, processRequest, void*, pSocket )
     rtl::OString aCommand( aBuf.makeStringAndClear() );
     if( aCommand.compareTo( "list", 4 ) == 0 )
     {
-        boost::unordered_map< rtl::OString, std::list<SvpElement*>, rtl::OStringHash > aMap;
+        std::hash_map< rtl::OString, std::list<SvpElement*>, rtl::OStringHash > aMap;
         for( std::list< SvpElement* >::const_iterator it = m_aElements.begin();
              it != m_aElements.end(); ++it )
         {
             std::list<SvpElement*>& rList = aMap[matchType(*it)];
             rList.push_back( *it );
         }
-        for( boost::unordered_map< rtl::OString, std::list<SvpElement*>, rtl::OStringHash>::const_iterator hash_it = aMap.begin();
+        for( std::hash_map< rtl::OString, std::list<SvpElement*>, rtl::OStringHash>::const_iterator hash_it = aMap.begin();
              hash_it != aMap.end(); ++hash_it )
         {
             aAnswer.append( "ElementType: " );
@@ -230,7 +229,7 @@ IMPL_LINK( SvpElementContainer, processRequest, void*, pSocket )
     }
     write( nFile, aAnswer.getStr(), aAnswer.getLength() );
     close( nFile );
-
+    
     return 0;
 }
 
@@ -284,7 +283,7 @@ sal_uInt32 SvpElement::getBitCountFromScanlineFormat( sal_Int32 nFormat )
             nBitCount = 32;
             break;
         default:
-        OSL_FAIL( "unsupported basebmp format" );
+        DBG_ERROR( "unsupported basebmp format" );
         break;
     }
     return nBitCount;

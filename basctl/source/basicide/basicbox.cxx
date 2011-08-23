@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ using namespace ::com::sun::star::uno;
 
 SFX_IMPL_TOOLBOX_CONTROL( LibBoxControl, SfxStringItem );
 
-LibBoxControl::LibBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
+LibBoxControl::LibBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
     : SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -70,7 +70,7 @@ LibBoxControl::~LibBoxControl()
 
 
 
-void LibBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
+void LibBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
 {
     BasicLibBox* pBox = (BasicLibBox*) GetToolBox().GetItemWindow( GetId() );
 
@@ -145,7 +145,9 @@ void DocListenerBox::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ 
 
 void DocListenerBox::onDocumentClosed( const ScriptDocument& /*_rDocument*/ )
 {
-    FillBox();
+    if ( SFX_APP()->IsInBasicCall() )
+        // Nicht wenn Office beendet
+        FillBox();
 }
 
 void DocListenerBox::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
@@ -166,25 +168,25 @@ BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >
     m_xFrame( rFrame )
 {
     FillBox();
-    bIgnoreSelect = sal_True;   // Select von 0 noch nicht weiterleiten
-    bFillBox = sal_True;
+    bIgnoreSelect = TRUE;	// Select von 0 noch nicht weiterleiten
+    bFillBox = TRUE;
     SelectEntryPos( 0 );
     aCurText = GetEntry( 0 );
     SetSizePixel( Size( 250, 200 ) );
-    bIgnoreSelect = sal_False;
+    bIgnoreSelect = FALSE;
 }
 
 
 
-BasicLibBox::~BasicLibBox()
+__EXPORT BasicLibBox::~BasicLibBox()
 {
     ClearBox();
 }
 
-void BasicLibBox::Update( const SfxStringItem* pItem )
+void __EXPORT BasicLibBox::Update( const SfxStringItem* pItem )
 {
     // Immer auf dem laufenden sein...
-//  if ( !pItem  || !pItem->GetValue().Len() )
+//	if ( !pItem  || !pItem->GetValue().Len() )
         FillBox();
 
     if ( pItem )
@@ -198,7 +200,7 @@ void BasicLibBox::Update( const SfxStringItem* pItem )
         SelectEntry( aCurText );
 }
 
-void BasicLibBox::ReleaseFocus()
+void __EXPORT BasicLibBox::ReleaseFocus()
 {
     SfxViewShell* pCurSh = SfxViewShell::Current();
     DBG_ASSERT( pCurSh, "Current ViewShell not found!" );
@@ -206,7 +208,7 @@ void BasicLibBox::ReleaseFocus()
     if ( pCurSh )
     {
         Window* pShellWin = pCurSh->GetWindow();
-        if ( !pShellWin )       // sonst werde ich ihn nicht los
+        if ( !pShellWin )		// sonst werde ich ihn nicht los
             pShellWin = Application::GetDefDialogParent();
 
         pShellWin->GrabFocus();
@@ -215,8 +217,8 @@ void BasicLibBox::ReleaseFocus()
 
 void BasicLibBox::FillBox()
 {
-    SetUpdateMode( sal_False );
-    bIgnoreSelect = sal_True;
+    SetUpdateMode( FALSE );
+    bIgnoreSelect = TRUE;
 
     aCurText = GetSelectEntry();
 
@@ -224,7 +226,7 @@ void BasicLibBox::FillBox()
     ClearBox();
 
     // create list box entries
-    sal_uInt16 nPos = InsertEntry( String( IDEResId( RID_STR_ALL ) ), LISTBOX_APPEND );
+    USHORT nPos = InsertEntry( String( IDEResId( RID_STR_ALL ) ), LISTBOX_APPEND );
     SetEntryData( nPos, new BasicLibEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_UNKNOWN, String() ) );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
@@ -238,15 +240,15 @@ void BasicLibBox::FillBox()
         InsertEntries( *doc, LIBRARY_LOCATION_DOCUMENT );
     }
 
-    SetUpdateMode( sal_True );
+    SetUpdateMode( TRUE );
 
     SelectEntry( aCurText );
     if ( !GetSelectEntryCount() )
     {
-        SelectEntryPos( GetEntryCount() );  // gibst es nicht => leer?
+        SelectEntryPos( GetEntryCount() );	// gibst es nicht => leer?
         aCurText = GetSelectEntry();
     }
-    bIgnoreSelect = sal_False;
+    bIgnoreSelect = FALSE;
 }
 
 void BasicLibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation )
@@ -263,7 +265,7 @@ void BasicLibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocatio
         {
             String aName( rDocument.getTitle( eLocation ) );
             String aEntryText( CreateMgrAndLibStr( aName, aLibName ) );
-            sal_uInt16 nPos = InsertEntry( aEntryText, LISTBOX_APPEND );
+            USHORT nPos = InsertEntry( aEntryText, LISTBOX_APPEND );
             SetEntryData( nPos, new BasicLibEntry( rDocument, eLocation, aLibName ) );
         }
     }
@@ -275,7 +277,7 @@ long BasicLibBox::PreNotify( NotifyEvent& rNEvt )
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
-        sal_uInt16 nKeyCode = aKeyEvt.GetKeyCode().GetCode();
+        USHORT nKeyCode = aKeyEvt.GetKeyCode().GetCode();
         switch( nKeyCode )
         {
             case KEY_RETURN:
@@ -299,35 +301,35 @@ long BasicLibBox::PreNotify( NotifyEvent& rNEvt )
         if ( bFillBox )
         {
             FillBox();
-            bFillBox = sal_False;
+            bFillBox = FALSE;
         }
     }
     else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
-        if ( !HasChildPathFocus( sal_True ) )
+        if ( !HasChildPathFocus( TRUE ) )
         {
-            bIgnoreSelect = sal_True;
-            bFillBox = sal_True;
+            bIgnoreSelect = TRUE;
+            bFillBox = TRUE;
         }
     }
 
     return nDone ? nDone : ListBox::PreNotify( rNEvt );
 }
 
-void BasicLibBox::Select()
+void __EXPORT BasicLibBox::Select()
 {
     if ( !IsTravelSelect() )
     {
         if ( !bIgnoreSelect )
             NotifyIDE();
         else
-            SelectEntry( aCurText );    // Seit 306... (Select nach Escape)
+            SelectEntry( aCurText );	// Seit 306... (Select nach Escape)
     }
 }
 
 void BasicLibBox::NotifyIDE()
 {
-    sal_uInt16 nSelPos = GetSelectEntryPos();
+    USHORT nSelPos = GetSelectEntryPos();
     BasicLibEntry* pEntry = (BasicLibEntry*)GetEntryData( nSelPos );
     if ( pEntry )
     {
@@ -349,8 +351,8 @@ void BasicLibBox::NotifyIDE()
 
 void BasicLibBox::ClearBox()
 {
-    sal_uInt16 nCount = GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    USHORT nCount = GetEntryCount();
+    for ( USHORT i = 0; i < nCount; ++i )
     {
         BasicLibEntry* pEntry = (BasicLibEntry*)GetEntryData( i );
         delete pEntry;
@@ -362,7 +364,7 @@ void BasicLibBox::ClearBox()
 
 SFX_IMPL_TOOLBOX_CONTROL( LanguageBoxControl, SfxStringItem );
 
-LanguageBoxControl::LanguageBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
+LanguageBoxControl::LanguageBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
     : SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -371,7 +373,7 @@ LanguageBoxControl::~LanguageBoxControl()
 {
 }
 
-void LanguageBoxControl::StateChanged( sal_uInt16 _nID, SfxItemState _eState, const SfxPoolItem* _pItem )
+void LanguageBoxControl::StateChanged( USHORT _nID, SfxItemState _eState, const SfxPoolItem* _pItem )
 {
     (void)_nID;
 
@@ -421,7 +423,7 @@ BasicLanguageBox::~BasicLanguageBox()
 
 void BasicLanguageBox::FillBox()
 {
-    SetUpdateMode( sal_False );
+    SetUpdateMode( FALSE );
     m_bIgnoreSelect = true;
     m_sCurrentText = GetSelectEntry();
     ClearBox();
@@ -435,8 +437,8 @@ void BasicLanguageBox::FillBox()
         Locale aCurrentLocale = pCurMgr->getStringResourceManager()->getCurrentLocale();
         Sequence< Locale > aLocaleSeq = pCurMgr->getStringResourceManager()->getLocales();
         const Locale* pLocale = aLocaleSeq.getConstArray();
-        sal_Int32 i, nCount = aLocaleSeq.getLength();
-        sal_uInt16 nSelPos = LISTBOX_ENTRY_NOTFOUND;
+        INT32 i, nCount = aLocaleSeq.getLength();
+        USHORT nSelPos = LISTBOX_ENTRY_NOTFOUND;
         for ( i = 0;  i < nCount;  ++i )
         {
             bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
@@ -448,7 +450,7 @@ void BasicLanguageBox::FillBox()
                 sLanguage += ' ';
                 sLanguage += m_sDefaultLanguageStr;
             }
-            sal_uInt16 nPos = InsertEntry( sLanguage );
+            USHORT nPos = InsertEntry( sLanguage );
             SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
 
             if ( bIsCurrent )
@@ -468,14 +470,14 @@ void BasicLanguageBox::FillBox()
         Disable();
     }
 
-    SetUpdateMode( sal_True );
+    SetUpdateMode( TRUE );
     m_bIgnoreSelect = false;
 }
 
 void BasicLanguageBox::ClearBox()
 {
-    sal_uInt16 nCount = GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    USHORT nCount = GetEntryCount();
+    for ( USHORT i = 0; i < nCount; ++i )
     {
         LanguageEntry* pEntry = (LanguageEntry*)GetEntryData(i);
         delete pEntry;
@@ -495,7 +497,7 @@ void BasicLanguageBox::Select()
     if ( !m_bIgnoreSelect )
         SetLanguage();
     else
-        SelectEntry( m_sCurrentText );  // Select after Escape
+        SelectEntry( m_sCurrentText );	// Select after Escape
 }
 
 long BasicLanguageBox::PreNotify( NotifyEvent& rNEvt )
@@ -503,7 +505,7 @@ long BasicLanguageBox::PreNotify( NotifyEvent& rNEvt )
     long nDone = 0;
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        sal_uInt16 nKeyCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+        USHORT nKeyCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
         switch( nKeyCode )
         {
             case KEY_RETURN:

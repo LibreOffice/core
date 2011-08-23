@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,13 +60,13 @@ DBG_NAME( AccessibleDialogWindow )
 
 
 // -----------------------------------------------------------------------------
-// class ChildDescriptor
+//	class ChildDescriptor
 // -----------------------------------------------------------------------------
 
 AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
     :pDlgEdObj( _pDlgEdObj )
     ,rxAccessible( 0 )
-{
+{ 
 }
 
 // -----------------------------------------------------------------------------
@@ -116,7 +116,7 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
 }
 
 // -----------------------------------------------------------------------------
-// class AccessibleDialogWindow
+//	class AccessibleDialogWindow
 // -----------------------------------------------------------------------------
 
 AccessibleDialogWindow::AccessibleDialogWindow( DialogWindow* pDialogWindow )
@@ -131,9 +131,9 @@ AccessibleDialogWindow::AccessibleDialogWindow( DialogWindow* pDialogWindow )
         SdrPage* pSdrPage = m_pDialogWindow->GetPage();
         if ( pSdrPage )
         {
-            sal_uLong nCount = pSdrPage->GetObjCount();
+            ULONG nCount = pSdrPage->GetObjCount();
 
-            for ( sal_uLong i = 0; i < nCount; ++i )
+            for ( ULONG i = 0; i < nCount; ++i )
             {
                 SdrObject* pObj = pSdrPage->GetObj( i );
                 DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
@@ -338,7 +338,7 @@ void AccessibleDialogWindow::RemoveChild( const ChildDescriptor& rDesc )
 void AccessibleDialogWindow::UpdateChild( const ChildDescriptor& rDesc )
 {
     if ( IsChildVisible( rDesc ) )
-    {
+    {			
         // if the object is not in the child list, insert child
         InsertChild( rDesc );
     }
@@ -358,7 +358,7 @@ void AccessibleDialogWindow::UpdateChildren()
         SdrPage* pSdrPage = m_pDialogWindow->GetPage();
         if ( pSdrPage )
         {
-            for ( sal_uLong i = 0, nCount = pSdrPage->GetObjCount(); i < nCount; ++i )
+            for ( ULONG i = 0, nCount = pSdrPage->GetObjCount(); i < nCount; ++i )
             {
                 SdrObject* pObj = pSdrPage->GetObj( i );
                 DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
@@ -443,13 +443,13 @@ void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindo
         case VCLEVENT_WINDOW_SHOW:
         {
             aNewValue <<= AccessibleStateType::SHOWING;
-            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );							
         }
         break;
         case VCLEVENT_WINDOW_HIDE:
         {
             aOldValue <<= AccessibleStateType::SHOWING;
-            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );				
         }
         break;
         case VCLEVENT_WINDOW_RESIZE:
@@ -518,7 +518,7 @@ void AccessibleDialogWindow::FillAccessibleStateSet( utl::AccessibleStateSetHelp
 }
 
 // -----------------------------------------------------------------------------
-// OCommonAccessibleComponent
+// OCommonAccessibleComponent 
 // -----------------------------------------------------------------------------
 
 awt::Rectangle AccessibleDialogWindow::implGetBounds() throw (RuntimeException)
@@ -551,7 +551,7 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     if ( IsChildVisible( aDesc ) )
                         InsertChild( aDesc );
                 }
-            }
+            }	
             break;
             case HINT_OBJREMOVED:
             {
@@ -648,7 +648,7 @@ void AccessibleDialogWindow::disposing()
 
 ::rtl::OUString AccessibleDialogWindow::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.basctl.AccessibleWindow" ));
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.basctl.AccessibleWindow" );
 }
 
 // -----------------------------------------------------------------------------
@@ -669,7 +669,7 @@ sal_Bool AccessibleDialogWindow::supportsService( const ::rtl::OUString& rServic
 Sequence< ::rtl::OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleWindow" ));
+    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleWindow" );
     return aNames;
 }
 
@@ -752,7 +752,7 @@ sal_Int32 AccessibleDialogWindow::getAccessibleIndexInParent(  ) throw (RuntimeE
         Window* pParent = m_pDialogWindow->GetAccessibleParentWindow();
         if ( pParent )
         {
-            for ( sal_uInt16 i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
+            for ( USHORT i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
             {
                 Window* pChild = pParent->GetAccessibleChildWindow( i );
                 if ( pChild == static_cast< Window* >( m_pDialogWindow ) )
@@ -778,7 +778,7 @@ sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeException)
+::rtl::OUString AccessibleDialogWindow::getAccessibleDescription(	) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -856,8 +856,8 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt
     {
         Reference< XAccessible > xAcc = getAccessibleChild( i );
         if ( xAcc.is() )
-        {
-            Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
+        {			
+            Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );				
             if ( xComp.is() )
             {
                 Rectangle aRect = VCLRectangle( xComp->getBounds() );
@@ -1007,7 +1007,7 @@ void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex ) thro
 // -----------------------------------------------------------------------------
 
 sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
-{
+{	
     OExternalLockGuard aGuard( this );
 
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
@@ -1065,7 +1065,7 @@ sal_Int32 AccessibleDialogWindow::getSelectedAccessibleChildCount(  ) throw (Run
     sal_Int32 nRet = 0;
 
     for ( sal_Int32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
-    {
+    {		
         if ( isAccessibleChildSelected( i ) )
             ++nRet;
     }
@@ -1085,7 +1085,7 @@ Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal
     Reference< XAccessible > xChild;
 
     for ( sal_Int32 i = 0, j = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
-    {
+    {		
         if ( isAccessibleChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
         {
             xChild = getAccessibleChild( i );
@@ -1115,7 +1115,7 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
             {
                 SdrPageView* pPgView = pSdrView->GetSdrPageView();
                 if ( pPgView )
-                    pSdrView->MarkObj( pDlgEdObj, pPgView, sal_True );
+                    pSdrView->MarkObj( pDlgEdObj, pPgView, TRUE );
             }
         }
     }

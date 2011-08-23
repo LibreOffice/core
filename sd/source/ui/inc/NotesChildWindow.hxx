@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ class NotesChildWindow
     : public SfxChildWindow
 {
 public:
-    NotesChildWindow (::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
+    NotesChildWindow (::Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
     virtual ~NotesChildWindow (void);
-
+    
     SFX_DECL_CHILDWINDOW (NotesChildWindow);
 };
 

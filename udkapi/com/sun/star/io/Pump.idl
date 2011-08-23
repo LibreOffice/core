@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,49 +24,55 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_io_Pipe_idl__
-#define __com_sun_star_io_Pipe_idl__
-
-#include <com/sun/star/io/XActiveDataSource.idl>
-
-#include <com/sun/star/io/XActiveDataSink.idl>
-
-#include <com/sun/star/io/XActiveDataControl.idl>
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module io {
-
-//=============================================================================
-
+#ifndef __com_sun_star_io_Pipe_idl__ 
+#define __com_sun_star_io_Pipe_idl__ 
+ 
+#ifndef __com_sun_star_io_XActiveDataSource_idl__ 
+#include <com/sun/star/io/XActiveDataSource.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_XActiveDataSink_idl__ 
+#include <com/sun/star/io/XActiveDataSink.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_XActiveDataControl_idl__ 
+#include <com/sun/star/io/XActiveDataControl.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module io {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: service com::sun::star::io::Pump
 /** the implementation of a data source and a data sink.
     <p>A thread will be created that reads from the input stream and writes
     the data to the connected output stream. Data will not be buffered by
     this service. </p>
-
+    
  */
 published service Pump
-{
+{ 
     /** allows to set the outputstream
      */
-    interface com::sun::star::io::XActiveDataSource;
-
+    interface com::sun::star::io::XActiveDataSource; 
+    
     /** allows to set the inputstream
      */
-    interface com::sun::star::io::XActiveDataSink;
+    interface com::sun::star::io::XActiveDataSink; 
 
     /** allows listener administration and starting/stopping the pump */
-    interface com::sun::star::io::XActiveDataControl;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    interface com::sun::star::io::XActiveDataControl; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

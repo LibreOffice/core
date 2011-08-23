@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,14 +83,14 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
         SfxItemSet aNewAttr( mpViewShell->GetPool(),
                              EE_ITEMS_START, EE_ITEMS_END );
-        aNewAttr.Put( aEditAttr, sal_False );
+        aNewAttr.Put( aEditAttr, FALSE );
 
         // Dialog hochfahren und ausfuehren
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdOutlineBulletTabDlg( NULL, &aNewAttr, mpView ) : 0;
         if( pDlg )
         {
-            sal_uInt16 nResult = pDlg->Execute();
+            USHORT nResult = pDlg->Execute();
 
             switch( nResult )
             {

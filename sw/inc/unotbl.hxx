@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,6 +65,9 @@ class SwChartDataProvider;
 class SwFrmFmt;
 
 
+/* -----------------------------22.09.00 11:10--------------------------------
+
+ ---------------------------------------------------------------------------*/
 class SwChartEventListenerContainer : public SwEventListenerContainer
 {
     public:
@@ -72,7 +75,9 @@ class SwChartEventListenerContainer : public SwEventListenerContainer
             SwEventListenerContainer(pxParentL){}
         void ChartDataChanged();
 };
+/* ---------------------------------------------------------------------------
 
+ ---------------------------------------------------------------------------*/
 typedef
 cppu::WeakImplHelper4
 <
@@ -87,14 +92,14 @@ class SwXCell : public SwXCellBaseClass,
     public SwClient
 {
     friend void   lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
-                                 sal_Bool bKeepNumberFmt = sal_False );
+                                 BOOL bKeepNumberFmt = FALSE );
     friend double lcl_getValue( SwXCell &rCell );
     friend void   lcl_setValue( SwXCell &rCell, double nVal );
 
 
     const SfxItemPropertySet*   m_pPropSet;
     SwTableBox*                 pBox;       // only set in non-XML import
-    const SwStartNode*      pStartNode; // only set in XML import
+    const SwStartNode* 		pStartNode; // only set in XML import
 
     // table position where pBox was found last
     sal_uInt16              nFndPos;
@@ -110,10 +115,7 @@ protected:
     bool IsValid() const;
 
     virtual ~SwXCell();
-
-    //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
-
+    
 public:
     SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, sal_uInt16 nPos=USHRT_MAX );
     SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode); // XML import interface
@@ -158,8 +160,11 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    //SwClient
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //XEnumerationAccess - frueher XParagraphEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -169,12 +174,14 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
     SwTableBox*   GetTblBox()const {return pBox;}
-    static SwXCell*     CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTbl = 0 );
-    SwTableBox*     FindBox(SwTable* pTable, SwTableBox* pBox);
+    static SwXCell*		CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTbl = 0 );
+    SwTableBox* 	FindBox(SwTable* pTable, SwTableBox* pBox);
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };
-
+/* -----------------27.06.98 15:40-------------------
+ *
+ * --------------------------------------------------*/
 class SwXTextTableRow : public cppu::WeakImplHelper2
 <
     ::com::sun::star::beans::XPropertySet,
@@ -183,14 +190,11 @@ class SwXTextTableRow : public cppu::WeakImplHelper2
     public SwClient
 {
     const SfxItemPropertySet*   m_pPropSet;
-    SwTableLine*            pLine;
+    SwTableLine* 			pLine;
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 protected:
     virtual ~SwXTextTableRow();
-    //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
-
 public:
     SwXTextTableRow(SwFrmFmt* pFmt, SwTableLine* pLine);
 
@@ -208,13 +212,18 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    const SwTableLine*  GetTblRow() const {return pLine;}
+    //SwClient
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+    const SwTableLine* 	GetTblRow() const {return pLine;}
     static SwTableLine* FindLine(SwTable* pTable, SwTableLine* pLine);
 };
-
+/* -----------------20.07.98 13:03-------------------
+ *
+ * --------------------------------------------------*/
 typedef cppu::WeakImplHelper3<
                                 ::com::sun::star::text::XTextTableCursor,
                                 ::com::sun::star::lang::XServiceInfo,
@@ -224,8 +233,10 @@ class SW_DLLPUBLIC SwXTextTableCursor : public SwXTextTableCursor_Base
     ,public SwClient
     ,public OTextCursorHelper
 {
-    SwDepend                aCrsrDepend;
+    SwDepend 				aCrsrDepend;
     const SfxItemPropertySet*   m_pPropSet;
+
+    //	SwUnoCrsr* 		GetCrsr() const { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
 
 protected:
     virtual ~SwXTextTableCursor();
@@ -236,7 +247,7 @@ public:
 
 
     DECLARE_XINTERFACE()
-
+    
     //XTextTableCursor
     virtual ::rtl::OUString SAL_CALL getRangeName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL gotoCellByName( const ::rtl::OUString& aCellName, sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
@@ -260,23 +271,26 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     // ITextCursorHelper
-    virtual const SwPaM*        GetPaM() const;
-    virtual SwPaM*              GetPaM();
-    virtual const SwDoc*        GetDoc() const;
-    virtual SwDoc*              GetDoc();
+    virtual const SwPaM*		GetPaM() const;
+    virtual	SwPaM*				GetPaM();
+    virtual const SwDoc* 		GetDoc() const;
+    virtual SwDoc* 				GetDoc();
 
-    const SwUnoCrsr*            GetCrsr() const;
-    SwUnoCrsr*                  GetCrsr();
-    SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    const SwUnoCrsr*			GetCrsr() const;
+    SwUnoCrsr*					GetCrsr();
+    SwFrmFmt* 		GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };
 
+/*-----------------11.12.97 09:38-------------------
+
+--------------------------------------------------*/
 struct SwRangeDescriptor
 {
     sal_Int32 nTop;
@@ -303,20 +317,20 @@ class SwXTextTable : public cppu::WeakImplHelper10
 >,
     public SwClient
 {
-    SwEventListenerContainer        aLstnrCntnr;
-    SwChartEventListenerContainer   aChartLstnrCntnr;
+    SwEventListenerContainer		aLstnrCntnr;
+    SwChartEventListenerContainer	aChartLstnrCntnr;
     const SfxItemPropertySet*       m_pPropSet;
 
     // Descriptor-interface
-    SwTableProperties_Impl*     pTableProps;
-    String                      m_sTableName;
-    sal_Bool                        bIsDescriptor;
-    unsigned short              nRows;
-    unsigned short              nColumns;
+    SwTableProperties_Impl*		pTableProps;
+    String 						m_sTableName;
+    sal_Bool 						bIsDescriptor;
+    unsigned short 				nRows;
+    unsigned short 				nColumns;
 
 
-    sal_Bool                        bFirstRowAsLabel    :1;
-    sal_Bool                        bFirstColumnAsLabel :1;
+    sal_Bool						bFirstRowAsLabel 	:1;
+    sal_Bool						bFirstColumnAsLabel	:1;
 protected:
     virtual ~SwXTextTable();
 public:
@@ -393,23 +407,26 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-    sal_uInt16          getRowCount(void);
-    sal_uInt16          getColumnCount(void);
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >     GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
+    sal_uInt16 			getRowCount(void);
+    sal_uInt16 			getColumnCount(void);
+    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >  	GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
                         const String& sTLName, const String& sBRName,
                         SwRangeDescriptor& rDesc);
 
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };
 
+/* -----------------27.04.98 16:41-------------------
+ *
+ * --------------------------------------------------*/
 class SwXCellRange : public cppu::WeakImplHelper7
 <
     ::com::sun::star::table::XCellRange,
@@ -422,16 +439,16 @@ class SwXCellRange : public cppu::WeakImplHelper7
 >,
     public SwClient
 {
-    SwDepend                        aCursorDepend; //the cursor is removed after the doc has been removed
-    SwChartEventListenerContainer   aChartLstnrCntnr;
+    SwDepend						aCursorDepend; //the cursor is removed after the doc has been removed
+    SwChartEventListenerContainer	aChartLstnrCntnr;
 
-    SwRangeDescriptor           aRgDesc;
+    SwRangeDescriptor 			aRgDesc;
     const SfxItemPropertySet*   m_pPropSet;
 
-    SwUnoCrsr*                  pTblCrsr;
+    SwUnoCrsr* 					pTblCrsr;
 
-    sal_Bool                        bFirstRowAsLabel    :1;
-    sal_Bool                        bFirstColumnAsLabel :1;
+    sal_Bool						bFirstRowAsLabel 	:1;
+    sal_Bool						bFirstColumnAsLabel	:1;
 
 public:
     SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt, SwRangeDescriptor& rDesc);
@@ -483,15 +500,15 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
-    SwFrmFmt*   GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
-    sal_uInt16      getRowCount(void);
-    sal_uInt16      getColumnCount(void);
+    SwFrmFmt* 	GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    sal_uInt16 		getRowCount(void);
+    sal_uInt16 		getColumnCount(void);
 
     const SwUnoCrsr* GetTblCrsr() const;
 
@@ -501,9 +518,11 @@ public:
             ::com::sun::star::uno::Sequence< ::rtl::OUString > *pTxtSeq,
             ::com::sun::star::uno::Sequence< double > *pDblSeq,
             sal_Bool bForceNumberResults = sal_False ) throw (::com::sun::star::uno::RuntimeException);
-
+    
 };
-
+/* -----------------03.02.99 07:31-------------------
+ *
+ * --------------------------------------------------*/
 class SwXTableRows : public cppu::WeakImplHelper2
 <
     ::com::sun::star::table::XTableRows,
@@ -517,9 +536,17 @@ protected:
     virtual ~SwXTableRows();
 public:
     SwXTableRows(SwFrmFmt& rFrmFmt);
-
+    
 
     TYPEINFO();
+
+// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
+//	virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  > getIdlClasses(void) throw( ::com::sun::star::uno::RuntimeException );
+
+// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
+//	virtual sal_Bool		queryInterface( ::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  & rOut );
+
+//	SMART_UNO_DECLARATION( SwXTableRows, UsrObject );
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -535,13 +562,16 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
 
+/* -----------------03.02.99 07:31-------------------
+ *
+ * --------------------------------------------------*/
 class SwXTableColumns : public cppu::WeakImplHelper2
 <
     ::com::sun::star::table::XTableColumns,
@@ -555,9 +585,16 @@ protected:
     virtual ~SwXTableColumns();
 public:
     SwXTableColumns(SwFrmFmt& rFrmFmt);
-
+    
 
     TYPEINFO();
+// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
+//	virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  > getIdlClasses(void) throw( ::com::sun::star::uno::RuntimeException );
+
+// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
+//	virtual sal_Bool		queryInterface( ::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  & rOut );
+
+//	SMART_UNO_DECLARATION( SwXTableColumns, UsrObject );
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -573,11 +610,11 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
 
 #endif

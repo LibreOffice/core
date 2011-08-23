@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,17 +26,16 @@
  *
  ************************************************************************/
 
-#ifndef DOM_DOCUMENTBUILDER_HXX
-#define DOM_DOCUMENTBUILDER_HXX
+#ifndef _DOCUMENTBUILDER_HXX
+#define _DOCUMENTBUILDER_HXX
 
 #include <sal/types.h>
-
 #include <cppuhelper/implbase2.hxx>
-
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
 #include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XDOMImplementation.hpp>
@@ -46,8 +45,10 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include "libxml/tree.h"
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -58,41 +59,28 @@ using namespace com::sun::star::io;
 
 namespace DOM
 {
-    typedef ::cppu::WeakImplHelper2
-        < XDocumentBuilder
-        , ::com::sun::star::lang::XServiceInfo
-        > CDocumentBuilder_Base;
-
-    class CDocumentBuilder
-        : public CDocumentBuilder_Base
+    class  CDocumentBuilder
+        : public ::cppu::WeakImplHelper2< XDocumentBuilder, XServiceInfo >
     {
     private:
-        ::osl::Mutex m_Mutex;
-        Reference< ::com::sun::star::lang::XMultiServiceFactory > const
-            m_xFactory;
-        Reference< XEntityResolver > m_xEntityResolver;
-        Reference< XErrorHandler > m_xErrorHandler;
+        Reference< XMultiServiceFactory > m_aFactory;
+        Reference< XEntityResolver > m_aEntityResolver;
+        Reference< XErrorHandler > m_aErrorHandler;
 
     public:
 
         // ctor
-        CDocumentBuilder(
-            Reference< ::com::sun::star::lang::XMultiServiceFactory > const&
-                xFactory);
+        CDocumentBuilder(const Reference< XMultiServiceFactory >& xFactory);
 
         // call for factory
-        static Reference< XInterface > getInstance(
-            Reference< ::com::sun::star::lang::XMultiServiceFactory > const&
-                xFactory);
+        static Reference< XInterface > getInstance(const Reference < XMultiServiceFactory >& xFactory);
 
         // static helpers for service info and component management
         static const char* aImplementationName;
         static const char* aSupportedServiceNames[];
         static OUString _getImplementationName();
         static Sequence< OUString > _getSupportedServiceNames();
-        static Reference< XInterface > _getInstance(
-            Reference< ::com::sun::star::lang::XMultiServiceFactory > const&
-                rSMgr);
+        static Reference< XInterface > _getInstance(const Reference< XMultiServiceFactory >& rSMgr);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
@@ -109,39 +97,43 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        Indicates whether or not this parser is configured to understand
-        namespaces.
+        Indicates whether or not this parser is configured to understand 
+        namespaces.     
         */
         virtual sal_Bool SAL_CALL isNamespaceAware()
             throw (RuntimeException);
 
-        /**
-        Indicates whether or not this parser is configured to validate XML
+        /**       
+        Indicates whether or not this parser is configured to validate XML 
         documents.
         */
         virtual sal_Bool SAL_CALL isValidating()
             throw (RuntimeException);
 
         /**
-        Obtain a new instance of a DOM Document object to build a DOM tree
-        with.
+        Obtain a new instance of a DOM Document object to build a DOM tree 
+        with.          
         */
         virtual Reference< XDocument > SAL_CALL newDocument()
             throw (RuntimeException);
 
         /**
-        Parse the content of the given InputStream as an XML document and
-        return a new DOM Document object.
+        Parse the content of the given InputStream as an XML document and 
+        return a new DOM Document object.     
         */
         virtual Reference< XDocument > SAL_CALL parse(const Reference< XInputStream >& is)
             throw (RuntimeException, SAXParseException, IOException);
 
         /**
-        Parse the content of the given URI as an XML document and return
+        Parse the content of the given URI as an XML document and return 
         a new DOM Document object.
         */
         virtual Reference< XDocument > SAL_CALL parseURI(const OUString& uri)
             throw (RuntimeException, SAXParseException, IOException);
+
+        virtual Reference< XDocument > SAL_CALL parseSource(const InputSource& is)
+            throw (RuntimeException, SAXParseException, IOException);
+
 
         /**
         Specify the EntityResolver to be used to resolve entities present

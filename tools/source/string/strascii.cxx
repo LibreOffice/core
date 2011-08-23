@@ -2,7 +2,7 @@
 #/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,17 +32,17 @@
 
 #ifdef DBG_UTIL
 
-static sal_Bool ImplDbgCheckAsciiStr( const sal_Char* pAsciiStr, sal_Int32 nLen )
+static BOOL ImplDbgCheckAsciiStr( const sal_Char* pAsciiStr, sal_Int32 nLen )
 {
     while ( nLen && *pAsciiStr )
     {
         if ( ((unsigned char)*pAsciiStr) > 127 )
-            return sal_False;
+            return FALSE;
         ++pAsciiStr,
         --nLen;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 #endif
@@ -261,7 +261,7 @@ UniString& UniString::AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
         {
             if ( !pAsciiStr[i] )
             {
-                OSL_FAIL( "UniString::AssignAscii() : nLen is wrong" );
+                DBG_ERROR( "UniString::AssignAscii() : nLen is wrong" );
             }
         }
     }
@@ -338,7 +338,7 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
         {
             if ( !pAsciiStr[i] )
             {
-                OSL_FAIL( "UniString::AppendAscii() : nLen is wrong" );
+                DBG_ERROR( "UniString::AppendAscii() : nLen is wrong" );
             }
         }
     }
@@ -505,7 +505,7 @@ StringCompare UniString::CompareIgnoreCaseToAscii( const sal_Char* pAsciiStr,
 
 // -----------------------------------------------------------------------
 
-sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr ) const
+BOOL UniString::EqualsAscii( const sal_Char* pAsciiStr ) const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
@@ -516,7 +516,7 @@ sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const
+BOOL UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
@@ -527,7 +527,7 @@ sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr,
+BOOL UniString::EqualsAscii( const sal_Char* pAsciiStr,
                              xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
@@ -543,7 +543,7 @@ sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr,
 
 // -----------------------------------------------------------------------
 
-sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
+BOOL UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
                                        xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );

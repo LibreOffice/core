@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ xub_StrLen BasicRuntime::GetCol2()
   return pRun->nCol2;
 }
 
-sal_Bool BasicRuntime::IsRun()
+BOOL BasicRuntime::IsRun()
 {
   return pRun->IsRun();
 }
@@ -118,17 +118,17 @@ bool BasicRuntimeAccess::HasRuntime()
   return pINST && pINST->pRun != NULL;
 }
 
-sal_uInt16 BasicRuntimeAccess::GetStackEntryCount()
+USHORT BasicRuntimeAccess::GetStackEntryCount()
 {
   return GetSbData()->pErrStack->Count();
 }
 
-BasicErrorStackEntry BasicRuntimeAccess::GetStackEntry( sal_uInt16 nIndex )
+BasicErrorStackEntry BasicRuntimeAccess::GetStackEntry( USHORT nIndex )
 {
   return BasicErrorStackEntry( GetSbData()->pErrStack->GetObject( nIndex ) );
 }
 
-sal_Bool BasicRuntimeAccess::HasStack()
+BOOL BasicRuntimeAccess::HasStack()
 {
   return GetSbData()->pErrStack != NULL;
 }
@@ -139,7 +139,7 @@ void BasicRuntimeAccess::DeleteStack()
   GetSbData()->pErrStack = NULL;
 }
 
-sal_Bool BasicRuntimeAccess::IsRunInit()
+BOOL BasicRuntimeAccess::IsRunInit()
 {
   return GetSbData()->bRunInit;
 }

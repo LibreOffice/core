@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ public class _XCloneable extends MultiMethodTest {
     // oObj filled by MultiMethodTest
     public XCloneable oObj = null ;
     protected XCloneable clone = null;
-
+    
     /**
      * calls the method. <p>
-     * Has <b>OK</b> status if no exception has occurred. <p>
+     * Has <b>OK</b> status if no exception has occured. <p>
      */
     public void _createClone() {
         boolean result = true;
@@ -59,23 +59,23 @@ public class _XCloneable extends MultiMethodTest {
 
         //check if the implementaionname equals
         result &= checkImplementationName(oObj,clone);
-
+        
         //check ImplementationID
         result &= checkImplementationID(oObj, clone);
-
+        
         tRes.tested("createClone()", result) ;
     }
-
+    
     protected byte[] getImplementationID(XInterface ifc) {
         byte[] res = new byte[0];
-        XTypeProvider provider = (XTypeProvider)
+        XTypeProvider provider = (XTypeProvider) 
                     UnoRuntime.queryInterface(XTypeProvider.class, ifc);
         if (provider != null) {
             res = provider.getImplementationId();
         }
         return res;
-    }
-
+    } 
+    
     protected boolean checkImplementationID(XInterface org, XInterface clone) {
         boolean res = getImplementationID(org).equals(
                                             getImplementationID(clone));
@@ -84,18 +84,18 @@ public class _XCloneable extends MultiMethodTest {
             log.println("------------------------------------------------------------------------");
         }
         return !res;
-    }
-
+    }    
+    
     protected String getImplementationName(XInterface ifc) {
         String res = "";
-        XServiceInfo info = (XServiceInfo)
+        XServiceInfo info = (XServiceInfo) 
                     UnoRuntime.queryInterface(XServiceInfo.class, ifc);
         if (info != null) {
             res = info.getImplementationName();
         }
         return res;
     }
-
+    
     protected boolean checkImplementationName(XInterface org, XInterface clone) {
         boolean res = getImplementationName(org).equals(
                                             getImplementationName(clone));

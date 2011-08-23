@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@
 
 namespace rptui
 {
-#define LINE_SIZE           50
-#define SECTION_OFFSET      3
+#define LINE_SIZE			50
+#define SECTION_OFFSET	    3
 #define SCR_LINE_SIZE       10
 using namespace ::com::sun::star;
 
@@ -53,7 +53,7 @@ void lcl_setScrollBar(sal_Int32 _nNewValue,const Point& _aPos,const Size& _aSize
 
 // -----------------------------------------------------------------------------
 DBG_NAME( rpt_OScrollWindowHelper );
-OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
+OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView) 
     : OScrollWindowHelper_BASE( _pDesignView,WB_DIALOGCONTROL)
     ,OPropertyChangeListener(m_aMutex)
     ,m_aHScroll( this, WB_HSCROLL|WB_REPEAT|WB_DRAG )
@@ -65,7 +65,7 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
 {
     DBG_CTOR( rpt_OScrollWindowHelper,NULL);
     SetMapMode( MapMode( MAP_100TH_MM ) );
-
+    
     impl_initScrollBar( m_aHScroll );
     impl_initScrollBar( m_aVScroll );
 
@@ -93,9 +93,10 @@ void OScrollWindowHelper::impl_initScrollBar( ScrollBar& _rScrollBar ) const
     aStyle.SetDragFullOptions( aStyle.GetDragFullOptions() | DRAGFULL_OPTION_SCROLL ); // live scrolling
     aSettings.SetStyleSettings( aStyle );
     _rScrollBar.SetSettings( aSettings );
+    //_rScrollBar.SetMapMode( MapMode( MAP_100TH_MM ) );
 
     _rScrollBar.SetScrollHdl( LINK( this, OScrollWindowHelper, ScrollHdl ) );
-    _rScrollBar.SetLineSize( SCR_LINE_SIZE );
+    _rScrollBar.SetLineSize( SCR_LINE_SIZE ); 
 }
 
 // -----------------------------------------------------------------------------
@@ -103,7 +104,7 @@ void OScrollWindowHelper::initialize()
 {
     uno::Reference<report::XReportDefinition> xReportDefinition = m_pParent->getController().getReportDefinition();
     m_pReportDefintionMultiPlexer = addStyleListener(xReportDefinition,this);
-
+    
     m_aReportWindow.initialize();
 }
 //------------------------------------------------------------------------------
@@ -117,7 +118,7 @@ void OScrollWindowHelper::setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight)
     long nWidth = long(_nWidth - (double)aStartWidth);
     m_aHScroll.SetRangeMax( nWidth );
     m_aVScroll.SetRangeMax( m_aTotalPixelSize.Height() );
-
+    
     Resize();
 }
 //------------------------------------------------------------------------------
@@ -133,14 +134,14 @@ Size OScrollWindowHelper::ResizeScrollBars()
     const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     bool bVVisible = false; // by default no vertical-ScrollBar
     bool bHVisible = false; // by default no horizontal-ScrollBar
-    bool bChanged;          // determines if a visiblility was changed
+    bool bChanged;			// determines if a visiblility was changed
     do
     {
         bChanged = false;
 
         // does we need a vertical ScrollBar
         if ( aOutPixSz.Width() < m_aTotalPixelSize.Width() && !bHVisible )
-        {
+        {	
             bHVisible = true;
             aOutPixSz.Height() -= nScrSize;
             bChanged = true;
@@ -148,7 +149,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
 
         // does we need a horizontal ScrollBar
         if ( aOutPixSz.Height() < m_aTotalPixelSize.Height() && !bVVisible )
-        {
+        {	
             bVVisible = true;
             aOutPixSz.Width() -= nScrSize;
             bChanged = true;
@@ -174,7 +175,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
 
     const Point aOffset = LogicToPixel( Point( SECTION_OFFSET, SECTION_OFFSET ), MAP_APPFONT );
     // resize scrollbars and set their ranges
-    {
+    {	
         Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH*m_pParent->getController().getZoomValue()),100);
         const sal_Int32 nNewWidth = aOutPixSz.Width() - aOffset.X() - (long)aStartWidth;
         lcl_setScrollBar(nNewWidth,Point( (long)aStartWidth + aOffset.X(), aOutPixSz.Height() ),Size( nNewWidth, nScrSize ),m_aHScroll);
@@ -203,12 +204,12 @@ IMPL_LINK( OScrollWindowHelper, ScrollHdl, ScrollBar*, /*pScroll*/ )
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::addSection(const uno::Reference< report::XSection >& _xSection
                                    ,const ::rtl::OUString& _sColorEntry
-                                   ,sal_uInt16 _nPosition)
+                                   ,USHORT _nPosition)
 {
     m_aReportWindow.addSection(_xSection,_sColorEntry,_nPosition);
 }
 //------------------------------------------------------------------------------
-void OScrollWindowHelper::removeSection(sal_uInt16 _nPosition)
+void OScrollWindowHelper::removeSection(USHORT _nPosition)
 {
     m_aReportWindow.removeSection(_nPosition);
 }
@@ -218,12 +219,12 @@ void OScrollWindowHelper::toggleGrid(sal_Bool _bVisible)
     m_aReportWindow.toggleGrid(_bVisible);
 }
 //------------------------------------------------------------------------------
-sal_uInt16 OScrollWindowHelper::getSectionCount() const
+USHORT OScrollWindowHelper::getSectionCount() const
 {
     return m_aReportWindow.getSectionCount();
 }
 //------------------------------------------------------------------------------
-void OScrollWindowHelper::SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType )
+void OScrollWindowHelper::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType )
 {
     m_aReportWindow.SetInsertObj(eObj,_sShapeType);
 }
@@ -238,7 +239,7 @@ void OScrollWindowHelper::SetMode( DlgEdMode _eNewMode )
     m_aReportWindow.SetMode(_eNewMode);
 }
 //------------------------------------------------------------------------------
-sal_Bool OScrollWindowHelper::HasSelection() const
+BOOL OScrollWindowHelper::HasSelection() const
 {
     return m_aReportWindow.HasSelection();
 }
@@ -249,7 +250,7 @@ void OScrollWindowHelper::Delete()
 }
 //----------------------------------------------------------------------------
 void OScrollWindowHelper::Copy()
-{
+{	
     m_aReportWindow.Copy();
 }
 //----------------------------------------------------------------------------
@@ -258,7 +259,7 @@ void OScrollWindowHelper::Paste()
     m_aReportWindow.Paste();
 }
 //----------------------------------------------------------------------------
-sal_Bool OScrollWindowHelper::IsPasteAllowed() const
+BOOL OScrollWindowHelper::IsPasteAllowed() const
 {
     return m_aReportWindow.IsPasteAllowed();
 }
@@ -313,7 +314,7 @@ void OScrollWindowHelper::setMarked(const uno::Sequence< uno::Reference< report:
     return  m_aReportWindow.getSectionWindow(_xSection);
 }
 // -------------------------------------------------------------------------
-void OScrollWindowHelper::markSection(const sal_uInt16 _nPos)
+void OScrollWindowHelper::markSection(const sal_uInt16 _nPos) 
 {
     m_aReportWindow.markSection(_nPos);
 }
@@ -331,19 +332,19 @@ void OScrollWindowHelper::collapseSections(const uno::Sequence< ::com::sun::star
 long OScrollWindowHelper::Notify( NotifyEvent& rNEvt )
 {
     const CommandEvent* pCommandEvent = rNEvt.GetCommandEvent();
-    if ( pCommandEvent &&
+    if ( pCommandEvent && 
         ( ((pCommandEvent->GetCommand() == COMMAND_WHEEL) ||
          (pCommandEvent->GetCommand() == COMMAND_STARTAUTOSCROLL) ||
          (pCommandEvent->GetCommand() == COMMAND_AUTOSCROLL))) )
-    {
+    {   
         ScrollBar* pHScrBar = NULL;
         ScrollBar* pVScrBar = NULL;
         if ( m_aHScroll.IsVisible() )
             pHScrBar = &m_aHScroll;
-
+        
         if ( m_aVScroll.IsVisible() )
             pVScrBar = &m_aVScroll;
-
+        
         if ( HandleScrollCommand( *pCommandEvent, pHScrBar, pVScrBar ) )
             return 1L;
     }
@@ -358,6 +359,7 @@ void OScrollWindowHelper::alignMarkedObjects(sal_Int32 _nControlModification,boo
 void OScrollWindowHelper::ImplInitSettings()
 {
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
+    // SetBackground( Wallpaper( COL_LIGHTRED ));
     SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
 }
@@ -369,7 +371,7 @@ void OScrollWindowHelper::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings();
+        ImplInitSettings();		
         Invalidate();
     }
 }
@@ -379,12 +381,12 @@ void OScrollWindowHelper::_propertyChanged(const beans::PropertyChangeEvent& /*_
     m_aReportWindow.notifySizeChanged();
 }
 // -----------------------------------------------------------------------------
-void OScrollWindowHelper::setGridSnap(sal_Bool bOn)
+void OScrollWindowHelper::setGridSnap(BOOL bOn)
 {
     m_aReportWindow.setGridSnap(bOn);
 }
 // -----------------------------------------------------------------------------
-void OScrollWindowHelper::setDragStripes(sal_Bool bOn)
+void OScrollWindowHelper::setDragStripes(BOOL bOn)
 {
     m_aReportWindow.setDragStripes(bOn);
 }

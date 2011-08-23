@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using namespace vcl;
 
 void Control::ImplInitControlData()
 {
-    mbHasFocus      = sal_False;
+    mbHasFocus	    = FALSE;
     mpControlData   = new ImplControlData;
 }
 
@@ -215,7 +215,7 @@ long Control::GetLineCount() const
 Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
 {
     Pair aPair( -1, -1 );
-
+    
     int nDisplayLines = m_aLineIndices.size();
     if( nLine >= 0 && nLine < nDisplayLines )
     {
@@ -304,10 +304,10 @@ long Control::Notify( NotifyEvent& rNEvt )
     {
         if ( !mbHasFocus )
         {
-            mbHasFocus = sal_True;
+            mbHasFocus = TRUE;
             if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, maGetFocusHdl, this ) )
                 // been destroyed within the handler
-                return sal_True;
+                return TRUE;
         }
     }
     else
@@ -317,10 +317,10 @@ long Control::Notify( NotifyEvent& rNEvt )
             Window* pFocusWin = Application::GetFocusWindow();
             if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
             {
-                mbHasFocus = sal_False;
+                mbHasFocus = FALSE;
                 if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, maLoseFocusHdl, this ) )
                     // been destroyed within the handler
-                    return sal_True;
+                    return TRUE;
             }
         }
     }
@@ -332,11 +332,11 @@ long Control::Notify( NotifyEvent& rNEvt )
 
 void Control::StateChanged( StateChangedType nStateChange )
 {
-    if( nStateChange == STATE_CHANGE_INITSHOW   ||
-        nStateChange == STATE_CHANGE_VISIBLE    ||
-        nStateChange == STATE_CHANGE_FORMAT     ||
-        nStateChange == STATE_CHANGE_ZOOM       ||
-        nStateChange == STATE_CHANGE_BORDER     ||
+    if( nStateChange == STATE_CHANGE_INITSHOW	||
+        nStateChange == STATE_CHANGE_VISIBLE	||
+        nStateChange == STATE_CHANGE_FORMAT		||
+        nStateChange == STATE_CHANGE_ZOOM		||
+        nStateChange == STATE_CHANGE_BORDER		||
         nStateChange == STATE_CHANGE_CONTROLFONT
         )
     {
@@ -373,7 +373,7 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
 
 // -----------------------------------------------------------------
 
-sal_Bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Link& rHandler, void* pCaller )
+BOOL Control::ImplCallEventListenersAndHandler(  ULONG nEvent, const Link& rHandler, void* pCaller )
 {
     ImplDelData aCheckDelete;
     ImplAddDel( &aCheckDelete );
@@ -386,10 +386,10 @@ sal_Bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Lin
         if ( !aCheckDelete.IsDelete() )
         {
             ImplRemoveDel( &aCheckDelete );
-            return sal_False;
+            return FALSE;
         }
     }
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------
@@ -442,14 +442,14 @@ void Control::DataChanged( const DataChangedEvent& rDCEvt)
 {
     // we don't want to loose some style settings for controls created with the
     // toolkit
-    if ( IsCreatedWithToolkit() &&
+    if ( IsCreatedWithToolkit() && 
          (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         AllSettings     aSettings = GetSettings();
         StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
-        sal_uLong           nOldOptions = rDCEvt.GetOldSettings()->GetStyleSettings().GetOptions();
-        sal_uLong           nNewOptions = aStyleSettings.GetOptions();
+        ULONG           nOldOptions = rDCEvt.GetOldSettings()->GetStyleSettings().GetOptions();
+        ULONG           nNewOptions = aStyleSettings.GetOptions();
 
         if ( !(nNewOptions & STYLE_OPTION_MONO) && ( nOldOptions & STYLE_OPTION_MONO ) )
         {
@@ -518,7 +518,7 @@ const Color& Control::GetCanonicalTextColor( const StyleSettings& _rStyle ) cons
 }
 
 // -----------------------------------------------------------------
-void Control::ImplInitSettings( const sal_Bool _bFont, const sal_Bool _bForeground )
+void Control::ImplInitSettings( const BOOL _bFont, const BOOL _bForeground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -545,7 +545,7 @@ void Control::ImplInitSettings( const sal_Bool _bFont, const sal_Bool _bForegrou
 // -----------------------------------------------------------------
 
 void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const XubString& _rStr,
-    sal_uInt16 _nStyle, MetricVector* _pVector, String* _pDisplayText ) const
+    USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText ) const
 {
 #ifdef FS_DEBUG
     if ( !_pVector )

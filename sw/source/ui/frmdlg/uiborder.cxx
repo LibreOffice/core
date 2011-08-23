@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,14 +48,14 @@
 
 
 
-SwBorderDlg::SwBorderDlg(Window* pParent, SfxItemSet& rSet, sal_uInt16 nType) :
+SwBorderDlg::SwBorderDlg(Window* pParent, SfxItemSet& rSet, USHORT nType) :
 
     SfxSingleTabDialog(pParent, rSet, 0)
 
 {
     SetText(SW_RESSTR(STR_FRMUI_BORDER));
 
-    // create TabPage
+    // TabPage erzeugen
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER );

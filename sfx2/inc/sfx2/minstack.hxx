@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,7 @@
 #ifndef _SFXMINSTACK_HXX
 #define _SFXMINSTACK_HXX
 
+//ASDBG #ifndef _SFXMINARRAY_HXX
 #include <sfx2/minarray.hxx>
 
 #define DECL_OBJSTACK( ARR, T, nI, nG ) \
@@ -35,7 +36,7 @@ DECL_OBJARRAY( ARR##arr_, T, nI, nG ); \
 class ARR: private ARR##arr_ \
 { \
 public: \
-    ARR( sal_uInt8 nInitSize = nI, sal_uInt8 nGrowSize = nG ): \
+    ARR( BYTE nInitSize = nI, BYTE nGrowSize = nG ): \
         ARR##arr_( nInitSize, nGrowSize ) \
     {} \
 \
@@ -43,14 +44,14 @@ public: \
         ARR##arr_( rOrig ) \
     {} \
 \
-    sal_uInt16      Count() const { return ARR##arr_::Count(); } \
-    void        Push( const T& rElem ) { Append( rElem ); } \
-    const T& Top( sal_uInt16 nLevel = 0 ) const \
+    USHORT		Count() const { return ARR##arr_::Count(); } \
+    void		Push( const T& rElem ) { Append( rElem ); } \
+    const T& Top( USHORT nLevel = 0 ) const \
                 { return (*this)[Count()-nLevel-1]; } \
     const T& Bottom() const { return (*this)[0]; } \
-    T        Pop(); \
-    void        Clear() { ARR##arr_::Clear(); } \
-    sal_Bool        Contains( const T& rItem ) const \
+    T		 Pop(); \
+    void		Clear() { ARR##arr_::Clear(); } \
+    BOOL		Contains( const T& rItem ) const \
                 { return ARR##arr_::Contains( rItem ); } \
 }
 
@@ -58,7 +59,7 @@ public: \
 IMPL_OBJARRAY( ARR##arr_, T ); \
 \
 T ARR::Pop() \
-{   T aRet = (*this)[Count()-1]; \
+{	T aRet = (*this)[Count()-1]; \
     Remove( Count()-1, 1 ); \
     return aRet; \
 }
@@ -68,7 +69,7 @@ DECL_PTRARRAY( ARR##arr_, T, nI, nG ) \
 class ARR: private ARR##arr_ \
 { \
 public: \
-    ARR( sal_uInt8 nInitSize = nI, sal_uInt8 nGrowSize = nG ): \
+    ARR( BYTE nInitSize = nI, BYTE nGrowSize = nG ): \
         ARR##arr_( nInitSize, nGrowSize ) \
     {} \
 \
@@ -76,22 +77,22 @@ public: \
         ARR##arr_( rOrig ) \
     {} \
 \
-    sal_uInt16      Count() const { return ARR##arr_::Count(); } \
-    void        Push( T rElem ) { Append( rElem ); } \
-    sal_Bool        Replace( T rOldElem, T rNewElem ) \
+    USHORT		Count() const { return ARR##arr_::Count(); } \
+    void		Push( T rElem ) { Append( rElem ); } \
+    BOOL        Replace( T rOldElem, T rNewElem ) \
                 { return ARR##arr_::Replace( rOldElem, rNewElem ); } \
-    T           Top( sal_uInt16 nLevel = 0 ) const \
+    T			Top( USHORT nLevel = 0 ) const \
                 { return (*this)[Count()-nLevel-1]; } \
-    T           Bottom() const { return (*this)[0]; } \
-    T           Pop() \
-                {   T aRet = (*this)[Count()-1]; \
+    T			Bottom() const { return (*this)[0]; } \
+    T			Pop() \
+                {	T aRet = (*this)[Count()-1]; \
                     Remove( Count()-1, 1 ); \
                     return aRet; \
                 } \
-    T*       operator*() \
+    T*		 operator*() \
                 { return &(*this)[Count()-1]; } \
-    void        Clear() { ARR##arr_::Clear(); } \
-    sal_Bool        Contains( const T pItem ) const \
+    void		Clear() { ARR##arr_::Clear(); } \
+    BOOL		Contains( const T pItem ) const \
                 { return ARR##arr_::Contains( pItem ); } \
 }
 

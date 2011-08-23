@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -143,7 +143,7 @@ void VCLXAccessibleMenuBar::disposing()
 
 ::rtl::OUString VCLXAccessibleMenuBar::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleMenuBar") );
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleMenuBar" );
 }
 
 // -----------------------------------------------------------------------------
@@ -151,7 +151,7 @@ void VCLXAccessibleMenuBar::disposing()
 Sequence< ::rtl::OUString > VCLXAccessibleMenuBar::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleMenuBar") );
+    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleMenuBar" );
     return aNames;
 }
 
@@ -173,7 +173,7 @@ sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent(  ) throw (RuntimeEx
             Window* pParent = pWindow->GetAccessibleParentWindow();
             if ( pParent )
             {
-                for ( sal_uInt16 n = pParent->GetAccessibleChildWindowCount(); n; )
+                for ( USHORT n = pParent->GetAccessibleChildWindowCount(); n; )
                 {
                     Window* pChild = pParent->GetAccessibleChildWindow( --n );
                     if ( pChild == pWindow )

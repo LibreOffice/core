@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
     while ( it != end )
     {
         delete (*it);
-        ++it;
+        it++;
     }
 }
 
@@ -163,7 +163,7 @@ rtl::OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
             = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            aId += rtl::OUString::createFromAscii( "/" );
 
         aId += m_pImpl->m_aResults[ nIndex ]->aData.getName();
 
@@ -358,7 +358,7 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        uno::Reference< sdbc::XRow > xRow
+        uno::Reference< sdbc::XRow > xRow 
             = m_pImpl->m_aResults[ nIndex ]->xRow;
         if ( xRow.is() )
         {
@@ -370,14 +370,14 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
     if ( getResult( nIndex ) )
     {
         static rtl::OUString aFolderType(
-            RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_FOLDER_CONTENT_TYPE ) );
+            rtl::OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE ) );
         static rtl::OUString aLinkType(
-            RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_LINK_CONTENT_TYPE ) );
+            rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE ) );
 
-        HierarchyContentProperties aData(
+        HierarchyContentProperties aData( 
             m_pImpl->m_aResults[ nIndex ]->aData );
 
-        uno::Reference< sdbc::XRow > xRow
+        uno::Reference< sdbc::XRow > xRow 
             = HierarchyContent::getPropertyValues(
                 m_pImpl->m_xSMgr,
                 getResultSet()->getProperties(),

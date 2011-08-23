@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#include <prewin.h>
-#include <postwin.h>
-#undef OPTIONAL
-
 #include "vcl/svapp.hxx"
 #include "tools/fsys.hxx"
 #include "tools/urlobj.hxx"
@@ -47,9 +43,16 @@
 #pragma warning (push,1)
 #pragma warning (disable:4005)
 
-#include <string.h>
-#include <tchar.h>
-#include <objbase.h>
+    #include "tools/prewin.h"
+
+    #include <windows.h>
+    #include <string.h>
+    #include <tchar.h>
+    #include <winreg.h>
+    #include <winbase.h>
+    #include <objbase.h>
+
+    #include "tools/postwin.h"
 
 #pragma warning (pop)
 
@@ -58,17 +61,27 @@
 #include <algorithm>
 
 
+using namespace rtl;
 using namespace std;
 using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::plugin;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringToOString;
-
 typedef map< OString, OUString, less< OString > > PluginLocationMap;
+
+
+#if OSL_DEBUG_LEVEL > 1
+#include <stdio.h>
+
+static void logPlugin( OUString const & path_ )
+{
+    static FILE * s_file = 0;
+    if (! s_file)
+        s_file = fopen( "d:\\plugins.log", "a+" );
+    OString path( OUStringToOString( path_, RTL_TEXTENCODING_ASCII_US ) );
+    fprintf( s_file, "%s\n", path.getStr() );
+}
+#endif
 
 //__________________________________________________________________________________________________
 static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & rPlugins )
@@ -113,6 +126,9 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
 
             OUString path( OStringToOUString( arComplete, RTL_TEXTENCODING_MS_1252 ) );
             rPlugins[ aName ] = path;
+#if OSL_DEBUG_LEVEL > 1
+            logPlugin( path );
+#endif
         }
 
         if (! ::FindNextFile( hFind, &aFindData ))
@@ -241,6 +257,9 @@ static void add_MozPlugin( HKEY hKey, PluginLocationMap & rPlugins )
              rPlugins.find( aName ) == rPlugins.end())
         {
             rPlugins[ aName ] = aUPath;
+#if OSL_DEBUG_LEVEL > 1
+            logPlugin( aUPath );
+#endif
         }
     }
 }
@@ -392,7 +411,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                         OString aExtToken2( aExt.getToken( 0, '|', nIndex2 ) );
                         if( aMIMEToken.getLength() == 0 || aExtToken2.getLength() == 0 )
                             continue;
-
+                        
                         rDescr.Mimetype = OUString(
                             aMIMEToken.getStr(), aMIMEToken.getLength(), RTL_TEXTENCODING_MS_1252 );
                         if (! rDescr.Mimetype.getLength())
@@ -403,7 +422,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                         rDescr.Description = aComment;
 
                         sal_Int32 nPos = 0, nLen = aExtToken.getLength();
-                        OUString aExtensions = nLen ? OUString(RTL_CONSTASCII_USTRINGPARAM("*.")) : OUString(RTL_CONSTASCII_USTRINGPARAM("*.*"));
+                        OUString aExtensions( OUString::createFromAscii( nLen ? "*." : "*.*" ) );
 
                         for ( ; nPos < nLen; ++nPos )
                         {
@@ -412,7 +431,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                             {
                             case ',':
                             case ';':
-                                aExtensions += OUString(RTL_CONSTASCII_USTRINGPARAM(";*."));
+                                aExtensions += OUString::createFromAscii( ";*." );
                             case ' ':
                                 break;
                             case '*':
@@ -437,7 +456,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                 }
 #if OSL_DEBUG_LEVEL > 1
                 else
-                    OSL_FAIL( "### cannot get MIME type or extensions!" );
+                    DBG_ERROR( "### cannot get MIME type or extensions!" );
 #endif
             }
             if (pVersionData)

@@ -27,17 +27,36 @@
 #ifndef __ooo_vba_excel_XRange_idl__
 #define __ooo_vba_excel_XRange_idl__
 
+#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
+#ifndef __com_sun_star_script_XDefaultProperty_idl__
 #include <com/sun/star/script/XDefaultProperty.idl>
+#endif
+#ifndef __com_sun_star_script_XDefaultMethod_idl__
 #include <com/sun/star/script/XDefaultMethod.idl>
+#endif
+#ifndef __com_sun_star_script_XErrorQuery_idl__
 #include <com/sun/star/script/XErrorQuery.idl>
+#endif
+#ifndef __ooo_vba_XCollection_idl__
 #include <ooo/vba/XCollection.idl>
+#endif
+#ifndef __ooo_vba_excel_XFormat_idl__
 #include <ooo/vba/excel/XFormat.idl>
+#endif
+#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
+#endif
+#ifndef __com_sun_star_helper_script_BasicErrorException_idl__
 #include <com/sun/star/script/BasicErrorException.idl>
-
+#endif
 //=============================================================================
 
 module ooo {  module vba {  module excel {
@@ -102,7 +121,7 @@ interface XRange
     void FillRight();
     void FillUp();
     void FillDown();
-    XRange Item([in] any RowIndex, [in] any ColumnIndex) raises(com::sun::star::script::BasicErrorException);
+    XRange Item([in] any row, [in] any column) raises(com::sun::star::script::BasicErrorException);
     XRange Offset([in] any RowOffset, [in] any ColumnOffset);
     XRange CurrentRegion();
     XRange CurrentArray();
@@ -135,7 +154,7 @@ interface XRange
     XCharacters characters([in] any Start, [in] any Length);
     void Delete( [in] any Shift );
 
-    any Areas( [in] any Item );
+    any Areas( [in] any item );
     any BorderAround( [in] any LineStyle, [in] any Weight, [in] any ColorIndex, [in] any Color );
         void AutoFilter([in ] any Field, [in] any Criteria1, [in] any Operator, [in] any Criteria2, [in] any VisibleDropDown);
         void Insert([in] any Shift, [in] any CopyOrigin);
@@ -152,9 +171,9 @@ interface XRange
     XRange Previous( ) raises ( com::sun::star::script::BasicErrorException );
      XRange SpecialCells( [in] any Type, [in]  /*Optional*/ any Value ) raises ( com::sun::star::script::BasicErrorException );
     void RemoveSubtotal() raises ( com::sun::star::script::BasicErrorException );
-    void    Subtotal( [in] long GroupBy, [in] long Function, [in]  /*Optional*/ sequence<long> TotalList, [in]  /*Optional*/ any Replace, [in]  /*Optional*/ any PageBreaks, [in] any SummaryBelowData ) raises ( com::sun::star::script::BasicErrorException );
+    void	Subtotal( [in] long GroupBy, [in] long Function, [in]  /*Optional*/ sequence<long> TotalList, [in]  /*Optional*/ any Replace, [in]  /*Optional*/ any PageBreaks, [in] any SummaryBelowData ) raises ( com::sun::star::script::BasicErrorException );
     XRange MergeArea( ) raises ( com::sun::star::script::BasicErrorException );
-    any Hyperlinks( [in] any Index );
+    any Hyperlinks( [in] any aIndex );
     long   CopyFromRecordset([in] any Data, [in]  any MaxRows , [in]  any MaxColumns) raises ( com::sun::star::script::BasicErrorException );
     XPivotTable PivotTable();
     void TextToColumns([in] any Destination, [in] any DataType, [in] any TextQualifier, [in] any ConsecutiveDelimiter, [in] any Tab, [in] any Semicolon, [in] any Comma,

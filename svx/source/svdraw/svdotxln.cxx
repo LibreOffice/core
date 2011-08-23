@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/datetime.hxx>
 #include <svx/svdotext.hxx>
-#include "svx/svditext.hxx"
+#include "svditext.hxx"
 #include <svx/svdmodel.hxx>
 #include <editeng/editdata.hxx>
 #include <sfx2/lnkbase.hxx>
@@ -46,6 +46,7 @@
 // #90477#
 #include <tools/tenccvt.hxx>
 
+#ifndef SVX_LIGHT
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  @@@@  @@@@@  @@@@@@  @@@@@@ @@@@@@ @@  @@ @@@@@@  @@    @@ @@  @@ @@  @@
@@ -65,7 +66,7 @@
 
 class ImpSdrObjTextLink: public ::sfx2::SvBaseLink
 {
-    SdrTextObj*                 pSdrObj;
+    SdrTextObj*					pSdrObj;
 
 public:
     ImpSdrObjTextLink( SdrTextObj* pObj1 )
@@ -78,7 +79,7 @@ public:
     virtual void DataChanged( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
 
-    sal_Bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    BOOL Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
 
 ImpSdrObjTextLink::~ImpSdrObjTextLink()
@@ -126,6 +127,7 @@ void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
     if (pSdrObj )
         pSdrObj->ReloadLinkedText( bForceReload );
 }
+#endif // SVX_LIGHT
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -149,7 +151,9 @@ ImpSdrObjTextLinkUserData::ImpSdrObjTextLinkUserData(SdrTextObj* pObj1):
 
 ImpSdrObjTextLinkUserData::~ImpSdrObjTextLinkUserData()
 {
+#ifndef SVX_LIGHT
     delete pLink;
+#endif
 }
 
 SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* pObj1) const
@@ -195,8 +199,8 @@ void SdrTextObj::SetTextLink(const String& rFileName, const String& rFilterName,
 void SdrTextObj::ReleaseTextLink()
 {
     ImpLinkAbmeldung();
-    sal_uInt16 nAnz=GetUserDataCount();
-    for (sal_uInt16 nNum=nAnz; nNum>0;) {
+    USHORT nAnz=GetUserDataCount();
+    for (USHORT nNum=nAnz; nNum>0;) {
         nNum--;
         SdrObjUserData* pData=GetUserData(nNum);
         if (pData->GetInventor()==SdrInventor && pData->GetId()==SDRUSERDATA_OBJTEXTLINK) {
@@ -207,18 +211,18 @@ void SdrTextObj::ReleaseTextLink()
 
 bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
 {
-    ImpSdrObjTextLinkUserData*  pData = GetLinkUserData();
+    ImpSdrObjTextLinkUserData*	pData = GetLinkUserData();
     bool                        bRet = true;
 
     if( pData )
     {
-        ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-        DateTime                    aFileDT;
-        sal_Bool                        bExists = sal_False, bLoad = sal_False;
+        ::ucbhelper::ContentBroker*	pBroker = ::ucbhelper::ContentBroker::get();
+        DateTime				    aFileDT;
+        BOOL					    bExists = FALSE, bLoad = FALSE;
 
         if( pBroker )
         {
-            bExists = sal_True;
+            bExists = TRUE;
 
             try
             {
@@ -234,14 +238,14 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
             }
             catch( ... )
             {
-                bExists = sal_False;
+                bExists = FALSE;
             }
         }
 
         if( bExists )
         {
             if( bForceLoad )
-                bLoad = sal_True;
+                bLoad = TRUE;
             else
                 bLoad = ( aFileDT > pData->aFileDate0 );
 
@@ -259,8 +263,8 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
 
 bool SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/, rtl_TextEncoding eCharSet)
 {
-    INetURLObject   aFileURL( rFileName );
-    sal_Bool            bRet = sal_False;
+    INetURLObject	aFileURL( rFileName );
+    BOOL			bRet = FALSE;
 
     if( aFileURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
@@ -285,14 +289,14 @@ bool SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/
         cRTF[4] = 0;
         pIStm->Read(cRTF, 5);
 
-        sal_Bool bRTF = cRTF[0] == '{' && cRTF[1] == '\\' && cRTF[2] == 'r' && cRTF[3] == 't' && cRTF[4] == 'f';
+        BOOL bRTF = cRTF[0] == '{' && cRTF[1] == '\\' && cRTF[2] == 'r' && cRTF[3] == 't' && cRTF[4] == 'f';
 
         pIStm->Seek(0);
 
         if( !pIStm->GetError() )
         {
-            SetText( *pIStm, aFileURL.GetMainURL( INetURLObject::NO_DECODE ), sal::static_int_cast< sal_uInt16 >( bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT ) );
-            bRet = sal_True;
+            SetText( *pIStm, aFileURL.GetMainURL( INetURLObject::NO_DECODE ), sal::static_int_cast< USHORT >( bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT ) );
+            bRet = TRUE;
         }
 
         delete pIStm;
@@ -304,8 +308,8 @@ bool SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/
 ImpSdrObjTextLinkUserData* SdrTextObj::GetLinkUserData() const
 {
     ImpSdrObjTextLinkUserData* pData=NULL;
-    sal_uInt16 nAnz=GetUserDataCount();
-    for (sal_uInt16 nNum=nAnz; nNum>0 && pData==NULL;) {
+    USHORT nAnz=GetUserDataCount();
+    for (USHORT nNum=nAnz; nNum>0 && pData==NULL;) {
         nNum--;
         pData=(ImpSdrObjTextLinkUserData*)GetUserData(nNum);
         if (pData->GetInventor()!=SdrInventor || pData->GetId()!=SDRUSERDATA_OBJTEXTLINK) {

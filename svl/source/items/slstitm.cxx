@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,12 +46,12 @@ TYPEINIT1_AUTOFACTORY(SfxStringListItem, SfxPoolItem);
 class SfxImpStringList
 {
 public:
-    sal_uInt16  nRefCount;
-    List    aList;
+    USHORT	nRefCount;
+    List	aList;
 
             SfxImpStringList() { nRefCount = 1; }
             ~SfxImpStringList();
-    void    Sort( sal_Bool bAscending, List* );
+    void 	Sort( BOOL bAscending, List* );
 };
 
 //------------------------------------------------------------------------
@@ -70,36 +70,36 @@ SfxImpStringList::~SfxImpStringList()
 
 //------------------------------------------------------------------------
 
-void SfxImpStringList::Sort( sal_Bool bAscending, List* pParallelList )
+void SfxImpStringList::Sort( BOOL bAscending, List* pParallelList )
 {
     DBG_ASSERT(!pParallelList || pParallelList->Count() >= aList.Count(),"Sort:ParallelList too small");
-    sal_uLong nCount = aList.Count();
+    ULONG nCount = aList.Count();
     if( nCount > 1 )
     {
         nCount -= 2;
         // Bubble Dir Einen
-        sal_Bool bSwapped = sal_True;
+        BOOL bSwapped = TRUE;
         while( bSwapped )
         {
-            bSwapped = sal_False;
-            for( sal_uLong nCur = 0; nCur <= nCount; nCur++ )
+            bSwapped = FALSE;
+            for( ULONG nCur = 0; nCur <= nCount; nCur++ )
             {
                 String* pStr1 = (String*)aList.GetObject( nCur );
                 String* pStr2 = (String*)aList.GetObject( nCur+1 );
                 // COMPARE_GREATER => pStr2 ist groesser als pStr1
                 StringCompare eCompare = pStr1->CompareIgnoreCaseToAscii( *pStr2 ); //@@@
-                sal_Bool bSwap = sal_False;
+                BOOL bSwap = FALSE;
                 if( bAscending )
                 {
                     if( eCompare == COMPARE_LESS )
-                        bSwap = sal_True;
+                        bSwap = TRUE;
                 }
                 else if( eCompare == COMPARE_GREATER )
-                    bSwap = sal_True;
+                    bSwap = TRUE;
 
                 if( bSwap )
                 {
-                    bSwapped = sal_True;
+                    bSwapped = TRUE;
                     aList.Replace( pStr1, nCur + 1 );
                     aList.Replace( pStr2, nCur );
                     if( pParallelList )
@@ -124,7 +124,7 @@ SfxStringListItem::SfxStringListItem() :
 
 //------------------------------------------------------------------------
 
-SfxStringListItem::SfxStringListItem( sal_uInt16 which, const List* pList ) :
+SfxStringListItem::SfxStringListItem( USHORT which, const List* pList ) :
     SfxPoolItem( which ),
     pImp(NULL)
 {
@@ -147,7 +147,7 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, const List* pList ) :
 
 //------------------------------------------------------------------------
 
-SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
+SfxStringListItem::SfxStringListItem( USHORT which, SvStream& rStream ) :
     SfxPoolItem( which ),
     pImp(NULL)
 {
@@ -215,21 +215,21 @@ int SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
     SfxStringListItem* pItem = (SfxStringListItem*)&rItem;
 
     if( pImp == pItem->pImp )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 //------------------------------------------------------------------------
 
 SfxItemPresentation SfxStringListItem::GetPresentation
 (
-    SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    SfxItemPresentation 	/*ePresentation*/,
+    SfxMapUnit				/*eCoreMetric*/,
+    SfxMapUnit				/*ePresentationMetric*/,
+    XubString& 				rText,
     const IntlWrapper *
-)   const
+)	const
 {
     rText.AssignAscii(RTL_CONSTASCII_STRINGPARAM("(List)"));
     return SFX_ITEM_PRESENTATION_NONE;
@@ -251,14 +251,14 @@ SfxPoolItem* SfxStringListItem::Clone( SfxItemPool *) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SfxStringListItem::Create( SvStream & rStream, sal_uInt16 ) const
+SfxPoolItem* SfxStringListItem::Create( SvStream & rStream, USHORT ) const
 {
     return new SfxStringListItem( Which(), rStream );
 }
 
 //------------------------------------------------------------------------
 
-SvStream& SfxStringListItem::Store( SvStream & rStream, sal_uInt16 ) const
+SvStream& SfxStringListItem::Store( SvStream & rStream, USHORT ) const
 {
     if( !pImp )
     {
@@ -312,7 +312,7 @@ void SfxStringListItem::SetString( const XubString& rStr )
         // String gehoert der Liste
         pImp->aList.Insert( pStr, LIST_APPEND );
 
-        nStart += nLen + 1 ;    // delimiter ueberspringen
+        nStart += nLen + 1 ;	// delimiter ueberspringen
     } while( nDelimPos != STRING_NOTFOUND );
 
     // Kein Leerstring am Ende
@@ -348,14 +348,14 @@ XubString SfxStringListItem::GetString()
 
 int SfxStringListItem::IsPoolable() const
 {
-    return sal_False;
+    return FALSE;
 }
 
 #endif
 
 //------------------------------------------------------------------------
 
-void SfxStringListItem::Sort( sal_Bool bAscending, List* pParallelList )
+void SfxStringListItem::Sort( BOOL bAscending, List* pParallelList )
 {
     DBG_ASSERT(GetRefCount()==0,"Sort:RefCount!=0");
     if( pImp )
@@ -394,7 +394,7 @@ void SfxStringListItem::GetStringList( com::sun::star::uno::Sequence< rtl::OUStr
 
 //----------------------------------------------------------------------------
 // virtual
-bool SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
 {
     com::sun::star::uno::Sequence< rtl::OUString > aValue;
     if ( rVal >>= aValue )
@@ -403,13 +403,13 @@ bool SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
         return true;
     }
 
-    OSL_FAIL( "SfxStringListItem::PutValue - Wrong type!" );
+    DBG_ERROR( "SfxStringListItem::PutValue - Wrong type!" );
     return false;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-bool SfxStringListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxStringListItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
 {
     // GetString() is not const!!!
     SfxStringListItem* pThis = const_cast< SfxStringListItem * >( this );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ namespace frm
     DBG_NAME( ORichTextControl )
     //------------------------------------------------------------------
     ORichTextControl::ORichTextControl( const Reference< XMultiServiceFactory >& _rxORB )
-        :UnoEditControl( _rxORB )
+        :m_xORB( _rxORB )
     {
         DBG_CTOR( ORichTextControl, NULL );
     }
@@ -279,7 +279,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ORichTextControl::getImplementationName()  throw( RuntimeException )
+    ::rtl::OUString	SAL_CALL ORichTextControl::getImplementationName()  throw( RuntimeException )
     {
         return getImplementationName_Static();
     }
@@ -291,7 +291,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ORichTextControl::getImplementationName_Static()
+    ::rtl::OUString	SAL_CALL ORichTextControl::getImplementationName_Static()
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.form.ORichTextControl" ) );
     }
@@ -375,7 +375,7 @@ namespace frm
     void ORichTextPeer::dispose( ) throw(RuntimeException)
     {
         {
-            SolarMutexGuard aGuard;
+            ::osl::SolarGuard aGuard( GetMutex() );
             RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
 
             if ( pRichTextControl )
@@ -633,7 +633,7 @@ namespace frm
                 #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OString sTrace( "ORichTextPeer::implCreateDispatcher: creating *parametrized* dispatcher for " );
                     sTrace += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    OSL_TRACE( "%s", sTrace.getStr() );
+                    DBG_TRACE( sTrace.getStr() );
                 #endif
                     pAttributeDispatcher = new OParametrizedAttributeDispatcher( pRichTextControl->getView(), _nSlotId, _rURL, pRichTextControl );
                 }
@@ -642,7 +642,7 @@ namespace frm
                 #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OString sTrace( "ORichTextPeer::implCreateDispatcher: creating *normal* dispatcher for " );
                     sTrace += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    OSL_TRACE( "%s", sTrace.getStr() );
+                    DBG_TRACE( sTrace.getStr() );
                 #endif
                     pAttributeDispatcher = new OAttributeDispatcher( pRichTextControl->getView(), _nSlotId, _rURL, pRichTextControl );
                 }
@@ -652,7 +652,7 @@ namespace frm
             {
                 ::rtl::OString sTrace( "ORichTextPeer::implCreateDispatcher: not creating dispatcher (unsupported slot) for " );
                 sTrace += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-                OSL_TRACE( "%s", sTrace.getStr() );
+                DBG_TRACE( sTrace.getStr() );
             }
         #endif
         }
@@ -683,11 +683,11 @@ namespace frm
 
             // some hard-coded slots, which do not have a UNO name at SFX level, but which
             // we nevertheless need to transport via UNO mechanisms, so we need a name
-            if ( _rUnoSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AllowHangingPunctuation" ) ) )
+            if ( _rUnoSlotName.equalsAscii( "AllowHangingPunctuation" ) )
                 return SID_ATTR_PARA_HANGPUNCTUATION;
-            if ( _rUnoSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ApplyForbiddenCharacterRules" ) ) )
+            if ( _rUnoSlotName.equalsAscii( "ApplyForbiddenCharacterRules" ) )
                 return SID_ATTR_PARA_FORBIDDEN_RULES;
-            if ( _rUnoSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseScriptSpacing" ) ) )
+            if ( _rUnoSlotName.equalsAscii( "UseScriptSpacing" ) )
                 return SID_ATTR_PARA_SCRIPTSPACE;
 
             OSL_ENSURE( pSlot, "lcl_getSlotFromUnoName: unknown UNO slot name!" );
@@ -701,7 +701,7 @@ namespace frm
         Reference< XDispatch > xReturn;
         if ( !GetWindow() )
         {
-            OSL_FAIL( "ORichTextPeer::queryDispatch: already disposed?" );
+            OSL_ENSURE( sal_False, "ORichTextPeer::queryDispatch: already disposed?" );
             return xReturn;
         }
 

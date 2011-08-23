@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,15 +55,15 @@ using namespace vcl;
 static void sendEmptyCommit( SalFrame* pFrame )
 {
     vcl::DeletionListener aDel( pFrame );
-
+    
     SalExtTextInputEvent aEmptyEv;
-    aEmptyEv.mnTime             = 0;
-    aEmptyEv.mpTextAttr         = 0;
-    aEmptyEv.maText             = String();
-    aEmptyEv.mnCursorPos        = 0;
-    aEmptyEv.mnCursorFlags      = 0;
-    aEmptyEv.mnDeltaStart       = 0;
-    aEmptyEv.mbOnlyCursor       = False;
+    aEmptyEv.mnTime 			= 0;
+    aEmptyEv.mpTextAttr 		= 0;
+    aEmptyEv.maText 		    = String();
+    aEmptyEv.mnCursorPos 		= 0;
+    aEmptyEv.mnCursorFlags 	    = 0;
+    aEmptyEv.mnDeltaStart 	    = 0;
+    aEmptyEv.mbOnlyCursor 	    = False;
     pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEmptyEv );
     if( ! aDel.isDeleted() )
         pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
@@ -184,7 +184,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     maClientData.aInputEv.mnCursorPos       = 0;
     maClientData.aInputEv.mnDeltaStart      = 0;
     maClientData.aInputEv.mnCursorFlags     = 0;
-    maClientData.aInputEv.mbOnlyCursor      = sal_False;
+    maClientData.aInputEv.mbOnlyCursor      = FALSE;
 
     SalI18N_InputMethod *pInputMethod;
     pInputMethod = GetX11SalData()->GetDisplay()->GetInputMethod();
@@ -334,7 +334,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
         if ( mnPreeditStyle != XIMPreeditNone )
         {
-#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD
             if ( mpPreeditAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
@@ -342,7 +342,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         }
         if ( mnStatusStyle != XIMStatusNone )
         {
-#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD
             if ( mpStatusAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
@@ -559,14 +559,14 @@ SalI18N_InputContext::IsSupportedIMStyle( XIMStyle nStyle ) const
 Bool
 SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
 {
+    int nBestScore   = 0;
+    int nActualScore = 0;
+
     mnPreeditStyle = 0;
     mnStatusStyle  = 0;
 
     if ( pIMStyles != NULL )
     {
-        int nBestScore   = 0;
-        int nActualScore = 0;
-
         // check whether the XIM supports one of the desired styles
         // only a single preedit and a single status style must occure
         // in a inpuut method style. Hideki said so, so i trust him
@@ -682,10 +682,10 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
     if ( mbUseable && (maContext != NULL)  )
     {
         maClientData.pFrame = pFocusFrame;
-
-        const SystemEnvData* pEnv   = pFocusFrame->GetSystemData();
-        XLIB_Window  aClientWindow  = pEnv->aShellWindow;
-        XLIB_Window  aFocusWindow   = pEnv->aWindow;
+        
+        const SystemEnvData* pEnv	= pFocusFrame->GetSystemData();
+        XLIB_Window  aClientWindow	= pEnv->aShellWindow;
+        XLIB_Window  aFocusWindow	= pEnv->aWindow;
 
         XSetICValues( maContext,
                       XNFocusWindow,       aFocusWindow,
@@ -698,7 +698,7 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
             // begin preedit again
             GetX11SalData()->GetDisplay()->SendInternalEvent( pFocusFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
         }
-
+        
         XSetICFocus( maContext );
     }
 }
@@ -760,7 +760,7 @@ SalI18N_InputContext::SetLanguage(LanguageType)
 }
 
 void
-SalI18N_InputContext::EndExtTextInput( sal_uInt16 /*nFlags*/ )
+SalI18N_InputContext::EndExtTextInput( USHORT /*nFlags*/ )
 {
     if ( mbUseable && (maContext != NULL) && maClientData.pFrame )
     {

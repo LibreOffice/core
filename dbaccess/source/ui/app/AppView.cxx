@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 
     SetBorderStyle(WINDOW_BORDER_MONO);
 
-    m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL ,sal_False);
+    m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL ,FALSE);
     m_pPanel->SetBorderStyle(WINDOW_BORDER_MONO);
     OApplicationSwapWindow* pSwap = new OApplicationSwapWindow( m_pPanel, *this );
     pSwap->Show();
@@ -101,7 +101,8 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 // -----------------------------------------------------------------------------
 OAppBorderWindow::~OAppBorderWindow()
 {
-    // destroy children
+    //////////////////////////////////////////////////////////////////////
+    // Childs zerstoeren
     if ( m_pPanel )
     {
         m_pPanel->Hide();
@@ -126,10 +127,11 @@ void OAppBorderWindow::GetFocus()
 // -----------------------------------------------------------------------------
 void OAppBorderWindow::Resize()
 {
-    // parent window dimension
+    //////////////////////////////////////////////////////////////////////
+    // Abmessungen parent window
     Size aOutputSize( GetOutputSize() );
-    long nOutputWidth   = aOutputSize.Width();
-    long nOutputHeight  = aOutputSize.Height();
+    long nOutputWidth	= aOutputSize.Width();
+    long nOutputHeight	= aOutputSize.Height();
     long nX = 0;
 
     Size aFLSize = LogicToPixel( Size( 3, 8 ), MAP_APPFONT );
@@ -183,6 +185,10 @@ void OAppBorderWindow::ImplInitSettings()
 
     if( true )
         SetBackground( rStyleSettings.GetDialogColor() );
+
+    /*SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
+    SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );*/
 }
 // -----------------------------------------------------------------------------
 OApplicationView* OAppBorderWindow::getView() const
@@ -191,13 +197,13 @@ OApplicationView* OAppBorderWindow::getView() const
 }
 
 // -----------------------------------------------------------------------------
-OApplicationSwapWindow* OAppBorderWindow::getPanel() const
+OApplicationSwapWindow*	OAppBorderWindow::getPanel() const
 {
     return static_cast< OApplicationSwapWindow* >( m_pPanel->getChildWindow() );
 }
 
 // -----------------------------------------------------------------------------
-OApplicationDetailView* OAppBorderWindow::getDetailView() const
+OApplicationDetailView*	OAppBorderWindow::getDetailView() const
 {
     return m_pDetailView;
 }
@@ -307,11 +313,11 @@ long OApplicationView::PreNotify( NotifyEvent& rNEvt )
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             // give the pane the chance to intercept mnemonic accelerators
-            // #i34790#
+            // #i34790# - 2004-09-30 - fs@openoffice.org
             if ( getPanel() && getPanel()->interceptKeyInput( *pKeyEvent ) )
                 return 1L;
             // and ditto the detail view
-            // #i72799#
+            // #i72799# - 2006-12-20 / frank.schoenheit@sun.com
             if ( getDetailView() && getDetailView()->interceptKeyInput( *pKeyEvent ) )
                 return 1L;
         }
@@ -524,7 +530,7 @@ void OApplicationView::showPreview(const Reference< XContent >& _xContent)
     getDetailView()->showPreview(_xContent);
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::showPreview( const ::rtl::OUString& _sDataSourceName,
+void OApplicationView::showPreview(	const ::rtl::OUString& _sDataSourceName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                                     const ::rtl::OUString& _sName,
                                     sal_Bool _bTable)
@@ -595,6 +601,9 @@ void OApplicationView::ImplInitSettings()
 
     if( true )
         SetBackground( rStyleSettings.GetFieldColor() );
+    /*SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
+    SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );*/
 }
 //-----------------------------------------------------------------------------
 

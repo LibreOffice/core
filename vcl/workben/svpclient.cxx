@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,17 +59,11 @@
 #include <netinet/in.h>
 
 
+using namespace rtl;
 using namespace cppu;
 using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OStringBuffer;
 // -----------------------------------------------------------------------
 
 // Forward declaration
@@ -95,7 +89,7 @@ SAL_IMPLEMENT_MAIN()
     catch( com::sun::star::uno::Exception& rExc)
     {
     }
-
+    
     if( ! xFactory.is() )
     {
         fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
@@ -103,11 +97,11 @@ SAL_IMPLEMENT_MAIN()
     }
 
     /*
-     *  Create UCB.
+     *	Create UCB.
      */
     Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
-    aArgs[ 1 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bSuccess =
 #endif
@@ -139,19 +133,19 @@ class MyWin : public WorkWindow
 public:
                 MyWin( Window* pParent, WinBits nWinStyle );
 
-    void        MouseMove( const MouseEvent& rMEvt );
-    void        MouseButtonDown( const MouseEvent& rMEvt );
-    void        MouseButtonUp( const MouseEvent& rMEvt );
-    void        KeyInput( const KeyEvent& rKEvt );
-    void        KeyUp( const KeyEvent& rKEvt );
-    void        Paint( const Rectangle& rRect );
-    void        Resize();
-
-    sal_Bool        Close();
-
+    void		MouseMove( const MouseEvent& rMEvt );
+    void		MouseButtonDown( const MouseEvent& rMEvt );
+    void		MouseButtonUp( const MouseEvent& rMEvt );
+    void		KeyInput( const KeyEvent& rKEvt );
+    void		KeyUp( const KeyEvent& rKEvt );
+    void		Paint( const Rectangle& rRect );
+    void		Resize();
+    
+    BOOL        Close();
+    
     void parseList( const rtl::OString& rList );
     rtl::OString processCommand( const rtl::OString& rCommand );
-
+    
     DECL_LINK( ListHdl, Button* );
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( QuitHdl, Button* );
@@ -181,24 +175,24 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     m_aListButton.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "List Elements" ) ) );
     m_aListButton.SetClickHdl( LINK( this, MyWin, ListHdl ) );
     m_aListButton.Show();
-
+    
     m_aSvpBitmaps.SetPosSizePixel( Point( 10, 40 ), Size( 150, 150 ) );
     m_aSvpBitmaps.SetSelectHdl( LINK( this, MyWin, SelectHdl ) );
     m_aSvpBitmaps.Show();
-
+    
     m_aImage.SetPosSizePixel( Point( 170, 10 ), Size( 400, 400 ) );
     m_aImage.SetScaleMode( com::sun::star::awt::ImageScaleMode::None );
     m_aImage.Show();
-
+    
     m_aQuitButton.SetPosSizePixel( Point( 10, 300 ), Size( 120,25 ) );
     m_aQuitButton.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Quit SVP server" ) ) );
     m_aQuitButton.SetClickHdl( LINK( this, MyWin, QuitHdl ) );
     m_aQuitButton.Show();
 }
 
-sal_Bool MyWin::Close()
+BOOL MyWin::Close()
 {
-    sal_Bool bRet = WorkWindow::Close();
+    BOOL bRet = WorkWindow::Close();
     if( bRet )
         Application::Quit();
     return bRet;
@@ -214,7 +208,7 @@ void MyWin::parseList( const rtl::OString& rList )
         rtl::OString aLine = rList.getToken( 0, '\n', nTokenPos );
         if( ! aLine.getLength() || *aLine.getStr() == '#' )
             continue;
-
+        
         if( aLine.compareTo( "ElementType: ", 13 ) == 0 )
             aElementType = rtl::OStringToOUString( aLine.copy( 13 ), RTL_TEXTENCODING_ASCII_US );
         else
@@ -279,7 +273,7 @@ IMPL_LINK( MyWin, QuitHdl, Button*, )
 IMPL_LINK( MyWin, SelectHdl, ListBox*, )
 {
     String aEntry = m_aSvpBitmaps.GetSelectEntry();
-    sal_uInt16 nPos = aEntry.SearchAscii( ": " );
+    USHORT nPos = aEntry.SearchAscii( ": " );
     if( nPos != STRING_NOTFOUND )
     {
         OStringBuffer aCommand( 64 );
@@ -298,7 +292,7 @@ IMPL_LINK( MyWin, SelectHdl, ListBox*, )
         aFixedSize.Width() += 10;
         aFixedSize.Height() += 10;
         m_aImage.SetSizePixel( aFixedSize );
-        m_aImage.SetImage( Image( BitmapEx( aBitmap ) ) );
+        m_aImage.SetBitmap( BitmapEx( aBitmap ) );
     }
     return 0;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,25 +40,22 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
 {
-    SwDepend    aPageDescDep;
-    SwDepend    aCharFmtDep, aAnchorCharFmtDep;
-    String      sPrefix;
-    String      sSuffix;
+    SwDepend  	aPageDescDep;
+    SwDepend 	aCharFmtDep, aAnchorCharFmtDep;
+    String 		sPrefix;
+    String 		sSuffix;
 protected:
     bool        m_bEndNote;
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
-
 public:
     SvxNumberType aFmt;
-    sal_uInt16    nFtnOffset;
+    USHORT 	  nFtnOffset;
 
-    void        ChgPageDesc( SwPageDesc *pDesc );
-    SwPageDesc* GetPageDesc( SwDoc &rDoc ) const;
-    bool        KnowsPageDesc() const;
-    bool        DependsOn( const SwPageDesc* ) const;
+    void 		ChgPageDesc( SwPageDesc *pDesc );
+    SwPageDesc *GetPageDesc( SwDoc &rDoc ) const;
+    SwClient   *GetPageDescDep() const { return (SwClient*)&aPageDescDep; }
 
     void SetFtnTxtColl(SwTxtFmtColl& rColl);
-    SwTxtFmtColl* GetFtnTxtColl() const { return  (SwTxtFmtColl*) GetRegisteredIn(); } // can be 0.
+    SwTxtFmtColl* GetFtnTxtColl() const { return  (SwTxtFmtColl*) GetRegisteredIn(); } // kann 0 sein
 
     SwCharFmt* GetCharFmt(SwDoc &rDoc) const;
     void SetCharFmt( SwCharFmt* );
@@ -68,23 +65,24 @@ public:
     void SetAnchorCharFmt( SwCharFmt* );
     SwClient   *GetAnchorCharFmtDep() const { return (SwClient*)&aAnchorCharFmtDep; }
 
+    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
+
     SwEndNoteInfo & operator=(const SwEndNoteInfo&);
-    sal_Bool operator==( const SwEndNoteInfo &rInf ) const;
+    BOOL operator==( const SwEndNoteInfo &rInf ) const;
 
     SwEndNoteInfo( SwTxtFmtColl *pTxtColl = 0);
     SwEndNoteInfo(const SwEndNoteInfo&);
 
-    const String& GetPrefix() const         { return sPrefix; }
-    const String& GetSuffix() const         { return sSuffix; }
+    const String& GetPrefix() const 		{ return sPrefix; }
+    const String& GetSuffix() const 		{ return sSuffix; }
 
-    void SetPrefix(const String& rSet)      { sPrefix = rSet; }
-    void SetSuffix(const String& rSet)      { sSuffix = rSet; }
-    void ReleaseCollection() { if ( GetRegisteredInNonConst() ) GetRegisteredInNonConst()->Remove( this ); }
+    void SetPrefix(const String& rSet)		{ sPrefix = rSet; }
+    void SetSuffix(const String& rSet)		{ sSuffix = rSet; }
 };
 
 enum SwFtnPos
 {
-    // Momentarily only PAGE and CHAPTER. CHAPTER == document-endnotes.
+    //Derzeit nur PAGE und CHAPTER. CHAPTER == Dokumentendenoten.
     FTNPOS_PAGE = 1,
     FTNPOS_CHAPTER = 8
 };
@@ -100,14 +98,14 @@ class SW_DLLPUBLIC SwFtnInfo: public SwEndNoteInfo
 
 public:
     String    aQuoVadis;
-    String    aErgoSum;
+    String	  aErgoSum;
     SwFtnPos  ePos;
     SwFtnNum  eNum;
 
 
     SwFtnInfo& operator=(const SwFtnInfo&);
 
-    sal_Bool operator==( const SwFtnInfo &rInf ) const;
+    BOOL operator==( const SwFtnInfo &rInf ) const;
 
     SwFtnInfo(SwTxtFmtColl* pTxtColl = 0);
     SwFtnInfo(const SwFtnInfo&);

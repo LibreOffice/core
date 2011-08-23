@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,12 +50,10 @@
 #include "commontypes.hxx"
 #include "listviewitems.hxx"
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <connectivity/dbmetadata.hxx>
 
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
 
 //.........................................................................
 namespace dbaui
@@ -107,8 +105,10 @@ OTableTreeListBox::~OTableTreeListBox()
 void OTableTreeListBox::implSetDefaultImages()
 {
     ImageProvider aImageProvider;
-    SetDefaultExpandedEntryBmp(  aImageProvider.getFolderImage( DatabaseObject::TABLE ) );
-    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE ) );
+    SetDefaultExpandedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, false ), BMP_COLOR_NORMAL );
+    SetDefaultExpandedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, true ), BMP_COLOR_HIGHCONTRAST );
+    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, false ), BMP_COLOR_NORMAL );
+    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, true ), BMP_COLOR_HIGHCONTRAST );
 }
 
 // -----------------------------------------------------------------------------
@@ -131,27 +131,33 @@ void OTableTreeListBox::notifyHiContrastChanged()
     SvLBoxEntry* pEntryLoop = First();
     while (pEntryLoop)
     {
-        sal_uInt16 nCount = pEntryLoop->ItemCount();
-        for (sal_uInt16 i=0;i<nCount;++i)
+        USHORT nCount = pEntryLoop->ItemCount();
+        for (USHORT i=0;i<nCount;++i)
         {
             SvLBoxItem* pItem = pEntryLoop->GetItem(i);
             if ( pItem && pItem->IsA() == SV_ITEM_ID_LBOXCONTEXTBMP)
             {
                 SvLBoxContextBmp* pContextBitmapItem = static_cast< SvLBoxContextBmp* >( pItem );
 
-                Image aImage;
+                Image aImage, aImageHC;
                 if ( isFolderEntry( pEntryLoop ) )
                 {
-                    aImage = m_pImageProvider->getFolderImage( DatabaseObject::TABLE );
+                    aImage = m_pImageProvider->getFolderImage( DatabaseObject::TABLE, false );
+                    aImageHC = m_pImageProvider->getFolderImage( DatabaseObject::TABLE, true );
                 }
                 else
                 {
                     String sCompleteName( getQualifiedTableName( pEntryLoop ) );
-                    m_pImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage );
+                    m_pImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage, aImageHC );
                 }
 
-                pContextBitmapItem->SetBitmap1( aImage );
-                pContextBitmapItem->SetBitmap2( aImage );
+                pContextBitmapItem->SetBitmap1( aImage, BMP_COLOR_NORMAL );
+                pContextBitmapItem->SetBitmap2( aImage, BMP_COLOR_NORMAL );
+                pContextBitmapItem->SetBitmap1( aImageHC, BMP_COLOR_HIGHCONTRAST );
+                pContextBitmapItem->SetBitmap2( aImageHC, BMP_COLOR_HIGHCONTRAST );
+                // TODO: Now that we give both images to the entry item, it is not necessary anymore
+                // to do this anytime HC changes - the tree control will do this itself now.
+                // We would only need to properly initialize newly inserted entries.
                 break;
             }
         }
@@ -193,7 +199,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     }
     catch(RuntimeException&)
     {
-        OSL_FAIL("OTableTreeListBox::UpdateTableList : caught an RuntimeException!");
+        DBG_ERROR("OTableTreeListBox::UpdateTableList : caught an RuntimeException!");
     }
     catch ( const SQLException& )
     {
@@ -201,7 +207,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     }
     catch(Exception&)
     {
-        // a non-SQLException exception occurred ... simply throw an SQLException
+        // a non-SQLException exception occured ... simply throw an SQLException
         SQLException aInfo;
         aInfo.Message = sCurrentActionError;
         throw aInfo;
@@ -284,13 +290,15 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
 
     try
     {
+        // the root entry saying "all objects"
+        SvLBoxEntry* pAllObjects = NULL;
         if (haveVirtualRoot())
         {
             String sRootEntryText;
             TNames::const_iterator aViews = ::std::find_if(_rTables.begin(),_rTables.end(),
-            ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_False),::o3tl::select2nd<TNames::value_type>()));
+            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_False),::std::select2nd<TNames::value_type>()));
             TNames::const_iterator aTables = ::std::find_if(_rTables.begin(),_rTables.end(),
-            ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_True),::o3tl::select2nd<TNames::value_type>()));
+            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_True),::std::select2nd<TNames::value_type>()));
 
             if ( aViews == _rTables.end() )
                 sRootEntryText  = String(ModuleRes(STR_ALL_TABLES));
@@ -298,7 +306,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 sRootEntryText  = String(ModuleRes(STR_ALL_VIEWS));
             else
                 sRootEntryText  = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
-            InsertEntry( sRootEntryText, NULL, sal_False, LIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
+            pAllObjects = InsertEntry( sRootEntryText, NULL, FALSE, LIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
         }
 
         if ( _rTables.empty() )
@@ -310,7 +318,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
         TNames::const_iterator aEnd = _rTables.end();
 
         Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_QUERY_THROW );
-        for ( ; aIter != aEnd; ++aIter )
+        for ( ;	aIter != aEnd; ++aIter )
         {
             // add the entry
             implAddEntry(
@@ -344,7 +352,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 {
                     SvLBoxEntry* pFolder = GetEntryPosByName( *folder, pRootEntry );
                     if ( !pFolder )
-                        pFolder = InsertEntry( *folder, pRootEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
+                        pFolder = InsertEntry( *folder, pRootEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
                 }
             }
         }
@@ -384,24 +392,25 @@ void OTableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 {
     OMarkableTreeListBox::checkedButton_noBroadcast(_pEntry);
 
-    // if an entry has children, it makes a difference if the entry is checked
-    // because all children are checked or if the user checked it explicitly.
+    // if an entry has children, it makes a difference if the entry is checked because alls children are checked
+    // or if the user checked it explicitly.
     // So we track explicit (un)checking
 
     SvButtonState eState = GetCheckButtonState(_pEntry);
-    OSL_ENSURE(SV_BUTTON_TRISTATE != eState, "OTableTreeListBox::CheckButtonHdl: user action which lead to TRISTATE?");
+    DBG_ASSERT(SV_BUTTON_TRISTATE != eState, "OTableTreeListBox::CheckButtonHdl: user action which lead to TRISTATE?");
     implEmphasize(_pEntry, SV_BUTTON_CHECKED == eState);
 }
 
 //------------------------------------------------------------------------
 void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants, sal_Bool _bUpdateAncestors)
 {
-    OSL_ENSURE(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
+    DBG_ASSERT(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
 
     // special emphasizing handling for the "all objects" entry
+    // 89709 - 16.07.2001 - frank.schoenheit@sun.com
     sal_Bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry() == _pEntry);
-    if  (   GetModel()->HasChilds(_pEntry)              // the entry has children
-        ||  bAllObjectsEntryAffected                    // or it is the "all objects" entry
+    if	(	GetModel()->HasChilds(_pEntry)				// the entry has children
+        ||	bAllObjectsEntryAffected					// or it is the "all objects" entry
         )
     {
         OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
@@ -439,9 +448,9 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 
     // replace the text item with our own one
     SvLBoxItem* pTextItem = _pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING);
-    OSL_ENSURE(pTextItem, "OTableTreeListBox::InitEntry: no text item!?");
+    DBG_ASSERT(pTextItem, "OTableTreeListBox::InitEntry: no text item!?");
     sal_uInt16 nTextPos = _pEntry->GetPos(pTextItem);
-    OSL_ENSURE(((sal_uInt16)-1) != nTextPos, "OTableTreeListBox::InitEntry: no text item pos!");
+    DBG_ASSERT(((sal_uInt16)-1) != nTextPos, "OTableTreeListBox::InitEntry: no text item pos!");
 
     _pEntry->ReplaceItem(new OBoldListboxString(_pEntry, 0, _rString), nTextPos);
 }
@@ -481,7 +490,7 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
     {
         SvLBoxEntry* pFolder = GetEntryPosByName( rFirstName, pParentEntry );
         if ( !pFolder )
-            pFolder = InsertEntry( rFirstName, pParentEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFirstFolderType ) );
+            pFolder = InsertEntry( rFirstName, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFirstFolderType ) );
         pParentEntry = pFolder;
     }
 
@@ -489,20 +498,22 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
     {
         SvLBoxEntry* pFolder = GetEntryPosByName( rSecondName, pParentEntry );
         if ( !pFolder )
-            pFolder = InsertEntry( rSecondName, pParentEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nSecondFolderType ) );
+            pFolder = InsertEntry( rSecondName, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nSecondFolderType ) );
         pParentEntry = pFolder;
     }
 
     SvLBoxEntry* pRet = NULL;
     if ( !_bCheckName || !GetEntryPosByName( sName, pParentEntry ) )
     {
-        pRet = InsertEntry( sName, pParentEntry, sal_False, LIST_APPEND );
+        pRet = InsertEntry( sName, pParentEntry, FALSE, LIST_APPEND );
 
-        Image aImage;
-        m_pImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage );
+        Image aImage, aImageHC;
+        m_pImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage, aImageHC );
 
-        SetExpandedEntryBmp( pRet, aImage );
-        SetCollapsedEntryBmp( pRet, aImage );
+        SetExpandedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
+        SetCollapsedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
+        SetExpandedEntryBmp( pRet, aImageHC, BMP_COLOR_HIGHCONTRAST );
+        SetCollapsedEntryBmp( pRet, aImageHC, BMP_COLOR_HIGHCONTRAST );
     }
     return pRet;
 }
@@ -679,7 +690,7 @@ void OTableTreeListBox::removedTable( const ::rtl::OUString& _rName )
 }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

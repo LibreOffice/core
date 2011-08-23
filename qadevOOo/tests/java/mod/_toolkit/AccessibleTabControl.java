@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ public class AccessibleTabControl extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, 
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
     }
@@ -148,7 +148,7 @@ public class AccessibleTabControl extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleSelection
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
                                                     PrintWriter log) {
         log.println("creating a test environment");
 
@@ -172,13 +172,13 @@ public class AccessibleTabControl extends TestCase {
 
         shortWait();
 
-        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                             xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
         XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                          XDispatchProvider.class,
+                                          XDispatchProvider.class, 
                                           secondController);
 
         XURLTransformer urlTransf = null;
@@ -225,16 +225,16 @@ public class AccessibleTabControl extends TestCase {
 
         shortWait();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
+        oObj = at.getAccessibleObjectForRole(xRoot, 
                                              AccessibleRole.PAGE_TAB_LIST);
 
-        XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot,
-                                                                       AccessibleRole.PUSH_BUTTON,
+        XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot, 
+                                                                       AccessibleRole.PUSH_BUTTON, 
                                                                        "Close");
 
         accCloseButton = (XAccessibleAction) UnoRuntime.queryInterface(
@@ -245,10 +245,10 @@ public class AccessibleTabControl extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XAccessibleSelection selection = (XAccessibleSelection) (XAccessibleSelection) UnoRuntime.queryInterface(
-                                                                              XAccessibleSelection.class,
+                                                                              XAccessibleSelection.class, 
                                                                               oObj);
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 try {
@@ -259,10 +259,10 @@ public class AccessibleTabControl extends TestCase {
             }
         });
 
-        tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
+        tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected", 
                             new Boolean(true));
 
-        tEnv.addObjRelation("XAccessibleSelection.multiSelection",
+        tEnv.addObjRelation("XAccessibleSelection.multiSelection", 
                             new Boolean(false));
 
         return tEnv;

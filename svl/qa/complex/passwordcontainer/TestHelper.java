@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,40 +29,38 @@ package complex.passwordcontainer;
 
 import com.sun.star.task.UserRecord;
 
-// import share.LogWriter;
+import share.LogWriter;
 
 public class TestHelper {
-    // LogWriter m_aLogWriter;
+    LogWriter m_aLogWriter;
     String m_sTestPrefix;
-
-    public TestHelper(  String sTestPrefix ) {
-        // m_aLogWriter = aLogWriter;
+    
+    public TestHelper( LogWriter aLogWriter, String sTestPrefix ) {
+        m_aLogWriter = aLogWriter;
         m_sTestPrefix = sTestPrefix;
     }
-
+    
     public void Error( String sError ) {
-        System.out.println( m_sTestPrefix + "Error: " + sError );
+        m_aLogWriter.println( m_sTestPrefix + "Error: " + sError );
     }
-
+    
     public void Message( String sMessage ) {
-        System.out.println( m_sTestPrefix + sMessage );
+        m_aLogWriter.println( m_sTestPrefix + sMessage );
     }
-
+    
     public boolean sameLists(UserRecord aUserList1[], UserRecord aUserList2[]) {
         // only works when every name is unique within the list containing it
-
+        
         if(aUserList1.length != aUserList2.length) {
             Message("User list lengths: " + aUserList1.length + " <--> " + aUserList2.length + " respectively ");
             return false;
         }
-
+        
         for(int i = 0; i < aUserList1.length; i++) {
             int j;
             for(j = 0; j < aUserList2.length; j++) {
-                if(!aUserList1[i].UserName.equals(aUserList2[j].UserName))
-                {
+                if(!aUserList1[i].UserName.equals(aUserList2[j].UserName)) 
                     continue;
-                }
                 if(aUserList1[i].Passwords[0].equals(aUserList2[j].Passwords[0])) {
                     break;
                 }

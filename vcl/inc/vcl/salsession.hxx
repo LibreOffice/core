@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,18 +41,18 @@ enum SalSessionEventType
 
 struct SalSessionEvent
 {
-    SalSessionEventType         m_eType;
+    SalSessionEventType			m_eType;
 
-    SalSessionEvent( SalSessionEventType eType )
+    SalSessionEvent( SalSessionEventType eType ) 
             : m_eType( eType )
     {}
 };
 
 struct SalSessionInteractionEvent : public SalSessionEvent
 {
-    bool                        m_bInteractionGranted;
+    bool						m_bInteractionGranted;
 
-    SalSessionInteractionEvent( bool bGranted )
+    SalSessionInteractionEvent( bool bGranted ) 
             : SalSessionEvent( Interaction ),
               m_bInteractionGranted( bGranted )
     {}
@@ -60,10 +60,10 @@ struct SalSessionInteractionEvent : public SalSessionEvent
 
 struct SalSessionSaveRequestEvent : public SalSessionEvent
 {
-    bool                        m_bShutdown;
-    bool                        m_bCancelable;
+    bool						m_bShutdown;
+    bool						m_bCancelable;
 
-    SalSessionSaveRequestEvent( bool bShutdown, bool bCancelable )
+    SalSessionSaveRequestEvent( bool bShutdown, bool bCancelable ) 
             : SalSessionEvent( SaveRequest ),
               m_bShutdown( bShutdown ),
               m_bCancelable( bCancelable )
@@ -72,30 +72,30 @@ struct SalSessionSaveRequestEvent : public SalSessionEvent
 
 struct SalSessionShutdownCancelEvent : public SalSessionEvent
 {
-    SalSessionShutdownCancelEvent()
+    SalSessionShutdownCancelEvent() 
             : SalSessionEvent( ShutdownCancel )
     {}
 };
 
 struct SalSessionQuitEvent : public SalSessionEvent
 {
-    SalSessionQuitEvent()
+    SalSessionQuitEvent() 
             : SalSessionEvent( Quit )
     {}
 };
 
 typedef void(*SessionProc)( SalSessionEvent *pEvent);
 
-class VCL_PLUGIN_PUBLIC SalSession
+class VCL_DLLPUBLIC SalSession
 {
-    SessionProc         m_aProc;
+    SessionProc			m_aProc;
 public:
-    SalSession()
+    SalSession() 
             : m_aProc( 0 )
     {}
     virtual ~SalSession();
-
-    void SetCallback( SessionProc aCallback )
+    
+    void SetCallback( SessionProc aCallback ) 
     {
         m_aProc = aCallback;
     }
@@ -104,7 +104,7 @@ public:
         if( m_aProc )
             m_aProc( pEvent );
     }
-
+    
     // query the session manager for a user interaction slot
     virtual void queryInteraction() = 0;
     // signal the session manager that we're done with user interaction

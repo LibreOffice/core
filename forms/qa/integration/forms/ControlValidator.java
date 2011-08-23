@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,23 +27,25 @@
 package integration.forms;
 
 /** base class for components validating the content of form controls
+ *
+ * @author  fs@openoffice.org
  */
 public abstract class ControlValidator implements com.sun.star.form.validation.XValidator
 {
-
+    
     /** Creates a new instance of ControlValidator */
     public ControlValidator()
     {
     }
-
+    
     public void addValidityConstraintListener(com.sun.star.form.validation.XValidityConstraintListener xValidityConstraintListener)
     {
     }
-
+    
     public void removeValidityConstraintListener(com.sun.star.form.validation.XValidityConstraintListener xValidityConstraintListener)
     {
     }
-
+    
     protected boolean isVoid( Object Value )
     {
         try

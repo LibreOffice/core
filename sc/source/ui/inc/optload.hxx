@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,28 +38,28 @@ class ScDocument;
 class ScLoadOptPage : public SfxTabPage
 {
 private:
-    FixedText   aLinkFT;
-    RadioButton aAlwaysRB;
-    RadioButton aRequestRB;
-    RadioButton aNeverRB;
-    CheckBox    aDocOnlyCB;
-    GroupBox    aLinkGB;
+    FixedText	aLinkFT;
+    RadioButton	aAlwaysRB;
+    RadioButton	aRequestRB;
+    RadioButton	aNeverRB;
+    CheckBox	aDocOnlyCB;
+    GroupBox	aLinkGB;
     ScDocument *pDoc;
 
-    DECL_LINK(  UpdateHdl, CheckBox* );
+    DECL_LINK(	UpdateHdl, CheckBox* );
 
 public:
                         ScLoadOptPage( Window* pParent,
                                          const SfxItemSet& rSet );
                         ~ScLoadOptPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    void                SetDocument(ScDocument*);
+    void				SetDocument(ScDocument*);
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
 #endif

@@ -149,19 +149,19 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     private static final String     s_tableNameCustomers = "CUSTOMERS";
     private static final String     s_tableNameSales = "SALES";
 
-    private XPropertySet            m_xMasterForm;
-    private ButtonOperator          m_aOperator;
-    private SalesFilter             m_aSalesFilter;
+    private XPropertySet			m_xMasterForm;
+    private ButtonOperator			m_aOperator;
+    private SalesFilter				m_aSalesFilter;
 
-    private KeyGenerator            m_aSalesmanKeyGenerator;
-    private KeyGenerator            m_aSalesKeyGenerator;
-    private ControlLock             m_aSalesmenLocker;
-    private ControlLock             m_aSalesLocker;
-    private GridFieldValidator      m_aSalesNameValidator;
+    private KeyGenerator			m_aSalesmanKeyGenerator;
+    private KeyGenerator			m_aSalesKeyGenerator;
+    private ControlLock				m_aSalesmenLocker;
+    private	ControlLock				m_aSalesLocker;
+    private	GridFieldValidator		m_aSalesNameValidator;
 
-    private boolean                 m_bDefaultSalesDate;
-    private boolean                 m_bProtectKeyFields;
-    private boolean                 m_bAllowEmptySales;
+    private boolean					m_bDefaultSalesDate;
+    private boolean					m_bProtectKeyFields;
+    private boolean					m_bAllowEmptySales;
 
     /* ------------------------------------------------------------------ */
     public DataAwareness()
@@ -219,16 +219,16 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     /* ------------------------------------------------------------------ */
     public void resetted( EventObject aEvent ) throws com.sun.star.uno.RuntimeException
     {
-        // check if this reset occurred becase we're on a new record
+        // check if this reset occured becase we're on a new record
         XPropertySet xFormProps = UNO.queryPropertySet(  aEvent.Source );
         try
         {
             Boolean aIsNew = (Boolean)xFormProps.getPropertyValue( "IsNew" );
             if ( aIsNew.booleanValue() )
-            {   // yepp
+            {	// yepp
 
                 if ( !m_bDefaultSalesDate )
-                {   // we're interested to do all this only if the user told us to default the sales date
+                {	// we're interested to do all this only if the user told us to default the sales date
                     // to "today"
                     // As date fields do this defaulting automatically, the semantics is inverted here:
                     // If we're told to default, we must do nothing, if we should not default, we must
@@ -276,7 +276,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         {
             // did it come from a radio button or checkbox?
             if ( aEvent.PropertyName.equals( "State" ) )
-            {   // yep
+            {	// yep
                 Short aNewState = (Short)aEvent.NewValue;
 
                 XPropertySet xModel = UNO.queryPropertySet( aEvent.Source );
@@ -292,7 +292,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
                     {
                         // it's one of the options for key generation
                         if ( sRefValue.equals( "none" ) )
-                        {   // no automatic generation at all
+                        {	// no automatic generation at all
                             m_aSalesmanKeyGenerator.stopGenerator( );
                             m_aSalesKeyGenerator.stopGenerator( );
                         }
@@ -300,11 +300,11 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
                         {
                             boolean bGenerateOnReset = true;
                             if ( sRefValue.equals( "update" ) )
-                            {   // generate on update
+                            {	// generate on update
                                 bGenerateOnReset = ( 0 == nNewValue );
                             }
                             else if ( sRefValue.equals( "reset" ) )
-                            {   // generat on reset
+                            {	// generat on reset
                                 bGenerateOnReset = ( 0 != nNewValue );
                             }
                             m_aSalesmanKeyGenerator.activateKeyGenerator( bGenerateOnReset );
@@ -413,7 +413,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         String[] aCurrentFilter = (String[])xDSP.getPropertyValue( "TableFilter" );
 
         // check if the table name is already part of it
-        String sAllTables = "*";                                                // all tables
+        String sAllTables = "*";												// all tables
 
         for ( int i=0; i<aCurrentFilter.length; ++i )
         {
@@ -692,7 +692,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
 
         // --------------------------------------------------------------
         /* create some shapes */
-        XPropertySet xSNRField =    m_formLayer.insertControlLine( "NumericField", "SNR", "", 3 );
+        XPropertySet xSNRField =	m_formLayer.insertControlLine( "NumericField", "SNR", "", 3 );
                                     m_formLayer.insertControlLine( "TextField", "FIRSTNAME", "", 11);
                                     m_formLayer.insertControlLine( "TextField", "LASTNAME", "", 19 );
                                     m_formLayer.insertControlLine( "TextField", "STREET", "", 27 );
@@ -748,17 +748,17 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         xSalesFormProps.setPropertyValue( "Command", sCommand );
 
         // the master-details connection
-        String[] aMasterFields = new String[] { "SNR" };        // the field in the master form
-        String[] aDetailFields = new String[] { "salesmen" };   // the name in the detail form
+        String[] aMasterFields = new String[] { "SNR" };		// the field in the master form
+        String[] aDetailFields = new String[] { "salesmen" };	// the name in the detail form
         xSalesFormProps.setPropertyValue( "MasterFields", aMasterFields );
         xSalesFormProps.setPropertyValue( "DetailFields", aDetailFields );
 
         // the create thr grid model
         XPropertySet xSalesGridModel = m_formLayer.createControlAndShape( "GridControl", 2, 80, 162, 40, xSalesForm );
         xSalesGridModel.setPropertyValue( "Name", "SalesTable" );
-        XPropertySet xKeyColumn      =  createGridColumn( xSalesGridModel, "NumericField", "SALENR", 12 );
-        XPropertySet xCustomerColumn =  createGridColumn( xSalesGridModel, "ListBox", "COS_NR", 40 );
-        XPropertySet xSalesNameColumn = createGridColumn( xSalesGridModel, "TextField", "NAME", 25 );
+        XPropertySet xKeyColumn		 =	createGridColumn( xSalesGridModel, "NumericField", "SALENR", 12 );
+        XPropertySet xCustomerColumn =	createGridColumn( xSalesGridModel, "ListBox", "COS_NR", 40 );
+        XPropertySet xSalesNameColumn =	createGridColumn( xSalesGridModel, "TextField", "NAME", 25 );
                                         createGridColumn( xSalesGridModel, "DateField", "SALEDATE", 24 );
                                         createGridColumn( xSalesGridModel, "CurrencyField", "PRICE", 16 );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,36 +51,40 @@ public:
            , sal_Int32 nDimensionCount );
     virtual ~VPolarRadiusAxis();
 
-    virtual void initPlotter(
+    virtual void SAL_CALL initPlotter(
           const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xLogicTarget
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xFinalTarget
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory >& xFactory
-        , const rtl::OUString& rCID
+        , const rtl::OUString& rCID 
                 ) throw (::com::sun::star::uno::RuntimeException );
 
     virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
 
-    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
-
-    virtual void setExplicitScaleAndIncrement(
-            const ExplicitScaleData& rScale
-          , const ExplicitIncrementData& rIncrement )
+    virtual void SAL_CALL setScales(
+          const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::chart2::ExplicitScaleData >& rScales
+            , sal_Bool bSwapXAndYAxis )
                 throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void initAxisLabelProperties(
+    virtual void SAL_CALL setExplicitScaleAndIncrement(
+            const ::com::sun::star::chart2::ExplicitScaleData& rScale
+          , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement )
+                throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL initAxisLabelProperties(
                     const ::com::sun::star::awt::Size& rFontReferenceSize
                   , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels );
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
 
-    virtual void createMaximumLabels();
-    virtual void createLabels();
-    virtual void updatePositions();
+    virtual void SAL_CALL createMaximumLabels();
+    virtual void SAL_CALL createLabels();
+    virtual void SAL_CALL updatePositions();
 
-    virtual void createShapes();
+    virtual void SAL_CALL createShapes();
 
 protected: //methods
     virtual bool prepareShapeCreation();

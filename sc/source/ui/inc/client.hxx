@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,21 +40,21 @@ class SdrModel;
 class ScClient : public SfxInPlaceClient
 {
 private:
-    SdrModel*       pModel;
-    SdrGrafObj*     pGrafEdit;
+    SdrModel*		pModel;
+    SdrGrafObj*		pGrafEdit;
 
     virtual void    ObjectAreaChanged();
     virtual void    RequestNewObjectArea( Rectangle& );
     virtual void    ViewChanged();
-    virtual void    MakeVisible();
+    virtual void	MakeVisible();
 
 public:
                     ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj );
-    virtual         ~ScClient();
+    virtual			~ScClient();
 
-    SdrGrafObj*     GetGrafEdit() const             { return pGrafEdit; }
-    void            SetGrafEdit(SdrGrafObj* pNew)   { pGrafEdit = pNew; }
-    SdrOle2Obj*     GetDrawObj();
+    SdrGrafObj*		GetGrafEdit() const				{ return pGrafEdit; }
+    void			SetGrafEdit(SdrGrafObj* pNew)	{ pGrafEdit = pNew; }
+    SdrOle2Obj*		GetDrawObj();
 };
 
 

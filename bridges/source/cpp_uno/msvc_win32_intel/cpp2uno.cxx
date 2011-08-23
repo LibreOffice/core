@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,7 +166,7 @@ static inline typelib_TypeClass cpp2uno_call(
     (*pThis->getUnoI()->pDispatcher)(
         pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-    // in case an exception occurred...
+    // in case an exception occured...
     if (pUnoExc)
     {
         // destruct temporary in/inout params
@@ -191,7 +191,7 @@ static inline typelib_TypeClass cpp2uno_call(
         // is here for dummy
         return typelib_TypeClass_VOID;
     }
-    else // else no exception occurred...
+    else // else no exception occured...
     {
         // temporary params
         while (nTempIndizes--)
@@ -287,8 +287,8 @@ static typelib_TypeClass __cdecl cpp_mediate(
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
-            aParam.bIn      = sal_True;
-            aParam.bOut     = sal_False;
+            aParam.bIn		= sal_True;
+            aParam.bOut		= sal_False;
 
             eRet = cpp2uno_call(
                 pCppI, aMemberDescr.get(),
@@ -370,40 +370,40 @@ static __declspec(naked) void __cdecl cpp_vtable_call(void)
 {
 __asm
     {
-        sub     esp, 8      // space for immediate return type
-        push    esp
+        sub		esp, 8		// space for immediate return type
+        push	esp
         push    edx         // vtable offset
-        push    eax         // function index
-        mov     eax, esp
-        add     eax, 20
-        push    eax         // original stack ptr
+        push	eax			// function index
+        mov		eax, esp
+        add		eax, 20
+        push	eax			// original stack ptr
 
-        call    cpp_mediate
-        add     esp, 16
+        call	cpp_mediate
+        add		esp, 16
 
-        cmp     eax, typelib_TypeClass_FLOAT
-        je      Lfloat
-        cmp     eax, typelib_TypeClass_DOUBLE
-        je      Ldouble
-        cmp     eax, typelib_TypeClass_HYPER
-        je      Lhyper
-        cmp     eax, typelib_TypeClass_UNSIGNED_HYPER
-        je      Lhyper
+        cmp		eax, typelib_TypeClass_FLOAT
+        je		Lfloat
+        cmp		eax, typelib_TypeClass_DOUBLE
+        je		Ldouble
+        cmp		eax, typelib_TypeClass_HYPER
+        je		Lhyper
+        cmp		eax, typelib_TypeClass_UNSIGNED_HYPER
+        je		Lhyper
         // rest is eax
-        pop     eax
-        add     esp, 4
+        pop		eax
+        add		esp, 4
         ret
 Lhyper:
-        pop     eax
-        pop     edx
+        pop		eax
+        pop		edx
         ret
 Lfloat:
-        fld     dword ptr [esp]
-        add     esp, 8
+        fld		dword ptr [esp]
+        add		esp, 8
         ret
 Ldouble:
-        fld     qword ptr [esp]
-        add     esp, 8
+        fld		qword ptr [esp]
+        add		esp, 8
         ret
     }
 }

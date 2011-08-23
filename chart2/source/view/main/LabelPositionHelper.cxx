@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,6 +68,7 @@ awt::Point LabelPositionHelper::transformSceneToScreenPosition( const drawing::P
                   rScenePosition3D, m_xLogicTarget, m_pShapeFactory, m_nDimensionCount );
 }
 
+//static
 void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const tNameSequence& rPropNames, LabelAlignment eAlignment)
 {
     //HorizontalAdjustment
@@ -99,14 +100,15 @@ void lcl_doDynamicFontResize( uno::Any* pAOldAndNewFontHeightAny
                           , const awt::Size& rOldReferenceSize
                           , const awt::Size& rNewReferenceSize  )
 {
-    double fOldFontHeight = 0;
+    double fOldFontHeight = 0, fNewFontHeight;
     if( pAOldAndNewFontHeightAny && ( *pAOldAndNewFontHeightAny >>= fOldFontHeight ) )
     {
-        double fNewFontHeight = RelativeSizeHelper::calculate( fOldFontHeight, rOldReferenceSize, rNewReferenceSize );
+        fNewFontHeight = RelativeSizeHelper::calculate( fOldFontHeight, rOldReferenceSize, rNewReferenceSize );
         *pAOldAndNewFontHeightAny = uno::makeAny(fNewFontHeight);
     }
 }
 
+//static
 void LabelPositionHelper::doDynamicFontResize( tAnySequence& rPropValues
                     , const tNameSequence& rPropNames
                     , const uno::Reference< beans::XPropertySet >& xAxisModelProps
@@ -430,6 +432,7 @@ void lcl_correctRotation_Right_Bottom( double& rfXCorrection, double& rfYCorrect
 
 }//end anonymous namespace
 
+//static
 void LabelPositionHelper::correctPositionForRotation( const uno::Reference< drawing::XShape >& xShape2DText
                      , LabelAlignment eLabelAlignment, const double fRotationAngle, bool bRotateAroundCenter )
 {
@@ -452,7 +455,7 @@ void LabelPositionHelper::correctPositionForRotation( const uno::Reference< draw
             lcl_correctRotation_Left( fXCorrection, fYCorrection, fAnglePositiveDegree, aSize, bRotateAroundCenter );
             break;
         case LABEL_ALIGN_RIGHT:
-            lcl_correctRotation_Right( fXCorrection, fYCorrection, fAnglePositiveDegree, aSize, bRotateAroundCenter );
+            lcl_correctRotation_Right( fXCorrection, fYCorrection, fAnglePositiveDegree, aSize, bRotateAroundCenter );    
             break;
         case LABEL_ALIGN_TOP:
             lcl_correctRotation_Top( fXCorrection, fYCorrection, fAnglePositiveDegree, aSize, bRotateAroundCenter );

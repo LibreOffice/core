@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ bool ScBiffReader::nextRecord()
     *mpStream >> mnId >> mnLength;
 
     mnOffset = mpStream->Tell();
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
     fprintf( stderr, "Read record 0x%x length 0x%x at offset 0x%x\n",
         (unsigned)mnId, (unsigned)mnLength, (unsigned)mnOffset );
 

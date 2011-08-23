@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,8 @@
 #include "sunjre.hxx"
 
 using namespace std;
+using namespace rtl;
 using namespace osl;
-
-using ::rtl::OUString;
 
 namespace jfw_plugin
 {
@@ -99,7 +98,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
 {
     //get java.vendor, java.version, java.home,
     //javax.accessibility.assistive_technologies from system properties
-
+    
     OUString sVendor;
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
     OUString sVendorProperty(
@@ -115,9 +114,9 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     bool bVendor = false;
     bool bHome = false;
     bool bAccess = false;
-
+    
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
-    for (it_prop i = props.begin(); i != props.end(); ++i)
+    for (it_prop i = props.begin(); i != props.end(); i++)
     {
         if(! bVendor && sVendorProperty.equals(i->first))
         {
@@ -131,7 +130,6 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
         }
         else if (!bHome && sHomeProperty.equals(i->first))
         {
-#ifndef JVM_ONE_PATH_CHECK
            OUString fileURL;
            if (osl_getFileURLFromSystemPath(i->second.pData,& fileURL.pData) ==
                osl_File_E_None)
@@ -145,10 +143,6 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
                    bHome = true;
                }
            }
-#else
-           m_sHome = i->second;
-           bHome = true;
-#endif
         }
         else if (!bAccess && sAccessProperty.equals(i->first))
         {
@@ -164,18 +158,18 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     }
     if (!bVersion || !bVendor || !bHome)
         return false;
-
+    
     // init m_sRuntimeLibrary
     OSL_ASSERT(m_sHome.getLength());
     //call virtual function to get the possible paths to the runtime library.
-
+    
     int size = 0;
     char const* const* arRtPaths = getRuntimePaths( & size);
     vector<OUString> libpaths = getVectorFromCharArray(arRtPaths, size);
-
+    
     bool bRt = false;
     typedef vector<OUString>::const_iterator i_path;
-    for(i_path ip = libpaths.begin(); ip != libpaths.end(); ++ip)
+    for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
     {
         //Construct an absolute path to the possible runtime
         OUString usRt= m_sHome + *ip;
@@ -201,7 +195,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     OUString sPathSep= OUString::createFromAscii(arSep);
     bool bLdPath = true;
     int c = 0;
-    for(i_path il = ld_paths.begin(); il != ld_paths.end(); ++il, ++c)
+    for(i_path il = ld_paths.begin(); il != ld_paths.end(); il ++, c++)
     {
         OUString usAbsUrl= m_sHome + *il;
         // convert to system path
@@ -221,7 +215,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     }
     if (bLdPath == false)
         return false;
-
+    
     return true;
 }
 
@@ -272,13 +266,13 @@ bool VendorBase::needsRestart() const
 
 int VendorBase::compareVersions(const rtl::OUString& /*sSecond*/) const
 {
-    OSL_FAIL("[Java framework] VendorBase::compareVersions must be "
+    OSL_ENSURE(0, "[Java framework] VendorBase::compareVersions must be "
                "overridden in derived class.");
     return 0;
 }
 
 
-
+        
 
 }
 

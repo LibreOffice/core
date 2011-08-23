@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-static const sal_uLong HIDE_MOUSE_TIMEOUT = 10000;
-static const sal_uLong SHOW_MOUSE_TIMEOUT = 1000;
+static const ULONG HIDE_MOUSE_TIMEOUT = 10000;
+static const ULONG SHOW_MOUSE_TIMEOUT = 1000;
 
 // =============================================================================
 
@@ -60,7 +60,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::
 , mnPauseTimeout( SLIDE_NO_TIMEOUT )
 , mnRestartPageIndex( PAGE_NO_END )
 , meShowWindowMode(SHOWWINDOWMODE_NORMAL)
-, mbShowNavigatorAfterSpecialMode( sal_False )
+, mbShowNavigatorAfterSpecialMode( FALSE )
 , mbMouseAutoHide(true)
 , mbMouseCursorHidden(false)
 , mnFirstMouseMove(0)
@@ -70,7 +70,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::
 
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.
-    EnableRTL (sal_False);
+    EnableRTL (FALSE);
 
     MapMode aMap(GetMapMode());
     aMap.SetMapUnit(MAP_100TH_MM);
@@ -86,6 +86,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::
     maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
 
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
+//	SetBackground( Wallpaper( Color( COL_BLACK ) ) );
     SetBackground(); // avoids that VCL paints any background!
     GetParent()->Show();
     AddEventListener( LINK( this, ShowWindow, EventHdl ) );
@@ -105,7 +106,7 @@ ShowWindow::~ShowWindow(void)
 
 void ShowWindow::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     if( SHOWWINDOWMODE_PREVIEW == meShowWindowMode )
     {
@@ -219,10 +220,10 @@ void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
             {
                 // if this is not the first mouse move while hidden, see if
                 // enough time has pasted to show mouse pointer again
-                sal_uLong nTime = Time::GetSystemTicks();
+                ULONG nTime = Time::GetSystemTicks();
                 if( (nTime - mnFirstMouseMove) >= SHOW_MOUSE_TIMEOUT )
                 {
-                    ShowPointer( sal_True );
+                    ShowPointer( TRUE );
                     mnFirstMouseMove = 0;
                     mbMouseCursorHidden = false;
                     maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
@@ -288,6 +289,17 @@ void ShowWindow::Paint(const Rectangle& rRect)
 {
     if( (meShowWindowMode == SHOWWINDOWMODE_NORMAL) || (meShowWindowMode == SHOWWINDOWMODE_PREVIEW) )
     {
+/*
+        Region aOldClipRegion( GetClipRegion() );
+            
+        Region aClipRegion( rRect );
+        aClipRegion.Exclude( maPresArea );
+        SetClipRegion( aClipRegion );
+
+        DrawWallpaper( rRect, maShowBackground );
+
+        SetClipRegion( aOldClipRegion );
+*/
         if( mxController.is() )
         {
             mxController->paint(rRect);
@@ -307,7 +319,7 @@ void ShowWindow::Paint(const Rectangle& rRect)
         }
         else if( SHOWWINDOWMODE_PAUSE == meShowWindowMode )
         {
-            DrawPauseScene( sal_False );
+            DrawPauseScene( FALSE );
         }
         else if( SHOWWINDOWMODE_BLANK == meShowWindowMode )
         {
@@ -324,7 +336,14 @@ void ShowWindow::Paint(const Rectangle& rRect)
 
 long ShowWindow::Notify(NotifyEvent& rNEvt)
 {
-    long nOK = sal_False;
+    long nOK = FALSE;
+/*
+    if( mpViewShell && rNEvt.GetType() == EVENT_GETFOCUS )
+    {
+        NotifyEvent aNEvt(EVENT_GETFOCUS, this);
+        nOK = mpViewShell->GetViewFrame()->GetWindow().Notify(aNEvt);
+    }
+*/
     if (!nOK)
         nOK = Window::Notify(rNEvt);
 
@@ -338,6 +357,13 @@ void ShowWindow::GetFocus()
 {
     // Basisklasse
     Window::GetFocus();
+/*
+    if( mpViewShell )
+    {
+        NotifyEvent aNEvt(EVENT_GETFOCUS, this);
+        mpViewShell->GetViewFrame()->GetWindow().Notify(aNEvt);
+    }
+*/
 }
 
 // -----------------------------------------------------------------------------
@@ -366,19 +392,21 @@ void ShowWindow::Move()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ShowWindow::SetEndMode()
+BOOL ShowWindow::SetEndMode()
 {
     if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
         DeleteWindowFromPaintView();
         meShowWindowMode = SHOWWINDOWMODE_END;
+//		maShowBackground = GetBackground();
+//		SetBackground( Wallpaper( Color( COL_BLACK ) ) );
         maShowBackground = Wallpaper( Color( COL_BLACK ) );
 
         // hide navigator if it is visible
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_False );
-            mbShowNavigatorAfterSpecialMode = sal_True;
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, FALSE );
+            mbShowNavigatorAfterSpecialMode = TRUE;
         }
 
         Invalidate();
@@ -389,7 +417,7 @@ sal_Bool ShowWindow::SetEndMode()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout, Graphic* pLogo )
+BOOL ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout, Graphic* pLogo )
 {
     rtl::Reference< SlideShow > xSlideShow;
 
@@ -406,13 +434,15 @@ sal_Bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTim
         mnPauseTimeout = nTimeout;
         mnRestartPageIndex = nPageIndexToRestart;
         meShowWindowMode = SHOWWINDOWMODE_PAUSE;
+//		maShowBackground = GetBackground();
+//		SetBackground( Wallpaper( Color( COL_BLACK ) ) );
         maShowBackground = Wallpaper( Color( COL_BLACK ) );
 
         // hide navigator if it is visible
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_False );
-            mbShowNavigatorAfterSpecialMode = sal_True;
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, FALSE );
+            mbShowNavigatorAfterSpecialMode = TRUE;
         }
 
         if( pLogo )
@@ -429,20 +459,22 @@ sal_Bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTim
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor )
+BOOL ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor )
 {
     if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
         DeleteWindowFromPaintView();
         mnRestartPageIndex = nPageIndexToRestart;
         meShowWindowMode = SHOWWINDOWMODE_BLANK;
+//		maShowBackground = GetBackground();
+//		SetBackground( Wallpaper( rBlankColor ) );
         maShowBackground = Wallpaper( rBlankColor );
 
         // hide navigator if it is visible
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_False );
-            mbShowNavigatorAfterSpecialMode = sal_True;
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, FALSE );
+            mbShowNavigatorAfterSpecialMode = TRUE;
         }
 
         Invalidate();
@@ -466,6 +498,7 @@ void ShowWindow::TerminateShow()
     maPauseTimer.Stop();
     maMouseTimer.Stop();
     Erase();
+//	SetBackground( maShowBackground );
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
     meShowWindowMode = SHOWWINDOWMODE_NORMAL;
     mnPauseTimeout = SLIDE_NO_TIMEOUT;
@@ -475,8 +508,8 @@ void ShowWindow::TerminateShow()
         // show navigator?
         if( mbShowNavigatorAfterSpecialMode )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_True );
-            mbShowNavigatorAfterSpecialMode = sal_False;
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, TRUE );
+            mbShowNavigatorAfterSpecialMode = FALSE;
         }
     }
 
@@ -503,6 +536,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     maLogo.Clear();
     maPauseTimer.Stop();
     Erase();
+//	SetBackground( maShowBackground );
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
     meShowWindowMode = SHOWWINDOWMODE_NORMAL;
     mnPauseTimeout = SLIDE_NO_TIMEOUT;
@@ -510,11 +544,11 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     if( mpViewShell )
     {
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( mpViewShell->GetViewShellBase() ) );
-
+  
          if( xSlideShow.is() )
         {
             AddWindowToPaintView();
-
+    
             if( SHOWWINDOWMODE_BLANK == eOldShowWindowMode )
             {
                 xSlideShow->pause(false);
@@ -532,25 +566,25 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     // show navigator?
     if( mbShowNavigatorAfterSpecialMode )
     {
-        mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_True );
-        mbShowNavigatorAfterSpecialMode = sal_False;
+        mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, TRUE );
+        mbShowNavigatorAfterSpecialMode = FALSE;
     }
 }
 
 // -----------------------------------------------------------------------------
 
-void ShowWindow::DrawPauseScene( sal_Bool bTimeoutOnly )
+void ShowWindow::DrawPauseScene( BOOL bTimeoutOnly )
 {
-    const MapMode&  rMap = GetMapMode();
-    const Point     aOutOrg( PixelToLogic( Point() ) );
-    const Size      aOutSize( GetOutputSize() );
-    const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, rMap ) );
-    const Size      aOffset( LogicToLogic( Size( 1000, 1000 ), MAP_100TH_MM, rMap ) );
-    String          aText( SdResId( STR_PRES_PAUSE ) );
-    sal_Bool            bDrawn = sal_False;
+    const MapMode&	rMap = GetMapMode();
+    const Point		aOutOrg( PixelToLogic( Point() ) );
+    const Size		aOutSize( GetOutputSize() );
+    const Size		aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, rMap ) );
+    const Size		aOffset( LogicToLogic( Size( 1000, 1000 ), MAP_100TH_MM, rMap ) );
+    String			aText( SdResId( STR_PRES_PAUSE ) );
+    BOOL			bDrawn = FALSE;
 
-    Font            aFont( GetSettings().GetStyleSettings().GetMenuFont() );
-    const Font      aOldFont( GetFont() );
+    Font 			aFont( GetSettings().GetStyleSettings().GetMenuFont() );
+    const Font 		aOldFont( GetFont() );
 
     aFont.SetSize( aTextSize );
     aFont.SetColor( COL_WHITE );
@@ -566,7 +600,7 @@ void ShowWindow::DrawPauseScene( sal_Bool bTimeoutOnly )
         else
             aGrfSize = LogicToLogic( maLogo.GetPrefSize(), maLogo.GetPrefMapMode(), rMap );
 
-        const Point aGrfPos( Max( aOutOrg.X() + aOutSize.Width() - aGrfSize.Width() - aOffset.Width(), aOutOrg.X() ),
+        const Point	aGrfPos( Max( aOutOrg.X() + aOutSize.Width() - aGrfSize.Width() - aOffset.Width(), aOutOrg.X() ),
                              Max( aOutOrg.Y() + aOutSize.Height() - aGrfSize.Height() - aOffset.Height(), aOutOrg.Y() ) );
 
         if( maLogo.IsAnimated() )
@@ -577,30 +611,30 @@ void ShowWindow::DrawPauseScene( sal_Bool bTimeoutOnly )
 
     if( SLIDE_NO_TIMEOUT != mnPauseTimeout )
     {
-        MapMode         aVMap( rMap );
-        VirtualDevice   aVDev( *this );
+        MapMode			aVMap( rMap );
+        VirtualDevice	aVDev( *this );
 
         aVMap.SetOrigin( Point() );
         aVDev.SetMapMode( aVMap );
         aVDev.SetBackground( Wallpaper( Color( COL_BLACK ) ) );
-
+        
         // set font first, to determine real output height
         aVDev.SetFont( aFont );
-
+            
         const Size aVDevSize( aOutSize.Width(), aVDev.GetTextHeight() );
 
         if( aVDev.SetOutputSize( aVDevSize ) )
         {
             // Note: if performance gets an issue here, we can use NumberFormatter directly
-            SvtSysLocale                aSysLocale;
+            SvtSysLocale				aSysLocale;
             const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
-
+            
             aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " ( " ));
             aText += aLocaleData.getDuration( Time( 0, 0, mnPauseTimeout ) );
             aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " )" ));
             aVDev.DrawText( Point( aOffset.Width(), 0 ), aText );
             DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, aVDev );
-            bDrawn = sal_True;
+            bDrawn = TRUE;
         }
     }
 
@@ -616,12 +650,12 @@ void ShowWindow::DrawPauseScene( sal_Bool bTimeoutOnly )
 
 void ShowWindow::DrawEndScene()
 {
-    const Font      aOldFont( GetFont() );
-    Font            aFont( GetSettings().GetStyleSettings().GetMenuFont() );
+    const Font		aOldFont( GetFont() );
+    Font			aFont( GetSettings().GetStyleSettings().GetMenuFont() );
 
-    const Point     aOutOrg( PixelToLogic( Point() ) );
-    const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, GetMapMode() ) );
-    const String    aText( SdResId( STR_PRES_SOFTEND ) );
+    const Point		aOutOrg( PixelToLogic( Point() ) );
+    const Size		aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, GetMapMode() ) );
+    const String	aText( SdResId( STR_PRES_SOFTEND ) );
 
     aFont.SetSize( aTextSize );
     aFont.SetColor( COL_WHITE );
@@ -647,7 +681,7 @@ IMPL_LINK( ShowWindow, PauseTimeoutHdl, Timer*, pTimer )
         RestartShow();
     else
     {
-        DrawPauseScene( sal_True );
+        DrawPauseScene( TRUE );
         pTimer->Start();
     }
 
@@ -665,7 +699,7 @@ IMPL_LINK( ShowWindow, MouseTimeoutHdl, Timer*, EMPTYARG )
     else
     {
         // mouse has been idle to long, hide pointer
-        ShowPointer( sal_False );
+        ShowPointer( FALSE );
         mbMouseCursorHidden = true;
     }
     return 0L;
@@ -694,9 +728,9 @@ void ShowWindow::DeleteWindowFromPaintView()
     if( mpViewShell->GetView() )
         mpViewShell->GetView()->DeleteWindowFromPaintView( this );
 
-    sal_uInt16 nChild = GetChildCount();
+    USHORT nChild = GetChildCount();
     while( nChild-- )
-        GetChild( nChild )->Show( sal_False );
+        GetChild( nChild )->Show( FALSE );
 }
 
 void ShowWindow::AddWindowToPaintView()
@@ -704,9 +738,9 @@ void ShowWindow::AddWindowToPaintView()
     if( mpViewShell->GetView() )
         mpViewShell->GetView()->AddWindowToPaintView( this );
 
-    sal_uInt16 nChild = GetChildCount();
+    USHORT nChild = GetChildCount();
     while( nChild-- )
-        GetChild( nChild )->Show( sal_True );
+        GetChild( nChild )->Show( TRUE );
 }
 
 } // end of namespace sd

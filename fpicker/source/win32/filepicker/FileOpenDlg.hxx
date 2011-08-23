@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ typedef struct _tagOFNA {
    LPCSTR       lpstrPrompt;
 #endif
 #if (_WIN32_WINNT >= 0x0500)
-   void *       pvReserved;
+   void *		pvReserved;
    DWORD        dwReserved;
    DWORD        FlagsEx;
 #endif // (_WIN32_WINNT >= 0x0500)
@@ -132,7 +132,7 @@ typedef _LPOPENFILENAMEA _LPOPENFILENAME;
 
 //-------------------------------------------------------------
 // A simple wrapper class around the Win32 GetOpenFileName API.
-// This class is not thread-safe and only one instance at a
+// This class is not thread-safe and only one instance at a 
 // time is allowed
 //-------------------------------------------------------------
 
@@ -140,15 +140,15 @@ class CFileOpenDialog
 {
 public:
     // ctor
-    // bFileOpenDialog idicates if we want a FileOpen or FileSave
+    // bFileOpenDialog idicates if we want a FileOpen or FileSave 
     // dialog
     // dwFlags see OPENFILENAME
     // dwTemplateId - an ID for custom templates
     // hInstance    - an instance handle for the module
     // which provides the custom template, unused if dwTemplateId
     // is 0
-    CFileOpenDialog(
-        bool bFileOpenDialog = sal_True,
+    CFileOpenDialog( 
+        bool bFileOpenDialog = sal_True, 
         sal_uInt32 dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
         sal_uInt32 dwTemplateId = 0,
         HINSTANCE hInstance = 0);
@@ -156,12 +156,12 @@ public:
     virtual ~CFileOpenDialog();
 
     virtual void SAL_CALL setTitle(const rtl::OUString& aTitle);
-
+    
     // to set a filter string using the M$ format
     // e.g. FltName\0*.txt;*.rtf\0...\0\0
     void SAL_CALL setFilter(const rtl::OUString& aFilter);
 
-    // set the index of the current filter when the
+    // set the index of the current filter when the 
     // dialog is about to shown, the index starts with 1
     // the function succeeded if the given filter index
     // is greater than zero and is a valid position
@@ -171,8 +171,8 @@ public:
     // get the index of the currently selected filter
     // the index of the returned filter starts with 1
     sal_uInt32 SAL_CALL getSelectedFilterIndex() const;
-
-    // set the name and optional the path of the
+    
+    // set the name and optional the path of the 
     // file that will be initially be shown when
     // the dialog will be displayed
     virtual void SAL_CALL setDefaultName(const rtl::OUString& aName);
@@ -205,19 +205,19 @@ public:
 
     // returns whether multi-selection mode is enabled or not
     bool SAL_CALL getMultiSelectionMode() const;
-
-    // shows the dialog, calls preModal before
+    
+    // shows the dialog, calls preModal before 
     // showing the dialog and postModal after
     // showing the dialog
     // the method returns:
     //  0 - when the dialog was canceled by the user
     //  1 - when the dialog was closed with ok
-    // -1 - when an error occurred
+    // -1 - when an error occured
     sal_Int16 SAL_CALL doModal();
 
-    // returns the last dialog error that occurred
+    // returns the last dialog error that occured
     sal_uInt32 SAL_CALL getLastDialogError() const;
-
+    
     // retrievs the currently selected file
     // including path and drive information
     // can be called only if the dialog is
@@ -253,14 +253,14 @@ protected:
     virtual void SAL_CALL onHelp();
 
     // only called back if OFN_EXPLORER is set
-    virtual void SAL_CALL onInitDone();
+    virtual void SAL_CALL onInitDone();	
     virtual void SAL_CALL onFolderChanged();
     virtual void SAL_CALL onTypeChanged(sal_uInt32 nFilterIndex);
-
+    
     virtual void SAL_CALL onInitDialog(HWND hwndDlg) = 0;
 
     virtual sal_uInt32 SAL_CALL onCtrlCommand(HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode);
-
+    
     sal_uInt32 SAL_CALL onWMNotify(HWND hwndChild, LPOFNOTIFYW lpOfNotify);
 
     // we use non-virtual functions to do necessary work before
@@ -268,18 +268,18 @@ protected:
     void SAL_CALL handleInitDialog(HWND hwndDlg, HWND hwndChild);
 
 protected:
-
-    // handle to the window of the
+    
+    // handle to the window of the 
     // FileOpen/FileSave dialog
-    // will be set on message
+    // will be set on message 
     // WM_INITDIALOG, before this
     // value is undefined
-    HWND    m_hwndFileOpenDlg;
-    HWND    m_hwndFileOpenDlgChild;
+    HWND	m_hwndFileOpenDlg;
+    HWND	m_hwndFileOpenDlgChild;
 
-    _OPENFILENAME   m_ofn;
+    _OPENFILENAME	m_ofn;
 
-    // we connect the instance with the dialog window using
+    // we connect the instance with the dialog window using 
     // SetProp, with this function we can reconnect from
     // callback functions to this instance
     static CFileOpenDialog* SAL_CALL getCurrentInstance(HWND hwnd);
@@ -288,33 +288,33 @@ protected:
 
 private:
     // FileOpen or FileSaveDialog
-    bool            m_bFileOpenDialog;
-    rtl::OUString   m_dialogTitle;
-    rtl::OUString   m_displayDirectory;
-    rtl::OUString   m_defaultExtension;
+    bool			m_bFileOpenDialog;
+    rtl::OUString	m_dialogTitle;
+    rtl::OUString	m_displayDirectory;
+    rtl::OUString	m_defaultExtension;
 
-    mutable rtl::OUStringBuffer m_filterBuffer;
-    mutable rtl::OUStringBuffer m_fileTitleBuffer;
-    mutable rtl::OUStringBuffer m_helperBuffer;
+    mutable	rtl::OUStringBuffer m_filterBuffer;	
+    mutable	rtl::OUStringBuffer m_fileTitleBuffer;	
+    mutable rtl::OUStringBuffer	m_helperBuffer;	
     mutable rtl::OUStringBuffer m_fileNameBuffer;
 
     CGetFileNameWrapper m_GetFileNameWrapper;
 
-    WNDPROC             m_pfnBaseDlgProc;
+    WNDPROC	    		m_pfnBaseDlgProc;
 
     // callback function
-    static UINT_PTR CALLBACK ofnHookProc(
+    static unsigned int CALLBACK ofnHookProc( 
         HWND hChildDlg, // handle to child dialog box
-        UINT uiMsg,     // message identifier
+        unsigned int uiMsg,     // message identifier
         WPARAM wParam,  // message parameter
         LPARAM lParam   // message parameter
     );
 
-    // we have to subclass the dialog in order
-    // to clean up the window property we are
+    // we have to subclass the dialog in order 
+    // to clean up the window property we are 
     // using to connect the window with a class
     // instance in WM_NCDESTROY
-    static LRESULT CALLBACK BaseDlgProc(
+    static LRESULT CALLBACK BaseDlgProc( 
         HWND hWnd, UINT wMessage, WPARAM wParam, LPARAM lParam );
 
 private:

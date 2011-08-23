@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <svsys.h>
+#include <tools/svwin.h>
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif
@@ -39,11 +39,11 @@
 // =======================================================================
 
 // Maximale Periode
-#define MAX_SYSPERIOD     65533
+#define MAX_SYSPERIOD	  65533
 
 // =======================================================================
 
-void ImplSalStartTimer( sal_uLong nMS, sal_Bool bMutex )
+void ImplSalStartTimer( ULONG nMS, BOOL bMutex )
 {
     SalData* pSalData = GetSalData();
 
@@ -52,7 +52,7 @@ void ImplSalStartTimer( sal_uLong nMS, sal_Bool bMutex )
     if ( !bMutex )
         pSalData->mnTimerOrgMS = nMS;
 
-    // Periode darf nicht zu gross sein, da Windows mit sal_uInt16 arbeitet
+    // Periode darf nicht zu gross sein, da Windows mit USHORT arbeitet
     if ( nMS > MAX_SYSPERIOD )
         nMS = MAX_SYSPERIOD;
 
@@ -71,7 +71,7 @@ WinSalTimer::~WinSalTimer()
 {
 }
 
-void WinSalTimer::Start( sal_uLong nMS )
+void WinSalTimer::Start( ULONG nMS )
 {
     // switch to main thread
     SalData* pSalData = GetSalData();
@@ -118,7 +118,7 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
 
         // Test for MouseLeave
         SalTestMouseLeave();
-
+        
         bool bRecursive = pSalData->mbInTimerProc && (nId != SALTIMERPROC_RECURSIVE);
         if ( pSVData->mpSalTimer && ! bRecursive )
         {
@@ -133,7 +133,7 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
                     pSVData->mpSalTimer->CallCallback();
                     pSalData->mbInTimerProc = FALSE;
                     ImplSalYieldMutexRelease();
-
+    
                     // Run the timer in the correct time, if we start this
                     // with a small timeout, because we don't get the mutex
                     if ( pSalData->mnTimerId &&

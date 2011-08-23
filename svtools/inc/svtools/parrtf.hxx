@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,19 +31,19 @@
 
 #include "svtools/svtdllapi.h"
 #include <svtools/svparser.hxx>
-#include <stack>
+#include <svl/svarray.hxx>
 
 struct RtfParserState_Impl
 {
     rtl_TextEncoding eCodeSet;
-    sal_uInt8 nUCharOverread;
+    BYTE nUCharOverread;
 
-    RtfParserState_Impl( sal_uInt8 nUOverread, rtl_TextEncoding eCdSt )
+    RtfParserState_Impl( BYTE nUOverread, rtl_TextEncoding eCdSt )
         : eCodeSet( eCdSt ), nUCharOverread( nUOverread )
     {}
 };
 
-typedef std::stack< RtfParserState_Impl > RtfParserStates_Impl;
+SV_DECL_VARARR( RtfParserStates_Impl, RtfParserState_Impl, 16, 16 )
 
 class SVT_DLLPUBLIC SvRTFParser : public SvParser
 {
@@ -51,7 +51,7 @@ class SVT_DLLPUBLIC SvRTFParser : public SvParser
 
     int nOpenBrakets;
     rtl_TextEncoding eCodeSet, eUNICodeSet;
-    sal_uInt8 nUCharOverread;
+    BYTE nUCharOverread;
 
 private:
     static short _inSkipGroup;
@@ -70,22 +70,22 @@ protected:
 
     virtual ~SvRTFParser();
 
-    rtl_TextEncoding GetCodeSet() const             { return eCodeSet; }
+    rtl_TextEncoding GetCodeSet() const 			{ return eCodeSet; }
     void SetEncoding( rtl_TextEncoding eEnc );
 
-    rtl_TextEncoding GetUNICodeSet() const          { return eUNICodeSet; }
-    void SetUNICodeSet( rtl_TextEncoding eSet )     { eUNICodeSet = eSet; }
+    rtl_TextEncoding GetUNICodeSet() const 			{ return eUNICodeSet; }
+    void SetUNICodeSet( rtl_TextEncoding eSet )		{ eUNICodeSet = eSet; }
 
 public:
-    SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize = 3 );
+    SvRTFParser( SvStream& rIn, BYTE nStackSize = 3 );
 
     virtual SvParserState CallParser();   // Aufruf des Parsers
 
     int GetOpenBrakets() const { return nOpenBrakets; }
 
     // fuers asynchrone lesen aus dem SvStream
-//  virtual void SaveState( int nToken );
-//  virtual void RestoreState();
+//	virtual void SaveState( int nToken );
+//	virtual void RestoreState();
     virtual void Continue( int nToken );
 };
 

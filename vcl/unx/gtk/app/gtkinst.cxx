@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,6 @@
 
 #include <rtl/strbuf.hxx>
 
-#include <rtl/uri.hxx>
-
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
@@ -66,7 +64,7 @@ void GtkHookedYieldMutex::ThreadsEnter()
     acquire();
     if( !aYieldStack.empty() )
     { /* Previously called ThreadsLeave() */
-        sal_uLong nCount = aYieldStack.front();
+        ULONG nCount = aYieldStack.front();
         aYieldStack.pop_front();
         while( nCount-- > 1 )
             acquire();
@@ -98,7 +96,7 @@ void GtkHookedYieldMutex::release()
     SalYieldMutex::release();
 }
 
-extern "C"
+extern "C" 
 {
     #define GET_YIELD_MUTEX() static_cast<GtkHookedYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())
     static void GdkThreadsEnter( void )
@@ -163,7 +161,7 @@ extern "C"
             pYieldMutex = new GtkHookedYieldMutex();
         else
             pYieldMutex = new GtkYieldMutex();
-
+                
         gdk_threads_init();
 
         GtkInstance* pInstance = new GtkInstance( pYieldMutex );
@@ -189,25 +187,25 @@ GtkInstance::~GtkInstance()
     DeInitAtkBridge();
 }
 
-SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
+SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, ULONG nStyle )
 {
     return new GtkSalFrame( pParent, nStyle );
 }
 
-SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, sal_uLong )
+SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, ULONG )
 {
     SalFrame* pFrame = new GtkSalFrame( pParentData );
 
     return pFrame;
 }
 
-SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
+SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow )
 {
     // there is no method to set a visual for a GtkWidget
     // so we need the X11SalObject in that case
     if( pWindowData )
         return X11SalObject::CreateObject( pParent, pWindowData, bShow );
-
+    
     return new GtkSalObject( static_cast<GtkSalFrame*>(pParent), bShow );
 }
 
@@ -219,34 +217,21 @@ extern "C"
 
 void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType)
 {
-    rtl::OString sGtkURL;
-    rtl_TextEncoding aSystemEnc = osl_getThreadTextEncoding();
-    if ((aSystemEnc == RTL_TEXTENCODING_UTF8) || (rFileUrl.compareToAscii( "file://", 7 ) !=  0))
-        sGtkURL = rtl::OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8);
-    else
-    {
-        //Non-utf8 locales are a bad idea if trying to work with non-ascii filenames
-        //Decode %XX components
-        rtl::OUString sDecodedUri = rtl::Uri::decode(rFileUrl.copy(7), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
-        //Convert back to system locale encoding
-        rtl::OString sSystemUrl = rtl::OUStringToOString(sDecodedUri, aSystemEnc);
-        //Encode to an escaped ASCII-encoded URI
-        gchar *g_uri = g_filename_to_uri(sSystemUrl.getStr(), NULL, NULL);
-        sGtkURL = rtl::OString(g_uri);
-        g_free(g_uri);
-    }
 #if GTK_CHECK_VERSION(2,10,0)
     GtkRecentManager *manager = gtk_recent_manager_get_default ();
-    gtk_recent_manager_add_item (manager, sGtkURL);
+    gtk_recent_manager_add_item (manager, rtl::OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8).getStr());
     (void)rMimeType;
 #else
     static getDefaultFnc sym_gtk_recent_manager_get_default =
         (getDefaultFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_get_default" );
-
-    static addItemFnc sym_gtk_recent_manager_add_item =
+    
+    static addItemFnc sym_gtk_recent_manager_add_item = 
         (addItemFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_add_item");
     if (sym_gtk_recent_manager_get_default && sym_gtk_recent_manager_add_item)
-        sym_gtk_recent_manager_add_item(sym_gtk_recent_manager_get_default(), sGtkURL);
+    {
+        sym_gtk_recent_manager_add_item(sym_gtk_recent_manager_get_default(),
+            rtl::OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8).getStr());
+    }
     else
         X11SalInstance::AddToRecentDocumentList(rFileUrl, rMimeType);
 #endif
@@ -322,13 +307,13 @@ sal_Bool GtkYieldMutex::tryToAcquire()
     // how to we do a try_lock without having a gdk_threads_try_enter ?
     if( ! g_mutex_trylock( gdk_threads_mutex ) )
         return sal_False;
-
+    
     // obtained gdk mutex, now lock count is one by definition
     SolarMutexObject::acquire();
     mnCount = 1;
     mnThreadId = aCurrentThread;
     SolarMutexObject::release();
-
+    
     return sal_True;
 }
 

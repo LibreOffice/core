@@ -57,15 +57,19 @@
  * @file
  * Represente index source,index body and index index entry.
  ************************************************************************/
-#ifndef     _XFINDEX_HXX
-#define     _XFINDEX_HXX
+/*************************************************************************
+ * Change History
+   2005-02-02	create and implemente.
+ ************************************************************************/
+#ifndef		_XFINDEX_HXX
+#define		_XFINDEX_HXX
 #include <map>
 #include <vector>
 
-#include    "xfcontent.hxx"
-#include    "ixfproperty.hxx"
-#include    "xfcontentcontainer.hxx"
-#include    "xftabstop.hxx"
+#include	"xfcontent.hxx"
+#include	"ixfproperty.hxx"
+#include	"xfcontentcontainer.hxx"
+#include	"xftabstop.hxx"
 
 class XFIndex;
 class XFIndexEntry;
@@ -84,51 +88,51 @@ public:
 
 public:
     /**
-     * @descr   Set template level.
+     * @descr	Set template level.
      */
-    void    SetLevel(rtl::OUString level);
+    void	SetLevel(rtl::OUString level);
     /**
-     * @descr   Set style.
+     * @descr	Set style.
      */
-    void    SetStyleName(rtl::OUString style);
+    void	SetStyleName(rtl::OUString style);
     /**
-     * @descr   Add a entry in the template.
+     * @descr	Add a entry in the template.
      */
-    void    AddEntry(enumXFIndexTemplate entry, rtl::OUString styleName = A2OUSTR(""));
+    void	AddEntry(enumXFIndexTemplate entry, rtl::OUString styleName = A2OUSTR(""));
 
     /**
-     * @descr   Add a tab entry in the template.
+     * @descr	Add a tab entry in the template.
      */
-    void    AddTabEntry(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.', rtl::OUString styleName = A2OUSTR(""));
+    void	AddTabEntry(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.', rtl::OUString styleName = A2OUSTR(""));
 
     /**
-     * @descr   Add a entry in the template.
+     * @descr	Add a entry in the template.
      */
-    void    AddTextEntry(rtl::OUString sSpan, rtl::OUString styleName = A2OUSTR(""));
+    void	AddTextEntry(rtl::OUString sSpan, rtl::OUString styleName = A2OUSTR(""));
 
     /**
-     * @descr   clear all index template parts.
+     * @descr	clear all index template parts.
      */
-    void    Clear();
-    virtual void    ToXml(IXFStream *pStrm);
+    void	Clear();
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
     /**
-     * @descr   Helper function.
+     * @descr	Helper function.
      */
-    void    SetTagName(rtl::OUString tag);
+    void	SetTagName(rtl::OUString tag);
 
     friend class XFIndex;
 private:
-    rtl::OUString   m_nLevel;
-    rtl::OUString   m_strStyle;
-    enumXFTab   m_eTabType;
-    double      m_fTabLength;
-    rtl::OUString   m_strTabDelimiter;
-    rtl::OUString   m_strTabLeader;
-    rtl::OUString   m_strTagName;
+    rtl::OUString	m_nLevel;
+    rtl::OUString	m_strStyle;
+    enumXFTab	m_eTabType;
+    double		m_fTabLength;
+    rtl::OUString	m_strTabDelimiter;
+    rtl::OUString	m_strTabLeader;
+    rtl::OUString	m_strTagName;
     typedef std::pair<enumXFIndexTemplate, rtl::OUString> TOCTEMPLATE_ENTRY_TYPE;
-    std::vector<TOCTEMPLATE_ENTRY_TYPE> m_aEntries; // template entry + text style
+    std::vector<TOCTEMPLATE_ENTRY_TYPE>	m_aEntries; // template entry + text style
     std::map<sal_uInt16, rtl::OUString> m_aTextEntries;
 
     rtl::OUString m_strChapterTextStyle;
@@ -147,25 +151,25 @@ public:
 
 public:
     /**
-     * @descr   Set index type.
+     * @descr	Set index type.
      */
-    void    SetIndexType(enumXFIndex type);
+    void	SetIndexType(enumXFIndex type);
 
     /**
-     * @descr   Set index section style. Perhaps you should create a section style first.
+     * @descr	Set index section style. Perhaps you should create a section style first.
      */
-    void    SetSectionStyle(rtl::OUString strSectStyleName);
+    void	SetSectionStyle(rtl::OUString strSectStyleName);
 
     /**
-     * @descr   Set index title.
+     * @descr	Set index title.
      */
-    void    SetTitle(rtl::OUString title, rtl::OUString strParaStyle);
+    void	SetTitle(rtl::OUString title, rtl::OUString strParaStyle);
 
     /**
-     * @descr   Set index entry template.
-     * @param   level [1-10].
+     * @descr	Set index entry template.
+     * @param	level [1-10].
      */
-    void    AddTemplate(sal_uInt32 level,
+    void	AddTemplate(sal_uInt32 level,
         rtl::OUString style,
         enumXFIndexTemplate type1 = enumXFIndexTemplateChapter,
         enumXFIndexTemplate type2 = enumXFIndexTemplateText,
@@ -173,53 +177,53 @@ public:
         enumXFIndexTemplate type4 = enumXFIndexTemplatePage);
 
     /**
-     * @descr   Add index templaet entry.
+     * @descr	Add index templaet entry.
      */
-    void    AddTemplate(rtl::OUString level, rtl::OUString style, XFIndexTemplate* templ);
+    void	AddTemplate(rtl::OUString level, rtl::OUString style, XFIndexTemplate* templ);
 
     /**
-     * @descr   Add index entry.
+     * @descr	Add index entry.
      */
-    void    AddEntry(rtl::OUString entry, rtl::OUString strParaStyle);
+    void	AddEntry(rtl::OUString entry, rtl::OUString strParaStyle);
 
     /**
-     * @descr   return entry count.
+     * @descr	return entry count.
      */
-    sal_Int32   GetEntryCount();
+    sal_Int32	GetEntryCount();
 
     /**
-     * @descr   Set if protected index to prevent handly-revise.
+     * @descr	Set if protected index to prevent handly-revise.
      */
-    void    SetProtected(sal_Bool protect);
+    void	SetProtected(sal_Bool protect);
 
     /**
-     * @descr   Set separator.
+     * @descr	Set separator.
      */
-    void    SetSeparator(sal_Bool sep);
+    void	SetSeparator(sal_Bool sep);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
     void AddTocSource(sal_uInt16 nLevel, const rtl::OUString sStyleName);
 
     /**
-     * @descr   Set default value for index.
+     * @descr	Set default value for index.
      */
     void SetDefaultAlphaIndex(rtl::OUString strDivision,sal_Bool bRunin, sal_Bool bSeparator);
 
 private:
-    enumXFIndex     m_eType;
-    rtl::OUString       m_strTitle;
-    rtl::OUString       m_strSectStyle;
-    bool                m_bProtect;
-    bool            m_bSeparator;
-    XFParagraph     *m_pTitle;
+    enumXFIndex		m_eType;
+    rtl::OUString		m_strTitle;
+    rtl::OUString		m_strSectStyle;
+    bool				m_bProtect;
+    bool			m_bSeparator;
+    XFParagraph		*m_pTitle;
 
-    std::vector<XFIndexTemplate *>  m_aTemplates; // template entry + style
+    std::vector<XFIndexTemplate *>	m_aTemplates; // template entry + style
 
     #define MAX_TOC_LEVEL 10
     std::vector<rtl::OUString> m_aTOCSource[MAX_TOC_LEVEL+1];
 
-    sal_uInt32      m_nMaxLevel;
+    sal_uInt32		m_nMaxLevel;
 };
 
 inline XFIndexTemplate::XFIndexTemplate()

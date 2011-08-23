@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,10 +61,10 @@ public class _GenericDrawPage extends MultiPropertyTest {
                 res=true;
             }
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("an UnknownPropertyException occurred");
+            log.println("an UnknownPropertyException occured");
 
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("an WrappedTargetException occurred");
+            log.println("an WrappedTargetException occured");
         }
 
         tRes.tested("Number",res);
@@ -83,10 +83,10 @@ public class _GenericDrawPage extends MultiPropertyTest {
                 res=true;
             }
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("an UnknownPropertyException occurred");
+            log.println("an UnknownPropertyException occured");
 
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("an WrappedTargetException occurred");
+            log.println("an WrappedTargetException occured");
         }
 
         tRes.tested("UserDefinedAttributes",res);

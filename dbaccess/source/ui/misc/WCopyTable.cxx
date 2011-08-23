@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,6 @@
 #include <vcl/waitobj.hxx>
 
 #include <functional>
-#include <o3tl/compat_functional.hxx>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -91,7 +90,7 @@ using namespace dbtools;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
-#define MAX_PAGES   4   // max. Pages die angezeigt werden
+#define MAX_PAGES	4	// max. Pages die angezeigt werden
 
 DBG_NAME(OCopyTableWizard)
 namespace
@@ -153,7 +152,7 @@ bool ObjectCopySource::isView() const
         {
             ::rtl::OUString sObjectType;
             OSL_VERIFY( m_xObject->getPropertyValue( PROPERTY_TYPE ) >>= sObjectType );
-            bIsView = sObjectType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VIEW" ) );
+            bIsView = sObjectType.equalsAscii( "VIEW" );
         }
     }
     catch( const Exception& )
@@ -194,8 +193,8 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
         ::rtl::OUString sStatement(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
         sStatement += sTargetName;
         sStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE 0=1"));
-
-
+        
+        
         for ( i=0; i < SAL_N_ELEMENTS( aProperties ); ++i )
         {
             if ( m_xObjectPSI->hasPropertyByName( aProperties[i].first ) )
@@ -213,7 +212,7 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
                 }
             }
         }
-
+        
         _xConnection->createStatement()->executeQuery(sStatement);
 
         if ( m_xObjectPSI->hasPropertyByName( PROPERTY_APPLYFILTER ) )
@@ -331,7 +330,7 @@ bool NamedTableCopySource::isView() const
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return sTableType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VIEW" ) );
+    return sTableType.equalsAscii( "VIEW" );
 }
 
 //------------------------------------------------------------------------
@@ -480,14 +479,14 @@ const DummyCopySource& DummyCopySource::Instance()
 //------------------------------------------------------------------------
 ::rtl::OUString DummyCopySource::getQualifiedObjectName() const
 {
-    OSL_FAIL( "DummyCopySource::getQualifiedObjectName: not to be called!" );
+    OSL_ENSURE( false, "DummyCopySource::getQualifiedObjectName: not to be called!" );
     return ::rtl::OUString();
 }
 
 //------------------------------------------------------------------------
 bool DummyCopySource::isView() const
 {
-    OSL_FAIL( "DummyCopySource::isView: not to be called!" );
+    OSL_ENSURE( false, "DummyCopySource::isView: not to be called!" );
     return false;
 }
 
@@ -509,27 +508,27 @@ Sequence< ::rtl::OUString > DummyCopySource::getColumnNames() const
 //------------------------------------------------------------------------
 Sequence< ::rtl::OUString > DummyCopySource::getPrimaryKeyColumnNames() const
 {
-    OSL_FAIL( "DummyCopySource::getPrimaryKeyColumnNames: not to be called!" );
+    OSL_ENSURE( false, "DummyCopySource::getPrimaryKeyColumnNames: not to be called!" );
     return Sequence< ::rtl::OUString >();
 }
 
 //------------------------------------------------------------------------
 OFieldDescription* DummyCopySource::createFieldDescription( const ::rtl::OUString& /*_rColumnName*/ ) const
 {
-    OSL_FAIL( "DummyCopySource::createFieldDescription: not to be called!" );
+    OSL_ENSURE( false, "DummyCopySource::createFieldDescription: not to be called!" );
     return NULL;
 }
 //------------------------------------------------------------------------
 ::rtl::OUString DummyCopySource::getSelectStatement() const
 {
-    OSL_FAIL( "DummyCopySource::getSelectStatement: not to be called!" );
+    OSL_ENSURE( false, "DummyCopySource::getSelectStatement: not to be called!" );
     return ::rtl::OUString();
 }
 
 //------------------------------------------------------------------------
 ::utl::SharedUNOComponent< XPreparedStatement > DummyCopySource::getPreparedSelectStatement() const
 {
-    OSL_FAIL( "DummyCopySource::getPreparedSelectStatement: not to be called!" );
+    OSL_ENSURE( false, "DummyCopySource::getPreparedSelectStatement: not to be called!" );
     return ::utl::SharedUNOComponent< XPreparedStatement >();
 }
 
@@ -617,7 +616,8 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     impl_loadSourceData();
 
     bool bAllowViews = true;
-    // if the source is a, don't allow creating views
+    // if the source is a, don't allow creating views #100644# (oj)
+    // (fs: Hmm? A SELECT * FROM <view> would be created, where #100644# claims this is nonsense. Why?
     if ( m_rSourceObject.isView() )
         bAllowViews = false;
     // no views if the target connection does not support creating them
@@ -633,7 +633,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
         ::rtl::OUString sCatalog;
         ::rtl::OUString sSchema;
         ::rtl::OUString sTable;
-        ::dbtools::qualifiedNameComponents( xSrcMeta,
+        ::dbtools::qualifiedNameComponents(	xSrcMeta,
                                             m_sName,
                                             sCatalog,
                                             sSchema,
@@ -659,7 +659,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
 // -----------------------------------------------------------------------------
 OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDefaultName, sal_Int16 _nOperation,
         const ODatabaseExport::TColumns& _rSourceColumns, const ODatabaseExport::TColumnVector& _rSourceColVec,
-        const Reference< XConnection >& _xConnection, const Reference< XNumberFormatter >&  _xFormatter,
+        const Reference< XConnection >& _xConnection, const Reference< XNumberFormatter >&	_xFormatter,
         TypeSelectionPageFactory _pTypeSelectionPageFactory, SvStream& _rTypeSelectionPageArg, const Reference< XMultiServiceFactory >& _rM )
     :WizardDialog( pParent, ModuleRes(WIZ_RTFCOPYTABLE))
     ,m_vSourceColumns(_rSourceColumns)
@@ -843,7 +843,7 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
         }
 
         if ( bContainsColumns )
-        {   // we have dest columns so look for the matching column
+        {	// we have dest columns so look for the matching column 
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
             ODatabaseExport::TColumnVector::const_iterator aSrcEnd = m_vSourceVec.end();
             for(;aSrcIter != aSrcEnd;++aSrcIter)
@@ -868,7 +868,7 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
         {
             Reference< XDatabaseMetaData > xMetaData( m_xDestConnection->getMetaData() );
             ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
-            sal_Int32 nMaxNameLen       = getMaxColumnNameLength();
+            sal_Int32 nMaxNameLen		= getMaxColumnNameLength();
 
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
             ODatabaseExport::TColumnVector::const_iterator aSrcEnd = m_vSourceVec.end();
@@ -880,7 +880,7 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                 pField->SetType(pType);
                 if ( !bPKeyAllowed )
                     pField->SetPrimaryKey(sal_False);
-
+                
                 // now create a column
                 insertColumn(m_vDestColumns.size(),pField);
                 m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(m_vDestColumns.size(),m_vDestColumns.size()));
@@ -905,10 +905,10 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
             case CopyTableOperation::CopyDefinitionOnly:
             {
                 sal_Bool bOnFirstPage = GetCurLevel() == 0;
-                if ( bOnFirstPage )
+                if ( bOnFirstPage ) 
                 {
                     // we came from the first page so we have to clear
-                    // all column information already collected
+                    // all column information already collected 
                     clearDestColumns();
                     m_mNameMapping.clear();
                 }
@@ -920,7 +920,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                     OWizTypeSelect* pPage = static_cast<OWizTypeSelect*>(GetPage(3));
                     if ( pPage )
                     {
-                        m_mNameMapping.clear();
+                        m_mNameMapping.clear();                        
                         pPage->setDisplayRow(nBreakPos);
                         ShowPage(3);
                         return 0;
@@ -931,7 +931,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                     if ( supportsPrimaryKey() )
                     {
                         ODatabaseExport::TColumns::iterator aFind = ::std::find_if(m_vDestColumns.begin(),m_vDestColumns.end()
-                            ,::o3tl::compose1(::std::mem_fun(&OFieldDescription::IsPrimaryKey),::o3tl::select2nd<ODatabaseExport::TColumns::value_type>()));
+                            ,::std::compose1(::std::mem_fun(&OFieldDescription::IsPrimaryKey),::std::select2nd<ODatabaseExport::TColumns::value_type>()));
                         if ( aFind == m_vDestColumns.end() && m_xInteractionHandler.is() )
                         {
 
@@ -974,7 +974,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                 break;
             default:
             {
-                OSL_FAIL("OCopyTableWizard::ImplOKHdl: invalid creation style!");
+                OSL_ENSURE(sal_False, "OCopyTableWizard::ImplOKHdl: invalid creation style!");
             }
         }
 
@@ -1025,7 +1025,7 @@ IMPL_LINK( OCopyTableWizard, ImplActivateHdl, WizardDialog*, EMPTYARG )
 void OCopyTableWizard::CheckButtons()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::CheckButtons" );
-    if(GetCurLevel() == 0) // the first page has no back button
+    if(GetCurLevel() == 0) // erste Seite hat kein PrevButton
     {
         if(m_nPageCount > 1)
             m_pbNext.Enable(sal_True);
@@ -1034,7 +1034,7 @@ void OCopyTableWizard::CheckButtons()
 
         m_pbPrev.Enable(sal_False);
     }
-    else if(GetCurLevel() == m_nPageCount-1) // the last page has no next button
+    else if(GetCurLevel() == m_nPageCount-1) // letzte Seite hat keinen Next Button
     {
         m_pbNext.Enable(sal_False);
         m_pbPrev.Enable(sal_True);
@@ -1042,13 +1042,14 @@ void OCopyTableWizard::CheckButtons()
     else
     {
         m_pbPrev.Enable(sal_True);
-        // next already has its state
+        // next has already his state
     }
 }
 // -----------------------------------------------------------------------
 void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::EnableButton" );
+//	CheckButtons();
     Button* pButton;
     if(eStyle == WIZARD_NEXT)
         pButton = &m_pbNext;
@@ -1102,7 +1103,7 @@ void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,
         m_vDestColumns.erase(_sOldName);
         OSL_ENSURE( m_vDestColumns.find(_pField->GetName()) == m_vDestColumns.end(),"Column with that name already exist!");
 
-        m_aDestVec[_nPos] =
+        m_aDestVec[_nPos] = 
             m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first;
     }
 }
@@ -1144,9 +1145,9 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
         if ( !pActFieldDescr )
             continue;
 
-        sal_Int32 nType           = pActFieldDescr->GetType();
-        sal_Int32 nScale          = pActFieldDescr->GetScale();
-        sal_Int32 nPrecision      = pActFieldDescr->GetPrecision();
+        sal_Int32 nType			  = pActFieldDescr->GetType();
+        sal_Int32 nScale		  = pActFieldDescr->GetScale();
+        sal_Int32 nPrecision	  = pActFieldDescr->GetPrecision();
         sal_Bool bAutoIncrement   = pActFieldDescr->IsAutoIncrement();
         ::rtl::OUString sTypeName = pActFieldDescr->GetTypeName();
 
@@ -1229,7 +1230,7 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, co
             }
             else
             {
-                OSL_FAIL("OCopyTableWizard::appendColumns: invalid field name!");
+                OSL_ENSURE(sal_False, "OCopyTableWizard::appendColumns: invalid field name!");
             }
 
         }
@@ -1330,7 +1331,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         if(xAppend.is())
             xAppend->appendByDescriptor(xTable);
 
-        //  xTable = NULL;
+        //	xTable = NULL;
         // we need to reget the table because after appending it it is no longer valid
         if(xTables->hasByName(m_sName))
             xTables->getByName(m_sName) >>= xTable;
@@ -1360,7 +1361,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             Reference<XNameAccess> xNameAccess = xSuppDestinationColumns->getColumns();
             Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
             const ::rtl::OUString* pIter = aSeq.getConstArray();
-            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+            const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
 
             ::std::vector<int> aAlreadyFound(m_vColumnPos.size(),0);
 
@@ -1376,8 +1377,8 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                     ODatabaseExport::TPositions::iterator aPosFind = ::std::find_if(
                         m_vColumnPos.begin(),
                         m_vColumnPos.end(),
-                        ::o3tl::compose1(    ::std::bind2nd( ::std::equal_to< sal_Int32 >(), nPos ),
-                                            ::o3tl::select1st< ODatabaseExport::TPositions::value_type >()
+                        ::std::compose1(    ::std::bind2nd( ::std::equal_to< sal_Int32 >(), nPos ),
+                                            ::std::select1st< ODatabaseExport::TPositions::value_type >()
                         )
                     );
 
@@ -1484,10 +1485,10 @@ sal_Int16 OCopyTableWizard::getOperation() const
     return m_nOperation;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFunctor,
-                                                    const ::rtl::OUString&  _sColumnName,
-                                                    const ::rtl::OUString&  _sExtraChars,
-                                                    sal_Int32               _nMaxNameLen)
+::rtl::OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&	_rCmpFunctor,
+                                                    const ::rtl::OUString&	_sColumnName,
+                                                    const ::rtl::OUString&	_sExtraChars,
+                                                    sal_Int32				_nMaxNameLen)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::convertColumnName" );
     ::rtl::OUString sAlias = _sColumnName;

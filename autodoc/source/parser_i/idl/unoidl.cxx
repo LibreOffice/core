@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,11 +61,13 @@ class FileParsePerformers
                                                 io_rRepository,
                             ParserInfo &        io_rParserInfo );
 
-    void                ParseFile(
-                            const char *        i_sFullPath );
+    void				ParseFile(
+                            const char *		i_sFullPath );
+
+    void                ConnectLinks();
 
   private:
-    CharacterSource     aFileLoader;
+    CharacterSource		aFileLoader;
     Dyn<csi::uidl::TokenParser_Uidl>
                         pTokens;
     csi::uidl::TokenDistributor
@@ -79,7 +81,7 @@ class FileParsePerformers
 
 
 IdlParser::IdlParser( ary::Repository & io_rRepository )
-    :   pRepository(&io_rRepository)
+    :	pRepository(&io_rRepository)
 {
 }
 
@@ -121,13 +123,15 @@ IdlParser::Run( const autodoc::FileCollector_Ifc & i_rFiles )
         {
             Cout() << "Unknown error." << Endl();
             exit(0);
-//          pFileParsePerformers = new FileParsePerformers( *pRepository );
+//    		pFileParsePerformers = new FileParsePerformers( *pRepository );
         }
     }
+
+    pFileParsePerformers->ConnectLinks();
 }
 
 FileParsePerformers::FileParsePerformers( ary::Repository & io_rRepository,
-                                          ParserInfo &           io_rParserInfo )
+                                          ParserInfo &			 io_rParserInfo )
     :   pTokens(0),
         aDistributor(io_rRepository, io_rParserInfo),
         rRepository( io_rRepository ),
@@ -161,6 +165,13 @@ FileParsePerformers::ParseFile( const char * i_sFullPath )
     do {
         aDistributor.TradeToken();
     } while ( NOT aFileLoader.IsFinished() );
+}
+
+void
+FileParsePerformers::ConnectLinks()
+{
+    // KORR_FUTURE ?
+//  rRepository.RwGate_Idl().ConnectAdditionalLinks();
 }
 
 }   // namespace autodoc

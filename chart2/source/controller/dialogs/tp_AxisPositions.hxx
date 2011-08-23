@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,7 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
+//class SvNumberFormatter;
 
 //.............................................................................
 namespace chart
@@ -47,7 +48,7 @@ public:
     AxisPositionsTabPage( Window* pParent, const SfxItemSet& rInAttrs );
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual sal_Bool FillItemSet( SfxItemSet& rOutAttrs );
+    virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );
     virtual void Reset( const SfxItemSet& rInAttrs );
     using TabPage::DeactivatePage;
     virtual int DeactivatePage( SfxItemSet* pItemSet = NULL );
@@ -69,7 +70,7 @@ private: //member:
     ListBox             m_aLB_CrossesAt;
     FormattedField      m_aED_CrossesAt;
     ComboBox            m_aED_CrossesAtCategory;
-    CheckBox            m_aCB_AxisBetweenCategories;
+    CheckBox			m_aCB_AxisBetweenCategories;
 
     FixedLine       m_aFL_Labels;
     FixedText       m_aFT_PlaceLabels;
@@ -90,14 +91,14 @@ private: //member:
     FixedLine   m_aFL_Vertical;
     FixedText   m_aFT_PlaceTicks;
     ListBox     m_aLB_PlaceTicks;
-
+    
     FixedLine   m_aFL_Grids;
     CheckBox    m_aCB_MajorGrid;
     PushButton  m_aPB_MajorGrid;
     CheckBox    m_aCB_MinorGrid;
     PushButton  m_aPB_MinorGrid;
 
-    SvNumberFormatter*  m_pNumFormatter;
+    SvNumberFormatter*	m_pNumFormatter;
 
     bool    m_bCrossingAxisIsCategoryAxis;
     ::com::sun::star::uno::Sequence< rtl::OUString > m_aCategories;

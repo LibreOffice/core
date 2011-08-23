@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,10 +131,10 @@ void PresenterPaneBase::disposing (void)
 void PresenterPaneBase::SetTitle (const OUString& rsTitle)
 {
     msTitle = rsTitle;
-
+    
     OSL_ASSERT(mpPresenterController.get()!=NULL);
     OSL_ASSERT(mpPresenterController->GetPaintManager().get()!=NULL);
-
+    
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }
 
@@ -221,7 +221,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
     if ( ! mxComponentContext.is())
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterSpritePane: missing component context")),
+            OUString::createFromAscii("PresenterSpritePane: missing component context"),
             static_cast<XWeak*>(this));
     }
 
@@ -233,7 +233,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             if ( ! (rArguments[0] >>= mxPaneId))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid pane id")),
+                    OUString::createFromAscii("PresenterPane: invalid pane id"),
                     static_cast<XWeak*>(this),
                     0);
             }
@@ -241,7 +241,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             if ( ! (rArguments[1] >>= mxParentWindow))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid parent window")),
+                    OUString::createFromAscii("PresenterPane: invalid parent window"),
                     static_cast<XWeak*>(this),
                     1);
             }
@@ -250,15 +250,15 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             if ( ! (rArguments[2] >>= xParentCanvas))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid parent canvas")),
+                    OUString::createFromAscii("PresenterPane: invalid parent canvas"),
                     static_cast<XWeak*>(this),
                     2);
             }
-
+            
             if ( ! (rArguments[3] >>= msTitle))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid title")),
+                    OUString::createFromAscii("PresenterPane: invalid title"),
                     static_cast<XWeak*>(this),
                     3);
             }
@@ -266,7 +266,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             if ( ! (rArguments[4] >>= mxBorderPainter))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid border painter")),
+                    OUString::createFromAscii("PresenterPane: invalid border painter"),
                     static_cast<XWeak*>(this),
                     4);
             }
@@ -275,19 +275,19 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             if (rArguments.getLength()>5 && ! (rArguments[5] >>= bIsWindowVisibleOnCreation))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid window visibility flag")),
+                    OUString::createFromAscii("PresenterPane: invalid window visibility flag"),
                     static_cast<XWeak*>(this),
                     5);
             }
 
             CreateWindows(mxParentWindow, bIsWindowVisibleOnCreation);
-
+    
             if (mxBorderWindow.is())
             {
                 mxBorderWindow->addWindowListener(this);
                 mxBorderWindow->addPaintListener(this);
             }
-
+            
             CreateCanvases(mxParentWindow, xParentCanvas);
 
             // Raise new windows.
@@ -303,7 +303,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
     else
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterSpritePane: invalid number of arguments")),
+            OUString::createFromAscii("PresenterSpritePane: invalid number of arguments"),
                 static_cast<XWeak*>(this));
     }
 }
@@ -398,7 +398,7 @@ void PresenterPaneBase::CreateWindows (
 {
     if (mxPresenterHelper.is() && rxParentWindow.is())
     {
-
+        
         mxBorderWindow = mxPresenterHelper->createWindow(
             rxParentWindow,
             sal_False,
@@ -483,7 +483,7 @@ void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
         awt::Rectangle aLocalBorderBox (0,0, aBorderBox.Width, aBorderBox.Height);
 
         PaintBorderBackground(aLocalBorderBox, rUpdateBox);
-
+        
         if (mbHasCallout)
             mxBorderPainter->paintBorderWithCallout(
                 mxPaneId->getResourceURL(),

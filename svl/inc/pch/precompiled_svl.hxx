@@ -304,7 +304,7 @@
 
 #include <algorithm>
 #include <deque>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <limits>
 
 #include <list>

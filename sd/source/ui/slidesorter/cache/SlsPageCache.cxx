@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,12 +45,10 @@ namespace sd { namespace slidesorter { namespace cache {
 
 PageCache::PageCache (
     const Size& rPreviewSize,
-    const bool bDoSuperSampling,
     const SharedCacheContext& rpCacheContext)
    : mpImplementation(
         new GenericPageCache(
             rPreviewSize,
-            bDoSuperSampling,
             rpCacheContext))
 {
 }
@@ -65,66 +63,26 @@ PageCache::~PageCache (void)
 
 
 
-void PageCache::ChangeSize (
-    const Size& rPreviewSize,
-    const bool bDoSuperSampling)
+void PageCache::ChangeSize(const Size& rPreviewSize)
 {
-    mpImplementation->ChangePreviewSize(rPreviewSize, bDoSuperSampling);
+    mpImplementation->ChangePreviewSize(rPreviewSize);
 }
 
 
 
 
-Bitmap PageCache::GetPreviewBitmap (
-    const CacheKey aKey,
-    const bool bResize)
+BitmapEx PageCache::GetPreviewBitmap (
+    CacheKey aKey,
+    const Size& rSize)
 {
-    return mpImplementation->GetPreviewBitmap(aKey, bResize);
+    return mpImplementation->GetPreviewBitmap(aKey, rSize);
 }
 
 
 
 
-Bitmap PageCache::GetMarkedPreviewBitmap (
-    const CacheKey aKey,
-    const bool bResize)
-{
-    return mpImplementation->GetMarkedPreviewBitmap(aKey, bResize);
-}
-
-
-
-
-void PageCache::SetMarkedPreviewBitmap (
-    const CacheKey aKey,
-    const Bitmap& rMarkedBitmap)
-{
-    mpImplementation->SetMarkedPreviewBitmap(aKey, rMarkedBitmap);
-}
-
-
-
-
-void PageCache::RequestPreviewBitmap (const CacheKey aKey)
-{
-    return mpImplementation->RequestPreviewBitmap(aKey);
-}
-
-
-
-
-void PageCache::InvalidatePreviewBitmap (
-    const CacheKey aKey,
-    const bool bRequestPreview)
-{
-    if (mpImplementation->InvalidatePreviewBitmap(aKey) && bRequestPreview)
-        RequestPreviewBitmap(aKey);
-}
-
-
-
-
-void PageCache::ReleasePreviewBitmap (const CacheKey aKey)
+void PageCache::ReleasePreviewBitmap (
+    CacheKey aKey)
 {
     mpImplementation->ReleasePreviewBitmap(aKey);
 }
@@ -132,7 +90,7 @@ void PageCache::ReleasePreviewBitmap (const CacheKey aKey)
 
 
 
-void PageCache::InvalidateCache (const bool bUpdateCache)
+void PageCache::InvalidateCache (bool bUpdateCache)
 {
     mpImplementation->InvalidateCache(bUpdateCache);
 }
@@ -141,8 +99,8 @@ void PageCache::InvalidateCache (const bool bUpdateCache)
 
 
 void PageCache::SetPreciousFlag (
-    const CacheKey aKey,
-    const bool bIsPrecious)
+    CacheKey aKey,
+    bool bIsPrecious)
 {
     mpImplementation->SetPreciousFlag(aKey, bIsPrecious);
 }

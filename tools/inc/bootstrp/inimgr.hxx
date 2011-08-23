@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@ Source and Destination Dir is used. Otherwise ForceUpdate has to be used
 class IniManager
 {
 private:
-    sal_Bool bUpdate;
+    BOOL bUpdate;
 
-    ByteString sGlobalDir;      /// holds the org. ini dir
-    ByteString sLocalPath;      /// holds path of local ini dir
+    ByteString sGlobalDir;   	/// holds the org. ini dir
+    ByteString sLocalPath;		/// holds path of local ini dir
 
 public:
     IniManager( ByteString &rDir, ByteString &rLocalDir );
@@ -51,7 +51,7 @@ public:
     IniManager();
 
     ByteString ToLocal( ByteString &rPath );
-    void Update();          /// Call ForceUpdate the First Time called
+    void Update();			/// Call ForceUpdate the First Time called
     void ForceUpdate();
 
     static ByteString GetLocalIni();

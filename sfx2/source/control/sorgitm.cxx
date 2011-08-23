@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,21 +89,21 @@ int SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 }
 
 
-bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     String aValue;
-    sal_Bool bIsString = sal_False;
+    BOOL bIsString = FALSE;
     sal_Bool bValue = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case 0:
         case MID_SCRIPT_ORGANIZER_LANGUAGE:
-            bIsString = sal_True;
+            bIsString = TRUE;
             aValue = aLanguage;
             break;
         default:
-            OSL_FAIL("Wrong MemberId!");
+            DBG_ERROR("Wrong MemberId!");
                return false;
      }
 
@@ -114,7 +114,7 @@ bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uIn
     return true;
 }
 
-bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
     ::rtl::OUString aValue;
     sal_Bool bRet = false;
@@ -128,7 +128,7 @@ bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
                 aLanguage = aValue;
             break;
         default:
-            OSL_FAIL("Wrong MemberId!");
+            DBG_ERROR("Wrong MemberId!");
             return false;
     }
 

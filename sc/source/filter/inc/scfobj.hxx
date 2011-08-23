@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class Sc10InsertObject
 {
 public:
     static void InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rectangle& rRect,
-                                SCTAB nSrcTab, sal_uInt16 nX1, sal_uInt16 nY1, sal_uInt16 nX2, sal_uInt16 nY2 );
+                                SCTAB nSrcTab, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 );
 };
 
 

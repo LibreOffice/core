@@ -48,7 +48,7 @@ SHL1OBJS=  \
     $(SLO)$/rtl_Uuid.obj
 
 SHL1TARGET= rtl_Uuid
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -64,4 +64,5 @@ SLOFILES=$(SHL1OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk
+.INCLUDE : _cppunit.mk
+

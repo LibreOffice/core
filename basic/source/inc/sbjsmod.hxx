@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@
 
 class SbJScriptModule : public SbModule
 {
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
-    virtual sal_Bool StoreData( SvStream& ) const;
+    virtual BOOL LoadData( SvStream&, USHORT );
+    virtual BOOL StoreData( SvStream& ) const;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_JSCRIPTMOD,1);
     TYPEINFO();
-    SbJScriptModule( const String& );       // DURCHREICHEN
+    SbJScriptModule( const String& );		// DURCHREICHEN
 };
 
 #endif

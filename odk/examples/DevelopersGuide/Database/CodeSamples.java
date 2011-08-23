@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import java.io.*;
@@ -50,12 +50,12 @@ import com.sun.star.sdbc.*;
 import com.sun.star.sdb.*;
 import com.sun.star.sdbcx.*;
 import com.sun.star.frame.*;
-
+    
 public class CodeSamples
 {
     public static XComponentContext xContext;
     public static XMultiComponentFactory xMCF;
-
+    
     public static void main(String argv[]) throws java.lang.Exception
     {
         try {
@@ -108,7 +108,7 @@ public class CodeSamples
                 }
                 displayTableStructure( con );
             }
-            //  printDataSources();
+            //	printDataSources();
         }
         catch(Exception e)
         {
@@ -136,9 +136,36 @@ public class CodeSamples
         else
             System.out.println("Connection could not be created!");
     }
-
+    
     // uses the driver manager to create a new connection and dispose it.
     public static XConnection openConnectionWithDriverManager() throws com.sun.star.uno.Exception
+    {
+        XConnection con = null;
+        // create the DriverManager
+        Object driverManager =
+            xMCF.createInstanceWithContext("com.sun.star.sdbc.DriverManager",
+                                           xContext);
+        // query for the interface
+        com.sun.star.sdbc.XDriverManager xDriverManager;
+        xDriverManager = (XDriverManager)UnoRuntime.queryInterface(XDriverManager.class,driverManager);
+        if(xDriverManager != null)
+        {
+            // first create the needed url
+            String adabasURL = "sdbc:adabas::MYDB0";
+            // second create the necessary properties
+            com.sun.star.beans.PropertyValue [] adabasProps = new com.sun.star.beans.PropertyValue[]
+            {
+                new com.sun.star.beans.PropertyValue("user",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE),
+                new com.sun.star.beans.PropertyValue("password",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE)
+            };
+            // now create a connection to adabas
+            con = xDriverManager.getConnectionWithInfo(adabasURL,adabasProps);
+        }
+        return con;
+    }
+
+    // uses the driver manager to create a new connection and dispose it.
+    public static XConnection openToJDBC() throws com.sun.star.uno.Exception
     {
         XConnection con = null;
         // create the DriverManager
@@ -159,7 +186,7 @@ public class CodeSamples
                 new com.sun.star.beans.PropertyValue("password",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE),
                 new com.sun.star.beans.PropertyValue("JavaDriverClass",0,"org.gjt.mm.mysql.Driver",com.sun.star.beans.PropertyState.DIRECT_VALUE)
             };
-            // now create a connection to mysql
+            // now create a connection to adabas
             con = xDriverManager.getConnectionWithInfo(url,props);
         }
         return con;
@@ -171,7 +198,7 @@ public class CodeSamples
         XConnection con = null;
         // create the Driver with the implementation name
         Object aDriver =
-            xMCF.createInstanceWithContext("org.openoffice.comp.drivers.MySQL.Driver",
+            xMCF.createInstanceWithContext("com.sun.star.comp.sdbcx.adabas.ODriver",
                                            xContext);
         // query for the interface
         com.sun.star.sdbc.XDriver xDriver;
@@ -179,16 +206,15 @@ public class CodeSamples
         if(xDriver != null)
         {
             // first create the needed url
-            String url = "jdbc:mysql://localhost:3306/TestTables";
+            String adabasURL = "sdbc:adabas::MYDB0";
             // second create the necessary properties
-            com.sun.star.beans.PropertyValue [] props = new com.sun.star.beans.PropertyValue[]
+            com.sun.star.beans.PropertyValue [] adabasProps = new com.sun.star.beans.PropertyValue[]
             {
                 new com.sun.star.beans.PropertyValue("user",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE),
-                new com.sun.star.beans.PropertyValue("password",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE),
-                                new com.sun.star.beans.PropertyValue("JavaDriverClass",0,"org.gjt.mm.mysql.Driver",com.sun.star.beans.PropertyState.DIRECT_VALUE)
+                new com.sun.star.beans.PropertyValue("password",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE)
             };
-            // now create a connection to mysql
-            con = xDriver.connect(url,props);
+            // now create a connection to adabas
+            con = xDriver.connect(adabasURL,adabasProps);
         }
         return con;
     }
@@ -276,11 +302,11 @@ public class CodeSamples
                                            xContext));
         // we use the first datasource
         XQueryDefinitionsSupplier xQuerySup = (XQueryDefinitionsSupplier)
-                                            UnoRuntime.queryInterface(XQueryDefinitionsSupplier.class,
-                                            xNameAccess.getByName( "Bibliography" ));
+                                            UnoRuntime.queryInterface(XQueryDefinitionsSupplier.class, 
+                                            xNameAccess.getByName( "Bibliography" )); 
         XNameAccess xQDefs = xQuerySup.getQueryDefinitions();
         // create new query definition
-        XSingleServiceFactory xSingleFac =  (XSingleServiceFactory)
+        XSingleServiceFactory xSingleFac =	(XSingleServiceFactory) 
                                             UnoRuntime.queryInterface(XSingleServiceFactory.class, xQDefs);
 
         XPropertySet xProp = (XPropertySet) UnoRuntime.queryInterface(
@@ -298,7 +324,7 @@ public class CodeSamples
                 {}
         xCont.insertByName("Query1",xProp);
         XDocumentDataSource xDs = (XDocumentDataSource)UnoRuntime.queryInterface(XDocumentDataSource.class, xQuerySup);
-
+        
         XStorable xStore = (XStorable)UnoRuntime.queryInterface(XStorable.class,xDs.getDatabaseDocument());
         xStore.store();
     }
@@ -312,13 +338,13 @@ public class CodeSamples
                                            xContext));
         // we use the first datasource
         XDataSource xDS = (XDataSource)UnoRuntime.queryInterface(
-            XDataSource.class, xNameAccess.getByName( "Bibliography" ));
+            XDataSource.class, xNameAccess.getByName( "Bibliography" )); 
         XConnection con = xDS.getConnection("","");
         XQueriesSupplier xQuerySup = (XQueriesSupplier)
-                                            UnoRuntime.queryInterface(XQueriesSupplier.class, con);
-
+                                            UnoRuntime.queryInterface(XQueriesSupplier.class, con); 
+        
         XNameAccess xQDefs = xQuerySup.getQueries();
-
+        
         XColumnsSupplier xColsSup = (XColumnsSupplier) UnoRuntime.queryInterface(
             XColumnsSupplier.class,xQDefs.getByName("Query1"));
         XNameAccess xCols = xColsSup.getColumns();

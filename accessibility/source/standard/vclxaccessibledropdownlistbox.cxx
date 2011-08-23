@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 
-VCLXAccessibleDropDownListBox::VCLXAccessibleDropDownListBox (VCLXWindow* pVCLWindow)
+VCLXAccessibleDropDownListBox::VCLXAccessibleDropDownListBox (VCLXWindow* pVCLWindow) 
     : VCLXAccessibleBox (pVCLWindow,  VCLXAccessibleBox::LISTBOX, true)
 {
 }
@@ -74,7 +74,7 @@ VCLXAccessibleDropDownListBox::~VCLXAccessibleDropDownListBox()
 bool VCLXAccessibleDropDownListBox::IsValid (void) const
 {
     return static_cast<ListBox*>(GetWindow()) != NULL;
-
+ 
 }
 
 
@@ -90,22 +90,23 @@ void VCLXAccessibleDropDownListBox::ProcessWindowEvent( const VclWindowEvent& rV
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString VCLXAccessibleDropDownListBox::getImplementationName()
+::rtl::OUString VCLXAccessibleDropDownListBox::getImplementationName() 
     throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleDropDownListBox" ));
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.toolkit.AccessibleDropDownListBox");
 }
 
 
 
 
-Sequence< ::rtl::OUString > VCLXAccessibleDropDownListBox::getSupportedServiceNames (void)
+Sequence< ::rtl::OUString > VCLXAccessibleDropDownListBox::getSupportedServiceNames (void) 
     throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleDropDownListBox" ));
+    aNames[nLength] = ::rtl::OUString::createFromAscii(
+        "com.sun.star.accessibility.AccessibleDropDownListBox" );
     return aNames;
 }
 

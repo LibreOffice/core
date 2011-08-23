@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,90 +24,90 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_XWordCursor_idl__
-#define __com_sun_star_text_XWordCursor_idl__
-
-#ifndef __com_sun_star_text_XTextCursor_idl__
-#include <com/sun/star/text/XTextCursor.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
+#ifndef __com_sun_star_text_XWordCursor_idl__ 
+#define __com_sun_star_text_XWordCursor_idl__ 
+ 
+#ifndef __com_sun_star_text_XTextCursor_idl__ 
+#include <com/sun/star/text/XTextCursor.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module text {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to move a cursor word by word.
  */
 published interface XWordCursor: com::sun::star::text::XTextCursor
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** determines if the cursor is positioned at the start of a word.
      */
-    boolean isStartOfWord();
-
-    //-------------------------------------------------------------------------
-
+    boolean isStartOfWord(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** determines if the cursor is positioned at the end of a word.
      */
-    boolean isEndOfWord();
-
-    //-------------------------------------------------------------------------
-
+    boolean isEndOfWord(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** moves the cursor to the next word.
 
-        <p>Note: the function returning <true/> does not necessarily mean
-        that the cursor is located at the next word, or any word at all!
+        <p>Note: the function returning <true/> does not necessarily mean 
+        that the cursor is located at the next word, or any word at all! 
         This may happen for example if it travels over empty paragraphs.</p>
 
         @returns
             <true/> if the cursor was moved. It returns <false/> it the
             cursor can not advance further.
      */
-    boolean gotoNextWord( [in] boolean bExpand );
-
-    //-------------------------------------------------------------------------
-
+    boolean gotoNextWord( [in] boolean bExpand ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** moves the cursor to the previous word.
 
-        <p>Note: the function returning <true/> does not necessarily mean
-        that the cursor is located at the previous word, or any word at all!
+        <p>Note: the function returning <true/> does not necessarily mean 
+        that the cursor is located at the previous word, or any word at all! 
         This may happen for example if it travels over empty paragraphs.</p>
 
         @returns
             <true/> if the cursor was moved. It returns <false/> it the
             cursor can not advance further.
      */
-    boolean gotoPreviousWord( [in] boolean bExpand );
-
-    //-------------------------------------------------------------------------
-
+    boolean gotoPreviousWord( [in] boolean bExpand ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** moves the cursor to the end of the current word.
 
         @returns
-            <true/> if the cursor is now at the end of a word,
+            <true/> if the cursor is now at the end of a word, 
             <false/> otherwise. If <false/> was returned the cursor
             will remain at its original position.
      */
-    boolean gotoEndOfWord( [in] boolean bExpand );
-
-    //-------------------------------------------------------------------------
-
+    boolean gotoEndOfWord( [in] boolean bExpand ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** moves the cursor to the start of the current word.
 
         @returns
-            <true/> if the cursor is now at the start of a word,
+            <true/> if the cursor is now at the start of a word, 
             <false/> otherwise. If <false/> was returned the cursor
             will remain at its original position.
      */
-    boolean gotoStartOfWord( [in] boolean bExpand );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    boolean gotoStartOfWord( [in] boolean bExpand ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,6 @@
 #include <IMark.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <istyleaccess.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
@@ -138,7 +137,7 @@ uno::Sequence< sal_Int8 >  CreateUnoTunnelId()
     static osl::Mutex aCreateMutex;
     osl::Guard<osl::Mutex> aGuard( aCreateMutex );
     uno::Sequence< sal_Int8 > aSeq( 16 );
-    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0,	sal_True );
     return aSeq;
 }
 
@@ -158,7 +157,7 @@ SwUnoInternalPaM::~SwUnoInternalPaM()
     }
 }
 
-SwUnoInternalPaM&   SwUnoInternalPaM::operator=(const SwPaM& rPaM)
+SwUnoInternalPaM&	SwUnoInternalPaM::operator=(const SwPaM& rPaM)
 {
     const SwPaM* pTmp = &rPaM;
     *GetPoint() = *rPaM.GetPoint();
@@ -217,10 +216,10 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
         SwAsciiOptions aOpt = xWrt->GetAsciiOptions();
         aOpt.SetCharSet( RTL_TEXTENCODING_UNICODE );
         xWrt->SetAsciiOptions( aOpt );
-        xWrt->bUCS2_WithStartChar = sal_False;
+        xWrt->bUCS2_WithStartChar = FALSE;
         // --> FME #i68522#
-        const sal_Bool bOldShowProgress = xWrt->bShowProgress;
-        xWrt->bShowProgress = sal_False;
+        const BOOL bOldShowProgress = xWrt->bShowProgress;
+        xWrt->bShowProgress = FALSE;
         // <--
 
         long lLen;
@@ -301,8 +300,8 @@ throw (lang::IllegalArgumentException)
     if(pStyle.get())
     {
         SwFmtAutoFmt aFmt( (bPara)
-            ? sal::static_int_cast< sal_uInt16 >(RES_AUTO_STYLE)
-            : sal::static_int_cast< sal_uInt16 >(RES_TXTATR_AUTOFMT) );
+            ? sal::static_int_cast< USHORT >(RES_AUTO_STYLE)
+            : sal::static_int_cast< USHORT >(RES_TXTATR_AUTOFMT) );
         aFmt.SetStyleHandle( pStyle );
         rSet.Put(aFmt);
     }
@@ -334,13 +333,13 @@ throw (lang::IllegalArgumentException)
 
     SwTxtFmtColl *const pLocal = pStyle->GetCollection();
     UnoActionContext aAction(pDoc);
-    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+    pDoc->StartUndo( UNDO_START, NULL );
     SwPaM *pTmpCrsr = &rPaM;
     do {
         pDoc->SetTxtFmtColl(*pTmpCrsr, pLocal);
         pTmpCrsr = static_cast<SwPaM*>(pTmpCrsr->GetNext());
     } while ( pTmpCrsr != &rPaM );
-    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    pDoc->EndUndo( UNDO_END, NULL );
 }
 
 bool
@@ -378,7 +377,7 @@ SwUnoCursorHelper::SetPageDesc(
             {
                 throw lang::IllegalArgumentException();
             }
-            pNewDesc.get()->RegisterToPageDesc( *pPageDesc );
+            pPageDesc->Add( pNewDesc.get() );
             bPut = sal_True;
         }
         if(!bPut)
@@ -403,9 +402,9 @@ lcl_SetNodeNumStart(SwPaM & rCrsr, uno::Any const& rValue)
     SwDoc* pDoc = rCrsr.GetDoc();
     UnoActionContext aAction(pDoc);
 
-    if( rCrsr.GetNext() != &rCrsr )         // Mehrfachselektion ?
+    if( rCrsr.GetNext() != &rCrsr )			// Mehrfachselektion ?
     {
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+        pDoc->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( rCrsr );
         SwPaM aPam( *rCrsr.GetPoint() );
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
@@ -414,7 +413,7 @@ lcl_SetNodeNumStart(SwPaM & rCrsr, uno::Any const& rValue)
           pDoc->SetNodeNumStart(*aRangeArr.SetPam( n, aPam ).GetPoint(),
                     nStt );
         }
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+        pDoc->EndUndo( UNDO_END, NULL);
     }
     else
     {
@@ -435,7 +434,7 @@ lcl_setCharFmtSequence(SwPaM & rPam, uno::Any const& rValue)
     for (sal_Int32 nStyle = 0; nStyle < aCharStyles.getLength(); nStyle++)
     {
         uno::Any aStyle;
-        rPam.GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_START, NULL);
+        rPam.GetDoc()->StartUndo(UNDO_START, NULL);
         aStyle <<= aCharStyles.getConstArray()[nStyle];
         // create a local set and apply each format directly
         SfxItemSet aSet(rPam.GetDoc()->GetAttrPool(),
@@ -446,7 +445,7 @@ lcl_setCharFmtSequence(SwPaM & rPam, uno::Any const& rValue)
         SwUnoCursorHelper::SetCrsrAttr(rPam, aSet, (nStyle)
                 ? nsSetAttrMode::SETATTR_DONTREPLACE
                 : nsSetAttrMode::SETATTR_DEFAULT);
-        rPam.GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_START, NULL);
+        rPam.GetDoc()->EndUndo(UNDO_START, NULL);
     }
     return true;
 }
@@ -569,7 +568,11 @@ throw (lang::IllegalArgumentException)
         {
             // multi selection is not considered
             SwTxtNode *const pTxtNd = rPam.GetNode()->GetTxtNode();
+            // --> OD 2008-05-14 #refactorlists# - check on list style not needed
+//                const SwNumRule* pRule = pTxtNd->GetNumRule();
+//                if( FN_UNO_NUM_LEVEL == rEntry.nWID  &&  pRule != NULL )
             if (FN_UNO_NUM_LEVEL == rEntry.nWID)
+            // <--
             {
                 sal_Int16 nLevel = 0;
                 if (rValue >>= nLevel)
@@ -663,14 +666,14 @@ SwUnoCursorHelper::GetCurTxtFmtColl(SwPaM & rPaM, const bool bConditional)
     static const sal_uInt16 nMaxLookup = 1000;
     SwFmtColl *pFmt = 0;
 
-//  if ( GetCrsrCnt() > nMaxLookup )
-//      return 0;
+//	if ( GetCrsrCnt() > nMaxLookup )
+//		return 0;
     bool bError = false;
     SwPaM *pTmpCrsr = &rPaM;
     do
     {
-        const sal_uLong nSttNd = pTmpCrsr->Start()->nNode.GetIndex();
-        const sal_uLong nEndNd = pTmpCrsr->End()->nNode.GetIndex();
+        const ULONG nSttNd = pTmpCrsr->Start()->nNode.GetIndex();
+        const ULONG nEndNd = pTmpCrsr->End()->nNode.GetIndex();
 
         if( nEndNd - nSttNd >= nMaxLookup )
         {
@@ -679,7 +682,7 @@ SwUnoCursorHelper::GetCurTxtFmtColl(SwPaM & rPaM, const bool bConditional)
         }
 
         const SwNodes& rNds = rPaM.GetDoc()->GetNodes();
-        for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
+        for( ULONG n = nSttNd; n <= nEndNd; ++n )
         {
             SwTxtNode const*const pNd = rNds[ n ]->GetTxtNode();
             if( pNd )
@@ -703,10 +706,10 @@ SwUnoCursorHelper::GetCurTxtFmtColl(SwPaM & rPaM, const bool bConditional)
     return (bError) ? 0 : pFmt;
 }
 
-/* --------------------------------------------------
- *  Hilfsfunktion fuer PageDesc
+/* -----------------26.06.98 16:20-------------------
+ * 	Hilfsfunktion fuer PageDesc
  * --------------------------------------------------*/
-SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName)
+SwPageDesc*	GetPageDescByName_Impl(SwDoc& rDoc, const String& rName)
 {
     SwPageDesc* pRet = 0;
     sal_uInt16 nDCount = rDoc.GetPageDescCnt();
@@ -795,13 +798,13 @@ public:
         m_bIsDisposed = true;
         m_ListenerContainer.Disposing();
     }
-protected:
+
     // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 
 };
 
-void SwXTextCursor::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void SwXTextCursor::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 
@@ -876,7 +879,7 @@ void SwXTextCursor::DeleteAndInsert(const ::rtl::OUString& rText,
         SwDoc* pDoc = pUnoCrsr->GetDoc();
         UnoActionContext aAction(pDoc);
         const xub_StrLen nTxtLen = rText.getLength();
-        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
+        pDoc->StartUndo(UNDO_INSERT, NULL);
         SwCursor * pCurrent = pUnoCrsr;
         do
         {
@@ -894,11 +897,11 @@ void SwXTextCursor::DeleteAndInsert(const ::rtl::OUString& rText,
 
                 SwUnoCursorHelper::SelectPam(*pUnoCrsr, true);
                 pCurrent->Left(rText.getLength(),
-                        CRSR_SKIP_CHARS, sal_False, sal_False);
+                        CRSR_SKIP_CHARS, FALSE, FALSE);
             }
             pCurrent = static_cast<SwCursor *>(pCurrent->GetNext());
         } while (pCurrent != pUnoCrsr);
-        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
+        pDoc->EndUndo(UNDO_INSERT, NULL);
     }
 }
 
@@ -1080,7 +1083,7 @@ throw (uno::RuntimeException)
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    sal_Bool bRet = rUnoCursor.Left( nCount, CRSR_SKIP_CHARS, sal_False, sal_False);
+    sal_Bool bRet = rUnoCursor.Left( nCount, CRSR_SKIP_CHARS, FALSE, FALSE);
     if (CURSOR_META == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
@@ -1099,7 +1102,7 @@ throw (uno::RuntimeException)
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    sal_Bool bRet = rUnoCursor.Right(nCount, CRSR_SKIP_CHARS, sal_False, sal_False);
+    sal_Bool bRet = rUnoCursor.Right(nCount, CRSR_SKIP_CHARS, FALSE, FALSE);
     if (CURSOR_META == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
@@ -1362,7 +1365,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand) throw (uno::RuntimeException)
     if (rUnoCursor.GetCntntNode() &&
             (pPoint->nContent == rUnoCursor.GetCntntNode()->Len()))
     {
-        rUnoCursor.Right(1, CRSR_SKIP_CHARS, sal_False, sal_False);
+        rUnoCursor.Right(1, CRSR_SKIP_CHARS, FALSE, FALSE);
     }
     else
     {
@@ -1405,14 +1408,14 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw (uno::RuntimeException)
     // start of paragraph?
     if (pPoint->nContent == 0)
     {
-        rUnoCursor.Left(1, CRSR_SKIP_CHARS, sal_False, sal_False);
+        rUnoCursor.Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
     }
     else
     {
         rUnoCursor.GoPrevWordWT( i18n::WordType::DICTIONARY_WORD );
         if (pPoint->nContent == 0)
         {
-            rUnoCursor.Left(1, CRSR_SKIP_CHARS, sal_False, sal_False);
+            rUnoCursor.Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
         }
     }
 
@@ -2025,10 +2028,10 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
                 {
                     if (!pSetParent.get())
                     {
-                        pSetParent.reset( pSet->Clone( sal_False ) );
+                        pSetParent.reset( pSet->Clone( FALSE ) );
                         // --> OD 2006-07-12 #i63870#
                         SwUnoCursorHelper::GetCrsrAttr(
-                                rPaM, *pSetParent, sal_True, sal_False );
+                                rPaM, *pSetParent, TRUE, FALSE );
                         // <--
                     }
 
@@ -2062,7 +2065,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
     // if we are reseting paragraph attributes, we need to select the full paragraph first
     SwPosition aStart = *rPaM.Start();
     SwPosition aEnd = *rPaM.End();
-    ::std::auto_ptr< SwUnoCrsr > pTemp ( rDoc.CreateUnoCrsr(aStart, sal_False) );
+    ::std::auto_ptr< SwUnoCrsr > pTemp ( rDoc.CreateUnoCrsr(aStart, FALSE) );
     if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
     {
         pTemp->MovePara(fnParaCurr, fnParaStart);
@@ -2242,7 +2245,8 @@ SwXTextCursor::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_FAIL("SwXTextCursor::addPropertyChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXTextCursor::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -2252,7 +2256,8 @@ SwXTextCursor::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_FAIL("SwXTextCursor::removePropertyChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXTextCursor::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -2262,7 +2267,8 @@ SwXTextCursor::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_FAIL("SwXTextCursor::addVetoableChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXTextCursor::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -2272,7 +2278,8 @@ SwXTextCursor::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_FAIL("SwXTextCursor::removeVetoableChangeListener(): not implemented");
+    OSL_ENSURE(false,
+        "SwXTextCursor::removeVetoableChangeListener(): not implemented");
 }
 
 beans::PropertyState SAL_CALL
@@ -2321,16 +2328,18 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 }
 
 // para specific attribut ranges
-static sal_uInt16 g_ParaResetableSetRange[] = {
+static USHORT g_ParaResetableSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
+    // --> OD 2008-02-25 #refactorlists#
     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
+    // <--
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
 // selection specific attribut ranges
-static sal_uInt16 g_ResetableSetRange[] = {
+static USHORT g_ResetableSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
     RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
@@ -2340,13 +2349,13 @@ static sal_uInt16 g_ResetableSetRange[] = {
 };
 
 static void
-lcl_EnumerateIds(sal_uInt16 const* pIdRange, SvUShortsSort & rWhichIds)
+lcl_EnumerateIds(USHORT const* pIdRange, SvUShortsSort & rWhichIds)
 {
     while (*pIdRange)
     {
-        const sal_uInt16 nStart = sal::static_int_cast<sal_uInt16>(*pIdRange++);
-        const sal_uInt16 nEnd   = sal::static_int_cast<sal_uInt16>(*pIdRange++);
-        for (sal_uInt16 nId = nStart + 1;  nId <= nEnd;  ++nId)
+        const USHORT nStart = sal::static_int_cast<USHORT>(*pIdRange++);
+        const USHORT nEnd   = sal::static_int_cast<USHORT>(*pIdRange++);
+        for (USHORT nId = nStart + 1;  nId <= nEnd;  ++nId)
         {
             rWhichIds.Insert( nId );
         }
@@ -2610,17 +2619,17 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
 
     SwSortKey* pKey1 = new SwSortKey;
     pKey1->nColumnId = USHRT_MAX;
-    pKey1->bIsNumeric = sal_True;
+    pKey1->bIsNumeric = TRUE;
     pKey1->eSortOrder = SRT_ASCENDING;
 
     SwSortKey* pKey2 = new SwSortKey;
     pKey2->nColumnId = USHRT_MAX;
-    pKey2->bIsNumeric = sal_True;
+    pKey2->bIsNumeric = TRUE;
     pKey2->eSortOrder = SRT_ASCENDING;
 
     SwSortKey* pKey3 = new SwSortKey;
     pKey3->nColumnId = USHRT_MAX;
-    pKey3->bIsNumeric = sal_True;
+    pKey3->bIsNumeric = TRUE;
     pKey3->eSortOrder = SRT_ASCENDING;
     SwSortKey* aKeys[3] = {pKey1, pKey2, pKey3};
 
@@ -2634,7 +2643,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
         const OUString& rPropName = pProperties[n].Name;
 
         // old and new sortdescriptor
-        if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsSortInTable")))
+        if (rPropName.equalsAscii("IsSortInTable"))
         {
             if (aValue.getValueType() == ::getBooleanCppuType())
             {
@@ -2645,7 +2654,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Delimiter")))
+        else if (rPropName.equalsAscii("Delimiter"))
         {
             sal_Unicode uChar = sal_Unicode();
             if (aValue >>= uChar)
@@ -2658,7 +2667,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             }
         }
         // old sortdescriptor
-        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SortColumns")))
+        else if (rPropName.equalsAscii("SortColumns"))
         {
             bOldSortdescriptor = sal_True;
             sal_Bool bTemp(sal_False);
@@ -2671,7 +2680,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if ( rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsCaseSensitive")))
+        else if ( rPropName.equalsAscii("IsCaseSensitive"))
         {
             bOldSortdescriptor = sal_True;
             sal_Bool bTemp(sal_False);
@@ -2684,7 +2693,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CollatorLocale")))
+        else if (rPropName.equalsAscii("CollatorLocale"))
         {
             bOldSortdescriptor = sal_True;
             lang::Locale aLocale;
@@ -2772,7 +2781,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
             }
         }
         // new sortdescriptor
-        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsSortColumns")))
+        else if (rPropName.equalsAscii("IsSortColumns"))
         {
             bNewSortdescriptor = sal_True;
             if (aValue.getValueType() == ::getBooleanCppuType())
@@ -2785,7 +2794,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SortFields")))
+        else if (rPropName.equalsAscii("SortFields"))
         {
             bNewSortdescriptor = sal_True;
             uno::Sequence < table::TableSortField > aFields;
@@ -2802,7 +2811,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                             SvxLocaleToLanguage( pFields[i].CollatorLocale );
                         aKeys[i]->sSortType = pFields[i].CollatorAlgorithm;
                         aKeys[i]->nColumnId =
-                            static_cast<sal_uInt16>(pFields[i].Field);
+                            static_cast<USHORT>(pFields[i].Field);
                         aKeys[i]->bIsNumeric = (pFields[i].FieldType ==
                                 table::TableSortFieldType_NUMERIC);
                         aKeys[i]->eSortOrder = (pFields[i].IsAscending)
@@ -2823,7 +2832,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
 
     if (bNewSortdescriptor && bOldSortdescriptor)
     {
-        OSL_FAIL("someone tried to set the old deprecated and "
+        DBG_ERROR("someone tried to set the old deprecated and "
             "the new sortdescriptor");
         bRet = sal_False;
     }
@@ -2865,7 +2874,7 @@ throw (uno::RuntimeException)
         SwPosition & rEnd   = *rUnoCursor.End();
 
         SwNodeIndex aPrevIdx( rStart.nNode, -1 );
-        const sal_uLong nOffset = rEnd.nNode.GetIndex() - rStart.nNode.GetIndex();
+        const ULONG nOffset = rEnd.nNode.GetIndex() - rStart.nNode.GetIndex();
         const xub_StrLen nCntStt  = rStart.nContent.GetIndex();
 
         rUnoCursor.GetDoc()->SortText(rUnoCursor, aSortOpt);
@@ -2894,7 +2903,7 @@ throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
 
-    if (!rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextContent")))
+    if (!rServiceName.equalsAscii("com.sun.star.text.TextContent"))
     {
         throw uno::RuntimeException();
     }

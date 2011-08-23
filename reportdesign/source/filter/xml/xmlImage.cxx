@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,7 +114,7 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception catched while filling the image props");
+        OSL_ENSURE(0,"Exception catched while filling the image props");
     }
 }
 // -----------------------------------------------------------------------------

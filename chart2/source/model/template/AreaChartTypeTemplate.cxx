@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,64 +71,43 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-struct StaticAreaChartTypeTemplateDefaults_Initializer
+void lcl_AddDefaultsToMap(
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AREA_TEMPLATE_DIMENSION, 2 );
-    }
-};
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AREA_TEMPLATE_DIMENSION, 2 );
+}
 
-struct StaticAreaChartTypeTemplateDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticAreaChartTypeTemplateDefaults_Initializer >
+const uno::Sequence< Property > & lcl_GetPropertySequence()
 {
-};
+    static uno::Sequence< Property > aPropSeq;
 
-struct StaticAreaChartTypeTemplateInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    uno::Sequence< Property > lcl_GetPropertySequence()
-    {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-};
+    return aPropSeq;
+}
 
-struct StaticAreaChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticAreaChartTypeTemplateInfoHelper_Initializer >
+::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
 {
-};
+    static ::cppu::OPropertyArrayHelper aArrayHelper(
+        lcl_GetPropertySequence(),
+        /* bSorted = */ sal_True );
 
-struct StaticAreaChartTypeTemplateInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticAreaChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticAreaChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticAreaChartTypeTemplateInfo_Initializer >
-{
-};
+    return aArrayHelper;
+}
 
 } // anonymous namespace
 
@@ -155,23 +134,49 @@ AreaChartTypeTemplate::~AreaChartTypeTemplate()
 uno::Any AreaChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticAreaChartTypeTemplateDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
+    static tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
+    }
+
+    tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
         return uno::Any();
+
     return (*aFound).second;
+    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL AreaChartTypeTemplate::getInfoHelper()
 {
-    return *StaticAreaChartTypeTemplateInfoHelper::get();
+    return lcl_getInfoHelper();
 }
 
+
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL AreaChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+    AreaChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticAreaChartTypeTemplateInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
 
 sal_Int32 AreaChartTypeTemplate::getDimension() const
@@ -253,7 +258,7 @@ Reference< chart2::XChartType > SAL_CALL AreaChartTypeTemplate::getChartTypeForN
     throw (uno::RuntimeException)
 {
     Reference< chart2::XChartType > xResult( getChartTypeForIndex( 0 ) );
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
+    ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );    
     return xResult;
 }
 

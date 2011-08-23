@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <hash_map>
+#include <hash_set>
 #include <vector>
 
 namespace com {
@@ -76,7 +76,7 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
             m_xConfigProvider;
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
             m_xConfigAccess;
-
+            
     struct LocaleAccess
     {
         // the real string used in the configuration
@@ -85,22 +85,22 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
         // xAccess is mutable to be able to be filled on demand
         mutable com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xAccess;
     };
-
-    boost::unordered_map< com::sun::star::lang::Locale,
+            
+    std::hash_map< com::sun::star::lang::Locale,
                    LocaleAccess,
                    utl::LocaleHash >
             m_aConfig;
-
+    
     rtl::OUString tryLocale( const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rType ) const;
-
+    
     DefaultFontConfiguration();
     public:
     ~DefaultFontConfiguration();
-
+    
     static DefaultFontConfiguration* get();
-
+    
     rtl::OUString getDefaultFont( const com::sun::star::lang::Locale& rLocale, int nType ) const;
-    rtl::OUString getUserInterfaceFont( const com::sun::star::lang::Locale& rLocale ) const;
+    rtl::OUString getUserInterfaceFont( const com::sun::star::lang::Locale& rLocale ) const;    
 };
 
 // IMPL_FONT_ATTR_DEFAULT       - Default-Font like Andale Sans UI, Palace Script, Albany, Thorndale, Cumberland, ...
@@ -119,38 +119,38 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
 // IMPL_FONT_ATTR_COMIC         - Like Comic Sans MS
 // IMPL_FONT_ATTR_BRUSHSCRIPT   - More Script
 // IMPL_FONT_ATTR_OTHERSTYLE    - OldStyle, ... so negativ points
-#define IMPL_FONT_ATTR_DEFAULT       ((sal_uLong)0x00000001)
-#define IMPL_FONT_ATTR_STANDARD      ((sal_uLong)0x00000002)
-#define IMPL_FONT_ATTR_NORMAL        ((sal_uLong)0x00000004)
-#define IMPL_FONT_ATTR_SYMBOL        ((sal_uLong)0x00000008)
-#define IMPL_FONT_ATTR_FIXED         ((sal_uLong)0x00000010)
-#define IMPL_FONT_ATTR_SANSSERIF     ((sal_uLong)0x00000020)
-#define IMPL_FONT_ATTR_SERIF         ((sal_uLong)0x00000040)
-#define IMPL_FONT_ATTR_DECORATIVE    ((sal_uLong)0x00000080)
-#define IMPL_FONT_ATTR_SPECIAL       ((sal_uLong)0x00000100)
-#define IMPL_FONT_ATTR_ITALIC        ((sal_uLong)0x00000200)
-#define IMPL_FONT_ATTR_TITLING       ((sal_uLong)0x00000400)
-#define IMPL_FONT_ATTR_CAPITALS      ((sal_uLong)0x00000800)
-#define IMPL_FONT_ATTR_CJK           ((sal_uLong)0x00001000)
-#define IMPL_FONT_ATTR_CJK_JP        ((sal_uLong)0x00002000)
-#define IMPL_FONT_ATTR_CJK_SC        ((sal_uLong)0x00004000)
-#define IMPL_FONT_ATTR_CJK_TC        ((sal_uLong)0x00008000)
-#define IMPL_FONT_ATTR_CJK_KR        ((sal_uLong)0x00010000)
-#define IMPL_FONT_ATTR_CTL           ((sal_uLong)0x00020000)
-#define IMPL_FONT_ATTR_NONELATIN     ((sal_uLong)0x00040000)
-#define IMPL_FONT_ATTR_FULL          ((sal_uLong)0x00080000)
-#define IMPL_FONT_ATTR_OUTLINE       ((sal_uLong)0x00100000)
-#define IMPL_FONT_ATTR_SHADOW        ((sal_uLong)0x00200000)
-#define IMPL_FONT_ATTR_ROUNDED       ((sal_uLong)0x00400000)
-#define IMPL_FONT_ATTR_TYPEWRITER    ((sal_uLong)0x00800000)
-#define IMPL_FONT_ATTR_SCRIPT        ((sal_uLong)0x01000000)
-#define IMPL_FONT_ATTR_HANDWRITING   ((sal_uLong)0x02000000)
-#define IMPL_FONT_ATTR_CHANCERY      ((sal_uLong)0x04000000)
-#define IMPL_FONT_ATTR_COMIC         ((sal_uLong)0x08000000)
-#define IMPL_FONT_ATTR_BRUSHSCRIPT   ((sal_uLong)0x10000000)
-#define IMPL_FONT_ATTR_GOTHIC        ((sal_uLong)0x20000000)
-#define IMPL_FONT_ATTR_SCHOOLBOOK    ((sal_uLong)0x40000000)
-#define IMPL_FONT_ATTR_OTHERSTYLE    ((sal_uLong)0x80000000)
+#define IMPL_FONT_ATTR_DEFAULT       ((ULONG)0x00000001)
+#define IMPL_FONT_ATTR_STANDARD      ((ULONG)0x00000002)
+#define IMPL_FONT_ATTR_NORMAL        ((ULONG)0x00000004)
+#define IMPL_FONT_ATTR_SYMBOL        ((ULONG)0x00000008)
+#define IMPL_FONT_ATTR_FIXED         ((ULONG)0x00000010)
+#define IMPL_FONT_ATTR_SANSSERIF     ((ULONG)0x00000020)
+#define IMPL_FONT_ATTR_SERIF         ((ULONG)0x00000040)
+#define IMPL_FONT_ATTR_DECORATIVE    ((ULONG)0x00000080)
+#define IMPL_FONT_ATTR_SPECIAL       ((ULONG)0x00000100)
+#define IMPL_FONT_ATTR_ITALIC        ((ULONG)0x00000200)
+#define IMPL_FONT_ATTR_TITLING       ((ULONG)0x00000400)
+#define IMPL_FONT_ATTR_CAPITALS      ((ULONG)0x00000800)
+#define IMPL_FONT_ATTR_CJK           ((ULONG)0x00001000)
+#define IMPL_FONT_ATTR_CJK_JP        ((ULONG)0x00002000)
+#define IMPL_FONT_ATTR_CJK_SC        ((ULONG)0x00004000)
+#define IMPL_FONT_ATTR_CJK_TC        ((ULONG)0x00008000)
+#define IMPL_FONT_ATTR_CJK_KR        ((ULONG)0x00010000)
+#define IMPL_FONT_ATTR_CTL           ((ULONG)0x00020000)
+#define IMPL_FONT_ATTR_NONELATIN     ((ULONG)0x00040000)
+#define IMPL_FONT_ATTR_FULL          ((ULONG)0x00080000)
+#define IMPL_FONT_ATTR_OUTLINE       ((ULONG)0x00100000)
+#define IMPL_FONT_ATTR_SHADOW        ((ULONG)0x00200000)
+#define IMPL_FONT_ATTR_ROUNDED       ((ULONG)0x00400000)
+#define IMPL_FONT_ATTR_TYPEWRITER    ((ULONG)0x00800000)
+#define IMPL_FONT_ATTR_SCRIPT        ((ULONG)0x01000000)
+#define IMPL_FONT_ATTR_HANDWRITING   ((ULONG)0x02000000)
+#define IMPL_FONT_ATTR_CHANCERY      ((ULONG)0x04000000)
+#define IMPL_FONT_ATTR_COMIC         ((ULONG)0x08000000)
+#define IMPL_FONT_ATTR_BRUSHSCRIPT   ((ULONG)0x10000000)
+#define IMPL_FONT_ATTR_GOTHIC        ((ULONG)0x20000000)
+#define IMPL_FONT_ATTR_SCHOOLBOOK    ((ULONG)0x40000000)
+#define IMPL_FONT_ATTR_OTHERSTYLE    ((ULONG)0x80000000)
 
 #define IMPL_FONT_ATTR_CJK_ALLLANG   (IMPL_FONT_ATTR_CJK_JP | IMPL_FONT_ATTR_CJK_SC | IMPL_FONT_ATTR_CJK_TC | IMPL_FONT_ATTR_CJK_KR)
 #define IMPL_FONT_ATTR_ALLSCRIPT     (IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_BRUSHSCRIPT)
@@ -163,14 +163,14 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
 
 struct UNOTOOLS_DLLPUBLIC FontNameAttr
 {
-    String                              Name;
-    ::std::vector< String >             Substitutions;
-    ::std::vector< String >             MSSubstitutions;
-    ::std::vector< String >             PSSubstitutions;
-    ::std::vector< String >             HTMLSubstitutions;
-    FontWeight                          Weight;
-    FontWidth                           Width;
-    unsigned long                       Type; // bitfield of IMPL_FONT_ATTR_*
+    String								Name;
+    ::std::vector< String >				Substitutions;
+    ::std::vector< String >				MSSubstitutions;
+    ::std::vector< String >				PSSubstitutions;
+    ::std::vector< String >				HTMLSubstitutions;
+    FontWeight							Weight;
+    FontWidth							Width;
+    unsigned long						Type; // bitfield of IMPL_FONT_ATTR_*
 };
 
 class UNOTOOLS_DLLPUBLIC FontSubstConfiguration
@@ -189,14 +189,14 @@ private:
         // a minimal match is sufficient (that is e.g. "Thorndale" will match
         // "Thorndale BlaBlub"). Also names must be lower case.
         mutable std::vector< FontNameAttr >     aSubstAttributes;
-
+        
         LocaleSubst() : bConfigRead( false ) {}
     };
-    boost::unordered_map< com::sun::star::lang::Locale, LocaleSubst, utl::LocaleHash > m_aSubst;
-    typedef boost::unordered_set< rtl::OUString, rtl::OUStringHash > UniqueSubstHash;
+    std::hash_map< com::sun::star::lang::Locale, LocaleSubst, utl::LocaleHash > m_aSubst;
+    typedef std::hash_set< rtl::OUString, rtl::OUStringHash > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
 
-
+    
     void fillSubstVector( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
                           const rtl::OUString& rType,
                           std::vector< String >& rSubstVector ) const;
@@ -220,7 +220,7 @@ public:
                                                                    rtl::OUString(),
                                                                    rtl::OUString() )
                                      ) const;
-    static void getMapName( const String& rOrgName, String& rShortName, String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uLong& rType );
+    static void getMapName( const String& rOrgName, String& rShortName, String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, ULONG& rType );
 };
 
 } // namespace utl

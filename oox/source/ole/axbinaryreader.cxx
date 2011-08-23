@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,15 +27,12 @@
  ************************************************************************/
 
 #include "oox/ole/axbinaryreader.hxx"
-
 #include "oox/ole/olehelper.hxx"
+
+using ::rtl::OUString;
 
 namespace oox {
 namespace ole {
-
-// ============================================================================
-
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -97,8 +94,7 @@ AxFontData::AxFontData() :
     mnFontEffects( 0 ),
     mnFontHeight( 160 ),
     mnFontCharSet( WINDOWS_CHARSET_DEFAULT ),
-    mnHorAlign( AX_FONTDATA_LEFT ),
-    mbDblUnderline( false )
+    mnHorAlign( AX_FONTDATA_LEFT )
 {
 }
 
@@ -126,7 +122,6 @@ bool AxFontData::importBinaryModel( BinaryInputStream& rInStrm )
     aReader.skipIntProperty< sal_uInt8 >(); // font pitch/family
     aReader.readIntProperty< sal_uInt8 >( mnHorAlign );
     aReader.skipIntProperty< sal_uInt16 >(); // font weight
-    mbDblUnderline = false;
     return aReader.finalizeImport();
 }
 
@@ -141,7 +136,6 @@ bool AxFontData::importStdFont( BinaryInputStream& rInStrm )
         setFlag( mnFontEffects, AX_FONTDATA_ITALIC,    getFlag( aFontInfo.mnFlags, OLE_STDFONT_ITALIC ) );
         setFlag( mnFontEffects, AX_FONTDATA_UNDERLINE, getFlag( aFontInfo.mnFlags, OLE_STDFONT_UNDERLINE ) );
         setFlag( mnFontEffects, AX_FONTDATA_STRIKEOUT, getFlag( aFontInfo.mnFlags,OLE_STDFONT_STRIKE ) );
-        mbDblUnderline = false;
         // StdFont stores font height in 1/10,000 of points
         setHeightPoints( getLimitedValue< sal_Int16, sal_Int32 >( aFontInfo.mnHeight / 10000, 0, SAL_MAX_INT16 ) );
         mnFontCharSet = aFontInfo.mnCharSet;
@@ -154,9 +148,9 @@ bool AxFontData::importStdFont( BinaryInputStream& rInStrm )
 bool AxFontData::importGuidAndFont( BinaryInputStream& rInStrm )
 {
     OUString aGuid = OleHelper::importGuid( rInStrm );
-    if( aGuid.equalsAscii( AX_GUID_CFONT ) )
+    if( aGuid.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{AFC20920-DA4E-11CE-B943-00AA006887B4}" ) ) )
         return importBinaryModel( rInStrm );
-    if( aGuid.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(OLE_GUID_STDFONT) ) )
+    if( aGuid.equalsAscii( OLE_GUID_STDFONT ) )
         return importStdFont( rInStrm );
     return false;
 }

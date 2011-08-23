@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,14 +54,14 @@ public class HelpFileDocument
         }
         return aReader;
     }
-
+    
     /** Makes a document for a File.
     */
     public static Document Document( String aModule, File aCaptionFile, File aContentFile )
         throws java.io.FileNotFoundException, java.io.UnsupportedEncodingException {
         Document doc = new Document();
 
-        // Add the path of the file as a field named "path".  Use a field that is
+        // Add the path of the file as a field named "path".  Use a field that is 
         // indexed (i.e. searchable), but don't tokenize the field into words.
         File aFile = aCaptionFile != null ? aCaptionFile : aContentFile;
         if( aFile != null )
@@ -69,7 +69,7 @@ public class HelpFileDocument
             String aPath = "#HLP#" + aModule + "/" + aFile.getName();
             doc.add(new Field("path", aPath, Field.Store.YES, Field.Index.UN_TOKENIZED));
         }
-
+        
         // Add the caption of the file to a field named "caption".  Specify a Reader,
         // so that the text of the file is tokenized and indexed, but not stored.
         doc.add( new Field( "caption", getReaderForFile( aCaptionFile ) ) );
@@ -77,7 +77,7 @@ public class HelpFileDocument
         // Add the contents of the file to a field named "content".  Specify a Reader,
         // so that the text of the file is tokenized and indexed, but not stored.
         doc.add( new Field( "content", getReaderForFile( aContentFile ) ) );
-
+        
         // return the document
         return doc;
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ XMLConstantsPropertyHandler::XMLConstantsPropertyHandler(
 {
 }
 
-XMLConstantsPropertyHandler::~XMLConstantsPropertyHandler()
+XMLConstantsPropertyHandler::~XMLConstantsPropertyHandler() 
 {
 }
 
@@ -56,7 +56,7 @@ sal_Bool XMLConstantsPropertyHandler::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& ) const
-{
+{ 
     sal_uInt16 nEnum;
     sal_Bool bRet = SvXMLUnitConverter::convertEnum(
         nEnum, rStrImpValue, pMap );
@@ -64,16 +64,16 @@ sal_Bool XMLConstantsPropertyHandler::importXML(
     if( bRet )
         rValue <<= (sal_Int16)nEnum;
 
-    return bRet;
+    return bRet; 
 }
 
-sal_Bool XMLConstantsPropertyHandler::exportXML(
+sal_Bool XMLConstantsPropertyHandler::exportXML( 
     OUString& rStrExpValue,
     const Any& rValue,
     const SvXMLUnitConverter& ) const
-{
+{ 
     OUStringBuffer aOut;
-
+    
     sal_Bool bRet = false;
 
     sal_Int32 nEnum = 0;
@@ -83,7 +83,7 @@ sal_Bool XMLConstantsPropertyHandler::exportXML(
         nEnum = *((sal_Int32*)rValue.getValue());
         bRet = true;
     }
-    else
+    else 
     {
         bRet = (rValue >>= nEnum );
     }
@@ -95,18 +95,18 @@ sal_Bool XMLConstantsPropertyHandler::exportXML(
             sal_uInt16 nConst = static_cast<sal_uInt16>( nEnum );
 
             bRet = SvXMLUnitConverter::convertEnum(
-                aOut, nConst, pMap, eDefault );
+                aOut, nConst, pMap, eDefault ); 
 
             rStrExpValue = aOut.makeStringAndClear();
         }
         else
         {
-            OSL_FAIL("XMLConstantsPropertyHandler::exportXML() constant is out of range for implementation using sal_uInt16");
+            DBG_ERROR("XMLConstantsPropertyHandler::exportXML() constant is out of range for implementation using sal_uInt16");
         }
     }
     else
     {
-        OSL_FAIL("XMLConstantsPropertyHandler::exportXML() could not convert any to sal_Int32");
+        DBG_ERROR("XMLConstantsPropertyHandler::exportXML() could not convert any to sal_Int32");
     }
 
     return bRet;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,42 +35,41 @@
 #include <tblrwcl.hxx>
 #include <swtblfmt.hxx>
 
-using namespace ::editeng;
 
-inline const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, sal_Bool bTop )
+inline const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, BOOL bTop )
 {
     return bTop ? pBox->GetTop() : pBox->GetBottom();
 }
 
 
-sal_Bool _SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrmFmt& rFmt )
+BOOL _SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrmFmt& rFmt )
 {
     const SvxBorderLine* pBrd;
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rFmt.GetItemState( RES_BOX, sal_True, &pItem ) &&
+    if( SFX_ITEM_SET == rFmt.GetItemState( RES_BOX, TRUE, &pItem ) &&
         0 != ( pBrd = ((SvxBoxItem*)pItem)->GetLeft() ) )
     {
         if( *pBrdLn == *pBrd )
-            bAnyBorderFnd = sal_True;
-        return sal_True;
+            bAnyBorderFnd = TRUE;
+        return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
 
 
-sal_Bool lcl_GCBorder_ChkBoxBrd_L( const SwTableLine*& rpLine, void* pPara )
+BOOL lcl_GCBorder_ChkBoxBrd_L( const SwTableLine*& rpLine, void* pPara )
 {
     const SwTableBox* pBox = rpLine->GetTabBoxes()[ 0 ];
     return lcl_GCBorder_ChkBoxBrd_B( pBox, pPara );
 }
 
-sal_Bool lcl_GCBorder_ChkBoxBrd_B( const SwTableBox*& rpBox, void* pPara )
+BOOL lcl_GCBorder_ChkBoxBrd_B( const SwTableBox*& rpBox, void* pPara )
 {
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
     if( rpBox->GetTabLines().Count() )
     {
-        for( sal_uInt16 n = 0, nLines = rpBox->GetTabLines().Count();
+        for( USHORT n = 0, nLines = rpBox->GetTabLines().Count();
                 n < nLines && bRet; ++n )
         {
             const SwTableLine* pLine = rpBox->GetTabLines()[ n ];
@@ -85,36 +84,36 @@ sal_Bool lcl_GCBorder_ChkBoxBrd_B( const SwTableBox*& rpBox, void* pPara )
     return bRet;
 }
 
-sal_Bool lcl_GCBorder_GetLastBox_L( const SwTableLine*& rpLine, void* pPara )
+BOOL lcl_GCBorder_GetLastBox_L( const SwTableLine*& rpLine, void* pPara )
 {
     const SwTableBoxes& rBoxes = rpLine->GetTabBoxes();
     const SwTableBox* pBox = rBoxes[ rBoxes.Count()-1 ];
     ::lcl_GCBorder_GetLastBox_B( pBox, pPara );
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool lcl_GCBorder_GetLastBox_B( const SwTableBox*& rpBox, void* pPara )
+BOOL lcl_GCBorder_GetLastBox_B( const SwTableBox*& rpBox, void* pPara )
 {
     SwTableLines& rLines = (SwTableLines&)rpBox->GetTabLines();
     if( rLines.Count() )
         rLines.ForEach( &lcl_GCBorder_GetLastBox_L, pPara );
     else
         ((SwTableBoxes*)pPara)->Insert( rpBox, ((SwTableBoxes*)pPara)->Count() );
-    return sal_True;
+    return TRUE;
 }
 
 // suche das "Ende" der vorgegebene BorderLine. Returnt wird die "Layout"Pos!
-sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTblLineBoxes& rCollTLB,
-                        const SvxBorderLine& rBrdLn, sal_uInt16& rStt, sal_Bool bTop )
+USHORT lcl_FindEndPosOfBorder( const SwCollectTblLineBoxes& rCollTLB,
+                        const SvxBorderLine& rBrdLn, USHORT& rStt, BOOL bTop )
 {
-    sal_uInt16 nPos, nLastPos = 0;
-    for( sal_uInt16 nEnd = rCollTLB.Count(); rStt < nEnd; ++rStt )
+    USHORT nPos, nLastPos = 0;
+    for( USHORT nEnd = rCollTLB.Count(); rStt < nEnd; ++rStt )
     {
         const SfxPoolItem* pItem;
         const SvxBorderLine* pBrd;
         const SwTableBox& rBox = rCollTLB.GetBox( rStt, &nPos );
 
-        if( SFX_ITEM_SET != rBox.GetFrmFmt()->GetItemState(RES_BOX,sal_True, &pItem )
+        if( SFX_ITEM_SET != rBox.GetFrmFmt()->GetItemState(RES_BOX,TRUE, &pItem )
             || 0 == ( pBrd = GetLineTB( (SvxBoxItem*)pItem, bTop ))
             || !( *pBrd == rBrdLn ))
             break;
@@ -124,23 +123,23 @@ sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTblLineBoxes& rCollTLB,
 }
 
 inline const SvxBorderLine* lcl_GCBorder_GetBorder( const SwTableBox& rBox,
-                                                sal_Bool bTop,
+                                                BOOL bTop,
                                                 const SfxPoolItem** ppItem )
 {
-    return SFX_ITEM_SET == rBox.GetFrmFmt()->GetItemState( RES_BOX, sal_True, ppItem )
+    return SFX_ITEM_SET == rBox.GetFrmFmt()->GetItemState( RES_BOX, TRUE, ppItem )
             ? GetLineTB( (SvxBoxItem*)*ppItem, bTop )
             : 0;
 }
 
 void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
-                                sal_uInt16& rStt, sal_Bool bTop,
+                                USHORT& rStt, BOOL bTop,
                                 const SvxBorderLine& rLine,
                                 const SfxPoolItem* pItem,
-                                sal_uInt16 nEndPos,
+                                USHORT nEndPos,
                                 SwShareBoxFmts* pShareFmts )
 {
     SwTableBox* pBox = (SwTableBox*)&rCollTLB.GetBox( rStt );
-    sal_uInt16 nNextPos;
+    USHORT nNextPos;
     const SvxBorderLine* pLn = &rLine;
 
     do {
@@ -167,11 +166,11 @@ void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
 
         pLn = lcl_GCBorder_GetBorder( *pBox, bTop, &pItem );
 
-    } while( sal_True );
+    } while( TRUE );
 }
 
 
-sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
+BOOL lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
 {
     _SwGCLineBorder* pGCPara = (_SwGCLineBorder*)pPara;
 
@@ -182,7 +181,7 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
         const SvxBorderLine* pBrd;
         const SfxPoolItem* pItem;
         const SwTableBoxes& rBoxes = rpLine->GetTabBoxes();
-        for( sal_uInt16 n = 0, nBoxes = rBoxes.Count() - 1; n < nBoxes; ++n )
+        for( USHORT n = 0, nBoxes = rBoxes.Count() - 1; n < nBoxes; ++n )
         {
             SwTableBoxes aBoxes;
             {
@@ -194,9 +193,9 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
             }
 
             SwTableBox* pBox;
-            for( sal_uInt16 i = aBoxes.Count(); i; )
+            for( USHORT i = aBoxes.Count(); i; )
                 if( SFX_ITEM_SET == (pBox = aBoxes[ --i ])->GetFrmFmt()->
-                    GetItemState( RES_BOX, sal_True, &pItem ) &&
+                    GetItemState( RES_BOX, TRUE, &pItem ) &&
                     0 != ( pBrd = ((SvxBoxItem*)pItem)->GetRight() ) )
                 {
                     aBPara.SetBorder( *pBrd );
@@ -220,8 +219,8 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
     // und jetzt die eigene untere Kante mit der nachfolgenden oberen Kante
     if( !pGCPara->IsLastLine() )
     {
-        SwCollectTblLineBoxes aBottom( sal_False );
-        SwCollectTblLineBoxes aTop( sal_True );
+        SwCollectTblLineBoxes aBottom( FALSE );
+        SwCollectTblLineBoxes aTop( TRUE );
 
         ::lcl_Line_CollectBox( rpLine, &aBottom );
 
@@ -229,7 +228,7 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
         ::lcl_Line_CollectBox( pNextLine, &aTop );
 
         // dann entferne mal alle "doppelten" gleichen Lines
-        sal_uInt16 nBtmPos, nTopPos,
+        USHORT nBtmPos, nTopPos,
                 nSttBtm = 0, nSttTop = 0,
                 nEndBtm = aBottom.Count(), nEndTop = aTop.Count();
 
@@ -237,23 +236,23 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
                          *pTopBox = &aTop.GetBox( nSttTop++, &nTopPos );
         const SfxPoolItem *pBtmItem = 0, *pTopItem = 0;
         const SvxBorderLine *pBtmLine(0), *pTopLine(0);
-        sal_Bool bGetTopItem = sal_True, bGetBtmItem = sal_True;
+        BOOL bGetTopItem = TRUE, bGetBtmItem = TRUE;
 
         do {
             if( bGetBtmItem )
-                pBtmLine = lcl_GCBorder_GetBorder( *pBtmBox, sal_False, &pBtmItem );
+                pBtmLine = lcl_GCBorder_GetBorder( *pBtmBox, FALSE, &pBtmItem );
             if( bGetTopItem )
-                pTopLine = lcl_GCBorder_GetBorder( *pTopBox, sal_True, &pTopItem );
+                pTopLine = lcl_GCBorder_GetBorder( *pTopBox, TRUE, &pTopItem );
 
             if( pTopLine && pBtmLine && *pTopLine == *pBtmLine )
             {
                 // dann kann einer entfernt werden, aber welche?
-                sal_uInt16 nSavSttBtm = nSttBtm, nSavSttTop = nSttTop;
-                sal_uInt16 nBtmEndPos = ::lcl_FindEndPosOfBorder( aBottom,
-                                                *pTopLine, nSttBtm, sal_False );
+                USHORT nSavSttBtm = nSttBtm, nSavSttTop = nSttTop;
+                USHORT nBtmEndPos = ::lcl_FindEndPosOfBorder( aBottom,
+                                                *pTopLine, nSttBtm, FALSE );
                 if( !nBtmEndPos ) nBtmEndPos = nBtmPos;
-                sal_uInt16 nTopEndPos = ::lcl_FindEndPosOfBorder( aTop,
-                                                *pTopLine, nSttTop, sal_True );
+                USHORT nTopEndPos = ::lcl_FindEndPosOfBorder( aTop,
+                                                *pTopLine, nSttTop, TRUE );
                 if( !nTopEndPos ) nTopEndPos = nTopPos;
 
 
@@ -262,7 +261,7 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
                     // dann die TopBorder bis zur BottomEndPos loeschen
                     nSttTop = nSavSttTop;
                     if( nTopPos <= nBtmEndPos )
-                        lcl_GCBorder_DelBorder( aTop, --nSttTop, sal_True,
+                        lcl_GCBorder_DelBorder( aTop, --nSttTop, TRUE,
                                             *pBtmLine, pTopItem, nBtmEndPos,
                                             pGCPara->pShareFmts );
                     else
@@ -273,7 +272,7 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
                     // sonst die BottomBorder bis zur TopEndPos loeschen
                     nSttBtm = nSavSttBtm;
                     if( nBtmPos <= nTopEndPos )
-                        lcl_GCBorder_DelBorder( aBottom, --nSttBtm, sal_False,
+                        lcl_GCBorder_DelBorder( aBottom, --nSttBtm, FALSE,
                                             *pTopLine, pBtmItem, nTopEndPos,
                                             pGCPara->pShareFmts );
                     else
@@ -289,36 +288,36 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
 
                 pBtmBox = &aBottom.GetBox( nSttBtm++, &nBtmPos );
                 pTopBox = &aTop.GetBox( nSttTop++, &nTopPos );
-                bGetTopItem = bGetBtmItem = sal_True;
+                bGetTopItem = bGetBtmItem = TRUE;
             }
             else if( nTopPos < nBtmPos )
             {
                 if( nSttTop >= nEndTop )
                     break;
                 pTopBox = &aTop.GetBox( nSttTop++, &nTopPos );
-                bGetTopItem = sal_True;
-                bGetBtmItem = sal_False;
+                bGetTopItem = TRUE;
+                bGetBtmItem = FALSE;
             }
             else
             {
                 if( nSttBtm >= nEndBtm )
                     break;
                 pBtmBox = &aBottom.GetBox( nSttBtm++, &nBtmPos );
-                bGetTopItem = sal_False;
-                bGetBtmItem = sal_True;
+                bGetTopItem = FALSE;
+                bGetBtmItem = TRUE;
             }
 
-        } while( sal_True );
+        } while( TRUE );
     }
 
     ((SwTableLine*)rpLine)->GetTabBoxes().ForEach( &lcl_GC_Box_Border, pPara );
 
     ++pGCPara->nLinePos;
 
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool lcl_GC_Box_Border( const SwTableBox*& rpBox, void* pPara )
+BOOL lcl_GC_Box_Border( const SwTableBox*& rpBox, void* pPara )
 {
     if( rpBox->GetTabLines().Count() )
     {
@@ -326,7 +325,7 @@ sal_Bool lcl_GC_Box_Border( const SwTableBox*& rpBox, void* pPara )
         aPara.pShareFmts = ((_SwGCLineBorder*)pPara)->pShareFmts;
         ((SwTableBox*)rpBox)->GetTabLines().ForEach( &lcl_GC_Line_Border, &aPara );
     }
-    return sal_True;
+    return TRUE;
 }
 
 struct _GCLinePara
@@ -339,10 +338,10 @@ struct _GCLinePara
     {}
 };
 
-sal_Bool lcl_MergeGCBox( const SwTableBox*& rpTblBox, void* pPara )
+BOOL lcl_MergeGCBox( const SwTableBox*& rpTblBox, void* pPara )
 {
     SwTableBox*& rpBox = (SwTableBox*&)rpTblBox;
-    sal_uInt16 n, nLen = rpBox->GetTabLines().Count();
+    USHORT n, nLen = rpBox->GetTabLines().Count();
     if( nLen )
     {
         // ACHTUNG: die Anzahl der Lines kann sich aendern!
@@ -358,7 +357,7 @@ sal_Bool lcl_MergeGCBox( const SwTableBox*& rpTblBox, void* pPara )
             // hinter diese Box in der Parent-Line und loesche diese Box
             SwTableLine* pInsLine = rpBox->GetUpper();
             SwTableLine* pCpyLine = rpBox->GetTabLines()[0];
-            sal_uInt16 nInsPos = pInsLine->GetTabBoxes().C40_GETPOS( SwTableBox, rpBox );
+            USHORT nInsPos = pInsLine->GetTabBoxes().C40_GETPOS( SwTableBox, rpBox );
             for( n = 0; n < pCpyLine->GetTabBoxes().Count(); ++n )
                 pCpyLine->GetTabBoxes()[n]->SetUpper( pInsLine );
 
@@ -367,16 +366,16 @@ sal_Bool lcl_MergeGCBox( const SwTableBox*& rpTblBox, void* pPara )
             // loesche alte die Box mit der Line
             pInsLine->GetTabBoxes().DeleteAndDestroy( nInsPos );
 
-            return sal_False;       // neu aufsetzen
+            return FALSE;		// neu aufsetzen
         }
     }
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
+BOOL lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
 {
     SwTableLine* pLn = (SwTableLine*)rpLine;
-    sal_uInt16 nLen = pLn->GetTabBoxes().Count();
+    USHORT nLen = pLn->GetTabBoxes().Count();
     if( nLen )
     {
         _GCLinePara* pGCPara = (_GCLinePara*)pPara;
@@ -397,28 +396,28 @@ sal_Bool lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
 
             SwTableLines& rLns = *pGCPara->pLns;
             const SwTableLine* pTmp = pLn;
-            sal_uInt16 nInsPos = rLns.GetPos( pTmp );
+            USHORT nInsPos = rLns.GetPos( pTmp );
             OSL_ENSURE( USHRT_MAX != nInsPos, "Line nicht gefunden!" );
 
             SwTableBox* pUpper = pLn->GetUpper();
 
-            rLns.Remove( nInsPos, 1 );      // die Line dem aus Array loeschen
+            rLns.Remove( nInsPos, 1 );		// die Line dem aus Array loeschen
             rLns.Insert( &pBox->GetTabLines(), nInsPos );
 
             // JP 31.03.99: Bug 60000 - die Attribute der zu loeschenden
             // Line an die "eingefuegten" uebertragen
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == pLn->GetFrmFmt()->GetItemState(
-                                    RES_BACKGROUND, sal_True, &pItem ))
+                                    RES_BACKGROUND, TRUE, &pItem ))
             {
                 SwTableLines& rBoxLns = pBox->GetTabLines();
-                for( sal_uInt16 nLns = 0; nLns < nLen; ++nLns )
+                for( USHORT nLns = 0; nLns < nLen; ++nLns )
                     if( SFX_ITEM_SET != rBoxLns[ nLns ]->GetFrmFmt()->
-                            GetItemState( RES_BACKGROUND, sal_True ))
+                            GetItemState( RES_BACKGROUND, TRUE ))
                         pGCPara->pShareFmts->SetAttr( *rBoxLns[ nLns ], *pItem );
             }
 
-            pBox->GetTabLines().Remove( 0, nLen );  // Lines aus Array loeschen
+            pBox->GetTabLines().Remove( 0, nLen );	// Lines aus Array loeschen
 
             delete pLn;
 
@@ -426,7 +425,7 @@ sal_Bool lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
             while( nLen-- )
                 rLns[ nInsPos++ ]->SetUpper( pUpper );
 
-            pLn = pLine;                        // und neu setzen
+            pLn = pLine;						// und neu setzen
             nLen = pLn->GetTabBoxes().Count();
         }
 
@@ -435,7 +434,7 @@ sal_Bool lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
             if( !lcl_MergeGCBox( *(pLn->GetTabBoxes().GetData() + nLen ), pPara ))
                 --nLen;
     }
-    return sal_True;
+    return TRUE;
 }
 
         // Struktur ein wenig aufraeumen
@@ -445,7 +444,7 @@ void SwTable::GCLines()
     _GCLinePara aPara( GetTabLines() );
     SwShareBoxFmts aShareFmts;
     aPara.pShareFmts = &aShareFmts;
-    for( sal_uInt16 n = 0; n < GetTabLines().Count() &&
+    for( USHORT n = 0; n < GetTabLines().Count() &&
             lcl_MergeGCLine( *(GetTabLines().GetData() + n ), &aPara ); ++n )
         ;
 }

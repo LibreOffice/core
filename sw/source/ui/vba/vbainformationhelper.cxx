@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,6 @@
 #include <doc.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include <swtypes.hxx>
-#include <viewsh.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -60,13 +59,11 @@ double SwVbaInformationHelper::handleWdVerticalPositionRelativeToPage( const css
     sal_Int32 nCurrentPos = xTVCursor->getPosition().Y;
 
     sal_Int32 nCurrentPage = handleWdActiveEndPageNumber( xTVCursor );
-    SwDoc* pDoc = word::getDocShell( xModel )->GetDoc();
-    ViewShell* pViewSh = pDoc->GetCurrentViewShell();
-    sal_Int32 nPageHeight = pViewSh ? pViewSh->GetPageSize( nCurrentPage, sal_False ).Height() : 0;
+    sal_Int32 nPageHeight = word::getDocShell( xModel )->GetDoc()->GetPageSize( nCurrentPage, sal_False ).Height();
     // FIXME: handle multipul page style
     // it is very strange that the curros position is incorrect when open Word file.
     // e.g. if current cursor in the top left of the text body of the first page without header,
-    // the top value of current position should be 0, but is 201 when open a Word file.
+    // the top value of current position should be 0, but is 201 when open a Word file. 
     nCurrentPos = nCurrentPos + nTopMargin - ( DEFAULT_PAGE_DISTANCE + TWIP_TO_MM100( nPageHeight ) ) * (  nCurrentPage - 1  );
     return Millimeter::getInPoints( nCurrentPos );
 }

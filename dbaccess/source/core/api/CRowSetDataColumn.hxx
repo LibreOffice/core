@@ -41,17 +41,17 @@ namespace dbaccess
     class ORowSetDataColumn;
     typedef ::comphelper::OPropertyArrayUsageHelper<ORowSetDataColumn> ORowSetDataColumn_PROP;
 
-    class ORowSetDataColumn :   public ODataColumn,
+    class ORowSetDataColumn :	public ODataColumn,
                                 public OColumnSettings,
                                 public ORowSetDataColumn_PROP
     {
     protected:
-        ORowSetCacheIterator        m_aColumnValue;
-        ::com::sun::star::uno::Any  m_aOldValue;
+        ORowSetCacheIterator		m_aColumnValue;
+        ::com::sun::star::uno::Any	m_aOldValue;
 
         ::rtl::OUString             m_sLabel;
-        ::rtl::OUString             m_aDescription;     // description
-        ORowSetBase*                m_pRowSet;
+        ::rtl::OUString				m_aDescription;		// description
+        ORowSetBase*				m_pRowSet;
 
         virtual ~ORowSetDataColumn();
     public:

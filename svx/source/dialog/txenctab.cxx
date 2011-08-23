@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <svx/dialogs.hrc> // -> RID_SVXSTR_TEXTENCODING_TABLE
 #include <svx/dialmgr.hxx>
-#include "svx/txenctab.hxx"
+#include "txenctab.hxx"
 #include <tools/shl.hxx>
 
 //------------------------------------------------------------------------

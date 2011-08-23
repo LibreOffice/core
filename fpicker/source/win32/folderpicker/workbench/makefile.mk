@@ -32,7 +32,9 @@ TARGET=			testfops
 LIBTARGET=		NO
 TARGETTYPE=		CUI
 
+
 # --- Settings -----------------------------------------------------
+#.INCLUDE :		$(PRJ)$/util$/makefile.pmk
 
 .INCLUDE :  settings.mk
 
@@ -56,6 +58,5 @@ APP1STDLIBS+=	$(CPPULIB)			\
 APP1DEF=		$(MISC)$/$(APP1TARGET).def
 
 # --- Targets ------------------------------------------------------
-
 .INCLUDE :		target.mk
 

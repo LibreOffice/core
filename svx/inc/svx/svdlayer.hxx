@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@ class SVX_DLLPUBLIC SdrLayer
 friend class SdrLayerAdmin;
 protected:
     String     aName;
-    String      maTitle;
-    String      maDescription;
+    String		maTitle;
+    String		maDescription;
     SdrModel*  pModel; // zum Broadcasten
-    sal_uInt16     nType;  // 0=Userdefined,1=Standardlayer
+    UINT16     nType;  // 0=Userdefined,1=Standardlayer
     SdrLayerID nID;
 protected:
     SdrLayer(SdrLayerID nNewID, const String& rNewName)       { nID=nNewID; aName=rNewName; nType=0; pModel=NULL; }
@@ -106,33 +106,33 @@ public:
     void                 SetParent(SdrLayerAdmin* pNewParent)                        { pParent=pNewParent; }
     void                 SetModel(SdrModel* pNewModel);
     SdrModel*            GetModel() const                                            { return pModel; }
-    void                 InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos=0xFFFF)           { aLayer.Insert(pLayer,nPos); pLayer->SetModel(pModel); Broadcast(); }
-    SdrLayer*            RemoveLayer(sal_uInt16 nPos);
+    void                 InsertLayer(SdrLayer* pLayer, USHORT nPos=0xFFFF)           { aLayer.Insert(pLayer,nPos); pLayer->SetModel(pModel); Broadcast(); }
+    SdrLayer*            RemoveLayer(USHORT nPos);
     // Alle Layer loeschen
     void               ClearLayer();
     // Neuer Layer wird angelegt und eingefuegt
-    SdrLayer*          NewLayer(const String& rName, sal_uInt16 nPos=0xFFFF);
+    SdrLayer*          NewLayer(const String& rName, USHORT nPos=0xFFFF);
     void               DeleteLayer(SdrLayer* pLayer)                                 { aLayer.Remove(pLayer); delete pLayer; Broadcast(); }
-    void               MoveLayer(SdrLayer* pLayer, sal_uInt16 nNewPos=0xFFFF);
-    SdrLayer*          MoveLayer(sal_uInt16 nPos, sal_uInt16 nNewPos);
+    void               MoveLayer(SdrLayer* pLayer, USHORT nNewPos=0xFFFF);
+    SdrLayer*          MoveLayer(USHORT nPos, USHORT nNewPos);
     // Neuer Layer, Name wird aus der Resource geholt
-    SdrLayer*          NewStandardLayer(sal_uInt16 nPos=0xFFFF);
+    SdrLayer*          NewStandardLayer(USHORT nPos=0xFFFF);
 
     // Iterieren ueber alle Layer
-    sal_uInt16             GetLayerCount() const                                         { return sal_uInt16(aLayer.Count()); }
-    SdrLayer*          GetLayer(sal_uInt16 i)                                            { return (SdrLayer*)(aLayer.GetObject(i)); }
-    const SdrLayer*    GetLayer(sal_uInt16 i) const                                      { return (SdrLayer*)(aLayer.GetObject(i)); }
+    USHORT             GetLayerCount() const                                         { return USHORT(aLayer.Count()); }
+    SdrLayer*          GetLayer(USHORT i)                                            { return (SdrLayer*)(aLayer.GetObject(i)); }
+    const SdrLayer*    GetLayer(USHORT i) const                                      { return (SdrLayer*)(aLayer.GetObject(i)); }
 
-    sal_uInt16             GetLayerPos(SdrLayer* pLayer) const;
+    USHORT             GetLayerPos(SdrLayer* pLayer) const;
 
     SdrLayer*          GetLayer(const String& rName, bool bInherited)            { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayer(rName,bInherited)); }
     const SdrLayer*    GetLayer(const String& rName, bool bInherited) const;
           SdrLayerID   GetLayerID(const String& rName, bool bInherited) const;
-          SdrLayer*    GetLayerPerID(sal_uInt16 nID)                                     { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayerPerID(nID)); }
-    const SdrLayer*    GetLayerPerID(sal_uInt16 nID) const;
+          SdrLayer*    GetLayerPerID(USHORT nID)                                     { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayerPerID(nID)); }
+    const SdrLayer*    GetLayerPerID(USHORT nID) const;
 
-    void               SetControlLayerName(const String& rNewName) { aControlLayerName=rNewName; }
-    const String&      GetControlLayerName() const                 { return aControlLayerName; }
+    void     	       SetControlLayerName(const String& rNewName) { aControlLayerName=rNewName; }
+    const String& 	   GetControlLayerName() const                 { return aControlLayerName; }
 };
 
 /*
@@ -153,7 +153,7 @@ bInherited:
     TRUE: Wird der Layer/LayerSet nicht gefunden, so wird im Parent-LayerAdmin
           nachgesehen, ob es dort einen entsprechende Definition gibt.
     FALSE: Es wird nur dieser LayerAdmin durchsucht.
-    Jeder LayerAdmin einer Seite hat einen Parent-LayerAdmin, nï¿½mlich den des
+    Jeder LayerAdmin einer Seite hat einen Parent-LayerAdmin, nämlich den des
     Model. Das Model selbst hat keinen Parent.
 */
 

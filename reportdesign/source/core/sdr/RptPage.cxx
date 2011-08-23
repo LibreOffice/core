@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,11 +79,11 @@ SdrPage* OReportPage::Clone() const
 }
 
 //----------------------------------------------------------------------------
-sal_uLong OReportPage::getIndexOf(const uno::Reference< report::XReportComponent >& _xObject)
+ULONG OReportPage::getIndexOf(const uno::Reference< report::XReportComponent >& _xObject)
 {
     DBG_CHKTHIS( rpt_OReportPage,NULL);
-    sal_uLong nCount = GetObjCount();
-    sal_uLong i = 0;
+    ULONG nCount = GetObjCount();
+    ULONG i = 0;
     for (; i < nCount; ++i)
     {
         OObjectBase* pObj = dynamic_cast<OObjectBase*>(GetObj(i));
@@ -92,25 +92,25 @@ sal_uLong OReportPage::getIndexOf(const uno::Reference< report::XReportComponent
         {
             break;
         }
-    }
+    } // for (; i < nCount; ++i)
     return i;
 }
 //----------------------------------------------------------------------------
 void OReportPage::removeSdrObject(const uno::Reference< report::XReportComponent >& _xObject)
 {
     DBG_CHKTHIS( rpt_OReportPage,NULL);
-    sal_uLong nPos = getIndexOf(_xObject);
+    ULONG nPos = getIndexOf(_xObject);
     if ( nPos < GetObjCount() )
     {
         OObjectBase* pBase = dynamic_cast<OObjectBase*>(GetObj(nPos));
         OSL_ENSURE(pBase,"Why is this not a OObjectBase?");
         if ( pBase )
             pBase->EndListening();
-        RemoveObject(nPos);
+        /*delete */RemoveObject(nPos);
     }
 }
 // -----------------------------------------------------------------------------
-SdrObject* OReportPage::RemoveObject(sal_uLong nObjNum)
+SdrObject* OReportPage::RemoveObject(ULONG nObjNum)
 {
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
     if (getSpecialMode())
@@ -132,13 +132,28 @@ SdrObject* OReportPage::RemoveObject(sal_uLong nObjNum)
     return pObj;
 }
 //----------------------------------------------------------------------------
+//namespace
+//{
+//	::rtl::OUString lcl_getControlName(const uno::Reference< lang::XServiceInfo >& _xServiceInfo)
+//	{
+//		if ( _xServiceInfo->supportsService( SERVICE_FIXEDTEXT ))
+//			return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"));
+//        if ( _xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD ))
+//			return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FormattedField"));
+//		if ( _xServiceInfo->supportsService( SERVICE_IMAGECONTROL))
+//			return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.DatabaseImageControl"));
+//        
+//		return ::rtl::OUString();
+//	}
+//}
+//----------------------------------------------------------------------------
 void OReportPage::insertObject(const uno::Reference< report::XReportComponent >& _xObject)
 {
     DBG_CHKTHIS( rpt_OReportPage,NULL);
     OSL_ENSURE(_xObject.is(),"Object is not valid to create a SdrObject!");
-    if ( !_xObject.is() )
+    if ( !_xObject.is() ) // || !m_pView )
         return;
-    sal_uLong nPos = getIndexOf(_xObject);
+    ULONG nPos = getIndexOf(_xObject);
     if ( nPos < GetObjCount() )
         return; // Object already in list
 
@@ -163,7 +178,7 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
 {
     if (_pToRemoveObj)
     {
-        for (sal_uLong i=0;i<GetObjCount();i++)
+        for (ULONG i=0;i<GetObjCount();i++)
         {
             SdrObject *aObj = GetObj(i);
             if (aObj && aObj == _pToRemoveObj)
@@ -171,6 +186,7 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
                 SdrObject* pObject = RemoveObject(i);
                 (void)pObject;
                 break;
+                // delete pObject;
             }
         }
     }
@@ -181,18 +197,18 @@ void OReportPage::resetSpecialMode()
     const sal_Bool bChanged = rModel.IsChanged();
     ::std::vector<SdrObject*>::iterator aIter = m_aTemporaryObjectList.begin();
     ::std::vector<SdrObject*>::iterator aEnd = m_aTemporaryObjectList.end();
-
+     
     for (; aIter != aEnd; ++aIter)
     {
          removeTempObject(*aIter);
     }
     m_aTemporaryObjectList.clear();
     rModel.SetChanged(bChanged);
-
+    
     m_bSpecialInsertMode = false;
 }
 // -----------------------------------------------------------------------------
-void OReportPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertReason* pReason)
+void OReportPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason* pReason)
 {
     SdrPage::NbcInsertObject(pObj, nPos, pReason);
 
@@ -202,7 +218,7 @@ void OReportPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInse
         m_aTemporaryObjectList.push_back(pObj);
         return;
     }
-
+    
     if ( pUnoObj )
     {
         pUnoObj->CreateMediator();
@@ -215,6 +231,14 @@ void OReportPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInse
     reportdesign::OSection* pSection = reportdesign::OSection::getImplementation(m_xSection);
     uno::Reference< drawing::XShape> xShape(pObj->getUnoShape(),uno::UNO_QUERY);
     pSection->notifyElementAdded(xShape);
+
+    //// check if we are a shape
+    //uno::Reference<beans::XPropertySet> xProp(xShape,uno::UNO_QUERY);
+    //if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) )
+    //{
+    //    // use MimeConfigurationHelper::GetStringClassIDRepresentation(MimeConfigurationHelper::GetSequenceClassID(SO3_SCH_OLE_EMBED_CLASSID_8))
+    //    xProp->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID")),uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("12dcae26-281f-416f-a234-c3086127382e"))));
+    //}
 
     // now that the shape is inserted into its structures, we can allow the OObjectBase
     // to release the reference to it

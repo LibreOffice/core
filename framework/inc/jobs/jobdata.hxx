@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,8 +81,6 @@ class JobData : private ThreadHelpBase
         static const sal_Char* JOBCFG_PROP_ARGUMENTS;
         /// define the cfg key "Service" of a job relativ to JOBCFG_ROOT/<job alias>
         static const sal_Char* JOBCFG_PROP_SERVICE;
-        /// define the cfg key "Context" of a job relativ to JOBCFG_ROOT/<job alias>
-        static const sal_Char* JOBCFG_PROP_CONTEXT;
 
         /// specifies the root package and key to find event registrations
         static const sal_Char* EVENTCFG_ROOT;
@@ -108,7 +106,6 @@ class JobData : private ThreadHelpBase
         static const sal_Char* PROP_FRAME;
         static const sal_Char* PROP_MODEL;
         static const sal_Char* PROP_SERVICE;
-        static const sal_Char* PROP_CONTEXT;
 
     //___________________________________
     // structs
@@ -146,13 +143,13 @@ class JobData : private ThreadHelpBase
             /// this job is used by the global event broadcaster
             E_DOCUMENTEVENT
         };
-
+        
         /** Some jobs can be registered to "logical events", which are generated on demand if another document event
             occures. E.g. "onDocumentOpened" in case "OnNew" or "OnLoad" was notified to the JobExecutor instance.
             And normaly the original event is transported as parameter set to the executed job. But then such job
             cant differ between e.g. "OnNew" and "onDocumentOpened".
             That's why we must know, for which type of event the job was realy triggered .-)
-
+        
             The information "sDocEvent" from this struct must be set on the member JobData::m_sEvent from outside
             user of such Jobdata structure.
         */
@@ -160,7 +157,7 @@ class JobData : private ThreadHelpBase
         {
             ::rtl::OUString m_sJobName;
             ::rtl::OUString m_sDocEvent;
-
+            
             TJob2DocEventBinding(const ::rtl::OUString& sJobName ,
                                  const ::rtl::OUString& sDocEvent)
                 : m_sJobName (sJobName )
@@ -214,12 +211,6 @@ class JobData : private ThreadHelpBase
         ::rtl::OUString m_sService;
 
         /**
-            the module context list of this job.
-            It's readed from the configuration. Don't set it from outside!
-         */
-        ::rtl::OUString m_sContext;
-
-        /**
             a job can be registered for an event.
             It can be an empty value! But it will be set from outside any times.
             Because it's not clear which job this instance should represent if an event
@@ -265,7 +256,6 @@ class JobData : private ThreadHelpBase
         css::uno::Sequence< css::beans::NamedValue > getJobConfig            () const;
 
         sal_Bool                                     hasConfig               () const;
-        sal_Bool                                     hasCorrectContext       ( const ::rtl::OUString& rModuleIdent ) const;
 
         void                                         setEnvironment (       EEnvironment                                  eEnvironment );
         void                                         setAlias       ( const ::rtl::OUString&                              sAlias       );

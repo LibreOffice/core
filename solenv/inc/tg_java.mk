@@ -42,32 +42,34 @@ $(MISC)/java/com/sun/star/upd/$(VERSIONINFOFILE)_updversion.java .PHONY:
 
 .IF "$(JAVATARGET)"!=""
 .IF "$(PACKAGE)"!=""
-$(CLASSDIR)/$(PACKAGE)/%.class .NOINFER .IGNORE : %.java
-    $(COMMAND_ECHO)-$(RM) $(JAVATARGET)
+$(CLASSDIR)/$(IDLPACKAGE)/%.class .NOINFER .IGNORE : %.java
+#	echo $@
+    @@-$(RM) $(JAVATARGET)
 .ELSE			# "$(PACKAGE)"!=""
 $(CLASSDIR)/%.class .NOINFER .IGNORE : %.java
-    $(COMMAND_ECHO)-$(RM) $(JAVATARGET)
+#	echo $@
+    @@-$(RM) $(JAVATARGET)
 .ENDIF			# "$(PACKAGE)"!=""
 
 $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES) 
 .IF "$(JAVARESPONSE)"!=""
-    $(COMMAND_ECHO)$(JAVAC) @<<
+    $(JAVAC) @<<
     $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
     <<keep
 .ELSE			# "$(JAVARESPONSE)"!=""
 .IF "$(use_jdep)"!=""
-    $(COMMAND_ECHO)$(JAVAC) -depend $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
+    $(JAVAC) -depend $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
 .ELSE			# "$(use_jdep)"!=""
 .IF "$(javauno)"!=""
 .IF "$(JAVAFILES:d)"==""
-    $(COMMAND_ECHO)$(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
+    $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
 .ELSE			# "$(JAVAFILES:d)"==""
     @@$(TOUCH) $(INPATH)_$(VCSID)_a_dummy.java
-    $(COMMAND_ECHO)$(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) ./*.java $(uniq $(JAVAFILES:d:+"*.java"))
+    $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) ./*.java $(uniq $(JAVAFILES:d:+"*.java"))
     @@-$(RM) $(INPATH)_$(VCSID)_a_dummy.java
 .ENDIF			# "$(JAVAFILES:d)"==""
 .ELSE			# "$(javauno)"!=""
-    $(COMMAND_ECHO)$(JAVAC) $(JAVACPS) "$(CLASSPATH)" -d $(CLASSDIR) $(JAVAFLAGS) @$(mktmp $(strip $(JAVAFILES)))
+    $(JAVAC) $(JAVACPS) "$(CLASSPATH)" -d $(CLASSDIR) $(JAVAFLAGS) @$(mktmp $(strip $(JAVAFILES)))
 .ENDIF			# "$(javauno)"!=""
 .ENDIF			# "$(use_jdep)"!=""
 .ENDIF			# "$(JAVARESPONSE)"!=""
@@ -76,6 +78,7 @@ $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES)
     @@-find $(CLASSDIR) -type d -user $(USER) \! -perm -5 -print | xargs chmod a+r $$1
 .ENDIF
 .ENDIF
-    @$(TOUCH) $@
+    @echo > $@
 
 .ENDIF			# "$(JAVATARGET)"!=""
+

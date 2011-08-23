@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
-#include <sfx2/objface.hxx>
+
 #include <vcl/msgbox.hxx>
 #include <vcl/vclenum.hxx>
 
@@ -87,7 +87,7 @@ using ::std::auto_ptr;
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 #define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
+    (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
 #define GET_STRING(nid) ((const SfxStringItem&)pReqArgs->Get(nid)).GetValue()
 #define GET_UINT16(nid) ((const SfxUInt16Item&)pReqArgs->Get(nid)).GetValue()
 #define GET_BOOL(nid)   ((const SfxBoolItem&)pReqArgs->Get(nid)).GetValue()
@@ -97,9 +97,9 @@ using ::std::auto_ptr;
 
 /** Try to parse the given range using Calc-style syntax first, then
     Excel-style if that fails. */
-sal_uInt16 lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
+USHORT lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument* pDoc, USHORT /* nSlot */)
 {
-    sal_uInt16 nResult = rScRange.Parse(aAddress, pDoc);
+    USHORT nResult = rScRange.Parse(aAddress, pDoc);
     if ( (nResult & SCA_VALID) )
         return nResult;
 
@@ -108,9 +108,9 @@ sal_uInt16 lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument*
 
 /** Try to parse the given address using Calc-style syntax first, then
     Excel-style if that fails. */
-sal_uInt16 lcl_ParseAddress(ScAddress& rScAddress, const String& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
+USHORT lcl_ParseAddress(ScAddress& rScAddress, const String& aAddress, ScDocument* pDoc, USHORT /* nSlot */)
 {
-    sal_uInt16 nResult = rScAddress.Parse(aAddress, pDoc);
+    USHORT nResult = rScAddress.Parse(aAddress, pDoc);
     if ( (nResult & SCA_VALID) )
         return nResult;
 
@@ -119,14 +119,14 @@ sal_uInt16 lcl_ParseAddress(ScAddress& rScAddress, const String& aAddress, ScDoc
 
 void ScTabViewShell::Execute( SfxRequest& rReq )
 {
-    SfxViewFrame*       pThisFrame  = GetViewFrame();
-    SfxBindings&        rBindings   = pThisFrame->GetBindings();
-    ScModule*           pScMod      = SC_MOD();
-    const SfxItemSet*   pReqArgs    = rReq.GetArgs();
-    sal_uInt16              nSlot       = rReq.GetSlot();
+    SfxViewFrame*		pThisFrame  = GetViewFrame();
+    SfxBindings&		rBindings	= pThisFrame->GetBindings();
+    ScModule*			pScMod		= SC_MOD();
+    const SfxItemSet*	pReqArgs	= rReq.GetArgs();
+    USHORT				nSlot		= rReq.GetSlot();
 
-    if (nSlot != SID_CURRENTCELL)       // der kommt beim MouseButtonUp
-        HideListBox();                  // Autofilter-DropDown-Listbox
+    if (nSlot != SID_CURRENTCELL)		// der kommt beim MouseButtonUp
+        HideListBox();					// Autofilter-DropDown-Listbox
 
     switch ( nSlot )
     {
@@ -134,22 +134,22 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
-                     pReqArgs->GetItemState(FID_INSERT_FILE,sal_True,&pItem) == SFX_ITEM_SET )
+                     pReqArgs->GetItemState(FID_INSERT_FILE,TRUE,&pItem) == SFX_ITEM_SET )
                 {
                     String aFileName = ((const SfxStringItem*)pItem)->GetValue();
 
                         // Einfuege-Position
 
                     Point aInsertPos;
-                    if ( pReqArgs->GetItemState(FN_PARAM_1,sal_True,&pItem) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState(FN_PARAM_1,TRUE,&pItem) == SFX_ITEM_SET )
                         aInsertPos = ((const SfxPointItem*)pItem)->GetValue();
                     else
                         aInsertPos = GetInsertPos();
 
-                        //  als Link?
+                        //	als Link?
 
-                    sal_Bool bAsLink = false;
-                    if ( pReqArgs->GetItemState(FN_PARAM_2,sal_True,&pItem) == SFX_ITEM_SET )
+                    BOOL bAsLink = FALSE;
+                    if ( pReqArgs->GetItemState(FN_PARAM_2,TRUE,&pItem) == SFX_ITEM_SET )
                         bAsLink = ((const SfxBoolItem*)pItem)->GetValue();
 
                         // ausfuehren
@@ -161,32 +161,32 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_OPENDLG_EDIT_PRINTAREA:
             {
-                sal_uInt16          nId  = ScPrintAreasDlgWrapper::GetChildWindowId();
+                USHORT			nId  = ScPrintAreasDlgWrapper::GetChildWindowId();
                 SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+                pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
             }
             break;
 
         case SID_CHANGE_PRINTAREA:
             {
-                if ( pReqArgs )         // OK aus Dialog
+                if ( pReqArgs )			// OK aus Dialog
                 {
                     String aPrintStr;
                     String aRowStr;
                     String aColStr;
-                    sal_Bool bEntire = false;
+                    BOOL bEntire = FALSE;
                     const SfxPoolItem* pItem;
-                    if ( pReqArgs->GetItemState( SID_CHANGE_PRINTAREA, sal_True, &pItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState( SID_CHANGE_PRINTAREA, TRUE, &pItem ) == SFX_ITEM_SET )
                         aPrintStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    if ( pReqArgs->GetItemState( FN_PARAM_2, sal_True, &pItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState( FN_PARAM_2, TRUE, &pItem ) == SFX_ITEM_SET )
                         aRowStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    if ( pReqArgs->GetItemState( FN_PARAM_3, sal_True, &pItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState( FN_PARAM_3, TRUE, &pItem ) == SFX_ITEM_SET )
                         aColStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    if ( pReqArgs->GetItemState( FN_PARAM_4, sal_True, &pItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState( FN_PARAM_4, TRUE, &pItem ) == SFX_ITEM_SET )
                         bEntire = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
-                    SetPrintRanges( bEntire, &aPrintStr, &aColStr, &aRowStr, false );
+                    SetPrintRanges( bEntire, &aPrintStr, &aColStr, &aRowStr, FALSE );
 
                     rReq.Done();
                 }
@@ -194,20 +194,20 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         case SID_ADD_PRINTAREA:
-        case SID_DEFINE_PRINTAREA:      // Menue oder Basic
+        case SID_DEFINE_PRINTAREA:		// Menue oder Basic
             {
-                sal_Bool bAdd = ( nSlot == SID_ADD_PRINTAREA );
+                BOOL bAdd = ( nSlot == SID_ADD_PRINTAREA );
                 if ( pReqArgs )
                 {
                     String aPrintStr;
                     const SfxPoolItem* pItem;
-                    if ( pReqArgs->GetItemState( SID_DEFINE_PRINTAREA, sal_True, &pItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState( SID_DEFINE_PRINTAREA, TRUE, &pItem ) == SFX_ITEM_SET )
                         aPrintStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    SetPrintRanges( false, &aPrintStr, NULL, NULL, bAdd );
+                    SetPrintRanges( FALSE, &aPrintStr, NULL, NULL, bAdd );
                 }
                 else
                 {
-                    SetPrintRanges( false, NULL, NULL, NULL, bAdd );      // aus Selektion
+                    SetPrintRanges( FALSE, NULL, NULL, NULL, bAdd );      // aus Selektion
                     rReq.Done();
                 }
             }
@@ -216,7 +216,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_DELETE_PRINTAREA:
             {
                 String aEmpty;
-                SetPrintRanges( false, &aEmpty, NULL, NULL, false );        // Druckbereich loeschen
+                SetPrintRanges( FALSE, &aEmpty, NULL, NULL, FALSE );        // Druckbereich loeschen
                 rReq.Done();
             }
             break;
@@ -232,7 +232,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         case FID_RESET_PRINTZOOM:
-            SetPrintZoom( 100, 0 );     // 100%, nicht auf Seiten
+            SetPrintZoom( 100, 0 );		// 100%, nicht auf Seiten
             rReq.Done();
             break;
 
@@ -249,18 +249,18 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 String aAddress;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( nSlot, TRUE, &pItem ) == SFX_ITEM_SET )
                     aAddress = ((const SfxStringItem*)pItem)->GetValue();
                 else if ( nSlot == SID_JUMPTOMARK && pReqArgs->GetItemState(
-                                            SID_JUMPTOMARK, sal_True, &pItem ) == SFX_ITEM_SET )
+                                            SID_JUMPTOMARK, TRUE, &pItem ) == SFX_ITEM_SET )
                     aAddress = ((const SfxStringItem*)pItem)->GetValue();
 
-                //  #i14927# SID_CURRENTCELL with a single cell must unmark if FN_PARAM_1
-                //  isn't set (for recorded macros, because IsAPI is no longer available).
-                //  ScGridWindow::MouseButtonUp no longer executes the slot for a single
-                //  cell if there is a multi selection.
-                sal_Bool bUnmark = ( nSlot == SID_CURRENTCELL );
-                if ( pReqArgs->GetItemState( FN_PARAM_1, sal_True, &pItem ) == SFX_ITEM_SET )
+                //	#i14927# SID_CURRENTCELL with a single cell must unmark if FN_PARAM_1
+                //	isn't set (for recorded macros, because IsAPI is no longer available).
+                //	ScGridWindow::MouseButtonUp no longer executes the slot for a single
+                //	cell if there is a multi selection.
+                BOOL bUnmark = ( nSlot == SID_CURRENTCELL );
+                if ( pReqArgs->GetItemState( FN_PARAM_1, TRUE, &pItem ) == SFX_ITEM_SET )
                     bUnmark = ((const SfxBoolItem*)pItem)->GetValue();
 
                 bool bAlignToCursor = true;
@@ -269,21 +269,21 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 if ( nSlot == SID_JUMPTOMARK )
                 {
-                    //  URL has to be decoded for escaped characters (%20)
+                    //	#106586# URL has to be decoded for escaped characters (%20)
                     aAddress = INetURLObject::decode( aAddress, INET_HEX_ESCAPE,
                                                INetURLObject::DECODE_WITH_CHARSET,
                                             RTL_TEXTENCODING_UTF8 );
                 }
 
-                sal_Bool bFound = false;
+                BOOL bFound = FALSE;
                 ScViewData* pViewData = GetViewData();
-                ScDocument* pDoc      = pViewData->GetDocument();
-                ScMarkData& rMark     = pViewData->GetMarkData();
-                ScRange     aScRange;
-                ScAddress   aScAddress;
-                sal_uInt16      nResult = lcl_ParseRange(aScRange, aAddress, pDoc, nSlot);
-                SCTAB       nTab = pViewData->GetTabNo();
-                sal_Bool        bMark = sal_True;
+                ScDocument* pDoc	  = pViewData->GetDocument();
+                ScMarkData& rMark	  = pViewData->GetMarkData();
+                ScRange		aScRange;
+                ScAddress	aScAddress;
+                USHORT      nResult = lcl_ParseRange(aScRange, aAddress, pDoc, nSlot);
+                SCTAB		nTab = pViewData->GetTabNo();
+                BOOL		bMark = TRUE;
 
                 // Is this a range ?
                 if( nResult & SCA_VALID )
@@ -312,14 +312,14 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                     aScRange = ScRange( aScAddress, aScAddress );
                     // Zellen sollen nicht markiert werden
-                    bMark = false;
+                    bMark = FALSE;
                 }
                 // Ist es benahmster Bereich (erst Namen dann DBBereiche) ?
                 else
                 {
-                    ScRangeUtil     aRangeUtil;
+                    ScRangeUtil		aRangeUtil;
                     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-                    if( aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_NAMES, eConv ) ||
+                    if(	aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_NAMES, eConv ) ||
                         aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_DBASE, eConv ) )
                     {
                         nResult |= SCA_VALID;
@@ -334,13 +334,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     sal_Int32 nNumeric = aAddress.ToInt32();
                     if ( nNumeric > 0 && nNumeric <= MAXROW+1 )
                     {
-                        //  1-basierte Zeilennummer
+                        //	1-basierte Zeilennummer
 
                         aScAddress.SetRow( (SCROW)(nNumeric - 1) );
                         aScAddress.SetCol( pViewData->GetCurX() );
                         aScAddress.SetTab( nTab );
                         aScRange = ScRange( aScAddress, aScAddress );
-                        bMark    = false;
+                        bMark	 = FALSE;
                         nResult  = SCA_VALID;
                     }
                 }
@@ -351,15 +351,15 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 // wir haben was gefunden
                 if( nResult & SCA_VALID )
                 {
-                    bFound = sal_True;
+                    bFound = TRUE;
                     SCCOL nCol = aScRange.aStart.Col();
                     SCROW nRow = aScRange.aStart.Row();
-                    sal_Bool bNothing = ( pViewData->GetCurX()==nCol && pViewData->GetCurY()==nRow );
+                    BOOL bNothing = ( pViewData->GetCurX()==nCol && pViewData->GetCurY()==nRow );
 
                     // markieren
                     if( bMark )
                     {
-                        if (rMark.IsMarked())           // ist derselbe Bereich schon markiert?
+                        if (rMark.IsMarked())			// ist derselbe Bereich schon markiert?
                         {
                             ScRange aOldMark;
                             rMark.GetMarkArea( aOldMark );
@@ -369,18 +369,18 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                             bNothing = ( aCurrent == aOldMark );
                         }
                         else
-                            bNothing = false;
+                            bNothing = FALSE;
 
                         if (!bNothing)
-                            MarkRange( aScRange, false );   // Cursor kommt hinterher...
+                            MarkRange( aScRange, FALSE );	// Cursor kommt hinterher...
                     }
                     else
                     {
-                        //  remove old selection, unless bUnmark argument is sal_False (from navigator)
+                        //	remove old selection, unless bUnmark argument is FALSE (from navigator)
                         if( bUnmark )
                         {
                             MoveCursorAbs( nCol, nRow,
-                                SC_FOLLOW_NONE, false, false );
+                                SC_FOLLOW_NONE, FALSE, FALSE );
                         }
                     }
 
@@ -389,14 +389,14 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     // zusammengefasste Zellen beruecksichtigen:
                     pDoc->SkipOverlapped(nCol, nRow, nTab);
 
-                    //  Navigator-Aufrufe sind nicht API!!!
+                    //	Navigator-Aufrufe sind nicht API!!!
 
                     if( bNothing )
                     {
                         if (rReq.IsAPI())
-                            rReq.Ignore();      // wenn Makro, dann gar nix
+                            rReq.Ignore();		// wenn Makro, dann gar nix
                         else
-                            rReq.Done();        // sonst wenigstens aufzeichnen
+                            rReq.Done();		// sonst wenigstens aufzeichnen
                     }
                     else
                     {
@@ -419,14 +419,14 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     rReq.SetReturnValue( SfxStringItem( SID_CURRENTCELL, aAddress ) );
                 }
 
-                if (!bFound)    // kein gueltiger Bereich
+                if (!bFound)	// kein gueltiger Bereich
                 {
-                    //  wenn es ein Tabellenname ist, umschalten (fuer Navigator/URL's)
+                    //	wenn es ein Tabellenname ist, umschalten (fuer Navigator/URL's)
 
                     SCTAB nNameTab;
                     if ( pDoc->GetTable( aAddress, nNameTab ) )
                     {
-                        bFound = sal_True;
+                        bFound = TRUE;
                         if ( nNameTab != nTab )
                             SetTabNo( nNameTab );
                     }
@@ -434,7 +434,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 if ( !bFound && nSlot == SID_JUMPTOMARK )
                 {
-                    //  Grafik-Objekte probieren (nur bei URL's)
+                    //	Grafik-Objekte probieren (nur bei URL's)
 
                     bFound = SelectObject( aAddress );
                 }
@@ -455,7 +455,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_CURRENTTAB:
             if ( pReqArgs )
             {
-                //  Tabelle fuer Basic ist 1-basiert
+                //	Tabelle fuer Basic ist 1-basiert
                 SCTAB nTab = ((const SfxUInt16Item&)pReqArgs->Get(nSlot)).GetValue() - 1;
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 if ( nTab < pDoc->GetTableCount() )
@@ -466,7 +466,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if( ! rReq.IsAPI() )
                         rReq.Done();
                 }
-                //! sonst Fehler ?
+                //!	sonst Fehler ?
             }
             break;
 
@@ -476,9 +476,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 String aStrDocName( ((const SfxStringItem&)pReqArgs->
                                         Get(nSlot)).GetValue() );
 
-                SfxViewFrame*   pViewFrame = NULL;
-                ScDocShell*     pDocSh = (ScDocShell*)SfxObjectShell::GetFirst();
-                sal_Bool            bFound = false;
+                SfxViewFrame*	pViewFrame = NULL;
+                ScDocShell* 	pDocSh = (ScDocShell*)SfxObjectShell::GetFirst();
+                BOOL			bFound = FALSE;
 
                 // zu aktivierenden ViewFrame suchen
 
@@ -507,16 +507,16 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 if ( !pThisFrame->GetFrame().IsInPlace() )          // nicht bei OLE
                 {
-                    //  print preview is now always in the same frame as the tab view
-                    //  -> always switch this frame back to normal view
-                    //  (ScPreviewShell ctor reads view data)
+                    //	print preview is now always in the same frame as the tab view
+                    //	-> always switch this frame back to normal view
+                    //	(ScPreviewShell ctor reads view data)
 
                     // #102785#; finish input
                     pScMod->InputEnterHandler();
 
                     pThisFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SFX_CALLMODE_ASYNCHRON );
                 }
-                //  else Fehler (z.B. Ole)
+                //	else Fehler (z.B. Ole)
             }
             break;
 
@@ -525,11 +525,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
 
-        //  SID_TABLE_ACTIVATE und SID_MARKAREA werden von Basic aus an der versteckten
-        //  View aufgerufen, um auf der sichtbaren View zu markieren/umzuschalten:
+        //	SID_TABLE_ACTIVATE und SID_MARKAREA werden von Basic aus an der versteckten
+        //	View aufgerufen, um auf der sichtbaren View zu markieren/umzuschalten:
 
         case SID_TABLE_ACTIVATE:
-            OSL_FAIL("old slot SID_TABLE_ACTIVATE");
+            DBG_ERROR("old slot SID_TABLE_ACTIVATE");
             break;
 
         case SID_REPAINT:
@@ -543,13 +543,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_NORMALVIEWMODE:
         case FID_PAGEBREAKMODE:
             {
-                sal_Bool bWantPageBreak = nSlot == FID_PAGEBREAKMODE;
+                BOOL bWantPageBreak = nSlot == FID_PAGEBREAKMODE;
 
                 // check whether there is an explicit argument, use it
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET )
                 {
-                    sal_Bool bItemValue = ((const SfxBoolItem*)pItem)->GetValue();
+                    BOOL bItemValue = ((const SfxBoolItem*)pItem)->GetValue();
                     bWantPageBreak = (nSlot == FID_PAGEBREAKMODE) == bItemValue;
                 }
 
@@ -557,12 +557,12 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     SetPagebreakMode( bWantPageBreak );
                     UpdatePageBreakData();
-                    SetCurSubShell( GetCurObjectSelectionType(), sal_True );
+                    SetCurSubShell( GetCurObjectSelectionType(), TRUE );
                     PaintGrid();
                     PaintTop();
                     PaintLeft();
                     rBindings.Invalidate( nSlot );
-                    rReq.AppendItem( SfxBoolItem( nSlot, sal_True ) );
+                    rReq.AppendItem( SfxBoolItem( nSlot, TRUE ) );
                     rReq.Done();
                 }
             }
@@ -570,7 +570,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case FID_FUNCTION_BOX:
             {
-                sal_uInt16 nChildId = ScFunctionChildWindow::GetChildWindowId();
+                USHORT nChildId = ScFunctionChildWindow::GetChildWindowId();
                 if ( rReq.GetArgs() )
                     pThisFrame->SetChildWindow( nChildId, ((const SfxBoolItem&) (rReq.GetArgs()->Get(FID_FUNCTION_BOX))).GetValue());
                 else
@@ -587,9 +587,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case FID_TOGGLESYNTAX:
             {
-                sal_Bool bSet = !GetViewData()->IsSyntaxMode();
+                BOOL bSet = !GetViewData()->IsSyntaxMode();
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
                 GetViewData()->SetSyntaxMode( bSet );
                 PaintGrid();
@@ -600,9 +600,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
         case FID_TOGGLEHEADERS:
             {
-                sal_Bool bSet = !GetViewData()->IsHeaderMode();
+                BOOL bSet = !GetViewData()->IsHeaderMode();
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
                 GetViewData()->SetHeaderMode( bSet );
                 RepeatResize();
@@ -616,9 +616,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 ScViewData* pViewData = GetViewData();
                 const ScViewOptions& rOpts = pViewData->GetOptions();
-                sal_Bool bFormulaMode = !rOpts.GetOption( VOPT_FORMULAS );
+                BOOL bFormulaMode = !rOpts.GetOption( VOPT_FORMULAS );
                 const SfxPoolItem *pItem;
-                if( pReqArgs && pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET )
+                if( pReqArgs && pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET )
                     bFormulaMode = ((const SfxBoolItem *)pItem)->GetValue();
 
                 ScViewOptions rSetOpts = ScViewOptions( rOpts );
@@ -635,11 +635,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case FID_TOGGLEINPUTLINE:
             {
-                sal_uInt16          nId  = ScInputWindowWrapper::GetChildWindowId();
+                USHORT			nId  = ScInputWindowWrapper::GetChildWindowId();
                 SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
-                sal_Bool bSet = ( pWnd == NULL );
+                BOOL bSet = ( pWnd == NULL );
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
 
                 pThisFrame->SetChildWindow( nId, bSet );
@@ -652,14 +652,14 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_ATTR_ZOOM: // Statuszeile
         case FID_SCALE:
             {
-                sal_Bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
-                SvxZoomType eOldZoomType = GetZoomType();
-                SvxZoomType eNewZoomType = eOldZoomType;
-                const Fraction& rOldY = GetViewData()->GetZoomY();  // Y wird angezeigt
-                sal_uInt16 nOldZoom = (sal_uInt16)(( rOldY.GetNumerator() * 100 )
+                BOOL bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+                SvxZoomType	eOldZoomType = GetZoomType();
+                SvxZoomType	eNewZoomType = eOldZoomType;
+                const Fraction& rOldY = GetViewData()->GetZoomY();	// Y wird angezeigt
+                USHORT nOldZoom = (USHORT)(( rOldY.GetNumerator() * 100 )
                                             / rOldY.GetDenominator());
-                sal_uInt16 nZoom = nOldZoom;
-                sal_Bool bCancel = false;
+                USHORT nZoom = nOldZoom;
+                BOOL bCancel = FALSE;
 
                 if ( pReqArgs )
                 {
@@ -667,15 +667,15 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                                                    pReqArgs->Get(SID_ATTR_ZOOM);
 
                     eNewZoomType = rZoomItem.GetType();
-                    nZoom     = rZoomItem.GetValue();
+                    nZoom	  = rZoomItem.GetValue();
                 }
                 else
                 {
-                    SfxItemSet      aSet     ( GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
-                    SvxZoomItem     aZoomItem( eOldZoomType, nOldZoom, SID_ATTR_ZOOM );
+                    SfxItemSet		aSet	 ( GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
+                    SvxZoomItem		aZoomItem( eOldZoomType, nOldZoom, SID_ATTR_ZOOM );
                     AbstractSvxZoomDialog* pDlg = NULL;
-                    ScMarkData&     rMark = GetViewData()->GetMarkData();
-                    sal_uInt16          nBtnFlags =   SVX_ZOOM_ENABLE_50
+                    ScMarkData&		rMark = GetViewData()->GetMarkData();
+                    USHORT			nBtnFlags =   SVX_ZOOM_ENABLE_50
                                                 | SVX_ZOOM_ENABLE_75
                                                 | SVX_ZOOM_ENABLE_100
                                                 | SVX_ZOOM_ENABLE_150
@@ -694,22 +694,18 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         pDlg = pFact->CreateSvxZoomDialog(GetDialogParent(), aSet );
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     }
-                    if (pDlg)
-                    {
-                       pDlg->SetLimits( MINZOOM, MAXZOOM );
+                    pDlg->SetLimits( MINZOOM, MAXZOOM );
 
-                       bCancel = ( RET_CANCEL == pDlg->Execute() );
-                    }
-                    // bCancel is True only if we were in the previous if block,
-                    // so no need to check again pDlg
+                    bCancel = ( RET_CANCEL == pDlg->Execute() );
+
                     if ( !bCancel )
                     {
-                        const SvxZoomItem&  rZoomItem = (const SvxZoomItem&)
+                        const SvxZoomItem&	rZoomItem = (const SvxZoomItem&)
                                                 pDlg->GetOutputItemSet()->
                                                     Get( SID_ATTR_ZOOM );
 
                         eNewZoomType = rZoomItem.GetType();
-                        nZoom     = rZoomItem.GetValue();
+                        nZoom	  = rZoomItem.GetValue();
                     }
 
                     delete pDlg;
@@ -719,8 +715,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     if ( eNewZoomType == SVX_ZOOM_PERCENT )
                     {
-                        if ( nZoom < MINZOOM )  nZoom = MINZOOM;
-                        if ( nZoom > MAXZOOM )  nZoom = MAXZOOM;
+                        if ( nZoom < MINZOOM )	nZoom = MINZOOM;
+                        if ( nZoom > MAXZOOM )	nZoom = MAXZOOM;
                     }
                     else
                     {
@@ -764,10 +760,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_ATTR_ZOOMSLIDER:
             {
                 const SfxPoolItem* pItem = NULL;
-                sal_Bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
-                if ( pReqArgs && pReqArgs->GetItemState(SID_ATTR_ZOOMSLIDER, sal_True, &pItem) == SFX_ITEM_SET )
+                BOOL bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+                if ( pReqArgs && pReqArgs->GetItemState(SID_ATTR_ZOOMSLIDER, TRUE, &pItem) == SFX_ITEM_SET )
                 {
-                    const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                    const USHORT nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
                     if( nCurrentZoom )
                     {
                         SetZoomType( SVX_ZOOM_PERCENT, bSyncZoom );
@@ -811,7 +807,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             SCTAB nTab;
 
             SvULongs aIndexList( 4, 4 );
-            SFX_REQUEST_ARG( rReq, pItem, SfxIntegerListItem, SID_SELECT_TABLES, false );
+            SFX_REQUEST_ARG( rReq, pItem, SfxIntegerListItem, SID_SELECT_TABLES, sal_False );
             if ( pItem )
                 pItem->GetList( aIndexList );
             else
@@ -824,7 +820,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 pDlg->SetDescription(
                     String( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
                     String( ScResId( STR_DLG_SELECTTABLES_LBNAME ) ),
-                    GetStaticInterface()->GetSlot(SID_SELECT_TABLES)->GetCommand(), HID_SELECTTABLES );
+                    SID_SELECT_TABLES, HID_SELECTTABLES );
 
                 // fill all table names with selection state
                 String aTabName;
@@ -854,7 +850,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 SCTAB nFirstVisTab = 0;
 
                 // special case: only hidden tables selected -> do nothing
-                sal_Bool bVisSelected = false;
+                sal_Bool bVisSelected = sal_False;
                 for( nSelIx = 0; !bVisSelected && (nSelIx < nSelCount); ++nSelIx )
                     bVisSelected = rDoc.IsVisible( nFirstVisTab = static_cast<SCTAB>(aIndexList[nSelIx]) );
                 if( !bVisSelected )
@@ -864,7 +860,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if( nSelCount )
                 {
                     for( nTab = 0; nTab < nTabCount; ++nTab )
-                        rMark.SelectTable( nTab, false );
+                        rMark.SelectTable( nTab, sal_False );
 
                     for( nSelIx = 0; nSelIx < nSelCount; ++nSelIx )
                         rMark.SelectTable( static_cast<SCTAB>(aIndexList[nSelIx]), sal_True );
@@ -903,11 +899,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 ScSplitMode eHSplit = GetViewData()->GetHSplitMode();
                 ScSplitMode eVSplit = GetViewData()->GetVSplitMode();
-                if ( eHSplit == SC_SPLIT_NORMAL || eVSplit == SC_SPLIT_NORMAL )     // aufheben
+                if ( eHSplit == SC_SPLIT_NORMAL || eVSplit == SC_SPLIT_NORMAL )		// aufheben
                     RemoveSplit();
-                else if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )      // normal
-                    FreezeSplitters( false );
-                else                                                                // erzeugen
+                else if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )		// normal
+                    FreezeSplitters( FALSE );
+                else																// erzeugen
                     SplitAtCursor();
                 rReq.Done();
 
@@ -919,24 +915,24 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 ScSplitMode eHSplit = GetViewData()->GetHSplitMode();
                 ScSplitMode eVSplit = GetViewData()->GetVSplitMode();
-                if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )           // aufheben
+                if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )			// aufheben
                     RemoveSplit();
                 else
-                    FreezeSplitters( sal_True );        // erzeugen oder fixieren
+                    FreezeSplitters( TRUE );		// erzeugen oder fixieren
                 rReq.Done();
 
                 InvalidateSplit();
             }
             break;
 
-        //  ----------------------------------------------------------------
+        //	----------------------------------------------------------------
 
         case FID_CHG_SHOW:
             {
-                sal_uInt16          nId  = ScHighlightChgDlgWrapper::GetChildWindowId();
+                USHORT			nId  = ScHighlightChgDlgWrapper::GetChildWindowId();
                 SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+                pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
             }
             break;
 
@@ -947,10 +943,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 rReq.Done ();
 
                 /*
-                sal_uInt16          nId  = ScAcceptChgDlgWrapper::GetChildWindowId();
+                USHORT			nId  = ScAcceptChgDlgWrapper::GetChildWindowId();
                 SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? sal_False : sal_True );
+                pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
                 */
             }
             break;
@@ -961,12 +957,12 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScAddress aCursorPos( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
                 ScDocShell* pDocSh = pData->GetDocShell();
 
-                ScChangeAction* pAction = pDocSh->GetChangeAction( aCursorPos );
+                ScChangeAction*	pAction = pDocSh->GetChangeAction( aCursorPos );
                 if ( pAction )
                 {
                     const SfxPoolItem* pItem;
                     if ( pReqArgs &&
-                         pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET &&
+                         pReqArgs->GetItemState( nSlot, TRUE, &pItem ) == SFX_ITEM_SET &&
                          pItem->ISA( SfxStringItem ) )
                     {
                         String aComment = ((const SfxStringItem*)pItem)->GetValue();
@@ -983,19 +979,19 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         case SID_CREATE_SW_DRAWVIEW:
-            //  wird von den Forms gerufen, wenn die DrawView mit allem Zubehoer
-            //  angelegt werden muss
+            //	wird von den Forms gerufen, wenn die DrawView mit allem Zubehoer
+            //	angelegt werden muss
             if (!GetScDrawView())
             {
                 GetViewData()->GetDocShell()->MakeDrawLayer();
-                rBindings.InvalidateAll(false);
+                rBindings.InvalidateAll(FALSE);
             }
             break;
 
         case FID_PROTECT_DOC:
             {
-                ScDocument*         pDoc = GetViewData()->GetDocument();
-                SfxPasswordDialog*  pDlg;
+                ScDocument* 		pDoc = GetViewData()->GetDocument();
+                SfxPasswordDialog*	pDlg;
 
                 if( pReqArgs )
                 {
@@ -1011,29 +1007,29 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScDocProtection* pProtect = pDoc->GetDocProtection();
                 if (pProtect && pProtect->isProtected())
                 {
-                    sal_Bool    bCancel = false;
-                    String  aPassword;
+                    BOOL	bCancel = FALSE;
+                    String	aPassword;
 
                     if (pProtect->isProtectedWithPass())
                     {
-                        String  aText( ScResId(SCSTR_PASSWORD) );
+                        String	aText( ScResId(SCSTR_PASSWORD) );
 
-                        pDlg = new SfxPasswordDialog(   GetDialogParent(), &aText );
+                        pDlg = new SfxPasswordDialog( 	GetDialogParent(), &aText );
                         pDlg->SetText( ScResId(SCSTR_UNPROTECTDOC) );
                         pDlg->SetMinLen( 0 );
-                        pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand() );
+                        pDlg->SetHelpId( FID_PROTECT_DOC );
                         pDlg->SetEditHelpId( HID_PASSWD_DOC );
 
                         if (pDlg->Execute() == RET_OK)
                             aPassword = pDlg->GetPassword();
                         else
-                            bCancel = sal_True;
+                            bCancel = TRUE;
                         delete pDlg;
                     }
                     if (!bCancel)
                     {
                         Unprotect( TABLEID_DOC, aPassword );
-                        rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, false ) );
+                        rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, FALSE ) );
                         rReq.Done();
                     }
                 }
@@ -1041,10 +1037,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     String aText( ScResId(SCSTR_PASSWORDOPT) );
 
-                    pDlg = new SfxPasswordDialog(   GetDialogParent(), &aText );
+                    pDlg = new SfxPasswordDialog( 	GetDialogParent(), &aText );
                     pDlg->SetText( ScResId(SCSTR_PROTECTDOC) );
                     pDlg->SetMinLen( 0 );
-                    pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand() );
+                    pDlg->SetHelpId( FID_PROTECT_DOC );
                     pDlg->SetEditHelpId( HID_PASSWD_DOC );
                     pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
 
@@ -1052,7 +1048,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         String aPassword = pDlg->GetPassword();
                         Protect( TABLEID_DOC, aPassword );
-                        rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, sal_True ) );
+                        rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, TRUE ) );
                         rReq.Done();
                     }
 
@@ -1066,8 +1062,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_PROTECT_TABLE:
         {
             ScDocument* pDoc = GetViewData()->GetDocument();
-            SCTAB       nTab = GetViewData()->GetTabNo();
+            SCTAB		nTab = GetViewData()->GetTabNo();
             bool        bOldProtection = pDoc->IsTabProtected(nTab);
+
+#if ENABLE_SHEET_PROTECTION
 
             if( pReqArgs )
             {
@@ -1093,7 +1091,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     auto_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
                     pDlg->SetText( ScResId(SCSTR_UNPROTECTTAB) );
                     pDlg->SetMinLen( 0 );
-                    pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_TABLE)->GetCommand() );
+                    pDlg->SetHelpId( FID_PROTECT_TABLE );
                     pDlg->SetEditHelpId( HID_PASSWD_TABLE );
 
                     if (pDlg->Execute() == RET_OK)
@@ -1136,6 +1134,85 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
             }
+#else
+            auto_ptr<SfxPasswordDialog> pDlg;
+            String				aPassword;
+            BOOL				bCancel = FALSE;
+            bool                bNewProtection = ! bOldProtection;
+
+            if( pReqArgs )
+            {
+                const SfxPoolItem* pItem;
+                if( IS_AVAILABLE( FID_PROTECT_TABLE, &pItem ) )
+                    bNewProtection = ((const SfxBoolItem*)pItem)->GetValue();
+                if( bNewProtection == bOldProtection )
+                {
+                    rReq.Ignore();
+                    break;
+                }
+            }
+
+            if ( bOldProtection)
+            {
+                // Unprotect a protected sheet.
+
+                ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+                if (pProtect && pProtect->isProtectedWithPass())
+                {
+                    String aText( ScResId(SCSTR_PASSWORDOPT) );
+                    pDlg.reset(new SfxPasswordDialog(GetDialogParent(), &aText));
+                    pDlg->SetText( ScResId(SCSTR_UNPROTECTTAB) );
+                    pDlg->SetMinLen( 0 );
+                    pDlg->SetHelpId( FID_PROTECT_TABLE );
+                    pDlg->SetEditHelpId( HID_PASSWD_TABLE );
+
+                    if (pDlg->Execute() == RET_OK)
+                        aPassword = pDlg->GetPassword();
+                    else
+                        bCancel = TRUE;
+                }
+
+                if (!pReqArgs)
+                {
+                    rReq.AppendItem( SfxBoolItem(FID_PROTECT_TABLE, false) );
+                    rReq.Done();
+                }
+            }
+            else
+            {
+                String aText( ScResId(SCSTR_PASSWORDOPT) );
+
+                pDlg.reset(new SfxPasswordDialog(GetDialogParent(), &aText));
+                pDlg->SetText( ScResId(SCSTR_PROTECTTAB) );
+                pDlg->SetMinLen( 0 );
+                pDlg->SetHelpId( FID_PROTECT_TABLE );
+                pDlg->SetEditHelpId( HID_PASSWD_TABLE );
+                pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
+
+                if (pDlg->Execute() == RET_OK)
+                    aPassword = pDlg->GetPassword();
+                else
+                    bCancel = TRUE;
+            }
+
+            if( !bCancel )
+            {
+                if ( bOldProtection )
+                    Unprotect( nTab, aPassword );
+                else
+                {
+                    pScMod->InputEnterHandler();
+
+                    Protect( nTab, aPassword );
+                }
+
+                if( !pReqArgs )
+                {
+                    rReq.AppendItem( SfxBoolItem( FID_PROTECT_TABLE, bNewProtection ) );
+                    rReq.Done();
+                }
+            }
+#endif
             TabChanged();
             UpdateInputHandler(true);   // damit sofort wieder eingegeben werden kann
             SelectionChanged();
@@ -1150,7 +1227,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         default:
-            OSL_FAIL("Unbekannter Slot bei ScTabViewShell::Execute");
+            DBG_ERROR("Unbekannter Slot bei ScTabViewShell::Execute");
             break;
     }
 }

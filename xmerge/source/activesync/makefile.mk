@@ -27,6 +27,7 @@
 
 PRJ	= ..$/.. 
 PRJNAME = xmerge
+#PACKAGE = com$/sun$/star$/documentconversion$/XSLTFilter
 TARGET  = xmergesync 
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO

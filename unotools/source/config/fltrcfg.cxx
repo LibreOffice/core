@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,59 +37,61 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 using namespace utl;
+using namespace rtl;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
-
-#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
+#define C2U(cChar) OUString::createFromAscii(cChar)
 
 // -----------------------------------------------------------------------
-#define FILTERCFG_WORD_CODE             0x0001
-#define FILTERCFG_WORD_STORAGE          0x0002
-#define FILTERCFG_EXCEL_CODE            0x0004
-#define FILTERCFG_EXCEL_STORAGE         0x0008
-#define FILTERCFG_PPOINT_CODE           0x0010
-#define FILTERCFG_PPOINT_STORAGE        0x0020
-#define FILTERCFG_MATH_LOAD             0x0100
-#define FILTERCFG_MATH_SAVE             0x0200
-#define FILTERCFG_WRITER_LOAD           0x0400
-#define FILTERCFG_WRITER_SAVE           0x0800
-#define FILTERCFG_CALC_LOAD             0x1000
-#define FILTERCFG_CALC_SAVE             0x2000
-#define FILTERCFG_IMPRESS_LOAD          0x4000
-#define FILTERCFG_IMPRESS_SAVE          0x8000
-#define FILTERCFG_EXCEL_EXECTBL         0x10000
+#define FILTERCFG_WORD_CODE 			0x0001
+#define FILTERCFG_WORD_STORAGE 			0x0002
+#define FILTERCFG_EXCEL_CODE 			0x0004
+#define FILTERCFG_EXCEL_STORAGE 		0x0008
+#define FILTERCFG_PPOINT_CODE 			0x0010
+#define FILTERCFG_PPOINT_STORAGE 		0x0020
+#define FILTERCFG_MATH_LOAD				0x0100
+#define FILTERCFG_MATH_SAVE				0x0200
+#define FILTERCFG_WRITER_LOAD			0x0400
+#define FILTERCFG_WRITER_SAVE			0x0800
+#define FILTERCFG_CALC_LOAD				0x1000
+#define FILTERCFG_CALC_SAVE				0x2000
+#define FILTERCFG_IMPRESS_LOAD			0x4000
+#define FILTERCFG_IMPRESS_SAVE			0x8000
+#define FILTERCFG_EXCEL_EXECTBL			0x10000
 #define FILTERCFG_ENABLE_PPT_PREVIEW    0x20000
 #define FILTERCFG_ENABLE_EXCEL_PREVIEW  0x40000
 #define FILTERCFG_ENABLE_WORD_PREVIEW   0x80000
-#define FILTERCFG_USE_ENHANCED_FIELDS   0x100000
-#define FILTERCFG_WORD_WBCTBL           0x200000
+#define FILTERCFG_USE_ENHANCED_FIELDS	0x100000
+#define FILTERCFG_WORD_WBCTBL			0x200000
 
 static SvtFilterOptions* pOptions=0;
 
+/* -----------------------------22.01.01 10:23--------------------------------
+
+ ---------------------------------------------------------------------------*/
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
 {
-    sal_Bool                bLoadVBA;
-    sal_Bool                bSaveVBA;
+    sal_Bool				bLoadVBA;
+    sal_Bool				bSaveVBA;
 public:
     SvtAppFilterOptions_Impl(const OUString& rRoot) :
         utl::ConfigItem(rRoot),
         bLoadVBA(sal_False),
-        bSaveVBA(sal_False)  {}
+        bSaveVBA(sal_False)	 {}
     ~SvtAppFilterOptions_Impl();
-    virtual void            Commit();
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
-    void                    Load();
+    virtual void			Commit();
+    virtual void    		Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    void					Load();
 
-    sal_Bool                IsLoad() const {return bLoadVBA;}
-    void                    SetLoad(sal_Bool bSet)
+    sal_Bool				IsLoad() const {return bLoadVBA;}
+    void					SetLoad(sal_Bool bSet)
                             {
                                 if(bSet != bLoadVBA)
                                     SetModified();
                                 bLoadVBA = bSet;
                             }
-    sal_Bool                IsSave() const {return bSaveVBA;}
-    void                    SetSave(sal_Bool bSet)
+    sal_Bool				IsSave() const {return bSaveVBA;}
+    void					SetSave(sal_Bool bSet)
                             {
                                 if(bSet != bSaveVBA)
                                     SetModified();
@@ -97,13 +99,18 @@ public:
                             }
 };
 
+/* -----------------------------22.01.01 11:08--------------------------------
+
+ ---------------------------------------------------------------------------*/
 SvtAppFilterOptions_Impl::~SvtAppFilterOptions_Impl()
 {
     if(IsModified())
         Commit();
 }
+/* -----------------------------22.01.01 10:38--------------------------------
 
-void    SvtAppFilterOptions_Impl::Commit()
+ ---------------------------------------------------------------------------*/
+void	SvtAppFilterOptions_Impl::Commit()
 {
     Sequence<OUString> aNames(2);
     OUString* pNames = aNames.getArray();
@@ -124,7 +131,11 @@ void SvtAppFilterOptions_Impl::Notify( const Sequence< rtl::OUString >&  )
     // no listeners supported yet
 }
 
-void    SvtAppFilterOptions_Impl::Load()
+
+/* -----------------------------22.01.01 10:38--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void	SvtAppFilterOptions_Impl::Load()
 {
     Sequence<OUString> aNames(2);
     OUString* pNames = aNames.getArray();
@@ -143,17 +154,17 @@ void    SvtAppFilterOptions_Impl::Load()
 // -----------------------------------------------------------------------
 class SvtWriterFilterOptions_Impl : public SvtAppFilterOptions_Impl
 {
-    sal_Bool                bLoadExecutable;
+    sal_Bool				bLoadExecutable;
 public:
     SvtWriterFilterOptions_Impl(const OUString& rRoot) :
         SvtAppFilterOptions_Impl(rRoot),
         bLoadExecutable(sal_False)
     {}
-    virtual void            Commit();
-    void                    Load();
+    virtual void			Commit();
+    void					Load();
 
-    sal_Bool                IsLoadExecutable() const {return bLoadExecutable;}
-    void                    SetLoadExecutable(sal_Bool bSet)
+    sal_Bool				IsLoadExecutable() const {return bLoadExecutable;}
+    void					SetLoadExecutable(sal_Bool bSet)
                             {
                                 if(bSet != bLoadExecutable)
                                     SetModified();
@@ -189,17 +200,17 @@ void SvtWriterFilterOptions_Impl::Load()
 // -----------------------------------------------------------------------
 class SvtCalcFilterOptions_Impl : public SvtAppFilterOptions_Impl
 {
-    sal_Bool                bLoadExecutable;
+    sal_Bool				bLoadExecutable;
 public:
     SvtCalcFilterOptions_Impl(const OUString& rRoot) :
         SvtAppFilterOptions_Impl(rRoot),
         bLoadExecutable(sal_False)
     {}
-    virtual void            Commit();
-    void                    Load();
+    virtual void			Commit();
+    void					Load();
 
-    sal_Bool                IsLoadExecutable() const {return bLoadExecutable;}
-    void                    SetLoadExecutable(sal_Bool bSet)
+    sal_Bool				IsLoadExecutable() const {return bLoadExecutable;}
+    void					SetLoadExecutable(sal_Bool bSet)
                             {
                                 if(bSet != bLoadExecutable)
                                     SetModified();
@@ -232,10 +243,13 @@ void SvtCalcFilterOptions_Impl::Load()
         bLoadExecutable = *(sal_Bool*)pValues[0].getValue();
 }
 
+/* -----------------------------22.01.01 10:32--------------------------------
+
+ ---------------------------------------------------------------------------*/
 struct SvtFilterOptions_Impl
 {
-    sal_uLong nFlags;
-    SvtWriterFilterOptions_Impl aWriterCfg;
+    ULONG nFlags;
+    SvtWriterFilterOptions_Impl	aWriterCfg;
     SvtCalcFilterOptions_Impl aCalcCfg;
     SvtAppFilterOptions_Impl aImpressCfg;
 
@@ -262,8 +276,8 @@ struct SvtFilterOptions_Impl
         Load();
     }
 
-    void SetFlag( sal_uLong nFlag, sal_Bool bSet );
-    sal_Bool IsFlag( sal_uLong nFlag ) const;
+    void SetFlag( ULONG nFlag, BOOL bSet );
+    BOOL IsFlag( ULONG nFlag ) const;
     void Load()
     {
         aWriterCfg.Load();
@@ -271,19 +285,21 @@ struct SvtFilterOptions_Impl
         aImpressCfg.Load();
     }
 };
+/* -----------------------------22.01.01 10:34--------------------------------
 
-void SvtFilterOptions_Impl::SetFlag( sal_uLong nFlag, sal_Bool bSet )
+ ---------------------------------------------------------------------------*/
+void SvtFilterOptions_Impl::SetFlag( ULONG nFlag, BOOL bSet )
 {
     switch(nFlag)
     {
-        case FILTERCFG_WORD_CODE:       aWriterCfg.SetLoad(bSet);break;
-        case FILTERCFG_WORD_STORAGE:    aWriterCfg.SetSave(bSet);break;
-        case FILTERCFG_WORD_WBCTBL: aWriterCfg.SetLoadExecutable(bSet);break;
-        case FILTERCFG_EXCEL_CODE:      aCalcCfg.SetLoad(bSet);break;
-        case FILTERCFG_EXCEL_STORAGE:   aCalcCfg.SetSave(bSet);break;
-        case FILTERCFG_EXCEL_EXECTBL:   aCalcCfg.SetLoadExecutable(bSet);break;
-        case FILTERCFG_PPOINT_CODE:     aImpressCfg.SetLoad(bSet);break;
-        case FILTERCFG_PPOINT_STORAGE:  aImpressCfg.SetSave(bSet);break;
+        case FILTERCFG_WORD_CODE:		aWriterCfg.SetLoad(bSet);break;
+        case FILTERCFG_WORD_STORAGE:	aWriterCfg.SetSave(bSet);break;
+        case FILTERCFG_WORD_WBCTBL:	aWriterCfg.SetLoadExecutable(bSet);break;
+        case FILTERCFG_EXCEL_CODE:		aCalcCfg.SetLoad(bSet);break;
+        case FILTERCFG_EXCEL_STORAGE:	aCalcCfg.SetSave(bSet);break;
+        case FILTERCFG_EXCEL_EXECTBL:	aCalcCfg.SetLoadExecutable(bSet);break;
+        case FILTERCFG_PPOINT_CODE:		aImpressCfg.SetLoad(bSet);break;
+        case FILTERCFG_PPOINT_STORAGE:	aImpressCfg.SetSave(bSet);break;
         default:
             if( bSet )
                 nFlags |= nFlag;
@@ -291,20 +307,22 @@ void SvtFilterOptions_Impl::SetFlag( sal_uLong nFlag, sal_Bool bSet )
                 nFlags &= ~nFlag;
     }
 }
+/* -----------------------------22.01.01 10:35--------------------------------
 
-sal_Bool SvtFilterOptions_Impl::IsFlag( sal_uLong nFlag ) const
+ ---------------------------------------------------------------------------*/
+BOOL SvtFilterOptions_Impl::IsFlag( ULONG nFlag ) const
 {
-    sal_Bool bRet;
+    BOOL bRet;
     switch(nFlag)
     {
-        case FILTERCFG_WORD_CODE        : bRet = aWriterCfg.IsLoad();break;
-        case FILTERCFG_WORD_STORAGE     : bRet = aWriterCfg.IsSave();break;
-        case FILTERCFG_WORD_WBCTBL      : bRet = aWriterCfg.IsLoadExecutable();break;
-        case FILTERCFG_EXCEL_CODE       : bRet = aCalcCfg.IsLoad();break;
+        case FILTERCFG_WORD_CODE 		: bRet = aWriterCfg.IsLoad();break;
+        case FILTERCFG_WORD_STORAGE   	: bRet = aWriterCfg.IsSave();break;
+        case FILTERCFG_WORD_WBCTBL		: bRet = aWriterCfg.IsLoadExecutable();break;
+        case FILTERCFG_EXCEL_CODE 	    : bRet = aCalcCfg.IsLoad();break;
         case FILTERCFG_EXCEL_STORAGE    : bRet = aCalcCfg.IsSave();break;
-        case FILTERCFG_EXCEL_EXECTBL    : bRet = aCalcCfg.IsLoadExecutable();break;
-        case FILTERCFG_PPOINT_CODE      : bRet = aImpressCfg.IsLoad();break;
-        case FILTERCFG_PPOINT_STORAGE   : bRet = aImpressCfg.IsSave();break;
+        case FILTERCFG_EXCEL_EXECTBL	: bRet = aCalcCfg.IsLoadExecutable();break;
+        case FILTERCFG_PPOINT_CODE 	 	: bRet = aImpressCfg.IsLoad();break;
+        case FILTERCFG_PPOINT_STORAGE	: bRet = aImpressCfg.IsSave();break;
         default:
             bRet = 0 != (nFlags & nFlag );
     }
@@ -326,7 +344,9 @@ SvtFilterOptions::~SvtFilterOptions()
 {
     delete pImp;
 }
+/* -----------------------------22.01.01 08:45--------------------------------
 
+ ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -336,29 +356,29 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
-            "Import/MathTypeToMath",            //  0
-            "Import/WinWordToWriter",           //  1
-            "Import/PowerPointToImpress",       //  2
-            "Import/ExcelToCalc",               //  3
+            "Import/MathTypeToMath",			//  0
+            "Import/WinWordToWriter",			//  1
+            "Import/PowerPointToImpress",		//  2
+            "Import/ExcelToCalc",				//  3
             "Export/MathToMathType",            //  4
             "Export/WriterToWinWord",           //  5
             "Export/ImpressToPowerPoint",       //  6
-            "Export/CalcToExcel",               //  7
-            "Export/EnablePowerPointPreview",   //  8
-            "Export/EnableExcelPreview",        //  9
-            "Export/EnableWordPreview",         // 10
+            "Export/CalcToExcel",            	//  7
+            "Export/EnablePowerPointPreview",	//	8
+            "Export/EnableExcelPreview",		//	9
+            "Export/EnableWordPreview",			// 10
             "Import/ImportWWFieldsAsEnhancedFields" // 11
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
-            pNames[i] = OUString::createFromAscii(aPropNames[i]);
+            pNames[i] = C2U(aPropNames[i]);
     }
     return aNames;
 }
 //-----------------------------------------------------------------------
-static sal_uLong lcl_GetFlag(sal_Int32 nProp)
+static ULONG lcl_GetFlag(sal_Int32 nProp)
 {
-    sal_uLong nFlag = 0;
+    ULONG nFlag = 0;
     switch(nProp)
     {
         case  0: nFlag = FILTERCFG_MATH_LOAD; break;
@@ -374,16 +394,20 @@ static sal_uLong lcl_GetFlag(sal_Int32 nProp)
         case 10: nFlag = FILTERCFG_ENABLE_WORD_PREVIEW; break;
         case 11: nFlag = FILTERCFG_USE_ENHANCED_FIELDS; break;
 
-        default: OSL_FAIL("illegal value");
+        default: DBG_ERROR("illegal value");
     }
     return nFlag;
 }
+/*-- 22.01.01 08:53:03---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SvtFilterOptions::Notify( const Sequence<OUString>& )
 {
     Load();
 }
+/*-- 22.01.01 08:53:04---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SvtFilterOptions::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
@@ -393,14 +417,16 @@ void SvtFilterOptions::Commit()
     const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        sal_uLong nFlag = lcl_GetFlag(nProp);
+        ULONG nFlag = lcl_GetFlag(nProp);
         sal_Bool bVal = pImp->IsFlag( nFlag);
         pValues[nProp].setValue(&bVal, rType);
 
     }
     PutProperties(aNames, aValues);
 }
+/*-- 22.01.01 08:53:04---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SvtFilterOptions::Load()
 {
     pImp->Load();
@@ -415,7 +441,7 @@ void SvtFilterOptions::Load()
             if(pValues[nProp].hasValue())
             {
                 sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
-                sal_uLong nFlag = lcl_GetFlag(nProp);
+                ULONG nFlag = lcl_GetFlag(nProp);
                 pImp->SetFlag( nFlag, bVal);
             }
         }
@@ -440,7 +466,7 @@ void SvtFilterOptions::SetLoadWordBasicExecutable( sal_Bool bFlag )
     SetModified();
 }
 
-sal_Bool SvtFilterOptions::IsLoadWordBasicExecutable() const
+BOOL SvtFilterOptions::IsLoadWordBasicExecutable() const
 {
     return pImp->IsFlag( FILTERCFG_WORD_WBCTBL );
 }

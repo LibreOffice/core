@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,13 +35,9 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#undef OPTIONAL
-#endif
-
+#if STLPORT_VERSION>=321
 #include <cstdarg>
+#endif
 
 #include "plugin/impl.hxx"
 
@@ -87,9 +83,9 @@ const Sequence< ::rtl::OUString >& PluginManager::getAdditionalSearchPaths()
         String aPluginPath( aOptions.GetPluginPath() );
         if( aPluginPath.Len() )
         {
-            sal_uInt16 nPaths = aPluginPath.GetTokenCount( ';' );
+            USHORT nPaths = aPluginPath.GetTokenCount( ';' );
             aPaths.realloc( nPaths );
-            for( sal_uInt16 i = 0; i < nPaths; i++ )
+            for( USHORT i = 0; i < nPaths; i++ )
                 aPaths.getArray()[i] = aPluginPath.GetToken( i, ';' );
         }
     }
@@ -133,7 +129,7 @@ Sequence< ::rtl::OUString > XPluginManager_Impl::getSupportedServiceNames(void) 
 Sequence< ::rtl::OUString > XPluginManager_Impl::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager"));
+    aSNS.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.plugin.PluginManager" );
     return aSNS;
 }
 
@@ -187,7 +183,7 @@ Sequence<com::sun::star::plugin::PluginDescription> XPluginManager_Impl::getPlug
     return aRet;
 }
 
-Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin( const Reference< ::com::sun::star::plugin::XPluginContext >& acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const ::com::sun::star::plugin::PluginDescription& plugintype)
+Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin( const Reference< ::com::sun::star::plugin::XPluginContext >& acontext, INT16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const ::com::sun::star::plugin::PluginDescription& plugintype)
     throw( RuntimeException,::com::sun::star::plugin::PluginException )
 {
     XPlugin_Impl* pImpl = new XPlugin_Impl( m_xSMgr );

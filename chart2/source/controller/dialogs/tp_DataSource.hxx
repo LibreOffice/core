@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ protected:
     //TabPage
     virtual void DeactivatePage();
 
-    virtual void        initializePage();
+    virtual void		initializePage();
 
     DECL_LINK( SeriesSelectionChangedHdl, void* );
     DECL_LINK( RoleSelectionChangedHdl, void* );
@@ -125,12 +125,12 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelectionListener >
         getSelectionRangeListener();
 
-    /** @return </sal_True>, if the edit field contains a valid range entry. if no
-        XCellRangesAccess can be obtained, </sal_True> is returned.
+    /** @return </TRUE>, if the edit field contains a valid range entry. if no
+        XCellRangesAccess can be obtained, </TRUE> is returned.
      */
     bool isRangeFieldContentValid( Edit & rEdit );
 
-    /** @return </sal_True>, if the tab-page is in a consistent (commitable) state
+    /** @return </TRUE>, if the tab-page is in a consistent (commitable) state
      */
     bool isValid();
     void setDirty();

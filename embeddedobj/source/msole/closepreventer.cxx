@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,14 +41,14 @@ void SAL_CALL OClosePreventer::notifyClosing( const com::sun::star::lang::EventO
         throw (::com::sun::star::uno::RuntimeException)
 {
     // just a disaster
-    OSL_FAIL( "The object can not be prevented from closing!\n" );
+    OSL_ENSURE( sal_False, "The object can not be prevented from closing!\n" );
 }
 
 void SAL_CALL OClosePreventer::disposing( const com::sun::star::lang::EventObject& )
         throw (::com::sun::star::uno::RuntimeException)
 {
     // just a disaster
-    OSL_FAIL( "The object can not be prevented from closing!\n" );
+    OSL_ENSURE( sal_False, "The object can not be prevented from closing!\n" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

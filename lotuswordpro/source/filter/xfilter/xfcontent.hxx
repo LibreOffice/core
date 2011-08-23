@@ -57,10 +57,14 @@
  * @file
  * Base class for the all content object,ie. text,paragraph,picture,and so on.
  ************************************************************************/
-#ifndef     _XFCONTENT_HXX
-#define     _XFCONTENT_HXX
+/*************************************************************************
+ * Change History
+ * 2004-12-23 create this file.
+ ************************************************************************/
+#ifndef		_XFCONTENT_HXX
+#define		_XFCONTENT_HXX
 
-#include    "ixfcontent.hxx"
+#include	"ixfcontent.hxx"
 
 /**
  * @descr
@@ -71,26 +75,26 @@ class XFContent : public IXFContent
 {
 public:
     /**
-     * @short:  return the content type.
+     * @short:	return the content type.
      */
-    virtual enumXFContent   GetContentType(){ return enumXFContentUnknown; }
+    virtual enumXFContent	GetContentType(){ return enumXFContentUnknown; }
 
     /**
-     * @short:  All content except XFTextContent can have a style.
+     * @short:	All content except XFTextContent can have a style.
      */
-    virtual void    SetStyleName(rtl::OUString style){m_strStyleName = style;}
+    virtual void	SetStyleName(rtl::OUString style){m_strStyleName = style;}
 
     /**
-     * @short:  return the style name.
+     * @short:	return the style name.
      */
-    virtual rtl::OUString   GetStyleName(){return m_strStyleName;}
+    virtual rtl::OUString	GetStyleName(){return m_strStyleName;}
 
     /**
      */
-    virtual IXFContent*     Clone(){return NULL;}
+    virtual IXFContent*		Clone(){return NULL;}
 
 protected:
-    rtl::OUString   m_strStyleName;
+    rtl::OUString	m_strStyleName;
 };
 
 #endif

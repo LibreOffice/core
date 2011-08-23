@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "EventOOoTContext.hxx"
 #include "EventMap.hxx"
 #include "MutableAttrList.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include "ActionMapTypesOOo.hxx"
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
@@ -39,7 +39,7 @@
 #include <comphelper/stl_types.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -48,22 +48,22 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 class XMLTransformerOOoEventMap_Impl:
-    public ::boost::unordered_map< ::rtl::OUString, NameKey_Impl,
+    public ::std::hash_map< ::rtl::OUString, NameKey_Impl, 
                             ::rtl::OUStringHash, ::comphelper::UStringEqual >
 {
 public:
 
     void AddMap( XMLTransformerEventMapEntry *pInit );
-
+    
     XMLTransformerOOoEventMap_Impl( XMLTransformerEventMapEntry *pInit,
-                                       XMLTransformerEventMapEntry *pInit2  );
+                                       XMLTransformerEventMapEntry *pInit2	);
     ~XMLTransformerOOoEventMap_Impl();
 };
 
 void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry *pInit )
 {
     XMLTransformerOOoEventMap_Impl::key_type aKey;
-    XMLTransformerOOoEventMap_Impl::mapped_type aData;
+    XMLTransformerOOoEventMap_Impl::data_type aData;
     while( pInit->m_pOOoName )
     {
         aKey = OUString::createFromAscii(pInit->m_pOOoName);
@@ -77,16 +77,16 @@ void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry *pInit 
 
         if( !insert( aVal ).second )
         {
-            OSL_FAIL( "duplicate OOo event name extry" );
+            OSL_ENSURE( false, "duplicate OOo event name extry" );
         }
 
         ++pInit;
     }
 }
 
-XMLTransformerOOoEventMap_Impl::XMLTransformerOOoEventMap_Impl(
+XMLTransformerOOoEventMap_Impl::XMLTransformerOOoEventMap_Impl( 
         XMLTransformerEventMapEntry *pInit,
-        XMLTransformerEventMapEntry *pInit2 )
+        XMLTransformerEventMapEntry *pInit2	)
 {
     if( pInit )
         AddMap( pInit );
@@ -102,11 +102,11 @@ XMLTransformerOOoEventMap_Impl::~XMLTransformerOOoEventMap_Impl()
 
 TYPEINIT1( XMLEventOOoTransformerContext, XMLPersElemContentTContext );
 
-XMLEventOOoTransformerContext::XMLEventOOoTransformerContext(
-        XMLTransformerBase& rImp,
+XMLEventOOoTransformerContext::XMLEventOOoTransformerContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
         sal_Bool bPersistent ) :
-    XMLPersElemContentTContext( rImp, rQName,
+    XMLPersElemContentTContext( rImp, rQName, 
         rImp.GetNamespaceMap().GetKeyByAttrName( rQName ), XML_EVENT_LISTENER ),
     m_bPersistent( bPersistent )
 {
@@ -116,7 +116,7 @@ XMLEventOOoTransformerContext::~XMLEventOOoTransformerContext()
 {
 }
 
-XMLTransformerOOoEventMap_Impl
+XMLTransformerOOoEventMap_Impl 
     *XMLEventOOoTransformerContext::CreateEventMap()
 {
     return new XMLTransformerOOoEventMap_Impl( aTransformerEventMap,
@@ -129,7 +129,7 @@ void XMLEventOOoTransformerContext::FlushEventMap(
     delete p;
 }
 
-sal_uInt16 XMLEventOOoTransformerContext::GetEventName(
+sal_uInt16 XMLEventOOoTransformerContext::GetEventName( 
         const OUString& rName,
         OUString& rNewName,
            XMLTransformerOOoEventMap_Impl& rMap )
@@ -149,13 +149,13 @@ sal_uInt16 XMLEventOOoTransformerContext::GetEventName(
 }
 
 
-void XMLEventOOoTransformerContext::StartElement(
+void XMLEventOOoTransformerContext::StartElement( 
     const Reference< XAttributeList >& rAttrList )
 {
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OOO_EVENT_ACTIONS );
     OSL_ENSURE( pActions, "go no actions" );
-
+    
     OUString aLocation, aMacroName;
     sal_Int16 nMacroName = -1;
     Reference< XAttributeList > xAttrList( rAttrList );
@@ -166,7 +166,7 @@ void XMLEventOOoTransformerContext::StartElement(
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, 
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -175,7 +175,7 @@ void XMLEventOOoTransformerContext::StartElement(
         {
             if( !pMutableAttrList )
             {
-                pMutableAttrList =
+                pMutableAttrList = 
                         new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
@@ -186,7 +186,7 @@ void XMLEventOOoTransformerContext::StartElement(
                 // TODO
                 break;
             case XML_ATACTION_EVENT_NAME:
-                pMutableAttrList->SetValueByIndex( i,
+                pMutableAttrList->SetValueByIndex( i, 
                                GetTransformer().GetEventName( rAttrValue ) );
                 break;
             case XML_ATACTION_ADD_NAMESPACE_PREFIX:
@@ -194,7 +194,7 @@ void XMLEventOOoTransformerContext::StartElement(
                     OUString aAttrValue( rAttrValue );
                     sal_uInt16 nValPrefix =
                         static_cast<sal_uInt16>((*aIter).second.m_nParam1);
-                    if( GetTransformer().AddNamespacePrefix( aAttrValue,
+                    if( GetTransformer().AddNamespacePrefix( aAttrValue, 
                                                              nValPrefix ) )
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
@@ -226,14 +226,14 @@ void XMLEventOOoTransformerContext::StartElement(
         sTmp = aLocation;
         sTmp.append( sal_Unicode( ':' ) );
         sTmp.append( aMacroName );
-        pMutableAttrList->SetValueByIndex( nMacroName,
+        pMutableAttrList->SetValueByIndex( nMacroName, 
                                            sTmp.makeStringAndClear() );
     }
 
     if( m_bPersistent )
         XMLPersElemContentTContext::StartElement( xAttrList );
     else
-        GetTransformer().GetDocHandler()->startElement( GetExportQName(),
+        GetTransformer().GetDocHandler()->startElement( GetExportQName(), 
                                                         xAttrList );
 }
 

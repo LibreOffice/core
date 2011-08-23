@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -173,7 +173,7 @@ void PresenterTextView::SetText (const Reference<text::XText>& rxText)
     Reference<container::XEnumerationAccess> xParagraphAccess (rxText, UNO_QUERY);
     if ( ! xParagraphAccess.is())
         return;
-
+    
     Reference<container::XEnumeration> xParagraphs (
         xParagraphAccess->createEnumeration() , UNO_QUERY);
     if ( ! xParagraphs.is())
@@ -248,7 +248,7 @@ void PresenterTextView::SetTextChangeBroadcaster (
 void PresenterTextView::SetLocation (const css::geometry::RealPoint2D& rLocation)
 {
     maLocation = rLocation;
-
+    
     for (::std::vector<SharedPresenterTextParagraph>::iterator
              iParagraph(maParagraphs.begin()),
              iEnd(maParagraphs.end());
@@ -344,7 +344,7 @@ void PresenterTextView::MoveCaret (
         case AccessibleTextType::CHARACTER:
             nCharacterIndex += nDistance;
             break;
-
+                    
         case AccessibleTextType::WORD:
         {
             sal_Int32 nRemainingDistance (nDistance);
@@ -376,7 +376,7 @@ void PresenterTextView::MoveCaret (
                         else
                         {
                             nRemainingDistance -= nDelta;
-
+                            
                             // Move caret one character to the end of
                             // the previous or the start of the next paragraph.
                             pParagraph = GetParagraph(nParagraphIndex);
@@ -778,7 +778,7 @@ void PresenterTextParagraph::Format (
     mnVerticalOffset = nY;
     maWordBoundaries.clear();
     maWordBoundaries.push_back(0);
-
+    
     const rendering::FontMetrics aMetrics (rpFont->mxFont->getFontMetrics());
     mnAscent = aMetrics.Ascent;
     mnDescent = aMetrics.Descent;
@@ -801,7 +801,7 @@ void PresenterTextParagraph::Format (
 
         if (aWordBoundary.endPos>aWordBoundary.startPos)
             AddWord(nWidth, aCurrentLine, aWordBoundary.endPos, rpFont);
-
+            
         if (aWordBoundary.startPos<0 || aWordBoundary.endPos<0)
             break;
         if (nPosition >= aWordBoundary.endPos)
@@ -831,7 +831,7 @@ sal_Int32 PresenterTextParagraph::GetWordBoundary(
         else
             return GetCharacterCount();
     }
-
+    
     sal_Int32 nIndex (0);
     for (sal_Int32 nCount (maWordBoundaries.size()); nIndex<nCount; ++nIndex)
     {
@@ -916,9 +916,13 @@ void PresenterTextParagraph::AddWord (
     const PresenterTheme::SharedFontDescriptor& rpFont)
 {
     sal_Int32 nLineStart (0);
+    sal_Int32 nLineEnd (0);
     if ( ! maLines.empty())
+    {
         nLineStart = rCurrentLine.startPos;
-
+        nLineEnd = rCurrentLine.endPos;
+    }
+    
     const ::rtl::OUString sLineCandidate (
         msParagraphText.copy(nLineStart, nWordBoundary-nLineStart));
 
@@ -1073,7 +1077,7 @@ TextSegment PresenterTextParagraph::GetTextSegment (
             if (mxBreakIterator.is())
                 return GetWordTextSegment(nOffset, nIndex);
             break;
-
+                
         case AccessibleTextType::LINE:
         {
             for (::std::vector<Line>::const_iterator
@@ -1182,12 +1186,14 @@ awt::Rectangle PresenterTextParagraph::GetCharacterBounds (
 {
     // Find the line that contains the requested character and accumulate
     // the previous line heights.
+    sal_Int32 nFirstCharacterIndex (0);
+    sal_Int32 nEndCharacterIndex (0);
     double nX (mnXOrigin);
     double nY (mnYOrigin + mnVerticalOffset + mnAscent);
     const sal_Int8 nTextDirection (GetTextDirection());
     for (sal_Int32 nLineIndex=0,nLineCount=maLines.size();
          nLineIndex<nLineCount;
-         ++nLineIndex, nY+=mnLineHeight)
+         ++nLineIndex, nFirstCharacterIndex=nEndCharacterIndex, nY+=mnLineHeight)
     {
         Line& rLine (maLines[nLineIndex]);
         // Skip lines before the indexed character.

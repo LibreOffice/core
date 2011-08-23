@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class ViewShell;
 // #i2237#
 // removed old stuff here which still forced zoom to be
 // %BRUSH_SIZE which is outdated now
-//#define BRUSH_SIZE        8
+//#define BRUSH_SIZE		8
 
 /** An SdWindow contains the actual working area of ViewShell.
 
@@ -57,26 +57,26 @@ class ViewShell;
     member of the <type>OutputDevice</type> base class.  It is calculated to
     be an integer percent value.
 */
-class Window
-    : public ::Window,
+class Window 
+    : public ::Window, 
       public ::DropTargetHelper
 {
 public:
     Window (::Window* pParent);
     virtual ~Window (void);
 
-    void    SetViewShell (ViewShell* pViewSh);
+    void	SetViewShell (ViewShell* pViewSh);
 
     /** Set the zoom factor to the specified value and center the display
-        area arround the zoom center.
-        @param nZoom
+        area arround the zoom center.  
+        @param nZoom 
             The zoom factor is given as integral percent value.
     */
-    void    SetZoomIntegral(long nZoom);
+    void	SetZoomIntegral(long nZoom);
 
     /** This internally used method performs the actual adaption of the
-        window's map mode to the specified zoom factor.
-        @param nZoom
+        window's map mode to the specified zoom factor.  
+        @param nZoom 
             The zoom factor is given as integral percent value.
         @return
             When the given zoom factor lies outside the valid range enclosed
@@ -85,7 +85,7 @@ public:
             forced into that interval.  Therefore the returned value is a
             valid zoom factor.
     */
-    long    SetZoomFactor(long nZoom);
+    long	SetZoomFactor(long nZoom);
 
     /** This method is called when the whole page shall be displayed in the
         window.  Position and zoom factor are set so that the given
@@ -96,7 +96,7 @@ public:
         @param rZoomRect
             The rectangle is expected to be given relative to the upper left
             corner of the window in logical coordinates (100th of mm).
-        @return
+        @return 
             The new zoom factor is returned as integral percent value.
     */
     long SetZoomRect (const Rectangle& rZoomRect);
@@ -112,8 +112,8 @@ public:
         manually or programatically are set to this value if they are
         smaller.  If the currently used zoom factor is smaller than the minimal zoom
         factor than set the minimal zoom factor as the new current zoom
-        factor.
-
+        factor.  
+    
         <p>This calculation is performed only when the
         <member>bMinZoomAutoCalc</member> is set (to <TRUE/>).</p>
     */
@@ -140,25 +140,25 @@ public:
         larger than the view or the value of aWinPos in this direction is -1
         then the window is centered in this direction.
         */
-    void UpdateMapOrigin (sal_Bool bInvalidate = sal_True);
+    void UpdateMapOrigin (BOOL bInvalidate = TRUE);
 
     void UpdateMapMode (void);
 
-    double  GetVisibleX();          // Interface fuer ScrollBars
-    double  GetVisibleY();
-    void    SetVisibleXY(double fX, double fY);
-    double  GetVisibleWidth();
-    double  GetVisibleHeight();
-    double  GetScrlLineWidth();
-    double  GetScrlLineHeight();
-    double  GetScrlPageWidth();
-    double  GetScrlPageHeight();
+    double	GetVisibleX();			// Interface fuer ScrollBars
+    double	GetVisibleY();
+    void	SetVisibleXY(double fX, double fY);
+    double	GetVisibleWidth();
+    double	GetVisibleHeight();
+    double	GetScrlLineWidth();
+    double	GetScrlLineHeight();
+    double	GetScrlPageWidth();
+    double	GetScrlPageHeight();
     virtual void GrabFocus();
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8	ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     /** The DropScroll() method is used by AcceptDrop() to scroll the
         content of the window while dragging and dropping.  With this method
@@ -172,11 +172,11 @@ protected:
     Point maViewOrigin;
     Size maViewSize;
     Size maPrevSize; // contains previous window size in logical coords
-    sal_uInt16 mnMinZoom;
-    sal_uInt16 mnMaxZoom;
-
+    USHORT mnMinZoom;
+    USHORT mnMaxZoom;
     /** This flag tells whether to re-calculate the minimal zoom factor
-        depening on the current zoom factor.  Its default value is now sal_False.
+        depening on the current zoom factor.  According to task #105436# its
+        default value is now FALSE.
     */
     bool mbMinZoomAutoCalc;
     bool mbCalcMinZoomByMinSide;
@@ -200,13 +200,13 @@ protected:
     virtual long Notify( NotifyEvent& rNEvt );
 
     /** Create an accessibility object that makes this window accessible.
-
+        
         @return
             The returned reference is empty if an accessible object could
             not be created.
     */
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>
+        ::com::sun::star::accessibility::XAccessible> 
         CreateAccessible (void);
 
     XubString GetSurroundingText() const;

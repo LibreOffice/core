@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(Runtim
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
+    ::cppu::OTypeCollection aTypes(	::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XPropertySet > *)0 ));
 
@@ -208,8 +208,8 @@ OCommonStatement::createTest( const ::rtl::OUString &aColumnName,
     ::rtl::OString sMatch = rtl::OUStringToOString( aMatch, RTL_TEXTENCODING_UTF8 );
     ::rtl::OString sColumnName = rtl::OUStringToOString( aColumnName, RTL_TEXTENCODING_UTF8 );
 
-    return e_book_query_field_test( e_contact_field_id( sColumnName.getStr() ),
-                                    eTest, sMatch.getStr() );
+    return e_book_query_field_test( e_contact_field_id( sColumnName ),
+                                    eTest, sMatch );
 }
 
 // -------------------------------------------------------------------------
@@ -413,7 +413,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         {
             // String containing only a '%' and nothing else matches everything
             pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS,
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
+                                  rtl::OUString::createFromAscii( "" ) );
         }
         else if( aMatchString.indexOf( WILDCARD ) == -1 )
         {   // Simple string , eg. "to match" "contains in evo"
@@ -428,7 +428,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
             m_pConnection->throwGenericSQLException(STR_QUERY_NOT_LIKE_TOO_COMPLEX,*this);
         }
         else if( (aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) ) )
-        {   // One occurrence of '%'  matches...
+        {   // One occurance of '%'  matches...
             if ( aMatchString.indexOf ( WILDCARD ) == 0 )
                 pResult = createTest( aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.copy( 1 ) );
             else if ( aMatchString.indexOf ( WILDCARD ) == aMatchString.getLength() - 1 )
@@ -477,10 +477,10 @@ rtl::OUString OCommonStatement::getTableName()
                     OSQLParseNode::getTableComponents( pNodeForTableName, aCatalog, aSchema, aTableName,NULL);
             }
             else
-                OSL_FAIL( "odd table layout" );
+                OSL_ENSURE( false,  "odd table layout" );
         }
         else
-                OSL_FAIL( "unusual table layout" );
+                OSL_ENSURE( false,  "unusual table layout" );
     }
     return aTableName;
 }

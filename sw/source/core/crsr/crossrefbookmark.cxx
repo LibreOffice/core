@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,8 @@
 #include <crossrefbookmark.hxx>
 #include <ndtxt.hxx>
 
-using ::rtl::OUString;
+using namespace rtl;
+
 namespace sw { namespace mark
 {
     CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,

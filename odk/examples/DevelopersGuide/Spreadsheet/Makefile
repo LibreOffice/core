@@ -59,7 +59,6 @@ COMP1_JAR=$(SAMPLE_CLASS_OUT)/$(COMP1_JAR_NAME)
 COMP1_MANIFESTFILE=$(COMP1_GEN_OUT)/$(COMP1_NAME).uno.Manifest
 COMP1_UNOPKG_MANIFEST=$(COMP1_GEN_OUT)/$(COMP1_NAME)/META-INF/manifest.xml
 COMP1_REGISTERFLAG=$(SAMPLE_GEN_OUT)/devguide_$(COMP1_NAME)_register_component.flag
-COMP1_COMPONENTS=$(COMP1_NAME).components
 
 # Example DataPilot component
 COMP2_NAME=ExampleDataPilotSource
@@ -72,7 +71,6 @@ COMP2_JAR=$(SAMPLE_CLASS_OUT)/$(COMP2_JAR_NAME)
 COMP2_MANIFESTFILE=$(COMP2_GEN_OUT)/$(COMP2_NAME).uno.Manifest
 COMP2_UNOPKG_MANIFEST=$(COMP2_GEN_OUT)/$(COMP2_NAME)/META-INF/manifest.xml
 COMP2_REGISTERFLAG=$(SAMPLE_GEN_OUT)/devguide_$(COMP2_NAME)_register_component.flag
-COMP2_COMPONENTS=$(COMP2_NAME).components
 
 #REGISTERFLAG = $(OUT_MISC)$(PS)devguide_$(SAMPLE_NAME)_register_component.flag
 
@@ -178,8 +176,8 @@ $(COMP1_UNOPKG_MANIFEST) :
 	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-typelibrary;type=RDB$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(COMP1_GEN_OUT)/,,$(@D))).uno.rdb$(QM)"/$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-components$(QM)">> $@
-	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP1_COMPONENTS)$(QM)"/$(CSEP)>> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(COMP1_GEN_OUT)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 $(COMP2_UNOPKG_MANIFEST) :
@@ -187,24 +185,22 @@ $(COMP2_UNOPKG_MANIFEST) :
 	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
 	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
 	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-components$(QM)">> $@
-	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP2_COMPONENTS)$(QM)"/$(CSEP)>> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(COMP2_GEN_OUT)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
-$(COMP1_PACKAGE) : $(COMP1_RDB) $(COMP1_JAR) $(COMP1_UNOPKG_MANIFEST) $(COMP1_COMPONENTS)
+$(COMP1_PACKAGE) : $(COMP1_RDB) $(COMP1_JAR) $(COMP1_UNOPKG_MANIFEST)
 	echo "####" $(@)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_ZIP) $@ $(COMP1_COMPONENTS)
-	cd $(subst /,$(PS),$(COMP1_GEN_OUT)) && $(SDK_ZIP) -u ../../../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(COMP1_GEN_OUT)) && $(SDK_ZIP) ../../../bin/$(@F) $(<F)
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP1_JAR_NAME)
 	cd $(subst /,$(PS),$(COMP1_GEN_OUT)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../../bin/$(@F) META-INF/manifest.xml
 
-$(COMP2_PACKAGE) : $(COMP2_JAR) $(COMP2_UNOPKG_MANIFEST) $(COMP2_COMPONENTS)
+$(COMP2_PACKAGE) : $(COMP2_JAR) $(COMP2_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_ZIP) $@ $(COMP2_COMPONENTS)
-	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
 	cd $(subst /,$(PS),$(COMP2_GEN_OUT)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../../bin/$(@F) META-INF/manifest.xml
 
 $(SAMPLE_GEN_OUT)/devguide_$(COMP1_NAME)_register_component.flag : $(OUT_BIN)/$(COMP1_NAME).$(UNOOXT_EXT)

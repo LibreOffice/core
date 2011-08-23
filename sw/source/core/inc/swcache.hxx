@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,72 +73,72 @@ SV_DECL_PTRARR_DEL(SwCacheObjArr,SwCacheObj*,1,1)
 
 class SwCache : public SwCacheObjArr
 {
-    SvUShorts aFreePositions;       //Freie Positionen fuer das Insert wenn
+    SvUShorts aFreePositions;		//Freie Positionen fuer das Insert wenn
                                     //die Maximalgrenze nicht erreicht ist.
                                     //Immer wenn ein Objekt ausgetragen wird,
                                     //so wird seine Position hier eingetragen.
 
-    SwCacheObj *pRealFirst;         //_immer_ der echte LRU-erste
-    SwCacheObj *pFirst;             //der virtuelle erste.
+    SwCacheObj *pRealFirst;			//_immer_ der echte LRU-erste
+    SwCacheObj *pFirst;				//der virtuelle erste.
     SwCacheObj *pLast;
 
-    const sal_uInt16 nMax;              //Mehr sollen nicht aufgenommen werden,
+    const USHORT nMax;				//Mehr sollen nicht aufgenommen werden,
                                     //der Cache kann aber dynamisch um jeweils
                                     //nMax vergroessert werden.
-          sal_uInt16 nCurMax;           //Mehr werden nicht aufgenommen.
+          USHORT nCurMax;			//Mehr werden nicht aufgenommen.
 
 
     void DeleteObj( SwCacheObj *pObj );
 
 #if OSL_DEBUG_LEVEL > 1
     ByteString aName;
-    long nAppend;           //Anzahl der Eintragungen durch Erweiterung.
-    long nInsertFree;       //Anzahl der Eintragungen auf freie Plaetze.
-    long nReplace;          //Anzahl der Ersetzungen durch ein neues Objekt
-    long nGetSuccess;       //Anzahl der Erfolgreichen Get's
-    long nGetFail;          //Anzahl der nicht Erfolgreichen Get's
-    long nToTop;            //Anzahl der Umsortierungen (LRU)
-    long nDelete;           //Anzahl der Loeschungen (von Aussen)
-    long nGetSeek;          //Anzahl der Get's ohne Index
-    long nAverageSeekCnt;   //Anzahl der Seek's fuer alle Get's ohne Index
-    long nFlushCnt;         //Anzahl von Flush-Aufrufen.
-    long nFlushedObjects;   //Anzahl der wg. Flush vernichteten Objekte
-    long nIncreaseMax;      //Anzahl Cache-Erweiterungen
-    long nDecreaseMax;      //Anzahl Cache-Verkleinerungen
+    long nAppend;			//Anzahl der Eintragungen durch Erweiterung.
+    long nInsertFree;		//Anzahl der Eintragungen auf freie Plaetze.
+    long nReplace;			//Anzahl der Ersetzungen durch ein neues Objekt
+    long nGetSuccess;		//Anzahl der Erfolgreichen Get's
+    long nGetFail;			//Anzahl der nicht Erfolgreichen Get's
+    long nToTop;			//Anzahl der Umsortierungen (LRU)
+    long nDelete;			//Anzahl der Loeschungen (von Aussen)
+    long nGetSeek;			//Anzahl der Get's ohne Index
+    long nAverageSeekCnt;	//Anzahl der Seek's fuer alle Get's ohne Index
+    long nFlushCnt;			//Anzahl von Flush-Aufrufen.
+    long nFlushedObjects;	//Anzahl der wg. Flush vernichteten Objekte
+    long nIncreaseMax;		//Anzahl Cache-Erweiterungen
+    long nDecreaseMax;		//Anzahl Cache-Verkleinerungen
 
-    void Check();           //Wird bei swcache.cxx mit DEBUG aktiv!
+    void Check();			//Wird bei swcache.cxx mit DEBUG aktiv!
 #endif
 
 public:
 
-    //nur sal_uInt8 hineinstecken!!!
+    //nur BYTE hineinstecken!!!
 #if OSL_DEBUG_LEVEL > 1
-    SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize,
+    SwCache( const USHORT nInitSize, const USHORT nGrowSize,
             const ByteString &rNm );
     ~SwCache();
 #else
-    SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize );
+    SwCache( const USHORT nInitSize, const USHORT nGrowSize );
 #endif
 
-    void Flush( const sal_uInt8 nPercent = 100 );
+    void Flush( const BYTE nPercent = 100 );
 
-    //bToTop == sal_False -> Keine LRU-Umsortierung!
-    SwCacheObj *Get( const void *pOwner, const sal_Bool bToTop = sal_True );
-    SwCacheObj *Get( const void *pOwner, const sal_uInt16 nIndex,
-                     const sal_Bool bToTop = sal_True );
+    //bToTop == FALSE -> Keine LRU-Umsortierung!
+    SwCacheObj *Get( const void *pOwner, const BOOL bToTop = TRUE );
+    SwCacheObj *Get( const void *pOwner, const USHORT nIndex,
+                     const BOOL bToTop = TRUE );
     void ToTop( SwCacheObj *pObj );
 
-    sal_Bool Insert( SwCacheObj *pNew );
+    BOOL Insert( SwCacheObj *pNew );
     void Delete( const void *pOwner );
-//  void Delete( const void *pOwner, const sal_uInt16 nIndex );
+//	void Delete( const void *pOwner, const USHORT nIndex );
 
-    void SetLRUOfst( const sal_uInt16 nOfst );      //nOfst sagt wieviele unangetastet
+    void SetLRUOfst( const USHORT nOfst );		//nOfst sagt wieviele unangetastet
                                                 //bleiben sollen.
     void ResetLRUOfst() { pFirst = pRealFirst; }
 
-    inline void IncreaseMax( const sal_uInt16 nAdd );
-    inline void DecreaseMax( const sal_uInt16 nSub );
-    sal_uInt16 GetCurMax() const { return nCurMax; }
+    inline void IncreaseMax( const USHORT nAdd );
+    inline void DecreaseMax( const USHORT nSub );
+    USHORT GetCurMax() const { return nCurMax; }
     inline SwCacheObj *First() { return pRealFirst; }
     inline SwCacheObj *Last()  { return pLast; }
     inline SwCacheObj *Next( SwCacheObj *pCacheObj);
@@ -149,10 +149,10 @@ class SwSaveSetLRUOfst
 {
     SwCache &rCache;
 public:
-    SwSaveSetLRUOfst( SwCache &rC, const sal_uInt16 nOfst )
-        : rCache( rC )          { rCache.SetLRUOfst( nOfst );  }
+    SwSaveSetLRUOfst( SwCache &rC, const USHORT nOfst )
+        : rCache( rC ) 			{ rCache.SetLRUOfst( nOfst );  }
 
-    ~SwSaveSetLRUOfst()         { rCache.ResetLRUOfst(); }
+    ~SwSaveSetLRUOfst()			{ rCache.ResetLRUOfst(); }
 };
 
 //Das allgemeine CacheObjekt. Anwender des Cache muessen eine Klasse vom
@@ -160,21 +160,21 @@ public:
 
 class SwCacheObj
 {
-    friend class SwCache;   //Der darf alles
+    friend class SwCache;	//Der darf alles
 
-    SwCacheObj *pNext;      //Fuer die LRU-Verkettung.
+    SwCacheObj *pNext;		//Fuer die LRU-Verkettung.
     SwCacheObj *pPrev;
 
-    sal_uInt16 nCachePos;       //Position im Cache-Array.
+    USHORT nCachePos;		//Position im Cache-Array.
 
-    sal_uInt8       nLock;
+    BYTE		nLock;
 
     inline SwCacheObj *GetNext() { return pNext; }
     inline SwCacheObj *GetPrev() { return pPrev; }
-    inline void SetNext( SwCacheObj *pNew )  { pNext = pNew; }
+    inline void SetNext( SwCacheObj *pNew )	 { pNext = pNew; }
     inline void SetPrev( SwCacheObj *pNew )  { pPrev = pNew; }
 
-    inline void   SetCachePos( const sal_uInt16 nNew ) { nCachePos = nNew; }
+    inline void   SetCachePos( const USHORT nNew ) { nCachePos = nNew; }
 
 protected:
     const void *pOwner;
@@ -186,12 +186,12 @@ public:
     virtual ~SwCacheObj();
 
     inline const void *GetOwner() const { return pOwner; }
-    inline sal_Bool IsOwner( const void *pNew ) const;
+    inline BOOL IsOwner( const void *pNew ) const;
 
-    inline sal_uInt16 GetCachePos() const { return nCachePos; }
-    inline void Invalidate()          { pOwner = 0; }
+    inline USHORT GetCachePos() const { return nCachePos; }
+    inline void Invalidate()		  { pOwner = 0; }
 
-    inline sal_Bool IsLocked() const { return 0 != nLock; }
+    inline BOOL IsLocked() const { return 0 != nLock; }
 
 #if OSL_DEBUG_LEVEL > 1
     void Lock();
@@ -223,42 +223,42 @@ class SwCacheAccess
 
 protected:
     SwCacheObj *pObj;
-    const void *pOwner;     //Kann ggf. in NewObj benutzt werden.
+    const void *pOwner;		//Kann ggf. in NewObj benutzt werden.
 
     virtual SwCacheObj *NewObj() = 0;
 
     inline SwCacheObj *Get();
 
-    inline SwCacheAccess( SwCache &rCache, const void *pOwner, sal_Bool bSeek = sal_True );
-    inline SwCacheAccess( SwCache &rCache, const void *pOwner, const sal_uInt16 nIndex );
+    inline SwCacheAccess( SwCache &rCache, const void *pOwner, BOOL bSeek = TRUE );
+    inline SwCacheAccess( SwCache &rCache, const void *pOwner, const USHORT nIndex );
 
 public:
     virtual ~SwCacheAccess();
 
-    virtual sal_Bool IsAvailable() const;
+    virtual BOOL IsAvailable() const;
 
     //Abkuerzung fuer diejenigen, die wissen, das die Ableitung das IsAvailable
     //nicht ueberladen haben.
-    sal_Bool IsAvail() const { return pObj != 0; }
+    BOOL IsAvail() const { return pObj != 0; }
 };
 
-inline void SwCache::IncreaseMax( const sal_uInt16 nAdd )
+inline void SwCache::IncreaseMax( const USHORT nAdd )
 {
-    nCurMax = nCurMax + sal::static_int_cast< sal_uInt16 >(nAdd);
+    nCurMax = nCurMax + sal::static_int_cast< USHORT >(nAdd);
 #if OSL_DEBUG_LEVEL > 1
     ++nIncreaseMax;
 #endif
 }
-inline void SwCache::DecreaseMax( const sal_uInt16 nSub )
+inline void SwCache::DecreaseMax( const USHORT nSub )
 {
     if ( nCurMax > nSub )
-        nCurMax = nCurMax - sal::static_int_cast< sal_uInt16 >(nSub);
+        nCurMax = nCurMax - sal::static_int_cast< USHORT >(nSub);
 #if OSL_DEBUG_LEVEL > 1
     ++nDecreaseMax;
 #endif
 }
 
-inline sal_Bool SwCacheObj::IsOwner( const void *pNew ) const
+inline BOOL SwCacheObj::IsOwner( const void *pNew ) const
 {
     return pOwner && pOwner == pNew;
 }
@@ -271,7 +271,7 @@ inline SwCacheObj *SwCache::Next( SwCacheObj *pCacheObj)
         return NULL;
 }
 
-inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn, sal_Bool bSeek ) :
+inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn, BOOL bSeek ) :
     rCache( rC ),
     pObj( 0 ),
     pOwner( pOwn )
@@ -281,7 +281,7 @@ inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn, sal_Bool bSe
 }
 
 inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn,
-                              const sal_uInt16 nIndex ) :
+                              const USHORT nIndex ) :
     rCache( rC ),
     pObj( 0 ),
     pOwner( pOwn )

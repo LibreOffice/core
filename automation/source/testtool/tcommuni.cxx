@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <basic/testtool.hxx>
 
 CommunicationManagerClientViaSocketTT::CommunicationManagerClientViaSocketTT()
-: CommunicationManagerClientViaSocket( sal_True )
+: CommunicationManagerClientViaSocket( TRUE )
 , aAppPath()
 , aAppParams()
 , pProcess( NULL )
@@ -51,14 +51,14 @@ CommunicationManagerClientViaSocketTT::CommunicationManagerClientViaSocketTT()
 }
 
 
-sal_Bool CommunicationManagerClientViaSocketTT::StartCommunication()
+BOOL CommunicationManagerClientViaSocketTT::StartCommunication()
 {
-    bApplicationStarted = sal_False;
+    bApplicationStarted = FALSE;
     return CommunicationManagerClientViaSocket::StartCommunication( ByteString( GetHostConfig(), RTL_TEXTENCODING_UTF8 ), GetTTPortConfig() );
 }
 
 
-sal_Bool CommunicationManagerClientViaSocketTT::StartCommunication( String aApp, String aParams, Environment *pChildEnv )
+BOOL CommunicationManagerClientViaSocketTT::StartCommunication( String aApp, String aParams, Environment *pChildEnv )
 {
     aAppPath = aApp;
     aAppParams = aParams;
@@ -67,7 +67,7 @@ sal_Bool CommunicationManagerClientViaSocketTT::StartCommunication( String aApp,
 }
 
 
-sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
+BOOL CommunicationManagerClientViaSocketTT::RetryConnect()
 {
     if ( !bApplicationStarted )
     {
@@ -79,18 +79,18 @@ sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
             pProcess = new Process();
             pProcess->SetImage( aAppPath, aAppParams, &aAppEnv );
 
-            sal_Bool bSucc = pProcess->Start();
-            bApplicationStarted = sal_True;
+            BOOL bSucc = pProcess->Start();
+            bApplicationStarted = TRUE;
 
             if ( bSucc )
             {
-                aFirstRetryCall = Time() + Time( 0, 1 );    // Max eine Minute Zeit
+                aFirstRetryCall = Time() + Time( 0, 1 );	// Max eine Minute Zeit
                 for ( int i = 10 ; i-- ; )
                     GetpApp()->Reschedule();
             }
             return bSucc;
         }
-        return sal_False;
+        return FALSE;
     }
     else
     {
@@ -101,18 +101,18 @@ sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
             aWait.Start();
             while ( aWait.IsActive() )
                 GetpApp()->Yield();
-            return sal_True;
+            return TRUE;
         }
         else
-            return sal_False;
+            return FALSE;
     }
 }
 
-sal_Bool CommunicationManagerClientViaSocketTT::KillApplication()
+BOOL CommunicationManagerClientViaSocketTT::KillApplication()
 {
     if ( pProcess )
         return pProcess->Terminate();
-    return sal_True;
+    return TRUE;
 }
 
 #define GETSET(aVar, KeyName, Dafault)                 \
@@ -128,7 +128,7 @@ String GetHostConfig()
 {
     String aHostToTalk;
 
-    for ( sal_uInt16 i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+    for ( USHORT i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
         if ( Application::GetCommandLineParam( i ).Copy(0,6).CompareIgnoreCaseToAscii("-host=") == COMPARE_EQUAL
 #ifndef UNX
@@ -147,11 +147,11 @@ String GetHostConfig()
 }
 
 
-sal_uLong GetTTPortConfig()
+ULONG GetTTPortConfig()
 {
     String aPortToTalk;
 
-    for ( sal_uInt16 i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+    for ( USHORT i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
         if ( Application::GetCommandLineParam( i ).Copy(0,6).CompareIgnoreCaseToAscii("-port=") == COMPARE_EQUAL
 #ifndef UNX
@@ -159,8 +159,8 @@ sal_uLong GetTTPortConfig()
 #endif
           )
         {
-            aPortToTalk = Application::GetCommandLineParam( i ).Copy(6);
-            return (sal_uLong)aPortToTalk.ToInt64();
+            aPortToTalk = Application::GetCommandLineParam( i ).Copy(6);                
+            return (ULONG)aPortToTalk.ToInt64();
         }
     }
 
@@ -169,15 +169,15 @@ sal_uLong GetTTPortConfig()
     aConf.SetGroup("Communication");
 
     GETSET( abPortToTalk, "TTPort", ByteString::CreateFromInt32( TESTTOOL_DEFAULT_PORT ) );
-    return (sal_uLong)abPortToTalk.ToInt64();
+    return (ULONG)abPortToTalk.ToInt64();
 }
 
 
-sal_uLong GetUnoPortConfig()
+ULONG GetUnoPortConfig()
 {
     String aPortToTalk;
 
-    for ( sal_uInt16 i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+    for ( USHORT i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
         if ( Application::GetCommandLineParam( i ).Copy(0,9).CompareIgnoreCaseToAscii("-unoport=") == COMPARE_EQUAL
 #ifndef UNX
@@ -186,7 +186,7 @@ sal_uLong GetUnoPortConfig()
           )
         {
             aPortToTalk = Application::GetCommandLineParam( i ).Copy(6);
-            return (sal_uLong)aPortToTalk.ToInt64();
+            return (ULONG)aPortToTalk.ToInt64();
         }
     }
 
@@ -195,7 +195,7 @@ sal_uLong GetUnoPortConfig()
     aConf.SetGroup("Communication");
 
     GETSET( abPortToTalk, "UnoPort", ByteString::CreateFromInt32( UNO_DEFAULT_PORT ) );
-    return (sal_uLong)abPortToTalk.ToInt64();
+    return (ULONG)abPortToTalk.ToInt64();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

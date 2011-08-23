@@ -5,7 +5,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <fcntl.h>
-#if (defined(_WIN32) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #include <io.h>
 #else
 #include <unistd.h>
@@ -135,7 +135,7 @@ void
 
                         case 'w':
                             dp = &optarg[n + 1];
-                            n += (int)strlen(dp);
+                            n += strlen(dp);
                             while (isspace(*dp)) dp++;
 
                             for (i = NINCLUDE - 1; i >= 0; i--)
@@ -173,7 +173,7 @@ void
     {
         if ((fp = strrchr(argv[optind], '/')) != NULL)
         {
-            int len = (int)(fp - argv[optind]);
+            int len = fp - argv[optind];
 
             dp = (char *) newstring((uchar *) argv[optind], len + 1, 0);
             dp[len] = '\0';

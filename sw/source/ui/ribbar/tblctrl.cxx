@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <svl/intitem.hxx>
 
 #include <vcl/toolbox.hxx>
-#include <sfx2/app.hxx>
+#include <sfx2/app.hxx> 
 
 #include "cmdid.h"
 #include "swtypes.hxx"
@@ -51,9 +51,9 @@ SFX_IMPL_TOOLBOX_CONTROL( SwTableOptimizeCtrl, SfxUInt16Item );
 
 
 
-SwTableOptimizeCtrl::SwTableOptimizeCtrl(
-    sal_uInt16 nSlotId,
-    sal_uInt16 nId,
+SwTableOptimizeCtrl::SwTableOptimizeCtrl( 
+    USHORT nSlotId,
+    USHORT nId,
     ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {
@@ -88,7 +88,7 @@ SfxPopupWindow* SwTableOptimizeCtrl::CreatePopupWindow()
 
 
 
-SfxPopupWindowType  SwTableOptimizeCtrl::GetPopupWindowType() const
+SfxPopupWindowType	SwTableOptimizeCtrl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }

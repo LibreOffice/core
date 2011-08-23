@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@ class ImplRemoteControl
 {
     friend class StatementFlow;
 
-    sal_Bool         m_bIdleInserted;
+    BOOL         m_bIdleInserted;
     AutoTimer    m_aIdleTimer;
-    sal_Bool         m_bInsideExecutionLoop;
+    BOOL         m_bInsideExecutionLoop;
 #if OSL_DEBUG_LEVEL > 1
     EditWindow *m_pDbgWin;
 #endif
@@ -57,7 +57,7 @@ class ImplRemoteControl
 public:
     ImplRemoteControl();
     ~ImplRemoteControl();
-    sal_Bool QueCommands( sal_uLong nServiceId, SvStream *pIn );
+    BOOL QueCommands( ULONG nServiceId, SvStream *pIn );
     SvStream* GetReturnStream();
 
     DECL_LINK( IdleHdl,   Application* );

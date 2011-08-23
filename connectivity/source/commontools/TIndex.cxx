@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,19 +39,20 @@ using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
-OIndexHelper::OIndexHelper( OTableHelper* _pTable) : connectivity::sdbcx::OIndex(sal_True)
+OIndexHelper::OIndexHelper(	OTableHelper* _pTable) : connectivity::sdbcx::OIndex(sal_True)
                  , m_pTable(_pTable)
 {
     construct();
     ::std::vector< ::rtl::OUString> aVector;
-    m_pColumns  = new OIndexColumns(this,m_aMutex,aVector);
+    m_pColumns	= new OIndexColumns(this,m_aMutex,aVector);
 }
 // -------------------------------------------------------------------------
-OIndexHelper::OIndexHelper( OTableHelper* _pTable,
+OIndexHelper::OIndexHelper(	OTableHelper* _pTable,
                 const ::rtl::OUString& _Name,
                 const ::rtl::OUString& _Catalog,
                 sal_Bool _isUnique,
@@ -79,9 +80,9 @@ void OIndexHelper::refreshColumns()
     {
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
         ::rtl::OUString aSchema,aTable;
-        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
-        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
-
+        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))	>>= aSchema;
+        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))		>>= aTable;
+        
         Reference< XResultSet > xResult = m_pTable->getMetaData()->getIndexInfo(
             m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),
             aSchema,aTable,sal_False,sal_False);
@@ -104,7 +105,7 @@ void OIndexHelper::refreshColumns()
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        m_pColumns  = new OIndexColumns(this,m_aMutex,aVector);
+        m_pColumns	= new OIndexColumns(this,m_aMutex,aVector);
 }
 // -----------------------------------------------------------------------------
 

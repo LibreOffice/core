@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,6 +48,7 @@ void NamedProperties::AddPropertiesToVector(
     NamedLineProperties::AddPropertiesToVector( rOutProperties );
 }
 
+// static
 OUString NamedProperties::GetPropertyNameForHandle( sal_Int32 nHandle )
 {
     OUString aName = NamedFillProperties::GetPropertyNameForHandle( nHandle );

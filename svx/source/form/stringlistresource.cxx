@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace svx
     StringListResource::StringListResource( const ResId& _rResId )
         :Resource( _rResId )
     {
-        sal_uInt16 nLocalID = 1;
+        USHORT nLocalID = 1;
         ResId aLocalID( nLocalID, *_rResId.GetResMgr() );
         while ( IsAvailableRes( aLocalID.SetRT( RSC_STRING ) ) )
         {

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 ' **
-' ** owner : gregor.hartmann@oracle.com
+' ** owner : joerg.skottke@oracle.com
 ' **
 ' ** short description : check macro-dialogs / BASIC-IDE ( 1. part )
 ' **

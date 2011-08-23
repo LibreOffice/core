@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,6 +31,7 @@
 
 #include <fmtftn.hxx>
 
+#include <oox/core/tokens.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sax/fshelper.hxx>

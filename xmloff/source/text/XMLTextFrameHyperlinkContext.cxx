@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_xmloff.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "XMLTextFrameContext.hxx"
@@ -172,7 +172,7 @@ Reference < XTextContent > XMLTextFrameHyperlinkContext::GetTextContent() const
     return xTxt;
 }
 
-// Frame "to character": anchor moves from first to last char after saving (#i33242#)
+// --> OD 2004-08-24 #33242#
 Reference < drawing::XShape > XMLTextFrameHyperlinkContext::GetShape() const
 {
     Reference < drawing::XShape > xShape;
@@ -184,5 +184,7 @@ Reference < drawing::XShape > XMLTextFrameHyperlinkContext::GetShape() const
 
     return xShape;
 }
+// <--
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

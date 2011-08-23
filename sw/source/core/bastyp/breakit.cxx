@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,6 +68,18 @@ SwBreakIt::SwBreakIt(
       aForbiddenLang( LANGUAGE_DONTKNOW)
 {
     DBG_ASSERT( m_xMSF.is(), "SwBreakIt: no MultiServiceFactory" );
+    //if ( m_xMSF.is() )
+    //{
+ //       xBreak = uno::Reference< i18n::XBreakIterator >(
+    //		m_xMSF->createInstance(
+    //			rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) ),
+ //           uno::UNO_QUERY);
+
+ //       xCTLDetect = uno::Reference< i18n::XScriptTypeDetector >(
+ //           m_xMSF->createInstance(
+ //                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.ScriptTypeDetector")) ),
+ //           uno::UNO_QUERY);
+ //   }
 }
 
 SwBreakIt::~SwBreakIt()
@@ -101,11 +113,11 @@ void SwBreakIt::_GetForbidden( const LanguageType aLang )
     m_pForbidden = new i18n::ForbiddenCharacters( aWrap.getForbiddenCharacters() );
 }
 
-sal_uInt16 SwBreakIt::GetRealScriptOfText( const String& rTxt,
+USHORT SwBreakIt::GetRealScriptOfText( const String& rTxt,
                                         xub_StrLen nPos ) const
 {
     createBreakIterator();
-    sal_uInt16 nScript = i18n::ScriptType::WEAK;
+    USHORT nScript = i18n::ScriptType::WEAK;
     if( xBreak.is() && rTxt.Len() )
     {
         if( nPos && nPos == rTxt.Len() )
@@ -134,17 +146,17 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const String& rTxt,
             nScript = xBreak->getScriptType( rTxt, nChgPos );
     }
     if( i18n::ScriptType::WEAK == nScript )
-        nScript = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
+        nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
     return nScript;
 }
 
-sal_uInt16 SwBreakIt::GetAllScriptsOfText( const String& rTxt ) const
+USHORT SwBreakIt::GetAllScriptsOfText( const String& rTxt ) const
 {
-    const sal_uInt16 coAllScripts = ( SCRIPTTYPE_LATIN |
+    const USHORT coAllScripts = ( SCRIPTTYPE_LATIN |
                                   SCRIPTTYPE_ASIAN |
                                   SCRIPTTYPE_COMPLEX );
     createBreakIterator();
-    sal_uInt16 nRet = 0, nScript;
+    USHORT nRet = 0, nScript;
     if( !xBreak.is() )
         nRet = coAllScripts;
     else if( rTxt.Len() )

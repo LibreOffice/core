@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2009 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ namespace dbaccess
                 break;
             }
 
-            OSL_FAIL( "lcl_getComponentStorageBaseName: unimplemented case!" );
+            OSL_ENSURE( false, "lcl_getComponentStorageBaseName: unimplemented case!" );
             static const ::rtl::OUString s_sFallback;
             return s_sFallback;
         }
@@ -322,12 +322,12 @@ namespace dbaccess
     void SAL_CALL SettingsDocumentHandler::startDocument(  ) throw (SAXException, RuntimeException)
     {
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::endDocument(  ) throw (SAXException, RuntimeException)
     {
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::startElement( const ::rtl::OUString& i_Name, const Reference< XAttributeList >& i_Attribs ) throw (SAXException, RuntimeException)
     {
@@ -335,13 +335,13 @@ namespace dbaccess
 
         if ( m_aStates.empty() )
         {
-            if ( i_Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "office:settings" ) ) )
+            if ( i_Name.equalsAscii( "office:settings" ) )
             {
                 pNewState = new OfficeSettingsImport( m_aSettings );
             }
             else
             {
-                OSL_FAIL( "SettingsDocumentHandler::startElement: invalid settings file!" );
+                OSL_ENSURE( false, "SettingsDocumentHandler::startElement: invalid settings file!" );
                 // Yes, that's not correct. Somebody could, in theory, give us a document which starts with "foo:settings",
                 // where "foo" is mapped to the proper namespace URL.
                 // However, there's no need to bother with this. The "recovery" sub storage we're recovering from is
@@ -359,7 +359,7 @@ namespace dbaccess
 
         m_aStates.push( pNewState );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::endElement( const ::rtl::OUString& i_Name ) throw (SAXException, RuntimeException)
     {
@@ -370,7 +370,7 @@ namespace dbaccess
         pCurrentState->endElement();
         m_aStates.pop();
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::characters( const ::rtl::OUString& i_Chars ) throw (SAXException, RuntimeException)
     {
@@ -379,22 +379,22 @@ namespace dbaccess
         ::rtl::Reference< SettingsImport > pCurrentState( m_aStates.top() );
         pCurrentState->characters( i_Chars );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (SAXException, RuntimeException)
     {
         // ignore them - that's why they're called "ignorable"
         (void)aWhitespaces;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::processingInstruction( const ::rtl::OUString& i_Target, const ::rtl::OUString& i_Data ) throw (SAXException, RuntimeException)
     {
-        OSL_FAIL( "SettingsDocumentHandler::processingInstruction: unexpected ..." );
+        OSL_ENSURE( false, "SettingsDocumentHandler::processingInstruction: unexpected ..." );
         (void)i_Target;
         (void)i_Data;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::setDocumentLocator( const Reference< XLocator >& i_Locator ) throw (SAXException, RuntimeException)
     {
@@ -429,7 +429,7 @@ namespace dbaccess
             break;
         }
 
-        OSL_FAIL( "SubComponentRecovery::getComponentsStorageName: unimplemented case!" );
+        OSL_ENSURE( false, "SubComponentRecovery::getComponentsStorageName: unimplemented case!" );
         static const ::rtl::OUString s_sFallback;
         return s_sFallback;
     }
@@ -466,7 +466,7 @@ namespace dbaccess
 
         default:
             // TODO
-            OSL_FAIL( "SubComponentRecoverys::saveToRecoveryStorage: unimplemented case!" );
+            OSL_ENSURE( false, "SubComponentRecoverys::saveToRecoveryStorage: unimplemented case!" );
             break;
         }
 
@@ -496,17 +496,17 @@ namespace dbaccess
         switch ( m_eType )
         {
         case TABLE:
-            m_aCompDesc.bForEditing = sModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.TableDesign" ) );
+            m_aCompDesc.bForEditing = sModuleIdentifier.equalsAscii( "com.sun.star.sdb.TableDesign" );
             break;
 
         case QUERY:
-            m_aCompDesc.bForEditing = sModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.QueryDesign" ) );
+            m_aCompDesc.bForEditing = sModuleIdentifier.equalsAscii( "com.sun.star.sdb.QueryDesign" );
             break;
 
         case REPORT:
-            if ( sModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.report.ReportDefinition" ) ) )
+            if ( sModuleIdentifier.equalsAscii( "com.sun.star.report.ReportDefinition" ) )
             {
-                // it's an SRB report designer
+                // it's an SRB report desginer
                 m_aCompDesc.bForEditing = true;
                 break;
             }
@@ -517,14 +517,14 @@ namespace dbaccess
             break;
 
         default:
-            if ( sModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.RelationDesign" ) ) )
+            if ( sModuleIdentifier.equalsAscii( "com.sun.star.sdb.RelationDesign" ) )
             {
                 m_eType = RELATION_DESIGN;
                 m_aCompDesc.bForEditing = true;
             }
             else
             {
-                OSL_FAIL( "SubComponentRecovery::impl_identifyComponent_throw: couldn't classify the given sub component!" );
+                OSL_ENSURE( false, "SubComponentRecovery::impl_identifyComponent_throw: couldn't classify the given sub component!" );
             }
             break;
         }
@@ -692,7 +692,7 @@ namespace dbaccess
             xSubComponent = impl_recoverQueryDesign_throw( i_rRecoveryStorage, i_rComponentName, i_bForEditing );
             break;
         default:
-            OSL_FAIL( "SubComponentRecovery::recoverFromStorage: unimplemented case!" );
+            OSL_ENSURE( false, "SubComponentRecovery::recoverFromStorage: unimplemented case!" );
             break;
         }
         return xSubComponent;

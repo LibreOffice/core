@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,31 +26,30 @@
  *
  ************************************************************************/
 
-#include    <rtl/alloc.h>
-#include    <osl/file.hxx>
-#include    <codemaker/typemanager.hxx>
+#include	<rtl/alloc.h>
+#include	<osl/file.hxx>
+#include	<codemaker/typemanager.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
+using namespace rtl;
+
 TypeManager::TypeManager()
 {
     m_pImpl = new TypeManagerImpl();
-    acquire();
-}
+    acquire();	
+}	
 
 TypeManager::~TypeManager()
 {
     release();
-}
+}	
 
 sal_Int32 TypeManager::acquire()
-{
+{ 
     return osl_incrementInterlockedCount(&m_pImpl->m_refCount);
 }
 
 sal_Int32 TypeManager::release()
-{
+{ 
     sal_Int32 refCount = 0;
     if (0 == (refCount = osl_decrementInterlockedCount(&m_pImpl->m_refCount)) )
     {
@@ -62,33 +61,33 @@ sal_Int32 TypeManager::release()
 RegistryTypeManager::RegistryTypeManager()
 {
     m_pImpl = new RegistryTypeManagerImpl();
-    acquire();
-}
+    acquire();	
+}	
 
 RegistryTypeManager::~RegistryTypeManager()
 {
     release();
-}
+}	
 
 void RegistryTypeManager::acquire()
-{
+{ 
     TypeManager::acquire();
 }
 
 void RegistryTypeManager::release()
-{
+{ 
     if (0 == TypeManager::release())
     {
         if (m_pImpl->m_pMergedRegistry)
-        {
+        {	
             if (m_pImpl->m_pMergedRegistry->isValid())
             {
                 m_pImpl->m_pMergedRegistry->destroy(OUString());
             }
-
+            
             delete m_pImpl->m_pMergedRegistry;
         }
-
+        
         if (m_pImpl->m_registries.size() > 0)
         {
             freeRegistries();
@@ -101,7 +100,7 @@ void RegistryTypeManager::release()
 sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFiles)
 {
     m_pImpl->m_isMerged = bMerged && (regFiles.size() > 1);
-
+    
     if (regFiles.empty())
         return sal_False;
 
@@ -117,7 +116,7 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
             freeRegistries();
             return sal_False;
         }
-        ++iter;
+        iter++;
     }
 
     if (m_pImpl->m_isMerged)
@@ -127,12 +126,12 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
         osl::FileBase::createTempFile(0, 0, &tmpName);
         if (!pTmpReg->create(tmpName))
         {
-            RegistryKey rootKey;
+            RegistryKey rootKey;	
             RegError ret = REG_NO_ERROR;
             OUString aRoot( RTL_CONSTASCII_USTRINGPARAM("/") );
             iter = regFiles.begin();
             pTmpReg->openRootKey(rootKey);
-
+            
             while (iter != regFiles.end())
             {
                 if ( (ret = pTmpReg->mergeKey(rootKey, aRoot, convertToFileUrl( *iter ))) )
@@ -146,9 +145,9 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
                         return sal_False;
                     }
                 }
-                ++iter;
+                iter++;
             }
-
+            
             m_pImpl->m_pMergedRegistry = pTmpReg;
             freeRegistries();
         } else
@@ -158,76 +157,76 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
             return sal_False;
         }
     }
-
+    
     return sal_True;
-}
+}	
 
 TypeReader RegistryTypeManager::getTypeReader(const OString& name)
 {
     TypeReader reader;
     RegistryKey key(searchTypeKey(name));
-
+    
     if (key.isValid())
     {
-        RegValueType    valueType;
-        sal_uInt32      valueSize;
+        RegValueType 	valueType;
+        sal_uInt32		valueSize;
 
         if (!key.getValueInfo(OUString(), &valueType, &valueSize))
         {
-            sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
+            sal_uInt8*	pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);	
             if (!key.getValue(OUString(), pBuffer))
             {
                 reader = TypeReader(pBuffer, valueSize, sal_True);
-            }
+            }		
             rtl_freeMemory(pBuffer);
         }
     }
     return reader;
-}
+}	
 
 RTTypeClass RegistryTypeManager::getTypeClass(const OString& name)
 {
     if (m_pImpl->m_t2TypeClass.count(name) > 0)
     {
-        return m_pImpl->m_t2TypeClass[name];
+        return m_pImpl->m_t2TypeClass[name];		
     } else
     {
         RegistryKey key(searchTypeKey(name));
-
+        
         if (key.isValid())
         {
-            RegValueType    valueType;
-            sal_uInt32      valueSize;
+            RegValueType 	valueType;
+            sal_uInt32		valueSize;
 
             if (!key.getValueInfo(OUString(), &valueType, &valueSize))
             {
-                sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
+                sal_uInt8*	pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);	
                 if (!key.getValue(OUString(), pBuffer))
                 {
                     TypeReader reader(pBuffer, valueSize, sal_False);
 
                     RTTypeClass ret = reader.getTypeClass();
-
+                    
                     rtl_freeMemory(pBuffer);
-
-                    m_pImpl->m_t2TypeClass[name] = ret;
+                    
+                    m_pImpl->m_t2TypeClass[name] = ret;				
                     return ret;
-                }
+                }		
                 rtl_freeMemory(pBuffer);
             }
         }
-    }
+    }	
 
-    return RT_TYPE_INVALID;
-}
+    return RT_TYPE_INVALID;	
+}	
 
 void RegistryTypeManager::setBase(const OString& base)
-{
+{ 
     m_pImpl->m_base = base;
 
     if (base.lastIndexOf('/') != (base.getLength() - 1))
     {
-        m_pImpl->m_base += "/";
+        m_pImpl->m_base += "/";			
     }
 }
 
@@ -239,12 +238,12 @@ void RegistryTypeManager::freeRegistries()
     {
         delete *iter;
 
-        ++iter;
-    }
+        iter++;
+    }	
 
-}
+}	
 
-RegistryKey RegistryTypeManager::searchTypeKey(const OString& name)
+RegistryKey	RegistryTypeManager::searchTypeKey(const OString& name)
 {
     RegistryKey key, rootKey;
 
@@ -266,12 +265,12 @@ RegistryKey RegistryTypeManager::searchTypeKey(const OString& name)
                     break;
             }
 
-            ++iter;
-        }
+            iter++;
+        }	
     }
-
+    
     return key;
-}
-
+}	
+    
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

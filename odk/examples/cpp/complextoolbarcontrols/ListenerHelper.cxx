@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ using com::sun::star::frame::FeatureStateEvent;
 
 static AllListeners aListeners;
 
-void ListenerHelper::AddListener(
-    const Reference < XFrame >& xFrame,
-    const Reference < XStatusListener > xControl,
+void ListenerHelper::AddListener( 
+    const Reference < XFrame >& xFrame, 
+    const Reference < XStatusListener > xControl, 
     const ::rtl::OUString& aCommand )
 {
     sal_uInt32 i=0;
@@ -56,8 +56,8 @@ void ListenerHelper::AddListener(
 }
 
 void ListenerHelper::RemoveListener(
-    const Reference < XFrame >& xFrame,
-    const Reference < XStatusListener > xControl,
+    const Reference < XFrame >& xFrame, 
+    const Reference < XStatusListener > xControl, 
     const ::rtl::OUString& aCommand )
 {
     sal_uInt32 nSize = aListeners.size();
@@ -73,16 +73,16 @@ void ListenerHelper::RemoveListener(
                 {
                     aL.erase( aIter );
                     break;
-                }
+                }		
 
-                ++aIter;
+                aIter++;
             }
         }
     }
 }
 
-void ListenerHelper::Notify(
-        const Reference < XFrame >& xFrame,
+void ListenerHelper::Notify( 
+        const Reference < XFrame >& xFrame, 
         const ::rtl::OUString& aCommand,
         FeatureStateEvent& rEvent )
 {
@@ -97,14 +97,14 @@ void ListenerHelper::Notify(
             while ( aIter != aL.end() )
             {
                 (*aIter)->statusChanged( rEvent );
-                ++aIter;
+                aIter++;
             }
         }
     }
 }
 
-com::sun::star::uno::Reference < XDispatch > ListenerHelper::GetDispatch(
-        const Reference < XFrame >& xFrame,
+com::sun::star::uno::Reference < XDispatch > ListenerHelper::GetDispatch( 
+        const Reference < XFrame >& xFrame, 
         const ::rtl::OUString& aCommand )
 {
     sal_uInt32 nSize = aListeners.size();
@@ -117,15 +117,15 @@ com::sun::star::uno::Reference < XDispatch > ListenerHelper::GetDispatch(
     return Reference < XDispatch >();
 }
 
-void ListenerHelper::AddDispatch(
+void ListenerHelper::AddDispatch( 	
         const Reference < XDispatch > xDispatch,
-        const Reference < XFrame >& xFrame,
+        const Reference < XFrame >& xFrame, 
         const ::rtl::OUString& aCommand )
 {
-    ListenerItem aItem;
+    ListenerItem aItem; 
     aItem.xFrame = xFrame;
     aItem.xDispatch = xDispatch;
-    aListeners.push_back( aItem );
+    aListeners.push_back( aItem );			
     xFrame->addEventListener( new ListenerItemEventListener( xFrame ) );
 }
 
@@ -138,9 +138,9 @@ void SAL_CALL ListenerItemEventListener::disposing( const EventObject& aEvent) t
         {
             aListeners.erase( aIter );
             break;
-        }
+        }		
 
-        ++aIter;
+        aIter++;
     }
 }
 

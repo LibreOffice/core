@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 #define _SVX_PASSWD_CXX
 
-#include "svx/passwd.hxx"
+#include "passwd.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "passwd.hrc"
@@ -44,7 +44,7 @@
 
 IMPL_LINK( SvxPasswordDialog, ButtonHdl, OKButton *, EMPTYARG )
 {
-    sal_Bool bOK = sal_True;
+    BOOL bOK = TRUE;
     short nRet = RET_OK;
     String aEmpty;
 
@@ -54,7 +54,7 @@ IMPL_LINK( SvxPasswordDialog, ButtonHdl, OKButton *, EMPTYARG )
         aNewPasswdED.SetText( aEmpty );
         aRepeatPasswdED.SetText( aEmpty );
         aNewPasswdED.GrabFocus();
-        bOK = sal_False;
+        bOK = FALSE;
     }
 
     if ( bOK && aCheckPasswordHdl.IsSet() && !aCheckPasswordHdl.Call( this ) )
@@ -62,9 +62,9 @@ IMPL_LINK( SvxPasswordDialog, ButtonHdl, OKButton *, EMPTYARG )
         ErrorBox( this, WB_OK, aOldPasswdErrStr ).Execute();
         aOldPasswdED.SetText( aEmpty );
         aOldPasswdED.GrabFocus();
-        bOK = sal_False;
+        bOK = FALSE;
     }
-
+        
     if ( bOK )
         EndDialog( nRet );
 
@@ -92,21 +92,21 @@ IMPL_LINK( SvxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-SvxPasswordDialog::SvxPasswordDialog( Window* pParent, sal_Bool bAllowEmptyPasswords, sal_Bool bDisableOldPassword ) :
+SvxPasswordDialog::SvxPasswordDialog( Window* pParent, BOOL bAllowEmptyPasswords, BOOL bDisableOldPassword ) :
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_PASSWORD ) ),
     aOldFL          ( this, SVX_RES( FL_OLD_PASSWD ) ),
     aOldPasswdFT    ( this, SVX_RES( FT_OLD_PASSWD ) ),
-    aOldPasswdED    ( this, SVX_RES( ED_OLD_PASSWD ) ),
+    aOldPasswdED	( this, SVX_RES( ED_OLD_PASSWD ) ),
     aNewFL          ( this, SVX_RES( FL_NEW_PASSWD ) ),
     aNewPasswdFT    ( this, SVX_RES( FT_NEW_PASSWD ) ),
-    aNewPasswdED    ( this, SVX_RES( ED_NEW_PASSWD ) ),
-    aRepeatPasswdFT ( this, SVX_RES( FT_REPEAT_PASSWD ) ),
-    aRepeatPasswdED ( this, SVX_RES( ED_REPEAT_PASSWD ) ),
+    aNewPasswdED	( this, SVX_RES( ED_NEW_PASSWD ) ),
+    aRepeatPasswdFT	( this, SVX_RES( FT_REPEAT_PASSWD ) ),
+    aRepeatPasswdED	( this, SVX_RES( ED_REPEAT_PASSWD ) ),
     aOKBtn          ( this, SVX_RES( BTN_PASSWD_OK ) ),
-    aEscBtn         ( this, SVX_RES( BTN_PASSWD_ESC ) ),
-    aHelpBtn        ( this, SVX_RES( BTN_PASSWD_HELP ) ),
-    aOldPasswdErrStr    ( SVX_RES( STR_ERR_OLD_PASSWD ) ),
-    aRepeatPasswdErrStr ( SVX_RES( STR_ERR_REPEAT_PASSWD ) ),
+    aEscBtn			( this, SVX_RES( BTN_PASSWD_ESC ) ),
+    aHelpBtn		( this, SVX_RES( BTN_PASSWD_HELP ) ),
+    aOldPasswdErrStr	( SVX_RES( STR_ERR_OLD_PASSWD ) ),
+    aRepeatPasswdErrStr	( SVX_RES( STR_ERR_REPEAT_PASSWD ) ),
     bEmpty  ( bAllowEmptyPasswords )
 {
     FreeResource();

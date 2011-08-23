@@ -1,6 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //Implementierung der Klasse RegistrationContextInformation.
 
+#include <assert.h>
 #include "registrationcontextinformation.hxx"
 #include "msihelper.hxx"
 
@@ -30,7 +31,7 @@ RegistrationContextInformation::RegistrationContextInformation(MSIHANDLE hMsi, c
 }
 
 std::wstring RegistrationContextInformation::GetWordDocumentDisplayName() const
-{
+{	
     std::wstring str;
     GetMsiProp(msihandle_, TEXT("STR_MS_WORD_DOCUMENT"), str);
     if (m_IsWin9x && !IsConvertableToAnsi(str))
@@ -78,7 +79,7 @@ std::wstring RegistrationContextInformation::GetWordTemplateDefaultShellCommand(
 }
 
 std::wstring RegistrationContextInformation::GetRtfDocumentDisplayName() const
-{
+{	
     std::wstring str;
     GetMsiProp(msihandle_, TEXT("STR_RTF_DOCUMENT"), str);
     if (m_IsWin9x && !IsConvertableToAnsi(str))
@@ -220,7 +221,7 @@ std::wstring RegistrationContextInformation::GetPowerPointShowDefaultShellComman
 {
     return std::wstring(TEXT("open"));
 }
-
+    
 //----------------------------------------------
 /** The string for the "New" command that should appear
     in the Explorer context menu when someone right
@@ -231,13 +232,13 @@ std::wstring RegistrationContextInformation::ShellNewCommandDisplayName() const
     std::wstring str;
     GetMsiProp(msihandle_, TEXT("STR_NEW_DISPLAY_NAME"), str);
     std::wstring::size_type idx = str.find(TEXT("~"));
-
+    
     if(std::wstring::npos != idx)
         str.replace(idx, 1, TEXT("&"));
-
+        
     if (m_IsWin9x && !IsConvertableToAnsi(str))
         str = TEXT("&New");
-
+        
     return str;
 }
 
@@ -250,7 +251,7 @@ std::wstring RegistrationContextInformation::ShellEditCommandDisplayName() const
     std::wstring str;
     GetMsiProp(msihandle_, TEXT("STR_EDIT"), str);
     std::wstring::size_type idx = str.find(TEXT("~"));
-
+    
     if(std::wstring::npos != idx)
         str.replace(idx, 1, TEXT("&"));
 
@@ -263,7 +264,7 @@ std::wstring RegistrationContextInformation::ShellEditCommandDisplayName() const
 std::wstring RegistrationContextInformation::GetOpenOfficeFriendlyAppName() const
 {
     std::wstring str;
-    GetMsiProp(msihandle_, TEXT("ProductName"), str);
+    GetMsiProp(msihandle_, TEXT("ProductName"), str);	
     return str;
 }
 
@@ -301,7 +302,7 @@ std::wstring RegistrationContextInformation::GetOpenOfficeCommandline(SHELL_COMM
         break;
     case Office: // default to std command line
         break;
-    // default: no default to find new added enums at compile time
+    // default: no default to find new added enums at compile time 
     }
     switch(ShellCommand)
     {
@@ -317,7 +318,7 @@ std::wstring RegistrationContextInformation::GetOpenOfficeCommandline(SHELL_COMM
     case Printto:
         cmd_line += std::wstring(TEXT(" -pt \"%2\" \"%1\""));
         break;
-    // default: no default to find new added enums at compile time
+    // default: no default to find new added enums at compile time 
     }
     return cmd_line;
 }
@@ -337,7 +338,7 @@ bool RegistrationContextInformation::IsConvertableToAnsi(const std::wstring& Str
             buff,
             sizeof(buff),
             NULL,
-            &bUsedDefChar);
+            &bUsedDefChar);        
     }
     return !bUsedDefChar;
 }

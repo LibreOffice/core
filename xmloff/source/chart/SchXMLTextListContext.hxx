@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public:
     virtual void EndElement();
 
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix,
+        USHORT nPrefix,
         const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -56,6 +56,6 @@ private:
     std::vector< ::rtl::OUString> m_aTextVector;
 };
 
-#endif  // _SCH_XMLTEXTLISTCONTEXT_HXX_
+#endif	// _SCH_XMLTEXTLISTCONTEXT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

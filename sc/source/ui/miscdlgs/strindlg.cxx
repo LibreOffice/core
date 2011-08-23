@@ -56,7 +56,7 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
                                     const String&   rTitle,
                                     const String&   rEditTitle,
                                     const String&   rDefault,
-                                    const rtl::OString& sHelpId, const rtl::OString& sEditHelpId    ) :
+                                    ULONG nHelpId    ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_STRINPUT ) ),
     //
     aFtEditTitle    ( this, ScResId( FT_LABEL ) ),
@@ -65,12 +65,30 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
-    SetHelpId( sHelpId );
+    SetHelpId( nHelpId );
     SetText( rTitle );
     aFtEditTitle.SetText( rEditTitle );
     aEdInput.SetText( rDefault );
     aEdInput.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    aEdInput.SetHelpId( sEditHelpId );
+
+    //	HelpId for Edit different for different uses
+
+    if ( nHelpId == FID_TAB_APPEND )
+        aEdInput.SetHelpId( HID_SC_APPEND_NAME );
+    else if ( nHelpId == FID_TAB_RENAME )
+        aEdInput.SetHelpId( HID_SC_RENAME_NAME );
+    else if ( nHelpId == HID_SC_ADD_AUTOFMT )
+        aEdInput.SetHelpId( HID_SC_AUTOFMT_NAME );
+    else if ( nHelpId == HID_SC_REN_AFMT_DLG )
+        aEdInput.SetHelpId( HID_SC_REN_AFMT_NAME );
+    else if ( nHelpId == SID_RENAME_OBJECT )
+        aEdInput.SetHelpId( HID_SC_RENAME_OBJECT );
+    // #i68101#
+    else if ( nHelpId == SID_TITLE_DESCRIPTION_OBJECT )
+        aEdInput.SetHelpId( HID_SC_TITLE_DESCRIPTION_OBJECT );
+    else
+        DBG_ERRORFILE( "unknown ID" );
+
     //-------------
     FreeResource();
 }
@@ -82,7 +100,7 @@ void ScStringInputDlg::GetInputString( String& rString ) const
     rString = aEdInput.GetText();
 }
 
-ScStringInputDlg::~ScStringInputDlg()
+__EXPORT ScStringInputDlg::~ScStringInputDlg()
 {
 }
 

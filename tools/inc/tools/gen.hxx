@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,23 +73,23 @@ inline long FRound( double fVal )
 class Pair
 {
 public:
-    long                nA;
-    long                nB;
+    long				nA;
+    long				nB;
 
                         Pair();
                         Pair( long nA, long nB );
 
-    long                A() const { return nA; }
-    long                B() const { return nB; }
+    long				A() const { return nA; }
+    long				B() const { return nB; }
 
-    long&               A() { return nA; }
-    long&               B() { return nB; }
+    long&				A() { return nA; }
+    long&				B() { return nB; }
 
-    sal_Bool                operator == ( const Pair& rPair ) const;
-    sal_Bool                operator != ( const Pair& rPair ) const;
+    BOOL				operator == ( const Pair& rPair ) const;
+    BOOL				operator != ( const Pair& rPair ) const;
 
-    TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Pair& rPair );
-    TOOLS_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStream, const Pair& rPair );
+    TOOLS_DLLPUBLIC friend SvStream&	operator>>( SvStream& rIStream, Pair& rPair );
+    TOOLS_DLLPUBLIC friend SvStream&	operator<<( SvStream& rOStream, const Pair& rPair );
 };
 
 inline Pair::Pair()
@@ -103,12 +103,12 @@ inline Pair::Pair( long _nA, long _nB )
     Pair::nB = _nB;
 }
 
-inline sal_Bool Pair::operator == ( const Pair& rPair ) const
+inline BOOL Pair::operator == ( const Pair& rPair ) const
 {
     return ((nA == rPair.nA) && (nB == rPair.nB));
 }
 
-inline sal_Bool Pair::operator != ( const Pair& rPair ) const
+inline BOOL Pair::operator != ( const Pair& rPair ) const
 {
     return ((nA != rPair.nA) || (nB != rPair.nB));
 }
@@ -123,28 +123,28 @@ public:
                         Point();
                         Point( long nX, long nY );
 
-    long                X() const { return nA; }
-    long                Y() const { return nB; }
+    long				X() const { return nA; }
+    long				Y() const { return nB; }
 
-    long&               X() { return nA; }
-    long&               Y() { return nB; }
+    long&				X() { return nA; }
+    long&				Y() { return nB; }
 
-    void                Move( long nHorzMove, long nVertMove );
-    sal_Bool                IsAbove( const Point& rPoint ) const;
-    sal_Bool                IsBelow( const Point& rPoint ) const;
-    sal_Bool                IsLeft( const Point& rPoint ) const;
-    sal_Bool                IsRight( const Point& rPoint ) const;
+    void				Move( long nHorzMove, long nVertMove );
+    BOOL				IsAbove( const Point& rPoint ) const;
+    BOOL				IsBelow( const Point& rPoint ) const;
+    BOOL				IsLeft( const Point& rPoint ) const;
+    BOOL				IsRight( const Point& rPoint ) const;
 
-    Point&              operator += ( const Point& rPoint );
-    Point&              operator -= ( const Point& rPoint );
-    Point&              operator *= ( const long nVal );
-    Point&              operator /= ( const long nVal );
+    Point&				operator += ( const Point& rPoint );
+    Point&				operator -= ( const Point& rPoint );
+    Point&				operator *= ( const long nVal );
+    Point&				operator /= ( const long nVal );
 
 #ifdef __BORLANDC__
-    friend Point        operator+( const Point &rVal1, const Point &rVal2 );
-    friend Point        operator-( const Point &rVal1, const Point &rVal2 );
-    friend Point        operator*( const Point &rVal1, const long nVal2 );
-    friend Point        operator/( const Point &rVal1, const long nVal2 );
+    friend Point		operator+( const Point &rVal1, const Point &rVal2 );
+    friend Point		operator-( const Point &rVal1, const Point &rVal2 );
+    friend Point		operator*( const Point &rVal1, const long nVal2 );
+    friend Point		operator/( const Point &rVal1, const long nVal2 );
 #else
     friend inline Point operator+( const Point &rVal1, const Point &rVal2 );
     friend inline Point operator-( const Point &rVal1, const Point &rVal2 );
@@ -152,10 +152,10 @@ public:
     friend inline Point operator/( const Point &rVal1, const long nVal2 );
 #endif
 
-    long                getX() const { return X(); }
-    long                getY() const { return Y(); }
-    void                setX(long nX)  { X() = nX; }
-    void                setY(long nY)  { Y() = nY; }
+    long				getX() const { return X(); }
+    long				getY() const { return Y(); }
+    void				setX(long nX)  { X() = nX; }
+    void				setY(long nY)  { Y() = nY; }
 };
 
 inline Point::Point()
@@ -172,22 +172,22 @@ inline void Point::Move( long nHorzMove, long nVertMove )
     nB += nVertMove;
 }
 
-inline sal_Bool Point::IsAbove( const Point& rPoint ) const
+inline BOOL Point::IsAbove( const Point& rPoint ) const
 {
     return (nB > rPoint.nB);
 }
 
-inline sal_Bool Point::IsBelow( const Point& rPoint ) const
+inline BOOL Point::IsBelow( const Point& rPoint ) const
 {
     return (nB < rPoint.nB);
 }
 
-inline sal_Bool Point::IsLeft( const Point& rPoint ) const
+inline BOOL Point::IsLeft( const Point& rPoint ) const
 {
     return (nA < rPoint.nA);
 }
 
-inline sal_Bool Point::IsRight( const Point& rPoint ) const
+inline BOOL Point::IsRight( const Point& rPoint ) const
 {
     return (nA > rPoint.nA);
 }
@@ -250,16 +250,16 @@ public:
                     Size();
                     Size( long nWidth, long nHeight );
 
-    long            Width() const  { return nA; }
-    long            Height() const { return nB; }
+    long			Width() const  { return nA; }
+    long			Height() const { return nB; }
 
-    long&           Width()  { return nA; }
-    long&           Height() { return nB; }
+    long&			Width()  { return nA; }
+    long&			Height() { return nB; }
 
-    long                getWidth() const { return Width(); }
-    long                getHeight() const { return Height(); }
-    void                setWidth(long nWidth)  { Width() = nWidth; }
-    void                setHeight(long nHeight)  { Height() = nHeight; }
+    long				getWidth() const { return Width(); }
+    long				getHeight() const { return Height(); }
+    void				setWidth(long nWidth)  { Width() = nWidth; }
+    void				setHeight(long nHeight)  { Height() = nHeight; }
 };
 
 inline Size::Size()
@@ -275,8 +275,8 @@ inline Size::Size( long nWidth, long nHeight ) :
 // - Range -
 // ---------
 
-#define RANGE_MIN   LONG_MIN
-#define RANGE_MAX   LONG_MAX
+#define RANGE_MIN	LONG_MIN
+#define RANGE_MAX	LONG_MAX
 
 class Range : public Pair
 {
@@ -284,16 +284,16 @@ public:
                     Range();
                     Range( long nMin, long nMax );
 
-    long            Min() const { return nA; }
-    long            Max() const { return nB; }
-    long            Len() const { return nB - nA + 1; }
+    long			Min() const { return nA; }
+    long			Max() const { return nB; }
+    long			Len() const { return nB - nA + 1; }
 
-    long&           Min() { return nA; }
-    long&           Max() { return nB; }
+    long&			Min() { return nA; }
+    long&			Max() { return nB; }
 
-    sal_Bool            IsInside( long nIs ) const;
+    BOOL			IsInside( long nIs ) const;
 
-    void            Justify();
+    void			Justify();
 };
 
 inline Range::Range()
@@ -304,7 +304,7 @@ inline Range::Range( long nMin, long nMax ) : Pair( nMin, nMax )
 {
 }
 
-inline sal_Bool Range::IsInside( long nIs ) const
+inline BOOL Range::IsInside( long nIs ) const
 {
     return ((nA <= nIs) && (nIs <= nB ));
 }
@@ -323,8 +323,8 @@ inline void Range::Justify()
 // - Selection -
 // -------------
 
-#define SELECTION_MIN   LONG_MIN
-#define SELECTION_MAX   LONG_MAX
+#define SELECTION_MIN	LONG_MIN
+#define SELECTION_MAX	LONG_MAX
 
 class Selection : public Pair
 {
@@ -333,23 +333,23 @@ public:
                     Selection( long nPos );
                     Selection( long nMin, long nMax );
 
-    long            Min() const { return nA; }
-    long            Max() const { return nB; }
-    long            Len() const { return nB - nA; }
+    long			Min() const { return nA; }
+    long			Max() const { return nB; }
+    long			Len() const { return nB - nA; }
 
-    long&           Min() { return nA; }
-    long&           Max() { return nB; }
+    long&			Min() { return nA; }
+    long&			Max() { return nB; }
 
-    sal_Bool            IsInside( long nIs ) const;
+    BOOL			IsInside( long nIs ) const;
 
-    void            Justify();
+    void			Justify();
 
-    sal_Bool            operator !() const { return !Len(); }
+    BOOL			operator !() const { return !Len(); }
 
-    long                getMin() const { return Min(); }
-    long                getMax() const { return Max(); }
-    void                setMin(long nMin)  { Min() = nMin; }
-    void                setMax(long nMax)  { Max() = nMax; }
+    long				getMin() const { return Min(); }
+    long				getMax() const { return Max(); }
+    void				setMin(long nMin)  { Min() = nMin; }
+    void				setMax(long nMax)  { Max() = nMax; }
 };
 
 inline Selection::Selection()
@@ -365,7 +365,7 @@ inline Selection::Selection( long nMin, long nMax ) :
 {
 }
 
-inline sal_Bool Selection::IsInside( long nIs ) const
+inline BOOL Selection::IsInside( long nIs ) const
 {
     return ((nA <= nIs) && (nIs < nB ));
 }
@@ -384,15 +384,15 @@ inline void Selection::Justify()
 // - Rectangle -
 // -------------
 
-#define RECT_EMPTY  ((short)-32767)
+#define RECT_EMPTY	((short)-32767)
 
 class TOOLS_DLLPUBLIC Rectangle
 {
 public:
-    long                nLeft;
-    long                nTop;
-    long                nRight;
-    long                nBottom;
+    long				nLeft;
+    long				nTop;
+    long				nRight;
+    long				nBottom;
 
                         Rectangle();
                         Rectangle( const Point& rLT, const Point& rRB );
@@ -400,75 +400,75 @@ public:
                                    long nRight, long nBottom );
                         Rectangle( const Point& rLT, const Size& rSize );
 
-    long                Left() const    { return nLeft;   }
-    long                Right() const   { return nRight;  }
-    long                Top() const     { return nTop;    }
-    long                Bottom() const  { return nBottom; }
+    long				Left() const	{ return nLeft;   }
+    long				Right() const	{ return nRight;  }
+    long				Top() const 	{ return nTop;	  }
+    long				Bottom() const	{ return nBottom; }
 
-    long&               Left()          { return nLeft;   }
-    long&               Right()         { return nRight;  }
-    long&               Top()           { return nTop;    }
-    long&               Bottom()        { return nBottom; }
+    long&				Left()			{ return nLeft;   }
+    long&				Right() 		{ return nRight;  }
+    long&				Top()			{ return nTop;	  }
+    long&				Bottom()		{ return nBottom; }
 
-    inline Point                TopLeft() const;
-    Point               TopRight() const;
-    Point               TopCenter() const;
-    Point               BottomLeft() const;
-    Point               BottomRight() const;
-    Point               BottomCenter() const;
-    Point               LeftCenter() const;
-    Point               RightCenter() const;
-    Point               Center() const;
+    inline Point				TopLeft() const;
+    Point				TopRight() const;
+    Point				TopCenter() const;
+    Point				BottomLeft() const;
+    Point				BottomRight() const;
+    Point				BottomCenter() const;
+    Point				LeftCenter() const;
+    Point				RightCenter() const;
+    Point				Center() const;
 
-    void                Move( long nHorzMove, long nVertMove );
+    void				Move( long nHorzMove, long nVertMove );
     inline void         Transpose();
-    inline void         SetPos( const Point& rPoint );
-    void                SetSize( const Size& rSize );
-    inline Size         GetSize() const;
+    inline void			SetPos( const Point& rPoint );
+    void				SetSize( const Size& rSize );
+    inline Size			GetSize() const;
 
-    long                GetWidth() const;
-    long                GetHeight() const;
+    long				GetWidth() const;
+    long				GetHeight() const;
 
-    Rectangle&          Union( const Rectangle& rRect );
-    Rectangle&          Intersection( const Rectangle& rRect );
-    Rectangle           GetUnion( const Rectangle& rRect ) const;
-    Rectangle           GetIntersection( const Rectangle& rRect ) const;
+    Rectangle&			Union( const Rectangle& rRect );
+    Rectangle&			Intersection( const Rectangle& rRect );
+    Rectangle			GetUnion( const Rectangle& rRect ) const;
+    Rectangle			GetIntersection( const Rectangle& rRect ) const;
 
-    void                Justify();
+    void				Justify();
 
-    sal_Bool                IsInside( const Point& rPOINT ) const;
-    sal_Bool                IsInside( const Rectangle& rRect ) const;
-    sal_Bool                IsOver( const Rectangle& rRect ) const;
+    BOOL				IsInside( const Point& rPOINT ) const;
+    BOOL				IsInside( const Rectangle& rRect ) const;
+    BOOL				IsOver( const Rectangle& rRect ) const;
 
-    void                SetEmpty() { nRight = nBottom = RECT_EMPTY; }
-    sal_Bool                IsEmpty() const;
+    void				SetEmpty() { nRight = nBottom = RECT_EMPTY; }
+    BOOL				IsEmpty() const;
 
-    sal_Bool                operator == ( const Rectangle& rRect ) const;
-    sal_Bool                operator != ( const Rectangle& rRect ) const;
+    BOOL				operator == ( const Rectangle& rRect ) const;
+    BOOL				operator != ( const Rectangle& rRect ) const;
 
-    Rectangle&          operator += ( const Point& rPt );
-    Rectangle&          operator -= ( const Point& rPt );
+    Rectangle&			operator += ( const Point& rPt );
+    Rectangle&			operator -= ( const Point& rPt );
 
 #ifdef __BORLANDC__
-    friend Rectangle    operator + ( const Rectangle& rRect, const Point& rPt );
-    friend Rectangle    operator - ( const Rectangle& rRect, const Point& rPt );
+    friend Rectangle	operator + ( const Rectangle& rRect, const Point& rPt );
+    friend Rectangle	operator - ( const Rectangle& rRect, const Point& rPt );
 #else
     friend inline Rectangle operator + ( const Rectangle& rRect, const Point& rPt );
     friend inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt );
 #endif
 
-    TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Rectangle& rRect );
-    TOOLS_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStream, const Rectangle& rRect );
+    TOOLS_DLLPUBLIC friend SvStream&	operator>>( SvStream& rIStream, Rectangle& rRect );
+    TOOLS_DLLPUBLIC friend SvStream&	operator<<( SvStream& rOStream, const Rectangle& rRect );
 
     // ONE
-    long                getX() const { return nLeft; }
-    long                getY() const { return nTop; }
-    long                getWidth() const { return nRight - nLeft; }
-    long                getHeight() const { return nBottom - nTop; }
-    void                setX( long n ) { nRight += n-nLeft; nLeft = n; }
-    void                setY( long n ) { nBottom += n-nTop; nTop = n; }
-    void                setWidth( long n ) { nRight = nLeft + n; }
-    void                setHeight( long n ) { nBottom = nTop + n; }
+    long				getX() const { return nLeft; }
+    long				getY() const { return nTop; }
+    long				getWidth() const { return nRight - nLeft; }
+    long				getHeight() const { return nBottom - nTop; }
+    void				setX( long n ) { nRight += n-nLeft; nLeft = n; }
+    void				setY( long n ) { nBottom += n-nTop; nTop = n; }
+    void				setWidth( long n ) { nRight = nLeft + n; }
+    void				setHeight( long n ) { nBottom = nTop + n; }
 };
 
 inline Rectangle::Rectangle()
@@ -479,30 +479,30 @@ inline Rectangle::Rectangle()
 
 inline Rectangle::Rectangle( const Point& rLT, const Point& rRB )
 {
-    nLeft   = rLT.X();
-    nTop    = rLT.Y();
-    nRight  = rRB.X();
+    nLeft	= rLT.X();
+    nTop	= rLT.Y();
+    nRight	= rRB.X();
     nBottom = rRB.Y();
 }
 
 inline Rectangle::Rectangle( long _nLeft,  long _nTop,
                              long _nRight, long _nBottom )
 {
-    nLeft   = _nLeft;
-    nTop    = _nTop;
-    nRight  = _nRight;
+    nLeft	= _nLeft;
+    nTop	= _nTop;
+    nRight	= _nRight;
     nBottom = _nBottom;
 }
 
 inline Rectangle::Rectangle( const Point& rLT, const Size& rSize )
 {
-    nLeft   = rLT.X();
-    nTop    = rLT.Y();
-    nRight  = rSize.Width()  ? nLeft+rSize.Width()-1 : RECT_EMPTY;
+    nLeft	= rLT.X();
+    nTop	= rLT.Y();
+    nRight	= rSize.Width()  ? nLeft+rSize.Width()-1 : RECT_EMPTY;
     nBottom = rSize.Height() ? nTop+rSize.Height()-1 : RECT_EMPTY;
 }
 
-inline sal_Bool Rectangle::IsEmpty() const
+inline BOOL Rectangle::IsEmpty() const
 {
     return ((nRight == RECT_EMPTY) || (nBottom == RECT_EMPTY));
 }
@@ -655,18 +655,18 @@ inline Rectangle Rectangle::GetIntersection( const Rectangle& rRect ) const
     return aTmpRect.Intersection( rRect );
 }
 
-inline sal_Bool Rectangle::operator == ( const Rectangle& rRect ) const
+inline BOOL Rectangle::operator == ( const Rectangle& rRect ) const
 {
-    return ((nLeft   == rRect.nLeft   ) &&
-            (nTop    == rRect.nTop    ) &&
+    return ((nLeft	 == rRect.nLeft   ) &&
+            (nTop	 == rRect.nTop	  ) &&
             (nRight  == rRect.nRight  ) &&
             (nBottom == rRect.nBottom ));
 }
 
-inline sal_Bool Rectangle::operator != ( const Rectangle& rRect ) const
+inline BOOL Rectangle::operator != ( const Rectangle& rRect ) const
 {
-    return ((nLeft   != rRect.nLeft   ) ||
-            (nTop    != rRect.nTop    ) ||
+    return ((nLeft	 != rRect.nLeft   ) ||
+            (nTop	 != rRect.nTop	  ) ||
             (nRight  != rRect.nRight  ) ||
             (nBottom != rRect.nBottom ));
 }
@@ -696,7 +696,7 @@ inline Rectangle& Rectangle::operator -= ( const Point& rPt )
 inline Rectangle operator + ( const Rectangle& rRect, const Point& rPt )
 {
     Rectangle aRect( rRect.nLeft  + rPt.X(), rRect.nTop    + rPt.Y(),
-                     (rRect.nRight  == RECT_EMPTY) ? RECT_EMPTY : rRect.nRight + rPt.X(),
+                     (rRect.nRight	== RECT_EMPTY) ? RECT_EMPTY : rRect.nRight + rPt.X(),
                      (rRect.nBottom == RECT_EMPTY) ? RECT_EMPTY : rRect.nBottom + rPt.Y() );
     return aRect;
 }
@@ -705,7 +705,7 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
 {
     Rectangle aRect( rRect.nLeft - rPt.X(),
                      rRect.nTop - rPt.Y(),
-                     (rRect.nRight  == RECT_EMPTY) ? RECT_EMPTY : rRect.nRight - rPt.X(),
+                     (rRect.nRight	== RECT_EMPTY) ? RECT_EMPTY : rRect.nRight - rPt.X(),
                      (rRect.nBottom == RECT_EMPTY) ? RECT_EMPTY : rRect.nBottom - rPt.Y() );
     return aRect;
 }

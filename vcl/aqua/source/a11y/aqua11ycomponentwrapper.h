@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 +(id)positionAttributeForElement:(AquaA11yWrapper *)wrapper;
 +(id)descriptionAttributeForElement:(AquaA11yWrapper *)wrapper;
 +(void)addAttributeNamesTo:(NSMutableArray *)attributeNames;
-+(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
++(MacOSBOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
 +(void)setFocusedAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
 @end
 

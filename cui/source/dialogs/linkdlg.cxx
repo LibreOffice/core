@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 #include <linkdlg.hxx>
 #include <vcl/svapp.hxx>
@@ -54,10 +57,10 @@
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 
-#define MAX_FILENAME    18
-#define MAX_LINKNAME    18
-#define MAX_TYPENAME    15
-#define MAX_UPDATENAME  10
+#define MAX_FILENAME	18
+#define MAX_LINKNAME	18
+#define MAX_TYPENAME	15
+#define MAX_UPDATENAME	10
 
 #define FILEOBJECT ( OBJECT_CLIENT_FILE & ~OBJECT_CLIENT_SO )
 
@@ -67,33 +70,32 @@ SV_DECL_IMPL_REF_LIST(SvBaseLink,SvBaseLink*)
 
 // Achtung im Code wird dieses Array direkt (0, 1, ...) indiziert
 static long nTabs[] =
-    {   4, // Number of Tabs
+    {	4, // Number of Tabs
         0, 77, 144, 209
     };
 
 
-SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, sal_Bool bHtml )
+SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, BOOL bHtml )
     : ModalDialog( pParent, CUI_RES( MD_UPDATE_BASELINKS ) ),
     aFtFiles( this, CUI_RES( FT_FILES ) ),
     aFtLinks( this, CUI_RES( FT_LINKS ) ),
     aFtType( this, CUI_RES( FT_TYPE ) ),
     aFtStatus( this, CUI_RES( FT_STATUS ) ),
-    aTbLinks( this, CUI_RES(TB_LINKS ) ),
-    aFtFiles2( this, CUI_RES( FT_FILES2 ) ),
-    aFtFullFileName( this, CUI_RES( FT_FULL_FILE_NAME ) ),
-    aFtSource2( this, CUI_RES( FT_SOURCE2 ) ),
-    aFtFullSourceName( this, CUI_RES( FT_FULL_SOURCE_NAME ) ),
-    aFtType2( this, CUI_RES( FT_TYPE2 ) ),
-    aFtFullTypeName( this, CUI_RES( FT_FULL_TYPE_NAME ) ),
-    aFtUpdate( this, CUI_RES( FT_UPDATE ) ),
-    aRbAutomatic( this, CUI_RES( RB_AUTOMATIC ) ),
-    aRbManual( this, CUI_RES( RB_MANUAL ) ),
     aCancelButton1( this, CUI_RES( 1 ) ),
     aHelpButton1( this, CUI_RES( 1 ) ),
     aPbUpdateNow( this, CUI_RES( PB_UPDATE_NOW ) ),
     aPbOpenSource( this, CUI_RES( PB_OPEN_SOURCE ) ),
     aPbChangeSource( this, CUI_RES( PB_CHANGE_SOURCE ) ),
     aPbBreakLink( this, CUI_RES( PB_BREAK_LINK ) ),
+    aFtFiles2( this, CUI_RES( FT_FILES2 ) ),
+    aFtSource2( this, CUI_RES( FT_SOURCE2 ) ),
+    aFtType2( this, CUI_RES( FT_TYPE2 ) ),
+    aFtUpdate( this, CUI_RES( FT_UPDATE ) ),
+    aRbAutomatic( this, CUI_RES( RB_AUTOMATIC ) ),
+    aRbManual( this, CUI_RES( RB_MANUAL ) ),
+    aFtFullFileName( this, CUI_RES( FT_FULL_FILE_NAME ) ),
+    aFtFullSourceName( this, CUI_RES( FT_FULL_SOURCE_NAME ) ),
+    aFtFullTypeName( this, CUI_RES( FT_FULL_TYPE_NAME ) ),
     aStrAutolink( CUI_RES( STR_AUTOLINK ) ),
     aStrManuallink( CUI_RES( STR_MANUALLINK ) ),
     aStrBrokenlink( CUI_RES( STR_BROKENLINK ) ),
@@ -103,7 +105,8 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, sal_Bool bH
     aStrCloselinkmsgMulti( CUI_RES( STR_CLOSELINKMSG_MULTI ) ),
     aStrWaitinglink( CUI_RES( STR_WAITINGLINK ) ),
     pLinkMgr( NULL ),
-    bHtmlMode(bHtml)
+    bHtmlMode(bHtml),
+    aTbLinks( this, CUI_RES(TB_LINKS ) )
 {
     FreeResource();
 
@@ -112,15 +115,9 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, sal_Bool bH
     aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
     aTbLinks.Resize();  // OS: Hack fuer richtige Selektion
 
-    // UpdateTimer fuer DDE-/Grf-Links, auf die gewarted wird
+    //JP 24.02.99: UpdateTimer fuer DDE-/Grf-Links, auf die gewarted wird
     aUpdateTimer.SetTimeoutHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
     aUpdateTimer.SetTimeout( 1000 );
-    //IAccessibility2 Implementation 2009-----
-    // Set the ZOrder, and accessible name to the dialog's title
-    aTbLinks.SetZOrder(0, WINDOW_ZORDER_FIRST);
-    aTbLinks.SetAccessibleName(this->GetText());
-    aTbLinks.SetAccessibleRelationLabeledBy(&aFtFiles);
-    //-----IAccessibility2 Implementation 2009
 
     OpenSource().Hide();
 
@@ -129,6 +126,7 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, sal_Bool bH
     Automatic().SetClickHdl( LINK( this, SvBaseLinksDlg, AutomaticClickHdl ) );
     Manual().SetClickHdl( LINK( this, SvBaseLinksDlg, ManualClickHdl ) );
     UpdateNow().SetClickHdl( LINK( this, SvBaseLinksDlg, UpdateNowClickHdl ) );
+//  OpenSource().SetClickHdl( LINK( this, SvBaseLinksDlg, OpenSourceClickHdl ) );
     ChangeSource().SetClickHdl( LINK( this, SvBaseLinksDlg, ChangeSourceClickHdl ) );
     if(!bHtmlMode)
         BreakLink().SetClickHdl( LINK( this, SvBaseLinksDlg, BreakLinkClickHdl ) );
@@ -144,11 +142,15 @@ SvBaseLinksDlg::~SvBaseLinksDlg()
 
 /*************************************************************************
 |*    SvBaseLinksDlg::Handler()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 14.06.94
+|*	  Letzte Aenderung	JP 30.05.95
 *************************************************************************/
 IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
 {
-    sal_uInt16 nSelectionCount = pSvTabListBox ?
-        (sal_uInt16)pSvTabListBox->GetSelectionCount() : 0;
+    USHORT nSelectionCount = pSvTabListBox ?
+        (USHORT)pSvTabListBox->GetSelectionCount() : 0;
     if(nSelectionCount > 1)
     {
         //bei Mehrfachselektion ggf. alte Eintraege deselektieren
@@ -156,16 +158,16 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
         SvBaseLink* pLink = 0;
         pEntry = pSvTabListBox->GetHdlEntry();
         pLink = (SvBaseLink*)pEntry->GetUserData();
-        sal_uInt16 nObjectType = pLink->GetObjType();
+        USHORT nObjectType = pLink->GetObjType();
         if((OBJECT_CLIENT_FILE & nObjectType) != OBJECT_CLIENT_FILE)
         {
-            pSvTabListBox->SelectAll(sal_False);
+            pSvTabListBox->SelectAll(FALSE);
             pSvTabListBox->Select(pEntry);
             nSelectionCount = 1;
         }
         else
         {
-            for( sal_uInt16 i = 0; i < nSelectionCount; i++)
+            for( USHORT i = 0; i < nSelectionCount; i++)
             {
                 pEntry = i == 0 ? pSvTabListBox->FirstSelected() :
                                     pSvTabListBox->NextSelected(pEntry);
@@ -173,7 +175,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
                 pLink = (SvBaseLink*)pEntry->GetUserData();
                 DBG_ASSERT(pLink, "Wo ist der Link?");
                 if( (OBJECT_CLIENT_FILE & pLink->GetObjType()) != OBJECT_CLIENT_FILE )
-                    pSvTabListBox->Select( pEntry, sal_False );
+                    pSvTabListBox->Select( pEntry, FALSE );
 
             }
         }
@@ -186,7 +188,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
     }
     else
     {
-        sal_uInt16 nPos;
+        USHORT nPos;
         SvBaseLink* pLink = GetSelEntry( &nPos );
         if( !pLink )
             return 0;
@@ -238,7 +240,7 @@ IMPL_LINK_INLINE_START( SvBaseLinksDlg, AutomaticClickHdl, RadioButton *, pRadio
 {
     (void)pRadioButton;
 
-    sal_uInt16 nPos;
+    USHORT nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
     if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
         LINKUPDATE_ALWAYS != pLink->GetUpdateMode() )
@@ -251,7 +253,7 @@ IMPL_LINK_INLINE_START( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioBut
 {
     (void)pRadioButton;
 
-    sal_uInt16 nPos;
+    USHORT nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
     if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
         LINKUPDATE_ONCALL != pLink->GetUpdateMode())
@@ -263,17 +265,17 @@ IMPL_LINK_INLINE_END( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioButto
 IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, EMPTYARG )
 {
     SvTabListBox& rListBox = Links();
-    sal_uInt16 nSelCnt = (sal_uInt16)rListBox.GetSelectionCount();
+    USHORT nSelCnt = (USHORT)rListBox.GetSelectionCount();
     if( 255 < nSelCnt )
         nSelCnt = 255;
 
     std::vector< SvBaseLink* > aLnkArr;
-    std::vector< sal_uInt16 > aPosArr;
+    std::vector< USHORT > aPosArr;
 
     SvLBoxEntry* pE = rListBox.FirstSelected();
     while( pE )
     {
-        sal_uInt16 nFndPos = (sal_uInt16)rListBox.GetModel()->GetAbsPos( pE );
+        USHORT nFndPos = (USHORT)rListBox.GetModel()->GetAbsPos( pE );
         if( LISTBOX_ENTRY_NOTFOUND != nFndPos )
         {
             aLnkArr.push_back( static_cast< SvBaseLink* >( pE->GetUserData() ) );
@@ -284,17 +286,17 @@ IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, EMPTYARG )
 
     if( !aLnkArr.empty() )
     {
-        for( sal_uInt16 n = 0; n < aLnkArr.size(); ++n )
+        for( USHORT n = 0; n < aLnkArr.size(); ++n )
         {
             SvBaseLinkRef xLink = aLnkArr[ n ];
 
             // suche erstmal im Array nach dem Eintrag
-            for( sal_uInt16 i = 0; i < pLinkMgr->GetLinks().Count(); ++i )
+            for( USHORT i = 0; i < pLinkMgr->GetLinks().Count(); ++i )
                 if( &xLink == *pLinkMgr->GetLinks()[ i ] )
                 {
-                    xLink->SetUseCache( sal_False );
+                    xLink->SetUseCache( FALSE );
                     SetType( *xLink, aPosArr[ n ], xLink->GetUpdateMode() );
-                    xLink->SetUseCache( sal_True );
+                    xLink->SetUseCache( TRUE );
                     break;
                 }
         }
@@ -325,7 +327,7 @@ IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, EMPTYARG )
         {
             SvLBoxEntry* pSelEntry = rListBox.FirstSelected();
             if( pE != pSelEntry )
-                rListBox.Select( pSelEntry, sal_False );
+                rListBox.Select( pSelEntry, FALSE );
             rListBox.Select( pE );
             rListBox.MakeVisible( pE );
         }
@@ -335,11 +337,20 @@ IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
+/*
+IMPL_LINK_INLINE_START( SvBaseLinksDlg, OpenSourceClickHdl, PushButton *, pPushButton )
+{
+    DBG_ASSERT( !this, "Open noch nicht impl." );
+    return 0;
+}
+IMPL_LINK_INLINE_END( SvBaseLinksDlg, OpenSourceClickHdl, PushButton *, pPushButton )
+*/
+
 IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
 {
     (void)pPushButton;
 
-    sal_uInt16 nSelectionCount = (sal_uInt16)Links().GetSelectionCount();
+    USHORT nSelectionCount = (USHORT)Links().GetSelectionCount();
     if(nSelectionCount > 1)
     {
         PathDialog aPathDlg( this );
@@ -360,7 +371,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
         {
             String aPath = aPathDlg.GetPath();
 
-            for( sal_uInt16 i = 0; i < nSelectionCount; i++)
+            for( USHORT i = 0; i < nSelectionCount; i++)
             {
                 pEntry = i==0 ?
                         Links().FirstSelected() :
@@ -387,7 +398,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
     }
     else
     {
-        sal_uInt16 nPos;
+        USHORT nPos;
         SvBaseLink* pLink = GetSelEntry( &nPos );
         if ( pLink && (pLink->GetLinkSourceName().Len() != 0) )
             pLink->Edit( this, LINK( this, SvBaseLinksDlg, EndEditHdl ) );
@@ -399,10 +410,10 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
 {
     (void)pPushButton;
 
-    sal_Bool bModified = sal_False;
+    BOOL bModified = FALSE;
     if(Links().GetSelectionCount() <= 1)
     {
-        sal_uInt16 nPos;
+        USHORT nPos;
         SvBaseLinkRef xLink = GetSelEntry( &nPos );
         if( !xLink.Is() )
             return 0;
@@ -414,7 +425,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
             Links().GetModel()->Remove( Links().GetEntry( nPos ) );
 
             // falls Object noch vorhanden, dann das schliessen
-            sal_Bool bNewLnkMgr = OBJECT_CLIENT_FILE == xLink->GetObjType();
+            BOOL bNewLnkMgr = OBJECT_CLIENT_FILE == xLink->GetObjType();
 
             // dem Link sagen, das er aufgeloest wird!
             xLink->Closed();
@@ -433,7 +444,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
                 if( pEntry )
                     Links().SetCurEntry( pEntry );
             }
-            bModified = sal_True;
+            bModified = TRUE;
         }
     }
     else
@@ -453,7 +464,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
                 pEntry = Links().NextSelected(pEntry);
             }
             Links().RemoveSelection();
-            for( sal_uLong i = 0; i < aLinkList.Count(); i++ )
+            for( ULONG i = 0; i < aLinkList.Count(); i++ )
             {
                 SvBaseLinkRef xLink = aLinkList.GetObject( i );
                 // dem Link sagen, das er aufgeloest wird!
@@ -461,7 +472,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
 
                 // falls einer vergessen hat sich auszutragen
                 pLinkMgr->Remove( &xLink );
-                bModified = sal_True;
+                bModified = TRUE;
             }
             //Danach alle selektierten Eintraege entfernen
         }
@@ -474,6 +485,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
             Automatic().Disable();
             Manual().Disable();
             UpdateNow().Disable();
+//            OpenSource().Disable();
             ChangeSource().Disable();
             BreakLink().Disable();
 
@@ -490,9 +502,11 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
 IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
 {
     (void)pTimer;
+//    for( SvLBoxEntry* pBox = Links().First(); pBox;
+//          pBox = Links().Next( pBox ))
 
-    Links().SetUpdateMode(sal_False);
-    for( sal_uLong nPos = Links().GetEntryCount(); nPos; )
+    Links().SetUpdateMode(FALSE);
+    for( ULONG nPos = Links().GetEntryCount(); nPos; )
     {
         SvLBoxEntry* pBox = Links().GetEntry( --nPos );
         SvBaseLinkRef xLink( (SvBaseLink*)pBox->GetUserData() );
@@ -504,38 +518,39 @@ IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
                 Links().SetEntryText( sCur, pBox, 3 );
         }
     }
-    Links().SetUpdateMode(sal_True);
+    Links().SetUpdateMode(TRUE);
     return 0;
 }
 
 IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
 {
-    sal_uInt16 nPos;
+    USHORT nPos;
     GetSelEntry( &nPos );
 
     if( _pLink && _pLink->WasLastEditOK() )
     {
+        // JP 09.01.98:
         // StarImpress/Draw tauschen die LinkObjecte selbst aus!
         // also suche den Link im Manager, wenn der nicht mehr existiert,
         // dann setze fuelle die Liste komplett neu. Ansonsten braucht
         // nur der editierte Linkt aktualisiert werden.
-        sal_Bool bLinkFnd = sal_False;
-        for( sal_uInt16 n = pLinkMgr->GetLinks().Count(); n;  )
+        BOOL bLinkFnd = FALSE;
+        for( USHORT n = pLinkMgr->GetLinks().Count(); n;  )
             if( _pLink == &(*pLinkMgr->GetLinks()[ --n ]) )
             {
-                bLinkFnd = sal_True;
+                bLinkFnd = TRUE;
                 break;
             }
 
         if( bLinkFnd )
         {
-            Links().SetUpdateMode(sal_False);
+            Links().SetUpdateMode(FALSE);
             Links().GetModel()->Remove( Links().GetEntry( nPos ) );
             SvLBoxEntry* pToUnselect = Links().FirstSelected();
             InsertEntry( *_pLink, nPos, sal_True );
             if(pToUnselect)
-                Links().Select(pToUnselect, sal_False);
-            Links().SetUpdateMode(sal_True);
+                Links().Select(pToUnselect, FALSE);
+            Links().SetUpdateMode(TRUE);
         }
         else
         {
@@ -574,7 +589,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
 
     if( pNewMgr )
         // Update muss vor Clear gestoppt werden
-        Links().SetUpdateMode( sal_False );
+        Links().SetUpdateMode( FALSE );
 
     Links().Clear();
     pLinkMgr = pNewMgr;
@@ -582,7 +597,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
     if( pLinkMgr )
     {
         SvBaseLinks& rLnks = (SvBaseLinks&)pLinkMgr->GetLinks();
-        for( sal_uInt16 n = 0; n < rLnks.Count(); ++n )
+        for( USHORT n = 0; n < rLnks.Count(); ++n )
         {
             SvBaseLinkRef* pLinkRef = rLnks[ n ];
             if( !pLinkRef->Is() )
@@ -602,13 +617,13 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
             Links().Select( pEntry );
             LinksSelectHdl( 0 );
         }
-        Links().SetUpdateMode( sal_True );
+        Links().SetUpdateMode( TRUE );
         Links().Invalidate();
     }
 }
 
 
-void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_Bool bSelect )
+void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, USHORT nPos, sal_Bool bSelect )
 {
     String aEntry, sFileNm, sLinkNm, sTypeNm, sFilter;
 
@@ -622,7 +637,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_
     INetURLObject aPath( sFileNm, INET_PROT_FILE );
     String aFileName = aPath.getName();
     aFileName = INetURLObject::decode(aFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
-
+    
     if( aFileName.Len() > aTxt.Len() )
         aTxt = aFileName;
     else if( aTxt.Search( aFileName, aTxt.Len() - aFileName.Len() ) == STRING_NOTFOUND )
@@ -646,12 +661,12 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_
         Links().Select(pE);
 }
 
-SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uInt16* pPos )
+SvBaseLink* SvBaseLinksDlg::GetSelEntry( USHORT* pPos )
 {
     SvLBoxEntry* pE = Links().FirstSelected();
-    sal_uInt16 nPos;
+    USHORT nPos;
     if( pE && LISTBOX_ENTRY_NOTFOUND !=
-        ( nPos = (sal_uInt16)Links().GetModel()->GetAbsPos( pE ) ) )
+        ( nPos = (USHORT)Links().GetModel()->GetAbsPos( pE ) ) )
     {
         DBG_ASSERT( pE, "wo kommt der leere Eintrag her?" );
 
@@ -663,8 +678,8 @@ SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uInt16* pPos )
 }
 
 void SvBaseLinksDlg::SetType( SvBaseLink& rLink,
-                                    sal_uInt16 nSelPos,
-                                    sal_uInt16 nType )
+                                    USHORT nSelPos,
+                                    USHORT nType )
 {
     rLink.SetUpdateMode( nType );
     rLink.Update();
@@ -679,8 +694,8 @@ void SvBaseLinksDlg::SetActLink( SvBaseLink * pLink )
     if( pLinkMgr )
     {
         const SvBaseLinks& rLnks = pLinkMgr->GetLinks();
-        sal_uInt16 nSelect = 0;
-        for( sal_uInt16 n = 0; n < rLnks.Count(); ++n )
+        USHORT nSelect = 0;
+        for( USHORT n = 0; n < rLnks.Count(); ++n )
         {
             SvBaseLinkRef* pLinkRef = rLnks[ n ];
             // #109573# only visible links have been inserted into the TreeListBox,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,9 @@
 #ifndef SC_FUSEL_HXX
 #define SC_FUSEL_HXX
 
+#ifndef _SV_HXX
+#endif
+
 #include "fudraw.hxx"
 
 //class Outliner;
@@ -50,24 +53,24 @@ public:
 
     virtual ~FuSelection();
                                        // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
-    virtual sal_uInt8 Command(const CommandEvent& rCEvt);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BYTE Command(const CommandEvent& rCEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 
     void    ActivateNoteHandles(SdrObject* pObj);
 
 protected:
-//  Outliner*       pOutliner;
-//  OutlinerView*   pOutlinerView;
-    sal_Bool            bVCAction;
+//	Outliner*		pOutliner;
+//	OutlinerView*	pOutlinerView;
+    BOOL			bVCAction;
 
 private:
-    sal_Bool TestDetective( SdrPageView* pPV, const Point& rPos );  // -> fusel2
+    BOOL TestDetective( SdrPageView* pPV, const Point& rPos );	// -> fusel2
 
     bool                IsNoteCaptionMarked() const;
     bool                IsNoteCaptionClicked( const Point& rPos ) const;
@@ -75,6 +78,6 @@ private:
 
 
 
-#endif      // _SD_FUSEL_HXX
+#endif		// _SD_FUSEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

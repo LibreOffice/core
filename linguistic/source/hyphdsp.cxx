@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_linguistic.hxx"
 
 
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/factory.hxx>	// helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
@@ -43,13 +43,14 @@
 #include <osl/mutex.hxx>
 
 #include "hyphdsp.hxx"
-#include "linguistic/hyphdta.hxx"
-#include "linguistic/lngprops.hxx"
+#include "hyphdta.hxx"
+#include "lngprops.hxx"
 #include "lngsvcmgr.hxx"
 
 
 using namespace utl;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -57,13 +58,10 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 ///////////////////////////////////////////////////////////////////////////
 
 HyphenatorDispatcher::HyphenatorDispatcher( LngSvcMgr &rLngSvcMgr ) :
-    rMgr    (rLngSvcMgr)
+    rMgr	(rLngSvcMgr)
 {
 }
 
@@ -82,37 +80,37 @@ void HyphenatorDispatcher::ClearSvcList()
 }
 
 
-Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
+Reference<XHyphenatedWord>	HyphenatorDispatcher::buildHyphWord(
             const OUString rOrigWord,
             const Reference<XDictionaryEntry> &xEntry,
-            sal_Int16 nLang, sal_Int16 nMaxLeading )
+            INT16 nLang, INT16 nMaxLeading )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     Reference< XHyphenatedWord > xRes;
 
     if (xEntry.is())
     {
         OUString aText( xEntry->getDictionaryWord() );
-        sal_Int32 nTextLen = aText.getLength();
+        INT32 nTextLen = aText.getLength();
 
         // trailing '=' means "hyphenation should not be possible"
         if (nTextLen > 0  &&  aText[ nTextLen - 1 ] != '=')
         {
-            sal_Int16 nHyphenationPos = -1;
+            INT16 nHyphenationPos = -1;
 
             OUStringBuffer aTmp( nTextLen );
-            sal_Bool  bSkip = sal_False;
-            sal_Int32 nHyphIdx = -1;
-            sal_Int32 nLeading = 0;
-            for (sal_Int32 i = 0;  i < nTextLen;  i++)
+            BOOL  bSkip = FALSE;
+            INT32 nHyphIdx = -1;
+            INT32 nLeading = 0;
+            for (INT32 i = 0;  i < nTextLen;  i++)
             {
                 sal_Unicode cTmp = aText[i];
                 if (cTmp != '=')
                 {
                     aTmp.append( cTmp );
                     nLeading++;
-                    bSkip = sal_False;
+                    bSkip = FALSE;
                     nHyphIdx++;
                 }
                 else
@@ -120,9 +118,9 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                     if (!bSkip  &&  nHyphIdx >= 0)
                     {
                         if (nLeading <= nMaxLeading)
-                            nHyphenationPos = (sal_Int16) nHyphIdx;
+                            nHyphenationPos = (INT16) nHyphIdx;
                     }
-                    bSkip = sal_True;   //! multiple '=' should count as one only
+                    bSkip = TRUE;	//! multiple '=' should count as one only
                 }
             }
 
@@ -172,9 +170,9 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
 
 
 Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
-            const Reference< XDictionaryEntry > &xEntry, sal_Int16 nLanguage )
+            const Reference< XDictionaryEntry > &xEntry, INT16 nLanguage )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     Reference<XPossibleHyphens> xRes;
 
@@ -182,33 +180,33 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
     {
         // text with hyphenation info
         OUString aText( xEntry->getDictionaryWord() );
-        sal_Int32 nTextLen = aText.getLength();
+        INT32 nTextLen = aText.getLength();
 
         // trailing '=' means "hyphenation should not be possible"
         if (nTextLen > 0  &&  aText[ nTextLen - 1 ] != '=')
         {
             // sequence to hold hyphenation positions
-            Sequence< sal_Int16 > aHyphPos( nTextLen );
-            sal_Int16 *pPos = aHyphPos.getArray();
-            sal_Int32 nHyphCount = 0;
+            Sequence< INT16 > aHyphPos( nTextLen );
+            INT16 *pPos = aHyphPos.getArray();
+            INT32 nHyphCount = 0;
 
             OUStringBuffer aTmp( nTextLen );
-            sal_Bool  bSkip = sal_False;
-            sal_Int32 nHyphIdx = -1;
-            for (sal_Int32 i = 0;  i < nTextLen;  i++)
+            BOOL  bSkip = FALSE;
+            INT32 nHyphIdx = -1;
+            for (INT32 i = 0;  i < nTextLen;  i++)
             {
                 sal_Unicode cTmp = aText[i];
                 if (cTmp != '=')
                 {
                     aTmp.append( cTmp );
-                    bSkip = sal_False;
+                    bSkip = FALSE;
                     nHyphIdx++;
                 }
                 else
                 {
                     if (!bSkip  &&  nHyphIdx >= 0)
-                        pPos[ nHyphCount++ ] = (sal_Int16) nHyphIdx;
-                    bSkip = sal_True;   //! multiple '=' should count as one only
+                        pPos[ nHyphCount++ ] = (INT16) nHyphIdx;
+                    bSkip = TRUE;	//! multiple '=' should count as one only
                 }
             }
 
@@ -235,7 +233,7 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
 Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     Sequence< Locale > aLocales( static_cast< sal_Int32 >(aSvcMap.size()) );
     Locale *pLocales = aLocales.getArray();
@@ -243,7 +241,7 @@ Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
     for (aIt = aSvcMap.begin();  aIt != aSvcMap.end();  ++aIt)
     {
         *pLocales++ = CreateLocale( aIt->first );
-    }
+    }    
     return aLocales;
 }
 
@@ -251,7 +249,7 @@ Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
 sal_Bool SAL_CALL HyphenatorDispatcher::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     HyphSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LocaleToLanguage( rLocale ) ) );
     return aIt != aSvcMap.end();
 }
@@ -263,12 +261,12 @@ Reference< XHyphenatedWord > SAL_CALL
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
-    Reference< XHyphenatedWord >    xRes;
+    Reference< XHyphenatedWord >	xRes;
 
-    sal_Int32 nWordLen = rWord.getLength();
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    INT32 nWordLen = rWord.getLength();
+    INT16 nLanguage = LocaleToLanguage( rLocale );
     if (nLanguage == LANGUAGE_NONE  || !nWordLen ||
         nMaxLeading == 0 || nMaxLeading == nWordLen)
         return xRes;
@@ -277,7 +275,7 @@ Reference< XHyphenatedWord > SAL_CALL
     HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
     LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
-    sal_Bool bWordModified = sal_False;
+    BOOL bWordModified = FALSE;
     if (!pEntry || (nMaxLeading < 0 || nMaxLeading > nWordLen))
     {
 #ifdef LINGU_EXCEPTIONS
@@ -299,7 +297,7 @@ Reference< XHyphenatedWord > SAL_CALL
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             bWordModified |= RemoveControlChars( aChkWord );
-        sal_Int16 nChkMaxLeading = (sal_Int16) GetPosInWordToCheck( rWord, nMaxLeading );
+        INT16 nChkMaxLeading = (INT16) GetPosInWordToCheck( rWord, nMaxLeading );
 
         // check for results from (positive) dictionaries which have precedence!
         Reference< XDictionaryEntry > xEntry;
@@ -307,7 +305,7 @@ Reference< XHyphenatedWord > SAL_CALL
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
             xEntry = GetDicList()->queryDictionaryEntry( aChkWord, rLocale,
-                        sal_True, sal_False );
+                        TRUE, FALSE );
         }
 
         if (xEntry.is())
@@ -321,11 +319,11 @@ Reference< XHyphenatedWord > SAL_CALL
         }
         else
         {
-            sal_Int32 nLen = pEntry->aSvcImplNames.getLength() > 0 ? 1 : 0;
+            INT32 nLen = pEntry->aSvcImplNames.getLength() > 0 ? 1 : 0;
             DBG_ASSERT( pEntry->nLastTriedSvcIndex < nLen,
                     "lng : index out of range");
 
-            sal_Int32 i = 0;
+            INT32 i = 0;
             Reference< XHyphenator > xHyph;
             if (pEntry->aSvcRefs.getLength() > 0)
                 xHyph = pEntry->aSvcRefs[0];
@@ -376,7 +374,7 @@ Reference< XHyphenatedWord > SAL_CALL
                         xRes = xHyph->hyphenate( aChkWord, rLocale, nChkMaxLeading,
                                                 rProperties );
 
-                    pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                    pEntry->nLastTriedSvcIndex = (INT16) i;
                     ++i;
 
                     // if language is not supported by the services
@@ -385,7 +383,7 @@ Reference< XHyphenatedWord > SAL_CALL
                         aSvcMap.erase( nLanguage );
                 }
             }
-        }   // if (xEntry.is())
+        }	// if (xEntry.is())
     }
 
     if (bWordModified  &&  xRes.is())
@@ -408,12 +406,12 @@ Reference< XHyphenatedWord > SAL_CALL
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
-    Reference< XHyphenatedWord >    xRes;
+    Reference< XHyphenatedWord >	xRes;
 
-    sal_Int32 nWordLen = rWord.getLength();
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    INT32 nWordLen = rWord.getLength();
+    INT16 nLanguage = LocaleToLanguage( rLocale );
     if (nLanguage == LANGUAGE_NONE  || !nWordLen)
         return xRes;
 
@@ -421,7 +419,7 @@ Reference< XHyphenatedWord > SAL_CALL
     HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
     LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
-    sal_Bool bWordModified = sal_False;
+    BOOL bWordModified = FALSE;
     if (!pEntry || !(0 <= nIndex && nIndex <= nWordLen - 2))
     {
 #ifdef LINGU_EXCEPTIONS
@@ -443,7 +441,7 @@ Reference< XHyphenatedWord > SAL_CALL
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             bWordModified |= RemoveControlChars( aChkWord );
-        sal_Int16 nChkIndex = (sal_Int16) GetPosInWordToCheck( rWord, nIndex );
+        INT16 nChkIndex = (INT16) GetPosInWordToCheck( rWord, nIndex );
 
         // check for results from (positive) dictionaries which have precedence!
         Reference< XDictionaryEntry > xEntry;
@@ -451,7 +449,7 @@ Reference< XHyphenatedWord > SAL_CALL
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
             xEntry = GetDicList()->queryDictionaryEntry( aChkWord, rLocale,
-                        sal_True, sal_False );
+                        TRUE, FALSE );
         }
 
         if (xEntry.is())
@@ -460,11 +458,11 @@ Reference< XHyphenatedWord > SAL_CALL
         }
         else
         {
-            sal_Int32 nLen = pEntry->aSvcImplNames.getLength() > 0 ? 1 : 0;
+            INT32 nLen = pEntry->aSvcImplNames.getLength() > 0 ? 1 : 0;
             DBG_ASSERT( pEntry->nLastTriedSvcIndex < nLen,
                     "lng : index out of range");
 
-            sal_Int32 i = 0;
+            INT32 i = 0;
             Reference< XHyphenator > xHyph;
             if (pEntry->aSvcRefs.getLength() > 0)
                 xHyph = pEntry->aSvcRefs[0];
@@ -515,7 +513,7 @@ Reference< XHyphenatedWord > SAL_CALL
                         xRes = xHyph->queryAlternativeSpelling( aChkWord, rLocale,
                                     nChkIndex, rProperties );
 
-                    pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                    pEntry->nLastTriedSvcIndex = (INT16) i;
                     ++i;
 
                     // if language is not supported by the services
@@ -524,7 +522,7 @@ Reference< XHyphenatedWord > SAL_CALL
                         aSvcMap.erase( nLanguage );
                 }
             }
-        }   // if (xEntry.is())
+        }	// if (xEntry.is())
     }
 
     if (bWordModified  &&  xRes.is())
@@ -547,11 +545,11 @@ Reference< XPossibleHyphens > SAL_CALL
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
-    Reference< XPossibleHyphens >   xRes;
+    Reference< XPossibleHyphens >	xRes;
 
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    INT16 nLanguage = LocaleToLanguage( rLocale );
     if (nLanguage == LANGUAGE_NONE  || !rWord.getLength())
         return xRes;
 
@@ -585,7 +583,7 @@ Reference< XPossibleHyphens > SAL_CALL
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
             xEntry = GetDicList()->queryDictionaryEntry( aChkWord, rLocale,
-                        sal_True, sal_False );
+                        TRUE, FALSE );
         }
 
         if (xEntry.is())
@@ -594,11 +592,11 @@ Reference< XPossibleHyphens > SAL_CALL
         }
         else
         {
-            sal_Int32 nLen = pEntry->aSvcImplNames.getLength() > 0 ? 1 : 0;
+            INT32 nLen = pEntry->aSvcImplNames.getLength() > 0 ? 1 : 0;
             DBG_ASSERT( pEntry->nLastTriedSvcIndex < nLen,
                     "lng : index out of range");
 
-            sal_Int32 i = 0;
+            INT32 i = 0;
             Reference< XHyphenator > xHyph;
             if (pEntry->aSvcRefs.getLength() > 0)
                 xHyph = pEntry->aSvcRefs[0];
@@ -649,7 +647,7 @@ Reference< XPossibleHyphens > SAL_CALL
                     xRes = xHyph->createPossibleHyphens( aChkWord, rLocale,
                                 rProperties );
 
-                    pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                    pEntry->nLastTriedSvcIndex = (INT16) i;
                     ++i;
 
                     // if language is not supported by the services
@@ -658,7 +656,7 @@ Reference< XPossibleHyphens > SAL_CALL
                         aSvcMap.erase( nLanguage );
                 }
             }
-        }   // if (xEntry.is())
+        }	// if (xEntry.is())
     }
 
     if (xRes.is()  &&  xRes->getWord() != rWord)
@@ -675,11 +673,11 @@ Reference< XPossibleHyphens > SAL_CALL
 void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
         const Sequence< OUString > &rSvcImplNames )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    INT16 nLanguage = LocaleToLanguage( rLocale );
 
-    sal_Int32 nLen = rSvcImplNames.getLength();
+    INT32 nLen = rSvcImplNames.getLength();
     if (0 == nLen)
         // remove entry
         aSvcMap.erase( nLanguage );
@@ -709,12 +707,12 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
 Sequence< OUString >
     HyphenatorDispatcher::GetServiceList( const Locale &rLocale ) const
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     Sequence< OUString > aRes;
 
     // search for entry with that language and use data from that
-    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
+    INT16 nLanguage = LocaleToLanguage( rLocale );
     HyphenatorDispatcher            *pThis = (HyphenatorDispatcher *) this;
     const HyphSvcByLangMap_t::iterator  aIt( pThis->aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Hyph       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;

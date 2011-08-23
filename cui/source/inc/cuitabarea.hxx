@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,7 @@ class SvxAreaTabDialog : public SfxTabDialog
 {
 private:
     SdrModel*           mpDrawModel;
+//	const SdrView*		mpView;
 
     XColorTable*        mpColorTab;
     XColorTable*        mpNewColorTab;
@@ -59,13 +60,13 @@ private:
     ChangeType          mnGradientListState;
     ChangeType          mnHatchingListState;
 
-    sal_uInt16              mnPageType;
-    sal_uInt16              mnDlgType;
-    sal_uInt16              mnPos;
-    sal_Bool                mbAreaTP;
-    sal_Bool                mbDeleteColorTable;
+    USHORT              mnPageType;
+    USHORT              mnDlgType;
+    USHORT              mnPos;
+    BOOL                mbAreaTP;
+    BOOL                mbDeleteColorTable;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
 
 protected:
     virtual short       Ok();
@@ -80,29 +81,29 @@ public:
                       const SdrView* pSdrView = NULL );
     ~SvxAreaTabDialog();
 
-    void                 SetNewColorTable( XColorTable* pColTab )
+    void            	 SetNewColorTable( XColorTable* pColTab )
                             { mpNewColorTab = pColTab; }
-    XColorTable*         GetNewColorTable() const { return mpNewColorTab; }
-    const XColorTable*   GetColorTable() const { return mpColorTab; }
+    XColorTable*    	 GetNewColorTable() const { return mpNewColorTab; }
+    const XColorTable*	 GetColorTable() const { return mpColorTab; }
 
-    void                 SetNewGradientList( XGradientList* pGrdLst)
+    void            	 SetNewGradientList( XGradientList* pGrdLst)
                             { mpNewGradientList = pGrdLst; }
-    XGradientList*       GetNewGradientList() const
+    XGradientList*  	 GetNewGradientList() const
                             { return mpNewGradientList; }
     const XGradientList* GetGradientList() const { return mpGradientList; }
 
-    void                 SetNewHatchingList( XHatchList* pHtchLst)
+    void				 SetNewHatchingList( XHatchList* pHtchLst)
                             { mpNewHatchingList = pHtchLst; }
-    XHatchList*          GetNewHatchingList() const
+    XHatchList*     	 GetNewHatchingList() const
                             { return mpNewHatchingList; }
-    const XHatchList*    GetHatchingList() const { return mpHatchingList; }
+    const XHatchList*	 GetHatchingList() const { return mpHatchingList; }
 
-    void                 SetNewBitmapList( XBitmapList* pBmpLst)
+    void				 SetNewBitmapList( XBitmapList* pBmpLst)
                             { mpNewBitmapList = pBmpLst; }
-    XBitmapList*         GetNewBitmapList() const { return mpNewBitmapList; }
-    const XBitmapList*   GetBitmapList() const { return mpBitmapList; }
+    XBitmapList*		 GetNewBitmapList() const { return mpNewBitmapList; }
+    const XBitmapList*	 GetBitmapList() const { return mpBitmapList; }
 
-    void                 DontDeleteColorTable() { mbDeleteColorTable = sal_False; }
+    void				 DontDeleteColorTable() { mbDeleteColorTable = FALSE; }
 };
 
 /*************************************************************************
@@ -119,8 +120,10 @@ class SvxTransparenceTabPage : public SvxTabPage
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
-    sal_uInt16          nPageType;
-    sal_uInt16          nDlgType;
+    //CHINA001 UINT16*             pPageType;
+    //CHINA001 UINT16*             pDlgType;
+    UINT16             nPageType; //add CHINA001 
+    UINT16             nDlgType;  //add CHINA001 
 
     // main selection
     FixedLine           aFlProp;
@@ -150,7 +153,7 @@ class SvxTransparenceTabPage : public SvxTabPage
     // preview
     SvxXRectPreview     aCtlBitmapPreview;
     SvxXRectPreview     aCtlXRectPreview;
-    sal_Bool                bBitmap;
+    BOOL				bBitmap;
 
     XOutdevItemPool*    pXPool;
     XFillAttrSetItem    aXFillAttr;
@@ -165,29 +168,31 @@ class SvxTransparenceTabPage : public SvxTabPage
     DECL_LINK(ModifiedTrgrHdl_Impl, void*);
 #endif
 
-    void ActivateLinear(sal_Bool bActivate);
-    void ActivateGradient(sal_Bool bActivate);
+    void ActivateLinear(BOOL bActivate);
+    void ActivateGradient(BOOL bActivate);
     void SetControlState_Impl(XGradientStyle eXGS);
 
-    sal_Bool InitPreview ( const SfxItemSet& rSet );
-    void InvalidatePreview (sal_Bool bEnable = sal_True );
+    BOOL InitPreview ( const SfxItemSet& rSet );
+    void InvalidatePreview (BOOL bEnable = TRUE );
 
 public:
     SvxTransparenceTabPage(Window* pParent, const SfxItemSet& rInAttrs);
     void Construct();
 
     static SfxTabPage* Create(Window*, const SfxItemSet&);
-    static sal_uInt16* GetRanges();
+    static UINT16* GetRanges();
 
-    virtual sal_Bool FillItemSet(SfxItemSet&);
+    virtual BOOL FillItemSet(SfxItemSet&);
     virtual void Reset(const SfxItemSet&);
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet);
     virtual void PointChanged(Window* pWindow, RECT_POINT eRP);
 
-    void SetPageType(sal_uInt16 nInType) { nPageType = nInType; }
-    void SetDlgType(sal_uInt16 nInType) { nDlgType = nInType; }
-    virtual void PageCreated (SfxAllItemSet aSet);
+    //CHINA001 void SetPageType(UINT16 *pInType) { pPageType = pInType; }
+    //CHINA001 void SetDlgType(UINT16* pInType) { pDlgType = pInType; }
+    void SetPageType(UINT16 nInType) { nPageType = nInType; } //add CHINA001 
+    void SetDlgType(UINT16 nInType) { nDlgType = nInType; }//add CHINA001 
+    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001 
 };
 
 /*************************************************************************
@@ -215,28 +220,28 @@ private:
     FixedLine           aFlStepCount;
     NumericField        aNumFldStepCount;
 
-    CheckBox            aCbxHatchBckgrd;
+    CheckBox			aCbxHatchBckgrd;
     ColorLB             aLbHatchBckgrdColor;
 
     FixedLine           aFlSize;
-    TriStateBox         aTsbOriginal;
-    TriStateBox         aTsbScale;
-    FixedText           aFtXSize;
-    MetricField         aMtrFldXSize;
-    FixedText           aFtYSize;
-    MetricField         aMtrFldYSize;
+    TriStateBox			aTsbOriginal;
+    TriStateBox			aTsbScale;
+    FixedText			aFtXSize;
+    MetricField			aMtrFldXSize;
+    FixedText			aFtYSize;
+    MetricField			aMtrFldYSize;
     FixedLine           aFlPosition;
-    SvxRectCtl          aCtlPosition;
-    FixedText           aFtXOffset;
-    MetricField         aMtrFldXOffset;
-    FixedText           aFtYOffset;
-    MetricField         aMtrFldYOffset;
+    SvxRectCtl			aCtlPosition;
+    FixedText			aFtXOffset;
+    MetricField			aMtrFldXOffset;
+    FixedText			aFtYOffset;
+    MetricField			aMtrFldYOffset;
     TriStateBox         aTsbTile;
     TriStateBox         aTsbStretch;
     FixedLine           aFlOffset;
-    RadioButton         aRbtRow;
-    RadioButton         aRbtColumn;
-    MetricField         aMtrFldOffset;
+    RadioButton			aRbtRow;
+    RadioButton			aRbtColumn;
+    MetricField			aMtrFldOffset;
 
     SvxXRectPreview     aCtlXRectPreview;
 
@@ -253,18 +258,21 @@ private:
     ChangeType*         pnGradientListState;
     ChangeType*         pnHatchingListState;
 
-    sal_uInt16 nPageType;
-    sal_uInt16 nDlgType;
-    sal_uInt16 nPos;
+    //CHINA001 USHORT*             pPageType;
+    //CHINA001 USHORT*             pDlgType;
+    //CHINA001 USHORT*             pPos;
+    UINT16 nPageType; //add CHINA001 
+    UINT16 nDlgType;//add CHINA001 
+    UINT16 nPos; //add CHINA001 
 
-    sal_Bool*               pbAreaTP;
+    BOOL*               pbAreaTP;
 
     XOutdevItemPool*    pXPool;
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
-    SfxMapUnit          ePoolUnit;
-    FieldUnit           eFUnit;
+    SfxMapUnit			ePoolUnit;
+    FieldUnit			eFUnit;
 
 #ifdef _SVX_TPAREA_CXX
     DECL_LINK( SelectDialogTypeHdl_Impl, ListBox * );
@@ -279,6 +287,7 @@ private:
     DECL_LINK( ToggleHatchBckgrdColorHdl_Impl, void * );
     DECL_LINK( ClickBitmapHdl_Impl, void * );
     DECL_LINK( ModifyBitmapHdl_Impl, void * );
+//	DECL_LINK( ModifyTransparentHdl_Impl, void * );
     DECL_LINK( ModifyStepCountHdl_Impl, void * );
     DECL_LINK( ModifyTileHdl_Impl, void * );
     DECL_LINK( ClickScaleHdl_Impl, void * );
@@ -290,14 +299,14 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    static  sal_uInt16*     GetRanges();
+    static  USHORT*	    GetRanges();
 
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
-
+    
     void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
     void    SetGradientList( XGradientList* pGrdLst)
                 { pGradientList = pGrdLst; }
@@ -305,11 +314,14 @@ public:
                 { pHatchingList = pHtchLst; }
     void    SetBitmapList( XBitmapList* pBmpLst) { pBitmapList = pBmpLst; }
 
-    void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
-    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
-    void    SetPos( sal_uInt16 nInPos ) { nPos = nInPos; }
-    void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
-    virtual void PageCreated (SfxAllItemSet aSet);
+    //CHINA001 void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
+    void    SetPageType( UINT16 nInType ) { nPageType = nInType; } //add CHINA001 
+    //CHINA001 void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
+    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }//add CHINA001 
+    //CHINA001 void    SetPos( USHORT* pInPos ) { pPos = pInPos; }
+    void    SetPos( UINT16 nInPos ) { nPos = nInPos; }//add CHINA001 
+    void    SetAreaTP( BOOL* pIn ) { pbAreaTP = pIn; }
+    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001 
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
     void    SetGrdChgd( ChangeType* pIn ) { pnGradientListState = pIn; }
     void    SetHtchChgd( ChangeType* pIn ) { pnHatchingListState = pIn; }
@@ -338,24 +350,24 @@ private:
     ColorLB             aLbShadowColor;
     FixedText           aFtTransparent;
     MetricField         aMtrTransparent;
-    SvxXShadowPreview   aCtlXRectPreview;
+    SvxXShadowPreview	aCtlXRectPreview;
 
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
     XColorTable*        pColorTab;
     ChangeType*         pnColorTableState;
-    sal_uInt16              nPageType;
-    sal_uInt16              nDlgType;
-    sal_uInt16*             pPos;
-    sal_Bool*               pbAreaTP;
+    UINT16				nPageType;	//add CHINA001 
+    UINT16				nDlgType;	//add CHINA001 
+    USHORT*             pPos;
+    BOOL*               pbAreaTP;
 
-    sal_Bool                bDisable;
+    BOOL				bDisable;
 
     XOutdevItemPool*    pXPool;
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
-    SfxMapUnit          ePoolUnit;
+    SfxMapUnit			ePoolUnit;
 
 #ifdef _SVX_TPSHADOW_CXX
     DECL_LINK( ClickShadowHdl_Impl, void * );
@@ -367,21 +379,23 @@ public:
 
     void    Construct();
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    static  sal_uInt16*     GetRanges();
+    static  USHORT*	    GetRanges();
 
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
     void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
-    void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
-    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
-    void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
+//CHINA001	void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
+//CHINA001	void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
+    void    SetPageType( UINT16 nInType ) { nPageType = nInType; } //add CHINA001 
+    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }	//add CHINA001 
+    void    SetAreaTP( BOOL* pIn ) { pbAreaTP = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
-    virtual void PageCreated (SfxAllItemSet aSet);
-    void    DisablePage( sal_Bool bIn ) { bDisable = bIn; }
+    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001 
+    void	DisablePage( BOOL bIn ) { bDisable = bIn; }
 };
 
 /*************************************************************************
@@ -428,10 +442,10 @@ private:
 
     ChangeType*         pnGradientListState;
     ChangeType*         pnColorTableState;
-    sal_uInt16*             pPageType;
-    sal_uInt16*             pDlgType;
-    sal_uInt16*             pPos;
-    sal_Bool*               pbAreaTP;
+    USHORT*             pPageType;
+    USHORT*             pDlgType;
+    USHORT*             pPos;
+    BOOL*               pbAreaTP;
 
     XOutdevItemPool*    pXPool;
     XFillStyleItem      aXFStyleItem;
@@ -458,7 +472,7 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -468,10 +482,10 @@ public:
     void    SetGradientList( XGradientList* pGrdLst)
                 { pGradientList = pGrdLst; }
 
-    void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
-    void    SetPos( sal_uInt16* pInPos ) { pPos = pInPos; }
-    void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
+    void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
+    void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
+    void    SetPos( USHORT* pInPos ) { pPos = pInPos; }
+    void    SetAreaTP( BOOL* pIn ) { pbAreaTP = pIn; }
 
     void    SetGrdChgd( ChangeType* pIn ) { pnGradientListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
@@ -515,10 +529,10 @@ private:
 
     ChangeType*         pnHatchingListState;
     ChangeType*         pnColorTableState;
-    sal_uInt16*             pPageType;
-    sal_uInt16*             pDlgType;
-    sal_uInt16*             pPos;
-    sal_Bool*               pbAreaTP;
+    USHORT*             pPageType;
+    USHORT*             pDlgType;
+    USHORT*             pPos;
+    BOOL*               pbAreaTP;
 
     XOutdevItemPool*    pXPool;
     XFillStyleItem      aXFStyleItem;
@@ -526,7 +540,7 @@ private:
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
-    SfxMapUnit          ePoolUnit;
+    SfxMapUnit			ePoolUnit;
 
 #ifdef _SVX_TPHATCH_CXX
     DECL_LINK( ChangeHatchHdl_Impl, void * );
@@ -546,7 +560,7 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -558,15 +572,15 @@ public:
     void    SetHatchingList( XHatchList* pHtchLst)
                 { pHatchingList = pHtchLst; }
 
-    void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
-    void    SetPos( sal_uInt16* pInPos ) { pPos = pInPos; }
-    void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
+    void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
+    void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
+    void    SetPos( USHORT* pInPos ) { pPos = pInPos; }
+    void    SetAreaTP( BOOL* pIn ) { pbAreaTP = pIn; }
 
     void    SetHtchChgd( ChangeType* pIn ) { pnHatchingListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
 
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void		DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 /*************************************************************************
@@ -607,12 +621,12 @@ private:
 
     ChangeType*         pnBitmapListState;
     ChangeType*         pnColorTableState;
-    sal_uInt16*             pPageType;
-    sal_uInt16*             pDlgType;
-    sal_uInt16*             pPos;
-    sal_Bool*               pbAreaTP;
+    USHORT*             pPageType;
+    USHORT*             pDlgType;
+    USHORT*             pPos;
+    BOOL*               pbAreaTP;
 
-    sal_Bool                bBmpChanged;
+    BOOL                bBmpChanged;
 
     XOutdevItemPool*    pXPool;
     XFillStyleItem      aXFStyleItem;
@@ -640,7 +654,7 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -651,10 +665,10 @@ public:
     void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
     void    SetBitmapList( XBitmapList* pBmpLst) { pBitmapList = pBmpLst; }
 
-    void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
-    void    SetPos( sal_uInt16* pInPos ) { pPos = pInPos; }
-    void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
+    void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
+    void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
+    void    SetPos( USHORT* pInPos ) { pPos = pInPos; }
+    void    SetAreaTP( BOOL* pIn ) { pbAreaTP = pIn; }
 
     void    SetBmpChgd( ChangeType* pIn ) { pnBitmapListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
@@ -667,7 +681,7 @@ public:
             Return a label control that provides a name for the specified
             control.
     */
-    virtual Window* GetParentLabeledBy( const Window* pLabeled ) const;
+    virtual Window*	GetParentLabeledBy( const Window* pLabeled ) const;
 };
 
 /*************************************************************************
@@ -717,11 +731,11 @@ private:
     XColorTable*        pColorTab;
 
     ChangeType*         pnColorTableState;
-    sal_uInt16*             pPageType;
-    sal_uInt16*             pDlgType;
-    sal_uInt16*             pPos;
-    sal_Bool*               pbAreaTP;
-    sal_Bool                bDeleteColorTable;
+    USHORT*             pPageType;
+    USHORT*             pDlgType;
+    USHORT*             pPos;
+    BOOL*               pbAreaTP;
+    BOOL                bDeleteColorTable;
 
     XOutdevItemPool*    pXPool;
     XFillStyleItem      aXFStyleItem;
@@ -731,29 +745,29 @@ private:
 
     ColorModel          eCM;
 
-    Color               aAktuellColor;
+    Color				aAktuellColor;
 
 #ifdef _SVX_TPCOLOR_CXX
     void    ConvertColorValues (Color& rColor, ColorModel eModell);
-    void    RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK );
-    void    CmykToRgb_Impl( Color& rColor, const sal_uInt16 nKey );
-    sal_uInt16  ColorToPercent_Impl( sal_uInt16 nColor );
-    sal_uInt16  PercentToColor_Impl( sal_uInt16 nPercent );
+    void    RgbToCmyk_Impl( Color& rColor, USHORT& rK );
+    void    CmykToRgb_Impl( Color& rColor, const USHORT nKey );
+    USHORT  ColorToPercent_Impl( USHORT nColor );
+    USHORT  PercentToColor_Impl( USHORT nPercent );
 
     void    FillValueSet_Impl( ValueSet& rVs );
     //-----------------------------------------------------------------------------------------------------
-    DECL_LINK( ClickAddHdl_Impl, void * );      // Button 'Hinzufuegen'
-    DECL_LINK( ClickModifyHdl_Impl, void * );   // Button 'Aendern'
-    DECL_LINK( ClickDeleteHdl_Impl, void * );   // Button 'loeschen'
-    DECL_LINK( ClickWorkOnHdl_Impl, void * );   // Button 'Bearbeiten'
+    DECL_LINK( ClickAddHdl_Impl, void * );		// Button 'Hinzufuegen'
+    DECL_LINK( ClickModifyHdl_Impl, void * );	// Button 'Aendern'
+    DECL_LINK( ClickDeleteHdl_Impl, void * );	// Button 'loeschen'
+    DECL_LINK( ClickWorkOnHdl_Impl, void * );	// Button 'Bearbeiten'
 
-    DECL_LINK( SelectColorLBHdl_Impl, void * ); // Farbe aus Listbox auswï¿½hlen
-    DECL_LINK( SelectValSetHdl_Impl, void * );  // Farbe aus Farbpalette (links) auswï¿½hlen
-    DECL_LINK( SelectColorModelHdl_Impl, void * );  // Auswahl Listbox 'Farbmodell'
+    DECL_LINK( SelectColorLBHdl_Impl, void * );	// Farbe aus Listbox auswählen
+    DECL_LINK( SelectValSetHdl_Impl, void * );	// Farbe aus Farbpalette (links) auswählen
+    DECL_LINK( SelectColorModelHdl_Impl, void * );	// Auswahl Listbox 'Farbmodell'
     long ChangeColorHdl_Impl( void* p );
-    DECL_LINK( ModifiedHdl_Impl, void * );      // Inhalt der Farbwerte-Felder wurde verï¿½ndert
-    DECL_LINK( ClickLoadHdl_Impl, void * );     // Button 'Farbtabelle laden'
-    DECL_LINK( ClickSaveHdl_Impl, void * );     // Button 'Farbtabelle sichern'
+    DECL_LINK( ModifiedHdl_Impl, void * );		// Inhalt der Farbwerte-Felder wurde verändert
+    DECL_LINK( ClickLoadHdl_Impl, void * );		// Button 'Farbtabelle laden'
+    DECL_LINK( ClickSaveHdl_Impl, void * );		// Button 'Farbtabelle sichern'
 
     long CheckChanges_Impl();
 #endif
@@ -764,7 +778,7 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -772,17 +786,18 @@ public:
 
     void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
 
-    void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
-    void    SetPos( sal_uInt16* pInPos ) { pPos = pInPos; }
-    void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
+    void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
+    void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
+    void    SetPos( USHORT* pInPos ) { pPos = pInPos; }
+    void    SetAreaTP( BOOL* pIn ) { pbAreaTP = pIn; }
 
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
 
-    void    SetDeleteColorTable( sal_Bool bIn ) { bDeleteColorTable = bIn; }
+    void	SetDeleteColorTable( BOOL bIn ) { bDeleteColorTable = bIn; }
 
     virtual void FillUserData();
 };
+
 
 #endif // _CUI_TAB_AREA_HXX
 

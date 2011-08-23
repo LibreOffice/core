@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,17 +35,17 @@ using namespace ::std;
 using namespace com::sun::star;
 
 SdrCustomShapeEngineItem::SdrCustomShapeEngineItem()
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_ENGINE, String() )
+:	SfxStringItem( SDRATTR_CUSTOMSHAPE_ENGINE, String() )
 {}
 SdrCustomShapeEngineItem::SdrCustomShapeEngineItem( const String& rVal )
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_ENGINE, rVal )
+:	SfxStringItem( SDRATTR_CUSTOMSHAPE_ENGINE, rVal )
 {}
 
 SdrCustomShapeDataItem::SdrCustomShapeDataItem()
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, String() )
+:	SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, String() )
 {}
 SdrCustomShapeDataItem::SdrCustomShapeDataItem( const String& rVal )
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, rVal )
+:	SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, rVal )
 {}
 
 bool SdrCustomShapeGeometryItem::PropertyEq::operator()( const rtl::OUString& r1, const rtl::OUString& r2 ) const
@@ -61,16 +61,19 @@ size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustom
     return (size_t)r1.first.hashCode() + r1.second.hashCode();
 };
 
-TYPEINIT1_FACTORY( SdrCustomShapeGeometryItem, SfxPoolItem , new  SdrCustomShapeGeometryItem);
+TYPEINIT1_FACTORY( SdrCustomShapeGeometryItem, SfxPoolItem , new  SdrCustomShapeGeometryItem(0));
 SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem()
-:   SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
+:	SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
 {}
 SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< beans::PropertyValue >& rVal )
-:   SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
+:	SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
 {
     sal_Int32 i, j;
     aPropSeq = rVal;
 
+    // hashing property values
+//  beans::PropertyValue* pPropValues = aPropSeq.getArray();
+//  const rtl::OUString* pPtr = NULL;
     for ( i = 0; i < aPropSeq.getLength(); i++ )
     {
         beans::PropertyValue& rPropVal = aPropSeq[ i ];
@@ -120,10 +123,10 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
 {
     com::sun::star::uno::Any* pAny = GetPropertyValueByName( rPropVal.Name );
     if ( pAny )
-    {   // property is already available
+    {	// property is already available
         sal_Int32 i;
         if ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
-        {   // old property is a sequence->each entry has to be removed from the HashPairMap
+        {	// old property is a sequence->each entry has to be removed from the HashPairMap
             ::com::sun::star::uno::Sequence < beans::PropertyValue >& rSecSequence =
                 *((::com::sun::star::uno::Sequence < beans::PropertyValue >*)pAny->getValue());
             for ( i = 0; i < rSecSequence.getLength(); i++ )
@@ -135,7 +138,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
         }
         *pAny = rPropVal.Value;
         if ( rPropVal.Value.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
-        {   // the new property is a sequence->each entry has to be inserted into the HashPairMap
+        {	// the new property is a sequence->each entry has to be inserted into the HashPairMap
             ::com::sun::star::uno::Sequence < beans::PropertyValue >& rSecSequence =
                 *((::com::sun::star::uno::Sequence < beans::PropertyValue >*)pAny->getValue());
             for ( i = 0; i < rSecSequence.getLength(); i++ )
@@ -146,7 +149,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
         }
     }
     else
-    {   // its a new property
+    {	// its a new property
         sal_uInt32 nIndex = aPropSeq.getLength();
         aPropSeq.realloc( nIndex + 1 );
         aPropSeq[ nIndex ] = rPropVal ;
@@ -158,7 +161,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
 void SdrCustomShapeGeometryItem::SetPropertyValue( const rtl::OUString& rSequenceName, const com::sun::star::beans::PropertyValue& rPropVal )
 {
     com::sun::star::uno::Any* pAny = GetPropertyValueByName( rSequenceName, rPropVal.Name );
-    if ( pAny ) // just replacing
+    if ( pAny )	// just replacing
         *pAny = rPropVal.Value;
     else
     {
@@ -235,7 +238,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const rtl::OUString& rPropN
             if ( nLength )
             {
                 sal_Int32 nIndex  = (*aHashIter).second;
-                if ( nIndex != ( nLength - 1 ) )                        // resizing sequence
+                if ( nIndex != ( nLength - 1 ) )						// resizing sequence
                 {
                     PropertyHashMap::iterator aHashIter2( aPropHashMap.find( aPropSeq[ nLength - 1 ].Name ) );
                     (*aHashIter2).second = nIndex;
@@ -243,7 +246,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const rtl::OUString& rPropN
                 }
                 aPropSeq.realloc( aPropSeq.getLength() - 1 );
             }
-            aPropHashMap.erase( aHashIter );                            // removing property from hashmap
+            aPropHashMap.erase( aHashIter );							// removing property from hashmap
         }
     }
 }
@@ -265,7 +268,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const rtl::OUString& rSeque
                 if ( nLength )
                 {
                     sal_Int32 nIndex  = (*aHashIter).second;
-                    if ( nIndex != ( nLength - 1 ) )                            // resizing sequence
+                    if ( nIndex != ( nLength - 1 ) )							// resizing sequence
                     {
                         PropertyPairHashMap::iterator aHashIter2( aPropPairHashMap.find( PropertyPair( rSequenceName, rSecSequence[ nLength - 1 ].Name ) ) );
                         (*aHashIter2).second = nIndex;
@@ -290,7 +293,7 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( SvStream& /*rIn*/, sal_u
 
     }
 }
-int SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
+int __EXPORT SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
 {
     int bRet = SfxPoolItem::operator==( rCmp );
     if ( bRet )
@@ -298,7 +301,7 @@ int SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
     return bRet;
 }
 
-SfxItemPresentation SdrCustomShapeGeometryItem::GetPresentation(
+SfxItemPresentation __EXPORT SdrCustomShapeGeometryItem::GetPresentation(
     SfxItemPresentation ePresentation, SfxMapUnit /*eCoreMetric*/,
     SfxMapUnit /*ePresentationMetric*/, XubString &rText, const IntlWrapper *) const
 {
@@ -306,18 +309,19 @@ SfxItemPresentation SdrCustomShapeGeometryItem::GetPresentation(
     if ( ePresentation == SFX_ITEM_PRESENTATION_COMPLETE )
     {
         XubString aStr;
+//		SdrItemPool::TakeItemName( Which(), aStr );
         aStr += sal_Unicode( ' ' );
         rText.Insert( aStr, 0 );
     }
     return ePresentation;
 }
 
-SfxPoolItem* SdrCustomShapeGeometryItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
+SfxPoolItem* __EXPORT SdrCustomShapeGeometryItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
 {
     return new SdrCustomShapeGeometryItem( rIn, nItemVersion );
 }
 
-SvStream& SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& __EXPORT SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 {
     if ( nItemVersion )
     {
@@ -326,21 +330,38 @@ SvStream& SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16 nItemVer
     return rOut;
 }
 
-SfxPoolItem* SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
+SfxPoolItem* __EXPORT SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
-    return new SdrCustomShapeGeometryItem( GetGeometry() );
+    SdrCustomShapeGeometryItem* pItem = new SdrCustomShapeGeometryItem( GetGeometry() );
+//	SdrCustomShapeGeometryItem* pItem = new SdrCustomShapeGeometryItem( *this );
+
+/*
+    for ( i = 0; i < GetCount(); i++ )
+    {
+        const SdrCustomShapeAdjustmentValue& rVal = GetValue( i );
+        pItem->SetValue( i, rVal );
+    }
+*/
+    return pItem;
 }
 
+#ifdef SDR_ISPOOLABLE
+int __EXPORT SdrCustomShapeGeometryItem::IsPoolable() const
+{
+    USHORT nId=Which();
+    return nId < SDRATTR_NOTPERSIST_FIRST || nId > SDRATTR_NOTPERSIST_LAST;
+}
+#endif
 sal_uInt16 SdrCustomShapeGeometryItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
 {
     return 1;
 }
-bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     rVal <<= aPropSeq;
     return true;
 }
-bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     if ( ! ( rVal >>= aPropSeq ) )
         return false;
@@ -351,12 +372,17 @@ const uno::Sequence< beans::PropertyValue >& SdrCustomShapeGeometryItem::GetGeom
 {
     return aPropSeq;
 }
+/*
+const uno::Any* GetValueByName( const rtl::OUString& rProperty ) const
+{
 
+}
+*/
 SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem()
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, String() )
+:	SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, String() )
 {}
 SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem( const String& rVal )
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, rVal )
+:	SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, rVal )
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

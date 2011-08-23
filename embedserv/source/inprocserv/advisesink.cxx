@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,6 +140,7 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnDataChange( LPFORMATETC pFetc, LPSTG
 {
     if ( m_pListener )
     {
+        WRITEDEBUGINFO( "OleWrapperAdviseSink::OnDataChange():" );
         m_pListener->OnDataChange( pFetc, pMedium );
     }
 }
@@ -148,6 +149,7 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnViewChange( DWORD dwAspect, LONG lin
 {
     if ( m_pListener )
     {
+        WRITEDEBUGINFO( "OleWrapperAdviseSink::OnViewChange():" );
         m_pListener->OnViewChange( dwAspect, lindex );
     }
 }
@@ -156,6 +158,7 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename( LPMONIKER pMoniker )
 {
     if ( m_pListener )
     {
+        WRITEDEBUGINFO( "OleWrapperAdviseSink::OnRename():" );
         m_pListener->OnRename( pMoniker );
     }
 }
@@ -164,6 +167,7 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnSave(void)
 {
     if ( m_pListener )
     {
+        WRITEDEBUGINFO( "OleWrapperAdviseSink::OnSave():" );
         m_pListener->OnSave();
     }
 }
@@ -172,6 +176,7 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnClose(void)
 {
     if ( m_pListener )
     {
+        WRITEDEBUGINFO( "OleWrapperAdviseSink::OnClose():" );
         m_pListener->OnClose();
     }
 

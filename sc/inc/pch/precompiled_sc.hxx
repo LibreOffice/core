@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -195,6 +195,7 @@
 #include <tools/errinf.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
+#include <tools/list.hxx>
 #include <tools/rc.hxx>
 #include <tools/rtti.hxx>
 #include <tools/solar.h>
@@ -218,7 +219,7 @@
 #include <vcl/dndhelp.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
-#include <tools/fldunit.hxx>
+#include <vcl/fldunit.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/jobset.hxx>

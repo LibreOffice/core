@@ -72,18 +72,15 @@ struct inclist *inc_path(file, include, dot, incCollection)
      * If the path was surrounded by "" or is an absolute path,
      * then check the exact path provided.
      */
-// FIXME: creates duplicates in the dependency files if absolute paths are
-// given, which certainly is not the intended behavior. Also it slows down
-// makedepend performance considerably.
-//  if (!found && (dot || *include == '/')) {
-//
-//      if ((exists_path(incCollection, include)) && stat(include, &st) == 0 && !( st.st_mode & S_IFDIR)) {
-//          ip = newinclude(include, include);
-//          found = TRUE;
-//      }
-//      else if (show_where_not)
-//          warning1("\tnot in %s\n", include);
-//  }
+    if (!found && (dot || *include == '/')) {
+
+        if ((exists_path(incCollection, include)) && stat(include, &st) == 0 && !( st.st_mode & S_IFDIR)) {
+            ip = newinclude(include, include);
+            found = TRUE;
+        }
+        else if (show_where_not)
+            warning1("\tnot in %s\n", include);
+    }
 
     /*
      * See if this include file is in the directory of the
@@ -294,7 +291,7 @@ void included_by(ip, newfile)
     else {
         for (i=0; i<ip->i_listlen; i++)
             if (ip->i_list[ i ] == newfile) {
-                i = (int)strlen(newfile->i_file);
+                i = strlen(newfile->i_file);
                 if (!ip->i_included_sym &&
                 !(i > 2 &&
                   newfile->i_file[i-1] == 'c' &&

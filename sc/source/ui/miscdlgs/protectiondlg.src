@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,6 @@
 
 ModalDialog RID_SCDLG_TABPROTECTION
 {
-    HelpID = "sc:ModalDialog:RID_SCDLG_TABPROTECTION";
     Text [ en-US ] = "Protect Sheet" ;
     Size = MAP_APPFONT ( 220 , 135 ) ;
     Moveable = TRUE ;
@@ -54,11 +53,10 @@ ModalDialog RID_SCDLG_TABPROTECTION
 
     CheckBox BTN_PROTECT
     {
-        HelpID = "sc:CheckBox:RID_SCDLG_TABPROTECTION:BTN_PROTECT";
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 150 , 10 );
 
-        Text [ en-US ] = "P~rotect this sheet and the contents of protected cells" ;
+        Text [ en-US ] = "P~rotect this sheet and the contents of locked cells" ;
     };
 
     FixedText FT_PASSWORD1
@@ -71,7 +69,6 @@ ModalDialog RID_SCDLG_TABPROTECTION
 
     Edit ED_PASSWORD1
     {
-        HelpID = "sc:Edit:RID_SCDLG_TABPROTECTION:ED_PASSWORD1";
         Border = TRUE;
         PassWord = TRUE;
         Pos = MAP_APPFONT ( 56, 22 );
@@ -88,7 +85,6 @@ ModalDialog RID_SCDLG_TABPROTECTION
 
     Edit ED_PASSWORD2
     {
-        HelpID = "sc:Edit:RID_SCDLG_TABPROTECTION:ED_PASSWORD2";
         Border = TRUE;
         PassWord = TRUE;
         Pos = MAP_APPFONT ( 56, 39 );
@@ -119,13 +115,13 @@ ModalDialog RID_SCDLG_TABPROTECTION
         TabStop = TRUE ;
     };
 
-    String ST_SELECT_PROTECTED_CELLS
+    String ST_SELECT_LOCKED_CELLS
     {
-        Text [ en-US ] = "Select protected cells";
+        Text [ en-US ] = "Select locked cells";
     };
 
-    String ST_SELECT_UNPROTECTED_CELLS
+    String ST_SELECT_UNLOCKED_CELLS
     {
-        Text [ en-US ] = "Select unprotected cells";
+        Text [ en-US ] = "Select unlocked cells";
     };
 };

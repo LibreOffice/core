@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,19 +47,19 @@ class FuConstPolygon : public FuConstruct
 
     virtual ~FuConstPolygon();
                                        // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 
-    // Create default drawing objects via keyboard
+    // #98185# Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 };
 
 
-#endif      // _FUCONPOL_HXX
+#endif		// _FUCONPOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

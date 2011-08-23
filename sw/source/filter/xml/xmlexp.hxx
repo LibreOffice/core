@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,6 @@
 #include "xmlitmap.hxx"
 #include <xmloff/uniref.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <vector>
 
 class SwPaM;
 class SwFmt;
@@ -46,37 +45,36 @@ class SwTableLines;
 class SwTableBox;
 class SwXMLTableColumn_Impl;
 class SwXMLTableLines_Impl;
+class SwXMLTableLinesCache_Impl;
 class SwXMLTableColumnsSortByWidth_Impl;
 class SwXMLTableFrmFmtsSort_Impl;
 class SwXMLTableInfo_Impl;
 class SwTableNode;
 class XMLPropertySetMapper;
-class SwXMLTableLines_Impl;
-
-typedef ::std::vector< SwXMLTableLines_Impl* > SwXMLTableLinesCache_Impl;
 
 class SwXMLExport : public SvXMLExport
 {
     friend class SwXMLExpContext;
 
 #ifdef XML_CORE_API
-    SwPaM                       *pCurPaM;       // the current PaM
-    SwPaM                       *pOrigPaM;      // the original PaM
+    SwPaM						*pCurPaM;		// the current PaM
+    SwPaM						*pOrigPaM;		// the original PaM
 #endif
 
-    SvXMLUnitConverter*         pTwipUnitConv;
-    SvXMLExportItemMapper*      pTableItemMapper;
-    SwXMLTableLinesCache_Impl*  pTableLines;
+    SvXMLUnitConverter			*pTwipUnitConv;
 
-    SvXMLItemMapEntriesRef      xTableItemMap;
-    SvXMLItemMapEntriesRef      xTableRowItemMap;
-    SvXMLItemMapEntriesRef      xTableCellItemMap;
+    SvXMLExportItemMapper		*pTableItemMapper;
+    SwXMLTableLinesCache_Impl	*pTableLines;
+
+    SvXMLItemMapEntriesRef 		xTableItemMap;
+    SvXMLItemMapEntriesRef 		xTableRowItemMap;
+    SvXMLItemMapEntriesRef 		xTableCellItemMap;
     UniReference < XMLPropertySetMapper > xParaPropMapper;
 
-    sal_Bool                    bExportWholeDoc : 1;// export whole document?
-    sal_Bool                    bBlock : 1;         // export text block?
-    sal_Bool                    bExportFirstTableOnly : 1;
-    sal_Bool                    bShowProgress : 1;
+    sal_Bool					bExportWholeDoc : 1;// export whole document?
+    sal_Bool					bBlock : 1;			// export text block?
+    sal_Bool					bExportFirstTableOnly : 1;
+    sal_Bool					bShowProgress : 1;
     sal_Bool                    bSavedShowChanges : 1;
 
     void _InitItemExport();
@@ -103,7 +101,7 @@ class SwXMLExport : public SvXMLExport
                           SwXMLTableInfo_Impl& rTblInfo );
     void ExportTableLines( const SwTableLines& rLines,
                            SwXMLTableInfo_Impl& rTblInfo,
-                           sal_uInt16 nHeaderRows = 0 );
+                           USHORT nHeaderRows = 0 );
 
     virtual void _ExportMeta();
     virtual void _ExportFontDecls();
@@ -126,8 +124,7 @@ class SwXMLExport : public SvXMLExport
     const ::rtl::OUString sCell;
 
     void setBlockMode();
-private:
-    void DeleteTableLines();
+
 protected:
 
     virtual XMLTextParagraphExport* CreateTextParagraphExport();
@@ -137,11 +134,14 @@ protected:
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
 
 public:
+
+    // #110680#
     SwXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nExportFlags = EXPORT_ALL);
 
 #ifdef XML_CORE_API
+    // #110680#
     SwXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
@@ -187,6 +187,6 @@ inline const SvXMLUnitConverter& SwXMLExport::GetTwipUnitConverter() const
 }
 
 
-#endif  //  _XMLEXP_HXX
+#endif	//  _XMLEXP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <vcl/bmpacc.hxx>
 #include <tools/debug.hxx>
 
-#define IMAGE_COL_TRANSPARENT       COL_LIGHTMAGENTA
+#define IMAGE_COL_TRANSPARENT		COL_LIGHTMAGENTA
 
 //........................................................................
 namespace svx
@@ -48,10 +48,10 @@ namespace svx
     //====================================================================
 
     ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(
-        sal_uInt16 nId,
-        sal_uInt16 nTbxBtnId,
+        USHORT nId,
+        USHORT nTbxBtnId,
         ToolBox* ptrTbx,
-        sal_uInt16 nMode ) :
+        USHORT nMode ) :
         mnDrawMode        ( nMode ),
         mnBtnId           ( nTbxBtnId ),
         mnSlotId           ( nId ),
@@ -61,7 +61,7 @@ namespace svx
         if (mnSlotId == SID_BACKGROUND_COLOR)
             mnDrawMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
         DBG_ASSERT( ptrTbx, "ToolBox not found :-(" );
-        mbWasHiContrastMode = ptrTbx ? ( ptrTbx->GetSettings().GetStyleSettings().GetHighContrastMode() ) : sal_False;
+        mbWasHiContrastMode = ptrTbx ? ( ptrTbx->GetSettings().GetStyleSettings().GetHighContrastMode() ) : FALSE;
         Update(mnSlotId == SID_ATTR_CHAR_COLOR2 ? COL_BLACK : COL_GRAY);
     }
 
@@ -150,7 +150,7 @@ namespace svx
                 }
                 else
                 {
-                    OSL_FAIL( "ToolboxButtonColorUpdater::Update: TBX_UPDATER_MODE_CHAR_COLOR / TBX_UPDATER_MODE_CHAR_BACKGROUND" );
+                    DBG_ERROR( "ToolboxButtonColorUpdater::Update: TBX_UPDATER_MODE_CHAR_COLOR / TBX_UPDATER_MODE_CHAR_BACKGROUND" );
                     // !!! DrawChar( aVirDev, aColor );
                 }
 

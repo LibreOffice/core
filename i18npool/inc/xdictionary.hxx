@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,15 +35,18 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-#define CACHE_MAX 32        // max cache structure number
-#define DEFAULT_SIZE 256    // for boundary size, to avoid alloc and release memory
+// Whether to use cell boundary code, currently unused but prepared.
+#define USE_CELL_BOUNDARY_CODE 0
+
+#define CACHE_MAX 32		// max cache structure number
+#define DEFAULT_SIZE 256	// for boundary size, to avoid alloc and release memory
 
 // cache structure.
 struct WordBreakCache {
-    sal_Int32 length;       // contents length saved here.
-    sal_Unicode *contents;      // seperated segment contents.
-    sal_Int32* wordboundary;        // word boundaries in segments.
-    sal_Int32 size;         // size of wordboundary
+    sal_Int32 length;		// contents length saved here.
+    sal_Unicode *contents;		// seperated segment contents.
+    sal_Int32* wordboundary;     	// word boundaries in segments.
+    sal_Int32 size;			// size of wordboundary
 
     WordBreakCache();
     sal_Bool equals(const sal_Unicode *str, Boundary& boundary);    // checking cached string
@@ -61,6 +64,12 @@ private:
     Boundary boundary;
     sal_Bool japaneseWordBreak;
 
+#if USE_CELL_BOUNDARY_CODE
+    // For CTL breakiterator, where the word boundary should not be inside cell.
+    sal_Bool useCellBoundary;
+    sal_Int32* cellBoundary;
+#endif
+
 public:
     xdictionary(const sal_Char *lang);
     ~xdictionary();
@@ -68,6 +77,10 @@ public:
     Boundary previousWord( const rtl::OUString& rText, sal_Int32 nPos, sal_Int16 wordType);
     Boundary getWordBoundary( const rtl::OUString& rText, sal_Int32 nPos, sal_Int16 wordType, sal_Bool bDirection );
     void setJapaneseWordBreak();
+
+#if USE_CELL_BOUNDARY_CODE
+    void setCellBoundary(sal_Int32* cellArray);
+#endif
 
 private:
     WordBreakCache cache[CACHE_MAX];

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,10 +74,10 @@ namespace connectivity
     class IParseContext;
 
     typedef ::std::vector< OSQLParseNode* >                  OSQLParseNodes;
-
-    enum SQLNodeType    {SQL_NODE_RULE, SQL_NODE_LISTRULE, SQL_NODE_COMMALISTRULE,
+    
+    enum SQLNodeType	{SQL_NODE_RULE, SQL_NODE_LISTRULE, SQL_NODE_COMMALISTRULE,
                          SQL_NODE_KEYWORD, SQL_NODE_COMPARISON, SQL_NODE_NAME,
-                         SQL_NODE_STRING,   SQL_NODE_INTNUM, SQL_NODE_APPROXNUM,
+                         SQL_NODE_STRING,	SQL_NODE_INTNUM, SQL_NODE_APPROXNUM,
                          SQL_NODE_EQUAL,SQL_NODE_LESS,SQL_NODE_GREAT,SQL_NODE_LESSEQ,SQL_NODE_GREATEQ,SQL_NODE_NOTEQUAL,
                          SQL_NODE_PUNCTUATION, SQL_NODE_AMMSC, SQL_NODE_ACCESS_DATE,SQL_NODE_DATE,SQL_NODE_CONCAT};
 
@@ -87,7 +87,7 @@ namespace connectivity
     //==================================================================
     struct OOO_DLLPUBLIC_DBTOOLS SQLParseNodeParameter
     {
-        const ::com::sun::star::lang::Locale&   rLocale;
+        const ::com::sun::star::lang::Locale&	rLocale;
         ::dbtools::DatabaseMetaData             aMetaData;
         OSQLParser*                             pParser;
         ::boost::shared_ptr< QueryNameSet >     pSubQueryHistory;
@@ -95,7 +95,7 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       xField;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xQueries;  // see bParseToSDBCLevel
         const IParseContext& m_rContext;
-        sal_Char            cDecSep;
+        sal_Char			cDecSep;
         bool                bQuote                      : 1;    /// should we quote identifiers?
         bool                bInternational              : 1;    /// should we internationalize keywords and placeholders?
         bool                bPredicate                  : 1;    /// are we going to parse a mere predicate?
@@ -123,17 +123,14 @@ namespace connectivity
     {
         friend class OSQLParser;
 
-        OSQLParseNodes                  m_aChildren;
-        OSQLParseNode*                  m_pParent;      // pParent for reverse linkage in the tree
-        ::rtl::OUString                 m_aNodeValue;   // token name, or empty in case of rules,
-                                                        // or ::rtl::OUString in case of
-                                                        // ::rtl::OUString, INT, etc.
-        SQLNodeType                     m_eNodeType;    // see above
-        sal_uInt32                      m_nNodeID;      // ::com::sun::star::chaos::Rule ID (if IsRule())
-                                                        // or Token ID (if !IsRule())
-                                            // ::com::sun::star::chaos::Rule IDs and Token IDs can't
-                                            // be distinguished by their values,
-                                            // IsRule has to be used for that!
+        OSQLParseNodes					m_aChildren;
+        OSQLParseNode*	 				m_pParent;		// pParent fuer Reuckverkettung im Baum
+        ::rtl::OUString 				m_aNodeValue;	// Token-Name oder leer bei Regeln oder ::rtl::OUString bei
+                                                        // ::rtl::OUString, INT, usw. -Werten
+        SQLNodeType 					m_eNodeType;	// s. o.
+        sal_uInt32						m_nNodeID; 		// ::com::sun::star::chaos::Rule ID (bei IsRule()) oder Token ID (bei !IsRule())
+                                            // ::com::sun::star::chaos::Rule IDs und Token IDs koennen nicht anhand des Wertes
+                                            // unterschieden werden, dafuer ist IsRule() abzufragen!
     public:
         enum Rule
         {
@@ -236,7 +233,7 @@ namespace connectivity
             other_like_predicate_part_2,
             between_predicate_part_2,
             cast_spec,
-            rule_count,             // last value
+            rule_count,             // letzter_wert
             UNKNOWN_RULE            // ID indicating that a node is no rule with a matching Rule-enum value (see getKnownRuleID)
         };
 
@@ -257,19 +254,22 @@ namespace connectivity
                       SQLNodeType _eNodeType,
                       sal_uInt32 _nNodeID = 0);
 
-            // copies the respective ParseNode
+            // Kopiert den entsprechenden ParseNode
         OSQLParseNode(const OSQLParseNode& rParseNode);
         OSQLParseNode& operator=(const OSQLParseNode& rParseNode);
 
         sal_Bool operator==(OSQLParseNode& rParseNode) const;
 
-        // destructor destructs the tree recursively
+        // Destruktor raeumt rekursiv den Baum ab
         virtual ~OSQLParseNode();
 
+        // Parent gibt den Zeiger auf den Parent zurueck
         OSQLParseNode* getParent() const {return m_pParent;};
 
+        // SetParent setzt den Parent-Zeiger eines ParseNodes
         void setParent(OSQLParseNode* pParseNode) {m_pParent = pParseNode;};
 
+        // ChildCount liefert die Anzahl der Kinder eines Knotens
         sal_uInt32 count() const {return m_aChildren.size();};
         inline OSQLParseNode* getChild(sal_uInt32 nPos) const;
 
@@ -304,7 +304,7 @@ namespace connectivity
                 too, to check whether they contain nested sub queries.
 
             @param _pErrorHolder
-                takes the error which occurred while generating the statement, if any. Might be <NULL/>,
+                takes the error which occured while generating the statement, if any. Might be <NULL/>,
                 in this case the error is not reported back, and can only be recognized by examing the
                 return value.
 
@@ -350,37 +350,42 @@ namespace connectivity
         OSQLParseNode* getByRule(OSQLParseNode::Rule eRule) const;
 
 #if OSL_DEBUG_LEVEL > 0
-            // shows the ParseTree with tabs and linefeeds
+            // zeigt den ParseTree mit tabs und linefeeds
         void showParseTree( ::rtl::OUString& rString ) const;
         void showParseTree( ::rtl::OUStringBuffer& _inout_rBuf, sal_uInt32 nLevel ) const;
 #endif
 
+            // GetNodeType gibt den Knotentyp zurueck
         SQLNodeType getNodeType() const {return m_eNodeType;};
 
-            // RuleId returns the RuleID of the node's rule (only if IsRule())
+            // RuleId liefert die RuleId der Regel des Knotens (nur bei IsRule())
         sal_uInt32 getRuleID() const {return m_nNodeID;}
 
         /** returns the ID of the rule represented by the node
+
             If the node does not represent a rule, UNKNOWN_RULE is returned
         */
         Rule getKnownRuleID() const;
 
-            // returns the TokenId of the node's token (only if !isRule())
+            // RuleId liefert die TokenId des Tokens des Knotens (nur bei ! IsRule())
         sal_uInt32 getTokenID() const {return m_nNodeID;}
 
-            // IsRule tests whether a node is a rule (NonTerminal)
-            // ATTENTION: rules can be leaves, for example empty lists
+            // IsRule testet ob ein Node eine Regel (NonTerminal) ist
+            // Achtung : Regeln koenne auch Blaetter sein, z.B. leere Listen
         sal_Bool isRule() const
             { return (m_eNodeType == SQL_NODE_RULE) || (m_eNodeType == SQL_NODE_LISTRULE)
                 || (m_eNodeType == SQL_NODE_COMMALISTRULE);}
 
-            // IsToken tests whether a Node is a Token (Terminal but not a rule)
-        sal_Bool isToken() const {return !isRule();}
+            // IsToken testet ob ein Node ein Token (Terminal) ist
+        sal_Bool isToken() const {return !isRule();} // ein Token ist keine Regel
 
+                // TokenValue liefert den NodeValue eines Tokens
         const ::rtl::OUString& getTokenValue() const {return m_aNodeValue;}
 
-        void setTokenValue(const ::rtl::OUString& rString) {    if (isToken()) m_aNodeValue = rString;}
+            // SetTokenValue setzt den NodeValue
+        void setTokenValue(const ::rtl::OUString& rString) {	if (isToken()) m_aNodeValue = rString;}
 
+            // IsLeaf testet ob ein Node ein Blatt ist
         sal_Bool isLeaf() const {return m_aChildren.empty();}
 
         // negate only a searchcondition, any other rule could cause a gpf
@@ -390,11 +395,11 @@ namespace connectivity
         // e.q. (a or b) and (c or d) <=> a and c or a and d or b and c or b and d
         static void disjunctiveNormalForm(OSQLParseNode*& pSearchCondition);
 
-        //   Simplies logic expressions
-        // a * a        = a
-        // a + a        = a
+        //	 Simplies logic expressions
+        // a * a		= a
+        // a + a		= a
         // a * ( a + b) = a
-        // a + a * b    = a
+        // a + a * b	= a
         static void absorptions(OSQLParseNode*& pSearchCondition);
 
         // erase not nessary braces
@@ -410,7 +415,7 @@ namespace connectivity
                                             ::rtl::OUString &_rTable
                                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData);
 
-        // susbtitute all occurrences of :var or [name] into the dynamic parameter ?
+        // susbtitute all occurences of :var or [name] into the dynamic parameter ?
         // _pNode will be modified if parameters exists
         static void substituteParameterNames(OSQLParseNode* _pNode);
 
@@ -419,7 +424,7 @@ namespace connectivity
         static ::rtl::OUString getTableRange(const OSQLParseNode* _pTableRef);
 
     protected:
-        // ParseNodeToStr konkateniert alle Token (leaves) des ParseNodes
+        // ParseNodeToStr konkateniert alle Token (Blaetter) des ParseNodes
         void parseNodeToStr(::rtl::OUString& rString,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
@@ -456,16 +461,16 @@ namespace connectivity
     {
         OSL_ENSURE(nPos < m_aChildren.size(), "Invalid Position");
 
-        //  return m_aChildren[nPos];
+        //	return m_aChildren[nPos];
         return m_aChildren.at(nPos);
     }
 
     // Utility-Methoden zum Abfragen auf bestimmte Rules, Token oder Punctuation:
-    #define SQL_ISRULE(pParseNode, eRule)   ((pParseNode)->isRule() && (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::eRule))
+    #define SQL_ISRULE(pParseNode, eRule) 	((pParseNode)->isRule() && (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::eRule))
     #define SQL_ISTOKEN(pParseNode, token) ((pParseNode)->isToken() && (pParseNode)->getTokenID() == SQL_TOKEN_##token)
     #define SQL_ISPUNCTUATION(pParseNode, aString) ((pParseNode)->getNodeType() == SQL_NODE_PUNCTUATION && !(pParseNode)->getTokenValue().compareToAscii(aString))
 }
 
-#endif  //_CONNECTIVITY_SQLNODE_HXX
+#endif	//_CONNECTIVITY_SQLNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

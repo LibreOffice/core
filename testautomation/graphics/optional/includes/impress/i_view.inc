@@ -41,35 +41,33 @@
 
 testcase tAnsichtHintergrundNotizen
     Printlog "- View background notes"
-    printlog "new document"
-    Call hNewDocument
+    Call hNewDocument						'/// new document ///'
     try
-        printlog "view background notes"
-        ViewNotes					
+        ViewNotes					'/// view background notes ///'
         sleep 3
     catch
         Warnlog  "View-Notes could not be accessed"
     endcatch
     ViewWorkspaceDrawingView
     sleep 1
-    printlog "close document"
-    Call hCloseDocument						
+    Call hCloseDocument						'/// close document ///'
     sleep 1
-endcase 'tAnsichtHintergrundNotizen
+endcase
 
 '-------------------------------------------------------------------------------
 
 testcase tViewWorkspaceHandoutView
     Printlog "- View background handout"
-    printlog "new document"
-    Call hNewDocument						
+    Call hNewDocument						'/// new document ///'
     sleep 2
     Kontext "DocumentImpress"
-    DocumentImpress.UseMenu
-    hMenuSelectNr (5)
-    hMenuSelectNr (13)
+    if NOT documentImpress.Exists then
+        hNewDocument
+        sleep 1
+    end if
+    sleep 2
     Printlog "  ViewWorkspaceHandoutView"
-    ViewWorkspaceHandoutView						
+    ViewWorkspaceHandoutView						'/// view background handout ///'
     sleep 2
     Kontext "Tasks"
     sleep 2
@@ -79,11 +77,9 @@ testcase tViewWorkspaceHandoutView
         Printlog "  ViewWorkspaceHandoutView works"
     end if
     Printlog "ViewWorkspaceHandoutView closed"
-    printlog "back to view background drawing"
-    ViewWorkspaceDrawingView
-    printlog "close document"
-    Call hCloseDocument						
-endcase 'tViewWorkspaceHandoutView
+    ViewWorkspaceDrawingView						'/// back to view background drawing ///'
+    Call hCloseDocument						'/// close document ///'
+endcase
 
 '-------------------------------------------------------------------------------
 
@@ -93,67 +89,67 @@ testcase tViewWorkspaceOutlineView
    dim sFile as string
    dim i as integer
 
-   printlog "load a document with heading styles in writer and use the function 'writer:'File->Send->Outline to presentation' to get it into the presentation"
+   '/// load a document with heading styles in writer and use the function 'writer:'File->Send->Outline to presentation' to get it into the presentation ///'
    ' all 'heading 1' are new slides
 
-   printlog "document used : graphics\\required\\input\\outlinefromwriter.sxw -> you get into writer"
+   '/// document used : "graphics\\required\\input\\outlinefromwriter.sxw" -> you get into writer ///'
    sFile = ConvertPath (gTesttoolPath + "graphics\required\input\outlinefromwriter.sxw")
    hDateiOeffnen (sFile)
    sleep 10
-   printlog "with 'File->Send->Outline to presentation' you get into impress"
+   '///+ with 'File->Send->Outline to presentation' you get into impress ///'
    FileSendOutlineToPresentation
    sleep 10
-   Printlog "printlog View->Workspace->Outline View"
+   Printlog "'/// View->Workspace->Outline View ///'"
    ViewWorkspaceOutlineView
    sleep 1
-   printlog "go to the line with the 'I' (via 'search & replace' function)"
+   '/// go to the line with the 'I' (via 'search & replace' function) ///'
    hTypeKeys "<STRG HOME>"
    EditSelectAll
    hFindeImDokument ("I")
 
-   printlog "expected level/style: 'Outline 8'"
-   printlog "get last character from selected style in stylist (expect a number of the outline(heading level)"
+   '///<b> expected level/style: 'Outline 8' </b>///'
+   '/// get last character from selected style in stylist (expect a number of the outline(heading level) ///'
    fGetPresentationStyle ("8")
 
-   printlog "type keys [home] [tab] to go one level down"
+   '/// type keys [home] [tab] to go one level down ///'
    Kontext "DocumentImpressOutlineView"
    DocumentImpressOutlineView.TypeKeys "<Home><Tab>"
 
-   printlog "expected level/style: 'Outline 9'"
+   '///<b> expected level/style: 'Outline 9' </b>///'
    fGetPresentationStyle ("9")
 
    Kontext "DocumentImpressOutlineView"
-   printlog "Edit - Select All to go select the whole text"
+   '/// Edit - "Select All" to go select the whole text ///'
    EditSelectAll
-   printlog "type keys [shift]+[tab] eight times, to get all lines to the highest, except the one with the 'I'"
+   '/// type keys [shift]+[tab] eight times, to get all lines to the highest, except the one with the 'I' ///'
    DocumentImpressOutlineView.TypeKeys ("<Shift Tab>", 8)
     
 hPrepareSearchBUG
     hTypeKeys "<STRG HOME>"
     EditSelectAll
     hFindeImDokument ("I")
-    printlog "expected level/style: 'Outline 1"
+    '///<b> expected level/style: 'Outline 1' </b>///'
     fGetPresentationStyle ("1")
     
-    printlog "type keys [shift]+[tab] to get the last line to the highest level, too"
+    '/// type keys [shift]+[tab] to get the last line to the highest level, too ///'
     Kontext "DocumentImpressOutlineView"
     DocumentImpressOutlineView.TypeKeys ("<Shift Tab>", 1)
-    printlog "expected level/style: 'Title'"
+    '///<b> expected level/style: 'Title' </b>///'
     fGetPresentationStyle (0)
     
     Kontext "DocumentImpressOutlineView"
     DocumentImpressOutlineView.TypeKeys ("<escape>", 1)
-    Printlog "call 'Edit->Undo' nine times"
+    Printlog "'///<b> call 'Edit->Undo' nine times </b>///'"
     for i = 1 to 9
       editundo
     next i
 
 hPrepareSearchBUG
     hFindeImDokument ("I")
-    printlog "expected level/style: 'Outline 9'"
+    '///<b> expected level/style: 'Outline 9' </b>///'
     fGetPresentationStyle (9)
     
-    Printlog "call 'Edit->Redo' nine times "
+    Printlog "'///<b> call 'Edit->Redo' nine times </b>///'"
     for i = 1 to 9
       editredo
     next i
@@ -168,10 +164,10 @@ hPrepareSearchBUG
     hTypeKeys "<STRG HOME>"
     EditSelectAll
     hFindeImDokument ("I")
-    printlog "expected level/style: 'Title'"
+    '///<b> expected level/style: 'Title' </b>///'
     fGetPresentationStyle (0)
 
-    Printlog "call 'Edit->Undo' nine times"
+    Printlog "'///<b> call 'Edit->Undo' nine times </b>///'"
     for i = 1 to 9
         editundo
     next i
@@ -180,13 +176,13 @@ hPrepareSearchBUG
     hTypeKeys "<STRG HOME>"
     EditSelectAll
     hFindeImDokument ("I")
-    printlog "expected level/style: 'Outline 9"
+    '///<b> expected level/style: 'Outline 9' </b>///'
     fGetPresentationStyle (9)
 
-    printlog "type keys [strg]+[A]"
+    '/// type keys [strg]+[A] ///'
     Kontext "DocumentImpressOutlineView"
     EditSelectAll
-    printlog "type keys [strg]+[X]"
+    '/// type keys [strg]+[X] ///'
     DocumentImpressOutlineView.TypeKeys "<mod1 X>"
 
     kontext
@@ -197,17 +193,17 @@ hPrepareSearchBUG
         Warnlog "messagebox missing ! (about deleting pages with graphic objects:)"
     endif
 
-   printlog "'Edit->Undo'"
+   '/// 'Edit->Undo' ///'
     editundo
-   printlog "'Edit->Redo'"
+   '/// 'Edit->Redo' ///'
     editredo
-   printlog "'Edit->Undo'"
+   '/// 'Edit->Undo' ///'
     editundo
 
-   printlog "type keys [strg]+[A]"
+   '/// type keys [strg]+[A] ///'
    Kontext "DocumentImpressOutlineView"
    EditSelectAll
-   printlog "type keys [strg]+[X]"
+   '/// type keys [strg]+[X] ///'
    DocumentImpressOutlineView.TypeKeys "<mod1 X>"
 
     kontext
@@ -218,23 +214,23 @@ hPrepareSearchBUG
         Warnlog "messagebox missing ! (about deleting pages with graphic objects:)"
     endif
 
-    printlog "type keys [strg]+[V]"
+    '/// type keys [strg]+[V] ///'
     Kontext "DocumentImpressOutlineView"
     DocumentImpressOutlineView.TypeKeys "<mod1 V>"
 
-    printlog "'Edit->Undo'"
+    '/// 'Edit->Undo' ///'
     editundo
-    printlog "'Edit->Redo'"
+    '/// 'Edit->Redo' ///'
     editredo
 
-    printlog "type keys [strg]+[End]"
+    '/// type keys [strg]+[End] ///'
     Kontext "DocumentImpressOutlineView"
     DocumentImpressOutlineView.TypeKeys "<mod1 End>"
-    printlog "type keys [strg]+[V]"
+    '/// type keys [strg]+[V] ///'
     DocumentImpressOutlineView.TypeKeys "<mod1 V>"
-    printlog "type keys [strg]+[A]"
+    '/// type keys [strg]+[A] ///'
     EditSelectAll
-    printlog "type keys [delete]"
+    '/// type keys [delete] ///'
     DocumentImpressOutlineView.TypeKeys "<delete>"
 
     kontext
@@ -246,7 +242,7 @@ hPrepareSearchBUG
         Warnlog "messagebox missing ! (about deleting pages with graphic objects:)"
         endif
 
-    printlog "type keys [strg]+[A]"
+    '/// type keys [strg]+[A] ///'
     Kontext "DocumentImpressOutlineView"
     EditSelectAll
     try
@@ -256,7 +252,7 @@ hPrepareSearchBUG
         Warnlog "error 4711 TBO :-("
     endcatch
     
-    printlog "type keys [delete]"
+    '/// type keys [delete] ///'
     Kontext "DocumentImpressOutlineView"
     DocumentImpressOutlineView.TypeKeys "<delete>"
 
@@ -279,50 +275,44 @@ hPrepareSearchBUG
     endcatch
     
     ViewWorkspaceDrawingView
-    printlog "close document"
-    Call  hCloseDocument						
-endcase 'tViewWorkspaceOutlineView
+    Call  hCloseDocument						'/// close document ///'
+    Call  hCloseDocument						'/// close document ///'
+endcase
 
 '-------------------------------------------------------------------------------
 
 testcase tViewWorkspaceDrawingView
     Printlog "- View/Background-drawing"
-    printlog "new document"
-    Call hNewDocument						
+    Call hNewDocument						'/// new document ///'
     sleep 2
-    printlog "view background drawing"
-    ViewDrawing						
+    ViewDrawing						'/// view background drawing ///'
     try
-        printlog "create rectangle"
-        hRechteckErstellen ( 20,20,40,40 )			
+        hRechteckErstellen ( 20,20,40,40 )			'/// create rectangle ///'
         sleep 1
         Printlog "  - rectangle created"
     catch
         Warnlog "  Rectangle could not be created"
     endcatch
-    printlog "close document"
-    Call hCloseDocument		
-endcase 'tViewWorkspaceDrawingView
+    Call hCloseDocument						'/// close document ///'
+endcase
 
 '-------------------------------------------------------------------------------
 
 testcase tAnsichtEbene
-    printLog "- View/Layer"							
-
-    printlog "new document-autopilot"
-    FileAutopilotPresentation					
+    printLog "- View/Layer"							'/// view layer ///'
+    
+    
+    FileAutopilotPresentation					'/// new document-autopilot ///'
     Kontext "AutopilotPraesentation1"
     sleep 5
     AutopilotPraesentation1.Ok
     sleep 2
     sleep 2
-    printlog "back to view slide"
-    ViewSlide							
+    ViewSlide							'/// back to view slide ///'
     Sleep 2
+    
+    Call  hCloseDocument						'/// close document ///'
 
-    printlog "close document"
-    Call  hCloseDocument						
-
-endcase 'tAnsichtEbene
+endcase
 
 '-------------------------------------------------------------------------------

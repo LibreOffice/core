@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,19 +40,22 @@
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#ifdef QUARTZ
+#ifdef WNT
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#elif defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
 #endif
 
-#include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
-//  ----------------------------------------------------
-//  class VCLXSystemDependentWindow
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXSystemDependentWindow
+//	----------------------------------------------------
 VCLXSystemDependentWindow::VCLXSystemDependentWindow()
 {
 }
@@ -77,7 +80,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Any VCLXSystemDependentWindow::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     // TODO, check the process id
     ::com::sun::star::uno::Any aRet;

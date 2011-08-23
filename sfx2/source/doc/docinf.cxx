@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -262,7 +262,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pGuid );
         rCustomSect.SetPropertyName( nPropId,
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_PID_GUID")) );
+            ::rtl::OUString::createFromAscii("_PID_GUID") );
     }
 
     // write hyperlinks
@@ -270,7 +270,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pHyperlinks );
         rCustomSect.SetPropertyName( nPropId,
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_PID_HLINKS")) );
+            ::rtl::OUString::createFromAscii("_PID_HLINKS") );
     }
 
     uno::Reference<beans::XPropertySet> xUserDefinedProps(
@@ -313,7 +313,8 @@ uno::Sequence<sal_uInt8> SFX2_DLLPUBLIC convertMetaFile(GDIMetaFile* i_pThumb)
         SvMemoryStream aStream;
 // magic value 160 taken from GraphicHelper::getThumbnailFormatFromGDI_Impl()
         if( i_pThumb->CreateThumbnail( 160, aBitmap ) ) {
-            aBitmap.GetBitmap().Write( aStream, sal_False, sal_False );
+            aBitmap.GetBitmap().Write( aStream, FALSE, FALSE );
+//            uno::Sequence<sal_uInt8> aSeq(aStream.GetSize()); // WRONG
             aStream.Seek(STREAM_SEEK_TO_END);
             uno::Sequence<sal_uInt8> aSeq(aStream.Tell());
             const sal_uInt8* pBlob(

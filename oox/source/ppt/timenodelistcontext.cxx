@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,12 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include "oox/helper/attributelist.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/ppt/slidetransition.hxx"
+#include "tokens.hxx"
 
 #include "animvariantcontext.hxx"
 #include "commonbehaviorcontext.hxx"
@@ -128,10 +130,10 @@ namespace oox { namespace ppt {
 
                 switch( aElement )
                 {
-                case PPT_TOKEN( audio ):
+                case NMSP_PPT|XML_audio:
                     mbIsNarration = attribs.getBool( XML_isNarration, false );
                     break;
-                case PPT_TOKEN( video ):
+                case NMSP_PPT|XML_video:
                     mbFullScrn = attribs.getBool( XML_fullScrn, false );
                     break;
                 default:
@@ -142,11 +144,11 @@ namespace oox { namespace ppt {
         virtual void SAL_CALL endFastElement( sal_Int32 aElement )
             throw ( SAXException, RuntimeException)
             {
-                if( aElement == PPT_TOKEN( audio ) )
+                if( aElement == ( NMSP_PPT|XML_audio ) )
                 {
                     // TODO deal with mbIsNarration
                 }
-                else if( aElement == PPT_TOKEN( video ) )
+                else if( aElement == ( NMSP_PPT|XML_video ) )
                 {
                     // TODO deal with mbFullScrn
                 }
@@ -160,7 +162,7 @@ namespace oox { namespace ppt {
 
                 switch ( aElementToken )
                 {
-                case PPT_TOKEN( cBhvr ):
+                case NMSP_PPT|XML_cBhvr:
                     xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
                 default:
@@ -203,7 +205,7 @@ namespace oox { namespace ppt {
                     if( maTo >>= aString )
                     {
                         OSL_TRACE( "Magic conversion %s", OUSTRING_TO_CSTR( aString ) );
-                        maTo = makeAny( aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "visible" ) ) ? sal_True : sal_False );
+                        maTo = makeAny( aString.equalsAscii( "visible" ) ? sal_True : sal_False );
                         if( !maTo.has<sal_Bool>() )
                             OSL_TRACE( "conversion failed" );
                     }
@@ -226,10 +228,10 @@ namespace oox { namespace ppt {
 
                 switch ( aElementToken )
                 {
-                case PPT_TOKEN( cBhvr ):
+                case NMSP_PPT|XML_cBhvr:
                     xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
-                case PPT_TOKEN( to ):
+                case NMSP_PPT|XML_to:
                     // CT_TLAnimVariant
                     xRet.set( new AnimVariantContext( *this, aElementToken, maTo ) );
                     break;
@@ -260,7 +262,7 @@ namespace oox { namespace ppt {
             {
                 switch ( aElement )
                 {
-                case PPT_TOKEN( cmd ):
+                case NMSP_PPT|XML_cmd:
                     msCommand = xAttribs->getOptionalValue( XML_cmd );
                     maType = xAttribs->getOptionalValueToken( XML_type, 0 );
                     break;
@@ -276,7 +278,7 @@ namespace oox { namespace ppt {
         virtual void SAL_CALL endFastElement( sal_Int32 aElement )
             throw ( SAXException, RuntimeException)
             {
-                if( aElement == PPT_TOKEN( cmd ) )
+                if( aElement == ( NMSP_PPT|XML_cmd ) )
                 {
                     try {
                         // see sd/source/filter/ppt/pptinanimations.cxx
@@ -355,7 +357,7 @@ namespace oox { namespace ppt {
 
                 switch ( aElementToken )
                 {
-                case PPT_TOKEN( cBhvr ):
+                case NMSP_PPT|XML_cBhvr:
                     xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
                 default:
@@ -408,14 +410,14 @@ namespace oox { namespace ppt {
 
                 switch ( aElementToken )
                 {
-                case PPT_TOKEN( cTn ):
+                case NMSP_PPT|XML_cTn:
                     xRet.set( new CommonTimeNodeContext( *this, aElementToken, xAttribs, mpNode ) );
                     break;
-                case PPT_TOKEN( nextCondLst ):
+                case NMSP_PPT|XML_nextCondLst:
                     xRet.set( new CondListContext( *this, aElementToken, xAttribs, mpNode,
                                                    mpNode->getNextCondition() ) );
                     break;
-                case PPT_TOKEN( prevCondLst ):
+                case NMSP_PPT|XML_prevCondLst:
                     xRet.set( new CondListContext( *this, aElementToken, xAttribs, mpNode,
                                                    mpNode->getPrevCondition() ) );
                     break;
@@ -456,7 +458,7 @@ namespace oox { namespace ppt {
 
                 switch ( aElementToken )
                 {
-                case PPT_TOKEN( cTn ):
+                case NMSP_PPT|XML_cTn:
                     xRet.set( new CommonTimeNodeContext( *this, aElementToken, xAttribs, mpNode ) );
                     break;
                 default:
@@ -520,7 +522,7 @@ namespace oox { namespace ppt {
 
                 switch ( aElementToken )
                 {
-                case PPT_TOKEN( hsl ):
+                case NMSP_PPT|XML_hsl:
                     // CT_TLByHslColorTransform
                 {
                     if( mbHasByColor )
@@ -533,7 +535,7 @@ namespace oox { namespace ppt {
                     xRet.set(this);
                     break;
                 }
-                case PPT_TOKEN( rgb ):
+                case NMSP_PPT|XML_rgb:
                 {
                     if( mbHasByColor )
                     {
@@ -546,19 +548,19 @@ namespace oox { namespace ppt {
                     xRet.set(this);
                     break;
                 }
-                case PPT_TOKEN( by ):
+                case NMSP_PPT|XML_by:
                     // CT_TLByAnimateColorTransform
                     mbHasByColor = true;
                     xRet.set(this);
                     break;
-                case PPT_TOKEN( cBhvr ):
+                case NMSP_PPT|XML_cBhvr:
                     xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
-                case PPT_TOKEN( to ):
+                case NMSP_PPT|XML_to:
                     // CT_Color
                     xRet.set( new ColorContext( *this, maToClr ) );
                     break;
-                case PPT_TOKEN( from ):
+                case NMSP_PPT|XML_from:
                     // CT_Color
                     xRet.set( new ColorContext( *this, maFromClr ) );
                     break;
@@ -677,10 +679,10 @@ namespace oox { namespace ppt {
 
                 switch ( aElementToken )
                 {
-                case PPT_TOKEN( cBhvr ):
+                case NMSP_PPT|XML_cBhvr:
                     xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
-                case PPT_TOKEN( tavLst ):
+                case NMSP_PPT|XML_tavLst:
                     xRet.set( new TimeAnimValueListContext ( *this, xAttribs, maTavList ) );
                     break;
                 default:
@@ -747,10 +749,10 @@ namespace oox { namespace ppt {
 
                 switch ( aElementToken )
                 {
-                case PPT_TOKEN( cBhvr ):
+                case NMSP_PPT|XML_cBhvr:
                     xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
-                case PPT_TOKEN( to ):
+                case NMSP_PPT|XML_to:
                 {
                     // CT_TLPoint
                     Point p = GetPointPercent( xAttribs );
@@ -758,7 +760,7 @@ namespace oox { namespace ppt {
                     maTo <<= p.Y;
                     break;
                 }
-                case PPT_TOKEN( from ):
+                case NMSP_PPT|XML_from:
                 {
                     // CT_TLPoint
                     Point p = GetPointPercent( xAttribs );
@@ -766,7 +768,7 @@ namespace oox { namespace ppt {
                     maFrom <<= p.Y;
                     break;
                 }
-                case PPT_TOKEN( by ):
+                case NMSP_PPT|XML_by:
                 {
                     // CT_TLPoint
                     Point p = GetPointPercent( xAttribs );
@@ -833,7 +835,7 @@ namespace oox { namespace ppt {
 
                 switch ( aElementToken )
                 {
-                case PPT_TOKEN( cBhvr ):
+                case NMSP_PPT|XML_cBhvr:
                     xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
                 default:
@@ -901,10 +903,10 @@ namespace oox { namespace ppt {
 
                 switch ( aElementToken )
                 {
-                case PPT_TOKEN( cBhvr ):
+                case NMSP_PPT|XML_cBhvr:
                     xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
-                case PPT_TOKEN( to ):
+                case NMSP_PPT|XML_to:
                 {
                     // CT_TLPoint
                     Point p = GetPointPercent( xAttribs );
@@ -914,7 +916,7 @@ namespace oox { namespace ppt {
                     mpNode->setTo( rAny );
                     break;
                 }
-                case PPT_TOKEN( from ):
+                case NMSP_PPT|XML_from:
                 {
                     // CT_TLPoint
                     Point p = GetPointPercent( xAttribs );
@@ -924,7 +926,7 @@ namespace oox { namespace ppt {
                     mpNode->setFrom( rAny );
                     break;
                 }
-                case PPT_TOKEN( by ):
+                case NMSP_PPT|XML_by:
                 {
                     // CT_TLPoint
                     Point p = GetPointPercent( xAttribs );
@@ -934,12 +936,11 @@ namespace oox { namespace ppt {
                     mpNode->setBy( rAny );
                     break;
                 }
-                case PPT_TOKEN( rCtr ):
+                case NMSP_PPT|XML_rCtr:
                 {
                     // CT_TLPoint
                     Point p = GetPointPercent( xAttribs );
                     // TODO push
-                    (void)p;
                     break;
                 }
                 default:
@@ -971,7 +972,7 @@ namespace oox { namespace ppt {
                 sal_Int32 nDir = xAttribs->getOptionalValueToken( XML_transition, 0 );
                 OUString sFilter = xAttribs->getOptionalValue( XML_filter );
                 // TODO
-//              OUString sPrList = xAttribs->getOptionalValue( XML_prLst );
+//				OUString sPrList = xAttribs->getOptionalValue( XML_prLst );
 
                 if( sFilter.getLength() )
                 {
@@ -993,10 +994,10 @@ namespace oox { namespace ppt {
 
                 switch ( aElementToken )
                 {
-                case PPT_TOKEN( cBhvr ):
+                case NMSP_PPT|XML_cBhvr:
                     xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
                     break;
-                case PPT_TOKEN( progress ):
+                case NMSP_PPT|XML_progress:
                     xRet.set( new AnimVariantContext( *this, aElementToken, maProgress ) );
                     // TODO handle it.
                     break;
@@ -1025,41 +1026,41 @@ namespace oox { namespace ppt {
         TimeNodeContext *pCtx = NULL;
         switch( aElement )
         {
-        case PPT_TOKEN( animClr ):
+        case NMSP_PPT|XML_animClr:
             pCtx = new AnimColorContext( rParent, aElement, xAttribs, pNode );
             break;
-        case PPT_TOKEN( par ):
+        case NMSP_PPT|XML_par:
             pCtx = new ParallelExclTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
-        case PPT_TOKEN( seq ):
+        case NMSP_PPT|XML_seq:
             pCtx = new SequenceTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
-        case PPT_TOKEN( excl ):
+        case NMSP_PPT|XML_excl:
             pCtx = new ParallelExclTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
-        case PPT_TOKEN( anim ):
+        case NMSP_PPT|XML_anim:
             pCtx = new AnimContext ( rParent, aElement, xAttribs, pNode );
             break;
-        case PPT_TOKEN( animEffect ):
+        case NMSP_PPT|XML_animEffect:
             pCtx = new AnimEffectContext( rParent, aElement, xAttribs, pNode );
             break;
-        case PPT_TOKEN( animMotion ):
+        case NMSP_PPT|XML_animMotion:
             pCtx = new AnimMotionContext( rParent, aElement, xAttribs, pNode );
             break;
-        case PPT_TOKEN( animRot ):
+        case NMSP_PPT|XML_animRot:
             pCtx = new AnimRotContext( rParent, aElement, xAttribs, pNode );
             break;
-        case PPT_TOKEN( animScale ):
+        case NMSP_PPT|XML_animScale:
             pCtx = new AnimScaleContext( rParent, aElement, xAttribs, pNode );
             break;
-        case PPT_TOKEN( cmd ):
+        case NMSP_PPT|XML_cmd:
             pCtx = new CmdTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
-        case PPT_TOKEN( set ):
+        case NMSP_PPT|XML_set:
             pCtx = new SetTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
-        case PPT_TOKEN( audio ):
-        case PPT_TOKEN( video ):
+        case NMSP_PPT|XML_audio:
+        case NMSP_PPT|XML_video:
             pCtx = new MediaNodeContext( rParent, aElement, xAttribs, pNode );
             break;
         default:
@@ -1106,43 +1107,43 @@ namespace oox { namespace ppt {
 
         switch( aElementToken )
         {
-        case PPT_TOKEN( par ):
+        case NMSP_PPT|XML_par:
             nNodeType = AnimationNodeType::PAR;
             break;
-        case PPT_TOKEN( seq ):
+        case NMSP_PPT|XML_seq:
             nNodeType = AnimationNodeType::SEQ;
             break;
-        case PPT_TOKEN( excl ):
+        case NMSP_PPT|XML_excl:
             // TODO pick the right type. We choose parallel for now as
             // there does not seem to be an "Exclusive"
             nNodeType = AnimationNodeType::PAR;
             break;
-        case PPT_TOKEN( anim ):
+        case NMSP_PPT|XML_anim:
             nNodeType = AnimationNodeType::ANIMATE;
             break;
-        case PPT_TOKEN( animClr ):
+        case NMSP_PPT|XML_animClr:
             nNodeType = AnimationNodeType::ANIMATECOLOR;
             break;
-        case PPT_TOKEN( animEffect ):
+        case NMSP_PPT|XML_animEffect:
             nNodeType = AnimationNodeType::TRANSITIONFILTER;
             break;
-        case PPT_TOKEN( animMotion ):
+        case NMSP_PPT|XML_animMotion:
             nNodeType = AnimationNodeType::ANIMATEMOTION;
             break;
-        case PPT_TOKEN( animRot ):
-        case PPT_TOKEN( animScale ):
+        case NMSP_PPT|XML_animRot:
+        case NMSP_PPT|XML_animScale:
             nNodeType = AnimationNodeType::ANIMATETRANSFORM;
             break;
-        case PPT_TOKEN( cmd ):
+        case NMSP_PPT|XML_cmd:
             nNodeType = AnimationNodeType::COMMAND;
             break;
-        case PPT_TOKEN( set ):
+        case NMSP_PPT|XML_set:
             nNodeType = AnimationNodeType::SET;
             break;
-        case PPT_TOKEN( audio ):
+        case NMSP_PPT|XML_audio:
             nNodeType = AnimationNodeType::AUDIO;
             break;
-        case PPT_TOKEN( video ):
+        case NMSP_PPT|XML_video:
             nNodeType = AnimationNodeType::AUDIO;
             OSL_TRACE( "OOX: video requested, gave Audio instead" );
             break;

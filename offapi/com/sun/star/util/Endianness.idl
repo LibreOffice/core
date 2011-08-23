@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,29 +29,29 @@
 
 module com { module sun { module star { module util {
 
-/** These constants describe the endianness of data structures.<p>
+/** These constans describe the endiannes of data structures.<p>
 
     The endianness specifies the order in which the bytes of larger
     types are laid out in memory.<p>
 
-    @since OOo 2.0
+    @since OOo 2.0.0
  */
-constants Endianness
+constants Endianness 
 {
     /** Little endian.<p>
 
         The values are stored in little endian format, i.e. the bytes
-        of the long word 0xAABBCCDD are laid out like 0xDD, 0xCC,
+        of the long word 0xAABBCCDD are layed out like 0xDD, 0xCC,
         0xBB, 0xAA in memory. That is, data of arbitrary machine word
         lengths always starts with the least significant byte, and
         ends with the most significant one.<p>
      */
-    const byte  LITTLE=0;
+    const byte	LITTLE=0;
 
     /** Big endian.<p>
 
         The values are stored in big endian format, i.e. the bytes of
-        the long word 0xAABBCCDD are laid out like 0xAA, 0xBB, 0xCC,
+        the long word 0xAABBCCDD are layed out like 0xAA, 0xBB, 0xCC,
         0xDD in memory. That is, data of arbitrary machine word
         lengths always start with the most significant byte, and ends
         with the least significant one.<p>

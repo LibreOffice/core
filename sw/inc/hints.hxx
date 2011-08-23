@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ class SwHistory;
 class SwMsgPoolItem : public SfxPoolItem
 {
 public:
-    SwMsgPoolItem( sal_uInt16 nWhich );
+    SwMsgPoolItem( USHORT nWhich );
 
     // "Overhead" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -64,7 +64,7 @@ class SwPtrMsgPoolItem : public SwMsgPoolItem
 public:
     void * pObject;
 
-    SwPtrMsgPoolItem( sal_uInt16 nId, void * pObj )
+    SwPtrMsgPoolItem( USHORT nId, void * pObj )
         : SwMsgPoolItem( nId ), pObject( pObj )
     {}
 };
@@ -114,8 +114,8 @@ class SwUpdateAttr: public SwMsgPoolItem
 public:
     xub_StrLen nStart;
     xub_StrLen nEnd;
-    sal_uInt16 nWhichAttr;
-    SwUpdateAttr( xub_StrLen nS, xub_StrLen nE, sal_uInt16 nW );
+    USHORT nWhichAttr;
+    SwUpdateAttr( xub_StrLen nS, xub_StrLen nE, USHORT nW );
 };
 
 
@@ -155,10 +155,10 @@ public:
         const String* pNewTblNm; // Split: the name of the new table
     } DATA;
     SwHistory* pHistory;
-    sal_uInt16 nSplitLine;           // Split: from this BaseLine on will be splitted
+    USHORT nSplitLine;           // Split: from this BaseLine on will be splitted
     TableFmlUpdtFlags eFlags;
-    sal_Bool bModified : 1;
-    sal_Bool bBehindSplitLine : 1;
+    BOOL bModified : 1;
+    BOOL bBehindSplitLine : 1;
 
     SwTableFmlUpdate( const SwTable* );
 };
@@ -179,7 +179,7 @@ public:
  */
 class SwAttrSetChg: public SwMsgPoolItem
 {
-    sal_Bool bDelSet;
+    BOOL bDelSet;
     SwAttrSet* pChgSet;           // what has changed
     const SwAttrSet* pTheChgdSet; // is only used to compare
 public:
@@ -194,8 +194,8 @@ public:
     // Where it has changed
     const SwAttrSet* GetTheChgdSet() const { return pTheChgdSet; }
 
-    sal_uInt16 Count() const { return pChgSet->Count(); }
-    void ClearItem( sal_uInt16 nWhichL = 0 )
+    USHORT Count() const { return pChgSet->Count(); }
+    void ClearItem( USHORT nWhichL = 0 )
 #if OSL_DEBUG_LEVEL > 1
         ;
 #else
@@ -214,7 +214,7 @@ class SwVirtPageNumInfo: public SwMsgPoolItem
 {
     const SwPageFrm *pPage;
     const SwPageFrm *pOrigPage;
-    const SwFrm     *pFrm;
+    const SwFrm 	*pFrm;
     // Multiple attributes can be attached to a single paragraph / table
     // The frame, in the end, has to decide which attribute takes effect and which physical page it involves
 public:
@@ -244,7 +244,7 @@ public:
 
     const String& GetString() const { return sStr; }
 
-    SwStringMsgPoolItem( sal_uInt16 nId, const String& rStr )
+    SwStringMsgPoolItem( USHORT nId, const String& rStr )
         : SwMsgPoolItem( nId ), sStr( rStr )
     {}
 };

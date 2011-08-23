@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,14 +33,14 @@
 #include <tools/solar.h>
 #include <svtools/textdata.hxx>
 #include <svl/hint.hxx>
-#include <tools/gen.hxx>
+#include <tools/gen.hxx> 
 #include "editeng/editengdllapi.h"
 
 struct EENotify;
 class EditEngine;
 
-#define EDITSOURCE_HINT_PARASMOVED          20
-#define EDITSOURCE_HINT_SELECTIONCHANGED    21
+#define EDITSOURCE_HINT_PARASMOVED			20
+#define EDITSOURCE_HINT_SELECTIONCHANGED	21
 
 /** Extends TextHint by two additional parameters which are necessary
     for the EDITSOURCE_HINT_PARASMOVED hint. TextHint's value in this
@@ -50,20 +50,20 @@ class EditEngine;
 class EDITENG_DLLPUBLIC SvxEditSourceHint : public TextHint
 {
 private:
-    sal_uLong   mnStart;
-    sal_uLong   mnEnd;
+    ULONG 	mnStart;
+    ULONG 	mnEnd;
 
 public:
             TYPEINFO();
-            SvxEditSourceHint( sal_uLong nId );
-            SvxEditSourceHint( sal_uLong nId, sal_uLong nValue, sal_uLong nStart=0, sal_uLong nEnd=0 );
+            SvxEditSourceHint( ULONG nId );
+            SvxEditSourceHint( ULONG nId, ULONG nValue, ULONG nStart=0, ULONG nEnd=0 );
 
-    sal_uLong   GetValue() const;
-    sal_uLong   GetStartValue() const;
-    sal_uLong   GetEndValue() const;
-    void    SetValue( sal_uLong n );
-    void    SetStartValue( sal_uLong n );
-    void    SetEndValue( sal_uLong n );
+    ULONG 	GetValue() const;
+    ULONG	GetStartValue() const;
+    ULONG	GetEndValue() const;
+    void	SetValue( ULONG n );
+    void	SetStartValue( ULONG n );
+    void	SetEndValue( ULONG n );
 };
 
 /** Helper class for common functionality in edit sources
@@ -85,10 +85,10 @@ public:
 
         Please note that the range returned is half-open: [nStartIndex,nEndIndex)
 
-        @param nStartIndex
+        @param nStartIndex 
         Herein, the start index of the range of similar attributes is returned
 
-        @param nEndIndex
+        @param nEndIndex 
         Herein, the end index (exclusive) of the range of similar attributes is returned
 
         @param rEE
@@ -102,7 +102,7 @@ public:
 
         @return sal_True, if the range has been successfully determined
      */
-    static sal_Bool GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_uInt16 nPara, sal_uInt16 nIndex );
+    static sal_Bool GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, const EditEngine& rEE, USHORT nPara, USHORT nIndex );
 
     /** Convert point from edit engine to user coordinate space
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,22 +60,21 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
-#include "sot/stg.hxx"
-#include "sot/storinfo.hxx"
+#include "stg.hxx"
+#include "storinfo.hxx"
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include "sot/clsids.hxx"
+#include "clsids.hxx"
 
 #include "unostorageholder.hxx"
-
-#include <vector>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -102,6 +101,8 @@ protected:
 public:
     FileStreamWrapper_Impl( const String& rName );
     virtual ~FileStreamWrapper_Impl();
+
+    //DECLARE_UNO3_AGG_DEFAULTS( FileStreamWrapper_Impl, FileInputStreamWrapper_Base);
 
     virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw ( IllegalArgumentException, IOException, RuntimeException);
     virtual sal_Int64 SAL_CALL getPosition(  ) throw ( IOException, RuntimeException);
@@ -335,6 +336,22 @@ TYPEINIT1( UCBStorage, BaseStorage );
 
 sal_Int32 GetFormatId_Impl( SvGlobalName aName )
 {
+//    if ( aName == SvGlobalName( SO3_SW_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARWRITER_8;
+//    if ( aName == SvGlobalName( SO3_SWWEB_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARWRITERWEB_8;
+//    if ( aName == SvGlobalName( SO3_SWGLOB_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARWRITERGLOB_8;
+//    if ( aName == SvGlobalName( SO3_SDRAW_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARDRAW_8;
+//    if ( aName == SvGlobalName( SO3_SIMPRESS_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARIMPRESS_8;
+//    if ( aName == SvGlobalName( SO3_SC_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARCALC_8;
+//    if ( aName == SvGlobalName( SO3_SCH_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARCHART_8;
+//    if ( aName == SvGlobalName( SO3_SM_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARMATH_8;
     if ( aName == SvGlobalName( SO3_SW_CLASSID_60 ) )
         return SOT_FORMATSTR_ID_STARWRITER_60;
     if ( aName == SvGlobalName( SO3_SWWEB_CLASSID_60 ) )
@@ -359,7 +376,7 @@ sal_Int32 GetFormatId_Impl( SvGlobalName aName )
         return 0;
     else
     {
-        OSL_FAIL( "Unknown UCB storage format!" );
+        DBG_ERROR( "Unknown UCB storage format!" );
         return 0;
     }
 }
@@ -408,6 +425,7 @@ SvGlobalName GetClassId_Impl( sal_Int32 nFormat )
         case SOT_FORMATSTR_ID_STARMATH_60 :
             return SvGlobalName( SO3_SM_CLASSID_60 );
         default :
+            //DBG_ERROR( "Unknown UCB storage format!" );
             return SvGlobalName();
     }
 }
@@ -426,10 +444,10 @@ class UCBStorageStream_Impl : public SvRefBase, public SvStream
                                 ~UCBStorageStream_Impl();
 public:
 
-    virtual sal_uLong               GetData( void* pData, sal_uLong nSize );
-    virtual sal_uLong               PutData( const void* pData, sal_uLong nSize );
-    virtual sal_uLong               SeekPos( sal_uLong nPos );
-    virtual void                SetSize( sal_uLong nSize );
+    virtual ULONG               GetData( void* pData, ULONG nSize );
+    virtual ULONG               PutData( const void* pData, ULONG nSize );
+    virtual ULONG               SeekPos( ULONG nPos );
+    virtual void                SetSize( ULONG nSize );
     virtual void                FlushData();
     virtual void                ResetError();
 
@@ -449,29 +467,29 @@ public:
     RepresentModes              m_nRepresentMode; // should it be used as XInputStream or as SvStream
     long                        m_nError;
     StreamMode                  m_nMode;        // open mode ( read/write/trunc/nocreate/sharing )
-    sal_Bool                        m_bSourceRead;  // Source still contains useful information
-    sal_Bool                        m_bModified;    // only modified streams will be sent to the original content
-    sal_Bool                        m_bCommited;    // sending the streams is coordinated by the root storage of the package
-    sal_Bool                        m_bDirect;      // the storage and its streams are opened in direct mode; for UCBStorages
+    BOOL                        m_bSourceRead;  // Source still contains useful information
+    BOOL                        m_bModified;    // only modified streams will be sent to the original content
+    BOOL                        m_bCommited;    // sending the streams is coordinated by the root storage of the package
+    BOOL                        m_bDirect;      // the storage and its streams are opened in direct mode; for UCBStorages
                                                 // this means that the root storage does an autocommit when its external
                                                 // reference is destroyed
-    sal_Bool                        m_bIsOLEStorage;// an OLEStorage on a UCBStorageStream makes this an Autocommit-stream
+    BOOL                        m_bIsOLEStorage;// an OLEStorage on a UCBStorageStream makes this an Autocommit-stream
 
-                                UCBStorageStream_Impl( const String&, StreamMode, UCBStorageStream*, sal_Bool, const ByteString* pKey=0, sal_Bool bRepair = sal_False, Reference< XProgressHandler > xProgress = Reference< XProgressHandler >() );
+                                UCBStorageStream_Impl( const String&, StreamMode, UCBStorageStream*, BOOL, const ByteString* pKey=0, BOOL bRepair = FALSE, Reference< XProgressHandler > xProgress = Reference< XProgressHandler >() );
 
     void                        Free();
-    sal_Bool                        Init();
-    sal_Bool                        Clear();
+    BOOL                        Init();
+    BOOL                        Clear();
     sal_Int16                   Commit();       // if modified and commited: transfer an XInputStream to the content
-    sal_Bool                        Revert();       // discard all changes
+    BOOL                        Revert();       // discard all changes
     BaseStorage*                CreateStorage();// create an OLE Storage on the UCBStorageStream
-    sal_uLong                       GetSize();
+    ULONG                       GetSize();
 
-    sal_uLong                       ReadSourceWriteTemporary( sal_uLong aLength ); // read aLength from source and copy to temporary,
+    ULONG                       ReadSourceWriteTemporary( ULONG aLength ); // read aLength from source and copy to temporary,
                                                                            // no seeking is produced
-    sal_uLong                       ReadSourceWriteTemporary();                // read source till the end and copy to temporary,
+    ULONG                       ReadSourceWriteTemporary();                // read source till the end and copy to temporary,
 
-    sal_uLong                       CopySourceToTemporary();                // same as ReadSourceWriteToTemporary()
+    ULONG                       CopySourceToTemporary();                // same as ReadSourceWriteToTemporary()
                                                                         // but the writing is done at the end of temporary
                                                                         // pointer position is not changed
     Reference<XInputStream>     GetXInputStream();                      // return XInputStream, after that
@@ -485,7 +503,7 @@ public:
 SV_DECL_IMPL_REF( UCBStorageStream_Impl );
 
 struct UCBStorageElement_Impl;
-typedef ::std::vector< UCBStorageElement_Impl* > UCBStorageElementList_Impl;
+DECLARE_LIST( UCBStorageElementList_Impl, UCBStorageElement_Impl* )
 
 class UCBStorage_Impl : public SvRefBase
 {
@@ -501,36 +519,37 @@ public:
     ::ucbhelper::Content*       m_pContent;     // the content that provides the storage elements
     ::utl::TempFile*            m_pTempFile;    // temporary file, only for storages on stream
     SvStream*                   m_pSource;      // original stream, only for storages on a stream
+    //SvStream*                   m_pStream;      // the corresponding editable stream, only for storage on a stream
     long                        m_nError;
     StreamMode                  m_nMode;        // open mode ( read/write/trunc/nocreate/sharing )
-    sal_Bool                        m_bModified;    // only modified elements will be sent to the original content
-    sal_Bool                        m_bCommited;    // sending the streams is coordinated by the root storage of the package
-    sal_Bool                        m_bDirect;      // the storage and its streams are opened in direct mode; for UCBStorages
+    BOOL                        m_bModified;    // only modified elements will be sent to the original content
+    BOOL                        m_bCommited;    // sending the streams is coordinated by the root storage of the package
+    BOOL                        m_bDirect;      // the storage and its streams are opened in direct mode; for UCBStorages
                                                 // this means that the root storage does an autocommit when its external
                                                 // reference is destroyed
-    sal_Bool                        m_bIsRoot;      // marks this storage as root storages that manages all oommits and reverts
-    sal_Bool                        m_bDirty;           // ???
-    sal_Bool                        m_bIsLinked;
-    sal_Bool                        m_bListCreated;
-    sal_uLong                       m_nFormat;
+    BOOL                        m_bIsRoot;      // marks this storage as root storages that manages all oommits and reverts
+    BOOL                        m_bDirty;           // ???
+    BOOL                        m_bIsLinked;
+    BOOL                        m_bListCreated;
+    ULONG                       m_nFormat;
     String                      m_aUserTypeName;
     SvGlobalName                m_aClassId;
 
     UCBStorageElementList_Impl  m_aChildrenList;
 
-    sal_Bool                        m_bRepairPackage;
+    BOOL                        m_bRepairPackage;
     Reference< XProgressHandler > m_xProgressHandler;
 
     UNOStorageHolderList*       m_pUNOStorageHolderList;
-                                UCBStorage_Impl( const ::ucbhelper::Content&, const String&, StreamMode, UCBStorage*, sal_Bool, sal_Bool, sal_Bool = sal_False, Reference< XProgressHandler > = Reference< XProgressHandler >() );
-                                UCBStorage_Impl( const String&, StreamMode, UCBStorage*, sal_Bool, sal_Bool, sal_Bool = sal_False, Reference< XProgressHandler > = Reference< XProgressHandler >() );
-                                UCBStorage_Impl( SvStream&, UCBStorage*, sal_Bool );
+                                UCBStorage_Impl( const ::ucbhelper::Content&, const String&, StreamMode, UCBStorage*, BOOL, BOOL, BOOL = FALSE, Reference< XProgressHandler > = Reference< XProgressHandler >() );
+                                UCBStorage_Impl( const String&, StreamMode, UCBStorage*, BOOL, BOOL, BOOL = FALSE, Reference< XProgressHandler > = Reference< XProgressHandler >() );
+                                UCBStorage_Impl( SvStream&, UCBStorage*, BOOL );
     void                        Init();
     sal_Int16                   Commit();
-    sal_Bool                        Revert();
-    sal_Bool                        Insert( ::ucbhelper::Content *pContent );
-    UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, sal_Bool bDirect );
-    UCBStorageStream_Impl*      OpenStream( UCBStorageElement_Impl*, StreamMode, sal_Bool, const ByteString* pKey=0 );
+    BOOL                        Revert();
+    BOOL                        Insert( ::ucbhelper::Content *pContent );
+    UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, BOOL bDirect );
+    UCBStorageStream_Impl*      OpenStream( UCBStorageElement_Impl*, StreamMode, BOOL, const ByteString* pKey=0 );
     void                        SetProps( const Sequence < Sequence < PropertyValue > >& rSequence, const String& );
     void                        GetProps( sal_Int32&, Sequence < Sequence < PropertyValue > >& rSequence, const String& );
     sal_Int32                   GetObjectCount();
@@ -565,32 +584,32 @@ struct UCBStorageElement_Impl
 {
     String                      m_aName;        // the actual URL relative to the root "folder"
     String                      m_aOriginalName;// the original name in the content
-    sal_uLong                       m_nSize;
-    sal_Bool                        m_bIsFolder;    // Only sal_True when it is a UCBStorage !
-    sal_Bool                        m_bIsStorage;   // Also sal_True when it is an OLEStorage !
-    sal_Bool                        m_bIsRemoved;   // element will be removed on commit
-    sal_Bool                        m_bIsInserted;  // element will be removed on revert
+    ULONG                       m_nSize;
+    BOOL                        m_bIsFolder;    // Only TRUE when it is a UCBStorage !
+    BOOL                        m_bIsStorage;   // Also TRUE when it is an OLEStorage !
+    BOOL                        m_bIsRemoved;   // element will be removed on commit
+    BOOL                        m_bIsInserted;  // element will be removed on revert
     UCBStorage_ImplRef          m_xStorage;     // reference to the "real" storage
     UCBStorageStream_ImplRef    m_xStream;      // reference to the "real" stream
 
                                 UCBStorageElement_Impl( const ::rtl::OUString& rName,
-                                            sal_Bool bIsFolder = sal_False, sal_uLong nSize = 0 )
+                                            BOOL bIsFolder = FALSE, ULONG nSize = 0 )
                                     : m_aName( rName )
                                     , m_aOriginalName( rName )
                                     , m_nSize( nSize )
                                     , m_bIsFolder( bIsFolder )
                                     , m_bIsStorage( bIsFolder )
-                                    , m_bIsRemoved( sal_False )
-                                    , m_bIsInserted( sal_False )
+                                    , m_bIsRemoved( FALSE )
+                                    , m_bIsInserted( FALSE )
                                 {
                                 }
 
     ::ucbhelper::Content*       GetContent();
-    sal_Bool                        IsModified();
+    BOOL                        IsModified();
     String                      GetContentType();
     void                        SetContentType( const String& );
     String                      GetOriginalContentType();
-    sal_Bool                        IsLoaded()
+    BOOL                        IsLoaded()
                                 { return m_xStream.Is() || m_xStorage.Is(); }
 };
 
@@ -612,7 +631,7 @@ String UCBStorageElement_Impl::GetContentType()
         return m_xStorage->m_aContentType;
     else
     {
-        OSL_FAIL("Element not loaded!");
+        DBG_ERROR("Element not loaded!");
         return String();
     }
 }
@@ -626,7 +645,7 @@ void UCBStorageElement_Impl::SetContentType( const String& rType )
         m_xStorage->m_aContentType = m_xStorage->m_aOriginalContentType = rType;
     }
     else {
-        OSL_FAIL("Element not loaded!");
+        DBG_ERROR("Element not loaded!");
     }
 }
 
@@ -640,9 +659,9 @@ String UCBStorageElement_Impl::GetOriginalContentType()
         return String();
 }
 
-sal_Bool UCBStorageElement_Impl::IsModified()
+BOOL UCBStorageElement_Impl::IsModified()
 {
-    sal_Bool bModified = m_bIsRemoved || m_bIsInserted || m_aName != m_aOriginalName;
+    BOOL bModified = m_bIsRemoved || m_bIsInserted || m_aName != m_aOriginalName;
     if ( bModified )
     {
         if ( m_xStream.Is() )
@@ -654,7 +673,7 @@ sal_Bool UCBStorageElement_Impl::IsModified()
     return bModified;
 }
 
-UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nMode, UCBStorageStream* pStream, sal_Bool bDirect, const ByteString* pKey, sal_Bool bRepair, Reference< XProgressHandler > xProgress  )
+UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nMode, UCBStorageStream* pStream, BOOL bDirect, const ByteString* pKey, BOOL bRepair, Reference< XProgressHandler > xProgress  )
     : m_pAntiImpl( pStream )
     , m_aURL( rName )
     , m_pContent( NULL )
@@ -663,10 +682,10 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
     , m_nError( 0 )
     , m_nMode( nMode )
     , m_bSourceRead( !( nMode & STREAM_TRUNC ) )
-    , m_bModified( sal_False )
-    , m_bCommited( sal_False )
+    , m_bModified( FALSE )
+    , m_bCommited( FALSE )
     , m_bDirect( bDirect )
-    , m_bIsOLEStorage( sal_False )
+    , m_bIsOLEStorage( FALSE )
 {
     // name is last segment in URL
     INetURLObject aObj( rName );
@@ -682,7 +701,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
         {
             xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
                                                      xProgress );
-            aTemp += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?repairpackage"));
+            aTemp += rtl::OUString::createFromAscii("?repairpackage");
         }
 
         m_pContent = new ::ucbhelper::Content( aTemp, xComEnv );
@@ -700,7 +719,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
                 ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( (sal_Int8*) pBuffer, RTL_DIGEST_LENGTH_SHA1 );
                 ::com::sun::star::uno::Any aAny;
                 aAny <<= aSequ;
-                m_pContent->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EncryptionKey")), aAny );
+                m_pContent->setPropertyValue( ::rtl::OUString::createFromAscii("EncryptionKey"), aAny );
             }
         }
     }
@@ -738,7 +757,7 @@ Reference<XInputStream> UCBStorageStream_Impl::GetXInputStream()
 
     if( m_pAntiImpl && m_nRepresentMode != nonset )
     {
-        OSL_FAIL( "Misuse of the XInputstream!" );
+        DBG_ERROR( "Misuse of the XInputstream!" );
         SetError( ERRCODE_IO_ACCESSDENIED );
     }
     else
@@ -751,7 +770,7 @@ Reference<XInputStream> UCBStorageStream_Impl::GetXInputStream()
                 CopySourceToTemporary();
 
                 // owner transfer of stream to wrapper
-                aResult = new ::utl::OInputStreamWrapper( m_pStream, sal_True );
+                aResult = new ::utl::OInputStreamWrapper( m_pStream, TRUE );
                 m_pStream->Seek(0);
 
                 if( aResult.is() )
@@ -788,13 +807,13 @@ Reference<XInputStream> UCBStorageStream_Impl::GetXInputStream()
     return aResult;
 }
 
-sal_Bool UCBStorageStream_Impl::Init()
+BOOL UCBStorageStream_Impl::Init()
 {
     if( m_nRepresentMode == xinputstream )
     {
-        OSL_FAIL( "XInputStream misuse!" );
+        DBG_ERROR( "XInputStream misuse!" );
         SetError( ERRCODE_IO_ACCESSDENIED );
-        return sal_False;
+        return FALSE;
     }
 
     if( !m_pStream )
@@ -814,9 +833,9 @@ sal_Bool UCBStorageStream_Impl::Init()
 
         if( !m_pStream )
         {
-            OSL_FAIL( "Suspicious temporary stream creation!" );
+            DBG_ERROR( "Suspicious temporary stream creation!" );
             SetError( SVSTREAM_CANNOT_MAKE );
-            return sal_False;
+            return FALSE;
         }
 
         SetError( m_pStream->GetError() );
@@ -847,13 +866,13 @@ sal_Bool UCBStorageStream_Impl::Init()
             catch( BufferSizeExceededException& )
             {
                 // the temporary stream already contain all the data
-                m_bSourceRead = sal_False;
+                m_bSourceRead = FALSE;
             }
             catch( Exception& )
             {
                 // something is really wrong
-                m_bSourceRead = sal_False;
-                OSL_FAIL( "Can not operate original stream!" );
+                m_bSourceRead = FALSE;
+                DBG_ERROR( "Can not operate original stream!" );
                 SetError( SVSTREAM_CANNOT_MAKE );
             }
 
@@ -862,7 +881,7 @@ sal_Bool UCBStorageStream_Impl::Init()
         else
         {
             // if the new file is edited than no source exist
-            m_bSourceRead = sal_False;
+            m_bSourceRead = FALSE;
                 //SetError( SVSTREAM_CANNOT_MAKE );
         }
     }
@@ -872,12 +891,12 @@ sal_Bool UCBStorageStream_Impl::Init()
     return sal_True;
 }
 
-sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
+ULONG UCBStorageStream_Impl::ReadSourceWriteTemporary()
 {
     // read source stream till the end and copy all the data to
     // the current position of the temporary stream
 
-    sal_uLong aResult = 0;
+    ULONG aResult = 0;
 
     if( m_bSourceRead )
     {
@@ -885,7 +904,7 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
 
         try
         {
-            sal_uLong aReaded;
+            ULONG aReaded;
             do
             {
                 aReaded = m_rSource->readBytes( aData, 32000 );
@@ -895,7 +914,7 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
 #if OSL_DEBUG_LEVEL > 1
         catch( Exception & e )
         {
-            OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_ENSURE( FALSE, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #else
         catch( Exception & )
         {
@@ -903,18 +922,18 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
         }
     }
 
-    m_bSourceRead = sal_False;
+    m_bSourceRead = FALSE;
 
     return aResult;
 
 }
 
-sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uLong aLength )
+ULONG UCBStorageStream_Impl::ReadSourceWriteTemporary( ULONG aLength )
 {
     // read aLength bite from the source stream and copy them to the current
     // position of the temporary stream
 
-    sal_uLong aResult = 0;
+    ULONG aResult = 0;
 
     if( m_bSourceRead )
     {
@@ -923,22 +942,22 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uLong aLength )
         try
         {
 
-            sal_uLong aReaded = 32000;
+            ULONG aReaded = 32000;
 
-            for( sal_uLong pInd = 0; pInd < aLength && aReaded == 32000 ; pInd += 32000 )
+            for( ULONG pInd = 0; pInd < aLength && aReaded == 32000 ; pInd += 32000 )
             {
-                sal_uLong aToCopy = min( aLength - pInd, 32000 );
+                ULONG aToCopy = min( aLength - pInd, 32000 );
                 aReaded = m_rSource->readBytes( aData, aToCopy );
                 aResult += m_pStream->Write( aData.getArray(), aReaded );
             }
 
             if( aResult < aLength )
-                m_bSourceRead = sal_False;
+                m_bSourceRead = FALSE;
         }
 #if OSL_DEBUG_LEVEL > 1
         catch( Exception & e )
         {
-            OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_ENSURE( FALSE, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #else
         catch( Exception & )
         {
@@ -949,14 +968,14 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uLong aLength )
     return aResult;
 }
 
-sal_uLong UCBStorageStream_Impl::CopySourceToTemporary()
+ULONG UCBStorageStream_Impl::CopySourceToTemporary()
 {
     // current position of the temporary stream is not changed
-    sal_uLong aResult = 0;
+    ULONG aResult = 0;
 
     if( m_bSourceRead )
     {
-        sal_uLong aPos = m_pStream->Tell();
+        ULONG aPos = m_pStream->Tell();
         m_pStream->Seek( STREAM_SEEK_TO_END );
         aResult = ReadSourceWriteTemporary();
         m_pStream->Seek( aPos );
@@ -968,9 +987,9 @@ sal_uLong UCBStorageStream_Impl::CopySourceToTemporary()
 
 // UCBStorageStream_Impl must have a SvStream interface, because it then can be used as underlying stream
 // of an OLEStorage; so every write access caused by storage operations marks the UCBStorageStream as modified
-sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
+ULONG UCBStorageStream_Impl::GetData( void* pData, ULONG nSize )
 {
-    sal_uLong aResult = 0;
+    ULONG aResult = 0;
 
     if( !Init() )
         return 0;
@@ -983,20 +1002,20 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
         // read the tail of the data from original stream
         // copy this tail to the temporary stream
 
-        sal_uLong aToRead = nSize - aResult;
+        ULONG aToRead = nSize - aResult;
         pData = (void*)( (char*)pData + aResult );
 
         try
         {
             Sequence<sal_Int8> aData( aToRead );
-            sal_uLong aReaded = m_rSource->readBytes( aData, aToRead );
+            ULONG aReaded = m_rSource->readBytes( aData, aToRead );
             aResult += m_pStream->Write( (void*)aData.getArray(), aReaded );
             memcpy( pData, aData.getArray(), aReaded );
         }
 #if OSL_DEBUG_LEVEL > 1
         catch( Exception & e )
         {
-            OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_ENSURE( FALSE, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #else
         catch( Exception & )
         {
@@ -1004,13 +1023,13 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
         }
 
         if( aResult < nSize )
-            m_bSourceRead = sal_False;
+            m_bSourceRead = FALSE;
     }
 
     return aResult;
 }
 
-sal_uLong UCBStorageStream_Impl::PutData( const void* pData, sal_uLong nSize )
+ULONG UCBStorageStream_Impl::PutData( const void* pData, ULONG nSize )
 {
     if ( !(m_nMode & STREAM_WRITE) )
     {
@@ -1021,7 +1040,7 @@ sal_uLong UCBStorageStream_Impl::PutData( const void* pData, sal_uLong nSize )
     if( !nSize || !Init() )
         return 0;
 
-    sal_uLong aResult = m_pStream->Write( pData, nSize );
+    ULONG aResult = m_pStream->Write( pData, nSize );
 
     m_bModified = aResult > 0;
 
@@ -1029,12 +1048,12 @@ sal_uLong UCBStorageStream_Impl::PutData( const void* pData, sal_uLong nSize )
 
 }
 
-sal_uLong UCBStorageStream_Impl::SeekPos( sal_uLong nPos )
+ULONG UCBStorageStream_Impl::SeekPos( ULONG nPos )
 {
     if( !Init() )
         return 0;
 
-    sal_uLong aResult;
+    ULONG aResult;
 
     if( nPos == STREAM_SEEK_TO_END )
     {
@@ -1065,7 +1084,7 @@ sal_uLong UCBStorageStream_Impl::SeekPos( sal_uLong nPos )
                 {
                     aResult += ReadSourceWriteTemporary( nPos - aResult );
                     if( aResult < nPos )
-                        m_bSourceRead = sal_False;
+                        m_bSourceRead = FALSE;
 
                     DBG_ASSERT( aResult == m_pStream->Tell(), "Error in stream arithmetic!\n" );
                 }
@@ -1086,7 +1105,7 @@ sal_uLong UCBStorageStream_Impl::SeekPos( sal_uLong nPos )
     return aResult;
 }
 
-void  UCBStorageStream_Impl::SetSize( sal_uLong nSize )
+void  UCBStorageStream_Impl::SetSize( ULONG nSize )
 {
     if ( !(m_nMode & STREAM_WRITE) )
     {
@@ -1097,11 +1116,11 @@ void  UCBStorageStream_Impl::SetSize( sal_uLong nSize )
     if( !Init() )
         return;
 
-    m_bModified = sal_True;
+    m_bModified = TRUE;
 
     if( m_bSourceRead )
     {
-        sal_uLong aPos = m_pStream->Tell();
+        ULONG aPos = m_pStream->Tell();
         m_pStream->Seek( STREAM_SEEK_TO_END );
         if( m_pStream->Tell() < nSize )
             ReadSourceWriteTemporary( nSize - m_pStream->Tell() );
@@ -1109,7 +1128,7 @@ void  UCBStorageStream_Impl::SetSize( sal_uLong nSize )
     }
 
     m_pStream->SetStreamSize( nSize );
-    m_bSourceRead = sal_False;
+    m_bSourceRead = FALSE;
 }
 
 void  UCBStorageStream_Impl::FlushData()
@@ -1120,7 +1139,7 @@ void  UCBStorageStream_Impl::FlushData()
         m_pStream->Flush();
     }
 
-    m_bCommited = sal_True;
+    m_bCommited = TRUE;
 }
 
 void UCBStorageStream_Impl::SetError( sal_uInt32 nErr )
@@ -1141,15 +1160,15 @@ void  UCBStorageStream_Impl::ResetError()
         m_pAntiImpl->ResetError();
 }
 
-sal_uLong UCBStorageStream_Impl::GetSize()
+ULONG UCBStorageStream_Impl::GetSize()
 {
     if( !Init() )
         return 0;
 
-    sal_uLong nPos = m_pStream->Tell();
+    ULONG nPos = m_pStream->Tell();
     m_pStream->Seek( STREAM_SEEK_TO_END );
     ReadSourceWriteTemporary();
-    sal_uLong nRet = m_pStream->Tell();
+    ULONG nRet = m_pStream->Tell();
     m_pStream->Seek( nPos );
 
     return nRet;
@@ -1201,7 +1220,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 aArg.Data = xStream;
                 aArg.ReplaceExisting = sal_True;
                 aAny <<= aArg;
-                m_pContent->executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")), aAny );
+                m_pContent->executeCommand( ::rtl::OUString::createFromAscii("insert"), aAny );
 
                 // wrapper now controls lifetime of temporary file
                 m_aTempURL.Erase();
@@ -1209,8 +1228,8 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 INetURLObject aObj( m_aURL );
                 aObj.SetName( m_aName );
                 m_aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
-                m_bModified = sal_False;
-                m_bSourceRead = sal_True;
+                m_bModified = FALSE;
+                m_bSourceRead = TRUE;
             }
             catch ( CommandAbortedException& )
             {
@@ -1231,7 +1250,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 return COMMIT_RESULT_FAILURE;
             }
 
-            m_bCommited = sal_False;
+            m_bCommited = FALSE;
             return COMMIT_RESULT_SUCCESS;
         }
     }
@@ -1239,13 +1258,13 @@ sal_Int16 UCBStorageStream_Impl::Commit()
     return COMMIT_RESULT_NOTHING_TO_DO;
 }
 
-sal_Bool UCBStorageStream_Impl::Revert()
+BOOL UCBStorageStream_Impl::Revert()
 {
     // if an OLEStorage is created on this stream, no "revert" is neccessary because OLEStorages do nothing on "Revert" !
     if ( m_bCommited )
     {
-        OSL_FAIL("Revert while commit is in progress!" );
-        return sal_False;                   //  ???
+        DBG_ERROR("Revert while commit is in progress!" );
+        return FALSE;                   //  ???
     }
 
     Free();
@@ -1255,7 +1274,7 @@ sal_Bool UCBStorageStream_Impl::Revert()
         m_aTempURL.Erase();
     }
 
-    m_bSourceRead = sal_False;
+    m_bSourceRead = FALSE;
     try
     {
         m_rSource = m_pContent->openStream();
@@ -1263,11 +1282,11 @@ sal_Bool UCBStorageStream_Impl::Revert()
         {
             if ( m_pAntiImpl && ( m_nMode & STREAM_TRUNC ) )
                 // stream is in use and should be truncated
-                m_bSourceRead = sal_False;
+                m_bSourceRead = FALSE;
             else
             {
                 m_nMode &= ~STREAM_TRUNC;
-                m_bSourceRead = sal_True;
+                m_bSourceRead = TRUE;
             }
         }
         else
@@ -1285,15 +1304,15 @@ sal_Bool UCBStorageStream_Impl::Revert()
     {
     }
 
-    m_bModified = sal_False;
+    m_bModified = FALSE;
     m_aName = m_aOriginalName;
     m_aContentType = m_aOriginalContentType;
     return ( GetError() == ERRCODE_NONE );
 }
 
-sal_Bool UCBStorageStream_Impl::Clear()
+BOOL UCBStorageStream_Impl::Clear()
 {
-    sal_Bool bRet = ( m_pAntiImpl == NULL );
+    BOOL bRet = ( m_pAntiImpl == NULL );
     DBG_ASSERT( bRet, "Removing used stream!" );
     if( bRet )
     {
@@ -1344,7 +1363,7 @@ void UCBStorageStream_Impl::PrepareCachedForReopen( StreamMode nMode )
     }
 }
 
-UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey )
+UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect, const ByteString* pKey )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorageStream !
@@ -1353,7 +1372,7 @@ UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, sal_B
     StorageBase::m_nMode = pImp->m_nMode;
 }
 
-UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey, sal_Bool bRepair, Reference< XProgressHandler > xProgress )
+UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect, const ByteString* pKey, BOOL bRepair, Reference< XProgressHandler > xProgress )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorageStream !
@@ -1380,34 +1399,34 @@ UCBStorageStream::~UCBStorageStream()
     pImp->ReleaseRef();
 }
 
-sal_uLong UCBStorageStream::Read( void * pData, sal_uLong nSize )
+ULONG UCBStorageStream::Read( void * pData, ULONG nSize )
 {
     //return pImp->m_pStream->Read( pData, nSize );
     return pImp->GetData( pData, nSize );
 }
 
-sal_uLong UCBStorageStream::Write( const void* pData, sal_uLong nSize )
+ULONG UCBStorageStream::Write( const void* pData, ULONG nSize )
 {
 /*
     // mba: does occur in writer !
     if ( pImp->m_bCommited )
     {
-        OSL_FAIL("Writing while commit is in progress!" );
+        DBG_ERROR("Writing while commit is in progress!" );
         return 0;
     }
 */
-    // pImp->m_bModified = sal_True;
+    // pImp->m_bModified = TRUE;
     //return pImp->m_pStream->Write( pData, nSize );
     return pImp->PutData( pData, nSize );
 }
 
-sal_uLong UCBStorageStream::Seek( sal_uLong nPos )
+ULONG UCBStorageStream::Seek( ULONG nPos )
 {
     //return pImp->m_pStream->Seek( nPos );
     return pImp->Seek( nPos );
 }
 
-sal_uLong UCBStorageStream::Tell()
+ULONG UCBStorageStream::Tell()
 {
     if( !pImp->Init() )
         return 0;
@@ -1420,32 +1439,32 @@ void UCBStorageStream::Flush()
     Commit();
 }
 
-sal_Bool UCBStorageStream::SetSize( sal_uLong nNewSize )
+BOOL UCBStorageStream::SetSize( ULONG nNewSize )
 {
 /*
     if ( pImp->m_bCommited )
     {
-        OSL_FAIL("Changing stream size while commit is in progress!" );
-        return sal_False;
+        DBG_ERROR("Changing stream size while commit is in progress!" );
+        return FALSE;
     }
 */
-    // pImp->m_bModified = sal_True;
+    // pImp->m_bModified = TRUE;
     //return pImp->m_pStream->SetStreamSize( nNewSize );
     pImp->SetSize( nNewSize );
     return !pImp->GetError();
 }
 
-sal_Bool UCBStorageStream::Validate( sal_Bool bWrite ) const
+BOOL UCBStorageStream::Validate( BOOL bWrite ) const
 {
     return ( !bWrite || ( pImp->m_nMode & STREAM_WRITE ) );
 }
 
-sal_Bool UCBStorageStream::ValidateMode( StreamMode m ) const
+BOOL UCBStorageStream::ValidateMode( StreamMode m ) const
 {
     // ???
     if( m == ( STREAM_READ | STREAM_TRUNC ) )  // from stg.cxx
-        return sal_True;
-    sal_uInt16 nCurMode = 0xFFFF;
+        return TRUE;
+    USHORT nCurMode = 0xFFFF;
     if( ( m & 3 ) == STREAM_READ )
     {
         // only SHARE_DENYWRITE or SHARE_DENYALL allowed
@@ -1453,7 +1472,7 @@ sal_Bool UCBStorageStream::ValidateMode( StreamMode m ) const
            && ( nCurMode & STREAM_SHARE_DENYWRITE ) )
          || ( ( m & STREAM_SHARE_DENYALL )
            && ( nCurMode & STREAM_SHARE_DENYALL ) ) )
-            return sal_True;
+            return TRUE;
     }
     else
     {
@@ -1462,10 +1481,10 @@ sal_Bool UCBStorageStream::ValidateMode( StreamMode m ) const
         // the commit may fail
         if( ( m & STREAM_SHARE_DENYALL )
          && ( nCurMode & STREAM_SHARE_DENYALL ) )
-            return sal_True;
+            return TRUE;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 const SvStream* UCBStorageStream::GetSvStream() const
@@ -1487,28 +1506,28 @@ Reference< XInputStream > UCBStorageStream::GetXInputStream() const
     return pImp->GetXInputStream();
 }
 
-sal_Bool  UCBStorageStream::Equals( const BaseStorageStream& rStream ) const
+BOOL  UCBStorageStream::Equals( const BaseStorageStream& rStream ) const
 {
     // ???
     return ((BaseStorageStream*) this ) == &rStream;
 }
 
-sal_Bool UCBStorageStream::Commit()
+BOOL UCBStorageStream::Commit()
 {
     // mark this stream for sending it on root commit
     pImp->FlushData();
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool UCBStorageStream::Revert()
+BOOL UCBStorageStream::Revert()
 {
     return pImp->Revert();
 }
 
-sal_Bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
+BOOL UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
 {
     if( !pImp->Init() )
-        return sal_False;
+        return FALSE;
 
     UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pDestStm );
     if ( pStg )
@@ -1516,18 +1535,18 @@ sal_Bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
 
     pDestStm->SetSize( 0 );
     Seek( STREAM_SEEK_TO_END );
-    sal_Int32 n = Tell();
+    INT32 n = Tell();
     if( n < 0 )
-        return sal_False;
+        return FALSE;
 
     if( pDestStm->SetSize( n ) && n )
     {
-        sal_uInt8* p = new sal_uInt8[ 4096 ];
+        BYTE* p = new BYTE[ 4096 ];
         Seek( 0L );
         pDestStm->Seek( 0L );
         while( n )
         {
-            sal_uInt32 nn = n;
+            UINT32 nn = n;
             if( nn > 4096 )
                 nn = 4096;
             if( Read( p, nn ) != nn )
@@ -1540,13 +1559,13 @@ sal_Bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
         delete[] p;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool UCBStorageStream::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
+BOOL UCBStorageStream::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
 {
     if ( rName.CompareToAscii("Title") == COMPARE_EQUAL )
-        return sal_False;
+        return FALSE;
 
     if ( rName.CompareToAscii("MediaType") == COMPARE_EQUAL )
     {
@@ -1560,34 +1579,34 @@ sal_Bool UCBStorageStream::SetProperty( const String& rName, const ::com::sun::s
         if ( pImp->m_pContent )
         {
             pImp->m_pContent->setPropertyValue( rName, rValue );
-            return sal_True;
+            return TRUE;
         }
     }
     catch ( Exception& )
     {
     }
 
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool UCBStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
+BOOL UCBStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
 {
     try
     {
         if ( pImp->m_pContent )
         {
             rValue = pImp->m_pContent->getPropertyValue( rName );
-            return sal_True;
+            return TRUE;
         }
     }
     catch ( Exception& )
     {
     }
 
-    return sal_False;
+    return FALSE;
 }
 
-UCBStorage::UCBStorage( SvStream& rStrm, sal_Bool bDirect )
+UCBStorage::UCBStorage( SvStream& rStrm, BOOL bDirect )
 {
     String aURL = GetLinkedFile( rStrm );
     if ( aURL.Len() )
@@ -1597,7 +1616,7 @@ UCBStorage::UCBStorage( SvStream& rStrm, sal_Bool bDirect )
             nMode = STREAM_READ | STREAM_WRITE;
 
         ::ucbhelper::Content aContent( aURL, Reference < XCommandEnvironment >() );
-        pImp = new UCBStorage_Impl( aContent, aURL, nMode, this, bDirect, sal_True );
+        pImp = new UCBStorage_Impl( aContent, aURL, nMode, this, bDirect, TRUE );
     }
     else
     {
@@ -1611,7 +1630,7 @@ UCBStorage::UCBStorage( SvStream& rStrm, sal_Bool bDirect )
     StorageBase::m_nMode = pImp->m_nMode;
 }
 
-UCBStorage::UCBStorage( const ::ucbhelper::Content& rContent, const String& rName, StreamMode nMode, sal_Bool bDirect, sal_Bool bIsRoot )
+UCBStorage::UCBStorage( const ::ucbhelper::Content& rContent, const String& rName, StreamMode nMode, BOOL bDirect, BOOL bIsRoot )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorage !
@@ -1621,7 +1640,7 @@ UCBStorage::UCBStorage( const ::ucbhelper::Content& rContent, const String& rNam
     StorageBase::m_nMode = pImp->m_nMode;
 }
 
-UCBStorage::UCBStorage( const String& rName, StreamMode nMode, sal_Bool bDirect, sal_Bool bIsRoot, sal_Bool bIsRepair, Reference< XProgressHandler > xProgressHandler )
+UCBStorage::UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect, BOOL bIsRoot, BOOL bIsRepair, Reference< XProgressHandler > xProgressHandler )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorage !
@@ -1631,7 +1650,7 @@ UCBStorage::UCBStorage( const String& rName, StreamMode nMode, sal_Bool bDirect,
     StorageBase::m_nMode = pImp->m_nMode;
 }
 
-UCBStorage::UCBStorage( const String& rName, StreamMode nMode, sal_Bool bDirect, sal_Bool bIsRoot )
+UCBStorage::UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect, BOOL bIsRoot )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorage !
@@ -1660,7 +1679,7 @@ UCBStorage::~UCBStorage()
     pImp->ReleaseRef();
 }
 
-UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const String& rName, StreamMode nMode, UCBStorage* pStorage, sal_Bool bDirect, sal_Bool bIsRoot, sal_Bool bIsRepair, Reference< XProgressHandler > xProgressHandler  )
+UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const String& rName, StreamMode nMode, UCBStorage* pStorage, BOOL bDirect, BOOL bIsRoot, BOOL bIsRepair, Reference< XProgressHandler > xProgressHandler  )
     : m_pAntiImpl( pStorage )
     , m_pContent( new ::ucbhelper::Content( rContent ) )
     , m_pTempFile( NULL )
@@ -1668,13 +1687,13 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const St
     //, m_pStream( NULL )
     , m_nError( 0 )
     , m_nMode( nMode )
-    , m_bModified( sal_False )
-    , m_bCommited( sal_False )
+    , m_bModified( FALSE )
+    , m_bCommited( FALSE )
     , m_bDirect( bDirect )
     , m_bIsRoot( bIsRoot )
-    , m_bDirty( sal_False )
-    , m_bIsLinked( sal_True )
-    , m_bListCreated( sal_False )
+    , m_bDirty( FALSE )
+    , m_bIsLinked( TRUE )
+    , m_bListCreated( FALSE )
     , m_nFormat( 0 )
     , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( bIsRepair )
@@ -1688,14 +1707,14 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const St
         // no name given = use temporary name!
         DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
         m_pTempFile = new ::utl::TempFile;
-        m_pTempFile->EnableKillingFile( sal_True );
+        m_pTempFile->EnableKillingFile( TRUE );
         m_aName = m_aOriginalName = aName = m_pTempFile->GetURL();
     }
 
     m_aURL = rName;
 }
 
-UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStorage* pStorage, sal_Bool bDirect, sal_Bool bIsRoot, sal_Bool bIsRepair, Reference< XProgressHandler > xProgressHandler )
+UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStorage* pStorage, BOOL bDirect, BOOL bIsRoot, BOOL bIsRepair, Reference< XProgressHandler > xProgressHandler )
     : m_pAntiImpl( pStorage )
     , m_pContent( NULL )
     , m_pTempFile( NULL )
@@ -1703,13 +1722,13 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     //, m_pStream( NULL )
     , m_nError( 0 )
     , m_nMode( nMode )
-    , m_bModified( sal_False )
-    , m_bCommited( sal_False )
+    , m_bModified( FALSE )
+    , m_bCommited( FALSE )
     , m_bDirect( bDirect )
     , m_bIsRoot( bIsRoot )
-    , m_bDirty( sal_False )
-    , m_bIsLinked( sal_False )
-    , m_bListCreated( sal_False )
+    , m_bDirty( FALSE )
+    , m_bIsLinked( FALSE )
+    , m_bListCreated( FALSE )
     , m_nFormat( 0 )
     , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( bIsRepair )
@@ -1722,7 +1741,7 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
         // no name given = use temporary name!
         DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
         m_pTempFile = new ::utl::TempFile;
-        m_pTempFile->EnableKillingFile( sal_True );
+        m_pTempFile->EnableKillingFile( TRUE );
         m_aName = m_aOriginalName = aName = m_pTempFile->GetURL();
     }
 
@@ -1745,31 +1764,31 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
         // substorages are opened like streams: the URL is a "child URL" of the root package URL
         m_aURL = rName;
         if ( m_aURL.CompareToAscii( "vnd.sun.star.pkg://", 19 ) != 0 )
-            m_bIsLinked = sal_True;
+            m_bIsLinked = TRUE;
     }
 }
 
-UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, sal_Bool bDirect )
+UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL bDirect )
     : m_pAntiImpl( pStorage )
     , m_pContent( NULL )
     , m_pTempFile( new ::utl::TempFile )
     , m_pSource( &rStream )
     , m_nError( 0 )
-    , m_bModified( sal_False )
-    , m_bCommited( sal_False )
+    , m_bModified( FALSE )
+    , m_bCommited( FALSE )
     , m_bDirect( bDirect )
-    , m_bIsRoot( sal_True )
-    , m_bDirty( sal_False )
-    , m_bIsLinked( sal_False )
-    , m_bListCreated( sal_False )
+    , m_bIsRoot( TRUE )
+    , m_bDirty( FALSE )
+    , m_bIsLinked( FALSE )
+    , m_bListCreated( FALSE )
     , m_nFormat( 0 )
     , m_aClassId( SvGlobalName() )
-    , m_bRepairPackage( sal_False )
+    , m_bRepairPackage( FALSE )
     , m_pUNOStorageHolderList( NULL )
 {
     // opening in direct mode is too fuzzy because the data is transferred to the stream in the Commit() call,
     // which will be called in the storages' dtor
-    m_pTempFile->EnableKillingFile( sal_True );
+    m_pTempFile->EnableKillingFile( TRUE );
     DBG_ASSERT( !bDirect, "Storage on a stream must not be opened in direct mode!" );
 
     // UCBStorages work on a content, so a temporary file for a content must be created, even if the stream is only
@@ -1843,7 +1862,7 @@ void UCBStorage_Impl::Init()
                             Reference < ::com::sun::star::packages::manifest::XManifestReader > xReader =
                                 Reference< ::com::sun::star::packages::manifest::XManifestReader >
                                     ( ::comphelper::getProcessServiceFactory()->createInstance(
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.packages.manifest.ManifestReader"))), UNO_QUERY) ;
+                                        ::rtl::OUString::createFromAscii( "com.sun.star.packages.manifest.ManifestReader" )), UNO_QUERY) ;
                             Sequence < Sequence < PropertyValue > > aProps = xReader->readManifestSequence( xInputStream );
 
                             // cleanup
@@ -1863,7 +1882,7 @@ void UCBStorage_Impl::Init()
         {
             // get the manifest information from the package
             try {
-                Any aAny = m_pContent->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
+                Any aAny = m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
                 rtl::OUString aTmp;
                 if ( ( aAny >>= aTmp ) && aTmp.getLength() )
                     m_aContentType = m_aOriginalContentType = aTmp;
@@ -1908,7 +1927,7 @@ void UCBStorage_Impl::CreateContent()
         {
             xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
                                                      m_xProgressHandler );
-            aTemp += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?repairpackage"));
+            aTemp += rtl::OUString::createFromAscii("?repairpackage");
         }
 
         m_pContent = new ::ucbhelper::Content( aTemp, xComEnv );
@@ -1930,15 +1949,15 @@ void UCBStorage_Impl::ReadContent()
    if ( m_bListCreated )
         return;
 
-    m_bListCreated = sal_True;
+    m_bListCreated = TRUE;
 
     // create cursor for access to children
     Sequence< ::rtl::OUString > aProps(4);
     ::rtl::OUString* pProps = aProps.getArray();
-    pProps[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
-    pProps[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
-    pProps[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
-    pProps[3] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size"));
+    pProps[0] = ::rtl::OUString::createFromAscii( "Title" );
+    pProps[1] = ::rtl::OUString::createFromAscii( "IsFolder" );
+    pProps[2] = ::rtl::OUString::createFromAscii( "MediaType" );
+    pProps[3] = ::rtl::OUString::createFromAscii( "Size" );
     ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
@@ -1960,7 +1979,7 @@ void UCBStorage_Impl::ReadContent()
                 if ( m_bIsLinked )
                 {
                     // unpacked storages have to deal with the meta-inf folder by themselves
-                    if( aTitle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("META-INF")) )
+                    if( aTitle.equalsAscii("META-INF") )
                         continue;
                 }
                 else
@@ -1968,10 +1987,10 @@ void UCBStorage_Impl::ReadContent()
                     aContentType = xRow->getString(3);
                 }
 
-                sal_Bool bIsFolder( xRow->getBoolean(2) );
+                BOOL bIsFolder( xRow->getBoolean(2) );
                 sal_Int64 nSize = xRow->getLong(4);
-                UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, bIsFolder, (sal_uLong) nSize );
-                m_aChildrenList.push_back( pElement );
+                UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, bIsFolder, (ULONG) nSize );
+                m_aChildrenList.Insert( pElement, LIST_APPEND );
 
                 sal_Bool bIsOfficeDocument = m_bIsLinked || ( m_aClassId != SvGlobalName() );
                 if ( bIsFolder )
@@ -1999,15 +2018,15 @@ void UCBStorage_Impl::ReadContent()
                     ::ucbhelper::Content aContent( aName, xComEnv );
 
                     ::rtl::OUString aMediaType;
-                    Any aAny = aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
+                    Any aAny = aContent.getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
                     if ( ( aAny >>= aMediaType ) && ( aMediaType.compareToAscii("application/vnd.sun.star.oleobject") == 0 ) )
-                        pElement->m_bIsStorage = sal_True;
+                        pElement->m_bIsStorage = TRUE;
                     else if ( !aMediaType.getLength() )
                     {
                         // older files didn't have that special content type, so they must be detected
                         OpenStream( pElement, STREAM_STD_READ, m_bDirect );
                         if ( Storage::IsStorageFile( pElement->m_xStream ) )
-                            pElement->m_bIsStorage = sal_True;
+                            pElement->m_bIsStorage = TRUE;
                         else
                             pElement->m_xStream->Free();
                     }
@@ -2060,13 +2079,14 @@ void UCBStorage_Impl::SetError( long nError )
 
 sal_Int32 UCBStorage_Impl::GetObjectCount()
 {
-    sal_Int32 nCount = m_aChildrenList.size();
-    for ( size_t i = 0; i < m_aChildrenList.size(); ++i )
+    sal_Int32 nCount = m_aChildrenList.Count();
+    UCBStorageElement_Impl* pElement = m_aChildrenList.First();
+    while ( pElement )
     {
-        UCBStorageElement_Impl* pElement = m_aChildrenList[ i ];
         DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.Is(), "Storage should be open!" );
         if ( pElement->m_bIsFolder && pElement->m_xStorage.Is() )
             nCount += pElement->m_xStorage->GetObjectCount();
+        pElement = m_aChildrenList.Next();
     }
 
     return nCount;
@@ -2074,7 +2094,7 @@ sal_Int32 UCBStorage_Impl::GetObjectCount()
 
 ::rtl::OUString Find_Impl( const Sequence < Sequence < PropertyValue > >& rSequence, const ::rtl::OUString& rPath )
 {
-    sal_Bool bFound = sal_False;
+    BOOL bFound = FALSE;
     for ( sal_Int32 nSeqs=0; nSeqs<rSequence.getLength(); nSeqs++ )
     {
         const Sequence < PropertyValue >& rMyProps = rSequence[nSeqs];
@@ -2083,15 +2103,15 @@ sal_Int32 UCBStorage_Impl::GetObjectCount()
         for ( sal_Int32 nProps=0; nProps<rMyProps.getLength(); nProps++ )
         {
             const PropertyValue& rAny = rMyProps[nProps];
-            if ( rAny.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FullPath")) )
+            if ( rAny.Name.equalsAscii("FullPath") )
             {
                 rtl::OUString aTmp;
                 if ( ( rAny.Value >>= aTmp ) && aTmp == rPath )
-                    bFound = sal_True;
+                    bFound = TRUE;
                 if ( aType.getLength() )
                     break;
             }
-            else if ( rAny.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")) )
+            else if ( rAny.Name.equalsAscii("MediaType") )
             {
                 if ( ( rAny.Value >>= aType ) && aType.getLength() && bFound )
                     break;
@@ -2118,9 +2138,9 @@ void UCBStorage_Impl::SetProps( const Sequence < Sequence < PropertyValue > >& r
         // the "FullPath" of a child always starts without '/'
         aPath.Erase();
 
-    for ( size_t i = 0; i < m_aChildrenList.size(); ++i )
+    UCBStorageElement_Impl* pElement = m_aChildrenList.First();
+    while ( pElement )
     {
-        UCBStorageElement_Impl* pElement = m_aChildrenList[ i ];
         DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.Is(), "Storage should be open!" );
         if ( pElement->m_bIsFolder && pElement->m_xStorage.Is() )
             pElement->m_xStorage->SetProps( rSequence, aPath );
@@ -2130,6 +2150,8 @@ void UCBStorage_Impl::SetProps( const Sequence < Sequence < PropertyValue > >& r
             aElementPath += pElement->m_aName;
             pElement->SetContentType( Find_Impl( rSequence, aElementPath ) );
         }
+
+        pElement = m_aChildrenList.Next();
     }
 
     if ( m_aContentType.Len() )
@@ -2159,9 +2181,9 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
     if ( !m_bIsRoot )
         aPath += m_aName;
     aPath += '/';
-    aProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
+    aProps[0].Name = ::rtl::OUString::createFromAscii("MediaType");
     aProps[0].Value <<= (::rtl::OUString ) m_aContentType;
-    aProps[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FullPath"));
+    aProps[1].Name = ::rtl::OUString::createFromAscii("FullPath");
     aProps[1].Value <<= (::rtl::OUString ) aPath;
     rSequence[ nProps++ ] = aProps;
 
@@ -2170,9 +2192,9 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
         aPath.Erase();
 
     // now the properties of my elements
-    for ( size_t i = 0; i < m_aChildrenList.size(); ++i )
+    UCBStorageElement_Impl* pElement = m_aChildrenList.First();
+    while ( pElement )
     {
-        UCBStorageElement_Impl* pElement = m_aChildrenList[ i ];
         DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.Is(), "Storage should be open!" );
         if ( pElement->m_bIsFolder && pElement->m_xStorage.Is() )
             // storages add there properties by themselves ( see above )
@@ -2182,12 +2204,14 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
             // properties of streams
             String aElementPath( aPath );
             aElementPath += pElement->m_aName;
-            aProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
+            aProps[0].Name = ::rtl::OUString::createFromAscii("MediaType");
             aProps[0].Value <<= (::rtl::OUString ) pElement->GetContentType();
-            aProps[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FullPath"));
+            aProps[1].Name = ::rtl::OUString::createFromAscii("FullPath");
             aProps[1].Value <<= (::rtl::OUString ) aElementPath;
             rSequence[ nProps++ ] = aProps;
         }
+
+        pElement = m_aChildrenList.Next();
     }
 }
 
@@ -2196,7 +2220,7 @@ UCBStorage_Impl::~UCBStorage_Impl()
     if ( m_pUNOStorageHolderList )
     {
         for ( UNOStorageHolderList::iterator aIter = m_pUNOStorageHolderList->begin();
-              aIter != m_pUNOStorageHolderList->end(); ++aIter )
+              aIter != m_pUNOStorageHolderList->end(); aIter++ )
             if ( *aIter )
             {
                 (*aIter)->InternalDispose();
@@ -2209,19 +2233,23 @@ UCBStorage_Impl::~UCBStorage_Impl()
     }
 
     // first delete elements!
-    for ( size_t i = 0, n = m_aChildrenList.size(); i < n; ++i )
-        delete m_aChildrenList[ i ];
-    m_aChildrenList.clear();
+    UCBStorageElement_Impl* pElement = m_aChildrenList.First();
+    while ( pElement )
+    {
+        delete pElement;
+        pElement = m_aChildrenList.Next();
+    }
 
+    m_aChildrenList.Clear();
     delete m_pContent;
     delete m_pTempFile;
 }
 
-sal_Bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
+BOOL UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
 {
     // a new substorage is inserted into a UCBStorage ( given by the parameter pContent )
     // it must be inserted with a title and a type
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     try
     {
@@ -2258,7 +2286,7 @@ sal_Bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
                 // remove old content, create an "empty" new one and initialize it with the new inserted
                 DELETEZ( m_pContent );
                 m_pContent = new ::ucbhelper::Content( aNewFolder );
-                bRet = sal_True;
+                bRet = TRUE;
             }
         }
     }
@@ -2284,6 +2312,7 @@ sal_Bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
 sal_Int16 UCBStorage_Impl::Commit()
 {
     // send all changes to the package
+    UCBStorageElement_Impl* pElement = m_aChildrenList.First();
     sal_Int16 nRet = COMMIT_RESULT_NOTHING_TO_DO;
 
     // there is nothing to do if the storage has been opened readonly or if it was opened in transacted mode and no
@@ -2293,15 +2322,14 @@ sal_Int16 UCBStorage_Impl::Commit()
         try
         {
             // all errors will be caught in the "catch" statement outside the loop
-            for ( size_t i = 0; i < m_aChildrenList.size() && nRet; ++i )
+            while ( pElement && nRet )
             {
-                UCBStorageElement_Impl* pElement = m_aChildrenList[ i ];
                 ::ucbhelper::Content* pContent = pElement->GetContent();
-                sal_Bool bDeleteContent = sal_False;
+                BOOL bDeleteContent = FALSE;
                 if ( !pContent && pElement->IsModified() )
                 {
                     // if the element has never been opened, no content has been created until now
-                    bDeleteContent = sal_True;  // remember to delete it later
+                    bDeleteContent = TRUE;  // remember to delete it later
                     String aName( m_aURL );
                     aName += '/';
                     aName += pElement->m_aOriginalName;
@@ -2316,7 +2344,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // first remove all open stream handles
                         if( !pElement->m_xStream.Is() || pElement->m_xStream->Clear() )
                         {
-                            pContent->executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), makeAny( sal_Bool( sal_True ) ) );
+                            pContent->executeCommand( ::rtl::OUString::createFromAscii("delete"), makeAny( sal_Bool( sal_True ) ) );
                             nRet = COMMIT_RESULT_SUCCESS;
                         }
                         else
@@ -2349,7 +2377,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             // OLE storage should be stored encrytped, if the storage uses encryption
                             pElement->m_xStream->m_aContentType = String::CreateFromAscii("application/vnd.sun.star.oleobject");
                             Any aValue;
-                            aValue <<= (sal_Bool) sal_True;
+                            aValue <<= (BOOL) TRUE;
                             pElement->m_xStream->m_pContent->setPropertyValue(String::CreateFromAscii("Encrypted"), aValue );
                         }
 
@@ -2362,7 +2390,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         nLocalRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
                         aAny <<= (rtl::OUString) pElement->m_aName;
-                        pContent->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")), aAny );
+                        pContent->setPropertyValue( ::rtl::OUString::createFromAscii("Title"), aAny );
                     }
 
                     if ( pElement->IsLoaded() && pElement->GetContentType() != pElement->GetOriginalContentType() )
@@ -2371,7 +2399,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         nLocalRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
                         aAny <<= (rtl::OUString) pElement->GetContentType();
-                        pContent->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny );
+                        pContent->setPropertyValue( ::rtl::OUString::createFromAscii("MediaType"), aAny );
                     }
 
                     if ( nLocalRet != COMMIT_RESULT_NOTHING_TO_DO )
@@ -2384,6 +2412,8 @@ sal_Int16 UCBStorage_Impl::Commit()
 
                 if ( nRet == COMMIT_RESULT_FAILURE )
                     break;
+
+                pElement = m_aChildrenList.Next();
             }
         }
         catch ( ContentCreationException& )
@@ -2422,14 +2452,14 @@ sal_Int16 UCBStorage_Impl::Commit()
                     // clipboard format and ClassId will be retrieved from the media type when the file is loaded again
                     Any aType;
                     aType <<= (rtl::OUString) m_aContentType;
-                    m_pContent->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aType );
+                    m_pContent->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), aType );
 
                     if (  m_bIsLinked )
                     {
                         // write a manifest file
                         // first create a subfolder "META-inf"
                         Content aNewSubFolder;
-                        sal_Bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, String::CreateFromAscii("META-INF"), aNewSubFolder );
+                        BOOL bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, String::CreateFromAscii("META-INF"), aNewSubFolder );
                         if ( bRet )
                         {
                             // create a stream to write the manifest file - use a temp file
@@ -2445,7 +2475,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             Reference < ::com::sun::star::packages::manifest::XManifestWriter > xWriter =
                                 Reference< ::com::sun::star::packages::manifest::XManifestWriter >
                                     ( ::comphelper::getProcessServiceFactory()->createInstance(
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.packages.manifest.ManifestWriter"))), UNO_QUERY) ;
+                                        ::rtl::OUString::createFromAscii( "com.sun.star.packages.manifest.ManifestWriter" )), UNO_QUERY) ;
                             sal_Int32 nCount = GetObjectCount() + 1;
                             Sequence < Sequence < PropertyValue > > aProps( nCount );
                             sal_Int32 nProps = 0;
@@ -2457,7 +2487,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             xWriter = NULL;
                             xOutputStream = NULL;
                             DELETEZ( pTempFile );
-                            aNewSubFolder.transferContent( aSource, InsertOperation_MOVE, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("manifest.xml")), NameClash::OVERWRITE );
+                            aNewSubFolder.transferContent( aSource, InsertOperation_MOVE, ::rtl::OUString::createFromAscii("manifest.xml"), NameClash::OVERWRITE );
                         }
                     }
                     else
@@ -2468,7 +2498,7 @@ sal_Int16 UCBStorage_Impl::Commit()
 #endif
                         // force writing
                         Any aAny;
-                        m_pContent->executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("flush")), aAny );
+                        m_pContent->executeCommand( ::rtl::OUString::createFromAscii("flush"), aAny );
                         if ( m_pSource != 0 )
                         {
                             SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ );
@@ -2529,43 +2559,42 @@ sal_Int16 UCBStorage_Impl::Commit()
 
             // after successfull root commit all elements names and types are adjusted and all removed elements
             // are also removed from the lists
-            for ( size_t i = 0; i < m_aChildrenList.size(); )
+            UCBStorageElement_Impl* pInnerElement = m_aChildrenList.First();
+            BOOL bRet = TRUE;
+            while ( pInnerElement && bRet )
             {
-                UCBStorageElement_Impl* pInnerElement = m_aChildrenList[ i ];
+                UCBStorageElement_Impl* pNext = m_aChildrenList.Next();
                 if ( pInnerElement->m_bIsRemoved )
                 {
-                    UCBStorageElementList_Impl::iterator it = m_aChildrenList.begin();
-                    ::std::advance( it, i );
-                    delete *it;
-                    m_aChildrenList.erase( it );
+                    // is this correct use of our list class ?!
+                    m_aChildrenList.Remove( pInnerElement );
                 }
                 else
                 {
                     pInnerElement->m_aOriginalName = pInnerElement->m_aName;
-                    pInnerElement->m_bIsInserted = sal_False;
-                    ++i;
+                    pInnerElement->m_bIsInserted = FALSE;
                 }
+
+                pInnerElement = pNext;
             }
         }
 
-        m_bCommited = sal_False;
+        m_bCommited = FALSE;
     }
 
     return nRet;
 }
 
-sal_Bool UCBStorage_Impl::Revert()
+BOOL UCBStorage_Impl::Revert()
 {
-    for ( size_t i = 0; i < m_aChildrenList.size(); )
+    UCBStorageElement_Impl* pElement = m_aChildrenList.First();
+    BOOL bRet = TRUE;
+    while ( pElement && bRet )
     {
-        UCBStorageElement_Impl* pElement = m_aChildrenList[ i ];
-        pElement->m_bIsRemoved = sal_False;
+        pElement->m_bIsRemoved = FALSE;
         if ( pElement->m_bIsInserted )
         {
-            UCBStorageElementList_Impl::iterator it = m_aChildrenList.begin();
-            ::std::advance( it, i );
-            delete *it;
-            m_aChildrenList.erase( it );
+            m_aChildrenList.Remove( pElement );  // correct usage of list ???
         }
         else
         {
@@ -2581,11 +2610,13 @@ sal_Bool UCBStorage_Impl::Revert()
             }
 
             pElement->m_aName = pElement->m_aOriginalName;
-            pElement->m_bIsRemoved = sal_False;
-            ++i;
+            pElement->m_bIsRemoved = FALSE;
         }
+
+        pElement = m_aChildrenList.Next();
     }
-    return sal_True;
+
+    return bRet;
 }
 
 const String& UCBStorage::GetName() const
@@ -2593,17 +2624,17 @@ const String& UCBStorage::GetName() const
     return pImp->m_aName; // pImp->m_aURL ?!
 }
 
-sal_Bool UCBStorage::IsRoot() const
+BOOL UCBStorage::IsRoot() const
 {
     return pImp->m_bIsRoot;
 }
 
 void UCBStorage::SetDirty()
 {
-    pImp->m_bDirty = sal_True;
+    pImp->m_bDirty = TRUE;
 }
 
-void UCBStorage::SetClass( const SvGlobalName & rClass, sal_uLong nOriginalClipFormat, const String & rUserTypeName )
+void UCBStorage::SetClass( const SvGlobalName & rClass, ULONG nOriginalClipFormat, const String & rUserTypeName )
 {
     pImp->m_aClassId = rClass;
     pImp->m_nFormat = nOriginalClipFormat;
@@ -2642,15 +2673,15 @@ const ClsId& UCBStorage::GetClassId() const
     return ( const ClsId& ) pImp->m_aClassId.GetCLSID();
 }
 
-void UCBStorage::SetConvertClass( const SvGlobalName & /*rConvertClass*/, sal_uLong /*nOriginalClipFormat*/, const String & /*rUserTypeName*/ )
+void UCBStorage::SetConvertClass( const SvGlobalName & /*rConvertClass*/, ULONG /*nOriginalClipFormat*/, const String & /*rUserTypeName*/ )
 {
     // ???
 }
 
-sal_Bool UCBStorage::ShouldConvert()
+BOOL UCBStorage::ShouldConvert()
 {
     // ???
-    return sal_False;
+    return FALSE;
 }
 
 SvGlobalName UCBStorage::GetClassName()
@@ -2658,36 +2689,38 @@ SvGlobalName UCBStorage::GetClassName()
     return  pImp->m_aClassId;
 }
 
-sal_uLong UCBStorage::GetFormat()
+ULONG UCBStorage::GetFormat()
 {
     return pImp->m_nFormat;
 }
 
 String UCBStorage::GetUserName()
 {
-    OSL_FAIL("UserName is not implemented in UCB storages!" );
+    DBG_ERROR("UserName is not implemented in UCB storages!" );
     return pImp->m_aUserTypeName;
 }
 
 void UCBStorage::FillInfoList( SvStorageInfoList* pList ) const
 {
     // put information in childrenlist into StorageInfoList
-    for ( size_t i = 0; i < pImp->GetChildrenList().size(); ++i )
+    UCBStorageElement_Impl* pElement = pImp->GetChildrenList().First();
+    while ( pElement )
     {
-        UCBStorageElement_Impl* pElement = pImp->GetChildrenList()[ i ];
         if ( !pElement->m_bIsRemoved )
         {
             // problem: what about the size of a substorage ?!
-            sal_uLong nSize = pElement->m_nSize;
+            ULONG nSize = pElement->m_nSize;
             if ( pElement->m_xStream.Is() )
                 nSize = pElement->m_xStream->GetSize();
             SvStorageInfo aInfo( pElement->m_aName, nSize, pElement->m_bIsStorage );
             pList->Append( aInfo );
         }
+
+        pElement = pImp->m_aChildrenList.Next();
     }
 }
 
-sal_Bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, BaseStorage* pDest, const String& rNew ) const
+BOOL UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, BaseStorage* pDest, const String& rNew ) const
 {
     // insert stream or storage into the list or stream of the destination storage
     // not into the content, this will be done on commit !
@@ -2698,7 +2731,7 @@ sal_Bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, 
         // the destination stream must not be open
         BaseStorageStream* pOtherStream = pDest->OpenStream( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect );
         BaseStorageStream* pStream = NULL;
-        sal_Bool bDeleteStream = sal_False;
+        BOOL bDeleteStream = FALSE;
 
         // if stream is already open, it is allowed to copy it, so be aware of this
         if ( rElement.m_xStream.Is() )
@@ -2706,7 +2739,7 @@ sal_Bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, 
         if ( !pStream )
         {
             pStream = ( const_cast < UCBStorage* > (this) )->OpenStream( rElement.m_aName, STREAM_STD_READ, pImp->m_bDirect );
-            bDeleteStream = sal_True;
+            bDeleteStream = TRUE;
         }
 
         pStream->CopyTo( pOtherStream );
@@ -2727,19 +2760,19 @@ sal_Bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, 
         BaseStorage* pStorage = NULL;
 
         // if stream is already open, it is allowed to copy it, so be aware of this
-        sal_Bool bDeleteStorage = sal_False;
+        BOOL bDeleteStorage = FALSE;
         if ( rElement.m_xStorage.Is() )
             pStorage = rElement.m_xStorage->m_pAntiImpl;
         if ( !pStorage )
         {
             pStorage = ( const_cast < UCBStorage* > (this) )->OpenStorage( rElement.m_aName, pImp->m_nMode, pImp->m_bDirect );
-            bDeleteStorage = sal_True;
+            bDeleteStorage = TRUE;
         }
 
         UCBStorage* pUCBDest = PTR_CAST( UCBStorage, pDest );
         UCBStorage* pUCBCopy = PTR_CAST( UCBStorage, pStorage );
 
-        sal_Bool bOpenUCBStorage = pUCBDest && pUCBCopy;
+        BOOL bOpenUCBStorage = pUCBDest && pUCBCopy;
         BaseStorage* pOtherStorage = bOpenUCBStorage ?
                 pDest->OpenUCBStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect ) :
                 pDest->OpenOLEStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect );
@@ -2764,26 +2797,28 @@ sal_Bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, 
         delete pOtherStorage;
     }
 
-    return sal_Bool( Good() && pDest->Good() );
+    return BOOL( Good() && pDest->Good() );
 }
 
 UCBStorageElement_Impl* UCBStorage::FindElement_Impl( const String& rName ) const
 {
     DBG_ASSERT( rName.Len(), "Name is empty!" );
-    for ( size_t i = 0, n = pImp->GetChildrenList().size(); i < n; ++i )
+    UCBStorageElement_Impl* pElement = pImp->GetChildrenList().First();
+    while ( pElement )
     {
-        UCBStorageElement_Impl* pElement = pImp->GetChildrenList()[ i ];
         if ( pElement->m_aName == rName && !pElement->m_bIsRemoved )
-            return pElement;
+            break;
+        pElement = pImp->m_aChildrenList.Next();
     }
-    return NULL;
+
+    return pElement;
 }
 
-sal_Bool UCBStorage::CopyTo( BaseStorage* pDestStg ) const
+BOOL UCBStorage::CopyTo( BaseStorage* pDestStg ) const
 {
     DBG_ASSERT( pDestStg != ((BaseStorage*)this), "Self-Copying is not possible!" );
     if ( pDestStg == ((BaseStorage*)this) )
-        return sal_False;
+        return FALSE;
 
     // perhaps it's also a problem if one storage is a parent of the other ?!
     // or if not: could be optimized ?!
@@ -2797,28 +2832,29 @@ sal_Bool UCBStorage::CopyTo( BaseStorage* pDestStg ) const
         pDestStg->SetClassId( GetClassId() );
     pDestStg->SetDirty();
 
-    sal_Bool bRet = sal_True;
-    for ( size_t i = 0; i < pImp->GetChildrenList().size() && bRet; ++i )
+    BOOL bRet = TRUE;
+    UCBStorageElement_Impl* pElement = pImp->GetChildrenList().First();
+    while ( pElement && bRet )
     {
-        UCBStorageElement_Impl* pElement = pImp->GetChildrenList()[ i ];
         if ( !pElement->m_bIsRemoved )
             bRet = CopyStorageElement_Impl( *pElement, pDestStg, pElement->m_aName );
+        pElement = pImp->m_aChildrenList.Next();
     }
 
     if( !bRet )
         SetError( pDestStg->GetError() );
-    return sal_Bool( Good() && pDestStg->Good() );
+    return BOOL( Good() && pDestStg->Good() );
 }
 
-sal_Bool UCBStorage::CopyTo( const String& rElemName, BaseStorage* pDest, const String& rNew )
+BOOL UCBStorage::CopyTo( const String& rElemName, BaseStorage* pDest, const String& rNew )
 {
     if( !rElemName.Len() )
-        return sal_False;
+        return FALSE;
 
     if ( pDest == ((BaseStorage*) this) )
     {
         // can't double an element
-        return sal_False;
+        return FALSE;
     }
     else
     {
@@ -2829,28 +2865,28 @@ sal_Bool UCBStorage::CopyTo( const String& rElemName, BaseStorage* pDest, const 
         else
         {
             SetError( SVSTREAM_FILE_NOT_FOUND );
-            return sal_False;
+            return FALSE;
         }
     }
 }
 
-sal_Bool UCBStorage::Commit()
+BOOL UCBStorage::Commit()
 {
     // mark this storage for sending it on root commit
-    pImp->m_bCommited = sal_True;
+    pImp->m_bCommited = TRUE;
     if ( pImp->m_bIsRoot )
         // the root storage coordinates commiting by sending a Commit command to its content
         return ( pImp->Commit() != COMMIT_RESULT_FAILURE );
     else
-        return sal_True;
+        return TRUE;
 }
 
-sal_Bool UCBStorage::Revert()
+BOOL UCBStorage::Revert()
 {
     return pImp->Revert();
 }
 
-BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey )
+BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nMode, BOOL bDirect, const ByteString* pKey )
 {
     if( !rEleName.Len() )
         return NULL;
@@ -2875,8 +2911,8 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
         {
             // create a new UCBStorageElement and insert it into the list
             pElement = new UCBStorageElement_Impl( rEleName );
-            pElement->m_bIsInserted = sal_True;
-            pImp->m_aChildrenList.push_back( pElement );
+            pElement->m_bIsInserted = TRUE;
+            pImp->m_aChildrenList.Insert( pElement, LIST_APPEND );
         }
     }
 
@@ -2888,7 +2924,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
             // stream has already been created; if it has no external reference, it may be opened another time
             if ( pElement->m_xStream->m_pAntiImpl )
             {
-                OSL_FAIL("Stream is already open!" );
+                DBG_ERROR("Stream is already open!" );
                 SetError( SVSTREAM_ACCESS_DENIED );  // ???
                 return NULL;
             }
@@ -2903,6 +2939,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
                 {
                     pElement->m_xStream->PrepareCachedForReopen( nMode );
 
+    //              DBG_ASSERT( bDirect == pElement->m_xStream->m_bDirect, "Wrong DirectMode!" );
                     return new UCBStorageStream( pElement->m_xStream );
                 }
             }
@@ -2919,7 +2956,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
     return NULL;
 }
 
-UCBStorageStream_Impl* UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey )
+UCBStorageStream_Impl* UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, BOOL bDirect, const ByteString* pKey )
 {
     String aName( m_aURL );
     aName += '/';
@@ -2928,31 +2965,31 @@ UCBStorageStream_Impl* UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pEle
     return pElement->m_xStream;
 }
 
-BaseStorage* UCBStorage::OpenUCBStorage( const String& rEleName, StreamMode nMode, sal_Bool bDirect )
+BaseStorage* UCBStorage::OpenUCBStorage( const String& rEleName, StreamMode nMode, BOOL bDirect )
 {
     if( !rEleName.Len() )
         return NULL;
 
-    return OpenStorage_Impl( rEleName, nMode, bDirect, sal_True );
+    return OpenStorage_Impl( rEleName, nMode, bDirect, TRUE );
 }
 
-BaseStorage* UCBStorage::OpenOLEStorage( const String& rEleName, StreamMode nMode, sal_Bool bDirect )
+BaseStorage* UCBStorage::OpenOLEStorage( const String& rEleName, StreamMode nMode, BOOL bDirect )
 {
     if( !rEleName.Len() )
         return NULL;
 
-    return OpenStorage_Impl( rEleName, nMode, bDirect, sal_False );
+    return OpenStorage_Impl( rEleName, nMode, bDirect, FALSE );
 }
 
-BaseStorage* UCBStorage::OpenStorage( const String& rEleName, StreamMode nMode, sal_Bool bDirect )
+BaseStorage* UCBStorage::OpenStorage( const String& rEleName, StreamMode nMode, BOOL bDirect )
 {
     if( !rEleName.Len() )
         return NULL;
 
-    return OpenStorage_Impl( rEleName, nMode, bDirect, sal_True );
+    return OpenStorage_Impl( rEleName, nMode, bDirect, TRUE );
 }
 
-BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nMode, sal_Bool bDirect, sal_Bool bForceUCBStorage )
+BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nMode, BOOL bDirect, BOOL bForceUCBStorage )
 {
     // try to find the storage element
     UCBStorageElement_Impl *pElement = FindElement_Impl( rEleName );
@@ -2965,8 +3002,8 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
             String aName( pImp->m_aURL );
             aName += '/';
             aName += rEleName;  //  ???
-            UCBStorage *pStorage = new UCBStorage( aName, nMode, bDirect, sal_False, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
-            pStorage->pImp->m_bIsRoot = sal_False;
+            UCBStorage *pStorage = new UCBStorage( aName, nMode, bDirect, FALSE, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
+            pStorage->pImp->m_bIsRoot = FALSE;
             pStorage->pImp->m_bListCreated = sal_True; // the storage is pretty new, nothing to read
             pStorage->SetError( GetError() );
             return pStorage;
@@ -2976,8 +3013,8 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
         // problem: perhaps an OLEStorage should be created ?!
         // Because nothing is known about the element that should be created, an external parameter is needed !
         pElement = new UCBStorageElement_Impl( rEleName );
-        pElement->m_bIsInserted = sal_True;
-        pImp->m_aChildrenList.push_back( pElement );
+        pElement->m_bIsInserted = TRUE;
+        pImp->m_aChildrenList.Insert( pElement, LIST_APPEND );
     }
 
     if ( !pElement->m_bIsFolder && ( pElement->m_bIsStorage || !bForceUCBStorage ) )
@@ -3003,7 +3040,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
         pElement->m_xStream->PrepareCachedForReopen( nMode );
         pElement->m_xStream->Init();
 
-        pElement->m_bIsStorage = sal_True;
+        pElement->m_bIsStorage = TRUE;
         return pElement->m_xStream->CreateStorage();  // can only be created in transacted mode
     }
     else if ( pElement->m_xStorage.Is() )
@@ -3011,23 +3048,24 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
         // storage has already been opened; if it has no external reference, it may be opened another time
         if ( pElement->m_xStorage->m_pAntiImpl )
         {
-            OSL_FAIL("Storage is already open!" );
+            DBG_ERROR("Storage is already open!" );
             SetError( SVSTREAM_ACCESS_DENIED );  // ???
         }
         else
         {
-            sal_Bool bIsWritable = (( pElement->m_xStorage->m_nMode & STREAM_WRITE ) != 0);
+            BOOL bIsWritable = (( pElement->m_xStorage->m_nMode & STREAM_WRITE ) != 0);
             if ( !bIsWritable && (( nMode & STREAM_WRITE ) != 0 ))
             {
                 String aName( pImp->m_aURL );
                 aName += '/';
                 aName += pElement->m_aOriginalName;
-                UCBStorage* pStorage = new UCBStorage( aName, nMode, bDirect, sal_False, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
+                UCBStorage* pStorage = new UCBStorage( aName, nMode, bDirect, FALSE, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
                 pElement->m_xStorage = pStorage->pImp;
                 return pStorage;
             }
             else
             {
+//                    DBG_ASSERT( bDirect == pElement->m_xStorage->m_bDirect, "Wrong DirectMode!" );
                 return new UCBStorage( pElement->m_xStorage );
             }
         }
@@ -3035,7 +3073,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
     else if ( !pElement->m_xStream.Is() )
     {
         // storage is opened the first time
-        sal_Bool bIsWritable = (( pImp->m_nMode & STREAM_WRITE ) != 0 );
+        BOOL bIsWritable = (( pImp->m_nMode & STREAM_WRITE ) != 0 );
         if ( pImp->m_bIsLinked && pImp->m_bIsRoot && bIsWritable )
         {
             // make sure that the root storage object has been created before substorages will be created
@@ -3045,7 +3083,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
 
             Content aFolder( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), Reference < XCommandEnvironment >() );
             pImp->m_pContent = new Content;
-            sal_Bool bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, pImp->m_aName, *pImp->m_pContent );
+            BOOL bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, pImp->m_aName, *pImp->m_pContent );
             if ( !bRet )
             {
                 SetError( SVSTREAM_CANNOT_MAKE );
@@ -3066,31 +3104,31 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
     return NULL;
 }
 
-UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, sal_Bool bDirect )
+UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, BOOL bDirect )
 {
     UCBStorage_Impl* pRet = NULL;
     String aName( m_aURL );
     aName += '/';
     aName += pElement->m_aOriginalName;  //  ???
 
-    pElement->m_bIsStorage = pElement->m_bIsFolder = sal_True;
+    pElement->m_bIsStorage = pElement->m_bIsFolder = TRUE;
 
     if ( m_bIsLinked && !::utl::UCBContentHelper::Exists( aName ) )
     {
         Content aNewFolder;
-        sal_Bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, pElement->m_aOriginalName, aNewFolder );
+        BOOL bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, pElement->m_aOriginalName, aNewFolder );
         if ( bRet )
-            pRet = new UCBStorage_Impl( aNewFolder, aName, nMode, NULL, bDirect, sal_False, m_bRepairPackage, m_xProgressHandler );
+            pRet = new UCBStorage_Impl( aNewFolder, aName, nMode, NULL, bDirect, FALSE, m_bRepairPackage, m_xProgressHandler );
     }
     else
     {
-        pRet = new UCBStorage_Impl( aName, nMode, NULL, bDirect, sal_False, m_bRepairPackage, m_xProgressHandler );
+        pRet = new UCBStorage_Impl( aName, nMode, NULL, bDirect, FALSE, m_bRepairPackage, m_xProgressHandler );
     }
 
     if ( pRet )
     {
         pRet->m_bIsLinked = m_bIsLinked;
-        pRet->m_bIsRoot = sal_False;
+        pRet->m_bIsRoot = FALSE;
 
         // if name has been changed before creating the stream: set name!
         pRet->m_aName = pElement->m_aOriginalName;
@@ -3103,41 +3141,41 @@ UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement,
     return pRet;
 }
 
-sal_Bool UCBStorage::IsStorage( const String& rEleName ) const
+BOOL UCBStorage::IsStorage( const String& rEleName ) const
 {
     if( !rEleName.Len() )
-        return sal_False;
+        return FALSE;
 
     const UCBStorageElement_Impl *pElement = FindElement_Impl( rEleName );
     return ( pElement && pElement->m_bIsStorage );
 }
 
-sal_Bool UCBStorage::IsStream( const String& rEleName ) const
+BOOL UCBStorage::IsStream( const String& rEleName ) const
 {
     if( !rEleName.Len() )
-        return sal_False;
+        return FALSE;
 
     const UCBStorageElement_Impl *pElement = FindElement_Impl( rEleName );
     return ( pElement && !pElement->m_bIsStorage );
 }
 
-sal_Bool UCBStorage::IsContained( const String & rEleName ) const
+BOOL UCBStorage::IsContained( const String & rEleName ) const
 {
     if( !rEleName.Len() )
-        return sal_False;
+        return FALSE;
     const UCBStorageElement_Impl *pElement = FindElement_Impl( rEleName );
     return ( pElement != NULL );
 }
 
-sal_Bool UCBStorage::Remove( const String& rEleName )
+BOOL UCBStorage::Remove( const String& rEleName )
 {
     if( !rEleName.Len() )
-        return sal_False;
+        return FALSE;
 
     UCBStorageElement_Impl *pElement = FindElement_Impl( rEleName );
     if ( pElement )
     {
-        pElement->m_bIsRemoved = sal_True;
+        pElement->m_bIsRemoved = TRUE;
     }
     else
         SetError( SVSTREAM_FILE_NOT_FOUND );
@@ -3145,16 +3183,16 @@ sal_Bool UCBStorage::Remove( const String& rEleName )
     return ( pElement != NULL );
 }
 
-sal_Bool UCBStorage::Rename( const String& rEleName, const String& rNewName )
+BOOL UCBStorage::Rename( const String& rEleName, const String& rNewName )
 {
     if( !rEleName.Len()|| !rNewName.Len() )
-        return sal_False;
+        return FALSE;
 
     UCBStorageElement_Impl *pAlreadyExisting = FindElement_Impl( rNewName );
     if ( pAlreadyExisting )
     {
         SetError( SVSTREAM_ACCESS_DENIED );
-        return sal_False;                       // can't change to a name that is already used
+        return FALSE;                       // can't change to a name that is already used
     }
 
     UCBStorageElement_Impl *pElement = FindElement_Impl( rEleName );
@@ -3168,10 +3206,10 @@ sal_Bool UCBStorage::Rename( const String& rEleName, const String& rNewName )
     return pElement != NULL;
 }
 
-sal_Bool UCBStorage::MoveTo( const String& rEleName, BaseStorage* pNewSt, const String& rNewName )
+BOOL UCBStorage::MoveTo( const String& rEleName, BaseStorage* pNewSt, const String& rNewName )
 {
     if( !rEleName.Len() || !rNewName.Len() )
-        return sal_False;
+        return FALSE;
 
     if ( pNewSt == ((BaseStorage*) this) && !FindElement_Impl( rNewName ) )
     {
@@ -3195,31 +3233,31 @@ sal_Bool UCBStorage::MoveTo( const String& rEleName, BaseStorage* pNewSt, const 
         }
 */
         // MoveTo is done by first copying to the new destination and then removing the old element
-        sal_Bool bRet = CopyTo( rEleName, pNewSt, rNewName );
+        BOOL bRet = CopyTo( rEleName, pNewSt, rNewName );
         if ( bRet )
             bRet = Remove( rEleName );
         return bRet;
     }
 }
 
-sal_Bool UCBStorage::ValidateFAT()
+BOOL UCBStorage::ValidateFAT()
 {
     // ???
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool UCBStorage::Validate( sal_Bool  bWrite ) const
+BOOL UCBStorage::Validate( BOOL  bWrite ) const
 {
     // ???
     return ( !bWrite || ( pImp->m_nMode & STREAM_WRITE ) );
 }
 
-sal_Bool UCBStorage::ValidateMode( StreamMode m ) const
+BOOL UCBStorage::ValidateMode( StreamMode m ) const
 {
     // ???
     if( m == ( STREAM_READ | STREAM_TRUNC ) )  // from stg.cxx
-        return sal_True;
-    sal_uInt16 nCurMode = 0xFFFF;
+        return TRUE;
+    USHORT nCurMode = 0xFFFF;
     if( ( m & 3 ) == STREAM_READ )
     {
         // only SHARE_DENYWRITE or SHARE_DENYALL allowed
@@ -3227,7 +3265,7 @@ sal_Bool UCBStorage::ValidateMode( StreamMode m ) const
            && ( nCurMode & STREAM_SHARE_DENYWRITE ) )
          || ( ( m & STREAM_SHARE_DENYALL )
            && ( nCurMode & STREAM_SHARE_DENYALL ) ) )
-            return sal_True;
+            return TRUE;
     }
     else
     {
@@ -3236,10 +3274,10 @@ sal_Bool UCBStorage::ValidateMode( StreamMode m ) const
         // the commit may fail
         if( ( m & STREAM_SHARE_DENYALL )
          && ( nCurMode & STREAM_SHARE_DENYALL ) )
-            return sal_True;
+            return TRUE;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 const SvStream* UCBStorage::GetSvStream() const
@@ -3249,13 +3287,13 @@ const SvStream* UCBStorage::GetSvStream() const
     return pImp->m_pSource;
 }
 
-sal_Bool UCBStorage::Equals( const BaseStorage& rStorage ) const
+BOOL UCBStorage::Equals( const BaseStorage& rStorage ) const
 {
     // ???
     return ((BaseStorage*)this) == &rStorage;
 }
 
-sal_Bool UCBStorage::IsStorageFile( const String& rFileName )
+BOOL UCBStorage::IsStorageFile( const String& rFileName )
 {
     String aFileURL = rFileName;
     INetURLObject aObj( aFileURL );
@@ -3267,27 +3305,27 @@ sal_Bool UCBStorage::IsStorageFile( const String& rFileName )
     }
 
     SvStream * pStm = ::utl::UcbStreamHelper::CreateStream( aFileURL, STREAM_STD_READ );
-    sal_Bool bRet = UCBStorage::IsStorageFile( pStm );
+    BOOL bRet = UCBStorage::IsStorageFile( pStm );
     delete pStm;
     return bRet;
 }
 
-sal_Bool UCBStorage::IsStorageFile( SvStream* pFile )
+BOOL UCBStorage::IsStorageFile( SvStream* pFile )
 {
     if ( !pFile )
-        return sal_False;
+        return FALSE;
 
-    sal_uLong nPos = pFile->Tell();
+    ULONG nPos = pFile->Tell();
     pFile->Seek( STREAM_SEEK_TO_END );
     if ( pFile->Tell() < 4 )
-        return sal_False;
+        return FALSE;
 
     pFile->Seek(0);
-    sal_uInt32 nBytes;
+    UINT32 nBytes;
     *pFile >> nBytes;
 
     // search for the magic bytes
-    sal_Bool bRet = ( nBytes == 0x04034b50 );
+    BOOL bRet = ( nBytes == 0x04034b50 );
     if ( !bRet )
     {
         // disk spanned file have an additional header in front of the usual one
@@ -3303,22 +3341,22 @@ sal_Bool UCBStorage::IsStorageFile( SvStream* pFile )
     return bRet;
 }
 
-sal_Bool UCBStorage::IsDiskSpannedFile( SvStream* pFile )
+BOOL UCBStorage::IsDiskSpannedFile( SvStream* pFile )
 {
     if ( !pFile )
-        return sal_False;
+        return FALSE;
 
-    sal_uLong nPos = pFile->Tell();
+    ULONG nPos = pFile->Tell();
     pFile->Seek( STREAM_SEEK_TO_END );
     if ( !pFile->Tell() )
-        return sal_False;
+        return FALSE;
 
     pFile->Seek(0);
-    sal_uInt32 nBytes;
+    UINT32 nBytes;
     *pFile >> nBytes;
 
     // disk spanned file have an additional header in front of the usual one
-    sal_Bool bRet = ( nBytes == 0x08074b50 );
+    BOOL bRet = ( nBytes == 0x08074b50 );
     if ( bRet )
     {
         *pFile >> nBytes;
@@ -3332,13 +3370,13 @@ sal_Bool UCBStorage::IsDiskSpannedFile( SvStream* pFile )
 String UCBStorage::GetLinkedFile( SvStream &rStream )
 {
     String aString;
-    sal_uLong nPos = rStream.Tell();
+    ULONG nPos = rStream.Tell();
     rStream.Seek( STREAM_SEEK_TO_END );
     if ( !rStream.Tell() )
         return aString;
 
     rStream.Seek(0);
-    sal_uInt32 nBytes;
+    UINT32 nBytes;
     rStream >> nBytes;
     if( nBytes == 0x04034b50 )
     {
@@ -3368,7 +3406,7 @@ String UCBStorage::CreateLinkFile( const String& rName )
     SvStream* pStream = pTempFile->GetStream( STREAM_STD_READWRITE | STREAM_TRUNC );
 
     // write header
-    *pStream << ( sal_uInt32 ) 0x04034b50;
+    *pStream << ( UINT32 ) 0x04034b50;
 
     // assemble a new folder name in the destination folder
     INetURLObject aObj( rName );
@@ -3379,7 +3417,7 @@ String UCBStorage::CreateLinkFile( const String& rName )
     // create a folder and store its URL
     Content aFolder( aFolderURL, Reference < XCommandEnvironment >() );
     Content aNewFolder;
-    sal_Bool bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, aTitle, aNewFolder );
+    BOOL bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, aTitle, aNewFolder );
     if ( !bRet )
     {
         aFolderObj.insertName( aTitle );
@@ -3425,15 +3463,15 @@ String UCBStorage::CreateLinkFile( const String& rName )
         return aURL;
     }
 
-    pTempFile->EnableKillingFile( sal_True );
+    pTempFile->EnableKillingFile( TRUE );
     delete pTempFile;
     return String();
 }
 
-sal_Bool UCBStorage::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
+BOOL UCBStorage::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
 {
     if ( rName.CompareToAscii("Title") == COMPARE_EQUAL )
-        return sal_False;
+        return FALSE;
 
     if ( rName.CompareToAscii("MediaType") == COMPARE_EQUAL )
     {
@@ -3447,38 +3485,38 @@ sal_Bool UCBStorage::SetProperty( const String& rName, const ::com::sun::star::u
         if ( pImp->GetContent() )
         {
             pImp->m_pContent->setPropertyValue( rName, rValue );
-            return sal_True;
+            return TRUE;
         }
     }
     catch ( Exception& )
     {
     }
 
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool UCBStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
+BOOL UCBStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
 {
     try
     {
         if ( pImp->GetContent() )
         {
             rValue = pImp->m_pContent->getPropertyValue( rName );
-            return sal_True;
+            return TRUE;
         }
     }
     catch ( Exception& )
     {
     }
 
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool UCBStorage::GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue )
+BOOL UCBStorage::GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue )
 {
     UCBStorageElement_Impl *pEle = FindElement_Impl( rEleName );
     if ( !pEle )
-        return sal_False;
+        return FALSE;
 
     if ( !pEle->m_bIsFolder )
     {
@@ -3487,7 +3525,7 @@ sal_Bool UCBStorage::GetProperty( const String& rEleName, const String& rName, :
         if ( pEle->m_xStream->m_nError )
         {
             pEle->m_xStream.Clear();
-            return sal_False;
+            return FALSE;
         }
 
         try
@@ -3495,7 +3533,7 @@ sal_Bool UCBStorage::GetProperty( const String& rEleName, const String& rName, :
             if ( pEle->m_xStream->m_pContent )
             {
                 rValue = pEle->m_xStream->m_pContent->getPropertyValue( rName );
-                return sal_True;
+                return TRUE;
             }
         }
         catch ( Exception& )
@@ -3509,7 +3547,7 @@ sal_Bool UCBStorage::GetProperty( const String& rEleName, const String& rName, :
         if ( pEle->m_xStorage->m_nError )
         {
             pEle->m_xStorage.Clear();
-            return sal_False;
+            return FALSE;
         }
 
         try
@@ -3517,7 +3555,7 @@ sal_Bool UCBStorage::GetProperty( const String& rEleName, const String& rName, :
             if ( pEle->m_xStorage->GetContent() )
             {
                 rValue = pEle->m_xStorage->m_pContent->getPropertyValue( rName );
-                return sal_True;
+                return TRUE;
             }
         }
         catch ( Exception& )
@@ -3525,7 +3563,7 @@ sal_Bool UCBStorage::GetProperty( const String& rEleName, const String& rName, :
         }
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 UNOStorageHolderList* UCBStorage::GetUNOStorageHolderList()

@@ -58,21 +58,25 @@
  * Meta info for the full document.
  * You can see this by click: File->Properties.
  ************************************************************************/
-#ifndef     _XFOFFICEMETA_HXX
-#define     _XFOFFICEMETA_HXX
+/*************************************************************************
+ * Change History
+ * 2004-12-26 create this file.
+ ************************************************************************/
+#ifndef		_XFOFFICEMETA_HXX
+#define		_XFOFFICEMETA_HXX
 
-#include    "xfglobal.hxx"
+#include	"xfglobal.hxx"
 
 class XFOfficeMeta : public IXFObject
 {
 public:
-    XFOfficeMeta(){}
-    virtual ~XFOfficeMeta(){}
+    XFOfficeMeta(){};
+    virtual ~XFOfficeMeta(){};
 
-    void    SetGenerator(rtl::OUString generator);
-    void    SetTitle(rtl::OUString title);
-    void    SetCreator(rtl::OUString creator);
-    void    SetDescription(rtl::OUString dsr);
+    void	SetGenerator(rtl::OUString generator);
+    void	SetTitle(rtl::OUString title);
+    void	SetCreator(rtl::OUString creator);
+    void	SetDescription(rtl::OUString dsr);
     void SetKeywords(rtl::OUString keywords);
     void SetCreationTime(rtl::OUString crtime);
     void SetLastTime(rtl::OUString lstime);
@@ -80,14 +84,14 @@ public:
 
     virtual void ToXml(IXFStream *pStream);
 private:
-    rtl::OUString   m_strGenerator;
-    rtl::OUString   m_strTitle;
-    rtl::OUString   m_strCreator;
-    rtl::OUString   m_strDsr;
-    rtl::OUString   m_strKeywords;
-    rtl::OUString   m_strCrtime;
-    rtl::OUString   m_strLstime;
-    rtl::OUString   m_strEdtime;
+    rtl::OUString	m_strGenerator;
+    rtl::OUString	m_strTitle;
+    rtl::OUString	m_strCreator;
+    rtl::OUString	m_strDsr;
+    rtl::OUString	m_strKeywords;
+    rtl::OUString	m_strCrtime;
+    rtl::OUString	m_strLstime;
+    rtl::OUString	m_strEdtime;
 
 };
 

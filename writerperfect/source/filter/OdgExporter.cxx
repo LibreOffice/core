@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* libwpg
  * Copyright (C) 2006 Ariya Hidayat (ariya@kde.org)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
@@ -49,26 +48,26 @@ OdgExporter::OdgExporter(DocumentHandlerInterface *pHandler):
 OdgExporter::~OdgExporter()
 {
 
-    for (std::vector<DocumentElement *>::iterator iterBody = mBodyElements.begin(); iterBody != mBodyElements.end(); ++iterBody)
+    for (std::vector<DocumentElement *>::iterator iterBody = mBodyElements.begin(); iterBody != mBodyElements.end(); iterBody++)
     {
         delete (*iterBody);
         (*iterBody) = NULL;
     }
 
     for (std::vector<DocumentElement *>::iterator iterGraphicsAutomaticStyles = mGraphicsAutomaticStyles.begin();
-        iterGraphicsAutomaticStyles != mGraphicsAutomaticStyles.end(); ++iterGraphicsAutomaticStyles)
+        iterGraphicsAutomaticStyles != mGraphicsAutomaticStyles.end(); iterGraphicsAutomaticStyles++)
     {
         delete((*iterGraphicsAutomaticStyles));
     }
 
     for (std::vector<DocumentElement *>::iterator iterGraphicsStrokeDashStyles = mGraphicsStrokeDashStyles.begin();
-        iterGraphicsStrokeDashStyles != mGraphicsStrokeDashStyles.end(); ++iterGraphicsStrokeDashStyles)
+        iterGraphicsStrokeDashStyles != mGraphicsStrokeDashStyles.end(); iterGraphicsStrokeDashStyles++)
     {
         delete((*iterGraphicsStrokeDashStyles));
     }
 
     for (std::vector<DocumentElement *>::iterator iterGraphicsGradientStyles = mGraphicsGradientStyles.begin();
-        iterGraphicsGradientStyles != mGraphicsGradientStyles.end(); ++iterGraphicsGradientStyles)
+        iterGraphicsGradientStyles != mGraphicsGradientStyles.end(); iterGraphicsGradientStyles++)
     {
         delete((*iterGraphicsGradientStyles));
     }
@@ -147,13 +146,13 @@ void OdgExporter::endGraphics()
     TagOpenElement("office:styles").write(mpHandler);
 
     for (std::vector<DocumentElement *>::const_iterator iterGraphicsStrokeDashStyles = mGraphicsStrokeDashStyles.begin();
-        iterGraphicsStrokeDashStyles != mGraphicsStrokeDashStyles.end(); ++iterGraphicsStrokeDashStyles)
+        iterGraphicsStrokeDashStyles != mGraphicsStrokeDashStyles.end(); iterGraphicsStrokeDashStyles++)
     {
         (*iterGraphicsStrokeDashStyles)->write(mpHandler);
     }
 
     for (std::vector<DocumentElement *>::const_iterator iterGraphicsGradientStyles = mGraphicsGradientStyles.begin();
-        iterGraphicsGradientStyles != mGraphicsGradientStyles.end(); ++iterGraphicsGradientStyles)
+        iterGraphicsGradientStyles != mGraphicsGradientStyles.end(); iterGraphicsGradientStyles++)
     {
         (*iterGraphicsGradientStyles)->write(mpHandler);
     }
@@ -164,7 +163,7 @@ void OdgExporter::endGraphics()
 
     // writing out the graphics automatic styles
     for (std::vector<DocumentElement *>::iterator iterGraphicsAutomaticStyles = mGraphicsAutomaticStyles.begin();
-        iterGraphicsAutomaticStyles != mGraphicsAutomaticStyles.end(); ++iterGraphicsAutomaticStyles)
+        iterGraphicsAutomaticStyles != mGraphicsAutomaticStyles.end(); iterGraphicsAutomaticStyles++)
     {
         (*iterGraphicsAutomaticStyles)->write(mpHandler);
     }
@@ -196,6 +195,7 @@ void OdgExporter::endGraphics()
     tmpStyleStyleOpenElement.write(mpHandler);
 
     TagOpenElement tmpStyleDrawingPagePropertiesOpenElement("style:drawing-page-properties");
+    // tmpStyleDrawingPagePropertiesOpenElement.addAttribute("draw:background-size", "border");
     tmpStyleDrawingPagePropertiesOpenElement.addAttribute("draw:fill", "none");
     tmpStyleDrawingPagePropertiesOpenElement.write(mpHandler);
 
@@ -228,7 +228,7 @@ void OdgExporter::endGraphics()
     tmpDrawPageOpenElement.write(mpHandler);
 
     for (std::vector<DocumentElement *>::const_iterator bodyIter = mBodyElements.begin();
-        bodyIter != mBodyElements.end(); ++bodyIter)
+        bodyIter != mBodyElements.end(); bodyIter++)
     {
         (*bodyIter)->write(mpHandler);
     }
@@ -646,5 +646,3 @@ WPXString OdgExporter::doubleToString(const double value)
     }
     return WPXString(stringValue.c_str());
 }
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

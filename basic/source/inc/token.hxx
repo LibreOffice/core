@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ enum SbiToken {
     _ERROR_, TBOOLEAN, TVARIANT, TBYTE,
     DATATYPE2 = TBYTE,
 
-    EACH, ELSE, ELSEIF, END, ERASE, EXIT,
+    EACH, ELSE,	ELSEIF, END, ERASE, EXIT,
     FOR, FUNCTION,
     GET, GLOBAL, GOSUB, GOTO,
     IF, _IN_, INPUT,
@@ -107,7 +107,7 @@ enum SbiToken {
     JS_ASS_DIV, JS_ASS_MOD, JS_ASS_LSHIFT, JS_ASS_RSHIFT, JS_ASS_RSHIFT_Z,
     JS_ASS_AND, JS_ASS_XOR, JS_ASS_OR,
     JS_COND_QUEST, JS_COND_SEL, JS_LOG_OR, JS_LOG_AND, JS_BIT_OR,
-    JS_BIT_XOR, JS_BIT_AND, JS_EQ, JS_NE, JS_LT, JS_LE,
+    JS_BIT_XOR, JS_BIT_AND,	JS_EQ, JS_NE, JS_LT, JS_LE,
     JS_GT, JS_GE, JS_LSHIFT, JS_RSHIFT, JS_RSHIFT_Z,
     JS_PLUS, JS_MINUS, JS_MUL, JS_DIV, JS_MOD, JS_LOG_NOT, JS_BIT_NOT,
     JS_INC, JS_DEC, JS_LPAREN, JS_RPAREN, JS_LINDEX, JS_RINDEX
@@ -136,46 +136,46 @@ public:
 };
 
 class SbiTokenizer : public SbiScanner {
-    TokenLabelInfo  m_aTokenLabelInfo;
+    TokenLabelInfo	m_aTokenLabelInfo;
 
 protected:
-    SbiToken eCurTok;               // aktuelles Token
-    SbiToken ePush;                 // Pushback-Token
-    sal_uInt16  nPLine, nPCol1, nPCol2; // Pushback-Location
-    sal_Bool bEof;                      // sal_True bei Dateiende
-    sal_Bool bEos;                      // sal_True bei Statement-Ende
-    sal_Bool bKeywords;                 // sal_True, falls Keywords geparst werden
-    sal_Bool bAs;                       // letztes Keyword war AS
-    sal_Bool bErrorIsSymbol;            // Handle Error token as Symbol, not keyword
+    SbiToken eCurTok;				// aktuelles Token
+    SbiToken ePush;					// Pushback-Token
+    USHORT  nPLine, nPCol1, nPCol2; // Pushback-Location
+    BOOL bEof;						// TRUE bei Dateiende
+    BOOL bEos;						// TRUE bei Statement-Ende
+    BOOL bKeywords;					// TRUE, falls Keywords geparst werden
+    BOOL bAs;						// letztes Keyword war AS
+    BOOL bErrorIsSymbol;			// Handle Error token as Symbol, not keyword
 public:
     SbiTokenizer( const ::rtl::OUString&, StarBASIC* = NULL );
    ~SbiTokenizer();
 
-    inline sal_Bool IsEof()             { return bEof; }
-    inline sal_Bool IsEos()             { return bEos; }
+    inline BOOL IsEof()				{ return bEof; }
+    inline BOOL IsEos()				{ return bEos; }
 
-    void  Push( SbiToken );             // Pushback eines Tokens
+    void  Push( SbiToken ); 			// Pushback eines Tokens
     const String& Symbol( SbiToken );// Rueckumwandlung
 
-    SbiToken Peek();                    // das naechste Token lesen
-    SbiToken Next();                    // Ein Token lesen
-    sal_Bool MayBeLabel( sal_Bool= sal_False ); // Kann es ein Label sein?
+    SbiToken Peek();				 	// das naechste Token lesen
+    SbiToken Next();				  	// Ein Token lesen
+    BOOL MayBeLabel( BOOL= FALSE );	// Kann es ein Label sein?
 
-    void Hilite( SbTextPortions& ); // Syntax-Highlighting
+    void Hilite( SbTextPortions& );	// Syntax-Highlighting
 
     void Error( SbError c ) { GenError( c ); }
     void Error( SbError, SbiToken );
     void Error( SbError, const char* );
     void Error( SbError, String );
 
-    void Keywords( sal_Bool b ) { bKeywords = b; }
+    void Keywords( BOOL b ) { bKeywords = b; }
 
-    static sal_Bool IsEoln( SbiToken t )
-        { return sal_Bool( t == EOS || t == EOLN || t == REM ); }
-    static sal_Bool IsKwd( SbiToken t )
-        { return sal_Bool( t >= FIRSTKWD && t <= LASTKWD ); }
-    static sal_Bool IsExtra( SbiToken t )
-        { return sal_Bool( t >= FIRSTEXTRA ); }
+    static BOOL IsEoln( SbiToken t )
+        { return BOOL( t == EOS || t == EOLN || t == REM ); }
+    static BOOL IsKwd( SbiToken t )
+        { return BOOL( t >= FIRSTKWD && t <= LASTKWD ); }
+    static BOOL IsExtra( SbiToken t )
+        { return BOOL( t >= FIRSTEXTRA ); }
 };
 
 

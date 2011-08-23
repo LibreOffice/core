@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/svdpage.hxx>
-#include "svx/globl3d.hxx"
+#include "globl3d.hxx"
 #include <svx/polysc3d.hxx>
 #include <svx/cube3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/polygn3d.hxx>
-#include "svx/objfac3d.hxx"
+#include "objfac3d.hxx"
 #include <svx/svdobj.hxx>
 
 /*************************************************************************
@@ -45,14 +45,14 @@
 |*
 \************************************************************************/
 
-static sal_Bool bInit = sal_False;
+static BOOL bInit = FALSE;
 
 E3dObjFactory::E3dObjFactory()
 {
     if ( !bInit )
     {
         SdrObjFactory::InsertMakeObjectHdl(LINK(this, E3dObjFactory, MakeObject));
-        bInit = sal_True;
+        bInit = TRUE;
     }
 }
 
@@ -81,10 +81,10 @@ IMPL_LINK( E3dObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
             case E3D_POLYSCENE_ID:
                 pObjFactory->pNewObj = new E3dPolyScene();
                 break;
-            case E3D_POLYGONOBJ_ID  :
+            case E3D_POLYGONOBJ_ID	:
                 pObjFactory->pNewObj = new E3dPolygonObj();
                 break;
-            case E3D_CUBEOBJ_ID :
+            case E3D_CUBEOBJ_ID	:
                 pObjFactory->pNewObj = new E3dCubeObj();
                 break;
             case E3D_SPHEREOBJ_ID:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,12 +45,12 @@ namespace sw { namespace mark
 #endif
             // IDocumentMarkAccess
             virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM, const ::rtl::OUString& rName, IDocumentMarkAccess::MarkType eMark);
-
-            virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
-                const rtl::OUString& rName,
+        
+            virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM, 
+                const rtl::OUString& rName, 
                 const rtl::OUString& rType);
-            virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
-                const rtl::OUString& rName,
+            virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM, 
+                const rtl::OUString& rName, 
                 const rtl::OUString& rType);
 
             virtual ::sw::mark::IMark* getMarkForTxtNode(const SwTxtNode& rTxtNode, IDocumentMarkAccess::MarkType eMark);
@@ -67,13 +67,13 @@ namespace sw { namespace mark
             virtual void deleteMark(const ::sw::mark::IMark* const pMark);
             virtual void clearAllMarks();
 
-            // marks
+            // marks 
             virtual const_iterator_t getMarksBegin() const;
             virtual const_iterator_t getMarksEnd() const;
             virtual sal_Int32 getMarksCount() const;
             virtual const_iterator_t findMark(const ::rtl::OUString& rName) const;
 
-            // bookmarks
+            // bookmarks 
             virtual const_iterator_t getBookmarksBegin() const;
             virtual const_iterator_t getBookmarksEnd() const;
             virtual sal_Int32 getBookmarksCount() const;

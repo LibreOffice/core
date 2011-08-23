@@ -660,7 +660,7 @@
         <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
     </anim:par>
     </anim:par>
-    </anim:par>
+    </anim:par>    
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-stretchy" pres:preset-sub-type="from-bottom">
@@ -748,7 +748,7 @@
         <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
     </anim:par>
     </anim:par>
-    </anim:par>
+    </anim:par>   
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-unfold" anim:iterate-type="by-letter" anim:iterate-interval="0.1s">

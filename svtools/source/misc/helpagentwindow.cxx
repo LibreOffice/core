@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,15 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include <svtools/helpagentwindow.hxx>
+#include "helpagentwindow.hxx"
 #include <osl/diagnose.h>
 #include <vcl/button.hxx>
 #include <vcl/bitmap.hxx>
 #include <svtools/svtdata.hxx>
+
 #include <svtools/svtools.hrc>
 #include <svtools/helpid.hrc>
 
-#define WB_AGENT_STYLE  0
+#define WB_AGENT_STYLE	0
 
 //........................................................................
 namespace svt
@@ -56,7 +57,7 @@ namespace svt
     public:
         CloserButton_Impl( Window* pParent, WinBits nBits ) : ImageButton( pParent, nBits ) {}
 
-        virtual void        MouseButtonUp( const MouseEvent& rMEvt );
+        virtual void		MouseButtonUp( const MouseEvent& rMEvt );
     };
 
     //--------------------------------------------------------------------
@@ -100,7 +101,7 @@ namespace svt
         m_aPreferredSize.Height() += aSize.Height() - aOutputSize.Height();
 
         SetPointer(Pointer(POINTER_REFHAND));
-        AlwaysEnableInput( sal_True, sal_True );
+        AlwaysEnableInput( TRUE, TRUE );
 
         // unique id for the testtool
         SetUniqueId( HID_HELPAGENT_WINDOW );
@@ -122,10 +123,10 @@ namespace svt
     {
         FloatingWindow::Paint(rRect);
 
-        Size        aOutputSize( GetOutputSizePixel() );
-        Point       aPoint=Point();
-        Rectangle   aOutputRect( aPoint, aOutputSize );
-        Rectangle   aInnerRect( aOutputRect );
+        Size		aOutputSize( GetOutputSizePixel() );
+        Point		aPoint=Point();
+        Rectangle	aOutputRect( aPoint, aOutputSize );
+        Rectangle	aInnerRect( aOutputRect );
 
         // paint the background
         SetLineColor( GetSettings().GetStyleSettings().GetFaceColor() );
@@ -181,7 +182,7 @@ namespace svt
     }
 
 //........................................................................
-}   // namespace svt
+}	// namespace svt
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

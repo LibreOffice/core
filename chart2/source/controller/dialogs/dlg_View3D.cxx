@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,8 @@ using namespace ::com::sun::star::chart2;
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
 
-sal_uInt16 View3DDialog::m_nLastPageId = 0;
+// static
+USHORT View3DDialog::m_nLastPageId = 0;
 
 View3DDialog::View3DDialog(Window* pParent, const uno::Reference< frame::XModel > & xChartModel, XColorTable* pColorTable )
     : TabDialog(pParent,SchResId(DLG_3D_VIEW))

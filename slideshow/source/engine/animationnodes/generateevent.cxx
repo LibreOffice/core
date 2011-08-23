@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,42 +58,42 @@ EventSharedPtr generateEvent(
     double nAdditionalDelay )
 {
     EventSharedPtr pEvent;
-
+    
     if (! rEventDescription.hasValue())
         return pEvent;
-
+    
     animations::Timing eTiming;
     animations::Event aEvent;
     uno::Sequence<uno::Any> aSequence;
     double nDelay1 = 0;
-
+    
     if (rEventDescription >>= eTiming) {
         switch (eTiming) {
         case animations::Timing_INDEFINITE:
             break; // don't schedule no event
         case animations::Timing_MEDIA:
-            OSL_FAIL( "MEDIA timing not yet implemented!" );
+            OSL_ENSURE( false, "MEDIA timing not yet implemented!" );
             break;
         default:
             ENSURE_OR_THROW( false, "unexpected case!" );
         }
     }
     else if (rEventDescription >>= aEvent) {
-
+        
         // try to extract additional event delay
         double nDelay2 = 0.0;
         if (aEvent.Offset.hasValue() && !(aEvent.Offset >>= nDelay2)) {
-            OSL_FAIL( "offset values apart from DOUBLE not "
+            OSL_ENSURE( false, "offset values apart from DOUBLE not "
                         "recognized in animations::Event!" );
         }
-
+        
         // common vars used inside switch
         uno::Reference<animations::XAnimationNode> xNode;
         uno::Reference<drawing::XShape> xShape;
         ShapeSharedPtr pShape;
-
+        
         // TODO(F1): Respect aEvent.Repeat value
-
+        
         switch (aEvent.Trigger) {
         default:
             ENSURE_OR_THROW( false, "unexpected event trigger!" );
@@ -101,10 +101,10 @@ EventSharedPtr generateEvent(
             // no event at all
             break;
         case animations::EventTrigger::ON_BEGIN:
-            OSL_FAIL( "event trigger ON_BEGIN not yet implemented!" );
+            OSL_ENSURE( false, "event trigger ON_BEGIN not yet implemented!" );
             break;
         case animations::EventTrigger::ON_END:
-            OSL_FAIL( "event trigger ON_END not yet implemented!" );
+            OSL_ENSURE( false, "event trigger ON_END not yet implemented!" );
             break;
         case animations::EventTrigger::BEGIN_EVENT:
             // try to extract XAnimationNode event source
@@ -112,11 +112,11 @@ EventSharedPtr generateEvent(
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
                                     "generateEvent, BEGIN_EVENT");
-                rContext.mrUserEventQueue.registerAnimationStartEvent(
+                rContext.mrUserEventQueue.registerAnimationStartEvent( 
                     pEvent, xNode );
             }
             else {
-                OSL_FAIL("could not extract source XAnimationNode "
+                OSL_ENSURE(false, "could not extract source XAnimationNode "
                            "for BEGIN_EVENT!" );
             }
             break;
@@ -126,11 +126,11 @@ EventSharedPtr generateEvent(
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
                                     "generateEvent, END_EVENT");
-                rContext.mrUserEventQueue.registerAnimationEndEvent(
+                rContext.mrUserEventQueue.registerAnimationEndEvent( 
                     pEvent, xNode );
             }
             else {
-                OSL_FAIL( "could not extract source XAnimationNode "
+                OSL_ENSURE( false, "could not extract source XAnimationNode "
                             "for END_EVENT!" );
             }
             break;
@@ -146,7 +146,7 @@ EventSharedPtr generateEvent(
                     pEvent, pShape );
             }
             else {
-                OSL_FAIL( "could not extract source XAnimationNode "
+                OSL_ENSURE( false, "could not extract source XAnimationNode "
                             "for ON_CLICK!" );
             }
             break;
@@ -158,14 +158,14 @@ EventSharedPtr generateEvent(
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
                                     "generateEvent, ON_DBL_CLICK");
-                rContext.mrUserEventQueue.registerShapeDoubleClickEvent(
+                rContext.mrUserEventQueue.registerShapeDoubleClickEvent( 
                     pEvent, pShape );
             }
             else {
-                OSL_FAIL( "could not extract source XAnimationNode "
+                OSL_ENSURE( false, "could not extract source XAnimationNode "
                             "for ON_DBL_CLICK!" );
             }
-            break;
+            break;    
         case animations::EventTrigger::ON_MOUSE_ENTER:
             // try to extract XShape event source
             if ((aEvent.Source >>= xShape) &&
@@ -174,11 +174,11 @@ EventSharedPtr generateEvent(
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
                                     "generateEvent, ON_MOUSE_ENTER");
-                rContext.mrUserEventQueue.registerMouseEnterEvent(
+                rContext.mrUserEventQueue.registerMouseEnterEvent( 
                     pEvent, pShape );
             }
             else {
-                OSL_FAIL( "could not extract source XAnimationNode "
+                OSL_ENSURE( false, "could not extract source XAnimationNode "
                             "for ON_MOUSE_ENTER!" );
             }
             break;
@@ -190,16 +190,16 @@ EventSharedPtr generateEvent(
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
                                     "generateEvent, ON_MOUSE_LEAVE");
-                rContext.mrUserEventQueue.registerMouseLeaveEvent(
+                rContext.mrUserEventQueue.registerMouseLeaveEvent( 
                     pEvent, pShape );
             }
             else {
-                OSL_FAIL( "could not extract source XAnimationNode "
+                OSL_ENSURE( false, "could not extract source XAnimationNode "
                             "for ON_MOUSE_LEAVE!" );
             }
             break;
         case animations::EventTrigger::ON_PREV:
-            OSL_FAIL( "event trigger ON_PREV not yet implemented, "
+            OSL_ENSURE( false, "event trigger ON_PREV not yet implemented, "
                         "mapped to ON_NEXT!" );
             // FALLTHROUGH intended
         case animations::EventTrigger::ON_NEXT:
@@ -218,17 +218,17 @@ EventSharedPtr generateEvent(
                     pEvent, xNode );
             }
             else {
-                OSL_FAIL( "could not extract source XAnimationNode "
+                OSL_ENSURE( false, "could not extract source XAnimationNode "
                             "for ON_STOP_AUDIO!" );
             }
             break;
         case animations::EventTrigger::REPEAT:
-            OSL_FAIL( "event trigger REPEAT not yet implemented!" );
+            OSL_ENSURE( false, "event trigger REPEAT not yet implemented!" );
             break;
         }
     }
     else if (rEventDescription >>= aSequence) {
-        OSL_FAIL( "sequence of timing primitives "
+        OSL_ENSURE( false, "sequence of timing primitives "
                     "not yet implemented!" );
     }
     else if (rEventDescription >>= nDelay1) {
@@ -238,7 +238,7 @@ EventSharedPtr generateEvent(
         // schedule delay event
         rContext.mrEventQueue.addEvent( pEvent );
     }
-
+    
     return pEvent;
 }
 

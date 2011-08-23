@@ -1,10 +1,14 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
+*
+* $RCSfile: mysqlc_general.cxx,v $
+*
+* $Revision: 1.1.2.3 $
 *
 * This file is part of OpenOffice.org.
 *
@@ -125,19 +129,19 @@ int mysqlToOOOType(int cppConnType)
         case sql::DataType::SET:
         case sql::DataType::VARCHAR:
             return com::sun::star::sdbc::DataType::VARCHAR;
-
+        
         case sql::DataType::VARBINARY:
             return com::sun::star::sdbc::DataType::VARBINARY;
 
         case sql::DataType::LONGVARCHAR:
             return com::sun::star::sdbc::DataType::LONGVARCHAR;
-
+        
         case sql::DataType::LONGVARBINARY:
             return com::sun::star::sdbc::DataType::LONGVARBINARY;
 
         case sql::DataType::TIMESTAMP:
             return com::sun::star::sdbc::DataType::TIMESTAMP;
-
+        
         case sql::DataType::DATE:
             return com::sun::star::sdbc::DataType::DATE;
 
@@ -146,7 +150,7 @@ int mysqlToOOOType(int cppConnType)
 
         case sql::DataType::GEOMETRY:
             return com::sun::star::sdbc::DataType::VARCHAR;
-
+        
         case sql::DataType::SQLNULL:
             return com::sun::star::sdbc::DataType::SQLNULL;
 
@@ -154,19 +158,19 @@ int mysqlToOOOType(int cppConnType)
             return com::sun::star::sdbc::DataType::VARCHAR;
     }
 
-    OSL_FAIL( "mysqlToOOOType: unhandled case, falling back to VARCHAR" );
+    OSL_ENSURE( false, "mysqlToOOOType: unhandled case, falling back to VARCHAR" );
     return com::sun::star::sdbc::DataType::VARCHAR;
 }
 
 
-::rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
+::rtl::OUString convert(const ::ext_std::string& _string, const rtl_TextEncoding encoding)
 {
     return ::rtl::OUString( _string.c_str(), _string.size(), encoding );
 }
 
-::std::string convert(const ::rtl::OUString& _string, const rtl_TextEncoding encoding)
+::ext_std::string convert(const ::rtl::OUString& _string, const rtl_TextEncoding encoding)
 {
-    return ::std::string( ::rtl::OUStringToOString( _string, encoding ).getStr() );
+    return ::ext_std::string( ::rtl::OUStringToOString( _string, encoding ).getStr() );
 }
 
 

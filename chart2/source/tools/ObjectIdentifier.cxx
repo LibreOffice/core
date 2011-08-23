@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ OUString lcl_createClassificationStringForType( ObjectType eObjectType
         if( aRet.getLength() )
             aRet.appendAscii(":");
         aRet.append( m_aDragMethodEquals );
-        aRet.append( rDragMethodServiceName );
+        aRet.append( rDragMethodServiceName );  
 
         if( rDragParameterString.getLength() )
         {
@@ -341,6 +341,7 @@ bool ObjectIdentifier::operator<( const ObjectIdentifier& rOID ) const
     return bReturn;
 }
 
+//static
 OUString ObjectIdentifier::createClassifiedIdentifierForObject(
           const Reference< uno::XInterface >& xObject
         , const Reference< frame::XModel >& xChartModel )
@@ -353,7 +354,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     OUString aDragMethodServiceName;
     OUString aDragParameterString;
 
-
+    
     try
     {
         //title
@@ -369,7 +370,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
                     eObjectType, aObjectID, aParentParticle, aDragMethodServiceName, aDragParameterString );
             }
             return aRet;
-
+            
         }
 
         //axis
@@ -424,12 +425,14 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     return aRet;
 }
 
+//static
 OUString ObjectIdentifier::createClassifiedIdentifierForParticle(
         const OUString& rParticle )
 {
     return ObjectIdentifier::createClassifiedIdentifierForParticles( rParticle, OUString() );
 }
 
+//static
 OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
             const OUString& rParentParticle
           , const OUString& rChildParticle
@@ -452,10 +455,11 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
             aRet.appendAscii(":");
     }
     aRet.append(rChildParticle);
-
+    
     return aRet.makeStringAndClear();
 }
 
+//static
 OUString ObjectIdentifier::createParticleForDiagram(
           const Reference< XDiagram >& /*xDiagram*/
         , const Reference< frame::XModel >& /*xChartModel*/ )
@@ -465,12 +469,13 @@ OUString ObjectIdentifier::createParticleForDiagram(
     return aRet;
 }
 
+//static
 OUString ObjectIdentifier::createParticleForCoordinateSystem(
           const Reference< XCoordinateSystem >& xCooSys
         , const Reference< frame::XModel >& xChartModel )
 {
     OUStringBuffer aRet;
-
+    
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
     if( xCooSysContainer.is() )
@@ -493,12 +498,13 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
     return aRet.makeStringAndClear();
 }
 
+//static
 OUString ObjectIdentifier::createParticleForAxis(
             sal_Int32 nDimensionIndex
           , sal_Int32 nAxisIndex )
 {
     OUStringBuffer aRet(C2U("Axis="));
-
+    
     aRet.append( OUString::valueOf( nDimensionIndex ) );
     aRet.appendAscii(",");
     aRet.append( OUString::valueOf( nAxisIndex ) );
@@ -506,6 +512,7 @@ OUString ObjectIdentifier::createParticleForAxis(
     return aRet.makeStringAndClear();
 }
 
+//static
 OUString ObjectIdentifier::createParticleForGrid(
             sal_Int32 nDimensionIndex
           , sal_Int32 nAxisIndex )
@@ -519,6 +526,7 @@ OUString ObjectIdentifier::createParticleForGrid(
     return aRet.makeStringAndClear();
 }
 
+//static
 OUString ObjectIdentifier::createClassifiedIdentifierForGrid(
           const Reference< XAxis >& xAxis
         , const Reference< frame::XModel >& xChartModel
@@ -537,6 +545,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForGrid(
     return aGridCID;
 }
 
+//static
 OUString ObjectIdentifier::createParticleForSeries(
               sal_Int32 nDiagramIndex, sal_Int32 nCooSysIndex
             , sal_Int32 nChartTypeIndex, sal_Int32 nSeriesIndex )
@@ -557,12 +566,13 @@ OUString ObjectIdentifier::createParticleForSeries(
     return aRet.makeStringAndClear();
 }
 
+//static
 OUString ObjectIdentifier::createParticleForLegend(
           const Reference< XLegend >& /*xLegend*/
         , const Reference< frame::XModel >& xChartModel )
 {
     OUStringBuffer aRet;
-
+    
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     //todo: if more than one diagram is implemeted, find the correct diagram wich is owner of the given legend
 
@@ -574,6 +584,7 @@ OUString ObjectIdentifier::createParticleForLegend(
     return aRet.makeStringAndClear();
 }
 
+//static
 OUString ObjectIdentifier::createClassifiedIdentifier(
         enum ObjectType eObjectType //e.g. OBJECTTYPE_DATA_SERIES
         , const OUString& rParticleID )//e.g. SeriesID
@@ -582,13 +593,14 @@ OUString ObjectIdentifier::createClassifiedIdentifier(
         eObjectType, rParticleID, m_aEmptyString );
 }
 
+//static
 OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
         enum ObjectType eObjectType //e.g. OBJECTTYPE_DATA_POINT or OBJECTTYPE_GRID
         , const OUString& rParticleID //e.g. Point Index or SubGrid Index
         , const OUString& rParentPartical //e.g. "Series=SeriesID" or "Grid=GridId"
         , const OUString& rDragMethodServiceName
         , const OUString& rDragParameterString
-        )
+        ) 
         //, bool bIsMultiClickObject ) //e.g. true
 {
     //e.g. "MultiClick/Series=2:Point=34"
@@ -608,11 +620,13 @@ OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
     return aRet.makeStringAndClear();
 }
 
+//static
 const OUString& ObjectIdentifier::getPieSegmentDragMethodServiceName()
 {
     return m_aPieSegmentDragMethodServiceName;
 }
 
+//static
 OUString ObjectIdentifier::createPieSegmentDragParameterString(
           sal_Int32 nOffsetPercent
         , const awt::Point& rMinimumPosition
@@ -630,6 +644,7 @@ OUString ObjectIdentifier::createPieSegmentDragParameterString(
     return aRet.makeStringAndClear();
 }
 
+//static
 bool ObjectIdentifier::parsePieSegmentDragParameterString(
           const OUString& rDragParameterString
         , sal_Int32& rOffsetPercent
@@ -663,10 +678,11 @@ bool ObjectIdentifier::parsePieSegmentDragParameterString(
     rMaximumPosition.Y = aValueString.toInt32();
     if( nCharacterIndex < 0 )
         return false;
-
+    
     return true;
 }
 
+//static
 OUString ObjectIdentifier::getDragMethodServiceName( const OUString& rCID )
 {
     OUString aRet;
@@ -692,6 +708,7 @@ OUString ObjectIdentifier::getDragMethodServiceName( const OUString& rCID )
     return aRet;
 }
 
+//static
 OUString ObjectIdentifier::getDragParameterString( const OUString& rCID )
 {
     OUString aRet;
@@ -717,6 +734,7 @@ OUString ObjectIdentifier::getDragParameterString( const OUString& rCID )
     return aRet;
 }
 
+//static
 bool ObjectIdentifier::isDragableObject( const OUString& rClassifiedIdentifier )
 {
     ObjectType eObjectType = ObjectIdentifier::getObjectType( rClassifiedIdentifier );
@@ -751,6 +769,7 @@ bool ObjectIdentifier::isDragableObject()
     return bReturn;
 }
 
+//static
 bool ObjectIdentifier::isRotateableObject( const OUString& rClassifiedIdentifier )
 {
     ObjectType eObjectType = ObjectIdentifier::getObjectType( rClassifiedIdentifier );
@@ -765,6 +784,7 @@ bool ObjectIdentifier::isRotateableObject( const OUString& rClassifiedIdentifier
     return false;
 }
 
+//static
 bool ObjectIdentifier::isMultiClickObject( const OUString& rClassifiedIdentifier )
 {
     //the name of a shape is it's ClassifiedIdentifier
@@ -827,6 +847,7 @@ bool ObjectIdentifier::areIdenticalObjects( const OUString& rCID1, const OUStrin
     return false;
 }
 
+//static
 OUString ObjectIdentifier::getStringForType( ObjectType eObjectType )
 {
     OUString aRet;
@@ -913,6 +934,7 @@ OUString ObjectIdentifier::getStringForType( ObjectType eObjectType )
     return aRet;
 }
 
+//static
 ObjectType ObjectIdentifier::getObjectType( const OUString& rCID )
 {
     ObjectType eRet;
@@ -999,6 +1021,7 @@ ObjectType ObjectIdentifier::getObjectType()
     return eObjectType;
 }
 
+//static
 OUString ObjectIdentifier::createDataCurveCID(
                                 const OUString& rSeriesParticle
                                 , sal_Int32 nCurveIndex
@@ -1006,9 +1029,10 @@ OUString ObjectIdentifier::createDataCurveCID(
 {
     OUString aParticleID( OUString::valueOf( nCurveIndex ) );
     ObjectType eType = bAverageLine ? OBJECTTYPE_DATA_AVERAGE_LINE : OBJECTTYPE_DATA_CURVE;
-    return createClassifiedIdentifierWithParent( eType, aParticleID, rSeriesParticle );
+    return createClassifiedIdentifierWithParent( eType, aParticleID, rSeriesParticle ); 
 }
 
+//static
 OUString ObjectIdentifier::createDataCurveEquationCID(
                                 const OUString& rSeriesParticle
                                 , sal_Int32 nCurveIndex )
@@ -1017,10 +1041,11 @@ OUString ObjectIdentifier::createDataCurveEquationCID(
     return createClassifiedIdentifierWithParent( OBJECTTYPE_DATA_CURVE_EQUATION, aParticleID, rSeriesParticle );
 }
 
+//static
 OUString ObjectIdentifier::addChildParticle( const rtl::OUString& rParticle, const rtl::OUString& rChildParticle )
 {
     OUStringBuffer aRet(rParticle);
-
+    
     if( aRet.getLength() && rChildParticle.getLength() )
         aRet.appendAscii(":");
     if( rChildParticle.getLength() )
@@ -1029,6 +1054,7 @@ OUString ObjectIdentifier::addChildParticle( const rtl::OUString& rParticle, con
     return aRet.makeStringAndClear();
 }
 
+//static
 rtl::OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObjectType, sal_Int32 nIndex )
 {
     OUStringBuffer aRet( getStringForType( eObjectType ) );
@@ -1040,6 +1066,7 @@ rtl::OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObject
     return aRet.makeStringAndClear();
 }
 
+//static
 sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( const rtl::OUString& rParticleOrCID )
 {
     sal_Int32 nRet = -1;
@@ -1051,6 +1078,7 @@ sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( const rtl::OUString& rPar
     return nRet;
 }
 
+//static
 OUString ObjectIdentifier::createSeriesSubObjectStub( ObjectType eSubObjectType
                     , const rtl::OUString& rSeriesParticle
                     , const rtl::OUString& rDragMethodServiceName
@@ -1064,12 +1092,14 @@ OUString ObjectIdentifier::createSeriesSubObjectStub( ObjectType eSubObjectType
           , rDragMethodServiceName, rDragParameterString );
 }
 
+//static
 OUString ObjectIdentifier::createPointCID( const OUString& rPointCID_Stub, sal_Int32 nIndex  )
 {
     OUString aRet(rPointCID_Stub);
     return aRet+=OUString::valueOf( nIndex );
 }
 
+//static
 OUString ObjectIdentifier::getParticleID( const OUString& rCID )
 {
     OUString aRet;
@@ -1079,6 +1109,7 @@ OUString ObjectIdentifier::getParticleID( const OUString& rCID )
     return aRet;
 }
 
+//static
 OUString ObjectIdentifier::getFullParentParticle( const OUString& rCID )
 {
     OUString aRet;
@@ -1097,6 +1128,7 @@ OUString ObjectIdentifier::getFullParentParticle( const OUString& rCID )
     return aRet;
 }
 
+//static
 OUString ObjectIdentifier::getObjectID( const rtl::OUString& rCID )
 {
     OUString aRet;
@@ -1108,10 +1140,11 @@ OUString ObjectIdentifier::getObjectID( const rtl::OUString& rCID )
         sal_Int32 nEndPos = rCID.getLength();
         aRet = rCID.copy(nStartPos,nEndPos-nStartPos);
     }
-
+    
     return aRet;
 }
 
+//static
 bool ObjectIdentifier::isCID( const OUString& rName )
 {
     return rName.getLength() && rName.match( m_aProtocol );
@@ -1125,6 +1158,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
         rObjectCID, Reference< frame::XModel >( xChartDocument, uno::UNO_QUERY ));
 }
 
+//static
 Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                 const OUString& rObjectCID
                 , const Reference< frame::XModel >& xChartModel )
@@ -1307,6 +1341,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
     return xObjectProperties;
 }
 
+//static
 Reference< XAxis > ObjectIdentifier::getAxisForCID(
                 const OUString& rObjectCID
                 , const Reference< frame::XModel >& xChartModel )
@@ -1322,6 +1357,7 @@ Reference< XAxis > ObjectIdentifier::getAxisForCID(
     return AxisHelper::getAxis( nDimensionIndex, nAxisIndex, xCooSys );
 }
 
+//static
 Reference< XDataSeries > ObjectIdentifier::getDataSeriesForCID(
                 const OUString& rObjectCID
                 , const Reference< frame::XModel >& xChartModel )
@@ -1344,10 +1380,11 @@ Reference< XDataSeries > ObjectIdentifier::getDataSeriesForCID(
         if( nSeriesIndex >= 0 && nSeriesIndex < aDataSeriesSeq.getLength() )
             xSeries.set( aDataSeriesSeq[nSeriesIndex] );
     }
-
+    
     return xSeries;
 }
 
+//static
 Reference< XDiagram > ObjectIdentifier::getDiagramForCID(
                   const rtl::OUString& rObjectCID
                 , const uno::Reference< frame::XModel >& xChartModel )
@@ -1379,6 +1416,7 @@ TitleHelper::eTitleType ObjectIdentifier::getTitleTypeForCID( const OUString& rC
     return eRet;
 }
 
+// static
 OUString ObjectIdentifier::getSeriesParticleFromCID( const OUString& rCID )
 {
     sal_Int32 nDiagramIndex = -1;
@@ -1393,6 +1431,7 @@ OUString ObjectIdentifier::getSeriesParticleFromCID( const OUString& rCID )
     return ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCooSysIndex, nChartTypeIndex, nSeriesIndex );
 }
 
+//static
 OUString ObjectIdentifier::getMovedSeriesCID( const ::rtl::OUString& rObjectCID, sal_Bool bForward )
 {
     sal_Int32 nDiagramIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, C2U("CID/D=") ) );

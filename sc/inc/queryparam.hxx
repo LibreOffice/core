@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: interpre.hxx,v $
+ * $Revision: 1.35.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,8 +51,6 @@ struct ScQueryParamBase
 
     virtual ~ScQueryParamBase();
 
-    virtual bool IsValidFieldIndex() const;
-
     SC_DLLPUBLIC SCSIZE GetEntryCount() const;
     SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n) const;
     void Resize(SCSIZE nNew);
@@ -82,10 +83,12 @@ struct ScQueryParamTable
 
 struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamTable
 {
-    bool            bDestPers;          // not saved
+    BOOL            bDestPers;          // nicht gespeichert
     SCTAB           nDestTab;
     SCCOL           nDestCol;
     SCROW           nDestRow;
+    SCROW           nDynamicEndRow;
+    bool            bUseDynamicRange;
 
     ScQueryParam();
     ScQueryParam( const ScQueryParam& r );
@@ -93,7 +96,7 @@ struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamT
     virtual ~ScQueryParam();
 
     ScQueryParam&   operator=   ( const ScQueryParam& r );
-    sal_Bool            operator==  ( const ScQueryParam& rOther ) const;
+    BOOL            operator==  ( const ScQueryParam& rOther ) const;
     void            Clear();
     void            ClearDestParams();
     void            MoveToDest();
@@ -127,8 +130,6 @@ struct ScDBQueryParamInternal : public ScDBQueryParamBase, public ScQueryParamTa
 {
     ScDBQueryParamInternal();
     virtual ~ScDBQueryParamInternal();
-
-    virtual bool IsValidFieldIndex() const;
 };
 
 // ============================================================================
@@ -139,8 +140,6 @@ struct ScDBQueryParamMatrix : public ScDBQueryParamBase
 
     ScDBQueryParamMatrix();
     virtual ~ScDBQueryParamMatrix();
-
-    virtual bool IsValidFieldIndex() const;
 };
 
 #endif

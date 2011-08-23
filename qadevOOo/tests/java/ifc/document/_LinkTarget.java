@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ public class _LinkTarget extends MultiPropertyTest {
             tRes.tested("LinkDisplayName",LDN!=null);
         }
         catch (Exception ex) {
-            log.println("Exception occurred during LinkDisplayName");
+            log.println("Exception occured during LinkDisplayName");
             ex.printStackTrace(log);
             tRes.tested("LinkDisplayName",false);
         }

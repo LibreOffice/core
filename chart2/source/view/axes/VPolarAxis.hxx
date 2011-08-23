@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,10 @@ public:
            , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount );
 
-    void setIncrements( const std::vector< ExplicitIncrementData >& rIncrements );
+    void setIncrements( const ::com::sun::star::uno::Sequence<
+                        ::com::sun::star::chart2::ExplicitIncrementData >& rIncrements );
 
-    virtual sal_Bool isAnythingToDraw();
+    virtual sal_Bool SAL_CALL isAnythingToDraw();
 
     virtual ~VPolarAxis();
 
@@ -61,7 +62,8 @@ protected:
 
 protected: //member
     PolarPlottingPositionHelper* m_pPosHelper;
-    ::std::vector< ExplicitIncrementData >   m_aIncrements;
+    ::com::sun::star::uno::Sequence<
+        ::com::sun::star::chart2::ExplicitIncrementData >   m_aIncrements;
 };
 
 //.............................................................................

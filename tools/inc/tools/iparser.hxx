@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,21 +70,21 @@ key [value]
 
 // error codes:
 
-#define IP_NO_ERROR         0x0000
-#define IP_UNEXPECTED_EOF   0x0001
+#define IP_NO_ERROR			0x0000
+#define IP_UNEXPECTED_EOF	0x0001
 
-#define REPLACE_VARIABLES   sal_True
+#define REPLACE_VARIABLES	TRUE
 
 class TOOLS_DLLPUBLIC InformationParser
 {
 private:
-    sal_Bool bRecover;
+    BOOL bRecover;
     ByteString sOldLine;
 
     ByteString sCurrentComment;
 
-    sal_Bool bReplaceVariables; // meaning %UPD and %VERSION
-    sal_uInt16 nLevel;
+    BOOL bReplaceVariables; // meaning %UPD and %VERSION
+    USHORT nLevel;
     ByteString sUPD;
     ByteString sVersion;
 
@@ -92,10 +92,10 @@ private:
     SvStream *pActStream;
     UniString sStreamName;
 
-    sal_uInt16 nErrorCode;
-    sal_uIntPtr nErrorLine;
+    USHORT nErrorCode;
+    ULONG nErrorLine;
     ByteString sErrorText;
-    sal_uIntPtr nActLine;
+    ULONG nActLine;
 
     // methods
     TOOLS_DLLPRIVATE ByteString &ReadLine();
@@ -103,15 +103,15 @@ private:
     inline void Recover();
 
 protected:
-  sal_Bool Save( SvStream &rOutStream,
-         const GenericInformationList *pSaveList, sal_uInt16 nLevel, sal_Bool bStripped );
+  BOOL Save( SvStream &rOutStream,
+         const GenericInformationList *pSaveList, USHORT nLevel, BOOL bStripped );
     GenericInformationList *Execute( SvStream &rSourceStream,
                                 GenericInformationList *pExistingList );
     virtual void PrintStatus( ByteString &rStatus )
         { if ( aStatusLink.IsSet()) aStatusLink.Call( &rStatus ); }
 
 public:
-    InformationParser( sal_Bool bReplace = sal_False );
+    InformationParser( BOOL bReplace = FALSE );
     virtual ~InformationParser();
 
     // the following methods return NULL if any errors are detected
@@ -130,15 +130,15 @@ public:
                                 GenericInformationList *pExistingList = NULL );
 
   // save the InfrormationList to rSourceFile
-  // returns sal_False on error
-  sal_Bool Save( SvFileStream &rSourceStream,
+  // returns FALSE on error
+  BOOL Save( SvFileStream &rSourceStream,
          const GenericInformationList *pSaveList );
-  sal_Bool Save( SvMemoryStream &rSourceStream,
+  BOOL Save( SvMemoryStream &rSourceStream,
          const GenericInformationList *pSaveList );
-  sal_Bool Save( const UniString &rSourceFile,
+  BOOL Save( const UniString &rSourceFile,
          const GenericInformationList *pSaveList );
 
-    sal_uInt16 GetErrorCode();
+    USHORT GetErrorCode();
     ByteString &GetErrorText();
 
     void SetStatusHdl( const Link &rHdl ) { aStatusLink = rHdl; }

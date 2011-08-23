@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- May 2005       Created
+ May 2005		Created
  ************************************************************************/
 #include "lwpnotes.hxx"
 #include "lwppara.hxx"
@@ -83,7 +83,7 @@ void LwpFribNote::Read(LwpObjectStream *pObjStrm, sal_uInt16 /*len*/)
 /**
  * @descr  Register style
  */
-void LwpFribNote::RegisterNewStyle()
+void LwpFribNote::RegisterStyle()
 {
     LwpObject* pLayout = m_Layout.obj();
     if(pLayout)

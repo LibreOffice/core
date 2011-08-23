@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 #include "lwpbulletstylemgr.hxx"
 #include "lwpdoc.hxx"
@@ -92,7 +92,7 @@ LwpBulletStyleMgr::~LwpBulletStyleMgr()
 
 /**
  * @short   Register bullet style to style-list. The function only register the bullet and single customized numbering
- *      not inluding the numbering sequence.
+ *		not inluding the numbering sequence.
  * @param   pPara pointer to the current paragraph which has a bullet/numbering.
  * @param   pBullOver pointer to the bulletoverride of current paragraph.
  * @param   pIndent pointer to the indentoverride of current paragraph.
@@ -102,22 +102,22 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
 {
     if(!pPara || !pIndent || !pBullOver)
     {
-//      assert(false);
-        return rtl::OUString();
+//		assert(false);
+        return rtl::OUString::createFromAscii("");
     }
 
     LwpSilverBullet* pSilverBullet = pPara->GetSilverBullet();
     if (!pSilverBullet)
     {
         assert(false);
-        return rtl::OUString();
+        return rtl::OUString::createFromAscii("");
     }
 
     LwpPara* pBulletPara = pSilverBullet->GetBulletPara();
     if (!pBulletPara)
     {
         assert(false);
-        return rtl::OUString();
+        return rtl::OUString::createFromAscii("");
     }
 
     LwpParaProperty* pProp = pPara->GetProperty(PP_LOCAL_INDENT);
@@ -130,14 +130,14 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
     }
 
     LwpObjectID aBulletID = pBullOver->GetSilverBullet();
-    boost::shared_ptr<LwpBulletOverride> pBulletOver(pBullOver->clone());
+    LwpBulletOverride aBulletOver = *pBullOver;
 
     sal_uInt16 nNameIndex = 0;
     std::vector <OverridePair>::iterator iter;
-    for(iter = m_vIDsPairList.begin(); iter != m_vIDsPairList.end(); ++iter)
+    for(iter = m_vIDsPairList.begin(); iter != m_vIDsPairList.end(); iter++)
     {
-        if (iter->first->GetSilverBullet() == aBulletID && iter->second == aIndentID
-            && iter->first->IsRightAligned() == pBullOver->IsRightAligned())
+        if (iter->first.GetSilverBullet() == aBulletID && iter->second == aIndentID
+            && iter->first.IsRightAligned() == pBullOver->IsRightAligned())
         {
             return m_vStyleNameList[nNameIndex];
         }
@@ -147,7 +147,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
         }
     }
 
-    m_vIDsPairList.push_back(std::make_pair(pBulletOver, aIndentID));
+    m_vIDsPairList.push_back(std::make_pair(aBulletOver, aIndentID));
     rtl::OUString aStyleName;
 
     LwpFribPtr* pBulletParaFribs = pBulletPara->GetFribs();
@@ -185,6 +185,24 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
     }
     else
     {
+        rtl::OUString aPrefix = rtl::OUString::createFromAscii("");
+
+        LwpFrib* pFrib = pBulletParaFribs->HasFrib(FRIB_TAG_DOCVAR);
+        LwpFribDocVar* pDocVarFrib = NULL;
+        if (pFrib)
+        {
+            pDocVarFrib = static_cast<LwpFribDocVar*>(pFrib);
+//				ModifierInfo* pInfo = pDocVarFrib->GetModifiers();
+            switch (pDocVarFrib->GetType())
+            {
+            case 0x000D: // division name
+                aPrefix = this->GetDivisionName();
+                break;
+            case 0x000E: // section name
+                aPrefix = this->GetSectionName(pPara);
+                break;
+            }
+        }
         ParaNumbering aParaNumbering;
         pBulletPara->GetParaNumber(1, &aParaNumbering);
         LwpFribParaNumber* pParaNumber = aParaNumbering.pParaNumber;
@@ -192,19 +210,20 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
         {
             for (sal_uInt8 nPos = 1; nPos < 10; nPos++)
             {
+                aPrefix = rtl::OUString::createFromAscii("");
                 if (pParaNumber->GetStyleID() != NUMCHAR_other)
                 {
-                    rtl::OUString aPrefix;
                     XFNumFmt aFmt;
                     if (aParaNumbering.pPrefix)
                     {
                         aPrefix += aParaNumbering.pPrefix->GetText();
+//							aFmt.SetPrefix(aParaNumbering.pPrefix->GetText() + aAdditionalInfoName);
                     }
 
                     rtl::OUString aNumber = LwpSilverBullet::GetNumCharByStyleID(pParaNumber);
                     if (pParaNumber->GetStyleID() == NUMCHAR_01 || pParaNumber->GetStyleID() == NUMCHAR_Chinese4)
                     {
-                        aPrefix += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+                        aPrefix += rtl::OUString::createFromAscii("0");
                     }
                     aFmt.SetPrefix(aPrefix);
 
@@ -232,13 +251,13 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
                     }
 
                     pListStyle->SetListBullet(nPos, LwpSilverBullet::GetNumCharByStyleID(pParaNumber).toChar(),
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Times New Roman")), aPrefix, aSuffix);
+                        rtl::OUString::createFromAscii("Times New Roman"), aPrefix, aSuffix);
                 }
 
                 pListStyle->SetListPosition(nPos, 0.0, 0.635, 0.0);
             }
             aStyleName = pXFStyleMgr->AddStyle(pListStyle)->GetStyleName();
-        }
+            }
 
     }
 
@@ -262,7 +281,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
 
     if (!m_pFoundry)
     {
-        return rtl::OUString();
+        return rtl::OUString::createFromAscii("");
     }
     LwpFontManager* pFontMgr = m_pFoundry->GetFontManger();
 
@@ -274,7 +293,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
 
     for (sal_uInt8 nC = 1; nC < 11; nC++)
     {
-        pListStyle->SetListBullet(nC, cBulletChar, aFontName, rtl::OUString(), aSuffix);
+        pListStyle->SetListBullet(nC, cBulletChar, aFontName, rtl::OUString::createFromAscii(""), aSuffix);
 
         if (pIndent->GetMRest() > 0.001)
         {
@@ -314,10 +333,10 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
 
     if (m_aBulletStyleList.empty())
     {
-    //  pListStyle = new XFListStyle();
-    //  m_aBulletStyleList.push_back(pListStyle);
-    //  m_aCurrentStyleName = pXFStyleMgr->AddStyle(pListStyle);
-    //  this->CreateNewListStyle(pListStyle, pXFStyleMgr);
+    //	pListStyle = new XFListStyle();
+    //	m_aBulletStyleList.push_back(pListStyle);
+    //	m_aCurrentStyleName = pXFStyleMgr->AddStyle(pListStyle);
+    //	this->CreateNewListStyle(pListStyle, pXFStyleMgr);
         if (pSilverBullet->IsBulletOrdered())
         {
             m_strCurrentNumberingName = pSilverBullet->GetNumberingName();
@@ -361,7 +380,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
 
     if (pSilverBullet->IsBulletOrdered())
     {
-//      pListStyle->SetListNumber(int level, XFNumFmt & fmt, sal_Int16 start);
+//		pListStyle->SetListNumber(int level, XFNumFmt & fmt, sal_Int16 start);
     }
     else
     {
@@ -409,12 +428,12 @@ void LwpBulletStyleMgr::OutputBulletListHeader(IXFStream* pOutputStream, sal_Boo
         m_pBulletList->SetOrdered(sal_False);
     }
     m_pBulletList->SetStyleName(rStyleName);
-//  if (nLevels < 0)
-//  {
-//      m_pBulletList->StartList(pOutputStream);
-//  }
-//  else
-//  {
+//	if (nLevels < 0)
+//	{
+//		m_pBulletList->StartList(pOutputStream);
+//	}
+//	else
+//	{
         for (sal_uInt8 nC = 0; nC < nLevel; nC++)
         {
             //continue numbering
@@ -435,7 +454,7 @@ void LwpBulletStyleMgr::OutputBulletListHeader(IXFStream* pOutputStream, sal_Boo
                 XFList::StartListItem(pOutputStream);
             }
         }
-//  }
+//	}
 }
 
 #include "xfilter/xflistitem.hxx"
@@ -536,10 +555,10 @@ rtl::OUString LwpBulletStyleMgr::GetDivisionName()
 {
     if (!m_pFoundry)
     {
-        return rtl::OUString();
+        return rtl::OUString::createFromAscii("");
     }
 
-    rtl::OUString aRet = rtl::OUString();
+    rtl::OUString aRet = rtl::OUString::createFromAscii("");
 
     LwpDocument* pDoc = m_pFoundry->GetDocument();
     if (pDoc)
@@ -559,13 +578,13 @@ rtl::OUString LwpBulletStyleMgr::GetSectionName(LwpPara* pPara)
     LwpObjectID* pStoryID = pPara->GetStoryID();
     if (pStoryID->IsNull())
     {
-        return rtl::OUString();
+        return rtl::OUString::createFromAscii("");
     }
 
     LwpStory* pStory = static_cast<LwpStory*>(pStoryID->obj(VO_STORY));
     if (!pStory)
     {
-        return rtl::OUString();
+        return rtl::OUString::createFromAscii("");
     }
 
     return pStory->GetSectionName();

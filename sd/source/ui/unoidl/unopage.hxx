@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,13 +52,17 @@ class SvxShape;
 class SdrObject;
 struct SfxItemPropertySimpleEntry;
 
+#ifdef SVX_LIGHT
+#define SvxFmDrawPage SvxDrawPage
+#endif
+
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
 class SdGenericDrawPage : public SvxFmDrawPage,
                           public SdUnoSearchReplaceShape,
                           public ::com::sun::star::drawing::XShapeCombiner,
-                          public ::com::sun::star::drawing::XShapeBinder,
+                          public ::com::sun::star::drawing::XShapeBinder,			
                           public ::com::sun::star::container::XNamed,
                           public ::com::sun::star::beans::XPropertySet,
                           public ::com::sun::star::beans::XMultiPropertySet,
@@ -74,7 +78,7 @@ private:
 protected:
     friend class SdXImpressDocument;
 
-    const SvxItemPropertySet*   mpPropSet;
+    const SvxItemPropertySet*	mpPropSet;
 
     virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw();
@@ -90,7 +94,7 @@ protected:
     void SetWidth( sal_Int32 nWidth );
     void SetHeight( sal_Int32 nHeight );
 
-    bool     mbIsImpressDocument;
+    bool	 mbIsImpressDocument;
 
     virtual void disposing() throw();
 

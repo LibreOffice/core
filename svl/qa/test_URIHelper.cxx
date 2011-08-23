@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,12 +31,6 @@
 
 #include "sal/config.h"
 
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/extensions/HelperMacros.h>
-
 #include <cstddef>
 
 #include "com/sun/star/lang/Locale.hpp"
@@ -61,6 +55,7 @@
 #include "cppuhelper/bootstrap.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
+#include "testshl/simpleheader.hxx"
 #include "osl/diagnose.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
@@ -342,13 +337,7 @@ void Test::testFindFirstURLInText() {
           "ftp://bla.bla.bla/blubber/", 3, 29 },
         { "..\\ftp://bla.bla.bla/blubber/...", 0, 0, 0 },
         { "..\\ftp:\\\\bla.bla.bla\\blubber/...",
-//Sync with tools/source/fsys/urlobj.cxx and changeScheme
-#ifdef LINUX
-          "smb://bla.bla.bla/blubber%2F", 7, 29 },
-#endif
-#ifdef WNT
           "file://bla.bla.bla/blubber%2F", 7, 29 },
-#endif
         { "http://sun.com", "http://sun.com/", 0, 14 },
         { "http://sun.com/", "http://sun.com/", 0, 15 },
         { "http://www.xerox.com@www.pcworld.com/go/3990332.htm", 0, 0, 0 },
@@ -465,10 +454,10 @@ void Test::testFindFirstURLInText() {
 
 css::uno::Reference< css::uno::XComponentContext > Test::m_context;
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
 
 }
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

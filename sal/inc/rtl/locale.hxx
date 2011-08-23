@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -186,7 +186,7 @@ public:
     static OLocale registerLocale( const OUString & language, const OUString & country,
                             const OUString & variant )
     {
-        return rtl_locale_register( language.getStr(), country.getStr(), variant.getStr() );
+        return rtl_locale_register( language, country, variant );
     }
 
     /**
@@ -196,7 +196,7 @@ public:
      */
     static OLocale registerLocale( const OUString & language, const OUString & country )
     {
-        return rtl_locale_register( language.getStr(), country.getStr(), NULL );
+        return rtl_locale_register( language, country, NULL );
     }
 
     /** @deprecated
@@ -207,7 +207,7 @@ public:
      */
     static void setDefault( const OUString & language, const OUString & country,
                             const OUString & variant )
-             { rtl_locale_setDefault(language.getStr(), country.getStr(), variant.getStr()); }
+             { rtl_locale_setDefault(language, country, variant); }
 
     /**
          Getter for programmatic name of field,
@@ -237,14 +237,14 @@ public:
         return pData == obj.pData;
     }
 
-    rtl_Locale *    getData() const { return pData; }
+    rtl_Locale *	getData() const { return pData; }
 
 private:
     /**
          Must be the first member in this class. OUString access this member with
          *(rtl_Locale **)&locale.
      */
-    rtl_Locale *    pData;
+    rtl_Locale *	pData;
 
     OLocale()
         : pData(rtl_locale_getDefault()) {}

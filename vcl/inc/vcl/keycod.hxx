@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,54 +63,54 @@ enum KeyFuncType { KEYFUNC_DONTKNOW, KEYFUNC_NEW, KEYFUNC_OPEN,
 class VCL_DLLPUBLIC KeyCode
 {
 private:
-    sal_uInt16      nCode;
+    USHORT		nCode;
     KeyFuncType eFunc;
 
 public:
                 KeyCode() { nCode = 0; eFunc = KEYFUNC_DONTKNOW; }
                 KeyCode( const ResId& rResId );
-                KeyCode( sal_uInt16 nKey, sal_uInt16 nModifier = 0 )
+                KeyCode( USHORT nKey, USHORT nModifier = 0 )
                     { nCode = nKey | nModifier; eFunc = KEYFUNC_DONTKNOW; }
-                KeyCode( sal_uInt16 nKey, sal_Bool bShift, sal_Bool bMod1, sal_Bool bMod2, sal_Bool bMod3 );
+                KeyCode( USHORT nKey, BOOL bShift, BOOL bMod1, BOOL bMod2, BOOL bMod3 );
                 KeyCode( KeyFuncType eFunction );
 
-    sal_uInt16      GetFullCode() const { return nCode; }
-    sal_uInt16      GetFullKeyCode() const { return (nCode) ; }
+    USHORT		GetFullCode() const { return nCode; }
+    USHORT		GetFullKeyCode() const { return (nCode) ; }
     KeyFuncType GetFullFunction() const { return eFunc; }
-    sal_Bool        IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const;
+    BOOL		IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const;
 
-    sal_uInt16      GetCode() const
+    USHORT		GetCode() const
                     { return (nCode & KEY_CODE); }
 
-    sal_uInt16      GetModifier() const
+    USHORT		GetModifier() const
                     { return (nCode & KEY_MODTYPE); }
-    sal_uInt16      GetAllModifier() const
+    USHORT		GetAllModifier() const
                     { return (nCode & KEY_ALLMODTYPE); }
-    sal_Bool        IsShift() const
+    BOOL		IsShift() const
                     { return ((nCode & KEY_SHIFT) != 0); }
-    sal_Bool        IsMod1() const
+    BOOL		IsMod1() const
                     { return ((nCode & KEY_MOD1) != 0); }
-    sal_Bool        IsMod2() const
+    BOOL		IsMod2() const
                     { return ((nCode & KEY_MOD2) != 0); }
-    sal_Bool        IsMod3() const
-                    { return ((nCode & KEY_MOD3) != 0); }
-    sal_uInt16      GetGroup() const
+    BOOL		IsMod3() const
+                    { return ((nCode & KEY_MOD3) != 0); }	
+    USHORT		GetGroup() const
                     { return (nCode & KEYGROUP_TYPE); }
 
-    XubString   GetName( Window* pWindow = NULL ) const;
-    XubString   GetSymbolName( const XubString& rFontName, Window* pWindow = NULL ) const;
+    XubString	GetName( Window* pWindow = NULL ) const;
+    XubString	GetSymbolName( const XubString& rFontName, Window* pWindow = NULL ) const;
 
-    sal_Bool        IsFunction() const
-                    { return ((eFunc != KEYFUNC_DONTKNOW) ? sal_True : sal_False); }
+    BOOL		IsFunction() const
+                    { return ((eFunc != KEYFUNC_DONTKNOW) ? TRUE : FALSE); }
 
     KeyFuncType GetFunction() const;
 
     KeyCode&    operator = ( const KeyCode& rKeyCode );
-    sal_Bool        operator ==( const KeyCode& rKeyCode ) const;
-    sal_Bool        operator !=( const KeyCode& rKeyCode ) const;
+    BOOL		operator ==( const KeyCode& rKeyCode ) const;
+    BOOL		operator !=( const KeyCode& rKeyCode ) const;
 };
 
-inline KeyCode::KeyCode( sal_uInt16 nKey, sal_Bool bShift, sal_Bool bMod1, sal_Bool bMod2, sal_Bool bMod3 )
+inline KeyCode::KeyCode( USHORT nKey, BOOL bShift, BOOL bMod1, BOOL bMod2, BOOL bMod3 )
 {
     nCode = nKey;
     if( bShift )
@@ -124,7 +124,7 @@ inline KeyCode::KeyCode( sal_uInt16 nKey, sal_Bool bShift, sal_Bool bMod1, sal_B
     eFunc = KEYFUNC_DONTKNOW;
 }
 
-inline sal_Bool KeyCode::operator ==( const KeyCode& rKeyCode ) const
+inline BOOL KeyCode::operator ==( const KeyCode& rKeyCode ) const
 {
     if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
         return (nCode == rKeyCode.nCode);
@@ -132,7 +132,7 @@ inline sal_Bool KeyCode::operator ==( const KeyCode& rKeyCode ) const
         return (GetFunction() == rKeyCode.GetFunction());
 }
 
-inline sal_Bool KeyCode::operator !=( const KeyCode& rKeyCode ) const
+inline BOOL KeyCode::operator !=( const KeyCode& rKeyCode ) const
 {
     if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
         return (nCode != rKeyCode.nCode);
@@ -140,7 +140,7 @@ inline sal_Bool KeyCode::operator !=( const KeyCode& rKeyCode ) const
         return (GetFunction() != rKeyCode.GetFunction());
 }
 
-inline sal_Bool KeyCode::IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const
+inline BOOL KeyCode::IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const
 {
     if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
         return (GetFullKeyCode() == rKeyCode.GetFullKeyCode());

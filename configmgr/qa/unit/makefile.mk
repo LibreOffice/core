@@ -42,8 +42,8 @@ SHL1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(CPPUNITLIB) \
-    $(SALLIB)
-
+    $(SALLIB) \
+    $(TESTSHL2LIB)
 SHL1TARGET = unit
 SHL1VERSIONMAP = version.map
 DEF1NAME = $(SHL1TARGET)

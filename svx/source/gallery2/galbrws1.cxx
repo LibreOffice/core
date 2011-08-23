@@ -36,14 +36,12 @@
 #include <sfx2/app.hxx>
 #include "helpid.hrc"
 #include "svx/gallery1.hxx"
-#include "svx/galtheme.hxx"
+#include "galtheme.hxx"
 #include "svx/galmisc.hxx"
 #include "galbrws1.hxx"
 #include <com/sun/star/util/DateTime.hpp>
 #include "gallery.hrc"
 #include <algorithm>
-#include <svx/dialogs.hrc>
-#include <svx/dialmgr.hxx>
 
 #include <svx/svxdlg.hxx>
 
@@ -164,14 +162,13 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
 
     mpThemes->SetHelpId( HID_GALLERY_THEMELIST );
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
-    mpThemes->SetAccessibleName(String(SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) ) );
 
-    for( sal_uIntPtr i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
+    for( ULONG i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
         ImplInsertThemeEntry( mpGallery->GetThemeInfo( i ) );
 
     ImplAdjustControls();
-    maNewTheme.Show( sal_True );
-    mpThemes->Show( sal_True );
+    maNewTheme.Show( TRUE );
+    mpThemes->Show( TRUE );
 }
 
 // -----------------------------------------------------------------------------
@@ -187,11 +184,11 @@ GalleryBrowser1::~GalleryBrowser1()
 
 // -----------------------------------------------------------------------------
 
-sal_uIntPtr GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
+ULONG GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
 {
-    static const sal_Bool bShowHiddenThemes = ( getenv( "GALLERY_SHOW_HIDDEN_THEMES" ) != NULL );
+    static const BOOL bShowHiddenThemes = ( getenv( "GALLERY_SHOW_HIDDEN_THEMES" ) != NULL );
 
-    sal_uIntPtr nRet = LISTBOX_ENTRY_NOTFOUND;
+    ULONG nRet = LISTBOX_ENTRY_NOTFOUND;
 
     if( pEntry && ( !pEntry->IsHidden() || bShowHiddenThemes ) )
     {
@@ -216,8 +213,8 @@ sal_uIntPtr GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEnt
 
 void GalleryBrowser1::ImplAdjustControls()
 {
-    const Size  aOutSize( GetOutputSizePixel() );
-    const long  nNewThemeHeight = LogicToPixel( Size( 0, 14 ), MAP_APPFONT ).Height();
+    const Size	aOutSize( GetOutputSizePixel() );
+    const long	nNewThemeHeight = LogicToPixel( Size( 0, 14 ), MAP_APPFONT ).Height();
     const long  nStartY = nNewThemeHeight + 4;
 
     maNewTheme.SetPosSizePixel( Point(),
@@ -237,10 +234,10 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
     try
     {
         ::ucbhelper::Content aCnt( pThm->GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
-        util::DateTime  aDateTimeModified;
-        DateTime        aDateTime;
+        util::DateTime	aDateTimeModified;
+        DateTime		aDateTime;
 
-        aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= aDateTimeModified;
+        aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDateTimeModified;
         ::utl::typeConvert( aDateTimeModified, aDateTime );
         rData.aThemeChangeDate = aDateTime;
         rData.aThemeChangeTime = aDateTime;
@@ -258,30 +255,30 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
 
 // -----------------------------------------------------------------------------
 
-::std::vector< sal_uInt16 > GalleryBrowser1::ImplGetExecuteVector()
+::std::vector< USHORT > GalleryBrowser1::ImplGetExecuteVector()
 {
-    ::std::vector< sal_uInt16 > aExecVector;
+    ::std::vector< USHORT > aExecVector;
     GalleryTheme*           pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
     if( pTheme )
     {
-        sal_Bool                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
-        static const sal_Bool   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
+        BOOL                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
+        static const BOOL	bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
 
         if( pTheme->IsReadOnly() )
-            bUpdateAllowed = bRenameAllowed = bRemoveAllowed = sal_False;
+            bUpdateAllowed = bRenameAllowed = bRemoveAllowed = FALSE;
         else if( pTheme->IsImported() )
         {
-            bUpdateAllowed = sal_False;
-            bRenameAllowed = bRemoveAllowed = sal_True;
+            bUpdateAllowed = FALSE;
+            bRenameAllowed = bRemoveAllowed = TRUE;
         }
         else if( pTheme->IsDefault() )
         {
-            bUpdateAllowed = bRenameAllowed = sal_True;
-            bRemoveAllowed = sal_False;
+            bUpdateAllowed = bRenameAllowed = TRUE;
+            bRemoveAllowed = FALSE;
         }
         else
-            bUpdateAllowed = bRenameAllowed = bRemoveAllowed = sal_True;
+            bUpdateAllowed = bRenameAllowed = bRemoveAllowed = TRUE;
 
         if( bUpdateAllowed && pTheme->GetObjectCount() )
             aExecVector.push_back( MN_ACTUALIZE );
@@ -344,7 +341,7 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
         {
             const String    aOldName( aName );
             String          aTitle( mpExchangeData->aEditedTitle );
-            sal_uInt16          nCount = 0;
+            USHORT          nCount = 0;
 
             while( mpGallery->HasTheme( aTitle ) && ( nCount++ < 16000 ) )
             {
@@ -403,13 +400,13 @@ IMPL_LINK( GalleryBrowser1, DestroyThemePropertiesDlgHdl, VclAbstractDialog2*, p
 
 // -----------------------------------------------------------------------------
 
-void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
+void GalleryBrowser1::ImplExecute( USHORT nId )
 {
     switch( nId )
     {
         case( MN_ACTUALIZE ):
         {
-            GalleryTheme*       pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
+            GalleryTheme*		pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
@@ -434,8 +431,8 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
 
         case( MN_RENAME ):
         {
-            GalleryTheme*   pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
-            const String    aOldName( pTheme->GetName() );
+            GalleryTheme*	pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
+            const String	aOldName( pTheme->GetName() );
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -448,8 +445,8 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
 
                 if( aNewName.Len() && ( aNewName != aOldName ) )
                 {
-                    String  aName( aNewName );
-                    sal_uInt16  nCount = 0;
+                    String	aName( aNewName );
+                    USHORT	nCount = 0;
 
                     while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
                     {
@@ -480,7 +477,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");
 
                     if( aDlg->Execute() == RET_OK )
-                        pTheme->SetId( aDlg->GetId(), sal_True );
+                        pTheme->SetId( aDlg->GetId(), TRUE );
                     delete aDlg;
                 }
             }
@@ -528,8 +525,8 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
         case( GALLERY_HINT_THEME_RENAMED ):
         {
-            const sal_uInt16 nCurSelectPos = mpThemes->GetSelectEntryPos();
-            const sal_uInt16 nRenameEntryPos = mpThemes->GetEntryPos( rGalleryHint.GetThemeName() );
+            const USHORT nCurSelectPos = mpThemes->GetSelectEntryPos();
+            const USHORT nRenameEntryPos = mpThemes->GetEntryPos( rGalleryHint.GetThemeName() );
 
             mpThemes->RemoveEntry( rGalleryHint.GetThemeName() );
             ImplInsertThemeEntry( mpGallery->GetThemeInfo( rGalleryHint.GetStringData() ) );
@@ -550,8 +547,8 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
         case( GALLERY_HINT_CLOSE_THEME ):
         {
-            const sal_uInt16 nCurSelectPos = mpThemes->GetSelectEntryPos();
-            const sal_uInt16 nCloseEntryPos = mpThemes->GetEntryPos( rGalleryHint.GetThemeName() );
+            const USHORT nCurSelectPos = mpThemes->GetSelectEntryPos();
+            const USHORT nCloseEntryPos = mpThemes->GetEntryPos( rGalleryHint.GetThemeName() );
 
             if( nCurSelectPos == nCloseEntryPos )
             {
@@ -581,15 +578,15 @@ void GalleryBrowser1::ShowContextMenu()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
+BOOL GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 {
-    sal_Bool bRet = static_cast< GalleryBrowser* >( GetParent() )->KeyInput( rKEvt, pWindow );
+    BOOL bRet = static_cast< GalleryBrowser* >( GetParent() )->KeyInput( rKEvt, pWindow );
 
     if( !bRet )
     {
-        ::std::vector< sal_uInt16 > aExecVector( ImplGetExecuteVector() );
-        sal_uInt16                  nExecuteId = 0;
-        sal_Bool                    bMod1 = rKEvt.GetKeyCode().IsMod1();
+        ::std::vector< USHORT > aExecVector( ImplGetExecuteVector() );
+        USHORT                  nExecuteId = 0;
+        BOOL                    bMod1 = rKEvt.GetKeyCode().IsMod1();
 
         switch( rKEvt.GetKeyCode().GetCode() )
         {
@@ -640,7 +637,7 @@ sal_Bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
         if( nExecuteId && ( ::std::find( aExecVector.begin(), aExecVector.end(), nExecuteId ) != aExecVector.end() ) )
         {
             ImplExecute( nExecuteId );
-            bRet = sal_True;
+            bRet = TRUE;
         }
     }
 
@@ -651,7 +648,7 @@ sal_Bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 
 IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, EMPTYARG )
 {
-    ::std::vector< sal_uInt16 > aExecVector( ImplGetExecuteVector() );
+    ::std::vector< USHORT > aExecVector( ImplGetExecuteVector() );
 
     if( aExecVector.size() )
     {
@@ -666,7 +663,7 @@ IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, EMPTYARG )
         aMenu.RemoveDisabledEntries();
 
         const Rectangle aThemesRect( mpThemes->GetPosPixel(), mpThemes->GetOutputSizePixel() );
-        Point           aSelPos( mpThemes->GetBoundingRectangle( mpThemes->GetSelectEntryPos() ).Center() );
+        Point			aSelPos( mpThemes->GetBoundingRectangle( mpThemes->GetSelectEntryPos() ).Center() );
 
         aSelPos.X() = Max( Min( aSelPos.X(), aThemesRect.Right() ), aThemesRect.Left() );
         aSelPos.Y() = Max( Min( aSelPos.Y(), aThemesRect.Bottom() ), aThemesRect.Top() );
@@ -697,9 +694,9 @@ IMPL_LINK( GalleryBrowser1, SelectThemeHdl, void*, EMPTYARG )
 
 IMPL_LINK( GalleryBrowser1, ClickNewThemeHdl, void*, EMPTYARG )
 {
-    String  aNewTheme( GAL_RESID( RID_SVXSTR_GALLERY_NEWTHEME ) );
-    String  aName( aNewTheme );
-    sal_uIntPtr nCount = 0;
+    String	aNewTheme( GAL_RESID( RID_SVXSTR_GALLERY_NEWTHEME ) );
+    String	aName( aNewTheme );
+    ULONG	nCount = 0;
 
     while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
     {

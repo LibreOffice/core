@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,36 +59,40 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFacto
     if (!pAppData_Impl->pFactArr)
         pAppData_Impl->pFactArr = new SfxChildWinFactArr_Impl;
 
-    for (sal_uInt16 nFactory=0; nFactory<pAppData_Impl->pFactArr->Count(); ++nFactory)
+//#ifdef DBG_UTIL
+    for (USHORT nFactory=0; nFactory<pAppData_Impl->pFactArr->Count(); ++nFactory)
     {
         if (pFact->nId ==  (*pAppData_Impl->pFactArr)[nFactory]->nId)
         {
             pAppData_Impl->pFactArr->Remove( nFactory );
+//			DBG_ERROR("ChildWindow mehrfach registriert!");
+//			return;
         }
     }
+//#endif
 
     pAppData_Impl->pFactArr->C40_INSERT(
         SfxChildWinFactory, pFact, pAppData_Impl->pFactArr->Count() );
 }
 
-void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt16 nId,
+void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nId,
         SfxChildWinContextFactory *pFact)
 {
     SfxChildWinFactArr_Impl *pFactories;
     SfxChildWinFactory *pF = NULL;
     if ( pMod )
     {
-        // Abandon Module, search there for ChildwindowFactory
+        // Modul "ubergeben, ChildwindowFactory dort suchen
         pFactories = pMod->GetChildWinFactories_Impl();
         if ( pFactories )
         {
-            sal_uInt16 nCount = pFactories->Count();
-            for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
+            USHORT nCount = pFactories->Count();
+            for (USHORT nFactory=0; nFactory<nCount; ++nFactory)
             {
                 SfxChildWinFactory *pFac = (*pFactories)[nFactory];
                 if ( nId == pFac->nId )
                 {
-                    // Factory found, registrer Context here.
+                    // Factory gefunden, Context dort registrieren
                     pF = pFac;
                     break;
                 }
@@ -98,23 +102,23 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
 
     if ( !pF )
     {
-        // Search for Factory in the Application
-        DBG_ASSERT( pAppData_Impl, "No AppData!" );
-        DBG_ASSERT( pAppData_Impl->pFactArr, "No Factories!" );
+        // Factory an der Application suchen
+        DBG_ASSERT( pAppData_Impl, "Keine AppDaten!" );
+        DBG_ASSERT( pAppData_Impl->pFactArr, "Keine Factories!" );
 
         pFactories = pAppData_Impl->pFactArr;
-        sal_uInt16 nCount = pFactories->Count();
-        for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
+        USHORT nCount = pFactories->Count();
+        for (USHORT nFactory=0; nFactory<nCount; ++nFactory)
         {
             SfxChildWinFactory *pFac = (*pFactories)[nFactory];
             if ( nId == pFac->nId )
             {
                 if ( pMod )
                 {
-                    // If the context of a module has been registered, then the
-                    // ChildWindowFactory must also be available there,
-                    // else the ContextFactory would have be unsubscribed on
-                    // DLL-exit
+                    // Wenn der Context von einem Modul registriert wurde,
+                    // mu\s die ChildwindowFactory auch dort zur Verf"ugung
+                    // stehen, sonst m"u\ste sich die Contextfactory im DLL-Exit
+                    // wieder abmelden !
                     pF = new SfxChildWinFactory( pFac->pCtor, pFac->nId,
                             pFac->nPos );
                     pMod->RegisterChildWindow( pF );
@@ -134,7 +138,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
         return;
     }
 
-    OSL_FAIL( "No ChildWindow for this Context!" );
+    DBG_ERROR( "Kein ChildWindow fuer diesen Context!" );
 }
 
 //--------------------------------------------------------------------

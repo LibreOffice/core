@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,57 +42,57 @@ class SvStream;
 class ScDdeLink : public ::sfx2::SvBaseLink, public SvtBroadcaster
 {
 private:
-static sal_Bool bIsInUpdate;
+static BOOL	bIsInUpdate;
 
-    ScDocument*     pDoc;
+    ScDocument*		pDoc;
 
-    String          aAppl;          // Verbindungsdaten
-    String          aTopic;
-    String          aItem;
-    sal_uInt8           nMode;          // Zahlformat-Modus
+    String			aAppl;			// Verbindungsdaten
+    String			aTopic;
+    String			aItem;
+    BYTE			nMode;			// Zahlformat-Modus
 
-    sal_Bool            bNeedUpdate;    // wird gesetzt, wenn Update nicht moeglich war
+    BOOL			bNeedUpdate;	// wird gesetzt, wenn Update nicht moeglich war
 
-    ScMatrixRef     pResult;        // Ergebnis
+    ScMatrixRef		pResult;		// Ergebnis
 
 public:
     TYPEINFO();
 
             ScDdeLink( ScDocument* pD,
                         const String& rA, const String& rT, const String& rI,
-                        sal_uInt8 nM );
+                        BYTE nM );
             ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr );
             ScDdeLink( ScDocument* pD, const ScDdeLink& rOther );
     virtual ~ScDdeLink();
 
-    void            Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
+    void			Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
 
                                             // von SvBaseLink ueberladen:
-    virtual void    DataChanged( const String& rMimeType,
+    virtual void	DataChanged( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
 
                                             // von SvtBroadcaster ueberladen:
-    virtual void    ListenersGone();
+    virtual void	ListenersGone();
 
                                             // fuer Interpreter:
 
-    const ScMatrix* GetResult() const           { return pResult.get(); }
-    void            SetResult( ScMatrixRef pRes ) { pResult = pRes; }
+    const ScMatrix* GetResult() const           { return pResult; }
+    void            SetResult( ScMatrix* pRes ) { pResult = pRes; }
 
                                             // XML and Excel import after NewData()
     ScMatrixRef     GetModifiableResult()   { return pResult; }
 
-    const String&   GetAppl() const     { return aAppl; }
-    const String&   GetTopic() const    { return aTopic; }
-    const String&   GetItem() const     { return aItem; }
-    sal_uInt8           GetMode() const     { return nMode; }
+    const String&	GetAppl() const		{ return aAppl; }
+    const String&	GetTopic() const	{ return aTopic; }
+    const String&	GetItem() const		{ return aItem; }
+    BYTE			GetMode() const		{ return nMode; }
 
-    void            ResetValue();           // Wert zuruecksetzen
-    void            TryUpdate();
+    void			ResetValue();			// Wert zuruecksetzen
+    void			TryUpdate();
 
-    sal_Bool            NeedsUpdate() const { return bNeedUpdate; }
+    BOOL			NeedsUpdate() const { return bNeedUpdate; }
 
-    static sal_Bool     IsInUpdate()        { return bIsInUpdate; }
+    static BOOL		IsInUpdate()		{ return bIsInUpdate; }
 };
 
 

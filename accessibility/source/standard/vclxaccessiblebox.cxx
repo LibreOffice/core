@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@
 #include <accessibility/standard/vclxaccessibletextfield.hxx>
 #include <accessibility/standard/vclxaccessibleedit.hxx>
 #include <accessibility/standard/vclxaccessiblelist.hxx>
+#include <accessibility/standard/vclxaccessiblelistboxlist.hxx>
 #include <accessibility/helper/listboxhelper.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>

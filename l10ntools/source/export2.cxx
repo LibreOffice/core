@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,32 +54,32 @@ ResData::~ResData()
 {
     if ( pStringList ) {
         // delete existing res. of type StringList
-        for ( size_t i = 0; i < pStringList->size(); i++ ) {
-            ExportListEntry* test = (*pStringList)[ i ];
+        for ( ULONG i = 0; i < pStringList->Count(); i++ ) {
+            ExportListEntry* test = pStringList->GetObject( i );
             if( test != NULL ) delete test;
         }
         delete pStringList;
     }
     if ( pFilterList ) {
         // delete existing res. of type FilterList
-        for ( size_t i = 0; i < pFilterList->size(); i++ ) {
-            ExportListEntry* test = (*pFilterList)[ i ];
+        for ( ULONG i = 0; i < pFilterList->Count(); i++ ) {
+            ExportListEntry* test = pFilterList->GetObject( i );
             delete test;
         }
         delete pFilterList;
     }
     if ( pItemList ) {
         // delete existing res. of type ItemList
-        for ( size_t i = 0; i < pItemList->size(); i++ ) {
-            ExportListEntry* test = (*pItemList)[ i ];
+        for ( ULONG i = 0; i < pItemList->Count(); i++ ) {
+            ExportListEntry* test = pItemList->GetObject( i );
             delete test;
         }
         delete pItemList;
     }
     if ( pUIEntries ) {
         // delete existing res. of type UIEntries
-        for ( size_t i = 0; i < pUIEntries->size(); i++ ) {
-            ExportListEntry* test = (*pUIEntries)[ i ];
+        for ( ULONG i = 0; i < pUIEntries->Count(); i++ ) {
+            ExportListEntry* test = pUIEntries->GetObject( i );
             delete test;
         }
         delete pUIEntries;
@@ -100,8 +100,8 @@ void Export::DumpExportList( ByteString& sListName , ExportList& aList ){
     printf( "%s\n", sListName.GetBuffer() );
     ByteString l("");
     ExportListEntry* aEntry;
-    for( unsigned int x = 0; x < aList.size() ; x++ ){
-        aEntry = (ExportListEntry*) aList[ x ];
+    for( unsigned int x = 0; x < aList.Count() ; x++ ){
+        aEntry = (ExportListEntry*) aList.GetObject( x );
         Export::DumpMap( l , *aEntry );
     }
     printf("\n");
@@ -109,7 +109,7 @@ void Export::DumpExportList( ByteString& sListName , ExportList& aList ){
 ByteString Export::DumpMap( ByteString& sMapName , ByteStringHashMap& aMap ){
     ByteStringHashMap::const_iterator idbg;
     ByteString sReturn;
-
+    
     if( sMapName.Len() )
         printf("MapName %s\n", sMapName.GetBuffer());
     if( aMap.size() < 1 ) return ByteString();
@@ -129,14 +129,14 @@ void Export::SetLanguages( std::vector<ByteString> val ){
     isInitialized = true;
 }
 /*****************************************************************************/
-std::vector<ByteString> Export::GetLanguages(){
+std::vector<ByteString> Export::GetLanguages(){ 
 /*****************************************************************************/
-    return aLanguages;
+    return aLanguages; 
 }
 /*****************************************************************************/
-std::vector<ByteString> Export::GetForcedLanguages(){
+std::vector<ByteString> Export::GetForcedLanguages(){ 
 /*****************************************************************************/
-    return aForcedLanguages;
+    return aForcedLanguages; 
 }
 std::vector<ByteString> Export::aLanguages       = std::vector<ByteString>();
 std::vector<ByteString> Export::aForcedLanguages = std::vector<ByteString>();
@@ -147,7 +147,8 @@ void Export::QuotHTMLXRM( ByteString &rString )
 /*****************************************************************************/
 {
     ByteString sReturn;
-    for ( sal_uInt16 i = 0; i < rString.Len(); i++ ) {
+    //BOOL bBreak = FALSE;
+    for ( USHORT i = 0; i < rString.Len(); i++ ) {
         ByteString sTemp = rString.Copy( i );
         if ( sTemp.Search( "<Arg n=" ) == 0 ) {
             while ( i < rString.Len() && rString.GetChar( i ) != '>' ) {
@@ -159,7 +160,7 @@ void Export::QuotHTMLXRM( ByteString &rString )
                 i++;
             }
         }
-
+      
         if ( i < rString.Len()) {
             switch ( rString.GetChar( i )) {
                 case '<':
@@ -215,7 +216,7 @@ void Export::QuotHTML( ByteString &rString )
 /*****************************************************************************/
 {
     ByteString sReturn;
-    for ( sal_uInt16 i = 0; i < rString.Len(); i++ ) {
+    for ( USHORT i = 0; i < rString.Len(); i++ ) {
         ByteString sTemp = rString.Copy( i );
         if ( sTemp.Search( "<Arg n=" ) == 0 ) {
             while ( i < rString.Len() && rString.GetChar( i ) != '>' ) {
@@ -269,13 +270,13 @@ void Export::RemoveUTF8ByteOrderMarker( ByteString &rString ){
 
 bool Export::hasUTF8ByteOrderMarker( const ByteString &rString ){
     // Byte order marker signature
-
+    
     const unsigned char c1 =  0xEF;
     const unsigned char c2 =  0xBB;
     const unsigned char c3 =  0xBF;
 
     const char bom[ 3 ] = { c1 , c2 , c3 };
-
+    
     return      rString.Len() >= 3 &&
                 rString.GetChar( 0 ) == bom[ 0 ] &&
                 rString.GetChar( 1 ) == bom[ 1 ] &&
@@ -299,11 +300,13 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
         aFileIn.ReadLine( sLine );
         // Test header
         if( hasUTF8ByteOrderMarker( sLine ) ){
+            //cout << "UTF8 Header found!\n";
             DirEntry aTempFile = Export::GetTempFile();
             ByteString sTempFile = ByteString( aTempFile.GetFull() , RTL_TEXTENCODING_ASCII_US );
             SvFileStream aNewFile( String( sTempFile , RTL_TEXTENCODING_ASCII_US ) , STREAM_WRITE );
             // Remove header
             RemoveUTF8ByteOrderMarker( sLine );
+            //cout << "Copy stripped stuff to " << sTempFile.GetBuffer() << endl;
             aNewFile.WriteLine( sLine );
             // Copy the rest
             while( !aFileIn.IsEof() ){
@@ -313,15 +316,40 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
             if( aFileIn.IsOpen() ) aFileIn.Close();
             if( aNewFile.IsOpen() ) aNewFile.Close();
             DirEntry aEntry( rFilename.GetBuffer() );
+            //cout << "Removing file " << rFilename.GetBuffer() << "\n";
             aEntry.Kill();
+            //cout << "Renaming file " << sTempFile.GetBuffer() << " to " << rFilename.GetBuffer() << "\n";
             DirEntry( sTempFile ).MoveTo( DirEntry( rFilename.GetBuffer() ) );
         }
     }
     if( aFileIn.IsOpen() ) aFileIn.Close();
 }
 
+// Merge it into source code!
+//bool Export::isMergingGermanAllowed( const ByteString& rPrj ){  
+//    (void) rPrj;
+//	return true;
+/*	static ByteStringBoolHashMap aHash;
+    
+    if( aHash.find( rPrj ) != aHash.end() ){
+        return aHash[ rPrj ];
+    }
+    
+    ByteString sFile = Export::GetEnv( "SRC_ROOT" ) ;
+    sFile.Append("/");
+    sFile.Append( rPrj );
+    sFile.Append("/prj/l10n");
+#if defined(WNT) || defined(OS2)
+    sFile.SearchAndReplaceAll('/','\\');
+#endif
+    DirEntry aFlagfile( sFile );
+
+    aHash[ rPrj ] = !aFlagfile.Exists();
+    return aHash[ rPrj ];*/
+//}
 bool Export::CopyFile( const ByteString& source , const ByteString& dest )
 {
+//    cout << "CopyFile( " << source.GetBuffer() << " , " << dest.GetBuffer() << " )\n";
     const int BUFFERSIZE    = 8192;
     char buf[ BUFFERSIZE ];
 
@@ -339,7 +367,7 @@ bool Export::CopyFile( const ByteString& source , const ByteString& dest )
         fclose( IN_FILE );
         return false;
     }
-
+   
     while( fgets( buf , BUFFERSIZE , IN_FILE ) != NULL )
     {
         if( fputs( buf , OUT_FILE ) == EOF )
@@ -359,7 +387,7 @@ bool Export::CopyFile( const ByteString& source , const ByteString& dest )
     }
     fclose ( IN_FILE );
     fclose ( OUT_FILE );
-
+    
     return true;
 }
 
@@ -418,7 +446,7 @@ void Export::InitLanguages( bool bMergeMode ){
     if( !isInitialized ){
         ByteString sTmp;
         ByteStringBoolHashMap aEnvLangs;
-        for ( sal_uInt16 x = 0; x < sLanguages.GetTokenCount( ',' ); x++ ){
+        for ( USHORT x = 0; x < sLanguages.GetTokenCount( ',' ); x++ ){
             sTmp = sLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
             sTmp.EraseLeadingAndTrailingChars();
             if( bMergeMode && !isAllowed( sTmp ) ){}
@@ -435,10 +463,10 @@ void Export::InitForcedLanguages( bool bMergeMode ){
 /*****************************************************************************/
     ByteString sTmp;
     ByteStringBoolHashMap aEnvLangs;
-    for ( sal_uInt16 x = 0; x < sForcedLanguages.GetTokenCount( ',' ); x++ ){
+    for ( USHORT x = 0; x < sForcedLanguages.GetTokenCount( ',' ); x++ ){
         sTmp = sForcedLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
         sTmp.EraseLeadingAndTrailingChars();
-        if( bMergeMode && isAllowed( sTmp ) ){}
+        if( bMergeMode && isAllowed( sTmp ) ){} 
         else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) )
             aForcedLanguages.push_back( sTmp );
     }
@@ -459,8 +487,8 @@ void Export::replaceEncoding( ByteString& rString )
 
     for( xub_StrLen idx = 0; idx <= rString.Len()-8 ; idx++ )
     {
-        if( rString.GetChar( idx )   == '&' &&
-            rString.GetChar( idx+1 ) == '#' &&
+        if( rString.GetChar( idx )   == '&' && 
+            rString.GetChar( idx+1 ) == '#' && 
             rString.GetChar( idx+2 ) == 'x' &&
             rString.GetChar( idx+7 ) == ';' )
         {
@@ -474,7 +502,7 @@ void Export::replaceEncoding( ByteString& rString )
             rString = sTmp;
          }
     }
-}
+}        
 
 /*****************************************************************************/
 void Export::FillInFallbacks( ResData *pResData )
@@ -484,18 +512,18 @@ void Export::FillInFallbacks( ResData *pResData )
     for( unsigned int n = 0; n < aLanguages.size(); n++ ){
         sCur = aLanguages[ n ];
         if( isAllowed( sCur )  ){
-            ByteString nFallbackIndex = GetFallbackLanguage( sCur );
+            ByteString nFallbackIndex = GetFallbackLanguage( sCur );		
             if( nFallbackIndex.Len() ){
                 if ( !pResData->sText[ sCur ].Len())
-                    pResData->sText[ sCur ] =
+                    pResData->sText[ sCur ] = 
                         pResData->sText[ nFallbackIndex ];
 
                 if ( !pResData->sHelpText[ sCur ].Len())
-                    pResData->sHelpText[ sCur ] =
+                    pResData->sHelpText[ sCur ] = 
                         pResData->sHelpText[ nFallbackIndex ];
 
                 if ( !pResData->sQuickHelpText[ sCur ].Len())
-                    pResData->sQuickHelpText[ sCur ] =
+                    pResData->sQuickHelpText[ sCur ] = 
                         pResData->sQuickHelpText[ nFallbackIndex ];
 
                 if ( !pResData->sTitle[ sCur ].Len())
@@ -505,11 +533,11 @@ void Export::FillInFallbacks( ResData *pResData )
                 if ( pResData->pStringList )
                     FillInListFallbacks(
                         pResData->pStringList, sCur, nFallbackIndex );
-
+                
                 if ( pResData->pPairedList )
                     FillInListFallbacks(
                         pResData->pPairedList, sCur, nFallbackIndex );
-
+                
                 if ( pResData->pFilterList )
                     FillInListFallbacks(
                         pResData->pFilterList, sCur, nFallbackIndex );
@@ -524,16 +552,16 @@ void Export::FillInFallbacks( ResData *pResData )
             }
         }
     }
-}
+}        
 
 /*****************************************************************************/
 void Export::FillInListFallbacks(
     ExportList *pList, const ByteString &nSource, const ByteString &nFallback )
 /*****************************************************************************/
-{
+{ 
 
-    for ( size_t i = 0; i < pList->size(); i++ ) {
-        ExportListEntry *pEntry = (*pList)[ i ];
+    for ( ULONG i = 0; i < pList->Count(); i++ ) {
+        ExportListEntry *pEntry = pList->GetObject( i );
         if ( !( *pEntry )[ nSource ].Len()){
              ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];
             ByteString x = ( *pEntry )[ nSource ];
@@ -546,17 +574,17 @@ void Export::FillInListFallbacks(
 ByteString Export::GetTimeStamp()
 /*****************************************************************************/
 {
-//  return "xx.xx.xx";
+//	return "xx.xx.xx";
     char buf[20];
     Time aTime;
-
+        
     snprintf(buf, sizeof(buf), "%8d %02d:%02d:%02d", int(Date().GetDate()),
         int(aTime.GetHour()), int(aTime.GetMin()), int(aTime.GetSec()));
     return ByteString(buf);
 }
 
 /*****************************************************************************/
-sal_Bool Export::ConvertLineEnds(
+BOOL Export::ConvertLineEnds(
     ByteString sSource, ByteString sDestination )
 /*****************************************************************************/
 {
@@ -565,11 +593,11 @@ sal_Bool Export::ConvertLineEnds(
 
     SvFileStream aSource( sSourceFile, STREAM_READ );
     if ( !aSource.IsOpen())
-        return sal_False;
+        return FALSE;
     SvFileStream aDestination( sDestinationFile, STREAM_STD_WRITE | STREAM_TRUNC );
     if ( !aDestination.IsOpen()) {
         aSource.Close();
-        return sal_False;
+        return FALSE;
     }
 
     ByteString sLine;
@@ -587,7 +615,7 @@ sal_Bool Export::ConvertLineEnds(
     aSource.Close();
     aDestination.Close();
 
-    return sal_True;
+    return TRUE;
 }
 
 /*****************************************************************************/
@@ -597,7 +625,7 @@ ByteString Export::GetNativeFile( ByteString sSource )
     DirEntry aTemp( GetTempFile());
     ByteString sReturn( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
-    for ( sal_uInt16 i = 0; i < 10; i++ )
+    for ( USHORT i = 0; i < 10; i++ )
         if ( ConvertLineEnds( sSource, sReturn ))
             return sReturn;
 
@@ -644,16 +672,15 @@ void Export::getRandomName( const ByteString& sPrefix , ByteString& sRandStr , c
 
     static sal_uInt64 value;
     char     buffer[RAND_NAME_LENGTH];
-
-    TimeValue           tv;
-    sal_uInt64          v;
-    int                 i;
+    
+    TimeValue			tv;
+    sal_uInt64			v;
+    int					i;
 
     osl_getSystemTime( &tv );
-    oslProcessInfo proInfo;
-    proInfo.Size = sizeof(oslProcessInfo);
+    oslProcessInfo	proInfo;
     osl_getProcessInfo( 0 , osl_Process_IDENTIFIER , &proInfo );
-
+    
     value += ((sal_uInt64) ( tv.Nanosec / 1000 ) << 16) ^ ( tv.Nanosec / 1000 ) ^ proInfo.Ident;
 
     v = value;
@@ -663,7 +690,7 @@ void Export::getRandomName( const ByteString& sPrefix , ByteString& sRandStr , c
         buffer[i] = LETTERS[v % COUNT_OF_LETTERS];
         v        /= COUNT_OF_LETTERS;
     }
-
+    
     sRandStr.Append( buffer , RAND_NAME_LENGTH );
     sRandStr.Append( sPostfix );
 }
@@ -679,23 +706,23 @@ DirEntry Export::GetTempFile()
 /*****************************************************************************/
 {
     rtl::OUString* sTempFilename = new rtl::OUString();
-
+    
     // Create a temp file
     int nRC = osl::FileBase::createTempFile( 0 , 0 , sTempFilename );
     if( nRC ) printf(" osl::FileBase::createTempFile RC = %d",nRC);
-
+    
     String strTmp( *sTempFilename  );
-
+    
     INetURLObject::DecodeMechanism eMechanism = INetURLObject::DECODE_TO_IURI;
-    String sDecodedStr = INetURLObject::decode( strTmp , '%' , eMechanism );
+    String sDecodedStr = INetURLObject::decode( strTmp , '%' , eMechanism ); 
     ByteString sTmp( sDecodedStr , RTL_TEXTENCODING_UTF8 );
-
+    
 #if defined(WNT) || defined(OS2)
     sTmp.SearchAndReplace("file:///","");
     sTmp.SearchAndReplaceAll('/','\\');
 #else
     // Set file permission to 644
-     const sal_uInt64 nPerm = osl_File_Attribute_OwnRead | osl_File_Attribute_OwnWrite |
+     const sal_uInt64 nPerm = osl_File_Attribute_OwnRead | osl_File_Attribute_OwnWrite | 
                              osl_File_Attribute_GrpRead | osl_File_Attribute_OthRead ;
 
     nRC = osl::File::setAttributes( *sTempFilename , nPerm );

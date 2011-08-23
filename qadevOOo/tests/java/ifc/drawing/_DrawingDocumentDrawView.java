@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,7 +149,7 @@ public class _DrawingDocumentDrawView extends MultiPropertyTest {
             e.printStackTrace(log);
         }
     }
-
+    
     public void _ZoomType() {
         Object oldValue=null;
         Object newValue=null;
@@ -171,7 +171,7 @@ public class _DrawingDocumentDrawView extends MultiPropertyTest {
         log.println("oldZoomValue: "+oldValue);
         log.println("newZoomValue: "+newValue);
         tRes.tested("ZoomType",(!oldValue.equals(newValue)));
-    }
-
+    }        
+            
 }
 

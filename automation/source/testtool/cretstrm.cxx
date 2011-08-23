@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ CRetStream::~CRetStream()
 void CRetStream::Read ( String &aString )
 {
     comm_UniChar* pStr;
-    sal_uInt16 nLenInChars;
+    USHORT nLenInChars;
     CmdBaseStream::Read( pStr, nLenInChars );
 
     aString = String( pStr, nLenInChars );
@@ -63,7 +63,7 @@ void CRetStream::Read( SbxValue &aValue )
     *pSammel >> nId;
     if (nId != BinSbxValue)
     {
-        OSL_TRACE( "Falscher Typ im Stream: Erwartet SbxValue, gefunden :%hu", nId );
+        DBG_ERROR1( "Falscher Typ im Stream: Erwartet SbxValue, gefunden :%hu", nId );
     }
     SbxBaseRef xBase = SbxBase::Load( *pSammel );
     if ( IS_TYPE( SbxValue, xBase ) )

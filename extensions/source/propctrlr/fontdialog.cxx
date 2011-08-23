@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,6 +53,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crsditem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/flstitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/cmapitem.hxx>
@@ -90,13 +91,13 @@ namespace pcr
             _rxProps );
 
     public:
-        sal_Bool        getCheckFontProperty(const ::rtl::OUString& _rPropName, ::com::sun::star::uno::Any& _rValue);
-        ::rtl::OUString getStringFontProperty(const ::rtl::OUString& _rPropName, const ::rtl::OUString& _rDefault);
-        sal_Int16       getInt16FontProperty(const ::rtl::OUString& _rPropName, const sal_Int16 _nDefault);
-        sal_Int32       getInt32FontProperty(const ::rtl::OUString& _rPropName, const sal_Int32 _nDefault);
-        float           getFloatFontProperty(const ::rtl::OUString& _rPropName, const float _nDefault);
+        sal_Bool		getCheckFontProperty(const ::rtl::OUString& _rPropName, ::com::sun::star::uno::Any& _rValue);
+        ::rtl::OUString	getStringFontProperty(const ::rtl::OUString& _rPropName, const ::rtl::OUString& _rDefault);
+        sal_Int16		getInt16FontProperty(const ::rtl::OUString& _rPropName, const sal_Int16 _nDefault);
+        sal_Int32		getInt32FontProperty(const ::rtl::OUString& _rPropName, const sal_Int32 _nDefault);
+        float			getFloatFontProperty(const ::rtl::OUString& _rPropName, const float _nDefault);
 
-        void            invalidateItem(
+        void			invalidateItem(
                             const ::rtl::OUString& _rPropName,
                             sal_uInt16 _nItemId,
                             SfxItemSet& _rSet,
@@ -122,7 +123,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString OFontPropertyExtractor::getStringFontProperty(const ::rtl::OUString& _rPropName, const ::rtl::OUString& _rDefault)
+    ::rtl::OUString	OFontPropertyExtractor::getStringFontProperty(const ::rtl::OUString& _rPropName, const ::rtl::OUString& _rDefault)
     {
         Any aValue;
         if (getCheckFontProperty(_rPropName, aValue))
@@ -168,8 +169,8 @@ namespace pcr
     //------------------------------------------------------------------------
     void OFontPropertyExtractor::invalidateItem(const ::rtl::OUString& _rPropName, sal_uInt16 _nItemId, SfxItemSet& _rSet, sal_Bool _bForceInvalidation)
     {
-        if  (   _bForceInvalidation
-            ||  (   m_xPropStateAccess.is()
+        if	(	_bForceInvalidation
+            ||	(	m_xPropStateAccess.is()
                 && (PropertyState_AMBIGUOUS_VALUE == m_xPropStateAccess->getPropertyState(_rPropName))
                 )
             )
@@ -211,23 +212,23 @@ namespace pcr
             ::com::sun::star::awt::FontDescriptor aDefaultFont = VCLUnoHelper::CreateFontDescriptor(aDefaultVCLFont);
 
             // get the current properties
-            ::rtl::OUString aFontName       = aPropExtractor.getStringFontProperty(PROPERTY_FONT_NAME, aDefaultFont.Name);
-            ::rtl::OUString aFontStyleName  = aPropExtractor.getStringFontProperty(PROPERTY_FONT_STYLENAME, aDefaultFont.StyleName);
-            sal_Int16   nFontFamily         = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_FAMILY, aDefaultFont.Family);
-            sal_Int16   nFontCharset        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_CHARSET, aDefaultFont.CharSet);
-            float   nFontHeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_HEIGHT, (float)aDefaultFont.Height);
-            float   nFontWeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_WEIGHT, aDefaultFont.Weight);
-            sal_Int16 nFontSlant            = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_SLANT, (sal_Int16)aDefaultFont.Slant);
-            sal_Int16 nFontUnderline        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_UNDERLINE, aDefaultFont.Underline);
-            sal_Int16 nFontStrikeout        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_STRIKEOUT, aDefaultFont.Strikeout);
+            ::rtl::OUString aFontName		= aPropExtractor.getStringFontProperty(PROPERTY_FONT_NAME, aDefaultFont.Name);
+            ::rtl::OUString aFontStyleName	= aPropExtractor.getStringFontProperty(PROPERTY_FONT_STYLENAME, aDefaultFont.StyleName);
+            sal_Int16	nFontFamily			= aPropExtractor.getInt16FontProperty(PROPERTY_FONT_FAMILY, aDefaultFont.Family);
+            sal_Int16	nFontCharset		= aPropExtractor.getInt16FontProperty(PROPERTY_FONT_CHARSET, aDefaultFont.CharSet);
+            float	nFontHeight				= aPropExtractor.getFloatFontProperty(PROPERTY_FONT_HEIGHT, (float)aDefaultFont.Height);
+            float	nFontWeight				= aPropExtractor.getFloatFontProperty(PROPERTY_FONT_WEIGHT, aDefaultFont.Weight);
+            sal_Int16 nFontSlant			= aPropExtractor.getInt16FontProperty(PROPERTY_FONT_SLANT, (sal_Int16)aDefaultFont.Slant);
+            sal_Int16 nFontUnderline		= aPropExtractor.getInt16FontProperty(PROPERTY_FONT_UNDERLINE, aDefaultFont.Underline);
+            sal_Int16 nFontStrikeout		= aPropExtractor.getInt16FontProperty(PROPERTY_FONT_STRIKEOUT, aDefaultFont.Strikeout);
 
-            sal_Int32 nTextLineColor        = aPropExtractor.getInt32FontProperty(PROPERTY_TEXTLINECOLOR, COL_AUTO);
-            sal_Int16 nFontRelief           = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_RELIEF, (sal_Int16)aDefaultVCLFont.GetRelief());
-            sal_Int16 nFontEmphasisMark     = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_EMPHASIS_MARK, aDefaultVCLFont.GetEmphasisMark());
+            sal_Int32 nTextLineColor		= aPropExtractor.getInt32FontProperty(PROPERTY_TEXTLINECOLOR, COL_AUTO);
+            sal_Int16 nFontRelief			= aPropExtractor.getInt16FontProperty(PROPERTY_FONT_RELIEF, (sal_Int16)aDefaultVCLFont.GetRelief());
+            sal_Int16 nFontEmphasisMark		= aPropExtractor.getInt16FontProperty(PROPERTY_FONT_EMPHASIS_MARK, aDefaultVCLFont.GetEmphasisMark());
 
             Any aValue;
-            sal_Bool bWordLineMode          = aPropExtractor.getCheckFontProperty(PROPERTY_WORDLINEMODE, aValue) ? aDefaultFont.WordLineMode : ::cppu::any2bool(aValue);
-            sal_Int32 nColor32              = aPropExtractor.getInt32FontProperty(PROPERTY_TEXTCOLOR, 0);
+            sal_Bool bWordLineMode			= aPropExtractor.getCheckFontProperty(PROPERTY_WORDLINEMODE, aValue) ? aDefaultFont.WordLineMode : ::cppu::any2bool(aValue);
+            sal_Int32 nColor32				= aPropExtractor.getInt32FontProperty(PROPERTY_TEXTCOLOR, 0);
 
             // build SfxItems with the values
             SvxFontItem aFontItem((FontFamily)nFontFamily, aFontName, aFontStyleName, PITCH_DONTKNOW, nFontCharset, CFID_FONT);
@@ -235,18 +236,18 @@ namespace pcr
             nFontHeight = (float)OutputDevice::LogicToLogic(Size(0, (sal_Int32)nFontHeight), MAP_POINT, MAP_TWIP).Height();
             SvxFontHeightItem aSvxFontHeightItem((sal_uInt32)nFontHeight,100,CFID_HEIGHT);
 
-            FontWeight      eWeight=VCLUnoHelper::ConvertFontWeight(nFontWeight);
-            FontItalic      eItalic=(FontItalic)nFontSlant;
-            FontUnderline   eUnderline=(FontUnderline)nFontUnderline;
-            FontStrikeout   eStrikeout=(FontStrikeout)nFontStrikeout;
+            FontWeight		eWeight=VCLUnoHelper::ConvertFontWeight(nFontWeight);
+            FontItalic		eItalic=(FontItalic)nFontSlant;
+            FontUnderline	eUnderline=(FontUnderline)nFontUnderline;
+            FontStrikeout	eStrikeout=(FontStrikeout)nFontStrikeout;
 
-            SvxWeightItem       aWeightItem(eWeight,CFID_WEIGHT);
-            SvxPostureItem      aPostureItem(eItalic,CFID_POSTURE);
+            SvxWeightItem		aWeightItem(eWeight,CFID_WEIGHT);
+            SvxPostureItem		aPostureItem(eItalic,CFID_POSTURE);
 
-            SvxCrossedOutItem   aCrossedOutItem(eStrikeout,CFID_STRIKEOUT);
+            SvxCrossedOutItem	aCrossedOutItem(eStrikeout,CFID_STRIKEOUT);
             SvxWordLineModeItem aWordLineModeItem(bWordLineMode, CFID_WORDLINEMODE);
 
-            SvxUnderlineItem    aUnderlineItem(eUnderline,CFID_UNDERLINE);
+            SvxUnderlineItem 	aUnderlineItem(eUnderline,CFID_UNDERLINE);
             aUnderlineItem.SetColor(Color(nTextLineColor));
 
             SvxColorItem aSvxColorItem(nColor32,CFID_CHARCOLOR);
@@ -281,7 +282,7 @@ namespace pcr
         }
         catch (Exception&)
         {
-            OSL_FAIL("ControlCharacterDialog::translatePropertiesToItems: caught an exception!");
+            DBG_ERROR("ControlCharacterDialog::translatePropertiesToItems: caught an exception!");
         }
 
         _pSet->DisableItem(SID_ATTR_CHAR_CJK_FONT);
@@ -384,7 +385,7 @@ namespace pcr
                 sal_Int32 nColor = rUnderlineItem.GetColor().GetColor();
 
                 Any aUnoColor;
-                if (COL_AUTO != (sal_uInt32)nColor)
+                if (COL_AUTO != (UINT32)nColor)
                     aUnoColor <<= nColor;
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTLINECOLOR, aUnoColor );
@@ -429,7 +430,7 @@ namespace pcr
                 sal_Int32 nColor = rColorItem.GetValue().GetColor();
 
                 Any aUnoColor;
-                if (COL_AUTO != (sal_uInt32)nColor)
+                if (COL_AUTO != (UINT32)nColor)
                     aUnoColor <<= nColor;
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTCOLOR, aUnoColor );
@@ -488,7 +489,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    SfxItemSet* ControlCharacterDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
+    SfxItemSet*	ControlCharacterDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
     {
         // just to be sure ....
         _rpSet = NULL;
@@ -500,7 +501,7 @@ namespace pcr
 
         Font aDefaultVCLFont = Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont();
 
-        SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
+        SfxPoolItem** pCounter = _rppDefaults;	// want to modify this without affecting the out param _rppDefaults
         *pCounter++ = new SvxFontItem(aDefaultVCLFont.GetFamily(), aDefaultVCLFont.GetName(), aDefaultVCLFont.GetStyleName(), aDefaultVCLFont.GetPitch(), aDefaultVCLFont.GetCharSet(), CFID_FONT);
         *pCounter++ = new SvxFontHeightItem(aDefaultVCLFont.GetHeight(), 100, CFID_HEIGHT);
         *pCounter++ = new SvxWeightItem(aDefaultVCLFont.GetWeight(), CFID_WEIGHT);
@@ -526,28 +527,28 @@ namespace pcr
         *pCounter++ = new SvxFontListItem (new FontList(Application::GetDefaultDevice()), CFID_FONTLIST);
 
         // create the pool
-        static SfxItemInfo const aItemInfos[CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1] =
+        static SfxItemInfo __READONLY_DATA aItemInfos[CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1] =
         {
-            { SID_ATTR_CHAR_FONT,               0 },
-            { SID_ATTR_CHAR_FONTHEIGHT,         0 },
-            { SID_ATTR_CHAR_WEIGHT,             0 },
-            { SID_ATTR_CHAR_POSTURE,            0 },
-            { SID_ATTR_CHAR_LANGUAGE,           0 },
-            { SID_ATTR_CHAR_UNDERLINE,          0 },
-            { SID_ATTR_CHAR_STRIKEOUT,          0 },
-            { SID_ATTR_CHAR_WORDLINEMODE,       0 },
-            { SID_ATTR_CHAR_COLOR,              0 },
-            { SID_ATTR_CHAR_RELIEF,             0 },
-            { SID_ATTR_CHAR_EMPHASISMARK,       0 },
-            { 0,                                0 },
-            { 0,                                0 },
-            { 0,                                0 },
-            { 0,                                0 },
-            { 0,                                0 },
-            { 0,                                0 },
-            { 0,                                0 },
-            { 0,                                0 },
-            { SID_ATTR_CHAR_FONTLIST,           0 }
+            { SID_ATTR_CHAR_FONT,				0 },
+            { SID_ATTR_CHAR_FONTHEIGHT,			0 },
+            { SID_ATTR_CHAR_WEIGHT,				0 },
+            { SID_ATTR_CHAR_POSTURE,			0 },
+            { SID_ATTR_CHAR_LANGUAGE,			0 },
+            { SID_ATTR_CHAR_UNDERLINE,			0 },
+            { SID_ATTR_CHAR_STRIKEOUT,			0 },
+            { SID_ATTR_CHAR_WORDLINEMODE,		0 },
+            { SID_ATTR_CHAR_COLOR,				0 },
+            { SID_ATTR_CHAR_RELIEF,				0 },
+            { SID_ATTR_CHAR_EMPHASISMARK,		0 },
+            { 0,								0 },
+            { 0,								0 },
+            { 0,								0 },
+            { 0,								0 },
+            { 0,								0 },
+            { 0,								0 },
+            { 0,								0 },
+            { 0,								0 },
+            { SID_ATTR_CHAR_FONTLIST,			0 }
         };
 
         _rpPool = new SfxItemPool(String::CreateFromAscii("PCRControlFontItemPool"), CFID_FIRST_ITEM_ID, CFID_LAST_ITEM_ID,
@@ -602,7 +603,7 @@ namespace pcr
     }
 
 //............................................................................
-}   // namespace pcr
+}	// namespace pcr
 //............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

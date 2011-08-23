@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include <tools/solar.h>
 
-/* --------------------------------------------------
+/* -----------------23.02.99 11:33-------------------
  * Die Klasse SwNode2Layout stellt die Verbindung von Nodes zum Layout her.
  * Sie liefert einen intelligenten Iterator ueber die zum Node oder Nodebereich
  * gehoerenden Frames. Je nach Zweck der Iteration, z.B. um vor oder hinter
@@ -46,10 +46,10 @@
  * je nach Aufgabenstellung.
  * Die Aufgabenstellung wird durch die Wahl des Ctors bestimmt.
  * 1. Das Einsammeln der UpperFrms, damit spaeter RestoreUpperFrms wird,
- *    wird von MakeFrms gerufen, wenn es keinen PrevNext gibt, vor/hinter den
- *    die Frames gehaengt werden koennen.
+ * 	  wird von MakeFrms gerufen, wenn es keinen PrevNext gibt, vor/hinter den
+ * 	  die Frames gehaengt werden koennen.
  * 2. Die Lieferung der Frames hinter/vor die die neuen Frames eines Nodes
- *    gehaengt werden muessen, ebenfalls von MakeFrms gerufen.
+ * 	  gehaengt werden muessen, ebenfalls von MakeFrms gerufen.
  * --------------------------------------------------*/
 
 class SwNode2LayImpl;
@@ -68,15 +68,15 @@ public:
     SwNode2Layout( const SwNode& rNd );
     // Dieser Ctor ist fuer das Einfuegen vor oder hinter rNd gedacht,
     // nIdx ist der Index des einzufuegenden Nodes
-    SwNode2Layout( const SwNode& rNd, sal_uLong nIdx );
+    SwNode2Layout( const SwNode& rNd, ULONG nIdx );
     ~SwNode2Layout();
     SwFrm* NextFrm();
     SwLayoutFrm* UpperFrm( SwFrm* &rpFrm, const SwNode& rNode );
-    void RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
+    void RestoreUpperFrms( SwNodes& rNds, ULONG nStt, ULONG nEnd );
 
     SwFrm *GetFrm( const Point* pDocPos = 0,
                     const SwPosition *pPos = 0,
-                    const sal_Bool bCalcFrm = sal_True ) const;
+                    const BOOL bCalcFrm = TRUE ) const;
 };
 
 #endif

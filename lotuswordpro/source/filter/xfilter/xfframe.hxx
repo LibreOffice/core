@@ -58,23 +58,27 @@
  * Frame object for OOo.This is the basic object for all Shape Layer.
  * You can reference to the XFFrame object.
  ************************************************************************/
-#ifndef     _XFFRAME_HXX
-#define     _XFFRAME_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-10 create and implements.
+ ************************************************************************/
+#ifndef		_XFFRAME_HXX
+#define		_XFFRAME_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
-#include    "xfrect.hxx"
-#include    "xfcontentcontainer.hxx"
+#include	"xfglobal.hxx"
+#include	"xfcontent.hxx"
+#include	"xfrect.hxx"
+#include	"xfcontentcontainer.hxx"
 
-#define     XFFRAME_FLAG_HEIGHT         0x00000001
-#define     XFFRAME_FLAG_MINHEIGHT      0x00000002
-#define     XFFRAME_FLAG_MAXHEIGHT      0x00000004
+#define		XFFRAME_FLAG_HEIGHT			0x00000001
+#define		XFFRAME_FLAG_MINHEIGHT		0x00000002
+#define		XFFRAME_FLAG_MAXHEIGHT		0x00000004
 /**
  * @brief
- *  Base class for all frame object,include drawing,image,text-box.
+ *	Base class for all frame object,include drawing,image,text-box.
  *
- *  Use SetX(),SetY(),SetWidth(),SetHeight() to set postion for the frame.
- *  Only if you set anchor type to enumXFAnchorPage, the SetAnchorPage functions.
+ *	Use SetX(),SetY(),SetWidth(),SetHeight() to set postion for the frame.
+ *	Only if you set anchor type to enumXFAnchorPage, the SetAnchorPage functions.
  */
 class XFFrame : public XFContentContainer
 {
@@ -85,167 +89,165 @@ public:
     virtual ~XFFrame();
 
 public:
-    using XFContentContainer::Add;
+    /**
+     * @descr	override the add function to adjust z-index.
+     */
+    virtual void	Add(IXFContent *pContent);
 
     /**
-     * @descr   override the add function to adjust z-index.
+     * @descr:	Set the anchor type for the frame object.
      */
-    virtual void    Add(IXFContent *pContent);
+    void	SetAnchorType(enumXFAnchor type);
 
     /**
-     * @descr:  Set the anchor type for the frame object.
+     * @descr:	if it's page anchor,set the page number.
      */
-    void    SetAnchorType(enumXFAnchor type);
+    void	SetAnchorPage(sal_Int32	page);
 
     /**
-     * @descr:  if it's page anchor,set the page number.
+     * @descr	Set frame name.
      */
-    void    SetAnchorPage(sal_Int32 page);
+    void	SetName(rtl::OUString name);
 
     /**
-     * @descr   Set frame name.
+     * @descr	Set z-index of the frame.
      */
-    void    SetName(rtl::OUString name);
+    void	SetZIndex(sal_uInt32 zIndex);
+    /**
+     * @descr	Set frame position X.
+     */
+    void	SetX(double x);
 
     /**
-     * @descr   Set z-index of the frame.
+     * @descr	Set frame position Y.
      */
-    void    SetZIndex(sal_uInt32 zIndex);
-    /**
-     * @descr   Set frame position X.
-     */
-    void    SetX(double x);
+    void	SetY(double y);
 
     /**
-     * @descr   Set frame position Y.
+     * @descr	Set frame wieth.
      */
-    void    SetY(double y);
+    void	SetWidth(double width);
 
     /**
-     * @descr   Set frame wieth.
+     * @descr	Set frame height. Be careful SetHeight and SetMinHeight will override each other.
      */
-    void    SetWidth(double width);
+    void	SetHeight(double height);
 
     /**
-     * @descr   Set frame height. Be careful SetHeight and SetMinHeight will override each other.
+     * @descr	Set frame min-height. Be careful SetHeight and SetMinHeight will override each other.
      */
-    void    SetHeight(double height);
+    void	SetMinHeight(double minHeight);
 
     /**
-     * @descr   Set frame min-height. Be careful SetHeight and SetMinHeight will override each other.
+     * @descr	Set frame max-height.
      */
-    void    SetMinHeight(double minHeight);
+    void	SetMaxHeight(double minHeight);
 
     /**
-     * @descr   Set frame max-height.
+     * @descr	Set frame position.
      */
-    void    SetMaxHeight(double minHeight);
+    void	SetPosition(double x, double y, double width, double height);
 
     /**
-     * @descr   Set frame position.
+     * @descr	Set frame position.
      */
-    void    SetPosition(double x, double y, double width, double height);
+    void	SetPosition(const XFRect& rect);
 
     /**
-     * @descr   Set frame position.
+     * @descr:	Link the text content of the two frame.
      */
-    void    SetPosition(const XFRect& rect);
+    void	SetNextLink(rtl::OUString next);
 
     /**
-     * @descr:  Link the text content of the two frame.
+     * @descr	Get the frame type. image, drawing or text-box.
      */
-    void    SetNextLink(rtl::OUString next);
+    virtual enumXFFrameType	GetFrameType();
 
     /**
-     * @descr   Get the frame type. image, drawing or text-box.
+     * @descr	Get content type, enumXFContentFrame.
      */
-    virtual enumXFFrameType GetFrameType();
+    virtual enumXFContent	GetContentType();
 
     /**
-     * @descr   Get content type, enumXFContentFrame.
+     * @descr	serialize.
      */
-    virtual enumXFContent   GetContentType();
-
-    /**
-     * @descr   serialize.
-     */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    void    StartFrame(IXFStream *pStrm);
+    void	StartFrame(IXFStream *pStrm);
 
-    void    EndFrame(IXFStream *pStrm);
+    void	EndFrame(IXFStream *pStrm);
 
-    void    AdjustZIndex();
+    void	AdjustZIndex();
 
 protected:
-    enumXFAnchor    m_eAnchor;
-    sal_Int32       m_nAnchorPage;
-    rtl::OUString   m_strName;
-    sal_uInt32      m_nZIndex;
-    XFRect          m_aRect;
-    double          m_fMinHeight;
-    double          m_fMaxHeight;
-    rtl::OUString   m_strNextLink;
-    enumXFFrameType m_eType;
-    sal_uInt32      m_nFlag;
-    sal_Bool            m_isTextBox;
+    enumXFAnchor	m_eAnchor;
+    sal_Int32		m_nAnchorPage;
+    rtl::OUString	m_strName;
+    sal_uInt32		m_nZIndex;
+    XFRect			m_aRect;
+    double			m_fMinHeight;
+    double			m_fMaxHeight;
+    rtl::OUString	m_strNextLink;
+    enumXFFrameType	m_eType;
+    sal_uInt32		m_nFlag;
+    sal_Bool			m_isTextBox;
 };
 
-inline void XFFrame::SetAnchorType(enumXFAnchor anchor)
+inline void	XFFrame::SetAnchorType(enumXFAnchor anchor)
 {
     m_eAnchor = anchor;
 }
 
-inline void XFFrame::SetName(rtl::OUString name)
+inline void	XFFrame::SetName(rtl::OUString name)
 {
     m_strName = name;
 }
 
-inline void XFFrame::SetX(double x)
+inline void	XFFrame::SetX(double x)
 {
     m_aRect.SetX(x);
 }
 
-inline void XFFrame::SetY(double y)
+inline void	XFFrame::SetY(double y)
 {
     m_aRect.SetY(y);
 }
 
-inline void XFFrame::SetWidth(double width)
+inline void	XFFrame::SetWidth(double width)
 {
     m_aRect.SetWidth(width);
 }
 
-inline void XFFrame::SetHeight(double height)
+inline void	XFFrame::SetHeight(double height)
 {
     m_aRect.SetHeight(height);
     m_nFlag |= XFFRAME_FLAG_HEIGHT;
     m_nFlag &= XFFRAME_FLAG_HEIGHT;
 }
 
-inline void XFFrame::SetMinHeight(double minHeight)
+inline void	XFFrame::SetMinHeight(double minHeight)
 {
     m_fMinHeight = minHeight;
     m_nFlag |= XFFRAME_FLAG_MINHEIGHT;
     m_nFlag &= XFFRAME_FLAG_MINHEIGHT;
 }
 
-inline void XFFrame::SetMaxHeight(double maxHeight)
+inline void	XFFrame::SetMaxHeight(double maxHeight)
 {
     m_fMaxHeight = maxHeight;
     m_nFlag |= XFFRAME_FLAG_MAXHEIGHT;
     m_nFlag &= XFFRAME_FLAG_MAXHEIGHT;
 }
 
-inline void XFFrame::SetPosition(double x, double y, double width, double height)
+inline void	XFFrame::SetPosition(double x, double y, double width, double height)
 {
     m_aRect.SetStartPoint(XFPoint(x,y));
     m_aRect.SetSize(width,height);
     m_nFlag |= XFFRAME_FLAG_HEIGHT;
 }
 
-inline void XFFrame::SetPosition(const XFRect& rect)
+inline void	XFFrame::SetPosition(const XFRect& rect)
 {
     m_aRect = rect;
 }

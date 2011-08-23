@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 
 #include <cuires.hrc>
 #include "passwdomdlg.hrc"
@@ -47,7 +47,7 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
         Size = MAP_APPFONT( 165, 8 );
         Text [ en-US ] = "File encryption password";
     };
-
+  
     FixedText FT_PASSWD_TO_OPEN
     {
         Pos = MAP_APPFONT( 6, 17 );
@@ -81,7 +81,13 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
         Border = TRUE ;
         PassWord = TRUE ;
     };
-
+/*
+    FixedImage FI_PASSWD_TO_OPEN_MATCH
+    {
+        Pos = MAP_APPFONT ( 150, 42 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+    };
+*/
     FixedText FT_PASSWD_NOTE
     {
         Pos = MAP_APPFONT( 6, 80 );
@@ -97,7 +103,7 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
         Pos = MAP_APPFONT( 0, 117 );
         Size = MAP_APPFONT( 171, 8 );
     };
-
+  
     MoreButton BTN_MORE_FEWER_OPTIONS
     {
         HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_MORE;
@@ -170,6 +176,13 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
         Border = TRUE ;
         PassWord = TRUE ;
     };
+/*
+    FixedImage FI_PASSWD_TO_MODIFY_MATCH
+    {
+        Pos = MAP_APPFONT ( 150, 224 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+    };
+*/
 
     String STR_PASSWD_MUST_BE_CONFIRMED
     {
@@ -180,7 +193,7 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     {
         Text [ en-US ] = "More ~Options" ;
     };
-
+    
     String STR_FEWER_OPTIONS
     {
         Text [ en-US ] = "Fewer ~Options" ;
@@ -200,4 +213,16 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     {
         Text [ en-US ] = "Please enter a password to open or to modify, or check the open read-only option to continue." ;
     };
+/*    
+    Image IMG_PASSWD_MATCH
+    {
+        ImageBitmap = Bitmap { File = "apply.png"; };
+    };
+    
+    Image IMG_PASSWD_MATCH_HC
+    {
+        ImageBitmap = Bitmap { File = "apply_h.png"; };
+    };
+*/
 };
+

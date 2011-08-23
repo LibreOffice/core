@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,14 @@ namespace com { namespace sun { namespace star {
     namespace text { class XTextContent; }
 } } }
 
-struct SwPosition;  // fwd Decl. wg. UI
+struct SwPosition;	// fwd Decl. wg. UI
 class SwDoc;
 
 namespace sw { namespace mark
 {
     class MarkBase
         : virtual public IMark
+        , private ::boost::noncopyable
     {
         public:
             //getters
@@ -105,6 +106,9 @@ namespace sw { namespace mark
 
             virtual ~MarkBase();
 
+            // SwClient
+            virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+
             const ::com::sun::star::uno::WeakReference<
                 ::com::sun::star::text::XTextContent> & GetXBookmark() const
                     { return m_wXBookmark; }
@@ -113,9 +117,6 @@ namespace sw { namespace mark
                     { m_wXBookmark = xBkmk; }
 
         protected:
-            // SwClient
-            virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
-
             MarkBase(const SwPaM& rPaM,
                 const ::rtl::OUString& rName);
             ::boost::scoped_ptr<SwPosition> m_pPos1;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,11 +48,11 @@ class SvXMLImportItemMapper
 {
 protected:
     SvXMLItemMapEntriesRef mrMapEntries;
-    sal_uInt16 nUnknownWhich;
+    USHORT nUnknownWhich;
 
 public:
     SvXMLImportItemMapper( SvXMLItemMapEntriesRef rMapEntries ,
-                           sal_uInt16 nUnknWhich=USHRT_MAX );
+                           USHORT nUnknWhich=USHRT_MAX );
     virtual ~SvXMLImportItemMapper();
 
     /** fills the given itemset with the attributes in the given list */
@@ -63,7 +63,7 @@ public:
 
     /** this method is called for every item that has the
         MID_SW_FLAG_SPECIAL_ITEM_IMPORT flag set */
-    virtual sal_Bool handleSpecialItem( const SvXMLItemMapEntry& rEntry,
+    virtual BOOL handleSpecialItem( const SvXMLItemMapEntry& rEntry,
                                     SfxPoolItem& rItem,
                                     SfxItemSet& rSet,
                                     const ::rtl::OUString& rValue,
@@ -72,7 +72,7 @@ public:
 
     /** this method is called for every item that has the
         MID_SW_FLAG_NO_ITEM_IMPORT flag set */
-    virtual sal_Bool handleNoItem( const SvXMLItemMapEntry& rEntry,
+    virtual BOOL handleNoItem( const SvXMLItemMapEntry& rEntry,
                                SfxItemSet& rSet,
                                const ::rtl::OUString& rValue,
                                const SvXMLUnitConverter& rUnitConverter,
@@ -108,6 +108,6 @@ SvXMLImportItemMapper::getMapEntries() const
 }
 
 
-#endif  //  _XMLIMPIT_HXX
+#endif	//  _XMLIMPIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

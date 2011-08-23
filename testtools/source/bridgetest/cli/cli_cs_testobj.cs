@@ -239,22 +239,7 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         return arg;
     }
 
-    public TwoFloats echoTwoFloats(/*[in]*/TwoFloats arg)
-    {
-        return arg;
-    }
-
-    public FourFloats echoFourFloats(/*[in]*/FourFloats arg)
-    {
-        return arg;
-    }
-
-    public MixedFloatAndInteger echoMixedFloatAndInteger(/*[in]*/MixedFloatAndInteger arg)
-    {
-        return arg;
-    }
-
-    public ThreeByteStruct echoThreeByteStruct(/*[in]*/ThreeByteStruct arg)
+    public AllFloats echoAllFloats(/*[in]*/AllFloats arg)
     {
         return arg;
     }

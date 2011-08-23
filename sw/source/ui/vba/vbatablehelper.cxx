@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile:
+ * $Revision:
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -181,12 +184,17 @@ SwTableBox* SwVbaTableHelper::GetTabBox( sal_Int32 nCol, sal_Int32 nRow ) throw 
     return pStart;
 }
 
-void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, sal_Bool /*bCurRowOnly*/ )
+void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, BOOL /*bCurRowOnly*/ )
 {
     rCols.SetLeftMin ( 0 );
     rCols.SetLeft    ( 0 );
     rCols.SetRight   ( UNO_TABLE_COLUMN_SUM );
     rCols.SetRightMax( UNO_TABLE_COLUMN_SUM );
+
+    //if( !pDoc )
+   // {
+     //   pDoc = word::getDocShell( getCurrentDocument() )->GetDoc();
+   // }
     pTable->GetTabCols( rCols, pStart, sal_False, sal_False );
 }
 
@@ -205,7 +213,7 @@ sal_Int32 SwVbaTableHelper::GetRightSeparator( SwTabCols& rCols, sal_Int32 nNum)
     sal_Int32 i = 0;
     while( nNum >= 0 )
     {
-        if( !rCols.IsHidden( static_cast< sal_uInt16 >(i)) )
+        if( !rCols.IsHidden( static_cast< USHORT >(i)) )
             nNum--;
         i++;
     }
@@ -240,10 +248,10 @@ sal_Int32 SwVbaTableHelper::GetColWidth( SwTabCols& rCols, sal_Int32 nNum ) thro
         else
         {
             SwTwips nRValid = nNum < GetColCount( rCols ) ?
-                            rCols[(sal_uInt16)GetRightSeparator( rCols, nNum)]:
+                            rCols[(USHORT)GetRightSeparator( rCols, nNum)]:
                                     rCols.GetRight();
             SwTwips nLValid = nNum ?
-                            rCols[(sal_uInt16)GetRightSeparator( rCols, nNum - 1)]:
+                            rCols[(USHORT)GetRightSeparator( rCols, nNum - 1)]:
                                     rCols.GetLeft();
             nWidth = nRValid - nLValid;
         }
@@ -264,31 +272,37 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
     SwTabCols aOldCols;
     InitTabCols( aOldCols, pStart, bCurRowOnly );
 
+    //BOOL bCurRowOnly = FALSE;
+    SwTwips nWidth = 0;
+
     SwTabCols aCols( aOldCols );
     if ( aCols.Count() > 0 )
     {
-        SwTwips nWidth = GetColWidth( aCols, nCol);
+    //	if(aCols.Count() != GetColCount( aCols ))
+    //		bCurRowOnly = TRUE;
+        nWidth = GetColWidth( aCols, nCol);
 
         int nDiff = (int)(nNewWidth - nWidth);
         if( !nCol )
-            aCols[ static_cast< sal_uInt16 >(GetRightSeparator(aCols, 0)) ] += nDiff;
+            aCols[ static_cast< USHORT >(GetRightSeparator(aCols, 0)) ] += nDiff;
         else if( nCol < GetColCount( aCols )  )
         {
             if(nDiff < GetColWidth( aCols, nCol + 1) - MINLAY)
-                aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol)) ] += nDiff;
+                aCols[ static_cast< USHORT >(GetRightSeparator( aCols, nCol)) ] += nDiff;
             else
             {
                 int nDiffLeft = nDiff - (int)GetColWidth( aCols, nCol + 1) + (int)MINLAY;
-                aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol)) ] += (nDiff - nDiffLeft);
-                aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol - 1)) ] -= nDiffLeft;
+                aCols[ static_cast< USHORT >(GetRightSeparator( aCols, nCol)) ] += (nDiff - nDiffLeft);
+                aCols[ static_cast< USHORT >(GetRightSeparator( aCols, nCol - 1)) ] -= nDiffLeft;
             }
         }
         else
-            aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol-1)) ] -= nDiff;
+            aCols[ static_cast< USHORT >(GetRightSeparator( aCols, nCol-1)) ] -= nDiff;
     }
     else
         aCols.SetRight( Min( (long)nNewWidth, aCols.GetRightMax()) );
 
+    //pDoc->SetTabCols(*pTable, aCols, aOldCols, pStartBox, bCurRowOnly );
     pTable->SetTabCols(aCols, aOldCols, pStart, bCurRowOnly );
 }
 

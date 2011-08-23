@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,7 @@
 #include "hintids.hxx"  // for following include
 #include <editeng/brshitem.hxx> // for SvxGraphicsPosition
 
-namespace editeng { class SvxBorderLine; }
-
+class SvxBorderLine;
 struct SvXMLEnumMapEntry;
 class SvXMLUnitConverter;
 class Color;
@@ -63,20 +62,20 @@ sal_Bool lcl_frmitems_parseXMLBorder( const ::rtl::OUString& rValue,
                                       sal_uInt16& rNamedWidth,
                                       sal_Bool& rHasColor, Color& rColor );
 
-void lcl_frmitems_setXMLBorderWidth( editeng::SvxBorderLine& rLine,
+void lcl_frmitems_setXMLBorderWidth( SvxBorderLine& rLine,
                                      sal_uInt16 nOutWidth, sal_uInt16 nInWidth,
                                      sal_uInt16 nDistance );
 
-void lcl_frmitems_setXMLBorderWidth( editeng::SvxBorderLine& rLine,
+void lcl_frmitems_setXMLBorderWidth( SvxBorderLine& rLine,
                                      sal_uInt16 nWidth, sal_Bool bDouble );
 
-sal_Bool lcl_frmitems_setXMLBorder( editeng::SvxBorderLine*& rpLine,
+sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                                     sal_Bool bHasStyle, sal_uInt16 nStyle,
                                     sal_Bool bHasWidth, sal_uInt16 nWidth,
                                     sal_uInt16 nNamedWidth,
                                     sal_Bool bHasColor, const Color& rColor );
 
-void lcl_frmitems_setXMLBorder( editeng::SvxBorderLine*& rpLine,
+void lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                                 sal_uInt16 nWidth, sal_uInt16 nOutWidth,
                                 sal_uInt16 nInWidth, sal_uInt16 nDistance );
 

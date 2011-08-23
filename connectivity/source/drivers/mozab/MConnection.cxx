@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ const sal_Char* getSdbcScheme( SdbcScheme _eScheme )
 // -----------------------------------------------------------------------------
 ::rtl::OUString OConnection::getDriverImplementationName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MOZAB_DRIVER_IMPL_NAME));
+    return rtl::OUString::createFromAscii(MOZAB_DRIVER_IMPL_NAME);
 }
 
 // -----------------------------------------------------------------------------
@@ -120,7 +120,7 @@ const sal_Char* getSchemeURI( MozillaScheme _eScheme )
 
 // -----------------------------------------------------------------------------
 
-OConnection::OConnection(MozabDriver*   _pDriver)
+OConnection::OConnection(MozabDriver*	_pDriver)
     :OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
     ,m_pDriver(_pDriver)
     ,m_pImplData( new ConnectionImplData )
@@ -152,14 +152,14 @@ void SAL_CALL OConnection::release() throw()
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     OSL_TRACE("IN OConnection::construct()\n" );
-    //  open file
+    //	open file
     setURL(url);
     //
     // Skip 'sdbc:mozab: part of URL
     //
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    OSL_ENSURE( url.copy( 0, nLen ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdbc:address" ) ), "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
+    OSL_ENSURE( url.copy( 0, nLen ).equalsAscii( "sdbc:address" ), "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
 
     ::rtl::OUString aAddrbookURI(url.copy(nLen+1));
     // Get Scheme
@@ -378,7 +378,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     OPreparedStatement* pPrepared = new OPreparedStatement(this,_sSql);
     Reference< XPreparedStatement > xReturn = pPrepared;
     pPrepared->lateInit();
-
+    
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
@@ -573,11 +573,11 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
                 "$1$", sParameter
              ) );
             ::dbtools::throwGenericSQLException( sError, _rxContext );
-            OSL_FAIL( "OConnection::throwSQLException: unreachable (1)!" );
+            OSL_ENSURE( false, "OConnection::throwSQLException: unreachable (1)!" );
         }
 
         throwGenericSQLException( _rError.getResId(), _rxContext );
-        OSL_FAIL( "OConnection::throwSQLException: unreachable (2)!" );
+        OSL_ENSURE( false, "OConnection::throwSQLException: unreachable (2)!" );
     }
 
     if ( _rError.getErrorCondition() != 0 )
@@ -588,7 +588,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );
         else
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext);
-        OSL_FAIL( "OConnection::throwSQLException: unreachable (3)!" );
+        OSL_ENSURE( false, "OConnection::throwSQLException: unreachable (3)!" );
     }
 
     throwGenericSQLException( STR_UNSPECIFIED_ERROR, _rxContext );

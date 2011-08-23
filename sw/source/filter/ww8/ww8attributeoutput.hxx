@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ public:
 
     /// Output text.
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet );
-
+    
     /// Output text (without markup).
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
 
@@ -91,7 +91,7 @@ public:
     /// Output redlining.
     virtual void Redline( const SwRedlineData* pRedline );
 
-    virtual void FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rSwFmtDrop, sal_uInt16 nStyle, ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo, ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner );
+    virtual void FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rSwFmtDrop, USHORT nStyle, ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo, ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner );
 
     /// Output FKP (Formatted disK Page) - necessary for binary formats only.
     /// FIXME having it in AttributeOutputBase is probably a hack, it
@@ -99,48 +99,61 @@ public:
     virtual void OutputFKP();
 
     /// Output style.
-    virtual void ParagraphStyle( sal_uInt16 nStyle );
+    virtual void ParagraphStyle( USHORT nStyle );
 
     virtual void TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
+
     virtual void TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
+
     virtual void TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
+
     virtual void TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
+
     virtual void TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
+
     virtual void TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
+
     virtual void TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
+
     virtual void TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
+
     virtual void TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
+
     virtual void TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeInfo );
+
     virtual void TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner );
+
     virtual void TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
+
     virtual void TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
+
     virtual void TableRowEnd( sal_uInt32 nDepth = 1 );
 
     /// Start of the styles table.
     virtual void StartStyles();
 
     /// End of the styles table.
-    virtual void EndStyles( sal_uInt16 nNumberOfStyles );
+    virtual void EndStyles( USHORT nNumberOfStyles );
 
     /// Write default style.
-    virtual void DefaultStyle( sal_uInt16 nStyle );
+    virtual void DefaultStyle( USHORT nStyle );
 
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
-            sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwIdi, sal_uInt16 nId,
+            USHORT nBase, USHORT nNext, USHORT nWwIdi, USHORT nId,
             bool bAutoUpdate );
 
     /// End of a style in the styles table.
     virtual void EndStyle();
 
     /// Start of (paragraph or run) properties of a style.
-    virtual void StartStyleProperties( bool bParProp, sal_uInt16 nStyle );
+    virtual void StartStyleProperties( bool bParProp, USHORT nStyle );
 
     /// End of (paragraph or run) properties of a style.
     virtual void EndStyleProperties( bool bParProp );
 
     /// Numbering rule and Id.
-    virtual void OutlineNumbering( sal_uInt8 nLvl, const SwNumFmt &rNFmt, const SwFmt &rFmt );
+    virtual void OutlineNumbering( BYTE nLvl, const SwNumFmt &rNFmt, const SwFmt &rFmt );
 
     /// Page break
     /// As a paragraph property - the paragraph should be on the next page.
@@ -148,7 +161,7 @@ public:
 
     /// Write a section break
     /// msword::ColumnBreak or msword::PageBreak
-    virtual void SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = NULL );
+    virtual void SectionBreak( BYTE nC, const WW8_SepInfo* pSectionInfo = NULL );
 
     /// Start of the section properties.
     virtual void StartSection();
@@ -162,7 +175,7 @@ public:
     virtual void SectionFormProtection( bool bProtected );
 
     /// Numbering of the lines in the document.
-    virtual void SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo );
+    virtual void SectionLineNumbering( ULONG nRestartNo, const SwLineNumberInfo& rLnNumInfo );
 
     /// Has different headers/footers for the title page.
     virtual void SectionTitlePage();
@@ -176,24 +189,24 @@ public:
     /// The style of the page numbers.
     ///
     /// nPageRestartNumberr being 0 means no restart.
-    virtual void SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 nPageRestartNumber );
+    virtual void SectionPageNumbering( USHORT nNumType, USHORT nPageRestartNumber );
 
     /// The type of breaking.
-    virtual void SectionType( sal_uInt8 nBreakCode );
+    virtual void SectionType( BYTE nBreakCode );
 
     /// Special header/footer flags, needed for old versions only.
-    virtual void SectionWW6HeaderFooterFlags( sal_uInt8 nHeadFootFlags );
+    virtual void SectionWW6HeaderFooterFlags( BYTE nHeadFootFlags );
 
     /// Definition of a numbering instance.
-    virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule );
+    virtual void NumberingDefinition( USHORT nId, const SwNumRule &rRule );
 
     /// All the numbering level information.
-    virtual void NumberingLevel( sal_uInt8 nLevel,
-        sal_uInt16 nStart,
-        sal_uInt16 nNumberingType,
+    virtual void NumberingLevel( BYTE nLevel,
+        USHORT nStart,
+        USHORT nNumberingType,
         SvxAdjust eAdjust,
-        const sal_uInt8 *pNumLvlPos,
-        sal_uInt8 nFollow,
+        const BYTE *pNumLvlPos,
+        BYTE nFollow,
         const wwFont *pFont,
         const SfxItemSet *pOutSet,
         sal_Int16 nIndentAt,
@@ -371,7 +384,7 @@ protected:
     virtual void FormatBox( const SvxBoxItem& );
 
     /// Sfx item RES_COL
-    virtual void FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol & rCol, bool bEven, SwTwips nPageSize );
+    virtual void FormatColumns_Impl( USHORT nCols, const SwFmtCol & rCol, bool bEven, SwTwips nPageSize );
 
     /// Sfx item RES_KEEP
     virtual void FormatKeep( const SvxFmtKeepItem& );
@@ -384,13 +397,13 @@ protected:
 
     /// Sfx item RES_FRAMEDIR
     virtual void FormatFrameDirection( const SvxFrameDirectionItem& );
-
+    
     /// Write the expanded field
     virtual void WriteExpand( const SwField* pFld );
-
+    
     virtual void RefField ( const SwField& rFld, const String& rRef );
     virtual void HiddenField( const SwField& rFld );
-    virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd );
+    virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd ); 
     virtual void PostitField( const SwField* pFld );
     virtual bool DropdownField( const SwField* pFld );
 
@@ -403,39 +416,38 @@ protected:
     ///
     /// We have to remember these positions between the StartStyle() and
     /// EndStyle().
-    sal_uInt16 nPOPosStdLen1, nPOPosStdLen2;
+    USHORT nPOPosStdLen1, nPOPosStdLen2;
 
     /// For output of styles.
     ///
     /// We have to remember this position between StartStyleProperties() and
     /// EndStyleProperties().
-    sal_uInt16 m_nStyleStartSize, m_nStyleLenPos;
+    USHORT m_nStyleStartSize, m_nStyleLenPos;
 
     /// For output of styles.
     ///
     /// Used between StartStyles() and EndStyles().
-    sal_uLong m_nStyAnzPos;
+    ULONG m_nStyAnzPos;
 
     /// For output of run properties.
     ///
     /// We have to remember the number of field results, and do not export end
     /// of the field results if we were forced to split text.
-    sal_uInt16 m_nFieldResults;
+    USHORT m_nFieldResults;
 
 public:
     WW8AttributeOutput( WW8Export &rWW8Export ) : AttributeOutputBase(), m_rWW8Export( rWW8Export ) {}
     virtual ~WW8AttributeOutput() {}
 
     /// Return the right export class.
-    virtual WW8Export& GetExport() { return m_rWW8Export; }
-    const WW8Export& GetExport() const { return m_rWW8Export; }
+    virtual MSWordExportBase& GetExport() { return m_rWW8Export; }
 
 protected:
     /// Output the bold etc. attributes
-    void OutputWW8Attribute( sal_uInt8 nId, bool bVal );
-
+    void OutputWW8Attribute( BYTE nId, bool bVal );
+    
     /// Output the bold etc. attributes, the Complex Text Layout version
-    void OutputWW8AttributeCTL( sal_uInt8 nId, bool bVal );
+    void OutputWW8AttributeCTL( BYTE nId, bool bVal );
 
 };
 

@@ -1,8 +1,8 @@
 /*
  * ************************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ class PropertySetHelper
         {
             m_xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, _aObj);
         }
-
+    
     /**
        get a property and don't convert it
        @param _sName the string name of the property
@@ -100,24 +100,24 @@ class PropertySetHelper
 public class OpenOfficeDatabaseReportExtractor extends Assurance
 {
     private ParameterHelper m_aParameterHelper;
-
+    
     public OpenOfficeDatabaseReportExtractor(ParameterHelper _aParameter)
     {
         m_aParameterHelper = _aParameter;
     }
-
+    
     private XDesktop m_xDesktop = null;
     private XDesktop getXDesktop()
         {
 
-            if (m_xDesktop == null)
+            if (m_xDesktop == null) 
             {
-                try
+                try 
                 {
                     XInterface xInterface = (XInterface) getMultiServiceFactory().createInstance( "com.sun.star.frame.Desktop" );
                     m_xDesktop =  UnoRuntime.queryInterface(XDesktop.class, xInterface);
                 }
-                catch (com.sun.star.uno.Exception e)
+                catch (com.sun.star.uno.Exception e) 
                 {
                     GlobalLogWriter.println("ERROR: uno.Exception caught");
                     GlobalLogWriter.println("Message: " + e.getMessage());
@@ -125,7 +125,7 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
             }
             return m_xDesktop;
         }
-
+            
     private void showElements(XNameAccess _xNameAccess)
         {
             if (_xNameAccess != null)
@@ -141,8 +141,8 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
                 System.out.println("Warning: Given object is null.");
             }
         }
-
-
+        
+        
     private OfficeProvider m_aProvider = null;
     private XMultiServiceFactory m_xMultiServiceFactory = null;
     private XMultiServiceFactory getMultiServiceFactory()
@@ -175,7 +175,7 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
 //            }
 //            TimeHelper.waitInSeconds(2, "Give close Office some time.");
 //        }
-
+        
     private String m_sMailAddress = null;
     private String m_sParentDistinct = null;
 
@@ -192,10 +192,10 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
 
     /**
      * This is the main test Function of current ReportDesignerTest
-     * @param _sDocument
+     * @param _sDocument 
      * @return
      */
-
+       
     public ArrayList<String> load(String _sDocument /*, int _nType*/)
         {
             // We need to copy the database file to a place where we have write access, NEVER use the docpool for this
@@ -206,13 +206,13 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
             String sFilename = FileHelper.getBasename(_sDocument);
             String sDestinationFile = FileHelper.appendPath(sOutputPath, sFilename);
             FileHelper.copy(_sDocument, sDestinationFile);
-
+            
             // now the fix reference of the AbsoluteReferenceFile should exist.
             assure("There exists no file: " + sDestinationFile, FileHelper.exists(sDestinationFile));
 
             String sFileURL = URLHelper.getFileURLFromSystemPath(sDestinationFile);
             GlobalLogWriter.println("File URL: " + sFileURL);
-
+            
             ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
 
             // FYI: it is not allowed to open the document read only
@@ -222,46 +222,46 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
 //            aPropertyList.add(aReadOnly);
 
             XComponent xDocComponent = loadComponent(sFileURL, getXDesktop(), aPropertyList);
-
+            
             GlobalLogWriter.println("Load done");
-//  context = createUnoService("com.sun.star.sdb.DatabaseContext")
+// 	context = createUnoService("com.sun.star.sdb.DatabaseContext")
 //     oDataBase = context.getByName("hh")
 //     oDBDoc = oDataBase.DatabaseDocument
-//
-//  dim args(1) as new com.sun.star.beans.PropertyValue
-//  args(0).Name = "ActiveConnection"
-//  args(0).Value = oDBDoc.getCurrentController().getPropertyValue("ActiveConnection")
-//  reportContainer = oDBDoc.getReportDocuments()
+// 
+// 	dim args(1) as new com.sun.star.beans.PropertyValue
+// 	args(0).Name = "ActiveConnection"
+// 	args(0).Value = oDBDoc.getCurrentController().getPropertyValue("ActiveConnection")
+// 	reportContainer = oDBDoc.getReportDocuments()
 //     report = reportContainer.loadComponentFromURL("Report40","",0,args)
-
+                    
             ArrayList<String> aList = null;
             try
             {
 //                XInterface x = (XInterface)getMultiServiceFactory().createInstance("com.sun.star.sdb.DatabaseContext");
 //                assure("can't create instance of com.sun.star.sdb.DatabaseContext", x != null);
 //                GlobalLogWriter.println("createInstance com.sun.star.sdb.DatabaseContext done");
-
+                
 //                XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, x);
 //                showElements(xNameAccess);
 //                Object aObj = xNameAccess.getByName(sFileURL);
 //                    GlobalLogWriter.println("1");
-
+                
 //                PropertySetHelper aHelper = new PropertySetHelper(aObj);
 //                XDocumentDataSource xDataSource = (XDocumentDataSource)UnoRuntime.queryInterface(XDocumentDataSource.class, aObj);
 //                Object aDatabaseDocument = aHelper.getPropertyValueAsObject("DatabaseDocument");
 //                XOfficeDatabaseDocument xOfficeDBDoc = xDataSource.getDatabaseDocument();
-
+                
                 XOfficeDatabaseDocument xOfficeDBDoc = UnoRuntime.queryInterface(XOfficeDatabaseDocument.class, xDocComponent);
-
+                
 //                XOfficeDatabaseDocument xOfficeDBDoc = (XOfficeDatabaseDocument)UnoRuntime.queryInterface(XOfficeDatabaseDocument.class, xDataSource);
                 assure("can't access DatabaseDocument", xOfficeDBDoc != null);
 //                GlobalLogWriter.println("2");
-
+                
                 XModel xDBSource = UnoRuntime.queryInterface(XModel.class, xOfficeDBDoc);
                 Object aController = xDBSource.getCurrentController();
                 assure("Controller of xOfficeDatabaseDocument is empty!", aController != null);
 //                GlobalLogWriter.println("3");
-
+                
                 XDatabaseDocumentUI aDBDocUI = UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
                 aDBDocUI.connect();
                 boolean isConnect = aDBDocUI.isConnected();
@@ -273,28 +273,28 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
                 {
                     GlobalLogWriter.println("Connection is false");
                 }
-
-                // aHelper = new PropertySetHelper(aController);
-
+                
+                // aHelper = new PropertySetHelper(aController);              
+                
                 XReportDocumentsSupplier xSupplier = UnoRuntime.queryInterface(XReportDocumentsSupplier.class, xOfficeDBDoc);
                 XNameAccess xNameAccess = xSupplier.getReportDocuments();
                 assure("xOfficeDatabaseDocument returns no Report Document", xNameAccess != null);
 //                     GlobalLogWriter.println("5");
-
+                
                 showElements(xNameAccess);
-
+                
                 // Object aActiveConnectionObj = aHelper.getPropertyValueAsObject("ActiveConnection");
-                Object aActiveConnectionObj = aDBDocUI.getActiveConnection();
+                Object aActiveConnectionObj = aDBDocUI.getActiveConnection(); 
                 assure("ActiveConnection is empty", aActiveConnectionObj != null);
 //                     GlobalLogWriter.println("5");
 
                 ArrayList<PropertyValue> aPropertyList2 = new ArrayList<PropertyValue>();
-
+                
                 PropertyValue aActiveConnection = new PropertyValue();
                 aActiveConnection.Name = "ActiveConnection";
                 aActiveConnection.Value = aActiveConnectionObj;
                 aPropertyList2.add(aActiveConnection);
-
+                
                 aList = loadAndStoreReports(xNameAccess, aPropertyList2 /*, _nType*/ );
                 createDBEntry(/*_nType*/);
             }
@@ -303,12 +303,12 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
                 GlobalLogWriter.println("ERROR: Exception caught");
                 GlobalLogWriter.println("Message: " + e.getMessage());
             }
-
+            
             // String mTestDocumentPath = (String) param.get("TestDocumentPath");
             // System.out.println("mTestDocumentPath: '" + mTestDocumentPath + "'");
             // // workaround for issue using deprecated "DOCPTH" prop
             // System.setProperty("DOCPTH", mTestDocumentPath);
-
+            
             // Close the document
             // util.utils.shortWait(2000);
 
@@ -321,14 +321,14 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
             return "AutogenReportDesignTest";
             // return getFileFormat(_nType);
         }
-
+    
 // -----------------------------------------------------------------------------
     private void createDBEntry(/*int _nType*/)
         {
             // try to connect the database
             String sDBConnection = (String)m_aParameterHelper.getTestParameters().get( convwatch.PropertyName.DB_CONNECTION_STRING );
             if (sDBConnection != null && sDBConnection.length() > 0)
-            {
+            {                
                 GlobalLogWriter.println("DBConnection: " + sDBConnection);
 // TODO: DB
 //                DB.init(sDBConnection);
@@ -362,7 +362,7 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
                 // System.exit(1);
             }
         }
-
+    
     private ArrayList<String> loadAndStoreReports(XNameAccess _xNameAccess, ArrayList<PropertyValue> _aPropertyList /*, int _nType*/ )
         {
             ArrayList<String> aList = new ArrayList<String>();
@@ -373,20 +373,13 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
                 {
                     String sReportName = sElementNames[i];
                     XComponent xDoc = loadComponent(sReportName, _xNameAccess, _aPropertyList);
-                    if (xDoc != null)
-                    {
-                        // util.utils.shortWait(1000);
-                        // print? or store?
-                        String sDocumentPathName = storeComponent(sReportName, xDoc /*, _nType*/);
-                        aList.add(sDocumentPathName);
-    //                    util.utils.shortWait(1000);
-                        closeComponent(xDoc);
-    //                    util.utils.shortWait(1000);
-                    }
-                    else
-                    {
-                        System.out.println("Leave out maybe due to errors.");
-                    }
+//                     util.utils.shortWait(1000);
+                    // print? or store?
+                    String sDocumentPathName = storeComponent(sReportName, xDoc /*, _nType*/);
+                    aList.add(sDocumentPathName);
+//                    util.utils.shortWait(1000);
+                    closeComponent(xDoc);
+//                    util.utils.shortWait(1000);
                     // sBackPath contains the path where to find the extracted ODB Document
                 }
             }
@@ -413,7 +406,7 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
              }
              return sExtension;
          }
-
+    
     //         switch(_nType)
     //         {
     //         case WRITER:
@@ -443,7 +436,7 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
     //         }
     //         return sFileType;
     //     }
-
+    
     private String m_sOutputPath = null;
 
     private String getOutputPath(/*int _nType*/)
@@ -456,17 +449,17 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
                 // sOutputPath += "tmp_123";
                 sOutputPath = FileHelper.appendPath(sOutputPath, DateHelper.getDateTimeForFilename());
                 // sOutputPath += System.getProperty("file.separator");
-
+                
                 // sOutputPath += getFileFormat(_nType);
                 // sOutputPath += System.getProperty("file.separator");
-
+                
                 File aOutputFile = new File(sOutputPath); // create the directory of the given output path
                 aOutputFile.mkdirs();
                 m_sOutputPath = sOutputPath;
             }
             return m_sOutputPath;
         }
-
+    
     /*
       store given _xComponent under the given Name in DOC_COMPARATOR_INPUTPATH
      */
@@ -481,10 +474,10 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
 //            File aOutputFile = new File(sOutputPath); // create the directory of the given output path
 //            aOutputFile.mkdirs();
 
-
+            
             String sName = _sName + getFormatExtension(_xComponent /*_nType*/);
             sOutputPath = FileHelper.appendPath(sOutputPath, sName);
-
+            
             // we need the name and path
             String sBackPathName = sOutputPath;
 
@@ -520,7 +513,7 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
             }
             return sBackPathName;
         }
-
+    
     private XComponent loadComponent(String _sName, Object _xComponent, ArrayList _aPropertyList)
         {
             XComponent xDocComponent = null;
@@ -559,9 +552,9 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
             catch (com.sun.star.util.CloseVetoException e)
             {
                 GlobalLogWriter.println("ERROR: CloseVetoException caught");
-                GlobalLogWriter.println("CloseVetoException occurred Can't close document.");
+                GlobalLogWriter.println("CloseVetoException occured Can't close document.");
                 GlobalLogWriter.println("Message: " + e.getMessage());
             }
         }
-
+    
 }

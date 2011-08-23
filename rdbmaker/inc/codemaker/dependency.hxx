@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,38 +29,38 @@
 #ifndef _CODEMAKER_DEPENDENCY_HXX_
 #define _CODEMAKER_DEPENDENCY_HXX_
 
-#include    <boost/unordered_map.hpp>
-#include    <registry/registry.hxx>
-#include    <registry/reflread.hxx>
-#include    <codemaker/typemanager.hxx>
-#include    <codemaker/global.hxx>
+#include 	<hash_map>
+#include	<registry/registry.hxx>
+#include	<registry/reflread.hxx>
+#include	<codemaker/typemanager.hxx>
+#include	<codemaker/global.hxx>
 #include <osl/diagnose.h>
 
-#define TYPEUSE_NORMAL      0x0001
-#define TYPEUSE_SUPER       0x0002
-#define TYPEUSE_MEMBER      0x0004
-#define TYPEUSE_INPARAM     0x0008
-#define TYPEUSE_OUTPARAM    0x0010
-#define TYPEUSE_INOUTPARAM  0x0020
-#define TYPEUSE_RETURN      0x0040
-#define TYPEUSE_EXCEPTION   0x0080
-#define TYPEUSE_SCOPE       0x0100
+#define	TYPEUSE_NORMAL		0x0001
+#define	TYPEUSE_SUPER		0x0002
+#define	TYPEUSE_MEMBER		0x0004
+#define	TYPEUSE_INPARAM		0x0008
+#define	TYPEUSE_OUTPARAM 	0x0010
+#define	TYPEUSE_INOUTPARAM 	0x0020
+#define	TYPEUSE_RETURN		0x0040
+#define	TYPEUSE_EXCEPTION	0x0080
+#define	TYPEUSE_SCOPE       0x0100
 
 /**
  * Flag shows the state of the code generation. If the Flag is set
  * the code for this type is generated.
  */
-#define CODEGEN_DEFAULT     0x0001
+#define	CODEGEN_DEFAULT		0x0001
 
 struct TypeUsing
 {
     TypeUsing(const ::rtl::OString& type, sal_uInt16 use)
         : m_type(type)
-        , m_use(use)
+        , m_use(use) 
         {}
 
-    ::rtl::OString  m_type;
-    sal_uInt16      m_use;
+    ::rtl::OString 	m_type;
+    sal_uInt16		m_use;
 
     sal_Bool operator == (const TypeUsing & typeUsing) const
     {
@@ -77,24 +77,45 @@ struct LessTypeUsing
     }
 };
 
-typedef ::std::set< TypeUsing, LessTypeUsing > TypeUsingSet;
+typedef	::std::set< TypeUsing, LessTypeUsing > TypeUsingSet;
 
 
-typedef ::boost::unordered_map
-<
-    ::rtl::OString,
-    TypeUsingSet,
-    HashString,
+#if (defined( _MSC_VER ) && ( _MSC_VER < 1200 ))
+typedef	::std::__hash_map__
+<	
+    ::rtl::OString, 
+    TypeUsingSet, 
+    HashString, 
+    EqualString, 
+    NewAlloc
+> DependencyMap;
+
+typedef	::std::__hash_map__
+<	
+    ::rtl::OString, 
+    sal_uInt16, 
+    HashString, 
+    EqualString,
+    NewAlloc
+> GenerationMap;
+#else
+typedef	::std::hash_map
+<	
+    ::rtl::OString, 
+    TypeUsingSet, 
+    HashString, 
     EqualString
 > DependencyMap;
 
-typedef ::boost::unordered_map
-<
-    ::rtl::OString,
-    sal_uInt16,
-    HashString,
+typedef	::std::hash_map
+<	
+    ::rtl::OString, 
+    sal_uInt16, 
+    HashString, 
     EqualString
 > GenerationMap;
+
+#endif
 
 struct TypeDependencyImpl
 {
@@ -102,10 +123,10 @@ struct TypeDependencyImpl
         : m_refCount(0)
         {}
 
-    sal_Int32       m_refCount;
-    DependencyMap   m_dependencies;
-    GenerationMap   m_generatedTypes;
-};
+    sal_Int32		m_refCount;
+    DependencyMap	m_dependencies;
+    GenerationMap	m_generatedTypes;
+};	
 
 class TypeDependency
 {
@@ -127,12 +148,12 @@ public:
         return *this;
     }
 
-    sal_Bool        insert(const ::rtl::OString& type, const ::rtl::OString& depend, sal_uInt16);
-    TypeUsingSet    getDependencies(const ::rtl::OString& type);
-    sal_Bool        hasDependencies(const ::rtl::OString& type);
+    sal_Bool 		insert(const ::rtl::OString& type, const ::rtl::OString& depend, sal_uInt16);
+    TypeUsingSet	getDependencies(const ::rtl::OString& type);
+    sal_Bool		hasDependencies(const ::rtl::OString& type);
 
-    void        setGenerated(const ::rtl::OString& type, sal_uInt16 genFlag=CODEGEN_DEFAULT);
-    sal_Bool    isGenerated(const ::rtl::OString& type, sal_uInt16 genFlag=CODEGEN_DEFAULT);
+    void		setGenerated(const ::rtl::OString& type, sal_uInt16 genFlag=CODEGEN_DEFAULT);
+    sal_Bool	isGenerated(const ::rtl::OString& type, sal_uInt16 genFlag=CODEGEN_DEFAULT);
 
     sal_Int32 getSize() { return m_pImpl->m_generatedTypes.size(); }
 protected:
@@ -140,11 +161,11 @@ protected:
     void release();
 
 protected:
-    TypeDependencyImpl* m_pImpl;
+    TypeDependencyImpl*	m_pImpl;
 };
 
 sal_Bool checkTypeDependencies(TypeManager& typeMgr, TypeDependency& dependencies, const ::rtl::OString& type, sal_Bool bDepend = sal_False);
-
+    
 #endif // _CODEMAKER_DEPENDENCY_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ void SvTabListBox::SetTabs()
         */
 
         // alle anderen Tabs an Liste haengen
-        for( sal_uInt16 nCurTab = 1; nCurTab < nTabCount; nCurTab++ )
+        for( USHORT nCurTab = 1; nCurTab < nTabCount; nCurTab++ )
         {
             SvLBoxTab* pTab = pTabList+nCurTab;
             AddTab( pTab->GetPos(), pTab->nFlags );
@@ -87,10 +87,10 @@ void SvTabListBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
     XubString aToken;
 
     const xub_Unicode* pCurToken = aCurEntry.GetBuffer();
-    sal_uInt16 nCurTokenLen;
+    USHORT nCurTokenLen;
     const xub_Unicode* pNextToken = GetToken( pCurToken, nCurTokenLen );
-    sal_uInt16 nCount = nTabCount; nCount--;
-    for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
+    USHORT nCount = nTabCount; nCount--;
+    for( USHORT nToken = 0; nToken < nCount; nToken++ )
     {
         if( pCurToken && nCurTokenLen )
             // aToken.Assign( pCurToken, nCurTokenLen );
@@ -114,7 +114,7 @@ SvTabListBox::SvTabListBox( Window* pParent, WinBits nBits )
     pTabList = 0;
     nTabCount = 0;
     pViewParent = 0;
-    SetHighlightRange();    // ueber volle Breite selektieren
+    SetHighlightRange();	// ueber volle Breite selektieren
 }
 
 SvTabListBox::SvTabListBox( Window* pParent, const ResId& rResId )
@@ -144,7 +144,7 @@ void SvTabListBox::SetTabs( long* pTabs, MapUnit eMapUnit )
         return;
 
     delete [] pTabList;
-    sal_uInt16 nCount = (sal_uInt16)(*pTabs);
+    USHORT nCount = (USHORT)(*pTabs);
     pTabList = new SvLBoxTab[ nCount ];
     nTabCount = nCount;
 
@@ -152,7 +152,7 @@ void SvTabListBox::SetTabs( long* pTabs, MapUnit eMapUnit )
     MapMode aMMDest( MAP_PIXEL );
 
     pTabs++;
-    for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++, pTabs++ )
+    for( USHORT nIdx = 0; nIdx < nCount; nIdx++, pTabs++ )
     {
         Size aSize( *pTabs, 0 );
         aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
@@ -165,7 +165,7 @@ void SvTabListBox::SetTabs( long* pTabs, MapUnit eMapUnit )
         Invalidate();
 }
 
-void SvTabListBox::SetTab( sal_uInt16 nTab,long nValue,MapUnit eMapUnit )
+void SvTabListBox::SetTab( USHORT nTab,long nValue,MapUnit eMapUnit )
 {
     DBG_ASSERT(nTab<nTabCount,"Invalid Tab-Pos");
     if( nTab < nTabCount )
@@ -184,8 +184,8 @@ void SvTabListBox::SetTab( sal_uInt16 nTab,long nValue,MapUnit eMapUnit )
 }
 
 SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
-                                        sal_Bool /*bChildsOnDemand*/,
-                                        sal_uLong nPos, void* pUserData,
+                                        BOOL /*bChildsOnDemand*/,
+                                        ULONG nPos, void* pUserData,
                                         SvLBoxButtonKind )
 {
     return InsertEntryToColumn( rText, pParent, nPos, 0xffff, pUserData );
@@ -195,15 +195,15 @@ SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rText,
                                         const Image& rExpandedEntryBmp,
                                         const Image& rCollapsedEntryBmp,
                                         SvLBoxEntry* pParent,
-                                        sal_Bool /*bChildsOnDemand*/,
-                                        sal_uLong nPos, void* pUserData,
+                                        BOOL /*bChildsOnDemand*/,
+                                        ULONG nPos, void* pUserData,
                                         SvLBoxButtonKind )
 {
     return InsertEntryToColumn( rText, rExpandedEntryBmp, rCollapsedEntryBmp,
                                 pParent, nPos, 0xffff, pUserData );
 }
 
-SvLBoxEntry* SvTabListBox::InsertEntryToColumn(const XubString& rStr,SvLBoxEntry* pParent,sal_uLong nPos,sal_uInt16 nCol,
+SvLBoxEntry* SvTabListBox::InsertEntryToColumn(const XubString& rStr,SvLBoxEntry* pParent,ULONG nPos,USHORT nCol,
     void* pUser )
 {
     XubString aStr;
@@ -217,7 +217,7 @@ SvLBoxEntry* SvTabListBox::InsertEntryToColumn(const XubString& rStr,SvLBoxEntry
     }
     aStr += rStr;
     XubString aFirstStr( aStr );
-    sal_uInt16 nEnd = aFirstStr.Search( '\t' );
+    USHORT nEnd = aFirstStr.Search( '\t' );
     if( nEnd != STRING_NOTFOUND )
     {
         aFirstStr.Erase( nEnd );
@@ -226,12 +226,12 @@ SvLBoxEntry* SvTabListBox::InsertEntryToColumn(const XubString& rStr,SvLBoxEntry
     }
     else
         aCurEntry.Erase();
-    return SvTreeListBox::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUser );
+    return SvTreeListBox::InsertEntry( aFirstStr, pParent, FALSE, nPos, pUser );
 }
 
 SvLBoxEntry* SvTabListBox::InsertEntryToColumn( const XubString& rStr,
-    const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp,
-    SvLBoxEntry* pParent,sal_uLong nPos,sal_uInt16 nCol, void* pUser )
+    const Image& rExpandedEntryBmp,	const Image& rCollapsedEntryBmp,
+    SvLBoxEntry* pParent,ULONG nPos,USHORT nCol, void* pUser )
 {
     XubString aStr;
     if( nCol != 0xffff )
@@ -244,7 +244,7 @@ SvLBoxEntry* SvTabListBox::InsertEntryToColumn( const XubString& rStr,
     }
     aStr += rStr;
     XubString aFirstStr( aStr );
-    sal_uInt16 nEnd = aFirstStr.Search( '\t' );
+    USHORT nEnd = aFirstStr.Search( '\t' );
     if( nEnd != STRING_NOTFOUND )
     {
         aFirstStr.Erase( nEnd );
@@ -257,11 +257,11 @@ SvLBoxEntry* SvTabListBox::InsertEntryToColumn( const XubString& rStr,
     return SvTreeListBox::InsertEntry(
         aFirstStr,
         rExpandedEntryBmp, rCollapsedEntryBmp,
-        pParent, sal_False, nPos, pUser );
+        pParent, FALSE, nPos, pUser );
 }
 
-SvLBoxEntry* SvTabListBox::InsertEntryToColumn( const XubString& rStr, sal_uLong nPos,
-    sal_uInt16 nCol, void* pUser )
+SvLBoxEntry* SvTabListBox::InsertEntryToColumn( const XubString& rStr, ULONG nPos,
+    USHORT nCol, void* pUser )
 {
     return InsertEntryToColumn( rStr,0,nPos, nCol, pUser );
 }
@@ -271,14 +271,14 @@ String SvTabListBox::GetEntryText( SvLBoxEntry* pEntry ) const
     return GetEntryText( pEntry, 0xffff );
 }
 
-String SvTabListBox::GetEntryText( SvLBoxEntry* pEntry, sal_uInt16 nCol ) const
+String SvTabListBox::GetEntryText( SvLBoxEntry* pEntry, USHORT nCol ) const
 {
     DBG_ASSERT(pEntry,"GetEntryText:Invalid Entry");
     XubString aResult;
     if( pEntry )
     {
-        sal_uInt16 nCount = pEntry->ItemCount();
-        sal_uInt16 nCur = 0;
+        USHORT nCount = pEntry->ItemCount();
+        USHORT nCur = 0;
         while( nCur < nCount )
         {
             SvLBoxItem* pStr = pEntry->GetItem( nCur );
@@ -303,19 +303,19 @@ String SvTabListBox::GetEntryText( SvLBoxEntry* pEntry, sal_uInt16 nCol ) const
     return aResult;
 }
 
-String SvTabListBox::GetEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
+String SvTabListBox::GetEntryText( ULONG nPos, USHORT nCol ) const
 {
     SvLBoxEntry* pEntry = GetEntryOnPos( nPos );
     return GetEntryText( pEntry, nCol );
 }
 
-void SvTabListBox::SetEntryText( const XubString& rStr, sal_uLong nPos, sal_uInt16 nCol )
+void SvTabListBox::SetEntryText( const XubString& rStr, ULONG nPos, USHORT nCol )
 {
     SvLBoxEntry* pEntry = SvTreeListBox::GetEntry( nPos );
     SetEntryText( rStr, pEntry, nCol );
 }
 
-void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry, sal_uInt16 nCol )
+void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry, USHORT nCol )
 {
     DBG_ASSERT(pEntry,"SetEntryText:Invalid Entry");
     if( !pEntry )
@@ -325,14 +325,14 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry, sal
     if ( sOldText == rStr )
         return;
 
-    sal_uInt16 nTextColumn = nCol;
+    USHORT nTextColumn = nCol;
     const xub_Unicode* pCurToken = rStr.GetBuffer();
-    sal_uInt16 nCurTokenLen;
+    USHORT nCurTokenLen;
     const xub_Unicode* pNextToken = GetToken( pCurToken, nCurTokenLen );
 
     XubString aTemp;
-    sal_uInt16 nCount = pEntry->ItemCount();
-    sal_uInt16 nCur = 0;
+    USHORT nCount = pEntry->ItemCount();
+    USHORT nCur = 0;
     while( nCur < nCount )
     {
         SvLBoxItem* pStr = pEntry->GetItem( nCur );
@@ -372,7 +372,7 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry, sal
     delete pData;
 }
 
-String SvTabListBox::GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const
+String SvTabListBox::GetCellText( ULONG nPos, USHORT nCol ) const
 {
     SvLBoxEntry* pEntry = GetEntryOnPos( nPos );
     DBG_ASSERT( pEntry, "SvTabListBox::GetCellText(): Invalid Entry" );
@@ -386,9 +386,9 @@ String SvTabListBox::GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const
     return aResult;
 }
 
-sal_uLong SvTabListBox::GetEntryPos( const XubString& rStr, sal_uInt16 nCol )
+ULONG SvTabListBox::GetEntryPos( const XubString& rStr, USHORT nCol )
 {
-    sal_uLong nPos = 0;
+    ULONG nPos = 0;
     SvLBoxEntry* pEntry = First();
     while( pEntry )
     {
@@ -401,9 +401,9 @@ sal_uLong SvTabListBox::GetEntryPos( const XubString& rStr, sal_uInt16 nCol )
     return 0xffffffff;
 }
 
-sal_uLong SvTabListBox::GetEntryPos( const SvLBoxEntry* pEntry ) const
+ULONG SvTabListBox::GetEntryPos( const SvLBoxEntry* pEntry ) const
 {
-    sal_uLong nPos = 0;
+    ULONG nPos = 0;
     SvLBoxEntry* pTmpEntry = First();
     while( pTmpEntry )
     {
@@ -415,13 +415,13 @@ sal_uLong SvTabListBox::GetEntryPos( const SvLBoxEntry* pEntry ) const
     return 0xffffffff;
 }
 
-void SvTabListBox::Resize()
+void __EXPORT SvTabListBox::Resize()
 {
     SvTreeListBox::Resize();
 }
 
 // static
-const xub_Unicode* SvTabListBox::GetToken( const xub_Unicode* pPtr, sal_uInt16& rLen )
+const xub_Unicode* SvTabListBox::GetToken( const xub_Unicode* pPtr, USHORT& rLen )
 {
     if( !pPtr || *pPtr == 0 )
     {
@@ -429,7 +429,7 @@ const xub_Unicode* SvTabListBox::GetToken( const xub_Unicode* pPtr, sal_uInt16& 
         return 0;
     }
     xub_Unicode c = *pPtr;
-    sal_uInt16 nLen = 0;
+    USHORT nLen = 0;
     while( c != '\t' && c != 0 )
     {
         pPtr++;
@@ -444,15 +444,15 @@ const xub_Unicode* SvTabListBox::GetToken( const xub_Unicode* pPtr, sal_uInt16& 
     return pPtr;
 }
 
-String SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
+String SvTabListBox::GetTabEntryText( ULONG nPos, USHORT nCol ) const
 {
     SvLBoxEntry* pEntry = SvTreeListBox::GetEntry( nPos );
     DBG_ASSERT( pEntry, "GetTabEntryText(): Invalid entry " );
     XubString aResult;
     if ( pEntry )
     {
-        sal_uInt16 nCount = pEntry->ItemCount();
-        sal_uInt16 nCur = ( 0 == nCol && IsCellFocusEnabled() ) ? GetCurrentTabPos() : 0;
+        USHORT nCount = pEntry->ItemCount();
+        USHORT nCur = ( 0 == nCol && IsCellFocusEnabled() ) ? GetCurrentTabPos() : 0;
         while( nCur < nCount )
         {
             SvLBoxItem* pStr = pEntry->GetItem( nCur );
@@ -482,10 +482,10 @@ String SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
     return aResult;
 }
 
-SvLBoxEntry* SvTabListBox::GetEntryOnPos( sal_uLong _nEntryPos ) const
+SvLBoxEntry* SvTabListBox::GetEntryOnPos( ULONG _nEntryPos ) const
 {
     SvLBoxEntry* pEntry = NULL;
-    sal_uLong i, nPos = 0, nCount = GetLevelChildCount( NULL );
+    ULONG i, nPos = 0, nCount = GetLevelChildCount( NULL );
     for ( i = 0; i < nCount; ++i )
     {
         SvLBoxEntry* pParent = GetEntry(i);
@@ -506,9 +506,9 @@ SvLBoxEntry* SvTabListBox::GetEntryOnPos( sal_uLong _nEntryPos ) const
     return pEntry;
 }
 
-SvLBoxEntry* SvTabListBox::GetChildOnPos( SvLBoxEntry* _pParent, sal_uLong _nEntryPos, sal_uLong& _rPos ) const
+SvLBoxEntry* SvTabListBox::GetChildOnPos( SvLBoxEntry* _pParent, ULONG _nEntryPos, ULONG& _rPos ) const
 {
-    sal_uLong i, nCount = GetLevelChildCount( _pParent );
+    ULONG i, nCount = GetLevelChildCount( _pParent );
     for ( i = 0; i < nCount; ++i )
     {
         SvLBoxEntry* pParent = GetEntry( _pParent, i );
@@ -526,33 +526,33 @@ SvLBoxEntry* SvTabListBox::GetChildOnPos( SvLBoxEntry* _pParent, sal_uLong _nEnt
     return NULL;
 }
 
-void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
+void SvTabListBox::SetTabJustify( USHORT nTab, SvTabJustify eJustify)
 {
     if( nTab >= nTabCount )
         return;
     SvLBoxTab* pTab = &(pTabList[ nTab ]);
-    sal_uInt16 nFlags = pTab->nFlags;
+    USHORT nFlags = pTab->nFlags;
     nFlags &= (~MYTABMASK);
-    nFlags |= (sal_uInt16)eJustify;
+    nFlags |= (USHORT)eJustify;
     pTab->nFlags = nFlags;
     SvTreeListBox::nTreeFlags |= TREEFLAG_RECALCTABS;
     if( IsUpdateMode() )
         Invalidate();
 }
 
-SvTabJustify SvTabListBox::GetTabJustify( sal_uInt16 nTab ) const
+SvTabJustify SvTabListBox::GetTabJustify( USHORT nTab ) const
 {
     SvTabJustify eResult = AdjustLeft;
     if( nTab >= nTabCount )
         return eResult;
     SvLBoxTab* pTab = &(pTabList[ nTab ]);
-    sal_uInt16 nFlags = pTab->nFlags;
+    USHORT nFlags = pTab->nFlags;
     nFlags &= MYTABMASK;
     eResult = (SvTabJustify)nFlags;
     return eResult;
 }
 
-long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
+long SvTabListBox::GetLogicTab( USHORT nTab )
 {
     if( SvTreeListBox::nTreeFlags & TREEFLAG_RECALCTABS )
         ((SvTabListBox*)this)->SetTabs();
@@ -580,9 +580,9 @@ SvHeaderTabListBox::SvHeaderTabListBox( Window* pParent, WinBits nWinStyle ) :
 
     SvTabListBox( pParent, nWinStyle ),
 
-    m_bFirstPaint   ( sal_True ),
+    m_bFirstPaint	( TRUE ),
     m_pImpl         ( new ::svt::SvHeaderTabListBoxImpl ),
-    m_pAccessible   ( NULL )
+    m_pAccessible	( NULL )
 {
 }
 
@@ -592,9 +592,9 @@ SvHeaderTabListBox::SvHeaderTabListBox( Window* pParent, const ResId& rResId ) :
 
     SvTabListBox( pParent, rResId ),
 
-    m_bFirstPaint   ( sal_True ),
+    m_bFirstPaint	( TRUE ),
     m_pImpl         ( new ::svt::SvHeaderTabListBoxImpl ),
-    m_pAccessible   ( NULL )
+    m_pAccessible	( NULL )
 {
 }
 
@@ -611,7 +611,7 @@ void SvHeaderTabListBox::Paint( const Rectangle& rRect )
 {
     if ( m_bFirstPaint )
     {
-        m_bFirstPaint = sal_False;
+        m_bFirstPaint = FALSE;
         RepaintScrollBars();
     }
     SvTabListBox::Paint( rRect );
@@ -630,14 +630,14 @@ void SvHeaderTabListBox::InitHeaderBar( HeaderBar* pHeaderBar )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvHeaderTabListBox::IsItemChecked( SvLBoxEntry* pEntry, sal_uInt16 nCol ) const
+sal_Bool SvHeaderTabListBox::IsItemChecked( SvLBoxEntry* pEntry, USHORT nCol ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = (SvLBoxButton*)( pEntry->GetItem( nCol + 1 ) );
 
     if ( pItem && ( (SvLBoxItem*)pItem )->IsA() == SV_ITEM_ID_LBOXBUTTON )
     {
-        sal_uInt16 nButtonFlags = pItem->GetButtonFlags();
+        USHORT nButtonFlags = pItem->GetButtonFlags();
         eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
     }
 
@@ -647,7 +647,7 @@ sal_Bool SvHeaderTabListBox::IsItemChecked( SvLBoxEntry* pEntry, sal_uInt16 nCol
 // -----------------------------------------------------------------------
 
 SvLBoxEntry* SvHeaderTabListBox::InsertEntryToColumn(
-    const XubString& rStr, sal_uLong nPos, sal_uInt16 nCol, void* pUserData )
+    const XubString& rStr, ULONG nPos, USHORT nCol, void* pUserData )
 {
     SvLBoxEntry* pEntry = SvTabListBox::InsertEntryToColumn( rStr, nPos, nCol, pUserData );
     RecalculateAccessibleChildren();
@@ -657,7 +657,7 @@ SvLBoxEntry* SvHeaderTabListBox::InsertEntryToColumn(
 // -----------------------------------------------------------------------
 
 SvLBoxEntry* SvHeaderTabListBox::InsertEntryToColumn(
-    const XubString& rStr, SvLBoxEntry* pParent, sal_uLong nPos, sal_uInt16 nCol, void* pUserData )
+    const XubString& rStr, SvLBoxEntry* pParent, ULONG nPos, USHORT nCol, void* pUserData )
 {
     SvLBoxEntry* pEntry = SvTabListBox::InsertEntryToColumn( rStr, pParent, nPos, nCol, pUserData );
     RecalculateAccessibleChildren();
@@ -668,7 +668,7 @@ SvLBoxEntry* SvHeaderTabListBox::InsertEntryToColumn(
 
 SvLBoxEntry* SvHeaderTabListBox::InsertEntryToColumn(
     const XubString& rStr, const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp,
-    SvLBoxEntry* pParent, sal_uLong nPos, sal_uInt16 nCol, void* pUserData )
+    SvLBoxEntry* pParent, ULONG nPos, USHORT nCol, void* pUserData )
 {
     SvLBoxEntry* pEntry = SvTabListBox::InsertEntryToColumn(
         rStr, rExpandedEntryBmp, rCollapsedEntryBmp, pParent, nPos, nCol, pUserData );
@@ -678,19 +678,19 @@ SvLBoxEntry* SvHeaderTabListBox::InsertEntryToColumn(
 
 // -----------------------------------------------------------------------
 
-sal_uLong SvHeaderTabListBox::Insert(
-    SvLBoxEntry* pEnt, SvLBoxEntry* pPar, sal_uLong nPos )
+ULONG SvHeaderTabListBox::Insert(
+    SvLBoxEntry* pEnt, SvLBoxEntry* pPar, ULONG nPos )
 {
-    sal_uLong n = SvTabListBox::Insert( pEnt, pPar, nPos );
+    ULONG n = SvTabListBox::Insert( pEnt, pPar, nPos );
     RecalculateAccessibleChildren();
     return n;
 }
 
 // -----------------------------------------------------------------------
 
-sal_uLong SvHeaderTabListBox::Insert( SvLBoxEntry* pEntry, sal_uLong nRootPos )
+ULONG SvHeaderTabListBox::Insert( SvLBoxEntry* pEntry, ULONG nRootPos )
 {
-    sal_uLong nPos = SvTabListBox::Insert( pEntry, nRootPos );
+    ULONG nPos = SvTabListBox::Insert( pEntry, nRootPos );
     RecalculateAccessibleChildren();
     return nPos;
 }
@@ -762,7 +762,7 @@ sal_Bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, Tr
     SvLBoxEntry* pEntry = GetEntry( _nRow );
     if ( pEntry )
     {
-        sal_uInt16 nItemCount = pEntry->ItemCount();
+        USHORT nItemCount = pEntry->ItemCount();
         if ( nItemCount > ( _nColumn + 1 ) )
         {
             SvLBoxButton* pItem = (SvLBoxButton*)( pEntry->GetItem( _nColumn + 1 ) );
@@ -798,8 +798,8 @@ sal_Int32 SvHeaderTabListBox::GetCurrRow() const
     SvLBoxEntry* pEntry = GetCurEntry();
     if ( pEntry )
     {
-        sal_uLong nCount = GetEntryCount();
-        for ( sal_uLong i = 0; i < nCount; ++i )
+        ULONG nCount = GetEntryCount();
+        for ( ULONG i = 0; i < nCount; ++i )
         {
             if ( pEntry == GetEntry(i) )
             {
@@ -838,13 +838,13 @@ sal_Bool SvHeaderTabListBox::IsCellFocusable() const
     return IsCellFocusEnabled();
 }
 // -----------------------------------------------------------------------
-sal_Bool SvHeaderTabListBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
+BOOL SvHeaderTabListBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 {
-    sal_Bool bRet = ( IsCellFocusEnabled() == sal_True );
+    sal_Bool bRet = ( IsCellFocusEnabled() == TRUE );
     if ( bRet )
     {
         // first set cursor to _nRow
-        SetCursor( GetEntry( _nRow ), sal_True );
+        SetCursor( GetEntry( _nRow ), TRUE );
         // then set the focus into _nColumn
         bRet = ( SetCurrentTabPos( _nColumn ) == true );
     }
@@ -853,22 +853,22 @@ sal_Bool SvHeaderTabListBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 // -----------------------------------------------------------------------
 void SvHeaderTabListBox::SetNoSelection()
 {
-    SvLBox::SelectAll( sal_False );
+    SvLBox::SelectAll( FALSE );
 }
 // -----------------------------------------------------------------------
 void SvHeaderTabListBox::SelectAll()
 {
-    SvLBox::SelectAll( sal_True );
+    SvLBox::SelectAll( TRUE );
 }
 // -----------------------------------------------------------------------
-void SvHeaderTabListBox::SelectAll( sal_Bool bSelect, sal_Bool bPaint )
+void SvHeaderTabListBox::SelectAll( BOOL bSelect, BOOL bPaint )
 {
-    // overwritten just to disambiguate the SelectAll() from the base' class SelectAll( BOOl, sal_Bool )
+    // overwritten just to disambiguate the SelectAll() from the base' class SelectAll( BOOl, BOOL )
     SvTabListBox::SelectAll( bSelect, bPaint );
 }
 
 // -----------------------------------------------------------------------
-void SvHeaderTabListBox::SelectRow( long _nRow, sal_Bool _bSelect, sal_Bool )
+void SvHeaderTabListBox::SelectRow( long _nRow, BOOL _bSelect, BOOL )
 {
     Select( GetEntry( _nRow ), _bSelect );
 }
@@ -895,7 +895,7 @@ bool SvHeaderTabListBox::IsRowSelected( long _nRow ) const
 // -----------------------------------------------------------------------
 sal_Bool SvHeaderTabListBox::IsColumnSelected( long ) const
 {
-    return sal_False;
+    return FALSE;
 }
 // -----------------------------------------------------------------------
 void SvHeaderTabListBox::GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& ) const
@@ -911,12 +911,12 @@ sal_Bool SvHeaderTabListBox::IsCellVisible( sal_Int32, sal_uInt16 ) const
     return sal_True;
 }
 // -----------------------------------------------------------------------
-String SvHeaderTabListBox::GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const
+String SvHeaderTabListBox::GetAccessibleCellText( long _nRow, USHORT _nColumnPos ) const
 {
     return ::rtl::OUString( GetTabEntryText( _nRow, _nColumnPos ) );
 }
 // -----------------------------------------------------------------------
-Rectangle SvHeaderTabListBox::calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen )
+Rectangle SvHeaderTabListBox::calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen )
 {
     Rectangle aRect;
     if ( _bIsColumnBar )
@@ -930,7 +930,7 @@ Rectangle SvHeaderTabListBox::calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _
     return aRect;
 }
 // -----------------------------------------------------------------------
-Rectangle SvHeaderTabListBox::calcTableRect( sal_Bool _bOnScreen )
+Rectangle SvHeaderTabListBox::calcTableRect( BOOL _bOnScreen )
 {
     Window* pParent = NULL;
     if ( !_bOnScreen )
@@ -940,14 +940,14 @@ Rectangle SvHeaderTabListBox::calcTableRect( sal_Bool _bOnScreen )
     return aRect;
 }
 // -----------------------------------------------------------------------
-Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, sal_Bool _bIsHeader, sal_Bool _bOnScreen )
+Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, BOOL _bIsHeader, BOOL _bOnScreen )
 {
     DBG_ASSERT( !_bIsHeader || 0 == _nRow, "invalid parameters" );
     Rectangle aRect;
     SvLBoxEntry* pEntry = GetEntry( _nRow );
     if ( pEntry )
     {
-        aRect = _bIsHeader ? calcHeaderRect( sal_True, sal_False ) : GetBoundingRect( pEntry );
+        aRect = _bIsHeader ? calcHeaderRect( sal_True, FALSE ) : GetBoundingRect( pEntry );
         Point aTopLeft = aRect.TopLeft();
         DBG_ASSERT( m_pImpl->m_pHeaderBar->GetItemCount() > _nColumn, "invalid column" );
         Rectangle aItemRect = m_pImpl->m_pHeaderBar->GetItemRect( m_pImpl->m_pHeaderBar->GetItemId( _nColumn ) );
@@ -1018,7 +1018,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
     if ( m_aAccessibleChildren.empty() )
     {
         const sal_uInt16 nColumnCount = GetColumnCount();
-        sal_Int32 nCount = AreChildrenTransient() ?
+        sal_Int32 nCount = AreChildrenTransient() ? 
                 nColumnCount : ( GetRowCount() + 1 ) * nColumnCount;
         m_aAccessibleChildren.assign( nCount, Reference< XAccessible >() );
     }
@@ -1105,7 +1105,7 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
         }
         case ::svt::BBTYPE_COLUMNHEADERCELL:
         {
-            aRetText = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( (sal_uInt16)_nPos ) );
+            aRetText = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( (USHORT)_nPos ) );
             break;
         }
 
@@ -1115,7 +1115,7 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
             break;
 
         default:
-            OSL_FAIL("BrowseBox::GetAccessibleName: invalid enum!");
+            OSL_ENSURE(0,"BrowseBox::GetAccessibleName: invalid enum!");
     }
     return aRetText;
 }
@@ -1224,7 +1224,7 @@ void SvHeaderTabListBox::GrabTableFocus()
     GrabFocus();
 }
 // -----------------------------------------------------------------------
-sal_Bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
+BOOL SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
@@ -1239,7 +1239,7 @@ void SvHeaderTabListBox::GrabFocus()
     Control::GrabFocus();
 }
 // -----------------------------------------------------------------------
-Reference< XAccessible > SvHeaderTabListBox::GetAccessible( sal_Bool bCreate )
+Reference< XAccessible > SvHeaderTabListBox::GetAccessible( BOOL bCreate )
 {
     return Control::GetAccessible( bCreate );
 }
@@ -1283,7 +1283,7 @@ Rectangle SvHeaderTabListBox::GetFieldCharacterBounds(sal_Int32,sal_Int32,sal_In
 // -----------------------------------------------------------------------------
 sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
 {
-    String sText = GetAccessibleCellText( _nRow, static_cast< sal_uInt16 >( _nColumnPos ) );
+    String sText = GetAccessibleCellText( _nRow, static_cast< USHORT >( _nColumnPos ) );
     MetricVector aRects;
     if ( GetGlyphBoundRects(Point(0,0),sText,0,STRING_LEN,0,aRects) )
     {

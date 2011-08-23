@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
 
 //--------------------------------------------------------------------
 
-bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     if ( pObjSh )
     {
@@ -78,7 +78,7 @@ bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /
 
 //--------------------------------------------------------------------
 
-bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     // This item MUST have a model. Please don't change this, there are UNO-based
     // implementations which need it!!
@@ -111,8 +111,8 @@ bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uIn
 
 //=========================================================================
 
-SfxObjectItem::SfxObjectItem( sal_uInt16 nWhichId, SfxShell *pSh )
-:   SfxPoolItem( nWhichId ),
+SfxObjectItem::SfxObjectItem( USHORT nWhichId, SfxShell *pSh )
+:	SfxPoolItem( nWhichId ),
     _pSh( pSh )
 {}
 

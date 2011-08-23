@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,8 @@
 
 #ifdef DEBUG
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <tox.hxx>
-#include <cstdio>
 class String;
 
 namespace rtl
@@ -48,6 +47,7 @@ struct SwPosition;
 class SwPaM;
 class SwNodeNum;
 class SwUndo;
+class SwUndos;
 class SwRect;
 class SwFrmFmt;
 class SwFrmFmts;
@@ -82,10 +82,12 @@ SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem & rItem);
 SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem * pItem);
 SW_DLLPUBLIC const char * dbg_out(const SfxItemSet & rSet);
 SW_DLLPUBLIC const char * dbg_out(SwNodes & rNodes);
+// const char * dbg_out(SwOutlineNodes & rNodes);
 SW_DLLPUBLIC const char * dbg_out(const SwPosition & rPos);
 SW_DLLPUBLIC const char * dbg_out(const SwPaM & rPam);
 SW_DLLPUBLIC const char * dbg_out(const SwNodeNum & rNum);
 SW_DLLPUBLIC const char * dbg_out(const SwUndo & rUndo);
+SW_DLLPUBLIC const char * dbg_out(const SwUndos & rUndos);
 SW_DLLPUBLIC const char * dbg_out(const SwRewriter & rRewriter);
 SW_DLLPUBLIC const char * dbg_out(const SwNumRule & rRule);
 SW_DLLPUBLIC const char * dbg_out(const SwTxtFmtColl & rFmt);
@@ -94,11 +96,11 @@ SW_DLLPUBLIC const char * dbg_out(const SwNumRuleTbl & rTbl);
 SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange);
 
 template<typename tKey, typename tMember, typename fHashFunction>
-String lcl_dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & rMap)
+String lcl_dbg_out(const std::hash_map<tKey, tMember, fHashFunction> & rMap)
 {
     String aResult("[", RTL_TEXTENCODING_ASCII_US);
 
-    typename boost::unordered_map<tKey, tMember, fHashFunction>::const_iterator aIt;
+    typename std::hash_map<tKey, tMember, fHashFunction>::const_iterator aIt;
 
     for (aIt = rMap.begin(); aIt != rMap.end(); aIt++)
     {
@@ -118,7 +120,7 @@ String lcl_dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & rM
 }
 
 template<typename tKey, typename tMember, typename fHashFunction>
-const char * dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & rMap)
+const char * dbg_out(const std::hash_map<tKey, tMember, fHashFunction> & rMap)
 {
     return dbg_out(lcl_dbg_out(rMap));
 }

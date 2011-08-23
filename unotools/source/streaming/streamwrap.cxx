@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -182,7 +182,7 @@ void OInputStreamWrapper::checkError() const
 //------------------------------------------------------------------------------
 OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream& _rStream)
 {
-    SetStream( &_rStream, sal_False );
+    SetStream( &_rStream, FALSE );
 }
 
 //------------------------------------------------------------------------------
@@ -238,8 +238,8 @@ void SAL_CALL OOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8
 {
     sal_uInt32 nWritten = rStream.Write(aData.getConstArray(),aData.getLength());
     ErrCode err = rStream.GetError();
-    if  (   (ERRCODE_NONE != err)
-        ||  (nWritten != (sal_uInt32)aData.getLength())
+    if	(	(ERRCODE_NONE != err)
+        ||	(nWritten != (sal_uInt32)aData.getLength())
         )
     {
         throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
@@ -329,7 +329,7 @@ sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  ) throw (IOExceptio
 //------------------------------------------------------------------------------
 OStreamWrapper::OStreamWrapper(SvStream& _rStream)
 {
-    SetStream( &_rStream, sal_False );
+    SetStream( &_rStream, FALSE );
 }
 
 //------------------------------------------------------------------------------
@@ -349,8 +349,8 @@ void SAL_CALL OStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8 >& aD
 {
     sal_uInt32 nWritten = m_pSvStream->Write(aData.getConstArray(),aData.getLength());
     ErrCode err = m_pSvStream->GetError();
-    if  (   (ERRCODE_NONE != err)
-        ||  (nWritten != (sal_uInt32)aData.getLength())
+    if	(	(ERRCODE_NONE != err)
+        ||	(nWritten != (sal_uInt32)aData.getLength())
         )
     {
         throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));

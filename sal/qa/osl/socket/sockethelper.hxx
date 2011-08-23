@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,8 +74,10 @@ extern "C"
 #ifndef _OSL_SOCKET_CONST_H_
 
 #if ( defined WNT )                     // Windows
-#include <winsock.h>
+#include <tools/prewin.h>
+#include <winsock.h> 
 #include <string.h>
+#include <tools/postwin.h>
 #endif
 
 #endif
@@ -83,24 +85,6 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-
-/** test output if SILENT_TEST is 0
-*/
-#if OSL_DEBUG_LEVEL > 0
-#   define SILENT_TEST 0
-#else
-#   define SILENT_TEST 1
-#endif
-
-#if SILENT_TEST
-#   define t_print(...) { }
-#else
-#   define t_print printf
-#endif
-
-/** convert UString and OUString to std::string
-*/
-#define STD_STRING(s) (std::string((const char *)s.getStr()))
 
 /** compare two OUString.
 */
@@ -112,10 +96,10 @@ sal_Bool compareUString( const ::rtl::OUString & ustr, const sal_Char *astr );
 */
 sal_Bool compareSocketAddr( const ::osl::SocketAddr & addr1 , const ::osl::SocketAddr & addr2  );
 //char * oustring2char( const ::rtl::OUString & str );
-/** print a UNI_CODE String. And also print some comments of the string.
+/** print a UNI_CODE String. And also print some comments of the string. 
 */
 void printUString( const ::rtl::OUString & str, const char * msg = "" );
-/** get the local host name.
+/** get the local host name. 
     mindy: gethostbyname( "localhost" ), on Linux, it returns the hostname in /etc/hosts + domain name,
     if no entry in /etc/hosts, it returns "localhost" + domain name
 */

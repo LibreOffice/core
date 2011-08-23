@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
                 m_sHelpMessage = sValue;
                 break;
             case XML_TOK_COLUMN_VISIBILITY:
-                m_bHidden = !sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("visible"));
+                m_bHidden = !sValue.equalsAscii("visible");
                 break;
             case XML_TOK_COLUMN_TYPE_NAME:
                 sType = sValue;
@@ -101,9 +101,10 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
             case XML_TOK_COLUMN_DEFAULT_VALUE:
                 if ( sValue.getLength() && sType.getLength() )
                     m_aDefaultValue <<= sValue;
+                //    SvXMLUnitConverter::convertAny(m_aDefaultValue,sType,sValue);
                 break;
             case XML_TOK_COLUMN_VISIBLE:
-                m_bHidden = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("false"));
+                m_bHidden = sValue.equalsAscii("false");
                 break;
             case XML_TOK_DEFAULT_CELL_STYLE_NAME:
                 m_sCellStyleName = sValue;
@@ -134,7 +135,7 @@ void OXMLColumn::EndElement()
 
             if ( m_aDefaultValue.hasValue() )
                 xProp->setPropertyValue(PROPERTY_CONTROLDEFAULT,m_aDefaultValue);
-
+            
             Reference<XAppend> xAppend(m_xParentContainer,UNO_QUERY);
             if ( xAppend.is() )
                 xAppend->appendByDescriptor(xProp);
@@ -151,7 +152,7 @@ void OXMLColumn::EndElement()
                         pAutoStyle->FillPropertySet(xProp);
                     }
                 }
-            }
+            } // if ( m_sStyleName.getLength() )
             if ( m_sCellStyleName.getLength() )
             {
                 const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
@@ -166,9 +167,9 @@ void OXMLColumn::EndElement()
                     }
                 }
             }
-
+            
         }
-    }
+    } // if ( xFac.is() && m_sName.getLength() )
     else if ( m_sCellStyleName.getLength() )
     {
         const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();

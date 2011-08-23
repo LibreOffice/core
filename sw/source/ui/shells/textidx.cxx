@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include "cmdid.h"
 #include "view.hxx"
 #include "wrtsh.hxx"
-#include "swundo.hxx"                   // fuer Undo-Ids
+#include "swundo.hxx"               	// fuer Undo-Ids
 #include "textsh.hxx"
 #include "idxmrk.hxx"
 #include "cnttab.hxx"
@@ -57,9 +57,9 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     if(pArgs)
-       pArgs->GetItemState(nSlot, sal_False, &pItem );
+       pArgs->GetItemState(nSlot, FALSE, &pItem );
 
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     Window *pMDI = &pVFrame->GetWindow();
@@ -92,9 +92,9 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
         case FN_EDIT_IDX_ENTRY_DLG:
         {
             SwTOXMgr aMgr(GetShellPtr());
-            sal_uInt16 nRet = RET_OK;
+            USHORT nRet = RET_OK;
             if(aMgr.GetTOXMarkCount() > 1)
-            {   // Mehrere Marken, welche solls denn sein ?
+            {	// Mehrere Marken, welche solls denn sein ?
                 //
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -104,7 +104,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
                 nRet = pMultDlg->Execute();
                 delete pMultDlg;
             }
-            if( nRet == RET_OK)
+            if(	nRet == RET_OK)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -129,7 +129,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
                             SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
                             RES_LR_SPACE, RES_LR_SPACE,
                             FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE,
-                            0   );
+                            0	);
             SwWrtShell& rSh = GetShell();
             SwRect aRect;
             rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
@@ -139,11 +139,11 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)
             aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
             const SwTOXBase* pCurTOX = 0;
-            sal_Bool bGlobal = sal_False;
+            BOOL bGlobal = FALSE;
             if(pItem)
             {
                 pCurTOX = (const SwTOXBase* )((SwPtrItem*)pItem)->GetValue();
-                bGlobal = sal_True;
+                bGlobal = TRUE;
             }
             else
                 pCurTOX = rSh.GetCurTOX();
@@ -169,7 +169,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             const SwTOXBase* pBase = rSh.GetCurTOX();
             OSL_ENSURE(pBase, "no TOXBase to remove");
             if( pBase )
-                rSh.DeleteTOX(*pBase, sal_True);
+                rSh.DeleteTOX(*pBase, TRUE);
         }
         break;
         default:
@@ -187,7 +187,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
 
     SfxChildWindow* pAuthMark = pVFrame->GetChildWindow(FN_INSERT_AUTH_ENTRY_DLG);
 
-    const sal_Bool bHtmlMode = 0 != ::GetHtmlMode( GetView().GetDocShell() );
+    const BOOL bHtmlMode = 0 != ::GetHtmlMode( GetView().GetDocShell() );
     const SwTOXBase* pBase = 0;
     if( bHtmlMode || 0 != ( pBase = rSh.GetCurTOX()) )
     {
@@ -205,27 +205,27 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
         if(!pIdxMrk)
             rSet.DisableItem( FN_INSERT_IDX_ENTRY_DLG );
         else
-            rSet.Put(SfxBoolItem(FN_INSERT_IDX_ENTRY_DLG, sal_True));
+            rSet.Put(SfxBoolItem(FN_INSERT_IDX_ENTRY_DLG, TRUE));
 
         if(!pAuthMark)
             rSet.DisableItem( FN_INSERT_AUTH_ENTRY_DLG );
         else
-            rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, sal_True));
+            rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, TRUE));
 
     }
-    else
+    else //if( SFX_ITEM_UNKNOWN != rSet.GetItemState( FN_EDIT_IDX_ENTRY_DLG ))
     {
 
-        sal_Bool bEnableEdit = sal_True;
-        sal_Bool bInReadonly = rSh.HasReadonlySel();
+        BOOL bEnableEdit = TRUE;
+        BOOL bInReadonly = rSh.HasReadonlySel();
         if( rSh.HasSelection() || bInReadonly)
-            bEnableEdit = sal_False;
+            bEnableEdit = FALSE;
         else
         {
             SwTOXMarks aArr;
             rSh.GetCurTOXMarks( aArr );
             if( !aArr.Count())
-                bEnableEdit = sal_False;
+                bEnableEdit = FALSE;
         }
 
         if(!bEnableEdit)
@@ -248,7 +248,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
         else
             rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, 0 != pAuthMark));
 
-        if( bInReadonly || !pField ||
+        if(	bInReadonly || !pField ||
             pField->GetTyp()->Which() != RES_AUTHORITY)
             rSet.DisableItem(FN_EDIT_AUTH_ENTRY_DLG);
         rSet.DisableItem(FN_REMOVE_CUR_TOX);

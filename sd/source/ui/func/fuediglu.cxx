@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@ FuEditGluePoints::FuEditGluePoints (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
-    SfxRequest& rReq)
+    SdDrawDocument*	pDoc,
+    SfxRequest& rReq) 
     : FuDraw(pViewSh, pWin, pView, pDoc, rReq)
 {
 }
@@ -79,7 +79,7 @@ FunctionReference FuEditGluePoints::Create( ViewShell* pViewSh, ::sd::Window* pW
 void FuEditGluePoints::DoExecute( SfxRequest& rReq )
 {
     FuDraw::DoExecute( rReq );
-    mpView->SetInsGluePointMode(sal_False);
+    mpView->SetInsGluePointMode(FALSE);
     mpViewShell->GetViewShellBase().GetToolBarManager()->AddToolBar(
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msGluePointsToolBar);
@@ -95,7 +95,7 @@ FuEditGluePoints::~FuEditGluePoints()
 {
     mpView->BrkAction();
     mpView->UnmarkAllGluePoints();
-    mpView->SetInsGluePointMode(sal_False);
+    mpView->SetInsGluePointMode(FALSE);
 }
 
 /*************************************************************************
@@ -104,25 +104,25 @@ FuEditGluePoints::~FuEditGluePoints()
 |*
 \************************************************************************/
 
-sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 {
     mpView->SetActualWin( mpWindow );
 
-    sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
+    BOOL bReturn = FuDraw::MouseButtonDown(rMEvt);
 
     if (mpView->IsAction())
     {
         if (rMEvt.IsRight())
             mpView->BckAction();
 
-        return sal_True;
+        return TRUE;
     }
 
     if (rMEvt.IsLeft())
     {
-        bReturn = sal_True;
-        sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        bReturn = TRUE;
+        USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
         mpWindow->CaptureMouse();
 
         SdrViewEvent aVEvt;
@@ -197,7 +197,7 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
                mpView->UnmarkAllObj();
             }
 
-            sal_Bool bMarked = sal_False;
+            BOOL bMarked = FALSE;
 
             if (!rMEvt.IsMod1())
             {
@@ -248,7 +248,7 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
+BOOL FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
 {
     mpView->SetActualWin( mpWindow );
 
@@ -264,7 +264,7 @@ sal_Bool FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
 
     ForcePointer(&rMEvt);
 
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************
@@ -273,21 +273,21 @@ sal_Bool FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
 {
     mpView->SetActualWin( mpWindow );
 
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     if (mpView->IsAction())
     {
-        bReturn = sal_True;
+        bReturn = TRUE;
         mpView->EndAction();
     }
 
     FuDraw::MouseButtonUp(rMEvt);
 
-    sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+    USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
     Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
     if (Abs(aMDPos.X() - aPos.X()) < nDrgLog &&
@@ -313,16 +313,16 @@ sal_Bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
+BOOL FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 {
     mpView->SetActualWin( mpWindow );
 
-    sal_Bool bReturn = FuDraw::KeyInput(rKEvt);
+    BOOL bReturn = FuDraw::KeyInput(rKEvt);
 
     return bReturn;
 }
@@ -333,7 +333,7 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuEditGluePoints::Command(const CommandEvent& rCEvt)
+BOOL FuEditGluePoints::Command(const CommandEvent& rCEvt)
 {
     mpView->SetActualWin( mpWindow );
     return FuPoor::Command( rCEvt );
@@ -359,7 +359,7 @@ void FuEditGluePoints::Activate()
 
 void FuEditGluePoints::Deactivate()
 {
-    mpView->SetGluePointEditMode( sal_False );
+    mpView->SetGluePointEditMode( FALSE );
     FuDraw::Deactivate();
 }
 
@@ -411,44 +411,44 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
         {
             const SfxItemSet* pSet = rReq.GetArgs();
             const SfxPoolItem& rItem = pSet->Get(SID_GLUE_PERCENT);
-            sal_Bool bPercent = ((const SfxBoolItem&) rItem).GetValue();
+            BOOL bPercent = ((const SfxBoolItem&) rItem).GetValue();
             mpView->SetMarkedGluePointsPercent(bPercent);
         }
         break;
 
         case SID_GLUE_HORZALIGN_CENTER:
         {
-            mpView->SetMarkedGluePointsAlign(sal_False, SDRHORZALIGN_CENTER);
+            mpView->SetMarkedGluePointsAlign(FALSE, SDRHORZALIGN_CENTER);
         }
         break;
 
         case SID_GLUE_HORZALIGN_LEFT:
         {
-            mpView->SetMarkedGluePointsAlign(sal_False, SDRHORZALIGN_LEFT);
+            mpView->SetMarkedGluePointsAlign(FALSE, SDRHORZALIGN_LEFT);
         }
         break;
 
         case SID_GLUE_HORZALIGN_RIGHT:
         {
-            mpView->SetMarkedGluePointsAlign(sal_False, SDRHORZALIGN_RIGHT);
+            mpView->SetMarkedGluePointsAlign(FALSE, SDRHORZALIGN_RIGHT);
         }
         break;
 
         case SID_GLUE_VERTALIGN_CENTER:
         {
-            mpView->SetMarkedGluePointsAlign(sal_True, SDRVERTALIGN_CENTER);
+            mpView->SetMarkedGluePointsAlign(TRUE, SDRVERTALIGN_CENTER);
         }
         break;
 
         case SID_GLUE_VERTALIGN_TOP:
         {
-            mpView->SetMarkedGluePointsAlign(sal_True, SDRVERTALIGN_TOP);
+            mpView->SetMarkedGluePointsAlign(TRUE, SDRVERTALIGN_TOP);
         }
         break;
 
         case SID_GLUE_VERTALIGN_BOTTOM:
         {
-            mpView->SetMarkedGluePointsAlign(sal_True, SDRVERTALIGN_BOTTOM);
+            mpView->SetMarkedGluePointsAlign(TRUE, SDRVERTALIGN_BOTTOM);
         }
         break;
     }

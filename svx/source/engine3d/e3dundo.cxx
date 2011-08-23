@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,9 @@ E3dUndoAction::~E3dUndoAction ()
 |* Repeat gibt es nicht
 |*
 \************************************************************************/
-sal_Bool E3dUndoAction::CanRepeat(SfxRepeatTarget&) const
+BOOL E3dUndoAction::CanRepeat(SfxRepeatTarget&) const
 {
-    return sal_False;
+    return FALSE;
 }
 
 /************************************************************************/
@@ -113,17 +113,17 @@ TYPEINIT1(E3dAttributesUndoAction, SdrUndoAction);
 |*
 \************************************************************************/
 E3dAttributesUndoAction::E3dAttributesUndoAction( SdrModel &rModel,
-    E3dView*    p3dView,
-    E3dObject*  pInObject,
+    E3dView*	p3dView,
+    E3dObject*	pInObject,
     const SfxItemSet& rNewSet,
     const SfxItemSet& rOldSet,
-    sal_Bool bUseSubObj)
-:   SdrUndoAction( rModel ),
-    pObject      ( pInObject ),
-    pView        ( p3dView ),
+    BOOL bUseSubObj)
+:	SdrUndoAction( rModel ),
+    pObject	 	 ( pInObject ),
+    pView		 ( p3dView ),
     bUseSubObjects(bUseSubObj),
-    aNewSet      ( rNewSet ),
-    aOldSet      ( rOldSet )
+    aNewSet		 ( rNewSet ),
+    aOldSet		 ( rOldSet )
 {
 }
 
@@ -165,9 +165,9 @@ void E3dAttributesUndoAction::Redo()
 |* Mehrfaches Undo nicht moeglich
 |*
 \************************************************************************/
-sal_Bool E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget& /*rView*/) const
+BOOL E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget& /*rView*/) const
 {
-    return sal_False;
+    return FALSE;
 }
 
 /*************************************************************************

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <svx/sdrpaintwindow.hxx>
+#include <sdrpaintwindow.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -58,7 +58,7 @@ class OverlayTableEdge : public sdr::overlay::OverlayObject
 {
 protected:
     basegfx::B2DPolyPolygon maPolyPolygon;
-    bool                    mbVisible;
+    bool					mbVisible;
 
     // geometry creation for OverlayObject
     virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
@@ -89,7 +89,7 @@ void TableEdgeHdl::SetEdge( sal_Int32 nEdge, sal_Int32 nStart, sal_Int32 nEnd, T
     }
     else
     {
-        OSL_FAIL( "sdr::table::TableEdgeHdl::SetEdge(), invalid edge!" );
+        OSL_ENSURE( false, "sdr::table::TableEdgeHdl::SetEdge(), invalid edge!" );
     }
 }
 
@@ -192,7 +192,7 @@ void TableEdgeHdl::CreateB2dIAObject()
                                 rPageWindow.GetOverlayManager()->add(*pOverlayObject);
                                 maOverlayGroup.append(*pOverlayObject);
                             }
-
+                            
                             if(aInvisible.count())
                             {
                                 // also create overlay object vor invisible parts to allow
@@ -213,9 +213,9 @@ void TableEdgeHdl::CreateB2dIAObject()
 //////////////////////////////////////////////////////////////////////////////
 
 OverlayTableEdge::OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible )
-:   OverlayObject(Color(COL_GRAY))
-,   maPolyPolygon( rPolyPolygon )
-,   mbVisible(bVisible)
+:	OverlayObject(Color(COL_GRAY))
+,	maPolyPolygon( rPolyPolygon )
+,	mbVisible(bVisible)
 {
 }
 

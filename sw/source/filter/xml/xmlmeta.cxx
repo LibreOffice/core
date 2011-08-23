@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,11 +97,25 @@ enum SvXMLTokenMapAttrs
     XML_TOK_META_STAT_END=XML_TOK_UNKNOWN
 };
 
+/*
+static __FAR_DATA SvXMLTokenMapEntry aMetaStatAttrTokenMap[] =
+{
+    { XML_NAMESPACE_META, XML_TABLE_COUNT,      XML_TOK_META_STAT_TABLE	},
+    { XML_NAMESPACE_META, XML_IMAGE_COUNT,      XML_TOK_META_STAT_IMAGE	},
+    { XML_NAMESPACE_META, XML_OBJECT_COUNT,     XML_TOK_META_STAT_OLE	},
+    { XML_NAMESPACE_META, XML_PARAGRAPH_COUNT,  XML_TOK_META_STAT_PARA	},
+    { XML_NAMESPACE_META, XML_PAGE_COUNT,       XML_TOK_META_STAT_PAGE	},
+    { XML_NAMESPACE_META, XML_WORD_COUNT,       XML_TOK_META_STAT_WORD	},
+    { XML_NAMESPACE_META, XML_CHARACTER_COUNT,  XML_TOK_META_STAT_CHAR	},
+    XML_TOKEN_MAP_END
+};
+*/
+
 struct statistic {
     SvXMLTokenMapAttrs token;
     const char* name;
-    sal_uInt16 SwDocStat::* target16;
-    sal_uLong  SwDocStat::* target32; /* or 64, on LP64 platforms */
+    USHORT SwDocStat::* target16;
+    ULONG  SwDocStat::* target32; /* or 64, on LP64 platforms */
 };
 
 static const struct statistic s_stats [] = {
@@ -143,7 +157,7 @@ void SwXMLImport::SetStatistics(
                     }
                     nTokens |= pStat->token;
                 } else {
-                    OSL_FAIL("SwXMLImport::SetStatistics: invalid entry");
+                    DBG_ERROR("SwXMLImport::SetStatistics: invalid entry");
                 }
             }
         }

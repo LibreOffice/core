@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -191,7 +191,7 @@ public class XMLImporter extends TestCase {
                         return impValue.equals(title) ;
                     } catch (com.sun.star.uno.Exception e) {
                         logF.println
-                            ("Exception occurred while checking filter :") ;
+                            ("Exception occured while checking filter :") ;
                         e.printStackTrace(logF) ;
                         return false ;
                     }

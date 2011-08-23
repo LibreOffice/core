@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,7 @@
 #include <atlbase.h>
 extern CComModule _Module;
 #include <atlcom.h>
+#include <tools/postsys.h>
 
 #pragma warning (pop)
 #pragma warning (disable:4505)
@@ -156,8 +157,6 @@ public:
 private:
     CComVariant m_varValue;
 };
-
-#include <tools/postsys.h>
 
 #endif
 

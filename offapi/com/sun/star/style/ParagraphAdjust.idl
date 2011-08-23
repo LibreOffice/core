@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,63 +24,63 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_style_ParagraphAdjust_idl__
-#define __com_sun_star_style_ParagraphAdjust_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module style {
-
-//=============================================================================
-
+#ifndef __com_sun_star_style_ParagraphAdjust_idl__ 
+#define __com_sun_star_style_ParagraphAdjust_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module style {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: enum com::sun::star::style::ParagraphAdjust
 /** These enumeration values describe the formatting of a text paragraph.
  */
 published enum ParagraphAdjust
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::ParagraphAdjust::LEFT
     /** adjusted to the left border
      */
-    LEFT,
-
-    //-------------------------------------------------------------------------
-
+    LEFT, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::ParagraphAdjust::RIGHT
     /** adjusted to the right border
      */
-    RIGHT,
-
-    //-------------------------------------------------------------------------
-
+    RIGHT, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::ParagraphAdjust::BLOCK
     /** adjusted to both borders / stretched, except for last line
      */
-    BLOCK,
-
-    //-------------------------------------------------------------------------
-
+    BLOCK, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::ParagraphAdjust::CENTER
     /** adjusted to the center
      */
-    CENTER,
-
-    //-------------------------------------------------------------------------
-
+    CENTER, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::ParagraphAdjust::STRETCH
     /** adjusted to both borders / stretched, including last line
      */
-    STRETCH
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    STRETCH 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

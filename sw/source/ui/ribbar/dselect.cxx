@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include "drawbase.hxx"
 #include "dselect.hxx"
 
-extern sal_Bool bNoInterrupt;       // in mainwn.cxx
+extern BOOL bNoInterrupt;		// in mainwn.cxx
 
 /*************************************************************************
 |*
@@ -49,21 +49,21 @@ extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
                 SwDrawBase(pWrtShell, pEditWin, pSwView)
 {
-    m_bCreateObj = sal_False;
+    m_bCreateObj = FALSE;
 }
 
 /*************************************************************************
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
+BOOL DrawSelection::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     switch (rKEvt.GetKeyCode().GetCode())
     {
@@ -74,7 +74,7 @@ sal_Bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
                 m_pSh->BreakMark();
                 m_pWin->ReleaseMouse();
             }
-            bReturn = sal_True;
+            bReturn = TRUE;
         }
         break;
     }
@@ -91,10 +91,10 @@ sal_Bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
 |*
 \************************************************************************/
 
-void DrawSelection::Activate(const sal_uInt16 nSlotId)
+void DrawSelection::Activate(const USHORT nSlotId)
 {
     m_pWin->SetSdrDrawMode(OBJ_NONE);
-    m_pWin->SetObjectSelect( sal_True );
+    m_pWin->SetObjectSelect( TRUE );
     SwDrawBase::Activate(nSlotId);
 
     m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);

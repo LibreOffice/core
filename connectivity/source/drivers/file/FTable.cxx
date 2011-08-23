@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::container;
 
 DBG_NAME( file_OFileTable )
 OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
-: OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
+: OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
                 ,m_pConnection(_pConnection)
                 ,m_pFileStream(NULL)
                 ,m_nFilePos(0)
@@ -63,17 +63,17 @@ OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
     DBG_CTOR( file_OFileTable, NULL );
     construct();
     TStringVector aVector;
-    //  m_pColumns  = new OColumns(this,m_aMutex,aVector);
+    //	m_pColumns	= new OColumns(this,m_aMutex,aVector);
     m_aColumns = new OSQLColumns();
 }
 // -------------------------------------------------------------------------
-OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
+OFileTable::OFileTable(	sdbcx::OCollection* _pTables,OConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description ,
                     const ::rtl::OUString& _SchemaName,
                     const ::rtl::OUString& _CatalogName
-                ) : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
+                ) : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),
                                   _Name,
                                   _Type,
                                   _Description,
@@ -90,7 +90,7 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
     DBG_CTOR( file_OFileTable, NULL );
     m_aColumns = new OSQLColumns();
     construct();
-    //  refreshColumns();
+    //	refreshColumns();
 }
 // -------------------------------------------------------------------------
 OFileTable::~OFileTable( )
@@ -103,7 +103,7 @@ void OFileTable::refreshColumns()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::refreshColumns" );
     TStringVector aVector;
         Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
-                                                    m_SchemaName,m_Name,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")));
+                                                    m_SchemaName,m_Name,::rtl::OUString::createFromAscii("%"));
 
     if(xResult.is())
     {
@@ -115,7 +115,7 @@ void OFileTable::refreshColumns()
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        m_pColumns  = new OColumns(this,m_aMutex,aVector);
+        m_pColumns	= new OColumns(this,m_aMutex,aVector);
 }
 // -------------------------------------------------------------------------
 void OFileTable::refreshKeys()
@@ -205,19 +205,19 @@ void SAL_CALL OFileTable::release() throw()
     OTable_TYPEDEF::release();
 }
 // -----------------------------------------------------------------------------
-sal_Bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, sal_Bool /*bFlush*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
+BOOL OFileTable::InsertRow(OValueRefVector& /*rRow*/, BOOL /*bFlush*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::InsertRow" );
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-sal_Bool OFileTable::DeleteRow(const OSQLColumns& /*_rCols*/)
+BOOL OFileTable::DeleteRow(const OSQLColumns& /*_rCols*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::DeleteRow" );
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-sal_Bool OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
+BOOL OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::UpdateRow" );
     return sal_False;
@@ -226,13 +226,13 @@ sal_Bool OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRo
 void OFileTable::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& /*descriptor*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::addColumn" );
-    OSL_FAIL( "OFileTable::addColumn: not implemented!" );
+    OSL_ENSURE( false, "OFileTable::addColumn: not implemented!" );
 }
 // -----------------------------------------------------------------------------
 void OFileTable::dropColumn(sal_Int32 /*_nPos*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::dropColumn" );
-    OSL_FAIL( "OFileTable::addColumn: not implemented!" );
+    OSL_ENSURE( false, "OFileTable::addColumn: not implemented!" );
 }
 
 // -----------------------------------------------------------------------------

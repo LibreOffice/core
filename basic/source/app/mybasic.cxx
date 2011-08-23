@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,14 @@
 #include <vcl/msgbox.hxx>
 #include <basic/sbx.hxx>
 
+// AB-Uno-Test
+//#define unotest
+#ifdef unotest
+#include <usr/uno.hxx>
+#include <basic/sbuno.hxx>
+#include <sbunoobj.hxx>
+#endif
+
 #include "sbintern.hxx"
 
 #include <basic/ttstrhlp.hxx>
@@ -52,7 +60,7 @@ TYPEINIT1(MyBasic,StarBASIC)
 class MyFactory : public SbxFactory
 {
 public:
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
+    virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
 };
 
 static SampleObjectFac aFac1;
@@ -60,7 +68,7 @@ static MyFactory aFac2;
 static ProcessFactory aProcessFac;
 static short nInst = 0;
 
-SbxBase* MyFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCr )
+SbxBase* MyFactory::Create( UINT16 nSbxId, UINT32 nCr )
 {
     if( nCr == SBXCR_TEST && nSbxId == SBXID_MYBASIC )
         return new MyBasic;
@@ -71,7 +79,6 @@ SbxBase* MyFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCr )
 MyBasic::MyBasic() : StarBASIC()
 {
     nError = 0;
-    CurrentError = 0;
     if( !nInst++ )
     {
         AddFactory( &aFac1 );
@@ -81,6 +88,21 @@ MyBasic::MyBasic() : StarBASIC()
     SbxVariable* p = new SbxCollection( CUniString("MyColl") );
     p->SetName( CUniString("Objects") );
     Insert( p );
+
+    // AB-Uno-Test
+#ifdef unotest
+    // Get Uno-Service-Manager and Reflection Service
+    createAndSetDefaultServiceManager();		// done later
+
+    // Get Uno-Test-Object
+    UsrAny aObjAny = getIntrospectionTestObject();
+
+    // Box object into SbUnoObject
+    String aName( "UnoObject" );
+    SbxObjectRef xSbUnoObj = GetSbUnoObject( aName, aObjAny );
+    //SbxObjectRef xSbUnoObj = new SbUnoObject( aName, aObjAny );
+    Insert( (SbxObject*)xSbUnoObj );
+#endif
 
     pTestObject = NULL;
 }
@@ -129,17 +151,17 @@ void MyBasic::LoadIniFile()
 {
 }
 
-SbTextType MyBasic::GetSymbolType( const String &rSymbol, sal_Bool bWasTTControl )
+SbTextType MyBasic::GetSymbolType( const String &rSymbol, BOOL bWasTTControl )
 {
-    (void) rSymbol;       /* avoid warning about unused parameter */
-    (void) bWasTTControl; /* avoid warning about unused parameter */
+    (void) rSymbol;       /* avoid warning about unused parameter */ 
+    (void) bWasTTControl; /* avoid warning about unused parameter */ 
     return SB_SYMBOL;     // Everything here is of type SB_SYMBOL and continues to be so
 }
 
 
 MyBasic::~MyBasic()
 {
-    Reset();
+    aErrors.Clear();
     if( !--nInst )
     {
         RemoveFactory( &aFac1 );
@@ -150,72 +172,39 @@ MyBasic::~MyBasic()
 
 void MyBasic::Reset()
 {
-    for ( size_t i = 0, n = aErrors.size(); i < n; ++i ) delete aErrors[ i ];
-    aErrors.clear();
+    aErrors.Clear();
     nError = 0;
-    CurrentError = 0;
 }
 
-sal_Bool MyBasic::Compile( SbModule* p )
+BOOL MyBasic::Compile( SbModule* p )
 {
     Reset();
     return StarBASIC::Compile( p );
 }
 
-BasicError* MyBasic::NextError()
-{
-    if ( CurrentError < ( aErrors.size() - 1 ) )
-    {
-        ++CurrentError;
-        return aErrors[ CurrentError ];
-    }
-    return NULL;
-}
-
-BasicError* MyBasic::PrevError()
-{
-    if ( !aErrors.empty() && CurrentError > 0 )
-    {
-        --CurrentError;
-        return aErrors[ CurrentError ];
-    }
-    return NULL;
-}
-
-BasicError* MyBasic::FirstError()
-{
-    if ( !aErrors.empty() )
-    {
-        CurrentError = 0;
-        return aErrors[ CurrentError ];
-    }
-    return NULL;
-}
-
-sal_Bool MyBasic::ErrorHdl()
+BOOL MyBasic::ErrorHdl()
 {
     AppBasEd* pWin = aBasicApp.pFrame->FindModuleWin( GetActiveModule()->GetName() );
     if( !pWin )
-    {       // open a window
+    {		// open a window
         pWin = aBasicApp.pFrame->CreateModuleWin( GetActiveModule() );
     }
     else
         pWin->ToTop();
     if( IsCompilerError() )
     {
-        aErrors.push_back(
+        aErrors.Insert(
           new BasicError
             ( pWin,
-              0, StarBASIC::GetErrorText(), GetLine(), GetCol1(), GetCol2() )
-            );
+              0, StarBASIC::GetErrorText(), GetLine(), GetCol1(), GetCol2() ),
+              LIST_APPEND );
         nError++;
-        CurrentError = aErrors.size() - 1;
-        return sal_Bool( nError < 20 ); // Cancel after 20 errors
+        return BOOL( nError < 20 );	// Cancel after 20 errors
     }
     else
     {
         ReportRuntimeError( pWin );
-        return sal_False;
+        return FALSE;
     }
 }
 
@@ -224,7 +213,7 @@ void MyBasic::ReportRuntimeError( AppBasEd *pEditWin )
     String nErrorText;
     nErrorText = GetSpechialErrorText();
 
-    if ( pEditWin )     // just in case the focus is not right
+    if ( pEditWin )		// just in case the focus is not right
         pEditWin->ToTop();
 
     BasicError( pEditWin,
@@ -232,9 +221,9 @@ void MyBasic::ReportRuntimeError( AppBasEd *pEditWin )
         GetCol1(), GetCol2() ).Show();
 }
 
-void MyBasic::DebugFindNoErrors( sal_Bool bDebugFindNoErrors )
+void MyBasic::DebugFindNoErrors( BOOL bDebugFindNoErrors )
 {
-    (void) bDebugFindNoErrors; /* avoid warning about unused parameter */
+    (void) bDebugFindNoErrors; /* avoid warning about unused parameter */ 
 }
 
 const String MyBasic::GetSpechialErrorText()
@@ -242,14 +231,14 @@ const String MyBasic::GetSpechialErrorText()
     return GetErrorText();
 }
 
-sal_uInt16 MyBasic::BreakHdl()
+USHORT MyBasic::BreakHdl()
 {
     SbModule* pMod = GetActiveModule();
     if( pMod )
     {
         AppBasEd* pWin = aBasicApp.pFrame->FindModuleWin( pMod->GetName() );
         if( !pWin )
-        {       // open a window
+        {		// open a window
             pWin = aBasicApp.pFrame->CreateModuleWin( pMod );
         }
         else
@@ -257,8 +246,10 @@ sal_uInt16 MyBasic::BreakHdl()
         pWin->Highlight( GetLine(), GetCol1(), GetCol2() );
     }
 
-    if( IsBreak() ) // If Breakpoint (or "Run to Cursor")
+    if( IsBreak() )	// If Breakpoint (or "Run to Cursor")
     {
+//		if ( GetActiveModule()->IsBP(GetLine()) )
+//			GetActiveModule()->ClearBP(GetLine());
         return aBasicApp.pFrame->BreakHandler();
     }
     else
@@ -274,7 +265,7 @@ sal_uInt16 MyBasic::BreakHdl()
 ***************************************************************************/
 
 BasicError::BasicError
-    ( AppBasEd* w, sal_uInt16 nE, const String& r, sal_uInt16 nL, sal_uInt16 nC1, sal_uInt16 nC2 )
+    ( AppBasEd* w, USHORT nE, const String& r, USHORT nL, USHORT nC1, USHORT nC2 )
     : aText( SttResId( IDS_ERROR1 ) )
 {
     pWin  = w;
@@ -295,12 +286,12 @@ BasicError::BasicError
 // to highlight a statement
 void BasicError::Show()
 {
-    if( pWin && aBasicApp.pFrame->IsWinValid( pWin ) )
+    if( pWin && aBasicApp.pFrame->IsWinValid( pWin ) ) 
     {
         pWin->Highlight( nLine, nCol1, nCol2 );
         aBasicApp.pFrame->pStatus->Message( aText );
-    }
-    else
+    } 
+    else 
         MessBox( aBasicApp.pFrame, WB_OK, aBasicApp.pFrame->GetText(),
                  aText ).Execute();
 }

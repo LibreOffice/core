@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace cppu;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
@@ -64,8 +63,8 @@ DynamicResultSetWrapper::DynamicResultSetWrapper(
                 , m_xSource( xOrigin )
                 , m_xSourceResultOne( NULL )
                 , m_xSourceResultTwo( NULL )
-            //  , m_xSourceResultCurrent( NULL )
-            //  , m_bUseOne( NULL )
+            //	, m_xSourceResultCurrent( NULL )
+            //	, m_bUseOne( NULL )
                 , m_xMyResultOne( NULL )
                 , m_xMyResultTwo( NULL )
                 , m_xListener( NULL )
@@ -184,7 +183,7 @@ void SAL_CALL DynamicResultSetWrapper
 //--------------------------------------------------------------------------
 // virtual
 void SAL_CALL DynamicResultSetWrapper
-    ::addEventListener( const Reference< XEventListener >& Listener )
+    ::addEventListener(	const Reference< XEventListener >& Listener )
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
@@ -243,7 +242,7 @@ void SAL_CALL DynamicResultSetWrapper
     //@todo
     /*
     <p>The Listener is allowed to blockade this call, until he really want to go
-    to the new version. The only situation, where the listener has to return the
+    to the new version.	The only situation, where the listener has to return the
     update call at once is, while he disposes his broadcaster or while he is
     removing himsef as listener (otherwise you deadlock)!!!
     */
@@ -276,7 +275,7 @@ void SAL_CALL DynamicResultSetWrapper
                     }
                     else
                     {
-                        OSL_FAIL( "ListActionType was WELCOME but ActionInfo didn't contain a WelcomeDynamicResultSetStruct" );
+                        OSL_ENSURE( sal_False, "ListActionType was WELCOME but ActionInfo didn't contain a WelcomeDynamicResultSetStruct" );
                         //throw RuntimeException();
                     }
                     break;
@@ -292,7 +291,7 @@ void SAL_CALL DynamicResultSetWrapper
 
     /*
     m_bUseOne = !m_bUseOne;
-    if( m_bUseOne )
+    if(	m_bUseOne )
         m_xSourceResultCurrent = m_xSourceResultOne;
     else
         m_xSourceResultCurrent = m_xSourceResultTwo;
@@ -429,8 +428,8 @@ void SAL_CALL DynamicResultSetWrapper
         {
             xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
                 m_xSMgr->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" )) ),
+                    OUString::createFromAscii(
+                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
                 UNO_QUERY );
         }
         catch ( Exception const & )
@@ -444,7 +443,7 @@ void SAL_CALL DynamicResultSetWrapper
             return;
         }
     }
-    OSL_FAIL( "could not connect to cache" );
+    OSL_ENSURE( sal_False, "could not connect to cache" );
     throw ServiceNotFoundException();
 }
 

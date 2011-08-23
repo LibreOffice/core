@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <osl/time.h>
 
 #ifndef _RTL_TEXTENC_H_
-#   include <rtl/textenc.h>
+#	include <rtl/textenc.h>
 #endif
 
 #ifdef __cplusplus
@@ -61,7 +61,7 @@ typedef enum
     osl_Thread_PriorityNormal,
     osl_Thread_PriorityBelowNormal,
     osl_Thread_PriorityLowest,
-    osl_Thread_PriorityUnknown,         /* don't use to set */
+    osl_Thread_PriorityUnknown,			/* don't use to set */
     osl_Thread_Priority_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslThreadPriority;
 
@@ -160,18 +160,6 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread);
 */
 void SAL_CALL osl_yieldThread(void);
 
-/** Attempts to set the name of the current thread.
-
-    The name of a thread is usually evaluated for debugging purposes.  Not all
-    platforms support this.  On Linux, a set thread name can be observed with
-    "ps -L".  On Windows with the Microsoft compiler, a thread name set while a
-    debugger is attached can be observed within the debugger.
-
-    @param name  the name of the thread; must not be null; on Linux, only the
-    first 16 characters are used
-*/
-void SAL_CALL osl_setThreadName(char const * name);
-
 /* Callback when data stored in a thread key is no longer needed */
 
 typedef void (SAL_CALL *oslThreadKeyCallbackFunction)(void *);
@@ -191,7 +179,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData);
 /** Get the current thread local text encoding. */
 rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void);
 
-/** Set the thread local text encoding.
+/** Set the thread local text encoding. 
     @return the old text encoding.
 */
 rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding(rtl_TextEncoding Encoding);
@@ -200,6 +188,6 @@ rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding(rtl_TextEncoding Encoding);
 }
 #endif
 
-#endif  /* _OSL_THREAD_H_ */
+#endif	/* _OSL_THREAD_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

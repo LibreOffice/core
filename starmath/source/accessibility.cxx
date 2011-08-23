@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -338,8 +338,8 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
     Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : 0;
     if (pAccParent)
     {
-        sal_uInt16 nCnt = pAccParent->GetAccessibleChildWindowCount();
-        for (sal_uInt16 i = 0;  i < nCnt  &&  nIdx == -1;  ++i)
+        USHORT nCnt = pAccParent->GetAccessibleChildWindowCount();
+        for (USHORT i = 0;  i < nCnt  &&  nIdx == -1;  ++i)
             if (pAccParent->GetAccessibleChildWindow( i ) == pWin)
                 nIdx = i;
     }
@@ -462,7 +462,6 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getCaretPosition()
 sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    SolarMutexGuard aGuard;
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     String aTxt( GetAccessibleText_Impl() );
     if (!(nIdx < aTxt.Len()))
@@ -483,12 +482,12 @@ sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
 }
 
 Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttributes(
-        sal_Int32 nIndex,
+        sal_Int32 nIndex, 
         const uno::Sequence< ::rtl::OUString > & /*rRequestedAttributes*/ )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nLen = GetAccessibleText_Impl().Len();
+    INT32 nLen = GetAccessibleText_Impl().Len();
     if (!(0 <= nIndex  &&  nIndex < nLen))
         throw IndexOutOfBoundsException();
     return Sequence< beans::PropertyValue >();
@@ -511,10 +510,10 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
         if (!pDoc)
             throw RuntimeException();
         String aTxt( GetAccessibleText_Impl() );
-        if (!(0 <= nIndex  &&  nIndex <= aTxt.Len()))   // aTxt.Len() is valid
+        if (!(0 <= nIndex  &&  nIndex <= aTxt.Len()))   // #108812# aTxt.Len() is valid
             throw IndexOutOfBoundsException();
 
-        // find a reasonable rectangle for position aTxt.Len().
+        // #108812# find a reasonable rectangle for position aTxt.Len().
         bool bWasBehindText = (nIndex == aTxt.Len());
         if (bWasBehindText && nIndex)
             --nIndex;
@@ -560,7 +559,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             }
         }
 
-        // take rectangle from last character and move it to the right
+        // #108812# take rectangle from last character and move it to the right
         if (bWasBehindText)
             aRes.X += aRes.Width;
     }
@@ -668,11 +667,11 @@ sal_Bool SAL_CALL SmGraphicAccessible::setSelection(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nLen = GetAccessibleText_Impl().Len();
+    INT32 nLen = GetAccessibleText_Impl().Len();
     if (!(0 <= nStartIndex  &&  nStartIndex < nLen) ||
         !(0 <= nEndIndex    &&  nEndIndex   < nLen))
         throw IndexOutOfBoundsException();
-    return sal_False;
+    return FALSE;
 }
 
 OUString SAL_CALL SmGraphicAccessible::getText()
@@ -846,7 +845,7 @@ SmEditSource::SmEditSource( const SmEditSource &rSrc ) :
     aViewFwd    (rSrc.rEditAcc),
     aTextFwd    (rSrc.rEditAcc, *this),
     aEditViewFwd(rSrc.rEditAcc),
-    rEditAcc    (rSrc.rEditAcc)
+    rEditAcc	(rSrc.rEditAcc)
 {
 }
 
@@ -896,7 +895,7 @@ SmViewForwarder::~SmViewForwarder()
 {
 }
 
-sal_Bool SmViewForwarder::IsValid() const
+BOOL SmViewForwarder::IsValid() const
 {
     return rEditAcc.GetEditView() != 0;
 }
@@ -993,13 +992,13 @@ IMPL_LINK(SmTextForwarder, NotifyHdl, EENotify*, aNotify)
     return 0;
 }
 
-sal_uInt16 SmTextForwarder::GetParagraphCount() const
+USHORT SmTextForwarder::GetParagraphCount() const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     return pEditEngine ? pEditEngine->GetParagraphCount() : 0;
 }
 
-sal_uInt16 SmTextForwarder::GetTextLen( sal_uInt16 nParagraph ) const
+USHORT SmTextForwarder::GetTextLen( USHORT nParagraph ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     return pEditEngine ? pEditEngine->GetTextLen( nParagraph ) : 0;
@@ -1015,7 +1014,7 @@ String SmTextForwarder::GetText( const ESelection& rSel ) const
     return aRet;
 }
 
-SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib ) const
+SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     OSL_ENSURE( pEditEngine, "EditEngine missing" );
@@ -1034,7 +1033,7 @@ SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHa
             nFlags = GETATTRIBS_CHARATTRIBS;
             break;
         default:
-            OSL_FAIL("unknown flags for SmTextForwarder::GetAttribs");
+            DBG_ERROR("unknown flags for SmTextForwarder::GetAttribs");
         }
 
         return pEditEngine->GetAttribs( rSel.nStartPara, rSel.nStartPos, rSel.nEndPos, nFlags );
@@ -1045,17 +1044,17 @@ SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHa
     }
 }
 
-SfxItemSet SmTextForwarder::GetParaAttribs( sal_uInt16 nPara ) const
+SfxItemSet SmTextForwarder::GetParaAttribs( USHORT nPara ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     OSL_ENSURE( pEditEngine, "EditEngine missing" );
 
     SfxItemSet aSet( pEditEngine->GetParaAttribs( nPara ) );
 
-    sal_uInt16 nWhich = EE_PARA_START;
+    USHORT nWhich = EE_PARA_START;
     while( nWhich <= EE_PARA_END )
     {
-        if( aSet.GetItemState( nWhich, sal_True ) != SFX_ITEM_ON )
+        if( aSet.GetItemState( nWhich, TRUE ) != SFX_ITEM_ON )
         {
             if( pEditEngine->HasParaAttrib( nPara, nWhich ) )
                 aSet.Put( pEditEngine->GetParaAttrib( nPara, nWhich ) );
@@ -1066,7 +1065,7 @@ SfxItemSet SmTextForwarder::GetParaAttribs( sal_uInt16 nPara ) const
     return aSet;
 }
 
-void SmTextForwarder::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet )
+void SmTextForwarder::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
@@ -1084,9 +1083,9 @@ void SmTextForwarder::RemoveAttribs( const ESelection& rSelection, sal_Bool bRem
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
         pEditEngine->RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
-}
+}    
 
-void SmTextForwarder::GetPortions( sal_uInt16 nPara, SvUShorts& rList ) const
+void SmTextForwarder::GetPortions( USHORT nPara, SvUShorts& rList ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
@@ -1121,15 +1120,15 @@ void SmTextForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESelection&
         pEditEngine->QuickSetAttribs( rSet, rSel );
 }
 
-sal_Bool SmTextForwarder::IsValid() const
+BOOL SmTextForwarder::IsValid() const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     // cannot reliably query EditEngine state
     // while in the middle of an update
-    return pEditEngine ? pEditEngine->GetUpdateMode() : sal_False;
+    return pEditEngine ? pEditEngine->GetUpdateMode() : FALSE;
 }
 
-XubString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+XubString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     XubString aTxt;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
@@ -1138,29 +1137,29 @@ XubString SmTextForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_uInt1
     return aTxt;
 }
 
-void SmTextForwarder::FieldClicked(const SvxFieldItem&, sal_uInt16, sal_uInt16)
+void SmTextForwarder::FieldClicked(const SvxFieldItem&, USHORT, USHORT)
 {
 }
 
-sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
+USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, USHORT nWhich )
 {
     EECharAttribArray aAttribs;
 
-    const SfxPoolItem*  pLastItem = NULL;
+    const SfxPoolItem*	pLastItem = NULL;
 
     SfxItemState eState = SFX_ITEM_DEFAULT;
 
     // check all paragraphs inside the selection
-    for( sal_uInt16 nPara = rSel.nStartPara; nPara <= rSel.nEndPara; nPara++ )
+    for( USHORT nPara = rSel.nStartPara; nPara <= rSel.nEndPara; nPara++ )
     {
         SfxItemState eParaState = SFX_ITEM_DEFAULT;
 
         // calculate start and endpos for this paragraph
-        sal_uInt16 nPos = 0;
+        USHORT nPos = 0;
         if( rSel.nStartPara == nPara )
             nPos = rSel.nStartPos;
 
-        sal_uInt16 nEndPos = rSel.nEndPos;
+        USHORT nEndPos = rSel.nEndPos;
         if( rSel.nEndPara != nPara )
             nEndPos = rEditEngine.GetTextLen( nPara );
 
@@ -1168,23 +1167,23 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
         // get list of char attribs
         rEditEngine.GetCharAttribs( nPara, aAttribs );
 
-        bool bEmpty = true;     // we found no item inside the selektion of this paragraph
-        bool bGaps  = false;    // we found items but theire gaps between them
-        sal_uInt16 nLastEnd = nPos;
+        BOOL bEmpty = TRUE;		// we found no item inside the selektion of this paragraph
+        BOOL bGaps  = FALSE;	// we found items but theire gaps between them
+        USHORT nLastEnd = nPos;
 
         const SfxPoolItem* pParaItem = NULL;
 
-        for( sal_uInt16 nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++ )
+        for( USHORT nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++ )
         {
             struct EECharAttrib aAttrib = aAttribs.GetObject( nAttrib );
             OSL_ENSURE( aAttrib.pAttr, "GetCharAttribs gives corrupt data" );
 
             const sal_Bool bEmptyPortion = aAttrib.nStart == aAttrib.nEnd;
             if( (!bEmptyPortion && (aAttrib.nStart >= nEndPos)) || (bEmptyPortion && (aAttrib.nStart > nEndPos)) )
-                break;  // break if we are already behind our selektion
+                break;	// break if we are already behind our selektion
 
             if( (!bEmptyPortion && (aAttrib.nEnd <= nPos)) || (bEmptyPortion && (aAttrib.nEnd < nPos)) )
-                continue;   // or if the attribute ends before our selektion
+                continue;	// or if the attribute ends before our selektion
 
             if( aAttrib.pAttr->Which() != nWhich )
                 continue; // skip if is not the searched item
@@ -1202,16 +1201,16 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
             }
 
             if( bEmpty )
-                bEmpty = false;
+                bEmpty = FALSE;
 
             if( !bGaps && aAttrib.nStart > nLastEnd )
-                bGaps = true;
+                bGaps = TRUE;
 
             nLastEnd = aAttrib.nEnd;
         }
 
         if( !bEmpty && !bGaps && nLastEnd < ( nEndPos - 1 ) )
-            bGaps = true;
+            bGaps = TRUE;
         if( bEmpty )
             eParaState = SFX_ITEM_DEFAULT;
         else if( bGaps )
@@ -1235,18 +1234,18 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
     return eState;
 }
 
-sal_uInt16 SmTextForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
+USHORT SmTextForwarder::GetItemState( const ESelection& rSel, USHORT nWhich ) const
 {
-    sal_uInt16 nState = SFX_ITEM_DISABLED;
+    USHORT nState = SFX_ITEM_DISABLED;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
         nState = GetSvxEditEngineItemState( *pEditEngine, rSel, nWhich );
     return nState;
 }
 
-sal_uInt16 SmTextForwarder::GetItemState( sal_uInt16 nPara, sal_uInt16 nWhich ) const
+USHORT SmTextForwarder::GetItemState( USHORT nPara, USHORT nWhich ) const
 {
-    sal_uInt16 nState = SFX_ITEM_DISABLED;
+    USHORT nState = SFX_ITEM_DISABLED;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
@@ -1256,37 +1255,37 @@ sal_uInt16 SmTextForwarder::GetItemState( sal_uInt16 nPara, sal_uInt16 nWhich ) 
     return nState;
 }
 
-LanguageType SmTextForwarder::GetLanguage( sal_uInt16 nPara, sal_uInt16 nIndex ) const
+LanguageType SmTextForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     return pEditEngine ? pEditEngine->GetLanguage(nPara, nIndex) : LANGUAGE_NONE;
 }
 
-sal_uInt16 SmTextForwarder::GetFieldCount( sal_uInt16 nPara ) const
+USHORT SmTextForwarder::GetFieldCount( USHORT nPara ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     return pEditEngine ? pEditEngine->GetFieldCount(nPara) : 0;
 }
 
-EFieldInfo SmTextForwarder::GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const
+EFieldInfo SmTextForwarder::GetFieldInfo( USHORT nPara, USHORT nField ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     return pEditEngine ? pEditEngine->GetFieldInfo( nPara, nField ) : EFieldInfo();
 }
 
-EBulletInfo SmTextForwarder::GetBulletInfo( sal_uInt16 /*nPara*/ ) const
+EBulletInfo SmTextForwarder::GetBulletInfo( USHORT /*nPara*/ ) const
 {
     return EBulletInfo();
 }
 
-Rectangle SmTextForwarder::GetCharBounds( sal_uInt16 nPara, sal_uInt16 nIndex ) const
+Rectangle SmTextForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
 {
     Rectangle aRect(0,0,0,0);
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-
+    
     if (pEditEngine)
     {
-        // Handle virtual position one-past-the end of the string
+        // #108900# Handle virtual position one-past-the end of the string
         if( nIndex >= pEditEngine->GetTextLen(nPara) )
         {
             if( nIndex )
@@ -1303,16 +1302,16 @@ Rectangle SmTextForwarder::GetCharBounds( sal_uInt16 nPara, sal_uInt16 nIndex ) 
     return aRect;
 }
 
-Rectangle SmTextForwarder::GetParaBounds( sal_uInt16 nPara ) const
+Rectangle SmTextForwarder::GetParaBounds( USHORT nPara ) const
 {
     Rectangle aRect(0,0,0,0);
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-
+    
     if (pEditEngine)
     {
         const Point aPnt = pEditEngine->GetDocPosTopLeft( nPara );
-        const sal_uLong nWidth = pEditEngine->CalcTextWidth();
-        const sal_uLong nHeight = pEditEngine->GetTextHeight( nPara );
+        const ULONG nWidth = pEditEngine->CalcTextWidth();
+        const ULONG nHeight = pEditEngine->GetTextHeight( nPara );
         aRect = Rectangle( aPnt.X(), aPnt.Y(), aPnt.X() + nWidth, aPnt.Y() + nHeight );
     }
 
@@ -1331,21 +1330,21 @@ OutputDevice* SmTextForwarder::GetRefDevice() const
     return pEditEngine ? pEditEngine->GetRefDevice() : 0;
 }
 
-sal_Bool SmTextForwarder::GetIndexAtPoint( const Point& rPos, sal_uInt16& nPara, sal_uInt16& nIndex ) const
+sal_Bool SmTextForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
 {
     sal_Bool bRes = sal_False;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
         EPosition aDocPos = pEditEngine->FindDocPosition( rPos );
-        nPara   = aDocPos.nPara;
-        nIndex  = aDocPos.nIndex;
+        nPara	= aDocPos.nPara;
+        nIndex	= aDocPos.nIndex;
         bRes = sal_True;
     }
     return bRes;
 }
 
-sal_Bool SmTextForwarder::GetWordIndices( sal_uInt16 nPara, sal_uInt16 nIndex, sal_uInt16& nStart, sal_uInt16& nEnd ) const
+sal_Bool SmTextForwarder::GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const
 {
     sal_Bool bRes = sal_False;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
@@ -1366,39 +1365,39 @@ sal_Bool SmTextForwarder::GetWordIndices( sal_uInt16 nPara, sal_uInt16 nIndex, s
     return bRes;
 }
 
-sal_Bool SmTextForwarder::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex ) const
+sal_Bool SmTextForwarder::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    return pEditEngine ?
+    return pEditEngine ? 
                 SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, *pEditEngine, nPara, nIndex )
                 : sal_False;
 }
 
-sal_uInt16 SmTextForwarder::GetLineCount( sal_uInt16 nPara ) const
+USHORT SmTextForwarder::GetLineCount( USHORT nPara ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     return pEditEngine ? pEditEngine->GetLineCount(nPara) : 0;
 }
 
-sal_uInt16 SmTextForwarder::GetLineLen( sal_uInt16 nPara, sal_uInt16 nLine ) const
+USHORT SmTextForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     return pEditEngine ? pEditEngine->GetLineLen(nPara, nLine) : 0;
 }
-
-void SmTextForwarder::GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_uInt16 nPara, sal_uInt16 nLine ) const
+    
+void SmTextForwarder::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nPara, USHORT nLine ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     pEditEngine->GetLineBoundaries(rStart, rEnd, nPara, nLine);
-}
+}    
 
-sal_uInt16 SmTextForwarder::GetLineNumberAtIndex( sal_uInt16 nPara, sal_uInt16 nIndex ) const
+USHORT SmTextForwarder::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     return pEditEngine ? pEditEngine->GetLineNumberAtIndex(nPara, nIndex) : 0;
-}
+}    
 
-sal_Bool SmTextForwarder::QuickFormatDoc( sal_Bool /*bFull*/ )
+sal_Bool SmTextForwarder::QuickFormatDoc( BOOL /*bFull*/ )
 {
     sal_Bool bRes = sal_False;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
@@ -1410,13 +1409,13 @@ sal_Bool SmTextForwarder::QuickFormatDoc( sal_Bool /*bFull*/ )
     return bRes;
 }
 
-sal_Int16 SmTextForwarder::GetDepth( sal_uInt16 /*nPara*/ ) const
+sal_Int16 SmTextForwarder::GetDepth( USHORT /*nPara*/ ) const
 {
     // math has no outliner...
     return -1;
 }
 
-sal_Bool SmTextForwarder::SetDepth( sal_uInt16 /*nPara*/, sal_Int16 nNewDepth )
+sal_Bool SmTextForwarder::SetDepth( USHORT /*nPara*/, sal_Int16 nNewDepth )
 {
     // math has no outliner...
     return -1 == nNewDepth;  // is it the value from 'GetDepth' ?
@@ -1465,12 +1464,12 @@ void SmTextForwarder::AppendParagraph()
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
-        sal_uInt16 nParaCount = pEditEngine->GetParagraphCount();
+        USHORT nParaCount = pEditEngine->GetParagraphCount();
         pEditEngine->InsertParagraph( nParaCount, String() );
     }
 }
 
-xub_StrLen SmTextForwarder::AppendTextPortion( sal_uInt16 nPara, const String &rText, const SfxItemSet &rSet )
+xub_StrLen SmTextForwarder::AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet )
 {
     xub_StrLen nRes = 0;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
@@ -1479,7 +1478,7 @@ xub_StrLen SmTextForwarder::AppendTextPortion( sal_uInt16 nPara, const String &r
         // append text
         ESelection aSel( nPara, pEditEngine->GetTextLen( nPara ) );
         pEditEngine->QuickInsertText( rText, aSel );
-
+        
         // set attributes for new appended text
         nRes = aSel.nEndPos = pEditEngine->GetTextLen( nPara );
         pEditEngine->QuickSetAttribs( rSet, aSel );
@@ -1489,7 +1488,7 @@ xub_StrLen SmTextForwarder::AppendTextPortion( sal_uInt16 nPara, const String &r
 
 void SmTextForwarder::CopyText(const SvxTextForwarder& rSource)
 {
-
+    
     const SmTextForwarder* pSourceForwarder = dynamic_cast< const SmTextForwarder* >( &rSource );
     if( !pSourceForwarder )
         return;
@@ -1501,7 +1500,7 @@ void SmTextForwarder::CopyText(const SvxTextForwarder& rSource)
         pEditEngine->SetText( *pNewTextObject );
         delete pNewTextObject;
     }
-}
+}    
 
 //------------------------------------------------------------------------
 
@@ -1514,7 +1513,7 @@ SmEditViewForwarder::~SmEditViewForwarder()
 {
 }
 
-sal_Bool SmEditViewForwarder::IsValid() const
+BOOL SmEditViewForwarder::IsValid() const
 {
     return rEditAcc.GetEditView() != 0;
 }
@@ -1683,9 +1682,17 @@ void SmEditAccessible::Init()
     }
 }
 
+#ifdef TL_NOT_YET_USED
+SmDocShell * SmEditAccessible::GetDoc_Impl()
+{
+    SmViewShell *pView = pWin ? pWin->GetView() : 0;
+    return pView ? pView->GetDoc() : 0;
+}
+#endif // TL_NOT_YET_USED
+
 void SmEditAccessible::ClearWin()
 {
-    // remove handler before current object gets destroyed
+    // #112565# remove handler before current object gets destroyed
     // (avoid handler being called for already dead object)
     EditEngine *pEditEngine = GetEditEngine();
     if (pEditEngine)
@@ -1861,8 +1868,8 @@ sal_Int32 SAL_CALL SmEditAccessible::getAccessibleIndexInParent(  )
     Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : 0;
     if (pAccParent)
     {
-        sal_uInt16 nCnt = pAccParent->GetAccessibleChildWindowCount();
-        for (sal_uInt16 i = 0;  i < nCnt  &&  nIdx == -1;  ++i)
+        USHORT nCnt = pAccParent->GetAccessibleChildWindowCount();
+        for (USHORT i = 0;  i < nCnt  &&  nIdx == -1;  ++i)
             if (pAccParent->GetAccessibleChildWindow( i ) == pWin)
                 nIdx = i;
     }

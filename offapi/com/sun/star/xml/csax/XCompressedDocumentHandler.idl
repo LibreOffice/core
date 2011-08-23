@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,16 +24,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+ 
+//i20156 - new file for xmlsecurity module
 
-//i20156 - new file for XML security module
+#ifndef __com_sun_star_xml_csax_XCompressedDocumentHandler_idl__ 
+#define __com_sun_star_xml_csax_XCompressedDocumentHandler_idl__ 
 
-#ifndef __com_sun_star_xml_csax_XCompressedDocumentHandler_idl__
-#define __com_sun_star_xml_csax_XCompressedDocumentHandler_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/xml/sax/SAXException.idl>
-
-
+#include <com/sun/star/uno/XInterface.idl> 
+#include <com/sun/star/xml/sax/SAXException.idl> 
+ 
+ 
 module com { module sun { module star { module xml { module csax {
 
 /**
@@ -45,12 +45,12 @@ struct XMLAttribute
      * the attribute name
      */
     string sName;
-
+    
     /**
      * the attribute value
      */
     string sValue;
-};
+}; 
 
 /**
  * A compressed XDocumentHandler interface.
@@ -64,33 +64,33 @@ struct XMLAttribute
  * when UNO C++/Java bridge is involved.
  */
 interface XCompressedDocumentHandler: com::sun::star::uno::XInterface
-{
-    void _startDocument()
+{ 
+    void _startDocument() 
+        raises( com::sun::star::xml::sax::SAXException ); 
+        
+    void _endDocument() 
+        raises( com::sun::star::xml::sax::SAXException ); 
+        
+    void _startElement( [in] string aName, [in] sequence< XMLAttribute > aAttributes) 
         raises( com::sun::star::xml::sax::SAXException );
-
-    void _endDocument()
-        raises( com::sun::star::xml::sax::SAXException );
-
-    void _startElement( [in] string aName, [in] sequence< XMLAttribute > aAttributes)
-        raises( com::sun::star::xml::sax::SAXException );
-
-    void _endElement( [in] string aName )
-        raises( com::sun::star::xml::sax::SAXException );
-
-    void _characters( [in] string aChars )
-        raises( com::sun::star::xml::sax::SAXException );
-
-    void _ignorableWhitespace( [in] string aWhitespaces )
-        raises( com::sun::star::xml::sax::SAXException );
-
-    void _processingInstruction( [in] string aTarget, [in] string aData )
-        raises( com::sun::star::xml::sax::SAXException );
-
+        
+    void _endElement( [in] string aName ) 
+        raises( com::sun::star::xml::sax::SAXException ); 
+ 
+    void _characters( [in] string aChars ) 
+        raises( com::sun::star::xml::sax::SAXException ); 
+ 
+    void _ignorableWhitespace( [in] string aWhitespaces ) 
+        raises( com::sun::star::xml::sax::SAXException ); 
+        
+    void _processingInstruction( [in] string aTarget, [in] string aData ) 
+        raises( com::sun::star::xml::sax::SAXException ); 
+ 
     void _setDocumentLocator( [in] long columnNumber, [in] long lineNumber, [in] string publicId, [in] string systemId)
-        raises( com::sun::star::xml::sax::SAXException );
-
-};
+        raises( com::sun::star::xml::sax::SAXException ); 
+ 
+}; 
 
 } ; } ; } ; } ; } ;
 
-#endif
+#endif 

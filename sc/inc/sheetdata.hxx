@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <xmloff/maptype.hxx>
 #include <editeng/editdata.hxx>
 #include <vector>
-#include <boost/unordered_set.hpp>
+#include <hash_set>
 
 #include "address.hxx"
 
@@ -114,7 +114,7 @@ struct ScLoadedNamespaceEntry
 
 class ScSheetSaveData
 {
-    boost::unordered_set<rtl::OUString, rtl::OUStringHash>  maInitialPrefixes;
+    std::hash_set<rtl::OUString, rtl::OUStringHash>  maInitialPrefixes;
     std::vector<ScLoadedNamespaceEntry>              maLoadedNamespaces;
 
     std::vector<ScCellStyleEntry> maCellStyles;

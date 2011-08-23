@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ TypeAdmin::~TypeAdmin()
 
 const Type &
 TypeAdmin::CheckIn_UsedType( const InputContext &   ,
-                             DYN UsedType &         pass_type )
+                             DYN UsedType &    	    pass_type )
 {
     Dyn<UsedType>
         pNewType(&pass_type);  // Ensure clean up of heap object.

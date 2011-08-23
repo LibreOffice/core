@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 // include ---------------------------------------------------------------
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
@@ -43,17 +46,17 @@ enum MSFltrPg2_CheckBoxEntries {
     InvalidCBEntry
 };
 
-#define CBCOL_FIRST     0
-#define CBCOL_SECOND    1
+#define CBCOL_FIRST		0
+#define CBCOL_SECOND 	1
 
 // -----------------------------------------------------------------------
 
 OfaMSFilterTabPage::OfaMSFilterTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_MSFILTEROPT ), rSet ),
-    aMSWordGB       ( this, CUI_RES( GB_WORD        ) ),
-    aWBasicCodeCB   ( this, CUI_RES( CB_WBAS_CODE ) ),
+    aMSWordGB		( this, CUI_RES( GB_WORD	    ) ),
+    aWBasicCodeCB	( this, CUI_RES( CB_WBAS_CODE ) ),
     aWBasicWbctblCB ( this, CUI_RES( CB_WBAS_WBCTBL ) ),
-    aWBasicStgCB    ( this, CUI_RES( CB_WBAS_STG  ) ),
+    aWBasicStgCB	( this, CUI_RES( CB_WBAS_STG  ) ),
     aMSExcelGB      ( this, CUI_RES( GB_EXCEL     ) ),
     aEBasicCodeCB   ( this, CUI_RES( CB_EBAS_CODE ) ),
     aEBasicExectblCB( this, CUI_RES( CB_EBAS_EXECTBL ) ),
@@ -84,17 +87,17 @@ IMPL_LINK( OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, CheckBox*, EMPTYARG 
     return 0;
 }
 
-SfxTabPage* OfaMSFilterTabPage::Create( Window* pParent,
+SfxTabPage*	OfaMSFilterTabPage::Create( Window* pParent,
                                         const SfxItemSet& rAttrSet )
 {
     return new OfaMSFilterTabPage( pParent, rAttrSet );
 }
 
-sal_Bool OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
+BOOL OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
 {
     SvtFilterOptions* pOpt = SvtFilterOptions::Get();
 
-    sal_Bool bFlag;
+    BOOL bFlag;
     if( aWBasicCodeCB.GetSavedValue() != (bFlag = aWBasicCodeCB.IsChecked()))
         pOpt->SetLoadWordBasicCode( bFlag );
     if( aWBasicWbctblCB.GetSavedValue() != (bFlag = aWBasicWbctblCB.IsChecked()))
@@ -114,8 +117,12 @@ sal_Bool OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
     if( aPBasicStgCB.GetSavedValue() != (bFlag = aPBasicStgCB.IsChecked()))
         pOpt->SetLoadPPointBasicStorage( bFlag );
 
-    return sal_False;
+    return FALSE;
 }
+
+/*-----------------02.09.96 13.47-------------------
+
+--------------------------------------------------*/
 
 void OfaMSFilterTabPage::Reset( const SfxItemSet& )
 {
@@ -144,18 +151,21 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet& )
 
 }
 
+/*-----------------29.06.00 13:22-------------------
+ *
+ * --------------------------------------------------*/
 OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
                                         const SfxItemSet& rSet )
     : SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_MSFILTEROPT2 ), rSet ),
-    aCheckLB            ( this, CUI_RES( CLB_SETTINGS   )),
-    aHeader1FT          ( this, CUI_RES( FT_HEADER1_EXPLANATION )),
+    aCheckLB			( this, CUI_RES( CLB_SETTINGS	)),
+    aHeader1FT			( this, CUI_RES( FT_HEADER1_EXPLANATION )),
     aHeader2FT          ( this, CUI_RES( FT_HEADER2_EXPLANATION )),
     sHeader1            ( CUI_RES( ST_HEADER1 )),
     sHeader2            ( CUI_RES( ST_HEADER2 )),
-    sChgToFromMath      ( CUI_RES( ST_CHG_MATH  )),
-    sChgToFromWriter    ( CUI_RES( ST_CHG_WRITER )),
-    sChgToFromCalc      ( CUI_RES( ST_CHG_CALC )),
-    sChgToFromImpress   ( CUI_RES( ST_CHG_IMPRESS )),
+    sChgToFromMath		( CUI_RES( ST_CHG_MATH	)),
+    sChgToFromWriter	( CUI_RES( ST_CHG_WRITER )),
+    sChgToFromCalc		( CUI_RES( ST_CHG_CALC )),
+    sChgToFromImpress	( CUI_RES( ST_CHG_IMPRESS )),
     pCheckButtonData(0)
 {
     FreeResource();
@@ -169,7 +179,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
                     HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED );
 
     aCheckLB.SetHelpId( HID_OFAPAGE_MSFLTR2_CLB );
-    aCheckLB.SetStyle( aCheckLB.GetStyle()|WB_HSCROLL| WB_VSCROLL );
+    aCheckLB.SetWindowBits( WB_HSCROLL| WB_VSCROLL );
 }
 
 OfaMSFilterTabPage2::~OfaMSFilterTabPage2()
@@ -177,69 +187,73 @@ OfaMSFilterTabPage2::~OfaMSFilterTabPage2()
     delete pCheckButtonData;
 }
 
-SfxTabPage* OfaMSFilterTabPage2::Create( Window* pParent,
+SfxTabPage*	OfaMSFilterTabPage2::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
     return new OfaMSFilterTabPage2( pParent, rAttrSet );
 }
 
-sal_Bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
+BOOL OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
 {
+    BOOL bModified = FALSE;
     SvtFilterOptions* pOpt = SvtFilterOptions::Get();
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
-        sal_Bool (SvtFilterOptions:: *FnIs)() const;
-        void (SvtFilterOptions:: *FnSet)( sal_Bool bFlag );
+        BOOL (SvtFilterOptions:: *FnIs)() const;
+        void (SvtFilterOptions:: *FnSet)( BOOL bFlag );
     } aChkArr[] = {
-        { Math,     &SvtFilterOptions::IsMathType2Math,
-                        &SvtFilterOptions::SetMathType2Math },
-        { Math,     &SvtFilterOptions::IsMath2MathType,
+        { Math, 	&SvtFilterOptions::IsMathType2Math,
+                        &SvtFilterOptions::SetMathType2Math	},
+        { Math, 	&SvtFilterOptions::IsMath2MathType,
                         &SvtFilterOptions::SetMath2MathType },
-        { Writer,   &SvtFilterOptions::IsWinWord2Writer,
+        { Writer,	&SvtFilterOptions::IsWinWord2Writer,
                         &SvtFilterOptions::SetWinWord2Writer },
-        { Writer,   &SvtFilterOptions::IsWriter2WinWord,
+        { Writer, 	&SvtFilterOptions::IsWriter2WinWord,
                         &SvtFilterOptions::SetWriter2WinWord },
-        { Calc,     &SvtFilterOptions::IsExcel2Calc,
+        { Calc, 	&SvtFilterOptions::IsExcel2Calc,
                         &SvtFilterOptions::SetExcel2Calc },
-        { Calc,     &SvtFilterOptions::IsCalc2Excel,
+        { Calc, 	&SvtFilterOptions::IsCalc2Excel,
                         &SvtFilterOptions::SetCalc2Excel },
-        { Impress,  &SvtFilterOptions::IsPowerPoint2Impress,
+        { Impress, 	&SvtFilterOptions::IsPowerPoint2Impress,
                         &SvtFilterOptions::SetPowerPoint2Impress },
-        { Impress,  &SvtFilterOptions::IsImpress2PowerPoint,
+        { Impress, 	&SvtFilterOptions::IsImpress2PowerPoint,
                         &SvtFilterOptions::SetImpress2PowerPoint },
         { InvalidCBEntry, 0, 0 }
     };
 
-    sal_Bool bCheck, bFirst = sal_True;
+    BOOL bCheck, bFirst = TRUE;
     for( const ChkCBoxEntries* pArr = aChkArr;
             InvalidCBEntry != pArr->eType; ++pArr, bFirst = !bFirst )
     {
-        sal_uInt16 nCol = bFirst ? 1 : 2;
+        USHORT nCol = bFirst ? 1 : 2;
         SvLBoxEntry* pEntry = GetEntry4Type( pArr->eType );
         if( pEntry )
         {
             SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem( nCol ));
             if( pItem && ((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON )
             {
-                sal_uInt16 nButtonFlags = pItem->GetButtonFlags();
+                USHORT nButtonFlags = pItem->GetButtonFlags();
                 bCheck = SV_BUTTON_CHECKED ==
                         pCheckButtonData->ConvertToButtonState( nButtonFlags );
 
                 if( bCheck != (pOpt->*pArr->FnIs)() )
+                {
+                    bModified = TRUE;
                     (pOpt->*pArr->FnSet)( bCheck );
+                }
             }
         }
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
 {
     SvtFilterOptions* pOpt = SvtFilterOptions::Get();
 
-    aCheckLB.SetUpdateMode(sal_False);
+    aCheckLB.SetUpdateMode(FALSE);
     aCheckLB.Clear();
 
     SvtModuleOptions aModuleOpt;
@@ -256,7 +270,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
-        sal_Bool (SvtFilterOptions:: *FnIs)() const;
+        BOOL (SvtFilterOptions:: *FnIs)() const;
     } aChkArr[] = {
         { Math,     &SvtFilterOptions::IsMathType2Math },
         { Math,     &SvtFilterOptions::IsMath2MathType },
@@ -269,11 +283,11 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
         { InvalidCBEntry, NULL }
     };
 
-    sal_Bool bFirst = sal_True;
+    BOOL bFirst = TRUE;
     for( const ChkCBoxEntries* pArr = aChkArr;
             InvalidCBEntry != pArr->eType; ++pArr, bFirst = !bFirst )
     {
-        sal_uInt16 nCol = bFirst ? 1 : 2;
+        USHORT nCol = bFirst ? 1 : 2;
         SvLBoxEntry* pEntry = GetEntry4Type( static_cast< sal_IntPtr >( pArr->eType ) );
         if( pEntry )
         {
@@ -288,7 +302,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
             }
         }
     }
-    aCheckLB.SetUpdateMode( sal_True );
+    aCheckLB.SetUpdateMode( TRUE );
 }
 
 void OfaMSFilterTabPage2::InsertEntry( const String& _rTxt, sal_IntPtr _nType )
@@ -324,7 +338,7 @@ SvLBoxEntry* OfaMSFilterTabPage2::GetEntry4Type( sal_IntPtr _nType ) const
 void OfaMSFilterTabPage2::MSFltrSimpleTable::SetTabs()
 {
     SvxSimpleTable::SetTabs();
-    sal_uInt16 nAdjust = SV_LBOXTAB_ADJUST_RIGHT|SV_LBOXTAB_ADJUST_LEFT|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_ADJUST_NUMERIC|SV_LBOXTAB_FORCE;
+    USHORT nAdjust = SV_LBOXTAB_ADJUST_RIGHT|SV_LBOXTAB_ADJUST_LEFT|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_ADJUST_NUMERIC|SV_LBOXTAB_FORCE;
 
     if( aTabs.Count() > 1 )
     {
@@ -344,9 +358,11 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::HBarClick()
 {
     // Sortierung durch diese Ueberladung abgeklemmt
 }
+/* -----------------------------2002/06/20 11:51------------------------------
 
+ ---------------------------------------------------------------------------*/
 void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(
-                            SvLBoxEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
+                            SvLBoxEntry* pEntry, USHORT nCol, SvButtonState eState)
 {
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
 
@@ -370,9 +386,11 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(
         InvalidateEntry( pEntry );
     }
 }
+/* -----------------------------2002/06/20 11:56------------------------------
 
+ ---------------------------------------------------------------------------*/
 SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
-                                    SvLBoxEntry* pEntry, sal_uInt16 nCol ) const
+                                    SvLBoxEntry* pEntry, USHORT nCol ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
@@ -380,14 +398,16 @@ SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
 
     if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
     {
-        sal_uInt16 nButtonFlags = pItem->GetButtonFlags();
+        USHORT nButtonFlags = pItem->GetButtonFlags();
         eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
     }
 
     return eState;
 }
+/* -----------------------------2002/06/20 11:57------------------------------
 
-void OfaMSFilterTabPage2::MSFltrSimpleTable::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked)
+ ---------------------------------------------------------------------------*/
+void OfaMSFilterTabPage2::MSFltrSimpleTable::CheckEntryPos(ULONG nPos, USHORT nCol, BOOL bChecked)
 {
     if ( nPos < GetEntryCount() )
         SetCheckButtonState(
@@ -396,14 +416,16 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::CheckEntryPos(sal_uLong nPos, sal_u
             bChecked ? SvButtonState( SV_BUTTON_CHECKED ) :
                                        SvButtonState( SV_BUTTON_UNCHECKED ) );
 }
+/* -----------------------------2002/06/20 11:51------------------------------
 
+ ---------------------------------------------------------------------------*/
 void OfaMSFilterTabPage2::MSFltrSimpleTable::KeyInput( const KeyEvent& rKEvt )
 {
     if(!rKEvt.GetKeyCode().GetModifier() &&
         KEY_SPACE == rKEvt.GetKeyCode().GetCode())
     {
-        sal_uLong nSelPos = GetModel()->GetAbsPos(GetCurEntry());
-        sal_uInt16 nCol = GetCurrentTabPos() - 1;
+        ULONG nSelPos = GetModel()->GetAbsPos(GetCurEntry());
+        USHORT nCol = GetCurrentTabPos() - 1;
         if ( nCol < 2 )
         {
             SvLBoxEntry* pEntry = GetEntry( nSelPos );
@@ -413,7 +435,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::KeyInput( const KeyEvent& rKEvt )
         }
         else
         {
-            sal_uInt16 nCheck = GetCheckButtonState( GetEntry(nSelPos), 1 ) == SV_BUTTON_CHECKED ? 1 : 0;
+            USHORT nCheck = GetCheckButtonState( GetEntry(nSelPos), 1 ) == SV_BUTTON_CHECKED ? 1 : 0;
             if(GetCheckButtonState( GetEntry(nSelPos), 0 ))
                 nCheck += 2;
             nCheck--;

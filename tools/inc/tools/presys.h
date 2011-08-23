@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,10 +28,13 @@
 
 /* nicht geschuetzt, darf nur einmal includet werden */
 
-// Konflï¿½kt mit den Tools-Pair vermeiden
+// Konflíkt mit den Tools-Pair vermeiden
 #define Pair StlPair
 
 #if defined WNT
+
+#define BOOL         WIN_BOOL
+#define BYTE         WIN_BYTE
 
 #define Rectangle    BLA_Rectangle
 #define Polygon      BLA_Polygon

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ static PushButton* get_button (Dialog const* dialog, sal_uInt32 type)
         , mClosing (false)\
     {\
     }\
-    sal_Bool Closing##cls::Close ()\
+    BOOL Closing##cls::Close ()\
     {\
         if (mClosing)\
             EndDialog (false);\

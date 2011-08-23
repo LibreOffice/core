@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,6 +121,9 @@ void VCartesianCoordinateSystem::createVAxisList(
 {
     m_aAxisMap.clear();
 
+    //if(!m_xLogicTargetForAxes.is() || !m_xFinalTarget.is() || !m_xCooSysModel.is() )
+    //    return;
+
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     bool bSwapXAndY = this->getPropertySwapXAndYAxis();
 
@@ -128,7 +131,7 @@ void VCartesianCoordinateSystem::createVAxisList(
         return;
 
     sal_Int32 nDimensionIndex = 0;
-
+    
     for( nDimensionIndex = 0; nDimensionIndex < nDimensionCount; nDimensionIndex++ )
     {
         sal_Int32 nMaxAxisIndex = m_xCooSysModel->getMaximumAxisIndexByDimension(nDimensionIndex);
@@ -149,9 +152,13 @@ void VCartesianCoordinateSystem::createVAxisList(
                 aAxisProperties.m_bCrossingAxisHasReverseDirection = (AxisOrientation_REVERSE==aCrossingScale.Orientation);
 
                 if( aCrossingScale.AxisType == AxisType::CATEGORY )
+                {
                     aAxisProperties.m_bCrossingAxisIsCategoryAxes = true;
+                    aAxisProperties.m_bAxisBetweenCategories = ChartTypeHelper::shiftTicksAtXAxisPerDefault( AxisHelper::getChartTypeByIndex( m_xCooSysModel, 0 ) )
+                        || ( aAxisProperties.m_pExplicitCategoriesProvider && aAxisProperties.m_pExplicitCategoriesProvider->hasComplexCategories() );
+                }
             }
-
+        
             if( nDimensionIndex == 2 )
             {
                 aAxisProperties.m_xAxisTextProvider = new TextualDataProvider( m_aSeriesNamesForZAxis );
@@ -164,11 +171,24 @@ void VCartesianCoordinateSystem::createVAxisList(
             if(aAxisProperties.m_bDisplayLabels)
                 aAxisProperties.m_nNumberFormatKey = this->getNumberFormatKeyForAxis( xAxis, xNumberFormatsSupplier );
 
+            if( nDimensionIndex == 0 && aAxisProperties.m_nAxisType == AxisType::CATEGORY
+                && aAxisProperties.m_pExplicitCategoriesProvider )
+            {
+                if( aAxisProperties.m_pExplicitCategoriesProvider->hasComplexCategories() )
+                    aAxisProperties.m_bComplexCategories = true;
+            }
+            //-------------------
             ::boost::shared_ptr< VAxisBase > apVAxis( new VCartesianAxis(aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
             tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );
             m_aAxisMap[aFullAxisIndex] = apVAxis;
             apVAxis->set3DWallPositions( m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
 
+            //apVAxis->setExplicitScaleAndIncrement( this->getExplicitScale( nDimensionIndex, nAxisIndex ), this->getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
+            //apVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory
+            //    , this->createCIDForAxis( xAxis, nDimensionIndex, nAxisIndex ) );
+            //if(2==nDimensionCount)
+            //    apVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
+            //apVAxis->setScales( this->getExplicitScales(nDimensionIndex,nAxisIndex), bSwapXAndY );
             apVAxis->initAxisLabelProperties(rFontReferenceSize,rMaximumSpaceForLabels);
         }
     }

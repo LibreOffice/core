@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmTextControlFeature::FmTextControlFeature: caught an exception!" );
+            OSL_ENSURE( sal_False, "FmTextControlFeature::FmTextControlFeature: caught an exception!" );
         }
         osl_decrementInterlockedCount( &m_refCount );
     }
@@ -92,7 +92,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmTextControlFeature::dispatch: caught an exception!" );
+            OSL_ENSURE( sal_False, "FmTextControlFeature::dispatch: caught an exception!" );
         }
     }
 
@@ -105,7 +105,7 @@ namespace svx
         if ( m_pInvalidator )
             m_pInvalidator->Invalidate( m_nSlotId );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL FmTextControlFeature::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
@@ -122,7 +122,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmTextControlFeature::dispose: caught an exception!" );
+            OSL_ENSURE( sal_False, "FmTextControlFeature::dispose: caught an exception!" );
         }
     }
 

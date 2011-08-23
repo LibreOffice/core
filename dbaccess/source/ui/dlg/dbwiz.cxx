@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,14 +62,14 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-#define START_PAGE                      0
-#define CONNECTION_PAGE                 1
-#define ADDITIONAL_PAGE_DBASE           2
+#define START_PAGE			            0
+#define CONNECTION_PAGE		            1
+#define ADDITIONAL_PAGE_DBASE     		2
 #define ADDITIONAL_PAGE_FLAT            3
 #define ADDITIONAL_PAGE_LDAP            4
 #define ADDITIONAL_PAGE_ADABAS          5
 #define ADDITIONAL_PAGE_MYSQL_JDBC      6
-#define ADDITIONAL_PAGE_MYSQL_ODBC      7
+#define ADDITIONAL_PAGE_MYSQL_ODBC	    7
 #define ADDITIONAL_PAGE_ORACLE_JDBC     8
 #define ADDITIONAL_PAGE_ADO             9
 #define ADDITIONAL_PAGE_ODBC           10
@@ -93,7 +93,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     ,m_bApplied(sal_False)
     ,m_bUIEnabled( sal_True )
 {
-    DBG_CTOR(ODbTypeWizDialog,NULL);
+    DBG_CTOR(ODbTypeWizDialog,NULL);	
     m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
     m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
@@ -125,8 +125,8 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
 //-------------------------------------------------------------------------
 ODbTypeWizDialog::~ODbTypeWizDialog()
 {
-    DBG_DTOR(ODbTypeWizDialog,NULL);
-    delete m_pOutSet;
+    DBG_DTOR(ODbTypeWizDialog,NULL);	
+    delete m_pOutSet;	
 }
 //-------------------------------------------------------------------------
 IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
@@ -245,7 +245,7 @@ Reference< XDriver > ODbTypeWizDialog::getDriver()
     return m_pImpl->getDriver();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ODbTypeWizDialog::getDatasourceType(const SfxItemSet& _rSet) const
+::rtl::OUString	ODbTypeWizDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }
@@ -258,7 +258,7 @@ void ODbTypeWizDialog::clearPassword()
 // -----------------------------------------------------------------------------
 TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
 {
-    sal_uInt16 nStringId = STR_PAGETITLE_ADVANCED;
+    USHORT nStringId = STR_PAGETITLE_ADVANCED;
     TabPage* pPage = NULL;
     switch(_nState)
     {
@@ -310,13 +310,13 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
             pPage = ODriversSettings::CreateUser(this,*m_pOutSet);
             break;
         default:
-            OSL_FAIL("Wrong state!");
+            OSL_ENSURE(0,"Wrong state!");
             break;
     }
 
     // register ourself as modified listener
     if ( pPage )
-    {
+    {		
         static_cast<OGenericAdministrationPage*>(pPage)->SetServiceFactory(m_pImpl->getORB());
         static_cast<OGenericAdministrationPage*>(pPage)->SetAdminDialog(this,this);
         // open our own resource block, as the page titles are strings local to this block
@@ -347,7 +347,7 @@ void ODbTypeWizDialog::enableConfirmSettings( bool _bEnable )
 {
     enableButtons( WZB_FINISH, _bEnable );
     // TODO:
-    // this is hacky. At the moment, this method is used in only one case.
+    // this is hacky. At the moment, this method is used in only one case (#b6532894#).
     // As soon as it is to be used more wide-spread, we should find a proper concept
     // for enabling both the Next and Finish buttons, depending on the current page state.
     // Plus, the concept must also care for the case where those pages are embedded into
@@ -380,7 +380,7 @@ sal_Bool ODbTypeWizDialog::onFinish()
     return m_pImpl->saveChanges(*m_pOutSet) ? OWizardMachine::onFinish() : sal_False;
 }
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

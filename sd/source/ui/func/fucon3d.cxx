@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,6 +57,7 @@
 #include "ToolBarManager.hxx"
 #include <svx/svx3ditems.hxx>
 
+// #97016#
 #include <svx/polysc3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -71,11 +72,11 @@ TYPEINIT1( FuConstruct3dObject, FuConstruct );
 \************************************************************************/
 
 FuConstruct3dObject::FuConstruct3dObject (
-    ViewShell*  pViewSh,
-    ::sd::Window*       pWin,
-    ::sd::View*         pView,
-    SdDrawDocument* pDoc,
-    SfxRequest&     rReq)
+    ViewShell* 	pViewSh,
+    ::sd::Window*		pWin,
+    ::sd::View*			pView,
+    SdDrawDocument*	pDoc,
+    SfxRequest&		rReq) 
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
 }
@@ -103,6 +104,7 @@ void FuConstruct3dObject::DoExecute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
+// #97016#
 E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 {
     E3dCompoundObject* p3DObj = NULL;
@@ -130,7 +132,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 
         case SID_3D_SHELL:
         {
-            XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, sal_False);
+            XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, FALSE);
             aXPoly.Scale(5.0, 5.0);
 
             ::basegfx::B2DPolygon aB2DPolygon(aXPoly.getB2DPolygon());
@@ -142,13 +144,13 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 
             // Dies ist ein offenes Objekt, muss daher defaultmaessig
             // doppelseitig behandelt werden
-            p3DObj->SetMergedItem(Svx3DDoubleSidedItem(sal_True));
+            p3DObj->SetMergedItem(Svx3DDoubleSidedItem(TRUE));
             break;
         }
 
         case SID_3D_HALF_SPHERE:
         {
-            XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, sal_False);
+            XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, FALSE);
             aXPoly.Scale(5.0, 5.0);
 
             aXPoly.Insert(0, Point (2400*5, 1250*5), XPOLY_NORMAL);
@@ -259,6 +261,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
     return p3DObj;
 }
 
+// #97016#
 void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *pScene)
 {
     Camera3D &aCamera  = (Camera3D&) pScene->GetCamera ();
@@ -286,6 +289,7 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
 
         case SID_3D_SPHERE:
         {
+//				pScene->RotateX(DEG2RAD(60));
         }
         break;
 
@@ -300,11 +304,13 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
         case SID_3D_CONE:
         case SID_3D_PYRAMID:
         {
+//				pScene->RotateX(DEG2RAD(25));
         }
         break;
 
         case SID_3D_TORUS:
         {
+//				pScene->RotateX(DEG2RAD(15));
             aTransformation.rotate(DEG2RAD(90), 0.0, 0.0);
         }
         break;
@@ -321,24 +327,26 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
     pScene->SetMergedItemSetAndBroadcast(aAttr);
 }
 
-sal_Bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
         mpWindow->CaptureMouse();
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
         E3dCompoundObject* p3DObj = NULL;
 
         WaitObject aWait( (Window*)mpViewShell->GetActiveWindow() );
 
+        // #97016#
         p3DObj = ImpCreateBasic3DShape();
         E3dScene* pScene = mpView->SetCurrent3DObj(p3DObj);
 
+        // #97016#
         ImpPrepareBasic3DShape(p3DObj, pScene);
         bReturn = mpView->BegCreatePreparedObject(aPnt, nDrgLog, pScene);
 
@@ -365,7 +373,7 @@ sal_Bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct3dObject::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstruct3dObject::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -376,15 +384,15 @@ sal_Bool FuConstruct3dObject::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         mpView->EndCreateObj(SDRCREATE_FORCEEND);
-        bReturn = sal_True;
+        bReturn = TRUE;
     }
 
     bReturn = FuConstruct::MouseButtonUp(rMEvt) || bReturn;
@@ -399,12 +407,12 @@ sal_Bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct3dObject::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstruct3dObject::KeyInput(const KeyEvent& rKEvt)
 {
     return( FuConstruct::KeyInput(rKEvt) );
 }
@@ -433,12 +441,21 @@ void FuConstruct3dObject::Deactivate()
     FuConstruct::Deactivate();
 }
 
+// #97016#
 SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
+    // case SID_3D_CUBE:
+    // case SID_3D_SHELL:
+    // case SID_3D_SPHERE:
+    // case SID_3D_TORUS:
+    // case SID_3D_HALF_SPHERE:
+    // case SID_3D_CYLINDER:
+    // case SID_3D_CONE:
+    // case SID_3D_PYRAMID:
 
     E3dCompoundObject* p3DObj = ImpCreateBasic3DShape();
 
-    // E3dView::SetCurrent3DObj part
+    // E3dView::SetCurrent3DObj part		
     // get transformed BoundVolume of the object
     basegfx::B3DRange aObjVol(p3DObj->GetBoundVolume());
     aObjVol.transform(p3DObj->GetTransform());
@@ -448,10 +465,11 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     Rectangle a3DRect(0, 0, (long)fW, (long)fH);
     E3dScene* pScene = new E3dPolyScene(mpView->Get3DDefaultAttributes());
 
+    // mpView->InitScene(pScene, fW, fH, aVolume.MaxVec().Z() + ((fW + fH) / 4.0));
     // copied code from E3dView::InitScene
     double fCamZ(aVolume.getMaxZ() + ((fW + fH) / 4.0));
     Camera3D aCam(pScene->GetCamera());
-    aCam.SetAutoAdjustProjection(sal_False);
+    aCam.SetAutoAdjustProjection(FALSE);
     aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
     ::basegfx::B3DPoint aLookAt;
     double fDefaultCamPosZ = mpView->GetDefaultCamPosZ();
@@ -460,18 +478,18 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     aCam.SetFocalLength(mpView->GetDefaultCamFocal());
     aCam.SetDefaults(::basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt, mpView->GetDefaultCamFocal());
     pScene->SetCamera(aCam);
-
+    
     pScene->Insert3DObj(p3DObj);
     pScene->NbcSetSnapRect(a3DRect);
     pScene->SetModel(mpDoc);
-
+        
     ImpPrepareBasic3DShape(p3DObj, pScene);
-
+        
     SfxItemSet aAttr(mpDoc->GetPool());
     SetStyleSheet(aAttr, p3DObj);
     aAttr.Put(XLineStyleItem (XLINE_NONE));
     p3DObj->SetMergedItemSet(aAttr);
-
+    
     // make object interactive at once
     pScene->SetRectsDirty();
 
@@ -505,7 +523,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
         }
     }
 
-    // use changed rectangle, not original one
+    // #97016#, #98245# use changed rectangle, not original one
     pScene->SetLogicRect(aRect);
 
     return pScene;

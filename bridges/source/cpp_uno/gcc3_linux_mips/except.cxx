@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -52,7 +52,7 @@ using namespace ::__cxxabiv1;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
-
+    
 void dummy_can_throw_anything( char const * )
 {
 }
@@ -63,13 +63,13 @@ static OUString toUNOname( char const * p ) SAL_THROW( () )
 #if defined BRIDGES_DEBUG
     char const * start = p;
 #endif
-
+    
     // example: N3com3sun4star4lang24IllegalArgumentExceptionE
-
+    
     OUStringBuffer buf( 64 );
     OSL_ASSERT( 'N' == *p );
     ++p; // skip N
-
+    
     while ('E' != *p)
     {
         // read chars count
@@ -84,7 +84,7 @@ static OUString toUNOname( char const * p ) SAL_THROW( () )
         if ('E' != *p)
             buf.append( (sal_Unicode)'.' );
     }
-
+    
 #if defined BRIDGES_DEBUG
     OUString ret( buf.makeStringAndClear() );
     OString c_ret( OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ) );
@@ -98,18 +98,18 @@ static OUString toUNOname( char const * p ) SAL_THROW( () )
 //==================================================================================================
 class RTTI
 {
-    typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
-
+    typedef hash_map< OUString, type_info *, OUStringHash > t_rtti_map;
+    
     Mutex m_mutex;
     t_rtti_map m_rttis;
     t_rtti_map m_generatedRttis;
 
     void * m_hApp;
-
+    
 public:
     RTTI() SAL_THROW( () );
     ~RTTI() SAL_THROW( () );
-
+    
     type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW( () );
 };
 //__________________________________________________________________________________________________
@@ -127,9 +127,9 @@ RTTI::~RTTI() SAL_THROW( () )
 type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW( () )
 {
     type_info * rtti;
-
+    
     OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
-
+    
     MutexGuard guard( m_mutex );
     t_rtti_map::const_iterator iRttiFind( m_rttis.find( unoName ) );
     if (iRttiFind == m_rttis.end())
@@ -147,7 +147,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         }
         while (index >= 0);
         buf.append( 'E' );
-
+        
         OString symName( buf.makeStringAndClear() );
         rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
 
@@ -183,7 +183,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
                     // this class has no base class
                     rtti = new __class_type_info( strdup( rttiName ) );
                 }
-
+                
                 pair< t_rtti_map::iterator, bool > insertion(
                     m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
                 OSL_ENSURE( insertion.second, "### inserting new generated rtti failed?!" );
@@ -198,7 +198,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     {
         rtti = iRttiFind->second;
     }
-
+    
     return rtti;
 }
 
@@ -225,7 +225,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
         OUStringToOString(
             *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
             RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
+    fprintf( stderr, "> uno exception occured: %s\n", cstr.getStr() );
 #endif
     void * pCppExc;
     type_info * rtti;
@@ -242,10 +242,10 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
             *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
             Reference< XInterface >() );
     }
-
+    
     pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
     ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
-
+    
     // destruct uno exception
     ::uno_any_destruct( pUnoExc, 0 );
     // avoiding locked counts
@@ -274,7 +274,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
             Reference< XInterface >() );
     }
     }
-
+    
     __cxa_throw( pCppExc, rtti, deleteException );
 }
 
@@ -290,16 +290,16 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if defined _DEBUG
         OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr.getStr() );
+        OSL_ENSURE( 0, cstr.getStr() );
 #endif
         return;
     }
-
+    
     typelib_TypeDescription * pExcTypeDescr = 0;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
 #if defined BRIDGES_DEBUG
     OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );
+    fprintf( stderr, "> c++ exception occured: %s\n", cstr_unoName.getStr() );
 #endif
     typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
     if (0 == pExcTypeDescr)
@@ -311,7 +311,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if defined _DEBUG
         OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr.getStr() );
+        OSL_ENSURE( 0, cstr.getStr() );
 #endif
     }
     else

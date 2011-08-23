@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,6 +36,7 @@
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -63,7 +64,7 @@ java_sql_ResultSetMetaData::~java_sql_ResultSetMetaData()
 jclass java_sql_ResultSetMetaData::getMyClass() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSetMetaData::getMyClass" );
-    // The class needs to be fetched just once, that is why it is static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/ResultSetMetaData");
     return theClass;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ struct ScXMLExternalTabData
 
 class ScXMLTableContext : public SvXMLImportContext
 {
-    rtl::OUString   sPrintRanges;
+    rtl::OUString	sPrintRanges;
     ::std::auto_ptr<ScXMLExternalTabData> pExternalRefInfo;
     sal_Int32       nStartOffset;
-    sal_Bool        bStartFormPage;
+    sal_Bool		bStartFormPage;
     sal_Bool        bPrintEntireSheet;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -59,16 +59,16 @@ class ScXMLTableContext : public SvXMLImportContext
 
 public:
 
-    ScXMLTableContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLTableContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        const sal_Bool bTempIsSubTable = false,
+                        const sal_Bool bTempIsSubTable = sal_False,
                         const sal_Int32 nSpannedCols = 0);
 
     virtual ~ScXMLTableContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -83,14 +83,14 @@ class ScXMLTableProtectionContext : public SvXMLImportContext
     ScXMLImport& GetScImport();
 
 public:
-    ScXMLTableProtectionContext( ScXMLImport& rImport, sal_uInt16 nPrefix,
+    ScXMLTableProtectionContext( ScXMLImport& rImport, USHORT nPrefix,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                  ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual ~ScXMLTableProtectionContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

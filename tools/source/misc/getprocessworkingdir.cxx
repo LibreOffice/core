@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,27 +41,24 @@
 
 namespace tools {
 
-bool getProcessWorkingDir(rtl::OUString &rUrl)
-{
-    rUrl = rtl::OUString();
+bool getProcessWorkingDir(rtl::OUString * url) {
+    OSL_ASSERT(url != NULL);
     rtl::OUString s(RTL_CONSTASCII_USTRINGPARAM("$OOO_CWD"));
     rtl::Bootstrap::expandMacros(s);
-    if (s.getLength() == 0)
-    {
-        if (osl_getProcessWorkingDir(&rUrl.pData) == osl_Process_E_None)
+    if (s.getLength() == 0) {
+        if (osl_getProcessWorkingDir(&url->pData) == osl_Process_E_None) {
             return true;
-    }
-    else if (s[0] == '1')
-    {
-        rUrl = s.copy(1);
+        }
+    } else if (s[0] == '1') {
+        *url = s.copy(1);
         return true;
-    }
-    else if (s[0] == '2' &&
-               (osl::FileBase::getFileURLFromSystemPath(s.copy(1), rUrl) ==
+    } else if (s[0] == '2' &&
+               (osl::FileBase::getFileURLFromSystemPath(s.copy(1), *url) ==
                 osl::FileBase::E_None))
     {
         return true;
     }
+    *url = rtl::OUString();
     return false;
 }
 

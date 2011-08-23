@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 #ifndef SC_FMTUNO_HXX
 #define SC_FMTUNO_HXX
 
-#include <vector>
-
+#include "address.hxx"
+#include "conditio.hxx"
 #include <formula/grammar.hxx>
+#include <tools/list.hxx>
 #include <svl/itemprop.hxx>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>
-#include <com/sun/star/sheet/XSheetCondition2.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -48,10 +48,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
-#include <com/sun/star/sheet/ConditionOperator2.hpp>
 
-#include "address.hxx"
-#include "conditio.hxx"
 
 class ScDocument;
 class ScTableConditionalEntry;
@@ -86,27 +83,28 @@ class ScTableConditionalFormat : public cppu::WeakImplHelper5<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    std::vector<ScTableConditionalEntry*>   aEntries;
+    List	aEntries;
 
-    ScTableConditionalEntry*    GetObjectByIndex_Impl(sal_uInt16 nIndex) const;
+    ScTableConditionalEntry*	GetObjectByIndex_Impl(USHORT nIndex) const;
     void                        AddEntry_Impl(const ScCondFormatEntryItem& aEntry);
 
     ScTableConditionalFormat(); // disable
 public:
-                            ScTableConditionalFormat(ScDocument* pDoc, sal_uLong nKey,
+                            ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
                                 formula::FormulaGrammar::Grammar eGrammar);
-    virtual                 ~ScTableConditionalFormat();
+    virtual					~ScTableConditionalFormat();
 
     void                    FillFormat( ScConditionalFormat& rFormat, ScDocument* pDoc,
                                 formula::FormulaGrammar::Grammar eGrammar) const;
+    void					DataChanged();
 
                             // XSheetConditionalEntries
-    virtual void SAL_CALL   addNew( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	addNew( const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::beans::PropertyValue >& aConditionalEntry )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeByIndex( sal_Int32 nIndex )
+    virtual void SAL_CALL	removeByIndex( sal_Int32 nIndex )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   clear() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	clear() throw(::com::sun::star::uno::RuntimeException);
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
@@ -155,34 +153,32 @@ public:
 
 
 class ScTableConditionalEntry : public cppu::WeakImplHelper3<
-                            com::sun::star::sheet::XSheetCondition2,
+                            com::sun::star::sheet::XSheetCondition,
                             com::sun::star::sheet::XSheetConditionalEntry,
                             com::sun::star::lang::XServiceInfo >
 {
 private:
+    ScTableConditionalFormat*	pParent;
     ScCondFormatEntryItem       aData;
 
     ScTableConditionalEntry(); // disabled
 public:
-                            ScTableConditionalEntry(const ScCondFormatEntryItem& aItem);
-    virtual                 ~ScTableConditionalEntry();
+                            ScTableConditionalEntry(ScTableConditionalFormat* pPar,
+                                                    const ScCondFormatEntryItem& aItem);
+    virtual					~ScTableConditionalEntry();
 
     void                    GetData(ScCondFormatEntryItem& rData) const;
 
                             // XSheetCondition
     virtual ::com::sun::star::sheet::ConditionOperator SAL_CALL getOperator()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getConditionOperator()
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setOperator( ::com::sun::star::sheet::ConditionOperator nOperator )
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator )
+    virtual void SAL_CALL	setOperator( ::com::sun::star::sheet::ConditionOperator nOperator )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getFormula1() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setFormula1( const ::rtl::OUString& aFormula1 )
+    virtual void SAL_CALL	setFormula1( const ::rtl::OUString& aFormula1 )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getFormula2() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setFormula2( const ::rtl::OUString& aFormula2 )
+    virtual void SAL_CALL	setFormula2( const ::rtl::OUString& aFormula2 )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::table::CellAddress SAL_CALL getSourcePosition()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -190,8 +186,8 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XSheetConditionalEntry
-    virtual ::rtl::OUString SAL_CALL getStyleName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setStyleName( const ::rtl::OUString& aStyleName )
+    virtual ::rtl::OUString	SAL_CALL getStyleName() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	setStyleName( const ::rtl::OUString& aStyleName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
@@ -206,61 +202,58 @@ public:
 
 
 class ScTableValidationObj : public cppu::WeakImplHelper5<
-                            com::sun::star::sheet::XSheetCondition2,
+                            com::sun::star::sheet::XSheetCondition,
                             com::sun::star::sheet::XMultiFormulaTokens,
                             com::sun::star::beans::XPropertySet,
                             com::sun::star::lang::XUnoTunnel,
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    SfxItemPropertySet  aPropSet;
-    sal_uInt16              nMode;          // enum ScConditionMode
-    String              aExpr1;
-    String              aExpr2;
+    SfxItemPropertySet	aPropSet;
+    USHORT				nMode;			// enum ScConditionMode
+    String				aExpr1;
+    String				aExpr2;
     String              maExprNmsp1;
     String              maExprNmsp2;
     formula::FormulaGrammar::Grammar  meGrammar1;      // grammar used with aExpr1 and aExpr2
     formula::FormulaGrammar::Grammar  meGrammar2;      // grammar used with aExpr1 and aExpr2
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > aTokens1;
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > aTokens2;
-    ScAddress           aSrcPos;
+    ScAddress			aSrcPos;
     String              aPosString;     // formula position as text
-    sal_uInt16              nValMode;       // enum ScValidationMode
-    sal_Bool                bIgnoreBlank;
+    USHORT				nValMode;		// enum ScValidationMode
+    BOOL				bIgnoreBlank;
     sal_Int16           nShowList;
-    sal_Bool                bShowInput;
-    String              aInputTitle;
-    String              aInputMessage;
-    sal_Bool                bShowError;
-    sal_uInt16              nErrorStyle;    // enum ScValidErrorStyle
-    String              aErrorTitle;
-    String              aErrorMessage;
+    BOOL				bShowInput;
+    String				aInputTitle;
+    String				aInputMessage;
+    BOOL				bShowError;
+    USHORT				nErrorStyle;	// enum ScValidErrorStyle
+    String				aErrorTitle;
+    String				aErrorMessage;
 
-    void                    ClearData_Impl();
+    void					ClearData_Impl();
 
     ScTableValidationObj(); // disabled
 public:
-                            ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
+                            ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
                                                 const formula::FormulaGrammar::Grammar eGrammar);
-    virtual                 ~ScTableValidationObj();
+    virtual					~ScTableValidationObj();
 
-    ScValidationData*       CreateValidationData( ScDocument* pDoc,
+    ScValidationData*		CreateValidationData( ScDocument* pDoc,
                                                 formula::FormulaGrammar::Grammar eGrammar ) const;
+    void					DataChanged();
 
                             // XSheetCondition
     virtual ::com::sun::star::sheet::ConditionOperator SAL_CALL getOperator()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getConditionOperator()
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setOperator( ::com::sun::star::sheet::ConditionOperator nOperator )
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator )
+    virtual void SAL_CALL	setOperator( ::com::sun::star::sheet::ConditionOperator nOperator )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getFormula1() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setFormula1( const ::rtl::OUString& aFormula1 )
+    virtual void SAL_CALL	setFormula1( const ::rtl::OUString& aFormula1 )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getFormula2() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setFormula2( const ::rtl::OUString& aFormula2 )
+    virtual void SAL_CALL	setFormula2( const ::rtl::OUString& aFormula2 )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::table::CellAddress SAL_CALL getSourcePosition()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -280,7 +273,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -292,25 +285,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_unotools.hxx"
 #include <unotools/fontdefs.hxx>
 #include <unotools/fontcfg.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 struct ImplLocalizedFontName
 {
@@ -421,7 +421,7 @@ void GetEnglishSearchFontName( String& rName )
     // translate normalized localized name to its normalized English ASCII name
     if( bNeedTranslation )
     {
-        typedef boost::unordered_map<const String, const char*,FontNameHash> FontNameDictionary;
+        typedef std::hash_map<const String, const char*,FontNameHash> FontNameDictionary;
         static FontNameDictionary aDictionary( sizeof(aImplLocalizedNamesList) / sizeof(*aImplLocalizedNamesList) );
         // the font name dictionary needs to be intialized once
         if( aDictionary.empty() )
@@ -528,7 +528,7 @@ void AddTokenFontName( String& rName, const String& rNewToken )
 
 // =======================================================================
 
-String GetSubsFontName( const String& rName, sal_uLong nFlags )
+String GetSubsFontName( const String& rName, ULONG nFlags )
 {
     String aName;
 

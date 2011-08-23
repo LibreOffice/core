@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,16 +30,16 @@ package com.sun.star.comp.helper;
 /**
  * BootstrapException is a checked exception that wraps an exception
  * thrown by the original target.
- *
+ * 
  * @since UDK 3.1.0
  */
 public class BootstrapException extends java.lang.Exception {
-
+    
     /**
      * This field holds the target exception.
      */
     private Exception m_target = null;
-
+    
     /**
      * Constructs a <code>BootstrapException</code> with <code>null</code> as
      * the target exception.
@@ -56,7 +56,7 @@ public class BootstrapException extends java.lang.Exception {
      */
     public BootstrapException( String message ) {
         super( message );
-    }
+    }    
 
     /**
      * Constructs a <code>BootstrapException</code> with the specified
@@ -69,17 +69,17 @@ public class BootstrapException extends java.lang.Exception {
         super( message );
         m_target = target;
     }
-
+    
     /**
      * Constructs a <code>BootstrapException</code> with a target exception.
      *
-     * @param  target    the target exception
+     * @param  target    the target exception     
      */
     public BootstrapException( Exception target ) {
         super();
         m_target = target;
     }
-
+    
     /**
      * Get the thrown target exception.
      *
@@ -87,5 +87,5 @@ public class BootstrapException extends java.lang.Exception {
      */
     public Exception getTargetException() {
         return m_target;
-    }
+    }    
 }

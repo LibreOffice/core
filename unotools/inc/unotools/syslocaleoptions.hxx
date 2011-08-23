@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@
 #include <unotools/options.hxx>
 
 // bits for broadcasting hints of changes in a SfxSimpleHint, may be combined
-const sal_uLong SYSLOCALEOPTIONS_HINT_LOCALE    = 0x00000001;
-const sal_uLong SYSLOCALEOPTIONS_HINT_CURRENCY  = 0x00000002;
-const sal_uLong SYSLOCALEOPTIONS_HINT_UILOCALE  = 0x00000004;
-const sal_uLong SYSLOCALEOPTIONS_HINT_DECSEP    = 0x00000008;
+const ULONG SYSLOCALEOPTIONS_HINT_LOCALE    = 0x00000001;
+const ULONG SYSLOCALEOPTIONS_HINT_CURRENCY  = 0x00000002;
+const ULONG SYSLOCALEOPTIONS_HINT_UILOCALE  = 0x00000004;
+const ULONG SYSLOCALEOPTIONS_HINT_DECSEP    = 0x00000008;
 
 class SvtSysLocaleOptions_Impl;
 class SvtListener;
@@ -93,8 +93,8 @@ public:
         @ATTENTION
         All SvtSysLocaleOptions instances point to exactly one refcounted
         internal representation instance and broadcast blocks are counted.
-        Thus if you issue a BlockBroadcasts(sal_True) you MUST issue a matching
-        BlockBroadcasts(sal_False) or otherwise pending hints would never be
+        Thus if you issue a BlockBroadcasts(TRUE) you MUST issue a matching
+        BlockBroadcasts(FALSE) or otherwise pending hints would never be
         broadcasted again.
      */
        virtual void                BlockBroadcasts( bool bBlock );
@@ -106,14 +106,14 @@ public:
             void                SetLocaleConfigString( const ::rtl::OUString& rStr );
             com::sun::star::lang::Locale GetLocale() const;
             com::sun::star::lang::Locale GetRealLocale() const;
-            LanguageType        GetRealLanguage() const;
+            LanguageType		GetRealLanguage() const;
 
     /// The config string may be empty to denote the SYSTEM locale
             const ::rtl::OUString&  GetUILocaleConfigString() const;
             void                SetUILocaleConfigString( const ::rtl::OUString& rStr );
             com::sun::star::lang::Locale GetUILocale() const;
             com::sun::star::lang::Locale GetRealUILocale() const;
-            LanguageType        GetRealUILanguage() const;
+            LanguageType		GetRealUILanguage() const;
 
     /// The config string may be empty to denote the default currency of the locale
             const ::rtl::OUString&  GetCurrencyConfigString() const;

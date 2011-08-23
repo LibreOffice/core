@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,13 +68,13 @@ public class SwXTextDocument extends TestCase {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
         DesktopTools.closeDoc(xSecondTextDoc);
-        DesktopTools.closeDoc(xTextDoc);
+        DesktopTools.closeDoc(xTextDoc);        
     }
 
     /**
      *    creating a Testenvironment for the interfaces to be tested
      */
-    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    public synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
                                                               PrintWriter log)
         throws StatusException {
         TestEnvironment tEnv = null;
@@ -92,43 +92,43 @@ public class SwXTextDocument extends TestCase {
 
             try {
                 for (int i = 0; i < 5; i++) {
-                    oText.insertString(oCursor, "Paragraph Number: " + i,
+                    oText.insertString(oCursor, "Paragraph Number: " + i, 
                                        false);
-                    oText.insertString(oCursor,
-                                       " The quick brown fox jumps over the lazy Dog: SwXParagraph",
+                    oText.insertString(oCursor, 
+                                       " The quick brown fox jumps over the lazy Dog: SwXParagraph", 
                                        false);
-                    oText.insertControlCharacter(oCursor,
-                                                 ControlCharacter.PARAGRAPH_BREAK,
+                    oText.insertControlCharacter(oCursor, 
+                                                 ControlCharacter.PARAGRAPH_BREAK, 
                                                  false);
-                    oText.insertString(oCursor,
-                                       "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG: SwXParagraph",
+                    oText.insertString(oCursor, 
+                                       "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG: SwXParagraph", 
                                        false);
-                    oText.insertControlCharacter(oCursor,
-                                                 ControlCharacter.PARAGRAPH_BREAK,
+                    oText.insertControlCharacter(oCursor, 
+                                                 ControlCharacter.PARAGRAPH_BREAK, 
                                                  false);
-                    oText.insertControlCharacter(oCursor,
-                                                 ControlCharacter.LINE_BREAK,
+                    oText.insertControlCharacter(oCursor, 
+                                                 ControlCharacter.LINE_BREAK, 
                                                  false);
                 }
                             for (int i = 0; i < 11; i++) {
                 oText.insertString(oCursor, "xTextDoc ", false);
-
+                            
             }
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 e.printStackTrace(log);
                 throw new StatusException("Couldn't insert lines", e);
             }
 
-            //insert two sections parent and child
+            //insert two sections parent and child            
             XMultiServiceFactory oDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
-                                                   XMultiServiceFactory.class,
+                                                   XMultiServiceFactory.class, 
                                                    xTextDoc);
 
             XInterface oTS;
             XTextSection xTS;
 
             XTextSectionsSupplier oTSSupp = (XTextSectionsSupplier) UnoRuntime.queryInterface(
-                                                    XTextSectionsSupplier.class,
+                                                    XTextSectionsSupplier.class, 
                                                     xTextDoc);
             XNameAccess oTSSuppName = oTSSupp.getTextSections();
 
@@ -148,29 +148,29 @@ public class SwXTextDocument extends TestCase {
 
             XInterface oTS2 = (XInterface) oDocMSF.createInstance(
                                       "com.sun.star.text.TextSection");
-            oTSC = (XTextContent) UnoRuntime.queryInterface(XTextContent.class,
+            oTSC = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, 
                                                             oTS2);
             oText.insertTextContent(oCursor, oTSC, false);
 
             XIndexAccess oTSSuppIndex = (XIndexAccess) UnoRuntime.queryInterface(
-                                                XIndexAccess.class,
+                                                XIndexAccess.class, 
                                                 oTSSuppName);
             log.println(
                     "getting a TextSection with the XTextSectionSupplier()");
-            xTS = (XTextSection) UnoRuntime.queryInterface(XTextSection.class,
+            xTS = (XTextSection) UnoRuntime.queryInterface(XTextSection.class, 
                                                            oTSSuppIndex.getByIndex(0));
 
-            XNamed xTSName = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+            XNamed xTSName = (XNamed) UnoRuntime.queryInterface(XNamed.class, 
                                                                 xTS);
             xTSName.setName("SwXTextSection");
 
             log.println("    adding TextTable");
             the_table = SOfficeFactory.createTextTable(xTextDoc, 6, 4);
 
-            XNamed the_name = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+            XNamed the_name = (XNamed) UnoRuntime.queryInterface(XNamed.class, 
                                                                  the_table);
             the_name.setName("SwXTextDocument");
-            SOfficeFactory.insertTextContent(xTextDoc,
+            SOfficeFactory.insertTextContent(xTextDoc, 
                                              (XTextContent) the_table);
 
             log.println("    adding ReferenceMark");
@@ -185,33 +185,33 @@ public class SwXTextDocument extends TestCase {
             SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
 
             log.println("    adding TextGraphic");
-            WriterTools.insertTextGraphic(xTextDoc, oDocMSF, 5200, 4200, 4400,
-                                          4000, "space-metal.jpg",
+            WriterTools.insertTextGraphic(xTextDoc, oDocMSF, 5200, 4200, 4400, 
+                                          4000, "space-metal.jpg", 
                                           "SwXTextDocument");
 
             log.println("    adding EndNote");
 
             XInterface aEndNote = (XInterface) oDocMSF.createInstance(
                                           "com.sun.star.text.Endnote");
-            oTC = (XTextContent) UnoRuntime.queryInterface(XTextContent.class,
+            oTC = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, 
                                                            aEndNote);
             SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
 
             log.println("    adding Bookmark");
-            SOfficeFactory.insertTextContent(xTextDoc,
+            SOfficeFactory.insertTextContent(xTextDoc, 
                                              (XTextContent) SOfficeFactory.createBookmark(
                                                      xTextDoc));
 
             log.println("    adding DocumentIndex");
-            oTC = SOfficeFactory.createIndex(xTextDoc,
+            oTC = SOfficeFactory.createIndex(xTextDoc, 
                                              "com.sun.star.text.DocumentIndex");
             SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
 
             log.println("    adding TextFrame");
 
-            XTextFrame frame = SOfficeFactory.createTextFrame(xTextDoc, 500,
+            XTextFrame frame = SOfficeFactory.createTextFrame(xTextDoc, 500, 
                                                               500);
-            oTC = (XTextContent) UnoRuntime.queryInterface(XTextContent.class,
+            oTC = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, 
                                                            frame);
             SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
 
@@ -241,9 +241,9 @@ public class SwXTextDocument extends TestCase {
             return tEnv;
         }
 
-        XModel model1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel model1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                            xTextDoc);
-        XModel model2 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel model2 = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                            xSecondTextDoc);
 
         XController cont1 = model1.getCurrentController();

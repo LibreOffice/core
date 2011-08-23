@@ -34,7 +34,7 @@
 #define AVMEDIA_GST_MANAGER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Manager_GStreamer"
 #define AVMEDIA_GST_MANAGER_SERVICENAME "com.sun.star.media.Manager"
 
-#if OSL_DEBUG_LEVEL > 2
+#if DEBUG
 #define DBG OSL_TRACE
 #else
 #define DBG(...)

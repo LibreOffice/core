@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
+
 #include "cmdid.h"
+#include <tools/list.hxx>
 #include "swmodule.hxx"
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "globals.hrc"
 #include "helpid.h"
+
 
 #include <sfx2/styfitem.hxx>
 
@@ -105,7 +109,7 @@ rtl::OUString GetCommandContextByIndex( sal_Int16 nIndex )
     rtl::OUString aRes;
     if (0 <= nIndex  &&  nIndex < COND_COMMAND_COUNT)
     {
-        aRes = rtl::OUString::createFromAscii( aCommandContext[ nIndex ] );
+        aRes = C2U( aCommandContext[ nIndex ] );
     }
     return aRes;
 }
@@ -115,45 +119,45 @@ rtl::OUString GetCommandContextByIndex( sal_Int16 nIndex )
 
 CommandStruct SwCondCollItem::aCmds[] =
 {
-    { PARA_IN_TABLEHEAD,    0 },
-    { PARA_IN_TABLEBODY,    0 },
-    { PARA_IN_FRAME,        0 },
-    { PARA_IN_SECTION,      0 },
-    { PARA_IN_FOOTENOTE,    0 },
-    { PARA_IN_ENDNOTE,      0 },
-    { PARA_IN_HEADER,       0 },
-    { PARA_IN_FOOTER,       0 },
-    { PARA_IN_OUTLINE,      0 },
-    { PARA_IN_OUTLINE,      1 },
-    { PARA_IN_OUTLINE,      2 },
-    { PARA_IN_OUTLINE,      3 },
-    { PARA_IN_OUTLINE,      4 },
-    { PARA_IN_OUTLINE,      5 },
-    { PARA_IN_OUTLINE,      6 },
-    { PARA_IN_OUTLINE,      7 },
-    { PARA_IN_OUTLINE,      8 },
-    { PARA_IN_OUTLINE,      9 },
-    { PARA_IN_LIST,         0 },
-    { PARA_IN_LIST,         1 },
-    { PARA_IN_LIST,         2 },
-    { PARA_IN_LIST,         3 },
-    { PARA_IN_LIST,         4 },
-    { PARA_IN_LIST,         5 },
-    { PARA_IN_LIST,         6 },
-    { PARA_IN_LIST,         7 },
-    { PARA_IN_LIST,         8 },
-    { PARA_IN_LIST,         9 }
+    { PARA_IN_TABLEHEAD,	0 },
+    { PARA_IN_TABLEBODY, 	0 },
+    { PARA_IN_FRAME, 		0 },
+    { PARA_IN_SECTION, 		0 },
+    { PARA_IN_FOOTENOTE,	0 },
+    { PARA_IN_ENDNOTE,		0 },
+    { PARA_IN_HEADER, 		0 },
+    { PARA_IN_FOOTER, 		0 },
+    { PARA_IN_OUTLINE, 		0 },
+    { PARA_IN_OUTLINE, 		1 },
+    { PARA_IN_OUTLINE, 		2 },
+    { PARA_IN_OUTLINE, 		3 },
+    { PARA_IN_OUTLINE, 		4 },
+    { PARA_IN_OUTLINE, 		5 },
+    { PARA_IN_OUTLINE, 		6 },
+    { PARA_IN_OUTLINE, 		7 },
+    { PARA_IN_OUTLINE, 		8 },
+    { PARA_IN_OUTLINE, 		9 },
+    { PARA_IN_LIST, 		0 },
+    { PARA_IN_LIST, 		1 },
+    { PARA_IN_LIST, 		2 },
+    { PARA_IN_LIST, 		3 },
+    { PARA_IN_LIST, 		4 },
+    { PARA_IN_LIST, 		5 },
+    { PARA_IN_LIST, 		6 },
+    { PARA_IN_LIST, 		7 },
+    { PARA_IN_LIST, 		8 },
+    { PARA_IN_LIST, 		9 }
 };
 
 
 TYPEINIT1_AUTOFACTORY(SwCondCollItem, SfxPoolItem)
 
 /****************************************************************************
-    Item for the transport of the condition table
+    Item fuer den Transport der Bedingungstabelle
 ****************************************************************************/
 
 
-SwCondCollItem::SwCondCollItem(sal_uInt16 _nWhich ) :
+SwCondCollItem::SwCondCollItem(USHORT _nWhich ) :
     SfxPoolItem(_nWhich)
 {
 
@@ -171,23 +175,23 @@ SfxPoolItem*   SwCondCollItem::Clone( SfxItemPool * /*pPool*/ ) const
 int SwCondCollItem::operator==( const SfxPoolItem& rItem) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rItem), "different types" );
-    sal_Bool bReturn = sal_True;
-    for(sal_uInt16 i = 0; i < COND_COMMAND_COUNT; i++)
+    BOOL bReturn = TRUE;
+    for(USHORT i = 0; i < COND_COMMAND_COUNT; i++)
         if(sStyles[i] != ((SwCondCollItem&)rItem).sStyles[i])
         {
-            bReturn = sal_False;
+            bReturn = FALSE;
             break;
         }
 
     return bReturn;
 }
 
-const String&   SwCondCollItem::GetStyle(sal_uInt16 nPos) const
+const String&	SwCondCollItem::GetStyle(USHORT nPos) const
 {
     return nPos < COND_COMMAND_COUNT ? sStyles[nPos] : aEmptyStr;
 }
 
-void SwCondCollItem::SetStyle(const String* pStyle, sal_uInt16 nPos)
+void SwCondCollItem::SetStyle(const String* pStyle, USHORT nPos)
 {
     if( nPos < COND_COMMAND_COUNT )
         sStyles[nPos] = pStyle ? *pStyle : aEmptyStr;

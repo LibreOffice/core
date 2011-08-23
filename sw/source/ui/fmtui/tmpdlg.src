@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,6 +89,7 @@ TabDialog DLG_TEMPLATE_2
             PageItem
             {
                 Identifier = TP_PARA_STD ;
+                /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = TP_PARA_STD ;
             };
@@ -101,6 +102,7 @@ TabDialog DLG_TEMPLATE_2
             PageItem
             {
                 Identifier = TP_PARA_EXT ;
+                /* ### ACHTUNG: Neuer Text in Resource? Textflu?: Textflu?*/
                 Text [ en-US ] = "Text Flow" ;
                 PageResID = TP_PARA_EXT ;
             };
@@ -175,16 +177,16 @@ TabDialog DLG_TEMPLATE_4
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-     // Text[norwegian_wrong] = "Sidetyper";
-     // Text[italian_wrong] = "Stili pagina";
-     // Text[portuguese_brazilian_wrong] = "Estilos da Página ";
-     // Text[portuguese_wrong] = "Estilos da Página ";
-     // Text[finnish_wrong] = "Sivutyylit";
-     // Text[danish_wrong] = "Sidelayout";
-     // Text[french_wrong] = "Styles de page";
-     // Text[swedish_wrong] = "Sidformat";
-     // Text[dutch_wrong] = "Pagina-opmaakprofielen";
-     // Text[spanish_wrong] = "Estilos de página";
+     //	Text[norwegian_wrong] = "Sidetyper";
+     //	Text[italian_wrong] = "Stili pagina";
+     //	Text[portuguese_brazilian_wrong] = "Estilos da Página ";
+     //	Text[portuguese_wrong] = "Estilos da Página ";
+     //	Text[finnish_wrong] = "Sivutyylit";
+     //	Text[danish_wrong] = "Sidelayout";
+     //	Text[french_wrong] = "Styles de page";
+     //	Text[swedish_wrong] = "Sidformat";
+     //	Text[dutch_wrong] = "Pagina-opmaakprofielen";
+     //	Text[spanish_wrong] = "Estilos de página";
     Text [ en-US ] = "Page Style" ;
     Moveable = TRUE ;
     TabControl 1
@@ -251,6 +253,7 @@ String STR_PAGE_HEADER
 };
 String STR_PAGE_FOOTER
 {
+    /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
     Text [ en-US ] = "Footer" ;
 };
 String STR_PAGE_TEXTGRID
@@ -263,22 +266,23 @@ String STR_PAGE_COLUMN
 };
 String STR_PAGE_FOOTNOTE
 {
+    /* ### ACHTUNG: Neuer Text in Resource? Fußnote : Fu˜note */
     Text [ en-US ] = "Footnote" ;
 };
 TabDialog DLG_TEMPLATE_3
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-     // Text[norwegian_wrong] = "Rammemaler";
-     // Text[italian_wrong] = "Stili cornice";
-     // Text[portuguese_brazilian_wrong] = "Estilos de Moldura";
-     // Text[portuguese_wrong] = "Estilos de Moldura";
-     // Text[finnish_wrong] = "Kehystyylit";
-     // Text[danish_wrong] = "Rammelayout";
-     // Text[french_wrong] = "Styles d'encadrement";
-     // Text[swedish_wrong] = "Ramformat";
-     // Text[dutch_wrong] = "Kaderopmaakprofielen";
-     // Text[spanish_wrong] = "Estilos de marco";
+     //	Text[norwegian_wrong] = "Rammemaler";
+     //	Text[italian_wrong] = "Stili cornice";
+     //	Text[portuguese_brazilian_wrong] = "Estilos de Moldura";
+     //	Text[portuguese_wrong] = "Estilos de Moldura";
+     //	Text[finnish_wrong] = "Kehystyylit";
+     //	Text[danish_wrong] = "Rammelayout";
+     //	Text[french_wrong] = "Styles d'encadrement";
+     //	Text[swedish_wrong] = "Ramformat";
+     //	Text[dutch_wrong] = "Kaderopmaakprofielen";
+     //	Text[spanish_wrong] = "Estilos de marco";
     Text [ en-US ] = "Frame Style" ;
     Moveable = TRUE ;
     TabControl 1
@@ -296,6 +300,7 @@ TabDialog DLG_TEMPLATE_3
             {
                 Identifier = TP_FRM_ADD ;
                 PageResID = TP_FRM_ADD ;
+                /* ### ACHTUNG: Neuer Text in Resource? Zusätze : Zusõtze */
                 Text [ en-US ] = "Options" ;
             };
             PageItem

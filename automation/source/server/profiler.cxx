@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,10 @@
 TTProfiler::TTProfiler()
 : mpStart( NULL )
 , mpEnd( NULL )
-, bIsProfileIntervalStarted( sal_False )
-, bIsProfilingPerCommand( sal_False )
-, bIsPartitioning( sal_False )
-, bIsAutoProfiling( sal_False )
+, bIsProfileIntervalStarted( FALSE )
+, bIsProfilingPerCommand( FALSE )
+, bIsPartitioning( FALSE )
+, bIsAutoProfiling( FALSE )
 , pSysDepStatic( NULL )
 {
     InitSysdepProfiler();
@@ -94,13 +94,13 @@ String TTProfiler::GetProfileHeader()
 }
 
 
-void TTProfiler::StartProfileInterval( sal_Bool bReadAnyway )
+void TTProfiler::StartProfileInterval( BOOL bReadAnyway )
 {
     if ( !bIsProfileIntervalStarted || bReadAnyway )
     {
         GetProfileSnapshot( mpStart );
         GetSysdepProfileSnapshot( mpStart->pSysdepProfileSnapshot, PROFILE_START );
-        bIsProfileIntervalStarted = sal_True;
+        bIsProfileIntervalStarted = TRUE;
     }
 }
 
@@ -108,10 +108,10 @@ String TTProfiler::GetProfileLine( ProfileSnapshot *pStart, ProfileSnapshot *pEn
 {
     String aProfileString;
 
-    aProfileString += Pad(GetpApp()->GetAppLocaleDataWrapper().getDuration( DIFF( pStart, pEnd, aTime) , sal_True, sal_True ), 12);
+    aProfileString += Pad(GetpApp()->GetAppLocaleDataWrapper().getDuration( DIFF( pStart, pEnd, aTime) , TRUE, TRUE ), 12);
 
-    sal_uLong nProcessTicks = DIFF( pStart, pEnd, nProcessTicks );
-    sal_uLong nSystemTicks = DIFF( pStart, pEnd, nSystemTicks );
+    ULONG nProcessTicks = DIFF( pStart, pEnd, nProcessTicks );
+    ULONG nSystemTicks = DIFF( pStart, pEnd, nSystemTicks );
     if ( nSystemTicks )
     {
         aProfileString += Pad(UniString::CreateFromInt32( (100 * nProcessTicks) / nSystemTicks ), 11);
@@ -146,7 +146,7 @@ void TTProfiler::EndProfileInterval()
 {
     GetProfileSnapshot( mpEnd );
     GetSysdepProfileSnapshot( mpEnd->pSysdepProfileSnapshot, PROFILE_END );
-    bIsProfileIntervalStarted = sal_False;
+    bIsProfileIntervalStarted = FALSE;
 }
 
 
@@ -158,34 +158,34 @@ void TTProfiler::GetProfileSnapshot( ProfileSnapshot *pProfileSnapshot )
 }
 
 
-void TTProfiler::StartProfilingPerCommand()     // Jeden Befehl mitschneiden
+void TTProfiler::StartProfilingPerCommand()		// Jeden Befehl mitschneiden
 {
-    bIsProfilingPerCommand = sal_True;
+    bIsProfilingPerCommand = TRUE;
 }
 
 void TTProfiler::StopProfilingPerCommand()
 {
-    bIsProfilingPerCommand = sal_False;
+    bIsProfilingPerCommand = FALSE;
 }
 
 void TTProfiler::StartPartitioning()
 {
-    bIsPartitioning = sal_True;
+    bIsPartitioning = TRUE;
 }
 
 void TTProfiler::StopPartitioning()
 {
-    bIsPartitioning = sal_True;
+    bIsPartitioning = TRUE;
 }
 
-sal_uLong TTProfiler::GetPartitioningTime()
+ULONG TTProfiler::GetPartitioningTime()
 {
     return DIFF( mpStart, mpEnd, nSystemTicks );
 }
 
 
 
-void TTProfiler::StartAutoProfiling( sal_uLong nMSec )
+void TTProfiler::StartAutoProfiling( ULONG nMSec )
 {
     if ( !bIsAutoProfiling )
     {
@@ -196,7 +196,7 @@ void TTProfiler::StartAutoProfiling( sal_uLong nMSec )
         GetProfileSnapshot( pAutoStart );
         GetSysdepProfileSnapshot( pAutoStart->pSysdepProfileSnapshot, PROFILE_START );
         SetTimeout( nMSec );
-        bIsAutoProfiling = sal_True;
+        bIsAutoProfiling = TRUE;
         Start();
     }
 
@@ -214,11 +214,11 @@ void TTProfiler::Timeout()
 
     aAutoProfileBuffer += aLine;
 
-    ProfileSnapshot *pTemp = pAutoStart;        // Tauschen, so daﬂ jetziges Ende n‰chsten Start wird
+    ProfileSnapshot *pTemp = pAutoStart;		// Tauschen, so daﬂ jetziges Ende n‰chsten Start wird
     pAutoStart = pAutoEnd;
     pAutoEnd = pTemp;
 
-    Start();    // Timer neu starten
+    Start();	// Timer neu starten
 }
 
 String TTProfiler::GetAutoProfiling()
@@ -233,14 +233,14 @@ void TTProfiler::StopAutoProfiling()
     if ( bIsAutoProfiling )
     {
         Stop();
-        bIsAutoProfiling = sal_False;
+        bIsAutoProfiling = FALSE;
     }
 }
 
 
 
-//String TTProfiler::Hex( sal_uLong nNr )
-String TTProfiler::Dec( sal_uLong nNr )
+//String TTProfiler::Hex( ULONG nNr )
+String TTProfiler::Dec( ULONG nNr )
 {
     String aRet(UniString::CreateFromInt32(nNr));
     if ( nNr < 100 )
@@ -252,7 +252,7 @@ String TTProfiler::Dec( sal_uLong nNr )
     return aRet;
 }
 
-String TTProfiler::Pad( const String &aS, xub_StrLen nLen )
+String TTProfiler::Pad( const String aS, xub_StrLen nLen )
 {
     if ( nLen > aS.Len() )
         return UniString().Fill( nLen - aS.Len() ).Append( aS );

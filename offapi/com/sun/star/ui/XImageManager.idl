@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,34 +64,34 @@
 #include <com/sun/star/lang/IllegalAccessException.idl>
 #endif
 
-module com { module sun { module star { module ui {
+module com { module sun { module star { module ui { 
 
-/** specifies access functions to an images manager interface to add,
-    replace and remove images associations to command URLs.
+/** specifies access functions to an images manager interface to add, 
+    replace and remove images assocations to command URLs.
 
     <p>
-    An image manager controls a number of image sets which are specified
+    An image manager controls a number of image sets which are specified 
     by a <type>ImageType</type>.
     </p>
 */
-
+    
 interface XImageManager
 {
-    /** resets the image manager to default data.
-
+    /** resets the image manager to default data. 
+        
         <p>
         This means that all user images of the instance will be removed.
         </p>
     */
     void reset();
-
+    
     /** retrieves the list of command URLs which have images associated.
 
         @param nImageType
             specifies the image type for this operation.
-
+        
         @return
-            all command URLs within the images manager that have an image
+            all command URLs within the images manager that have an image 
             associated.
     */
     sequence< string > getAllImageNames( [in] short nImageType );
@@ -100,7 +100,7 @@ interface XImageManager
 
         @param nImageType
             specifies the image type for this operation.
-
+        
         @param ResourceURL
             a command URL that should be checked for an associated image.
 
@@ -113,16 +113,16 @@ interface XImageManager
 
         @param nImageType
             specifies the image type for this association operation.
-
+        
         @param aCommandURLSequence
             a sequence of command URLs for which the images are requested.
 
         @return
-            a sequence of graphics object which are associated with the
-            provided command URLs. If an unknown command URL is provided or
-            a command URL has no associated image a graphics object with an
-            empty image is provided. If the sequence
-            <var>aCommandURLSequence</var> contains an invalid command
+            a sequence of graphics object which are associated with the 
+            provided command URLs. If an unknown command URL is provided or 
+            a command URL has no associated image a graphics object with an 
+            empty image is provided. If the sequence 
+            <var>aCommandURLSequence</var> contains an invalid command 
             URL a <type scope="com::sun::star::lang">IllegalArgumentException</type>
             is thrown.
     */
@@ -132,20 +132,20 @@ interface XImageManager
 
         @param nImageType
             specifies the image type for this association operation.
-
+        
         @param aCommandURLSequence
             a sequence of command URLs for which images should be replaced.
 
         @param aGraphicsSequence
-            a sequence of graphic objects which should replace the old images
+            a sequence of graphic objects which should replace the old images 
             of the provided command URLs.
 
         <p>
-        If a command URL cannot be found the replace call will be omitted. If
-        <var>aCommandURLSequence</var> contains an invalid command URL a
-        <type scope="com::sun::star::lang">IllegalArgumentException</type>
-        is thrown. If the image manager is  associated with a read-only configuration
-        manager a <type scope="com::sun::star::lang">IllegalAccessException</type>
+        If a command URL cannot be found the replace call will be omitted. If 
+        <var>aCommandURLSequence</var> contains an invalid command URL a 
+        <type scope="com::sun::star::lang">IllegalArgumentException</type> 
+        is thrown. If the image manager is  associated with a read-only configuration 
+        manager a <type scope="com::sun::star::lang">IllegalAccessException</type> 
         is thrown.
         </p>
     */
@@ -155,38 +155,38 @@ interface XImageManager
 
         @param nImageType
             specifies the image type for this association operation.
-
+        
         @param aCommandURLSequence
             a sequence of command URLs for which the images should be removed.
-
+            
         <p>
-        If the <var>aCommandURLSequence</var> contains an invalid command URL a
-        <type scope="com::sun::star::lang">IllegalArgumentException</type> is
-        thrown. If  the image manager is associated with a read-only configuration
-        manager a <type scope="com::sun::star::lang">IllegalAccessException</type>
+        If the <var>aCommandURLSequence</var> contains an invalid command URL a 
+        <type scope="com::sun::star::lang">IllegalArgumentException</type> is 
+        thrown. If  the image manager is associated with a read-only configuration 
+        manager a <type scope="com::sun::star::lang">IllegalAccessException</type> 
         is thrown.
         </p>
     */
     void removeImages( [in] short nImageType, [in] sequence< string > aResourceURLSequence ) raises ( com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IllegalAccessException );
-
+        
     /** inserts new image/command associations to a image manager.
 
         @param nImageType
             specifies the image type for this association operation.
-
+        
         @param aCommandURLSequence
             a sequence of command URLs which specify which commands get an new image.
 
         @param aGraphicSequence
-            a sequence of graphic objects which should be associated with the provided
+            a sequence of graphic objects which should be associated with the provided 
             command URLs.
 
         <p>
-        If an association is already present it is replaced. If
-        <var>aCommandURLSequence</var> contains an invalid command URL a
+        If an association is already present it is replaced. If 
+        <var>aCommandURLSequence</var> contains an invalid command URL a 
         <type scope="com::sun::star::lang">IllegalArgumentException</type>
-        is thrown. If the configuration manager is read-only a
-        <type scope="com::sun::star::lang">IllegalAccessException</type> is
+        is thrown. If the configuration manager is read-only a 
+        <type scope="com::sun::star::lang">IllegalAccessException</type> is 
         thrown.
         </p>
     */
@@ -203,44 +203,44 @@ interface XImageManager
         <p>
         An image manager implementation notifies its listener whenever an image
         set has been changed, due to insert, remove or replace operations. To
-        minimize the overhead for notifications an image manager places all
-        inserted and/or replaced images into a single notify call. A container
-        which implements <type scope="com::sun::star::container">XNameAccess</type>
-        holds the information. The access key is a command URL and provides a
-        <type scope="::com::sun::star::graphic">XGraphic</type>. This container
-        is placed into  the
+        minimize the overhead for notifications an image manager places all 
+        inserted and/or replaced images into a single notify call. A container 
+        which implements <type scope="com::sun::star::container">XNameAccess</type> 
+        holds the information. The access key is a command URL and provides a 
+        <type scope="::com::sun::star::graphic">XGraphic</type>. This container 
+        is placed into  the 
         <member scope="com::sun::star::ui">ConfigurationEvent::Element</member>.
-        The image set which has been changed is put into the
+        The image set which has been changed is put into the 
         <member scope="com::sun::star::ui">ConfigurationEvent::aInfo</member>.
         </p>
     */
     interface com::sun::star::ui::XUIConfiguration;
 
-    /** allows controlling or observing the lifetime of an image manager
+    /** allows controlling or observing the lifetime of an imahge manager 
         instance.
 
-    <p>The owner of the object may dispose of this object using
+    <p>The owner of the object may dispose of this object using 
     <member scope="com::sun::star::lang">XComponent::dispose()</member>.
     </p>
     */
     interface ::com::sun::star::lang::XComponent;
 
-    /** initializes an image manager instance.
-
-        An image manager instance must be initialized using
-        <member scope=com::sun::star::lang>XInitialization::initialize</member>
+    /** initializes an image manager instance. 
+    
+        An image manager instance must be initialized using 
+        <member scope=com::sun::star::lang>XInitialization::initialize</member> 
         before it can be used.<br>
         The following property must be provided if the image manager is
         related to a module:
         <ul>
-            <li><b>ModuleIdentifier</b>specifies a string property which is the
+            <li><b>ModuleIdentifier</b>specifies a string property which is the 
             unique identifier of module.
             </li>
-            <li><b>UserConfigStorage</b>specifies a
-            <type scope="com::sun::star::embed">XStorage</type> property which
+            <li><b>UserConfigStorage</b>specifies a 
+            <type scope="com::sun::star::embed">XStorage</type> property which 
             provides access to the configuration storage of the module.
             </li>
-            <li><b>UserRootCommit</b>specifies an optional
+            <li><b>UserRootCommit</b>specifies an optional 
             <type scope="com::sun::star::embed">XTransactedObject</type>
             property which makes it possible to commit a root storage.
             </li>

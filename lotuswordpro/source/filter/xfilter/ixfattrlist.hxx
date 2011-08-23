@@ -57,10 +57,14 @@
  * @file
  * Interface for the attibute list of a xml element.
  ************************************************************************/
-#ifndef     _IXFATTRLIST_HXX
-#define     _IXFATTRLIST_HXX
+/*************************************************************************
+ * Change History
+ * 2004-12-23  create this file.
+ ************************************************************************/
+#ifndef		_IXFATTRLIST_HXX
+#define		_IXFATTRLIST_HXX
 
-#include    <rtl/ustring.hxx>
+#include	<rtl/ustring.hxx>
 
 /**
  * @brief
@@ -68,21 +72,21 @@
  * Implemente this interface for different sax writer. For OOo,i use the XDocumentHandler stream;
  * for ouputting the local file system,It's just a vector container.
  */
-class   IXFAttrList
+class	IXFAttrList
 {
 public:
     virtual ~IXFAttrList(){}
     /**
-     * @descr:  Add a attribute to the attribute list.
+     * @descr:	Add a attribute to the attribute list.
      */
-    virtual void    AddAttribute(const rtl::OUString& name, const rtl::OUString& value) = 0;
+    virtual void	AddAttribute(const rtl::OUString& name, const rtl::OUString& value) = 0;
 
     /**
-     * @descr:  Clear all the attributes in the attribute list.
+     * @descr:	Clear all the attributes in the attribute list.
      */
-    virtual void    Clear() = 0;
+    virtual void	Clear() = 0;
 };
 
-#endif  //_IXFATTRLIST_HXX
+#endif	//_IXFATTRLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

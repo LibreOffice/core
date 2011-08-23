@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,14 +44,14 @@ DBG_NAME( LineInfo )
 // ----------------
 
 ImplLineInfo::ImplLineInfo() :
-    mnRefCount  ( 1 ),
-    meStyle     ( LINE_SOLID ),
-    mnWidth     ( 0 ),
-    mnDashCount ( 0 ),
-    mnDashLen   ( 0 ),
-    mnDotCount  ( 0 ),
-    mnDotLen    ( 0 ),
-    mnDistance  ( 0 ),
+    mnRefCount	( 1 ),
+    meStyle		( LINE_SOLID ),
+    mnWidth		( 0 ),
+    mnDashCount	( 0 ),
+    mnDashLen	( 0 ),
+    mnDotCount	( 0 ),
+    mnDotLen	( 0 ),
+    mnDistance	( 0 ),
     meLineJoin  ( basegfx::B2DLINEJOIN_ROUND )
 {
 }
@@ -59,30 +59,16 @@ ImplLineInfo::ImplLineInfo() :
 // -----------------------------------------------------------------------
 
 ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
-    mnRefCount  ( 1 ),
-    meStyle     ( rImplLineInfo.meStyle ),
-    mnWidth     ( rImplLineInfo.mnWidth ),
-    mnDashCount ( rImplLineInfo.mnDashCount ),
-    mnDashLen   ( rImplLineInfo.mnDashLen ),
-    mnDotCount  ( rImplLineInfo.mnDotCount ),
-    mnDotLen    ( rImplLineInfo.mnDotLen ),
-    mnDistance  ( rImplLineInfo.mnDistance ),
+    mnRefCount	( 1 ),
+    meStyle		( rImplLineInfo.meStyle ),
+    mnWidth		( rImplLineInfo.mnWidth ),
+    mnDashCount	( rImplLineInfo.mnDashCount	),
+    mnDashLen	( rImplLineInfo.mnDashLen ),
+    mnDotCount	( rImplLineInfo.mnDotCount ),
+    mnDotLen	( rImplLineInfo.mnDotLen ),
+    mnDistance	( rImplLineInfo.mnDistance ),
     meLineJoin  ( rImplLineInfo.meLineJoin )
 {
-}
-
-// -----------------------------------------------------------------------
-
-inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
-{
-    return(meStyle == rB.meStyle
-        && mnWidth == rB.mnWidth
-        && mnDashCount == rB.mnDashCount
-        && mnDashLen == rB.mnDashLen
-        && mnDotCount == rB.mnDotCount
-        && mnDotLen == rB.mnDotLen
-        && mnDistance == rB.mnDistance
-        && meLineJoin == rB.meLineJoin);
 }
 
 // ------------
@@ -127,20 +113,26 @@ LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
 
     if( !( --mpImplLineInfo->mnRefCount ) )
         delete mpImplLineInfo;
-
+    
     mpImplLineInfo = rLineInfo.mpImplLineInfo;
     return *this;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool LineInfo::operator==( const LineInfo& rLineInfo ) const
+BOOL LineInfo::operator==( const LineInfo& rLineInfo ) const
 {
     DBG_CHKTHIS( LineInfo, NULL );
     DBG_CHKOBJ( &rLineInfo, LineInfo, NULL );
 
     return( mpImplLineInfo == rLineInfo.mpImplLineInfo ||
-           *mpImplLineInfo == *rLineInfo.mpImplLineInfo );
+            ( mpImplLineInfo->meStyle == rLineInfo.mpImplLineInfo->meStyle &&
+              mpImplLineInfo->mnWidth == rLineInfo.mpImplLineInfo->mnWidth &&
+              mpImplLineInfo->mnDashCount == rLineInfo.mpImplLineInfo->mnDashCount &&
+              mpImplLineInfo->mnDashLen == rLineInfo.mpImplLineInfo->mnDashLen &&
+              mpImplLineInfo->mnDotCount == rLineInfo.mpImplLineInfo->mnDotCount &&
+              mpImplLineInfo->mnDotLen == rLineInfo.mpImplLineInfo->mnDotLen &&
+              mpImplLineInfo->mnDistance == rLineInfo.mpImplLineInfo->mnDistance ) );
 }
 
 // -----------------------------------------------------------------------
@@ -176,7 +168,7 @@ void LineInfo::SetWidth( long nWidth )
 
 // -----------------------------------------------------------------------
 
-void LineInfo::SetDashCount( sal_uInt16 nDashCount )
+void LineInfo::SetDashCount( USHORT nDashCount )
 {
     DBG_CHKTHIS( LineInfo, NULL );
     ImplMakeUnique();
@@ -194,7 +186,7 @@ void LineInfo::SetDashLen( long nDashLen )
 
 // -----------------------------------------------------------------------
 
-void LineInfo::SetDotCount( sal_uInt16 nDotCount )
+void LineInfo::SetDotCount( USHORT nDotCount )
 {
     DBG_CHKTHIS( LineInfo, NULL );
     ImplMakeUnique();
@@ -236,8 +228,8 @@ void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
 
 SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 {
-    VersionCompat   aCompat( rIStm, STREAM_READ );
-    sal_uInt16          nTmp16;
+    VersionCompat	aCompat( rIStm, STREAM_READ );
+    UINT16			nTmp16;
 
     rIStm >> nTmp16; rImplLineInfo.meStyle = (LineStyle) nTmp16;
     rIStm >> rImplLineInfo.mnWidth;
@@ -266,7 +258,7 @@ SvStream& operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
     VersionCompat aCompat( rOStm, STREAM_WRITE, 3 );
 
     // version 1
-    rOStm << (sal_uInt16) rImplLineInfo.meStyle << rImplLineInfo.mnWidth;
+    rOStm << (UINT16) rImplLineInfo.meStyle << rImplLineInfo.mnWidth;
 
     // since version2
     rOStm << rImplLineInfo.mnDashCount << rImplLineInfo.mnDashLen;
@@ -274,7 +266,7 @@ SvStream& operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
     rOStm << rImplLineInfo.mnDistance;
 
     // since version3
-    rOStm << (sal_uInt16) rImplLineInfo.meLineJoin;
+    rOStm << (UINT16) rImplLineInfo.meLineJoin;
 
     return rOStm;
 }
@@ -353,15 +345,15 @@ void LineInfo::applyToB2DPolyPolygon(
         if(GetWidth() > 1 && io_rLinePolyPolygon.count())
         {
             const double fHalfLineWidth((GetWidth() * 0.5) + 0.5);
-
+            
             for(sal_uInt32 a(0); a < io_rLinePolyPolygon.count(); a++)
             {
                 o_rFillPolyPolygon.append(basegfx::tools::createAreaGeometry(
-                    io_rLinePolyPolygon.getB2DPolygon(a),
-                    fHalfLineWidth,
+                    io_rLinePolyPolygon.getB2DPolygon(a), 
+                    fHalfLineWidth, 
                     GetLineJoin()));
             }
-
+            
             io_rLinePolyPolygon.clear();
         }
     }

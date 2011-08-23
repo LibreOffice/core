@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,53 +24,52 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_grid_XGridDataListener_idl__
-#define __com_sun_star_awt_grid_XGridDataListener_idl__
+#ifndef __com_sun_star_awt_grid_XGridDataListener_idl__ 
+#define __com_sun_star_awt_grid_XGridDataListener_idl__ 
+ 
+#ifndef __com_sun_star_awt_grid_GridDataEvent_idl__ 
+#include <com/sun/star/awt/grid/GridDataEvent.idl> 
+#endif 
 
-#ifndef __com_sun_star_awt_grid_GridDataEvent_idl__
-#include <com/sun/star/awt/grid/GridDataEvent.idl>
-#endif
+#ifndef __com_sun_star_lang_XEventListener_idl__ 
+#include <com/sun/star/lang/XEventListener.idl> 
+#endif 
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-//=============================================================================
-
-module com {  module sun {  module star {  module awt { module grid {
-
-//=============================================================================
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module awt { module grid {  
+ 
+//============================================================================= 
 
 /** An instance of this interface is used by the <type>XGridDataModel</type> to
     get notifications about data model changes.
-
+    
     <p>Usually you must not implement this interface yourself, but you must notify it correctly if
     you implement the <type>XGridDataModel</type> yourself</p>.
-
-    @since OOo 3.3
- */
+    
+    @since OOo 3.3.0
+ */       
 interface XGridDataListener: com::sun::star::lang::XEventListener
-{
+{ 
 
-    /** is called when one or more rows of data have been inserted into a grid control's data model.
+    /** 
+        Invoked after a row was added to the data model.
     */
-    void rowsInserted( [in] GridDataEvent Event );
-
-    /** is called when one or more rows of data have been removed from a grid control's data model.
+    void rowAdded( [in] GridDataEvent Event ); 
+    
+    /** 
+        Invoked after a row was added to the data model.
     */
-    void rowsRemoved( [in] GridDataEvent Event );
-
-    /** is called when existing data in a grid control's data model has been modified.
+    void rowRemoved( [in] GridDataEvent Event ); 
+    
+    /** 
+        Invoked after a row was added to the data model.
     */
-    void dataChanged( [in] GridDataEvent Event );
-
-    /** is called when the title of one or more rows changed.
-    */
-    void rowHeadingChanged( [in] GridDataEvent Event );
-};
-
-//=============================================================================
-
-}; }; }; }; };
-
-#endif
+    void dataChanged( [in] GridDataEvent Event ); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; };  
+ 
+#endif 

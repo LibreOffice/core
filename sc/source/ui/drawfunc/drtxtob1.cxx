@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 #include "scabstdlg.hxx"
 //------------------------------------------------------------------------
 
-sal_Bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
+BOOL ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -65,7 +65,7 @@ sal_Bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
     SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(  pViewData->GetDialogParent(), &rArgs,
                                                         pViewData->GetSfxDocShell(),RID_SCDLG_CHAR );
     DBG_ASSERT(pDlg, "Dialog create fail!");
-    sal_Bool bRet = ( pDlg->Execute() == RET_OK );
+    BOOL bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
     {
@@ -78,7 +78,7 @@ sal_Bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
     return bRet;
 }
 
-sal_Bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
+BOOL ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet )
 {
     SfxItemPool* pArgPool = rArgs.GetPool();
@@ -96,7 +96,7 @@ sal_Bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     // Muss natuerlich noch geaendert werden
     // aNewAttr.Put( SvxParaDlgLimitsItem( 567 * 50, 5670) );
 
-    aNewAttr.Put( SvxHyphenZoneItem( false, SID_ATTR_PARA_HYPHENZONE ) );
+    aNewAttr.Put( SvxHyphenZoneItem( sal_False, SID_ATTR_PARA_HYPHENZONE ) );
     aNewAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, SID_ATTR_PARA_PAGEBREAK ) );
     aNewAttr.Put( SvxFmtSplitItem( sal_True, SID_ATTR_PARA_SPLIT)  );
     aNewAttr.Put( SvxWidowsItem( 0, SID_ATTR_PARA_WIDOWS) );
@@ -107,7 +107,7 @@ sal_Bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
 
     SfxAbstractTabDialog* pDlg = pFact->CreateScParagraphDlg( pViewData->GetDialogParent(), &aNewAttr, RID_SCDLG_PARAGRAPH);
     DBG_ASSERT(pDlg, "Dialog create fail!");
-    sal_Bool bRet = ( pDlg->Execute() == RET_OK );
+    BOOL bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
     {
@@ -128,13 +128,13 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
     SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( pViewData->GetDialogParent() );
 
     pDlg->Insert( SOT_FORMAT_STRING, EMPTY_STRING );
-    pDlg->Insert( SOT_FORMAT_RTF,    EMPTY_STRING );
+    pDlg->Insert( SOT_FORMAT_RTF,	 EMPTY_STRING );
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
-    sal_uLong nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
+    ULONG nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
 
-    //! test if outliner view is still valid
+    //!	test if outliner view is still valid
 
     if (nFormat > 0)
     {

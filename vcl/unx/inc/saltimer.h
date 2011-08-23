@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ public:
     virtual ~X11SalTimer();
 
     // overload all pure virtual methods
-    void            Start( sal_uIntPtr nMS );
-    void            Stop();
+    void 			Start( ULONG nMS );
+    void 			Stop();
 };
 
 #endif

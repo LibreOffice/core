@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,17 +37,17 @@ class SwDoc;
 class SvxMacroTableDtor;
 class SwImpBlocks;
 
-#define SWXML_CONVBLOCK     0x0001
-#define SWXML_NOROOTCOMMIT  0x0002
+#define SWXML_CONVBLOCK 	0x0001
+#define SWXML_NOROOTCOMMIT 	0x0002
 
 class SwXMLTextBlocks : public SwImpBlocks
 {
 protected:
-    sal_Bool         bAutocorrBlock;
-    sal_Bool         bBlock;
+    BOOL 		 bAutocorrBlock;
+    BOOL 		 bBlock;
     SfxObjectShellRef xDocShellRef;
-    sal_uInt16       nFlags;
-    String       aPackageName;
+    USHORT		 nFlags;
+    String		 aPackageName;
     SfxMediumRef xMedium;
 
     void ReadInfo();
@@ -58,53 +58,53 @@ protected:
 public:
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xBlkRoot;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xRoot;
-    short               nCurBlk;
+    short				nCurBlk;
     SwXMLTextBlocks( const String& rFile );
     SwXMLTextBlocks( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFile );
-    void   AddName( const String&, const String&, const String&, sal_Bool bOnlyTxt = sal_False );
-    virtual void   AddName( const String&, const String&, sal_Bool bOnlyTxt = sal_False );
+    void   AddName( const String&, const String&, const String&, BOOL bOnlyTxt = FALSE );
+    virtual void   AddName( const String&, const String&, BOOL bOnlyTxt = FALSE );
     void GeneratePackageName ( const String& rShort, String& rPackageName );
     virtual ~SwXMLTextBlocks();
-    //virtual sal_Bool   IsOld() const;
-    virtual sal_uLong Delete( sal_uInt16 );
-    virtual sal_uLong Rename( sal_uInt16, const String&, const String& );
-    virtual sal_uLong CopyBlock( SwImpBlocks& rImp, String& rShort, const String& rLong);
+    //virtual BOOL   IsOld() const;
+    virtual ULONG Delete( USHORT );
+    virtual ULONG Rename( USHORT, const String&, const String& );
+    virtual ULONG CopyBlock( SwImpBlocks& rImp, String& rShort, const String& rLong);
     virtual void  ClearDoc();
-    virtual sal_uLong GetDoc( sal_uInt16 );
-    virtual sal_uLong BeginPutDoc( const String&, const String& );
-    virtual sal_uLong PutDoc();
-    virtual sal_uLong GetText( sal_uInt16, String& );
-    virtual sal_uLong PutText( const String&, const String&, const String& );
-    virtual sal_uLong MakeBlockList();
+    virtual ULONG GetDoc( USHORT );
+    virtual ULONG BeginPutDoc( const String&, const String& );
+    virtual ULONG PutDoc();
+    virtual ULONG GetText( USHORT, String& );
+    virtual ULONG PutText( const String&, const String&, const String& );
+    virtual ULONG MakeBlockList();
 
     virtual short GetFileType ( void ) const;
-    virtual sal_uLong OpenFile( sal_Bool bReadOnly = sal_True );
+    virtual ULONG OpenFile( BOOL bReadOnly = TRUE );
     virtual void  CloseFile();
 
-    static sal_Bool IsFileUCBStorage( const String & rFileName);
+    static BOOL IsFileUCBStorage( const String & rFileName);
 
     // Methods for the new Autocorrecter
-    sal_uLong GetText( const String& rShort, String& );
+    ULONG GetText( const String& rShort, String& );
 
-    virtual sal_Bool IsOnlyTextBlock( const String& rShort ) const;
-    virtual sal_Bool IsOnlyTextBlock( sal_uInt16 nIdx ) const;
-    virtual void SetIsTextOnly( const String& rShort, sal_Bool bNewValue );
-    virtual void SetIsTextOnly( sal_uInt16 nIdx, sal_Bool bNewValue );
+    virtual BOOL IsOnlyTextBlock( const String& rShort ) const;
+    virtual BOOL IsOnlyTextBlock( USHORT nIdx ) const;
+    virtual void SetIsTextOnly( const String& rShort, BOOL bNewValue );
+    virtual void SetIsTextOnly( USHORT nIdx, BOOL bNewValue );
 
-    virtual sal_uLong GetMacroTable( sal_uInt16, SvxMacroTableDtor& rMacroTbl,
+    virtual ULONG GetMacroTable( USHORT, SvxMacroTableDtor& rMacroTbl,
                                  sal_Bool bFileAlreadyOpen = sal_False );
-    virtual sal_uLong SetMacroTable( sal_uInt16 nIdx,
+    virtual ULONG SetMacroTable( USHORT nIdx,
                                  const SvxMacroTableDtor& rMacroTable,
                                  sal_Bool bFileAlreadyOpen = sal_False );
-    virtual sal_Bool PutMuchEntries( sal_Bool bOn );
+    virtual BOOL PutMuchEntries( BOOL bOn );
 
 public:
     SwDoc* GetDoc() const { return pDoc; }
     //void  SetDoc( SwDoc * pNewDoc);
-    sal_uLong StartPutBlock( const String& rShort, const String& rPackageName );
-    sal_uLong PutBlock( SwPaM& rPaM, const String& rLong );
-    sal_uLong GetBlockText( const String& rShort, String& rText );
-    sal_uLong PutBlockText( const String& rShort, const String& rName, const String& rText,  const String& rPackageName );
+    ULONG StartPutBlock( const String& rShort, const String& rPackageName );
+    ULONG PutBlock( SwPaM& rPaM, const String& rLong );
+    ULONG GetBlockText( const String& rShort, String& rText );
+    ULONG PutBlockText( const String& rShort, const String& rName, const String& rText,  const String& rPackageName );
     void MakeBlockText( const String& rText );
 
 };

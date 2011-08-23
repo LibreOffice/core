@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,7 +119,7 @@ SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
 }
 
 
-SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
+SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, USHORT nVersion )
 {
     if( SVX_MACROTBL_VERSION40 <= nVersion )
         rStrm >> nVersion;
@@ -128,7 +128,7 @@ SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
 
     for( short i = 0; i < nMacro; ++i )
     {
-        sal_uInt16 nCurKey, eType = STARBASIC;
+        USHORT nCurKey, eType = STARBASIC;
         String aLibName, aMacName;
         rStrm >> nCurKey;
         SfxPoolItem::readByteString(rStrm, aLibName);
@@ -154,14 +154,14 @@ SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
 
 SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
 {
-    sal_uInt16 nVersion = SOFFICE_FILEFORMAT_31 == rStream.GetVersion()
+    USHORT nVersion = SOFFICE_FILEFORMAT_31 == rStream.GetVersion()
                                     ? SVX_MACROTBL_VERSION31
                                     : SVX_MACROTBL_AKTVERSION;
 
     if( SVX_MACROTBL_VERSION40 <= nVersion )
         rStream << nVersion;
 
-    rStream << (sal_uInt16)Count();
+    rStream << (USHORT)Count();
 
     SvxMacro* pMac = ((SvxMacroTableDtor*)this)->First();
     while( pMac && rStream.GetError() == SVSTREAM_OK )
@@ -171,7 +171,7 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
         SfxPoolItem::writeByteString(rStream, pMac->GetMacName());
 
         if( SVX_MACROTBL_VERSION40 <= nVersion )
-            rStream << (sal_uInt16)pMac->GetScriptType();
+            rStream << (USHORT)pMac->GetScriptType();
         pMac = ((SvxMacroTableDtor*)this)->Next();
     }
     return rStream;
@@ -201,20 +201,20 @@ int SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
 
     // Anzahl unterschiedlich => auf jeden Fall ungleich
     if ( rOwn.Count() != rOther.Count() )
-        return sal_False;
+        return FALSE;
 
     // einzeln verleichen; wegen Performance ist die Reihenfolge wichtig
-    for ( sal_uInt16 nNo = 0; nNo < rOwn.Count(); ++nNo )
+    for ( USHORT nNo = 0; nNo < rOwn.Count(); ++nNo )
     {
         const SvxMacro *pOwnMac = rOwn.GetObject(nNo);
         const SvxMacro *pOtherMac = rOther.GetObject(nNo);
-        if (    rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
+        if ( 	rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
                 pOwnMac->GetLibName() != pOtherMac->GetLibName() ||
                 pOwnMac->GetMacName() != pOtherMac->GetMacName() )
-            return sal_False;
+            return FALSE;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -229,11 +229,11 @@ SfxPoolItem* SvxMacroItem::Clone( SfxItemPool* ) const
 SfxItemPresentation SvxMacroItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
+    XubString& 			rText,
     const IntlWrapper *
-)   const
+)	const
 {
 /*!!!
     SvxMacroTableDtor& rTbl = (SvxMacroTableDtor&)GetMacroTable();
@@ -255,14 +255,14 @@ SfxItemPresentation SvxMacroItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxMacroItem::Store( SvStream& rStrm , sal_uInt16 ) const
+SvStream& SvxMacroItem::Store( SvStream& rStrm , USHORT ) const
 {
     return aMacroTable.Write( rStrm );
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
+SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, USHORT nVersion ) const
 {
     SvxMacroItem* pAttr = new SvxMacroItem( Which() );
     pAttr->aMacroTable.Read( rStrm, nVersion );
@@ -271,7 +271,7 @@ SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
 
 // -----------------------------------------------------------------------
 
-void SvxMacroItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
+void SvxMacroItem::SetMacro( USHORT nEvent, const SvxMacro& rMacro )
 {
     SvxMacro *pMacro;
     if ( 0 != (pMacro=aMacroTable.Get(nEvent)) )
@@ -285,7 +285,7 @@ void SvxMacroItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SvxMacroItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
+USHORT SvxMacroItem::GetVersion( USHORT nFileFormatVersion ) const
 {
     return SOFFICE_FILEFORMAT_31 == nFileFormatVersion
                 ? 0 : aMacroTable.GetVersion();

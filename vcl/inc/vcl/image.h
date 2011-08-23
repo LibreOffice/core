@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <vcl/bitmapex.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 // ----------------
 // - ImplImageBmp -
@@ -44,34 +44,34 @@ public:
                 ImplImageBmp();
                 ~ImplImageBmp();
 
-    void        Create( long nItemWidth, long nItemHeight, sal_uInt16 nInitSize );
-    void        Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight,sal_uInt16 nInitSize );
+    void		Create( long nItemWidth, long nItemHeight, USHORT nInitSize );
+    void		Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight,USHORT nInitSize );
 
-    void        Expand( sal_uInt16 nGrowSize );
+    void		Expand( USHORT nGrowSize );
 
-    void        Replace( sal_uInt16 nPos, sal_uInt16 nSrcPos );
-    void        Replace( sal_uInt16 nPos, const ImplImageBmp& rImageBmp, sal_uInt16 nSrcPos );
-    void        Replace( sal_uInt16 nPos, const BitmapEx& rBmpEx );
+    void		Replace( USHORT nPos, USHORT nSrcPos );
+    void		Replace( USHORT nPos, const ImplImageBmp& rImageBmp, USHORT nSrcPos );
+    void		Replace( USHORT nPos, const BitmapEx& rBmpEx );
 
-    void        ReplaceColors( const Color* pSrcColors, const Color* pDstColors, sal_uIntPtr nColorCount );
-    void        ColorTransform();
-    void            Invert();
+    void        ReplaceColors( const Color* pSrcColors, const Color* pDstColors, ULONG nColorCount );
+    void		ColorTransform( BmpColorMode eColorMode );
+    void        	Invert();
 
-    BitmapEx    GetBitmapEx( sal_uInt16 nPosCount, sal_uInt16* pPosAry ) const;
+    BitmapEx	GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const;
 
-    void        Draw( sal_uInt16 nPos, OutputDevice* pDev, const Point& rPos, sal_uInt16 nStyle, const Size* pSize = NULL );
+    void		Draw( USHORT nPos, OutputDevice* pDev, const Point& rPos, USHORT nStyle, const Size* pSize = NULL );
 
 private:
 
-    BitmapEx    maBmpEx;
-    BitmapEx    maDisabledBmpEx;
-    BitmapEx*   mpDisplayBmp;
-    Size        maSize;
-    sal_uInt8*      mpInfoAry;
-    sal_uInt16      mnSize;
+    BitmapEx	maBmpEx;
+    BitmapEx	maDisabledBmpEx;
+    BitmapEx*	mpDisplayBmp;
+    Size		maSize;
+    BYTE*		mpInfoAry;
+    USHORT		mnSize;
 
-    void        ImplUpdateDisplayBmp( OutputDevice* pOutDev );
-    void        ImplUpdateDisabledBmpEx( int nPos );
+    void		ImplUpdateDisplayBmp( OutputDevice* pOutDev );
+    void		ImplUpdateDisabledBmpEx( int nPos );
 
 private:    // prevent assignment and copy construction
     ImplImageBmp( const ImplImageBmp& );
@@ -90,21 +90,21 @@ enum ImageType { IMAGETYPE_BITMAP, IMAGETYPE_IMAGE };
 
 struct ImageAryData
 {
-    ::rtl::OUString maName;
+    ::rtl::OUString	maName;
     // Images identified by either name, or by id
-    sal_uInt16          mnId;
+    USHORT			mnId;
     BitmapEx        maBitmapEx;
 
     ImageAryData();
     ImageAryData( const rtl::OUString &aName,
-                  sal_uInt16 nId, const BitmapEx &aBitmap );
+                  USHORT nId, const BitmapEx &aBitmap );
     ImageAryData( const ImageAryData& rData );
     ~ImageAryData();
 
     bool IsLoadable() { return maBitmapEx.IsEmpty() && maName.getLength(); }
     void Load(const rtl::OUString &rPrefix);
 
-    ImageAryData&   operator=( const ImageAryData& rData );
+    ImageAryData&	operator=( const ImageAryData& rData );
 };
 
 // ------------------------------------------------------------------------------
@@ -112,23 +112,23 @@ struct ImageAryData
 struct ImplImageList
 {
     typedef std::vector<ImageAryData *> ImageAryDataVec;
-    typedef boost::unordered_map< rtl::OUString, ImageAryData *, rtl::OUStringHash >
+    typedef std::hash_map< rtl::OUString, ImageAryData *, rtl::OUStringHash >
         ImageAryDataNameHash;
 
     ImageAryDataVec             maImages;
     ImageAryDataNameHash        maNameHash;
     rtl::OUString               maPrefix;
-    Size                        maImageSize;
-    sal_uIntPtr                       mnRefCount;
+    Size			            maImageSize;
+    ULONG                       mnRefCount;
 
     ImplImageList();
     ImplImageList( const ImplImageList &aSrc );
     ~ImplImageList();
 
     void AddImage( const ::rtl::OUString &aName,
-                   sal_uInt16 nId, const BitmapEx &aBitmapEx );
-    void RemoveImage( sal_uInt16 nPos );
-    sal_uInt16 GetImageCount() const;
+                   USHORT nId, const BitmapEx &aBitmapEx );
+    void RemoveImage( USHORT nPos );
+    USHORT GetImageCount() const;
 };
 
 // --------------------
@@ -137,13 +137,13 @@ struct ImplImageList
 
 struct ImplImageRefData
 {
-    ImplImageList*  mpImplData;
-    sal_uInt16          mnIndex;
+    ImplImageList*	mpImplData;
+    USHORT			mnIndex;
 
-                    ImplImageRefData() {}    // Um Warning zu umgehen
+                    ImplImageRefData() {}	 // Um Warning zu umgehen
                     ~ImplImageRefData();
 
-    sal_Bool            IsEqual( const ImplImageRefData& rData );
+    BOOL			IsEqual( const ImplImageRefData& rData );
 };
 
 // ----------------
@@ -152,13 +152,13 @@ struct ImplImageRefData
 
 struct ImplImageData
 {
-    ImplImageBmp*   mpImageBitmap;
-    BitmapEx        maBmpEx;
+    ImplImageBmp*	mpImageBitmap;
+    BitmapEx		maBmpEx;
 
                     ImplImageData( const BitmapEx& rBmpEx );
                     ~ImplImageData();
 
-    sal_Bool            IsEqual( const ImplImageData& rData );
+    BOOL			IsEqual( const ImplImageData& rData );
 };
 
 // -------------
@@ -167,10 +167,10 @@ struct ImplImageData
 
 struct ImplImage
 {
-    sal_uIntPtr         mnRefCount;
+    ULONG			mnRefCount;
     // TODO: use inheritance to get rid of meType+mpData
-    void*           mpData;
-    ImageType       meType;
+    void*			mpData;
+    ImageType		meType;
 
                     ImplImage();
                     ~ImplImage();

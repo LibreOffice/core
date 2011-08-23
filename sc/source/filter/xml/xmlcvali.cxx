@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ class ScXMLContentValidationContext : public SvXMLImportContext
     sal_Bool           bDisplayHelp;
     sal_Bool           bDisplayError;
 
-    SvXMLImportContextRef           xEventContext;
+    SvXMLImportContextRef			xEventContext;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -79,14 +79,14 @@ class ScXMLContentValidationContext : public SvXMLImportContext
 
 public:
 
-    ScXMLContentValidationContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLContentValidationContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLContentValidationContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -100,10 +100,10 @@ public:
 
 class ScXMLHelpMessageContext : public SvXMLImportContext
 {
-    rtl::OUString   sTitle;
-    rtl::OUStringBuffer sMessage;
-    sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay;
+    rtl::OUString	sTitle;
+    rtl::OUStringBuffer	sMessage;
+    sal_Int32		nParagraphCount;
+    sal_Bool		bDisplay;
 
     ScXMLContentValidationContext* pValidationContext;
 
@@ -112,7 +112,7 @@ class ScXMLHelpMessageContext : public SvXMLImportContext
 
 public:
 
-    ScXMLHelpMessageContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLHelpMessageContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -120,7 +120,7 @@ public:
 
     virtual ~ScXMLHelpMessageContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -130,11 +130,11 @@ public:
 
 class ScXMLErrorMessageContext : public SvXMLImportContext
 {
-    rtl::OUString   sTitle;
-    rtl::OUStringBuffer sMessage;
-    rtl::OUString   sMessageType;
-    sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay;
+    rtl::OUString	sTitle;
+    rtl::OUStringBuffer	sMessage;
+    rtl::OUString	sMessageType;
+    sal_Int32		nParagraphCount;
+    sal_Bool		bDisplay;
 
     ScXMLContentValidationContext* pValidationContext;
 
@@ -143,7 +143,7 @@ class ScXMLErrorMessageContext : public SvXMLImportContext
 
 public:
 
-    ScXMLErrorMessageContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLErrorMessageContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -151,7 +151,7 @@ public:
 
     virtual ~ScXMLErrorMessageContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -161,17 +161,17 @@ public:
 
 class ScXMLErrorMacroContext : public SvXMLImportContext
 {
-    rtl::OUString   sName;
-    sal_Bool        bExecute;
+    rtl::OUString	sName;
+    sal_Bool		bExecute;
 
-    ScXMLContentValidationContext*  pValidationContext;
+    ScXMLContentValidationContext*	pValidationContext;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLErrorMacroContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLErrorMacroContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -179,7 +179,7 @@ public:
 
     virtual ~ScXMLErrorMacroContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -189,7 +189,7 @@ public:
 //------------------------------------------------------------------
 
 ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
@@ -202,7 +202,7 @@ ScXMLContentValidationsContext::~ScXMLContentValidationsContext()
 {
 }
 
-SvXMLImportContext *ScXMLContentValidationsContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLContentValidationsContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -228,15 +228,15 @@ void ScXMLContentValidationsContext::EndElement()
 }
 
 ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     nShowList(sheet::TableValidationVisibility::UNSORTED),
     bAllowEmptyCell(sal_True),
-    bDisplayHelp(false),
-    bDisplayError(false)
+    bDisplayHelp(sal_False),
+    bDisplayError(sal_False)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationAttrTokenMap();
@@ -244,7 +244,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -261,7 +261,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
             break;
             case XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL:
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bAllowEmptyCell = false;
+                    bAllowEmptyCell = sal_False;
             break;
             case XML_TOK_CONTENT_VALIDATION_DISPLAY_LIST:
             {
@@ -287,7 +287,7 @@ ScXMLContentValidationContext::~ScXMLContentValidationContext()
 {
 }
 
-SvXMLImportContext *ScXMLContentValidationContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLContentValidationContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -354,7 +354,7 @@ void ScXMLContentValidationContext::SetFormula( OUString& rFormula, OUString& rF
 
 void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidation ) const
 {
-    rValidation.aValidationType = sheet::ValidationType_ANY;    // default if no condition is given
+    rValidation.aValidationType = sheet::ValidationType_ANY;    // #b6343997# default if no condition is given
     rValidation.aOperator = sheet::ConditionOperator_NONE;
 
     if( sCondition.getLength() > 0 )
@@ -494,7 +494,7 @@ void ScXMLContentValidationContext::SetErrorMacro(const sal_Bool bExecute)
 }
 
 ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -503,7 +503,7 @@ ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
     sTitle(),
     sMessage(),
     nParagraphCount(0),
-    bDisplay(false)
+    bDisplay(sal_False)
 {
     pValidationContext = pTempValidationContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -512,7 +512,7 @@ ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -532,7 +532,7 @@ ScXMLHelpMessageContext::~ScXMLHelpMessageContext()
 {
 }
 
-SvXMLImportContext *ScXMLHelpMessageContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLHelpMessageContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -564,7 +564,7 @@ void ScXMLHelpMessageContext::EndElement()
 }
 
 ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -574,7 +574,7 @@ ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
     sMessage(),
     sMessageType(),
     nParagraphCount(0),
-    bDisplay(false)
+    bDisplay(sal_False)
 {
     pValidationContext = pTempValidationContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -583,7 +583,7 @@ ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -606,7 +606,7 @@ ScXMLErrorMessageContext::~ScXMLErrorMessageContext()
 {
 }
 
-SvXMLImportContext *ScXMLErrorMessageContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLErrorMessageContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -638,14 +638,14 @@ void ScXMLErrorMessageContext::EndElement()
 }
 
 ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sName(),
-    bExecute(false)
+    bExecute(sal_False)
 {
     pValidationContext = pTempValidationContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -654,7 +654,7 @@ ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -674,7 +674,7 @@ ScXMLErrorMacroContext::~ScXMLErrorMacroContext()
 {
 }
 
-SvXMLImportContext *ScXMLErrorMacroContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLErrorMacroContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )

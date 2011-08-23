@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,6 +38,7 @@
 #include <sot/clsids.hxx>
 
 #include "edtwin.hxx"
+#include "errhdl.hxx"
 #include "wrtsh.hxx"
 #include "cmdid.h"
 #include "frmatr.hxx"
@@ -58,7 +59,7 @@
 using namespace ::com::sun::star;
 
 /*------------------------------------------------------------------------
- Beschreibung:  Zeilenhoehe einstellen (Dialog)
+ Beschreibung:	Zeilenhoehe einstellen (Dialog)
 ------------------------------------------------------------------------*/
 
 
@@ -79,7 +80,7 @@ void SwTableFUNC::ColWidthDlg( Window *pParent )
  --------------------------------------------------------------------*/
 
 
-SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const
+SwTwips SwTableFUNC::GetColWidth(USHORT nNum) const
 {
     SwTwips nWidth = 0;
 
@@ -95,10 +96,10 @@ SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const
         else
         {
             SwTwips nRValid = nNum < GetColCount() ?
-                            aCols[(sal_uInt16)GetRightSeparator((int)nNum)]:
+                            aCols[(USHORT)GetRightSeparator((int)nNum)]:
                                     aCols.GetRight();
             SwTwips nLValid = nNum ?
-                            aCols[(sal_uInt16)GetRightSeparator((int)nNum - 1)]:
+                            aCols[(USHORT)GetRightSeparator((int)nNum - 1)]:
                                     aCols.GetLeft();
             nWidth = nRValid - nLValid;
         }
@@ -111,7 +112,7 @@ SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const
 
 
 
-SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
+SwTwips SwTableFUNC::GetMaxColWidth( USHORT nNum ) const
 {
     OSL_ENSURE(nNum <= aCols.Count(), "Index out of Area");
 
@@ -119,7 +120,7 @@ SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
     {
         // Die max. Breite ergibt sich aus der eigenen Breite und
         // der Breite der Nachbarzellen um je MINLAY verringert
-        SwTwips nMax =  nNum == 0 ?
+        SwTwips nMax = 	nNum == 0 ?
             GetColWidth(1) - MINLAY :
                 nNum == GetColCount() ?
                     GetColWidth( nNum-1 ) - MINLAY :
@@ -133,34 +134,35 @@ SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
 
 
 
-void SwTableFUNC::SetColWidth(sal_uInt16 nNum, SwTwips nNewWidth )
+void SwTableFUNC::SetColWidth(USHORT nNum, SwTwips nNewWidth )
 {
     // aktuelle Breite setzen
     // alle folgenden Verschieben
-    sal_Bool bCurrentOnly = sal_False;
+    BOOL bCurrentOnly = FALSE;
+    SwTwips nWidth = 0;
 
     if ( aCols.Count() > 0 )
     {
         if(aCols.Count() != GetColCount())
-            bCurrentOnly = sal_True;
-        SwTwips nWidth = GetColWidth(nNum);
+            bCurrentOnly = TRUE;
+        nWidth = GetColWidth(nNum);
 
         int nDiff = (int)(nNewWidth - nWidth);
         if( !nNum )
-            aCols[ static_cast< sal_uInt16 >(GetRightSeparator(0)) ] += nDiff;
+            aCols[ static_cast< USHORT >(GetRightSeparator(0)) ] += nDiff;
         else if( nNum < GetColCount()  )
         {
             if(nDiff < GetColWidth(nNum + 1) - MINLAY)
-                aCols[ static_cast< sal_uInt16 >(GetRightSeparator(nNum)) ] += nDiff;
+                aCols[ static_cast< USHORT >(GetRightSeparator(nNum)) ] += nDiff;
             else
             {
                 int nDiffLeft = nDiff - (int)GetColWidth(nNum + 1) + (int)MINLAY;
-                aCols[ static_cast< sal_uInt16 >(GetRightSeparator(nNum)) ] += (nDiff - nDiffLeft);
-                aCols[ static_cast< sal_uInt16 >(GetRightSeparator(nNum - 1)) ] -= nDiffLeft;
+                aCols[ static_cast< USHORT >(GetRightSeparator(nNum)) ] += (nDiff - nDiffLeft);
+                aCols[ static_cast< USHORT >(GetRightSeparator(nNum - 1)) ] -= nDiffLeft;
             }
         }
         else
-            aCols[ static_cast< sal_uInt16 >(GetRightSeparator(nNum-1)) ] -= nDiff;
+            aCols[ static_cast< USHORT >(GetRightSeparator(nNum-1)) ] -= nDiff;
     }
     else
         aCols.SetRight( Min( nNewWidth, aCols.GetRightMax()) );
@@ -182,7 +184,7 @@ void SwTableFUNC::InitTabCols()
 
 
 
-SwTableFUNC::SwTableFUNC(SwWrtShell *pShell, sal_Bool bCopyFmt)
+SwTableFUNC::SwTableFUNC(SwWrtShell *pShell, BOOL bCopyFmt)
     : pFmt(pShell->GetTableFmt()),
       pSh(pShell),
       bCopy(bCopyFmt)
@@ -213,7 +215,7 @@ void SwTableFUNC::UpdateChart()
     }
 }
 
-uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
+uno::Reference< frame::XModel > SwTableFUNC::InsertChart( 
         uno::Reference< chart2::data::XDataProvider > &rxDataProvider,
         sal_Bool bFillWithData,
         const rtl::OUString &rCellRange,
@@ -229,11 +231,11 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         aName = pSh->GetTableFmt()->GetName();
         // insert node before table
         pSh->MoveTable( fnTableCurr, fnTableStart );
-        pSh->Up( sal_False, 1, sal_False );
+        pSh->Up( FALSE, 1, FALSE );
         if ( pSh->IsCrsrInTbl() )
         {
             if ( aName != pSh->GetTableFmt()->GetName() )
-                pSh->Down( sal_False, 1, sal_False ); // two adjacent tables
+                pSh->Down( FALSE, 1, FALSE ); // two adjacent tables
         }
         pSh->SplitNode();
     }
@@ -247,7 +249,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     ::svt::EmbeddedObjectRef aEmbObjRef( xObj, ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
     if ( xObj.is() )
     {
-
+        
         SwFlyFrmFmt* pTmp = 0;
         pSh->InsertOleObject( aEmbObjRef, &pTmp );
         if (ppFlyFrmFmt)
@@ -257,7 +259,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         if( xCompSupp.is())
         {
             xChartModel.set( xCompSupp->getComponent(), uno::UNO_QUERY );
-            if( xChartModel.is() )
+            if( xChartModel.is() ) 
                 xChartModel->lockControllers(); //#i79578# don't request a new replacement image for charts to often - block change notifications
         }
 
@@ -274,7 +276,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         if ( !pClient )
         {
             pClient = new SwOleClient( &pSh->GetView(), &pSh->GetView().GetEditWin(), aEmbObjRef );
-            pSh->SetCheckForOLEInCaption( sal_True );
+            pSh->SetCheckForOLEInCaption( TRUE );
         }
         pSh->CalcAndSetScale( aEmbObjRef );
         //#50270# Error brauchen wir nicht handeln, das erledigt das
@@ -307,13 +309,13 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
 
             bHasCategories = false;
             if (nRowLen == 1 && nColLen == 1)
-                bFirstCellAsLabel   = false;
+                bFirstCellAsLabel	= false;
             else if (nRowLen > 1)
                 eDataRowSource = chart::ChartDataRowSource_ROWS;
             else if (nColLen > 1)
                 eDataRowSource = chart::ChartDataRowSource_COLUMNS;
             else {
-                OSL_FAIL("unexpected state" );
+                OSL_ENSURE(false, "unexpected state" );
             }
         }
 
@@ -335,16 +337,16 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
 
     pSh->EndUndo( UNDO_UI_INSERT_CHART );
 
-    if( xChartModel.is() )
+    if( xChartModel.is() ) 
         xChartModel->unlockControllers(); //#i79578# don't request a new replacement image for charts to often
     return xChartModel;
 }
 
-sal_uInt16  SwTableFUNC::GetCurColNum() const
+USHORT	SwTableFUNC::GetCurColNum() const
 {
-    sal_uInt16 nPos = pSh->GetCurTabColNum();
-    sal_uInt16 nCount = 0;
-    for(sal_uInt16 i = 0; i < nPos; i++ )
+    USHORT nPos = pSh->GetCurTabColNum();
+    USHORT nCount = 0;
+    for(USHORT i = 0; i < nPos; i++ )
         if(aCols.IsHidden(i))
             nCount ++;
     return nPos - nCount;
@@ -353,10 +355,10 @@ sal_uInt16  SwTableFUNC::GetCurColNum() const
 
 
 
-sal_uInt16  SwTableFUNC::GetColCount() const
+USHORT	SwTableFUNC::GetColCount() const
 {
-    sal_uInt16 nCount = 0;
-    for(sal_uInt16 i = 0; i < aCols.Count(); i++ )
+    USHORT nCount = 0;
+    for(USHORT i = 0; i < aCols.Count(); i++ )
         if(aCols.IsHidden(i))
             nCount ++;
     return aCols.Count() - nCount;
@@ -370,7 +372,7 @@ int SwTableFUNC::GetRightSeparator(int nNum) const
     int i = 0;
     while( nNum >= 0 )
     {
-        if( !aCols.IsHidden( static_cast< sal_uInt16 >(i)) )
+        if( !aCols.IsHidden( static_cast< USHORT >(i)) )
             nNum--;
         i++;
     }

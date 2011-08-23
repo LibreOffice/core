@@ -6,6 +6,10 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
+# $RCSfile: makefile.mk,v $
+#
+# $Revision: 1.10 $
+#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -42,11 +46,14 @@ TARFILE_MD5=90401bca927835b6fbae4a707ed187c8
 TARFILE_NAME=nlpsolver-0.9
 TARFILE_ROOTDIR=nlpsolver-0.9
 
+#ADDITIONAL_FILES= \
+#    toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java
+
 PATCH_FILES=nlpsolver-0.9.patch
 
 ANT_FLAGS+=-Dplatforms.JDK_1.5.home=$(JAVA_HOME) -Doffice.program.dir=$(SOLARBINDIR)
 
-CONFIGURE_ACTION=cp -rv --preserve=timestamps ../../../../locale src/
+CONFIGURE_ACTION=cp -rpv ../../../../locale src/
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=

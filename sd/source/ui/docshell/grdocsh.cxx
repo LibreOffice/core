@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,12 +58,13 @@ TYPEINIT1(GraphicDocShell, DrawDocShell);
 SFX_IMPL_INTERFACE(GraphicDocShell, SfxObjectShell, SdResId(0))
 {
     SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
+    SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
 }
 
 SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), SFXOBJECTSHELL_STD_NORMAL, "sdraw" )
 
 GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode,
-                                     sal_Bool bDataObject,
+                                     BOOL bDataObject,
                                      DocumentType eDocType) :
     DrawDocShell(eMode, bDataObject, eDocType)
 {
@@ -71,7 +72,7 @@ GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode,
 }
 
 GraphicDocShell::GraphicDocShell(const sal_uInt64 nModelCreationFlags,
-                                     sal_Bool bDataObject,
+                                     BOOL bDataObject,
                                      DocumentType eDocType) :
     DrawDocShell(nModelCreationFlags, bDataObject, eDocType)
 {

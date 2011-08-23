@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ namespace chart
 class ChartItemPool : public SfxItemPool
 {
 private:
-    SfxPoolItem**   ppPoolDefaults;
+    SfxPoolItem**	ppPoolDefaults;
     SfxItemInfo*    pItemInfos;
 
 public:
@@ -47,7 +47,7 @@ protected:
 public:
 
     virtual SfxItemPool* Clone() const;
-    SfxMapUnit GetMetric( sal_uInt16 nWhich ) const;
+    SfxMapUnit GetMetric( USHORT nWhich ) const;
 
     /// creates a pure chart item pool
     static SfxItemPool* CreateChartItemPool();

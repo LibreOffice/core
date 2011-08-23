@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,11 +25,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _DRAWFONT_HXX
-#define _DRAWFONT_HXX
+#ifndef	_DRAWFONT_HXX
+#define	_DRAWFONT_HXX
 
 #include <tools/solar.h>
 #include <tools/string.hxx>
+#include <errhdl.hxx>
 
 class SwTxtFrm;
 class OutputDevice;
@@ -69,25 +70,25 @@ class SwDrawTextInfo
     xub_StrLen nIdx;
     xub_StrLen nLen;
     xub_StrLen nOfst;
-    sal_uInt16 nWidth;
-    sal_uInt16 nAscent;
-    sal_uInt16 nCompress;
+    USHORT nWidth;
+    USHORT nAscent;
+    USHORT nCompress;
     long nSperren;
     long nSpace;
     long nKern;
     xub_StrLen nNumberOfBlanks;
-    sal_uInt8 nCursorBidiLevel;
-    sal_Bool bBullet : 1;
-    sal_Bool bUpper : 1;        // Fuer Kapitaelchen: Grossbuchstaben-Flag
-    sal_Bool bDrawSpace : 1;    // Fuer Kapitaelchen: Unter/Durchstreichung
-    sal_Bool bGreyWave  : 1;    // Graue Wellenlinie beim extended TextInput
-    sal_Bool bSpaceStop : 1;    // For underlining we need to know, if a portion
+    BYTE nCursorBidiLevel;
+    BOOL bBullet : 1;
+    BOOL bUpper : 1;		// Fuer Kapitaelchen: Grossbuchstaben-Flag
+    BOOL bDrawSpace : 1;	// Fuer Kapitaelchen: Unter/Durchstreichung
+    BOOL bGreyWave	: 1;	// Graue Wellenlinie beim extended TextInput
+    BOOL bSpaceStop : 1;    // For underlining we need to know, if a portion
                             // is right in front of a hole portion or a
                             // fix margin portion.
-    sal_Bool bSnapToGrid : 1;   // Does paragraph snap to grid?
-    sal_Bool bIgnoreFrmRTL : 1; // Paint text as if text has LTR direction, used for
+    BOOL bSnapToGrid : 1;   // Does paragraph snap to grid?
+    BOOL bIgnoreFrmRTL : 1; // Paint text as if text has LTR direction, used for
                             // line numbering
-    sal_Bool bPosMatchesBounds :1;  // GetCrsrOfst should not return the next
+    BOOL bPosMatchesBounds :1;  // GetCrsrOfst should not return the next
                                 // position if screen position is inside second
                                 // half of bound rect, used for Accessibility
 
@@ -95,27 +96,27 @@ class SwDrawTextInfo
 public:
 
 #if OSL_DEBUG_LEVEL > 1
-    sal_Bool bPos   : 1;            // These flags should control, that the appropriate
-    sal_Bool bWrong : 1;            // Set-function has been called before calling
-    sal_Bool bGrammarCheck : 1;     //  the Get-function of a member
-    sal_Bool bSize  : 1;
-    sal_Bool bFnt   : 1;
-    sal_Bool bHyph  : 1;
-    sal_Bool bLeft  : 1;
-    sal_Bool bRight : 1;
-    sal_Bool bKana  : 1;
-    sal_Bool bOfst  : 1;
-    sal_Bool bAscent: 1;
-    sal_Bool bSperr : 1;
-    sal_Bool bSpace : 1;
-    sal_Bool bNumberOfBlanks : 1;
-    sal_Bool bUppr  : 1;
-    sal_Bool bDrawSp: 1;
+    BOOL bPos   : 1;            // These flags should control, that the appropriate
+    BOOL bWrong : 1;            // Set-function has been called before calling
+    BOOL bGrammarCheck : 1;     //  the Get-function of a member
+    BOOL bSize  : 1;
+    BOOL bFnt   : 1;
+    BOOL bHyph  : 1;
+    BOOL bLeft  : 1;
+    BOOL bRight : 1;
+    BOOL bKana  : 1;
+    BOOL bOfst  : 1;
+    BOOL bAscent: 1;
+    BOOL bSperr : 1;
+    BOOL bSpace : 1;
+    BOOL bNumberOfBlanks : 1;
+    BOOL bUppr  : 1;
+    BOOL bDrawSp: 1;
 #endif
 
     SwDrawTextInfo( ViewShell *pS, OutputDevice &rO, const SwScriptInfo* pSI,
                     const XubString &rSt, xub_StrLen nI, xub_StrLen nL,
-                    sal_uInt16 nW = 0, sal_Bool bB = sal_False )
+                    USHORT nW = 0, BOOL bB = FALSE )
     {
         pFrm = NULL;
         pSh = pS;
@@ -131,11 +132,11 @@ public:
         nCursorBidiLevel = 0;
         bBullet = bB;
         pUnderFnt = 0;
-        bGreyWave = sal_False;
-        bSpaceStop = sal_False;
-        bSnapToGrid = sal_False;
-        bIgnoreFrmRTL = sal_False;
-        bPosMatchesBounds = sal_False;
+        bGreyWave = FALSE;
+        bSpaceStop = FALSE;
+        bSnapToGrid = FALSE;
+        bIgnoreFrmRTL = FALSE;
+        bPosMatchesBounds = FALSE;
 
         // These values are initialized but, they have to be
         // set explicitly via their Set-function before they may
@@ -154,15 +155,15 @@ public:
         nAscent = 0;
         nSperren = 0;
         nSpace = 0;
-        bUpper = sal_False;
-        bDrawSpace = sal_False;
+        bUpper = FALSE;
+        bDrawSpace = FALSE;
 
 #if OSL_DEBUG_LEVEL > 1
         // these flags control, whether the matching member variables have
         // been set by using the Set-function before they may be accessed
         // by their Get-function:
         bPos = bWrong = bGrammarCheck = bSize = bFnt = bAscent = bSpace = bNumberOfBlanks = bUppr =
-        bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = bSperr = sal_False;
+        bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = bSperr = FALSE;
 #endif
     }
 
@@ -306,12 +307,12 @@ public:
         return nKanaDiff;
     }
 
-    sal_uInt16 GetWidth() const
+    USHORT GetWidth() const
     {
         return nWidth;
     }
 
-    sal_uInt16 GetAscent() const
+    USHORT GetAscent() const
     {
 #if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( bAscent, "DrawTextInfo: Undefined Ascent" );
@@ -319,7 +320,7 @@ public:
         return nAscent;
     }
 
-    sal_uInt16 GetKanaComp() const
+    USHORT GetKanaComp() const
     {
         return nCompress;
     }
@@ -353,17 +354,17 @@ public:
         return nNumberOfBlanks;
     }
 
-    sal_uInt8 GetCursorBidiLevel() const
+    BYTE GetCursorBidiLevel() const
     {
         return nCursorBidiLevel;
     }
 
-    sal_Bool GetBullet() const
+    BOOL GetBullet() const
     {
         return bBullet;
     }
 
-    sal_Bool GetUpper() const
+    BOOL GetUpper() const
     {
 #if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( bUppr, "DrawTextInfo: Undefined Upperflag" );
@@ -371,7 +372,7 @@ public:
         return bUpper;
     }
 
-    sal_Bool GetDrawSpace() const
+    BOOL GetDrawSpace() const
     {
 #if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( bDrawSp, "DrawTextInfo: Undefined DrawSpaceflag" );
@@ -379,27 +380,27 @@ public:
         return bDrawSpace;
     }
 
-    sal_Bool GetGreyWave() const
+    BOOL GetGreyWave() const
     {
         return bGreyWave;
     }
 
-    sal_Bool IsSpaceStop() const
+    BOOL IsSpaceStop() const
     {
         return bSpaceStop;
     }
 
-    sal_Bool SnapToGrid() const
+    BOOL SnapToGrid() const
     {
         return bSnapToGrid;
     }
 
-    sal_Bool IsIgnoreFrmRTL() const
+    BOOL IsIgnoreFrmRTL() const
     {
         return bIgnoreFrmRTL;
     }
 
-    sal_Bool IsPosMatchesBounds() const
+    BOOL IsPosMatchesBounds() const
     {
         return bPosMatchesBounds;
     }
@@ -413,7 +414,7 @@ public:
     {
         pPos = &rNew;
 #if OSL_DEBUG_LEVEL > 1
-        bPos = sal_True;
+        bPos = TRUE;
 #endif
     }
 
@@ -421,7 +422,7 @@ public:
     {
         pHyphPos = pNew;
 #if OSL_DEBUG_LEVEL > 1
-        bHyph = sal_True;
+        bHyph = TRUE;
 #endif
     }
 
@@ -434,7 +435,7 @@ public:
     {
         pWrong = pNew;
 #if OSL_DEBUG_LEVEL > 1
-        bWrong = sal_True;
+        bWrong = TRUE;
 #endif
     }
 
@@ -442,7 +443,7 @@ public:
     {
         pGrammarCheck = pNew;
 #if OSL_DEBUG_LEVEL > 1
-        bGrammarCheck = sal_True;
+        bGrammarCheck = TRUE;
 #endif
     }
 
@@ -455,7 +456,7 @@ public:
     {
         pSize = &rNew;
 #if OSL_DEBUG_LEVEL > 1
-        bSize = sal_True;
+        bSize = TRUE;
 #endif
     }
 
@@ -463,7 +464,7 @@ public:
     {
         pFnt = pNew;
 #if OSL_DEBUG_LEVEL > 1
-        bFnt = sal_True;
+        bFnt = TRUE;
 #endif
     }
 
@@ -481,7 +482,7 @@ public:
     {
         nOfst = nNew;
 #if OSL_DEBUG_LEVEL > 1
-        bOfst = sal_True;
+        bOfst = TRUE;
 #endif
     }
 
@@ -489,7 +490,7 @@ public:
     {
         nLeft = nNew;
 #if OSL_DEBUG_LEVEL > 1
-        bLeft = sal_True;
+        bLeft = TRUE;
 #endif
     }
 
@@ -497,7 +498,7 @@ public:
     {
         nRight = nNew;
 #if OSL_DEBUG_LEVEL > 1
-        bRight = sal_True;
+        bRight = TRUE;
 #endif
     }
 
@@ -505,20 +506,20 @@ public:
     {
         nKanaDiff = nNew;
 #if OSL_DEBUG_LEVEL > 1
-        bKana = sal_True;
+        bKana = TRUE;
 #endif
     }
 
-    void SetWidth( sal_uInt16 nNew )
+    void SetWidth( USHORT nNew )
     {
         nWidth = nNew;
     }
 
-    void SetAscent( sal_uInt16 nNew )
+    void SetAscent( USHORT nNew )
     {
         nAscent = nNew;
 #if OSL_DEBUG_LEVEL > 1
-        bAscent = sal_True;
+        bAscent = TRUE;
 #endif
     }
 
@@ -540,20 +541,20 @@ public:
             nSperren = 0;
         }
 #if OSL_DEBUG_LEVEL > 1
-        bSpace = sal_True;
-        bSperr = sal_True;
+        bSpace = TRUE;
+        bSperr = TRUE;
 #endif
     }
 
     void SetNumberOfBlanks( xub_StrLen nNew )
     {
 #if OSL_DEBUG_LEVEL > 1
-        bNumberOfBlanks = sal_True;
+        bNumberOfBlanks = TRUE;
 #endif
         nNumberOfBlanks = nNew;
     }
 
-    void SetCursorBidiLevel( sal_uInt8 nNew )
+    void SetCursorBidiLevel( BYTE nNew )
     {
         nCursorBidiLevel = nNew;
     }
@@ -563,7 +564,7 @@ public:
         nCompress = nNew;
     }
 
-    void SetBullet( sal_Bool bNew )
+    void SetBullet( BOOL bNew )
     {
         bBullet = bNew;
     }
@@ -573,48 +574,48 @@ public:
         pUnderFnt = pULFnt;
     }
 
-    void SetUpper( sal_Bool bNew )
+    void SetUpper( BOOL bNew )
     {
         bUpper = bNew;
 #if OSL_DEBUG_LEVEL > 1
-        bUppr = sal_True;
+        bUppr = TRUE;
 #endif
     }
 
-    void SetDrawSpace( sal_Bool bNew )
+    void SetDrawSpace( BOOL bNew )
     {
         bDrawSpace = bNew;
 #if OSL_DEBUG_LEVEL > 1
-        bDrawSp = sal_True;
+        bDrawSp = TRUE;
 #endif
     }
 
-    void SetGreyWave( sal_Bool bNew )
+    void SetGreyWave( BOOL bNew )
     {
         bGreyWave = bNew;
     }
 
-    void SetSpaceStop( sal_Bool bNew )
+    void SetSpaceStop( BOOL bNew )
     {
         bSpaceStop = bNew;
     }
 
-    void SetSnapToGrid( sal_Bool bNew )
+    void SetSnapToGrid( BOOL bNew )
     {
         bSnapToGrid = bNew;
     }
 
-    void SetIgnoreFrmRTL( sal_Bool bNew )
+    void SetIgnoreFrmRTL( BOOL bNew )
     {
         bIgnoreFrmRTL = bNew;
     }
 
-    void SetPosMatchesBounds( sal_Bool bNew )
+    void SetPosMatchesBounds( BOOL bNew )
     {
         bPosMatchesBounds = bNew;
     }
 
-    void Shift( sal_uInt16 nDir );
+    void Shift( USHORT nDir );
 
     // sets a new color at the output device if necessary
     // if a font is passed as argument, the change if made to the font

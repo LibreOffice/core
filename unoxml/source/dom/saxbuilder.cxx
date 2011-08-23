@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,11 @@
 #pragma warning(disable : 4701)
 #endif
 
+#include "node.hxx"
 #include "saxbuilder.hxx"
-
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
-
+#include <libxml/tree.h>
+#include <com/sun/star/uno/Sequence.h>
 
 namespace DOM
 {
@@ -93,16 +94,12 @@ namespace DOM
     SAXDocumentBuilderState SAL_CALL CSAXDocumentBuilder::getState()
         throw (RuntimeException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         return m_aState;
     }
 
     void SAL_CALL CSAXDocumentBuilder::reset()
         throw (RuntimeException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         m_aDocument = Reference< XDocument >();
         m_aFragment = Reference< XDocumentFragment >();
         while (!m_aNodeStack.empty()) m_aNodeStack.pop();
@@ -113,8 +110,6 @@ namespace DOM
     Reference< XDocument > SAL_CALL CSAXDocumentBuilder::getDocument()
         throw (RuntimeException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         if (m_aState != SAXDocumentBuilderState_DOCUMENT_FINISHED)
             throw RuntimeException();
 
@@ -124,8 +119,6 @@ namespace DOM
     Reference< XDocumentFragment > SAL_CALL CSAXDocumentBuilder::getDocumentFragment()
          throw (RuntimeException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         if (m_aState != SAXDocumentBuilderState_FRAGMENT_FINISHED)
             throw RuntimeException();
         return m_aFragment;
@@ -134,8 +127,6 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::startDocumentFragment(const Reference< XDocument >& ownerDoc)
         throw (RuntimeException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         // start a new document fragment and push it onto the stack
         // we have to be in a clean state to do this
         if (!m_aState == SAXDocumentBuilderState_READY)
@@ -151,8 +142,6 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::endDocumentFragment()
         throw (RuntimeException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         // there should only be the document left on the node stack
         if (m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
             throw RuntimeException();
@@ -168,7 +157,6 @@ namespace DOM
 
     void SAL_CALL  CSAXDocumentBuilder::startDocument() throw (RuntimeException, SAXException)
     {
-        ::osl::MutexGuard g(m_Mutex);
 
         // start a new document and push it onto the stack
         // we have to be in a clean state to do this
@@ -176,7 +164,7 @@ namespace DOM
             throw SAXException();
 
         Reference< XDocumentBuilder > aBuilder(m_aServiceManager->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.DocumentBuilder"))), UNO_QUERY_THROW);
+                OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), UNO_QUERY_THROW);
         Reference< XDocument > aDocument = aBuilder->newDocument();
         m_aNodeStack.push(Reference< XNode >(aDocument, UNO_QUERY));
         m_aDocument = aDocument;
@@ -185,8 +173,6 @@ namespace DOM
 
     void SAL_CALL CSAXDocumentBuilder::endDocument() throw (RuntimeException, SAXException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         // there should only be the document left on the node stack
         if (!m_aState == SAXDocumentBuilderState_BUILDING_DOCUMENT)
             throw SAXException();
@@ -201,8 +187,6 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::startElement(const OUString& aName, const Reference< XAttributeList>& attribs)
         throw (RuntimeException, SAXException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
         {
@@ -226,12 +210,12 @@ namespace DOM
             attr_qname = attribs->getNameByIndex(i);
             attr_value = attribs->getValueByIndex(i);
             // new prefix mapping
-            if (attr_qname.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns:"))) == 0)
+            if (attr_qname.indexOf(OUString::createFromAscii("xmlns:")) == 0)
             {
                 newprefix = attr_qname.copy(attr_qname.indexOf(':')+1);
                 aNSMap.insert(NSMap::value_type(newprefix, attr_value));
             }
-            else if (attr_qname == OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns")))
+            else if (attr_qname == OUString::createFromAscii("xmlns"))
             {
                 // new default prefix
                 aNSMap.insert(NSMap::value_type(OUString(), attr_value));
@@ -258,8 +242,7 @@ namespace DOM
         if ( result != aNSMap.end())
         {
             // found a URI for prefix
-            // qualified name
-            aElement = m_aDocument->createElementNS( result->second, aName);
+            aElement = m_aDocument->createElementNS( result->second, aName); // qualified name 
         }
         else
         {
@@ -280,8 +263,10 @@ namespace DOM
             attr_qname = a->first;
             attr_value = a->second;
             idx = attr_qname.indexOf(':');
-            if (idx != -1)
+            if(idx != -1)
+            {
                 aPrefix = attr_qname.copy(0, idx);
+            }
             else
                 aPrefix = OUString();
 
@@ -290,13 +275,11 @@ namespace DOM
             {
                 // set attribute with namespace
                 aElement->setAttributeNS(result->second, attr_qname, attr_value);
-            }
-            else
-            {
+            } else {
                 // set attribute without namespace
                 aElement->setAttribute(attr_qname, attr_value);
-            }
-            ++a;
+           }
+            a++;
         }
         m_aNSStack.push(aNSMap);
     }
@@ -304,8 +287,6 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::endElement(const OUString& aName)
         throw (RuntimeException, SAXException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         // pop the current element from the stack
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -319,7 +300,7 @@ namespace DOM
         OUString aRefName;
         OUString aPrefix = aElement->getPrefix();
         if (aPrefix.getLength() > 0)
-            aRefName = aPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM(":")) + aElement->getTagName();
+            aRefName = aPrefix + OUString::createFromAscii(":") + aElement->getTagName();
         else
             aRefName = aElement->getTagName();
         if (aRefName != aName) // consistency check
@@ -333,8 +314,6 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::characters(const OUString& aChars)
         throw (RuntimeException, SAXException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         //  append text node to the current top element
          if (m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -347,8 +326,6 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::ignorableWhitespace(const OUString& )
         throw (RuntimeException, SAXException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         //  ignore ignorable whitespace
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -358,8 +335,6 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::processingInstruction(const OUString& aTarget, const OUString& aData)
         throw (RuntimeException, SAXException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         //  append PI node to the current top
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -373,8 +348,6 @@ namespace DOM
     void SAL_CALL CSAXDocumentBuilder::setDocumentLocator(const Reference< XLocator >& aLocator)
         throw (RuntimeException, SAXException)
     {
-        ::osl::MutexGuard g(m_Mutex);
-
         // set the document locator...
         m_aLocator = aLocator;
     }

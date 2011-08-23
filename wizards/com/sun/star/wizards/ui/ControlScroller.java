@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,6 @@ import com.sun.star.beans.*;
 import com.sun.star.awt.*;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.common.HelpIds;
 
 import java.util.*;
 
@@ -118,7 +117,7 @@ public abstract class ControlScroller
         oImgControl = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgBackground" + sIncSuffix,
                 new String[]
                 {
-                    "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                    "Border", "Height", "PositionX", "PositionY", "Step", "Width"
                 },
                 new Object[]
                 {
@@ -130,11 +129,11 @@ public abstract class ControlScroller
                 new AdjustmentListenerImpl(),
                 new String[]
                 {
-                    "Border", PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                    "Border", "Enabled", "Height", "HelpURL", "Orientation", "PositionX", "PositionY", "Step", "Width"
                 },
                 new Object[]
                 {
-                    new Short((short) 0), new Boolean(true), new Integer(ScrollHeight), HelpIds.getHelpIdString(curHelpIndex), new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)
+                    new Short((short) 0), new Boolean(true), new Integer(ScrollHeight), "HID:" + curHelpIndex, new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)
                 });
         scrollfields = new Vector();
         int ypos = iStartPosY + SORELFIRSTPOSY;
@@ -178,7 +177,7 @@ public abstract class ControlScroller
             {
                 Helper.setUnoPropertyValues(UnoDialog.getModel(xScrollBar), new String[]
                         {
-                            PropertyNames.PROPERTY_ENABLED, "BlockIncrement", "LineIncrement", "ScrollValue", "ScrollValueMax"
+                            "Enabled", "BlockIncrement", "LineIncrement", "ScrollValue", "ScrollValueMax"
                         }, new Object[]
                         {
                             Boolean.TRUE, new Integer(nblockincrement), new Integer(nlineincrement), new Integer(nscrollvalue), new Integer(ntotfieldcount - nblockincrement)
@@ -188,7 +187,7 @@ public abstract class ControlScroller
             {
                 Helper.setUnoPropertyValues(UnoDialog.getModel(xScrollBar), new String[]
                         {
-                            PropertyNames.PROPERTY_ENABLED, "ScrollValue"
+                            "Enabled", "ScrollValue"
                         }, new Object[]
                         {
                             Boolean.FALSE, new Integer(nscrollvalue)
@@ -286,7 +285,7 @@ public abstract class ControlScroller
         {
             Helper.setUnoPropertyValues(UnoDialog.getModel(xScrollBar), new String[]
                     {
-                        PropertyNames.PROPERTY_ENABLED, "ScrollValueMax"
+                        "Enabled", "ScrollValueMax"
                     }, new Object[]
                     {
                         Boolean.TRUE, new Integer(ntotfieldcount - nblockincrement)
@@ -294,14 +293,14 @@ public abstract class ControlScroller
         }
         else
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), "Enabled", Boolean.FALSE);
         }
     }
 
     protected void toggleComponent(boolean _bdoenable)
     {
         boolean bdoenable = _bdoenable && (ntotfieldcount > nblockincrement);
-        CurUnoDialog.setControlProperty("TitleScrollBar" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(bdoenable));
+        CurUnoDialog.setControlProperty("TitleScrollBar" + sIncSuffix, "Enabled", new Boolean(bdoenable));
     }
 
     protected void toggleControls(boolean _bdoenable)
@@ -312,7 +311,7 @@ public abstract class ControlScroller
             for (int m = 0; m < curproperties.length; m++)
             {
                 PropertyValue curproperty = curproperties[m];
-                CurUnoDialog.setControlProperty(curproperty.Name, PropertyNames.PROPERTY_ENABLED, new Boolean(_bdoenable));
+                CurUnoDialog.setControlProperty(curproperty.Name, "Enabled", new Boolean(_bdoenable));
             }
         }
 
@@ -340,7 +339,7 @@ public abstract class ControlScroller
         this.nblockincrement = _nblockincrement;
         Helper.setUnoPropertyValues(UnoDialog.getModel(xScrollBar), new String[]
                 {
-                    PropertyNames.PROPERTY_ENABLED, "BlockIncrement", "ScrollValueMax"
+                    "Enabled", "BlockIncrement", "ScrollValueMax"
                 }, new Object[]
                 {
                     new Boolean(ntotfieldcount > nblockincrement), new Integer(nblockincrement), new Integer(ntotfieldcount - nblockincrement)
@@ -390,7 +389,7 @@ public abstract class ControlScroller
      * the control in guiRow and column
      * @param guiRow 0 based row index
      * @param column 0 based column index
-     * @return the propertyValue object corresponding to
+     * @return the propertyValue object corresponding to 
      * this control.
      */
     protected PropertyValue fieldInfo(int guiRow, int column)
@@ -497,7 +496,7 @@ public abstract class ControlScroller
 
     protected abstract void initializeScrollFields();
 
-    /** inserts a group of controls into the component. The group may either be a row or a column of controls
+    /** inserts a group of controls into the component. The group may either be a row or a column of controls 
      *  The controls should be put on Step 99 (means made invisible at first). All the controlrows that are needed are than
      *  made visible automatically when calling "initialize(_fieldcount)"
      * @author bc93774

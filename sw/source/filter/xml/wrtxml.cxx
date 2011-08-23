@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,6 +55,7 @@
 #include <docsh.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
+#include <errhdl.hxx>
 #include <swerror.h>
 #include <wrtxml.hxx>
 #include <statstr.hrc>
@@ -80,7 +81,7 @@ SwXMLWriter::SwXMLWriter( const String& rBaseURL )
 }
 
 
-SwXMLWriter::~SwXMLWriter()
+__EXPORT SwXMLWriter::~SwXMLWriter()
 {
 }
 
@@ -170,7 +171,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         { "StyleFamilies", sizeof("StyleFamilies")-1, 0,
               &::getCppuType( (Sequence<sal_Int32>*)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // #i69627#
+        // --> OD 2006-09-26 #i69627#
         { "OutlineStyleAsNormalListStyle", sizeof("OutlineStyleAsNormalListStyle")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
@@ -202,6 +203,35 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
             if ( pStatusBarItem )
                 pStatusBarItem->GetValue() >>= xStatusIndicator;
         }
+
+//		try
+//		{
+//			uno::Reference<frame::XModel> xModel( pDoc->GetDocShell()->GetModel());
+//			if (xModel.is())
+//			{
+//				uno::Sequence< beans::PropertyValue > xMediaDescr
+//				uno::Reference<frame::XController> xController(
+//					xModel->getCurrentController());
+//				if( xController.is())
+//				{
+//					uno::Reference<frame::XFrame> xFrame( xController->getFrame());
+//					if( xFrame.is())
+//					{
+//						uno::Reference<task::XStatusIndicatorFactory> xFactory(
+//							xFrame, uno::UNO_QUERY );
+//						if( xFactory.is())
+//						{
+//							xStatusIndicator =
+//								xFactory->createStatusIndicator();
+//						}
+//					}
+//				}
+//			}
+//		}
+//		catch( const RuntimeException& )
+//		{
+//			xStatusIndicator = 0;
+//		}
 
         // set progress range and start status indicator
         sal_Int32 nProgressRange(1000000);
@@ -269,7 +299,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         xInfoSet->setPropertyValue( sAutoTextMode, aAny2 );
     }
 
-    // #i69627#
+    // --> OD 2006-09-26 #i69627#
     const sal_Bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
     if ( bOASIS &&
          docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *pDoc ) )
@@ -439,9 +469,11 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         }
     }
 
-    if( pDoc->GetCurrentViewShell() && pDoc->GetDocStat().nPage > 1 &&  //swmod 071108//swmod 071225
+    if( pDoc->GetRootFrm() && pDoc->GetDocStat().nPage > 1 &&
         !(bOrganizerMode || bBlock || bErr) )
     {
+//			DBG_ASSERT( !pDoc->GetDocStat().bModified,
+//						"doc stat is modified!" );
         OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
         try
         {
@@ -507,17 +539,17 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     return 0;
 }
 
-sal_uLong SwXMLWriter::WriteStorage()
+ULONG SwXMLWriter::WriteStorage()
 {
     return _Write();
 }
 
-sal_uLong SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
+ULONG SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
 {
     return _Write( &aTargetMedium );
 }
 
-sal_uLong SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
+ULONG SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
                                const String* pFileName )
 {
     return IsStgWriter()

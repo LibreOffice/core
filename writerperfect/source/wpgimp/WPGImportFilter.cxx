@@ -175,12 +175,12 @@ OUString SAL_CALL WPGImportFilter::detect( com::sun::star::uno::Sequence< Proper
     if (input)
         delete input;
 
-    if (sTypeName.getLength())
+    if (!sTypeName.equalsAscii(""))
     {
         if ( location == Descriptor.getLength() )
         {
             Descriptor.realloc(nLength+1);
-            Descriptor[location].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName"));
+            Descriptor[location].Name = ::rtl::OUString::createFromAscii( "TypeName" );
         }
 
         Descriptor[location].Value <<=sTypeName;

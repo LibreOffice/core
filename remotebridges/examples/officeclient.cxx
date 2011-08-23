@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ public:     // Methods
     virtual sal_Int32 SAL_CALL run( const Sequence< OUString >& aArguments )
         throw(RuntimeException);
 
-
+    
 private: // helper methods
     void testWriter( const Reference < XComponent > & rComponent );
     void registerServices();
@@ -92,7 +92,7 @@ void OfficeClientMain::testWriter( const Reference< XComponent > & rComponent )
     Reference< XTextCursor > rCursor = rText->createTextCursor();
     Reference< XTextRange > rRange ( rCursor , UNO_QUERY );
 
-    rText->insertString( rRange, OUString(RTL_CONSTASCII_USTRINGPARAM("This text has been posted by the officeclient component")), sal_False );
+    rText->insertString( rRange, OUString::createFromAscii( "This text has been posted by the officeclient component" ), sal_False );
 }
 
 /********************
@@ -105,9 +105,9 @@ void OfficeClientMain::registerServices( )
     Reference < XImplementationRegistration > rImplementationRegistration(
 
         m_xSMgr->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration"))),
+            OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" )),
         UNO_QUERY );
-
+    
     if( ! rImplementationRegistration.is() )
     {
         printf( "Couldn't create registration component\n" );
@@ -116,13 +116,13 @@ void OfficeClientMain::registerServices( )
 
     OUString aSharedLibrary[4];
     aSharedLibrary[0] =
-        OUString(RTL_CONSTASCII_USTRINGPARAM( "connector.uno" SAL_DLLEXTENSION ));
+        OUString::createFromAscii( "connector.uno" SAL_DLLEXTENSION );
     aSharedLibrary[1] =
-        OUString(RTL_CONSTASCII_USTRINGPARAM( "remotebridge.uno" SAL_DLLEXTENSION ));
+        OUString::createFromAscii( "remotebridge.uno" SAL_DLLEXTENSION );
     aSharedLibrary[2] =
-        OUString(RTL_CONSTASCII_USTRINGPARAM( "bridgefac.uno" SAL_DLLEXTENSION ));
+        OUString::createFromAscii( "bridgefac.uno" SAL_DLLEXTENSION );
     aSharedLibrary[3] =
-        OUString(RTL_CONSTASCII_USTRINGPARAM( "uuresolver.uno" SAL_DLLEXTENSION ));
+        OUString::createFromAscii( "uuresolver.uno" SAL_DLLEXTENSION );
 
     sal_Int32 i;
     for( i = 0 ; i < 4 ; i ++ )
@@ -135,7 +135,7 @@ void OfficeClientMain::registerServices( )
         {
             // register the needed services in the servicemanager
             rImplementationRegistration->registerImplementation(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
+                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
                 aDllName,
                 Reference< XSimpleRegistry > () );
         }
@@ -156,7 +156,7 @@ sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments ) throw
         try {
             registerServices();
             Reference < XInterface > r =
-                m_xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.UnoUrlResolver")) );
+                m_xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.bridge.UnoUrlResolver" ) );
             Reference < XUnoUrlResolver > rResolver( r , UNO_QUERY );
             r = rResolver->resolve( aArguments.getConstArray()[0] );
 
@@ -164,25 +164,25 @@ sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments ) throw
             if( rNamingService.is() )
             {
                 printf( "got the remote NamingService\n" );
-
-                r = rNamingService->getRegisteredObject(OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice.ServiceManager")));
-
+            
+                r = rNamingService->getRegisteredObject(OUString::createFromAscii("StarOffice.ServiceManager"));
+                
                 Reference< XMultiServiceFactory > rRemoteSMgr( r , UNO_QUERY );
-
+                
                 Reference < XComponentLoader > rLoader(
                     rRemoteSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop" ))),
                     UNO_QUERY );
-
+                
                 if( rLoader.is() )
                 {
-
+                    
                     sal_Char *urls[] = {
                         "private:factory/swriter",
                         "private:factory/sdraw",
                         "private:factory/simpress",
                         "private:factory/scalc"
                     };
-
+                    
                     sal_Char *docu[]= {
                         "a new writer document ...\n",
                         "a new draw document ...\n",
@@ -194,14 +194,14 @@ sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments ) throw
                     {
                         printf( "press any key to open %s\n" , docu[i] );
                         getchar();
-
-                        Reference< XComponent > rComponent =
+                        
+                        Reference< XComponent > rComponent = 
                             rLoader->loadComponentFromURL(
                                 OUString::createFromAscii( urls[i] ) ,
                                 OUString( RTL_CONSTASCII_USTRINGPARAM("_blank")),
                                 0 ,
                                 Sequence < ::com::sun::star::beans::PropertyValue >() );
-
+                        
                         if( 0 == i )
                         {
                             testWriter( rComponent );
@@ -212,7 +212,7 @@ sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments ) throw
                     }
                 }
             }
-
+            
         }
         catch( ConnectionSetupException &e )
         {
@@ -241,7 +241,7 @@ sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments ) throw
     }
     else
     {
-        printf( "usage: (uno officeclient-component --) uno-url\n"
+        printf( "usage: (uno officeclient-component --) uno-url\n" 
                 "e.g.:  uno:socket,host=localhost,port=2002;urp;StarOffice.NamingService\n" );
         return 1;
     }
@@ -262,7 +262,7 @@ Sequence< OUString > getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< OUString > seqNames(2);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.example.OfficeClientExample"));
+            seqNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.bridge.example.OfficeClientExample" );
             pNames = &seqNames;
         }
     }
@@ -293,18 +293,18 @@ sal_Bool SAL_CALL component_writeInfo(
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" )) ) );
-
+                    OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+            
             const Sequence< OUString > & rSNL = getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();
             for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
                 xNewKey->createKey( pArray[nPos] );
-
+            
             return sal_True;
         }
         catch (InvalidRegistryException &)
         {
-            OSL_FAIL( "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;
@@ -314,21 +314,21 @@ void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = 0;
-
+    
     if (pServiceManager && rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             CreateInstance, getSupportedServiceNames() ) );
-
+        
         if (xFactory.is())
         {
             xFactory->acquire();
             pRet = xFactory.get();
         }
     }
-
+    
     return pRet;
 }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace com {
 namespace sun {
 namespace star {
 namespace lang {
-    class XMultiServiceFactory;
+    class XMultiServiceFactory; 
 }
 }}}
 
@@ -57,7 +57,7 @@ namespace vcl
 class VCL_DLLPUBLIC I18nHelper
 {
 private:
-    ::osl::Mutex                    maMutex;
+    ::osl::Mutex	                maMutex;
     ::com::sun::star::lang::Locale  maLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
 
@@ -87,12 +87,12 @@ public:
     sal_Bool    MatchMnemonic( const String& rString, sal_Unicode cMnemonicChar ) const;
 
     String      GetDate( const Date& rDate ) const;
-    String      GetNum( long nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep = sal_True, sal_Bool bTrailingZeros = sal_True ) const;
-
+    String      GetNum( long nNumber, USHORT nDecimals, BOOL bUseThousandSep = TRUE, BOOL bTrailingZeros = TRUE ) const;
+    
     static String filterFormattingChars( const String& );
 };
 
-}   // namespace vcl
+}	// namespace vcl
 
 #endif  // _VCL_I18NHELP_HXX
 

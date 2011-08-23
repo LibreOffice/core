@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
+
 #include "hintids.hxx"
 #include <vcl/graph.hxx>
 #include <svx/galbrws.hxx>
@@ -48,25 +50,28 @@
 #include <sfx2/bindings.hxx>
 #include <uivwimp.hxx>
 #include <avmedia/mediaplayer.hxx>
-//#include <swlinguconfig.hxx>
 #include <swmodule.hxx>
 
 #include <sfx2/objface.hxx>
 #include <navipi.hxx>
 #include <wrtsh.hxx>
-#include <edtwin.hxx>
+#include "doc.hxx"
 #include "view.hxx"
 #include "basesh.hxx"
 #include "docsh.hxx"
-#include "doc.hxx"
 #include "globals.hrc"
-#include "cmdid.h"          // FN_       ...
+#include "cmdid.h"		 	// FN_		 ...
 #include "globdoc.hxx"
 #include "wview.hxx"
 #include "shells.hrc"
 
 #define OLEObjects
 #define SwView
+#define SearchAttributes
+#define ReplaceAttributes
+#define SearchSettings
+#define _ExecSearch ExecSearch
+#define _StateSearch StateSearch
 #define Frames
 #define Graphics
 #define Tables
@@ -86,6 +91,7 @@
 #define WebListInTable
 #define TextPage
 #include <sfx2/msg.hxx>
+#include <svx/svxslots.hxx>
 #include "swslots.hxx"
 #include <PostItMgr.hxx>
 
@@ -121,6 +127,7 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_FIELD_DATA_ONLY);
         SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_SYNC_LABELS,           CHILDWIN_LABEL    );
         SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_MAILMERGE_CHILDWINDOW, CHILDWIN_MAILMERGE);
+//    SFX_CHILDWINDOW_REGISTRATION(FN_MAILMERGE_SENDMAIL_CHILDWINDOW);
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS|
                                 SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                 SW_RES(RID_TOOLS_TOOLBOX) );
@@ -128,7 +135,7 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
 
 TYPEINIT1(SwView,SfxViewShell)
 
-ShellModes  SwView::GetShellMode()
+ShellModes	SwView::GetShellMode()
 {
     return pViewImpl->GetShellMode();
 }
@@ -180,7 +187,7 @@ void lcl_SetViewMarks(SwViewOption& rVOpt, sal_Bool bOn )
     rVOpt.SetHardBlank(bOn);
     rVOpt.SetSoftHyph(bOn);
     SwViewOption::SetAppearanceFlag(
-            VIEWOPT_FIELD_SHADINGS, bOn, sal_True);
+            VIEWOPT_FIELD_SHADINGS, bOn, TRUE);
 }
 
 void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
@@ -200,46 +207,6 @@ void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
     }
 }
 
-void SwView::RecheckBrowseMode()
-{
-    // OS: numerische Reihenfolge beachten!
-    static sal_uInt16 const aInva[] =
-        {
-            //SID_NEWWINDOW,/*5620*/
-            SID_BROWSER_MODE, /*6313*/
-            SID_RULER_BORDERS, SID_RULER_PAGE_POS,
-            //SID_ATTR_LONG_LRSPACE,
-            SID_HTML_MODE,
-            SID_RULER_PROTECT,
-            //SID_AUTOSPELL_CHECK,
-            //SID_AUTOSPELL_MARKOFF,
-            FN_RULER,       /*20211*/
-            FN_VIEW_GRAPHIC,    /*20213*/
-            FN_VIEW_BOUNDS,     /**/
-            FN_VIEW_FIELDS,     /*20215*/
-            FN_VLINEAL,             /*20216*/
-            FN_VSCROLLBAR,      /*20217*/
-            FN_HSCROLLBAR,      /*20218*/
-            FN_VIEW_META_CHARS, /**/
-            FN_VIEW_MARKS,      /**/
-            //FN_VIEW_FIELDNAME,    /**/
-            FN_VIEW_TABLEGRID,  /*20227*/
-            FN_PRINT_LAYOUT, /*20237*/
-            FN_QRY_MERGE,   /*20364*/
-            FN_SHADOWCURSOR, /**/
-            0
-        };
-    // the view must not exist!
-    GetViewFrame()->GetBindings().Invalidate(aInva);
-    CheckVisArea();
-
-    SvxZoomType eType;
-    if( GetWrtShell().GetViewOptions()->getBrowseMode() && SVX_ZOOM_PERCENT != (eType = (SvxZoomType)
-        GetWrtShell().GetViewOptions()->GetZoomType()) )
-        SetZoom( eType );
-    InvalidateBorder();
-}
-
 /*--------------------------------------------------------------------
     State of view options
  --------------------------------------------------------------------*/
@@ -254,6 +221,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
     while(nWhich)
     {
         sal_Bool bReadonly = GetDocShell()->IsReadOnly();
+        sal_Bool bBrowse = pIDSA ? pIDSA->get( IDocumentSettingAccess::BROWSE_MODE ) : sal_False;
         if ( bReadonly && nWhich != FN_VIEW_GRAPHIC )
         {
             rSet.DisableItem(nWhich);
@@ -263,22 +231,13 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
         {
             case FN_RULER:
             {
-                if(!pOpt->IsViewHRuler(sal_True) && !pOpt->IsViewVRuler(sal_True))
+                if(!pOpt->IsViewHRuler(TRUE) && !pOpt->IsViewVRuler(TRUE))
                 {
                     rSet.DisableItem(nWhich);
                     nWhich = 0;
                 }
                 else
                     aBool.SetValue( pOpt->IsViewAnyRuler());
-            }
-            break;
-            case SID_BROWSER_MODE:
-            case FN_PRINT_LAYOUT:
-            {
-                sal_Bool bState = pOpt->getBrowseMode();
-                if(FN_PRINT_LAYOUT == nWhich)
-                    bState = !bState;
-                aBool.SetValue( bState );
             }
             break;
             case FN_VIEW_BOUNDS:
@@ -320,7 +279,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_VLINEAL:
                 aBool.SetValue( 0 != StatVLineal() ); break;
             case FN_HSCROLLBAR:
-                if( pOpt->getBrowseMode() )
+                if(bBrowse)
                 {
                     rSet.DisableItem(nWhich);
                     nWhich = 0;
@@ -333,7 +292,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 aBool.SetValue( pOpt->IsOnlineSpell() );
             break;
             case FN_SHADOWCURSOR:
-                if (pIDSA == 0 || pOpt->getBrowseMode() )
+                if (pIDSA == 0 || pIDSA->get( IDocumentSettingAccess::BROWSE_MODE ))
                 {
                     rSet.DisableItem( nWhich );
                     nWhich = 0;
@@ -363,7 +322,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     int eState = STATE_TOGGLE;
     sal_Bool bSet = sal_False;
-    bool bBrowseModeChanged = false;
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -375,7 +333,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         eState = bSet ? STATE_ON : STATE_OFF;
     }
 
-    sal_Bool bFlag = STATE_ON == eState;
+    BOOL bFlag = STATE_ON == eState;
     uno::Reference< beans::XPropertySet >  xLngProp( ::GetLinguPropertySet() );
 
     switch ( nSlot )
@@ -390,13 +348,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         case FN_VIEW_FIELDS:
                 if( STATE_TOGGLE == eState )
                     bFlag = !SwViewOption::IsFieldShadings() ;
-                SwViewOption::SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bFlag, sal_True );
+                SwViewOption::SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bFlag, TRUE );
                 break;
 
         case FN_VIEW_BOUNDS:
                 if( STATE_TOGGLE == eState )
                     bFlag = !SwViewOption::IsDocBoundaries();
-                SwViewOption::SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bFlag, sal_True );
+                SwViewOption::SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bFlag, TRUE );
                 break;
 
         case SID_GRID_VISIBLE:
@@ -418,19 +376,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                     bFlag = !pOpt->IsCrossHair();
 
                 pOpt->SetCrossHair( bFlag );
-                break;
-
-        case SID_BROWSER_MODE:
-        case FN_PRINT_LAYOUT:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->getBrowseMode();
-                else if( nSlot == FN_PRINT_LAYOUT )
-                    bFlag = !bFlag;
-                bBrowseModeChanged = bFlag != pOpt->getBrowseMode();
-                // Disable "multiple layout"
-                GetDocShell()->ToggleBrowserMode( bFlag, this );
-
-                pOpt->setBrowseMode( bFlag );
                 break;
 
     case FN_VIEW_NOTES:
@@ -489,7 +434,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         case FN_VIEW_TABLEGRID:
                 if( STATE_TOGGLE == eState )
                     bFlag = !SwViewOption::IsTableBoundaries();
-                SwViewOption::SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bFlag, sal_True );
+                SwViewOption::SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bFlag, TRUE );
                 break;
 
         case FN_VIEW_FIELDNAME:
@@ -549,7 +494,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         break;
 
         default:
-            OSL_FAIL("wrong request method");
+            OSL_ENSURE(sal_False, "wrong request method");
             return;
     }
 
@@ -561,11 +506,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     if( !(*rSh.GetViewOptions() == *pOpt ))
     {
         rSh.ApplyViewOptions( *pOpt );
-        if( bBrowseModeChanged )
-        {
-            RecheckBrowseMode();
-            CheckVisArea();
-        }
 
         //Die UsrPref muessen als Modified gekennzeichnet werden.
         //call for initialization
@@ -579,21 +519,19 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     pModule->ApplyUsrPref( *pOpt, this, bWebView ? VIEWOPT_DEST_WEB : VIEWOPT_DEST_TEXT );
 
-    // #i6193# let postits know about new spellcheck setting
+    //mod #i6193# let postits know about new spellcheck setting
     if ( nSlot == SID_AUTOSPELL_CHECK )
         GetPostItMgr()->SetSpellChecking();
 
-    const sal_Bool bLockedView = rSh.IsViewLocked();
-    rSh.LockView( sal_True );    //lock visible section
+    const BOOL bLockedView = rSh.IsViewLocked();
+    rSh.LockView( TRUE );    //lock visible section
     GetWrtShell().EndAction();
-    if( bBrowseModeChanged && !bFlag )
-        CalcVisArea( GetEditWin().GetOutputSizePixel() );
     rSh.LockView( bLockedView );
 
     delete pOpt;
     Invalidate(rReq.GetSlot());
     if(!pArgs)
-        rReq.AppendItem(SfxBoolItem(nSlot, (sal_Bool)bFlag));
+        rReq.AppendItem(SfxBoolItem(nSlot, (BOOL)bFlag));
     rReq.Done();
 }
 

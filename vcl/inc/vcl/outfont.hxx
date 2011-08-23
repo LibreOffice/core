@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 #define _SV_OUTFONT_HXX
 
 #include <tools/string.hxx>
+#include <tools/list.hxx>
 #include <i18npool/lang.h>
 #include <tools/gen.hxx>
 #include <tools/solar.h>
@@ -37,7 +38,9 @@
 #include <unotools/fontdefs.hxx>
 #include <vcl/vclenum.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
+
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 
 class ImplDevFontListData;
 class ImplGetDevFontList;
@@ -51,8 +54,6 @@ class Font;
 class ConvertChar;
 struct FontMatchStatus;
 class OutputDevice;
-
-namespace com { namespace sun { namespace star { namespace lang { struct Locale; }}}}
 
 // ----------------------
 // - ImplFontAttributes -
@@ -116,7 +117,7 @@ public: // TODO: hide members behind accessor methods
 // TODO: make cloning cheaper
 
 // abstract base class for physical font faces
-class VCL_PLUGIN_PUBLIC ImplFontData : public ImplDevFontAttributes
+class VCL_DLLPUBLIC ImplFontData : public ImplDevFontAttributes
 {
 public:
     // by using an ImplFontData object as a factory for its corresponding
@@ -140,7 +141,7 @@ public:
     virtual ImplFontData*   Clone() const = 0;
 
 protected:
-    explicit                ImplFontData( const ImplDevFontAttributes&, int nMagic );
+                            ImplFontData( const ImplDevFontAttributes&, int nMagic );
     void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
     long                    mnWidth;    // Width (in pixels)
@@ -185,22 +186,22 @@ public: // TODO: change to private
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
 
-class VCL_PLUGIN_PUBLIC ImplDevFontList
+class VCL_DLLPUBLIC ImplDevFontList
 {
 private:
     friend class WinGlyphFallbackSubstititution;
     mutable bool            mbMatchData;    // true if matching attributes are initialized
     bool                    mbMapNames;     // true if MapNames are available
 
-    typedef boost::unordered_map<const String, ImplDevFontListData*,FontNameHash> DevFontList;
+    typedef std::hash_map<const String, ImplDevFontListData*,FontNameHash> DevFontList;
     DevFontList             maDevFontList;
 
     ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
     ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyh fallback substitution
 
 public:
-    explicit                ImplDevFontList();
-    virtual                 ~ImplDevFontList();
+                            ImplDevFontList();
+                            ~ImplDevFontList();
 
     // fill the list with device fonts
     void                    Add( ImplFontData* );
@@ -226,7 +227,7 @@ public:
     ImplGetDevSizeList*     GetDevSizeList( const String& rFontName ) const;
 
     //used by 2-level font fallback
-    ImplDevFontListData* ImplFindByLocale( com::sun::star::lang::Locale& ) const;
+    ImplDevFontListData* ImplFindByLocale(com::sun::star::lang::Locale lc) const;
 
 protected:
     void                    InitMatchData() const;
@@ -235,7 +236,7 @@ protected:
     ImplDevFontListData*    ImplFindByTokenNames( const String& ) const;
     ImplDevFontListData*    ImplFindByAliasName( const String& rSearchName, const String& rShortName ) const;
     ImplDevFontListData*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
-    ImplDevFontListData*    ImplFindByAttributes( sal_uLong nSearchType, FontWeight, FontWidth,
+    ImplDevFontListData*    ImplFindByAttributes( ULONG nSearchType, FontWeight, FontWidth,
                                 FontFamily, FontItalic, const String& rSearchFamily ) const;
     ImplDevFontListData*    FindDefaultFont() const;
 
@@ -254,8 +255,8 @@ private:
 
 struct ImplKernPairData
 {
-    sal_uInt16              mnChar1;
-    sal_uInt16              mnChar2;
+    USHORT              mnChar1;
+    USHORT              mnChar2;
     long                mnKern;
 };
 
@@ -267,12 +268,12 @@ struct ImplKernPairData
 class ImplFontMetricData : public ImplFontAttributes
 {
 public:
-    explicit ImplFontMetricData( const ImplFontSelectData& );
+            ImplFontMetricData( const ImplFontSelectData& );
     void    ImplInitTextLineSize( const OutputDevice* pDev );
     void    ImplInitAboveTextLineSize();
 
 public: // TODO: hide members behind accessor methods
-    // font instance attributes from the font request
+    // font instance attributes from the font request 
     long                mnWidth;                    // Reference Width
     short               mnOrientation;              // Rotation in 1/10 degrees
 
@@ -324,10 +325,10 @@ public: // TODO: hide members behind accessor methods
 // TODO: rename ImplFontEntry to LogicalFontInstance
 // TODO: allow sharing of metrics for related fonts
 
-class VCL_PLUGIN_PUBLIC ImplFontEntry
+class VCL_DLLPUBLIC ImplFontEntry
 {
 public:
-    explicit            ImplFontEntry( const ImplFontSelectData& );
+                        ImplFontEntry( const ImplFontSelectData& );
     virtual             ~ImplFontEntry();
 
 public: // TODO: make data members private
@@ -335,8 +336,8 @@ public: // TODO: make data members private
     ImplFontMetricData  maMetric;           // Font Metric
     const ConvertChar*  mpConversion;       // used e.g. for StarBats->StarSymbol
     long                mnLineHeight;
-    sal_uLong               mnRefCount;
-    sal_uInt16              mnSetFontFlags;     // Flags returned by SalGraphics::SetFont()
+    ULONG               mnRefCount;
+    USHORT              mnSetFontFlags;     // Flags returned by SalGraphics::SetFont()
     short               mnOwnOrientation;   // text angle if lower layers don't rotate text themselves
     short               mnOrientation;      // text angle in 3600 system
     bool                mbInit;             // true if maMetric member is valid
@@ -351,7 +352,7 @@ private:
     // TODO: at least the ones which just differ in orientation, stretching or height
     typedef ::std::pair<sal_UCS4,FontWeight> GFBCacheKey;
     struct GFBCacheKey_Hash{ size_t operator()( const GFBCacheKey& ) const; };
-    typedef ::boost::unordered_map<GFBCacheKey,String,GFBCacheKey_Hash> UnicodeFallbackList;
+    typedef ::std::hash_map<GFBCacheKey,String,GFBCacheKey_Hash> UnicodeFallbackList;
     UnicodeFallbackList* mpUnicodeFallbackList;
 };
 
@@ -393,7 +394,7 @@ public:
     void                AddLine( ImplTextLineInfo* pLine );
     void                Clear();
 
-    ImplTextLineInfo*   GetLine( sal_uInt16 nLine ) const
+    ImplTextLineInfo*   GetLine( USHORT nLine ) const
                             { return mpLines[nLine]; }
     xub_StrLen          Count() const { return mnLines; }
 

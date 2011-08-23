@@ -54,8 +54,8 @@ typedef struct token
 {
     unsigned char type;
     unsigned char flag;
-    size_t wslen;
-    size_t len;
+    unsigned int wslen;
+    unsigned int len;
     uchar *t;
     unsigned int identifier;            /* used from macro processor to identify where a macro becomes valid again. */
 }   Token;
@@ -65,7 +65,7 @@ typedef struct tokenrow
     Token *tp;                          /* current one to scan */
     Token *bp;                          /* base (allocated value) */
     Token *lp;                          /* last+1 token used */
-    size_t max;                         /* number allocated */
+    int max;                            /* number allocated */
 }   Tokenrow;
 
 typedef struct source
@@ -87,7 +87,7 @@ typedef struct nlist
 {
     struct nlist *next;
     uchar *name;
-    size_t len;
+    int len;
     Tokenrow *vp;                       /* value as macro */
     Tokenrow *ap;                       /* list of argument names, if any */
     char val;                           /* value as preprocessor name */
@@ -144,7 +144,16 @@ void        mvl_add(
                                 inout_pValidators,
                 Nlist *         in_pMacro,
                 Token *         in_pTokenWhereMacroBecomesValid);
+/*  Updates all token pointers within the list, when the tokens have
+    moved, by
+        pTokenWhereMacroBecomesValid += in_nNrofTokens;
+    .
 
+void        mvl_move(
+                MacroValidatorList *
+                                inout_pValidators,
+                int             in_nSpace); // in pointer units.
+*/
 /*  Checks if one of the validators within the list points to
     the token in_pTokenToCheck. If so, the macro is set valid and
     the validator is removed.
@@ -165,7 +174,7 @@ Source *setsource(char *, int, int, char *, int);
 void unsetsource(void);
 void puttokens(Tokenrow *);
 void process(Tokenrow *);
-void *domalloc(size_t);
+void *domalloc(int);
 void dofree(void *);
 void error(enum errtype, char *,...);
 void flushout(void);
@@ -202,7 +211,7 @@ void setempty(Tokenrow *);
 void makespace(Tokenrow *, Token *);
 char *outnum(char *, int);
 int digit(int);
-uchar *newstring(uchar *, size_t, size_t);
+uchar *newstring(uchar *, int, int);
 
 #define rowlen(tokrow)  ((tokrow)->lp - (tokrow)->bp)
 

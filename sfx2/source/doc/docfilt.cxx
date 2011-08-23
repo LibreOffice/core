@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,10 +32,11 @@
 // INCLUDE ---------------------------------------------------------------
 
 #ifdef SOLARIS
+// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
 #include <ctime>
 #endif
 
-#include <string>
+#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <sot/exchange.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -177,7 +178,7 @@ String SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
     return pType ? String::CreateFromAscii(pType) : String();
 }
 
-String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xStorage, sal_Bool bTemplate,
+String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xStorage, BOOL bTemplate,
                                         String* pFilterName )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
@@ -196,7 +197,7 @@ String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com:
     if ( xProps.is() )
     {
         ::rtl::OUString aMediaType;
-        xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= aMediaType;
+        xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
         if ( aMediaType.getLength() )
         {
             ::com::sun::star::datatransfer::DataFlavor aDataFlavor;

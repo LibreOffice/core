@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -184,7 +184,7 @@ SfxTabPage*  SwMailConfigPage::Create( Window* pParent, const SfxItemSet& rAttrS
     return new SwMailConfigPage(pParent, rAttrSet);
 }
 
-sal_Bool SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
+BOOL SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     if(m_aDisplayNameED.GetText() != m_aDisplayNameED.GetSavedValue())
         m_pConfigItem->SetMailDisplayName(m_aDisplayNameED.GetText());
@@ -268,7 +268,7 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
 #ifdef MSC
 #pragma warning (default : 4355)
 #endif
-    m_aImageList( SW_RES(ILIST) ),
+    m_aImageList( SW_RES( GetSettings().GetStyleSettings().GetHighContrastMode() ? ILIST_HC : ILIST) ),
     m_sTask( SW_RES(        ST_TASK          )),
     m_sStatus( SW_RES(      ST_STATUS        )),
     m_sEstablish( SW_RES(   ST_ESTABLISH     )),
@@ -306,7 +306,7 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
 
     m_aStatusLB.SetHelpId(HID_MM_TESTACCOUNTSETTINGS_TLB);
     static long nTabs[] = {2, 0, aSz.Width()/2 };
-    m_aStatusLB.SetStyle( m_aStatusLB.GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
+    m_aStatusLB.SetWindowBits( WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_aStatusLB.SetSelectionMode( SINGLE_SELECTION );
     m_aStatusLB.SetTabs(&nTabs[0], MAP_PIXEL);
     short nEntryHeight = m_aStatusLB.GetEntryHeight();
@@ -404,7 +404,8 @@ void SwTestAccountSettingsDialog::Test()
                     new SwConnectionContext(
                         m_pParent->m_aServerED.GetText(),
                         sal::static_int_cast< sal_Int16, sal_Int64 >(m_pParent->m_aPortNF.GetValue()),
-                        m_pParent->m_aSecureCB.IsChecked() ? OUString(RTL_CONSTASCII_USTRINGPARAM("Ssl")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")));
+                        ::rtl::OUString::createFromAscii(
+                                m_pParent->m_aSecureCB.IsChecked() ? "Ssl" : "Insecure"));
             xMailService->connect(xConnectionContext, xAuthenticator);
             bIsLoggedIn = xMailService->isConnected();
             if( xInMailService.is() )
@@ -414,7 +415,7 @@ void SwTestAccountSettingsDialog::Test()
         }
         catch(uno::Exception&)
         {
-            OSL_FAIL("exception caught");
+            OSL_ENSURE(false, "exception caught");
         }
     }
 
@@ -444,7 +445,7 @@ void SwTestAccountSettingsDialog::Test()
 SwMailConfigDlg::SwMailConfigDlg(Window* pParent, SfxItemSet& rSet ) :
     SfxSingleTabDialog(pParent, rSet, 0)
 {
-    // create TabPage
+    // TabPage erzeugen
     SetTabPage(SwMailConfigPage::Create( this, rSet ));
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ class HTMLReader: public Reader
 {
     // wir wollen die Streams / Storages nicht geoeffnet haben
     virtual int SetStrmStgPtr();
-    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
     virtual String GetTemplateName() const;
 public:
     HTMLReader();
@@ -51,12 +51,12 @@ public:
 
 class WW1Reader : public Reader
 {
-    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 };
 
 class XMLReader : public Reader
 {
-    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
     virtual int GetReaderType();
 
@@ -64,7 +64,7 @@ public:
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
-    virtual sal_uInt16 GetSectionList( SfxMedium& rMedium,
+    virtual USHORT GetSectionList( SfxMedium& rMedium,
                                 SvStrings& rStrings ) const;
 };
 
@@ -73,6 +73,7 @@ public:
 void GetWW8Writer( const String&, const String&, WriterRef& );
 
 
+// JP 17.03.99 - 63049
 // Umsetzen der LRSpaces im aktuell importierten Doc. Die Fremd-Filter
 // liefern immer absolute Werte fuer die Ebenen einer NumRule. Wir
 // verarbeiten jetzt aber relative Werte bezogen auf das LR-Space-Item.
@@ -80,13 +81,13 @@ void GetWW8Writer( const String&, const String&, WriterRef& );
 // Absatz-Einzug abgezogen werden muss.
 class SW_DLLPUBLIC SwRelNumRuleSpaces
 {
-    SwNumRuleTbl* pNumRuleTbl;  // Liste aller benannten NumRules
-    sal_Bool bNewDoc;
+    SwNumRuleTbl* pNumRuleTbl;	// Liste aller benannten NumRules
+    BOOL bNewDoc;
 
     void SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule );
 
 public:
-    SwRelNumRuleSpaces( SwDoc& rDoc, sal_Bool bNewDoc );
+    SwRelNumRuleSpaces( SwDoc& rDoc, BOOL bNewDoc );
     ~SwRelNumRuleSpaces();
 
     void SetNumRelSpaces( SwDoc& rDoc );
@@ -94,7 +95,7 @@ public:
                                 const SwNodeIndex& rEnd );
 };
 
-#define SW_SV_BRUSH_25          0
+#define SW_SV_BRUSH_25     		0
 #define SW_SV_BRUSH_50          1
 #define SW_SV_BRUSH_75          2
 #define SW_SV_BRUSH_NULL        3

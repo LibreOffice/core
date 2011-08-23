@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,33 +48,33 @@
 #include "global.hxx"
 
 using namespace utl;
+using namespace rtl;
 using namespace com::sun::star::uno;
 using ::com::sun::star::lang::Locale;
 using ::com::sun::star::i18n::LocaleDataItem;
-using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 
-#define SC_VERSION ((sal_uInt16)251)
+#define SC_VERSION ((USHORT)251)
 
 TYPEINIT1(ScTpCalcItem, SfxPoolItem);
 
 //------------------------------------------------------------------------
 
-//! these functions should be moved to some header file
-inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
-inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
+//!	these functions should be moved to some header file
+inline long TwipsToHMM(long nTwips)	{ return (nTwips * 127 + 36) / 72; }
+inline long HMMToTwips(long nHMM)	{ return (nHMM * 72 + 63) / 127; }
 
-inline long TwipsToEvenHMM(long nTwips) { return ( (nTwips * 127 + 72) / 144 ) * 2; }
+inline long TwipsToEvenHMM(long nTwips)	{ return ( (nTwips * 127 + 72) / 144 ) * 2; }
 
 //------------------------------------------------------------------------
 
-sal_uInt16 lcl_GetDefaultTabDist()
+USHORT lcl_GetDefaultTabDist()
 {
     if ( ScOptionsUtil::IsMetricSystem() )
-        return 709;                 // 1,25 cm
+        return 709;					// 1,25 cm
     else
-        return 720;                 // 1/2"
+        return 720;					// 1/2"
 }
 
 //========================================================================
@@ -123,22 +123,22 @@ ScDocOptions::~ScDocOptions()
 
 void ScDocOptions::ResetDocOptions()
 {
-    bIsIgnoreCase       = false;
-    bIsIter             = false;
-    nIterCount          = 100;
-    fIterEps            = 1.0E-3;
+    bIsIgnoreCase		= FALSE;
+    bIsIter				= FALSE;
+    nIterCount			= 100;
+    fIterEps			= 1.0E-3;
     nPrecStandardFormat = SvNumberFormatter::UNLIMITED_PRECISION;
     eKeyBindingType     = ScOptionsUtil::KEY_DEFAULT;
-    nDay                = 30;
-    nMonth              = 12;
-    nYear               = 1899;
-    nYear2000           = SvNumberFormatter::GetYear2000Default();
-    nTabDistance        = lcl_GetDefaultTabDist();
-    bCalcAsShown        = false;
-    bMatchWholeCell     = true;
-    bDoAutoSpell        = false;
-    bLookUpColRowNames  = true;
-    bFormulaRegexEnabled= true;
+    nDay				= 30;
+    nMonth				= 12;
+    nYear				= 1899;
+    nYear2000			= SvNumberFormatter::GetYear2000Default();
+    nTabDistance 		= lcl_GetDefaultTabDist();
+    bCalcAsShown		= FALSE;
+    bMatchWholeCell		= TRUE;
+    bDoAutoSpell		= FALSE;
+    bLookUpColRowNames	= TRUE;
+    bFormulaRegexEnabled= TRUE;
     bUseEnglishFuncName = false;
     eFormulaGrammar     = ::formula::FormulaGrammar::GRAM_NATIVE;
 
@@ -148,13 +148,13 @@ void ScDocOptions::ResetDocOptions()
 void ScDocOptions::ResetFormulaSeparators()
 {
     // Defaults to the old separator values.
-    aFormulaSepArg = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
-    aFormulaSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
-    aFormulaSepArrayRow = OUString(RTL_CONSTASCII_USTRINGPARAM("|"));
+    aFormulaSepArg = OUString::createFromAscii(";");
+    aFormulaSepArrayCol = OUString::createFromAscii(";");
+    aFormulaSepArrayRow = OUString::createFromAscii("|");
 
     const Locale& rLocale = *ScGlobal::GetLocale();
     const OUString& rLang = rLocale.Language;
-    if (rLang.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ru")))
+    if (rLang.equalsAscii("ru"))
         // Don't do automatic guess for these languages, and fall back to
         // the old separator set.
         return;
@@ -189,12 +189,12 @@ void ScDocOptions::ResetFormulaSeparators()
         // if the decimal and list separators are equal, set the
         // parameter separator to be ';', unless they are both
         // semicolon in which case don't change the decimal separator.
-        aFormulaSepArg = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+        aFormulaSepArg = OUString::createFromAscii(";");
 
-    aFormulaSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+    aFormulaSepArrayCol = OUString::createFromAscii(",");
     if (cDecSep == sal_Unicode(','))
-        aFormulaSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-    aFormulaSepArrayRow = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+        aFormulaSepArrayCol = OUString::createFromAscii(".");
+    aFormulaSepArrayRow = OUString::createFromAscii(";");
 }
 
 const LocaleDataWrapper& ScDocOptions::GetLocaleDataWrapper()
@@ -208,36 +208,36 @@ const LocaleDataWrapper& ScDocOptions::GetLocaleDataWrapper()
 
 //------------------------------------------------------------------------
 
-ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )
+ScTpCalcItem::ScTpCalcItem( USHORT nWhichP, const ScDocOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),
-        theOptions  ( rOpt )
+        theOptions	( rOpt )
 {
 }
 
 //------------------------------------------------------------------------
 
 ScTpCalcItem::ScTpCalcItem( const ScTpCalcItem& rItem )
-    :   SfxPoolItem ( rItem ),
-        theOptions  ( rItem.theOptions )
+    :   SfxPoolItem	( rItem ),
+        theOptions	( rItem.theOptions )
 {
 }
 
 //------------------------------------------------------------------------
 
-ScTpCalcItem::~ScTpCalcItem()
+__EXPORT ScTpCalcItem::~ScTpCalcItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String ScTpCalcItem::GetValueText() const
+String __EXPORT ScTpCalcItem::GetValueText() const
 {
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("ScTpCalcItem") );
 }
 
 //------------------------------------------------------------------------
 
-int ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
+int __EXPORT ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -248,28 +248,28 @@ int ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT ScTpCalcItem::Clone( SfxItemPool * ) const
 {
     return new ScTpCalcItem( *this );
 }
 
 //==================================================================
-//  Config Item containing document options
+//	Config Item containing document options
 //==================================================================
 
-#define CFGPATH_CALC        "Office.Calc/Calculate"
+#define CFGPATH_CALC		"Office.Calc/Calculate"
 
-#define SCCALCOPT_ITER_ITER         0
-#define SCCALCOPT_ITER_STEPS        1
-#define SCCALCOPT_ITER_MINCHG       2
-#define SCCALCOPT_DATE_DAY          3
-#define SCCALCOPT_DATE_MONTH        4
-#define SCCALCOPT_DATE_YEAR         5
-#define SCCALCOPT_DECIMALS          6
-#define SCCALCOPT_CASESENSITIVE     7
-#define SCCALCOPT_PRECISION         8
-#define SCCALCOPT_SEARCHCRIT        9
-#define SCCALCOPT_FINDLABEL         10
+#define SCCALCOPT_ITER_ITER			0
+#define SCCALCOPT_ITER_STEPS		1
+#define SCCALCOPT_ITER_MINCHG		2
+#define SCCALCOPT_DATE_DAY			3
+#define SCCALCOPT_DATE_MONTH		4
+#define SCCALCOPT_DATE_YEAR			5
+#define SCCALCOPT_DECIMALS			6
+#define SCCALCOPT_CASESENSITIVE		7
+#define SCCALCOPT_PRECISION			8
+#define SCCALCOPT_SEARCHCRIT		9
+#define SCCALCOPT_FINDLABEL			10
 #define SCCALCOPT_REGEX             11
 #define SCCALCOPT_COUNT             12
 
@@ -281,10 +281,10 @@ SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_SEP_ARRAY_COL     4
 #define SCFORMULAOPT_COUNT             5
 
-#define CFGPATH_DOCLAYOUT   "Office.Calc/Layout/Other"
+#define CFGPATH_DOCLAYOUT	"Office.Calc/Layout/Other"
 
-#define SCDOCLAYOUTOPT_TABSTOP      0
-#define SCDOCLAYOUTOPT_COUNT        1
+#define SCDOCLAYOUTOPT_TABSTOP		0
+#define SCDOCLAYOUTOPT_COUNT		1
 
 #define CFGPATH_COMPAT      "Office.Calc/Compatibility"
 #define SCCOMPATOPT_KEY_BINDING     0
@@ -294,16 +294,16 @@ Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "IterativeReference/Iteration",     // SCCALCOPT_ITER_ITER
-        "IterativeReference/Steps",         // SCCALCOPT_ITER_STEPS
-        "IterativeReference/MinimumChange", // SCCALCOPT_ITER_MINCHG
-        "Other/Date/DD",                    // SCCALCOPT_DATE_DAY
-        "Other/Date/MM",                    // SCCALCOPT_DATE_MONTH
-        "Other/Date/YY",                    // SCCALCOPT_DATE_YEAR
-        "Other/DecimalPlaces",              // SCCALCOPT_DECIMALS
-        "Other/CaseSensitive",              // SCCALCOPT_CASESENSITIVE
-        "Other/Precision",                  // SCCALCOPT_PRECISION
-        "Other/SearchCriteria",             // SCCALCOPT_SEARCHCRIT
+        "IterativeReference/Iteration",		// SCCALCOPT_ITER_ITER
+        "IterativeReference/Steps",			// SCCALCOPT_ITER_STEPS
+        "IterativeReference/MinimumChange",	// SCCALCOPT_ITER_MINCHG
+        "Other/Date/DD",					// SCCALCOPT_DATE_DAY
+        "Other/Date/MM",					// SCCALCOPT_DATE_MONTH
+        "Other/Date/YY",					// SCCALCOPT_DATE_YEAR
+        "Other/DecimalPlaces",				// SCCALCOPT_DECIMALS
+        "Other/CaseSensitive",				// SCCALCOPT_CASESENSITIVE
+        "Other/Precision",					// SCCALCOPT_PRECISION
+        "Other/SearchCriteria",				// SCCALCOPT_SEARCHCRIT
         "Other/FindLabel",                  // SCCALCOPT_FINDLABEL
         "Other/RegularExpressions",         // SCCALCOPT_REGEX
     };
@@ -337,16 +337,16 @@ Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "TabStop/NonMetric"         // SCDOCLAYOUTOPT_TABSTOP
+        "TabStop/NonMetric"			// SCDOCLAYOUTOPT_TABSTOP
     };
     Sequence<OUString> aNames(SCDOCLAYOUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < SCDOCLAYOUTOPT_COUNT; i++)
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
 
-    //  adjust for metric system
+    //	adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
-        pNames[SCDOCLAYOUTOPT_TABSTOP] = OUString(RTL_CONSTASCII_USTRINGPARAM( "TabStop/Metric") );
+        pNames[SCDOCLAYOUTOPT_TABSTOP] = OUString::createFromAscii( "TabStop/Metric" );
 
     return aNames;
 }
@@ -366,28 +366,28 @@ Sequence<OUString> ScDocCfg::GetCompatPropertyNames()
 }
 
 ScDocCfg::ScDocCfg() :
-    aCalcItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_CALC )) ),
-    aFormulaItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_FORMULA))),
-    aLayoutItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_DOCLAYOUT))),
-    aCompatItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_COMPAT)))
+    aCalcItem( OUString::createFromAscii( CFGPATH_CALC ) ),
+    aFormulaItem(OUString::createFromAscii(CFGPATH_FORMULA)),
+    aLayoutItem(OUString::createFromAscii(CFGPATH_DOCLAYOUT)),
+    aCompatItem(OUString::createFromAscii(CFGPATH_COMPAT))
 {
     sal_Int32 nIntVal = 0;
+    double fDoubleVal = 0;
 
     Sequence<OUString> aNames;
     Sequence<Any> aValues;
     const Any* pValues = NULL;
 
-    sal_uInt16 nDateDay, nDateMonth, nDateYear;
+    USHORT nDateDay, nDateMonth, nDateYear;
     GetDate( nDateDay, nDateMonth, nDateYear );
 
     aNames = GetCalcPropertyNames();
     aValues = aCalcItem.GetProperties(aNames);
     aCalcItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
-        double fDoubleVal = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
             DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
@@ -399,22 +399,22 @@ ScDocCfg::ScDocCfg() :
                         SetIter( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCCALCOPT_ITER_STEPS:
-                        if (pValues[nProp] >>= nIntVal) SetIterCount( (sal_uInt16) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetIterCount( (USHORT) nIntVal );
                         break;
                     case SCCALCOPT_ITER_MINCHG:
                         if (pValues[nProp] >>= fDoubleVal) SetIterEps( fDoubleVal );
                         break;
                     case SCCALCOPT_DATE_DAY:
-                        if (pValues[nProp] >>= nIntVal) nDateDay = (sal_uInt16) nIntVal;
+                        if (pValues[nProp] >>= nIntVal) nDateDay = (USHORT) nIntVal;
                         break;
                     case SCCALCOPT_DATE_MONTH:
-                        if (pValues[nProp] >>= nIntVal) nDateMonth = (sal_uInt16) nIntVal;
+                        if (pValues[nProp] >>= nIntVal) nDateMonth = (USHORT) nIntVal;
                         break;
                     case SCCALCOPT_DATE_YEAR:
-                        if (pValues[nProp] >>= nIntVal) nDateYear = (sal_uInt16) nIntVal;
+                        if (pValues[nProp] >>= nIntVal) nDateYear = (USHORT) nIntVal;
                         break;
                     case SCCALCOPT_DECIMALS:
-                        if (pValues[nProp] >>= nIntVal) SetStdPrecision( (sal_uInt16) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetStdPrecision( (USHORT) nIntVal );
                         break;
                     case SCCALCOPT_CASESENSITIVE:
                         // content is reversed
@@ -482,7 +482,7 @@ ScDocCfg::ScDocCfg() :
                 break;
                 case SCFORMULAOPT_ENGLISH_FUNCNAME:
                 {
-                    sal_Bool bEnglish = false;
+                    sal_Bool bEnglish;
                     if (pValues[nProp] >>= bEnglish)
                         SetUseEnglishFuncName(bEnglish);
                 }
@@ -530,7 +530,7 @@ ScDocCfg::ScDocCfg() :
                     case SCDOCLAYOUTOPT_TABSTOP:
                         // TabDistance in ScDocOptions is in twips
                         if (pValues[nProp] >>= nIntVal)
-                            SetTabDistance( (sal_uInt16) HMMToTwips( nIntVal ) );
+                            SetTabDistance( (USHORT) HMMToTwips( nIntVal ) );
                         break;
                 }
             }
@@ -567,7 +567,7 @@ IMPL_LINK( ScDocCfg, CalcCommitHdl, void *, EMPTYARG )
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    sal_uInt16 nDateDay, nDateMonth, nDateYear;
+    USHORT nDateDay, nDateMonth, nDateYear;
     GetDate( nDateDay, nDateMonth, nDateYear );
 
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -634,7 +634,6 @@ IMPL_LINK( ScDocCfg, FormulaCommitHdl, void *, EMPTYARG )
                 {
                     case ::formula::FormulaGrammar::GRAM_NATIVE_XL_A1:    nVal = 1; break;
                     case ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1:  nVal = 2; break;
-                    default: break;
                 }
                 pValues[nProp] <<= nVal;
             }
@@ -672,9 +671,9 @@ IMPL_LINK( ScDocCfg, LayoutCommitHdl, void *, EMPTYARG )
         switch(nProp)
         {
             case SCDOCLAYOUTOPT_TABSTOP:
-                //  TabDistance in ScDocOptions is in twips
-                //  use only even numbers, so defaults don't get changed
-                //  by modifying other settings in the same config item
+                //	TabDistance in ScDocOptions is in twips
+                //	use only even numbers, so defaults don't get changed
+                //	by modifying other settings in the same config item
                 pValues[nProp] <<= (sal_Int32) TwipsToEvenHMM( GetTabDistance() );
                 break;
         }

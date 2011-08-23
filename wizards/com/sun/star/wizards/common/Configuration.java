@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ import com.sun.star.util.XChangesBatch;
  * For the get methods, two parameters must be given: name and parent, where name is the
  * name of the property, parent is a HierarchyElement (::com::sun::star::configuration::HierarchyElement)<br/>
  * The get and set methods support hieryrchical property names like "options/gridX". <br/>
- * NOTE: not yet supported, but sometime later,
- * If you will ommit the "parent" parameter, then the "name" parameter must be in hierarchy form from
+ * NOTE: not yet supported, but sometime later, 
+ * If you will ommit the "parent" parameter, then the "name" parameter must be in hierarchy form from 
  * the root of the registry.
  * @author  rpiterman
  */
@@ -134,7 +134,7 @@ public abstract class Configuration
 
     public static void set(boolean value, String name, Object parent) throws Exception
     {
-        if (value == true)
+        if (value = true)
         {
             set(Boolean.TRUE, name, parent);
         }
@@ -334,7 +334,7 @@ public abstract class Configuration
     public static String[] getNodeDisplayNames(XNameAccess _xNameAccessNode)
     {
         String[] snames = null;
-        return getNodeChildNames(_xNameAccessNode, PropertyNames.PROPERTY_NAME);
+        return getNodeChildNames(_xNameAccessNode, "Name");
     }
 
     public static String[] getNodeChildNames(XNameAccess xNameAccessNode, String _schildname)
@@ -400,7 +400,7 @@ public abstract class Configuration
     public static XNameAccess getChildNodebyDisplayName(XNameAccess _xNameAccessNode, String _displayname)
     {
         String[] snames = null;
-        return getChildNodebyDisplayName(_xNameAccessNode, _displayname, PropertyNames.PROPERTY_NAME);
+        return getChildNodebyDisplayName(_xNameAccessNode, _displayname, "Name");
     }
 
     public static XNameAccess getChildNodebyDisplayName(XNameAccess _xNameAccessNode, String _displayname, String _nodename)

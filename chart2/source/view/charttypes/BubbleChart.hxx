@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,11 @@ public:
              , sal_Int32 nDimensionCount );
     virtual ~BubbleChart();
 
-    virtual void createShapes();
+    //-------------------------------------------------------------------------
+    // chart2::XPlotter
+    //-------------------------------------------------------------------------
+
+    virtual void SAL_CALL createShapes();
 
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
 
@@ -62,7 +66,7 @@ public:
 
     //-------------------------------------------------------------------------
 
-    virtual LegendSymbolStyle getLegendSymbolStyle();
+    virtual ::com::sun::star::chart2::LegendSymbolStyle getLegendSymbolStyle();
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -78,7 +82,7 @@ private: //methods
 
 private: //member
 
-    bool   m_bShowNegativeValues;//input parameter
+    bool   m_bShowNegativeValues;//input parameter    
     bool   m_bBubbleSizeAsArea;//input parameter
     double m_fBubbleSizeScaling;//input parameter
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,45 +32,48 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
 #include <vcl/toolbox.hxx>
-
 #include "smmod.hxx"
 #include "config.hxx"
-#include "toolbox.hrc"
+
+#include "dialog.hrc"
+
+#define NUM_TBX_CATEGORIES	9
 
 class SmToolBoxWindow : public SfxFloatingWindow
 {
 
 protected:
-    ToolBox     aToolBoxCat;
+    ToolBox		aToolBoxCat;
     FixedLine   aToolBoxCat_Delim;  // to visualy seperate the catalog part
-    ToolBox    *pToolBoxCmd;
-    ToolBox    *vToolBoxCategories[NUM_TBX_CATEGORIES];
+    ToolBox	   *pToolBoxCmd;
+    ToolBox	   *vToolBoxCategories[NUM_TBX_CATEGORIES];
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
-    sal_uInt16      nActiveCategoryRID;
+    ImageList  *aImageListsH[NUM_TBX_CATEGORIES + 1];   /* high contrast */
+    USHORT      nActiveCategoryRID;
 
-    virtual sal_Bool    Close();
+    virtual BOOL    Close();
     virtual void    GetFocus();
 
-    void            ApplyImageLists( sal_uInt16 nCategoryRID );
+    void            ApplyImageLists( USHORT nCategoryRID );
 
     DECL_LINK( CategoryClickHdl, ToolBox* );
     DECL_LINK( CmdSelectHdl, ToolBox* );
 
     SmViewShell * GetView();
-    const ImageList * GetImageList( sal_uInt16 nResId );
+    const ImageList * GetImageList( USHORT nResId, BOOL bHighContrast );
 
 public:
     SmToolBoxWindow(SfxBindings    *pBindings,
                     SfxChildWindow *pChildWindow,
-                    Window         *pParent);
+                    Window		   *pParent);
     ~SmToolBoxWindow();
 
     // Window
-    virtual void    StateChanged( StateChangedType nStateChange );
+    virtual void	StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent &rEvt );
 
-    void        AdjustPosSize( bool bSetPos );
-    void        SetCategory(sal_uInt16 nCategory);
+    void        AdjustPosSize( BOOL bSetPos );
+    void		SetCategory(USHORT nCategory);
 };
 
 /**************************************************************************/
@@ -81,7 +84,7 @@ class SmToolBoxWrapper : public SfxChildWindow
 
 protected:
     SmToolBoxWrapper(Window *pParentWindow,
-                     sal_uInt16, SfxBindings*, SfxChildWinInfo*);
+                     USHORT, SfxBindings*, SfxChildWinInfo*);
 };
 
 #endif

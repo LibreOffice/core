@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ namespace sd {
 
 /*************************************************************************
 |*
-|* SfxRequests for temporary functions
+|* SfxRequests fuer temporaere Funktionen
 |*
 \************************************************************************/
 
@@ -92,7 +92,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
     DeactivateCurrentFunction();
 
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
-    sal_uInt16 nSId = rReq.GetSlot();
+    USHORT nSId = rReq.GetSlot();
 
     switch( nSId )
     {
@@ -119,7 +119,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             }
             else
             {
-                // open the zoom dialog here
+                // hier den Zoom-Dialog oeffnen
                 SetCurrentFunction( FuScale::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
             }
             Cancel();
@@ -132,7 +132,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
             if (pArgs && pArgs->Count () == 1 )
             {
-                SFX_REQUEST_ARG (rReq, pScale, SfxUInt16Item, SID_ATTR_ZOOMSLIDER, sal_False);
+                SFX_REQUEST_ARG (rReq, pScale, SfxUInt16Item, SID_ATTR_ZOOMSLIDER, FALSE);
                 if (CHECK_RANGE (5, pScale->GetValue (), 3000))
                 {
                     SetZoom (pScale->GetValue ());
@@ -154,7 +154,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_ZOOM_OUT:
         {
             SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), pOlView, GetDoc(), rReq) );
-            // ends itself, no need for Cancel()!
+            // Beendet sich selbst, kein Cancel() notwendig!
             rReq.Done();
         }
         break;
@@ -232,10 +232,10 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_SELECTALL:
         {
             ::Outliner* pOutl = pOlView->GetOutliner();
-            sal_uLong nParaCount = pOutl->GetParagraphCount();
+            ULONG nParaCount = pOutl->GetParagraphCount();
             if (nParaCount > 0)
             {
-                pOutlinerView->SelectRange( 0, (sal_uInt16) nParaCount );
+                pOutlinerView->SelectRange( 0, (USHORT) nParaCount );
             }
             Cancel();
         }
@@ -261,16 +261,16 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_COLORVIEW:
         {
             ::Outliner* pOutl = pOutlinerView->GetOutliner();
-            sal_uLong nCntrl = pOutl->GetControlWord();
+            ULONG nCntrl = pOutl->GetControlWord();
 
             if ( !(nCntrl & EE_CNTRL_NOCOLORS) )
             {
-                // color view is enabled: disable
+                // Farbansicht ist eingeschaltet: ausschalten
                 pOutl->SetControlWord(nCntrl | EE_CNTRL_NOCOLORS);
             }
             else
             {
-                // color view is disabled: enable
+                // Farbansicht ist ausgeschaltet: einschalten
                 pOutl->SetControlWord(nCntrl & ~EE_CNTRL_NOCOLORS);
             }
 
@@ -337,7 +337,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
     DeactivateCurrentFunction();
 
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
-    sal_uInt16 nSId = rReq.GetSlot();
+    USHORT nSId = rReq.GetSlot();
 
     switch( nSId )
     {
@@ -419,7 +419,35 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 
         case SID_SET_DEFAULT:
         {
-            pOutlinerView->RemoveAttribs(sal_True); // sal_True = also paragraph attributes
+            // 1. Selektion merken (kriegt die eselige EditEngine nicht selbst
+            //	  auf die Reihe!)
+            // 2. Update auf False (sonst flackert's noch staerker
+            // an allen selektierten Absaetzen:
+            //	a. deren Vorlage nochmal setzen, um absatzweite harte Attribute
+            //	   zu entfernen
+            //	b. harte Zeichenattribute loeschen
+            // 3. Update auf True und Selektion wieder setzen
+            /*
+            ESelection aEsel= pOutlinerView->GetSelection();
+            Outliner* pOutl = pOutlinerView->GetOutliner();
+            pOutl->SetUpdateMode(FALSE);
+            List* pSelectedParas = pOutlinerView->CreateSelectionList();
+            Paragraph* pPara = (Paragraph*)pSelectedParas->First();
+            while (pPara)
+            {
+                ULONG nParaPos = pOutl->GetAbsPos(pPara);
+                String aName;
+                SfxStyleFamily aFamily;
+                pOutl->GetStyleSheet(nParaPos, aName, aFamily);
+                pOutl->SetStyleSheet(nParaPos, aName, aFamily);
+                pOutl->QuickRemoveCharAttribs(nParaPos);
+                pPara = (Paragraph*)pSelectedParas->Next();
+            }
+            delete pSelectedParas;
+            pOutl->SetUpdateMode(TRUE);
+            pOutlinerView->SetSelection(aEsel);
+            */
+            pOutlinerView->RemoveAttribs(TRUE); // TRUE = auch Absatzattribute
             Cancel();
             rReq.Done();
         }
@@ -502,7 +530,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                     if( GetDocSh()->HasName() )
                         aName = GetDocSh()->GetMedium()->GetName();
                     //else
-                    //  aName = GetDocSh()->GetName();
+                    //	aName = GetDocSh()->GetName();
                     pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
                 }
                 break;
@@ -519,7 +547,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                                 pOldFldItem->GetField()->ISA( SvxPageField ) ||
                                 pOldFldItem->GetField()->ISA( SvxPagesField )) )
             {
-                // select field, so it gets deleted on Insert
+                // Feld selektieren, so dass es beim Insert geloescht wird
                 ESelection aSel = pOutlinerView->GetSelection();
                 if( aSel.nStartPos == aSel.nEndPos )
                     aSel.nEndPos++;
@@ -554,20 +582,20 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                     if( pField )
                     {
                         SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
-                        //pOLV->DeleteSelected(); <-- unfortunately missing!
-                        // select field, so it gets deleted on Insert
+                        //pOLV->DeleteSelected(); <-- fehlt leider !
+                        // Feld selektieren, so dass es beim Insert geloescht wird
                         ESelection aSel = pOutlinerView->GetSelection();
-                        sal_Bool bSel = sal_True;
+                        BOOL bSel = TRUE;
                         if( aSel.nStartPos == aSel.nEndPos )
                         {
-                            bSel = sal_False;
+                            bSel = FALSE;
                             aSel.nEndPos++;
                         }
                         pOutlinerView->SetSelection( aSel );
 
                         pOutlinerView->InsertField( aFieldItem );
 
-                        // reset selection to original state
+                        // Selektion wird wieder in den Ursprungszustand gebracht
                         if( !bSel )
                             aSel.nEndPos--;
                         pOutlinerView->SetSelection( aSel );

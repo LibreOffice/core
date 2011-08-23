@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 #define WW_SORTEDARRAY_HXX
 
 #include <algorithm>
+#include <errhdl.hxx>       // OSL_ENSURE()
 #include <tools/debug.hxx>
 
 //simple template that manages a static [] array by sorting at construction
@@ -108,7 +109,7 @@ namespace ww
             }
             if (bBroken)
             {
-               OSL_FAIL( rtl::OUStringToOString( sError, RTL_TEXTENCODING_ASCII_US ).getStr() );
+               DBG_ERROR(rtl::OUStringToOString(sError, RTL_TEXTENCODING_ASCII_US));
             }
 #endif
         }

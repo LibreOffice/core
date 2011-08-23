@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 #include <svx/svdmodel.hxx>
 #include <svx/xflhtit.hxx>
-#include "svx/unofill.hxx"
+#include "unofill.hxx"
 #include <svx/unomid.hxx>
 #include "UnoNameItemTable.hxx"
 
@@ -48,7 +48,7 @@ class SvxUnoTransGradientTable : public SvxUnoNameItemTable
 {
 public:
     SvxUnoTransGradientTable( SdrModel* pModel ) throw();
-    virtual ~SvxUnoTransGradientTable() throw();
+    virtual	~SvxUnoTransGradientTable() throw();
 
     virtual NameOrIndex* createItem() const throw();
 
@@ -85,7 +85,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getSupportedService
 NameOrIndex* SvxUnoTransGradientTable::createItem() const throw()
 {
     XFillFloatTransparenceItem* pNewItem = new XFillFloatTransparenceItem();
-    pNewItem->SetEnabled( sal_True );
+    pNewItem->SetEnabled( TRUE );
     return pNewItem;
 }
 

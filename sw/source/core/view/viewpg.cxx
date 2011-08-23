@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,14 @@
 #include <rootfrm.hxx>
 #include <viewimp.hxx>
 #include <viewopt.hxx>
-#include <printdata.hxx>
+#include <swprtopt.hxx> // SwPrtOptions
 #include <fldbas.hxx>
 #include <ptqueue.hxx>
 #include <swregion.hxx>
 #include <hints.hxx>
 #include <fntcache.hxx>
 
-#include <statstr.hrc>  // Text fuer SfxProgress
+#include <statstr.hrc>	// Text fuer SfxProgress
 #include <comcore.hrc>
 
 #include <IDocumentFieldsAccess.hxx>
@@ -70,21 +70,22 @@ void ViewShell::ShowPreViewSelection( sal_uInt16 nSelPage )
 }
 
 //#i6467# adjust view options for page preview
-void ViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
+void ViewShell::AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions )
 {
     if ( !IsPreView() )
     {
-        OSL_FAIL( "view shell doesn't belongs to a page preview - no adjustment of its view options");
+        OSL_ENSURE( false, "view shell doesn't belongs to a page preview - no adjustment of its view options");
         return;
     }
 
-    PrepareForPrint( rPrintOptions );
+    PrepareForPrint( _rPrintOptions );
 
     return;
 }
 
+
 //#i14016# - consider empty pages on calculation of the scaling for a page to be printed.
-void ViewShell::PrintProspect(
+void ViewShell::PrintProspect( 
     OutputDevice *pOutDev,
     const SwPrintData &rPrintData,
     sal_Int32 nRenderer // the index in the vector of prospect pages to be printed
@@ -102,7 +103,7 @@ void ViewShell::PrintProspect(
     // output device is now provided by a call from outside the Writer)
     pPrinter->Push();
 
-    std::pair< sal_Int32, sal_Int32 > rPagesToPrint =
+    std::pair< sal_Int32, sal_Int32 > rPagesToPrint = 
             rPrintData.GetRenderData().GetPagePairsForProspectPrinting()[ nRenderer ];
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT( rPagesToPrint.first  == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
@@ -111,7 +112,7 @@ void ViewShell::PrintProspect(
 
     // create a new shell for the Printer
     ViewShell aShell( *this, 0, pPrinter );
-
+    
     SET_CURR_SHELL( &aShell );
 
     aShell.PrepareForPrint( rPrintData );
@@ -211,7 +212,7 @@ void ViewShell::PrintProspect(
     Size aTmpPrtSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), aMapMode ) );
 
     // calculate start point for equal border on all sides
-    Point aSttPt( (aTmpPrtSize.Width() - nMaxColSz) / 2,
+    Point aSttPt( (aTmpPrtSize.Width() - nMaxColSz) / 2, 
                   (aTmpPrtSize.Height() - nMaxRowSz) / 2 );
     for( int nC = 0; nC < 2; ++nC )
     {
@@ -235,7 +236,7 @@ void ViewShell::PrintProspect(
     SwPaintQueue::Repaint();
 
     //!! applying/modifying view options and formatting the dcoument should now only be done in getRendererCount!
-
+    
     pFntCache->Flush();
 
     // restore settings of OutputDevice (should be done always now since the

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ import org.openoffice.xmerge.converter.xml.*;
  *  @author   David Proulx
  */
 abstract class Wse {
-
+    
     /**
      *  Return true if <code>dataArray[startIndex]</code> is the start
      *  of a valid element of this type.
@@ -63,7 +63,7 @@ abstract class Wse {
         return false;
     }
 
-
+    
     /**
      *  Compute and return the index of the first <code>byte</code>
      *  following this element.  It is assumed that the element
@@ -88,7 +88,7 @@ abstract class Wse {
      *           object.
      */
     abstract int getByteCount();
-
+        
 
     /**
      *  Return an <code>byte</code> array representing this element.

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,13 @@
 #include "ORealDriver.hxx"
 #include "odbc/ODriver.hxx"
 #include <cppuhelper/factory.hxx>
+#include <osl/diagnose.h>
 
 using namespace connectivity::odbc;
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
@@ -47,6 +49,31 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             const Sequence< OUString > & rServiceNames,
             rtl_ModuleCount* _pTemp
         );
+
+//***************************************************************************************
+//
+// Die vorgeschriebene C-Api muss erfuellt werden!
+// Sie besteht aus drei Funktionen, die von dem Modul exportiert werden muessen.
+//
+
+//---------------------------------------------------------------------------------------
+void REGISTER_PROVIDER(
+        const OUString& aServiceImplName,
+        const Sequence< OUString>& Services,
+        const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
+{
+    OUString aMainKeyName;
+    aMainKeyName = OUString::createFromAscii("/");
+    aMainKeyName += aServiceImplName;
+    aMainKeyName += OUString::createFromAscii("/UNO/SERVICES");
+
+    Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
+    OSL_ENSURE(xNewKey.is(), "ODBC::component_writeInfo : could not create a registry key !");
+
+    for (sal_Int32 i=0; i<Services.getLength(); ++i)
+        xNewKey->createKey(Services[i]);
+}
+
 
 //---------------------------------------------------------------------------------------
 struct ProviderRequest
@@ -90,11 +117,36 @@ struct ProviderRequest
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
 component_getImplementationEnvironment(
-                const sal_Char  **ppEnvTypeName,
-                uno_Environment ** /*ppEnv*/
+                const sal_Char	**ppEnvTypeName,
+                uno_Environment	** /*ppEnv*/
             )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+//---------------------------------------------------------------------------------------
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
+                void* /*pServiceManager*/,
+                void* pRegistryKey
+            )
+{
+    if (pRegistryKey)
+    try
+    {
+        Reference< ::com::sun::star::registry::XRegistryKey > xKey(reinterpret_cast< ::com::sun::star::registry::XRegistryKey*>(pRegistryKey));
+
+        REGISTER_PROVIDER(
+            ODBCDriver::getImplementationName_Static(),
+            ODBCDriver::getSupportedServiceNames_Static(), xKey);
+
+        return sal_True;
+    }
+    catch (::com::sun::star::registry::InvalidRegistryException& )
+    {
+        OSL_ENSURE(sal_False, "ODBC::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
+    }
+
+    return sal_False;
 }
 
 //---------------------------------------------------------------------------------------

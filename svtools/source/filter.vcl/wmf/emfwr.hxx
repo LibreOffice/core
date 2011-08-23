@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,55 +47,55 @@ class EMFWriter
 {
 private:
 
-    VirtualDevice       maVDev;
-    MapMode             maDestMapMode;
-    FilterConfigItem*   mpFilterConfigItem;
-    SvStream& m_rStm;
-    sal_Bool*               mpHandlesUsed;
-    sal_uLong               mnHandleCount;
-    sal_uLong               mnLastPercent;
-    sal_uLong               mnRecordCount;
-    sal_uLong               mnRecordPos;
-    sal_Bool                mbRecordOpen;
-    sal_Bool                mbLineChanged;
-    sal_uInt32          mnLineHandle;
-    sal_Bool                mbFillChanged;
-    sal_uInt32          mnFillHandle;
-    sal_Bool                mbTextChanged;
-    sal_uInt32          mnTextHandle;
-    sal_uInt32          mnHorTextAlign;
+    VirtualDevice		maVDev;
+    MapMode				maDestMapMode;
+    FilterConfigItem*	mpFilterConfigItem;
+    SvStream*			mpStm;
+    BOOL*				mpHandlesUsed;
+    ULONG				mnHandleCount;
+    ULONG				mnLastPercent;
+    ULONG				mnRecordCount;
+    ULONG				mnRecordPos;
+    BOOL				mbRecordOpen;
+    BOOL				mbLineChanged;
+    sal_uInt32			mnLineHandle;
+    BOOL				mbFillChanged;
+    sal_uInt32			mnFillHandle;
+    BOOL				mbTextChanged;
+    sal_uInt32			mnTextHandle;
+    sal_uInt32			mnHorTextAlign;
 
-    void                ImplBeginRecord( sal_uInt32 nType );
-    void                ImplEndRecord();
+    void				ImplBeginRecord( sal_uInt32 nType );
+    void				ImplEndRecord();
+                        
+    ULONG				ImplAcquireHandle();
+    void				ImplReleaseHandle( ULONG nHandle );
 
-    sal_uLong               ImplAcquireHandle();
-    void                ImplReleaseHandle( sal_uLong nHandle );
+    BOOL				ImplPrepareHandleSelect( sal_uInt32& rHandle, ULONG nSelectType );
+    void				ImplCheckLineAttr();
+    void				ImplCheckFillAttr();
+    void				ImplCheckTextAttr();
 
-    sal_Bool                ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectType );
-    void                ImplCheckLineAttr();
-    void                ImplCheckFillAttr();
-    void                ImplCheckTextAttr();
-
-    void                ImplWriteColor( const Color& rColor );
-    void                ImplWriteRasterOp( RasterOp eRop );
-    void                ImplWriteExtent( long nExtent );
-    void                ImplWritePoint( const Point& rPoint );
-    void                ImplWriteSize( const Size& rSize);
-    void                ImplWriteRect( const Rectangle& rRect );
-    void                ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClose );
-    void                ImplWritePolygonRecord( const Polygon& rPoly, sal_Bool bClose );
-    void                ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly );
-    void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, sal_uInt32 nROP );
-    void                ImplWriteTextRecord( const Point& rPos, const String rText, const sal_Int32* pDXArray, sal_uInt32 nWidth );
+    void				ImplWriteColor( const Color& rColor );
+    void				ImplWriteRasterOp( RasterOp eRop );
+    void				ImplWriteExtent( long nExtent );
+    void				ImplWritePoint( const Point& rPoint );
+    void				ImplWriteSize( const Size& rSize);
+    void				ImplWriteRect( const Rectangle& rRect );
+    void				ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClose );
+    void				ImplWritePolygonRecord( const Polygon& rPoly, BOOL bClose );
+    void				ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly );
+    void				ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, UINT32 nROP );
+    void				ImplWriteTextRecord( const Point& rPos, const String rText, const sal_Int32* pDXArray, sal_uInt32 nWidth );
 
     void                Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
-    void                ImplWrite( const GDIMetaFile& rMtf );
+    void				ImplWrite( const GDIMetaFile& rMtf );
 
 public:
 
-    EMFWriter(SvStream &rStream) : m_rStm(rStream) {}
+                        EMFWriter() {}
 
-    sal_Bool WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pConfigItem = NULL );
+    BOOL				WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfigItem* pConfigItem = NULL );
 };
 
 #endif // _EMFWR_HXX

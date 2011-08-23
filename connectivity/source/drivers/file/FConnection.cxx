@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ using namespace ::ucbhelper;
 using rtl::OUString;
 typedef connectivity::OMetaConnection OConnection_BASE;
 // --------------------------------------------------------------------------------
-OConnection::OConnection(OFileDriver*   _pDriver)
+OConnection::OConnection(OFileDriver*	_pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
                          ,m_pDriver(_pDriver)
                          ,m_bClosed(sal_False)
@@ -178,7 +178,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         // set fields to fetch
         Sequence< OUString > aProps(1);
         OUString* pProps = aProps.getArray();
-        pProps[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+        pProps[ 0 ] = OUString::createFromAscii( "Title" );
 
         try
         {
@@ -198,7 +198,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             }
             else
             {
-                OSL_FAIL("OConnection::construct: ::ucbhelper::Content isn't a folde nor a document! How that?!");
+                OSL_ENSURE(0,"OConnection::construct: ::ucbhelper::Content isn't a folde nor a document! How that?!");
                 throw SQLException();
             }
         }
@@ -380,10 +380,10 @@ void OConnection::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     OConnection_BASE::disposing();
 
-    m_bClosed   = sal_True;
+    m_bClosed	= sal_True;
 m_xDir.clear();
 m_xContent.clear();
-    m_xCatalog  = WeakReference< XTablesSupplier>();
+    m_xCatalog	= WeakReference< XTablesSupplier>();
 
     dispose_ChildImpl();
 }
@@ -405,7 +405,7 @@ Reference< XDynamicResultSet > OConnection::getDir() const
     Reference<XDynamicResultSet> xContent;
     Sequence< ::rtl::OUString > aProps(1);
     ::rtl::OUString* pProps = aProps.getArray();
-    pProps[ 0 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+    pProps[ 0 ] = ::rtl::OUString::createFromAscii( "Title" );
     try
     {
         Reference<XContentIdentifier> xIdent = getContent()->getIdentifier();

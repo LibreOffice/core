@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ import org.openoffice.xmerge.util.Debug;
  *
  *  @author      Paul Rank
  *  @author      Mark Murnane
- *  @author      Martin Maher
+ *  @author      Martin Maher 
  */
 public abstract class SxcDocumentDeserializer implements OfficeConstants,
     DocumentDeserializer {
@@ -79,14 +79,14 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
     /**  An <code>ConvertData</code> object assigned to this object. */
     private ConvertData cd = null;
-
+    
     /** A style catalog for the workbook  */
     private StyleCatalog styleCat = null;
 
     private int textStyles = 1;
     private int colStyles = 1;
     private int rowStyles = 1;
-
+    
     /**
      *  Constructor.
      *
@@ -98,7 +98,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     }
 
 
-    /**
+    /** 
      *  This abstract method will be implemented by concrete subclasses
      *  and will return an application-specific Decoder.
      *
@@ -112,7 +112,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     public abstract SpreadsheetDecoder createDecoder(String workbook, String[] worksheetNames, String password)
         throws IOException;
 
-
+    
     /**
      *  <p>This method will return the name of the WorkBook from the
      *  <code>ConvertData</code>.  Allows for situations where the
@@ -121,14 +121,14 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      *  <p>Implemented in the Deserializer as the Decoder's constructor requires
      *  a name.</p>
      *
-     *  @param  cd  The <code>ConvertData</code> containing the Device
+     *  @param  cd  The <code>ConvertData</code> containing the Device 
      *              content.
      *
      *  @return  The WorkBook name.
      */
     protected abstract String getWorkbookName(ConvertData cd) throws IOException;
 
-
+    
     /**
      *  This method will return the name of the WorkSheet from the
      *  <code>ConvertData</code>.
@@ -139,8 +139,8 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      *  @return  The WorkSheet names.
      */
     protected abstract String[] getWorksheetNames(ConvertData cd) throws IOException;
-
-
+    
+    
     /**
      *  <p>Method to convert a set of &quot;Device&quot;
      *  <code>Document</code> objects into a <code>SxcDocument</code>
@@ -170,9 +170,9 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         sxcDoc.initContentDOM();
         sxcDoc.initSettingsDOM();
 
-        // Default to an initial 5 entries in the catalog.
+        // Default to an initial 5 entries in the catalog.  
         styleCat = new StyleCatalog(5);
-
+        
         doc = sxcDoc.getContentDOM();
         settings = sxcDoc.getSettingsDOM();
         initFontTable();
@@ -204,14 +204,14 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      *
      */
     private void initFontTable() {
-
-        String fontTable[]= new String[] {  "Tahoma", "Tahoma", "swiss", "variable",
+    
+        String fontTable[]= new String[] {	"Tahoma", "Tahoma", "swiss", "variable",
                                             "Courier New", "&apos;Courier New&apos;", "modern", "fixed"};
         //  Traverse to the office:body element.
         //  There should only be one.
         NodeList list = doc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
         Node root = list.item(0);
-
+    
         for(int i=0;i<fontTable.length;) {
 
             // Create an element node for the table
@@ -262,8 +262,8 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                 processTable(node);
             }
         }
-
-        // Add the Defined Name table if there is one
+        
+        // Add the Defined Name table if there is one 
         Enumeration nameDefinitionTable = decoder.getNameDefinitions();
         if(nameDefinitionTable.hasMoreElements()) {
             processNameDefinition(node, nameDefinitionTable);
@@ -271,16 +271,16 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
         // add settings
         NodeList settingsList = settings.getElementsByTagName(TAG_OFFICE_SETTINGS);
-        Node settingsNode = settingsList.item(0);;
+        Node settingsNode = settingsList.item(0);;		
         processSettings(settingsNode);
 
     }
+    
 
-
-
+    
     /**
      *  This method process the settings portion
-     *  of the <code>Document</code>.
+     *  of the <code>Document</code>.  
      *
      *  @param  root  The root <code>Node</code> of the
      *                <code>Document</code> we are building.  This
@@ -288,23 +288,23 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      *                tag.
      */
     protected void processSettings(Node root) {
-
-        Element configItemSetEntry      = (Element) settings.createElement(TAG_CONFIG_ITEM_SET);
+    
+        Element configItemSetEntry		= (Element) settings.createElement(TAG_CONFIG_ITEM_SET);
         configItemSetEntry.setAttribute(ATTRIBUTE_CONFIG_NAME, "view-settings");
-        Element configItemMapIndexed    = (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_INDEXED);
+        Element configItemMapIndexed	= (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_INDEXED);
         configItemMapIndexed.setAttribute(ATTRIBUTE_CONFIG_NAME, "Views");
-        Element configItemMapEntry      = (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_ENTRY);
+        Element configItemMapEntry		= (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_ENTRY);
         BookSettings bs = (BookSettings) decoder.getSettings();
         bs.writeNode(settings, configItemMapEntry);
-
+    
         configItemMapIndexed.appendChild(configItemMapEntry);
         configItemSetEntry.appendChild(configItemMapIndexed);
         root.appendChild(configItemSetEntry);
     }
-
+    
     /**
      *  This method process a Name Definition Table and generates a portion
-     *  of the <code>Document</code>.
+     *  of the <code>Document</code>.  
      *
      *  @param  root  The root <code>Node</code> of the
      *                <code>Document</code> we are building.  This
@@ -329,7 +329,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
         Debug.log(Debug.TRACE, "</NAMED-EXPRESSIONS>");
     }
-
+    
     /**
      *  This method process a WorkSheet and generates a portion
      *  of the <code>Document</code>.  A spreadsheet is represented
@@ -366,7 +366,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
         // add the various different table-columns
         processColumns(tableElement);
-
+        
         // Get each cell and add to doc
         processCells(tableElement);
 
@@ -390,7 +390,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     protected void processColumns(Node root) throws IOException {
 
         for(Enumeration e = decoder.getColumnRowInfos();e.hasMoreElements();) {
-
+        
             ColumnRowInfo ci = (ColumnRowInfo) e.nextElement();
             if(ci.isColumn()) {
                 ColumnStyle cStyle = new ColumnStyle("Default",SxcConstants.COLUMN_STYLE_FAMILY,
@@ -399,7 +399,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                 Style result[] = (Style[]) styleCat.getMatching(cStyle);
                 String styleName;
                 if(result.length==0) {
-
+                
                         cStyle.setName("co" + colStyles++);
                         styleName = cStyle.getName();
                         Debug.log(Debug.TRACE,"No existing style found, adding " + styleName);
@@ -454,8 +454,8 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
         // The number of columns in the spreadsheet
         int lastColumn = decoder.getNumberOfColumns();
-
-        //
+        
+        // 
         Node autoStylesNode = null;
 
         // Loop over all cells in the spreadsheet
@@ -505,7 +505,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                         Style result[] = (Style[]) styleCat.getMatching(rStyle);
                         String styleName;
                         if(result.length==0) {
-
+                    
                                 rStyle.setName("ro" + rowStyles++);
                                 styleName = rStyle.getName();
                                 Debug.log(Debug.TRACE,"No existing style found, adding " + styleName);
@@ -514,12 +514,12 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                                 RowStyle existingStyle = (RowStyle) result[0];
                                 styleName = existingStyle.getName();
                                 Debug.log(Debug.TRACE,"Existing style found : " + styleName);
-                        }
+                        }						
                         rowElement.setAttribute(ATTRIBUTE_TABLE_STYLE_NAME, styleName);
                         // For now we will not use the repeat column attribute
                     }
                 }
-
+        
                 // Append the row element to the root node
                 root.appendChild(rowElement);
 
@@ -554,7 +554,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
             // Get the type of the data in the cell
             String cellType = decoder.getCellDataType();
 
-            // Get the cell format
+            // Get the cell format 
             Format fmt = decoder.getCellFormat();
 
             // Create an element node for the cell
@@ -570,14 +570,14 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                 autoStylesNode = doc.createElement(TAG_OFFICE_AUTOMATIC_STYLES);
                 doc.insertBefore(autoStylesNode, bodyNode);
                }
-
+            
             CellStyle tStyle = new
-            CellStyle(  "Default",SxcConstants.TABLE_CELL_STYLE_FAMILY,
+            CellStyle(	"Default",SxcConstants.TABLE_CELL_STYLE_FAMILY,
                         SxcConstants.DEFAULT_STYLE, fmt, null);
             String styleName;
             Style result[] = (Style[]) styleCat.getMatching(tStyle);
             if(result.length==0) {
-
+                
                     tStyle.setName("ce" + textStyles++);
                     styleName = tStyle.getName();
                     Debug.log(Debug.TRACE,"No existing style found, adding " + styleName);
@@ -587,9 +587,9 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                     styleName = existingStyle.getName();
                     Debug.log(Debug.TRACE,"Existing style found : " + styleName);
             }
-
+            
             cellElement.setAttribute(ATTRIBUTE_TABLE_STYLE_NAME, styleName);
-
+            
             // Store the cell data into the appropriate attributes
             processCellData(cellElement, cellType, cellContents);
 
@@ -613,7 +613,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
             int numSkippedCells = lastColumn - col + 1;
             addEmptyCells(numSkippedCells, rowElement);
         }
-
+        
         // Now write the style catalog to the document
         if(autoStylesNode!=null) {
             Debug.log(Debug.TRACE,"Well the autostyle node was found!!!");
@@ -637,7 +637,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      *  It is called when the conversion process encounters
      *  a row (or rows) that do not contain any data in its cells.
      *
-     *  @param  numEmptyRows   The number of empty rows that we
+     *  @param  numEmptyRows   The number of empty rows that we 
      *                         need to add to the <code>Document</code>.
      *  @param  root           The <code>Node</code> of the
      *                         <code>Document</code> we are building
@@ -685,7 +685,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      *                           current row.
      *  @param   row             The <code>Node</code> of the
      *                           <code>Document</code> we
-     *                           are building that we will
+     *                           are building that we will 
      *                           append our empty cell
      *                           <code>Node</code> objects.
      *                           This <code>Node</code> should
@@ -724,7 +724,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      *  the appropriate attributes on the cell <code>Element</code>.
      *
      *  @param   cellElement  A TAG_TABLE_CELL <code>Element</code>
-     *                        that we will be adding attributes to
+     *                        that we will be adding attributes to 
      *                        based on the type of data in the cell.
      *  @param   type         The type of data contained in the cell.
      *  @param   contents     The contents of the data contained in
@@ -761,7 +761,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
             } else if (type.equals(CELLTYPE_BOOLEAN)) {
 
-                // StarOffice XML format requires stored boolean value
+                // StarOffice XML format requires stored boolean value 
                 // to be in lower case
                 cellElement.setAttribute(ATTRIBUTE_TABLE_BOOLEAN_VALUE,
                                          contents.toLowerCase());

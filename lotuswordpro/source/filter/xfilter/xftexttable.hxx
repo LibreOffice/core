@@ -57,10 +57,14 @@
  * @file
  * Text table object. It's the table used in writer.
  ************************************************************************/
-#ifndef     _XFTEXTTABLE_HXX
-#define     _XFTEXTTABLE_HXX
+/*************************************************************************
+ * Change History
+ * 2005-03-31 create and implements.
+ ************************************************************************/
+#ifndef		_XFTEXTTABLE_HXX
+#define		_XFTEXTTABLE_HXX
 
-#include    "xftable.hxx"
+#include	"xftable.hxx"
 
 class XFTextTable : public XFTable
 {
@@ -68,17 +72,17 @@ public:
     XFTextTable();
 
 private:
-    void    SetRowCount(sal_Int32 row);
+    void	SetRowCount(sal_Int32 row);
 
-    void    SetColCount(sal_Int32 col);
+    void	SetColCount(sal_Int32 col);
 
-    rtl::OUString   SetCell(sal_Int32 row, sal_Int32 col, XFCell *pCell);
+    rtl::OUString	SetCell(sal_Int32 row, sal_Int32 col, XFCell *pCell);
 
     virtual void ToXml(IXFStream *pStrm);
 
 private:
-    sal_Int32       m_nColCount;
-    sal_Int32       m_nRowCount;
+    sal_Int32		m_nColCount;
+    sal_Int32		m_nRowCount;
 };
 
 #endif

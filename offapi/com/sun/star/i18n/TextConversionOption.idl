@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module i18n {
 //--------------------------------------------------------------------------
 /** Text conversion options to be used with <type>XTextConversion</type>.
 
-    <p>These text conversion options are usually selected by end users.
+    <p>These text conversion options are usuall selected by end users. 
     The options can be combined and may be related to
     <type>TextConversionType</type>. </p>
 
@@ -54,14 +54,14 @@ published constants TextConversionOption
     const long  CHARACTER_BY_CHARACTER          = 1;    // (1 << 0)
 
     /// Ignore post-positional word for Hangul to Hanja conversion
-    const long  IGNORE_POST_POSITIONAL_WORD     = 2;    // (1 << 1)
+    const long	IGNORE_POST_POSITIONAL_WORD 	= 2;	// (1 << 1)
 
-    /** Use Taiwan, HongKong SAR, and Macao SAR character variants for
-        Simplified to Traditional Chinese conversion
+    /** Use Taiwan, HongKong SAR, and Macao SAR character variants for 
+        Simplified to Traditionary Chinese conversion
 
-        @since OOo 2.0
+        @since OOo 2.0.0
     */
-    const long  USE_CHARACTER_VARIANTS          = 2;    // (1 << 1)
+    const long	USE_CHARACTER_VARIANTS 	        = 2;	// (1 << 1)
 };
 
 //=============================================================================

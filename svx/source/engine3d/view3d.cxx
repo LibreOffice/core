@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <tools/shl.hxx>
-#include "svx/svditer.hxx"
+#include "svditer.hxx"
 #include <svx/svdpool.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdmodel.hxx>
@@ -44,7 +44,7 @@
 #include <svx/svdview.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include "svx/globl3d.hxx"
+#include "globl3d.hxx"
 #include <svx/obj3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/sphere3d.hxx>
@@ -65,7 +65,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sdrpaintwindow.hxx>
+#include <sdrpaintwindow.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -78,7 +78,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
-#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
+#define ITEMVALUE(ItemSet,Id,Cast)	((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 TYPEINIT1(E3dView, SdrView);
 
@@ -88,16 +88,16 @@ TYPEINIT1(E3dView, SdrView);
 class Impl3DMirrorConstructOverlay
 {
     // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList               maObjects;
+    ::sdr::overlay::OverlayObjectList				maObjects;
 
     // the view
-    const E3dView&                                  mrView;
+    const E3dView&									mrView;
 
     // the object count
-    sal_uInt32                                      mnCount;
+    sal_uInt32										mnCount;
 
     // the unmirrored polygons
-    basegfx::B2DPolyPolygon*                        mpPolygons;
+    basegfx::B2DPolyPolygon*						mpPolygons;
 
     // the overlay geometry from selected objects
     drawinglayer::primitive2d::Primitive2DSequence  maFullOverlay;
@@ -110,7 +110,7 @@ public:
 };
 
 Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
-:   maObjects(),
+:	maObjects(),
     mrView(rView),
     mnCount(rView.GetMarkedObjectCount()),
     mpPolygons(0),
@@ -138,7 +138,7 @@ Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
                     {
                         sdr::contact::ViewContact& rVC = pObject->GetViewContact();
                         sdr::contact::ViewObjectContact& rVOC = rVC.GetViewObjectContact(rOC);
-
+                        
                         const drawinglayer::primitive2d::Primitive2DSequence aNewSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo));
                         drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(maFullOverlay, aNewSequence);
                     }
@@ -182,7 +182,7 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
 
         if(pTargetOverlay)
         {
-            // buld transfoprmation: translate and rotate so that given edge is
+            // buld transfoprmation: translate and rotate so that given edge is 
             // on x axis, them mirror in y and translate back
             const basegfx::B2DVector aEdge(aMirrorAxisB.X() - aMirrorAxisA.X(), aMirrorAxisB.Y() - aMirrorAxisA.Y());
             basegfx::B2DHomMatrix aMatrixTransform(basegfx::tools::createTranslateB2DHomMatrix(
@@ -211,7 +211,7 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
                     aContent = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparencePrimitive2D, 1);
 
                     sdr::overlay::OverlayPrimitive2DSequenceObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aContent);
-
+                    
                     pTargetOverlay->add(*pNew);
                     maObjects.append(*pNew);
                 }
@@ -255,7 +255,7 @@ E3dView::E3dView(SdrModel* pModel, OutputDevice* pOut) :
 void E3dView::DrawMarkedObj(OutputDevice& rOut) const
 {
     // Existieren 3D-Objekte, deren Szenen nicht selektiert sind?
-    sal_Bool bSpecialHandling = sal_False;
+    BOOL bSpecialHandling = FALSE;
     E3dScene *pScene = NULL;
 
     long nCnt = GetMarkedObjectCount();
@@ -267,14 +267,14 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             // zugehoerige Szene
             pScene = ((E3dCompoundObject*)pObj)->GetScene();
             if(pScene && !IsObjMarked(pScene))
-                bSpecialHandling = sal_True;
+                bSpecialHandling = TRUE;
         }
         // Alle SelectionFlags zuruecksetzen
         if(pObj && pObj->ISA(E3dObject))
         {
             pScene = ((E3dObject*)pObj)->GetScene();
             if(pScene)
-                pScene->SetSelected(sal_False);
+                pScene->SetSelected(FALSE);
         }
     }
 
@@ -291,9 +291,12 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
                 // zugehoerige Szene
                 pScene = ((E3dCompoundObject*)pObj)->GetScene();
                 if(pScene)
-                    pScene->SetSelected(sal_False);
+                    pScene->SetSelected(FALSE);
             }
         }
+
+        // bei allen direkt selektierten Objekten auf selektiert setzen
+        SdrMark* pM = NULL;
 
         for(nObjs = 0;nObjs < nCnt;nObjs++)
         {
@@ -302,8 +305,9 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             {
                 // Objekt markieren
                 E3dObject* p3DObj = (E3dObject*)pObj;
-                p3DObj->SetSelected(sal_True);
+                p3DObj->SetSelected(TRUE);
                 pScene = p3DObj->GetScene();
+                pM = GetSdrMarkByIndex(nObjs);
             }
         }
 
@@ -312,9 +316,9 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             // code from parent
             SortMarkedObjects();
 
-            pScene->SetDrawOnlySelected(sal_True);
+            pScene->SetDrawOnlySelected(TRUE);
             pScene->SingleObjectPainter(rOut); // #110094#-17
-            pScene->SetDrawOnlySelected(sal_False);
+            pScene->SetDrawOnlySelected(FALSE);
         }
 
         // SelectionFlag zuruecksetzen
@@ -326,7 +330,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
                 // zugehoerige Szene
                 pScene = ((E3dCompoundObject*)pObj)->GetScene();
                 if(pScene)
-                    pScene->SetSelected(sal_False);
+                    pScene->SetSelected(FALSE);
             }
         }
     }
@@ -372,7 +376,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
         {
             // reset all selection flags at 3D objects
             pScene = ((E3dObject*)pObj)->GetScene();
-
+            
             if(pScene)
             {
                 pScene->SetSelected(false);
@@ -404,7 +408,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
         }
     }
 
-    // create new mark list which contains all indirectly selected3d
+    // create new mark list which contains all indirectly selected3d 
     // scenes as selected objects
     SdrMarkList aOldML(GetMarkedObjectList());
     SdrMarkList aNewML;
@@ -418,10 +422,10 @@ SdrModel* E3dView::GetMarkedObjModel() const
         if(pObj && pObj->ISA(E3dObject))
         {
             pScene = ((E3dObject*)pObj)->GetScene();
-
+            
             if(pScene && !IsObjMarked(pScene) && GetSdrPageView())
             {
-                ((E3dView*)this)->MarkObj(pScene, GetSdrPageView(), sal_False, sal_True);
+                ((E3dView*)this)->MarkObj(pScene, GetSdrPageView(), FALSE, TRUE);
             }
         }
     }
@@ -470,17 +474,17 @@ SdrModel* E3dView::GetMarkedObjModel() const
 |*
 \************************************************************************/
 
-sal_Bool E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+BOOL E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, UINT32 nOptions)
 {
-    sal_Bool bRetval = sal_False;
+    BOOL bRetval = FALSE;
 
     // Liste holen
     Point aPos(rPos);
     SdrObjList* pDstList = pLst;
     ImpGetPasteObjList(aPos, pDstList);
-
+    
     if(!pDstList)
-        return sal_False;
+        return FALSE;
 
     // Owner der Liste holen
     SdrObject* pOwner = pDstList->GetOwnerObj();
@@ -523,9 +527,9 @@ sal_Bool E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLs
 }
 
 // #83403# Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
-sal_Bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point /*aOffset*/)
+BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point /*aOffset*/)
 {
-    sal_Bool bRetval(sal_False);
+    BOOL bRetval(FALSE);
 
     if(pSrcScene && pDstScene)
     {
@@ -542,7 +546,7 @@ sal_Bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene*
             {
                 // #116235#
                 E3dCompoundObject* pNewCompoundObj = dynamic_cast< E3dCompoundObject* >(pCompoundObj->Clone());
-
+                
                 if(pNewCompoundObj)
                 {
                     // get dest scene's current range in 3D world coordinates
@@ -574,7 +578,7 @@ sal_Bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene*
                         const double fFactor((aSceneScale.getX() * fSizeFactor) / (basegfx::fTools::equalZero(fObjSize) ? 1.0 : fObjSize));
                         fScale *= fFactor;
                     }
-
+                    
                     if(aObjectScale.getY() * fScale > aSceneScale.getY() * fSizeFactor)
                     {
                         const double fObjSize(aObjectScale.getY() * fScale);
@@ -620,7 +624,7 @@ sal_Bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene*
                     pNewCompoundObj->NbcSetLayer(pCompoundObj->GetLayer());
                     pNewCompoundObj->NbcSetStyleSheet(pCompoundObj->GetStyleSheet(), sal_True);
                     pDstScene->Insert3DObj(pNewCompoundObj);
-                    bRetval = sal_True;
+                    bRetval = TRUE;
 
                     // Undo anlegen
                     if( GetModel()->IsUndoEnabled() )
@@ -639,11 +643,11 @@ sal_Bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene*
 |*
 \************************************************************************/
 
-sal_Bool E3dView::IsConvertTo3DObjPossible() const
+BOOL E3dView::IsConvertTo3DObjPossible() const
 {
-    sal_Bool bAny3D(sal_False);
-    sal_Bool bGroupSelected(sal_False);
-    sal_Bool bRetval(sal_True);
+    BOOL bAny3D(FALSE);
+    BOOL bGroupSelected(FALSE);
+    BOOL bRetval(TRUE);
 
     for(sal_uInt32 a=0;!bAny3D && a<GetMarkedObjectCount();a++)
     {
@@ -656,20 +660,20 @@ sal_Bool E3dView::IsConvertTo3DObjPossible() const
 
     bRetval = !bAny3D
         && (
-           IsConvertToPolyObjPossible(sal_False)
-        || IsConvertToPathObjPossible(sal_False)
+           IsConvertToPolyObjPossible(FALSE)
+        || IsConvertToPathObjPossible(FALSE)
         || IsImportMtfPossible());
     return bRetval;
 }
 
-void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, sal_Bool& rAny3D,
-    sal_Bool& rGroupSelected) const
+void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, BOOL& rAny3D,
+    BOOL& rGroupSelected) const
 {
     if(pObj)
     {
         if(pObj->ISA(E3dObject))
         {
-            rAny3D = sal_True;
+            rAny3D = TRUE;
         }
         else
         {
@@ -681,7 +685,7 @@ void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, sal_Bool& rAny3D,
                     SdrObject* pNewObj = aIter.Next();
                     ImpIsConvertTo3DPossible(pNewObj, rAny3D, rGroupSelected);
                 }
-                rGroupSelected = sal_True;
+                rGroupSelected = TRUE;
             }
         }
     }
@@ -728,9 +732,9 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
         XLineStyle eLineStyle = (XLineStyle)((const XLineStyleItem&)rSet.Get(XATTR_LINESTYLE)).GetValue();
         XFillStyle eFillStyle = ITEMVALUE(rSet, XATTR_FILLSTYLE, XFillStyleItem);
 
-        if(((SdrPathObj*)pObj)->IsClosed()
-            && eLineStyle == XLINE_SOLID
-            && !nLineWidth
+        if(((SdrPathObj*)pObj)->IsClosed() 
+            && eLineStyle == XLINE_SOLID 
+            && !nLineWidth 
             && eFillStyle != XFILL_NONE)
         {
             if(pObj->GetPage() && GetModel()->IsUndoEnabled() )
@@ -741,7 +745,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
     }
 }
 
-void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, sal_Bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat)
+void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat)
 {
     // Einzelnes PathObject, dieses umwanden
     SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj);
@@ -750,9 +754,9 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, sal
     {
         E3dDefaultAttributes aDefault = Get3DDefaultAttributes();
         if(bExtrude)
-            aDefault.SetDefaultExtrudeCharacterMode(sal_True);
+            aDefault.SetDefaultExtrudeCharacterMode(TRUE);
         else
-            aDefault.SetDefaultLatheCharacterMode(sal_True);
+            aDefault.SetDefaultLatheCharacterMode(TRUE);
 
         // ItemSet des Ursprungsobjektes holen
         SfxItemSet aSet(pObj->GetMergedItemSet());
@@ -768,10 +772,10 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, sal
             // Das SdrPathObj ist nicht gefuellt, lasse die
             // vordere und hintere Flaeche weg. Ausserdem ist
             // eine beidseitige Darstellung notwendig.
-            aDefault.SetDefaultExtrudeCloseFront(sal_False);
-            aDefault.SetDefaultExtrudeCloseBack(sal_False);
+            aDefault.SetDefaultExtrudeCloseFront(FALSE);
+            aDefault.SetDefaultExtrudeCloseBack(FALSE);
 
-            aSet.Put(Svx3DDoubleSidedItem(sal_True));
+            aSet.Put(Svx3DDoubleSidedItem(TRUE));
 
             // Fuellattribut setzen
             aSet.Put(XFillStyleItem(XFILL_SOLID));
@@ -801,7 +805,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, sal
             p3DObj->NbcSetLayer(pObj->GetLayer());
 
             p3DObj->SetMergedItemSet(aSet);
-
+            
             p3DObj->NbcSetStyleSheet(pObj->GetStyleSheet(), sal_True);
 
             // Neues 3D-Objekt einfuegen
@@ -810,7 +814,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, sal
     }
 }
 
-void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, sal_Bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat)
+void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat)
 {
     if(pObj)
     {
@@ -826,9 +830,9 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, sal_Bool bExt
         }
         else
             ImpChangeSomeAttributesFor3DConversion(pObj);
-
+        
         // convert completely to path objects
-        SdrObject* pNewObj1 = pObj->ConvertToPolyObj(sal_False, sal_False);
+        SdrObject* pNewObj1 = pObj->ConvertToPolyObj(FALSE, FALSE);
 
         if(pNewObj1)
         {
@@ -844,9 +848,9 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, sal_Bool bExt
             }
             else
                 ImpChangeSomeAttributesFor3DConversion2(pNewObj1);
-
+            
             // convert completely to path objects
-            SdrObject* pNewObj2 = pObj->ConvertToContourObj(pNewObj1, sal_True);
+            SdrObject* pNewObj2 = pObj->ConvertToContourObj(pNewObj1, TRUE);
 
             if(pNewObj2)
             {
@@ -881,7 +885,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, sal_Bool bExt
 |*
 \************************************************************************/
 
-void E3dView::ConvertMarkedObjTo3D(sal_Bool bExtrude, basegfx::B2DPoint aPnt1, basegfx::B2DPoint aPnt2)
+void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, basegfx::B2DPoint aPnt1, basegfx::B2DPoint aPnt2)
 {
     if(AreObjectsMarked())
     {
@@ -948,7 +952,7 @@ void E3dView::ConvertMarkedObjTo3D(sal_Bool bExtrude, basegfx::B2DPoint aPnt1, b
 
             // SnapRect Ausdehnung mittels Spiegelung an der Rotationsachse
             // erweitern
-            for(sal_uInt32 a=0;a<GetMarkedObjectCount();a++)
+            for(UINT32 a=0;a<GetMarkedObjectCount();a++)
             {
                 SdrMark* pMark = GetSdrMarkByIndex(a);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
@@ -988,7 +992,7 @@ void E3dView::ConvertMarkedObjTo3D(sal_Bool bExtrude, basegfx::B2DPoint aPnt1, b
 
         // Ueber die Selektion gehen und in 3D wandeln, komplett mit
         // Umwandeln in SdrPathObject, auch Schriften
-        for(sal_uInt32 a=0;a<GetMarkedObjectCount();a++)
+        for(UINT32 a=0;a<GetMarkedObjectCount();a++)
         {
             SdrMark* pMark = GetSdrMarkByIndex(a);
             SdrObject* pObj = pMark->GetMarkedSdrObj();
@@ -1018,8 +1022,8 @@ void E3dView::ConvertMarkedObjTo3D(sal_Bool bExtrude, basegfx::B2DPoint aPnt1, b
             // und alle alten Objekte weghauen
             SdrObject* pRepObj = GetMarkedObjectByIndex(0);
             SdrPageView* pPV = GetSdrPageViewOfMarkedByIndex(0);
-            MarkObj(pRepObj, pPV, sal_True);
-            ReplaceObjectAtView(pRepObj, *pPV, pScene, sal_False);
+            MarkObj(pRepObj, pPV, TRUE);
+            ReplaceObjectAtView(pRepObj, *pPV, pScene, FALSE);
             DeleteMarked();
             MarkObj(pScene, pPV);
 
@@ -1064,36 +1068,36 @@ void E3dView::ConvertMarkedObjTo3D(sal_Bool bExtrude, basegfx::B2DPoint aPnt1, b
 
 struct E3dDepthNeighbour
 {
-    E3dDepthNeighbour*          mpNext;
-    E3dExtrudeObj*              mpObj;
+    E3dDepthNeighbour*	        mpNext;
+    E3dExtrudeObj*		        mpObj;
     basegfx::B2DPolyPolygon     maPreparedPolyPolygon;
 
     E3dDepthNeighbour()
     :   mpNext(0),
         mpObj(0),
         maPreparedPolyPolygon()
-    {
+    { 
     }
 };
 
 struct E3dDepthLayer
 {
-    E3dDepthLayer*              mpDown;
-    E3dDepthNeighbour*          mpNext;
+    E3dDepthLayer*		        mpDown;
+    E3dDepthNeighbour*	        mpNext;
 
-    E3dDepthLayer()
+    E3dDepthLayer() 
     :   mpDown(0),
         mpNext(0)
-    {
+    { 
     }
 
-    ~E3dDepthLayer()
-    {
-        while(mpNext)
-        {
-            E3dDepthNeighbour* pSucc = mpNext->mpNext;
-            delete mpNext;
-            mpNext = pSucc;
+    ~E3dDepthLayer() 
+    { 
+        while(mpNext) 
+        { 
+            E3dDepthNeighbour* pSucc = mpNext->mpNext; 
+            delete mpNext; 
+            mpNext = pSucc; 
         }
     }
 };
@@ -1106,7 +1110,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
         SdrObjListIter aIter(*pSubList, IM_FLAT);
         E3dDepthLayer* pBaseLayer = NULL;
         E3dDepthLayer* pLayer = NULL;
-        sal_Int32 nNumLayers = 0;
+        INT32 nNumLayers = 0;
 
         while(aIter.IsMore())
         {
@@ -1133,32 +1137,32 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                         // using logical AND clipping
                         const basegfx::B2DPolyPolygon aAndPolyPolygon(
                             basegfx::tools::solvePolygonOperationAnd(
-                                aExtrudePoly,
+                                aExtrudePoly, 
                                 pAct->maPreparedPolyPolygon));
 
                         bOverlap = (0 != aAndPolyPolygon.count());
-
+                        
                         if(bOverlap)
                         {
                             // second ciriteria: is another fillstyle or color used?
                             const SfxItemSet& rCompareSet = pAct->mpObj->GetMergedItemSet();
-
+                            
                             XFillStyle eCompareFillStyle = ITEMVALUE(rCompareSet, XATTR_FILLSTYLE, XFillStyleItem);
 
                             if(eLocalFillStyle == eCompareFillStyle)
-                            {
+                            {				  
                                 if(eLocalFillStyle == XFILL_SOLID)
                                 {
                                     Color aCompareColor = ((const XFillColorItem&)(rCompareSet.Get(XATTR_FILLCOLOR))).GetColorValue();
 
                                     if(aCompareColor == aLocalColor)
                                     {
-                                        bOverlap = sal_False;
+                                        bOverlap = FALSE;
                                     }
                                 }
                                 else if(eLocalFillStyle == XFILL_NONE)
                                 {
-                                    bOverlap = sal_False;
+                                    bOverlap = FALSE;
                                 }
                             }
                         }
@@ -1243,7 +1247,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
 |*
 \************************************************************************/
 
-sal_Bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
+BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
     SdrHdl* pHdl, short nMinMov,
     SdrDragMethod* pForcedMeth)
 {
@@ -1254,25 +1258,25 @@ sal_Bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
     }
     else
     {
-        sal_Bool bOwnActionNecessary;
+        BOOL bOwnActionNecessary;
         if (pHdl == NULL)
         {
-           bOwnActionNecessary = sal_True;
+           bOwnActionNecessary = TRUE;
         }
         else if (pHdl->IsVertexHdl() || pHdl->IsCornerHdl())
         {
-           bOwnActionNecessary = sal_True;
+           bOwnActionNecessary = TRUE;
         }
         else
         {
-           bOwnActionNecessary = sal_False;
+           bOwnActionNecessary = FALSE;
         }
 
         if(bOwnActionNecessary && GetMarkedObjectCount() >= 1)
         {
             E3dDragConstraint eConstraint = E3DDRAG_CONSTR_XYZ;
-            sal_Bool bThereAreRootScenes = sal_False;
-            sal_Bool bThereAre3DObjects = sal_False;
+            BOOL bThereAreRootScenes = FALSE;
+            BOOL bThereAre3DObjects = FALSE;
             long nCnt = GetMarkedObjectCount();
             for(long nObjs = 0;nObjs < nCnt;nObjs++)
             {
@@ -1280,9 +1284,9 @@ sal_Bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                 if(pObj)
                 {
                     if(pObj->ISA(E3dScene) && ((E3dScene*)pObj)->GetScene() == pObj)
-                        bThereAreRootScenes = sal_True;
+                        bThereAreRootScenes = TRUE;
                     if(pObj->ISA(E3dObject))
-                        bThereAre3DObjects = sal_True;
+                        bThereAre3DObjects = TRUE;
                 }
             }
             if( bThereAre3DObjects )
@@ -1358,7 +1362,7 @@ sal_Bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 |*
 \************************************************************************/
 
-sal_Bool E3dView::HasMarkedScene()
+BOOL E3dView::HasMarkedScene()
 {
     return (GetMarkedScene() != NULL);
 }
@@ -1371,9 +1375,9 @@ sal_Bool E3dView::HasMarkedScene()
 
 E3dScene* E3dView::GetMarkedScene()
 {
-    sal_uIntPtr nCnt = GetMarkedObjectCount();
+    ULONG nCnt = GetMarkedObjectCount();
 
-    for ( sal_uIntPtr i = 0; i < nCnt; i++ )
+    for ( ULONG i = 0; i < nCnt; i++ )
         if ( GetMarkedObjectByIndex(i)->ISA(E3dScene) )
             return (E3dScene*) GetMarkedObjectByIndex(i);
 
@@ -1396,7 +1400,7 @@ E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
     aVolume.transform(p3DObj->GetTransform());
     double fW(aVolume.getWidth());
     double fH(aVolume.getHeight());
-
+    
     Rectangle aRect(0,0, (long) fW, (long) fH);
 
     pScene = new E3dPolyScene(Get3DDefaultAttributes());
@@ -1419,7 +1423,7 @@ void E3dView::InitScene(E3dScene* pScene, double fW, double fH, double fCamZ)
 {
     Camera3D aCam(pScene->GetCamera());
 
-    aCam.SetAutoAdjustProjection(sal_False);
+    aCam.SetAutoAdjustProjection(FALSE);
     aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
     basegfx::B3DPoint aLookAt;
 
@@ -1450,12 +1454,12 @@ void E3dView::Start3DCreation()
         // bestimme die koordinaten fuer JOEs Mirrorachse
         // entgegen der normalen Achse wird diese an die linke Seite des Objektes
         // positioniert
-        long          nOutMin = 0;
-        long          nOutMax = 0;
-        long          nMinLen = 0;
-        long          nObjDst = 0;
-        long          nOutHgt = 0;
-        OutputDevice* pOut    = GetFirstOutputDevice(); //GetWin(0);
+        long		  nOutMin = 0;
+        long		  nOutMax = 0;
+        long		  nMinLen = 0;
+        long		  nObjDst = 0;
+        long		  nOutHgt = 0;
+        OutputDevice* pOut	  = GetFirstOutputDevice(); //GetWin(0);
 
         // erstmal Darstellungsgrenzen bestimmen
         if (pOut != NULL)
@@ -1494,8 +1498,8 @@ void E3dView::Start3DCreation()
         }
 
         basegfx::B2DPoint aCenter(aR.getCenter());
-        long      nMarkHgt = basegfx::fround(aR.getHeight()) - 1;
-        long      nHgt     = nMarkHgt + nObjDst * 2;
+        long	  nMarkHgt = basegfx::fround(aR.getHeight()) - 1;
+        long	  nHgt	   = nMarkHgt + nObjDst * 2;
 
         if (nHgt < nMinLen) nHgt = nMinLen;
 
@@ -1534,7 +1538,7 @@ void E3dView::Start3DCreation()
         mpMirrorOverlay->SetMirrorAxis(aHdlList.GetHdl(HDL_REF1)->GetPos(), aHdlList.GetHdl(HDL_REF2)->GetPos());
         //CreateMirrorPolygons ();
         //ShowMirrorPolygons (aHdlList.GetHdl (HDL_REF1)->GetPos (),
-        //                  aHdlList.GetHdl (HDL_REF2)->GetPos ());
+        //					aHdlList.GetHdl (HDL_REF2)->GetPos ());
     }
 }
 
@@ -1583,14 +1587,14 @@ void E3dView::MovAction(const Point& rPnt)
 /*************************************************************************
 |*
 |* Schluss. Objekt und evtl. Unterobjekte ueber ImpCreate3DLathe erstellen
-|*          [FG] Mit dem Parameterwert sal_True (SDefault: sal_False) wird einfach ein
+|*          [FG] Mit dem Parameterwert TRUE (SDefault: FALSE) wird einfach ein
 |*               Rotationskoerper erzeugt, ohne den Benutzer die Lage der
 |*               Achse fetlegen zu lassen. Es reicht dieser Aufruf, falls
 |*               ein Objekt selektiert ist. (keine Initialisierung noetig)
 |*
 \************************************************************************/
 
-void E3dView::End3DCreation(sal_Bool bUseDefaultValuesForMirrorAxes)
+void E3dView::End3DCreation(BOOL bUseDefaultValuesForMirrorAxes)
 {
     ResetCreationActive();
 
@@ -1607,7 +1611,7 @@ void E3dView::End3DCreation(sal_Bool bUseDefaultValuesForMirrorAxes)
             basegfx::B2DPoint aPnt1(aRect.Left(), -aRect.Top());
             basegfx::B2DPoint aPnt2(aRect.Left(), -aRect.Bottom());
 
-            ConvertMarkedObjTo3D(sal_False, aPnt1, aPnt2);
+            ConvertMarkedObjTo3D(FALSE, aPnt1, aPnt2);
         }
         else
         {
@@ -1620,7 +1624,7 @@ void E3dView::End3DCreation(sal_Bool bUseDefaultValuesForMirrorAxes)
             basegfx::B2DPoint aPnt1(aMirrorRef1.X(), -aMirrorRef1.Y());
             basegfx::B2DPoint aPnt2(aMirrorRef2.X(), -aMirrorRef2.Y());
 
-            ConvertMarkedObjTo3D(sal_False, aPnt1, aPnt2);
+            ConvertMarkedObjTo3D(FALSE, aPnt1, aPnt2);
         }
     }
 }
@@ -1658,21 +1662,21 @@ void E3dView::ResetCreationActive ()
 
 void E3dView::InitView ()
 {
-    eDragConstraint          = E3DDRAG_CONSTR_XYZ;
-    fDefaultScaleX           =
-    fDefaultScaleY           =
-    fDefaultScaleZ           = 1.0;
-    fDefaultRotateX          =
-    fDefaultRotateY          =
-    fDefaultRotateZ          = 0.0;
+    eDragConstraint 		 = E3DDRAG_CONSTR_XYZ;
+    fDefaultScaleX			 =
+    fDefaultScaleY			 =
+    fDefaultScaleZ			 = 1.0;
+    fDefaultRotateX 		 =
+    fDefaultRotateY 		 =
+    fDefaultRotateZ 		 = 0.0;
     fDefaultExtrusionDeepth  = 1000; // old: 2000;
-    fDefaultLightIntensity   = 0.8; // old: 0.6;
+    fDefaultLightIntensity	 = 0.8; // old: 0.6;
     fDefaultAmbientIntensity = 0.4;
     nHDefaultSegments        = 12;
     nVDefaultSegments        = 12;
     aDefaultLightColor       = RGB_Color(COL_WHITE);
     aDefaultAmbientColor     = RGB_Color(COL_BLACK);
-    bDoubleSided             = sal_False;
+    bDoubleSided             = FALSE;
     mpMirrorOverlay = 0L;
 }
 
@@ -1682,13 +1686,13 @@ void E3dView::InitView ()
 |*
 \************************************************************************/
 
-sal_Bool E3dView::IsBreak3DObjPossible() const
+BOOL E3dView::IsBreak3DObjPossible() const
 {
-    sal_uIntPtr nCount = GetMarkedObjectCount();
+    ULONG nCount = GetMarkedObjectCount();
 
     if (nCount > 0)
     {
-        sal_uIntPtr i = 0;
+        ULONG i = 0;
 
         while (i < nCount)
         {
@@ -1697,11 +1701,11 @@ sal_Bool E3dView::IsBreak3DObjPossible() const
             if (pObj && pObj->ISA(E3dObject))
             {
                 if(!(((E3dObject*)pObj)->IsBreakObjPossible()))
-                    return sal_False;
+                    return FALSE;
             }
             else
             {
-                return sal_False;
+                return FALSE;
             }
 
             i++;
@@ -1709,10 +1713,10 @@ sal_Bool E3dView::IsBreak3DObjPossible() const
     }
     else
     {
-        return sal_False;
+        return FALSE;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************
@@ -1726,10 +1730,10 @@ void E3dView::Break3DObj()
     if(IsBreak3DObjPossible())
     {
         // ALLE selektierten Objekte werden gewandelt
-        sal_uInt32 nCount = GetMarkedObjectCount();
+        UINT32 nCount = GetMarkedObjectCount();
 
         BegUndo(String(SVX_RESSTR(RID_SVX_3D_UNDO_BREAK_LATHE)));
-        for(sal_uInt32 a=0;a<nCount;a++)
+        for(UINT32 a=0;a<nCount;a++)
         {
             E3dObject* pObj = (E3dObject*)GetMarkedObjectByIndex(a);
             BreakSingle3DObj(pObj);
@@ -1772,11 +1776,11 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
 
 void E3dView::MergeScenes ()
 {
-    sal_uIntPtr nCount = GetMarkedObjectCount();
+    ULONG nCount = GetMarkedObjectCount();
 
     if (nCount > 0)
     {
-        sal_uIntPtr     nObj    = 0;
+        ULONG     nObj    = 0;
         SdrObject *pObj   = GetMarkedObjectByIndex(nObj);
         E3dScene  *pScene = new E3dPolyScene(Get3DDefaultAttributes());
         basegfx::B3DRange aBoundVol;
@@ -1805,7 +1809,7 @@ void E3dView::MergeScenes ()
 
                         switch (pSubObj->GetObjIdentifier())
                         {
-                            case E3D_CUBEOBJ_ID :
+                            case E3D_CUBEOBJ_ID	:
                                 pNewObj = new E3dCubeObj;
                                 *(E3dCubeObj*)pNewObj = *(E3dCubeObj*)pSubObj;
                                 break;
@@ -1895,29 +1899,29 @@ void E3dView::CheckPossibilities()
     // Weitere Flags bewerten
     if(bGroupPossible || bUnGroupPossible || bGrpEnterPossible)
     {
-        sal_Int32 nMarkCnt = GetMarkedObjectCount();
-        sal_Bool bCoumpound = sal_False;
-        sal_Bool b3DObject = sal_False;
-        for(sal_Int32 nObjs = 0L; (nObjs < nMarkCnt) && !bCoumpound; nObjs++)
+        INT32 nMarkCnt = GetMarkedObjectCount();
+        BOOL bCoumpound = FALSE;
+        BOOL b3DObject = FALSE;
+        for(INT32 nObjs = 0L; (nObjs < nMarkCnt) && !bCoumpound; nObjs++)
         {
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dCompoundObject))
-                bCoumpound = sal_True;
+                bCoumpound = TRUE;
             if(pObj && pObj->ISA(E3dObject))
-                b3DObject = sal_True;
+                b3DObject = TRUE;
         }
 
         // Bisher: Es sind ZWEI oder mehr beliebiger Objekte selektiert.
         // Nachsehen, ob CompoundObjects beteiligt sind. Falls ja,
         // das Gruppieren verbieten.
         if(bGroupPossible && bCoumpound)
-            bGroupPossible = sal_False;
+            bGroupPossible = FALSE;
 
         if(bUnGroupPossible && b3DObject)
-            bUnGroupPossible = sal_False;
+            bUnGroupPossible = FALSE;
 
         if(bGrpEnterPossible && bCoumpound)
-            bGrpEnterPossible = sal_False;
+            bGrpEnterPossible = FALSE;
     }
 }
 

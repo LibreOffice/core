@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,44 +24,44 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_configuration_backend_XUpdateHandler_idl__
+#ifndef __com_sun_star_configuration_backend_XUpdateHandler_idl__ 
 #define __com_sun_star_configuration_backend_XUpdateHandler_idl__
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_configuration_backend_TemplateIdentifier_idl__ 
+#include <com/sun/star/configuration/backend/TemplateIdentifier.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__ 
+#include <com/sun/star/configuration/backend/MalformedDataException.idl> 
+#endif 
 
-#ifndef __com_sun_star_configuration_backend_TemplateIdentifier_idl__
-#include <com/sun/star/configuration/backend/TemplateIdentifier.idl>
-#endif
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__ 
+#include <com/sun/star/lang/WrappedTargetException.idl> 
+#endif 
 
-#ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__
-#include <com/sun/star/configuration/backend/MalformedDataException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalAccessException_idl__
-#include <com/sun/star/lang/IllegalAccessException.idl>
-#endif
+#ifndef __com_sun_star_lang_IllegalAccessException_idl__ 
+#include <com/sun/star/lang/IllegalAccessException.idl> 
+#endif 
 
 //=============================================================================
-
+ 
 module com { module sun { module star { module configuration { module backend {
-
-//=============================================================================
-
-/** receives a description of a configuration update or layer
+ 
+//============================================================================= 
+ 
+/** receives a description of a configuration update or layer 
     as a sequence of events.
 
     @since OOo 1.1.2
  */
 published interface XUpdateHandler: ::com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that a update or description is started.
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -69,19 +69,19 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @throws com::sun::star::lang::IllegalAccessException
             if the target layer is read-only
-            <p><em>Some implementations can only detect this when executing
+            <p><em>Some implementations can only detect this when executing 
                 <member>XUpdateHandler::endUpdate()</member></em>
             </p>
 
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs processing the event.
      */
-    void startUpdate(  )
+    void startUpdate(  ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::IllegalAccessException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::IllegalAccessException, 
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that the current update description is complete.
 
         <p> Must match a previous call to <member>XUpdateHandler::startUpdate()</member>.
@@ -102,16 +102,16 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs processing the event.
      */
-    void endUpdate(  )
+    void endUpdate(  ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::IllegalAccessException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::IllegalAccessException, 
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+          
     /** receives notification that a modification of a node is started.
 
-        <p> Subsequent calls describe changes to properties and items or
-            members of the node until a matching call to
+        <p> Subsequent calls describe changes to properties and items or 
+            members of the node until a matching call to 
             <member>XUpdateHandler::endNode()</member> is encountered.
         </p>
 
@@ -122,17 +122,17 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             specifies attribute values to be applied to the node in the
             current layer.
 
-            <p> The value is a combination of
+            <p> The value is a combination of 
                 <type>NodeAttribute</type> flags.
             </p>
-            <p> Only attributes which are selected in aAttributeMask
+            <p>	Only attributes which are selected in aAttributeMask 
                 are changed.
             </p>
 
         @param aAttributeMask
             specifies which attributes should be changed for the node.
 
-            <p> The value is a combination of
+            <p> The value is a combination of 
                 <type>NodeAttribute</type> flags.
             </p>
 
@@ -143,7 +143,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
-            <li>if there isn't an update in progress at all</li>
+            <li>if there isn't an update in progress at all</li> 
             <li>if a node is not valid in this place</li>
             <li>if there already was a change to that node</li>
             <li>if there is no node with that name</li>
@@ -161,21 +161,21 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     void modifyNode ( [in] string aName,
                       [in] short  aAttributes,
                       [in] short  aAttributeMask,
-                      [in] boolean bReset )
+                      [in] boolean bReset ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that a node is started as a new item.
 
-        <p> The current node must be a set and
-            a preexisting item (if any) must be removable.
+        <p> The current node must be a set and 
+            a preexisting item (if any) must be removeable.
         </p>
         <p> The new item will be created from the default template
             of the set.
         </p>
         <p> Subsequent calls describe the difference from the template
-            of properties, items or members of the node until a matching call
+            of properties, items or members of the node until a matching call 
             to <member>XUpdateHandler::endNode()</member> is encountered.
         </p>
 
@@ -185,7 +185,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         @param aAttributes
             specifies attribute values to be applied to the new node.
 
-            <p> The value is a combination of
+            <p> The value is a combination of 
                 <type>NodeAttribute</type> flags.  Note that
                 <member>NodeAttribute::FUSE</member> has an impact on the
                 semantics of this method.
@@ -196,7 +196,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <li>if there isn't a set node in progress currently</li>
             <li>if there already was a change to an item of that name</li>
             <li>if the template for the new node is not found</li>
-            <li>if an item of that name exists and is not removable</li>
+            <li>if an item of that name exists and is not removeable</li>
             <li>if the name is not a valid item name</li>
             <li>if the attributes are not valid for the node</li>
             </ul>
@@ -207,20 +207,20 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void addOrReplaceNode ( [in] string aName,
-                            [in] short  aAttributes )
+    void addOrReplaceNode (	[in] string aName,
+                            [in] short  aAttributes ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
-    /** receives notification that a node is started as a new item
+                    com::sun::star::lang::WrappedTargetException ); 	 	 
+    //------------------------------------------------------------------------- 
+     
+    /** receives notification that a node is started as a new item 
         based on a particular template.
 
-        <p> The current node must be a set and
-            a preexisting item (if any) must be removable.
+        <p> The current node must be a set and 
+            a preexisting item (if any) must be removeable.
         </p>
         <p> Subsequent calls describe the difference from the template
-            of properties or members of the node until a matching call
+            of properties or members of the node until a matching call 
             to <member>XUpdateHandler::endNode()</member> is encountered.
         </p>
 
@@ -233,7 +233,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         @param aAttributes
             specifies attribute values to be applied to the new node.
 
-            <p> The value is a combination of
+            <p> The value is a combination of 
                 <type>NodeAttribute</type> flags.  Note that
                 <member>NodeAttribute::FUSE</member> has an impact on the
                 semantics of this method.
@@ -244,7 +244,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <li>if there isn't a set node in progress currently</li>
             <li>if there already was a change to an item of that name</li>
             <li>if the template for the new node is not found</li>
-            <li>if an item of that name exists and is not removable</li>
+            <li>if an item of that name exists and is not removeable</li>
             <li>if the name is not a valid item name</li>
             <li>if the template is not a valid item type for the containing set</li>
             <li>if the attributes are not valid for the node</li>
@@ -256,40 +256,40 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void addOrReplaceNodeFromTemplate(  [in] string aName,
+    void addOrReplaceNodeFromTemplate(	[in] string aName,
                                         [in] short  aAttributes,
                                         [in] TemplateIdentifier aTemplate )
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that a node modification is complete.
 
-        <p> Must match the last open call to
-            <member>XUpdateHandler::modifyNode()</member>,
-            <member>XUpdateHandler::addOrReplaceNode()</member> or
+        <p> Must match the last open call to 
+            <member>XUpdateHandler::modifyNode()</member>, 
+            <member>XUpdateHandler::addOrReplaceNode()</member> or 
             <member>XUpdateHandler::addOrReplaceNodeFromTemplate()</member>.
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
             <li>if invalid data is detected in the node</li>
-            <li>if no node is started at all</li>
+            <li>if no node is started at all</li>	
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
 
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs processing the event.
      */
-    void endNode( )
+    void endNode( ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
+    /** receives notification that an item is to be dropped from a set. 
 
-    /** receives notification that an item is to be dropped from a set.
-
-        <p> The current node must be a set and
-            the item must be removable.
+        <p> The current node must be a set and 
+            the item must be removeable.
         </p>
 
         @param aName
@@ -300,7 +300,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <li>if there isn't a set node in progress currently</li>
             <li>if there already was a change to a node of that name</li>
             <li>if there is no item with that name</li>
-            <li>if the item is not removable</li>
+            <li>if the item is not removeable</li>
             <li>if the name is not a valid node name</li>
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
@@ -308,15 +308,15 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs processing the event.
      */
-    void removeNode( [in] string aName )
+    void removeNode( [in] string aName ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that modification of an existing property is started. .
 
-        <p> Subsequent calls describe changes to the value(s)
-            of the property until a matching call to
+        <p> Subsequent calls describe changes to the value(s) 
+            of the property until a matching call to 
             <member>XUpdateHandler::endProperty()</member> is encountered.
         </p>
 
@@ -326,20 +326,20 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         @param aAttributes
             specifies new attributes of the property.
 
-            <p> The value is a combination of
+            <p> The value is a combination of 
                 <type>NodeAttribute</type> flags.
             </p>
-            <p> Only attributes which are selected in aAttributeMask are changed.
+            <p> Only attributes which are selected in aAttributeMask are changed. 
             </p>
-            <p> <const>NodeAttribute::MANDATORY</const> need not be set
-                and can't be removed, as dynamic properties always are mandatory
+            <p>	<const>NodeAttribute::MANDATORY</const> need not be set 
+                and can't be removed, as dynamic properties always are mandatory 
                 in subsequent layers.
             </p>
 
         @param aAttributeMask
             specifies which attributes should be changed for the property.
 
-            <p> The value is a combination of
+            <p> The value is a combination of 
                 <type>NodeAttribute</type> flags.
             </p>
 
@@ -366,22 +366,22 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void modifyProperty( [in] string aName,
-                          [in] short aAttributes,
-                          [in] short aAttributeMask,
-                         [in] type aType )
+    void modifyProperty( [in] string aName, 
+                          [in] short aAttributes, 
+                          [in] short aAttributeMask, 
+                         [in] type aType ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
-    /** receives notification about a change to the value of
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+       
+    /** receives notification about a change to the value of 
         the current property.
 
         @param aValue
             specifies the new value of the property.
 
-            <p> The value must match the type of the existing property.
-                If the property does not have the
+            <p> The value must match the type of the existing property. 
+                If the property does not have the 
                 <const>SchemaAttribute::REQUIRED</const> flag set,
                 the value can be <void/>.
             </p>
@@ -390,7 +390,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <ul>
             <li>if there isn't a property modification in progress currently</li>
             <li>if there already was a change to this value</li>
-            <li>if the type of the value is not an allowed type</li>
+            <li>if the type of the value is not an allowed type</li> 
             <li>if the value is not valid for the property</li>
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
@@ -400,19 +400,19 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void setPropertyValue( [in] any aValue )
+    void setPropertyValue( [in] any aValue ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
-    /** receives notification about a change to the value of
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+       
+    /** receives notification about a change to the value of 
         the current property for a specific locale.
 
         @param aValue
             specifies the new value of the property for the given locale.
 
-            <p> The value must match the type of the existing property.
-                If the property does not have the
+            <p> The value must match the type of the existing property. 
+                If the property does not have the 
                 <const>SchemaAttribute::REQUIRED</const> flag set,
                 the value can be <void/>.
             </p>
@@ -422,7 +422,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
-            <li>if there isn't a property modification in progress currently</li>
+            <li>if there isn't a property modification in progress currently</li> 
             <li>if the property is not localizable</li>
             <li>if there already was a change to this value</li>
             <li>if the type of the value is not an allowed type</li>
@@ -436,12 +436,12 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void setPropertyValueForLocale( [in] any aValue, [in] string aLocale )
+    void setPropertyValueForLocale( [in] any aValue, [in] string aLocale ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
-    /** receives notification that the value of the current property
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+       
+    /** receives notification that the value of the current property 
         should be reset to its default.
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -456,12 +456,12 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void resetPropertyValue( )
+    void resetPropertyValue( ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
-    /** receives notification that the value of the current property
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+       
+    /** receives notification that the value of the current property 
         for a specific locale should be reset to its default.
 
         @param aLocale
@@ -481,33 +481,33 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void resetPropertyValueForLocale( [in] string aLocale )
+    void resetPropertyValueForLocale( [in] string aLocale ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that a property modification is complete.
 
-        <p> Must match the last open call to
+        <p> Must match the last open call to 
             <member>XUpdateHandler::modifyProperty()</member>.
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
             <li>if invalid data is detected in the property</li>
-            <li>if no property is started at all</li>
+            <li>if no property is started at all</li>	
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
 
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs processing the event.
      */
-    void endProperty( )
+    void endProperty( ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
-    /** receives notification that a property is reset to its default state.
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
+    /** receives notification that a property is reset to its default state. 
 
         @param aName
             specifies the name of the property.
@@ -516,7 +516,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <ul>
             <li>if there isn't a group or extensible node in progress currently</li>
             <li>if there already was a change to a property of that name</li>
-            <li>if there is no property with that name, or if the property
+            <li>if there is no property with that name, or if the property 
                 has no default</li>
             <li>if the property is read-only</li>
             <li>if the name is not a valid property name</li>
@@ -528,17 +528,17 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void resetProperty( [in] string aName )
+    void resetProperty(	[in] string aName ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that a property having a value of <void/>
-        is added to the current node.
+        is added to the current node. 
 
-        <p> The current node must be extensible and
-            a preexisting property (if any) must be
-            removable in this layer.
+        <p> The current node must be extensible and 
+            a preexisting property (if any) must be 
+            removeable in this layer.
         </p>
 
         @param aName
@@ -547,13 +547,13 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         @param aAttributes
             specifies the attributes of the new property.
 
-            <p> The value is a combination of
-                <type>NodeAttribute</type> flags and may also contain the
+            <p> The value is a combination of 
+                <type>NodeAttribute</type> flags and may also contain the 
                 <const>SchemaAttribute::REQUIRED</const> flag.
             </p>
             </p>
-            <p> <const>NodeAttribute::MANDATORY</const> need not be set,
-                as dynamic properties always are mandatory
+            <p>	<const>NodeAttribute::MANDATORY</const> need not be set, 
+                as dynamic properties always are mandatory 
                 in subsequent layers.
             </p>
 
@@ -564,9 +564,9 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <ul>
             <li>if there isn't a group or extensible node in progress currently</li>
             <li>if there already was a change to a property of that name</li>
-            <li>if a property of that name exists and is not removable</li>
+            <li>if a property of that name exists and is not removeable</li>
             <li>if the specified type is not allowed</li>
-            <li>if the name is not a valid property name</li>
+            <li>if the name is not a valid property name</li> 
             <li>if the attributes are not valid for the property</li>
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
@@ -576,19 +576,19 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::SchemaAttribute
      */
-    void addOrReplaceProperty( [in] string aName,
-                                [in] short aAttributes,
-                               [in] type aType )
+    void addOrReplaceProperty( [in] string aName, 
+                                [in] short aAttributes, 
+                               [in] type aType ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
+    /** receives notification that a property having a non-<NULL/> value 
+        is added to the current node. 
 
-    /** receives notification that a property having a non-<NULL/> value
-        is added to the current node.
-
-        <p> The current node must be extensible and
-            a preexisting property (if any) must be
-            removable in this layer.
+        <p> The current node must be extensible and 
+            a preexisting property (if any) must be 
+            removeable in this layer.
         </p>
 
         @param aName
@@ -597,20 +597,20 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         @param aAttributes
             specifies the attributes of the new property.
 
-            <p> The value is a combination of
-                <type>NodeAttribute</type> flags and may also contain the
+            <p> The value is a combination of 
+                <type>NodeAttribute</type> flags and may also contain the 
                 <const>SchemaAttribute::REQUIRED</const> flag.
             </p>
             </p>
-            <p> <const>NodeAttribute::MANDATORY</const> need not be set,
-                as dynamic properties always are mandatory
+            <p>	<const>NodeAttribute::MANDATORY</const> need not be set, 
+                as dynamic properties always are mandatory 
                 in subsequent layers.
             </p>
 
         @param aValue
             specifies the value of the new property.
 
-            <p> The value also determines the type.
+            <p> The value also determines the type. 
                 Therefore the value must not be <void/>.
             </p>
 
@@ -618,7 +618,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <ul>
             <li>if there isn't a group or extensible node in progress currently</li>
             <li>if there already was a change to a property of that name</li>
-            <li>if a property of that name exists and is not removable</li>
+            <li>if a property of that name exists and is not removeable</li>
             <li>if the type of the value is not an allowed type,
                 or if the value is <void/></li>
             <li>if the name is not a valid property name</li>
@@ -631,16 +631,16 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::SchemaAttribute
      */
-    void addOrReplacePropertyWithValue( [in] string aName,
-                                         [in] short aAttributes,
-                                        [in] any aValue )
+    void addOrReplacePropertyWithValue(	[in] string aName, 
+                                         [in] short aAttributes, 
+                                        [in] any aValue ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
+    /** receives notification that a property is dropped from the current node. 
 
-    /** receives notification that a property is dropped from the current node.
-
-        <p>The current node must be extensible and the property removable.</p>
+        <p>The current node must be extensible and the property removeable.</p>
 
         @param aName
             specifies the name of the property.
@@ -649,7 +649,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <ul>
             <li>if there isn't a group or extensible node in progress currently</li>
             <li>if there is no property with that name</li>
-            <li>if the property is not removable</li>
+            <li>if the property is not removeable</li>
             <li>if the name is not a valid node name</li>
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
@@ -657,17 +657,17 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs processing the event.
      */
-    void removeProperty( [in] string aName )
+    void removeProperty( [in] string aName ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; }; 
 
-};
-
-//=============================================================================
-
-}; }; }; }; };
-
-//=============================================================================
-
-#endif
+//============================================================================= 
+ 
+#endif 

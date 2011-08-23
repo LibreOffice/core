@@ -44,7 +44,7 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=-D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1
+CDEFS+=-D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
 
 # enable visibility define in "sal/types.h"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
@@ -72,8 +72,13 @@ CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
 CFLAGS+=-fmessage-length=0 -c
 
-# flags to enable build with symbols
-CFLAGSENABLESYMBOLS=-g
+# flags to enable build with symbols; required for crashdump feature
+.IF "$(ENABLE_SYMBOLS)"=="SMALL"
+CFLAGSENABLESYMBOLS=-g1
+.ELSE
+CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
+
+.ENDIF
 
 # flags for the C++ Compiler
 CFLAGSCC= -pipe $(ARCH_FLAGS)
@@ -84,12 +89,9 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
-.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE" && "$(HAVE_GCC_VISIBILITY_BROKEN)" != "TRUE"
-CFLAGSCXX+=-fvisibility-inlines-hidden
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CFLAGSCXX += -fvisibility-inlines-hidden
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
-.IF "$(HAVE_CXX0X)" == "TRUE"
-CFLAGSCXX+=-std=c++0x -Wno-deprecated-declarations
-.ENDIF # "$(HAVE_CXX0X)" == "TRUE"
 
 CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
 CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
@@ -108,14 +110,15 @@ CFLAGSPROF=
 # Compiler flags for debugging
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
+# Compiler flags for enabling optimizations
+.IF "$(PRODUCT)"!=""
+CFLAGSOPT=$(CDEFAULTOPT) # optimizing for products
 
 GCCNUMVERSION_CMD=-dumpversion $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)/bin/getcompver.awk
 GCCNUMVER:=$(shell @-$(CXX) $(GCCNUMVERSION_CMD))
 
-# Compiler flags for enabling optimizations
-.IF "$(PRODUCT)"!=""
-CFLAGSOPT=$(CDEFAULTOPT) # optimizing for products
-.IF "$(GCCNUMVER)" <= "000400050000"
+.IF "$(USE_SYSTEM_STL)"!="YES" || "$(GCCNUMVER)" <= "000400050000"
+#STLPort headers are full of aliasing warnings and
 #At least SLED 10.2 gcc 4.3 overly agressively optimizes
 #uno::Sequence into junk, so only strict-alias on compiler
 #later than 4.5.1
@@ -124,7 +127,6 @@ CFLAGSOPT+=-fno-strict-aliasing
 .ELSE 	# "$(PRODUCT)"!=""
 CFLAGSOPT=   							# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
-
 # Compiler flags for disabling optimizations
 CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
@@ -133,7 +135,7 @@ CFLAGSOUTOBJ=-o
 # -Wshadow does not work for C with nested uses of pthread_cleanup_push:
 CFLAGSWARNCC=-Wall -Wextra -Wendif-labels
 CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wshadow -Wno-ctor-dtor-privacy \
-    -Wno-non-virtual-dtor -Woverloaded-virtual
+    -Wno-non-virtual-dtor
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-Werror
@@ -142,7 +144,8 @@ CFLAGSWERRCC=-Werror
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    lotuswordpro
+    lotuswordpro \
+    soldep
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
@@ -153,41 +156,27 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 # default linker flags
-.IF "$(SYSBASE)"!=""
-LINKFLAGS_SYSBASE:=-Wl,--sysroot=$(SYSBASE)
-.ENDIF          # "$(SYSBASE)"!=""
-#
-# The DT RPATH value is used first, before any other path, specifically before
-# the path defined in the LD_LIBRARY_PATH environment variable. This is
-# problematic since it does not allow the user to overwrite the value.
-# Therefore DT_RPATH is deprecated. The introduction of the new variant,
-# DT_RUNPATH, corrects this oversight by requiring the value is used after the
-# path in LD_LIBRARY_PATH.
-#
-# The linker option --enable-new-dtags must be used to also add DT_RUNPATH
-# entry. This will cause both, DT_RPATH and DT_RUNPATH entries, to be created
-#
 LINKFLAGSDEFS*=-Wl,-z,defs
-LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\',--enable-new-dtags
-LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\',--enable-new-dtags
+LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\'
+LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
     #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
-LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\',--enable-new-dtags
-LINKFLAGSRUNPATH_SDK=-Wl,-rpath,\''$$ORIGIN/../../ure-link/lib'\',--enable-new-dtags
-LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\',--enable-new-dtags
+LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
+LINKFLAGSRUNPATH_SDK=-Wl,-rpath,\''$$ORIGIN/../../ure-link/lib'\'
+LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
-LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../basis-link/program'\',--enable-new-dtags
+LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../basis-link/program'\'
 LINKFLAGSRUNPATH_NONE=
 # flag -Wl,-z,noexecstack sets the NX bit on the stack
-LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGS_SYSBASE)
+LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS)
 .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
 LINKFLAGS += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo
 .ENDIF
 
 # linker flags for linking applications
-LINKFLAGSAPPGUI= -Wl,-export-dynamic \
-    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib
-LINKFLAGSAPPCUI= -Wl,-export-dynamic \
-    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib
+LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
+LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
 
 # linker flags for linking shared libraries
 LINKFLAGSSHLGUI= -shared
@@ -231,7 +220,7 @@ STDSHLCUIMT+=-ljemalloc
 .ENDIF
 
 .IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
-LINKFLAGS += -Wl,--hash-style=$(WITH_LINKER_HASH_STYLE)
+LINKFLAGS += -Wl,--hash-style=both
 .ELSE
 LINKFLAGS += -Wl,-zdynsort
 .ENDIF
@@ -246,6 +235,26 @@ STDSHLCUIMT+=-Wl,--as-needed $(DL_LIB) $(PTHREAD_LIBS) -lm -Wl,--no-as-needed
 X11LINK_DYNAMIC = -Wl,--as-needed -lXext -lX11 -Wl,--no-as-needed
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
+
+.IF "$(USE_STLP_DEBUG)" != ""
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlportstlg
+LIBSTLPORTST=$(STATIC) -lstlportstlg $(DYNAMIC)
+.ELSE
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc_stldebug
+LIBSTLPORTST=$(STATIC) -lstlport_gcc_stldebug $(DYNAMIC)
+.ENDIF
+.ELSE # "$(USE_STLP_DEBUG)" != ""
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlport
+LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
+.ELSE
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
+LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
+.ENDIF
+.ENDIF # "$(USE_STLP_DEBUG)" != ""
+
+#FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
 # name of library manager
 LIBMGR*=ar

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #include "PrintOptTest.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -36,33 +36,33 @@
 namespace css = ::com::sun::star;
 
 // using test  only
-#define ROOTNODE_PRINTOPTION                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Print/Option"))
-#define PROPERTYNAME_REDUCETRANSPARENCY                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceTransparency"))
-#define PROPERTYNAME_REDUCEDTRANSPARENCYMODE            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedTransparencyMode"))
-#define PROPERTYNAME_REDUCEGRADIENTS                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceGradients"))
-#define PROPERTYNAME_REDUCEDGRADIENTMODE                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedGradientMode"))
-#define PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedGradientStepCount"))
-#define PROPERTYNAME_REDUCEBITMAPS                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceBitmaps"))
-#define PROPERTYNAME_REDUCEDBITMAPMODE                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapMode"))
-#define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapResolution"))
-#define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapIncludesTransparency"))
-#define PROPERTYNAME_CONVERTTOGREYSCALES                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ConvertToGreyscales"))
+#define ROOTNODE_PRINTOPTION                            rtl::OUString::createFromAscii("org.openoffice.Office.Common/Print/Option")
+#define	PROPERTYNAME_REDUCETRANSPARENCY	                rtl::OUString::createFromAscii("ReduceTransparency")
+#define	PROPERTYNAME_REDUCEDTRANSPARENCYMODE	        rtl::OUString::createFromAscii("ReducedTransparencyMode")
+#define	PROPERTYNAME_REDUCEGRADIENTS		            rtl::OUString::createFromAscii("ReduceGradients")
+#define	PROPERTYNAME_REDUCEDGRADIENTMODE		        rtl::OUString::createFromAscii("ReducedGradientMode")
+#define PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT           rtl::OUString::createFromAscii("ReducedGradientStepCount")
+#define PROPERTYNAME_REDUCEBITMAPS                      rtl::OUString::createFromAscii("ReduceBitmaps")
+#define PROPERTYNAME_REDUCEDBITMAPMODE                  rtl::OUString::createFromAscii("ReducedBitmapMode")
+#define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            rtl::OUString::createFromAscii("ReducedBitmapResolution")
+#define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  rtl::OUString::createFromAscii("ReducedBitmapIncludesTransparency")
+#define PROPERTYNAME_CONVERTTOGREYSCALES                rtl::OUString::createFromAscii("ConvertToGreyscales")
 
 PrintOptTest::PrintOptTest()
 {
     m_xCfg = css::uno::Reference< css::container::XNameAccess >(
             ::comphelper::ConfigurationHelper::openConfig(
             ::utl::getProcessServiceFactory(),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Print/Option")),
+            rtl::OUString::createFromAscii("org.openoffice.Office.Common/Print/Option"),
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY);
 
-        if (m_xCfg.is())
+        if (m_xCfg.is())		
         {
             //UniString  sTmp = UniString("printer");
             //xub_StrLen nTokenCount = sTmp.GetTokenCount('/');
             //sTmp = sTmp.GetToken(nTokenCount - 1, '/');
-            m_xCfg->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Printer"))) >>= m_xNode;
+            m_xCfg->getByName(rtl::OUString::createFromAscii("Printer")) >>= m_xNode;
         }
 }
 
@@ -124,7 +124,7 @@ void PrintOptTest::impl_SetReduceTransparency(sal_Bool bState )
     }
 }
 
-sal_Bool PrintOptTest::impl_IsReduceGradients() const
+sal_Bool PrintOptTest::impl_IsReduceGradients() const 
 {
     sal_Bool bRet = sal_False;
     if (m_xNode.is())
@@ -227,7 +227,7 @@ sal_Bool PrintOptTest::impl_IsReduceBitmaps() const
         css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
         if (xSet.is())
         {
-            xSet->getPropertyValue(PROPERTYNAME_REDUCEBITMAPS) >>= bRet;
+            xSet->getPropertyValue(PROPERTYNAME_REDUCEBITMAPS) >>= bRet; 
         }
     }
     return bRet;
@@ -292,7 +292,7 @@ sal_Int16  PrintOptTest::impl_GetReducedBitmapResolution() const
         if (xSet.is())
         {
             xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPRESOLUTION) >>= nRet;
-        }
+        } 
     }
     return  nRet;
 }
@@ -386,7 +386,7 @@ PrintOptTest::~PrintOptTest()
 
 void PrintOptTest::impl_checkPrint()
 {
-    //test SetReduceTransparency()
+    //test SetReduceTransparency() 
     sal_Bool bNewValue = sal_False;
     sal_Bool bOldValue = sal_False;
     bOldValue = PrintOptTest::impl_IsReduceTransparency();
@@ -397,12 +397,12 @@ void PrintOptTest::impl_checkPrint()
     if ( bNewValue == bOldValue ) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the SetReduceTransparency() error!")),
+            "the SetReduceTransparency() error!"),
             0);
     }
-
+    
     //test IsReduceTransparemcy()
     bNewValue = bOldValue = sal_False;
     bOldValue = impl_IsReduceTransparency();
@@ -413,9 +413,9 @@ void PrintOptTest::impl_checkPrint()
     if(bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the IsReduceTransparency() error!")),
+            "the IsReduceTransparency() error!"),
             0);
     }
 
@@ -424,15 +424,15 @@ void PrintOptTest::impl_checkPrint()
     nOldMode = nNewMode = 0;
     nOldMode = impl_GetReducedTransparencyMode();
     nNewMode = nOldMode + 1;
-    aPrintOpt.SetReducedTransparencyMode( nNewMode );
+    aPrintOpt.SetReducedTransparencyMode( nNewMode );	
     nNewMode = impl_GetReducedTransparencyMode();
     //if(nNewMode != nOldMode)      // test the old source
     if ( nNewMode == nOldMode ) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the SetReducedTransparencyMode() error!")),
+            "the SetReducedTransparencyMode() error!"),
             0);
     }
 
@@ -446,10 +446,10 @@ void PrintOptTest::impl_checkPrint()
     if(nNewMode == nOldMode)  // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
             "the IsReducedTransparencyMode() error!"
-            "nOldMode's value is :")),
+            "nOldMode's value is :"),
             0);
     }
 
@@ -459,13 +459,13 @@ void PrintOptTest::impl_checkPrint()
     bNewValue = !bOldValue;
     aPrintOpt.SetReduceGradients(bNewValue);
     bNewValue = impl_IsReduceGradients();
-    //if (bNewValue != bOldValue)   //test the old source
+    //if (bNewValue != bOldValue)   //test the old source 
     if (bNewValue == bOldValue)   //test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the SetReduceGradients() error!")),
+            "the SetReduceGradients() error!"),
             0);
 
     }
@@ -480,13 +480,13 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the IsReduceGradients() error!")),
+            "the IsReduceGradients() error!"),
             0);
 
     }
-
+    
     //test SetRedecedGradientMode()
     nOldMode = nNewMode = 0;
     nOldMode = this->impl_GetReducedGradientMode();
@@ -497,9 +497,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewMode == nOldMode)// test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the SetRedecedGradientMode() error!")),
+            "the SetRedecedGradientMode() error!"),
             0);
     }
 
@@ -513,13 +513,13 @@ void PrintOptTest::impl_checkPrint()
     if (nNewMode == nOldMode) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the GetReducedGradientMode() error!")),
+            "the GetReducedGradientMode() error!"),
             0);
 
     }
-
+    
     //test the SetReducedGradientStepCount()
     sal_Int16 nNewStepCount;
     sal_Int16 nOldStepCount;
@@ -532,9 +532,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewStepCount == nOldStepCount) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the SetReducedGradientStepCount() error!")),
+            "the SetReducedGradientStepCount() error!"),
             0);
 
     }
@@ -549,12 +549,12 @@ void PrintOptTest::impl_checkPrint()
     if (nNewStepCount == nOldStepCount)  //test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the GetReduceGradientStepCount() error!")),
+            "the GetReduceGradientStepCount() error!"),
             0);
     }
-
+    
     // test the SetReduceBitmaps()
     bNewValue = bOldValue = sal_False;
     bOldValue = this->impl_IsReduceBitmaps();
@@ -565,9 +565,9 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the SetReduceBitmaps() error!")),
+            "the SetReduceBitmaps() error!"),
             0);
     }
 
@@ -581,12 +581,12 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the IsReduceBitmaps() error!")),
+            "the IsReduceBitmaps() error!"),
             0);
     }
-
+    
     // test the SetReduceBitmap()
     nNewMode = nOldMode = 0;
     nOldMode = impl_GetReducedBitmapMode();
@@ -597,12 +597,12 @@ void PrintOptTest::impl_checkPrint()
     if (nNewMode == nOldMode)// test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the SetReduceBitmap() error!")),
+            "the SetReduceBitmap() error!"),
             0);
     }
-
+    
     // test the SetReduceBitmapMode()
     nNewMode = nOldMode = 0;
     nOldMode = this->impl_GetReducedBitmapMode();
@@ -613,9 +613,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewMode == nOldMode)  // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the SetReduceBitmapMode() error!")),
+            "the SetReduceBitmapMode() error!"),
             0);
     }
 
@@ -629,9 +629,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewMode == nOldMode)// test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the GetReduceBitmapMode() error!")),
+            "the GetReduceBitmapMode() error!"),
             0);
 
     }
@@ -648,9 +648,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewResolution == nOldResolution)// test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the SetReducedBitmapResolution() error!")),
+            "the SetReducedBitmapResolution() error!"),
             0);
     }
 
@@ -664,9 +664,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewResolution == nOldResolution) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the GetReduceBitmapResolution() error!")),
+            "the GetReduceBitmapResolution() error!"),
             0);
     }
 
@@ -680,9 +680,9 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the old source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the SetReducedBitmapIncludesTransparency() error!")),
+            "the SetReducedBitmapIncludesTransparency() error!"),
             0);
     }
 
@@ -696,12 +696,12 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the IsReducedBitmapIncludesTransparency() error!")),
+            "the IsReducedBitmapIncludesTransparency() error!"),
             0);
     }
-
+    
     // test the SetConvertToGreyscales()
     bNewValue = bOldValue = sal_False;
     bOldValue = this->impl_IsConvertToGreyscales();
@@ -712,13 +712,13 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the SetConvertToGreyscales() error!")),
-            0);
+            "the SetConvertToGreyscales() error!"),
+            0); 
     }
 
-    // test the IsConvertToGreyscales()
+    // test the IsConvertToGreyscales() 
     bNewValue = bOldValue = sal_False;
     bOldValue = this->impl_IsConvertToGreyscales();
     bNewValue = !bOldValue;
@@ -728,9 +728,9 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString::createFromAscii(
             "null com.sun.star.configuration."
-            "the IsConvertToGreyscales() error!")),
+            "the IsConvertToGreyscales() error!"),
             0);
     }
 }

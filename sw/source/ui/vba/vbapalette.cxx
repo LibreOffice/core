@@ -14,7 +14,7 @@ static const sal_Int32 ColorTable[] =
 {
 WdColor::wdColorAutomatic, // 0
 WdColor::wdColorBlack,             // 1
-WdColor::wdColorBlue,               // 2
+WdColor::wdColorBlue,               // 2 
 WdColor::wdColorTurquoise,     // 3
 WdColor::wdColorBrightGreen, // 4
 WdColor::wdColorPink,               // 5
@@ -72,7 +72,7 @@ uno::Reference< container::XIndexAccess >
 VbaPalette::getPalette() const
 {
 
-    return mxPalette;
+    return mxPalette;	
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

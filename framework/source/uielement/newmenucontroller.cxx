@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,18 +31,18 @@
 #include <uielement/newmenucontroller.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
-#include <framework/bmkmenu.hxx>
-#include <framework/imageproducer.hxx>
-#include <framework/menuconfiguration.hxx>
+#include <classes/bmkmenu.hxx>
+#include <helper/imageproducer.hxx>
+#include <xml/menuconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -54,7 +54,7 @@
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
@@ -69,8 +69,9 @@
 #include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
+//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -87,21 +88,21 @@ namespace framework
 
 DEFINE_XSERVICEINFO_MULTISERVICE        (   NewMenuController                           ,
                                             OWeakObject                                 ,
-                                            SERVICENAME_POPUPMENUCONTROLLER             ,
+                                            SERVICENAME_POPUPMENUCONTROLLER		        ,
                                             IMPLEMENTATIONNAME_NEWMENUCONTROLLER
                                         )
 
 DEFINE_INIT_SERVICE                     (   NewMenuController, {} )
 
-void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages )
+void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages, sal_Bool bHiContrast )
 {
-    sal_uInt16 nItemCount = pPopupMenu->GetItemCount();
+    USHORT nItemCount = pPopupMenu->GetItemCount();
     Image               aImage;
     Reference< XFrame > xFrame( m_xFrame );
 
-    for ( sal_uInt16 i = 0; i < nItemCount; i++ )
+    for ( USHORT i = 0; i < nItemCount; i++ )
     {
-        sal_uInt16 nItemId = pPopupMenu->GetItemId( sal::static_int_cast<sal_uInt16>( i ));
+        USHORT nItemId = pPopupMenu->GetItemId( sal::static_int_cast<USHORT>( i ));
         if ( nItemId != 0 )
         {
             if ( bSetImages )
@@ -115,7 +116,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
 
                 if ( aImageId.getLength() > 0 )
                 {
-                    aImage = GetImageFromURL( xFrame, aImageId, false );
+                    aImage = GetImageFromURL( xFrame, aImageId, FALSE, bHiContrast );
                     if ( !!aImage )
                     {
                         bImageSet = sal_True;
@@ -127,7 +128,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
                 {
                     String aCmd( pPopupMenu->GetItemCommand( nItemId ) );
                     if ( aCmd.Len() )
-                        aImage = GetImageFromURL( xFrame, aCmd, false );
+                        aImage = GetImageFromURL( xFrame, aCmd, FALSE, bHiContrast );
 
                     if ( !!aImage )
                         pPopupMenu->SetItemImage( nItemId, aImage );
@@ -141,8 +142,8 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
 
 void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const KeyCode& rKeyCode )
 {
-    sal_uInt16        nCount( pPopupMenu->GetItemCount() );
-    sal_uInt16        nId( 0 );
+    USHORT        nCount( pPopupMenu->GetItemCount() );
+    USHORT        nId( 0 );
     sal_Bool      bFound( sal_False );
     rtl::OUString aCommand;
 
@@ -152,7 +153,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
 
         for ( sal_uInt32 i = 0; i < sal_uInt32( nCount ); i++ )
         {
-            nId = pPopupMenu->GetItemId( sal_uInt16( i ));
+            nId = pPopupMenu->GetItemId( USHORT( i ));
             if ( nId != 0 && pPopupMenu->GetItemType( nId ) != MENUITEM_SEPARATOR )
             {
                 aCommand = pPopupMenu->GetItemCommand( nId );
@@ -174,7 +175,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
         {
             for ( sal_uInt32 i = 0; i < sal_uInt32( nCount ); i++ )
             {
-                nId = pPopupMenu->GetItemId( sal_uInt16( i ));
+                nId = pPopupMenu->GetItemId( USHORT( i ));
                 if ( nId != 0 && pPopupMenu->GetItemType( nId ) != MENUITEM_SEPARATOR )
                 {
                     aCommand = pPopupMenu->GetItemCommand( nId );
@@ -253,7 +254,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
         std::vector< sal_uInt32 >       aIds;
         for ( sal_uInt32 i = 0; i < nItemCount; i++ )
         {
-            sal_uInt16 nId( pPopupMenu->GetItemId( sal_uInt16( i )));
+            USHORT nId( pPopupMenu->GetItemId( USHORT( i )));
             if ( nId & ( pPopupMenu->GetItemType( nId ) != MENUITEM_SEPARATOR ))
             {
                 aIds.push_back( nId );
@@ -289,7 +290,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
 
         const sal_uInt32 nCount2 = aIds.size();
         for ( sal_uInt32 i = 0; i < nCount2; i++ )
-            pPopupMenu->SetAccelKey( sal_uInt16( aIds[i] ), aMenuShortCuts[i] );
+            pPopupMenu->SetAccelKey( USHORT( aIds[i] ), aMenuShortCuts[i] );
 
         // Special handling for "New" menu short-cut should be set at the
         // document which will be opened using it.
@@ -327,6 +328,7 @@ void NewMenuController::retrieveShortcutsFromConfiguration(
 NewMenuController::NewMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     svt::PopupMenuControllerBase( xServiceManager ),
     m_bShowImages( sal_True ),
+    m_bHiContrast( sal_False ),
     m_bNewMenu( sal_False ),
     m_bModuleIdentified( sal_False ),
     m_bAcceleratorCfg( sal_False ),
@@ -367,10 +369,10 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
         AddInfo         aAddInfo;
 
         // retrieve additional parameters from bookmark menu and
-        // store it in a boost::unordered_map.
-        for ( sal_uInt16 i = 0; i < pSubMenu->GetItemCount(); i++ )
+        // store it in a hash_map.
+        for ( USHORT i = 0; i < pSubMenu->GetItemCount(); i++ )
         {
-            sal_uInt16 nItemId = pSubMenu->GetItemId( sal::static_int_cast<sal_uInt16>( i ) );
+            USHORT nItemId = pSubMenu->GetItemId( sal::static_int_cast<USHORT>( i ) );
             if (( nItemId != 0 ) &&
                 ( pSubMenu->GetItemType( nItemId ) != MENUITEM_SEPARATOR ))
             {
@@ -386,7 +388,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
         }
 
         if ( m_bShowImages )
-            setMenuImages( pVCLPopupMenu, m_bShowImages );
+            setMenuImages( pVCLPopupMenu, m_bShowImages, m_bHiContrast );
 
         delete pSubMenu;
     }
@@ -445,7 +447,7 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
             xURLTransformer->parseStrict( aTargetURL );
 
             aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-            aArgsList[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
+            aArgsList[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
 
             rtl::OUString aTargetFrame( m_aTargetFrame );
             AddInfoForId::const_iterator pItem = m_aAddInfoForItem.find( rEvent.MenuId );
@@ -466,7 +468,7 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
         pNewDocument->aTargetURL = aTargetURL;
         pNewDocument->aArgSeq    = aArgsList;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgsList);
+            UiEventLogHelper(::rtl::OUString::createFromAscii("NewMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgsList);
         Application::PostUserEvent( STATIC_LINK(0, NewMenuController, ExecuteHdl_Impl), pNewDocument );
     }
 }
@@ -481,13 +483,17 @@ void SAL_CALL NewMenuController::activate( const css::awt::MenuEvent& ) throw (R
         {
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
             sal_Bool bShowImages( rSettings.GetUseImagesInMenus() );
+            sal_Bool bHiContrast( rSettings.GetHighContrastMode() );
 
             PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
-            if ( m_bShowImages != bShowImages )
+            if (( m_bShowImages != bShowImages ) ||
+                ( m_bHiContrast != bHiContrast ))
             {
                 m_bShowImages = bShowImages;
-                setMenuImages( pVCLPopupMenu, m_bShowImages );
+                m_bHiContrast = bHiContrast;
+
+                setMenuImages( pVCLPopupMenu, m_bShowImages, m_bHiContrast );
             }
 
             setAccelerators( pVCLPopupMenu );
@@ -520,7 +526,7 @@ void NewMenuController::impl_setPopupMenu()
                 {
                     for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
                     {
-                        if ( aSeq[y].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooSetupFactoryEmptyDocumentURL")) )
+                        if ( aSeq[y].Name.equalsAscii("ooSetupFactoryEmptyDocumentURL") )
                         {
                             aSeq[y].Value >>= m_aEmptyDocURL;
                             break;
@@ -554,7 +560,9 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
             m_bShowImages   = rSettings.GetUseImagesInMenus();
-            m_bNewMenu      = m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:AddDirect" ) );
+            m_bHiContrast   = rSettings.GetHighContrastMode();
+
+            m_bNewMenu      = m_aCommandURL.equalsAscii( ".uno:AddDirect" );
         }
     }
 }
@@ -570,6 +578,16 @@ IMPL_STATIC_LINK_NOINSTANCE( NewMenuController, ExecuteHdl_Impl, NewDocument*, p
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
         pNewDocument->xDispatch->dispatch( pNewDocument->aTargetURL, pNewDocument->aArgSeq );
+/*
+    }
+    catch (const ::com::sun::star::document::CorruptedFilterConfigurationException& exFilters)
+    {
+        throw exFilters;
+    }
+    catch (const Exception& )
+    {
+    }
+*/
     delete pNewDocument;
     return 0;
 }

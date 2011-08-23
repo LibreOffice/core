@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ public:
     SvBorder( const Rectangle & rOuter, const Rectangle & rInner );
     SvBorder( long nLeftP, long nTopP, long nRightP, long nBottomP )
     { nLeft = nLeftP; nTop = nTopP; nRight = nRightP; nBottom = nBottomP; }
-    sal_Bool    operator == ( const SvBorder & rObj ) const
+    BOOL    operator == ( const SvBorder & rObj ) const
             {
                 return nTop == rObj.nTop && nRight == rObj.nRight &&
                        nBottom == rObj.nBottom && nLeft == rObj.nLeft;
             }
-    sal_Bool    operator != ( const SvBorder & rObj ) const
+    BOOL    operator != ( const SvBorder & rObj ) const
             { return !(*this == rObj); }
     SvBorder & operator = ( const SvBorder & rBorder )
             {
@@ -74,7 +74,7 @@ public:
                 Bottom() -= rBorder.Bottom();
                 return *this;
             }
-    sal_Bool    IsInside( const SvBorder & rInside )
+    BOOL    IsInside( const SvBorder & rInside )
             {
                 return nTop >= rInside.nTop && nRight >= rInside.nRight &&
                        nBottom >= rInside.nBottom && nLeft >= rInside.nLeft;
@@ -94,6 +94,6 @@ TOOLS_DLLPUBLIC Rectangle & operator -= ( Rectangle & rRect, const SvBorder & rB
 
 //=========================================================================
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

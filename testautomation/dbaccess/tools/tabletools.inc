@@ -340,7 +340,6 @@ function fCreateTable(aFieldTypeContent(),sTableName,optional sCatalog,optional 
         sleep 1
         FieldType.TypeKeys "<RETURN>" , TRUE
         Description.TypeKeys "<RETURN>" , TRUE
-        CellDescription.TypeKeys "<RETURN>" , TRUE
         printlog "-------------------------------"
     next 
 

@@ -66,6 +66,11 @@ LIB1FILES=	\
     $(SLB)$/cpprtl.lib	\
     $(SLB)$/textenc.lib 
 
+#.IF "$(GUI)"=="UNX"
+#LIB1FILES+=$(SLB)$/systoolsunx.lib
+#.ENDIF # UNX
+
+
 LIB3TARGET=$(LB)$/a$(TARGET).lib
 LIB3ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
 LIB3FILES=	\
@@ -74,6 +79,9 @@ LIB3FILES=	\
     $(LB)$/cpprtl.lib	\
     $(LB)$/textenc.lib
 
+#.IF "$(GUI)"=="UNX"
+#LIB3FILES+=$(LB)$/systoolsunx.lib
+#.ENDIF # UNX
 
 .IF "$(GUI)" == "WNT" || "$(GUI)"=="OS2"
 SHL1TARGET= $(TARGET)
@@ -121,8 +129,31 @@ SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 SHL1STDLIBS=pthread.lib
 .ENDIF # OS2
 
+# If we compile sal with STLport checking iterators
+# we need to link against the STLport
+.IF "$(USE_STLP_DEBUG)" != ""
+SHL1STDLIBS+=$(LIBSTLPORT)
+.ENDIF
+
+#The irony that using the system STL instead of
+#stlport requires that we link libsal with the
+#LIBSTLPORT alias which is not required when using
+#stlport is not lost on me
+.IF "$(USE_SYSTEM_STL)"=="YES"
+SHL1STDLIBS+=$(LIBSTLPORT)
+.ENDIF
+
 .IF "$(OS)"=="MACOSX"
 SHL1STDLIBS+=-framework CoreFoundation -framework Carbon
+.ENDIF
+
+.IF "$(OS)" == "LINUX"
+.IF "$(PAM_LINK)" == "YES"
+SHL1STDLIBS+=-lpam
+.ENDIF
+.IF "$(CRYPT_LINK)" == "YES"
+SHL1STDLIBS+=-lcrypt
+.ENDIF
 .ENDIF
 
 SHL1LIBS+=$(SLB)$/$(TARGET).lib
@@ -163,15 +194,6 @@ SHL1STDLIBS+=-lgcc
 .ENDIF
 .ENDIF
 .ENDIF
-
-SHL4DEPN+=$(SHL1TARGETN)
-SHL4LIBS=$(SLB)$/textenc_tables.lib
-SHL4TARGET=sal_textenc
-SHL4STDLIBS=$(SALLIB)
-SHL4VERSIONMAP=saltextenc.map
-
-SHL4DEF=$(MISC)$/$(SHL4TARGET).def
-DEF4NAME=$(SHL4TARGET)
 
 # --- Targets ------------------------------------------------------
 

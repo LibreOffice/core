@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,33 +52,33 @@
 
 SFX_IMPL_CHILDWINDOW(SwFldDlgWrapper, FN_INSERT_FIELD)
 
-SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, sal_uInt16 nId) :
+SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, USHORT nId) :
         SfxChildWindow(pParentWindow, nId),
         m_pDocSh(0)
 {
-    // avoid flickering of buttons:
+    // Flackern der Buttons vermeiden:
     m_aUpdateTimer.SetTimeout(200);
     m_aUpdateTimer.SetTimeoutHdl(LINK(this, SwChildWinWrapper, UpdateHdl));
 }
 
 IMPL_LINK( SwChildWinWrapper, UpdateHdl, void*, EMPTYARG )
 {
-    GetWindow()->Activate();    // update dialog
+    GetWindow()->Activate();	// Dialog aktualisieren
 
     return 0;
 }
 
 /*--------------------------------------------------------------------
-    Description: newly initialise dialog after Doc switch
+    Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
  --------------------------------------------------------------------*/
-sal_Bool SwChildWinWrapper::ReInitDlg(SwDocShell *)
+BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *)
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     if (m_pDocSh != GetOldDocShell())
     {
         m_aUpdateTimer.Stop();
-        bRet = sal_True;            // immediate Update
+        bRet = TRUE;			// Sofortiges Update
     }
     else
         m_aUpdateTimer.Start();
@@ -93,14 +93,14 @@ SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
     return aInfo;
 }
 
-SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, sal_uInt16 nId,
+SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, USHORT nId,
                                     SfxBindings* pB,
                                     SfxChildWinInfo*  )
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
+            
     AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent, DLG_FLD_INSERT );
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     pDlgInterface = pDlg;
@@ -110,13 +110,13 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, sal_uInt16 nId,
 }
 
 /*--------------------------------------------------------------------
-    Description: newly initialise dialog after Doc switch
+    Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
  --------------------------------------------------------------------*/
-sal_Bool SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
+BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
-    sal_Bool bRet;
+    BOOL bRet;
 
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  // update immediately, Doc switch
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)	// Sofort aktualisieren, Dok-Wechsel
     {
         pDlgInterface->ReInitDlg();
     }
@@ -124,7 +124,7 @@ sal_Bool SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
     return bRet;
 }
 
-void SwFldDlgWrapper::ShowPage(sal_uInt16 nPage)
+void SwFldDlgWrapper::ShowPage(USHORT nPage)
 {
     pDlgInterface->ShowPage(nPage ? nPage : TP_FLD_REF);
 }
@@ -136,22 +136,22 @@ SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
 // prevent instatiation of dialog other than by calling
 // the mail merge dialog
-    aInfo.bVisible = sal_False;
+    aInfo.bVisible = FALSE;
     return aInfo;
 }
 
-SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, sal_uInt16 nId,
+SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, USHORT nId,
                                     SfxBindings* pB,
                                     SfxChildWinInfo* pInfo )
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
+            
     AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent, DLG_FLD_INSERT );
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
-    pDlgInterface = pDlg;
-
+    pDlgInterface = pDlg; 
+    
     pWindow = pDlg->GetWindow();
     pDlg->ActivateDatabasePage();
     pDlg->Start();
@@ -159,13 +159,13 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, sal_uInt16 n
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
 
-/* --------------------------------------------------
+/* -----------------04.02.2003 14:17-----------------
  * re-init after doc activation
  * --------------------------------------------------*/
-sal_Bool SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
+BOOL SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
-    sal_Bool bRet;
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  // update immediately, Doc switch
+    BOOL bRet;
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // Sofort aktualisieren, Dok-Wechsel
     {
         pDlgInterface->ReInitDlg();
     }

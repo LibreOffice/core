@@ -2,7 +2,7 @@
  *
  * $Revision: 1.8 $
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,82 +25,110 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_grid_XGridDataModel_idl__
-#define __com_sun_star_awt_grid_XGridDataModel_idl__
+#ifndef __com_sun_star_awt_grid_XGridDataModel_idl__ 
+#define __com_sun_star_awt_grid_XGridDataModel_idl__ 
+ 
+
+#include <com/sun/star/lang/XComponent.idl> 
+#include <com/sun/star/awt/grid/XGridDataListener.idl> 
 
 
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/util/XCloneable.idl>
-#include <com/sun/star/awt/grid/XGridDataListener.idl>
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-
-//=============================================================================
-
-module com {  module sun {  module star {  module awt { module grid {
-
-//=============================================================================
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module awt { module grid { 
+ 
+//============================================================================= 
 /** An instance of this interface is used by the <type>UnoControlGrid</type> to
     retrieve the content data that is displayed in the actual control.
 
     If you do not need your own model implementation, you can also use the <type>DefaultGridDataModel</type>.
-
-    @since OOo 3.3
-*/
-interface XGridDataModel
-{
-    /** implements life time control for the component
+    
+    @since OOo 3.3.0
+*/   
+interface XGridDataModel: ::com::sun::star::lang::XComponent 
+{ 
+    /** Specifies the height of each row.
     */
-    interface ::com::sun::star::lang::XComponent;
+    [attribute] long RowHeight;
 
-    /** allows cloning the complete column model
+    /** Contains the row header.
     */
-    interface ::com::sun::star::util::XCloneable;
+    [attribute] sequence< string > RowHeaders;
 
-    /** denotes the number of rows for which the model can provide data
+    /** Returns the content of each row.
     */
-    [attribute, readonly] long RowCount;
+    [attribute,readonly] sequence< sequence< any > > Data;
 
-    /** denotes the number of columns for which the model can provide data
+    /**Specifies the width of row header.
     */
-    [attribute, readonly] long ColumnCount;
+    [attribute] long RowHeaderWidth;
 
-    /** retrieves the data for a given cell
-
-        @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if the column or row index do not denote a valid cell position.
+    /** Returns the number of rows in in the model.
+        @returns
+                the number of rows.
     */
-    any getCellData( [in] long Column, [in] long Row )
-        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+    long getRowCount();
 
-    /** retrieves the tool tip to be displayed when the mouse hovers over a given cell
+    /** Adds a row to the model.
 
-        <p>At the moment, only string tool tips are supported.</p>
-
-        <p>If <VOID/> is returned here, the cell's content will be displayed as tip, but only if it does
-        not fit into the cell.</p>
-
-        @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if the column or row index do not denote a valid cell position.
+        @param headername
+                specifies the name of the row. 
+        @param data
+                the content of the row.
     */
-    any getCellToolTip( [in] long Column, [in] long Row )
-        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+    void addRow( [in] string headername, [in] sequence< any > data );
 
-    /** retrieves the heading of a given row
+    /** Removes a row from the model.
 
-        <p>A grid control will usually paint a row's title in the header column of the respective row.</p>
-
-        <p>At the moment, only strings are supported as row headings.</p>
-
-        @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if the given index does not denote a valid row.
+        @param index
+                the index of the row that should be removed.
     */
-    any
-        getRowHeading( [in] long RowIndex )
-        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
-};
+    void removeRow( [in] long index);
 
-//=============================================================================
+    /** Removes all rows from the model.
+    */
+    void removeAll();
 
-}; }; }; };};
+    /**Updates the content of a given cell.
+        @param row
+            the row index
+        @param column
+            the column index
+        @param value
+            the new value of the cell.
+    */
+    void updateCell([in] long row, [in] long column, [in] any value );
+        
+    /**Updates the content of a given row.
+        @param row
+            the row index
+        @param columns
+            column indexes of the cells, which should be updated
+        @param value
+            the new values of the cells.
+    */
+    void updateRow([in] long row, [in] sequence< long > columns, [in] sequence< any > values);
 
-#endif
+    //------------------------------------------------------------------------- 
+
+    /** Adds a listener for the <type>GridDataEvent</type> posted after the grid changes.
+        @param Listener
+            the listener to add.
+    */    
+    [oneway] void addDataListener( [in] XGridDataListener  listener); 
+ 
+    //------------------------------------------------------------------------- 
+
+    /** Removes a listener previously added with <method>addDataListener()</method>.
+        @param Listener
+            the listener to remove.
+    */       
+    [oneway] void removeDataListener( [in] XGridDataListener listener); 
+  
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };};  
+ 
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,25 +29,24 @@
 #ifndef __FRAMEWORK_XML_TOOLBOXDOCUMENTHANDLER_HXX_
 #define __FRAMEWORK_XML_TOOLBOXDOCUMENTHANDLER_HXX_
 
-#include <framework/toolboxconfiguration.hxx>
+#include <xml/toolboxconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <stdtypes.h>
-#include <framework/fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
@@ -55,7 +54,7 @@ namespace framework{
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 
-class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : private ThreadHelpBase,   // Struct for right initalization of lock member! Must be first of baseclasses.
+class OReadToolBoxDocumentHandler : private ThreadHelpBase,	// Struct for right initalization of lock member! Must be first of baseclasses.
                                     public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
@@ -92,48 +91,48 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : private ThreadHelpBase,   // S
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
-        throw ( ::com::sun::star::xml::sax::SAXException,
+        throw (	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endDocument(void)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
             const rtl::OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endElement(const rtl::OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL characters(const rtl::OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL ignorableWhitespace(const rtl::OUString& aWhitespaces)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL processingInstruction(const rtl::OUString& aTarget,
                                                     const rtl::OUString& aData)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL setDocumentLocator(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > &xLocator)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
     private:
         ::rtl::OUString getErrorLineString();
 
-        class ToolBoxHashMap : public ::boost::unordered_map<   ::rtl::OUString                 ,
-                                                        ToolBox_XML_Entry               ,
-                                                        OUStringHashCode                ,
-                                                        ::std::equal_to< ::rtl::OUString >  >
+        class ToolBoxHashMap : public ::std::hash_map<	::rtl::OUString					,
+                                                        ToolBox_XML_Entry				,
+                                                        OUStringHashCode				,
+                                                        ::std::equal_to< ::rtl::OUString >	>
         {
             public:
                 inline void free()
@@ -142,22 +141,22 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : private ThreadHelpBase,   // S
                 }
         };
 
-        sal_Bool                                                                        m_bToolBarStartFound : 1;
-        sal_Bool                                                                        m_bToolBarEndFound : 1;
-        sal_Bool                                                                        m_bToolBarItemStartFound : 1;
-        sal_Bool                                                                        m_bToolBarSpaceStartFound : 1;
-        sal_Bool                                                                        m_bToolBarBreakStartFound : 1;
-        sal_Bool                                                                        m_bToolBarSeparatorStartFound : 1;
-        ToolBoxHashMap                                                                  m_aToolBoxMap;
+        sal_Bool																	    m_bToolBarStartFound : 1;
+        sal_Bool																	    m_bToolBarEndFound : 1;
+        sal_Bool																	    m_bToolBarItemStartFound : 1;
+        sal_Bool																	    m_bToolBarSpaceStartFound : 1;
+        sal_Bool																	    m_bToolBarBreakStartFound : 1;
+        sal_Bool																	    m_bToolBarSeparatorStartFound : 1;
+        ToolBoxHashMap																    m_aToolBoxMap;
         com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >    m_rItemContainer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >        m_xLocator;
-
-        sal_Int32                                                                       m_nHashCode_Style_Radio;
-        sal_Int32                                                                       m_nHashCode_Style_Auto;
-        sal_Int32                                                                       m_nHashCode_Style_Left;
-        sal_Int32                                                                       m_nHashCode_Style_AutoSize;
-        sal_Int32                                                                       m_nHashCode_Style_DropDown;
-        sal_Int32                                                                       m_nHashCode_Style_Repeat;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >	    m_xLocator;
+        
+        sal_Int32																	    m_nHashCode_Style_Radio;
+        sal_Int32																	    m_nHashCode_Style_Auto;
+        sal_Int32																	    m_nHashCode_Style_Left;
+        sal_Int32																	    m_nHashCode_Style_AutoSize;
+        sal_Int32																	    m_nHashCode_Style_DropDown;
+        sal_Int32																	    m_nHashCode_Style_Repeat;
         sal_Int32                                                                       m_nHashCode_Style_DropDownOnly;
         sal_Int32                                                                       m_nHashCode_Style_Text;
         sal_Int32                                                                       m_nHashCode_Style_Image;
@@ -171,7 +170,7 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : private ThreadHelpBase,   // S
 };
 
 
-class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler : private ThreadHelpBase   // Struct for right initalization of lock member! Must be first of baseclasses.
+class OWriteToolBoxDocumentHandler : private ThreadHelpBase	// Struct for right initalization of lock member! Must be first of baseclasses.
 {
     public:
             OWriteToolBoxDocumentHandler(
@@ -182,7 +181,7 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler : private ThreadHelpBase   // S
         void WriteToolBoxDocument() throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
-
+    
     protected:
         virtual void WriteToolBoxItem( const rtl::OUString& aCommandURL, const rtl::OUString& aLabel, const rtl::OUString& aHelpURL, const rtl::OUString& aTooltip, sal_Int16 nStyle,
                                        sal_Int16 nWidth, sal_Bool bVisible ) throw
@@ -192,22 +191,22 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler : private ThreadHelpBase   // S
         virtual void WriteToolBoxSpace() throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
-
+        
         virtual void WriteToolBoxBreak() throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
-
+        
         virtual void WriteToolBoxSeparator() throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >      m_xEmptyList;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >	m_xWriteDocumentHandler;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >		m_xEmptyList;
         com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >           m_rItemAccess;
-        ::rtl::OUString                                                                     m_aXMLToolbarNS;
-        ::rtl::OUString                                                                     m_aXMLXlinkNS;
-        ::rtl::OUString                                                                     m_aAttributeType;
-        ::rtl::OUString                                                                     m_aAttributeURL;
+        ::rtl::OUString																		m_aXMLToolbarNS;
+        ::rtl::OUString																		m_aXMLXlinkNS;
+        ::rtl::OUString																		m_aAttributeType;
+        ::rtl::OUString																		m_aAttributeURL;
 };
 
 } // namespace framework

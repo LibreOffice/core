@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -291,17 +291,17 @@ inline cppu_Bridge::cppu_Bridge(
     , bExportCpp2Uno( bExportCpp2Uno_ )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-
+    
     aCpp2Uno.pBridge = this;
     aCpp2Uno.acquire = cppu_Mapping_acquire;
     aCpp2Uno.release = cppu_Mapping_release;
     aCpp2Uno.mapInterface = cppu_Mapping_cpp2uno;
-
+    
     aUno2Cpp.pBridge = this;
     aUno2Cpp.acquire = cppu_Mapping_acquire;
     aUno2Cpp.release = cppu_Mapping_release;
     aUno2Cpp.mapInterface = cppu_Mapping_uno2cpp;
-
+    
     (*((uno_Environment *)pCppEnv)->acquire)( (uno_Environment *)pCppEnv );
     (*((uno_Environment *)pUnoEnv)->acquire)( (uno_Environment *)pUnoEnv );
 }
@@ -466,7 +466,7 @@ inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
         }
         catch (::com::sun::star::uno::RuntimeException &)
         {
-            OSL_FAIL( "### RuntimeException occurred udring queryInterface()!" );
+            OSL_ENSURE( 0, "### RuntimeException occured udring queryInterface()!" );
         }
     }
 }

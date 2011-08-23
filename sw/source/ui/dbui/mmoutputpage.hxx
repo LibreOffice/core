@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     long            m_nFromToFTPos;
     long            m_nFromToNFPos;
     long            m_nRBOffset;
-
+    
     bool            m_bCancelSaving;
 
     SwMailMergeWizard*  m_pWizard;
@@ -196,6 +196,7 @@ class SW_DLLPUBLIC SwSendMailDialog : public ModelessDialog //SfxModalDialog
     bool                    m_bDesctructionEnabled;
 
     ImageList               m_aImageList;
+    ImageList               m_aImageListHC;
 
     SwSendMailDialog_Impl*  m_pImpl;
     SwMailMergeConfigItem*  m_pConfigItem;

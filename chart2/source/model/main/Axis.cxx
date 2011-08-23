@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -195,86 +195,63 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-struct StaticAxisDefaults_Initializer
+void lcl_AddDefaultsToMap(
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
-        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_SHOW, true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_CROSSOVER_POSITION, ::com::sun::star::chart::ChartAxisPosition_ZERO );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_DISPLAY_LABELS, true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_LABEL_POSITION, ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
+    ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_AXIS_TEXT_ROTATION, 0.0 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_BREAK, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_OVERLAP, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_STACKED, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_ARRANGE_ORDER, ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO );
 
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_SHOW, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_CROSSOVER_POSITION, ::com::sun::star::chart::ChartAxisPosition_ZERO );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_DISPLAY_LABELS, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_LABEL_POSITION, ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_AXIS_TEXT_ROTATION, 0.0 );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_BREAK, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_OVERLAP, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_STACKED, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_ARRANGE_ORDER, ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO );
+    float fDefaultCharHeight = 10.0;
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
 
-        float fDefaultCharHeight = 10.0;
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MAJOR_TICKMARKS, 2 /* CHAXIS_MARK_OUTER */ );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MINOR_TICKMARKS, 0 /* CHAXIS_MARK_NONE */ );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_MARK_POSITION, ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
+}
 
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MAJOR_TICKMARKS, 2 /* CHAXIS_MARK_OUTER */ );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MINOR_TICKMARKS, 0 /* CHAXIS_MARK_NONE */ );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_MARK_POSITION, ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
-    }
-};
-
-struct StaticAxisDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticAxisDefaults_Initializer >
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-};
+    static Sequence< Property > aPropSeq;
 
-struct StaticAxisInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    Sequence< Property > lcl_GetPropertySequence()
-    {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
-};
 
-struct StaticAxisInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticAxisInfoHelper_Initializer >
-{
-};
+    return aPropSeq;
+}
 
-struct StaticAxisInfo_Initializer
+::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
 {
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticAxisInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
+    static ::cppu::OPropertyArrayHelper aArrayHelper(
+        lcl_GetPropertySequence(),
+        /* bSorted = */ sal_True );
 
-struct StaticAxisInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticAxisInfo_Initializer >
-{
-};
+    return aArrayHelper;
+}
 
 typedef uno::Reference< beans::XPropertySet > lcl_tSubGridType;
 typedef uno::Sequence< lcl_tSubGridType >     lcl_tSubGridSeq;
@@ -449,7 +426,7 @@ void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
         m_aScaleData = rScaleData;
     }
     AllocateSubGrids();
-
+    
     //don't keep the mutex locked while calling out
     if( xOldCategories.is() && xOldCategories != xNewCategories )
     {
@@ -467,27 +444,33 @@ void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
 chart2::ScaleData SAL_CALL Axis::getScaleData()
     throw (uno::RuntimeException)
 {
+    // /--
     MutexGuard aGuard( m_aMutex );
     return m_aScaleData;
+    // \--
 }
 
 Reference< beans::XPropertySet > SAL_CALL Axis::getGridProperties()
     throw (uno::RuntimeException)
 {
+    // /--
     MutexGuard aGuard( m_aMutex );
     return m_xGrid;
+    // \--
 }
 Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubGridProperties()
     throw (uno::RuntimeException)
 {
+    // /--
     MutexGuard aGuard( m_aMutex );
     return m_aSubGridProperties;
+    // \--
 }
 
 Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties()
     throw (uno::RuntimeException)
 {
-    OSL_FAIL( "Not implemented yet" );
+    OSL_ENSURE( false, "Not implemented yet" );
     return Sequence< Reference< beans::XPropertySet > >();
 }
 
@@ -496,8 +479,10 @@ Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties
 Reference< chart2::XTitle > SAL_CALL Axis::getTitleObject()
     throw (uno::RuntimeException)
 {
+    // /--
     MutexGuard aGuard( GetMutex() );
     return m_xTitle;
+    // \--
 }
 
 void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle )
@@ -593,23 +578,52 @@ void Axis::fireModifyEvent()
 uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticAxisDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
+    static tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        CharacterProperties::AddDefaultsToMap( aStaticDefaults );
+        LineProperties::AddDefaultsToMap( aStaticDefaults );
+
+        // initialize defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
+    }
+
+    tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
         return uno::Any();
+
     return (*aFound).second;
+    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Axis::getInfoHelper()
 {
-    return *StaticAxisInfoHelper::get();
+    return lcl_getInfoHelper();
 }
 
+
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL Axis::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL
+    Axis::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticAxisInfo::get();
+    static Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
 
 // ================================================================================

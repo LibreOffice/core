@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace dsapi
 {
 
 void
-Tok_Word::Trigger( TokenInterpreter &   io_rInterpreter ) const
+Tok_Word::Trigger( TokenInterpreter &	io_rInterpreter ) const
 {
     io_rInterpreter.Process_Word(*this);
 }
@@ -53,7 +53,7 @@ Tok_Word::Text() const
 }
 
 void
-Tok_Comma::Trigger( TokenInterpreter &  io_rInterpreter ) const
+Tok_Comma::Trigger( TokenInterpreter &	io_rInterpreter ) const
 {
     io_rInterpreter.Process_Comma();
 }
@@ -65,7 +65,7 @@ Tok_Comma::Text() const
 }
 
 void
-Tok_DocuEnd::Trigger( TokenInterpreter &    io_rInterpreter ) const
+Tok_DocuEnd::Trigger( TokenInterpreter &	io_rInterpreter ) const
 {
     io_rInterpreter.Process_DocuEnd();
 }
@@ -77,7 +77,7 @@ Tok_DocuEnd::Text() const
 }
 
 void
-Tok_EOL::Trigger( TokenInterpreter &    io_rInterpreter ) const
+Tok_EOL::Trigger( TokenInterpreter &	io_rInterpreter ) const
 {
     io_rInterpreter.Process_EOL();
 }
@@ -101,7 +101,7 @@ Tok_EOF::Text() const
 }
 
 void
-Tok_White::Trigger( TokenInterpreter &  io_rInterpreter ) const
+Tok_White::Trigger( TokenInterpreter &	io_rInterpreter ) const
 {
     io_rInterpreter.Process_White();
 }

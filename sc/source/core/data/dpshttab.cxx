@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,10 @@
 #include "dpcachetable.hxx"
 #include "dpobject.hxx"
 #include "globstr.hrc"
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
 #include "dpglobal.hxx"
-#include "rangenam.hxx"
-
+// End Comments
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 #include <vector>
@@ -55,22 +56,22 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using ::std::vector;
+using ::std::hash_map;
+using ::std::hash_set;
 
 // -----------------------------------------------------------------------
 
-ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, ScDPCache* pCache) :
-    ScDPTableData(pD),
-    aQuery ( rDesc.GetQueryParam() ),
+ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , long nCacheId) :
+    ScDPTableData(pD, rDesc.GetCacheId( pD, nCacheId) ), // DataPilot Migration - Cache&&Performance
+    aQuery ( rDesc.aQueryParam  ),
     pSpecial(NULL),
-    bIgnoreEmptyRows( false ),
-    bRepeatIfEmpty(false),
-    mrDesc(rDesc),
-    aCacheTable(pCache)
+    bIgnoreEmptyRows( FALSE ),
+    bRepeatIfEmpty(FALSE),
+    aCacheTable( pD, rDesc.GetCacheId( pD, nCacheId))
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
-    pSpecial = new bool[nEntryCount];
+    pSpecial = new BOOL[nEntryCount];
     for (SCSIZE j = 0; j < nEntryCount; ++j )
     {
         ScQueryEntry& rEntry = aQuery.GetEntry(j);
@@ -115,13 +116,13 @@ String ScSheetDPData::getDimensionName(long nColumn)
     CreateCacheTable();
     if (getIsDataLayoutDimension(nColumn))
     {
-        //! different internal and display names?
+        //!	different internal and display names?
         //return "Data";
         return ScGlobal::GetRscString(STR_PIVOT_DATA);
     }
     else if (nColumn >= aCacheTable.getColSize())
     {
-        OSL_FAIL("getDimensionName: invalid dimension");
+        DBG_ERROR("getDimensionName: invalid dimension");
         return String();
     }
     else
@@ -130,26 +131,26 @@ String ScSheetDPData::getDimensionName(long nColumn)
     }
 }
 
-sal_Bool ScSheetDPData::IsDateDimension(long nDim)
+BOOL ScSheetDPData::IsDateDimension(long nDim)
 {
     CreateCacheTable();
     long nColCount = aCacheTable.getColSize();
     if (getIsDataLayoutDimension(nDim))
     {
-        return false;
+        return FALSE;
     }
     else if (nDim >= nColCount)
     {
-        OSL_FAIL("IsDateDimension: invalid dimension");
-        return false;
+        DBG_ERROR("IsDateDimension: invalid dimension");
+        return FALSE;
     }
     else
     {
-        return GetCacheTable().getCache()->IsDateDimension( nDim);
+        return aCacheTable.GetCache()->IsDateDimension( nDim);
     }
 }
 
-sal_uLong ScSheetDPData::GetNumberFormat(long nDim)
+ULONG ScSheetDPData::GetNumberFormat(long nDim)
 {
     CreateCacheTable();
     if (getIsDataLayoutDimension(nDim))
@@ -158,32 +159,32 @@ sal_uLong ScSheetDPData::GetNumberFormat(long nDim)
     }
     else if (nDim >= GetCacheTable().getColSize())
     {
-        OSL_FAIL("GetNumberFormat: invalid dimension");
+        DBG_ERROR("GetNumberFormat: invalid dimension");
         return 0;
     }
     else
     {
-        return GetCacheTable().getCache()->GetNumberFormat( nDim );
-    }
+        return GetCacheTable().GetCache()->GetNumberFormat( nDim );
+    } 
 }
-sal_uInt32  ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )
+UINT32	ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )
 {
     if( !mpDoc )
         return 0;
 
     if ( SvNumberFormatter* pFormatter = mpDoc->GetFormatTable() )
         return pFormatter->GetFormatIndex( eIdx, LANGUAGE_SYSTEM );
-
+    
     return 0;
 }
 
-sal_Bool ScSheetDPData::getIsDataLayoutDimension(long nColumn)
+BOOL ScSheetDPData::getIsDataLayoutDimension(long nColumn)
 {
     CreateCacheTable();
     return (nColumn ==(long)( aCacheTable.getColSize()));
 }
 
-void ScSheetDPData::SetEmptyFlags( sal_Bool bIgnoreEmptyRowsP, sal_Bool bRepeatIfEmptyP )
+void ScSheetDPData::SetEmptyFlags( BOOL bIgnoreEmptyRowsP, BOOL bRepeatIfEmptyP )
 {
     bIgnoreEmptyRows = bIgnoreEmptyRowsP;
     bRepeatIfEmpty   = bRepeatIfEmptyP;
@@ -201,20 +202,18 @@ void ScSheetDPData::CreateCacheTable()
         // already cached.
         return;
 
-    if (!aCacheTable.hasCache())
-        aCacheTable.setCache(mrDesc.CreateCache());
-
-    aCacheTable.fillTable(aQuery, pSpecial, bIgnoreEmptyRows, bRepeatIfEmpty);
+    aCacheTable.fillTable( aQuery, pSpecial, 
+                                bIgnoreEmptyRows, bRepeatIfEmpty );
 }
 
-void ScSheetDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
+void ScSheetDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
 {
     CreateCacheTable();
     aCacheTable.filterByPageDimension(
-        rCriteria, (IsRepeatIfEmpty() ? rCatDims : boost::unordered_set<sal_Int32>()));
+        rCriteria, (IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>()));
 }
 
-void ScSheetDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
+void ScSheetDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     CreateCacheTable();
     sal_Int32 nRowSize = aCacheTable.getRowSize();
@@ -222,7 +221,7 @@ void ScSheetDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rC
         return;
 
     aCacheTable.filterTable(
-        rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : boost::unordered_set<sal_Int32>());
+        rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>());
 }
 
 void ScSheetDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
@@ -236,117 +235,83 @@ const ScDPCacheTable& ScSheetDPData::GetCacheTable() const
     return aCacheTable;
 }
 
-ScSheetSourceDesc::ScSheetSourceDesc(ScDocument* pDoc) :
-    mpDoc(pDoc) {}
 
-void ScSheetSourceDesc::SetSourceRange(const ScRange& rRange)
+// Wang Xu Ming -- 2009-8-5
+// DataPilot Migration - Cache&&Performance
+ScDPTableDataCache* ScSheetSourceDesc::CreateCache( ScDocument* pDoc , long nID ) const
 {
-    maSourceRange = rRange;
-    maRangeName = OUString(); // overwrite existing range name if any.
-}
-
-const ScRange& ScSheetSourceDesc::GetSourceRange() const
-{
-    if (maRangeName.getLength())
+    if ( pDoc )
     {
-        // Obtain the source range from the range name first.
-        maSourceRange = ScRange();
-        ScRangeName* pRangeName = mpDoc->GetRangeName();
-        do
+        ScDPTableDataCache* pCache =  GetExistDPObjectCache( pDoc );
+        if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
+            return pCache;
+
+        ULONG nErrId = CheckValidate( pDoc );
+        if ( !nErrId )
         {
-            if (!pRangeName)
-                break;
+            pCache = new ScDPTableDataCache( pDoc );
 
-            OUString aUpper = ScGlobal::pCharClass->upper(maRangeName);
-            const ScRangeData* pData = pRangeName->findByUpperName(aUpper);
-            if (!pData)
-                break;
+            pCache->InitFromDoc( pDoc, aSourceRange );
+            pCache->SetId( nID );
+            pDoc->AddDPObjectCache( pCache );
 
-            // range name found.  Fow now, we only use the first token and
-            // ignore the rest.
-            ScRange aRange;
-            if (!pData->IsReference(aRange))
-                break;
-
-            maSourceRange = aRange;
+            DBG_TRACE1("Create a cache id = %d \n", pCache->GetId() );
         }
-        while (false);
+        else
+            DBG_ERROR( "\n Error Create Cache" );
+        return pCache;
     }
-    return maSourceRange;
+    return NULL;
 }
 
-void ScSheetSourceDesc::SetRangeName(const OUString& rName)
+ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache ( ScDocument* pDoc  ) const
 {
-    maRangeName = rName;
+    return pDoc->GetUsedDPObjectCache( aSourceRange );
 }
-
-const OUString& ScSheetSourceDesc::GetRangeName() const
+ScDPTableDataCache* ScSheetSourceDesc::GetCache( ScDocument* pDoc, long nID ) const
 {
-    return maRangeName;
-}
-
-bool ScSheetSourceDesc::HasRangeName() const
-{
-    return maRangeName.getLength() > 0;
-}
-
-void ScSheetSourceDesc::SetQueryParam(const ScQueryParam& rParam)
-{
-    maQueryParam = rParam;
-}
-
-const ScQueryParam& ScSheetSourceDesc::GetQueryParam() const
-{
-    return maQueryParam;
-}
-
-bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
-{
-    return maSourceRange == rOther.maSourceRange &&
-        maRangeName == rOther.maRangeName &&
-        maQueryParam  == rOther.maQueryParam;
-}
-
-ScDPCache* ScSheetSourceDesc::CreateCache() const
-{
-    if (!mpDoc)
-        return NULL;
-
-    sal_uLong nErrId = CheckSourceRange();
-    if (nErrId)
-    {
-        OSL_FAIL( "Error Create Cache\n" );
-        return NULL;
-    }
-
-    ScDPCache* pCache = new ScDPCache(mpDoc);
-    pCache->InitFromDoc(mpDoc, GetSourceRange());
+    ScDPTableDataCache* pCache = pDoc->GetDPObjectCache( nID );
+    if ( NULL == pCache && pDoc )
+        pCache = GetExistDPObjectCache( pDoc );
+    if ( NULL == pCache )
+        pCache = CreateCache( pDoc );    
     return pCache;
 }
 
-long ScSheetSourceDesc::GetCacheId() const
+long ScSheetSourceDesc:: GetCacheId( ScDocument* pDoc, long nID ) const
 {
-    return -1;
+    ScDPTableDataCache* pCache = GetCache( pDoc,  nID);
+    if ( NULL == pCache )
+        return -1;
+    else 
+        return pCache->GetId();
 }
 
-sal_uLong ScSheetSourceDesc::CheckSourceRange() const
+ULONG ScSheetSourceDesc::CheckValidate( ScDocument* pDoc ) const
 {
-    if (!mpDoc)
+    ScRange aSrcRange( aSourceRange);
+    if ( !pDoc )
         return STR_ERR_DATAPILOTSOURCE;
-
-    const ScRange& aSrcRange = GetSourceRange();
-    const ScAddress& s = aSrcRange.aStart;
-    const ScAddress& e = aSrcRange.aEnd;
-    for (SCCOL nCol = aSrcRange.aStart.Col(); nCol <= e.Col(); ++nCol)
+    for(USHORT i= aSrcRange.aStart.Col();i <= aSrcRange.aEnd.Col();i++)
     {
-        if (mpDoc->IsBlockEmpty(s.Tab(), nCol, s.Row(), nCol, s.Row()))
-            return STR_PIVOT_FIRSTROWEMPTYERR;
+        if ( pDoc->IsBlockEmpty( aSrcRange.aStart.Tab(),
+            i, aSrcRange.aStart.Row(),i, aSrcRange.aStart.Row()))
+            return STR_PIVOT_FIRSTROWEMPTYERR; 
     }
-
-    if (mpDoc->IsBlockEmpty(s.Tab(), s.Col(), s.Row()+1, e.Col(), e.Row()))
-        return STR_PIVOT_ONLYONEROWERR;
-
+    if( pDoc->IsBlockEmpty( aSrcRange.aStart.Tab(), aSrcRange.aStart.Col(), aSrcRange.aStart.Row()+1, aSrcRange.aEnd.Col(), aSrcRange.aEnd.Row() ) )
+    {
+        return STR_PIVOT_ONLYONEROWERR; 
+    }
     return 0;
 }
+// End Comments
+
+// -----------------------------------------------------------------------
+
+
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ public class _XMailMergeBroadcaster extends MultiMethodTest {
     protected XMailMergeListener listener = new MyMailMergeEventListener();
 
     /**
-     * Tries to query the tested component for object relation
+     * Tries to query the tested component for object relation 
      * <code>executeArgs</code> [<code>NamedValue</code>] and <code>Job</code>
      * [<code>XJob</code>]
      * @throw StatusException If relations are not found
@@ -95,12 +95,12 @@ public class _XMailMergeBroadcaster extends MultiMethodTest {
     */
     public void _addMailMergeEventListener() {
         log.println("Testing addMailMergeEventListener ...");
-
+        
         oObj.addMailMergeEventListener( listener );
-
+        
         NamedValue[] executeArgs = (NamedValue[]) tEnv.getObjRelation("executeArgs");
         XJob Job = (XJob) tEnv.getObjRelation("Job");
-
+        
         try {
             Job.execute(executeArgs);
         } catch ( com.sun.star.lang.IllegalArgumentException e) {
@@ -110,7 +110,7 @@ public class _XMailMergeBroadcaster extends MultiMethodTest {
             throw new StatusException(Status.failed
                 ("'could not fire event: " + e)) ;
         }
-
+            
         shortWait();
 
         tRes.tested("addMailMergeEventListener()", changed);
@@ -124,12 +124,12 @@ public class _XMailMergeBroadcaster extends MultiMethodTest {
         log.println("Testing removeMailMergeEventListener ...");
         requiredMethod("addMailMergeEventListener()");
         changed = false;
-
+        
         oObj.removeMailMergeEventListener( listener );
-
+        
         NamedValue[] executeArgs = (NamedValue[]) tEnv.getObjRelation("executeArgs");
         XJob Job = (XJob) tEnv.getObjRelation("Job");
-
+        
         try {
             Job.execute(executeArgs);
         } catch ( com.sun.star.lang.IllegalArgumentException e) {

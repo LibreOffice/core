@@ -39,10 +39,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/display.obj		 \
-            $(SLO)$/dtranscomp.obj   \
-            $(SLO)$/fontident.obj    \
-            $(SLO)$/stringmirror.obj \
+SLOFILES=	$(SLO)$/display.obj		\
+            $(SLO)$/dtranscomp.obj  \
+            $(SLO)$/fontident.obj   \
             $(SLO)$/factory.obj
 
 # --- Targets ------------------------------------------------------

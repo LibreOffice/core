@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -175,7 +175,7 @@ void DXFTransform::TransDir(const DXFVector & rSrc, DXFVector & rTgt) const
 }
 
 
-sal_Bool DXFTransform::TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const
+BOOL DXFTransform::TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const
 {
     double fMXAbs=aMX.Abs();
     double fMYAbs=aMY.Abs();
@@ -186,22 +186,22 @@ sal_Bool DXFTransform::TransCircleToEllipse(double fRadius, double & rEx, double
     {
         rEx=fabs(aMX.fx*fRadius);
         rEy=fabs(aMY.fy*fRadius);
-        return sal_True;
+        return TRUE;
     }
     else if (fabs(aMX.fx)<=fNearNull && fabs(aMX.fz)<=fNearNull &&
              fabs(aMY.fy)<=fNearNull && fabs(aMY.fz)<=fNearNull)
     {
         rEx=fabs(aMY.fx*fRadius);
         rEy=fabs(aMX.fy*fRadius);
-        return sal_True;
+        return TRUE;
     }
     else if (fabs(fMXAbs-fMYAbs)<=fNearNull &&
              fabs(aMX.fz)<=fNearNull && fabs(aMY.fz)<=fNearNull)
     {
         rEx=rEy=fabs(((fMXAbs+fMYAbs)/2)*fRadius);
-        return sal_True;
+        return TRUE;
     }
-    else return sal_False;
+    else return FALSE;
 }
 
 LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
@@ -216,12 +216,12 @@ LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
 
     aLineInfo.SetStyle( aDXFLineInfo.eStyle );
     aLineInfo.SetWidth( (sal_Int32) (aDXFLineInfo.fWidth * scale + 0.5) );
-    aLineInfo.SetDashCount( static_cast< sal_uInt16 >( aDXFLineInfo.nDashCount ) );
+    aLineInfo.SetDashCount( static_cast< USHORT >( aDXFLineInfo.nDashCount ) );
     aLineInfo.SetDashLen( (sal_Int32) (aDXFLineInfo.fDashLen * scale + 0.5) );
-    aLineInfo.SetDotCount( static_cast< sal_uInt16 >( aDXFLineInfo.nDotCount ) );
+    aLineInfo.SetDotCount( static_cast< USHORT >( aDXFLineInfo.nDotCount ) );
     aLineInfo.SetDotLen( (sal_Int32) (aDXFLineInfo.fDotLen * scale + 0.5) );
     aLineInfo.SetDistance( (sal_Int32) (aDXFLineInfo.fDistance * scale + 0.5) );
-
+    
     if ( aLineInfo.GetDashCount() > 0 && aLineInfo.GetDashLen() == 0 )
         aLineInfo.SetDashLen(1);
 
@@ -231,7 +231,7 @@ LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
     return aLineInfo;
 }
 
-sal_uLong DXFTransform::TransLineWidth(double fW) const
+ULONG DXFTransform::TransLineWidth(double fW) const
 {
     double fex,fey;
 
@@ -239,7 +239,7 @@ sal_uLong DXFTransform::TransLineWidth(double fW) const
     fey=sqrt(aMY.fx*aMY.fx + aMY.fy*aMY.fy);
     // ###
     // printf("fex=%f fey=%f\n", fex, fey);
-    return (sal_uLong)(fabs(fW)*(fex+fey)/2.0+0.5);
+    return (ULONG)(fabs(fW)*(fex+fey)/2.0+0.5);
 }
 
 
@@ -248,9 +248,9 @@ double DXFTransform::CalcRotAngle() const
     return atan2(aMX.fy,aMX.fx)/3.14159265359*180.0;
 }
 
-sal_Bool DXFTransform::Mirror() const
+BOOL DXFTransform::Mirror() const
 {
-    if (aMZ.SProd(aMX*aMY)<0) return sal_True; else return sal_False;
+    if (aMZ.SProd(aMX*aMY)<0) return TRUE; else return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,19 +30,28 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XQueriesSupplier;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.uno.UnoRuntime;
 import connectivity.tools.CRMDatabase;
 
-// ---------- junit imports -----------------
-import org.junit.Test;
-import static org.junit.Assert.*;
-// ------------------------------------------
-
-public class Query extends TestCase {
+public class Query extends complexlib.ComplexTestCase {
 
     connectivity.tools.HsqlDatabase m_database;
+
+    // --------------------------------------------------------------------------------------------------------
+    public String[] getTestMethodNames() {
+        return new String[]
+        {
+            "testQueryColumns"
+        };
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    public String getTestObjectName() {
+        return "Query";
+    }
 
     // --------------------------------------------------------------------------------------------------------
     private void createTestCase()
@@ -51,26 +60,25 @@ public class Query extends TestCase {
         {
             if ( m_database == null )
             {
-                final CRMDatabase database = new CRMDatabase( getMSF(), false );
+                final CRMDatabase database = new CRMDatabase( getFactory(), false );
                 m_database = database.getDatabase();
             }
         }
         catch( Exception e )
         {
-            System.out.println( "could not create the test case, error message:\n" + e.getMessage() );
+            log.println( "could not create the test case, error message:\n" + e.getMessage() );
             e.printStackTrace( System.err );
-            fail( "failed to created the test case");
+            assure( "failed to created the test case", false );
         }
     }
 
     // --------------------------------------------------------------------------------------------------------
-//    private XMultiServiceFactory getFactory()
-//    {
-//        return (XMultiServiceFactory)param.getMSF();
-//    }
+    private XMultiServiceFactory getFactory()
+    {
+        return (XMultiServiceFactory)param.getMSF();
+    }
 
     // --------------------------------------------------------------------------------------------------------
-    @Test
     public void testQueryColumns()
     {
         createTestCase();
@@ -99,20 +107,20 @@ public class Query extends TestCase {
                     XIndexAccess.class, suppCols.getColumns());
 
                 // check whether the columns supplied by the query match what we expected
-                assertTrue( "invalid column count (found " + columns.getCount() + ", expected: " + expectedColumnNames[i].length + ") for query \"" + queryNames[i] + "\"",
+                assure( "invalid column count (found " + columns.getCount() + ", expected: " + expectedColumnNames[i].length + ") for query \"" + queryNames[i] + "\"",
                     columns.getCount() == expectedColumnNames[i].length );
                 for ( int col = 0; col < columns.getCount(); ++col )
                 {
                     final XNamed columnName = UnoRuntime.queryInterface(
                         XNamed.class, columns.getByIndex(col) );
-                    assertTrue( "column no. " + col + " of query \"" + queryNames[i] + "\" not matching",
+                    assure( "column no. " + col + " of query \"" + queryNames[i] + "\" not matching",
                         columnName.getName().equals( expectedColumnNames[i][col] ) );
                 }
             }
         }
         catch ( Exception e )
         {
-            fail( "caught an unexpected exception: " + e.getMessage() );
+            assure( "caught an unexpected exception: " + e.getMessage(), false );
         }
     }
 }

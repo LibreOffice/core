@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,10 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// Special class for IO. Used for system-independent representation
-// (change of byte-order, conversion of characters)
-// Writes in binary format for efficiency.
+// eigene Klasse fuer IO, die die systemunabhaengige Darstellung
+// uebernimmt (bytes dreht, Character konvertiert)
+// das Schreiben erfolgt aus Effizienzgruenden binaer
 #ifndef _IO_HXX
 #define _IO_HXX
 
@@ -47,12 +46,31 @@
 #include <vcl/keycod.hxx>
 #include <tools/stream.hxx>
 
+/*$
+class BinaryFile {
+    int fd;
+public:
+    enum IO_OpenMode {
+        BF_READ = O_RDONLY,
+        BF_WRITE = O_RDWR,
+        BF_CREATE = O_CREAT,
+        BF_TRUNC = O_TRUNC
+    };
+        // ctor oeffnet File im BinearMode, dtor schliesst es
+    BinaryFile(const String &, int eOpenMode);
+    ~BinaryFile();
+    BOOL Ok() const {
+        return -1 != fd;
+    }
+    operator int() const { return fd; }
+};
+*/
 
 class SwIOin {
 private:
         SvFileStream aStr; //$ ifstream
 public:
-    // Stream is created in respective mode.
+    // Stream wird im entsprechenden Mode erzeugt.
     SwIOin(const String &rFilename, StreamMode nMode =
                                     STREAM_READ | STREAM_NOCREATE );
 
@@ -66,8 +84,8 @@ public:
     SwIOin& operator>>(unsigned long& val);
     String ReadString();
     KeyCode ReadKeyCode();
-    // Can be extended for more arrays of base types.
-    // nLen is count of elements.
+    // kann erweitert werden fuer weitere Arrays von
+    // Basistypen; nLen ist die Anzahl der Elemente
     SwIOin& Read(char *buf, unsigned nLen);
 
     int operator!() { return aStr.GetError() != SVSTREAM_OK; }
@@ -81,7 +99,7 @@ private:
     void _write(const char *buf, unsigned size);
     SvFileStream aStr; //$ ofstream
 public:
-    // Stream is created in respective mode.
+    // Stream wird im entsprechenden Mode erzeugt.
     SwIOout( const String &rFilename, StreamMode nMode =
                                       STREAM_WRITE | STREAM_NOCREATE );
     SwIOout& operator<<(char val);
@@ -94,8 +112,8 @@ public:
     SwIOout& operator<<(unsigned long val);
     SwIOout& operator<<(const String &);
     SwIOout& operator<<(const KeyCode &);
-    // Can be extended for more arrays of base types.
-    // nLen is count of elements.
+    // kann erweitert werden fuer weitere Arrays von
+    // Basistypen; nLen ist die Anzahl der Elemente
     SwIOout& Write(const char *buf, unsigned nLen);
 
     int operator!() { return aStr.GetError() != SVSTREAM_OK; }
@@ -110,7 +128,7 @@ private:
     SvFileStream aStr; //$ fstream
 
 public:
-    // Stream is created in respective mode.
+    // Stream wird im entsprechenden Mode erzeugt.
     SwIOinout(const String &rFilename, StreamMode nMode =
                                        STREAM_READWRITE  | STREAM_NOCREATE );
 
@@ -124,8 +142,8 @@ public:
     SwIOinout& operator>>(unsigned long& val);
     String ReadString();
     KeyCode ReadKeyCode();
-    // Can be extended for more arrays of base types.
-    // nLen is count of elements.
+    // kann erweitert werden fuer weitere Arrays von
+    // Basistypen; nLen ist die Anzahl der Elemente
     SwIOinout& Read(char *buf, unsigned nLen);
     SwIOinout& Read(unsigned short *buf, unsigned nLen );
 
@@ -139,8 +157,8 @@ public:
     SwIOinout& operator<<(unsigned long val);
     SwIOinout& operator<<(const String &);
     SwIOinout& operator<<(const KeyCode &);
-    // Can be extended for more arrays of base types.
-    // nLen is count of elements.
+    // kann erweitert werden fuer weitere Arrays von
+    // Basistypen; nLen ist die Anzahl der Elemente
     SwIOinout& Write(const char *buf, unsigned nLen);
 
     int operator!() { return aStr.GetError() != SVSTREAM_OK; }
@@ -148,7 +166,7 @@ public:
         return aStr;
     }
 
-    sal_Bool Ok();
+    BOOL Ok();
 };
 
 

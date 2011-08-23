@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include "envelp.hrc"
 
-// local resources *********************************************************
+// Lokale Resourcen *********************************************************
 
 #define BOX_ALIGN      1
 #define BTN_TOP        7
@@ -44,7 +44,7 @@
 #define BTN_PRTSETUP  15
 #define FL_PRINTER    16
 
-// global resources ********************************************************
+// Globale Resourcen ********************************************************
 
 #define BMP_HOR_LEFT_LOWER  (RC_ENVPRT_BEGIN     )
 #define BMP_HOR_LEFT_UPPER  (RC_ENVPRT_BEGIN +  1)
@@ -67,11 +67,26 @@
 #define ITM_VER_CNTR        (RC_ENVPRT_BEGIN + 16)
 #define ITM_VER_RGHT        (RC_ENVPRT_BEGIN + 17)
 
-// overflow check ********************************************************
+#define BMP_HOR_LEFT_LOWER_H  (RC_ENVPRT_HC_BEGIN   )
+#define BMP_HOR_LEFT_UPPER_H  (RC_ENVPRT_HC_BEGIN + 1)
+#define BMP_HOR_CNTR_LOWER_H  (RC_ENVPRT_HC_BEGIN + 2)
+#define BMP_HOR_CNTR_UPPER_H  (RC_ENVPRT_HC_BEGIN + 3)
+#define BMP_HOR_RGHT_LOWER_H  (RC_ENVPRT_HC_BEGIN + 4)
+#define BMP_HOR_RGHT_UPPER_H  (RC_ENVPRT_HC_BEGIN + 5)
 
-#define ENVPRT_ACT_END  ITM_VER_RGHT
+#define BMP_VER_LEFT_LOWER_H  (RC_ENVPRT_HC_BEGIN + 6)
+#define BMP_VER_LEFT_UPPER_H  (RC_ENVPRT_HC_BEGIN + 7)
+#define BMP_VER_CNTR_LOWER_H  (RC_ENVPRT_HC_BEGIN + 8)
+#define BMP_VER_CNTR_UPPER_H  (RC_ENVPRT_HC_BEGIN + 9)
+#define BMP_VER_RGHT_LOWER_H  (RC_ENVPRT_HC_BEGIN + 10)
+#define BMP_VER_RGHT_UPPER_H  (RC_ENVPRT_HC_BEGIN + 11)
 
-#if ENVPRT_ACT_END > ITM_VER_RGHT
+
+// Ueberlaufpruefung ********************************************************
+
+#define ENVPRT_ACT_END  BMP_VER_RGHT_UPPER_H
+
+#if ENVPRT_ACT_END > RC_ENVPRT_HC_END
 #error Resource-Ueberlauf in #file, #line
 #endif
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 
 #include "finteraction.hxx"
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 
 //........................................................................
@@ -52,7 +51,7 @@ namespace dbaui
         ,m_bDoesNotExist(sal_False)
     {
         DBG_CTOR( OFilePickerInteractionHandler, NULL );
-        OSL_ENSURE( m_xMaster.is(), "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!" );
+        DBG_ASSERT( m_xMaster.is(), "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!" );
     }
 
     //--------------------------------------------------------------------
@@ -79,7 +78,7 @@ namespace dbaui
     }
 
 //........................................................................
-}   // namespace svt
+}	// namespace svt
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

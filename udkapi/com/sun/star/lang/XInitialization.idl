@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,30 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_lang_XInitialization_idl__
-#define __com_sun_star_lang_XInitialization_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-#include <com/sun/star/uno/Exception.idl>
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module lang {
-
-//=============================================================================
-
+#ifndef __com_sun_star_lang_XInitialization_idl__ 
+#define __com_sun_star_lang_XInitialization_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_uno_Exception_idl__ 
+#include <com/sun/star/uno/Exception.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module lang {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: interface com::sun::star::lang::XInitialization
 /** initializes an object directly after its creation.
-
-    <p>This interface works together with factories. If you want to
+    
+    <p>This interface works together with factories. If you want to 
     initialize the object after creation, you should
-    support this interface and you may support other interfaces
+    support this interface and you may support other interfaces 
     which offer type-safe initialization methods.  </p>
 
     <p>Instead of calling <member>XSingleComponentFactory::createInstanceWithContext</member>
-    and later initialize(), you should call
+    and later initialize(), you should call 
     <member>XSingleComponentFactory::createInstanceWithArgumentsAndContext</member>
     to pass the arguments to the instance. The reason is, that a component may want to
     return the same instance for the same set of parameters, and it can do so by implementing
@@ -56,24 +60,24 @@ module com {  module sun {  module star {  module lang {
 
  */
 published interface XInitialization: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::lang::XInitialization::initialize
-    /** initializes the object.
-
+    /** initializes the object. 
+        
         <p>It should be called directly after the object is created.
      */
-    void initialize( [in] sequence<any> aArguments )
-            raises( com::sun::star::uno::Exception );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    void initialize( [in] sequence<any> aArguments ) 
+            raises( com::sun::star::uno::Exception ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

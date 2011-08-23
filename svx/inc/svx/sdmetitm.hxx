@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ class SVX_DLLPUBLIC SdrMetricItem: public SfxInt32Item {
 public:
     TYPEINFO();
     SdrMetricItem(): SfxInt32Item() {}
-    SdrMetricItem(sal_uInt16 nId, sal_Int32 nVal=0):  SfxInt32Item(nId,nVal) {}
-    SdrMetricItem(sal_uInt16 nId, SvStream& rIn): SfxInt32Item(nId,rIn) {}
+    SdrMetricItem(USHORT nId, INT32 nVal=0):  SfxInt32Item(nId,nVal) {}
+    SdrMetricItem(USHORT nId, SvStream& rIn): SfxInt32Item(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
     virtual bool HasMetrics() const;
     virtual bool ScaleMetrics(long nMul, long nDiv);
 
@@ -52,6 +52,10 @@ public:
                                                 SfxMapUnit eCoreMetric,
                                                 SfxMapUnit ePresMetric,
                                                 String& rText, const IntlWrapper * = 0) const;
+
+#ifdef SDR_ISPOOLABLE
+    virtual int IsPoolable() const;
+#endif
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,8 +58,8 @@ import java.lang.reflect.InvocationTargetException;
  * calls to the implementing objects and are used instead of casts
  * and identity comparisons.
  * <p>
- * @version     $Revision: 1.10 $ $ $Date: 2008-04-11 11:11:46 $
- * @author      Markus Herzog
+ * @version 	$Revision: 1.10 $ $ $Date: 2008-04-11 11:11:46 $
+ * @author 	    Markus Herzog
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.container.XSet
  * @see         com.sun.star.container.XContentEnumerationAccess
@@ -67,21 +67,21 @@ import java.lang.reflect.InvocationTargetException;
  * @see         com.sun.star.lang.XServiceInfo
  * @see         com.sun.star.lang.XInitialization
  * @since       UDK1.0
- */
+ */									   
 public class ServiceManager implements XMultiServiceFactory,
-                                       XMultiComponentFactory,
-                                       XSet,
-                                       XContentEnumerationAccess,
-                                       XComponent,
+                                       XMultiComponentFactory, 
+                                       XSet, 
+                                       XContentEnumerationAccess, 
+                                       XComponent, 
                                        XServiceInfo,
                                        XInitialization
 {
     private static final boolean DEBUG = false;
-
+    
     private static final void DEBUG (String dbg) {
         if (DEBUG) System.err.println( dbg );
     }
-
+    
     private static com.sun.star.uno.Type UNO_TYPE = null;
 
     XImplementationLoader loader = null;
@@ -93,10 +93,10 @@ public class ServiceManager implements XMultiServiceFactory,
 
     java.util.Vector    eventListener;
     java.util.Hashtable factoriesByImplNames;
-    java.util.Hashtable factoriesByServiceNames;  // keys:
-
+    java.util.Hashtable factoriesByServiceNames;  // keys: 
+    
     private com.sun.star.uno.XComponentContext m_xDefaultContext;
-
+    
     /**
      * Creates a new instance of the <code>ServiceManager</code>.
      */
@@ -115,77 +115,77 @@ public class ServiceManager implements XMultiServiceFactory,
         factoriesByServiceNames = new java.util.Hashtable();
         m_xDefaultContext = xContext;
     }
-
+    
     /**
-     * Returns the service factory for the <code>ServiceManager</code>. If the given implementation name
+     * Returns the service factory for the <code>ServiceManager</code>. If the given implementation name 
      * does not equal to the <code>ServiceManagers</code> class name null will be returned.
      * <p>
      * @return     the factory for the <code>ServiceManager</code>.
-     * @param      implName     the implementation name of the of the service.
+     * @param      implName		the implementation name of the of the service. 
      *                          Must be equal to <code>com.sun.star.comp.servicemanager.ServicManager</code>
-     * @param      multiFactory refernce of the <code>MultiServiceFactory</code>. This parameter will be ignored.
-     * @param      regKey       the root key of the registry. This parameter will be ignored.
+     * @param	   multiFactory	refernce of the <code>MultiServiceFactory</code>. This parameter will be ignored.
+     * @param	   regKey		the root key of the registry. This parameter will be ignored. 	
      */
-      public static XSingleServiceFactory getServiceFactory( String implName,
-                                                           XMultiServiceFactory multiFactory,
+      public static XSingleServiceFactory getServiceFactory( String implName, 
+                                                           XMultiServiceFactory multiFactory, 
                                                            XRegistryKey regKey)
-    {
+    {	     
         if ( implName.equals(ServiceManager.class.getName()) )
             return new ServiceManagerFactory();
-
+        
         return null;
     }
 
-
+    
     /**
      * Supplies a Java component loader. The loader component must be enlisted at the <code>ServiceManager</code> before.
      * <p>
-     * @return      a new instance of the Java component loader
-     * @see         com.sun.star.loader.Java
-     */
-    private XImplementationLoader getLoader()
-                throws  com.sun.star.uno.Exception,
+     * @return		a new instance of the Java component loader
+     * @see			com.sun.star.loader.Java 
+     */  	
+    private XImplementationLoader getLoader() 
+                throws 	com.sun.star.uno.Exception,
                           com.sun.star.uno.RuntimeException
     {
-        Object[] param = { this };
-        DEBUG("make loader");
+        Object[] param = { this };                        
+        DEBUG("make loader");            
         Object loaderObj = createInstanceWithArgumentsAndContext(
             "com.sun.star.loader.Java", param, m_xDefaultContext );
-
+        
         if (loaderObj == null)
             throw new com.sun.star.uno.Exception("Can get an instance of com.sun.star.loader.Java");
-
+            
         return UnoRuntime.queryInterface( XImplementationLoader.class, loaderObj );
     }
 
     /**
      * Registers a list of components given by their class names.
-     * <p>
-     * @param   newImpls    list of the components that should be registered, given by their class names.
-     *                      If any exception occurred during the registration, the process will be canceled.
-     * @see     com.sun.star.container.XSet
+     * <p> 
+     * @param 	newImpls	list of the components that should be registered, given by their class names.
+     *						If any exception occured during the registration, the process will be canceled.
+     * @see 	com.sun.star.container.XSet
      */
-    private void xaddFactories( String[] newImpls )
+    private void xaddFactories( String[] newImpls ) 
                     throws com.sun.star.uno.Exception
     {
-        for (int i=0; i<newImpls.length; i++) {
+        for (int i=0; i<newImpls.length; i++) {               
             DEBUG ("try to add " + newImpls[i] );
             Object newFactory = null;
-
+            
             try {
                 if (loader == null)
                     loader = getLoader();
-
+                
                 newFactory = loader.activate( newImpls[i], null, null, null );
-            }
+            } 
             catch (com.sun.star.uno.Exception e) {
-
+                
 //****************************** BEGIN DEPRECATED ******************************************
-
+                
                 try {
                     // try to get the class of the implementation
                     Class clazz = Class.forName( newImpls[i] );
-
+                    
                     Class[] methodClassParam = { String.class, XMultiServiceFactory.class, XRegistryKey.class };
                     java.lang.reflect.Method getFactoryMeth = null;
                     try {
@@ -197,12 +197,12 @@ public class ServiceManager implements XMultiServiceFactory,
                     catch (SecurityException securityExc) {
                         getFactoryMeth = null;
                     }
-
+                    
                     if (getFactoryMeth == null)
                         getFactoryMeth = clazz.getMethod("getServiceFactory", methodClassParam);
-
-                    Object[] methodParams = { newImpls[i], this, null };
-                    newFactory = getFactoryMeth.invoke( clazz, methodParams );
+    
+                    Object[] methodParams = { newImpls[i], this, null };                                 
+                    newFactory = getFactoryMeth.invoke( clazz, methodParams );                          
                 }
                 catch (NoSuchMethodException ex) {}
                 catch (SecurityException ex) {}
@@ -210,13 +210,13 @@ public class ServiceManager implements XMultiServiceFactory,
                 catch (IllegalAccessException ex) {}
                 catch (IllegalArgumentException ex) {}
                 catch (InvocationTargetException ex) {}
-
+                
 //****************************** END DEPRECATED ******************************************
             }
-
+            
             if ( newFactory == null )
                 throw new com.sun.star.loader.CannotActivateFactoryException("Can not get factory for " +  newImpls[i]);
-
+            
             insert( newFactory );
         } // end of for ...
     }
@@ -225,13 +225,13 @@ public class ServiceManager implements XMultiServiceFactory,
      * The method is used to add components to the <code>ServiceManager</code>. The first argument indicates a <code>SimpleRegistry</code>.
      * The components which should be added will be searched under the <i>Implementations</i> key in the registry.
      * <p>
-     * @param   args    the first argument ( args[0] ) specifices the SimpleRegistry object
-     * @see     com.sun.star.lang.XInitialization
-     * @see     com.sun.star.lang.RegistryServiceManager
-     * @see     com.sun.star.lang.XSimpleRegistry
+     * @param 	args	the first argument ( args[0] ) specifices the SimpleRegistry object
+     * @see		com.sun.star.lang.XInitialization
+     * @see		com.sun.star.lang.RegistryServiceManager
+     * @see		com.sun.star.lang.XSimpleRegistry
      */
-    public void initialize( Object args[] )
-                throws  com.sun.star.uno.Exception,
+    public void initialize( Object args[] ) 
+                throws 	com.sun.star.uno.Exception, 
                         com.sun.star.uno.RuntimeException {
         XSimpleRegistry xSimpleRegistry = null;
         try {
@@ -239,17 +239,17 @@ public class ServiceManager implements XMultiServiceFactory,
             if (xSimpleRegistry != null)
             {
                 XRegistryKey rootkey = xSimpleRegistry.getRootKey();
-
+                
                 XRegistryKey implkey_xRegistryKey = rootkey.openKey("Implementations");
                 if(implkey_xRegistryKey != null) {
                     XRegistryKey xRegistryKeys[] = implkey_xRegistryKey.openKeys();
-
+                    
                     for(int i = 0; i < xRegistryKeys.length; ++ i) {
                         xaddFactories(new String[]{xRegistryKeys[i].getStringValue()});
                     }
                 }
             }
-
+            
             if (args.length > 1)
             {
                 m_xDefaultContext = (XComponentContext)args[ 1 ];
@@ -260,29 +260,29 @@ public class ServiceManager implements XMultiServiceFactory,
             throw new com.sun.star.lang.IllegalArgumentException("Argument must not be null.");
         }
     }
-
+    
     /**
-     * Creates a new instance of a specified service. Therefor the associated factory of the service is
+     * Creates a new instance of a specified service. Therefor the associated factory of the service is 
      * looked up and used to instanciate a new component.
      * <p>
-     * @return  newly created component
-     * @param   serviceSpecifier    indicates the service or component name
-     * @see     com.sun.star.lang.XMultiServiceFactory
+     * @return	newly created component
+     * @param	serviceSpecifier 	indicates the service or component name
+     * @see		com.sun.star.lang.XMultiServiceFactory
      */
-    public java.lang.Object createInstance( String serviceSpecifier )
-            throws com.sun.star.uno.Exception,
+    public java.lang.Object createInstance( String serviceSpecifier ) 
+            throws com.sun.star.uno.Exception, 
                    com.sun.star.uno.RuntimeException
     {
         return createInstanceWithContext( serviceSpecifier, m_xDefaultContext );
     }
-
+    
     /**
-     * Creates a new instance of a specified service with the given parameters.
+     * Creates a new instance of a specified service with the given parameters. 
      * Therefor the associated factory of the service is  looked up and used to instanciate a new component.
      * <p>
-     * @return  newly created component
-     * @param   serviceSpecifier    indicates the service or component name
-     * @see     com.sun.star.lang.XMultiServiceFactory
+     * @return	newly created component
+     * @param	serviceSpecifier 	indicates the service or component name
+     * @see		com.sun.star.lang.XMultiServiceFactory
      */
     public java.lang.Object createInstanceWithArguments(
         String serviceSpecifier, Object[] args )
@@ -290,52 +290,52 @@ public class ServiceManager implements XMultiServiceFactory,
     {
         if (DEBUG) {
             System.err.println("createInstanceWithArguments:" );
-
+            
             for (int i=0; i<args.length; i++)
                 System.err.print(" "+ args[i]);
-
+            
             System.err.println();
         }
-
+        
         return createInstanceWithArgumentsAndContext( serviceSpecifier, args, m_xDefaultContext );
     }
-
+    
     /**
      * Look up the factory for a given service or implementation name.
      * First the requested service name is search in the list of avaible services. If it can not be found
-     * the name is looked up in the the implementation list.
+     * the name is looked up in the the implementation list. 
      * <p>
-     * @return  the factory of the service / implementation
-     * @param   serviceSpecifier    indicates the service or implementation name
-     * @see     com.sun.star.lang.XMultiServiceFactory
+     * @return	the factory of the service / implementation
+     * @param	serviceSpecifier 	indicates the service or implementation name
+     * @see		com.sun.star.lang.XMultiServiceFactory
      */
     private Object queryServiceFactory(String serviceName)
-            throws com.sun.star.uno.Exception,
+            throws com.sun.star.uno.Exception, 
                    com.sun.star.uno.RuntimeException
     {
         DEBUG("queryServiceFactory for name " + serviceName );
         Object factory = null;
-
+                
         if ( factoriesByServiceNames.containsKey( serviceName ) ) {
             java.util.Vector aviableFact = (java.util.Vector) factoriesByServiceNames.get( serviceName );
-
+            
             DEBUG("");
             DEBUG("aviable factories for " + serviceName +" "+ aviableFact);
             DEBUG("");
-
+            
             if ( !aviableFact.isEmpty() )
                 factory = aviableFact.lastElement();
-
+            
         } else // not found in list of services - now try the implementations
             factory = factoriesByImplNames.get( serviceName ); // return null if none is aviable
-
+       
         if (DEBUG) {
             if (factory == null) System.err.println("service not registered");
             else
                 System.err.println("service found:" + factory + " " + UnoRuntime.queryInterface(XSingleServiceFactory.class, factory));
         }
-
-        if (factory == null)
+        
+        if (factory == null) 
             throw new com.sun.star.uno.Exception("Query for service factory for " + serviceName + " failed.");
 
         return factory;
@@ -344,20 +344,20 @@ public class ServiceManager implements XMultiServiceFactory,
     /**
      * Supplies a list of all avialable services names.
      * <p>
-     * @return  list of Strings of all service names
-     * @see     com.sun.star.container.XContentEnumerationAccess
-     */
-    public String[] getAvailableServiceNames()
-            throws com.sun.star.uno.RuntimeException
+     * @return 	list of Strings of all service names
+     * @see 	com.sun.star.container.XContentEnumerationAccess
+     */ 
+    public String[] getAvailableServiceNames() 
+            throws com.sun.star.uno.RuntimeException 
     {
         int i = 0;
         String[] availableServiceNames = new String[factoriesByServiceNames.size()];
-
+        
         java.util.Enumeration keys = factoriesByServiceNames.keys();
-
+        
         while (keys.hasMoreElements())
             availableServiceNames[i++] = (String) keys.nextElement();
-
+        
         return availableServiceNames;
     }
 
@@ -446,47 +446,47 @@ public class ServiceManager implements XMultiServiceFactory,
         return null;
     }
 //      public String[] getAvailableServiceNames();
-
+    
     /**
      * Removes all listeners from the <code>ServiceManager</code> and clears the list of the services.
      * <p>
-     * @see com.sun.star.lang.XComponent
+     * @see	com.sun.star.lang.XComponent
      */
-    public void dispose()
+    public void dispose() 
         throws com.sun.star.uno.RuntimeException
     {
         if (eventListener != null) {
             java.util.Enumeration enumer = eventListener.elements();
-
+            
             while (enumer.hasMoreElements()) {
                 XEventListener listener = (XEventListener) enumer.nextElement();
                 listener.disposing(new com.sun.star.lang.EventObject(this));
             }
         }
-
+        
         eventListener.removeAllElements();
-        factoriesByServiceNames.clear();
+        factoriesByServiceNames.clear();        
         factoriesByImplNames.clear();
     }
 
     /**
-     * Adds a new <code>EventListener</code>. The listener is notified when a
-     * service is added (removed) to (from) the <code>ServiceManager</code>.
-     * If the listener is already registred a
+     * Adds a new <code>EventListener</code>. The listener is notified when a 
+     * service is added (removed) to (from) the <code>ServiceManager</code>. 
+     * If the listener is already registred a 
      * <code>com.sun.star.uno.RuntimeException</code> will be thrown.
      * <p>
-     * @param   xListener   the new listener which should been added.
-     * @see     com.sun.star.lang.XComponent
+     * @param 	xListener	the new listener which should been added.
+     * @see		com.sun.star.lang.XComponent
      */
-    public void addEventListener( XEventListener xListener )
+    public void addEventListener( XEventListener xListener ) 
             throws com.sun.star.uno.RuntimeException
     {
         if (xListener == null)
             throw new com.sun.star.uno.RuntimeException("Listener must not be null");
-
+  
           if ( eventListener.contains(xListener) )
-              throw new com.sun.star.uno.RuntimeException("Listener already registred.");
-
+              throw new com.sun.star.uno.RuntimeException("Listener already registred.");      	
+            
            eventListener.addElement(xListener);
     }
 
@@ -495,158 +495,158 @@ public class ServiceManager implements XMultiServiceFactory,
      * If the listener is not registered a <code>com.sun.star.uno.RuntimeException</code>
      * will be thrown.
      * <p>
-     * @param   xListener   the new listener which should been removed.
-     * @see com.sun.star.lang.XComponent
+     * @param 	xListener	the new listener which should been removed.
+     * @see	com.sun.star.lang.XComponent
      */
-    public void removeEventListener( XEventListener xListener )
+    public void removeEventListener( XEventListener xListener ) 
             throws com.sun.star.uno.RuntimeException
     {
         if (xListener == null)
             throw new com.sun.star.uno.RuntimeException("Listener must not be null");
-
+  
           if ( !eventListener.contains(xListener) )
-              throw new com.sun.star.uno.RuntimeException("Listener is not registered.");
-
-        eventListener.removeElement(xListener);
+              throw new com.sun.star.uno.RuntimeException("Listener is not registered.");      	
+            
+        eventListener.removeElement(xListener);	
     }
 
     /**
      * Checks if a component is registered at the <code>ServiceManager</code>. The given object argument must
      * provide a <code>XServiceInfo</code> interface.
      * <p>
-     * @return  true if the component is registred otherwise false.
-     * @param   object object which provides a <code>XServiceInfo</code> interface.
-     * @see     com.sun.star.container.XSet
-     * @see     com.sun.star.lang.XServiceInfo
+     * @return 	true if the component is registred otherwise false. 
+     * @param	object object which provides a <code>XServiceInfo</code> interface.
+     * @see		com.sun.star.container.XSet
+     * @see		com.sun.star.lang.XServiceInfo
      */
-    public boolean has( Object object )
+    public boolean has( Object object ) 
         throws com.sun.star.uno.RuntimeException
     {
-            if (object == null)
+            if (object == null) 
                 throw new com.sun.star.uno.RuntimeException("The parameter must not been null");
-
+            
             XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, object);
-
+            
             if (xServiceInfo != null) {
                 return UnoRuntime.areSame(factoriesByImplNames.get(xServiceInfo.getImplementationName()), object);
-            }
-
+            }   
+        
         return false;
     }
 
     /**
      * Adds a <code>SingleServiceFactory</code> to the <code>ServiceManager</code>.
      * <p>
-     * @param   object  factory which should be added.
+     * @param	object	factory which should be added.
      * @see com.sun.star.container.XSet
-     * @see com.sun.star.lang.XSingleServiceFactory
+     * @see	com.sun.star.lang.XSingleServiceFactory
      */
-    public void insert( Object object )
-        throws com.sun.star.lang.IllegalArgumentException,
-               com.sun.star.container.ElementExistException,
+    public void insert( Object object ) 
+        throws com.sun.star.lang.IllegalArgumentException, 
+               com.sun.star.container.ElementExistException, 
                com.sun.star.uno.RuntimeException
     {
         if (object == null) throw new com.sun.star.lang.IllegalArgumentException();
-
-        XServiceInfo xServiceInfo =
+        
+        XServiceInfo xServiceInfo = 
                 UnoRuntime.queryInterface(XServiceInfo.class, object);
-
-        if (xServiceInfo == null)
+        
+        if (xServiceInfo == null) 
             throw new com.sun.star.lang.IllegalArgumentException(
                 "The given object does not implement the XServiceInfo interface."
             );
-
+            
         if ( factoriesByImplNames.containsKey( xServiceInfo.getImplementationName() ) ) {
             throw new com.sun.star.container.ElementExistException(
                 xServiceInfo.getImplementationName() + " already registred"
             );
         }
-
+        
         DEBUG("add factory " + object.toString() + " for " + xServiceInfo.getImplementationName());
         factoriesByImplNames.put( xServiceInfo.getImplementationName(), object );
-
-
+        
+            
         String[] serviceNames = xServiceInfo.getSupportedServiceNames();
         java.util.Vector vec = null;
-
-        for (int i=0; i<serviceNames.length; i++) {
+            
+        for (int i=0; i<serviceNames.length; i++) {                
             if ( !factoriesByServiceNames.containsKey( serviceNames[i] ) ) {
                 DEBUG("> no registered services found under " + serviceNames[i] + ": adding..." );
                 factoriesByServiceNames.put(serviceNames[i], new java.util.Vector());
             }
-
-            vec = (java.util.Vector) factoriesByServiceNames.get( serviceNames[i] );
-
+                
+            vec = (java.util.Vector) factoriesByServiceNames.get( serviceNames[i] );                                                  
+            
             if ( vec.contains( object ) )
                 System.err.println("The implementation " + xServiceInfo.getImplementationName() +
                     " already registered for the service " + serviceNames[i] + " - ignoring!");
-            else
-                vec.addElement(object);
-        }
+            else                
+                vec.addElement(object); 
+        }        
     }
 
     /**
      * Removes a <code>SingleServiceFactory</code> from the <code>ServiceManager</code>.
      * <p>
-     * @param   object  factory which should be removed.
+     * @param	object	factory which should be removed.
      * @see com.sun.star.container.XSet
-     * @see com.sun.star.lang.XSingleServiceFactory
+     * @see	com.sun.star.lang.XSingleServiceFactory
      */
-    public void remove( Object object )
-        throws com.sun.star.lang.IllegalArgumentException,
-               com.sun.star.container.NoSuchElementException,
+    public void remove( Object object ) 
+        throws com.sun.star.lang.IllegalArgumentException, 
+               com.sun.star.container.NoSuchElementException, 
                com.sun.star.uno.RuntimeException
     {
-        if (object == null)
+        if (object == null) 
             throw new com.sun.star.lang.IllegalArgumentException(
                     "The given object must not be null."
             );
-
-        XServiceInfo xServiceInfo =
+        
+        XServiceInfo xServiceInfo = 
             UnoRuntime.queryInterface(XServiceInfo.class, object);
-
+        
         if (xServiceInfo == null)
             throw new com.sun.star.lang.IllegalArgumentException(
                     "The given object does not implement the XServiceInfo interface."
             );
-
-        XSingleServiceFactory xSingleServiceFactory =
+        
+        XSingleServiceFactory xSingleServiceFactory = 
             UnoRuntime.queryInterface(XSingleServiceFactory.class, object);
-
-        if (xSingleServiceFactory == null)
+        
+        if (xSingleServiceFactory == null) 
             throw new com.sun.star.lang.IllegalArgumentException(
                     "The given object does not implement the XSingleServiceFactory interface."
             );
-
+        
         if ( factoriesByImplNames.remove( xServiceInfo.getImplementationName() ) == null )
             throw new com.sun.star.container.NoSuchElementException(
-                    xServiceInfo.getImplementationName() +
+                    xServiceInfo.getImplementationName() + 
                     " is not registered as an implementation."
             );
-
+        
         String[] serviceNames = xServiceInfo.getSupportedServiceNames();
-
+        
         for ( int i=0; i<serviceNames.length; i++ ) {
             if ( factoriesByServiceNames.containsKey( serviceNames[i] ) ) {
                 java.util.Vector vec = (java.util.Vector) factoriesByServiceNames.get(serviceNames[i]);
-
-                if ( !vec.removeElement(object) )
+                
+                if ( !vec.removeElement(object) ) 
                     System.err.println("The implementation " + xServiceInfo.getImplementationName() +
                         " is not registered for the service " + serviceNames[i] + " - ignoring!");
-
+                
                 if ( vec.isEmpty() ) // remove the vector if no implementations aviable for the service
-                    factoriesByServiceNames.remove( serviceNames[i] );
-            }
+                    factoriesByServiceNames.remove( serviceNames[i] );   
+            }                    
         }
     }
 
     /**
      * Provides an enumeration of all registred services.
      * <p>
-     * @return  an enumeration of all avialable services.
-     * @see     com.sun.star.conatiner.XEnumerationAccess
+     * @return 	an enumeration of all avialable services.
+     * @see 	com.sun.star.conatiner.XEnumerationAccess
      */
-    public XEnumeration createEnumeration()
+    public XEnumeration createEnumeration()	
             throws com.sun.star.uno.RuntimeException
     {
         return new ServiceEnumerationImpl( factoriesByImplNames.elements() );
@@ -655,9 +655,9 @@ public class ServiceManager implements XMultiServiceFactory,
     /**
      * Provides the UNO type of the <code>ServiceManager</code>
      * <p>
-     * @return  the UNO type of the <code>ServiceManager</code>.
-     * @see     com.sun.star.container.XElementAccess
-     * @see     com.sun.star.uno.TypeClass
+     * @return 	the UNO type of the <code>ServiceManager</code>.
+     * @see 	com.sun.star.container.XElementAccess
+     * @see		com.sun.star.uno.TypeClass
      */
     public com.sun.star.uno.Type getElementType()
             throws com.sun.star.uno.RuntimeException
@@ -671,8 +671,8 @@ public class ServiceManager implements XMultiServiceFactory,
     /**
      * Checks if the any componets are registered.
      * <p>
-     * @return  true - if the list of the registred components is not empty - otherwise false.
-     * @see     com.sun.star.container.XElementAccess
+     * @return	true - if the list of the registred components is not empty - otherwise false.
+     * @see		com.sun.star.container.XElementAccess
      */
     public boolean hasElements() {
         return ! factoriesByImplNames.isEmpty();
@@ -681,33 +681,33 @@ public class ServiceManager implements XMultiServiceFactory,
     /**
      * Provides an enumeration of of all factorys for a specified service.
      * <p>
-     * @return  an enumeration for service name.
-     * @param   serviceName     name of the requested service
-     * @see     com.sun.star.container.XContentEnumerationAccess
+     * @return	an enumeration for service name.
+     * @param	serviceName		name of the requested service
+     * @see 	com.sun.star.container.XContentEnumerationAccess
      */
     public XEnumeration createContentEnumeration( String serviceName )
                 throws com.sun.star.uno.RuntimeException
     {
         XEnumeration enumer = null;
-
+        
         java.util.Vector serviceList = (java.util.Vector) factoriesByServiceNames.get(serviceName);
-
+        
         if (serviceList != null)
             enumer = new ServiceEnumerationImpl( serviceList.elements() );
-        else
+        else 
             enumer = new ServiceEnumerationImpl();
-
+            
         return enumer;
     }
-
+      
     /**
      * Returns the implementation name of the <code>ServiceManager</code> component.
      * <p>
-     * @return  the class name of the <code>ServiceManager</code>.
-     * @see     com.sun.star.lang.XServiceInfo
+     * @return	the class name of the <code>ServiceManager</code>.
+     * @see		com.sun.star.lang.XServiceInfo
      */
-    public String getImplementationName()
-            throws com.sun.star.uno.RuntimeException
+    public String getImplementationName() 
+            throws com.sun.star.uno.RuntimeException 
     {
         return getClass().getName();
     }
@@ -715,132 +715,132 @@ public class ServiceManager implements XMultiServiceFactory,
     /**
      * Checks if the <code>ServiceManager</code> supports a service.
      * <p>
-     * @return  true if the service is supported - otherwise false.
-     * @param   serviceName service name which should be checked.
-     * @see     com.sun.star.lang.XServiceInfo
+     * @return	true if the service is supported - otherwise false.
+     * @param	serviceName	service name which should be checked. 
+     * @see		com.sun.star.lang.XServiceInfo
      */
     public boolean supportsService( String serviceName )
-            throws com.sun.star.uno.RuntimeException
+            throws com.sun.star.uno.RuntimeException 
     {
         for (int i=0; i<supportedServiceNames.length; i++)
             if (supportedServiceNames[i].equals( serviceName )) return true;
-
+            
         if (getImplementationName().equals( serviceName )) return true;
-
+        
         return false;
     }
-
+    
     /**
-     * Supplies list of all supported services.
+     * Supplies list of all supported services. 
      * <p>
-     * @return  a list of all supported service names.
-     * @see     com.sun.star.lang.XServiceInfo
+     * @return	a list of all supported service names.
+     * @see		com.sun.star.lang.XServiceInfo
      */
     public String[] getSupportedServiceNames()
-            throws com.sun.star.uno.RuntimeException
-    {
+            throws com.sun.star.uno.RuntimeException 
+    {	    
         return supportedServiceNames;
     }
-
+    
     /**
-     * The <code>ServiceEnumerationImpl</code> class provides an
-     * implementation of the @see com.sun.star.container.XEnumeration interface.
+     * The <code>ServiceEnumerationImpl</code> class provides an 
+     * implementation of the @see com.sun.star.container.XEnumeration interface. 
      * It is a inner wrapper for a java.util.Enumeration object.
      * <p>
-     * @version     $Revision: 1.10 $ $ $Date: 2008-04-11 11:11:46 $
-     * @author      Markus Herzog
+     * @version 	$Revision: 1.10 $ $ $Date: 2008-04-11 11:11:46 $
+     * @author 	    Markus Herzog
      * @see         com.sun.star.lang.XSingleServiceFactory
      * @see         com.sun.star.lang.XServiceInfo
      * @since       UDK1.0
      */
     class ServiceEnumerationImpl implements XEnumeration {
         java.util.Enumeration enumeration = null;
-
+    
         /**
          * Constructs a new empty instance.
          */
         public ServiceEnumerationImpl() {
         }
-
+    
         /**
          * Constructs a new instance with a given enumeration.
          * <p>
-         * @param   enumer  is the enumeration which should been wrapped.
-         * @see     com.sun.star.container.XEnumeration
+         * @param	enumer	is the enumeration which should been wrapped.
+         * @see		com.sun.star.container.XEnumeration
          */
         public ServiceEnumerationImpl(java.util.Enumeration enumer) {
             enumeration = enumer;
         }
-
+            
         /**
          * Checks if the enumeration contains more elements.
          * <p>
-         * @return  true if more elements are available - otherwise false.
-         * @see     com.sun.star.container.XEnumeration
+         * @return	true if more elements are available - otherwise false.
+         * @see		com.sun.star.container.XEnumeration
          */
-        public boolean hasMoreElements()
-                throws com.sun.star.uno.RuntimeException
+        public boolean hasMoreElements() 
+                throws com.sun.star.uno.RuntimeException 
         {
             if (enumeration != null)
                 return enumeration.hasMoreElements();
-
+                
             return false;
         }
-
+    
         /**
          * Returns the next element of the enumeration. If no further elements
          * available a com.sun.star.container.NoSuchElementException exception will be thrown.
          * <p>
-         * @return  the next element.
-         * @see     com.sun.star.container.XEnumeration
+         * @return	the next element.
+         * @see		com.sun.star.container.XEnumeration
          */
-        public Object nextElement()
-                throws com.sun.star.container.NoSuchElementException,
-                       com.sun.star.lang.WrappedTargetException,
+        public Object nextElement() 
+                throws com.sun.star.container.NoSuchElementException, 
+                       com.sun.star.lang.WrappedTargetException, 
                        com.sun.star.uno.RuntimeException
         {
             if (enumeration == null)
                 throw new com.sun.star.container.NoSuchElementException();
-
+                
             try {
                 return enumeration.nextElement();
             } catch (java.util.NoSuchElementException e) {
-                com.sun.star.container.NoSuchElementException ex =
+                com.sun.star.container.NoSuchElementException ex = 
                         new com.sun.star.container.NoSuchElementException();
                 ex.fillInStackTrace();
-
+                
                 throw ex;
             }
         }
     }
 }
 /**
- * The <code>ServiceManagerFactory</code> is the factory class for the
- * <code>ServiceManager</code>. As all factories it implments the
+ * The <code>ServiceManagerFactory</code> is the factory class for the 
+ * <code>ServiceManager</code>. As all factories it implments the 
  * com.sun.star.lang.XSingleServiceFactory and the com.sun.star.lang.XServiceInfo
  * interfaces.
  * <p>
- * @version     $Revision: 1.10 $ $ $Date: 2008-04-11 11:11:46 $
- * @author      Markus Herzog
+ * @version 	$Revision: 1.10 $ $ $Date: 2008-04-11 11:11:46 $
+ * @author 	    Markus Herzog
  * @see         com.sun.star.lang.XSingleServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
  * @since       UDK1.0
 */
-class ServiceManagerFactory implements  XServiceInfo, XSingleComponentFactory, XSingleServiceFactory
+class ServiceManagerFactory implements 	XServiceInfo, XSingleComponentFactory, XSingleServiceFactory
 {
     /**
      * Creates a new instance of the <code>ServiceManagerFactory</code>.
      */
     public ServiceManagerFactory() {
     }
-
+    
     /**
      * Supplies the implementation name of the <code>ServiceManager</code>.
      * <p>
-     * @return      <code>ServiceManager</code> class name.
+     * @return		<code>ServiceManager</code> class name.
       * @see         com.sun.star.lang.XServiceInfo
      */
-    public String getImplementationName()
+    public String getImplementationName() 
             throws com.sun.star.uno.RuntimeException
     {
         return ServiceManager.class.getName();
@@ -849,28 +849,28 @@ class ServiceManagerFactory implements  XServiceInfo, XSingleComponentFactory, X
     /**
      * Checks wether or not a service is supported.
      * <p>
-     * @return      true - if the service is supported, otherwise false.
-     * @param       serviceName     the name of the service that should be checked.
+     * @return 		true - if the service is supported, otherwise false.
+     * @param		serviceName		the name of the service that should be checked.
       * @see         com.sun.star.lang.XServiceInfo
      */
-    public boolean supportsService( String serviceName )
+    public boolean supportsService( String serviceName ) 
             throws com.sun.star.uno.RuntimeException
     {
         for ( int i=0; i<ServiceManager.supportedServiceNames.length; i++ )
             if ( ServiceManager.supportedServiceNames[i].equals(serviceName) ) return true;
-
+        
         if ( getImplementationName().equals(serviceName) ) return true;
-
+        
         return false;
     }
 
     /**
      * Returns all service names which are supported by <code>ServiceManager</code>.
      * <p>
-     * @return      a list aof all supported service names.
+     * @return		a list aof all supported service names.
       * @see         com.sun.star.lang.XServiceInfo
      */
-    public String[] getSupportedServiceNames()
+    public String[] getSupportedServiceNames() 
             throws com.sun.star.uno.RuntimeException
     {
         return ServiceManager.supportedServiceNames;
@@ -879,11 +879,11 @@ class ServiceManagerFactory implements  XServiceInfo, XSingleComponentFactory, X
     /**
      * Creates a new instance of the <code>ServiceManager</code>.
      * <p>
-     * @return      newly created <code>ServiceManager</code> object.
+     * @return		newly created <code>ServiceManager</code> object.
       * @see         com.sun.star.lang.XSingleServiceFactory
      */
-    public java.lang.Object createInstance()
-            throws com.sun.star.uno.Exception,
+    public java.lang.Object createInstance() 
+            throws com.sun.star.uno.Exception, 
                    com.sun.star.uno.RuntimeException
     {
         return new ServiceManager();
@@ -895,17 +895,17 @@ class ServiceManagerFactory implements  XServiceInfo, XSingleComponentFactory, X
      * because there is no the <code>ServiceManager</code> has no constructor with
      * arguments.
      * <p>
-     * @return      null - allways throws an exception
-     * @param       aArguments arguments for new instance.
+     * @return		null - allways throws an exception
+     * @param		aArguments arguments for new instance.
       * @see         com.sun.star.lang.XSingleServiceFactory
      */
-    public java.lang.Object createInstanceWithArguments( java.lang.Object[] aArguments )
-            throws com.sun.star.uno.Exception,
+    public java.lang.Object createInstanceWithArguments( java.lang.Object[] aArguments ) 
+            throws com.sun.star.uno.Exception, 
                    com.sun.star.uno.RuntimeException
     {
         throw new com.sun.star.lang.NoSuchMethodException("Constructor with arguments is not supported.");
     }
-
+    
     // XSingleComponentFactory impl
     //______________________________________________________________________________________________
     public Object createInstanceWithContext( XComponentContext xContext )

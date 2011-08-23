@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,33 +39,37 @@
 
 #include "fldpage.hxx"
 
+/*--------------------------------------------------------------------
+   Beschreibung:
+ --------------------------------------------------------------------*/
+
 class SwFldDBPage : public SwFldPage
 {
-    FixedText           aTypeFT;
-    ListBox             aTypeLB;
-    FixedText           aSelectionFT;
-    SwDBTreeList        aDatabaseTLB;
+    FixedText 			aTypeFT;
+    ListBox 			aTypeLB;
+    FixedText 			aSelectionFT;
+    SwDBTreeList		aDatabaseTLB;
 
     FixedText           aAddDBFT;
     PushButton          aAddDBPB;
-
-    FixedText           aConditionFT;
-    ConditionEdit       aConditionED;
-    FixedText           aValueFT;
-    Edit                aValueED;
-    RadioButton         aDBFormatRB;
-    RadioButton         aNewFormatRB;
-    NumFormatListBox    aNumFormatLB;
-    ListBox             aFormatLB;
+            
+    FixedText 			aConditionFT;
+    ConditionEdit		aConditionED;
+    FixedText 			aValueFT;
+    Edit 				aValueED;
+    RadioButton			aDBFormatRB;
+    RadioButton			aNewFormatRB;
+    NumFormatListBox	aNumFormatLB;
+    ListBox				aFormatLB;
     FixedLine           aFormatFL;
     FixedLine           aFormatVertFL;
 
-    String              sOldDBName;
-    String              sOldTableName;
-    String              sOldColumnName;
-    sal_uLong               nOldFormat;
-    sal_uInt16              nOldSubType;
-    Link                aOldNumSelectHdl;
+    String				sOldDBName;
+    String				sOldTableName;
+    String				sOldColumnName;
+    ULONG				nOldFormat;
+    USHORT				nOldSubType;
+    Link				aOldNumSelectHdl;
 
     DECL_LINK( TypeHdl, ListBox* );
     DECL_LINK( NumSelectHdl, NumFormatListBox* pLB = 0);
@@ -73,12 +77,12 @@ class SwFldDBPage : public SwFldPage
     DECL_LINK( ModifyHdl, Edit *pED = 0 );
     DECL_LINK( AddDBHdl, PushButton* );
 
-    void                CheckInsert();
+    void				CheckInsert();
 
     using SwFldPage::SetWrtShell;
 
 protected:
-    virtual sal_uInt16      GetGroup();
+    virtual USHORT		GetGroup();
 
 public:
                         SwFldDBPage(Window* pParent, const SfxItemSet& rSet);
@@ -87,12 +91,12 @@ public:
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    virtual void        FillUserData();
+    virtual void		FillUserData();
     void                ActivateMailMergeAddress();
-
+    
     void                SetWrtShell(SwWrtShell& rSh);
 };
 

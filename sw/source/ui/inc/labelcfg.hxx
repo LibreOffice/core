@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,12 +47,12 @@ public:
     virtual void Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 
-    void    FillLabels(const rtl::OUString& rManufacturer, SwLabRecs& rLabArr);
+    void	FillLabels(const rtl::OUString& rManufacturer, SwLabRecs& rLabArr);
     const com::sun::star::uno::Sequence<rtl::OUString>&
             GetManufacturers() const {return aNodeNames;}
 
-    sal_Bool    HasLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType);
-    void        SaveLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType,
+    sal_Bool	HasLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType);
+    void		SaveLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType,
                             const SwLabRec& rRec);
 };
 

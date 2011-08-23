@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ class ViewClipboard;
 struct SdViewRedrawRec
 {
     OutputDevice* mpOut;
-    Rectangle     aRect;
+    Rectangle	  aRect;
 };
 
 
@@ -78,50 +78,50 @@ public:
     TYPEINFO();
 
     View (
-        SdDrawDocument* pDrawDoc,
-        OutputDevice* pOutDev,
+        SdDrawDocument* pDrawDoc, 
+        OutputDevice* pOutDev, 
         ViewShell* pViewSh=NULL);
     virtual ~View (void);
 
     void                    CompleteRedraw( OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
 
-    virtual sal_Bool            GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False ) const;
-    virtual sal_Bool            SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False);
-    virtual void            MarkListHasChanged();
-    virtual void            ModelHasChanged();
+    virtual BOOL 	        GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE ) const;
+    virtual BOOL   	        SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
+    virtual void	        MarkListHasChanged();
+    virtual void	        ModelHasChanged();
     virtual void            SelectAll();
     virtual void            DoCut(::Window* pWindow=NULL);
     virtual void            DoCopy(::Window* pWindow=NULL);
     virtual void            DoPaste(::Window* pWindow=NULL);
     virtual void            DoConnect(SdrOle2Obj* pOleObj);
-    virtual sal_Bool            SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr = sal_False);
+    virtual BOOL            SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr = FALSE);
     virtual void            StartDrag( const Point& rStartPos, ::Window* pWindow );
     virtual void            DragFinished( sal_Int8 nDropAction );
     virtual sal_Int8 AcceptDrop (
-        const AcceptDropEvent& rEvt,
+        const AcceptDropEvent& rEvt, 
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        ::sd::Window* pTargetWindow = NULL, 
+        USHORT nPage = SDRPAGE_NOTFOUND, 
+        USHORT nLayer = SDRPAGE_NOTFOUND);
     virtual sal_Int8 ExecuteDrop (
-        const ExecuteDropEvent& rEvt,
+        const ExecuteDropEvent& rEvt, 
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        ::sd::Window* pTargetWindow = NULL, 
+        USHORT nPage = SDRPAGE_NOTFOUND, 
+        USHORT nLayer = SDRPAGE_NOTFOUND);
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::datatransfer::XTransferable>
+        ::com::sun::star::datatransfer::XTransferable>	
         CreateClipboardDataObject (::sd::View*, ::Window& rWindow);
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::datatransfer::XTransferable>
-        CreateDragDataObject (::sd::View*, ::Window& rWindow,
+        CreateDragDataObject (::sd::View*, ::Window& rWindow, 
             const Point& rDragPos);
     ::com::sun::star::uno::Reference<
         ::com::sun::star::datatransfer::XTransferable>
         CreateSelectionDataObject (::sd::View*, ::Window& rWindow);
 
-    void                    UpdateSelectionClipboard( sal_Bool bForceDeselect );
+    void                    UpdateSelectionClipboard( BOOL bForceDeselect );
 
     inline DrawDocShell* GetDocSh (void) const;
     inline SdDrawDocument* GetDoc (void) const;
@@ -135,15 +135,15 @@ public:
 
     bool RestoreDefaultText( SdrTextObj* pTextObj );
 
-    sal_Bool                    InsertData( const TransferableDataHelper& rDataHelper,
-                                        const Point& rPos, sal_Int8& rDnDAction, sal_Bool bDrag,
-                                        sal_uLong nFormat = 0, sal_uInt16 nPage = SDRPAGE_NOTFOUND, sal_uInt16 nLayer = SDRLAYER_NOTFOUND );
+    BOOL		            InsertData( const TransferableDataHelper& rDataHelper,
+                                        const Point& rPos, sal_Int8& rDnDAction, BOOL bDrag,
+                                        ULONG nFormat = 0, USHORT nPage = SDRPAGE_NOTFOUND, USHORT nLayer = SDRLAYER_NOTFOUND );
     /** gets the metafile from the given transferable helper and insert it as a graphic shape.
         @param bOptimize if set to true, the metafile is analyzed and if only one bitmap action is
                          present, then is is inserted as a single graphic.
     */
-    bool                    InsertMetaFile( TransferableDataHelper& rDataHelper,
-                                            const Point& rInsertPos,
+    bool					InsertMetaFile( TransferableDataHelper& rDataHelper,
+                                            const Point& rInsertPos, 
                                             ImageMap* pImageMap, bool bOptimize );
 
     SdrGrafObj*             InsertGraphic( const Graphic& rGraphic,
@@ -152,25 +152,25 @@ public:
     SdrMediaObj*            InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize );
 
-    bool PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nPasteOptions );
+    bool PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, ULONG nPasteOptions );
 
-    sal_Bool                    IsPresObjSelected(sal_Bool bOnPage=sal_True, sal_Bool bOnMasterPage=sal_True, sal_Bool bCheckPresObjListOnly=sal_False, sal_Bool bCheckLayoutOnly=sal_False) const;
+    BOOL	                IsPresObjSelected(BOOL bOnPage=TRUE, BOOL bOnMasterPage=TRUE, BOOL bCheckPresObjListOnly=FALSE, BOOL bCheckLayoutOnly=FALSE) const;
 
-    void                    SetMarkedOriginalSize();
+    void	                SetMarkedOriginalSize();
 
-    void                    LockRedraw(sal_Bool bLock);
+    void	                LockRedraw(BOOL bLock);
 
-    sal_Bool                    IsMorphingAllowed() const;
-    sal_Bool                    IsVectorizeAllowed() const;
+    BOOL	                IsMorphingAllowed() const;
+    BOOL	                IsVectorizeAllowed() const;
 
     virtual SfxStyleSheet*  GetStyleSheet() const;
 
-    sal_Bool                    GetExchangeList( List*& rpExchangeList, List* pBookmarkList, sal_uInt16 nType );
+    BOOL	                GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT nType );
 
     virtual void onAccessibilityOptionsChanged();
 
     virtual SdrModel*   GetMarkedObjModel() const;
-    virtual sal_Bool        Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
+    virtual BOOL		Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, UINT32 nOptions=0);
     using SdrExchangeView::Paste;
 
     /** returns true if we have an undo manager and there is an open list undo action */
@@ -183,14 +183,14 @@ public:
     void updateHandles();
 
     virtual SdrViewContext GetContext() const;
-    virtual sal_Bool HasMarkablePoints() const;
-    virtual sal_uLong GetMarkablePointCount() const;
-    virtual sal_Bool HasMarkedPoints() const;
-    virtual sal_uLong GetMarkedPointCount() const;
-    virtual sal_Bool IsPointMarkable(const SdrHdl& rHdl) const;
-    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
+    virtual BOOL HasMarkablePoints() const;
+    virtual ULONG GetMarkablePointCount() const;
+    virtual BOOL HasMarkedPoints() const;
+    virtual ULONG GetMarkedPointCount() const;
+    virtual BOOL IsPointMarkable(const SdrHdl& rHdl) const;
+    virtual BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
     virtual void CheckPossibilities();
-    virtual sal_Bool MarkPoints(const ::Rectangle* pRect, sal_Bool bUnmark);
+    virtual BOOL MarkPoints(const ::Rectangle* pRect, BOOL bUnmark);
     using SdrMarkView::MarkPoints;
 
     void SetPossibilitiesDirty() { bPossibilitiesDirty = true; }
@@ -211,21 +211,21 @@ protected:
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
     virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos );
 
-    SdDrawDocument*         mpDoc;
-    DrawDocShell*           mpDocSh;
-    ViewShell*              mpViewSh;
-    SdrMarkList*            mpDragSrcMarkList;
-    SdrObject*              mpDropMarkerObj;
-    SdrDropMarkerOverlay*   mpDropMarker;
-    sal_uInt16                  mnDragSrcPgNum;
-    Point                   maDropPos;
-    ::std::vector< String > maDropFileVector;
-    sal_Int8                mnAction;
-    Timer                   maDropErrorTimer;
-    Timer                   maDropInsertFileTimer;
-    sal_uInt16                  mnLockRedrawSmph;
-    List*                   mpLockedRedraws;
-    bool                    mbIsDropAllowed;
+    SdDrawDocument* 	    mpDoc;
+    DrawDocShell* 			mpDocSh;
+    ViewShell*				mpViewSh;
+    SdrMarkList*		    mpDragSrcMarkList;
+    SdrObject*			    mpDropMarkerObj;
+    SdrDropMarkerOverlay*	mpDropMarker;
+    USHORT				    mnDragSrcPgNum;
+    Point				    maDropPos;
+    ::std::vector< String >	maDropFileVector;
+    sal_Int8			    mnAction;
+    Timer				    maDropErrorTimer;
+    Timer				    maDropInsertFileTimer;
+    USHORT				    mnLockRedrawSmph;
+    List*				    mpLockedRedraws;
+    bool					mbIsDropAllowed;
 
                             DECL_LINK( DropErrorHdl, Timer* );
                             DECL_LINK( DropInsertFileHdl, Timer* );
@@ -233,20 +233,20 @@ protected:
 
     void ImplClearDrawDropMarker();
 
-    SmartTagSet             maSmartTags;
+    SmartTagSet				maSmartTags;
 
 private:
     ::std::auto_ptr<ViewClipboard> mpClipboard;
 };
 
 
-DrawDocShell* View::GetDocSh (void) const
+DrawDocShell* View::GetDocSh (void) const 
 {
-    return mpDocSh;
+    return mpDocSh; 
 }
-SdDrawDocument* View::GetDoc (void) const
+SdDrawDocument* View::GetDoc (void) const 
 {
-    return mpDoc;
+    return mpDoc; 
 }
 
 ViewShell* View::GetViewShell (void) const

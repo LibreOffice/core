@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ void cancelCommandExecution( const uno::Any & rException,
 
     cppu::throwException( rException );
 
-    OSL_FAIL( "Return from cppu::throwException call!!!" );
+    OSL_ENSURE( sal_False, "Return from cppu::throwException call!!!" );
     throw uno::RuntimeException();
 }
 
@@ -122,7 +122,7 @@ void cancelCommandExecution( const ucb::IOErrorCode eError,
 
     cppu::throwException( xRequest->getRequest() );
 
-    OSL_FAIL( "Return from cppu::throwException call!!!" );
+    OSL_ENSURE( sal_False, "Return from cppu::throwException call!!!" );
     throw uno::RuntimeException();
 }
 

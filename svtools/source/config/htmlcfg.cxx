@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,37 +33,40 @@
 #include <svtools/parhtml.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
+#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <sal/macros.h>
-#include <list>
 
 // -----------------------------------------------------------------------
-#define HTMLCFG_UNKNOWN_TAGS            0x01
-//#define HTMLCFG_STYLE_SHEETS          0x02
-//#define HTMLCFG_NETSCAPE3             0x04
-#define HTMLCFG_STAR_BASIC              0x08
-#define HTMLCFG_LOCAL_GRF               0x10
-#define HTMLCFG_PRINT_LAYOUT_EXTENSION  0x20
-#define HTMLCFG_IGNORE_FONT_FAMILY      0x40
-#define HTMLCFG_IS_BASIC_WARNING        0x80
+#define HTMLCFG_UNKNOWN_TAGS 			0x01
+//#define HTMLCFG_STYLE_SHEETS 			0x02
+//#define HTMLCFG_NETSCAPE3    			0x04
+#define HTMLCFG_STAR_BASIC   			0x08
+#define HTMLCFG_LOCAL_GRF   			0x10
+#define HTMLCFG_PRINT_LAYOUT_EXTENSION 	0x20
+#define HTMLCFG_IGNORE_FONT_FAMILY	 	0x40
+#define HTMLCFG_IS_BASIC_WARNING		0x80
 #define HTMLCFG_NUMBERS_ENGLISH_US      0x100
 
 using namespace utl;
+using namespace rtl;
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
 
 static SvxHtmlOptions* pOptions = 0;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+DECLARE_LIST( LinkList, Link * )
 
+#define C2U(cChar) OUString::createFromAscii(cChar)
+/* -----------------------------23.11.00 11:39--------------------------------
+
+ ---------------------------------------------------------------------------*/
 struct HtmlOptions_Impl
 {
-    ::std::list<Link> aList;
-    sal_Int32   nFlags;
-    sal_Int32   nExportMode;
-    sal_Int32   aFontSizeArr[HTML_FONT_COUNT];
-    sal_Int32   eEncoding;
+    LinkList    aList;
+    sal_Int32 	nFlags;
+    sal_Int32 	nExportMode;
+    sal_Int32 	aFontSizeArr[HTML_FONT_COUNT];
+    sal_Int32 	eEncoding;
     sal_Bool    bIsEncodingDefault;
 
     HtmlOptions_Impl() :
@@ -82,6 +85,9 @@ struct HtmlOptions_Impl
     }
 };
 
+/* -----------------------------23.11.00 11:39--------------------------------
+
+ ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -89,21 +95,21 @@ const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
     {
         static const char* aPropNames[] =
         {
-            "Import/UnknownTag",                    //  0
-            "Import/FontSetting",                   //  1
-            "Import/FontSize/Size_1",               //  2
-            "Import/FontSize/Size_2",               //  3
-            "Import/FontSize/Size_3",               //  4
-            "Import/FontSize/Size_4",               //  5
-            "Import/FontSize/Size_5",               //  6
-            "Import/FontSize/Size_6",               //  7
-            "Import/FontSize/Size_7",               //  8
-            "Export/Browser",                       //  9
-            "Export/Basic",                         //  0
-            "Export/PrintLayout",                   // 11
-            "Export/LocalGraphic",                  // 12
-            "Export/Warning",                       // 13
-            "Export/Encoding",                      // 14
+            "Import/UnknownTag",					//  0
+            "Import/FontSetting",					//  1
+            "Import/FontSize/Size_1",				//  2
+            "Import/FontSize/Size_2",				//  3
+            "Import/FontSize/Size_3",				//  4
+            "Import/FontSize/Size_4",				//  5
+            "Import/FontSize/Size_5",				//  6
+            "Import/FontSize/Size_6",				//  7
+            "Import/FontSize/Size_7",				//  8
+            "Export/Browser",						//  9
+            "Export/Basic",							//  0
+            "Export/PrintLayout",					// 11
+            "Export/LocalGraphic",					// 12
+            "Export/Warning",    					// 13
+            "Export/Encoding",  					// 14
             "Import/NumbersEnglishUS"               // 15
         };
         const int nCount = SAL_N_ELEMENTS(aPropNames);
@@ -160,15 +166,17 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
                     case  9://"Export/Browser",
                         {
                             sal_Int32 nExpMode = 0;
+//							pValues[nProp] >>= pImp->nExportMode;
                             pValues[nProp] >>= nExpMode;
                             switch( nExpMode )
                             {
-                                case 0:     nExpMode = HTML_CFG_HTML32;     break;
-                                case 1:     nExpMode = HTML_CFG_MSIE_40;    break;
-                                case 3:     nExpMode = HTML_CFG_WRITER;     break;
-                                case 4:     nExpMode = HTML_CFG_NS40;       break;
-                                case 5:     nExpMode = HTML_CFG_MSIE_40_OLD;break;
-                                default:    nExpMode = HTML_CFG_NS40;       break;
+                                case 0:		nExpMode = HTML_CFG_HTML32;		break;
+                                case 1:		nExpMode = HTML_CFG_MSIE_40;	break;
+//								case 2:		nExpMode = HTML_CFG_NS30;		break;	depricated
+                                case 3:		nExpMode = HTML_CFG_WRITER;		break;
+                                case 4:		nExpMode = HTML_CFG_NS40;		break;
+                                case 5:		nExpMode = HTML_CFG_MSIE_40_OLD;break;
+                                default:	nExpMode = HTML_CFG_NS40;		break;
                             }
 
                             pImp->nExportMode = nExpMode;
@@ -206,13 +214,15 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
 }
 
 // -----------------------------------------------------------------------
-void    SvxHtmlOptions::Commit()
+void	SvxHtmlOptions::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
 
+//	const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
+//	const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         sal_Bool bSet = sal_False;
@@ -227,18 +237,19 @@ void    SvxHtmlOptions::Commit()
             case  6: pValues[nProp] <<= pImp->aFontSizeArr[4];break;//"Import/FontSize/Size_5",
             case  7: pValues[nProp] <<= pImp->aFontSizeArr[5];break;//"Import/FontSize/Size_6",
             case  8: pValues[nProp] <<= pImp->aFontSizeArr[6];break;//"Import/FontSize/Size_7",
-            case  9:                //"Export/Browser",
+            case  9:				//"Export/Browser",
                 {
                     sal_Int32 nExpMode = pImp->nExportMode;
 
                     switch( nExpMode )
                     {
-                        case HTML_CFG_HTML32:       nExpMode = 0;   break;
-                        case HTML_CFG_MSIE_40:      nExpMode = 1;   break;
-                        case HTML_CFG_WRITER:       nExpMode = 3;   break;
-                        case HTML_CFG_NS40:         nExpMode = 4;   break;
-                        case HTML_CFG_MSIE_40_OLD:  nExpMode = 5;   break;
-                        default:                    nExpMode = 4;   break;  // NS40
+                        case HTML_CFG_HTML32:		nExpMode = 0;	break;
+                        case HTML_CFG_MSIE_40:		nExpMode = 1;	break;
+//						case HTML_CFG_NS30:			nExpMode = 2;	break;	depricated
+                        case HTML_CFG_WRITER:		nExpMode = 3;	break;
+                        case HTML_CFG_NS40:			nExpMode = 4;	break;
+                        case HTML_CFG_MSIE_40_OLD:	nExpMode = 5;	break;
+                        default:					nExpMode = 4;	break;	// NS40
                     }
 
                     pValues[nProp] <<= nExpMode;
@@ -262,16 +273,16 @@ void    SvxHtmlOptions::Commit()
 
 void SvxHtmlOptions::AddListenerLink( const Link& rLink )
 {
-    pImp->aList.push_back( rLink );
+    pImp->aList.Insert( new Link( rLink ) );
 }
 
 void SvxHtmlOptions::RemoveListenerLink( const Link& rLink )
 {
-    for ( ::std::list<Link>::iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )
+    for ( USHORT n=0; n<pImp->aList.Count(); n++ )
     {
-        if ( *iter == rLink )
+        if ( (*pImp->aList.GetObject(n) ) == rLink )
         {
-            pImp->aList.erase(iter);
+            delete pImp->aList.Remove(n);
             break;
         }
     }
@@ -279,8 +290,8 @@ void SvxHtmlOptions::RemoveListenerLink( const Link& rLink )
 
 void SvxHtmlOptions::CallListeners()
 {
-    for ( ::std::list<Link>::const_iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )
-        iter->Call( this );
+    for ( USHORT n = 0; n < pImp->aList.Count(); ++n )
+        pImp->aList.GetObject(n)->Call( this );
 }
 
 
@@ -291,14 +302,14 @@ void SvxHtmlOptions::Notify( const com::sun::star::uno::Sequence< rtl::OUString 
 }
 
 // -----------------------------------------------------------------------
-sal_uInt16  SvxHtmlOptions::GetFontSize(sal_uInt16 nPos) const
+USHORT 	SvxHtmlOptions::GetFontSize(USHORT nPos) const
 {
     if(nPos < HTML_FONT_COUNT)
-        return (sal_uInt16)pImp->aFontSizeArr[nPos];
+        return (USHORT)pImp->aFontSizeArr[nPos];
     return 0;
 }
 // -----------------------------------------------------------------------
-void SvxHtmlOptions::SetFontSize(sal_uInt16 nPos, sal_uInt16 nSize)
+void SvxHtmlOptions::SetFontSize(USHORT nPos, USHORT nSize)
 {
     if(nPos < HTML_FONT_COUNT)
     {
@@ -312,7 +323,7 @@ void SvxHtmlOptions::SetFontSize(sal_uInt16 nPos, sal_uInt16 nSize)
 // -----------------------------------------------------------------------
 
 
-sal_Bool SvxHtmlOptions::IsImportUnknown() const
+BOOL SvxHtmlOptions::IsImportUnknown() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_UNKNOWN_TAGS) ;
 }
@@ -320,7 +331,7 @@ sal_Bool SvxHtmlOptions::IsImportUnknown() const
 // -----------------------------------------------------------------------
 
 
-void SvxHtmlOptions::SetImportUnknown(sal_Bool bSet)
+void SvxHtmlOptions::SetImportUnknown(BOOL bSet)
 {
     if(bSet)
         pImp->nFlags |= HTMLCFG_UNKNOWN_TAGS;
@@ -332,15 +343,15 @@ void SvxHtmlOptions::SetImportUnknown(sal_Bool bSet)
 // -----------------------------------------------------------------------
 
 
-sal_uInt16  SvxHtmlOptions::GetExportMode() const
+USHORT 	SvxHtmlOptions::GetExportMode() const
 {
-    return (sal_uInt16)pImp->nExportMode;
+    return (USHORT)pImp->nExportMode;
 }
 
 // -----------------------------------------------------------------------
 
 
-void SvxHtmlOptions::SetExportMode(sal_uInt16 nSet)
+void SvxHtmlOptions::SetExportMode(USHORT nSet)
 {
     if(nSet <= HTML_CFG_MAX )
     {
@@ -353,7 +364,7 @@ void SvxHtmlOptions::SetExportMode(sal_uInt16 nSet)
 // -----------------------------------------------------------------------
 
 
-sal_Bool SvxHtmlOptions::IsStarBasic() const
+BOOL SvxHtmlOptions::IsStarBasic() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_STAR_BASIC) ;
 }
@@ -361,7 +372,7 @@ sal_Bool SvxHtmlOptions::IsStarBasic() const
 // -----------------------------------------------------------------------
 
 
-void SvxHtmlOptions::SetStarBasic(sal_Bool bSet)
+void SvxHtmlOptions::SetStarBasic(BOOL bSet)
 {
     if(bSet)
         pImp->nFlags |=  HTMLCFG_STAR_BASIC;
@@ -370,12 +381,18 @@ void SvxHtmlOptions::SetStarBasic(sal_Bool bSet)
     SetModified();
 }
 
-sal_Bool SvxHtmlOptions::IsSaveGraphicsLocal() const
+/*-----------------14.02.97 08.34-------------------
+
+--------------------------------------------------*/
+
+BOOL SvxHtmlOptions::IsSaveGraphicsLocal() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_LOCAL_GRF) ;
 }
+/*-----------------14.02.97 08.34-------------------
 
-void SvxHtmlOptions::SetSaveGraphicsLocal(sal_Bool bSet)
+--------------------------------------------------*/
+void SvxHtmlOptions::SetSaveGraphicsLocal(BOOL bSet)
 {
     if(bSet)
         pImp->nFlags |=  HTMLCFG_LOCAL_GRF;
@@ -384,9 +401,13 @@ void SvxHtmlOptions::SetSaveGraphicsLocal(sal_Bool bSet)
     SetModified();
 }
 
-sal_Bool    SvxHtmlOptions::IsPrintLayoutExtension() const
+/*-----------------10/21/97 08:34am-----------------
+
+--------------------------------------------------*/
+
+BOOL 	SvxHtmlOptions::IsPrintLayoutExtension() const
 {
-    sal_Bool bRet = 0 != (pImp->nFlags & HTMLCFG_PRINT_LAYOUT_EXTENSION);
+    BOOL bRet = 0 != (pImp->nFlags & HTMLCFG_PRINT_LAYOUT_EXTENSION);
     switch( pImp->nExportMode )
     {
         case HTML_CFG_MSIE_40:
@@ -394,12 +415,14 @@ sal_Bool    SvxHtmlOptions::IsPrintLayoutExtension() const
         case HTML_CFG_WRITER :
         break;
         default:
-            bRet = sal_False;
+            bRet = FALSE;
     }
     return bRet;
 }
+/*-----------------10/21/97 08:34am-----------------
 
-void    SvxHtmlOptions::SetPrintLayoutExtension(sal_Bool bSet)
+--------------------------------------------------*/
+void	SvxHtmlOptions::SetPrintLayoutExtension(BOOL bSet)
 {
     if(bSet)
         pImp->nFlags |=  HTMLCFG_PRINT_LAYOUT_EXTENSION;
@@ -408,12 +431,18 @@ void    SvxHtmlOptions::SetPrintLayoutExtension(sal_Bool bSet)
     SetModified();
 }
 
-sal_Bool SvxHtmlOptions::IsIgnoreFontFamily() const
+/*-----------------10.07.98 10.02-------------------
+
+--------------------------------------------------*/
+
+BOOL SvxHtmlOptions::IsIgnoreFontFamily() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_IGNORE_FONT_FAMILY) ;
 }
+/*-----------------10.07.98 10.02-------------------
 
-void SvxHtmlOptions::SetIgnoreFontFamily(sal_Bool bSet)
+--------------------------------------------------*/
+void SvxHtmlOptions::SetIgnoreFontFamily(BOOL bSet)
 {
     if(bSet)
         pImp->nFlags |=  HTMLCFG_IGNORE_FONT_FAMILY;
@@ -421,13 +450,17 @@ void SvxHtmlOptions::SetIgnoreFontFamily(sal_Bool bSet)
         pImp->nFlags &= ~HTMLCFG_IGNORE_FONT_FAMILY;
     SetModified();
 }
-
-sal_Bool SvxHtmlOptions::IsStarBasicWarning() const
+/* -----------------05.02.99 09:03-------------------
+ *
+ * --------------------------------------------------*/
+BOOL SvxHtmlOptions::IsStarBasicWarning() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_IS_BASIC_WARNING) ;
 }
-
-void SvxHtmlOptions::SetStarBasicWarning(sal_Bool bSet)
+/* -----------------05.02.99 09:03-------------------
+ *
+ * --------------------------------------------------*/
+void SvxHtmlOptions::SetStarBasicWarning(BOOL bSet)
 {
     if(bSet)
         pImp->nFlags |=  HTMLCFG_IS_BASIC_WARNING;
@@ -436,6 +469,9 @@ void SvxHtmlOptions::SetStarBasicWarning(sal_Bool bSet)
     SetModified();
 }
 
+/*-----------------19.02.2001 18:40-----------------
+ *
+ * --------------------------------------------------*/
 rtl_TextEncoding SvxHtmlOptions::GetTextEncoding() const
 {
     rtl_TextEncoding eRet;
@@ -446,13 +482,18 @@ rtl_TextEncoding SvxHtmlOptions::GetTextEncoding() const
     return eRet;
 }
 
+/*-----------------19.02.2001 18:40-----------------
+ *
+ * --------------------------------------------------*/
 void SvxHtmlOptions::SetTextEncoding( rtl_TextEncoding eEnc )
 {
     pImp->eEncoding = eEnc;
     pImp->bIsEncodingDefault = sal_False;
     SetModified();
 }
+/* -----------------------------15.08.2001 12:01------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool SvxHtmlOptions::IsDefaultTextEncoding() const
 {
     return pImp->bIsEncodingDefault;
@@ -465,12 +506,16 @@ SvxHtmlOptions* SvxHtmlOptions::Get()
     return pOptions;
 }
 
-sal_Bool SvxHtmlOptions::IsNumbersEnglishUS() const
+
+/* ---------------------- 2006-06-07T21:02+0200 ---------------------- */
+BOOL SvxHtmlOptions::IsNumbersEnglishUS() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_NUMBERS_ENGLISH_US) ;
 }
 
-void SvxHtmlOptions::SetNumbersEnglishUS(sal_Bool bSet)
+
+/* ---------------------- 2006-06-07T21:02+0200 ---------------------- */
+void SvxHtmlOptions::SetNumbersEnglishUS(BOOL bSet)
 {
     if(bSet)
         pImp->nFlags |=  HTMLCFG_NUMBERS_ENGLISH_US;

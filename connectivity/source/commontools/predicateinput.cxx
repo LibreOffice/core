@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OPredicateInputController::getSeparatorChars: caught an exception!" );
+            OSL_ENSURE( sal_False, "OPredicateInputController::getSeparatorChars: caught an exception!" );
         }
         return sal_False;
     }
@@ -133,7 +133,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OPredicateInputController::OPredicateInputController: caught an exception!" );
+            OSL_ENSURE( sal_False, "OPredicateInputController::OPredicateInputController: caught an exception!" );
         }
     }
 
@@ -142,20 +142,20 @@ namespace dbtools
     {
         OSQLParseNode* pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, _rStatement, m_xFormatter, _rxField );
         if ( !pReturn )
-        {   // is it a text field ?
+        {	// is it a text field ?
             sal_Int32 nType = DataType::OTHER;
-            _rxField->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Type" )) ) >>= nType;
+            _rxField->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) >>= nType;
 
-            if  (   ( DataType::CHAR        == nType )
-                ||  ( DataType::VARCHAR     == nType )
-                ||  ( DataType::LONGVARCHAR == nType )
-                ||  ( DataType::CLOB        == nType )
+            if	(	( DataType::CHAR		== nType )
+                ||	( DataType::VARCHAR		== nType )
+                ||	( DataType::LONGVARCHAR == nType )
+                ||	( DataType::CLOB		== nType )
                 )
-            {   // yes -> force a quoted text and try again
+            {	// yes -> force a quoted text and try again
                 ::rtl::OUString sQuoted( _rStatement );
-                if  (   sQuoted.getLength()
-                    &&  (   (sQuoted.getStr()[0] != '\'')
-                        ||  (sQuoted.getStr()[ sQuoted.getLength() - 1 ] != '\'' )
+                if	(	sQuoted.getLength()
+                    &&	(	(sQuoted.getStr()[0] != '\'')
+                        ||	(sQuoted.getStr()[ sQuoted.getLength() - 1 ] != '\'' )
                         )
                     )
                 {
@@ -183,12 +183,12 @@ namespace dbtools
             // * a column formatted with an english number format
             // => the output is german (as we use the system locale for this), i.e. "3,4"
             // => the input does not recognize the german text, as predicateTree uses the number format
-            //    of the column to determine the main locale - the locale on the context is only a fallback
-            if  (   ( DataType::FLOAT == nType )
-                ||  ( DataType::REAL == nType )
-                ||  ( DataType::DOUBLE == nType )
-                ||  ( DataType::NUMERIC == nType )
-                ||  ( DataType::DECIMAL == nType )
+            //	  of the column to determine the main locale - the locale on the context is only a fallback
+            if	(	( DataType::FLOAT == nType )
+                ||	( DataType::REAL == nType )
+                ||	( DataType::DOUBLE == nType )
+                ||	( DataType::NUMERIC == nType )
+                ||	( DataType::DECIMAL == nType )
                 )
             {
                 const IParseContext& rParseContext = m_aParser.getContext();
@@ -203,10 +203,10 @@ namespace dbtools
                 try
                 {
                     Reference< XPropertySetInfo > xPSI( _rxField->getPropertySetInfo() );
-                    if ( xPSI.is() && xPSI->hasPropertyByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormatKey" )) ) )
+                    if ( xPSI.is() && xPSI->hasPropertyByName( ::rtl::OUString::createFromAscii( "FormatKey" ) ) )
                     {
                         sal_Int32 nFormatKey = 0;
-                        _rxField->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormatKey" )) ) >>= nFormatKey;
+                        _rxField->getPropertyValue( ::rtl::OUString::createFromAscii( "FormatKey" ) ) >>= nFormatKey;
                         if ( nFormatKey && m_xFormatter.is() )
                         {
                             Locale aFormatLocale;
@@ -226,18 +226,18 @@ namespace dbtools
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "OPredicateInputController::implPredicateTree: caught an exception while dealing with the formats!" );
+                    OSL_ENSURE( sal_False, "OPredicateInputController::implPredicateTree: caught an exception while dealing with the formats!" );
                 }
 
                 sal_Bool bDecDiffers = ( nCtxDecSep != nFmtDecSep );
                 sal_Bool bFmtDiffers = ( nCtxThdSep != nFmtThdSep );
                 if ( bDecDiffers || bFmtDiffers )
-                {   // okay, at least one differs
+                {	// okay, at least one differs
                     // "translate" the value into the "format locale"
                     ::rtl::OUString sTranslated( _rStatement );
                     const sal_Unicode nIntermediate( '_' );
-                    sTranslated = sTranslated.replace( nCtxDecSep,  nIntermediate );
-                    sTranslated = sTranslated.replace( nCtxThdSep,  nFmtThdSep );
+                    sTranslated = sTranslated.replace( nCtxDecSep,	nIntermediate );
+                    sTranslated = sTranslated.replace( nCtxThdSep,	nFmtThdSep );
                     sTranslated = sTranslated.replace( nIntermediate, nFmtDecSep );
 
                     pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, sTranslated, m_xFormatter, _rxField );
@@ -300,9 +300,9 @@ namespace dbtools
             // '-characters to the text. If we would give this to predicateTree this would add
             // two  additional '-characters which we don't want. So check the field format.
             // FS - 06.01.00 - 71532
-            sal_Bool bValidQuotedText = ( sValue.getLength() >= 2 )
-                                    &&  ( sValue.getStr()[0] == '\'' )
-                                    &&  ( sValue.getStr()[ sValue.getLength() - 1 ] == '\'' );
+            sal_Bool bValidQuotedText =	( sValue.getLength() >= 2 )
+                                    &&	( sValue.getStr()[0] == '\'' )
+                                    &&	( sValue.getStr()[ sValue.getLength() - 1 ] == '\'' );
                 // again : as normalizePredicateString always did a conversion on the value text,
                 // bValidQuotedText == sal_True implies that we have a text field, as no other field
                 // values will be formatted with the quote characters
@@ -335,15 +335,15 @@ namespace dbtools
                 {
                     if ( !_bForStatementUse )
                     {
-                        if  (   ( pOdbcSpec->count() >= 2 )
-                            &&  ( SQL_NODE_STRING == pOdbcSpec->getChild(1)->getNodeType() )
+                        if	(	( pOdbcSpec->count() >= 2 )
+                            &&	( SQL_NODE_STRING == pOdbcSpec->getChild(1)->getNodeType() )
                             )
                         {
 
                             sReturn = pOdbcSpec->getChild(1)->getTokenValue();
                         }
                         else
-                            OSL_FAIL( "OPredicateInputController::getPredicateValue: unknown/invalid structure (odbc + param use)!" );
+                            OSL_ENSURE( sal_False, "OPredicateInputController::getPredicateValue: unknown/invalid structure (odbc + param use)!" );
                     }
                     else
                     {
@@ -357,7 +357,7 @@ namespace dbtools
                 }
                 else
                 {
-                    if  ( pParseNode->count() >= 3 )
+                    if	( pParseNode->count() >= 3 )
                     {
                         OSQLParseNode* pValueNode = pParseNode->getChild(2);
                         OSL_ENSURE( pValueNode, "OPredicateInputController::getPredicateValue: invalid node child!" );
@@ -376,7 +376,7 @@ namespace dbtools
                             );
                     }
                     else
-                        OSL_FAIL( "OPredicateInputController::getPredicateValue: unknown/invalid structure (noodbc)!" );
+                        OSL_ENSURE( sal_False, "OPredicateInputController::getPredicateValue: unknown/invalid structure (noodbc)!" );
                 }
 
                 delete pParseNode;
@@ -386,7 +386,7 @@ namespace dbtools
         return sReturn;
     }
 //.........................................................................
-}   // namespace dbtools
+}	// namespace dbtools
 //.........................................................................
 
 

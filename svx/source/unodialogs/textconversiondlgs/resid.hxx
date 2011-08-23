@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace textconversiondlgs
 class TextConversionDlgs_ResId : public ResId
 {
  public:
-    TextConversionDlgs_ResId(sal_uInt16 nId);
+    TextConversionDlgs_ResId(USHORT nId);
 };
 
 //.............................................................................

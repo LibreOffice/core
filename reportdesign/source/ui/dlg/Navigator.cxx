@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "uistrings.hrc"
 #include "ReportController.hxx"
 #include "UITools.hxx"
-#include "RptUndo.hxx"
+#include "Undo.hxx"
 #include "reportformula.hxx"
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
@@ -62,8 +62,8 @@
 #include <memory>
 #include <algorithm>
 
-#define RID_SVXIMG_COLLAPSEDNODE            (RID_FORMS_START + 2)
-#define RID_SVXIMG_EXPANDEDNODE             (RID_FORMS_START + 3)
+#define RID_SVXIMG_COLLAPSEDNODE			(RID_FORMS_START + 2)
+#define RID_SVXIMG_EXPANDEDNODE				(RID_FORMS_START + 3)
 #define DROP_ACTION_TIMER_INITIAL_TICKS     10
 #define DROP_ACTION_TIMER_SCROLL_TICKS      3
 #define DROP_ACTION_TIMER_TICK_BASE         10
@@ -74,9 +74,9 @@ using namespace ::com::sun::star;
 using namespace utl;
 using namespace ::comphelper;
 
-sal_uInt16 lcl_getImageId(const uno::Reference< report::XReportComponent>& _xElement)
+USHORT lcl_getImageId(const uno::Reference< report::XReportComponent>& _xElement)
 {
-    sal_uInt16 nId = 0;
+    USHORT nId = 0;
     uno::Reference< report::XFixedLine> xFixedLine(_xElement,uno::UNO_QUERY);
     if ( uno::Reference< report::XFixedText>(_xElement,uno::UNO_QUERY).is() )
         nId = SID_FM_FIXEDTEXT;
@@ -121,7 +121,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
                     ,   public SvTreeListBox
                     ,   public reportdesign::ITraverseReport
                     ,   public comphelper::OSelectionChangeListener
-                    ,   public ::comphelper::OPropertyChangeListener
+                    ,	public ::comphelper::OPropertyChangeListener
 {
     class UserData;
     friend class UserData;
@@ -154,28 +154,29 @@ class NavigatorTree :   public ::cppu::BaseMutex
     AutoTimer                                                                   m_aDropActionTimer;
     Timer                                                                       m_aSynchronizeTimer;
     ImageList                                                                   m_aNavigatorImages;
+    ImageList                                                                   m_aNavigatorImagesHC;
     Point                                                                       m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
     DROP_ACTION                                                                 m_aDropActionType;
     OReportController&                                                          m_rController;
     SvLBoxEntry*                                                                m_pMasterReport;
-    SvLBoxEntry*                                                                m_pDragedEntry;
-    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pReportListener;
+    SvLBoxEntry*				                                                m_pDragedEntry;
+    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>	                m_pReportListener;
     ::rtl::Reference< comphelper::OSelectionChangeMultiplexer>                  m_pSelectionListener;
     unsigned short                                                              m_nTimerCounter;
 
-    SvLBoxEntry* insertEntry(const ::rtl::OUString& _sName,SvLBoxEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData);
-    void traverseSection(const uno::Reference< report::XSection>& _xSection,SvLBoxEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition = LIST_APPEND);
+    SvLBoxEntry* insertEntry(const ::rtl::OUString& _sName,SvLBoxEntry* _pParent,USHORT _nImageId,ULONG _nPosition,UserData* _pData);
+    void traverseSection(const uno::Reference< report::XSection>& _xSection,SvLBoxEntry* _pParent,USHORT _nImageId,ULONG _nPosition = LIST_APPEND);
     void traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvLBoxEntry* _pParent);
 
     NavigatorTree(const NavigatorTree&);
     void operator =(const NavigatorTree&);
 protected:
-    virtual void        Command( const CommandEvent& rEvt );
+    virtual void	    Command( const CommandEvent& rEvt );
     // DragSourceHelper overridables
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void		StartDrag( sal_Int8 nAction, const Point& rPosPixel );
     // DropTargetHelper overridables
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt );
+    virtual sal_Int8	AcceptDrop( const AcceptDropEvent& _rEvt );
+    virtual sal_Int8	ExecuteDrop( const ExecuteDropEvent& _rEvt );
 
     // OSelectionChangeListener
     virtual void _disposing(const lang::EventObject& _rSource) throw( uno::RuntimeException);
@@ -204,7 +205,7 @@ public:
     virtual void traverseReportFooter(const uno::Reference< report::XSection>& _xSection);
     virtual void traversePageHeader(const uno::Reference< report::XSection>& _xSection);
     virtual void traversePageFooter(const uno::Reference< report::XSection>& _xSection);
-
+    
     virtual void traverseGroups(const uno::Reference< report::XGroups>& _xGroups);
     virtual void traverseGroup(const uno::Reference< report::XGroup>& _xGroup);
     virtual void traverseGroupFunctions(const uno::Reference< report::XFunctions>& _xFunctions);
@@ -231,7 +232,7 @@ NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
         ,m_pDragedEntry(NULL)
         ,m_nTimerCounter( DROP_ACTION_TIMER_INITIAL_TICKS )
 {
-    DBG_CTOR(rpt_NavigatorTree,NULL);
+    DBG_CTOR(rpt_NavigatorTree,NULL);    
     m_pReportListener = new OPropertyChangeMultiplexer(this,m_rController.getReportDefinition().get());
     m_pReportListener->addProperty(PROPERTY_PAGEHEADERON);
     m_pReportListener->addProperty(PROPERTY_PAGEFOOTERON);
@@ -243,10 +244,17 @@ NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
     SetHelpId( HID_REPORT_NAVIGATOR_TREE );
 
     m_aNavigatorImages = ImageList( ModuleRes( RID_SVXIMGLIST_RPTEXPL ) );
+    m_aNavigatorImagesHC = ImageList( ModuleRes( RID_SVXIMGLIST_RPTEXPL_HC ) );
 
     SetNodeBitmaps(
         m_aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-        m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
+        m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+        BMP_COLOR_NORMAL
+    );
+    SetNodeBitmaps(
+        m_aNavigatorImagesHC.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+        m_aNavigatorImagesHC.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+        BMP_COLOR_HIGHCONTRAST
     );
 
     SetDragDropMode(0xFFFF);
@@ -269,7 +277,7 @@ NavigatorTree::~NavigatorTree()
     }
     m_pReportListener->dispose();
     m_pSelectionListener->dispose();
-    DBG_DTOR(rpt_NavigatorTree,NULL);
+    DBG_DTOR(rpt_NavigatorTree,NULL);    
 }
 //------------------------------------------------------------------------------
 void NavigatorTree::Command( const CommandEvent& rEvt )
@@ -309,14 +317,14 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
             sal_Bool bDeleteAllowed = m_rController.isEditable() && (xGroup.is() ||
                                       uno::Reference< report::XFunction>(pData->getContent(),uno::UNO_QUERY).is());
             PopupMenu aContextMenu( ModuleRes( RID_MENU_NAVIGATOR ) );
-
-            sal_uInt16 nCount = aContextMenu.GetItemCount();
-            for (sal_uInt16 i = 0; i < nCount; ++i)
+            
+            USHORT nCount = aContextMenu.GetItemCount();
+            for (USHORT i = 0; i < nCount; ++i)
             {
                 if ( MENUITEM_SEPARATOR != aContextMenu.GetItemType(i))
                 {
-                    sal_uInt16 nId = aContextMenu.GetItemId(i);
-
+                    USHORT nId = aContextMenu.GetItemId(i);
+                    
                     aContextMenu.CheckItem(nId,m_rController.isCommandChecked(nId));
                     sal_Bool bEnabled = m_rController.isCommandEnabled(nId);
                     if ( nId == SID_RPT_NEW_FUNCTION )
@@ -327,8 +335,8 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
                     else
                         aContextMenu.EnableItem(nId,bEnabled);
                 }
-            }
-            sal_uInt16 nId = aContextMenu.Execute(this, aWhere);
+            } // for (USHORT i = 0; i < nCount; ++i)
+            USHORT nId = aContextMenu.Execute(this, aWhere);
             if ( nId )
             {
                 uno::Sequence< beans::PropertyValue> aArgs;
@@ -364,7 +372,7 @@ sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
     {
         if (m_aDropActionTimer.IsActive())
             m_aDropActionTimer.Stop();
-    }
+    } 
     else
     {
         bool bNeedTrigger = false;
@@ -373,14 +381,14 @@ sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
         {
             m_aDropActionType = DA_SCROLLUP;
             bNeedTrigger = true;
-        }
+        } 
         else if ((aDropPos.Y() < GetSizePixel().Height()) && (aDropPos.Y() >= GetSizePixel().Height() - GetEntryHeight()))
         {
             m_aDropActionType = DA_SCROLLDOWN;
             bNeedTrigger = true;
-        }
+        } 
         else
-        {
+        { 
             SvLBoxEntry* pDropppedOn = GetEntry(aDropPos);
             if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
             {
@@ -401,7 +409,7 @@ sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
                 m_aDropActionTimer.SetTimeout(DROP_ACTION_TIMER_TICK_BASE);
                 m_aDropActionTimer.Start();
             }
-        }
+        } 
         else if (!bNeedTrigger)
             m_aDropActionTimer.Stop();
     }
@@ -411,6 +419,7 @@ sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
 // -------------------------------------------------------------------------
 sal_Int8 NavigatorTree::ExecuteDrop( const ExecuteDropEvent& /*_rEvt*/ )
 {
+    // _rEvt.mnAction;
     return DND_ACTION_NONE;
 }
 // -------------------------------------------------------------------------
@@ -471,8 +480,8 @@ IMPL_LINK(NavigatorTree, OnEntrySelDesel, NavigatorTree*, /*pThis*/)
             aSelection <<= static_cast<UserData*>(pEntry->GetUserData())->getContent();
         m_rController.select(aSelection);
         m_pSelectionListener->unlock();
-    }
-
+    }    
+    
     return 0L;
 }
 // -----------------------------------------------------------------------------
@@ -493,7 +502,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
             SetCurEntry(pEntry);
         }
         else if ( !pEntry )
-            SelectAll(sal_False,sal_False);
+            SelectAll(FALSE,FALSE);
     }
     else
     {
@@ -512,20 +521,26 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
     m_pSelectionListener->unlock();
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry* NavigatorTree::insertEntry(const ::rtl::OUString& _sName,SvLBoxEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData)
+SvLBoxEntry* NavigatorTree::insertEntry(const ::rtl::OUString& _sName,SvLBoxEntry* _pParent,USHORT _nImageId,ULONG _nPosition,UserData* _pData)
 {
     SvLBoxEntry* pEntry = NULL;
     if ( _nImageId )
     {
         const Image aImage( m_aNavigatorImages.GetImage( _nImageId ) );
-        pEntry = InsertEntry(_sName,aImage,aImage,_pParent,sal_False,_nPosition,_pData);
+        pEntry = InsertEntry(_sName,aImage,aImage,_pParent,FALSE,_nPosition,_pData);
+        if ( pEntry )
+        {
+            const Image aImageHC( m_aNavigatorImagesHC.GetImage( _nImageId ) );
+            SetExpandedEntryBmp( pEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
+            SetCollapsedEntryBmp( pEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
+        }
     }
     else
-        pEntry = InsertEntry(_sName,_pParent,sal_False,_nPosition,_pData);
+        pEntry = InsertEntry(_sName,_pParent,FALSE,_nPosition,_pData);
     return pEntry;
 }
 // -----------------------------------------------------------------------------
-void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xSection,SvLBoxEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition)
+void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xSection,SvLBoxEntry* _pParent,USHORT _nImageId,ULONG _nPosition)
 {
     SvLBoxEntry* pSection = insertEntry(_xSection->getName(),_pParent,_nImageId,_nPosition,new UserData(this,_xSection));
     const sal_Int32 nCount = _xSection->getCount();
@@ -666,7 +681,7 @@ void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) 
             SvLBoxEntry* pParent = find(xReport);
             if ( _rEvent.PropertyName == PROPERTY_REPORTHEADERON )
             {
-                sal_uLong nPos = xReport->getReportHeaderOn() ? 2 : 1;
+                ULONG nPos = xReport->getReportHeaderOn() ? 2 : 1;
                 traverseSection(xReport->getReportHeader(),pParent,SID_REPORTHEADERFOOTER,nPos);
             }
             else if ( _rEvent.PropertyName == PROPERTY_PAGEHEADERON )
@@ -677,14 +692,14 @@ void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) 
                 traverseSection(xReport->getPageFooter(),pParent, SID_PAGEHEADERFOOTER);
             else if ( _rEvent.PropertyName == PROPERTY_REPORTFOOTERON )
             {
-                sal_uLong nPos = xReport->getPageFooterOn() ? (GetLevelChildCount(pParent) - 1) : LIST_APPEND;
+                ULONG nPos = xReport->getPageFooterOn() ? (GetLevelChildCount(pParent) - 1) : LIST_APPEND;
                 traverseSection(xReport->getReportFooter(),pParent,SID_REPORTHEADERFOOTER,nPos);
             }
         }
     }
 }
 // -----------------------------------------------------------------------------
-void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent )
+void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent ) 
 {
     SvLBoxEntry* pEntry = find(_rEvent.Source);
     uno::Reference<beans::XPropertySet> xProp(_rEvent.Element,uno::UNO_QUERY_THROW);
@@ -708,7 +723,7 @@ void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent )
         uno::Reference< report::XReportComponent> xElement(xProp,uno::UNO_QUERY);
         if ( xProp.is() )
             sName = lcl_getName(xProp);
-        insertEntry(sName,pEntry,(!xElement.is() ? sal_uInt16(SID_RPT_NEW_FUNCTION) : lcl_getImageId(xElement)),LIST_APPEND,new UserData(this,xProp));
+        insertEntry(sName,pEntry,(!xElement.is() ? USHORT(SID_RPT_NEW_FUNCTION) : lcl_getImageId(xElement)),LIST_APPEND,new UserData(this,xProp));
     }
     if ( !IsExpanded(pEntry) )
         Expand(pEntry);
@@ -765,13 +780,13 @@ void NavigatorTree::removeEntry(SvLBoxEntry* _pEntry,bool _bRemove)
 }
 DBG_NAME(rpt_NavigatorTree_UserData)
 // -----------------------------------------------------------------------------
-NavigatorTree::UserData::UserData(NavigatorTree* _pTree,const uno::Reference<uno::XInterface>& _xContent)
+NavigatorTree::UserData::UserData(NavigatorTree* _pTree,const uno::Reference<uno::XInterface>& _xContent) 
     : OPropertyChangeListener(m_aMutex)
     , OContainerListener(m_aMutex)
     , m_xContent(_xContent)
     , m_pTree(_pTree)
 {
-    DBG_CTOR(rpt_NavigatorTree_UserData,NULL);
+    DBG_CTOR(rpt_NavigatorTree_UserData,NULL);    
     uno::Reference<beans::XPropertySet> xProp(m_xContent,uno::UNO_QUERY);
     if ( xProp.is() )
     {
@@ -802,7 +817,7 @@ NavigatorTree::UserData::UserData(NavigatorTree* _pTree,const uno::Reference<uno
 // -----------------------------------------------------------------------------
 NavigatorTree::UserData::~UserData()
 {
-    DBG_DTOR(rpt_NavigatorTree_UserData,NULL);
+    DBG_DTOR(rpt_NavigatorTree_UserData,NULL);    
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
     if ( m_pListener.is() )
@@ -829,7 +844,7 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
                 pMemFunSection = ::std::mem_fun(&OGroupHelper::getFooter);
                 nPos = m_pTree->GetChildCount(pEntry) - 1;
             }
-
+            
             OGroupHelper aGroupHelper(xGroup);
             if ( pIsOn(&aGroupHelper) )
             {
@@ -837,6 +852,8 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
                     ++nPos;
                 m_pTree->traverseSection(pMemFunSection(&aGroupHelper),pEntry,bFooterOn ? SID_GROUPFOOTER : SID_GROUPHEADER,nPos);
             }
+            //else
+            //    m_pTree->removeEntry(m_pTree->GetEntry(pEntry,nPos));
         }
         else if ( PROPERTY_EXPRESSION == _rEvent.PropertyName)
         {
@@ -885,11 +902,11 @@ public:
     virtual ~ONavigatorImpl();
 
     uno::Reference< report::XReportDefinition>  m_xReport;
-    ::rptui::OReportController&                 m_rController;
+    ::rptui::OReportController&				    m_rController;
     ::std::auto_ptr<NavigatorTree>              m_pNavigatorTree;
 };
 
-ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pParent)
+ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pParent) 
     :m_xReport(_rController.getReportDefinition())
     ,m_rController(_rController)
     ,m_pNavigatorTree(new NavigatorTree(_pParent,_rController))
@@ -919,20 +936,24 @@ ONavigator::ONavigator( Window* _pParent
     DBG_CTOR( rpt_ONavigator,NULL);
 
     m_pImpl.reset(new ONavigatorImpl(_rController,this));
-
+    
+    //Size aSpace = LogicToPixel( Size( 7, 120), MAP_APPFONT );
+    //Size aOutSize(nMaxTextWidth + m_aHeader.GetSizePixel().Width() + 3*aSpace.Width(),aSpace.Height());
+    //SetMinOutputSizePixel(aOutSize);
+    //SetOutputSizePixel(aOutSize);
     FreeResource();
     m_pImpl->m_pNavigatorTree->Show();
     m_pImpl->m_pNavigatorTree->GrabFocus();
     SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
     Show();
-
+    
 }
 // -----------------------------------------------------------------------------
 
 //------------------------------------------------------------------------
 ONavigator::~ONavigator()
 {
-    DBG_DTOR( rpt_ONavigator,NULL);
+    DBG_DTOR( rpt_ONavigator,NULL);	
 }
 //------------------------------------------------------------------------------
 void ONavigator::Resize()

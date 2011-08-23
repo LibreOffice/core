@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,11 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <rtl/ustrbuf.hxx>
+
+
 #include <tools/rtti.hxx>
 #include <tools/solar.h>
-#include <svtools/unoevent.hxx>
+#include "unoevent.hxx"
 #include <svl/macitem.hxx>
 
 using namespace ::com::sun::star;
@@ -214,7 +216,7 @@ sal_uInt16 SvBaseEventDescriptor::getMacroID(const OUString& rName) const
 void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                                        const SvxMacro& rMacro)
 {
-    sal_Bool bRetValueOK = sal_False;   // do we have a ret value?
+    sal_Bool bRetValueOK = sal_False;	// do we have a ret value?
 
     if (rMacro.HasMacro())
     {
@@ -254,7 +256,7 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                 break;
             }
             case EXTENDED_STYPE:
-            {
+            {   
                 // create sequence
                 Sequence<PropertyValue> aSequence(2);
                 Any aTmp;
@@ -280,7 +282,7 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                         }
             case JAVASCRIPT:
             default:
-                OSL_FAIL("not implemented");
+                DBG_ERROR("not implemented");
         }
     }
     // else: bRetValueOK not set
@@ -315,7 +317,7 @@ void SvBaseEventDescriptor::getMacroFromAny(
 
     // process ...
     sal_Bool bTypeOK = sal_False;
-    sal_Bool bNone = sal_False;     // true if EventType=="None"
+    sal_Bool bNone = sal_False;		// true if EventType=="None"
     enum ScriptType eType = EXTENDED_STYPE;
     OUString sScriptVal;
     OUString sMacroVal;
@@ -380,7 +382,7 @@ void SvBaseEventDescriptor::getMacroFromAny(
                 SvxMacro aMacro(sMacroVal, sLibVal, eType);
                 rMacro = aMacro;
             }
-            else if (eType == EXTENDED_STYPE)
+            else if (eType == EXTENDED_STYPE) 
             {
                 SvxMacro aMacro(sScriptVal, sScript);
                 rMacro = aMacro;
@@ -422,13 +424,13 @@ SvEventDescriptor::~SvEventDescriptor()
     // automatically release xParentRef !
 }
 
-void SvEventDescriptor::replaceByName(
+void SvEventDescriptor::replaceByName( 
     const sal_uInt16 nEvent,
     const SvxMacro& rMacro)
         throw(
-            IllegalArgumentException,
-            NoSuchElementException,
-            WrappedTargetException,
+            IllegalArgumentException, 
+            NoSuchElementException, 
+            WrappedTargetException, 
             RuntimeException)
 {
     SvxMacroItem aItem(getMacroItemWhich());
@@ -437,12 +439,12 @@ void SvEventDescriptor::replaceByName(
     setMacroItem(aItem);
 }
 
-void SvEventDescriptor::getByName(
+void SvEventDescriptor::getByName( 
     SvxMacro& rMacro,
     const sal_uInt16 nEvent )
         throw(
-            NoSuchElementException,
-            WrappedTargetException,
+            NoSuchElementException, 
+            WrappedTargetException, 
             RuntimeException)
 {
     const SvxMacroItem& rItem = getMacroItem();
@@ -463,7 +465,7 @@ void SvEventDescriptor::getByName(
 //
 
 SvDetachedEventDescriptor::SvDetachedEventDescriptor(
-    const SvEventDescription* pSupportedMacroItems) :
+    const SvEventDescription* pSupportedMacroItems) : 
     SvBaseEventDescriptor(pSupportedMacroItems),
     sImplName(RTL_CONSTASCII_USTRINGPARAM(sAPI_SvDetachedEventDescriptor))
 {
@@ -493,7 +495,7 @@ sal_Int16 SvDetachedEventDescriptor::getIndex(const sal_uInt16 nID) const
 {
     // iterate over supported events
     sal_Int16 nIndex = 0;
-    while ( (mpSupportedMacroItems[nIndex].mnEvent != nID) &&
+    while ( (mpSupportedMacroItems[nIndex].mnEvent != nID) && 
             (mpSupportedMacroItems[nIndex].mnEvent != 0)      )
     {
         nIndex++;
@@ -501,20 +503,20 @@ sal_Int16 SvDetachedEventDescriptor::getIndex(const sal_uInt16 nID) const
     return (mpSupportedMacroItems[nIndex].mnEvent == nID) ? nIndex : -1;
 }
 
-OUString SvDetachedEventDescriptor::getImplementationName()
+OUString SvDetachedEventDescriptor::getImplementationName() 
     throw( ::com::sun::star::uno::RuntimeException )
 {
     return sImplName;
 }
 
 
-void SvDetachedEventDescriptor::replaceByName(
+void SvDetachedEventDescriptor::replaceByName( 
     const sal_uInt16 nEvent,
     const SvxMacro& rMacro)
     throw(
-        IllegalArgumentException,
-        NoSuchElementException,
-        WrappedTargetException,
+        IllegalArgumentException, 
+        NoSuchElementException, 
+        WrappedTargetException, 
         RuntimeException)
 {
     sal_Int16 nIndex = getIndex(nEvent);
@@ -526,12 +528,12 @@ void SvDetachedEventDescriptor::replaceByName(
 }
 
 
-void SvDetachedEventDescriptor::getByName(
+void SvDetachedEventDescriptor::getByName( 
     SvxMacro& rMacro,
     const sal_uInt16 nEvent )
     throw(
-        NoSuchElementException,
-        WrappedTargetException,
+        NoSuchElementException, 
+        WrappedTargetException, 
         RuntimeException)
 {
     sal_Int16 nIndex = getIndex(nEvent);
@@ -542,8 +544,8 @@ void SvDetachedEventDescriptor::getByName(
         rMacro = (*aMacros[nIndex]);
 }
 
-sal_Bool SvDetachedEventDescriptor::hasByName(
-    const sal_uInt16 nEvent ) const     /// item ID of event
+sal_Bool SvDetachedEventDescriptor::hasByName( 
+    const sal_uInt16 nEvent ) const		/// item ID of event
         throw(IllegalArgumentException)
 {
     sal_Int16 nIndex = getIndex(nEvent);

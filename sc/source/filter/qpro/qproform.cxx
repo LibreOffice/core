@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,44 +41,44 @@
 
 void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 nRelBit )
 {
-    sal_uInt16 nTmp = nRelBit & 0x1fff;
+    UINT16 nTmp = nRelBit & 0x1fff;
     rSRD.InitAddress( ScAddress( nCol, (~nTmp + 1), 0 ) );
     if( nRelBit & 0x4000 )
     {
         rSRD.nRelCol = nCol;
-        rSRD.SetColRel( sal_True );
+        rSRD.SetColRel( TRUE );
     }
     else
     {
         rSRD.nCol = nCol;
-        rSRD.SetColRel( false );
+        rSRD.SetColRel( FALSE );
     }
     if( nRelBit & 0x2000 )
     {
         rSRD.nRelRow = (~nTmp + 1);
-        rSRD.nRelRow = (sal_Int16)(nTmp << 3);
+        rSRD.nRelRow = (INT16)(nTmp << 3);
         rSRD.nRelRow /= 8;
-        rSRD.SetRowRel( sal_True );
+        rSRD.SetRowRel( TRUE );
     }
     else
     {
         rSRD.nRow = nTmp;
-        rSRD.SetRowRel( false );
+        rSRD.SetRowRel( FALSE );
     }
     if( nRelBit & 0x8000 )
     {
         rSRD.nRelTab = nPage;
-        rSRD.SetTabRel( sal_True );
+        rSRD.SetTabRel( TRUE );
         // absolute tab needed in caller for comparison in case of DoubleRef
         rSRD.nTab = aEingPos.Tab() + nPage;
     }
     else
     {
         rSRD.nTab = nPage;
-        rSRD.SetTabRel( false );
+        rSRD.SetTabRel( FALSE );
     }
     if (rSRD.nTab != aEingPos.Tab())
-        rSRD.SetFlag3D( sal_True);
+        rSRD.SetFlag3D( TRUE);
 }
 
 QProToSc::QProToSc( SvStream& rStream, const ScAddress& rRefPos ) :
@@ -91,15 +91,15 @@ QProToSc::QProToSc( SvStream& rStream, const ScAddress& rRefPos ) :
 void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtString )
 {
     TokenId  eParam[ nBufSize ];
-    sal_Int32    nCount;
+    INT32    nCount;
     TokenId  nPush, nPush1;
 
-    sal_Bool bAddIn = false;
-    sal_Bool bNeg = false;
+    BOOL bAddIn = FALSE;
+    BOOL bNeg = FALSE;
 
     if( eOc == ocNoName )
     {
-        bAddIn = sal_True;
+        bAddIn = TRUE;
         if( pExtString )
         {
             ByteString s;
@@ -152,7 +152,8 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
 
     if( nArgs> 0 )
     {
-        sal_Int16 nLast = nArgs- 1;
+        INT16 nNull = -1;
+        INT16 nLast = nArgs- 1;
 
         if( eOc == ocZGZ )
             aPool << eParam[ 2 ] << ocSep << eParam[ 1 ] << ocSep << eParam[ 0 ];
@@ -160,7 +161,6 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
             aPool << eParam[ 3 ] << ocSep << eParam[ 2 ] << ocSep << eParam[ 1 ] << ocSep << eParam[ 0 ];
         else
         {
-            sal_Int16 nNull = -1;
             aPool << eParam[ nLast ];
             for( nCount = nLast - 1 ; nCount >= 0 ; nCount-- )
             {
@@ -327,7 +327,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 // Sheet name of second corner is not displayed if identical
                 if (aCRD.Ref1.IsFlag3D() && aCRD.Ref1.nTab == aCRD.Ref2.nTab &&
                         aCRD.Ref1.IsTabRel() == aCRD.Ref2.IsTabRel())
-                    aCRD.Ref2.SetFlag3D( false);
+                    aCRD.Ref2.SetFlag3D( FALSE);
                 aStack << aPool.Store( aCRD );
                 break;
 
@@ -417,7 +417,7 @@ static const struct
     { ocAnd, FT_Op },
     { ocOr, FT_Op },
     { ocNot, FT_FuncFix1 },
-    { ocPush, FT_NOP },     // Unary plus
+    { ocPush, FT_NOP }, 	// Unary plus
     { ocAddress, FT_FuncFix4 }, // Address of
     { ocNoName, FT_NotImpl }, // Halt function
     { ocNoName, FT_DLL }, // DLL function
@@ -538,7 +538,7 @@ static const struct
     { ocNoName, FT_NotImpl },
     { ocGetActDate, FT_FuncFix0 },
     { ocNPV, FT_FuncFix2 },
-    { ocNoName, FT_NotImpl },                // 0x90
+    { ocNoName, FT_NotImpl }, 				 // 0x90
     { ocNoName, FT_NotImpl },
     { ocNoName, FT_NOP },
     { ocNoName, FT_NOP }, // 147

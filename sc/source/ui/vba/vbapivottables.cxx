@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ class PivotTableEnumeration : public EnumerationHelperImpl
 public:
     PivotTableEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    {
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException) 
+    { 
         return DataPilotToPivotTable( m_xEnumeration->nextElement(),  m_xContext );
     }
 
 };
 
-ScVbaPivotTables::ScVbaPivotTables( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaPivotTables_BASE( xParent, xContext, xIndexAccess )
+ScVbaPivotTables::ScVbaPivotTables( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaPivotTables_BASE( xParent, xContext, xIndexAccess ) 
 {
 }
 
@@ -69,20 +69,20 @@ ScVbaPivotTables::createCollectionObject( const css::uno::Any& aSource )
     return DataPilotToPivotTable( aSource,  mxContext );
 }
 
-uno::Type
+uno::Type 
 ScVbaPivotTables::getElementType() throw (uno::RuntimeException)
 {
     return excel::XPivotTable::static_type(0);
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaPivotTables::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotTables") );
     return sImplName;
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<rtl::OUString> 
 ScVbaPivotTables::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

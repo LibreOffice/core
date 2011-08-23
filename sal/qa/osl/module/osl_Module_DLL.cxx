@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,15 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include <osl_Module_Const.h>
-
 #include <stdio.h>
 #include <sal/types.h>
-
-// This module contains no tests. It is loaded as a dynamic library by
-// osl_Module.
-// But we instatiate a test plugin to fake the build process.
-CPPUNIT_PLUGIN_IMPLEMENT();
+#include <testshl/simpleheader.hxx>
 
 extern "C" sal_Bool SAL_CALL firstfunc( sal_Bool bRes )
 {

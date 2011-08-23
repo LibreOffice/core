@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,7 @@
 #define _SFX_APPDATA_HXX
 
 #include <tools/link.hxx>
+#include <tools/list.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 #include <tools/string.hxx>
@@ -111,11 +112,12 @@ public:
     // application members
     SfxFilterMatcher*                   pMatcher;
     ResMgr*                             pLabelResMgr;
-    SfxStatusDispatcher*                pAppDispatch;
+    SfxStatusDispatcher*				pAppDispatch;
     SfxDocumentTemplates*               pTemplates;
 
     // global pointers
     SfxItemPool*                        pPool;
+    SfxEventConfiguration*              pEventConfig;
     SvUShorts*                          pDisabledSlotList;
     SvStrings*                          pSecureURLs;
     SvtSaveOptions*                     pSaveOptions;
@@ -126,11 +128,12 @@ public:
     SfxProgress*                        pProgress;
     ISfxTemplateCommon*                 pTemplateCommon;
 
-    sal_uInt16                              nDocModalMode;              // counts documents in modal mode
-    sal_uInt16                              nAutoTabPageId;
-    sal_uInt16                              nRescheduleLocks;
-    sal_uInt16                              nInReschedule;
-    sal_uInt16                              nAsynchronCalls;
+    USHORT                              nDocModalMode;              // counts documents in modal mode
+    USHORT                              nAutoTabPageId;
+    USHORT                              nBasicCallLevel;
+    USHORT                              nRescheduleLocks;
+    USHORT                              nInReschedule;
+    USHORT                              nAsynchronCalls;
 
     rtl::Reference< sfx2::appl::ImeStatusWindow > m_xImeStatusWindow;
 
@@ -142,29 +145,29 @@ public:
     SfxObjectShellArr_Impl*     pObjShells;
     ResMgr*                     pSfxResManager;
     ResMgr*                     pOfaResMgr;
-    SimpleResMgr*               pSimpleResManager;
+    SimpleResMgr*				pSimpleResManager;
     SfxBasicManagerHolder*      pBasicManager;
     SfxBasicManagerCreationListener*
                                 pBasMgrListener;
     SfxViewFrame*               pViewFrame;
     SfxSlotPool*                pSlotPool;
     SfxResourceManager*         pResMgr;
-    SfxDispatcher*              pAppDispat;     // Dispatcher if no document
+    SfxDispatcher*              pAppDispat;     // Dispatcher falls kein Doc
     SfxInterface**              pInterfaces;
 
-    sal_uInt16                      nDocNo;             // current Doc-Number (AutoName)
-    sal_uInt16                      nInterfaces;
+    USHORT                      nDocNo;     		// Laufende Doc-Nummer (AutoName)
+    USHORT                      nInterfaces;
 
-    sal_Bool                        bDispatcherLocked:1;    // do nothing
-    sal_Bool                        bDowning:1;   // sal_True on Exit and afterwards
-    sal_Bool                        bInQuit : 1;
-    sal_Bool                        bInvalidateOnUnlock : 1;
-    sal_Bool                        bODFVersionWarningLater : 1;
+    BOOL                        bDispatcherLocked:1;    // nichts ausf"uhren
+    BOOL                        bDowning:1;   // TRUE ab Exit und danach
+    BOOL                        bInQuit : 1;
+    BOOL                        bInvalidateOnUnlock : 1;
+    BOOL                        bODFVersionWarningLater : 1;
 
                                 SfxAppData_Impl( SfxApplication* );
                                 ~SfxAppData_Impl();
 
-    void                        UpdateApplicationSettings( sal_Bool bDontHide );
+    void                        UpdateApplicationSettings( BOOL bDontHide );
     SfxDocumentTemplates*       GetDocumentTemplates();
     void                        DeInitDDE();
 

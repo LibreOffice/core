@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ namespace
 
     struct ComponentDescription
     {
-        const sal_Char*     pAsciiServiceName;
+        const sal_Char*	    pAsciiServiceName;
         const sal_Char*     pAsciiImplementationName;
         ComponentFactory    pFactory;
 
@@ -138,7 +138,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
     {
         ::rtl::OUString sMainKeyName( sRootKey );
         sMainKeyName += ::rtl::OUString::createFromAscii( pComponents->pAsciiImplementationName );
-        sMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+        sMainKeyName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES" );
 
         try
         {
@@ -147,7 +147,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
         }
         catch( Exception& )
         {
-            OSL_FAIL( "OModule::writeComponentInfos: something went wrong while creating the keys!" );
+            OSL_ASSERT( "OModule::writeComponentInfos: something went wrong while creating the keys!" );
             return sal_False;
         }
         ++pComponents;

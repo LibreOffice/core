@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -248,6 +248,7 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
     DBG_ASSERT( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
 
+    sal_uInt16 nLevel = 0;                  // counter for level to climb down in path
     ::std::auto_ptr< String > xLongName;    // link / file name
     ::std::auto_ptr< String > xShortName;   // 8.3-representation of file name
     ::std::auto_ptr< String > xTextMark;    // text mark
@@ -277,7 +278,6 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
         if( aGuid == XclTools::maGuidFileMoniker )
         {
-            sal_uInt16 nLevel = 0; // counter for level to climb down in path
             rStrm >> nLevel;
             xShortName.reset( new String );
             lclAppendString32( *xShortName, rStrm, false );
@@ -438,9 +438,8 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     ScRangeList aRowScRanges;
     rAddrConv.ConvertRangeList( aRowScRanges, aRowXclRanges, nScTab, false );
     xLabelRangesRef = rDoc.GetRowNameRangesRef();
-    for ( size_t i = 0, nRanges = aRowScRanges.size(); i < nRanges; ++i )
+    for( pScRange = aRowScRanges.First(); pScRange; pScRange = aRowScRanges.Next() )
     {
-        pScRange = aRowScRanges[ i ];
         ScRange aDataRange( *pScRange );
         if( aDataRange.aEnd.Col() < MAXCOL )
         {
@@ -459,10 +458,8 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     ScRangeList aColScRanges;
     rAddrConv.ConvertRangeList( aColScRanges, aColXclRanges, nScTab, false );
     xLabelRangesRef = rDoc.GetColNameRangesRef();
-
-    for ( size_t i = 0, nRanges = aColScRanges.size(); i < nRanges; ++i )
+    for( pScRange = aColScRanges.First(); pScRange; pScRange = aColScRanges.Next() )
     {
-        pScRange = aColScRanges[ i ];
         ScRange aDataRange( *pScRange );
         if( aDataRange.aEnd.Row() < MAXROW )
         {
@@ -511,7 +508,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     }
 
     // entire conditional format outside of valid range?
-    if( maRanges.empty() )
+    if( !maRanges.Count() )
         return;
 
     sal_uInt8 nType, nOperator;
@@ -539,7 +536,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
                 case EXC_CF_CMP_GREATER_EQUAL:  eMode = SC_COND_EQGREATER;  break;
                 case EXC_CF_CMP_LESS_EQUAL:     eMode = SC_COND_EQLESS;     break;
                 default:
-                    OSL_TRACE( "XclImpCondFormat::ReadCF - unknown CF comparison 0x%02hX", nOperator );
+                    DBG_ERROR1( "XclImpCondFormat::ReadCF - unknown CF comparison 0x%02hX", nOperator );
             }
         }
         break;
@@ -549,7 +546,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         break;
 
         default:
-            OSL_TRACE( "XclImpCondFormat::ReadCF - unknown CF mode 0x%02hX", nType );
+            DBG_ERROR1( "XclImpCondFormat::ReadCF - unknown CF mode 0x%02hX", nType );
             return;
     }
 
@@ -597,7 +594,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     // *** formulas ***
 
-    const ScAddress& rPos = maRanges.front()->aStart;    // assured above that maRanges is not empty
+    const ScAddress& rPos = maRanges.GetObject( 0 )->aStart;    // assured above that maRanges is not empty
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
 
     ::std::auto_ptr< ScTokenArray > xTokArr1;
@@ -626,7 +623,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     if( !mxScCondFmt.get() )
     {
-        sal_uLong nKey = 0;
+        ULONG nKey = 0;
         mxScCondFmt.reset( new ScConditionalFormat( nKey, GetDocPtr() ) );
     }
 
@@ -641,14 +638,13 @@ void XclImpCondFormat::Apply()
     {
         ScDocument& rDoc = GetDoc();
 
-        sal_uLong nKey = rDoc.AddCondFormat( *mxScCondFmt );
+        ULONG nKey = rDoc.AddCondFormat( *mxScCondFmt );
         ScPatternAttr aPattern( rDoc.GetPool() );
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nKey ) );
 
         // maRanges contains only valid cell ranges
-        for ( size_t i = 0, nRanges = maRanges.size(); i < nRanges; ++i )
+        for( const ScRange* pScRange = maRanges.First(); pScRange; pScRange = maRanges.Next() )
         {
-            const ScRange* pScRange = maRanges[ i ];
             rDoc.ApplyPatternAreaTab(
                 pScRange->aStart.Col(), pScRange->aStart.Row(),
                 pScRange->aEnd.Col(), pScRange->aEnd.Row(),
@@ -666,23 +662,23 @@ XclImpCondFormatManager::XclImpCondFormatManager( const XclImpRoot& rRoot ) :
 
 void XclImpCondFormatManager::ReadCondfmt( XclImpStream& rStrm )
 {
-    XclImpCondFormat* pFmt = new XclImpCondFormat( GetRoot(), maCondFmtList.size() );
+    XclImpCondFormat* pFmt = new XclImpCondFormat( GetRoot(), maCondFmtList.Count() );
     pFmt->ReadCondfmt( rStrm );
-    maCondFmtList.push_back( pFmt );
+    maCondFmtList.Append( pFmt );
 }
 
 void XclImpCondFormatManager::ReadCF( XclImpStream& rStrm )
 {
-    DBG_ASSERT( !maCondFmtList.empty(), "XclImpCondFormatManager::ReadCF - CF without leading CONDFMT" );
-    if( !maCondFmtList.empty() )
-        maCondFmtList.back().ReadCF( rStrm );
+    DBG_ASSERT( !maCondFmtList.Empty(), "XclImpCondFormatManager::ReadCF - CF without leading CONDFMT" );
+    if( !maCondFmtList.Empty() )
+        maCondFmtList.GetObject( maCondFmtList.Count() - 1 )->ReadCF( rStrm );
 }
 
 void XclImpCondFormatManager::Apply()
 {
-    for( XclImpCondFmtList::iterator itFmt = maCondFmtList.begin(); itFmt != maCondFmtList.end(); ++itFmt )
-        itFmt->Apply();
-    maCondFmtList.clear();
+    for( XclImpCondFormat* pFmt = maCondFmtList.First(); pFmt; pFmt = maCondFmtList.Next() )
+        pFmt->Apply();
+    maCondFmtList.Clear();
 }
 
 // Data Validation ============================================================
@@ -780,7 +776,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     rRoot.GetAddressConverter().ConvertRangeList( aScRanges, aXclRanges, nScTab, true );
 
     // only continue if there are valid ranges
-    if ( aScRanges.empty() )
+    if ( !aScRanges.Count() )
         return;
 
     bool bIsValid = true;   // valid settings in flags field
@@ -820,7 +816,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
 
 
     // first range for base address for relative references
-    const ScRange& rScRange = *aScRanges.front();    // aScRanges is not empty
+    const ScRange& rScRange = *aScRanges.GetObject( 0 );    // aScRanges is not empty
 
     // process string list of a list validity (convert to list of string tokens)
     if( xTokArr1.get() && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
@@ -863,17 +859,14 @@ void XclImpValidationManager::Apply()
     {
         DVItem& rItem = *itr;
         // set the handle ID
-        sal_uLong nHandle = rDoc.AddValidationEntry( rItem.maValidData );
+        ULONG nHandle = rDoc.AddValidationEntry( rItem.maValidData );
         ScPatternAttr aPattern( rDoc.GetPool() );
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
 
         // apply all ranges
-        for ( size_t i = 0, nRanges = rItem.maRanges.size(); i < nRanges; ++i )
-        {
-            const ScRange* pScRange = rItem.maRanges[ i ];
+        for( const ScRange* pScRange = rItem.maRanges.First(); pScRange; pScRange = rItem.maRanges.Next() )
             rDoc.ApplyPatternAreaTab( pScRange->aStart.Col(), pScRange->aStart.Row(),
                 pScRange->aEnd.Col(), pScRange->aEnd.Row(), pScRange->aStart.Tab(), aPattern );
-        }
     }
     maDVItems.clear();
 }
@@ -931,13 +924,14 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
         String aTables( rStrm.ReadUniString() );
 
         const sal_Unicode cSep = ';';
+        aTables.SearchAndReplaceAll( ',', cSep );
         String aQuotedPairs( RTL_CONSTASCII_USTRINGPARAM( "\"\"" ) );
-        xub_StrLen nTokenCnt = aTables.GetQuotedTokenCount( aQuotedPairs, ',' );
+        xub_StrLen nTokenCnt = aTables.GetQuotedTokenCount( aQuotedPairs, cSep );
         maTables.Erase();
         xub_StrLen nStringIx = 0;
         for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
         {
-            String aToken( aTables.GetQuotedToken( 0, aQuotedPairs, ',', nStringIx ) );
+            String aToken( aTables.GetQuotedToken( 0, aQuotedPairs, cSep, nStringIx ) );
             sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.ToInt32() : 0;
             if( nTabNum > 0 )
                 ScGlobal::AddToken( maTables, ScfTools::GetNameFromHTMLIndex( static_cast< sal_uInt32 >( nTabNum ) ), cSep );
@@ -979,14 +973,14 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
         // #i64794# Excel replaces spaces with underscores
         aXclName.SearchAndReplaceAll( ' ', '_' );
 
-        // find the defined name used in Calc
+        // #101529# find the defined name used in Calc
         if( const XclImpName* pName = GetNameManager().FindName( aXclName, GetCurrScTab() ) )
         {
             if( const ScRangeData* pRangeData = pName->GetScRangeData() )
             {
                 ScRange aRange;
                 if( pRangeData->IsReference( aRange ) )
-                    maWQList.push_back( new XclImpWebQuery( aRange ) );
+                    maWQList.Append( new XclImpWebQuery( aRange ) );
             }
         }
     }
@@ -998,34 +992,34 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
 
 void XclImpWebQueryBuffer::ReadParamqry( XclImpStream& rStrm )
 {
-    if (!maWQList.empty())
-        maWQList.back().ReadParamqry( rStrm );
+    if( XclImpWebQuery* pQuery = maWQList.Last() )
+        pQuery->ReadParamqry( rStrm );
 }
 
 void XclImpWebQueryBuffer::ReadWqstring( XclImpStream& rStrm )
 {
-    if (!maWQList.empty())
-        maWQList.back().ReadWqstring( rStrm );
+    if( XclImpWebQuery* pQuery = maWQList.Last() )
+        pQuery->ReadWqstring( rStrm );
 }
 
 void XclImpWebQueryBuffer::ReadWqsettings( XclImpStream& rStrm )
 {
-    if (!maWQList.empty())
-        maWQList.back().ReadWqsettings( rStrm );
+    if( XclImpWebQuery* pQuery = maWQList.Last() )
+        pQuery->ReadWqsettings( rStrm );
 }
 
 void XclImpWebQueryBuffer::ReadWqtables( XclImpStream& rStrm )
 {
-    if (!maWQList.empty())
-        maWQList.back().ReadWqtables( rStrm );
+    if( XclImpWebQuery* pQuery = maWQList.Last() )
+        pQuery->ReadWqtables( rStrm );
 }
 
 void XclImpWebQueryBuffer::Apply()
 {
     ScDocument& rDoc = GetDoc();
     String aFilterName( RTL_CONSTASCII_USTRINGPARAM( EXC_WEBQRY_FILTER ) );
-    for( XclImpWebQueryList::iterator itQuery = maWQList.begin(); itQuery != maWQList.end(); ++itQuery )
-        itQuery->Apply( rDoc, aFilterName );
+    for( XclImpWebQuery* pQuery = maWQList.First(); pQuery; pQuery = maWQList.Next() )
+        pQuery->Apply( rDoc, aFilterName );
 }
 
 // Decryption =================================================================
@@ -1130,11 +1124,11 @@ ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
     rStrm.SetDecrypter( xDecr );
 
     // request and verify a password (decrypter implements IDocPasswordVerifier)
-    if( xDecr )
-        rStrm.GetRoot().RequestEncryptionData( *xDecr );
+    if( xDecr.is() )
+        rStrm.GetRoot().RequestPassword( *xDecr );
 
     // return error code (success, wrong password, etc.)
-    return xDecr ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
+    return xDecr.is() ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
 }
 
 // Document protection ========================================================
@@ -1173,6 +1167,7 @@ void XclImpDocProtectBuffer::Apply() const
     auto_ptr<ScDocProtection> pProtect(new ScDocProtection);
     pProtect->setProtected(true);
 
+#if ENABLE_SHEET_PROTECTION
     if (mnPassHash)
     {
         // 16-bit password pash.
@@ -1181,6 +1176,7 @@ void XclImpDocProtectBuffer::Apply() const
         aPass[1] = mnPassHash & 0xFF;
         pProtect->setPasswordHash(aPass, PASSHASH_XL);
     }
+#endif
 
     // document protection options
     pProtect->setOption(ScDocProtection::STRUCTURE, mbDocProtect);
@@ -1226,7 +1222,7 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
 {
     rStrm.Ignore(12);
 
-    // feature type can be either 2 or 4.  If 2, this record stores flag for
+    // feature type can be either 2 or 4.  If 2, this record stores flag for 
     // enhanced protection, whereas if 4 it stores flag for smart tag.
     sal_uInt16 nFeatureType;
     rStrm >> nFeatureType;
@@ -1236,7 +1232,7 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
 
     rStrm.Ignore(1); // always 1
 
-    // The flag size specifies the size of bytes that follows that stores
+    // The flag size specifies the size of bytes that follows that stores 
     // feature data.  If -1 it depends on the feature type imported earlier.
     // For enhanced protection data, the size is always 4.  For the most xls
     // documents out there this value is almost always -1.
@@ -1245,7 +1241,7 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
     if (nFlagSize != -1)
         return;
 
-    // There are actually 4 bytes to read, but the upper 2 bytes currently
+    // There are actually 4 bytes to read, but the upper 2 bytes currently 
     // don't store any bits.
     sal_uInt16 nOptions;
     rStrm >> nOptions;
@@ -1276,6 +1272,7 @@ void XclImpSheetProtectBuffer::Apply() const
         auto_ptr<ScTableProtection> pProtect(new ScTableProtection);
         pProtect->setProtected(true);
 
+#if ENABLE_SHEET_PROTECTION
         // 16-bit hash password
         const sal_uInt16 nHash = itr->second.mnPasswordHash;
         if (nHash)
@@ -1285,6 +1282,7 @@ void XclImpSheetProtectBuffer::Apply() const
             aPass[1] = nHash & 0xFF;
             pProtect->setPasswordHash(aPass, PASSHASH_XL);
         }
+#endif
 
         // sheet protection options
         const sal_uInt16 nOptions = itr->second.mnOptions;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class ScFormulaResult
         double          mfValue;    // double result direct for performance and memory consumption
         const formula::FormulaToken*  mpToken;    // if not, result token obtained from interpreter
     };
-    sal_uInt16              mnError;    // error code
+    USHORT              mnError;    // error code
     bool                mbToken :1; // whether content of union is a token
     bool                mbEmpty :1; // empty cell result
     bool                mbEmptyDisplayedAsString :1;    // only if mbEmpty
@@ -160,16 +160,16 @@ public:
         details instead. */
     inline  bool                IsValue() const;
 
-    /** Determines whether or not the result is a string containing more than
+    /** Determines whether or not the result is a string containing more than 
         one paragraph */
     inline  bool                IsMultiline() const;
 
     /** Get error code if set or GetCellResultType() is formula::svError or svUnknown,
         else 0. */
-    inline  sal_uInt16              GetResultError() const;
+    inline  USHORT              GetResultError() const;
 
     /** Set error code, don't touch token or double. */
-    inline  void                SetResultError( sal_uInt16 nErr );
+    inline  void                SetResultError( USHORT nErr );
 
     /** Set direct double. Shouldn't be used externally except in
         ScFormulaCell for rounded CalcAsShown or SetErrCode(). If
@@ -320,7 +320,7 @@ inline void ScFormulaResult::SetToken( const formula::FormulaToken* p )
              dynamic_cast<const ScMatrixCellResultToken*>(p) : NULL);
         if (pMatResult)
         {
-            const ScMatrixFormulaCellToken* pNewMatFormula =
+            const ScMatrixFormulaCellToken* pNewMatFormula = 
                 dynamic_cast<const ScMatrixFormulaCellToken*>(pMatResult);
             if (pNewMatFormula)
             {
@@ -435,7 +435,7 @@ inline bool ScFormulaResult::IsMultiline() const
 }
 
 
-inline sal_uInt16 ScFormulaResult::GetResultError() const
+inline USHORT ScFormulaResult::GetResultError() const
 {
     if (mnError)
         return mnError;
@@ -453,7 +453,7 @@ inline sal_uInt16 ScFormulaResult::GetResultError() const
 }
 
 
-inline void ScFormulaResult::SetResultError( sal_uInt16 nErr )
+inline void ScFormulaResult::SetResultError( USHORT nErr )
 {
     mnError = nErr;
 }

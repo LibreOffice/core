@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,25 +60,25 @@ using namespace ::com::sun::star;
 
 struct SfxRequest_Impl: public SfxListener
 
-/*  [Description]
+/* 	[Beschreibung]
 
-    Implementation structur of the <SfxRequest> class.
+    Implementations-Struktur der Klasse <SfxRequest>.
 */
 
 {
-    SfxRequest*     pAnti;       // Owner because of dying pool
-    String          aTarget;     // if possible from target object set by App
-    SfxItemPool*    pPool;       // ItemSet build with this pool
-    SfxPoolItem*    pRetVal;     // Return value belongs to itself
-    SfxShell*       pShell;      // run from this shell
-    const SfxSlot*  pSlot;       // executed Slot
-    sal_uInt16          nModifier;   // which Modifier was pressed?
-    sal_Bool            bDone;       // at all executed
-    sal_Bool            bIgnored;    // Cancelled by the User
-    sal_Bool            bCancelled;  // no longer notify
-    sal_Bool            bUseTarget;  // aTarget was set by Application
-    sal_uInt16              nCallMode;   // Synch/Asynch/API/Record
-    sal_Bool                bAllowRecording;
+    SfxRequest*			pAnti;		 // Owner wegen sterbendem Pool
+    String				aTarget;	 // ggf. von App gesetztes Zielobjekt
+    SfxItemPool*        pPool;		 // ItemSet mit diesem Pool bauen
+    SfxPoolItem*		pRetVal;	 // R"uckgabewert geh"ort sich selbst
+    SfxShell*           pShell;      // ausgef"uhrt an dieser Shell
+    const SfxSlot*		pSlot;		 // ausgef"uhrter Slot
+    USHORT              nModifier;   // welche Modifier waren gedrueckt?
+    BOOL				bDone;		 // "uberhaupt ausgef"uhrt
+    BOOL				bIgnored;	 // vom User abgebrochen
+    BOOL				bCancelled;	 // nicht mehr zustellen
+    BOOL				bUseTarget;	 // aTarget wurde von Applikation gesetzt
+    USHORT  			nCallMode;   // Synch/Asynch/API/Record
+    BOOL                bAllowRecording;
     SfxAllItemSet*      pInternalArgs;
     SfxViewFrame*       pViewFrame;
 
@@ -88,17 +88,17 @@ struct SfxRequest_Impl: public SfxListener
                         : pAnti( pOwner)
                         , pPool(0)
                         , nModifier(0)
-                        , bCancelled(sal_False)
+                        , bCancelled(FALSE)
                         , nCallMode( SFX_CALLMODE_SYNCHRON )
-                        , bAllowRecording( sal_False )
+                        , bAllowRecording( FALSE )
                         , pInternalArgs( 0 )
                         , pViewFrame(0)
                         {}
     ~SfxRequest_Impl() { delete pInternalArgs; }
 
 
-    void                SetPool( SfxItemPool *pNewPool );
-    virtual void        Notify( SfxBroadcaster &rBC, const SfxHint &rHint );
+    void				SetPool( SfxItemPool *pNewPool );
+    virtual void		Notify( SfxBroadcaster &rBC, const SfxHint &rHint );
     void                Record( const uno::Sequence < beans::PropertyValue >& rArgs );
 };
 
@@ -133,11 +133,11 @@ SfxRequest::~SfxRequest()
 {
     DBG_MEMTEST();
 
-    // Leave out Done() marked requests with 'rem'
+    // nicht mit Done() marktierte Requests mit 'rem' rausschreiben
     if ( pImp->xRecorder.is() && !pImp->bDone && !pImp->bIgnored )
         pImp->Record( uno::Sequence < beans::PropertyValue >() );
 
-    // Clear object
+    // Objekt abr"aumen
     delete pArgs;
     if ( pImp->pRetVal )
         DeleteItemOnIdle(pImp->pRetVal);
@@ -150,7 +150,7 @@ SfxRequest::SfxRequest
 (
     const SfxRequest& rOrig
 )
-:   SfxHint( rOrig ),
+:	SfxHint( rOrig ),
     nSlot(rOrig.nSlot),
     pArgs(rOrig.pArgs? new SfxAllItemSet(*rOrig.pArgs): 0),
     pImp( new SfxRequest_Impl(this) )
@@ -158,8 +158,8 @@ SfxRequest::SfxRequest
     DBG_MEMTEST();
 
     pImp->bAllowRecording = rOrig.pImp->bAllowRecording;
-    pImp->bDone = sal_False;
-    pImp->bIgnored = sal_False;
+    pImp->bDone = FALSE;
+    pImp->bIgnored = FALSE;
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
@@ -182,35 +182,35 @@ SfxRequest::SfxRequest
 SfxRequest::SfxRequest
 (
     SfxViewFrame*   pViewFrame,
-    sal_uInt16          nSlotId
+    USHORT          nSlotId
 
 )
 
-/*  [Description]
+/*	[Beschreibung]
 
-    With this constructor events can subsequently be recorded that are not run
-    across SfxDispatcher (eg from KeyInput() or mouse events). For this, a
-    SfxRequest instance is created by this constructor and then proceed
-    exactly as with a SfxRequest that in a <Slot-Execute-Method> is given as a
-    parameter.
+    Mit diesem Konstruktor k"onnen Events, die nicht "uber den SfxDispatcher
+    gelaufen sind (z.B aus KeyInput() oder Mouse-Events) nachtr"aglich
+    recorded werden. Dazu wird eine SfxRequest-Instanz mit diesem Konstruktor
+    erzeugt und dann genauso verfahren, wie mit einem SfxRequest, der in
+    eine <Slot-Execute-Methode> als Parameter gegeben wird.
 */
 
-:   nSlot(nSlotId),
+:	nSlot(nSlotId),
     pArgs(0),
     pImp( new SfxRequest_Impl(this) )
 {
     DBG_MEMTEST();
 
-    pImp->bDone = sal_False;
-    pImp->bIgnored = sal_False;
+    pImp->bDone = FALSE;
+    pImp->bIgnored = FALSE;
     pImp->SetPool( &pViewFrame->GetPool() );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = SFX_CALLMODE_SYNCHRON;
-    pImp->bUseTarget = sal_False;
+    pImp->bUseTarget = FALSE;
     pImp->pViewFrame = pViewFrame;
-    if( pImp->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImp->pShell, &pImp->pSlot, sal_True, sal_True ) )
+    if( pImp->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImp->pShell, &pImp->pSlot, TRUE, TRUE ) )
     {
         pImp->SetPool( &pImp->pShell->GetPool() );
         pImp->xRecorder = SfxRequest::GetMacroRecorder( pViewFrame );
@@ -221,7 +221,7 @@ SfxRequest::SfxRequest
     {
         ByteString aStr( "Recording unsupported slot: ");
         aStr += ByteString::CreateFromInt32( pImp->pPool->GetSlotId(nSlotId) );
-        OSL_FAIL( aStr.GetBuffer() );
+        DBG_ERROR( aStr.GetBuffer() );
     }
 #endif
 }
@@ -231,50 +231,50 @@ SfxRequest::SfxRequest
 
 SfxRequest::SfxRequest
 (
-    sal_uInt16        nSlotId,  // executed <Slot-Id>
-    SfxCallMode     nMode,      // Synch/API/...
-    SfxItemPool&  rPool     // necessary for the SfxItemSet for parameters
+    USHORT 			nSlotId, 	// auszuf"uhrende <Slot-Id>
+    SfxCallMode 	nMode,		// Synch/API/...
+    SfxItemPool&	rPool 		// ggf. f"ur das SfxItemSet f"ur Parameter
 )
 
 // creates a SfxRequest without arguments
 
-:   nSlot(nSlotId),
+:	nSlot(nSlotId),
     pArgs(0),
     pImp( new SfxRequest_Impl(this) )
 {
     DBG_MEMTEST();
 
-    pImp->bDone = sal_False;
-    pImp->bIgnored = sal_False;
+    pImp->bDone = FALSE;
+    pImp->bIgnored = FALSE;
     pImp->SetPool( &rPool );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
-    pImp->bUseTarget = sal_False;
+    pImp->bUseTarget = FALSE;
 }
 
 SfxRequest::SfxRequest
 (
-    const SfxSlot* pSlot,       // executed <Slot-Id>
+    const SfxSlot* pSlot, 	// auszuf"uhrende <Slot-Id>
     const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rArgs,
-    SfxCallMode     nMode,      // Synch/API/...
-    SfxItemPool&   rPool        // necessary for the SfxItemSet for parameters
+    SfxCallMode 	nMode,		// Synch/API/...
+    SfxItemPool&	rPool 		// ggf. f"ur das SfxItemSet f"ur Parameter
 )
-:   nSlot(pSlot->GetSlotId()),
+:	nSlot(pSlot->GetSlotId()),
     pArgs(new SfxAllItemSet(rPool)),
     pImp( new SfxRequest_Impl(this) )
 {
     DBG_MEMTEST();
 
-    pImp->bDone = sal_False;
-    pImp->bIgnored = sal_False;
+    pImp->bDone = FALSE;
+    pImp->bIgnored = FALSE;
     pImp->SetPool( &rPool );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
-    pImp->bUseTarget = sal_False;
+    pImp->bUseTarget = FALSE;
     TransformParameters( nSlot, rArgs, *pArgs, pSlot );
 }
 
@@ -282,50 +282,50 @@ SfxRequest::SfxRequest
 
 SfxRequest::SfxRequest
 (
-    sal_uInt16                  nSlotId,
-    sal_uInt16                  nMode,
-    const SfxAllItemSet&    rSfxArgs
+    USHORT 					nSlotId,
+    USHORT					nMode,
+    const SfxAllItemSet&	rSfxArgs
 )
 
 // creates a SfxRequest with arguments
 
-:   nSlot(nSlotId),
+:	nSlot(nSlotId),
     pArgs(new SfxAllItemSet(rSfxArgs)),
     pImp( new SfxRequest_Impl(this) )
 {
     DBG_MEMTEST();
 
-    pImp->bDone = sal_False;
-    pImp->bIgnored = sal_False;
+    pImp->bDone = FALSE;
+    pImp->bIgnored = FALSE;
     pImp->SetPool( rSfxArgs.GetPool() );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
-    pImp->bUseTarget = sal_False;
+    pImp->bUseTarget = FALSE;
 }
 //--------------------------------------------------------------------
 
-sal_uInt16 SfxRequest::GetCallMode() const
+USHORT SfxRequest::GetCallMode() const
 {
     return pImp->nCallMode;
 }
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxRequest::IsSynchronCall() const
+BOOL SfxRequest::IsSynchronCall() const
 {
     return SFX_CALLMODE_SYNCHRON == ( SFX_CALLMODE_SYNCHRON & pImp->nCallMode );
 }
 
 //--------------------------------------------------------------------
 
-void SfxRequest::SetSynchronCall( sal_Bool bSynchron )
+void SfxRequest::SetSynchronCall( BOOL bSynchron )
 {
     if ( bSynchron )
         pImp->nCallMode |= SFX_CALLMODE_SYNCHRON;
     else
-        pImp->nCallMode &= ~(sal_uInt16) SFX_CALLMODE_SYNCHRON;
+        pImp->nCallMode &= ~(USHORT) SFX_CALLMODE_SYNCHRON;
 }
 
 void SfxRequest::SetInternalArgs_Impl( const SfxAllItemSet& rArgs )
@@ -344,15 +344,16 @@ const SfxItemSet* SfxRequest::GetInternalArgs_Impl() const
 
 void SfxRequest_Impl::Record
 (
-    const uno::Sequence < beans::PropertyValue >& rArgs  // current Parameter
+    const uno::Sequence < beans::PropertyValue >& rArgs    // aktuelle Parameter
 )
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Internal helper method to create a <SfxMacroStatement> Instance, which
-    repeatable describes the just executed SfxRequest. The ownership of thr
-    created instance, to which a pointer is returned, is handed over to the
-    caller.
+    Interne Hilfsmethode zum erzeugen einer <SfxMacroStatement>-Instanz,
+    welche den bereits ausgef"uhrten SfxRequest wiederholbar beschreibt.
+
+    Die erzeugte Instanz, auf die ein Pointer zur"uckgeliefert wird
+    geht in das Eigentum des Aufrufers "uber.
 */
 
 {
@@ -389,7 +390,7 @@ void SfxRequest_Impl::Record
                 com::sun::star::uno::UNO_QUERY);
 
         com::sun::star::uno::Reference< com::sun::star::util::XURLTransformer > xTransform(
-                xFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
+                xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")),
                 com::sun::star::uno::UNO_QUERY);
 
         com::sun::star::util::URL aURL;
@@ -407,17 +408,19 @@ void SfxRequest_Impl::Record
 
 void SfxRequest::Record_Impl
 (
-    SfxShell&       rSh,    // the <SfxShell>, which has excecuted the Request
-    const SfxSlot&  rSlot,  // the <SfxSlot>, which has executed the Request
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder,
+    SfxShell& rSh,    // die <SfxShell>, die den Request ausgef"uhrt hat
+    const SfxSlot&	rSlot, 	// der <SfxSlot>, der den Request ausgef"uhrt hat
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder,  // der Recorder, mit dem aufgezeichnet wird
     SfxViewFrame* pViewFrame
 )
 
-/*  [Description]
+/*	[Beschreibung]
 
-    This internal method marks the specified SfxMakro SfxRequest as recorded in
-    SfxMakro. Pointer to the parameters in Done() is used again, thus has to
-    still be alive.
+    Diese interne Methode markiert den SfxRequest als in dem angegebenen
+    SfxMakro aufzuzeichnen.
+
+    Pointer auf die Parameter werden in Done() wieder verwendet, m"usseb
+    dann also noch leben.
 */
 
 {
@@ -449,7 +452,7 @@ void SfxRequest::AppendItem(const SfxPoolItem &rItem)
 
 //--------------------------------------------------------------------
 
-void SfxRequest::RemoveItem( sal_uInt16 nID )
+void SfxRequest::RemoveItem( USHORT nID )
 {
     if (pArgs)
     {
@@ -463,10 +466,10 @@ void SfxRequest::RemoveItem( sal_uInt16 nID )
 
 const SfxPoolItem* SfxRequest::GetArg
 (
-    sal_uInt16  nSlotId,  // Slot-Id or Which-Id of the parameters
-    bool    bDeep,    // sal_False: do not seach in the Parent-ItemSets
-    TypeId  aType     // != 0:  RTTI check with Assertion
-)   const
+    USHORT 			nSlotId, 	// Slot-Id oder Which-Id des Parameters
+    bool            bDeep,      // FALSE: nicht in Parent-ItemSets suchen
+    TypeId			aType		// != 0:  RTTI Pruefung mit Assertion
+) 	const
 {
     return GetItem( pArgs, nSlotId, bDeep, aType );
 }
@@ -476,19 +479,22 @@ const SfxPoolItem* SfxRequest::GetArg
 const SfxPoolItem* SfxRequest::GetItem
 (
     const SfxItemSet* pArgs,
-    sal_uInt16            nSlotId,  // Slot-Id or Which-Id of the parameters
-    bool              bDeep,    // sal_False: do not seach in the Parent-ItemSets
-    TypeId            aType     // != 0:  RTTI check with Assertion
+    USHORT 			nSlotId, 	// Slot-Id oder Which-Id des Parameters
+    bool    		bDeep,	 	// false: nicht in Parent-ItemSets suchen
+    TypeId			aType		// != 0:  RTTI Pruefung mit Assertion
 )
 
-/*  [Description]
+/*	[Beschreibung]
 
-    With this method the access to individual parameters in the SfxRequest is
-    simplified. In particular the type-examination (by Assertion) is performed,
-    whereby the application source code will be much clearer. In the product-
-    version is a 0 returned, if the found item is not of the specified class.
+    Mit dieser Methode wird der Zugriff auf einzelne Parameter im
+    SfxRequest wesentlich vereinfacht. Insbesondere wird die Typpr"ufung
+    (per Assertion) durchgef"uhrt, wodurch die Applikations-Sourcen
+    wesentlich "ubersichtlicher werden. In der PRODUCT-Version wird
+    eine 0 zur"uckgegeben, wenn das gefundene Item nicht von der
+    angegebenen Klasse ist.
 
-    [Example]
+
+    [Beispiel]
 
     void MyShell::Execute( SfxRequest &rReq )
     {
@@ -497,14 +503,14 @@ const SfxPoolItem* SfxRequest::GetItem
             case SID_MY:
             {
                 ...
-                // An Example on not using the macros
+                // ein Beispiel ohne Verwendung des Makros
                 const SfxInt32Item *pPosItem = (const SfxUInt32Item*)
-                    rReq.GetArg( SID_POS, sal_False, TYPE(SfxInt32Item) );
-                sal_uInt16 nPos = pPosItem ? pPosItem->GetValue() : 0;
+                    rReq.GetArg( SID_POS, FALSE, TYPE(SfxInt32Item) );
+                USHORT nPos = pPosItem ? pPosItem->GetValue() : 0;
 
-                // An Example on using the macros
-                SFX_REQUEST_ARG(rReq, pSizeItem, SfxInt32Item, SID_SIZE, sal_False);
-                sal_uInt16 nSize = pSizeItem ? pPosItem->GetValue() : 0;
+                // ein Beispiel mit Verwendung des Makros
+                SFX_REQUEST_ARG(rReq, pSizeItem, SfxInt32Item, SID_SIZE, FALSE);
+                USHORT nSize = pSizeItem ? pPosItem->GetValue() : 0;
 
                 ...
             }
@@ -517,24 +523,24 @@ const SfxPoolItem* SfxRequest::GetItem
 {
     if ( pArgs )
     {
-        // Which may be converted to ID
-        sal_uInt16 nWhich = pArgs->GetPool()->GetWhich(nSlotId);
+        // ggf. in Which-Id umrechnen
+        USHORT nWhich = pArgs->GetPool()->GetWhich(nSlotId);
 
-        // Is the item set or available at bDeep == sal_True?
+        // ist das Item gesetzt oder bei bDeep==TRUE verf"ugbar?
         const SfxPoolItem *pItem = 0;
         if ( ( bDeep ? SFX_ITEM_AVAILABLE : SFX_ITEM_SET )
              <= pArgs->GetItemState( nWhich, bDeep, &pItem ) )
         {
-            // Compare type
+            // stimmt der Typ "uberein?
             if ( !pItem || pItem->IsA(aType) )
                 return pItem;
 
-            // Item of wrong type => Programming error
-            OSL_FAIL(  "invalid argument type" );
+            // Item da aber falsch => Programmierfehler
+            DBG_ERROR(  "invalid argument type" );
         }
     }
 
-    // No Parameter, not found or wrong type
+    // keine Parameter, nicht gefunden oder falschen Typ gefunden
     return 0;
 }
 
@@ -542,7 +548,7 @@ const SfxPoolItem* SfxRequest::GetItem
 
 void SfxRequest::SetReturnValue(const SfxPoolItem &rItem)
 {
-    DBG_ASSERT(!pImp->pRetVal, "Set Return value multiple times?");
+    DBG_ASSERT(!pImp->pRetVal, "Returnwert mehrfach setzen?");
     if(pImp->pRetVal)
         delete pImp->pRetVal;
     pImp->pRetVal = rItem.Clone();
@@ -559,42 +565,47 @@ const SfxPoolItem* SfxRequest::GetReturnValue() const
 
 void SfxRequest::Done
 (
-    const SfxItemSet&   rSet,   /* parameters passed on by the application,
-                                   that for example were asked for by the user
-                                   in a dialogue, 0 if no parameters have been
-                                   set */
+    const SfxItemSet&	rSet,   /* 	von der Applikation mitgeteilte Parameter,
+                                    die z.B. in einem Dialog vom Benuter
+                                    erfragt wurden, ggf. 0 falls keine
+                                    Parameter gesetzt wurden */
 
-    bool                bKeep   /*  true (default)
-                                   'rSet' is saved and GetArgs() queriable.
+    bool                bKeep   /*  TRUE (default)
+                                    'rSet' wird gepeichert und ist "uber
+                                    GetArgs() abfragbar
 
-                                    false
-                                   'rSet' is not copied (faster) */
+                                    FALSE
+                                    'rSet' wird nicht kopiert (schneller) */
 )
 
-/*  [Description]
+/*	[Beschreibung]
 
-    This method must be called in the <Execute-Method> of the <SfxSlot>s, which
-    has performed the SfxRequest when the execution actually took place. If
-    'Done()' is not called, then the SfxRequest is considered canceled.
+    Diese Methode mu\s in der <Execute-Methode> des <SfxSlot>s gerufen
+    werden, der den SfxRequest ausgef"uhrt hat, wenn die Ausf"uhrung
+    tats"achlich stattgefunden hat. Wird 'Done()' nicht gerufen, gilt
+    der SfxRequest als abgebrochen.
 
-    Any return values are passed only when 'Done()' was called. Similar, when
-    recording a macro only true statements are generated if 'Done()' was
-    called; for SfxRequests that were not identified as such will instead
-    be commented out by inserting ('rem').
+    Etwaige Returnwerte werden nur durchgereicht, wenn 'Done()' gerufen
+    wurde. Ebenso werden beim Aufzeichnen von Makros nur echte
+    Statements erzeugt, wenn 'Done()' gerufen wurde; f"ur SfxRequests,
+    die nicht derart gekennzeichnet wurden, wird anstelle dessen eine
+    auf die abgebrochene Funktion hinweisende Bemerkung ('rem') eingf"ugt.
 
-    [Note]
 
-    'Done ()' is not called, for example when a dialoge started by the function
-    was canceled by the user or if the execution could not be performed due to
-    a wrong context (without use of separate <SfxShell>s). 'Done ()' will be
-    launched, when executing the function led to a regular error
-    (for example, file could not be opened).
+    [Anmerkung]
+
+    'Done()' wird z.B. nicht gerufen, wenn ein durch die Funktion gestarteter
+    Dialog vom Benutzer	abgebrochen wurde oder das Ausf"uhren aufgrund
+    eines falschen Kontextes (ohne Verwendung separater <SfxShell>s)
+    nicht durchgef"uhrt werden konnte. 'Done()' mu\s sehr wohl gerufen
+    werden, wenn das Ausf"uhren der Funktion zu einem regul"aren Fehler
+    f"uhrte (z.B. Datei konnte nicht ge"offnet werden).
 */
 
 {
     Done_Impl( &rSet );
 
-    // Keep items if possible, so they can be queried by StarDraw.
+    // ggf. Items merken, damit StarDraw sie abfragen kann
     if ( bKeep )
     {
         if ( !pArgs )
@@ -619,8 +630,8 @@ void SfxRequest::Done
 //--------------------------------------------------------------------
 
 
-void SfxRequest::Done( sal_Bool bRelease )
-//  [<SfxRequest::Done(SfxItemSet&)>]
+void SfxRequest::Done( BOOL bRelease )
+//	[<SfxRequest::Done(SfxItemSet&)>]
 {
     Done_Impl( pArgs );
     if( bRelease )
@@ -637,7 +648,7 @@ void SfxRequest::ForgetAllArgs()
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxRequest::IsCancelled() const
+BOOL SfxRequest::IsCancelled() const
 {
     return pImp->bCancelled;
 }
@@ -646,14 +657,14 @@ sal_Bool SfxRequest::IsCancelled() const
 
 void SfxRequest::Cancel()
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Marks this request as no longer executable. For example, if called when
-    the target (more precisely, its pool) dies.
+    Markiert diesen Request als nicht mehr auszufuehren. Wird z.B. gerufen,
+    wenn das Ziel (genauer dessen Pool) stirbt.
 */
 
 {
-    pImp->bCancelled = sal_True;
+    pImp->bCancelled = TRUE;
     pImp->SetPool( 0 );
     DELETEZ( pArgs );
 }
@@ -663,86 +674,87 @@ void SfxRequest::Cancel()
 
 void SfxRequest::Ignore()
 
-/*  [Description]
+/*	[Beschreibung]
 
-    If this method is called instead of <SfxRequest::Done()>, then this
-    request is not recorded.
+    Wird diese Methode anstelle von <SfxRequest::Done()> gerufen, dann
+    wird dieser Request nicht recorded.
 
-    [Example]
 
-    The selecting of tools in StarDraw should not be recorded, but the same
-    slots are to be used from the generation of the tools to the generated
-    objects. Thus can NoRecords not be specified, i.e. should not be recorded.
+    [Bespiel]
+
+    Das Selektieren von Tools im StarDraw soll nicht aufgezeichnet werden,
+    dieselben Slots sollen aber zum erzeugen der von den Tools zu
+    erzeugenden Objekte verwendet werde. Also kann nicht NoRecord
+    angegeben werden, dennoch soll u.U. nicht aufgezeichnet werden.
 */
 
 {
-    // Mark as actually executed
-    pImp->bIgnored = sal_True;
+    // als tats"achlich ausgef"uhrt markieren
+    pImp->bIgnored = TRUE;
 }
 
 //--------------------------------------------------------------------
 
 void SfxRequest::Done_Impl
 (
-    const SfxItemSet*   pSet    /* parameters passed on by the application,
-                                   that for example were asked for by the user
-                                   in a dialogue, 0 if no parameters have been
-                                   set */
-
+    const SfxItemSet*	pSet	/* 	von der Applikation mitgeteilte Parameter,
+                                    die z.B. in einem Dialog vom Benuter
+                                    erfragt wurden, ggf. 0 falls keine
+                                    Parameter gesetzt wurden */
 )
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Internal method to mark SfxRequest with 'done' and to evaluate the
-    parameters in 'pSet' in case it is recorded.
+    Interne Methode zum als 'done' markieren des SfxRequest und zum Auswerten
+    der Parameter in 'pSet' falls aufgezeichnet wird.
 */
 
 {
-    // Mark as actually executed
-    pImp->bDone = sal_True;
+    // als tats"achlich ausgef"uhrt markieren
+    pImp->bDone = TRUE;
 
-    // not Recording
+    // nicht Recorden
     if ( !pImp->xRecorder.is() )
         return;
 
-    // was running a different slot than requested (Delegation)
+    // wurde ein anderer Slot ausgef"uhrt als angefordert (Delegation)
     if ( nSlot != pImp->pSlot->GetSlotId() )
     {
-        // Search Slot again
+        // Slot neu suchen
         pImp->pSlot = pImp->pShell->GetInterface()->GetSlot(nSlot);
         DBG_ASSERT( pImp->pSlot, "delegated SlotId not found" );
-        if ( !pImp->pSlot ) // playing it safe
+        if ( !pImp->pSlot ) // Hosentr"ger und G"urtel
             return;
     }
 
-    // recordable?
-    // new Recording uses UnoName!
+    // record-f"ahig?
+    // neues Recorden verwendet UnoName!
     if ( !pImp->pSlot->pUnoName )
     {
         ByteString aStr( "Recording not exported slot: ");
         aStr += ByteString::CreateFromInt32( pImp->pSlot->GetSlotId() );
-        OSL_FAIL( aStr.GetBuffer() );
+        DBG_ERROR( aStr.GetBuffer() );
     }
 
-    if ( !pImp->pSlot->pUnoName ) // playing it safe
+    if ( !pImp->pSlot->pUnoName ) // Hosentr"ger und G"urtel
         return;
 
-    // often required values
+    // "ofters ben"otigte Werte
     SfxItemPool &rPool = pImp->pShell->GetPool();
 
     // Property-Slot?
     if ( !pImp->pSlot->IsMode(SFX_SLOT_METHOD) )
     {
-        // get the property as SfxPoolItem
+        // des Property als SfxPoolItem besorgen
         const SfxPoolItem *pItem;
-        sal_uInt16 nWhich = rPool.GetWhich(pImp->pSlot->GetSlotId());
-        SfxItemState eState = pSet ? pSet->GetItemState( nWhich, sal_False, &pItem ) : SFX_ITEM_UNKNOWN;
+        USHORT nWhich = rPool.GetWhich(pImp->pSlot->GetSlotId());
+        SfxItemState eState = pSet ? pSet->GetItemState( nWhich, FALSE, &pItem ) : SFX_ITEM_UNKNOWN;
 #ifdef DBG_UTIL
         if ( SFX_ITEM_SET != eState )
         {
             ByteString aStr( "Recording property not available: ");
             aStr += ByteString::CreateFromInt32( pImp->pSlot->GetSlotId() );
-            OSL_FAIL( aStr.GetBuffer() );
+            DBG_ERROR( aStr.GetBuffer() );
         }
 #endif
         uno::Sequence < beans::PropertyValue > aSeq;
@@ -751,7 +763,7 @@ void SfxRequest::Done_Impl
         pImp->Record( aSeq );
     }
 
-    // record everything in a single statement?
+    // alles in ein einziges Statement aufzeichnen?
     else if ( pImp->pSlot->IsMode(SFX_SLOT_RECORDPERSET) )
     {
         uno::Sequence < beans::PropertyValue > aSeq;
@@ -760,27 +772,27 @@ void SfxRequest::Done_Impl
         pImp->Record( aSeq );
     }
 
-    // record each item as a single statement
+    // jedes Item als einzelnes Statement recorden
     else if ( pImp->pSlot->IsMode(SFX_SLOT_RECORDPERITEM) )
     {
         if ( pSet )
         {
-            // iterate over Items
+            // "uber die Items iterieren
             SfxItemIter aIter(*pSet);
             for ( const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem() )
             {
-                // to determine the slot ID for the individual item
-                sal_uInt16 nSlotId = rPool.GetSlotId( pItem->Which() );
+                // die Slot-Id f"ur das einzelne Item ermitteln
+                USHORT nSlotId = rPool.GetSlotId( pItem->Which() );
                 if ( nSlotId == nSlot )
                 {
-                    // play it safe; repair the wrong flags
-                    OSL_FAIL( "recursion RecordPerItem - use RecordPerSet!" );
+                    // mit Hosentr"ager und G"urtel reparieren des falschen Flags
+                    DBG_ERROR( "recursion RecordPerItem - use RecordPerSet!" );
                     SfxSlot *pSlot = (SfxSlot*) pImp->pSlot;
-                    pSlot->nFlags &= ~((sal_uIntPtr)SFX_SLOT_RECORDPERITEM);
+                    pSlot->nFlags &= ~((ULONG)SFX_SLOT_RECORDPERITEM);
                     pSlot->nFlags &=  SFX_SLOT_RECORDPERSET;
                 }
 
-                // Record a Sub-Request
+                // einen Sub-Request recorden
                 SfxRequest aReq( pImp->pViewFrame, nSlotId );
                 if ( aReq.pImp->pSlot )
                     aReq.AppendItem( *pItem );
@@ -789,7 +801,7 @@ void SfxRequest::Done_Impl
         }
         else
         {
-          //HACK(think about this again)
+            HACK(hierueber nochmal nachdenken)
             pImp->Record( uno::Sequence < beans::PropertyValue >() );
         }
     }
@@ -797,18 +809,20 @@ void SfxRequest::Done_Impl
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxRequest::IsDone() const
+BOOL SfxRequest::IsDone() const
 
-/*  [Description]
+/*	[Beschreibung]
 
-    With this method it can be queried whether the SfxRequest was actually
-    executed or not. If a SfxRequest was not executed, then this is for example
-    because it was canceled by the user or the context for this request was
-    wrong, this was not implemented on a separate <SfxShell>.
+    Mit dieser Methode kann abgefragt werden, ob der SfxRequest tats"achlich
+    ausgef"uhrt wurde oder nicht. Wurde ein SfxRequest nicht ausgef"uhrt,
+    liegt dies z.B. daran, da\s der Benutzer abgebrochen hat oder
+    der Kontext f"ur diesen Request falsch war, dieses aber nicht "uber
+    eine separate <SfxShell> realisiert wurde.
 
-    SfxRequest instances that return sal_False will not be recorded.
+    SfxRequest-Instanzen, die hier FALSE liefern, werden nicht recorded.
 
-    [Cross-reference]
+
+    [Querverweise]
 
     <SfxRequest::Done(const SfxItemSet&)>
     <SfxRequest::Done()>
@@ -822,10 +836,10 @@ sal_Bool SfxRequest::IsDone() const
 
 SfxMacro* SfxRequest::GetRecordingMacro()
 
-/*  [Description]
+/*	[Beschreibung]
 
-    With this method it can be queried as to whether and to what <SfxMacro>
-    the SfxRequests is being recorded.
+    Mit dieser Methode kann abgefragt werden, ob und in welchem <SfxMacro>
+    die SfxRequests gerade aufgezeichnet werden.
 */
 
 {
@@ -836,13 +850,12 @@ SfxMacro* SfxRequest::GetRecordingMacro()
 
 com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder( SfxViewFrame* pView )
 
-/*  [Description]
+/*  [Beschreibung]
 
-    This recorder is an attempt for dispatch () to get calls from the Frame.
-    This is then available through a property by a supplier but only when
-    recording was turned on.
-
-    (See also SfxViewFrame::MiscExec_Impl() and SID_RECORDING)
+    Hier wird versucht einen Recorder fuer dispatch() Aufrufe vom Frame zu bekommen.
+    Dieser ist dort per Property an einem Supplier verfuegbar - aber nur dann, wenn
+    recording angeschaltet wurde.
+    (Siehe auch SfxViewFrame::MiscExec_Impl() und SID_RECORDING)
 */
 
 {
@@ -854,7 +867,7 @@ com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRe
 
     if(xSet.is())
     {
-        com::sun::star::uno::Any aProp = xSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DispatchRecorderSupplier")));
+        com::sun::star::uno::Any aProp = xSet->getPropertyValue(rtl::OUString::createFromAscii("DispatchRecorderSupplier"));
         com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
         aProp >>= xSupplier;
         if(xSupplier.is())
@@ -864,7 +877,7 @@ com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRe
     return xRecorder;
 }
 
-sal_Bool SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
+BOOL SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
 {
     return GetMacroRecorder( pView ).is();
 }
@@ -872,12 +885,12 @@ sal_Bool SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxRequest::IsAPI() const
+BOOL SfxRequest::IsAPI() const
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Returns sal_True if this SfxRequest was generated by an API (for example BASIC),
-    otherwise sal_False.
+    Liefert TRUE, wenn dieser SfxRequest von einer API (z.B. BASIC)
+    erzeugt wurde, sonst FALSE.
 */
 
 {
@@ -889,13 +902,13 @@ sal_Bool SfxRequest::IsAPI() const
 
 bool SfxRequest::IsRecording() const
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Returns sal_True if this SfxRequest is to be recorded ie
-    1. Currently a macro is beeing recorded
-    2. This request is even recorded
-    3. the request did not originate from a pure API (for example BASIC),
-    otherwise sal_False.
+    Liefert TRUE, wenn dieser SfxRequest recorded werden soll, d.h.
+    1. zu Zeit ein Makro aufgezeichnet wird
+    2. dieser Request "uberhaupt aufgezeichnet wird
+    3. der Request nicht von reiner API (z.B. BASIC) ausgeht,
+    sonst FALSE.
 */
 
 {
@@ -903,13 +916,13 @@ bool SfxRequest::IsRecording() const
 }
 
 //--------------------------------------------------------------------
-void SfxRequest::SetModifier( sal_uInt16 nModi )
+void SfxRequest::SetModifier( USHORT nModi )
 {
     pImp->nModifier = nModi;
 }
 
 //--------------------------------------------------------------------
-sal_uInt16 SfxRequest::GetModifier() const
+USHORT SfxRequest::GetModifier() const
 {
     return pImp->nModifier;
 }
@@ -918,35 +931,36 @@ sal_uInt16 SfxRequest::GetModifier() const
 
 void SfxRequest::SetTarget( const String &rTarget )
 
-/*  [Description]
+/*	[Beschreibung]
 
-    With this method the recording of the target object can be implemented.
+    Mit dieser Methode kann das zu recordende Zielobjekt umgesetzt werden.
 
-    [Example]
 
-    The BASIC-Methode 'Open' is although executed by the Shell 'Application'
-    but recorded on the Objekt 'Documents' (global):
+    [Beispiel]
+
+    Die BASIC-Methode 'Open' wird zwar von der Shell 'Application' ausgef"uhrt,
+    aber am Objekt 'Documents' (global) recorded:
 
         rReq.SetTarget( "Documents" );
 
-    This then leads to:
+    Dies f"uhrt dann zu:
 
         Documents.Open( ... )
 */
 
 {
     pImp->aTarget = rTarget;
-    pImp->bUseTarget = sal_True;
+    pImp->bUseTarget = TRUE;
 }
 
-void SfxRequest::AllowRecording( sal_Bool bSet )
+void SfxRequest::AllowRecording( BOOL bSet )
 {
     pImp->bAllowRecording = bSet;
 }
 
-sal_Bool SfxRequest::AllowsRecording() const
+BOOL SfxRequest::AllowsRecording() const
 {
-    sal_Bool bAllow = pImp->bAllowRecording;
+    BOOL bAllow = pImp->bAllowRecording;
     if( !bAllow )
         bAllow = ( SFX_CALLMODE_API != ( SFX_CALLMODE_API & pImp->nCallMode ) ) &&
                  ( SFX_CALLMODE_RECORD == ( SFX_CALLMODE_RECORD & pImp->nCallMode ) );

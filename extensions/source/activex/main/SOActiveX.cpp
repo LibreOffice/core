@@ -61,7 +61,7 @@ HRESULT ExecuteFunc( IDispatch* idispUnoObject,
     // for debugging purposes
     // USES_CONVERSION;
     // if ( !SUCCEEDED( hr ) )
-    //  ::MessageBox( NULL, OLE2A( myInfo.bstrDescription ), OLE2A( myInfo.bstrSource ), MB_OK | MB_ICONINFORMATION );
+    //	::MessageBox( NULL, OLE2A( myInfo.bstrDescription ), OLE2A( myInfo.bstrSource ), MB_OK | MB_ICONINFORMATION );
 
     return hr;
 }
@@ -142,16 +142,16 @@ CSOActiveX::CSOActiveX()
     if( !SUCCEEDED( hr ) )
         OutputError_Impl( NULL, hr );
 
-    mPWinClass.style            = CS_HREDRAW|CS_VREDRAW;
-    mPWinClass.lpfnWndProc      = ::DefWindowProc;
-    mPWinClass.cbClsExtra       = 0;
-    mPWinClass.cbWndExtra       = 0;
-    mPWinClass.hInstance        = (HINSTANCE) GetModuleHandle(NULL); //myInstance;
-    mPWinClass.hIcon            = NULL;
-    mPWinClass.hCursor          = NULL;
-    mPWinClass.hbrBackground    = (HBRUSH) COLOR_BACKGROUND;
-    mPWinClass.lpszMenuName     = NULL;
-    mPWinClass.lpszClassName    = STAROFFICE_WINDOWCLASS;
+    mPWinClass.style			= CS_HREDRAW|CS_VREDRAW;
+    mPWinClass.lpfnWndProc		= ::DefWindowProc;
+    mPWinClass.cbClsExtra		= 0;
+    mPWinClass.cbWndExtra		= 0;
+    mPWinClass.hInstance		= (HINSTANCE) GetModuleHandle(NULL); //myInstance;
+    mPWinClass.hIcon			= NULL;
+    mPWinClass.hCursor			= NULL;
+    mPWinClass.hbrBackground	= (HBRUSH) COLOR_BACKGROUND;
+    mPWinClass.lpszMenuName	    = NULL;
+    mPWinClass.lpszClassName	= STAROFFICE_WINDOWCLASS;
 
     RegisterClass(&mPWinClass);
 }
@@ -260,7 +260,7 @@ HRESULT CSOActiveX::TerminateOffice()
     hr = ExecuteFunc( pdispChildren, L"queryFrames", &nFlag, 1, &aFrames );
     if ( SUCCEEDED( hr ) )
     {
-        if ( ( aFrames.vt == ( VT_ARRAY | VT_DISPATCH ) || aFrames.vt == ( VT_ARRAY | VT_VARIANT ) )
+        if ( ( aFrames.vt == ( VT_ARRAY | VT_DISPATCH ) || aFrames.vt == ( VT_ARRAY | VT_VARIANT ) ) 
           && ( !aFrames.parray || aFrames.parray->cDims == 1 && aFrames.parray->rgsabound[0].cElements == 0 ) )
         {
             // there is no frames open
@@ -269,7 +269,7 @@ HRESULT CSOActiveX::TerminateOffice()
             hr = ExecuteFunc( pdispDesktop, L"terminate", NULL, 0, &dummyResult );
         }
     }
-
+    
     return hr;
 }
 
@@ -372,7 +372,7 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG /*pErrorLog*/ 
     hr = CBindStatusCallback<CSOActiveX>::Download( this, &CSOActiveX::CallbackCreateXInputStream, mCurFileUrl, m_spClientSite, FALSE );
     if ( hr == MK_S_ASYNCHRONOUS )
         hr = S_OK;
-
+    
     if ( !SUCCEEDED( hr ) )
     {
         // trigger initialization without stream
@@ -574,7 +574,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
         long nInitInd = 0;
         CComVariant pFrameVariant( mpDispFrame );
         SafeArrayPutElement( pInitVals, &nInitInd, &pFrameVariant );
-
+        
         // the second sequence element
         nInitInd = 1;
         CComVariant pStrArr( 1L );
@@ -615,7 +615,7 @@ HRESULT CSOActiveX::CallLoadComponentFromURL1PBool( OLECHAR* sUrl, OLECHAR* sArg
     HRESULT hr = GetUnoStruct( L"com.sun.star.beans.PropertyValue", pdispPropVal );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    OLECHAR*    sPropMemberNames[2] = { L"Name", L"Value" };
+    OLECHAR* 	sPropMemberNames[2] = { L"Name", L"Value" };
     CComVariant pPropVar[2];
     pPropVar[0] = CComVariant( sArgName );
     pPropVar[1].vt = VT_BOOL; pPropVar[1].boolVal = sArgVal ? VARIANT_TRUE : VARIANT_FALSE ;
@@ -666,7 +666,7 @@ HRESULT CSOActiveX::CallDispatchMethod( OLECHAR* sUrl,
         hr = GetUnoStruct( L"com.sun.star.beans.PropertyValue", pdispPropVal );
         if( !SUCCEEDED( hr ) ) return hr;
 
-        OLECHAR*    sPropMemberNames[2] = { L"Name", L"Value" };
+        OLECHAR* 	sPropMemberNames[2] = { L"Name", L"Value" };
         CComVariant pPropVar[2];
         pPropVar[0] = aArgNames[ix];
         pPropVar[1] = aArgVals[ix];
@@ -719,7 +719,7 @@ void CSOActiveX::CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* /*
         if( SUCCEEDED( hr ) && mpDispTempFile )
         {
             SAFEARRAY FAR* pDataArray = SafeArrayCreateVector( VT_I1, 0, dwSize );
-
+    
             if ( pDataArray )
             {
                 hr = SafeArrayLock( pDataArray );
@@ -951,7 +951,7 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
     if ( mbDrawLocked )
         return S_OK;
     LockingGuard aGuard( mbDrawLocked );
-
+    
     if( m_spInPlaceSite && mCurFileUrl && mbReadyForActivation )
     {
         HWND hwnd;
@@ -1084,7 +1084,7 @@ STDMETHODIMP CSOActiveX::SetClientSite( IOleClientSite* aClientSite )
 
     CComPtr<IOleContainer> aContainer;
     m_spClientSite->GetContainer( &aContainer );
-//  ATLASSERT( aContainer );
+//	ATLASSERT( aContainer );
 
     if( SUCCEEDED( hr )  && aContainer )
     {
@@ -1096,7 +1096,7 @@ STDMETHODIMP CSOActiveX::SetClientSite( IOleClientSite* aClientSite )
             aServiceProvider->QueryService( SID_SInternetExplorer,
                                             IID_IWebBrowser,
                                             (void**)&mWebBrowser2 );
-//          ATLASSERT( mWebBrowser2 );
+//			ATLASSERT( mWebBrowser2 );
             if( mWebBrowser2 )
                 AtlAdvise( mWebBrowser2, GetUnknown(), DIID_DWebBrowserEvents2, &mCookie );
         }

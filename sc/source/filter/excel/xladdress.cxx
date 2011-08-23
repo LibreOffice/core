@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 void XclAddress::Read( XclImpStream& rStrm, bool bCol16Bit )
 {
-    mnRow = rStrm.ReaduInt16();
+    rStrm >> mnRow;
     if( bCol16Bit )
         rStrm >> mnCol;
     else
@@ -46,7 +46,7 @@ void XclAddress::Read( XclImpStream& rStrm, bool bCol16Bit )
 
 void XclAddress::Write( XclExpStream& rStrm, bool bCol16Bit ) const
 {
-    rStrm << static_cast<sal_uInt16> (mnRow);
+    rStrm << mnRow;
     if( bCol16Bit )
         rStrm << mnCol;
     else
@@ -63,9 +63,7 @@ bool XclRange::Contains( const XclAddress& rPos ) const
 
 void XclRange::Read( XclImpStream& rStrm, bool bCol16Bit )
 {
-    maFirst.mnRow = rStrm.ReaduInt16();
-    maLast.mnRow = rStrm.ReaduInt16();
-
+    rStrm >> maFirst.mnRow >> maLast.mnRow;
     if( bCol16Bit )
         rStrm >> maFirst.mnCol >> maLast.mnCol;
     else
@@ -77,7 +75,7 @@ void XclRange::Read( XclImpStream& rStrm, bool bCol16Bit )
 
 void XclRange::Write( XclExpStream& rStrm, bool bCol16Bit ) const
 {
-    rStrm << static_cast<sal_uInt16>(maFirst.mnRow) << static_cast<sal_uInt16>(maLast.mnRow);
+    rStrm << maFirst.mnRow << maLast.mnRow;
     if( bCol16Bit )
         rStrm << maFirst.mnCol << maLast.mnCol;
     else
@@ -142,7 +140,7 @@ XclAddressConverterBase::XclAddressConverterBase( XclTracer& rTracer, const ScAd
     mbTabTrunc( false )
 {
     DBG_ASSERT( static_cast< size_t >( rMaxPos.Col() ) <= SAL_MAX_UINT16, "XclAddressConverterBase::XclAddressConverterBase - invalid max column" );
-    DBG_ASSERT( static_cast< size_t >( rMaxPos.Row() ) <= SAL_MAX_UINT32, "XclAddressConverterBase::XclAddressConverterBase - invalid max row" );
+    DBG_ASSERT( static_cast< size_t >( rMaxPos.Row() ) <= SAL_MAX_UINT16, "XclAddressConverterBase::XclAddressConverterBase - invalid max row" );
 }
 
 XclAddressConverterBase::~XclAddressConverterBase()

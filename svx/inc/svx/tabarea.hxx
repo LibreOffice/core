@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 // include ---------------------------------------------------------------
 
 #include <svtools/valueset.hxx>
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <vcl/fixed.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/xsetit.hxx>
@@ -59,7 +59,7 @@ enum PageType
 
 // define ----------------------------------------------------------------
 
-typedef sal_uInt16 ChangeType; // auch in tab_line.hxx (mitpflegen !!!)
+typedef USHORT ChangeType; // auch in tab_line.hxx (mitpflegen !!!)
 
 #define CT_NONE                 ( (ChangeType) 0x0000 )
 #define CT_MODIFIED             ( (ChangeType) 0x0001 )

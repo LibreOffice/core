@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,6 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/awt/XItemList.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/numbers.hxx>
@@ -73,7 +72,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_OFilterControl()
@@ -105,8 +104,8 @@ namespace frm
     //=====================================================================
     //---------------------------------------------------------------------
     OFilterControl::OFilterControl( const Reference< XMultiServiceFactory >& _rxORB )
-        :UnoControl( _rxORB )
-        ,m_aTextListeners( *this )
+        :m_aTextListeners( *this )
+        ,m_aContext( _rxORB )
         ,m_aParser( _rxORB )
         ,m_nControlClass( FormComponentType::TEXTFIELD )
         ,m_bFilterList( sal_False )
@@ -120,31 +119,31 @@ namespace frm
     {
         if ( !m_xField.is() )
         {
-            OSL_FAIL( "OFilterControl::ensureInitialized: improperly initialized: no field!" );
+            OSL_ENSURE( sal_False, "OFilterControl::ensureInitialized: improperly initialized: no field!" );
             return sal_False;
         }
 
         if ( !m_xConnection.is() )
         {
-            OSL_FAIL( "OFilterControl::ensureInitialized: improperly initialized: no connection!" );
+            OSL_ENSURE( sal_False, "OFilterControl::ensureInitialized: improperly initialized: no connection!" );
             return sal_False;
         }
 
         if ( !m_xFormatter.is() )
         {
             // we can create one from the connection, if it's an SDB connection
-            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, maContext.getLegacyServiceFactory() );
+            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, m_aContext.getLegacyServiceFactory() );
 
             if ( xFormatSupplier.is() )
             {
-                maContext.createComponent( "com.sun.star.util.NumberFormatter", m_xFormatter );
+                m_aContext.createComponent( "com.sun.star.util.NumberFormatter", m_xFormatter );
                 if ( m_xFormatter.is() )
                     m_xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
             }
         }
         if ( !m_xFormatter.is() )
         {
-            OSL_FAIL( "OFilterControl::ensureInitialized: no number formatter!" );
+            OSL_ENSURE( sal_False, "OFilterControl::ensureInitialized: no number formatter!" );
             // no fallback anymore
             return sal_False;
         }
@@ -153,7 +152,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    Any SAL_CALL OFilterControl::queryAggregation( const Type & rType ) throw(RuntimeException)
+    Any	SAL_CALL OFilterControl::queryAggregation( const Type & rType ) throw(RuntimeException)
     {
         Any aRet = UnoControl::queryAggregation( rType);
         if(!aRet.hasValue())
@@ -169,22 +168,22 @@ namespace frm
         switch (m_nControlClass)
         {
             case FormComponentType::RADIOBUTTON:
-                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("radiobutton") );
+                aServiceName = ::rtl::OUString::createFromAscii("radiobutton");
                 break;
             case FormComponentType::CHECKBOX:
-                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("checkbox") );
+                aServiceName = ::rtl::OUString::createFromAscii("checkbox");
                 break;
             case FormComponentType::COMBOBOX:
-                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("combobox") );
+                aServiceName = ::rtl::OUString::createFromAscii("combobox");
                 break;
             case FormComponentType::LISTBOX:
-                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("listbox") );
+                aServiceName = ::rtl::OUString::createFromAscii("listbox");
                 break;
             default:
                 if (m_bMultiLine)
-                    aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MultiLineEdit") );
+                    aServiceName = ::rtl::OUString::createFromAscii("MultiLineEdit");
                 else
-                    aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit") );
+                    aServiceName = ::rtl::OUString::createFromAscii("Edit");
         }
         return aServiceName;
     }
@@ -257,6 +256,7 @@ namespace frm
             OControl::initFormControlPeer( getPeer() );
 
             // filter controls are _never_ readonly
+            // #107013# - 2002-02-03 - fs@openoffice.org
             Reference< XPropertySet > xModel( getModel(), UNO_QUERY_THROW );
             Reference< XPropertySetInfo > xModelPSI( xModel->getPropertySetInfo(), UNO_SET_THROW );
             if ( xModelPSI->hasPropertyByName( PROPERTY_READONLY ) )
@@ -343,28 +343,11 @@ namespace frm
 
             case FormComponentType::LISTBOX:
             {
-                try
-                {
-                    const Reference< XItemList > xItemList( getModel(), UNO_QUERY_THROW );
-                    ::rtl::OUString sItemText( xItemList->getItemText( rEvent.Selected ) );
-
-                    const MapString2String::const_iterator itemPos = m_aDisplayItemToValueItem.find( sItemText );
-                    if ( itemPos != m_aDisplayItemToValueItem.end() )
-                    {
-                        sItemText = itemPos->second;
-                        if ( sItemText.getLength() )
-                        {
-                            ::dbtools::OPredicateInputController aPredicateInput( maContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
-                            ::rtl::OUString sErrorMessage;
-                            OSL_VERIFY( aPredicateInput.normalizePredicateString( sItemText, m_xField, &sErrorMessage ) );
-                        }
-                    }
-                    aText.append( sItemText );
-                }
-                catch( const Exception& )
-                {
-                    DBG_UNHANDLED_EXCEPTION();
-                }
+                Sequence< ::rtl::OUString> aValueSelection;
+                Reference< XPropertySet > aPropertyPointer(getModel(), UNO_QUERY);
+                aPropertyPointer->getPropertyValue(PROPERTY_VALUE_SEQ) >>= aValueSelection;
+                if (rEvent.Selected <= aValueSelection.getLength())
+                    aText.append( aValueSelection[ rEvent.Selected ] );
             }
             break;
 
@@ -528,7 +511,7 @@ namespace frm
                 Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
                 if (xText.is())
                     aText = xText->getText();
-            }   break;
+            }	break;
             default:
                 return sal_True;
         }
@@ -539,7 +522,7 @@ namespace frm
             aNewText.trim();
             if ( aNewText.getLength() )
             {
-                ::dbtools::OPredicateInputController aPredicateInput( maContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
+                ::dbtools::OPredicateInputController aPredicateInput( m_aContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
                 ::rtl::OUString sErrorMessage;
                 if ( !aPredicateInput.normalizePredicateString( aNewText, m_xField, &sErrorMessage ) )
                 {
@@ -590,14 +573,14 @@ namespace frm
                 if (xVclWindow.is())
                 {
                     Any aValue;
-                    if  (   aText.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) )
+                    if  (   aText.equalsAscii( "1" )
                         ||  aText.equalsIgnoreAsciiCaseAscii( "TRUE" )
                         ||  aText.equalsIgnoreAsciiCaseAscii( "IS TRUE" )
                         )
                     {
                         aValue <<= (sal_Int32)STATE_CHECK;
                     }
-                    else if (   aText.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "0" ) )
+                    else if (   aText.equalsAscii( "0" )
                             ||  aText.equalsIgnoreAsciiCaseAscii( "FALSE" )
                             )
                     {
@@ -609,7 +592,7 @@ namespace frm
                     m_aText = aText;
                     xVclWindow->setProperty( PROPERTY_STATE, aValue );
                 }
-            }   break;
+            }	break;
             case FormComponentType::RADIOBUTTON:
             {
                 Reference< XVclWindowPeer >  xVclWindow( getPeer(), UNO_QUERY );
@@ -624,7 +607,7 @@ namespace frm
                     m_aText = aText;
                     xVclWindow->setProperty(PROPERTY_STATE, aValue);
                 }
-            }   break;
+            }	break;
             case FormComponentType::LISTBOX:
             {
                 Reference< XListBox >  xListBox( getPeer(), UNO_QUERY );
@@ -632,16 +615,6 @@ namespace frm
                 {
                     m_aText = aText;
                     xListBox->selectItem(m_aText, sal_True);
-                    if ( xListBox->getSelectedItemPos() >= 0 )
-                    {
-                        const bool isQuoted =   ( aText.getLength() > 0 )
-                                            &&  ( aText[0] == '\'' )
-                                            &&  ( aText[aText.getLength() - 1] == '\'' );
-                        if ( isQuoted )
-                        {
-                            xListBox->selectItem( aText.copy( 1, aText.getLength() - 2 ), sal_True );
-                        }
-                    }
                 }
             } break;
             default:
@@ -738,12 +711,12 @@ namespace frm
         try
         {
             Sequence< Any > aArgs(2);
-            aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLException") ), 0, makeAny( _rExcept ), PropertyState_DIRECT_VALUE);
-            aArgs[1] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow") ), 0, makeAny( m_xMessageParent ), PropertyState_DIRECT_VALUE);
+            aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, makeAny( _rExcept ), PropertyState_DIRECT_VALUE);
+            aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny( m_xMessageParent ), PropertyState_DIRECT_VALUE);
+            
+            static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.sdb.ErrorMessageDialog" );
 
-            static ::rtl::OUString s_sDialogServiceName (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ErrorMessageDialog") );
-
-            Reference< XExecutableDialog > xErrorDialog( maContext.createComponentWithArguments( s_sDialogServiceName, aArgs ), UNO_QUERY );
+            Reference< XExecutableDialog > xErrorDialog( m_aContext.createComponentWithArguments( s_sDialogServiceName, aArgs ), UNO_QUERY );
             if ( xErrorDialog.is() )
                 xErrorDialog->execute();
             else
@@ -784,7 +757,7 @@ namespace frm
             }
             else
             {
-                OSL_FAIL( "OFilterControl::initialize: unrecognized argument!" );
+                DBG_ERROR( "OFilterControl::initialize: unrecognized argument!" );
                 continue;
             }
 
@@ -806,7 +779,7 @@ namespace frm
                 Reference< XPropertySet > xControlModel;
                 if ( !(*pValue >>= xControlModel ) || !xControlModel.is() )
                 {
-                    OSL_FAIL( "OFilterControl::initialize: invalid control model argument!" );
+                    OSL_ENSURE( sal_False, "OFilterControl::initialize: invalid control model argument!" );
                     continue;
                 }
 
@@ -832,16 +805,6 @@ namespace frm
                         case FormComponentType::LISTBOX:
                         case FormComponentType::COMBOBOX:
                             m_nControlClass = nClassId;
-                            if ( FormComponentType::LISTBOX == nClassId )
-                            {
-                                Sequence< ::rtl::OUString > aDisplayItems;
-                                OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aDisplayItems );
-                                Sequence< ::rtl::OUString > aValueItems;
-                                OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_VALUE_SEQ ) >>= aValueItems );
-                                OSL_ENSURE( aDisplayItems.getLength() == aValueItems.getLength(), "OFilterControl::initialize: inconsistent item lists!" );
-                                for ( sal_Int32 i=0; i < ::std::min( aDisplayItems.getLength(), aValueItems.getLength() ); ++i )
-                                    m_aDisplayItemToValueItem[ aDisplayItems[i] ] = aValueItems[i];
-                            }
                             break;
                         default:
                             m_bMultiLine = ::comphelper::hasProperty( PROPERTY_MULTILINE, xControlModel ) && ::comphelper::getBOOL( xControlModel->getPropertyValue( PROPERTY_MULTILINE ) );
@@ -886,7 +849,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OFilterControl::getImplementationName_Static()
+    ::rtl::OUString	SAL_CALL OFilterControl::getImplementationName_Static()
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.forms.OFilterControl" ) );
     }
@@ -907,7 +870,7 @@ namespace frm
     }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

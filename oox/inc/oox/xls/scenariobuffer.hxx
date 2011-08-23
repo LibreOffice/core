@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,7 @@
 #define OOX_XLS_SCENARIOBUFFER_HXX
 
 #include <com/sun/star/table/CellAddress.hpp>
-#include "oox/helper/refmap.hxx"
-#include "oox/helper/refvector.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
 namespace oox {
@@ -75,9 +74,9 @@ public:
     void                importInputCells( const AttributeList& rAttribs );
 
     /** Imports a scenario definition from a SCENARIO record. */
-    void                importScenario( SequenceInputStream& rStrm );
+    void                importScenario( RecordInputStream& rStrm );
     /** Imports a new cell for this scenario from a INPUTCELLS record. */
-    void                importInputCells( SequenceInputStream& rStrm );
+    void                importInputCells( RecordInputStream& rStrm );
 
     /** Imports a scenario definition from a SCENARIO record. */
     void                importScenario( BiffInputStream& rStrm );
@@ -113,7 +112,7 @@ public:
     /** Imports sheet scenario settings from a scenarios element. */
     void                importScenarios( const AttributeList& rAttribs );
     /** Imports sheet scenario settings from a SCENARIOS record. */
-    void                importScenarios( SequenceInputStream& rStrm );
+    void                importScenarios( RecordInputStream& rStrm );
     /** Imports sheet scenario settings from a SCENARIOS record. */
     void                importScenarios( BiffInputStream& rStrm );
 

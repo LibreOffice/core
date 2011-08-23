@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace connectivity
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
     public:
-        OKeyColumnsHelper(  OTableKeyHelper* _pKey,
+        OKeyColumnsHelper(	OTableKeyHelper* _pKey,
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< ::rtl::OUString> &_rVector);
     };

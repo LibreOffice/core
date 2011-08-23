@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,6 @@
 
 // -----------------------------------------------------------------------------
 
-using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -84,22 +83,22 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
     static const SfxItemPropertyMapEntry aSvxCellPropertyMap[] =
     {
         FILL_PROPERTIES
-//      { MAP_CHAR_LEN("HasLevels"),                    OWN_ATTR_HASLEVELS,             &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
-        { MAP_CHAR_LEN("Style"),                        OWN_ATTR_STYLE,                 &::com::sun::star::style::XStyle::static_type(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_CHAR_LEN(UNO_NAME_TEXT_WRITINGMODE),      SDRATTR_TEXTDIRECTION,          &::getCppuType( (::com::sun::star::text::WritingMode*) 0 ),                         0,      0},
-        { MAP_CHAR_LEN(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        &::getCppuType((const ::com::sun::star::drawing::TextHorizontalAdjust*)0),  0,      0}, \
-        { MAP_CHAR_LEN(UNO_NAME_TEXT_LEFTDIST),         SDRATTR_TEXT_LEFTDIST,          &::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
-        { MAP_CHAR_LEN(UNO_NAME_TEXT_LOWERDIST),        SDRATTR_TEXT_LOWERDIST,         &::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
-        { MAP_CHAR_LEN(UNO_NAME_TEXT_RIGHTDIST),        SDRATTR_TEXT_RIGHTDIST,         &::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
-        { MAP_CHAR_LEN(UNO_NAME_TEXT_UPPERDIST),        SDRATTR_TEXT_UPPERDIST,         &::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
-        { MAP_CHAR_LEN(UNO_NAME_TEXT_VERTADJUST),       SDRATTR_TEXT_VERTADJUST,        &::getCppuType((const ::com::sun::star::drawing::TextVerticalAdjust*)0),    0,      0},\
-        { MAP_CHAR_LEN(UNO_NAME_TEXT_WORDWRAP),         SDRATTR_TEXT_WORDWRAP,          &::getBooleanCppuType(),        0,      0}, \
+//		{ MAP_CHAR_LEN("HasLevels"),					OWN_ATTR_HASLEVELS,				&::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,		0},
+        { MAP_CHAR_LEN("Style"),						OWN_ATTR_STYLE,					&::com::sun::star::style::XStyle::static_type(),									::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_WRITINGMODE),		SDRATTR_TEXTDIRECTION,			&::getCppuType( (::com::sun::star::text::WritingMode*) 0 ),							0,		0},
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_HORZADJUST),		SDRATTR_TEXT_HORZADJUST,		&::getCppuType((const ::com::sun::star::drawing::TextHorizontalAdjust*)0),	0,		0}, \
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_LEFTDIST),			SDRATTR_TEXT_LEFTDIST,			&::getCppuType((const sal_Int32*)0),		0,		SFX_METRIC_ITEM}, \
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_LOWERDIST),		SDRATTR_TEXT_LOWERDIST,			&::getCppuType((const sal_Int32*)0),		0,		SFX_METRIC_ITEM}, \
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_RIGHTDIST),		SDRATTR_TEXT_RIGHTDIST,			&::getCppuType((const sal_Int32*)0),		0,		SFX_METRIC_ITEM}, \
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_UPPERDIST),		SDRATTR_TEXT_UPPERDIST,			&::getCppuType((const sal_Int32*)0),		0,		SFX_METRIC_ITEM}, \
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_VERTADJUST),		SDRATTR_TEXT_VERTADJUST,		&::getCppuType((const ::com::sun::star::drawing::TextVerticalAdjust*)0),	0,		0},\
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_WORDWRAP),			SDRATTR_TEXT_WORDWRAP,			&::getBooleanCppuType(),		0,		0}, \
 
-        { MAP_CHAR_LEN("TableBorder"),                  OWN_ATTR_TABLEBORDER,           &::getCppuType((const TableBorder*)0), 0, 0 }, \
-        { MAP_CHAR_LEN("TopBorder"),                    SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, TOP_BORDER }, \
-        { MAP_CHAR_LEN("BottomBorder"),                 SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, BOTTOM_BORDER }, \
-        { MAP_CHAR_LEN("LeftBorder"),                   SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, LEFT_BORDER }, \
-        { MAP_CHAR_LEN("RightBorder"),                  SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, RIGHT_BORDER }, \
+        { MAP_CHAR_LEN("TableBorder"),					OWN_ATTR_TABLEBORDER,			&::getCppuType((const TableBorder*)0), 0, 0 }, \
+        { MAP_CHAR_LEN("TopBorder"),					SDRATTR_TABLE_BORDER,			&::getCppuType((const BorderLine*)0), 0, TOP_BORDER }, \
+        { MAP_CHAR_LEN("BottomBorder"),					SDRATTR_TABLE_BORDER,			&::getCppuType((const BorderLine*)0), 0, BOTTOM_BORDER }, \
+        { MAP_CHAR_LEN("LeftBorder"),					SDRATTR_TABLE_BORDER,			&::getCppuType((const BorderLine*)0), 0, LEFT_BORDER }, \
+        { MAP_CHAR_LEN("RightBorder"),					SDRATTR_TABLE_BORDER,			&::getCppuType((const BorderLine*)0), 0, RIGHT_BORDER }, \
 
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_CHAR_PROPERTIES,
@@ -107,7 +106,7 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         {0,0,0,0,0,0}
     };
 
-    static SvxItemPropertySet aSvxCellPropertySet( aSvxCellPropertyMap, SdrObject::GetGlobalDrawObjectItemPool() );
+    static SvxItemPropertySet aSvxCellPropertySet( aSvxCellPropertyMap, SdrObject::GetGlobalDrawObjectItemPool() ); 
     return &aSvxCellPropertySet;
 }
 
@@ -166,24 +165,24 @@ namespace sdr
         }
 
         CellProperties::CellProperties(SdrObject& rObj, sdr::table::Cell* pCell)
-        :   TextProperties(rObj)
-        ,   mxCell(pCell)
+        :	TextProperties(rObj)
+        ,	mxCell(pCell)
         {
         }
 
         CellProperties::CellProperties(const CellProperties& rProps, SdrObject& rObj, sdr::table::Cell* pCell)
-        :   TextProperties(rProps, rObj)
-        ,   mxCell( pCell )
+        :	TextProperties(rProps, rObj)
+        ,	mxCell( pCell )
         {
         }
 
         CellProperties::~CellProperties()
         {
         }
-
+        
         BaseProperties& CellProperties::Clone(SdrObject& rObj) const
         {
-            OSL_FAIL("CellProperties::Clone(), does not work yet!");
+            DBG_ERROR("CellProperties::Clone(), does not work yet!");
             return *(new CellProperties(*this, rObj,0));
         }
 
@@ -198,12 +197,12 @@ namespace sdr
             if( mxCell.is() )
             {
                 OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
-
+                
                 bool bOwnParaObj = pParaObj != 0;
 
                 if( pParaObj == 0 )
                     pParaObj = mxCell->GetOutlinerParaObject();
-
+                
                 if(pParaObj)
                 {
                     // handle outliner attributes
@@ -271,7 +270,7 @@ namespace sdr
             // call parent
             AttributeProperties::ItemChange( nWhich, pNewItem );
         }
-
+        
         void CellProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
         {
             TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
@@ -311,7 +310,7 @@ Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) th
 , mnColSpan( 1 )
 , mxTable( rTableObj.getTable() )
 {
-    if( rTableObj.GetModel() )
+    if( rTableObj.GetModel() ) 
         SetModel( rTableObj.GetModel() );
 }
 
@@ -335,7 +334,7 @@ void Cell::dispose()
         }
         catch( Exception& )
         {
-            OSL_FAIL("Cell::dispose(), exception caught!");
+            DBG_ERROR("Cell::dispose(), exception caught!");
         }
         mxTable.clear();
     }
@@ -401,7 +400,7 @@ void Cell::mergeContent( const CellRef& xSourceCell )
     if( xSourceCell->hasText() )
     {
         SdrOutliner& rOutliner=rTableObj.ImpGetDrawOutliner();
-        rOutliner.SetUpdateMode(sal_True);
+        rOutliner.SetUpdateMode(TRUE);
 
         if( hasText() )
         {
@@ -438,7 +437,7 @@ void Cell::cloneFrom( const CellRef& xCell )
         mbMerged = xCell->mbMerged;
         mnRowSpan = xCell->mnRowSpan;
         mnColSpan = xCell->mnColSpan;
-
+    
     }
     notifyModified();
 }
@@ -555,7 +554,7 @@ const SfxItemSet& Cell::GetObjectItemSet()
     }
     else
     {
-        OSL_FAIL("Cell::GetObjectItemSet(), called without properties!");
+        DBG_ERROR("Cell::GetObjectItemSet(), called without properties!");
         return GetObject().GetObjectItemSet();
     }
 }
@@ -659,7 +658,7 @@ sal_Int32 Cell::getMinimumHeight()
     {
         Outliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aSize);
-        rOutliner.SetUpdateMode(sal_True);
+        rOutliner.SetUpdateMode(TRUE);
         ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
 
         if( GetOutlinerParaObject() )
@@ -978,7 +977,7 @@ Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMa
         }
         else
         {
-            OSL_FAIL("GetAnyForItem() Returnvalue has wrong Type!" );
+            DBG_ERROR("GetAnyForItem() Returnvalue has wrong Type!" );
         }
     }
 
@@ -1025,7 +1024,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             const TableBorder* pBorder = (const TableBorder* )rValue.getValue();
             if( pBorder == NULL )
                 break;
-
+            
             SvxBoxItem aBox( SDRATTR_TABLE_BORDER );
             SvxBoxInfoItem aBoxInfo( SDRATTR_TABLE_BORDER_INNER );
             SvxBorderLine aLine;
@@ -1076,7 +1075,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             mpProperties->SetObjectItem( XFillBmpStretchItem( eMode == BitmapMode_STRETCH ) );
             mpProperties->SetObjectItem( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
             return;
-        }
+        }	
         default:
         {
             SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
@@ -1165,21 +1164,21 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
             const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(mpProperties->GetItem(SDRATTR_TABLE_BORDER));
 
              TableBorder aTableBorder;
-            aTableBorder.TopLine                = SvxBoxItem::SvxLineToLine(rBox.GetTop(), false);
-            aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(VALID_TOP);
-            aTableBorder.BottomLine             = SvxBoxItem::SvxLineToLine(rBox.GetBottom(), false);
-            aTableBorder.IsBottomLineValid      = rBoxInfoItem.IsValid(VALID_BOTTOM);
-            aTableBorder.LeftLine               = SvxBoxItem::SvxLineToLine(rBox.GetLeft(), false);
-            aTableBorder.IsLeftLineValid        = rBoxInfoItem.IsValid(VALID_LEFT);
-            aTableBorder.RightLine              = SvxBoxItem::SvxLineToLine(rBox.GetRight(), false);
-            aTableBorder.IsRightLineValid       = rBoxInfoItem.IsValid(VALID_RIGHT );
-            aTableBorder.HorizontalLine         = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetHori(), false);
-            aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(VALID_HORI);
-            aTableBorder.VerticalLine           = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), false);
-            aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(VALID_VERT);
-            aTableBorder.Distance               = rBox.GetDistance();
-            aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(VALID_DISTANCE);
-
+            aTableBorder.TopLine 				= SvxBoxItem::SvxLineToLine(rBox.GetTop(), false);
+            aTableBorder.IsTopLineValid 		= rBoxInfoItem.IsValid(VALID_TOP);
+            aTableBorder.BottomLine				= SvxBoxItem::SvxLineToLine(rBox.GetBottom(), false);
+            aTableBorder.IsBottomLineValid		= rBoxInfoItem.IsValid(VALID_BOTTOM);
+            aTableBorder.LeftLine				= SvxBoxItem::SvxLineToLine(rBox.GetLeft(), false);
+            aTableBorder.IsLeftLineValid		= rBoxInfoItem.IsValid(VALID_LEFT);
+            aTableBorder.RightLine				= SvxBoxItem::SvxLineToLine(rBox.GetRight(), false);
+            aTableBorder.IsRightLineValid		= rBoxInfoItem.IsValid(VALID_RIGHT );
+            aTableBorder.HorizontalLine			= SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetHori(), false);
+            aTableBorder.IsHorizontalLineValid 	= rBoxInfoItem.IsValid(VALID_HORI);
+            aTableBorder.VerticalLine			= SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), false);
+            aTableBorder.IsVerticalLineValid	= rBoxInfoItem.IsValid(VALID_VERT);
+            aTableBorder.Distance 				= rBox.GetDistance();
+            aTableBorder.IsDistanceValid 		= rBoxInfoItem.IsValid(VALID_DISTANCE);
+            
             return Any( aTableBorder );
         }
         case OWN_ATTR_FILLBMP_MODE:
@@ -1261,7 +1260,7 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
         throw DisposedException();
 
     const sal_Int32 nCount = aPropertyNames.getLength();
-
+    
     const OUString* pNames = aPropertyNames.getConstArray();
     const Any* pValues = aValues.getConstArray();
 
@@ -1273,11 +1272,11 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
         }
         catch( UnknownPropertyException& )
         {
-            OSL_FAIL("svx::Cell::setPropertyValues(), unknown property!" );
+            DBG_ERROR("svx::Cell::setPropertyValues(), unknown property!" );
         }
         catch( Exception& )
         {
-            OSL_FAIL("svx::Cell::setPropertyValues(), Exception caught!" );
+            DBG_ERROR("svx::Cell::setPropertyValues(), Exception caught!" );
         }
     }
 }
@@ -1305,11 +1304,11 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
         }
         catch( UnknownPropertyException& )
         {
-            OSL_FAIL("svx::Cell::setPropertyValues(), unknown property!" );
+            DBG_ERROR("svx::Cell::setPropertyValues(), unknown property!" );
         }
         catch( Exception& )
         {
-            OSL_FAIL( "svx::Cell::getPropertyValues(), Exception caught!" );
+            DBG_ERROR( "svx::Cell::getPropertyValues(), Exception caught!" );
         }
     }
 
@@ -1398,9 +1397,9 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
             case SFX_ITEM_DEFAULT:
                 eState = PropertyState_DEFAULT_VALUE;
                 break;
-    //      case SFX_ITEM_UNKNOWN:
-    //      case SFX_ITEM_DONTCARE:
-    //      case SFX_ITEM_DISABLED:
+    //		case SFX_ITEM_UNKNOWN:
+    //		case SFX_ITEM_DONTCARE:
+    //		case SFX_ITEM_DISABLED:
             default:
                 eState = PropertyState_AMBIGUOUS_VALUE;
                 break;
@@ -1419,7 +1418,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 case XATTR_FILLHATCH:
                 case XATTR_LINEDASH:
                     {
-                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
+                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
                         if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
                             eState = PropertyState_DEFAULT_VALUE;
                     }
@@ -1434,7 +1433,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 case XATTR_LINESTART:
                 case XATTR_FILLFLOATTRANSPARENCE:
                     {
-                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
+                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
                         if( ( pItem == NULL ) )
                             eState = PropertyState_DEFAULT_VALUE;
                     }
@@ -1499,7 +1498,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(U
             mpProperties->ClearObjectItem( XATTR_FILLBMP_TILE );
             break;
         }
-//      case OWN_ATTR_HASLEVELS:
+//		case OWN_ATTR_HASLEVELS:
         case OWN_ATTR_STYLE:
             break;
 
@@ -1554,7 +1553,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
             TableBorder aBorder;
             return Any( aBorder );
         }
-
+        
         default:
         {
             if(  GetModel()->GetItemPool().IsWhich(pMap->nWID) )

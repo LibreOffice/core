@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,50 +38,53 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
+
 /**
  *  This class is used by <code>PxlDocument</code> to maintain pexcel
- *  worksheets.
+ *  worksheets. 
  *
- *  @author  Martin Maher
+ *  @author  Martin Maher 
  */
 public class Worksheet {
 
     private String name;
     private Workbook wb;
-    private Vector rows         = new Vector();
-    private Vector colInfo      = new Vector();
-    private Vector cells        = new Vector();
-    private DefColWidth dcw     = new DefColWidth();
-    private DefRowHeight drh    = new DefRowHeight();
-    private Window2 win2        = new Window2();
-    private Selection sel       = new Selection();
-    private Pane p              = new Pane();
+    private Vector rows			= new Vector();
+    private Vector colInfo		= new Vector();
+    private Vector cells		= new Vector();
+    private DefColWidth dcw		= new DefColWidth();
+    private DefRowHeight drh	= new DefRowHeight();
+    private Window2 win2		= new Window2();
+    private Selection sel		= new Selection();
+    private Pane p				= new Pane();
     private BeginningOfFile bof;
     private Eof eof;
-
+    
     /**
-      * Creates a worksheet in a given workbook.
-      *
-      * @param  wb The destination workbook.
+      *	Writes the current workbook to the <code>Outputstream</code> 
+      * 
+      * @param	os The destination outputstream	
       */
     public Worksheet(Workbook wb) {
         this.wb = wb;
     }
-
+    
     /**
-      * Default Contructor. Creates a worksheet not attached to any workbook.
+      * Default Contructor	
+      * 
+      * @param	os The destination outputstream	
       */
     public Worksheet() {
-    }
+    }	
 
     /**
-      * Writes the current workbook to the <code>Outputstream</code>
-      *
-      * @param  os The destination outputstream
+      *	Writes the current workbook to the <code>Outputstream</code> 
+      * 
+      * @param	os The destination outputstream	
       */
     public void write(OutputStream os) throws IOException {
-
-        bof     = new BeginningOfFile(false);
+        
+        bof		= new BeginningOfFile(false);
         bof.write(os);
         dcw.write(os);
         for(Enumeration e = colInfo.elements();e.hasMoreElements();) {
@@ -100,17 +103,16 @@ public class Worksheet {
         win2.write(os);
         p.write(os);
         sel.write(os);
-        eof     = new Eof();
+        eof		= new Eof();
         eof.write(os);
     }
 
     /**
-     *  Reads a worksheet from the <code>InputStream</code> and contructs a
-     *  workbook object from it
+      *	Reads a worksheet from the <code>InputStream</code> and contructs a
+     *	workbook object from it 
      *
-     * @param   is InputStream containing a Pocket Excel Data file.
-     * @return True if we read anything. False if not.
-     */
+      * @param	is InputStream containing a Pocket Excel Data file.
+      */
     public boolean read(InputStream is) throws IOException {
 
         int b = is.read();
@@ -126,13 +128,13 @@ public class Worksheet {
                     BlankCell bc = new BlankCell(is);
                     cells.add(bc);
                     break;
-
+                    
                 case PocketExcelConstants.NUMBER_CELL:
                     Debug.log(Debug.TRACE,"NUMBER: Cell Value, Floating-Point Number (03h)");
-                    FloatNumber fn = new FloatNumber(is);
+                    FloatNumber fn = new FloatNumber(is);	
                     cells.add(fn);
                     break;
-
+                    
                 case PocketExcelConstants.LABEL_CELL:
                     Debug.log(Debug.TRACE,"LABEL: Cell Value, String Constant (04h)");
                     LabelCell lc = new LabelCell(is);
@@ -147,14 +149,14 @@ public class Worksheet {
                 case PocketExcelConstants.FORMULA_CELL:
                     Debug.log(Debug.TRACE,"FORMULA: Cell Formula (06h)");
                     Formula f = new Formula(is, wb);
-                    cells.add(f);
+                    cells.add(f);		
                     break;
-
+                    
                  case PocketExcelConstants.FORMULA_STRING:
                     Debug.log(Debug.TRACE,"String Value of a Formula (07h)");
                     StringValue sv = new StringValue(is);
                     break;
-
+                   
                 case PocketExcelConstants.ROW_DESCRIPTION:
                     Debug.log(Debug.TRACE,"ROW: Describes a Row (08h)");
                     Row rw = new Row(is);
@@ -165,7 +167,7 @@ public class Worksheet {
                     Debug.log(Debug.TRACE,"BOF Record");
                     bof = new BeginningOfFile(is);
                     break;
-
+                    
                 case PocketExcelConstants.EOF_MARKER:
                     Debug.log(Debug.TRACE,"EOF Marker");
                     eof = new Eof();
@@ -175,7 +177,7 @@ public class Worksheet {
                     Debug.log(Debug.TRACE,"SELECTION: Current Selection (1Dh)");
                     sel = new Selection(is);
                     break;
-
+                    
                 case PocketExcelConstants.NUMBER_FORMAT:
                     Debug.log(Debug.TRACE,"FORMAT: Number Format (1Eh)");
                     NumberFormat nf = new NumberFormat(is);
@@ -185,22 +187,22 @@ public class Worksheet {
                     Debug.log(Debug.TRACE,"DEFAULTROWHEIGHT: Default Row Height (25h)");
                     drh = new DefRowHeight(is);
                     break;
-
+                    
                 case PocketExcelConstants.SHEET_WINDOW_INFO:
                     Debug.log(Debug.TRACE,"WINDOW2: Sheet Window Information (3Eh) [PXL 2.0]");
                     win2 = new Window2(is);
                     break;
-
+                    
                 case PocketExcelConstants.PANE_INFO:
                     Debug.log(Debug.TRACE,"PANE: Number of Panes and their Position (41h) [PXL 2.0]");
                     p = new Pane(is);
                     break;
-
+                    
                 case PocketExcelConstants.DEF_COL_WIDTH:
                     Debug.log(Debug.TRACE,"DEFCOLWIDTH: Default Column Width (55h) [PXL 2.0]");
                     dcw = new DefColWidth(is);
                     break;
-
+                    
                 case PocketExcelConstants.COLINFO:
                     Debug.log(Debug.TRACE,"COLINFO: Column Formatting Information (7Dh) [PXL 2.0]");
                     ColInfo ci = new ColInfo(is);
@@ -211,7 +213,7 @@ public class Worksheet {
                     break;
             }
             b = is.read();
-
+            
         }
         Debug.log(Debug.TRACE,"Leaving Worksheet:");
 
@@ -219,47 +221,47 @@ public class Worksheet {
     }
 
     /**
-      * Returns an enumerator which will be used to access individual cells
+      *	Returns an enumerator which will be used to access individual cells	
      *
-      * @return an enumerator to the worksheet cells
+      * @return an enumerator to the worksheet cells	
       */
     public Enumeration getCellEnumerator() throws IOException {
         return (cells.elements());
     }
 
     /**
-     * Adds a cell to this worksheet based on a <code>BIFFRecord</code>.
-     * Current valdid celltypes are <code>FloatNumber</code>,
-     * <code>LabelCell</code> or <code>Formula</code>
+      * Adds a cell to this worksheet. Current valdid celltypes are
+     * <code>FloatNumber</code>, <code>LabelCell</code> or <code>Formula</code>
      *
-     * @param br The <code>BIFFRecord</code> to read from.
-     */
+      * @param	f the font recrod to add	
+      */
     public void addCell(BIFFRecord br) {
         cells.add(br);
     }
 
     /**
-     * Adds a row to the worksheet.
+      * Adds a number of ColInfo Records to the worksheet base on a list of
+     * clumnwidths passed in
      *
-     * @param r The row to add.
-     */
+      * @param	list of column widths	
+      */
     public void addRow(Row r) {
         rows.add(r);
     }
 
     /**
-     * Adds a ColInfo record to the worksheet. This may effec more than one column.
+      * Adds a number of ColInfo Records to the worksheet base on a list of
+     * clumnwidths passed in
      *
-     * @param c ColInfo structure defining widths, format etc.
-     */
+      * @param	list of column widths	
+      */
     public void addCol(ColInfo c) {
         colInfo.add(c);
     }
-
     /**
-     * Add various settings to this worksheet.
+     * Returns an <code>Enumeration</code> to the ColInfo's for this worksheet
      *
-     * @param s SheetSettings object defining pane number, splits etc.
+     * @return an <code>Enumeration</code> to the ColInfo's 
      */
     public void addSettings(SheetSettings s) {
 
@@ -273,17 +275,17 @@ public class Worksheet {
             win2.setSplitType(s.getSplitType());
         }
     }
-
+    
     /**
      * Returns an <code>Enumeration</code> to the ColInfo's for this worksheet
      *
-     * @return an <code>Enumeration</code> to the ColInfo's
+     * @return an <code>Enumeration</code> to the ColInfo's 
      */
      public Enumeration getColInfos() {
 
          return (colInfo.elements());
      }
-
+     
     /**
      * Returns a <code>SheetSettings</code> object containing a collection of data
      * contained in <code>Pane</code>, <code>Window2</code> and
@@ -303,15 +305,15 @@ public class Worksheet {
         s.setPaneNumber(p.getPaneNumber());
         s.setTopLeft(p.getTop(), p.getLeft());
          return s;
-     }
+     }		 
     /**
      * Returns an <code>Enumeration</code> to the Rows for this worksheet
      *
-     * @return an <code>Enumeration</code> to the Rows
+     * @return an <code>Enumeration</code> to the Rows 
      */
      public Enumeration getRows() {
 
          return (rows.elements());
      }
-
+     
 }

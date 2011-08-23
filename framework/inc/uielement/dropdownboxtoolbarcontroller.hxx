@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <uielement/complextoolbarcontroller.hxx>
@@ -53,19 +53,19 @@ class IListBoxListener
         virtual void Select() = 0;
         virtual void DoubleClick() = 0;
         virtual void GetFocus() = 0;
-        virtual void LoseFocus() = 0;
+        virtual void LoseFocus() = 0; 
         virtual long PreNotify( NotifyEvent& rNEvt ) = 0;
 };
 
 class DropdownToolbarController : public IListBoxListener,
                                   public ComplexToolbarController
-
+                                  
 {
     public:
-        DropdownToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        DropdownToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, 
                                    const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                    ToolBox*     pToolBar,
-                                   sal_uInt16       nID,
+                                   USHORT       nID,
                                    sal_Int32    nWidth,
                                    const rtl::OUString& aCommand );
         virtual ~DropdownToolbarController();

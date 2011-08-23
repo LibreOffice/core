@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include "vcl/ppdparser.hxx"
 #include "vcl/strhelper.hxx"
@@ -49,7 +49,6 @@
 #include "osl/thread.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
-#include "rtl/instance.hxx"
 #include <sal/macros.h>
 
 #include "com/sun/star/lang/Locale.hpp"
@@ -72,23 +71,23 @@ namespace psp
         struct LocaleHash
         {
             size_t operator()(const com::sun::star::lang::Locale& rLocale) const
-            { return
+            { return   
                   (size_t)rLocale.Language.hashCode()
                 ^ (size_t)rLocale.Country.hashCode()
                 ^ (size_t)rLocale.Variant.hashCode()
                 ;
             }
         };
-
-        typedef boost::unordered_map< com::sun::star::lang::Locale, rtl::OUString, LocaleHash, LocaleEqual > translation_map;
-        typedef boost::unordered_map< rtl::OUString, translation_map, rtl::OUStringHash > key_translation_map;
-
+        
+        typedef std::hash_map< com::sun::star::lang::Locale, rtl::OUString, LocaleHash, LocaleEqual > translation_map;
+        typedef std::hash_map< rtl::OUString, translation_map, rtl::OUStringHash > key_translation_map;
+        
         key_translation_map     m_aTranslations;
         public:
         PPDTranslator() {}
         ~PPDTranslator() {}
-
-
+        
+        
         void insertValue(
             const rtl::OUString& i_rKey,
             const rtl::OUString& i_rOption,
@@ -96,7 +95,7 @@ namespace psp
             const rtl::OUString& i_rTranslation,
             const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale()
             );
-
+        
         void insertOption( const rtl::OUString& i_rKey,
                            const rtl::OUString& i_rOption,
                            const rtl::OUString& i_rTranslation,
@@ -104,14 +103,14 @@ namespace psp
         {
             insertValue( i_rKey, i_rOption, rtl::OUString(), i_rTranslation, i_rLocale );
         }
-
+        
         void insertKey( const rtl::OUString& i_rKey,
                         const rtl::OUString& i_rTranslation,
                         const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() )
         {
             insertValue( i_rKey, rtl::OUString(), rtl::OUString(), i_rTranslation, i_rLocale );
         }
-
+        
         rtl::OUString translateValue(
             const rtl::OUString& i_rKey,
             const rtl::OUString& i_rOption,
@@ -132,7 +131,7 @@ namespace psp
             return translateValue( i_rKey, rtl::OUString(), rtl::OUString(), i_rLocale );
         }
     };
-
+    
     static com::sun::star::lang::Locale normalizeInputLocale(
         const com::sun::star::lang::Locale& i_rLocale,
         bool bInsertDefault = false
@@ -162,7 +161,7 @@ namespace psp
         aLoc.Language = aLoc.Language.toAsciiLowerCase();
         aLoc.Country  = aLoc.Country.toAsciiUpperCase();
         aLoc.Variant  = aLoc.Variant.toAsciiUpperCase();
-
+        
         return aLoc;
     }
 
@@ -196,7 +195,7 @@ namespace psp
             m_aTranslations[ aK ][ aLoc ] = i_rTranslation;
         }
     }
-
+    
     rtl::OUString PPDTranslator::translateValue(
         const rtl::OUString& i_rKey,
         const rtl::OUString& i_rOption,
@@ -205,7 +204,7 @@ namespace psp
         ) const
     {
         rtl::OUString aResult;
-
+        
         rtl::OUStringBuffer aKey( i_rKey.getLength() + i_rOption.getLength() + i_rValue.getLength() + 2 );
         aKey.append( i_rKey );
         if( i_rOption.getLength() || i_rValue.getLength() )
@@ -225,7 +224,7 @@ namespace psp
             if( it != m_aTranslations.end() )
             {
                 const translation_map& rMap( it->second );
-
+                
                 com::sun::star::lang::Locale aLoc( normalizeInputLocale( i_rLocale, true ) );
                 for( int nTry = 0; nTry < 4; nTry++ )
                 {
@@ -246,34 +245,10 @@ namespace psp
         }
         return aResult;
     }
-
-    class PPDCache
-    {
-    public:
-        std::list< PPDParser* > aAllParsers;
-        boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >* pAllPPDFiles;
-        PPDCache()
-            : pAllPPDFiles(NULL)
-        {}
-        ~PPDCache()
-        {
-            while( aAllParsers.begin() != aAllParsers.end() )
-            {
-                delete aAllParsers.front();
-                aAllParsers.pop_front();
-            }
-            delete pAllPPDFiles;
-            pAllPPDFiles = NULL;
-        }
-    };
 }
 
 using namespace psp;
-
-using ::rtl::OUString;
-using ::rtl::OStringBuffer;
-using ::rtl::OUStringHash;
-
+using namespace rtl;
 
 #undef DBG_ASSERT
 #if defined DBG_UTIL || (OSL_DEBUG_LEVEL > 1)
@@ -283,25 +258,23 @@ using ::rtl::OUStringHash;
 #define DBG_ASSERT( x, y )
 #endif
 
-namespace
-{
-    struct thePPDCache : public rtl::Static<PPDCache, thePPDCache> {};
-}
+std::list< PPDParser* > PPDParser::aAllParsers;
+std::hash_map< OUString, OUString, OUStringHash >* PPDParser::pAllPPDFiles = NULL;
 
 class PPDDecompressStream
 {
     SvFileStream*       mpFileStream;
     SvMemoryStream*     mpMemStream;
     rtl::OUString       maFileName;
-
+    
     // forbid copying
     PPDDecompressStream( const PPDDecompressStream& );
     PPDDecompressStream& operator=(const PPDDecompressStream& );
-
+    
     public:
     PPDDecompressStream( const rtl::OUString& rFile );
     ~PPDDecompressStream();
-
+    
     bool IsOpen() const;
     bool IsEof() const;
     void ReadLine( ByteString& o_rLine);
@@ -328,7 +301,7 @@ void PPDDecompressStream::Open( const rtl::OUString& i_rFile )
 
     mpFileStream = new SvFileStream( i_rFile, STREAM_READ );
     maFileName = mpFileStream->GetFileName();
-
+    
     if( ! mpFileStream->IsOpen() )
     {
         Close();
@@ -338,9 +311,9 @@ void PPDDecompressStream::Open( const rtl::OUString& i_rFile )
     ByteString aLine;
     mpFileStream->ReadLine( aLine );
     mpFileStream->Seek( 0 );
-
+    
     // check for compress'ed or gzip'ed file
-    sal_uLong nCompressMethod = 0;
+    ULONG nCompressMethod = 0;
     if( aLine.Len() > 1 && static_cast<unsigned char>(aLine.GetChar( 0 )) == 0x1f )
     {
         if( static_cast<unsigned char>(aLine.GetChar( 1 )) == 0x8b ) // check for gzip
@@ -398,7 +371,7 @@ static osl::FileBase::RC resolveLink( const rtl::OUString& i_rURL, rtl::OUString
 {
     osl::DirectoryItem aLinkItem;
     osl::FileBase::RC aRet = osl::FileBase::E_None;
-
+    
     if( ( aRet = osl::DirectoryItem::get( i_rURL, aLinkItem ) ) == osl::FileBase::E_None )
     {
         osl::FileStatus aStatus( FileStatusMask_FileName | FileStatusMask_Type | FileStatusMask_LinkTargetURL );
@@ -433,65 +406,60 @@ void PPDParser::scanPPDDir( const String& rDir )
 
     const int nSuffixes = SAL_N_ELEMENTS(pSuffixes);
 
-    PPDCache &rPPDCache = thePPDCache::get();
-
     osl::Directory aDir( rDir );
-    if ( aDir.open() == osl::FileBase::E_None )
+    aDir.open();
+    osl::DirectoryItem aItem;
+
+    INetURLObject aPPDDir(rDir);
+    while( aDir.getNextItem( aItem ) == osl::FileBase::E_None )
     {
-        osl::DirectoryItem aItem;
-
-        INetURLObject aPPDDir(rDir);
-        while( aDir.getNextItem( aItem ) == osl::FileBase::E_None )
+        osl::FileStatus aStatus( FileStatusMask_FileName );
+        if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
         {
-            osl::FileStatus aStatus( FileStatusMask_FileName );
-            if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
+            rtl::OUStringBuffer aURLBuf( rDir.Len() + 64 );
+            aURLBuf.append( rDir );
+            aURLBuf.append( sal_Unicode( '/' ) );
+            aURLBuf.append( aStatus.getFileName() );
+            
+            rtl::OUString aFileURL, aFileName;
+            osl::FileStatus::Type eType = osl::FileStatus::Unknown;
+            
+            if( resolveLink( aURLBuf.makeStringAndClear(), aFileURL, aFileName, eType ) == osl::FileBase::E_None )
             {
-                rtl::OUStringBuffer aURLBuf( rDir.Len() + 64 );
-                aURLBuf.append( rDir );
-                aURLBuf.append( sal_Unicode( '/' ) );
-                aURLBuf.append( aStatus.getFileName() );
-
-                rtl::OUString aFileURL, aFileName;
-                osl::FileStatus::Type eType = osl::FileStatus::Unknown;
-
-                if( resolveLink( aURLBuf.makeStringAndClear(), aFileURL, aFileName, eType ) == osl::FileBase::E_None )
+                if( eType == osl::FileStatus::Regular )
                 {
-                    if( eType == osl::FileStatus::Regular )
+                    INetURLObject aPPDFile = aPPDDir;
+                    aPPDFile.Append( aFileName );
+        
+                    // match extension
+                    for( int nSuffix = 0; nSuffix < nSuffixes; nSuffix++ )
                     {
-                        INetURLObject aPPDFile = aPPDDir;
-                        aPPDFile.Append( aFileName );
-
-                        // match extension
-                        for( int nSuffix = 0; nSuffix < nSuffixes; nSuffix++ )
+                        if( aFileName.getLength() > pSuffixes[nSuffix].nSuffixLen )
                         {
-                            if( aFileName.getLength() > pSuffixes[nSuffix].nSuffixLen )
+                            if( aFileName.endsWithIgnoreAsciiCaseAsciiL( pSuffixes[nSuffix].pSuffix, pSuffixes[nSuffix].nSuffixLen ) )
                             {
-                                if( aFileName.endsWithIgnoreAsciiCaseAsciiL( pSuffixes[nSuffix].pSuffix, pSuffixes[nSuffix].nSuffixLen ) )
-                                {
-                                (*rPPDCache.pAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - pSuffixes[nSuffix].nSuffixLen ) ] = aPPDFile.PathToFileName();
-                                    break;
-                                }
+                                (*pAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - pSuffixes[nSuffix].nSuffixLen ) ] = aPPDFile.PathToFileName();
+                                break;
                             }
                         }
                     }
-                    else if( eType == osl::FileStatus::Directory )
-                    {
-                        scanPPDDir( aFileURL );
-                    }
+                }
+                else if( eType == osl::FileStatus::Directory )
+                {
+                    scanPPDDir( aFileURL );
                 }
             }
         }
-        aDir.close();
     }
+    aDir.close();
 }
 
 void PPDParser::initPPDFiles()
 {
-    PPDCache &rPPDCache = thePPDCache::get();
-    if( rPPDCache.pAllPPDFiles )
+    if( pAllPPDFiles )
         return;
 
-    rPPDCache.pAllPPDFiles = new boost::unordered_map< OUString, OUString, OUStringHash >();
+    pAllPPDFiles = new std::hash_map< OUString, OUString, OUStringHash >();
 
     // check installation directories
     std::list< OUString > aPathList;
@@ -501,7 +469,7 @@ void PPDParser::initPPDFiles()
         INetURLObject aPPDDir( *ppd_it, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         scanPPDDir( aPPDDir.GetMainURL( INetURLObject::NO_DECODE ) );
     }
-    if( rPPDCache.pAllPPDFiles->find( OUString( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) ) == rPPDCache.pAllPPDFiles->end() )
+    if( pAllPPDFiles->find( OUString( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) ) == pAllPPDFiles->end() )
     {
         // last try: search in directory of executable (mainly for setup)
         OUString aExe;
@@ -514,7 +482,7 @@ void PPDParser::initPPDFiles()
 #endif
             scanPPDDir( aDir.GetMainURL( INetURLObject::NO_DECODE ) );
 #ifdef DEBUG
-            fprintf( stderr, "SGENPRT %s\n", rPPDCache.pAllPPDFiles->find( OUString( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) ) == rPPDCache.pAllPPDFiles->end() ? "not found" : "found" );
+            fprintf( stderr, "SGENPRT %s\n", pAllPPDFiles->find( OUString( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) ) == pAllPPDFiles->end() ? "not found" : "found" );
 #endif
         }
     }
@@ -522,19 +490,17 @@ void PPDParser::initPPDFiles()
 
 void PPDParser::getKnownPPDDrivers( std::list< rtl::OUString >& o_rDrivers, bool bRefresh )
 {
-    PPDCache &rPPDCache = thePPDCache::get();
-
     if( bRefresh )
     {
-        delete rPPDCache.pAllPPDFiles;
-        rPPDCache.pAllPPDFiles = NULL;
+        delete pAllPPDFiles;
+        pAllPPDFiles = NULL;
     }
 
     initPPDFiles();
     o_rDrivers.clear();
-
-    boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
-    for( it = rPPDCache.pAllPPDFiles->begin(); it != rPPDCache.pAllPPDFiles->end(); ++it )
+    
+    std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
+    for( it = pAllPPDFiles->begin(); it != pAllPPDFiles->end(); ++it )
         o_rDrivers.push_back( it->first );
 }
 
@@ -545,9 +511,8 @@ String PPDParser::getPPDFile( const String& rFile )
     PPDDecompressStream aStream( aPPD.PathToFileName() );
     if( ! aStream.IsOpen() )
     {
-        boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
-        PPDCache &rPPDCache = thePPDCache::get();
-
+        std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
+        
         bool bRetry = true;
         do
         {
@@ -560,23 +525,23 @@ String PPDParser::getPPDFile( const String& rFile )
                 aBase = aBase.copy( nLastIndex+1 );
             do
             {
-                it = rPPDCache.pAllPPDFiles->find( aBase );
+                it = pAllPPDFiles->find( aBase );
                 nLastIndex = aBase.lastIndexOf( sal_Unicode( '.' ) );
                 if( nLastIndex > 0 )
                     aBase = aBase.copy( 0, nLastIndex );
-            } while( it == rPPDCache.pAllPPDFiles->end() && nLastIndex > 0 );
-
-            if( it == rPPDCache.pAllPPDFiles->end() && bRetry )
+            } while( it == pAllPPDFiles->end() && nLastIndex > 0 );
+            
+            if( it == pAllPPDFiles->end() && bRetry )
             {
                 // a new file ? rehash
-                delete rPPDCache.pAllPPDFiles; rPPDCache.pAllPPDFiles = NULL;
+                delete pAllPPDFiles; pAllPPDFiles = NULL;
                 bRetry = false;
                 // note this is optimized for office start where
                 // no new files occur and initPPDFiles is called only once
             }
-        } while( ! rPPDCache.pAllPPDFiles );
-
-        if( it != rPPDCache.pAllPPDFiles->end() )
+        } while( ! pAllPPDFiles );
+        
+        if( it != pAllPPDFiles->end() )
             aStream.Open( it->second );
     }
 
@@ -660,8 +625,7 @@ const PPDParser* PPDParser::getParser( const String& rFile )
         return NULL;
     }
 
-    PPDCache &rPPDCache = thePPDCache::get();
-    for( ::std::list< PPDParser* >::const_iterator it = rPPDCache.aAllParsers.begin(); it != rPPDCache.aAllParsers.end(); ++it )
+    for( ::std::list< PPDParser* >::const_iterator it = aAllParsers.begin(); it != aAllParsers.end(); ++it )
         if( (*it)->m_aFile == aFile )
             return *it;
 
@@ -680,11 +644,22 @@ const PPDParser* PPDParser::getParser( const String& rFile )
     {
         // this may actually be the SGENPRT parser,
         // so ensure uniquness here
-        rPPDCache.aAllParsers.remove( pNewParser );
+        aAllParsers.remove( pNewParser );
         // insert new parser to list
-        rPPDCache.aAllParsers.push_front( pNewParser );
+        aAllParsers.push_front( pNewParser );
     }
     return pNewParser;
+}
+
+void PPDParser::freeAll()
+{
+    while( aAllParsers.begin() != aAllParsers.end() )
+    {
+        delete aAllParsers.front();
+        aAllParsers.pop_front();
+    }
+    delete pAllPPDFiles;
+    pAllPPDFiles = NULL;
 }
 
 PPDParser::PPDParser( const String& rFile ) :
@@ -775,8 +750,9 @@ PPDParser::PPDParser( const String& rFile ) :
             case PPDKey::AnySetup:          pSetupType = "AnySetup";break;
             default: break;
         };
-        fprintf( stderr, "\t\"%s\" (%d values) OrderDependency: %d %s\n",
+        fprintf( stderr, "\t\"%s\" (\"%s\") (%d values) OrderDependency: %d %s\n",
                  BSTRING( pKey->getKey() ).GetBuffer(),
+                 BSTRING( pKey->m_aUITranslation ).GetBuffer(),
                  pKey->countValues(),
                  pKey->m_nOrderDependency,
                  pSetupType );
@@ -796,10 +772,12 @@ PPDParser::PPDParser( const String& rFile ) :
                 case eNo:               pVType = "no";break;
                 default: break;
             };
-            fprintf( stderr, "option: \"%s\", value: type %s \"%s\"\n",
+            fprintf( stderr, "option: \"%s\" (\"%s\"), value: type %s \"%s\" (\"%s\")\n",
                      BSTRING( pValue->m_aOption ).GetBuffer(),
+                     BSTRING( pValue->m_aOptionTranslation ).GetBuffer(),
                      pVType,
-                     BSTRING( pValue->m_aValue ).GetBuffer() );
+                     BSTRING( pValue->m_aValue ).GetBuffer(),
+                     BSTRING( pValue->m_aValueTranslation ).GetBuffer() );
         }
     }
     fprintf( stderr, "constraints: (%d found)\n", m_aConstraints.size() );
@@ -972,7 +950,7 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
         // default values are parsed in pass 2
         if( aKey.CompareTo( "Default", 7 ) == COMPARE_EQUAL )
             continue;
-
+        
         bool bQuery     = false;
         if( aKey.GetChar( 0 ) == '?' )
         {
@@ -1000,7 +978,7 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
             }
             bIsGlobalizedLine = true;
         }
-
+        
         String aOption;
         nPos = aCurrentLine.Search( ':' );
         if( nPos != STRING_NOTFOUND )
@@ -1024,7 +1002,7 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
             int nTransPos = aLine.Search( '/' );
             if( nTransPos != STRING_NOTFOUND )
                 aOptionTranslation = handleTranslation( aLine.Copy( nTransPos+1 ), bIsGlobalizedLine );
-
+    
             // read in more lines if necessary for multiline values
             aLine = aCurrentLine.Copy( nPos+1 );
             if( aLine.Len() )
@@ -1041,7 +1019,7 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
                 }
             }
             aLine = WhitespaceToSpace( aLine );
-
+    
             // #i100644# handle a missing value (actually a broken PPD)
             if( ! aLine.Len() )
             {
@@ -1088,7 +1066,7 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
                 eType = eString;
             }
         }
-
+        
         // handle globalized PPD entries
         if( bIsGlobalizedLine )
         {
@@ -1125,14 +1103,14 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
             continue;
         pValue->m_eType = eType;
         pValue->m_aValue = aValue;
-
+        
         if( aOptionTranslation.getLength() )
             m_pTranslator->insertOption( aUniKey, aOption, aOptionTranslation, aTransLocale );
         if( aValueTranslation.getLength() )
             m_pTranslator->insertValue( aUniKey, aOption, aValue, aValueTranslation, aTransLocale );
 
         // eventually update query and remove from option list
-        if( bQuery && pKey->m_bQueryValue == sal_False )
+        if( bQuery && pKey->m_bQueryValue == FALSE )
         {
             pKey->m_aQueryValue = *pValue;
             pKey->m_bQueryValue = true;
@@ -1147,7 +1125,7 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
         if( aLine.CompareTo( "*Default", 8 ) == COMPARE_EQUAL )
         {
             String aKey( aLine.Copy( 8 ), RTL_TEXTENCODING_MS_1252 );
-            sal_uInt16 nPos = aKey.Search( ':' );
+            USHORT nPos = aKey.Search( ':' );
             if( nPos != STRING_NOTFOUND )
             {
                 aKey.Erase( nPos );
@@ -1292,7 +1270,7 @@ void PPDParser::parseConstraint( const ByteString& rLine )
             }
             else
                 // constraint for nonexistent keys; this happens
-                // e.g. in HP4PLUS3
+                // e.g. in HP4PLUS3 (#75636#)
                 bFailed = true;
         }
     }
@@ -1340,9 +1318,13 @@ bool PPDParser::getMargins(
     ImLLy = StringToDouble( GetCommandLineToken( 1, aArea ) );
     ImURx = StringToDouble( GetCommandLineToken( 2, aArea ) );
     ImURy = StringToDouble( GetCommandLineToken( 3, aArea ) );
+//  sscanf( m_pImageableAreas->getValue( nImArea )->m_aValue.GetStr(),
+//          "%lg%lg%lg%lg", &ImLLx, &ImLLy, &ImURx, &ImURy );
     aArea = m_pPaperDimensions->getValue( nPDim )->m_aValue;
     PDWidth     = StringToDouble( GetCommandLineToken( 0, aArea ) );
     PDHeight    = StringToDouble( GetCommandLineToken( 1, aArea ) );
+//  sscanf( m_pPaperDimensions->getValue( nPDim )->m_aValue.GetStr(),
+//          "%lg%lg", &PDWidth, &PDHeight );
     rLeft  = (int)(ImLLx + 0.5);
     rLower = (int)(ImLLy + 0.5);
     rUpper = (int)(PDHeight - ImURy + 0.5);
@@ -1435,7 +1417,7 @@ String PPDParser::getSlot( int nSlot ) const
     if( nSlot > 0 && nSlot < m_pInputSlots->countValues() )
         return m_pInputSlots->getValue( nSlot )->m_aOption;
     else if( m_pInputSlots->countValues() > 0 )
-        return m_pInputSlots->getValue( (sal_uLong)0 )->m_aOption;
+        return m_pInputSlots->getValue( (ULONG)0 )->m_aOption;
 
     return String();
 }
@@ -1448,7 +1430,7 @@ String PPDParser::getSlotCommand( int nSlot ) const
     if( nSlot > 0 && nSlot < m_pInputSlots->countValues() )
         return m_pInputSlots->getValue( nSlot )->m_aValue;
     else if( m_pInputSlots->countValues() > 0 )
-        return m_pInputSlots->getValue( (sal_uLong)0 )->m_aValue;
+        return m_pInputSlots->getValue( (ULONG)0 )->m_aValue;
 
     return String();
 }
@@ -1475,7 +1457,7 @@ String PPDParser::getPaperDimension( int nPaperDimension ) const
     if( nPaperDimension > 0 && nPaperDimension < m_pPaperDimensions->countValues() )
         return m_pPaperDimensions->getValue( nPaperDimension )->m_aOption;
     else if( m_pPaperDimensions->countValues() > 0 )
-        return m_pPaperDimensions->getValue( (sal_uLong)0 )->m_aOption;
+        return m_pPaperDimensions->getValue( (ULONG)0 )->m_aOption;
 
     return String();
 }
@@ -1488,7 +1470,7 @@ String PPDParser::getPaperDimensionCommand( int nPaperDimension ) const
     if( nPaperDimension > 0 && nPaperDimension < m_pPaperDimensions->countValues() )
         return m_pPaperDimensions->getValue( nPaperDimension )->m_aValue;
     else if( m_pPaperDimensions->countValues() > 0 )
-        return m_pPaperDimensions->getValue( (sal_uLong)0 )->m_aValue;
+        return m_pPaperDimensions->getValue( (ULONG)0 )->m_aValue;
 
     return String();
 }
@@ -1511,14 +1493,13 @@ void PPDParser::getResolutionFromString(
                                         const String& rString,
                                         int& rXRes, int& rYRes ) const
 {
-    int nDPIPos;
+    int nPos = 0, nDPIPos;
 
     rXRes = rYRes = 300;
 
     nDPIPos = rString.SearchAscii( "dpi" );
     if( nDPIPos != STRING_NOTFOUND )
     {
-        int nPos = 0;
         if( ( nPos = rString.Search( 'x' ) ) != STRING_NOTFOUND )
         {
             rXRes = rString.Copy( 0, nPos ).ToInt32();
@@ -1597,7 +1578,7 @@ String PPDParser::getDuplex( int nDuplex ) const
     if( nDuplex > 0 && nDuplex < m_pDuplexTypes->countValues() )
         return m_pDuplexTypes->getValue( nDuplex )->m_aOption;
     else if( m_pDuplexTypes->countValues() > 0 )
-        return m_pDuplexTypes->getValue( (sal_uLong)0 )->m_aOption;
+        return m_pDuplexTypes->getValue( (ULONG)0 )->m_aOption;
 
     return String();
 }
@@ -1610,7 +1591,7 @@ String PPDParser::getDuplexCommand( int nDuplex ) const
     if( nDuplex > 0 && nDuplex < m_pDuplexTypes->countValues() )
         return m_pDuplexTypes->getValue( nDuplex )->m_aValue;
     else if( m_pDuplexTypes->countValues() > 0 )
-        return m_pDuplexTypes->getValue( (sal_uLong)0 )->m_aValue;
+        return m_pDuplexTypes->getValue( (ULONG)0 )->m_aValue;
 
     return String();
 }
@@ -1743,7 +1724,7 @@ const PPDValue* PPDKey::getValueCaseInsensitive( const String& rOption ) const
             if( m_aOrderedValues[n]->m_aOption.EqualsIgnoreCaseAscii( rOption ) )
                 pValue = m_aOrderedValues[n];
     }
-
+    
     return pValue;
 }
 
@@ -2052,7 +2033,7 @@ void PPDContext::getUnconstrainedValues( const PPDKey* pKey, ::std::list< const 
 
 // -------------------------------------------------------------------
 
-void* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
+void* PPDContext::getStreamableBuffer( ULONG& rBytes ) const
 {
     rBytes = 0;
     if( ! m_aCurrentValues.size() )
@@ -2098,7 +2079,7 @@ void* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
 
 // -------------------------------------------------------------------
 
-void PPDContext::rebuildFromStreamBuffer( void* pBuffer, sal_uLong nBytes )
+void PPDContext::rebuildFromStreamBuffer( void* pBuffer, ULONG nBytes )
 {
     if( ! m_pParser )
         return;

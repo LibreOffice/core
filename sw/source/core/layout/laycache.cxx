@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,6 @@
 #include <frmtool.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
-#include "viewopt.hxx"
-#include "viewsh.hxx"
 #include <flyfrm.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
@@ -101,18 +99,18 @@ void SwLayoutCache::Read( SvStream &rStream )
 
 //-----------------------------------------------------------------------------
 
-void SwLayCacheImpl::Insert( sal_uInt16 nType, sal_uLong nIndex, xub_StrLen nOffset )
+void SwLayCacheImpl::Insert( USHORT nType, ULONG nIndex, xub_StrLen nOffset )
 {
     aType.Insert( nType, aType.Count() );
     SvULongs::Insert( nIndex, SvULongs::Count() );
-    aOffset.push_back( nOffset );
+    aOffset.Insert( nOffset, aOffset.Count() );
 }
 
-sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
+BOOL SwLayCacheImpl::Read( SvStream& rStream )
 {
-    SwLayCacheIoImpl aIo( rStream, sal_False );
+    SwLayCacheIoImpl aIo( rStream, FALSE );
     if( aIo.GetMajorVersion() > SW_LAYCACHE_IO_VERSION_MAJOR )
-        return sal_False;
+        return FALSE;
 
     // Due to an evil bug in the layout cache (#102759#), we cannot trust the
     // sizes of fly frames which have been written using the "old" layout cache.
@@ -120,8 +118,8 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
     // height of fly frames
     bUseFlyCache = aIo.GetMinorVersion() >= 1;
 
-    sal_uInt8 cFlags;
-    sal_uInt32 nIndex, nOffset;
+    BYTE cFlags;
+    UINT32 nIndex, nOffset;
 
     aIo.OpenRec( SW_LAYCACHE_IO_REC_PAGES );
     aIo.OpenFlagRec();
@@ -157,7 +155,7 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
             aIo.OpenFlagRec();
             aIo.CloseFlagRec();
             long nX, nY, nW, nH;
-            sal_uInt16 nPgNum;
+            USHORT nPgNum;
             aIo.GetStream() >> nPgNum >> nIndex
                     >> nX >> nY >> nW >> nH;
             SwFlyCache* pFly = new SwFlyCache( nPgNum, nIndex, nX, nY, nW, nH );
@@ -189,15 +187,15 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
 
 void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 {
-    if( rDoc.GetCurrentLayout() ) // the layout itself ..   //swmod 080218
+    if( rDoc.GetRootFrm() ) // the layout itself ..
     {
-        SwLayCacheIoImpl aIo( rStream, sal_True );
+        SwLayCacheIoImpl aIo( rStream, TRUE );
         // We want to save the relative index, so we need the index
         // of the first content
-        sal_uLong nStartOfContent = rDoc.GetNodes().GetEndOfContent().
+        ULONG nStartOfContent = rDoc.GetNodes().GetEndOfContent().
                                 StartOfSectionNode()->GetIndex();
         // The first page..
-        SwPageFrm* pPage = (SwPageFrm*)rDoc.GetCurrentLayout()->Lower();    //swmod 080218
+        SwPageFrm* pPage = (SwPageFrm*)rDoc.GetRootFrm()->Lower();
 
         aIo.OpenRec( SW_LAYCACHE_IO_REC_PAGES );
         aIo.OpenFlagRec( 0, 0 );
@@ -217,12 +215,12 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                 {
                     if( pTmp->IsTxtFrm() )
                     {
-                        sal_uLong nNdIdx = ((SwTxtFrm*)pTmp)->GetNode()->GetIndex();
+                        ULONG nNdIdx = ((SwTxtFrm*)pTmp)->GetNode()->GetIndex();
                         if( nNdIdx > nStartOfContent )
                         {
                             /*  Open Paragraph Record */
                             aIo.OpenRec( SW_LAYCACHE_IO_REC_PARA );
-                            sal_Bool bFollow = ((SwTxtFrm*)pTmp)->IsFollow();
+                            BOOL bFollow = ((SwTxtFrm*)pTmp)->IsFollow();
                             aIo.OpenFlagRec( bFollow ? 0x01 : 0x00,
                                             bFollow ? 8 : 4 );
                             nNdIdx -= nStartOfContent;
@@ -237,7 +235,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                     else if( pTmp->IsTabFrm() )
                     {
                         SwTabFrm* pTab = (SwTabFrm*)pTmp;
-                        sal_uLong nOfst = STRING_LEN;
+                        ULONG nOfst = STRING_LEN;
                         if( pTab->IsFollow() )
                         {
                             // If the table is a follow, we have to look for the
@@ -259,7 +257,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                         }
                         do
                         {
-                            sal_uLong nNdIdx =
+                            ULONG nNdIdx =
                                     pTab->GetTable()->GetTableNode()->GetIndex();
                             if( nNdIdx > nStartOfContent )
                             {
@@ -309,7 +307,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
             if( pPage->GetSortedObjs() )
             {
                 SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-                for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+                for ( USHORT i = 0; i < rObjs.Count(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = rObjs[i];
                     if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -323,7 +321,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                             if( pC )
                             {
                                 sal_uInt32 nOrdNum = pAnchoredObj->GetDrawObj()->GetOrdNum();
-                                sal_uInt16 nPageNum = pPage->GetPhyPageNum();
+                                USHORT nPageNum = pPage->GetPhyPageNum();
                                 /* Open Fly Record */
                                 aIo.OpenRec( SW_LAYCACHE_IO_REC_FLY );
                                 aIo.OpenFlagRec( 0, 0 );
@@ -350,16 +348,13 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 #if OSL_DEBUG_LEVEL > 1
 sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
 {
-    if( !pImpl )
-        return sal_True;
-    const SwRootFrm *pRootFrm = rDoc.GetCurrentLayout();
     sal_Bool bRet = sal_True;
-    if( pRootFrm )
+    if( pImpl && rDoc.GetRootFrm() )
     {
-        sal_uInt16 nIndex = 0;
-        sal_uLong nStartOfContent = rDoc.GetNodes().GetEndOfContent().
+        USHORT nIndex = 0;
+        ULONG nStartOfContent = rDoc.GetNodes().GetEndOfContent().
                                 StartOfSectionNode()->GetIndex();
-        SwPageFrm* pPage = (SwPageFrm*)pRootFrm->Lower();
+        SwPageFrm* pPage = (SwPageFrm*)rDoc.GetRootFrm()->Lower();
         if( pPage )
             pPage = (SwPageFrm*)pPage->GetNext();
         while( pPage )
@@ -378,10 +373,10 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
             {
                 if( pTmp->IsTxtFrm() )
                 {
-                    sal_uLong nNdIdx = ((SwTxtFrm*)pTmp)->GetNode()->GetIndex();
+                    ULONG nNdIdx = ((SwTxtFrm*)pTmp)->GetNode()->GetIndex();
                     if( nNdIdx > nStartOfContent )
                     {
-                        sal_Bool bFollow = ((SwTxtFrm*)pTmp)->IsFollow();
+                        BOOL bFollow = ((SwTxtFrm*)pTmp)->IsFollow();
                         nNdIdx -= nStartOfContent;
                         if( pImpl->GetBreakIndex( nIndex ) != nNdIdx ||
                             SW_LAYCACHE_IO_REC_PARA !=
@@ -398,7 +393,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                 else if( pTmp->IsTabFrm() )
                 {
                     SwTabFrm* pTab = (SwTabFrm*)pTmp;
-                    sal_uLong nOfst = STRING_LEN;
+                    ULONG nOfst = STRING_LEN;
                     if( pTab->IsFollow() )
                     {
                         nOfst = 0;
@@ -417,7 +412,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                     }
                     do
                     {
-                        sal_uLong nNdIdx =
+                        ULONG nNdIdx =
                                 pTab->GetTable()->GetTableNode()->GetIndex();
                         if( nNdIdx > nStartOfContent )
                         {
@@ -488,8 +483,8 @@ SwLayoutCache::~SwLayoutCache()
  * --------------------------------------------------*/
 
 SwActualSection::SwActualSection( SwActualSection *pUp,
-                                  SwSectionFrm    *pSect,
-                                  SwSectionNode   *pNd ) :
+                                  SwSectionFrm	  *pSect,
+                                  SwSectionNode	  *pNd ) :
     pUpper( pUp ),
     pSectFrm( pSect ),
     pSectNode( pNd )
@@ -497,7 +492,8 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
     if ( !pSectNode )
     {
         const SwNodeIndex *pIndex = pSect->GetFmt()->GetCntnt().GetCntntIdx();
-        pSectNode = pIndex->GetNode().FindSectionNode();
+        pSectNode = pSect->GetFmt()->GetDoc()->GetNodes()[*pIndex]->
+                                                            FindSectionNode();
     }
 }
 
@@ -511,8 +507,8 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
  * --------------------------------------------------*/
 
 SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
-            SwLayoutFrm* &rpL, SwActualSection* &rpA, sal_Bool &rB,
-            sal_uLong nNodeIndex, sal_Bool bCache )
+            SwLayoutFrm* &rpL, SwActualSection* &rpA, BOOL &rB,
+            ULONG nNodeIndex, BOOL bCache )
     : rpFrm( rpF ), rpPrv( rpP ), rpPage( rpPg ), rpLay( rpL ),
       rpActualSection( rpA ), rbBreakAfter(rB), pDoc(pD), nMaxParaPerPage( 25 ),
       nParagraphCnt( bCache ? 0 : USHRT_MAX ), bFirst( bCache )
@@ -556,9 +552,9 @@ SwLayHelper::~SwLayHelper()
  * otherwise it estimates the page count.
  * --------------------------------------------------*/
 
-sal_uLong SwLayHelper::CalcPageCount()
+ULONG SwLayHelper::CalcPageCount()
 {
-    sal_uLong nPgCount;
+    ULONG nPgCount;
     SwLayCacheImpl *pCache = pDoc->GetLayoutCache() ?
                              pDoc->GetLayoutCache()->LockImpl() : NULL;
     if( pCache )
@@ -571,11 +567,11 @@ sal_uLong SwLayHelper::CalcPageCount()
         nPgCount = pDoc->GetDocStat().nPage;
         if ( nPgCount <= 10 ) // no page insertion for less than 10 pages
             nPgCount = 0;
-        sal_uLong nNdCount = pDoc->GetDocStat().nPara;
+        ULONG nNdCount = pDoc->GetDocStat().nPara;
         if ( nNdCount <= 1 )
         {
             //Estimates the number of paragraphs.
-            sal_uLong nTmp = pDoc->GetNodes().GetEndOfContent().GetIndex() -
+            ULONG nTmp = pDoc->GetNodes().GetEndOfContent().GetIndex() -
                         pDoc->GetNodes().GetEndOfExtras().GetIndex();
             //Tables have a little overhead..
             nTmp -= pDoc->GetTblFrmFmts()->Count() * 25;
@@ -591,22 +587,19 @@ sal_uLong SwLayHelper::CalcPageCount()
                 nMaxParaPerPage = nNdCount / nPgCount;
             else
             {
-                nMaxParaPerPage = Max( sal_uLong(20),
-                                       sal_uLong(20 + nNdCount / 1000 * 3) );
+                nMaxParaPerPage = Max( ULONG(20),
+                                       ULONG(20 + nNdCount / 1000 * 3) );
 #ifdef PM2
-                const sal_uLong nMax = 49;
+                const ULONG nMax = 49;
 #else
-                const sal_uLong nMax = 53;
+                const ULONG nMax = 53;
 #endif
                 nMaxParaPerPage = Min( nMaxParaPerPage, nMax );
                 nPgCount = nNdCount / nMaxParaPerPage;
             }
             if ( nNdCount < 1000 )
                 nPgCount = 0;// no progress bar for small documents
-            ViewShell *pSh = 0;
-            if( rpLay && rpLay->getRootFrm() )
-                pSh = rpLay->getRootFrm()->GetCurrShell();
-            if( pSh && pSh->GetViewOptions()->getBrowseMode() )
+            if ( pDoc->get(IDocumentSettingAccess::BROWSE_MODE) )
                 nMaxParaPerPage *= 6;
         }
     }
@@ -615,7 +608,7 @@ sal_uLong SwLayHelper::CalcPageCount()
 
 /*-----------------23.5.2001 16:44------------------
  * SwLayHelper::CheckInsertPage()
- * inserts a page and return sal_True, if
+ * inserts a page and return TRUE, if
  * - the break after flag is set
  * - the actual content wants a break before
  * - the maximum count of paragraph/rows is reached
@@ -624,9 +617,9 @@ sal_uLong SwLayHelper::CalcPageCount()
  * wants a break after.
  * --------------------------------------------------*/
 
-sal_Bool SwLayHelper::CheckInsertPage()
+BOOL SwLayHelper::CheckInsertPage()
 {
-    sal_Bool bEnd = 0 == rpPage->GetNext();
+    BOOL bEnd = 0 == rpPage->GetNext();
     const SwAttrSet* pAttr = rpFrm->GetAttrSet();
     const SvxFmtBreakItem& rBrk = pAttr->GetBreak();
     const SwFmtPageDesc& rDesc = pAttr->GetPageDesc();
@@ -638,7 +631,7 @@ sal_Bool SwLayHelper::CheckInsertPage()
                               rDesc.GetPageDesc();
     // <--
 
-    sal_Bool bBrk = nParagraphCnt > nMaxParaPerPage || rbBreakAfter;
+    BOOL bBrk = nParagraphCnt > nMaxParaPerPage || rbBreakAfter;
     rbBreakAfter = rBrk.GetBreak() == SVX_BREAK_PAGE_AFTER ||
                    rBrk.GetBreak() == SVX_BREAK_PAGE_BOTH;
     if ( !bBrk )
@@ -647,28 +640,28 @@ sal_Bool SwLayHelper::CheckInsertPage()
 
     if ( bBrk || pDesc )
     {
-        sal_uInt16 nPgNum = 0;
+        USHORT nPgNum = 0;
         if ( !pDesc )
             pDesc = rpPage->GetPageDesc()->GetFollow();
         else
         {
             if ( 0 != (nPgNum = rDesc.GetNumOffset()) )
-                ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(sal_True);
+                ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(TRUE);
         }
-        sal_Bool bNextPageOdd = !rpPage->OnRightPage();
-        sal_Bool bInsertEmpty = sal_False;
+        BOOL bNextPageOdd = !rpPage->OnRightPage();
+        BOOL bInsertEmpty = FALSE;
         if( nPgNum && bNextPageOdd != ( ( nPgNum % 2 ) != 0 ) )
         {
             bNextPageOdd = !bNextPageOdd;
-            bInsertEmpty = sal_True;
+            bInsertEmpty = TRUE;
         }
         ::InsertNewPage( (SwPageDesc&)*pDesc, rpPage->GetUpper(),
-                         bNextPageOdd, bInsertEmpty, sal_False, rpPage->GetNext() );
+                         bNextPageOdd, bInsertEmpty, FALSE, rpPage->GetNext() );
         if ( bEnd )
         {
             OSL_ENSURE( rpPage->GetNext(), "Keine neue Seite?" );
             do
-            {   rpPage = (SwPageFrm*)rpPage->GetNext();
+            {	rpPage = (SwPageFrm*)rpPage->GetNext();
             } while ( rpPage->GetNext() );
         }
         else
@@ -684,9 +677,9 @@ sal_Bool SwLayHelper::CheckInsertPage()
         rpLay = rpPage->FindBodyCont();
         while( rpLay->Lower() )
             rpLay = (SwLayoutFrm*)rpLay->Lower();
-        return sal_True;
+        return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
 // --> OD 2006-03-22 #b6375613#
@@ -695,7 +688,7 @@ bool lcl_HasTextFrmAnchoredObjs( SwTxtFrm* p_pTxtFrm )
     bool bHasTextFrmAnchoredObjs( false );
 
     const SwSpzFrmFmts* pSpzFrmFmts = p_pTxtFrm->GetTxtNode()->GetDoc()->GetSpzFrmFmts();
-    for ( sal_uInt16 i = 0; i < pSpzFrmFmts->Count(); ++i )
+    for ( USHORT i = 0; i < pSpzFrmFmts->Count(); ++i )
     {
         SwFrmFmt *pFmt = (SwFrmFmt*)(*pSpzFrmFmts)[i];
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
@@ -763,13 +756,13 @@ void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
  *  one page, in this case the needed count of pages will inserted.
  * --------------------------------------------------*/
 
-sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
+BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
 {
-    sal_Bool bRet = sal_False;
-    sal_Bool bLongTab = sal_False;
-    sal_uLong nMaxRowPerPage( 0 );
+    BOOL bRet = FALSE;
+    BOOL bLongTab = FALSE;
+    ULONG nMaxRowPerPage( 0 );
     nNodeIndex -= nStartOfContent;
-    sal_uInt16 nRows( 0 );
+    USHORT nRows( 0 );
     if( rpFrm->IsTabFrm() )
     {
         //Inside a table counts every row as a paragraph
@@ -798,15 +791,15 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 if( pTmp->GetNext() )
                     pTmp = pTmp->GetNext();
                 pTmp = ((SwRowFrm*)pTmp)->Lower();
-                sal_uInt16 nCnt = 0;
+                USHORT nCnt = 0;
                 do
                 {
                     ++nCnt;
                     pTmp = pTmp->GetNext();
                 } while( pTmp );
-                nMaxRowPerPage = Max( sal_uLong(2), nMaxParaPerPage / nCnt );
+                nMaxRowPerPage = Max( ULONG(2), nMaxParaPerPage / nCnt );
             }
-            bLongTab = sal_True;
+            bLongTab = TRUE;
         }
     }
     else
@@ -816,9 +809,9 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
         ( pImpl->GetBreakOfst( nIndex ) < STRING_LEN ||
           ( ++nIndex < pImpl->Count() &&
           pImpl->GetBreakIndex( nIndex ) == nNodeIndex ) ) )
-        bFirst = sal_False;
+        bFirst = FALSE;
 #if OSL_DEBUG_LEVEL > 1
-    sal_uLong nBreakIndex = ( pImpl && nIndex < pImpl->Count() ) ?
+    ULONG nBreakIndex = ( pImpl && nIndex < pImpl->Count() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
     (void)nBreakIndex;
 #endif
@@ -827,18 +820,18 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
          ( rpFrm->IsTabFrm() && bLongTab )
        )
     {
-        sal_uLong nRowCount = 0;
+        ULONG nRowCount = 0;
         do
         {
             if( pImpl || bLongTab )
             {
 #if OSL_DEBUG_LEVEL > 1
-                sal_uLong nBrkIndex = ( pImpl && nIndex < pImpl->Count() ) ?
+                ULONG nBrkIndex = ( pImpl && nIndex < pImpl->Count() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
                 (void)nBrkIndex;
 #endif
                 xub_StrLen nOfst = STRING_LEN;
-                sal_uInt16 nType = SW_LAYCACHE_IO_REC_PAGES;
+                USHORT nType = SW_LAYCACHE_IO_REC_PAGES;
                 if( bLongTab )
                 {
                     rbBreakAfter = sal_True;
@@ -861,7 +854,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 if( nOfst < STRING_LEN )
                 {
                     sal_Bool bSplit = sal_False;
-                    sal_uInt16 nRepeat( 0 );
+                    USHORT nRepeat( 0 );
                     if( !bLongTab && rpFrm->IsTxtFrm() &&
                         SW_LAYCACHE_IO_REC_PARA == nType &&
                         nOfst<((SwTxtFrm*)rpFrm)->GetTxtNode()->GetTxt().Len() )
@@ -892,16 +885,16 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                             SwFrm *pPrv;
                             if( nRepeat > 0 )
                             {
-                                bDontCreateObjects = sal_True; //frmtool
+                                bDontCreateObjects = TRUE; //frmtool
 
                                 // Insert new headlines:
-                                sal_uInt16 nRowIdx = 0;
+                                USHORT nRowIdx = 0;
                                 SwRowFrm* pHeadline = 0;
                                 while( nRowIdx < nRepeat )
                                 {
                                     OSL_ENSURE( pTab->GetTable()->GetTabLines()[ nRowIdx ], "Table ohne Zeilen?" );
                                     pHeadline =
-                                        new SwRowFrm( *pTab->GetTable()->GetTabLines()[ nRowIdx ], pTab );
+                                        new SwRowFrm( *pTab->GetTable()->GetTabLines()[ nRowIdx ] );
                                     pHeadline->SetRepeatedHeadline( true );
                                     pHeadline->InsertBefore( pFoll, 0 );
                                     pHeadline->RegistFlys();
@@ -909,7 +902,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                                     ++nRowIdx;
                                 }
 
-                                bDontCreateObjects = sal_False;
+                                bDontCreateObjects = FALSE;
                                 pPrv = pHeadline;
                                 nRows = nRows + nRepeat;
                             }
@@ -933,7 +926,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         else
                         {
                             SwTxtFrm *pNew = new SwTxtFrm( ((SwTxtFrm*)rpFrm)->
-                                                            GetTxtNode(), rpFrm );
+                                                           GetTxtNode() );
                             pNew->_SetIsFollow( sal_True );
                             pNew->ManipOfst( nOfst );
                             pNew->SetFollow( ((SwTxtFrm*)rpFrm)->GetFollow() );
@@ -957,7 +950,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 if( rpPrv && rpPrv->IsTxtFrm() && !rpPrv->GetValidSizeFlag() )
                     rpPrv->Frm().Height( rpPrv->GetUpper()->Prt().Height() );
 
-                bRet = sal_True;
+                bRet = TRUE;
                 rpPrv = 0;
                 nParagraphCnt = 0;
 
@@ -975,7 +968,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     else
                     {
                         pSct = new SwSectionFrm(
-                            *rpActualSection->GetSectionFrm(), sal_False );
+                            *rpActualSection->GetSectionFrm(), FALSE );
                         rpActualSection->GetSectionFrm()->SimpleFormat();
                         bInit = true;
                     }
@@ -994,7 +987,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
         } while( bLongTab || ( pImpl && nIndex < pImpl->Count() &&
                  (*pImpl)[ nIndex ] == nNodeIndex ) );
     }
-    bFirst = sal_False;
+    bFirst = FALSE;
     return bRet;
 }
 
@@ -1025,12 +1018,65 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 {
     if( !pImpl || !pPage )
         return;
-    sal_uInt16 nFlyCount = pImpl->GetFlyCount();
+    USHORT nFlyCount = pImpl->GetFlyCount();
     // Any text frames at the page, fly cache avaiable?
     if( pPage->GetSortedObjs() && nFlyIdx < nFlyCount )
     {
         SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-        sal_uInt16 nPgNum = pPage->GetPhyPageNum();
+        USHORT nPgNum = pPage->GetPhyPageNum();
+
+/*
+
+        //
+        // NOTE: This code assumes that all objects have already been
+        // inserted into the drawing layout, so that the cached objects
+        // can be identified by their ordnum. Unfortunately this function
+        // is called with page n if page n+1 has been inserted. Thus
+        // not all the objects have been inserted and the ordnums cannot
+        // be used to identify the objects.
+        //
+
+        for ( USHORT i = 0; i < rObjs.Count(); ++i )  // check objects
+        {
+            SdrObject *pO = rObjs[i];
+            if ( pO->ISA(SwVirtFlyDrawObj) )  // a text frame?
+            {
+                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                if( pFly->Frm().Left() == WEIT_WECH && pFly->GetAnchor() &&
+                    !pFly->GetAnchor()->FindFooterOrHeader() )
+                {   // Only frame with default position and not in header/footer
+                    const SwContact *pC = (SwContact*)GetUserCall(pO);
+                    if( pC )
+                    {
+                        ULONG nOrdNum = pO->GetOrdNum(); // the Id
+                        SwFlyCache* pFlyC;
+                        while( nFlyIdx < nFlyCount && ( pFlyC = pImpl->
+                               GetFlyCache(nFlyIdx) )->nPageNum < nPgNum)
+                            ++nFlyIdx;
+                        if( nFlyIdx < nFlyCount &&
+                            pFlyC->nPageNum == nPgNum )
+                        {
+                            USHORT nIdx = nFlyIdx;
+                            while( nIdx < nFlyCount && ( pFlyC = pImpl->
+                                   GetFlyCache( nIdx ) )->nPageNum == nPgNum &&
+                                   pFlyC->nOrdNum != nOrdNum )
+                                ++nIdx;
+                            if( nIdx < nFlyCount && pFlyC->nPageNum == nPgNum &&
+                                pFlyC->nOrdNum == nOrdNum )
+                            {   // we get the stored information
+                                pFly->Frm().Pos().X() = pFlyC->Left() +
+                                                        pPage->Frm().Left();
+                                pFly->Frm().Pos().Y() = pFlyC->Top() +
+                                                        pPage->Frm().Top();
+                                pFly->Frm().Width( pFlyC->Width() );
+                                pFly->Frm().Height( pFlyC->Height() );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+ */
 
         //
         // NOTE: Here we do not use the absolute ordnums but
@@ -1044,7 +1090,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 
         // sort cached objects on this page by ordnum
         std::set< const SwFlyCache*, FlyCacheCompare > aFlyCacheSet;
-        sal_uInt16 nIdx = nFlyIdx;
+        USHORT nIdx = nFlyIdx;
 
         while( nIdx < nFlyCount && ( pFlyC = pImpl->
                GetFlyCache( nIdx ) )->nPageNum == nPgNum )
@@ -1055,7 +1101,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 
         // sort objects on this page by ordnum
         std::set< const SdrObject*, SdrObjectCompare > aFlySet;
-        for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+        for ( USHORT i = 0; i < rObjs.Count(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = rObjs[i];
             if ( pAnchoredObj->ISA(SwFlyFrm) )  // a text frame?
@@ -1115,21 +1161,21 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
  * the rpPage parameter to the right page, if possible.
  * --------------------------------------------------*/
 
-sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
+BOOL SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
 {
     if( !pFly->GetAnchorFrm() || !pFly->GetVirtDrawObj() ||
         pFly->GetAnchorFrm()->FindFooterOrHeader() )
-        return sal_False;
-    sal_Bool bRet = sal_False;
+        return FALSE;
+    BOOL bRet = FALSE;
     SwDoc* pDoc = rpPage->GetFmt()->GetDoc();
     SwLayCacheImpl *pCache = pDoc->GetLayoutCache() ?
                              pDoc->GetLayoutCache()->LockImpl() : NULL;
     if( pCache )
     {
-        sal_uInt16 nPgNum = rpPage->GetPhyPageNum();
-        sal_uInt16 nIdx = 0;
-        sal_uInt16 nCnt = pCache->GetFlyCount();
-        sal_uLong nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
+        USHORT nPgNum = rpPage->GetPhyPageNum();
+        USHORT nIdx = 0;
+        USHORT nCnt = pCache->GetFlyCount();
+        ULONG nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
         SwFlyCache* pFlyC = 0;
 
         // skip fly frames from pages before the current page
@@ -1164,7 +1210,7 @@ sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
                     pFly->Frm().Width( pFlyC->Width() );
                     pFly->Frm().Height( pFlyC->Height() );
                 }
-                bRet = sal_True;
+                bRet = TRUE;
             }
         }
         pDoc->GetLayoutCache()->UnlockImpl();
@@ -1174,49 +1220,52 @@ sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
 
 // -----------------------------------------------------------------------------
 
-SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, sal_Bool bWrtMd ) :
+SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, BOOL bWrtMd ) :
     pStream( &rStrm ),
     nMajorVersion(SW_LAYCACHE_IO_VERSION_MAJOR),
     nMinorVersion(SW_LAYCACHE_IO_VERSION_MINOR),
     bWriteMode( bWrtMd ),
-    bError( sal_False  )
+    bError( FALSE  )
 {
     if( bWriteMode )
         *pStream << nMajorVersion
-                 << nMinorVersion;
+                 <<	nMinorVersion;
 
     else
         *pStream >> nMajorVersion
-                 >> nMinorVersion;
+                 >>	nMinorVersion;
 }
 
-sal_Bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
+BOOL SwLayCacheIoImpl::OpenRec( BYTE cType )
 {
-    sal_Bool bRes = sal_True;
-    sal_uInt32 nPos = pStream->Tell();
+    BOOL bRes = TRUE;
+    UINT16 nLvl = aRecTypes.Count();
+    OSL_ENSURE( nLvl == aRecSizes.Count(), "OpenRec: Level" );
+    UINT32 nPos = pStream->Tell();
     if( bWriteMode )
     {
-        aRecords.push_back( RecTypeSize(cType, nPos) );
-        *pStream << (sal_uInt32) 0;
+        aRecTypes.Insert( cType, nLvl );
+        aRecSizes.Insert( nPos, nLvl );
+        *pStream << (UINT32) 0;
     }
     else
     {
-        sal_uInt32 nVal;
+        UINT32 nVal;
         *pStream >> nVal;
-        sal_uInt8 cRecTyp = (sal_uInt8)nVal;
+        BYTE cRecTyp = (BYTE)nVal;
+        aRecTypes.Insert( cRecTyp, nLvl );
+        sal_uInt32 nSize = nVal >> 8;
+        aRecSizes.Insert( nPos + nSize, nLvl );
         if( !nVal || cRecTyp != cType ||
             pStream->GetErrorCode() != SVSTREAM_OK || pStream->IsEof() )
         {
             OSL_ENSURE( nVal, "OpenRec: Record-Header is 0" );
-            OSL_ENSURE( cRecTyp == cType, "OpenRec: Wrong Record Type" );
-            aRecords.push_back( RecTypeSize(0, pStream->Tell()) );
+            OSL_ENSURE( cRecTyp == cType,
+                    "OpenRec: Wrong Record Type" );
+            aRecTypes[nLvl] = 0;
+            aRecSizes[nLvl] = pStream->Tell();
             bRes = sal_False;
-            bError = sal_True;
-        }
-        else
-        {
-            sal_uInt32 nSize = nVal >> 8;
-            aRecords.push_back( RecTypeSize(cRecTyp, nPos+nSize) );
+            bError = TRUE;
         }
     }
     return bRes;
@@ -1224,71 +1273,78 @@ sal_Bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
 
 // Close record
 
-sal_Bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
+BOOL SwLayCacheIoImpl::CloseRec( BYTE )
 {
-    sal_Bool bRes = sal_True;
-    OSL_ENSURE( !aRecords.empty(), "CloseRec: no levels" );
-    if( !aRecords.empty() )
+    BOOL bRes = TRUE;
+    UINT16 nLvl = aRecTypes.Count();
+    OSL_ENSURE( nLvl == aRecSizes.Count(), "CloseRec: wrong Level" );
+    OSL_ENSURE( nLvl, "CloseRec: no levels" );
+    if( nLvl )
     {
-        sal_uInt32 nPos = pStream->Tell();
+        nLvl--;
+        UINT32 nPos = pStream->Tell();
         if( bWriteMode )
         {
-            sal_uInt32 nBgn = aRecords.back().size;
+            UINT32 nBgn = aRecSizes[nLvl];
             pStream->Seek( nBgn );
-            sal_uInt32 nSize = nPos - nBgn;
-            sal_uInt32 nVal = ( nSize << 8 ) | aRecords.back().type;
+            UINT32 nSize = nPos - nBgn;
+            UINT32 nVal = ( nSize << 8 ) | aRecTypes[nLvl];
             *pStream << nVal;
             pStream->Seek( nPos );
             if( pStream->GetError() != SVSTREAM_OK )
-                 bRes = sal_False;
+                 bRes = FALSE;
         }
         else
         {
-            sal_uInt32 n = aRecords.back().size;
+            UINT32 n = aRecSizes[nLvl];
             OSL_ENSURE( n >= nPos, "CloseRec: to much data read" );
             if( n != nPos )
             {
                 pStream->Seek( n );
                 if( n < nPos )
-                     bRes = sal_False;
+                     bRes = FALSE;
             }
             if( pStream->GetErrorCode() != SVSTREAM_OK )
-                bRes = sal_False;
+                bRes = FALSE;
         }
-        aRecords.pop_back();
+
+        aRecTypes.Remove( nLvl, 1 );
+        aRecSizes.Remove( nLvl, 1 );
     }
 
     if( !bRes )
-        bError = sal_True;
+        bError = TRUE;
 
     return bRes;
 }
 
-sal_uInt32 SwLayCacheIoImpl::BytesLeft()
+UINT32 SwLayCacheIoImpl::BytesLeft()
 {
-    sal_uInt32 n = 0;
-    if( !bError && !aRecords.empty() )
+    UINT16 nLvl = aRecSizes.Count();
+    UINT32 n = 0;
+    if( !bError && nLvl )
     {
-        sal_uInt32 nEndPos = aRecords.back().size;
-        sal_uInt32 nPos = pStream->Tell();
+        UINT32 nEndPos = aRecSizes[ nLvl-1 ];
+        UINT32 nPos = pStream->Tell();
         if( nEndPos > nPos )
             n = nEndPos - nPos;
     }
+
     return n;
 }
 
-sal_uInt8 SwLayCacheIoImpl::Peek()
+BYTE SwLayCacheIoImpl::Peek()
 {
-    sal_uInt8 c = 0;
+    BYTE c = 0;
     if( !bError )
     {
-        sal_uInt32 nPos = pStream->Tell();
+        UINT32 nPos = pStream->Tell();
         *pStream >> c;
         pStream->Seek( nPos );
         if( pStream->GetErrorCode() != SVSTREAM_OK )
         {
             c = 0;
-            bError = sal_True;
+            bError = TRUE;
         }
     }
     return c;
@@ -1296,27 +1352,27 @@ sal_uInt8 SwLayCacheIoImpl::Peek()
 
 void SwLayCacheIoImpl::SkipRec()
 {
-    sal_uInt8 c = Peek();
+    BYTE c = Peek();
     OpenRec( c );
-    pStream->Seek( aRecords.back().size );
+    pStream->Seek( aRecSizes[aRecSizes.Count()-1] );
     CloseRec( c );
 }
 
-sal_uInt8 SwLayCacheIoImpl::OpenFlagRec()
+BYTE SwLayCacheIoImpl::OpenFlagRec()
 {
     OSL_ENSURE( !bWriteMode, "OpenFlagRec illegal in write  mode" );
-    sal_uInt8 cFlags;
+    BYTE cFlags;
     *pStream >> cFlags;
     nFlagRecEnd = pStream->Tell() + ( cFlags & 0x0F );
     return (cFlags >> 4);
 }
 
-void SwLayCacheIoImpl::OpenFlagRec( sal_uInt8 nFlags, sal_uInt8 nLen )
+void SwLayCacheIoImpl::OpenFlagRec( BYTE nFlags, BYTE nLen )
 {
     OSL_ENSURE( bWriteMode, "OpenFlagRec illegal in read  mode" );
     OSL_ENSURE( (nFlags & 0xF0) == 0, "illegal flags set" );
     OSL_ENSURE( nLen < 16, "wrong flag record length" );
-    sal_uInt8 cFlags = (nFlags << 4) + nLen;
+    BYTE cFlags = (nFlags << 4) + nLen;
     *pStream << cFlags;
     nFlagRecEnd = pStream->Tell() + nLen;
 }

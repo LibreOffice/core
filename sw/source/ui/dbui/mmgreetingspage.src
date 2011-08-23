@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
         StringList [en-US]=             \
         {                               \
             < "< not available >" ; > ; \
-        };
+        };                              
 
 
 #define GREETINGS_BODY  \
@@ -144,31 +144,29 @@ TabPage DLG_MM_GREETINGS_PAGE
     };
     CheckBox    CB_GREETINGLINE
     {
-        HelpID = "sw:CheckBox:DLG_MM_GREETINGS_PAGE:CB_GREETINGLINE";
         Pos = MAP_APPFONT ( 12 , 27 );
         Size = MAP_APPFONT ( 242 , 10 );
         Text[ en-US ] = "This document should contain a salutation";
     };
     GREETINGS_BODY
     FixedText       FI_PREVIEW
-    {
+    {                                                                               
         Pos = MAP_APPFONT ( 12 , 168 ) ;
-        Size = MAP_APPFONT ( 242 , 8 ) ;
+        Size = MAP_APPFONT ( 242 , 8 ) ;                                            
         Text[ en-US ] = "Preview";
-    };
+    };                                                                              
     Window          WIN_PREVIEW
-    {
+    {                                                                               
         Pos = MAP_APPFONT ( 12 , 179 );
-        Size = MAP_APPFONT ( 186 , 21 ) ;
+        Size = MAP_APPFONT ( 186 , 21 ) ;                                           
         Border = TRUE;
-    };
+    };                                                                              
     PushButton      PB_ASSIGN
-    {
-        HelpID = "sw:PushButton:DLG_MM_GREETINGS_PAGE:PB_ASSIGN";
+    {                                                                               
         Pos = MAP_APPFONT ( 204 , 179 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;                                            
         Text[ en-US ] = "~Match fields...";
-    };
+    };                                                                              
     FixedText       FI_DOCINDEX
     {
         Pos = MAP_APPFONT ( 121 , 206 ) ;
@@ -177,7 +175,6 @@ TabPage DLG_MM_GREETINGS_PAGE
     };
     ImageButton     IB_PREVSET
     {
-        HelpID = "sw:ImageButton:DLG_MM_GREETINGS_PAGE:IB_PREVSET";
         Pos = MAP_APPFONT ( 177 , 204 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_PREV;
@@ -185,7 +182,6 @@ TabPage DLG_MM_GREETINGS_PAGE
     };
     ImageButton     IB_NEXTSET
     {
-        HelpID = "sw:ImageButton:DLG_MM_GREETINGS_PAGE:IB_NEXTSET";
         Pos = MAP_APPFONT ( 188 , 204 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_NEXT ;
@@ -197,7 +193,7 @@ TabPage DLG_MM_GREETINGS_PAGE
     };
 };
 
-#undef TOP_OFFSET
+#undef TOP_OFFSET 
 #undef LEFT_OFFSET
 
 #define TOP_OFFSET 0
@@ -211,12 +207,11 @@ ModalDialog DLG_MM_MAILBODY
     Moveable = TRUE ;
     Text [ en-US ] = "E-Mail Message";
     CheckBox    CB_GREETINGLINE
-    {
-        HelpID = "sw:CheckBox:DLG_MM_MAILBODY:CB_GREETINGLINE";
-        Pos = MAP_APPFONT ( 6  , 3 ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
+    {                                                                               
+        Pos = MAP_APPFONT ( 6  , 3 ) ;                    
+        Size = MAP_APPFONT ( 242 , 10 ) ;                                           
         Text[ en-US ] = "This e-mail should contain a salutation";
-    };
+    };                                                                              
     GREETINGS_BODY
     FixedText           FT_BODY
     {
@@ -226,7 +221,6 @@ ModalDialog DLG_MM_MAILBODY
     };
     MultiLineEdit MLE_BODY
     {
-        HelpID = "sw:MultiLineEdit:DLG_MM_MAILBODY:MLE_BODY";
         Pos = MAP_APPFONT ( 12,   151 ) ;
         Size = MAP_APPFONT ( 180 , 50 ) ;
         Border = TRUE;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 
     <p>
     It's an asynchronous loading. For synchronous processes use <type>XSynchronousFrameLoader</type>
-    instead of this one. The generic load algorithm of the office supports both ones - but preferred
+    instead of this one. The generic load algorithm of the office supports both ones - but prefered
     the synchronous interface.
     </p>
 
@@ -68,7 +68,7 @@ published interface XFrameLoader: com::sun::star::uno::XInterface
             specifies the loading target
 
         @param URL
-            describes the resource of loading component
+            describes the ressource of loading component
             Support of special protocols are implementation details
             and depends from the environment.
 

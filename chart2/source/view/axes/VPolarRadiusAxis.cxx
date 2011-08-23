@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,6 @@
 #include "VCartesianAxis.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "CommonConverters.hxx"
-#include "Tickmarks_Equidistant.hxx"
 #include <rtl/math.hxx>
 
 //.............................................................................
@@ -72,7 +71,7 @@ void VPolarRadiusAxis::setTransformationSceneToScreen( const drawing::HomogenMat
     m_apAxisWithLabels->setTransformationSceneToScreen( rMatrix );
 }
 
-void VPolarRadiusAxis::setExplicitScaleAndIncrement(
+void SAL_CALL VPolarRadiusAxis::setExplicitScaleAndIncrement(
               const ExplicitScaleData& rScale
             , const ExplicitIncrementData& rIncrement )
             throw (uno::RuntimeException)
@@ -81,7 +80,7 @@ void VPolarRadiusAxis::setExplicitScaleAndIncrement(
     m_apAxisWithLabels->setExplicitScaleAndIncrement( rScale, rIncrement );
 }
 
-void VPolarRadiusAxis::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
+void SAL_CALL VPolarRadiusAxis::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
        , const uno::Reference< drawing::XShapes >& xFinalTarget
        , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
        , const rtl::OUString& rCID )
@@ -91,13 +90,15 @@ void VPolarRadiusAxis::initPlotter(  const uno::Reference< drawing::XShapes >& x
     m_apAxisWithLabels->initPlotter(  xLogicTarget, xFinalTarget, xShapeFactory, rCID );
 }
 
-void VPolarRadiusAxis::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
+void SAL_CALL VPolarRadiusAxis::setScales( const uno::Sequence< ExplicitScaleData >& rScales
+                                     , sal_Bool bSwapXAndYAxis )
+                            throw (uno::RuntimeException)
 {
     VPolarAxis::setScales( rScales, bSwapXAndYAxis );
     m_apAxisWithLabels->setScales( rScales, bSwapXAndYAxis );
 }
 
-void VPolarRadiusAxis::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFontReferenceSize
+void SAL_CALL VPolarRadiusAxis::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFontReferenceSize
                   , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels )
 {
     VPolarAxis::initAxisLabelProperties( rFontReferenceSize, rMaximumSpaceForLabels );
@@ -121,39 +122,39 @@ bool VPolarRadiusAxis::prepareShapeCreation()
     return true;
 }
 
-void VPolarRadiusAxis::createMaximumLabels()
+void SAL_CALL VPolarRadiusAxis::createMaximumLabels()
 {
     m_apAxisWithLabels->createMaximumLabels();
 }
 
-void VPolarRadiusAxis::updatePositions()
+void SAL_CALL VPolarRadiusAxis::updatePositions()
 {
     m_apAxisWithLabels->updatePositions();
 }
 
-void VPolarRadiusAxis::createLabels()
+void SAL_CALL VPolarRadiusAxis::createLabels()
 {
     m_apAxisWithLabels->createLabels();
 }
 
-void VPolarRadiusAxis::createShapes()
+void SAL_CALL VPolarRadiusAxis::createShapes()
 {
     if( !prepareShapeCreation() )
         return;
-
+    
     const ExplicitScaleData& rAngleScale         = m_pPosHelper->getScales()[0];
     const ExplicitIncrementData& rAngleIncrement = m_aIncrements[0];
 
     ::std::vector< ::std::vector< TickInfo > > aAngleTickInfos;
-    TickFactory aAngleTickFactory( rAngleScale, rAngleIncrement );
-    aAngleTickFactory.getAllTicks( aAngleTickInfos );
+    TickmarkHelper aAngleTickmarkHelper( rAngleScale, rAngleIncrement );
+    aAngleTickmarkHelper.getAllTicks( aAngleTickInfos );
 
     uno::Reference< XScaling > xInverseScaling( NULL );
     if( rAngleScale.Scaling.is() )
         xInverseScaling = rAngleScale.Scaling->getInverseScaling();
 
     AxisProperties aAxisProperties(m_aAxisProperties);
-
+    
     sal_Int32 nTick = 0;
     EquidistantTickIter aIter( aAngleTickInfos, rAngleIncrement, 0, 0 );
     for( TickInfo* pTickInfo = aIter.firstInfo()
@@ -165,8 +166,8 @@ void VPolarRadiusAxis::createShapes()
             continue;
         }
 
-        //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
-        aAxisProperties.m_pfMainLinePositionAtOtherAxis = new double( pTickInfo->getUnscaledTickValue() );
+        pTickInfo->updateUnscaledValue( xInverseScaling );
+        aAxisProperties.m_pfMainLinePositionAtOtherAxis = new double( pTickInfo->fUnscaledTickValue );
         aAxisProperties.m_bDisplayLabels=false;
 
         //-------------------

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 
 //-----------------------------------------------------------
-//  interface includes
+//	interface includes
 //-----------------------------------------------------------
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -49,54 +49,54 @@
 #include <windows.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
+#endif 
 
 #include <osl/file.hxx>
 
 //--------------------------------------------------------------
-//  namesapces
+//	namesapces
 //--------------------------------------------------------------
 
-using namespace ::rtl                   ;
-using namespace ::cppu                  ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
-using namespace std                     ;
+using namespace	::rtl					;
+using namespace	::cppu					;
+using namespace	::com::sun::star::uno	;
+using namespace	::com::sun::star::lang	;
+using namespace std						;
 using namespace com::sun::star::system;
 
 //--------------------------------------------------------------
-//  defines
+//	defines
 //--------------------------------------------------------------
 
 #define RDB_SYSPATH "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\applicat.rdb"
 
 //--------------------------------------------------------------
-//  global variables
+//	global variables
 //--------------------------------------------------------------
 
-Reference< XMultiServiceFactory >   g_xFactory;
+Reference< XMultiServiceFactory >	g_xFactory;
 
 //--------------------------------------------------------------
-//  main
+//	main
 //--------------------------------------------------------------
 
 
-// int SAL_CALL main(int nArgc, char* Argv[], char* pEnv[]  )
+// int SAL_CALL main(int nArgc, char* Argv[], char* pEnv[]	)
 // make Warning free, leave out typename
 int SAL_CALL main(int , char*, char* )
 {
     //-------------------------------------------------
     // get the global service-manager
     //-------------------------------------------------
-
+    
     // Get global factory for uno services.
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occurred.
+    // Print a message if an error occured.
     if ( g_xFactory.is() == sal_False )
     {
-        OSL_FAIL("Can't create RegistryServiceFactory");
+        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -109,15 +109,15 @@ int SAL_CALL main(int , char*, char* )
     try
     {
         Reference< XSimpleMailClientSupplier > xSmplMailClientSuppl(
-            g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SimpleSystemMail")) ), UNO_QUERY );
-
+            g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.system.SimpleSystemMail" ) ), UNO_QUERY );
+    
         if ( !xSmplMailClientSuppl.is() )
         {
-            OSL_FAIL( "Error creating SimpleSystemMail Service" );
+            OSL_ENSURE( sal_False, "Error creating SimpleSystemMail Service" );
             return(-1);
-        }
+        }	
 
-        Reference< XSimpleMailClient > xSmplMailClient(
+        Reference< XSimpleMailClient > xSmplMailClient( 
             xSmplMailClientSuppl->querySimpleMailClient( ) );
 
         if ( xSmplMailClient.is( ) )
@@ -127,30 +127,30 @@ int SAL_CALL main(int , char*, char* )
 
             if ( xSmplMailMsg.is( ) )
             {
-                xSmplMailMsg->setRecipient( OUString(RTL_CONSTASCII_USTRINGPARAM("tino.rachui@germany.sun.com")) );
-                xSmplMailMsg->setOriginator( OUString(RTL_CONSTASCII_USTRINGPARAM("tino.rachui@germany.sun.com")) );
-
+                xSmplMailMsg->setRecipient( OUString::createFromAscii("tino.rachui@germany.sun.com") );
+                xSmplMailMsg->setOriginator( OUString::createFromAscii( "tino.rachui@germany.sun.com" ) );
+                
                 Sequence< OUString > ccRecips( 1 );
-                ccRecips[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("tino.rachui@germany.sun.com"));
-
+                ccRecips[0] = OUString::createFromAscii( "tino.rachui@germany.sun.com" );
+            
                 xSmplMailMsg->setCcRecipient( ccRecips );
 
                 Sequence< OUString > bccRecips( 1 );
-                bccRecips[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("tino.rachui@germany.sun.com"));
-
+                bccRecips[0] = OUString::createFromAscii( "tino.rachui@germany.sun.com" );
+            
                 xSmplMailMsg->setBccRecipient( bccRecips );
 
-                xSmplMailMsg->setSubject( OUString(RTL_CONSTASCII_USTRINGPARAM("Mapi Test")) );
-
+                xSmplMailMsg->setSubject( OUString::createFromAscii( "Mapi Test" ) );
+                
                 Sequence< OUString > attachements( 2 );
 
-                OUString aFile(RTL_CONSTASCII_USTRINGPARAM("D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testprx.exe"));
+                OUString aFile = OUString::createFromAscii( "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testprx.exe" );
                 OUString aFileURL;
 
                 osl::FileBase::getFileURLFromSystemPath( aFile, aFileURL );
                 attachements[0] = aFileURL;
-
-                aFile = OUString(RTL_CONSTASCII_USTRINGPARAM("D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testsyssh.exe"));
+                
+                aFile = OUString::createFromAscii( "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testsyssh.exe" );                
                 osl::FileBase::getFileURLFromSystemPath( aFile, aFileURL );
 
                 attachements[1] = aFile;
@@ -172,10 +172,10 @@ int SAL_CALL main(int , char*, char* )
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
-    // Print a message if an error occurred.
+    // Print a message if an error occured.
     if ( xComponent.is() == sal_False )
     {
-        OSL_FAIL("Error shuting down");
+        OSL_ENSURE(sal_False, "Error shuting down");
     }
 
     // Dispose and clear factory

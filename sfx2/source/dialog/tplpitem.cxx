@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include "sfx2/tplpitem.hxx"
+#include "tplpitem.hxx"
 #include <com/sun/star/frame/status/Template.hpp>
 
 
@@ -43,22 +43,22 @@ TYPEINIT1_AUTOFACTORY(SfxTemplateItem, SfxFlagItem);
 
 SfxTemplateItem::SfxTemplateItem() :
     SfxFlagItem()
-{
+{    
 }
 
 SfxTemplateItem::SfxTemplateItem
 (
-    sal_uInt16 nWhichId,      // Slot-ID
-    const String& rStyle, // Name of the current Styles
-    sal_uInt16 nValue         // Flags for the filters of the automatic display
-) : SfxFlagItem( nWhichId, nValue ),
+    USHORT nWhichId,      // Slot-ID
+    const String& rStyle, // Name des aktuellen Styles
+    USHORT nValue         // Flags f"ur das Filtern bei automatischer Anzeige
+) :	SfxFlagItem( nWhichId, nValue ),
     aStyle( rStyle )
 {
 }
 
 //-------------------------------------------------------------------------
 
-// copy constuctor
+// copy ctor
 SfxTemplateItem::SfxTemplateItem( const SfxTemplateItem& rCopy ) :
 
     SfxFlagItem( rCopy ),
@@ -85,7 +85,7 @@ SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
 }
 
 //-------------------------------------------------------------------------
-bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     ::com::sun::star::frame::status::Template aTemplate;
 
@@ -97,13 +97,13 @@ bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nM
 }
 
 //-------------------------------------------------------------------------
-bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::Template aTemplate;
 
     if ( rVal >>= aTemplate )
     {
-        SetValue( sal::static_int_cast< sal_uInt16 >( aTemplate.Value ) );
+        SetValue( sal::static_int_cast< USHORT >( aTemplate.Value ) );
         aStyle = aTemplate.StyleName;
         return true;
     }
@@ -113,9 +113,9 @@ bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 
 
 //-------------------------------------------------------------------------
 
-sal_uInt8 SfxTemplateItem::GetFlagCount() const
+BYTE SfxTemplateItem::GetFlagCount() const
 {
-    return sizeof(sal_uInt16) * 8;
+    return sizeof(USHORT) * 8;
 }
 
 

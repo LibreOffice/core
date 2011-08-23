@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,34 +46,38 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include "svx/xmlsecctrl.hxx"
+#include "xmlsecctrl.hxx"
 #include <tools/urlobj.hxx>
 
-#define PAINT_OFFSET    5
+#define PAINT_OFFSET	5
 
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxUInt16Item );
 
 struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
 {
-    Point       maPos;
-    Size        maSize;
-    sal_uInt16      mnState;
-    Image       maImage;
+    Point		maPos;
+    Size		maSize;
+    UINT16		mnState;
+    Image		maImage;
     Image       maImageBroken;
     Image       maImageNotValidated;
 };
 
 
-XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16 _nId, StatusBar& _rStb )
+XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nSlotId,  USHORT _nId, StatusBar& _rStb )
     :SfxStatusBarControl( _nSlotId, _nId, _rStb )
+
     ,mpImpl( new XmlSecStatusBarControl_Impl )
 {
-    mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
+    mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;
 
-    mpImpl->maImage             = Image( SVX_RES( RID_SVXBMP_SIGNET              ) );
-    mpImpl->maImageBroken       = Image( SVX_RES( RID_SVXBMP_SIGNET_BROKEN       ) );
-    mpImpl->maImageNotValidated = Image( SVX_RES( RID_SVXBMP_SIGNET_NOTVALIDATED ) );
+    sal_Bool bHC = GetStatusBar().GetSettings().GetStyleSettings().GetHighContrastMode();
+    mpImpl->maImage = Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_H : RID_SVXBMP_SIGNET ) );
+    mpImpl->maImageBroken =
+        Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_BROKEN_H : RID_SVXBMP_SIGNET_BROKEN ) );
+    mpImpl->maImageNotValidated =
+        Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_NOTVALIDATED_H : RID_SVXBMP_SIGNET_NOTVALIDATED ) );
 }
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()
@@ -81,28 +85,33 @@ XmlSecStatusBarControl::~XmlSecStatusBarControl()
     delete mpImpl;
 }
 
-void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
+void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
+    GetStatusBar().SetHelpText( GetId(), String() );// necessary ?
+
+    GetStatusBar().SetHelpId( GetId(), nSID );      // necessary ?
+
     if( SFX_ITEM_AVAILABLE != eState )
     {
-        mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
+        mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;
     }
     else if( pState->ISA( SfxUInt16Item ) )
     {
+//		mpImpl->mbSigned = ( ( SfxUInt16Item* ) pState )->GetValue() == 1 /* SIGNED*/ ;
         mpImpl->mnState = ( ( SfxUInt16Item* ) pState )->GetValue();
     }
     else
     {
         DBG_ERRORFILE( "+XmlSecStatusBarControl::StateChanged(): invalid item type" );
-        mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
+        mpImpl->mnState = (UINT16)SIGNATURESTATE_UNKNOWN;
     }
 
-    if( GetStatusBar().AreItemsVisible() )              // necessary ?
+    if( GetStatusBar().AreItemsVisible() )				// necessary ?
         GetStatusBar().SetItemData( GetId(), 0 );
 
     GetStatusBar().SetItemText( GetId(), String() );    // necessary ?
 
-    sal_uInt16 nResId = RID_SVXSTR_XMLSEC_NO_SIG;
+    USHORT nResId = RID_SVXSTR_XMLSEC_NO_SIG;
     if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_OK )
         nResId = RID_SVXSTR_XMLSEC_SIG_OK;
     else if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_BROKEN )
@@ -140,11 +149,13 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
 
 void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    OutputDevice*       pDev = rUsrEvt.GetDevice();
+    OutputDevice*		pDev = rUsrEvt.GetDevice();
     DBG_ASSERT( pDev, "-XmlSecStatusBarControl::Paint(): no Output Device... this will lead to nirvana..." );
-    Rectangle           aRect = rUsrEvt.GetRect();
-    Color               aOldLineColor = pDev->GetLineColor();
-    Color               aOldFillColor = pDev->GetFillColor();
+    Rectangle			aRect = rUsrEvt.GetRect();
+    StatusBar&			rBar = GetStatusBar();
+    Point				aItemPos = rBar.GetItemTextPos( GetId() );
+    Color				aOldLineColor = pDev->GetLineColor();
+    Color				aOldFillColor = pDev->GetFillColor();
 
     pDev->SetLineColor();
     pDev->SetFillColor( pDev->GetBackground().GetColor() );
@@ -159,7 +170,7 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         ++aRect.Top();
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImageBroken );
     }
-    else if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
+    else if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED 
         || mpImpl->mnState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK)
     {
         ++aRect.Top();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,29 +29,36 @@
 #include "oox/core/contexthandler2.hxx"
 #include <rtl/ustrbuf.hxx>
 
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::xml::sax::SAXException;
+using ::com::sun::star::xml::sax::XFastAttributeList;
+using ::com::sun::star::xml::sax::XFastContextHandler;
+
 namespace oox {
 namespace core {
 
 // ============================================================================
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
-// ============================================================================
-
-/** Information about a processed element. */
-struct ElementInfo
+/** Information about a processed context element. */
+struct ContextInfo
 {
-    OUStringBuffer      maChars;            /// Collected element characters.
+    OUString            maCurrChars;        /// Collected characters from context.
+    OUString            maFinalChars;       /// Finalized (stipped) characters.
     sal_Int32           mnElement;          /// The element identifier.
     bool                mbTrimSpaces;       /// True = trims leading/trailing spaces from text data.
 
-    inline explicit     ElementInfo() : mnElement( XML_TOKEN_INVALID ), mbTrimSpaces( false ) {}
-                        ElementInfo( sal_Int32 nElement ) : mnElement( nElement ), mbTrimSpaces(false) {}
+    explicit            ContextInfo();
+                        ContextInfo( sal_Int32 nElement ) : mnElement( nElement ) {}
 };
+
+ContextInfo::ContextInfo() :
+    mnElement( XML_TOKEN_INVALID ),
+    mbTrimSpaces( false )
+{
+}
 
 // ============================================================================
 
@@ -60,7 +67,7 @@ ContextHandler2Helper::ContextHandler2Helper( bool bEnableTrimSpace ) :
     mnRootStackSize( 0 ),
     mbEnableTrimSpace( bEnableTrimSpace )
 {
-    pushElementInfo( XML_ROOT_CONTEXT );
+    pushContextInfo( XML_ROOT_CONTEXT );
 }
 
 ContextHandler2Helper::ContextHandler2Helper( const ContextHandler2Helper& rParent ) :
@@ -79,7 +86,7 @@ sal_Int32 ContextHandler2Helper::getCurrentElement() const
     return mxContextStack->empty() ? XML_ROOT_CONTEXT : mxContextStack->back().mnElement;
 }
 
-sal_Int32 ContextHandler2Helper::getParentElement( sal_Int32 nCountBack ) const
+sal_Int32 ContextHandler2Helper::getPreviousElement( sal_Int32 nCountBack ) const
 {
     if( (nCountBack < 0) || (mxContextStack->size() < static_cast< size_t >( nCountBack )) )
         return XML_TOKEN_INVALID;
@@ -92,50 +99,49 @@ bool ContextHandler2Helper::isRootElement() const
     return mxContextStack->size() == mnRootStackSize + 1;
 }
 
-Reference< XFastContextHandler > ContextHandler2Helper::implCreateChildContext(
-        sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
+Reference< XFastContextHandler > ContextHandler2Helper::implCreateChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
 {
-    // #i76091# process collected characters (calls onCharacters() if needed)
-    processCollectedChars();
+    appendCollectedChars();
     ContextHandlerRef xContext = onCreateContext( nElement, AttributeList( rxAttribs ) );
     return Reference< XFastContextHandler >( xContext.get() );
 }
 
-void ContextHandler2Helper::implStartElement( sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
+void ContextHandler2Helper::implStartCurrentContext( sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
 {
     AttributeList aAttribs( rxAttribs );
-    pushElementInfo( nElement ).mbTrimSpaces = aAttribs.getToken( XML_TOKEN( space ), XML_TOKEN_INVALID ) != XML_preserve;
+    pushContextInfo( nElement ).mbTrimSpaces = aAttribs.getToken( NMSP_XML | XML_space, XML_TOKEN_INVALID ) != XML_preserve;
     onStartElement( aAttribs );
 }
 
 void ContextHandler2Helper::implCharacters( const OUString& rChars )
 {
-    // #i76091# collect characters until new element starts or this element ends
+    // #i76091# collect characters until context ends
     if( !mxContextStack->empty() )
-        mxContextStack->back().maChars.append(rChars);
+        mxContextStack->back().maCurrChars += rChars;
 }
 
-void ContextHandler2Helper::implEndElement( sal_Int32 nElement )
+void ContextHandler2Helper::implEndCurrentContext( sal_Int32 nElement )
 {
     (void)nElement;     // prevent "unused parameter" warning in product build
-    OSL_ENSURE( getCurrentElement() == nElement, "ContextHandler2Helper::implEndElement - context stack broken" );
+    OSL_ENSURE( getCurrentElement() == nElement, "ContextHandler2Helper::implEndCurrentContext - context stack broken" );
     if( !mxContextStack->empty() )
     {
-        // #i76091# process collected characters (calls onCharacters() if needed)
-        processCollectedChars();
-        onEndElement();
-        popElementInfo();
+        // #i76091# process collected characters
+        appendCollectedChars();
+        // finalize the current context and pop context info from stack
+        onEndElement( mxContextStack->back().maFinalChars );
+        popContextInfo();
     }
 }
 
-ContextHandlerRef ContextHandler2Helper::implCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
+ContextHandlerRef ContextHandler2Helper::implCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     return onCreateRecordContext( nRecId, rStrm );
 }
 
-void ContextHandler2Helper::implStartRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
+void ContextHandler2Helper::implStartRecord( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
-    pushElementInfo( nRecId );
+    pushContextInfo( nRecId );
     onStartRecord( rStrm );
 }
 
@@ -145,50 +151,54 @@ void ContextHandler2Helper::implEndRecord( sal_Int32 nRecId )
     OSL_ENSURE( getCurrentElement() == nRecId, "ContextHandler2Helper::implEndRecord - context stack broken" );
     if( !mxContextStack->empty() )
     {
+        // finalize the current context and pop context info from stack
         onEndRecord();
-        popElementInfo();
+        popContextInfo();
     }
 }
 
-ElementInfo& ContextHandler2Helper::pushElementInfo( sal_Int32 nElement )
+ContextInfo& ContextHandler2Helper::pushContextInfo( sal_Int32 nElement )
 {
-    mxContextStack->resize( mxContextStack->size() + 1 );
-    ElementInfo& rInfo = mxContextStack->back();
-    rInfo.mnElement = nElement;
-    return rInfo;
+    ContextInfo aInfo( nElement );
+    mxContextStack->push_back( aInfo );
+    return mxContextStack->back();
 }
 
-void ContextHandler2Helper::popElementInfo()
+void ContextHandler2Helper::popContextInfo()
 {
-    OSL_ENSURE( !mxContextStack->empty(), "ContextHandler2Helper::popElementInfo - context stack broken" );
+    OSL_ENSURE( !mxContextStack->empty(), "ContextHandler2Helper::popContextInfo - context stack broken" );
     if( !mxContextStack->empty() )
         mxContextStack->pop_back();
 }
 
-void ContextHandler2Helper::processCollectedChars()
+void ContextHandler2Helper::appendCollectedChars()
 {
-    OSL_ENSURE( !mxContextStack->empty(), "ContextHandler2Helper::processCollectedChars - no context info" );
-    ElementInfo& rInfo = mxContextStack->back();
-    if( rInfo.maChars.getLength() > 0 )
+    OSL_ENSURE( !mxContextStack->empty(), "ContextHandler2Helper::appendCollectedChars - no context info" );
+    ContextInfo& rInfo = mxContextStack->back();
+    if( rInfo.maCurrChars.getLength() > 0 )
     {
-        OUString aChars = rInfo.maChars.makeStringAndClear();
-        if( mbEnableTrimSpace && rInfo.mbTrimSpaces )
-            aChars = aChars.trim();
-        if( aChars.getLength() > 0 )
-            onCharacters( aChars );
+        OUString aChars( rInfo.maCurrChars );
+
+        rInfo.maCurrChars = OUString();
+        rInfo.maFinalChars += ( (mbEnableTrimSpace && rInfo.mbTrimSpaces) ? aChars.trim() : aChars );
     }
 }
 
 // ============================================================================
 
 ContextHandler2::ContextHandler2( ContextHandler2Helper& rParent ) :
-    ContextHandler( dynamic_cast< ContextHandler& >( rParent ) ),
+    ContextHandler( rParent.queryContextHandler() ),
     ContextHandler2Helper( rParent )
 {
 }
 
 ContextHandler2::~ContextHandler2()
 {
+}
+
+ContextHandler& ContextHandler2::queryContextHandler()
+{
+    return *this;
 }
 
 // com.sun.star.xml.sax.XFastContextHandler interface -------------------------
@@ -202,7 +212,7 @@ Reference< XFastContextHandler > SAL_CALL ContextHandler2::createFastChildContex
 void SAL_CALL ContextHandler2::startFastElement(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw( SAXException, RuntimeException )
 {
-    implStartElement( nElement, rxAttribs );
+    implStartCurrentContext( nElement, rxAttribs );
 }
 
 void SAL_CALL ContextHandler2::characters( const OUString& rChars ) throw( SAXException, RuntimeException )
@@ -212,17 +222,17 @@ void SAL_CALL ContextHandler2::characters( const OUString& rChars ) throw( SAXEx
 
 void SAL_CALL ContextHandler2::endFastElement( sal_Int32 nElement ) throw( SAXException, RuntimeException )
 {
-    implEndElement( nElement );
+    implEndCurrentContext( nElement );
 }
 
 // oox.core.RecordContext interface -------------------------------------------
 
-ContextHandlerRef ContextHandler2::createRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
+ContextHandlerRef ContextHandler2::createRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     return implCreateRecordContext( nRecId, rStrm );
 }
 
-void ContextHandler2::startRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
+void ContextHandler2::startRecord( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     implStartRecord( nRecId, rStrm );
 }
@@ -243,20 +253,16 @@ void ContextHandler2::onStartElement( const AttributeList& )
 {
 }
 
-void ContextHandler2::onCharacters( const OUString& )
+void ContextHandler2::onEndElement( const OUString& )
 {
 }
 
-void ContextHandler2::onEndElement()
-{
-}
-
-ContextHandlerRef ContextHandler2::onCreateRecordContext( sal_Int32, SequenceInputStream& )
+ContextHandlerRef ContextHandler2::onCreateRecordContext( sal_Int32, RecordInputStream& )
 {
     return 0;
 }
 
-void ContextHandler2::onStartRecord( SequenceInputStream& )
+void ContextHandler2::onStartRecord( RecordInputStream& )
 {
 }
 

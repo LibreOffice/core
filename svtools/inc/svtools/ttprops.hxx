@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,34 +37,34 @@
 class SfxPoolItem;
 class Bitmap;
 
-// Defines zur Steuerung der Ausfï¿½hrung von Slots
-#define EXECUTE_NO                  0
-#define EXECUTE_POSSIBLE            1
-#define EXECUTE_YES                 2
-#define EXECUTEMODE_ASYNCHRON       1
-#define EXECUTEMODE_DIALOGASYNCHRON 2
+// Defines zur Steuerung der Ausführung von Slots
+#define EXECUTE_NO					0
+#define EXECUTE_POSSIBLE			1
+#define EXECUTE_YES					2
+#define EXECUTEMODE_ASYNCHRON		1
+#define EXECUTEMODE_DIALOGASYNCHRON	2
 
-#define SFX_USE_BINDINGS        0x8000
+#define SFX_USE_BINDINGS		0x8000
 
 // Property Requests(PR)
-#define TT_PR_ONCE      0x100
+#define TT_PR_ONCE		0x100
 
-#define TT_PR_SLOTS     ( 0x001 | TT_PR_ONCE )
+#define TT_PR_SLOTS		( 0x001 | TT_PR_ONCE )
 #define TT_PR_DISPATCHER (0x002 )
-#define TT_PR_IMG       ( 0x004 )
+#define TT_PR_IMG		( 0x004 )
 
-#define TT_PR_ERR_NODISPATCHER  01
-#define TT_PR_ERR_NOEXECUTE     02
+#define TT_PR_ERR_NODISPATCHER	01
+#define TT_PR_ERR_NOEXECUTE		02
 
-/// To detect inconsistencies
-#define TT_PROPERTIES_VERSION   1
+///	To detect inconsistencies
+#define TT_PROPERTIES_VERSION	1
 
 class SVT_DLLPUBLIC TTProperties : public ApplicationProperty
 {
-    sal_uInt16 nDonePRs;                    // Verwaltung fï¿½r die Properties, die nur einmal gerufen werden mussen.
-    SVT_DLLPRIVATE sal_Bool RequestProperty( sal_uInt16 nRequest );
+    USHORT nDonePRs;					// Verwaltung für die Properties, die nur einmal gerufen werden mussen.
+    SVT_DLLPRIVATE BOOL RequestProperty( USHORT nRequest );
 
-    sal_Bool HasSlots(){ return nPropertyVersion == TT_PROPERTIES_VERSION; }
+    BOOL HasSlots(){ return nPropertyVersion == TT_PROPERTIES_VERSION; }
 
 public:
     TYPEINFO();
@@ -76,31 +76,31 @@ public:
             , nPropertyVersion( 0 )
                     {}
 
-    sal_Bool GetSlots();
+    BOOL GetSlots();
 
     /// ExecuteFunction
-    sal_uInt16 mnSID;
+    USHORT mnSID;
     SfxPoolItem** mppArgs;
-    sal_uInt16 mnMode;
-    sal_uInt16 ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs = NULL, sal_uInt16 nMode = 0 );
+    USHORT mnMode;
+    USHORT ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs = NULL, USHORT nMode = 0 );
 
     /// Img
     Bitmap *mpBmp;
-    sal_Bool Img( Bitmap *pBmp );
+    BOOL Img( Bitmap *pBmp );
 
-    static SvtResId GetSvtResId( sal_uInt16 nId );
+    static SvtResId GetSvtResId( USHORT nId );
 
-    sal_uLong nSidOpenUrl;
-    sal_uLong nSidFileName;
-    sal_uLong nSidNewDocDirect;
-    sal_uLong nSidCopy;
-    sal_uLong nSidPaste;
-    sal_uLong nSidSourceView;
-    sal_uLong nSidSelectAll;
-    sal_uLong nSidReferer;
+    ULONG nSidOpenUrl;
+    ULONG nSidFileName;
+    ULONG nSidNewDocDirect;
+    ULONG nSidCopy;
+    ULONG nSidPaste;
+    ULONG nSidSourceView;
+    ULONG nSidSelectAll;
+    ULONG nSidReferer;
 
-    sal_uInt16 nActualPR;
-    sal_uInt16 nPropertyVersion;        // Wird bei jedem call gesetzt.
+    USHORT nActualPR;
+    USHORT nPropertyVersion;		// Wird bei jedem call gesetzt.
 };
 
 #endif // _SVTOOLS_TTPROPS_HXX

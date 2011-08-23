@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,14 +61,14 @@ SwInsertAbstractDlg::~SwInsertAbstractDlg()
 {
 }
 
-sal_uInt8 SwInsertAbstractDlg::GetLevel() const
+BYTE SwInsertAbstractDlg::GetLevel() const
 {
-    return static_cast< sal_uInt8 >(aLevelNF.GetValue() - 1);
+    return static_cast< BYTE >(aLevelNF.GetValue() - 1);
 }
 
-sal_uInt8 SwInsertAbstractDlg::GetPara() const
+BYTE SwInsertAbstractDlg::GetPara() const
 {
-    return (sal_uInt8) aParaNF.GetValue();
+    return (BYTE) aParaNF.GetValue();
 }
 
 

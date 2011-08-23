@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,12 +62,12 @@ namespace
         typedef typename ObjectMap::iterator   ObjectIter;
         typedef typename ObjectMap::value_type ObjectEntry;
 
-    //  private:
+    //	private:
         // this combination of map and vector is used to have a fast name and index access
-        ::std::vector< ObjectIter >             m_aElements;        // hold the iterators which point to map
-        ObjectMap                               m_aNameMap;         // hold the elements and a name
+        ::std::vector< ObjectIter >				m_aElements;		// hold the iterators which point to map
+        ObjectMap								m_aNameMap;			// hold the elements and a name
     public:
-        OHardRefMap(sal_Bool _bCase)
+        OHardRefMap(sal_Bool _bCase) 
             : m_aNameMap(_bCase ? true : false)
         {
         }
@@ -107,6 +107,7 @@ namespace
                 // during the swap. If we would not do this, the UStringMixLess instance which is used would be
                 // default constructed (instead of being constructed from the same instance in m_aNameMap), and
                 // it's case-sensitive flag would have an unpredictable value.
+                // 2002-01-09 - #106589# - fs@openoffice.org
         }
         // -----------------------------------------------------------------------------
         virtual void clear()
@@ -124,7 +125,7 @@ namespace
         {
             OSL_ENSURE(!m_aNameMap.size(),"OCollection::reFill: collection isn't empty");
             m_aElements.reserve(_rVector.size());
-
+            
             for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
                 m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(*i,ObjectType())));
         }
@@ -175,10 +176,10 @@ namespace
             Reference<XComponent> xComp(m_aElements[_nIndex]->second.get(),UNO_QUERY);
             ::comphelper::disposeComponent(xComp);
             m_aElements[_nIndex]->second = T();
-
+    
             ::rtl::OUString sName = m_aElements[_nIndex]->first;
             m_aElements.erase(m_aElements.begin()+_nIndex);
-            m_aNameMap.erase(sName);
+            m_aNameMap.erase(sName);	
         }
         // -----------------------------------------------------------------------------
         virtual void disposeElements()
@@ -193,7 +194,7 @@ namespace
                 }
             }
             m_aElements.clear();
-            m_aNameMap.clear();
+            m_aNameMap.clear();			
         }
         // -----------------------------------------------------------------------------
         virtual sal_Int32 findColumn( const ::rtl::OUString& columnName )
@@ -226,9 +227,9 @@ namespace
             m_aElements[_nIndex]->second = _xObject;
         }
         // -----------------------------------------------------------------------------
-        sal_Bool isCaseSensitive() const
-        {
-            return m_aNameMap.key_comp().isCaseSensitive();
+        sal_Bool isCaseSensitive() const 
+        { 
+            return m_aNameMap.key_comp().isCaseSensitive(); 
         }
         // -----------------------------------------------------------------------------
     };
@@ -278,8 +279,8 @@ Sequence< Type > SAL_CALL OCollection::getTypes() throw (RuntimeException)
     if ( m_bUseIndexOnly )
     {
         Sequence< Type > aTypes(OCollectionBase::getTypes());
-        Type* pBegin    = aTypes.getArray();
-        Type* pEnd      = pBegin + aTypes.getLength();
+        Type* pBegin	= aTypes.getArray();
+        Type* pEnd		= pBegin + aTypes.getLength();
 
         ::std::vector<Type> aOwnTypes;
         aOwnTypes.reserve(aTypes.getLength());
@@ -310,7 +311,7 @@ void OCollection::disposing(void)
     m_aRefreshListeners.disposeAndClear(EventObject(static_cast<XTypeProvider*>(this)));
 
     ::osl::MutexGuard aGuard(m_rMutex);
-
+    
     disposeElements();
 
     m_pElements->swap();
@@ -351,8 +352,8 @@ Sequence< ::rtl::OUString > SAL_CALL OCollection::getElementNames(  ) throw(Runt
 void SAL_CALL OCollection::refresh(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-
-    disposeElements();
+    
+    disposeElements();	
 
     impl_refresh();
     EventObject aEvt(static_cast<XTypeProvider*>(this));
@@ -528,7 +529,7 @@ void SAL_CALL OCollection::removeRefreshListener( const Reference< XRefreshListe
 void OCollection::insertElement(const ::rtl::OUString& _sElementName,const ObjectType& _xElement)
 {
     OSL_ENSURE(!m_pElements->exists(_sElementName),"Element already exists");
-    if ( !m_pElements->exists(_sElementName) )
+    if ( !m_pElements->exists(_sElementName) ) 
         m_pElements->insert(_sElementName,_xElement);
 }
 // -----------------------------------------------------------------------------

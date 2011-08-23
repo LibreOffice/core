@@ -57,19 +57,23 @@
  * @file
  * Tab stop object,<text:tab-stop/>
  *************************************************************************/
-#ifndef     _XFTABSTOP_HXX
-#define     _XFTABSTOP_HXX
+/**************************************************************************
+ * Change History
+ * 2004-01-11 create this file.
+ *************************************************************************/
+#ifndef		_XFTABSTOP_HXX
+#define		_XFTABSTOP_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
+#include	"xfglobal.hxx"
+#include	"xfcontent.hxx"
 
 class XFTabStop : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
-inline void XFTabStop::ToXml(IXFStream *pStrm)
+inline void	XFTabStop::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 

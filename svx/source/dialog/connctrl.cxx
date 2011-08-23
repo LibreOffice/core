@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,18 +38,26 @@
 
 #include <svx/svdpage.hxx> // SdrObjList
 
-#include "svx/connctrl.hxx"
+#include "connctrl.hxx"
 #include <svx/dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include "dlgutil.hxx"
 
+// #110094#
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 
+// #110094#
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <vcl/svapp.hxx>
 
+/*************************************************************************
+|*
+|* Ctor SvxXConnectionPreview
+|*
+*************************************************************************/
+
 SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rResId,
                             const SfxItemSet& rInAttrs ) :
-                            Control ( pParent, rResId ),
+                            Control	( pParent, rResId ),
                             rAttrs  ( rInAttrs ),
                             pEdgeObj( NULL ),
                             pObjList( NULL ),
@@ -59,44 +67,57 @@ SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rRes
     SetStyles();
 }
 
+/*************************************************************************
+|*
+|* Dtor SvxXConnectionPreview
+|*
+*************************************************************************/
+
 SvxXConnectionPreview::~SvxXConnectionPreview()
 {
     delete pObjList;
 }
 
+/*************************************************************************
+|*
+|* Dtor SvxXConnectionPreview
+|*
+*************************************************************************/
+
 void SvxXConnectionPreview::Construct()
 {
-    DBG_ASSERT( pView, "No valid view is passed on! ");
+    DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_uIntPtr nMarkCount = rMarkList.GetMarkCount();
+    ULONG nMarkCount = rMarkList.GetMarkCount();
 
     if( nMarkCount >= 1 )
     {
-        sal_Bool bFound = sal_False;
+        BOOL bFound = FALSE;
         const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
 
-        for( sal_uInt16 i = 0; i < nMarkCount && !bFound; i++ )
+        for( USHORT i = 0; i < nMarkCount && !bFound; i++ )
         {
             pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-            sal_uInt32 nInv = pObj->GetObjInventor();
-            sal_uInt16 nId = pObj->GetObjIdentifier();
+            UINT32 nInv = pObj->GetObjInventor();
+            UINT16 nId = pObj->GetObjIdentifier();
             if( nInv == SdrInventor && nId == OBJ_EDGE )
             {
-                bFound = sal_True;
+                bFound = TRUE;
                 SdrEdgeObj* pTmpEdgeObj = (SdrEdgeObj*) pObj;
                 pEdgeObj = (SdrEdgeObj*) pTmpEdgeObj->Clone();
 
-                SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection( sal_True );
-                SdrObjConnection& rConn2 = (SdrObjConnection&)pEdgeObj->GetConnection( sal_False );
+                SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection( TRUE );
+                SdrObjConnection& rConn2 = (SdrObjConnection&)pEdgeObj->GetConnection( FALSE );
 
-                rConn1 = pTmpEdgeObj->GetConnection( sal_True );
-                rConn2 = pTmpEdgeObj->GetConnection( sal_False );
+                rConn1 = pTmpEdgeObj->GetConnection( TRUE );
+                rConn2 = pTmpEdgeObj->GetConnection( FALSE );
 
-                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( sal_True );
-                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( sal_False );
+                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( TRUE );
+                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( FALSE );
 
+                // #110094#
                 // potential memory leak here (!). Create SdrObjList only when there is
                 // not yet one.
                 if(!pObjList)
@@ -108,13 +129,13 @@ void SvxXConnectionPreview::Construct()
                 {
                     SdrObject* pObj1 = pTmpObj1->Clone();
                     pObjList->InsertObject( pObj1 );
-                    pEdgeObj->ConnectToNode( sal_True, pObj1 );
+                    pEdgeObj->ConnectToNode( TRUE, pObj1 );
                 }
                 if( pTmpObj2 )
                 {
                     SdrObject* pObj2 = pTmpObj2->Clone();
                     pObjList->InsertObject( pObj2 );
-                    pEdgeObj->ConnectToNode( sal_False, pObj2 );
+                    pEdgeObj->ConnectToNode( FALSE, pObj2 );
                 }
                 pObjList->InsertObject( pEdgeObj );
             }
@@ -124,7 +145,7 @@ void SvxXConnectionPreview::Construct()
     if( !pEdgeObj )
         pEdgeObj = new SdrEdgeObj();
 
-    // Adapt size
+    // Groesse anpassen
     if( pObjList )
     {
         OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
@@ -134,16 +155,16 @@ void SvxXConnectionPreview::Construct()
         aMapMode.SetMapUnit( pOD->GetMapMode().GetMapUnit() );
         SetMapMode( aMapMode );
 
-        MapMode         aDisplayMap( aMapMode );
-        Point           aNewPos;
-        Size            aNewSize;
-        const Size      aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
-        const long      nWidth = aWinSize.Width();
-        const long      nHeight = aWinSize.Height();
+        MapMode			aDisplayMap( aMapMode );
+        Point			aNewPos;
+        Size			aNewSize;
+        const Size		aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
+        const long		nWidth = aWinSize.Width();
+        const long		nHeight = aWinSize.Height();
         double          fRectWH = (double) aRect.GetWidth() / aRect.GetHeight();
         double          fWinWH = (double) nWidth / nHeight;
 
-        // Adapt bitmap to Thumb size (not here!)
+        // Bitmap an Thumbgroesse anpassen (hier nicht!)
         if ( fRectWH < fWinWH)
         {
             aNewSize.Width() = (long) ( (double) nHeight * fRectWH );
@@ -159,18 +180,18 @@ void SvxXConnectionPreview::Construct()
         Fraction aFrac2( aWinSize.Height(), aRect.GetHeight() );
         Fraction aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
 
-        // Implement MapMode
+        // MapMode umsetzen
         aDisplayMap.SetScaleX( aMinFrac );
         aDisplayMap.SetScaleY( aMinFrac );
 
-        // Centering
+        // Zentrierung
         aNewPos.X() = ( nWidth - aNewSize.Width() )  >> 1;
         aNewPos.Y() = ( nHeight - aNewSize.Height() ) >> 1;
 
         aDisplayMap.SetOrigin( LogicToLogic( aNewPos, aMapMode, aDisplayMap ) );
         SetMapMode( aDisplayMap );
 
-        // Origin
+        // Ursprung
         aNewPos = aDisplayMap.GetOrigin();
         aNewPos -= Point( aRect.TopLeft().X(), aRect.TopLeft().Y() );
         aDisplayMap.SetOrigin( aNewPos );
@@ -180,8 +201,52 @@ void SvxXConnectionPreview::Construct()
         Point aPos;
         MouseEvent aMEvt( aPos, 1, 0, MOUSE_RIGHT );
         MouseButtonDown( aMEvt );
+        /*
+        Point aPt( -aRect.TopLeft().X(), -aRect.TopLeft().Y() );
+        aMapMode.SetOrigin( aPt );
+
+        // Skalierung
+        Size aSize = GetOutputSize();
+        Fraction aFrac1( aSize.Width(), aRect.GetWidth() );
+        Fraction aFrac2( aSize.Height(), aRect.GetHeight() );
+        Fraction aMaxFrac( aFrac1 > aFrac2 ? aFrac1 : aFrac2 );
+        Fraction aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
+        BOOL bChange = (BOOL) ( (double)aMinFrac > 1.0 );
+        aMapMode.SetScaleX( aMinFrac );
+        aMapMode.SetScaleY( aMinFrac );
+
+        // zentrieren
+        long nXXL = aSize.Width() > aRect.GetWidth() ? aSize.Width() : aRect.GetWidth();
+        long nXS = aSize.Width() <= aRect.GetWidth() ? aSize.Width() : aRect.GetWidth();
+        if( bChange )
+        {
+            long nTmp = nXXL; nXXL = nXS; nXS = nTmp;
+        }
+        long nX = (long) ( (double)aMinFrac * (double)nXXL );
+        nX = (long) ( (double)labs( nXS - nX ) / (double)aMinFrac / 2.0 );
+
+        long nYXL = aSize.Height() > aRect.GetHeight() ? aSize.Height() : aRect.GetHeight();
+        long nYS = aSize.Height() <= aRect.GetHeight() ? aSize.Height() : aRect.GetHeight();
+        if( bChange )
+        {
+            long nTmp = nXXL; nXXL = nXS; nXS = nTmp;
+        }
+        long nY = (long) ( (double)aMinFrac * (double)nYXL );
+        nY = (long) ( (double)labs( nYS - nY ) / (double)aMinFrac / 2.0 );
+
+        aPt += Point( nX, nY );
+        aMapMode.SetOrigin( aPt );
+
+        SetMapMode( aMapMode );
+        */
     }
 }
+
+/*************************************************************************
+|*
+|* SvxXConnectionPreview: Paint()
+|*
+*************************************************************************/
 
 void SvxXConnectionPreview::Paint( const Rectangle& )
 {
@@ -200,7 +265,7 @@ void SvxXConnectionPreview::Paint( const Rectangle& )
         for(sal_uInt32 a(0L); a < pObjList->GetObjCount(); a++)
         {
             SdrObject* pObject = pObjList->GetObj(a);
-            DBG_ASSERT(pObject,
+            DBG_ASSERT(pObject, 
                 "SvxXConnectionPreview::Paint: Corrupt ObjectList (!)");
             aObjectVector.push_back(pObject);
         }
@@ -213,17 +278,27 @@ void SvxXConnectionPreview::Paint( const Rectangle& )
     }
 }
 
+/*************************************************************************
+|*
+|* SvxXConnectionPreview: SetAttributes()
+|*
+*************************************************************************/
+
 void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 {
+    //pEdgeObj->SetItemSetAndBroadcast(rInAttrs);
     pEdgeObj->SetMergedItemSetAndBroadcast(rInAttrs);
 
     Invalidate();
 }
 
+/*************************************************************************
+|*
+|* Ermittelt die Anzahl der Linienversaetze anhand des Preview-Objektes
+|*
+*************************************************************************/
 
-// Get number of lines which are offset based on the preview object
-
-sal_uInt16 SvxXConnectionPreview::GetLineDeltaAnz()
+USHORT SvxXConnectionPreview::GetLineDeltaAnz()
 {
     const SfxItemSet& rSet = pEdgeObj->GetMergedItemSet();
     sal_uInt16 nCount(0);
@@ -234,11 +309,17 @@ sal_uInt16 SvxXConnectionPreview::GetLineDeltaAnz()
     return nCount;
 }
 
+/*************************************************************************
+|*
+|* SvxXConnectionPreview: MouseButtonDown()
+|*
+*************************************************************************/
+
 void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    sal_Bool bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
-    sal_Bool bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
-    sal_Bool bCtrl    = rMEvt.IsMod1();
+    BOOL bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
+    BOOL bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
+    BOOL bCtrl	  = rMEvt.IsMod1();
 
     if( bZoomIn || bZoomOut )
     {

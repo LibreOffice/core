@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,9 @@
 
 
 // INCLUDE ---------------------------------------------------------------
-#include "xmloff/VisAreaContext.hxx"
+#include "VisAreaContext.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -47,7 +47,7 @@ using namespace ::xmloff::token;
 //------------------------------------------------------------------
 
 XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
+                                              USHORT nPrfx,
                                                    const rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                               Rectangle& rRect, const MapUnit aMapUnit ) :
@@ -63,7 +63,7 @@ XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
 }
 
 XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
-                                         sal_uInt16 nPrfx,
+                                         USHORT nPrfx,
                                                    const rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ::com::sun::star::awt::Rectangle& rRect, const sal_Int16 nMeasureUnit ) :
@@ -89,7 +89,7 @@ void XMLVisAreaContext::process( const uno::Reference< xml::sax::XAttributeList>
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
+        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
@@ -119,7 +119,7 @@ void XMLVisAreaContext::process( const uno::Reference< xml::sax::XAttributeList>
     }
 }
 
-SvXMLImportContext *XMLVisAreaContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *XMLVisAreaContext::CreateChildContext( USHORT nPrefix,
                                      const rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& )

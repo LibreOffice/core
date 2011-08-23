@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,9 +92,9 @@ SwPosColumn fnColumnStart = &GetColumnStt;
 SwPosColumn fnColumnEnd = &GetColumnEnd;
 
 
-sal_Bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
+BOOL SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     if( !pTblCrsr )
     {
         SwLayoutFrm* pLayFrm = GetCurrFrm()->GetUpper();
@@ -107,7 +107,7 @@ sal_Bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol
                 SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
                 SwCrsrSaveState aSaveState( *pCurCrsr );
 
-                pCnt->Calc();                   // ???
+                pCnt->Calc();					// ???
 
                 Point aPt( pCnt->Frm().Pos() + pCnt->Prt().Pos() );
                 if( fnPosCol == GetColumnEnd )
@@ -118,11 +118,11 @@ sal_Bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol
 
                 pCnt->GetCrsrOfst( pCurCrsr->GetPoint(), aPt );
 
-                if( !pCurCrsr->IsInProtectTable( sal_True ) &&
+                if( !pCurCrsr->IsInProtectTable( TRUE ) &&
                     !pCurCrsr->IsSelOvr() )
                 {
                     UpdateCrsr();
-                    bRet = sal_True;
+                    bRet = TRUE;
                 }
             }
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,36 +30,14 @@
 
 #include "vcl/arrange.hxx"
 #include "vcl/edit.hxx"
-#include "vcl/svdata.hxx"
-#include "vcl/svapp.hxx"
-
-#include "com/sun/star/beans/PropertyValue.hpp"
-#include "com/sun/star/awt/Rectangle.hpp"
 
 #include "osl/diagnose.h"
 
 using namespace vcl;
-using namespace com::sun::star;
 
 // ----------------------------------------
 // vcl::WindowArranger
 //-----------------------------------------
-
-long WindowArranger::getDefaultBorder()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    long nResult = pSVData->maAppData.mnDefaultLayoutBorder;
-    if( nResult < 0 )
-    {
-        OutputDevice* pDefDev = Application::GetDefaultDevice();
-        if( pDefDev )
-        {
-            Size aBorder( pDefDev->LogicToPixel( Size( 3, 3 ), MapMode( MAP_APPFONT ) ) );
-            nResult = pSVData->maAppData.mnDefaultLayoutBorder = aBorder.Height();
-        }
-    }
-    return nResult > 0 ? nResult : 0;
-}
 
 WindowArranger::~WindowArranger()
 {}
@@ -76,7 +54,7 @@ void WindowArranger::setParent( WindowArranger* i_pParent )
 void WindowArranger::setParentWindow( Window* i_pNewParent )
 {
     m_pParentWindow = i_pNewParent;
-
+    
     size_t nEle = countElements();
     for( size_t i = 0; i < nEle; i++ )
     {
@@ -179,28 +157,18 @@ Size WindowArranger::Element::getOptimalSize( WindowSizeType i_eType ) const
     Size aResult;
     if( ! m_bHidden )
     {
-        bool bVisible = false;
         if( m_pElement && m_pElement->IsVisible() )
-        {
             aResult = m_pElement->GetOptimalSize( i_eType );
-            bVisible = true;
-        }
-        else if( m_pChild && m_pChild->isVisible() )
-        {
+        else if( m_pChild )
             aResult = m_pChild->getOptimalSize( i_eType );
-            bVisible = true;
-        }
-        if( bVisible )
-        {
-            if( aResult.Width() < m_aMinSize.Width() )
-                aResult.Width() = m_aMinSize.Width();
-            if( aResult.Height() < m_aMinSize.Height() )
-                aResult.Height() = m_aMinSize.Height();
-            aResult.Width() += getBorderValue( m_nLeftBorder ) + getBorderValue( m_nRightBorder );
-            aResult.Height() += getBorderValue( m_nTopBorder ) + getBorderValue( m_nBottomBorder );
-        }
+        if( aResult.Width() < m_aMinSize.Width() )
+            aResult.Width() = m_aMinSize.Width();
+        if( aResult.Height() < m_aMinSize.Height() )
+            aResult.Height() = m_aMinSize.Height();
+        aResult.Width() += m_nLeftBorder + m_nRightBorder;
+        aResult.Height() += m_nTopBorder + m_nBottomBorder;
     }
-
+    
     return aResult;
 }
 
@@ -208,73 +176,15 @@ void WindowArranger::Element::setPosSize( const Point& i_rPos, const Size& i_rSi
 {
     Point aPoint( i_rPos );
     Size aSize( i_rSize );
-    aPoint.X() += getBorderValue( m_nLeftBorder );
-    aPoint.Y() += getBorderValue( m_nTopBorder );
-    aSize.Width() -= getBorderValue( m_nLeftBorder ) + getBorderValue( m_nRightBorder );
-    aSize.Height() -= getBorderValue( m_nTopBorder ) + getBorderValue( m_nBottomBorder );
+    aPoint.X() += m_nLeftBorder;
+    aPoint.Y() += m_nTopBorder;
+    aSize.Width() -= m_nLeftBorder + m_nRightBorder;
+    aSize.Height() -= m_nTopBorder + m_nBottomBorder;
     if( m_pElement )
         m_pElement->SetPosSizePixel( aPoint, aSize );
     else if( m_pChild )
         m_pChild->setManagedArea( Rectangle( aPoint, aSize ) );
 }
-
-uno::Sequence< beans::PropertyValue > WindowArranger::getProperties() const
-{
-    uno::Sequence< beans::PropertyValue > aRet( 3 );
-    aRet[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OuterBorder" ) );
-    aRet[0].Value = uno::makeAny( sal_Int32( getBorderValue( m_nOuterBorder ) ) );
-    aRet[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ManagedArea" ) );
-    awt::Rectangle aArea( m_aManagedArea.getX(), m_aManagedArea.getY(), m_aManagedArea.getWidth(), m_aManagedArea.getHeight() );
-    aRet[1].Value = uno::makeAny( aArea );
-    aRet[2].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) );
-    aRet[2].Value = uno::makeAny( sal_Bool( isVisible() ) );
-    return aRet;
-}
-
-void WindowArranger::setProperties( const uno::Sequence< beans::PropertyValue >& i_rProps )
-{
-    const beans::PropertyValue* pProps = i_rProps.getConstArray();
-    bool bResize = false;
-    for( sal_Int32 i = 0; i < i_rProps.getLength(); i++ )
-    {
-        if( pProps[i].Name.equalsAscii( "OuterBorder" ) )
-        {
-            sal_Int32 nVal = 0;
-            if( pProps[i].Value >>= nVal )
-            {
-                if( getBorderValue( m_nOuterBorder ) != nVal )
-                {
-                    m_nOuterBorder = nVal;
-                    bResize = true;
-                }
-            }
-        }
-        else if( pProps[i].Name.equalsAscii( "ManagedArea" ) )
-        {
-            awt::Rectangle aArea( 0, 0, 0, 0 );
-            if( pProps[i].Value >>= aArea )
-            {
-                m_aManagedArea.setX( aArea.X );
-                m_aManagedArea.setY( aArea.Y );
-                m_aManagedArea.setWidth( aArea.Width );
-                m_aManagedArea.setHeight( aArea.Height );
-                bResize = true;
-            }
-        }
-        else if( pProps[i].Name.equalsAscii( "Visible" ) )
-        {
-            sal_Bool bVal = sal_False;
-            if( pProps[i].Value >>= bVal )
-            {
-                show( bVal, false );
-                bResize = true;
-            }
-        }
-    }
-    if( bResize )
-        resize();
-}
-
 
 // ----------------------------------------
 // vcl::RowOrColumn
@@ -292,7 +202,6 @@ RowOrColumn::~RowOrColumn()
 Size RowOrColumn::getOptimalSize( WindowSizeType i_eType ) const
 {
     Size aRet( 0, 0 );
-    long nDistance = getBorderValue( m_nBorderWidth );
     for( std::vector< WindowArranger::Element >::const_iterator it = m_aElements.begin();
          it != m_aElements.end(); ++it )
     {
@@ -303,7 +212,7 @@ Size RowOrColumn::getOptimalSize( WindowSizeType i_eType ) const
             if( m_bColumn )
             {
                 // add the distance between elements
-                aRet.Height() += nDistance;
+                aRet.Height() += m_nBorderWidth;
                 // check if the width needs adjustment
                 if( aRet.Width() < aElementSize.Width() )
                     aRet.Width() = aElementSize.Width();
@@ -312,7 +221,7 @@ Size RowOrColumn::getOptimalSize( WindowSizeType i_eType ) const
             else
             {
                 // add the distance between elements
-                aRet.Width() += nDistance;
+                aRet.Width() += m_nBorderWidth;
                 // check if the height needs adjustment
                 if( aRet.Height() < aElementSize.Height() )
                     aRet.Height() = aElementSize.Height();
@@ -325,14 +234,13 @@ Size RowOrColumn::getOptimalSize( WindowSizeType i_eType ) const
     {
         // subtract the border for the first element
         if( m_bColumn )
-            aRet.Height() -= nDistance;
+            aRet.Height() -= m_nBorderWidth;
         else
-            aRet.Width() -= nDistance;
-
+            aRet.Width() -= m_nBorderWidth;
+    
         // add the outer border
-        long nOuterBorder = getBorderValue( m_nOuterBorder );
-        aRet.Width() += 2*nOuterBorder;
-        aRet.Height() += 2*nOuterBorder;
+        aRet.Width() += 2*m_nOuterBorder;
+        aRet.Height() += 2*m_nOuterBorder;
     }
 
     return aRet;
@@ -360,7 +268,7 @@ void RowOrColumn::distributeRowWidth( std::vector<Size>& io_rSizes, long /*i_nUs
                     aIndices.push_back( i );
             }
         }
-
+        
         // distribute extra space evenly among collected elements
         nElements = aIndices.size();
         if( nElements > 0 )
@@ -400,7 +308,7 @@ void RowOrColumn::distributeColumnHeight( std::vector<Size>& io_rSizes, long /*i
                     aIndices.push_back( i );
             }
         }
-
+        
         // distribute extra space evenly among collected elements
         nElements = aIndices.size();
         if( nElements > 0 )
@@ -437,9 +345,7 @@ void RowOrColumn::resize()
     size_t nElements = m_aElements.size();
     // get all element sizes for sizing
     std::vector<Size> aElementSizes( nElements );
-    long nDistance = getBorderValue( m_nBorderWidth );
-    long nOuterBorder = getBorderValue( m_nOuterBorder );
-    long nUsedWidth = 2*nOuterBorder - (nElements ? nDistance : 0);
+    long nUsedWidth = 2*m_nOuterBorder - (nElements ? m_nBorderWidth : 0);
     for( size_t i = 0; i < nElements; i++ )
     {
         if( m_aElements[i].isVisible() )
@@ -447,13 +353,13 @@ void RowOrColumn::resize()
             aElementSizes[i] = m_aElements[i].getOptimalSize( eType );
             if( m_bColumn )
             {
-                aElementSizes[i].Width() = m_aManagedArea.GetWidth() - 2 * nOuterBorder;
-                nUsedWidth += aElementSizes[i].Height() + nDistance;
+                aElementSizes[i].Width() = m_aManagedArea.GetWidth() - 2* m_nOuterBorder;
+                nUsedWidth += aElementSizes[i].Height() + m_nBorderWidth;
             }
             else
             {
-                aElementSizes[i].Height() = m_aManagedArea.GetHeight() - 2 * nOuterBorder;
-                nUsedWidth += aElementSizes[i].Width() + nDistance;
+                aElementSizes[i].Height() = m_aManagedArea.GetHeight() - 2* m_nOuterBorder;
+                nUsedWidth += aElementSizes[i].Width() + m_nBorderWidth;
             }
         }
     }
@@ -470,8 +376,8 @@ void RowOrColumn::resize()
     // get starting position
     Point aElementPos( m_aManagedArea.TopLeft() );
     // outer border
-    aElementPos.X() += nOuterBorder;
-    aElementPos.Y() += nOuterBorder;
+    aElementPos.X() += m_nOuterBorder;
+    aElementPos.Y() += m_nOuterBorder;
 
     // position managed windows
     for( size_t i = 0; i < nElements; i++ )
@@ -481,27 +387,27 @@ void RowOrColumn::resize()
         {
             m_aElements[i].setPosSize( aElementPos, aElementSizes[i] );
             if( m_bColumn )
-                aElementPos.Y() += nDistance + aElementSizes[i].Height();
+                aElementPos.Y() += m_nBorderWidth + aElementSizes[i].Height();
             else
-                aElementPos.X() += nDistance + aElementSizes[i].Width();
+                aElementPos.X() += m_nBorderWidth + aElementSizes[i].Width();
         }
     }
 }
 
-size_t RowOrColumn::addWindow( Window* i_pWindow, sal_Int32 i_nExpandPrio, const Size& i_rMinSize, size_t i_nIndex )
+size_t RowOrColumn::addWindow( Window* i_pWindow, sal_Int32 i_nExpandPrio, size_t i_nIndex )
 {
     size_t nIndex = i_nIndex;
     if( i_nIndex >= m_aElements.size() )
     {
         nIndex = m_aElements.size();
-        m_aElements.push_back( WindowArranger::Element( i_pWindow, boost::shared_ptr<WindowArranger>(), i_nExpandPrio, i_rMinSize ) );
+        m_aElements.push_back( WindowArranger::Element( i_pWindow, boost::shared_ptr<WindowArranger>(), i_nExpandPrio ) );
     }
     else
     {
         std::vector< WindowArranger::Element >::iterator it = m_aElements.begin();
         while( i_nIndex-- )
             ++it;
-        m_aElements.insert( it, WindowArranger::Element( i_pWindow, boost::shared_ptr<WindowArranger>(), i_nExpandPrio, i_rMinSize ) );
+        m_aElements.insert( it, WindowArranger::Element( i_pWindow, boost::shared_ptr<WindowArranger>(), i_nExpandPrio ) );
     }
     return nIndex;
 }
@@ -574,14 +480,14 @@ Size LabeledElement::getOptimalSize( WindowSizeType i_eType ) const
         if( m_nLabelColumnWidth != 0 )
             aRet.Width() = m_nLabelColumnWidth;
         else
-            aRet.Width() += getBorderValue( m_nDistance );
+            aRet.Width() += m_nDistance;
     }
     Size aElementSize( m_aElement.getOptimalSize( i_eType ) );
     aRet.Width() += aElementSize.Width();
     if( aElementSize.Height() > aRet.Height() )
         aRet.Height() = aElementSize.Height();
     if( aRet.Height() != 0 )
-        aRet.Height() += 2 * getBorderValue( m_nOuterBorder );
+        aRet.Height() += 2*m_nOuterBorder;
 
     return aRet;
 }
@@ -590,26 +496,24 @@ void LabeledElement::resize()
 {
     Size aLabelSize( m_aLabel.getOptimalSize( WINDOWSIZE_MINIMUM ) );
     Size aElementSize( m_aElement.getOptimalSize( WINDOWSIZE_PREFERRED ) );
-    long nDistance = getBorderValue( m_nDistance );
-    long nOuterBorder = getBorderValue( m_nOuterBorder );
-    if( nDistance + aLabelSize.Width() + aElementSize.Width() > m_aManagedArea.GetWidth() )
+    if( m_nDistance + aLabelSize.Width() + aElementSize.Width() > m_aManagedArea.GetWidth() )
         aElementSize = m_aElement.getOptimalSize( WINDOWSIZE_MINIMUM );
-
+    
     // align label and element vertically in LabeledElement
-    long nYOff = (m_aManagedArea.GetHeight() - 2*nOuterBorder - aLabelSize.Height()) / 2;
+    long nYOff = (m_aManagedArea.GetHeight() - 2*m_nOuterBorder - aLabelSize.Height()) / 2;
     Point aPos( m_aManagedArea.Left(),
-                m_aManagedArea.Top() + nOuterBorder + nYOff );
+                m_aManagedArea.Top() + m_nOuterBorder + nYOff );
     Size aSize( aLabelSize );
     if( m_nLabelColumnWidth != 0 )
         aSize.Width() = m_nLabelColumnWidth;
     m_aLabel.setPosSize( aPos, aSize );
-
-    aPos.X() += aSize.Width() + nDistance;
-    nYOff = (m_aManagedArea.GetHeight() - 2*nOuterBorder - aElementSize.Height()) / 2;
-    aPos.Y() = m_aManagedArea.Top() + nOuterBorder + nYOff;
+    
+    aPos.X() += aSize.Width() + m_nDistance;
+    nYOff = (m_aManagedArea.GetHeight() - 2*m_nOuterBorder - aElementSize.Height()) / 2;
+    aPos.Y() = m_aManagedArea.Top() + m_nOuterBorder + nYOff;
     aSize.Width() = aElementSize.Width();
-    aSize.Height() = m_aManagedArea.GetHeight() - 2*nOuterBorder;
-
+    aSize.Height() = m_aManagedArea.GetHeight() - 2*m_nOuterBorder;
+    
     // label style
     // 0: position left and right
     // 1: keep the element close to label and grow it
@@ -675,24 +579,20 @@ long LabelColumn::getLabelWidth() const
                 if( pLW )
                 {
                     Size aLabSize( pLW->GetOptimalSize( WINDOWSIZE_MINIMUM ) );
-                    long nLB = 0;
-                    pLabel->getBorders(0, &nLB);
-                    aLabSize.Width() += getBorderValue( nLB );
                     if( aLabSize.Width() > nWidth )
                         nWidth = aLabSize.Width();
                 }
             }
         }
     }
-    return nWidth + getBorderValue( getBorderWidth() );
+    return nWidth + getBorderWidth();
 }
 
 Size LabelColumn::getOptimalSize( WindowSizeType i_eType ) const
 {
     long nWidth = getLabelWidth();
-    long nOuterBorder = getBorderValue( m_nOuterBorder );
     Size aColumnSize;
-
+    
     // every child is a LabeledElement
     size_t nEle = countElements();
     for( size_t i = 0; i < nEle; i++ )
@@ -723,19 +623,19 @@ Size LabelColumn::getOptimalSize( WindowSizeType i_eType ) const
         }
         if( aElementSize.Width() )
         {
-            aElementSize.Width() += 2*nOuterBorder;
+            aElementSize.Width() += 2*m_nOuterBorder;
             if( aElementSize.Width() > aColumnSize.Width() )
                 aColumnSize.Width() = aElementSize.Width();
         }
         if( aElementSize.Height() )
         {
-            aColumnSize.Height() += getBorderValue( getBorderWidth() ) + aElementSize.Height();
+            aColumnSize.Height() += getBorderWidth() + aElementSize.Height(); 
         }
     }
     if( nEle > 0 && aColumnSize.Height() )
     {
-        aColumnSize.Height() -= getBorderValue( getBorderWidth() ); // for the first element
-        aColumnSize.Height() += 2*nOuterBorder;
+        aColumnSize.Height() -= getBorderWidth(); // for the first element
+        aColumnSize.Height() += 2*m_nOuterBorder;
     }
     return aColumnSize;
 }
@@ -768,13 +668,12 @@ size_t LabelColumn::addRow( Window* i_pLabel, boost::shared_ptr<WindowArranger> 
     return nIndex;
 }
 
-size_t LabelColumn::addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent, const Size& i_rElementMinSize )
+size_t LabelColumn::addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent )
 {
     boost::shared_ptr< LabeledElement > xLabel( new LabeledElement( this, 1 ) );
     xLabel->setLabel( i_pLabel );
     xLabel->setBorders( 0, i_nIndent, 0, 0, 0 );
     xLabel->setElement( i_pElement );
-    xLabel->setMinimumSize( 1, i_rElementMinSize );
     size_t nIndex = addChild( xLabel );
     resize();
     return nIndex;
@@ -792,23 +691,19 @@ Indenter::~Indenter()
 Size Indenter::getOptimalSize( WindowSizeType i_eType ) const
 {
     Size aSize( m_aElement.getOptimalSize( i_eType ) );
-    long nOuterBorder = getBorderValue( m_nOuterBorder );
-    long nIndent = getBorderValue( m_nIndent );
-    aSize.Width()  += 2*nOuterBorder + nIndent;
-    aSize.Height() += 2*nOuterBorder;
+    aSize.Width()  += 2*m_nOuterBorder + m_nIndent;
+    aSize.Height() += 2*m_nOuterBorder;
     return aSize;
 }
 
 void Indenter::resize()
 {
-    long nOuterBorder = getBorderValue( m_nOuterBorder );
-    long nIndent = getBorderValue( m_nIndent );
     Point aPt( m_aManagedArea.TopLeft() );
-    aPt.X() += nOuterBorder + nIndent;
-    aPt.Y() += nOuterBorder;
+    aPt.X() += m_nOuterBorder + m_nIndent;
+    aPt.Y() += m_nOuterBorder;
     Size aSz( m_aManagedArea.GetSize() );
-    aSz.Width()  -= 2*nOuterBorder + nIndent;
-    aSz.Height() -= 2*nOuterBorder;
+    aSz.Width()  -= 2*m_nOuterBorder + m_nIndent;
+    aSz.Height() -= 2*m_nOuterBorder;
     m_aElement.setPosSize( aPt, aSz );
 }
 
@@ -834,14 +729,10 @@ MatrixArranger::~MatrixArranger()
 {
 }
 
-Size MatrixArranger::getOptimalSize( WindowSizeType i_eType,
-                                     std::vector<long>& o_rColumnWidths, std::vector<long>& o_rRowHeights,
-                                     std::vector<sal_Int32>& o_rColumnPrio, std::vector<sal_Int32>& o_rRowPrio
-                                    ) const
+Size MatrixArranger::getOptimalSize( WindowSizeType i_eType, std::vector<long>& o_rColumnWidths, std::vector<long>& o_rRowHeights ) const
 {
-    long nOuterBorder = getBorderValue( m_nOuterBorder );
-    Size aMatrixSize( 2*nOuterBorder, 2*nOuterBorder );
-
+    Size aMatrixSize( 2*m_nOuterBorder, 2*m_nOuterBorder );
+    
     // first find out the current number of rows and columns
     sal_uInt32 nRows = 0, nColumns = 0;
     for( std::vector< MatrixElement >::const_iterator it = m_aElements.begin();
@@ -852,13 +743,11 @@ Size MatrixArranger::getOptimalSize( WindowSizeType i_eType,
         if( it->m_nY >= nRows )
             nRows = it->m_nY+1;
     }
-
+    
     // now allocate row and column depth vectors
     o_rColumnWidths = std::vector< long >( nColumns, 0 );
     o_rRowHeights   = std::vector< long >( nRows, 0 );
-    o_rColumnPrio   = std::vector< sal_Int32 >( nColumns, 0 );
-    o_rRowPrio      = std::vector< sal_Int32 >( nRows, 0 );
-
+    
     // get sizes an allocate them into rows/columns
     for( std::vector< MatrixElement >::const_iterator it = m_aElements.begin();
             it != m_aElements.end(); ++it )
@@ -868,120 +757,61 @@ Size MatrixArranger::getOptimalSize( WindowSizeType i_eType,
             o_rColumnWidths[ it->m_nX ] = aSize.Width();
         if( aSize.Height() > o_rRowHeights[ it->m_nY ] )
             o_rRowHeights[ it->m_nY ] = aSize.Height();
-        if( it->m_nExpandPriority > o_rColumnPrio[ it->m_nX ] )
-            o_rColumnPrio[ it->m_nX ] = it->m_nExpandPriority;
-        if( it->m_nExpandPriority > o_rRowPrio[ it->m_nY ] )
-            o_rRowPrio[ it->m_nY ] = it->m_nExpandPriority;
     }
-
+    
     // add up sizes
-    long nDistanceX = getBorderValue( m_nBorderX );
-    long nDistanceY = getBorderValue( m_nBorderY );
     for( sal_uInt32 i = 0; i < nColumns; i++ )
-        aMatrixSize.Width() += o_rColumnWidths[i] + nDistanceX;
+        aMatrixSize.Width() += o_rColumnWidths[i] + m_nBorderX;
     if( nColumns > 0 )
-        aMatrixSize.Width() -= nDistanceX;
-
+        aMatrixSize.Width() -= m_nBorderX;
+    
     for( sal_uInt32 i = 0; i < nRows; i++ )
-        aMatrixSize.Height() += o_rRowHeights[i] + nDistanceY;
+        aMatrixSize.Height() += o_rRowHeights[i] + m_nBorderY;
     if( nRows > 0 )
-        aMatrixSize.Height() -= nDistanceY;
-
+        aMatrixSize.Height() -= m_nBorderY;
+    
     return aMatrixSize;
 }
 
 Size MatrixArranger::getOptimalSize( WindowSizeType i_eType ) const
 {
     std::vector<long> aColumnWidths, aRowHeights;
-    std::vector<sal_Int32> aColumnPrio, aRowPrio;
-    return getOptimalSize( i_eType, aColumnWidths, aRowHeights, aColumnPrio, aRowPrio );
+    return getOptimalSize( i_eType, aColumnWidths, aRowHeights );
 }
-
-void MatrixArranger::distributeExtraSize( std::vector<long>& io_rSizes, const std::vector<sal_Int32>& i_rPrios, long i_nExtraWidth )
-{
-    if( ! io_rSizes.empty()  && io_rSizes.size() == i_rPrios.size() ) // sanity check
-    {
-        // find all elements with the highest expand priority
-        size_t nElements = io_rSizes.size();
-        std::vector< size_t > aIndices;
-        sal_Int32 nHighPrio = 0;
-        for( size_t i = 0; i < nElements; i++ )
-        {
-            sal_Int32 nCurPrio = i_rPrios[ i ];
-            if( nCurPrio > nHighPrio )
-            {
-                aIndices.clear();
-                nHighPrio = nCurPrio;
-            }
-            if( nCurPrio == nHighPrio )
-                aIndices.push_back( i );
-        }
-
-        // distribute extra space evenly among collected elements
-        nElements = aIndices.size();
-        if( nElements > 0 )
-        {
-            long nDelta = i_nExtraWidth / nElements;
-            for( size_t i = 0; i < nElements; i++ )
-            {
-                io_rSizes[ aIndices[i] ] += nDelta;
-                i_nExtraWidth -= nDelta;
-            }
-            // add the last pixels to the last row element
-            if( i_nExtraWidth > 0 && nElements > 0 )
-                io_rSizes[aIndices.back()] += i_nExtraWidth;
-        }
-    }
-}
-
 
 void MatrixArranger::resize()
 {
     // assure that we have at least one row and column
     if( m_aElements.empty() )
         return;
-
+    
     // check if we can get optimal size, else fallback to minimal size
     std::vector<long> aColumnWidths, aRowHeights;
-    std::vector<sal_Int32> aColumnPrio, aRowPrio;
-    Size aOptSize( getOptimalSize( WINDOWSIZE_PREFERRED, aColumnWidths, aRowHeights, aColumnPrio, aRowPrio ) );
+    Size aOptSize( getOptimalSize( WINDOWSIZE_PREFERRED, aColumnWidths, aRowHeights ) );
     if( aOptSize.Height() > m_aManagedArea.GetHeight() ||
         aOptSize.Width() > m_aManagedArea.GetWidth() )
     {
         std::vector<long> aMinColumnWidths, aMinRowHeights;
-        getOptimalSize( WINDOWSIZE_MINIMUM, aMinColumnWidths, aMinRowHeights, aColumnPrio, aRowPrio );
+        getOptimalSize( WINDOWSIZE_MINIMUM, aMinColumnWidths, aMinRowHeights );
         if( aOptSize.Height() > m_aManagedArea.GetHeight() )
             aRowHeights = aMinRowHeights;
         if( aOptSize.Width() > m_aManagedArea.GetWidth() )
             aColumnWidths = aMinColumnWidths;
     }
-
-    // distribute extra space available
-    long nExtraSize = m_aManagedArea.GetWidth();
-    for( size_t i = 0; i < aColumnWidths.size(); ++i )
-        nExtraSize -= aColumnWidths[i] + m_nBorderX;
-    if( nExtraSize > 0 )
-        distributeExtraSize( aColumnWidths, aColumnPrio, nExtraSize );
-    nExtraSize =  m_aManagedArea.GetHeight();
-    for( size_t i = 0; i < aRowHeights.size(); ++i )
-        nExtraSize -= aRowHeights[i] + m_nBorderY;
-    if( nExtraSize > 0 )
-        distributeExtraSize( aRowHeights, aRowPrio, nExtraSize );
-
+    
+    // FIXME: distribute extra space available
+    
     // prepare offsets
-    long nDistanceX = getBorderValue( m_nBorderX );
-    long nDistanceY = getBorderValue( m_nBorderY );
-    long nOuterBorder = getBorderValue( m_nOuterBorder );
     std::vector<long> aColumnX( aColumnWidths.size() );
-    aColumnX[0] = m_aManagedArea.Left() + nOuterBorder;
+    aColumnX[0] = m_aManagedArea.Left() + m_nOuterBorder;
     for( size_t i = 1; i < aColumnX.size(); i++ )
-        aColumnX[i] = aColumnX[i-1] + aColumnWidths[i-1] + nDistanceX;
-
+        aColumnX[i] = aColumnX[i-1] + aColumnWidths[i-1] + m_nBorderX;
+    
     std::vector<long> aRowY( aRowHeights.size() );
-    aRowY[0] = m_aManagedArea.Top() + nOuterBorder;
+    aRowY[0] = m_aManagedArea.Top() + m_nOuterBorder;
     for( size_t i = 1; i < aRowY.size(); i++ )
-        aRowY[i] = aRowY[i-1] + aRowHeights[i-1] + nDistanceY;
-
+        aRowY[i] = aRowY[i-1] + aRowHeights[i-1] + m_nBorderY;
+    
     // now iterate over the elements and assign their positions
     for( std::vector< MatrixElement >::iterator it = m_aElements.begin();
          it != m_aElements.end(); ++it )
@@ -992,7 +822,7 @@ void MatrixArranger::resize()
     }
 }
 
-size_t MatrixArranger::addWindow( Window* i_pWindow, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio, const Size& i_rMinSize )
+size_t MatrixArranger::addWindow( Window* i_pWindow, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio )
 {
     sal_uInt64 nMapValue = getMap( i_nX, i_nY );
     std::map< sal_uInt64, size_t >::const_iterator it = m_aMatrixMap.find( nMapValue );
@@ -1000,7 +830,7 @@ size_t MatrixArranger::addWindow( Window* i_pWindow, sal_uInt32 i_nX, sal_uInt32
     if( it == m_aMatrixMap.end() )
     {
         m_aMatrixMap[ nMapValue ] = nIndex = m_aElements.size();
-        m_aElements.push_back( MatrixElement( i_pWindow, i_nX, i_nY, boost::shared_ptr<WindowArranger>(), i_nExpandPrio, i_rMinSize ) );
+        m_aElements.push_back( MatrixElement( i_pWindow, i_nX, i_nY, boost::shared_ptr<WindowArranger>(), i_nExpandPrio ) );
     }
     else
     {
@@ -1008,7 +838,6 @@ size_t MatrixArranger::addWindow( Window* i_pWindow, sal_uInt32 i_nX, sal_uInt32
         rEle.m_pElement = i_pWindow;
         rEle.m_pChild.reset();
         rEle.m_nExpandPriority = i_nExpandPrio;
-        rEle.m_aMinSize = i_rMinSize;
         rEle.m_nX = i_nX;
         rEle.m_nY = i_nY;
         nIndex = it->second;

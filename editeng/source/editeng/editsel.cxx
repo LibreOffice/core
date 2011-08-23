@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,67 +35,69 @@
 #include <impedit.hxx>
 #include <editeng/editview.hxx>
 
-//  ----------------------------------------------------------------------
-//  class EditSelFunctionSet
-//  ----------------------------------------------------------------------
+//	----------------------------------------------------------------------
+//	class EditSelFunctionSet
+//	----------------------------------------------------------------------
 EditSelFunctionSet::EditSelFunctionSet()
 {
     pCurView = NULL;
 }
 
-void EditSelFunctionSet::CreateAnchor()
+void __EXPORT EditSelFunctionSet::CreateAnchor()
 {
     if ( pCurView )
         pCurView->pImpEditView->CreateAnchor();
 }
 
-void EditSelFunctionSet::DestroyAnchor()
+void __EXPORT EditSelFunctionSet::DestroyAnchor()
 {
-    // Only with multiple selection
+    // Nur bei Mehrfachselektion
 }
 
-sal_Bool EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool )
+BOOL __EXPORT EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL )
 {
     if ( pCurView )
         return pCurView->pImpEditView->SetCursorAtPoint( rPointPixel );
 
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+BOOL __EXPORT EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     if ( pCurView )
         return pCurView->pImpEditView->IsSelectionAtPoint( rPointPixel );
 
-    return sal_False;
+    return FALSE;
 }
 
-void EditSelFunctionSet::DeselectAtPoint( const Point& )
+void __EXPORT EditSelFunctionSet::DeselectAtPoint( const Point& )
 {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !   Implement when multiple selection is possible   !
+// !  Implementieren, wenn Mehrfachselektion moeglich  !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
-void EditSelFunctionSet::BeginDrag()
+void __EXPORT EditSelFunctionSet::BeginDrag()
 {
-    // Only with multiple selection
+    // Nur bei Mehrfachselektion
 }
 
 
-void EditSelFunctionSet::DeselectAll()
+void __EXPORT EditSelFunctionSet::DeselectAll()
 {
     if ( pCurView )
         pCurView->pImpEditView->DeselectAll();
 }
 
-//  ----------------------------------------------------------------------
-//  class EditSelectionEngine
-//  ----------------------------------------------------------------------
+//	----------------------------------------------------------------------
+//	class EditSelectionEngine
+//	----------------------------------------------------------------------
 EditSelectionEngine::EditSelectionEngine() : SelectionEngine( (Window*)0 )
 {
+    // Wegen Bug OV: (1994)
+    // 1995: RangeSelection lassen, SingleSelection nur fuer ListBoxen geeignet!
     SetSelectionMode( RANGE_SELECTION );
-    EnableDrag( sal_True );
+    EnableDrag( TRUE );
 }
 
 void EditSelectionEngine::SetCurView( EditView* pNewView )

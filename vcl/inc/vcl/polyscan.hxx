@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@
 
 struct ScanlinePoint
 {
-    long            mnX;
-    ScanlinePoint*  mpNext;
+    long			mnX;
+    ScanlinePoint*	mpNext;
 
                     ScanlinePoint() : mnX( 0L ), mpNext( NULL ) {};
                     ScanlinePoint( long nX, ScanlinePoint* pNext ) : mnX( nX ), mpNext( pNext ) {};
                     ~ScanlinePoint() {};
 
-    void            Set( long nX, ScanlinePoint* pNext ) { mnX = nX, mpNext = pNext; }
+    void			Set( long nX, ScanlinePoint* pNext ) { mnX = nX, mpNext = pNext; }
 };
 
 // -------------------
@@ -53,11 +53,11 @@ struct ScanlinePoint
 
 struct PolyScanSegment
 {
-    long            mnStart;
-    long            mnEnd;
-
+    long			mnStart;
+    long			mnEnd;
+                    
                     PolyScanSegment() : mnStart( 0L ), mnEnd( 0L ) {};
-                    PolyScanSegment( long nStart, long nEnd ) : mnStart( nStart ), mnEnd( nEnd ) {};
+                    PolyScanSegment( long nStart, long nEnd ) : mnStart( nStart ), mnEnd( nEnd ) {}; 
                     ~PolyScanSegment() {};
 };
 
@@ -65,51 +65,51 @@ struct PolyScanSegment
 // - PolyScanline -
 // ----------------
 
-struct  ScanlinePoint;
-class   Polygon;
-class   PolyPolygon;
+struct	ScanlinePoint;
+class	Polygon;
+class	PolyPolygon;
 
 class PolyScanline
 {
 private:
 
-    ScanlinePoint*          mpFirst;
-    ScanlinePoint*          mpLast;
-    ScanlinePoint*          mpAct;
-    long                    mnLeft;
-    long                    mnRight;
-
-    void                    ImplDelete();
-
+    ScanlinePoint*			mpFirst;
+    ScanlinePoint*			mpLast;
+    ScanlinePoint*			mpAct;
+    long					mnLeft;
+    long					mnRight;
+                            
+    void					ImplDelete();
+                            
 public:
-
+                            
                             PolyScanline();
                             ~PolyScanline();
-
-    void                    Insert( long nX );
-    void                    Set( long nStart, long nEnd );
-    void                    Set( const PolyScanSegment& rSegment ) { Set( rSegment.mnStart, rSegment.mnEnd ); }
-
-    inline sal_Bool             GetFirstX( long& rX );
-    inline sal_Bool             GetNextX( long& rX );
-
-    sal_Bool                    GetFirstSegment( PolyScanSegment& rSegment );
-    sal_Bool                    GetNextSegment( PolyScanSegment& rSegment );
+                            
+    void					Insert( long nX );
+    void					Set( long nStart, long nEnd );
+    void					Set( const PolyScanSegment& rSegment ) { Set( rSegment.mnStart, rSegment.mnEnd ); }
+                            
+    inline BOOL				GetFirstX( long& rX );
+    inline BOOL				GetNextX( long& rX );
+                            
+    BOOL					GetFirstSegment( PolyScanSegment& rSegment );
+    BOOL					GetNextSegment( PolyScanSegment& rSegment );
 };
 
 // ------------------------------------------------------------------------
 
-inline sal_Bool PolyScanline::GetFirstX( long& rX )
+inline BOOL PolyScanline::GetFirstX( long& rX )
 {
     mpAct = mpFirst;
-    return( mpAct ? ( rX = mpAct->mnX, mpAct = mpAct->mpNext, sal_True ) : sal_False );
+    return( mpAct ? ( rX = mpAct->mnX, mpAct = mpAct->mpNext, TRUE ) : FALSE );
 }
 
 // ------------------------------------------------------------------------
 
-inline sal_Bool PolyScanline::GetNextX( long& rX )
+inline BOOL PolyScanline::GetNextX( long& rX )
 {
-    return( mpAct ? ( rX = mpAct->mnX, mpAct = mpAct->mpNext, sal_True ) : sal_False );
+    return( mpAct ? ( rX = mpAct->mnX, mpAct = mpAct->mpNext, TRUE ) : FALSE );
 }
 
 // ---------------
@@ -119,18 +119,18 @@ inline sal_Bool PolyScanline::GetNextX( long& rX )
 class PolyScanner
 {
 private:
-
-    PolyScanline*   mpArray;
-    long            mnLeft;
-    long            mnTop;
-    long            mnRight;
-    long            mnBottom;
+    
+    PolyScanline*	mpArray;
+    long			mnLeft;
+    long			mnTop;
+    long			mnRight;
+    long			mnBottom;
 
                     PolyScanner() {};
 
 protected:
 
-    void            InsertLine( const Point& rStart, const Point& rEnd );
+    void			InsertLine( const Point& rStart, const Point& rEnd );
 
 public:
 
@@ -139,18 +139,18 @@ public:
                     PolyScanner( const PolyPolygon& rPolyPoly );
                     ~PolyScanner();
 
-    long            Left() const { return mnLeft; }
-    long            Top() const { return mnTop; }
-    long            Right() const { return mnRight; }
-    long            Bottom() const { return mnBottom; }
+    long			Left() const { return mnLeft; }
+    long			Top() const { return mnTop; }
+    long			Right() const { return mnRight; }
+    long			Bottom() const { return mnBottom; }
 
-    long            Width() const { return( mnRight - mnLeft + 1L ); }
-    long            Height() const { return( mnBottom - mnTop + 1L ); }
+    long			Width() const { return( mnRight - mnLeft + 1L ); }
+    long			Height() const { return( mnBottom - mnTop + 1L ); }
 
-    Rectangle       GetBoundRect() const { return Rectangle( mnLeft, mnTop, mnRight, mnBottom ); }
+    Rectangle		GetBoundRect() const { return Rectangle( mnLeft, mnTop, mnRight, mnBottom ); }
 
-    sal_uLong           Count() const { return Height(); }
-    PolyScanline*   operator[]( sal_uLong nPos ) const;
+    ULONG			Count() const { return Height(); }
+    PolyScanline*	operator[]( ULONG nPos ) const;
 };
 
 #endif // _SV_POLYSCAN_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_PRINTDATA_HXX
-#define SW_PRINTDATA_HXX
+#ifndef _SW_PRINTDATA_HXX
+#define _SW_PRINTDATA_HXX
 
 
 #include <sal/types.h>
@@ -47,7 +47,7 @@ class SwViewOption;
 class OutputDevice;
 class SwViewOptionAdjust_Impl;
 class SwPrtOptions;
-class ViewShell;
+class SwWrtShell;
 class SfxViewShell;
 
 // forward declarations
@@ -65,15 +65,15 @@ class SwPrintData
 public:
 
     sal_Bool bPrintGraphic, bPrintTable, bPrintDraw, bPrintControl, bPrintPageBackground,
-             bPrintBlackFont,
+             bPrintBlackFont, 
              //#i81434# - printing of hidden text
              bPrintHiddenText, bPrintTextPlaceholder,
              bPrintLeftPages, bPrintRightPages, bPrintReverse, bPrintProspect,
              bPrintProspectRTL,
              bPrintSingleJobs, bPaperFromSetup,
-             // Print empty pages
+             // --> FME 2005-12-13 #b6354161# Print empty pages
              bPrintEmptyPages,
-
+             // <--
              // #i56195# no field update while printing mail merge documents
              bUpdateFieldsInPrinting,
              bModified;
@@ -93,7 +93,7 @@ public:
         bPrintLeftPages         =
         bPrintRightPages        =
         bPrintPageBackground    =
-        bPrintEmptyPages        =
+        bPrintEmptyPages        = 
         bUpdateFieldsInPrinting = sal_True;
 
         bPaperFromSetup         =
@@ -102,8 +102,8 @@ public:
         bPrintProspectRTL       =
         bPrintSingleJobs        =
         bModified               =
-        bPrintBlackFont         =
-        bPrintHiddenText        =
+        bPrintBlackFont         = 
+        bPrintHiddenText        = 
         bPrintTextPlaceholder   = sal_False;
 
         nPrintPostIts           = 0;
@@ -134,7 +134,7 @@ public:
         bPrintHiddenText    ==   rData.bPrintHiddenText     &&
         bPrintTextPlaceholder   ==   rData.bPrintTextPlaceholder;
     }
-
+    
     // Note: in the context where this class ist used the pointers should always be valid
     // during the lifetime of this object
     const SwPrintUIOptions &    GetPrintUIOptions() const       { return *m_pPrintUIOptions; }
@@ -158,7 +158,7 @@ public:
     sal_Bool IsPrintSingleJobs() const          { return bPrintSingleJobs; }
     sal_Int16 GetPrintPostIts() const           { return nPrintPostIts; }
     const rtl::OUString GetFaxName() const      { return sFaxName; }
-    sal_Bool IsPrintHiddenText() const          { return bPrintHiddenText; }
+    sal_Bool IsPrintHiddenText() const          { return bPrintHiddenText; } 
     sal_Bool IsPrintTextPlaceholder() const     { return bPrintTextPlaceholder; }
 
     void SetPrintGraphic( sal_Bool b )              { doSetModified(); bPrintGraphic = b; }
@@ -179,7 +179,7 @@ public:
     void SetFaxName( const rtl::OUString& rSet )    { sFaxName = rSet; }
     void SetPrintHiddenText( sal_Bool b )           { doSetModified(); bPrintHiddenText = b; }
     void SetPrintTextPlaceholder( sal_Bool b )      { doSetModified(); bPrintTextPlaceholder = b; }
-
+    
     virtual void doSetModified () { bModified = sal_True;}
 };
 
@@ -195,9 +195,9 @@ class SwPrintUIOptions : public vcl::PrinterOptionsHelper
 public:
     SwPrintUIOptions( bool bWeb, bool bSwSrcView, bool bHasSelection, bool bHasPostIts, const SwPrintData &rDefaultPrintData );
     virtual ~SwPrintUIOptions();
-
+    
     bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );
-
+    
     bool IsPrintFormControls() const            { return getBoolValue( "PrintControls",        m_rDefaultPrintData.bPrintControl ); }
     bool IsPrintPageBackground() const          { return getBoolValue( "PrintPageBackground",  m_rDefaultPrintData.bPrintPageBackground ); }
     bool IsPrintProspect() const                { return getBoolValue( "PrintProspect",        m_rDefaultPrintData.bPrintProspect ); }
@@ -207,7 +207,7 @@ public:
     bool IsPrintWithBlackTextColor() const      { return getBoolValue( "PrintBlackFonts",      m_rDefaultPrintData.bPrintBlackFont ); }
     sal_Int16 GetPrintPostItsType() const       { return static_cast< sal_Int16 >(getIntValue( "PrintAnnotationMode", m_rDefaultPrintData.nPrintPostIts )); }
     bool IsPaperFromSetup() const               { return getBoolValue( "PrintPaperFromSetup",  m_rDefaultPrintData.bPaperFromSetup ); }
-    bool IsPrintReverse() const                 { return false; /*handled by print dialog now*/ }
+    bool IsPrintReverse() const                 { return false; /*handled by print dialog now*/ /*getBoolValue( "PrintReversed",        m_rDefaultPrintData.bPrintReverse );*/ }
 
     bool IsPrintLeftPages() const;
     bool IsPrintRightPages() const;
@@ -225,7 +225,7 @@ public:
 // and it is used in the 'render' function of that same interface
 class SwRenderData
 {
-    // pages valid for printing (according to the current settings)
+    // pages valid for printing (according to the current settings) 
     // and their respective start frames (see getRendererCount in unotxdoc.cxx)
     // This set of pages does NOT depend on the 'PageRange' that is used as a printing option!
     std::set< sal_Int32 >                       m_aValidPages;          // the set of possible pages (see StringRangeEnumerator::getRangesFromString )
@@ -246,11 +246,11 @@ class SwRenderData
 
     rtl::OUString               m_aPageRange;
 
-    // the view options to be applied for printing
+    // the view options to be applied for printing 
     SwViewOptionAdjust_Impl *   m_pViewOptionAdjust;
 
-    SwPrintData *               m_pPrtOptions;
-
+    SwPrtOptions *              m_pPrtOptions;
+    
 public:
 
     // PostIt relevant data
@@ -263,21 +263,21 @@ public:
     ~SwRenderData();
 
 
-    bool HasPostItData() const  { return m_pPostItShell != 0 && m_pPostItDoc != 0; }
+    bool HasPostItData() const  { return m_pPostItShell != 0 && m_pPostItDoc != 0 && m_pPostItShell != 0; }
     void CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
     void DeletePostItData();
 
     bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != 0; }
-    bool NeedNewViewOptionAdjust( const ViewShell& ) const;
-    void ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions );
-    void ViewOptionAdjust( SwPrintData const* const pPrtOptions );
+    bool NeedNewViewOptionAdjust( const SwWrtShell& ) const;
+    void ViewOptionAdjustStart( SwWrtShell &rSh, const SwViewOption &rViewOptions );
+    void ViewOptionAdjust( const SwPrtOptions *pPrtOptions );
     void ViewOptionAdjustStop();
 
     bool HasSwPrtOptions() const    { return m_pPrtOptions != 0; }
-    void SetSwPrtOptions(SwPrintData *const pOpt)   { m_pPrtOptions = pOpt; }
-    SwPrintData const*  GetSwPrtOptions() const     { return m_pPrtOptions; }
-    SwPrintData &       GetSwPrtOptionsRef()        { return *m_pPrtOptions; }
-    void MakeSwPrtOptions( SwPrintData & rOptions, const SwDocShell *pDocShell,
+    void SetSwPrtOptions( SwPrtOptions * pOpt )     { m_pPrtOptions = pOpt; }
+    const SwPrtOptions *    GetSwPrtOptions() const { return m_pPrtOptions; }
+    SwPrtOptions &          GetSwPrtOptionsRef()    { return *m_pPrtOptions; }
+    void MakeSwPrtOptions( SwPrtOptions &rOptions, const SwDocShell *pDocShell,
             const SwPrintUIOptions *pOpt, const SwRenderData *pData, bool bIsPDFExport );
 
 
@@ -293,13 +293,13 @@ public:
     // a value of -1 for the tray means that there is no specific tray defined
     std::map< sal_Int32, sal_Int32 >&        GetPrinterPaperTrays()          { return m_aPrinterPaperTrays; }
     const std::map< sal_Int32, sal_Int32 >&  GetPrinterPaperTrays() const    { return m_aPrinterPaperTrays; }
-
+    
     // used for 'normal' printing
     // A page value of 0 as entry indicates that this page is not from the document but
     // from the post-it document. (See also GetPostItStartFrame below)
     std::vector< sal_Int32 > &          GetPagesToPrint()           { return m_aPagesToPrint; }
     const std::vector< sal_Int32 > &    GetPagesToPrint() const     { return m_aPagesToPrint; }
-
+    
     // used for 'normal' printing with post-its
     // - if the map entry will be NULL then the respective page to be printed is from
     // the document. In that case use the value from GetPagesToPrint at the same index to
@@ -316,23 +316,11 @@ public:
 
     rtl::OUString   GetPageRange() const                            { return m_aPageRange; }
     void            SetPageRange( const rtl::OUString &rRange )     { m_aPageRange = rRange; }
-};
+};    
 
 
 ////////////////////////////////////////////////////////////
 
-// last remnants of swprtopt.hxx:
-#define POSTITS_NONE    0
-#define POSTITS_ONLY    1
-#define POSTITS_ENDDOC  2
-#define POSTITS_ENDPAGE 3
-
-namespace sw {
-
-void InitPrintOptionsFromApplication(SwPrintData & o_rData, bool const bWeb);
-
-} // namespace sw
-
-#endif  // SW_PRINTDATA_HXX
+#endif  //_SW_PRINTDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

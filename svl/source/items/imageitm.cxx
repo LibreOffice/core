@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,27 +38,27 @@ struct SfxImageItem_Impl
 {
     String  aURL;
     long    nAngle;
-    sal_Bool    bMirrored;
+    BOOL    bMirrored;
     int     operator == ( const SfxImageItem_Impl& rOther ) const
             { return nAngle == rOther.nAngle && bMirrored == rOther.bMirrored; }
 };
 
 //---------------------------------------------------------
 
-SfxImageItem::SfxImageItem( sal_uInt16 which, sal_uInt16 nImage )
+SfxImageItem::SfxImageItem( USHORT which, UINT16 nImage )
     : SfxInt16Item( which, nImage )
 {
     pImp = new SfxImageItem_Impl;
     pImp->nAngle = 0;
-    pImp->bMirrored = sal_False;
+    pImp->bMirrored = FALSE;
 }
 
-SfxImageItem::SfxImageItem( sal_uInt16 which, const String& rURL )
+SfxImageItem::SfxImageItem( USHORT which, const String& rURL )
     : SfxInt16Item( which, 0 )
 {
     pImp = new SfxImageItem_Impl;
     pImp->nAngle = 0;
-    pImp->bMirrored = sal_False;
+    pImp->bMirrored = FALSE;
     pImp->aURL = rURL;
 }
 
@@ -88,7 +88,7 @@ int SfxImageItem::operator==( const SfxPoolItem& rItem ) const
     return( ((SfxImageItem&) rItem).GetValue() == GetValue() && (*pImp == *(((SfxImageItem&)rItem).pImp) ) );
 }
 
-bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq( 4 );
     aSeq[0] = ::com::sun::star::uno::makeAny( GetValue() );
@@ -100,13 +100,13 @@ bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
     return true;
 }
 
-bool SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
     {
         sal_Int16     nVal = sal_Int16();
-        rtl::OUString aURL;
+        rtl::OUString aURL;  
         if ( aSeq[0] >>= nVal )
             SetValue( nVal );
         aSeq[1] >>= pImp->nAngle;
@@ -129,12 +129,12 @@ long SfxImageItem::GetRotation() const
     return pImp->nAngle;
 }
 
-void SfxImageItem::SetMirrored( sal_Bool bSet )
+void SfxImageItem::SetMirrored( BOOL bSet )
 {
     pImp->bMirrored = bSet;
 }
 
-sal_Bool SfxImageItem::IsMirrored() const
+BOOL SfxImageItem::IsMirrored() const
 {
     return pImp->bMirrored;
 }

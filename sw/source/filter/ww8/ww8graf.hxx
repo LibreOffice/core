@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,11 +35,11 @@
 
 struct EscherShape
 {
-    sal_uLong mnEscherShapeOrder;
-    sal_uLong mnNoInlines;
-    // new member <mbInHeaderFooter>
+    ULONG mnEscherShapeOrder;
+    ULONG mnNoInlines;
+    // --> OD 2004-12-13 #117915# - new member <mbInHeaderFooter>
     bool mbInHeaderFooter;
-    EscherShape( sal_uLong nEscherShapeOrder,
+    EscherShape( ULONG nEscherShapeOrder,
                  bool _bInHeaderFooter )
         : mnEscherShapeOrder(nEscherShapeOrder),
           mnNoInlines(0),
@@ -51,7 +51,7 @@ struct EscherShape
 class wwZOrderer
 {
 private:
-    // consider that objects in page header/footer
+    // --> OD 2004-12-13 #117915# - consider that objects in page header/footer
     // are always behind objects in page body. Thus, assure, that in vector
     // <maEscherLayer> objects in page header|footer are inserted before
     // objects in page body - see method <GetEscherObjectPos(..)>.
@@ -64,24 +64,24 @@ private:
     std::vector<short> maDrawHeight;
     typedef std::vector<short>::iterator myditer;
 
-    std::stack<sal_uInt16> maIndexes;
+    std::stack<USHORT> maIndexes;
 
     sw::util::SetLayer maSetLayer;
 
-    sal_uLong mnNoInitialObjects;
-    sal_uLong mnInlines;
+    ULONG mnNoInitialObjects;
+    ULONG mnInlines;
     SdrPage* mpDrawPg;
     const SvxMSDffShapeOrders *mpShapeOrders;
 
-    sal_uInt16 GetEscherObjectIdx(sal_uLong nSpId);
-    myeiter MapEscherIdxToIter(sal_uLong nIdx);
-    // new parameter <_bInHeaderFooter>, indicating
+    USHORT GetEscherObjectIdx(ULONG nSpId);
+    myeiter MapEscherIdxToIter(ULONG nIdx);
+    // --> OD 2004-12-13 #117915# - new parameter <_bInHeaderFooter>, indicating
     // that object is in header or footer
-    sal_uLong GetEscherObjectPos( sal_uLong nSpId,
+    ULONG GetEscherObjectPos( ULONG nSpId,
                               const bool _bInHeaderFooter );
     // <--
-    sal_uLong GetDrawingObjectPos(short nWwHeight);
-    bool InsertObject(SdrObject *pObject, sal_uLong nPos);
+    ULONG GetDrawingObjectPos(short nWwHeight);
+    bool InsertObject(SdrObject *pObject, ULONG nPos);
 public:
     wwZOrderer(const sw::util::SetLayer &rSetLayer, SdrPage* pDrawPg,
         const SvxMSDffShapeOrders *pShapeOrders);
@@ -91,12 +91,13 @@ public:
      instantiate the appropiate one at run time.
      */
     void InsertDrawingObject(SdrObject* pObj, short nWwHeight);
-    // new parameter <_bInHeaderFooter>, indicating that object is in header or footer
+    // --> OD 2004-12-13 #117915# - new parameter <_bInHeaderFooter>, indicating
+    // that object is in header or footer
     void InsertEscherObject( SdrObject* pObject,
-                             sal_uLong nSpId,
+                             ULONG nSpId,
                              const bool _bInHeaderFooter );
     // <--
-    void InsideEscher(sal_uLong nIndex);
+    void InsideEscher(ULONG nIndex);
     void OutsideEscher();
 };
 

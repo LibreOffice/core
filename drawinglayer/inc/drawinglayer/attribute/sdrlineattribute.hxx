@@ -3,6 +3,12 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: sdrattribute.hxx,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
+ *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -60,11 +66,11 @@ namespace drawinglayer
         public:
             /// constructors/assignmentoperator/destructor
             SdrLineAttribute(
-                basegfx::B2DLineJoin eJoin,
-                double fWidth,
-                double fTransparence,
-                const basegfx::BColor& rColor,
-                const ::std::vector< double >& rDotDashArray,
+                basegfx::B2DLineJoin eJoin, 
+                double fWidth, 
+                double fTransparence, 
+                const basegfx::BColor& rColor, 
+                const ::std::vector< double >& rDotDashArray, 
                 double fFullDotDashLen);
             SdrLineAttribute(const basegfx::BColor& rColor);
             SdrLineAttribute();

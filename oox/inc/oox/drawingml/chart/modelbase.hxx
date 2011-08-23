@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 #ifndef OOX_DRAWINGML_CHART_MODELBASE_HXX
 #define OOX_DRAWINGML_CHART_MODELBASE_HXX
 
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/helper.hxx"
-#include "oox/helper/refmap.hxx"
-#include "oox/helper/refvector.hxx"
+#include "tokens.hxx"
 
 namespace oox { class AttributeList; }
 

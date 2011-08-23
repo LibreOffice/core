@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@
 #include "xmloff/ImageStyle.hxx"
 #include "xmloff/MarkerStyle.hxx"
 #include <xmloff/xmlictxt.hxx>
-#include "svx/xmlgrhlp.hxx"
+#include "xmlgrhlp.hxx"
 #include "xmloff/attrlist.hxx"
 
 #include "xmlxtimp.hxx"
@@ -75,12 +75,12 @@ using namespace ::rtl;
 using namespace ::xmloff::token;
 using namespace cppu;
 
-sal_Char const sXML_np__office[] = "__office";
-sal_Char const sXML_np__office_ooo[] = "___office";
-sal_Char const sXML_np__draw[] = "__draw";
-sal_Char const sXML_np__draw_ooo[] = "___draw";
-sal_Char const sXML_np__ooo[] = "__ooo";
-sal_Char const sXML_np__xlink[] = "__xlink";
+sal_Char __READONLY_DATA sXML_np__office[] = "__office";
+sal_Char __READONLY_DATA sXML_np__office_ooo[] = "___office";
+sal_Char __READONLY_DATA sXML_np__draw[] = "__draw";
+sal_Char __READONLY_DATA sXML_np__draw_ooo[] = "___draw";
+sal_Char __READONLY_DATA sXML_np__ooo[] = "__ooo";
+sal_Char __READONLY_DATA sXML_np__xlink[] = "__xlink";
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -91,21 +91,21 @@ enum SvxXMLTableImportContextEnum { stice_unknown, stice_color, stice_marker, st
 class SvxXMLTableImportContext : public SvXMLImportContext
 {
 public:
-    SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >& xAttrList, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable,
+    SvxXMLTableImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >& xAttrList, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, 
         sal_Bool bOOoFormat );
     virtual ~SvxXMLTableImportContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList );
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList );
 
     SvxXMLXTableImport& getImport() const { return *(SvxXMLXTableImport*)&GetImport(); }
 
 protected:
-    void importColor( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importMarker( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importDash( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importHatch( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importGradient( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importBitmap( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importColor( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importMarker( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importDash( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importHatch( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importGradient( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importBitmap( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
 
 private:
     uno::Reference< XNameContainer > mxTable;
@@ -115,7 +115,7 @@ private:
 
 ///////////////////////////////////////////////////////////////////////
 
-SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, sal_Bool bOOoFormat )
+SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, sal_Bool bOOoFormat )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxTable( xTable ), meContext( eContext ),
     mbOOoFormat( bOOoFormat )
 {
@@ -125,7 +125,7 @@ SvxXMLTableImportContext::~SvxXMLTableImportContext()
 {
 }
 
-SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& rAttrList )
+SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& rAttrList )
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
     {
@@ -141,8 +141,8 @@ SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( sal_uInt16 nPr
             {
                 const OUString& rAttrName = xAttrList->getNameByIndex( i );
                 OUString aLocalName;
-                sal_uInt16 nPrefix_ =
-                    GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                sal_uInt16 nPrefix_ = 
+                    GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, 
                                                                 &aLocalName );
                 if( XML_NAMESPACE_XLINK == nPrefix_ &&
                     stice_bitmap == meContext &&
@@ -222,7 +222,7 @@ SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( sal_uInt16 nPr
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 
-void SvxXMLTableImportContext::importColor( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importColor( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     (void)nPrfx;
     (void)rLocalName;
@@ -251,7 +251,7 @@ void SvxXMLTableImportContext::importColor( sal_uInt16 nPrfx, const OUString& rL
     }
 }
 
-void SvxXMLTableImportContext::importMarker( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importMarker( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     (void)nPrfx;
     (void)rLocalName;
@@ -263,11 +263,11 @@ void SvxXMLTableImportContext::importMarker( sal_uInt16 nPrfx, const OUString& r
     }
     catch( Exception& )
     {
-        OSL_FAIL("SvxXMLTableImportContext::importMarker(), exception caught!");
+        DBG_ERROR("SvxXMLTableImportContext::importMarker(), exception caught!");
     }
 }
 
-void SvxXMLTableImportContext::importDash( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importDash( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     (void)nPrfx;
     (void)rLocalName;
@@ -279,11 +279,11 @@ void SvxXMLTableImportContext::importDash( sal_uInt16 nPrfx, const OUString& rLo
     }
     catch( Exception& )
     {
-        OSL_FAIL("SvxXMLTableImportContext::importDash(), exception caught!");
+        DBG_ERROR("SvxXMLTableImportContext::importDash(), exception caught!");
     }
 }
 
-void SvxXMLTableImportContext::importHatch( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importHatch( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     (void)nPrfx;
     (void)rLocalName;
@@ -295,11 +295,11 @@ void SvxXMLTableImportContext::importHatch( sal_uInt16 nPrfx, const OUString& rL
     }
     catch( Exception& )
     {
-        OSL_FAIL("SvxXMLTableImportContext::importHatch(), exception caught!");
+        DBG_ERROR("SvxXMLTableImportContext::importHatch(), exception caught!");
     }
 }
 
-void SvxXMLTableImportContext::importGradient( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importGradient( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     (void)nPrfx;
     (void)rLocalName;
@@ -311,11 +311,11 @@ void SvxXMLTableImportContext::importGradient( sal_uInt16 nPrfx, const OUString&
     }
     catch( Exception& )
     {
-        OSL_FAIL("SvxXMLTableImportContext::importGradient(), exception caught!");
+        DBG_ERROR("SvxXMLTableImportContext::importGradient(), exception caught!");
     }
 }
 
-void SvxXMLTableImportContext::importBitmap( sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importBitmap( USHORT nPrfx, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     (void)nPrfx;
     (void)rLocalName;
@@ -327,18 +327,18 @@ void SvxXMLTableImportContext::importBitmap( sal_uInt16 nPrfx, const OUString& r
     }
     catch( Exception& )
     {
-        OSL_FAIL("SvxXMLTableImportContext::importBitmap(), exception caught!");
+        DBG_ERROR("SvxXMLTableImportContext::importBitmap(), exception caught!");
     }
 }
 
 ///////////////////////////////////////////////////////////////////////
 
 // #110680#
-SvxXMLXTableImport::SvxXMLXTableImport(
+SvxXMLXTableImport::SvxXMLXTableImport( 
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-    const uno::Reference< XNameContainer > & rTable,
+    const uno::Reference< XNameContainer > & rTable, 
     uno::Reference< XGraphicObjectResolver >& xGrfResolver )
-:   SvXMLImport(xServiceFactory, 0),
+:	SvXMLImport(xServiceFactory, 0),
     mrTable( rTable )
 {
     SetGraphicResolver( xGrfResolver );
@@ -365,19 +365,19 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
 {
     sal_Bool bRet = sal_True;
 
-    uno::Reference< XGraphicObjectResolver >    xGrfResolver;
-    SvXMLGraphicHelper* pGraphicHelper = 0;
+    uno::Reference< XGraphicObjectResolver >	xGrfResolver;
+    SvXMLGraphicHelper*	pGraphicHelper = 0;
 
     try
     {
         do
         {
-            SfxMedium aMedium( rUrl, STREAM_READ | STREAM_NOCREATE, sal_True );
+            SfxMedium aMedium( rUrl, STREAM_READ | STREAM_NOCREATE, TRUE );
 
             uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
             if( !xServiceFactory.is() )
             {
-                OSL_FAIL( "SvxXMLXTableImport::load: got no service manager" );
+                DBG_ERROR( "SvxXMLXTableImport::load: got no service manager" );
                 break;
             }
 
@@ -396,7 +396,7 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
                 xIStm.set( xStorage->openStreamElement( aContentStmName, embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
                 if( !xIStm.is() )
                 {
-                    OSL_FAIL( "could not open Content stream" );
+                    DBG_ERROR( "could not open Content stream" );
                     break;
                 }
 
@@ -431,11 +431,11 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
     }
     catch( uno::Exception& )
     {
-//      CL: I disabled this assertion since its an error, but it happens
-//          each time you load a document with property tables that are not
-//          on the current machine. Maybe a better fix would be to place
-//          a file exists check before importing...
-//      OSL_FAIL("svx::SvxXMLXTableImport::load(), exception caught!");
+//		CL: I disabled this assertion since its an error, but it happens
+//		    each time you load a document with property tables that are not
+//			on the current machine. Maybe a better fix would be to place
+//		    a file exists check before importing...
+//		DBG_ERROR("svx::SvxXMLXTableImport::load(), exception caught!");
         bRet = sal_False;
     }
 

@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,10 +148,10 @@ namespace svt
 
         const PToolPanelDrawer pDrawer( m_aDrawers[ i_nChildIndex ] );
 
-        Reference< XAccessible > xItemAccessible = pDrawer->GetAccessible( sal_False );
+        Reference< XAccessible > xItemAccessible = pDrawer->GetAccessible( FALSE );
         if ( !xItemAccessible.is() )
         {
-            xItemAccessible = pDrawer->GetAccessible( sal_True );
+            xItemAccessible = pDrawer->GetAccessible( TRUE );
             ENSURE_OR_RETURN( xItemAccessible.is(), "illegal accessible provided by the drawer implementation!", NULL );
             OSL_VERIFY( ::comphelper::OAccessibleImplementationAccess::setAccessibleParent( xItemAccessible->getAccessibleContext(),
                 i_rParentAccessible ) );
@@ -166,7 +166,7 @@ namespace svt
         OSL_PRECOND( i_nPosition <= m_aDrawers.size(), "DrawerDeckLayouter::PanelInserted: inconsistency!" );
 
         PToolPanelDrawer pDrawer( new ToolPanelDrawer( m_rParentWindow, i_pPanel->GetDisplayName() ) );
-        pDrawer->SetHelpId( i_pPanel->GetHelpID() );
+        pDrawer->SetSmartHelpId( i_pPanel->GetHelpID() );
         // proper Z-Order
         if ( i_nPosition == 0 )
         {

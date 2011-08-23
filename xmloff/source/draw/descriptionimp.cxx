@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 
 #include "descriptionimp.hxx"
@@ -56,7 +56,7 @@ using namespace ::xmloff::token;
 
 TYPEINIT1( SdXMLDescriptionContext, SvXMLImportContext );
 
-SdXMLDescriptionContext::SdXMLDescriptionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,   const OUString& rLocalName,
+SdXMLDescriptionContext::SdXMLDescriptionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,	const OUString& rLocalName,
         const Reference< XAttributeList>&, const Reference< XShape >& rxShape)
 : SvXMLImportContext(rImport, nPrfx, rLocalName), mxShape( rxShape )
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include "XMLTextHeaderFooterContext.hxx"
 #include <xmloff/XMLTextTableContext.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -43,8 +43,12 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
+//using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
+//using namespace ::com::sun::star::container;
+//using namespace ::com::sun::star::lang;
+//using namespace ::com::sun::star::text;
 
 
 TYPEINIT1( XMLTextHeaderFooterContext, SvXMLImportContext );
@@ -57,12 +61,12 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
                        sal_Bool bFooter, sal_Bool bLft ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xPropSet( rPageStylePropSet ),
-    sOn( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsOn" )) : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsOn" )) ),
-    sShareContent( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsShared" ))
-                                                      : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsShared" )) ),
-    sText( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterText" )) : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderText" )) ),
-    sTextLeft( bFooter ?  OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterTextLeft" ))
-                                                     : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderTextLeft" )) ),
+    sOn( OUString::createFromAscii( bFooter ? "FooterIsOn" : "HeaderIsOn" ) ),
+    sShareContent( OUString::createFromAscii( bFooter ? "FooterIsShared"
+                                                      : "HeaderIsShared" ) ),
+    sText( OUString::createFromAscii( bFooter ? "FooterText" : "HeaderText" ) ),
+    sTextLeft( OUString::createFromAscii( bFooter ? "FooterTextLeft"
+                                                     : "HeaderTextLeft" ) ),
     bInsertContent( sal_True ),
     bLeft( bLft )
 {
@@ -161,15 +165,15 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
             xOldTextCursor = xTxtImport->GetCursor();
             xTxtImport->SetCursor( xText->createTextCursor() );
         }
-
-        pContext =
+        
+        pContext = 
             GetImport().GetTextImport()->CreateTextChildContext(
                 GetImport(), nPrefix, rLocalName, xAttrList,
                 XML_TEXT_TYPE_HEADER_FOOTER );
     }
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
+    
     return pContext;
 }
 

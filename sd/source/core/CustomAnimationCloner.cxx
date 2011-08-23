@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,7 +140,7 @@ namespace sd
         catch( Exception& e )
         {
             (void)e;
-            OSL_FAIL(
+            DBG_ERROR(
                 (OString("sd::CustomAnimationClonerImpl::Clone(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -225,7 +225,7 @@ namespace sd
         catch( Exception& e )
         {
             (void)e;
-            OSL_FAIL(
+            DBG_ERROR(
                 (OString("sd::CustomAnimationClonerImpl::transformNode(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -300,7 +300,7 @@ namespace sd
         catch( Exception& e )
         {
             (void)e;
-            OSL_FAIL(
+            DBG_ERROR(
                 (OString("sd::CustomAnimationClonerImpl::transformValue(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -335,7 +335,7 @@ namespace sd
                 return maCloneNodeVector[nNode];
         }
 
-        OSL_FAIL( "sd::CustomAnimationClonerImpl::getClonedNode() failed!" );
+        DBG_ERROR( "sd::CustomAnimationClonerImpl::getClonedNode() failed!" );
         return xSource;
     }
 }

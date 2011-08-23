@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@
 #    define USE_MOTIF
 #endif
 
-#define Window      XLIB_Window
-#define Font        XLIB_Font
-#define KeyCode     XLIB_KeyCode
-#define Time        XLIB_Time
-#define Cursor      XLIB_Cursor
-#define Region      XLIB_Region
-#define String      XLIB_String
-#define Boolean     XLIB_Boolean
-#define XPointer    XLIB_XPointer
+#define Window		XLIB_Window
+#define Font		XLIB_Font
+#define KeyCode		XLIB_KeyCode
+#define Time		XLIB_Time
+#define Cursor		XLIB_Cursor
+#define Region		XLIB_Region
+#define String		XLIB_String
+#define Boolean		XLIB_Boolean
+#define XPointer	XLIB_XPointer
 #include <X11/Xlib.h>
 extern "C" {
 #include <X11/Intrinsic.h>
@@ -137,17 +137,17 @@ extern "C" {
 class ConnectorInstance
 {
 public:
-    NPP                         instance;
-    NPWindow                    window;
-    NPSetWindowCallbackStruct   ws_info;
-    char*                       pMimeType;
-    void*                       pShell;
-    void*                       pWidget;
-    void*                       pForm;
-
+    NPP							instance;
+    NPWindow					window;
+    NPSetWindowCallbackStruct	ws_info;
+    char*						pMimeType;
+    void*						pShell;
+    void*						pWidget;
+    void*						pForm;
+    
     GtkWidget*                  pGtkWindow;
     GtkWidget*                  pGtkWidget;
-
+    
     bool                        bShouldUseXEmbed;
 
     int nArg;
@@ -158,9 +158,9 @@ public:
     NPSavedData aData;
 
     ConnectorInstance( NPP inst, char* type,
-                       int args, char* pargnbuf, sal_uLong nargnbytes,
-                       char* pargvbuf, sal_uLong nargvbytes,
-                       char* savedata, sal_uLong savebytes );
+                       int args, char* pargnbuf, ULONG nargnbytes,
+                       char* pargvbuf, ULONG nargvbytes,
+                       char* savedata, ULONG savebytes );
     ~ConnectorInstance();
 };
 
@@ -170,29 +170,29 @@ protected:
     osl::Mutex               m_aUserEventMutex;
 
     static std::vector<PluginConnector*>  allConnectors;
-
+    
     DECL_LINK( NewMessageHdl, Mediator* );
     DECL_LINK( WorkOnNewMessageHdl, Mediator* );
-
+    
     std::vector<NPStream*>              m_aNPWrapStreams;
     std::vector<ConnectorInstance*>     m_aInstances;
-
-    sal_uLong   FillBuffer( char*&, const char*, sal_uLong, va_list );
+    
+    ULONG	FillBuffer( char*&, const char*, ULONG, va_list );
 public:
     PluginConnector( int nSocket );
     ~PluginConnector();
 
-    virtual MediatorMessage* WaitForAnswer( sal_uLong nMessageID );
-    MediatorMessage*    Transact( const char*, sal_uLong, ... );
-    MediatorMessage*    Transact( sal_uInt32, ... );
-    void                Respond( sal_uLong nID, char*, sal_uLong, ... );
-    sal_uLong               Send( sal_uInt32, ... );
+    virtual MediatorMessage* WaitForAnswer( ULONG nMessageID );
+    MediatorMessage*	Transact( const char*, ULONG, ... );
+    MediatorMessage*	Transact( UINT32, ... );
+    void				Respond( ULONG nID, char*, ULONG, ... );
+    ULONG				Send( UINT32, ... );
 
-    static const sal_uInt32 UnknownStreamID = 0xffffffff;
-    static const sal_uInt32 UnknownNPPID = 0xffffffff;
+    static const UINT32 UnknownStreamID = 0xffffffff;
+    static const UINT32 UnknownNPPID = 0xffffffff;
 
-    sal_uInt32  GetStreamID( NPStream* pStream );
-    sal_uInt32  GetNPPID( NPP );
+    UINT32	GetStreamID( NPStream* pStream );
+    UINT32	GetNPPID( NPP );
 
     std::vector<NPStream*>& getStreamList() { return m_aNPWrapStreams; }
 
@@ -209,9 +209,9 @@ public:
         LINK( this, PluginConnector, WorkOnNewMessageHdl ).
             Call( (Mediator*)this );
     }
-
+    
     ConnectorInstance* getInstance( NPP );
-    ConnectorInstance* getInstanceById( sal_uInt32 );
+    ConnectorInstance* getInstanceById( UINT32 );
 };
 
 enum CommandAtoms

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,9 @@
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
 
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
 
 #include <xmloff/xmlstyle.hxx>
 
@@ -44,14 +46,14 @@ class XMLFontEncodingPropHdl;
 
 class XMLOFF_DLLPUBLIC XMLFontStylesContext : public SvXMLStylesContext
 {
-    XMLFontFamilyNamePropHdl    *pFamilyNameHdl;
-    XMLFontFamilyPropHdl        *pFamilyHdl;
-    XMLFontPitchPropHdl         *pPitchHdl;
-    XMLFontEncodingPropHdl      *pEncHdl;
+    XMLFontFamilyNamePropHdl 	*pFamilyNameHdl;
+    XMLFontFamilyPropHdl 		*pFamilyHdl;
+    XMLFontPitchPropHdl 		*pPitchHdl;
+    XMLFontEncodingPropHdl 		*pEncHdl;
 
-    SvXMLTokenMap           *pFontStyleAttrTokenMap;
+    SvXMLTokenMap			*pFontStyleAttrTokenMap;
 
-    rtl_TextEncoding        eDfltEncoding;
+    rtl_TextEncoding		eDfltEncoding;
 
 protected:
 

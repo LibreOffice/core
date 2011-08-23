@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ public:
         sal_Int32 nSelectedChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
-    // index has to be treated as global child index.
+    // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
     void deselectAccessibleChild(
         sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,

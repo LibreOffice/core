@@ -10,9 +10,9 @@
 	<key>UTImportedTypeDeclarations</key>
 	
 	<key>CFBundleExecutable</key>
-	<string>[FULLAPPPRODUCTNAME]</string>
+	<string>[FULLPRODUCTNAME]</string>
 	<key>CFBundleGetInfoString</key>
-	<string>[FULLAPPPRODUCTNAME]</string>
+	<string>[FULLPRODUCTNAME]</string>
 	<key>CFBundleIconFile</key>
 	<string>ooo3_installer.icns</string>
 	<key>CFBundleShortVersionString</key>
@@ -22,7 +22,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>[FULLAPPPRODUCTNAME]</string>
+	<string>[FULLPRODUCTNAME]</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>

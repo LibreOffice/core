@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,15 +64,15 @@ class SvxPathTabPage : public SfxTabPage
 {
 private:
     FixedLine           aStdBox;
-    FixedText           aTypeText;
-    FixedText           aPathText;
+    FixedText			aTypeText;
+    FixedText			aPathText;
     SvxControlFocusHelper aPathCtrl;
-    PushButton          aStandardBtn;
-    PushButton          aPathBtn;
+    PushButton			aStandardBtn;
+    PushButton      	aPathBtn;
 
-    HeaderBar*                  pHeaderBar;
-    ::svx::OptHeaderTabListBox* pPathBox;
-    OptPath_Impl*               pImpl;
+    HeaderBar*					pHeaderBar;
+    ::svx::OptHeaderTabListBox*	pPathBox;
+    OptPath_Impl*				pImpl;
 
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker > xFolderPicker;
@@ -89,9 +89,9 @@ private:
 
     DECL_LINK( DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
 
-    void        GetPathList( sal_uInt16 _nPathHandle, String& _rInternalPath,
+    void        GetPathList( USHORT _nPathHandle, String& _rInternalPath,
                              String& _rUserPath, String& _rWritablePath, sal_Bool& _rReadOnly );
-    void        SetPathList( sal_uInt16 _nPathHandle,
+    void        SetPathList( USHORT _nPathHandle,
                              const String& _rUserPath, const String& _rWritablePath );
 #endif
 
@@ -99,11 +99,11 @@ public:
     SvxPathTabPage( Window* pParent, const SfxItemSet& rSet );
     ~SvxPathTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rSet );
+    static USHORT*		GetRanges();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
     virtual void        FillUserData();
 };
 

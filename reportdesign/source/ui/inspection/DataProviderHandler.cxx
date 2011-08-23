@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <tools/fldunit.hxx>
+#include <vcl/fldunit.hxx>
 #include "metadata.hxx"
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -169,6 +169,13 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
 
             m_xMasterDetails = new OPropertyMediator( m_xDataProvider.get(), m_xReportComponent.get(), aPropertyMediation,sal_True );
         }
+        
+        //const ::rtl::OUString sRowSet(RTL_CONSTASCII_USTRINGPARAM("RowSet"));
+        //if ( xNameCont->hasByName(sRowSet) )
+        //{
+        //    uno::Reference<beans::XPropertySet> xProp(m_xFormComponentHandler,uno::UNO_QUERY);
+        //    xProp->setPropertyValue(sRowSet,xNameCont->getByName(sRowSet));
+        //}
     }
     catch(uno::Exception)
     {
@@ -198,7 +205,7 @@ uno::Any SAL_CALL DataProviderHandler::getPropertyValue(const ::rtl::OUString & 
             //        uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
             //        const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
             //        const uno::Reference< chart2::XCoordinateSystem >* pIter = aCooSysSeq.getConstArray();
-            //        const uno::Reference< chart2::XCoordinateSystem >* pEnd     = pIter + aCooSysSeq.getLength();
+            //        const uno::Reference< chart2::XCoordinateSystem >* pEnd	  = pIter + aCooSysSeq.getLength();
             //        for(;pIter != pEnd;++pIter)
             //        {
             //            const uno::Reference< chart2::XChartTypeContainer > xCTCnt( *pIter, uno::UNO_QUERY_THROW );
@@ -260,11 +267,11 @@ void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
             ::rtl::OUString sStr;
             _aValue>>= sStr;
             xFormatted->setString(sStr);
-            uno::Sequence< uno::Reference< chart2::XFormattedString> > aArgs(1);
+            uno::Sequence< uno::Reference< chart2::XFormattedString> > aArgs(1); 
             aArgs[0] = xFormatted;
             xTitle->setText(aArgs);
         }
-    }
+    } // if ( xTitled.is() )
 }
 
 beans::PropertyState SAL_CALL DataProviderHandler::getPropertyState(const ::rtl::OUString & PropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException)
@@ -279,7 +286,7 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
     switch(nId)
     {
         case PROPERTY_ID_CHARTTYPE:
-            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_PROP_CHARTTYPE_DLG);
+            aOut.PrimaryButtonId = UID_RPT_PROP_CHARTTYPE_DLG;
             aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::TextField , sal_True);
             aOut.HasPrimaryButton = sal_True;
             break;
@@ -289,7 +296,7 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
         case PROPERTY_ID_MASTERFIELDS:
         case PROPERTY_ID_DETAILFIELDS:
             aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::StringListField , sal_False);
-            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_PROP_DLG_LINKFIELDS);
+            aOut.PrimaryButtonId = UID_RPT_PROP_DLG_LINKFIELDS;
             aOut.HasPrimaryButton = sal_True;
             break;
         default:
@@ -323,7 +330,7 @@ uno::Any SAL_CALL DataProviderHandler::convertToPropertyValue(const ::rtl::OUStr
             }
             catch( const uno::Exception& )
             {
-                OSL_FAIL( "DataProviderHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                OSL_ENSURE( sal_False, "DataProviderHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
             }
             break;
         case PROPERTY_ID_MASTERFIELDS:
@@ -357,7 +364,7 @@ uno::Any SAL_CALL DataProviderHandler::convertToControlValue(const ::rtl::OUStri
             }
             catch( const uno::Exception& )
             {
-                OSL_FAIL( "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                OSL_ENSURE( sal_False, "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
             }
             break;
         default:
@@ -389,8 +396,9 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
             ,PROPERTY_MASTERFIELDS
             ,PROPERTY_DETAILFIELDS
             ,PROPERTY_PREVIEW_COUNT
+            //,PROPERTY_TITLE
         };
-
+        
         for (size_t nPos = 0; nPos < SAL_N_ELEMENTS(s_pProperties) ;++nPos )
         {
             aValue.Name = s_pProperties[nPos];
@@ -444,7 +452,7 @@ inspection::InteractiveSelectionResult SAL_CALL DataProviderHandler::onInteracti
         default:
             eResult = m_xFormComponentHandler->onInteractivePropertySelection(PropertyName, Primary, out_Data, _rxInspectorUI);
     }
-
+    
     return eResult;
 }
 
@@ -472,9 +480,9 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const ::rtl::OUStrin
             xReceiver->setArguments( aArgs.getPropertyValues() );
             if ( !bModified )
                 xReport->setModified(sal_False);
-        }
+        } // if ( NewValue != OldValue )
         m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, InspectorUI, FirstTimeInit);
-    }
+    } // if ( ActuatingPropertyName == PROPERTY_COMMAND )
     else if ( ActuatingPropertyName == PROPERTY_TITLE )
     {
         if ( NewValue != OldValue )
@@ -485,7 +493,7 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const ::rtl::OUStrin
         const sal_Int32 nId = m_pInfoService->getPropertyId(ActuatingPropertyName);
         switch(nId)
         {
-
+            
             case PROPERTY_ID_MASTERFIELDS:
                 break;
             case PROPERTY_ID_DETAILFIELDS:
@@ -551,7 +559,7 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
 
     _rClearBeforeDialog.clear();
     return ( xDialog->execute() != 0 );
-}
+} 
 //........................................................................
 } // namespace rptui
 //........................................................................

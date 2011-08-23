@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile:  $
+ * $Revision:  $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -78,7 +81,7 @@ class SidebarTextEditSource : public SvxEditSource,
 SidebarTextEditSource::SidebarTextEditSource( SidebarTxtControl& rSidebarTxtControl )
     : SvxEditSource()
     , mrSidebarTxtControl( rSidebarTxtControl )
-    , mTextForwarder( *(rSidebarTxtControl.GetTextView()->GetOutliner()), sal_False )
+    , mTextForwarder( *(rSidebarTxtControl.GetTextView()->GetOutliner()), FALSE )
     , mViewForwarder( *(rSidebarTxtControl.GetTextView()) )
 {
     if ( mrSidebarTxtControl.GetTextView() )

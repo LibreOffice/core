@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include "services.h"
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
-#include <framework/imageproducer.hxx>
+#include <helper/imageproducer.hxx>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -49,7 +49,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <dispatch/uieventloghelper.hxx>
 #include "helper/mischelper.hxx"
-#include "helpid.hrc"
 #include <osl/mutex.hxx>
 
 using namespace com::sun::star::uno;
@@ -63,10 +62,10 @@ using namespace ::com::sun::star::frame;
 
 namespace framework
 {
-class
-DEFINE_XSERVICEINFO_MULTISERVICE        (   MacrosMenuController                    ,
+class 
+DEFINE_XSERVICEINFO_MULTISERVICE        (   MacrosMenuController				    ,
                                             OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
+                                            SERVICENAME_POPUPMENUCONTROLLER		    ,
                                             IMPLEMENTATIONNAME_MACROSMENUCONTROLLER
                                         )
 
@@ -88,21 +87,23 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
 {
     VCLXPopupMenu* pVCLPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*     pPopupMenu    = 0;
-
+    
     SolarMutexGuard aSolarMutexGuard;
-
+    
     resetPopupMenu( rPopupMenu );
     if ( pVCLPopupMenu )
         pPopupMenu = (PopupMenu *)pVCLPopupMenu->GetMenu();
 
     if (!pPopupMenu)
         return;
-
+        
     // insert basic
     String aCommand = String::CreateFromAscii( ".uno:MacroDialog" );
     String aDisplayName = RetrieveLabelFromCommand( aCommand );
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
+    //pPopupMenu->SetHelpId( 2, HID_SVX_BASIC_MACRO_ORGANIZER );
+    pPopupMenu->SetHelpId( 2, 40012 );
 
     // insert providers but not basic or java
     addScriptItems( pPopupMenu, 4);
@@ -118,7 +119,7 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( Runt
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xServiceManager.clear();
-
+    
     if ( m_xPopupMenu.is() )
     {
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
@@ -149,9 +150,14 @@ void MacrosMenuController::impl_select(const Reference< XDispatch >& /*_xDispatc
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
+        //pExecuteInfo->aArgs         = aArgs; 
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MacrosMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, pExecuteInfo->aArgs);
-        Application::PostUserEvent( STATIC_LINK(0, MacrosMenuController , ExecuteHdl_Impl), pExecuteInfo );
+            UiEventLogHelper(::rtl::OUString::createFromAscii("MacrosMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, pExecuteInfo->aArgs);
+//                xDispatch->dispatch( aTargetURL, aArgs );
+        Application::PostUserEvent( STATIC_LINK(0, MacrosMenuController , ExecuteHdl_Impl), pExecuteInfo ); 
+    }
+    else
+    {
     }
 }
 
@@ -170,7 +176,7 @@ IMPL_STATIC_LINK_NOINSTANCE( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*
    }
    delete pExecuteInfo;
    return 0;
-}
+} 
 
 String MacrosMenuController::RetrieveLabelFromCommand( const String& aCmdURL )
 {
@@ -178,13 +184,15 @@ String MacrosMenuController::RetrieveLabelFromCommand( const String& aCmdURL )
     return framework::RetrieveLabelFromCommand(aCmdURL,m_xServiceManager,m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,bModuleIdentified,"Label");
 }
 
-void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId )
+void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startItemId )
 {
     const String aCmdBase = String::CreateFromAscii( ".uno:ScriptOrganizer?ScriptOrganizer.Language:string=" );
     const String ellipsis = String::CreateFromAscii( "..." );
-    const ::rtl::OUString providerKey(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.ScriptProviderFor"));
-    const ::rtl::OUString languageProviderName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.LanguageScriptProvider"));
-    sal_uInt16 itemId = startItemId;
+    const ::rtl::OUString providerKey =
+    ::rtl::OUString::createFromAscii("com.sun.star.script.provider.ScriptProviderFor" );
+    const ::rtl::OUString languageProviderName =
+        ::rtl::OUString::createFromAscii("com.sun.star.script.provider.LanguageScriptProvider" );    
+    USHORT itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xServiceManager, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
 
@@ -196,7 +204,7 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
             break;
         }
         Sequence< ::rtl::OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
-
+                    
         if ( serviceNames.getLength() > 0 )
         {
             for ( sal_Int32 index = 0; index < serviceNames.getLength(); index++ )
@@ -215,6 +223,8 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
                     aDisplayName.Append( ellipsis );
                     pPopupMenu->InsertItem( itemId, aDisplayName );
                     pPopupMenu->SetItemCommand( itemId, aCommand );
+                    //pPopupMenu->SetHelpId( itemId, HID_SVX_COMMON_MACRO_ORGANIZER );
+                    pPopupMenu->SetHelpId( itemId, 40014 );
                     itemId++;
                     break;
                 }

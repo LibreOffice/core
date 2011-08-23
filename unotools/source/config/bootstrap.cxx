@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,26 +51,26 @@
 // ---------------------------------------------------------------------------------------
 #define BOOTSTRAP_DATA_NAME                 SAL_CONFIGFILE("bootstrap")
 
-#define BOOTSTRAP_ITEM_PRODUCT_KEY          "ProductKey"
+#define BOOTSTRAP_ITEM_PRODUCT_KEY			"ProductKey"
 #define BOOTSTRAP_ITEM_PRODUCT_SOURCE       "ProductSource"
-#define BOOTSTRAP_ITEM_VERSIONFILE          "Location"
-#define BOOTSTRAP_ITEM_BUILDID              "buildid"
+#define BOOTSTRAP_ITEM_VERSIONFILE			"Location"
+#define BOOTSTRAP_ITEM_BUILDID				"buildid"
 
-#define BOOTSTRAP_ITEM_BASEINSTALLATION     "BaseInstallation"
-#define BOOTSTRAP_ITEM_USERINSTALLATION     "UserInstallation"
+#define BOOTSTRAP_ITEM_BASEINSTALLATION		"BaseInstallation"
+#define BOOTSTRAP_ITEM_USERINSTALLATION		"UserInstallation"
 
-#define BOOTSTRAP_ITEM_SHAREDIR             "SharedDataDir"
-#define BOOTSTRAP_ITEM_USERDIR              "UserDataDir"
+#define BOOTSTRAP_ITEM_SHAREDIR		        "SharedDataDir"
+#define BOOTSTRAP_ITEM_USERDIR		        "UserDataDir"
 
-#define BOOTSTRAP_DEFAULT_BASEINSTALL       "$SYSBINDIR/.."
+#define BOOTSTRAP_DEFAULT_BASEINSTALL	    "$SYSBINDIR/.."
 
-#define BOOTSTRAP_DIRNAME_SHAREDIR          "share"
-#define BOOTSTRAP_DIRNAME_USERDIR           "user"
+#define BOOTSTRAP_DIRNAME_SHAREDIR		    "share"
+#define BOOTSTRAP_DIRNAME_USERDIR		    "user"
 
-#define VERSIONFILE_SECTION                 "Versions"
+#define VERSIONFILE_SECTION         		"Versions"
 
-#define SETUP_DATA_NAME                     SAL_CONFIGFILE("setup")
-#define SETUP_ITEM_ALLUSERS                 "ALLUSERS"
+#define SETUP_DATA_NAME                 	SAL_CONFIGFILE("setup")
+#define SETUP_ITEM_ALLUSERS         		"ALLUSERS"
 // ---------------------------------------------------------------------------------------
 typedef char const * AsciiString;
 // ---------------------------------------------------------------------------------------
@@ -196,23 +196,23 @@ PathStatus implCheckStatusOfURL(OUString const& _sURL, osl::DirectoryItem& aDirI
     {
         switch( DirectoryItem::get(_sURL, aDirItem) )
         {
-        case DirectoryItem::E_None:         // Success
+        case DirectoryItem::E_None:		    // Success
             eStatus = Bootstrap::PATH_EXISTS;
             break;
 
-        case DirectoryItem::E_NOENT:        // No such file or directory<br>
+        case DirectoryItem::E_NOENT:		// No such file or directory<br>
             eStatus = Bootstrap::PATH_VALID;
             break;
 
-        case DirectoryItem::E_INVAL:        // the format of the parameters was not valid<br>
-        case DirectoryItem::E_NAMETOOLONG:  // File name too long<br>
-        case DirectoryItem::E_NOTDIR:       // A component of the path prefix of path is not a directory<p>
+        case DirectoryItem::E_INVAL:		// the format of the parameters was not valid<br>
+        case DirectoryItem::E_NAMETOOLONG:	// File name too long<br>
+        case DirectoryItem::E_NOTDIR:		// A component of the path prefix of path is not a directory<p>
             eStatus = Bootstrap::DATA_INVALID;
             break;
 
         // how to handle these ?
-        case DirectoryItem::E_LOOP:         // Too many symbolic links encountered<br>
-        case DirectoryItem::E_ACCES:        // permission denied<br>
+        case DirectoryItem::E_LOOP:			// Too many symbolic links encountered<br>
+        case DirectoryItem::E_ACCES:		// permission denied<br>
         // any other error - what to do ?
         default:
             eStatus = Bootstrap::DATA_UNKNOWN;
@@ -261,7 +261,7 @@ bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
     using osl::File;
 
     OUString sBasePath;
-    OSL_VERIFY(tools::getProcessWorkingDir(sBasePath));
+    OSL_VERIFY(tools::getProcessWorkingDir(&sBasePath));
 
     OUString sAbsolute;
     if ( File::E_None == File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
@@ -271,7 +271,7 @@ bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
     }
     else
     {
-        OSL_FAIL("Could not get absolute file URL for URL");
+        OSL_ENSURE(false, "Could not get absolute file URL for URL");
         return false;
     }
 }
@@ -359,7 +359,7 @@ PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
         if (eStatus == Bootstrap::PATH_EXISTS)
         {
             if (!implNormalizeURL(_sURL,aDirItem))
-                OSL_FAIL("Unexpected failure getting actual URL for existing object");
+                OSL_ENSURE(false,"Unexpected failure getting actual URL for existing object");
         }
     }
     return eStatus;
@@ -401,7 +401,7 @@ PathStatus getDerivedPath(
 
         OSL_ENSURE(sDerivedURL == _rURL,"Could not set derived URL via Bootstrap default parameter");
         OSL_POSTCOND(RTL_BOOTSTRAP_DEFAULTS_BROKEN ||
-                    (_rData.getFrom(_sBootstrapParameter,sDerivedURL) && sDerivedURL==_rURL),"Use of default did not affect bootstrap value");
+                    _rData.getFrom(_sBootstrapParameter,sDerivedURL) && sDerivedURL==_rURL,"Use of default did not affect bootstrap value");
     }
     else
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 // - VersionCompat -
 // -----------------
 
-VersionCompat::VersionCompat( SvStream& rStm, sal_uInt16 nStreamMode, sal_uInt16 nVersion ) :
+VersionCompat::VersionCompat( SvStream& rStm, USHORT nStreamMode, USHORT nVersion ) :
             mpRWStm     ( &rStm ),
             mnStmMode   ( nStreamMode ),
             mnVersion   ( nVersion )
@@ -65,7 +65,7 @@ VersionCompat::~VersionCompat()
 {
     if( STREAM_WRITE == mnStmMode )
     {
-        const sal_uInt32 nEndPos = mpRWStm->Tell();
+        const UINT32 nEndPos = mpRWStm->Tell();
 
         mpRWStm->Seek( mnCompatPos );
         *mpRWStm << ( nEndPos - mnTotalSize );
@@ -73,7 +73,7 @@ VersionCompat::~VersionCompat()
     }
     else
     {
-        const sal_uInt32 nReadSize = mpRWStm->Tell() - mnCompatPos;
+        const UINT32 nReadSize = mpRWStm->Tell() - mnCompatPos;
 
         if( mnTotalSize > nReadSize )
             mpRWStm->SeekRel( mnTotalSize - nReadSize );

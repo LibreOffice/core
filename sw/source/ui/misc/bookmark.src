@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,10 @@
 #include "helpid.h"
 ModalDialog DLG_INSERT_BOOKMARK
 {
-    HelpID = CMD_FN_INSERT_BOOKMARK ;
+    HelpID = FN_INSERT_BOOKMARK ;
     OUTPUTSIZE = TRUE ;
     Size = MAP_APPFONT ( 179 , 96 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Textmarke einfügen : Textmarke einf³gen */
     Text [ en-US ] = "Insert Bookmark" ;
     MOVEABLE = TRUE ;
     SVLOOK = TRUE ;
@@ -53,7 +54,6 @@ ModalDialog DLG_INSERT_BOOKMARK
     };
     ComboBox CB_BOOKMARK
     {
-        HelpID = "sw:ComboBox:DLG_INSERT_BOOKMARK:CB_BOOKMARK";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 99 , 76 ) ;
         TABSTOP = TRUE ;
@@ -62,9 +62,9 @@ ModalDialog DLG_INSERT_BOOKMARK
     };
     PushButton BT_DELETE
     {
-        HelpID = "sw:PushButton:DLG_INSERT_BOOKMARK:BT_DELETE";
         Pos = MAP_APPFONT ( 123 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text [ en-US ] = "~Delete" ;
         TABSTOP = TRUE ;
         DISABLE = TRUE ;

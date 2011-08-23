@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,6 @@ QueueProcessor::QueueProcessor (
     RequestQueue& rQueue,
     const ::boost::shared_ptr<BitmapCache>& rpCache,
     const Size& rPreviewSize,
-    const bool bDoSuperSampling,
     const SharedCacheContext& rpCacheContext)
     : maMutex(),
       maTimer(),
@@ -49,7 +48,6 @@ QueueProcessor::QueueProcessor (
       mnTimeBetweenLowPriorityRequests (100/*ms*/),
       mnTimeBetweenRequestsWhenNotIdle (1000/*ms*/),
       maPreviewSize(rPreviewSize),
-      mbDoSuperSampling(bDoSuperSampling),
       mpCacheContext(rpCacheContext),
       mrQueue(rQueue),
       mpCache(rpCache),
@@ -62,7 +60,7 @@ QueueProcessor::QueueProcessor (
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeBetweenHighPriorityRequests")));
     if (aTimeBetweenReqeusts.has<sal_Int32>())
         aTimeBetweenReqeusts >>= mnTimeBetweenHighPriorityRequests;
-
+    
     aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeBetweenLowPriorityRequests")));
     if (aTimeBetweenReqeusts.has<sal_Int32>())
@@ -139,12 +137,9 @@ void QueueProcessor::Terminate (void)
 
 
 
-void QueueProcessor::SetPreviewSize (
-    const Size& rPreviewSize,
-    const bool bDoSuperSampling)
+void QueueProcessor::SetPreviewSize (const Size& rPreviewSize)
 {
     maPreviewSize = rPreviewSize;
-    mbDoSuperSampling = bDoSuperSampling;
 }
 
 
@@ -213,24 +208,27 @@ void QueueProcessor::ProcessOneRequest (
             const SdPage* pSdPage = dynamic_cast<const SdPage*>(mpCacheContext->GetPage(aKey));
             if (pSdPage != NULL)
             {
-                const Bitmap aPreview (
-                    maBitmapFactory.CreateBitmap(*pSdPage, maPreviewSize, mbDoSuperSampling));
-                mpCache->SetBitmap (pSdPage, aPreview, ePriorityClass!=NOT_VISIBLE);
+                const ::boost::shared_ptr<BitmapEx> pPreview (
+                    maBitmapFactory.CreateBitmap(*pSdPage, maPreviewSize));
+                mpCache->SetBitmap (
+                    pSdPage,
+                    pPreview,
+                    ePriorityClass!=NOT_VISIBLE);
 
                 // Initiate a repaint of the new preview.
-                mpCacheContext->NotifyPreviewCreation(aKey, aPreview);
+                mpCacheContext->NotifyPreviewCreation(aKey, pPreview);
             }
         }
     }
-    catch (::com::sun::star::uno::RuntimeException &aException)
+    catch (::com::sun::star::uno::RuntimeException aException)
     {
         (void) aException;
-        OSL_FAIL("RuntimeException caught in QueueProcessor");
+        OSL_ASSERT("RuntimeException caught in QueueProcessor");
     }
-    catch (::com::sun::star::uno::Exception &aException)
+    catch (::com::sun::star::uno::Exception aException)
     {
         (void) aException;
-        OSL_FAIL("Exception caught in QueueProcessor");
+        OSL_ASSERT("Exception caught in QueueProcessor");
     }
 }
 

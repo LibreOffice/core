@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,7 @@
 
 // -----------------------------------------------------------------------------
 
-namespace editeng {
-    class SvxBorderLine;
-}
+class SvxBorderLine;
 
 namespace sdr { namespace table {
 
@@ -54,7 +52,7 @@ namespace sdr { namespace table {
 */
 bool findMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedCol, sal_Int32 nMergedRow, sal_Int32& rOriginCol, sal_Int32& rOriginRow );
 
-typedef std::vector< editeng::SvxBorderLine* > BorderLineVector;
+typedef std::vector< SvxBorderLine* > BorderLineVector;
 typedef std::vector< BorderLineVector > BorderLineMap;
 
 // -----------------------------------------------------------------------------
@@ -76,7 +74,7 @@ public:
 
     /** try to fit the table into the given rectangle.
         If the rectangle is to small, it will be grown to fit the table.
-
+    
         if bFitWidth or bFitHeight is set, the layouter tries to scale
         the rows and/or columns to the given area. The result my be bigger
         to fullfill constrains.
@@ -87,7 +85,7 @@ public:
 
     /** after a call to LayoutTable, this method can be used to set the new
         column and row sizes back to the model. */
-//  void SetLayoutToModel();
+//	void SetLayoutToModel();
 
     void UpdateBorderLayout();
 
@@ -97,12 +95,13 @@ public:
 
     ::sal_Int32 getRowCount() const { return static_cast< ::sal_Int32 >( maRows.size() ); }
     ::sal_Int32 getColumnCount() const { return static_cast< ::sal_Int32 >( maColumns.size() ); }
-    sal_Int32 getRowHeight( sal_Int32 nRow ) const;
+
+    sal_Int32 getRowHeight( sal_Int32 nRow );
 
     // sets the layout height of the given row hard, LayoutTable must be called directly after calling this method! */
     void setRowHeight( sal_Int32 nRow, sal_Int32 nHeight );
 
-    sal_Int32 getColumnWidth( sal_Int32 nColumn ) const;
+    sal_Int32 getColumnWidth( sal_Int32 nColumn );
 
     // sets the layout width of the given column hard, LayoutTable must be called directly after calling this method! */
     void setColumnWidth( sal_Int32 nColumn, sal_Int32 nWidth );
@@ -118,7 +117,7 @@ public:
     bool isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal ) const;
 
     /** returns the requested borderline in rpBorderLine or a null pointer if there is no border at this edge */
-    editeng::SvxBorderLine* getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal )const;
+    SvxBorderLine* getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal )const;
 
     void updateCells( ::Rectangle& rRectangle );
 
@@ -146,9 +145,9 @@ private:
     void ResizeBorderLayout();
     void ResizeBorderLayout( BorderLineMap& rMap );
 
-    void SetBorder( sal_Int32 nCol, sal_Int32 nRow, bool bHorizontal, const editeng::SvxBorderLine* pLine );
+    void SetBorder( sal_Int32 nCol, sal_Int32 nRow, bool bHorizontal, const SvxBorderLine* pLine );
 
-    static bool HasPriority( const editeng::SvxBorderLine* pThis, const editeng::SvxBorderLine* pOther );
+    static bool HasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther );
 
     struct Layout
     {
@@ -157,7 +156,7 @@ private:
         sal_Int32 mnMinSize;
 
         Layout() : mnPos( 0 ), mnSize( 0 ), mnMinSize( 0 ) {}
-        void clear() { mnPos = 0; mnSize = 0; mnMinSize = 0; }
+        void clear() { mnPos = 0; mnSize = 0; mnMinSize = 0; } 
     };
     typedef std::vector< Layout > LayoutVector;
 
@@ -170,7 +169,7 @@ private:
     BorderLineMap maHorizontalBorders;
     BorderLineMap maVerticalBorders;
 
-    com::sun::star::text::WritingMode   meWritingMode;
+    com::sun::star::text::WritingMode	meWritingMode;
 
     const rtl::OUString msSize;
 };

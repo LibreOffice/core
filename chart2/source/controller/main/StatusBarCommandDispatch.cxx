@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,9 @@
 #include "ObjectNameProvider.hxx"
 #include "macros.hxx"
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
+
+// for ressource strings STR_UNDO and STR_REDO
+#include <sfx2/sfx.hrc>
 
 #include "ResId.hxx"
 

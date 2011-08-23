@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,13 +35,9 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#undef OPTIONAL
-#endif
-
+#if STLPORT_VERSION>=321
 #include <cstdarg>
+#endif
 
 #include <plugin/impl.hxx>
 #include <tools/debug.hxx>
@@ -63,6 +59,33 @@ extern "C" {
         uno_Environment** /*ppEnv*/ )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+    }
+
+    sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pXUnoKey )
+    {
+        if( pXUnoKey )
+        {
+            try
+            {
+                Reference< ::com::sun::star::registry::XRegistryKey > xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pXUnoKey ) );
+                
+                ::rtl::OUString aImplName = ::rtl::OUString::createFromAscii( "/" );
+                aImplName += XPluginManager_Impl::getImplementationName_Static();
+                aImplName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES/com.sun.star.plugin.PluginManager" );
+                xKey->createKey( aImplName );
+                
+                aImplName = ::rtl::OUString::createFromAscii( "/" );
+                aImplName += PluginModel::getImplementationName_Static();
+                aImplName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES/com.sun.star.plugin.PluginModel" );
+                xKey->createKey( aImplName );
+                
+                return sal_True;
+            }
+            catch( ::com::sun::star::registry::InvalidRegistryException& )
+            {
+            }
+        }
+        return sal_False;
     }
 
     void* SAL_CALL component_getFactory(

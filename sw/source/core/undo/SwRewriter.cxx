@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ String SwRewriter::Apply(const String & rStr) const
     String aResult = rStr;
     vector<SwRewriteRule>::const_iterator aIt;
 
-    for (aIt = mRules.begin(); aIt != mRules.end(); ++aIt)
+    for (aIt = mRules.begin(); aIt != mRules.end(); aIt++)
         aResult.SearchAndReplaceAll(aIt->first, aIt->second);
 
     return aResult;

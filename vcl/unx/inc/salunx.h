@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 #define _SALUNX_H
 
 // -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#if defined LINUX || defined FREEBSD || \
-    defined NETBSD || defined OPENBSD || defined DRAGONFLY
+#if defined SCO || defined LINUX || defined HPUX || defined FREEBSD || \
+	defined NETBSD || defined OPENBSD
 #include <sys/time.h>
 #elif defined AIX
 #include <time.h>
@@ -42,7 +42,7 @@
 #include <salstd.hxx>
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define capacityof(a)   (sizeof(a)/sizeof(*a))
+#define capacityof(a)	(sizeof(a)/sizeof(*a))
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline long Divide( long nDividend, long nDivisor )
@@ -70,7 +70,7 @@ inline int operator == ( const timeval &t1, const timeval &t2 )
 {
     if( t1.tv_sec == t2.tv_sec )
         return t1.tv_usec == t2.tv_usec;
-    return sal_False;
+    return FALSE;
 }
 
 inline timeval &operator -= ( timeval &t1, const timeval &t2 )
@@ -97,7 +97,7 @@ inline timeval &operator += ( timeval &t1, const timeval &t2 )
     return t1;
 }
 
-inline timeval &operator += ( timeval &t1, sal_uIntPtr t2 )
+inline timeval &operator += ( timeval &t1, ULONG t2 )
 {
     t1.tv_sec  += t2 / 1000;
     t1.tv_usec += t2 ? (t2 % 1000) * 1000 : 500;
@@ -115,7 +115,7 @@ inline timeval operator + ( const timeval &t1, const timeval &t2 )
     return t0 += t2;
 }
 
-inline timeval operator + ( const timeval &t1, sal_uIntPtr t2 )
+inline timeval operator + ( const timeval &t1, ULONG t2 )
 {
     timeval t0 = t1;
     return t0 += t2;

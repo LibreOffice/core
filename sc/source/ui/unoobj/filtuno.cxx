@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,20 +58,20 @@ using ::rtl::OUStringBuffer;
 
 //------------------------------------------------------------------------
 
-#define SCFILTEROPTIONSOBJ_SERVICE      "com.sun.star.ui.dialogs.FilterOptionsDialog"
-#define SCFILTEROPTIONSOBJ_IMPLNAME     "com.sun.star.comp.Calc.FilterOptionsDialog"
+#define SCFILTEROPTIONSOBJ_SERVICE		"com.sun.star.ui.dialogs.FilterOptionsDialog"
+#define SCFILTEROPTIONSOBJ_IMPLNAME		"com.sun.star.comp.Calc.FilterOptionsDialog"
 
 SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, SCFILTEROPTIONSOBJ_IMPLNAME, SCFILTEROPTIONSOBJ_SERVICE )
 
 #define SC_UNONAME_FILENAME         "URL"
-#define SC_UNONAME_FILTERNAME       "FilterName"
-#define SC_UNONAME_FILTEROPTIONS    "FilterOptions"
-#define SC_UNONAME_INPUTSTREAM      "InputStream"
+#define SC_UNONAME_FILTERNAME		"FilterName"
+#define SC_UNONAME_FILTEROPTIONS	"FilterOptions"
+#define SC_UNONAME_INPUTSTREAM		"InputStream"
 
 //------------------------------------------------------------------------
 
 ScFilterOptionsObj::ScFilterOptionsObj() :
-    bExport( false )
+    bExport( sal_False )
 {
 }
 
@@ -81,7 +81,7 @@ ScFilterOptionsObj::~ScFilterOptionsObj()
 
 // stuff for exService_...
 
-uno::Reference<uno::XInterface> SAL_CALL ScFilterOptionsObj_CreateInstance(
+uno::Reference<uno::XInterface>	SAL_CALL ScFilterOptionsObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& )
 {
     SolarMutexGuard aGuard;
@@ -91,14 +91,14 @@ uno::Reference<uno::XInterface> SAL_CALL ScFilterOptionsObj_CreateInstance(
 
 rtl::OUString ScFilterOptionsObj::getImplementationName_Static()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCFILTEROPTIONSOBJ_IMPLNAME ));
+    return rtl::OUString::createFromAscii( SCFILTEROPTIONSOBJ_IMPLNAME );
 }
 
 uno::Sequence<rtl::OUString> ScFilterOptionsObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCFILTEROPTIONSOBJ_SERVICE ));
+    pArray[0] = rtl::OUString::createFromAscii( SCFILTEROPTIONSOBJ_SERVICE );
     return aRet;
 }
 
@@ -109,7 +109,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValu
     uno::Sequence<beans::PropertyValue> aRet(1);
     beans::PropertyValue* pArray = aRet.getArray();
 
-    pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTEROPTIONS ));
+    pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_FILTEROPTIONS );
     pArray[0].Value <<= aFilterOptions;
 
     return aRet;
@@ -155,7 +155,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
 
     if ( !bExport && aFilterString == ScDocShell::GetAsciiFilterName() )
     {
-        //  ascii import is special...
+        //	ascii import is special...
 
         INetURLObject aURL( aFileName );
         String aExt(aURL.getExtension());
@@ -192,12 +192,12 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
             // HTML import.
             ::std::auto_ptr<AbstractScTextImportOptionsDlg> pDlg(
                 pFact->CreateScTextImportOptionsDlg(NULL, RID_SCDLG_TEXT_IMPORT_OPTIONS));
-
+    
             if (pDlg->Execute() == RET_OK)
             {
                 LanguageType eLang = pDlg->GetLanguageType();
                 OUStringBuffer aBuf;
-
+    
                 aBuf.append(String::CreateFromInt32(static_cast<sal_Int32>(eLang)));
                 aBuf.append(sal_Unicode(' '));
                 aBuf.append(pDlg->IsDateConversionSet() ? sal_Unicode('1') : sal_Unicode('0'));
@@ -209,8 +209,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
     else
     {
         sal_Bool bMultiByte = sal_True;
-        sal_Bool bDBEnc     = false;
-        sal_Bool bAscii     = false;
+        sal_Bool bDBEnc     = sal_False;
+        sal_Bool bAscii     = sal_False;
 
         sal_Unicode cStrDel = '"';
         sal_Unicode cAsciiDel = ';';
@@ -220,7 +220,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
 
         if ( aFilterString == ScDocShell::GetAsciiFilterName() )
         {
-            //  ascii export (import is handled above)
+            //	ascii export (import is handled above)
 
             INetURLObject aURL( aFileName );
             String aExt(aURL.getExtension());
@@ -234,7 +234,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         }
         else if ( aFilterString == ScDocShell::GetLotusFilterName() )
         {
-            //  lotus is only imported
+            //	lotus is only imported
             DBG_ASSERT( !bExport, "Filter Options for Lotus Export is not implemented" );
 
             aTitle = ScGlobal::GetRscString( STR_IMPORT_LOTUS );
@@ -244,12 +244,12 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         {
             if ( bExport )
             {
-                //  dBase export
+                //	dBase export
                 aTitle = ScGlobal::GetRscString( STR_EXPORT_DBF );
             }
             else
             {
-                //  dBase import
+                //	dBase import
                 aTitle = ScGlobal::GetRscString( STR_IMPORT_DBF );
             }
             // common for dBase import/export
@@ -260,12 +260,12 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         {
             if ( bExport )
             {
-                //  DIF export
+                //	DIF export
                 aTitle = ScGlobal::GetRscString( STR_EXPORT_DIF );
             }
             else
             {
-                //  DIF import
+                //	DIF import
                 aTitle = ScGlobal::GetRscString( STR_IMPORT_DIF );
             }
             // common for DIF import/export
@@ -290,7 +290,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         delete pDlg;
     }
 
-    xInputStream.clear();   // don't hold the stream longer than necessary
+    xInputStream.clear();	// don't hold the stream longer than necessary
 
     return nRet;
 }
@@ -300,7 +300,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
 void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
                             throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    bExport = false;
+    bExport = sal_False;
 }
 
 // XExporter

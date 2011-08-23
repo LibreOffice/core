@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 /////////////////////////////////////////////////////////////////
 
 // Latin default-fonts
-static const sal_uInt16 aLatinDefFnts[FNT_END] =
+static const USHORT aLatinDefFnts[FNT_END] =
 {
     DEFAULTFONT_SERIF,  // FNT_VARIABLE
     DEFAULTFONT_SERIF,  // FNT_FUNCTION
@@ -54,7 +54,7 @@ static const sal_uInt16 aLatinDefFnts[FNT_END] =
 //! we use non-asian fonts for variables, functions and numbers since they
 //! look better and even in asia only latin letters will be used for those.
 //! At least that's what I was told...
-static const sal_uInt16 aCJKDefFnts[FNT_END] =
+static const USHORT aCJKDefFnts[FNT_END] =
 {
     DEFAULTFONT_SERIF,          // FNT_VARIABLE
     DEFAULTFONT_SERIF,          // FNT_FUNCTION
@@ -67,7 +67,7 @@ static const sal_uInt16 aCJKDefFnts[FNT_END] =
 };
 
 // CTL default-fonts
-static const sal_uInt16 aCTLDefFnts[FNT_END] =
+static const USHORT aCTLDefFnts[FNT_END] =
 {
     DEFAULTFONT_CTL_TEXT,    // FNT_VARIABLE
     DEFAULTFONT_CTL_TEXT,    // FNT_FUNCTION
@@ -80,7 +80,7 @@ static const sal_uInt16 aCTLDefFnts[FNT_END] =
 };
 
 
-String GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
+String GetDefaultFontName( LanguageType nLang, USHORT nIdent )
 {
     OSL_ENSURE( /*FNT_BEGIN <= nIdent  &&*/  nIdent <= FNT_END,
             "index out opd range" );
@@ -89,7 +89,7 @@ String GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
         return String::CreateFromAscii( FNTNAME_MATH );
     else
     {
-        const sal_uInt16 *pTable;
+        const USHORT *pTable;
         switch ( SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ) )
         {
             case SCRIPTTYPE_LATIN :     pTable = aLatinDefFnts; break;
@@ -97,7 +97,7 @@ String GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
             case SCRIPTTYPE_COMPLEX :   pTable = aCTLDefFnts; break;
             default :
                 pTable = aLatinDefFnts;
-                OSL_FAIL( "unknown script-type" );
+                DBG_ERROR( "unknown script-type" );
         }
 
         return Application::GetDefaultDevice()->GetDefaultFont(
@@ -109,53 +109,53 @@ String GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
 /////////////////////////////////////////////////////////////////
 
 SmFormat::SmFormat()
-:   aBaseSize(0, SmPtsTo100th_mm(12))
+:	aBaseSize(0, SmPtsTo100th_mm(12))
 {
-    nVersion    = SM_FMT_VERSION_NOW;
+    nVersion 	= SM_FMT_VERSION_NOW;
 
     eHorAlign       = AlignCenter;
     nGreekCharStyle = 0;
-    bIsTextmode     = bScaleNormalBrackets = false;
+    bIsTextmode     = bScaleNormalBrackets = FALSE;
 
-    vSize[SIZ_TEXT]     = 100;
-    vSize[SIZ_INDEX]    = 60;
+    vSize[SIZ_TEXT] 	= 100;
+    vSize[SIZ_INDEX]	= 60;
     vSize[SIZ_FUNCTION] =
     vSize[SIZ_OPERATOR] = 100;
-    vSize[SIZ_LIMITS]   = 60;
+    vSize[SIZ_LIMITS]	= 60;
 
-    vDist[DIS_HORIZONTAL]           = 10;
-    vDist[DIS_VERTICAL]             = 5;
-    vDist[DIS_ROOT]                 = 0;
-    vDist[DIS_SUPERSCRIPT]          =
-    vDist[DIS_SUBSCRIPT]            = 20;
-    vDist[DIS_NUMERATOR]            =
-    vDist[DIS_DENOMINATOR]          = 0;
-    vDist[DIS_FRACTION]             = 10;
-    vDist[DIS_STROKEWIDTH]          = 5;
-    vDist[DIS_UPPERLIMIT]           =
-    vDist[DIS_LOWERLIMIT]           = 0;
-    vDist[DIS_BRACKETSIZE]          =
-    vDist[DIS_BRACKETSPACE]         = 5;
-    vDist[DIS_MATRIXROW]            = 3;
-    vDist[DIS_MATRIXCOL]            = 30;
-    vDist[DIS_ORNAMENTSIZE]         =
-    vDist[DIS_ORNAMENTSPACE]        = 0;
-    vDist[DIS_OPERATORSIZE]         = 50;
-    vDist[DIS_OPERATORSPACE]        = 20;
-    vDist[DIS_LEFTSPACE]            =
-    vDist[DIS_RIGHTSPACE]           = 100;
-    vDist[DIS_TOPSPACE]             =
-    vDist[DIS_BOTTOMSPACE]          =
-    vDist[DIS_NORMALBRACKETSIZE]    = 0;
+    vDist[DIS_HORIZONTAL]	 		= 10;
+    vDist[DIS_VERTICAL] 	 		= 5;
+    vDist[DIS_ROOT] 		 		= 0;
+    vDist[DIS_SUPERSCRIPT]	 		=
+    vDist[DIS_SUBSCRIPT]	 		= 20;
+    vDist[DIS_NUMERATOR]	 		=
+    vDist[DIS_DENOMINATOR]	 		= 0;
+    vDist[DIS_FRACTION] 	 		= 10;
+    vDist[DIS_STROKEWIDTH]	 		= 5;
+    vDist[DIS_UPPERLIMIT]	 		=
+    vDist[DIS_LOWERLIMIT]    		= 0;
+    vDist[DIS_BRACKETSIZE]	 		=
+    vDist[DIS_BRACKETSPACE]  		= 5;
+    vDist[DIS_MATRIXROW]	 		= 3;
+    vDist[DIS_MATRIXCOL]	 		= 30;
+    vDist[DIS_ORNAMENTSIZE]  		=
+    vDist[DIS_ORNAMENTSPACE] 		= 0;
+    vDist[DIS_OPERATORSIZE]  		= 50;
+    vDist[DIS_OPERATORSPACE] 		= 20;
+    vDist[DIS_LEFTSPACE]	 		=
+    vDist[DIS_RIGHTSPACE]	 		= 100;
+    vDist[DIS_TOPSPACE]		 		=
+    vDist[DIS_BOTTOMSPACE]	 		=
+    vDist[DIS_NORMALBRACKETSIZE]	= 0;
 
-    vFont[FNT_VARIABLE] =
-    vFont[FNT_FUNCTION] =
-    vFont[FNT_NUMBER]   =
-    vFont[FNT_TEXT]     =
-    vFont[FNT_SERIF]    = SmFace(C2S(FNTNAME_TIMES), aBaseSize);
-    vFont[FNT_SANS]     = SmFace(C2S(FNTNAME_HELV),  aBaseSize);
-    vFont[FNT_FIXED]    = SmFace(C2S(FNTNAME_COUR),  aBaseSize);
-    vFont[FNT_MATH]     = SmFace(C2S(FNTNAME_MATH),  aBaseSize);
+    vFont[FNT_VARIABLE]	=
+    vFont[FNT_FUNCTION]	=
+    vFont[FNT_NUMBER]	=
+    vFont[FNT_TEXT]		=
+    vFont[FNT_SERIF]	= SmFace(C2S(FNTNAME_TIMES), aBaseSize);
+    vFont[FNT_SANS]		= SmFace(C2S(FNTNAME_HELV),  aBaseSize);
+    vFont[FNT_FIXED]	= SmFace(C2S(FNTNAME_COUR),  aBaseSize);
+    vFont[FNT_MATH]		= SmFace(C2S(FNTNAME_MATH),  aBaseSize);
 
     vFont[FNT_MATH].SetCharSet( RTL_TEXTENCODING_UNICODE );
 
@@ -167,21 +167,21 @@ SmFormat::SmFormat()
     vFont[FNT_SANS]    .SetItalic(ITALIC_NONE);
     vFont[FNT_FIXED]   .SetItalic(ITALIC_NONE);
 
-    for ( sal_uInt16 i = FNT_BEGIN;  i <= FNT_END;  i++ )
+    for ( USHORT i = FNT_BEGIN;  i <= FNT_END;  i++ )
     {
         SmFace &rFace = vFont[i];
-        rFace.SetTransparent( true );
+        rFace.SetTransparent( TRUE );
         rFace.SetAlign( ALIGN_BASELINE );
         rFace.SetColor( COL_AUTO );
-        bDefaultFont[i] = false;
+        bDefaultFont[i] = FALSE;
     }
 }
 
 
-void SmFormat::SetFont(sal_uInt16 nIdent, const SmFace &rFont, bool bDefault )
+void SmFormat::SetFont(USHORT nIdent, const SmFace &rFont, BOOL bDefault )
 {
     vFont[nIdent] = rFont;
-    vFont[nIdent].SetTransparent( true );
+    vFont[nIdent].SetTransparent( TRUE );
     vFont[nIdent].SetAlign( ALIGN_BASELINE );
 
     bDefaultFont[nIdent] = bDefault;
@@ -196,7 +196,7 @@ SmFormat & SmFormat::operator = (const SmFormat &rFormat)
     SetGreekCharStyle(rFormat.GetGreekCharStyle());
     SetScaleNormalBrackets(rFormat.IsScaleNormalBrackets());
 
-    sal_uInt16  i;
+    USHORT  i;
     for (i = FNT_BEGIN;  i <= FNT_END;  i++)
     {
         SetFont(i, rFormat.GetFont(i));
@@ -211,30 +211,30 @@ SmFormat & SmFormat::operator = (const SmFormat &rFormat)
 }
 
 
-bool SmFormat::operator == (const SmFormat &rFormat) const
+BOOL SmFormat::operator == (const SmFormat &rFormat) const
 {
-    bool bRes = aBaseSize == rFormat.aBaseSize  &&
+    BOOL bRes = aBaseSize == rFormat.aBaseSize  &&
                 eHorAlign == rFormat.eHorAlign  &&
                 nGreekCharStyle == rFormat.nGreekCharStyle &&
                 bIsTextmode == rFormat.bIsTextmode  &&
                 bScaleNormalBrackets  == rFormat.bScaleNormalBrackets;
 
-    sal_uInt16 i;
+    USHORT i;
     for (i = 0;  i <= SIZ_END && bRes;  ++i)
     {
         if (vSize[i] != rFormat.vSize[i])
-            bRes = false;
+            bRes = FALSE;
     }
     for (i = 0;  i <= DIS_END && bRes;  ++i)
     {
         if (vDist[i] != rFormat.vDist[i])
-            bRes = false;
+            bRes = FALSE;
     }
     for (i = 0;  i <= FNT_END && bRes;  ++i)
     {
         if (vFont[i] != rFormat.vFont[i]  ||
             bDefaultFont[i] != rFormat.bDefaultFont[i])
-            bRes = false;
+            bRes = FALSE;
     }
 
     return bRes;

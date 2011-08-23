@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,10 +72,10 @@ class ColWheel;
 class Fix
 {
 private:
-    friend  class FixCpx;
-    friend  class ColWheel;
+    friend	class FixCpx;
+    friend	class ColWheel;
 
-//  friend  Fix ImpMultBig2( const Fix& a, const Fix& b );
+//	friend	Fix ImpMultBig2( const Fix& a, const Fix& b );
 
 public:
     long            x;
@@ -84,7 +84,7 @@ public:
                     Fix() { x=0; }
                     Fix( int i ) { x=(long(i)<<FIX_POST); }
                     Fix( short l ) { x=(long(l)<<FIX_POST); }
-                    Fix( sal_uInt16 l ) { x=(long(l)<<FIX_POST); }
+                    Fix( USHORT l ) { x=(long(l)<<FIX_POST); }
                     Fix( long l ) { x=(l<<FIX_POST); }
                     Fix( long Z, long N ) { x=(Z<<FIX_POST)/N; }
 
@@ -102,8 +102,8 @@ public:
     void            DivBig( const Fix& a )
                         { x=((x<<FIX_P3)/a.x)<<FIX_P2; }
 
-    friend sal_Bool     operator> ( const Fix& a, const Fix& b ) { return a.x > b.x; }
-    friend sal_Bool     operator< ( const Fix& a, const Fix& b ) { return a.x < b.x; }
+    friend BOOL     operator> ( const Fix& a, const Fix& b ) { return a.x > b.x; }
+    friend BOOL     operator< ( const Fix& a, const Fix& b ) { return a.x < b.x; }
 
     operator        long() const    { return (x+FIX_ADD) >> FIX_POST; }
     operator        double() const  { return double(x)/(1<<FIX_POST); }
@@ -122,7 +122,7 @@ public:
 
 class FixCpx
 {
-//  friend  FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb );
+//	friend	FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb );
 
 public:
     Fix             r;
@@ -219,12 +219,12 @@ inline FixCpx operator/ ( const FixCpx& a, const FixCpx& b )
 Fix ImpMultBig2( const Fix& a, const Fix& b );
 FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb );
 
-void ImpCartToPolar( const short x, const short y, Fix& rRad, sal_uInt16& rPhi );
-void ImpPolarToCart( const Fix& rR, const sal_uInt16 Phi, short& rX, short& rY );
+void ImpCartToPolar( const short x, const short y, Fix& rRad, USHORT& rPhi );
+void ImpPolarToCart( const Fix& rR, const USHORT Phi, short& rX, short& rY );
 
-sal_uInt16 ImpSqrt( sal_uLong nRadi );
-sal_uInt16 ImpATan2( const short x, const short y );
-FixCpx ImpExPI( sal_uInt16 nPhi );
+USHORT ImpSqrt( ULONG nRadi );
+USHORT ImpATan2( const short x, const short y );
+FixCpx ImpExPI( USHORT nPhi );
 
 #endif // _MCVMATH_HXX
 

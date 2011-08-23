@@ -5,7 +5,8 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 
 =head1 PROGRAM NAME AND AUTHOR
 
-Timings
+Timings - $Revision: 1.2 $
+Last changes: $Author: rt $ $Date: 2004-11-26 18:43:32 $
 
 =head1 WHAT IT IS
 
@@ -50,7 +51,7 @@ $record = 1;
 while( <> )
 {
     if( $state == 0 && m|next position will be| )
-    {
+    {		
         ($posX) = m|.*\(([0-9]+.[0-9]+),|;
         ($posY) = m|.*,([0-9]+.[0-9]+)\)|;
         $state = 1;

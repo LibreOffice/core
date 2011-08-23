@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,19 +40,19 @@
 #include "dbustrings.hrc"
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "localresaccess.hxx"
 #include <unotools/syslocale.hxx>
 
-#define EF_VISITED      0x0001
-#define EF_DIRTY        0x0002
+#define EF_VISITED		0x0001
+#define EF_DIRTY		0x0002
 
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
-
+                                    
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -66,19 +66,19 @@ namespace dbaui
     //==================================================================
 
     //------------------------------------------------------------------------------
-    #define INIT_MEMBERS()                                          \
-        :ModalDialog( pParent, ModuleRes(DLG_PARAMETERS))           \
-        ,m_aNamesFrame  (this, ModuleRes(FL_PARAMS))                    \
-        ,m_aAllParams   (this, ModuleRes(LB_ALLPARAMS))                 \
-        ,m_aValueFrame  (this, ModuleRes(FT_VALUE))                     \
-        ,m_aParam       (this, ModuleRes(ET_PARAM))                     \
-        ,m_aTravelNext  (this, ModuleRes(BT_TRAVELNEXT))                \
-        ,m_aOKBtn       (this, ModuleRes(BT_OK))                        \
-        ,m_aCancelBtn   (this, ModuleRes(BT_CANCEL))                    \
-        ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)               \
-        ,m_xConnection(_rxConnection)                               \
-        ,m_aPredicateInput( _rxORB, _rxConnection, getParseContext() )  \
-        ,m_bNeedErrorOnCurrent(sal_True)                            \
+    #define INIT_MEMBERS()											\
+        :ModalDialog( pParent, ModuleRes(DLG_PARAMETERS))			\
+        ,m_aNamesFrame	(this, ModuleRes(FL_PARAMS))					\
+        ,m_aAllParams	(this, ModuleRes(LB_ALLPARAMS))					\
+        ,m_aValueFrame	(this, ModuleRes(FT_VALUE))						\
+        ,m_aParam		(this, ModuleRes(ET_PARAM))						\
+        ,m_aTravelNext	(this, ModuleRes(BT_TRAVELNEXT))				\
+        ,m_aOKBtn		(this, ModuleRes(BT_OK))						\
+        ,m_aCancelBtn	(this, ModuleRes(BT_CANCEL))					\
+        ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)				\
+        ,m_xConnection(_rxConnection)								\
+        ,m_aPredicateInput( _rxORB, _rxConnection, getParseContext() )	\
+        ,m_bNeedErrorOnCurrent(sal_True)							\
 
 
     //------------------------------------------------------------------------------
@@ -95,7 +95,7 @@ DBG_NAME(OParameterDialog)
             m_xFormatter = Reference< XNumberFormatter>(_rxORB->createInstance(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
         else {
-            OSL_FAIL("OParameterDialog::OParameterDialog: need a service factory!");
+            DBG_ERROR("OParameterDialog::OParameterDialog: need a service factory!");
         }
 
         Reference< XNumberFormatsSupplier >  xNumberFormats = ::dbtools::getNumberFormats(m_xConnection, sal_True);
@@ -105,7 +105,7 @@ DBG_NAME(OParameterDialog)
             m_xFormatter->attachNumberFormatsSupplier(xNumberFormats);
         try
         {
-            OSL_ENSURE(rParamContainer->getCount(), "OParameterDialog::OParameterDialog : can't handle empty containers !");
+            DBG_ASSERT(rParamContainer->getCount(), "OParameterDialog::OParameterDialog : can't handle empty containers !");
 
             m_aFinalValues.realloc(rParamContainer->getCount());
             PropertyValue* pValues = m_aFinalValues.getArray();
@@ -136,7 +136,7 @@ DBG_NAME(OParameterDialog)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-
+        
 
         Construct();
 
@@ -169,12 +169,12 @@ DBG_NAME(OParameterDialog)
             m_aAllParams.SelectEntryPos(0);
             LINK(this, OParameterDialog, OnEntrySelected).Call(&m_aAllParams);
 
-            if (m_aAllParams.GetEntryCount() == 1)
+            if (m_aAllParams.GetEntryCount() == 1) 
             {
                 m_aTravelNext.Enable(sal_False);
             }
 
-            if (m_aAllParams.GetEntryCount() > 1)
+            if (m_aAllParams.GetEntryCount() > 1) 
             {
                 m_aOKBtn.SetStyle(m_aOKBtn.GetStyle() & ~WB_DEFBUTTON);
                 m_aTravelNext.SetStyle(m_aTravelNext.GetStyle() | WB_DEFBUTTON);
@@ -216,14 +216,14 @@ DBG_NAME(OParameterDialog)
                     if (!m_bNeedErrorOnCurrent)
                         return 1L;
 
-                    m_bNeedErrorOnCurrent = sal_False;  // will be reset in OnValueModified
+                    m_bNeedErrorOnCurrent = sal_False;	// will be reset in OnValueModified
 
                     ::rtl::OUString sName;
-                    try
-                    {
-                        sName = ::comphelper::getString(xParamAsSet->getPropertyValue(PROPERTY_NAME));
-                    }
-                    catch(Exception&)
+                    try 
+                    { 
+                        sName = ::comphelper::getString(xParamAsSet->getPropertyValue(PROPERTY_NAME)); 
+                    } 
+                    catch(Exception&) 
                     {
                         DBG_UNHANDLED_EXCEPTION();
                     }
@@ -250,8 +250,8 @@ DBG_NAME(OParameterDialog)
         if (&m_aCancelBtn == pButton)
         {
             // no interpreting of the given values anymore ....
-            m_aParam.SetLoseFocusHdl(Link());   // no direct call from the control anymore ...
-            m_bNeedErrorOnCurrent = sal_False;      // in case of any indirect calls -> no error message
+            m_aParam.SetLoseFocusHdl(Link());	// no direct call from the control anymore ...
+            m_bNeedErrorOnCurrent = sal_False;		// in case of any indirect calls -> no error message
             m_aCancelBtn.SetClickHdl(Link());
             m_aCancelBtn.Click();
         }
@@ -259,7 +259,7 @@ DBG_NAME(OParameterDialog)
         {
             // transfer the current values into the Any
             if (LINK(this, OParameterDialog, OnEntrySelected).Call(&m_aAllParams) != 0L)
-            {   // there was an error interpreting the current text
+            {	// there was an error interpreting the current text
                 m_bNeedErrorOnCurrent = sal_True;
                     // we're are out of the complex web :) of direct and indirect calls to OnValueLoseFocus now,
                     // so the next time it is called we need an error message, again ....
@@ -288,7 +288,7 @@ DBG_NAME(OParameterDialog)
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
-
+                
             }
             // to close the dialog (which is more code than a simple EndDialog)
             m_aOKBtn.SetClickHdl(Link());
@@ -298,7 +298,7 @@ DBG_NAME(OParameterDialog)
         {
             sal_uInt16 nCurrent = m_aAllParams.GetSelectEntryPos();
             sal_uInt16 nCount = m_aAllParams.GetEntryCount();
-            OSL_ENSURE(nCount == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
+            DBG_ASSERT(nCount == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
 
             // search the next entry in list we haven't visited yet
             sal_uInt16 nNext = (nCurrent + 1) % nCount;
@@ -333,7 +333,7 @@ DBG_NAME(OParameterDialog)
         {
             // do the transformation of the current text
             if (LINK(this, OParameterDialog, OnValueLoseFocus).Call(&m_aParam) != 0L)
-            {   // there was an error interpreting the text
+            {	// there was an error interpreting the text
                 m_aAllParams.SelectEntryPos(m_nCurrentlySelected);
                 return 1L;
             }
@@ -343,13 +343,13 @@ DBG_NAME(OParameterDialog)
 
         // initialize the controls with the new values
         sal_uInt16 nSelected = m_aAllParams.GetSelectEntryPos();
-        OSL_ENSURE(nSelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnEntrySelected : no current entry !");
+        DBG_ASSERT(nSelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnEntrySelected : no current entry !");
 
         m_aParam.SetText(::comphelper::getString(m_aFinalValues[nSelected].Value));
         m_nCurrentlySelected = nSelected;
 
         // with this the value isn't dirty
-        OSL_ENSURE(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnEntrySelected : invalid current entry !");
+        DBG_ASSERT(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnEntrySelected : invalid current entry !");
         m_aVisitedParams[m_nCurrentlySelected] &= ~EF_DIRTY;
 
         m_aResetVisitFlag.SetTimeout(1000);
@@ -361,15 +361,15 @@ DBG_NAME(OParameterDialog)
     //------------------------------------------------------------------------------
     IMPL_LINK(OParameterDialog, OnVisitedTimeout, Timer*, /*pTimer*/)
     {
-        OSL_ENSURE(m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnVisitedTimeout : invalid call !");
+        DBG_ASSERT(m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnVisitedTimeout : invalid call !");
 
         // mark the currently selected entry as visited
-        OSL_ENSURE(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnVisitedTimeout : invalid entry !");
+        DBG_ASSERT(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnVisitedTimeout : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= EF_VISITED;
 
         // was it the last "not visited yet" entry ?
         ConstByteVectorIterator aIter;
-        for (   aIter = m_aVisitedParams.begin();
+        for	(	aIter = m_aVisitedParams.begin();
                 aIter < m_aVisitedParams.end();
                 ++aIter
             )
@@ -378,10 +378,10 @@ DBG_NAME(OParameterDialog)
                 break;
         }
         if (aIter == m_aVisitedParams.end())
-        {   // yes, there isn't another one -> change the "default button"
+        {	// yes, there isn't another one -> change the "default button"
             m_aTravelNext.SetStyle(m_aTravelNext.GetStyle() & ~WB_DEFBUTTON);
             m_aOKBtn.SetStyle(m_aOKBtn.GetStyle() | WB_DEFBUTTON);
-
+            
             // set to focus to one of the buttons temporary (with this their "default"-state is really updated)
             Window* pOldFocus = Application::GetFocusWindow();
 
@@ -411,7 +411,7 @@ DBG_NAME(OParameterDialog)
     IMPL_LINK(OParameterDialog, OnValueModified, Control*, /*pBox*/)
     {
         // mark the currently selected entry as dirty
-        OSL_ENSURE(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
+        DBG_ASSERT(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= EF_DIRTY;
 
         m_bNeedErrorOnCurrent = sal_True;
@@ -421,7 +421,7 @@ DBG_NAME(OParameterDialog)
 
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,6 +57,7 @@
 #include <svx/dialogs.hrc>
 #include <sot/clsids.hxx>
 
+#include "misc.hxx"
 #include "strings.hrc"
 #include "app.hrc"
 #include "unokywds.hxx"
@@ -121,8 +122,8 @@ void ViewShell::UpdateScrollBars()
         if(IsPageFlipMode()) // ie in zoom mode where no panning
         {
             SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
-            sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) / 2;
-            sal_uInt16 nTotalPages = GetDoc()->GetSdPageCount(pPage->GetPageKind());
+            USHORT nCurPage = (pPage->GetPageNum() - 1) / 2;
+            USHORT nTotalPages = GetDoc()->GetSdPageCount(pPage->GetPageKind());
             mpVerticalScrollBar->SetRange(Range(0,256*nTotalPages));
             mpVerticalScrollBar->SetVisibleSize(256);
             mpVerticalScrollBar->SetThumbPos(256*nCurPage);
@@ -235,8 +236,8 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     if(IsPageFlipMode())
     {
         SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
-        sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) >> 1;
-        sal_uInt16 nNewPage = (sal_uInt16)pVScroll->GetThumbPos()/256;
+        USHORT nCurPage = (pPage->GetPageNum() - 1) >> 1;
+        USHORT nNewPage = (USHORT)pVScroll->GetThumbPos()/256;
         if( nCurPage != nNewPage )
             static_cast<DrawViewShell*>(this)->SwitchPage(nNewPage);
     }
@@ -280,7 +281,7 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     return 0;
 }
 
-SvxRuler* ViewShell::CreateHRuler(::sd::Window* , sal_Bool )
+SvxRuler* ViewShell::CreateHRuler(::sd::Window* , BOOL )
 {
     return NULL;
 }
@@ -342,9 +343,9 @@ void ViewShell::Scroll(long nScrollX, long nScrollY)
         long nNewThumb = mpVerticalScrollBar->GetThumbPos() + nScrollY;
         mpVerticalScrollBar->SetThumbPos(nNewThumb);
     }
-    double  fX = (double) mpHorizontalScrollBar->GetThumbPos() /
+    double	fX = (double) mpHorizontalScrollBar->GetThumbPos() /
                             mpHorizontalScrollBar->GetRange().Len();
-    double  fY = (double) mpVerticalScrollBar->GetThumbPos() /
+    double	fY = (double) mpVerticalScrollBar->GetThumbPos() /
                             mpVerticalScrollBar->GetRange().Len();
 
     GetActiveWindow()->SetVisibleXY(fX, fY);
@@ -466,7 +467,7 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
 \************************************************************************/
 
 void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
-                              const Point& rWinPos, sal_Bool bUpdate)
+                              const Point& rWinPos, BOOL bUpdate)
 {
     if (mpContentWindow.get() != NULL)
     {
@@ -528,9 +529,9 @@ void ViewShell::DrawMarkRect(const Rectangle& rRect) const
 
 void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                                        long nLeft, long nRight,
-                                       long nUpper, long nLower, sal_Bool bScaleAll,
-                                       Orientation eOrientation, sal_uInt16 nPaperBin,
-                                       sal_Bool bBackgroundFullSize)
+                                       long nUpper, long nLower, BOOL bScaleAll,
+                                       Orientation eOrientation, USHORT nPaperBin,
+                                       BOOL bBackgroundFullSize)
 {
     SdPage* pPage = 0;
     SdUndoGroup* pUndoGroup = NULL;
@@ -540,7 +541,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
 
-    sal_uInt16 i, nPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
+    USHORT i, nPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
 
     Broadcast (ViewShellHint(ViewShellHint::HINT_PAGE_RESIZE_START));
 
@@ -649,7 +650,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     // Handoutseite an neues Format der Standardseiten anpassen
     if( (ePageKind == PK_STANDARD) || (ePageKind == PK_HANDOUT) )
-        GetDoc()->GetSdPage(0, PK_HANDOUT)->CreateTitleAndLayout(sal_True);
+        GetDoc()->GetSdPage(0, PK_HANDOUT)->CreateTitleAndLayout(TRUE);
 
     // Undo Gruppe dem Undo Manager uebergeben
     pViewShell->GetViewFrame()->GetObjectShell()
@@ -661,7 +662,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     Point aPageOrg = Point(nWidth, nHeight / 2);
     Size aViewSize = Size(nWidth * 3, nHeight * 2);
 
-    InitWindows(aPageOrg, aViewSize, Point(-1, -1), sal_True);
+    InitWindows(aPageOrg, aViewSize, Point(-1, -1), TRUE);
 
     Point aVisAreaPos;
 
@@ -755,9 +756,9 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
 |*
 \************************************************************************/
 
-sal_Bool ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
+BOOL ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     if (rHEvt.GetMode())
     {
@@ -821,13 +822,13 @@ void ViewShell::WriteFrameViewData()
 |*
 \************************************************************************/
 
-sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
+BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 {
     ErrCode aErrCode = 0;
 
     SfxErrorContext aEC(ERRCTX_SO_DOVERB, GetActiveWindow(), RID_SO_ERRCTX);
-    sal_Bool bAbort = sal_False;
-    GetDocSh()->SetWaitCursor( sal_True );
+    BOOL bAbort = FALSE;
+    GetDocSh()->SetWaitCursor( TRUE );
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
     bool bChangeDefaultsForChart = false;
@@ -869,16 +870,16 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             aName = String();
 
             // Dialog "OLE-Objekt einfuegen" aufrufen
-            GetDocSh()->SetWaitCursor( sal_False );
+            GetDocSh()->SetWaitCursor( FALSE );
             pViewShell->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERT_OBJECT,
                 SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
             xObj = pObj->GetObjRef();
-            GetDocSh()->SetWaitCursor( sal_True );
+            GetDocSh()->SetWaitCursor( TRUE );
 
             if (!xObj.is())
             {
-                bAbort = sal_True;
+                bAbort = TRUE;
             }
         }
 
@@ -887,7 +888,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             /******************************************************
             * OLE-Objekt ist nicht mehr leer
             ******************************************************/
-            pObj->SetEmptyPresObj(sal_False);
+            pObj->SetEmptyPresObj(FALSE);
             pObj->SetOutlinerParaObject(NULL);
             pObj->SetGraphic(NULL);
 
@@ -970,10 +971,10 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         pSdClient->DoVerb(nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
         pViewShell->GetViewFrame()->GetBindings().Invalidate(
-            SID_NAVIGATOR_STATE, sal_True, sal_False);
+            SID_NAVIGATOR_STATE, TRUE, FALSE);
     }
 
-    GetDocSh()->SetWaitCursor( sal_False );
+    GetDocSh()->SetWaitCursor( FALSE );
 
     if (aErrCode != 0 && !bAbort)
     {
@@ -1027,7 +1028,7 @@ void ViewShell::WriteUserData(String&)
 |*
 \************************************************************************/
 
-void ViewShell::SetRuler(sal_Bool bRuler)
+void ViewShell::SetRuler(BOOL bRuler)
 {
     mbHasRulers = ( bRuler && !GetDocSh()->IsPreview() ); // no rulers on preview mode
 
@@ -1070,8 +1071,8 @@ sal_Int8 ViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    USHORT nPage,
+    USHORT nLayer)
 {
     ::sd::View* pView = GetView();
     return( pView ? pView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
@@ -1087,10 +1088,10 @@ sal_Int8 ViewShell::ExecuteDrop (
     const ExecuteDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    USHORT nPage,
+    USHORT nLayer)
 {
-    ::sd::View* pView = GetView();
+    ::sd::View*	pView = GetView();
     return( pView ? pView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
 }
 
@@ -1199,7 +1200,7 @@ void ViewShell::AdaptDefaultsForChart(
         }
         catch( const uno::Exception & )
         {
-            OSL_FAIL( "Exception caught in AdaptDefaultsForChart" );
+            OSL_ENSURE( false, "Exception caught in AdaptDefaultsForChart" );
         }
     }
 }

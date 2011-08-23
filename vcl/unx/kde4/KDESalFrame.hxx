@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,22 +40,22 @@ class KDESalFrame : public X11SalFrame
         {
             X11SalGraphics* pGraphics;
             bool bInUse;
-
+            
             GraphicsHolder() : pGraphics(0),bInUse( false ) {}
             ~GraphicsHolder();
         };
-
+        
         GraphicsHolder m_aGraphics[ nMaxGraphics ];
 
     public:
-        KDESalFrame( SalFrame* pParent, sal_uLong nStyle );
+        KDESalFrame( SalFrame* pParent, ULONG nStyle );
         virtual ~KDESalFrame();
 
         virtual SalGraphics* GetGraphics();
         virtual void ReleaseGraphics( SalGraphics *pGraphics );
         virtual void updateGraphics( bool bClear );
         virtual void UpdateSettings( AllSettings& rSettings );
-        virtual void Show( sal_Bool bVisible, sal_Bool bNoActivate );
+        virtual void Show( BOOL bVisible, BOOL bNoActivate );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

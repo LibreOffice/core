@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
+using namespace rtl;
+
 #include <xrender_peer.hxx>
 
 #include <salunx.h>
@@ -88,7 +88,7 @@ void XRenderPeer::InitRenderLib()
     if( !mpRenderLib ) {
 #ifdef DEBUG
         fprintf( stderr, "Display can do XRender, but no %s installed.\n"
-            "Please install for improved display performance\n", OUStringToOString( aLibName.getStr(),
+            "Please install for improved display performance\n", OUStringToOString( aLibName.getStr(), 
                                                                                     osl_getThreadTextEncoding() ).getStr() );
 #endif
         return;

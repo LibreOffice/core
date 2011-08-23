@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,9 @@ public:
     void Show( bool bShow );
     void Enable( bool bEnable );
 
-    sal_uInt16 GetSelectEntryCount() const;
-    sal_uInt16 GetSelectEntryPos() const;
-    void SelectEntryPos( sal_uInt16 nPos );
+    USHORT GetSelectEntryCount() const;
+    USHORT GetSelectEntryPos() const;
+    void SelectEntryPos( USHORT nPos );
 
     void SetSelectHdl( const Link& rLink );
 

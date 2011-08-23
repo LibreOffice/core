@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,15 +33,16 @@
 #include <hintids.hxx>
 #include <editeng/brkitem.hxx>
 #include <editsh.hxx>
-#include <doc.hxx>      // fuer SwTxtFmtColls
-#include <IDocumentUndoRedo.hxx>
-#include <edimp.hxx>    // fuer MACROS
+#include <doc.hxx>		// fuer SwTxtFmtColls
+#include <edimp.hxx>	// fuer MACROS
 #include <ndtxt.hxx>
 #include <paratr.hxx>
 #include <fmtpdsc.hxx>
-#include <viewopt.hxx>  // Formular view
+// --> FME 2004-06-29 #114856# Formular view
+#include <viewopt.hxx>
+// <--
 #include <SwRewriter.hxx>
-#include <numrule.hxx>
+#include <undobj.hxx>
 #include <swundo.hxx>
 
 /*************************************
@@ -56,13 +57,13 @@ SwTxtFmtColl& SwEditShell::GetDfltTxtFmtColl() const
 }
 
 
-sal_uInt16 SwEditShell::GetTxtFmtCollCount() const
+USHORT SwEditShell::GetTxtFmtCollCount() const
 {
     return GetDoc()->GetTxtFmtColls()->Count();
 }
 
 
-SwTxtFmtColl& SwEditShell::GetTxtFmtColl( sal_uInt16 nFmtColl) const
+SwTxtFmtColl& SwEditShell::GetTxtFmtColl( USHORT nFmtColl) const
 {
     return *((*(GetDoc()->GetTxtFmtColls()))[nFmtColl]);
 }
@@ -77,16 +78,17 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
     SwRewriter aRewriter;
     aRewriter.AddRule(UNDO_ARG1, pLocal->GetName());
 
-    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_SETFMTCOLL, &aRewriter);
+    GetDoc()->StartUndo(UNDO_SETFMTCOLL, &aRewriter);
     FOREACHPAM_START(this)
 
         if( !PCURCRSR->HasReadonlySel(
-                    // Formular view
+                    // --> FME 2004-06-29 #114856# Formular view
                     GetViewOptions()->IsFormView() ) )
+                    // <--
             GetDoc()->SetTxtFmtColl( *PCURCRSR, pLocal, true, bResetListAttrs );
 
     FOREACHPAM_END()
-    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_SETFMTCOLL, &aRewriter);
+    GetDoc()->EndUndo(UNDO_SETFMTCOLL, NULL);
     EndAllAction();
 }
 // <--
@@ -100,14 +102,14 @@ SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const String& rFmtCollName,
         pParent = &GetTxtFmtColl(0);
     if (  (pColl=GetDoc()->MakeTxtFmtColl(rFmtCollName, pParent)) == 0 )
     {
-        OSL_FAIL( "MakeTxtFmtColl failed" );
+        OSL_ENSURE( FALSE, "MakeTxtFmtColl failed" );
     }
     return pColl;
 
 }
 
 
-void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
+void SwEditShell::FillByEx(SwTxtFmtColl* pColl, BOOL bReset)
 {
     if( bReset )
     {
@@ -122,17 +124,17 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
     if( pSet )
     {
         // JP 05.10.98: falls eines der Attribute Break/PageDesc/NumRule(auto)
-        //      im ItemSet steht, so entferne die VORM setzen an der Collection.
-        //      Ansonst wird zu viel gemacht oder falsche gemacht (NumRules!)
-        //      Bug 57568
+        //		im ItemSet steht, so entferne die VORM setzen an der Collection.
+        //		Ansonst wird zu viel gemacht oder falsche gemacht (NumRules!)
+        //		Bug 57568
 
         // AutoNumRules NICHT in die Vorlagen uebernehmen
         const SfxPoolItem* pItem;
         const SwNumRule* pRule = 0;
-        if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, sal_False ) ||
-            SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC,sal_False ) ||
+        if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, FALSE ) ||
+            SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC,FALSE ) ||
             ( SFX_ITEM_SET == pSet->GetItemState( RES_PARATR_NUMRULE,
-                sal_False, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
+                FALSE, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
                 ((SwNumRuleItem*)pItem)->GetValue() )) &&
                 pRule && pRule->IsAutoRule() )
             )
@@ -142,7 +144,7 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
             aSet.ClearItem( RES_PAGEDESC );
 
             if( pRule || (SFX_ITEM_SET == pSet->GetItemState( RES_PARATR_NUMRULE,
-                sal_False, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
+                FALSE, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
                 ((SwNumRuleItem*)pItem)->GetValue() )) &&
                 pRule && pRule->IsAutoRule() ))
                 aSet.ClearItem( RES_PARATR_NUMRULE );

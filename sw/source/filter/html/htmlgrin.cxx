@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,6 +40,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/adjitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>
@@ -54,11 +55,13 @@
 
 #include <fmtornt.hxx>
 #include <fmturl.hxx>
+#include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
+#include <fmtinfmt.hxx>
 #include "frmatr.hxx"
 #include "charatr.hxx"
 #include <frmfmt.hxx>
@@ -81,15 +84,15 @@
 using namespace ::com::sun::star;
 
 
-HTMLOptionEnum aHTMLImgHAlignTable[] =
+HTMLOptionEnum __FAR_DATA aHTMLImgHAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,    text::HoriOrientation::LEFT       },
     { OOO_STRING_SVTOOLS_HTML_AL_right,   text::HoriOrientation::RIGHT      },
-    { 0,                0               }
+    { 0,				0				}
 };
 
 
-HTMLOptionEnum aHTMLImgVAlignTable[] =
+HTMLOptionEnum __FAR_DATA aHTMLImgVAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_VA_top,         text::VertOrientation::LINE_TOP       },
     { OOO_STRING_SVTOOLS_HTML_VA_texttop,     text::VertOrientation::CHAR_TOP       },
@@ -99,7 +102,7 @@ HTMLOptionEnum aHTMLImgVAlignTable[] =
     { OOO_STRING_SVTOOLS_HTML_VA_bottom,      text::VertOrientation::TOP            },
     { OOO_STRING_SVTOOLS_HTML_VA_baseline,    text::VertOrientation::TOP            },
     { OOO_STRING_SVTOOLS_HTML_VA_absbottom,   text::VertOrientation::LINE_BOTTOM    },
-    { 0,                    0                   }
+    { 0,					0					}
 };
 
 SV_IMPL_PTRARR( ImageMaps, ImageMapPtr )
@@ -112,7 +115,7 @@ ImageMap *SwHTMLParser::FindImageMap( const String& rName ) const
 
     if( pImageMaps )
     {
-        for( sal_uInt16 i=0; i<pImageMaps->Count(); i++ )
+        for( USHORT i=0; i<pImageMaps->Count(); i++ )
         {
             ImageMap *pIMap = (*pImageMaps)[i];
             if( rName.EqualsIgnoreCaseAscii( pIMap->GetName() ) )
@@ -129,8 +132,8 @@ void SwHTMLParser::ConnectImageMaps()
 {
     SwNodes& rNds = pDoc->GetNodes();
     // auf den Start-Node der 1. Section
-    sal_uLong nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 1;
-    sal_uLong nEndIdx = rNds.GetEndOfAutotext().GetIndex();
+    ULONG nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 1;
+    ULONG nEndIdx = rNds.GetEndOfAutotext().GetIndex();
 
     SwGrfNode* pGrfNd;
     while( nMissingImgMaps > 0 && nIdx < nEndIdx )
@@ -156,7 +159,7 @@ void SwHTMLParser::ConnectImageMaps()
                     // Grafik muss nicht skaliert werden
                     pGrfNd->ScaleImageMap();
                 }
-                nMissingImgMaps--;  // eine Map weniger suchen
+                nMissingImgMaps--;	// eine Map weniger suchen
             }
         }
         nIdx = rNds[nIdx]->EndOfSectionIndex() + 1;
@@ -164,7 +167,7 @@ void SwHTMLParser::ConnectImageMaps()
 }
 
 
-/*  */
+/*  */
 
 void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            sal_Int16 eHoriOri,
@@ -173,7 +176,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            SfxItemSet& rFrmItemSet )
 {
     const SfxItemSet *pCntnrItemSet = 0;
-    sal_uInt16 i = aContexts.Count();
+    USHORT i = aContexts.Count();
     while( !pCntnrItemSet && i > nContextStMin )
         pCntnrItemSet = aContexts[--i]->GetFrmItemSet();
 
@@ -183,7 +186,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
         // des Containers uebernommen.
         rFrmItemSet.Put( *pCntnrItemSet );
     }
-    else if( pCSS1Parser->MayBePositioned( rCSS1PropInfo, sal_True ) )
+    else if( pCSS1Parser->MayBePositioned( rCSS1PropInfo, TRUE ) )
     {
         // Wenn die Ausrichtung anhand der CSS1-Optionen gesetzt werden kann
         // werden die benutzt.
@@ -200,16 +203,16 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
 void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            sal_Int16 eHoriOri,
                                            SfxItemSet& rFrmSet,
-                                           sal_Bool bDontAppend )
+                                           BOOL bDontAppend )
 {
-    sal_Bool bMoveBackward = sal_False;
+    BOOL bMoveBackward = FALSE;
     SwFmtAnchor aAnchor( FLY_AS_CHAR );
     sal_Int16 eVertRel = text::RelOrientation::FRAME;
 
     if( text::HoriOrientation::NONE != eHoriOri )
     {
         // den Absatz-Einzug bestimmen
-        sal_uInt16 nLeftSpace = 0, nRightSpace = 0;
+        USHORT nLeftSpace = 0, nRightSpace = 0;
         short nIndent = 0;
         GetMarginsFromContextWithNumBul( nLeftSpace, nRightSpace, nIndent );
 
@@ -238,15 +241,15 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
 
         // Einen neuen Absatz aufmachen, wenn der aktuelle
         // absatzgebundene Rahmen ohne Umlauf enthaelt.
-        if( !bDontAppend && HasCurrentParaFlys( sal_True ) )
+        if( !bDontAppend && HasCurrentParaFlys( TRUE ) )
         {
             // Wenn der Absatz nur Grafiken enthaelt, braucht er
             // auch keinen unteren Absatz-Abstand. Da hier auch bei
             // Verwendung von Styles kein Abstand enstehen soll, wird
             // hier auch geweohnlich attributiert !!!
-            sal_uInt16 nUpper=0, nLower=0;
+            USHORT nUpper=0, nLower=0;
             GetULSpaceFromContext( nUpper, nLower );
-            InsertAttr( SvxULSpaceItem( nUpper, 0, RES_UL_SPACE ), sal_False, sal_True );
+            InsertAttr( SvxULSpaceItem( nUpper, 0, RES_UL_SPACE ), FALSE, TRUE );
 
             AppendTxtNode( AM_NOSPACE );
 
@@ -254,7 +257,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
             {
                 NewAttr( &aAttrTab.pULSpace, SvxULSpaceItem( 0, nLower, RES_UL_SPACE ) );
                 aParaAttrs.Insert( aAttrTab.pULSpace, aParaAttrs.Count() );
-                EndAttr( aAttrTab.pULSpace, 0, sal_False );
+                EndAttr( aAttrTab.pULSpace, 0, FALSE );
             }
         }
 
@@ -263,7 +266,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
         if( nCntnt )
         {
             aAnchor.SetType( FLY_AT_CHAR );
-            bMoveBackward = sal_True;
+            bMoveBackward = TRUE;
             eVertOri = text::VertOrientation::CHAR_BOTTOM;
             eVertRel = text::RelOrientation::CHAR;
         }
@@ -300,11 +303,12 @@ void SwHTMLParser::RegisterFlyFrm( SwFrmFmt *pFlyFmt )
         SURROUND_THROUGHT == pFlyFmt->GetSurround().GetSurround() )
     {
         aMoveFlyFrms.Insert( pFlyFmt, aMoveFlyFrms.Count() );
-        aMoveFlyCnts.push_back( pPam->GetPoint()->nContent.GetIndex() );
+        aMoveFlyCnts.Insert( pPam->GetPoint()->nContent.GetIndex(),
+                             aMoveFlyCnts.Count() );
     }
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
                                          String& rTypeStr ) const
@@ -316,7 +320,7 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
     rTypeStr = GetScriptTypeString( pHeaderAttrs );
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::InsertImage()
 {
@@ -327,10 +331,10 @@ void SwHTMLParser::InsertImage()
     long nWidth=0, nHeight=0;
     long nVSpace=0, nHSpace=0;
 
-    sal_uInt16 nBorder = (aAttrTab.pINetFmt ? 1 : 0);
-    sal_Bool bIsMap = sal_False;
-    sal_Bool bPrcWidth = sal_False;
-    sal_Bool bPrcHeight = sal_False;
+    USHORT nBorder = (aAttrTab.pINetFmt ? 1 : 0);
+    BOOL bIsMap = FALSE;
+    BOOL bPrcWidth = FALSE;
+    BOOL bPrcHeight = FALSE;
     SvxMacroItem aMacroItem(RES_FRMMACRO);
 
     ScriptType eDfltScriptType;
@@ -338,9 +342,9 @@ void SwHTMLParser::InsertImage()
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
     const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        sal_uInt16 nEvent = 0;
+        USHORT nEvent = 0;
         ScriptType eScriptType2 = eDfltScriptType;
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
@@ -391,10 +395,10 @@ void SwHTMLParser::InsertImage()
                 sAltNm = pOption->GetString();
                 break;
             case HTML_O_BORDER:
-                nBorder = (sal_uInt16)pOption->GetNumber();
+                nBorder = (USHORT)pOption->GetNumber();
                 break;
             case HTML_O_ISMAP:
-                bIsMap = sal_True;
+                bIsMap = TRUE;
                 break;
             case HTML_O_USEMAP:
                 aMap = pOption->GetString();
@@ -460,7 +464,7 @@ IMAGE_SETEVENT:
             // Rule invalisieren ist noetig, weil zwischem dem einlesen
             // des LI und der Grafik ein EndAction gerufen worden sein kann.
             if( GetNumInfo().GetNumRule() )
-                GetNumInfo().GetNumRule()->SetInvalidRule( sal_True );
+                GetNumInfo().GetNumRule()->SetInvalidRule( TRUE );
 
             // Die Vorlage novh mal setzen. Ist noetig, damit der
             // Erstzeilen-Einzug stimmt.
@@ -488,8 +492,21 @@ IMAGE_SETEVENT:
         nVBorderWidth = (long)nBorder;
         SvxCSS1Parser::PixelToTwip( nVBorderWidth, nHBorderWidth );
 
-        ::editeng::SvxBorderLine aHBorderLine( NULL, nHBorderWidth );
-        ::editeng::SvxBorderLine aVBorderLine( NULL, nVBorderWidth );
+        SvxBorderLine aHBorderLine;
+        SvxBorderLine aVBorderLine;
+
+        SvxCSS1Parser::SetBorderWidth( aHBorderLine,
+                                       (USHORT)nHBorderWidth, FALSE );
+        if( nHBorderWidth == nVBorderWidth )
+            aVBorderLine.SetOutWidth( aHBorderLine.GetOutWidth() );
+        else
+            SvxCSS1Parser::SetBorderWidth( aVBorderLine,
+                                           (USHORT)nVBorderWidth, FALSE );
+
+        // die tatsaechlich gesetzter Rahmenbreite benutzen und nicht die
+        // Wunschbreite!
+        nHBorderWidth = aHBorderLine.GetOutWidth();
+        nVBorderWidth = aVBorderLine.GetOutWidth();
 
         if( aAttrTab.pINetFmt )
         {
@@ -497,10 +514,10 @@ IMAGE_SETEVENT:
                 ((const SwFmtINetFmt&)aAttrTab.pINetFmt->GetItem()).GetValue();
 
             pCSS1Parser->SetATagStyles();
-            sal_uInt16 nPoolId =  static_cast< sal_uInt16 >(pDoc->IsVisitedURL( rURL )
+            USHORT nPoolId =  static_cast< USHORT >(pDoc->IsVisitedURL( rURL )
                                     ? RES_POOLCHR_INET_VISIT
                                     : RES_POOLCHR_INET_NORMAL);
-            const SwCharFmt *pCharFmt = pCSS1Parser->GetCharFmtFromPool( nPoolId );
+            const SwCharFmt *pCharFmt =	pCSS1Parser->GetCharFmtFromPool( nPoolId );
             aHBorderLine.SetColor( pCharFmt->GetColor().GetValue() );
             aVBorderLine.SetColor( aHBorderLine.GetColor() );
         }
@@ -543,13 +560,13 @@ IMAGE_SETEVENT:
     {
         case SVX_CSS1_LTYPE_TWIP:
             aTwipSz.Width() = aPropInfo.nWidth;
-            nWidth = 1; // != 0
-            bPrcWidth = sal_False;
+            nWidth = 1;	// != 0
+            bPrcWidth = FALSE;
             break;
         case SVX_CSS1_LTYPE_PERCENTAGE:
             aTwipSz.Width() = 0;
             nWidth = aPropInfo.nWidth;
-            bPrcWidth = sal_True;
+            bPrcWidth = TRUE;
             break;
         default:
             ;
@@ -558,24 +575,24 @@ IMAGE_SETEVENT:
     {
         case SVX_CSS1_LTYPE_TWIP:
             aTwipSz.Height() = aPropInfo.nHeight;
-            nHeight = 1;    // != 0
-            bPrcHeight = sal_False;
+            nHeight = 1;	// != 0
+            bPrcHeight = FALSE;
             break;
         case SVX_CSS1_LTYPE_PERCENTAGE:
             aTwipSz.Height() = 0;
             nHeight = aPropInfo.nHeight;
-            bPrcHeight = sal_True;
+            bPrcHeight = TRUE;
             break;
         default:
             ;
     }
 
     Size aGrfSz( 0, 0 );
-    sal_Bool bSetTwipSize = sal_True;       // Twip-Size am Node setzen?
-    sal_Bool bChangeFrmSize = sal_False;    // Frame-Format nachtraeglich anpassen?
-    sal_Bool bRequestGrfNow = sal_False;
-    sal_Bool bSetScaleImageMap = sal_False;
-    sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
+    BOOL bSetTwipSize = TRUE;		// Twip-Size am Node setzen?
+    BOOL bChangeFrmSize = FALSE;	// Frame-Format nachtraeglich anpassen?
+    BOOL bRequestGrfNow = FALSE;
+    BOOL bSetScaleImageMap = FALSE;
+    BYTE nPrcWidth = 0, nPrcHeight = 0;
 
     if( !nWidth || !nHeight )
     {
@@ -585,12 +602,12 @@ IMAGE_SETEVENT:
         // Tabelle layoutet wird.
         if( pTable!=0 && !nWidth )
         {
-            bRequestGrfNow = sal_True;
+            bRequestGrfNow = TRUE;
             IncGrfsThatResizeTable();
         }
 
         // Die Groesse des Rahmens wird nachtraeglich gesetzt
-        bChangeFrmSize = sal_True;
+        bChangeFrmSize = TRUE;
         aGrfSz = aTwipSz;
         if( !nWidth && !nHeight )
         {
@@ -602,7 +619,7 @@ IMAGE_SETEVENT:
             // eine %-Angabe
             if( bPrcWidth )
             {
-                nPrcWidth = (sal_uInt8)nWidth;
+                nPrcWidth = (BYTE)nWidth;
                 nPrcHeight = 255;
             }
             else
@@ -614,7 +631,7 @@ IMAGE_SETEVENT:
         {
             if( bPrcHeight )
             {
-                nPrcHeight = (sal_uInt8)nHeight;
+                nPrcHeight = (BYTE)nHeight;
                 nPrcWidth = 255;
             }
             else
@@ -627,13 +644,13 @@ IMAGE_SETEVENT:
     {
         // Breite und Hoehe wurden angegeben und brauchen nicht gesetzt
         // zu werden
-        bSetTwipSize = sal_False;
+        bSetTwipSize = FALSE;
 
         if( bPrcWidth )
-            nPrcWidth = (sal_uInt8)nWidth;
+            nPrcWidth = (BYTE)nWidth;
 
         if( bPrcHeight )
-            nPrcHeight = (sal_uInt8)nHeight;
+            nPrcHeight = (BYTE)nHeight;
     }
 
     // Image-Map setzen
@@ -662,7 +679,7 @@ IMAGE_SETEVENT:
             ImageMap aEmptyImgMap( aName );
             SwFmtURL aURL; aURL.SetMap( &aEmptyImgMap );//wird kopieiert
             aFrmSet.Put( aURL );
-            nMissingImgMaps++;          // es fehlen noch Image-Maps
+            nMissingImgMaps++;			// es fehlen noch Image-Maps
 
             // die Grafik muss beim SetTwipSize skaliert werden, wenn
             // wir keine Groesse am Node gesetzt haben oder die Groesse
@@ -718,7 +735,7 @@ IMAGE_SETEVENT:
         // ggfs. eine Grafik anspringen
         if( JUMPTO_GRAPHIC == eJumpTo && sHTMLGrfName == sJmpMark )
         {
-            bChkJumpMark = sal_True;
+            bChkJumpMark = TRUE;
             eJumpTo = JUMPTO_NONE;
         }
     }
@@ -732,7 +749,7 @@ IMAGE_SETEVENT:
     pGrfNd->SetChgTwipSize( bChangeFrmSize, bChangeFrmSize );
 
     if( bSetScaleImageMap )
-        pGrfNd->SetScaleImageMap( sal_True );
+        pGrfNd->SetScaleImageMap( TRUE );
 
     if( aAttrTab.pINetFmt )
     {
@@ -748,13 +765,13 @@ IMAGE_SETEVENT:
 
         {
             const SvxMacro *pMacro;
-            static sal_uInt16 aEvents[] = {
+            static USHORT __READONLY_DATA aEvents[] = {
                 SFX_EVENT_MOUSEOVER_OBJECT,
                 SFX_EVENT_MOUSECLICK_OBJECT,
                 SFX_EVENT_MOUSEOUT_OBJECT,
                 0 };
 
-            for( sal_uInt16 n = 0; aEvents[ n ]; ++n )
+            for( USHORT n = 0; aEvents[ n ]; ++n )
                 if( 0 != ( pMacro = rINetFmt.GetMacro( aEvents[ n ] ) ))
                     aMacroItem.SetMacro( aEvents[ n ], *pMacro );
         }
@@ -800,7 +817,7 @@ IMAGE_SETEVENT:
         InsertBookmark( aId );
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::InsertBodyOptions()
 {
@@ -809,20 +826,20 @@ void SwHTMLParser::InsertBodyOptions()
 
     String aBackGround, aId, aStyle, aLang, aDir;
     Color aBGColor, aTextColor, aLinkColor, aVLinkColor;
-    sal_Bool bBGColor=sal_False, bTextColor=sal_False;
-    sal_Bool bLinkColor=sal_False, bVLinkColor=sal_False;
+    BOOL bBGColor=FALSE, bTextColor=FALSE;
+    BOOL bLinkColor=FALSE, bVLinkColor=FALSE;
 
     ScriptType eDfltScriptType;
     String sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
     const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         rtl::OUString aEvent;
-        sal_Bool bSetEvent = sal_False;
+        BOOL bSetEvent = FALSE;
 
         switch( pOption->GetToken() )
         {
@@ -834,55 +851,58 @@ void SwHTMLParser::InsertBodyOptions()
                 break;
             case HTML_O_BGCOLOR:
                 pOption->GetColor( aBGColor );
-                bBGColor = sal_True;
+                bBGColor = TRUE;
                 break;
             case HTML_O_TEXT:
                 pOption->GetColor( aTextColor );
-                bTextColor = sal_True;
+                bTextColor = TRUE;
                 break;
             case HTML_O_LINK:
                 pOption->GetColor( aLinkColor );
-                bLinkColor = sal_True;
+                bLinkColor = TRUE;
                 break;
             case HTML_O_VLINK:
                 pOption->GetColor( aVLinkColor );
-                bVLinkColor = sal_True;
+                bVLinkColor = TRUE;
                 break;
 
             case HTML_O_SDONLOAD:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONLOAD:
                 aEvent = GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC );
-                bSetEvent = sal_True;
+                bSetEvent = TRUE;
                 break;
 
             case HTML_O_SDONUNLOAD:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONUNLOAD:
                 aEvent = GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEDOC );
-                bSetEvent = sal_True;
+                bSetEvent = TRUE;
                 break;
 
             case HTML_O_SDONFOCUS:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONFOCUS:
                 aEvent = GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC );
-                bSetEvent = sal_True;
+                bSetEvent = TRUE;
                 break;
 
             case HTML_O_SDONBLUR:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONBLUR:
                 aEvent = GlobalEventConfig::GetEventName( STR_EVENT_DEACTIVATEDOC );
-                bSetEvent = sal_True;
+                bSetEvent = TRUE;
                 break;
 
             case HTML_O_ONERROR:
+//				if( bAnyStarBasic )
+//					InsertBasicDocEvent( SFX_EVENT_ACTIVATEDOC,
+//										 pOption->GetString() );
                 break;
 
             case HTML_O_STYLE:
                 aStyle = pOption->GetString();
-                bTextColor = sal_True;
+                bTextColor = TRUE;
                 break;
             case HTML_O_LANG:
                 aLang = pOption->GetString();
@@ -913,7 +933,7 @@ void SwHTMLParser::InsertBodyOptions()
     // Die Item fuer die Seitenvorlage vorbereiten (Hintergrund, Umrandung)
     // Beim BrushItem muessen schon gesetzte werte erhalten bleiben!
     SvxBrushItem aBrushItem( pCSS1Parser->GetPageDescBackground() );
-    sal_Bool bSetBrush = sal_False;
+    BOOL bSetBrush = FALSE;
 
     if( bBGColor && !pCSS1Parser->IsBodyBGColorSet() )
     {
@@ -930,7 +950,7 @@ void SwHTMLParser::InsertBodyOptions()
             aBrushItem.SetGraphicLink( aLink );
             aBrushItem.SetGraphicPos( ePos );
         }
-        bSetBrush = sal_True;
+        bSetBrush = TRUE;
         pCSS1Parser->SetBodyBGColorSet();
     }
 
@@ -939,7 +959,7 @@ void SwHTMLParser::InsertBodyOptions()
         // Hintergrundgrafik aus "BACKGROUND"
         aBrushItem.SetGraphicLink( INetURLObject::GetAbsURL( sBaseURL, aBackGround ) );
         aBrushItem.SetGraphicPos( GPOS_TILED );
-        bSetBrush = sal_True;
+        bSetBrush = TRUE;
         pCSS1Parser->SetBodyBackgroundSet();
     }
 
@@ -956,12 +976,12 @@ void SwHTMLParser::InsertBodyOptions()
                                        &aItemSet );
 
         const SfxPoolItem *pItem;
-        static sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,
+        static USHORT aWhichIds[3] = { RES_CHRATR_FONTSIZE,
                                        RES_CHRATR_CJK_FONTSIZE,
                                        RES_CHRATR_CTL_FONTSIZE };
-        for( sal_uInt16 i=0; i<3; i++ )
+        for( USHORT i=0; i<3; i++ )
         {
-            if( SFX_ITEM_SET == aItemSet.GetItemState( aWhichIds[i], sal_False,
+            if( SFX_ITEM_SET == aItemSet.GetItemState( aWhichIds[i], FALSE,
                                                        &pItem ) &&
                 static_cast <const SvxFontHeightItem * >(pItem)->GetProp() != 100)
             {
@@ -1000,9 +1020,9 @@ void SwHTMLParser::InsertBodyOptions()
     if( aLang.Len() )
     {
         LanguageType eLang = MsLangId::convertIsoStringToLanguage( aLang );
+        sal_uInt16 nWhich = 0;
         if( LANGUAGE_DONTKNOW != eLang )
         {
-            sal_uInt16 nWhich = 0;
             switch( SvtLanguageOptions::GetScriptTypeOfLanguage( eLang ) )
             {
             case SCRIPTTYPE_LATIN:
@@ -1028,7 +1048,7 @@ void SwHTMLParser::InsertBodyOptions()
         InsertBookmark( aId );
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::NewAnchor()
 {
@@ -1044,16 +1064,16 @@ void SwHTMLParser::NewAnchor()
     SvxMacroTableDtor aMacroTbl;
     String sHRef, aName, sTarget;
     String aId, aStyle, aClass, aLang, aDir;
-    sal_Bool bHasHRef = sal_False, bFixed = sal_False;
+    BOOL bHasHRef = FALSE, bFixed = FALSE;
 
     ScriptType eDfltScriptType;
     String sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
     const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        sal_uInt16 nEvent = 0;
+        USHORT nEvent = 0;
         ScriptType eScriptType2 = eDfltScriptType;
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
@@ -1064,7 +1084,7 @@ void SwHTMLParser::NewAnchor()
 
             case HTML_O_HREF:
                 sHRef = pOption->GetString();
-                bHasHRef = sal_True;
+                bHasHRef = TRUE;
                 break;
             case HTML_O_TARGET:
                 sTarget = pOption->GetString();
@@ -1080,7 +1100,7 @@ void SwHTMLParser::NewAnchor()
                 aClass = pOption->GetString();
                 break;
             case HTML_O_SDFIXED:
-                bFixed = sal_True;
+                bFixed = TRUE;
                 break;
             case HTML_O_LANG:
                 aLang = pOption->GetString();
@@ -1156,7 +1176,7 @@ ANCHOR_SETEVENT:
     // einen neuen Kontext anlegen
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_ANCHOR_ON );
 
-    sal_Bool bEnAnchor = sal_False, bFtnAnchor = sal_False, bFtnEnSymbol = sal_False;
+    BOOL bEnAnchor = FALSE, bFtnAnchor = FALSE, bFtnEnSymbol = FALSE;
     String aFtnName;
     String aStrippedClass( aClass );
     SwCSS1Parser::GetScriptFromClass( aStrippedClass, sal_False );
@@ -1165,17 +1185,17 @@ ANCHOR_SETEVENT:
         ('d' == aStrippedClass.GetChar(1) || 'D' == aStrippedClass.GetChar(1)) )
     {
         if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_anc ) )
-            bEnAnchor = sal_True;
+            bEnAnchor = TRUE;
         else if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_anc ) )
-            bFtnAnchor = sal_True;
+            bFtnAnchor = TRUE;
         else if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_sym ) ||
                  aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_sym ) )
-            bFtnEnSymbol = sal_True;
+            bFtnEnSymbol = TRUE;
         if( bEnAnchor || bFtnAnchor || bFtnEnSymbol )
         {
             aFtnName = sHRef.Copy( 1 );
             aClass = aStrippedClass = aName = aEmptyStr;
-            bHasHRef = sal_False;
+            bHasHRef = FALSE;
         }
     }
 
@@ -1188,7 +1208,7 @@ ANCHOR_SETEVENT:
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             DoPositioning( aItemSet, aPropInfo, pCntxt );
-            InsertAttrs( aItemSet, aPropInfo, pCntxt, sal_True );
+            InsertAttrs( aItemSet, aPropInfo, pCntxt, TRUE );
         }
     }
 
@@ -1223,11 +1243,11 @@ ANCHOR_SETEVENT:
     if( bEnAnchor || bFtnAnchor )
     {
         InsertFootEndNote( aFtnName, bEnAnchor, bFixed );
-        bInFootEndNoteAnchor = bCallNextToken = sal_True;
+        bInFootEndNoteAnchor = bCallNextToken = TRUE;
     }
     else if( bFtnEnSymbol )
     {
-        bInFootEndNoteSymbol = bCallNextToken = sal_True;
+        bInFootEndNoteSymbol = bCallNextToken = TRUE;
     }
 
     // den Kontext merken
@@ -1239,17 +1259,17 @@ void SwHTMLParser::EndAnchor()
     if( bInFootEndNoteAnchor )
     {
         FinishFootEndNote();
-        bInFootEndNoteAnchor = sal_False;
+        bInFootEndNoteAnchor = FALSE;
     }
     else if( bInFootEndNoteSymbol )
     {
-        bInFootEndNoteSymbol = sal_False;
+        bInFootEndNoteSymbol = FALSE;
     }
 
     EndTag( HTML_ANCHOR_OFF );
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::InsertBookmark( const String& rName )
 {
@@ -1258,10 +1278,10 @@ void SwHTMLParser::InsertBookmark( const String& rName )
     aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
 }
 
-sal_Bool SwHTMLParser::HasCurrentParaBookmarks( sal_Bool bIgnoreStack ) const
+BOOL SwHTMLParser::HasCurrentParaBookmarks( BOOL bIgnoreStack ) const
 {
-    sal_Bool bHasMarks = sal_False;
-    sal_uLong nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
+    BOOL bHasMarks = FALSE;
+    ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
 
     // first step: are there still bookmark in the attribute-stack?
     // bookmarks are added to the end of the stack - thus we only have
@@ -1269,13 +1289,13 @@ sal_Bool SwHTMLParser::HasCurrentParaBookmarks( sal_Bool bIgnoreStack ) const
     if( !bIgnoreStack )
     {
         _HTMLAttr* pAttr;
-        for( sal_uInt16 i = aSetAttrTab.Count(); i; )
+        for( USHORT i = aSetAttrTab.Count(); i; )
         {
             pAttr = aSetAttrTab[ --i ];
             if( RES_FLTR_BOOKMARK == pAttr->pItem->Which() )
             {
                 if( pAttr->GetSttParaIdx() == nNodeIdx )
-                    bHasMarks = sal_True;
+                    bHasMarks = TRUE;
                 break;
             }
         }
@@ -1291,10 +1311,10 @@ sal_Bool SwHTMLParser::HasCurrentParaBookmarks( sal_Bool bIgnoreStack ) const
             ppMark++)
         {
             const ::sw::mark::IMark* pBookmark = ppMark->get();
-            sal_uLong nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
+            ULONG nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
             if( nBookNdIdx==nNodeIdx )
             {
-                bHasMarks = sal_True;
+                bHasMarks = TRUE;
                 break;
             }
             else if( nBookNdIdx > nNodeIdx )
@@ -1305,11 +1325,11 @@ sal_Bool SwHTMLParser::HasCurrentParaBookmarks( sal_Bool bIgnoreStack ) const
     return bHasMarks;
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::StripTrailingPara()
 {
-    sal_Bool bSetSmallFont = sal_False;
+    BOOL bSetSmallFont = FALSE;
 
     SwCntntNode* pCNd = pPam->GetCntntNode();
     if( !pPam->GetPoint()->nContent.GetIndex() )
@@ -1317,11 +1337,11 @@ void SwHTMLParser::StripTrailingPara()
         if( pCNd && pCNd->StartOfSectionIndex()+2 <
             pCNd->EndOfSectionIndex() )
         {
-            sal_uLong nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
+            ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
 
             const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
-            for( sal_uInt16 i=0; i<rFrmFmtTbl.Count(); i++ )
+            for( USHORT i=0; i<rFrmFmtTbl.Count(); i++ )
             {
                 SwFrmFmt const*const pFmt = rFrmFmtTbl[i];
                 SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
@@ -1334,7 +1354,7 @@ void SwHTMLParser::StripTrailingPara()
                     return;     // den Knoten duerfen wir nicht loeschen
             }
 
-            SetAttr( sal_False );   // die noch offenen Attribute muessen
+            SetAttr( FALSE );   // die noch offenen Attribute muessen
                                 // beendet werden, bevor der Node
                                 // geloescht wird, weil sonst der
                                 // End-Index in die Botanik zeigt
@@ -1359,7 +1379,7 @@ void SwHTMLParser::StripTrailingPara()
                 ppMark++)
             {
                 ::sw::mark::IMark* pMark = ppMark->get();
-                sal_uLong nBookNdIdx = pMark->GetMarkPos().nNode.GetIndex();
+                ULONG nBookNdIdx = pMark->GetMarkPos().nNode.GetIndex();
                 if(nBookNdIdx==nNodeIdx)
                 {
                     SwNodeIndex nNewNdIdx(pPam->GetPoint()->nNode);
@@ -1369,7 +1389,7 @@ void SwHTMLParser::StripTrailingPara()
                         OSL_ENSURE(!this, "Hoppla, wo ist mein Vorgaenger-Node");
                         return;
                     }
-                    // #i81002# - refactoring
+                    // --> OD 2007-09-27 #i81002# - refactoring
                     // Do not directly manipulate member of <SwBookmark>
                     {
                         SwPosition aNewPos(*pNd);
@@ -1394,7 +1414,7 @@ void SwHTMLParser::StripTrailingPara()
             // In leeren Zellen stellen wir einen kleinen Font ein, damit die
             // Zelle nicht hoeher wird als die Grafik bzw. so niedrig wie
             // moeglich bleibt.
-            bSetSmallFont = sal_True;
+            bSetSmallFont = TRUE;
         }
     }
     else if( pCNd && pCNd->IsTxtNode() && pTable &&
@@ -1403,7 +1423,7 @@ void SwHTMLParser::StripTrailingPara()
     {
         // Wenn die Zelle nur zeichengebundene Grafiken/Rahmen enthaelt
         // stellen wir ebenfalls einen kleinen Font ein.
-        bSetSmallFont = sal_True;
+        bSetSmallFont = TRUE;
         SwTxtNode* pTxtNd = pCNd->GetTxtNode();
 
         xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,29 +60,29 @@ enum ScValidErrorStyle
 };
 
 //
-// Entry for validation (only one condition exists)
+//	Eintrag fuer Gueltigkeit (es gibt nur eine Bedingung)
 //
 
 class SC_DLLPUBLIC ScValidationData : public ScConditionEntry
 {
-    sal_uInt32          nKey;               // index in attributes
+    sal_uInt32			nKey;				// Index in Attributen
 
-    ScValidationMode    eDataMode;
-    sal_Bool                bShowInput;
-    sal_Bool                bShowError;
-    ScValidErrorStyle   eErrorStyle;
+    ScValidationMode	eDataMode;
+    BOOL				bShowInput;
+    BOOL				bShowError;
+    ScValidErrorStyle	eErrorStyle;
     sal_Int16           mnListType;         // selection list type: none, unsorted, sorted.
-    String              aInputTitle;
-    String              aInputMessage;
-    String              aErrorTitle;
-    String              aErrorMessage;
+    String				aInputTitle;
+    String				aInputMessage;
+    String				aErrorTitle;
+    String				aErrorMessage;
 
-    sal_Bool                bIsUsed;            // temporary during saving
+    BOOL				bIsUsed;			// temporaer beim Speichern
 
-    sal_Bool            DoMacro( const ScAddress& rPos, const String& rInput,
+    BOOL			DoMacro( const ScAddress& rPos, const String& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const;
 
-    sal_Bool            DoScript( const ScAddress& rPos, const String& rInput,
+    BOOL			DoScript( const ScAddress& rPos, const String& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const;
 
     using ScConditionEntry::operator==;
@@ -99,26 +99,26 @@ public:
                                 ScDocument* pDocument, const ScAddress& rPos );
             ScValidationData( const ScValidationData& r );
             ScValidationData( ScDocument* pDocument, const ScValidationData& r );
-    virtual ~ScValidationData();
+    virtual	~ScValidationData();
 
-    ScValidationData* Clone() const     // real copy
+    ScValidationData* Clone() const		// echte Kopie
                     { return new ScValidationData( GetDocument(), *this ); }
     ScValidationData* Clone(ScDocument* pNew) const
                     { return new ScValidationData( pNew, *this ); }
 
-    void            ResetInput();
-    void            ResetError();
-    void            SetInput( const String& rTitle, const String& rMsg );
-    void            SetError( const String& rTitle, const String& rMsg,
+    void			ResetInput();
+    void			ResetError();
+    void			SetInput( const String& rTitle, const String& rMsg );
+    void			SetError( const String& rTitle, const String& rMsg,
                                 ScValidErrorStyle eStyle );
 
-    sal_Bool            GetInput( String& rTitle, String& rMsg ) const
+    BOOL			GetInput( String& rTitle, String& rMsg ) const
                         { rTitle = aInputTitle; rMsg = aInputMessage; return bShowInput; }
-    sal_Bool            GetErrMsg( String& rTitle, String& rMsg, ScValidErrorStyle& rStyle ) const;
+    BOOL			GetErrMsg( String& rTitle, String& rMsg, ScValidErrorStyle& rStyle ) const;
 
-    sal_Bool            HasErrMsg() const       { return bShowError; }
+    BOOL			HasErrMsg() const		{ return bShowError; }
 
-    ScValidationMode GetDataMode() const    { return eDataMode; }
+    ScValidationMode GetDataMode() const	{ return eDataMode; }
 
     inline sal_Int16 GetListType() const                { return mnListType; }
     inline void     SetListType( sal_Int16 nListType )  { mnListType = nListType; }
@@ -133,28 +133,28 @@ public:
         @return  true = rStrings has been filled with at least one entry. */
     bool            FillSelectionList( TypedScStrCollection& rStrings, const ScAddress& rPos ) const;
 
-                    //  with string: during input, with cell: for detective / RC_FORCED
-    sal_Bool            IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
+                    //	mit String: bei Eingabe, mit Zelle: fuer Detektiv / RC_FORCED
+    BOOL			IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
                                     const ScAddress& rPos ) const;
-    sal_Bool            IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
+    BOOL			IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
-                    // TRUE -> break
-    sal_Bool            DoError( Window* pParent, const String& rInput, const ScAddress& rPos ) const;
-    void            DoCalcError( ScFormulaCell* pCell ) const;
+                    // TRUE -> Abbruch
+    BOOL			DoError( Window* pParent, const String& rInput, const ScAddress& rPos ) const;
+    void			DoCalcError( ScFormulaCell* pCell ) const;
 
-    sal_Bool            IsEmpty() const;
-    sal_uInt32      GetKey() const          { return nKey; }
-    void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
+    BOOL			IsEmpty() const;
+    sal_uInt32		GetKey() const			{ return nKey; }
+    void			SetKey(sal_uInt32 nNew)	{ nKey = nNew; }	// nur wenn nicht eingefuegt!
 
-    void            SetUsed(sal_Bool bSet)      { bIsUsed = bSet; }
-    sal_Bool            IsUsed() const          { return bIsUsed; }
+    void			SetUsed(BOOL bSet)		{ bIsUsed = bSet; }
+    BOOL			IsUsed() const			{ return bIsUsed; }
 
-    sal_Bool            EqualEntries( const ScValidationData& r ) const;    // for undo
+    BOOL			EqualEntries( const ScValidationData& r ) const;	// fuer Undo
 
-    //  sort (using PTRARR) by index
-    //  operator== only for sorting
-    sal_Bool operator ==( const ScValidationData& r ) const { return nKey == r.nKey; }
-    sal_Bool operator < ( const ScValidationData& r ) const { return nKey <  r.nKey; }
+    //	sortiert (per PTRARR) nach Index
+    //	operator== nur fuer die Sortierung
+    BOOL operator ==( const ScValidationData& r ) const	{ return nKey == r.nKey; }
+    BOOL operator < ( const ScValidationData& r ) const	{ return nKey <  r.nKey; }
 
 private:
     /** Tries to fill the passed collection with list validation entries.
@@ -177,7 +177,7 @@ private:
 };
 
 //
-//  list of contitions:
+//	Liste der Bedingungen:
 //
 
 typedef ScValidationData* ScValidationDataPtr;
@@ -193,17 +193,21 @@ public:
         ScValidationDataList(ScDocument* pNewDoc, const ScValidationDataList& rList);
         ~ScValidationDataList() {}
 
-    void    InsertNew( ScValidationData* pNew )
+    void	InsertNew( ScValidationData* pNew )
                 { if (!Insert(pNew)) delete pNew; }
 
     ScValidationData* GetData( sal_uInt32 nKey );
 
-    void    CompileXML();
-    void    UpdateReference( UpdateRefMode eUpdateRefMode,
+    void	CompileXML();
+    void	UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
-    sal_Bool    operator==( const ScValidationDataList& r ) const;      // for ref-undo
+    /** Temporarily during save, returns RefManager's decision whether ALL 
+     *  references are marked now. */
+    bool    MarkUsedExternalReferences() const;
+
+    BOOL	operator==( const ScValidationDataList& r ) const;		// fuer Ref-Undo
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ namespace rtl
 
 // class SvxKerningItem --------------------------------------------------
 
-// Note: Twips value
-// Twips: 0 = no kerning
+// Achtung: Twips-Werte
+// Twips: 0 = kein Kerning
 
-/*  [Description]
+/*	[Beschreibung]
 
-    This item describes the kerning.
+    Dieses Item beschreibt die Schrift-Laufweite.
 */
 
 class EDITENG_DLLPUBLIC SvxKerningItem : public SfxInt16Item
@@ -54,14 +54,14 @@ class EDITENG_DLLPUBLIC SvxKerningItem : public SfxInt16Item
 public:
     TYPEINFO();
 
-    SvxKerningItem( const short nKern /*= 0*/, const sal_uInt16 nId  );
+    SvxKerningItem( const short nKern /*= 0*/, const USHORT nId  );
 
-    // "pure virtual Methods" from SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
+    virtual SvStream&		Store(SvStream &, USHORT nItemVersion) const;
     virtual bool            ScaleMetrics( long nMult, long nDiv );
-    virtual bool            HasMetrics() const;
+    virtual	bool            HasMetrics() const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -73,8 +73,8 @@ public:
             return *this;
         }
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 #endif

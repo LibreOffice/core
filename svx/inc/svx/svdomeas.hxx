@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class SdrOutliner;
 struct ImpMeasureRec;
 struct ImpMeasurePoly;
 
-namespace sdr { namespace properties {
+namespace sdr {	namespace properties {
     class MeasureProperties;
 }}
 
@@ -52,8 +52,8 @@ namespace sdr { namespace properties {
 class SdrMeasureObjGeoData : public SdrTextObjGeoData
 {
 public:
-    Point                       aPt1;
-    Point                       aPt2;
+    Point						aPt1;
+    Point						aPt2;
 
 public:
     SdrMeasureObjGeoData();
@@ -70,14 +70,14 @@ private:
     // to allow sdr::properties::MeasureProperties access to SetTextDirty()
     friend class sdr::properties::MeasureProperties;
 
-    friend class                SdrMeasureField;
+    friend class				SdrMeasureField;
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    Point                       aPt1;
-    Point                       aPt2;
+    Point						aPt1;
+    Point						aPt2;
     bool                        bTextDirty;
 
 protected:
@@ -86,7 +86,7 @@ protected:
     void ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const;
     basegfx::B2DPolyPolygon ImpCalcXPoly(const ImpMeasurePoly& rPol) const;
     void ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const;
-    void SetTextDirty() { bTextDirty=sal_True; SetTextSizeDirty(); if (!aOutRect.IsEmpty()) { SetBoundRectDirty(); SetRectsDirty(sal_True); } }
+    void SetTextDirty() { bTextDirty=TRUE; SetTextSizeDirty(); if (!aOutRect.IsEmpty()) { SetBoundRectDirty(); SetRectsDirty(sal_True); } }
     void UndirtyText() const;
 
     virtual SdrObjGeoData* NewGeoData() const;
@@ -100,9 +100,9 @@ public:
     virtual ~SdrMeasureObj();
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual UINT16 GetObjIdentifier() const;
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
-    virtual SdrMeasureObj* Clone() const;
+    virtual void operator=(const SdrObject& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
@@ -110,7 +110,7 @@ public:
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-
+    
     // special drag methods
     virtual bool hasSpecialDrag() const;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
@@ -141,19 +141,19 @@ public:
     virtual Point GetPoint(sal_uInt32 i) const;
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
 
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
     virtual const Size& GetTextSize() const;
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false,
-        Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const;
+        Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
     virtual void TakeTextAnchorRect(Rectangle& rAnchorRect) const;
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
-    virtual sal_uInt16 GetOutlinerViewAnchorMode() const;
+    virtual USHORT GetOutlinerViewAnchorMode() const;
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
 
-    virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
+    virtual bool CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
         bool bEdit, Color*& rpTxtColor, Color*& rpFldColor, String& rRet) const;
 
     // #i97878#

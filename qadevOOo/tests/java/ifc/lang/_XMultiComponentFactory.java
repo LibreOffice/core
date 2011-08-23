@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ public class _XMultiComponentFactory extends MultiMethodTest {
 
     public XComponentContext xContext = null;
     private String[] availableServiceNames = null;
-
+    
     public void before(){
         xContext = (XComponentContext)tEnv.getObjRelation("DC");
         availableServiceNames = (String[])tEnv.getObjRelation("XMultiComponentFactory.ServiceNames");
@@ -58,7 +58,7 @@ public class _XMultiComponentFactory extends MultiMethodTest {
     /**
     * Calls the method with one of the available service names
     * obtained by method getAvailableServiceNames. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     * and returned value is not null.
     */
     public void _createInstanceWithContext() {
@@ -81,14 +81,14 @@ public class _XMultiComponentFactory extends MultiMethodTest {
     /**
     * Calls the method with one of the available service names
     * obtained by method getAvailableServiceNames. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     * and returned value is not null.
     */
     public void _createInstanceWithArgumentsAndContext() {
         requiredMethod("getAvailableServiceNames()");
         boolean result = true;
         XInterface component = null;
-
+        
         try {
             component = (XInterface)oObj.createInstanceWithArgumentsAndContext(
                     availableServiceNames[0], new Object[0], xContext);
@@ -103,7 +103,7 @@ public class _XMultiComponentFactory extends MultiMethodTest {
 
     /**
     * Just calls the method. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     * and returned value is not null.
     */
     public void _getAvailableServiceNames() {

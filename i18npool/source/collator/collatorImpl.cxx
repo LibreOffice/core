@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
+using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -46,7 +44,7 @@ CollatorImpl::CollatorImpl( const Reference < XMultiServiceFactory >& rxMSF ) : 
 {
     if ( rxMSF.is()) {
         Reference < XInterface > xI =
-            xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.LocaleData")));
+            xMSF->createInstance( OUString::createFromAscii("com.sun.star.i18n.LocaleData"));
         if ( xI.is() )
             xI->queryInterface(::getCppuType((const Reference< XLocaleData>*)0)) >>= localedata;
     }
@@ -150,9 +148,9 @@ CollatorImpl::listCollatorOptions( const OUString& /*collatorAlgorithmName*/ ) t
 
     for (sal_Int32 i = 0; i < option_str.getLength(); i++)
         option_int[i] =
-            option_str[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IGNORE_CASE")) ?  CollatorOptions::CollatorOptions_IGNORE_CASE :
-            option_str[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IGNORE_KANA")) ?  CollatorOptions::CollatorOptions_IGNORE_KANA :
-            option_str[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IGNORE_WIDTH")) ?  CollatorOptions::CollatorOptions_IGNORE_WIDTH : 0;
+            option_str[i].equalsAscii("IGNORE_CASE") ?  CollatorOptions::CollatorOptions_IGNORE_CASE :
+            option_str[i].equalsAscii("IGNORE_KANA") ?  CollatorOptions::CollatorOptions_IGNORE_KANA :
+            option_str[i].equalsAscii("IGNORE_WIDTH") ?  CollatorOptions::CollatorOptions_IGNORE_WIDTH : 0;
 
     return option_int;
 }
@@ -170,7 +168,7 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
     }
     if (xMSF.is()) {
         Reference < XInterface > xI =
-            xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Collator_")) + serviceName);
+            xMSF->createInstance(OUString::createFromAscii("com.sun.star.i18n.Collator_") + serviceName);
 
         if (xI.is()) {
             Reference < XCollator > xC;
@@ -197,8 +195,8 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
     }
 
     static sal_Unicode under = (sal_Unicode) '_';
-    static OUString tw(RTL_CONSTASCII_USTRINGPARAM("TW"));
-    static OUString unicode(RTL_CONSTASCII_USTRINGPARAM("Unicode"));
+    static OUString tw(OUString::createFromAscii("TW"));
+    static OUString unicode(OUString::createFromAscii("Unicode"));
 
     sal_Int32 l = rLocale.Language.getLength();
     sal_Int32 c = rLocale.Country.getLength();
@@ -215,9 +213,9 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
              // load service with name <base>_<lang>_<country>_<algorithm>
              createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(rLocale.Country).append(
                      under).append(rSortAlgorithm).makeStringAndClear(), rSortAlgorithm)) ||
-            (l > 0 && c > 0 && a > 0 && rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) &&
-             (rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HK")) ||
-              rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MO"))) &&
+            (l > 0 && c > 0 && a > 0 && rLocale.Language.equalsAscii("zh") &&
+             (rLocale.Country.equalsAscii("HK") ||
+              rLocale.Country.equalsAscii("MO")) &&
              // if the country code is HK or MO, one more step to try TW.
              createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(tw).append(under).append(
                      rSortAlgorithm).makeStringAndClear(), rSortAlgorithm)) ||

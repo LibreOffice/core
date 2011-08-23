@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "VPolarAngleAxis.hxx"
 #include "VPolarRadiusAxis.hxx"
 #include "macros.hxx"
-#include "Tickmarks.hxx"
+#include "TickmarkHelper.hxx"
 #include "ShapeFactory.hxx"
 
 #include <memory>
@@ -69,12 +69,12 @@ VPolarAxis::~VPolarAxis()
     m_pPosHelper = NULL;
 }
 
-void VPolarAxis::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )
+void VPolarAxis::setIncrements( const uno::Sequence< ExplicitIncrementData >& rIncrements )
 {
     m_aIncrements = rIncrements;
 }
 
-sal_Bool VPolarAxis::isAnythingToDraw()
+sal_Bool SAL_CALL VPolarAxis::isAnythingToDraw()
 {
     return ( 2==m_nDimension && VAxisBase::isAnythingToDraw() );
 }

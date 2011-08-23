@@ -6,6 +6,10 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
+# $RCSfile: makefile.mk,v $
+#
+# $Revision: 1.0 $
+#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -29,6 +33,11 @@ PRJ=..$/..
 
 PRJNAME=scripting
 TARGET=vbaevents
+.IF "$(ENABLE_VBA)"!="YES"
+dummy:
+        @echo "not building vbaevents..."
+.ENDIF
+
 VISIBILITY_HIDDEN=TRUE
 NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
@@ -41,6 +50,8 @@ COMPRDB=$(SOLARBINDIR)$/types.rdb
 DLLPRE =
 
 # ------------------------------------------------------------------
+
+#.INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES= \
         $(SLO)$/service.obj \
@@ -81,11 +92,3 @@ $(MISC)$/$(TARGET).don : $(SOLARBINDIR)$/oovbaapi.rdb
         +$(CPPUMAKER) -O$(INCCOM)$/$(TARGET) -BUCR $(SOLARBINDIR)$/oovbaapi.rdb -X$(SOLARBINDIR)$/types.rdb && echo > $@
         echo $@
  
-
-ALLTAR : $(MISC)/vbaevents.component
-
-$(MISC)/vbaevents.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        vbaevents.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt vbaevents.component

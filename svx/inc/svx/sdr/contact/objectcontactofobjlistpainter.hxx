@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,10 +73,10 @@ namespace sdr
         {
         protected:
             // Target OutputDevice
-            OutputDevice&                                   mrTargetOutputDevice;
+            OutputDevice&									mrTargetOutputDevice;
 
             // Set StartPoint for next run, also given in constructor
-            SdrObjectVector                                 maStartObjects;
+            SdrObjectVector									maStartObjects;
 
             // the processed page which is the base e.g. for PageNumberFields
             const SdrPage*                                  mpProcessedPage;
@@ -88,22 +88,13 @@ namespace sdr
         public:
             // basic constructor/destructor
             ObjectContactOfObjListPainter(
-                OutputDevice& rTargetDevice,
+                OutputDevice& rTargetDevice, 
                 const SdrObjectVector& rObjects,
                 const SdrPage* pProcessedPage);
             virtual ~ObjectContactOfObjListPainter();
 
             // Process the whole displaying
             virtual void ProcessDisplay(DisplayInfo& rDisplayInfo);
-
-            // VirtualDevice? Default is false
-            virtual bool isOutputToVirtualDevice() const;
-
-            // recording MetaFile? Default is false
-            virtual bool isOutputToRecordingMetaFile() const;
-
-            // pdf export? Default is false
-            virtual bool isOutputToPDFFile() const;
 
             // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
             virtual OutputDevice* TryToGetOutputDevice() const;
@@ -121,10 +112,10 @@ namespace sdr
         {
         protected:
             // the original ObjectContact this painter is working on
-            ObjectContact&                                  mrOriginalObjectContact;
+            ObjectContact&									mrOriginalObjectContact;
 
             // Set StartPoint for next run, also given in constructor
-            SdrPageWeakRef                                  mxStartPage;
+            SdrPageWeakRef									mxStartPage;
 
             // Hierarchy access methods
             virtual sal_uInt32 GetPaintObjectCount() const;
@@ -133,14 +124,14 @@ namespace sdr
         public:
             // basic constructor
             ObjectContactOfPagePainter(
-                const SdrPage* pPage,
+                const SdrPage* pPage, 
                 ObjectContact& rOriginalObjectContact);
             virtual ~ObjectContactOfPagePainter();
 
             // set another page
             void SetStartPage(const SdrPage* pPage);
             const SdrPage* GetStartPage() const { return mxStartPage.get(); }
-
+            
             // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
             virtual OutputDevice* TryToGetOutputDevice() const;
         };

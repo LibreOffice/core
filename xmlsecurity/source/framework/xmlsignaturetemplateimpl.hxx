@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,9 @@
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
 
 class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper3<
     ::com::sun::star::xml::crypto::XXMLSignatureTemplate ,
@@ -75,7 +77,7 @@ class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper3<
 
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > > SAL_CALL getTargets(
         ) throw (com::sun::star::uno::RuntimeException);
-
+        
         virtual void SAL_CALL setBinding(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::crypto::XUriBinding >& aUriBinding )
@@ -84,7 +86,7 @@ class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper3<
             ::com::sun::star::xml::crypto::XUriBinding >
             SAL_CALL getBinding(  )
             throw (::com::sun::star::uno::RuntimeException);
-
+            
         virtual void SAL_CALL setStatus(
             ::com::sun::star::xml::crypto::SecurityOperationStatus status )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -117,6 +119,6 @@ class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper3<
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
 } ;
 
-#endif  // _XMLSIGNATURETEMPLATE_XMLSECIMPL_HXX_
+#endif	// _XMLSIGNATURETEMPLATE_XMLSECIMPL_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,7 @@
 // - FieldTypes -
 // --------------
 
+// By changes you must also change: rsc/vclrsc.hxx
 enum FieldUnit { FUNIT_NONE, FUNIT_MM, FUNIT_CM, FUNIT_M, FUNIT_KM,
                  FUNIT_TWIP, FUNIT_POINT, FUNIT_PICA,
                  FUNIT_INCH, FUNIT_FOOT, FUNIT_MILE, FUNIT_CHAR, FUNIT_LINE, FUNIT_CUSTOM,

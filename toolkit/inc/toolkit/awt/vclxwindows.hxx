@@ -82,8 +82,6 @@
 #include <com/sun/star/awt/XComboBox.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XItemListListener.hpp>
-#include <com/sun/star/awt/XImageConsumer.hpp>
-#include <com/sun/star/awt/XSimpleTabController.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -94,7 +92,6 @@
 
 #include <vcl/pointr.hxx>
 #include <vcl/image.hxx>
-#include <vcl/tabctrl.hxx>
 
 #include <com/sun/star/document/XVbaMethodParameter.hpp>  //liuchen 2009-6-22, add the support of input/output parameters to VBA Dialog_QueryClose event
 class Button;
@@ -111,10 +108,10 @@ class ToolBox;
 class VclSimpleEvent;
 class VclMenuEvent;
 
-//  ----------------------------------------------------
-//  class VCLXGraphicControl
+//	----------------------------------------------------
+//	class VCLXGraphicControl
 //    deriving from VCLXWindow, drawing the graphic which exists as "Graphic" at the model
-//  ----------------------------------------------------
+//	----------------------------------------------------
 
 
 class TOOLKIT_DLLPUBLIC VCLXGraphicControl : public VCLXWindow
@@ -124,7 +121,7 @@ private:
     Image                       maImage;
 
 protected:
-    const Image&    GetImage() const { return maImage; }
+    BitmapEx                    GetBitmap() const { return maImage.GetBitmapEx(); }
 
 protected:
     // ::com::sun::star::awt::XWindow
@@ -150,9 +147,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
-//  class VCLXButton
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXButton
+//	----------------------------------------------------
 typedef ::cppu::ImplInheritanceHelper2  <   VCLXGraphicControl
                                         ,   ::com::sun::star::awt::XButton
                                         ,   ::com::sun::star::awt::XToggleButton
@@ -160,8 +157,8 @@ typedef ::cppu::ImplInheritanceHelper2  <   VCLXGraphicControl
 class VCLXButton :public VCLXButton_Base
 {
 private:
-    ::rtl::OUString             maActionCommand;
-    ActionListenerMultiplexer   maActionListeners;
+    ::rtl::OUString				maActionCommand;
+    ActionListenerMultiplexer	maActionListeners;
     ItemListenerMultiplexer     maItemListeners;
 
 protected:
@@ -199,9 +196,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXImageControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXImageControl
+//	----------------------------------------------------
 class VCLXImageControl : public VCLXGraphicControl
 {
 public:
@@ -224,16 +221,16 @@ protected:
     virtual void    ImplSetNewImage();
 };
 
-//  ----------------------------------------------------
-//  class VCLXCheckBox
-//  ----------------------------------------------------
-class VCLXCheckBox :    public ::com::sun::star::awt::XCheckBox,
+//	----------------------------------------------------
+//	class VCLXCheckBox
+//	----------------------------------------------------
+class VCLXCheckBox :	public ::com::sun::star::awt::XCheckBox,
                         public ::com::sun::star::awt::XButton,
                         public VCLXGraphicControl
 {
 private:
-    ActionListenerMultiplexer   maActionListeners;
-    ::rtl::OUString             maActionCommand;
+    ActionListenerMultiplexer	maActionListeners;
+    ::rtl::OUString				maActionCommand;
     ItemListenerMultiplexer     maItemListeners;
 
 protected:
@@ -244,13 +241,13 @@ public:
                     VCLXCheckBox();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 
     // ::com::sun::star::lang::XComponent
@@ -282,20 +279,20 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXRadioButton
-//  ----------------------------------------------------
-class VCLXRadioButton : public ::com::sun::star::awt::XRadioButton,
+//	----------------------------------------------------
+//	class VCLXRadioButton
+//	----------------------------------------------------
+class VCLXRadioButton :	public ::com::sun::star::awt::XRadioButton,
                         public ::com::sun::star::awt::XButton,
                         public VCLXGraphicControl
 {
 private:
     ItemListenerMultiplexer     maItemListeners;
-    ActionListenerMultiplexer   maActionListeners;
-    ::rtl::OUString             maActionCommand;
+    ActionListenerMultiplexer	maActionListeners;
+    ::rtl::OUString				maActionCommand;
 
 protected:
-    void            ImplClickedOrToggled( sal_Bool bToggled );
+    void			ImplClickedOrToggled( BOOL bToggled );
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
@@ -303,13 +300,13 @@ public:
                     VCLXRadioButton();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -341,10 +338,10 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getFirstActionListener ();
 };
 
-//  ----------------------------------------------------
-//  class VCLXMessageBox
-//  ----------------------------------------------------
-class VCLXMessageBox :  public ::com::sun::star::awt::XMessageBox,
+//	----------------------------------------------------
+//	class VCLXMessageBox
+//	----------------------------------------------------
+class VCLXMessageBox :	public ::com::sun::star::awt::XMessageBox,
                         public VCLXTopWindow
 {
 public:
@@ -352,13 +349,13 @@ public:
                         ~VCLXMessageBox();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 
     // ::com::sun::star::awt::XMessageBox
@@ -375,46 +372,12 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXFrame
-//  ----------------------------------------------------
-class VCLXFrame :   public VCLXContainer
-{
-protected:
-    void                        ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-
-public:
-    VCLXFrame();
-    ~VCLXFrame();
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XView
-    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XDevice,
-    ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
-
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
-};
 
 
-
-//  ----------------------------------------------------
-//  class VCLXDialog
-//  ----------------------------------------------------
-class TOOLKIT_DLLPUBLIC VCLXDialog :    public ::com::sun::star::awt::XDialog2,
+//	----------------------------------------------------
+//	class VCLXDialog
+//	----------------------------------------------------
+class VCLXDialog :	public ::com::sun::star::awt::XDialog2,
                         public ::com::sun::star::document::XVbaMethodParameter, //liuchen 2009-6-22, add the support of input/output parameters to VBA UserForm_QueryClose event
                     public VCLXTopWindow
 {
@@ -423,17 +386,17 @@ public:
                         ~VCLXDialog();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XDialog2
     virtual void SAL_CALL endDialog( ::sal_Int32 Result ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setHelpId( const rtl::OUString& Id ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHelpId( ::sal_Int32 Id ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XDialog
     void SAL_CALL setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException);
@@ -459,23 +422,23 @@ public:
     ::com::sun::star::uno::Any SAL_CALL getVbaMethodParameter( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-//  ----------------------------------------------------
-//  class VCLXTabPage
-//  ----------------------------------------------------
-class VCLXTabPage : public VCLXContainer
+//	----------------------------------------------------
+//	class VCLXTabPage
+//	----------------------------------------------------
+class VCLXTabPage :	public VCLXContainer
 {
 public:
                         VCLXTabPage();
                         ~VCLXTabPage();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XView
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException);
@@ -486,59 +449,6 @@ public:
     // ::com::sun::star::awt::XVclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
 
-    TabPage*  getTabPage() const throw ( ::com::sun::star::uno::RuntimeException);
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
-};
-
-class VCLXMultiPage : public ::com::sun::star::awt::XSimpleTabController, public VCLXContainer
-{
-    TabListenerMultiplexer maTabListeners;
-    sal_Int32 mTabId;
-protected:
-    void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-public:
-    VCLXMultiPage();
-    ~VCLXMultiPage();
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL acquire() throw() { OWeakObject::acquire(); }
-    void SAL_CALL release() throw() { OWeakObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XView
-    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XDevice,
-    ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
-    // XSimpleTabController
-    virtual ::sal_Int32 SAL_CALL insertTab() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeTab( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL setTabProps( ::sal_Int32 ID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Properties ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > SAL_CALL getTabProps( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL activateTab( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getActiveTabID() throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL addTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
-    // C++
-    TabControl*  getTabControl() const throw ( ::com::sun::star::uno::RuntimeException);
-    sal_uInt16 insertTab( TabPage*, rtl::OUString& sTitle );
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -596,10 +506,10 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXFixedText
-//  ----------------------------------------------------
-class VCLXFixedText :   public ::com::sun::star::awt::XFixedText,
+//	----------------------------------------------------
+//	class VCLXFixedText
+//	----------------------------------------------------
+class VCLXFixedText :	public ::com::sun::star::awt::XFixedText,
                         public VCLXWindow
 {
 protected:
@@ -610,13 +520,13 @@ public:
                         ~VCLXFixedText();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XFixedText
     void SAL_CALL setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException);
@@ -633,10 +543,10 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXScrollBar
-//  ----------------------------------------------------
-class VCLXScrollBar :   public ::com::sun::star::awt::XScrollBar,
+//	----------------------------------------------------
+//	class VCLXScrollBar
+//	----------------------------------------------------
+class VCLXScrollBar :	public ::com::sun::star::awt::XScrollBar,
                         public VCLXWindow
 {
 private:
@@ -649,13 +559,13 @@ protected:
 public:
                     VCLXScrollBar();
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 
     // ::com::sun::star::lang::XComponent
@@ -694,10 +604,10 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXEdit
-//  ----------------------------------------------------
-class TOOLKIT_DLLPUBLIC VCLXEdit :  public ::com::sun::star::awt::XTextComponent,
+//	----------------------------------------------------
+//	class VCLXEdit
+//	----------------------------------------------------
+class TOOLKIT_DLLPUBLIC VCLXEdit :	public ::com::sun::star::awt::XTextComponent,
                     public ::com::sun::star::awt::XTextEditField,
                     public ::com::sun::star::awt::XTextLayoutConstrains,
                     public VCLXWindow
@@ -713,16 +623,16 @@ protected:
 public:
                     VCLXEdit();
 
-    TextListenerMultiplexer&    GetTextListeners() { return maTextListeners; }
+    TextListenerMultiplexer&	GetTextListeners() { return maTextListeners; }
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 
     // ::com::sun::star::lang::XComponent
@@ -762,9 +672,9 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXListBox
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXListBox
+//	----------------------------------------------------
 typedef ::cppu::ImplInheritanceHelper3  <   VCLXWindow
                                         ,   ::com::sun::star::awt::XListBox
                                         ,   ::com::sun::star::awt::XTextLayoutConstrains
@@ -773,11 +683,11 @@ typedef ::cppu::ImplInheritanceHelper3  <   VCLXWindow
 class VCLXListBox  : public VCLXListBox_Base
 {
 private:
-    ActionListenerMultiplexer   maActionListeners;
-    ItemListenerMultiplexer     maItemListeners;
+    ActionListenerMultiplexer	maActionListeners;
+    ItemListenerMultiplexer		maItemListeners;
 
 protected:
-    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void	ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                     CreateAccessibleContext();
     void            ImplCallItemListeners();
@@ -839,17 +749,17 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXComboBox
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXComboBox
+//	----------------------------------------------------
 typedef ::cppu::ImplInheritanceHelper2  <   VCLXEdit
                                         ,   ::com::sun::star::awt::XComboBox
                                         ,   ::com::sun::star::awt::XItemListListener > VCLXComboBox_Base;
-class VCLXComboBox :    public VCLXComboBox_Base
+class VCLXComboBox :	public VCLXComboBox_Base
 {
 private:
-    ActionListenerMultiplexer   maActionListeners;
-    ItemListenerMultiplexer     maItemListeners;
+    ActionListenerMultiplexer	maActionListeners;
+    ItemListenerMultiplexer		maItemListeners;
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
@@ -903,14 +813,14 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXSpinField
-//  ----------------------------------------------------
-class TOOLKIT_DLLPUBLIC VCLXSpinField : public ::com::sun::star::awt::XSpinField,
+//	----------------------------------------------------
+//	class VCLXSpinField
+//	----------------------------------------------------
+class TOOLKIT_DLLPUBLIC VCLXSpinField :	public ::com::sun::star::awt::XSpinField,
                         public VCLXEdit
 {
 private:
-    SpinListenerMultiplexer maSpinListeners;
+    SpinListenerMultiplexer	maSpinListeners;
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
@@ -919,13 +829,13 @@ public:
                     VCLXSpinField();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 
     // ::com::sun::star::awt::XSpinField
@@ -941,25 +851,25 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXFormattedSpinField
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXFormattedSpinField
+//	----------------------------------------------------
 class VCLXFormattedSpinField : public VCLXSpinField
 {
 private:
-    FormatterBase*  mpFormatter;
+    FormatterBase*	mpFormatter;
 
 protected:
-    FormatterBase*  GetFormatter() const { return GetWindow() ? mpFormatter : NULL; }
+    FormatterBase*	GetFormatter() const { return GetWindow() ? mpFormatter : NULL; }
 
 public:
                     VCLXFormattedSpinField();
                     ~VCLXFormattedSpinField();
 
-    void            SetFormatter( FormatterBase* pFormatter ) { mpFormatter = pFormatter; }
+    void			SetFormatter( FormatterBase* pFormatter ) { mpFormatter = pFormatter; }
 
-    void            setStrictFormat( sal_Bool bStrict );
-    sal_Bool        isStrictFormat();
+    void 			setStrictFormat( sal_Bool bStrict );
+    sal_Bool 		isStrictFormat();
 
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
@@ -969,10 +879,10 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXDateField
-//  ----------------------------------------------------
-class TOOLKIT_DLLPUBLIC VCLXDateField : public ::com::sun::star::awt::XDateField,
+//	----------------------------------------------------
+//	class VCLXDateField
+//	----------------------------------------------------
+class TOOLKIT_DLLPUBLIC VCLXDateField :	public ::com::sun::star::awt::XDateField,
                         public VCLXFormattedSpinField
 {
 public:
@@ -980,13 +890,13 @@ public:
                     ~VCLXDateField();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 
     // ::com::sun::star::awt::XDateField
@@ -1015,10 +925,10 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXTimeField
-//  ----------------------------------------------------
-class VCLXTimeField :   public ::com::sun::star::awt::XTimeField,
+//	----------------------------------------------------
+//	class VCLXTimeField
+//	----------------------------------------------------
+class VCLXTimeField :	public ::com::sun::star::awt::XTimeField,
                         public VCLXFormattedSpinField
 {
 public:
@@ -1026,13 +936,13 @@ public:
                     ~VCLXTimeField();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XTimeField
     void SAL_CALL setTime( sal_Int32 Time ) throw(::com::sun::star::uno::RuntimeException);
@@ -1058,10 +968,10 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXNumericField
-//  ----------------------------------------------------
-class VCLXNumericField :    public ::com::sun::star::awt::XNumericField,
+//	----------------------------------------------------
+//	class VCLXNumericField
+//	----------------------------------------------------
+class VCLXNumericField :	public ::com::sun::star::awt::XNumericField,
                             public VCLXFormattedSpinField
 {
 public:
@@ -1069,13 +979,13 @@ public:
                     ~VCLXNumericField();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XNumericField
     void SAL_CALL setValue( double Value ) throw(::com::sun::star::uno::RuntimeException);
@@ -1103,12 +1013,12 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXMetricField
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXMetricField
+//	----------------------------------------------------
 class MetricFormatter;
 class MetricField;
-class VCLXMetricField : public ::com::sun::star::awt::XMetricField,
+class VCLXMetricField :	public ::com::sun::star::awt::XMetricField,
                         public VCLXFormattedSpinField
 {
     MetricFormatter *GetMetricFormatter() throw(::com::sun::star::uno::RuntimeException);
@@ -1119,13 +1029,13 @@ public:
     ~VCLXMetricField();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XMetricField
     virtual void SAL_CALL setValue( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
@@ -1155,10 +1065,10 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXCurrencyField
-//  ----------------------------------------------------
-class VCLXCurrencyField :   public ::com::sun::star::awt::XCurrencyField,
+//	----------------------------------------------------
+//	class VCLXCurrencyField
+//	----------------------------------------------------
+class VCLXCurrencyField :	public ::com::sun::star::awt::XCurrencyField,
                             public VCLXFormattedSpinField
 {
 public:
@@ -1166,13 +1076,13 @@ public:
                     ~VCLXCurrencyField();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 
     // ::com::sun::star::awt::XCurrencyField
@@ -1201,10 +1111,10 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXPatternField
-//  ----------------------------------------------------
-class VCLXPatternField :    public ::com::sun::star::awt::XPatternField,
+//	----------------------------------------------------
+//	class VCLXPatternField
+//	----------------------------------------------------
+class VCLXPatternField :	public ::com::sun::star::awt::XPatternField,
                             public VCLXFormattedSpinField
 {
 public:
@@ -1212,13 +1122,13 @@ public:
                     ~VCLXPatternField();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 
     // ::com::sun::star::awt::XPatternField
@@ -1237,10 +1147,10 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
-//  ----------------------------------------------------
-//  class VCLXToolBox
-//  ----------------------------------------------------
-class VCLXToolBox : public VCLXWindow
+//	----------------------------------------------------
+//	class VCLXToolBox
+//	----------------------------------------------------
+class VCLXToolBox :	public VCLXWindow
 {
 private:
 

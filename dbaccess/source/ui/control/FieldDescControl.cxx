@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
-#define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
-#define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
-#define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
+#define ITEMID_HORJUSTIFY		SID_ATTR_ALIGN_HOR_JUSTIFY
+#define ITEMID_VERJUSTIFY		SID_ATTR_ALIGN_VER_JUSTIFY
+#define ITEMID_LINEBREAK		SID_ATTR_ALIGN_LINEBREAK
+#define ITEMID_MARGIN			SID_ATTR_ALIGN_MARGIN
 
 #include "FieldDescControl.hxx"
 #include "FieldControls.hxx"
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "TableDesignHelpBar.hxx"
 #include <vcl/scrbar.hxx>
@@ -50,7 +51,7 @@
 #include <svx/svxids.hrc>
 #include <svx/algitem.hxx>
 #include <svl/itempool.hxx>
-#define _ZFORLIST_DECLARE_TABLE     // ohne das bekomme ich einen Compiler-Fehler in <svl/zforlist.hxx>
+#define _ZFORLIST_DECLARE_TABLE		// ohne das bekomme ich einen Compiler-Fehler in <svl/zforlist.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/rngitem.hxx>
 #include <svl/intitem.hxx>
@@ -70,7 +71,6 @@
 #include <memory>
 #include "dbu_control.hrc"
 #include "dbu_tbl.hrc"
-#include <osl/diagnose.h>
 
 
 using namespace dbaui;
@@ -84,18 +84,18 @@ using namespace ::com::sun::star::util;
 //==================================================================
 
 // fuer die Controls auf der OFieldDescGenPage
-#define CONTROL_SPACING_X   18  // 6
-#define CONTROL_SPACING_Y   4
-#define CONTROL_WIDTH_1     160 // 100
-#define CONTROL_WIDTH_2     100 // 60
-#define CONTROL_WIDTH_3     250
-#define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - 20 - 5)
+#define CONTROL_SPACING_X	18	// 6
+#define	CONTROL_SPACING_Y	4
+#define CONTROL_WIDTH_1		160	// 100
+#define CONTROL_WIDTH_2		100 // 60
+#define CONTROL_WIDTH_3		250
+#define CONTROL_WIDTH_4		(CONTROL_WIDTH_3 - 20 - 5)
 
-#define SBA_DEF_RANGEFORMAT         (100 + 143) // RangeItem
-#define SBA_DEF_FMTVALUE            (100 + 144) // SfxULONG, Format
-#define SBA_ATTR_ALIGN_HOR_JUSTIFY  (100 + 145) //  SvxHorJustifyItem
+#define SBA_DEF_RANGEFORMAT			(100 + 143) // RangeItem
+#define SBA_DEF_FMTVALUE			(100 + 144) // SfxULONG, Format
+#define SBA_ATTR_ALIGN_HOR_JUSTIFY	(100 + 145) //  SvxHorJustifyItem
 
-#define HSCROLL_STEP        20
+#define HSCROLL_STEP		20
 
 
 namespace
@@ -105,7 +105,7 @@ namespace
     {
         double nValue = _nValue;
         sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(_xNumberFormatter,_nFormatKey);
-        if(     (nNumberFormat & ::com::sun::star::util::NumberFormat::DATE)    == ::com::sun::star::util::NumberFormat::DATE
+        if(		(nNumberFormat & ::com::sun::star::util::NumberFormat::DATE)	== ::com::sun::star::util::NumberFormat::DATE
             || (nNumberFormat & ::com::sun::star::util::NumberFormat::DATETIME) == ::com::sun::star::util::NumberFormat::DATETIME )
         {
             nValue = DBTypeConversion::toStandardDbDate(DBTypeConversion::getNULLDate(_xNumberFormatter->getNumberFormatsSupplier()),nValue);
@@ -263,11 +263,11 @@ OFieldDescControl::~OFieldDescControl()
 
     {
         ::std::auto_ptr<Window> aTemp(m_pVertScroll);
-        m_pVertScroll    = NULL;
+        m_pVertScroll	 = NULL;
     }
     {
         ::std::auto_ptr<Window> aTemp(m_pHorzScroll);
-        m_pHorzScroll    = NULL;
+        m_pHorzScroll	 = NULL;
     }
     if ( m_bAdded )
         ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
@@ -312,7 +312,7 @@ String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
     static String aOne('1');
     static String aNone(ModuleRes(STR_VALUE_NONE));
 
-    // aeltere Versionen haben eventuell einen sprachabhaengigen String als Default gespeichert
+    // FS - 66161 - 14.05.1999 - aeltere Versionen haben eventuell einen sprachabhaengigen String als Default gespeichert
     if (rPersistentString.Equals(aYes) || rPersistentString.Equals(aNo))
         return rPersistentString;
 
@@ -410,6 +410,7 @@ void OFieldDescControl::CheckScrollBars()
     {
         m_pVertScroll->Show();
         m_pVertScroll->SetRangeMax(nActive - nLastVisible);
+//		m_pVertScroll->SetThumbPos(0);
 
         m_pVertScroll->SetPosSizePixel( Point(nNewHWidth, 0), Size(nVScrollWidth, szOverallSize.Height()) );
     }
@@ -424,6 +425,7 @@ void OFieldDescControl::CheckScrollBars()
     {
         m_pHorzScroll->Show();
         m_pHorzScroll->SetRangeMax((lMaxXPosition - lMaxXAvailable + HSCROLL_STEP - 1 )/HSCROLL_STEP);
+//		m_pHorzScroll->SetThumbPos(0);
 
         m_pHorzScroll->SetPosSizePixel( Point(0, nNewVHeight), Size(bNeedVScrollBar ? nNewHWidth : szOverallSize.Width(), nHScrollHeight) );
     }
@@ -473,12 +475,12 @@ void OFieldDescControl::ScrollAllAggregates()
 
     if (nDeltaX || nDeltaY)
     {
-        Control* ppAggregates[]     = {   pRequired, pNumType
+        Control* ppAggregates[]		= {	  pRequired, pNumType
                                         , pAutoIncrement, pDefault
                                         , pTextLen, pLength
                                         , pScale, m_pColumnName
                                         , m_pType, m_pAutoIncrementValue};
-        Control* ppAggregatesText[] = {   pRequiredText, pNumTypeText
+        Control* ppAggregatesText[]	= {	  pRequiredText, pNumTypeText
                                         , pAutoIncrementText, pDefaultText
                                         , pTextLenText, pLengthText
                                         , pScaleText, m_pColumnNameText
@@ -514,7 +516,7 @@ sal_Int32 OFieldDescControl::GetMaxControlHeight() const
             const Size aTemp( ppAggregates[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
             if ( aTemp.Height() > aHeight.Height() )
                 aHeight.Height() = aTemp.Height();
-        }
+        } // if ( ppAggregates[i] )
     }
 
     return aHeight.Height();
@@ -525,13 +527,13 @@ void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
     DBG_CHKTHIS(OFieldDescControl,NULL);
     //////////////////////////////////////////////////////////////////////
     // Controls enablen/disablen
-    Control* ppAggregates[]     = {   pRequired, pNumType
+    Control* ppAggregates[]		= {	  pRequired, pNumType
                                         , pAutoIncrement, pDefault
                                         , pTextLen, pLength
                                         , pScale, m_pColumnName
                                         , m_pType, m_pAutoIncrementValue
                                         , pFormat};
-    Control* ppAggregatesText[] = {   pRequiredText, pNumTypeText
+    Control* ppAggregatesText[]	= {	  pRequiredText, pNumTypeText
                                         , pAutoIncrementText, pDefaultText
                                         , pTextLenText, pLengthText
                                         , pScaleText, m_pColumnNameText
@@ -727,7 +729,7 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
 }
 
 // -----------------------------------------------------------------------
-void OFieldDescControl::SetModified(sal_Bool /*bModified*/)
+void OFieldDescControl::SetModified(sal_Bool /*bModified*/) 
 {
 }
 //------------------------------------------------------------------------
@@ -812,9 +814,9 @@ void OFieldDescControl::ArrangeAggregates()
     // die Beschreibung eines Controls
     struct AGGREGATE_DESCRIPTION
     {
-        Control*    pctrlInputControl;  // das eigentliche Control zur Eingabe
-        Control*    pctrlTextControl;   // das Label dazu
-        sal_uInt16      nPosSizeArgument;   // das zweite Argument fuer SetPosSize
+        Control*	pctrlInputControl;	// das eigentliche Control zur Eingabe
+        Control*	pctrlTextControl;	// das Label dazu
+        USHORT		nPosSizeArgument;	// das zweite Argument fuer SetPosSize
     };
     AGGREGATE_DESCRIPTION adAggregates[] = {
         { m_pColumnName, m_pColumnNameText, 1},
@@ -922,7 +924,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             pRequired->InsertEntry( aYes );
             pRequired->InsertEntry( aNo );
             pRequired->SelectEntryPos(1);
-
+            
             InitializeControl(pRequired,HID_TAB_ENT_REQUIRED,true);
         }
     }
@@ -1068,9 +1070,9 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     }
 }
 // -----------------------------------------------------------------------------
-void OFieldDescControl::InitializeControl(Control* _pControl,const ::rtl::OString& _sHelpId,bool _bAddChangeHandler)
+void OFieldDescControl::InitializeControl(Control* _pControl,ULONG _nHelpId,bool _bAddChangeHandler)
 {
-    _pControl->SetHelpId(_sHelpId);
+    _pControl->SetHelpId(_nHelpId);
     if ( _bAddChangeHandler )
         ((OPropListBoxCtrl*)_pControl)->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
@@ -1079,7 +1081,7 @@ void OFieldDescControl::InitializeControl(Control* _pControl,const ::rtl::OStrin
     _pControl->EnableClipSiblings();
 }
 // -----------------------------------------------------------------------------
-FixedText* OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
+FixedText* OFieldDescControl::CreateText(USHORT _nTextRes)
 {
     FixedText* pFixedText = new FixedText( this );
     pFixedText->SetText( ModuleRes(_nTextRes) );
@@ -1087,15 +1089,15 @@ FixedText* OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
     return pFixedText;
 }
 // -----------------------------------------------------------------------------
-OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const rtl::OString& _sHelpId)
+OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(USHORT _nHelpStr,short _nProperty,ULONG _nHelpId)
 {
     OPropNumericEditCtrl* pControl = new OPropNumericEditCtrl( this, _nHelpStr, _nProperty, WB_BORDER );
     pControl->SetDecimalDigits(0);
     pControl->SetMin(0);
-    pControl->SetMax(0x7FFFFFFF);   // soll draussen geaendert werden, wenn noetig
-    pControl->SetStrictFormat(sal_True);
+    pControl->SetMax(0x7FFFFFFF);	// soll draussen geaendert werden, wenn noetig
+    pControl->SetStrictFormat(TRUE);
 
-    InitializeControl(pControl,_sHelpId,false);
+    InitializeControl(pControl,_nHelpId,false);
 
     return pControl;
 }
@@ -1168,7 +1170,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
 void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 nCol )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-
+    
     //////////////////////////////////////////////////////////////////////
     // Groesse ermitteln
     const sal_Int32 nControlHeight = GetMaxControlHeight();
@@ -1192,7 +1194,7 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
         case 4:
             aSize.Width()  = CONTROL_WIDTH_4;
             break;
-        }
+        } // switch( nCol )
     }
 
 
@@ -1226,12 +1228,12 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
     const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
     aPosition.Y() += ((nRow+1)*nControl_Spacing_y) +
                     (nRow*nControlHeight);
-
+    
     //////////////////////////////////////////////////////////////////////
     // Control anzeigen
     (*ppControl)->SetPosSizePixel( aPosition, aSize );
     aSize = (*ppControl)->GetSizePixel();
-
+    
     (*ppControl)->Show();
 }
 //------------------------------------------------------------------------------
@@ -1424,7 +1426,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
                 break;
             default:
-                OSL_FAIL("Unknown type");
+                OSL_ENSURE(0,"Unknown type");
         }
         m_pPreviousType = pFieldType;
     }
@@ -1459,7 +1461,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         {
             // disable autoincrement value because it should only be visible when autoincrement is to true
             DeactivateAggregate( tpAutoIncrementValue );
-            pAutoIncrement->SelectEntryPos( 1 );        // no
+            pAutoIncrement->SelectEntryPos( 1 );		// no
             ActivateAggregate( tpDefault );
             // hat Auswirkungen auf pRequired
             if(!pFieldDescr->IsPrimaryKey())
@@ -1476,7 +1478,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     if( pBoolDefault )
     {
         // wenn pRequired auf sal_True gesetzt ist, dann darf das sal_Bool Feld nicht den Eintrag <<keiner>> besitzen
-        ::rtl::OUString sValue;
+        ::rtl::OUString sValue; 
         pFieldDescr->GetControlDefault() >>= sValue;
         String sDef = BoolStringUI(sValue);
 
@@ -1505,9 +1507,9 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     if( pRequired )
     {
         if( pFieldDescr->IsNullable() )
-            pRequired->SelectEntryPos( 1 ); // no
+            pRequired->SelectEntryPos( 1 );	// no
         else
-            pRequired->SelectEntryPos( 0 ); // yes
+            pRequired->SelectEntryPos( 0 );	// yes
     }
 
     if( pTextLen )
@@ -1518,7 +1520,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if( pNumType )
     {
-        OSL_FAIL("OFieldDescControl::DisplayData: invalid num type!");
+        OSL_ENSURE(sal_False, "OFieldDescControl::DisplayData: invalid num type!");
     }
 
     if( pLength )
@@ -1535,10 +1537,10 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if(m_pType)
     {
-        sal_uInt16 nPos = pFieldType.get() ? m_pType->GetEntryPos(String(pFieldDescr->getTypeInfo()->aUIName)) : LISTBOX_ENTRY_NOTFOUND;
+        USHORT nPos = pFieldType.get() ? m_pType->GetEntryPos(String(pFieldDescr->getTypeInfo()->aUIName)) : LISTBOX_ENTRY_NOTFOUND;
         if(nPos == LISTBOX_ENTRY_NOTFOUND)
         {
-            const OTypeInfoMap* pMap = getTypeInfo();
+            const OTypeInfoMap*	pMap = getTypeInfo();
             OTypeInfoMap::const_iterator aIter = pMap->find(pFieldType.get() ? pFieldDescr->getTypeInfo()->nType : pFieldDescr->GetType());
             if(aIter == pMap->end() && !pMap->empty())
             {
@@ -1708,7 +1710,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
         catch(const Exception&)
         {
         }
-    }
+    } // if ( sDefault.getLength() )
     else
         pFieldDescr->SetControlDefault(Any());
 
@@ -1759,7 +1761,7 @@ void OFieldDescControl::GetFocus()
 void OFieldDescControl::implFocusLost(Window* _pWhich)
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    OSL_ENSURE(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
+    DBG_ASSERT(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
 
     //////////////////////////////////////////////////////////////////////
     // Das aktive Control merken
@@ -1785,9 +1787,9 @@ void OFieldDescControl::LoseFocus()
 sal_Bool OFieldDescControl::isCopyAllowed()
 {
     sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
-                        (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
-                        m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
-                        m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
+                        (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample	||
+                        m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength			||
+                        m_pActFocusWindow == pScale	 || m_pActFocusWindow == m_pColumnName		||
                         m_pActFocusWindow == m_pAutoIncrementValue) &&
                         static_cast<Edit*>(m_pActFocusWindow)->GetSelected().Len() != 0;
 
@@ -1797,9 +1799,9 @@ sal_Bool OFieldDescControl::isCopyAllowed()
 sal_Bool OFieldDescControl::isCutAllowed()
 {
     sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
-                        (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
-                        m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
-                        m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
+                        (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample	||
+                        m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength			||
+                        m_pActFocusWindow == pScale	 || m_pActFocusWindow == m_pColumnName		||
                         m_pActFocusWindow == m_pAutoIncrementValue) &&
                         static_cast<Edit*>(m_pActFocusWindow)->GetSelected().Len() != 0;
     return bAllowed;
@@ -1808,9 +1810,9 @@ sal_Bool OFieldDescControl::isCutAllowed()
 sal_Bool OFieldDescControl::isPasteAllowed()
 {
     sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
-                        (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
-                        m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
-                        m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName      ||
+                        (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample	||
+                        m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength			||
+                        m_pActFocusWindow == pScale	 || m_pActFocusWindow == m_pColumnName		||
                         m_pActFocusWindow == m_pAutoIncrementValue);
     if ( bAllowed )
     {
@@ -1905,7 +1907,7 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
             Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
             OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
             ::rtl::OUString sFormat;
-            xFormSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormatString"))) >>= sFormat;
+            xFormSet->getPropertyValue(::rtl::OUString::createFromAscii("FormatString")) >>= sFormat;
 
             if ( !bTextFormat )
             {
@@ -1913,7 +1915,7 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
                 ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"))) >>= aLocale;
 
                 sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(xNumberFormatter,nFormatKey);
-                if(     (nNumberFormat & ::com::sun::star::util::NumberFormat::DATE)    == ::com::sun::star::util::NumberFormat::DATE
+                if(		(nNumberFormat & ::com::sun::star::util::NumberFormat::DATE)	== ::com::sun::star::util::NumberFormat::DATE
                     || (nNumberFormat & ::com::sun::star::util::NumberFormat::DATETIME) == ::com::sun::star::util::NumberFormat::DATETIME )
                 {
                     nValue = DBTypeConversion::toNullDate(DBTypeConversion::getNULLDate(xNumberFormatter->getNumberFormatsSupplier()),nValue);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <svtools/roadmapwizard.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
-#include <svtools/roadmap.hxx>
+#include "roadmap.hxx"
 #include <tools/debug.hxx>
 
 #include <stdarg.h>
@@ -72,7 +72,7 @@ namespace svt
         StateDescriptions   aStateDescriptors;
         StateSet            aDisabledStates;
         bool                bActivePathIsDefinite;
-           FixedLine*           pFixedLine;
+           FixedLine*	        pFixedLine;
 
         RoadmapWizardImpl()
             :pRoadmap( NULL )
@@ -136,7 +136,7 @@ namespace svt
     //====================================================================
     DBG_NAME( RoadmapWizard )
     //--------------------------------------------------------------------
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     const char* CheckInvariants( const void* pVoid )
     {
         return static_cast< const RoadmapWizard* >( pVoid )->checkInvariants();
@@ -234,21 +234,21 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    const BitmapEx& RoadmapWizard::GetRoadmapBitmap( ) const
+    const BitmapEx&	RoadmapWizard::GetRoadmapBitmap( ) const
     {
         return m_pImpl->pRoadmap->GetRoadmapBitmap();
     }
 
     //--------------------------------------------------------------------
-    void RoadmapWizard::SetRoadmapHelpId( const rtl::OString& _rId )
+    void RoadmapWizard::SetRoadmapSmartHelpId( const SmartId& _rId, SmartIdUpdateMode _aMode )
     {
-        m_pImpl->pRoadmap->SetHelpId( _rId );
+        m_pImpl->pRoadmap->SetSmartHelpId( _rId, _aMode );
     }
 
     //--------------------------------------------------------------------
-    const rtl::OString& RoadmapWizard::GetRoadmapHelpId() const
+    SmartId RoadmapWizard::GetRoadmapSmartHelpId() const
     {
-        return m_pImpl->pRoadmap->GetHelpId();
+        return m_pImpl->pRoadmap->GetSmartHelpId();
     }
 
     //--------------------------------------------------------------------
@@ -349,7 +349,7 @@ namespace svt
         {
             if ( m_pImpl->getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) <= nCurrentStatePathIndex )
             {
-                OSL_FAIL( "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
+                OSL_ENSURE( false, "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
                 return;
             }
         }

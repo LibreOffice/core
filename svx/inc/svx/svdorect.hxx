@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 class XPolygon;
 
-namespace sdr { namespace properties {
+namespace sdr {	namespace properties {
     class RectangleProperties;
 }}
 
@@ -54,16 +54,16 @@ class SVX_DLLPUBLIC SdrRectObj : public SdrTextObj
 private:
     // to allow sdr::properties::RectangleProperties access to SetXPolyDirty()
     friend class sdr::properties::RectangleProperties;
-    friend class                SdrTextObj; // wg SetXPolyDirty bei GrowAdjust
+    friend class				SdrTextObj; // wg SetXPolyDirty bei GrowAdjust
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    XPolygon*                   mpXPoly;
+    XPolygon*					mpXPoly;
 
 protected:
-    // Liefert sal_True, wenn das Painten ein Polygon erfordert.
+    // Liefert TRUE, wenn das Painten ein Polygon erfordert.
     bool PaintNeedsXPoly(long nEckRad) const;
 
 protected:
@@ -88,18 +88,18 @@ public:
     // Konstruktion eines Textrahmens
     SdrRectObj(SdrObjKind eNewTextKind);
     SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect);
-    // der sal_uInt16 eFormat nimmt Werte des enum EETextFormat entgegen
-    SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
+    // der USHORT eFormat nimmt Werte des enum EETextFormat entgegen
+    SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, USHORT eFormat);
     virtual ~SdrRectObj();
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual UINT16 GetObjIdentifier() const;
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    virtual SdrRectObj* Clone() const;
+    virtual void operator=(const SdrObject& rObj);
     virtual void RecalcSnapRect();
     virtual void NbcSetSnapRect(const Rectangle& rRect);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
@@ -107,7 +107,7 @@ public:
 
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-
+    
     // special drag methods
     virtual bool hasSpecialDrag() const;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
@@ -126,10 +126,10 @@ public:
     virtual bool DoMacro(const SdrObjMacroHitRec& rRec);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
 
-    virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
-    virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const;
+    virtual SdrGluePoint GetVertexGluePoint(USHORT nNum) const;
+    virtual SdrGluePoint GetCornerGluePoint(USHORT nNum) const;
 
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 };

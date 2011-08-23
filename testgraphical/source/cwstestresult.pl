@@ -5,7 +5,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -53,13 +53,13 @@ use Cws;
 #### global #####
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-my $is_debug = 1;           # enable debug
-my $opt_master;             # option: master workspace
-my $opt_child;              # option: child workspace
-my $opt_milestone;              # option: milestone
-my $opt_testrunName;        # option: testrunName
-my $opt_testrunPlatform;    # option: testrunPlatfrom
-my $opt_resultPage;         # option: resultPage
+my $is_debug = 1;       	# enable debug
+my $opt_master;          	# option: master workspace
+my $opt_child;    	        # option: child workspace
+my $opt_milestone;    	        # option: milestone 
+my $opt_testrunName;  		# option: testrunName
+my $opt_testrunPlatform;	# option: testrunPlatfrom
+my $opt_resultPage;     	# option: resultPage
 
 
 #### main #####
@@ -76,8 +76,8 @@ sub testresult
     # get master and child workspace
     my $masterws = $opt_master ? uc($opt_master) : $ENV{WORK_STAMP};
     my $milestone = $opt_milestone ? $opt_milestone : $ENV{UPDMINOR};
-    my $childws  = $opt_milestone ? undef : ( $opt_child  ? $opt_child  : $ENV{CWS_WORK_STAMP} );
-
+    my $childws  = $opt_milestone ? undef : ( $opt_child  ? $opt_child  : $ENV{CWS_WORK_STAMP} ); 
+    
     if ( !defined($masterws) ) {
         print_error("Can't determine master workspace environment.\n"
                     . "Please initialize environment with setsolar ...", 1);
@@ -112,7 +112,7 @@ sub testresult
         $opt_resultPage=SOAP::Data->type(string => $opt_resultPage);
         $result=$eis->submitTestResultMWS($masterws,$milestone,$opt_testrunName,$opt_testrunPlatform, $opt_resultPage, $status);
     }
-
+        
     exit(0)
 }
 
@@ -120,7 +120,7 @@ sub testresult
 sub is_valid_cws
 {
     my $cws = shift;
-
+    
     my $masterws = $cws->master();
     my $childws  = $cws->child();
     # check if we got a valid child workspace
@@ -165,7 +165,7 @@ sub parse_options
 # sub print_message
 # {
 #     my $message     = shift;
-#
+# 
 #     print STDERR "$script_name: ";
 #     print STDERR "$message\n";
 #     return;
@@ -186,7 +186,7 @@ sub print_error
     return;
 }
 
-sub usage
+sub usage 
 {
     print STDERR "Usage: cwstestresult[-h] [-M masterws] [-m milestone|-c childws] <-n testrunName> <-p testrunPlatform> <-r resultPage> statusName\n";
     print STDERR "\n";

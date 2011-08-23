@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,12 +36,12 @@
 // - FontToSubsFont -
 // ------------------
 
-#define FONTTOSUBSFONT_IMPORT                   ((sal_uLong)0x00000001)
-#define FONTTOSUBSFONT_EXPORT                   ((sal_uLong)0x00000002)
-#define FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS     ((sal_uLong)0x00000004)
+#define FONTTOSUBSFONT_IMPORT                   ((ULONG)0x00000001)
+#define FONTTOSUBSFONT_EXPORT                   ((ULONG)0x00000002)
+#define FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS     ((ULONG)0x00000004)
 
 typedef void* FontToSubsFontConverter;
-UNOTOOLS_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( const String& rFontName, sal_uLong nFlags );
+UNOTOOLS_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( const String& rFontName, ULONG nFlags );
 UNOTOOLS_DLLPUBLIC void                        DestroyFontToSubsFontConverter( FontToSubsFontConverter hConverter );
 UNOTOOLS_DLLPUBLIC sal_Unicode                 ConvertFontToSubsFontChar( FontToSubsFontConverter hConverter, sal_Unicode c );
 UNOTOOLS_DLLPUBLIC String                      GetFontToSubsFontName( FontToSubsFontConverter hConverter );
@@ -75,7 +75,7 @@ public:
 //allow somewhat more dubious transformations that are nevertheless
 //recognizably similiar. Even in this mode there will be characters that fail.
 //The users of this might want to make a distinction between failed characters
-//which were inside and those outside the unicode private area.
+//which were inside and those outside the unicode private area. 
 UNOTOOLS_DLLPUBLIC StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly=false);
 #endif // _UNOTOOLS_FONTCVT_HXX
 

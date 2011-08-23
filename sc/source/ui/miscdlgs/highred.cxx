@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,18 +49,18 @@
 
 // defines -------------------------------------------------------------------
 
-#define ABS_SREF          SCA_VALID \
+#define ABS_SREF		  SCA_VALID \
                         | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
-#define ABS_DREF          ABS_SREF \
+#define ABS_DREF		  ABS_SREF \
                         | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-#define ABS_SREF3D      ABS_SREF | SCA_TAB_3D
-#define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
+#define ABS_SREF3D		ABS_SREF | SCA_TAB_3D
+#define ABS_DREF3D		ABS_DREF | SCA_TAB_3D
 
 
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
 
-inline void EnableDisable( Window& rWin, sal_Bool bEnable )
+inline void EnableDisable( Window& rWin, BOOL bEnable )
 {
     if (bEnable)
         rWin.Enable();
@@ -69,27 +69,27 @@ inline void EnableDisable( Window& rWin, sal_Bool bEnable )
 }
 
 //============================================================================
-//  class ScHighlightChgDlg
+//	class ScHighlightChgDlg
 
 //----------------------------------------------------------------------------
 ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                      ScViewData*       ptrViewData)
+                      ScViewData*		ptrViewData)
 
-    :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_HIGHLIGHT_CHANGES ),
+    :	ScAnyRefDlg	( pB, pCW, pParent, RID_SCDLG_HIGHLIGHT_CHANGES ),
         //
-        aHighlightBox   ( this, ScResId( CB_HIGHLIGHT)),
+        aHighlightBox	( this, ScResId( CB_HIGHLIGHT)),
         aFlFilter       ( this, ScResId( FL_FILTER)),
-        aFilterCtr      ( this),
-        aCbAccept       ( this, ScResId( CB_HIGHLIGHT_ACCEPT)),
-        aCbReject       ( this, ScResId( CB_HIGHLIGHT_REJECT)),
-        aOkButton       ( this, ScResId( BTN_OK ) ),
-        aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
-        aHelpButton     ( this, ScResId( BTN_HELP ) ),
+        aFilterCtr		( this),
+        aCbAccept		( this, ScResId( CB_HIGHLIGHT_ACCEPT)),
+        aCbReject		( this, ScResId( CB_HIGHLIGHT_REJECT)),
+        aOkButton		( this, ScResId( BTN_OK ) ),
+        aCancelButton	( this, ScResId( BTN_CANCEL ) ),
+        aHelpButton		( this, ScResId( BTN_HELP ) ),
         aEdAssign       ( this, this, ScResId( ED_ASSIGN ) ),
-        aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign, this ),
+        aRbAssign		( this, ScResId( RB_ASSIGN ), &aEdAssign, this ),
         //
-        pViewData       ( ptrViewData ),
-        pDoc            ( ptrViewData->GetDocument() ),
+        pViewData		( ptrViewData ),
+        pDoc			( ptrViewData->GetDocument() ),
         aLocalRangeName ( *(pDoc->GetRangeName()) )
 {
     FreeResource();
@@ -103,22 +103,23 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
     aOkButton.SetClickHdl(LINK( this, ScHighlightChgDlg, OKBtnHdl));
     aHighlightBox.SetClickHdl(LINK( this, ScHighlightChgDlg, HighLightHandle ));
     aFilterCtr.SetRefHdl(LINK( this, ScHighlightChgDlg, RefHandle ));
-    aFilterCtr.HideRange(false);
+    aFilterCtr.HideRange(FALSE);
     aFilterCtr.Show();
-    SetDispatcherLock( true );
+    SetDispatcherLock( TRUE );
+    //SFX_APPWINDOW->Disable(FALSE);
 
     Init();
 
 }
-
 ScHighlightChgDlg::~ScHighlightChgDlg()
 {
-    SetDispatcherLock( false );
+    SetDispatcherLock( FALSE );
+    //SFX_APPWINDOW->Enable();
 }
 
-void ScHighlightChgDlg::Init()
+void __EXPORT ScHighlightChgDlg::Init()
 {
-    String  aAreaStr;
+    String	aAreaStr;
     ScRange aRange;
 
     DBG_ASSERT( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
@@ -129,7 +130,7 @@ void ScHighlightChgDlg::Init()
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         aFilterCtr.ClearAuthors();
         ScStrCollection aUserColl=pChanges->GetUserCollection();
-        for(sal_uInt16  i=0;i<aUserColl.GetCount();i++)
+        for(USHORT	i=0;i<aUserColl.GetCount();i++)
             aFilterCtr.InsertAuthor(aUserColl[i]->GetString());
     }
 
@@ -144,7 +145,7 @@ void ScHighlightChgDlg::Init()
     aFilterCtr.SetFirstTime(aChangeViewSet.GetTheFirstDateTime());
     aFilterCtr.SetLastDate(aChangeViewSet.GetTheLastDateTime());
     aFilterCtr.SetLastTime(aChangeViewSet.GetTheLastDateTime());
-    aFilterCtr.SetDateMode((sal_uInt16)aChangeViewSet.GetTheDateMode());
+    aFilterCtr.SetDateMode((USHORT)aChangeViewSet.GetTheDateMode());
     aFilterCtr.CheckAuthor(aChangeViewSet.HasAuthor());
     aFilterCtr.CheckComment(aChangeViewSet.HasComment());
     aFilterCtr.SetComment(aChangeViewSet.GetTheComment());
@@ -163,15 +164,16 @@ void ScHighlightChgDlg::Init()
     }
 
     aFilterCtr.CheckRange(aChangeViewSet.HasRange());
+    ScRange* pRangeEntry=aChangeViewSet.GetTheRangeList().GetObject(0);
 
-    if ( !aChangeViewSet.GetTheRangeList().empty() )
+
+    if(pRangeEntry!=NULL)
     {
         String aRefStr;
-        const ScRange* pRangeEntry = aChangeViewSet.GetTheRangeList().front();
         pRangeEntry->Format( aRefStr, ABS_DREF3D, pDoc );
         aFilterCtr.SetRange(aRefStr);
     }
-    aFilterCtr.Enable(sal_True,sal_True);
+    aFilterCtr.Enable(TRUE,TRUE);
     HighLightHandle(&aHighlightBox);
 }
 
@@ -193,12 +195,12 @@ void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 //----------------------------------------------------------------------------
-sal_Bool ScHighlightChgDlg::Close()
+BOOL __EXPORT ScHighlightChgDlg::Close()
 {
     return DoClose( ScHighlightChgDlgWrapper::GetChildWindowId() );
 }
 
-void ScHighlightChgDlg::RefInputDone( sal_Bool bForced)
+void ScHighlightChgDlg::RefInputDone( BOOL bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
     if(bForced || !aRbAssign.IsVisible())
@@ -212,9 +214,20 @@ void ScHighlightChgDlg::RefInputDone( sal_Bool bForced)
 
 void ScHighlightChgDlg::SetActive()
 {
+    /*
+    if(pTPFilter!=NULL)
+    {
+        aAcceptChgCtr.GetFilterPage()->SetFocusToRange();
+        aEdAssign.Hide();
+        aRbAssign.Hide();
+        SFX_APPWINDOW->Enable();
+        SetDispatcherLock( FALSE );
+    }
+    //RefInputDone();
+    */
 }
 
-sal_Bool ScHighlightChgDlg::IsRefInputMode() const
+BOOL ScHighlightChgDlg::IsRefInputMode() const
 {
     return aEdAssign.IsVisible();
 }
@@ -225,13 +238,13 @@ IMPL_LINK( ScHighlightChgDlg, HighLightHandle, CheckBox*, pCb )
     {
         if(aHighlightBox.IsChecked())
         {
-            aFilterCtr.Enable(sal_True,sal_True);
+            aFilterCtr.Enable(TRUE,TRUE);
             aCbAccept.Enable();
             aCbReject.Enable();
         }
         else
         {
-            aFilterCtr.Disable(sal_True);
+            aFilterCtr.Disable(TRUE);
             aCbAccept.Disable();
             aCbReject.Disable();
         }
@@ -243,7 +256,8 @@ IMPL_LINK( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef )
 {
     if(pRef!=NULL)
     {
-        SetDispatcherLock( true );
+        SetDispatcherLock( TRUE );
+        //SFX_APPWINDOW->Disable(FALSE);
         aEdAssign.Show();
         aRbAssign.Show();
         aEdAssign.SetText(aFilterCtr.GetRange());

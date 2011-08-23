@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define _CHART2_MINIMUMANDMAXIMUMSUPPLIER_HXX
 
 #include <sal/types.h>
-#include <tools/date.hxx>
+
 #include <set>
 
 //.............................................................................
@@ -61,10 +61,6 @@ public:
     virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex ) = 0;
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) = 0;
     virtual bool isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) = 0;
-
-    //return a constant out of ::com::sun::star::chart::TimeUnit that allows to display the smallest distance between occuring dates
-    virtual long calculateTimeResolutionOnXAxis() = 0;
-    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) = 0;
 };
 
 class MergedMinimumAndMaximumSupplier : public MinimumAndMaximumSupplier
@@ -90,9 +86,6 @@ public:
     virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex );
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex );
     virtual bool isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
-
-    virtual long calculateTimeResolutionOnXAxis();
-    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate );
 
 private:
     typedef ::std::set< MinimumAndMaximumSupplier* > MinimumAndMaximumSupplierSet;

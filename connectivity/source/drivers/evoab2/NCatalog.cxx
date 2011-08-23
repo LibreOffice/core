@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,15 +55,15 @@ void OEvoabCatalog::refreshTables()
 {
     TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),aTypes);
+        ::rtl::OUString::createFromAscii("%"),::rtl::OUString::createFromAscii("%"),aTypes);
 
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
         ::rtl::OUString aName;
-
+        
         while(xResult->next())
         {
             aName = xRow->getString(3);

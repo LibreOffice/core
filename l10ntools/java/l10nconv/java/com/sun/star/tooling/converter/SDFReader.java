@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 /*
  * SDFReader.java
  *
- *
+ * 
  */
 
 package com.sun.star.tooling.converter;
@@ -39,25 +39,25 @@ import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.*;
 
-/**
- *
- * SDFReader is a FileReader that knows about
+/**  
+ * 
+ * SDFReader is a FileReader that knows about 
  * the content of SDFFiles
- *
- * A SDFBlock is read of the given file. A SDFBlock
- * consists of all SDFLines that are traanslations of the
+ * 
+ * A SDFBlock is read of the given file. A SDFBlock 
+ * consists of all SDFLines that are traanslations of the 
  * same String and the SDFLine containing the source string
  * itself. SDFFile lines are read and checked whether they
- * have the allowed column count and  don't contain illeagal
+ * have the allowed column count and  don't contain illeagal 
  * characters (like most unprintable characters below 0x00df).
- * If the given source language is not found in the first
- * block of SDFLines a ConverterException is thrown at runtime.
+ * If the given source language is not found in the first 
+ * block of SDFLines a ConverterException is thrown at runtime. 
  * If the given target language is "" (that means not given)
- * the first language that is not the given source language
+ * the first language that is not the given source language 
  * is taken for target language. The found values are returned in HashMaps that
  * use the following keys:
  * <br/>
- *  "BlockNr" originally coming from reading the sdf file, contains 'block nr in sdf file'+'-'+'hash value of the sdf id fields'.<br/>
+ *  "BlockNr" originally coming from reading the sdf file, contains 'block nr in sdf file'+'-'+'hash value of the sdf id fields'.<br/> 
  *  "Project"  first column in sdf file format.<br/>
  *  "SourceFile" second column in sdf file format.<br/>
  *  "Dummy" third column in sdf file format.<br/>
@@ -67,20 +67,20 @@ import java.util.*;
  *  "HID" 7. column in sdf file format.<br/>
  *  "Platform" 8. column in sdf file format. <br/>
  *  "Width", 9. column in sdf file format.<br/>
- *  "SourceLanguageID" 10. column in sdf file format(in the line with the source language).<br/>
+ *  "SourceLanguageID" 10. column in sdf file format(in the line with the source language).<br/> 
  *  "SourceText"  11. column in sdf file format(in the line with the source language).<br/>
  *  "SourceHText" 12. column in sdf file format(in the line with the source language).<br/>
  *  "SourceQText" 13. column in sdf file format(in the line with the source language).<br/>
- *  "SourceTitle" 14. column in sdf file format(in the line with the source language).<br/>
+ *  "SourceTitle" 14. column in sdf file format(in the line with the source language).<br/> 
  *  "TargetLanguageID" 10. column in sdf file format (in the line with the target language).<br/>
  *  "TargetText" 11. column in sdf file format (in the line with the target language).<br/>
  *  "TargetHText" 12. column in sdf file format (in the line with the target language).<br/>
  *  "TargetQText"  13. column in sdf file format (in the line with the target language).<br/>
  *  "TargetTitle", 14. column in sdf file format (in the line with the target language).<br/>
  *  "TimeStamp" 15. column in sdf file format.<br/>
- *
+ *  
  * @author Christian Schmidt 2005
- *
+ * 
  */
 
 public class SDFReader extends DataReader {
@@ -132,7 +132,7 @@ public class SDFReader extends DataReader {
      * language line
      */
     private Map[]         data            = { sourceMap, targetMap };
-
+    
     /**
      * The Id of the current SDFBlock
      */
@@ -142,7 +142,7 @@ public class SDFReader extends DataReader {
      * The SDF file to read from
      */
     private File          sourceFile;
-
+    
     /**
      * The language in the source file that should be handelt as source language
      */
@@ -152,12 +152,12 @@ public class SDFReader extends DataReader {
      * The language in the source file that should be handelt as target language
      */
     protected String      targetLanguage;
-
+    
     /**
      * A counter holding the number of blocks just read
      * from this file
      */
-    private long           blockNr         = 0;// If we use Integer, more then numbers greater than 128k would be signed
+    private long           blockNr         = 0;// If we use Integer, more then numbers greater than 128k would be signed 
 
     /**
      * A counter holding the number of skipped lines that means
@@ -166,18 +166,18 @@ public class SDFReader extends DataReader {
     private int           skippedLines    = 0;
 
     /**
-     * This switch is set for indicating that all source file lines
+     * This switch is set for indicating that all source file lines 
      * are read and no lines remain buffered. Finding this like 'true'
-     * means the source file is finished
+     * means the source file is finished 
      */
     private boolean       endIt           = false;
 
     /**
-     * Indicates whether the targetLanguage is found in this source file so far
+     * Indicates whether the targetLanguage is found in this source file so far 
      */
     private boolean       foundTarget     = false;
     /**
-     * Indicates whether the sourceLanguage is found in this source file so far
+     * Indicates whether the sourceLanguage is found in this source file so far 
      */
     private boolean       foundSource     = false;
 
@@ -213,7 +213,7 @@ public class SDFReader extends DataReader {
      * Counts the blocks without targetLanguage
      */
     private int           targetLangMiss;
-
+    
     /**
      * Counts the blocks without sourceLanguage
      */
@@ -237,12 +237,12 @@ public class SDFReader extends DataReader {
 
     /**
      * Create a new Instance of SDFREader
-     *
-     * @param source                the file to read from
+     * 
+     * @param source                the file to read from 
      * @param sourceLanguage        the sourceLanguage (must not be empty)
      * @param targetLanguage        the targetLanguage
      * @param charset               the charset used to read source
-     * @throws java.io.IOException
+     * @throws java.io.IOException     
      * @throws Exception
      */
     public SDFReader(File source, String sourceLanguage, String targetLanguage,
@@ -260,7 +260,7 @@ public class SDFReader extends DataReader {
             if ((splitLine = split(line)) != null){
                 this.CurrentBlockId = getSDFBlockId(splitLine);
                 this.CurrentBlockHash=this.CurrentBlockId.hashCode();
-                //found the first
+                //found the first 
                 this.blockNr++;
                 }
             this.splittedLineBuffer = splitLine;
@@ -268,12 +268,12 @@ public class SDFReader extends DataReader {
         reset();
 
     }
-
+    
     /* (non-Javadoc)
      * @see com.sun.star.tooling.converter.DataReader#getData()
      */
     public Map getData()throws IOException {
-
+        
         Map map=new HashMap();
 //        do {
             this.skip=false;
@@ -287,17 +287,17 @@ public class SDFReader extends DataReader {
             }else{
                 map.putAll(help[1]);
                 map.putAll(help[0]);
-
+                
             }
-//        }while(this.skip=true);
+//        }while(this.skip=true); 
         return map;
     }
 
 
     /**
-     * Read a Block from the sdf file and return
+     * Read a Block from the sdf file and return 
      * @return a Map[] where [0] holds the source and [1] the target language data.
-     *
+     * 
      * @throws java.io.IOException
      */
     public Map[] readBlock() throws java.io.IOException {
@@ -317,13 +317,13 @@ public class SDFReader extends DataReader {
                     line = this.lineBuffer;
                     splittedLine = this.splittedLineBuffer;
                     this.SDFMap = new ExtMap(SDFReader.fieldnames, splittedLine);
-
+                    
                     try {
                         checkLanguage(splittedLine);
                     } catch (ConverterException e) {
                         throw e;
                     }finally{
-
+                    
                         useBuffer = false;
                     }
                 } else {
@@ -358,7 +358,7 @@ public class SDFReader extends DataReader {
                              * we found the next block , but do we have the
                              * target text?
                              */
-
+                            
                             if (!foundTarget) {
                                 createTargetLine();
                             }
@@ -402,7 +402,7 @@ public class SDFReader extends DataReader {
                 }
 
             } catch (LineErrorException e) {
-
+                
                 OutputHandler.log(e.getMessage());
                 this.skippedLines++;
             } catch (ConverterException e) {
@@ -442,7 +442,7 @@ public class SDFReader extends DataReader {
     }
 
     /**
-     *
+     * 
      */
     private void createTargetLine() {
         targetLangMiss++;
@@ -466,7 +466,7 @@ public class SDFReader extends DataReader {
     /**
      * Show the statistic information got while
      * reading the file
-     *
+     * 
      * @throws IOException
      */
     private void showStat() throws IOException {
@@ -493,13 +493,13 @@ public class SDFReader extends DataReader {
     }
 
     /**
-     * Check the current line  whether the source language
+     * Check the current line  whether the source language 
      * or target language is in it
-     *
+     * 
      * @throws ConverterException if a not needed language or no target language is found
-     *              in this block
+     *              in this block 
      * @throws IOException
-     *
+     *  
      */
     final private void checkLanguage(String[] splittedLine)
             throws ConverterException, IOException {
@@ -509,7 +509,7 @@ public class SDFReader extends DataReader {
         if (!foundSource && this.sourceLanguage.equals(langID)) {
 //          found the next source language line
             this.data[0] = new ExtMap(SDFReader.sourceLineNames, splittedLine);
-
+             
 //            this.data[0].put("BlockNr", Integer.toHexString(blockNr));
 //            this.data[0].put("BlockHash", Integer.toHexString(this.CurrentBlockHash));
             this.data[0].put("BlockNr", blockNrFormatter.format(blockNr)+'-'+Integer.toHexString(this.CurrentBlockHash));
@@ -533,7 +533,7 @@ public class SDFReader extends DataReader {
                                 + this.sourceLanguage + " ");
                         OutputHandler.out("Target Language is: "
                                 + this.targetLanguage + " ");
-                        OutputHandler.out(EMPTY);
+                        OutputHandler.out(EMPTY);                        
                         System.out.println("Start");
 
                     } else {
@@ -572,8 +572,8 @@ public class SDFReader extends DataReader {
     }
 
     /**
-     * split the SDFLine in its columns
-     *
+     * split the SDFLine in its columns 
+     * 
      * @param   line the current SDFLine
      * @return  the splitted SDFLine as array of String
      *          or null if an error occours
@@ -585,16 +585,16 @@ public class SDFReader extends DataReader {
         if ((splitLine = line.split("\t")).length == 15)
             return splitLine;
         else
-            //an error occurred
+            //an error occured
             return null;
     }
 
     /**
      * create a block Id from a splitted SDFLine
      * the blockId consists of the column one to eight of an SDF File
-     *
+     * 
      * @param splitLine    the line to create a block id from
-     * @return the blockId as String
+     * @return the blockId as String 
      */
     private String getSDFBlockId(String[] splitLine) {
         StringBuffer BlockId = new StringBuffer("");
@@ -610,11 +610,11 @@ public class SDFReader extends DataReader {
 
     /**
      * Check if there are not allowed characters in this line
-     *
+     * 
      * @param line      the SDFLine to check
      * @return          if everything, ok the original
      *                   else the wrong character as String
-     *
+     *  
      * @throws java.io.IOException
      */
     private String check(String line) throws java.io.IOException {

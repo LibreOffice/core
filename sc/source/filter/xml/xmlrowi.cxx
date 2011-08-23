@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,14 +65,14 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sVisibility(GetXMLToken(XML_VISIBLE)),
     nRepeatedRows(1),
-    bHasCell(false)
+    bHasCell(sal_False)
 {
     rtl::OUString sCellStyleName;
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
@@ -122,7 +122,7 @@ ScXMLTableRowContext::~ScXMLTableRowContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -133,17 +133,17 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( sal_uInt16 nPrefix
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     case XML_TOK_TABLE_ROW_CELL:
-//      if( IsInsertCellPossible() )
+//		if( IsInsertCellPossible() )
         {
             bHasCell = sal_True;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList, false, nRepeatedRows
+                                                      rLName, xAttrList, sal_False, nRepeatedRows
                                                       //this
                                                       );
         }
         break;
     case XML_TOK_TABLE_ROW_COVERED_CELL:
-//      if( IsInsertCellPossible() )
+//		if( IsInsertCellPossible() )
         {
             bHasCell = sal_True;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
@@ -209,14 +209,14 @@ void ScXMLTableRowContext::EndElement()
                         }
                     }
                     sal_Bool bVisible (sal_True);
-                    sal_Bool bFiltered (false);
+                    sal_Bool bFiltered (sal_False);
                     if (IsXMLToken(sVisibility, XML_COLLAPSE))
                     {
-                        bVisible = false;
+                        bVisible = sal_False;
                     }
                     else if (IsXMLToken(sVisibility, XML_FILTER))
                     {
-                        bVisible = false;
+                        bVisible = sal_False;
                         bFiltered = sal_True;
                     }
                     if (!bVisible)
@@ -230,7 +230,7 @@ void ScXMLTableRowContext::EndElement()
 }
 
 ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -273,7 +273,7 @@ ScXMLTableRowsContext::~ScXMLTableRowsContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -286,17 +286,17 @@ SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( sal_uInt16 nPrefi
     case XML_TOK_TABLE_ROWS_ROW_GROUP:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   false, sal_True );
+                                                   sal_False, sal_True );
         break;
     case XML_TOK_TABLE_ROWS_HEADER_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, false );
+                                                   sal_True, sal_False );
         break;
     case XML_TOK_TABLE_ROWS_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   false, false );
+                                                   sal_False, sal_False );
         break;
     case XML_TOK_TABLE_ROWS_ROW:
             pContext = new ScXMLTableRowContext( GetScImport(), nPrefix,
@@ -349,11 +349,12 @@ void ScXMLTableRowsContext::EndElement()
             ScDocument* pDoc(GetScImport().GetDocument());
             if (pDoc)
             {
-                ScXMLImport::MutexGuard aGuard(GetScImport());
+                GetScImport().LockSolarMutex();
                 ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(static_cast<SCTAB>(nSheet), sal_True));
                 ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
                 sal_Bool bResized;
                 pRowArray->Insert(static_cast<SCROW>(nGroupStartRow), static_cast<SCROW>(nGroupEndRow), bResized, !bGroupDisplay, sal_True);
+                GetScImport().UnlockSolarMutex();
             }
         }
     }

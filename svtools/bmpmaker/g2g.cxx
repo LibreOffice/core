@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,19 +57,19 @@ class G2GApp
 {
 private:
 
-    sal_uInt8           cExitCode;
+    BYTE	        cExitCode;
 
     void            ShowUsage();
-    sal_Bool            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam );
-    void            SetExitCode( sal_uInt8 cExit ) { if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) ) cExitCode = cExit; }
+    BOOL	        GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam );
+    void	        SetExitCode( BYTE cExit ) { if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) ) cExitCode = cExit; }
 
-    virtual void    Message( const String& rText, sal_uInt8 cExitCode = EXIT_NOERROR );
+    virtual void    Message( const String& rText, BYTE cExitCode = EXIT_NOERROR );
 
 public:
 
                     G2GApp();
     virtual        ~G2GApp();
-
+                    
     int             Start( const ::std::vector< String >& rArgs );
 };
 
@@ -87,13 +87,13 @@ G2GApp::~G2GApp()
 
 // -----------------------------------------------------------------------
 
-sal_Bool G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam )
+BOOL G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
-        String  aTestStr( '-' );
+        String	aTestStr( '-' );
 
         for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
@@ -101,7 +101,7 @@ sal_Bool G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const S
 
             if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
             {
-                bRet = sal_True;
+                bRet = TRUE;
 
                 if( i < ( nCount - 1 ) )
                     rParam = rArgs[ i + 1 ];
@@ -119,7 +119,7 @@ sal_Bool G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const S
 
 // -----------------------------------------------------------------------
 
-void G2GApp::Message( const String& rText, sal_uInt8 nExitCode )
+void G2GApp::Message( const String& rText, BYTE nExitCode )
 {
     if( EXIT_NOERROR != nExitCode )
         SetExitCode( nExitCode );
@@ -132,7 +132,7 @@ void G2GApp::Message( const String& rText, sal_uInt8 nExitCode )
 // -----------------------------------------------------------------------------
 
 void G2GApp::ShowUsage()
-{
+{   
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Usage:" ) ) );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "    g2g inputfile outputfile -format exportformat -filterpath path [ -# RRGGBB ]" ) ) );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Options:" ) ) );
@@ -148,16 +148,16 @@ void G2GApp::ShowUsage()
 
 int G2GApp::Start( const ::std::vector< String >& rArgs )
 {
-    size_t nCmdCount = rArgs.size();
+    int		nCmdCount = rArgs.size();
+    USHORT	nCurCmd = 0;
 
     cExitCode = EXIT_NOERROR;
 
     if( nCmdCount >= 6 )
     {
         GraphicFilter   aFilter( sal_False );
-        String          aInFile, aOutFile, aFilterStr, aFilterPath, aTransColStr;
-        size_t nCurCmd = 0;
-
+        String	        aInFile, aOutFile, aFilterStr, aFilterPath, aTransColStr;
+        
         aInFile = rArgs[ nCurCmd++ ];
         aOutFile = rArgs[ nCurCmd++ ];
         GetCommandOption( rArgs, String( RTL_CONSTASCII_USTRINGPARAM( "format" ) ), aFilterStr );
@@ -168,7 +168,7 @@ int G2GApp::Start( const ::std::vector< String >& rArgs )
 
         if( aInFile.Len() && aOutFile.Len() && aFilterStr.Len() )
         {
-            const sal_uInt16 nExportFilter = aFilter.GetExportFormatNumberForShortName( aFilterStr );
+            const USHORT nExportFilter = aFilter.GetExportFormatNumberForShortName( aFilterStr );
 
             if( GRFILTER_FORMAT_NOTFOUND == nExportFilter )
                 Message( String( RTL_CONSTASCII_USTRINGPARAM( "invalid graphic filter" ) ), EXIT_INVALID_GRAPHICFILTER );
@@ -181,7 +181,7 @@ int G2GApp::Start( const ::std::vector< String >& rArgs )
                     const GfxLink   aGfxLink;
 
                     aGraphic.SetLink( aGfxLink );
-
+                
                     if( aFilter.ImportGraphic( aGraphic, aInFile, aInStm ) == GRFILTER_OK )
                     {
                         SvFileStream aOutStm( aOutFile, STREAM_WRITE | STREAM_TRUNC );
@@ -199,9 +199,9 @@ int G2GApp::Start( const ::std::vector< String >& rArgs )
 
                             if( bHex )
                             {
-                                const sal_uInt8 cTransR = ( LOWERHEXTONUM( aHexStr.GetChar( 0 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 1 ) );
-                                const sal_uInt8 cTransG = ( LOWERHEXTONUM( aHexStr.GetChar( 2 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 3 ) );
-                                const sal_uInt8 cTransB = ( LOWERHEXTONUM( aHexStr.GetChar( 4 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 5 ) );
+                                const BYTE cTransR = ( LOWERHEXTONUM( aHexStr.GetChar( 0 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 1 ) );
+                                const BYTE cTransG = ( LOWERHEXTONUM( aHexStr.GetChar( 2 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 3 ) );
+                                const BYTE cTransB = ( LOWERHEXTONUM( aHexStr.GetChar( 4 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 5 ) );
 
                                 BitmapEx    aBmpEx( aGraphic.GetBitmapEx() );
                                 Bitmap      aOldBmp( aBmpEx.GetBitmap() );
@@ -226,14 +226,14 @@ int G2GApp::Start( const ::std::vector< String >& rArgs )
                 else
                     Message( String( RTL_CONSTASCII_USTRINGPARAM( "invalid file(s)" ) ), EXIT_INVALID_FILE );
             }
-        }
+        }   
     }
     else
         ShowUsage();
 
     return cExitCode;
 }
-
+    
 // --------
 // - Main -
 // --------
@@ -247,7 +247,7 @@ int main( int nArgCount, char* ppArgs[] )
 
     for( int i = 1; i < nArgCount; i++ )
         aArgs.push_back( String( ppArgs[ i ], RTL_TEXTENCODING_ASCII_US ) );
-
+    
     return aG2GApp.Start( aArgs );
 }
 

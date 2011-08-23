@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#include <svl/filenotation.hxx>
+#include "filenotation.hxx"
 #include <osl/file.h>
 #include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
@@ -124,7 +124,6 @@ namespace svt
         }
 
         OSL_ENSURE( bSuccess, "OFileNotation::OFileNotation: could not detect the format!" );
-        (void)bSuccess;
     }
 
     //---------------------------------------------------------------------
@@ -136,12 +135,12 @@ namespace svt
             case N_URL: return m_sFileURL;
         }
 
-        OSL_FAIL("OFileNotation::get: inavlid enum value!");
+        OSL_ENSURE(sal_False, "OFileNotation::get: inavlid enum value!");
         return ::rtl::OUString();
     }
 
 //.........................................................................
-}   // namespace svt
+}	// namespace svt
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

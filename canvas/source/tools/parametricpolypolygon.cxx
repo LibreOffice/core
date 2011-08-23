@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,14 +54,14 @@ namespace canvas
     uno::Sequence<rtl::OUString> ParametricPolyPolygon::getAvailableServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LinearGradient" ));
-        aRet[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EllipticalGradient" ));
-        aRet[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RectangularGradient" ));
+        aRet[0] = rtl::OUString::createFromAscii("LinearGradient");
+        aRet[1] = rtl::OUString::createFromAscii("EllipticalGradient");
+        aRet[2] = rtl::OUString::createFromAscii("RectangularGradient");
 
         return aRet;
     }
 
-    ParametricPolyPolygon* ParametricPolyPolygon::create(
+    ParametricPolyPolygon* ParametricPolyPolygon::create( 
         const uno::Reference< rendering::XGraphicDevice >& rDevice,
         const ::rtl::OUString& rServiceName,
         const uno::Sequence< uno::Any >& rArgs )
@@ -85,46 +85,46 @@ namespace canvas
             beans::PropertyValue aProp;
             if( (rArgs[i] >>= aProp) )
             {
-                if( aProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Colors")) )
+                if( aProp.Name.equalsAscii("Colors") )
                 {
                     aProp.Value >>= colorSequence;
                 }
-                else if( aProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Stops")) )
+                else if( aProp.Name.equalsAscii("Stops") )
                 {
                     aProp.Value >>= colorStops;
                 }
-                else if( aProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AspectRatio")) )
+                else if( aProp.Name.equalsAscii("AspectRatio") )
                 {
                     aProp.Value >>= fAspectRatio;
                 }
             }
         }
 
-        if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LinearGradient")) )
+        if( rServiceName.equalsAscii("LinearGradient") )
         {
             return createLinearHorizontalGradient(rDevice, colorSequence, colorStops);
         }
-        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EllipticalGradient")) )
+        else if( rServiceName.equalsAscii("EllipticalGradient") )
         {
             return createEllipticalGradient(rDevice, colorSequence, colorStops, fAspectRatio);
         }
-        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("RectangularGradient")) )
+        else if( rServiceName.equalsAscii("RectangularGradient") )
         {
             return createRectangularGradient(rDevice, colorSequence, colorStops, fAspectRatio);
         }
-        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("VerticalLineHatch")) )
+        else if( rServiceName.equalsAscii("VerticalLineHatch") )
         {
             // TODO: NYI
         }
-        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OrthogonalLinesHatch")) )
+        else if( rServiceName.equalsAscii("OrthogonalLinesHatch") )
         {
             // TODO: NYI
         }
-        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ThreeCrossingLinesHatch")) )
+        else if( rServiceName.equalsAscii("ThreeCrossingLinesHatch") )
         {
             // TODO: NYI
         }
-        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FourCrossingLinesHatch")) )
+        else if( rServiceName.equalsAscii("FourCrossingLinesHatch") )
         {
             // TODO: NYI
         }
@@ -132,42 +132,42 @@ namespace canvas
         return NULL;
     }
 
-    ParametricPolyPolygon* ParametricPolyPolygon::createLinearHorizontalGradient(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const uno::Sequence< uno::Sequence< double > >&     colors,
-        const uno::Sequence< double >&                      stops )
+    ParametricPolyPolygon* ParametricPolyPolygon::createLinearHorizontalGradient( 
+        const uno::Reference< rendering::XGraphicDevice >& 	rDevice,
+        const uno::Sequence< uno::Sequence< double > >&		colors, 
+        const uno::Sequence< double >& 						stops )
     {
         // TODO(P2): hold gradient brush statically, and only setup
         // the colors
         return new ParametricPolyPolygon( rDevice, GRADIENT_LINEAR, colors, stops );
     }
 
-    ParametricPolyPolygon* ParametricPolyPolygon::createEllipticalGradient(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const uno::Sequence< uno::Sequence< double > >&     colors,
-        const uno::Sequence< double >&                      stops,
+    ParametricPolyPolygon* ParametricPolyPolygon::createEllipticalGradient( 
+        const uno::Reference< rendering::XGraphicDevice >& 	rDevice,
+        const uno::Sequence< uno::Sequence< double > >&		colors, 
+        const uno::Sequence< double >& 						stops,
         double                                              fAspectRatio )
     {
         // TODO(P2): hold gradient polygon statically, and only setup
         // the colors
-        return new ParametricPolyPolygon(
+        return new ParametricPolyPolygon( 
             rDevice,
-            ::basegfx::tools::createPolygonFromCircle(
+            ::basegfx::tools::createPolygonFromCircle( 
                 ::basegfx::B2DPoint(0,0), 1 ),
             GRADIENT_ELLIPTICAL,
             colors, stops, fAspectRatio );
     }
 
     ParametricPolyPolygon* ParametricPolyPolygon::createRectangularGradient( const uno::Reference< rendering::XGraphicDevice >& rDevice,
-                                                                             const uno::Sequence< uno::Sequence< double > >&    colors,
-                                                                             const uno::Sequence< double >&                     stops,
+                                                                             const uno::Sequence< uno::Sequence< double > >&	colors, 
+                                                                             const uno::Sequence< double >& 					stops,
                                                                              double                                             fAspectRatio )
     {
         // TODO(P2): hold gradient polygon statically, and only setup
         // the colors
-        return new ParametricPolyPolygon(
+        return new ParametricPolyPolygon( 
             rDevice,
-            ::basegfx::tools::createPolygonFromRect(
+            ::basegfx::tools::createPolygonFromRect( 
                 ::basegfx::B2DRectangle( -1, -1, 1, 1 ) ),
             GRADIENT_RECTANGULAR,
             colors, stops, fAspectRatio );
@@ -236,11 +236,11 @@ namespace canvas
     {
     }
 
-    ParametricPolyPolygon::ParametricPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&    rDevice,
-                                                  const ::basegfx::B2DPolygon&                          rGradientPoly,
+    ParametricPolyPolygon::ParametricPolyPolygon( const uno::Reference< rendering::XGraphicDevice >& 	rDevice,
+                                                  const ::basegfx::B2DPolygon&							rGradientPoly,
                                                   GradientType                                          eType,
-                                                  const uno::Sequence< uno::Sequence< double > >&       rColors,
-                                                  const uno::Sequence< double >&                        rStops ) :
+                                                  const uno::Sequence< uno::Sequence< double > >&		rColors, 
+                                                  const uno::Sequence< double >& 						rStops ) :
         ParametricPolyPolygon_Base( m_aMutex ),
         mxDevice( rDevice ),
         maValues( rGradientPoly,
@@ -251,13 +251,13 @@ namespace canvas
     {
     }
 
-    ParametricPolyPolygon::ParametricPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&    rDevice,
-                                                  const ::basegfx::B2DPolygon&                          rGradientPoly,
+    ParametricPolyPolygon::ParametricPolyPolygon( const uno::Reference< rendering::XGraphicDevice >& 	rDevice,
+                                                  const ::basegfx::B2DPolygon&							rGradientPoly,
                                                   GradientType                                          eType,
-                                                  const uno::Sequence< uno::Sequence< double > >&       rColors,
-                                                  const uno::Sequence< double >&                        rStops,
-                                                  double                                                nAspectRatio ) :
-        ParametricPolyPolygon_Base( m_aMutex ),
+                                                  const uno::Sequence< uno::Sequence< double > >&		rColors, 
+                                                  const uno::Sequence< double >& 						rStops,
+                                                  double												nAspectRatio ) :
+        ParametricPolyPolygon_Base( m_aMutex ),        
         mxDevice( rDevice ),
         maValues( rGradientPoly,
                   rColors,
@@ -267,15 +267,15 @@ namespace canvas
     {
     }
 
-    ParametricPolyPolygon::ParametricPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&    rDevice,
-                                                  GradientType                                          eType,
-                                                  const uno::Sequence< uno::Sequence< double > >&       rColors,
-                                                  const uno::Sequence< double >&                        rStops ) :
-        ParametricPolyPolygon_Base( m_aMutex ),
+    ParametricPolyPolygon::ParametricPolyPolygon( const uno::Reference< rendering::XGraphicDevice >& 	rDevice,
+                                                  GradientType	 										eType,
+                                                  const uno::Sequence< uno::Sequence< double > >&		rColors, 
+                                                  const uno::Sequence< double >& 						rStops ) :
+        ParametricPolyPolygon_Base( m_aMutex ),        
         mxDevice( rDevice ),
         maValues( ::basegfx::B2DPolygon(),
                   rColors,
-                  rStops,
+                  rStops, 
                   1.0,
                   eType )
     {

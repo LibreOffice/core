@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,6 +40,7 @@
 // -------------------------------------------------------------------------
 using namespace connectivity;
 using namespace connectivity::hsqldb;
+//using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -70,7 +71,7 @@ void OHCatalog::refreshTables()
     Sequence< ::rtl::OUString > sTableTypes(2);
     sTableTypes[0] = s_sTableTypeView;
     sTableTypes[1] = s_sTableTypeTable;
-
+    
     refreshObjects(sTableTypes,aVector);
 
     if ( m_pTables )
@@ -148,7 +149,7 @@ Sequence< Type > SAL_CALL OHCatalog::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OCatalog::getTypes();
     ::std::vector<Type> aOwnTypes;
-    aOwnTypes.reserve(aTypes.getLength());
+    aOwnTypes.reserve(aTypes.getLength());	
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)

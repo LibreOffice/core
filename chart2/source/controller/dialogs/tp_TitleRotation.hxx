@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ public:
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rInAttrs);
     static SfxTabPage* CreateWithoutRotation(Window* pParent, const SfxItemSet& rInAttrs);
-    virtual sal_Bool FillItemSet(SfxItemSet& rOutAttrs);
+    virtual BOOL FillItemSet(SfxItemSet& rOutAttrs);
     virtual void Reset(const SfxItemSet& rInAttrs);
 };
 

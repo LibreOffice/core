@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-#include <comphelper/extract.hxx>
+
+#include <cppuhelper/extract.hxx>
 
 namespace utl
 {
@@ -112,7 +113,7 @@ public:
 
     sal_Bool equalTo(staruno::Sequence<sal_Int8> const& rIdentifier) throw()
     {
-        return  rIdentifier.getLength() == sizeof(tunnelId) &&
+        return	rIdentifier.getLength() == sizeof(tunnelId) &&
                 rtl_compareMemory(tunnelId, rIdentifier.getConstArray(), sizeof(tunnelId)) == 0;
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,21 +27,18 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/datasourceconverter.hxx"
-
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/datasourcemodel.hxx"
+#include "properties.hxx"
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::chart2::data::XDataSequence;
 
 namespace oox {
 namespace drawingml {
 namespace chart {
-
-// ============================================================================
-
-using namespace ::com::sun::star::chart2::data;
-using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
 
 // ============================================================================
 

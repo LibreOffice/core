@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,21 +28,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-#include <UndoSort.hxx>
-
 #include <doc.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>			// fuer die UndoIds
 #include <pam.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
-#include <UndoCore.hxx>
-#include <UndoTable.hxx>
+#include <undobj.hxx>
 #include <sortopt.hxx>
 #include <docsort.hxx>
 #include <redline.hxx>
 #include <node2lay.hxx>
 
+inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 /*--------------------------------------------------------------------
     Beschreibung:  Undo fuers Sorting
@@ -71,8 +68,9 @@ SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
     pSortOpt = new SwSortOptions(rOpt);
 }
 
-SwUndoSort::SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode& rTblNd,
-                        const SwSortOptions& rOpt, sal_Bool bSaveTable )
+
+SwUndoSort::SwUndoSort( ULONG nStt, ULONG nEnd, const SwTableNode& rTblNd,
+                        const SwSortOptions& rOpt, BOOL bSaveTable )
     : SwUndo(UNDO_SORT_TBL), pUndoTblAttr( 0 ), pRedlData( 0 )
 {
     nSttNode = nStt;
@@ -84,6 +82,8 @@ SwUndoSort::SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode& rTblN
         pUndoTblAttr = new SwUndoAttrTbl( rTblNd );
 }
 
+
+
 SwUndoSort::~SwUndoSort()
 {
     delete pSortOpt;
@@ -91,18 +91,18 @@ SwUndoSort::~SwUndoSort()
     delete pRedlData;
 }
 
-void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
+
+
+void SwUndoSort::Undo( SwUndoIter& rIter)
 {
-    SwDoc & rDoc = rContext.GetDoc();
+    SwDoc& 	rDoc = rIter.GetDoc();
     if(pSortOpt->bTable)
     {
         // Undo Tabelle
         RemoveIdxFromSection( rDoc, nSttNode, &nEndNode );
 
         if( pUndoTblAttr )
-        {
-            pUndoTblAttr->UndoImpl(rContext);
-        }
+            pUndoTblAttr->Undo( rIter );
 
         SwTableNode* pTblNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
 
@@ -115,7 +115,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         const SwTable& rTbl = pTblNd->GetTable();
 
         SwMovedBoxes aMovedList;
-        for( sal_uInt16 i=0; i < aSortList.Count(); i++)
+        for( USHORT i=0; i < aSortList.Count(); i++)
         {
             const SwTableBox* pSource = rTbl.GetTblBox(
                     *aSortList[i]->SORT_TXT_TBL.TBL.pSource );
@@ -133,24 +133,23 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         // Restore table frames:
         // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
-        const sal_uLong nIdx = pTblNd->GetIndex();
+        const ULONG nIdx = pTblNd->GetIndex();
         aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(), nIdx, nIdx + 1 );
         // <--
     }
     else
     {
         // Undo Text
-        SwPaM & rPam( AddUndoRedoPaM(rContext) );
-        RemoveIdxFromRange(rPam, true);
+        RemoveIdx( *rIter.pAktPam );
 
         // fuer die sorted Positions einen Index anlegen.
         // JP 25.11.97: Die IndexList muss aber nach SourcePosition
-        //              aufsteigend sortiert aufgebaut werden
-        SwUndoSortList aIdxList( (sal_uInt8)aSortList.Count() );
-        sal_uInt16 i;
+        //				aufsteigend sortiert aufgebaut werden
+        SwUndoSortList aIdxList( (BYTE)aSortList.Count() );
+        USHORT i;
 
         for( i = 0; i < aSortList.Count(); ++i)
-            for( sal_uInt16 ii=0; ii < aSortList.Count(); ++ii )
+            for( USHORT ii=0; ii < aSortList.Count(); ++ii )
                 if( aSortList[ii]->SORT_TXT_TBL.TXT.nSource == nSttNode + i )
                 {
                     SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
@@ -168,13 +167,14 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         }
         // Indixes loeschen
         aIdxList.DeleteAndDestroy(0, aIdxList.Count());
-        SetPaM(rPam, true);
+        SetPaM( rIter, TRUE );
     }
 }
 
-void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
+
+void SwUndoSort::Redo( SwUndoIter& rIter)
 {
-    SwDoc & rDoc = rContext.GetDoc();
+    SwDoc& rDoc = rIter.GetDoc();
 
     if(pSortOpt->bTable)
     {
@@ -192,7 +192,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         const SwTable& rTbl = pTblNd->GetTable();
 
         SwMovedBoxes aMovedList;
-        for(sal_uInt16 i=0; i < aSortList.Count(); ++i)
+        for(USHORT i=0; i < aSortList.Count(); ++i)
         {
             const SwTableBox* pSource = rTbl.GetTblBox(
                     (const String&) *aSortList[i]->SORT_TXT_TBL.TBL.pSource );
@@ -207,29 +207,25 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         }
 
         if( pUndoTblAttr )
-        {
-            pUndoTblAttr->RedoImpl(rContext);
-        }
+            pUndoTblAttr->Redo( rIter );
 
         // Restore table frames:
         // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
-        const sal_uLong nIdx = pTblNd->GetIndex();
+        const ULONG nIdx = pTblNd->GetIndex();
         aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(), nIdx, nIdx + 1 );
         // <--
     }
     else
     {
-        // Redo for Text
-        SwPaM & rPam( AddUndoRedoPaM(rContext) );
-        SetPaM(rPam);
-        RemoveIdxFromRange(rPam, true);
+        // Redo bei Text
+        RemoveIdx( *rIter.pAktPam );
 
-        SwUndoSortList aIdxList( (sal_uInt8)aSortList.Count() );
-        sal_uInt16 i;
+        SwUndoSortList aIdxList( (BYTE)aSortList.Count() );
+        USHORT i;
 
         for( i = 0; i < aSortList.Count(); ++i)
-        {   // aktuelle Pos ist die Ausgangslage
+        {	// aktuelle Pos ist die Ausgangslage
             SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
                     aSortList[i]->SORT_TXT_TBL.TXT.nSource);
             aIdxList.C40_INSERT( SwNodeIndex, pIdx, i );
@@ -244,27 +240,50 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         }
         // Indixes loeschen
         aIdxList.DeleteAndDestroy(0, aIdxList.Count());
-        SetPaM(rPam, true);
-        SwTxtNode const*const pTNd = rPam.GetNode()->GetTxtNode();
+        SetPaM( rIter, TRUE );
+        const SwTxtNode* pTNd = rIter.pAktPam->GetNode()->GetTxtNode();
         if( pTNd )
-        {
-            rPam.GetPoint()->nContent = pTNd->GetTxt().Len();
-        }
+            rIter.pAktPam->GetPoint()->nContent = pTNd->GetTxt().Len();
     }
 }
 
-void SwUndoSort::RepeatImpl(::sw::RepeatContext & rContext)
+
+void SwUndoSort::Repeat(SwUndoIter& rIter)
 {
-    // table not repeat capable
     if(!pSortOpt->bTable)
     {
-        SwPaM *const pPam = & rContext.GetRepeatPaM();
+        SwPaM* pPam = rIter.pAktPam;
         SwDoc& rDoc = *pPam->GetDoc();
 
         if( !rDoc.IsIdxInTbl( pPam->Start()->nNode ) )
             rDoc.SortText(*pPam, *pSortOpt);
     }
+    // Tabelle ist nicht Repeat-Faehig
+    rIter.pLastUndoObj = this;
 }
+
+
+void SwUndoSort::RemoveIdx( SwPaM& rPam )
+{
+    rPam.DeleteMark();
+    rPam.GetPoint()->nNode = nSttNode;
+
+    SwCntntNode* pCNd = rPam.GetCntntNode();
+    xub_StrLen nLen = pCNd->Len();
+    if( nLen >= nSttCntnt )
+        nLen = nSttCntnt;
+    rPam.GetPoint()->nContent.Assign(pCNd, nLen );
+    rPam.SetMark();
+
+    rPam.GetPoint()->nNode = nEndNode;
+    pCNd = rPam.GetCntntNode();
+    nLen = pCNd->Len();
+    if( nLen >= nEndCntnt )
+        nLen = nEndCntnt;
+    rPam.GetPoint()->nContent.Assign(pCNd, nLen );
+    RemoveIdxFromRange( rPam, TRUE );
+}
+
 
 void SwUndoSort::Insert( const String& rOrgPos, const String& rNewPos)
 {
@@ -272,7 +291,8 @@ void SwUndoSort::Insert( const String& rOrgPos, const String& rNewPos)
     aSortList.C40_INSERT( SwSortUndoElement, pEle, aSortList.Count() );
 }
 
-void SwUndoSort::Insert( sal_uLong nOrgPos, sal_uLong nNewPos)
+
+void SwUndoSort::Insert( ULONG nOrgPos, ULONG nNewPos)
 {
     SwSortUndoElement* pEle = new SwSortUndoElement(nOrgPos, nNewPos);
     aSortList.C40_INSERT( SwSortUndoElement, pEle, aSortList.Count() );

@@ -26,24 +26,16 @@
 #*************************************************************************
 PRJ	= ..$/..
 PRJNAME = filter
-PACKAGE = com/sun/star/comp/xsltfilter
+#PACKAGE = com$/sun$/star$/documentconversion$/XSLTFilter
 TARGET  =XSLTFilter
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
-
 .INCLUDE: settings.mk
 
-.IF "$(SYSTEM_LIBXSLT)" == "YES"
-CFLAGS+= $(LIBXSLT_CFLAGS)
-.ELSE
-LIBXSLTINCDIR=external$/libxslt
-CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
-.ENDIF
-
-SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/LibXSLTTransformer.obj $(SLO)$/fla.obj $(SLO)/OleHandler.obj
+SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/fla.obj
 LIBNAME=xsltfilter
 SHL1TARGETDEPN=makefile.mk
 SHL1OBJS=$(SLOFILES)
@@ -58,20 +50,19 @@ SHL1STDLIBS= \
     $(CPPUHELPERLIB)    \
     $(CPPULIB)          \
     $(XMLOFFLIB) \
-    $(SALLIB) \
-    $(LIBXML2LIB) \
-    $(XSLTLIB) \
-    $(PACKAGE2LIB)
+    $(SALLIB)
 
 .IF "$(SOLAR_JAVA)"!=""
 
+#USE_UDK_EXTENDED_MANIFESTFILE=TRUE
+#USE_EXTENDED_MANIFESTFILE=TRUE
 JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar
 
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 CUSTOMMANIFESTFILE = Manifest
 
 JARCOMPRESS		= TRUE
-JARCLASSDIRS	= com/sun/star/comp/xsltfilter
+JARCLASSDIRS	= XSLTransformer*.class XSLTFilterOLEExtracter*.class
 JARTARGET		= $(TARGET).jar
 
 .IF "$(SYSTEM_SAXON)" == "YES"
@@ -81,11 +72,7 @@ JARFILES += saxon9.jar
 .ENDIF
 
 # --- Files --------------------------------------------------------
-JAVACLASSFILES= \
- $(CLASSDIR)/com/sun/star/comp/xsltfilter/XSLTransformer.class \
- $(CLASSDIR)/com/sun/star/comp/xsltfilter/XSLTFilterOLEExtracter.class \
- $(CLASSDIR)/com/sun/star/comp/xsltfilter/Base64.class \
-
+JAVACLASSFILES=$(CLASSDIR)$/XSLTransformer.class  $(CLASSDIR)$/XSLTFilterOLEExtracter.class
 .ENDIF
 
 # --- Targets ------------------------------------------------------
@@ -96,17 +83,3 @@ $(JAVACLASSFILES) : $(CLASSDIR)
 $(CLASSDIR) :
     $(MKDIR) $(CLASSDIR)
 .ENDIF
-
-ALLTAR : $(MISC)/XSLTFilter.jar.component $(MISC)/xsltfilter.component
-
-$(MISC)/XSLTFilter.jar.component .ERRREMOVE : \
-        $(SOLARENV)/bin/createcomponent.xslt XSLTFilter.jar.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_JAVA)$(JARTARGET)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt XSLTFilter.jar.component
-
-$(MISC)/xsltfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        xsltfilter.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt xsltfilter.component

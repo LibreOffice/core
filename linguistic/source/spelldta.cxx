@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,27 +38,26 @@
 
 #include <vector>
 
-#include "linguistic/spelldta.hxx"
+#include "spelldta.hxx"
 #include "lngsvcmgr.hxx"
 
 
 using namespace utl;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 
-using ::rtl::OUString;
-
 namespace linguistic
 {
-
+    
 ///////////////////////////////////////////////////////////////////////////
 
 
-#define MAX_PROPOSALS   40
+#define MAX_PROPOSALS	40
 
 Reference< XSpellAlternatives > MergeProposals(
             Reference< XSpellAlternatives > &rxAlt1,
@@ -72,24 +71,24 @@ Reference< XSpellAlternatives > MergeProposals(
         xMerged = rxAlt1;
     else
     {
-        sal_Int32 nAltCount1 = rxAlt1->getAlternativesCount();
+        INT32 nAltCount1 = rxAlt1->getAlternativesCount();
         Sequence< OUString > aAlt1( rxAlt1->getAlternatives() );
         const OUString *pAlt1 = aAlt1.getConstArray();
 
-        sal_Int32 nAltCount2 = rxAlt2->getAlternativesCount();
+        INT32 nAltCount2 = rxAlt2->getAlternativesCount();
         Sequence< OUString > aAlt2( rxAlt2->getAlternatives() );
         const OUString *pAlt2 = aAlt2.getConstArray();
 
-        sal_Int32 nCountNew = Min( nAltCount1 + nAltCount2, (sal_Int32) MAX_PROPOSALS );
+        INT32 nCountNew = Min( nAltCount1 + nAltCount2, (INT32) MAX_PROPOSALS );
         Sequence< OUString > aAltNew( nCountNew );
         OUString *pAltNew = aAltNew.getArray();
 
-        sal_Int32 nIndex = 0;
-        sal_Int32 i = 0;
+        INT32 nIndex = 0;
+        INT32 i = 0;
         for (int j = 0;  j < 2;  j++)
         {
-            sal_Int32           nCount  = j == 0 ? nAltCount1 : nAltCount2;
-            const OUString  *pAlt   = j == 0 ? pAlt1 : pAlt2;
+            INT32 			nCount 	= j == 0 ? nAltCount1 : nAltCount2;
+            const OUString  *pAlt 	= j == 0 ? pAlt1 : pAlt2;
             for (i = 0;  i < nCount  &&  nIndex < MAX_PROPOSALS;  i++)
             {
                 if (pAlt[i].getLength())
@@ -110,23 +109,23 @@ Reference< XSpellAlternatives > MergeProposals(
 }
 
 
-sal_Bool SeqHasEntry(
-        const Sequence< OUString > &rSeq,
+BOOL SeqHasEntry( 
+        const Sequence< OUString > &rSeq, 
         const OUString &rTxt)
 {
-    sal_Bool bRes = sal_False;
-    sal_Int32 nLen = rSeq.getLength();
+    BOOL bRes = FALSE;
+    INT32 nLen = rSeq.getLength();
     const OUString *pEntry = rSeq.getConstArray();
-    for (sal_Int32 i = 0;  i < nLen  &&  !bRes;  ++i)
+    for (INT32 i = 0;  i < nLen  &&  !bRes;  ++i)
     {
         if (rTxt == pEntry[i])
-            bRes = sal_True;
+            bRes = TRUE;
     }
     return bRes;
 }
 
 
-void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
+void SearchSimilarText( const OUString &rText, INT16 nLanguage, 
         Reference< XDictionaryList > &xDicList,
         std::vector< OUString > & rDicListProps )
 {
@@ -137,13 +136,13 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
             aDics( xDicList->getDictionaries() );
     const Reference< XDictionary >
             *pDic = aDics.getConstArray();
-    sal_Int32 nDics = xDicList->getCount();
+    INT32 nDics = xDicList->getCount();
 
-    for (sal_Int32 i = 0;  i < nDics;  i++)
+    for (INT32 i = 0;  i < nDics;  i++)
     {
         Reference< XDictionary > xDic( pDic[i], UNO_QUERY );
 
-        sal_Int16           nLang = LocaleToLanguage( xDic->getLocale() );
+        INT16           nLang = LocaleToLanguage( xDic->getLocale() );
 
         if ( xDic.is() && xDic->isActive()
             && (nLang == nLanguage  ||  nLang == LANGUAGE_NONE) )
@@ -155,8 +154,8 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
 #endif
             const Sequence< Reference< XDictionaryEntry > > aEntries = xDic->getEntries();
             const Reference< XDictionaryEntry > *pEntries = aEntries.getConstArray();
-            sal_Int32 nLen = aEntries.getLength();
-            for (sal_Int32 k = 0;  k < nLen;  ++k)
+            INT32 nLen = aEntries.getLength();
+            for (INT32 k = 0;  k < nLen;  ++k)
             {
                 String aEntryTxt;
                 if (pEntries[k].is())
@@ -173,29 +172,29 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
 }
 
 
-void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
-        Reference< XDictionaryList > &rxDicList,
-        sal_Int16 nLanguage )
+void SeqRemoveNegEntries( Sequence< OUString > &rSeq, 
+        Reference< XDictionaryList > &rxDicList, 
+        INT16 nLanguage )
 {
     static const OUString aEmpty;
-    sal_Bool bSthRemoved = sal_False;
-    sal_Int32 nLen = rSeq.getLength();
+    BOOL bSthRemoved = FALSE;
+    INT32 nLen = rSeq.getLength();
     OUString *pEntries = rSeq.getArray();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
+    for (INT32 i = 0;  i < nLen;  ++i)
     {
-        Reference< XDictionaryEntry > xNegEntry( SearchDicList( rxDicList,
-                    pEntries[i], nLanguage, sal_False, sal_True ) );
+        Reference< XDictionaryEntry > xNegEntry( SearchDicList( rxDicList, 
+                    pEntries[i], nLanguage, FALSE, TRUE ) );
         if (xNegEntry.is())
         {
             pEntries[i] = aEmpty;
-            bSthRemoved = sal_True;
+            bSthRemoved = TRUE;
         }
     }
     if (bSthRemoved)
     {
         Sequence< OUString > aNew;
         // merge sequence without duplicates and empty strings in new empty sequence
-        aNew = MergeProposalSeqs( aNew, rSeq, sal_False );
+        aNew = MergeProposalSeqs( aNew, rSeq, FALSE );
         rSeq = aNew;
     }
 }
@@ -204,7 +203,7 @@ void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
 Sequence< OUString > MergeProposalSeqs(
             Sequence< OUString > &rAlt1,
             Sequence< OUString > &rAlt2,
-            sal_Bool bAllowDuplicates )
+            BOOL bAllowDuplicates )
 {
     Sequence< OUString > aMerged;
 
@@ -214,24 +213,24 @@ Sequence< OUString > MergeProposalSeqs(
         aMerged = rAlt1;
     else
     {
-        sal_Int32 nAltCount1 = rAlt1.getLength();
+        INT32 nAltCount1 = rAlt1.getLength();
         const OUString *pAlt1 = rAlt1.getConstArray();
-        sal_Int32 nAltCount2 = rAlt2.getLength();
+        INT32 nAltCount2 = rAlt2.getLength();
         const OUString *pAlt2 = rAlt2.getConstArray();
 
-        sal_Int32 nCountNew = Min( nAltCount1 + nAltCount2, (sal_Int32) MAX_PROPOSALS );
+        INT32 nCountNew = Min( nAltCount1 + nAltCount2, (INT32) MAX_PROPOSALS );
         aMerged.realloc( nCountNew );
         OUString *pMerged = aMerged.getArray();
 
-        sal_Int32 nIndex = 0;
-        sal_Int32 i = 0;
+        INT32 nIndex = 0;
+        INT32 i = 0;
         for (int j = 0;  j < 2;  j++)
         {
-            sal_Int32           nCount  = j == 0 ? nAltCount1 : nAltCount2;
+            INT32           nCount  = j == 0 ? nAltCount1 : nAltCount2;
             const OUString  *pAlt   = j == 0 ? pAlt1 : pAlt2;
             for (i = 0;  i < nCount  &&  nIndex < MAX_PROPOSALS;  i++)
             {
-                if (pAlt[i].getLength() &&
+                if (pAlt[i].getLength() && 
                     (bAllowDuplicates || !SeqHasEntry(aMerged, pAlt[i] )))
                     pMerged[ nIndex++ ] = pAlt[ i ];
             }
@@ -248,16 +247,16 @@ Sequence< OUString > MergeProposalSeqs(
 
 SpellAlternatives::SpellAlternatives()
 {
-    nLanguage   = LANGUAGE_NONE;
-    nType       = SpellFailure::IS_NEGATIVE_WORD;
+    nLanguage	= LANGUAGE_NONE;
+    nType 		= SpellFailure::IS_NEGATIVE_WORD;
 }
 
 
-SpellAlternatives::SpellAlternatives(
-            const OUString &rWord, sal_Int16 nLang,
-            sal_Int16 nFailureType, const OUString &rRplcWord ) :
+SpellAlternatives::SpellAlternatives( 
+            const OUString &rWord, INT16 nLang,
+            INT16 nFailureType, const OUString &rRplcWord ) :
     aAlt        ( Sequence< OUString >(1) ),
-    aWord       (rWord),
+    aWord		(rWord),
     nType       (nFailureType),
     nLanguage   (nLang)
 {
@@ -269,7 +268,7 @@ SpellAlternatives::SpellAlternatives(
 
 
 SpellAlternatives::SpellAlternatives(
-        const OUString &rWord, sal_Int16 nLang, sal_Int16 nFailureType,
+        const OUString &rWord, INT16 nLang, INT16 nFailureType,
         const Sequence< OUString > &rAlternatives ) :
     aAlt        (rAlternatives),
     aWord       (rWord),
@@ -287,7 +286,7 @@ SpellAlternatives::~SpellAlternatives()
 OUString SAL_CALL SpellAlternatives::getWord()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return aWord;
 }
 
@@ -295,7 +294,7 @@ OUString SAL_CALL SpellAlternatives::getWord()
 Locale SAL_CALL SpellAlternatives::getLocale()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return CreateLocale( nLanguage );
 }
 
@@ -303,7 +302,7 @@ Locale SAL_CALL SpellAlternatives::getLocale()
 sal_Int16 SAL_CALL SpellAlternatives::getFailureType()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return nType;
 }
 
@@ -311,20 +310,20 @@ sal_Int16 SAL_CALL SpellAlternatives::getFailureType()
 sal_Int16 SAL_CALL SpellAlternatives::getAlternativesCount()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-    return (sal_Int16) aAlt.getLength();
+    MutexGuard	aGuard( GetLinguMutex() );
+    return (INT16) aAlt.getLength();
 }
 
 
 Sequence< OUString > SAL_CALL SpellAlternatives::getAlternatives()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return aAlt;
 }
 
 
-void SAL_CALL SpellAlternatives::setAlternatives( const uno::Sequence< OUString >& rAlternatives )
+void SAL_CALL SpellAlternatives::setAlternatives( const uno::Sequence< OUString >& rAlternatives ) 
 throw (uno::RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -332,7 +331,7 @@ throw (uno::RuntimeException)
 }
 
 
-void SAL_CALL SpellAlternatives::setFailureType( sal_Int16 nFailureType )
+void SAL_CALL SpellAlternatives::setFailureType( sal_Int16 nFailureType ) 
 throw (uno::RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -340,30 +339,30 @@ throw (uno::RuntimeException)
 }
 
 
-void SpellAlternatives::SetWordLanguage(const OUString &rWord, sal_Int16 nLang)
+void SpellAlternatives::SetWordLanguage(const OUString &rWord, INT16 nLang)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     aWord = rWord;
     nLanguage = nLang;
 }
 
 
-void SpellAlternatives::SetFailureType(sal_Int16 nTypeP)
+void SpellAlternatives::SetFailureType(INT16 nTypeP)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     nType = nTypeP;
 }
 
 
 void SpellAlternatives::SetAlternatives( const Sequence< OUString > &rAlt )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     aAlt = rAlt;
 }
 
 
 ///////////////////////////////////////////////////////////////////////////
 
-}   // namespace linguistic
+}	// namespace linguistic
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

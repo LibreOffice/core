@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
-
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
-
-#include <rtl/ustring.hxx>
-#include <cstring>
+#include <testshl/simpleheader.hxx>
 
 namespace rtl_string
 {
@@ -120,7 +114,7 @@ namespace rtl_string
 
         void convertUStringToString_001()
             {
-                rtl::OUString suString(RTL_CONSTASCII_USTRINGPARAM("Hello"));
+                rtl::OUString suString = rtl::OUString::createFromAscii("Hello");
                 rtl::OString sString;
                 sal_Bool bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS);
 
@@ -179,14 +173,14 @@ namespace rtl_string
 } // namespace rtl_string
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::getLength);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::newFromString);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::convertUStringToString);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_string::getLength, "rtl_string");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_string::newFromString, "rtl_string");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_string::convertUStringToString, "rtl_string");
 
 // -----------------------------------------------------------------------------
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-CPPUNIT_PLUGIN_IMPLEMENT();
+NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

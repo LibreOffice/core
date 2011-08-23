@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,33 +65,33 @@ class ScNamedRangeObj : public ::cppu::WeakImplHelper6<
 {
 private:
     ScNamedRangesObj*       mpParent;
-    ScDocShell*             pDocShell;
-    String                  aName;
+    ScDocShell*				pDocShell;
+    String					aName;
 
 private:
-    ScRangeData*            GetRangeData_Impl();
-    void                    Modify_Impl( const String* pNewName,
+    ScRangeData*			GetRangeData_Impl();
+    void					Modify_Impl( const String* pNewName,
                                         const ScTokenArray* pNewTokens, const String* pNewContent,
                                         const ScAddress* pNewPos, const sal_uInt16* pNewType,
                                         const formula::FormulaGrammar::Grammar eGrammar );
 
 public:
                             ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm);
-    virtual                 ~ScNamedRangeObj();
+    virtual					~ScNamedRangeObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XNamedRange
     virtual ::rtl::OUString SAL_CALL getContent() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setContent( const ::rtl::OUString& aContent )
+    virtual void SAL_CALL	setContent( const ::rtl::OUString& aContent )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::table::CellAddress SAL_CALL getReferencePosition()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setReferencePosition(
+    virtual void SAL_CALL	setReferencePosition(
                                 const ::com::sun::star::table::CellAddress& aReferencePosition )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32       SAL_CALL getType() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setType( sal_Int32 nType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32		SAL_CALL getType() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	setType( sal_Int32 nType ) throw(::com::sun::star::uno::RuntimeException);
 
                             // XFormulaTokens
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL getTokens()
@@ -102,7 +102,7 @@ public:
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XCellRangeReferrer
@@ -113,7 +113,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -125,25 +125,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
@@ -184,15 +184,15 @@ class ScNamedRangesObj : public ::cppu::WeakImplHelper6<
                         public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
+    ScDocShell*				pDocShell;
 
      // if true, adding new name or modifying existing one will set the
      // document 'modified' and broadcast the change.  We turn this off during
      // import.
     sal_Bool                mbModifyAndBroadcast;
 
-    ScNamedRangeObj*        GetObjectByIndex_Impl(sal_uInt16 nIndex);
-    ScNamedRangeObj*        GetObjectByName_Impl(const ::rtl::OUString& aName);
+    ScNamedRangeObj*		GetObjectByIndex_Impl(sal_uInt16 nIndex);
+    ScNamedRangeObj*		GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 protected:
     /** called from the XActionLockable interface methods on initial locking */
@@ -203,22 +203,22 @@ protected:
 
 public:
                             ScNamedRangesObj(ScDocShell* pDocSh);
-    virtual                 ~ScNamedRangesObj();
+    virtual					~ScNamedRangesObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     bool                    IsModifyAndBroadcast() const;
 
                             // XNamedRanges
-    virtual void SAL_CALL   addNewByName( const ::rtl::OUString& aName, const ::rtl::OUString& aContent,
+    virtual void SAL_CALL	addNewByName( const ::rtl::OUString& aName, const ::rtl::OUString& aContent,
                                 const ::com::sun::star::table::CellAddress& aPosition, sal_Int32 nType )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addNewFromTitles( const ::com::sun::star::table::CellRangeAddress& aSource,
+    virtual void SAL_CALL	addNewFromTitles( const ::com::sun::star::table::CellRangeAddress& aSource,
                                 ::com::sun::star::sheet::Border aBorder )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeByName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	removeByName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   outputList( const ::com::sun::star::table::CellAddress& aOutputPosition )
+    virtual void SAL_CALL	outputList( const ::com::sun::star::table::CellAddress& aOutputPosition )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XNameAccess
@@ -251,7 +251,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -263,25 +263,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
@@ -311,28 +311,28 @@ class ScLabelRangeObj : public ::cppu::WeakImplHelper2<
                         public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
-    sal_Bool                bColumn;
-    ScRange                 aRange;         // criterion to find range
+    ScDocShell*				pDocShell;
+    sal_Bool				bColumn;
+    ScRange					aRange;			// Kriterium um Bereich zu finden
 
 private:
-    ScRangePair*            GetData_Impl();
-    void                    Modify_Impl( const ScRange* pLabel, const ScRange* pData );
+    ScRangePair*			GetData_Impl();
+    void					Modify_Impl( const ScRange* pLabel, const ScRange* pData );
 
 public:
                             ScLabelRangeObj(ScDocShell* pDocSh, sal_Bool bCol, const ScRange& rR);
-    virtual                 ~ScLabelRangeObj();
+    virtual					~ScLabelRangeObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XLabelRange
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getLabelArea()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setLabelArea( const ::com::sun::star::table::CellRangeAddress& aLabelArea )
+    virtual void SAL_CALL	setLabelArea( const ::com::sun::star::table::CellRangeAddress& aLabelArea )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getDataArea()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setDataArea( const ::com::sun::star::table::CellRangeAddress& aDataArea )
+    virtual void SAL_CALL	setDataArea( const ::com::sun::star::table::CellRangeAddress& aDataArea )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
@@ -352,22 +352,22 @@ class ScLabelRangesObj : public ::cppu::WeakImplHelper3<
                         public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
-    sal_Bool                    bColumn;
+    ScDocShell*				pDocShell;
+    sal_Bool					bColumn;
 
-    ScLabelRangeObj*        GetObjectByIndex_Impl(size_t nIndex);
+    ScLabelRangeObj*		GetObjectByIndex_Impl(sal_uInt16 nIndex);
 
 public:
                             ScLabelRangesObj(ScDocShell* pDocSh, sal_Bool bCol);
-    virtual                 ~ScLabelRangesObj();
+    virtual					~ScLabelRangesObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XLabelRanges
-    virtual void SAL_CALL   addNew( const ::com::sun::star::table::CellRangeAddress& aLabelArea,
+    virtual void SAL_CALL	addNew( const ::com::sun::star::table::CellRangeAddress& aLabelArea,
                                 const ::com::sun::star::table::CellRangeAddress& aDataArea )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeByIndex( sal_Int32 nIndex )
+    virtual void SAL_CALL	removeByIndex( sal_Int32 nIndex )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XIndexAccess

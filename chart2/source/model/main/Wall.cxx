@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,70 +60,46 @@ namespace
 static const ::rtl::OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.Wall" ));
 
-struct StaticWallDefaults_Initializer
+void lcl_AddDefaultsToMap(
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
-        ::chart::FillProperties::AddDefaultsToMap( rOutMap );
+    // override other defaults
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LineProperties::PROP_LINE_STYLE, drawing::LineStyle_NONE );
+}
 
-        // override other defaults
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LineProperties::PROP_LINE_STYLE, drawing::LineStyle_NONE );
-    }
-};
-
-struct StaticWallDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticWallDefaults_Initializer >
+const uno::Sequence< Property > & lcl_GetPropertySequence()
 {
-};
+    static uno::Sequence< Property > aPropSeq;
 
-struct StaticWallInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    uno::Sequence< Property > lcl_GetPropertySequence()
-    {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-};
+    return aPropSeq;
+}
 
-struct StaticWallInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticWallInfoHelper_Initializer >
+::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
 {
-};
+    static ::cppu::OPropertyArrayHelper aArrayHelper(
+        lcl_GetPropertySequence(),
+        /* bSorted = */ sal_True );
 
-struct StaticWallInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticWallInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticWallInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticWallInfo_Initializer >
-{
-};
+    return aArrayHelper;
+}
 
 } // anonymous namespace
 
@@ -160,23 +136,55 @@ uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()
 uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticWallDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
+    static tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        LineProperties::AddDefaultsToMap( aStaticDefaults );
+        FillProperties::AddDefaultsToMap( aStaticDefaults );
+
+        // initialize defaults
+        // Note: this should be last to override defaults of the previously
+        // added defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
+    }
+
+    tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
         return uno::Any();
+
     return (*aFound).second;
+    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Wall::getInfoHelper()
 {
-    return *StaticWallInfoHelper::get();
+    return lcl_getInfoHelper();
 }
 
+
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL Wall::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+    Wall::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticWallInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
 
 // ____ XModifyBroadcaster ____

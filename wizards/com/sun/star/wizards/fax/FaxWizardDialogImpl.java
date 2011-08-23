@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -246,7 +246,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             myFaxDoc.killEmptyFrames();
 
 
-            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false);
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false, "Template could not be saved to" + sPath);
             if (bSaveSuccess)
             {
                 saveConfiguration();
@@ -300,7 +300,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     {
         try
         {
-            //xComponent.dispose();
+            //xComponent.dispose();                       
             XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myFaxDoc.xFrame);
             xCloseable.close(false);
         }
@@ -340,7 +340,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     public void insertPathSelectionControl()
     {
         myPathSelection = new PathSelection(xMSF, this, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE);
-        myPathSelection.insert(5, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, HelpIds.getHelpIdString(HID + 34), HelpIds.getHelpIdString(HID + 35));
+        myPathSelection.insert(5, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + (HID + 34), "HID:" + (HID + 35));
         myPathSelection.sDefaultDirectory = sUserTemplatePath;
         myPathSelection.sDefaultName = "myFaxTemplate.ott";
         myPathSelection.sDefaultFilter = "writer8_template";
@@ -424,9 +424,9 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
     public void initializeElements()
     {
-        setControlProperty("chkUseLogo", PropertyNames.PROPERTY_ENABLED, new Boolean(myFaxDoc.hasElement("Company Logo")));
-        setControlProperty("chkUseSubject", PropertyNames.PROPERTY_ENABLED, new Boolean(myFaxDoc.hasElement("Subject Line")));
-        setControlProperty("chkUseDate", PropertyNames.PROPERTY_ENABLED, new Boolean(myFaxDoc.hasElement("Date")));
+        setControlProperty("chkUseLogo", "Enabled", new Boolean(myFaxDoc.hasElement("Company Logo")));
+        setControlProperty("chkUseSubject", "Enabled", new Boolean(myFaxDoc.hasElement("Subject Line")));
+        setControlProperty("chkUseDate", "Enabled", new Boolean(myFaxDoc.hasElement("Date")));
         myFaxDoc.updateDateFields();
     }
 
@@ -553,10 +553,10 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     public void optBusinessFaxItemChanged()
     {
         DataAware.setDataObject(faxDA, myConfig.cp_BusinessFax, true);
-        setControlProperty("lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
-        setControlProperty("lstBusinessStyle", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
-        setControlProperty("lblPrivateStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        setControlProperty("lstPrivateStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lblBusinessStyle", "Enabled", Boolean.TRUE);
+        setControlProperty("lstBusinessStyle", "Enabled", Boolean.TRUE);
+        setControlProperty("lblPrivateStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lstPrivateStyle", "Enabled", Boolean.FALSE);
         lstBusinessStyleItemChanged();
         enableSenderReceiver();
         setPossibleFooter(true);
@@ -572,10 +572,10 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     public void optPrivateFaxItemChanged()
     {
         DataAware.setDataObject(faxDA, myConfig.cp_PrivateFax, true);
-        setControlProperty("lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        setControlProperty("lstBusinessStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        setControlProperty("lblPrivateStyle", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
-        setControlProperty("lstPrivateStyle", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("lblBusinessStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lstBusinessStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lblPrivateStyle", "Enabled", Boolean.TRUE);
+        setControlProperty("lstPrivateStyle", "Enabled", Boolean.TRUE);
         lstPrivateStyleItemChanged();
         disableSenderReceiver();
         setPossibleFooter(false);
@@ -598,31 +598,31 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
     public void optSenderPlaceholderItemChanged()
     {
-        setControlProperty("lblSenderName", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        setControlProperty("lblSenderStreet", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        setControlProperty("lblPostCodeCity", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        setControlProperty("lblSenderFax", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        setControlProperty("txtSenderName", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        setControlProperty("txtSenderStreet", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        setControlProperty("txtSenderPostCode", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        setControlProperty("txtSenderState", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        setControlProperty("txtSenderCity", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        setControlProperty("txtSenderFax", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lblSenderName", "Enabled", Boolean.FALSE);
+        setControlProperty("lblSenderStreet", "Enabled", Boolean.FALSE);
+        setControlProperty("lblPostCodeCity", "Enabled", Boolean.FALSE);
+        setControlProperty("lblSenderFax", "Enabled", Boolean.FALSE);
+        setControlProperty("txtSenderName", "Enabled", Boolean.FALSE);
+        setControlProperty("txtSenderStreet", "Enabled", Boolean.FALSE);
+        setControlProperty("txtSenderPostCode", "Enabled", Boolean.FALSE);
+        setControlProperty("txtSenderState", "Enabled", Boolean.FALSE);
+        setControlProperty("txtSenderCity", "Enabled", Boolean.FALSE);
+        setControlProperty("txtSenderFax", "Enabled", Boolean.FALSE);
         myFaxDoc.fillSenderWithUserData();
     }
 
     public void optSenderDefineItemChanged()
     {
-        setControlProperty("lblSenderName", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
-        setControlProperty("lblSenderStreet", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
-        setControlProperty("lblPostCodeCity", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
-        setControlProperty("lblSenderFax", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
-        setControlProperty("txtSenderName", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
-        setControlProperty("txtSenderStreet", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
-        setControlProperty("txtSenderPostCode", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
-        setControlProperty("txtSenderState", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
-        setControlProperty("txtSenderCity", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
-        setControlProperty("txtSenderFax", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("lblSenderName", "Enabled", Boolean.TRUE);
+        setControlProperty("lblSenderStreet", "Enabled", Boolean.TRUE);
+        setControlProperty("lblPostCodeCity", "Enabled", Boolean.TRUE);
+        setControlProperty("lblSenderFax", "Enabled", Boolean.TRUE);
+        setControlProperty("txtSenderName", "Enabled", Boolean.TRUE);
+        setControlProperty("txtSenderStreet", "Enabled", Boolean.TRUE);
+        setControlProperty("txtSenderPostCode", "Enabled", Boolean.TRUE);
+        setControlProperty("txtSenderState", "Enabled", Boolean.TRUE);
+        setControlProperty("txtSenderCity", "Enabled", Boolean.TRUE);
+        setControlProperty("txtSenderFax", "Enabled", Boolean.TRUE);
         txtSenderNameTextChanged();
         txtSenderStreetTextChanged();
         txtSenderPostCodeTextChanged();
@@ -678,7 +678,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     public void txtSenderStateTextChanged()
     {
         TextFieldHandler myFieldHandler = new TextFieldHandler(myFaxDoc.xMSF, xTextDocument);
-        myFieldHandler.changeUserFieldContent(PropertyNames.PROPERTY_STATE, txtSenderState.getText());
+        myFieldHandler.changeUserFieldContent("State", txtSenderState.getText());
     }
 
     public void txtSenderFaxTextChanged()
@@ -686,7 +686,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         TextFieldHandler myFieldHandler = new TextFieldHandler(myFaxDoc.xMSF, xTextDocument);
         myFieldHandler.changeUserFieldContent("Fax", txtSenderFax.getText());
     }
-    //switch Elements on/off -------------------------------------------------------
+    //switch Elements on/off -------------------------------------------------------    
     public void setElements()
     {
         //UI relevant:
@@ -754,7 +754,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     {
         try
         {
-            boolean bFooterPossible = (chkUseFooter.getState() != 0) && AnyConverter.toBoolean(getControlProperty("chkUseFooter", PropertyNames.PROPERTY_ENABLED));
+            boolean bFooterPossible = (chkUseFooter.getState() != 0) && AnyConverter.toBoolean(getControlProperty("chkUseFooter", "Enabled"));
 
             if (chkFooterNextPages.getState() != 0)
             {
@@ -767,9 +767,9 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
                 myFaxDoc.switchFooter("Standard", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
             }
 
-            //enable/disable roadmap item for footer page
+            //enable/disable roadmap item for footer page       
             XInterface BPaperItem = getRoadmapItemByID(RM_FOOTER);
-            Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, new Boolean(bFooterPossible));
+            Helper.setUnoPropertyValue(BPaperItem, "Enabled", new Boolean(bFooterPossible));
 
         }
         catch (Exception exception)
@@ -797,7 +797,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     {
         XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
         myFaxDoc.switchUserField("Salutation", xTextComponent.getText(), (chkUseSalutation.getState() != 0));
-        setControlProperty("lstSalutation", PropertyNames.PROPERTY_ENABLED, new Boolean(chkUseSalutation.getState() != 0));
+        setControlProperty("lstSalutation", "Enabled", new Boolean(chkUseSalutation.getState() != 0));
     }
 
     public void lstSalutationItemChanged()
@@ -814,7 +814,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     {
         XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstCommunicationType);
         myFaxDoc.switchUserField("CommunicationType", xTextComponent.getText(), (chkUseCommunicationType.getState() != 0));
-        setControlProperty("lstCommunicationType", PropertyNames.PROPERTY_ENABLED, new Boolean(chkUseCommunicationType.getState() != 0));
+        setControlProperty("lstCommunicationType", "Enabled", new Boolean(chkUseCommunicationType.getState() != 0));
     }
 
     public void lstCommunicationItemChanged()
@@ -831,7 +831,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     {
         XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
         myFaxDoc.switchUserField("Greeting", xTextComponent.getText(), (chkUseGreeting.getState() != 0));
-        setControlProperty("lstGreeting", PropertyNames.PROPERTY_ENABLED, new Boolean(chkUseGreeting.getState() != 0));
+        setControlProperty("lstGreeting", "Enabled", new Boolean(chkUseGreeting.getState() != 0));
     }
 
     public void lstGreetingItemChanged()
@@ -846,7 +846,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
     private void setPossibleFooter(boolean bState)
     {
-        setControlProperty("chkUseFooter", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+        setControlProperty("chkUseFooter", "Enabled", new Boolean(bState));
         if (!bState)
         {
             chkUseFooter.setState((short) 0);
@@ -857,17 +857,17 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     private void enableSenderReceiver()
     {
         XInterface BPaperItem = getRoadmapItemByID(RM_SENDERRECEIVER);
-        Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        Helper.setUnoPropertyValue(BPaperItem, "Enabled", Boolean.TRUE);
     }
 
     private void disableSenderReceiver()
     {
         XInterface BPaperItem = getRoadmapItemByID(RM_SENDERRECEIVER);
-        Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        Helper.setUnoPropertyValue(BPaperItem, "Enabled", Boolean.FALSE);
     }
 }
 
 
 
 
-
+    

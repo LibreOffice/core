@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,10 +61,10 @@ namespace utl
     struct NodeValueAccessor
     {
     private:
-        ::rtl::OUString     sRelativePath;      // the relative path of the node
-        LocationType        eLocationType;      // the type of location where the value is stored
-        void*               pLocation;          // the pointer to the location
-        Type                aDataType;          // the type object pointed to by pLocation
+        ::rtl::OUString		sRelativePath;		// the relative path of the node
+        LocationType		eLocationType;		// the type of location where the value is stored
+        void*				pLocation;			// the pointer to the location
+        Type				aDataType;			// the type object pointed to by pLocation
 
     public:
         NodeValueAccessor( const ::rtl::OUString& _rNodePath );
@@ -72,15 +72,18 @@ namespace utl
         void bind( void* _pLocation, const Type& _rType );
         void bind( Any* _pLocation );
 
-        bool                    isBound( ) const        { return ( ltUnbound != eLocationType ) && ( NULL != pLocation ); }
-        const ::rtl::OUString&  getPath( ) const        { return sRelativePath; }
-        LocationType            getLocType( ) const     { return eLocationType; }
-        void*                   getLocation( ) const    { return pLocation; }
-        const Type&             getDataType( ) const    { return aDataType; }
+        bool					isBound( ) const		{ return ( ltUnbound != eLocationType ) && ( NULL != pLocation ); }
+        const ::rtl::OUString&	getPath( ) const		{ return sRelativePath; }
+        LocationType			getLocType( ) const		{ return eLocationType; }
+        void*					getLocation( ) const	{ return pLocation; }
+        const Type&				getDataType( ) const	{ return aDataType; }
 
         bool operator == ( const NodeValueAccessor& rhs ) const;
         bool operator != ( const NodeValueAccessor& rhs ) const { return !operator == ( rhs ); }
     };
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 17:21:13 -----------------------------------------------
 
     NodeValueAccessor::NodeValueAccessor( const ::rtl::OUString& _rNodePath )
         :sRelativePath( _rNodePath )
@@ -89,12 +92,18 @@ namespace utl
     {
     }
 
+    //---------------------------------------------------------------------
+    //--- 20.08.01 17:06:36 -----------------------------------------------
+
     bool NodeValueAccessor::operator == ( const NodeValueAccessor& rhs ) const
     {
-        return  (   sRelativePath   ==  rhs.sRelativePath   )
-            &&  (   eLocationType   ==  rhs.eLocationType   )
-            &&  (   pLocation       ==  rhs.pLocation       );
+        return	(	sRelativePath	==	rhs.sRelativePath	)
+            &&	(	eLocationType	==	rhs.eLocationType	)
+            &&	(	pLocation		==	rhs.pLocation		);
     }
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 17:47:43 -----------------------------------------------
 
     void NodeValueAccessor::bind( void* _pLocation, const Type& _rType )
     {
@@ -105,6 +114,9 @@ namespace utl
         aDataType = _rType;
     }
 
+    //---------------------------------------------------------------------
+    //--- 20.08.01 17:48:47 -----------------------------------------------
+
     void NodeValueAccessor::bind( Any* _pLocation )
     {
         DBG_ASSERT( !isBound(), "NodeValueAccessor::bind: already bound!" );
@@ -113,6 +125,9 @@ namespace utl
         pLocation = _pLocation;
         aDataType = ::getCppuType( _pLocation );
     }
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 17:42:17 -----------------------------------------------
 
     #ifndef UNX
     static
@@ -142,7 +157,7 @@ namespace utl
                     aBuf.append("::utl::lcl_copyData( Accessor, Any ): could not assign the data (node path: ");
                     aBuf.append( rtl::OUStringToOString( _rAccessor.getPath(), RTL_TEXTENCODING_ASCII_US ) );
                     aBuf.append( " !" );
-                    DBG_ASSERT( bSuccess, aBuf.getStr() );
+                    DBG_ASSERT( bSuccess, aBuf.getStr()	);
                     #endif
                 }
                 else {
@@ -158,6 +173,9 @@ namespace utl
                 break;
         }
     }
+
+    //---------------------------------------------------------------------
+    //--- 21.08.01 12:06:43 -----------------------------------------------
 
     #ifndef UNX
     static
@@ -187,12 +205,15 @@ namespace utl
     //= functors on NodeValueAccessor instances
     //=====================================================================
 
+    //---------------------------------------------------------------------
+    //--- 21.08.01 12:01:16 -----------------------------------------------
+
     /// base class for functors syncronizing between exchange locations and config sub nodes
     struct SubNodeAccess : public ::std::unary_function< NodeValueAccessor, void >
     {
     protected:
-        const OConfigurationNode&   m_rRootNode;
-        ::osl::Mutex&               m_rMutex;
+        const OConfigurationNode&	m_rRootNode;
+        ::osl::Mutex&				m_rMutex;
 
     public:
         SubNodeAccess( const OConfigurationNode& _rRootNode, ::osl::Mutex& _rMutex )
@@ -201,6 +222,9 @@ namespace utl
         {
         }
     };
+
+    //---------------------------------------------------------------------
+    //--- 21.08.01 11:25:56 -----------------------------------------------
 
     struct UpdateFromConfig : public SubNodeAccess
     {
@@ -212,6 +236,9 @@ namespace utl
             ::utl::lcl_copyData( _rAccessor, m_rRootNode.getNodeValue( _rAccessor.getPath( ) ), m_rMutex );
         }
     };
+
+    //---------------------------------------------------------------------
+    //--- 21.08.01 11:25:56 -----------------------------------------------
 
     struct UpdateToConfig : public SubNodeAccess
     {
@@ -226,6 +253,9 @@ namespace utl
         }
     };
 
+    //---------------------------------------------------------------------
+    //--- 20.08.01 16:58:24 -----------------------------------------------
+
     DECLARE_STL_VECTOR( NodeValueAccessor, NodeValueAccessors );
 
     //=====================================================================
@@ -233,11 +263,11 @@ namespace utl
     //=====================================================================
     struct OConfigurationValueContainerImpl
     {
-        Reference< XMultiServiceFactory >       xORB;           // the service factory
-        ::osl::Mutex&                           rMutex;         // the mutex for accessing the data containers
-        OConfigurationTreeRoot                  aConfigRoot;    // the configuration node we're accessing
+        Reference< XMultiServiceFactory >		xORB;			// the service factory
+        ::osl::Mutex&							rMutex;			// the mutex for accessing the data containers
+        OConfigurationTreeRoot					aConfigRoot;	// the configuration node we're accessing
 
-        NodeValueAccessors                      aAccessors;     // the accessors to the node values
+        NodeValueAccessors						aAccessors;		// the accessors to the node values
 
         OConfigurationValueContainerImpl( const Reference< XMultiServiceFactory >& _rxORB, ::osl::Mutex& _rMutex )
             :xORB( _rxORB )
@@ -250,6 +280,9 @@ namespace utl
     //= OConfigurationValueContainer
     //=====================================================================
 
+    //---------------------------------------------------------------------
+    //--- 20.08.01 15:53:35 -----------------------------------------------
+
     OConfigurationValueContainer::OConfigurationValueContainer(
             const Reference< XMultiServiceFactory >& _rxORB, ::osl::Mutex& _rAccessSafety,
             const sal_Char* _pConfigLocation, const sal_uInt16 _nAccessFlags, const sal_Int32 _nLevels )
@@ -257,6 +290,9 @@ namespace utl
     {
         implConstruct( ::rtl::OUString::createFromAscii( _pConfigLocation ), _nAccessFlags, _nLevels );
     }
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 15:55:20 -----------------------------------------------
 
     OConfigurationValueContainer::OConfigurationValueContainer(
             const Reference< XMultiServiceFactory >& _rxORB, ::osl::Mutex& _rAccessSafety,
@@ -266,15 +302,24 @@ namespace utl
         implConstruct( _rConfigLocation, _nAccessFlags, _nLevels );
     }
 
+    //---------------------------------------------------------------------
+    //--- 20.08.01 16:01:29 -----------------------------------------------
+
     OConfigurationValueContainer::~OConfigurationValueContainer()
     {
         delete m_pImpl;
     }
 
+    //---------------------------------------------------------------------
+    //--- 20.08.01 15:59:13 -----------------------------------------------
+
     const Reference< XMultiServiceFactory >& OConfigurationValueContainer::getServiceFactory( ) const
     {
         return m_pImpl->xORB;
     }
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 16:02:07 -----------------------------------------------
 
     void OConfigurationValueContainer::implConstruct( const ::rtl::OUString& _rConfigLocation,
         const sal_uInt16 _nAccessFlags, const sal_Int32 _nLevels )
@@ -299,19 +344,22 @@ namespace utl
         #endif
     }
 
+    //---------------------------------------------------------------------
+    //--- 20.08.01 16:39:05 -----------------------------------------------
+
     void OConfigurationValueContainer::registerExchangeLocation( const sal_Char* _pRelativePath,
         void* _pContainer, const Type& _rValueType )
     {
         // checks ....
         DBG_ASSERT( _pContainer, "OConfigurationValueContainer::registerExchangeLocation: invalid container location!" );
-        DBG_ASSERT( (   TypeClass_CHAR      ==  _rValueType.getTypeClass( ) )
-                ||  (   TypeClass_BOOLEAN   ==  _rValueType.getTypeClass( ) )
-                ||  (   TypeClass_BYTE      ==  _rValueType.getTypeClass( ) )
-                ||  (   TypeClass_SHORT     ==  _rValueType.getTypeClass( ) )
-                ||  (   TypeClass_LONG      ==  _rValueType.getTypeClass( ) )
-                ||  (   TypeClass_DOUBLE    ==  _rValueType.getTypeClass( ) )
-                ||  (   TypeClass_STRING    ==  _rValueType.getTypeClass( ) )
-                ||  (   TypeClass_SEQUENCE  ==  _rValueType.getTypeClass( ) ),
+        DBG_ASSERT(	(	TypeClass_CHAR		==	_rValueType.getTypeClass( )	)
+                ||	(	TypeClass_BOOLEAN	==	_rValueType.getTypeClass( )	)
+                ||	(	TypeClass_BYTE		==	_rValueType.getTypeClass( )	)
+                ||	(	TypeClass_SHORT		==	_rValueType.getTypeClass( )	)
+                ||	(	TypeClass_LONG		==	_rValueType.getTypeClass( )	)
+                ||	(	TypeClass_DOUBLE	==	_rValueType.getTypeClass( )	)
+                ||	(	TypeClass_STRING	==	_rValueType.getTypeClass( )	)
+                ||	(	TypeClass_SEQUENCE	==	_rValueType.getTypeClass( )	),
                 "OConfigurationValueContainer::registerExchangeLocation: invalid type!" );
 
         // build an accessor for this container
@@ -321,6 +369,9 @@ namespace utl
         // insert it into our structure
         implRegisterExchangeLocation( aNewAccessor );
     }
+
+    //---------------------------------------------------------------------
+    //--- 21.08.01 14:44:45 -----------------------------------------------
 
     void OConfigurationValueContainer::registerNullValueExchangeLocation( const sal_Char* _pRelativePath, Any* _pContainer )
     {
@@ -332,6 +383,9 @@ namespace utl
         implRegisterExchangeLocation( aNewAccessor );
     }
 
+    //---------------------------------------------------------------------
+    //--- 21.08.01 10:23:34 -----------------------------------------------
+
     void OConfigurationValueContainer::read( )
     {
         std::for_each(
@@ -340,6 +394,9 @@ namespace utl
             UpdateFromConfig( m_pImpl->aConfigRoot, m_pImpl->rMutex )
         );
     }
+
+    //---------------------------------------------------------------------
+    //--- 21.08.01 12:04:48 -----------------------------------------------
 
     void OConfigurationValueContainer::write( sal_Bool _bCommit )
     {
@@ -355,6 +412,9 @@ namespace utl
             commit( sal_False );
     }
 
+    //---------------------------------------------------------------------
+    //--- 21.08.01 12:09:45 -----------------------------------------------
+
     void OConfigurationValueContainer::commit( sal_Bool _bWrite )
     {
         // write the current values in the exchange locations (if requested)
@@ -364,6 +424,9 @@ namespace utl
         // commit the changes done
         m_pImpl->aConfigRoot.commit( );
     }
+
+    //---------------------------------------------------------------------
+    //--- 20.08.01 17:29:27 -----------------------------------------------
 
     void OConfigurationValueContainer::implRegisterExchangeLocation( const NodeValueAccessor& _rAccessor )
     {
@@ -389,7 +452,7 @@ namespace utl
     }
 
 //.........................................................................
-}   // namespace utl
+}	// namespace utl
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

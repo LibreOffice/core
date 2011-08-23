@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,6 @@ TabPage RID_SVXPAGE_OPTIONS_JAVA
     };
     CheckBox CB_JAVA_ENABLE
     {
-        HelpID = "cui:CheckBox:RID_SVXPAGE_OPTIONS_JAVA:CB_JAVA_ENABLE";
         Pos = MAP_APPFONT ( 12, 14 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "~Use a Java runtime environment" ;
@@ -76,21 +75,18 @@ TabPage RID_SVXPAGE_OPTIONS_JAVA
     };
     PushButton PB_ADD
     {
-        HelpID = "cui:PushButton:RID_SVXPAGE_OPTIONS_JAVA:PB_ADD";
         Pos = MAP_APPFONT ( 204 , 38 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add..." ;
     };
     PushButton PB_PARAMETER
     {
-        HelpID = "cui:PushButton:RID_SVXPAGE_OPTIONS_JAVA:PB_PARAMETER";
         Pos = MAP_APPFONT ( 204 , 55 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Parameters..." ;
     };
     PushButton PB_CLASSPATH
     {
-        HelpID = "cui:PushButton:RID_SVXPAGE_OPTIONS_JAVA:PB_CLASSPATH";
         Pos = MAP_APPFONT ( 204 , 72 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Class Path..." ;
@@ -139,14 +135,12 @@ ModalDialog RID_SVXDLG_JAVA_PARAMETER
     };
     Edit ED_PARAMETER
     {
-        HelpID = "cui:Edit:RID_SVXDLG_JAVA_PARAMETER:ED_PARAMETER";
         Pos = MAP_APPFONT ( 6 , 15 ) ;
         Size = MAP_APPFONT ( 202 , 12 ) ;
         Border = TRUE ;
     };
     PushButton PB_ASSIGN
     {
-        HelpID = "cui:PushButton:RID_SVXDLG_JAVA_PARAMETER:PB_ASSIGN";
         Pos = MAP_APPFONT ( 214 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Assign" ;
@@ -159,7 +153,6 @@ ModalDialog RID_SVXDLG_JAVA_PARAMETER
     };
     ListBox LB_ASSIGNED
     {
-        HelpID = "cui:ListBox:RID_SVXDLG_JAVA_PARAMETER:LB_ASSIGNED";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 42 ) ;
         Size = MAP_APPFONT ( 202 , 53 ) ;
@@ -173,7 +166,6 @@ ModalDialog RID_SVXDLG_JAVA_PARAMETER
     };
     PushButton PB_REMOVE
     {
-        HelpID = "cui:PushButton:RID_SVXDLG_JAVA_PARAMETER:PB_REMOVE";
         Pos = MAP_APPFONT ( 214 , 42 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Remove" ;
@@ -219,7 +211,6 @@ ModalDialog RID_SVXDLG_JAVA_CLASSPATH
     };
     ListBox LB_PATH
     {
-        HelpID = "cui:ListBox:RID_SVXDLG_JAVA_CLASSPATH:LB_PATH";
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 172 , 72 ) ;
         Border = TRUE ;
@@ -227,21 +218,18 @@ ModalDialog RID_SVXDLG_JAVA_CLASSPATH
     };
     PushButton PB_ADDARCHIVE
     {
-        HelpID = "cui:PushButton:RID_SVXDLG_JAVA_CLASSPATH:PB_ADDARCHIVE";
         Pos = MAP_APPFONT ( 184 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add Archive..." ;
     };
     PushButton PB_ADDPATH
     {
-        HelpID = "cui:PushButton:RID_SVXDLG_JAVA_CLASSPATH:PB_ADDPATH";
         Pos = MAP_APPFONT ( 184 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Add ~Folder" ;
     };
     PushButton PB_REMOVE_PATH
     {
-        HelpID = "cui:PushButton:RID_SVXDLG_JAVA_CLASSPATH:PB_REMOVE_PATH";
         Pos = MAP_APPFONT ( 184 , 48 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Remove" ;

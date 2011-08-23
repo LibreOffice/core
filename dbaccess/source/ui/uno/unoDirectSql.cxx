@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ DBG_NAME(ODirectSQLDialog)
     //---------------------------------------------------------------------
     ODirectSQLDialog::~ODirectSQLDialog()
     {
-
+    
         DBG_DTOR(ODirectSQLDialog,NULL);
     }
 
@@ -88,12 +88,12 @@ DBG_NAME(ODirectSQLDialog)
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ODirectSQLDialog )
 
     //---------------------------------------------------------------------
-    Dialog* ODirectSQLDialog::createDialog(Window* _pParent)
+    Dialog*	ODirectSQLDialog::createDialog(Window* _pParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection = m_xActiveConnection;
         if ( !xConnection.is() )
-        {
+        {			
             try
             {
                 // the connection the row set is working with
@@ -132,7 +132,7 @@ DBG_NAME(ODirectSQLDialog)
         ODirectSQLDialog_BASE::implInitialize(_rValue);
     }
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

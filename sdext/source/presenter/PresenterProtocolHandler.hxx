@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <rtl/ref.hxx>
 #include <boost/scoped_ptr.hpp>
 
@@ -71,12 +71,12 @@ public:
 
 
     // XInitialization
-
+    
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<css::uno::Any>& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
-
+    
     // XDispatchProvider
 
     virtual css::uno::Reference<css::frame::XDispatch > SAL_CALL
@@ -91,7 +91,7 @@ public:
             const css::uno::Sequence< css::frame::DispatchDescriptor>& rDescriptors)
         throw(css::uno::RuntimeException);
 
-
+    
 private:
     class Dispatch;
     ::rtl::Reference<PresenterController> mpPresenterController;

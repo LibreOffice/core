@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,19 +35,19 @@
 #include "numrule.hxx"
 #include "caption.hxx"
 
-#define VERSION_01      1
+#define VERSION_01 		1
 #define CAPTION_VERSION VERSION_01
 
 InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleId) :
-    bUseCaption(sal_False),
+    bUseCaption(FALSE),
     eObjType(eType),
     nNumType(SVX_NUM_ARABIC),
     sNumberSeparator(RTL_CONSTASCII_USTRINGPARAM((". "))),
     nPos(1),
     nLevel(0),
     sSeparator( String::CreateFromAscii( ": " ) ),
-    bIgnoreSeqOpts(sal_False),
-    bCopyAttributes(sal_False)
+    bIgnoreSeqOpts(FALSE),
+    bCopyAttributes(FALSE)
 {
     if (pOleId)
         aOleId = *pOleId;
@@ -81,11 +81,11 @@ InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
     return *this;
 }
 
-sal_Bool InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
+BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 {
     return (eObjType == rOpt.eObjType &&
-            aOleId == rOpt.aOleId); // So that identical Ole-IDs can't be added multiple
-                                    // times, don't compare against anything else.
+            aOleId == rOpt.aOleId);	// Damit gleiche Ole-IDs nicht mehrfach eingefuegt
+                                    // werden koennen, auf nichts weiteres vergleichen
 
 
 }

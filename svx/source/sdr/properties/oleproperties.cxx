@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: graphicproperties.cxx,v $
+ * $Revision: 1.12.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,12 +44,12 @@ namespace sdr
     namespace properties
     {
         OleProperties::OleProperties(SdrObject& rObj)
-        :   RectangleProperties(rObj)
+        :	RectangleProperties(rObj)
         {
         }
 
         OleProperties::OleProperties(const OleProperties& rProps, SdrObject& rObj)
-        :   RectangleProperties(rProps, rObj)
+        :	RectangleProperties(rProps, rObj)
         {
         }
 

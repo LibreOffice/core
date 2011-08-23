@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
  ************************************************************************/
 #define drawarc_mask_width 32
 #define drawarc_mask_height 32
-static unsigned char drawarc_mask_bits[] = {
+static char drawarc_mask_bits[] = {
    0xc0, 0x01, 0x00, 0x00, 0xc0, 0x01, 0x00, 0x00, 0xc0, 0x01, 0x00, 0x00,
    0xc0, 0x01, 0x00, 0x00, 0xc0, 0x01, 0x00, 0x00, 0xc0, 0x01, 0x00, 0x00,
    0x3f, 0x7e, 0x00, 0x00, 0xbf, 0x7e, 0x00, 0x00, 0x3f, 0x7e, 0x00, 0x00,

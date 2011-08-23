@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "xexptran.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include "eventimp.hxx"
@@ -47,12 +47,12 @@ using namespace ::xmloff::token;
 //////////////////////////////////////////////////////////////////////////////
 // dr3d:3dlight context
 
-SdXML3DLightContext::SdXML3DLightContext(
-    SvXMLImport& rImport,
+SdXML3DLightContext::SdXML3DLightContext( 
+    SvXMLImport& rImport, 
     sal_uInt16 nPrfx,
-    const rtl::OUString& rLName,
+    const rtl::OUString& rLName, 
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList)
-:   SvXMLImportContext( rImport, nPrfx, rLName),
+:	SvXMLImportContext( rImport, nPrfx, rLName),
     maDiffuseColor(0x00000000),
     maDirection(0.0, 0.0, 1.0),
     mbEnabled(false),
@@ -102,14 +102,14 @@ SdXML3DLightContext::~SdXML3DLightContext()
 
 TYPEINIT1( SdXML3DSceneShapeContext, SdXMLShapeContext );
 
-SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
+SdXML3DSceneShapeContext::SdXML3DSceneShapeContext( 
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
+    USHORT nPrfx, 
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShapes ), SdXML3DSceneAttributesHelper( rImport )
+    sal_Bool bTemporaryShapes) 
+:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShapes ), SdXML3DSceneAttributesHelper( rImport )
 {
 }
 
@@ -125,7 +125,7 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 {
     // create new 3DScene shape and add it to rShapes, use it
     // as base for the new 3DScene import
-    AddShape( "com.sun.star.drawing.Shape3DSceneObject" );
+    AddShape( "com.sun.star.drawing.Shape3DSceneObject" );		
     if( mxShape.is() )
     {
         SetStyle();
@@ -181,14 +181,14 @@ void SdXML3DSceneShapeContext::EndElement()
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( USHORT nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
     SvXMLImportContext* pContext = 0L;
 
     // #i68101#
-    if( nPrefix == XML_NAMESPACE_SVG &&
+    if( nPrefix == XML_NAMESPACE_SVG &&	
         (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
     {
         pContext = new SdXMLDescriptionContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
@@ -224,8 +224,8 @@ SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPr
 //////////////////////////////////////////////////////////////////////////////
 
 SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImporter )
-:   mrImport( rImporter ),
-    mbSetTransform( sal_False ),
+:	mrImport( rImporter ),
+    mbSetTransform( FALSE ),
     mxPrjMode(drawing::ProjectionMode_PERSPECTIVE),
     mnDistance(1000),
     mnFocalLength(1000),
@@ -236,30 +236,29 @@ SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImport
     maVRP(0.0, 0.0, 1.0),
     maVPN(0.0, 0.0, 1.0),
     maVUP(0.0, 1.0, 0.0),
-    mbVRPUsed(sal_False),
-    mbVPNUsed(sal_False),
-    mbVUPUsed(sal_False)
+    mbVRPUsed(FALSE),
+    mbVPNUsed(FALSE),
+    mbVUPUsed(FALSE)
 {
 }
 
 SdXML3DSceneAttributesHelper::~SdXML3DSceneAttributesHelper()
 {
     // release remembered light contexts, they are no longer needed
-    for ( size_t i = maList.size(); i > 0; )
-        maList[ --i ]->ReleaseRef();
-    maList.clear();
+    while(maList.Count())
+        maList.Remove(maList.Count() - 1)->ReleaseRef();
 }
 
 /** creates a 3d ligth context and adds it to the internal list for later processing */
 SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uInt16 nPrfx, const rtl::OUString& rLName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList)
 {
-    SvXMLImportContext* pContext = new SdXML3DLightContext(mrImport, nPrfx, rLName, xAttrList);
+    SvXMLImportContext*	pContext = new SdXML3DLightContext(mrImport, nPrfx, rLName, xAttrList);
 
     // remember SdXML3DLightContext for later evaluation
     if(pContext)
     {
         pContext->AddRef();
-        maList.push_back( (SdXML3DLightContext*)pContext );
+        maList.Insert((SdXML3DLightContext*)pContext, LIST_APPEND);
     }
 
     return pContext;
@@ -285,7 +284,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             if(aNewVec != maVRP)
             {
                 maVRP = aNewVec;
-                mbVRPUsed = sal_True;
+                mbVRPUsed = TRUE;
             }
             return;
         }
@@ -293,11 +292,11 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         {
             ::basegfx::B3DVector aNewVec;
             mrImport.GetMM100UnitConverter().convertB3DVector(aNewVec, rValue);
-
+            
             if(aNewVec != maVPN)
             {
                 maVPN = aNewVec;
-                mbVPNUsed = sal_True;
+                mbVPNUsed = TRUE;
             }
             return;
         }
@@ -305,11 +304,11 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         {
             ::basegfx::B3DVector aNewVec;
             mrImport.GetMM100UnitConverter().convertB3DVector(aNewVec, rValue);
-
+            
             if(aNewVec != maVUP)
             {
                 maVUP = aNewVec;
-                mbVUPUsed = sal_True;
+                mbVUPUsed = TRUE;
             }
             return;
         }
@@ -397,15 +396,15 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno
     aAny <<= mbLightingMode;
     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")), aAny);
 
-    if( !maList.empty() )
+    if(maList.Count())
     {
         uno::Any aAny2;
         uno::Any aAny3;
 
         // set lights
-        for( size_t a = 0; a < maList.size(); a++)
+        for(sal_uInt32 a(0L); a < maList.Count(); a++)
         {
-            SdXML3DLightContext* pCtx = (SdXML3DLightContext*)maList[ a ];
+            SdXML3DLightContext* pCtx = (SdXML3DLightContext*)maList.GetObject(a);
 
             // set anys
             aAny <<= pCtx->GetDiffuseColor().GetColor();

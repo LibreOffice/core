@@ -170,6 +170,7 @@
 ../../sw/source/ui/fldui/DropDownFieldDialog.src
 ../../sw/source/ui/fldui/fldui.src
 ../../sw/source/ui/fmtui/tmpdlg.src
+../../sw/source/ui/fmtui/fmtui.src
 ../../sw/source/ui/index/cnttab.src
 ../../sw/source/ui/index/multmrk.src
 ../../sw/source/ui/index/idxmrk.src
@@ -335,6 +336,7 @@
 ../../svx/source/dialog/macropg.src
 ../../svx/source/dialog/fontsubs.src
 ../../svx/source/dialog/align.src
+../../svx/source/dialog/hyprlink.src
 ../../svx/source/dialog/imapdlg.src
 ../../svx/source/dialog/dlgctrl.src
 ../../svx/source/dialog/tabstpge.src
@@ -522,6 +524,7 @@
 ../../basic/source/app/basmsg.src
 ../../basic/source/sbx/format.src
 ../../basic/source/classes/sb.src
+../../basic/workben/basmgr.src
 ../../forms/source/resource/xforms.src
 ../../forms/source/resource/strings.src
 ../../scaddins/source/datefunc/datefunc.src
@@ -551,6 +554,7 @@
 ../../chart2/source/controller/dialogs/dlg_RotateDiagram.src
 ../../chart2/source/controller/dialogs/tp_PointGeometry.src
 ../../chart2/source/controller/dialogs/dlg_ObjectProperties.src
+../../chart2/source/controller/dialogs/Bitmaps_HC.src
 ../../chart2/source/controller/dialogs/tp_TitleRotation.src
 ../../chart2/source/controller/dialogs/dlg_ChartType.src
 ../../chart2/source/controller/dialogs/Bitmaps.src

@@ -57,7 +57,11 @@
  * @file
  * Manager for all config object,include line number config.
  ************************************************************************/
-#include    "xfconfigmanager.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-03-23 create this file.
+ ************************************************************************/
+#include	"xfconfigmanager.hxx"
 
 XFConfigManager::XFConfigManager()
 {
@@ -66,28 +70,28 @@ XFConfigManager::XFConfigManager()
     m_pEndnoteConfig = NULL;
 }
 
-void    XFConfigManager::SetLineNumberConfig(XFLineNumberConfig *pLNConfig)
+void	XFConfigManager::SetLineNumberConfig(XFLineNumberConfig *pLNConfig)
 {
     if( m_pLineNumberConfig )
         delete m_pLineNumberConfig;
     m_pLineNumberConfig = pLNConfig;
 }
 
-void    XFConfigManager::SetFootnoteConfig(XFFootnoteConfig *pFNConfig)
+void	XFConfigManager::SetFootnoteConfig(XFFootnoteConfig *pFNConfig)
 {
     if( m_pFootnoteConfig )
         delete m_pFootnoteConfig;
     m_pFootnoteConfig = pFNConfig;
 }
 
-void    XFConfigManager::SetEndnoteConfig(XFEndnoteConfig *pENConfig)
+void	XFConfigManager::SetEndnoteConfig(XFEndnoteConfig *pENConfig)
 {
     if( m_pEndnoteConfig )
         delete m_pEndnoteConfig;
     m_pEndnoteConfig = pENConfig;
 }
 
-void    XFConfigManager::ToXml(IXFStream *pStrm)
+void	XFConfigManager::ToXml(IXFStream *pStrm)
 {
     if( m_pLineNumberConfig )
         AddStyle(m_pLineNumberConfig);

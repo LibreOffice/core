@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : gregor.hartmann@oracle.com
+'* owner : Joerg.Skottke@Sun.Com
 '*
 '* short description : Update test for the findbar
 '*

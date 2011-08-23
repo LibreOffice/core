@@ -57,10 +57,15 @@
 * @file
 * Border stuff of Wordpro.
 ************************************************************************/
-#include    "lwpborderstuff.hxx"
-#include    "lwpstyledef.hxx"
-#include    "lwpfilehdr.hxx"
-#include    "lwptools.hxx"
+/*************************************************************************
+* Change History
+* 2005-01-11  Create and implement.
+* 2005-01-17  Add Get** functions.
+************************************************************************/
+#include	"lwpborderstuff.hxx"
+#include	"lwpstyledef.hxx"
+#include	"lwpfilehdr.hxx"
+#include	"lwptools.hxx"
 
 LwpBorderStuff::LwpBorderStuff()
 {
@@ -80,7 +85,7 @@ LwpBorderStuff::LwpBorderStuff()
     m_nWidthBottom = 0;
 }
 
-void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
+void	LwpBorderStuff::Read(LwpObjectStream *pStrm)
 {
     pStrm->QuickRead(&m_nSides, sizeof(m_nSides) );
     if( m_nSides&LEFT )
@@ -156,12 +161,12 @@ void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
     }
 }
 
-sal_Bool    LwpBorderStuff::HasSide(sal_uInt16 side)
+sal_Bool	LwpBorderStuff::HasSide(sal_uInt16 side)
 {
     return m_nSides&side;
 }
 
-sal_uInt16  LwpBorderStuff::GetSideType(sal_uInt16 side)
+sal_uInt16	LwpBorderStuff::GetSideType(sal_uInt16 side)
 {
     switch(side)
     {
@@ -183,7 +188,7 @@ sal_uInt16  LwpBorderStuff::GetSideType(sal_uInt16 side)
     return 0;
 }
 
-LwpColor    LwpBorderStuff::GetSideColor(sal_uInt16 side)
+LwpColor	LwpBorderStuff::GetSideColor(sal_uInt16 side)
 {
     switch(side)
     {
@@ -205,7 +210,7 @@ LwpColor    LwpBorderStuff::GetSideColor(sal_uInt16 side)
     return LwpColor();
 }
 
-float   LwpBorderStuff::GetSideWidth(sal_uInt16 side)
+float	LwpBorderStuff::GetSideWidth(sal_uInt16 side)
 {
     switch(side)
     {
@@ -227,7 +232,7 @@ float   LwpBorderStuff::GetSideWidth(sal_uInt16 side)
     return 0;
 }
 
-LwpBorderStuff& LwpBorderStuff::operator = (const LwpBorderStuff& rOther)
+void LwpBorderStuff::operator = (const LwpBorderStuff& rOther)
 {
     m_nSides = rOther.m_nSides;
     m_nValid = rOther.m_nValid;
@@ -248,8 +253,6 @@ LwpBorderStuff& LwpBorderStuff::operator = (const LwpBorderStuff& rOther)
     m_aColorRight = rOther.m_aColorRight;
     m_aColorTop = rOther.m_aColorTop;
     m_aColorBottom = rOther.m_aColorBottom;
-
-    return *this;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

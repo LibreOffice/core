@@ -39,7 +39,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 #include <comphelper/propagg.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -102,7 +101,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
     ODataSettings::registerPropertiesFor(this);
 
     osl_incrementInterlockedCount(&m_refCount);
-    OSL_ENSURE(m_xCommandDefinition.is(), "OQuery::OQuery : invalid CommandDefinition object !");
+    DBG_ASSERT(m_xCommandDefinition.is(), "OQuery::OQuery : invalid CommandDefinition object !");
     if ( m_xCommandDefinition.is() )
     {
         try
@@ -111,14 +110,14 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
         }
         catch(Exception&)
         {
-            OSL_FAIL("OQueryDescriptor_Base::OQueryDescriptor_Base: caught an exception!");
+            OSL_ENSURE(sal_False, "OQueryDescriptor_Base::OQueryDescriptor_Base: caught an exception!");
         }
 
         m_xCommandDefinition->addPropertyChangeListener(::rtl::OUString(), this);
-        //  m_xCommandDefinition->addPropertyChangeListener(PROPERTY_NAME, this);
+        //	m_xCommandDefinition->addPropertyChangeListener(PROPERTY_NAME, this);
         m_xCommandPropInfo = m_xCommandDefinition->getPropertySetInfo();
     }
-    OSL_ENSURE(m_xConnection.is(), "OQuery::OQuery : invalid connection !");
+    DBG_ASSERT(m_xConnection.is(), "OQuery::OQuery : invalid connection !");
     osl_decrementInterlockedCount(&m_refCount);
 }
 
@@ -181,7 +180,7 @@ void OQuery::rebuildColumns()
             ::rtl::Reference< OSQLColumns > aParseColumns(
                 ::connectivity::parse::OParseColumn::createColumnsForResultSet( xResultSetMeta, xDBMeta,xColumnDefinitions ) );
             xColumns = OPrivateColumns::createWithIntrinsicNames(
-                aParseColumns, xDBMeta->supportsMixedCaseQuotedIdentifiers(), *this, m_aMutex );
+                aParseColumns, xDBMeta->storesMixedCaseQuotedIdentifiers(), *this, m_aMutex );
             if ( !xColumns.is() )
                 throw RuntimeException();
         }
@@ -239,7 +238,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
     {
         MutexGuard aGuard(m_aMutex);
 
-        OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
+        DBG_ASSERT(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
             "OQuery::propertyChange : where did this call come from ?");
 
         if (m_eDoingCurrently == SETTING_PROPERTIES)
@@ -258,7 +257,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
         }
         else
         {
-            OSL_FAIL("OQuery::propertyChange : my CommandDefinition has more properties than I do !");
+            DBG_ERROR("OQuery::propertyChange : my CommandDefinition has more properties than I do !");
         }
     }
 
@@ -270,7 +269,7 @@ void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeExc
     MutexGuard aGuard(m_aMutex);
 
     (void)_rSource;
-    OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
+    DBG_ASSERT(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
         "OQuery::disposing : where did this call come from ?");
 
     m_xCommandDefinition->removePropertyChangeListener(::rtl::OUString(), this);
@@ -305,10 +304,10 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
     if (getInfoHelper().fillPropertyMembersByHandle(&sAggPropName,&nAttr,_nHandle) &&
         m_xCommandPropInfo.is() &&
         m_xCommandPropInfo->hasPropertyByName(sAggPropName))
-    {   // the base class holds the property values itself, but we have to forward this to our CommandDefinition
+    {	// the base class holds the property values itself, but we have to forward this to our CommandDefinition
 
         m_eDoingCurrently = SETTING_PROPERTIES;
-        OAutoActionReset aAutoReset(this);
+        OAutoActionReset(this);
         m_xCommandDefinition->setPropertyValue(sAggPropName, _rValue);
 
         if ( PROPERTY_ID_COMMAND == _nHandle )
@@ -317,7 +316,7 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
     }
 }
 
-Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  ) throw(RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(	) throw(RuntimeException)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
@@ -380,5 +379,5 @@ void OQuery::registerProperties()
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseQuery" ) );
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

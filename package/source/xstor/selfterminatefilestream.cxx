@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< lang::
     // otherwise an exception is thrown in constructor
 
     m_xFileAccess.set( xOwnFactory->createInstance (
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ),
+                            ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
                        uno::UNO_QUERY_THROW );
 
     m_xInputStream.set( m_xFileAccess->openFileRead( aURL ), uno::UNO_SET_THROW );
@@ -80,7 +80,7 @@ void OSelfTerminateFileStream::CloseStreamDeleteFile()
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OSelfTerminateFileStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL OSelfTerminateFileStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) 
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -90,7 +90,7 @@ sal_Int32 SAL_CALL OSelfTerminateFileStream::readBytes( uno::Sequence< sal_Int8 
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OSelfTerminateFileStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL OSelfTerminateFileStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) 
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -100,7 +100,7 @@ sal_Int32 SAL_CALL OSelfTerminateFileStream::readSomeBytes( uno::Sequence< sal_I
 }
 
 //-----------------------------------------------
-void SAL_CALL OSelfTerminateFileStream::skipBytes( sal_Int32 nBytesToSkip )
+void SAL_CALL OSelfTerminateFileStream::skipBytes( sal_Int32 nBytesToSkip ) 
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -110,7 +110,7 @@ void SAL_CALL OSelfTerminateFileStream::skipBytes( sal_Int32 nBytesToSkip )
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OSelfTerminateFileStream::available(  )
+sal_Int32 SAL_CALL OSelfTerminateFileStream::available(  ) 
         throw ( io::NotConnectedException,
                 io::IOException,
                 uno::RuntimeException )
@@ -119,7 +119,7 @@ sal_Int32 SAL_CALL OSelfTerminateFileStream::available(  )
 }
 
 //-----------------------------------------------
-void SAL_CALL OSelfTerminateFileStream::closeInput(  )
+void SAL_CALL OSelfTerminateFileStream::closeInput(  ) 
         throw ( io::NotConnectedException,
                 io::IOException,
                 uno::RuntimeException )
@@ -138,7 +138,7 @@ void SAL_CALL OSelfTerminateFileStream::seek( sal_Int64 location )
 
 //-----------------------------------------------
 sal_Int64 SAL_CALL OSelfTerminateFileStream::getPosition()
-        throw ( io::IOException,
+        throw ( io::IOException, 
                 uno::RuntimeException)
 {
     return m_xSeekable->getPosition();

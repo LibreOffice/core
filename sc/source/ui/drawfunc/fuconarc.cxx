@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include "tabvwsh.hxx"
 #include "drawview.hxx"
 
-// Create default drawing objects via keyboard
+// #98185# Create default drawing objects via keyboard
 #include <svx/svdocirc.hxx>
 #include <svx/sxciaitm.hxx>
 
@@ -66,19 +66,19 @@ FuConstArc::~FuConstArc()
 |*
 \************************************************************************/
 
-sal_Bool FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
+BOOL __EXPORT FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = FuConstruct::MouseButtonDown( rMEvt );
+    BOOL bReturn = FuConstruct::MouseButtonDown( rMEvt );
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pWindow->CaptureMouse();
         pView->BegCreateObj( aPnt );
-        bReturn = sal_True;
+        bReturn = TRUE;
     }
     return bReturn;
 }
@@ -89,7 +89,7 @@ sal_Bool FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-sal_Bool FuConstArc::MouseMove( const MouseEvent& rMEvt )
+BOOL __EXPORT FuConstArc::MouseMove( const MouseEvent& rMEvt )
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -100,18 +100,27 @@ sal_Bool FuConstArc::MouseMove( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-sal_Bool FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
+BOOL __EXPORT FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = false;
+    BOOL bReturn = FALSE;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
+        // Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj( SDRCREATE_NEXTPOINT );
-        bReturn = sal_True;
+        bReturn = TRUE;
     }
+/*
+    else if ( pView->IsCreateObj() && rMEvt.IsRight() )
+    {
+        // Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        pView->EndCreateObj( SDRCREATE_FORCEEND );
+        bReturn = TRUE;
+    }
+*/
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
 
@@ -119,14 +128,14 @@ sal_Bool FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuConstArc::KeyInput(const KeyEvent& rKEvt)
+BOOL __EXPORT FuConstArc::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
+    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -163,7 +172,7 @@ void FuConstArc::Activate()
             break;
     }
 
-    pView->SetCurrentObj( sal::static_int_cast<sal_uInt16>( aObjKind ) );
+    pView->SetCurrentObj( sal::static_int_cast<UINT16>( aObjKind ) );
 
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
@@ -183,7 +192,7 @@ void FuConstArc::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// Create default drawing objects via keyboard
+// #98185# Create default drawing objects via keyboard
 SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_ARC:
@@ -216,7 +225,7 @@ SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle
         }
         else
         {
-            OSL_FAIL("Object is NO circle object");
+            DBG_ERROR("Object is NO circle object");
         }
     }
 

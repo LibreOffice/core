@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,8 +75,8 @@
 #include <svx/fmdmod.hxx>
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase2.hxx> // helper for implementations
-#include <cppuhelper/implbase4.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>	// helper for implementations
+#include <cppuhelper/implbase4.hxx>	// helper for implementations
 #include <RefreshListenerContainer.hxx>
 
 #include <viewopt.hxx>
@@ -130,7 +130,9 @@ class SfxViewFrame;
 class SwPrintUIOptions;
 class SwPrintData;
 class SwRenderData;
-class ViewShell;
+class SwPrtOptions;
+class SwWrtShell;
+
 
 typedef UnoActionContext* UnoActionContextPtr;
 SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4)
@@ -182,62 +184,62 @@ class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
     public SfxBaseModel
 {
-    ActionContextArr        aActionArr;
-    SwRefreshListenerContainer  aRefreshCont;
+    ActionContextArr		aActionArr;
+    SwRefreshListenerContainer	aRefreshCont;
 
     const SfxItemPropertySet* pPropSet;
 
-    SwDocShell*             pDocShell;
-    sal_Bool                    bObjectValid;
+    SwDocShell* 			pDocShell;
+    sal_Bool					bObjectValid;
 
-    SwXDrawPage*            pDrawPage;
-    css::uno::Reference< css::drawing::XDrawPage > *            pxXDrawPage;
+    SwXDrawPage*			pDrawPage;
+    css::uno::Reference< css::drawing::XDrawPage > *			pxXDrawPage;
 
-    css::uno::Reference< css::text::XText >                 xBodyText;
-    SwXBodyText*            pBodyText;
-    css::uno::Reference< css::uno::XAggregation >           xNumFmtAgg;
+    css::uno::Reference< css::text::XText > 				xBodyText;
+    SwXBodyText*			pBodyText;
+    css::uno::Reference< css::uno::XAggregation > 			xNumFmtAgg;
 
     css::uno::Reference< css::container::XIndexAccess > *     pxXNumberingRules;
     css::uno::Reference< css::container::XIndexAccess > *     pxXFootnotes;
     css::uno::Reference< css::beans::XPropertySet > *        pxXFootnoteSettings;
-    css::uno::Reference< css::container::XIndexAccess > *       pxXEndnotes;
+    css::uno::Reference< css::container::XIndexAccess > *		pxXEndnotes;
     css::uno::Reference< css::beans::XPropertySet > *        pxXEndnoteSettings;
-    css::uno::Reference< css::container::XNameAccess > *            pxXReferenceMarks;
-    css::uno::Reference< css::container::XEnumerationAccess > * pxXTextFieldTypes;
-    css::uno::Reference< css::container::XNameAccess > *            pxXTextFieldMasters;
-    css::uno::Reference< css::container::XNameAccess > *            pxXTextSections;
-    css::uno::Reference< css::container::XNameAccess > *            pxXBookmarks;
-    css::uno::Reference< css::container::XNameAccess > *            pxXTextTables;
-    css::uno::Reference< css::container::XNameAccess > *            pxXTextFrames;
-    css::uno::Reference< css::container::XNameAccess > *            pxXGraphicObjects;
-    css::uno::Reference< css::container::XNameAccess > *            pxXEmbeddedObjects;
-    css::uno::Reference< css::container::XNameAccess > *            pxXStyleFamilies;
+    css::uno::Reference< css::container::XNameAccess > *			pxXReferenceMarks;
+    css::uno::Reference< css::container::XEnumerationAccess > *	pxXTextFieldTypes;
+    css::uno::Reference< css::container::XNameAccess > *			pxXTextFieldMasters;
+    css::uno::Reference< css::container::XNameAccess > *			pxXTextSections;
+    css::uno::Reference< css::container::XNameAccess > *			pxXBookmarks;
+    css::uno::Reference< css::container::XNameAccess > *			pxXTextTables;
+    css::uno::Reference< css::container::XNameAccess > *			pxXTextFrames;
+    css::uno::Reference< css::container::XNameAccess > *			pxXGraphicObjects;
+    css::uno::Reference< css::container::XNameAccess > *			pxXEmbeddedObjects;
+    css::uno::Reference< css::container::XNameAccess > *			pxXStyleFamilies;
     mutable css::uno::Reference< css::style::XAutoStyles > *  pxXAutoStyles;
     css::uno::Reference< css::container::XIndexReplace > *        pxXChapterNumbering;
-    css::uno::Reference< css::container::XIndexAccess > *       pxXDocumentIndexes;
+    css::uno::Reference< css::container::XIndexAccess > *		pxXDocumentIndexes;
 
-    css::uno::Reference< css::beans::XPropertySet > *       pxXLineNumberingProperties;
-    css::uno::Reference< css::container::XNameAccess > *            pxLinkTargetSupplier;
-    css::uno::Reference< css::container::XEnumerationAccess >*  pxXRedlines;
-    css::uno::Reference< css::container::XNameContainer>        xXFormsContainer;
+    css::uno::Reference< css::beans::XPropertySet > * 		pxXLineNumberingProperties;
+    css::uno::Reference< css::container::XNameAccess > *			pxLinkTargetSupplier;
+    css::uno::Reference< css::container::XEnumerationAccess >* 	pxXRedlines;
+    css::uno::Reference< css::container::XNameContainer> 		xXFormsContainer;
 
     //temporary frame to enable PDF export if no valid view is available
     SfxViewFrame*                                   m_pHiddenViewFrame;
     css::uno::Reference< css::uno::XInterface>      xPropertyHelper;
     SwXDocumentPropertyHelper*                      pPropertyHelper;
-
+    
     SwPrintUIOptions *                              m_pPrintUIOptions;
     SwRenderData *                               m_pRenderData;
 
-    void                    GetBodyText();
-    void                    GetNumberFormatter();
+    void					GetBodyText();
+    void					GetNumberFormatter();
 
     // used for XRenderable implementation
     SfxViewShell *  GuessViewShell( /* out */ bool &rbIsSwSrcView, const css::uno::Reference< css::frame::XController > xController = css::uno::Reference< css::frame::XController >() );
     SwDoc *         GetRenderDoc( SfxViewShell *&rpView, const css::uno::Any& rSelection, bool bIsPDFExport );
     SfxViewShell *  GetRenderView( bool &rbIsSwSrcView, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions, bool bIsPDFExport );
 
-    rtl::OUString           maBuildId;
+    rtl::OUString			maBuildId;
 
     using SfxBaseModel::addEventListener;
     using SfxBaseModel::removeEventListener;
@@ -248,7 +250,7 @@ public:
     SwXTextDocument(SwDocShell* pShell);
 
     inline void notifyRefreshListeners() { aRefreshCont.Refreshed(); }
-    virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException);
+    virtual 	css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
     virtual void SAL_CALL release(  ) throw();
 
@@ -329,6 +331,9 @@ public:
     // css::text::XTextEmbeddedObjectsSupplier
     virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getEmbeddedObjects(void) throw( css::uno::RuntimeException );
 
+//	// css::text::XTextShapesSupplier
+//    virtual css::uno::Reference< css::container::XIndexAccess >  getShapes(void) throw( css::uno::RuntimeException );
+
     // css::text::XBookmarksSupplier
     virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getBookmarks(void) throw( css::uno::RuntimeException );
 
@@ -361,7 +366,7 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 
     // css::drawing::XDrawPageSupplier
@@ -415,31 +420,33 @@ public:
 
     // ::com::sun::star::util::XCloneable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
-
-
+    
+    
     //
-    void                        Invalidate();
-    void                        Reactivate(SwDocShell* pNewDocShell);
+    void						Invalidate();
+    void						Reactivate(SwDocShell* pNewDocShell);
     SwXDocumentPropertyHelper * GetPropertyHelper ();
-    sal_Bool                    IsValid() const {return bObjectValid;}
+    sal_Bool 			  		IsValid() const {return bObjectValid;}
 
-    void                        InitNewDoc();
+    void						InitNewDoc();
 
-    SwUnoCrsr*                  CreateCursorForSearch(css::uno::Reference< css::text::XTextCursor > & xCrsr);
-    SwUnoCrsr*                  FindAny(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc,
+    SwUnoCrsr* 					CreateCursorForSearch(css::uno::Reference< css::text::XTextCursor > & xCrsr);
+    SwUnoCrsr* 					FindAny(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc,
                                             css::uno::Reference< css::text::XTextCursor > & xCrsr, sal_Bool bAll,
                                             sal_Int32& nResult,
                                             css::uno::Reference< css::uno::XInterface >  xLastResult);
 
-    SwXDrawPage*                GetDrawPage();
-    SwDocShell*                 GetDocShell() {return pDocShell;}
+    SwXDrawPage*				GetDrawPage();
+    SwDocShell* 				GetDocShell() {return pDocShell;}
 
-
+    
     void * SAL_CALL operator new( size_t ) throw();
     void SAL_CALL operator delete( void * ) throw();
 
 };
+/* -----------------25.10.99 11:02-------------------
 
+ --------------------------------------------------*/
 class SwXLinkTargetSupplier : public cppu::WeakImplHelper2
 <
     css::container::XNameAccess,
@@ -470,13 +477,15 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 
     //
-    void    Invalidate() {pxDoc = 0;}
+    void	Invalidate() {pxDoc = 0;}
 };
+/* -----------------26.10.99 09:05-------------------
 
+ --------------------------------------------------*/
 class SwXLinkNameAccessWrapper : public cppu::WeakImplHelper4
 <
     css::beans::XPropertySet,
@@ -489,7 +498,7 @@ class SwXLinkNameAccessWrapper : public cppu::WeakImplHelper4
     const SfxItemPropertySet*                                                       pPropSet;
     const String                                                                    sLinkSuffix;
     const String                                                                    sLinkDisplayName;
-    css::uno::Reference< css::text::XTextDocument >         xDoc;
+    css::uno::Reference< css::text::XTextDocument >  		xDoc;
     SwXTextDocument*                                                                pxDoc;
 
 
@@ -523,11 +532,13 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 
 };
+/* -----------------26.10.99 15:46-------------------
 
+ --------------------------------------------------*/
 class SwXOutlineTarget : public cppu::WeakImplHelper2
 <
     css::beans::XPropertySet,
@@ -552,7 +563,7 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 };
 #endif
@@ -578,7 +589,8 @@ public:
 };
 
 
-/*  The class SwViewOptionAdjust_Impl is used to adjust the SwViewOption of
+/*-- 06.01.2004 15:08:34---------------------------------------------------
+    The class SwViewOptionAdjust_Impl is used to adjust the SwViewOption of
     the current ViewShell so that fields are not printed as commands and
     hidden characters are always invisible. Hidden text and place holders
     should be printed according to the current print options.
@@ -586,15 +598,19 @@ public:
   -----------------------------------------------------------------------*/
 class SwViewOptionAdjust_Impl
 {
-    ViewShell &    m_rShell;
+    SwWrtShell &    m_rShell;
     SwViewOption    m_aOldViewOptions;
+//    SwViewOption    m_aRenderViewOptions;   // view options to use when rendering for PDF export or printing
+//    bool            m_bRestoreViewOptions;
 
 public:
-    SwViewOptionAdjust_Impl( ViewShell& rSh, const SwViewOption &rViewOptions );
+    SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwViewOption &rViewOptions );
     ~SwViewOptionAdjust_Impl();
-    void AdjustViewOptions( SwPrintData const* const pPrtOptions );
-    bool checkShell( const ViewShell& rCompare ) const
-    { return &rCompare == &m_rShell; }
+    
+    void AdjustViewOptions( const SwPrtOptions *pPrtOptions );
+    
+    bool checkShell( const SwWrtShell& rCompare ) const
+    { return &rCompare == &m_rShell; } 
 };
 
 

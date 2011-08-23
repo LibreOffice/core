@@ -25,12 +25,11 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=../..
 
 PRJNAME=filter
 TARGET=msfilter
-
-ENABLE_EXCEPTIONS=TRUE
+ENABLE_EXCEPTIONS=true
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
@@ -44,18 +43,17 @@ SLOFILES= \
     $(SLO)$/countryid.obj	\
     $(SLO)$/escherex.obj	\
     $(SLO)$/eschesdo.obj    \
-    $(SLO)$/mscodec.obj		\
     $(SLO)$/msdffimp.obj	\
-    $(SLO)$/msfiltertracer.obj \
-    $(SLO)$/msocximex.obj	\
     $(SLO)$/msoleexp.obj	\
-    $(SLO)$/msvbahelper.obj \
     $(SLO)$/msvbasic.obj	\
-    $(SLO)$/services.obj	\
-    $(SLO)$/svdfppt.obj		\
     $(SLO)$/svxmsbas.obj	\
-    $(SLO)$/svxmsbas2.obj       \
-    $(SLO)$/mstoolbar.obj
+    $(SLO)$/msocximex.obj	\
+    $(SLO)$/mscodec.obj		\
+    $(SLO)$/msfiltertracer.obj \
+    $(SLO)$/svdfppt.obj		\
+    $(SLO)$/svxmsbas2.obj \
+    $(SLO)$/msvbahelper.obj \
+	$(SLO)$/mstoolbar.obj\
 
 SHL1TARGET= msfilter$(DLLPOSTFIX)
 SHL1IMPLIB=	i$(TARGET)
@@ -87,10 +85,4 @@ DEF1NAME=	$(SHL1TARGET)
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(MISC)/msfilter.component
 
-$(MISC)/msfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        msfilter.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt msfilter.component

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ namespace sd
 class PresLayoutPreview : public Control
 {
 private:
-    SdPage* mpMaster;
+    SdPage*	mpMaster;
     HeaderFooterSettings maSettings;
     Size maPageSize;
     Rectangle maOutRect;
@@ -130,45 +130,45 @@ int nDateTimeFormats[nDateTimeFormatsCount] =
 class HeaderFooterTabPage : public TabPage
 {
 private:
-    FixedLine   maFLIncludeOnPage;
+    FixedLine	maFLIncludeOnPage;
 
-    CheckBox    maCBHeader;
-    FixedText   maFTHeader;
-    Edit        maTBHeader;
+    CheckBox	maCBHeader;
+    FixedText	maFTHeader;
+    Edit		maTBHeader;
 
-    FixedLine   maFLDateTime;
-    CheckBox    maCBDateTime;
-    RadioButton maRBDateTimeFixed;
+    FixedLine	maFLDateTime;
+    CheckBox	maCBDateTime;
+    RadioButton	maRBDateTimeFixed;
     RadioButton maRBDateTimeAutomatic;
-    Edit        maTBDateTimeFixed;
-    ListBox     maCBDateTimeFormat;
-    FixedText   maFTDateTimeLanguage;
-    SvxLanguageBox  maCBDateTimeLanguage;
+    Edit		maTBDateTimeFixed;
+    ListBox		maCBDateTimeFormat;
+    FixedText	maFTDateTimeLanguage;
+    SvxLanguageBox	maCBDateTimeLanguage;
 
-    FixedLine   maFLFooter;
-    CheckBox    maCBFooter;
-    FixedText   maFTFooter;
-    Edit        maTBFooter;
+    FixedLine	maFLFooter;
+    CheckBox	maCBFooter;
+    FixedText	maFTFooter;
+    Edit		maTBFooter;
 
-    FixedLine   maFLSlideNumber;
-    CheckBox    maCBSlideNumber;
+    FixedLine	maFLSlideNumber;
+    CheckBox	maCBSlideNumber;
 
-    FixedLine   maFLNotOnTitle;
-    CheckBox    maCBNotOnTitle;
+    FixedLine	maFLNotOnTitle;
+    CheckBox	maCBNotOnTitle;
 
-    PushButton      maPBApplyToAll;
-    PushButton      maPBApply;
-    CancelButton    maPBCancel;
-    HelpButton      maPBHelp;
+    PushButton		maPBApplyToAll;
+    PushButton		maPBApply;
+    CancelButton	maPBCancel;
+    HelpButton		maPBHelp;
 
-    PresLayoutPreview   maCTPreview;
+    PresLayoutPreview	maCTPreview;
 
-    SdPage*             mpCurrentPage;
-    SdDrawDocument *    mpDoc;
+    SdPage*				mpCurrentPage;
+    SdDrawDocument *	mpDoc;
     HeaderFooterDialog* mpDialog;
-    LanguageType        meOldLanguage;
+    LanguageType		meOldLanguage;
 
-    bool            mbHandoutMode;
+    bool			mbHandoutMode;
 
     DECL_LINK( UpdateOnClickHdl, void * );
 
@@ -187,11 +187,11 @@ public:
     ~HeaderFooterTabPage();
 
     static  SfxTabPage* Create( ::Window*, const SfxItemSet& );
-    static  sal_uInt16*    GetRanges();
+    static  USHORT*	   GetRanges();
 
-    void    init( const HeaderFooterSettings& rSettings, bool bNotOnTitle, bool bHasApply );
-    void    getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle );
-    void    update();
+    void	init( const HeaderFooterSettings& rSettings, bool bNotOnTitle, bool bHasApply );
+    void	getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle );
+    void	update();
 };
 
 }
@@ -231,7 +231,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
         mpCurrentPage = NULL;
     }
 
-//  maTabCtrl.SetHelpId( HID_XML_FILTER_TABPAGE_CTRL );
+//	maTabCtrl.SetHelpId( HID_XML_FILTER_TABPAGE_CTRL );
     maTabCtrl.Show();
 
     mpSlideTabPage = new HeaderFooterTabPage( this, &maTabCtrl, pDoc, pSlide, false );
@@ -288,7 +288,7 @@ HeaderFooterDialog::~HeaderFooterDialog()
 
 IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
-    const sal_uInt16 nId = pTabCtrl->GetCurPageId();
+    const USHORT nId = pTabCtrl->GetCurPageId();
     TabPage* pTabPage = pTabCtrl->GetTabPage( nId );
     pTabPage->Show();
 
@@ -299,14 +299,14 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 IMPL_LINK( HeaderFooterDialog, DeactivatePageHdl, TabControl *, EMPTYARG )
 {
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 short HeaderFooterDialog::Execute()
 {
-    sal_uInt16 nRet = TabDialog::Execute();
+    USHORT nRet = TabDialog::Execute();
     if( nRet )
         mpViewShell->GetDocSh()->SetModified();
     return nRet;
@@ -361,7 +361,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
             int nPage;
             for( nPage = 0; nPage < nPageCount; nPage++ )
             {
-                SdPage* pPage = mpDoc->GetSdPage( (sal_uInt16)nPage, PK_STANDARD );
+                SdPage* pPage = mpDoc->GetSdPage( (USHORT)nPage, PK_STANDARD );
                 change( pUndoGroup, pPage, aNewSettings );
             }
         }
@@ -402,7 +402,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
         int nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {
-            SdPage* pPage = mpDoc->GetSdPage( (sal_uInt16)nPage, PK_NOTES );
+            SdPage* pPage = mpDoc->GetSdPage( (USHORT)nPage, PK_NOTES );
 
             change( pUndoGroup, pPage, aNewSettings );
         }
@@ -539,19 +539,6 @@ HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window*
 
     FillFormatList(SVXDATEFORMAT_A);
 
-    maTBHeader.SetAccessibleRelationMemberOf(&maCBHeader);
-    maRBDateTimeFixed.SetAccessibleRelationMemberOf(&maCBDateTime);
-    maRBDateTimeAutomatic.SetAccessibleRelationMemberOf(&maCBDateTime);
-    maTBDateTimeFixed.SetAccessibleName(maRBDateTimeFixed.GetText());
-    maTBDateTimeFixed.SetAccessibleRelationMemberOf(&maCBDateTime);
-    maTBDateTimeFixed.SetAccessibleRelationLabeledBy(&maRBDateTimeFixed);
-    maCBDateTimeFormat.SetAccessibleRelationMemberOf(&maCBDateTime);
-    maCBDateTimeFormat.SetAccessibleName(maRBDateTimeAutomatic.GetText());
-    maCBDateTimeFormat.SetAccessibleRelationLabeledBy(&maRBDateTimeAutomatic);
-    maCBDateTimeLanguage.SetAccessibleRelationMemberOf(&maCBDateTime);
-    maTBFooter.SetAccessibleRelationMemberOf(&maCBFooter);
-    maCBSlideNumber.SetAccessibleRelationMemberOf(&maFLIncludeOnPage);
-    maCBFooter.SetAccessibleRelationMemberOf(&maFLIncludeOnPage);
 }
 // -----------------------------------------------------------------------
 
@@ -584,8 +571,8 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
     for( nFormat = 0; nFormat < nDateTimeFormatsCount; nFormat++ )
     {
         String aStr( SvxDateTimeField::GetFormatted( aDate, aTime, nDateTimeFormats[nFormat], *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
-        sal_uInt16 nEntry = maCBDateTimeFormat.InsertEntry( aStr );
-        maCBDateTimeFormat.SetEntryData( nEntry, (void*)(sal_IntPtr)nDateTimeFormats[nFormat] );
+        USHORT nEntry = maCBDateTimeFormat.InsertEntry( aStr );
+        maCBDateTimeFormat.SetEntryData( nEntry, (void*)nDateTimeFormats[nFormat] );
         if( nDateTimeFormats[nFormat] == eFormat )
         {
             maCBDateTimeFormat.SelectEntryPos( nEntry );
@@ -616,7 +603,7 @@ void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNot
 
     maCBDateTimeLanguage.SelectLanguage( meOldLanguage );
 
-    sal_uInt16 nPos;
+    USHORT nPos;
     for( nPos = 0; nPos < maCBDateTimeFormat.GetEntryCount(); nPos++ )
     {
         int nFormat = (int)(sal_IntPtr)maCBDateTimeFormat.GetEntryData( nPos );
@@ -719,8 +706,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
         // if set, set it on all notes master pages
         if( bSet )
         {
-            sal_uInt16 nPageCount = mpDoc->GetMasterSdPageCount( PK_NOTES );
-            sal_uInt16 nPage;
+            USHORT nPageCount = mpDoc->GetMasterSdPageCount( PK_NOTES );
+            USHORT nPage;
             for( nPage = 0; nPage < nPageCount; nPage++ )
             {
                 GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PK_NOTES ) );
@@ -734,8 +721,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     {
         // get the language from the first master page
         // or set it to all master pages
-        sal_uInt16 nPageCount = bSet ? mpDoc->GetMasterSdPageCount( PK_NOTES ) : 1;
-        sal_uInt16 nPage;
+        USHORT nPageCount = bSet ? mpDoc->GetMasterSdPageCount( PK_NOTES ) : 1;
+        USHORT nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {
             GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PK_STANDARD ) );
@@ -754,7 +741,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
         {
             Outliner* pOutl = mpDoc->GetInternalOutliner();
             pOutl->Init( OUTLINERMODE_TEXTOBJECT );
-            sal_uInt16 nOutlMode = pOutl->GetMode();
+            USHORT nOutlMode = pOutl->GetMode();
 
             EditEngine* pEdit = const_cast< EditEngine* >(&pOutl->GetEditEngine());
 
@@ -765,12 +752,12 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
             EFieldInfo aFieldInfo;
             aFieldInfo.pFieldItem = NULL;
 
-            sal_uInt16 nParaCount = pEdit->GetParagraphCount();
-            sal_uInt16 nPara;
+            USHORT nParaCount = pEdit->GetParagraphCount();
+            USHORT nPara;
             for( nPara = 0; (nPara < nParaCount) && (aFieldInfo.pFieldItem == NULL); nPara++ )
             {
-                sal_uInt16 nFieldCount = pEdit->GetFieldCount( nPara );
-                sal_uInt16 nField;
+                USHORT nFieldCount = pEdit->GetFieldCount( nPara );
+                USHORT nField;
                 for( nField = 0; (nField < nFieldCount) && (aFieldInfo.pFieldItem == NULL); nField++ )
                 {
                     aFieldInfo = pEdit->GetFieldInfo( nPara, nField );

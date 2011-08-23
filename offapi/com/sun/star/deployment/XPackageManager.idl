@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ module com { module sun { module star { module deployment {
     </p>
 
     @see thePackageManagerFactory
-    @since OOo 2.0
+    @since OOo 2.0.0
     @deprecated
          Use <type>XExtensionManager</type>.
 */
@@ -76,12 +76,12 @@ interface XPackageManager
     /** interface to notify disposing
      */
     interface com::sun::star::lang::XComponent;
-
+    
     /** interface to notify changes of the set of deployed packages of
         this manager
     */
     interface com::sun::star::util::XModifyBroadcaster;
-
+    
     /** returns the underlying deployment context, that is,
         the name of the repository..
 
@@ -89,27 +89,27 @@ interface XPackageManager
                 underlying deployment context
     */
     string getContext();
-
+    
     /** gets the supported <type>XPackageTypeInfo</type>s.
-
+        
         @return
                 supported <type>XPackageTypeInfo</type>s.
     */
     sequence<XPackageTypeInfo> getSupportedPackageTypes();
-
+    
     /** creates a command channel to be used to asynchronously abort a command.
-
+        
         @return
                 abort channel
     */
     com::sun::star::task::XAbortChannel createAbortChannel();
-
+    
     /** adds an UNO package.
 
         The properties argument is currently only used to suppress the license information
         for shared extensions.
-
-
+       
+        
         @param url
                package URL, must be UCB conform
         @param properties
@@ -138,11 +138,11 @@ interface XPackageManager
     /** adds an extension.
 
         This copies the extension. If it was from the same repository,
-        which is represented by this XPackageManager interface, then
+        which is represented by this XPackageManager insterface, then
         nothing happens.
-
+        
         @param extension
-
+               
         @param xAbortChannel
                abort channel to asynchronously abort the adding process,
                or null
@@ -158,9 +158,9 @@ interface XPackageManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
-
+    
     /** removes an UNO package.
-
+        
         @param identifier
                package identifier
         @param fileName
@@ -179,9 +179,9 @@ interface XPackageManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
-
+    
     /** gets a deployed package.
-
+        
         @param identifier
                package identifier
         @param fileName
@@ -198,9 +198,9 @@ interface XPackageManager
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::lang::IllegalArgumentException);
-
+    
     /** gets all currently deployed packages.
-
+        
         @param xAbortChannel
                abort channel to asynchronously abort the removing process,
                or null
@@ -216,14 +216,14 @@ interface XPackageManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
-
+    
     /** Expert feature: erases the underlying registry cache and reinstalls
         all previously added packages.  Please keep in mind that all
         registration status get lost.
         <p>
         Please use this in case of suspected cache inconsistencies only.
         </p>
-
+        
         @param xAbortChannel
                abort channel to asynchronously abort the adding process
         @param xCmdEnv
@@ -265,14 +265,14 @@ interface XPackageManager
             removed extensions which must be revoked
        @return
             If true - then at least one extension was removed or added. Otherwise
-            nothing was changed.
+            nothing was chaned.
     */
     boolean synchronize([in] com::sun::star::task::XAbortChannel xAbortChannel,
                      [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException);
-
+    
 
     /** returns all extensions which are currently not in use
         because the user did not accept the license.

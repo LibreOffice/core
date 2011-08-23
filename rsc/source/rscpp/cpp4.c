@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -237,7 +237,7 @@ bad_define:
         cerror("#define syntax error", NULLST);
         inmacro = FALSE;                        /* Stop <newline> hack  */
 }
-
+
 void checkparm(int c, DEFBUF* dp)
 /*
  * Replace this param if it's defined.  Note that the macro name is a
@@ -265,7 +265,7 @@ void checkparm(int c, DEFBUF* dp)
         for (cp = token; *cp != EOS;)           /* And save             */
             save(*cp++);                        /* The token itself     */
 }
-
+
 #if STRING_FORMAL
 void stparmscan(delim, dp)
 int             delim;
@@ -337,7 +337,7 @@ void stparmscan(int delim)
         workp[-1] = wp[-1];             /* Nope, reset end quote.       */
 }
 #endif
-
+
 void doundef()
 /*
  * Remove the symbol from the defined list.
@@ -385,7 +385,7 @@ void charput(int c)
             *parmp++ = (char)c;
         }
 }
-
+
 /*
  *              M a c r o   E x p a n s i o n
  */
@@ -405,7 +405,9 @@ void expand(DEFBUF* tokenp)
 {
         register int            c;
         register FILEINFO       *file;
+#ifndef ZTC  /* BP */
     extern FILEINFO     *getfile();
+#endif
 
 #if OSL_DEBUG_LEVEL > 1
         if (debug)
@@ -486,7 +488,7 @@ void expand(DEFBUF* tokenp)
             expstuff(tokenp);           /* Do actual parameters         */
         }                               /* nargs switch                 */
 }
-
+
 FILE_LOCAL int
 expcollect()
 /*
@@ -547,7 +549,7 @@ expcollect()
         }                                       /* Collect all args.    */
         return (TRUE);                          /* Normal return        */
 }
-
+
 FILE_LOCAL
 void expstuff(DEFBUF* tokenp)
 /*
@@ -561,7 +563,9 @@ void expstuff(DEFBUF* tokenp)
         char            *defend;                /* -> output buff end   */
         int             string_magic;           /* String formal hack   */
         FILEINFO        *file;                  /* Funny #include       */
+#ifndef ZTC  /* BP */
     extern FILEINFO *getfile();
+#endif
 
         file = getfile(NBUFF, tokenp->name);
         inp = tokenp->repl;                     /* -> macro replacement */
@@ -626,7 +630,7 @@ void dumpparm(char* why)
             nargs, parmp - parm, why);
         for (i = 0; i < nargs; i++) {
         fprintf( pCppOut, "parm[%d] (%d) = \"%s\"\n",
-                i + 1, (int)strlen(parlist[i]), parlist[i]);
+                i + 1, strlen(parlist[i]), parlist[i]);
         }
 }
 #endif

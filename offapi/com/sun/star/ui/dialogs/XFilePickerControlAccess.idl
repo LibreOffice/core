@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ published interface XFilePickerControlAccess: com::sun::star::ui::dialogs::XFile
 {
 
 //-------------------------------------------------------------------------
-/** Set the value of an additional element within a FilePicker.
+/** Set the value of an additional element within a FilePicker. 
 
     @param ControlId
     Identifies the element which value is to be set.
@@ -58,24 +58,24 @@ published interface XFilePickerControlAccess: com::sun::star::ui::dialogs::XFile
         Specifies an action to perform with the given value.
         aControlAction has to be one of the values defined in <type>ControlActions</type>.
         Not all of the values are valid for all controls.
-        To add a new filter to the FilePicker use the interface XFilterManager, but
+        To add a new filter to the FilePicker use the interface XFilterManager, but 
         optionally an implementation may also support adding new filter using this
         method.
-
-    @param aValue
+        
+    @param aValue 
     The value to set. For checkboxes aValue should be a boolean value that
     should be <TRUE/> if the checkbox should be checked and <FALSE/> otherwise.
-
+    
     @see com::sun::star::ui::dialogs::CommonFilePickerElementIds
     @see com::sun::star::ui::dialogs::ExtendedFilePickerElementIds
     @see com::sun::star::ui::dialogs::ControlActions
 */
-void setValue( [in] short aControlId, [in] short aControlAction, [in] any aValue );
+void setValue( [in] short aControlId, [in] short aControlAction, [in] any aValue );	
 
 //-------------------------------------------------------------------------
 /** Get the value of an additional element within a FilePicker
-
-    @param aControlId
+    
+    @param aControlId 
     Identifies the element for which value is requested.
 
     @param aControlAction
@@ -83,23 +83,23 @@ void setValue( [in] short aControlId, [in] short aControlAction, [in] any aValue
     aControlAction has to be one of the values defined in <type>ControlActions</type>.
     Not all of the values are valid for all controls.
 
-    @returns
+    @returns 
     The value of the specified element. If the specified control
     is a checkbox the returned value is a boolean that is <TRUE/>
     if the checkbox is checked <FALSE/> otherwise.
     If the specified element doesn't exist or the specified element
-    doesn't support the specified control action an empty any will be
+    doesn't support the specidfied control action an empty any will be
     returned.
 
     @see com::sun::star::ui::dialogs::CommonFilePickerElementIds
     @see com::sun::star::ui::dialogs::ExtendedFilePickerElementIds
     @see com::sun::star::ui::dialogs::ControlActions
-*/
-any getValue( [in] short aControlId, [in] short aControlAction );
+*/	
+any getValue( [in] short aControlId, [in] short aControlAction );	
 
 //-------------------------------------------------------------------------
 /** Set the label of the specified element. If the specified element
-    doesn't support setting a label, this method has no effect.
+    doesn't support setting a label, this method has no effect.		
 
     @param aControlId
     Identifies the element for which the label should be set.
@@ -113,12 +113,12 @@ any getValue( [in] short aControlId, [in] short aControlAction );
 void setLabel( [in] short aControlId, [in] string aLabel );
 
 //-------------------------------------------------------------------------
-/** Returns the label of the specified element.
-
+/** Returns the label of the specified element. 
+    
     @param aControlId
     Identifies the element for which the label should be returned.
 
-    @returns
+    @returns 
     The label of the specified element or an empty string if
     the specified element has no or supports no label or the
     specified element doesn't exist.
@@ -131,7 +131,7 @@ string getLabel( [in] short aControlId );
 //-------------------------------------------------------------------------
 /** Enables or disables a control.
 
-    @param ControlId
+    @param ControlId 
     Identifies the control.
 
     @param bEnable

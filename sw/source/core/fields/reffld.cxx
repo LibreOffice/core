@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,9 @@
 #include <flyfrm.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>
+// --> OD 2007-10-18 #i81002#
 #include <crossrefbookmark.hxx>
+// <--
 #include <ftnidx.hxx>
 #include <viewsh.hxx>
 #include <unofldmid.h>
@@ -69,20 +71,19 @@
 #include <comcore.hrc>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
-#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using ::rtl::OUString;
 
-extern void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
+extern void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos = 0 );
 
 void lcl_GetLayTree( const SwFrm* pFrm, SvPtrarr& rArr )
 {
     while( pFrm )
     {
-        if( pFrm->IsBodyFrm() )     // soll uns nicht weiter interessieren
+        if( pFrm->IsBodyFrm() )		// soll uns nicht weiter interessieren
             pFrm = pFrm->GetUpper();
         else
         {
@@ -102,11 +103,11 @@ void lcl_GetLayTree( const SwFrm* pFrm, SvPtrarr& rArr )
 }
 
 
-sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
-                    const SwTxtNode& rBehindNd, sal_uInt16 nSttPos )
+BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
+                    const SwTxtNode& rBehindNd, USHORT nSttPos )
 {
-    const SwTxtFrm *pMyFrm = (SwTxtFrm*)rMyNd.getLayoutFrm( rMyNd.GetDoc()->GetCurrentLayout(), 0,0,sal_False),
-                   *pFrm = (SwTxtFrm*)rBehindNd.getLayoutFrm( rBehindNd.GetDoc()->GetCurrentLayout(), 0,0,sal_False);
+    const SwTxtFrm *pMyFrm = (SwTxtFrm*)rMyNd.GetFrm(0,0,FALSE),
+                   *pFrm = (SwTxtFrm*)rBehindNd.GetFrm(0,0,FALSE);
 
     while( pFrm && !pFrm->IsInside( nSttPos ) )
         pFrm = (SwTxtFrm*)pFrm->GetFollow();
@@ -114,15 +115,15 @@ sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
         pMyFrm = (SwTxtFrm*)pMyFrm->GetFollow();
 
     if( !pFrm || !pMyFrm || pFrm == pMyFrm )
-        return sal_False;
+        return FALSE;
 
     SvPtrarr aRefArr( 10, 10 ), aArr( 10, 10 );
     ::lcl_GetLayTree( pFrm, aRefArr );
     ::lcl_GetLayTree( pMyFrm, aArr );
 
-    sal_uInt16 nRefCnt = aRefArr.Count() - 1, nCnt = aArr.Count() - 1;
-    sal_Bool bVert = sal_False;
-    sal_Bool bR2L = sal_False;
+    USHORT nRefCnt = aRefArr.Count() - 1, nCnt = aArr.Count() - 1;
+    BOOL bVert = FALSE;
+    BOOL bR2L = FALSE;
 
     // solange bis ein Frame ungleich ist ?
     while( nRefCnt && nCnt && aRefArr[ nRefCnt ] == aArr[ nCnt ] )
@@ -146,7 +147,7 @@ sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
     const SwFrm* pFldFrm = (const SwFrm*)aArr[ nCnt ];
 
     // unterschiedliche Frames, dann ueberpruefe deren Y-/X-Position
-    sal_Bool bRefIsLower = sal_False;
+    BOOL bRefIsLower = FALSE;
     if( ( FRM_COLUMN | FRM_CELL ) & pFldFrm->GetType() ||
         ( FRM_COLUMN | FRM_CELL ) & pRefFrm->GetType() )
     {
@@ -180,7 +181,7 @@ sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
             pRefFrm = (const SwFrm*)aRefArr[ nRefCnt - 1 ];
     }
 
-    if( pRefFrm )               // als Flag missbrauchen
+    if( pRefFrm ) 				// als Flag missbrauchen
     {
         if( bVert )
         {
@@ -211,8 +212,8 @@ sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
 
 
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFldType,
-                              const String& rSetRef, sal_uInt16 nSubTyp,
-                              sal_uInt16 nSeqenceNo, sal_uLong nFmt )
+                              const String& rSetRef, USHORT nSubTyp,
+                              USHORT nSeqenceNo, ULONG nFmt )
     : SwField( pFldType, nFmt ),
       sSetRefName( rSetRef ),
       nSubType( nSubTyp ),
@@ -229,12 +230,12 @@ String SwGetRefField::GetDescription() const
     return SW_RES(STR_REFERENCE);
 }
 
-sal_uInt16 SwGetRefField::GetSubType() const
+USHORT SwGetRefField::GetSubType() const
 {
     return nSubType;
 }
 
-void SwGetRefField::SetSubType( sal_uInt16 n )
+void SwGetRefField::SetSubType( USHORT n )
 {
     nSubType = n;
 }
@@ -255,7 +256,7 @@ bool SwGetRefField::IsRefToNumItemCrossRefBookmark() const
 const SwTxtNode* SwGetRefField::GetReferencedTxtNode() const
 {
     SwDoc* pDoc = dynamic_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
-    sal_uInt16 nDummy = USHRT_MAX;
+    USHORT nDummy = USHRT_MAX;
     return SwGetRefFieldType::FindAnchor( pDoc, sSetRefName, nSubType, nSeqNo, &nDummy );
 }
 // <--
@@ -274,8 +275,11 @@ String SwGetRefField::Expand() const
 }
 
 
-String SwGetRefField::GetFieldName() const
+String SwGetRefField::GetCntnt(BOOL bName) const
 {
+    if( !bName )
+        return Expand();
+
     String aStr(GetTyp()->GetName());
     aStr += ' ';
     aStr += sSetRefName;
@@ -288,8 +292,8 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     sTxt.Erase();
 
     SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
-    sal_uInt16 nStt = USHRT_MAX;
-    sal_uInt16 nEnd = USHRT_MAX;
+    USHORT nStt = USHRT_MAX;
+    USHORT nEnd = USHRT_MAX;
     SwTxtNode* pTxtNd = SwGetRefFieldType::FindAnchor( pDoc, sSetRefName,
                                         nSubType, nSeqNo, &nStt, &nEnd );
     if ( !pTxtNd )
@@ -356,7 +360,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
             case REF_ENDNOTE:
                 {
                     // die Nummer oder den NumString besorgen
-                    sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
+                    USHORT n, nFtnCnt = pDoc->GetFtnIdxs().Count();
                     SwTxtFtn* pFtnIdx;
                     for( n = 0; n < nFtnCnt; ++n )
                         if( nSeqNo == (pFtnIdx = pDoc->GetFtnIdxs()[ n ])->GetSeqRefNo() )
@@ -364,12 +368,12 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                             sTxt = pFtnIdx->GetFtn().GetViewNumStr( *pDoc );
                             break;
                         }
-                    nStt = nEnd;        // kein Bereich, der String ist fertig
+                    nStt = nEnd;		// kein Bereich, der String ist fertig
                 }
                 break;
             }
 
-            if( nStt != nEnd )      // ein Bereich?
+            if( nStt != nEnd )		// ein Bereich?
             {
                 sTxt = pTxtNd->GetExpandTxt( nStt, nEnd - nStt );
 
@@ -392,14 +396,14 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     case REF_PAGE:
     case REF_PAGE_PGDESC:
         {
-            const SwTxtFrm* pFrm = (SwTxtFrm*)pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0,0,sal_False),
+            const SwTxtFrm* pFrm = (SwTxtFrm*)pTxtNd->GetFrm(0,0,FALSE),
                         *pSave = pFrm;
             while( pFrm && !pFrm->IsInside( nStt ) )
                 pFrm = (SwTxtFrm*)pFrm->GetFollow();
 
             if( pFrm || 0 != ( pFrm = pSave ))
             {
-                sal_uInt16 nPageNo = pFrm->GetVirtPageNum();
+                USHORT nPageNo = pFrm->GetVirtPageNum();
                 const SwPageFrm *pPage;
                 if( REF_PAGE_PGDESC == GetFormat() &&
                     0 != ( pPage = pFrm->FindPageFrm() ) &&
@@ -414,13 +418,13 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     case REF_CHAPTER:
         {
             // ein bischen trickreich: suche irgend einen Frame
-            const SwFrm* pFrm = pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout() );
+            const SwFrm* pFrm = pTxtNd->GetFrm();
             if( pFrm )
             {
                 SwChapterFieldType aFldTyp;
                 SwChapterField aFld( &aFldTyp, 0 );
                 aFld.SetLevel( MAXLEVEL - 1 );
-                aFld.ChangeExpansion( pFrm, pTxtNd, sal_True );
+                aFld.ChangeExpansion( pFrm, pTxtNd, TRUE );
                 sTxt = aFld.GetNumber();
             }
         }
@@ -466,7 +470,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
         break;
     // <--
     default:
-        OSL_FAIL("<SwGetRefField::UpdateField(..)> - unknown format type");
+        DBG_ERROR("<SwGetRefField::UpdateField(..)> - unknown format type");
     }
 }
 
@@ -577,7 +581,10 @@ String SwGetRefField::GetPar2() const
     return Expand();
 }
 
-bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+/*-----------------06.03.98 13:34-------------------
+
+--------------------------------------------------*/
+bool SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -586,14 +593,14 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             sal_Int16 nPart = 0;
             switch(GetFormat())
             {
-            case REF_PAGE       : nPart = ReferenceFieldPart::PAGE                ; break;
-            case REF_CHAPTER    : nPart = ReferenceFieldPart::CHAPTER             ; break;
-            case REF_CONTENT    : nPart = ReferenceFieldPart::TEXT                ; break;
-            case REF_UPDOWN     : nPart = ReferenceFieldPart::UP_DOWN             ; break;
-            case REF_PAGE_PGDESC: nPart = ReferenceFieldPart::PAGE_DESC           ; break;
-            case REF_ONLYNUMBER : nPart = ReferenceFieldPart::CATEGORY_AND_NUMBER ; break;
-            case REF_ONLYCAPTION: nPart = ReferenceFieldPart::ONLY_CAPTION        ; break;
-            case REF_ONLYSEQNO  : nPart = ReferenceFieldPart::ONLY_SEQUENCE_NUMBER; break;
+            case REF_PAGE		: nPart = ReferenceFieldPart::PAGE 				  ; break;
+            case REF_CHAPTER	: nPart = ReferenceFieldPart::CHAPTER	 		  ; break;
+            case REF_CONTENT	: nPart = ReferenceFieldPart::TEXT 				  ; break;
+            case REF_UPDOWN		: nPart = ReferenceFieldPart::UP_DOWN 			  ; break;
+            case REF_PAGE_PGDESC: nPart = ReferenceFieldPart::PAGE_DESC 		  ; break;
+            case REF_ONLYNUMBER	: nPart = ReferenceFieldPart::CATEGORY_AND_NUMBER ; break;
+            case REF_ONLYCAPTION: nPart = ReferenceFieldPart::ONLY_CAPTION 		  ; break;
+            case REF_ONLYSEQNO	: nPart = ReferenceFieldPart::ONLY_SEQUENCE_NUMBER; break;
             // --> OD 2007-09-06 #i81002#
             case REF_NUMBER:              nPart = ReferenceFieldPart::NUMBER;              break;
             case REF_NUMBER_NO_CONTEXT:   nPart = ReferenceFieldPart::NUMBER_NO_CONTEXT;   break;
@@ -611,7 +618,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             case  REF_SETREFATTR : nSource = ReferenceFieldSource::REFERENCE_MARK; break;
             case  REF_SEQUENCEFLD: nSource = ReferenceFieldSource::SEQUENCE_FIELD; break;
             case  REF_BOOKMARK   : nSource = ReferenceFieldSource::BOOKMARK; break;
-            case  REF_OUTLINE    : OSL_FAIL("not implemented"); break;
+            case  REF_OUTLINE    : DBG_ERROR("not implemented"); break;
             case  REF_FOOTNOTE   : nSource = ReferenceFieldSource::FOOTNOTE; break;
             case  REF_ENDNOTE    : nSource = ReferenceFieldSource::ENDNOTE; break;
             }
@@ -644,12 +651,14 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= (sal_Int16)nSeqNo;
         break;
     default:
-        OSL_FAIL("illegal property");
+        DBG_ERROR("illegal property");
     }
     return true;
 }
+/*-----------------06.03.98 13:34-------------------
 
-bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+--------------------------------------------------*/
+bool SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     String sTmp;
     switch( nWhichId )
@@ -660,13 +669,13 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             rAny >>= nPart;
             switch(nPart)
             {
-            case ReferenceFieldPart::PAGE:                  nPart = REF_PAGE; break;
-            case ReferenceFieldPart::CHAPTER:               nPart = REF_CHAPTER; break;
-            case ReferenceFieldPart::TEXT:                  nPart = REF_CONTENT; break;
-            case ReferenceFieldPart::UP_DOWN:               nPart = REF_UPDOWN; break;
-            case ReferenceFieldPart::PAGE_DESC:             nPart = REF_PAGE_PGDESC; break;
-            case ReferenceFieldPart::CATEGORY_AND_NUMBER:   nPart = REF_ONLYNUMBER; break;
-            case ReferenceFieldPart::ONLY_CAPTION:          nPart = REF_ONLYCAPTION; break;
+            case ReferenceFieldPart::PAGE: 					nPart = REF_PAGE; break;
+            case ReferenceFieldPart::CHAPTER:	 			nPart = REF_CHAPTER; break;
+            case ReferenceFieldPart::TEXT: 					nPart = REF_CONTENT; break;
+            case ReferenceFieldPart::UP_DOWN: 				nPart = REF_UPDOWN; break;
+            case ReferenceFieldPart::PAGE_DESC: 			nPart = REF_PAGE_PGDESC; break;
+            case ReferenceFieldPart::CATEGORY_AND_NUMBER: 	nPart = REF_ONLYNUMBER; break;
+            case ReferenceFieldPart::ONLY_CAPTION: 			nPart = REF_ONLYCAPTION; break;
             case ReferenceFieldPart::ONLY_SEQUENCE_NUMBER : nPart = REF_ONLYSEQNO; break;
             // --> OD 2007-09-06 #i81002#
             case ReferenceFieldPart::NUMBER:              nPart = REF_NUMBER;              break;
@@ -693,9 +702,9 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
                 ConvertProgrammaticToUIName();
             }
             break;
-            case ReferenceFieldSource::BOOKMARK       : nSubType = REF_BOOKMARK   ; break;
-            case ReferenceFieldSource::FOOTNOTE       : nSubType = REF_FOOTNOTE   ; break;
-            case ReferenceFieldSource::ENDNOTE        : nSubType = REF_ENDNOTE    ; break;
+            case ReferenceFieldSource::BOOKMARK		  : nSubType = REF_BOOKMARK   ; break;
+            case ReferenceFieldSource::FOOTNOTE		  : nSubType = REF_FOOTNOTE   ; break;
+            case ReferenceFieldSource::ENDNOTE		  : nSubType = REF_ENDNOTE    ; break;
             }
         }
         break;
@@ -719,11 +728,13 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     default:
-        OSL_FAIL("illegal property");
+        DBG_ERROR("illegal property");
     }
     return true;
 }
+/* -----------------------------11.01.2002 12:50------------------------------
 
+ ---------------------------------------------------------------------------*/
 void SwGetRefField::ConvertProgrammaticToUIName()
 {
     if(GetTyp() && REF_SEQUENCEFLD == nSubType)
@@ -734,7 +745,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
         if(!pDoc->GetFldType(RES_SETEXPFLD, rPar1, false))
         {
             sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-            sal_uInt16 nResId = USHRT_MAX;
+            USHORT nResId = USHRT_MAX;
             switch( nPoolId )
             {
                 case RES_POOLCOLL_LABEL_ABB:
@@ -755,6 +766,10 @@ void SwGetRefField::ConvertProgrammaticToUIName()
         }
     }
 }
+/*-----------------JP: 18.06.93 -------------------
+ Get-Referenz-Type
+ --------------------------------------------------*/
+
 
 SwGetRefFieldType::SwGetRefFieldType( SwDoc* pDc )
     : SwFieldType( RES_GETREFFLD ), pDoc( pDc )
@@ -767,13 +782,14 @@ SwFieldType* SwGetRefFieldType::Copy() const
 }
 
 
-void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwGetRefFieldType::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     // Update auf alle GetReferenz-Felder
     if( !pNew && !pOld )
     {
-        SwIterator<SwFmtFld,SwFieldType> aIter( *this );
-        for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+        SwClientIter aIter( *this );
+        for( SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
+                        pFld; pFld = (SwFmtFld*)aIter.Next() )
         {
             // nur die GetRef-Felder Updaten
             //JP 3.4.2001: Task 71231 - we need the correct language
@@ -793,12 +809,12 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
         }
     }
     // weiter an die Text-Felder, diese "Expandieren" den Text
-    NotifyClients( pOld, pNew );
+    SwModify::Modify( pOld, pNew );
 }
 
 SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
-                                        sal_uInt16 nSubType, sal_uInt16 nSeqNo,
-                                        sal_uInt16* pStt, sal_uInt16* pEnd )
+                                        USHORT nSubType, USHORT nSeqNo,
+                                        USHORT* pStt, USHORT* pEnd )
 {
     OSL_ENSURE( pStt, "warum wird keine StartPos abgefragt?" );
 
@@ -824,8 +840,9 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
             if( pFldType && pFldType->GetDepends() &&
                 nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)pFldType)->GetType() )
             {
-                SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-                for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+                SwClientIter aIter( *pFldType );
+                for( SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
+                                pFld; pFld = (SwFmtFld*)aIter.Next() )
                 {
                     if( pFld->GetTxtFld() && nSeqNo ==
                         ((SwSetExpField*)pFld->GetFld())->GetSeqNumber() )
@@ -850,7 +867,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
                 const ::sw::mark::IMark* pBkmk = ppMark->get();
                 const SwPosition* pPos = &pBkmk->GetMarkStart();
 
-                pTxtNd = pPos->nNode.GetNode().GetTxtNode();
+                pTxtNd = pDoc->GetNodes()[ pPos->nNode ]->GetTxtNode();
                 *pStt = pPos->nContent.GetIndex();
                 if(pEnd)
                 {
@@ -881,7 +898,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
     case REF_FOOTNOTE:
     case REF_ENDNOTE:
         {
-            sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
+            USHORT n, nFtnCnt = pDoc->GetFtnIdxs().Count();
             SwTxtFtn* pFtnIdx;
             for( n = 0; n < nFtnCnt; ++n )
                 if( nSeqNo == (pFtnIdx = pDoc->GetFtnIdxs()[ n ])->GetSeqRefNo() )
@@ -911,24 +928,24 @@ struct _RefIdsMap
     String aName;
     SvUShortsSort aIds, aDstIds, aIdsMap;
     SvUShorts aMap;
-    sal_Bool bInit;
+    BOOL bInit;
 
     _RefIdsMap( const String& rName )
         : aName( rName ), aIds( 16, 16 ), aIdsMap( 16, 16 ), aMap( 16, 16 ),
-        bInit( sal_False )
+        bInit( FALSE )
     {}
 
     void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
-                    sal_Bool bField = sal_True );
+                    BOOL bField = TRUE );
 
-    sal_Bool IsInit() const { return bInit; }
+    BOOL IsInit() const { return bInit; }
 };
 
 SV_DECL_PTRARR_DEL( _RefIdsMaps, _RefIdsMap*, 5, 5 )
 SV_IMPL_PTRARR( _RefIdsMaps, _RefIdsMap* )
 
 void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
-                        sal_Bool bField )
+                        BOOL bField )
 {
 
     if( !bInit )
@@ -936,20 +953,22 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
         if( bField )
         {
             const SwTxtNode* pNd;
-            SwFieldType* pType;
-            if( 0 != ( pType = rDestDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
+            SwModify* pMod;
+            if( 0 != ( pMod = rDestDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
             {
-                SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-                for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
+                SwClientIter aIter( *pMod );
+                for( SwFmtFld* pF = (SwFmtFld*)aIter.First( TYPE( SwFmtFld )); pF;
+                    pF = (SwFmtFld*)aIter.Next() )
                     if( pF->GetTxtFld() &&
                         0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
                         pNd->GetNodes().IsDocNodes() )
                         aIds.Insert( ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
             }
-            if( 0 != ( pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
+            if( 0 != ( pMod = rDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
             {
-                SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-                for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
+                SwClientIter aIter( *pMod );
+                for( SwFmtFld* pF = (SwFmtFld*)aIter.First( TYPE( SwFmtFld )); pF;
+                        pF = (SwFmtFld*)aIter.Next() )
                     if( pF->GetTxtFld() &&
                         0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
                         pNd->GetNodes().IsDocNodes() )
@@ -958,19 +977,19 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
         }
         else
         {
-            sal_uInt16 n;
+            USHORT n;
 
             for( n = rDestDoc.GetFtnIdxs().Count(); n; )
                 aIds.Insert( rDestDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
             for( n = rDoc.GetFtnIdxs().Count(); n; )
                 aDstIds.Insert( rDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
         }
-        bInit = sal_True;
+        bInit = TRUE;
     }
 
     // dann teste mal, ob die Nummer schon vergeben ist
     // oder ob eine neue bestimmt werden muss.
-    sal_uInt16 nPos, nSeqNo = rFld.GetSeqNo();
+    USHORT nPos, nSeqNo = rFld.GetSeqNo();
     if( aIds.Seek_Entry( nSeqNo ) && aDstIds.Seek_Entry( nSeqNo ))
     {
         // ist schon vergeben, also muss eine neue
@@ -979,7 +998,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
             rFld.SetSeqNo( aMap[ nPos ] );
         else
         {
-            sal_uInt16 n;
+            USHORT n;
 
             for( n = 0; n < aIds.Count(); ++n )
                 if( n != aIds[ n ] )
@@ -995,11 +1014,12 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
             // Id umsetzen
             if( bField )
             {
-                SwFieldType* pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false );
-                if( pType )
+                SwModify* pMod = rDoc.GetFldType( RES_SETEXPFLD, aName, false );
+                if( pMod )
                 {
-                    SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-                    for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
+                    SwClientIter aIter( *pMod );
+                    for( SwFmtFld* pF = (SwFmtFld*)aIter.First( TYPE( SwFmtFld )); pF;
+                            pF = (SwFmtFld*)aIter.Next() )
                         if( pF->GetTxtFld() && nSeqNo ==
                             ((SwSetExpField*)pF->GetFld())->GetSeqNumber() )
                             ((SwSetExpField*)pF->GetFld())->SetSeqNumber( n );
@@ -1008,7 +1028,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
             else
             {
                 SwTxtFtn* pFtnIdx;
-                for( sal_uInt16 i = 0, nCnt = rDoc.GetFtnIdxs().Count(); i < nCnt; ++i )
+                for( USHORT i = 0, nCnt = rDoc.GetFtnIdxs().Count(); i < nCnt; ++i )
                     if( nSeqNo == (pFtnIdx = rDoc.GetFtnIdxs()[ i ])->GetSeqRefNo() )
                     {
                         pFtnIdx->SetSeqNo( n );
@@ -1037,16 +1057,17 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
         _RefIdsMap aFntMap( aEmptyStr );
         _RefIdsMaps aFldMap;
 
-        SwIterator<SwFmtFld,SwFieldType> aIter( *this );
-        for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+        SwClientIter aIter( *this );
+        for( SwClient* pFld = aIter.First( TYPE( SwFmtFld ));
+                pFld; pFld = aIter.Next() )
         {
-            SwGetRefField& rRefFld = *(SwGetRefField*)pFld->GetFld();
+            SwGetRefField& rRefFld = *(SwGetRefField*)((SwFmtFld*)pFld)->GetFld();
             switch( rRefFld.GetSubType() )
             {
             case REF_SEQUENCEFLD:
                 {
                     _RefIdsMap* pMap = 0;
-                    for( sal_uInt16 n = aFldMap.Count(); n; )
+                    for( USHORT n = aFldMap.Count(); n; )
                         if( aFldMap[ --n ]->aName == rRefFld.GetSetRefName() )
                         {
                             pMap = aFldMap[ n ];
@@ -1058,13 +1079,13 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
                         aFldMap.C40_INSERT( _RefIdsMap, pMap, aFldMap.Count() );
                     }
 
-                    pMap->Check( *pDoc, rDestDoc, rRefFld, sal_True );
+                    pMap->Check( *pDoc, rDestDoc, rRefFld, TRUE );
                 }
                 break;
 
             case REF_FOOTNOTE:
             case REF_ENDNOTE:
-                aFntMap.Check( *pDoc, rDestDoc, rRefFld, sal_False );
+                aFntMap.Check( *pDoc, rDestDoc, rRefFld, FALSE );
                 break;
             }
         }

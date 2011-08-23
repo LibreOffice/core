@@ -44,6 +44,8 @@ OBJFILES=\
     $(OBJ)$/srcharg.obj \
     $(OBJ)$/ucbdemo.obj
 
+#SRSFILES= $(SRS)$/ucbdemo.srs
+
 #
 # UCBDEMO
 #
@@ -51,6 +53,7 @@ APP1TARGET=	ucbdemo
 APP1OBJS=\
     $(OBJ)$/srcharg.obj \
     $(OBJ)$/ucbdemo.obj
+#APP1RES=	$(RES)$/ucbdemo.res
 
 .IF "$(COMPHELPERLIB)"==""
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,16 +61,17 @@ namespace svxform
         // --------------------------------------------------------
         inline double getValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _rxVariant,
-            const ::com::sun::star::util::Date& _rNullDate ) const
+            const ::com::sun::star::util::Date& _rNullDate,
+            sal_Int16 _nKeyType) const
         {
             double nReturn(0);
             if ( ensureLoaded() )
-                nReturn = m_xTypeConversion->getValue( _rxVariant, _rNullDate );
+                nReturn = m_xTypeConversion->getValue(_rxVariant, _rNullDate, _nKeyType);
             return nReturn;
         }
 
         // --------------------------------------------------------
-        inline ::rtl::OUString getFormattedValue(
+        inline ::rtl::OUString getValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::util::Date& _rNullDate,
@@ -79,13 +80,13 @@ namespace svxform
         {
             ::rtl::OUString sReturn;
             if ( ensureLoaded() )
-                sReturn = m_xTypeConversion->getFormattedValue(_rxColumn, _rxFormatter, _rNullDate, _nKey, _nKeyType);
+                sReturn = m_xTypeConversion->getValue(_rxColumn, _rxFormatter, _rNullDate, _nKey, _nKeyType);
             return sReturn;
         }
     };
 
 //........................................................................
-}   // namespace svxform
+}	// namespace svxform
 //........................................................................
 
 #endif // SVX_TYPECONVERSION_CLIENT_HXX

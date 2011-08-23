@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#define _RTL_DIGEST_C_
+#define _RTL_DIGEST_C_ "$Revision: 1.9 $"
 
 #include <sal/types.h>
 #include <sal/macros.h>
@@ -684,7 +684,7 @@ static void __rtl_digest_endMD5 (DigestContextMD5 *ctx)
         0x80, 0x00, 0x00, 0x00
     };
     register const sal_uInt8 *p = end;
-
+    
     register sal_uInt32 *X;
     register int         i;
 
@@ -1132,7 +1132,7 @@ static void __rtl_digest_endSHA (DigestContextSHA *ctx)
         0x80, 0x00, 0x00, 0x00
     };
     register const sal_uInt8 *p = end;
-
+    
     register sal_uInt32 *X;
     register int         i;
 

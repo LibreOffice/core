@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,21 +128,21 @@ enum FontStrikeout { STRIKEOUT_NONE, STRIKEOUT_SINGLE, STRIKEOUT_DOUBLE,
 #ifndef ENUM_FONTEMPHASISMARK_DECLARED
 #define ENUM_FONTEMPHASISMARK_DECLARED
 
-typedef sal_uInt16 FontEmphasisMark;
-#define EMPHASISMARK_NONE           ((FontEmphasisMark)0x0000)
-#define EMPHASISMARK_DOT            ((FontEmphasisMark)0x0001)
-#define EMPHASISMARK_CIRCLE         ((FontEmphasisMark)0x0002)
-#define EMPHASISMARK_DISC           ((FontEmphasisMark)0x0003)
-#define EMPHASISMARK_ACCENT         ((FontEmphasisMark)0x0004)
-#define EMPHASISMARK_STYLE          ((FontEmphasisMark)0x00FF)
-#define EMPHASISMARK_POS_ABOVE      ((FontEmphasisMark)0x1000)
-#define EMPHASISMARK_POS_BELOW      ((FontEmphasisMark)0x2000)
+typedef USHORT FontEmphasisMark;
+#define EMPHASISMARK_NONE			((FontEmphasisMark)0x0000)
+#define EMPHASISMARK_DOT			((FontEmphasisMark)0x0001)
+#define EMPHASISMARK_CIRCLE 		((FontEmphasisMark)0x0002)
+#define EMPHASISMARK_DISC			((FontEmphasisMark)0x0003)
+#define EMPHASISMARK_ACCENT 		((FontEmphasisMark)0x0004)
+#define EMPHASISMARK_STYLE			((FontEmphasisMark)0x00FF)
+#define EMPHASISMARK_POS_ABOVE		((FontEmphasisMark)0x1000)
+#define EMPHASISMARK_POS_BELOW		((FontEmphasisMark)0x2000)
 
 // Only for kompability
-#define EMPHASISMARK_DOTS_ABOVE     (EMPHASISMARK_DOT | EMPHASISMARK_POS_ABOVE)
-#define EMPHASISMARK_DOTS_BELOW     (EMPHASISMARK_DOT | EMPHASISMARK_POS_BELOW)
-#define EMPHASISMARK_SIDE_DOTS      (EMPHASISMARK_ACCENT | EMPHASISMARK_POS_ABOVE)
-#define EMPHASISMARK_CIRCLE_ABOVE   (EMPHASISMARK_CIRCLE | EMPHASISMARK_POS_ABOVE)
+#define EMPHASISMARK_DOTS_ABOVE 	(EMPHASISMARK_DOT | EMPHASISMARK_POS_ABOVE)
+#define EMPHASISMARK_DOTS_BELOW 	(EMPHASISMARK_DOT | EMPHASISMARK_POS_BELOW)
+#define EMPHASISMARK_SIDE_DOTS		(EMPHASISMARK_ACCENT | EMPHASISMARK_POS_ABOVE)
+#define EMPHASISMARK_CIRCLE_ABOVE	(EMPHASISMARK_CIRCLE | EMPHASISMARK_POS_ABOVE)
 
 #endif
 
@@ -170,6 +170,6 @@ enum FontAntiAlias { ANTIALIAS_DONTKNOW, ANTIALIAS_FALSE, ANTIALIAS_TRUE };
 
 #endif
 
-#endif  // _TOOLS_FONTENUM_HXX
+#endif	// _TOOLS_FONTENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

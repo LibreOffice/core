@@ -795,8 +795,8 @@ testcase tFunctionsCombineCharacter
     Call hNewDocument
 
     '/// Open test file pageTest.sxw
-    hFileOpenLocally( sTestFile )
-    
+    Call hFileOpen(sTestFile)
+    Call sMakeReadOnlyDocumentEditable
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Right>"
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdstr.hrc"
+#include "svdglob.hxx"
 #include <svx/cube3d.hxx>
-#include "svx/globl3d.hxx"
+#include "globl3d.hxx"
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <svx/sdr/contact/viewcontactofe3dcube.hxx>
@@ -56,7 +56,7 @@ TYPEINIT1(E3dCubeObj, E3dCompoundObject);
 \************************************************************************/
 
 E3dCubeObj::E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, const basegfx::B3DVector& r3DSize)
-:   E3dCompoundObject(rDefault)
+:	E3dCompoundObject(rDefault)
 {
     // Defaults setzen
     SetDefaultAttributes(rDefault);
@@ -67,7 +67,7 @@ E3dCubeObj::E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, c
 }
 
 E3dCubeObj::E3dCubeObj()
-:   E3dCompoundObject()
+:	E3dCompoundObject()
 {
     // Defaults setzen
     E3dDefaultAttributes aDefault;
@@ -88,7 +88,7 @@ void E3dCubeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-sal_uInt16 E3dCubeObj::GetObjIdentifier() const
+UINT16 E3dCubeObj::GetObjIdentifier() const
 {
     return E3D_CUBEOBJ_ID;
 }
@@ -99,14 +99,29 @@ sal_uInt16 E3dCubeObj::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-SdrObject *E3dCubeObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
+SdrObject *E3dCubeObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
 {
     return NULL;
 }
 
-E3dCubeObj* E3dCubeObj::Clone() const
+/*************************************************************************
+|*
+|* Zuweisungsoperator
+|*
+\************************************************************************/
+
+void E3dCubeObj::operator=(const SdrObject& rObj)
 {
-    return CloneHelper< E3dCubeObj >();
+    // erstmal alle Childs kopieren
+    E3dCompoundObject::operator=(rObj);
+
+    // weitere Parameter kopieren
+    const E3dCubeObj& r3DObj = (const E3dCubeObj&)rObj;
+
+    aCubePos = r3DObj.aCubePos;
+    aCubeSize = r3DObj.aCubeSize;
+    bPosIsCenter = r3DObj.bPosIsCenter;
+    nSideFlags = r3DObj.nSideFlags;
 }
 
 /*************************************************************************
@@ -133,7 +148,7 @@ void E3dCubeObj::SetCubeSize(const basegfx::B3DVector& rNew)
     }
 }
 
-void E3dCubeObj::SetPosIsCenter(sal_Bool bNew)
+void E3dCubeObj::SetPosIsCenter(BOOL bNew)
 {
     if(bPosIsCenter != bNew)
     {
@@ -142,7 +157,7 @@ void E3dCubeObj::SetPosIsCenter(sal_Bool bNew)
     }
 }
 
-void E3dCubeObj::SetSideFlags(sal_uInt16 nNew)
+void E3dCubeObj::SetSideFlags(UINT16 nNew)
 {
     if(nSideFlags != nNew)
     {

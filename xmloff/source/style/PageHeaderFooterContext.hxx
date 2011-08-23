@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,15 +32,15 @@
 
 class PageHeaderFooterContext : public SvXMLImportContext
 {
-    ::std::vector< XMLPropertyState > &     rProperties;
-    sal_Int32                               nStartIndex;
-    sal_Int32                               nEndIndex;
-    sal_Bool                                bHeader;
+    ::std::vector< XMLPropertyState > &		rProperties;
+    sal_Int32								nStartIndex;
+    sal_Int32								nEndIndex;
+    sal_Bool								bHeader;
     const UniReference < SvXMLImportPropertyMapper > rMap;
 
 public:
 
-    PageHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+    PageHeaderFooterContext( SvXMLImport& rImport, USHORT nPrfx,
                        const rtl::OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -51,7 +51,7 @@ public:
 
     virtual ~PageHeaderFooterContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

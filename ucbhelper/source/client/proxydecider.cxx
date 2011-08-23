@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,15 +52,13 @@
 using namespace com::sun::star;
 using namespace ucbhelper;
 
-#define CONFIG_ROOT_KEY      "org.openoffice.Inet/Settings"
-#define PROXY_TYPE_KEY       "ooInetProxyType"
-#define NO_PROXY_LIST_KEY    "ooInetNoProxy"
-#define HTTP_PROXY_NAME_KEY  "ooInetHTTPProxyName"
-#define HTTP_PROXY_PORT_KEY  "ooInetHTTPProxyPort"
-#define HTTPS_PROXY_NAME_KEY "ooInetHTTPSProxyName"
-#define HTTPS_PROXY_PORT_KEY "ooInetHTTPSProxyPort"
-#define FTP_PROXY_NAME_KEY   "ooInetFTPProxyName"
-#define FTP_PROXY_PORT_KEY   "ooInetFTPProxyPort"
+#define CONFIG_ROOT_KEY     "org.openoffice.Inet/Settings"
+#define PROXY_TYPE_KEY      "ooInetProxyType"
+#define NO_PROXY_LIST_KEY   "ooInetNoProxy"
+#define HTTP_PROXY_NAME_KEY "ooInetHTTPProxyName"
+#define HTTP_PROXY_PORT_KEY "ooInetHTTPProxyPort"
+#define FTP_PROXY_NAME_KEY  "ooInetFTPProxyName"
+#define FTP_PROXY_PORT_KEY  "ooInetFTPProxyPort"
 
 //=========================================================================
 namespace ucbhelper
@@ -95,7 +93,7 @@ class HostnameCache
     typedef std::pair< rtl::OUString, rtl::OUString > HostListEntry;
 
     std::list< HostListEntry >     m_aHostList;
-    sal_uInt32                     m_nCapacity;
+    sal_uInt32                     m_nCapacity;                           
 
 public:
     explicit HostnameCache( sal_uInt32 nCapacity )
@@ -112,10 +110,10 @@ public:
         {
             if ( (*it).first == rKey )
             {
-                rValue = (*it).second;
+                rValue = (*it).second; 
                 return true;
             }
-            ++it;
+            it++;
         }
         return false;
     }
@@ -125,7 +123,7 @@ public:
         if ( m_aHostList.size() == m_nCapacity )
             m_aHostList.resize( m_nCapacity / 2 );
 
-        m_aHostList.push_front( HostListEntry( rKey, rValue ) );
+        m_aHostList.push_front( HostListEntry( rKey, rValue ) ); 
     }
 };
 
@@ -135,7 +133,6 @@ class InternetProxyDecider_Impl :
 {
     mutable osl::Mutex                       m_aMutex;
     InternetProxyServer                      m_aHttpProxy;
-    InternetProxyServer                      m_aHttpsProxy;
     InternetProxyServer                      m_aFtpProxy;
     const InternetProxyServer                m_aEmptyProxy;
     sal_Int32                                m_nProxyType;
@@ -250,61 +247,6 @@ bool WildCard::Matches( const rtl::OUString& rString ) const
 }
 
 //=========================================================================
-bool getConfigStringValue(
-    const uno::Reference< container::XNameAccess > & xNameAccess,
-    const char * key,
-    rtl::OUString & value )
-{
-    try
-    {
-        if ( !( xNameAccess->getByName( rtl::OUString::createFromAscii( key ) )
-                >>= value ) )
-        {
-            OSL_FAIL( "InternetProxyDecider - "
-                        "Error getting config item value!" );
-            return false;
-        }
-    }
-    catch ( lang::WrappedTargetException const & )
-    {
-        return false;
-    }
-    catch ( container::NoSuchElementException const & )
-    {
-        return false;
-    }
-    return true;
-}
-
-//=========================================================================
-bool getConfigInt32Value(
-    const uno::Reference< container::XNameAccess > & xNameAccess,
-    const char * key,
-    sal_Int32 & value )
-{
-    try
-    {
-        uno::Any aValue = xNameAccess->getByName(
-            rtl::OUString::createFromAscii( key ) );
-        if ( aValue.hasValue() && !( aValue >>= value ) )
-        {
-            OSL_FAIL( "InternetProxyDecider - "
-                        "Error getting config item value!" );
-            return false;
-        }
-    }
-    catch ( lang::WrappedTargetException const & )
-    {
-        return false;
-    }
-    catch ( container::NoSuchElementException const & )
-    {
-        return false;
-    }
-    return true;
-}
-
-//=========================================================================
 //=========================================================================
 //
 // InternetProxyDecider_Impl Implementation.
@@ -325,17 +267,17 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
 
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
                 rxSMgr->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.ConfigurationProvider" )) ),
+                    rtl::OUString::createFromAscii(
+                        "com.sun.star.configuration.ConfigurationProvider" ) ),
                 uno::UNO_QUERY );
 
         uno::Sequence< uno::Any > aArguments( 1 );
-        aArguments[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CONFIG_ROOT_KEY ));
+        aArguments[ 0 ] <<= rtl::OUString::createFromAscii( CONFIG_ROOT_KEY );
 
         uno::Reference< uno::XInterface > xInterface(
                     xConfigProv->createInstanceWithArguments(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.configuration.ConfigurationAccess" )),
+                        rtl::OUString::createFromAscii(
+                            "com.sun.star.configuration.ConfigurationAccess" ),
                     aArguments ) );
 
         OSL_ENSURE( xInterface.is(),
@@ -350,43 +292,127 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
 
             if ( xNameAccess.is() )
             {
-                // *** Proxy type ***
-                getConfigInt32Value(
-                    xNameAccess, PROXY_TYPE_KEY, m_nProxyType );
+                try
+                {
+                    if ( !( xNameAccess->getByName(
+                                rtl::OUString::createFromAscii(
+                                    PROXY_TYPE_KEY ) ) >>= m_nProxyType ) )
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "InternetProxyDecider - "
+                                    "Error getting config item value!" );
+                    }
+                }
+                catch ( lang::WrappedTargetException const & )
+                {
+                }
+                catch ( container::NoSuchElementException const & )
+                {
+                }
 
-                // *** No proxy list ***
                 rtl::OUString aNoProxyList;
-                getConfigStringValue(
-                    xNameAccess, NO_PROXY_LIST_KEY, aNoProxyList );
+                try
+                {
+                    if ( !( xNameAccess->getByName(
+                                rtl::OUString::createFromAscii(
+                                    NO_PROXY_LIST_KEY ) ) >>= aNoProxyList ) )
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "InternetProxyDecider - "
+                                    "Error getting config item value!" );
+                    }
+                }
+                catch ( lang::WrappedTargetException const & )
+                {
+                }
+                catch ( container::NoSuchElementException const & )
+                {
+                }
+
                 setNoProxyList( aNoProxyList );
 
-                // *** HTTP ***
-                getConfigStringValue(
-                    xNameAccess, HTTP_PROXY_NAME_KEY, m_aHttpProxy.aName );
+                try
+                {
+                    if ( !( xNameAccess->getByName(
+                                rtl::OUString::createFromAscii(
+                                    HTTP_PROXY_NAME_KEY ) )
+                            >>= m_aHttpProxy.aName ) )
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "InternetProxyDecider - "
+                                    "Error getting config item value!" );
+                    }
+                }
+                catch ( lang::WrappedTargetException const & )
+                {
+                }
+                catch ( container::NoSuchElementException const & )
+                {
+                }
 
                 m_aHttpProxy.nPort = -1;
-                getConfigInt32Value(
-                    xNameAccess, HTTP_PROXY_PORT_KEY, m_aHttpProxy.nPort );
+                try
+                {
+                    uno::Any aValue = xNameAccess->getByName(
+                            rtl::OUString::createFromAscii(
+                                HTTP_PROXY_PORT_KEY ) );
+                    if ( aValue.hasValue() &&
+                         !( aValue >>= m_aHttpProxy.nPort ) )
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "InternetProxyDecider - "
+                                    "Error getting config item value!" );
+                    }
+                }
+                catch ( lang::WrappedTargetException const & )
+                {
+                }
+                catch ( container::NoSuchElementException const & )
+                {
+                }
+
                 if ( m_aHttpProxy.nPort == -1 )
                     m_aHttpProxy.nPort = 80; // standard HTTP port.
 
-                // *** HTTPS ***
-                getConfigStringValue(
-                    xNameAccess, HTTPS_PROXY_NAME_KEY, m_aHttpsProxy.aName );
-
-                m_aHttpsProxy.nPort = -1;
-                getConfigInt32Value(
-                    xNameAccess, HTTPS_PROXY_PORT_KEY, m_aHttpsProxy.nPort );
-                if ( m_aHttpsProxy.nPort == -1 )
-                    m_aHttpsProxy.nPort = 443; // standard HTTPS port.
-
-                // *** FTP ***
-                getConfigStringValue(
-                    xNameAccess, FTP_PROXY_NAME_KEY, m_aFtpProxy.aName );
+                try
+                {
+                    if ( !( xNameAccess->getByName(
+                                rtl::OUString::createFromAscii(
+                                    FTP_PROXY_NAME_KEY ) )
+                            >>= m_aFtpProxy.aName ) )
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "InternetProxyDecider - "
+                                    "Error getting config item value!" );
+                    }
+                }
+                catch ( lang::WrappedTargetException const & )
+                {
+                }
+                catch ( container::NoSuchElementException const & )
+                {
+                }
 
                 m_aFtpProxy.nPort = -1;
-                getConfigInt32Value(
-                    xNameAccess, FTP_PROXY_PORT_KEY, m_aFtpProxy.nPort );
+                try
+                {
+                    uno::Any aValue = xNameAccess->getByName(
+                            rtl::OUString::createFromAscii(
+                                FTP_PROXY_PORT_KEY ) );
+                    if ( aValue.hasValue() &&
+                         !( aValue >>= m_aFtpProxy.nPort ) )
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "InternetProxyDecider - "
+                                    "Error getting config item value!" );
+                    }
+                }
+                catch ( lang::WrappedTargetException const & )
+                {
+                }
+                catch ( container::NoSuchElementException const & )
+                {
+                }
             }
 
             // Register as listener for config changes.
@@ -404,7 +430,7 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
     catch ( uno::Exception const & )
     {
         // createInstance, createInstanceWithArguments
-        OSL_FAIL( "InternetProxyDecider - Exception!" );
+        OSL_ENSURE( sal_False, "InternetProxyDecider - Exception!" );
     }
 }
 
@@ -477,7 +503,7 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const rtl::OUString & rHost,
             if ( (*it).first.Matches( aHostAndPort ) )
                 return false;
         }
-        ++it;
+        it++;
     }
 
     return true;
@@ -530,7 +556,7 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
             // This might be quite expensive (DNS lookup).
             const osl::SocketAddr aAddr( aHost, nPort );
             aFullyQualifiedHost = aAddr.getHostname().toAsciiLowerCase();
-            m_aHostnames.put( aHost, aFullyQualifiedHost );
+            m_aHostnames.put( aHost, aFullyQualifiedHost ); 
         }
 
         // Error resolving name? -> fallback.
@@ -562,12 +588,6 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
     {
         if ( m_aFtpProxy.aName.getLength() > 0 && m_aFtpProxy.nPort >= 0 )
             return m_aFtpProxy;
-    }
-    else if ( rProtocol.toAsciiLowerCase()
-                  .equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "https" ) ) )
-    {
-        if ( m_aHttpsProxy.aName.getLength() )
-            return m_aHttpsProxy;
     }
     else if ( m_aHttpProxy.aName.getLength() )
     {
@@ -601,7 +621,8 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_nProxyType ) )
                     {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                        OSL_ENSURE( sal_False,
+                                    "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -611,7 +632,8 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                     rtl::OUString aNoProxyList;
                     if ( !( rElem.Element >>= aNoProxyList ) )
                     {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                        OSL_ENSURE( sal_False,
+                                    "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
 
@@ -622,7 +644,8 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aHttpProxy.aName ) )
                     {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                        OSL_ENSURE( sal_False,
+                                    "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -631,7 +654,8 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aHttpProxy.nPort ) )
                     {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                        OSL_ENSURE( sal_False,
+                                    "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
 
@@ -639,32 +663,12 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                         m_aHttpProxy.nPort = 80; // standard HTTP port.
                 }
                 else if ( aKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                                    HTTPS_PROXY_NAME_KEY ) ) )
-                {
-                    if ( !( rElem.Element >>= m_aHttpsProxy.aName ) )
-                    {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
-                                    "Error getting config item value!" );
-                    }
-                }
-                else if ( aKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                                    HTTPS_PROXY_PORT_KEY ) ) )
-                {
-                    if ( !( rElem.Element >>= m_aHttpsProxy.nPort ) )
-                    {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
-                                    "Error getting config item value!" );
-                    }
-
-                    if ( m_aHttpsProxy.nPort == -1 )
-                        m_aHttpsProxy.nPort = 443; // standard HTTPS port.
-                }
-                else if ( aKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
                                                     FTP_PROXY_NAME_KEY ) ) )
                 {
                     if ( !( rElem.Element >>= m_aFtpProxy.aName ) )
                     {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                        OSL_ENSURE( sal_False,
+                                    "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -673,7 +677,8 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aFtpProxy.nPort ) )
                     {
-                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
+                        OSL_ENSURE( sal_False,
+                                    "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -737,14 +742,14 @@ void InternetProxyDecider_Impl::setNoProxyList(
                 if ( nColonPos == -1 )
                 {
                     // No port given, server pattern equals current token
-                    aPort = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+                    aPort = rtl::OUString::createFromAscii( "*" );
                     if ( aToken.indexOf( '*' ) == -1 )
                     {
                         // pattern describes exactly one server
                         aServer = aToken;
                     }
 
-                    aToken += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":*"));
+                    aToken += rtl::OUString::createFromAscii( ":*" );
                 }
                 else
                 {

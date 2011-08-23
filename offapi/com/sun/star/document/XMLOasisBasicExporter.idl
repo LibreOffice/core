@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,34 +45,34 @@
 module com { module sun { module star { module document {
 
 //=============================================================================
-
+    
 /** Filter for exporting Basic macros to the OASIS Open Office file format.
 
-    <p>First the <method>XExporter::setSourceDocument</method> method must be
+    <p>First the <method>XExporter::setSourceDocument</method> method must be 
     called in order to provide the export component with the source document
     from which the data should be exported. After that, the export is started
     by calling the <method>XFilter::filter</method> method.</p>
-
-    @since OOo 2.0
+    
+    @since OOo 2.0.0
  */
 published service XMLOasisBasicExporter
 {
     //-------------------------------------------------------------------------
 
     /** sets the source document for this filter.
-     */
+     */    
     interface com::sun::star::document::XExporter;
 
     //-------------------------------------------------------------------------
 
     /** filters the document.
-     */
+     */    
     interface com::sun::star::document::XFilter;
 
     //-------------------------------------------------------------------------
 
     /** initializes the component.
-     */
+     */    
     [optional] interface com::sun::star::lang::XInitialization;
 
 };

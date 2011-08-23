@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ interface XBitmapCanvas;
     <type>XIeeeDoubleBitmap</type>, <type>XIeeeFloatBitmap</type> and
     <type>XHalfFloatBitmap</type> interfaces.<p>
 
-    @since OOo 2.0
+    @since OOo 2.0.0
  */
 interface XBitmap : ::com::sun::star::uno::XInterface
 {
@@ -65,7 +65,7 @@ interface XBitmap : ::com::sun::star::uno::XInterface
 
         @return the bitmap size in pixel.
       */
-    ::com::sun::star::geometry::IntegerSize2D   getSize();
+    ::com::sun::star::geometry::IntegerSize2D	getSize();
 
     //-------------------------------------------------------------------------
 
@@ -81,7 +81,7 @@ interface XBitmap : ::com::sun::star::uno::XInterface
         @return <TRUE/>, if the bitmap has alpha data, or <FALSE/> if
         not.
       */
-    boolean                                     hasAlpha();
+    boolean										hasAlpha();
 
     //-------------------------------------------------------------------------
 
@@ -105,7 +105,7 @@ interface XBitmap : ::com::sun::star::uno::XInterface
         if the contents of a volatile bitmap have been destroyed, and
         thus cannot be read to generate the scaled bitmap.
      */
-    XBitmap                         getScaledBitmap( [in] ::com::sun::star::geometry::RealSize2D newSize, [in] boolean beFast )
+    XBitmap							getScaledBitmap( [in] ::com::sun::star::geometry::RealSize2D newSize, [in] boolean beFast )
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
 };

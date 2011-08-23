@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,18 +26,18 @@
  *
  ************************************************************************/
 
-#ifndef DOM_CHILDLIST_HXX
-#define DOM_CHILDLIST_HXX
+#ifndef _CHILDLIST_HXX
+#define _CHILDLIST_HXX
 
+#include <map>
 #include <sal/types.h>
-#include <rtl/ref.hxx>
-
+#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
-
-#include <cppuhelper/implbase1.hxx>
-
+#include "node.hxx"
+#include "libxml/tree.h"
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -45,19 +45,12 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CNode;
-
-    class CChildList
-        : public cppu::WeakImplHelper1< XNodeList >
+    class CChildList : public cppu::WeakImplHelper1< XNodeList >
     {
     private:
-        ::rtl::Reference<CNode> const m_pNode;
-        ::osl::Mutex & m_rMutex;
-
+        const xmlNodePtr m_pNode;
     public:
-        CChildList(::rtl::Reference<CNode> const& pBase,
-                ::osl::Mutex & rMutex);
-
+        CChildList(const CNode* base);
         /**
         The number of nodes in the list.
         */
@@ -65,8 +58,7 @@ namespace DOM
         /**
         Returns the indexth item in the collection.
         */
-        virtual Reference< XNode > SAL_CALL item(sal_Int32 index)
-            throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL item(sal_Int32 index) throw (RuntimeException);
     };
 }
 

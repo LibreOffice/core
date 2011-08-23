@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
+
+
+#include <tools/list.hxx>
 #include "actctrl.hxx"
+
+
 
 void NumEditAction::Action()
 {
@@ -45,7 +51,7 @@ long NumEditAction::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const KeyCode aKeyCode = pKEvt->GetKeyCode();
-        const sal_uInt16 nModifier = aKeyCode.GetModifier();
+        const USHORT nModifier = aKeyCode.GetModifier();
         if( aKeyCode.GetCode() == KEY_RETURN &&
                 !nModifier)
         {
@@ -71,12 +77,12 @@ NoSpaceEdit::~NoSpaceEdit()
 
 void NoSpaceEdit::KeyInput(const KeyEvent& rEvt)
 {
-    sal_Bool bCallParent = sal_True;
+    BOOL bCallParent = TRUE;
     if(rEvt.GetCharCode())
     {
         String sKey = rEvt.GetCharCode();
-        if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
-            bCallParent = sal_False;
+        if(	STRING_NOTFOUND != sForbiddenChars.Search(sKey))
+            bCallParent = FALSE;
     }
     if(bCallParent)
         Edit::KeyInput(rEvt);
@@ -86,11 +92,11 @@ void NoSpaceEdit::Modify()
 {
     Selection aSel = GetSelection();
     String sTemp = GetText();
-    for(sal_uInt16 i = 0; i < sForbiddenChars.Len(); i++)
+    for(USHORT i = 0; i < sForbiddenChars.Len(); i++)
     {
         sTemp.EraseAllChars( sForbiddenChars.GetChar(i) );
     }
-    sal_uInt16 nDiff = GetText().Len() - sTemp.Len();
+    USHORT nDiff = GetText().Len() - sTemp.Len();
     if(nDiff)
     {
         aSel.setMin(aSel.getMin() - nDiff);
@@ -109,14 +115,14 @@ ReturnActionEdit::~ReturnActionEdit()
 void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
 {
     const KeyCode aKeyCode = rEvt.GetKeyCode();
-    const sal_uInt16 nModifier = aKeyCode.GetModifier();
+    const USHORT nModifier = aKeyCode.GetModifier();
     if( aKeyCode.GetCode() == KEY_RETURN &&
             !nModifier)
     {
         if(aReturnActionLink.IsSet())
             aReturnActionLink.Call(this);
-    }
-    else
+    }    
+    else 
         Edit::KeyInput(rEvt);
 }
 

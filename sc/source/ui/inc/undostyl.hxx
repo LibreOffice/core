@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,31 +40,31 @@ class SfxStyleSheetBase;
 class ScStyleSaveData
 {
 private:
-    String          aName;
-    String          aParent;
-    SfxItemSet*     pItems;
+    String			aName;
+    String			aParent;
+    SfxItemSet*		pItems;
 
 public:
                         ScStyleSaveData();
                         ScStyleSaveData( const ScStyleSaveData& rOther );
                         ~ScStyleSaveData();
-    ScStyleSaveData&    operator=( const ScStyleSaveData& rOther );
+    ScStyleSaveData&	operator=( const ScStyleSaveData& rOther );
 
-    void                InitFromStyle( const SfxStyleSheetBase* pSource );
+    void				InitFromStyle( const SfxStyleSheetBase* pSource );
 
-    const String&       GetName() const     { return aName; }
-    const String&       GetParent() const   { return aParent; }
-    const SfxItemSet*   GetItems() const    { return pItems; }
+    const String&		GetName() const		{ return aName; }
+    const String&		GetParent() const	{ return aParent; }
+    const SfxItemSet*	GetItems() const	{ return pItems; }
 };
 
 class ScUndoModifyStyle: public ScSimpleUndo
 {
 private:
-    SfxStyleFamily  eFamily;
-    ScStyleSaveData aOldData;
-    ScStyleSaveData aNewData;
+    SfxStyleFamily	eFamily;
+    ScStyleSaveData	aOldData;
+    ScStyleSaveData	aNewData;
 
-    static void     DoChange( ScDocShell* pDocSh,
+    static void		DoChange( ScDocShell* pDocSh,
                                 const String& rName, SfxStyleFamily eStyleFamily,
                                 const ScStyleSaveData& rData );
 
@@ -74,14 +74,14 @@ public:
                                         SfxStyleFamily eFam,
                                         const ScStyleSaveData& rOld,
                                         const ScStyleSaveData& rNew );
-    virtual         ~ScUndoModifyStyle();
+    virtual 		~ScUndoModifyStyle();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 };
 
 class ScUndoApplyPageStyle: public ScSimpleUndo
@@ -89,16 +89,16 @@ class ScUndoApplyPageStyle: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoApplyPageStyle( ScDocShell* pDocSh, const String& rNewStyle );
-    virtual         ~ScUndoApplyPageStyle();
+    virtual 		~ScUndoApplyPageStyle();
 
     void            AddSheetAction( SCTAB nTab, const String& rOld );
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
     struct ApplyStyleEntry

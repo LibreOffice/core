@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,14 +78,14 @@ public:
     SchXMLFlatDocContext_Impl(
         SchXMLImportHelper& i_rImpHelper,
         SchXMLImport& i_rImport,
-        sal_uInt16 i_nPrefix, const ::rtl::OUString & i_rLName,
+        USHORT i_nPrefix, const ::rtl::OUString & i_rLName,
         const com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties>& i_xDocProps,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>& i_xDocBuilder);
 
     virtual ~SchXMLFlatDocContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 i_nPrefix, const ::rtl::OUString& i_rLocalName,
+        USHORT i_nPrefix, const ::rtl::OUString& i_rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& i_xAttrList);
 };
 
@@ -113,6 +113,6 @@ public:
 
 // ========================================
 
-#endif  // _SCH_XML_CONTEXTS_HXX_
+#endif	// _SCH_XML_CONTEXTS_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,11 +26,10 @@
  ************************************************************************/
 
 #include "solvrdlg.hrc"
-
 ModelessDialog RID_SCDLG_SOLVER
 {
     OutputSize = TRUE ;
-    HelpId = CMD_SID_OPENDLG_SOLVE ;
+    HelpId = SID_OPENDLG_SOLVE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 222 , 64 ) ;
@@ -45,7 +44,6 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     Edit ED_FORMULACELL
     {
-        HelpID = "sc:Edit:RID_SCDLG_SOLVER:ED_FORMULACELL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 64 , 14 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
@@ -53,7 +51,6 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     ImageButton RB_FORMULACELL
     {
-        HelpID = "sc:ImageButton:RID_SCDLG_SOLVER:RB_FORMULACELL";
         Pos = MAP_APPFONT ( 145 , 13 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -67,7 +64,6 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     Edit ED_TARGETVAL
     {
-        HelpID = "sc:Edit:RID_SCDLG_SOLVER:ED_TARGETVAL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 64 , 30 ) ;
         Size = MAP_APPFONT ( 93 , 12 ) ;
@@ -81,7 +77,6 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     Edit ED_VARCELL
     {
-        HelpID = "sc:Edit:RID_SCDLG_SOLVER:ED_VARCELL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 64 , 46 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
@@ -89,7 +84,6 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     ImageButton RB_VARCELL
     {
-        HelpID = "sc:ImageButton:RID_SCDLG_SOLVER:RB_VARCELL";
         Pos = MAP_APPFONT ( 145 , 45 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -122,6 +116,7 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     String STR_INVALIDVAL
     {
+        /* ### ACHTUNG: Neuer Text in Resource? Unzul‰ssiger Zielwert! : Unzulıssiger Zielwert! */
         Text [ en-US ] = "Invalid target value." ;
     };
     String STR_INVALIDVAR
@@ -134,6 +129,7 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     String STR_NOFORMULA
     {
+        /* ### ACHTUNG: Neuer Text in Resource? Zelle muﬂ eine Formel enthalten! : Zelle muò eine Formel enthalten! */
         Text [ en-US ] = "Cell must contain a formula." ;
     };
 };

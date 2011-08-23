@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@
 
 void FixedBorder::ImplInit( Window* pParent, WinBits nStyle )
 {
-    mnType          = FIXEDBORDER_TYPE_DOUBLEOUT;
-    mbTransparent   = sal_True;
+    mnType			= FIXEDBORDER_TYPE_DOUBLEOUT;
+    mbTransparent	= TRUE;
 
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
@@ -65,18 +65,18 @@ void FixedBorder::ImplInitSettings()
           !(pParent->GetStyle() & WB_CLIPCHILDREN) ) &&
          !IsControlBackground() && mbTransparent )
     {
-        SetMouseTransparent( sal_True );
-        EnableChildTransparentMode( sal_True );
+        SetMouseTransparent( TRUE );
+        EnableChildTransparentMode( TRUE );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( sal_True );
+        SetPaintTransparent( TRUE );
         SetBackground();
     }
     else
     {
-        SetMouseTransparent( sal_False );
-        EnableChildTransparentMode( sal_False );
+        SetMouseTransparent( FALSE );
+        EnableChildTransparentMode( FALSE );
         SetParentClipMode( 0 );
-        SetPaintTransparent( sal_False );
+        SetPaintTransparent( FALSE );
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
@@ -115,12 +115,12 @@ FixedBorder::~FixedBorder()
 
 // -----------------------------------------------------------------------
 
-void FixedBorder::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+void FixedBorder::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                             const Point& rPos, const Size& rSize )
 {
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    Rectangle               aRect( rPos, rSize );
-    sal_uInt16                  nBorderStyle = mnType;
+    const StyleSettings&	rStyleSettings = GetSettings().GetStyleSettings();
+    Rectangle				aRect( rPos, rSize );
+    USHORT					nBorderStyle = mnType;
 
     if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
          (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
@@ -143,7 +143,7 @@ void FixedBorder::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     else
     */
     {
-        DecorationView  aDecoView( pDev );
+        DecorationView	aDecoView( pDev );
         aDecoView.DrawFrame( aRect, nBorderStyle );
     }
 }
@@ -158,10 +158,10 @@ void FixedBorder::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void FixedBorder::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                        sal_uLong nFlags )
+                        ULONG nFlags )
 {
-    Point   aPos  = pDev->LogicToPixel( rPos );
-    Size    aSize = pDev->LogicToPixel( rSize );
+    Point	aPos  = pDev->LogicToPixel( rPos );
+    Size	aSize = pDev->LogicToPixel( rSize );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -213,7 +213,7 @@ void FixedBorder::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-void FixedBorder::SetTransparent( sal_Bool bTransparent )
+void FixedBorder::SetTransparent( BOOL bTransparent )
 {
     if ( mbTransparent != bTransparent )
     {
@@ -225,7 +225,7 @@ void FixedBorder::SetTransparent( sal_Bool bTransparent )
 
 // -----------------------------------------------------------------------
 
-void FixedBorder::SetBorderType( sal_uInt16 nType )
+void FixedBorder::SetBorderType( USHORT nType )
 {
     if ( mnType != nType )
     {

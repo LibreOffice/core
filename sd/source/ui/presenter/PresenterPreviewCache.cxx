@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,8 +65,7 @@ public:
 
     // CacheContext
     virtual void NotifyPreviewCreation (
-        CacheKey aKey,
-        const Bitmap& rPreview);
+        CacheKey aKey, const ::boost::shared_ptr<BitmapEx>& rPreview);
     virtual bool IsIdle (void);
     virtual bool IsVisible (CacheKey aKey);
     virtual const SdrPage* GetPage (CacheKey aKey);
@@ -101,7 +100,7 @@ Reference<XInterface> SAL_CALL PresenterPreviewCache_createInstance (
 
 ::rtl::OUString PresenterPreviewCache_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterPreviewCache"));
+    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterPreviewCache");
 }
 
 
@@ -111,7 +110,7 @@ Sequence<rtl::OUString> SAL_CALL PresenterPreviewCache_getSupportedServiceNames 
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterPreviewCache")));
+        ::rtl::OUString::createFromAscii("com.sun.star.drawing.PresenterPreviewCache"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -124,7 +123,7 @@ PresenterPreviewCache::PresenterPreviewCache (const Reference<XComponentContext>
     : PresenterPreviewCacheInterfaceBase(m_aMutex),
       maPreviewSize(Size(200,200)),
       mpCacheContext(new PresenterCacheContext()),
-      mpCache(new PageCache(maPreviewSize, false, mpCacheContext))
+      mpCache(new PageCache(maPreviewSize, mpCacheContext))
 {
     (void)rxContext;
 }
@@ -189,7 +188,7 @@ void SAL_CALL PresenterPreviewCache::setPreviewSize (
     OSL_ASSERT(mpCache.get()!=NULL);
 
     maPreviewSize = Size(rSize.Width, rSize.Height);
-    mpCache->ChangeSize(maPreviewSize, false);
+    mpCache->ChangeSize(maPreviewSize);
 }
 
 
@@ -211,7 +210,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
     if (pPage == NULL)
         throw RuntimeException();
 
-    const BitmapEx aPreview (mpCache->GetPreviewBitmap(pPage,true));
+    const BitmapEx aPreview (mpCache->GetPreviewBitmap(pPage, maPreviewSize));
     if (aPreview.IsEmpty())
         return NULL;
     else
@@ -370,10 +369,10 @@ void PresenterPreviewCache::PresenterCacheContext::RemovePreviewCreationNotifyLi
 
 void PresenterPreviewCache::PresenterCacheContext::NotifyPreviewCreation (
     CacheKey aKey,
-    const Bitmap& rPreview)
+    const ::boost::shared_ptr<BitmapEx>& rPreview)
 {
     (void)rPreview;
-
+    
     if ( ! mxSlides.is())
         return;
     const sal_Int32 nCount(mxSlides->getCount());
@@ -428,10 +427,10 @@ const SdrPage* PresenterPreviewCache::PresenterCacheContext::GetPage (CacheKey a
     PresenterPreviewCache::PresenterCacheContext::GetEntryList (bool bVisible)
 {
     ::boost::shared_ptr<std::vector<CacheKey> > pKeys (new std::vector<CacheKey>());
-
+    
     if ( ! mxSlides.is())
         return pKeys;
-
+    
     const sal_Int32 nFirstIndex (bVisible ? mnFirstVisibleSlideIndex : 0);
     const sal_Int32 nLastIndex (bVisible ? mnLastVisibleSlideIndex : mxSlides->getCount()-1);
 
@@ -455,11 +454,11 @@ sal_Int32 PresenterPreviewCache::PresenterCacheContext::GetPriority (CacheKey aK
         return 0;
 
     const sal_Int32 nCount (mxSlides->getCount());
-
+    
     for (sal_Int32 nIndex=mnFirstVisibleSlideIndex; nIndex<=mnLastVisibleSlideIndex; ++nIndex)
         if (aKey == GetPage(nIndex))
             return -nCount-1+nIndex;
-
+    
     for (sal_Int32 nIndex=0; nIndex<=nCount; ++nIndex)
         if (aKey == GetPage(nIndex))
             return nIndex;

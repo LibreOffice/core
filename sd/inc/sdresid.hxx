@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 class SD_DLLPUBLIC SdResId : public ResId
 {
 public:
-    SdResId(sal_uInt16 nId);
+    SdResId(USHORT nId);
 };
 
 #endif /* _SD_SDRESID_HXX */

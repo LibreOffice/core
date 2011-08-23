@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
+#include <tools/svwin.h>
 #include <sal/main.h>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -43,7 +44,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include <svtools/unoiface.hxx> // InitExtToolkit
+#include <svtools/unoiface.hxx>	// InitExtToolkit
 #include <comphelper/processfactory.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
@@ -69,7 +70,7 @@ using namespace ::com::sun::star::lang;
     {
         ::rtl::OUString localRegistry = ::comphelper::getPathToUserRegistry();
         ::rtl::OUString systemRegistry = ::comphelper::getPathToSystemRegistry();
-
+        
         Reference< XSimpleRegistry > xLocalRegistry( ::cppu::createSimpleRegistry() );
         Reference< XSimpleRegistry > xSystemRegistry( ::cppu::createSimpleRegistry() );
         if ( xLocalRegistry.is() && (localRegistry.getLength() > 0) )
@@ -81,14 +82,14 @@ using namespace ::com::sun::star::lang;
             catch ( InvalidRegistryException& )
             {
             }
-
+            
             if ( !xLocalRegistry->isValid() )
                 xLocalRegistry->open(localRegistry, sal_True, sal_True);
         }
-
+        
         if ( xSystemRegistry.is() && (systemRegistry.getLength() > 0) )
             xSystemRegistry->open( systemRegistry, sal_True, sal_False);
-
+        
         if ( (xLocalRegistry.is() && xLocalRegistry->isValid()) &&
              (xSystemRegistry.is() && xSystemRegistry->isValid()) )
         {
@@ -98,7 +99,7 @@ using namespace ::com::sun::star::lang;
             seqAnys[1] <<= xSystemRegistry ;
             Reference< XInitialization > xInit( xReg, UNO_QUERY );
             xInit->initialize( seqAnys );
-
+            
             Reference< XComponentContext > xContext( ::cppu::bootstrap_InitialComponentContext( xReg ) );
             return Reference< XMultiServiceFactory >( xContext->getServiceManager(), UNO_QUERY );
         }
@@ -106,7 +107,7 @@ using namespace ::com::sun::star::lang;
     catch( ::com::sun::star::uno::Exception& )
     {
     }
-
+    
     return ::cppu::createServiceFactory();
 }
 
@@ -146,7 +147,7 @@ private:
 public:
     MyWin() : WorkWindow( NULL, WB_APP|WB_STDWORK ) {;}
     void        Paint( const Rectangle& r );
-    void        SetXView(  uno::Reference< awt::XView > xV  ) { mxView = xV; }
+    void		SetXView(  uno::Reference< awt::XView > xV  ) { mxView = xV; }
 };
 
 
@@ -155,7 +156,7 @@ public:
 void Main( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMSF )
 {
     ::comphelper::setProcessServiceFactory( xMSF );
-
+    
     //uno::Reference< awt::XToolkit> xToolkit( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), uno::UNO_QUERY );
     uno::Reference< awt::XToolkit> xToolkit( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ) ) ), uno::UNO_QUERY );
 
@@ -242,7 +243,7 @@ void Main( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMult
 
     Reference< XComponent > xT( xToolkit, uno::UNO_QUERY );
     xT->dispose();
-
+    
     Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
     if (xProps.is())
     {

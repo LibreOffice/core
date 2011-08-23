@@ -56,7 +56,7 @@
 #include "cppu/unotype.hxx"
 #include "cppuhelper/compbase5.hxx"
 #include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/interfacecontainer.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
@@ -129,6 +129,7 @@ private:
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return configuration_provider::getSupportedServiceNames(); }
+        //TODO: DefaultProvider?
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
         rtl::OUString const & aServiceSpecifier)
@@ -278,7 +279,8 @@ Service::createInstanceWithArguments(
             static_cast< cppu::OWeakObject * >(this));
     }
     osl::MutexGuard guard(*lock_);
-    Components & components = Components::getSingleton(context_);
+    Components::initSingleton(context_);
+    Components & components = Components::getSingleton();
     rtl::Reference< RootAccess > root(
         new RootAccess(components, nodepath, locale, update));
     if (root->isValue()) {
@@ -389,14 +391,14 @@ void Service::flushModifications() const {
     Components * components;
     {
         osl::MutexGuard guard(*lock_);
-        components = &Components::getSingleton(context_);
+        Components::initSingleton(context_);
+        components = &Components::getSingleton();
     }
     components->flushModifications();
 }
 
 class Factory:
-    public cppu::WeakImplHelper2<
-        css::lang::XSingleComponentFactory, css::lang::XServiceInfo >,
+    public cppu::WeakImplHelper1< css::lang::XSingleComponentFactory >,
     private boost::noncopyable
 {
 public:
@@ -415,18 +417,6 @@ private:
         css::uno::Sequence< css::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context)
         throw (css::uno::Exception, css::uno::RuntimeException);
-
-    virtual rtl::OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
-    { return configuration_provider::getImplementationName(); }
-
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
-    { return ServiceName == getSupportedServiceNames()[0]; } //TODO
-
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException)
-    { return configuration_provider::getSupportedServiceNames(); }
 };
 
 css::uno::Reference< css::uno::XInterface > Factory::createInstanceWithContext(

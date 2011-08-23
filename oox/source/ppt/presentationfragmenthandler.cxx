@@ -47,6 +47,8 @@
 #include "oox/ppt/slidefragmenthandler.hxx"
 #include "oox/ppt/layoutfragmenthandler.hxx"
 #include "oox/ppt/pptimport.hxx"
+#include "oox/core/namespaces.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -181,12 +183,12 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                 FragmentHandlerRef xSlideFragmentHandler( new SlideFragmentHandler( rFilter, aSlideFragmentPath, pSlidePersistPtr, Slide ) );
 
                 // importing the corresponding masterpage/layout
-                OUString aLayoutFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "slideLayout" ) );
+                OUString aLayoutFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "slideLayout" ) );
                 if ( aLayoutFragmentPath.getLength() > 0 )
                 {
                     // importing layout
                     RelationsRef xLayoutRelations = rFilter.importRelations( aLayoutFragmentPath );
-                    OUString aMasterFragmentPath = xLayoutRelations->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "slideMaster" ) );
+                    OUString aMasterFragmentPath = xLayoutRelations->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "slideMaster" ) );
                     if( aMasterFragmentPath.getLength() )
                     {
                         // check if the corresponding masterpage+layout has already been imported
@@ -199,7 +201,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                                 pMasterPersistPtr = *aIter;
                                 break;
                             }
-                            ++aIter;
+                            aIter++;
                         }
                         if ( aIter == rMasterPages.end() )
                         {   // masterpersist not found, we have to load it
@@ -220,7 +222,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                             FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aMasterFragmentPath, pMasterPersistPtr, Master ) );
 
                             // set the correct theme
-                            OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
+                            OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "theme" ) );
                             if( aThemeFragmentPath.getLength() > 0 )
                             {
                                 std::map< OUString, oox::drawingml::ThemePtr >& rThemes( rFilter.getThemes() );
@@ -258,7 +260,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                 pSlidePersistPtr->createXShapes( rFilter );
 
                 // now importing the notes page
-                OUString aNotesFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "notesSlide" ) );
+                OUString aNotesFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "notesSlide" ) );
                 if( aNotesFragmentPath.getLength() > 0 )
                 {
                     Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
@@ -284,7 +286,8 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( (rtl::OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
+        OSL_ENSURE( false,
+            (rtl::OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -292,7 +295,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
 
     }
 
-    // todo error handling;
+    // todo	error handling;
     if ( rxStatusIndicator.is() )
         rxStatusIndicator->end();
 }
@@ -303,30 +306,30 @@ Reference< XFastContextHandler > PresentationFragmentHandler::createFastChildCon
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-    case PPT_TOKEN( presentation ):
-    case PPT_TOKEN( sldMasterIdLst ):
-    case PPT_TOKEN( notesMasterIdLst ):
-    case PPT_TOKEN( sldIdLst ):
+    case NMSP_PPT|XML_presentation:
+    case NMSP_PPT|XML_sldMasterIdLst:
+    case NMSP_PPT|XML_notesMasterIdLst:
+    case NMSP_PPT|XML_sldIdLst:
         break;
-    case PPT_TOKEN( sldMasterId ):
-        maSlideMasterVector.push_back( xAttribs->getOptionalValue( R_TOKEN( id ) ) );
+    case NMSP_PPT|XML_sldMasterId:
+        maSlideMasterVector.push_back( xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_id ) );
         break;
-    case PPT_TOKEN( sldId ):
-        maSlidesVector.push_back( xAttribs->getOptionalValue( R_TOKEN( id ) ) );
+    case NMSP_PPT|XML_sldId:
+        maSlidesVector.push_back( xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_id ) );
         break;
-    case PPT_TOKEN( notesMasterId ):
-        maNotesMasterVector.push_back( xAttribs->getOptionalValue(R_TOKEN( id ) ) );
+    case NMSP_PPT|XML_notesMasterId:
+        maNotesMasterVector.push_back( xAttribs->getOptionalValue(NMSP_RELATIONSHIPS|XML_id ) );
         break;
-    case PPT_TOKEN( sldSz ):
+    case NMSP_PPT|XML_sldSz:
         maSlideSize = GetSize2D( xAttribs );
         break;
-    case PPT_TOKEN( notesSz ):
+    case NMSP_PPT|XML_notesSz:
         maNotesSize = GetSize2D( xAttribs );
         break;
-    case PPT_TOKEN( custShowLst ):
+    case NMSP_PPT|XML_custShowLst:
         xRet.set( new CustomShowListContext( *this, maCustomShowList ) );
         break;
-    case PPT_TOKEN( defaultTextStyle ):
+    case NMSP_PPT|XML_defaultTextStyle:
         xRet.set( new TextListStyleContext( *this, *mpTextListStyle ) );
         break;
     }
@@ -344,7 +347,7 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
     {
         const OUString sLayout = CREATE_OUSTRING( "Layout" );
         uno::Reference< beans::XPropertySet > xSet( xSlide, uno::UNO_QUERY_THROW );
-        xSet->setPropertyValue( sLayout, Any( pMasterPersistPtr->getLayoutFromValueToken() ) );
+        xSet->setPropertyValue(	sLayout, Any( pMasterPersistPtr->getLayoutFromValueToken() ) );
     }
     while( xSlide->getCount() )
     {

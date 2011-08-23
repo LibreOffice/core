@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,13 @@
 #include <unomid.h>
 
 /*--------------------------------------------------------------------
-    Beschreibung:   globale Pointer
+    Beschreibung:	globale Pointer
  --------------------------------------------------------------------*/
 
-SwGlossaries*       pGlossaries = 0;
+SwGlossaries* 		pGlossaries = 0;
 
 // Liefert alle benoetigten Pfade. Wird durch UI initialisiert
-SwGlossaryList*     pGlossaryList = 0;
+SwGlossaryList*		pGlossaryList = 0;
 
 String* pOldGrfCat = 0;
 String* pOldTabCat = 0;
@@ -90,11 +90,11 @@ void SetCurrGlosGroup(String* pStr)
 
 SvStringsDtor* pDBNameList = 0;
 
-SvStringsDtor*  pAuthFieldNameList = 0;
-SvStringsDtor*  pAuthFieldTypeList = 0;
+SvStringsDtor* 	pAuthFieldNameList = 0;
+SvStringsDtor* 	pAuthFieldTypeList = 0;
 
 /*--------------------------------------------------------------------
-    Beschreibung:   UI beenden
+    Beschreibung:	UI beenden
  --------------------------------------------------------------------*/
 
 void _FinitUI()
@@ -122,7 +122,7 @@ void _FinitUI()
 
 }
 /*--------------------------------------------------------------------
-    Beschreibung:   Initialisierung
+    Beschreibung:	Initialisierung
  --------------------------------------------------------------------*/
 
 
@@ -162,20 +162,20 @@ ShellResource::ShellResource()
     sDurationFormat( SW_RES( STR_DURATION_FORMAT )),
 
     aTOXIndexName(          SW_RES(STR_TOI)),
-    aTOXUserName(           SW_RES(STR_TOU)),
-    aTOXContentName(        SW_RES(STR_TOC)),
-    aTOXIllustrationsName(  SW_RES(STR_TOX_ILL)),
-    aTOXObjectsName(        SW_RES(STR_TOX_OBJ)),
-    aTOXTablesName(         SW_RES(STR_TOX_TBL)),
-    aTOXAuthoritiesName(    SW_RES(STR_TOX_AUTH)),
+    aTOXUserName(			SW_RES(STR_TOU)),
+    aTOXContentName(		SW_RES(STR_TOC)),
+    aTOXIllustrationsName(	SW_RES(STR_TOX_ILL)),
+    aTOXObjectsName(		SW_RES(STR_TOX_OBJ)),
+    aTOXTablesName(			SW_RES(STR_TOX_TBL)),
+    aTOXAuthoritiesName(	SW_RES(STR_TOX_AUTH)),
     aHyperlinkClick( SW_RES( STR_HYPERLINK_CLICK)),
     pAutoFmtNameLst(0),
-    sPageDescFirstName(     SW_RES(STR_PAGEDESC_FIRSTNAME)),
-    sPageDescFollowName(    SW_RES(STR_PAGEDESC_FOLLOWNAME)),
+    sPageDescFirstName(		SW_RES(STR_PAGEDESC_FIRSTNAME)),
+    sPageDescFollowName(	SW_RES(STR_PAGEDESC_FOLLOWNAME)),
     sPageDescName(          SW_RES(STR_PAGEDESC_NAME))
 {
-    const sal_uInt16 nCount = FLD_DOCINFO_END - FLD_DOCINFO_BEGIN;
-
+    const USHORT nCount = FLD_DOCINFO_END - FLD_DOCINFO_BEGIN;
+    
     KeyCode aCode( KEY_SPACE );
     KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
     String aModStr( aModifiedCode.GetName() );
@@ -183,7 +183,7 @@ ShellResource::ShellResource()
     aModStr.SearchAndReplaceAllAscii( "+", String() );
     aHyperlinkClick.SearchAndReplaceAllAscii( "%s", aModStr );
 
-    for(sal_uInt16 i = 0; i < nCount; ++i)
+    for(USHORT i = 0; i < nCount; ++i)
     {
         String* pNew = new SW_RESSTR(FLD_DOCINFO_BEGIN + i);
         aDocInfoLst.Insert(pNew, aDocInfoLst.Count());
@@ -198,24 +198,11 @@ ShellResource::~ShellResource()
         delete pAutoFmtNameLst, pAutoFmtNameLst = 0;
 }
 
-String ShellResource::GetPageDescName( sal_uInt16 nNo, PageNameMode eMode )
+String ShellResource::GetPageDescName( USHORT nNo, BOOL bIsFirst, BOOL bFollow )
 {
-    String sRet;
-
-    switch (eMode)
-    {
-        case NORMAL_PAGE:
-            sRet = sPageDescName;
-            break;
-            break;
-        case FIRST_PAGE:
-            sRet = sPageDescFirstName;
-            break;
-        case FOLLOW_PAGE:
-            sRet = sPageDescFollowName;
-            break;
-    }
-
+    String sRet( bIsFirst ? sPageDescFirstName
+                          : bFollow ? sPageDescFollowName
+                                      : sPageDescName );
     sRet.SearchAndReplaceAscii( "$(ARG1)", String::CreateFromInt32( nNo ));
     return sRet;
 }
@@ -228,7 +215,7 @@ SwGlossaries* GetGlossaries()
     return (pGlossaries);
 }
 
-sal_Bool HasGlossaryList()
+BOOL HasGlossaryList()
 {
     return pGlossaryList != 0;
 }
@@ -256,7 +243,7 @@ void ShellResource::_GetAutoFmtNameLst() const
 ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
     : Resource( ResId(RID_SHELLRES_AUTOFMTSTRS, *pSwResMgr) )
 {
-    for( sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n )
+    for( USHORT n = 0; n < STR_AUTOFMTREDL_END; ++n )
     {
         String* p = new String( ResId( n + 1, *pSwResMgr) );
         if(STR_AUTOFMTREDL_TYPO == n)
@@ -278,31 +265,31 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
     FreeResource();
 }
 
-const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
+const String& 	SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
 {
     if(!pAuthFieldNameList)
     {
         pAuthFieldNameList = new SvStringsDtor(AUTH_FIELD_END, 1);
-        for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
+        for(USHORT i = 0; i < AUTH_FIELD_END; i++)
         {
             String*  pTmp = new String(SW_RES(STR_AUTH_FIELD_START + i));
             pAuthFieldNameList->Insert(pTmp, pAuthFieldNameList->Count());
         }
     }
-    return *pAuthFieldNameList->GetObject( static_cast< sal_uInt16 >(eType) );
+    return *pAuthFieldNameList->GetObject( static_cast< USHORT >(eType) );
 }
 
-const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
+const String& 	SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 {
     if(!pAuthFieldTypeList)
     {
         pAuthFieldTypeList = new SvStringsDtor(AUTH_TYPE_END, 1);
-        for(sal_uInt16 i = 0; i < AUTH_TYPE_END; i++)
+        for(USHORT i = 0; i < AUTH_TYPE_END; i++)
             pAuthFieldTypeList->Insert(
                 new String(SW_RES(STR_AUTH_TYPE_START + i)),
                                     pAuthFieldTypeList->Count());
     }
-    return *pAuthFieldTypeList->GetObject( static_cast< sal_uInt16 >(eType) );
+    return *pAuthFieldTypeList->GetObject( static_cast< USHORT >(eType) );
 }
 
 

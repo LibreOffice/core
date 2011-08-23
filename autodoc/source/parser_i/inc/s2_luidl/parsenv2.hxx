@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,60 +76,60 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
   public:
     virtual             ~UnoIDL_PE();
 
-    virtual void        EstablishContacts(
-                            UnoIDL_PE *         io_pParentPE,
+    virtual void	 	EstablishContacts(
+                            UnoIDL_PE *			io_pParentPE,
                             ary::Repository &
                                                 io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
-//  virtual void        EstablishContacts(
-//                          UnoIDL_PE *         io_pParentPE,
-//                          ary::idl::Gate &
+//	virtual void	 	EstablishContacts(
+//							UnoIDL_PE *			io_pParentPE,
+//							ary::idl::Gate &
 //                                                io_rGate,
-//                          TokenProcessing_Result &
-//                                              o_rResult );
-    virtual void        Enter(
-                            E_EnvStackAction    i_eWayOfEntering );
-    virtual void        Leave(
-                            E_EnvStackAction    i_eWayOfLeaving );
-    virtual void        ProcessToken(
-                            const Token &       i_rToken ) = 0;
+//							TokenProcessing_Result &
+//												o_rResult );
+    virtual void		Enter(
+                            E_EnvStackAction	i_eWayOfEntering );
+    virtual void		Leave(
+                            E_EnvStackAction	i_eWayOfLeaving );
+    virtual void	  	ProcessToken(
+                            const Token &		i_rToken ) = 0;
 
-    void                SetDocu(
+    void				SetDocu(
                             DYN ary::doc::OldIdlDocu *
                                                 let_dpDocu );
-    void                SetPublished();
-    void                SetOptional();
-    void                PassDocuAt(
+    void				SetPublished();
+    void				SetOptional();
+    void				PassDocuAt(
                             ary::idl::CodeEntity &
                                                 io_rCe );
 
-    UnoIDL_PE *         Parent() const          { return aMyNode.Parent(); }
+    UnoIDL_PE *			Parent() const			{ return aMyNode.Parent(); }
 
-    void                SetResult(
-                            E_TokenDone         i_eDone,
-                            E_EnvStackAction    i_eWhat2DoWithEnvStack,
-                            UnoIDL_PE *         i_pParseEnv2Push = 0 )
+    void				SetResult(
+                            E_TokenDone			i_eDone,
+                            E_EnvStackAction	i_eWhat2DoWithEnvStack,
+                            UnoIDL_PE *			i_pParseEnv2Push = 0 )
                                                 { aMyNode.SetTokenResult( i_eDone, i_eWhat2DoWithEnvStack, i_pParseEnv2Push ); }
     virtual const ary::idl::Module &
                         CurNamespace() const;
     virtual const ParserInfo &
                         ParseInfo() const;
-    ary::idl::Gate &    Gate() const            { return aMyNode.AryGate(); }
+    ary::idl::Gate &	Gate() const			{ return aMyNode.AryGate(); }
     TokenProcessing_Result &
                         TokenResult() const     { return aMyNode.TokenResult(); }
     DYN ary::doc::OldIdlDocu *
-                        ReleaseDocu()           { return pDocu.Release(); }
+                        ReleaseDocu()			{ return pDocu.Release(); }
   protected:
                         UnoIDL_PE();
     ary::Repository &   MyRepository()          { csv_assert(pRepository != 0);
                                                   return *pRepository;  }
   private:
-    virtual void        InitData();
-    virtual void        TransferData() = 0;
-    virtual void        ReceiveData();
+    virtual void		InitData();
+    virtual void		TransferData() = 0;
+    virtual void		ReceiveData();
 
-    SemanticNode        aMyNode;
+    SemanticNode		aMyNode;
     Dyn<ary::doc::OldIdlDocu>
                         pDocu;
     ary::Repository *   pRepository;

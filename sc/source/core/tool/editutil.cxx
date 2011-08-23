@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,9 +67,9 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-//  Delimiters zusaetzlich zu EditEngine-Default:
+//	Delimiters zusaetzlich zu EditEngine-Default:
 
-const sal_Char ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
+const sal_Char __FAR_DATA ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
 
 
 //------------------------------------------------------------------------
@@ -77,7 +77,7 @@ const sal_Char ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
 String ScEditUtil::ModifyDelimiters( const String& rOld )
 {
     String aRet = rOld;
-    aRet.EraseAllChars( '_' );  // underscore is used in function argument names
+    aRet.EraseAllChars( '_' );	// underscore is used in function argument names
     aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( pCalcDelimiters ) );
     aRet.Append(ScCompiler::GetNativeSymbol(ocSep)); // argument separator is localized.
     return aRet;
@@ -86,8 +86,8 @@ String ScEditUtil::ModifyDelimiters( const String& rOld )
 static String lcl_GetDelimitedString( const EditEngine& rEngine, const sal_Char c )
 {
     String aRet;
-    sal_uInt16 nParCount = rEngine.GetParagraphCount();
-    for (sal_uInt16 nPar=0; nPar<nParCount; nPar++)
+    USHORT nParCount = rEngine.GetParagraphCount();
+    for (USHORT nPar=0; nPar<nParCount; nPar++)
     {
         if (nPar > 0)
             aRet += c;
@@ -108,17 +108,17 @@ String ScEditUtil::GetMultilineString( const EditEngine& rEngine )
 
 //------------------------------------------------------------------------
 
-Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForceToTop )
+Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToTop )
 {
     // bForceToTop = always align to top, for editing
-    // (sal_False for querying URLs etc.)
+    // (FALSE for querying URLs etc.)
 
     if (!pPattern)
         pPattern = pDoc->GetPattern( nCol, nRow, nTab );
 
     Point aStartPos = aScrPos;
 
-    sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     const ScMergeAttr* pMerge = (const ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
@@ -137,23 +137,23 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForc
     }
 
     const SvxMarginItem* pMargin = (const SvxMarginItem*)&pPattern->GetItem(ATTR_MARGIN);
-    sal_uInt16 nIndent = 0;
+    USHORT nIndent = 0;
     if ( ((const SvxHorJustifyItem&)pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue() ==
                 SVX_HOR_JUSTIFY_LEFT )
         nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
-    long nPixDifX   = (long) ( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
-    aStartPos.X()   += nPixDifX * nLayoutSign;
-    nCellX          -= nPixDifX + (long) ( pMargin->GetRightMargin() * nPPTX );     // wegen Umbruch etc.
+    long nPixDifX	= (long) ( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
+    aStartPos.X()	+= nPixDifX * nLayoutSign;
+    nCellX			-= nPixDifX + (long) ( pMargin->GetRightMargin() * nPPTX );		// wegen Umbruch etc.
 
-    //  vertikale Position auf die in der Tabelle anpassen
+    //	vertikale Position auf die in der Tabelle anpassen
 
     long nPixDifY;
     long nTopMargin = (long) ( pMargin->GetTopMargin() * nPPTY );
     SvxCellVerJustify eJust = (SvxCellVerJustify) ((const SvxVerJustifyItem&)pPattern->
                                                 GetItem(ATTR_VER_JUSTIFY)).GetValue();
 
-    //  asian vertical is always edited top-aligned
-    sal_Bool bAsianVertical = ((const SfxBoolItem&)pPattern->GetItem( ATTR_STACKED )).GetValue() &&
+    //	asian vertical is always edited top-aligned
+    BOOL bAsianVertical = ((const SfxBoolItem&)pPattern->GetItem( ATTR_STACKED )).GetValue() &&
         ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
 
     if ( eJust == SVX_VER_JUSTIFY_TOP ||
@@ -165,9 +165,9 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForc
         pDev->SetMapMode( MAP_PIXEL );
 
         long nTextHeight = pDoc->GetNeededSize( nCol, nRow, nTab,
-                                                pDev, nPPTX, nPPTY, aZoomX, aZoomY, false );
+                                                pDev, nPPTX, nPPTY, aZoomX, aZoomY, FALSE );
         if (!nTextHeight)
-        {                                   // leere Zelle
+        {									// leere Zelle
             Font aFont;
             // font color doesn't matter here
             pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aZoomY );
@@ -179,23 +179,23 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForc
         pDev->SetMapMode(aMode);
 
         if ( nTextHeight > nCellY + nTopMargin || bForceToTop )
-            nPixDifY = 0;                           // zu gross -> oben anfangen
+            nPixDifY = 0;							// zu gross -> oben anfangen
         else
         {
             if ( eJust == SVX_VER_JUSTIFY_CENTER )
                 nPixDifY = nTopMargin + ( nCellY - nTextHeight ) / 2;
             else
-                nPixDifY = nCellY - nTextHeight + nTopMargin;       // JUSTIFY_BOTTOM
+                nPixDifY = nCellY - nTextHeight + nTopMargin;		// JUSTIFY_BOTTOM
         }
     }
 
     aStartPos.Y() += nPixDifY;
-    nCellY      -= nPixDifY;
+    nCellY		-= nPixDifY;
 
     if ( bLayoutRTL )
-        aStartPos.X() -= nCellX - 2;    // excluding grid on both sides
+        aStartPos.X() -= nCellX - 2;	// excluding grid on both sides
 
-                                                        //  -1 -> Gitter nicht ueberschreiben
+                                                        //	-1 -> Gitter nicht ueberschreiben
     return Rectangle( aStartPos, Size(nCellX-1,nCellY-1) );
 }
 
@@ -204,12 +204,12 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForc
 ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
     pEngine( pEng ),
     pEditAttrs( NULL ),
-    bNeedsObject( false ),
-    bNeedsCellAttr( false )
+    bNeedsObject( FALSE ),
+    bNeedsCellAttr( FALSE )
 {
     if ( pEngine->GetParagraphCount() > 1 )
     {
-        bNeedsObject = sal_True;            //! Zellatribute finden ?
+        bNeedsObject = TRUE;			//!	Zellatribute finden ?
     }
     else
     {
@@ -218,43 +218,43 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
                                         ESelection(0,0,0,pEngine->GetTextLen(0)), EditEngineAttribs_OnlyHard ) );
         const SfxItemSet& rEditDefaults = pEngine->GetDefaults();
 
-        for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END && !bNeedsObject; nId++)
+        for (USHORT nId = EE_CHAR_START; nId <= EE_CHAR_END && !bNeedsObject; nId++)
         {
-            SfxItemState eState = pEditAttrs->GetItemState( nId, false, &pItem );
+            SfxItemState eState = pEditAttrs->GetItemState( nId, FALSE, &pItem );
             if (eState == SFX_ITEM_DONTCARE)
-                bNeedsObject = sal_True;
+                bNeedsObject = TRUE;
             else if (eState == SFX_ITEM_SET)
             {
                 if ( nId == EE_CHAR_ESCAPEMENT || nId == EE_CHAR_PAIRKERNING ||
                         nId == EE_CHAR_KERNING || nId == EE_CHAR_XMLATTRIBS )
                 {
-                    //  Escapement and kerning are kept in EditEngine because there are no
-                    //  corresponding cell format items. User defined attributes are kept in
-                    //  EditEngine because "user attributes applied to all the text" is different
-                    //  from "user attributes applied to the cell".
+                    //	Escapement and kerning are kept in EditEngine because there are no
+                    //	corresponding cell format items. User defined attributes are kept in
+                    //	EditEngine because "user attributes applied to all the text" is different
+                    //	from "user attributes applied to the cell".
 
                     if ( *pItem != rEditDefaults.Get(nId) )
-                        bNeedsObject = sal_True;
+                        bNeedsObject = TRUE;
                 }
                 else
                     if (!bNeedsCellAttr)
                         if ( *pItem != rEditDefaults.Get(nId) )
-                            bNeedsCellAttr = sal_True;
+                            bNeedsCellAttr = TRUE;
                 //  rEditDefaults contains the defaults from the cell format
             }
         }
 
-        //  Feldbefehle enthalten?
+        //	Feldbefehle enthalten?
 
-        SfxItemState eFieldState = pEditAttrs->GetItemState( EE_FEATURE_FIELD, false );
+        SfxItemState eFieldState = pEditAttrs->GetItemState( EE_FEATURE_FIELD, FALSE );
         if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
-            bNeedsObject = sal_True;
+            bNeedsObject = TRUE;
 
-        //  not converted characters?
+        //	not converted characters?
 
-        SfxItemState eConvState = pEditAttrs->GetItemState( EE_FEATURE_NOTCONV, false );
+        SfxItemState eConvState = pEditAttrs->GetItemState( EE_FEATURE_NOTCONV, FALSE );
         if ( eConvState == SFX_ITEM_DONTCARE || eConvState == SFX_ITEM_SET )
-            bNeedsObject = sal_True;
+            bNeedsObject = TRUE;
     }
 }
 
@@ -267,12 +267,12 @@ ScEditAttrTester::~ScEditAttrTester()
 //------------------------------------------------------------------------
 
 ScEnginePoolHelper::ScEnginePoolHelper( SfxItemPool* pEnginePoolP,
-                sal_Bool bDeleteEnginePoolP )
+                BOOL bDeleteEnginePoolP )
             :
             pEnginePool( pEnginePoolP ),
             pDefaults( NULL ),
             bDeleteEnginePool( bDeleteEnginePoolP ),
-            bDeleteDefaults( false )
+            bDeleteDefaults( FALSE )
 {
 }
 
@@ -282,7 +282,7 @@ ScEnginePoolHelper::ScEnginePoolHelper( const ScEnginePoolHelper& rOrg )
             pEnginePool( rOrg.bDeleteEnginePool ? rOrg.pEnginePool->Clone() : rOrg.pEnginePool ),
             pDefaults( NULL ),
             bDeleteEnginePool( rOrg.bDeleteEnginePool ),
-            bDeleteDefaults( false )
+            bDeleteDefaults( FALSE )
 {
 }
 
@@ -299,13 +299,13 @@ ScEnginePoolHelper::~ScEnginePoolHelper()
 //------------------------------------------------------------------------
 
 ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
-                sal_Bool bDeleteEnginePoolP )
+                BOOL bDeleteEnginePoolP )
             :
             ScEnginePoolHelper( pEnginePoolP, bDeleteEnginePoolP ),
             EditEngine( pEnginePoolP )
 {
-    //  All EditEngines use ScGlobal::GetEditDefaultLanguage as DefaultLanguage.
-    //  DefaultLanguage for InputHandler's EditEngine is updated later.
+    //	All EditEngines use ScGlobal::GetEditDefaultLanguage as DefaultLanguage.
+    //	DefaultLanguage for InputHandler's EditEngine is updated later.
 
     SetDefaultLanguage( ScGlobal::GetEditDefaultLanguage() );
 }
@@ -325,41 +325,41 @@ ScEditEngineDefaulter::~ScEditEngineDefaulter()
 }
 
 
-void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, sal_Bool bRememberCopy )
+void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, BOOL bRememberCopy )
 {
     if ( bRememberCopy )
     {
         if ( bDeleteDefaults )
             delete pDefaults;
         pDefaults = new SfxItemSet( rSet );
-        bDeleteDefaults = sal_True;
+        bDeleteDefaults = TRUE;
     }
     const SfxItemSet& rNewSet = bRememberCopy ? *pDefaults : rSet;
-    sal_Bool bUndo = IsUndoEnabled();
-    EnableUndo( false );
-    sal_Bool bUpdateMode = GetUpdateMode();
+    BOOL bUndo = IsUndoEnabled();
+    EnableUndo( FALSE );
+    BOOL bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
-        SetUpdateMode( false );
-    sal_uInt16 nPara = GetParagraphCount();
-    for ( sal_uInt16 j=0; j<nPara; j++ )
+        SetUpdateMode( FALSE );
+    USHORT nPara = GetParagraphCount();
+    for ( USHORT j=0; j<nPara; j++ )
     {
         SetParaAttribs( j, rNewSet );
     }
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( TRUE );
     if ( bUndo )
-        EnableUndo( sal_True );
+        EnableUndo( TRUE );
 }
 
 
-void ScEditEngineDefaulter::SetDefaults( SfxItemSet* pSet, sal_Bool bTakeOwnership )
+void ScEditEngineDefaulter::SetDefaults( SfxItemSet* pSet, BOOL bTakeOwnership )
 {
     if ( bDeleteDefaults )
         delete pDefaults;
     pDefaults = pSet;
     bDeleteDefaults = bTakeOwnership;
     if ( pDefaults )
-        SetDefaults( *pDefaults, false );
+        SetDefaults( *pDefaults, FALSE );
 }
 
 
@@ -368,10 +368,10 @@ void ScEditEngineDefaulter::SetDefaultItem( const SfxPoolItem& rItem )
     if ( !pDefaults )
     {
         pDefaults = new SfxItemSet( GetEmptyItemSet() );
-        bDeleteDefaults = sal_True;
+        bDeleteDefaults = TRUE;
     }
     pDefaults->Put( rItem );
-    SetDefaults( *pDefaults, false );
+    SetDefaults( *pDefaults, FALSE );
 }
 
 const SfxItemSet& ScEditEngineDefaulter::GetDefaults()
@@ -379,90 +379,90 @@ const SfxItemSet& ScEditEngineDefaulter::GetDefaults()
     if ( !pDefaults )
     {
         pDefaults = new SfxItemSet( GetEmptyItemSet() );
-        bDeleteDefaults = sal_True;
+        bDeleteDefaults = TRUE;
     }
     return *pDefaults;
 }
 
 void ScEditEngineDefaulter::SetText( const EditTextObject& rTextObject )
 {
-    sal_Bool bUpdateMode = GetUpdateMode();
+    BOOL bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
-        SetUpdateMode( false );
+        SetUpdateMode( FALSE );
     EditEngine::SetText( rTextObject );
     if ( pDefaults )
-        SetDefaults( *pDefaults, false );
+        SetDefaults( *pDefaults, FALSE );
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( TRUE );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
-            const SfxItemSet& rSet, sal_Bool bRememberCopy )
+            const SfxItemSet& rSet, BOOL bRememberCopy )
 {
-    sal_Bool bUpdateMode = GetUpdateMode();
+    BOOL bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
-        SetUpdateMode( false );
+        SetUpdateMode( FALSE );
     EditEngine::SetText( rTextObject );
     SetDefaults( rSet, bRememberCopy );
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( TRUE );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
-            SfxItemSet* pSet, sal_Bool bTakeOwnership )
+            SfxItemSet* pSet, BOOL bTakeOwnership )
 {
-    sal_Bool bUpdateMode = GetUpdateMode();
+    BOOL bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
-        SetUpdateMode( false );
+        SetUpdateMode( FALSE );
     EditEngine::SetText( rTextObject );
     SetDefaults( pSet, bTakeOwnership );
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( TRUE );
 }
 
 
 void ScEditEngineDefaulter::SetText( const String& rText )
 {
-    sal_Bool bUpdateMode = GetUpdateMode();
+    BOOL bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
-        SetUpdateMode( false );
+        SetUpdateMode( FALSE );
     EditEngine::SetText( rText );
     if ( pDefaults )
-        SetDefaults( *pDefaults, false );
+        SetDefaults( *pDefaults, FALSE );
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( TRUE );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const String& rText,
-            const SfxItemSet& rSet, sal_Bool bRememberCopy )
+            const SfxItemSet& rSet, BOOL bRememberCopy )
 {
-    sal_Bool bUpdateMode = GetUpdateMode();
+    BOOL bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
-        SetUpdateMode( false );
+        SetUpdateMode( FALSE );
     EditEngine::SetText( rText );
     SetDefaults( rSet, bRememberCopy );
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( TRUE );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const String& rText,
-            SfxItemSet* pSet, sal_Bool bTakeOwnership )
+            SfxItemSet* pSet, BOOL bTakeOwnership )
 {
-    sal_Bool bUpdateMode = GetUpdateMode();
+    BOOL bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
-        SetUpdateMode( false );
+        SetUpdateMode( FALSE );
     EditEngine::SetText( rText );
     SetDefaults( pSet, bTakeOwnership );
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( TRUE );
 }
 
 void ScEditEngineDefaulter::RepeatDefaults()
 {
     if ( pDefaults )
     {
-        sal_uInt16 nPara = GetParagraphCount();
-        for ( sal_uInt16 j=0; j<nPara; j++ )
+        USHORT nPara = GetParagraphCount();
+        for ( USHORT j=0; j<nPara; j++ )
             SetParaAttribs( j, *pDefaults );
     }
 }
@@ -470,20 +470,20 @@ void ScEditEngineDefaulter::RepeatDefaults()
 void ScEditEngineDefaulter::RemoveParaAttribs()
 {
     SfxItemSet* pCharItems = NULL;
-    sal_Bool bUpdateMode = GetUpdateMode();
+    BOOL bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
-        SetUpdateMode( false );
-    sal_uInt16 nParCount = GetParagraphCount();
-    for (sal_uInt16 nPar=0; nPar<nParCount; nPar++)
+        SetUpdateMode( FALSE );
+    USHORT nParCount = GetParagraphCount();
+    for (USHORT nPar=0; nPar<nParCount; nPar++)
     {
         const SfxItemSet& rParaAttribs = GetParaAttribs( nPar );
-        sal_uInt16 nWhich;
+        USHORT nWhich;
         for (nWhich = EE_CHAR_START; nWhich <= EE_CHAR_END; nWhich ++)
         {
             const SfxPoolItem* pParaItem;
-            if ( rParaAttribs.GetItemState( nWhich, false, &pParaItem ) == SFX_ITEM_SET )
+            if ( rParaAttribs.GetItemState( nWhich, FALSE, &pParaItem ) == SFX_ITEM_SET )
             {
-                //  if defaults are set, use only items that are different from default
+                //	if defaults are set, use only items that are different from default
                 if ( !pDefaults || *pParaItem != pDefaults->Get(nWhich) )
                 {
                     if (!pCharItems)
@@ -498,23 +498,23 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
             SvUShorts aPortions;
             GetPortions( nPar, aPortions );
 
-            //  loop through the portions of the paragraph, and set only those items
-            //  that are not overridden by existing character attributes
+            //	loop through the portions of the paragraph, and set only those items
+            //	that are not overridden by existing character attributes
 
-            sal_uInt16 nPCount = aPortions.Count();
-            sal_uInt16 nStart = 0;
-            for ( sal_uInt16 nPos=0; nPos<nPCount; nPos++ )
+            USHORT nPCount = aPortions.Count();
+            USHORT nStart = 0;
+            for ( USHORT nPos=0; nPos<nPCount; nPos++ )
             {
-                sal_uInt16 nEnd = aPortions.GetObject( nPos );
+                USHORT nEnd = aPortions.GetObject( nPos );
                 ESelection aSel( nPar, nStart, nPar, nEnd );
                 SfxItemSet aOldCharAttrs = GetAttribs( aSel );
                 SfxItemSet aNewCharAttrs = *pCharItems;
                 for (nWhich = EE_CHAR_START; nWhich <= EE_CHAR_END; nWhich ++)
                 {
-                    //  Clear those items that are different from existing character attributes.
-                    //  Where no character attributes are set, GetAttribs returns the paragraph attributes.
+                    //	Clear those items that are different from existing character attributes.
+                    //	Where no character attributes are set, GetAttribs returns the paragraph attributes.
                     const SfxPoolItem* pItem;
-                    if ( aNewCharAttrs.GetItemState( nWhich, false, &pItem ) == SFX_ITEM_SET &&
+                    if ( aNewCharAttrs.GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
                          *pItem != aOldCharAttrs.Get(nWhich) )
                     {
                         aNewCharAttrs.ClearItem(nWhich);
@@ -531,14 +531,14 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
 
         if ( rParaAttribs.Count() )
         {
-            //  clear all paragraph attributes (including defaults),
-            //  so they are not contained in resulting EditTextObjects
+            //	clear all paragraph attributes (including defaults),
+            //	so they are not contained in resulting EditTextObjects
 
             SetParaAttribs( nPar, SfxItemSet( *rParaAttribs.GetPool(), rParaAttribs.GetRanges() ) );
         }
     }
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( TRUE );
 }
 
 //------------------------------------------------------------------------
@@ -570,11 +570,11 @@ void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
 }
 
 //------------------------------------------------------------------------
-//      Feldbefehle fuer Kopf- und Fusszeilen
+//		Feldbefehle fuer Kopf- und Fusszeilen
 //------------------------------------------------------------------------
 
 //
-//      Zahlen aus \sw\source\core\doc\numbers.cxx
+//		Zahlen aus \sw\source\core\doc\numbers.cxx
 //
 
 String lcl_GetCharStr( sal_Int32 nNo )
@@ -621,10 +621,10 @@ String lcl_GetNumStr( sal_Int32 nNo, SvxNumType eType )
             aTmpStr.Erase();
             break;
 
-//      CHAR_SPECIAL:
-//          ????
+//		CHAR_SPECIAL:
+//			????
 
-//      case ARABIC:    ist jetzt default
+//		case ARABIC:	ist jetzt default
         default:
             aTmpStr = String::CreateFromInt32( nNo );
             break;
@@ -642,17 +642,17 @@ ScHeaderFieldData::ScHeaderFieldData()
     eNumType = SVX_ARABIC;
 }
 
-ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP, sal_Bool bDeleteEnginePoolP )
+ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP, BOOL bDeleteEnginePoolP )
         : ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP )
 {
 }
 
-String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
-                                    sal_uInt16 /* nPara */, sal_uInt16 /* nPos */,
+String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
+                                    USHORT /* nPara */, USHORT /* nPos */,
                                     Color*& /* rTxtColor */, Color*& /* rFldColor */ )
 {
     String aRet;
-    const SvxFieldData* pFieldData = rField.GetField();
+    const SvxFieldData*	pFieldData = rField.GetField();
     if ( pFieldData )
     {
         TypeId aType = pFieldData->Type();
@@ -681,12 +681,13 @@ String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             aRet = ScGlobal::pLocaleData->getDate(aData.aDate);
         else
         {
+            //DBG_ERROR("unbekannter Feldbefehl");
             aRet = '?';
         }
     }
     else
     {
-        OSL_FAIL("FieldData ist 0");
+        DBG_ERROR("FieldData ist 0");
         aRet = '?';
     }
 
@@ -695,29 +696,29 @@ String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
 
 //------------------------------------------------------------------------
 //
-//                          Feld-Daten
+//							Feld-Daten
 //
 //------------------------------------------------------------------------
 
 ScFieldEditEngine::ScFieldEditEngine( SfxItemPool* pEnginePoolP,
-            SfxItemPool* pTextObjectPool, sal_Bool bDeleteEnginePoolP )
+            SfxItemPool* pTextObjectPool, BOOL bDeleteEnginePoolP )
         :
         ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP ),
-        bExecuteURL( sal_True )
+        bExecuteURL( TRUE )
 {
     if ( pTextObjectPool )
         SetEditTextObjectPool( pTextObjectPool );
-    //  EE_CNTRL_URLSFXEXECUTE nicht, weil die Edit-Engine den ViewFrame nicht kennt
+    //	EE_CNTRL_URLSFXEXECUTE nicht, weil die Edit-Engine den ViewFrame nicht kennt
     // wir haben keine StyleSheets fuer Text
     SetControlWord( (GetControlWord() | EE_CNTRL_MARKFIELDS) & ~EE_CNTRL_RTFSTYLESHEETS );
 }
 
-String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
-                                    sal_uInt16 /* nPara */, sal_uInt16 /* nPos */,
+String __EXPORT ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
+                                    USHORT /* nPara */, USHORT /* nPos */,
                                     Color*& rTxtColor, Color*& /* rFldColor */ )
 {
     String aRet;
-    const SvxFieldData* pFieldData = rField.GetField();
+    const SvxFieldData*	pFieldData = rField.GetField();
 
     if ( pFieldData )
     {
@@ -745,17 +746,18 @@ String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         }
         else
         {
+            //DBG_ERROR("unbekannter Feldbefehl");
             aRet = '?';
         }
     }
 
-    if (!aRet.Len())        // leer ist baeh
-        aRet = ' ';         // Space ist Default der Editengine
+    if (!aRet.Len()) 		// leer ist baeh
+        aRet = ' ';			// Space ist Default der Editengine
 
     return aRet;
 }
 
-void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_uInt16, sal_uInt16 )
+void __EXPORT ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, USHORT, USHORT )
 {
     const SvxFieldData* pFld = rField.GetField();
 
@@ -769,7 +771,7 @@ void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_uInt16, sa
 //------------------------------------------------------------------------
 
 ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePoolP,
-            SfxItemPool* pTextObjectPool, sal_Bool bDeleteEnginePoolP ) :
+            SfxItemPool* pTextObjectPool, BOOL bDeleteEnginePoolP ) :
     ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP )
 {
     if ( pTextObjectPool )

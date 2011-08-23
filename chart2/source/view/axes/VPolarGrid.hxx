@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define _CHART2_VPOLARGRID_HXX
 
 #include "VAxisOrGridBase.hxx"
-#include "Tickmarks.hxx"
+#include "TickmarkHelper.hxx"
 #include "VLineProperties.hxx"
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 
@@ -56,15 +56,16 @@ public:
         );
     virtual ~VPolarGrid();
 
-    virtual void createShapes();
+    virtual void SAL_CALL createShapes();
 
-    void setIncrements( const std::vector< ExplicitIncrementData >& rIncrements );
+    void setIncrements( const ::com::sun::star::uno::Sequence<
+                    ::com::sun::star::chart2::ExplicitIncrementData >& rIncrements );
 
     static void createLinePointSequence_ForAngleAxis(
                     ::com::sun::star::drawing::PointSequenceSequence& rPoints
                     , ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos
-                    , const ExplicitIncrementData& rIncrement
-                    , const ExplicitScaleData& rScale
+                    , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
+                    , const ::com::sun::star::chart2::ExplicitScaleData& rScale
                     , PolarPlottingPositionHelper* pPosHelper
                     , double fLogicRadius, double fLogicZ );
 
@@ -73,7 +74,8 @@ private: //member
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > > m_aGridPropertiesList;//main grid, subgrid, subsubgrid etc
     PolarPlottingPositionHelper* m_pPosHelper;
-    ::std::vector< ExplicitIncrementData >   m_aIncrements;
+    ::com::sun::star::uno::Sequence<
+            ::com::sun::star::chart2::ExplicitIncrementData >   m_aIncrements;
 
     void    getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
 
@@ -81,6 +83,12 @@ private: //member
                     , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
                     , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
                     , const ::std::vector<VLineProperties>& rLinePropertiesList );
+#if NOTYET
+    void    create2DAngleGrid( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xLogicTarget
+                    , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
+                    , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
+                    , const ::std::vector<VLineProperties>& rLinePropertiesList );
+#endif
 };
 
 //.............................................................................

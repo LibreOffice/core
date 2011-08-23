@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,18 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr, 10, 10 )
 
 SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
     : SwCursor( rPos, pRing, false ), SwModify( 0 ),
-    bRemainInSection( sal_True ),
-    bSkipOverHiddenSections( sal_False ),
-    bSkipOverProtectSections( sal_False )
+    bRemainInSection( TRUE ),
+    bSkipOverHiddenSections( FALSE ),
+    bSkipOverProtectSections( FALSE )
 
+{}
+
+// @@@ semantic: no copy ctor.
+SwUnoCrsr::SwUnoCrsr( SwUnoCrsr& rICrsr )
+    : SwCursor( rICrsr ), SwModify( 0 ),
+    bRemainInSection( rICrsr.bRemainInSection ),
+    bSkipOverHiddenSections( rICrsr.bSkipOverHiddenSections ),
+    bSkipOverProtectSections( rICrsr.bSkipOverProtectSections )
 {}
 
 SwUnoCrsr::~SwUnoCrsr()
@@ -55,7 +63,7 @@ SwUnoCrsr::~SwUnoCrsr()
     {
         // dann muss der Cursor aus dem Array ausgetragen werden
         SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
-        sal_uInt16 nDelPos = rTbl.GetPos( this );
+        USHORT nDelPos = rTbl.GetPos( this );
 
         if( USHRT_MAX != nDelPos )
             rTbl.Remove( nDelPos );
@@ -68,8 +76,8 @@ SwUnoCrsr::~SwUnoCrsr()
     while( GetNext() != this )
     {
         Ring* pNxt = GetNext();
-        pNxt->MoveTo( 0 );      // ausketten
-        delete pNxt;            // und loeschen
+        pNxt->MoveTo( 0 );		// ausketten
+        delete pNxt;			// und loeschen
     }
 }
 
@@ -105,7 +113,7 @@ bool SwUnoCrsr::IsReadOnlyAvailable() const
 }
 
 const SwCntntFrm*
-SwUnoCrsr::DoSetBidiLevelLeftRight( sal_Bool &, sal_Bool, sal_Bool )
+SwUnoCrsr::DoSetBidiLevelLeftRight( BOOL &, BOOL, BOOL )
 {
     return 0; // not for uno cursor
 }
@@ -115,7 +123,7 @@ void SwUnoCrsr::DoSetBidiLevelUpDown()
     return; // not for uno cursor
 }
 
-sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
+BOOL SwUnoCrsr::IsSelOvr( int eFlags )
 {
     if( bRemainInSection )
     {
@@ -126,8 +134,8 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
                     *pNewSttNd = rPtIdx.GetNode().StartOfSectionNode();
         if( pOldSttNd != pNewSttNd )
         {
-            sal_Bool bMoveDown = GetSavePos()->nNode < rPtIdx.GetIndex();
-            sal_Bool bValidPos = sal_False;
+            BOOL bMoveDown = GetSavePos()->nNode < rPtIdx.GetIndex();
+            BOOL bValidPos = FALSE;
 
             // search the correct surrounded start node - which the index
             // can't leave.
@@ -181,14 +189,14 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
                         }
                     }
                     else
-                        bValidPos = sal_True;
+                        bValidPos = TRUE;
                 } while ( pInvalidNode );
             }
 
             if( bValidPos )
             {
                 SwCntntNode* pCNd = GetCntntNode();
-                sal_uInt16 nCnt = 0;
+                USHORT nCnt = 0;
                 if( pCNd && !bMoveDown )
                     nCnt = pCNd->Len();
                 GetPoint()->nContent.Assign( pCNd, nCnt );
@@ -197,7 +205,7 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
             {
                 rPtIdx = GetSavePos()->nNode;
                 GetPoint()->nContent.Assign( GetCntntNode(), GetSavePos()->nCntnt );
-                return sal_True;
+                return TRUE;
             }
         }
     }
@@ -210,18 +218,26 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
 SwUnoTableCrsr::SwUnoTableCrsr(const SwPosition& rPos)
     : SwCursor(rPos,0,false), SwUnoCrsr(rPos), SwTableCursor(rPos), aTblSel(rPos,0,false)
 {
-    SetRemainInSection(sal_False);
+    SetRemainInSection(FALSE);
 }
 
 SwUnoTableCrsr::~SwUnoTableCrsr()
 {
     while( aTblSel.GetNext() != &aTblSel )
-        delete aTblSel.GetNext();           // und loeschen
+        delete aTblSel.GetNext();			// und loeschen
 }
 
-sal_Bool SwUnoTableCrsr::IsSelOvr( int eFlags )
+
+/*
+SwCursor* SwUnoTableCrsr::Create( SwPaM* pRing ) const
 {
-    sal_Bool bRet = SwUnoCrsr::IsSelOvr( eFlags );
+    return SwUnoCrsr::Create( pRing );
+}
+*/
+
+BOOL SwUnoTableCrsr::IsSelOvr( int eFlags )
+{
+    BOOL bRet = SwUnoCrsr::IsSelOvr( eFlags );
     if( !bRet )
     {
         const SwTableNode* pTNd = GetPoint()->nNode.GetNode().FindTableNode();
@@ -237,14 +253,14 @@ void SwUnoTableCrsr::MakeBoxSels()
     const SwCntntNode* pCNd;
     bool bMakeTblCrsrs = true;
     if( GetPoint()->nNode.GetIndex() && GetMark()->nNode.GetIndex() &&
-            0 != ( pCNd = GetCntntNode() ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) &&
-            0 != ( pCNd = GetCntntNode(sal_False) ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) )
-        bMakeTblCrsrs = GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *this );
+            0 != ( pCNd = GetCntntNode() ) && pCNd->GetFrm() &&
+            0 != ( pCNd = GetCntntNode(FALSE) ) && pCNd->GetFrm() )
+        bMakeTblCrsrs = GetDoc()->GetRootFrm()->MakeTblCrsrs( *this );
 
     if ( !bMakeTblCrsrs )
     {
         SwSelBoxes& rTmpBoxes = (SwSelBoxes&)GetBoxes();
-        sal_uInt16 nCount = 0;
+        USHORT nCount = 0;
         while( nCount < rTmpBoxes.Count() )
             DeleteBox( nCount );
     }

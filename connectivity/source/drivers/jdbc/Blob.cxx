@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ java_sql_Blob::~java_sql_Blob()
 
 jclass java_sql_Blob::getMyClass() const
 {
-    // the class must be fetched only once, therefore it's static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/Blob");
     return theClass;
@@ -63,12 +63,12 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
 {
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
-        // initialize temporary variable
+        // temporaere Variable initialisieren
         static const char * cSignature = "()J";
         static const char * cMethodName = "length";
-        // submit Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallLongMethod( object, mID );
@@ -82,10 +82,10 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     {
-        // initialize temporary variable
+        // temporaere Variable initialisieren
         static const char * cSignature = "(JI)[B";
         static const char * cMethodName = "getBytes";
-        // submit Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         jbyteArray out = (jbyteArray)t.pEnv->CallObjectMethod( object, mID,pos,count);
@@ -98,8 +98,8 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
             t.pEnv->DeleteLocalRef(out);
         }
     } //t.pEnv
-    // WARNING: the caller becomes the owner of the returned pointer
-    return  aSeq;
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    return 	aSeq;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_Blob::getBinaryStream(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
@@ -107,7 +107,7 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(NULL);
     jobject out = callObjectMethod(t.pEnv,"getBinaryStream","()Ljava/io/InputStream;", mID);
-    // WARNING: the caller becomes the owner of the returned pointer
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? 0 : new java_io_InputStream( t.pEnv, out );
 }
 
@@ -115,15 +115,15 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
 {
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
-        // initialize temporary variable
+        // temporaere Variable initialisieren
         static const char * cSignature = "([BI)J";
         static const char * cMethodName = "position";
-        // submit Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        // convert Parameter
+        // Parameter konvertieren
         jbyteArray pByteArray = t.pEnv->NewByteArray(pattern.getLength());
         t.pEnv->SetByteArrayRegion(pByteArray,0,pattern.getLength(),(jbyte*)pattern.getConstArray());
         out = t.pEnv->CallLongMethod( object, mID, pByteArray,start );
@@ -140,7 +140,7 @@ sal_Int64 SAL_CALL java_sql_Blob::positionOfBlob( const ::com::sun::star::uno::R
     // the pattern parameter. Since the effort for proper implementation is rather high - we would need
     // to translated patter into a byte[] -, we defer this functionality for the moment (hey, it was
     // unusable, anyway)
-    // #i57457#
+    // 2005-11-15 / #i57457# / frank.schoenheit@sun.com
     return 0;
 }
 

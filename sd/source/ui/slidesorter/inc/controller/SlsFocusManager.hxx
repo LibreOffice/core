@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace sd { namespace slidesorter { namespace controller {
     focused state of the focus page can be toggled with the ToggleFocus()
     method.
 */
-class FocusManager
+class FocusManager 
 {
 public:
     /** Create a new focus manager that operates on the pages of the model
@@ -121,6 +121,16 @@ public:
     */
     sal_Int32 GetFocusedPageIndex (void) const;
 
+    /** DEPRECATED. (Use equivalent SetFocusedPage(sal_Int32) instead.
+
+        Set the focus to the page with the given index.  This does not make
+        the focus visible.
+        @param nPageIndex
+            Index of a page as it is accepted by the slide sorter model.
+            The index is not checked for validity.
+    */
+    void FocusPage (sal_Int32 nPageIndex);
+
     /** Set the focused page to the one described by the given page
         descriptor.  The visibility of the focus indicator is not modified.
         @param rDescriptor
@@ -135,8 +145,6 @@ public:
             A valid page index that is understood by the SlideSorterModel.
     */
     void SetFocusedPage (sal_Int32 nPageIndex);
-
-    void SetFocusedPageToCurrentPage (void);
 
     /** Return <TRUE/> when the focus inidcator is currently shown.  A
         prerequisite is that the window managed by this focus manager has
@@ -166,7 +174,7 @@ public:
         typically the tool bar with the close button.
     */
     void SetFocusToToolBox (void);
-
+    
     /** Create an instance of this class to temporarily hide the focus
         indicator.  It is restored to its former visibility state when the
         FocusHider is destroyed.
@@ -195,13 +203,7 @@ private:
     bool mbPageIsFocused;
 
     ::std::vector<Link> maFocusChangeListeners;
-
-    /** When vertical wrap is active then pressing UP in the top row moves
-        the focus to the bottom row, DOWN in the bottom row moves the focus
-        to the top row.
-    */
-    bool mbIsVerticalWrapActive;
-
+    
     /** Reset the focus state of the given descriptor and request a repaint
         so that the focus indicator is hidden.
         @param pDescriptor

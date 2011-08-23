@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define _SWTABLEPG_HXX
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <vcl/lstbox.hxx>
 #include <actctrl.hxx>
 #include "prcntfld.hxx"
@@ -42,50 +42,50 @@ class SwTableRep;
 struct TColumn
 {
     SwTwips nWidth;
-    sal_Bool    bVisible;
+    BOOL	bVisible;
 };
 
 class SwFormatTablePage : public SfxTabPage
 {
     FixedLine        aOptionsFL;
-    FixedText       aNameFT;
-    TableNameEdit   aNameED;
-    FixedText       aWidthFT;
-    PercentField    aWidthMF;
-    CheckBox        aRelWidthCB;
+    FixedText		aNameFT;
+    TableNameEdit	aNameED;
+    FixedText		aWidthFT;
+    PercentField	aWidthMF;
+    CheckBox		aRelWidthCB;
 
     FixedLine        aPosFL;
-    RadioButton     aFullBtn;
-    RadioButton     aLeftBtn;
-    RadioButton     aFromLeftBtn;
-    RadioButton     aRightBtn;
-    RadioButton     aCenterBtn;
-    RadioButton     aFreeBtn;
+    RadioButton 	aFullBtn;
+    RadioButton 	aLeftBtn;
+    RadioButton 	aFromLeftBtn;
+    RadioButton 	aRightBtn;
+    RadioButton 	aCenterBtn;
+    RadioButton 	aFreeBtn;
 
     FixedLine       aDistFL;
-    FixedText       aLeftFT;
-    PercentField    aLeftMF;
-    FixedText       aRightFT;
-    PercentField    aRightMF;
-    FixedText       aTopFT;
-    MetricField     aTopMF;
-    FixedText       aBottomFT;
-    MetricField     aBottomMF;
+    FixedText		aLeftFT;
+    PercentField 	aLeftMF;
+    FixedText		aRightFT;
+    PercentField	aRightMF;
+    FixedText		aTopFT;
+    MetricField 	aTopMF;
+    FixedText		aBottomFT;
+    MetricField 	aBottomMF;
 
     FixedLine       aPropertiesFL;
     FixedText       aTextDirectionFT;
     ListBox         aTextDirectionLB;
 
     SwTableRep*     pTblData;
-    SwTwips         nSaveWidth;
-    SwTwips         nMinTableWidth;
-    sal_uInt16          nOldAlign;
-    sal_Bool            bModified;
-    sal_Bool            bFull:1;
-    sal_Bool            bHtmlMode : 1;
+    SwTwips			nSaveWidth;
+    SwTwips			nMinTableWidth;
+    USHORT 			nOldAlign;
+    BOOL			bModified;
+    BOOL 			bFull:1;
+    BOOL            bHtmlMode : 1;
 
-    void        Init();
-    void        ModifyHdl( Edit* pEdit );
+    void		Init();
+    void		ModifyHdl( Edit* pEdit );
 
     DECL_LINK( AutoClickHdl, CheckBox * );
     DECL_LINK( RelWidthClickHdl, CheckBox * );
@@ -98,11 +98,11 @@ class SwFormatTablePage : public SfxTabPage
 public:
     SwFormatTablePage( Window* pParent, const SfxItemSet& rSet );
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-    virtual void        ActivatePage( const SfxItemSet& rSet );
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet);
+    virtual BOOL		FillItemSet( SfxItemSet& rSet );
+    virtual void		Reset( const SfxItemSet& rSet );
+    virtual void		ActivatePage( const SfxItemSet& rSet );
+    virtual int 		DeactivatePage( SfxItemSet* pSet = 0 );
 };
 
 /*-------------------------------------------------------
@@ -112,50 +112,51 @@ public:
 
 class SwTableColumnPage : public SfxTabPage
 {
-    CheckBox        aModifyTableCB;
-    CheckBox        aProportionalCB;
-    FixedText       aSpaceFT;
-    MetricField     aSpaceED;
-     FixedLine        aColFL;
-    ImageButton     aUpBtn;
-    FixedText       aFT1;
-    PercentField    aMF1;
-    FixedText       aFT2;
-    PercentField    aMF2;
-    FixedText       aFT3;
-    PercentField    aMF3;
-    FixedText       aFT4;
-    PercentField    aMF4;
-    FixedText       aFT5;
-    PercentField    aMF5;
-    FixedText       aFT6;
-    PercentField    aMF6;
-    ImageButton     aDownBtn;
+    CheckBox		aModifyTableCB;
+    CheckBox		aProportionalCB;
+    FixedText		aSpaceFT;
+    MetricField		aSpaceED;
 
-    SwTableRep*     pTblData;
-    PercentField*   pFieldArr[MET_FIELDS];
-    FixedText*      pTextArr[MET_FIELDS];
-    SwTwips         nTableWidth;
-    SwTwips         nMinWidth;
-    sal_uInt16          nNoOfCols;
-    sal_uInt16          nNoOfVisibleCols;
+    ImageButton 	aUpBtn;
+    FixedText		aFT1;
+    PercentField	aMF1;
+    FixedText		aFT2;
+    PercentField	aMF2;
+    FixedText		aFT3;
+    PercentField	aMF3;
+    FixedText		aFT4;
+    PercentField	aMF4;
+    FixedText		aFT5;
+    PercentField	aMF5;
+    FixedText		aFT6;
+    PercentField	aMF6;
+    ImageButton 	aDownBtn;
+    FixedLine        aColFL;
+
+    SwTableRep*		pTblData;
+    PercentField*	pFieldArr[MET_FIELDS];
+    FixedText*		pTextArr[MET_FIELDS];
+    SwTwips 		nTableWidth;
+    SwTwips 		nMinWidth;
+    USHORT			nNoOfCols;
+    USHORT			nNoOfVisibleCols;
     //Breite merken, wenn auf autom. Ausrichtung gestellt wird
-    sal_uInt16          aValueTbl[MET_FIELDS];//primaere Zuordnung der MetricFields
-    sal_Bool            bModified:1;
-    sal_Bool            bModifyTbl:1;
-    sal_Bool            bPercentMode:1;
+    USHORT			aValueTbl[MET_FIELDS];//primaere Zuordnung der MetricFields
+    BOOL			bModified:1;
+    BOOL			bModifyTbl:1;
+    BOOL			bPercentMode:1;
 
-    void        Init(sal_Bool bWeb);
+    void		Init(BOOL bWeb);
     DECL_LINK( AutoClickHdl, CheckBox * );
-    void        ModifyHdl( PercentField* pEdit );
+    void		ModifyHdl( PercentField* pEdit );
     DECL_LINK( UpHdl, PercentField * );
     DECL_LINK( DownHdl, PercentField * );
     DECL_LINK( LoseFocusHdl, PercentField * );
     DECL_LINK( ModeHdl, CheckBox * );
-    void        UpdateCols( sal_uInt16 nAktPos );
-    SwTwips     GetVisibleWidth(sal_uInt16 nPos);
-    void        SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth);
-
+    void		UpdateCols( USHORT nAktPos );
+    SwTwips 	GetVisibleWidth(USHORT nPos);
+    void 		SetVisibleWidth(USHORT nPos, SwTwips nNewWidth);
+    
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
@@ -163,11 +164,11 @@ public:
     SwTableColumnPage( Window* pParent, const SfxItemSet& rSet );
     ~SwTableColumnPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-    virtual void        ActivatePage( const SfxItemSet& rSet );
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet);
+    virtual BOOL		FillItemSet( SfxItemSet& rSet );
+    virtual void		Reset( const SfxItemSet& rSet );
+    virtual void		ActivatePage( const SfxItemSet& rSet );
+    virtual int 		DeactivatePage( SfxItemSet* pSet = 0 );
 
 };
 
@@ -177,24 +178,24 @@ public:
 class SwTextFlowPage : public SfxTabPage
 {
     FixedLine       aFlowFL;
-    CheckBox        aPgBrkCB;
-    RadioButton     aPgBrkRB;
-    RadioButton     aColBrkRB;
-    RadioButton     aPgBrkBeforeRB;
-    RadioButton     aPgBrkAfterRB;
-    CheckBox        aPageCollCB;
-    ListBox         aPageCollLB;
-    FixedText       aPageNoFT;
-    NumericField    aPageNoNF;
-    CheckBox        aSplitCB;
+    CheckBox		aPgBrkCB;
+    RadioButton 	aPgBrkRB;
+    RadioButton 	aColBrkRB;
+    RadioButton 	aPgBrkBeforeRB;
+    RadioButton 	aPgBrkAfterRB;
+    CheckBox		aPageCollCB;
+    ListBox			aPageCollLB;
+    FixedText		aPageNoFT;
+    NumericField	aPageNoNF;
+    CheckBox		aSplitCB;
     TriStateBox     aSplitRowCB;
-    CheckBox        aKeepCB;
-    CheckBox        aHeadLineCB;
-    FixedText       aRepeatHeaderFT;    // "dummy" to build before and after FT
-    FixedText       aRepeatHeaderBeforeFT;
-    NumericField    aRepeatHeaderNF;
-    FixedText       aRepeatHeaderAfterFT;
-    TextControlCombo    aRepeatHeaderCombo;
+    CheckBox		aKeepCB;
+    CheckBox		aHeadLineCB;
+    FixedText		aRepeatHeaderFT;	// "dummy" to build before and after FT
+    FixedText		aRepeatHeaderBeforeFT;
+    NumericField	aRepeatHeaderNF;
+    FixedText		aRepeatHeaderAfterFT;
+    TextControlCombo	aRepeatHeaderCombo;
     FixedText       aTextDirectionFT;
     ListBox         aTextDirectionLB;
 
@@ -202,10 +203,10 @@ class SwTextFlowPage : public SfxTabPage
     FixedText       aVertOrientFT;
     ListBox         aVertOrientLB;
 
-    SwWrtShell*     pShell;
+    SwWrtShell*		pShell;
 
-    sal_Bool            bPageBreak;
-    sal_Bool            bHtmlMode;
+    BOOL			bPageBreak;
+    BOOL			bHtmlMode;
 
 
     DECL_LINK( PageBreakHdl_Impl, CheckBox* );
@@ -221,13 +222,13 @@ class SwTextFlowPage : public SfxTabPage
     ~SwTextFlowPage();
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet);
+    virtual BOOL		FillItemSet( SfxItemSet& rSet );
+    virtual void		Reset( const SfxItemSet& rSet );
 
-    void                SetShell(SwWrtShell* pSh);
+    void				SetShell(SwWrtShell* pSh);
 
-    void                DisablePageBreak();
+    void				DisablePageBreak();
 };
 
 #endif

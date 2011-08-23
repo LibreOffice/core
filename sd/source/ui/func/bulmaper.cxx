@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,8 +62,8 @@
 
 void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& rSet )
 {
-    const sal_uInt16 nCount = aNumRule.GetLevelCount();
-    for( sal_uInt16 nLevel = 0; nLevel < nCount; nLevel++ )
+    const USHORT nCount = aNumRule.GetLevelCount();
+    for( USHORT nLevel = 0; nLevel < nCount; nLevel++ )
     {
         const SvxNumberFormat& rSrcLevel = aNumRule.GetLevel(nLevel);
         SvxNumberFormat aNewLevel( rSrcLevel );
@@ -97,22 +97,22 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
 
             Font aMyFont;
             const SvxFontItem& rFItem =
-                (SvxFontItem&)rSet.Get(GetWhich( (sal_uInt16)nFontID ));
+                (SvxFontItem&)rSet.Get(GetWhich( (USHORT)nFontID ));
             aMyFont.SetFamily(rFItem.GetFamily());
             aMyFont.SetName(rFItem.GetFamilyName());
             aMyFont.SetCharSet(rFItem.GetCharSet());
             aMyFont.SetPitch(rFItem.GetPitch());
 
             const SvxFontHeightItem& rFHItem =
-                (SvxFontHeightItem&)rSet.Get(GetWhich( (sal_uInt16)nFontHeightID ));
+                (SvxFontHeightItem&)rSet.Get(GetWhich( (USHORT)nFontHeightID ));
             aMyFont.SetSize(Size(0, rFHItem.GetHeight()));
 
             const SvxWeightItem& rWItem =
-                (SvxWeightItem&)rSet.Get(GetWhich( (sal_uInt16)nWeightID ));
+                (SvxWeightItem&)rSet.Get(GetWhich( (USHORT)nWeightID ));
             aMyFont.SetWeight(rWItem.GetWeight());
 
             const SvxPostureItem& rPItem =
-                (SvxPostureItem&)rSet.Get(GetWhich( (sal_uInt16)nPostureID ));
+                (SvxPostureItem&)rSet.Get(GetWhich( (USHORT)nPostureID ));
             aMyFont.SetItalic(rPItem.GetPosture());
 
             const SvxUnderlineItem& rUItem = (SvxUnderlineItem&)rSet.Get(GetWhich(SID_ATTR_CHAR_UNDERLINE));
@@ -131,6 +131,7 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
             aMyFont.SetShadow(rSItem.GetValue());
 
             aNewLevel.SetBulletFont(&aMyFont);
+//			aNewLevel.SetBulletRelSize( 75 );
             aNumRule.SetLevel(nLevel, aNewLevel );
         }
         else if( rSrcLevel.GetNumberingType() == com::sun::star::style::NumberingType::CHAR_SPECIAL )

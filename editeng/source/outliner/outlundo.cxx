@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <outlundo.hxx>
 
 
-OutlinerUndoBase::OutlinerUndoBase( sal_uInt16 _nId, Outliner* pOutliner )
+OutlinerUndoBase::OutlinerUndoBase( USHORT _nId, Outliner* pOutliner )
     : EditUndo( _nId, NULL )
 {
     DBG_ASSERT( pOutliner, "Undo: Outliner?!" );
@@ -112,7 +112,7 @@ void OutlinerUndoChangeParaNumberingRestart::ImplApplyData( const ParaRestartDat
     pOutliner->SetParaIsNumberingRestart( mnPara, rData.mbParaIsNumberingRestart );
 }
 
-OutlinerUndoChangeDepth::OutlinerUndoChangeDepth( Outliner* pOutliner, sal_uInt16 nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth )
+OutlinerUndoChangeDepth::OutlinerUndoChangeDepth( Outliner* pOutliner, USHORT nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth )
     : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
 {
     mnPara = nPara;
@@ -122,21 +122,21 @@ OutlinerUndoChangeDepth::OutlinerUndoChangeDepth( Outliner* pOutliner, sal_uInt1
 
 void OutlinerUndoChangeDepth::Undo()
 {
-    GetOutliner()->ImplInitDepth( mnPara, mnOldDepth, sal_False );
+    GetOutliner()->ImplInitDepth( mnPara, mnOldDepth, FALSE );
 }
 
 void OutlinerUndoChangeDepth::Redo()
 {
-    GetOutliner()->ImplInitDepth( mnPara, mnNewDepth, sal_False );
+    GetOutliner()->ImplInitDepth( mnPara, mnNewDepth, FALSE );
 }
 
 void OutlinerUndoChangeDepth::Repeat()
 {
-    OSL_FAIL( "Repeat not implemented!" );
+    DBG_ERROR( "Repeat not implemented!" );
 }
 
 
-OutlinerUndoCheckPara::OutlinerUndoCheckPara( Outliner* pOutliner, sal_uInt16 nPara )
+OutlinerUndoCheckPara::OutlinerUndoCheckPara( Outliner* pOutliner, USHORT nPara )
     : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
 {
     mnPara = nPara;
@@ -146,24 +146,24 @@ void OutlinerUndoCheckPara::Undo()
 {
     Paragraph* pPara = GetOutliner()->GetParagraph( mnPara );
     pPara->Invalidate();
-    GetOutliner()->ImplCalcBulletText( mnPara, sal_False, sal_False );
+    GetOutliner()->ImplCalcBulletText( mnPara, FALSE, FALSE );
 }
 
 void OutlinerUndoCheckPara::Redo()
 {
     Paragraph* pPara = GetOutliner()->GetParagraph( mnPara );
     pPara->Invalidate();
-    GetOutliner()->ImplCalcBulletText( mnPara, sal_False, sal_False );
+    GetOutliner()->ImplCalcBulletText( mnPara, FALSE, FALSE );
 }
 
 void OutlinerUndoCheckPara::Repeat()
 {
-    OSL_FAIL( "Repeat not implemented!" );
+    DBG_ERROR( "Repeat not implemented!" );
 }
 
 DBG_NAME(OLUndoExpand);
 
-OLUndoExpand::OLUndoExpand(Outliner* pOut, sal_uInt16 _nId )
+OLUndoExpand::OLUndoExpand(Outliner* pOut, USHORT _nId )
     : EditUndo( _nId, 0 )
 {
     DBG_CTOR(OLUndoExpand,0);
@@ -181,20 +181,20 @@ OLUndoExpand::~OLUndoExpand()
 }
 
 
-void OLUndoExpand::Restore( sal_Bool bUndo )
+void OLUndoExpand::Restore( BOOL bUndo )
 {
     DBG_CHKTHIS(OLUndoExpand,0);
     DBG_ASSERT(pOutliner,"Undo:No Outliner");
     DBG_ASSERT(pOutliner->pEditEngine,"Outliner already deleted");
     Paragraph* pPara;
 
-    sal_Bool bExpand = sal_False;
-    sal_uInt16 _nId = GetId();
+    BOOL bExpand = FALSE;
+    USHORT _nId = GetId();
     if((_nId == OLUNDO_EXPAND && !bUndo) || (_nId == OLUNDO_COLLAPSE && bUndo))
-        bExpand = sal_True;
+        bExpand = TRUE;
     if( !pParas )
     {
-        pPara = pOutliner->GetParagraph( (sal_uLong)nCount );
+        pPara = pOutliner->GetParagraph( (ULONG)nCount );
         if( bExpand )
             pOutliner->Expand( pPara );
         else
@@ -202,9 +202,9 @@ void OLUndoExpand::Restore( sal_Bool bUndo )
     }
     else
     {
-        for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++ )
+        for( USHORT nIdx = 0; nIdx < nCount; nIdx++ )
         {
-            pPara = pOutliner->GetParagraph( (sal_uLong)(pParas[nIdx]) );
+            pPara = pOutliner->GetParagraph( (ULONG)(pParas[nIdx]) );
             if( bExpand )
                 pOutliner->Expand( pPara );
             else
@@ -217,21 +217,21 @@ void OLUndoExpand::Restore( sal_Bool bUndo )
 void OLUndoExpand::Undo()
 {
     DBG_CHKTHIS(OLUndoExpand,0);
-    Restore( sal_True );
+    Restore( TRUE );
 }
 
 
 void OLUndoExpand::Redo()
 {
     DBG_CHKTHIS(OLUndoExpand,0);
-    Restore( sal_False );
+    Restore( FALSE );
 }
 
 
 void OLUndoExpand::Repeat()
 {
     DBG_CHKTHIS(OLUndoExpand,0);
-    OSL_FAIL("Not implemented");
+    DBG_ERROR("Not implemented");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

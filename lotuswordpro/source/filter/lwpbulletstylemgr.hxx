@@ -59,13 +59,10 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 #ifndef _LWPBULLETSTYLEMGR_HXX
 #define _LWPBULLETSTYLEMGR_HXX
-
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include "lwpheader.hxx"
 #include "lwpfoundry.hxx"
@@ -90,8 +87,8 @@ public:
     virtual ~LwpBulletStyleMgr();
     rtl::OUString RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
         LwpIndentOverride* pIndent);
-//  rtl::OUString RegisterBulletStyle(const rtl::OUString& rContent, sal_uInt32 nFontID, LwpIndentOverride* pIndent);
-//  rtl::OUString AddStyleToList(LwpSilverBullet* pSilverBullet, sal_uInt16 nLevel);
+//	rtl::OUString RegisterBulletStyle(const rtl::OUString& rContent, sal_uInt32 nFontID, LwpIndentOverride* pIndent);
+//	rtl::OUString AddStyleToList(LwpSilverBullet* pSilverBullet, sal_uInt16 nLevel);
     inline void SetFoundry(LwpFoundry* pFoundry);
     inline void SetContinueFlag(sal_Bool bFlag);
     void OutputBulletListHeader(IXFStream* pOutputStream, sal_Bool bIsOrdered,
@@ -109,25 +106,25 @@ public:
     inline LwpNumberingOverride* GetCurrentNumOver();
 
 private:
-//  void CreateNewListStyle(XFListStyle*& pListStyle, XFStyleManager* pXFStyleMgr);
+//	void CreateNewListStyle(XFListStyle*& pListStyle, XFStyleManager* pXFStyleMgr);
     rtl::OUString GetDivisionName();
     rtl::OUString GetSectionName(LwpPara* pPara);
 
 private:
-//  std::vector <XFListStyle*> m_aBulletStyleList;
-    typedef std::pair<boost::shared_ptr<LwpBulletOverride>, LwpObjectID> OverridePair;
+//	std::vector <XFListStyle*> m_aBulletStyleList;
+    typedef std::pair<LwpBulletOverride, LwpObjectID> OverridePair;
     std::vector <rtl::OUString> m_vStyleNameList;
     std::vector <OverridePair> m_vIDsPairList;
     rtl::OUString m_aCurrentStyleName;
     LwpFoundry* m_pFoundry;
     XFList* m_pBulletList;
-//  UChar32 m_nCurrentChar;
-//  rtl::OUString m_strCurrentFontName;
-//  rtl::OUString m_strCurrentNumberingName;
+//	UChar32 m_nCurrentChar;
+//	rtl::OUString m_strCurrentFontName;
+//	rtl::OUString m_strCurrentNumberingName;
     sal_Bool m_bContinue;
     sal_Bool m_bIsBulletSkipped;
     LwpObjectID m_aCurrentNumberingID;
-    boost::scoped_ptr<LwpNumberingOverride> m_pCurrentNumOverride;
+    LwpNumberingOverride m_aCurrentNumOverride;
     sal_uInt16 m_nCurrentPos;
 
 };
@@ -162,11 +159,11 @@ inline sal_uInt16 LwpBulletStyleMgr::GetCurrentPos() const
 
 inline void LwpBulletStyleMgr::SetCurrentNumOver(const LwpNumberingOverride& rOther)
 {
-    m_pCurrentNumOverride.reset(rOther.clone());
+    m_aCurrentNumOverride = rOther;
 }
 inline LwpNumberingOverride* LwpBulletStyleMgr::GetCurrentNumOver()
 {
-    return m_pCurrentNumOverride.get();
+    return &m_aCurrentNumOverride;
 }
 
 #endif

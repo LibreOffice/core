@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,15 +27,28 @@
 #ifndef __ooo_vba_XControlProvider_idl__
 #define __ooo_vba_XControlProvider_idl__
 
+#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XControl_idl__
 #include <com/sun/star/awt/XControl.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_XControlShape_idl__
 #include <com/sun/star/drawing/XControlShape.idl>
+#endif
+#ifndef __ooo_vba_msforms_XControl_idl__
 #include <ooo/vba/msforms/XControl.idl>
+#endif
 
-module ooo {  module vba {
+module ooo {  module vba { 
 
-interface XControlProvider
+interface XControlProvider 
 {
    ::ooo::vba::msforms::XControl createControl( [in] ::com::sun::star::drawing::XControlShape xControl, [in] ::com::sun::star::frame::XModel xDocOwner );
    ::ooo::vba::msforms::XControl createUserformControl( [in] ::com::sun::star::awt::XControl xControl, [in] ::com::sun::star::awt::XControl xDialog, [in] ::com::sun::star::frame::XModel xDocOwner );

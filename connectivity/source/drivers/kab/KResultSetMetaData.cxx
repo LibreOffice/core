@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ KabResultSetMetaData::~KabResultSetMetaData()
 void KabResultSetMetaData::setKabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
     OSQLColumns::Vector::const_iterator aIter;
-    static const ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("Name"));
+    static const ::rtl::OUString aName(::rtl::OUString::createFromAscii("Name"));
 
     for (aIter = xColumns->get().begin(); aIter != xColumns->get().end(); ++aIter)
     {

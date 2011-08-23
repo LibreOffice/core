@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,6 +36,8 @@
 #include <ocidl.h>
 #include <adoint.h>
 #include "ado_post_sys_include.h"
+
+
 #include "ado/adoimp.hxx"
 #include "ado/Aolewrap.hxx"
 #include "ado/Aolevariant.hxx"
@@ -52,8 +54,8 @@ namespace connectivity
         class WpADOError;
         class WpADOProperty;
 
-        typedef WpOLEAppendCollection<  ADOFields,      ADOField,       WpADOField>         WpADOFields;
-        typedef WpOLECollection<        ADOProperties,  ADOProperty,    WpADOProperty>      WpADOProperties;
+        typedef WpOLEAppendCollection<	ADOFields,		ADOField,		WpADOField>			WpADOFields;
+        typedef WpOLECollection<		ADOProperties,	ADOProperty,	WpADOProperty>		WpADOProperties;
 
         //------------------------------------------------------------------------
         class WpADOConnection : public WpOLEBase<ADOConnection>
@@ -61,7 +63,7 @@ namespace connectivity
             friend class WpADOCommand;
         public:
 
-            WpADOConnection(ADOConnection* pInt)    :   WpOLEBase<ADOConnection>(pInt){}
+            WpADOConnection(ADOConnection* pInt)	:	WpOLEBase<ADOConnection>(pInt){}
 
             WpADOConnection(const WpADOConnection& rhs){operator=(rhs);}
 
@@ -73,36 +75,53 @@ namespace connectivity
             WpADOProperties get_Properties() const;
 
              rtl::OUString GetConnectionString() const;
+
              sal_Bool PutConnectionString(const ::rtl::OUString &aCon) const;
+
              sal_Int32 GetCommandTimeout() const;
+
              void PutCommandTimeout(sal_Int32 nRet);
-             sal_Int32 GetConnectionTimeout() const ;
+
+             sal_Int32 GetConnectionTimeout() const	;
+
              void PutConnectionTimeout(sal_Int32 nRet);
 
              sal_Bool Close( ) ;
+
              sal_Bool Execute(const ::rtl::OUString& _CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset);
+
              sal_Bool BeginTrans();
+
              sal_Bool CommitTrans( ) ;
+
              sal_Bool RollbackTrans( );
+
              sal_Bool Open(const ::rtl::OUString& ConnectionString, const ::rtl::OUString& UserID,const ::rtl::OUString& Password,long Options);
+
              sal_Bool GetErrors(ADOErrors** pErrors);
 
              ::rtl::OUString GetDefaultDatabase() const;
+
              sal_Bool PutDefaultDatabase(const ::rtl::OUString& _bstr);
 
              IsolationLevelEnum get_IsolationLevel() const ;
+
              sal_Bool put_IsolationLevel(const IsolationLevelEnum& eNum) ;
 
              sal_Int32 get_Attributes() const;
+
              sal_Bool put_Attributes(sal_Int32 nRet);
 
              CursorLocationEnum get_CursorLocation() const;
+
              sal_Bool put_CursorLocation(const CursorLocationEnum &eNum) ;
 
              ConnectModeEnum get_Mode() const;
+
              sal_Bool put_Mode(const ConnectModeEnum &eNum) ;
 
              ::rtl::OUString get_Provider() const;
+
              sal_Bool put_Provider(const ::rtl::OUString& _bstr);
 
              sal_Int32 get_State() const;
@@ -154,7 +173,7 @@ namespace connectivity
             WpADOCommand(){}
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
-            WpADOCommand(ADOCommand* pInt)  :   WpOLEBase<ADOCommand>(pInt){}
+            WpADOCommand(ADOCommand* pInt)	:	WpOLEBase<ADOCommand>(pInt){}
 
             WpADOCommand(const WpADOCommand& rhs){operator=(rhs);}
 
@@ -204,7 +223,9 @@ namespace connectivity
             //////////////////////////////////////////////////////////////////////
 
              ::rtl::OUString GetDescription() const;
+
              ::rtl::OUString GetSource() const ;
+
              sal_Int32 GetNumber() const ;
              ::rtl::OUString GetSQLState() const ;
              sal_Int32 GetNativeError() const ;
@@ -215,7 +236,7 @@ namespace connectivity
         //------------------------------------------------------------------------
         class WpADOField : public WpOLEBase<ADOField>
         {
-            //  friend class WpADOFields;
+            //	friend class WpADOFields;
         public:
 
             // Konstruktoren, operator=
@@ -230,7 +251,7 @@ namespace connectivity
              WpADOProperties get_Properties();
              sal_Int32 GetActualSize() const ;
              sal_Int32 GetAttributes() const ;
-             sal_Int32 GetStatus() const      ;
+             sal_Int32 GetStatus() const 	  ;
              sal_Int32 GetDefinedSize() const ;
             // gibt den Namen des Feldes zur"ueck
              ::rtl::OUString GetName() const ;
@@ -299,8 +320,8 @@ namespace connectivity
             }
             ~WpADORecordset()
             {
-                //  if(pInterface && get_State() == adStateOpen)
-                    //  Close();
+                //	if(pInterface && get_State() == adStateOpen)
+                    //	Close();
             }
             //////////////////////////////////////////////////////////////////////
              void Create();
@@ -315,7 +336,7 @@ namespace connectivity
              sal_Bool Cancel() const;
              sal_Int32 get_State( );
              sal_Bool Supports( /* [in] */ CursorOptionEnum CursorOptions);
-            PositionEnum_Param get_AbsolutePosition();
+            PositionEnum get_AbsolutePosition();
              void GetDataSource(IUnknown** pIUnknown) const ;
              void PutRefDataSource(IUnknown* pIUnknown);
              void GetBookmark(VARIANT& var);
@@ -337,9 +358,9 @@ namespace connectivity
              sal_Bool CancelUpdate();
              WpADOProperties get_Properties() const;
              sal_Bool NextRecordset(OLEVariant& RecordsAffected,ADORecordset** ppiRset);
-             sal_Bool get_RecordCount(ADO_LONGPTR &_nRet) const;
-             sal_Bool get_MaxRecords(ADO_LONGPTR &_nRet) const;
-             sal_Bool put_MaxRecords(ADO_LONGPTR _nRet);
+             sal_Bool get_RecordCount(sal_Int32 &_nRet) const;
+             sal_Bool get_MaxRecords(sal_Int32 &_nRet) const;
+             sal_Bool put_MaxRecords(sal_Int32 _nRet);
              sal_Bool get_CursorType(CursorTypeEnum &_nRet) const;
              sal_Bool put_CursorType(CursorTypeEnum _nRet);
              sal_Bool get_LockType(LockTypeEnum &_nRet) const;
@@ -379,19 +400,19 @@ namespace connectivity
         {
         public:
             /** putValue set the property value at the ado column
-                @param  _rProps     the properties where to set
-                @param  _aPosition  which property to set
-                @param  _aValVar    the value to set
+                @param	_rProps		the properties where to set
+                @param	_aPosition	which property to set
+                @param	_aValVar	the value to set
             */
-            static void             putValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition,const OLEVariant &_aValVar);
+            static void				putValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition,const OLEVariant &_aValVar);
 
             /** getValue returns a specific property value
-                @param  _rProps     the properties where to set
-                @param  _aPosition  the property
+                @param	_rProps		the properties where to set
+                @param	_aPosition	the property
 
-                @return the property value
+                @return	the property value
             */
-            static OLEVariant       getValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition);
+            static OLEVariant		getValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition);
         };
     }
 }

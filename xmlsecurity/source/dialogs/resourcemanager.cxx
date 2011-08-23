@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,17 +45,17 @@ using namespace std;
 
 namespace XmlSec
 {
-    static ResMgr*          pResMgr = 0;
+    static ResMgr*			pResMgr = 0;
     static SvtSysLocale*    pSysLocale = 0;
 
     ResMgr* GetResMgr( void )
     {
         if( !pResMgr )
         {
-            ByteString  aName( "xmlsec" );
-//          pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILanguage() );
-//          LanguageType    aLang( LANGUAGE_ENGLISH_US );
-//          pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), aLang );
+            ByteString	aName( "xmlsec" );
+//    		pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+//			LanguageType	aLang( LANGUAGE_ENGLISH_US );
+//			pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), aLang );
 // MT: Change to Locale
             pResMgr = ResMgr::CreateResMgr( aName.GetBuffer() );
         }
@@ -79,7 +79,7 @@ namespace XmlSec
 
     String GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT )
     {
-        // String with date and time information (#i20172#)
+        // --> PB 2004-10-12 #i20172# String with date and time information
         DateTime aDT( GetDateTime( _rDT ) );
         const LocaleDataWrapper& rLoDa = GetLocaleData();
         String sRet( rLoDa.getDate( aDT ) );
@@ -99,7 +99,7 @@ namespace XmlSec
         String sSec( _rTime, 6, 2 );
 
 
-        Date aDate( (sal_uInt16)sDay.ToInt32(), (sal_uInt16) sMonth.ToInt32(), (sal_uInt16)sYear.ToInt32() );
+        Date aDate( (USHORT)sDay.ToInt32(), (USHORT) sMonth.ToInt32(), (USHORT)sYear.ToInt32() );
         Time aTime( sHour.ToInt32(), sMin.ToInt32(), sSec.ToInt32(), 0 );
         const LocaleDataWrapper& rLoDa = GetLocaleData();
         String aStr( rLoDa.getDate( aDate ) );
@@ -114,11 +114,11 @@ namespace XmlSec
     }
 
     /*
-        Creates two strings based on the distinguished name which are displayed in the
+        Creates two strings based on the distinguished name which are displayed in the 
         certificate details view. The first string contains only the values of the attribute
         and valudes pairs, which are separated by commas. All escape characters ('"') are
         removed.
-        The second string is for the details view at the bottom. It shows the attribute/value
+        The second string is for the details view at the bottom. It shows the attribute/value 
         pairs on different lines. All escape characters ('"') are removed.
     */
     pair< OUString, OUString> GetDNForCertDetailsView( const OUString & rRawString)
@@ -127,7 +127,7 @@ namespace XmlSec
         ::rtl::OUStringBuffer s1, s2;
         OUString sEqual(RTL_CONSTASCII_USTRINGPARAM(" = "));
         typedef vector< pair < OUString, OUString > >::const_iterator CIT;
-        for (CIT i = vecAttrValueOfDN.begin(); i < vecAttrValueOfDN.end(); ++i)
+        for (CIT i = vecAttrValueOfDN.begin(); i < vecAttrValueOfDN.end(); i ++)
         {
             if (i != vecAttrValueOfDN.begin())
             {
@@ -141,11 +141,11 @@ namespace XmlSec
         }
         return make_pair(s1.makeStringAndClear(), s2.makeStringAndClear());
     }
-
+ 
 /*
     Whenever the attribute value contains special characters, such as '"' or ',' (without '')
     then the value will be enclosed in double quotes by the respective Windows or NSS function
-    which we use to retrieve, for example, the subject name. If double quotes appear in the value then
+    which we use to retrieve, for example, the subject name. If double quotes appear in the value then 
     they are escaped with a double quote. This function removes the escape characters.
 */
 #ifdef WNT
@@ -163,7 +163,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         for (sal_Int32 i = 0; i < length; i++)
         {
             sal_Unicode c = rRawString[i];
-
+        
             if (c == '=')
             {
                 if (! bInValue)
@@ -181,9 +181,9 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
             {
                 if (!bInEscape)
                 {
-                    //If this is the quote is the first of the couple which enclose the
+                    //If this is the quote is the first of the couple which enclose the 
                     //whole value, because the value contains special characters
-                    //then we just drop it. That is, this character must be followed by
+                    //then we just drop it. That is, this character must be followed by 
                     //a character which is not '"'.
                     if ( i + 1 < length && rRawString[i+1] == '"')
                         bInEscape = true;
@@ -192,7 +192,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                 }
                 else
                 {
-                    //This quote is escaped by a preceding quote and therefore is
+                    //This quote is escaped by a preceding quote and therefore is 
                     //part of the value
                     sbufValue.append(c);
                     bInEscape = false;
@@ -200,8 +200,8 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
             }
             else if (c == ',' || c == '+')
             {
-                //The comma separate the attribute value pairs.
-                //If the comma is not part of a value (the value would then be enclosed in '"'),
+                //The comma separate the attribute value pairs. 
+                //If the comma is not part of a value (the value would then be enclosed in '"'), 
                 //then we have reached the end of the value
                 if (!bInValue)
                 {
@@ -215,7 +215,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                 else
                 {
                     //The whole string is enclosed because it contains special characters.
-                    //The enclosing '"' are not part of certificate but will be added by
+                    //The enclosing '"' are not part of certificate but will be added by 
                     //the function (Windows or NSS) which retrieves DN
                     sbufValue.append(c);
                 }
@@ -249,7 +249,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         for (sal_Int32 i = 0; i < length; i++)
         {
             sal_Unicode c = rRawString[i];
-
+        
             if (c == '=')
             {
                 if (! bInValue)
@@ -273,7 +273,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                 { // bInEscape is true
                     sbufValue.append(c);
                     bInEscape = false;
-                }
+                }      
             }
             else if (c == '"')
             {
@@ -287,7 +287,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                 }
                 else
                 {
-                    //This quote is escaped by a preceding quote and therefore is
+                    //This quote is escaped by a preceding quote and therefore is 
                     //part of the value
                     sbufValue.append(c);
                     bInEscape = false;
@@ -295,8 +295,8 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
             }
             else if (c == ',' || c == '+')
             {
-                //The comma separate the attribute value pairs.
-                //If the comma is not part of a value (the value would then be enclosed in '"'),
+                //The comma separate the attribute value pairs. 
+                //If the comma is not part of a value (the value would then be enclosed in '"'), 
                 //then we have reached the end of the value
                 if (!bInValue)
                 {
@@ -310,7 +310,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                 else
                 {
                     //The whole string is enclosed because it contains special characters.
-                    //The enclosing '"' are not part of certificate but will be added by
+                    //The enclosing '"' are not part of certificate but will be added by 
                     //the function (Windows or NSS) which retrieves DN
                     sbufValue.append(c);
                 }
@@ -344,7 +344,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         {
             OUString sPartId = OUString::createFromAscii( aIDs[i++] );
             typedef vector< pair < OUString, OUString > >::const_iterator CIT;
-            for (CIT idn = vecAttrValueOfDN.begin(); idn != vecAttrValueOfDN.end(); ++idn)
+            for (CIT idn = vecAttrValueOfDN.begin(); idn != vecAttrValueOfDN.end(); idn++)
             {
                 if (idn->first.equals(sPartId))
                 {
@@ -358,21 +358,21 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         return retVal;
     }
 
-    String GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak )
+    String GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, UINT16 _nLineBreak )
     {
-        const sal_Int8*         pSerNumSeq = _rSeq.getConstArray();
-        int                     nCnt = _rSeq.getLength();
-        String                  aStr;
-        const char              pHexDigs[ 17 ] = "0123456789ABCDEF";
-        char                    pBuffer[ 3 ] = "  ";
-        sal_uInt8                   nNum;
-        sal_uInt16                  nBreakStart = _nLineBreak? _nLineBreak : 1;
-        sal_uInt16                  nBreak = nBreakStart;
+        const sal_Int8*			pSerNumSeq = _rSeq.getConstArray();
+        int						nCnt = _rSeq.getLength();
+        String					aStr;
+        const char				pHexDigs[ 17 ] = "0123456789ABCDEF";
+        char					pBuffer[ 3 ] = "  ";
+        UINT8					nNum;
+        UINT16					nBreakStart = _nLineBreak? _nLineBreak : 1;
+        UINT16					nBreak = nBreakStart;
         for( int i = 0 ; i < nCnt ; ++i )
         {
-            nNum = sal_uInt8( pSerNumSeq[ i ] );
+            nNum = UINT8( pSerNumSeq[ i ] );
 
-            // exchange the buffer[0] and buffer[1], which make it consistent with Mozilla and Windows
+            //MM : exchange the buffer[0] and buffer[1], which make it consistent with Mozilla and Windows
             pBuffer[ 1 ] = pHexDigs[ nNum & 0x0F ];
             nNum >>= 4;
             pBuffer[ 0 ] = pHexDigs[ nNum ];
@@ -393,8 +393,8 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
 
     long ShrinkToFitWidth( Control& _rCtrl, long _nOffs )
     {
-        long    nWidth = _rCtrl.GetTextWidth( _rCtrl.GetText() );
-        Size    aSize( _rCtrl.GetSizePixel() );
+        long	nWidth = _rCtrl.GetTextWidth( _rCtrl.GetText() );
+        Size	aSize( _rCtrl.GetSizePixel() );
         nWidth += _nOffs;
         aSize.Width() = nWidth;
         _rCtrl.SetSizePixel( aSize );
@@ -403,15 +403,15 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
 
     void AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset )
     {
-        Point   aPos( _rImage.GetPosPixel() );
-        Size    aSize( _rImage.GetSizePixel() );
-        long    n = aPos.X();
+        Point	aPos( _rImage.GetPosPixel() );
+        Size	aSize( _rImage.GetSizePixel() );
+        long	n = aPos.X();
         n += aSize.Width();
         n += _nXOffset;
         aPos.X() = n;
         n = aPos.Y();
-        n += aSize.Height() / 2;                    // y-position is in the middle of the image
-        n -= _rCtrl.GetSizePixel().Height() / 2;    // center Control
+        n += aSize.Height() / 2;					// y-position is in the middle of the image
+        n -= _rCtrl.GetSizePixel().Height() / 2;	// center Control
         aPos.Y() = n;
         _rCtrl.SetPosPixel( aPos );
     }

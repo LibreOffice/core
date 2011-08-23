@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,8 +31,8 @@
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
-#include <tools/link.hxx>
 #include <tools/list.hxx>
+#include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <vcl/mapmod.hxx>
 
@@ -51,24 +51,24 @@ class Gradient;
 // - GDIMetaFile-Types -
 // ---------------------
 
-#define GDI_METAFILE_END                ((sal_uLong)0xFFFFFFFF)
-#define GDI_METAFILE_LABEL_NOTFOUND     ((sal_uLong)0xFFFFFFFF)
+#define GDI_METAFILE_END                ((ULONG)0xFFFFFFFF)
+#define GDI_METAFILE_LABEL_NOTFOUND     ((ULONG)0xFFFFFFFF)
 
 #ifndef METAFILE_END
-#define METAFILE_END                    GDI_METAFILE_END
+#define METAFILE_END					GDI_METAFILE_END
 #endif
 
 #ifndef METAFILE_LABEL_NOTFOUND
-#define METAFILE_LABEL_NOTFOUND         GDI_METAFILE_LABEL_NOTFOUND
+#define METAFILE_LABEL_NOTFOUND			GDI_METAFILE_LABEL_NOTFOUND
 #endif
 
 // -----------
 // - Defines -
 // -----------
 
-#define MTF_MIRROR_NONE             0x00000000UL
-#define MTF_MIRROR_HORZ             0x00000001UL
-#define MTF_MIRROR_VERT             0x00000002UL
+#define MTF_MIRROR_NONE				0x00000000UL
+#define MTF_MIRROR_HORZ				0x00000001UL
+#define MTF_MIRROR_VERT				0x00000002UL
 
 // ---------
 // - Enums -
@@ -104,59 +104,59 @@ private:
     GDIMetaFile*    pNext;
     OutputDevice*   pOutDev;
     ImpLabelList*   pLabelList;
-    sal_Bool            bPause;
-    sal_Bool            bRecord;
-    sal_Bool            bUseCanvas;
+    BOOL            bPause;
+    BOOL            bRecord;
+    BOOL            bUseCanvas;
 
 
     SAL_DLLPRIVATE static Color    ImplColAdjustFnc( const Color& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE static Color    ImplColConvertFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static Color	   ImplColConvertFnc( const Color& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE static Color    ImplColMonoFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static Color	   ImplColMonoFnc( const Color& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE static Color    ImplColReplaceFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static Color	   ImplColReplaceFnc( const Color& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx ImplBmpReplaceFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE void            ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pColParam,
+    SAL_DLLPRIVATE void			   ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pColParam, 
                                                        BmpExchangeFnc pFncBmp, const void* pBmpParam );
 
-    SAL_DLLPRIVATE Point           ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt,
+    SAL_DLLPRIVATE Point           ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt, 
                                                         const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE Polygon         ImplGetRotatedPolygon( const Polygon& rPoly, const Point& rRotatePt,
+    SAL_DLLPRIVATE Polygon         ImplGetRotatedPolygon( const Polygon& rPoly, const Point& rRotatePt, 
                                                           const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE PolyPolygon     ImplGetRotatedPolyPolygon( const PolyPolygon& rPoly, const Point& rRotatePt,
+    SAL_DLLPRIVATE PolyPolygon     ImplGetRotatedPolyPolygon( const PolyPolygon& rPoly, const Point& rRotatePt, 
                                                               const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE void            ImplAddGradientEx( GDIMetaFile&          rMtf,
+    SAL_DLLPRIVATE void            ImplAddGradientEx( GDIMetaFile&          rMtf, 
                                                       const OutputDevice&   rMapDev,
                                                       const PolyPolygon&    rPolyPoly,
-                                                      const Gradient&       rGrad       );
-    SAL_DLLPRIVATE bool            ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize );
+                                                      const Gradient&	  	rGrad 		);
+    SAL_DLLPRIVATE bool			   ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize );
     SAL_DLLPRIVATE void          ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut );
 
 
 protected:
 
-    virtual void    Linker( OutputDevice* pOut, sal_Bool bLink );
+    virtual void    Linker( OutputDevice* pOut, BOOL bLink );
     virtual long    Hook();
 
 public:
                     GDIMetaFile();
                     GDIMetaFile( const GDIMetaFile& rMtf );
-    virtual         ~GDIMetaFile();
+    virtual			~GDIMetaFile();
 
     using List::operator==;
     using List::operator!=;
     GDIMetaFile&    operator=( const GDIMetaFile& rMtf );
-    sal_Bool            operator==( const GDIMetaFile& rMtf ) const;
-    sal_Bool            operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
+    BOOL			operator==( const GDIMetaFile& rMtf ) const;
+    BOOL			operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
     void            Clear();
-    sal_Bool        IsEqual( const GDIMetaFile& rMtf ) const;
-    sal_Bool            Mirror( sal_uLong nMirrorFlags );
+    sal_Bool		IsEqual( const GDIMetaFile& rMtf ) const;
+    BOOL            Mirror( ULONG nMirrorFlags );
     void            Move( long nX, long nY );
     // additional Move method getting specifics how to handle MapMode( MAP_PIXEL )
     void            Move( long nX, long nY, long nDPIX, long nDPIY );
@@ -173,54 +173,54 @@ public:
     */
     Rectangle       GetBoundRect( OutputDevice& i_rReference );
 
-    void            Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
-                            short nChannelRPercent = 0, short nChannelGPercent = 0,
-                            short nChannelBPercent = 0, double fGamma = 1.0, sal_Bool bInvert = sal_False );
-    void            Convert( MtfConversion eConversion );
-    void            ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
-    void            ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors,
-                                   sal_uLong nColorCount, sal_uLong* pTols = NULL );
+    void			Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
+                            short nChannelRPercent = 0, short nChannelGPercent = 0, 
+                            short nChannelBPercent = 0, double fGamma = 1.0, BOOL bInvert = FALSE );
+    void			Convert( MtfConversion eConversion );
+    void			ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, ULONG nTol = 0 );
+    void			ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors, 
+                                   ULONG nColorCount, ULONG* pTols = NULL );
 
     GDIMetaFile     GetMonochromeMtf( const Color& rCol ) const;
 
     void            Record( OutputDevice* pOutDev );
-    sal_Bool            IsRecord() const { return bRecord; }
+    BOOL            IsRecord() const { return bRecord; }
 
-    void            Play( GDIMetaFile& rMtf, sal_uLong nPos = GDI_METAFILE_END );
-    void            Play( OutputDevice* pOutDev, sal_uLong nPos = GDI_METAFILE_END );
+    void            Play( GDIMetaFile& rMtf, ULONG nPos = GDI_METAFILE_END );
+    void            Play( OutputDevice* pOutDev, ULONG nPos = GDI_METAFILE_END );
     void            Play( OutputDevice* pOutDev, const Point& rPos,
-                          const Size& rSize, sal_uLong nPos = GDI_METAFILE_END );
+                          const Size& rSize, ULONG nPos = GDI_METAFILE_END );
 
-    void            Pause( sal_Bool bPause );
-    sal_Bool            IsPause() const { return bPause; }
+    void            Pause( BOOL bPause );
+    BOOL            IsPause() const { return bPause; }
 
     void            Stop();
 
     void            WindStart();
     void            WindEnd();
-    void            Wind( sal_uLong nAction );
+    void            Wind( ULONG nAction );
     void            WindPrev();
     void            WindNext();
 
-    sal_uLong           GetActionCount() const { return Count(); }
+    ULONG           GetActionCount() const { return Count(); }
     void            AddAction( MetaAction* pAction );
-    void            AddAction( MetaAction* pAction, sal_uLong nPos );
-    void            RemoveAction( sal_uLong nPos );
-    MetaAction*     CopyAction( sal_uLong nPos ) const;
+    void            AddAction( MetaAction* pAction, ULONG nPos );
+    void 			RemoveAction( ULONG nPos );
+    MetaAction*     CopyAction( ULONG nPos ) const;
     MetaAction*     GetCurAction() const { return (MetaAction*) GetCurObject(); }
-    MetaAction*     GetAction( sal_uLong nAction ) const { return (MetaAction*) GetObject( nAction ); }
-    MetaAction*     FirstAction() { return (MetaAction*) First(); }
-    MetaAction*     NextAction() {  return (MetaAction*) Next(); }
-    MetaAction*     ReplaceAction( MetaAction* pAction, sal_uLong nAction ) { return (MetaAction*) Replace( pAction, nAction ); }
+    MetaAction*     GetAction( ULONG nAction ) const { return (MetaAction*) GetObject( nAction ); }
+    MetaAction*     FirstAction() {	return (MetaAction*) First(); }
+    MetaAction*     NextAction() { 	return (MetaAction*) Next(); }
+    MetaAction*     ReplaceAction( MetaAction* pAction, ULONG nAction ) { return (MetaAction*) Replace( pAction, nAction ); }
 
-    sal_uLong           GetActionPos( const String& rLabel );
-    sal_Bool            InsertLabel( const String& rLabel, sal_uLong nActionPos );
+    ULONG           GetActionPos( const String& rLabel );
+    BOOL            InsertLabel( const String& rLabel, ULONG nActionPos );
     void            RemoveLabel( const String& rLabel );
     void            RenameLabel( const String& rLabel, const String& rNewLabel );
-    sal_uLong           GetLabelCount() const;
-    String          GetLabel( sal_uLong nLabel );
+    ULONG           GetLabelCount() const;
+    String          GetLabel( ULONG nLabel );
 
-    sal_Bool            SaveStatus();
+    BOOL            SaveStatus();
 
     const Size&     GetPrefSize() const { return aPrefSize; }
     void            SetPrefSize( const Size& rSize ) { aPrefSize = rSize; }
@@ -231,23 +231,23 @@ public:
     void            SetHookHdl( const Link& rLink ) { aHookHdlLink = rLink; }
     const Link&     GetHookHdl() const { return aHookHdlLink; }
 
-    sal_uLong           GetChecksum() const;
-    sal_uLong           GetSizeBytes() const;
+    ULONG			GetChecksum() const;
+    ULONG           GetSizeBytes() const;
 
     // Methoden zum Lesen und Schreiben des neuen Formats;
     // die Read-Methode kann auch das alte Format lesen
-    SvStream&       Read( SvStream& rIStm );
-    SvStream&       Write( SvStream& rOStm );
+    SvStream&		Read( SvStream& rIStm );
+    SvStream&		Write( SvStream& rOStm );
 
     // Stream-Operatoren schreiben das alte Format (noch)
     // und lesen sowohl das alte wie auch das neue Format
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
-    sal_Bool           CreateThumbnail( sal_uInt32 nMaximumExtent, BitmapEx& rBmpEx, const BitmapEx* pOverlay = NULL, const Rectangle* pOverlayRect = NULL ) const;
+    BOOL           CreateThumbnail( sal_uInt32 nMaximumExtent, BitmapEx& rBmpEx, const BitmapEx* pOverlay = NULL, const Rectangle* pOverlayRect = NULL ) const;
 
-    void           UseCanvas( sal_Bool _bUseCanvas );
-    sal_Bool           GetUseCanvas() const { return bUseCanvas; }
+    void           UseCanvas( BOOL _bUseCanvas );
+    BOOL           GetUseCanvas() const { return bUseCanvas; }
 };
 
 /** Create a special metaaction that delegates rendering to specified

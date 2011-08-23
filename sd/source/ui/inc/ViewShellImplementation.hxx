@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,8 +128,8 @@ public:
     void AssignLayout ( SfxRequest& rRequest, PageKind ePageKind );
 
     /** Determine the view id of the view shell.  This corresponds to the
-        view id stored in the SfxViewFrame class.
-
+        view id stored in the SfxViewFrame class.  
+        
         We can not use the view of that class because with the introduction
         of the multi pane GUI we do not switch the SfxViewShell anymore when
         switching the view in the center pane.  The view id of the

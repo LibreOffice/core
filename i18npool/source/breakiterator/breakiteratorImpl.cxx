@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextCharacters( const OUString& Text, sal_
         return LBI->nextCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
 }
 
-sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, sal_Int32 nStartPos,
+sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, sal_Int32 nStartPos, 
         const Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
         throw(RuntimeException)
 {
@@ -133,7 +133,7 @@ Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 n
 }
 
 static inline sal_Bool SAL_CALL isCJK( const Locale& rLocale ) {
-        return rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) || rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja")) || rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko"));
+        return rLocale.Language.equalsAscii("zh") || rLocale.Language.equalsAscii("ja") || rLocale.Language.equalsAscii("ko");
 }
 
 Boundary SAL_CALL BreakIteratorImpl::previousWord( const OUString& Text, sal_Int32 nStartPos,
@@ -271,14 +271,14 @@ static sal_Int32 SAL_CALL iterateCodePoints(const OUString& Text, sal_Int32 &nSt
         } else {
             ch = Text.iterateCodePoints(&nStartPos, inc);
             // Fix for #i80436#.
-            // erAck: 2009-06-30T21:52+0200  This logic looks somewhat
-            // suspicious as if it cures a symptom.. anyway, had to add
-            // nStartPos < Text.getLength() to silence the (correct) assertion
-            // in rtl_uString_iterateCodePoints() if Text was one character
+            // erAck: 2009-06-30T21:52+0200  This logic looks somewhat 
+            // suspicious as if it cures a symptom.. anyway, had to add 
+            // nStartPos < Text.getLength() to silence the (correct) assertion 
+            // in rtl_uString_iterateCodePoints() if Text was one character 
             // (codepoint) only, made up of a surrogate pair.
             //if (inc > 0 && nStartPos < Text.getLength())
             //    ch = Text.iterateCodePoints(&nStartPos, 0);
-            // With surrogates, nStartPos may actually point behind string
+            // With surrogates, nStartPos may actually point behind string  
             // now, even if inc is only +1
             if (inc > 0)
                 ch = (nStartPos < nLen ? Text.iterateCodePoints(&nStartPos, 0) : 0);
@@ -341,7 +341,7 @@ sal_Int32  SAL_CALL BreakIteratorImpl::previousScript( const OUString& Text,
             else if (nStartPos == 0) {
                 if (numberOfChange > 0)
                     numberOfChange--;
-                if (nStartPos > 0)
+                if (nStartPos > 0) 
                     Text.iterateCodePoints(&nStartPos, -1);
                 else
                     return -1;
@@ -443,49 +443,34 @@ sal_Int16 SAL_CALL BreakIteratorImpl::getWordType( const OUString& /*Text*/,
         return 0;
 }
 
-static sal_Int16 scriptTypes[] = {
-    ScriptType::WEAK, ScriptType::WEAK, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX,
-    ScriptType::ASIAN, ScriptType::LATIN, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN, ScriptType::LATIN,
-// 15
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::ASIAN, ScriptType::ASIAN, ScriptType::COMPLEX,
-    ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN,
-// 30
-    ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::LATIN, ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-// 45
-    ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN,
-    ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-// 60
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::ASIAN, ScriptType::ASIAN,
-// 75
-    ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-// 90
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::WEAK, ScriptType::WEAK, ScriptType::COMPLEX,
-// 105
-    ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::ASIAN,
-// 120
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::WEAK, ScriptType::WEAK,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-// 135
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX,
-    ScriptType::WEAK};
+typedef struct {
+    UBlockCode from;
+    UBlockCode to;
+    sal_Int16 script;
+} UBlock2Script;
 
-#define scriptListCount SAL_N_ELEMENTS(scriptTypes)
+static UBlock2Script scriptList[] = {
+    {UBLOCK_NO_BLOCK, UBLOCK_NO_BLOCK, ScriptType::WEAK},
+    {UBLOCK_BASIC_LATIN, UBLOCK_ARMENIAN, ScriptType::LATIN},
+    {UBLOCK_HEBREW, UBLOCK_MYANMAR, ScriptType::COMPLEX},
+    {UBLOCK_GEORGIAN, UBLOCK_GEORGIAN, ScriptType::LATIN},
+    {UBLOCK_HANGUL_JAMO, UBLOCK_HANGUL_JAMO, ScriptType::ASIAN},
+    {UBLOCK_ETHIOPIC, UBLOCK_ETHIOPIC, ScriptType::COMPLEX},
+    {UBLOCK_CHEROKEE, UBLOCK_RUNIC, ScriptType::LATIN},
+    {UBLOCK_KHMER, UBLOCK_MONGOLIAN, ScriptType::COMPLEX},
+    {UBLOCK_LATIN_EXTENDED_ADDITIONAL, UBLOCK_GREEK_EXTENDED, ScriptType::LATIN},
+    {UBLOCK_CJK_RADICALS_SUPPLEMENT, UBLOCK_HANGUL_SYLLABLES, ScriptType::ASIAN},
+    {UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, ScriptType::ASIAN},
+    {UBLOCK_ARABIC_PRESENTATION_FORMS_A, UBLOCK_ARABIC_PRESENTATION_FORMS_A, ScriptType::COMPLEX},
+    {UBLOCK_CJK_COMPATIBILITY_FORMS, UBLOCK_CJK_COMPATIBILITY_FORMS, ScriptType::ASIAN},
+    {UBLOCK_ARABIC_PRESENTATION_FORMS_B, UBLOCK_ARABIC_PRESENTATION_FORMS_B, ScriptType::COMPLEX},
+    {UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, ScriptType::ASIAN},
+    {UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT, ScriptType::ASIAN},
+    {UBLOCK_CJK_STROKES, UBLOCK_CJK_STROKES, ScriptType::ASIAN},
+    {UBLOCK_LATIN_EXTENDED_C, UBLOCK_LATIN_EXTENDED_D, ScriptType::LATIN}
+};
+
+#define scriptListCount sizeof (scriptList) / sizeof (UBlock2Script)
 
 sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
 {
@@ -495,13 +480,23 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
         if (currentChar != lastChar) {
             lastChar = currentChar;
 
-            int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
-            if (script < 0)
+            //JP 21.9.2001: handle specific characters - always as weak
+            //                  definition of 1 - this breaks a word
+            //                  2 - this can be inside a word
+            //                  0x20 & 0xA0 - Bug 102975, declare western space and non-break space as WEAK char.
+            if( 1 == currentChar || 2 == currentChar || 0x20 == currentChar || 0xA0 == currentChar)
                 nRet = ScriptType::WEAK;
-            else if (static_cast<size_t>(script) >= SAL_N_ELEMENTS(scriptTypes))
-                nRet = ScriptType::COMPLEX;         // anything new is going to be pretty wild
-            else
-                nRet = scriptTypes[script];
+            // workaround for Coptic
+            else if ( 0x2C80 <= currentChar && 0x2CE3 >= currentChar)
+                nRet = ScriptType::LATIN;            
+            else {
+                UBlockCode block=ublock_getCode(currentChar);
+                sal_uInt16 i;
+                for ( i = 0; i < scriptListCount; i++) {
+                    if (block <= scriptList[i].to) break;
+                }
+                nRet=(i < scriptListCount && block >= scriptList[i].from) ? scriptList[i].script : ScriptType::WEAK;
+            }
         }
         return nRet;
 }
@@ -522,7 +517,7 @@ sal_Bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUS
         }
 
         Reference < uno::XInterface > xI = xMSF->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator_")) + aLocaleName);
+            OUString::createFromAscii("com.sun.star.i18n.BreakIterator_") + aLocaleName);
 
         if ( xI.is() ) {
             xI->queryInterface( getCppuType((const Reference< XBreakIterator>*)0) ) >>= xBI;
@@ -555,7 +550,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
             sal_Int32 v = rLocale.Variant.getLength();
             OUStringBuffer aBuf(l+c+v+3);
 
-            if ((l > 0 && c > 0 && v > 0 &&
+            if ((l > 0 && c > 0 && v > 0 && 
                     // load service with name <base>_<lang>_<country>_<varian>
                     createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).append(
                                     rLocale.Country).append(under).append(rLocale.Variant).makeStringAndClear())) ||
@@ -563,17 +558,17 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
                     // load service with name <base>_<lang>_<country>
                     createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).append(
                                     rLocale.Country).makeStringAndClear())) ||
-                (l > 0 && c > 0 && rLocale.Language.compareToAscii("zh") == 0 &&
+                (l > 0 && c > 0 && rLocale.Language.compareToAscii("zh") == 0 && 
                                     (rLocale.Country.compareToAscii("HK") == 0 ||
                                     rLocale.Country.compareToAscii("MO") == 0) &&
                     // if the country code is HK or MO, one more step to try TW.
                     createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).appendAscii(
                                     "TW").makeStringAndClear())) ||
-                (l > 0 &&
+                (l > 0 && 
                     // load service with name <base>_<lang>
                     createLocaleSpecificBreakIterator(rLocale.Language)) ||
                     // load default service with name <base>_Unicode
-                    createLocaleSpecificBreakIterator(OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode")))) {
+                    createLocaleSpecificBreakIterator(OUString::createFromAscii("Unicode"))) {
                 lookupTable.push_back( new lookupTableItem(aLocale, xBI) );
                 return xBI;
             }

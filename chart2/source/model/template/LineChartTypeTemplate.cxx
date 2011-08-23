@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,69 +89,48 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-struct StaticLineChartTypeTemplateDefaults_Initializer
+void lcl_AddDefaultsToMap(
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE, chart2::CurveStyle_LINES );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION, 20 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE, chart2::CurveStyle_LINES );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION, 20 );
 
-        // todo: check whether order 3 means polygons of order 3 or 2. (see
-        // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER, 3 );
-    }
-};
+    // todo: check whether order 3 means polygons of order 3 or 2. (see
+    // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER, 3 );
+}
 
-struct StaticLineChartTypeTemplateDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticLineChartTypeTemplateDefaults_Initializer >
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-};
+    static Sequence< Property > aPropSeq;
 
-struct StaticLineChartTypeTemplateInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    Sequence< Property > lcl_GetPropertySequence()
-    {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-};
+    return aPropSeq;
+}
 
-struct StaticLineChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticLineChartTypeTemplateInfoHelper_Initializer >
+::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
 {
-};
+    static ::cppu::OPropertyArrayHelper aArrayHelper(
+        lcl_GetPropertySequence(),
+        /* bSorted = */ sal_True );
 
-struct StaticLineChartTypeTemplateInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticLineChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticLineChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticLineChartTypeTemplateInfo_Initializer >
-{
-};
+    return aArrayHelper;
+}
 
 } // anonymous namespace
 
@@ -183,23 +162,49 @@ LineChartTypeTemplate::~LineChartTypeTemplate()
 uno::Any LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticLineChartTypeTemplateDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
+    static tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
+    }
+
+    tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
         return uno::Any();
+
     return (*aFound).second;
+    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL LineChartTypeTemplate::getInfoHelper()
 {
-    return *StaticLineChartTypeTemplateInfoHelper::get();
+    return lcl_getInfoHelper();
 }
 
+
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL LineChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+    LineChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticLineChartTypeTemplateInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
 
 sal_Int32 LineChartTypeTemplate::getDimension() const

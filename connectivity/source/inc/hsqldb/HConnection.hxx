@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ namespace connectivity
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xORB
             );
-
+            
             // XServiceInfo
             DECLARE_SERVICE_INFO();
             DECLARE_XTYPEPROVIDER()
@@ -135,7 +135,7 @@ namespace connectivity
             /** retrieves the icon for HSQL TEXT TABLEs
             */
             ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-                impl_getTextTableIcon_nothrow();
+                impl_getTextTableIcon_nothrow( ::sal_Int32 _ColorMode );
         };
 
         //==========================================================================

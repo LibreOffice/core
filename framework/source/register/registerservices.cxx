@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,14 +46,17 @@
 
         COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-        COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
+        COMPONENTWRITEINFO	(	COMPONENTINFO( Service1 )
+                                 COMPONENTINFO( Service2 )
+                            )
+
+        COMPONENTGETFACTORY	(	IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
                              )
 =================================================================================================================*/
 #include <services/urltransformer.hxx>
 #include <services/desktop.hxx>
-#include <services/tabwindowservice.hxx>
 #include <services/frame.hxx>
 #include <services/modulemanager.hxx>
 #include <jobs/jobexecutor.hxx>
@@ -93,12 +96,51 @@
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
-                        IFFACTORY( ::framework::Desktop                                 )   else
+COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
+                        COMPONENTINFO( ::framework::Desktop						            )
+                        COMPONENTINFO( ::framework::Frame                                   )
+                        COMPONENTINFO( ::framework::JobExecutor                             )
+                        COMPONENTINFO( ::framework::JobDispatch                             )
+                        COMPONENTINFO( ::framework::BackingComp                             )
+                        COMPONENTINFO( ::framework::LayoutManager                           )
+                        COMPONENTINFO( ::framework::UIElementFactoryManager                 )
+                        COMPONENTINFO( ::framework::PopupMenuControllerFactory              )
+                        COMPONENTINFO( ::framework::ObjectMenuController                    )
+                        COMPONENTINFO( ::framework::ControlMenuController                   )
+                        COMPONENTINFO( ::framework::UICommandDescription                    )
+                        COMPONENTINFO( ::framework::ModuleManager                           )
+                        COMPONENTINFO( ::framework::UIConfigurationManager                  )
+                        COMPONENTINFO( ::framework::ModuleUIConfigurationManagerSupplier    )
+                        COMPONENTINFO( ::framework::ModuleUIConfigurationManager            )
+                        COMPONENTINFO( ::framework::MenuBarFactory                          )
+                        COMPONENTINFO( ::framework::GlobalAcceleratorConfiguration          )
+                        COMPONENTINFO( ::framework::ModuleAcceleratorConfiguration          )
+                        COMPONENTINFO( ::framework::DocumentAcceleratorConfiguration        )
+                        COMPONENTINFO( ::framework::ToolBoxFactory                          )
+                        COMPONENTINFO( ::framework::AddonsToolBoxFactory                    )
+                        COMPONENTINFO( ::framework::WindowStateConfiguration                )
+                        COMPONENTINFO( ::framework::ToolbarControllerFactory                )
+                        COMPONENTINFO( ::framework::AutoRecovery                            )
+                        COMPONENTINFO( ::framework::StatusIndicatorFactory                  )
+                        COMPONENTINFO( ::framework::RecentFilesMenuController               )
+                        COMPONENTINFO( ::framework::StatusBarFactory                        )
+                        COMPONENTINFO( ::framework::UICategoryDescription                   )
+                        COMPONENTINFO( ::framework::StatusbarControllerFactory              )
+                        COMPONENTINFO( ::framework::SessionListener                         )
+                        COMPONENTINFO( ::framework::TaskCreatorService                      )
+                        COMPONENTINFO( ::framework::ImageManager                            )
+                        COMPONENTINFO( ::framework::LangSelectionStatusbarController        )
+                        COMPONENTINFO( ::framework::WindowContentFactoryManager             )
+                        COMPONENTINFO( ::framework::SubstitutePathVariables		)
+                        COMPONENTINFO( ::framework::PathSettings				)
+                    )
+
+COMPONENTGETFACTORY	(	IFFACTORY( ::framework::URLTransformer					        )	else
+                        IFFACTORY( ::framework::Desktop							        )	else
                         IFFACTORY( ::framework::Frame                                   )   else
                         IFFACTORY( ::framework::JobExecutor                             )   else
                         IFFACTORY( ::framework::JobDispatch                             )   else
-                        IFFACTORY( ::framework::BackingComp                             )   else
+                        IFFACTORY( ::framework::BackingComp                             )	else
                         IFFACTORY( ::framework::LayoutManager                           )   else
                         IFFACTORY( ::framework::UIElementFactoryManager                 )   else
                         IFFACTORY( ::framework::PopupMenuControllerFactory              )   else
@@ -118,20 +160,19 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::ToolbarControllerFactory                )   else
                         IFFACTORY( ::framework::AutoRecovery                            )   else
-                        IFFACTORY( ::framework::StatusIndicatorFactory                  )   else
+                        IFFACTORY( ::framework::StatusIndicatorFactory                  )	else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
-                        IFFACTORY( ::framework::UICategoryDescription                   )   else
-                        IFFACTORY( ::framework::SessionListener                         )   else
+                        IFFACTORY( ::framework::UICategoryDescription                   )	else
+                        IFFACTORY( ::framework::SessionListener                         )	else
                         IFFACTORY( ::framework::StatusbarControllerFactory              )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
-                        IFFACTORY( ::framework::TaskCreatorService                      )   else
+                        IFFACTORY( ::framework::TaskCreatorService	                    )   else
                         IFFACTORY( ::framework::ImageManager                            )   else
                         IFFACTORY( ::framework::LangSelectionStatusbarController        )   else
                         IFFACTORY( ::framework::WindowContentFactoryManager             )   else
-                        IFFACTORY( ::framework::TabWindowService                        )   else
-                        IFFACTORY( ::framework::SubstitutePathVariables                 )   else
-                        IFFACTORY( ::framework::PathSettings                            )
+                        IFFACTORY( ::framework::SubstitutePathVariables			        )	else
+                        IFFACTORY( ::framework::PathSettings					        )
             )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

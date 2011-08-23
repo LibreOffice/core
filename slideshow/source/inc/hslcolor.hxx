@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace slideshow
     {
         class RGBColor;
 
-        /** HSL color space class.
+        /** HSL color space class.        
          */
         class HSLColor
         {
@@ -51,22 +51,38 @@ namespace slideshow
             explicit HSLColor( const RGBColor& rColor );
 
             /** Hue of the color.
-
+                
                 @return hue, is in the range [0,360]
              */
             double getHue() const;
 
             /** Saturation of the color.
-
+                
                 @return saturation, is in the range [0,1]
              */
             double getSaturation() const;
 
             /** Luminance of the color.
-
+                
                 @return luminance, is in the range [0,1]
              */
             double getLuminance() const;
+
+            /** Get the RGB red value.
+             */
+            double getRed() const;
+
+            /** Get the RGB green value.
+             */
+            double getGreen() const;
+
+            /** Get the RGB blue value.
+             */
+            double getBlue() const;
+
+            /** Create an RGB color object.
+             */
+            RGBColor getRGBColor() const;
 
             struct HSLTriple
             {
@@ -80,21 +96,21 @@ namespace slideshow
 
         private:
             // default copy/assignment are okay
-            // HSLColor(const HSLColor&);
+            // HSLColor(const HSLColor&);            
             // HSLColor& operator=( const HSLColor& );
 
-            HSLTriple   maHSLTriple;
+            HSLTriple	maHSLTriple;
 
             /// Pre-calculated value, needed for conversion back to RGB
-            double      mnMagicValue;
-        };
+            double 		mnMagicValue;
+        };        
 
         HSLColor operator+( const HSLColor& rLHS, const HSLColor& rRHS );
         HSLColor operator*( const HSLColor& rLHS, const HSLColor& rRHS );
         HSLColor operator*( double nFactor, const HSLColor& rRHS );
 
         /** HSL color linear interpolator.
-
+            
             @param t
             As usual, t must be in the [0,1] range
 

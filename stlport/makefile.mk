@@ -34,22 +34,36 @@ TARGET=so_stlport
 
 .INCLUDE :	settings.mk
 
-.IF "$(WITH_STLPORT)"!="YES"
+.IF "$(USE_SYSTEM_STL)"=="YES"
 
+.IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
+# System STL when building with SunStudio is just a version of STLport
+# which comes with the compiler
 all:
     @echo "Nothing to do"
+.ELSE #"$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
+#
+# If you choose to build without stlport, some headers will be used to bring the
+# sgi extensions into the std namespace:
+$(INCCOM)$/stlport$/functional \
+$(INCCOM)$/stlport$/hash_map \
+$(INCCOM)$/stlport$/hash_set \
+$(INCCOM)$/stlport$/numeric \
+$(INCCOM)$/stlport$/slist \
+$(INCCOM)$/stlport$/rope \
+$(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
+    $(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+.ENDIF #"$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
 
-.ELSE # "$(WITH_STLPORT)"!="YES"
+.ELSE # "$(USE_SYSTEM_STL)"
 
 # --- Files --------------------------------------------------------
 .EXPORT : CC CXX
 .IF "$(COMID)"=="gcc3"
     TARFILE_NAME=STLport-4.5
     TARFILE_MD5=18f577b374d60b3c760a3a3350407632
-    PATCH_FILES=\
-                STLport-4.5.patch \
-                STLport-4.5-gcc43_warnings.patch \
-                STLport-4.5-cxx0x.patch
+    PATCH_FILES=STLport-4.5.patch STLport-4.5-gcc43_warnings.patch
 .ELIF "$(GUI)"=="WNT"
     .IF "$(CCNUMVER)"<="001300000000"
         TARFILE_NAME=STLport-4.0
@@ -130,7 +144,7 @@ BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
     BUILD_FLAGS+= -j$(MAXPROCESS)
 .ENDIF
 .IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
-CXX+= -Wl,--hash-style=$(WITH_LINKER_HASH_STYLE)
+CXX+= -Wl,--hash-style=both
 .ENDIF
 
 .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
@@ -188,6 +202,16 @@ OUT2LIB= \
 
 # --- Targets ------------------------------------------------------
 
+.IF "$(STLPORT4)"!="NO_STLPORT4"
+all :
+       @echo "         An already available installation of STLport has been chosen in the configure process."
+       @echo "         Therefore the version provided here does not need to be built in addition."
+.ELIF "$(OS)"=="MACOSX"
+all:
+    @echo '--with-stlport=yes is not supported on Mac OS X'
+    false
+.ENDIF
+
 .INCLUDE : 	set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
@@ -219,4 +243,4 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
 .ENDIF "$(COM)"=="GCC"
 .ENDIF          # "$(GUI)"=="WNT"
 
-.ENDIF # "$(WITH_STLPORT)"!="YES"
+.ENDIF # "$(USE_SYSTEM_STL)"

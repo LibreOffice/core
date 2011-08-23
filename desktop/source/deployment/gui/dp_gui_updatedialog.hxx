@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,6 @@
 #include "vcl/dialog.hxx"
 #include "vcl/fixed.hxx"
 #include <svtools/fixedhyper.hxx>
-#include <vcl/throbber.hxx>
 
 #include "descedit.hxx"
 #include "dp_gui_updatedata.hxx"
@@ -59,6 +58,7 @@ class ResId;
 class Window;
 
 namespace com { namespace sun { namespace star {
+    namespace awt { class XThrobber; }
     namespace deployment { class XExtensionManager;
                            class XPackage; }
     namespace uno { class XComponentContext; }
@@ -97,7 +97,7 @@ public:
 
     ~UpdateDialog();
 
-    virtual sal_Bool Close();
+    virtual BOOL Close();
 
     virtual short Execute();
 
@@ -108,59 +108,62 @@ public:
 private:
     UpdateDialog(UpdateDialog &); // not defined
     void operator =(UpdateDialog &); // not defined
-
+    
     struct DisabledUpdate;
     struct SpecificError;
-    struct IgnoredUpdate;
+    union IndexUnion;
+    friend union IndexUnion;
     struct Index;
     friend struct Index;
     class Thread;
     friend class Thread;
-
+    
     class CheckListBox: public SvxCheckListBox {
     public:
         CheckListBox(
             UpdateDialog & dialog, ResId const & resource,
-            Image const & normalStaticImage);
+            Image const & normalStaticImage,
+            Image const & highContrastStaticImage);
 
         virtual ~CheckListBox();
 
-        sal_uInt16 getItemCount() const;
+        USHORT getItemCount() const;
 
     private:
         CheckListBox(UpdateDialog::CheckListBox &); // not defined
         void operator =(UpdateDialog::CheckListBox &); // not defined
 
         virtual void MouseButtonDown(MouseEvent const & event);
+
         virtual void MouseButtonUp(MouseEvent const & event);
+
         virtual void KeyInput(KeyEvent const & event);
 
-        void handlePopupMenu( const Point &rPos );
-
-        rtl::OUString m_ignoreUpdate;
-        rtl::OUString m_ignoreAllUpdates;
-        rtl::OUString m_enableUpdate;
         UpdateDialog & m_dialog;
     };
 
 
     friend class CheckListBox;
 
-    sal_uInt16 insertItem( UpdateDialog::Index *pIndex, SvLBoxButtonKind kind );
-    void addAdditional( UpdateDialog::Index *pIndex, SvLBoxButtonKind kind );
-    bool isIgnoredUpdate( UpdateDialog::Index *pIndex );
-    void setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, bool bIgnoreAll );
+    void insertItem(
+        rtl::OUString const & name, USHORT position,
+        std::auto_ptr< UpdateDialog::Index const > index,
+        SvLBoxButtonKind kind);
 
-    void addEnabledUpdate( rtl::OUString const & name, dp_gui::UpdateData & data );
-    void addDisabledUpdate( UpdateDialog::DisabledUpdate & data );
-    void addSpecificError( UpdateDialog::SpecificError & data );
+    void addAdditional(
+        rtl::OUString const & name, USHORT position,
+        std::auto_ptr< UpdateDialog::Index const > index,
+        SvLBoxButtonKind kind);
+
+    void addEnabledUpdate(
+        rtl::OUString const & name, dp_gui::UpdateData const & data);
+
+    void addDisabledUpdate(UpdateDialog::DisabledUpdate const & data);
+    void addSpecificError(UpdateDialog::SpecificError const & data);
 
     void checkingDone();
 
     void enableOk();
-
-    void getIgnoredUpdates();
-    void storeIgnoredUpdates();
 
     void initDescription();
     void clearDescription();
@@ -168,7 +171,7 @@ private:
                          ::com::sun::star::deployment::XPackage > const & aExtension);
     bool showDescription(std::pair< rtl::OUString, rtl::OUString > const & pairPublisher,
                          rtl::OUString const & sReleaseNotes);
-    bool showDescription( ::com::sun::star::uno::Reference<
+    bool showDescription( ::com::sun::star::uno::Reference< 
         ::com::sun::star::xml::dom::XNode > const & aUpdateInfo);
     bool showDescription( const String& rDescription, bool bWithPublisher );
     bool isReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
@@ -176,13 +179,13 @@ private:
     DECL_LINK(selectionHandler, void *);
     DECL_LINK(allHandler, void *);
     DECL_LINK(okHandler, void *);
-    DECL_LINK(closeHandler, void *);
+    DECL_LINK(cancelHandler, void *);
     DECL_LINK(hyperlink_clicked, svt::FixedHyperlink *);
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         m_context;
     FixedText m_checking;
-    Throbber m_throbber;
+    com::sun::star::uno::Reference< com::sun::star::awt::XThrobber > m_throbber;
     FixedText m_update;
     UpdateDialog::CheckListBox m_updates;
     CheckBox m_all;
@@ -195,7 +198,7 @@ private:
     FixedLine m_line;
     HelpButton m_help;
     PushButton m_ok;
-    PushButton m_close;
+    CancelButton m_cancel;
     rtl::OUString m_error;
     rtl::OUString m_none;
     rtl::OUString m_noInstallable;
@@ -207,22 +210,18 @@ private:
     rtl::OUString m_noDependencyCurVer;
     rtl::OUString m_browserbased;
     rtl::OUString m_version;
-    rtl::OUString m_ignoredUpdate;
     std::vector< dp_gui::UpdateData > m_enabledUpdates;
     std::vector< UpdateDialog::DisabledUpdate > m_disabledUpdates;
+    std::vector< rtl::OUString > m_generalErrors;
     std::vector< UpdateDialog::SpecificError > m_specificErrors;
-    std::vector< UpdateDialog::IgnoredUpdate* > m_ignoredUpdates;
-    std::vector< Index* > m_ListboxEntries;
     std::vector< dp_gui::UpdateData > & m_updateData;
     rtl::Reference< UpdateDialog::Thread > m_thread;
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
 
-    Point   m_aFirstLinePos;
-    Size    m_aFirstLineSize;
-    long    m_nFirstLineDelta;
-    long    m_nOneLineMissing;
-    sal_uInt16  m_nLastID;
-    bool    m_bModified;
+    Point m_aFirstLinePos;
+    Size m_aFirstLineSize;
+    long m_nFirstLineDelta;
+    long m_nOneLineMissing;
 };
 
 }

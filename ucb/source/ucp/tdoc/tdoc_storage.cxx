@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -311,7 +311,8 @@ StorageElementFactory::createOutputStream( const rtl::OUString & rUri,
     // Each stream must have a parent storage.
     if ( !xParentStorage.is() )
     {
-        OSL_FAIL( "StorageElementFactory::createOutputStream - "
+        OSL_ENSURE( false,
+                    "StorageElementFactory::createOutputStream - "
                     "Unable to create parent storage!" );
         return uno::Reference< io::XOutputStream >();
     }
@@ -322,7 +323,8 @@ StorageElementFactory::createOutputStream( const rtl::OUString & rUri,
 
     if ( !xStream.is() )
     {
-        OSL_FAIL( "StorageElementFactory::createOutputStream - "
+        OSL_ENSURE( false,
+                    "StorageElementFactory::createOutputStream - "
                     "Unable to create stream!" );
         return uno::Reference< io::XOutputStream >();
     }
@@ -357,7 +359,8 @@ StorageElementFactory::createStream( const rtl::OUString & rUri,
     // Each stream must have a parent storage.
     if ( !xParentStorage.is() )
     {
-        OSL_FAIL( "StorageElementFactory::createStream - "
+        OSL_ENSURE( false,
+                    "StorageElementFactory::createStream - "
                     "Unable to create parent storage!" );
         return uno::Reference< io::XStream >();
     }
@@ -368,7 +371,8 @@ StorageElementFactory::createStream( const rtl::OUString & rUri,
 
     if ( !xStream.is() )
     {
-        OSL_FAIL( "StorageElementFactory::createStream - "
+        OSL_ENSURE( false,
+                    "StorageElementFactory::createStream - "
                     "Unable to create stream!" );
         return uno::Reference< io::XStream >();
     }
@@ -498,8 +502,8 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
             }
             else
             {
-                OSL_FAIL(
-                    "Bug! Value of property OpenMode has wrong type!" );
+                OSL_ENSURE(
+                    false, "Bug! Value of property OpenMode has wrong type!" );
 
                 throw uno::RuntimeException(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -509,7 +513,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         }
         catch ( beans::UnknownPropertyException const & e )
         {
-            OSL_FAIL( "Property OpenMode not supported!" );
+            OSL_ENSURE( false, "Property OpenMode not supported!" );
 
             throw embed::StorageWrappedTargetException(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -519,7 +523,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         }
         catch ( lang::WrappedTargetException const & e )
         {
-            OSL_FAIL( "Caught WrappedTargetException!" );
+            OSL_ENSURE( false, "Caught WrappedTargetException!" );
 
             throw embed::StorageWrappedTargetException(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -639,7 +643,8 @@ StorageElementFactory::queryStream(
             break;
 
         default:
-            OSL_FAIL( "StorageElementFactory::queryStream : Unknown open mode!" );
+            OSL_ENSURE( false,
+                "StorageElementFactory::queryStream : Unknown open mode!" );
 
             throw embed::InvalidStorageException(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(

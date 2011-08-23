@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,28 +37,28 @@
 
 class ImpErrorQuad
 {
-    long                    nRed;
-    long                    nGreen;
-    long                    nBlue;
-    long                    nReserved;
-
-public:
-
-    inline                  ImpErrorQuad() {}
-    inline                  ImpErrorQuad( const BitmapColor& rColor ) :
-                                nRed    ( (long) rColor.GetRed() << 5L ),
-                                nGreen  ( (long) rColor.GetGreen() << 5L ),
-                                nBlue   ( (long) rColor.GetBlue() << 5L ) {}
-
-    inline void             operator=( const BitmapColor& rColor );
-    inline ImpErrorQuad&    operator-=( const BitmapColor& rColor );
-
-    inline void             ImplAddColorError1( const ImpErrorQuad& rErrQuad );
-    inline void             ImplAddColorError3( const ImpErrorQuad& rErrQuad );
-    inline void             ImplAddColorError5( const ImpErrorQuad& rErrQuad );
-    inline void             ImplAddColorError7( const ImpErrorQuad& rErrQuad );
-
-    inline BitmapColor      ImplGetColor();
+    long					nRed;
+    long					nGreen;
+    long					nBlue;
+    long					nReserved;
+                            
+public:						
+                            
+    inline 					ImpErrorQuad() {}
+    inline					ImpErrorQuad( const BitmapColor& rColor ) :
+                                nRed	( (long) rColor.GetRed() << 5L ),
+                                nGreen	( (long) rColor.GetGreen() << 5L ),
+                                nBlue	( (long) rColor.GetBlue() << 5L ) {}
+                            
+    inline void				operator=( const BitmapColor& rColor );
+    inline ImpErrorQuad&	operator-=( const BitmapColor& rColor );
+                            
+    inline void				ImplAddColorError1( const ImpErrorQuad& rErrQuad );
+    inline void				ImplAddColorError3( const ImpErrorQuad& rErrQuad );
+    inline void				ImplAddColorError5( const ImpErrorQuad& rErrQuad );
+    inline void				ImplAddColorError7( const ImpErrorQuad& rErrQuad );
+                            
+    inline BitmapColor		ImplGetColor();
 };
 
 // ------------------------------------------------------------------------
@@ -121,9 +121,9 @@ inline void ImpErrorQuad::ImplAddColorError7( const ImpErrorQuad& rErrQuad )
 
 inline BitmapColor ImpErrorQuad::ImplGetColor()
 {
-    return BitmapColor( (sal_uInt8) ( ( nRed < 0L ? 0L : nRed > 8160L ? 8160L : nRed ) >> 5L ),
-                        (sal_uInt8) ( ( nGreen < 0L ? 0L : nGreen > 8160L ? 8160L : nGreen ) >> 5L ),
-                        (sal_uInt8) ( ( nBlue < 0L ? 0L : nBlue > 8160L ? 8160L : nBlue ) >> 5L ) );
+    return BitmapColor( (BYTE) ( ( nRed < 0L ? 0L : nRed > 8160L ? 8160L : nRed ) >> 5L ), 
+                        (BYTE) ( ( nGreen < 0L ? 0L : nGreen > 8160L ? 8160L : nGreen ) >> 5L ), 
+                        (BYTE) ( ( nBlue < 0L ? 0L : nBlue > 8160L ? 8160L : nBlue ) >> 5L ) );
 }
 
 // -------------
@@ -132,19 +132,19 @@ inline BitmapColor ImpErrorQuad::ImplGetColor()
 
 class ImpNodeCache
 {
-    OctreeNode*         pActNode;
-    sal_uLong               nNew;
-    sal_uLong               nDelete;
-    sal_uLong               nGet;
-    sal_uLong               nRelease;
-
-public:
-
-                        ImpNodeCache( const sal_uLong nInitSize );
+    OctreeNode*			pActNode;
+    ULONG				nNew;
+    ULONG				nDelete;
+    ULONG				nGet;
+    ULONG				nRelease;
+                        
+public:					
+                        
+                        ImpNodeCache( const ULONG nInitSize );
                         ~ImpNodeCache();
 
-    inline OctreeNode*  ImplGetFreeNode();
-    inline void         ImplReleaseNode( OctreeNode* pNode );
+    inline OctreeNode*	ImplGetFreeNode();
+    inline void			ImplReleaseNode( OctreeNode* pNode );
 };
 
 // ------------------------------------------------------------------------

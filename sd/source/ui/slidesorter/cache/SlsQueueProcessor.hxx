@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,12 +32,14 @@
 #include "cache/SlsPageCache.hxx"
 #include "SlsRequestPriorityClass.hxx"
 #include "SlsBitmapFactory.hxx"
+#include "view/SlsPageObject.hxx"
 #include "view/SlideSorterView.hxx"
+#include "view/SlsPageObjectViewObjectContact.hxx"
 #include "tools/IdleDetection.hxx"
 #include "SlsBitmapCache.hxx"
 #include "sdpage.hxx"
 #include "Window.hxx"
-
+ 
 #include <svx/svdpagv.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -62,15 +64,14 @@ class RequestQueue;
     timer is started that eventually calls ProcessRequest().  This is
     repeated until the queue is empty or Stop() is called.
 */
-class QueueProcessor
+class QueueProcessor 
 {
 public:
     typedef ::boost::function<bool()> IdleDetectionCallback;
     QueueProcessor (
-        RequestQueue& rQueue,
+        RequestQueue& rQueue, 
         const ::boost::shared_ptr<BitmapCache>& rpCache,
         const Size& rPreviewSize,
-        const bool bDoSuperSampling,
         const SharedCacheContext& rpCacheContext);
     virtual ~QueueProcessor();
 
@@ -90,9 +91,7 @@ public:
 
     void Terminate (void);
 
-    void SetPreviewSize (
-        const Size& rSize,
-        const bool bDoSuperSampling);
+    void SetPreviewSize (const Size& rSize);
 
     /** As we can not really terminate the rendering of a preview bitmap for
         a request in midair this method acts more like a semaphor.  It
@@ -120,7 +119,6 @@ private:
     sal_uInt32 mnTimeBetweenLowPriorityRequests;
     sal_uInt32 mnTimeBetweenRequestsWhenNotIdle;
     Size maPreviewSize;
-    bool mbDoSuperSampling;
     SharedCacheContext mpCacheContext;
     RequestQueue& mrQueue;
     ::boost::shared_ptr<BitmapCache> mpCache;

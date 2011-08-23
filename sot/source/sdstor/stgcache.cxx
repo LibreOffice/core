@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #if defined(_MSC_VER) && (_MSC_VER<1200)
 #include <tools/presys.h>
 #endif
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #if defined(_MSC_VER) && (_MSC_VER<1200)
 #include <tools/postsys.h>
 #endif
@@ -41,7 +41,7 @@
 #include <osl/endian.h>
 #include <tools/string.hxx>
 
-#include "sot/stg.hxx"
+#include "stg.hxx"
 #include "stgelem.hxx"
 #include "stgcache.hxx"
 #include "stgstrms.hxx"
@@ -50,19 +50,19 @@
 
 /*************************************************************************/
 //-----------------------------------------------------------------------------
-typedef boost::unordered_map
+typedef std::hash_map
 <
-    sal_Int32,
+    INT32,
     StgPage *,
-    boost::hash< sal_Int32 >,
-    std::equal_to< sal_Int32 >
+    std::hash< INT32 >,
+    std::equal_to< INT32 >
 > UsrStgPagePtr_Impl;
 #ifdef _MSC_VER
 #pragma warning( disable: 4786 )
 #endif
 
-//#define   CHECK_DIRTY 1
-//#define   READ_AFTER_WRITE 1
+//#define	CHECK_DIRTY 1
+//#define	READ_AFTER_WRITE 1
 
 ////////////////////////////// class StgPage /////////////////////////////
 // This class implements buffer functionality. The cache will always return
@@ -73,9 +73,9 @@ StgPage::StgPage( StgCache* p, short n )
 {
     pCache = p;
     nData  = n;
-    bDirty = sal_False;
+    bDirty = FALSE;
     nPage  = 0;
-    pData  = new sal_uInt8[ nData ];
+    pData  = new BYTE[ nData ];
     pNext1 =
     pNext2 =
     pLast1 =
@@ -88,15 +88,15 @@ StgPage::~StgPage()
     delete [] pData;
 }
 
-void StgPage::SetPage( short nOff, sal_Int32 nVal )
+void StgPage::SetPage( short nOff, INT32 nVal )
 {
-    if( ( nOff < (short) ( nData / sizeof( sal_Int32 ) ) ) && nOff >= 0 )
+    if( ( nOff < (short) ( nData / sizeof( INT32 ) ) ) && nOff >= 0 )
     {
 #ifdef OSL_BIGENDIAN
       nVal = SWAPLONG(nVal);
 #endif
-        ((sal_Int32*) pData )[ nOff ] = nVal;
-        bDirty = sal_True;
+        ((INT32*) pData )[ nOff ] = nVal;
+        bDirty = TRUE;
     }
 }
 
@@ -105,7 +105,7 @@ void StgPage::SetPage( short nOff, sal_Int32 nVal )
 // The disk cache holds the cached sectors. The sector type differ according
 // to their purpose.
 
-sal_Int32 lcl_GetPageCount( sal_uLong nFileSize, short nPageSize )
+INT32 lcl_GetPageCount( ULONG nFileSize, short nPageSize )
 {
 //    return (nFileSize >= 512) ? (nFileSize - 512) / nPageSize : 0;
     // #i61980# reallife: last page may be incomplete, return number of *started* pages
@@ -119,8 +119,8 @@ StgCache::StgCache()
     pCur = pElem1 = NULL;
     nPageSize = 512;
     nError = SVSTREAM_OK;
-    bMyStream = sal_False;
-    bFile = sal_False;
+    bMyStream = FALSE;
+    bFile = FALSE;
     pLRUCache = NULL;
     pStorageStream = NULL;
 }
@@ -128,15 +128,15 @@ StgCache::StgCache()
 StgCache::~StgCache()
 {
     Clear();
-    SetStrm( NULL, sal_False );
+    SetStrm( NULL, FALSE );
     delete (UsrStgPagePtr_Impl*)pLRUCache;
 }
 
 void StgCache::SetPhysPageSize( short n )
 {
     nPageSize = n;
-    sal_uLong nPos = pStrm->Tell();
-    sal_uLong nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
+    ULONG nPos = pStrm->Tell();
+    ULONG nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
     nPages = lcl_GetPageCount( nFileSize, nPageSize );
     pStrm->Seek( nPos );
 }
@@ -144,7 +144,7 @@ void StgCache::SetPhysPageSize( short n )
 // Create a new cache element
 // pCur points to this element
 
-StgPage* StgCache::Create( sal_Int32 nPg )
+StgPage* StgCache::Create( INT32 nPg )
 {
     StgPage* pElem = new StgPage( this, nPageSize );
     pElem->nPage = nPg;
@@ -227,7 +227,7 @@ void StgCache::Clear()
 
 // Look for a cached page
 
-StgPage* StgCache::Find( sal_Int32 nPage )
+StgPage* StgCache::Find( INT32 nPage )
 {
     if( !pLRUCache )
         return NULL;
@@ -255,7 +255,7 @@ StgPage* StgCache::Find( sal_Int32 nPage )
 
 // Load a page into the cache
 
-StgPage* StgCache::Get( sal_Int32 nPage, sal_Bool bForce )
+StgPage* StgCache::Get( INT32 nPage, BOOL bForce )
 {
     StgPage* p = Find( nPage );
     if( !p )
@@ -275,7 +275,7 @@ StgPage* StgCache::Get( sal_Int32 nPage, sal_Bool bForce )
 // to duplicate an existing stream or to create new entries.
 // The new page is initially marked dirty. No owner is copied.
 
-StgPage* StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
+StgPage* StgCache::Copy( INT32 nNew, INT32 nOld )
 {
     StgPage* p = Find( nNew );
     if( !p )
@@ -283,7 +283,7 @@ StgPage* StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
     if( nOld >= 0 )
     {
         // old page: we must have this data!
-        StgPage* q = Get( nOld, sal_True );
+        StgPage* q = Get( nOld, TRUE );
         if( q )
             memcpy( p->pData, q->pData, p->nData );
     }
@@ -293,17 +293,17 @@ StgPage* StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
 
 // Flush the cache whose owner is given. NULL flushes all.
 
-sal_Bool StgCache::Commit( StgDirEntry* )
+BOOL StgCache::Commit( StgDirEntry* )
 {
     StgPage* p = pElem1;
     if( p ) do
     {
         if( p->bDirty )
         {
-            sal_Bool b = Write( p->nPage, p->pData, 1 );
+            BOOL b = Write( p->nPage, p->pData, 1 );
             if( !b )
-                return sal_False;
-            p->bDirty = sal_False;
+                return FALSE;
+            p->bDirty = FALSE;
         }
         p = p->pNext2;
     } while( p != pElem1 );
@@ -316,10 +316,10 @@ sal_Bool StgCache::Commit( StgDirEntry* )
         if( p->bDirty )
         {
             ErrorBox( NULL, WB_OK, String("SO2: Dirty Block in Ordered List") ).Execute();
-            sal_Bool b = Write( p->nPage, p->pData, 1 );
+            BOOL b = Write( p->nPage, p->pData, 1 );
             if( !b )
-                return sal_False;
-            p->bDirty = sal_False;
+                return FALSE;
+            p->bDirty = FALSE;
         }
         p = p->pNext2;
     } while( p != pElem1 );
@@ -329,15 +329,15 @@ sal_Bool StgCache::Commit( StgDirEntry* )
         if( p->bDirty )
         {
             ErrorBox( NULL, WB_OK, String("SO2: Dirty Block in LRU List") ).Execute();
-            sal_Bool b = Write( p->nPage, p->pData, 1 );
+            BOOL b = Write( p->nPage, p->pData, 1 );
             if( !b )
-                return sal_False;
-            p->bDirty = sal_False;
+                return FALSE;
+            p->bDirty = FALSE;
         }
         p = p->pNext1;
     } while( p != pElem1 );
 #endif
-    return sal_True;
+    return TRUE;
 }
 
 void StgCache::Revert( StgDirEntry* )
@@ -345,7 +345,7 @@ void StgCache::Revert( StgDirEntry* )
 
 // Set a stream
 
-void StgCache::SetStrm( SvStream* p, sal_Bool bMy )
+void StgCache::SetStrm( SvStream* p, BOOL bMy )
 {
     if( pStorageStream )
     {
@@ -376,34 +376,34 @@ void StgCache::SetStrm( UCBStorageStream* pStgStream )
         pStrm = pStorageStream->GetModifySvStream();
     }
 
-    bMyStream = sal_False;
+    bMyStream = FALSE;
 }
 
 // Open/close the disk file
 
-sal_Bool StgCache::Open( const String& rName, StreamMode nMode )
+BOOL StgCache::Open( const String& rName, StreamMode nMode )
 {
     // do not open in exclusive mode!
     if( nMode & STREAM_SHARE_DENYALL )
         nMode = ( ( nMode & ~STREAM_SHARE_DENYALL ) | STREAM_SHARE_DENYWRITE );
     SvFileStream* pFileStrm = new SvFileStream( rName, nMode );
     // SvStream "Feature" Write Open auch erfolgreich, wenns nicht klappt
-    sal_Bool bAccessDenied = sal_False;
+    BOOL bAccessDenied = FALSE;
     if( ( nMode & STREAM_WRITE ) && !pFileStrm->IsWritable() )
     {
         pFileStrm->Close();
-        bAccessDenied = sal_True;
+        bAccessDenied = TRUE;
     }
-    SetStrm( pFileStrm, sal_True );
+    SetStrm( pFileStrm, TRUE );
     if( pFileStrm->IsOpen() )
     {
-        sal_uLong nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
+        ULONG nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
         nPages = lcl_GetPageCount( nFileSize, nPageSize );
         pStrm->Seek( 0L );
     }
     else
         nPages = 0;
-    bFile = sal_True;
+    bFile = TRUE;
     SetError( bAccessDenied ? ERRCODE_IO_ACCESSDENIED : pStrm->GetError() );
     return Good();
 }
@@ -419,7 +419,7 @@ void StgCache::Close()
 
 // low level I/O
 
-sal_Bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
+BOOL StgCache::Read( INT32 nPage, void* pBuf, INT32 nPg )
 {
     if( Good() )
     {
@@ -431,9 +431,9 @@ sal_Bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
             SetError( SVSTREAM_READ_ERROR );
         else if ( nPage < nPages )
         {
-            sal_uLong nPos = Page2Pos( nPage );
-            sal_Int32 nPg2 = ( ( nPage + nPg ) > nPages ) ? nPages - nPage : nPg;
-            sal_uLong nBytes = nPg2 * nPageSize;
+            ULONG nPos = Page2Pos( nPage );
+            INT32 nPg2 = ( ( nPage + nPg ) > nPages ) ? nPages - nPage : nPg;
+            ULONG nBytes = nPg2 * nPageSize;
             // fixed address and size for the header
             if( nPage == -1 )
             {
@@ -458,12 +458,12 @@ sal_Bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
     return Good();
 }
 
-sal_Bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
+BOOL StgCache::Write( INT32 nPage, void* pBuf, INT32 nPg )
 {
     if( Good() )
     {
-        sal_uLong nPos = Page2Pos( nPage );
-        sal_uLong nBytes = nPg * nPageSize;
+        ULONG nPos = Page2Pos( nPage );
+        ULONG nBytes = nPg * nPageSize;
         // fixed address and size for the header
         if( nPage == -1 )
             nPos = 0L, nBytes = 512;
@@ -475,16 +475,16 @@ sal_Bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
 #endif
             }
         }
-        sal_uLong nRes = pStrm->Write( pBuf, nBytes );
+        ULONG nRes = pStrm->Write( pBuf, nBytes );
         if( nRes != nBytes )
             SetError( SVSTREAM_WRITE_ERROR );
         else
             SetError( pStrm->GetError() );
 #ifdef READ_AFTER_WRITE
-        sal_uInt8 cBuf[ 512 ];
+        BYTE cBuf[ 512 ];
         pStrm->Flush();
         pStrm->Seek( nPos );
-        sal_Bool bRes = ( pStrm->Read( cBuf, 512 ) == 512 );
+        BOOL bRes = ( pStrm->Read( cBuf, 512 ) == 512 );
         if( bRes )
             bRes = !memcmp( cBuf, pBuf, 512 );
         if( !bRes )
@@ -499,10 +499,10 @@ sal_Bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
 
 // set the file size in pages
 
-sal_Bool StgCache::SetSize( sal_Int32 n )
+BOOL StgCache::SetSize( INT32 n )
 {
     // Add the file header
-    sal_Int32 nSize = n * nPageSize + 512;
+    INT32 nSize = n * nPageSize + 512;
     pStrm->SetStreamSize( nSize );
     SetError( pStrm->GetError() );
     if( !nError )
@@ -510,7 +510,7 @@ sal_Bool StgCache::SetSize( sal_Int32 n )
     return Good();
 }
 
-void StgCache::SetError( sal_uLong n )
+void StgCache::SetError( ULONG n )
 {
     if( n && !nError )
         nError = n;
@@ -533,13 +533,13 @@ void StgCache::MoveError( StorageBase& r )
 
 // Utility functions
 
-sal_Int32 StgCache::Page2Pos( sal_Int32 nPage )
+INT32 StgCache::Page2Pos( INT32 nPage )
 {
     if( nPage < 0 ) nPage = 0;
     return( nPage * nPageSize ) + nPageSize;
 }
 
-sal_Int32 StgCache::Pos2Page( sal_Int32 nPos )
+INT32 StgCache::Pos2Page( INT32 nPos )
 {
     return ( ( nPos + nPageSize - 1 ) / nPageSize ) * nPageSize - 1;
 }

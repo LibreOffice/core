@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,17 +52,17 @@
 #include "colmgr.hxx"
 
 /*-----------------------------------------------------------------------
-    Description: Taking the updated values from the set
+    Beschreibung: Uebernahme der aktualisierten Werte aus dem Set
  -----------------------------------------------------------------------*/
 void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
     const SvxPageItem* pPage = 0;
     SfxItemPool* pPool = rSet.GetPool();
-    sal_uInt16 nWhich = pPool->GetWhich( SID_ATTR_PAGE );
+    USHORT nWhich = pPool->GetWhich( SID_ATTR_PAGE );
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
     {
-        // alignment
+        // Ausrichtung
         pPage = (const SvxPageItem*)&rSet.Get( nWhich );
 
         if ( pPage )
@@ -71,16 +71,16 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     nWhich = pPool->GetWhich( SID_ATTR_PAGE_SIZE );
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
     {
-        // orientation and size from PageItem
+        // Orientation und Size aus dem PageItem
         const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get( nWhich );
         SetSize( rSize.GetSize() );
     }
     nWhich = RES_LR_SPACE;
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
     {
-        // set left and right border
+        // linken und rechten Rand einstellen
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get( nWhich );
 
         SetLeft( rLRSpace.GetLeft() );
@@ -94,9 +94,9 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     nWhich = RES_UL_SPACE;
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
     {
-        // set upper and lower border
+        // oberen und unteren Rand einstellen
         const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)rSet.Get( nWhich );
 
         SetTop( rULSpace.GetUpper() );
@@ -109,10 +109,10 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     }
 
 
-    // evaluate header-attributes
+    // Kopfzeilen-Attribute auswerten
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_HEADERSET),
-            sal_False, &pItem ) )
+            FALSE, &pItem ) )
     {
         const SfxItemSet& rHeaderSet = ((SvxSetItem*)pItem)->GetItemSet();
         const SfxBoolItem& rHeaderOn =
@@ -132,7 +132,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetHdDist( rUL.GetLower() );
             SetHdLeft( rLR.GetLeft() );
             SetHdRight( rLR.GetRight() );
-            SetHeader( sal_True );
+            SetHeader( TRUE );
             if ( rHeaderSet.GetItemState( RES_BACKGROUND ) == SFX_ITEM_SET )
             {
                 const SvxBrushItem& rItem =
@@ -147,11 +147,11 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             }
         }
         else
-            SetHeader( sal_False );
+            SetHeader( FALSE );
     }
 
     if( SFX_ITEM_SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_FOOTERSET),
-            sal_False, &pItem ) )
+            FALSE, &pItem ) )
     {
         const SfxItemSet& rFooterSet = ((SvxSetItem*)pItem)->GetItemSet();
         const SfxBoolItem& rFooterOn =
@@ -171,7 +171,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetFtDist( rUL.GetUpper() );
             SetFtLeft( rLR.GetLeft() );
             SetFtRight( rLR.GetRight() );
-            SetFooter( sal_True );
+            SetFooter( TRUE );
             if( rFooterSet.GetItemState( RES_BACKGROUND ) == SFX_ITEM_SET )
             {
                 const SvxBrushItem& rItem =
@@ -186,10 +186,10 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             }
         }
         else
-            SetFooter( sal_False );
+            SetFooter( FALSE );
     }
     if( SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND,
-            sal_False, &pItem ) )
+            FALSE, &pItem ) )
     {
         SetColor( ( (const SvxBrushItem*)pItem )->GetColor() );
         const Graphic* pGrf = ( (const SvxBrushItem*)pItem )->GetGraphic();
@@ -207,11 +207,11 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 }
 
 void SwColExample::DrawPage( const Point& rOrg,
-                            const sal_Bool bSecond,
-                            const sal_Bool bEnabled )
+                            const BOOL bSecond,
+                            const BOOL bEnabled )
 {
     SwPageExample::DrawPage( rOrg, bSecond, bEnabled );
-    sal_uInt16 nColumnCount;
+    USHORT nColumnCount;
     if( pColMgr && 0 != (nColumnCount = pColMgr->GetCount()))
     {
         long nL = GetLeft();
@@ -219,7 +219,7 @@ void SwColExample::DrawPage( const Point& rOrg,
 
         if ( GetUsage() == SVX_PAGE_MIRROR && !bSecond )
         {
-            // rotate for mirrored
+            // fuer gespiegelt drehen
             nL = GetRight();
             nR = GetLeft();
         }
@@ -244,18 +244,18 @@ void SwColExample::DrawPage( const Point& rOrg,
             SetFillColor( GetColor() );
 
         // #97495# make sure that the automatic column widht's are always equal
-        sal_Bool bAutoWidth = pColMgr->IsAutoWidth();
+        BOOL bAutoWidth = pColMgr->IsAutoWidth();
         sal_Int32 nAutoColWidth = 0;
         if(bAutoWidth)
         {
             sal_Int32 nColumnWidthSum = 0;
-            sal_uInt16 i;
+            USHORT i;
             for(i = 0; i < nColumnCount; ++i)
                 nColumnWidthSum += pColMgr->GetColWidth( i );
             nAutoColWidth = nColumnWidthSum / nColumnCount;
         }
 
-        sal_uInt16 i;
+        USHORT i;
         for( i = 0; i < nColumnCount; i++)
         {
             if(!bAutoWidth)
@@ -318,7 +318,7 @@ SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) 
     SetBorderStyle( WINDOW_BORDER_MONO );
 
     m_aFrmSize  = SvxPaperInfo::GetPaperSize(PAPER_A4);// DIN A4
-    ::FitToActualSize(m_aCols, (sal_uInt16)m_aFrmSize.Width());
+    ::FitToActualSize(m_aCols, (USHORT)m_aFrmSize.Width());
 
     long nHeight = m_aFrmSize.Height();
     Fraction aScale( m_aWinSize.Height(), nHeight );
@@ -360,16 +360,16 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 
     SetFillColor( aGrayColor );
 
-    //column seperator?
+    //Spaltentrenner?
     long nLength = aLogSize.Height() - 2 * aTL.Y();
     Point aUp( aTL );
     Point aDown( aTL.X(), nLength );
-    sal_Bool bLines = sal_False;
+    BOOL bLines = FALSE;
     if(m_aCols.GetLineAdj() != COLADJ_NONE)
     {
-        bLines = sal_True;
+        bLines = TRUE;
 
-        sal_uInt16 nPercent = m_aCols.GetLineHeight();
+        USHORT nPercent = m_aCols.GetLineHeight();
         if( nPercent != 100 )
         {
             nLength -= nLength * nPercent / 100;
@@ -387,14 +387,14 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 
     }
     const SwColumns& rCols = m_aCols.GetColumns();
-    sal_uInt16 nColCount = rCols.Count();
+    USHORT nColCount = rCols.Count();
     if( nColCount )
     {
         DrawRect(aRect);
         SetFillColor( rFieldColor );
         Rectangle aFrmRect(aTL, m_aFrmSize);
         long nSum = aTL.X();
-        for(sal_uInt16 i = 0; i < nColCount; i++)
+        for(USHORT i = 0; i < nColCount; i++)
         {
             SwColumn* pCol = rCols[i];
             aFrmRect.Left()    = nSum + pCol->GetLeft();//nSum + pCol->GetLeft() + aTL.X();
@@ -405,7 +405,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
         if(bLines )
         {
             nSum = aTL.X();
-            for(sal_uInt16 i = 0; i < nColCount - 1; i++)
+            for(USHORT i = 0; i < nColCount - 1; i++)
             {
                 nSum += rCols[i]->GetWishWidth();
                 aUp.X() = nSum;
@@ -419,32 +419,32 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
 {
     m_aCols = rCol;
-    sal_uInt16 nWishSum = m_aCols.GetWishWidth();
+    USHORT nWishSum = m_aCols.GetWishWidth();
     long nFrmWidth = m_aFrmSize.Width();
     SwColumns& rCols = m_aCols.GetColumns();
-    sal_uInt16 nColCount = rCols.Count();
+    USHORT nColCount = rCols.Count();
 
-    for(sal_uInt16 i = 0; i < nColCount; i++)
+    for(USHORT i = 0; i < nColCount; i++)
     {
         SwColumn* pCol = rCols[i];
         long nWish = pCol->GetWishWidth();
         nWish *= nFrmWidth;
         nWish /= nWishSum;
-        pCol->SetWishWidth((sal_uInt16)nWish);
+        pCol->SetWishWidth((USHORT)nWish);
         long nLeft = pCol->GetLeft();
         nLeft *= nFrmWidth;
         nLeft /= nWishSum;
-        pCol->SetLeft((sal_uInt16)nLeft);
+        pCol->SetLeft((USHORT)nLeft);
         long nRight = pCol->GetRight();
         nRight *= nFrmWidth;
         nRight /= nWishSum;
-        pCol->SetRight((sal_uInt16)nRight);
+        pCol->SetRight((USHORT)nRight);
     }
     // #97495# make sure that the automatic column width's are always equal
     if(nColCount && m_aCols.IsOrtho())
     {
         sal_Int32 nColumnWidthSum = 0;
-        sal_uInt16 i;
+        USHORT i;
         for(i = 0; i < nColCount; ++i)
         {
             SwColumn* pCol = rCols[i];
@@ -455,7 +455,7 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
         for(i = 0; i < nColCount; ++i)
         {
             SwColumn* pCol = rCols[i];
-            pCol->SetWishWidth( static_cast< sal_uInt16 >(nColumnWidthSum + pCol->GetRight() + pCol->GetLeft()));
+            pCol->SetWishWidth( static_cast< USHORT >(nColumnWidthSum + pCol->GetRight() + pCol->GetLeft()));
         }
     }
 }
@@ -468,8 +468,8 @@ SwPageGridExample::~SwPageGridExample()
 #define MAX_ROWS    10
 #define MAX_LINES   15
 void SwPageGridExample::DrawPage( const Point& rOrg,
-                           const sal_Bool bSecond,
-                           const sal_Bool bEnabled )
+                           const BOOL bSecond,
+                           const BOOL bEnabled )
 {
     SwPageExample::DrawPage(rOrg, bSecond, bEnabled);
     if(pGridItem && pGridItem->GetGridType())
@@ -487,7 +487,7 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
 
         if ( GetUsage() == SVX_PAGE_MIRROR && !bSecond )
         {
-            // rotate for mirrored
+            // fuer gespiegelt drehen
             nL = GetRight();
             nR = GetLeft();
         }
@@ -495,7 +495,7 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
         Rectangle aRect;
         aRect.Right() = rOrg.X() + GetSize().Width() - nR;
         aRect.Left()  = rOrg.X() + nL;
-        aRect.Top()   = rOrg.Y() + GetTop()
+        aRect.Top()	  = rOrg.Y() + GetTop()
                         + GetHdHeight() + GetHdDist();
         aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom()
                         - GetFtHeight() - GetFtDist();
@@ -572,9 +572,9 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
 {
     DELETEZ(pGridItem);
     //get the grid information
-    if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_TEXTGRID, sal_True))
+    if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_TEXTGRID, TRUE))
         pGridItem = (SwTextGridItem*)((const SwTextGridItem&)rSet.Get(RES_TEXTGRID)).Clone();
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( RES_FRAMEDIR, sal_True ))
+    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( RES_FRAMEDIR, TRUE ))
     {
         const SvxFrameDirectionItem& rDirItem =
                     (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -348,7 +348,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             // should not happen
             // assert False
         }
-
+        
         return null;
     }
 
@@ -573,13 +573,13 @@ public class SDBCReportDataFactory implements DataSourceFactory
                         final Boolean escape = (Boolean) prop.getPropertyValue(ESCAPEPROCESSING);
                         rowSetProp.setPropertyValue(ESCAPEPROCESSING, escape);
                         final String queryCommand = (String) prop.getPropertyValue(UNO_COMMAND);
-                        statement = "SELECT * FROM (" + queryCommand + ") AS \"__LibreOffice_report_result\"";
+                        statement = "SELECT * FROM (" + queryCommand + ")";
                     }
 
                 }
                 else
                 {
-                    statement = "SELECT * FROM (" + command + ") AS \"__LibreOffice_report_result\"";
+                    statement = "SELECT * FROM (" + command + ")";
                 }
             }
             rowSetProp.setPropertyValue(UNO_COMMAND, statement);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,8 +80,8 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.45 $ $ $Date: 2008-04-11 11:18:08 $
- * @author      Kay Ramme
+ * @version 	$Revision: 1.45 $ $ $Date: 2008-04-11 11:18:08 $
+ * @author 	    Kay Ramme
  * @since       UDK1.0
  */
 public class java_remote_bridge
@@ -155,7 +155,7 @@ public class java_remote_bridge
                         new Job(obj, java_remote_bridge.this, msg));
                 }
             } catch (Throwable e) {
-                dispose(e);
+                dispose(new DisposedException(e.toString()));
             }
         }
 
@@ -478,12 +478,12 @@ public class java_remote_bridge
             dispose = _life_count <= 0;
         }
         if (dispose) {
-            dispose(new Throwable("end of life"));
+            dispose(new com.sun.star.uno.RuntimeException("end of life"));
         }
     }
 
     public void dispose() {
-        dispose(new Throwable("user dispose"));
+        dispose(new com.sun.star.uno.RuntimeException("user dispose"));
     }
 
     private void dispose(Throwable throwable) {
@@ -498,8 +498,6 @@ public class java_remote_bridge
         for (Iterator i = disposeListeners.iterator(); i.hasNext();) {
             ((DisposeListener) i.next()).notifyDispose(this);
         }
-
-        _iProtocol.terminate();
 
         try {
             _messageDispatcher.terminate();
@@ -551,7 +549,7 @@ public class java_remote_bridge
                 }
                 _java_environment.list();
             }
-
+                
             // clear members
             _xConnection        = null;
             _java_environment   = null;
@@ -604,8 +602,7 @@ public class java_remote_bridge
             _iProtocol.writeReply(exception, threadId, result);
         } catch (IOException e) {
             dispose(e);
-            throw (DisposedException)
-                (new DisposedException("unexpected " + e).initCause(e));
+            throw new DisposedException("unexpected " + e);
         } catch (RuntimeException e) {
             dispose(e);
             throw e;
@@ -634,16 +631,16 @@ public class java_remote_bridge
                     oid, TypeDescription.getTypeDescription(type), operation,
                     threadId, params);
             } catch (IOException e) {
-                dispose(e);
-                throw (DisposedException)
-                    new DisposedException(e.toString()).initCause(e);
+                DisposedException d = new DisposedException(e.toString());
+                dispose(d);
+                throw d;
             }
             if (sync && Thread.currentThread() != _messageDispatcher) {
                 result = _iThreadPool.enter(handle, threadId);
             }
         } finally {
             _iThreadPool.detach(handle, threadId);
-            if(operation.equals("release"))
+            if(operation.equals("release")) 
                 release(); // kill this bridge, if this was the last proxy
         }
 

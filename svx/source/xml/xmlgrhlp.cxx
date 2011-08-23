@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 #include <tools/zcodec.hxx>
 
 #include "svtools/filter.hxx"
-#include "svx/xmlgrhlp.hxx"
+#include "xmlgrhlp.hxx"
 
 #include <algorithm>
 
@@ -61,9 +61,9 @@ using namespace com::sun::star::io;
 
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-#define XML_GRAPHICSTORAGE_NAME     "Pictures"
-#define XML_PACKAGE_URL_BASE        "vnd.sun.star.Package:"
-#define XML_GRAPHICOBJECT_URL_BASE  "vnd.sun.star.GraphicObject:"
+#define XML_GRAPHICSTORAGE_NAME		"Pictures"
+#define XML_PACKAGE_URL_BASE		"vnd.sun.star.Package:"
+#define XML_GRAPHICOBJECT_URL_BASE	"vnd.sun.star.GraphicObject:"
 
 // ---------------------------
 // - SvXMLGraphicInputStream -
@@ -87,11 +87,11 @@ class SvXMLGraphicInputStream : public::cppu::WeakImplHelper1< XInputStream >
 {
 private:
 
-    virtual sal_Int32   SAL_CALL    readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
-    virtual sal_Int32   SAL_CALL    readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
-    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
-    virtual sal_Int32   SAL_CALL    available() throw(NotConnectedException, RuntimeException);
-    virtual void        SAL_CALL    closeInput() throw(NotConnectedException, RuntimeException);
+    virtual sal_Int32	SAL_CALL	readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
+    virtual sal_Int32	SAL_CALL	readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
+    virtual void		SAL_CALL	skipBytes(sal_Int32 nBytesToSkip) throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
+    virtual sal_Int32	SAL_CALL	available() throw(NotConnectedException, RuntimeException);
+    virtual void		SAL_CALL	closeInput() throw(NotConnectedException, RuntimeException);
 
 private:
 
@@ -115,8 +115,8 @@ public:
 
 SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphicId )
 {
-    String          aGraphicId( rGraphicId );
-    GraphicObject   aGrfObject( ByteString( aGraphicId, RTL_TEXTENCODING_ASCII_US ) );
+    String			aGraphicId( rGraphicId );
+    GraphicObject	aGrfObject( ByteString( aGraphicId, RTL_TEXTENCODING_ASCII_US ) );
 
     maTmp.EnableKillingFile();
 
@@ -126,8 +126,8 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphi
 
         if( pStm )
         {
-            Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
-            const GfxLink   aGfxLink( aGraphic.GetLink() );
+            Graphic			aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+            const GfxLink	aGfxLink( aGraphic.GetLink() );
             sal_Bool        bRet = sal_False;
 
             if( aGfxLink.GetDataSize() && aGfxLink.GetData() )
@@ -329,8 +329,8 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
         Graphic aGraphic;
 
         mpOStm->Seek( 0 );
-        sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
-        sal_uInt16 pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
+        USHORT nFormat = GRFILTER_FORMAT_DONTKNOW;
+        USHORT pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
         GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *mpOStm ,nFormat,&pDeterminedFormat );
 
         if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
@@ -338,17 +338,17 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
             //Read the first two byte to check whether it is a gzipped stream, is so it may be in wmz or emz format
             //unzip them and try again
 
-            sal_uInt8    sFirstBytes[ 2 ];
+            BYTE    sFirstBytes[ 2 ];
 
             mpOStm->Seek( STREAM_SEEK_TO_END );
-            sal_uIntPtr nStreamLen = mpOStm->Tell();
+            ULONG nStreamLen = mpOStm->Tell();
             mpOStm->Seek( 0 );
 
             if ( !nStreamLen )
             {
                 SvLockBytes* pLockBytes = mpOStm->GetLockBytes();
                 if ( pLockBytes  )
-                    pLockBytes->SetSynchronMode( sal_True );
+                    pLockBytes->SetSynchronMode( TRUE );
 
                 mpOStm->Seek( STREAM_SEEK_TO_END );
                 nStreamLen = mpOStm->Tell();
@@ -370,7 +370,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
                     if (aZCodec.EndCompression() && pDest )
                     {
                         pDest->Seek( STREAM_SEEK_TO_END );
-                        sal_uIntPtr nStreamLen_ = pDest->Tell();
+                        ULONG nStreamLen_ = pDest->Tell();
                         if (nStreamLen_)
                         {
                             pDest->Seek(0L);
@@ -428,8 +428,8 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
                                                  ::rtl::OUString& rPictureStorageName,
                                                  ::rtl::OUString& rPictureStreamName )
 {
-    String      aURLStr( rURLStr );
-    sal_Bool    bRet = sal_False;
+    String		aURLStr( rURLStr );
+    sal_Bool	bRet = sal_False;
 
     if( aURLStr.Len() )
     {
@@ -455,7 +455,7 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
         }
         else
         {
-            OSL_FAIL( "SvXMLGraphicHelper::ImplInsertGraphicURL: invalid scheme" );
+            DBG_ERROR( "SvXMLGraphicHelper::ImplInsertGraphicURL: invalid scheme" );
         }
     }
 
@@ -500,7 +500,7 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
 
 SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
                                                               const ::rtl::OUString& rPictureStreamName,
-                                                              sal_Bool bTruncate )
+                                                              BOOL bTruncate )
 {
     SvxGraphicHelperStream_Impl aRet;
     aRet.xStorage = ImplGetGraphicStorage( rPictureStorageName );
@@ -518,6 +518,7 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const ::rt
         aRet.xStream = aRet.xStorage->openStreamElement( rPictureStreamName, nMode );
         if( aRet.xStream.is() && ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) )
         {
+//REMOVE				::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
             ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
             uno::Reference < beans::XPropertySet > xProps( aRet.xStream, uno::UNO_QUERY );
             xProps->setPropertyValue( aPropName, uno::makeAny( sal_True) );
@@ -533,8 +534,8 @@ String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) con
 {
     struct XMLGraphicMimeTypeMapper
     {
-        const char* pExt;
-        const char* pMimeType;
+        const char*	pExt;
+        const char*	pMimeType;
     };
 
     static XMLGraphicMimeTypeMapper aMapper[] =
@@ -564,8 +565,8 @@ String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) con
 Graphic SvXMLGraphicHelper::ImplReadGraphic( const ::rtl::OUString& rPictureStorageName,
                                              const ::rtl::OUString& rPictureStreamName )
 {
-    Graphic             aGraphic;
-    SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, sal_False ) );
+    Graphic				aGraphic;
+    SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, FALSE ) );
     if( aStream.xStream.is() )
     {
         SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
@@ -582,17 +583,17 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                                                const ::rtl::OUString& rPictureStreamName,
                                                const ::rtl::OUString& rGraphicId )
 {
-    String          aGraphicId( rGraphicId );
-    GraphicObject   aGrfObject( ByteString( aGraphicId, RTL_TEXTENCODING_ASCII_US ) );
-    sal_Bool        bRet = sal_False;
+    String			aGraphicId( rGraphicId );
+    GraphicObject	aGrfObject( ByteString( aGraphicId, RTL_TEXTENCODING_ASCII_US ) );
+    sal_Bool		bRet = sal_False;
 
     if( aGrfObject.GetType() != GRAPHIC_NONE )
     {
-        SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, sal_False ) );
+        SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, FALSE ) );
         if( aStream.xStream.is() )
         {
-            Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
-            const GfxLink   aGfxLink( aGraphic.GetLink() );
+            Graphic			aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+            const GfxLink	aGfxLink( aGraphic.GetLink() );
             const ::rtl::OUString  aMimeType( ImplGetGraphicMimeType( rPictureStreamName ) );
             uno::Any        aAny;
             uno::Reference < beans::XPropertySet > xProps( aStream.xStream, uno::UNO_QUERY );
@@ -604,7 +605,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                 xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ), aAny );
             }
 
-            const sal_Bool bCompressed = ( ( 0 == aMimeType.getLength() ) || ( aMimeType == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/tiff")) ) );
+            const sal_Bool bCompressed = ( ( 0 == aMimeType.getLength() ) || ( aMimeType == ::rtl::OUString::createFromAscii( "image/tiff" ) ) );
             aAny <<= bCompressed;
             xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), aAny );
 
@@ -636,13 +637,13 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                     const MetaCommentAction* pComment = ImplCheckForEPS( rMtf );
                     if ( pComment )
                     {
-                        sal_uInt32  nSize = pComment->GetDataSize();
-                        const sal_uInt8* pData = pComment->GetData();
+                        sal_uInt32	nSize = pComment->GetDataSize();
+                        const BYTE* pData = pComment->GetData();
                         if ( nSize && pData )
                             pStream->Write( pData, nSize );
 
                         const MetaEPSAction* pAct = ( (const MetaEPSAction*)rMtf.FirstAction() );
-                        const GfxLink&       rLink = pAct->GetLink();
+                        const GfxLink&		 rLink = pAct->GetLink();
 
                         pStream->Write( rLink.GetData(), rLink.GetDataSize() );
                     }
@@ -669,7 +670,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
 void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos, rtl::OUString& rRequestedFileName )
 {
     rtl::OUString aURLString( rURLStr );
-    ::rtl::OUString aPictureStorageName, aPictureStreamName;
+    ::rtl::OUString	aPictureStorageName, aPictureStreamName;
     if( ( maURLSet.find( aURLString ) != maURLSet.end() ) )
     {
         URLPairVector::iterator aIter( maGrfURLs.begin() ), aEnd( maGrfURLs.end() );
@@ -705,15 +706,15 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
         }
         else
         {
-            const String        aGraphicObjectId( aPictureStreamName );
-            const ByteString    aAsciiObjectID( aGraphicObjectId, RTL_TEXTENCODING_ASCII_US );
-            const GraphicObject aGrfObject( aAsciiObjectID );
+            const String		aGraphicObjectId( aPictureStreamName );
+            const GraphicObject	aGrfObject( ByteString( aGraphicObjectId, RTL_TEXTENCODING_ASCII_US ) );
+
             if( aGrfObject.GetType() != GRAPHIC_NONE )
             {
-                String          aStreamName( aGraphicObjectId );
-                Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
-                const GfxLink   aGfxLink( aGraphic.GetLink() );
-                String          aExtension;
+                String			aStreamName( aGraphicObjectId );
+                Graphic			aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+                const GfxLink	aGfxLink( aGraphic.GetLink() );
+                String			aExtension;
 
                 if( aGfxLink.GetDataSize() )
                 {
@@ -781,15 +782,6 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                 rURLPair.second = sPictures;
                 rURLPair.second += aStreamName;
             }
-#if OSL_DEBUG_LEVEL > 0
-            else
-            {
-                ByteString sMessage = "graphic object with ID '";
-                sMessage += aAsciiObjectID;
-                sMessage += "' has an unknown type";
-                OSL_ENSURE( false, sMessage.GetBuffer() );
-            }
-#endif
         }
 
         maURLSet.insert( aURLString );
@@ -800,7 +792,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
 
 void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLStorage,
                                SvXMLGraphicHelperMode eCreateMode,
-                               sal_Bool bDirect )
+                               BOOL bDirect )
 {
     mxRootStorage = rXMLStorage;
     meCreateMode = eCreateMode;
@@ -811,7 +803,7 @@ void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLSto
 
 SvXMLGraphicHelper* SvXMLGraphicHelper::Create( const uno::Reference < embed::XStorage >& rXMLStorage,
                                                 SvXMLGraphicHelperMode eCreateMode,
-                                                sal_Bool bDirect )
+                                                BOOL bDirect )
 {
     SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
 
@@ -823,7 +815,7 @@ SvXMLGraphicHelper* SvXMLGraphicHelper::Create( const uno::Reference < embed::XS
 
 // -----------------------------------------------------------------------------
 
-SvXMLGraphicHelper* SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode eCreateMode )
+SvXMLGraphicHelper*	SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode eCreateMode )
 {
     SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
 
@@ -954,7 +946,7 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
 
                 if( aId.getLength() )
                 {
-                    aRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICOBJECT_URL_BASE ));
+                    aRet = ::rtl::OUString::createFromAscii( XML_GRAPHICOBJECT_URL_BASE );
                     aRet += aId;
                 }
             }

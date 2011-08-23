@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "corestrings.hrc"
-#include <o3tl/compat_functional.hxx>
 
 //........................................................................
 namespace rptui
@@ -43,8 +42,8 @@ namespace rptui
     using namespace ::com::sun::star::beans;
     using namespace reportdesign;
 
-DBG_NAME( rpt_OPropertyMediator )
-OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
+DBG_NAME( rpt_OPropertyMediator )	
+OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource								
                                      ,const Reference< XPropertySet>& _xDest
                                      ,const TPropertyNamePair& _aNameMap
                                      ,sal_Bool _bReverse)
@@ -54,7 +53,7 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
                                 ,m_xDest(_xDest)
                                 ,m_bInChange(sal_False)
 {
-    DBG_CTOR( rpt_OPropertyMediator,NULL);
+    DBG_CTOR( rpt_OPropertyMediator,NULL);	
     osl_incrementInterlockedCount(&m_refCount);
     OSL_ENSURE(m_xDest.is(),"Dest is NULL!");
     OSL_ENSURE(m_xSource.is(),"Source is NULL!");
@@ -95,13 +94,13 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
             DBG_UNHANDLED_EXCEPTION();
             (void)e;
         }
-    }
+    } // if ( m_xDest.is() && m_xSource.is() )
     osl_decrementInterlockedCount(&m_refCount);
 }
 // -----------------------------------------------------------------------------
 OPropertyMediator::~OPropertyMediator()
 {
-    DBG_DTOR( rpt_OPropertyMediator,NULL);
+    DBG_DTOR( rpt_OPropertyMediator,NULL);	
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)
@@ -132,9 +131,9 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
                             aFind = ::std::find_if(
                                 m_aNameMap.begin(),
                                 m_aNameMap.end(),
-                                ::o3tl::compose1(
+                                ::std::compose1(
                                 ::std::bind2nd(::std::equal_to< ::rtl::OUString >(), evt.PropertyName),
-                                    ::o3tl::compose1(::o3tl::select1st<TPropertyConverter>(),::o3tl::select2nd<TPropertyNamePair::value_type>())
+                                    ::std::compose1(::std::select1st<TPropertyConverter>(),::std::select2nd<TPropertyNamePair::value_type>())
                                 )
                             );
                             if ( aFind != m_aNameMap.end() )
@@ -142,7 +141,7 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
                         }
                         if ( sPropName.getLength() && xPropInfo->hasPropertyByName(sPropName) )
                             xProp->setPropertyValue(sPropName,aFind->second.second->operator()(sPropName,evt.NewValue));
-                        else if (   evt.PropertyName == PROPERTY_CHARFONTNAME
+                        else if (   evt.PropertyName == PROPERTY_CHARFONTNAME 
                                 ||  evt.PropertyName == PROPERTY_CHARFONTSTYLENAME
                                 ||  evt.PropertyName == PROPERTY_CHARSTRIKEOUT
                                 ||  evt.PropertyName == PROPERTY_CHARWORDMODE
@@ -164,7 +163,7 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
         }
         catch(Exception&)
         {
-            OSL_FAIL("Exception catched!");
+            OSL_ENSURE(0,"Exception catched!");
         }
         m_bInChange = sal_False;
     }
@@ -202,7 +201,7 @@ void OPropertyMediator::startListening()
 }
 // -----------------------------------------------------------------------------
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

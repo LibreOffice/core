@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,16 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/seriescontext.hxx"
-
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/chart/datasourcecontext.hxx"
 #include "oox/drawingml/chart/seriesmodel.hxx"
 #include "oox/drawingml/chart/titlecontext.hxx"
+
+using ::rtl::OUString;
+using ::oox::core::ContextHandler2;
+using ::oox::core::ContextHandler2Helper;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace drawingml {
@@ -40,17 +44,10 @@ namespace chart {
 
 // ============================================================================
 
-using ::oox::core::ContextHandler2;
-using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextHandlerRef;
-using ::rtl::OUString;
-
-// ============================================================================
-
 namespace {
 
-ContextHandlerRef lclDataLabelSharedCreateContext( ContextHandler2& rContext,
-        sal_Int32 nElement, const AttributeList& rAttribs, DataLabelModelBase& orModel )
+ContextHandlerRef lclDataLabelSharedCreateContext(
+        ContextHandler2& rContext, sal_Int32 nElement, const AttributeList& rAttribs, DataLabelModelBase& orModel )
 {
     if( rContext.isRootElement() ) switch( nElement )
     {
@@ -83,7 +80,7 @@ ContextHandlerRef lclDataLabelSharedCreateContext( ContextHandler2& rContext,
             orModel.mobShowVal = rAttribs.getBool( XML_val );
             return 0;
         case C_TOKEN( separator ):
-            // collect separator text in onCharacters()
+            // collect separator text in onEndElement()
             return &rContext;
         case C_TOKEN( spPr ):
             return new ShapePropertiesContext( rContext, orModel.mxShapeProp.create() );
@@ -93,10 +90,14 @@ ContextHandlerRef lclDataLabelSharedCreateContext( ContextHandler2& rContext,
     return 0;
 }
 
-void lclDataLabelSharedCharacters( ContextHandler2& rContext, const OUString& rChars, DataLabelModelBase& orModel )
+void lclDataLabelSharedEndElement( ContextHandler2& rContext, const OUString& rChars, DataLabelModelBase& orModel )
 {
-    if( rContext.isCurrentElement( C_TOKEN( separator ) ) )
-        orModel.moaSeparator = rChars;
+    switch( rContext.getCurrentElement() )
+    {
+        case C_TOKEN( separator ):
+            orModel.moaSeparator = rChars;
+        break;
+    }
 }
 
 } // namespace
@@ -127,9 +128,9 @@ ContextHandlerRef DataLabelContext::onCreateContext( sal_Int32 nElement, const A
     return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel );
 }
 
-void DataLabelContext::onCharacters( const OUString& rChars )
+void DataLabelContext::onEndElement( const OUString& rChars )
 {
-    lclDataLabelSharedCharacters( *this, rChars, mrModel );
+    lclDataLabelSharedEndElement( *this, rChars, mrModel );
 }
 
 // ============================================================================
@@ -159,9 +160,9 @@ ContextHandlerRef DataLabelsContext::onCreateContext( sal_Int32 nElement, const 
     return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel );
 }
 
-void DataLabelsContext::onCharacters( const OUString& rChars )
+void DataLabelsContext::onEndElement( const OUString& rChars )
 {
-    lclDataLabelSharedCharacters( *this, rChars, mrModel );
+    lclDataLabelSharedEndElement( *this, rChars, mrModel );
 }
 
 // ============================================================================
@@ -305,7 +306,7 @@ ContextHandlerRef TrendlineContext::onCreateContext( sal_Int32 nElement, const A
             mrModel.mfIntercept = rAttribs.getDouble( XML_val, 0.0 );
             return 0;
         case C_TOKEN( name ):
-            return this;    // collect name in onCharacters()
+            return this;    // collect name in onEndElement()
         case C_TOKEN( order ):
             mrModel.mnOrder = rAttribs.getInteger( XML_val, 2 );
             return 0;
@@ -323,10 +324,14 @@ ContextHandlerRef TrendlineContext::onCreateContext( sal_Int32 nElement, const A
     return 0;
 }
 
-void TrendlineContext::onCharacters( const OUString& rChars )
+void TrendlineContext::onEndElement( const ::rtl::OUString& rChars )
 {
-    if( isCurrentElement( C_TOKEN( name ) ) )
-        mrModel.maName = rChars;
+    switch( getCurrentElement() )
+    {
+        case C_TOKEN( name ):
+            mrModel.maName = rChars;
+        break;
+    }
 }
 
 // ============================================================================

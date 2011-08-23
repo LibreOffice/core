@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,7 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XFilterFormulaParser.hpp>
 #include <rtl/instance.hxx>
 #include <comphelper/processfactory.hxx>
@@ -62,23 +63,27 @@ public:
                             const OUString& rNamespace );
 
 private:
-    typedef ::boost::unordered_map<
+    typedef ::std::hash_map<
         OUString,
         Reference< XSingleComponentFactory >,
         OUStringHash,
         ::std::equal_to< OUString > > FactoryMap;
 
-    Reference< XComponentContext > mxContext;   /// Global component context.
+    Reference< XComponentContext > mxContext;   /// Default context of global process factory.
     FactoryMap          maFactories;            /// All parser factories, mapped by formula namespace.
 };
 
-ScParserFactoryMap::ScParserFactoryMap() :
-    mxContext( ::comphelper::getProcessComponentContext() )
+ScParserFactoryMap::ScParserFactoryMap()
 {
-    if( mxContext.is() ) try
+    try
     {
+        // get process factory and default component context
+        Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_SET_THROW );
+        Reference< XPropertySet > xPropSet( xFactory, UNO_QUERY_THROW );
+        mxContext.set( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ), UNO_QUERY_THROW );
+
         // enumerate all implementations of the FormulaParser service
-        Reference< XContentEnumerationAccess > xFactoryEA( mxContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< XContentEnumerationAccess > xFactoryEA( xFactory, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnum( xFactoryEA->createContentEnumeration( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.FilterFormulaParser" ) ) ), UNO_SET_THROW );
         while( xEnum->hasMoreElements() ) try // single try/catch for every element
         {

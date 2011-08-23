@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -628,8 +628,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x0868, 1, L_FIX}, // "sprmCFUsePgsuSettings"
                             // chp.fUsePgsuSettings;1 or 0
         {0x486B, 2, L_FIX}, // "sprmCCpg" ;;word;
-        {0x486D, 2, L_FIX}, // "sprmCRgLid0_80" chp.rglid[0];LID: for non-FE text
-        {0x486E, 2, L_FIX}, // "sprmCRgLid1_80" chp.rglid[1];LID: for Far East text
+        {0x486D, 2, L_FIX}, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
+        {0x486E, 2, L_FIX}, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
         {0x286F, 1, L_FIX}, // "sprmCIdctHint" chp.idctHint;IDCT:
         {0x2E00, 1, L_FIX}, // "sprmPicBrcl" pic.brcl;brcl (see PIC definition)
         {0xCE01, 0, L_VAR}, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
@@ -745,8 +745,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xC650, 0, L_VAR}, // undocumented
         {0xC651, 0, L_VAR}, // undocumented
         {0xF661, 3, L_FIX}, // undocumented
-        {0x4873, 2, L_FIX}, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
-        {0x4874, 2, L_FIX}, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
+        {0x4873, 2, L_FIX}, // undocumented
+        {0x4874, 2, L_FIX}, // undocumented
         {0x6463, 4, L_FIX}, // undocumented
         {0x2461, 1, L_FIX}, // undoc, must be asian version of "sprmPJc"
         {0x845D, 2, L_FIX}, // undoc, must be asian version of "sprmPDxaRight"
@@ -850,67 +850,72 @@ SprmInfo wwSprmParser::GetSprmInfo(sal_uInt16 nId) const
 
 //-end
 
-inline sal_uInt8 Get_Byte( sal_uInt8 *& p )
+inline BYTE Get_Byte( BYTE *& p )
 {
-    sal_uInt8 n = SVBT8ToByte( *(SVBT8*)p );
+    BYTE n = SVBT8ToByte( *(SVBT8*)p );
     p += 1;
     return n;
 }
 
-inline sal_uInt16 Get_UShort( sal_uInt8 *& p )
+inline USHORT Get_UShort( BYTE *& p )
 {
-    sal_uInt16 n = SVBT16ToShort( *(SVBT16*)p );
+    USHORT n = SVBT16ToShort( *(SVBT16*)p );
     p += 2;
     return n;
 }
 
-inline short Get_Short( sal_uInt8 *& p )
+inline short Get_Short( BYTE *& p )
 {
     return Get_UShort(p);
 }
 
-inline sal_uLong Get_ULong( sal_uInt8 *& p )
+inline ULONG Get_ULong( BYTE *& p )
 {
-    sal_uLong n = SVBT32ToUInt32( *(SVBT32*)p );
+    ULONG n = SVBT32ToUInt32( *(SVBT32*)p );
     p += 4;
     return n;
 }
 
-inline long Get_Long( sal_uInt8 *& p )
+inline long Get_Long( BYTE *& p )
 {
     return Get_ULong(p);
 }
 
-WW8SprmIter::WW8SprmIter(const sal_uInt8* pSprms_, long nLen_,
+WW8SprmIter::WW8SprmIter(const BYTE* pSprms_, long nLen_,
     const wwSprmParser &rParser)
     :  mrSprmParser(rParser), pSprms( pSprms_), nRemLen( nLen_)
 {
     UpdateMyMembers();
 }
 
-void WW8SprmIter::SetSprms(const sal_uInt8* pSprms_, long nLen_)
+void WW8SprmIter::SetSprms(const BYTE* pSprms_, long nLen_)
 {
     pSprms = pSprms_;
     nRemLen = nLen_;
     UpdateMyMembers();
 }
 
-void WW8SprmIter::advance()
+const BYTE* WW8SprmIter::operator ++( int )
 {
     if (nRemLen > 0 )
     {
-        sal_uInt16 nSize = nAktSize;
-        if (nSize > nRemLen)
-            nSize = nRemLen;
-        pSprms += nSize;
-        nRemLen -= nSize;
-        UpdateMyMembers();
+        if( nRemLen >= nAktSize )
+        {
+            pSprms += nAktSize;
+            nRemLen -= nAktSize;
+            UpdateMyMembers();
+        }
+        else
+        {
+            throw( ::std::exception() );
+        }
     }
+    return pSprms;
 }
 
 void WW8SprmIter::UpdateMyMembers()
 {
-    if (pSprms && nRemLen > (mrSprmParser.getVersion()?1:0))
+    if (pSprms && nRemLen > (mrSprmParser.getVersion()?1:0)) //see #125180#
     {
         nAktId = mrSprmParser.GetSprmId(pSprms);
         pAktParams = pSprms + mrSprmParser.DistanceToData(nAktId);
@@ -925,13 +930,13 @@ void WW8SprmIter::UpdateMyMembers()
     }
 }
 
-const sal_uInt8* WW8SprmIter::FindSprm(sal_uInt16 nId)
+const BYTE* WW8SprmIter::FindSprm(USHORT nId)
 {
     while(GetSprms())
     {
         if( GetAktId() == nId )
             return GetAktParams();              // SPRM found!
-        advance();
+        operator ++(0);
     }
 
     return 0;                                   // SPRM _not_ found
@@ -952,12 +957,12 @@ WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(ww::WordVersion eVersion,
 {
 }
 
-sal_uLong WW8PLCFx_PCDAttrs::GetIdx() const
+ULONG WW8PLCFx_PCDAttrs::GetIdx() const
 {
     return 0;
 }
 
-void WW8PLCFx_PCDAttrs::SetIdx( sal_uLong )
+void WW8PLCFx_PCDAttrs::SetIdx( ULONG )
 {
 }
 
@@ -990,11 +995,11 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
         return;
     }
 
-    sal_uInt16 nPrm = SVBT16ToShort( ( (WW8_PCD*)pData )->prm );
+    UINT16 nPrm = SVBT16ToShort( ( (WW8_PCD*)pData )->prm );
     if ( nPrm & 1 )
     {
         // PRM Variant 2
-        sal_uInt16 nSprmIdx = nPrm >> 1;
+        UINT16 nSprmIdx = nPrm >> 1;
 
         if( nSprmIdx >= nGrpprls )
         {
@@ -1004,7 +1009,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
             p->nSprmsLen = 0;
             return;
         }
-        const sal_uInt8* pSprms = pGrpprls[ nSprmIdx ];
+        const BYTE* pSprms = pGrpprls[ nSprmIdx ];
 
         p->nSprmsLen = SVBT16ToShort( pSprms ); // Length
         pSprms += 2;
@@ -1019,8 +1024,8 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
 
         if (IsSevenMinus(GetFIBVersion()))
         {
-            aShortSprm[0] = (sal_uInt8)( ( nPrm & 0xfe) >> 1 );
-            aShortSprm[1] = (sal_uInt8)(   nPrm         >> 8 );
+            aShortSprm[0] = (BYTE)( ( nPrm & 0xfe) >> 1 );
+            aShortSprm[1] = (BYTE)(   nPrm         >> 8 );
             p->nSprmsLen = ( nPrm ) ? 2 : 0;        // Laenge
 
             // store Postion of internal mini storage in Data Pointer
@@ -1030,7 +1035,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
         {
             p->pMemPos = 0;
             p->nSprmsLen = 0;
-            sal_uInt8 nSprmListIdx = (sal_uInt8)((nPrm & 0xfe) >> 1);
+            BYTE nSprmListIdx = (BYTE)((nPrm & 0xfe) >> 1);
             if( nSprmListIdx )
             {
                 // process Sprm Id Matching as explained in MS Doku
@@ -1039,7 +1044,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                 // see file: s62f39.htm
                 //
                 // Since isprm is 7 bits, rgsprmPrm can hold 0x80 entries.
-                static const sal_uInt16 aSprmId[0x80] =
+                static const USHORT aSprmId[0x80] =
                 {
                     // sprmNoop, sprmNoop, sprmNoop, sprmNoop
                     0x0000,0x0000,0x0000,0x0000,
@@ -1111,14 +1116,14 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                 };
 
                 // find real Sprm Id:
-                sal_uInt16 nSprmId = aSprmId[ nSprmListIdx ];
+                USHORT nSprmId = aSprmId[ nSprmListIdx ];
 
                 if( nSprmId )
                 {
                     // move Sprm Id and Sprm Param to internal mini storage:
-                    aShortSprm[0] = (sal_uInt8)( ( nSprmId & 0x00ff)      );
-                    aShortSprm[1] = (sal_uInt8)( ( nSprmId & 0xff00) >> 8 );
-                    aShortSprm[2] = (sal_uInt8)( nPrm >> 8 );
+                    aShortSprm[0] = (BYTE)( ( nSprmId & 0x00ff)      );
+                    aShortSprm[1] = (BYTE)( ( nSprmId & 0xff00) >> 8 );
+                    aShortSprm[2] = (BYTE)( nPrm >> 8 );
 
                     // store Sprm Length in member:
                     p->nSprmsLen = ( nPrm ) ? 3 : 0;
@@ -1148,17 +1153,17 @@ WW8PLCFx_PCD::~WW8PLCFx_PCD()
     delete pPcdI;
 }
 
-sal_uLong WW8PLCFx_PCD::GetIMax() const
+ULONG WW8PLCFx_PCD::GetIMax() const
 {
     return pPcdI ? pPcdI->GetIMax() : 0;
 }
 
-sal_uLong WW8PLCFx_PCD::GetIdx() const
+ULONG WW8PLCFx_PCD::GetIdx() const
 {
     return pPcdI ? pPcdI->GetIdx() : 0;
 }
 
-void WW8PLCFx_PCD::SetIdx( sal_uLong nIdx )
+void WW8PLCFx_PCD::SetIdx( ULONG nIdx )
 {
     if (pPcdI)
         pPcdI->SetIdx( nIdx );
@@ -1246,11 +1251,11 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
         return WW8_CP_MAX;
     }
     bool bIsUnicode = false;
-    sal_Int32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
+    INT32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
     if( !bVer67 )
         nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart, bIsUnicode );
 
-    sal_Int32 nUnicodeFactor = bIsUnicode ? 2 : 1;
+    INT32 nUnicodeFactor = bIsUnicode ? 2 : 1;
 
     if( nStartPos < nFcStart )
         nStartPos = nFcStart;
@@ -1266,7 +1271,7 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
 //-----------------------------------------
 
 short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
-    sal_uInt8 *pCol, short *pIdx) const
+    BYTE *pCol, short *pIdx) const
 {
     /*
         Word does not factor the width of the border into the width/height
@@ -1275,12 +1280,12 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
         our calculations
     */
     short nMSTotalWidth;
-    sal_uInt8 nCol;
+    BYTE nCol;
     short nIdx,nSpace;
     if( bVer67 )
     {
-        sal_uInt16 aBrc1 = SVBT16ToShort(aBits1);
-        nCol = static_cast< sal_uInt8 >((aBrc1 >> 6) & 0x1f);   // aBor.ico
+        UINT16 aBrc1 = SVBT16ToShort(aBits1);
+        nCol = static_cast< BYTE >((aBrc1 >> 6) & 0x1f);   // aBor.ico
         nSpace = (aBrc1 & 0xF800) >> 11;
 
         nMSTotalWidth = aBrc1 & 0x07;
@@ -1307,13 +1312,28 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
         {
             //Note that codes over 25 are undocumented, and I can't create
             //these 4 here in the wild.
+            default:
             case 2:
             case 4:
             case 5:
             case 22:
                 DBG_WARNING("Can't create these from the menus, please report");
-            default:
+            case 1:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
             case 23:    //Only 3pt in the menus, but honours the size setting.
+                break;
+            case 3:
+                /*
+                double line is three times the width of an ordinary line,
+                except for the smallest 1/4 point size which appears to have
+                exactly the same total border width as a 1/2 point size
+                ordinary line, i.e. twice the nominal line width
+                */
+                nMSTotalWidth = (nMSTotalWidth == 5) ?
+                    nMSTotalWidth*2 : nMSTotalWidth*3;
                 break;
             case 10:
                 /*
@@ -1330,6 +1350,97 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
                     nMSTotalWidth = nMSTotalWidth*9/2;
                 else
                     nMSTotalWidth*=5;
+                break;
+            case 11:
+            case 12:
+                /*
+                small gap thin thick and thick thin appears to have a 3/4
+                point line, a 3/4 point gap and a thick line of the specified
+                width
+                */
+                nMSTotalWidth = nMSTotalWidth + 15*2;
+                break;
+            case 13:
+                /*
+                thin thick thin appears to have two outside 3/4 point lines,
+                two 3/4 point gaps and a thick line of the specified width
+                */
+                nMSTotalWidth = nMSTotalWidth + 15*4;
+                break;
+            case 14:
+            case 15:
+                /*
+                medium gap thin thick and thick thin appears to have a line
+                50% of the thick line, and an equal sized gap and then the
+                thick line of the specified width. But it appears to only
+                use one of the existing predefined widths for the thin line,
+                so the closest smallest existing border to the halved thick
+                line is used.
+                */
+                switch (nMSTotalWidth)
+                {
+                    case 45:    //2 1/4, closest to half is 1
+                        nMSTotalWidth += 20 + (nMSTotalWidth-1)/2;
+                        break;
+                    case 5:
+                    case 10:
+                        nMSTotalWidth += 5;
+                        break;
+                    case 15:    //3/4, closest to half is 1/4
+                        nMSTotalWidth += 5 + (nMSTotalWidth-1)/2;
+                        break;
+                    default:
+                        nMSTotalWidth*=2;
+                        break;
+                }
+                break;
+            case 16:
+                /*
+                medium gap thin thick thin appears to have a line
+                50% of the thick line, and an equal sized gap and then the
+                thick line of the specified width. But it appears to only
+                use one of the existing predefined widths for the thin
+                line, so the closest smallest existing border to the halved
+                thick line is used. Though some fudging at smaller sizes is
+                still required.
+                */
+                switch (nMSTotalWidth)
+                {
+                    case 45:    //2 1/4, closest to half is 1
+                        nMSTotalWidth += nMSTotalWidth + 20 * 2;
+                        break;
+                    case 20:
+                    case 15:
+                        nMSTotalWidth += nMSTotalWidth + 7 * 2;
+                        break;
+                    case 10:
+                    case 5:
+                        nMSTotalWidth += 5 + 4;
+                        break;
+                    default:
+                        nMSTotalWidth*=3;
+                        break;
+                }
+                break;
+            case 17:
+            case 18:
+                /*
+                large gap thin thick and thick thin appears to have a thick
+                line of 1 1/2 pt and a narrow of 3/4 point, with a distance
+                between the two of the explicitly set line width
+                */
+                nMSTotalWidth+=15+30;
+                break;
+            case 19:
+                /*
+                large gap thin thick thin appears to have a thick line of 1
+                1/2 pt and two narrows of 3/4 point, with a distance between
+                the two of the explicitly set line width, though the narrowest
+                line appears to behave as if it was even smaller
+                */
+                if (nMSTotalWidth == 5)
+                    nMSTotalWidth = 3;
+                nMSTotalWidth = nMSTotalWidth*2 + 15*2 + 30;
                 break;
             case 20:
                 /*
@@ -1349,6 +1460,19 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
                 */
                 nMSTotalWidth += 45*2;
                 break;
+            case 24:
+            case 25:
+                /*
+                emboss and engrave consist of a three lines, the central is of
+                the explicit point width, the other two (of equal size to each
+                other are the shadows and are either 3/4 pt of 1 1/2 depending
+                on if the central line is greater of less than 2 1/4 pt
+                */
+                if (nMSTotalWidth <= 45)
+                    nMSTotalWidth += 2*15;
+                else
+                    nMSTotalWidth += 2*30;
+                break;
         }
     }
 
@@ -1361,22 +1485,16 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
     return nMSTotalWidth;
 }
 
-/*
- * WW8Cp2Fc is a good method, a CP always maps to a FC
- * WW8Fc2Cp on the other hand is more dubious, a random FC
- * may not map to a valid CP. Try and avoid WW8Fc2Cp where
- * possible
- */
 WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
 {
     WW8_CP nFallBackCpEnd = WW8_CP_MAX;
     if( nFcPos == WW8_FC_MAX )
         return nFallBackCpEnd;
 
+    bool bIsUnicode = false;
     if( pPieceIter )    // Complex File ?
     {
-        bool bIsUnicode = false;
-        sal_uLong nOldPos = pPieceIter->GetIdx();
+        ULONG nOldPos = pPieceIter->GetIdx();
 
         for (pPieceIter->SetIdx(0);
             pPieceIter->GetIdx() < pPieceIter->GetIMax();(*pPieceIter)++)
@@ -1388,7 +1506,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
                 OSL_ENSURE( !this, "PLCFpcd-WW8Fc2Cp() ging schief" );
                 break;
             }
-            sal_Int32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
+            INT32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
             if( 8 <= pWw8Fib->nVersion )
             {
                 nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart,
@@ -1399,7 +1517,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
                 if (pWw8Fib->fExtChar)
                     bIsUnicode=true;
             }
-            sal_Int32 nLen = (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
+            INT32 nLen = (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
 
             /*
             If this cp is inside this piece, or its the last piece and we are
@@ -1433,11 +1551,9 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
         return nFallBackCpEnd;
     }
     // No complex file
-    if (!pWw8Fib->fExtChar)
-        nFallBackCpEnd = (nFcPos - pWw8Fib->fcMin);
-    else
-        nFallBackCpEnd = (nFcPos - pWw8Fib->fcMin + 1) / 2;
-    return nFallBackCpEnd;
+    if (pWw8Fib->fExtChar)
+        bIsUnicode=true;
+    return ((nFcPos - pWw8Fib->fcMin) / (bIsUnicode ? 2 : 1));
 }
 
 WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
@@ -1482,12 +1598,10 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
 
         WW8_FC nRet = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
         if (8 > pWw8Fib->nVersion)
-        {
-            if (pWw8Fib->fExtChar)
+        if (pWw8Fib->fExtChar)
                 *pIsUnicode=true;
             else
-                *pIsUnicode = false;
-        }
+                    *pIsUnicode = false;
         else
             nRet = WW8PLCFx_PCD::TransformPieceAddress( nRet, *pIsUnicode );
 
@@ -1515,10 +1629,10 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
         return 0;
 
     WW8_FC nClxPos = pWwF->fcClx;
-    sal_Int32 nClxLen = pWwF->lcbClx;
-    sal_Int32 nLeft = nClxLen;
-    sal_Int16 nGrpprl = 0;
-    sal_uInt8 clxt;
+    INT32 nClxLen = pWwF->lcbClx;
+    INT32 nLeft = nClxLen;
+    INT16 nGrpprl = 0;
+    BYTE clxt;
 
     pStr->Seek( nClxPos );
     while( 1 ) // Zaehle Zahl der Grpprls
@@ -1529,7 +1643,7 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
             break;                              // PLCFfpcd gefunden
         if( 1 == clxt )                         // clxtGrpprl ?
             nGrpprl++;
-        sal_uInt16 nLen;
+        UINT16 nLen;
         *pStr >> nLen;
         nLeft -= 2 + nLen;
         if( nLeft < 0 )
@@ -1538,24 +1652,24 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     }
     pStr->Seek( nClxPos );
     nLeft = nClxLen;
-    pPieceGrpprls = new sal_uInt8*[nGrpprl + 1];
-    memset( pPieceGrpprls, 0, ( nGrpprl + 1 ) * sizeof(sal_uInt8 *) );
+    pPieceGrpprls = new BYTE*[nGrpprl + 1];
+    memset( pPieceGrpprls, 0, ( nGrpprl + 1 ) * sizeof(BYTE *) );
     nPieceGrpprls = nGrpprl;
-    sal_Int16 nAktGrpprl = 0;                       // lies Grpprls ein
+    INT16 nAktGrpprl = 0;                       // lies Grpprls ein
     while( 1 )
     {
         *pStr >> clxt;
         nLeft--;
         if( 2 == clxt)                          // PLCFfpcd ?
             break;                              // PLCFfpcd gefunden
-        sal_uInt16 nLen;
+        UINT16 nLen;
         *pStr >> nLen;
         nLeft -= 2 + nLen;
         if( nLeft < 0 )
             return 0;                           // schiefgegangen
         if( 1 == clxt )                         // clxtGrpprl ?
         {
-            sal_uInt8* p = new sal_uInt8[nLen+2];         // alloziere
+            BYTE* p = new BYTE[nLen+2];         // alloziere
             ShortToSVBT16(nLen, p);             // trage Laenge ein
             pStr->Read( p+2, nLen );            // lies grpprl
             pPieceGrpprls[nAktGrpprl++] = p;    // trage in Array ein
@@ -1581,7 +1695,7 @@ void WW8ScannerBase::DeletePieceTable()
 {
     if( pPieceGrpprls )
     {
-        for( sal_uInt8** p = pPieceGrpprls; *p; p++ )
+        for( BYTE** p = pPieceGrpprls; *p; p++ )
             delete[] (*p);
         delete[] pPieceGrpprls;
         pPieceGrpprls = 0;
@@ -1698,7 +1812,7 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
         // Extended ATRD
             if (pWwFib->fcAtrdExtra && pWwFib->lcbAtrdExtra)
             {
-                pExtendedAtrds = new sal_uInt8[pWwFib->lcbAtrdExtra];
+                pExtendedAtrds = new BYTE[pWwFib->lcbAtrdExtra];
         long nOldPos = pTblSt->Tell();
         pTblSt->Seek(pWwFib->fcAtrdExtra);
         pTblSt->Read(pExtendedAtrds, pWwFib->lcbAtrdExtra);
@@ -1775,14 +1889,14 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
 
     rPLCF++;
 
-    if((((sal_uInt8*)pData)[0] & 0x1f ) != 0x13 )    // Kein Anfang ?
+    if((((BYTE*)pData)[0] & 0x1f ) != 0x13 )    // Kein Anfang ?
         return true;                            // Bei Fehler nicht abbrechen
 
     if( !rPLCF.Get( nP, pData ) )
         return false;
 
 
-    while((((sal_uInt8*)pData)[0] & 0x1f ) == 0x13 )
+    while((((BYTE*)pData)[0] & 0x1f ) == 0x13 )
     {
         // immer noch neue (nested) Anfaenge ?
         WW8SkipField( rPLCF );              // nested Field im Beschreibungsteil
@@ -1790,7 +1904,7 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
             return false;
     }
 
-    if((((sal_uInt8*)pData)[0] & 0x1f ) == 0x14 )
+    if((((BYTE*)pData)[0] & 0x1f ) == 0x14 )
     {
 
         // Field Separator ?
@@ -1799,7 +1913,7 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
         if( !rPLCF.Get( nP, pData ) )
             return false;
 
-        while ((((sal_uInt8*)pData)[0] & 0x1f ) == 0x13)
+        while ((((BYTE*)pData)[0] & 0x1f ) == 0x13)
         {
             // immer noch neue (nested) Anfaenge ?
             WW8SkipField( rPLCF );          // nested Field im Resultatteil
@@ -1815,7 +1929,7 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
 static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
 {
     void* pData;
-    sal_uLong nOldIdx = rPLCF.GetIdx();
+    ULONG nOldIdx = rPLCF.GetIdx();
 
     rF.nLen = rF.nId = rF.nOpt = rF.bCodeNest = rF.bResNest = 0;
 
@@ -1824,10 +1938,10 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
 
     rPLCF++;
 
-    if((((sal_uInt8*)pData)[0] & 0x1f ) != 0x13 )        // Kein Anfang ?
+    if((((BYTE*)pData)[0] & 0x1f ) != 0x13 )        // Kein Anfang ?
         goto Err;
 
-    rF.nId = ((sal_uInt8*)pData)[1];
+    rF.nId = ((BYTE*)pData)[1];
 
     if( !rPLCF.Get( rF.nLCode, pData ) )
         goto Err;
@@ -1836,7 +1950,7 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
     rF.nSCode++;                                    // ohne Marken
     rF.nLCode -= rF.nSCode;                         // Pos zu Laenge
 
-    while((((sal_uInt8*)pData)[0] & 0x1f ) == 0x13 )
+    while((((BYTE*)pData)[0] & 0x1f ) == 0x13 )
     {
         // immer noch neue (nested) Anfaenge ?
         WW8SkipField( rPLCF );              // nested Field im Beschreibungsteil
@@ -1845,13 +1959,13 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
             goto Err;
     }
 
-    if((((sal_uInt8*)pData)[0] & 0x1f ) == 0x14 ){       // Field Separator ?
+    if((((BYTE*)pData)[0] & 0x1f ) == 0x14 ){       // Field Separator ?
         rPLCF++;
 
         if( !rPLCF.Get( rF.nLRes, pData ) )
             goto Err;
 
-        while((((sal_uInt8*)pData)[0] & 0x1f ) == 0x13 )
+        while((((BYTE*)pData)[0] & 0x1f ) == 0x13 )
         {
             // immer noch neue (nested) Anfaenge ?
             WW8SkipField( rPLCF );              // nested Field im Resultatteil
@@ -1870,11 +1984,11 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
     }
 
     rPLCF++;
-    if((((sal_uInt8*)pData)[0] & 0x1f ) == 0x15 )
+    if((((BYTE*)pData)[0] & 0x1f ) == 0x15 )
     {
         // Field Ende ?
         // INDEX-Fld hat Bit7 gesetzt!?!
-        rF.nOpt = ((sal_uInt8*)pData)[1];                // Ja -> Flags uebernehmen
+        rF.nOpt = ((BYTE*)pData)[1];                // Ja -> Flags uebernehmen
     }else{
         rF.nId = 0;                                 // Nein -> Feld ungueltig
     }
@@ -1897,7 +2011,7 @@ String WW8ReadPString(SvStream& rStrm, rtl_TextEncoding eEnc,
     bool bAtEndSeekRel1)
 {
     ByteString aByteStr;
-    sal_uInt8 b;
+    UINT8 b;
     rStrm >> b;
 
     if (b)
@@ -1905,7 +2019,7 @@ String WW8ReadPString(SvStream& rStrm, rtl_TextEncoding eEnc,
         // Alloc methode automatically sets Zero at the end
         sal_Char*  pByteData = aByteStr.AllocBuffer( b );
 
-        sal_uLong nWasRead = rStrm.Read( pByteData, b );
+        ULONG nWasRead = rStrm.Read( pByteData, b );
         if( nWasRead != b )
             aByteStr.ReleaseBufferAccess(static_cast<xub_StrLen>(nWasRead));
     }
@@ -1917,9 +2031,9 @@ String WW8ReadPString(SvStream& rStrm, rtl_TextEncoding eEnc,
     return String( aByteStr, eEnc );
 }
 
-String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1)
+String WW8Read_xstz(SvStream& rStrm, USHORT nChars, bool bAtEndSeekRel1)
 {
-    sal_uInt16 b;
+    UINT16 b;
 
     if( nChars )
         b = nChars;
@@ -1932,16 +2046,16 @@ String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1)
         // Alloc methode automatically sets Zero at the end
         sal_Unicode* pData = aStr.AllocBuffer( b );
 
-        sal_uLong nWasRead = rStrm.Read( (sal_Char*)pData, b * 2 );
-        if( nWasRead != static_cast<sal_uLong>(b*2) )
+        ULONG nWasRead = rStrm.Read( (sal_Char*)pData, b * 2 );
+        if( nWasRead != static_cast<ULONG>(b*2) )
         {
-            b = static_cast<sal_uInt16>(nWasRead / 2);
+            b = static_cast<UINT16>(nWasRead / 2);
             aStr.ReleaseBufferAccess( b );
             pData = aStr.GetBufferAccess();
         }
 
 #ifdef OSL_BIGENDIAN
-        sal_uLong n;
+        ULONG n;
         sal_Unicode *pWork;
         for( n = 0, pWork = pData; n < b; ++n, ++pWork )
             *pWork = SWAPSHORT( *pWork );
@@ -1954,9 +2068,9 @@ String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1)
     return aStr;
 }
 
-sal_uLong SafeReadString(ByteString &rStr,sal_uInt16 nLen,SvStream &rStrm)
+ULONG SafeReadString(ByteString &rStr,USHORT nLen,SvStream &rStrm)
 {
-    sal_uLong nWasRead=0;
+    ULONG nWasRead=0;
     if (nLen)
     {
         nWasRead = rStrm.Read( rStr.AllocBuffer( nLen ), nLen);
@@ -1996,12 +2110,12 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
             nLen = USHRT_MAX - 1;
 
         if( bIsUnicode )
-            rStr.Append(WW8Read_xstz(rStrm, (sal_uInt16)nLen, false));
+            rStr.Append(WW8Read_xstz(rStrm, (USHORT)nLen, false));
         else
         {
             // Alloc method automatically sets Zero at the end
             ByteString aByteStr;
-            SafeReadString(aByteStr,(sal_uInt16)nLen,rStrm);
+            SafeReadString(aByteStr,(USHORT)nLen,rStrm);
             rStr += String( aByteStr, eEnc );
         }
         nTotalRead  += nLen;
@@ -2025,7 +2139,7 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, long nFilePos, long nPLCF,
 {
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
     // Pointer auf Pos- u. Struct-Array
-    pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];
+    pPLCF_PosArray = new INT32[ ( nPLCF + 3 ) / 4 ];
 
     long nOldPos = pSt->Tell();
 
@@ -2037,7 +2151,7 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, long nFilePos, long nPLCF,
     nIdx = 0;
 #endif // OSL_BIGENDIAN
     if( nStruct ) // Pointer auf Inhalts-Array
-        pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
+        pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
     else
         pPLCF_Contents = 0;                         // kein Inhalt
     if( nStartPos >= 0 )
@@ -2140,7 +2254,7 @@ bool WW8PLCFspecial::GetData(long nInIdx, WW8_CP& rPos, void*& rpValue) const
 
 // Ctor fuer *andere* als Fkps
 // Bei nStartPos < 0 wird das erste Element des PLCFs genommen
-WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
+WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct,
     WW8_CP nStartPos ) : pPLCF_PosArray(0), nIdx(0), nStru(nStruct)
 {
     OSL_ENSURE( nPLCF, "WW8PLCF: nPLCF ist Null!" );
@@ -2158,8 +2272,8 @@ WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
 // != 0, dann wird ein unvollstaendiger PLCF vervollstaendigt.  Das ist bei
 // WW6 bei Resourcenmangel und bei WordPad (W95) immer noetig.  Bei nStartPos
 // < 0 wird das erste Element des PLCFs genommen
-WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
-    WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN ) : pPLCF_PosArray(0), nIdx(0),
+WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct,
+    WW8_CP nStartPos, INT32 nPN, INT32 ncpN ) : pPLCF_PosArray(0), nIdx(0),
     nStru(nStruct)
 {
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
@@ -2173,7 +2287,7 @@ WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
         SeekPos( nStartPos );
 }
 
-void WW8PLCF::ReadPLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF )
+void WW8PLCF::ReadPLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF )
 {
     bool failure = false;
 
@@ -2199,7 +2313,7 @@ void WW8PLCF::ReadPLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF )
         nIdx = 0;
 #endif // OSL_BIGENDIAN
         // Pointer auf Inhalts-Array
-        pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
+        pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
     }
 
     pSt->Seek( nOldPos );
@@ -2214,12 +2328,12 @@ void WW8PLCF::MakeFailedPLCF()
 {
     nIMax = 0;
     delete[] pPLCF_PosArray;
-    pPLCF_PosArray = new sal_Int32[2];
+    pPLCF_PosArray = new INT32[2];
     pPLCF_PosArray[0] = pPLCF_PosArray[1] = WW8_CP_MAX;
-    pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
+    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
 }
 
-void WW8PLCF::GeneratePLCF( SvStream* pSt, sal_Int32 nPN, sal_Int32 ncpN )
+void WW8PLCF::GeneratePLCF( SvStream* pSt, INT32 nPN, INT32 ncpN )
 {
     OSL_ENSURE( nIMax < ncpN, "Pcl.Fkp: Warum ist PLCF zu gross ?" );
 
@@ -2233,9 +2347,9 @@ void WW8PLCF::GeneratePLCF( SvStream* pSt, sal_Int32 nPN, sal_Int32 ncpN )
     {
         size_t nSiz = 6 * nIMax + 4;
         size_t nElems = ( nSiz + 3 ) / 4;
-        pPLCF_PosArray = new sal_Int32[ nElems ]; // Pointer auf Pos-Array
+        pPLCF_PosArray = new INT32[ nElems ]; // Pointer auf Pos-Array
 
-        for (sal_Int32 i = 0; i < ncpN && !pSt->GetError(); ++i)
+        for (INT32 i = 0; i < ncpN && !pSt->GetError(); ++i)
         {
             // Baue FC-Eintraege
             pSt->Seek( ( nPN + i ) << 9 );  // erster FC-Eintrag jedes Fkp
@@ -2252,7 +2366,7 @@ void WW8PLCF::GeneratePLCF( SvStream* pSt, sal_Int32 nPN, sal_Int32 ncpN )
         sal_Size nLastFkpPos = ( ( nPN + nIMax - 1 ) << 9 );
         pSt->Seek( nLastFkpPos + 511 );     // Anz. Fkp-Eintraege des letzten Fkp
 
-        sal_uInt8 nb;
+        BYTE nb;
         *pSt >> nb;
         pSt->Seek( nLastFkpPos + nb * 4 );  // letzer FC-Eintrag des letzten Fkp
 
@@ -2266,10 +2380,10 @@ void WW8PLCF::GeneratePLCF( SvStream* pSt, sal_Int32 nPN, sal_Int32 ncpN )
     if (!failure)
     {
         // Pointer auf Inhalts-Array
-        pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
-        sal_uInt8* p = pPLCF_Contents;
+        pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
+        BYTE* p = pPLCF_Contents;
 
-        for (sal_Int32 i = 0; i < ncpN; ++i)         // Baue PNs
+        for (INT32 i = 0; i < ncpN; ++i)         // Baue PNs
         {
             ShortToSVBT16(static_cast<sal_uInt16>(nPN + i), p);
             p+=2;
@@ -2297,8 +2411,8 @@ bool WW8PLCF::SeekPos(WW8_CP nPos)
     if( (1 > nIdx) || (nP < pPLCF_PosArray[ nIdx-1 ]) )
         nIdx = 1;
 
-    sal_Int32 nI   = nIdx ? nIdx : 1;
-    sal_Int32 nEnd = nIMax;
+    INT32 nI   = nIdx ? nIdx : 1;
+    INT32 nEnd = nIMax;
 
     for(int n = (1==nIdx ? 1 : 2); n; --n )
     {
@@ -2347,7 +2461,7 @@ WW8PLCFpcd::WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct )
     :nStru( nStruct )
 {
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
-    pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];    // Pointer auf Pos-Array
+    pPLCF_PosArray = new INT32[ ( nPLCF + 3 ) / 4 ];    // Pointer auf Pos-Array
 
     long nOldPos = pSt->Tell();
 
@@ -2359,7 +2473,7 @@ WW8PLCFpcd::WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct )
 #endif // OSL_BIGENDIAN
 
     // Pointer auf Inhalts-Array
-    pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
+    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
 
     pSt->Seek( nOldPos );
 }
@@ -2418,7 +2532,7 @@ bool WW8PLCFpcd_Iter::Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const
     return true;
 }
 
-sal_Int32 WW8PLCFpcd_Iter::Where() const
+INT32 WW8PLCFpcd_Iter::Where() const
 {
     if ( nIdx >= rPLCF.nIMax )
         return SAL_MAX_INT32;
@@ -2433,12 +2547,12 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::Entry::operator<
     return (mnFC < rSecond.mnFC);
 }
 
-bool IsReplaceAllSprm(sal_uInt16 nSpId)
+bool IsReplaceAllSprm(USHORT nSpId)
 {
     return (0x6645 == nSpId || 0x6646 == nSpId);
 }
 
-bool IsExpandableSprm(sal_uInt16 nSpId)
+bool IsExpandableSprm(USHORT nSpId)
 {
     return 0x646B == nSpId;
 }
@@ -2452,7 +2566,6 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
     long nOldPos = pSt->Tell();
 
     pSt->Seek(nFilePos);
-    memset(maRawData, 0, 512);
     pSt->Read(maRawData, 512);
     mnIMax = maRawData[511];
 
@@ -2476,7 +2589,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                     if (aEntry.mnLen && eVersion == ww::eWW2)
                     {
                         Word2CHPX aChpx = ReadWord2Chpx(*pSt, nFilePos + nOfs + 1, static_cast< sal_uInt8 >(aEntry.mnLen));
-                        std::vector<sal_uInt8> aSprms = ChpxToSprms(aChpx);
+                        std::vector<BYTE> aSprms = ChpxToSprms(aChpx);
                         aEntry.mnLen = static_cast< sal_uInt16 >(aSprms.size());
                         if (aEntry.mnLen)
                         {
@@ -2497,39 +2610,27 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                             aEntry.mnLen = maRawData[nOfs+1];
                             nDelta++;
                         }
+
                         aEntry.mnLen *= 2;
 
                         //stylecode, std/istd
                         if (eVersion == ww::eWW2)
                         {
-                            if (aEntry.mnLen >= 1)
-                            {
-                                aEntry.mnIStd = *(maRawData+nOfs+1+nDelta);
-                                aEntry.mnLen--;  //style code
-                                if (aEntry.mnLen >= 6)
-                                {
-                                    aEntry.mnLen-=6; //PHE
-                                    //skipi stc, len byte + 6 byte PHE
-                                    aEntry.mpData = maRawData + nOfs + 8;
-                                }
-                                else
-                                    aEntry.mnLen=0; //Too short
-                            }
+                            aEntry.mnIStd = *(maRawData+nOfs+1+nDelta);
+                            aEntry.mnLen--;  //style code
+                            aEntry.mnLen-=6; //PHE
+                            //skipi stc, len byte + 6 byte PHE
+                            aEntry.mpData = maRawData + nOfs + 8;
                         }
                         else
                         {
-                            if (aEntry.mnLen >= 2)
-                            {
-                                aEntry.mnIStd = SVBT16ToShort(maRawData+nOfs+1+nDelta);
-                                aEntry.mnLen-=2; //istd
-                                //skip istd, len byte + optional extra len byte
-                                aEntry.mpData = maRawData + nOfs + 3 + nDelta;
-                            }
-                            else
-                                aEntry.mnLen=0; //Too short, ignore
+                            aEntry.mnIStd = SVBT16ToShort(maRawData+nOfs+1+nDelta);
+                            aEntry.mnLen-=2; //istd
+                            //skip istd, len byte + optional extra len byte
+                            aEntry.mpData = maRawData + nOfs + 3 + nDelta;
                         }
 
-                        sal_uInt16 nSpId = aEntry.mnLen ? maSprmParser.GetSprmId(aEntry.mpData) : 0;
+                        USHORT nSpId = aEntry.mnLen ? maSprmParser.GetSprmId(aEntry.mpData) : 0;
 
                         /*
                          If we replace then we throw away the old data, if we
@@ -2542,9 +2643,9 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                             sal_uInt16 nOrigLen = bExpand ? aEntry.mnLen : 0;
                             sal_uInt8 *pOrigData = bExpand ? aEntry.mpData : 0;
 
-                            sal_uInt32 nCurr = pDataSt->Tell();
+                            UINT32 nCurr = pDataSt->Tell();
 
-                            sal_uInt32 nPos = SVBT32ToUInt32(aEntry.mpData + 2);
+                            UINT32 nPos = SVBT32ToUInt32(aEntry.mpData + 2);
                             pDataSt->Seek(nPos);
                             *pDataSt >> aEntry.mnLen;
                             aEntry.mpData =
@@ -2564,29 +2665,19 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                     }
                     break;
                 default:
-                    OSL_FAIL("sweet god, what have you done!");
+                    OSL_ENSURE(false, "sweet god, what have you done!");
                     break;
             }
         }
 
         maEntries.push_back(aEntry);
-
-#ifdef DEBUGSPRMREADER
-        {
-            sal_Int32 nLen;
-            sal_uInt8* pSprms = GetLenAndIStdAndSprms( nLen );
-
-            WW8SprmIter aIter(pSprms, nLen, maSprmParser);
-            while(aIter.GetSprms())
-                aIter.advance();
-        }
-#endif
     }
 
     //one more FC than grrpl entries
     maEntries.push_back(Entry(Get_Long(pStart)));
 
-    //we expect them sorted, but it appears possible for them to arive unsorted
+    //#104773#, we expect them sorted, but it appears possible
+    //for them to arive unsorted
     std::sort(maEntries.begin(), maEntries.end());
 
     mnIdx = 0;
@@ -2613,9 +2704,6 @@ WW8PLCFx_Fc_FKP::WW8Fkp::Entry::Entry(const Entry &rEntry)
 WW8PLCFx_Fc_FKP::WW8Fkp::Entry&
     WW8PLCFx_Fc_FKP::WW8Fkp::Entry::operator=(const Entry &rEntry)
 {
-    if (this == &rEntry)
-        return *this;
-
     if (mbMustDelete)
         delete[] mpData;
 
@@ -2679,7 +2767,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::SeekPos(WW8_FC nFc)
     return false;
 }
 
-sal_uInt8* WW8PLCFx_Fc_FKP::WW8Fkp::Get(WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen)
+BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::Get(WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen)
     const
 {
     rLen = 0;
@@ -2693,7 +2781,7 @@ sal_uInt8* WW8PLCFx_Fc_FKP::WW8Fkp::Get(WW8_FC& rStart, WW8_FC& rEnd, sal_Int32&
     rStart = maEntries[mnIdx].mnFC;
     rEnd   = maEntries[mnIdx + 1].mnFC;
 
-    sal_uInt8* pSprms = GetLenAndIStdAndSprms( rLen );
+    BYTE* pSprms = GetLenAndIStdAndSprms( rLen );
     return pSprms;
 }
 
@@ -2707,32 +2795,32 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::SetIdx(sal_uInt8 nI)
     return false;
 }
 
-sal_uInt8* WW8PLCFx_Fc_FKP::WW8Fkp::GetLenAndIStdAndSprms(sal_Int32& rLen) const
+BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::GetLenAndIStdAndSprms(sal_Int32& rLen) const
 {
     rLen = maEntries[mnIdx].mnLen;
     return maEntries[mnIdx].mpData;
 }
 
-const sal_uInt8* WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( sal_uInt16 nId )
+const BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( USHORT nId )
 {
     if (mnIdx >= mnIMax)
         return 0;
 
     sal_Int32 nLen;
-    sal_uInt8* pSprms = GetLenAndIStdAndSprms( nLen );
+    BYTE* pSprms = GetLenAndIStdAndSprms( nLen );
 
     WW8SprmIter aIter(pSprms, nLen, maSprmParser);
     return aIter.FindSprm(nId);
 }
 
-bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
-    std::vector<const sal_uInt8 *> &rResult)
+bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(USHORT nId,
+    std::vector<const BYTE *> &rResult)
 {
     if (mnIdx >= mnIMax)
        return false;
 
     sal_Int32 nLen;
-    sal_uInt8* pSprms = GetLenAndIStdAndSprms( nLen );
+    BYTE* pSprms = GetLenAndIStdAndSprms( nLen );
 
     WW8SprmIter aIter(pSprms, nLen, maSprmParser);
 
@@ -2740,7 +2828,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
     {
         if (aIter.GetAktId() == nId)
             rResult.push_back(aIter.GetAktParams());
-        aIter.advance();
+        aIter++;
     };
     return !rResult.empty();
 }
@@ -2765,12 +2853,12 @@ long WW8PLCFx::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
 }
 
 // ...Idx2: Default: ignorieren
-sal_uLong WW8PLCFx::GetIdx2() const
+ULONG WW8PLCFx::GetIdx2() const
 {
     return 0;
 }
 
-void WW8PLCFx::SetIdx2(sal_uLong )
+void WW8PLCFx::SetIdx2(ULONG )
 {
 }
 
@@ -2829,12 +2917,12 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
         return false;                           // PLCF fertig abgearbeitet
     }
     (*pPLCF)++;
-    long nPo = SVBT16ToShort( (sal_uInt8 *)pPage );
+    long nPo = SVBT16ToShort( (BYTE *)pPage );
     nPo <<= 9;                                  // shift als LONG
 
     long nAktFkpFilePos = pFkp ? pFkp->GetFilePos() : -1;
     if (nAktFkpFilePos == nPo)
-        pFkp->Reset(GetStartFc());
+        pFkp->Reset(GetStartFc()); // #79464# //
     else
     {
         myiter aIter =
@@ -2889,15 +2977,15 @@ WW8PLCFx_Fc_FKP::~WW8PLCFx_Fc_FKP()
     delete pPCDAttrs;
 }
 
-sal_uLong WW8PLCFx_Fc_FKP::GetIdx() const
+ULONG WW8PLCFx_Fc_FKP::GetIdx() const
 {
-    sal_uLong u = pPLCF->GetIdx() << 8;
+    ULONG u = pPLCF->GetIdx() << 8;
     if (pFkp)
         u |= pFkp->GetIdx();
     return u;
 }
 
-void WW8PLCFx_Fc_FKP::SetIdx( sal_uLong nIdx )
+void WW8PLCFx_Fc_FKP::SetIdx( ULONG nIdx )
 {
     if( !( nIdx & 0xffffff00L ) )
     {
@@ -2929,7 +3017,7 @@ bool WW8PLCFx_Fc_FKP::SeekPos(WW8_FC nFcPos)
     void* pPage;
     if( pFkp && pPLCF->Get( nPLCFStart, nPLCFEnd, pPage ) )
     {
-        long nPo = SVBT16ToShort( (sal_uInt8 *)pPage );
+        long nPo = SVBT16ToShort( (BYTE *)pPage );
         nPo <<= 9;                                          // shift als LONG
         if (nPo != pFkp->GetFilePos())
             pFkp = 0;
@@ -2954,7 +3042,7 @@ WW8_FC WW8PLCFx_Fc_FKP::Where()
     return Where();                     // am einfachsten rekursiv
 }
 
-sal_uInt8* WW8PLCFx_Fc_FKP::GetSprmsAndPos(WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen)
+BYTE* WW8PLCFx_Fc_FKP::GetSprmsAndPos(WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen)
 {
     rLen = 0;                               // Default
     rStart = rEnd = WW8_FC_MAX;
@@ -2965,7 +3053,7 @@ sal_uInt8* WW8PLCFx_Fc_FKP::GetSprmsAndPos(WW8_FC& rStart, WW8_FC& rEnd, sal_Int
             return 0;
     }
 
-    sal_uInt8* pPos = pFkp->Get( rStart, rEnd, rLen );
+    BYTE* pPos = pFkp->Get( rStart, rEnd, rLen );
     if( rStart == WW8_FC_MAX )    //Not found
         return 0;
     return pPos;
@@ -2986,7 +3074,7 @@ WW8PLCFx& WW8PLCFx_Fc_FKP::operator ++( int )
     return *this;
 }
 
-sal_uInt16 WW8PLCFx_Fc_FKP::GetIstd() const
+USHORT WW8PLCFx_Fc_FKP::GetIstd() const
 {
     return pFkp ? pFkp->GetIstd() : 0xFFFF;
 }
@@ -3008,7 +3096,7 @@ void WW8PLCFx_Fc_FKP::GetPCDSprms( WW8PLCFxDesc& rDesc )
     }
 }
 
-const sal_uInt8* WW8PLCFx_Fc_FKP::HasSprm( sal_uInt16 nId )
+const BYTE* WW8PLCFx_Fc_FKP::HasSprm( USHORT nId )
 {
     // const waere schoener, aber dafuer muesste NewFkp() ersetzt werden oder
     // wegfallen
@@ -3020,7 +3108,7 @@ const sal_uInt8* WW8PLCFx_Fc_FKP::HasSprm( sal_uInt16 nId )
             return 0;
     }
 
-    const sal_uInt8* pRes = pFkp->HasSprm( nId );
+    const BYTE* pRes = pFkp->HasSprm( nId );
 
     if( !pRes )
     {
@@ -3038,7 +3126,7 @@ const sal_uInt8* WW8PLCFx_Fc_FKP::HasSprm( sal_uInt16 nId )
     return pRes;
 }
 
-bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult)
+bool WW8PLCFx_Fc_FKP::HasSprm(USHORT nId, std::vector<const BYTE *> &rResult)
 {
     // const waere schoener, aber dafuer muesste NewFkp() ersetzt werden oder
     // wegfallen
@@ -3063,7 +3151,7 @@ bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rR
         {
             if (aIter.GetAktId() == nId)
                 rResult.push_back(aIter.GetAktParams());
-            aIter.advance();
+            aIter++;
         };
     }
     return !rResult.empty();
@@ -3110,17 +3198,17 @@ void WW8PLCFx_Cp_FKP::ResetAttrStartEnd()
     bLineEnd   = false;
 }
 
-sal_uLong WW8PLCFx_Cp_FKP::GetPCDIMax() const
+ULONG WW8PLCFx_Cp_FKP::GetPCDIMax() const
 {
     return pPcd ? pPcd->GetIMax() : 0;
 }
 
-sal_uLong WW8PLCFx_Cp_FKP::GetPCDIdx() const
+ULONG WW8PLCFx_Cp_FKP::GetPCDIdx() const
 {
     return pPcd ? pPcd->GetIdx() : 0;
 }
 
-void WW8PLCFx_Cp_FKP::SetPCDIdx( sal_uLong nIdx )
+void WW8PLCFx_Cp_FKP::SetPCDIdx( ULONG nIdx )
 {
     if( pPcd )
         pPcd->SetIdx( nIdx );
@@ -3160,6 +3248,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
     else
     {
         /*
+        #93702#
         For the odd case where we have a location in a fastsaved file which
         does not have an entry in the FKP, perhaps its para end is in the next
         piece, or perhaps the cp just doesn't exist at all in this document.
@@ -3172,7 +3261,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
         */
         if( !pPieceIter )
             return;
-        sal_uLong nOldPos = pPieceIter->GetIdx();
+        ULONG nOldPos = pPieceIter->GetIdx();
         bool bOk = pPieceIter->SeekPos(nOrigCp);
         pPieceIter->SetIdx( nOldPos );
         if (!bOk)
@@ -3199,7 +3288,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
 
                 //We set the piece iterator to the piece that contains the
                 //character, now we have the correct piece for this character
-                sal_uLong nOldPos = pPieceIter->GetIdx();
+                ULONG nOldPos = pPieceIter->GetIdx();
                 p->nStartPos = nOrigCp;
                 pPieceIter->SeekPos( p->nStartPos);
 
@@ -3277,7 +3366,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                                 break;
                             }
                             bIsUnicode = false;
-                            sal_Int32 nFcStart=SVBT32ToUInt32(((WW8_PCD*)pData)->fc);
+                            INT32 nFcStart=SVBT32ToUInt32(((WW8_PCD*)pData)->fc);
 
                             if (IsEightPlus(GetFIBVersion()))
                             {
@@ -3357,11 +3446,11 @@ WW8PLCFx_SEPX::WW8PLCFx_SEPX(SvStream* pSt, SvStream* pTblSt,
     pStrm(pSt), nArrMax(256), nSprmSiz(0)
 {
     pPLCF =   rFib.lcbPlcfsed
-            ? new WW8PLCF(pTblSt, rFib.fcPlcfsed, rFib.lcbPlcfsed,
+            ? new WW8PLCF(pTblSt, rFib.fcPlcfsed, rFib.lcbPlcfsed, 
               GetFIBVersion() <= ww::eWW2 ? 6 : 12, nStartCp)
             : 0;
 
-    pSprms = new sal_uInt8[nArrMax];     // maximum length
+    pSprms = new BYTE[nArrMax];     // maximum length
 }
 
 WW8PLCFx_SEPX::~WW8PLCFx_SEPX()
@@ -3370,12 +3459,12 @@ WW8PLCFx_SEPX::~WW8PLCFx_SEPX()
     delete[] pSprms;
 }
 
-sal_uLong WW8PLCFx_SEPX::GetIdx() const
+ULONG WW8PLCFx_SEPX::GetIdx() const
 {
     return pPLCF ? pPLCF->GetIdx() : 0;
 }
 
-void WW8PLCFx_SEPX::SetIdx( sal_uLong nIdx )
+void WW8PLCFx_SEPX::SetIdx( ULONG nIdx )
 {
     if( pPLCF ) pPLCF->SetIdx( nIdx );
 }
@@ -3405,7 +3494,7 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
     }
     else
     {
-        sal_uInt32 nPo =  SVBT32ToUInt32( (sal_uInt8*)pData+2 );
+        sal_uInt32 nPo =  SVBT32ToUInt32( (BYTE*)pData+2 );
         if (nPo == 0xFFFFFFFF)
         {
             p->nStartPos = p->nEndPos = WW8_CP_MAX;   // Sepx empty
@@ -3417,20 +3506,20 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
             pStrm->Seek( nPo );
 
             // read len
-            if (GetFIBVersion() <= ww::eWW2)    // eWW6 ?, docs say yes, but...
+            if (GetFIBVersion() <= ww::eWW2)	// eWW6 ?, docs say yes, but...
             {
-                sal_uInt8 nSiz(0);
+                BYTE nSiz(0);
                 *pStrm >> nSiz;
                 nSprmSiz = nSiz;
             }
-            else
+            else 
                 *pStrm >> nSprmSiz;
 
             if( nSprmSiz > nArrMax )
             {               // passt nicht
                 delete[] pSprms;
                 nArrMax = nSprmSiz;                 // Hole mehr Speicher
-                pSprms = new sal_uInt8[nArrMax];
+                pSprms = new BYTE[nArrMax];
             }
             pStrm->Read( pSprms, nSprmSiz );        // read Sprms
 
@@ -3447,15 +3536,15 @@ WW8PLCFx& WW8PLCFx_SEPX::operator ++( int )
     return *this;
 }
 
-const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId ) const
+const BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId ) const
 {
     return HasSprm( nId, pSprms, nSprmSiz);
 }
 
-const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, const sal_uInt8*  pOtherSprms,
+const BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId, const BYTE*  pOtherSprms,
     long nOtherSprmSiz ) const
 {
-    const sal_uInt8 *pRet = 0;
+    const BYTE *pRet = 0;
     if (pPLCF)
     {
         WW8SprmIter aIter(pOtherSprms, nOtherSprmSiz, maSprmParser);
@@ -3464,8 +3553,8 @@ const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, const sal_uInt8*  pOthe
     return pRet;
 }
 
-bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,sal_uInt16 nId4,
-    sal_uInt8*& p1, sal_uInt8*& p2, sal_uInt8*& p3, sal_uInt8*& p4) const
+bool WW8PLCFx_SEPX::Find4Sprms(USHORT nId1,USHORT nId2,USHORT nId3,USHORT nId4,
+    BYTE*& p1, BYTE*& p2, BYTE*& p3, BYTE*& p4) const
 {
     if( !pPLCF )
         return 0;
@@ -3476,12 +3565,12 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
     p3 = 0;
     p4 = 0;
 
-    sal_uInt8* pSp = pSprms;
-    sal_uInt16 i=0;
+    BYTE* pSp = pSprms;
+    USHORT i=0;
     while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
     {
         // Sprm gefunden?
-        sal_uInt16 nAktId = maSprmParser.GetSprmId(pSp);
+        USHORT nAktId = maSprmParser.GetSprmId(pSp);
         bool bOk = true;
         if( nAktId  == nId1 )
             p1 = pSp + maSprmParser.DistanceToData(nId1);
@@ -3495,33 +3584,33 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
             bOk = false;
         bFound |= bOk;
         // erhoehe Zeiger, so dass er auf naechsten Sprm zeigt
-        sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp);
+        USHORT x = maSprmParser.GetSprmSize(nAktId, pSp);
         i = i + x;
         pSp += x;
     }
     return bFound;
 }
 
-const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
+const BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId, BYTE n2nd ) const
 {
     if( !pPLCF )
         return 0;
 
-    sal_uInt8* pSp = pSprms;
+    BYTE* pSp = pSprms;
 
-    sal_uInt16 i=0;
+    USHORT i=0;
     while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
     {
         // Sprm gefunden?
-        sal_uInt16 nAktId = maSprmParser.GetSprmId(pSp);
+        USHORT nAktId = maSprmParser.GetSprmId(pSp);
         if (nAktId == nId)
         {
-            sal_uInt8 *pRet = pSp + maSprmParser.DistanceToData(nId);
+            BYTE *pRet = pSp + maSprmParser.DistanceToData(nId);
             if (*pRet == n2nd)
                 return pRet;
         }
         // erhoehe Zeiger, so dass er auf naechsten Sprm zeigt
-        sal_uInt16 x = maSprmParser.GetSprmSize(nAktId, pSp);
+        USHORT x = maSprmParser.GetSprmSize(nAktId, pSp);
         i = i + x;
         pSp += x;
     }
@@ -3548,7 +3637,7 @@ WW8PLCFx_SubDoc::~WW8PLCFx_SubDoc()
     delete pTxt;
 }
 
-sal_uLong WW8PLCFx_SubDoc::GetIdx() const
+ULONG WW8PLCFx_SubDoc::GetIdx() const
 {
     // Wahrscheinlich pTxt... nicht noetig
     if( pRef )
@@ -3556,7 +3645,7 @@ sal_uLong WW8PLCFx_SubDoc::GetIdx() const
     return 0;
 }
 
-void WW8PLCFx_SubDoc::SetIdx( sal_uLong nIdx )
+void WW8PLCFx_SubDoc::SetIdx( ULONG nIdx )
 {
     if( pRef )
     {
@@ -3586,7 +3675,7 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
     if (!pRef)
         return;
 
-    sal_uLong nNr = pRef->GetIdx();
+    ULONG nNr = pRef->GetIdx();
 
     void *pData;
     WW8_CP nFoo;
@@ -3673,12 +3762,12 @@ WW8PLCFx_FLD::~WW8PLCFx_FLD()
     delete pPLCF;
 }
 
-sal_uLong WW8PLCFx_FLD::GetIdx() const
+ULONG WW8PLCFx_FLD::GetIdx() const
 {
     return pPLCF ? pPLCF->GetIdx() : 0;
 }
 
-void WW8PLCFx_FLD::SetIdx( sal_uLong nIdx )
+void WW8PLCFx_FLD::SetIdx( ULONG nIdx )
 {
     if( pPLCF )
         pPLCF->SetIdx( nIdx );
@@ -3700,7 +3789,7 @@ bool WW8PLCFx_FLD::StartPosIsFieldStart()
     sal_Int32 nTest;
     if (
          (!pPLCF || !pPLCF->Get(nTest, pData) ||
-         ((((sal_uInt8*)pData)[0] & 0x1f) != 0x13))
+         ((((BYTE*)pData)[0] & 0x1f) != 0x13))
        )
         return false;
     return true;
@@ -3718,7 +3807,7 @@ bool WW8PLCFx_FLD::EndPosIsFieldEnd()
 
         void* pData;
         sal_Int32 nTest;
-        if ( pPLCF->Get(nTest, pData) && ((((sal_uInt8*)pData)[0] & 0x1f) == 0x15) )
+        if ( pPLCF->Get(nTest, pData) && ((((BYTE*)pData)[0] & 0x1f) == 0x15) )
             bRet = true;
 
         pPLCF->SetIdx(n);
@@ -3792,23 +3881,23 @@ bool WW8PLCFx_FLD::GetPara(long nIdx, WW8FieldDesc& rF)
 //-----------------------------------------
 
 /*  to be optimized like this:    */
-void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen,
-    sal_uInt16 nExtraLen, rtl_TextEncoding eCS, std::vector<String> &rArray,
+void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
+    USHORT nExtraLen, rtl_TextEncoding eCS, std::vector<String> &rArray,
     std::vector<ww::bytes>* pExtraArray, ::std::vector<String>* pValueArray)
 {
     if(nLen==0)     // Handle Empty STTBF
         return;
 
-    sal_uLong nOldPos = rStrm.Tell();
+    ULONG nOldPos = rStrm.Tell();
     rStrm.Seek( nStart );
 
-    sal_uInt16 nLen2;
+    UINT16 nLen2;
     rStrm >> nLen2; // bVer67: total length of structure
                     // bVer8 : count of strings
 
     if( bVer8 )
     {
-        sal_uInt16 nStrings;
+        UINT16 nStrings;
         bool bUnicode = (0xFFFF == nLen2);
         if( bUnicode )
             rStrm >> nStrings;
@@ -3817,13 +3906,13 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
 
         rStrm >> nExtraLen;
 
-        for( sal_uInt16 i=0; i < nStrings; i++ )
+        for( USHORT i=0; i < nStrings; i++ )
         {
             if( bUnicode )
                 rArray.push_back(WW8Read_xstz(rStrm, 0, false));
             else
             {
-                sal_uInt8 nBChar;
+                BYTE nBChar;
                 rStrm >> nBChar;
                 ByteString aTmp;
                 SafeReadString(aTmp,nBChar,rStrm);
@@ -3848,16 +3937,16 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     rStrm.SeekRel( nExtraLen );
             }
         }
-        // read the value of the document variables, if requested.
+        // #129053# read the value of the document variables, if requested.
         if (pValueArray)
         {
-                for( sal_uInt16 i=0; i < nStrings; i++ )
+                for( USHORT i=0; i < nStrings; i++ )
                 {
                         if( bUnicode )
                                 pValueArray->push_back(WW8Read_xstz(rStrm, 0, false));
                         else
                         {
-                                sal_uInt8 nBChar;
+                                BYTE nBChar;
                                 rStrm >> nBChar;
                                 ByteString aTmp;
                                 SafeReadString(aTmp,nBChar,rStrm);
@@ -3868,7 +3957,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
     }
     else
     {
-        sal_uInt8 nBChar;
+        BYTE nBChar;
         if( nLen2 != nLen )
         {
             OSL_ENSURE( nLen2 == nLen, "Fib length and read length are different" );
@@ -3876,9 +3965,9 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 nLen = USHRT_MAX;
             else if (nLen < 2 )
                 nLen = 2;
-            nLen2 = static_cast<sal_uInt16>(nLen);
+            nLen2 = static_cast<UINT16>(nLen);
         }
-        sal_uLong nRead = 0;
+        ULONG nRead = 0;
         for( nLen2 -= 2; nRead < nLen2;  )
         {
             rStrm >> nBChar; ++nRead;
@@ -3891,7 +3980,8 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
             else
                 rArray.push_back(aEmptyStr);
 
-            // Skip the extra data (for bVer67 versions this must come from external knowledge)
+            // #89125# Skip the extra data (for bVer67 versions this must come
+            // from external knowledge)
             if (nExtraLen)
             {
                 if (pExtraArray)
@@ -3952,28 +4042,28 @@ WW8PLCFx_Book::~WW8PLCFx_Book()
     delete pBook[0];
 }
 
-sal_uLong WW8PLCFx_Book::GetIdx() const
+ULONG WW8PLCFx_Book::GetIdx() const
 {
     return nIMax ? pBook[0]->GetIdx() : 0;
 }
 
-void WW8PLCFx_Book::SetIdx( sal_uLong nI )
+void WW8PLCFx_Book::SetIdx( ULONG nI )
 {
     if( nIMax )
         pBook[0]->SetIdx( nI );
 }
 
-sal_uLong WW8PLCFx_Book::GetIdx2() const
+ULONG WW8PLCFx_Book::GetIdx2() const
 {
     return nIMax ? ( pBook[1]->GetIdx() | ( ( nIsEnd ) ? 0x80000000 : 0 ) ) : 0;
 }
 
-void WW8PLCFx_Book::SetIdx2( sal_uLong nI )
+void WW8PLCFx_Book::SetIdx2( ULONG nI )
 {
     if( nIMax )
     {
         pBook[1]->SetIdx( nI & 0x7fffffff );
-        nIsEnd = (sal_uInt16)( ( nI >> 31 ) & 1 );  // 0 oder 1
+        nIsEnd = (USHORT)( ( nI >> 31 ) & 1 );  // 0 oder 1
     }
 }
 
@@ -4028,8 +4118,8 @@ WW8PLCFx& WW8PLCFx_Book::operator ++( int )
     {
         (*pBook[nIsEnd])++;
 
-        sal_uLong l0 = pBook[0]->Where();
-        sal_uLong l1 = pBook[1]->Where();
+        ULONG l0 = pBook[0]->Where();
+        ULONG l1 = pBook[1]->Where();
         if( l0 < l1 )
             nIsEnd = 0;
         else if( l1 < l0 )
@@ -4054,13 +4144,13 @@ long WW8PLCFx_Book::GetLen() const
         OSL_ENSURE( !this, "Falscher Aufruf (2) von PLCF_Book::GetLen()" );
         return 0;
     }
-    sal_uInt16 nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
+    USHORT nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
     long nNum = pBook[1]->GetPos( nEndIdx );
     nNum -= nStartPos;
     return nNum;
 }
 
-void WW8PLCFx_Book::SetStatus(sal_uInt16 nIndex, eBookStatus eStat )
+void WW8PLCFx_Book::SetStatus(USHORT nIndex, eBookStatus eStat )
 {
     OSL_ENSURE(nIndex < nIMax, "set status of non existing bookmark!");
     pStatus[nIndex] = (eBookStatus)( pStatus[nIndex] | eStat );
@@ -4090,17 +4180,17 @@ long WW8PLCFx_Book::GetHandle() const
     }
 }
 
-String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
+String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, USHORT &nIndex)
 {
     bool bFound = false;
-    sal_uInt16 i = 0;
+    USHORT i = 0;
     if( pBook[0] && pBook[1] )
     {
         WW8_CP nStartAkt, nEndAkt;
         do
         {
             void* p;
-            sal_uInt16 nEndIdx;
+            USHORT nEndIdx;
 
             if( pBook[0]->GetData( i, nStartAkt, p ) && p )
                 nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
@@ -4134,9 +4224,9 @@ String WW8PLCFx_Book::GetUniqueBookmarkName(String &suggestedName)
         if (aRet.CompareTo(s)==0) {
             int len=aRet.Len();
             int p=len-1;
-            while(p>0 && aRet.GetChar(static_cast<sal_uInt16>(p))>='0' && aRet.GetChar(static_cast<sal_uInt16>(p))<='9')
+            while(p>0 && aRet.GetChar(static_cast<USHORT>(p))>='0' && aRet.GetChar(static_cast<USHORT>(p))<='9')
                 p--;
-            aRet=String(aRet, 0, static_cast<sal_uInt16>(p+1));
+            aRet=String(aRet, 0, static_cast<USHORT>(p+1));
             aRet += String::CreateFromInt32( nBookmarkId++ );
             i=0; // start search from beginning
         } else {
@@ -4152,9 +4242,21 @@ bool WW8PLCFx_Book::MapName(String& rName)
         return false;
 
     bool bFound = false;
-    sal_uInt16 i = 0;
+    USHORT i = 0;
+    WW8_CP nStartAkt, nEndAkt;
     do
     {
+        void* p;
+        USHORT nEndIdx;
+
+        if( pBook[0]->GetData( i, nStartAkt, p ) && p )
+            nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
+        else
+        {
+            OSL_ENSURE( !this, "Bookmark-EndIdx nicht lesbar" );
+            nEndIdx = i;
+        }
+        nEndAkt = pBook[1]->GetPos( nEndIdx );
         if (COMPARE_EQUAL == rName.CompareIgnoreCaseToAscii(aBookNames[i]))
         {
             rName = aBookNames[i];
@@ -4276,9 +4378,9 @@ void WW8PLCFMan::GetNewNoSprms( WW8PLCFxDesc& rDesc )
     rDesc.nOrigSprmsLen = rDesc.nSprmsLen;
 }
 
-sal_uInt16 WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
+USHORT WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
 {
-    sal_uInt16 nId;
+    USHORT nId;
 
     if (p == pFld)
         nId = eFLD;
@@ -4307,7 +4409,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
     memset( aD, 0, sizeof( aD ) );
     nLineEnd = WW8_CP_MAX;
     nManType = nType;
-    sal_uInt16 i;
+    USHORT i;
 
     if( MAN_MAINTEXT == nType )
     {
@@ -4450,7 +4552,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         if( p->pPLCFx->IsSprm() )
         {
             // Vorsicht: nEndPos muss bereits
-            p->pIdStk = new std::stack<sal_uInt16>;
+            p->pIdStk = new std::stack<USHORT>;
             if ((p == pChp) || (p == pPap))
             {
                 WW8_CP nTemp = p->nEndPos+p->nCpOfs;
@@ -4472,20 +4574,20 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
 
 WW8PLCFMan::~WW8PLCFMan()
 {
-    for( sal_uInt16 i=0; i<nPLCF; i++)
+    for( USHORT i=0; i<nPLCF; i++)
         delete aD[i].pIdStk;
 }
 
 // 0. welche Attr.-Klasse,
 // 1. ob ein Attr.-Start ist,
 // 2. CP, wo ist naechste Attr.-Aenderung
-sal_uInt16 WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
+USHORT WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
 {
     OSL_ENSURE(nPLCF,"What the hell");
     long nNext = LONG_MAX;  // SuchReihenfolge:
-    sal_uInt16 nNextIdx = nPLCF;// first ending found ( CHP, PAP, ( SEP ) ),
+    USHORT nNextIdx = nPLCF;// first ending found ( CHP, PAP, ( SEP ) ),
     bool bStart = true;     // dann Anfaenge finden ( ( SEP ), PAP, CHP )
-    sal_uInt16 i;
+    USHORT i;
     const WW8PLCFxDesc* pD;
     for (i=0; i < nPLCF; i++)
     {
@@ -4542,7 +4644,7 @@ void WW8PLCFMan::SeekPos( long nNewCp )
 
 void WW8PLCFMan::SaveAllPLCFx( WW8PLCFxSaveAll& rSave ) const
 {
-    sal_uInt16 i, n=0;
+    USHORT i, n=0;
     if( pPcd )
         pPcd->Save(  rSave.aS[n++] );
     if( pPcdA )
@@ -4555,7 +4657,7 @@ void WW8PLCFMan::SaveAllPLCFx( WW8PLCFxSaveAll& rSave ) const
 
 void WW8PLCFMan::RestoreAllPLCFx( const WW8PLCFxSaveAll& rSave )
 {
-    sal_uInt16 i, n=0;
+    USHORT i, n=0;
     if( pPcd )
         pPcd->Restore(  rSave.aS[n++] );
     if( pPcdA )
@@ -4655,7 +4757,7 @@ void WW8PLCFMan::GetNoSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
         pRes->nSprmId = 0;
 }
 
-bool WW8PLCFMan::TransferOpenSprms(std::stack<sal_uInt16> &rStack)
+bool WW8PLCFMan::TransferOpenSprms(std::stack<USHORT> &rStack)
 {
     for (int i = 0; i < nPLCF; ++i)
     {
@@ -4678,7 +4780,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
     p->bFirstSprm = false;
     if( bStart )
     {
-        sal_uInt16 nLastId = GetId(p);
+        USHORT nLastId = GetId(p);
         p->pIdStk->push(nLastId);   // merke Id fuer Attribut-Ende
 
         if( p->nSprmsLen )
@@ -4688,7 +4790,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
             if( p->pMemPos )
             {
                 // Length of last sprm
-                sal_uInt16 nSprmL = maSprmParser.GetSprmSize(nLastId, p->pMemPos);
+                USHORT nSprmL = maSprmParser.GetSprmSize(nLastId, p->pMemPos);
 
                 // Gesamtlaenge Sprms um SprmLaenge verringern
                 p->nSprmsLen -= nSprmL;
@@ -4722,6 +4824,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 p->nStartPos = p->nOrigEndPos+p->nCpOfs;
 
                 /*
+                #93702#
                 On failed seek we have run out of sprms, probably.  But if its
                 a fastsaved file (has pPcd) then we may be just in a sprm free
                 gap between pieces that have them, so set dirty flag in sprm
@@ -4840,7 +4943,7 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
 WW8PLCFMan& WW8PLCFMan::operator ++(int)
 {
     bool bStart;
-    sal_uInt16 nIdx = WhereIdx(&bStart);
+    USHORT nIdx = WhereIdx(&bStart);
     if (nIdx < nPLCF)
     {
         WW8PLCFxDesc* p = &aD[nIdx];
@@ -4863,7 +4966,7 @@ bool WW8PLCFMan::Get(WW8PLCFManResult* pRes) const
 {
     memset( pRes, 0, sizeof( WW8PLCFManResult ) );
     bool bStart;
-    sal_uInt16 nIdx = WhereIdx(&bStart);
+    USHORT nIdx = WhereIdx(&bStart);
 
     if( nIdx >= nPLCF )
     {
@@ -4899,7 +5002,7 @@ bool WW8PLCFMan::Get(WW8PLCFManResult* pRes) const
     }
 }
 
-sal_uInt16 WW8PLCFMan::GetColl() const
+USHORT WW8PLCFMan::GetColl() const
 {
     if( pPap->pPLCFx )
         return  pPap->pPLCFx->GetIstd();
@@ -4915,18 +5018,18 @@ WW8PLCFx_FLD* WW8PLCFMan::GetFld() const
     return (WW8PLCFx_FLD*)pFld->pPLCFx;
 }
 
-const sal_uInt8* WW8PLCFMan::HasParaSprm( sal_uInt16 nId ) const
+const BYTE* WW8PLCFMan::HasParaSprm( USHORT nId ) const
 {
     return ((WW8PLCFx_Cp_FKP*)pPap->pPLCFx)->HasSprm( nId );
 }
 
-const sal_uInt8* WW8PLCFMan::HasCharSprm( sal_uInt16 nId ) const
+const BYTE* WW8PLCFMan::HasCharSprm( USHORT nId ) const
 {
     return ((WW8PLCFx_Cp_FKP*)pChp->pPLCFx)->HasSprm( nId );
 }
 
-bool WW8PLCFMan::HasCharSprm(sal_uInt16 nId,
-    std::vector<const sal_uInt8 *> &rResult) const
+bool WW8PLCFMan::HasCharSprm(USHORT nId,
+    std::vector<const BYTE *> &rResult) const
 {
     return ((WW8PLCFx_Cp_FKP*)pChp->pPLCFx)->HasSprm(nId, rResult);
 }
@@ -4948,12 +5051,12 @@ void WW8PLCFx::Restore( const WW8PLCFxSave1& rSave )
     SetStartFc( rSave.nStartFC   );
 }
 
-sal_uLong WW8PLCFx_Cp_FKP::GetIdx2() const
+ULONG WW8PLCFx_Cp_FKP::GetIdx2() const
 {
     return GetPCDIdx();
 }
 
-void WW8PLCFx_Cp_FKP::SetIdx2( sal_uLong nIdx )
+void WW8PLCFx_Cp_FKP::SetIdx2( ULONG nIdx )
 {
     SetPCDIdx( nIdx );
 }
@@ -5079,7 +5182,7 @@ WW8_CP WW8Fib::GetBaseCp(ManTypes nType) const
             nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr + ccpAtn + ccpEdn;
             break;
         case MAN_TXBX_HDFT:
-            nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr + ccpAtn + ccpEdn +
+            nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr + ccpAtn + ccpEdn + 
                 ccpTxbx;
             break;
     }
@@ -5089,22 +5192,6 @@ WW8_CP WW8Fib::GetBaseCp(ManTypes nType) const
 ww::WordVersion WW8Fib::GetFIBVersion() const
 {
     ww::WordVersion eVer = ww::eWW8;
-    /*
-     * Word for Windows 2 I think (1.X might work too if anyone has an example.
-     * Various pages claim that the fileformats of Word 1 and 2 for Windows are
-     * equivalent to Word for Macintosh 4 and 5. On the other hand
-     *
-     * wIdents for Word for Mac versions...
-     * 0xFE32 for Word 1
-     * 0xFE34 for Word 3
-     * 0xFE37 for Word 4 et 5.
-     *
-     * and this document
-     * http://cmsdoc.cern.ch/documents/docformat/CMS_CERN_LetterHead.word is
-     * claimed to be "Word 5 for Mac" by Office etc and has that wIdent, but
-     * its format isn't the same as that of Word 2 for windows. Nor is it
-     * the same as that of Word for DOS/PCWord 5
-     */
     if (wIdent == 0xa5db)
         eVer = ww::eWW2;
     else
@@ -5125,13 +5212,13 @@ ww::WordVersion WW8Fib::GetFIBVersion() const
     return eVer;
 }
 
-WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
+WW8Fib::WW8Fib(SvStream& rSt, BYTE nWantedVersion, UINT32 nOffset)
     : nFibError( 0 )
 {
     memset(this, 0, sizeof(*this));
-    sal_uInt8 aBits1;
-    sal_uInt8 aBits2;
-    sal_uInt8 aVer8Bits1;    // nur ab WinWord 8 benutzt
+    BYTE aBits1;
+    BYTE aBits2;
+    BYTE aVer8Bits1;    // nur ab WinWord 8 benutzt
     rSt.Seek( nOffset );
     /*
         Wunsch-Nr vermerken, File-Versionsnummer ermitteln
@@ -5143,8 +5230,8 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     rSt >> nProduct;
     if( 0 != rSt.GetError() )
     {
-        sal_Int16 nFibMin;
-        sal_Int16 nFibMax;
+        INT16 nFibMin;
+        INT16 nFibMax;
         // note: 6 stands for "6 OR 7",  7 stands for "ONLY 7"
         switch( nVersion )
         {
@@ -5180,10 +5267,10 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     ww::WordVersion eVer = GetFIBVersion();
 
     // Hilfs-Varis fuer Ver67:
-    sal_Int16 pnChpFirst_Ver67=0;
-    sal_Int16 pnPapFirst_Ver67=0;
-    sal_Int16 cpnBteChp_Ver67=0;
-    sal_Int16 cpnBtePap_Ver67=0;
+    INT16 pnChpFirst_Ver67=0;
+    INT16 pnPapFirst_Ver67=0;
+    INT16 cpnBteChp_Ver67=0;
+    INT16 cpnBtePap_Ver67=0;
 
     // und auf gehts: FIB einlesen
     rSt >> lid;
@@ -5197,12 +5284,12 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     rSt >> aVer8Bits1;      // unter Ver67  nur leeres Reservefeld
                             // Inhalt von aVer8Bits1
                             //
-                            // sal_uInt8 fMac              :1;
-                            // sal_uInt8 fEmptySpecial     :1;
-                            // sal_uInt8 fLoadOverridePage :1;
-                            // sal_uInt8 fFuturesavedUndo  :1;
-                            // sal_uInt8 fWord97Saved      :1;
-                            // sal_uInt8 :3;
+                            // BYTE fMac              :1;
+                            // BYTE fEmptySpecial     :1;
+                            // BYTE fLoadOverridePage :1;
+                            // BYTE fFuturesavedUndo  :1;
+                            // BYTE fWord97Saved      :1;
+                            // BYTE :3;
     rSt >> chse;
     rSt >> chseTables;
     rSt >> fcMin;
@@ -5218,7 +5305,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         rSt >> wMagicRevised;
         rSt >> wMagicCreatedPrivate;
         rSt >> wMagicRevisedPrivate;
-        rSt.SeekRel( 9 * sizeof( sal_Int16 ) );
+        rSt.SeekRel( 9 * sizeof( INT16 ) );
 
         /*
         // dies sind die 9 unused Felder:
@@ -5242,11 +5329,11 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     rSt >> cbMac;
 
         // 2 Longs uebergehen, da unwichtiger Quatsch
-    rSt.SeekRel( 2 * sizeof( sal_Int32) );
+    rSt.SeekRel( 2 * sizeof( INT32) );
 
         // weitere 2 Longs nur bei Ver67 ueberspringen
     if (IsSevenMinus(eVer))
-        rSt.SeekRel( 2 * sizeof( sal_Int32) );
+        rSt.SeekRel( 2 * sizeof( INT32) );
 
     rSt >> ccpText;
     rSt >> ccpFtn;
@@ -5259,7 +5346,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
 
         // weiteres Long nur bei Ver67 ueberspringen
     if (IsSevenMinus(eVer))
-        rSt.SeekRel( 1 * sizeof( sal_Int32) );
+        rSt.SeekRel( 1 * sizeof( INT32) );
     else
     {
 // Einschub fuer WW8 *****************************************************
@@ -5360,7 +5447,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     // weiteres short nur bei Ver67 ueberspringen
     if (IsSevenMinus(eVer))
     {
-        rSt.SeekRel( 1*sizeof( sal_Int16) );
+        rSt.SeekRel( 1*sizeof( INT16) );
 
         // folgende 4 Shorts existieren nur bei Ver67;
         rSt >> pnChpFirst_Ver67;
@@ -5485,14 +5572,14 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
             rSt.Seek( 0x372 );          // fcSttbListNames
             rSt >> fcSttbListNames;
             rSt >> lcbSttbListNames;
-
+        
             if (cfclcb > 93)
             {
                 rSt.Seek( 0x382 );          // MagicTables
                 rSt >> fcPlcfTch;
                 rSt >> lcbPlcfTch;
             }
-
+            
             if (cfclcb > 113)
             {
                 rSt.Seek( 0x41A );          // new ATRD
@@ -5516,7 +5603,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
 }
 
 
-WW8Fib::WW8Fib(sal_uInt8 nVer)
+WW8Fib::WW8Fib(BYTE nVer)
 {
     memset(this, 0, sizeof(*this));
     nVersion = nVer;
@@ -5535,6 +5622,11 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
         fExtChar = true;
         fWord97Saved = fWord2000Saved = true;
 
+        // diese Flags muessen nicht gesetzt werden; koennen aber.
+        //  wMagicCreated = wMagicRevised = 0x6a62;
+        //  wMagicCreatedPrivate = wMagicRevisedPrivate = 0xb3b2;
+        //
+
         wMagicCreated = 0x6143;
         wMagicRevised = 0x6C6F;
         wMagicCreatedPrivate = 0x6E61;
@@ -5548,7 +5640,7 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
         nProduct = 0xc02d;
     }
 
-    // --> #i90932#
+    // --> #i90932# 
     lid = 0x409; // LANGUAGE_ENGLISH_US
 
     LanguageType nLang = Application::GetSettings().GetLanguage();
@@ -5571,7 +5663,7 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
             fFarEast = false;
             break;
     };
-    // <--
+    // <-- #i90932# 
 
     Locale aTempLocale;
     SvxLanguageToLocale( aTempLocale, lid );
@@ -5585,15 +5677,15 @@ sal_Unicode WW8Fib::getNumDecimalSep() const
 }
 
 bool WW8Fib::WriteHeader(SvStream& rStrm)
-{
+{	
     bool bVer8 = 8 == nVersion;
 
     size_t nUnencryptedHdr = bVer8 ? 0x44 : 0x24;
-    sal_uInt8 *pDataPtr = new sal_uInt8[ nUnencryptedHdr ];
-    sal_uInt8 *pData = pDataPtr;
+    BYTE *pDataPtr = new BYTE[ nUnencryptedHdr ];
+    BYTE *pData = pDataPtr;
     memset( pData, 0, nUnencryptedHdr );
 
-    sal_uLong nPos = rStrm.Tell();
+    ULONG nPos = rStrm.Tell();
     cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
     rStrm.Seek( nPos );
 
@@ -5603,23 +5695,23 @@ bool WW8Fib::WriteHeader(SvStream& rStrm)
     Set_UInt16( pData, lid );
     Set_UInt16( pData, pnNext );
 
-    sal_uInt16 nBits16 = 0;
-    if( fDot )          nBits16 |= 0x0001;
-    if( fGlsy)          nBits16 |= 0x0002;
-    if( fComplex )      nBits16 |= 0x0004;
-    if( fHasPic )       nBits16 |= 0x0008;
+    UINT16 nBits16 = 0;
+    if( fDot ) 			nBits16 |= 0x0001;
+    if( fGlsy) 			nBits16 |= 0x0002;
+    if( fComplex )		nBits16 |= 0x0004;
+    if( fHasPic ) 		nBits16 |= 0x0008;
     nBits16 |= (0xf0 & ( cQuickSaves << 4 ));
-    if( fEncrypted )    nBits16 |= 0x0100;
-    if( fWhichTblStm )  nBits16 |= 0x0200;
+    if( fEncrypted ) 	nBits16 |= 0x0100;
+    if( fWhichTblStm ) 	nBits16 |= 0x0200;
 
-    if (fReadOnlyRecommended)
+    if (fReadOnlyRecommended) 
         nBits16 |= 0x0400;
-    if (fWriteReservation)
+    if (fWriteReservation) 
         nBits16 |= 0x0800;
 
-    if( fExtChar )      nBits16 |= 0x1000;
+    if( fExtChar ) 		nBits16 |= 0x1000;
     if( fFarEast )      nBits16 |= 0x4000;  // #i90932#
-    if( fObfuscated )   nBits16 |= 0x8000;
+    if( fObfuscated )	nBits16 |= 0x8000;
     Set_UInt16( pData, nBits16 );
 
     Set_UInt16( pData, nFibBack );
@@ -5627,14 +5719,14 @@ bool WW8Fib::WriteHeader(SvStream& rStrm)
     Set_UInt16( pData, nKey );
     Set_UInt8( pData, envr );
 
-    sal_uInt8 nBits8 = 0;
+    BYTE nBits8 = 0;
     if( bVer8 )
     {
-        if( fMac )                  nBits8 |= 0x0001;
-        if( fEmptySpecial )         nBits8 |= 0x0002;
-        if( fLoadOverridePage )     nBits8 |= 0x0004;
-        if( fFuturesavedUndo )      nBits8 |= 0x0008;
-        if( fWord97Saved )          nBits8 |= 0x0010;
+        if( fMac ) 					nBits8 |= 0x0001;
+        if( fEmptySpecial ) 		nBits8 |= 0x0002;
+        if( fLoadOverridePage )		nBits8 |= 0x0004;
+        if( fFuturesavedUndo ) 		nBits8 |= 0x0008;
+        if( fWord97Saved ) 			nBits8 |= 0x0010;
         if( fWord2000Saved )        nBits8 |= 0x0020;
     }
     // unter Ver67 these are only reserved
@@ -5655,7 +5747,7 @@ bool WW8Fib::WriteHeader(SvStream& rStrm)
         Set_UInt16( pData, wMagicRevised );
         Set_UInt16( pData, wMagicCreatedPrivate );
         Set_UInt16( pData, wMagicRevisedPrivate );
-        pData += 9 * sizeof( sal_Int16 );
+        pData += 9 * sizeof( INT16 );
         Set_UInt16( pData, lidFE );
         Set_UInt16( pData, clw );
     }
@@ -5678,20 +5770,20 @@ bool WW8Fib::Write(SvStream& rStrm)
 
     size_t nUnencryptedHdr = bVer8 ? 0x44 : 0x24;
 
-    sal_uInt8 *pDataPtr = new sal_uInt8[ fcMin - nUnencryptedHdr ];
-    sal_uInt8 *pData = pDataPtr;
+    BYTE *pDataPtr = new BYTE[ fcMin - nUnencryptedHdr ];
+    BYTE *pData = pDataPtr;
     memset( pData, 0, fcMin - nUnencryptedHdr );
 
-    sal_uLong nPos = rStrm.Tell();
+    ULONG nPos = rStrm.Tell();
     cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
-    rStrm.Seek( nPos );
+    rStrm.Seek( nPos );    
 
     // 2 Longs uebergehen, da unwichtiger Quatsch
-    pData += 2 * sizeof( sal_Int32);
+    pData += 2 * sizeof( INT32);
 
     // weitere 2 Longs nur bei Ver67 ueberspringen
     if( !bVer8 )
-        pData += 2 * sizeof( sal_Int32);
+        pData += 2 * sizeof( INT32);
 
     Set_UInt32( pData, ccpText );
     Set_UInt32( pData, ccpFtn );
@@ -5704,7 +5796,7 @@ bool WW8Fib::Write(SvStream& rStrm)
 
         // weiteres Long nur bei Ver67 ueberspringen
     if( !bVer8 )
-        pData += 1 * sizeof( sal_Int32);
+        pData += 1 * sizeof( INT32);
 
 // Einschub fuer WW8 *****************************************************
     if( bVer8 )
@@ -5805,11 +5897,11 @@ bool WW8Fib::Write(SvStream& rStrm)
     // weiteres short nur bei Ver67 ueberspringen
     if( !bVer8 )
     {
-        pData += 1*sizeof( sal_Int16);
-        Set_UInt16( pData, (sal_uInt16)pnChpFirst );
-        Set_UInt16( pData, (sal_uInt16)pnPapFirst );
-        Set_UInt16( pData, (sal_uInt16)cpnBteChp );
-        Set_UInt16( pData, (sal_uInt16)cpnBtePap );
+        pData += 1*sizeof( INT16);
+        Set_UInt16( pData, (UINT16)pnChpFirst );
+        Set_UInt16( pData, (UINT16)pnPapFirst );
+        Set_UInt16( pData, (UINT16)cpnBteChp );
+        Set_UInt16( pData, (UINT16)cpnBtePap );
     }
 
     Set_UInt32( pData, fcPlcfdoaMom ); // nur bei Ver67, in Ver8 unused
@@ -5882,8 +5974,8 @@ bool WW8Fib::Write(SvStream& rStrm)
         Set_UInt32( pData, lcbPlcfTch );
 
         pData += 0x3FA - 0x38A;
-        Set_UInt16( pData, (sal_uInt16)0x0002);
-        Set_UInt16( pData, (sal_uInt16)0x00D9);
+        Set_UInt16( pData, (UINT16)0x0002);
+        Set_UInt16( pData, (UINT16)0x00D9);
 
         pData += 0x41A - 0x3FE;
         Set_UInt32( pData, fcAtrdExtra );
@@ -5899,13 +5991,13 @@ bool WW8Fib::Write(SvStream& rStrm)
     return 0 == rStrm.GetError();
 }
 
-rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs)
+rtl_TextEncoding WW8Fib::GetFIBCharset(UINT16 chs)
 {
     OSL_ENSURE(chs <= 0x100, "overflowed winword charset set");
     rtl_TextEncoding eCharSet =
         (0x0100 == chs)
         ? RTL_TEXTENCODING_APPLE_ROMAN
-        : rtl_getTextEncodingFromWindowsCharset( static_cast<sal_uInt8>(chs) );
+        : rtl_getTextEncodingFromWindowsCharset( static_cast<BYTE>(chs) );
     return eCharSet;
 }
 
@@ -5919,7 +6011,7 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
 
     rSt.Seek(nStyleStart);
 
-    sal_uInt16 cbStshi = 0; //  2 bytes size of the following STSHI structure
+    USHORT cbStshi = 0; //  2 bytes size of the following STSHI structure
 
     if (rFib.GetFIBVersion() <= ww::eWW2)
     {
@@ -5932,10 +6024,10 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
         // lies die Laenge der in der Datei gespeicherten Struktur
         rSt >> cbStshi;
 
-    sal_uInt16 nRead = cbStshi;
+    UINT16 nRead = cbStshi;
     do
     {
-        sal_uInt16 a16Bit;
+        UINT16 a16Bit;
 
         if(  2 > nRead ) break;
         rSt >> cstd;
@@ -5991,10 +6083,10 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
 {
     WW8_STD* pStd = 0;
 
-    sal_uInt16 cbStd;
+    UINT16 cbStd;
     rSt >> cbStd;   // lies Laenge
 
-    sal_uInt16 nRead = cbSTDBaseInFile;
+    UINT16 nRead = cbSTDBaseInFile;
     if( cbStd >= cbSTDBaseInFile )
     {
         // Fixed part vollst. vorhanden
@@ -6005,7 +6097,7 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
 
         do
         {
-            sal_uInt16 a16Bit;
+            UINT16 a16Bit;
 
             if( 2 > nRead ) break;
             rSt >> a16Bit;
@@ -6138,7 +6230,7 @@ struct WW8_FFN_Ver8 : public WW8_FFN_BASE
     sal_Char fs[ 24     ];  //  0x10  FONTSIGNATURE
 
     // ab Ver8 als Unicode
-    sal_uInt16 szFfn[65];   // 0x6 bzw. 0x40 ab Ver8 zero terminated string that
+    UINT16 szFfn[65];   // 0x6 bzw. 0x40 ab Ver8 zero terminated string that
                         // records name of font.
                         // Maximal size of szFfn is 65 characters.
                         // Vorsicht: Dieses Array kann auch kleiner sein!!!
@@ -6194,10 +6286,10 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
     rSt.Seek( rFib.fcSttbfffn );
 
-    sal_Int32 nFFn = rFib.lcbSttbfffn - 2;
+    INT32 nFFn = rFib.lcbSttbfffn - 2;
 
     // allocate Font Array
-    sal_uInt8* pA   = new sal_uInt8[ nFFn ];
+    BYTE* pA   = new BYTE[ nFFn ];
     memset(pA, 0, nFFn);
     WW8_FFN* p = (WW8_FFN*)pA;
 
@@ -6234,7 +6326,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
             if( nLeft < 1 )     // can we read the given ammount of bytes ?
                 break;
             // increase p by nNextSiz Bytes
-            p = (WW8_FFN *)( ( (sal_uInt8*)p ) + nNextSiz );
+            p = (WW8_FFN *)( ( (BYTE*)p ) + nNextSiz );
         }
     }
 
@@ -6247,7 +6339,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     if( eVersion <= ww::eWW2 )
     {
             WW8_FFN_BASE* pVer2 = (WW8_FFN_BASE*)pA;
-            for(sal_uInt16 i=0; i<nMax; ++i, ++p)
+            for(USHORT i=0; i<nMax; ++i, ++p)
             {
                 p->cbFfnM1   = pVer2->cbFfnM1;
 
@@ -6255,8 +6347,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 p->fTrueType = 0;
                 p->ff        = 0;
 
-                p->wWeight   = ( *(((sal_uInt8*)pVer2) + 1) );
-                p->chs   = ( *(((sal_uInt8*)pVer2) + 2) );
+                p->wWeight   = ( *(((BYTE*)pVer2) + 1) );
+                p->chs   = ( *(((BYTE*)pVer2) + 2) );
             /*
                  #i8726# 7- seems to encode the name in the same encoding as
                  the font, e.g load the doc in 97 and save to see the unicode
@@ -6267,17 +6359,17 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                     eEnc = RTL_TEXTENCODING_MS_1252;
 
                 p->sFontname = String ( (((const sal_Char*)pVer2) + 1 + 2), eEnc);
-                pVer2 = (WW8_FFN_BASE*)( ((sal_uInt8*)pVer2) + pVer2->cbFfnM1 + 1 );
+                pVer2 = (WW8_FFN_BASE*)( ((BYTE*)pVer2) + pVer2->cbFfnM1 + 1 );
             }
     }
         else if( eVersion < ww::eWW8 )
         {
             WW8_FFN_Ver6* pVer6 = (WW8_FFN_Ver6*)pA;
-            sal_uInt8 c2;
-            for(sal_uInt16 i=0; i<nMax; ++i, ++p)
+            BYTE c2;
+            for(USHORT i=0; i<nMax; ++i, ++p)
             {
                 p->cbFfnM1   = pVer6->cbFfnM1;
-                c2           = *(((sal_uInt8*)pVer6) + 1);
+                c2           = *(((BYTE*)pVer6) + 1);
 
                 p->prg       =  c2 & 0x02;
                 p->fTrueType = (c2 & 0x04) >> 2;
@@ -6312,17 +6404,17 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                         p->sFontname.APPEND_CONST_ASC(";Symbol");
                     }
                 }
-                pVer6 = (WW8_FFN_Ver6*)( ((sal_uInt8*)pVer6) + pVer6->cbFfnM1 + 1 );
+                pVer6 = (WW8_FFN_Ver6*)( ((BYTE*)pVer6) + pVer6->cbFfnM1 + 1 );
             }
         }
         else
         {
             WW8_FFN_Ver8* pVer8 = (WW8_FFN_Ver8*)pA;
-            sal_uInt8 c2;
-            for(sal_uInt16 i=0; i<nMax; ++i, ++p)
+            BYTE c2;
+            for(USHORT i=0; i<nMax; ++i, ++p)
             {
                 p->cbFfnM1   = pVer8->cbFfnM1;
-                c2           = *(((sal_uInt8*)pVer8) + 1);
+                c2           = *(((BYTE*)pVer8) + 1);
 
                 p->prg       =  c2 & 0x02;
                 p->fTrueType = (c2 & 0x04) >> 2;
@@ -6335,10 +6427,10 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
 #ifdef __WW8_NEEDS_COPY
                 {
-                    sal_uInt8 nLen = 0x28;
-                    sal_uInt8 nLength = sizeof( pVer8->szFfn ) / sizeof( SVBT16 );
-                    nLength = std::min( nLength, sal_uInt8( pVer8->cbFfnM1+1 ) );
-                    for( sal_uInt16* pTmp = pVer8->szFfn;
+                    BYTE nLen = 0x28;
+                    BYTE nLength = sizeof( pVer8->szFfn ) / sizeof( SVBT16 );
+                    nLength = std::min( nLength, BYTE( pVer8->cbFfnM1+1 ) );
+                    for( UINT16* pTmp = pVer8->szFfn;
                         nLen < nLength; ++pTmp, nLen+=2 )
                     {
                         *pTmp = SVBT16ToShort( *(SVBT16*)pTmp );
@@ -6357,14 +6449,14 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 lcl_checkFontname( p->sFontname );
 
                 // Zeiger auf Ursprungsarray einen Font nach hinten setzen
-                pVer8 = (WW8_FFN_Ver8*)( ((sal_uInt8*)pVer8) + pVer8->cbFfnM1 + 1 );
+                pVer8 = (WW8_FFN_Ver8*)( ((BYTE*)pVer8) + pVer8->cbFfnM1 + 1 );
             }
         }
     }
     delete[] pA;
 }
 
-const WW8_FFN* WW8Fonts::GetFont( sal_uInt16 nNum ) const
+const WW8_FFN* WW8Fonts::GetFont( USHORT nNum ) const
 {
     if( !pFontA || nNum >= nMax )
         return 0;
@@ -6407,7 +6499,7 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
       to point to the beginning of the next section's group of headers and
       footers in this PLCF, UpdateIndex does that task.
       */
-    for( sal_uInt8 nI = 0x1; nI <= 0x20; nI <<= 1 )
+    for( BYTE nI = 0x1; nI <= 0x20; nI <<= 1 )
         if( nI & rDop.grpfIhdt )                // Bit gesetzt ?
             nIdxOffset++;
 
@@ -6415,10 +6507,10 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
                                             // und der Fussnoten
 }
 
-bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rStart,
+bool WW8PLCF_HdFt::GetTextPos(BYTE grpfIhdt, BYTE nWhich, WW8_CP& rStart,
     long& rLen)
 {
-    sal_uInt8 nI = 0x01;
+    BYTE nI = 0x01;
     short nIdx = nIdxOffset;
     while (true)
     {
@@ -6453,10 +6545,10 @@ bool WW8PLCF_HdFt::GetTextPosExact(short nIdx, WW8_CP& rStart, long& rLen)
     return true;
 }
 
-void WW8PLCF_HdFt::UpdateIndex( sal_uInt8 grpfIhdt )
+void WW8PLCF_HdFt::UpdateIndex( BYTE grpfIhdt )
 {
     // Caution: Description is not correct
-    for( sal_uInt8 nI = 0x01; nI <= 0x20; nI <<= 1 )
+    for( BYTE nI = 0x01; nI <= 0x20; nI <<= 1 )
         if( nI & grpfIhdt )
             nIdxOffset++;
 }
@@ -6465,14 +6557,14 @@ void WW8PLCF_HdFt::UpdateIndex( sal_uInt8 grpfIhdt )
 //          WW8Dop
 //-----------------------------------------
 
-WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize) : bUseThaiLineBreakingRules(false)
+WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseThaiLineBreakingRules(false)
 {
     memset( &nDataStart, 0, (&nDataEnd - &nDataStart) );
     fDontUseHTMLAutoSpacing = true; //default
     fAcetateShowAtn = true; //default
     const sal_uInt32 nMaxDopSize = 0x268;
-    sal_uInt8* pDataPtr = new sal_uInt8[ nMaxDopSize ];
-    sal_uInt8* pData = pDataPtr;
+    BYTE* pDataPtr = new BYTE[ nMaxDopSize ];
+    BYTE* pData = pDataPtr;
 
     sal_uInt32 nRead = nMaxDopSize < nSize ? nMaxDopSize : nSize;
     rSt.Seek( nPos );
@@ -6484,9 +6576,9 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize) 
             memset( pData + nRead, 0, nMaxDopSize - nRead );
 
         // dann mal die Daten auswerten
-        sal_uInt32 a32Bit;
-        sal_uInt16 a16Bit;
-        sal_uInt8   a8Bit;
+        UINT32 a32Bit;
+        UINT16 a16Bit;
+        BYTE   a8Bit;
 
         a16Bit = Get_UShort( pData );        // 0 0x00
         fFacingPages        = 0 != ( a16Bit  &  0x0001 )     ;
@@ -6642,7 +6734,7 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize) 
             cDBC = Get_Long( pData );            // 480 0x1e0
             cDBCFtnEdn = Get_Long( pData );      // 484 0x1e4
 
-            pData += 1 * sizeof( sal_Int32);         // 488 0x1e8
+            pData += 1 * sizeof( INT32);         // 488 0x1e8
 
             nfcFtnRef = Get_Short( pData );      // 492 0x1ec
             nfcEdnRef = Get_Short( pData );      // 494 0x1ee
@@ -6658,6 +6750,7 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize) 
                 a32Bit = Get_Long( pData );      // 512 0x200
 
                 // i#78591#
+                // fDontUseHTMLAutoSpacing = (a32Bit & 0x4) >> 2;
                 SetCompatabilityOptions2(a32Bit);
             }
             if (nRead >= 550)
@@ -6741,7 +6834,7 @@ WW8Dop::WW8Dop() : bUseThaiLineBreakingRules(false)
     fAcetateShowAtn = true;
 }
 
-void WW8Dop::SetCompatabilityOptions(sal_uInt32 a32Bit)
+void WW8Dop::SetCompatabilityOptions(UINT32 a32Bit)
 {
     fNoTabForInd                = ( a32Bit &  0x00000001 )       ;
     fNoSpaceRaiseLower          = ( a32Bit &  0x00000002 ) >>  1 ;
@@ -6778,9 +6871,9 @@ void WW8Dop::SetCompatabilityOptions(sal_uInt32 a32Bit)
     fUsePrinterMetrics          = ( a32Bit &  0x80000000 ) >> 31 ;
 }
 
-sal_uInt32 WW8Dop::GetCompatabilityOptions() const
+UINT32 WW8Dop::GetCompatabilityOptions() const
 {
-    sal_uInt32 a32Bit = 0;
+    UINT32 a32Bit = 0;
     if (fNoTabForInd)                   a32Bit |= 0x00000001;
     if (fNoSpaceRaiseLower)             a32Bit |= 0x00000002;
     if (fSupressSpbfAfterPageBreak)     a32Bit |= 0x00000004;
@@ -6817,46 +6910,46 @@ sal_uInt32 WW8Dop::GetCompatabilityOptions() const
 }
 
 // i#78591#
-void WW8Dop::SetCompatabilityOptions2(sal_uInt32 a32Bit)
+void WW8Dop::SetCompatabilityOptions2(UINT32 a32Bit)
 {
-    fCompatabilityOptions_Unknown2_1                        = ( a32Bit &  0x00000001 );
-    fCompatabilityOptions_Unknown2_2                        = ( a32Bit &  0x00000002 ) >>  1 ;
-    fDontUseHTMLAutoSpacing     = ( a32Bit &  0x00000004 ) >>  2 ;
-    fCompatabilityOptions_Unknown2_4                    = ( a32Bit &  0x00000008 ) >>  3 ;
-       fCompatabilityOptions_Unknown2_5                 = ( a32Bit &  0x00000010 ) >>  4 ;
-       fCompatabilityOptions_Unknown2_6                 = ( a32Bit &  0x00000020 ) >>  5 ;
-       fCompatabilityOptions_Unknown2_7                 = ( a32Bit &  0x00000040 ) >>  6 ;
-       fCompatabilityOptions_Unknown2_8                 = ( a32Bit &  0x00000080 ) >>  7 ;
-       fCompatabilityOptions_Unknown2_9                 = ( a32Bit &  0x00000100 ) >>  8 ;
-       fCompatabilityOptions_Unknown2_10                    = ( a32Bit &  0x00000200 ) >>  9 ;
-       fCompatabilityOptions_Unknown2_11                    = ( a32Bit &  0x00000400 ) >> 10 ;
-       fCompatabilityOptions_Unknown2_12                    = ( a32Bit &  0x00000800 ) >> 11 ;
-    fCompatabilityOptions_Unknown2_13                   = ( a32Bit &  0x00001000 ) >> 12 ;
-    fCompatabilityOptions_Unknown2_14                   = ( a32Bit &  0x00002000 ) >> 13 ;
-    fCompatabilityOptions_Unknown2_15                   = ( a32Bit &  0x00004000 ) >> 14 ;
-    fCompatabilityOptions_Unknown2_16                   = ( a32Bit &  0x00008000 ) >> 15 ;
-       fCompatabilityOptions_Unknown2_17                    = ( a32Bit &  0x00010000 ) >> 16 ;
-       fCompatabilityOptions_Unknown2_18                    = ( a32Bit &  0x00020000 ) >> 17 ;
-       fCompatabilityOptions_Unknown2_19                    = ( a32Bit &  0x00040000 ) >> 18 ;
-       fCompatabilityOptions_Unknown2_20                    = ( a32Bit &  0x00080000 ) >> 19 ;
-    fCompatabilityOptions_Unknown2_21                   = ( a32Bit &  0x00100000 ) >> 20 ;
-       fCompatabilityOptions_Unknown2_22                    = ( a32Bit &  0x00200000 ) >> 21 ;
-    fCompatabilityOptions_Unknown2_23                   = ( a32Bit &  0x00400000 ) >> 22 ;
-    fCompatabilityOptions_Unknown2_24                   = ( a32Bit &  0x00800800 ) >> 23 ;
-    fCompatabilityOptions_Unknown2_25                   = ( a32Bit &  0x01000800 ) >> 24 ;
-    fCompatabilityOptions_Unknown2_26                   = ( a32Bit &  0x02000800 ) >> 25 ;
-    fCompatabilityOptions_Unknown2_27                   = ( a32Bit &  0x04000800 ) >> 26 ;
-    fCompatabilityOptions_Unknown2_28                   = ( a32Bit &  0x08000800 ) >> 27 ;
-    fCompatabilityOptions_Unknown2_29                   = ( a32Bit &  0x10000800 ) >> 28 ;
-    fCompatabilityOptions_Unknown2_30                   = ( a32Bit &  0x20000800 ) >> 29 ;
-    fCompatabilityOptions_Unknown2_31                   = ( a32Bit &  0x40000800 ) >> 30 ;
-       fCompatabilityOptions_Unknown2_32                    = ( a32Bit &  0x80000000 ) >> 31 ;
+    fCompatabilityOptions_Unknown2_1 						= ( a32Bit &  0x00000001 );
+    fCompatabilityOptions_Unknown2_2						= ( a32Bit &  0x00000002 ) >>  1 ;
+    fDontUseHTMLAutoSpacing		= ( a32Bit &  0x00000004 ) >>  2 ;
+    fCompatabilityOptions_Unknown2_4					= ( a32Bit &  0x00000008 ) >>  3 ;
+       fCompatabilityOptions_Unknown2_5					= ( a32Bit &  0x00000010 ) >>  4 ;
+       fCompatabilityOptions_Unknown2_6					= ( a32Bit &  0x00000020 ) >>  5 ;
+       fCompatabilityOptions_Unknown2_7					= ( a32Bit &  0x00000040 ) >>  6 ;
+       fCompatabilityOptions_Unknown2_8					= ( a32Bit &  0x00000080 ) >>  7 ;
+       fCompatabilityOptions_Unknown2_9					= ( a32Bit &  0x00000100 ) >>  8 ;
+       fCompatabilityOptions_Unknown2_10					= ( a32Bit &  0x00000200 ) >>  9 ;
+       fCompatabilityOptions_Unknown2_11					= ( a32Bit &  0x00000400 ) >> 10 ;
+       fCompatabilityOptions_Unknown2_12					= ( a32Bit &  0x00000800 ) >> 11 ;
+    fCompatabilityOptions_Unknown2_13					= ( a32Bit &  0x00001000 ) >> 12 ;	
+    fCompatabilityOptions_Unknown2_14					= ( a32Bit &  0x00002000 ) >> 13 ;	
+    fCompatabilityOptions_Unknown2_15					= ( a32Bit &  0x00004000 ) >> 14 ;	
+    fCompatabilityOptions_Unknown2_16					= ( a32Bit &  0x00008000 ) >> 15 ;	
+       fCompatabilityOptions_Unknown2_17					= ( a32Bit &  0x00010000 ) >> 16 ;
+       fCompatabilityOptions_Unknown2_18					= ( a32Bit &  0x00020000 ) >> 17 ;
+       fCompatabilityOptions_Unknown2_19					= ( a32Bit &  0x00040000 ) >> 18 ;
+       fCompatabilityOptions_Unknown2_20					= ( a32Bit &  0x00080000 ) >> 19 ;
+    fCompatabilityOptions_Unknown2_21					= ( a32Bit &  0x00100000 ) >> 20 ;	
+       fCompatabilityOptions_Unknown2_22					= ( a32Bit &  0x00200000 ) >> 21 ;
+    fCompatabilityOptions_Unknown2_23					= ( a32Bit &  0x00400000 ) >> 22 ;	
+    fCompatabilityOptions_Unknown2_24					= ( a32Bit &  0x00800800 ) >> 23 ;	
+    fCompatabilityOptions_Unknown2_25					= ( a32Bit &  0x01000800 ) >> 24 ;	
+    fCompatabilityOptions_Unknown2_26					= ( a32Bit &  0x02000800 ) >> 25 ;	
+    fCompatabilityOptions_Unknown2_27					= ( a32Bit &  0x04000800 ) >> 26 ;	
+    fCompatabilityOptions_Unknown2_28					= ( a32Bit &  0x08000800 ) >> 27 ;	
+    fCompatabilityOptions_Unknown2_29					= ( a32Bit &  0x10000800 ) >> 28 ;	
+    fCompatabilityOptions_Unknown2_30					= ( a32Bit &  0x20000800 ) >> 29 ;	
+    fCompatabilityOptions_Unknown2_31					= ( a32Bit &  0x40000800 ) >> 30 ;	
+       fCompatabilityOptions_Unknown2_32					= ( a32Bit &  0x80000000 ) >> 31 ;
 }
 
-sal_uInt32 WW8Dop::GetCompatabilityOptions2() const
+UINT32 WW8Dop::GetCompatabilityOptions2() const
 {
-    sal_uInt32 a32Bit = 0;
-    if (fCompatabilityOptions_Unknown2_1)           a32Bit |= 0x00000001;
+    UINT32 a32Bit = 0;
+    if (fCompatabilityOptions_Unknown2_1)			a32Bit |= 0x00000001;
     if (fCompatabilityOptions_Unknown2_2)           a32Bit |= 0x00000002;
     if (fDontUseHTMLAutoSpacing)     a32Bit |= 0x00000004;
     if (fCompatabilityOptions_Unknown2_4)           a32Bit |= 0x00000008;
@@ -6870,13 +6963,13 @@ sal_uInt32 WW8Dop::GetCompatabilityOptions2() const
     if (fCompatabilityOptions_Unknown2_12)          a32Bit |= 0x00000800;
     if (fCompatabilityOptions_Unknown2_13)          a32Bit |= 0x00001000;
     //#i42909# set thai "line breaking rules" compatibility option
-    // pflin, wonder whether bUseThaiLineBreakingRules is correct
+    // pflin, wonder whether bUseThaiLineBreakingRules is correct 
     // when importing word document.
     if (bUseThaiLineBreakingRules)          a32Bit |= 0x00002000;
-    else if (fCompatabilityOptions_Unknown2_14)         a32Bit |= 0x00002000;
+    else if (fCompatabilityOptions_Unknown2_14) 		a32Bit |= 0x00002000;
     if (fCompatabilityOptions_Unknown2_15)          a32Bit |= 0x00004000;
     if (fCompatabilityOptions_Unknown2_16)          a32Bit |= 0x00008000;
-    if (fCompatabilityOptions_Unknown2_17)          a32Bit |= 0x00010000;
+    if (fCompatabilityOptions_Unknown2_17)        	a32Bit |= 0x00010000;
     if (fCompatabilityOptions_Unknown2_18)          a32Bit |= 0x00020000;
     if (fCompatabilityOptions_Unknown2_19)          a32Bit |= 0x00040000;
     if (fCompatabilityOptions_Unknown2_20)          a32Bit |= 0x00080000;
@@ -6902,13 +6995,13 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     rFib.fcDop =  rStrm.Tell();
     rFib.lcbDop = nLen;
 
-    sal_uInt8 aData[ nMaxDopLen ];
+    BYTE aData[ nMaxDopLen ];
     memset( aData, 0, nMaxDopLen );
-    sal_uInt8* pData = aData;
+    BYTE* pData = aData;
 
     // dann mal die Daten auswerten
-    sal_uInt16 a16Bit;
-    sal_uInt8   a8Bit;
+    UINT16 a16Bit;
+    BYTE   a8Bit;
 
     a16Bit = 0;                         // 0 0x00
     if (fFacingPages)
@@ -7065,7 +7158,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         Set_UInt32( pData, cDBC );                     // 480 0x1e0
         Set_UInt32( pData, cDBCFtnEdn );               // 484 0x1e4
 
-        pData += 1 * sizeof( sal_Int32);                   // 488 0x1e8
+        pData += 1 * sizeof( INT32);                   // 488 0x1e8
 
         Set_UInt16( pData, nfcFtnRef );                // 492 0x1ec
         Set_UInt16( pData, nfcEdnRef );                // 494 0x1ee
@@ -7088,7 +7181,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
             a16Bit |= 0x2000;
         }
         Set_UInt16(pData, a16Bit);
-
+        
         pData += 48;
         a16Bit = 0x0080;
         Set_UInt16(pData, a16Bit);
@@ -7097,9 +7190,9 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     return 0 == rStrm.GetError();
 }
 
-void WW8DopTypography::ReadFromMem(sal_uInt8 *&pData)
+void WW8DopTypography::ReadFromMem(BYTE *&pData)
 {
-    sal_uInt16 a16Bit = Get_UShort(pData);
+    USHORT a16Bit = Get_UShort(pData);
     fKerningPunct = (a16Bit & 0x0001);
     iJustification = (a16Bit & 0x0006) >>  1;
     iLevelOfKinsoku = (a16Bit & 0x0018) >>  3;
@@ -7110,7 +7203,7 @@ void WW8DopTypography::ReadFromMem(sal_uInt8 *&pData)
     cchFollowingPunct = Get_Short(pData);
     cchLeadingPunct = Get_Short(pData);
 
-    sal_Int16 i;
+    INT16 i;
     for (i=0; i < nMaxFollowing; ++i)
         rgxchFPunct[i] = Get_Short(pData);
     for (i=0; i < nMaxLeading; ++i)
@@ -7118,7 +7211,7 @@ void WW8DopTypography::ReadFromMem(sal_uInt8 *&pData)
 
     if (cchFollowingPunct >= 0 && cchFollowingPunct < nMaxFollowing)
         rgxchFPunct[cchFollowingPunct]=0;
-    else
+    else    
         rgxchFPunct[nMaxFollowing - 1]=0;
 
     if (cchLeadingPunct >= 0 && cchLeadingPunct < nMaxLeading)
@@ -7128,9 +7221,9 @@ void WW8DopTypography::ReadFromMem(sal_uInt8 *&pData)
 
 }
 
-void WW8DopTypography::WriteToMem(sal_uInt8 *&pData) const
+void WW8DopTypography::WriteToMem(BYTE *&pData) const
 {
-    sal_uInt16 a16Bit = fKerningPunct;
+    USHORT a16Bit = fKerningPunct;
     a16Bit |= (iJustification << 1) & 0x0006;
     a16Bit |= (iLevelOfKinsoku << 3) & 0x0018;
     a16Bit |= (f2on1 << 5) & 0x002;
@@ -7141,22 +7234,23 @@ void WW8DopTypography::WriteToMem(sal_uInt8 *&pData) const
     Set_UInt16(pData,cchFollowingPunct);
     Set_UInt16(pData,cchLeadingPunct);
 
-    sal_Int16 i;
+    INT16 i;
     for (i=0; i < nMaxFollowing; ++i)
         Set_UInt16(pData,rgxchFPunct[i]);
     for (i=0; i < nMaxLeading; ++i)
         Set_UInt16(pData,rgxchLPunct[i]);
 }
 
-sal_uInt16 WW8DopTypography::GetConvertedLang() const
+USHORT WW8DopTypography::GetConvertedLang() const
 {
-    sal_uInt16 nLang;
+    USHORT nLang;
     //I have assumed peoples republic/taiwan == simplified/traditional
 
     //This isn't a documented issue, so we might have it all wrong,
     //i.e. i.e. whats with the powers of two ?
 
     /*
+    #84082#
     One example of 3 for reserved1 which was really Japanese, perhaps last bit
     is for some other use ?, or redundant. If more examples trigger the assert
     we might be able to figure it out.
@@ -7192,11 +7286,11 @@ sal_uInt16 WW8DopTypography::GetConvertedLang() const
 //-----------------------------------------
 //              Sprms
 //-----------------------------------------
-sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
+USHORT wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
     const
 {
     SprmInfo aSprm = GetSprmInfo(nId);
-    sal_uInt16 nL = 0;                      // number of Bytes to read
+    USHORT nL = 0;                      // number of Bytes to read
 
     //sprmPChgTabs
     switch( nId )
@@ -7204,11 +7298,11 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
         case 23:
         case 0xC615:
             if( pSprm[1 + mnDelta] != 255 )
-                nL = static_cast< sal_uInt16 >(pSprm[1 + mnDelta] + aSprm.nLen);
+                nL = static_cast< USHORT >(pSprm[1 + mnDelta] + aSprm.nLen);
             else
             {
-                sal_uInt8 nDel = pSprm[2 + mnDelta];
-                sal_uInt8 nIns = pSprm[3 + mnDelta + 4 * nDel];
+                BYTE nDel = pSprm[2 + mnDelta];
+                BYTE nIns = pSprm[3 + mnDelta + 4 * nDel];
 
                 nL = 2 + 4 * nDel + 3 * nIns;
             }
@@ -7225,12 +7319,12 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
                 case L_VAR:
                     // Variable 1-Byte Length?
                     // Excl. Token + Var-Lengthbyte
-                    nL = static_cast< sal_uInt16 >(pSprm[1 + mnDelta] + aSprm.nLen);
+                    nL = static_cast< USHORT >(pSprm[1 + mnDelta] + aSprm.nLen);
                     break;
                 case L_VAR2:
                     // Variable 2-Byte Length?
                     // Excl. Token + Var-Lengthbyte
-                    nL = static_cast< sal_uInt16 >(SVBT16ToShort( &pSprm[1 + mnDelta] ) + aSprm.nLen - 1);
+                    nL = static_cast< USHORT >(SVBT16ToShort( &pSprm[1 + mnDelta] ) + aSprm.nLen - 1);
                     break;
                 default:
                     OSL_ENSURE(!this, "Unknown sprm varient");
@@ -7242,11 +7336,11 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
 }
 
 // one or two bytes at the beginning at the sprm id
-sal_uInt16 wwSprmParser::GetSprmId(const sal_uInt8* pSp) const
+USHORT wwSprmParser::GetSprmId(const sal_uInt8* pSp) const
 {
     ASSERT_RET_ON_FAIL(pSp, "Why GetSprmId with pSp of 0", 0);
 
-    sal_uInt16 nId = 0;
+    USHORT nId = 0;
 
     if (ww::IsSevenMinus(meVersion))
     {
@@ -7265,17 +7359,17 @@ sal_uInt16 wwSprmParser::GetSprmId(const sal_uInt8* pSp) const
 }
 
 // with tokens and length byte
-sal_uInt16 wwSprmParser::GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm) const
+USHORT wwSprmParser::GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm) const
 {
     return GetSprmTailLen(nId, pSprm) + 1 + mnDelta + SprmDataOfs(nId);
 }
 
-sal_uInt8 wwSprmParser::SprmDataOfs(sal_uInt16 nId) const
+BYTE wwSprmParser::SprmDataOfs(USHORT nId) const
 {
     return GetSprmInfo(nId).nVari;
 }
 
-sal_uInt16 wwSprmParser::DistanceToData(sal_uInt16 nId) const
+USHORT wwSprmParser::DistanceToData(USHORT nId) const
 {
     return 1 + mnDelta + SprmDataOfs(nId);
 }

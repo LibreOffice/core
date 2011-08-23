@@ -58,7 +58,6 @@ SHL1STDLIBS= \
         $(SFX2LIB) \
         $(BASICLIB) \
         $(VCLLIB) \
-        $(SVLLIB) \
         $(TOOLSLIB) \
         $(UCBHELPERLIB) \
         $(COMPHELPERLIB) \
@@ -72,11 +71,3 @@ SHL1LIBS=$(SLB)$/$(TARGET).lib
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-
-ALLTAR : $(MISC)/basprov.component
-
-$(MISC)/basprov.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        basprov.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt basprov.component

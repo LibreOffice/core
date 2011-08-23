@@ -26,7 +26,7 @@
 #*************************************************************************
 
 
-.IF "$(VERBOSE)"!="TRUE"
+.IF "$(VERBOSE)"=="FALSE"
 ZIP_VERBOSITY=-q
 .ENDIF
 
@@ -57,7 +57,7 @@ $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
     @@-$(RM) $@
     $(COMMAND_ECHO)echo Manifest-Version: 1.0 > $@
 .IF "$(JARCLASSPATH)" != ""
-    $(COMMAND_ECHO)echo $(USQ)Class-Path: $(JARCLASSPATH)$(USQ) >> $@
+    echo $(USQ)Class-Path: $(JARCLASSPATH)$(USQ) >> $@
 .ENDIF
 # $(RSCREVISION) contains chars that must be quoted (for *NIX shells)
     $(COMMAND_ECHO)echo $(USQ)Solar-Version: $(RSCREVISION)$(USQ) >> $@
@@ -66,14 +66,6 @@ $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
 .ENDIF			# "$(JARMANIFEST)"!=""
 .ENDIF			# "$(NEW_JAR_PACK)"!=""
-
-.IF "$(JARCLASSEXCLUDES)" == ""
-ZIPJAR_EXCLUDE=
-.ELSE   # "$(JARCLASSEXCLUDES)" == ""
-ZIPJAR_EXCLUDE=$(foreach,i,$(JARCLASSEXCLUDES) -x "$i")
-# format:
-# JARCLASSEXCLUDES=foo/* bar/*
-.ENDIF  # "$(JARCLASSEXCLUDES)" == ""
 
 #
 # build jar 
@@ -90,8 +82,8 @@ $(JARTARGETN) :
     @-find . -type d -user $(USER) ! -perm -5 -print | xargs test "$$1" != "" && chmod +r $$1 
 .ENDIF
 .IF "$(JARMANIFEST)"!=""
-    $(COMMAND_ECHO)cd $(CLASSDIR)/$(TARGET) && zip $(ZIP_VERBOSITY) -u -rX ../$(@:f) $(subst,$(CLASSDIR)/$(TARGET)/, $(JARMANIFEST)) $(ZIPJAR_EXCLUDE) $(CHECKZIPRESULT)
+    $(COMMAND_ECHO)cd $(CLASSDIR)/$(TARGET) && zip $(ZIP_VERBOSITY) -u -rX ../$(@:f) $(subst,$(CLASSDIR)/$(TARGET)/, $(JARMANIFEST)) $(CHECKZIPRESULT)
 .ENDIF			# "$(JARMANIFEST)"!=""
-    $(COMMAND_ECHO)cd $(CLASSDIR) && zip $(ZIP_VERBOSITY) -u -rX $(@:f) $(subst,\,/ $(JARCLASSDIRS)) $(ZIPJAR_EXCLUDE) $(CHECKZIPRESULT)
+    $(COMMAND_ECHO)cd $(CLASSDIR) && zip $(ZIP_VERBOSITY) -u -rX $(@:f) $(subst,\,/ $(JARCLASSDIRS)) $(CHECKZIPRESULT)
 .ENDIF
 

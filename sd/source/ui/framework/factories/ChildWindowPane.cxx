@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace sd { namespace framework {
 
 ChildWindowPane::ChildWindowPane (
     const Reference<XResourceId>& rxPaneId,
-    sal_uInt16 nChildWindowId,
+    USHORT nChildWindowId,
     ViewShellBase& rViewShellBase,
     ::std::auto_ptr<SfxShell> pShell)
     : ChildWindowPaneInterfaceBase(rxPaneId,(::Window*)NULL),
@@ -68,7 +68,7 @@ ChildWindowPane::ChildWindowPane (
                 {
                     // The ViewShellBase has already been activated.  Make
                     // the child window visible as soon as possible.
-                    pViewFrame->SetChildWindow(mnChildWindowId, sal_True);
+                    pViewFrame->SetChildWindow(mnChildWindowId, TRUE);
                     OSL_TRACE("ChildWindowPane:activating now");
                 }
                 else
@@ -90,7 +90,7 @@ ChildWindowPane::ChildWindowPane (
             // The ViewShellBase has not yet been activated.  Hide the
             // window and wait a little before it is made visible.  See
             // comments in the GetWindow() method for an explanation.
-            pViewFrame->SetChildWindow(mnChildWindowId, sal_False);
+            pViewFrame->SetChildWindow(mnChildWindowId, FALSE);
             OSL_TRACE("ChildWindowPane:base not active");
         }
     }
@@ -112,7 +112,7 @@ void ChildWindowPane::Hide (void)
     if (pViewFrame != NULL)
         if (pViewFrame->KnowsChildWindow(mnChildWindowId))
             if (pViewFrame->HasChildWindow(mnChildWindowId))
-                pViewFrame->SetChildWindow(mnChildWindowId, sal_False);
+                pViewFrame->SetChildWindow(mnChildWindowId, FALSE);
 
     // Release the window because when the child window is shown again it
     // may use a different window.
@@ -147,7 +147,7 @@ void SAL_CALL ChildWindowPane::disposing (void)
         if (mxWindow.is())
             // Window already exists => nothing to do.
             break;
-
+        
         // When the window is not yet present then obtain it only when the
         // shell has already been activated.  The activation is not
         // necessary for the code to work properly but is used to optimize
@@ -157,7 +157,7 @@ void SAL_CALL ChildWindowPane::disposing (void)
         // Impress takes longer.
         if ( ! mbHasBeenActivated && mpShell.get()!=NULL && ! mpShell->IsActive())
             break;
-
+    
         mbHasBeenActivated = true;
         SfxViewFrame* pViewFrame = mrViewShellBase.GetViewFrame();
         if (pViewFrame == NULL)
@@ -168,7 +168,7 @@ void SAL_CALL ChildWindowPane::disposing (void)
         if ( ! pViewFrame->KnowsChildWindow(mnChildWindowId))
             break;
 
-        pViewFrame->SetChildWindow(mnChildWindowId, sal_True);
+        pViewFrame->SetChildWindow(mnChildWindowId, TRUE);
         SfxChildWindow* pChildWindow = pViewFrame->GetChildWindow(mnChildWindowId);
         if (pChildWindow == NULL)
             if (pViewFrame->HasChildWindow(mnChildWindowId))
@@ -176,7 +176,7 @@ void SAL_CALL ChildWindowPane::disposing (void)
                 // The child window is not yet visible.  Ask the view frame
                 // to show it and try again to get access to the child
                 // window.
-                pViewFrame->ShowChildWindow(mnChildWindowId, sal_True);
+                pViewFrame->ShowChildWindow(mnChildWindowId, TRUE);
                 pChildWindow = pViewFrame->GetChildWindow(mnChildWindowId);
             }
 
@@ -194,7 +194,7 @@ void SAL_CALL ChildWindowPane::disposing (void)
         // At last, we have access to the window and its UNO wrapper.
         mpWindow = &pDockingWindow->GetContentWindow();
         mxWindow = VCLUnoHelper::GetInterface(mpWindow);
-
+        
         // Register as window listener to be informed when the child window
         // is hidden.
         if (mxWindow.is())
@@ -219,11 +219,11 @@ Reference<awt::XWindow> SAL_CALL ChildWindowPane::getWindow (void)
 
 
 IMPLEMENT_FORWARD_XINTERFACE2(
-    ChildWindowPane,
+    ChildWindowPane, 
     ChildWindowPaneInterfaceBase,
     Pane);
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(
-    ChildWindowPane,
+    ChildWindowPane, 
     ChildWindowPaneInterfaceBase,
     Pane);
 
@@ -236,7 +236,7 @@ void SAL_CALL ChildWindowPane::disposing (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
-
+    
     if (rEvent.Source == mxWindow)
     {
         // The window is gone but the pane remains alive.  The next call to

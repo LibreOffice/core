@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,14 +96,12 @@ public:
           maToken(aToken)
     {}
     class TokenComparator
-    {
-    public:
+    { public:
         TokenComparator(::sd::toolpanel::controls::MasterPageContainer::Token aToken)
             : maToken(aToken) {}
-        bool operator () (const Descriptor& rDescriptor) const
-            { return maToken==rDescriptor.maToken; }
-    private:
-        ::sd::toolpanel::controls::MasterPageContainer::Token maToken;
+        bool operator () (const Descriptor& rDescriptor)
+        { return maToken==rDescriptor.maToken; }
+    private: ::sd::toolpanel::controls::MasterPageContainer::Token maToken;
     };
 };
 
@@ -143,7 +141,7 @@ RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance (void)
     else {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
-
+    
     return *mpInstance;
 }
 
@@ -165,7 +163,7 @@ RecentlyUsedMasterPages::~RecentlyUsedMasterPages (void)
 {
     Link aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
     mpContainer->RemoveChangeListener(aLink);
-
+    
     MasterPageObserver::Instance().RemoveEventListener(
         LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));
 }
@@ -177,7 +175,7 @@ void RecentlyUsedMasterPages::LateInit (void)
 {
     Link aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
     mpContainer->AddChangeListener(aLink);
-
+    
     LoadPersistentValues ();
     MasterPageObserver::Instance().AddEventListener(
         LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));
@@ -199,8 +197,8 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
         if ( ! xSet.is())
             return;
 
-        const String sURLMemberName (RTL_CONSTASCII_USTRINGPARAM("URL"));
-        const String sNameMemberName (RTL_CONSTASCII_USTRINGPARAM("Name"));
+        const String sURLMemberName (OUString::createFromAscii("URL"));
+        const String sNameMemberName (OUString::createFromAscii("Name"));
         OUString sURL;
         OUString sName;
 
@@ -274,8 +272,8 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
             xSet->removeByName (aKeys[i]);
 
         // Fill it with the URLs of this object.
-        const String sURLMemberName (RTL_CONSTASCII_USTRINGPARAM("URL"));
-        const String sNameMemberName (RTL_CONSTASCII_USTRINGPARAM("Name"));
+        const String sURLMemberName (OUString::createFromAscii("URL"));
+        const String sNameMemberName (OUString::createFromAscii("Name"));
         Any aValue;
         Reference<lang::XSingleServiceFactory> xChildFactory (
             xSet, UNO_QUERY);
@@ -288,7 +286,7 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
                 ++iDescriptor,++nIndex)
         {
             // Create new child.
-            OUString sKey (RTL_CONSTASCII_USTRINGPARAM("index_"));
+            OUString sKey (OUString::createFromAscii("index_"));
             sKey += OUString::valueOf(nIndex);
             Reference<container::XNameReplace> xChild(
                 xChildFactory->createInstance(), UNO_QUERY);

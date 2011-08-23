@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -156,7 +156,7 @@ namespace frm
     {
         m_pClipListener = new TransferableClipboardListener( LINK( this, OPasteClipboardDispatcher, OnClipboardChanged ) );
         m_pClipListener->acquire();
-        m_pClipListener->AddRemoveListener( _rView.GetWindow(), sal_True );
+        m_pClipListener->AddRemoveListener( _rView.GetWindow(), TRUE );
 
         // initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( _rView.GetWindow() ) );
@@ -190,7 +190,7 @@ namespace frm
     {
         OSL_ENSURE( getEditView() && getEditView()->GetWindow(), "OPasteClipboardDispatcher::disposing: EditView should not (yet) be disfunctional here!" );
         if ( getEditView() && getEditView()->GetWindow() && m_pClipListener )
-            m_pClipListener->AddRemoveListener( getEditView()->GetWindow(), sal_False );
+            m_pClipListener->AddRemoveListener( getEditView()->GetWindow(), FALSE );
         m_pClipListener->release();
         m_pClipListener = NULL;
 

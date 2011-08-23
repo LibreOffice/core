@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,6 +135,8 @@ sal_Bool TitlesAndObjectsTabPage::commitPage( ::svt::WizardTypes::CommitPageReas
 
 void TitlesAndObjectsTabPage::commitToModel()
 {
+    bool bChanged = false;
+
     m_aTimerTriggeredControllerLock.startTimer();
     uno::Reference< frame::XModel >  xModel( m_xChartModel, uno::UNO_QUERY);
 
@@ -144,12 +146,13 @@ void TitlesAndObjectsTabPage::commitToModel()
     {
         TitleDialogData aTitleOutput;
         m_apTitleResources->readFromResources( aTitleOutput );
-        aTitleOutput.writeDifferenceToModel( xModel, m_xCC );
+        bChanged = bChanged || aTitleOutput.writeDifferenceToModel( xModel, m_xCC );
         m_apTitleResources->ClearModifyFlag();
     }
 
     //commit legend changes to model
     {
+        bChanged = true;
         m_apLegendPositionResources->writeToModel( xModel );
     }
 

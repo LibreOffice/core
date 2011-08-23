@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 #include "sm.hxx"
 
 #include "vcl/salwtype.hxx"
-#include "vcl/apptypes.hxx"
+#include "vcl/salatype.hxx"
 #include "vcl/helper.hxx"
 #include <tools/solarmutex.hxx>
 #include "osl/mutex.hxx"
@@ -60,8 +60,8 @@
 
 SalYieldMutex::SalYieldMutex()
 {
-    mnCount     = 0;
-    mnThreadId  = 0;
+    mnCount 	= 0;
+    mnThreadId	= 0;
     ::tools::SolarMutex::SetSolarMutex( this );
 }
 
@@ -151,8 +151,8 @@ X11SalInstance::~X11SalInstance()
 
 struct PredicateReturn
 {
-    sal_uInt16  nType;
-    sal_Bool    bRet;
+    USHORT	nType;
+    BOOL	bRet;
 };
 
 extern "C" {
@@ -163,7 +163,7 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
     if ( pPre->bRet )
         return False;
 
-    sal_uInt16 nType;
+    USHORT nType;
 
     switch( pEvent->type )
     {
@@ -189,30 +189,30 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
     }
 
     if ( (nType & pPre->nType) || ( ! nType && (pPre->nType & INPUT_OTHER) ) )
-        pPre->bRet = sal_True;
+        pPre->bRet = TRUE;
 
     return False;
 }
 }
 
-bool X11SalInstance::AnyInput(sal_uInt16 nType)
+bool X11SalInstance::AnyInput(USHORT nType)
 {
     X11SalData *pSalData = GetX11SalData();
     Display *pDisplay  = pSalData->GetDisplay()->GetDisplay();
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     if( (nType & INPUT_TIMER) &&
         pSalData->GetDisplay()->GetXLib()->CheckTimeout( false ) )
     {
-        bRet = sal_True;
+        bRet = TRUE;
     }
     else if (XPending(pDisplay) )
     {
         PredicateReturn aInput;
-        XEvent          aEvent;
+        XEvent			aEvent;
 
-        aInput.bRet     = sal_False;
-        aInput.nType    = nType;
+        aInput.bRet 	= FALSE;
+        aInput.nType	= nType;
 
         XCheckIfEvent(pDisplay, &aEvent, ImplPredicateEvent,
                       (char *)&aInput );
@@ -229,14 +229,14 @@ osl::SolarMutex* X11SalInstance::GetYieldMutex()
 
 // -----------------------------------------------------------------------
 
-sal_uLong X11SalInstance::ReleaseYieldMutex()
+ULONG X11SalInstance::ReleaseYieldMutex()
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() ==
          osl::Thread::getCurrentIdentifier() )
     {
-        sal_uLong nCount = pYieldMutex->GetAcquireCount();
-        sal_uLong n = nCount;
+        ULONG nCount = pYieldMutex->GetAcquireCount();
+        ULONG n = nCount;
         while ( n )
         {
             pYieldMutex->release();
@@ -251,7 +251,7 @@ sal_uLong X11SalInstance::ReleaseYieldMutex()
 
 // -----------------------------------------------------------------------
 
-void X11SalInstance::AcquireYieldMutex( sal_uLong nCount )
+void X11SalInstance::AcquireYieldMutex( ULONG nCount )
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     while ( nCount )
@@ -261,42 +261,25 @@ void X11SalInstance::AcquireYieldMutex( sal_uLong nCount )
     }
 }
 
-// -----------------------------------------------------------------------
-
-bool X11SalInstance::CheckYieldMutex()
-{
-    bool bRet = true;
-
-    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
-    if ( pYieldMutex->GetThreadId() != osl::Thread::getCurrentIdentifier() )
-    {
-        bRet = false;
-    }
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
 void X11SalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 { GetX11SalData()->GetLib()->Yield( bWait, bHandleAllCurrentEvents ); }
 
 void* X11SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
     static const char* pDisplay = getenv( "DISPLAY" );
-    rReturnedType   = AsciiCString;
-    rReturnedBytes  = pDisplay ? strlen( pDisplay )+1 : 1;
+    rReturnedType	= AsciiCString;
+    rReturnedBytes	= pDisplay ? strlen( pDisplay )+1 : 1;
     return pDisplay ? (void*)pDisplay : (void*)"";
 }
 
-SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, sal_uLong nSalFrameStyle )
+SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, ULONG nSalFrameStyle )
 {
     SalFrame *pFrame = new X11SalFrame( pParent, nSalFrameStyle );
 
     return pFrame;
 }
 
-SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, sal_uLong nStyle )
+SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, ULONG nStyle )
 {
     SalFrame* pFrame = new X11SalFrame( NULL, nStyle, pParentData );
 
@@ -361,14 +344,14 @@ static void getServerDirectories( std::list< rtl::OString >& o_rFontPaths )
 void X11SalInstance::FillFontPathList( std::list< rtl::OString >& o_rFontPaths )
 {
     Display *pDisplay = GetX11SalData()->GetDisplay()->GetDisplay();
-
+    
     DBG_ASSERT( pDisplay, "No Display !" );
     if( pDisplay )
     {
         // get font paths to look for fonts
         int nPaths = 0, i;
         char** pPaths = XGetFontPath( pDisplay, &nPaths );
-
+        
         bool bServerDirs = false;
         for( i = 0; i < nPaths; i++ )
         {
@@ -387,33 +370,33 @@ void X11SalInstance::FillFontPathList( std::list< rtl::OString >& o_rFontPaths )
                 o_rFontPaths.push_back( aPath );
             }
         }
-
+        
         if( nPaths )
             XFreeFontPath( pPaths );
     }
-
+    
     // insert some standard directories
     o_rFontPaths.push_back( "/usr/openwin/lib/X11/fonts/TrueType" );
     o_rFontPaths.push_back( "/usr/openwin/lib/X11/fonts/Type1" );
     o_rFontPaths.push_back( "/usr/openwin/lib/X11/fonts/Type1/sun" );
     o_rFontPaths.push_back( "/usr/X11R6/lib/X11/fonts/truetype" );
     o_rFontPaths.push_back( "/usr/X11R6/lib/X11/fonts/Type1" );
-
+    
     #ifdef SOLARIS
     /* cde specials, from /usr/dt/bin/Xsession: here are the good fonts,
     the OWfontpath file may contain as well multiple lines as a comma
     separated list of fonts in each line. to make it even more weird
     environment variables are allowed as well */
-
+    
     const char* lang = getenv("LANG");
     if ( lang != NULL )
     {
         String aOpenWinDir( String::CreateFromAscii( "/usr/openwin/lib/locale/" ) );
         aOpenWinDir.AppendAscii( lang );
         aOpenWinDir.AppendAscii( "/OWfontpath" );
-
+        
         SvFileStream aStream( aOpenWinDir, STREAM_READ );
-
+        
         // TODO: replace environment variables
         while( aStream.IsOpen() && ! aStream.IsEof() )
         {

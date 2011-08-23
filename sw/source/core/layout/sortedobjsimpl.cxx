@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ SwAnchoredObject* SwSortedObjsImpl::operator[]( sal_uInt32 _nIndex )
 
     if ( _nIndex >= Count() )
     {
-        OSL_FAIL( "<SwSortedObjsImpl::operator[]> - index out of range" );
+        OSL_ENSURE( false, "<SwSortedObjsImpl::operator[]> - index out of range" );
     }
     else
     {
@@ -220,7 +220,8 @@ bool SwSortedObjsImpl::Insert( SwAnchoredObject& _rAnchoredObj )
     {
         // list already contains object
 #if OSL_DEBUG_LEVEL > 1
-        OSL_FAIL( "<SwSortedObjsImpl::Insert()> - already contains object" );
+        OSL_ENSURE( false,
+                "<SwSortedObjsImpl::Insert()> - already contains object" );
 #endif
         return true;
     }
@@ -249,7 +250,8 @@ bool SwSortedObjsImpl::Remove( SwAnchoredObject& _rAnchoredObj )
         // object not found.
         bRet = false;
 #if OSL_DEBUG_LEVEL > 1
-        OSL_FAIL( "<SwSortedObjsImpl::Remove()> - object not found" );
+        OSL_ENSURE( false,
+                "<SwSortedObjsImpl::Remove()> - object not found" );
 #endif
     }
     else
@@ -273,7 +275,8 @@ bool SwSortedObjsImpl::Update( SwAnchoredObject& _rAnchoredObj )
     if ( !Contains( _rAnchoredObj ) )
     {
         // given anchored object not found in list
-        OSL_FAIL( "<SwSortedObjsImpl::Update(..) - sorted list doesn't contain given anchored object" );
+        OSL_ENSURE( false,
+                "<SwSortedObjsImpl::Update(..) - sorted list doesn't contain given anchored object" );
         return false;
     }
 

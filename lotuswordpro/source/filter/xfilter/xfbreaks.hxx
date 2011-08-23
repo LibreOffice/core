@@ -57,14 +57,18 @@
  * @file
  * Breaks of paragraph.
  ************************************************************************/
-#ifndef     _XFBREAKS_HXX
-#define     _XFBREAKS_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-27 create this file.
+ ************************************************************************/
+#ifndef		_XFBREAKS_HXX
+#define		_XFBREAKS_HXX
 
-#include    "xfglobal.hxx"
-#include    "ixfproperty.hxx"
+#include	"xfglobal.hxx"
+#include	"ixfproperty.hxx"
 
 /**
- * @descr   Page|Column break object.
+ * @descr	Page|Column break object.
  */
 class XFBreaks : public IXFProperty
 {
@@ -75,20 +79,20 @@ public:
 
 public:
     /**
-     * @descr   Set break type, pls refer to enumXFBreaks.
+     * @descr	Set break type, pls refer to enumXFBreaks.
      */
-    void    SetBreakType(enumXFBreaks breaks);
+    void	SetBreakType(enumXFBreaks breaks);
 
     /**
-     * @descr   Output breaks object.
+     * @descr	Output breaks object.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFBreaks& b1, XFBreaks& b2);
     friend bool operator!=(XFBreaks& b1, XFBreaks& b2);
 
 private:
-    enumXFBreaks    m_eBreaks;
+    enumXFBreaks	m_eBreaks;
 };
 
 inline XFBreaks::XFBreaks()
@@ -100,14 +104,14 @@ inline XFBreaks::XFBreaks(enumXFBreaks breaks):m_eBreaks(breaks)
 {
 }
 
-inline void XFBreaks::SetBreakType(enumXFBreaks breaks)
+inline void	XFBreaks::SetBreakType(enumXFBreaks breaks)
 {
     m_eBreaks = breaks;
 }
 
-inline void XFBreaks::ToXml(IXFStream *pStrm)
+inline void	XFBreaks::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     switch(m_eBreaks)
     {
     case enumXFBreakAuto:

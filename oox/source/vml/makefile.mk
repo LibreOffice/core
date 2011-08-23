@@ -41,15 +41,13 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/vmldrawing.obj            \
-        $(SLO)$/vmldrawingfragment.obj    \
-        $(SLO)$/vmlformatting.obj         \
-        $(SLO)$/vmlinputstream.obj        \
-        $(SLO)$/vmlshape.obj              \
-        $(SLO)$/vmlshapecontainer.obj     \
-        $(SLO)$/vmlshapecontext.obj       \
-        $(SLO)$/vmltextbox.obj            \
-        $(SLO)$/vmltextboxcontext.obj
+        $(SLO)$/vmldrawing.obj			\
+        $(SLO)$/vmldrawingfragment.obj  \
+        $(SLO)$/vmlformatting.obj		\
+        $(SLO)$/vmlinputstream.obj		\
+        $(SLO)$/vmlshape.obj			\
+        $(SLO)$/vmlshapecontainer.obj	\
+        $(SLO)$/vmlshapecontext.obj
 
 # --- Targets -------------------------------------------------------
 

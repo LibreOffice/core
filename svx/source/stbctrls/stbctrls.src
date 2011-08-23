@@ -1,7 +1,7 @@
 ﻿/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -154,7 +154,7 @@ Menu RID_SVXMNU_ZOOM
         };
     };
 };
- // Funktionsauswahl auf dem SvxPosSizeStatusBarControl fuer Calc
+ //	Funktionsauswahl auf dem SvxPosSizeStatusBarControl fuer Calc
 Menu RID_SVXMNU_PSZ_FUNC
 {
     ItemList =
@@ -260,6 +260,30 @@ Image RID_SVXBMP_SIGNET_NOTVALIDATED
     };
     MaskColor = STD_MASKCOLOR;
 };
+Image RID_SVXBMP_SIGNET_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "signet_11x16_h.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SIGNET_BROKEN_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "caution_11x16_h.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SIGNET_NOTVALIDATED_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "notcertificate_16_h.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
 
 
 Image RID_SVXBMP_SLIDERBUTTON
@@ -286,6 +310,31 @@ Image RID_SVXBMP_SLIDERINCREASE
     };
     MaskColor = STD_MASKCOLOR;
 };
+Image RID_SVXBMP_SLIDERBUTTON_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "navigationball_10_h.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SLIDERDECREASE_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "slidezoomout_11_h.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SLIDERINCREASE_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "slidezoomin_11_h.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+
 Image RID_SVXBMP_DOC_MODIFIED_YES
 {
     ImageBitmap = Bitmap

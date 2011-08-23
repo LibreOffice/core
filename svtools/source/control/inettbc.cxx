@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,7 @@
 #include <sys/types.h>
 #endif
 
+
 #include <svtools/inettbc.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -41,13 +42,16 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+
+#include <com/sun/star/task/XInteractionHandler.hdl>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
+
 #include <comphelper/processfactory.hxx>
+
 #include <vcl/toolbox.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
@@ -65,8 +69,9 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
+
 #include "iodlg.hrc"
-#include <svtools/asynclink.hxx>
+#include <asynclink.hxx>
 #include <svl/urlfilter.hxx>
 
 #include <vector>
@@ -92,7 +97,7 @@ public:
     SvStringsDtor*                  pURLs;
     SvStringsDtor*                  pCompletions;
     const IUrlFilter*               pUrlFilter;
-    ::std::vector< WildCard >       m_aFilters;
+    ::std::vector< WildCard >		m_aFilters;
 
     static sal_Bool TildeParsing( String& aText, String& aBaseUrl );
 
@@ -110,24 +115,24 @@ class SvtMatchContext_Impl : public ::osl::Thread
 {
     static ::osl::Mutex*            pDirMutex;
 
-    SvStringsDtor                   aPickList;
+    SvStringsDtor 					aPickList;
     SvStringsDtor*                  pCompletions;
     SvStringsDtor*                  pURLs;
-    svtools::AsynchronLink          aLink;
-    String                          aBaseURL;
+    svtools::AsynchronLink 			aLink;
+    String							aBaseURL;
     String                          aText;
-    SvtURLBox*                      pBox;
-    sal_Bool                            bStop;
-    sal_Bool                            bOnlyDirectories;
-    sal_Bool                            bNoSelection;
+    SvtURLBox* 						pBox;
+    BOOL                            bStop;
+    BOOL							bOnlyDirectories;
+    BOOL							bNoSelection;
 
-    DECL_STATIC_LINK(               SvtMatchContext_Impl, Select_Impl, void* );
+    DECL_STATIC_LINK( 				SvtMatchContext_Impl, Select_Impl, void* );
 
     virtual void SAL_CALL           onTerminated( );
     virtual void SAL_CALL           run();
     virtual void SAL_CALL           Cancel();
-    void                            Insert( const String& rCompletion, const String& rURL, sal_Bool bForce = sal_False);
-    void                            ReadFolder( const String& rURL, const String& rMatch, sal_Bool bSmart );
+    void                            Insert( const String& rCompletion, const String& rURL, BOOL bForce = FALSE);
+    void                            ReadFolder( const String& rURL, const String& rMatch, BOOL bSmart );
     void                            FillPicklist( SvStringsDtor& rPickList );
 
 public:
@@ -135,7 +140,7 @@ public:
 
                                     SvtMatchContext_Impl( SvtURLBox* pBoxP, const String& rText );
                                     ~SvtMatchContext_Impl();
-    void                            Stop();
+    void          					Stop();
 };
 
 ::osl::Mutex* SvtMatchContext_Impl::pDirMutex = 0;
@@ -153,9 +158,9 @@ SvtMatchContext_Impl::SvtMatchContext_Impl(
     SvtURLBox* pBoxP, const String& rText )
     : aLink( STATIC_LINK( this, SvtMatchContext_Impl, Select_Impl ) )
     , aBaseURL( pBoxP->aBaseURL )
-    , aText( rText )
+    , aText(  rText )
     , pBox( pBoxP )
-    , bStop( sal_False )
+    , bStop( FALSE )
     , bOnlyDirectories( pBoxP->bOnlyDirectories )
     , bNoSelection( pBoxP->bNoSelection )
 {
@@ -200,7 +205,7 @@ void SvtMatchContext_Impl::FillPicklist( SvStringsDtor& rPickList )
                 seqPropertySet[nProperty].Value >>= sTitle;
                 aURL.SetURL( sTitle );
                 const StringPtr pStr = new String( aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
-                rPickList.Insert( pStr, (sal_uInt16) nItem );
+                rPickList.Insert( pStr, (USHORT) nItem );
                 break;
             }
         }
@@ -217,7 +222,7 @@ void SAL_CALL SvtMatchContext_Impl::Cancel()
 //-------------------------------------------------------------------------
 void SvtMatchContext_Impl::Stop()
 {
-    bStop = sal_True;
+    bStop = TRUE;
 
     if( isRunning() )
         terminate();
@@ -247,7 +252,7 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
     }
 
     SvtURLBox* pBox = pThis->pBox;
-    pBox->bAutoCompleteMode = sal_True;
+    pBox->bAutoCompleteMode = TRUE;
 
     // did we filter completions which otherwise would have been valid?
     // (to be filled below)
@@ -256,7 +261,7 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
     // insert all completed strings into the listbox
     pBox->Clear();
 
-    for( sal_uInt16 nPos = 0; nPos<pThis->pCompletions->Count(); nPos++ )
+    for( USHORT nPos = 0; nPos<pThis->pCompletions->Count(); nPos++ )
     {
         String sCompletion( *(*pThis->pCompletions)[nPos] );
 
@@ -326,12 +331,12 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
 //-------------------------------------------------------------------------
 void SvtMatchContext_Impl::Insert( const String& rCompletion,
                                    const String& rURL,
-                                   sal_Bool bForce )
+                                   BOOL bForce )
 {
     if( !bForce )
     {
         // avoid doubles
-        for( sal_uInt16 nPos = pCompletions->Count(); nPos--; )
+        for( USHORT nPos = pCompletions->Count(); nPos--; )
             if( *(*pCompletions)[ nPos ] == rCompletion )
                 return;
     }
@@ -345,7 +350,7 @@ void SvtMatchContext_Impl::Insert( const String& rCompletion,
 //-------------------------------------------------------------------------
 void SvtMatchContext_Impl::ReadFolder( const String& rURL,
                                        const String& rMatch,
-                                       sal_Bool bSmart )
+                                       BOOL bSmart )
 {
     // check folder to scan
     if( !UCBContentHelper::IsFolder( rURL ) )
@@ -370,7 +375,7 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 
         String aNewText( aText );
         aNewText += '/';
-        Insert( aNewText, rURL, sal_True );
+        Insert( aNewText, rURL, TRUE );
 
         return;
     }
@@ -412,9 +417,9 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
         try
         {
             uno::Reference< XDynamicResultSet > xDynResultSet;
-            ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
+            ResultSetInclude eInclude =	INCLUDE_FOLDERS_AND_DOCUMENTS;
             if ( bOnlyDirectories )
-                eInclude = INCLUDE_FOLDERS_ONLY;
+                eInclude =	INCLUDE_FOLDERS_ONLY;
 
             xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
@@ -496,7 +501,7 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
                         if ( bIsFolder )
                             aInput += aDelimiter;
 
-                        Insert( aInput, aObj.GetMainURL( INetURLObject::NO_DECODE ), sal_True );
+                        Insert( aInput, aObj.GetMainURL( INetURLObject::NO_DECODE ), TRUE );
                     }
                 }
             }
@@ -548,7 +553,7 @@ String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
             // HRO: I suppose this hack should only be done for Windows !!!???
 #ifdef WNT
             // HRO: INetURLObject::smatRel2Abs does not recognize '\\' as a relative path
-            //      but in case of "\\\\" INetURLObject is right - this is an absolute path !
+            //		but in case of "\\\\" INetURLObject is right - this is an absolute path !
 
             if( aText.Search( '\\' ) == 0 && (aText.Len() < 2 || aText.GetChar( 1 ) != '\\') )
             {
@@ -565,7 +570,7 @@ String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
             aObj.setFinalSlash();
 
             // take base URL and append current input
-            bool bWasAbsolute = sal_False;
+            bool bWasAbsolute = FALSE;
 #ifdef UNX
             // don't support FSYS_MAC under Unix, because here ':' is a valid character for a filename
             INetURLObject::FSysStyle eStyle = static_cast< INetURLObject::FSysStyle >( INetURLObject::FSYS_VOS | INetURLObject::FSYS_UNX | INetURLObject::FSYS_DOS );
@@ -606,7 +611,7 @@ void SvtMatchContext_Impl::run()
     pURLs->Remove( 0, pURLs->Count() );
 
     // check for input
-    sal_uInt16 nTextLen = aText.Len();
+    USHORT nTextLen = aText.Len();
     if ( !nTextLen )
         return;
 
@@ -642,7 +647,7 @@ void SvtMatchContext_Impl::run()
                 {
                     // if text input is a directory, it must be part of the match list! Until then it is scanned
                     if ( UCBContentHelper::IsFolder( aMainURL ) && aURLObject.hasFinalSlash() )
-                            Insert( aText, aMatch );
+                           Insert( aText, aMatch );
                     else
                         // otherwise the parent folder will be taken
                         aURLObject.removeSegment();
@@ -658,7 +663,7 @@ void SvtMatchContext_Impl::run()
         // don't scan history picklist if only directories are allowed, picklist contains only files
         return;
 
-    sal_Bool bFull = sal_False;
+    BOOL bFull = FALSE;
     int nCount = aPickList.Count();
 
     INetURLObject aCurObj;
@@ -667,12 +672,11 @@ void SvtMatchContext_Impl::run()
     aObj.SetSmartProtocol( eSmartProt == INET_PROT_NOT_VALID ? INET_PROT_HTTP : eSmartProt );
     for( ;; )
     {
-        for( sal_uInt16 nPos = 0; schedule() && nPos < nCount; nPos++ )
+        for( USHORT nPos = 0; schedule() && nPos < nCount; nPos++ )
         {
             aCurObj.SetURL( *aPickList.GetObject( nPos ) );
             aCurObj.SetSmartURL( aCurObj.GetURLNoPass());
             aCurMainURL = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
-
             if( eProt != INET_PROT_NOT_VALID && aCurObj.GetProtocol() != eProt )
                 continue;
 
@@ -697,7 +701,7 @@ void SvtMatchContext_Impl::run()
                     {
                         // try if text matches the scheme
                         String aScheme( INetURLObject::GetScheme( aCurObj.GetProtocol() ) );
-                        if ( aText.CompareIgnoreCaseToAscii( aScheme, aText.Len() ) == COMPARE_EQUAL && aText.Len() < aScheme.Len() )
+                        if ( aText.CompareTo( aScheme, aText.Len() ) == COMPARE_EQUAL && aText.Len() < aScheme.Len() )
                         {
                             if( bFull )
                                 aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -716,7 +720,7 @@ void SvtMatchContext_Impl::run()
                         aCurString.Erase( 0, aScheme.Len() );
                     }
 
-                    if( aText.CompareIgnoreCaseToAscii( aCurString, aText.Len() )== COMPARE_EQUAL )
+                    if( aText.CompareTo( aCurString, aText.Len() )== COMPARE_EQUAL )
                     {
                         if( bFull )
                             aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -757,7 +761,7 @@ void SvtMatchContext_Impl::run()
         }
 
         if( !bFull )
-            bFull = sal_True;
+            bFull = TRUE;
         else
             break;
     }
@@ -768,7 +772,7 @@ void SvtMatchContext_Impl::run()
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
-void SvtURLBox::TryAutoComplete( sal_Bool bForce )
+void SvtURLBox::TryAutoComplete( BOOL bForce )
 {
     if( Application::AnyInput( INPUT_KEYBOARD ) ) return;
 
@@ -777,7 +781,7 @@ void SvtURLBox::TryAutoComplete( sal_Bool bForce )
     Selection aSelection( GetSelection() );
     if( aSelection.Max() != aCurText.Len() && !bForce )
         return;
-    sal_uInt16 nLen = (sal_uInt16)aSelection.Min();
+    USHORT nLen = (USHORT)aSelection.Min();
     aCurText.Erase( nLen );
     if( aCurText.Len() && bIsAutoCompleteEnabled )
     {
@@ -795,13 +799,13 @@ SvtURLBox::SvtURLBox( Window* pParent, INetProtocol eSmart )
     :   ComboBox( pParent , WB_DROPDOWN | WB_AUTOSIZE | WB_AUTOHSCROLL ),
         pCtx( 0 ),
         eSmartProtocol( eSmart ),
-        bAutoCompleteMode( sal_False ),
-        bOnlyDirectories( sal_False ),
-        bTryAutoComplete( sal_False ),
-        bCtrlClick( sal_False ),
-        bHistoryDisabled( sal_False ),
-        bNoSelection( sal_False ),
-        bIsAutoCompleteEnabled( sal_True )
+        bAutoCompleteMode( FALSE ),
+        bOnlyDirectories( FALSE ),
+        bTryAutoComplete( FALSE ),
+        bCtrlClick( FALSE ),
+        bHistoryDisabled( FALSE ),
+        bNoSelection( FALSE ),
+        bIsAutoCompleteEnabled( TRUE )
 {
     ImplInit();
 
@@ -816,13 +820,13 @@ SvtURLBox::SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart )
     :   ComboBox( pParent, _nStyle ),
         pCtx( 0 ),
         eSmartProtocol( eSmart ),
-        bAutoCompleteMode( sal_False ),
-        bOnlyDirectories( sal_False ),
-        bTryAutoComplete( sal_False ),
-        bCtrlClick( sal_False ),
-        bHistoryDisabled( sal_False ),
-        bNoSelection( sal_False ),
-        bIsAutoCompleteEnabled( sal_True )
+        bAutoCompleteMode( FALSE ),
+        bOnlyDirectories( FALSE ),
+        bTryAutoComplete( FALSE ),
+        bCtrlClick( FALSE ),
+        bHistoryDisabled( FALSE ),
+        bNoSelection( FALSE ),
+        bIsAutoCompleteEnabled( TRUE )
 {
     ImplInit();
 }
@@ -832,13 +836,13 @@ SvtURLBox::SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart
     :   ComboBox( pParent , _rResId ),
         pCtx( 0 ),
         eSmartProtocol( eSmart ),
-        bAutoCompleteMode( sal_False ),
-        bOnlyDirectories( sal_False ),
-        bTryAutoComplete( sal_False ),
-        bCtrlClick( sal_False ),
-        bHistoryDisabled( sal_False ),
-        bNoSelection( sal_False ),
-        bIsAutoCompleteEnabled( sal_True )
+        bAutoCompleteMode( FALSE ),
+        bOnlyDirectories( FALSE ),
+        bTryAutoComplete( FALSE ),
+        bCtrlClick( FALSE ),
+        bHistoryDisabled( FALSE ),
+        bNoSelection( FALSE ),
+        bIsAutoCompleteEnabled( TRUE )
 {
     ImplInit();
 }
@@ -847,10 +851,8 @@ SvtURLBox::SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart
 void SvtURLBox::ImplInit()
 {
     pImp = new SvtURLBox_Impl();
-
-    if ( GetHelpId().getLength() == 0 )
-        SetHelpId( ".uno:OpenURL" );
-    EnableAutocomplete( sal_False );
+    SetHelpId( SID_OPENURL );
+    EnableAutocomplete( FALSE );
 
     SetText( String() );
 
@@ -932,7 +934,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
 
                     if ( aURL.Len() && ( !pImp->pUrlFilter || pImp->pUrlFilter->isUrlAllowed( aURL ) ) )
                     {
-                        sal_Bool bFound = (aURL.GetChar(aURL.Len()-1) == '/' );
+                        BOOL bFound = (aURL.GetChar(aURL.Len()-1) == '/' );
                         if ( !bFound )
                         {
                             String aUpperURL( aURL );
@@ -962,7 +964,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SvtURLBox::ProcessKey( const KeyCode& rKey )
+BOOL SvtURLBox::ProcessKey( const KeyCode& rKey )
 {
     // every key input stops the current matching thread
     if( pCtx )
@@ -980,7 +982,7 @@ sal_Bool SvtURLBox::ProcessKey( const KeyCode& rKey )
         if ( bAutoCompleteMode )
         {
             // reset picklist
-            bAutoCompleteMode = sal_False;
+            bAutoCompleteMode = FALSE;
             Selection aSelection( GetSelection() );
             SetSelection( Selection( aSelection.Min(), aSelection.Min() ) );
             if ( bOnlyDirectories )
@@ -991,19 +993,19 @@ sal_Bool SvtURLBox::ProcessKey( const KeyCode& rKey )
         }
 
         bCtrlClick = rKey.IsMod1();
-        sal_Bool bHandled = sal_False;
+        BOOL bHandled = FALSE;
         if ( GetOpenHdl().IsSet() )
         {
-            bHandled = sal_True;
+            bHandled = TRUE;
             GetOpenHdl().Call(this);
         }
         else if ( GetSelectHdl().IsSet() )
         {
-            bHandled = sal_True;
+            bHandled = TRUE;
             GetSelectHdl().Call(this);
         }
 
-        bCtrlClick = sal_False;
+        bCtrlClick = FALSE;
 
         ClearModifyFlag();
         return bHandled;
@@ -1011,9 +1013,9 @@ sal_Bool SvtURLBox::ProcessKey( const KeyCode& rKey )
     else if ( aCode == KEY_RETURN && !GetText().Len() && GetOpenHdl().IsSet() )
     {
         // for file dialog
-        bAutoCompleteMode = sal_False;
+        bAutoCompleteMode = FALSE;
         GetOpenHdl().Call(this);
-        return sal_True;
+        return TRUE;
     }
     else if( aCode == KEY_ESCAPE )
     {
@@ -1029,15 +1031,15 @@ sal_Bool SvtURLBox::ProcessKey( const KeyCode& rKey )
         }
         else
         {
-           return sal_False;
+           return FALSE;
         }
 
-        bAutoCompleteMode = sal_False;
-        return sal_True;
+        bAutoCompleteMode = FALSE;
+        return TRUE;
     }
     else
     {
-        return sal_False;
+        return FALSE;
     }
 }
 
@@ -1058,15 +1060,15 @@ long SvtURLBox::PreNotify( NotifyEvent& rNEvt )
         KeyCode aCode( rKey.GetCode() );
         if( ProcessKey( rKey ) )
         {
-            return sal_True;
+            return TRUE;
         }
         else if( ( aCode == KEY_UP || aCode == KEY_DOWN ) && !rKey.IsMod2() )
         {
             Selection aSelection( GetSelection() );
-            sal_uInt16 nLen = (sal_uInt16)aSelection.Min();
+            USHORT nLen = (USHORT)aSelection.Min();
             GetSubEdit()->KeyInput( rEvent );
             SetSelection( Selection( nLen, GetText().Len() ) );
-            return sal_True;
+            return TRUE;
         }
 
         if ( MatchesPlaceHolder( GetText() ) )
@@ -1085,7 +1087,7 @@ IMPL_LINK( SvtURLBox, AutoCompleteHdl_Impl, void*, EMPTYARG )
 {
     if ( GetSubEdit()->GetAutocompleteAction() == AUTOCOMPLETE_KEYINPUT )
     {
-        TryAutoComplete( sal_False );
+        TryAutoComplete( FALSE );
         return 1L;
     }
 
@@ -1124,7 +1126,7 @@ void SvtURLBox::Select()
 }
 
 //-------------------------------------------------------------------------
-void SvtURLBox::SetOnlyDirectories( sal_Bool bDir )
+void SvtURLBox::SetOnlyDirectories( BOOL bDir )
 {
     bOnlyDirectories = bDir;
     if ( bOnlyDirectories )
@@ -1132,7 +1134,7 @@ void SvtURLBox::SetOnlyDirectories( sal_Bool bDir )
 }
 
 //-------------------------------------------------------------------------
-void SvtURLBox::SetNoURLSelection( sal_Bool bSet )
+void SvtURLBox::SetNoURLSelection( BOOL bSet )
 {
     bNoSelection = bSet;
 }
@@ -1149,7 +1151,7 @@ String SvtURLBox::GetURL()
     // try to get the right case preserving URL from the list of URLs
     if ( pImp->pCompletions && pImp->pURLs )
     {
-        for( sal_uInt16 nPos=0; nPos<pImp->pCompletions->Count(); nPos++ )
+        for( USHORT nPos=0; nPos<pImp->pCompletions->Count(); nPos++ )
         {
 #ifdef DBG_UTIL
             String aTmp( *(*pImp->pCompletions)[ nPos ] );
@@ -1165,7 +1167,7 @@ String SvtURLBox::GetURL()
     aText.EraseTrailingChars();
     if ( !aText.Len() )
         return aText;
-    // #i9739#
+    // #i9739# - 2002-12-03 - fs@openoffice.org
 #endif
 
     INetURLObject aObj( aText );
@@ -1194,7 +1196,7 @@ String SvtURLBox::GetURL()
         bool bSlash = aObj.hasFinalSlash();
         {
             static const rtl::OUString aPropName(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CasePreservingURL" )));
+                rtl::OUString::createFromAscii("CasePreservingURL"));
 
             rtl::OUString aFileURL;
 
@@ -1230,7 +1232,7 @@ String SvtURLBox::GetURL()
 //-------------------------------------------------------------------------
 void SvtURLBox::DisableHistory()
 {
-    bHistoryDisabled = sal_True;
+    bHistoryDisabled = TRUE;
     UpdatePicklistForSmartProtocol_Impl();
 }
 
@@ -1305,7 +1307,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
                 return sal_False; // no such user
 #else
             pPasswd = getpwnam( OUStringToOString( OUString( aUserName ), RTL_TEXTENCODING_ASCII_US ).getStr() );
-            if( pPasswd )
+             if( pPasswd )
                 aParseTilde = String::CreateFromAscii( pPasswd->pw_dir );
             else
                 return sal_False; // no such user

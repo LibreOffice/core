@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,31 +45,31 @@ class UniString;
 // Load() and Store() must not be overridden.
 
 // This version of the Macros does not define Load/StorePrivateData()-methods
-#define SBX_DECL_PERSIST_NODATA( nCre, nSbxId, nVer )       \
-    virtual sal_uInt32 GetCreator() const { return nCre;   }    \
-    virtual sal_uInt16 GetVersion() const { return nVer;   }    \
-    virtual sal_uInt16 GetSbxId() const   { return nSbxId; }
+#define SBX_DECL_PERSIST_NODATA( nCre, nSbxId, nVer )		\
+    virtual UINT32 GetCreator() const { return nCre;   }	\
+    virtual UINT16 GetVersion() const { return nVer;   }	\
+    virtual UINT16 GetSbxId() const	  { return nSbxId; }
 
-#define SBX_DECL_PERSIST_NODATA_()                          \
-    virtual sal_uInt32 GetCreator() const;                      \
-    virtual sal_uInt16 GetVersion() const;                      \
-    virtual sal_uInt16 GetSbxId() const;
+#define SBX_DECL_PERSIST_NODATA_()							\
+    virtual UINT32 GetCreator() const;						\
+    virtual UINT16 GetVersion() const;						\
+    virtual UINT16 GetSbxId() const;
 
 // This version of the macro defines Load/StorePrivateData()-methods
-#define SBX_DECL_PERSIST( nCre, nSbxId, nVer )              \
-    virtual sal_Bool LoadPrivateData( SvStream&, sal_uInt16 );      \
-    virtual sal_Bool StorePrivateData( SvStream& ) const;       \
+#define SBX_DECL_PERSIST( nCre, nSbxId, nVer )				\
+    virtual BOOL LoadPrivateData( SvStream&, USHORT ); 		\
+    virtual BOOL StorePrivateData( SvStream& ) const;  		\
     SBX_DECL_PERSIST_NODATA( nCre, nSbxId, nVer )
 
-#define SBX_DECL_PERSIST_()                                 \
-    virtual sal_Bool LoadPrivateData( SvStream&, sal_uInt16 );      \
-    virtual sal_Bool StorePrivateData( SvStream& ) const;       \
+#define SBX_DECL_PERSIST_()									\
+    virtual BOOL LoadPrivateData( SvStream&, USHORT ); 		\
+    virtual BOOL StorePrivateData( SvStream& ) const;  		\
     SBX_DECL_PERSIST_NODATA_()
 
-#define SBX_IMPL_PERSIST( C, nCre, nSbxId, nVer )           \
-    sal_uInt32 C::GetCreator() const { return nCre;   }         \
-    sal_uInt16 C::GetVersion() const { return nVer;   }         \
-    sal_uInt16 C::GetSbxId() const   { return nSbxId; }
+#define SBX_IMPL_PERSIST( C, nCre, nSbxId, nVer )			\
+    UINT32 C::GetCreator() const { return nCre;   }			\
+    UINT16 C::GetVersion() const { return nVer;   }			\
+    UINT16 C::GetSbxId() const	 { return nSbxId; }
 
 class SbxBase;
 class SbxFactory;
@@ -81,12 +81,12 @@ class SbxBaseImpl;
 
 class SbxBase : virtual public SvRefBase
 {
-    SbxBaseImpl* mpSbxBaseImpl; // Impl data
+    SbxBaseImpl* mpSbxBaseImpl;	// Impl data
 
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
-    virtual sal_Bool StoreData( SvStream& ) const;
+    virtual BOOL LoadData( SvStream&, USHORT );
+    virtual BOOL StoreData( SvStream& ) const;
 protected:
-    sal_uInt16 nFlags;          // Flag-Bits
+    USHORT nFlags;			// Flag-Bits
 
     SbxBase();
     SbxBase( const SbxBase& );
@@ -95,21 +95,21 @@ protected:
     SBX_DECL_PERSIST(0,0,0);
 public:
     TYPEINFO();
-    inline void     SetFlags( sal_uInt16 n );
-    inline sal_uInt16   GetFlags() const;
-    inline void     SetFlag( sal_uInt16 n );
-    inline void     ResetFlag( sal_uInt16 n );
-    inline sal_Bool     IsSet( sal_uInt16 n ) const;
-    inline sal_Bool     IsReset( sal_uInt16 n ) const;
-    inline sal_Bool     CanRead() const;
-    inline sal_Bool     CanWrite() const;
-    inline sal_Bool     IsModified() const;
-    inline sal_Bool     IsConst() const;
-    inline sal_Bool     IsHidden() const;
-    inline sal_Bool     IsVisible() const;
+    inline void		SetFlags( USHORT n );
+    inline USHORT	GetFlags() const;
+    inline void		SetFlag( USHORT n );
+    inline void		ResetFlag( USHORT n );
+    inline BOOL		IsSet( USHORT n ) const;
+    inline BOOL		IsReset( USHORT n ) const;
+    inline BOOL		CanRead() const;
+    inline BOOL		CanWrite() const;
+    inline BOOL		IsModified() const;
+    inline BOOL		IsConst() const;
+    inline BOOL		IsHidden() const;
+    inline BOOL		IsVisible() const;
 
-    virtual sal_Bool IsFixed() const;
-    virtual void SetModified( sal_Bool );
+    virtual BOOL IsFixed() const;
+    virtual void SetModified( BOOL );
 
     virtual SbxDataType  GetType()  const;
     virtual SbxClassType GetClass() const;
@@ -118,24 +118,24 @@ public:
 
     static SbxBase* Load( SvStream& );
     static void Skip( SvStream& );
-    sal_Bool Store( SvStream& );
-    virtual sal_Bool LoadCompleted();
-    virtual sal_Bool StoreCompleted();
+    BOOL Store( SvStream& );
+    virtual BOOL LoadCompleted();
+    virtual BOOL StoreCompleted();
 
     static SbxError GetError();
     static void SetError( SbxError );
-    static sal_Bool IsError();
+    static BOOL IsError();
     static void ResetError();
 
     // Set the factory for Load/Store/Create
     static void AddFactory( SbxFactory* );
     static void RemoveFactory( SbxFactory* );
 
-    static SbxBase* Create( sal_uInt16, sal_uInt32=SBXCR_SBX );
+    static SbxBase* Create( UINT16, UINT32=SBXCR_SBX );
     static SbxObject* CreateObject( const String& );
     // Sbx solution as replacement for SfxBroadcaster::Enable()
-    static void StaticEnableBroadcasting( sal_Bool bEnable );
-    static sal_Bool StaticIsEnabledBroadcasting( void );
+    static void StaticEnableBroadcasting( BOOL bEnable );
+    static BOOL StaticIsEnabledBroadcasting( void );
 };
 
 #ifndef SBX_BASE_DECL_DEFINED
@@ -143,40 +143,40 @@ public:
 SV_DECL_REF(SbxBase)
 #endif
 
-inline void SbxBase::SetFlags( sal_uInt16 n )
+inline void SbxBase::SetFlags( USHORT n )
 { DBG_CHKTHIS( SbxBase, 0 ); nFlags = n; }
 
-inline sal_uInt16 SbxBase::GetFlags() const
+inline USHORT SbxBase::GetFlags() const
 { DBG_CHKTHIS( SbxBase, 0 ); return nFlags; }
 
-inline void SbxBase::SetFlag( sal_uInt16 n )
+inline void SbxBase::SetFlag( USHORT n )
 { DBG_CHKTHIS( SbxBase, 0 ); nFlags |= n; }
 
-inline void SbxBase::ResetFlag( sal_uInt16 n )
+inline void SbxBase::ResetFlag( USHORT n )
 { DBG_CHKTHIS( SbxBase, 0 ); nFlags &= ~n; }
 
-inline sal_Bool SbxBase::IsSet( sal_uInt16 n ) const
-{ DBG_CHKTHIS( SbxBase, 0 ); return sal_Bool( ( nFlags & n ) != 0 ); }
+inline BOOL SbxBase::IsSet( USHORT n ) const
+{ DBG_CHKTHIS( SbxBase, 0 ); return BOOL( ( nFlags & n ) != 0 ); }
 
-inline sal_Bool SbxBase::IsReset( sal_uInt16 n ) const
-{ DBG_CHKTHIS( SbxBase, 0 ); return sal_Bool( ( nFlags & n ) == 0 ); }
+inline BOOL SbxBase::IsReset( USHORT n ) const
+{ DBG_CHKTHIS( SbxBase, 0 ); return BOOL( ( nFlags & n ) == 0 ); }
 
-inline sal_Bool SbxBase::CanRead() const
+inline BOOL SbxBase::CanRead() const
 { DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_READ ); }
 
-inline sal_Bool SbxBase::CanWrite() const
+inline BOOL SbxBase::CanWrite() const
 { DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_WRITE ); }
 
-inline sal_Bool SbxBase::IsModified() const
+inline BOOL SbxBase::IsModified() const
 { DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_MODIFIED ); }
 
-inline sal_Bool SbxBase::IsConst() const
+inline BOOL SbxBase::IsConst() const
 { DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_CONST ); }
 
-inline sal_Bool SbxBase::IsHidden() const
+inline BOOL SbxBase::IsHidden() const
 { DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_HIDDEN ); }
 
-inline sal_Bool SbxBase::IsVisible() const
+inline BOOL SbxBase::IsVisible() const
 { DBG_CHKTHIS( SbxBase, 0 ); return IsReset( SBX_INVISIBLE ); }
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class ScSpellDialogChildWindow : public ::svx::SpellDialogChildWindow
 public:
     SFX_DECL_CHILDWINDOW( ScSpellDialogChildWindow );
 
-    explicit            ScSpellDialogChildWindow( Window* pParent, sal_uInt16 nId,
+    explicit            ScSpellDialogChildWindow( Window* pParent, USHORT nId,
                             SfxBindings* pBindings, SfxChildWinInfo* pInfo );
     virtual             ~ScSpellDialogChildWindow();
 

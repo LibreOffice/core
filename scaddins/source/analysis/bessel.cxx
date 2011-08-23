@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ double BesselJ( double x, sal_Int32 N ) throw (IllegalArgumentException, NoConve
         and an odd function for odd N (means J(-x)=-J(x)).*/
     double fSign = (N % 2 == 1 && x < 0) ? -1.0 : 1.0;
     double fX = fabs(x);
-
+    
     const double fMaxIteration = 9000000.0; //experimental, for to return in < 3 seconds
     double fEstimateIteration = fX * 1.5 + N;
     bool bAsymptoticPossible = pow(fX,0.4) > N;
@@ -262,12 +262,12 @@ double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException, NoConve
 
 double Besselk0( double fNum ) throw( IllegalArgumentException, NoConvergenceException )
 {
-    double  fRet;
+    double	fRet;
 
     if( fNum <= 2.0 )
     {
-        double  fNum2 = fNum * 0.5;
-        double  y = fNum2 * fNum2;
+        double	fNum2 = fNum * 0.5;
+        double	y = fNum2 * fNum2;
 
         fRet = -log( fNum2 ) * BesselI( fNum, 0 ) +
                 ( -0.57721566 + y * ( 0.42278420 + y * ( 0.23069756 + y * ( 0.3488590e-1 +
@@ -275,7 +275,7 @@ double Besselk0( double fNum ) throw( IllegalArgumentException, NoConvergenceExc
     }
     else
     {
-        double  y = 2.0 / fNum;
+        double	y = 2.0 / fNum;
 
         fRet = exp( -fNum ) / sqrt( fNum ) * ( 1.25331414 + y * ( -0.7832358e-1 +
                 y * ( 0.2189568e-1 + y * ( -0.1062446e-1 + y * ( 0.587872e-2 +
@@ -288,12 +288,12 @@ double Besselk0( double fNum ) throw( IllegalArgumentException, NoConvergenceExc
 
 double Besselk1( double fNum ) throw( IllegalArgumentException, NoConvergenceException )
 {
-    double  fRet;
+    double	fRet;
 
     if( fNum <= 2.0 )
     {
-        double  fNum2 = fNum * 0.5;
-        double  y = fNum2 * fNum2;
+        double	fNum2 = fNum * 0.5;
+        double	y = fNum2 * fNum2;
 
         fRet = log( fNum2 ) * BesselI( fNum, 1 ) +
                 ( 1.0 + y * ( 0.15443144 + y * ( -0.67278579 + y * ( -0.18156897 + y * ( -0.1919402e-1 +
@@ -302,7 +302,7 @@ double Besselk1( double fNum ) throw( IllegalArgumentException, NoConvergenceExc
     }
     else
     {
-        double  y = 2.0 / fNum;
+        double	y = 2.0 / fNum;
 
         fRet = exp( -fNum ) / sqrt( fNum ) * ( 1.25331414 + y * ( 0.23498619 +
                 y * ( -0.3655620e-1 + y * ( 0.1504268e-1 + y * ( -0.780353e-2 +
@@ -317,15 +317,15 @@ double BesselK( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException,
 {
     switch( nOrder )
     {
-        case 0:     return Besselk0( fNum );
-        case 1:     return Besselk1( fNum );
+        case 0:		return Besselk0( fNum );
+        case 1:		return Besselk1( fNum );
         default:
         {
-            double      fBkp;
+            double		fBkp;
 
-            double      fTox = 2.0 / fNum;
-            double      fBkm = Besselk0( fNum );
-            double      fBk = Besselk1( fNum );
+            double		fTox = 2.0 / fNum;
+            double		fBkm = Besselk0( fNum );
+            double		fBk = Besselk1( fNum );
 
             for( sal_Int32 n = 1 ; n < nOrder ; n++ )
             {

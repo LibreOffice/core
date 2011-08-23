@@ -57,19 +57,23 @@
  * @file
  * Line break object,<text:line-break/>
  *************************************************************************/
-#ifndef     _XFLINEBREAK_HXX
-#define     _XFLINEBREAK_HXX
+/**************************************************************************
+ * Change History
+ * 2004-01-11 create this file.
+ *************************************************************************/
+#ifndef		_XFLINEBREAK_HXX
+#define		_XFLINEBREAK_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
+#include	"xfglobal.hxx"
+#include	"xfcontent.hxx"
 
 class XFLineBreak : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
-inline void XFLineBreak::ToXml(IXFStream *pStrm)
+inline void	XFLineBreak::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 

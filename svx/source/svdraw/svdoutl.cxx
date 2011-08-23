@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@ DBG_NAME(SdrOutliner)
 |* Ctor
 |*
 \************************************************************************/
-SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode )
-:   Outliner( pItemPool, nMode ),
+SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, USHORT nMode )
+:	Outliner( pItemPool, nMode ),
     //mpPaintInfoRec( NULL )
     mpVisualizedPage(0)
 {
-    DBG_CTOR(SdrOutliner,NULL);
+    DBG_CTOR(SdrOutliner,NULL);    
 }
 
 
@@ -58,7 +58,7 @@ SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode )
 \************************************************************************/
 SdrOutliner::~SdrOutliner()
 {
-    DBG_DTOR(SdrOutliner,NULL);
+    DBG_DTOR(SdrOutliner,NULL);    
 }
 
 
@@ -71,15 +71,15 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
 {
     if( pObj && pObj != mpTextObj.get() )
     {
-        SetUpdateMode(sal_False);
-        sal_uInt16 nOutlinerMode2 = OUTLINERMODE_OUTLINEOBJECT;
+        SetUpdateMode(FALSE);
+        USHORT nOutlinerMode2 = OUTLINERMODE_OUTLINEOBJECT;
         if ( !pObj->IsOutlText() )
             nOutlinerMode2 = OUTLINERMODE_TEXTOBJECT;
         Init( nOutlinerMode2 );
 
         SetGlobalCharStretching(100,100);
 
-        sal_uIntPtr nStat = GetControlWord();
+        ULONG nStat = GetControlWord();
         nStat &= ~( EE_CNTRL_STRETCHING | EE_CNTRL_AUTOPAGESIZE );
         SetControlWord(nStat);
 
@@ -109,14 +109,14 @@ void SdrOutliner::SetTextObjNoInit( const SdrTextObj* pObj )
 |*
 |*
 \************************************************************************/
-XubString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
+XubString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
                                      Color*& rpTxtColor, Color*& rpFldColor)
 {
     bool bOk = false;
     XubString aRet;
 
     if(mpTextObj.is())
-        bOk = static_cast< SdrTextObj* >( mpTextObj.get())->CalcFieldValue(rField, nPara, nPos, sal_False, rpTxtColor, rpFldColor, aRet);
+        bOk = static_cast< SdrTextObj* >( mpTextObj.get())->CalcFieldValue(rField, nPara, nPos, FALSE, rpTxtColor, rpFldColor, aRet);
 
     if (!bOk)
         aRet = Outliner::CalcFieldValue(rField, nPara, nPos, rpTxtColor, rpFldColor);

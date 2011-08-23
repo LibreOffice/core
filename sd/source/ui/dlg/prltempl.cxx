@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,18 +74,18 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                                 SfxStyleSheetBase& rStyleBase,
                                 PresentationObjects _ePO,
                                 SfxStyleSheetBasePool* pSSPool ) :
-        SfxTabDialog        ( pParent, DlgId ),
-        mpDocShell          ( pDocSh ),
-        ePO                 ( _ePO ),
-        aInputSet           ( *rStyleBase.GetItemSet().GetPool(), SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL ),
-        pOutSet             ( NULL ),
-        pOrgSet             ( &rStyleBase.GetItemSet() )
+        SfxTabDialog		( pParent, DlgId ),
+        mpDocShell			( pDocSh ),
+        ePO 				( _ePO ),
+        aInputSet			( *rStyleBase.GetItemSet().GetPool(), SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL ),
+        pOutSet				( NULL ),
+        pOrgSet				( &rStyleBase.GetItemSet() )
 {
     if( IS_OUTLINE(ePO))
     {
         // Leider sind die Itemsets unserer Stylesheets nicht discret..
-        const sal_uInt16* pPtr = pOrgSet->GetRanges();
-        sal_uInt16 p1, p2;
+        const USHORT* pPtr = pOrgSet->GetRanges();
+        USHORT p1, p2;
         while( *pPtr )
         {
             p1 = pPtr[0];
@@ -115,14 +115,14 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 
         // Fals in diesem Stylesheet kein Bullet Item ist, holen wir uns
         // das aus dem 'Outline 1' Stylesheet.
-        if( SFX_ITEM_SET != aInputSet.GetItemState(EE_PARA_NUMBULLET, sal_False, &pItem ))
+        if( SFX_ITEM_SET != aInputSet.GetItemState(EE_PARA_NUMBULLET, FALSE, &pItem ))
         {
             String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
             aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
             SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
 
             if(pFirstStyleSheet)
-                if( SFX_ITEM_SET == pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, sal_False, &pItem) )
+                if( SFX_ITEM_SET == pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, FALSE, &pItem) )
                     aInputSet.Put( *pItem );
         }
 
@@ -171,7 +171,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
             AddTabPage( RID_SVXPAGE_PICK_BULLET );
             AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
             AddTabPage( RID_SVXPAGE_PICK_BMP );
-            AddTabPage( RID_SVXPAGE_NUM_OPTIONS );
+            AddTabPage( RID_SVXPAGE_NUM_OPTIONS );	
             AddTabPage( RID_SVXPAGE_TABULATOR );
         }
         break;
@@ -181,7 +181,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         break;
     }
 
-    // the tabpages Alignment, Tabs and Asian Typography are very
+    // #112490# the tabpages Alignment, Tabs and Asian Typography are very
     // usefull, except for the background style
     if( DlgId.GetId() != TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND )
     {
@@ -255,8 +255,8 @@ SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()
 
 // -----------------------------------------------------------------------
 
-void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
-{   SfxAllItemSet aSet(*(aInputSet.GetPool()));
+void SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+{	SfxAllItemSet aSet(*(aInputSet.GetPool()));
     switch( nId )
     {
         case RID_SVXPAGE_LINE:
@@ -324,7 +324,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
         pOutSet->Put( *SfxTabDialog::GetOutputItemSet() );
 
         const SvxNumBulletItem *pSvxNumBulletItem = NULL;
-        if( SFX_ITEM_SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, sal_False, (const SfxPoolItem**)&pSvxNumBulletItem ))
+        if( SFX_ITEM_SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, FALSE, (const SfxPoolItem**)&pSvxNumBulletItem ))
             SdBulletMapper::MapFontsInNumRule( *pSvxNumBulletItem->GetNumRule(), *pOutSet );
         return pOutSet;
     }
@@ -334,7 +334,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
 
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
-sal_uInt16 SdPresLayoutTemplateDlg::GetOutlineLevel() const
+USHORT SdPresLayoutTemplateDlg::GetOutlineLevel() const
 {
     switch( ePO )
     {
@@ -348,7 +348,7 @@ sal_uInt16 SdPresLayoutTemplateDlg::GetOutlineLevel() const
     case PO_OUTLINE_8: return 7;
     case PO_OUTLINE_9: return 8;
     default:
-        DBG_ASSERT( sal_False, "Falscher Po! [CL]");
+        DBG_ASSERT( FALSE, "Falscher Po! [CL]");
     }
     return 0;
 }

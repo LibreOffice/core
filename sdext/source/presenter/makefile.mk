@@ -42,13 +42,13 @@ MAXLINELENGTH:=100000
 
 PACKAGE=com.sun.PresenterScreen-$(PLATFORMID)
 
+.IF "$(L10N_framework)"==""
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
 .IF "$(ENABLE_PRESENTER_SCREEN)" == "NO"
 @all:
     @echo "Presenter Screen build disabled."
 .ELSE
-
-.IF "$(L10N_framework)"==""
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 DLLPRE=
 common_build_zip=
@@ -108,7 +108,7 @@ SHL1DEPN=
 SHL1IMPLIB=		i$(SHL1TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=$(SOLARENV)/src/reg-component.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1RPATH=      OXT
 DEF1NAME=		$(SHL1TARGET)
 
@@ -137,6 +137,9 @@ COMPONENT_FILES=																			\
     $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu				\
     $(ZIP1DIR)$/registry$/schema/org$/openoffice$/Office$/extension$/PresenterScreen.xcs   	\
     $(ZIP1DIR)$/registry$/data/$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
+
+#COMPONENT_MERGED_XCU= \
+#	$(FIND_XCU)$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
 
 COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/BorderTop.png							\
@@ -236,7 +239,8 @@ COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/LabelMouseOverRight.png
 
 COMPONENT_IMAGES=\
-    $(ZIP1DIR)$/bitmaps$/extension_32.png
+    $(ZIP1DIR)$/bitmaps$/extension_32.png \
+    $(ZIP1DIR)$/bitmaps$/extension_32_h.png
 
 COMPONENT_MANIFEST= 							\
     $(ZIP1DIR)$/META-INF$/manifest.xml
@@ -258,6 +262,9 @@ ZIP1DEPS=					\
     $(COMPONENT_IMAGES)    	\
     $(COMPONENT_LIBRARY)	\
     $(COMPONENT_HELP)
+
+#	$(COMPONENT_MERGED_XCU) \
+
 
 LINKNAME:=help
 XHPLINKSRC:=$(ZIP1DIR)/help
@@ -293,10 +300,7 @@ $(ZIP1DIR)/help/%/com.sun.PresenterScreen-$(PLATFORMID)/presenter.xhp : $(COMMON
     @-$(MKDIRHIER) $(@:d)
     $(TYPE) $< | sed "s/PLATFORMID/$(PLATFORMID)/" | sed 's/@PRESENTEREXTENSIONPRODUCTNAME@/Presenter Console/g' > $@
 
-.IF "$(ZIP1TARGETN)"!=""
 $(ZIP1TARGETN) : $(HELPLINKALLTARGETS)
-
-.ENDIF          # "$(ZIP1TARGETN)"!=""
 
 $(COMPONENT_BITMAPS) : bitmaps$/$$(@:f)
     @-$(MKDIRHIER) $(@:d)
@@ -370,9 +374,10 @@ $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(ZIP1DIR)_lang_track.mk
     $(TYPE) description.xml | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
 
+
+.ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"
 .ELSE
 ivo:
     $(ECHO)
 .ENDIF # L10N_framework
 
-.ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"

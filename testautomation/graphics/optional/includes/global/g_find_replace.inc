@@ -36,21 +36,19 @@
 '*
 '\**********************************************************************************
 testcase tiEditSearchAndReplace
-    printlog "This test tests the 'Search and Replace' -dialogue."
-    qaerrorlog "#i115121# Find and replace: wrong replacement"
-    goto endsub
+   '/// This test tests the 'Search and Replace' -dialogue. ///'
    Dim sFile  'as string
    Dim sExpression(2) as string  ' Expression to look for: ... Replace with
    dim sExt as string
 
-    Select Case Ucase(gApplication)
-        case "DRAW"      : sExt = ".odg"
-        case "IMPRESS"   : sExt = ".odp"
-    end select
+   Select Case Ucase(gApplication)
+       case "DRAW"      : sExt = ".odg"
+       case "IMPRESS"   : sExt = ".odp"
+   end select
 
-    printlog "First we need some errornes words to replace. (sExpression)"
-    printlog "sExpression(1) has to be 3 times in the document"
-    select case iSprache
+  'First we need some errornes words to replace. (sExpression)
+  'sExpression(1) has to be 3 times in the document
+     select case iSprache
          case 01 : sExpression(1) = "Alle" : sExpression(2) = "Allz"
          case 03 : sExpression(1) = "empreza" : sExpression(2) = "Emperor"       ' Portuguese
          case 07 : qaerrorlog "No files for Russian yet, will use english instead."
@@ -93,9 +91,9 @@ testcase tiEditSearchAndReplace
     else
         Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
     endif
-    printlog "check if the document is writable"
+    ' check if the document is writable
     if fIsDocumentWritable = false then
-        printlog "make the document writable and check if it's succesfull"
+        ' make the document writable and check if it's succesfull
         if fMakeDocumentWritable = false then
             warnlog "The document can't be make writeable. Test stopped."
             goto endsub
@@ -110,28 +108,24 @@ testcase tiEditSearchAndReplace
         Messagebox.OK
     end if
     sleep 2
-    printlog "Select the text"
-    hTypeKeys "<MOD1 HOME>"     
+    hTypeKeys "<MOD1 HOME>"     '/// Select the text ///'
 
-    printlog "Edit-Find & Replace"
+ '/// Edit-Find & Replace I///'
     EditSearchAndReplace
     sleep 1
     Kontext "FindAndReplace"
-    printlog "Clap the 'more options'-part open"
+    '/// Clap the 'more options'-part open ///'
     More.Click
-    printlog "verify, that search is done without 'similarity search' !!!"
+    '/// verify, that search is done without 'similarity search' !!! ///'
     if SimilaritySearch.IsChecked = TRUE then
         SimilaritySearch.UnCheck
         warnlog "'Similar search' checkbox was enabled! It shouldn't be the default!"
     end if
-    printlog "set Search text"
-    SearchFor.SetText sExpression(1)
-    printlog "set Replace text"
-    ReplaceWith.SetText sExpression(2)                            
+    SearchFor.SetText sExpression(1)                               '/// set Search text ///'
+    ReplaceWith.SetText sExpression(2)                            '/// set Replace text///'
 
-    printlog "Word has to be there ONLY three times"
-    printlog "1st search for text"
-    SearchNow.Click                                        
+ '/// Word has to be there ONLY three times ///'
+    SearchNow.Click                                        '/// 1st search for text ///'
     Kontext "Messagebox"
         if Messagebox.Exists(2) then
             Printlog Messagebox.GetText
@@ -140,8 +134,7 @@ testcase tiEditSearchAndReplace
     sleep 1
     Kontext "FindAndReplace"
 
-    printlog "2nd search for text"
-    SearchNow.Click                   
+    SearchNow.Click                   '/// 2nd search for text ///'
     Kontext "Messagebox"
         if Messagebox.Exists(2) then
             Printlog Messagebox.GetText
@@ -150,8 +143,7 @@ testcase tiEditSearchAndReplace
     sleep 1
     Kontext "FindAndReplace"
 
-    printlog "3th search for text"
-    SearchNow.Click                   
+    SearchNow.Click                   '/// 3th search for text///'
     Kontext "Messagebox"
         if Messagebox.Exists(2) then
             Printlog Messagebox.GetText
@@ -159,16 +151,15 @@ testcase tiEditSearchAndReplace
         end if
     sleep 1
     Kontext "FindAndReplace"
-    printlog "4th search for text; but it is no more available!"
-    SearchNow.Click                   
+
+    SearchNow.Click                   '/// 4th search for text; but it is no more available!///'
     sleep 2
     kontext "Messagebox"
     if Messagebox.Exists Then
         Printlog "- The word was found 3 times: '" + messagebox.gettext + "'"
         Messagebox.OK
     else
-        printlog "5th search for word 1"
-        SearchNow.Click               
+        SearchNow.Click               '/// 5th search for word 1///'
         kontext
         if Messagebox.Exists (5) Then
             Printlog "?: "+Messagebox.gettext
@@ -178,7 +169,7 @@ testcase tiEditSearchAndReplace
         Warnlog "- No MsgBox appeared: 'changed'"
     end if
 
- printlog "Replace all"
+ '/// Replace all ///'
     Kontext "FindAndReplace"
     sleep 1
     ReplaceAll.Click
@@ -192,8 +183,7 @@ testcase tiEditSearchAndReplace
     end if
     Kontext "FindAndReplace"
     sleep 2
-    printlog "Search for word 1 to check if all words are replaced"
-    SearchNow.Click                                        
+    SearchNow.Click                                        '/// Search for word 1 to check if all words are replaced ///'
     Kontext "Messagebox"
     if Not Messagebox.Exists then
         Warnlog "  Not all words are replaced (Replace All)"
@@ -205,20 +195,17 @@ testcase tiEditSearchAndReplace
     FindAndReplace.Close
     sleep 3
 
- printlog "Edit-Find & Replace II"
+ '/// Edit-Find & Replace II ///'
     gMouseClick 50,50
     sleep 1
     hTypeKeys "<MOD1 HOME>"
     EditSearchAndReplace
     sleep 1
     Kontext "FindAndReplace"
-    printlog "Search for word 2"
-    SearchFor.SetText sExpression(2)
-    printlog "Replace with word 1"
-    ReplaceWith.SetText sExpression(1)       
+    SearchFor.SetText sExpression(2)           '/// Search for word 2 ///'
+    ReplaceWith.SetText sExpression(1)       '/// Replace with word 1 ///'
 
-    printlog "Replace 1"
-    ReplaceBtn.Click                      
+    ReplaceBtn.Click                      '/// Replace 1 ///'
     Kontext "Messagebox"
     if Messagebox.Exists(4) Then
         Kontext "Messagebox"
@@ -230,8 +217,7 @@ testcase tiEditSearchAndReplace
     Kontext "FindAndReplace"
     sleep 1
 
-    printlog "2nd search for word 2"
-    SearchNow.Click                       
+    SearchNow.Click                       '/// 2nd search for word 2 ///'
     Kontext "Messagebox"
     if Messagebox.Exists(2) Then
         Warnlog "  All words got replaced, but only the 1st should have been"
@@ -242,7 +228,7 @@ testcase tiEditSearchAndReplace
         Printlog "  Word replaced"
     end if
 
- printlog "Replace all"
+ '/// Replace all ///'
     Kontext "FindAndReplace"
     ReplaceAll.Click
     kontext "Messagebox"
@@ -252,7 +238,7 @@ testcase tiEditSearchAndReplace
         Printlog "- No messagebox after replace all"
     end if
 
- printlog "Search for word 2 to check if all are replaced"
+ '/// Search for word 2 to check if all are replaced ///'
     Kontext "FindAndReplace"
     SearchNow.Click
     kontext "Messagebox"
@@ -267,23 +253,21 @@ testcase tiEditSearchAndReplace
     More.Click
     FindAndReplace.Close
     sleep 2
-  printlog "Close document"
+  '/// Close document ///'
     Call hCloseDocument
     
 endcase 'tiEditSearchAndReplace
-
 '--------------------------------------------------------
-
 testcase tiEditSearchAndReplaceBUGS
 
-printlog "inspired by bugs: 101974, 101975, 101976"
+'/// inspired by bugs: 101974, 101975, 101976 ///'
    dim i as integer
    dim bTemp as boolean
 
-   printlog "open application"
+   '/// open application ///'
    Call hNewDocument
    sleep 3
-   printlog "Edit->Search and Replace"
+   '/// Edit->Search and Replace ///'
    EditSearchAndReplace
    Kontext "FindAndReplace"
    if FindAndReplace.Exists (5) then
@@ -292,7 +276,7 @@ printlog "inspired by bugs: 101974, 101975, 101976"
       Warnlog "Dialog for Search&Replace could NOT be opened :-("
    endif
 
-   printlog "for al 5 views in 'View->Workspace->...' do: "
+   '/// for al 5 views in 'View->Workspace->...' do:  ///'
    for i = 1 to 6
       Printlog "- " + i + " View->Workspace->... ------------------------------------------------------"
       try
@@ -331,7 +315,7 @@ printlog "inspired by bugs: 101974, 101975, 101976"
       endcatch
       sleep 5
       Kontext "FindAndReplace"
-      printlog "if not already open, open. edit->search and replace"
+      '///+ if not already open, open. edit->search and replace ///'
       if (FindAndReplace.exists <> TRUE) then
          try
             EditSearchAndReplace
@@ -346,13 +330,13 @@ printlog "inspired by bugs: 101974, 101975, 101976"
          endif
       else
          Kontext "FindAndReplace"
-            printlog "set text to look for to a"
+         '///+ set text to look for to "a" ///'
          SearchFor.SetText "a"
-         Printlog " click button 'find'"
+         Printlog "'///+ click button 'find' ///'"
          SearchNow.Click
          sleep 5
          kontext
-         printlog "if active exists 'wrap/not found...' say OK"
+         '///+ if active exists 'wrap/not found...' say OK ///'
          if active.exists(5) then
             Printlog "Active: '" + active.GetText + "'"
             try
@@ -373,7 +357,7 @@ printlog "inspired by bugs: 101974, 101975, 101976"
    next i
    Kontext "FindAndReplace"
    FindAndReplace.cancel
-   printlog "close application"
+   '/// close application ///'
    Call hCloseDocument
    
 endcase 'tiEditSearchAndReplaceBUGS

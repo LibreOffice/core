@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,20 +26,13 @@
  *
  ************************************************************************/
 
-#include <attributesmap.hxx>
-
+#include "attributesmap.hxx"
 #include <string.h>
-
-#include <element.hxx>
-#include <document.hxx>
-
 
 namespace DOM
 {
-    CAttributesMap::CAttributesMap(::rtl::Reference<CElement> const& pElement,
-                ::osl::Mutex & rMutex)
-        : m_pElement(pElement)
-        , m_rMutex(rMutex)
+    CAttributesMap::CAttributesMap(const CElement* aElement)
+        : m_pElement(aElement)
     {
     }
 
@@ -48,10 +41,8 @@ namespace DOM
     */
     sal_Int32 SAL_CALL CAttributesMap::getLength() throw (RuntimeException)
     {
-        ::osl::MutexGuard const g(m_rMutex);
-
         sal_Int32 count = 0;
-        xmlNodePtr pNode = m_pElement->GetNodePtr();
+        xmlNodePtr pNode = m_pElement->m_aNodePtr;
         if (pNode != NULL)
         {
             xmlAttrPtr cur = pNode->properties;
@@ -62,18 +53,16 @@ namespace DOM
             }
         }
         return count;
+
     }
 
     /**
-    Retrieves a node specified by local name
+    Retrieves a node specified by local name     	
     */
-    Reference< XNode > SAL_CALL
-    CAttributesMap::getNamedItem(OUString const& name) throw (RuntimeException)
+    Reference< XNode > SAL_CALL CAttributesMap::getNamedItem(const OUString& name) throw (RuntimeException)
     {
-        ::osl::MutexGuard const g(m_rMutex);
-
         Reference< XNode > aNode;
-        xmlNodePtr pNode = m_pElement->GetNodePtr();
+        xmlNodePtr pNode = m_pElement->m_aNodePtr;
         if (pNode != NULL)
         {
             OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
@@ -83,9 +72,7 @@ namespace DOM
             {
                 if( strcmp((char*)xName, (char*)cur->name) == 0)
                 {
-                    aNode = Reference< XNode >(
-                            m_pElement->GetOwnerDocument().GetCNode(
-                                reinterpret_cast<xmlNodePtr>(cur)).get() );
+                    aNode = Reference< XNode >(static_cast<CNode*>(CNode::get((xmlNodePtr)cur)));                    
                     break;
                 }
                 cur = cur->next;
@@ -97,32 +84,24 @@ namespace DOM
     /**
     Retrieves a node specified by local name and namespace URI.
     */
-    Reference< XNode > SAL_CALL
-    CAttributesMap::getNamedItemNS(
-            OUString const& namespaceURI, OUString const& localName)
-    throw (RuntimeException)
+    Reference< XNode > SAL_CALL CAttributesMap::getNamedItemNS(const OUString& namespaceURI,const OUString& localName) throw (RuntimeException)
     {
-        ::osl::MutexGuard const g(m_rMutex);
-
         Reference< XNode > aNode;
-        xmlNodePtr pNode = m_pElement->GetNodePtr();
+        xmlNodePtr pNode = m_pElement->m_aNodePtr;
         if (pNode != NULL)
         {
             OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
             xmlChar* xName = (xmlChar*)o1.getStr();
             OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
-            xmlChar const*const xNs =
-                reinterpret_cast<xmlChar const*>(o2.getStr());
-            xmlNsPtr const pNs = xmlSearchNsByHref(pNode->doc, pNode, xNs);
+            xmlChar* xNs = (xmlChar*)o1.getStr();
+            xmlNsPtr pNs = xmlSearchNs(pNode->doc, pNode, xNs);
             xmlAttrPtr cur = pNode->properties;
             while (cur != NULL && pNs != NULL)
             {
                 if( strcmp((char*)xName, (char*)cur->name) == 0 &&
                     cur->ns == pNs)
                 {
-                    aNode = Reference< XNode >(
-                            m_pElement->GetOwnerDocument().GetCNode(
-                                reinterpret_cast<xmlNodePtr>(cur)).get() );
+                    aNode = Reference< XNode >(static_cast< CNode* >(CNode::get((xmlNodePtr)cur)));
                     break;
                 }
                 cur = cur->next;
@@ -134,13 +113,10 @@ namespace DOM
     /**
     Returns the indexth item in the map.
     */
-    Reference< XNode > SAL_CALL
-    CAttributesMap::item(sal_Int32 index) throw (RuntimeException)
+    Reference< XNode > SAL_CALL CAttributesMap::item(sal_Int32 index) throw (RuntimeException)
     {
-        ::osl::MutexGuard const g(m_rMutex);
-
         Reference< XNode > aNode;
-        xmlNodePtr pNode = m_pElement->GetNodePtr();
+        xmlNodePtr pNode = m_pElement->m_aNodePtr;
         if (pNode != NULL)
         {
             xmlAttrPtr cur = pNode->properties;
@@ -149,9 +125,7 @@ namespace DOM
             {
                 if (count == index)
                 {
-                    aNode = Reference< XNode >(
-                            m_pElement->GetOwnerDocument().GetCNode(
-                                reinterpret_cast<xmlNodePtr>(cur)).get() );
+                    aNode = Reference< XNode >(static_cast< CNode* >(CNode::get((xmlNodePtr)cur)));
                     break;
                 }
                 count++;
@@ -159,88 +133,81 @@ namespace DOM
             }
         }
         return aNode;
+
     }
 
     /**
     Removes a node specified by name.
     */
-    Reference< XNode > SAL_CALL
-    CAttributesMap::removeNamedItem(OUString const& name)
-    throw (RuntimeException)
+    Reference< XNode > SAL_CALL CAttributesMap::removeNamedItem(const OUString& name) throw (RuntimeException)
     {
-        // no MutexGuard needed: m_pElement is const
-        Reference< XAttr > const xAttr(m_pElement->getAttributeNode(name));
-        if (!xAttr.is()) {
-            throw DOMException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "CAttributesMap::removeNamedItem: no such attribute")),
-                static_cast<OWeakObject*>(this),
-                DOMExceptionType_NOT_FOUND_ERR);
+        Reference< XNode > aNode;
+        xmlNodePtr pNode = m_pElement->m_aNodePtr;
+        if (pNode != NULL)
+        {
+            OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+            xmlChar* xName = (xmlChar*)o1.getStr();
+            xmlAttrPtr cur = pNode->properties;
+            while (cur != NULL)
+            {
+                if( strcmp((char*)xName, (char*)cur->name) == 0)
+                {
+                    aNode = Reference< XNode >(static_cast< CNode* >(CNode::get((xmlNodePtr)cur)));
+                    xmlUnlinkNode((xmlNodePtr)cur);
+                    break;
+                }
+                cur = cur->next;
+            }
         }
-        Reference< XNode > const xRet(
-            m_pElement->removeAttributeNode(xAttr), UNO_QUERY);
-        return xRet;
+        return aNode;
     }
 
     /**
     // Removes a node specified by local name and namespace URI.
     */
-    Reference< XNode > SAL_CALL
-    CAttributesMap::removeNamedItemNS(
-            OUString const& namespaceURI, OUString const& localName)
-    throw (RuntimeException)
+    Reference< XNode > SAL_CALL CAttributesMap::removeNamedItemNS(const OUString& namespaceURI, const OUString& localName) throw (RuntimeException)
     {
-        // no MutexGuard needed: m_pElement is const
-        Reference< XAttr > const xAttr(
-            m_pElement->getAttributeNodeNS(namespaceURI, localName));
-        if (!xAttr.is()) {
-            throw DOMException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "CAttributesMap::removeNamedItemNS: no such attribute")),
-                static_cast<OWeakObject*>(this),
-                DOMExceptionType_NOT_FOUND_ERR);
+        Reference< XNode > aNode;
+        xmlNodePtr pNode = m_pElement->m_aNodePtr;
+        if (pNode != NULL)
+        {
+            OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
+            xmlChar* xName = (xmlChar*)o1.getStr();
+            OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
+            xmlChar* xNs = (xmlChar*)o1.getStr();
+            xmlNsPtr pNs = xmlSearchNs(pNode->doc, pNode, xNs);
+            xmlAttrPtr cur = pNode->properties;
+            while (cur != NULL && pNs != NULL)
+            {
+                if( strcmp((char*)xName, (char*)cur->name) == 0 &&
+                    cur->ns == pNs)
+                {
+                    aNode = Reference< XNode >(static_cast< CNode* >(CNode::get((xmlNodePtr)cur)));
+                    xmlUnlinkNode((xmlNodePtr)cur);
+                    break;
+                }
+                cur = cur->next;
+            }
         }
-        Reference< XNode > const xRet(
-            m_pElement->removeAttributeNode(xAttr), UNO_QUERY);
-        return xRet;
+        return aNode;
     }
 
     /**
     // Adds a node using its nodeName attribute.
     */
-    Reference< XNode > SAL_CALL
-    CAttributesMap::setNamedItem(Reference< XNode > const& xNode)
-    throw (RuntimeException)
+    Reference< XNode > SAL_CALL CAttributesMap::setNamedItem(const Reference< XNode >& arg) throw (RuntimeException)
     {
-        Reference< XAttr > const xAttr(xNode, UNO_QUERY);
-        if (!xNode.is()) {
-            throw DOMException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "CAttributesMap::setNamedItem: XAttr argument expected")),
-                static_cast<OWeakObject*>(this),
-                DOMExceptionType_HIERARCHY_REQUEST_ERR);
-        }
-        // no MutexGuard needed: m_pElement is const
-        Reference< XNode > const xRet(
-            m_pElement->setAttributeNode(xAttr), UNO_QUERY);
-        return xRet;
+      return arg;
+      // return Reference< XNode >();
     }
 
     /**
     Adds a node using its namespaceURI and localName.
     */
-    Reference< XNode > SAL_CALL
-    CAttributesMap::setNamedItemNS(Reference< XNode > const& xNode)
-    throw (RuntimeException)
+    Reference< XNode > SAL_CALL CAttributesMap::setNamedItemNS(const Reference< XNode >& arg) throw (RuntimeException)
     {
-        Reference< XAttr > const xAttr(xNode, UNO_QUERY);
-        if (!xNode.is()) {
-            throw DOMException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "CAttributesMap::setNamedItemNS: XAttr argument expected")),
-                static_cast<OWeakObject*>(this),
-                DOMExceptionType_HIERARCHY_REQUEST_ERR);
-        }
-        // no MutexGuard needed: m_pElement is const
-        Reference< XNode > const xRet(
-            m_pElement->setAttributeNodeNS(xAttr), UNO_QUERY);
-        return xRet;
+        return arg;
+    // return Reference< XNode >();
     }
 }
 

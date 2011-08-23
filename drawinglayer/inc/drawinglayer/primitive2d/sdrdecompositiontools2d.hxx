@@ -3,6 +3,12 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: sdrdecompositiontools3d.hxx,v $
+ *
+ *  $Revision: 1.5 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -36,8 +42,8 @@
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
-namespace basegfx {
-    class B2DPolyPolygon;
+namespace basegfx {	
+    class B2DPolyPolygon; 
     class B2DHomMatrix;
 }
 

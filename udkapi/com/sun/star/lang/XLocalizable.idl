@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,43 +24,47 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_lang_XLocalizable_idl__
-#define __com_sun_star_lang_XLocalizable_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-#include <com/sun/star/lang/Locale.idl>
-
-//=============================================================================
-
-module com {  module sun {  module star {  module lang {
-
-//=============================================================================
-
+#ifndef __com_sun_star_lang_XLocalizable_idl__ 
+#define __com_sun_star_lang_XLocalizable_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_Locale_idl__ 
+#include <com/sun/star/lang/Locale.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module lang {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: interface com::sun::star::lang::XLocalizable
 /** makes it possible to set a <type>Locale</type> to be used by the object.
  */
 published interface XLocalizable: com::sun::star::uno::XInterface
-{
-
+{ 
+     
     // DocMerge from xml: method com::sun::star::lang::XLocalizable::setLocale
     /** sets the locale to be used by this object.
      */
-    void setLocale( [in] Locale eLocale );
-
-
+    void setLocale( [in] Locale eLocale ); 
+ 
+     
     // DocMerge from idl: method com::sun::star::lang::XLocalizable::getLocale
-    /** @returns
+    /** @returns 
                 the locale, which is used by this object.
      */
-    Locale getLocale();
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    Locale getLocale(); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

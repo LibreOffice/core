@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,16 +97,6 @@ interface BaseTextEditView
     [
         ExecMethod = ExecDraw ;
         StateMethod = GetDrawState ;
-    ]
-    SID_BROWSER_MODE
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
-    ]
-    FN_PRINT_LAYOUT
-    [
-        ExecMethod = ExecViewOptions ;
-        StateMethod = StateViewOptions ;
     ]
     FN_REDLINE_PROTECT
     [
@@ -384,9 +374,9 @@ interface BaseTextEditView
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     /****************************************************/
-    /*                                                  */
-    /*       Properties Seitenformat                    */
-    /*                                                  */
+    /*													*/
+    /*		 Properties Seitenformat					*/
+    /*													*/
     /****************************************************/
     SID_ATTR_PAGE // status()
     [
@@ -525,7 +515,7 @@ interface BaseTextEditView
         FastCall , Cachable ;
     ]
 
-    FN_SYNC_LABELS  // status(play)
+    FN_SYNC_LABELS	// status(play)
     [
         ExecMethod = Execute ;
     ]
@@ -633,7 +623,7 @@ interface BaseTextEditView
     ]
 
       //Extra/Optionen/Ansicht
-        //Wird zusammen zum Property ViewSettings
+        //Wird zusammen zum Property ViewSettings  
     FN_VIEW_HIDDEN_PARA
     [
         ExecMethod = ExecViewOptions ;
@@ -656,7 +646,7 @@ interface BaseTextEditView
         Cachable;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
+    
     FN_VIEW_BOUNDS // status()
     [
         ExecMethod = ExecViewOptions ;
@@ -755,27 +745,27 @@ interface BaseTextEditView
 }
 
 interface GlobalContents
-[   uuid = "1FD80520-F517-11d0-AC9B-008029E867C6"; ]
+[	uuid = "1FD80520-F517-11d0-AC9B-008029E867C6"; ]
 {
-    UINT16  Type    FN_COLL_TYPE
+    UINT16 	Type	FN_COLL_TYPE
     (
-        UINT16  Position        FN_COLL_TYPE
+        UINT16	Position		FN_COLL_TYPE
     )
     [
     ]
 
     // Bereichsname, Index-Titel oder Leerstring
-    String  Title FN_COLL_TITLE
+    String 	Title FN_COLL_TITLE
     (
-        UINT16  Position        FN_COLL_TITLE
+        UINT16	Position		FN_COLL_TITLE
     )
     [
     ]
     // ohne FileName wird ein TextBereich an der Position eingefuegt
-    BOOL    InsertDocument  FN_COLL_ADD
+    BOOL	InsertDocument 	FN_COLL_ADD
     (
-        UINT16  Position        FN_COLL_ADD,
-        UINT16  FileName        FN_PARAM_1
+        UINT16	Position		FN_COLL_ADD,
+        UINT16 	FileName    	FN_PARAM_1
     )
     [
     ]

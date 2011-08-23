@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,21 +40,21 @@ class ScRange;
 class ScRangeToSequence
 {
 public:
-    static sal_Bool FillLongArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillLongArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange );
-    static sal_Bool FillLongArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillLongArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
-    static sal_Bool FillDoubleArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillDoubleArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange );
-    static sal_Bool FillDoubleArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillDoubleArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
-    static sal_Bool FillStringArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillStringArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange );
-    static sal_Bool FillStringArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillStringArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix, SvNumberFormatter* pFormatter );
-    static sal_Bool FillMixedArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillMixedArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange,
-                                sal_Bool bAllowNV = false );
+                                BOOL bAllowNV = FALSE );
 
     /** @param bDataTypes
             Additionally to the differentiation between string and double allow
@@ -62,7 +62,7 @@ public:
             implementation of XFormulaParser. If <FALSE/>, boolean values are
             treated as ordinary double values 1 (true) and 0 (false).
      */
-    static sal_Bool FillMixedArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillMixedArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix, bool bDataTypes = false );
 };
 
@@ -105,9 +105,9 @@ public:
 class ScByteSequenceToString
 {
 public:
-    //  rAny must contain Sequence<sal_Int8>,
-    //  may or may not contain 0-bytes at the end
-    static sal_Bool GetString( String& rString, const com::sun::star::uno::Any& rAny,
+    //	rAny must contain Sequence<sal_Int8>,
+    //	may or may not contain 0-bytes at the end
+    static BOOL GetString( String& rString, const com::sun::star::uno::Any& rAny,
                             sal_uInt16 nEncoding );
 };
 

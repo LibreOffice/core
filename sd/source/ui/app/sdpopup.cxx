@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@
 \************************************************************************/
 
 SdFieldPopup::SdFieldPopup( const SvxFieldData* pInField, LanguageType eLanguage ) :
-        PopupMenu   (),
-        pField      ( pInField )
+        PopupMenu	(),
+        pField		( pInField )
 {
     Fill( eLanguage );
 }
@@ -77,8 +77,8 @@ SdFieldPopup::~SdFieldPopup()
 
 void SdFieldPopup::Fill( LanguageType eLanguage )
 {
-    sal_uInt16 nID = 1;
-    sal_uInt16 nStyle = MIB_RADIOCHECK | MIB_AUTOCHECK;
+    USHORT nID = 1;
+    USHORT nStyle = MIB_RADIOCHECK | MIB_AUTOCHECK;
     InsertItem( nID++, String( SdResId( STR_FIX ) ), nStyle );
     InsertItem( nID++, String( SdResId( STR_VAR ) ), nStyle );
     InsertSeparator();
@@ -93,27 +93,27 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         else
             CheckItem( 2 );
 
-        //SVXDATEFORMAT_APPDEFAULT,     // Wird nicht benutzt
-        //SVXDATEFORMAT_SYSTEM,         // Wird nicht benutzt
+        //SVXDATEFORMAT_APPDEFAULT, 	// Wird nicht benutzt
+        //SVXDATEFORMAT_SYSTEM, 		// Wird nicht benutzt
         InsertItem( nID++, String( SdResId( STR_STANDARD_SMALL ) ), nStyle );
         InsertItem( nID++, String( SdResId( STR_STANDARD_BIG ) ), nStyle );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
-        aDateField.SetFormat( SVXDATEFORMAT_A );    // 13.02.96
+        aDateField.SetFormat( SVXDATEFORMAT_A );	// 13.02.96
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aDateField.SetFormat( SVXDATEFORMAT_B );    // 13.02.1996
+        aDateField.SetFormat( SVXDATEFORMAT_B );	// 13.02.1996
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aDateField.SetFormat( SVXDATEFORMAT_C );    // 13.Feb 1996
-        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-
-        aDateField.SetFormat( SVXDATEFORMAT_D );    // 13.Februar 1996
-        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aDateField.SetFormat( SVXDATEFORMAT_E );    // Die, 13.Februar 1996
-        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aDateField.SetFormat( SVXDATEFORMAT_F );    // Dienstag, 13.Februar 1996
+        aDateField.SetFormat( SVXDATEFORMAT_C );	// 13.Feb 1996
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
 
-        CheckItem( (sal_uInt16) ( pDateField->GetFormat() ) + 1 ); // - 2 + 3 !
+        aDateField.SetFormat( SVXDATEFORMAT_D );	// 13.Februar 1996
+        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        aDateField.SetFormat( SVXDATEFORMAT_E );	// Die, 13.Februar 1996
+        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        aDateField.SetFormat( SVXDATEFORMAT_F );	// Dienstag, 13.Februar 1996
+        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+
+        CheckItem( (USHORT) ( pDateField->GetFormat() ) + 1 ); // - 2 + 3 !
     }
     else if( pField->ISA( SvxExtTimeField ) )
     {
@@ -125,29 +125,29 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         else
             CheckItem( 2 );
 
-        //SVXTIMEFORMAT_APPDEFAULT,     // Wird nicht benutzt
-        //SVXTIMEFORMAT_SYSTEM,         // Wird nicht benutzt
+        //SVXTIMEFORMAT_APPDEFAULT, 	// Wird nicht benutzt
+        //SVXTIMEFORMAT_SYSTEM, 		// Wird nicht benutzt
         InsertItem( nID++, String( SdResId( STR_STANDARD_NORMAL ) ), nStyle );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    // 13:49
+        aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );	// 13:49
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMS );   // 13:49:38
+        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMS );	// 13:49:38
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMSH );  // 13:49:38.78
+        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMSH );	// 13:49:38.78
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
 
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HM );    // 01:49
+        aTimeField.SetFormat( SVXTIMEFORMAT_12_HM );	// 01:49
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMS );   // 01:49:38
+        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMS );	// 01:49:38
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMSH );  // 01:49:38.78
+        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMSH );	// 01:49:38.78
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        //SVXTIMEFORMAT_AM_HM,  // 01:49 PM
-        //SVXTIMEFORMAT_AM_HMS, // 01:49:38 PM
-        //SVXTIMEFORMAT_AM_HMSH // 01:49:38.78 PM
+        //SVXTIMEFORMAT_AM_HM,	// 01:49 PM
+        //SVXTIMEFORMAT_AM_HMS,	// 01:49:38 PM
+        //SVXTIMEFORMAT_AM_HMSH	// 01:49:38.78 PM
 
-        CheckItem( (sal_uInt16) ( pTimeField->GetFormat() ) + 1 ); // - 2 + 3 !
+        CheckItem( (USHORT) ( pTimeField->GetFormat() ) + 1 ); // - 2 + 3 !
     }
     else if( pField->ISA( SvxExtFileField ) )
     {
@@ -164,7 +164,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         InsertItem( nID++, String( SdResId( STR_FILEFORMAT_PATH ) ), nStyle );
         InsertItem( nID++, String( SdResId( STR_FILEFORMAT_NAME ) ), nStyle );
 
-        CheckItem( (sal_uInt16) ( pFileField->GetFormat() ) + 3 );
+        CheckItem( (USHORT) ( pFileField->GetFormat() ) + 3 );
     }
     else if( pField->ISA( SvxAuthorField ) )
     {
@@ -176,12 +176,12 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         else
             CheckItem( 2 );
 
-        for( sal_uInt16 i = 0; i < 4; i++ )
+        for( USHORT i = 0; i < 4; i++ )
         {
             aAuthorField.SetFormat( (SvxAuthorFormat) i );
             InsertItem( nID++, aAuthorField.GetFormatted(), nStyle );
         }
-        CheckItem( (sal_uInt16) ( pAuthorField->GetFormat() ) + 3 );
+        CheckItem( (USHORT) ( pAuthorField->GetFormat() ) + 3 );
     }
 }
 
@@ -195,14 +195,14 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
 SvxFieldData* SdFieldPopup::GetField()
 {
     SvxFieldData* pNewField = NULL;
-    sal_uInt16 nCount = GetItemCount();
+    USHORT nCount = GetItemCount();
 
     if( pField->ISA( SvxDateField ) )
     {
         const SvxDateField* pDateField = (const SvxDateField*) pField;
-        SvxDateType   eType;
+        SvxDateType	  eType;
         SvxDateFormat eFormat;
-        sal_uInt16 i;
+        USHORT i;
 
         if( IsItemChecked( 1 ) )
             eType = SVXDATETYPE_FIX;
@@ -233,9 +233,9 @@ SvxFieldData* SdFieldPopup::GetField()
     else if( pField->ISA( SvxExtTimeField ) )
     {
         const SvxExtTimeField* pTimeField = (const SvxExtTimeField*) pField;
-        SvxTimeType   eType;
+        SvxTimeType	  eType;
         SvxTimeFormat eFormat;
-        sal_uInt16 i;
+        USHORT i;
 
         if( IsItemChecked( 1 ) )
             eType = SVXTIMETYPE_FIX;
@@ -267,9 +267,9 @@ SvxFieldData* SdFieldPopup::GetField()
     else if( pField->ISA( SvxExtFileField ) )
     {
         const SvxExtFileField* pFileField = (const SvxExtFileField*) pField;
-        SvxFileType   eType;
+        SvxFileType	  eType;
         SvxFileFormat eFormat;
-        sal_uInt16 i;
+        USHORT i;
 
         if( IsItemChecked( 1 ) )
             eType = SVXFILETYPE_FIX;
@@ -297,7 +297,7 @@ SvxFieldData* SdFieldPopup::GetField()
                 if( pDocSh->HasName() )
                     aName = pDocSh->GetMedium()->GetName();
 
-                // Get current filename, not the one stored in the old field
+                // #91225# Get current filename, not the one stored in the old field
                 pNewField = new SvxExtFileField( aName );
                 ( (SvxExtFileField*) pNewField )->SetType( eType );
                 ( (SvxExtFileField*) pNewField )->SetFormat( eFormat );
@@ -307,9 +307,9 @@ SvxFieldData* SdFieldPopup::GetField()
     else if( pField->ISA( SvxAuthorField ) )
     {
         const SvxAuthorField* pAuthorField = (const SvxAuthorField*) pField;
-        SvxAuthorType   eType;
+        SvxAuthorType	eType;
         SvxAuthorFormat eFormat;
-        sal_uInt16 i;
+        USHORT i;
 
         if( IsItemChecked( 1 ) )
             eType = SVXAUTHORTYPE_FIX;
@@ -326,7 +326,7 @@ SvxFieldData* SdFieldPopup::GetField()
         if( pAuthorField->GetFormat() != eFormat ||
             pAuthorField->GetType() != eType )
         {
-            // Get current state of address, not the old one
+            // #91225# Get current state of address, not the old one
             SvtUserOptions aUserOptions;
             pNewField = new SvxAuthorField( aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() );
             ( (SvxAuthorField*) pNewField )->SetType( eType );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,14 +31,9 @@
 
 #include "sal/config.h"
 
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/extensions/HelperMacros.h>
-
 #include "Interface1.hpp"
 
+#include "testshl/simpleheader.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
@@ -155,10 +150,10 @@ void Test::testUnoSetThrow()
     CPPUNIT_ASSERT_EQUAL( false, bCaughtException );
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
 
 }   // namespace
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

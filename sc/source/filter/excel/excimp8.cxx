@@ -31,9 +31,10 @@
 
 #include "excimp8.hxx"
 
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <unotools/fltrcfg.hxx>
 
 #include <svtools/wmf.hxx>
@@ -42,11 +43,6 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/docinf.hxx>
-#include <sfx2/frame.hxx>
-
 #include <editeng/brshitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
@@ -59,16 +55,19 @@
 #include <editeng/crsditem.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/xflclit.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
+#include <basic/basmgr.hxx>
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
 #include <sot/exchange.hxx>
 
-#include <svl/stritem.hxx>
+#include <sfx2/docinf.hxx>
 
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <drwlayer.hxx>
@@ -106,98 +105,12 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
-#include <comphelper/mediadescriptor.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <sfx2/app.hxx>
 #include "xltoolbar.hxx"
 
-
 using namespace com::sun::star;
-using namespace ::comphelper;
 using ::rtl::OUString;
-
-//OleNameOverrideContainer
-
-typedef ::cppu::WeakImplHelper1< container::XNameContainer > OleNameOverrideContainer_BASE;
-
-class OleNameOverrideContainer : public OleNameOverrideContainer_BASE
-{
-private:
-    typedef boost::unordered_map< rtl::OUString, uno::Reference< container::XIndexContainer >, ::rtl::OUStringHash,
-       ::std::equal_to< ::rtl::OUString > > NamedIndexToOleName;
-    NamedIndexToOleName  IdToOleNameHash;
-    ::osl::Mutex m_aMutex;
-public:
-    // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  container::XIndexContainer::static_type(0); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        return ( IdToOleNameHash.size() > 0 );
-    }
-    // XNameAcess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if ( !hasByName(aName) )
-            throw container::NoSuchElementException();
-        return uno::makeAny( IdToOleNameHash[ aName ] );
-    }
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        uno::Sequence< ::rtl::OUString > aResult( IdToOleNameHash.size() );
-        NamedIndexToOleName::iterator it = IdToOleNameHash.begin();
-        NamedIndexToOleName::iterator it_end = IdToOleNameHash.end();
-        rtl::OUString* pName = aResult.getArray();
-        for (; it != it_end; ++it, ++pName )
-            *pName = it->first;
-        return aResult;
-    }
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        return ( IdToOleNameHash.find( aName ) != IdToOleNameHash.end() );
-    }
-
-    // XElementAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        return IdToOleNameHash.size();
-    }
-    // XNameContainer
-    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if ( hasByName( aName ) )
-            throw container::ElementExistException();
-        uno::Reference< container::XIndexContainer > xElement;
-        if ( ! ( aElement >>= xElement ) )
-            throw lang::IllegalArgumentException();
-       IdToOleNameHash[ aName ] = xElement;
-    }
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if ( !hasByName( aName ) )
-            throw container::NoSuchElementException();
-        IdToOleNameHash.erase( IdToOleNameHash.find( aName ) );
-    }
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if ( !hasByName( aName ) )
-            throw container::NoSuchElementException();
-        uno::Reference< container::XIndexContainer > xElement;
-        if ( ! ( aElement >>= xElement ) )
-            throw lang::IllegalArgumentException();
-        IdToOleNameHash[ aName ] = xElement;
-    }
-};
 
 // defined in docfunc.cxx ( really this needs a new name )
 script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule );
@@ -218,7 +131,7 @@ ImportExcel8::~ImportExcel8()
 
 void ImportExcel8::Calccount( void )
 {
-    ScDocOptions    aOpt = pD->GetDocOptions();
+    ScDocOptions	aOpt = pD->GetDocOptions();
     aOpt.SetIterCount( aIn.ReaduInt16() );
     pD->SetDocOptions( aOpt );
 }
@@ -234,7 +147,7 @@ void ImportExcel8::Precision( void )
 
 void ImportExcel8::Delta( void )
 {
-    ScDocOptions    aOpt = pD->GetDocOptions();
+    ScDocOptions	aOpt = pD->GetDocOptions();
     aOpt.SetIterEps( aIn.ReadDouble() );
     pD->SetDocOptions( aOpt );
 }
@@ -242,7 +155,7 @@ void ImportExcel8::Delta( void )
 
 void ImportExcel8::Iteration( void )
 {
-    ScDocOptions    aOpt = pD->GetDocOptions();
+    ScDocOptions	aOpt = pD->GetDocOptions();
     aOpt.SetIter( aIn.ReaduInt16() == 1 );
     pD->SetDocOptions( aOpt );
 }
@@ -250,8 +163,8 @@ void ImportExcel8::Iteration( void )
 
 void ImportExcel8::Boundsheet( void )
 {
-    sal_uInt8           nLen;
-    sal_uInt16          nGrbit;
+    UINT8			nLen;
+    UINT16			nGrbit;
 
     aIn.DisableDecryption();
     maSheetOffsets.push_back( aIn.ReaduInt32() );
@@ -269,7 +182,7 @@ void ImportExcel8::Boundsheet( void )
     }
 
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
-        pD->SetVisible( nScTab, false );
+        pD->SetVisible( nScTab, FALSE );
 
     if( !pD->RenameTab( nScTab, aName ) )
     {
@@ -283,26 +196,26 @@ void ImportExcel8::Boundsheet( void )
 
 void ImportExcel8::Scenman( void )
 {
-    sal_uInt16              nLastDispl;
+    UINT16				nLastDispl;
 
     aIn.Ignore( 4 );
     aIn >> nLastDispl;
 
-    aScenList.nLastScenario = nLastDispl;
+    aScenList.SetLast( nLastDispl );
 }
 
 
 void ImportExcel8::Scenario( void )
 {
-    aScenList.aEntries.push_back( new ExcScenario( aIn, *pExcRoot ) );
+    aScenList.Append( new ExcScenario( aIn, *pExcRoot ) );
 }
 
 
 void ImportExcel8::Labelsst( void )
 {
     XclAddress aXclPos;
-    sal_uInt16 nXF;
-    sal_uInt32  nSst;
+    UINT16 nXF;
+    UINT32  nSst;
 
     aIn >> aXclPos >> nXF >> nSst;
 
@@ -326,19 +239,19 @@ void ImportExcel8::ReadBasic( void )
     SfxObjectShell* pShell = GetDocShell();
     SotStorageRef xRootStrg = GetRootStorage();
     SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get();
-    if( pShell && xRootStrg.Is() ) try
+    if( pShell && xRootStrg.Is() && pFilterOpt )
     {
         bool bLoadCode = pFilterOpt->IsLoadExcelBasicCode();
         bool bLoadExecutable = pFilterOpt->IsLoadExcelBasicExecutable();
         bool bLoadStrg = pFilterOpt->IsLoadExcelBasicStorage();
-        // #FIXME need to get rid of this, we can also do this from within oox
-        // via the "ooo.vba.VBAGlobals" service
         if( bLoadCode || bLoadStrg )
         {
+            SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
             bool bAsComment = !bLoadExecutable;
 
             if ( !bAsComment )
             {
+#if 1
                 // see if we have the XCB stream
                 SvStorageStreamRef xXCB = xRootStrg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "XCB" ) ), STREAM_STD_READ | STREAM_NOCREATE  );
                 if ( xXCB.Is()|| SVSTREAM_OK == xXCB->GetError() )
@@ -346,56 +259,19 @@ void ImportExcel8::ReadBasic( void )
                     CTBWrapper wrapper;
                     if ( wrapper.Read( xXCB ) )
                     {
-#if OSL_DEBUG_LEVEL > 1
+#if DEBUG
                         wrapper.Print( stderr );
 #endif
                         wrapper.ImportCustomToolBar( *pShell );
                     }
                 }
+#endif
+
             }
+            aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
+            if ( !bAsComment )
+                GetObjectManager().SetOleNameOverrideInfo( aBasicImport.ControlNameForObjectId() );
         }
-        try
-        {
-            uno::Reference< lang::XComponent > xComponent( pShell->GetModel(), uno::UNO_QUERY_THROW );
-            uno::Sequence< beans::NamedValue > aArgSeq( 1 );
-
-            // collect names of embedded form controls, as specified in the VBA project
-            aArgSeq[ 0 ].Name = CREATE_OUSTRING( "OleNameOverrideInfo" );
-            uno::Reference< container::XNameContainer > xOleNameOverrideSink( new OleNameOverrideContainer );
-            aArgSeq[ 0 ].Value <<= xOleNameOverrideSink;
-
-            uno::Sequence< uno::Any > aArgs( 2 );
-            // framework calls filter objects with factory as first argument
-            aArgs[ 0 ] <<= getProcessServiceFactory();
-            aArgs[ 1 ] <<= aArgSeq;
-
-            uno::Reference< document::XImporter > xImporter( ScfApiHelper::CreateInstanceWithArgs( CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelVbaProjectFilter" ), aArgs ), uno::UNO_QUERY_THROW );
-            xImporter->setTargetDocument( xComponent );
-
-            MediaDescriptor aMediaDesc;
-            SfxMedium& rMedium = GetMedium();
-            SfxItemSet* pItemSet = rMedium.GetItemSet();
-            if( pItemSet )
-            {
-                if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
-                    aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pItem->GetValue() );
-                if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_PASSWORD ) ) )
-                    aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pItem->GetValue() );
-            }
-            aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
-            aMediaDesc[ MediaDescriptor::PROP_INTERACTIONHANDLER() ] <<= rMedium.GetInteractionHandler();
-
-            // call the filter
-            uno::Reference< document::XFilter > xFilter( xImporter, uno::UNO_QUERY_THROW );
-            xFilter->filter( aMediaDesc.getAsConstPropertyValueList() );
-            GetObjectManager().SetOleNameOverrideInfo( xOleNameOverrideSink );
-        }
-        catch( uno::Exception& )
-        {
-        }
-    }
-    catch( uno::Exception& )
-    {
     }
 }
 
@@ -424,9 +300,9 @@ void ImportExcel8::PostDocLoad( void )
     ImportExcel::PostDocLoad();
 
     // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!
-    if( !pD->IsClipboard() && aScenList.aEntries.size() )
+    if( !pD->IsClipboard() && aScenList.Count() )
     {
-        pD->UpdateChartListenerCollection();    // references in charts must be updated
+        pD->UpdateChartListenerCollection();	// references in charts must be updated
 
         aScenList.Apply( GetRoot() );
     }
@@ -502,10 +378,10 @@ XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRan
         ExcRoot( pRoot ),
         pCurrDBData(NULL),
         nFirstEmpty( 0 ),
-        bActive( false ),
-        bHasConflict( false ),
-        bCriteria( false ),
-        bAutoOrAdvanced(false),
+        bActive( FALSE ),
+        bHasConflict( FALSE ),
+        bCriteria( FALSE ),
+        bAutoOrAdvanced(FALSE),
         aFilterName(rName)
 {
     aParam.nCol1 = rRange.aStart.Col();
@@ -514,7 +390,7 @@ XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRan
     aParam.nCol2 = rRange.aEnd.Col();
     aParam.nRow2 = rRange.aEnd.Row();
 
-    aParam.bInplace = sal_True;
+    aParam.bInplace = TRUE;
 
 }
 
@@ -522,7 +398,7 @@ void XclImpAutoFilterData::CreateFromDouble( String& rStr, double fVal )
 {
     rStr += String( ::rtl::math::doubleToUString( fVal,
                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), sal_True));
+                ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE));
 }
 
 void XclImpAutoFilterData::SetCellAttribs()
@@ -530,7 +406,7 @@ void XclImpAutoFilterData::SetCellAttribs()
     ScDocument& rDoc = pExcRoot->pIR->GetDoc();
     for ( SCCOL nCol = StartCol(); nCol <= EndCol(); nCol++ )
     {
-        sal_Int16 nFlag = ((ScMergeFlagAttr*) rDoc.GetAttr( nCol, StartRow(), Tab(), ATTR_MERGE_FLAG ))->GetValue();
+        INT16 nFlag = ((ScMergeFlagAttr*) rDoc.GetAttr( nCol, StartRow(), Tab(), ATTR_MERGE_FLAG ))->GetValue();
         rDoc.ApplyAttr( nCol, StartRow(), Tab(), ScMergeFlagAttr( nFlag | SC_MF_AUTO) );
     }
 }
@@ -539,8 +415,8 @@ void XclImpAutoFilterData::InsertQueryParam()
 {
     if( pCurrDBData && !bHasConflict )
     {
-        ScRange aAdvRange;
-        sal_Bool    bHasAdv = pCurrDBData->GetAdvancedQuerySource( aAdvRange );
+        ScRange	aAdvRange;
+        BOOL	bHasAdv = pCurrDBData->GetAdvancedQuerySource( aAdvRange );
         if( bHasAdv )
             pExcRoot->pIR->GetDoc().CreateQueryParam( aAdvRange.aStart.Col(),
                 aAdvRange.aStart.Row(), aAdvRange.aEnd.Col(), aAdvRange.aEnd.Row(),
@@ -551,7 +427,7 @@ void XclImpAutoFilterData::InsertQueryParam()
             pCurrDBData->SetAdvancedQuerySource( &aAdvRange );
         else
         {
-            pCurrDBData->SetAutoFilter( sal_True );
+            pCurrDBData->SetAutoFilter( TRUE );
             SetCellAttribs();
         }
     }
@@ -591,23 +467,23 @@ static void ExcelQueryToOooQuery( ScQueryEntry& rEntry )
 
 void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
 {
-    sal_uInt16 nCol, nFlags;
+    UINT16 nCol, nFlags;
     rStrm >> nCol >> nFlags;
 
     ScQueryConnect  eConn       = ::get_flagvalue( nFlags, EXC_AFFLAG_ANDORMASK, SC_OR, SC_AND );
-    sal_Bool            bTop10      = ::get_flag( nFlags, EXC_AFFLAG_TOP10 );
-    sal_Bool            bTopOfTop10 = ::get_flag( nFlags, EXC_AFFLAG_TOP10TOP );
-    sal_Bool            bPercent    = ::get_flag( nFlags, EXC_AFFLAG_TOP10PERC );
-    sal_uInt16          nCntOfTop10 = nFlags >> 7;
-    SCSIZE          nCount      = aParam.GetEntryCount();
+    BOOL            bTop10      = ::get_flag( nFlags, EXC_AFFLAG_TOP10 );
+    BOOL            bTopOfTop10 = ::get_flag( nFlags, EXC_AFFLAG_TOP10TOP );
+    BOOL            bPercent    = ::get_flag( nFlags, EXC_AFFLAG_TOP10PERC );
+    UINT16			nCntOfTop10	= nFlags >> 7;
+    SCSIZE			nCount		= aParam.GetEntryCount();
 
     if( bTop10 )
     {
         if( nFirstEmpty < nCount )
         {
             ScQueryEntry& aEntry = aParam.GetEntry( nFirstEmpty );
-            aEntry.bDoQuery = sal_True;
-            aEntry.bQueryByString = sal_True;
+            aEntry.bDoQuery = TRUE;
+            aEntry.bQueryByString = TRUE;
             aEntry.nField = static_cast<SCCOLROW>(StartCol() + static_cast<SCCOL>(nCol));
             aEntry.eOp = bTopOfTop10 ?
                 (bPercent ? SC_TOPPERC : SC_TOPVAL) : (bPercent ? SC_BOTPERC : SC_BOTVAL);
@@ -620,12 +496,12 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
     }
     else
     {
-        sal_uInt8   nE, nType, nOper, nBoolErr, nVal;
-        sal_Int32   nRK;
-        double  fVal;
-        sal_Bool    bIgnore;
+        UINT8	nE, nType, nOper, nBoolErr, nVal;
+        INT32   nRK;
+        double	fVal;
+        BOOL	bIgnore;
 
-        sal_uInt8   nStrLen[ 2 ]    = { 0, 0 };
+        UINT8	nStrLen[ 2 ]	= { 0, 0 };
         ScQueryEntry *pQueryEntries[ 2 ] = { NULL, NULL };
 
         for( nE = 0; nE < 2; nE++ )
@@ -634,7 +510,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
             {
                 ScQueryEntry& aEntry = aParam.GetEntry( nFirstEmpty );
                 pQueryEntries[ nE ] = &aEntry;
-                bIgnore = false;
+                bIgnore = FALSE;
 
                 rStrm >> nType >> nOper;
                 switch( nOper )
@@ -682,21 +558,21 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                         rStrm >> nBoolErr >> nVal;
                         rStrm.Ignore( 6 );
                         aEntry.pStr->Assign( String::CreateFromInt32( (sal_Int32) nVal ) );
-                        bIgnore = (sal_Bool) nBoolErr;
+                        bIgnore = (BOOL) nBoolErr;
                     break;
                     case EXC_AFTYPE_EMPTY:
-                        aEntry.bQueryByString = false;
+                        aEntry.bQueryByString = FALSE;
                         aEntry.nVal = SC_EMPTYFIELDS;
                         aEntry.eOp = SC_EQUAL;
                     break;
                     case EXC_AFTYPE_NOTEMPTY:
-                        aEntry.bQueryByString = false;
+                        aEntry.bQueryByString = FALSE;
                         aEntry.nVal = SC_NONEMPTYFIELDS;
                         aEntry.eOp = SC_EQUAL;
                     break;
                     default:
                         rStrm.Ignore( 8 );
-                        bIgnore = sal_True;
+                        bIgnore = TRUE;
                 }
 
                 /*  #i39464# conflict, if two conditions of one column are 'OR'ed,
@@ -706,11 +582,11 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                     'A1 AND (B1 OR B2)' in this case, but Calc would do
                     '(A1 AND B1) OR B2' instead. */
                 if( (nFirstEmpty > 1) && nE && (eConn == SC_OR) && !bIgnore )
-                    bHasConflict = sal_True;
+                    bHasConflict = TRUE;
                 if( !bHasConflict && !bIgnore )
                 {
-                    aEntry.bDoQuery = sal_True;
-                    aEntry.bQueryByString = sal_True;
+                    aEntry.bDoQuery = TRUE;
+                    aEntry.bQueryByString = TRUE;
                     aEntry.nField = static_cast<SCCOLROW>(StartCol() + static_cast<SCCOL>(nCol));
                     aEntry.eConnect = nE ? eConn : SC_AND;
                     nFirstEmpty++;
@@ -735,10 +611,10 @@ void XclImpAutoFilterData::SetAdvancedRange( const ScRange* pRange )
     if (pRange)
     {
         aCriteriaRange = *pRange;
-        bCriteria = sal_True;
+        bCriteria = TRUE;
     }
     else
-        bCriteria = false;
+        bCriteria = FALSE;
 }
 
 void XclImpAutoFilterData::SetExtractPos( const ScAddress& rAddr )
@@ -746,11 +622,11 @@ void XclImpAutoFilterData::SetExtractPos( const ScAddress& rAddr )
     aParam.nDestCol = rAddr.Col();
     aParam.nDestRow = rAddr.Row();
     aParam.nDestTab = rAddr.Tab();
-    aParam.bInplace = false;
-    aParam.bDestPers = sal_True;
+    aParam.bInplace = FALSE;
+    aParam.bDestPers = TRUE;
 }
 
-void XclImpAutoFilterData::Apply( const sal_Bool bUseUnNamed )
+void XclImpAutoFilterData::Apply( const BOOL bUseUnNamed )
 {
     CreateScDBData(bUseUnNamed);
 
@@ -762,7 +638,7 @@ void XclImpAutoFilterData::Apply( const sal_Bool bUseUnNamed )
 //        SCROW nRow1 = StartRow();
 //        SCROW nRow2 = EndRow();
 //        size_t nRows = nRow2 - nRow1 + 1;
-//        boost::scoped_array<sal_uInt8> pFlags( new sal_uInt8[nRows]);
+//        boost::scoped_array<BYTE> pFlags( new BYTE[nRows]);
 //        pExcRoot->pDoc->GetRowFlagsArray( Tab()).FillDataArray( nRow1, nRow2,
 //                pFlags.get());
 //        for (size_t j=0; j<nRows; ++j)
@@ -774,7 +650,7 @@ void XclImpAutoFilterData::Apply( const sal_Bool bUseUnNamed )
     }
 }
 
-void XclImpAutoFilterData::CreateScDBData( const sal_Bool bUseUnNamed )
+void XclImpAutoFilterData::CreateScDBData( const BOOL bUseUnNamed )
 {
 
     // Create the ScDBData() object if the AutoFilter is activated
@@ -782,7 +658,7 @@ void XclImpAutoFilterData::CreateScDBData( const sal_Bool bUseUnNamed )
     if( bActive || bCriteria)
     {
         ScDBCollection& rColl = pExcRoot->pIR->GetDatabaseRanges();
-        pCurrDBData = rColl.GetDBAtArea( Tab(), StartCol(), StartRow(), EndCol(), EndRow() );
+        pCurrDBData	= rColl.GetDBAtArea( Tab(), StartCol(), StartRow(), EndCol(), EndRow() );
         if( !pCurrDBData )
         {
             AmendAFName(bUseUnNamed);
@@ -813,7 +689,7 @@ void XclImpAutoFilterData::EnableRemoveFilter()
     if( !bActive && bAutoOrAdvanced )
     {
         ScQueryEntry& aEntry = aParam.GetEntry( nFirstEmpty );
-        aEntry.bDoQuery = sal_True;
+        aEntry.bDoQuery = TRUE;
         ++nFirstEmpty;
     }
 
@@ -822,7 +698,7 @@ void XclImpAutoFilterData::EnableRemoveFilter()
     // inside the advanced range
 }
 
-void XclImpAutoFilterData::AmendAFName(const sal_Bool bUseUnNamed)
+void XclImpAutoFilterData::AmendAFName(const BOOL bUseUnNamed)
 {
     // If-and-only-if we have one AF filter then
     // use the Calc "unnamed" range name. Calc

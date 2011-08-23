@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace objectpositioning
             // calculated data for object position type TO_LAYOUT
             Point       maRelPos;
 
-            // #i26791#
+            // --> OD 2004-06-17 #i26791#
             // determine offset to frame anchor position according to the
             // positioning alignments
             Point maOffsetToFrmAnchorPos;
@@ -49,10 +49,16 @@ namespace objectpositioning
             virtual ~SwToLayoutAnchoredObjectPosition();
 
             /** calculate position for object
+
+                OD 30.07.2003 #110978#
+
+                @author OD
             */
             virtual void CalcPosition();
 
             /** calculated relative position for object
+
+                @author OD
             */
             Point GetRelPos() const;
     };

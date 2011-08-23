@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,25 +39,25 @@ typedef void* (*TypeId)();
 #define TYPEINFO() \
         static  void*  CreateType(); \
         static  TypeId StaticType(); \
-        static  sal_Bool   IsOf( TypeId aSameOrSuperType ); \
+        static  BOOL   IsOf( TypeId aSameOrSuperType ); \
         virtual TypeId Type() const; \
-        virtual sal_Bool   IsA( TypeId aSameOrSuperType ) const
+        virtual BOOL   IsA( TypeId aSameOrSuperType ) const
 
 #define TYPEINFO_VISIBILITY(visibility) \
         visibility static  void*  CreateType(); \
         visibility static  TypeId StaticType(); \
-        visibility static  sal_Bool   IsOf( TypeId aSameOrSuperType ); \
+        visibility static  BOOL   IsOf( TypeId aSameOrSuperType ); \
         visibility virtual TypeId Type() const; \
-        visibility virtual sal_Bool   IsA( TypeId aSameOrSuperType ) const
+        visibility virtual BOOL   IsA( TypeId aSameOrSuperType ) const
 
 #define TYPEINIT_FACTORY(sType, Factory ) \
         void*  sType::CreateType() { return Factory; } \
         TypeId sType::StaticType() { return &CreateType; } \
         TypeId sType::Type() const { return &CreateType; } \
-        sal_Bool sType::IsOf( TypeId aSameOrSuperType ) \
+        BOOL sType::IsOf( TypeId aSameOrSuperType ) \
         { \
             if ( aSameOrSuperType == StaticType() ) \
-                return sal_True
+                return TRUE
 
 #define STATICTYPE(sType) (sType::StaticType())
 
@@ -68,12 +68,12 @@ typedef void* (*TypeId)();
 
 #define SUPERTYPE(sSuper) \
             if ( sSuper::IsOf(aSameOrSuperType ) ) \
-                return sal_True
+                return TRUE
 
 #define TYPEINIT_END(sType) \
-            return sal_False; \
+            return FALSE; \
         } \
-        sal_Bool sType::IsA( TypeId aSameOrSuperType ) const \
+        BOOL sType::IsA( TypeId aSameOrSuperType ) const \
         { return IsOf( aSameOrSuperType ); }
 
 #define TYPEINIT0_FACTORY(sType, Factory) \
@@ -121,17 +121,17 @@ typedef void* (*TypeId)();
 // On-Demand-faehige persistent-TypeId Version
 
 #define TYPEINFO_ID(id) \
-        static  TypeId StaticType() { return (TypeId) ( id | 0xF000000L ); } \
-        static  sal_Bool   IsOf( TypeId aSameOrSuperType ); \
+        static	TypeId StaticType() { return (TypeId) ( id | 0xF000000L ); } \
+        static  BOOL   IsOf( TypeId aSameOrSuperType ); \
         virtual TypeId Type() const; \
-        virtual sal_Bool   IsA( TypeId aSameOrSuperType ) const
+        virtual BOOL   IsA( TypeId aSameOrSuperType ) const
 
 #define TYPEINIT_ID(sType) \
         TypeId sType::Type() const { return StaticType(); } \
-        sal_Bool   sType::IsOf( TypeId aSameOrSuperType ) \
+        BOOL   sType::IsOf( TypeId aSameOrSuperType ) \
         { \
             if ( aSameOrSuperType == StaticType() ) \
-                return sal_True
+                return TRUE
 
 #define TYPEINIT0_ID(sType) \
         TYPEINIT_ID(sType); \

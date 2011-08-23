@@ -278,7 +278,7 @@ int     last;   /* Last recipe line in target. */
       DB_RETURN( 0 );
    }
 
-   /* Stop making the rest of the recipies for this target if an error occurred
+   /* Stop making the rest of the recipies for this target if an error occured
     * but the Continue (-k) flag is set to build as much as possible. */
    if ( target->ce_attr & A_ERROR ) {
       if ( last ) {
@@ -420,6 +420,7 @@ char *ename;
 }
 
 
+
 /*
 ** Set the value of the environment string ename to value.
 **  Returns 0 if success, non-zero if failure
@@ -429,23 +430,16 @@ Write_env_string(ename, value)
 char *ename;
 char *value;
 {
-#if defined(HAVE_SETENV)
+   char*   p;
+   char*   envstr = DmStrAdd(ename, value, FALSE);
 
-  return( setenv(ename, value, 1) );
+   p = envstr+strlen(ename);    /* Don't change this code, DmStrAdd does not */
+   *p++ = '=';          /* add the space if *value is 0, it does    */
+   if( !*value ) *p = '\0'; /* allocate enough memory for one though.   */
 
-#else  /* !HAVE_SETENV */
-
-  char*   p;
-  char*   envstr = DmStrAdd(ename, value, FALSE);
-
-  p = envstr+strlen(ename); /* Don't change this code, DmStrAdd does not */
-  *p++ = '=';           /* add the space if *value is 0, it does    */
-  if( !*value ) *p = '\0';  /* allocate enough memory for one though.   */
-
-  return( putenv(envstr) ); /* Possibly leaking 'envstr' */
-
-#endif /* !HAVE_SETENV */
+   return( putenv(envstr) );
 }
+
 
 
 PUBLIC void

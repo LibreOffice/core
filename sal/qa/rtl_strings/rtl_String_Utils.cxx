@@ -2,7 +2,7 @@
 /*************************************************************************
 #
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+
 #include <math.h>
 #include <stdlib.h>
+
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
 
 #ifndef _SAL_TYPES_H_
     #include <sal/types.h>
@@ -44,11 +50,18 @@
     #include <rtl/string.hxx>
 #endif
 
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+
 #ifndef _RTL_STRING_UTILS_CONST_H_
     #include <rtl_String_Utils_Const.h>
 #endif
 
-using ::rtl::OString;
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+
+using namespace rtl;
+
 sal_uInt32 AStringLen( const sal_Char *pAStr )
 {
     sal_uInt32  nStrLen = 0;
@@ -134,7 +147,7 @@ sal_Bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2 )
     const sal_Unicode* pBuf1 = str1;
     const sal_Unicode* pBuf2 = str2;
     sal_Bool res = sal_True;
-
+   
     while ( (*pBuf1 == *pBuf2) && *pBuf1 !='\0' && *pBuf2 != '\0')
     {
         (pBuf1)++;
@@ -241,6 +254,11 @@ sal_Bool AStringToDoubleCompare ( const sal_Char  *pStr,
 
     return cmp;
 } // AStringToDoubleCompare
+
+//------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------
 
 sal_uInt32 UStringLen( const sal_Unicode *pUStr )
 {
@@ -570,5 +588,8 @@ sal_Bool AStringToUStringNCopy( sal_Unicode       *pDest,
 
     return  bCopied;
 } // AStringToUStringNCopy
+
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

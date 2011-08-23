@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ Reference<XInterface> SAL_CALL SlideRenderer_createInstance (
 
 ::rtl::OUString SlideRenderer_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.SlideRenderer"));
+    return OUString::createFromAscii("com.sun.star.comp.Draw.SlideRenderer");
 }
 
 
@@ -64,7 +64,7 @@ Sequence<rtl::OUString> SAL_CALL SlideRenderer_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SlideRenderer")));
+        ::rtl::OUString::createFromAscii("com.sun.star.drawing.SlideRenderer"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -117,7 +117,7 @@ void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
     else
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideRenderer: invalid number of arguments")),
+            OUString::createFromAscii("SlideRenderer: invalid number of arguments"),
                 static_cast<XWeak*>(this));
     }
 }
@@ -203,15 +203,15 @@ BitmapEx SlideRenderer::CreatePreview (
     const SdPage* pPage = SdPage::getImplementation(rxSlide);
     if (pPage == NULL)
         throw lang::IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideRenderer::createPreview() called with invalid slide")),
+            OUString::createFromAscii("SlideRenderer::createPreview() called with invalid slide"),
             static_cast<XWeak*>(this),
             0);
-
+    
     // Determine the size of the current slide and its aspect ratio.
     Size aPageSize = pPage->GetSize();
     if (aPageSize.Height() <= 0)
         throw lang::IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideRenderer::createPreview() called with invalid size")),
+            OUString::createFromAscii("SlideRenderer::createPreview() called with invalid size"),
             static_cast<XWeak*>(this),
             1);
 
@@ -231,14 +231,14 @@ BitmapEx SlideRenderer::CreatePreview (
         nFactor = 1;
     else if (nFactor > 10)
         nFactor = 10;
-
+    
     // Create the preview.  When the super sample factor n is greater than 1
     // then a preview is created in size (n*width, n*height) and then scaled
     // down to (width, height).  This is a poor mans antialiasing for the
     // time being.  When we have true antialiasing support this workaround
     // can be removed.
     const Image aPreview = maPreviewRenderer.RenderPage (
-        pPage,
+        pPage, 
         Size(aPreviewSize.Width*nFactor, aPreviewSize.Height*nFactor),
         ::rtl::OUString());
     if (nFactor == 1)

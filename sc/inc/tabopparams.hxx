@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ struct ScInterpreterTableOpParams
     ScAddress   aFormulaPos;
     ::std::vector< ScFormulaCell* > aNotifiedFormulaCells;
     ::std::vector< ScAddress >      aNotifiedFormulaPos;
-    sal_Bool        bValid;
-    sal_Bool        bRefresh;
-    sal_Bool        bCollectNotifications;
+    BOOL        bValid;
+    BOOL        bRefresh;
+    BOOL        bCollectNotifications;
 
     ScInterpreterTableOpParams()
-            : bValid( false )
-            , bRefresh( false )
-            , bCollectNotifications( sal_True )
+            : bValid( FALSE )
+            , bRefresh( FALSE )
+            , bCollectNotifications( TRUE )
     {
     }
 
@@ -62,6 +62,7 @@ struct ScInterpreterTableOpParams
             , aOld2(                 r.aOld2 )
             , aNew2(                 r.aNew2 )
             , aFormulaPos(           r.aFormulaPos )
+            //! never copied!   , aNotifiedFormulaCells( r.aNotifiedFormulaCells )
             , aNotifiedFormulaPos(   r.aNotifiedFormulaPos )
             , bValid(                r.bValid )
             , bRefresh(              r.bRefresh )
@@ -76,6 +77,8 @@ struct ScInterpreterTableOpParams
         aOld2                 = r.aOld2;
         aNew2                 = r.aNew2;
         aFormulaPos           = r.aFormulaPos;
+        //! never copied!   aNotifiedFormulaCells = r.aNotifiedFormulaCells;
+        //! instead, empty anything eventually present
         ::std::vector< ScFormulaCell* >().swap( aNotifiedFormulaCells );
         aNotifiedFormulaPos   = r.aNotifiedFormulaPos;
         bValid                = r.bValid;
@@ -91,9 +94,13 @@ struct ScInterpreterTableOpParams
             aOld1       == r.aOld1 &&
             aOld2       == r.aOld2 &&
             aFormulaPos == r.aFormulaPos ;
+            // aNotifiedFormula(Cells|Pos), aNew1, aNew2, bRefresh,
+            // bCollectNotifications are not compared
     }
 };
 
-#endif
+DECLARE_LIST( ScTabOpList, ScInterpreterTableOpParams* )
+
+#endif // SC_TABOPPARAMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

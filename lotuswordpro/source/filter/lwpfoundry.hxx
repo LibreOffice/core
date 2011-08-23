@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPFOUNDRY_HXX
@@ -83,14 +83,14 @@ class LwpDocument;
 class LwpBookMark;
 
 #include <vector>
-#define TAG_USER_VERSION    0x72655655UL        // "UVer"
+#define TAG_USER_VERSION	0x72655655UL		// "UVer"
 
 
 class LwpVersionManager
 {
 public:
-    LwpVersionManager(){}
-    ~LwpVersionManager(){}
+    LwpVersionManager(){};
+    ~LwpVersionManager(){};
 public:
     void Read(LwpObjectStream *pStrm);
     void Skip(LwpObjectStream *pStrm);
@@ -99,8 +99,8 @@ public:
 class LwpObjectManager
 {
 public:
-    LwpObjectManager(){}
-    ~LwpObjectManager(){}
+    LwpObjectManager(){};
+    ~LwpObjectManager(){};
 private:
     LwpObjectID m_Division;
 public:
@@ -110,8 +110,8 @@ public:
 class LwpNumberManager
 {
 public:
-    LwpNumberManager(){}
-    ~LwpNumberManager(){}
+    LwpNumberManager(){};
+    ~LwpNumberManager(){};
 private:
     LwpObjectID m_TableRange;
 public:
@@ -122,8 +122,8 @@ public:
 class LwpBulletManager
 {
 public:
-    LwpBulletManager(){}
-    ~LwpBulletManager(){}
+    LwpBulletManager(){};
+    ~LwpBulletManager(){};
 private:
     LwpObjectID m_Head;
 public:
@@ -135,8 +135,8 @@ class LwpContent;
 class LwpContentManager
 {
 public:
-    LwpContentManager(){}
-    ~LwpContentManager(){}
+    LwpContentManager(){};
+    ~LwpContentManager(){};
 private:
     LwpObjectID m_ContentList;
     LwpObjectID m_EnumHead;
@@ -160,8 +160,8 @@ public:
 class LwpPieceManager
 {
 public:
-    LwpPieceManager(){}
-    ~LwpPieceManager(){}
+    LwpPieceManager(){};
+    ~LwpPieceManager(){};
 private:
     LwpObjectID m_GeometryPieceList;
     LwpObjectID m_ScalePieceList;
@@ -197,13 +197,13 @@ class LwpListList;
 class LwpOrderedObjectManager
 {
 public:
-    LwpOrderedObjectManager(){}
-    ~LwpOrderedObjectManager(){}
+    LwpOrderedObjectManager(){};
+    ~LwpOrderedObjectManager(){};
 protected:
     LwpObjectID m_Head;
 public:
     void Read(LwpObjectStream *pStrm);
-    LwpObjectID* GetHeadID() { return &m_Head;}
+    LwpObjectID* GetHeadID() { return &m_Head;};
     LwpOrderedObject* Enumerate(LwpOrderedObject* pLast);
 protected:
     LwpListList* GetNextActiveListList(LwpListList* pLast);
@@ -230,7 +230,7 @@ private: //file members
     LwpBulletManager m_BulMgr;
     LwpOrderedObjectManager m_SectionList;
 
-    LwpObjectID m_Layout;   //The head layout
+    LwpObjectID m_Layout;	//The head layout
     LwpObjectID m_TextStyle;
     LwpObjectID m_DefaultTextStyle;
     LwpObjectID m_DefaultClickStyle;
@@ -317,7 +317,7 @@ private:
             }
     };
 
-    typedef boost::unordered_map<LwpObjectID, IXFStyle*, hashFunc, eqFunc> LwpStyleMap;
+    typedef std::hash_map<LwpObjectID, IXFStyle*, hashFunc, eqFunc> LwpStyleMap;
     LwpStyleMap m_StyleList;
 public:
     void SetFoundry(LwpFoundry* pFoundry){m_pFoundry = pFoundry;}

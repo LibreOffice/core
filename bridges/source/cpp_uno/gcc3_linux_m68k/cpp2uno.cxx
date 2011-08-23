@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <malloc.h>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include <rtl/alloc.h>
 #include <osl/mutex.hxx>
@@ -57,7 +57,7 @@ namespace
     static typelib_TypeClass cpp2uno_call(
         bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
         const typelib_TypeDescription * pMemberTypeDescr,
-        typelib_TypeDescriptionReference * pReturnTypeRef,
+        typelib_TypeDescriptionReference * pReturnTypeRef, 
         sal_Int32 nParams, typelib_MethodParameter * pParams,
         long r8, void ** pCallStack,
         sal_Int64 * pRegisterReturn /* space for register return */ )
@@ -65,30 +65,30 @@ namespace
         // pCallStack: ret, [return ptr], this, params
         char * pTopStack = (char *)(pCallStack + 0);
         char * pCppStack = pTopStack;
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "cpp2uno_call\n");
 #endif
         // return
         typelib_TypeDescription * pReturnTypeDescr = 0;
         if (pReturnTypeRef)
             TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-
+        
         void * pUnoReturn = 0;
         // complex return ptr: if != 0 && != pUnoReturn, reconversion need
         void * pCppReturn = 0;
-
+        
         if (pReturnTypeDescr)
         {
             if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
             {
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
         fprintf(stderr, "simple return\n");
 #endif
                 pUnoReturn = pRegisterReturn; // direct way for simple types
             }
             else // complex return via ptr (pCppReturn)
             {
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
         fprintf(stderr, "complex return\n");
 #endif
                 pCppReturn = (void *)r8;
@@ -111,9 +111,9 @@ namespace
         // cpp<=>uno)
         sal_Int32 * pTempIndizes = (sal_Int32 *)(pUnoArgs + (2 * nParams));
         // type descriptions for reconversions
-        typelib_TypeDescription ** ppTempParamTypeDescr =
+        typelib_TypeDescription ** ppTempParamTypeDescr = 
             (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
-
+        
         sal_Int32 nTempIndizes   = 0;
 
         for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
@@ -122,8 +122,8 @@ namespace
             typelib_TypeDescription * pParamTypeDescr = 0;
             TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-            if (!rParam.bOut &&
-                bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
+            if (!rParam.bOut && 
+                bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr )) 
             {
                 switch (pParamTypeDescr->eTypeClass)
                 {
@@ -169,7 +169,7 @@ namespace
                 else if (bridges::cpp_uno::shared::relatesToInterfaceType(
                     pParamTypeDescr ))
                 {
-                   uno_copyAndConvertData( pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                   uno_copyAndConvertData( pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ), 
                         *(void **)pCppStack, pParamTypeDescr,
                         pThis->getBridge()->getCpp2Uno() );
                     pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
@@ -190,39 +190,39 @@ namespace
         uno_Any aUnoExc; // Any will be constructed by callee
         uno_Any * pUnoExc = &aUnoExc;
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "before dispatch\n");
 #endif
         // invoke uno dispatch call
         (*pThis->getUnoI()->pDispatcher)(
           pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "after dispatch\n");
 #endif
 
-        // in case an exception occurred...
+        // in case an exception occured...
         if (pUnoExc)
         {
             // destruct temporary in/inout params
             for ( ; nTempIndizes--; )
             {
                 sal_Int32 nIndex = pTempIndizes[nTempIndizes];
-
+                
                 if (pParams[nIndex].bIn) // is in/inout => was constructed
-                    uno_destructData( pUnoArgs[nIndex],
+                    uno_destructData( pUnoArgs[nIndex], 
                         ppTempParamTypeDescr[nTempIndizes], 0 );
                 TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
             }
             if (pReturnTypeDescr)
                 TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
-
-            CPPU_CURRENT_NAMESPACE::raiseException( &aUnoExc,
+            
+            CPPU_CURRENT_NAMESPACE::raiseException( &aUnoExc, 
                 pThis->getBridge()->getUno2Cpp() ); // has to destruct the any
             // is here for dummy
             return typelib_TypeClass_VOID;
         }
-        else // else no exception occurred...
+        else // else no exception occured...
         {
             // temporary params
             for ( ; nTempIndizes--; )
@@ -230,18 +230,18 @@ namespace
                 sal_Int32 nIndex = pTempIndizes[nTempIndizes];
                 typelib_TypeDescription * pParamTypeDescr =
                     ppTempParamTypeDescr[nTempIndizes];
-
+                
                 if (pParams[nIndex].bOut) // inout/out
                 {
                     // convert and assign
                     uno_destructData( pCppArgs[nIndex], pParamTypeDescr,
                         cpp_release );
-                    uno_copyAndConvertData( pCppArgs[nIndex], pUnoArgs[nIndex],
+                    uno_copyAndConvertData( pCppArgs[nIndex], pUnoArgs[nIndex], 
                         pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
                 }
                 // destroy temp uno param
                 uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 );
-
+                
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
             // return
@@ -254,7 +254,7 @@ namespace
                     // destroy temp uno return
                     uno_destructData( pUnoReturn, pReturnTypeDescr, 0 );
                 }
-                // complex return ptr is set to return reg
+                // complex return ptr is set to return reg 
                 *(void **)pRegisterReturn = pCppReturn;
             }
             if (pReturnTypeDescr)
@@ -277,7 +277,7 @@ namespace
         sal_Int64 * pRegisterReturn /* space for register return */ )
     {
     void ** pCallStack = (void**)(sp);
-#if OSL_DEBUG_LEVEL > 2
+#ifdef CMC_DEBUG
     fprintf(stderr, "cpp_mediate with\n");
     fprintf(stderr, "%x %x\n", nFunctionIndex, nVtableOffset);
     fprintf(stderr, "and %x %x\n", pCallStack, pRegisterReturn);
@@ -289,10 +289,10 @@ namespace
 
         pThis = static_cast< char * >(pThis) - nVtableOffset;
 
-        bridges::cpp_uno::shared::CppInterfaceProxy * pCppI =
+        bridges::cpp_uno::shared::CppInterfaceProxy * pCppI = 
             bridges::cpp_uno::shared::CppInterfaceProxy::castInterfaceToProxy(
                 pThis);
-
+            
         typelib_InterfaceTypeDescription * pTypeDescr = pCppI->getTypeDescr();
 
         OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex,
@@ -300,7 +300,7 @@ namespace
         if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
         {
             throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
+                OUString::createFromAscii("illegal vtable index!"),
                 (XInterface *)pCppI );
         }
 
@@ -337,7 +337,7 @@ namespace
                     ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
                 aParam.bIn      = sal_True;
                 aParam.bOut     = sal_False;
-
+                
                 eRet = cpp2uno_call(
                     pCppI, aMemberDescr.get(),
                     0, // indicates void return
@@ -371,7 +371,7 @@ namespace
                         pCppI->getBridge()->getCppEnv(),
                         (void **)&pInterface, pCppI->getOid().pData,
                         (typelib_InterfaceTypeDescription *)pTD );
-
+                
                     if (pInterface)
                     {
                         ::uno_any_construct(
@@ -399,7 +399,7 @@ namespace
         default:
         {
             throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
+                OUString::createFromAscii("no member description found!"),
                 (XInterface *)pCppI );
             // is here for dummy
             eRet = typelib_TypeClass_VOID;
@@ -440,17 +440,17 @@ namespace
 
     //some m68k info : http://www2.biglobe.ne.jp/~inaba/trampolines.html
 
-    unsigned char *codeSnippet(unsigned char* code, sal_Int32 functionIndex,
+    unsigned char *codeSnippet(unsigned char* code, sal_Int32 functionIndex, 
         sal_Int32 vtableOffset)
     {
         unsigned char * p = code;
-        *(short *)&p[0] = 0x203C;       //movel functionIndex,d0
+        *(short *)&p[0] = 0x203C;		//movel functionIndex,d0
         *(long *)&p[2] = functionIndex;
-        *(short *)&p[6] = 0x223C;       //movel functionIndex,d1
+        *(short *)&p[6] = 0x223C;		//movel functionIndex,d1
         *(long *)&p[8] = vtableOffset;
-        *(short *)&p[12] = 0x4EF9;      //jmp cpp_vtable_call
+        *(short *)&p[12] = 0x4EF9;		//jmp cpp_vtable_call
         *(long *)&p[14] = (long)&cpp_vtable_call;
-        *(short *)&p[18] = 0x4E71;      //nop
+        *(short *)&p[18] = 0x4E71;		//nop
         return code + codeSnippetSize;
     }
 }
@@ -510,9 +510,12 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             {
                 (s++)->fn = code + writetoexecdiff;
 
-                typelib_InterfaceMethodTypeDescription *pMethodTD =
+                typelib_InterfaceMethodTypeDescription *pMethodTD = 
                     reinterpret_cast<
                         typelib_InterfaceMethodTypeDescription * >(member);
+
+                bool issimple = bridges::cpp_uno::shared::isSimpleType(
+                    pMethodTD->pReturnTypeRef);
 
                 code = codeSnippet(code, functionOffset++, vtableOffset);
                 break;

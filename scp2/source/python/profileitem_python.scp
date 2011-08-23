@@ -27,7 +27,6 @@
 
 #include "macros.inc"
 
-#ifndef DISABLE_PYUNO
 
 Profile gid_Profile_Pythonloader_Uno_Ini
     ModuleID = gid_Module_Optional_Pyuno;
@@ -93,6 +92,3 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonpath
   #endif
 #endif
 End
-
-// DISABLE_PYUNO
-#endif

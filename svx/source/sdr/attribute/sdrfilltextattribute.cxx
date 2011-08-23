@@ -2,10 +2,14 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: sdrallattribute.cxx,v $
+ *
+ * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,24 +41,24 @@ namespace drawinglayer
     namespace attribute
     {
         SdrFillTextAttribute::SdrFillTextAttribute(
-            const SdrFillAttribute& rFill,
-            const FillGradientAttribute& rFillFloatTransGradient,
+            const SdrFillAttribute& rFill, 
+            const FillGradientAttribute& rFillFloatTransGradient, 
             const SdrTextAttribute& rTextAttribute)
-        :   maFill(rFill),
+        :	maFill(rFill),
             maFillFloatTransGradient(rFillFloatTransGradient),
             maTextAttribute(rTextAttribute)
         {
         }
 
         SdrFillTextAttribute::SdrFillTextAttribute()
-        :   maFill(),
+        :	maFill(),
             maFillFloatTransGradient(),
             maTextAttribute()
         {
         }
 
         SdrFillTextAttribute::SdrFillTextAttribute(const SdrFillTextAttribute& rCandidate)
-        :   maFill(rCandidate.getFill()),
+        :	maFill(rCandidate.getFill()),
             maFillFloatTransGradient(rCandidate.getFillFloatTransGradient()),
             maTextAttribute(rCandidate.getText())
         {
@@ -71,8 +75,8 @@ namespace drawinglayer
 
         bool SdrFillTextAttribute::isDefault() const
         {
-            return(getFill().isDefault()
-                && getFillFloatTransGradient().isDefault()
+            return(getFill().isDefault() 
+                && getFillFloatTransGradient().isDefault() 
                 && getText().isDefault());
         }
 

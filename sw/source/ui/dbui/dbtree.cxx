@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,10 +95,10 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
     virtual void SAL_CALL elementReplaced( const ContainerEvent& Event ) throw (RuntimeException);
     virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
 
-    sal_Bool                        HasContext();
+    BOOL                        HasContext();
     SwWrtShell*                 GetWrtShell() { return pWrtSh;}
     void                        SetWrtShell(SwWrtShell& rSh) { pWrtSh = &rSh;}
-    Reference< XNameAccess >    GetContext() const {return xDBContext;}
+    Reference< XNameAccess >    GetContext() {return xDBContext;}
     Reference<XConnection>      GetConnection(const rtl::OUString& rSourceName);
 };
 
@@ -127,7 +127,7 @@ void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (Ru
     SolarMutexGuard aGuard;
     ::rtl::OUString sSource;
     rEvent.Accessor >>= sSource;
-    for(sal_uInt16 i = 0; i < aConnections.Count(); i++)
+    for(USHORT i = 0; i < aConnections.Count(); i++)
     {
         SwConnectionDataPtr pPtr = aConnections[i];
         if(pPtr->sSourceName == sSource)
@@ -148,7 +148,7 @@ void SwDBTreeList_Impl::elementReplaced( const ContainerEvent& rEvent ) throw (R
     elementRemoved(rEvent);
 }
 
-sal_Bool SwDBTreeList_Impl::HasContext()
+BOOL SwDBTreeList_Impl::HasContext()
 {
     if(!xDBContext.is())
     {
@@ -170,7 +170,7 @@ sal_Bool SwDBTreeList_Impl::HasContext()
 Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const rtl::OUString& rSourceName)
 {
     Reference<XConnection>  xRet;
-    for(sal_uInt16 i = 0; i < aConnections.Count(); i++)
+    for(USHORT i = 0; i < aConnections.Count(); i++)
     {
         SwConnectionDataPtr pPtr = aConnections[i];
         if(pPtr->sSourceName == rSourceName)
@@ -191,13 +191,14 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const rtl::OUString& rS
 
 SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
                         SwWrtShell* pSh,
-                        const String& rDefDBName, const sal_Bool bShowCol):
+                        const String& rDefDBName, const BOOL bShowCol):
 
-    SvTreeListBox   (pParent, rResId),
+    SvTreeListBox	(pParent, rResId),
     aImageList      (SW_RES(ILIST_DB_DLG    )),
-    sDefDBName      (rDefDBName),
-    bInitialized    (sal_False),
-    bShowColumns    (bShowCol),
+    aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
+    sDefDBName		(rDefDBName),
+    bInitialized    (FALSE),
+    bShowColumns	(bShowCol),
     pImpl(new SwDBTreeList_Impl(pSh))
 {
     SetHelpId(HID_DB_SELECTION_TLB);
@@ -216,11 +217,13 @@ void SwDBTreeList::InitTreeList()
     if(!pImpl->HasContext() && pImpl->GetWrtShell())
         return;
     SetSelectionMode(SINGLE_SELECTION);
-    SetStyle(GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
-    // don't set font, so that the Control's font is being applied!
+    SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
+    // Font nicht setzen, damit der Font des Controls uebernommen wird!
     SetSpaceBetweenEntries(0);
     SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
-                    aImageList.GetImage(IMG_EXPAND  ) );
+                    aImageList.GetImage(IMG_EXPAND  ), BMP_COLOR_NORMAL );
+    SetNodeBitmaps( aImageListHC.GetImage(IMG_COLLAPSE),
+                    aImageListHC.GetImage(IMG_EXPAND  ), BMP_COLOR_HIGHCONTRAST );
 
     SetDragDropMode(SV_DRAGDROP_APP_COPY);
 
@@ -231,27 +234,34 @@ void SwDBTreeList::InitTreeList()
     long nCount = aDBNames.getLength();
 
     Image aImg = aImageList.GetImage(IMG_DB);
+    Image aHCImg = aImageListHC.GetImage(IMG_DB);
     for(long i = 0; i < nCount; i++)
     {
         String sDBName(pDBNames[i]);
-        InsertEntry(sDBName, aImg, aImg, NULL, sal_True);
+        SvLBoxEntry* pEntry = InsertEntry(sDBName, aImg, aImg, NULL, TRUE);
+        SetExpandedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
+        SetCollapsedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
     }
     String sDBName(sDefDBName.GetToken(0, DB_DELIM));
     String sTableName(sDefDBName.GetToken(1, DB_DELIM));
     String sColumnName(sDefDBName.GetToken(2, DB_DELIM));
     Select(sDBName, sTableName, sColumnName);
 
-    bInitialized = sal_True;
+
+    bInitialized = TRUE;
 }
 
 void    SwDBTreeList::AddDataSource(const String& rSource)
 {
     Image aImg = aImageList.GetImage(IMG_DB);
-    SvLBoxEntry* pEntry = InsertEntry(rSource, aImg, aImg, NULL, sal_True);
+    Image aHCImg = aImageListHC.GetImage(IMG_DB);
+    SvLBoxEntry* pEntry = InsertEntry(rSource, aImg, aImg, NULL, TRUE);
+    SetExpandedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
+    SetCollapsedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
     SvTreeListBox::Select(pEntry);
 }
 
-void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
+void SwDBTreeList::ShowColumns(BOOL bShowCol)
 {
     if (bShowCol != bShowColumns)
     {
@@ -259,14 +269,14 @@ void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
         String sTableName, sColumnName;
         String  sDBName(GetDBName(sTableName, sColumnName));
 
-        SetUpdateMode(sal_False);
+        SetUpdateMode(FALSE);
 
         SvLBoxEntry* pEntry = First();
 
         while (pEntry)
         {
             pEntry = (SvLBoxEntry*)GetRootLevelParent( pEntry );
-            Collapse(pEntry);       // zuklappen
+            Collapse(pEntry);		// zuklappen
 
             SvLBoxEntry* pChild;
             while ((pChild = FirstChild(pEntry)) != 0L)
@@ -277,9 +287,9 @@ void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
 
         if (sDBName.Len())
         {
-            Select(sDBName, sTableName, sColumnName);   // force RequestingChilds
+            Select(sDBName, sTableName, sColumnName);	// force RequestingChilds
         }
-        SetUpdateMode(sal_True);
+        SetUpdateMode(TRUE);
     }
 }
 
@@ -287,7 +297,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
 {
     if (!pParent->HasChilds())
     {
-        if (GetParent(pParent)) // column names
+        if (GetParent(pParent))	// column names
         {
             try
             {
@@ -298,7 +308,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                 if(!pImpl->GetContext()->hasByName(sSourceName))
                     return;
                 Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
-                sal_Bool bTable = pParent->GetUserData() == 0;
+                BOOL bTable = pParent->GetUserData() == 0;
                 Reference<XColumnsSupplier> xColsSupplier;
                 if(bTable)
                 {
@@ -376,12 +386,15 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                         long nCount = aTblNames.getLength();
                         const ::rtl::OUString* pTblNames = aTblNames.getConstArray();
                         Image aImg = aImageList.GetImage(IMG_DBTABLE);
+                        Image aHCImg = aImageListHC.GetImage(IMG_DBTABLE);
                         for (long i = 0; i < nCount; i++)
                         {
                             sTableName = pTblNames[i];
                             SvLBoxEntry* pTableEntry = InsertEntry(sTableName, aImg, aImg, pParent, bShowColumns);
                             //to discriminate between queries and tables the user data of table entries is set
                             pTableEntry->SetUserData((void*)0);
+                            SetExpandedEntryBmp(pTableEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
+                            SetCollapsedEntryBmp(pTableEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
                         }
                     }
 
@@ -394,11 +407,14 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                         long nCount = aQueryNames.getLength();
                         const ::rtl::OUString* pQueryNames = aQueryNames.getConstArray();
                         Image aImg = aImageList.GetImage(IMG_DBQUERY);
+                        Image aHCImg = aImageListHC.GetImage(IMG_DBQUERY);
                         for (long i = 0; i < nCount; i++)
                         {
                             sQueryName = pQueryNames[i];
                             SvLBoxEntry* pQueryEntry = InsertEntry(sQueryName, aImg, aImg, pParent, bShowColumns);
                             pQueryEntry->SetUserData((void*)1);
+                            SetExpandedEntryBmp(pQueryEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
+                            SetCollapsedEntryBmp( pQueryEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
                         }
                     }
                 }
@@ -417,10 +433,10 @@ IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
     if (GetParent(pRight) && GetParent(GetParent(pRight)))
         return COMPARE_GREATER; // don't sort column names
 
-    return DefaultCompare(pData);   // otherwise call base class
+    return DefaultCompare(pData);	// Sonst Basisklasse rufen
 }
 
-String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, sal_Bool* pbIsTable)
+String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, BOOL* pbIsTable)
 {
     String sDBName;
     SvLBoxEntry* pEntry = FirstSelected();
@@ -443,14 +459,14 @@ String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, sal_Boo
 }
 
 /*------------------------------------------------------------------------
- Description:   Format: database.table
+ Beschreibung:	Format: Datenbank.Tabelle
 ------------------------------------------------------------------------*/
 void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const String& rColumnName)
 {
     SvLBoxEntry* pParent;
     SvLBoxEntry* pChild;
-    sal_uInt16 nParent = 0;
-    sal_uInt16 nChild = 0;
+    USHORT nParent = 0;
+    USHORT nChild = 0;
 
     while ((pParent = GetEntry(nParent++)) != NULL)
     {
@@ -497,7 +513,7 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
         STAR_REFERENCE( datatransfer::XTransferable ) xRef( pContainer );
         if( sColumnName.Len() )
         {
-            // drag database field
+            // Datenbankfeld draggen
             svx::OColumnTransferable aColTransfer(
                             sDBName
                             ,::rtl::OUString()
@@ -527,7 +543,7 @@ sal_Int8 SwDBTreeList::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
     return DND_ACTION_NONE;
 }
 
-void SwDBTreeList::SetWrtShell(SwWrtShell& rSh)
+void    SwDBTreeList::SetWrtShell(SwWrtShell& rSh)
 {
     pImpl->SetWrtShell(rSh);
     if (IsVisible() && !bInitialized)

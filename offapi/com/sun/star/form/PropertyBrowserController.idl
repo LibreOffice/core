@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,30 +25,30 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_form_PropertyBrowserController_idl__
-#define __com_sun_star_form_PropertyBrowserController_idl__
+#ifndef __com_sun_star_form_PropertyBrowserController_idl__ 
+#define __com_sun_star_form_PropertyBrowserController_idl__ 
 
-#ifndef __com_sun_star_frame_XController_idl__
-#include <com/sun/star/frame/XController.idl>
+#ifndef __com_sun_star_frame_XController_idl__ 
+#include <com/sun/star/frame/XController.idl> 
 #endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
 #endif
 
-#ifndef __com_sun_star_beans_XFastPropertySet_idl__
-#include <com/sun/star/beans/XFastPropertySet.idl>
+#ifndef __com_sun_star_beans_XFastPropertySet_idl__ 
+#include <com/sun/star/beans/XFastPropertySet.idl> 
 #endif
 
-#ifndef __com_sun_star_beans_XMultiPropertySet_idl__
-#include <com/sun/star/beans/XMultiPropertySet.idl>
+#ifndef __com_sun_star_beans_XMultiPropertySet_idl__ 
+#include <com/sun/star/beans/XMultiPropertySet.idl> 
 #endif
 
-//=============================================================================
-
- module com {  module sun {  module star {  module form {
-
-//=============================================================================
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module form {  
+ 
+//============================================================================= 
 
 /** describes a controller which can be used to browse and modify properties of form controls.
 
@@ -58,7 +58,7 @@
     data binding, it's layout, and it's event binding</p>
 
     <p>For using a PropertyBrowserController, you need to
-    <ul><li>instantiate it at a service factory of your choice</li>
+    <ul><li>instatiate it at a service factory of your choice</li>
         <li>attach it to an empty frame of your choice</li>
         <li>set the IntrospectedObject property to the control model which you wish to analyze</li>
     </ul>
@@ -110,7 +110,7 @@ published service PropertyBrowserController
         The appearance of the visual component created by the controller is that 3 tab pages, one for
         each group, are displayed (of course if the control does not support any aspects of a given group,
         the group is omitted).<br/>
-        With this property, it can be controller which page is currently active.</p>
+        With this property, it can be controller which page is currently acticve.</p>
 
         <p>Valid values are (this list may be extended in the future):
         <ul><li>Generic</li>
@@ -131,7 +131,7 @@ published service PropertyBrowserController
     */
     interface com::sun::star::beans::XPropertySet;
 
-    /** allows to access the properties via indices
+    /** allows to access the properties via indicies
     */
     interface com::sun::star::beans::XFastPropertySet;
 
@@ -140,8 +140,8 @@ published service PropertyBrowserController
     interface com::sun::star::beans::XMultiPropertySet;
 };
 
-//=============================================================================
-
-}; }; }; };
-
+//============================================================================= 
+ 
+}; }; }; };  
+ 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@ package com.sun.star.lib.uno.environments.remote;
  * This interface is an abstraction of the various
  * threadpool implementations.
  * <p>
- * @version     $Revision: 1.7 $ $ $Date: 2008-04-11 11:20:01 $
- * @author      Joerg Budischewski
- * @author      Kay Ramme
+ * @version 	$Revision: 1.7 $ $ $Date: 2008-04-11 11:20:01 $
+ * @author 	    Joerg Budischewski
+ * @author 	    Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPoolFactory
  * @see         com.sun.star.lib.uno.environments.remote.IThreadPoolFactory
  * @since       UDK1.0
@@ -101,7 +101,7 @@ public interface IThreadPool {
     public Object enter( Object handle, ThreadId id ) throws Throwable;
 
     /**
-     * Queues a job into the jobQueue of the thread belonging
+     * Queues a job into the jobQueue of the thread belonging 
      * to the jobs threadId.
      * <p>
      * @param job       the job
@@ -110,10 +110,10 @@ public interface IThreadPool {
 
     /**
      * Disposes this thread pool, thus releasing
-     * all threads by throwing a <code>DisposedException</code> with the given
-     * <code>Throwable</code> cause.
+     * all threads by throwing the given
+     * <code>Throwable</code>.
      * <p>
-     * @param throwing   the cause
+     * @param throwing   the Throwable
      */
     public void dispose(Throwable throwable);
 

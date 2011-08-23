@@ -57,8 +57,12 @@
  * @file
  * Table row style, ie. table row height.
  ************************************************************************/
-#include    "xfrowstyle.hxx"
-#include    "xfbgimage.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-01-28 create and implements.
+ ************************************************************************/
+#include	"xfrowstyle.hxx"
+#include	"xfbgimage.hxx"
 
 XFRowStyle::XFRowStyle():m_fHeight(0)
 {
@@ -68,21 +72,21 @@ XFRowStyle::XFRowStyle():m_fHeight(0)
 }
 
 
-void    XFRowStyle::SetbackImage(XFBGImage *pImage)
+void	XFRowStyle::SetbackImage(XFBGImage *pImage)
 {
     if( m_pBGImage )
         delete m_pBGImage;
     m_pBGImage = pImage;
 }
 
-enumXFStyle XFRowStyle::GetStyleFamily()
+enumXFStyle	XFRowStyle::GetStyleFamily()
 {
     return enumXFStyleTableRow;
 }
 
-void    XFRowStyle::ToXml(IXFStream *pStrm)
+void	XFRowStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );

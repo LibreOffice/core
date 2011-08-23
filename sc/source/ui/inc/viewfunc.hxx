@@ -32,6 +32,12 @@
 
 #include "tabbgcolor.hxx"
 
+#ifndef _SVSTDARR_SHORTS
+#define _SVSTDARR_SHORTS
+#include <svl/svstdarr.hxx>
+
+#endif
+
 #ifndef _SVSTDARR_STRINGS
 
 #define _SVSTDARR_STRINGS
@@ -40,15 +46,14 @@
 #endif
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-#include <vector>
 
 class ScPatternAttr;
 class ScAutoFormatData;
 class SvxSearchItem;
 class SfxItemSet;
+class SvxBorderLine;
 class SvxBoxItem;
 class SvxBoxInfoItem;
-class SfxStyleSheetBase;
 class SfxStyleSheet;
 class SfxPoolItem;
 class EditTextObject;
@@ -66,8 +71,6 @@ class SvxHyperlinkItem;
 class ScTransferObj;
 class ScTableProtection;
 
-namespace editeng { class SvxBorderLine; }
-
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 
 //==================================================================
@@ -75,267 +78,267 @@ namespace com { namespace sun { namespace star { namespace datatransfer { class 
 class ScViewFunc : public ScTabView
 {
 private:
-    ScAddress   aFormatSource;      // fuer automatisches Erweitern von Formatierung
-    ScRange     aFormatArea;
-    sal_Bool        bFormatValid;
+    ScAddress	aFormatSource;		// fuer automatisches Erweitern von Formatierung
+    ScRange		aFormatArea;
+    BOOL		bFormatValid;
 
 public:
                     ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
                     ~ScViewFunc();
 
-    const ScPatternAttr*    GetSelectionPattern ();
-    void                    GetSelectionFrame   ( SvxBoxItem&       rLineOuter,
-                                                  SvxBoxInfoItem&   rLineInner );
+    const ScPatternAttr*    GetSelectionPattern	();
+    void					GetSelectionFrame	( SvxBoxItem&		rLineOuter,
+                                                  SvxBoxInfoItem&	rLineInner );
 
-    sal_uInt8           GetSelectionScriptType();
+    BYTE			GetSelectionScriptType();
 
-    sal_Bool            GetAutoSumArea(ScRangeList& rRangeList);
-    void            EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr);
+    BOOL			GetAutoSumArea(ScRangeList& rRangeList);
+    void			EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr);
     bool            AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue );
     String          GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr );
 
-    void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
-                               sal_Bool bRecord = sal_True, const EditTextObject* pData = NULL );
-    void            EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue );
-    void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextObject* pData,
-                                sal_Bool bRecord = sal_True, sal_Bool bTestSimple = false );
+    void			EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+                               BOOL bRecord = TRUE, const EditTextObject* pData = NULL );
+    void			EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue );
+    void			EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextObject* pData,
+                                BOOL bRecord = TRUE, BOOL bTestSimple = FALSE );
 
-    void            EnterMatrix( const String& rString );
-    void            EnterBlock( const String& rString, const EditTextObject* pData );
+    void			EnterMatrix( const String& rString );
+    void			EnterBlock( const String& rString, const EditTextObject* pData );
 
-    void            EnterDataAtCursor( const String& rString );         //! nicht benutzt ?
+    void			EnterDataAtCursor( const String& rString );			//! nicht benutzt ?
 
-    SC_DLLPUBLIC void           CutToClip( ScDocument* pClipDoc = NULL, sal_Bool bIncludeObjects = false );
-    SC_DLLPUBLIC sal_Bool           CopyToClip( ScDocument* pClipDoc = NULL, sal_Bool bCut = false, sal_Bool bApi = false,
-                                sal_Bool bIncludeObjects = false, sal_Bool bStopEdit = true );
-    SC_DLLPUBLIC sal_Bool           CopyToClip( ScDocument* pClipDoc, const ScRange& rRange, sal_Bool bCut = false,
-                                sal_Bool bApi = false, sal_Bool bIncludeObjects = false, sal_Bool bStopEdit = true );
+    SC_DLLPUBLIC void			CutToClip( ScDocument* pClipDoc = NULL, BOOL bIncludeObjects = FALSE );
+    SC_DLLPUBLIC BOOL			CopyToClip( ScDocument* pClipDoc = NULL, BOOL bCut = FALSE, BOOL bApi = FALSE,
+                                BOOL bIncludeObjects = FALSE, BOOL bStopEdit = TRUE );
+    SC_DLLPUBLIC BOOL			CopyToClip( ScDocument* pClipDoc, const ScRange& rRange, BOOL bCut = FALSE,
+                                BOOL bApi = FALSE, BOOL bIncludeObjects = FALSE, BOOL bStopEdit = TRUE );
     ScTransferObj*              CopyToTransferable();
-    SC_DLLPUBLIC sal_Bool           PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
-                                    sal_uInt16 nFunction = PASTE_NOFUNC, sal_Bool bSkipEmpty = false,
-                                    sal_Bool bTranspose = false, sal_Bool bAsLink = false,
+    SC_DLLPUBLIC BOOL			PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
+                                    USHORT nFunction = PASTE_NOFUNC, BOOL bSkipEmpty = FALSE,
+                                    BOOL bTranspose = FALSE, BOOL bAsLink = FALSE,
                                     InsCellCmd eMoveMode = INS_NONE,
-                                    sal_uInt16 nUndoExtraFlags = IDF_NONE,
-                                    sal_Bool bAllowDialogs = false );
+                                    USHORT nUndoExtraFlags = IDF_NONE,
+                                    BOOL bAllowDialogs = FALSE );
 
-    void            FillTab( sal_uInt16 nFlags, sal_uInt16 nFunction, sal_Bool bSkipEmpty, sal_Bool bAsLink );
+    void			FillTab( USHORT nFlags, USHORT nFunction, BOOL bSkipEmpty, BOOL bAsLink );
 
-    SC_DLLPUBLIC void           PasteFromSystem();
-    SC_DLLPUBLIC sal_Bool           PasteFromSystem( sal_uLong nFormatId, sal_Bool bApi = false );
+    SC_DLLPUBLIC void			PasteFromSystem();
+    SC_DLLPUBLIC BOOL			PasteFromSystem( ULONG nFormatId, BOOL bApi = FALSE );
     void                        PasteFromTransferable( const ::com::sun::star::uno::Reference<
                                                        ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
-    void            PasteDraw();
-    void            PasteDraw( const Point& rLogicPos, SdrModel* pModel,
-                                sal_Bool bGroup = false, sal_Bool bSameDocClipboard = false );
+    void			PasteDraw();
+    void			PasteDraw( const Point& rLogicPos, SdrModel* pModel,
+                                BOOL bGroup = FALSE, BOOL bSameDocClipboard = FALSE );
 
-    sal_Bool            PasteOnDrawObject( const ::com::sun::star::uno::Reference<
+    BOOL			PasteOnDrawObject( const ::com::sun::star::uno::Reference<
                                             ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
-                                        SdrObject* pHitObj, sal_Bool bLink );
+                                        SdrObject* pHitObj, BOOL bLink );
 
-    sal_Bool            PasteDataFormat( sal_uLong nFormatId,
+    BOOL			PasteDataFormat( ULONG nFormatId,
                                         const ::com::sun::star::uno::Reference<
                                             ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
                                         SCCOL nPosX, SCROW nPosY, Point* pLogicPos = NULL,
-                                        sal_Bool bLink = false, sal_Bool bAllowDialogs = false );
+                                        BOOL bLink = FALSE, BOOL bAllowDialogs = FALSE );
 
-    sal_Bool            PasteFile( const Point&, const String&, sal_Bool bLink=false );
-    sal_Bool            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const ::rtl::OUString& = ::rtl::OUString(), sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
-    sal_Bool            PasteBitmap( const Point&, const Bitmap& );
-    sal_Bool            PasteMetaFile( const Point&, const GDIMetaFile& );
-    sal_Bool            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
+    BOOL			PasteFile( const Point&, const String&, BOOL bLink=FALSE );
+    BOOL            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const ::rtl::OUString& = ::rtl::OUString(), sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
+    BOOL			PasteBitmap( const Point&, const Bitmap& );
+    BOOL			PasteMetaFile( const Point&, const GDIMetaFile& );
+    BOOL			PasteGraphic( const Point& rPos, const Graphic& rGraphic,
                                     const String& rFile, const String& rFilter );
-    sal_Bool            PasteBookmark( sal_uLong nFormatId,
+    BOOL			PasteBookmark( ULONG nFormatId,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY );
-    sal_Bool            PasteDDE( const ::com::sun::star::uno::Reference<
+    BOOL			PasteDDE( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
-    sal_Bool            ApplyGraphicToObject( SdrObject* pObject, const Graphic& rGraphic );
+    BOOL			ApplyGraphicToObject( SdrObject* pObject, const Graphic& rGraphic );
 
-    void            InsertBookmark( const String& rDescription, const String& rURL,
+    void			InsertBookmark( const String& rDescription, const String& rURL,
                                     SCCOL nPosX, SCROW nPosY, const String* pTarget = NULL,
-                                    sal_Bool bTryReplace = false );
-    sal_Bool            HasBookmarkAtCursor( SvxHyperlinkItem* pContent );
+                                    BOOL bTryReplace = FALSE );
+    BOOL			HasBookmarkAtCursor( SvxHyperlinkItem* pContent );
 
-    long            DropRequestHdl( Exchange* pExchange );
-    sal_Bool            MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
-                                    sal_Bool bCut, sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
+    long			DropRequestHdl( Exchange* pExchange );
+    BOOL			MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
+                                    BOOL bCut, BOOL bRecord, BOOL bPaint, BOOL bApi );
 
-    sal_Bool            LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, sal_Bool bApi );
+    BOOL			LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, BOOL bApi );
 
-    void            CreateNames( sal_uInt16 nFlags );
-    sal_uInt16          GetCreateNameFlags();
-    void            InsertNameList();
-    sal_Bool            InsertName( const String& rName, const String& rSymbol,
+    void			CreateNames( USHORT nFlags );
+    USHORT			GetCreateNameFlags();
+    void			InsertNameList();
+    BOOL			InsertName( const String& rName, const String& rSymbol,
                                 const String& rType );
 
-    void            ApplyAttributes( const SfxItemSet* pDialogSet, const SfxItemSet* pOldSet,
-                                        sal_Bool bRecord = sal_True );
-    void            ApplyAttr( const SfxPoolItem& rAttrItem );
-    void            ApplySelectionPattern( const ScPatternAttr& rAttr,
-                                            sal_Bool bRecord = sal_True,
-                                            sal_Bool bCursorOnly = false );
-    void            ApplyPatternLines( const ScPatternAttr& rAttr,
+    void			ApplyAttributes( const SfxItemSet* pDialogSet, const SfxItemSet* pOldSet,
+                                        BOOL bRecord = TRUE );
+    void			ApplyAttr( const SfxPoolItem& rAttrItem );
+    void			ApplySelectionPattern( const ScPatternAttr& rAttr,
+                                            BOOL bRecord = TRUE,
+                                            BOOL bCursorOnly = FALSE );
+    void			ApplyPatternLines( const ScPatternAttr& rAttr,
                                         const SvxBoxItem* pNewOuter,
-                                        const SvxBoxInfoItem* pNewInner, sal_Bool bRecord = sal_True );
+                                        const SvxBoxInfoItem* pNewInner, BOOL bRecord = TRUE );
 
-    void            ApplyUserItemSet( const SfxItemSet& rItemSet );
+    void			ApplyUserItemSet( const SfxItemSet& rItemSet );
 
-    const SfxStyleSheet*    GetStyleSheetFromMarked();
-    void                    SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet,
-                                                        sal_Bool bRecord = sal_True );
-    void                    RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
-    void                    UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
+    const SfxStyleSheet*	GetStyleSheetFromMarked();
+    void					SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet,
+                                                        BOOL bRecord = TRUE );
+    void					RemoveStyleSheetInUse( SfxStyleSheet* pStyleSheet );
+    void					UpdateStyleSheetInUse( SfxStyleSheet* pStyleSheet );
 
-    void            SetNumberFormat( short nFormatType, sal_uLong nAdd = 0 );
-    void            SetNumFmtByStr( const String& rCode );
-    void            ChangeNumFmtDecimals( sal_Bool bIncrement );
+    void			SetNumberFormat( short nFormatType, ULONG nAdd = 0 );
+    void			SetNumFmtByStr( const String& rCode );
+    void			ChangeNumFmtDecimals( BOOL bIncrement );
 
-    void            SetConditionalFormat( const ScConditionalFormat& rNew );
-    void            SetValidation( const ScValidationData& rNew );
+    void			SetConditionalFormat( const ScConditionalFormat& rNew );
+    void			SetValidation( const ScValidationData& rNew );
 
-    void            ChangeIndent( sal_Bool bIncrement );
+    void			ChangeIndent( BOOL bIncrement );
 
-    void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
+    void			ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
-    void            Protect( SCTAB nTab, const String& rPassword );
-    sal_Bool            Unprotect( SCTAB nTab, const String& rPassword );
+    void			Protect( SCTAB nTab, const String& rPassword );
+    BOOL			Unprotect( SCTAB nTab, const String& rPassword );
 
-    void            DeleteCells( DelCellCmd eCmd, sal_Bool bRecord = sal_True );
-    sal_Bool            InsertCells( InsCellCmd eCmd, sal_Bool bRecord = sal_True, sal_Bool bPartOfPaste = false );
-    void            DeleteMulti( sal_Bool bRows, sal_Bool bRecord = sal_True );
+    void			DeleteCells( DelCellCmd eCmd, BOOL bRecord = TRUE );
+    BOOL			InsertCells( InsCellCmd eCmd, BOOL bRecord = TRUE, BOOL bPartOfPaste = FALSE );
+    void			DeleteMulti( BOOL bRows, BOOL bRecord = TRUE );
 
-    void            DeleteContents( sal_uInt16 nFlags, sal_Bool bRecord = sal_True );
+    void			DeleteContents( USHORT nFlags, BOOL bRecord = TRUE );
 
-    void            SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
-                                        ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                        sal_Bool bRecord = sal_True, sal_Bool bPaint = sal_True,
+    void			SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
+                                        ScSizeMode eMode, USHORT nSizeTwips,
+                                        BOOL bRecord = TRUE, BOOL bPaint = TRUE,
                                         ScMarkData* pMarkData = NULL );
-    void            SetMarkedWidthOrHeight( sal_Bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                        sal_Bool bRecord = sal_True, sal_Bool bPaint = sal_True );
-    void            ShowMarkedColumns( sal_Bool bShow, sal_Bool bRecord = sal_True );
-    void            ShowMarkedRows( sal_Bool bShow, sal_Bool bRecord = sal_True );
+    void			SetMarkedWidthOrHeight( BOOL bWidth, ScSizeMode eMode, USHORT nSizeTwips,
+                                        BOOL bRecord = TRUE, BOOL bPaint = TRUE );
+    void			ShowMarkedColumns( BOOL bShow, BOOL bRecord = TRUE );
+    void			ShowMarkedRows( BOOL bShow, BOOL bRecord = TRUE );
 
-    sal_Bool            AdjustBlockHeight( sal_Bool bPaint = sal_True, ScMarkData* pMarkData = NULL );
-    sal_Bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, sal_Bool bPaint = sal_True );
+    BOOL			AdjustBlockHeight( BOOL bPaint = TRUE, ScMarkData* pMarkData = NULL );
+    BOOL			AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, BOOL bPaint = TRUE );
 
-    void            ModifyCellSize( ScDirection eDir, sal_Bool bOptimal );
+    void			ModifyCellSize( ScDirection eDir, BOOL bOptimal );
 
-    SC_DLLPUBLIC void           InsertPageBreak( sal_Bool bColumn, sal_Bool bRecord = sal_True,
+    SC_DLLPUBLIC void			InsertPageBreak( BOOL bColumn, BOOL bRecord = TRUE,
                                         const ScAddress* pPos = NULL,
-                                        sal_Bool bSetModified = sal_True );
-    SC_DLLPUBLIC void           DeletePageBreak( sal_Bool bColumn, sal_Bool bRecord = sal_True,
+                                        BOOL bSetModified = TRUE );
+    SC_DLLPUBLIC void			DeletePageBreak( BOOL bColumn, BOOL bRecord = TRUE,
                                         const ScAddress* pPos = NULL,
-                                        sal_Bool bSetModified = sal_True );
+                                        BOOL bSetModified = TRUE );
 
-    void            RemoveManualBreaks();
+    void			RemoveManualBreaks();
 
-    void            SetPrintZoom(sal_uInt16 nScale, sal_uInt16 nPages);
-    void            AdjustPrintZoom();
+    void			SetPrintZoom(USHORT nScale, USHORT nPages);
+    void			AdjustPrintZoom();
 
-    sal_Bool            TestMergeCells();
-    sal_Bool            TestRemoveMerge();
+    BOOL			TestMergeCells();
+    BOOL			TestRemoveMerge();
 
-    sal_Bool            MergeCells( sal_Bool bApi, sal_Bool& rDoContents, sal_Bool bRecord = true, sal_Bool bCenter = false );
-    sal_Bool            RemoveMerge( sal_Bool bRecord = true );
+    BOOL			MergeCells( BOOL bApi, BOOL& rDoContents, BOOL bRecord = TRUE, BOOL bCenter = FALSE );
+    BOOL			RemoveMerge( BOOL bRecord = TRUE );
 
-    void            FillSimple( FillDir eDir, sal_Bool bRecord = sal_True );
-    void            FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
-                                double fStart, double fStep, double fMax, sal_Bool bRecord = sal_True );
-    void            FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount, sal_Bool bRecord = sal_True );
-    void            FillCrossDblClick();
+    void			FillSimple( FillDir eDir, BOOL bRecord = TRUE );
+    void			FillSeries( FillDir	eDir, FillCmd eCmd, FillDateCmd	eDateCmd,
+                                double fStart, double fStep, double fMax, BOOL bRecord = TRUE );
+    void			FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
+                                SCCOL nEndCol, SCROW nEndRow, ULONG nCount, BOOL bRecord = TRUE );
+    void			FillCrossDblClick();
 
-    void            TransliterateText( sal_Int32 nType );
+    void			TransliterateText( sal_Int32 nType );
 
     ScAutoFormatData* CreateAutoFormatData();
-    void            AutoFormat( sal_uInt16 nFormatNo, sal_Bool bRecord = sal_True );
+    void			AutoFormat( USHORT nFormatNo, BOOL bRecord = TRUE );
 
-    void            SearchAndReplace( const SvxSearchItem* pSearchItem,
-                                        sal_Bool bAddUndo, sal_Bool bIsApi );
+    void			SearchAndReplace( const SvxSearchItem* pSearchItem,
+                                        BOOL bAddUndo, BOOL bIsApi );
 
-    void            Solve( const ScSolveParam& rParam );
-    void            TabOp( const ScTabOpParam& rParam,  sal_Bool bRecord = sal_True );
+    void			Solve( const ScSolveParam& rParam );
+    void			TabOp( const ScTabOpParam& rParam,  BOOL bRecord = TRUE );
 
-    sal_Bool            InsertTable( const String& rName, SCTAB nTabNr, sal_Bool bRecord = sal_True );
-    sal_Bool            InsertTables(SvStrings *pNames, SCTAB nTab, SCTAB nCount, sal_Bool bRecord = sal_True);
+    BOOL			InsertTable( const String& rName, SCTAB nTabNr, BOOL bRecord = TRUE );
+    BOOL			InsertTables(SvStrings *pNames, SCTAB nTab, SCTAB nCount, BOOL bRecord = TRUE);
 
 
-    sal_Bool            AppendTable( const String& rName, sal_Bool bRecord = sal_True );
+    BOOL			AppendTable( const String& rName, BOOL bRecord = TRUE );
 
-    sal_Bool            DeleteTable( SCTAB nTabNr, sal_Bool bRecord = true );
-    sal_Bool            DeleteTables(const std::vector<SCTAB>& TheTabs, sal_Bool bRecord = true );
+    BOOL			DeleteTable( SCTAB nTabNr, BOOL bRecord = TRUE );
+    BOOL			DeleteTables(const SvShorts &TheTabs, BOOL bRecord = TRUE );
 
-    sal_Bool            RenameTable( const String& rName, SCTAB nTabNr );
-    void            MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, sal_Bool bCopy, const String* pNewTabName = NULL );
-    void            ImportTables( ScDocShell* pSrcShell,
+    BOOL			RenameTable( const String& rName, SCTAB nTabNr );
+    void			MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy );
+    void			ImportTables( ScDocShell* pSrcShell,
                                     SCTAB nCount, const SCTAB* pSrcTabs,
-                                    sal_Bool bLink,SCTAB nTab);
+                                    BOOL bLink,SCTAB nTab);
 
     bool            SetTabBgColor( const Color& rColor, SCTAB nTabNr );
     bool            SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfoList );
 
-    void            InsertTableLink( const String& rFile,
+    void			InsertTableLink( const String& rFile,
                                         const String& rFilter, const String& rOptions,
                                         const String& rTabName );
-    void            InsertAreaLink( const String& rFile,
+    void			InsertAreaLink( const String& rFile,
                                         const String& rFilter, const String& rOptions,
-                                        const String& rSource, sal_uLong nRefresh );
+                                        const String& rSource, ULONG nRefresh );
 
-    void            ShowTable( const String& rName );
-    void            HideTable( SCTAB nTabNr );
+    void			ShowTable( const String& rName );
+    void			HideTable( SCTAB nTabNr );
 
-    void            MakeScenario( const String& rName, const String& rComment,
-                                    const Color& rColor, sal_uInt16 nFlags );
-    void            ExtendScenario();
-    void            UseScenario( const String& rName );
+    void			MakeScenario( const String& rName, const String& rComment,
+                                    const Color& rColor, USHORT nFlags );
+    void			ExtendScenario();
+    void			UseScenario( const String& rName );
 
-    void            InsertSpecialChar( const String& rStr, const Font& rFont );
+    void			InsertSpecialChar( const String& rStr, const Font& rFont );
 
-    void            InsertDummyObject();
-    void            InsertOleObject();
+    void			InsertDummyObject();
+    void			InsertOleObject();
 
-    void            InsertDraw();
+    void			InsertDraw();
 
-    void            SetSelectionFrameLines( const ::editeng::SvxBorderLine* pLine,
-                                            sal_Bool bColorOnly );
+    void			SetSelectionFrameLines( const SvxBorderLine* pLine,
+                                            BOOL bColorOnly );
 
     void            SetNoteText( const ScAddress& rPos, const String& rNoteText );
     void            ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate );
-    void            DoRefConversion( sal_Bool bRecord = sal_True );
+    void            DoRefConversion( BOOL bRecord = TRUE );
 
-    void            DoHangulHanjaConversion( sal_Bool bRecord = true );
-    void            DoThesaurus( sal_Bool bRecord = true );
+    void            DoHangulHanjaConversion( BOOL bRecord = TRUE );
+    void			DoThesaurus( BOOL bRecord = TRUE );
 
     /** Generic implementation of sheet conversion functions. */
-    void            DoSheetConversion( const ScConversionParam& rParam, sal_Bool bRecord = sal_True );
+    void            DoSheetConversion( const ScConversionParam& rParam, BOOL bRecord = TRUE );
 
-    void            SetPrintRanges( sal_Bool bEntireSheet,
+    void            SetPrintRanges( BOOL bEntireSheet,
                                     const String* pPrint,
                                     const String* pRepCol, const String* pRepRow,
-                                    sal_Bool bAddPrint );
+                                    BOOL bAddPrint );
 
-    void            DetectiveAddPred();
-    void            DetectiveDelPred();
-    void            DetectiveAddSucc();
-    void            DetectiveDelSucc();
-    void            DetectiveAddError();
-    void            DetectiveMarkInvalid();
-    void            DetectiveDelAll();
-    void            DetectiveRefresh();
+    void			DetectiveAddPred();
+    void			DetectiveDelPred();
+    void			DetectiveAddSucc();
+    void			DetectiveDelSucc();
+    void			DetectiveAddError();
+    void			DetectiveMarkInvalid();
+    void			DetectiveDelAll();
+    void			DetectiveRefresh();
     void            DetectiveMarkPred();
     void            DetectiveMarkSucc();
 
     void            InsertCurrentTime(short nCellFmt, const ::rtl::OUString& rUndoStr);
 
-    void            ShowNote( bool bShow = true );
-    inline void     HideNote() { ShowNote( false ); }
-    void            EditNote();
+    void			ShowNote( bool bShow = true );
+    inline void		HideNote() { ShowNote( false ); }
+    void			EditNote();
 
-    void            ForgetFormatArea()      { bFormatValid = false; }
-    sal_Bool            SelectionEditable( sal_Bool* pOnlyNotBecauseOfMatrix = NULL );
+    void			ForgetFormatArea()		{ bFormatValid = FALSE; }
+    BOOL			SelectionEditable( BOOL* pOnlyNotBecauseOfMatrix = NULL );
 
         // Amelia Wang
         SC_DLLPUBLIC void                   DataFormPutData( SCROW nCurrentRow ,
@@ -346,14 +349,14 @@ public:
 
                                                 // interne Hilfsfunktionen
 protected:
-    void            UpdateLineAttrs( ::editeng::SvxBorderLine&        rLine,
-                                     const ::editeng::SvxBorderLine* pDestLine,
-                                     const ::editeng::SvxBorderLine* pSrcLine,
-                                     sal_Bool                 bColor );
+    void			UpdateLineAttrs( SvxBorderLine&		  rLine,
+                                     const SvxBorderLine* pDestLine,
+                                     const SvxBorderLine* pSrcLine,
+                                     BOOL 				  bColor );
 
 
 private:
-    void            PasteRTF( SCCOL nCol, SCROW nStartRow,
+    void			PasteRTF( SCCOL nCol, SCROW nStartRow,
                                 const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
     bool            PasteMultiRangesFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
@@ -361,12 +364,12 @@ private:
                                               InsCellCmd eMoveMode, sal_uInt16 nCondFlags, sal_uInt16 nUndoFlags );
     void            PostPasteFromClip(const ScRange& rPasteRange, const ScMarkData& rMark);
 
-    sal_uInt16          GetOptimalColWidth( SCCOL nCol, SCTAB nTab, sal_Bool bFormula );
+    USHORT			GetOptimalColWidth( SCCOL nCol, SCTAB nTab, BOOL bFormula );
 
-    void            StartFormatArea();
-    sal_Bool            TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bAttrChanged );
-    void            DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                        sal_Bool bAttrChanged, sal_Bool bAddUndo );
+    void			StartFormatArea();
+    BOOL			TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bAttrChanged );
+    void			DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                        BOOL bAttrChanged, BOOL bAddUndo );
 
     void            MarkAndJumpToRanges(const ScRangeList& rRanges);
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,18 +57,21 @@
 |*    ImpSearchEntry()
 |*
 |*    Beschreibung      Prueft ob im Speicherbereich pSource der nComp Bytes
-|*                      gross ist eine Zeichenkette(pDest) mit der l�nge nSize
-|*                      liegt. Geprueft wird NON-CASE-SENSITIVE und der Rueck-
-|*                      gabewert ist die Adresse an der die Zeichekette gefunden
-|*                      wurde oder NULL
+|*						gross ist eine Zeichenkette(pDest) mit der l�nge nSize
+|*						liegt. Geprueft wird NON-CASE-SENSITIVE und der Rueck-
+|*						gabewert ist die Adresse an der die Zeichekette gefunden
+|*						wurde oder NULL
+|*
+|*    Ersterstellung    SJ 04.03.98 ( und das an meinem Geburtstag )
+|*    Letzte Aenderung  SJ 04.03.98
 |*
 *************************************************************************/
 
-static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize )
+static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSize )
 {
     while ( nComp-- >= nSize )
     {
-        sal_uLong i;
+        ULONG i;
         for ( i = 0; i < nSize; i++ )
         {
             if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )
@@ -83,28 +86,28 @@ static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLo
 
 //--------------------------------------------------------------------------
 // SecurityCount is the buffersize of the buffer in which we will parse for a number
-static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
+static long ImplGetNumber( BYTE **pBuf, int& nSecurityCount )
 {
-    sal_Bool    bValid = sal_True;
-    sal_Bool    bNegative = sal_False;
-    long    nRetValue = 0;
+    BOOL	bValid = TRUE;
+    BOOL	bNegative = FALSE;
+    long	nRetValue = 0;
     while ( ( --nSecurityCount ) && ( ( **pBuf == ' ' ) || ( **pBuf == 0x9 ) ) )
         (*pBuf)++;
-    sal_uInt8 nByte = **pBuf;
+    BYTE nByte = **pBuf;
     while ( nSecurityCount && ( nByte != ' ' ) && ( nByte != 0x9 ) && ( nByte != 0xd ) && ( nByte != 0xa ) )
     {
         switch ( nByte )
         {
             case '.' :
                 // we'll only use the integer format
-                bValid = sal_False;
+                bValid = FALSE;
                 break;
             case '-' :
-                bNegative = sal_True;
+                bNegative = TRUE;
                 break;
             default :
                 if ( ( nByte < '0' ) || ( nByte > '9' ) )
-                    nSecurityCount = 1;         // error parsing the bounding box values
+                    nSecurityCount = 1;			// error parsing the bounding box values
                 else if ( bValid )
                 {
                     nRetValue *= 10;
@@ -122,12 +125,12 @@ static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
 
 //--------------------------------------------------------------------------
 
-static int ImplGetLen( sal_uInt8* pBuf, int nMax )
+static int ImplGetLen( BYTE* pBuf, int nMax )
 {
     int nLen = 0;
     while( nLen != nMax )
     {
-        sal_uInt8 nDat = *pBuf++;
+        BYTE nDat = *pBuf++;
         if ( nDat == 0x0a || nDat == 0x25 )
             break;
         nLen++;
@@ -137,19 +140,19 @@ static int ImplGetLen( sal_uInt8* pBuf, int nMax )
 
 static void MakeAsMeta(Graphic &rGraphic)
 {
-    VirtualDevice   aVDev;
-    GDIMetaFile     aMtf;
-    Bitmap          aBmp( rGraphic.GetBitmap() );
-    Size            aSize = aBmp.GetPrefSize();
+    VirtualDevice	aVDev;
+    GDIMetaFile		aMtf;
+    Bitmap			aBmp( rGraphic.GetBitmap() );
+    Size			aSize = aBmp.GetPrefSize();
 
     if( !aSize.Width() || !aSize.Height() )
-        aSize = Application::GetDefaultDevice()->PixelToLogic(
+        aSize = Application::GetDefaultDevice()->PixelToLogic( 
             aBmp.GetSizePixel(), MAP_100TH_MM );
     else
-        aSize = Application::GetDefaultDevice()->LogicToLogic( aSize,
+        aSize = Application::GetDefaultDevice()->LogicToLogic( aSize, 
             aBmp.GetPrefMapMode(), MAP_100TH_MM );
 
-    aVDev.EnableOutput( sal_False );
+    aVDev.EnableOutput( FALSE );
     aMtf.Record( &aVDev );
     aVDev.DrawBitmap( Point(), aSize, rGraphic.GetBitmap() );
     aMtf.Stop();
@@ -171,7 +174,7 @@ static oslProcessError runProcessWithPathSearch(const rtl::OUString &rProgName,
      * The current directory.
      * The Windows system directory.
      * The Windows directory.
-     * The directories that are listed in the PATH environment variable.
+     * The directories that are listed in the PATH environment variable. 
      *
      * Because one of our programs is called "convert" and there is a convert
      * in the windows system directory, we want to explicitly search the PATH
@@ -185,12 +188,12 @@ static oslProcessError runProcessWithPathSearch(const rtl::OUString &rProgName,
     oslFileError err = osl_searchFileURL(rProgName.pData, path.pData, &url.pData);
     if (err != osl_File_E_None)
         return osl_Process_E_NotFound;
-    return osl_executeProcess_WithRedirectedIO(url.pData,
+    return osl_executeProcess_WithRedirectedIO(url.pData, 
     pArgs, nArgs, osl_Process_HIDDEN,
         osl_getCurrentSecurity(), 0, 0, 0, pProcess, pIn, pOut, pErr);
 #else
-    return osl_executeProcess_WithRedirectedIO(rProgName.pData,
-        pArgs, nArgs, osl_Process_SEARCHPATH | osl_Process_HIDDEN,
+    return osl_executeProcess_WithRedirectedIO(rProgName.pData, 
+        pArgs, nArgs, osl_Process_SEARCHPATH | osl_Process_HIDDEN, 
         osl_getCurrentSecurity(), 0, 0, 0, pProcess, pIn, pOut, pErr);
 #endif
 }
@@ -205,17 +208,17 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
 {
     TempFile aTemp;
     aTemp.EnableKillingFile();
-    rtl::OUString fileName =
+    rtl::OUString fileName = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pstoedit"EXESUFFIX));
-    rtl::OUString arg1 =
+    rtl::OUString arg1 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-f"));
-    rtl::OUString arg2 =
+    rtl::OUString arg2 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("emf:-OO"));
-    rtl::OUString arg3 =
+    rtl::OUString arg3 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
     rtl::OUString output;
     osl::FileBase::getSystemPathFromFileURL(aTemp.GetName(), output);
-    rtl_uString *args[] =
+    rtl_uString *args[] = 
     {
         arg1.pData, arg2.pData, arg3.pData, output.pData
     };
@@ -245,7 +248,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
                 bEMFSupported=false;
         }
         osl_closeFile(pOut);
-    }
+    }		
     if (pErr) osl_closeFile(pErr);
     if (nCount == nBytesRead && bEMFSupported)
     {
@@ -258,7 +261,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     return bRet;
 }
 
-static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
+static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, 
     Graphic &rGraphic, rtl::OUString &rProgName, rtl_uString *pArgs[], size_t nArgs)
 {
     oslProcess aProcess;
@@ -288,7 +291,7 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
 
         aMemStm.Seek(0);
         if (
-            aMemStm.GetEndOfData() &&
+            aMemStm.GetEndOfData() && 
             GraphicConverter::Import(aMemStm, rGraphic, CVT_PNG) == ERRCODE_NONE
            )
         {
@@ -303,10 +306,10 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
     return bRet;
 }
 
-static bool RenderAsPNGThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
+static bool RenderAsPNGThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, 
     Graphic &rGraphic)
 {
-    rtl::OUString fileName =
+    rtl::OUString fileName = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("convert"EXESUFFIX));
     // density in pixel/inch
     rtl::OUString arg1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-density"));
@@ -317,53 +320,53 @@ static bool RenderAsPNGThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
     rtl::OUString arg3 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("eps:-"));
     // write png to STDOUT
     rtl::OUString arg4 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("png:-"));
-    rtl_uString *args[] =
+    rtl_uString *args[] = 
     {
         arg1.pData, arg2.pData, arg3.pData, arg4.pData
     };
-    return RenderAsPNGThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args,
+    return RenderAsPNGThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args, 
         sizeof(args)/sizeof(rtl_uString *));
 }
 
-static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
+static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, 
     Graphic &rGraphic)
 {
 #ifdef WNT
-    rtl::OUString fileName =
+    rtl::OUString fileName = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gswin32c"EXESUFFIX));
 #else
-    rtl::OUString fileName =
+    rtl::OUString fileName = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gs"EXESUFFIX));
 #endif
-    rtl::OUString arg1 =
+    rtl::OUString arg1 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-q"));
-    rtl::OUString arg2 =
+    rtl::OUString arg2 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dBATCH"));
-    rtl::OUString arg3 =
+    rtl::OUString arg3 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dNOPAUSE"));
-    rtl::OUString arg4 =
+    rtl::OUString arg4 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dPARANOIDSAFER"));
-    rtl::OUString arg5 =
+    rtl::OUString arg5 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dEPSCrop"));
-    rtl::OUString arg6 =
+    rtl::OUString arg6 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dTextAlphaBits=4"));
-    rtl::OUString arg7 =
+    rtl::OUString arg7 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-dGraphicsAlphaBits=4"));
-    rtl::OUString arg8 =
+    rtl::OUString arg8 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-r300x300"));
-    rtl::OUString arg9 =
+    rtl::OUString arg9 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-sDEVICE=png256"));
-    rtl::OUString arg10 =
+    rtl::OUString arg10 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-sOutputFile=-"));
-    rtl::OUString arg11 =
+    rtl::OUString arg11 = 
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
-    rtl_uString *args[] =
+    rtl_uString *args[] = 
     {
         arg1.pData, arg2.pData, arg3.pData, arg4.pData, arg5.pData,
-        arg6.pData, arg7.pData, arg8.pData, arg9.pData, arg10.pData,
+        arg6.pData, arg7.pData, arg8.pData, arg9.pData, arg10.pData, 
         arg11.pData
     };
-    return RenderAsPNGThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args,
+    return RenderAsPNGThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args, 
         sizeof(args)/sizeof(rtl_uString *));
 }
 
@@ -406,29 +409,29 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
             rStrm.Seek( nOrigPos + nPosTIFF );
             rStrm.Read( pBuf, nSizeTIFF );
             aReplacement.Write( pBuf, nSizeTIFF );
-            delete[] pBuf;
+            delete[] pBuf;		
         }
-        rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, (const sal_uInt8*)aReplacement.GetData(), aReplacement.Tell() ) ) );
+        rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, (const BYTE*)aReplacement.GetData(), aReplacement.Tell() ) ) );
     }
     else
         rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, NULL, 0 ) ) );
 }
 
 //there is no preview -> make a red box
-void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
+void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead, 
     long nWidth, long nHeight, Graphic &rGraphic)
 {
     GDIMetaFile aMtf;
-    VirtualDevice   aVDev;
-    Font            aFont;
+    VirtualDevice	aVDev;
+    Font			aFont;
 
-    aVDev.EnableOutput( sal_False );
+    aVDev.EnableOutput( FALSE );
     aMtf.Record( &aVDev );
     aVDev.SetLineColor( Color( COL_RED ) );
     aVDev.SetFillColor();
 
     aFont.SetColor( COL_LIGHTRED );
-//  aFont.SetSize( Size( 0, 32 ) );
+//	aFont.SetSize( Size( 0, 32 ) );
 
     aVDev.Push( PUSH_FONT );
     aVDev.SetFont( aFont );
@@ -438,14 +441,14 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 
     String aString;
     int nLen;
-    sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%Title:", nBytesRead - 32, 8 );
+    BYTE* pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Title:", nBytesRead - 32, 8 );
     if ( pDest )
     {
         pDest += 8;
         if ( *pDest == ' ' )
             pDest++;
         nLen = ImplGetLen( pDest, 32 );
-        sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
+        BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
         if ( strcmp( (const char*)pDest, "none" ) != 0 )
         {
             aString.AppendAscii( " Title:" );
@@ -454,27 +457,27 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         }
         pDest[ nLen ] = aOldValue;
     }
-    pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%Creator:", nBytesRead - 32, 10 );
+    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Creator:", nBytesRead - 32, 10 );
     if ( pDest )
     {
         pDest += 10;
         if ( *pDest == ' ' )
             pDest++;
         nLen = ImplGetLen( pDest, 32 );
-        sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
+        BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
         aString.AppendAscii( " Creator:" );
         aString.AppendAscii( (char*)pDest );
         aString.AppendAscii( "\n" );
         pDest[ nLen ] = aOldValue;
     }
-    pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%CreationDate:", nBytesRead - 32, 15 );
+    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%CreationDate:", nBytesRead - 32, 15 );
     if ( pDest )
     {
         pDest += 15;
         if ( *pDest == ' ' )
             pDest++;
         nLen = ImplGetLen( pDest, 32 );
-        sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
+        BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
         if ( strcmp( (const char*)pDest, "none" ) != 0 )
         {
             aString.AppendAscii( " CreationDate:" );
@@ -483,13 +486,13 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         }
         pDest[ nLen ] = aOldValue;
     }
-    pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%LanguageLevel:", nBytesRead - 4, 16 );
+    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%LanguageLevel:", nBytesRead - 4, 16 );
     if ( pDest )
     {
         pDest += 16;
         int nCount = 4;
         long nNumber = ImplGetNumber( &pDest, nCount );
-        if ( nCount && ( (sal_uInt32)nNumber < 10 ) )
+        if ( nCount && ( (UINT32)nNumber < 10 ) )
         {
             aString.AppendAscii( " LanguageLevel:" );
             aString.Append( UniString::CreateFromInt32( nNumber ) );
@@ -508,25 +511,25 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 //================== GraphicImport - die exportierte Funktion ================
 
 #ifdef WNT
-extern "C" sal_Bool _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL)
 #else
-extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL)
 #endif
 {
     if ( rStream.GetError() )
-        return sal_False;
+        return FALSE;
 
-    Graphic     aGraphic;
-    sal_Bool    bRetValue = sal_False;
-    sal_Bool    bHasPreview = sal_False;
-    sal_Bool    bGraphicLinkCreated = sal_False;
-    sal_uInt32  nSignature, nPSStreamPos, nPSSize;
-    sal_uInt32  nSizeWMF = 0;
-    sal_uInt32  nPosWMF = 0;
-    sal_uInt32  nSizeTIFF = 0;
-    sal_uInt32  nPosTIFF = 0;
-    sal_uInt32  nOrigPos = nPSStreamPos = rStream.Tell();
-    sal_uInt16  nOldFormat = rStream.GetNumberFormatInt();
+    Graphic		aGraphic;
+    sal_Bool	bRetValue = sal_False;
+    sal_Bool	bHasPreview = sal_False;
+    sal_Bool	bGraphicLinkCreated = sal_False;
+    sal_uInt32	nSignature, nPSStreamPos, nPSSize;
+    sal_uInt32	nSizeWMF = 0;
+    sal_uInt32	nPosWMF = 0;
+    sal_uInt32	nSizeTIFF = 0;
+    sal_uInt32	nPosTIFF = 0;
+    sal_uInt32	nOrigPos = nPSStreamPos = rStream.Tell();
+    sal_uInt16	nOldFormat = rStream.GetNumberFormatInt();
     rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rStream >> nSignature;
     if ( nSignature == 0xc6d3d0c5 )
@@ -541,7 +544,7 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
             {
                 rStream.Seek( nOrigPos + nPosWMF );
                 if ( GraphicConverter::Import( rStream, aGraphic, CVT_WMF ) == ERRCODE_NONE )
-                    bHasPreview = bRetValue = sal_True;
+                    bHasPreview = bRetValue = TRUE;
             }
         }
         else
@@ -557,34 +560,34 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
                 {
                     MakeAsMeta(aGraphic);
                     rStream.Seek( nOrigPos + nPosTIFF );
-                    bHasPreview = bRetValue = sal_True;
+                    bHasPreview = bRetValue = TRUE;
                 }
             }
         }
     }
     else
     {
-        nPSStreamPos = nOrigPos;            // no preview available _>so we must get the size manually
+        nPSStreamPos = nOrigPos;			// no preview available _>so we must get the size manually
         nPSSize = rStream.Seek( STREAM_SEEK_TO_END ) - nOrigPos;
     }
     sal_uInt8* pHeader = new sal_uInt8[ 22 ];
     rStream.Seek( nPSStreamPos );
-    rStream.Read( pHeader, 22 );    // check PostScript header
-    if ( ImplSearchEntry( pHeader, (sal_uInt8*)"%!PS-Adobe", 10, 10 ) &&
-        ImplSearchEntry( &pHeader[ 15 ], (sal_uInt8*)"EPS", 3, 3 ) )
+    rStream.Read( pHeader, 22 );	// check PostScript header
+    if ( ImplSearchEntry( pHeader, (BYTE*)"%!PS-Adobe", 10, 10 ) &&
+        ImplSearchEntry( &pHeader[ 15 ], (BYTE*)"EPS", 3, 3 ) )
     {
         rStream.Seek( nPSStreamPos );
         sal_uInt8* pBuf = new sal_uInt8[ nPSSize ];
         if ( pBuf )
         {
-            sal_uInt32  nBufStartPos = rStream.Tell();
-            sal_uInt32  nBytesRead = rStream.Read( pBuf, nPSSize );
+            sal_uInt32	nBufStartPos = rStream.Tell();
+            sal_uInt32	nBytesRead = rStream.Read( pBuf, nPSSize );
             if ( nBytesRead == nPSSize )
             {
                 int nSecurityCount = 32;
-                if ( !bHasPreview )     // if there is no tiff/wmf preview, we will parse for an preview in the eps prolog
+                if ( !bHasPreview )		// if there is no tiff/wmf preview, we will parse for an preview in the eps prolog
                 {
-                    sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%BeginPreview:", nBytesRead - 32, 15 );
+                    BYTE* pDest = ImplSearchEntry( pBuf, (BYTE*)"%%BeginPreview:", nBytesRead - 32, 15 );
                     if ( pDest  )
                     {
                         pDest += 15;
@@ -592,7 +595,7 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
                         long nHeight = ImplGetNumber( &pDest, nSecurityCount );
                         long nBitDepth = ImplGetNumber( &pDest, nSecurityCount );
                         long nScanLines = ImplGetNumber( &pDest, nSecurityCount );
-                        pDest = ImplSearchEntry( pDest, (sal_uInt8*)"%", 16, 1 );       // go to the first Scanline
+                        pDest = ImplSearchEntry( pDest, (BYTE*)"%", 16, 1 );		// go to the first Scanline
                         if ( nSecurityCount && pDest && nWidth && nHeight && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines )
                         {
                             rStream.Seek( nBufStartPos + ( pDest - pBuf ) );
@@ -601,9 +604,9 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
                             BitmapWriteAccess* pAcc = aBitmap.AcquireWriteAccess();
                             if ( pAcc )
                             {
-                                int  nBitsLeft;
-                                sal_Bool bIsValid = sal_True;
-                                sal_uInt8 nDat = 0;
+                                int	 nBitsLeft;
+                                BOOL bIsValid = TRUE;
+                                BYTE nDat = 0;
                                 char nByte;
                                 for ( long y = 0; bIsValid && ( y < nHeight ); y++ )
                                 {
@@ -619,7 +622,7 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
                                                 {
                                                     case 0x0a :
                                                         if ( --nScanLines < 0 )
-                                                            bIsValid = sal_False;
+                                                            bIsValid = FALSE;
                                                     case 0x09 :
                                                     case 0x0d :
                                                     case 0x20 :
@@ -631,10 +634,10 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
                                                         {
                                                             if ( nByte > '9' )
                                                             {
-                                                                nByte &=~0x20;  // case none sensitive for hexadezimal values
+                                                                nByte &=~0x20;	// case none sensitive for hexadezimal values
                                                                 nByte -= ( 'A' - 10 );
                                                                 if ( nByte > 15 )
-                                                                    bIsValid = sal_False;
+                                                                    bIsValid = FALSE;
                                                             }
                                                             else
                                                                 nByte -= '0';
@@ -643,27 +646,27 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
                                                             nDat |= ( nByte ^ 0xf ); // in epsi a zero bit represents white color
                                                         }
                                                         else
-                                                            bIsValid = sal_False;
+                                                            bIsValid = FALSE;
                                                     }
                                                     break;
                                                 }
                                             }
                                         }
                                         if ( nBitDepth == 1 )
-                                            pAcc->SetPixel( y, x, sal::static_int_cast< sal_uInt8 >(( nDat >> nBitsLeft ) & 1) );
+                                            pAcc->SetPixel( y, x, sal::static_int_cast< BYTE >(( nDat >> nBitsLeft ) & 1) );
                                         else
                                         {
-                                            pAcc->SetPixel( y, x, ( nDat ) ? 1 : 0 );   // nBitDepth == 8
+                                            pAcc->SetPixel( y, x, ( nDat ) ? 1 : 0 );	// nBitDepth == 8
                                             nBitsLeft = 0;
                                         }
                                     }
                                 }
                                 if ( bIsValid )
                                 {
-                                    VirtualDevice   aVDev;
-                                    GDIMetaFile     aMtf;
-                                    Size            aSize;
-                                    aVDev.EnableOutput( sal_False );
+                                    VirtualDevice	aVDev;
+                                    GDIMetaFile		aMtf;
+                                    Size			aSize;
+                                    aVDev.EnableOutput( FALSE );
                                     aMtf.Record( &aVDev );
                                     aSize = aBitmap.GetPrefSize();
                                     if( !aSize.Width() || !aSize.Height() )
@@ -676,7 +679,7 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
                                     aMtf.SetPrefMapMode( MAP_100TH_MM );
                                     aMtf.SetPrefSize( aSize );
                                     aGraphic = aMtf;
-                                    bHasPreview = bRetValue = sal_True;
+                                    bHasPreview = bRetValue = TRUE;
                                 }
                                 aBitmap.ReleaseAccess( pAcc );
                             }
@@ -684,7 +687,7 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
                     }
                 }
 
-                sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%BoundingBox:", nBytesRead, 14 );
+                BYTE* pDest = ImplSearchEntry( pBuf, (BYTE*)"%%BoundingBox:", nBytesRead, 14 );
                 if ( pDest )
                 {
                     nSecurityCount = 100;
@@ -698,12 +701,12 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
                     if ( nSecurityCount)
                     {
                         bGraphicLinkCreated = sal_True;
-                        GfxLink     aGfxLink( pBuf, nPSSize, GFX_LINK_TYPE_EPS_BUFFER, sal_True ) ;
-                        GDIMetaFile aMtf;
+                        GfxLink		aGfxLink( pBuf, nPSSize, GFX_LINK_TYPE_EPS_BUFFER, TRUE ) ;
+                        GDIMetaFile	aMtf;
 
                         long nWidth =  nNumb[2] - nNumb[0] + 1;
                         long nHeight = nNumb[3] - nNumb[1] + 1;
-
+                        
                         // if there is no preview -> try with gs to make one
                         if( !bHasPreview )
                         {
@@ -715,7 +718,7 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
                         // if there is no preview -> make a red box
                         if( !bHasPreview )
                         {
-                            MakePreview(pBuf, nBytesRead, nWidth, nHeight,
+                            MakePreview(pBuf, nBytesRead, nWidth, nHeight, 
                                 aGraphic);
                         }
 
@@ -739,5 +742,30 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
     rStream.Seek( nOrigPos );
     return ( bRetValue );
 }
+
+//================== ein bischen Muell fuer Windows ==========================
+
+#ifdef WIN
+
+static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
+
+extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
+{
+#ifndef WNT
+    if ( nHeap )
+        UnlockData( 0 );
+#endif
+
+    hDLLInst = hDLL;
+
+    return TRUE;
+}
+
+extern "C" int CALLBACK WEP( int )
+{
+    return 1;
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

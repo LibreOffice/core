@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <comphelper/docpasswordhelper.hxx>
-#include <comphelper/sequenceashashmap.hxx>
-
 #include "xistream.hxx"
 #include "xlstring.hxx"
 #include "xiroot.hxx"
@@ -41,8 +38,6 @@
 using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
-
-using namespace ::com::sun::star;
 
 // ============================================================================
 // Decryption
@@ -75,16 +70,9 @@ XclImpDecrypterRef XclImpDecrypter::Clone() const
     return xNewDecr;
 }
 
-::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyPassword( const ::rtl::OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
+::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyPassword( const OUString& rPassword )
 {
-    o_rEncryptionData = OnVerifyPassword( rPassword );
-    mnError = o_rEncryptionData.getLength() ? ERRCODE_NONE : ERRCODE_ABORT;
-    return o_rEncryptionData.getLength() ? ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
-}
-
-::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
-{
-    bool bValid = OnVerifyEncryptionData( rEncryptionData );
+    bool bValid = OnVerify( rPassword );
     mnError = bValid ? ERRCODE_NONE : ERRCODE_ABORT;
     return bValid ? ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
 }
@@ -123,6 +111,7 @@ sal_uInt16 XclImpDecrypter::Read( SvStream& rStrm, void* pData, sal_uInt16 nByte
 // ----------------------------------------------------------------------------
 
 XclImpBiff5Decrypter::XclImpBiff5Decrypter( sal_uInt16 nKey, sal_uInt16 nHash ) :
+    maPassword( 16 ),
     mnKey( nKey ),
     mnHash( nHash )
 {
@@ -130,12 +119,12 @@ XclImpBiff5Decrypter::XclImpBiff5Decrypter( sal_uInt16 nKey, sal_uInt16 nHash ) 
 
 XclImpBiff5Decrypter::XclImpBiff5Decrypter( const XclImpBiff5Decrypter& rSrc ) :
     XclImpDecrypter( rSrc ),
-    maEncryptionData( rSrc.maEncryptionData ),
+    maPassword( rSrc.maPassword ),
     mnKey( rSrc.mnKey ),
     mnHash( rSrc.mnHash )
 {
     if( IsValid() )
-        maCodec.InitCodec( maEncryptionData );
+        maCodec.InitKey( &maPassword.front() );
 }
 
 XclImpBiff5Decrypter* XclImpBiff5Decrypter::OnClone() const
@@ -143,59 +132,24 @@ XclImpBiff5Decrypter* XclImpBiff5Decrypter::OnClone() const
     return new XclImpBiff5Decrypter( *this );
 }
 
-uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const ::rtl::OUString& rPassword )
+bool XclImpBiff5Decrypter::OnVerify( const OUString& rPassword )
 {
-    maEncryptionData.realloc( 0 );
-
     /*  Convert password to a byte string. TODO: this needs some finetuning
         according to the spec... */
     OString aBytePassword = OUStringToOString( rPassword, osl_getThreadTextEncoding() );
     sal_Int32 nLen = aBytePassword.getLength();
     if( (0 < nLen) && (nLen < 16) )
     {
+        // copy byte string to sal_uInt8 array
+        maPassword.clear();
+        maPassword.resize( 16, 0 );
+        memcpy( &maPassword.front(), aBytePassword.getStr(), static_cast< size_t >( nLen ) );
+
         // init codec
-        maCodec.InitKey( (sal_uInt8*)aBytePassword.getStr() );
-
-        if ( maCodec.VerifyKey( mnKey, mnHash ) )
-        {
-            maEncryptionData = maCodec.GetEncryptionData();
-
-            // since the export uses Std97 encryption always we have to request it here
-            ::std::vector< sal_uInt16 > aPassVect( 16 );
-            ::std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
-            for( sal_Int32 nInd = 0; nInd < nLen; ++nInd, ++aIt )
-                *aIt = static_cast< sal_uInt16 >( rPassword.getStr()[nInd] );
-
-            uno::Sequence< sal_Int8 > aDocId = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
-            OSL_ENSURE( aDocId.getLength() == 16, "Unexpected length of the senquence!" );
-
-            ::msfilter::MSCodec_Std97 aCodec97;
-            aCodec97.InitKey( &aPassVect.front(), (sal_uInt8*)aDocId.getConstArray() );
-
-            // merge the EncryptionData, there should be no conflicts
-            ::comphelper::SequenceAsHashMap aEncryptionHash( maEncryptionData );
-            aEncryptionHash.update( ::comphelper::SequenceAsHashMap( aCodec97.GetEncryptionData() ) );
-            aEncryptionHash >> maEncryptionData;
-        }
+        maCodec.InitKey( &maPassword.front() );
+        return maCodec.VerifyKey( mnKey, mnHash );
     }
-
-    return maEncryptionData;
-}
-
-bool XclImpBiff5Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
-{
-    maEncryptionData.realloc( 0 );
-
-    if( rEncryptionData.getLength() )
-    {
-        // init codec
-        maCodec.InitCodec( rEncryptionData );
-
-        if ( maCodec.VerifyKey( mnKey, mnHash ) )
-            maEncryptionData = rEncryptionData;
-    }
-
-    return maEncryptionData.getLength();
+    return false;
 }
 
 void XclImpBiff5Decrypter::OnUpdate( sal_Size /*nOldStrmPos*/, sal_Size nNewStrmPos, sal_uInt16 nRecSize )
@@ -215,6 +169,7 @@ sal_uInt16 XclImpBiff5Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
 
 XclImpBiff8Decrypter::XclImpBiff8Decrypter( sal_uInt8 pnSalt[ 16 ],
         sal_uInt8 pnVerifier[ 16 ], sal_uInt8 pnVerifierHash[ 16 ] ) :
+    maPassword( 16, 0 ),
     maSalt( pnSalt, pnSalt + 16 ),
     maVerifier( pnVerifier, pnVerifier + 16 ),
     maVerifierHash( pnVerifierHash, pnVerifierHash + 16 )
@@ -223,13 +178,13 @@ XclImpBiff8Decrypter::XclImpBiff8Decrypter( sal_uInt8 pnSalt[ 16 ],
 
 XclImpBiff8Decrypter::XclImpBiff8Decrypter( const XclImpBiff8Decrypter& rSrc ) :
     XclImpDecrypter( rSrc ),
-    maEncryptionData( rSrc.maEncryptionData ),
+    maPassword( rSrc.maPassword ),
     maSalt( rSrc.maSalt ),
     maVerifier( rSrc.maVerifier ),
     maVerifierHash( rSrc.maVerifierHash )
 {
     if( IsValid() )
-        maCodec.InitCodec( maEncryptionData );
+        maCodec.InitKey( &maPassword.front(), &maSalt.front() );
 }
 
 XclImpBiff8Decrypter* XclImpBiff8Decrypter::OnClone() const
@@ -237,44 +192,25 @@ XclImpBiff8Decrypter* XclImpBiff8Decrypter::OnClone() const
     return new XclImpBiff8Decrypter( *this );
 }
 
-uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const ::rtl::OUString& rPassword )
+bool XclImpBiff8Decrypter::OnVerify( const OUString& rPassword )
 {
-    maEncryptionData.realloc( 0 );
-
     sal_Int32 nLen = rPassword.getLength();
     if( (0 < nLen) && (nLen < 16) )
     {
         // copy string to sal_uInt16 array
-        ::std::vector< sal_uInt16 > aPassVect( 16 );
+        maPassword.clear();
+        maPassword.resize( 16, 0 );
         const sal_Unicode* pcChar = rPassword.getStr();
         const sal_Unicode* pcCharEnd = pcChar + nLen;
-        ::std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
+        ::std::vector< sal_uInt16 >::iterator aIt = maPassword.begin();
         for( ; pcChar < pcCharEnd; ++pcChar, ++aIt )
             *aIt = static_cast< sal_uInt16 >( *pcChar );
 
         // init codec
-        maCodec.InitKey( &aPassVect.front(), &maSalt.front() );
-        if ( maCodec.VerifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
-            maEncryptionData = maCodec.GetEncryptionData();
+        maCodec.InitKey( &maPassword.front(), &maSalt.front() );
+        return maCodec.VerifyKey( &maVerifier.front(), &maVerifierHash.front() );
     }
-
-    return maEncryptionData;
-}
-
-bool XclImpBiff8Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
-{
-    maEncryptionData.realloc( 0 );
-
-    if( rEncryptionData.getLength() )
-    {
-        // init codec
-        maCodec.InitCodec( rEncryptionData );
-
-        if ( maCodec.VerifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
-            maEncryptionData = rEncryptionData;
-    }
-
-    return maEncryptionData.getLength();
+    return false;
 }
 
 void XclImpBiff8Decrypter::OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 /*nRecSize*/ )
@@ -412,7 +348,7 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
                 case EXC_BOF_BIFF4: eBiff = EXC_BIFF4;  break;
                 case EXC_BOF_BIFF5: eBiff = EXC_BIFF5;  break;
                 case EXC_BOF_BIFF8: eBiff = EXC_BIFF8;  break;
-                default:    OSL_TRACE( "XclImpStream::DetectBiffVersion - unknown BIFF version: 0x%04hX", nVersion );
+                default:    DBG_ERROR1( "XclImpStream::DetectBiffVersion - unknown BIFF version: 0x%04hX", nVersion );
             }
         }
         break;
@@ -506,14 +442,14 @@ void XclImpStream::SetDecrypter( XclImpDecrypterRef xDecrypter )
 void XclImpStream::CopyDecrypterFrom( const XclImpStream& rStrm )
 {
     XclImpDecrypterRef xNewDecr;
-    if( rStrm.mxDecrypter )
+    if( rStrm.mxDecrypter.is() )
         xNewDecr = rStrm.mxDecrypter->Clone();
     SetDecrypter( xNewDecr );
 }
 
 bool XclImpStream::HasValidDecrypter() const
 {
-    return mxDecrypter && mxDecrypter->IsValid();
+    return mxDecrypter.is() && mxDecrypter->IsValid();
 }
 
 void XclImpStream::EnableDecryption( bool bEnable )
@@ -731,6 +667,13 @@ XclImpStream& XclImpStream::operator>>( double& rfValue )
     return *this;
 }
 
+sal_Int8 XclImpStream::ReadInt8()
+{
+    sal_Int8 nValue(0);
+    operator>>( nValue );
+    return nValue;
+}
+
 sal_uInt8 XclImpStream::ReaduInt8()
 {
     sal_uInt8 nValue(0);
@@ -764,6 +707,13 @@ sal_uInt32 XclImpStream::ReaduInt32()
     sal_uInt32 nValue(0);
     operator>>( nValue );
     return nValue;
+}
+
+float XclImpStream::ReadFloat()
+{
+    float fValue(0.0);
+    operator>>( fValue );
+    return fValue;
 }
 
 double XclImpStream::ReadDouble()
@@ -1002,6 +952,11 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars )
     IgnoreUniString( nChars, ReaduInt8() );
 }
 
+void XclImpStream::IgnoreUniString()
+{
+    IgnoreUniString( ReaduInt16() );
+}
+
 // ----------------------------------------------------------------------------
 
 String XclImpStream::ReadRawByteString( sal_uInt16 nChars )
@@ -1043,7 +998,7 @@ bool XclImpStream::ReadNextRawRecHeader()
 
 void XclImpStream::SetupDecrypter()
 {
-    if( mxDecrypter )
+    if( mxDecrypter.is() )
         mxDecrypter->Update( mrStrm, mnRawRecSize );
 }
 

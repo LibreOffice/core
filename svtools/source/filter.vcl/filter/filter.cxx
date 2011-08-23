@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 #include "xbmread.hxx"
 #include "xpmread.hxx"
 #include <svl/solar.hrc>
-#include <svtools/svtools.hrc>
+#include "strings.hrc"
 #include "sgffilt.hxx"
 #include "osl/module.hxx"
 #include <com/sun/star/uno/Reference.h>
@@ -76,24 +76,28 @@
 
 #include "SvFilterOptionsDialog.hxx"
 
-#define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
+#define PMGCHUNG_msOG		0x6d734f47		// Microsoft Office Animated GIF
 
-#if (defined OS2 && !defined ICC)
+#if defined WIN || (defined OS2 && !defined ICC)
 
-#define IMPORT_FUNCTION_NAME    "_GraphicImport"
-#define EXPORT_FUNCTION_NAME    "_GraphicExport"
-#define IMPDLG_FUNCTION_NAME    "_DoImportDialog"
-#define EXPDLG_FUNCTION_NAME    "_DoExportDialog"
+#define IMPORT_FUNCTION_NAME	"_GraphicImport"
+#define EXPORT_FUNCTION_NAME	"_GraphicExport"
+#define IMPDLG_FUNCTION_NAME	"_DoImportDialog"
+#define EXPDLG_FUNCTION_NAME	"_DoExportDialog"
 
 #else
 
-#define IMPORT_FUNCTION_NAME    "GraphicImport"
-#define EXPORT_FUNCTION_NAME    "GraphicExport"
-#define IMPDLG_FUNCTION_NAME    "DoImportDialog"
-#define EXPDLG_FUNCTION_NAME    "DoExportDialog"
+#define IMPORT_FUNCTION_NAME	"GraphicImport"
+#define EXPORT_FUNCTION_NAME	"GraphicExport"
+#define IMPDLG_FUNCTION_NAME	"DoImportDialog"
+#define EXPDLG_FUNCTION_NAME	"DoExportDialog"
 
 #endif
 
+// Compilerfehler, wenn Optimierung bei WNT & MSC
+#ifdef _MSC_VER
+#pragma optimize( "", off )
+#endif
 
 // -----------
 // - statics -
@@ -102,11 +106,11 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-static List*        pFilterHdlList = NULL;
+static List*		pFilterHdlList = NULL;
 
 static ::osl::Mutex& getListMutex()
 {
-    static ::osl::Mutex s_aListProtection;
+    static ::osl::Mutex	s_aListProtection;
     return s_aListProtection;
 }
 
@@ -120,11 +124,11 @@ class ImpFilterOutputStream : public ::cppu::WeakImplHelper1< ::com::sun::star::
 {
 protected:
 
-    SvStream&                           mrStm;
+    SvStream& 							mrStm;
 
-    virtual void SAL_CALL               writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& rData ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) { mrStm.Write( rData.getConstArray(), rData.getLength() ); }
-    virtual void SAL_CALL               flush() throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) { mrStm.Flush(); }
-    virtual void SAL_CALL               closeOutput() throw() {}
+    virtual void SAL_CALL				writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& rData ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) { mrStm.Write( rData.getConstArray(), rData.getLength() ); }
+    virtual void SAL_CALL				flush() throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) { mrStm.Flush(); }
+    virtual void SAL_CALL				closeOutput() throw() {}
 
 public:
 
@@ -132,14 +136,14 @@ public:
                                         ~ImpFilterOutputStream() {}
 };
 
-sal_Bool ImplDirEntryHelper::Exists( const INetURLObject& rObj )
+BOOL ImplDirEntryHelper::Exists( const INetURLObject& rObj )
 {
-    sal_Bool bExists = sal_False;
+    BOOL bExists = FALSE;
 
     try
     {
-        ::rtl::OUString aTitle;
-        ::ucbhelper::Content    aCnt( rObj.GetMainURL( INetURLObject::NO_DECODE ),
+        ::rtl::OUString	aTitle;
+        ::ucbhelper::Content	aCnt( rObj.GetMainURL( INetURLObject::NO_DECODE ),
                               ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
         bExists = aCnt.isDocument();
@@ -154,7 +158,7 @@ sal_Bool ImplDirEntryHelper::Exists( const INetURLObject& rObj )
     }
     catch( ... )
     {
-//      DBG_ERRORFILE( "Any other exception" );
+//		DBG_ERRORFILE( "Any other exception" );
     }
     return bExists;
 }
@@ -168,7 +172,7 @@ void ImplDirEntryHelper::Kill( const String& rMainUrl )
         ::ucbhelper::Content aCnt( rMainUrl,
                              ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-        aCnt.executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )),
+        aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
                              ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -187,11 +191,11 @@ void ImplDirEntryHelper::Kill( const String& rMainUrl )
 
 //--------------------------------------------------------------------------
 
-sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize )
+BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSize )
 {
     while ( nComp-- >= nSize )
     {
-        sal_uLong i;
+        ULONG i;
         for ( i = 0; i < nSize; i++ )
         {
             if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )
@@ -208,8 +212,8 @@ sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nCom
 
 inline String ImpGetExtension( const String &rPath )
 {
-    String          aExt;
-    INetURLObject   aURL( rPath );
+    String			aExt;
+    INetURLObject	aURL( rPath );
     aExt = aURL.GetFileExtension().toAsciiUpperCase();
     return aExt;
 }
@@ -224,9 +228,9 @@ inline String ImpGetExtension( const String &rPath )
 |*            Eingabe-prarameter:
 |*              rPath            - Dateipfad
 |*              rFormatExtension - Inhalt egal
-|*              bTest            - setze sal_False
+|*              bTest            - setze FALSE
 |*            Ausgabe-parameter:
-|*              Funkionswert     - sal_True wenn Erfolg
+|*              Funkionswert     - TRUE wenn Erfolg
 |*              rFormatExtension - Bei Erfolg: uebliche Dateiendung
 |*                                 des Formats (Grossbuchstaben)
 |*        2.) Datei anlesen, Dateiformat ueberpruefen
@@ -234,32 +238,35 @@ inline String ImpGetExtension( const String &rPath )
 |*              rPath            - Dateipfad
 |*              rFormatExtension - uebliche Dateiendung des Formats
 |*                                 (Grossbuchstaben)
-|*              bTest            - setze sal_True
+|*              bTest            - setze TRUE
 |*            Ausgabe-parameter:
-|*              Funkionswert     - sal_False, wenn die Datei bestimmt nicht
+|*              Funkionswert     - FALSE, wenn die Datei bestimmt nicht
 |*                                 vom uebgebenen Format ist.
-|*                                 sal_True, wenn die Datei WAHRSCHEINLICH von
+|*                                 TRUE, wenn die Datei WAHRSCHEINLICH von
 |*                                 dem Format ist, ODER WENN DAS FORMAT
 |*                                 DIESER FUNKTION NICHT BEKANNT IST!
 |*
+|*    Ersterstellung    OH 26.05.95
+|*    Letzte Aenderung  OH 07.08.95
+|*
 *************************************************************************/
 
-static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, sal_Bool bTest )
+static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, BOOL bTest )
 {
-    sal_uInt16  i;
-    sal_uInt8    sFirstBytes[ 256 ];
-    sal_uLong   nFirstLong,nSecondLong;
-    sal_uLong   nStreamPos = rStream.Tell();
+    USHORT  i;
+    BYTE    sFirstBytes[ 256 ];
+    ULONG   nFirstLong,nSecondLong;
+    ULONG	nStreamPos = rStream.Tell();
 
     rStream.Seek( STREAM_SEEK_TO_END );
-    sal_uLong nStreamLen = rStream.Tell() - nStreamPos;
+    ULONG nStreamLen = rStream.Tell() - nStreamPos;
     rStream.Seek( nStreamPos );
 
     if ( !nStreamLen )
     {
         SvLockBytes* pLockBytes = rStream.GetLockBytes();
         if ( pLockBytes  )
-            pLockBytes->SetSynchronMode( sal_True );
+            pLockBytes->SetSynchronMode( TRUE );
 
         rStream.Seek( STREAM_SEEK_TO_END );
         nStreamLen = rStream.Tell() - nStreamPos;
@@ -272,25 +279,25 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     {
         rStream.Read( sFirstBytes, nStreamLen );
 
-        for( i = (sal_uInt16) nStreamLen; i < 256; i++ )
+        for( i = (USHORT) nStreamLen; i < 256; i++ )
             sFirstBytes[ i ]=0;
     }
 
     if( rStream.GetError() )
-        return sal_False;
+        return FALSE;
 
     // Die ersten 8 Bytes in nFirstLong, nSecondLong unterbringen,
     // Big-Endian:
     for( i = 0, nFirstLong = 0L, nSecondLong = 0L; i < 4; i++ )
     {
-        nFirstLong=(nFirstLong<<8)|(sal_uLong)sFirstBytes[i];
-        nSecondLong=(nSecondLong<<8)|(sal_uLong)sFirstBytes[i+4];
+        nFirstLong=(nFirstLong<<8)|(ULONG)sFirstBytes[i];
+        nSecondLong=(nSecondLong<<8)|(ULONG)sFirstBytes[i+4];
     }
 
-    // Folgende Variable ist nur bei bTest==sal_True interessant. Sie
-    // bleibt sal_False, wenn das Format (rFormatExtension) hier noch nicht
+    // Folgende Variable ist nur bei bTest==TRUE interessant. Sie
+    // bleibt FALSE, wenn das Format (rFormatExtension) hier noch nicht
     // einprogrammiert wurde.
-    sal_Bool bSomethingTested = sal_False;
+    BOOL bSomethingTested = FALSE;
 
     // Nun werden die verschieden Formate ueberprueft. Dabei ist die
     // Reihenfolge nicht egal. Z.b. koennte eine MET-Datei auch durch
@@ -299,7 +306,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     // Theoretisch waere aber vielleicht auch eine BMP-Datei denkbar,
     // die durch den MET-Test geht.
     // Diese Probleme gibt es natuerlich nicht nur bei MET und BMP.
-    // Deshalb wird im Falle der Uberpruefung eines Formats (bTest==sal_True)
+    // Deshalb wird im Falle der Uberpruefung eines Formats (bTest==TRUE)
     // nur genau dieses eine Format getestet. Alles andere koennte fatale
     // Folgen haben, z.B. wenn der Benutzer sagt, es sei BMP-Datei (und es
     // ist BMP-Datei), und hier wuerde die Datei durch den MET-Test gehen...
@@ -307,26 +314,26 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- MET ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "MET", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=sal_True;
+        bSomethingTested=TRUE;
         if( sFirstBytes[2] == 0xd3 )
         {
             rStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
             rStream.Seek( nStreamPos );
-            sal_uInt16 nFieldSize;
-            sal_uInt8 nMagic;
-            sal_Bool bOK=sal_True;
+            USHORT nFieldSize;
+            BYTE nMagic;
+            BOOL bOK=TRUE;
             rStream >> nFieldSize >> nMagic;
             for (i=0; i<3; i++) {
-                if (nFieldSize<6) { bOK=sal_False; break; }
-                if (nStreamLen < rStream.Tell() + nFieldSize ) { bOK=sal_False; break; }
+                if (nFieldSize<6) { bOK=FALSE; break; }
+                if (nStreamLen < rStream.Tell() + nFieldSize ) { bOK=FALSE; break; }
                 rStream.SeekRel(nFieldSize-3);
                 rStream >> nFieldSize >> nMagic;
-                if (nMagic!=0xd3) { bOK=sal_False; break; }
+                if (nMagic!=0xd3) { bOK=FALSE; break; }
             }
             rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
             if (bOK && !rStream.GetError()) {
                 rFormatExtension= UniString::CreateFromAscii( "MET", 3 );
-                return sal_True;
+                return TRUE;
             }
         }
     }
@@ -334,9 +341,9 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- BMP ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "BMP", 3 ) == COMPARE_EQUAL ) )
     {
-        sal_uInt8 nOffs;
+        BYTE nOffs;
 
-        bSomethingTested=sal_True;
+        bSomethingTested=TRUE;
 
         // OS/2-Bitmaparray ('BA') koennen wir evtl. auch lesen,
         // dementspr. muessen wir den Offset anpassen,
@@ -360,7 +367,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
                    sFirstBytes[14+nOffs] == 0x0c )
             {
                 rFormatExtension = UniString::CreateFromAscii( "BMP", 3 );
-                return sal_True;
+                return TRUE;
             }
         }
     }
@@ -371,33 +378,33 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         ( rFormatExtension.CompareToAscii( "WMF", 3 ) == COMPARE_EQUAL ) ||
             ( rFormatExtension.CompareToAscii( "EMF", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = sal_True;
+        bSomethingTested = TRUE;
 
         if ( nFirstLong==0xd7cdc69a || nFirstLong==0x01000900 )
         {
             rFormatExtension = UniString::CreateFromAscii( "WMF", 3 );
-            return sal_True;
+            return TRUE;
         }
         else if( nFirstLong == 0x01000000 && sFirstBytes[ 40 ] == 0x20 && sFirstBytes[ 41 ] == 0x45 &&
             sFirstBytes[ 42 ] == 0x4d && sFirstBytes[ 43 ] == 0x46 )
         {
             rFormatExtension = UniString::CreateFromAscii( "EMF", 3 );
-            return sal_True;
+            return TRUE;
         }
     }
 
     //--------------------------- PCX ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "PCX", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=sal_True;
+        bSomethingTested=TRUE;
         if (sFirstBytes[0]==0x0a)
         {
-            sal_uInt8 nVersion=sFirstBytes[1];
-            sal_uInt8 nEncoding=sFirstBytes[2];
+            BYTE nVersion=sFirstBytes[1];
+            BYTE nEncoding=sFirstBytes[2];
             if( ( nVersion==0 || nVersion==2 || nVersion==3 || nVersion==5 ) && nEncoding<=1 )
             {
                 rFormatExtension = UniString::CreateFromAscii( "PCX", 3 );
-                return sal_True;
+                return TRUE;
             }
         }
     }
@@ -405,69 +412,69 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- TIF ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "TIF", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=sal_True;
+        bSomethingTested=TRUE;
         if ( nFirstLong==0x49492a00 || nFirstLong==0x4d4d002a )
         {
             rFormatExtension=UniString::CreateFromAscii( "TIF", 3 );
-            return sal_True;
+            return TRUE;
         }
     }
 
     //--------------------------- GIF ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "GIF", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=sal_True;
+        bSomethingTested=TRUE;
         if ( nFirstLong==0x47494638 && (sFirstBytes[4]==0x37 || sFirstBytes[4]==0x39) && sFirstBytes[5]==0x61 )
         {
             rFormatExtension = UniString::CreateFromAscii( "GIF", 3 );
-            return sal_True;
+            return TRUE;
         }
     }
 
     //--------------------------- PNG ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "PNG", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=sal_True;
+        bSomethingTested=TRUE;
         if (nFirstLong==0x89504e47 && nSecondLong==0x0d0a1a0a)
         {
             rFormatExtension = UniString::CreateFromAscii( "PNG", 3 );
-            return sal_True;
+            return TRUE;
         }
     }
 
     //--------------------------- JPG ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "JPG", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=sal_True;
+        bSomethingTested=TRUE;
         if ( ( nFirstLong==0xffd8ffe0 && sFirstBytes[6]==0x4a && sFirstBytes[7]==0x46 && sFirstBytes[8]==0x49 && sFirstBytes[9]==0x46 ) ||
              ( nFirstLong==0xffd8fffe ) || ( 0xffd8ff00 == ( nFirstLong & 0xffffff00 ) ) )
         {
             rFormatExtension = UniString::CreateFromAscii( "JPG", 3 );
-            return sal_True;
+            return TRUE;
         }
     }
 
     //--------------------------- SVM ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "SVM", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=sal_True;
+        bSomethingTested=TRUE;
         if( nFirstLong==0x53564744 && sFirstBytes[4]==0x49 )
         {
             rFormatExtension = UniString::CreateFromAscii( "SVM", 3 );
-            return sal_True;
+            return TRUE;
         }
         else if( sFirstBytes[0]==0x56 && sFirstBytes[1]==0x43 && sFirstBytes[2]==0x4C &&
                  sFirstBytes[3]==0x4D && sFirstBytes[4]==0x54 && sFirstBytes[5]==0x46 )
         {
             rFormatExtension = UniString::CreateFromAscii( "SVM", 3 );
-            return sal_True;
+            return TRUE;
         }
     }
 
     //--------------------------- PCD ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "PCD", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = sal_True;
+        bSomethingTested = TRUE;
         if( nStreamLen >= 2055 )
         {
             char sBuf[8];
@@ -477,7 +484,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
             if( strncmp( sBuf, "PCD_IPI", 7 ) ==  0 )
             {
                 rFormatExtension = UniString::CreateFromAscii( "PCD", 3 );
-                return sal_True;
+                return TRUE;
             }
         }
     }
@@ -485,30 +492,30 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- PSD ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "PSD", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = sal_True;
+        bSomethingTested = TRUE;
         if ( ( nFirstLong == 0x38425053 ) && ( (nSecondLong >> 16 ) == 1 ) )
         {
             rFormatExtension = UniString::CreateFromAscii( "PSD", 3 );
-            return sal_True;
+            return TRUE;
         }
     }
 
     //--------------------------- EPS ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "EPS", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = sal_True;
-        if ( ( nFirstLong == 0xC5D0D3C6 ) || ( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"%!PS-Adobe", 10, 10 ) &&
-             ImplSearchEntry( &sFirstBytes[15], (sal_uInt8*)"EPS", 3, 3 ) ) )
+        bSomethingTested = TRUE;
+        if ( ( nFirstLong == 0xC5D0D3C6 ) || ( ImplSearchEntry( sFirstBytes, (BYTE*)"%!PS-Adobe", 10, 10 ) &&
+             ImplSearchEntry( &sFirstBytes[15], (BYTE*)"EPS", 3, 3 ) ) )
         {
             rFormatExtension = UniString::CreateFromAscii( "EPS", 3 );
-            return sal_True;
+            return TRUE;
         }
     }
 
     //--------------------------- DXF ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "DXF", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=sal_True;
+        bSomethingTested=TRUE;
 
         i=0;
         while (i<256 && sFirstBytes[i]<=32)
@@ -529,63 +536,31 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
             if (strncmp((char*)(sFirstBytes+i),"SECTION",7)==0)
             {
                 rFormatExtension = UniString::CreateFromAscii( "DXF", 3 );
-                return sal_True;
+                return TRUE;
             }
         }
 
         if( strncmp( (char*) sFirstBytes, "AutoCAD Binary DXF", 18 ) == 0 )
         {
             rFormatExtension = UniString::CreateFromAscii( "DXF", 3 );
-            return sal_True;
+            return TRUE;
         }
     }
 
     //--------------------------- PCT ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "PCT", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = sal_True;
-        sal_uInt8 sBuf[3];
-        // store number format
-        sal_uInt16 oldNumberFormat = rStream.GetNumberFormatInt();
-        sal_uInt32 nOffset; // in ms documents the pict format is used without the first 512 bytes
-        for ( nOffset = 0; ( nOffset <= 512 ) && ( ( nStreamPos + nOffset + 14 ) <= nStreamLen ); nOffset += 512 )
+        bSomethingTested = TRUE;
+        BYTE sBuf[4];
+        sal_uInt32 nOffset;	// in ms documents the pict format is used without the first 512 bytes
+        for ( nOffset = 10; ( nOffset <= 522 ) && ( ( nStreamPos + nOffset + 3 ) <= nStreamLen ); nOffset += 512 )
         {
-            short y1,x1,y2,x2;
-            bool bdBoxOk = true;
-
-            rStream.Seek( nStreamPos + nOffset);
-            // size of the pict in version 1 pict ( 2bytes) : ignored
-            rStream.SeekRel(2);
-            // bounding box (bytes 2 -> 9)
-            rStream.SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
-            rStream >> y1 >> x1 >> y2 >> x2;
-            rStream.SetNumberFormatInt(oldNumberFormat); // reset format
-
-            if (x1 > x2 || y1 > y2 || // bad bdbox
-                (x1 == x2 && y1 == y2) || // 1 pixel picture
-                x2-x1 > 2048 || y2-y1 > 2048 ) // picture anormaly big
-              bdBoxOk = false;
-
-            // read version op
+            rStream.Seek( nStreamPos + nOffset );
             rStream.Read( sBuf,3 );
-            // see http://developer.apple.com/legacy/mac/library/documentation/mac/pdf/Imaging_With_QuickDraw/Appendix_A.pdf
-            // normal version 2 - page A23 and A24
-            if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x02)
+            if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && ( sBuf[ 2 ] == 0x01 || sBuf[ 2 ] == 0x02 ) )
             {
-              rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
-              return sal_True;
-            }
-            // normal version 1 - page A25
-            else if (sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 && bdBoxOk) {
-              rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
-              return sal_True;
-            }
-            // previous code kept in order to do not break any compatibility
-            // probably eroneous
-            else if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x01 && bdBoxOk)
-            {
-              rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
-              return sal_True;
+                rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
+                return TRUE;
             }
         }
     }
@@ -596,7 +571,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
             ( rFormatExtension.CompareToAscii( "PGM", 3 ) == COMPARE_EQUAL ) ||
                 ( rFormatExtension.CompareToAscii( "PPM", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=sal_True;
+        bSomethingTested=TRUE;
         if ( sFirstBytes[ 0 ] == 'P' )
         {
             switch( sFirstBytes[ 1 ] )
@@ -604,17 +579,17 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
                 case '1' :
                 case '4' :
                     rFormatExtension = UniString::CreateFromAscii( "PBM", 3 );
-                return sal_True;
+                return TRUE;
 
                 case '2' :
                 case '5' :
                     rFormatExtension = UniString::CreateFromAscii( "PGM", 3 );
-                return sal_True;
+                return TRUE;
 
                 case '3' :
                 case '6' :
                     rFormatExtension = UniString::CreateFromAscii( "PPM", 3 );
-                return sal_True;
+                return TRUE;
             }
         }
     }
@@ -622,81 +597,81 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- RAS( SUN RasterFile )------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "RAS", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=sal_True;
+        bSomethingTested=TRUE;
         if( nFirstLong == 0x59a66a95 )
         {
             rFormatExtension = UniString::CreateFromAscii( "RAS", 3 );
-            return sal_True;
+            return TRUE;
         }
     }
 
     //--------------------------- XPM ------------------------------------
     if( !bTest )
     {
-        bSomethingTested = sal_True;
-        if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"/* XPM */", 256, 9 ) )
+        bSomethingTested = TRUE;
+        if( ImplSearchEntry( sFirstBytes, (BYTE*)"/* XPM */", 256, 9 ) )
         {
             rFormatExtension = UniString::CreateFromAscii( "XPM", 3 );
-            return sal_True;
+            return TRUE;
         }
     }
     else if( rFormatExtension.CompareToAscii( "XPM", 3 ) == COMPARE_EQUAL )
     {
-        bSomethingTested = sal_True;
-        return sal_True;
+        bSomethingTested = TRUE;
+        return TRUE;
     }
 
     //--------------------------- XBM ------------------------------------
     if( !bTest )
     {
-        sal_uLong nSize = ( nStreamLen > 2048 ) ? 2048 : nStreamLen;
-        sal_uInt8* pBuf = new sal_uInt8 [ nSize ];
+        ULONG nSize = ( nStreamLen > 2048 ) ? 2048 : nStreamLen;
+        BYTE* pBuf = new BYTE [ nSize ];
 
         rStream.Seek( nStreamPos );
         rStream.Read( pBuf, nSize );
-        sal_uInt8* pPtr = ImplSearchEntry( pBuf, (sal_uInt8*)"#define", nSize, 7 );
+        BYTE* pPtr = ImplSearchEntry( pBuf, (BYTE*)"#define", nSize, 7 );
 
         if( pPtr )
         {
-            if( ImplSearchEntry( pPtr, (sal_uInt8*)"_width", pBuf + nSize - pPtr, 6 ) )
+            if( ImplSearchEntry( pPtr, (BYTE*)"_width", pBuf + nSize - pPtr, 6 ) )
             {
                 rFormatExtension = UniString::CreateFromAscii( "XBM", 3 );
                 delete[] pBuf;
-                return sal_True;
+                return TRUE;
             }
         }
         delete[] pBuf;
     }
     else if( rFormatExtension.CompareToAscii( "XBM", 3 ) == COMPARE_EQUAL )
     {
-        bSomethingTested = sal_True;
-        return sal_True;
+        bSomethingTested = TRUE;
+        return TRUE;
     }
 
     //--------------------------- TGA ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "TGA", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = sal_True;
+        bSomethingTested = TRUE;
         if( rFormatExtension.CompareToAscii( "TGA", 3 ) == COMPARE_EQUAL )
-            return sal_True;
+            return TRUE;
     }
 
     //--------------------------- SGV ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "SGV", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = sal_True;
+        bSomethingTested = TRUE;
         if( rFormatExtension.CompareToAscii( "SGV", 3 ) == COMPARE_EQUAL )
-            return sal_True;
+            return TRUE;
     }
 
     //--------------------------- SGF ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "SGF", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=sal_True;
+        bSomethingTested=TRUE;
         if( sFirstBytes[ 0 ] == 'J' && sFirstBytes[ 1 ] == 'J' )
         {
             rFormatExtension = UniString::CreateFromAscii( "SGF", 3 );
-            return sal_True;
+            return TRUE;
         }
     }
 
@@ -714,7 +689,7 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
     if( rFormat == GRFILTER_FORMAT_DONTKNOW )
     {
         String aFormatExt;
-        if( ImpPeekGraphicFormat( rStream, aFormatExt, sal_False ) )
+        if( ImpPeekGraphicFormat( rStream, aFormatExt, FALSE ) )
         {
             for( sal_uInt16 i = 0; i < n; i++ )
             {
@@ -743,7 +718,7 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
     else
     {
         String aTmpStr( pConfig->GetImportFormatExtension( rFormat ) );
-        if( !ImpPeekGraphicFormat( rStream, aTmpStr, sal_True ) )
+        if( !ImpPeekGraphicFormat( rStream, aTmpStr, TRUE ) )
             return GRFILTER_FORMATERROR;
         if ( pConfig->GetImportFormatExtension( rFormat ).EqualsIgnoreCaseAscii( "pcd" ) )
         {
@@ -765,9 +740,9 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
 
 static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& rConfigItem )
 {
-    Graphic     aGraphic;
-    ByteString  aResMgrName( "svt", 3 );
-    ResMgr*     pResMgr;
+    Graphic		aGraphic;
+    ByteString	aResMgrName( "svt", 3 );
+    ResMgr*		pResMgr;
 
     pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 
@@ -776,11 +751,11 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 
     if ( rGraphic.GetType() != GRAPHIC_NONE )
     {
-        sal_Int32 nMode = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ExportMode" ) ), -1 );
+        sal_Int32 nMode = rConfigItem.ReadInt32( String( ResId( KEY_MODE, *pResMgr ) ), -1 );
 
-        if ( nMode == -1 )  // the property is not there, this is possible, if the graphic filter
-        {                   // is called via UnoGraphicExporter and not from a graphic export Dialog
-            nMode = 0;      // then we are defaulting this mode to 0
+        if ( nMode == -1 )	// the property is not there, this is possible, if the graphic filter
+        {					// is called via UnoGraphicExporter and not from a graphic export Dialog
+            nMode = 0;		// then we are defaulting this mode to 0
             if ( nLogicalWidth || nLogicalHeight )
                 nMode = 2;
         }
@@ -803,11 +778,11 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             // Aufloesung wird eingestellt
             if( nMode == 1 )
             {
-                Bitmap      aBitmap( rGraphic.GetBitmap() );
-                MapMode     aMap( MAP_100TH_INCH );
+                Bitmap 		aBitmap( rGraphic.GetBitmap() );
+                MapMode		aMap( MAP_100TH_INCH );
 
-                sal_Int32   nDPI = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), 75 );
-                Fraction    aFrac( 1, Min( Max( nDPI, sal_Int32( 75 ) ), sal_Int32( 600 ) ) );
+                sal_Int32   nDPI = rConfigItem.ReadInt32( String( ResId( KEY_RES, *pResMgr ) ), 75 );
+                Fraction	aFrac( 1, Min( Max( nDPI, sal_Int32( 75 ) ), sal_Int32( 600 ) ) );
 
                 aMap.SetScaleX( aFrac );
                 aMap.SetScaleY( aFrac );
@@ -830,7 +805,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             else
                 aGraphic = rGraphic;
 
-            sal_Int32 nColors = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Color" ) ), 0 ); // #92767#
+            sal_Int32 nColors = rConfigItem.ReadInt32( String( ResId( KEY_COLORS, *pResMgr ) ), 0 ); // #92767#
             if ( nColors )  // graphic conversion necessary ?
             {
                 BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
@@ -842,7 +817,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
         {
             if( ( nMode == 1 ) || ( nMode == 2 ) )
             {
-                GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
+                GDIMetaFile	aMtf( rGraphic.GetGDIMetaFile() );
                 ::com::sun::star::awt::Size aDefaultSize( 10000, 10000 );
                 Size aNewSize( OutputDevice::LogicToLogic( Size( nLogicalWidth, nLogicalHeight ), MAP_100TH_MM, aMtf.GetPrefMapMode() ) );
 
@@ -869,12 +844,12 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 
 static String ImpCreateFullFilterPath( const String& rPath, const String& rFilterName )
 {
-    ::rtl::OUString aPathURL;
+    ::rtl::OUString	aPathURL;
 
     ::osl::FileBase::getFileURLFromSystemPath( rPath, aPathURL );
     aPathURL += String( '/' );
 
-    ::rtl::OUString aSystemPath;
+    ::rtl::OUString	aSystemPath;
     ::osl::FileBase::getSystemPathFromFileURL( aPathURL, aSystemPath );
     aSystemPath += ::rtl::OUString( rFilterName );
 
@@ -890,29 +865,29 @@ class ImpFilterLibCache;
 
 struct ImpFilterLibCacheEntry
 {
-    ImpFilterLibCacheEntry* mpNext;
-    osl::Module             maLibrary;
-    String                  maFiltername;
-    PFilterCall             mpfnImport;
-    PFilterDlgCall          mpfnImportDlg;
+    ImpFilterLibCacheEntry*	mpNext;
+    osl::Module			    maLibrary;
+    String					maFiltername;
+    PFilterCall				mpfnImport;
+    PFilterDlgCall			mpfnImportDlg;
 
                             ImpFilterLibCacheEntry( const String& rPathname, const String& rFiltername );
-    int                     operator==( const String& rFiltername ) const { return maFiltername == rFiltername; }
+    int						operator==( const String& rFiltername ) const { return maFiltername == rFiltername; }
 
-    PFilterCall             GetImportFunction();
-    PFilterDlgCall          GetImportDlgFunction();
-    PFilterCall             GetExportFunction() { return (PFilterCall) maLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) ); }
-    PFilterDlgCall          GetExportDlgFunction() { return (PFilterDlgCall) maLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPDLG_FUNCTION_NAME ) ); }
+    PFilterCall				GetImportFunction();
+    PFilterDlgCall			GetImportDlgFunction();
+    PFilterCall				GetExportFunction() { return (PFilterCall) maLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) ); }
+    PFilterDlgCall			GetExportDlgFunction() { return (PFilterDlgCall) maLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPDLG_FUNCTION_NAME ) ); }
 };
 
 // ------------------------------------------------------------------------
 
 ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const String& rPathname, const String& rFiltername ) :
-        mpNext          ( NULL ),
-        maLibrary       ( rPathname ),
-        maFiltername    ( rFiltername ),
-        mpfnImport      ( NULL ),
-        mpfnImportDlg   ( NULL )
+        mpNext			( NULL ),
+        maLibrary		( rPathname ),
+        maFiltername	( rFiltername ),
+        mpfnImport		( NULL ),
+        mpfnImportDlg	( NULL )
 {
 }
 
@@ -942,21 +917,21 @@ PFilterDlgCall ImpFilterLibCacheEntry::GetImportDlgFunction()
 
 class ImpFilterLibCache
 {
-    ImpFilterLibCacheEntry* mpFirst;
-    ImpFilterLibCacheEntry* mpLast;
+    ImpFilterLibCacheEntry*	mpFirst;
+    ImpFilterLibCacheEntry*	mpLast;
 
 public:
                             ImpFilterLibCache();
                             ~ImpFilterLibCache();
 
-    ImpFilterLibCacheEntry* GetFilter( const String& rFilterPath, const String& rFiltername );
+    ImpFilterLibCacheEntry*	GetFilter( const String& rFilterPath, const String& rFiltername );
 };
 
 // ------------------------------------------------------------------------
 
 ImpFilterLibCache::ImpFilterLibCache() :
-    mpFirst     ( NULL ),
-    mpLast      ( NULL )
+    mpFirst		( NULL ),
+    mpLast		( NULL )
 {
 }
 
@@ -964,7 +939,7 @@ ImpFilterLibCache::ImpFilterLibCache() :
 
 ImpFilterLibCache::~ImpFilterLibCache()
 {
-    ImpFilterLibCacheEntry* pEntry = mpFirst;
+    ImpFilterLibCacheEntry*	pEntry = mpFirst;
     while( pEntry )
     {
         ImpFilterLibCacheEntry* pNext = pEntry->mpNext;
@@ -977,7 +952,7 @@ ImpFilterLibCache::~ImpFilterLibCache()
 
 ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter( const String& rFilterPath, const String& rFilterName )
 {
-    ImpFilterLibCacheEntry* pEntry = mpFirst;
+    ImpFilterLibCacheEntry*	pEntry = mpFirst;
 
     while( pEntry )
     {
@@ -1016,7 +991,7 @@ namespace { struct Cache : public rtl::Static<ImpFilterLibCache, Cache> {}; }
 // -----------------
 
 GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
-    bUseConfig        ( bConfig ),
+    bUseConfig	      ( bConfig ),
     nExpGraphHint     ( 0 )
 {
     ImplInit();
@@ -1075,7 +1050,7 @@ void GraphicFilter::ImplInit()
 
 // ------------------------------------------------------------------------
 
-sal_uLong GraphicFilter::ImplSetError( sal_uLong nError, const SvStream* pStm )
+ULONG GraphicFilter::ImplSetError( ULONG nError, const SvStream* pStm )
 {
     pErrorEx->nFilterError = nError;
     pErrorEx->nStreamError = pStm ? pStm->GetError() : ERRCODE_NONE;
@@ -1083,28 +1058,28 @@ sal_uLong GraphicFilter::ImplSetError( sal_uLong nError, const SvStream* pStm )
 }
 // ------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::GetImportFormatCount()
+USHORT GraphicFilter::GetImportFormatCount()
 {
     return pConfig->GetImportFormatCount();
 }
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::GetImportFormatNumber( const String& rFormatName )
+USHORT GraphicFilter::GetImportFormatNumber( const String& rFormatName )
 {
     return pConfig->GetImportFormatNumber( rFormatName );
 }
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::GetImportFormatNumberForMediaType( const String& rMediaType )
+USHORT GraphicFilter::GetImportFormatNumberForMediaType( const String& rMediaType )
 {
     return pConfig->GetImportFormatNumberForMediaType( rMediaType );
 }
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::GetImportFormatNumberForShortName( const String& rShortName )
+USHORT GraphicFilter::GetImportFormatNumberForShortName( const String& rShortName )
 {
     return pConfig->GetImportFormatNumberForShortName( rShortName );
 }
@@ -1118,35 +1093,35 @@ sal_uInt16 GraphicFilter::GetImportFormatNumberForTypeName( const String& rType 
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetImportFormatName( sal_uInt16 nFormat )
+String GraphicFilter::GetImportFormatName( USHORT nFormat )
 {
     return pConfig->GetImportFormatName( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetImportFormatTypeName( sal_uInt16 nFormat )
+String GraphicFilter::GetImportFormatTypeName( USHORT nFormat )
 {
     return pConfig->GetImportFilterTypeName( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetImportFormatMediaType( sal_uInt16 nFormat )
+String GraphicFilter::GetImportFormatMediaType( USHORT nFormat )
 {
     return pConfig->GetImportFormatMediaType( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetImportFormatShortName( sal_uInt16 nFormat )
+String GraphicFilter::GetImportFormatShortName( USHORT nFormat )
 {
     return pConfig->GetImportFormatShortName( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetImportOSFileType( sal_uInt16 )
+String GraphicFilter::GetImportOSFileType( USHORT )
 {
     String aOSFileType;
     return aOSFileType;
@@ -1154,42 +1129,42 @@ String GraphicFilter::GetImportOSFileType( sal_uInt16 )
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
+String GraphicFilter::GetImportWildcard( USHORT nFormat, sal_Int32 nEntry )
 {
     return pConfig->GetImportWildcard( nFormat, nEntry );
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool GraphicFilter::IsImportPixelFormat( sal_uInt16 nFormat )
+BOOL GraphicFilter::IsImportPixelFormat( USHORT nFormat )
 {
     return pConfig->IsImportPixelFormat( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::GetExportFormatCount()
+USHORT GraphicFilter::GetExportFormatCount()
 {
     return pConfig->GetExportFormatCount();
 }
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::GetExportFormatNumber( const String& rFormatName )
+USHORT GraphicFilter::GetExportFormatNumber( const String& rFormatName )
 {
     return pConfig->GetExportFormatNumber( rFormatName );
 }
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::GetExportFormatNumberForMediaType( const String& rMediaType )
+USHORT GraphicFilter::GetExportFormatNumberForMediaType( const String& rMediaType )
 {
     return pConfig->GetExportFormatNumberForMediaType( rMediaType );
 }
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::GetExportFormatNumberForShortName( const String& rShortName )
+USHORT GraphicFilter::GetExportFormatNumberForShortName( const String& rShortName )
 {
     return pConfig->GetExportFormatNumberForShortName( rShortName );
 }
@@ -1203,35 +1178,35 @@ sal_uInt16 GraphicFilter::GetExportFormatNumberForTypeName( const String& rType 
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetExportFormatName( sal_uInt16 nFormat )
+String GraphicFilter::GetExportFormatName( USHORT nFormat )
 {
     return pConfig->GetExportFormatName( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetExportFormatTypeName( sal_uInt16 nFormat )
+String GraphicFilter::GetExportFormatTypeName( USHORT nFormat )
 {
     return pConfig->GetExportFilterTypeName( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetExportFormatMediaType( sal_uInt16 nFormat )
+String GraphicFilter::GetExportFormatMediaType( USHORT nFormat )
 {
     return pConfig->GetExportFormatMediaType( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetExportFormatShortName( sal_uInt16 nFormat )
+String GraphicFilter::GetExportFormatShortName( USHORT nFormat )
 {
     return pConfig->GetExportFormatShortName( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetExportOSFileType( sal_uInt16 )
+String GraphicFilter::GetExportOSFileType( USHORT )
 {
     String aOSFileType;
     return aOSFileType;
@@ -1239,28 +1214,28 @@ String GraphicFilter::GetExportOSFileType( sal_uInt16 )
 
 // ------------------------------------------------------------------------
 
-String GraphicFilter::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
+String GraphicFilter::GetExportWildcard( USHORT nFormat, sal_Int32 nEntry )
 {
     return pConfig->GetExportWildcard( nFormat, nEntry );
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool GraphicFilter::IsExportPixelFormat( sal_uInt16 nFormat )
+BOOL GraphicFilter::IsExportPixelFormat( USHORT nFormat )
 {
     return pConfig->IsExportPixelFormat( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
-                                        sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat )
+USHORT GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
+                                        USHORT nFormat, USHORT* pDeterminedFormat )
 {
-    sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
+    sal_uInt16	nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::CanImportGraphic() : ProtType == INET_PROT_NOT_VALID" );
 
-    String      aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
-    SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE );
+    String		aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
+    SvStream*	pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE );
     if ( pStream )
     {
         nRetValue = CanImportGraphic( aMainUrl, *pStream, nFormat, pDeterminedFormat );
@@ -1271,10 +1246,10 @@ sal_uInt16 GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::CanImportGraphic( const String& rMainUrl, SvStream& rIStream,
-                                        sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat )
+USHORT GraphicFilter::CanImportGraphic( const String& rMainUrl, SvStream& rIStream,
+                                        USHORT nFormat, USHORT* pDeterminedFormat )
 {
-    sal_uLong nStreamPos = rIStream.Tell();
+    ULONG nStreamPos = rIStream.Tell();
     sal_uInt16 nRes = ImpTestOrFindFormat( rMainUrl, rIStream, nFormat );
 
     rIStream.Seek(nStreamPos);
@@ -1282,19 +1257,19 @@ sal_uInt16 GraphicFilter::CanImportGraphic( const String& rMainUrl, SvStream& rI
     if( nRes==GRFILTER_OK && pDeterminedFormat!=NULL )
         *pDeterminedFormat = nFormat;
 
-    return (sal_uInt16) ImplSetError( nRes, &rIStream );
+    return (USHORT) ImplSetError( nRes, &rIStream );
 }
 
 // ------------------------------------------------------------------------
 //SJ: TODO, we need to create a GraphicImporter component
-sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
-                                     sal_uInt16 nFormat, sal_uInt16 * pDeterminedFormat, sal_uInt32 nImportFlags )
+USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
+                                     USHORT nFormat, USHORT * pDeterminedFormat, sal_uInt32 nImportFlags )
 {
     sal_uInt16 nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ImportGraphic() : ProtType == INET_PROT_NOT_VALID" );
 
-    String      aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
-    SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE );
+    String		aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
+    SvStream*	pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE );
     if ( pStream )
     {
         nRetValue = ImportGraphic( rGraphic, aMainUrl, *pStream, nFormat, pDeterminedFormat, nImportFlags );
@@ -1303,30 +1278,30 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject&
     return nRetValue;
 }
 
-sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvStream& rIStream,
-                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, sal_uInt32 nImportFlags )
+USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvStream& rIStream,
+                                     USHORT nFormat, USHORT* pDeterminedFormat, sal_uInt32 nImportFlags )
 {
     return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, NULL );
 }
 
 //-------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvStream& rIStream,
-                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, sal_uInt32 nImportFlags,
+USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvStream& rIStream,
+                                     USHORT nFormat, USHORT* pDeterminedFormat, sal_uInt32 nImportFlags,
                                      com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
 {
-    String                  aFilterName;
-    sal_uLong                   nStmBegin;
-    sal_uInt16                  nStatus;
-    GraphicReader*          pContext = rGraphic.GetContext();
-    GfxLinkType             eLinkType = GFX_LINK_TYPE_NONE;
-    sal_Bool                    bDummyContext = ( pContext == (GraphicReader*) 1 );
-    const sal_Bool              bLinkSet = rGraphic.IsLink();
+    String					aFilterName;
+    ULONG					nStmBegin;
+    USHORT					nStatus;
+    GraphicReader*			pContext = rGraphic.GetContext();
+    GfxLinkType				eLinkType = GFX_LINK_TYPE_NONE;
+    BOOL					bDummyContext = ( pContext == (GraphicReader*) 1 );
+    const BOOL				bLinkSet = rGraphic.IsLink();
     FilterConfigItem*       pFilterConfigItem = NULL;
 
-    Size                    aPreviewSizeHint( 0, 0 );
-    sal_Bool                bAllowPartialStreamRead = sal_False;
-    sal_Bool                bCreateNativeLink = sal_True;
+    Size					aPreviewSizeHint( 0, 0 );
+    sal_Bool				bAllowPartialStreamRead = sal_False;
+    sal_Bool				bCreateNativeLink = sal_True;
 
     ResetLastError();
 
@@ -1335,7 +1310,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
         sal_Int32 i;
         for ( i = 0; i < pFilterData->getLength(); i++ )
         {
-            if ( (*pFilterData)[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PreviewSizeHint")) )
+            if ( (*pFilterData)[ i ].Name.equalsAscii( "PreviewSizeHint" ) )
             {
                 awt::Size aSize;
                 if ( (*pFilterData)[ i ].Value >>= aSize )
@@ -1347,7 +1322,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
                         nImportFlags &=~GRFILTER_I_FLAGS_FOR_PREVIEW;
                 }
             }
-            else if ( (*pFilterData)[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AllowPartialStreamRead")) )
+            else if ( (*pFilterData)[ i ].Name.equalsAscii( "AllowPartialStreamRead" ) )
             {
                 (*pFilterData)[ i ].Value >>= bAllowPartialStreamRead;
                 if ( bAllowPartialStreamRead )
@@ -1355,7 +1330,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
                 else
                     nImportFlags &=~GRFILTER_I_FLAGS_ALLOW_PARTIAL_STREAMREAD;
             }
-            else if ( (*pFilterData)[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CreateNativeLink")) )
+            else if ( (*pFilterData)[ i ].Name.equalsAscii( "CreateNativeLink" ) )
             {
                 (*pFilterData)[ i ].Value >>= bCreateNativeLink;
             }
@@ -1372,7 +1347,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
         else
             nStmBegin = rIStream.Tell();
 
-        bAbort = sal_False;
+        bAbort = FALSE;
         nStatus = ImpTestOrFindFormat( rPath, rIStream, nFormat );
         // Falls Pending, geben wir GRFILTER_OK zurueck,
         // um mehr Bytes anzufordern
@@ -1381,13 +1356,13 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
             rGraphic.SetContext( (GraphicReader*) 1 );
             rIStream.ResetError();
             rIStream.Seek( nStmBegin );
-            return (sal_uInt16) ImplSetError( GRFILTER_OK );
+            return (USHORT) ImplSetError( GRFILTER_OK );
         }
 
         rIStream.Seek( nStmBegin );
 
         if( ( nStatus != GRFILTER_OK ) || rIStream.GetError() )
-            return (sal_uInt16) ImplSetError( ( nStatus != GRFILTER_OK ) ? nStatus : GRFILTER_OPENERROR, &rIStream );
+            return (USHORT) ImplSetError( ( nStatus != GRFILTER_OK ) ? nStatus : GRFILTER_OPENERROR, &rIStream );
 
         if( pDeterminedFormat )
             *pDeterminedFormat = nFormat;
@@ -1451,7 +1426,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
                             break;
                         }
                     }
-                    ++aIter;
+                    aIter++;
                 }
             }
 
@@ -1521,8 +1496,8 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
         else if( aFilterName.EqualsIgnoreCaseAscii( IMP_SVSGF )
                 || aFilterName.EqualsIgnoreCaseAscii( IMP_SVSGV ) )
         {
-            sal_uInt16          nVersion;
-            unsigned char   nTyp = CheckSgfTyp( rIStream, nVersion );
+            USHORT			nVersion;
+            unsigned char	nTyp = CheckSgfTyp( rIStream, nVersion );
 
             switch( nTyp )
             {
@@ -1585,7 +1560,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
     }
     else
     {
-        ImpFilterLibCacheEntry* pFilter = NULL;
+        ImpFilterLibCacheEntry*	pFilter = NULL;
 
         // find first filter in filter pathes
         xub_StrLen i, nTokenCount = aFilterPath.GetTokenCount( ';' );
@@ -1633,15 +1608,15 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
 
     if( nStatus == GRFILTER_OK && bCreateNativeLink && ( eLinkType != GFX_LINK_TYPE_NONE ) && !rGraphic.GetContext() && !bLinkSet )
     {
-        const sal_uLong nStmEnd = rIStream.Tell();
-        const sal_uLong nBufSize = nStmEnd - nStmBegin;
+        const ULONG nStmEnd = rIStream.Tell();
+        const ULONG	nBufSize = nStmEnd - nStmBegin;
 
         if( nBufSize )
         {
-            sal_uInt8*  pBuf=0;
+            BYTE*	pBuf=0;
             try
             {
-                pBuf = new sal_uInt8[ nBufSize ];
+                pBuf = new BYTE[ nBufSize ];
             }
                 catch (std::bad_alloc)
             {
@@ -1652,7 +1627,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
             {
                 rIStream.Seek( nStmBegin );
                 rIStream.Read( pBuf, nBufSize );
-                rGraphic.SetLink( GfxLink( pBuf, nBufSize, eLinkType, sal_True ) );
+                rGraphic.SetLink( GfxLink( pBuf, nBufSize, eLinkType, TRUE ) );
             }
         }
     }
@@ -1675,15 +1650,15 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
+USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
     sal_uInt16 nFormat, const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
-    sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
+    sal_uInt16	nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ExportGraphic() : ProtType == INET_PROT_NOT_VALID" );
-    sal_Bool        bAlreadyExists = ImplDirEntryHelper::Exists( rPath );
+    BOOL		bAlreadyExists = ImplDirEntryHelper::Exists( rPath );
 
-    String      aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
-    SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_WRITE | STREAM_TRUNC );
+    String		aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
+    SvStream*	pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_WRITE | STREAM_TRUNC );
     if ( pStream )
     {
         nRetValue = ExportGraphic( rGraphic, aMainUrl, *pStream, nFormat, pFilterData );
@@ -1697,10 +1672,10 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPath,
+USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPath,
     SvStream& rOStm, sal_uInt16 nFormat, const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
-    sal_uInt16 nFormatCount = GetExportFormatCount();
+    USHORT nFormatCount = GetExportFormatCount();
 
     ResetLastError();
     nExpGraphHint = 0;
@@ -1711,7 +1686,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
         String aExt( aURL.GetFileExtension().toAsciiUpperCase() );
 
 
-        for( sal_uInt16 i = 0; i < nFormatCount; i++ )
+        for( USHORT i = 0; i < nFormatCount; i++ )
         {
             if ( pConfig->GetExportFormatExtension( i ).EqualsIgnoreCaseAscii( aExt ) )
             {
@@ -1721,15 +1696,15 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
         }
     }
     if( nFormat >= nFormatCount )
-        return (sal_uInt16) ImplSetError( GRFILTER_FORMATERROR );
+        return (USHORT) ImplSetError( GRFILTER_FORMATERROR );
 
     FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
     String aFilterName( pConfig->GetExportFilterName( nFormat ) );
 
-    bAbort              = sal_False;
-    sal_uInt16      nStatus = GRFILTER_OK;
-    GraphicType eType;
-    Graphic     aGraphic( rGraphic );
+    bAbort				= FALSE;
+    USHORT		nStatus = GRFILTER_OK;
+    GraphicType	eType;
+    Graphic		aGraphic( rGraphic );
 
     aGraphic = ImpGetScaledGraphic( rGraphic, aConfigItem );
     eType = aGraphic.GetType();
@@ -1739,13 +1714,13 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
         if( eType != GRAPHIC_BITMAP )
         {
             Size aSizePixel;
-            sal_uLong nColorCount,nBitsPerPixel,nNeededMem,nMaxMem;
+            ULONG nColorCount,nBitsPerPixel,nNeededMem,nMaxMem;
             VirtualDevice aVirDev;
 
             // Maximalen Speicherbedarf fuer das Bildes holen:
-//          if( GetOptionsConfig() )
-//              nMaxMem = (sal_uInt32)GetOptionsConfig()->ReadKey( "VEC-TO-PIX-MAX-KB", "1024" ).ToInt32();
-//          else
+//			if( GetOptionsConfig() )
+//				nMaxMem = (UINT32)GetOptionsConfig()->ReadKey( "VEC-TO-PIX-MAX-KB", "1024" ).ToInt32();
+//			else
                 nMaxMem = 1024;
 
             nMaxMem *= 1024; // In Bytes
@@ -1761,14 +1736,14 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
             else if (nColorCount<=256)   nBitsPerPixel=8;
             else if (nColorCount<=65536) nBitsPerPixel=16;
             else                         nBitsPerPixel=24;
-            nNeededMem=((sal_uLong)aSizePixel.Width()*(sal_uLong)aSizePixel.Height()*nBitsPerPixel+7)/8;
+            nNeededMem=((ULONG)aSizePixel.Width()*(ULONG)aSizePixel.Height()*nBitsPerPixel+7)/8;
 
             // ggf. Groesse des Bildes einschraenken:
             if (nMaxMem<nNeededMem)
             {
                 double fFak=sqrt(((double)nMaxMem)/((double)nNeededMem));
-                aSizePixel.Width()=(sal_uLong)(((double)aSizePixel.Width())*fFak);
-                aSizePixel.Height()=(sal_uLong)(((double)aSizePixel.Height())*fFak);
+                aSizePixel.Width()=(ULONG)(((double)aSizePixel.Width())*fFak);
+                aSizePixel.Height()=(ULONG)(((double)aSizePixel.Height())*fFak);
             }
 
             aVirDev.SetMapMode(MapMode(MAP_PIXEL));
@@ -1789,13 +1764,13 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
             {
                 Bitmap aBmp( aGraphic.GetBitmap() );
                 sal_Int32 nColorRes = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Colors" ) ), 0 );
-                if ( nColorRes && ( nColorRes <= (sal_uInt16)BMP_CONVERSION_24BIT) )
+                if ( nColorRes && ( nColorRes <= (USHORT)BMP_CONVERSION_24BIT) )
                 {
                     if( !aBmp.Convert( (BmpConversion) nColorRes ) )
                         aBmp = aGraphic.GetBitmap();
                 }
-                ResMgr*     pResMgr = CREATERESMGR( svt );
-                sal_Bool    bRleCoding = aConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "RLE_Coding" ) ), sal_True );
+                ResMgr*		pResMgr = CREATERESMGR( svt );
+                sal_Bool    bRleCoding = aConfigItem.ReadBool( String( ResId( KEY_RLE_CODING, *pResMgr ) ), sal_True );
                 // Wollen wir RLE-Kodiert speichern?
                 aBmp.Write( rOStm, bRleCoding );
                 delete pResMgr;
@@ -1808,7 +1783,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                 sal_Int32 nVersion = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ), 0 ) ;
                 if ( nVersion )
                     rOStm.SetVersion( nVersion );
-                GDIMetaFile aMTF;
+                GDIMetaFile	aMTF;
 
                 if ( eType != GRAPHIC_BITMAP )
                     aMTF = aGraphic.GetGDIMetaFile();
@@ -1835,9 +1810,9 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                 }
                 else
                 {
-                    Bitmap          aBmp( aGraphic.GetBitmap() );
-                    GDIMetaFile     aMTF;
-                    VirtualDevice   aVirDev;
+                    Bitmap			aBmp( aGraphic.GetBitmap() );
+                    GDIMetaFile		aMTF;
+                    VirtualDevice	aVirDev;
 
                     aMTF.Record( &aVirDev );
                     aVirDev.DrawBitmap( Point(), aBmp );
@@ -1859,9 +1834,9 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                 }
                 else
                 {
-                    Bitmap          aBmp( aGraphic.GetBitmap() );
-                    GDIMetaFile     aMTF;
-                    VirtualDevice   aVirDev;
+                    Bitmap			aBmp( aGraphic.GetBitmap() );
+                    GDIMetaFile		aMTF;
+                    VirtualDevice	aVirDev;
 
                     aMTF.Record( &aVirDev );
                     aVirDev.DrawBitmap( Point(), aBmp );
@@ -1892,7 +1867,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                     sal_Int32 k, j, i = 0;
                     for ( i = 0; i < pFilterData->getLength(); i++ )
                     {
-                        if ( (*pFilterData)[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AdditionalChunks")) )
+                        if ( (*pFilterData)[ i ].Name.equalsAscii( "AdditionalChunks" ) )
                         {
                             com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aAdditionalChunkSequence;
                             if ( (*pFilterData)[ i ].Value >>= aAdditionalChunkSequence )
@@ -1946,10 +1921,10 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                     if( xMgr.is() )
                     {
                         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ), ::com::sun::star::uno::UNO_QUERY );
+                            ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), ::com::sun::star::uno::UNO_QUERY );
 
                         ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svg.SVGWriter" )) ), ::com::sun::star::uno::UNO_QUERY );
+                            ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
 
                         if( xSaxWriter.is() && xSVGWriter.is() )
                         {
@@ -1958,7 +1933,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
 
                             if( xActiveDataSource.is() )
                             {
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xStmIf(
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >	xStmIf(
                                     static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( rOStm ) ) );
 
                                 SvMemoryStream aMemStm( 65535, 65535 );
@@ -2015,50 +1990,50 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
 
 // ------------------------------------------------------------------------
 
-sal_Bool GraphicFilter::Setup( sal_uInt16 )
+BOOL GraphicFilter::Setup( USHORT )
 {
-    return sal_False;
+    return FALSE;
 }
 
 /* ------------------------------------------------------------------------
     No Import filter has a dialog, so
    the following two methods are obsolete */
 
-sal_Bool GraphicFilter::HasImportDialog( sal_uInt16 )
+BOOL GraphicFilter::HasImportDialog( USHORT )
 {
     return sal_True;
-//  return pConfig->IsImportDialog( nFormat );
+//	return pConfig->IsImportDialog( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool GraphicFilter::DoImportDialog( Window*, sal_uInt16 )
+BOOL GraphicFilter::DoImportDialog( Window*, USHORT )
 {
     return sal_True;
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool GraphicFilter::HasExportDialog( sal_uInt16 nFormat )
+BOOL GraphicFilter::HasExportDialog( USHORT nFormat )
 {
     return pConfig->IsExportDialog( nFormat );
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool GraphicFilter::DoExportDialog( Window* pWindow, sal_uInt16 nFormat )
+BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat )
 {
     return DoExportDialog( pWindow, nFormat, FUNIT_MM );
 }
 
-sal_Bool GraphicFilter::DoExportDialog( Window*, sal_uInt16 nFormat, FieldUnit )
+BOOL GraphicFilter::DoExportDialog( Window*, USHORT nFormat, FieldUnit )
 {
     sal_Bool bRet = sal_False;
      com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
         xSMgr( ::comphelper::getProcessServiceFactory() );
 
     uno::Reference< com::sun::star::uno::XInterface > xFilterOptionsDialog
-        ( xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.SvFilterOptionsDialog" )) ),
+        ( xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.svtools.SvFilterOptionsDialog" ) ),
             com::sun::star::uno::UNO_QUERY );
     if ( xFilterOptionsDialog.is() )
     {
@@ -2109,8 +2084,8 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
 
     if( pData )
     {
-        sal_uInt16      nFormat = GRFILTER_FORMAT_DONTKNOW;
-        ByteString  aShortName;
+        USHORT		nFormat = GRFILTER_FORMAT_DONTKNOW;
+        ByteString	aShortName;
         switch( pData->mnFormat )
         {
             case( CVT_BMP ): aShortName = BMP_SHORTNAME; break;
@@ -2157,12 +2132,12 @@ GraphicFilter* GraphicFilter::GetGraphicFilter()
 
 int GraphicFilter::LoadGraphic( const String &rPath, const String &rFilterName,
                  Graphic& rGraphic, GraphicFilter* pFilter,
-                 sal_uInt16* pDeterminedFormat )
+                 USHORT* pDeterminedFormat )
 {
     if ( !pFilter )
         pFilter = GetGraphicFilter();
 
-    const sal_uInt16 nFilter = rFilterName.Len() && pFilter->GetImportFormatCount()
+    const USHORT nFilter = rFilterName.Len() && pFilter->GetImportFormatCount()
                     ? pFilter->GetImportFormatNumber( rFilterName )
                     : GRFILTER_FORMAT_DONTKNOW;
 

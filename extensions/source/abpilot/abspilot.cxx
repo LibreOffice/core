@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,7 +140,7 @@ namespace abp
     //---------------------------------------------------------------------
     String OAddessBookSourcePilot::getStateDisplayName( WizardState _nState ) const
     {
-        sal_uInt16 nResId = 0;
+        USHORT nResId = 0;
         switch ( _nState )
         {
             case STATE_SELECT_ABTYPE:        nResId = STR_SELECT_ABTYPE; break;
@@ -175,7 +175,7 @@ namespace abp
         // 2. check if we need to register the data source
         if ( m_aSettings.bRegisterDataSource )
             m_aNewDataSource.registerDataSource(m_aSettings.sRegisteredDataSourceName);
-
+    
         // 3. write the data source / table names into the configuration
         addressconfig::writeTemplateAddressSource( getORB(), m_aSettings.bRegisterDataSource ? m_aSettings.sRegisteredDataSourceName : m_aSettings.sDataSourceName, m_aSettings.sSelectedTable );
 
@@ -205,7 +205,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OAddessBookSourcePilot::Close()
+    BOOL OAddessBookSourcePilot::Close()
     {
         implCleanup();
 
@@ -312,14 +312,14 @@ namespace abp
         const sal_Char* pGuess = NULL;
         switch ( getSettings().eType )
         {
-            case AST_MORK               :
+            case AST_MORK		        : 
             case AST_THUNDERBIRD        : pGuess = "Personal Address book"; break;
-            case AST_LDAP               : pGuess = "LDAP Directory"; break;
+            case AST_LDAP		        : pGuess = "LDAP Directory"; break;
             case AST_EVOLUTION          :
             case AST_EVOLUTION_GROUPWISE:
             case AST_EVOLUTION_LDAP     : pGuess = "Personal"; break;
             default:
-                OSL_FAIL( "OAddessBookSourcePilot::implDefaultTableName: unhandled case!" );
+                DBG_ERROR( "OAddessBookSourcePilot::implDefaultTableName: unhandled case!" );
                 return;
         }
         const ::rtl::OUString sGuess = ::rtl::OUString::createFromAscii( pGuess );
@@ -339,7 +339,7 @@ namespace abp
     void OAddessBookSourcePilot::implCreateDataSource()
     {
         if (m_aNewDataSource.isValid())
-        {   // we already have a data source object
+        {	// we already have a data source object
             if ( m_aSettings.eType == m_eNewDataSourceType )
                 // and it already has the correct type
                 return;
@@ -398,7 +398,7 @@ namespace abp
                 break;
 
             case AST_INVALID:
-                OSL_FAIL( "OAddessBookSourcePilot::implCreateDataSource: illegal data source type!" );
+                DBG_ERROR( "OAddessBookSourcePilot::implCreateDataSource: illegal data source type!" );
                 break;
         }
         m_eNewDataSourceType = m_aSettings.eType;
@@ -437,7 +437,7 @@ namespace abp
                 return new FinalPage( this );
 
             default:
-                OSL_FAIL("OAddessBookSourcePilot::createPage: invalid state!");
+                DBG_ERROR("OAddessBookSourcePilot::createPage: invalid state!");
                 return NULL;
         }
     }
@@ -495,7 +495,7 @@ namespace abp
     }
 
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

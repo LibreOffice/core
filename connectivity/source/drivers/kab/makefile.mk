@@ -46,9 +46,6 @@ CFLAGS+=$(KDE_CFLAGS)
 
 .IF "$(KDE_ROOT)"!=""
 EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib
-.IF "$(OS)$(CPU)" == "LINUXX"
-EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib64
-.ENDIF
 .ENDIF
 
 # === KAB base library ==========================
@@ -139,11 +136,3 @@ dummy:
 
 .INCLUDE : $(PRJ)$/target.pmk
 
-
-ALLTAR : $(MISC)/kab1.component
-
-$(MISC)/kab1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        kab1.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt kab1.component

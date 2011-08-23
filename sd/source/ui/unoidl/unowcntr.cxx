@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,62 +29,68 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
+#include <tools/list.hxx>
 
 #include <unowcntr.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
+DECLARE_LIST( WeakRefList, uno::WeakReference< uno::XInterface >* )
+
 SvUnoWeakContainer::SvUnoWeakContainer() throw()
 {
+    mpList = new WeakRefList;
 }
 
 SvUnoWeakContainer::~SvUnoWeakContainer() throw()
 {
-    for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); ++it )
-            delete *it;
-    maList.clear();
+    uno::WeakReference< uno::XInterface >* pRef = mpList->First();
+    while( pRef )
+    {
+        delete mpList->Remove();
+        pRef = mpList->GetCurObject();
+    }
+    delete mpList;
 }
 
 /** inserts the given ref into this container */
 void SvUnoWeakContainer::insert( uno::WeakReference< uno::XInterface > xRef ) throw()
 {
-    for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); )
+    uno::WeakReference< uno::XInterface >* pRef = mpList->First();
+    while( pRef )
     {
-        uno::WeakReference< uno::XInterface >* pRef = *it;
-        uno::Reference< uno::XInterface > xTestRef( *pRef );
-        if ( !xTestRef.is() )
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xTestRef( *pRef );
+        if(! xTestRef.is() )
         {
-            delete pRef;
-            it = maList.erase( it );
+            delete mpList->Remove();
+            pRef = mpList->GetCurObject();
         }
         else
         {
-            if ( *pRef == xRef )
+            if( *pRef == xRef )
                 return;
-            ++it;
+
+            pRef = mpList->Next();
         }
     }
-    maList.push_back( new uno::WeakReference< uno::XInterface >( xRef ) );
+
+    mpList->Insert( new uno::WeakReference< uno::XInterface >( xRef ) );
 }
 
-/** searches the container for a ref that returns true on the given
+/** searches the container for a ref that returns true on the given 
     search function
 */
-sal_Bool SvUnoWeakContainer::findRef(
-    uno::WeakReference< uno::XInterface >& rRef,
-    void* pSearchData,
-    weakref_searchfunc pSearchFunc
-)
+sal_Bool SvUnoWeakContainer::findRef( uno::WeakReference< uno::XInterface >& rRef, void* pSearchData, weakref_searchfunc pSearchFunc )
 {
-    for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); )
+    uno::WeakReference< uno::XInterface >* pRef = mpList->First();
+    while( pRef )
     {
-        uno::WeakReference< uno::XInterface >* pRef = *it;
-        uno::Reference< uno::XInterface > xTestRef( *pRef );
-        if ( !xTestRef.is() )
+        uno::Reference< ::com::sun::star::uno::XInterface > xTestRef( *pRef );
+        if(!xTestRef.is())
         {
-            delete pRef;
-            it = maList.erase( it );
+            delete mpList->Remove();
+            pRef = mpList->GetCurObject();
         }
         else
         {
@@ -93,24 +99,28 @@ sal_Bool SvUnoWeakContainer::findRef(
                 rRef = *pRef;
                 return sal_True;
             }
-            ++it;
+
+            pRef = mpList->Next();
         }
     }
+
     return sal_False;
 }
 
 void SvUnoWeakContainer::dispose()
 {
-    for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); ++it )
+    uno::WeakReference< uno::XInterface >* pRef = mpList->First();
+    while( pRef )
     {
-        uno::WeakReference< uno::XInterface >* pRef = *it;
         uno::Reference< uno::XInterface > xTestRef( *pRef );
-        if ( xTestRef.is() )
+        if(xTestRef.is())
         {
             uno::Reference< lang::XComponent > xComp( xTestRef, uno::UNO_QUERY );
             if( xComp.is() )
                 xComp->dispose();
         }
+
+        pRef = mpList->Next();
     }
 }
 

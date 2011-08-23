@@ -1,8 +1,8 @@
 --- misc/icu/source/config/mh-aix-gcc	2009-01-15 01:46:10.000000000 -0600
 +++ misc/build/icu/source/config/mh-aix-gcc	2010-06-24 20:58:16.000000000 -0500
-@@ -1,10 +1,7 @@
+@@ -1,85 +1,49 @@
  ## -*-makefile-*-
--## Copyright (c) 2003-2009 IBM, Ken Foskey, and others. All rights reserved.
+-## Copyright (c) 2003-2007 IBM, Ken Foskey, and others. All rights reserved.
 -##
 -## Aix-specific setup (for gcc)
 -##
@@ -12,11 +12,11 @@
 +## Copyright (c) 1999-2006, International Business Machines Corporation and
 +## others. All Rights Reserved.
  
- # Certain files don't compile in -ansi mode (e.g. umutex.c, toolutil.c, and cdatatst.c)
- CFLAGS += -D_ALL_SOURCE
-@@ -13,84 +10,30 @@
- GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
- GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
+ ## Commands to generate dependency files
+-GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
+-GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
++GEN_DEPS.c=  $(CC) -E -MM $(DEFS) $(CPPFLAGS)
++GEN_DEPS.cc= $(CXX) -E -MM $(DEFS) $(CPPFLAGS)
  
 -## Commands to link
 -## We need to use the C++ linker, even when linking C programs, since
@@ -24,12 +24,9 @@
 -LINK.c=		$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS) 
 -LINK.cc=	$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS) 
 -
--## Shared library options
--LD_SOOPTIONS= -Wl,-bsymbolic
--
 -## Commands to make a shared library
--SHLIB.c=    $(AIX_PREDELETE) $(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-bexpall $(LD_SOOPTIONS)
--SHLIB.cc=   $(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -Wl,-bexpall $(LD_SOOPTIONS)
+-SHLIB.c=    $(AIX_PREDELETE) $(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-bexpall
+-SHLIB.cc=   $(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -Wl,-bexpall
 +## Flags for position independent code
 +SHAREDLIBCFLAGS = -fPIC
 +SHAREDLIBCXXFLAGS = -fPIC
@@ -42,11 +39,18 @@
  ## Compiler switch to embed a runtime search path
 -LD_RPATH=	-I
 -LD_RPATH_PRE=	
--
++LD_RPATH=	
++LD_RPATH_PRE =
+ 
 -## enable the shared lib loader
 -LDFLAGS += -Wl,-bbigtoc
-+LD_RPATH=
-+LD_RPATH_PRE=
++## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
++## (incl. the C++ runtime libs potentially found in the URE lib dir):
++#ENABLE_RPATH=YES
++#RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN:$$ORIGIN/../ure-link/lib'
++
++#SH#  ENABLE_RPATH=YES
++#SH#  RPATHLDFLAGS="${LD_RPATH_PRE}'$$ORIGIN:$$ORIGIN/../ure-link/lib'"
  
  ## These are the library specific LDFLAGS
  LDFLAGSICUDT=-nodefaultlibs -nostdlib
@@ -65,7 +69,6 @@
 -FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION).$(SO)
 -MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
 -SHARED_OBJECT = $(notdir $(FINAL_SO_TARGET:.$(SO)=.$(SOBJ)))
--SHARED_OBJECT_NO_VERSION = $(basename $(SO_TARGET)).$(SOBJ)
 -
 -# The following is for Makefile.inc's use.
 -ICULIBSUFFIX_VERSION = $(LIB_VERSION_MAJOR)
@@ -80,14 +83,19 @@
 -
 -## The type of assembly needed when pkgdata is used for generating shared libraries.
 -GENCCODE_ASSEMBLY=-a xlc
--
++## Compiler switch to embed a library name
++# The initial tab in the next line is to prevent icu-config from reading it.
++	#LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
++#SH# # We can't depend on MIDDLE_SO_TARGET being set.
++#SH# LD_SONAME=
+ 
  ## Shared object suffix
 -SOBJ=   so
 -# without the -brtl option, the library names use .a. AIX is funny that way.
 -SO=	a
 -A=	a
+-
 +SO = so
- 
  ## Non-shared intermediate object suffix
 -STATIC_O = o
 -
@@ -95,13 +103,9 @@
 -
 -## Build archive from shared object
 -%.a : %.so
--	ln -f $< $(SHARED_OBJECT_NO_VERSION)
--	$(AR) $(ARFLAGS) $@ $(SHARED_OBJECT_NO_VERSION)
--	rm -f $(SHARED_OBJECT_NO_VERSION)
+-	$(AR) $(ARFLAGS) $@ $<
 -$(LIBDIR)/%.a : %.so
--	ln -f $< $(SHARED_OBJECT_NO_VERSION)
--	$(AR) $(ARFLAGS) $@ $(SHARED_OBJECT_NO_VERSION)
--	rm -f $(SHARED_OBJECT_NO_VERSION)
+-	$(AR) $(ARFLAGS) $@ $<
 -
 -## Build import list from export list
 -%.e : %.exp
@@ -111,3 +115,41 @@
  
  ## Compilation rules
  %.$(STATIC_O): $(srcdir)/%.c
+@@ -107,16 +71,19 @@
+ 		[ -s $@ ] || rm -f $@'
+ 
+ ## Versioned libraries rules
+-%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
+-	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
+-%.$(SO): %$(SO_TARGET_VERSION).$(SO)
+-	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
+ 
++%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
++	$(RM) $@ && ln -s ${<F} $@
++%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
++	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
++
++##  Bind internal references
+ 
+-## BIR  - bind with internal references [so app data and icu data doesn't collide]
+ # LDflags that pkgdata will use
+-BIR_LDFLAGS= -Wl,-bE:$(NAME).map,-bnoexpall
++BIR_LDFLAGS= -Wl,-Bsymbolic
+ 
+ # Dependencies [i.e. map files] for the final library
+-BIR_DEPS= $(NAME).map
++BIR_DEPS=
++
++## End Linux-specific setup
+ 
+--- misc/icu/source/tools/pkgdata/dllmode.c	2010-07-27 09:29:19.000000000 -0500
++++ misc/build/icu/source/tools/pkgdata/dllmode.c	2010-07-27 09:29:48.000000000 -0500
+@@ -222,7 +222,7 @@
+                                      "\t$(SHLIB.c) -o $@ $(OBJECTS) $(DLL_LDFLAGS)\n\n");
+ #endif
+     
+-#ifdef U_AIX
++#if 0
+     T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(FINAL_SO_TARGET): $(OBJECTS) $(LISTFILES) $(DLL_DEPS)\n"
+                                      "\t$(SHLIB.c) -o $(FINAL_SO_TARGET:.$(SO)=.$(SOBJ)) $(OBJECTS) $(DLL_LDFLAGS)\n"
+                                      "\t$(AR) $(ARFLAGS) $@ $(FINAL_SO_TARGET:.$(SO)=.$(SOBJ))\n"

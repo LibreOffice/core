@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,15 +65,15 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemDat
 {
     uno::Sequence< beans::PropertyValue > aProps(5);
 
-    aProps[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
+    aProps[0].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_COMMANDURL );
     aProps[0].Value <<= sCommandURL;
-    aProps[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
+    aProps[1].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_HELPURL );
     aProps[1].Value <<= sHelpURL;
-    aProps[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ));
+    aProps[2].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_LABEL );
     aProps[2].Value <<= sLabel;
-    aProps[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+    aProps[3].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_TYPE );
     aProps[3].Value <<= nType;
-    aProps[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ));
+    aProps[4].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_CONTAINER );
     aProps[4].Value = aSubMenu;
 
     return aProps;
@@ -83,19 +83,19 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItem
 {
     uno::Sequence< beans::PropertyValue > aProps(7);
 
-    aProps[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
+    aProps[0].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_COMMANDURL );
     aProps[0].Value <<= sCommandURL;
-    aProps[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
+    aProps[1].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_HELPURL );
     aProps[1].Value <<= sHelpURL;
-    aProps[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ));
+    aProps[2].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_LABEL );
     aProps[2].Value <<= sLabel;
-    aProps[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+    aProps[3].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_TYPE );
     aProps[3].Value <<= nType;
-    aProps[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ));
+    aProps[4].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_CONTAINER );
     aProps[4].Value = aSubMenu;
-    aProps[5].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_ISVISIBLE ));
+    aProps[5].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ISVISIBLE );
     aProps[5].Value <<= isVisible;
-    aProps[6].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE ));
+    aProps[6].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_STYLE );
     aProps[6].Value <<= nStyle;
 
     return aProps;
@@ -122,7 +122,7 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
     uno::Sequence< beans::PropertyValue > aProps;
     m_xIndexAccess->getByIndex( nPosition ) >>= aProps;
     uno::Reference< container::XIndexAccess > xSubMenu;
-    getPropertyValue( aProps, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER )) ) >>= xSubMenu;
+    getPropertyValue( aProps, rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_CONTAINER ) ) >>= xSubMenu;
     ScVbaCommandBarControl* pNewCommandBarControl = NULL;
     if( xSubMenu.is() )
         pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, sal_True, m_xMenu );
@@ -133,7 +133,7 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
 }
 
 // Methods
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*/ ) throw (uno::RuntimeException)
 {
     sal_Int32 nPosition = -1;
@@ -142,7 +142,7 @@ ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*
         rtl::OUString sName;
         aIndex >>= sName;
         nPosition = VbaCommandBarHelper::findControlByName( m_xIndexAccess, sName, m_bIsMenu );
-    }
+    } 
     else
     {
         aIndex >>= nPosition;
@@ -152,21 +152,21 @@ ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*
     {
         throw uno::RuntimeException();
     }
-
-    return createCollectionObject( uno::makeAny( nPosition ) );
+    
+    return createCollectionObject( uno::makeAny( nPosition ) ); 
 }
 
-uno::Reference< XCommandBarControl > SAL_CALL
+uno::Reference< XCommandBarControl > SAL_CALL 
 ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const uno::Any& Parameter, const uno::Any& Before, const uno::Any& Temporary ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     // Parameter is not supported
     // the following name needs to be individually created;
-    rtl::OUString sLabel(RTL_CONSTASCII_USTRINGPARAM("Custom"));
-    rtl::OUString sCommandUrl(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_MENU_STR)) + sLabel);
+    rtl::OUString sLabel( rtl::OUString::createFromAscii("Custom") );
+    rtl::OUString sCommandUrl = rtl::OUString::createFromAscii( CUSTOM_MENU_STR ) + sLabel;
     sal_Int32 nType = office::MsoControlType::msoControlButton;
     sal_Int32 nPosition = 0;
     sal_Bool bTemporary = sal_True;
-
+    
     if( Type.hasValue() )
     {
         Type >>= nType;
@@ -188,7 +188,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
     if( Temporary.hasValue() )
         Temporary >>= bTemporary;
-
+    
     uno::Any aSubMenu;
     if( nType == office::MsoControlType::msoControlPopup )
     {
@@ -197,7 +197,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
         aSubMenu <<= xSCF->createInstanceWithContext( mxContext );
     }
 
-    // create control
+    // create control 
     uno::Sequence< beans::PropertyValue > aProps;
     rtl::OUString sHelpUrl;
     sal_uInt16 nItemType = 0;
@@ -218,7 +218,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
     pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
 
-    // sometimes it would crash if passing m_xMenu instead of uno::Reference< awt::XMenu >() in Linux.
+    // sometimes it would crash if passing m_xMenu instead of uno::Reference< awt::XMenu >() in Linux. 
     ScVbaCommandBarControl* pNewCommandBarControl = NULL;
     if( nType == office::MsoControlType::msoControlPopup )
         pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, bTemporary, uno::Reference< awt::XMenu >() );
@@ -227,15 +227,15 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
     return uno::Reference< XCommandBarControl >( pNewCommandBarControl );
 }
-
+   
 // XHelperInterface
-rtl::OUString&
+rtl::OUString& 
 ScVbaCommandBarControls::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarControls") );
     return sImplName;
 }
-uno::Sequence<rtl::OUString>
+uno::Sequence<rtl::OUString> 
 ScVbaCommandBarControls::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

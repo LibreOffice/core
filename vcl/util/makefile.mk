@@ -125,6 +125,7 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/virdev.hxx      \
             $(INC)$/vcl$/wall.hxx        \
             $(INC)$/vcl$/waitobj.hxx     \
+            $(INC)$/vcl$/wintypes.hxx    \
             $(INC)$/vcl$/window.hxx      \
             $(INC)$/vcl$/wrkwin.hxx
 
@@ -133,6 +134,7 @@ SHL11FILE=  $(MISC)$/app.slo
 SHL12FILE=  $(MISC)$/gdi.slo
 SHL13FILE=  $(MISC)$/win.slo
 SHL14FILE=  $(MISC)$/ctrl.slo
+#SHL15FILE=  $(MISC)$/ex.slo
 SHL16FILE=  $(MISC)$/salapp.slo
 SHL17FILE=  $(MISC)$/salwin.slo
 SHL18FILE=  $(MISC)$/salgdi.slo
@@ -186,7 +188,7 @@ SHL1STDLIBS+=\
 .IF "$(SYSTEM_GRAPHITE)" == "YES"
 SHL1STDLIBS+= $(GRAPHITE_LIBS)
 .ELSE
-SHL1STDLIBS+= -lgraphite2_off
+SHL1STDLIBS+= $(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT)/libgraphite.a
 .ENDIF
 .ENDIF
 .ENDIF
@@ -212,6 +214,11 @@ LIB1FILES+= \
 .ENDIF # USE_BUILTIN_RASTERIZER
 
 SHL1LIBS=   $(LIB1TARGET)
+.IF "$(GUI)"!="UNX"
+.IF "$(COM)"!="GCC"
+#SHL1OBJS=   $(SLO)$/salshl.obj
+.ENDIF
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 SHL1RES=    $(RES)$/salsrc.res
@@ -231,10 +238,9 @@ DEFLIB1NAME =vcl
 
 .IF "$(ENABLE_GRAPHITE)" == "TRUE"
 .IF "$(COM)" == "GCC"
-SHL1STDLIBS += -Wl,-Bstatic -lgraphite2_off -Wl,-Bdynamic
-#SHL1STDLIBS += -lgraphite2_off
+SHL1STDLIBS += -lgraphite
 .ELSE
-SHL1STDLIBS += graphite2_off.lib
+SHL1STDLIBS += graphite_dll.lib
 .ENDIF
 .ENDIF
 
@@ -245,8 +251,7 @@ SHL1STDLIBS += $(UWINAPILIB)      \
                $(WINSPOOLLIB)     \
                $(OLE32LIB)        \
                $(SHELL32LIB)      \
-               $(ADVAPI32LIB)     \
-               $(VERSIONLIB)
+               $(ADVAPI32LIB)
 
 SHL1STDLIBS += $(IMM32LIB)
 
@@ -305,7 +310,7 @@ SHL2STDLIBS=\
 # prepare linking of Xinerama
 .IF "$(USE_XINERAMA)" != "NO"
 
-.IF "$(OS)"=="MACOSX" || "$(OS)$(CPU)" == "LINUXX"
+.IF "$(OS)"=="MACOSX"
 XINERAMALIBS=-lXinerama
 .ELSE
 .IF "$(OS)" != "SOLARIS" || "$(USE_XINERAMA_VERSION)" == "Xorg"
@@ -328,7 +333,7 @@ SHL2STDLIBS+=`pkg-config --libs xrender`
 
 SHL2STDLIBS += -lXext -lSM -lICE -lX11
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD" && \
-    && "$(OS)"!="OPENBSD" "$(OS)"!="DRAGONFLY"
+	&& "$(OS)"!="OPENBSD"
 # needed by salprnpsp.cxx
 SHL2STDLIBS+= -ldl
 .ENDIF
@@ -390,9 +395,6 @@ SHL4STDLIBS+= $(XRANDR_LIBS)
 .IF "$(ENABLE_KDE)" != ""
 .IF "$(KDE_ROOT)"!=""
 EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib
-.IF "$(OS)$(CPU)" == "LINUXX"
-EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib64
-.ENDIF
 .ENDIF
 LIB5TARGET=$(SLB)$/ikde_plug_
 LIB5FILES=$(SLB)$/kdeplug.lib
@@ -454,16 +456,3 @@ SHL6STDLIBS+=$(KDE4_LIBS) $(KDE_GLIB_LIBS)
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(MISC)/vcl.component
-
-.IF "$(OS)" == "MACOSX"
-my_platform = .macosx
-.ELIF "$(OS)" == "WNT"
-my_platform = .windows
-.END
-
-$(MISC)/vcl.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        vcl.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt vcl$(my_platform).component

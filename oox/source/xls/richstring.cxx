@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,31 +27,29 @@
  ************************************************************************/
 
 #include "oox/xls/richstring.hxx"
-
-#include <com/sun/star/text/XText.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <com/sun/star/text/XText.hpp>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
+
+using ::rtl::OString;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::text::XText;
+using ::com::sun::star::text::XTextRange;
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
-
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
-// ============================================================================
-
 namespace {
 
-const sal_uInt8 BIFF12_STRINGFLAG_FONTS         = 0x01;
-const sal_uInt8 BIFF12_STRINGFLAG_PHONETICS     = 0x02;
+const sal_uInt8 OOBIN_STRINGFLAG_FONTS          = 0x01;
+const sal_uInt8 OOBIN_STRINGFLAG_PHONETICS      = 0x02;
 
 } // namespace
 
@@ -122,7 +120,7 @@ void RichStringPortion::writeFontProperties( const Reference<XText>& rxText, sal
 
 // ----------------------------------------------------------------------------
 
-void FontPortionModel::read( SequenceInputStream& rStrm )
+void FontPortionModel::read( RecordInputStream& rStrm )
 {
     mnPos = rStrm.readuInt16();
     mnFontId = rStrm.readuInt16();
@@ -160,7 +158,7 @@ void FontPortionModelList::appendPortion( const FontPortionModel& rPortion )
         back().mnFontId = rPortion.mnFontId;
 }
 
-void FontPortionModelList::importPortions( SequenceInputStream& rStrm )
+void FontPortionModelList::importPortions( RecordInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
     clear();
@@ -207,7 +205,7 @@ PhoneticDataModel::PhoneticDataModel() :
 {
 }
 
-void PhoneticDataModel::setBiffData( sal_Int32 nType, sal_Int32 nAlignment )
+void PhoneticDataModel::setBinData( sal_Int32 nType, sal_Int32 nAlignment )
 {
     static const sal_Int32 spnTypeIds[] = { XML_halfwidthKatakana, XML_fullwidthKatakana, XML_hiragana, XML_noConversion };
     mnType = STATIC_ARRAY_SELECT( spnTypeIds, nType, XML_fullwidthKatakana );
@@ -230,13 +228,13 @@ void PhoneticSettings::importPhoneticPr( const AttributeList& rAttribs )
     maModel.mnAlignment = rAttribs.getToken( XML_alignment, XML_left );
 }
 
-void PhoneticSettings::importPhoneticPr( SequenceInputStream& rStrm )
+void PhoneticSettings::importPhoneticPr( RecordInputStream& rStrm )
 {
     sal_uInt16 nFontId;
     sal_Int32 nType, nAlignment;
     rStrm >> nFontId >> nType >> nAlignment;
     maModel.mnFontId = nFontId;
-    maModel.setBiffData( nType, nAlignment );
+    maModel.setBinData( nType, nAlignment );
 }
 
 void PhoneticSettings::importPhoneticPr( BiffInputStream& rStrm )
@@ -244,16 +242,16 @@ void PhoneticSettings::importPhoneticPr( BiffInputStream& rStrm )
     sal_uInt16 nFontId, nFlags;
     rStrm >> nFontId >> nFlags;
     maModel.mnFontId = nFontId;
-    maModel.setBiffData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
+    maModel.setBinData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
     // following: range list with cells showing phonetic text
 }
 
-void PhoneticSettings::importStringData( SequenceInputStream& rStrm )
+void PhoneticSettings::importStringData( RecordInputStream& rStrm )
 {
     sal_uInt16 nFontId, nFlags;
     rStrm >> nFontId >> nFlags;
     maModel.mnFontId = nFontId;
-    maModel.setBiffData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
+    maModel.setBinData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
 }
 
 void PhoneticSettings::importStringData( BiffInputStream& rStrm )
@@ -261,7 +259,7 @@ void PhoneticSettings::importStringData( BiffInputStream& rStrm )
     sal_uInt16 nFontId, nFlags;
     rStrm >> nFontId >> nFlags;
     maModel.mnFontId = nFontId;
-    maModel.setBiffData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
+    maModel.setBinData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
 }
 
 // ============================================================================
@@ -292,7 +290,7 @@ void RichStringPhonetic::setBaseRange( sal_Int32 nBasePos, sal_Int32 nBaseEnd )
 
 // ----------------------------------------------------------------------------
 
-void PhoneticPortionModel::read( SequenceInputStream& rStrm )
+void PhoneticPortionModel::read( RecordInputStream& rStrm )
 {
     mnPos = rStrm.readuInt16();
     mnBasePos = rStrm.readuInt16();
@@ -325,7 +323,7 @@ void PhoneticPortionModelList::appendPortion( const PhoneticPortionModel& rPorti
     }
 }
 
-void PhoneticPortionModelList::importPortions( SequenceInputStream& rStrm )
+void PhoneticPortionModelList::importPortions( RecordInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
     clear();
@@ -397,12 +395,12 @@ void RichString::importPhoneticPr( const AttributeList& rAttribs )
     maPhonSettings.importPhoneticPr( rAttribs );
 }
 
-void RichString::importString( SequenceInputStream& rStrm, bool bRich )
+void RichString::importString( RecordInputStream& rStrm, bool bRich )
 {
     sal_uInt8 nFlags = bRich ? rStrm.readuInt8() : 0;
-    OUString aBaseText = BiffHelper::readString( rStrm );
+    OUString aBaseText = rStrm.readString();
 
-    if( !rStrm.isEof() && getFlag( nFlags, BIFF12_STRINGFLAG_FONTS ) )
+    if( !rStrm.isEof() && getFlag( nFlags, OOBIN_STRINGFLAG_FONTS ) )
     {
         FontPortionModelList aPortions;
         aPortions.importPortions( rStrm );
@@ -413,9 +411,9 @@ void RichString::importString( SequenceInputStream& rStrm, bool bRich )
         createPortion()->setText( aBaseText );
     }
 
-    if( !rStrm.isEof() && getFlag( nFlags, BIFF12_STRINGFLAG_PHONETICS ) )
+    if( !rStrm.isEof() && getFlag( nFlags, OOBIN_STRINGFLAG_PHONETICS ) )
     {
-        OUString aPhoneticText = BiffHelper::readString( rStrm );
+        OUString aPhoneticText = rStrm.readString();
         PhoneticPortionModelList aPortions;
         aPortions.importPortions( rStrm );
         maPhonSettings.importStringData( rStrm );

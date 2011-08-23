@@ -41,14 +41,14 @@
 class OutputDevice;
 class VirtualDevice;
 
-//  ----------------------------------------------------
-//  class VCLXDevice
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXDevice
+//	----------------------------------------------------
 
-// For using nDummy, no incompatible update, add a sal_Bool bCreatedWithToolkitMember later...
+// For using nDummy, no incompatible update, add a BOOL bCreatedWithToolkitMember later...
 #define FLAGS_CREATEDWITHTOOLKIT    0x00000001
 
-class TOOLKIT_DLLPUBLIC VCLXDevice :    public ::com::sun::star::awt::XDevice,
+class TOOLKIT_DLLPUBLIC VCLXDevice :	public ::com::sun::star::awt::XDevice,
                     public ::com::sun::star::lang::XTypeProvider,
                     public ::com::sun::star::lang::XUnoTunnel,
 /* public ::com::sun::star::awt::XTextConstraints,*/
@@ -58,46 +58,48 @@ class TOOLKIT_DLLPUBLIC VCLXDevice :    public ::com::sun::star::awt::XDevice,
     friend class VCLXGraphics;
 
 private:
-    OutputDevice*           mpOutputDevice;
+    ::osl::SolarMutex&      mrMutex;  // Reference to SolarMutex
+    OutputDevice*			mpOutputDevice;
 
 public:
-    void*                   pDummy;
-    sal_uInt32              nFlags;
+    void*					pDummy;
+    sal_uInt32				nFlags;
 
 protected:
-    void                    DestroyOutputDevice();
+    ::osl::SolarMutex&       GetMutex() { return mrMutex; }
+    void					DestroyOutputDevice();
 
 public:
                             VCLXDevice();
                             ~VCLXDevice();
 
-    void                    SetOutputDevice( OutputDevice* pOutDev ) { mpOutputDevice = pOutDev; }
-    OutputDevice*           GetOutputDevice() const { return mpOutputDevice; }
+    void					SetOutputDevice( OutputDevice* pOutDev ) { mpOutputDevice = pOutDev; }
+    OutputDevice*			GetOutputDevice() const { return mpOutputDevice; }
 
     void                    SetCreatedWithToolkit( sal_Bool bCreatedWithToolkit );
     sal_Bool                IsCreatedWithToolkit() const;
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XUnoTunnel
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
-    static VCLXDevice*                                          GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
-    sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >&	GetUnoTunnelId() throw();
+    static VCLXDevice*											GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
+    sal_Int64													SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XDevice,
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >    SAL_CALL createGraphics(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >      SAL_CALL createDevice( sal_Int32 nWidth, sal_Int32 nHeight ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::awt::DeviceInfo                                       SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >	SAL_CALL createGraphics(  ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >		SAL_CALL createDevice( sal_Int32 nWidth, sal_Int32 nHeight ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::DeviceInfo										SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::com::sun::star::awt::FontDescriptor > SAL_CALL getFontDescriptors(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >        SAL_CALL getFont( const ::com::sun::star::awt::FontDescriptor& aDescriptor ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >      SAL_CALL createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >		SAL_CALL getFont( const ::com::sun::star::awt::FontDescriptor& aDescriptor ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >		SAL_CALL createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayBitmap > SAL_CALL createDisplayBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >& Bitmap ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XTextConstraints
@@ -113,19 +115,19 @@ public:
 
 };
 
-//  ----------------------------------------------------
-//  class VCLXVirtualDevice
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXVirtualDevice
+//	----------------------------------------------------
 
 class VCLXVirtualDevice : public VCLXDevice
 {
 private:
-    VirtualDevice*  mpVDev;
+    VirtualDevice*	mpVDev;
 
 public:
                     ~VCLXVirtualDevice();
 
-    void            SetVirtualDevice( VirtualDevice* pVDev ) { SetOutputDevice( (OutputDevice*)pVDev ); }
+    void			SetVirtualDevice( VirtualDevice* pVDev ) { SetOutputDevice( (OutputDevice*)pVDev ); }
 };
 
 

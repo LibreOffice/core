@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,8 @@
 #include "oox/drawingml/textliststyle.hxx"
 #include "oox/drawingml/textliststylecontext.hxx"
 #include "oox/ppt/slidemastertextstylescontext.hxx"
+#include "oox/core/namespaces.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -53,30 +55,30 @@ Reference< XFastContextHandler > SlideMasterTextStylesContext::createFastChildCo
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case PPT_TOKEN( titleStyle ):
+        case NMSP_PPT|XML_titleStyle:
         {
             aTextListStylePtr = mpSlidePersistPtr->getTitleTextStyle();
             break;
         }
-        case PPT_TOKEN( bodyStyle ):
+        case NMSP_PPT|XML_bodyStyle:
         {
             aTextListStylePtr = mpSlidePersistPtr->getBodyTextStyle();
             break;
         }
-        case PPT_TOKEN( notesStyle ):
+        case NMSP_PPT|XML_notesStyle:
         {
             aTextListStylePtr = mpSlidePersistPtr->getNotesTextStyle();
             break;
         }
-        case PPT_TOKEN( otherStyle ):
+        case NMSP_PPT|XML_otherStyle:
         {
             aTextListStylePtr = mpSlidePersistPtr->getOtherTextStyle();
             break;
         }
     }
-    if ( aTextListStylePtr )            // sj: the master list style is the last instance of from where properties
-    {                                   // are obtained. i got some documents without having the textsize set at
-        for ( int i = 0; i < 9; i++ )   // any point, the master reference application is using 18pt then
+    if ( aTextListStylePtr )			// sj: the master list style is the last instance of from where properties 
+    {									// are obtained. i got some documents without having the textsize set at 
+        for ( int i = 0; i < 9; i++ )	// any point, the master reference application is using 18pt then
             aTextListStylePtr->getListStyle()[ i ]->getTextCharacterProperties().moHeight = 1800;
         xRet.set( new oox::drawingml::TextListStyleContext( *this, *aTextListStylePtr ) );
     }

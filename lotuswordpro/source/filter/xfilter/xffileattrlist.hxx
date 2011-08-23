@@ -57,15 +57,20 @@
  * @file
  * Wrapper the sax interface for xml output.
  ************************************************************************/
-#ifndef     _XFFILEATTRLIST_HXX
-#define     _XFFILEATTRLIST_HXX
+/*************************************************************************
+ * Change History
+ * 2004-12-23 create this file.
+ ************************************************************************/
 
-#include    "ixfattrlist.hxx"
-#include    "rtl/ustring.hxx"
-#include    <vector>
-#include    <utility>
+#ifndef		_XFFILEATTRLIST_HXX
+#define		_XFFILEATTRLIST_HXX
 
-class   XFFileAttrList : public IXFAttrList
+#include	"ixfattrlist.hxx"
+#include	"rtl/ustring.hxx"
+#include	<vector>
+#include	<utility>
+
+class	XFFileAttrList : public IXFAttrList
 {
 public:
 
@@ -73,8 +78,8 @@ public:
     virtual ~XFFileAttrList();
     //Interface ISaxAttributeList:
 
-    virtual void    AddAttribute(const rtl::OUString& name, const rtl::OUString& value);
-    virtual void    Clear();
+    virtual void	AddAttribute(const rtl::OUString& name, const rtl::OUString& value);
+    virtual void	Clear();
 
     friend class XFFileStream;
 private:

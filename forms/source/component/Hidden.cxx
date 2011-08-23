@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,16 +130,16 @@ sal_Bool OHiddenModel::convertFastPropertyValue(
 void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_BASE_PROPERTIES(4)
-        DECL_PROP2(CLASSID,         sal_Int16,          READONLY, TRANSIENT);
-        DECL_PROP1(HIDDEN_VALUE,    ::rtl::OUString,    BOUND);
-        DECL_PROP1(NAME,            ::rtl::OUString,    BOUND);
-        DECL_PROP1(TAG,             ::rtl::OUString,    BOUND);
+        DECL_PROP2(CLASSID,			sal_Int16,			READONLY, TRANSIENT);
+        DECL_PROP1(HIDDEN_VALUE,	::rtl::OUString,	BOUND);
+        DECL_PROP1(NAME,			::rtl::OUString,	BOUND);
+        DECL_PROP1(TAG,				::rtl::OUString,	BOUND);
     END_DESCRIBE_PROPERTIES();
 }
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+StringSequence SAL_CALL	OHiddenModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
     StringSequence aSupported( 2 );
     aSupported[ 0 ] = FRM_SUN_COMPONENT_HIDDENCONTROL;
@@ -150,7 +150,7 @@ StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::su
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OHiddenModel::getServiceName() throw(RuntimeException)
 {
-    return FRM_COMPONENT_HIDDEN;    // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_HIDDEN;	// old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -170,7 +170,7 @@ void SAL_CALL OHiddenModel::write(const Reference<XObjectOutputStream>& _rxOutSt
 void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
 {
     // Version
-    sal_uInt16 nVersion = _rxInStream->readShort();
+    UINT16 nVersion = _rxInStream->readShort();
 
     // Name
     DBG_ASSERT(nVersion != 1, "OHiddenModel::read : this version is obsolete !");
@@ -178,7 +178,7 @@ void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStrea
     {
         case 1 : { ::rtl::OUString sDummy; _rxInStream >> sDummy; _rxInStream >> m_sHiddenValue; } break;
         case 2 : _rxInStream >> m_sHiddenValue; break;
-        default : OSL_FAIL("OHiddenModel::read : unknown version !"); m_sHiddenValue = ::rtl::OUString();
+        default : DBG_ERROR("OHiddenModel::read : unknown version !"); m_sHiddenValue = ::rtl::OUString();
     }
     OControlModel::read(_rxInStream);
 }

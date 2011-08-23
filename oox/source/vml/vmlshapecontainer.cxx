@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,20 +27,16 @@
  ************************************************************************/
 
 #include "oox/vml/vmlshapecontainer.hxx"
-
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshape.hxx"
 
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::awt::Rectangle;
+using ::com::sun::star::drawing::XShapes;
+
 namespace oox {
 namespace vml {
-
-// ============================================================================
-
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
 
 // ============================================================================
 

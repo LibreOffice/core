@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@
 #include <comphelper/processfactory.hxx>
 
 #define _IMAPDLG_PRIVATE
-#include "svx/imapdlg.hxx"
+#include "imapdlg.hxx"
 
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -71,23 +71,23 @@
 #include "imapdlg.hrc"
 #include "imapwnd.hxx"
 #include "imapimp.hxx"
-#include "svx/dlgutil.hxx"
+#include "dlgutil.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 
-#define SELF_TARGET         "_self"
-#define IMAP_ALL_FILTER     "<Alle>"
-#define IMAP_CERN_FILTER    "MAP - CERN"
-#define IMAP_NCSA_FILTER    "MAP - NCSA"
-#define IMAP_BINARY_FILTER  "SIP - StarView ImageMap"
-#define IMAP_ALL_TYPE       "*.*"
-#define IMAP_BINARY_TYPE    "*.sip"
-#define IMAP_CERN_TYPE      "*.map"
-#define IMAP_NCSA_TYPE      "*.map"
-#define IMAP_BINARY_EXT     "sip"
-#define IMAP_CERN_EXT       "map"
-#define IMAP_NCSA_EXT       "map"
+#define SELF_TARGET			"_self"
+#define	IMAP_ALL_FILTER		"<Alle>"
+#define	IMAP_CERN_FILTER	"MAP - CERN"
+#define	IMAP_NCSA_FILTER	"MAP - NCSA"
+#define	IMAP_BINARY_FILTER	"SIP - StarView ImageMap"
+#define IMAP_ALL_TYPE		"*.*"
+#define IMAP_BINARY_TYPE	"*.sip"
+#define IMAP_CERN_TYPE		"*.map"
+#define IMAP_NCSA_TYPE		"*.map"
+#define	IMAP_BINARY_EXT		"sip"
+#define	IMAP_CERN_EXT		"map"
+#define	IMAP_NCSA_EXT		"map"
 
 /******************************************************************************/
 
@@ -109,29 +109,45 @@ inline String GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cS
     return aVal;
 }
 
-// ControllerItem
+/*************************************************************************
+|*
+|* ControllerItem
+|*
+\************************************************************************/
 
-SvxIMapDlgItem::SvxIMapDlgItem( sal_uInt16 _nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings ) :
+SvxIMapDlgItem::SvxIMapDlgItem( USHORT _nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings ) :
             SfxControllerItem   ( _nId, rBindings ),
-            rIMap               ( rIMapDlg )
+            rIMap				( rIMapDlg )
 {
 }
 
-void SvxIMapDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
+/*************************************************************************
+|*
+|* StateChanged-Methode
+|*
+\************************************************************************/
+
+void SvxIMapDlgItem::StateChanged( USHORT nSID, SfxItemState /*eState*/,
                                    const SfxPoolItem* pItem )
 {
     if ( ( nSID == SID_IMAP_EXEC ) && pItem )
     {
         const SfxBoolItem* pStateItem = PTR_CAST( SfxBoolItem, pItem );
 
-        DBG_ASSERT( pStateItem || pItem == 0, "SfxBoolItem expected");
+        DBG_ASSERT( pStateItem || pItem == 0, "SfxBoolItem erwartet");
 
-        // Disable Float if possible
+        // Float ggf. disablen
         rIMap.SetExecState( !pStateItem->GetValue() );
     }
 }
 
-SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( Window* _pParent, sal_uInt16 nId,
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( Window* _pParent, USHORT nId,
                                               SfxBindings* pBindings,
                                               SfxChildWinInfo* pInfo ) :
             SfxChildWindow( _pParent, nId )
@@ -147,6 +163,13 @@ SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( Window* _pParent, sal_uInt16 nId,
     pDlg->Initialize( pInfo );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void SvxIMapDlgChildWindow::UpdateIMapDlg( const Graphic& rGraphic, const ImageMap* pImageMap,
                                            const TargetList* pTargetList, void* pEditingObj )
 {
@@ -154,6 +177,13 @@ void SvxIMapDlgChildWindow::UpdateIMapDlg( const Graphic& rGraphic, const ImageM
          SfxViewFrame::Current()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
         SVXIMAPDLG()->Update( rGraphic, pImageMap, pTargetList, pEditingObj );
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
                         Window* _pParent, const ResId& rResId ) :
@@ -168,6 +198,7 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
         maCbbTarget         ( this, SVX_RES( RID_SVXCTL_CBB_TARGET ) ),
         aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
         maImageList         ( SVX_RES( IL_IMAPDLG ) ),
+        maImageListH        ( SVX_RES( ILH_IMAPDLG ) ),
         pCheckObj           ( NULL ),
         aIMapItem           ( SID_IMAP_EXEC, *this, *_pBindings )
 {
@@ -196,7 +227,7 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
     aTbxIMapDlg1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
     aTbxIMapDlg1.SetSizePixel( aTbxIMapDlg1.CalcWindowSizePixel() );
     aTbxIMapDlg1.SetSelectHdl( LINK( this, SvxIMapDlg, TbxClickHdl ) );
-    aTbxIMapDlg1.CheckItem( TBI_SELECT, sal_True );
+    aTbxIMapDlg1.CheckItem( TBI_SELECT, TRUE );
     TbxClickHdl( &aTbxIMapDlg1 );
 
     SetMinOutputSizePixel( aLastSize = GetOutputSizePixel() );
@@ -211,24 +242,38 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
     aEdtText.Disable();
     maFtTarget.Disable();
     maCbbTarget.Disable();
-    pOwnData->bExecState = sal_False;
+    pOwnData->bExecState = FALSE;
 
     Resize();
 
     pOwnData->aTimer.SetTimeout( 100 );
     pOwnData->aTimer.SetTimeoutHdl( LINK( this, SvxIMapDlg, UpdateHdl ) );
 
-    aTbxIMapDlg1.EnableItem( TBI_ACTIVE, sal_False );
-    aTbxIMapDlg1.EnableItem( TBI_MACRO, sal_False );
-    aTbxIMapDlg1.EnableItem( TBI_PROPERTY, sal_False );
+    aTbxIMapDlg1.EnableItem( TBI_ACTIVE, FALSE );
+    aTbxIMapDlg1.EnableItem( TBI_MACRO, FALSE );
+    aTbxIMapDlg1.EnableItem( TBI_PROPERTY, FALSE );
 }
+
+
+/*************************************************************************
+|*
+|* Dtor
+|*
+\************************************************************************/
 
 SvxIMapDlg::~SvxIMapDlg()
 {
-    // Delete URL-List
+    // URL-Liste loeschen
     delete pIMapWnd;
     delete pOwnData;
 }
+
+
+/*************************************************************************
+|*
+|* Resize-Methode
+|*
+\************************************************************************/
 
 void SvxIMapDlg::Resize()
 {
@@ -242,11 +287,11 @@ void SvxIMapDlg::Resize()
         Size    _aSize( aStbStatus.GetSizePixel() );
         Point   aPoint( 0, aNewSize.Height() - _aSize.Height() );
 
-        // Position the StatusBar
+        // StatusBar positionieren
         aStbStatus.SetPosSizePixel( aPoint, Size( aNewSize.Width(), _aSize.Height() ) );
         aStbStatus.Show();
 
-        // Position the EditWindow
+        // EditWindow positionieren
         _aSize.Width() = aNewSize.Width() - 18;
         _aSize.Height() = aPoint.Y() - pIMapWnd->GetPosPixel().Y() - 6;
         pIMapWnd->SetSizePixel( _aSize );
@@ -255,78 +300,132 @@ void SvxIMapDlg::Resize()
     }
 }
 
-sal_Bool SvxIMapDlg::Close()
+
+/*************************************************************************
+|*
+|* Close-Methode
+|*
+\************************************************************************/
+
+BOOL SvxIMapDlg::Close()
 {
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
 
     if ( aTbxIMapDlg1.IsItemEnabled( TBI_APPLY ) )
     {
-        QueryBox    aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
+        QueryBox	aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
                            String( SVX_RES( STR_IMAPDLG_MODIFY ) ) );
-        const long  nRet = aQBox.Execute();
+        const long	nRet = aQBox.Execute();
 
         if( nRet == RET_YES )
         {
-            SfxBoolItem aBoolItem( SID_IMAP_EXEC, sal_True );
+            SfxBoolItem aBoolItem( SID_IMAP_EXEC, TRUE );
             GetBindings().GetDispatcher()->Execute(
                 SID_IMAP_EXEC, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
         }
         else if( nRet == RET_CANCEL )
-            bRet = sal_False;
+            bRet = FALSE;
     }
     else if( pIMapWnd->IsChanged() )
     {
-        QueryBox    aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
+        QueryBox	aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
                            String( SVX_RES( STR_IMAPDLG_SAVE ) ) );
-        const long  nRet = aQBox.Execute();
+        const long	nRet = aQBox.Execute();
 
         if( nRet == RET_YES )
             bRet = DoSave();
         else if( nRet == RET_CANCEL )
-            bRet = sal_False;
+            bRet = FALSE;
     }
 
-    return( bRet ? SfxModelessDialog::Close() : sal_False );
+    return( bRet ? SfxModelessDialog::Close() : FALSE );
 }
 
-// Enabled or disable all Controls
 
-void SvxIMapDlg::SetExecState( sal_Bool bEnable )
+/*************************************************************************
+|*
+|* Enabled oder disabled alle Controls
+|*
+\************************************************************************/
+
+void SvxIMapDlg::SetExecState( BOOL bEnable )
 {
     pOwnData->bExecState = bEnable;
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 void SvxIMapDlg::SetGraphic( const Graphic& rGraphic )
 {
     pIMapWnd->SetGraphic( rGraphic );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void SvxIMapDlg::SetImageMap( const ImageMap& rImageMap )
 {
     pIMapWnd->SetImageMap( rImageMap );
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 const ImageMap& SvxIMapDlg::GetImageMap() const
 {
     return pIMapWnd->GetImageMap();
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void SvxIMapDlg::SetTargetList( const TargetList& rTargetList )
 {
-    TargetList  aNewList( rTargetList );
+    TargetList	aNewList( rTargetList );
 
     pIMapWnd->SetTargetList( aNewList );
 
     maCbbTarget.Clear();
 
-    for ( size_t i = 0, n = aNewList.size(); i < n; ++i )
-        maCbbTarget.InsertEntry( *aNewList[ i ] );
+    for( String* pStr = aNewList.First(); pStr; pStr = aNewList.Next() )
+        maCbbTarget.InsertEntry( *pStr );
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 const TargetList& SvxIMapDlg::GetTargetList() const
 {
     return pIMapWnd->GetTargetList();
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 void SvxIMapDlg::Update( const Graphic& rGraphic, const ImageMap* pImageMap,
                          const TargetList* pTargetList, void* pEditingObj )
@@ -340,21 +439,23 @@ void SvxIMapDlg::Update( const Graphic& rGraphic, const ImageMap* pImageMap,
 
     pOwnData->pUpdateEditingObject = pEditingObj;
 
-    // Delete UpdateTargetList, because this method can still be called several
-    // times before the update timer is turned on
-    for ( size_t i = 0, n = pOwnData->aUpdateTargetList.size(); i < n; ++i )
-        delete pOwnData->aUpdateTargetList[ i ];
-    pOwnData->aUpdateTargetList.clear();
+    // UpdateTargetList loeschen, da diese Methode
+    // vor dem Zuschlagen des Update-Timers noch
+    // mehrmals gerufen werden kann( #46540 )
+    for( String* pStr = pOwnData->aUpdateTargetList.First(); pStr; pStr = pOwnData->aUpdateTargetList.Next() )
+        delete pStr;
+    pOwnData->aUpdateTargetList.Clear();
 
-    // TargetList must be copied, since it is owned by the caller and can be
-    // deleted immediately after this call the copied list will be deleted
-    // again in the handler
+    // TargetListe muss kopiert werden, da sie im
+    // Besitz des Aufrufers ist und von ihm nach diesem
+    // Aufruf sofort geloescht werden kann;
+    // die kopierte Liste wird im Handler wieder geloescht
     if( pTargetList )
     {
         TargetList aTargetList( *pTargetList );
 
-        for ( size_t i = 0, n = aTargetList.size(); i < n; ++i )
-            pOwnData->aUpdateTargetList.push_back( new String( *aTargetList[ i ] ) );
+        for( String* pStr = aTargetList.First(); pStr; pStr = aTargetList.Next() )
+            pOwnData->aUpdateTargetList.Insert( new String( *pStr ) );
     }
 
     pOwnData->aTimer.Start();
@@ -366,18 +467,22 @@ void SvxIMapDlg::KeyInput( const KeyEvent& rKEvt )
         SfxModelessDialog::KeyInput( rKEvt );
 }
 
-// Click-handler for ToolBox
+/*************************************************************************
+|*
+|* Click-Hdl fuer ToolBox
+|*
+\************************************************************************/
 
 IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 {
-    sal_uInt16 nNewItemId = pTbx->GetCurItemId();
+    USHORT nNewItemId = pTbx->GetCurItemId();
 
     switch( pTbx->GetCurItemId() )
     {
         case( TBI_APPLY ):
         {
             URLLoseFocusHdl( NULL );
-            SfxBoolItem aBoolItem( SID_IMAP_EXEC, sal_True );
+            SfxBoolItem aBoolItem( SID_IMAP_EXEC, TRUE );
             GetBindings().GetDispatcher()->Execute(
                 SID_IMAP_EXEC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
         }
@@ -393,8 +498,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_SELECT ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
-            pIMapWnd->SetEditMode( sal_True );
+            pTbx->CheckItem( nNewItemId, TRUE );
+            pIMapWnd->SetEditMode( TRUE );
             if( pTbx->IsKeyEvent() )
             {
                 if((pTbx->GetKeyModifier() & KEY_MOD1) != 0)
@@ -407,7 +512,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_RECT ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetObjKind( OBJ_RECT );
             if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
             {
@@ -419,7 +524,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_CIRCLE ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetObjKind( OBJ_CIRC );
             if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
             {
@@ -431,7 +536,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_POLY ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetObjKind( OBJ_POLY );
             if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
             {
@@ -443,7 +548,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_FREEPOLY ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetObjKind( OBJ_FREEFILL );
             if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
             {
@@ -456,7 +561,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         case( TBI_ACTIVE ):
         {
             URLLoseFocusHdl( NULL );
-            sal_Bool bNewState = !pTbx->IsItemChecked( TBI_ACTIVE );
+            BOOL bNewState = !pTbx->IsItemChecked( TBI_ACTIVE );
             pTbx->CheckItem( TBI_ACTIVE, bNewState );
             pIMapWnd->SetCurrentObjState( !bNewState );
         }
@@ -509,13 +614,20 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
     return 0;
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void SvxIMapDlg::DoOpen()
 {
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
-    ImageMap        aLoadIMap;
-    const String    aFilter( DEFINE_CONST_UNICODE( IMAP_ALL_FILTER ) );
+    ImageMap		aLoadIMap;
+    const String	aFilter( DEFINE_CONST_UNICODE( IMAP_ALL_FILTER ) );
 
     aDlg.AddFilter( aFilter, DEFINE_CONST_UNICODE( IMAP_ALL_TYPE ) );
     aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ), DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ) );
@@ -550,17 +662,24 @@ void SvxIMapDlg::DoOpen()
     }
 }
 
-sal_Bool SvxIMapDlg::DoSave()
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+BOOL SvxIMapDlg::DoSave()
 {
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
 
-    const String    aBinFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ) );
-    const String    aCERNFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ) );
-    const String    aNCSAFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ) );
-    SdrModel*       pModel = pIMapWnd->GetSdrModel();
+    const String	aBinFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ) );
+    const String	aCERNFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ) );
+    const String	aNCSAFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ) );
+    SdrModel*		pModel = pIMapWnd->GetSdrModel();
     const sal_Bool bChanged = pModel->IsChanged();
-    sal_Bool            bRet = false;
+    BOOL			bRet = false;
 
     aDlg.AddFilter( aCERNFilter, DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ) );
     aDlg.AddFilter( aNCSAFilter, DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ) );
@@ -571,9 +690,9 @@ sal_Bool SvxIMapDlg::DoSave()
 
     if( aDlg.Execute() == ERRCODE_NONE )
     {
-        const String    aFilter( aDlg.GetCurrentFilter() );
-        String          aExt;
-        sal_uIntPtr         nFormat;
+        const String	aFilter( aDlg.GetCurrentFilter() );
+        String			aExt;
+        ULONG			nFormat;
 
         if ( aFilter == aBinFilter )
         {
@@ -592,14 +711,14 @@ sal_Bool SvxIMapDlg::DoSave()
         }
         else
         {
-            return sal_False;
+            return FALSE;
         }
 
         INetURLObject aURL( aDlg.GetPath() );
 
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
-            OSL_FAIL( "invalid URL" );
+            DBG_ERROR( "invalid URL" );
         }
         else
         {
@@ -616,7 +735,7 @@ sal_Bool SvxIMapDlg::DoSave()
 
                 delete pOStm;
                 pModel->SetChanged( bChanged );
-                bRet = sal_True;
+                bRet = TRUE;
             }
         }
     }
@@ -624,10 +743,17 @@ sal_Bool SvxIMapDlg::DoSave()
     return bRet;
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 {
-    String              aStr;
-    const NotifyInfo&   rInfo = pWnd->GetInfo();
+    String				aStr;
+    const NotifyInfo&	rInfo = pWnd->GetInfo();
 
     if ( rInfo.bNewObj )
     {
@@ -645,10 +771,10 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 
     if ( !rInfo.bOneMarked )
     {
-        aTbxIMapDlg1.CheckItem( TBI_ACTIVE, sal_False );
-        aTbxIMapDlg1.EnableItem( TBI_ACTIVE, sal_False );
-        aTbxIMapDlg1.EnableItem( TBI_MACRO, sal_False );
-        aTbxIMapDlg1.EnableItem( TBI_PROPERTY, sal_False );
+        aTbxIMapDlg1.CheckItem( TBI_ACTIVE, FALSE );
+        aTbxIMapDlg1.EnableItem( TBI_ACTIVE, FALSE );
+        aTbxIMapDlg1.EnableItem( TBI_MACRO, FALSE );
+        aTbxIMapDlg1.EnableItem( TBI_PROPERTY, FALSE );
         aStbStatus.SetItemText( 1, aStr );
 
         aFtURL.Disable();
@@ -663,10 +789,10 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
     }
     else
     {
-        aTbxIMapDlg1.EnableItem( TBI_ACTIVE, sal_True );
+        aTbxIMapDlg1.EnableItem( TBI_ACTIVE, TRUE );
         aTbxIMapDlg1.CheckItem( TBI_ACTIVE, !rInfo.bActivated );
-        aTbxIMapDlg1.EnableItem( TBI_MACRO, sal_True );
-        aTbxIMapDlg1.EnableItem( TBI_PROPERTY, sal_True );
+        aTbxIMapDlg1.EnableItem( TBI_MACRO, TRUE );
+        aTbxIMapDlg1.EnableItem( TBI_PROPERTY, TRUE );
 
         aFtURL.Enable();
         maURLBox.Enable();
@@ -692,6 +818,12 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
     return 0;
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
 {
     String aStr;
@@ -709,11 +841,17 @@ IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
     return 0L;
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
 {
     String aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
-    const Size& rSize = pWnd->GetGraphicSize();
+    const Size&	rSize = pWnd->GetGraphicSize();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
 
@@ -726,9 +864,15 @@ IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
     return 0L;
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, EMPTYARG )
 {
-    NotifyInfo  aNewInfo;
+    NotifyInfo	aNewInfo;
 
     aNewInfo.aMarkURL = maURLBox.GetText();
     aNewInfo.aMarkAltText = aEdtText.GetText();
@@ -739,11 +883,18 @@ IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, EMPTYARG )
     return 0;
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, EMPTYARG )
 {
-    NotifyInfo      aNewInfo;
-    const String    aURLText( maURLBox.GetText() );
-    const String    aTargetText( maCbbTarget.GetText() );
+    NotifyInfo		aNewInfo;
+    const String	aURLText( maURLBox.GetText() );
+    const String	aTargetText( maCbbTarget.GetText() );
 
     if ( aURLText.Len() )
     {
@@ -767,6 +918,13 @@ IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, EMPTYARG )
     return 0;
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 IMPL_LINK( SvxIMapDlg, UpdateHdl, Timer*, EMPTYARG )
 {
     pOwnData->aTimer.Stop();
@@ -785,28 +943,36 @@ IMPL_LINK( SvxIMapDlg, UpdateHdl, Timer*, EMPTYARG )
         SetTargetList( pOwnData->aUpdateTargetList );
         SetEditingObject( pOwnData->pUpdateEditingObject );
 
-        // After changes => default selection
-        aTbxIMapDlg1.CheckItem( TBI_SELECT, sal_True );
-        pIMapWnd->SetEditMode( sal_True );
+        // Nach Wechsel => default Selektion
+        aTbxIMapDlg1.CheckItem( TBI_SELECT, TRUE );
+        pIMapWnd->SetEditMode( TRUE );
     }
 
-    // Delete the copied list again in the Update method
-    for ( size_t i = 0, n = pOwnData->aUpdateTargetList.size(); i < n; ++i )
-        delete pOwnData->aUpdateTargetList[ i ];
-    pOwnData->aUpdateTargetList.clear();
+    // die in der Update-Methode kopierte Liste wieder loeschen
+    for( String* pStr = pOwnData->aUpdateTargetList.First(); pStr; pStr = pOwnData->aUpdateTargetList.Next() )
+        delete pStr;
+
+    pOwnData->aUpdateTargetList.Clear();
 
     GetBindings().Invalidate( SID_IMAP_EXEC );
 
     return 0L;
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
 {
-    const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
-    const SdrModel*     pModel = pWnd->GetSdrModel();
-    const SdrView*      pView = pWnd->GetSdrView();
-    const sal_Bool          bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
-    const sal_Bool          bDrawEnabled = !( bPolyEdit && aTbxIMapDlg1.IsItemChecked( TBI_POLYEDIT ) );
+    const SdrObject*	pObj = pWnd->GetSelectedSdrObject();
+    const SdrModel*		pModel = pWnd->GetSdrModel();
+    const SdrView*		pView = pWnd->GetSdrView();
+    const BOOL			bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
+    const BOOL			bDrawEnabled = !( bPolyEdit && aTbxIMapDlg1.IsItemChecked( TBI_POLYEDIT ) );
 
     aTbxIMapDlg1.EnableItem( TBI_APPLY, pOwnData->bExecState && pWnd->IsChanged() );
 
@@ -828,7 +994,7 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
 
     if ( bPolyEdit )
     {
-        sal_uInt16 nId = 0;
+        USHORT nId = 0;
 
         switch( pWnd->GetPolyEditMode() )
         {
@@ -839,18 +1005,24 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
             break;
         }
 
-        aTbxIMapDlg1.CheckItem( nId, sal_True );
+        aTbxIMapDlg1.CheckItem( nId, TRUE );
     }
     else
     {
-        aTbxIMapDlg1.CheckItem( TBI_POLYEDIT, sal_False );
-        aTbxIMapDlg1.CheckItem( TBI_POLYMOVE, sal_True );
-        aTbxIMapDlg1.CheckItem( TBI_POLYINSERT, sal_False );
+        aTbxIMapDlg1.CheckItem( TBI_POLYEDIT, FALSE );
+        aTbxIMapDlg1.CheckItem( TBI_POLYMOVE, TRUE );
+        aTbxIMapDlg1.CheckItem( TBI_POLYINSERT, FALSE );
         pWnd->SetPolyEditMode( 0 );
     }
 
     return 0L;
 }
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 IMPL_LINK( SvxIMapDlg, MiscHdl, void*, EMPTYARG )
 {
@@ -862,7 +1034,9 @@ IMPL_LINK( SvxIMapDlg, MiscHdl, void*, EMPTYARG )
 
 void SvxIMapDlg::ApplyImageList()
 {
-    ImageList& rImgLst = maImageList;
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+
+    ImageList& rImgLst = bHighContrast ? maImageListH : maImageList;
 
     aTbxIMapDlg1.SetImageList( rImgLst );
 }

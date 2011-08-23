@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,9 @@
 
 #include "oox/drawingml/textliststylecontext.hxx"
 #include "oox/drawingml/textparagraphpropertiescontext.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -63,40 +65,40 @@ Reference< XFastContextHandler > TextListStyleContext::createFastChildContext( s
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case A_TOKEN( defPPr ):     // CT_TextParagraphProperties
+        case NMSP_DRAWINGML|XML_defPPr:		// CT_TextParagraphProperties
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 0 ] ) );
             break;
-        case A_TOKEN( outline1pPr ):
+        case NMSP_DRAWINGML|XML_outline1pPr:
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getAggregationListStyle()[ 0 ] ) );
             break;
-        case A_TOKEN( outline2pPr ):
+        case NMSP_DRAWINGML|XML_outline2pPr:
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getAggregationListStyle()[ 1 ] ) );
             break;
-        case A_TOKEN( lvl1pPr ):
+        case NMSP_DRAWINGML|XML_lvl1pPr:
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 0 ] ) );
             break;
-        case A_TOKEN( lvl2pPr ):
+        case NMSP_DRAWINGML|XML_lvl2pPr:
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 1 ] ) );
             break;
-        case A_TOKEN( lvl3pPr ):
+        case NMSP_DRAWINGML|XML_lvl3pPr:
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 2 ] ) );
             break;
-        case A_TOKEN( lvl4pPr ):
+        case NMSP_DRAWINGML|XML_lvl4pPr:
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 3 ] ) );
             break;
-        case A_TOKEN( lvl5pPr ):
+        case NMSP_DRAWINGML|XML_lvl5pPr:
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 4 ] ) );
             break;
-        case A_TOKEN( lvl6pPr ):
+        case NMSP_DRAWINGML|XML_lvl6pPr:
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 5 ] ) );
             break;
-        case A_TOKEN( lvl7pPr ):
+        case NMSP_DRAWINGML|XML_lvl7pPr:
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 6 ] ) );
             break;
-        case A_TOKEN( lvl8pPr ):
+        case NMSP_DRAWINGML|XML_lvl8pPr:
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 7 ] ) );
             break;
-        case A_TOKEN( lvl9pPr ):
+        case NMSP_DRAWINGML|XML_lvl9pPr:
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 8 ] ) );
             break;
     }

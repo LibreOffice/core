@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/container/XIndexAccess.idl>
-#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl> 
 #include <com/sun/star/lang/DisposedException.idl>
 #include <com/sun/star/report/meta/XFunctionCategory.idl>
 #include <com/sun/star/report/meta/XFunctionDescription.idl>
@@ -49,18 +49,18 @@ interface XFunctionManager
     interface com::sun::star::container::XIndexAccess;
 
     /** same as getByIndex.
-        @param  position    The position.
-        @see com.sun.star.container.XIndexAccess
+        @param  position    The postion.
+        @see com.ssun.star.container.XIndexAccess
     */
     XFunctionCategory getCategory([in] long position)
-        raises( com::sun::star::lang::IndexOutOfBoundsException,
-                    com::sun::star::lang::WrappedTargetException );
+        raises( com::sun::star::lang::IndexOutOfBoundsException, 
+                    com::sun::star::lang::WrappedTargetException ); 
 
     /** get the function description by name
         @param  name    the name of the function
     */
     XFunctionDescription getFunctionByName([in] string name)
-        raises( com::sun::star::container::NoSuchElementException);
+        raises( com::sun::star::container::NoSuchElementException); 
 };
 
 //=============================================================================

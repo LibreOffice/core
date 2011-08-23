@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef _PSTM_HXX
 #define _PSTM_HXX
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include "tools/toolsdllapi.h"
 
 #include <tools/table.hxx>
@@ -49,15 +49,24 @@ typedef void * (*SvCreateInstancePersist)( SvPersistBase ** );
 
 class TOOLS_DLLPUBLIC SvClassManager
 {
-    typedef boost::unordered_map< sal_uInt16, SvCreateInstancePersist > Map;
+    typedef std::hash_map< USHORT, SvCreateInstancePersist > Map;
     Map aAssocTable;
 public:
-    void        Register( sal_uInt16 nClassId, SvCreateInstancePersist pFunc );
-    SvCreateInstancePersist Get( sal_uInt16 nClassId );
+    void        Register( USHORT nClassId, SvCreateInstancePersist pFunc );
+    SvCreateInstancePersist Get( USHORT nClassId );
 };
 
 /************************** S v R t t i B a s e **************************/
-
+/*
+#if defined (DOS) && defined (STC)
+#ifdef WIN
+#error Fuer Win muss der Kram virtual sein (MM/MH)
+#endif
+class SvRttiBase : public SvRefBase
+#else
+class SvRttiBase : virtual public SvRefBase
+#endif
+*/
 class TOOLS_DLLPUBLIC SvRttiBase : public SvRefBase
 {
 public:
@@ -68,11 +77,11 @@ SV_DECL_IMPL_REF(SvRttiBase)
 /*************************************************************************/
 #define SV_DECL_PERSIST( Class, CLASS_ID )                          \
     TYPEINFO();                                                     \
-    static  sal_uInt16  StaticClassId() { return CLASS_ID; }            \
+    static  USHORT  StaticClassId() { return CLASS_ID; }            \
     static  void *  CreateInstance( SvPersistBase ** ppBase );      \
     friend SvPersistStream& operator >> ( SvPersistStream & rStm,   \
                                           Class *& rpObj);          \
-    virtual sal_uInt16  GetClassId() const;                             \
+    virtual USHORT  GetClassId() const;                             \
     virtual void    Load( SvPersistStream & );                      \
     virtual void    Save( SvPersistStream & );
 
@@ -86,7 +95,7 @@ SV_DECL_IMPL_REF(SvRttiBase)
                         *ppBase = p;                                \
                         return p;                                   \
                     }                                               \
-    sal_uInt16          Class::GetClassId() const                       \
+    USHORT          Class::GetClassId() const                       \
                     { return StaticClassId(); }                     \
     SvPersistStream& operator >> (SvPersistStream & rStm, Class *& rpObj)\
                     {                                               \
@@ -109,7 +118,7 @@ class SvPersistStream;
 class SvPersistBase : public SvRttiBase
 {
 public:
-    virtual sal_uInt16  GetClassId() const = 0;
+    virtual USHORT  GetClassId() const = 0;
     virtual void    Load( SvPersistStream & ) = 0;
     virtual void    Save( SvPersistStream & ) = 0;
     TOOLS_DLLPUBLIC friend SvPersistStream& operator >> ( SvPersistStream & rStm,
@@ -127,9 +136,9 @@ class TOOLS_DLLPUBLIC SvPersistBaseMemberList : public SuperSvPersistBaseMemberL
 {
 public:
     SvPersistBaseMemberList();
-    SvPersistBaseMemberList(sal_uInt16 nInitSz, sal_uInt16 nResize );
+    SvPersistBaseMemberList(USHORT nInitSz, USHORT nResize );
 
-    void   WriteObjects( SvPersistStream &, sal_Bool bOnlyStreamedObj = sal_False ) const;
+    void   WriteObjects( SvPersistStream &, BOOL bOnlyStreamedObj = FALSE ) const;
     TOOLS_DLLPUBLIC friend SvPersistStream& operator << (SvPersistStream &, const SvPersistBaseMemberList &);
     TOOLS_DLLPUBLIC friend SvPersistStream& operator >> (SvPersistStream &, SvPersistBaseMemberList &);
 };
@@ -154,7 +163,7 @@ DECLARE_UNIQUEINDEX( SvPersistUIdx,SvPersistBase *)
 //=========================================================================
 class SvStream;
 class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit dieser Klasse k"onnen Laufzeit Objektstrukturen gespeichert
     und geladen werden. Es m"ussen immer alle beteiligten Objekte
@@ -163,7 +172,7 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
     die im Stream vorkommen k"onnen, ben"otigt. Die Liste aller Klassen
     wird in einem <SvClassManager> Objekt gespeichert und dem
      SvPersistStream "ubergeben, wenn er erzeugt wird.
-    Weiterhin wird die M"oglichkeit geboten sal_uInt32 Werte komprimiert
+    Weiterhin wird die M"oglichkeit geboten UINT32 Werte komprimiert
     zu schreiben und zu lesen (<SvPersistStream::WriteCompressed>,
     <SvPersistStream::ReadCompressed>).
     Es gibt auch die drei Hilfsmethoden <SvPersistStream::WriteDummyLen>,
@@ -178,11 +187,11 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
 
     Die Reihenfolge beim Speichern und Laden ist egal, sie muss nur
     gleich sein:
-    Speichern:      Laden:
-    A,B,C,D         A,B,C,D     richtig
-    B,A,C,D         B,A,C,D     richtig
-    C,A,B,D         A,B,C,D     falsch
-    A,B,C,D         A,B,C       falsch
+    Speichern:		Laden:
+    A,B,C,D			A,B,C,D     richtig
+    B,A,C,D			B,A,C,D     richtig
+    C,A,B,D			A,B,C,D     falsch
+    A,B,C,D			A,B,C		falsch
 
     [Anmerkung]
 
@@ -194,49 +203,49 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
     SvStream *              pStm;
     Table                   aPTable; // Pointer und Key gedreht
     SvPersistUIdx           aPUIdx;
-    sal_uIntPtr                   nStartIdx;
+    ULONG                   nStartIdx;
     const SvPersistStream * pRefStm;
-    sal_uInt32                  nFlags;
+    UINT32                  nFlags;
 
-    virtual sal_uIntPtr       GetData( void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr       PutData( const void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr       SeekPos( sal_uIntPtr nPos );
+    virtual ULONG       GetData( void* pData, ULONG nSize );
+    virtual ULONG       PutData( const void* pData, ULONG nSize );
+    virtual ULONG       SeekPos( ULONG nPos );
     virtual void        FlushData();
 protected:
-    sal_uIntPtr               GetCurMaxIndex( const SvPersistUIdx & ) const;
-    sal_uIntPtr               GetCurMaxIndex() const
+    ULONG               GetCurMaxIndex( const SvPersistUIdx & ) const;
+    ULONG               GetCurMaxIndex() const
                         { return GetCurMaxIndex( aPUIdx ); }
 
-    void                WriteObj( sal_uInt8 nHdr, SvPersistBase * pObj );
-    sal_uInt32              ReadObj( SvPersistBase * & rpObj,
-                                sal_Bool bRegister );
+    void				WriteObj( BYTE nHdr, SvPersistBase * pObj );
+    UINT32  			ReadObj( SvPersistBase * & rpObj,
+                                BOOL bRegister );
 public:
-    sal_Bool                IsStreamed( SvPersistBase * pObj ) const
+    BOOL                IsStreamed( SvPersistBase * pObj ) const
                         { return 0 != GetIndex( pObj ); }
     virtual void        ResetError();
 
                         SvPersistStream( SvClassManager &, SvStream * pStream,
-                                         sal_uInt32 nStartIdx = 1 );
+                                         UINT32 nStartIdx = 1 );
                         SvPersistStream( SvClassManager &, SvStream * pStream,
                                          const SvPersistStream & rPersStm );
                         ~SvPersistStream();
 
     void                SetStream( SvStream * pStream );
-    SvStream *          GetStream() const { return pStm; }
-    virtual sal_uInt16      IsA() const;
+    SvStream *			GetStream() const { return pStm; }
+    virtual USHORT		IsA() const;
 
-    SvPersistBase *     GetObject( sal_uIntPtr nIdx ) const;
-    sal_uIntPtr               GetIndex( SvPersistBase * ) const;
+    SvPersistBase *     GetObject( ULONG nIdx ) const;
+    ULONG               GetIndex( SvPersistBase * ) const;
 
-    void                SetContextFlags( sal_uInt32 n ) { nFlags = n; }
-    sal_uInt32              GetContextFlags() const { return nFlags; }
+    void                SetContextFlags( UINT32 n ) { nFlags = n; }
+    UINT32              GetContextFlags() const { return nFlags; }
 
-    static void         WriteCompressed( SvStream & rStm, sal_uInt32 nVal );
-    static sal_uInt32       ReadCompressed( SvStream & rStm );
+    static void         WriteCompressed( SvStream & rStm, UINT32 nVal );
+    static UINT32       ReadCompressed( SvStream & rStm );
 
-    sal_uInt32              WriteDummyLen();
-    void                WriteLen( sal_uInt32 nLenPos );
-    sal_uInt32              ReadLen( sal_uInt32 * pTestPos );
+    UINT32              WriteDummyLen();
+    void                WriteLen( UINT32 nLenPos );
+    UINT32              ReadLen( UINT32 * pTestPos );
 
     SvPersistStream&    WritePointer( SvPersistBase * pObj );
     SvPersistStream&    ReadPointer( SvPersistBase * & rpObj );
@@ -247,8 +256,8 @@ public:
                         // gespeichert werden.
     friend SvStream& operator >> ( SvStream &, SvPersistStream & );
     friend SvStream& operator << ( SvStream &, SvPersistStream & );
-    sal_uIntPtr             InsertObj( SvPersistBase * );
-    sal_uIntPtr             RemoveObj( SvPersistBase * );
+    ULONG   			InsertObj( SvPersistBase * );
+    ULONG   			RemoveObj( SvPersistBase * );
 };
 
 #endif // _PSTM_HXX

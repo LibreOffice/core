@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define SC_FORMULA_HXX
 
 #include "anyrefdg.hxx"
-#include "global.hxx"       // ScAddress
+#include "global.hxx"		// ScAddress
 #include <svtools/stdctrl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
@@ -67,12 +67,12 @@ class ScFormulaDlg : public formula::FormulaDlg,
                      public formula::IFormulaEditorHelper
 {
     ScFormulaReferenceHelper m_aHelper;
-    ScFormulaCell*  pCell;
+    ScFormulaCell*	pCell;
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser>          m_xParser;
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
 
-    static ScDocument*  pDoc;
-    static ScAddress    aCursorPos;
+    static ScDocument*	pDoc;
+    static ScAddress	aCursorPos;
 public:
                     ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                         Window* pParent, ScViewData* pViewData ,formula::IFunctionManager* _pFunctionMgr);
@@ -82,11 +82,11 @@ public:
     virtual void notifyChange();
     virtual void fill();
     virtual bool calculateValue(const String& _sExpression,String& _rResult);
-    virtual void doClose(sal_Bool _bOk);
-    virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc);
+    virtual void doClose(BOOL _bOk);
+    virtual void insertEntryToLRUList(const formula::IFunctionDescription*	pDesc);
     virtual void showReference(const String& _sFormula);
-    virtual void dispatch(sal_Bool _bOK,sal_Bool _bMartixChecked);
-    virtual void setDispatcherLock( sal_Bool bLock );
+    virtual void dispatch(BOOL _bOK,BOOL _bMartixChecked);
+    virtual void setDispatcherLock( BOOL bLock );
     virtual void setReferenceInput(const formula::FormEditData* _pData);
     virtual void deleteFormData();
     virtual void clear();
@@ -103,31 +103,31 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const;
     virtual ::com::sun::star::table::CellAddress getReferencePosition() const;
 
-    virtual sal_Bool    Close();
+    virtual BOOL	Close();
 
     // sc::IAnyRefDialog
     virtual void ShowReference(const String& _sRef);
-    virtual void HideReference( sal_Bool bDoneRefMode = sal_True );
+    virtual void HideReference( BOOL bDoneRefMode = TRUE );
     virtual void SetReference( const ScRange& rRef, ScDocument* pD );
 
     virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    virtual void RefInputDone( sal_Bool bForced = false );
-    virtual sal_Bool IsTableLocked() const;
-    virtual sal_Bool IsRefInputMode() const;
+    virtual void RefInputDone( BOOL bForced = FALSE );
+    virtual BOOL IsTableLocked() const;
+    virtual BOOL IsRefInputMode() const;
 
-    virtual sal_Bool IsDocAllowed( SfxObjectShell* pDocSh ) const;
+    virtual BOOL IsDocAllowed( SfxObjectShell* pDocSh ) const;
     virtual void AddRefEntry();
     virtual void SetActive();
     virtual void ViewShellChanged( ScTabViewShell* pScViewShell );
 protected:
 
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    sal_uLong        FindFocusWin(Window *pWin);
-    void         SaveLRUEntry(const ScFuncDesc* pFuncDesc);
-    void         HighlightFunctionParas(const String& aFormula);
+    ULONG		 FindFocusWin(Window *pWin);
+    void		 SaveLRUEntry(const ScFuncDesc*	pFuncDesc);
+    void		 HighlightFunctionParas(const String& aFormula);
 
-    sal_Bool        IsInputHdl(ScInputHandler* pHdl);
+    BOOL        IsInputHdl(ScInputHandler* pHdl);
     ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh);
 };
 

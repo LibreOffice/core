@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 
 //=============================================================================
 
-module com { module sun { module star { module oooimprovement {
+module com { module sun { module star { module oooimprovement { 
 
 interface XCoreController;
 
 //=============================================================================
 
-/** specifies a service controlling the core components of the OpenOffice.org
+/** specifies a service controlling the core components of the Openoffice.org
     improvement program. The OOo improvement program extension has to implement
     this service.
 
@@ -49,7 +49,7 @@ service CoreController : XCoreController
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 //=============================================================================
 

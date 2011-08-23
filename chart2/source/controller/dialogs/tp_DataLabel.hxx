@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public:
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
 
     virtual void Reset(const SfxItemSet& rInAttrs);
-    virtual sal_Bool FillItemSet(SfxItemSet& rOutAttrs);
+    virtual BOOL FillItemSet(SfxItemSet& rOutAttrs);
 
 private:
     DataLabelResources  m_aDataLabelResources;

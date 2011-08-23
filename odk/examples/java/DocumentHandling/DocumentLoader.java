@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.uno.UnoRuntime;
@@ -47,21 +47,21 @@ public class DocumentLoader {
                 "java -jar DocumentLoader.jar \"private:factory/swriter\"" );
             System.exit(1);
         }
-
+        
         com.sun.star.uno.XComponentContext xContext = null;
 
         try {
             // get the remote office component context
             xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
             System.out.println("Connected to a running office ...");
-
+            
             // get the remote office service manager
             com.sun.star.lang.XMultiComponentFactory xMCF =
                 xContext.getServiceManager();
-
+            
             Object oDesktop = xMCF.createInstanceWithContext(
                 "com.sun.star.frame.Desktop", xContext);
-
+        
             com.sun.star.frame.XComponentLoader xCompLoader =
                 (com.sun.star.frame.XComponentLoader)
                      UnoRuntime.queryInterface(
@@ -73,8 +73,8 @@ public class DocumentLoader {
                 StringBuffer sbTmp = new StringBuffer("file:///");
                 sbTmp.append(sourceFile.getCanonicalPath().replace('\\', '/'));
                 sUrl = sbTmp.toString();
-            }
-
+            }    
+      
             // Load a Writer document, which will be automaticly displayed
             com.sun.star.lang.XComponent xComp = xCompLoader.loadComponentFromURL(
                 sUrl, "_blank", 0, new com.sun.star.beans.PropertyValue[0]);

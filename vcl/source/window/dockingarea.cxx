@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ static void ImplInitBackground( DockingAreaWindow* pThis )
 DockingAreaWindow::DockingAreaWindow( Window* pParent ) :
     Window( WINDOW_DOCKINGAREA )
 {
-    ImplInit( pParent, WB_CLIPCHILDREN|WB_3DLOOK, NULL );
+    ImplInit( pParent, WB_CLIPCHILDREN|WB_3DLOOK, NULL ); 
 
     mpImplData = new ImplData;
     ImplInitBackground( this );
@@ -103,7 +103,7 @@ static void ImplInvalidateMenubar( DockingAreaWindow* pThis )
     // due to a possible comon gradient covering menubar and top dockingarea
     // the menubar must be repainted if the top dockingarea changes size or visibility
     if( ImplGetSVData()->maNWFData.mbMenuBarDockingAreaCommonBG &&
-        (pThis->GetAlign() == WINDOWALIGN_TOP)
+        (pThis->GetAlign() == WINDOWALIGN_TOP)  
         && pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL )
         && pThis->IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
     {
@@ -127,7 +127,7 @@ void DockingAreaWindow::StateChanged( StateChangedType nType )
 
 // -----------------------------------------------------------------------
 
-sal_Bool DockingAreaWindow::IsHorizontal() const
+BOOL DockingAreaWindow::IsHorizontal() const
 {
     return ( mpImplData->meAlign == WINDOWALIGN_TOP || mpImplData->meAlign == WINDOWALIGN_BOTTOM );
 }
@@ -150,7 +150,7 @@ WindowAlign DockingAreaWindow::GetAlign() const
 
 void DockingAreaWindow::Paint( const Rectangle& )
 {
-    EnableNativeWidget( sal_True ); // only required because the toolkit curently switches this flag off
+    EnableNativeWidget( TRUE ); // only required because the toolkit curently switches this flag off
     if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
     {
         ToolbarValue        aControlValue;
@@ -159,7 +159,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
         {
             // give NWF a hint that this dockingarea is adjacent to the menubar
             // useful for special gradient effects that should cover both windows
-            aControlValue.mbIsTopDockingArea = sal_True;
+            aControlValue.mbIsTopDockingArea = TRUE;
         }
         ControlState        nState = CTRL_STATE_ENABLED;
 
@@ -168,13 +168,13 @@ void DockingAreaWindow::Paint( const Rectangle& )
             // draw a single toolbar background covering the whole docking area
             Point tmp;
             Rectangle aCtrlRegion( tmp, GetOutputSizePixel() );
-
-            DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
+            
+            DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT, 
                                aCtrlRegion, nState, aControlValue, rtl::OUString() );
 
             // each toolbar gets a thin border to better recognize its borders on the homogeneous docking area
-            sal_uInt16 nChildren = GetChildCount();
-            for( sal_uInt16 n = 0; n < nChildren; n++ )
+            USHORT nChildren = GetChildCount();
+            for( USHORT n = 0; n < nChildren; n++ )
             {
                 Window* pChild = GetChild( n );
                 if ( pChild->IsVisible() )
@@ -195,11 +195,11 @@ void DockingAreaWindow::Paint( const Rectangle& )
         }
         else
         {
-            // create map to find toolbar lines
+            // create map to find toolbar lines 
             Size aOutSz = GetOutputSizePixel();
             std::map< int, int > ranges;
-            sal_uInt16 nChildren = GetChildCount();
-            for( sal_uInt16 n = 0; n < nChildren; n++ )
+            USHORT nChildren = GetChildCount();
+            for( USHORT n = 0; n < nChildren; n++ )
             {
                 Window* pChild = GetChild( n );
                 Point aPos = pChild->GetPosPixel();
@@ -229,7 +229,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
                     aTBRect.Top()       = 0;
                     aTBRect.Bottom()    = aOutSz.Height() - 1;
                 }
-                DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
+                DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT, 
                                    aTBRect, nState, aControlValue, rtl::OUString() );
             }
         }

@@ -40,7 +40,8 @@ AUTOSEG=true
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 .IF "$(ENABLE_PRESENTER_EXTRA_UI)"=="YES"
-ENABLE_PRESENTER_EXTRA_UI is not used anymore
+RSCDEFS+=-DENABLE_PRESENTER_EXTRA_UI
+ADDCDEFS+=-DENABLE_PRESENTER_EXTRA_UI
 .ENDIF
 
 # --- Files --------------------------------------------------------

@@ -53,6 +53,7 @@
 #include "logindlg.hxx"
 #include "masterpasscrtdlg.hxx"
 #include "masterpassworddlg.hxx"
+#include "passcrtdlg.hxx"
 #include "passworddlg.hxx"
 
 #include "iahndl.hxx"
@@ -152,6 +153,7 @@ void getRememberModes(
     }
     else
     {
+        //bool bHasRememberModeNo = false;
         bool bHasRememberModeSession = false;
         bool bHasRememberModePersistent = false;
 
@@ -160,6 +162,7 @@ void getRememberModes(
             switch ( rRememberModes[i] )
             {
             case ucb::RememberAuthentication_NO:
+                //bHasRememberModeNo = true;
                 break;
             case ucb::RememberAuthentication_SESSION:
                 bHasRememberModeSession = true;
@@ -295,7 +298,7 @@ handleAuthenticationRequest_(
 
             if (ePreferredRememberMode != eAlternateRememberMode)
             {
-                // user had the choice.
+                // user had te choice.
                 if (aInfo.GetIsRememberPassword())
                     xSupplyAuthentication->setRememberPassword(
                         ePreferredRememberMode);
@@ -518,8 +521,7 @@ executePasswordDialog(
     task::PasswordRequestMode nMode,
     ::rtl::OUString aDocName,
     bool bMSCryptoMode,
-    bool bIsPasswordToModify,
-    bool bIsSimplePasswordRequest )
+    bool bIsPasswordToModify )
        SAL_THROW((uno::RuntimeException))
 {
     try
@@ -530,36 +532,21 @@ executePasswordDialog(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
-            if (bIsSimplePasswordRequest)
-            {
-                std::auto_ptr< PasswordDialog > pDialog(
-                    new PasswordDialog( pParent, nMode, xManager.get(), aDocName,
-                    bIsPasswordToModify, bIsSimplePasswordRequest ) );
-                pDialog->SetMinLen(0);
+            const sal_uInt16 nMaxPasswdLen = bMSCryptoMode ? 15 : 0;   // 0 -> allow any length
 
-                rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
-                rInfo.SetPassword( pDialog->GetPassword() );
-            }
-            else
-            {
-                const sal_uInt16 nMaxPasswdLen = bMSCryptoMode ? 15 : 0;   // 0 -> allow any length
+            VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
+            AbstractPasswordToOpenModifyDialog *pTmp = pFact->CreatePasswordToOpenModifyDialog( pParent, 0, nMaxPasswdLen, bIsPasswordToModify );
+            std::auto_ptr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
 
-                VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
-                AbstractPasswordToOpenModifyDialog *pTmp = pFact->CreatePasswordToOpenModifyDialog( pParent, 0, nMaxPasswdLen, bIsPasswordToModify );
-                std::auto_ptr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
-
-                rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
-                rInfo.SetPassword( pDialog->GetPasswordToOpen() );
-                rInfo.SetPasswordToModify( pDialog->GetPasswordToModify() );
-                rInfo.SetRecommendToOpenReadonly( pDialog->IsRecommendToOpenReadonly() );
-            }
+            rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
+            rInfo.SetPassword( pDialog->GetPasswordToOpen() );
+            rInfo.SetPasswordToModify( pDialog->GetPasswordToModify() );
+            rInfo.SetRecommendToOpenReadonly( pDialog->IsRecommendToOpenReadonly() );
         }
-        else // enter password or reenter password
+        else
         {
             std::auto_ptr< PasswordDialog > pDialog(
-                new PasswordDialog( pParent, nMode, xManager.get(), aDocName,
-                bIsPasswordToModify, bIsSimplePasswordRequest ) );
-            pDialog->SetMinLen(0);
+                new PasswordDialog( pParent, nMode, xManager.get(), aDocName, bIsPasswordToModify ) );
 
             rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
             rInfo.SetPassword( bIsPasswordToModify ? String() : pDialog->GetPassword() );
@@ -582,8 +569,7 @@ handlePasswordRequest_(
         rContinuations,
     ::rtl::OUString aDocumentName,
     bool bMSCryptoMode,
-    bool bIsPasswordToModify,
-    bool bIsSimplePasswordRequest = false )
+    bool bIsPasswordToModify )
     SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionRetry > xRetry;
@@ -598,7 +584,7 @@ handlePasswordRequest_(
     LoginErrorInfo aInfo;
 
     executePasswordDialog( pParent, aInfo, nMode,
-            aDocumentName, bMSCryptoMode, bIsPasswordToModify, bIsSimplePasswordRequest );
+            aDocumentName, bMSCryptoMode, bIsPasswordToModify );
 
     switch (aInfo.GetResult())
     {
@@ -694,7 +680,7 @@ UUIInteractionHelper::handlePasswordRequest(
     ::rtl::OUString aDocumentName;
     bool bMSCryptoMode          = false;
     bool bIsPasswordToModify    = false;
-
+    
     bool bDoHandleRequest = false;
 
     uno::Any aAnyRequest(rRequest->getRequest());
@@ -731,7 +717,7 @@ UUIInteractionHelper::handlePasswordRequest(
 
         bDoHandleRequest = true;
     }
-
+    
     task::DocumentMSPasswordRequest aDocumentMSPasswordRequest;
     if (!bDoHandleRequest && (aAnyRequest >>= aDocumentMSPasswordRequest))
     {
@@ -745,7 +731,7 @@ UUIInteractionHelper::handlePasswordRequest(
 
     if (bDoHandleRequest)
     {
-        handlePasswordRequest_( pParent, nMode, rContinuations,
+        handlePasswordRequest_( pParent, nMode, rContinuations, 
                 aDocumentName, bMSCryptoMode, bIsPasswordToModify );
         return true;
     }
@@ -758,8 +744,7 @@ UUIInteractionHelper::handlePasswordRequest(
                                rRequest->getContinuations(),
                                rtl::OUString(),
                                false /* bool bMSCryptoMode */,
-                               false /* bool bIsPasswordToModify */,
-                               true  /* bool bIsSimplePasswordRequest */ );
+                               false /* bool bIsPasswordToModify */);
         return true;
     }
 

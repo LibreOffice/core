@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,15 +41,15 @@ import java.io.InputStream;
  */
 public class XInputStreamToInputStreamAdapter extends InputStream {
 
-    /**
+    /** 
      *  Internal handle to the XInputStream
      */
     private XInputStream xin;
-
+ 
     /**
      *  Constructor.
      *
-     *  @param  in  The <code>XInputStream</code> to be
+     *  @param  in  The <code>XInputStream</code> to be 
      *              accessed as an <code>InputStream</code>.
      */
     public XInputStreamToInputStreamAdapter (XInputStream in) {
@@ -77,11 +77,11 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         }
     }
 
-    public int read () throws IOException {
-        byte [][] tmp = new byte [1][1];
+    public int read () throws IOException {	
+        byte [][] tmp = new byte [1][1]; 
         try {
             long bytesRead = xin.readBytes(tmp, 1);
-
+      
             if (bytesRead <= 0) {
                return (-1);
             } else {
@@ -98,8 +98,8 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
     }
 
     public int read (byte[] b) throws IOException {
-
-        byte [][] tmp = new byte [1][b.length];
+    
+        byte [][] tmp = new byte [1][b.length]; 
         int bytesRead;
 
         try {
@@ -131,7 +131,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         bytesRead = xin.readBytes(tmp,len);
         }
             // Casting bytesRead to an int is okay, since the user can
-            // only pass in an integer length to read, so the bytesRead
+            // only pass in an integer length to read, so the bytesRead 
             // must <= len.
             //
             if (bytesRead <= 0) {
@@ -141,10 +141,10 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         } else {
                 System.arraycopy(tmp[0], 0, b, off, len);
         }
-
+        
         return ((int)bytesRead);
-
-
+        
+        
         } catch (Exception e) {
             throw new IOException("reader error: "+e.toString());
         }
@@ -170,7 +170,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
                tmpIntVal = (int)tmpLongVal;
             }
             tmpLongVal -= tmpIntVal;
-
+ 
             try {
                 xin.skipBytes(tmpIntVal);
             } catch (Exception e) {

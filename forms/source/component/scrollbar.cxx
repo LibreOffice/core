@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace frm
     //= helper
     //====================================================================
     //--------------------------------------------------------------------
-    Any translateExternalDoubleToControlIntValue(
+    Any translateExternalDoubleToControlIntValue( 
         const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
         const ::rtl::OUString& _rMinValueName, const ::rtl::OUString& _rMaxValueName )
     {
@@ -98,7 +98,7 @@ namespace frm
             aExternalDoubleValue <<= (double)nScrollValue;
         else
         {
-            OSL_FAIL( "translateControlIntToExternalDoubleValue: no integer scroll value!" );
+            OSL_ENSURE( sal_False, "translateControlIntToExternalDoubleValue: no integer scroll value!" );
             // aExternalDoubleValue is void here, which is okay for this purpose ...
         }
 
@@ -231,14 +231,14 @@ namespace frm
     //------------------------------------------------------------------------------
     Any OScrollBarModel::translateDbColumnToControlValue( )
     {
-        OSL_FAIL( "OScrollBarModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
+        OSL_ENSURE( sal_False, "OScrollBarModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return Any();
     }
 
     //------------------------------------------------------------------------------
     sal_Bool OScrollBarModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
-        OSL_FAIL( "OScrollBarModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
+        OSL_ENSURE( sal_False, "OScrollBarModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return sal_True;
     }
 
@@ -297,7 +297,7 @@ namespace frm
     //--------------------------------------------------------------------
     Any OScrollBarModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
-        return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
+        return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet, 
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollValueMin" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollValueMax" ) ) );
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,14 +26,13 @@
  *
  ************************************************************************/
 
-#ifndef DOM_COMMENT_HXX
-#define DOM_COMMENT_HXX
+#ifndef _COMMENT_HXX
+#define _COMMENT_HXX
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XComment.hpp>
-
-#include <characterdata.hxx>
-
+#include "characterdata.hxx"
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -41,22 +40,16 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1< CCharacterData, XComment >
-        CComment_Base;
-
-    class CComment
-        : public CComment_Base
+    class CComment : public cppu::ImplInheritanceHelper1< CCharacterData, XComment >
     {
-    private:
-        friend class CDocument;
-
+        friend class CNode;
     protected:
-        CComment(CDocument const& rDocument, ::osl::Mutex const& rMutex,
-                xmlNodePtr const pNode);
+        CComment(const xmlNodePtr aNodePtr);
 
     public:
 
-        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
+        virtual void SAL_CALL saxify(
+            const Reference< XDocumentHandler >& i_xHandler);
 
          // --- delegations for XCharacterData
         virtual void SAL_CALL appendData(const OUString& arg)

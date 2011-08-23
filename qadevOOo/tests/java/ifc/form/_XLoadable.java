@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -208,7 +208,7 @@ public class _XLoadable extends MultiMethodTest {
     /**
     * Adds a listener. If its methods are called or not is checked
     * in other object methods. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred.
+    * Has <b> OK </b> status if no runtime exceptions occured.
     */
     public void _addLoadListener() {
 
@@ -239,7 +239,7 @@ public class _XLoadable extends MultiMethodTest {
 
         tRes.tested("removeLoadListener()", result) ;
     }
-
+    
     protected void after() {
         disposeEnvironment();
     }

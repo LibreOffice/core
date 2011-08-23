@@ -57,8 +57,12 @@
  * @file
  * Header style,exist in page-master object.
  ************************************************************************/
-#include    "xfheaderstyle.hxx"
-#include    "xfbgimage.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-01-21 create this file.
+ ************************************************************************/
+#include	"xfheaderstyle.hxx"
+#include	"xfbgimage.hxx"
 
 XFHeaderStyle::XFHeaderStyle(sal_Bool isFooter)
 {
@@ -81,7 +85,7 @@ XFHeaderStyle::~XFHeaderStyle()
         delete m_pShadow;
 }
 
-void    XFHeaderStyle::SetMargins(double left, double right, double bottom)
+void	XFHeaderStyle::SetMargins(double left, double right, double bottom)
 {
     if( left != -1 )
         m_aMargin.SetLeft(left);
@@ -90,22 +94,22 @@ void    XFHeaderStyle::SetMargins(double left, double right, double bottom)
     if( bottom != -1 )
         m_aMargin.SetBottom(bottom);
 }
-void    XFHeaderStyle::SetDynamicSpace(sal_Bool dynamic)
+void	XFHeaderStyle::SetDynamicSpace(sal_Bool dynamic)
 {
     m_bDynamicSpace = dynamic;
 }
 
-void    XFHeaderStyle::SetHeight(double height)
+void	XFHeaderStyle::SetHeight(double height)
 {
     m_fHeight = height;
 }
 
-void    XFHeaderStyle::SetMinHeight(double minHeight)
+void	XFHeaderStyle::SetMinHeight(double minHeight)
 {
     m_fMinHeight = minHeight;
 }
 
-void    XFHeaderStyle::SetPadding(double left, double right, double top, double bottom)
+void	XFHeaderStyle::SetPadding(double left, double right, double top, double bottom)
 {
     if( left != -1 )
         m_aPadding.SetLeft(left);
@@ -117,35 +121,35 @@ void    XFHeaderStyle::SetPadding(double left, double right, double top, double 
         m_aPadding.SetBottom(bottom);
 }
 
-void    XFHeaderStyle::SetShadow(XFShadow *pShadow)
+void	XFHeaderStyle::SetShadow(XFShadow *pShadow)
 {
     if( m_pShadow && (pShadow != m_pShadow) )
         delete m_pShadow;
     m_pShadow = pShadow;
 }
 
-void    XFHeaderStyle::SetBorders(XFBorders *pBorders)
+void	XFHeaderStyle::SetBorders(XFBorders *pBorders)
 {
     if( m_pBorders )
         delete m_pBorders;
     m_pBorders = pBorders;
 }
 
-void    XFHeaderStyle::SetBackImage(XFBGImage *image)
+void	XFHeaderStyle::SetBackImage(XFBGImage *image)
 {
     if( m_pBGImage )
         delete m_pBGImage;
     m_pBGImage = image;
 }
 
-void    XFHeaderStyle::SetBackColor(XFColor color)
+void	XFHeaderStyle::SetBackColor(XFColor color)
 {
     m_aBackColor = color;
 }
 
-void    XFHeaderStyle::ToXml(IXFStream *pStrm)
+void	XFHeaderStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     if( m_bIsFooter )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,7 +116,7 @@ static uno::Reference< lang::XSingleServiceFactory > get_factory( char const *se
 }
 
 #define GET_FACTORY(x) get_factory( #x )
-
+    
 void LayoutTest::LoadFile( const OUString &aTestFile )
 {
     fprintf( stderr, "TEST: layout instance\n" );
@@ -147,12 +147,12 @@ void LayoutTest::InitUCB()
     OUString aEmpty;
     Sequence< Any > aArgs( 6 );
     aArgs[0]
-        <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+        <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
     aArgs[1]
-        <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
-    aArgs[2] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("PIPE"));
+        <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    aArgs[2] <<= OUString::createFromAscii( "PIPE" );
     aArgs[3] <<= aEmpty;
-    aArgs[4] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("PORTAL"));
+    aArgs[4] <<= OUString::createFromAscii( "PORTAL" );
     aArgs[5] <<= aEmpty;
 
     if ( !::ucbhelper::ContentBroker::initialize( mxMSF, aArgs ) )
@@ -198,30 +198,30 @@ void LayoutTest::ParseCommandLine()
     for ( sal_uInt16 i = 0; i < GetCommandLineParamCount(); i++ )
     {
         OUString aParam = OUString( GetCommandLineParam( i ) );
-        if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) || aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--help" ) ) )
+        if ( aParam.equalsAscii( "-h" ) || aParam.equalsAscii( "--help" ) )
             usage();
-        if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--inst" ) ) )
+        if ( aParam.equalsAscii( "--inst" ) )
         {
             if ( i >= GetCommandLineParamCount() - 1)
                 usage();
             mInstallDir = GetCommandLineParam( ++i );
             setenv( "OOO_INSTALL_PREFIX", OUSTRING_CSTR( mInstallDir ), 1 );
         }
-        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--test" ) ) )
+        else if ( aParam.equalsAscii( "--test" ) )
         {
-            mTestDialog = OUString(RTL_CONSTASCII_USTRINGPARAM("zoom"));
+            mTestDialog = OUString::createFromAscii( "zoom" );
             if (i + 1 < GetCommandLineParamCount())
                 mTestDialog = GetCommandLineParam( ++i );
         }
-        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--editor" ) ) )
+        else if ( aParam.equalsAscii( "--editor" ) )
             mEditMode = true;
         else
             mFiles.push_back( aParam );
     }
 
     if ( mFiles.size() <= 0 )
-        mFiles.push_back( OUString(RTL_CONSTASCII_USTRINGPARAM("layout.xml")) );
-}
+        mFiles.push_back( OUString::createFromAscii( "layout.xml" ) );
+}    
 
 void LayoutTest::RunEditor()
 {
@@ -264,43 +264,43 @@ void TestDialog( OUString const& name )
 {
     if ( 0 )
         ;
-    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "plugin" ) ) )
+    else if ( name.equalsAscii( "plugin" ) )
     {
         PluginDialog plugin ( 0 );
         RunDialog( plugin );
     }
-    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "query" ) ) )
+    else if ( name.equalsAscii( "query" ) )
     {
         QueryBox query ( 0, "Do you want to do?", "do");
         RunDialog( query );
     }
-    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "query-compat" ) ) )
+    else if ( name.equalsAscii( "query-compat" ) )
     {
         QueryBox query ( 0,
                          WinBits( WB_YES_NO | WB_DEF_YES ),
 //                         WinBits( WB_ABORT_RETRY_IGNORE ),
-                         OUString(RTL_CONSTASCII_USTRINGPARAM ("Do you want to do?")));
+                         OUString::createFromAscii ("Do you want to do?"));
         RunDialog( query );
     }
-    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "recover" ) ) )
+    else if ( name.equalsAscii( "recover" ) )
     {
         SvxRecoverDialog recover ( 0 );
         RunDialog( recover );
     }
 #if SORT_DLG
-    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sort" ) ) )
+    else if ( name.equalsAscii( "sort" ) )
     {
         LoadSC();
         ScSortDlg sort (0, 0);
         RunDialog( sort );
     }
 #endif /* SORT_DLG */
-    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "wordcount" ) ) )
+    else if ( name.equalsAscii( "wordcount" ) )
     {
         SwWordCountDialog words ( 0 );
         RunDialog( words );
     }
-    else if ( name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "zoom" ) ) )
+    else if ( name.equalsAscii( "zoom" ) )
     {
         SvxZoomDialog zoom( 0 );
         RunDialog( zoom );
@@ -310,10 +310,10 @@ void TestDialog( OUString const& name )
 void LayoutTest::RunFiles()
 {
     fprintf( stderr, "TEST: loading files\n" );
-    for ( std::list< OUString >::iterator  i = mFiles.begin(); i != mFiles.end(); ++i )
+    for ( std::list< OUString >::iterator  i = mFiles.begin(); i != mFiles.end(); i++ )
         LoadFile( *i );
     fprintf( stderr, "TEST: executing\n" );
-    Execute();
+    Execute(); 
     fprintf( stderr, "TEST: done executing\n" );
 }
 
@@ -344,14 +344,14 @@ void LayoutTest::Main()
             aStr += OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US );
         }
         fprintf (stderr, "Parsing error: '%s'\n", aStr.getStr());
-        OSL_FAIL( aStr.getStr() );
+        OSL_ENSURE( 0, aStr.getStr() );
     }
     catch ( uno::Exception & rExc )
     {
         OString aStr( OUStringToOString( rExc.Message,
                                          RTL_TEXTENCODING_ASCII_US ) );
         fprintf (stderr, "UNO error: '%s'\n", aStr.getStr());
-        OSL_FAIL( aStr.getStr() );
+        OSL_ENSURE( 0, aStr.getStr() );
     }
 
     Reference< lang::XComponent > xComp( mxContext, UNO_QUERY );

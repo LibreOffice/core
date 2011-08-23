@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,22 +55,21 @@
 
 #include <rtl/instance.hxx>
 
-#include "linguistic/misc.hxx"
+#include "misc.hxx"
 #include "defs.hxx"
-#include "linguistic/lngprops.hxx"
-#include "linguistic/hyphdta.hxx"
+#include "lngprops.hxx"
+#include "hyphdta.hxx"
 #include <i18npool/mslangid.hxx>
 
 using namespace utl;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::linguistic2;
-
-using ::rtl::OUString;
 
 namespace linguistic
 {
@@ -82,14 +81,14 @@ struct LinguMutex : public rtl::Static< osl::Mutex, LinguMutex >
 {
 };
 
-osl::Mutex &    GetLinguMutex()
+osl::Mutex &	GetLinguMutex()
 {
     return LinguMutex::get();
 }
 
 ///////////////////////////////////////////////////////////////////////////
 
-LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
+LocaleDataWrapper & GetLocaleDataWrapper( INT16 nLang )
 {
     static LocaleDataWrapper aLclDtaWrp(
                 getProcessServiceFactory(),
@@ -109,10 +108,10 @@ LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
 /**
     returns text-encoding used for ByteString unicode String conversion
  */
-rtl_TextEncoding GetTextEncoding( sal_Int16 nLanguage )
+rtl_TextEncoding GetTextEncoding( INT16 nLanguage )
 {
     DBG_ASSERT( nLanguage != LANGUAGE_NONE, "invalid language argument" );
-    static sal_Int16 nLastLanguage = LANGUAGE_NONE;
+    static INT16 nLastLanguage = LANGUAGE_NONE;
 
     // set default value for unknown languages
     static rtl_TextEncoding nEncoding = RTL_TEXTENCODING_DONTKNOW;
@@ -268,14 +267,14 @@ sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
 
 ///////////////////////////////////////////////////////////////////////////
 
-sal_Bool IsUseDicList( const PropertyValues &rProperties,
+BOOL IsUseDicList( const PropertyValues &rProperties,
         const uno::Reference< XPropertySet > &rxProp )
 {
-    sal_Bool bRes = sal_True;
+    BOOL bRes = TRUE;
 
-    sal_Int32 nLen = rProperties.getLength();
+    INT32 nLen = rProperties.getLength();
     const PropertyValue *pVal = rProperties.getConstArray();
-    sal_Int32 i;
+    INT32 i;
 
     for ( i = 0;  i < nLen;  ++i)
     {
@@ -285,7 +284,7 @@ sal_Bool IsUseDicList( const PropertyValues &rProperties,
             break;
         }
     }
-    if (i >= nLen)  // no temporary value found in 'rProperties'
+    if (i >= nLen)	// no temporary value found in 'rProperties'
     {
         uno::Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
         if (xFast.is())
@@ -296,14 +295,14 @@ sal_Bool IsUseDicList( const PropertyValues &rProperties,
 }
 
 
-sal_Bool IsIgnoreControlChars( const PropertyValues &rProperties,
+BOOL IsIgnoreControlChars( const PropertyValues &rProperties,
         const uno::Reference< XPropertySet > &rxProp )
 {
-    sal_Bool bRes = sal_True;
+    BOOL bRes = TRUE;
 
-    sal_Int32 nLen = rProperties.getLength();
+    INT32 nLen = rProperties.getLength();
     const PropertyValue *pVal = rProperties.getConstArray();
-    sal_Int32 i;
+    INT32 i;
 
     for ( i = 0;  i < nLen;  ++i)
     {
@@ -313,7 +312,7 @@ sal_Bool IsIgnoreControlChars( const PropertyValues &rProperties,
             break;
         }
     }
-    if (i >= nLen)  // no temporary value found in 'rProperties'
+    if (i >= nLen)	// no temporary value found in 'rProperties'
     {
         uno::Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
         if (xFast.is())
@@ -324,9 +323,9 @@ sal_Bool IsIgnoreControlChars( const PropertyValues &rProperties,
 }
 
 
-static sal_Bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry )
+static BOOL lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry )
 {
-    sal_Bool bRes = sal_False;
+    BOOL bRes = FALSE;
     if (xEntry.is())
     {
         // there has to be (at least one) '=' denoting a hyphenation position
@@ -340,10 +339,10 @@ static sal_Bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry 
 
 uno::Reference< XDictionaryEntry > SearchDicList(
         const uno::Reference< XDictionaryList > &xDicList,
-        const OUString &rWord, sal_Int16 nLanguage,
-        sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry )
+        const OUString &rWord, INT16 nLanguage,
+        BOOL bSearchPosDics, BOOL bSearchSpellEntry )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     uno::Reference< XDictionaryEntry > xEntry;
 
@@ -354,15 +353,15 @@ uno::Reference< XDictionaryEntry > SearchDicList(
             aDics( xDicList->getDictionaries() );
     const uno::Reference< XDictionary >
             *pDic = aDics.getConstArray();
-    sal_Int32 nDics = xDicList->getCount();
+    INT32 nDics = xDicList->getCount();
 
-    sal_Int32 i;
+    INT32 i;
     for (i = 0;  i < nDics;  i++)
     {
         uno::Reference< XDictionary > axDic( pDic[i], UNO_QUERY );
 
-        DictionaryType  eType = axDic->getDictionaryType();
-        sal_Int16           nLang = LocaleToLanguage( axDic->getLocale() );
+        DictionaryType	eType = axDic->getDictionaryType();
+        INT16			nLang = LocaleToLanguage( axDic->getLocale() );
 
         if ( axDic.is() && axDic->isActive()
             && (nLang == nLanguage  ||  nLang == LANGUAGE_NONE) )
@@ -396,8 +395,8 @@ sal_Bool SaveDictionaries( const uno::Reference< XDictionaryList > &xDicList )
 
     Sequence< uno::Reference< XDictionary >  > aDics( xDicList->getDictionaries() );
     const uno::Reference< XDictionary >  *pDic = aDics.getConstArray();
-    sal_Int32 nCount = aDics.getLength();
-    for (sal_Int32 i = 0;  i < nCount;  i++)
+    INT32 nCount = aDics.getLength();
+    for (INT32 i = 0;  i < nCount;  i++)
     {
         try
         {
@@ -463,7 +462,7 @@ sal_uInt8 AddEntryToDic(
 
 LanguageType LocaleToLanguage( const Locale& rLocale )
 {
-    //  empty Locale -> LANGUAGE_NONE
+    //	empty Locale -> LANGUAGE_NONE
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_NONE;
 
@@ -473,7 +472,7 @@ LanguageType LocaleToLanguage( const Locale& rLocale )
 
 Locale& LanguageToLocale( Locale& rLocale, LanguageType eLang )
 {
-    if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
+    if ( eLang != LANGUAGE_NONE	/* &&  eLang != LANGUAGE_SYSTEM */)
         MsLangId::convertLanguageToLocale( eLang, rLocale );
 
     return rLocale;
@@ -488,14 +487,14 @@ Locale CreateLocale( LanguageType eLang )
     return aLocale;
 }
 
-uno::Sequence< Locale > LangSeqToLocaleSeq( const uno::Sequence< sal_Int16 > &rLangSeq )
+uno::Sequence< Locale > LangSeqToLocaleSeq( const uno::Sequence< INT16 > &rLangSeq )
 {
-    const sal_Int16 *pLang = rLangSeq.getConstArray();
-    sal_Int32 nCount = rLangSeq.getLength();
+    const INT16 *pLang = rLangSeq.getConstArray();
+    INT32 nCount = rLangSeq.getLength();
 
     uno::Sequence< Locale > aLocales( nCount );
     Locale *pLocale = aLocales.getArray();
-    for (sal_Int32 i = 0;  i < nCount;  ++i)
+    for (INT32 i = 0;  i < nCount;  ++i)
     {
         LanguageToLocale( pLocale[i], pLang[ i ] );
     }
@@ -503,15 +502,15 @@ uno::Sequence< Locale > LangSeqToLocaleSeq( const uno::Sequence< sal_Int16 > &rL
     return aLocales;
 }
 
-uno::Sequence< sal_Int16 >
+uno::Sequence< INT16 >
     LocaleSeqToLangSeq( uno::Sequence< Locale > &rLocaleSeq )
 {
     const Locale *pLocale = rLocaleSeq.getConstArray();
-    sal_Int32 nCount = rLocaleSeq.getLength();
+    INT32 nCount = rLocaleSeq.getLength();
 
-    uno::Sequence< sal_Int16 >   aLangs( nCount );
-    sal_Int16 *pLang = aLangs.getArray();
-    for (sal_Int32 i = 0;  i < nCount;  ++i)
+    uno::Sequence< INT16 >   aLangs( nCount );
+    INT16 *pLang = aLangs.getArray();
+    for (INT32 i = 0;  i < nCount;  ++i)
     {
         pLang[i] = LocaleToLanguage( pLocale[i] );
     }
@@ -521,10 +520,10 @@ uno::Sequence< sal_Int16 >
 
 ///////////////////////////////////////////////////////////////////////////
 
-sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist )
+BOOL    IsReadOnly( const String &rURL, BOOL *pbExist )
 {
-    sal_Bool bRes = sal_False;
-    sal_Bool bExists = sal_False;
+    BOOL bRes = FALSE;
+    BOOL bExists = FALSE;
 
     if (rURL.Len() > 0)
     {
@@ -542,7 +541,7 @@ sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist )
         }
         catch (Exception &)
         {
-            bRes = sal_True;
+            bRes = TRUE;
         }
     }
 
@@ -554,17 +553,17 @@ sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist )
 ///////////////////////////////////////////////////////////////////////////
 
 
-static sal_Bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUString &rRplc,
+static BOOL GetAltSpelling( INT16 &rnChgPos, INT16 &rnChgLen, OUString &rRplc,
         uno::Reference< XHyphenatedWord > &rxHyphWord )
 {
-    sal_Bool bRes = rxHyphWord->isAlternativeSpelling();
+    BOOL bRes = rxHyphWord->isAlternativeSpelling();
     if (bRes)
     {
         OUString aWord( rxHyphWord->getWord() ),
                  aHyphenatedWord( rxHyphWord->getHyphenatedWord() );
-        sal_Int16   nHyphenationPos     = rxHyphWord->getHyphenationPos();
-        /*sal_Int16   nHyphenPos          = rxHyphWord->getHyphenPos()*/;
-        const sal_Unicode *pWord    = aWord.getStr(),
+        INT16   nHyphenationPos     = rxHyphWord->getHyphenationPos();
+        /*INT16   nHyphenPos          = rxHyphWord->getHyphenPos()*/;
+        const sal_Unicode *pWord	= aWord.getStr(),
                           *pAltWord = aHyphenatedWord.getStr();
 
         // at least char changes directly left or right to the hyphen
@@ -575,9 +574,9 @@ static sal_Bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUStri
         //! to an extend.)
 
         // find first different char from left
-        sal_Int32   nPosL    = 0,
+        sal_Int32	nPosL    = 0,
                     nAltPosL = 0;
-        for (sal_Int16 i = 0 ;  pWord[ nPosL ] == pAltWord[ nAltPosL ];  nPosL++, nAltPosL++, i++)
+        for (INT16 i = 0 ;  pWord[ nPosL ] == pAltWord[ nAltPosL ];  nPosL++, nAltPosL++, i++)
         {
             // restrict changes area beginning to the right to
             // the char immediately following the hyphen.
@@ -588,15 +587,15 @@ static sal_Bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUStri
         }
 
         // find first different char from right
-        sal_Int32   nPosR    = aWord.getLength() - 1,
+        sal_Int32	nPosR 	 = aWord.getLength() - 1,
                     nAltPosR = aHyphenatedWord.getLength() - 1;
         for ( ;  nPosR >= nPosL  &&  nAltPosR >= nAltPosL
                     &&  pWord[ nPosR ] == pAltWord[ nAltPosR ];
                 nPosR--, nAltPosR--)
             ;
 
-        rnChgPos = sal::static_int_cast< sal_Int16 >(nPosL);
-        rnChgLen = sal::static_int_cast< sal_Int16 >(nPosR - nPosL + 1);
+        rnChgPos = sal::static_int_cast< INT16 >(nPosL);
+        rnChgLen = sal::static_int_cast< INT16 >(nPosR - nPosL + 1);
         DBG_ASSERT( rnChgLen >= 0, "nChgLen < 0");
 
         sal_Int32 nTxtStart = nPosL;
@@ -607,32 +606,32 @@ static sal_Bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUStri
 }
 
 
-static sal_Int16 GetOrigWordPos( const OUString &rOrigWord, sal_Int16 nPos )
+static INT16 GetOrigWordPos( const OUString &rOrigWord, INT16 nPos )
 {
-    sal_Int32 nLen = rOrigWord.getLength();
-    sal_Int32 i = -1;
+    INT32 nLen = rOrigWord.getLength();
+    INT32 i = -1;
     while (nPos >= 0  &&  i++ < nLen)
     {
         sal_Unicode cChar = rOrigWord[i];
-        sal_Bool bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
+        BOOL bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
         if (!bSkip)
             --nPos;
     }
-    return sal::static_int_cast< sal_Int16 >((0 <= i  &&  i < nLen) ? i : -1);
+    return sal::static_int_cast< INT16 >((0 <= i  &&  i < nLen) ? i : -1);
 }
 
 
-sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPos )
+INT32 GetPosInWordToCheck( const OUString &rTxt, INT32 nPos )
 {
-    sal_Int32 nRes = -1;
-    sal_Int32 nLen = rTxt.getLength();
+    INT32 nRes = -1;
+    INT32 nLen = rTxt.getLength();
     if (0 <= nPos  &&  nPos < nLen)
     {
         nRes = 0;
-        for (sal_Int32 i = 0;  i < nPos;  ++i)
+        for (INT32 i = 0;  i < nPos;  ++i)
         {
             sal_Unicode cChar = rTxt[i];
-            sal_Bool bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
+            BOOL bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
             if (!bSkip)
                 ++nRes;
         }
@@ -648,17 +647,17 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
     uno::Reference< XHyphenatedWord > xRes;
     if (rOrigWord.getLength() && rxHyphWord.is())
     {
-        sal_Int16    nChgPos = 0,
+        INT16 	 nChgPos = 0,
                  nChgLen = 0;
         OUString aRplc;
-        sal_Bool bAltSpelling = GetAltSpelling( nChgPos, nChgLen, aRplc, rxHyphWord );
+        BOOL bAltSpelling = GetAltSpelling( nChgPos, nChgLen, aRplc, rxHyphWord );
 #if OSL_DEBUG_LEVEL > 1
         OUString aWord( rxHyphWord->getWord() );
 #endif
 
         OUString aOrigHyphenatedWord;
-        sal_Int16 nOrigHyphenPos        = -1;
-        sal_Int16 nOrigHyphenationPos   = -1;
+        INT16 nOrigHyphenPos        = -1;
+        INT16 nOrigHyphenationPos   = -1;
         if (!bAltSpelling)
         {
             aOrigHyphenatedWord = rOrigWord;
@@ -671,10 +670,10 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
             //! B�-c-k-er and Sc-hif-fah-rt
 
             OUString aLeft, aRight;
-            sal_Int16 nPos = GetOrigWordPos( rOrigWord, nChgPos );
+            INT16 nPos = GetOrigWordPos( rOrigWord, nChgPos );
 
             // get words like Sc-hif-fah-rt to work correct
-            sal_Int16 nHyphenationPos = rxHyphWord->getHyphenationPos();
+            INT16 nHyphenationPos = rxHyphWord->getHyphenationPos();
             if (nChgPos > nHyphenationPos)
                 --nPos;
 
@@ -685,7 +684,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
             aOrigHyphenatedWord += aRplc;
             aOrigHyphenatedWord += aRight;
 
-            nOrigHyphenPos      = sal::static_int_cast< sal_Int16 >(aLeft.getLength() +
+            nOrigHyphenPos      = sal::static_int_cast< INT16 >(aLeft.getLength() +
                                   rxHyphWord->getHyphenPos() - nChgPos);
             nOrigHyphenationPos = GetOrigWordPos( rOrigWord, nHyphenationPos );
         }
@@ -696,7 +695,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         }
         else
         {
-            sal_Int16 nLang = LocaleToLanguage( rxHyphWord->getLocale() );
+            INT16 nLang = LocaleToLanguage( rxHyphWord->getLocale() );
             xRes = new HyphenatedWord(
                         rOrigWord, nLang, nOrigHyphenationPos,
                         aOrigHyphenatedWord, nOrigHyphenPos );
@@ -719,24 +718,24 @@ static CharClass & lcl_GetCharClass()
 
 osl::Mutex & lcl_GetCharClassMutex()
 {
-    static osl::Mutex   aMutex;
+    static osl::Mutex	aMutex;
     return aMutex;
 }
 
 
-sal_Bool IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage )
+BOOL IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, INT16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
     CharClass &rCC = lcl_GetCharClass();
     rCC.setLocale( CreateLocale( nLanguage ) );
     sal_Int32 nFlags = rCC.getStringType( rText, nPos, nLen );
-    return      (nFlags & KCharacterType::UPPER)
+    return 		(nFlags & KCharacterType::UPPER)
             && !(nFlags & KCharacterType::LOWER);
 }
 
 
-sal_Bool IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage )
+BOOL IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, INT16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -748,7 +747,7 @@ sal_Bool IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int
 }
 
 
-String ToLower( const String &rText, sal_Int16 nLanguage )
+String ToLower( const String &rText, INT16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -758,7 +757,7 @@ String ToLower( const String &rText, sal_Int16 nLanguage )
 }
 
 
-String ToUpper( const String &rText, sal_Int16 nLanguage )
+String ToUpper( const String &rText, INT16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -768,7 +767,7 @@ String ToUpper( const String &rText, sal_Int16 nLanguage )
 }
 
 
-String ToTitle( const String &rText, sal_Int16 nLanguage )
+String ToTitle( const String &rText, INT16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -778,7 +777,7 @@ String ToTitle( const String &rText, sal_Int16 nLanguage )
 }
 
 
-sal_Unicode ToLower( const sal_Unicode cChar, sal_Int16 nLanguage )
+sal_Unicode	ToLower( const sal_Unicode cChar, INT16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -788,7 +787,7 @@ sal_Unicode ToLower( const sal_Unicode cChar, sal_Int16 nLanguage )
 }
 
 
-sal_Unicode ToUpper( const sal_Unicode cChar, sal_Int16 nLanguage )
+sal_Unicode	ToUpper( const sal_Unicode cChar, INT16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -836,7 +835,7 @@ static const sal_uInt32 the_aDigitZeroes [] =
     0x0001D7CE  //1D7FF   ; Decimal # Nd  [50] MATHEMATICAL BOLD DIGIT ZERO..MATHEMATICAL MONOSPACE DIGIT NINE
 };
 
-sal_Bool HasDigits( const OUString &rText )
+BOOL HasDigits( const OUString &rText )
 {
     static const int nNumDigitZeroes = SAL_N_ELEMENTS(the_aDigitZeroes);
     const sal_Int32 nLen = rText.getLength();
@@ -851,27 +850,27 @@ sal_Bool HasDigits( const OUString &rText )
             if (nDigitZero > nCodePoint)
                 break;
             if (/*nDigitZero <= nCodePoint &&*/ nCodePoint <= nDigitZero + 9)
-                return sal_True;
+                return TRUE;
         }
     }
-    return sal_False;
+    return FALSE;
 }
 
 
-sal_Bool IsNumeric( const String &rText )
+BOOL IsNumeric( const String &rText )
 {
-    sal_Bool bRes = sal_False;
+    BOOL bRes = FALSE;
     xub_StrLen nLen = rText.Len();
     if (nLen)
     {
-        bRes = sal_True;
+        bRes = TRUE;
         xub_StrLen i = 0;
         while (i < nLen)
         {
             sal_Unicode cChar = rText.GetChar( i++ );
             if ( !((sal_Unicode)'0' <= cChar  &&  cChar <= (sal_Unicode)'9') )
             {
-                bRes = sal_False;
+                bRes = FALSE;
                 break;
             }
         }
@@ -893,7 +892,7 @@ uno::Reference< XInterface > GetOneInstanceService( const char *pServiceName )
         {
             try
             {
-                xRef = xMgr->createInstance( ::rtl::OUString::createFromAscii( pServiceName ) );
+                xRef = xMgr->createInstance( A2OU( pServiceName ) );
             }
             catch (uno::Exception &)
             {
@@ -977,11 +976,11 @@ void SAL_CALL
     AppExitListener::disposing( const EventObject& rEvtSource )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (xDesktop.is()  &&  rEvtSource.Source == xDesktop)
     {
-        xDesktop = NULL;    //! release reference to desktop
+        xDesktop = NULL;	//! release reference to desktop
     }
 }
 
@@ -990,7 +989,7 @@ void SAL_CALL
     AppExitListener::queryTermination( const EventObject& /*rEvtSource*/ )
         throw(frame::TerminationVetoException, RuntimeException)
 {
-    //MutexGuard    aGuard( GetLinguMutex() );
+    //MutexGuard	aGuard( GetLinguMutex() );
 }
 
 
@@ -998,7 +997,7 @@ void SAL_CALL
     AppExitListener::notifyTermination( const EventObject& rEvtSource )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (xDesktop.is()  &&  rEvtSource.Source == xDesktop)
     {
@@ -1008,6 +1007,6 @@ void SAL_CALL
 
 ///////////////////////////////////////////////////////////////////////////
 
-}   // namespace linguistic
+}	// namespace linguistic
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

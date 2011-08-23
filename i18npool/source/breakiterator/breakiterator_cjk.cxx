@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,38 +44,38 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //      class BreakIterator_CJK
 //      ----------------------------------------------------;
 
-BreakIterator_CJK::BreakIterator_CJK() :
+BreakIterator_CJK::BreakIterator_CJK() : 
     dict( NULL ),
     hangingCharacters()
 {
         cBreakIterator = "com.sun.star.i18n.BreakIterator_CJK";
 }
 
-Boundary SAL_CALL
-BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos,
+Boundary SAL_CALL 
+BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos, 
         const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
 {
         if (dict) {
             result = dict->previousWord(text, anyPos, wordType);
             // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
-            if (result.endPos - result.startPos != 1 ||
+            if (result.endPos - result.startPos != 1 || 
                     getScriptType(text, result.startPos) == ScriptType::ASIAN)
                 return result;
             result = BreakIterator_Unicode::getWordBoundary(text, result.startPos, nLocale, wordType, true);
-            if (result.endPos < anyPos)
+            if (result.endPos < anyPos) 
                 return result;
         }
         return BreakIterator_Unicode::previousWord(text, anyPos, nLocale, wordType);
 }
 
-Boundary SAL_CALL
-BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
+Boundary SAL_CALL 
+BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos, 
         const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
 {
         if (dict) {
             result = dict->nextWord(text, anyPos, wordType);
             // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
-            if (result.endPos - result.startPos != 1 ||
+            if (result.endPos - result.startPos != 1 || 
                     getScriptType(text, result.startPos) == ScriptType::ASIAN)
                 return result;
             result = BreakIterator_Unicode::getWordBoundary(text, result.startPos, nLocale, wordType, true);
@@ -85,15 +85,15 @@ BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
         return BreakIterator_Unicode::nextWord(text, anyPos, nLocale, wordType);
 }
 
-Boundary SAL_CALL
-BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
-        const lang::Locale& nLocale, sal_Int16 wordType, sal_Bool bDirection )
+Boundary SAL_CALL 
+BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos, 
+        const lang::Locale& nLocale, sal_Int16 wordType, sal_Bool bDirection ) 
         throw(RuntimeException)
 {
         if (dict) {
             result = dict->getWordBoundary(text, anyPos, wordType, bDirection);
             // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
-            if (result.endPos - result.startPos != 1 ||
+            if (result.endPos - result.startPos != 1 || 
                     getScriptType(text, result.startPos) == ScriptType::ASIAN)
                 return result;
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ void DbgDialogTest( Window* pWindow );
         ->DbgData::nWarningOut and ->DbgData::nTraceOut
     @see DBG_OUT_USER_CHANNEL_0
 */
-sal_uInt16 DbgRegisterNamedUserChannel( const XubString& _rChannelUIName, DbgPrintLine pProc );
+USHORT DbgRegisterNamedUserChannel( const XubString& _rChannelUIName, DbgPrintLine pProc );
 
 #define DBGGUI_INIT()           DbgGUIInit()
 #define DBGGUI_DEINIT()         DbgGUIDeInit()

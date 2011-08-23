@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,12 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/imgdef.hxx>
+#include <imgdef.hxx>
 #include <svtools/miscopt.hxx>
+
 #include <toolkit/unohlp.hxx>
 #include <vcl/toolbox.hxx>
-//shizhobo
+//shizhobo 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE  = 1;
 const int TOOLBARCONTROLLER_PROPCOUNT               = 1;
@@ -86,15 +87,15 @@ struct ToolboxController_Impl
 };
 
 ToolboxController::ToolboxController(
-
+    
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >& xFrame,
     const ::rtl::OUString& aCommandURL ) :
     OPropertyContainer(GetBroadcastHelper())
-    ,   OWeakObject()
+    ,	OWeakObject()
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
-    ,   m_xFrame(xFrame)
+    ,	m_xFrame(xFrame)
     ,   m_xServiceManager( rServiceManager )
     ,   m_aCommandURL( aCommandURL )
     ,   m_aListenerContainer( m_aMutex )
@@ -118,7 +119,7 @@ ToolboxController::ToolboxController(
 
 ToolboxController::ToolboxController() :
     OPropertyContainer(GetBroadcastHelper())
-    ,   OWeakObject()
+    ,	OWeakObject()
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
     ,   m_aListenerContainer( m_aMutex )
@@ -189,7 +190,7 @@ throw ( RuntimeException )
             ,static_cast<XMultiPropertySet*>(this)
             ,static_cast<XFastPropertySet*>(this));
         if (!a.hasValue())
-            return OWeakObject::queryInterface( rType );
+            return OWeakObject::queryInterface( rType );	
     }
     return a;
 }
@@ -208,7 +209,7 @@ void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
 throw ( Exception, RuntimeException )
 {
     bool bInitialized( true );
-
+    
     {
         SolarMutexGuard aSolarMutexGuard;
 
@@ -222,7 +223,7 @@ throw ( Exception, RuntimeException )
     {
         SolarMutexGuard aSolarMutexGuard;
         m_bInitialized = sal_True;
-        //shizhoubo add
+        //shizhoubo add 
         m_bSupportVisiable = sal_False;
         PropertyValue aPropValue;
         for ( int i = 0; i < aArguments.getLength(); i++ )
@@ -260,13 +261,13 @@ throw ( Exception, RuntimeException )
 
 void SAL_CALL ToolboxController::update()
 throw ( RuntimeException )
-{
+{ 
     {
         SolarMutexGuard aSolarMutexGuard;
         if ( m_bDisposed )
             throw DisposedException();
     }
-
+   
     // Bind all registered listeners to their dispatch objects
     bindListener();
 }
@@ -446,7 +447,7 @@ void ToolboxController::addStatusListener( const rtl::OUString& aCommandURL )
         // intialize is called.
         if ( !m_bInitialized )
         {
-            // Put into the boost::unordered_map of status listener. Will be activated when initialized is called
+            // Put into the hash_map of status listener. Will be activated when initialized is called
             m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, Reference< XDispatch >() ));
             return;
         }
@@ -672,6 +673,22 @@ sal_Bool ToolboxController::hasBigImages() const
     return SvtMiscOptions().AreCurrentSymbolsLarge();
 }
 
+sal_Bool ToolboxController::isHighContrast() const
+{
+    sal_Bool bHighContrast( sal_False );
+
+    Reference< XWindow > xWindow = m_pImpl->m_xParentWindow;
+    if ( xWindow.is() )
+    {
+        SolarMutexGuard aSolarMutexGuard;
+        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        if ( pWindow )
+            bHighContrast = ( ((ToolBox *)pWindow)->GetSettings().GetStyleSettings().GetHighContrastMode() );
+    }
+
+    return bHighContrast;
+}
+
 void ToolboxController::updateStatus()
 {
     bindListener();
@@ -738,7 +755,7 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
     try
     {
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY_THROW );
-        URL aURL;
+        URL aURL;       
         aURL.Complete = sCommandURL;
         getURLTransformer()->parseStrict( aURL );
 
@@ -788,7 +805,7 @@ sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( com::sun::star::u
     {
         case TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE:
         {
-            sal_Bool aNewValue(sal_False);
+            sal_Bool aNewValue;
             aValue >>= aNewValue;
             if (aNewValue != m_bSupportVisiable)
             {
@@ -809,7 +826,7 @@ throw( com::sun::star::uno::Exception)
 {
     OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, aValue);
     if (TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE == nHandle)
-    {
+    {   
         sal_Bool rValue(sal_False);
         if (( aValue >>= rValue ) && m_bInitialized)
             this->setSupportVisiableProperty( rValue );
@@ -831,7 +848,7 @@ void ToolboxController::enable( bool bEnable )
     sal_uInt16 nItemId = 0;
     if( getToolboxId( nItemId, &pToolBox ) )
     {
-        pToolBox->EnableItem( nItemId, bEnable ? sal_True : sal_False );
+        pToolBox->EnableItem( nItemId, bEnable ? TRUE : FALSE );
     }
 }
 

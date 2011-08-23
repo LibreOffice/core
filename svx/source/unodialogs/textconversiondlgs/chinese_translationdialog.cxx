@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     , m_aFL_Commonterms( this, TextConversionDlgs_ResId( FL_COMMONTERMS ) )
     , m_aCB_Translate_Commonterms( this, TextConversionDlgs_ResId( CB_TRANSLATE_COMMONTERMS ) )
     , m_aPB_Editterms( this, TextConversionDlgs_ResId( PB_EDITTERMS ) )
-    , m_aFL_Bottomline( this, TextConversionDlgs_ResId( T_FL_BOTTOMLINE ) )
+    , m_aFL_Bottomline( this, TextConversionDlgs_ResId( FL_BOTTOMLINE ) )
     , m_aBP_OK( this, TextConversionDlgs_ResId( PB_OK ) )
     , m_aBP_Cancel( this, TextConversionDlgs_ResId( PB_CANCEL ) )
     , m_aBP_Help( this, TextConversionDlgs_ResId( PB_HELP ) )
@@ -75,20 +75,20 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     m_aRB_To_Traditional.SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL );
     m_aCB_Use_Variants.SetHelpId( HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS );
 
-    SvtLinguConfig  aLngCfg;
+    SvtLinguConfig	aLngCfg;
     sal_Bool bValue = sal_Bool();
-    Any aAny( aLngCfg.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_DIRECTION_TO_SIMPLIFIED )) ) );
+    Any aAny( aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_DIRECTION_TO_SIMPLIFIED ) ) );
     aAny >>= bValue;
     if( bValue )
         m_aRB_To_Simplified.Check();
     else
         m_aRB_To_Traditional.Check();
 
-    aAny = aLngCfg.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_USE_CHARACTER_VARIANTS )) );
+    aAny = aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_USE_CHARACTER_VARIANTS ) );
     if( aAny >>= bValue )
         m_aCB_Use_Variants.Check( bValue );
 
-    // #117820# (search for other occurrences!)
+    // #117820# (search for other occurences!)
     // disable and hide that checkbox until it is decided if it is needed or not.
     // If it is to be removed later the respective code needs to be removed as
     // well, otherwise we just have to remove the next lines again.
@@ -96,7 +96,7 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     m_aCB_Use_Variants.Enable( sal_False );
     m_aCB_Use_Variants.Show( sal_False );
 
-    aAny = aLngCfg.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_TRANSLATE_COMMON_TERMS )) );
+    aAny = aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_TRANSLATE_COMMON_TERMS ) );
     if( aAny >>= bValue )
         m_aCB_Translate_Commonterms.Check( bValue );
 
@@ -130,7 +130,7 @@ void ChineseTranslationDialog::getSettings( sal_Bool& rbDirectionToSimplified
 
 void ChineseTranslationDialog::impl_UpdateVariantsCheckBox()
 {
-// #117820# (search for other occurrences!)
+// #117820# (search for other occurences!)
 //    m_aCB_Use_Variants.Enable( m_aRB_To_Traditional.IsChecked() );
 }
 
@@ -142,7 +142,7 @@ IMPL_LINK( ChineseTranslationDialog, DirectionHdl, void*, EMPTYARG )
 
 IMPL_LINK( ChineseTranslationDialog, CommonTermsHdl, void*, EMPTYARG )
 {
-// #117820# (search for other occurrences!)
+// #117820# (search for other occurences!)
 //    if( m_aCB_Translate_Commonterms.IsChecked() && m_aRB_To_Traditional.IsChecked() )
 //        m_aCB_Use_Variants.Check( true );
     return 0;
@@ -151,14 +151,14 @@ IMPL_LINK( ChineseTranslationDialog, CommonTermsHdl, void*, EMPTYARG )
 IMPL_LINK( ChineseTranslationDialog, OkHdl, void*, EMPTYARG )
 {
     //save settings to configuration
-    SvtLinguConfig  aLngCfg;
+    SvtLinguConfig	aLngCfg;
     Any aAny;
     aAny <<= sal_Bool( !!m_aRB_To_Simplified.IsChecked() );
-    aLngCfg.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_DIRECTION_TO_SIMPLIFIED )), aAny );
+    aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_DIRECTION_TO_SIMPLIFIED ), aAny );
     aAny <<= sal_Bool( !!m_aCB_Use_Variants.IsChecked() );
-    aLngCfg.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_USE_CHARACTER_VARIANTS )), aAny );
+    aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_USE_CHARACTER_VARIANTS ), aAny );
     aAny <<= sal_Bool( !!m_aCB_Translate_Commonterms.IsChecked() );
-    aLngCfg.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_TRANSLATE_COMMON_TERMS )), aAny );
+    aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_TRANSLATE_COMMON_TERMS ), aAny );
 
     EndDialog( RET_OK );
     return 0;

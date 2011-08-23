@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -245,7 +245,7 @@ void UndoObjectSetText::Redo()
         if( mpUndoAnimation )
             mpUndoAnimation->Redo();
         SdrUndoObjSetText::Redo();
-        mxSdrObject->SetEmptyPresObj(mbNewEmptyPresObj ? sal_True : sal_False );
+        mxSdrObject->SetEmptyPresObj(mbNewEmptyPresObj ? TRUE : FALSE );
     }
 }
 
@@ -253,10 +253,10 @@ void UndoObjectSetText::Redo()
 // Undo for SdrObject::SetUserCall()
 
 UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
-:   SdrUndoObj(rObject)
-,   mpOldUserCall((SdPage*)rObject.GetUserCall())
-,   mpNewUserCall(0)
-,   mxSdrObject( &rObject )
+:	SdrUndoObj(rObject)
+,	mpOldUserCall((SdPage*)rObject.GetUserCall())
+,	mpNewUserCall(0)
+,	mxSdrObject( &rObject )
 {
 }
 
@@ -287,11 +287,11 @@ void UndoObjectUserCall::Redo()
 // Undo for SdPage::InsertPresObj() and SdPage::RemovePresObj()
 
 UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
-:   SdrUndoObj(rObject)
-,   meOldKind(PRESOBJ_NONE)
-,   meNewKind(PRESOBJ_NONE)
-,   mxPage( rObject.GetPage() )
-,   mxSdrObject( &rObject )
+:	SdrUndoObj(rObject)
+,	meOldKind(PRESOBJ_NONE)
+,	meNewKind(PRESOBJ_NONE)
+,	mxPage( rObject.GetPage() )
+,	mxSdrObject( &rObject )
 {
     DBG_ASSERT( mxPage.is(), "sd::UndoObjectPresentationKind::UndoObjectPresentationKind(), does not work for shapes without a slide!" );
 
@@ -348,7 +348,7 @@ void UndoAutoLayoutPosAndSize::Redo()
 {
     SdPage* pPage = static_cast< SdPage* >( mxPage.get() );
     if( pPage )
-        pPage->SetAutoLayout( pPage->GetAutoLayout(), sal_False, sal_False );
+        pPage->SetAutoLayout( pPage->GetAutoLayout(), FALSE, FALSE );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -403,7 +403,7 @@ void UndoGeoObject::Redo()
 //////////////////////////////////////////////////////////////////////////////
 
 UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
-: SdrUndoAttrObj( rObject, bStyleSheet1 ? sal_True : sal_False, bSaveText ? sal_True : sal_False )
+: SdrUndoAttrObj( rObject, bStyleSheet1 ? TRUE : FALSE, bSaveText ? TRUE : FALSE )
 , mxPage( rObject.GetPage() )
 , mxSdrObject( &rObject )
 {

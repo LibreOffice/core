@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XUndoManager.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>

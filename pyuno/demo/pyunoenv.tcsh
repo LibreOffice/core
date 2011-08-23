@@ -17,7 +17,7 @@ if( ! $?LD_LIBRARY_PATH ) then
 setenv LD_LIBRARY_PATH
 endif
 
-if( "$PYTHONPATH" != "" ) then
+if ( $?PYTHOHOME )
 	setenv PYTHONPATH $OOOHOME/program:$OOOHOME/program/pydemo:$OOOHOME/program/python/lib:$PYTHONPATH
 else
 	setenv PYTHONPATH $OOOHOME/program:$OOOHOME/program/pydemo:$OOOHOME/program/python/lib

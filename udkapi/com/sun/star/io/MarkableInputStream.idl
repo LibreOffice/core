@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,49 +24,55 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_io_DataInputStream_idl__
-#define __com_sun_star_io_DataInputStream_idl__
-
-#include <com/sun/star/io/XMarkableStream.idl>
-
-#include <com/sun/star/io/XActiveDataSink.idl>
-
-#include <com/sun/star/io/XConnectable.idl>
-
-
-module com {  module sun {  module star {  module io {
-
+#ifndef __com_sun_star_io_DataInputStream_idl__ 
+#define __com_sun_star_io_DataInputStream_idl__ 
+ 
+#ifndef __com_sun_star_io_XMarkableStream_idl__ 
+#include <com/sun/star/io/XMarkableStream.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_XActiveDataSink_idl__ 
+#include <com/sun/star/io/XActiveDataSink.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_XConnectable_idl__ 
+#include <com/sun/star/io/XConnectable.idl> 
+#endif 
+ 
+ 
+module com {  module sun {  module star {  module io {  
+ 
 //==========================================================================
 /** allows to set marks in an inputstream and to later jump back to these
     marks.
     <p>The implementation reads the original data from the input stream,
-    that has been set previously at the <type>XActiveDataSink</type>
+    that has been set previously at the <type>XActiveDataSink</type> 
     interface. In general the implementation must buffer the data. </p>
  */
 published service MarkableInputStream
-{
+{ 
     /** allows to access the data of this stream
      */
-    interface com::sun::star::io::XInputStream;
+    interface com::sun::star::io::XInputStream; 
 
     /** allows to create marks at the current position
         and to set the current position.
      */
-    interface com::sun::star::io::XMarkableStream;
+    interface com::sun::star::io::XMarkableStream; 
 
     /** allows to access to the underlying source
         of this stream.
      */
-    interface com::sun::star::io::XActiveDataSink;
-
+    interface com::sun::star::io::XActiveDataSink; 
+    
     /** allows to navigate via a chain of streams */
-    interface com::sun::star::io::XConnectable;
-
-};
-
-
-}; }; }; };
-
-
-
-#endif
+    interface com::sun::star::io::XConnectable; 
+ 
+}; 
+ 
+ 
+}; }; }; };  
+ 
+     
+ 
+#endif 

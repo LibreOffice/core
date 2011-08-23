@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : gregor.hartmann@oracle.com
+'*  owner : Joerg.Skottke@Sun.COM
 '*
 '*  short description : ToolsCustomize Dialog
 '*

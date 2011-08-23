@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,22 +45,22 @@
 // -----------------------------------------------------------------------
 
 ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
-    aFileName   ( rSource.GetFile() ),
-    aFilterName ( rSource.GetFilter() ),
-    aOptions    ( rSource.GetOptions() ),
-    aSourceArea ( rSource.GetSource() ),
-    aDestArea   ( rSource.GetDestArea() ),
+    aFileName	( rSource.GetFile() ),
+    aFilterName	( rSource.GetFilter() ),
+    aOptions	( rSource.GetOptions() ),
+    aSourceArea	( rSource.GetSource() ),
+    aDestArea	( rSource.GetDestArea() ),
     nRefresh    ( rSource.GetRefreshDelay() )       // seconds
 {
 }
 
 ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLinkSaver& rCopy ) :
     ScDataObject(),
-    aFileName   ( rCopy.aFileName ),
-    aFilterName ( rCopy.aFilterName ),
-    aOptions    ( rCopy.aOptions ),
-    aSourceArea ( rCopy.aSourceArea ),
-    aDestArea   ( rCopy.aDestArea ),
+    aFileName	( rCopy.aFileName ),
+    aFilterName	( rCopy.aFilterName ),
+    aOptions	( rCopy.aOptions ),
+    aSourceArea	( rCopy.aSourceArea ),
+    aDestArea	( rCopy.aDestArea ),
     nRefresh    ( rCopy.nRefresh )
 {
 }
@@ -69,21 +69,21 @@ ScAreaLinkSaver::~ScAreaLinkSaver()
 {
 }
 
-ScDataObject*   ScAreaLinkSaver::Clone() const
+ScDataObject*	ScAreaLinkSaver::Clone() const
 {
     return new ScAreaLinkSaver( *this );
 }
 
-sal_Bool ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
+BOOL ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
 {
-    return ( aFileName   == rCompare.GetFile() &&
+    return ( aFileName	 == rCompare.GetFile() &&
              aFilterName == rCompare.GetFilter() &&
-             aOptions    == rCompare.GetOptions() &&
+             aOptions	 == rCompare.GetOptions() &&
              aSourceArea == rCompare.GetSource() &&
              nRefresh    == rCompare.GetRefreshDelay() );
 }
 
-sal_Bool ScAreaLinkSaver::IsEqual( const ScAreaLink& rCompare ) const
+BOOL ScAreaLinkSaver::IsEqual( const ScAreaLink& rCompare ) const
 {
     return ( IsEqualSource( rCompare ) &&
              aDestArea == rCompare.GetDestArea() );
@@ -105,11 +105,11 @@ void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc ) const
     {
         ScAreaLink* pLink = new ScAreaLink( pObjSh, aFileName, aFilterName, aOptions,
                                             aSourceArea, aDestArea.aStart, nRefresh );
-        pLink->SetInCreate( sal_True );
+        pLink->SetInCreate( TRUE );
         pLink->SetDestArea( aDestArea );
         pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aFilterName, &aSourceArea );
         pLink->Update();
-        pLink->SetInCreate( false );
+        pLink->SetInCreate( FALSE );
     }
 }
 
@@ -128,12 +128,12 @@ ScAreaLinkSaveCollection::~ScAreaLinkSaveCollection()
 {
 }
 
-ScDataObject*   ScAreaLinkSaveCollection::Clone() const
+ScDataObject*	ScAreaLinkSaveCollection::Clone() const
 {
     return new ScAreaLinkSaveCollection( *this );
 }
 
-sal_Bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
+BOOL ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
 {
     // IsEqual can be checked in sequence.
     // Neither ref-update nor removing links will change the order.
@@ -141,31 +141,31 @@ sal_Bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
     sfx2::LinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
     if (pLinkManager)
     {
-        sal_uInt16 nPos = 0;
+        USHORT nPos = 0;
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nLinkCount = rLinks.Count();
-        for (sal_uInt16 i=0; i<nLinkCount; i++)
+        USHORT nLinkCount = rLinks.Count();
+        for (USHORT i=0; i<nLinkCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
             {
                 if ( nPos >= GetCount() || !(*this)[nPos]->IsEqual( *(ScAreaLink*)pBase ) )
-                    return false;
+                    return FALSE;
 
                 ++nPos;
             }
         }
         if ( nPos < GetCount() )
-            return false;           // fewer links in the document than in the save collection
+            return FALSE;           // fewer links in the document than in the save collection
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScAreaLinkSaver& rSaver )
 {
-    sal_uInt16 nLinkCount = rLinks.Count();
-    for (sal_uInt16 i=0; i<nLinkCount; i++)
+    USHORT nLinkCount = rLinks.Count();
+    for (USHORT i=0; i<nLinkCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
         if ( pBase->ISA(ScAreaLink) &&
@@ -188,8 +188,8 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc ) const
     if (pLinkManager)
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nSaveCount = GetCount();
-        for (sal_uInt16 nPos=0; nPos<nSaveCount; nPos++)
+        USHORT nSaveCount = GetCount();
+        for (USHORT nPos=0; nPos<nSaveCount; nPos++)
         {
             ScAreaLinkSaver* pSaver = (*this)[nPos];
             ScAreaLink* pLink = lcl_FindLink( rLinks, *pSaver );
@@ -201,6 +201,7 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc ) const
     }
 }
 
+// static
 ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocument* pDoc )
 {
     ScAreaLinkSaveCollection* pColl = NULL;
@@ -209,8 +210,8 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
     if (pLinkManager)
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nLinkCount = rLinks.Count();
-        for (sal_uInt16 i=0; i<nLinkCount; i++)
+        USHORT nLinkCount = rLinks.Count();
+        for (USHORT i=0; i<nLinkCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))

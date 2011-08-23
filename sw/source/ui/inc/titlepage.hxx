@@ -83,7 +83,7 @@ private:
 
     void FillList();
 
-    sal_uInt16 GetInsertPosition() const;
+    USHORT GetInsertPosition() const;
 
     DECL_LINK( OKHdl, Button * );
     DECL_LINK( EditHdl, Button * );

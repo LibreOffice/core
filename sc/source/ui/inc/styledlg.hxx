@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,9 @@
 #ifndef SC_STYLEDLG_HXX
 #define SC_STYLEDLG_HXX
 
+#ifndef _SFX_HXX
+#endif
+
 #include <sfx2/styledlg.hxx>
 
 //==================================================================
@@ -38,17 +41,17 @@ class SfxStyleSheetBase;
 class ScStyleDlg : public SfxStyleDialog
 {
 public:
-                ScStyleDlg( Window*             pParent,
-                            SfxStyleSheetBase&  rStyleBase,
-                            sal_uInt16              nRscId );
+                ScStyleDlg( Window*				pParent,
+                            SfxStyleSheetBase&	rStyleBase,
+                            USHORT				nRscId );
                 ~ScStyleDlg();
 
 protected:
-    virtual void                PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
-    virtual const SfxItemSet*   GetRefreshedSet();
+    virtual void				PageCreated( USHORT nPageId, SfxTabPage& rTabPage );
+    virtual const SfxItemSet*	GetRefreshedSet();
 
 private:
-    sal_uInt16 nDlgRsc;
+    USHORT nDlgRsc;
 };
 
 

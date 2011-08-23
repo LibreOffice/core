@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,49 +24,49 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_component_FormattedField_idl__
-#define __com_sun_star_form_component_FormattedField_idl__
-
-#ifndef __com_sun_star_awt_UnoControlFormattedFieldModel_idl__
-#include <com/sun/star/awt/UnoControlFormattedFieldModel.idl>
-#endif
-
-#ifndef __com_sun_star_form_FormControlModel_idl__
-#include <com/sun/star/form/FormControlModel.idl>
-#endif
-
-#ifndef __com_sun_star_form_XReset_idl__
-#include <com/sun/star/form/XReset.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module form {  module component {
-
-//=============================================================================
-
+#ifndef __com_sun_star_form_component_FormattedField_idl__ 
+#define __com_sun_star_form_component_FormattedField_idl__ 
+ 
+#ifndef __com_sun_star_awt_UnoControlFormattedFieldModel_idl__ 
+#include <com/sun/star/awt/UnoControlFormattedFieldModel.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_form_FormControlModel_idl__ 
+#include <com/sun/star/form/FormControlModel.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_form_XReset_idl__ 
+#include <com/sun/star/form/XReset.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module form {  module component { 
+ 
+//============================================================================= 
+ 
 /** This service specifies the control model of an edit field for entering text which can be
-    (nearly) arbitrarily formatted.
+    (nearly) arbirtrarily formatted.
 
     @see com::sun::star::util::XNumberFormatsSupplier
  */
 published service FormattedField
-{
-    service com::sun::star::awt::UnoControlFormattedFieldModel;
-
-    service com::sun::star::form::FormControlModel;
-
+{ 
+    service com::sun::star::awt::UnoControlFormattedFieldModel; 
+    
+    service com::sun::star::form::FormControlModel; 
+    
     /** can be used to reset the control to it's default state.
 
         @see com::sun::star::awt::UnoControlFormattedFieldModel::EffectiveValue
         @see com::sun::star::awt::UnoControlFormattedFieldModel::EffectiveDefault
     */
     interface com::sun::star::form::XReset;
-};
-
-//=============================================================================
-
-}; }; }; }; };
-
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; }; 
+ 
+#endif 

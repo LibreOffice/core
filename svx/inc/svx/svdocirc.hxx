@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 //   Vorausdeklarationen
 //************************************************************
 
-namespace sdr { namespace properties {
+namespace sdr {	namespace properties {
     class CircleProperties;
 }}
 
@@ -48,8 +48,8 @@ namespace sdr { namespace properties {
 class SdrCircObjGeoData : public SdrTextObjGeoData
 {
 public:
-    long                        nStartWink;
-    long                        nEndWink;
+    long						nStartWink;
+    long						nEndWink;
 };
 
 //************************************************************
@@ -69,12 +69,12 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    SdrObjKind                  meCircleKind;
-    long                        nStartWink;
-    long                        nEndWink;
+    SdrObjKind					meCircleKind;
+    long						nStartWink;
+    long						nEndWink;
 
     // bitfield
-    unsigned                    mbPolygonIsLine : 1;
+    unsigned					mbPolygonIsLine : 1;
 
 private:
      SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const Rectangle& rRect1, long nStart, long nEnd) const;
@@ -82,7 +82,7 @@ private:
     SVX_DLLPRIVATE void ImpSetAttrToCircInfo(); // Werte vom Pool kopieren
     SVX_DLLPRIVATE void ImpSetCircInfoToAttr(); // Werte in den Pool kopieren
 
-    // Liefert sal_True, wenn das Painten ein XPolygon erfordert.
+    // Liefert TRUE, wenn das Painten ein XPolygon erfordert.
     SVX_DLLPRIVATE bool PaintNeedsXPolyCirc() const; // PaintNeedsXPoly-> PaintNeedsXPolyCirc
     SVX_DLLPRIVATE virtual void RecalcXPoly();
 
@@ -104,13 +104,13 @@ public:
     virtual ~SdrCircObj();
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual UINT16 GetObjIdentifier() const;
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    virtual SdrCircObj* Clone() const;
+    virtual void operator=(const SdrObject& rObj);
     virtual void RecalcSnapRect();
     virtual void NbcSetSnapRect(const Rectangle& rRect);
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
@@ -120,7 +120,7 @@ public:
 
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-
+    
     // special drag methods
     virtual bool hasSpecialDrag() const;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
@@ -138,7 +138,7 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
     virtual void NbcShear (const Point& rRef, long nWink, double tn, bool bVShear);
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
 protected:
     virtual SdrObjGeoData* NewGeoData() const;

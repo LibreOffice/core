@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,6 +50,7 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/keepitem.hxx>
@@ -57,7 +58,6 @@
 #include <editeng/spltitem.hxx>
 #include <editeng/orphitem.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/svdobj.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svtools/htmlout.hxx>
@@ -87,6 +87,8 @@
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 // FOOTNOTES
+#include <dcontact.hxx>
+
 #include "doc.hxx"
 #include "swerror.h"
 #include "charatr.hxx"
@@ -101,8 +103,6 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <numrule.hxx>
 
-using ::editeng::SvxBorderLine;
-
 /*
  * um nicht immer wieder nach einem Update festzustellen, das irgendwelche
  * Hint-Ids dazugekommen sind, wird hier definiert, die Groesse der Tabelle
@@ -112,7 +112,7 @@ using ::editeng::SvxBorderLine;
  * diese Section und die dazugeherigen Tabellen muessen in folgenden Files
  * gepflegt werden: rtf\rtfatr.cxx, sw6\sw6atr.cxx, w4w\w4watr.cxx
  */
-#if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(__MINGW32__) && !defined(OS2)
+#if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(CSET) && !defined(WTC) && !defined(__MINGW32__) && !defined(OS2)
 
 #define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
@@ -123,28 +123,28 @@ using ::editeng::SvxBorderLine;
 
 #define HTML_HEADSPACE (12*20)
 
-#define CSS1_BACKGROUND_ATTR    1
-#define CSS1_BACKGROUND_PAGE    2
-#define CSS1_BACKGROUND_TABLE   3
-#define CSS1_BACKGROUND_FLY     4
-#define CSS1_BACKGROUND_SECTION 5
+#define CSS1_BACKGROUND_ATTR	1
+#define CSS1_BACKGROUND_PAGE	2
+#define CSS1_BACKGROUND_TABLE	3
+#define CSS1_BACKGROUND_FLY		4
+#define CSS1_BACKGROUND_SECTION	5
 
-#define CSS1_FRMSIZE_WIDTH      0x01
-#define CSS1_FRMSIZE_VARHEIGHT  0x02
-#define CSS1_FRMSIZE_MINHEIGHT  0x04
-#define CSS1_FRMSIZE_FIXHEIGHT  0x08
-#define CSS1_FRMSIZE_ANYHEIGHT  0x0e
-#define CSS1_FRMSIZE_PIXEL      0x10
+#define CSS1_FRMSIZE_WIDTH 		0x01
+#define CSS1_FRMSIZE_VARHEIGHT 	0x02
+#define CSS1_FRMSIZE_MINHEIGHT	0x04
+#define CSS1_FRMSIZE_FIXHEIGHT	0x08
+#define CSS1_FRMSIZE_ANYHEIGHT	0x0e
+#define CSS1_FRMSIZE_PIXEL		0x10
 
 using namespace ::com::sun::star;
 
 //-----------------------------------------------------------------------
 
-sal_Char CSS1_CONSTASCII_DEF( sCSS1_rule_end, " }" );
-sal_Char CSS1_CONSTASCII_DEF( sCSS1_span_tag_end, "\">" );
+sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_rule_end, " }" );
+sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_span_tag_end, "\">" );
 const sal_Char cCSS1_style_opt_end = '\"';
 
-sal_Char CSS1_CONSTASCII_DEF( sHTML_FTN_fontheight, "57%" );
+sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sHTML_FTN_fontheight, "57%" );
 
 extern SwAttrFnTab aCSS1AttrFnTab;
 
@@ -152,10 +152,10 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                               IDocumentStylePoolAccess /*SwDoc*/ *pDoc, SwDoc *pTemplate );
 static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rFmt,
                                    IDocumentStylePoolAccess /*SwDoc*/ *pDoc, SwDoc *pTemplate,
-                                   sal_uInt16 nRefPoolId, sal_Bool bExtRef,
-                                   sal_Bool bPseudo=sal_True );
+                                   USHORT nRefPoolId, BOOL bExtRef,
+                                   BOOL bPseudo=TRUE );
 static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
-                                  SwDoc *pDoc, sal_uInt16 nNotes, sal_Bool bEndNote );
+                                  SwDoc *pDoc, USHORT nNotes, BOOL bEndNote );
 static void OutCSS1_SwFmtDropAttrs( SwHTMLWriter& rHWrt,
                                     const SwFmtDrop& rDrop,
                                      const SfxItemSet *pCharFmtItemSet=0 );
@@ -173,24 +173,24 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
                                         const SvxLRSpaceItem *pLRSpace );
 static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
                                         const SfxItemSet& rItemSet,
-                                        sal_Bool bDeep );
+                                        BOOL bDeep );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
-                                 sal_uInt16 nMode, const String *pGrfName );
+                                 USHORT nMode, const String *pGrfName );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt );
 static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
-                                     sal_uInt16 nMode );
+                                     USHORT nMode );
 static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
                                         const SfxItemSet& rItemSet,
-                                        sal_Bool bDeep );
+                                        BOOL bDeep );
 static Writer& OutCSS1_SwFmtLayoutSplit( Writer& rWrt, const SfxPoolItem& rHt );
 
-static void ConvToHex( sal_uInt16 nHex, ByteString& rStr )
+static void ConvToHex( USHORT nHex, ByteString& rStr )
 {
     sal_Char aNToABuf[] = "00";
 
     // Pointer an das Bufferende setzen
     sal_Char *pStr = aNToABuf + (sizeof(aNToABuf)-1);
-    for( sal_uInt8 n = 0; n < 2; ++n )
+    for( BYTE n = 0; n < 2; ++n )
     {
         *(--pStr) = (sal_Char)(nHex & 0xf ) + 48;
         if( *pStr > '9' )
@@ -213,18 +213,18 @@ static void GetCSS1Color( const Color& rColor, ByteString& rStr )
 class SwCSS1OutMode
 {
     SwHTMLWriter& rWrt;
-    sal_uInt16 nOldMode;
+    USHORT nOldMode;
 
 public:
 
-    SwCSS1OutMode( SwHTMLWriter& rHWrt, sal_uInt16 nMode, sal_Bool bStartFirst=sal_True,
+    SwCSS1OutMode( SwHTMLWriter& rHWrt, USHORT nMode, BOOL bStartFirst=TRUE,
                    const String *pSelector=0 ) :
         rWrt( rHWrt ),
         nOldMode( rHWrt.nCSS1OutMode )
     {
         rWrt.nCSS1OutMode = nMode;
         if( bStartFirst )
-            rWrt.bFirstCSS1Property = sal_True;
+            rWrt.bFirstCSS1Property = TRUE;
         if( pSelector )
             rWrt.aCSS1Selector = *pSelector;
     }
@@ -245,7 +245,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
 
     if( bFirstCSS1Rule && (nCSS1OutMode & CSS1_OUTMODE_RULE_ON)!=0 )
     {
-        bFirstCSS1Rule = sal_False;
+        bFirstCSS1Rule = FALSE;
         OutNewLine();
         ((((sOut += '<') += OOO_STRING_SVTOOLS_HTML_style) += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += "=\"text/css\">";
         Strm() << sOut.GetBuffer();
@@ -268,7 +268,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
             }
             else
             {
-                HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, sal_False );
+                HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, FALSE );
                 return;
             }
             break;
@@ -285,7 +285,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
             ((sOut = ' ') += OOO_STRING_SVTOOLS_HTML_O_style) += "=\"";
             break;
         }
-        bFirstCSS1Property = sal_False;
+        bFirstCSS1Property = FALSE;
     }
     else
     {
@@ -341,8 +341,8 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
         OSL_ENSURE( FUNIT_MM == eUnit, "Masseinheit wird nicht unterstuetzt" );
     case FUNIT_MM:
         // 0.01mm = 0.57twip
-        nMul = 25400;   // 25.4 * 1000
-        nDiv = 1440;    // 72 * 20;
+        nMul = 25400;	// 25.4 * 1000
+        nDiv = 1440;	// 72 * 20;
         nFac = 100;
         pUnit = sCSS1_UNIT_mm;
         break;
@@ -351,28 +351,49 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
     case FUNIT_KM:
         OSL_ENSURE( FUNIT_CM == eUnit, "Masseinheit wird nicht unterstuetzt" );
     case FUNIT_CM:
+#ifdef EXACT_VALUES
+        // 0.001cm = 0.57twip
+        nMul = 25400;	// 2.54 * 10000
+        nDiv = 1440;	// 72 * 20;
+        nFac = 1000;
+#else
         // 0.01cm = 5.7twip (ist zwar ungenau, aber die UI ist auch ungenau)
-        nMul = 2540;    // 2.54 * 1000
-        nDiv = 1440;    // 72 * 20;
+        nMul = 2540;	// 2.54 * 1000
+        nDiv = 1440;	// 72 * 20;
         nFac = 100;
+#endif
         pUnit = sCSS1_UNIT_cm;
         break;
 
     case FUNIT_TWIP:
         OSL_ENSURE( FUNIT_POINT == eUnit, "Masseinheit wird nicht unterstuetzt" );
     case FUNIT_POINT:
+#ifdef EXACT_VALUES
+        // 0.01pt = 0.2twip
+        nMul = 1000;
+        nDiv = 20;
+        nFac = 100;
+#else
         // 0.1pt = 2.0twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 100;
         nDiv = 20;
         nFac = 10;
+#endif
         pUnit = sCSS1_UNIT_pt;
         break;
 
     case FUNIT_PICA:
+#ifdef EXACT_VALUES
+        // 0.001pc = 0.24twip
+        nMul = 10000;
+        nDiv = 12 * 20;
+        nFac = 1000;
+#else
         // 0.01pc = 2.40twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 1000;
-        nDiv = 240;     // 12 * 20;
+        nDiv = 240;		// 12 * 20;
         nFac = 100;
+#endif
         pUnit = sCSS1_UNIT_pc;
         break;
 
@@ -384,16 +405,23 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
     case FUNIT_INCH:
     default:
         OSL_ENSURE( FUNIT_INCH == eUnit, "Masseinheit wird nicht unterstuetzt" );
+#ifdef EXACT_VALUES
+        // 0.0001in = 0.144twip
+        nMul = 100000;
+        nDiv = 1440;	// 72 * 20;
+        nFac = 10000;
+#else
         // 0.01in = 14.4twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 1000;
-        nDiv = 1440;    // 72 * 20;
+        nDiv = 1440;	// 72 * 20;
         nFac = 100;
+#endif
         pUnit = sCSS1_UNIT_inch;
         break;
     }
 
     long nLongVal = 0;
-    sal_Bool bOutLongVal = sal_True;
+    BOOL bOutLongVal = TRUE;
     if( nVal > LONG_MAX / nMul )
     {
         // Zum Unrechnen der Einheit wird ein BigInt benoetigt
@@ -424,7 +452,7 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
                     rOut += (int)((nBigVal / nBigFac) % nBig10 );
                 }
             }
-            bOutLongVal = sal_False;
+            bOutLongVal = FALSE;
         }
 #else
         sal_Int64 nBigVal( nVal );
@@ -451,7 +479,7 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
                                 (nBigVal / (sal_Int64)nFac) % (sal_Int64)10 );
                 }
             }
-            bOutLongVal = sal_False;
+            bOutLongVal = FALSE;
         }
 #endif
     }
@@ -488,7 +516,7 @@ void SwHTMLWriter::OutCSS1_UnitProperty( const sal_Char *pProp, long nVal )
 }
 
 void SwHTMLWriter::OutCSS1_PixelProperty( const sal_Char *pProp, long nVal,
-                                          sal_Bool bVert )
+                                          BOOL bVert )
 {
     if( nVal && Application::GetDefaultDevice() )
     {
@@ -505,7 +533,7 @@ void SwHTMLWriter::OutCSS1_PixelProperty( const sal_Char *pProp, long nVal,
 }
 
 void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
-                                       sal_Bool bDeep )
+                                       BOOL bDeep )
 {
     // den ItemSet ausgeben, und zwar inklusive aller Attribute
     Out_SfxItemSet( aCSS1AttrFnTab, *this, rItemSet, bDeep );
@@ -566,16 +594,16 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
     }
 }
 
-void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
+void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, BOOL bUsed )
 {
-    bFirstCSS1Rule = sal_True;
+    bFirstCSS1Rule = TRUE;
 
 // Feature: PrintExt
     if( IsHTMLMode(HTMLMODE_PRINT_EXT) )
     {
         const SwPageDesc *pFirstPageDesc = 0;
-        sal_uInt16 nFirstRefPoolId = RES_POOLPAGE_HTML;
-        bCSS1IgnoreFirstPageDesc = sal_True;
+        USHORT nFirstRefPoolId = RES_POOLPAGE_HTML;
+        bCSS1IgnoreFirstPageDesc = TRUE;
 
         // Erstmal versuchen wir zu erraten, wie das Dokument so augebaut ist.
         // Erlaubt sind nur die Vorlagen HTML, erste Seite, linke Seite und
@@ -606,7 +634,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
             // Die Attributierung wird relativ zur HTML-Seitenvorlage
             // aus der HTML-Vorlage exportiert.
           OutCSS1_SwPageDesc( *this, *pPageDesc, pStylePoolAccess, pTemplate,
-                                RES_POOLPAGE_HTML, sal_True, sal_False );
+                                RES_POOLPAGE_HTML, TRUE, FALSE );
             nFirstRefPoolId = pFollow->GetPoolFmtId();
         }
         else if( (RES_POOLPAGE_LEFT == pPageDesc->GetPoolFmtId() &&
@@ -616,17 +644,17 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
         {
             // Das Dokument ist zweiseitig
           OutCSS1_SwPageDesc( *this, *pPageDesc, pStylePoolAccess, pTemplate,
-                                RES_POOLPAGE_HTML, sal_True );
+                                RES_POOLPAGE_HTML, TRUE );
           OutCSS1_SwPageDesc( *this, *pFollow, pStylePoolAccess, pTemplate,
-                                RES_POOLPAGE_HTML, sal_True );
+                                RES_POOLPAGE_HTML, TRUE );
             nFirstRefPoolId = RES_POOLPAGE_RIGHT;
-            bCSS1IgnoreFirstPageDesc = sal_False;
+            bCSS1IgnoreFirstPageDesc = FALSE;
         }
         // Alles andere bekommen wir nicht hin.
 
         if( pFirstPageDesc )
           OutCSS1_SwPageDesc( *this, *pFirstPageDesc, pStylePoolAccess, pTemplate,
-                                nFirstRefPoolId, sal_False );
+                                nFirstRefPoolId, FALSE );
     }
 // /Feature: PrintExt
 
@@ -638,13 +666,13 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
 
     // das Default-TextStyle wir nicht mit ausgegeben !!
     // das 0-Style ist das Default, wird nie ausgegeben !!
-    sal_uInt16 nArrLen = pDoc->GetTxtFmtColls()->Count();
-    sal_uInt16 i;
+    USHORT nArrLen = pDoc->GetTxtFmtColls()->Count();
+    USHORT i;
 
     for( i = 1; i < nArrLen; i++ )
     {
         const SwTxtFmtColl* pColl = (*pDoc->GetTxtFmtColls())[i];
-        sal_uInt16 nPoolId = pColl->GetPoolFmtId();
+        USHORT nPoolId = pColl->GetPoolFmtId();
         if( !bUsed || nPoolId == RES_POOLCOLL_TEXT ||
             pDoc->IsUsed( *pColl ) )
             OutCSS1_SwFmt( *this, *pColl, pDoc, pTemplate );
@@ -655,7 +683,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
     for( i=1; i<nArrLen; i++ )
     {
         const SwCharFmt *pCFmt = (*pDoc->GetCharFmts())[i];
-        sal_uInt16 nPoolId = pCFmt->GetPoolFmtId();
+        USHORT nPoolId = pCFmt->GetPoolFmtId();
         if( !bUsed || nPoolId == RES_POOLCHR_INET_NORMAL ||
             nPoolId == RES_POOLCHR_INET_VISIT ||
             pDoc->IsUsed( *pCFmt ) )
@@ -664,7 +692,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
 
     const SwFtnIdxs& rIdxs = pDoc->GetFtnIdxs();
     nArrLen = rIdxs.Count();
-    sal_uInt16 nEnd = 0, nFtn = 0;
+    USHORT nEnd = 0, nFtn = 0;
     for( i=0; i < nArrLen; i++ )
     {
         if( rIdxs[i]->GetFtn().IsEndNote() )
@@ -672,8 +700,8 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
         else
             nFtn++;
     }
-    OutCSS1_SwFtnInfo( *this, pDoc->GetFtnInfo(), pDoc, nFtn, sal_False );
-    OutCSS1_SwFtnInfo( *this, pDoc->GetEndNoteInfo(), pDoc, nEnd, sal_True );
+    OutCSS1_SwFtnInfo( *this, pDoc->GetFtnInfo(), pDoc, nFtn, FALSE );
+    OutCSS1_SwFtnInfo( *this, pDoc->GetEndNoteInfo(), pDoc, nEnd, TRUE );
 
     if( !bFirstCSS1Rule )
     {
@@ -682,11 +710,11 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
         Strm() << "-->";
 
         OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_style, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_style, FALSE );
     }
     else
     {
-        bFirstCSS1Rule = sal_False;
+        bFirstCSS1Rule = FALSE;
     }
 
     nDfltTopMargin = 0;
@@ -697,25 +725,25 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
 
 // wenn pPseudo gesetzt ist werden Styles-Sheets ausgegeben,
 // sonst wird nur nach Token und Class fuer ein Format gesucht
-sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
-                                      String& rClass, sal_uInt16& rRefPoolId,
+USHORT SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
+                                      String& rClass, USHORT& rRefPoolId,
                                       String *pPseudo )
 {
-    sal_uInt16 nDeep = 0;
+    USHORT nDeep = 0;
     rToken.Erase(); rClass.Erase();
     rRefPoolId = 0;
     if( pPseudo )
         pPseudo->Erase();
 
-    sal_Bool bChrFmt = RES_CHRFMT==pFmt->Which();
+    BOOL bChrFmt = RES_CHRFMT==pFmt->Which();
 
     // Nach oben die Formate abklappern, bis man auf eine Standard-
     // oder eine HTML-Tag-Vorlage trifft
     const SwFmt *pPFmt = pFmt;
     while( pPFmt && !pPFmt->IsDefault() )
     {
-        sal_Bool bStop = sal_False;
-        sal_uInt16 nPoolId = pPFmt->GetPoolFmtId();
+        BOOL bStop = FALSE;
+        USHORT nPoolId = pPFmt->GetPoolFmtId();
         if( USER_FMT & nPoolId )
         {
             // Benutzer-Vorlagen
@@ -730,13 +758,13 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                         // OOO_STRING_SVTOOLS_HTML_insertedtext
                         // OOO_STRING_SVTOOLS_HTML_language
                         // OOO_STRING_SVTOOLS_HTML_person
-            case 'B':   if( !bChrFmt && rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_blockquote) )
+            case 'B':	if( !bChrFmt && rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_blockquote) )
                         {
                             rRefPoolId = RES_POOLCOLL_HTML_BLOCKQUOTE;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_blockquote );
                         }
                         break;
-            case 'C':   if( bChrFmt )
+            case 'C':	if( bChrFmt )
                         {
                             if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_citiation) )
                             {
@@ -750,14 +778,14 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                             }
                         }
                         break;
-            case 'D':   if( bChrFmt && rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_definstance) )
+            case 'D':	if( bChrFmt && rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_definstance) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_DEFINSTANCE;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_definstance);
                         }
                         else if( !bChrFmt )
                         {
-                            sal_uInt16 nDefListLvl = GetDefListLvl( rNm, nPoolId );
+                            USHORT nDefListLvl = GetDefListLvl( rNm, nPoolId );
                             // Die Vorlagen DD 1/DT 1 werden ausgegeben,
                             // aber keine von ihnen abgeleiteten Vorlagen,
                             // auch nicht DD 2/DT 2 etc.
@@ -766,7 +794,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                                 if( pPseudo &&
                                     (nDeep || (nDefListLvl & 0x0fff) > 1) )
                                 {
-                                    bStop = sal_True;
+                                    bStop = TRUE;
                                 }
                                 else if( nDefListLvl & HTML_DLCOLL_DD )
                                 {
@@ -781,23 +809,23 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                             }
                         }
                         break;
-            case 'E':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_emphasis ) )
+            case 'E':	if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_emphasis ) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_EMPHASIS;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_emphasis );
                         }
                         break;
-            case 'H':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_horzrule ) )
+            case 'H':	if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_horzrule ) )
                             // HR nicht ausgeben!
                             bStop = (nDeep==0);
                         break;
-            case 'K':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_keyboard ) )
+            case 'K':	if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_keyboard ) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_KEYBOARD;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_keyboard );
                         }
                         break;
-            case 'L':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_listing ) )
+            case 'L':	if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_listing ) )
                         {
                             // Listing als PRE exportieren bzw. von
                             // PRE abgeleitete Vorlage exportieren
@@ -806,13 +834,13 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                             nDeep = CSS1_FMT_CMPREF;
                         }
                         break;
-            case 'P':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_preformtxt ) )
+            case 'P':	if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_preformtxt ) )
                         {
                             rRefPoolId = RES_POOLCOLL_HTML_PRE;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_preformtxt );
                         }
                         break;
-            case 'S':   if( bChrFmt )
+            case 'S':	if( bChrFmt )
                         {
                             if( rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_sample ) )
                             {
@@ -826,19 +854,19 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                             }
                         }
                         break;
-            case 'T':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_teletype ) )
+            case 'T':	if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_teletype ) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_TELETYPE;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_teletype );
                         }
                         break;
-            case 'V':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_variable ) )
+            case 'V':	if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_variable ) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_VARIABLE;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_variable );
                         }
                         break;
-            case 'X':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_xmp ) )
+            case 'X':	if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_xmp ) )
                         {
                             // XMP als PRE exportieren (aber nicht die
                             // Vorlage als Style)
@@ -851,7 +879,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
 
             // Wenn eine PoolId gesetzt ist, entspricht der Name der
             // Vorlage dem szugehoerigen Token
-            OSL_ENSURE( (rRefPoolId != 0) == (rToken.Len() > 0),
+            OSL_ENSURE( rRefPoolId != 0 == rToken.Len() > 0,
                     "Token missing" );
         }
         else
@@ -1046,14 +1074,14 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
     return nDeep;
 }
 
-static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, String& rSelector,
-                               sal_uInt16& rRefPoolId )
+static USHORT GetCSS1Selector( const SwFmt *pFmt, String& rSelector,
+                               USHORT& rRefPoolId )
 {
     ByteString aToken;
     String aClass;
     String aPseudo;
 
-    sal_uInt16 nDeep = SwHTMLWriter::GetCSS1Selector( pFmt, aToken, aClass,
+    USHORT nDeep = SwHTMLWriter::GetCSS1Selector( pFmt, aToken, aClass,
                                                   rRefPoolId, &aPseudo );
     if( nDeep )
     {
@@ -1071,7 +1099,7 @@ static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, String& rSelector,
     return nDeep;
 }
 
-const SwFmt *SwHTMLWriter::GetTemplateFmt( sal_uInt16 nPoolFmtId,
+const SwFmt *SwHTMLWriter::GetTemplateFmt( USHORT nPoolFmtId,
                                            IDocumentStylePoolAccess* pTemplate /*SwDoc *pTemplate*/)
 {
     const SwFmt *pRefFmt = 0;
@@ -1089,7 +1117,7 @@ const SwFmt *SwHTMLWriter::GetTemplateFmt( sal_uInt16 nPoolFmtId,
     return pRefFmt;
 }
 
-const SwFmt *SwHTMLWriter::GetParentFmt( const SwFmt& rFmt, sal_uInt16 nDeep )
+const SwFmt *SwHTMLWriter::GetParentFmt( const SwFmt& rFmt, USHORT nDeep )
 {
     OSL_ENSURE( nDeep != USHRT_MAX, "GetParent fuer HTML-Vorlage aufgerufen!" );
     const SwFmt *pRefFmt = 0;
@@ -1099,7 +1127,7 @@ const SwFmt *SwHTMLWriter::GetParentFmt( const SwFmt& rFmt, sal_uInt16 nDeep )
         // hier wird die HTML-Tag-Vorlage, von der die Vorlage abgeleitet
         // ist als Referenz geholt
         pRefFmt = &rFmt;
-        for( sal_uInt16 i=nDeep; i>0; i-- )
+        for( USHORT i=nDeep; i>0; i-- )
             pRefFmt = pRefFmt->DerivedFrom();
 
         if( pRefFmt && pRefFmt->IsDefault() )
@@ -1109,9 +1137,9 @@ const SwFmt *SwHTMLWriter::GetParentFmt( const SwFmt& rFmt, sal_uInt16 nDeep )
     return pRefFmt;
 }
 
-sal_Bool lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 )
+BOOL lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 )
 {
-    return  ((const SvxFontItem &)r1).GetFamilyName() ==
+    return 	((const SvxFontItem &)r1).GetFamilyName() ==
                     ((const SvxFontItem &)r2).GetFamilyName() &&
             ((const SvxFontItem &)r1).GetFamily() ==
                     ((const SvxFontItem &)r2).GetFamily();
@@ -1119,24 +1147,24 @@ sal_Bool lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r
 
 void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
                                     const SfxItemSet& rRefItemSet,
-                                    sal_Bool bSetDefaults,
-                                    sal_Bool bClearSame,
+                                    BOOL bSetDefaults,
+                                    BOOL bClearSame,
                                      const SfxItemSet *pRefScriptItemSet )
 {
     OSL_ENSURE( bSetDefaults || bClearSame,
             "SwHTMLWriter::SubtractItemSet: Bei diesen Flags passiert nix" );
-    SfxItemSet aRefItemSet( *rRefItemSet.GetPool(), rRefItemSet.GetRanges() );
+    SfxItemSet aRefItemSet( *rRefItemSet.GetPool(),	rRefItemSet.GetRanges() );
     aRefItemSet.Set( rRefItemSet );
 
     // und mit dem Attr-Set der Vorlage vergleichen
     SfxWhichIter aIter( rItemSet );
-    sal_uInt16 nWhich = aIter.FirstWhich();
+    USHORT nWhich = aIter.FirstWhich();
     while( nWhich )
     {
         const SfxPoolItem *pRefItem, *pItem;
-        sal_Bool bItemSet = ( SFX_ITEM_SET ==
-                rItemSet.GetItemState( nWhich, sal_False, &pItem) );
-        sal_Bool bRefItemSet;
+        BOOL bItemSet = ( SFX_ITEM_SET ==
+                rItemSet.GetItemState( nWhich, FALSE, &pItem) );
+        BOOL bRefItemSet;
 
         if( pRefScriptItemSet )
         {
@@ -1158,18 +1186,18 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
             case RES_CHRATR_CTL_POSTURE:
             case RES_CHRATR_CTL_WEIGHT:
                 bRefItemSet = ( SFX_ITEM_SET ==
-                    pRefScriptItemSet->GetItemState( nWhich, sal_True, &pRefItem) );
+                    pRefScriptItemSet->GetItemState( nWhich, TRUE, &pRefItem) );
                 break;
             default:
                 bRefItemSet = ( SFX_ITEM_SET ==
-                    aRefItemSet.GetItemState( nWhich, sal_False, &pRefItem) );
+                    aRefItemSet.GetItemState( nWhich, FALSE, &pRefItem) );
                 break;
             }
         }
         else
         {
             bRefItemSet = ( SFX_ITEM_SET ==
-                aRefItemSet.GetItemState( nWhich, sal_False, &pRefItem) );
+                aRefItemSet.GetItemState( nWhich, FALSE, &pRefItem) );
         }
 
         if( bItemSet )
@@ -1202,11 +1230,11 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
 
 void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
                                     String& rNames,
-                                    sal_Unicode cQuote, sal_Bool bGeneric )
+                                    sal_Unicode cQuote, BOOL bGeneric )
 {
     rNames = aEmptyStr;
     const String& rName = rFontItem.GetFamilyName();
-    sal_Bool bContainsKeyword = sal_False;
+    BOOL bContainsKeyword = FALSE;
     if( rName.Len() )
     {
         xub_StrLen nStrPos = 0;
@@ -1217,7 +1245,7 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
             if( !aName.Len() )
                 continue;
 
-            sal_Bool bIsKeyword = sal_False;
+            BOOL bIsKeyword = FALSE;
             switch( aName.GetChar( 0 ) )
             {
             case 'c':
@@ -1260,11 +1288,11 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
         const sal_Char *pStr = 0;
         switch( rFontItem.GetFamily() )
         {
-        case FAMILY_ROMAN:      pStr = sCSS1_PV_serif;      break;
-        case FAMILY_SWISS:      pStr = sCSS1_PV_sans_serif; break;
-        case FAMILY_SCRIPT:     pStr = sCSS1_PV_cursive;    break;
-        case FAMILY_DECORATIVE: pStr = sCSS1_PV_fantasy;    break;
-        case FAMILY_MODERN:     pStr = sCSS1_PV_monospace;  break;
+        case FAMILY_ROMAN:		pStr = sCSS1_PV_serif;		break;
+        case FAMILY_SWISS:		pStr = sCSS1_PV_sans_serif;	break;
+        case FAMILY_SCRIPT:		pStr = sCSS1_PV_cursive;	break;
+        case FAMILY_DECORATIVE:	pStr = sCSS1_PV_fantasy;	break;
+        case FAMILY_MODERN:		pStr = sCSS1_PV_monospace;	break;
         default:
             ;
         }
@@ -1283,12 +1311,12 @@ sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
 {
     static sal_uInt16 aWhichIds[] =
     {
-        RES_CHRATR_FONT,        RES_CHRATR_CJK_FONT,        RES_CHRATR_CTL_FONT,
-        RES_CHRATR_FONTSIZE,    RES_CHRATR_CJK_FONTSIZE,    RES_CHRATR_CTL_FONTSIZE,
-        RES_CHRATR_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
-        RES_CHRATR_POSTURE,     RES_CHRATR_CJK_POSTURE,     RES_CHRATR_CTL_POSTURE,
-        RES_CHRATR_WEIGHT,      RES_CHRATR_CJK_WEIGHT,      RES_CHRATR_CTL_WEIGHT,
-        0,                      0,                          0
+        RES_CHRATR_FONT,		RES_CHRATR_CJK_FONT,		RES_CHRATR_CTL_FONT,
+        RES_CHRATR_FONTSIZE,	RES_CHRATR_CJK_FONTSIZE,	RES_CHRATR_CTL_FONTSIZE,
+        RES_CHRATR_LANGUAGE,	RES_CHRATR_CJK_LANGUAGE,	RES_CHRATR_CTL_LANGUAGE,
+        RES_CHRATR_POSTURE,		RES_CHRATR_CJK_POSTURE,		RES_CHRATR_CTL_POSTURE,
+        RES_CHRATR_WEIGHT,		RES_CHRATR_CJK_WEIGHT,		RES_CHRATR_CTL_WEIGHT,
+        0,						0,							0
     };
 
     for( sal_uInt16 i=0; aWhichIds[i]; i += 3 )
@@ -1351,13 +1379,13 @@ sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
         if( pDCCharFmt )
         {
             SfxItemSet aTstItemSet( *pDCCharFmt->GetAttrSet().GetPool(),
-                RES_CHRATR_FONT,        RES_CHRATR_FONT,
-                RES_CHRATR_POSTURE,     RES_CHRATR_POSTURE,
-                RES_CHRATR_WEIGHT,      RES_CHRATR_WEIGHT,
-                RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_FONT,
-                RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT,
-                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_FONT,
-                RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
+                RES_CHRATR_FONT, 		RES_CHRATR_FONT,
+                RES_CHRATR_POSTURE,		RES_CHRATR_POSTURE,
+                RES_CHRATR_WEIGHT,		RES_CHRATR_WEIGHT,
+                RES_CHRATR_CJK_FONT,	RES_CHRATR_CJK_FONT,
+                RES_CHRATR_CJK_POSTURE,	RES_CHRATR_CJK_WEIGHT,
+                RES_CHRATR_CTL_FONT,	RES_CHRATR_CTL_FONT,
+                RES_CHRATR_CTL_POSTURE,	RES_CHRATR_CTL_WEIGHT,
                 0 );
             aTstItemSet.Set( pDCCharFmt->GetAttrSet(), sal_True );
             return HasScriptDependentItems( aTstItemSet, sal_False );
@@ -1396,8 +1424,8 @@ static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
             // some class rule for the additional style dependen properties
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_NO_SCRIPT|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     sal_True, &rSelector );
-                rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, sal_False );
+                                     TRUE, &rSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, FALSE );
             }
 
             SfxItemSet aScriptItemSet( *rItemSet.GetPool(),
@@ -1413,8 +1441,8 @@ static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
             aNewSelector.Append( aPseudo );
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     sal_True, &aNewSelector );
-                rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, sal_False );
+                                     TRUE, &aNewSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, FALSE );
             }
 
             aNewSelector = aSelector;
@@ -1422,8 +1450,8 @@ static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
             aNewSelector.Append( aPseudo );
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     sal_True, &aNewSelector );
-                rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, sal_False );
+                                     TRUE, &aNewSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, FALSE );
             }
 
             aNewSelector = aSelector;
@@ -1431,8 +1459,8 @@ static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
             aNewSelector.Append( aPseudo );
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     sal_True, &aNewSelector );
-                rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, sal_False );
+                                     TRUE, &aNewSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, FALSE );
             }
         }
         else
@@ -1445,8 +1473,8 @@ static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
             aNewSelector.Append( aPseudo );
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     sal_True, &aNewSelector );
-                rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, sal_False );
+                                     TRUE, &aNewSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, FALSE );
             }
 
             aNewSelector = aSelector;
@@ -1454,8 +1482,8 @@ static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
             aNewSelector.Append( aPseudo );
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     sal_True, &aNewSelector );
-                rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, sal_False );
+                                     TRUE, &aNewSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, FALSE );
             }
 
             aNewSelector = aSelector;
@@ -1463,8 +1491,8 @@ static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
             aNewSelector.Append( aPseudo );
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                     sal_True, &aNewSelector );
-                rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, sal_False );
+                                     TRUE, &aNewSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, FALSE );
             }
         }
     }
@@ -1476,8 +1504,8 @@ static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
         // script dependencies by now.
         SwCSS1OutMode aMode( rHTMLWrt,
                 rHTMLWrt.nCSS1Script|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                             sal_True, &rSelector );
-        rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, sal_False );
+                             TRUE, &rSelector );
+        rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, FALSE );
     }
 
     return bScriptDependent;
@@ -1509,7 +1537,7 @@ static void OutCSS1DropCapRule(
             // some class rule for the additional style dependen properties
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_NO_SCRIPT|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     sal_True, &rSelector );
+                                     TRUE, &rSelector );
                 OutCSS1_SwFmtDropAttrs( rHTMLWrt, rDrop );
             }
 
@@ -1527,7 +1555,7 @@ static void OutCSS1DropCapRule(
             aNewSelector.Append( aPseudo );
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     sal_True, &aNewSelector );
+                                     TRUE, &aNewSelector );
                 OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
             }
 
@@ -1536,7 +1564,7 @@ static void OutCSS1DropCapRule(
             aNewSelector.Append( aPseudo );
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     sal_True, &aNewSelector );
+                                     TRUE, &aNewSelector );
                 OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
             }
 
@@ -1545,7 +1573,7 @@ static void OutCSS1DropCapRule(
             aNewSelector.Append( aPseudo );
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     sal_True, &aNewSelector );
+                                     TRUE, &aNewSelector );
                 OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
             }
         }
@@ -1559,7 +1587,7 @@ static void OutCSS1DropCapRule(
             aNewSelector.Append( aPseudo );
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     sal_True, &aNewSelector );
+                                     TRUE, &aNewSelector );
                 OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop );
             }
 
@@ -1568,7 +1596,7 @@ static void OutCSS1DropCapRule(
             aNewSelector.Append( aPseudo );
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     sal_True, &aNewSelector );
+                                     TRUE, &aNewSelector );
                 OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop );
             }
 
@@ -1577,7 +1605,7 @@ static void OutCSS1DropCapRule(
             aNewSelector.Append( aPseudo );
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                                     sal_True, &aNewSelector );
+                                     TRUE, &aNewSelector );
                 OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop );
             }
         }
@@ -1590,7 +1618,7 @@ static void OutCSS1DropCapRule(
         // script dependencies by now.
         SwCSS1OutMode aMode( rHTMLWrt,
                 rHTMLWrt.nCSS1Script|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                             sal_True, &rSelector );
+                             TRUE, &rSelector );
                 OutCSS1_SwFmtDropAttrs( rHTMLWrt, rDrop );
     }
 }
@@ -1600,11 +1628,11 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    sal_Bool bCharFmt = sal_False;
+    BOOL bCharFmt = FALSE;
     switch( rFmt.Which() )
     {
     case RES_CHRFMT:
-        bCharFmt = sal_True;
+        bCharFmt = TRUE;
         break;
 
     case RES_TXTFMTCOLL:
@@ -1619,12 +1647,12 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     // den Selector und die auszugebende Attr-Set-Tiefe ermitteln
     String aSelector;
-    sal_uInt16 nRefPoolId = 0;
-    sal_uInt16 nDeep = GetCSS1Selector( &rFmt, aSelector, nRefPoolId );
+    USHORT nRefPoolId = 0;
+    USHORT nDeep = GetCSS1Selector( &rFmt, aSelector, nRefPoolId );
     if( !nDeep )
-        return rWrt;    // von keiner HTML-Vorlage abgeleitet
+        return rWrt;	// von keiner HTML-Vorlage abgeleitet
 
-    sal_uInt16 nPoolFmtId = rFmt.GetPoolFmtId();
+    USHORT nPoolFmtId = rFmt.GetPoolFmtId();
 
     // Den auszugebenden Attr-Set bestimmen. Hier muessen 3 Faelle
     // unterschieden werden:
@@ -1646,11 +1674,11 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // (ausser fuer nDeep==1)
     const SfxItemSet& rFmtItemSet = rFmt.GetAttrSet();
     SfxItemSet aItemSet( *rFmtItemSet.GetPool(), rFmtItemSet.GetRanges() );
-    aItemSet.Set( rFmtItemSet, sal_True ); // Was nDeep!=1 that is not working
+    aItemSet.Set( rFmtItemSet, TRUE ); // Was nDeep!=1 that is not working
                                        // for script dependent items buts should
                                        // not make a deifference for any other
 
-    sal_Bool bSetDefaults = sal_True, bClearSame = sal_True;
+    BOOL bSetDefaults = TRUE, bClearSame = TRUE;
     const SwFmt *pRefFmt = 0;
     const SwFmt *pRefFmtScript = 0;
     switch( nDeep )
@@ -1661,12 +1689,12 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     case CSS1_FMT_CMPREF:
         pRefFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pDoc );
         pRefFmtScript = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pTemplate );
-        bClearSame = sal_False;
+        bClearSame = FALSE;
         break;
     default:
         pRefFmt = SwHTMLWriter::GetParentFmt( rFmt, nDeep );
         pRefFmtScript = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pTemplate );
-        bSetDefaults = sal_False;
+        bSetDefaults = FALSE;
         break;
     }
 
@@ -1699,16 +1727,16 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             const String& rNm = rFmt.GetName();
             switch( rNm.GetChar(0) )
             {
-            case 'D':   if( rNm.EqualsAscii("DD 1") || rNm.EqualsAscii("DT 1") )
+            case 'D':	if( rNm.EqualsAscii("DD 1") || rNm.EqualsAscii("DT 1") )
                             rHTMLWrt.nDfltBottomMargin = 0;
                         break;
-            case 'L':   if(rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_listing) )
+            case 'L':	if(rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_listing) )
                             rHTMLWrt.nDfltBottomMargin = 0;
                         break;
-            case 'P':   if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_preformtxt) )
+            case 'P':	if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_preformtxt) )
                             rHTMLWrt.nDfltBottomMargin = 0;
                         break;
-            case 'X':   if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_xmp) )
+            case 'X':	if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_xmp) )
                             rHTMLWrt.nDfltBottomMargin = 0;
                         break;
             }
@@ -1768,12 +1796,12 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     }
 
     if( nPoolFmtId==RES_POOLCOLL_TEXT && !rHTMLWrt.bFirstCSS1Property )
-        rHTMLWrt.bPoolCollTextModified = sal_True;
+        rHTMLWrt.bPoolCollTextModified = TRUE;
 
     // Drop-Caps ausgeben
     const SfxPoolItem *pItem;
     if( rHTMLWrt.IsHTMLMode(HTMLMODE_DROPCAPS) &&
-        SFX_ITEM_SET==aItemSet.GetItemState( RES_PARATR_DROP, sal_False, &pItem ))
+        SFX_ITEM_SET==aItemSet.GetItemState( RES_PARATR_DROP, FALSE, &pItem ))
     {
         String sOut( aSelector );
         sOut.Append( ':');
@@ -1787,8 +1815,8 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
 static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
                                    IDocumentStylePoolAccess/*SwDoc*/ *pDoc, SwDoc *pTemplate,
-                                   sal_uInt16 nRefPoolId, sal_Bool bExtRef,
-                                   sal_Bool bPseudo )
+                                   USHORT nRefPoolId, BOOL bExtRef,
+                                   BOOL bPseudo )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -1806,9 +1834,9 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
         const sal_Char *pPseudo = 0;
         switch( rPageDesc.GetPoolFmtId() )
         {
-        case RES_POOLPAGE_FIRST:    pPseudo = sCSS1_first;  break;
-        case RES_POOLPAGE_LEFT:     pPseudo = sCSS1_left;   break;
-        case RES_POOLPAGE_RIGHT:    pPseudo = sCSS1_right;  break;
+        case RES_POOLPAGE_FIRST:	pPseudo = sCSS1_first;	break;
+        case RES_POOLPAGE_LEFT:		pPseudo = sCSS1_left;	break;
+        case RES_POOLPAGE_RIGHT:	pPseudo = sCSS1_right;	break;
         }
         if( pPseudo )
         {
@@ -1818,12 +1846,12 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     }
 
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_RULE_ON|CSS1_OUTMODE_TEMPLATE,
-                         sal_True, &aSelector );
+                         TRUE, &aSelector );
 
     // Die Groesse: Wenn sie sich nur durch das Landscape-Flag unterscheidet,
     // wird nur Portrait oder Landscape exportiert. Sonst wird die Groesse
     // exportiert.
-    sal_Bool bRefLandscape = pRefPageDesc ? pRefPageDesc->GetLandscape() : sal_False;
+    BOOL bRefLandscape = pRefPageDesc ? pRefPageDesc->GetLandscape() : FALSE;
     Size aRefSz;
     const Size& rSz = rPageDesc.GetMaster().GetFrmSize().GetSize();
     if( pRefPageDesc )
@@ -1867,16 +1895,16 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     const SwFrmFmt &rMaster = rPageDesc.GetMaster();
     SfxItemSet aItemSet( *rMaster.GetAttrSet().GetPool(),
                          RES_LR_SPACE, RES_UL_SPACE );
-    aItemSet.Set( rMaster.GetAttrSet(), sal_True );
+    aItemSet.Set( rMaster.GetAttrSet(), TRUE );
 
     if( pRefPageDesc )
     {
         SwHTMLWriter::SubtractItemSet( aItemSet,
                                        pRefPageDesc->GetMaster().GetAttrSet(),
-                                       sal_True );
+                                       TRUE );
     }
 
-    OutCSS1_SvxULSpace_SvxLRSpace( rWrt, aItemSet, sal_False );
+    OutCSS1_SvxULSpace_SvxLRSpace( rWrt, aItemSet, FALSE );
 
     // Wenn fuer einen Pseudo-Selektor keine Property ausgegeben wurde, muessen
     // wir trotzdem etwas ausgeben, damit beim Import die entsprechende
@@ -1886,7 +1914,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
         rHTMLWrt.OutNewLine();
         ByteString sTmp( aSelector, rHTMLWrt.eDestEnc );
         rWrt.Strm() << sTmp.GetBuffer() << " {";
-        rHTMLWrt.bFirstCSS1Property = sal_False;
+        rHTMLWrt.bFirstCSS1Property = FALSE;
     }
 
     if( !rHTMLWrt.bFirstCSS1Property )
@@ -1896,7 +1924,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
 }
 
 static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
-                                  SwDoc *pDoc, sal_uInt16 nNotes, sal_Bool bEndNote )
+                                  SwDoc *pDoc, USHORT nNotes, BOOL bEndNote )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -1909,7 +1937,7 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
         aSelector.AppendAscii( bEndNote ? OOO_STRING_SVTOOLS_HTML_sdendnote_anc
                                         : OOO_STRING_SVTOOLS_HTML_sdfootnote_anc );
         SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                             sal_True, &aSelector );
+                             TRUE, &aSelector );
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_size,
                                         sHTML_FTN_fontheight );
         rHTMLWrt.Strm() << sCSS1_rule_end;
@@ -1920,7 +1948,7 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
     {
         const SfxItemSet& rFmtItemSet = pSymCharFmt->GetAttrSet();
         SfxItemSet aItemSet( *rFmtItemSet.GetPool(), rFmtItemSet.GetRanges() );
-        aItemSet.Set( rFmtItemSet, sal_True );
+        aItemSet.Set( rFmtItemSet, TRUE );
 
         // Wenn es Fuss- bzw. Endnoten gibt, dann muessen alles Attribute
         // ausgegeben werden, damit Netscape das Dokument richtig anzeigt.
@@ -1932,7 +1960,7 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
                         static_cast< sal_uInt16 >(bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE) );
             if( pRefFmt )
                 SwHTMLWriter::SubtractItemSet( aItemSet, pRefFmt->GetAttrSet(),
-                                               sal_True );
+                                               TRUE );
         }
         if( aItemSet.Count() )
         {
@@ -1962,14 +1990,14 @@ Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet,
     // Export der Absatz-Vorlagen beruecksichtigt.
 
     const SfxPoolItem *pItem;
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, sal_False,
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, FALSE,
                                                &pItem ) )
     {
         OutCSS1_SvxBrush( rWrt, *pItem, CSS1_BACKGROUND_PAGE,
                           &aEmbBGGrfName );
     }
 
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, sal_False,
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, FALSE,
                                                &pItem ))
     {
         OutCSS1_SvxBox( rWrt, *pItem );
@@ -1991,7 +2019,7 @@ Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
 
     SwCSS1OutMode aMode( rHTMLWrt, rHTMLWrt.nCSS1Script|CSS1_OUTMODE_STYLE_OPT |
                                    CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_PARA );
-    rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, sal_False );
+    rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, FALSE );
 
     return rWrt;
 }
@@ -2045,7 +2073,7 @@ Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
 
 
 Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
-                                    sal_uInt8 nLevel )
+                                    BYTE nLevel )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -2129,7 +2157,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
 
                 // top
                 long nXPos=0, nYPos=0;
-                sal_Bool bOutXPos = sal_False, bOutYPos = sal_False;
+                BOOL bOutXPos = FALSE, bOutYPos = FALSE;
                 if( RES_DRAWFRMFMT == rFrmFmt.Which() )
                 {
                     OSL_ENSURE( pSdrObj, "Kein SdrObject uebergeben. Ineffizient" );
@@ -2142,7 +2170,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                         nXPos = aPos.A();
                         nYPos = aPos.B();
                     }
-                    bOutXPos = bOutYPos = sal_True;
+                    bOutXPos = bOutYPos = TRUE;
                 }
                 else
                 {
@@ -2163,7 +2191,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                         nYPos -= aULItem.GetUpper();
                         if( nYPos < 0 )
                         {
-                            aULItem.SetUpper( (sal_uInt16)(aULItem.GetUpper() + nYPos) );
+                            aULItem.SetUpper( (USHORT)(aULItem.GetUpper() + nYPos) );
                             nYPos = 0;
                         }
                     }
@@ -2179,7 +2207,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                         nXPos -= aLRItem.GetLeft();
                         if( nXPos < 0 )
                         {
-                            aLRItem.SetLeft( (sal_uInt16)(aLRItem.GetLeft() + nXPos) );
+                            aLRItem.SetLeft( (USHORT)(aLRItem.GetLeft() + nXPos) );
                             nXPos = 0;
                         }
                     }
@@ -2210,7 +2238,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                 {
                     if( nFrmOpts & HTML_FRMOPT_S_PIXSIZE )
                         OutCSS1_PixelProperty( sCSS1_P_width, aTwipSz.Width(),
-                                               sal_False );
+                                               FALSE );
                     else
                         OutCSS1_UnitProperty( sCSS1_P_width, aTwipSz.Width() );
                 }
@@ -2218,7 +2246,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                 {
                     if( nFrmOpts & HTML_FRMOPT_S_PIXSIZE )
                         OutCSS1_PixelProperty( sCSS1_P_height, aTwipSz.Height(),
-                                               sal_True );
+                                               TRUE );
                     else
                         OutCSS1_UnitProperty( sCSS1_P_height, aTwipSz.Height() );
                 }
@@ -2230,7 +2258,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                     "Absolute Groesse wird exportiert" );
             OSL_ENSURE( HTML_FRMOPT_ANYSIZE & nFrmOpts,
                     "Jede Groesse wird exportiert" );
-            sal_uInt16 nMode = 0;
+            USHORT nMode = 0;
             if( nFrmOpts & HTML_FRMOPT_S_WIDTH )
                 nMode |= CSS1_FRMSIZE_WIDTH;
             if( nFrmOpts & HTML_FRMOPT_S_HEIGHT )
@@ -2249,9 +2277,9 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
     {
         const SvxLRSpaceItem *pLRItem = 0;
         const SvxULSpaceItem *pULItem = 0;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_LR_SPACE, sal_True ) )
+        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_LR_SPACE, TRUE ) )
             pLRItem = &aLRItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_UL_SPACE, sal_True ) )
+        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_UL_SPACE, TRUE ) )
             pULItem = &aULItem;
         if( pLRItem || pULItem )
             OutCSS1_SvxULSpace_SvxLRSpace( *this, pULItem, pLRItem );
@@ -2263,7 +2291,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
         const SfxPoolItem* pItem;
         if( nFrmOpts & HTML_FRMOPT_S_NOBORDER )
             OutCSS1_SvxBox( *this, rFrmFmt.GetBox() );
-        else if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BOX, sal_True, &pItem ) )
+        else if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BOX, TRUE, &pItem ) )
             OutCSS1_SvxBox( *this, *pItem );
     }
 
@@ -2272,7 +2300,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
         OutCSS1_FrmFmtBackground( rFrmFmt );
 
     if( pItemSet )
-        OutCSS1_SfxItemSet( *pItemSet, sal_False );
+        OutCSS1_SfxItemSet( *pItemSet, FALSE );
 
     if( !bFirstCSS1Property )
         Strm() << '\"';
@@ -2286,13 +2314,13 @@ void SwHTMLWriter::OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt )
 
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
-    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) )
+    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, FALSE, &pItem ) )
         OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_TABLE, 0 );
 
     if( IsHTMLMode( HTMLMODE_PRINT_EXT ) )
-        OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( *this, rItemSet, sal_False );
+        OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( *this, rItemSet, FALSE );
 
-    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_LAYOUT_SPLIT, sal_False, &pItem ) )
+    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_LAYOUT_SPLIT, FALSE, &pItem ) )
         OutCSS1_SwFmtLayoutSplit( *this, *pItem );
 
     if( !bFirstCSS1Property )
@@ -2307,17 +2335,18 @@ void SwHTMLWriter::OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt )
 
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
-    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) )
+    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, FALSE, &pItem ) )
         OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_SECTION, 0 );
 
     if( !bFirstCSS1Property )
         Strm() << '\"';
 }
 
-static sal_Bool OutCSS1_FrmFmtBrush( SwHTMLWriter& rWrt,
+static BOOL OutCSS1_FrmFmtBrush( SwHTMLWriter& rWrt,
                                  const SvxBrushItem& rBrushItem )
 {
-    sal_Bool bWritten = sal_False;
+    BOOL bWritten = FALSE;
+    /// OD 02.09.2002 #99657#
     /// output brush of frame format, if its background color is not "no fill"/"auto fill"
     /// or it has a background graphic.
     if( rBrushItem.GetColor() != COL_TRANSPARENT ||
@@ -2325,7 +2354,7 @@ static sal_Bool OutCSS1_FrmFmtBrush( SwHTMLWriter& rWrt,
         0 != rBrushItem.GetGraphicPos() )
     {
         OutCSS1_SvxBrush( rWrt, rBrushItem, CSS1_BACKGROUND_FLY, 0 );
-        bWritten = sal_True;
+        bWritten = TRUE;
     }
     return bWritten;
 }
@@ -2432,7 +2461,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
                     const SvxBlinkItem *pBItem )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
-    sal_Bool bNone = sal_False;
+    BOOL bNone = FALSE;
 
     const sal_Char *pUStr = 0;
     if( pUItem )
@@ -2440,7 +2469,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
         switch( pUItem->GetLineStyle() )
         {
         case UNDERLINE_NONE:
-            bNone = sal_True;
+            bNone = TRUE;
             break;
         case UNDERLINE_DONTKNOW:
             break;
@@ -2463,7 +2492,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
         switch( pOItem->GetLineStyle() )
         {
         case UNDERLINE_NONE:
-            bNone = sal_True;
+            bNone = TRUE;
             break;
         case UNDERLINE_DONTKNOW:
             break;
@@ -2486,7 +2515,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
         switch( pCOItem->GetStrikeout() )
         {
         case STRIKEOUT_NONE:
-            bNone = sal_True;
+            bNone = TRUE;
             break;
         case STRIKEOUT_DONTKNOW:
             break;
@@ -2508,7 +2537,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
     {
         if( !pBItem->GetValue() )
         {
-            bNone = sal_True;
+            bNone = TRUE;
         }
         else if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         {
@@ -2567,8 +2596,8 @@ static Writer& OutCSS1_SvxCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
     const sal_Char *pStr = 0;
     switch( ((const SvxCaseMapItem&)rHt).GetCaseMap() )
     {
-    case SVX_CASEMAP_NOT_MAPPED:    pStr = sCSS1_PV_normal;     break;
-    case SVX_CASEMAP_KAPITAELCHEN:  pStr = sCSS1_PV_small_caps; break;
+    case SVX_CASEMAP_NOT_MAPPED:	pStr = sCSS1_PV_normal;		break;
+    case SVX_CASEMAP_KAPITAELCHEN:	pStr = sCSS1_PV_small_caps;	break;
     default:
         ;
     }
@@ -2627,8 +2656,8 @@ static Writer& OutCSS1_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
     sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
     switch( rHt.Which() )
     {
-    case RES_CHRATR_CJK_FONT:   nScript = CSS1_OUTMODE_CJK; break;
-    case RES_CHRATR_CTL_FONT:   nScript = CSS1_OUTMODE_CTL; break;
+    case RES_CHRATR_CJK_FONT:	nScript = CSS1_OUTMODE_CJK;	break;
+    case RES_CHRATR_CTL_FONT:	nScript = CSS1_OUTMODE_CTL;	break;
     }
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
@@ -2638,10 +2667,10 @@ static Writer& OutCSS1_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
 
     String sOut;
     // MS IE3b1 hat mit einfachen Haekchen Probleme
-    sal_uInt16 nMode = rHTMLWrt.nCSS1OutMode & CSS1_OUTMODE_ANY_ON;
+    USHORT nMode = rHTMLWrt.nCSS1OutMode & CSS1_OUTMODE_ANY_ON;
     sal_Unicode cQuote = nMode == CSS1_OUTMODE_RULE_ON ? '\"' : '\'';
     SwHTMLWriter::PrepareFontList( ((const SvxFontItem&)rHt), sOut, cQuote,
-                                   sal_True );
+                                   TRUE );
 
     rHTMLWrt.OutCSS1_Property( sCSS1_P_font_family, sOut );
 
@@ -2661,17 +2690,17 @@ static Writer& OutCSS1_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
     sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
     switch( rHt.Which() )
     {
-    case RES_CHRATR_CJK_FONTSIZE:   nScript = CSS1_OUTMODE_CJK; break;
-    case RES_CHRATR_CTL_FONTSIZE:   nScript = CSS1_OUTMODE_CTL; break;
+    case RES_CHRATR_CJK_FONTSIZE:	nScript = CSS1_OUTMODE_CJK;	break;
+    case RES_CHRATR_CTL_FONTSIZE:	nScript = CSS1_OUTMODE_CTL;	break;
     }
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
 
-    sal_uInt32 nHeight = ((const SvxFontHeightItem&)rHt).GetHeight();
+    UINT32 nHeight = ((const SvxFontHeightItem&)rHt).GetHeight();
     if( rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT) )
     {
         // einen Hint nur dann ausgeben wenn es auch was bringt
-        sal_uInt16 nSize = rHTMLWrt.GetHTMLFontSize( nHeight );
+        USHORT nSize = rHTMLWrt.GetHTMLFontSize( nHeight );
         if( rHTMLWrt.aFontHeights[nSize-1] == nHeight )
             return rWrt;
     }
@@ -2691,8 +2720,8 @@ static Writer& OutCSS1_SvxPosture( Writer& rWrt, const SfxPoolItem& rHt )
     sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
     switch( rHt.Which() )
     {
-    case RES_CHRATR_CJK_POSTURE:    nScript = CSS1_OUTMODE_CJK; break;
-    case RES_CHRATR_CTL_POSTURE:    nScript = CSS1_OUTMODE_CTL; break;
+    case RES_CHRATR_CJK_POSTURE:	nScript = CSS1_OUTMODE_CJK;	break;
+    case RES_CHRATR_CTL_POSTURE:	nScript = CSS1_OUTMODE_CTL;	break;
     }
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
@@ -2700,8 +2729,8 @@ static Writer& OutCSS1_SvxPosture( Writer& rWrt, const SfxPoolItem& rHt )
     const sal_Char *pStr = 0;
     switch( ((const SvxPostureItem&)rHt).GetPosture() )
     {
-    case ITALIC_NONE:       pStr = sCSS1_PV_normal;     break;
-    case ITALIC_OBLIQUE:    pStr = sCSS1_PV_oblique;    break;
+    case ITALIC_NONE:		pStr = sCSS1_PV_normal;		break;
+    case ITALIC_OBLIQUE:	pStr = sCSS1_PV_oblique;	break;
     case ITALIC_NORMAL:
         if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         {
@@ -2730,7 +2759,7 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
     if( !rHTMLWrt.IsHTMLMode(HTMLMODE_FULL_STYLES) )
         return rWrt;
 
-    sal_Int16 nValue = ((const SvxKerningItem&)rHt).GetValue();
+    INT16 nValue = ((const SvxKerningItem&)rHt).GetValue();
     if( nValue )
     {
         ByteString sOut;
@@ -2741,7 +2770,7 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
         }
 
         // Breite als n.n pt
-        nValue = (nValue + 1) / 2;  // 1/10pt
+        nValue = (nValue + 1) / 2; 	// 1/10pt
         sOut.Append( ByteString::CreateFromInt32( (sal_Int32)(nValue  / 10) ) );
         sOut.Append( '.' );
         sOut.Append( ByteString::CreateFromInt32( (sal_Int32)(nValue % 10) ) );
@@ -2769,8 +2798,8 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
     switch( rHt.Which() )
     {
-    case RES_CHRATR_CJK_LANGUAGE:   nScript = CSS1_OUTMODE_CJK; break;
-    case RES_CHRATR_CTL_LANGUAGE:   nScript = CSS1_OUTMODE_CTL; break;
+    case RES_CHRATR_CJK_LANGUAGE:	nScript = CSS1_OUTMODE_CJK;	break;
+    case RES_CHRATR_CTL_LANGUAGE:	nScript = CSS1_OUTMODE_CTL;	break;
     }
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
@@ -2822,8 +2851,8 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
     sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
     switch( rHt.Which() )
     {
-    case RES_CHRATR_CJK_WEIGHT: nScript = CSS1_OUTMODE_CJK; break;
-    case RES_CHRATR_CTL_WEIGHT: nScript = CSS1_OUTMODE_CTL; break;
+    case RES_CHRATR_CJK_WEIGHT:	nScript = CSS1_OUTMODE_CJK;	break;
+    case RES_CHRATR_CTL_WEIGHT:	nScript = CSS1_OUTMODE_CTL;	break;
     }
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
@@ -2831,11 +2860,11 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
     const sal_Char *pStr = 0;
     switch( ((const SvxWeightItem&)rHt).GetWeight() )
     {
-    case WEIGHT_ULTRALIGHT: pStr = sCSS1_PV_extra_light;    break;
-    case WEIGHT_LIGHT:      pStr = sCSS1_PV_light;          break;
-    case WEIGHT_SEMILIGHT:  pStr = sCSS1_PV_demi_light;     break;
-    case WEIGHT_NORMAL:     pStr = sCSS1_PV_normal;         break;
-    case WEIGHT_SEMIBOLD:   pStr = sCSS1_PV_demi_bold;      break;
+    case WEIGHT_ULTRALIGHT:	pStr = sCSS1_PV_extra_light; 	break;
+    case WEIGHT_LIGHT:		pStr = sCSS1_PV_light; 			break;
+    case WEIGHT_SEMILIGHT:	pStr = sCSS1_PV_demi_light; 	break;
+    case WEIGHT_NORMAL:		pStr = sCSS1_PV_normal;			break;
+    case WEIGHT_SEMIBOLD:	pStr = sCSS1_PV_demi_bold; 		break;
     case WEIGHT_BOLD:
         if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         {
@@ -2846,7 +2875,7 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
             pStr = sCSS1_PV_bold;
         }
         break;
-    case WEIGHT_ULTRABOLD:  pStr = sCSS1_PV_extra_bold;     break;
+    case WEIGHT_ULTRABOLD:	pStr = sCSS1_PV_extra_bold;		break;
     default:
         pStr = sCSS1_PV_normal;;
     }
@@ -2873,17 +2902,17 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Netscape4 hat massive Probleme mit den Zellenhoehen
+    // #60393#: Netscape4 hat massive Probleme mit den Zellenhoehen
     // wenn der Zeilenabstand innerhalb einer Tabelle geaendert wird
     // und die Breite der Tabelle nicht automatisch berechnet wird
     // (also wenn eine WIDTH-Option vorhanden ist).
     if( rHTMLWrt.bOutTable && rHTMLWrt.bCfgNetscape4 )
         return rWrt;
 
-    const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&)rHt;
+    const SvxLineSpacingItem& rLSItem =	(const SvxLineSpacingItem&)rHt;
 
-    sal_uInt16 nHeight = 0;
-    sal_uInt16 nPrcHeight = 0;
+    USHORT nHeight = 0;
+    USHORT nPrcHeight = 0;
     SvxLineSpace eLineSpace = rLSItem.GetLineSpaceRule();
     switch( rLSItem.GetInterLineSpaceRule() )
     {
@@ -2939,10 +2968,10 @@ static Writer& OutCSS1_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
     const sal_Char* pStr = 0;
     switch( ((const SvxAdjustItem&)rHt).GetAdjust() )
     {
-    case SVX_ADJUST_LEFT:   pStr = sCSS1_PV_left;       break;
-    case SVX_ADJUST_RIGHT:  pStr = sCSS1_PV_right;      break;
-    case SVX_ADJUST_BLOCK:  pStr = sCSS1_PV_justify;    break;
-    case SVX_ADJUST_CENTER: pStr = sCSS1_PV_center;     break;
+    case SVX_ADJUST_LEFT:	pStr = sCSS1_PV_left; 		break;
+    case SVX_ADJUST_RIGHT:	pStr = sCSS1_PV_right;		break;
+    case SVX_ADJUST_BLOCK:	pStr = sCSS1_PV_justify;	break;
+    case SVX_ADJUST_CENTER: pStr = sCSS1_PV_center; 	break;
     default:
         ;
     }
@@ -3012,7 +3041,7 @@ static void OutCSS1_SwFmtDropAttrs( SwHTMLWriter& rHWrt,
     rHWrt.OutCSS1_PropertyAscii( sCSS1_P_font_size, sOut );
 
     // Abstand zum Text = rechter Rand
-    sal_uInt16 nDistance = rDrop.GetDistance();
+    USHORT nDistance = rDrop.GetDistance();
     if( nDistance > 0 )
         rHWrt.OutCSS1_UnitProperty( sCSS1_P_margin_right, nDistance );
 
@@ -3045,14 +3074,14 @@ static Writer& OutCSS1_SwFmtDrop( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, FALSE );
     }
 
     return rWrt;
 }
 
 static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
-                                     sal_uInt16 nMode )
+                                     USHORT nMode )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -3061,7 +3090,7 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
 
     if( nMode & CSS1_FRMSIZE_WIDTH )
     {
-        sal_uInt8 nPrcWidth = rFSItem.GetWidthPercent();
+        BYTE nPrcWidth = rFSItem.GetWidthPercent();
         if( nPrcWidth )
         {
             (sOut = ByteString::CreateFromInt32( nPrcWidth) ) += '%';
@@ -3070,7 +3099,7 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
         else if( nMode & CSS1_FRMSIZE_PIXEL )
         {
             rHTMLWrt.OutCSS1_PixelProperty( sCSS1_P_width,
-                                            rFSItem.GetSize().Width(), sal_False );
+                                            rFSItem.GetSize().Width(), FALSE );
         }
         else
         {
@@ -3081,7 +3110,7 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
 
     if( nMode & CSS1_FRMSIZE_ANYHEIGHT )
     {
-        sal_Bool bOutHeight = sal_False;
+        BOOL bOutHeight = FALSE;
         switch( rFSItem.GetHeightSizeType() )
         {
         case ATT_FIX_SIZE:
@@ -3100,7 +3129,7 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
 
         if( bOutHeight )
         {
-            sal_uInt8 nPrcHeight = rFSItem.GetHeightPercent();
+            BYTE nPrcHeight = rFSItem.GetHeightPercent();
             if( nPrcHeight )
             {
                 (sOut = ByteString::CreateFromInt32( nPrcHeight ) ) += '%';
@@ -3110,7 +3139,7 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
             {
                 rHTMLWrt.OutCSS1_PixelProperty( sCSS1_P_height,
                                                 rFSItem.GetSize().Width(),
-                                                sal_True );
+                                                TRUE );
             }
             else
             {
@@ -3210,7 +3239,7 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
 
 static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
                                         const SfxItemSet& rItemSet,
-                                        sal_Bool bDeep )
+                                        BOOL bDeep )
 {
     const SvxULSpaceItem *pULSpace = 0;
     const SvxLRSpaceItem *pLRSpace = 0;
@@ -3230,7 +3259,7 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
 static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
                                         const SvxFmtBreakItem *pBreakItem,
                                         const SwFmtPageDesc *pPDescItem,
-                                        const SvxFmtKeepItem *pKeepItem )
+                                        const SvxFmtKeepItem *pKeepItem	)
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -3273,9 +3302,9 @@ static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
         {
             switch( pPDesc->GetPoolFmtId() )
             {
-            case RES_POOLPAGE_LEFT:     pBreakBefore = sCSS1_PV_left;   break;
-            case RES_POOLPAGE_RIGHT:    pBreakBefore = sCSS1_PV_right;  break;
-            default:                    pBreakBefore = sCSS1_PV_always; break;
+            case RES_POOLPAGE_LEFT:		pBreakBefore = sCSS1_PV_left;	break;
+            case RES_POOLPAGE_RIGHT:	pBreakBefore = sCSS1_PV_right;	break;
+            default:					pBreakBefore = sCSS1_PV_always;	break;
             }
         }
         else if( !pBreakBefore )
@@ -3296,7 +3325,7 @@ static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
 
 static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
                                         const SfxItemSet& rItemSet,
-                                        sal_Bool bDeep )
+                                        BOOL bDeep )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
     const SfxPoolItem *pItem;
@@ -3332,7 +3361,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt )
 
 
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
-                                 sal_uInt16 nMode, const String *pGrfName )
+                                 USHORT nMode, const String *pGrfName )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -3343,7 +3372,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         return rWrt;
 
     // Erstmal ein par Werte holen
-//  const Brush &rBrush = ((const SvxBrushItem &)rHt).GetBrush();
+//	const Brush &rBrush = ((const SvxBrushItem &)rHt).GetBrush();
     const Color & rColor = ((const SvxBrushItem &)rHt).GetColor();
     const String *pLink = pGrfName ? pGrfName
                             : ((const SvxBrushItem &)rHt).GetGraphicLink();
@@ -3359,14 +3388,15 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     }
 
     // Erstmal die Farbe holen
-    sal_Bool bColor = sal_False;
-    /// set <bTransparent> to sal_True, if color is "no fill"/"auto fill"
-    sal_Bool bTransparent = (rColor.GetColor() == COL_TRANSPARENT);
+    BOOL bColor = FALSE;
+    /// OD 02.09.2002 #99657#
+    /// set <bTransparent> to TRUE, if color is "no fill"/"auto fill"
+    BOOL bTransparent = (rColor.GetColor() == COL_TRANSPARENT);
     Color aColor;
     if( !bTransparent )
     {
         aColor = rColor;
-        bColor = sal_True;
+        bColor = TRUE;
     }
 
     // und jetzt eine Grafik
@@ -3382,10 +3412,10 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
             const String* pTempFileName = rHTMLWrt.GetOrigFileName();
             if( pTempFileName )
                 sGrfNm = *pTempFileName;
-            sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, sGrfNm,
+            USHORT nErr = XOutBitmap::WriteGraphic( *pGrf, sGrfNm,
                         String::CreateFromAscii("JPG"),
                         XOUTBMP_USE_NATIVE_IF_POSSIBLE );
-            if( !nErr )     // fehlerhaft, da ist nichts auszugeben
+            if( !nErr )		// fehlerhaft, da ist nichts auszugeben
             {
                 sGrfNm = URIHelper::SmartRel2Abs(
                     INetURLObject(rWrt.GetBaseURL()), sGrfNm,
@@ -3534,13 +3564,20 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
                                    const sal_Char *pProperty,
                                    const SvxBorderLine *pLine )
 {
-    if( !pLine || pLine->isEmpty() )
+    if( !pLine )
     {
         rHTMLWrt.OutCSS1_PropertyAscii( pProperty, sCSS1_PV_none );
         return;
     }
 
-    sal_Int32 nWidth = pLine->GetWidth();
+    BOOL bDouble = FALSE;
+    INT32 nWidth = pLine->GetOutWidth();
+    if( pLine->GetInWidth() )
+    {
+        nWidth += pLine->GetDistance();
+        nWidth += pLine->GetInWidth();
+        bDouble = TRUE;
+    }
 
     ByteString sOut;
     if( Application::GetDefaultDevice() &&
@@ -3553,7 +3590,7 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     }
     else
     {
-        nWidth *= 5;    // 1/100pt
+        nWidth *= 5; 	// 1/100pt
 
         // Breite als n.nn pt
         sOut += ByteString::CreateFromInt32( nWidth / 100 );
@@ -3564,40 +3601,21 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
 
     // Linien-Stil: solid oder double
     sOut += ' ';
-    switch ( pLine->GetStyle( ) )
+    if ( bDouble )
+        sOut += sCSS1_PV_double;
+    else
     {
-        case ::editeng::SOLID:
-            sOut += sCSS1_PV_solid;
-            break;
-        case ::editeng::DOTTED:
-            sOut += sCSS1_PV_dotted;
-            break;
-        case ::editeng::DASHED:
-            sOut += sCSS1_PV_dashed;
-            break;
-        case ::editeng::DOUBLE:
-        case ::editeng::THINTHICK_SMALLGAP:
-        case ::editeng::THINTHICK_MEDIUMGAP:
-        case ::editeng::THINTHICK_LARGEGAP:
-        case ::editeng::THICKTHIN_SMALLGAP:
-        case ::editeng::THICKTHIN_MEDIUMGAP:
-        case ::editeng::THICKTHIN_LARGEGAP:
-            sOut += sCSS1_PV_double;
-            break;
-        case ::editeng::EMBOSSED:
-            sOut += sCSS1_PV_ridge;
-            break;
-        case ::editeng::ENGRAVED:
-            sOut += sCSS1_PV_groove;
-            break;
-        case ::editeng::INSET:
-            sOut += sCSS1_PV_inset;
-            break;
-        case ::editeng::OUTSET:
-            sOut += sCSS1_PV_outset;
-            break;
-        default:
-            sOut += sCSS1_PV_none;
+        switch ( pLine->GetStyle( ) )
+        {
+            case DOTTED:
+                sOut += sCSS1_PV_dotted;
+                break;
+            case DASHED:
+                sOut += sCSS1_PV_dashed;
+                break;
+            default:
+                sOut += sCSS1_PV_solid;
+        }
     }
     sOut += ' ';
 
@@ -3610,6 +3628,11 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
 Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+
+    // Das Zeichen-Attribut wird nicht ausgegeben, wenn gerade
+    // Optionen ausgegeben werden
+//    if( !rHTMLWrt.IsHTMLMode(HTMLMODE_PARA_BORDER))
+//        return rWrt;
 
     const SvxBoxItem& rBoxItem = (const SvxBoxItem&)rHt;
     const SvxBorderLine *pTop = rBoxItem.GetTop();
@@ -3702,37 +3725,37 @@ static Writer& OutCSS1_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
 
 
 SwAttrFnTab aCSS1AttrFnTab = {
-/* RES_CHRATR_CASEMAP   */          OutCSS1_SvxCaseMap,
-/* RES_CHRATR_CHARSETCOLOR  */      0,
-/* RES_CHRATR_COLOR */              OutCSS1_SvxColor,
-/* RES_CHRATR_CONTOUR   */          0,
-/* RES_CHRATR_CROSSEDOUT    */      OutCSS1_SvxCrossedOut,
-/* RES_CHRATR_ESCAPEMENT    */      0,
-/* RES_CHRATR_FONT  */              OutCSS1_SvxFont,
-/* RES_CHRATR_FONTSIZE  */          OutCSS1_SvxFontHeight,
-/* RES_CHRATR_KERNING   */          OutCSS1_SvxKerning,
-/* RES_CHRATR_LANGUAGE  */          OutCSS1_SvxLanguage,
-/* RES_CHRATR_POSTURE   */          OutCSS1_SvxPosture,
+/* RES_CHRATR_CASEMAP	*/          OutCSS1_SvxCaseMap,
+/* RES_CHRATR_CHARSETCOLOR	*/      0,
+/* RES_CHRATR_COLOR	*/              OutCSS1_SvxColor,
+/* RES_CHRATR_CONTOUR	*/          0,
+/* RES_CHRATR_CROSSEDOUT	*/      OutCSS1_SvxCrossedOut,
+/* RES_CHRATR_ESCAPEMENT	*/      0,
+/* RES_CHRATR_FONT	*/              OutCSS1_SvxFont,
+/* RES_CHRATR_FONTSIZE	*/          OutCSS1_SvxFontHeight,
+/* RES_CHRATR_KERNING	*/          OutCSS1_SvxKerning,
+/* RES_CHRATR_LANGUAGE	*/          OutCSS1_SvxLanguage,
+/* RES_CHRATR_POSTURE	*/          OutCSS1_SvxPosture,
 /* RES_CHRATR_PROPORTIONALFONTSIZE*/0,
-/* RES_CHRATR_SHADOWED  */          0,
-/* RES_CHRATR_UNDERLINE */          OutCSS1_SvxUnderline,
-/* RES_CHRATR_WEIGHT    */          OutCSS1_SvxFontWeight,
-/* RES_CHRATR_WORDLINEMODE  */      0,
-/* RES_CHRATR_AUTOKERN  */          0,
-/* RES_CHRATR_BLINK */              OutCSS1_SvxBlink,
-/* RES_CHRATR_NOHYPHEN  */          0, // Neu: nicht trennen
+/* RES_CHRATR_SHADOWED	*/          0,
+/* RES_CHRATR_UNDERLINE	*/          OutCSS1_SvxUnderline,
+/* RES_CHRATR_WEIGHT	*/          OutCSS1_SvxFontWeight,
+/* RES_CHRATR_WORDLINEMODE	*/      0,
+/* RES_CHRATR_AUTOKERN	*/          0,
+/* RES_CHRATR_BLINK	*/          	OutCSS1_SvxBlink,
+/* RES_CHRATR_NOHYPHEN	*/          0, // Neu: nicht trennen
 /* RES_CHRATR_NOLINEBREAK */        0, // Neu: nicht umbrechen
-/* RES_CHRATR_BACKGROUND */         OutCSS1_SvxBrush, // Neu: Zeichenhintergrund
-/* RES_CHRATR_CJK_FONT */           OutCSS1_SvxFont,
-/* RES_CHRATR_CJK_FONTSIZE */       OutCSS1_SvxFontHeight,
-/* RES_CHRATR_CJK_LANGUAGE */       OutCSS1_SvxLanguage,
-/* RES_CHRATR_CJK_POSTURE */        OutCSS1_SvxPosture,
-/* RES_CHRATR_CJK_WEIGHT */         OutCSS1_SvxFontWeight,
-/* RES_CHRATR_CTL_FONT */           OutCSS1_SvxFont,
-/* RES_CHRATR_CTL_FONTSIZE */       OutCSS1_SvxFontHeight,
-/* RES_CHRATR_CTL_LANGUAGE */       OutCSS1_SvxLanguage,
-/* RES_CHRATR_CTL_POSTURE */        OutCSS1_SvxPosture,
-/* RES_CHRATR_CTL_WEIGHT */         OutCSS1_SvxFontWeight,
+/* RES_CHRATR_BACKGROUND */        	OutCSS1_SvxBrush, // Neu: Zeichenhintergrund
+/* RES_CHRATR_CJK_FONT */			OutCSS1_SvxFont,
+/* RES_CHRATR_CJK_FONTSIZE */		OutCSS1_SvxFontHeight,
+/* RES_CHRATR_CJK_LANGUAGE */		OutCSS1_SvxLanguage,
+/* RES_CHRATR_CJK_POSTURE */		OutCSS1_SvxPosture,
+/* RES_CHRATR_CJK_WEIGHT */			OutCSS1_SvxFontWeight,
+/* RES_CHRATR_CTL_FONT */			OutCSS1_SvxFont,
+/* RES_CHRATR_CTL_FONTSIZE */		OutCSS1_SvxFontHeight,
+/* RES_CHRATR_CTL_LANGUAGE */		OutCSS1_SvxLanguage,
+/* RES_CHRATR_CTL_POSTURE */		OutCSS1_SvxPosture,
+/* RES_CHRATR_CTL_WEIGHT */			OutCSS1_SvxFontWeight,
 /* RES_CHRATR_ROTATE */             0,
 /* RES_CHRATR_EMPHASIS_MARK */      0,
 /* RES_CHRATR_TWO_LINES */          0,
@@ -3754,26 +3777,26 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
 /* RES_TXTATR_DUMMY5 */             0,
 
-/* RES_TXTATR_FIELD */              0,
-/* RES_TXTATR_FLYCNT */             0,
-/* RES_TXTATR_FTN */                0,
+/* RES_TXTATR_FIELD	*/          	0,
+/* RES_TXTATR_FLYCNT */ 			0,
+/* RES_TXTATR_FTN */				0,
 /* RES_TXTATR_DUMMY4 */             0,
 /* RES_TXTATR_DUMMY3 */             0,
-/* RES_TXTATR_DUMMY1 */             0, // Dummy:
-/* RES_TXTATR_DUMMY2 */             0, // Dummy:
+/* RES_TXTATR_DUMMY1 */        	    0, // Dummy:
+/* RES_TXTATR_DUMMY2 */        	    0, // Dummy:
 
-/* RES_PARATR_LINESPACING   */      OutCSS1_SvxLineSpacing,
-/* RES_PARATR_ADJUST    */          OutCSS1_SvxAdjust,
-/* RES_PARATR_SPLIT */              OutCSS1_SvxFmtSplit,
-/* RES_PARATR_WIDOWS    */          OutCSS1_SvxWidows,
-/* RES_PARATR_ORPHANS   */          OutCSS1_SvxOrphans,
-/* RES_PARATR_TABSTOP   */          0,
+/* RES_PARATR_LINESPACING	*/      OutCSS1_SvxLineSpacing,
+/* RES_PARATR_ADJUST	*/          OutCSS1_SvxAdjust,
+/* RES_PARATR_SPLIT	*/				OutCSS1_SvxFmtSplit,
+/* RES_PARATR_WIDOWS	*/          OutCSS1_SvxWidows,
+/* RES_PARATR_ORPHANS	*/          OutCSS1_SvxOrphans,
+/* RES_PARATR_TABSTOP	*/          0,
 /* RES_PARATR_HYPHENZONE*/          0,
-/* RES_PARATR_DROP */               OutCSS1_SwFmtDrop,
-/* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
-/* RES_PARATR_NUMRULE */            0, // Dummy:
-/* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
-/* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
+/* RES_PARATR_DROP */				OutCSS1_SwFmtDrop,
+/* RES_PARATR_REGISTER */        	0, // neu:  Registerhaltigkeit
+/* RES_PARATR_NUMRULE */       	    0, // Dummy:
+/* RES_PARATR_SCRIPTSPACE */   	    0, // Dummy:
+/* RES_PARATR_HANGINGPUNCTUATION */	0, // Dummy:
 /* RES_PARATR_FORBIDDEN_RULES */    0, // new
 /* RES_PARATR_VERTALIGN */          0, // new
 /* RES_PARATR_SNAPTOGRID*/          0, // new
@@ -3786,41 +3809,41 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_PARATR_LIST_RESTARTVALUE */  0, // new
 /* RES_PARATR_LIST_ISCOUNTED */     0, // new
 
-/* RES_FILL_ORDER   */              0,
-/* RES_FRM_SIZE */                  0,
-/* RES_PAPER_BIN    */              0,
-/* RES_LR_SPACE */                  OutCSS1_SvxLRSpace,
-/* RES_UL_SPACE */                  OutCSS1_SvxULSpace,
-/* RES_PAGEDESC */                  0,
-/* RES_BREAK */                     0,
-/* RES_CNTNT */                     0,
-/* RES_HEADER */                    0,
-/* RES_FOOTER */                    0,
-/* RES_PRINT */                     0,
-/* RES_OPAQUE */                    0,
-/* RES_PROTECT */                   0,
-/* RES_SURROUND */                  0,
-/* RES_VERT_ORIENT */               0,
-/* RES_HORI_ORIENT */               0,
-/* RES_ANCHOR */                    0,
-/* RES_BACKGROUND */                OutCSS1_SvxBrush,
-/* RES_BOX  */                      OutCSS1_SvxBox,
-/* RES_SHADOW */                    0,
-/* RES_FRMMACRO */                  0,
-/* RES_COL */                       0,
-/* RES_KEEP */                      0,
-/* RES_URL */                       0,
-/* RES_EDIT_IN_READONLY */          0,
-/* RES_LAYOUT_SPLIT */              0,
-/* RES_CHAIN */                     0,
-/* RES_TEXTGRID */                  0,
-/* RES_LINENUMBER */                0,
-/* RES_FTN_AT_TXTEND */             0,
-/* RES_END_AT_TXTEND */             0,
-/* RES_COLUMNBALANCE */             0,
-/* RES_FRAMEDIR */                  OutCSS1_SvxFrameDirection,
+/* RES_FILL_ORDER	*/				0,
+/* RES_FRM_SIZE	*/					0,
+/* RES_PAPER_BIN	*/              0,
+/* RES_LR_SPACE	*/                  OutCSS1_SvxLRSpace,
+/* RES_UL_SPACE	*/                  OutCSS1_SvxULSpace,
+/* RES_PAGEDESC */					0,
+/* RES_BREAK */						0,
+/* RES_CNTNT */						0,
+/* RES_HEADER */		   			0,
+/* RES_FOOTER */		   			0,
+/* RES_PRINT */						0,
+/* RES_OPAQUE */					0,
+/* RES_PROTECT */					0,
+/* RES_SURROUND */					0,
+/* RES_VERT_ORIENT */				0,
+/* RES_HORI_ORIENT */				0,
+/* RES_ANCHOR */					0,
+/* RES_BACKGROUND */				OutCSS1_SvxBrush,
+/* RES_BOX	*/                      OutCSS1_SvxBox,
+/* RES_SHADOW */					0,
+/* RES_FRMMACRO */					0,
+/* RES_COL */						0,
+/* RES_KEEP */						0,
+/* RES_URL */        	    		0,
+/* RES_EDIT_IN_READONLY */        	0,
+/* RES_LAYOUT_SPLIT */ 	    		0,
+/* RES_CHAIN */        	    		0,
+/* RES_TEXTGRID */        	    	0,
+/* RES_LINENUMBER */        	    0,
+/* RES_FTN_AT_TXTEND */        	    0,
+/* RES_END_AT_TXTEND */        	    0,
+/* RES_COLUMNBALANCE */        	    0,
+/* RES_FRAMEDIR */        	    	OutCSS1_SvxFrameDirection,
 /* RES_HEADER_FOOTER_EAT_SPACING */ 0,
-/* RES_FRMATR_DUMMY9 */             0, // Dummy:
+/* RES_FRMATR_DUMMY9 */        	    0, // Dummy:
 /* RES_FOLLOW_TEXT_FLOW */          0,
 /* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
 /* RES_FRMATR_DUMMY2 */             0, // Dummy:
@@ -3829,26 +3852,26 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:
 
 /* RES_GRFATR_MIRRORGRF */          0,
-/* RES_GRFATR_CROPGRF   */          0,
-/* RES_GRFATR_ROTATION */           0,
-/* RES_GRFATR_LUMINANCE */          0,
-/* RES_GRFATR_CONTRAST */           0,
-/* RES_GRFATR_CHANNELR */           0,
-/* RES_GRFATR_CHANNELG */           0,
-/* RES_GRFATR_CHANNELB */           0,
-/* RES_GRFATR_GAMMA */              0,
-/* RES_GRFATR_INVERT */             0,
-/* RES_GRFATR_TRANSPARENCY */       0,
-/* RES_GRFATR_DRWAMODE */           0,
-/* RES_GRFATR_DUMMY1 */             0,
-/* RES_GRFATR_DUMMY2 */             0,
-/* RES_GRFATR_DUMMY3 */             0,
-/* RES_GRFATR_DUMMY4 */             0,
-/* RES_GRFATR_DUMMY5 */             0,
+/* RES_GRFATR_CROPGRF	*/			0,
+/* RES_GRFATR_ROTATION */			0,
+/* RES_GRFATR_LUMINANCE */			0,
+/* RES_GRFATR_CONTRAST */			0,
+/* RES_GRFATR_CHANNELR */			0,
+/* RES_GRFATR_CHANNELG */			0,
+/* RES_GRFATR_CHANNELB */			0,
+/* RES_GRFATR_GAMMA */				0,
+/* RES_GRFATR_INVERT */				0,
+/* RES_GRFATR_TRANSPARENCY */		0,
+/* RES_GRFATR_DRWAMODE */			0,
+/* RES_GRFATR_DUMMY1 */				0,
+/* RES_GRFATR_DUMMY2 */				0,
+/* RES_GRFATR_DUMMY3 */				0,
+/* RES_GRFATR_DUMMY4 */				0,
+/* RES_GRFATR_DUMMY5 */				0,
 
-/* RES_BOXATR_FORMAT */             0,
-/* RES_BOXATR_FORMULA */            0,
-/* RES_BOXATR_VALUE */              0
+/* RES_BOXATR_FORMAT */				0,
+/* RES_BOXATR_FORMULA */			0,
+/* RES_BOXATR_VALUE */				0
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

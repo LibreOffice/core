@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#ifdef WNT
-#include <windows.h>
-#endif
+/**************************************************************************
+                                TODO
+ **************************************************************************
+
+ *************************************************************************/
 #include <ucbhelper/contentidentifier.hxx>
 #include "odma_provider.hxx"
 #include "odma_content.hxx"
@@ -41,8 +43,6 @@
 #include <rtl/uri.hxx>
 #include <algorithm>
 #include <osl/file.hxx>
-
-#include <o3tl/compat_functional.hxx>
 
 using namespace com::sun::star;
 using namespace odma;
@@ -60,7 +60,7 @@ ContentProvider::ContentProvider(
                 const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
 : ::ucbhelper::ContentProviderImplHelper( rSMgr )
 {
-
+    
 }
 
 //=========================================================================
@@ -95,8 +95,8 @@ HWND choose_parent_window()
     return hwnd_parent;
 }
 
-ODMHANDLE ContentProvider::getHandle()
-{
+ODMHANDLE ContentProvider::getHandle() 
+{ 
     if(!m_aOdmHandle)
     {
         ODMSTATUS odm = NODMRegisterApp(&m_aOdmHandle,ODM_API_VERSION,ODMA_ODMA_REGNAME,(DWORD) choose_parent_window( ),NULL);
@@ -114,7 +114,7 @@ ODMHANDLE ContentProvider::getHandle()
             break;
         }
     }
-    return m_aOdmHandle;
+    return m_aOdmHandle; 
 }
 // -----------------------------------------------------------------------------
 
@@ -151,8 +151,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 // @@@ Adjust implementation name. Keep the prefix "com.sun.star.comp."!
 // @@@ Adjust service name.
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.comp.odma.ContentProvider" )),
+                     rtl::OUString::createFromAscii(
+                            "com.sun.star.comp.odma.ContentProvider" ),
                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODMA_CONTENT_PROVIDER_SERVICE_NAME) ) );
 
 //=========================================================================
@@ -183,11 +183,11 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     rtl::OUString sOdma = aScheme.getToken(3,'.',nIndex);
     rtl::OUString sCanonicURL = Identifier->getContentIdentifier();
     // check if url starts with odma
-    if ( !(Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) ||
+    if ( !(Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) || 
            Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( sOdma )) )
         throw ucb::IllegalIdentifierException();
 
-    if(!(   sCanonicURL.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(ODMA_URL_SCHEME_SHORT ODMA_URL_SHORT)) ||
+    if(!(	sCanonicURL.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(ODMA_URL_SCHEME_SHORT ODMA_URL_SHORT)) ||
             sCanonicURL.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(ODMA_URL_SCHEME ODMA_URL_SHORT))))
         throw ucb::IllegalIdentifierException();
 
@@ -210,15 +210,15 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     // Create a new content.
 
     sCanonicURL = convertURL(sCanonicURL);
-
+    
     ::rtl::Reference<ContentProperties> aProp;
     // first check if we got an ODMA ID from outside
     if( sCanonicURL.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(ODMA_URL_ODMAID)))
     {// we get an orignal ODMA id so we have to look for the name
         ::rtl::OString sDocId = ::rtl::OUStringToOString(sCanonicURL,RTL_TEXTENCODING_MS_1252);
         sal_Char* lpszDocName = new sal_Char[ODM_NAME_MAX];
-
-        ODMSTATUS odm = NODMGetDocInfo( getHandle(),
+        
+        ODMSTATUS odm = NODMGetDocInfo(	getHandle(),
                                         const_cast<sal_Char*>(sDocId.getStr()),
                                         ODM_NAME,
                                         lpszDocName,
@@ -236,7 +236,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     }
     else // we got an already fetched name here so look for it
     {
-        // we have a valid document name
+        // we have a valid document name 
         aProp = getContentPropertyWithTitle(sCanonicURL);
         if(!aProp.is())
             aProp = getContentPropertyWithSavedAsName(sCanonicURL);
@@ -273,8 +273,8 @@ void ContentProvider::closeDocument(const ::rtl::OString& _sDocumentId)
     if(aIter != m_aContents.end())
     {
         DWORD dwFlags = ODM_SILENT;
-        ODMSTATUS odm = NODMCloseDocEx( ContentProvider::getHandle(),
-                                        const_cast<sal_Char*>(_sDocumentId.getStr()),
+        ODMSTATUS odm = NODMCloseDocEx(	ContentProvider::getHandle(), 
+                                        const_cast<sal_Char*>(_sDocumentId.getStr()), 
                                         &dwFlags,
                                         0xFFFFFFFF,
                                         0xFFFFFFFF,
@@ -310,22 +310,22 @@ void ContentProvider::saveDocument(const ::rtl::OString& _sDocumentId)
 // -----------------------------------------------------------------------------
 util::Date toDate(const ::rtl::OString& _sSQLString)
 {
-    sal_uInt16  nYear   = 0,
-                nMonth  = 0,
-                nDay    = 0;
-    nYear   = (sal_uInt16)_sSQLString.copy(0,4).toInt32();
-    nMonth  = (sal_uInt16)_sSQLString.copy(4,2).toInt32();
-    nDay    = (sal_uInt16)_sSQLString.copy(6,2).toInt32();
+    sal_uInt16	nYear	= 0,
+                nMonth	= 0,
+                nDay	= 0;
+    nYear	= (sal_uInt16)_sSQLString.copy(0,4).toInt32();
+    nMonth	= (sal_uInt16)_sSQLString.copy(4,2).toInt32();
+    nDay	= (sal_uInt16)_sSQLString.copy(6,2).toInt32();
 
     return util::Date(nDay,nMonth,nYear);
 }
 //-----------------------------------------------------------------------------
 util::Time toTime(const ::rtl::OString& _sSQLString)
 {
-    sal_uInt16  nHour   = 0,
-                nMinute = 0,
-                nSecond = 0;
-    nHour   = (sal_uInt16)_sSQLString.copy(8,2).toInt32();
+    sal_uInt16	nHour	= 0,
+                nMinute	= 0,
+                nSecond	= 0;
+    nHour	= (sal_uInt16)_sSQLString.copy(8,2).toInt32();
     nMinute = (sal_uInt16)_sSQLString.copy(10,2).toInt32();
     nSecond = (sal_uInt16)_sSQLString.copy(12,2).toInt32();
 
@@ -347,7 +347,7 @@ void ContentProvider::fillDocumentProperties(const ::rtl::Reference<ContentPrope
     sal_Char* pDocId = const_cast<sal_Char*>(_rProp->m_sDocumentId.getStr());
 
     // read the create date of the document
-    ODMSTATUS odm = NODMGetDocInfo( getHandle(),
+    ODMSTATUS odm = NODMGetDocInfo(	getHandle(),
                                     pDocId,
                                     ODM_CREATEDDATE,
                                     lpszDocInfo,
@@ -356,7 +356,7 @@ void ContentProvider::fillDocumentProperties(const ::rtl::Reference<ContentPrope
         _rProp->m_aDateCreated = toDateTime(::rtl::OString(lpszDocInfo));
 
     // read the modified date of the document
-    odm = NODMGetDocInfo(   getHandle(),
+    odm = NODMGetDocInfo(	getHandle(),
                             pDocId,
                             ODM_MODIFYDATE,
                             lpszDocInfo,
@@ -365,7 +365,7 @@ void ContentProvider::fillDocumentProperties(const ::rtl::Reference<ContentPrope
         _rProp->m_aDateModified = toDateTime(::rtl::OString(lpszDocInfo));
 
     // read the title of the document
-    odm = NODMGetDocInfo(   getHandle(),
+    odm = NODMGetDocInfo(	getHandle(),
                             pDocId,
                             ODM_TITLETEXT,
                             lpszDocInfo,
@@ -374,7 +374,7 @@ void ContentProvider::fillDocumentProperties(const ::rtl::Reference<ContentPrope
         _rProp->m_sTitle = ::rtl::OStringToOUString(rtl::OString(lpszDocInfo),RTL_TEXTENCODING_ASCII_US);
 
     // read the name of the document
-    odm = NODMGetDocInfo(   getHandle(),
+    odm = NODMGetDocInfo(	getHandle(),
                             pDocId,
                             ODM_NAME,
                             lpszDocInfo,
@@ -383,7 +383,7 @@ void ContentProvider::fillDocumentProperties(const ::rtl::Reference<ContentPrope
         _rProp->m_sDocumentName = ::rtl::OStringToOUString(rtl::OString(lpszDocInfo),RTL_TEXTENCODING_ASCII_US);
 
     // read the author of the document
-    odm = NODMGetDocInfo(   getHandle(),
+    odm = NODMGetDocInfo(	getHandle(),
                             pDocId,
                             ODM_AUTHOR,
                             lpszDocInfo,
@@ -392,7 +392,7 @@ void ContentProvider::fillDocumentProperties(const ::rtl::Reference<ContentPrope
         _rProp->m_sAuthor = ::rtl::OStringToOUString(rtl::OString(lpszDocInfo),RTL_TEXTENCODING_ASCII_US);
 
     // read the subject of the document
-    odm = NODMGetDocInfo(   getHandle(),
+    odm = NODMGetDocInfo(	getHandle(),
                             pDocId,
                             ODM_SUBJECT,
                             lpszDocInfo,
@@ -401,7 +401,7 @@ void ContentProvider::fillDocumentProperties(const ::rtl::Reference<ContentPrope
         _rProp->m_sSubject = ::rtl::OStringToOUString(rtl::OString(lpszDocInfo),RTL_TEXTENCODING_ASCII_US);
 
     // read the keywords of the document
-    odm = NODMGetDocInfo(   getHandle(),
+    odm = NODMGetDocInfo(	getHandle(),
                             pDocId,
                             ODM_KEYWORDS,
                             lpszDocInfo,
@@ -410,7 +410,7 @@ void ContentProvider::fillDocumentProperties(const ::rtl::Reference<ContentPrope
         _rProp->m_sKeywords = ::rtl::OStringToOUString(rtl::OString(lpszDocInfo),RTL_TEXTENCODING_ASCII_US);
 
 /*
-    odm = NODMGetDocInfo(   getHandle(),
+    odm = NODMGetDocInfo(	getHandle(),
                                     const_cast<sal_Char*>(_rProp->m_sDocumentId.getStr()),
                                     ODM_URL,
                                     lpszDocInfo,
@@ -430,7 +430,7 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
 ::rtl::Reference<ContentProperties> ContentProvider::queryContentProperty(const ::rtl::OUString& _sDocumentName)
 {
     ::rtl::Reference<ContentProperties> aReturn;
-    sal_Char* lpszDMSList   = new sal_Char[ODM_DMSID_MAX];
+    sal_Char* lpszDMSList	= new sal_Char[ODM_DMSID_MAX];
 
     ODMSTATUS odm = NODMGetDMS(ODMA_ODMA_REGNAME, lpszDMSList);
     if(odm == ODM_SUCCESS)
@@ -442,17 +442,17 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
         ::rtl::OString sQuery("SELECT ODM_DOCID_LATEST, ODM_NAME WHERE ODM_TITLETEXT = '");
         sQuery += sTitleText;
         sQuery += "'";
-
+        
         DWORD dwFlags = ODM_SPECIFIC;
         odm = NODMQueryExecute(getHandle(), sQuery,dwFlags, lpszDMSList, pQueryId );
         if(odm == ODM_SUCCESS)
         {
-            sal_uInt16 nCount       = 10;
-            sal_uInt16 nMaxCount    = 10;
-            sal_Char* lpszDocId     = new sal_Char[ODM_DOCID_MAX * nMaxCount];
-            sal_Char* lpszDocName   = new sal_Char[ODM_NAME_MAX * nMaxCount];
-            sal_Char* lpszDocInfo   = new sal_Char[ODM_DOCID_MAX];
-
+            sal_uInt16 nCount		= 10;
+            sal_uInt16 nMaxCount	= 10;
+            sal_Char* lpszDocId		= new sal_Char[ODM_DOCID_MAX * nMaxCount];
+            sal_Char* lpszDocName	= new sal_Char[ODM_NAME_MAX * nMaxCount];
+            sal_Char* lpszDocInfo	= new sal_Char[ODM_DOCID_MAX];
+            
             ::rtl::OUString sContentType(RTL_CONSTASCII_USTRINGPARAM(ODMA_CONTENT_TYPE));
             do
             {
@@ -465,7 +465,7 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
                 if(odm == ODM_SUCCESS)
                     for(sal_uInt16 i = 0; i < nCount; ++i)
                     {
-                        odm = NODMGetDocInfo(   getHandle(),
+                        odm = NODMGetDocInfo(	getHandle(),
                                                 &lpszDocId[ODM_DOCID_MAX*i],
                                                 ODM_TITLETEXT,
                                                 lpszDocInfo,
@@ -473,9 +473,9 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
                         if( odm == ODM_SUCCESS && sTitleText == ::rtl::OString(lpszDocInfo))
                         {
                             aReturn = new ContentProperties();
-                            aReturn->m_sDocumentName    = ::rtl::OStringToOUString(rtl::OString(&lpszDocName[ODM_NAME_MAX*i]),RTL_TEXTENCODING_ASCII_US);
-                            aReturn->m_sDocumentId  = ::rtl::OString(&lpszDocId[ODM_DOCID_MAX*i]);
-                            aReturn->m_sContentType = sContentType;
+                            aReturn->m_sDocumentName	= ::rtl::OStringToOUString(rtl::OString(&lpszDocName[ODM_NAME_MAX*i]),RTL_TEXTENCODING_ASCII_US);
+                            aReturn->m_sDocumentId	= ::rtl::OString(&lpszDocId[ODM_DOCID_MAX*i]);
+                            aReturn->m_sContentType	= sContentType;
                             append(aReturn);
                             nCount = 0; // break condition from outer loop
                             break;
@@ -494,7 +494,7 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
         delete [] pQueryId;
     }
     delete [] lpszDMSList;
-
+    
 
     return aReturn;
 }
@@ -503,11 +503,11 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
                                                                    const ContentPropertiesMemberFunctor& _aFunctor) const
 {
     ::rtl::Reference<ContentProperties> aReturn;
-    ContentsMap::const_iterator aFind = ::std::find_if( m_aContents.begin(),
+    ContentsMap::const_iterator aFind = ::std::find_if(	m_aContents.begin(),
                                                         m_aContents.end(),
-                                                        ::o3tl::compose1(
+                                                        ::std::compose1(
                                                             ::std::bind2nd(_aFunctor,_sName),
-                                                            ::o3tl::select2nd<ContentsMap::value_type>()
+                                                            ::std::select2nd<ContentsMap::value_type>()
                                                         )
                                                     );
     if(aFind != m_aContents.end())
@@ -539,7 +539,7 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
     if(!_rProp->m_bIsOpen)
     {
         sal_Char *pFileName = new sal_Char[ODM_FILENAME_MAX];
-
+        
         DWORD dwFlag = ODM_MODIFYMODE | ODM_SILENT;
         ODMSTATUS odm = NODMOpenDoc(getHandle(), dwFlag, const_cast<sal_Char*>(_rProp->m_sDocumentId.getStr()), pFileName);
         switch(odm)
@@ -604,7 +604,7 @@ sal_Bool ContentProvider::deleteDocument(const ::rtl::Reference<ContentPropertie
                                  const_cast< sal_Char*>(_rProp->m_sDocumentId.getStr()));
     if(odm == ODM_SUCCESS)
         m_aContents.erase(_rProp->m_sDocumentId);
-
+    
     return odm == ODM_SUCCESS;
 }
 // -----------------------------------------------------------------------------

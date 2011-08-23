@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ NSTimer* AquaSalTimer::pRunningTimer = nil;
 bool AquaSalTimer::bDispatchTimer = false;
 
 
-void ImplSalStartTimer( sal_uLong nMS )
+void ImplSalStartTimer( ULONG nMS )
 {
     SalData* pSalData = GetSalData();
     if( pSalData->mpFirstInstance->isNSAppThread() )
@@ -109,7 +109,7 @@ void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
             // timer already elapsed since event posted
             pSVData->mpSalTimer->CallCallback();
         }
-        ImplSalStartTimer( sal_uLong( [pEvent data1] ) );
+        ImplSalStartTimer( ULONG( [pEvent data1] ) );
     }
 
 }
@@ -123,7 +123,7 @@ AquaSalTimer::~AquaSalTimer()
     ImplSalStopTimer();
 }
 
-void AquaSalTimer::Start( sal_uLong nMS )
+void AquaSalTimer::Start( ULONG nMS )
 {
     ImplSalStartTimer( nMS );
 }

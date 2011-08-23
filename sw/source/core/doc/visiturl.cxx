@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ SwURLStateChanged::~SwURLStateChanged()
 
 void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    if( rHint.ISA( INetURLHistoryHint ) && pDoc->GetCurrentViewShell() )    //swmod 071108//swmod 071225
+    if( rHint.ISA( INetURLHistoryHint ) && pDoc->GetRootFrm() )
     {
         // diese URL wurde veraendert:
         const INetURLObject* pIURL = ((INetURLHistoryHint&)rHint).GetObject();
@@ -68,13 +68,13 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
             sURL == pDoc->GetDocShell()->GetMedium()->GetName() )
             (sBkmk = pIURL->GetMark()).Insert( INET_MARK_TOKEN, 0 );
 
-        sal_Bool bAction = sal_False, bUnLockView = sal_False;
+        BOOL bAction = FALSE, bUnLockView = FALSE;
         const SwFmtINetFmt* pItem;
         const SwTxtINetFmt* pTxtAttr;
         const SwTxtNode* pTxtNd;
-        sal_uInt32 n, nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
+        USHORT n, nMaxItems = pDoc->GetAttrPool().GetItemCount( RES_TXTATR_INETFMT );
         for( n = 0; n < nMaxItems; ++n )
-            if( 0 != (pItem = (SwFmtINetFmt*)pDoc->GetAttrPool().GetItem2(
+            if( 0 != (pItem = (SwFmtINetFmt*)pDoc->GetAttrPool().GetItem(
                 RES_TXTATR_INETFMT, n ) ) &&
                 ( pItem->GetValue() == sURL ||
                     ( sBkmk.Len() && pItem->GetValue() == sBkmk )) &&
@@ -84,35 +84,35 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
                 if( !bAction && pESh )
                 {
                     pESh->StartAllAction();
-                    bAction = sal_True;
+                    bAction = TRUE;
                     bUnLockView = !pESh->IsViewLocked();
-                    pESh->LockView( sal_True );
+                    pESh->LockView( TRUE );
                 }
                 const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( false );
                 const SwTxtAttr* pAttr = pTxtAttr;
                 SwUpdateAttr aUpdateAttr( *pAttr->GetStart(),
                                           *pAttr->GetEnd(),
                                           RES_FMT_CHG );
-                ((SwTxtNode*)pTxtNd)->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
+                ((SwTxtNode*)pTxtNd)->Modify( &aUpdateAttr, &aUpdateAttr );
             }
 
         if( bAction )
             pESh->EndAllAction();
          if( bUnLockView )
-             pESh->LockView( sal_False );
+             pESh->LockView( FALSE );
     }
 }
 
     // erfrage ob die URL besucht war. Uebers Doc, falls nur ein Bookmark
     // angegeben ist. Dann muss der Doc. Name davor gesetzt werden!
-sal_Bool SwDoc::IsVisitedURL( const String& rURL ) const
+BOOL SwDoc::IsVisitedURL( const String& rURL ) const
 {
 #if OSL_DEBUG_LEVEL > 1
     static long nTmp = 0;
     ++nTmp;
 #endif
 
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     if( rURL.Len() )
     {
         INetURLHistory *pHist = INetURLHistory::GetOrCreate();

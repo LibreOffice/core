@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,17 +39,17 @@ class SheetScenarios;
 
 // ============================================================================
 
-class ScenarioContext : public WorksheetContextBase
+class OoxScenarioContext : public OoxWorksheetContextBase
 {
 public:
-    explicit            ScenarioContext( WorksheetContextBase& rParent, SheetScenarios& rSheetScenarios );
+    explicit            OoxScenarioContext( OoxWorksheetContextBase& rParent, SheetScenarios& rSheetScenarios );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        onStartRecord( SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        onStartRecord( RecordInputStream& rStrm );
 
 private:
     Scenario&           mrScenario;
@@ -57,17 +57,17 @@ private:
 
 // ============================================================================
 
-class ScenariosContext : public WorksheetContextBase
+class OoxScenariosContext : public OoxWorksheetContextBase
 {
 public:
-    explicit            ScenariosContext( WorksheetFragmentBase& rFragment );
+    explicit            OoxScenariosContext( OoxWorksheetFragmentBase& rFragment );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        onStartRecord( SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        onStartRecord( RecordInputStream& rStrm );
 
 private:
     SheetScenarios&     mrSheetScenarios;

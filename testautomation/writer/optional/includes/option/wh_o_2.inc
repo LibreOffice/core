@@ -48,8 +48,8 @@ testcase tToolsOptionsHTMLPrint
     dim bRadioBut(4) as boolean         ' RadioButtons
     dim bTempRadioBut(4) as boolean
 
-    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\options\test.html" )
-    
+    Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\test.html" )
+    Call sMakeReadOnlyDocumentEditable
     printlog "- Tools/Options/HTML: PrintHTML "
 
     printlog (" - save states ")
@@ -83,13 +83,7 @@ testcase tToolsOptionsHTMLPrint
 
     if bCheckboxStatus(6) Then AusDruckereinstellung.UnCheck  Else AusDruckereinstellung.Check
 
-    if ( Keine.IsEnabled) then
-        if (Keine.IsChecked = True) Then
-            NurNotizen.Check
-        Else
-            Keine.Check
-        end if
-    end if
+    if (Keine.IsChecked = True) Then NurNotizen.Check Else Keine.Check
 
     bTempRadioBut(1) = Keine.IsChecked
     bTempRadioBut(2) = NurNotizen.IsChecked
@@ -114,7 +108,7 @@ testcase tToolsOptionsHTMLPrint
     ToolsOptions
     Call hToolsOptions ( "HTML" , "PRINT" )
 
-    if ( bCheckboxStatus(1) = Grafiken.IsChecked               ) Then WarnLog "'Graphics' state changed"
+    if ( bCheckboxStatus(1) = Grafiken.IsChecked               ) Then WarnLog "#i108219#'Graphics' state changed"
     if ( bCheckboxStatus(2) = Kontrollfelder.IsChecked         ) Then WarnLog "'Controls' state changed"
     if ( bCheckboxStatus(3) = Hintergrund.IsChecked            ) Then WarnLog "'Background' state changed"
     if ( bCheckboxStatus(4) = SchwarzDrucken.IsChecked         ) Then WarnLog "'Print black' state changed"
@@ -169,7 +163,7 @@ testcase tToolsOptionsHTMLPrint
     ' Is saved with document
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    hFileOpen( gOfficePath & "user\work\printtest.html")
+    Call hFileOpen(gOfficepath + "user\work\printtest.html")
     ToolsOptions
     Call hToolsOptions ( "HTML" , "PRINT" )
 
@@ -191,13 +185,7 @@ testcase tToolsOptionsHTMLPrint
 
     AusDruckereinstellung.Check
 
-    if ( Dokumentende.IsEnabled ) then
-        if (Dokumentende.IsChecked = True) Then
-            Seitenende.Check
-        Else
-            Dokumentende.Check
-        end if
-    end if
+    if (Dokumentende.IsChecked = True) Then Seitenende.Check Else Dokumentende.Check
 
     bTempRadioBut(1) = Keine.IsChecked
     bTempRadioBut(2) = NurNotizen.IsChecked

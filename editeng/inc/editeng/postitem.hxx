@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ namespace rtl
 
 // class SvxPostureItem --------------------------------------------------
 
-/*  [Description]
-
-    This item describes the font setting (Italic)
+/*
+    [Beschreibung]
+    Dieses Item beschreibt die Font-Stellung (Italic)
 */
 
 class EDITENG_DLLPUBLIC SvxPostureItem : public SfxEnumItem
@@ -53,26 +53,26 @@ public:
     TYPEINFO();
 
     SvxPostureItem( const FontItalic ePost /*= ITALIC_NONE*/,
-                    const sal_uInt16 nId  );
+                    const USHORT nId  );
 
-    // "pure virtual Methods" from SfxPoolItem + SwEnumItem
+    // "pure virtual Methoden" vom SfxPoolItem + SwEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
-    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
-    virtual sal_uInt16          GetValueCount() const;
+    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
+    virtual SvStream&		Store(SvStream &, USHORT nItemVersion) const;
+    virtual String			GetValueTextByPos( USHORT nPos ) const;
+    virtual USHORT          GetValueCount() const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    virtual int             HasBoolValue() const;
-    virtual sal_Bool            GetBoolValue() const;
-    virtual void            SetBoolValue( sal_Bool bVal );
+    virtual int 			HasBoolValue() const;
+    virtual BOOL			GetBoolValue() const;
+    virtual void			SetBoolValue( BOOL bVal );
 
     inline SvxPostureItem& operator=(const SvxPostureItem& rPost) {
         SetValue( rPost.GetValue() );
@@ -80,10 +80,10 @@ public:
     }
 
     // enum cast
-    FontItalic              GetPosture() const
+    FontItalic				GetPosture() const
                                 { return (FontItalic)GetValue(); }
-    void                    SetPosture( FontItalic eNew )
-                                { SetValue( (sal_uInt16)eNew ); }
+    void					SetPosture( FontItalic eNew )
+                                { SetValue( (USHORT)eNew ); }
 };
 
 #endif // #ifndef _SVX_POSTITEM_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,6 +38,7 @@
 #include <sfx2/viewfac.hxx>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
+#include <memory>
 #include <comphelper/implementationreference.hxx>
 
 namespace sd { namespace slidesorter {
@@ -61,15 +62,12 @@ class Animator;
 class Clipboard;
 class CurrentSlideManager;
 class FocusManager;
-class InsertionIndicatorHandler;
 class Listener;
 class PageSelector;
+class Properties;
 class ScrollBarManager;
-class SelectionFunction;
 class SelectionManager;
-class SelectionObserver;
 class SlotManager;
-class VisibleAreaManager;
 
 class SlideSorterController
 {
@@ -81,14 +79,12 @@ public:
     */
     SlideSorterController (SlideSorter& rSlideSorter);
 
-    /** Late initialization.  Call this method once a new new object has been
+    /** Late initialization.  Call this method once a new new object has been 
         created.
     */
     virtual void Init (void);
 
     virtual ~SlideSorterController (void);
-
-    void Dispose (void);
 
     /** Place and size the scroll bars and the browser window so that the
         given rectangle is filled.
@@ -111,8 +107,7 @@ public:
     Rectangle Rearrange (bool bForce = false);
 
     /** Return the descriptor of the page that is rendered under the
-        given position.  This takes the IsOnlyPreviewTriggersMouseOver
-        property into account.
+        given position.
         @return
             Returns a pointer to a page descriptor instead of a
             reference because when no page is found at the position
@@ -131,7 +126,9 @@ public:
     ::boost::shared_ptr<CurrentSlideManager> GetCurrentSlideManager (void) const;
     ::boost::shared_ptr<SlotManager> GetSlotManager (void) const;
     ::boost::shared_ptr<SelectionManager> GetSelectionManager (void) const;
-    ::boost::shared_ptr<InsertionIndicatorHandler> GetInsertionIndicatorHandler (void) const;
+
+    // forward VCLs PrePaint window event to DrawingLayer
+    void PrePaint();
 
     /** This method forwards the call to the SlideSorterView and executes
         pending operations like moving selected pages into the visible area.
@@ -142,7 +139,7 @@ public:
     void FuPermanent (SfxRequest& rRequest);
     void FuSupport (SfxRequest& rRequest);
     bool Command (
-        const CommandEvent& rEvent,
+        const CommandEvent& rEvent, 
         ::sd::Window* pWindow);
 
     void GetCtrlState (SfxItemSet &rSet);
@@ -187,12 +184,6 @@ public:
     */
     virtual FunctionReference CreateSelectionFunction (SfxRequest& rRequest);
 
-    /** When the current function of the view shell is the slide sorter
-        selection function then return a reference to it.  Otherwise return
-        an empty reference.
-    */
-    ::rtl::Reference<SelectionFunction> GetCurrentSelectionFunction (void);
-
     /** Prepare for a change of the edit mode.  Depending on the current
         edit mode we may save the selection so that it can be restored when
         later changing back to the current edit mode.
@@ -229,6 +220,11 @@ public:
     */
     bool IsContextMenuOpen (void) const;
 
+    /** Return a collection of properties that are used througout the slide
+        sorter.
+    */
+    ::boost::shared_ptr<Properties> GetProperties (void) const;
+
     /** Provide the set of pages to be displayed in the slide sorter.  The
         GetDocumentSlides() method can be found only in the SlideSorterModel.
     */
@@ -238,24 +234,18 @@ public:
     */
     ::boost::shared_ptr<Animator> GetAnimator (void) const;
 
-    VisibleAreaManager& GetVisibleAreaManager (void) const;
-
-    void CheckForMasterPageAssignment (void);
-
 private:
     SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;
     view::SlideSorterView& mrView;
-    ::boost::scoped_ptr<PageSelector> mpPageSelector;
-    ::boost::scoped_ptr<FocusManager> mpFocusManager;
+    ::std::auto_ptr<PageSelector> mpPageSelector;
+    ::std::auto_ptr<FocusManager> mpFocusManager;
     ::boost::shared_ptr<SlotManager> mpSlotManager;
-    ::boost::scoped_ptr<controller::Clipboard> mpClipboard;
-    ::boost::scoped_ptr<ScrollBarManager> mpScrollBarManager;
+    ::std::auto_ptr<controller::Clipboard> mpClipboard;
+    ::std::auto_ptr<ScrollBarManager> mpScrollBarManager;
     mutable ::boost::shared_ptr<CurrentSlideManager> mpCurrentSlideManager;
     ::boost::shared_ptr<SelectionManager> mpSelectionManager;
-    ::boost::shared_ptr<InsertionIndicatorHandler> mpInsertionIndicatorHandler;
     ::boost::shared_ptr<Animator> mpAnimator;
-    ::boost::scoped_ptr<VisibleAreaManager> mpVisibleAreaManager;
 
     // The listener listens to UNO events and thus is a UNO object.
     // For proper life time management and at the same time free access to
@@ -263,7 +253,6 @@ private:
     ::rtl::Reference<controller::Listener> mpListener;
 
     int mnModelChangeLockCount;
-    bool mbIsForcedRearrangePending;
 
     bool mbPreModelChangeDone;
     bool mbPostModelChangePending;
@@ -297,6 +286,11 @@ private:
     /** Remember whether the context menu is open.
     */
     bool mbIsContextMenuOpen;
+
+    /** Some slide sorter wide properties that are used in different
+        classes.
+    */
+    ::boost::shared_ptr<Properties> mpProperties;
 
     /** Delete the given list of normal pages.  This method is a helper
         function for DeleteSelectedPages().

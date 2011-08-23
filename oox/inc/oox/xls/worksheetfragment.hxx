@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,23 +36,24 @@ namespace xls {
 
 // ============================================================================
 
-class DataValidationsContext : public WorksheetContextBase
+class OoxDataValidationsContext : public OoxWorksheetContextBase
 {
 public:
-    explicit            DataValidationsContext( WorksheetFragmentBase& rFragment );
+    explicit            OoxDataValidationsContext( OoxWorksheetFragmentBase& rFragment );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
-    virtual void        onEndElement();
+    // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
+
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
 
 private:
     /** Imports the dataValidation element containing data validation settings. */
     void                importDataValidation( const AttributeList& rAttribs );
     /** Imports the DATAVALIDATION record containing data validation settings. */
-    void                importDataValidation( SequenceInputStream& rStrm );
+    void                importDataValidation( RecordInputStream& rStrm );
 
 private:
     ::std::auto_ptr< ValidationModel > mxValModel;
@@ -60,21 +61,25 @@ private:
 
 // ============================================================================
 
-class WorksheetFragment : public WorksheetFragmentBase
+class OoxWorksheetFragment : public OoxWorksheetFragmentBase
 {
 public:
-    explicit            WorksheetFragment(
+    explicit            OoxWorksheetFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
-                            const ISegmentProgressBarRef& rxProgressBar,
+                            ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
                             sal_Int16 nSheet );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
+
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+
+    // oox.core.FragmentHandler2 interface ------------------------------------
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        initializeImport();
@@ -105,25 +110,25 @@ private:
     void                importControl( const AttributeList& rAttribs );
 
     /** Imports the DIMENSION record containing the used area of the sheet. */
-    void                importDimension( SequenceInputStream& rStrm );
+    void                importDimension( RecordInputStream& rStrm );
     /** Imports sheet format properties from a SHEETFORMATPR record. */
-    void                importSheetFormatPr( SequenceInputStream& rStrm );
+    void                importSheetFormatPr( RecordInputStream& rStrm );
     /** Imports column settings from a COL record. */
-    void                importCol( SequenceInputStream& rStrm );
+    void                importCol( RecordInputStream& rStrm );
     /** Imports a merged cell range from a MERGECELL record. */
-    void                importMergeCell( SequenceInputStream& rStrm );
+    void                importMergeCell( RecordInputStream& rStrm );
     /** Imports a hyperlink for a cell range from a HYPERLINK record. */
-    void                importHyperlink( SequenceInputStream& rStrm );
+    void                importHyperlink( RecordInputStream& rStrm );
     /** Imports the BRK record for an individual row or column page break. */
-    void                importBrk( SequenceInputStream& rStrm, bool bRowBreak );
+    void                importBrk( RecordInputStream& rStrm, bool bRowBreak );
     /** Imports the DRAWING record containing the relation identifier for the DrawingML part. */
-    void                importDrawing( SequenceInputStream& rStrm );
+    void                importDrawing( RecordInputStream& rStrm );
     /** Imports the LEGACYDRAWING record containing the relation identifier for the VML drawing part. */
-    void                importLegacyDrawing( SequenceInputStream& rStrm );
+    void                importLegacyDrawing( RecordInputStream& rStrm );
     /** Imports additional data for an OLE object. */
-    void                importOleObject( SequenceInputStream& rStrm );
+    void                importOleObject( RecordInputStream& rStrm );
     /** Imports additional data for an OCX form control. */
-    void                importControl( SequenceInputStream& rStrm );
+    void                importControl( RecordInputStream& rStrm );
 
     /** Imports the binary data of an embedded OLE object from the fragment with the passed ID. */
     void                importEmbeddedOleData( StreamDataSequence& orEmbeddedData, const ::rtl::OUString& rRelId );
@@ -131,12 +136,14 @@ private:
 
 // ============================================================================
 
+class BiffPivotTableContext;
+
 class BiffWorksheetFragment : public BiffWorksheetFragmentBase
 {
 public:
     explicit            BiffWorksheetFragment(
                             const BiffWorkbookFragmentBase& rParent,
-                            const ISegmentProgressBarRef& rxProgressBar,
+                            ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
                             sal_Int16 nSheet );
     virtual             ~BiffWorksheetFragment();
@@ -145,45 +152,41 @@ public:
     virtual bool        importFragment();
 
 private:
-    /** Imports the AUTOFILTER and following records with auto filter settings. */
-    void                importAutoFilter( BiffInputStream& rStrm );
     /** Imports the COLINFO record and sets column properties and formatting. */
-    void                importColInfo( BiffInputStream& rStrm );
+    void                importColInfo();
     /** Imports the BIFF2 COLUMNDEFAULT record and sets column default formatting. */
-    void                importColumnDefault( BiffInputStream& rStrm );
+    void                importColumnDefault();
     /** Imports the BIFF2 COLWIDTH record and sets column width. */
-    void                importColWidth( BiffInputStream& rStrm );
+    void                importColWidth();
     /** Imports the DATAVALIDATION record containing cell ranges with data validation settings. */
-    void                importDataValidation( BiffInputStream& rStrm );
+    void                importDataValidation();
     /** Imports the DATAVALIDATIONS record containing global data validation settings. */
-    void                importDataValidations( BiffInputStream& rStrm );
+    void                importDataValidations();
     /** Imports the DEFCOLWIDTH record and sets default column width. */
-    void                importDefColWidth( BiffInputStream& rStrm );
+    void                importDefColWidth();
     /** Imports the DEFROWHEIGHT record and sets default row height and properties. */
-    void                importDefRowHeight( BiffInputStream& rStrm );
+    void                importDefRowHeight();
     /** Imports the DIMENSION record containing the used area of the sheet. */
-    void                importDimension( BiffInputStream& rStrm );
+    void                importDimension();
     /** Imports the HYPERLINK record and sets a cell hyperlink. */
-    void                importHyperlink( BiffInputStream& rStrm );
+    void                importHyperlink();
     /** Imports the LABELRANGES record and sets the imported label ranges. */
-    void                importLabelRanges( BiffInputStream& rStrm );
+    void                importLabelRanges();
     /** Imports the MEREDCELLS record and merges all cells in the document. */
-    void                importMergedCells( BiffInputStream& rStrm );
+    void                importMergedCells();
     /** Imports the HORPAGEBREAKS or VERPAGEBREAKS record and inserts page breaks. */
-    void                importPageBreaks( BiffInputStream& rStrm, bool bRowBreak );
+    void                importPageBreaks( bool bRowBreak );
     /** Imports a pivot table. */
-    void                importPTDefinition( BiffInputStream& rStrm );
-    /** Imports the QUERYTABLE and following records and inserts a web query. */
-    void                importQueryTable( BiffInputStream& rStrm );
+    void                importPTDefinition();
     /** Imports the SCENARIOS record and the following scenarios. */
-    void                importScenarios( BiffInputStream& rStrm );
+    void                importScenarios();
     /** Imports the SHAREDFEATHEAD record. */
-    void                importSharedFeatHead( BiffInputStream& rStrm );
+    void                importSharedFeatHead();
     /** Imports the STANDARDWIDTH record and sets standard column width. */
-    void                importStandardWidth( BiffInputStream& rStrm );
+    void                importStandardWidth();
 
 private:
-    ::boost::shared_ptr< BiffWorksheetContextBase > mxContext;
+    ::boost::shared_ptr< BiffPivotTableContext > mxPTContext;
 };
 
 // ============================================================================

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,17 +30,16 @@ import com.sun.star.awt.*;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * @author rpiterman
  *
  * This class suppoprts imple cases where a UI control can
  * be directly synchronized with a data property.
- * Such controls are: the different text controls
- * (synchronizing the "Text" , "Value", "Date", "Time" property),
+ * Such controls are: the different text controls 
+ * (synchronizing the "Text" , "Value", "Date", "Time" property), 
  * Checkbox controls, Dropdown listbox controls (synchronizing the
- * SelectedItems[] property.
+ * SelectedItems[] property. 
  * For those controls, static convenience methods are offered, to simplify use.
  */
 public class UnoDataAware extends DataAware
@@ -80,7 +79,7 @@ public class UnoDataAware extends DataAware
 
     protected void setToUI(Object value)
     {
-        //System.out.println("Settings uno property : "+ Helper.getUnoPropertyValue(this.unoModel,PropertyNames.PROPERTY_NAME) + "<-" +stringof(value));
+        //System.out.println("Settings uno property : "+ Helper.getUnoPropertyValue(this.unoModel,"Name") + "<-" +stringof(value));
         Helper.setUnoPropertyValue(unoModel, unoPropName, value);
     }
 
@@ -204,7 +203,7 @@ public class UnoDataAware extends DataAware
                 field
                 ? DataAwareFields.getFieldValueFor(data, prop, new Short((short) 0))
                 : new DataAware.PropertyValue(prop, data),
-                checkBox, PropertyNames.PROPERTY_STATE);
+                checkBox, "State");
         xcheckBox.addItemListener(itemListener(uda, listener));
         return uda;
     }
@@ -234,7 +233,7 @@ public class UnoDataAware extends DataAware
         return new UnoDataAware(data,
                 field ? DataAwareFields.getFieldValueFor(data, prop, "")
                 : new DataAware.PropertyValue(prop, data),
-                label, PropertyNames.PROPERTY_LABEL);
+                label, "Label");
     }
 
     public static UnoDataAware attachListBox(Object data, String prop, Object listBox, final Listener listener, boolean field)
@@ -261,6 +260,6 @@ public class UnoDataAware extends DataAware
 
     public static void setEnabled(Object control, Boolean enabled)
     {
-        Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_ENABLED, enabled);
+        Helper.setUnoPropertyValue(getModel(control), "Enabled", enabled);
     }
 }

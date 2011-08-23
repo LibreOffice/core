@@ -57,7 +57,11 @@
  * @file
  * Float frame whose anchor is page.
  ************************************************************************/
-#include    "xffloatframe.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-01-21 create this file.
+ ************************************************************************/
+#include	"xffloatframe.hxx"
 
 XFFloatFrame::XFFloatFrame(sal_Int32 page)
 {
@@ -73,7 +77,7 @@ XFFloatFrame::XFFloatFrame(sal_Int32 start, sal_Int32 end, sal_Bool all)
     SetAnchorType(enumXFAnchorPage);
 }
 
-void    XFFloatFrame::ToXml(IXFStream *pStrm)
+void	XFFloatFrame::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();

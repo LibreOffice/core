@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,21 +26,19 @@
  *
  ************************************************************************/
 
-#ifndef DOM_CHARACTERDATA_HXX
-#define DOM_CHARACTERDATA_HXX
-
-#include <libxml/tree.h>
+#ifndef _CHARACTERDATA_HXX
+#define _CHARACTERDATA_HXX
 
 #include <sal/types.h>
-
 #include <cppuhelper/implbase1.hxx>
-
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XCharacterData.hpp>
-
-#include <node.hxx>
-
+#include <com/sun/star/xml/dom/XElement.hpp>
+#include <com/sun/star/xml/dom/XDOMImplementation.hpp>
+#include <libxml/tree.h>
+#include "node.hxx"
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -48,19 +46,14 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1< CNode, XCharacterData >
-        CCharacterData_Base;
-
-    class CCharacterData
-        : public CCharacterData_Base
+    class CCharacterData : public cppu::ImplInheritanceHelper1< CNode, XCharacterData >
     {
 
-    protected:
-        CCharacterData(CDocument const& rDocument, ::osl::Mutex const& rMutex,
-                NodeType const& reNodeType, xmlNodePtr const& rpNode);
 
-        void dispatchEvent_Impl(
-                OUString const& prevValue, OUString const& newValue);
+    protected:
+        CCharacterData();
+        void init_characterdata(const xmlNodePtr aNodePtr);
+        void _dispatchEvent(const OUString& prevValue, const OUString& newValue);
 
     public:
         /**
@@ -93,7 +86,7 @@ namespace DOM
             throw (RuntimeException, DOMException);
 
         /**
-        Replace the characters starting at the specified 16-bit unit offset
+        Replace the characters starting at the specified 16-bit unit offset 
         with the specified string.
         */
         virtual void SAL_CALL replaceData(sal_Int32 offset, sal_Int32 count, const OUString& arg)

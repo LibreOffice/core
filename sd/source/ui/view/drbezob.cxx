@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
 {
     SfxItemSet aAttrSet( mpView->GetDoc()->GetPool() );
     mpView->GetAttributes( aAttrSet );
-    rSet.Put(aAttrSet, sal_False); // <- sal_False, damit DontCare-Status uebernommen wird
+    rSet.Put(aAttrSet, FALSE); // <- FALSE, damit DontCare-Status uebernommen wird
 
     FunctionReference xFunc( mpViewSh->GetCurrentFunction() );
 
@@ -134,13 +134,13 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
     {
         if(xFunc->ISA(FuSelection))
         {
-            sal_uInt16 nEditMode = static_cast<FuSelection*>(xFunc.get())->GetEditMode();
-            rSet.Put(SfxBoolItem(nEditMode, sal_True));
+            USHORT nEditMode = static_cast<FuSelection*>(xFunc.get())->GetEditMode();
+            rSet.Put(SfxBoolItem(nEditMode, TRUE));
         }
         else if (xFunc->ISA(FuConstructBezierPolygon))
         {
-            sal_uInt16 nEditMode = static_cast<FuConstructBezierPolygon*>(xFunc.get())->GetEditMode();
-            rSet.Put(SfxBoolItem(nEditMode, sal_True));
+            USHORT nEditMode = static_cast<FuConstructBezierPolygon*>(xFunc.get())->GetEditMode();
+            rSet.Put(SfxBoolItem(nEditMode, TRUE));
         }
     }
 
@@ -149,17 +149,17 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
         // #i77187# if object is move and/or size protected, do not allow point editing at all
         rSet.DisableItem(SID_BEZIER_MOVE);
         rSet.DisableItem(SID_BEZIER_INSERT);
-
+        
         rSet.DisableItem(SID_BEZIER_DELETE);
         rSet.DisableItem(SID_BEZIER_CUTLINE);
         rSet.DisableItem(SID_BEZIER_CONVERT);
-
+        
         rSet.DisableItem(SID_BEZIER_EDGE);
         rSet.DisableItem(SID_BEZIER_SMOOTH);
         rSet.DisableItem(SID_BEZIER_SYMMTR);
-
+        
         rSet.DisableItem(SID_BEZIER_CLOSE);
-
+        
         rSet.DisableItem(SID_BEZIER_ELIMINATE_POINTS);
     }
     else
@@ -188,8 +188,8 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             switch (eSegm)
             {
                 case SDRPATHSEGMENT_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
-                case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,sal_False)); break; // Button reingedrueckt = Kurve
-                case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,sal_True));  break;
+                case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,FALSE)); break; // Button reingedrueckt = Kurve
+                case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,TRUE));  break;
                 default: break;
             }
         }
@@ -205,9 +205,9 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             switch (eSmooth)
             {
                 case SDRPATHSMOOTH_DONTCARE  : break;
-                case SDRPATHSMOOTH_ANGULAR   : rSet.Put(SfxBoolItem(SID_BEZIER_EDGE,  sal_True)); break;
-                case SDRPATHSMOOTH_ASYMMETRIC: rSet.Put(SfxBoolItem(SID_BEZIER_SMOOTH,sal_True)); break;
-                case SDRPATHSMOOTH_SYMMETRIC : rSet.Put(SfxBoolItem(SID_BEZIER_SYMMTR,sal_True)); break;
+                case SDRPATHSMOOTH_ANGULAR   : rSet.Put(SfxBoolItem(SID_BEZIER_EDGE,  TRUE)); break;
+                case SDRPATHSMOOTH_ASYMMETRIC: rSet.Put(SfxBoolItem(SID_BEZIER_SMOOTH,TRUE)); break;
+                case SDRPATHSMOOTH_SYMMETRIC : rSet.Put(SfxBoolItem(SID_BEZIER_SYMMTR,TRUE)); break;
             }
         }
         if (!pIPPEC || !pIPPEC->IsOpenCloseMarkedObjectsPossible())
@@ -220,13 +220,13 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             switch (eClose)
             {
                 case SDROBJCLOSED_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CLOSE); break;
-                case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,sal_False)); break;
-                case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,sal_True)); break;
+                case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,FALSE)); break;
+                case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,TRUE)); break;
                 default: break;
             }
         }
 
-        if(pIPPEC == mpView)
+        if(pIPPEC == mpView) 
             rSet.Put(SfxBoolItem(SID_BEZIER_ELIMINATE_POINTS, mpView->IsEliminatePolyPoints()));
         else
             rSet.DisableItem( SID_BEZIER_ELIMINATE_POINTS ); // only works for views
@@ -242,7 +242,7 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
 
 void BezierObjectBar::Execute(SfxRequest& rReq)
 {
-    sal_uInt16 nSId = rReq.GetSlot();
+    USHORT nSId = rReq.GetSlot();
 
     switch (nSId)
     {

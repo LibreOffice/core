@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace sd {
 |*
 \************************************************************************/
 
-class FuText
+class FuText 
     : public FuConstruct
 {
 public:
@@ -56,24 +56,25 @@ public:
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
-    virtual sal_Bool Command(const CommandEvent& rCEvt);
-    virtual sal_Bool RequestHelp(const HelpEvent& rHEvt);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BOOL Command(const CommandEvent& rCEvt);
+    virtual BOOL RequestHelp(const HelpEvent& rHEvt);
     virtual void ReceiveRequest(SfxRequest& rReq);
     virtual void DoubleClick(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 
-    void    SetInEditMode(const MouseEvent& rMEvt, sal_Bool bQuickDrag);
-    sal_Bool    DeleteDefaultText();
+    void    SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag);
+    BOOL	DeleteDefaultText();
     SdrTextObj* GetTextObj() { return static_cast< SdrTextObj* >( mxTextObj.get() ); }
 
     DECL_LINK(SpellError, void* );
 
+    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
     /** is called when the currenct function should be aborted. <p>
@@ -87,21 +88,22 @@ public:
     static void ChangeFontSize( bool, OutlinerView*, const FontList*, ::sd::View* );
 
 protected:
-    FuText (ViewShell* pViewSh,
-        ::sd::Window* pWin,
+    FuText (ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq);
 
     virtual void disposing();
 
-    SdrObjectWeakRef    mxTextObj;
+    SdrObjectWeakRef	mxTextObj;
     Link                aOldLink;
-    sal_Bool                bFirstObjCreated;
+    BOOL                bFirstObjCreated;
 
-    SfxRequest&         rRequest;
+    SfxRequest&			rRequest;
 
 private:
+    // #97016#
     void ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj);
     void ImpSetAttributesFitToSize(SdrTextObj* pTxtObj);
     void ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj);

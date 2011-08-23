@@ -30,9 +30,6 @@
 #define SC_XIHELPER_HXX
 
 #include <editeng/editdata.hxx>
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include "scmatrix.hxx"
 #include "xladdress.hxx"
 #include "xiroot.hxx"
@@ -74,6 +71,13 @@ public:
 
     // cell range -------------------------------------------------------------
 
+    /** Checks if the passed cell range is valid (checks start and end position).
+        @param rXclRange  The Excel cell range to check.
+        @param bWarn  true = Sets the internal flag that produces a warning box
+            after loading/saving the file, if the cell range is not valid.
+        @return  true = Cell range in rXclRange is valid. */
+    bool                CheckRange( const XclRange& rXclRange, bool bWarn );
+
     /** Converts the passed Excel cell range to a Calc cell range.
         @param rScRange  (Out) The converted Calc cell range, if valid.
         @param rXclRange  The Excel cell range to convert.
@@ -107,7 +111,7 @@ class EditTextObject;
 /** This class provides methods to convert an XclImpString.
     @The string can be converted to an edit engine text object or directly
     to a Calc edit cell. */
-class XclImpStringHelper : boost::noncopyable
+class XclImpStringHelper : ScfNoInstance
 {
 public:
     /** Returns a new edit engine text object.
@@ -122,11 +126,6 @@ public:
                             const XclImpRoot& rRoot,
                             const XclImpString& rString,
                             sal_uInt16 nXFIndex = 0 );
-private:
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static methods. To enforce this, the default constructor
-        is made private */
-    XclImpStringHelper();
 };
 
 // Header/footer conversion ===================================================
@@ -166,7 +165,7 @@ struct XclFontData;
     Known but unsupported control sequences:
     &G                      picture
  */
-class XclImpHFConverter : protected XclImpRoot, private boost::noncopyable
+class XclImpHFConverter : protected XclImpRoot, ScfNoCopy
 {
 public:
     explicit            XclImpHFConverter( const XclImpRoot& rRoot );
@@ -189,7 +188,7 @@ private:    // types
     /** Contains all information about a header/footer portion. */
     struct XclImpHFPortionInfo
     {
-        typedef boost::shared_ptr< EditTextObject > EditTextObjectRef;
+        typedef ScfRef< EditTextObject > EditTextObjectRef;
         EditTextObjectRef   mxObj;          /// Edit engine text object.
         ESelection          maSel;          /// Edit engine selection.
         sal_Int32           mnHeight;       /// Height of previous lines in twips.
@@ -251,7 +250,7 @@ private:
 /** This class contains static methods to decode an URL stored in an Excel file.
     @descr  Excel URLs can contain a sheet name, for instance: path\[test.xls]Sheet1
     This sheet name will be extracted automatically. */
-class XclImpUrlHelper : boost::noncopyable
+class XclImpUrlHelper : ScfNoInstance
 {
 public:
     /** Decodes an encoded external document URL with optional sheet name.
@@ -281,12 +280,6 @@ public:
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
     static bool         DecodeLink( String& rApplic, String& rTopic, const String rEncUrl );
-
-private:
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static methods. To enforce this, the default constructor
-        is made private */
-    XclImpUrlHelper();
 };
 
 // Cached values ==============================================================
@@ -295,7 +288,7 @@ class ScTokenArray;
 
 /** This class stores one cached value of a cached value list (used for instance in
     CRN, EXTERNNAME, tArray). */
-class XclImpCachedValue : boost::noncopyable
+class XclImpCachedValue : ScfNoCopy
 {
 public:
     /** Creates a cached value and reads contents from stream and stores it with its array address. */
@@ -313,7 +306,7 @@ public:
     /** Returns the cached Calc error code, if this value has Error type, else 0. */
     inline sal_uInt8    GetXclError() const { return (mnType == EXC_CACHEDVAL_ERROR) ? mnBoolErr : EXC_ERR_NA; }
     /** Returns the cached Calc error code, if this value has Error type, else 0. */
-    sal_uInt16              GetScError() const;
+    USHORT              GetScError() const;
     /** Returns the token array if this is a Boolean value or error value, else 0. */
     inline const ScTokenArray* GetBoolErrFmla() const { return mxTokArr.get(); }
 
@@ -341,7 +334,7 @@ public:
     ScMatrixRef         CreateScMatrix() const;
 
 private:
-    typedef boost::ptr_vector< XclImpCachedValue > XclImpValueList;
+    typedef ScfDelList< XclImpCachedValue > XclImpValueList;
 
     XclImpValueList     maValueList;    /// List of cached cell values.
     SCSIZE              mnScCols;       /// Number of cached columns.

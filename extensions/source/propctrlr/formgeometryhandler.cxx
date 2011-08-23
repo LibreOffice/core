@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -376,7 +376,7 @@ namespace pcr
             break;
 
             default:
-                OSL_FAIL( "FormGeometryHandler::getPropertyValue: huh?" );
+                OSL_ENSURE( false, "FormGeometryHandler::getPropertyValue: huh?" );
                 break;
             }
         }
@@ -443,7 +443,7 @@ namespace pcr
             break;
 
             default:
-                OSL_FAIL( "FormGeometryHandler::getPropertyValue: huh?" );
+                OSL_ENSURE( false, "FormGeometryHandler::getPropertyValue: huh?" );
                 break;
             }
         }
@@ -491,7 +491,7 @@ namespace pcr
                 break;
 
             default:
-                OSL_FAIL( "FormGeometryHandler::describePropertyLine: huh?" );
+                OSL_ENSURE( false, "FormGeometryHandler::describePropertyLine: huh?" );
                 break;
             }
         }
@@ -547,7 +547,7 @@ namespace pcr
         }
         break;
         default:
-            OSL_FAIL( "FormGeometryHandler::actuatingPropertyChanged: not registered for this property!" );
+            OSL_ENSURE( false, "FormGeometryHandler::actuatingPropertyChanged: not registered for this property!" );
             break;
         }
     }
@@ -706,7 +706,7 @@ namespace pcr
             break;
 
             default:
-                OSL_FAIL( "FormGeometryHandler::impl_setSheetAnchorType_nothrow: illegal anchor type!" );
+                OSL_ENSURE( false, "FormGeometryHandler::impl_setSheetAnchorType_nothrow: illegal anchor type!" );
                 break;
             }
         }
@@ -742,13 +742,13 @@ namespace pcr
         ::std::vector< EventTranslation > aEventTranslations;
         aEventTranslations.reserve(2);
 
-        if ( _event.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Position" ) ) )
+        if ( _event.PropertyName.equalsAscii( "Position" ) )
         {
             AwtPoint aPos = m_xShape->getPosition();
             aEventTranslations.push_back( EventTranslation( PROPERTY_POSITIONX, makeAny( aPos.X ) ) );
             aEventTranslations.push_back( EventTranslation( PROPERTY_POSITIONY, makeAny( aPos.Y ) ) );
         }
-        else if ( _event.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+        else if ( _event.PropertyName.equalsAscii( "Size" ) )
         {
             AwtSize aSize = m_xShape->getSize();
             aEventTranslations.push_back( EventTranslation( PROPERTY_WIDTH, makeAny( aSize.Width ) ) );
@@ -777,7 +777,7 @@ namespace pcr
             m_aPropertyChangeListeners.notifyEach( &XPropertyChangeListener::propertyChange, aTranslatedEvent );
         }
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ShapeGeometryChangeNotifier::disposing( const EventObject& /*_event*/ ) throw (RuntimeException)
     {

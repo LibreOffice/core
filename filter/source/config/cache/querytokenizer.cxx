@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,9 @@ namespace filter{
 //_______________________________________________
 // definitions
 
-
-
+/*-----------------------------------------------
+    01.08.2003 10:42
+-----------------------------------------------*/
 QueryTokenizer::QueryTokenizer(const ::rtl::OUString& sQuery)
     : m_bValid(sal_True)
 {
@@ -79,15 +80,17 @@ QueryTokenizer::QueryTokenizer(const ::rtl::OUString& sQuery)
     }
 }
 
-
-
+/*-----------------------------------------------
+    01.08.2003 10:28
+-----------------------------------------------*/
 QueryTokenizer::~QueryTokenizer()
 {
     /*TODO*/
 }
 
-
-
+/*-----------------------------------------------
+    01.08.2003 10:53
+-----------------------------------------------*/
 sal_Bool QueryTokenizer::valid() const
 {
     return m_bValid;

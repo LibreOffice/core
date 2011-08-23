@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,7 +136,7 @@ public class SwXTextCursor extends TestCase {
     *      {@link ifc.text._XTextRange} : major text of text document</li>
     * </ul>
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
                                                                  PrintWriter log) {
         XInterface oObj = null;
 
@@ -157,19 +157,19 @@ public class SwXTextCursor extends TestCase {
                 aText.insertString(textCursor, "" + (3 - i), false);
 
                 for (int j = 0; j < 5; j++) {
-                    aText.insertString(textCursor, "XTextCursor,XTextCursor",
+                    aText.insertString(textCursor, "XTextCursor,XTextCursor", 
                                        false);
-                    aText.insertString(textCursor, "The quick brown fox ",
+                    aText.insertString(textCursor, "The quick brown fox ", 
                                        false);
-                    aText.insertString(textCursor, "jumps over the lazy dog ",
+                    aText.insertString(textCursor, "jumps over the lazy dog ", 
                                        false);
                 }
 
-                aText.insertControlCharacter(textCursor,
-                                             ControlCharacter.PARAGRAPH_BREAK,
+                aText.insertControlCharacter(textCursor, 
+                                             ControlCharacter.PARAGRAPH_BREAK, 
                                              false);
-                aText.insertControlCharacter(textCursor,
-                                             ControlCharacter.LINE_BREAK,
+                aText.insertControlCharacter(textCursor, 
+                                             ControlCharacter.LINE_BREAK, 
                                              false);
             }
         } catch (com.sun.star.lang.IllegalArgumentException e) {
@@ -189,11 +189,11 @@ public class SwXTextCursor extends TestCase {
 
         //Adding relation for util.XSortable
         final XParagraphCursor paragrCursor = (XParagraphCursor) UnoRuntime.queryInterface(
-                                                      XParagraphCursor.class,
+                                                      XParagraphCursor.class, 
                                                       oObj);
         final PrintWriter finalLog = log;
 
-        tEnv.addObjRelation("SORTCHECKER",
+        tEnv.addObjRelation("SORTCHECKER", 
                             new ifc.util._XSortable.XSortChecker() {
             PrintWriter out = finalLog;
 
@@ -205,32 +205,32 @@ public class SwXTextCursor extends TestCase {
                 textCursor.gotoEnd(false);
 
                 try {
-                    aText.insertControlCharacter(textCursor,
-                                                 ControlCharacter.PARAGRAPH_BREAK,
+                    aText.insertControlCharacter(textCursor, 
+                                                 ControlCharacter.PARAGRAPH_BREAK, 
                                                  false);
                     aText.insertString(textCursor, "4", false);
-                    aText.insertControlCharacter(textCursor,
-                                                 ControlCharacter.PARAGRAPH_BREAK,
+                    aText.insertControlCharacter(textCursor, 
+                                                 ControlCharacter.PARAGRAPH_BREAK, 
                                                  false);
                     aText.insertString(textCursor, "b", false);
-                    aText.insertControlCharacter(textCursor,
-                                                 ControlCharacter.PARAGRAPH_BREAK,
+                    aText.insertControlCharacter(textCursor, 
+                                                 ControlCharacter.PARAGRAPH_BREAK, 
                                                  false);
                     aText.insertString(textCursor, "3", false);
-                    aText.insertControlCharacter(textCursor,
-                                                 ControlCharacter.PARAGRAPH_BREAK,
+                    aText.insertControlCharacter(textCursor, 
+                                                 ControlCharacter.PARAGRAPH_BREAK, 
                                                  false);
                     aText.insertString(textCursor, "a", false);
-                    aText.insertControlCharacter(textCursor,
-                                                 ControlCharacter.PARAGRAPH_BREAK,
+                    aText.insertControlCharacter(textCursor, 
+                                                 ControlCharacter.PARAGRAPH_BREAK, 
                                                  false);
                     aText.insertString(textCursor, "23", false);
-                    aText.insertControlCharacter(textCursor,
-                                                 ControlCharacter.PARAGRAPH_BREAK,
+                    aText.insertControlCharacter(textCursor, 
+                                                 ControlCharacter.PARAGRAPH_BREAK, 
                                                  false);
                     aText.insertString(textCursor, "ab", false);
-                    aText.insertControlCharacter(textCursor,
-                                                 ControlCharacter.PARAGRAPH_BREAK,
+                    aText.insertControlCharacter(textCursor, 
+                                                 ControlCharacter.PARAGRAPH_BREAK, 
                                                  false);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
                     out.println("Unexpected exception:" + e);
@@ -247,10 +247,10 @@ public class SwXTextCursor extends TestCase {
                 out.println(textCursor.getString());
             }
 
-            public boolean checkSort(boolean isSortNumbering,
+            public boolean checkSort(boolean isSortNumbering, 
                                      boolean isSortAscending) {
                 out.println("Sort checking...");
-
+                
                 String ls = System.getProperty("line.separator");
 
                 String text = paragrCursor.getString();

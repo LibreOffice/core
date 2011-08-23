@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 
 #include "address.hxx"
 #include "ftools.hxx"
-#include <boost/noncopyable.hpp>
 
 class SfxObjectShell;
 
@@ -90,7 +89,7 @@ class SvStream;
 class ScDocument;
 
 /** This class contains static helper methods for the Excel import and export filters. */
-class XclTools : boost::noncopyable
+class XclTools : ScfNoInstance
 {
 public:
     // GUID's -----------------------------------------------------------------
@@ -121,9 +120,9 @@ public:
     static sal_uInt8    GetXclOrientFromRot( sal_uInt16 nXclRot );
 
     /** Converts a Calc error code to an Excel error code. */
-    static sal_uInt8    GetXclErrorCode( sal_uInt16 nScError );
+    static sal_uInt8    GetXclErrorCode( USHORT nScError );
     /** Converts an Excel error code to a Calc error code. */
-    static sal_uInt16       GetScErrorCode( sal_uInt8 nXclError );
+    static USHORT       GetScErrorCode( sal_uInt8 nXclError );
 
     /** Converts the passed BIFF error to a double containing the respective Calc error code. */
     static double       ErrorToDouble( sal_uInt8 nXclError );
@@ -150,10 +149,10 @@ public:
 
     /** Returns the Calc column width (twips) for the passed Excel width.
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
-    static sal_uInt16       GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth );
+    static USHORT       GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth );
     /** Returns the Excel column width for the passed Calc width (twips).
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
-    static sal_uInt16   GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth );
+    static sal_uInt16   GetXclColumnWidth( USHORT nScWidth, long nScCharWidth );
 
     /** Returns a correction value to convert column widths from/to default column widths.
         @param nXclDefFontHeight  Excel height of application default font. */
@@ -234,7 +233,7 @@ public:
     static void         SkipSubStream( XclImpStream& rStrm );
 
     // Basic macro names ------------------------------------------------------
-
+    
     /** Returns the full StarBasic macro URL from an Excel macro name. */
     static ::rtl::OUString GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell = 0 );
     /** Returns the full StarBasic macro URL from an Excel module and macro name. */
@@ -251,11 +250,6 @@ private:
     static const String maCFStyleNamePrefix2;       /// Prefix for cond. formatting style names from OOX filter.
     static const ::rtl::OUString maSbMacroPrefix;   /// Prefix for StarBasic macros.
     static const ::rtl::OUString maSbMacroSuffix;   /// Suffix for StarBasic macros.
-
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static items. To enforce this, the default constructor
-        is made private */
-    XclTools();
 };
 
 // read/write colors ----------------------------------------------------------

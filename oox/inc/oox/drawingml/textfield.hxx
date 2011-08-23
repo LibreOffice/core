@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ public:
     inline void setType( const ::rtl::OUString& sType ) { msType = sType; }
     inline void setUuid( const ::rtl::OUString & sUuid ) { msUuid = sUuid; }
 
-    virtual sal_Int32    insertAt(
+    virtual void    insertAt(
                         const ::oox::core::XmlFilterBase& rFilterBase,
                         const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > & xText,
                         const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > &xAt,

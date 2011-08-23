@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ public class _XTimeField extends MultiMethodTest {
         oObj.setTime(11150000) ;
 
         result = oObj.getTime() == 11150000 ;
-
+        
         if (! result ) {
             System.out.println("Getting "+oObj.getTime()+ " expected 11150000");
         }
@@ -84,7 +84,7 @@ public class _XTimeField extends MultiMethodTest {
 
     /**
     * Gets the current value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     */
     public void _getTime() {
 
@@ -114,7 +114,7 @@ public class _XTimeField extends MultiMethodTest {
 
     /**
     * Gets the current value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     */
     public void _getMin() {
 
@@ -144,7 +144,7 @@ public class _XTimeField extends MultiMethodTest {
 
     /**
     * Gets the current value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     */
     public void _getMax() {
 
@@ -178,7 +178,7 @@ public class _XTimeField extends MultiMethodTest {
 
     /**
     * Gets the current value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     */
     public void _getFirst() {
 
@@ -214,7 +214,7 @@ public class _XTimeField extends MultiMethodTest {
 
     /**
     * Gets the current value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     */
     public void _getLast() {
 
@@ -228,7 +228,7 @@ public class _XTimeField extends MultiMethodTest {
 
     /**
     * Sets the value to empty. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> setTime </code> : value must be not empty </li>
@@ -281,7 +281,7 @@ public class _XTimeField extends MultiMethodTest {
 
     /**
     * Gets strict state and stores it. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred.
+    * Has <b> OK </b> status if no runtime exceptions occured.
     */
     public void _isStrictFormat() {
 

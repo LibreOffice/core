@@ -29,6 +29,7 @@ PRJ=..
 PRJNAME=xmlscript
 TARGET=xcr
 NO_BSYMBOLIC=TRUE
+#USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -55,7 +56,6 @@ SHL1LIBS= \
 SHL1STDLIBS= \
         $(COMPHELPERLIB)                \
         $(CPPUHELPERLIB)		\
-        $(COMPHELPERLIB)		\
         $(CPPULIB) 			\
         $(SALLIB)
 
@@ -75,11 +75,3 @@ $(MISC)$/$(SHL1TARGET).flt : makefile.mk xcr.flt
     @echo ------------------------------
     @echo Making: $@
     $(TYPE) xcr.flt > $@
-
-ALLTAR : $(MISC)/xcr.component
-
-$(MISC)/xcr.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        xcr.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt xcr.component

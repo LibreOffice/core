@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@
 
 enum BasicEntryType { OBJ_TYPE_UNKNOWN, OBJ_TYPE_DOCUMENT, OBJ_TYPE_LIBRARY, OBJ_TYPE_MODULE, OBJ_TYPE_DIALOG, OBJ_TYPE_METHOD, OBJ_TYPE_DOCUMENT_OBJECTS, OBJ_TYPE_USERFORMS, OBJ_TYPE_NORMAL_MODULES, OBJ_TYPE_CLASS_MODULES };
 
-#define BROWSEMODE_MODULES      0x01
-#define BROWSEMODE_SUBS         0x02
-#define BROWSEMODE_DIALOGS      0x04
+#define BROWSEMODE_MODULES		0x01
+#define BROWSEMODE_SUBS			0x02
+#define BROWSEMODE_DIALOGS		0x04
 
 class SbMethod;
 class SbxObject;
@@ -153,21 +153,21 @@ class BasicTreeListBox  :public SvTreeListBox
                         ,public ::basctl::DocumentEventListener
 {
 private:
-    sal_uInt16                          nMode;
+    USHORT                          nMode;
     ::basctl::DocumentEventNotifier m_aNotifier;
 
-    void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage );
+    void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage, const Image& rImageHC );
 
 protected:
-    virtual void            RequestingChilds( SvLBoxEntry* pParent );
-    virtual void            ExpandedHdl();
-    virtual SvLBoxEntry*    CloneEntry( SvLBoxEntry* pSource );
-    virtual long            ExpandingHdl();
+    virtual void			RequestingChilds( SvLBoxEntry* pParent );
+    virtual void 			ExpandedHdl();
+    virtual SvLBoxEntry* 	CloneEntry( SvLBoxEntry* pSource );
+    virtual long			ExpandingHdl();
 
     void                    ImpCreateLibEntries( SvLBoxEntry* pShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation );
-    void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName );
-    void                    ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName );
-    void                    ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const String& rLibName );
+    void 					ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName );
+    void 					ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName );
+    void 					ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const String& rLibName );
     SvLBoxEntry*            ImpFindEntry( SvLBoxEntry* pParent, const String& rText );
 
     // DocumentEventListener
@@ -187,29 +187,29 @@ public:
 
     void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void            ScanAllEntries();
-    void            UpdateEntries();
+    void			UpdateEntries();
 
-    sal_Bool            IsEntryProtected( SvLBoxEntry* pEntry );
+    BOOL			IsEntryProtected( SvLBoxEntry* pEntry );
 
-    void            SetMode( sal_uInt16 nM ) { nMode = nM; }
-    sal_uInt16          GetMode() const { return nMode; }
+    void			SetMode( USHORT nM ) { nMode = nM; }
+    USHORT			GetMode() const { return nMode; }
 
-    SbModule*       FindModule( SvLBoxEntry* pEntry );
-    SbxVariable*    FindVariable( SvLBoxEntry* pEntry );
+    SbModule*		FindModule( SvLBoxEntry* pEntry );
+    SbxVariable*	FindVariable( SvLBoxEntry* pEntry );
     SvLBoxEntry*    FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     SvLBoxEntry*    FindEntry( SvLBoxEntry* pParent, const String& rText, BasicEntryType eType );
 
     BasicEntryDescriptor    GetEntryDescriptor( SvLBoxEntry* pEntry );
 
-    sal_uInt16          ConvertType( BasicEntryType eType );
+    USHORT          ConvertType( BasicEntryType eType );
     bool            IsValidEntry( SvLBoxEntry* pEntry );
 
-    SvLBoxEntry*    AddEntry( const String& rText, const Image& rImage,
-                              SvLBoxEntry* pParent, bool bChildrenOnDemand,
+    SvLBoxEntry*    AddEntry( const String& rText, const Image& rImage, const Image& rImageHC,
+                              SvLBoxEntry* pParent, bool bChildrenOnDemand, 
                               std::auto_ptr< BasicEntry > aUserData );
 
     String          GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
-    void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
+    void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage, Image& rImageHC );
 
     void            SetCurrentEntry( BasicEntryDescriptor& rDesc );
 
@@ -217,6 +217,6 @@ private:
     LibraryType     GetLibraryType() const;
 };
 
-#endif  // _BASTYPE2_HXX
+#endif	// _BASTYPE2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

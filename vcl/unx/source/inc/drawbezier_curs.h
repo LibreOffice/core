@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define drawbezier_curs_height 32
 #define drawbezier_curs_x_hot 7
 #define drawbezier_curs_y_hot 7
-static unsigned char drawbezier_curs_bits[] = {
+static char drawbezier_curs_bits[] = {
    0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00,
    0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0xbf, 0x7e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

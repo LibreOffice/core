@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,24 +94,6 @@ static const ::rtl::OUString lcl_aCompleteRange(
 typedef ::std::multimap< OUString, uno::WeakReference< chart2::data::XDataSequence > >
     lcl_tSequenceMap;
 
-Sequence< OUString > lcl_AnyToStringSequence( const Sequence< uno::Any >& aAnySeq )
-{
-    Sequence< OUString > aResult;
-    aResult.realloc( aAnySeq.getLength() );
-    transform( aAnySeq.getConstArray(), aAnySeq.getConstArray() + aAnySeq.getLength(),
-               aResult.getArray(), CommonFunctors::AnyToString() );
-    return aResult;
-}
-
-Sequence< uno::Any > lcl_StringToAnySequence( const Sequence< OUString >& aStringSeq )
-{
-    Sequence< uno::Any > aResult;
-    aResult.realloc( aStringSeq.getLength() );
-    transform( aStringSeq.getConstArray(), aStringSeq.getConstArray() + aStringSeq.getLength(),
-               aResult.getArray(), CommonFunctors::makeAny< OUString >() );
-    return aResult;
-}
-
 struct lcl_setModified : public ::std::unary_function< lcl_tSequenceMap, void >
 {
     void operator() ( const lcl_tSequenceMap::value_type & rMapEntry )
@@ -173,9 +155,9 @@ struct lcl_internalizeSeries : public ::std::unary_function< Reference< chart2::
                 if( xLabel.is() )
                 {
                     if( m_bDataInColumns )
-                        m_rInternalData.setComplexColumnLabel( nNewIndex, ContainerHelper::SequenceToVector( lcl_StringToAnySequence( xLabel->getTextualData() ) ) );
+                        m_rInternalData.setComplexColumnLabel( nNewIndex, ContainerHelper::SequenceToVector( xLabel->getTextualData() ) );
                     else
-                        m_rInternalData.setComplexRowLabel( nNewIndex, ContainerHelper::SequenceToVector( lcl_StringToAnySequence( xLabel->getTextualData() ) ) );
+                        m_rInternalData.setComplexRowLabel( nNewIndex, ContainerHelper::SequenceToVector( xLabel->getTextualData() ) );
                     if( m_bConnectToModel )
                     {
                         Reference< chart2::data::XDataSequence > xNewLabel(
@@ -206,37 +188,37 @@ private:
     bool                    m_bDataInColumns;
 };
 
-struct lcl_copyFromLevel : public ::std::unary_function< vector< uno::Any >, uno::Any >
+struct lcl_makeAnyFromLevelVector : public ::std::unary_function< vector< OUString >, uno::Any >
 {
 public:
 
-    explicit lcl_copyFromLevel( sal_Int32 nLevel ) : m_nLevel( nLevel )
+    explicit lcl_makeAnyFromLevelVector( sal_Int32 nLevel ) : m_nLevel( nLevel )
     {}
 
-    uno::Any operator() ( const vector< uno::Any >& rVector )
+    uno::Any operator() ( const vector< OUString >& rVector )
     {
-        uno::Any aRet;
+        OUString aString;
         if( m_nLevel <  static_cast< sal_Int32 >(rVector.size()) )
-            aRet = rVector[m_nLevel];
-        return aRet;
+            aString = rVector[m_nLevel];
+        return uno::makeAny( aString );
     }
 
 private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_getStringFromLevelVector : public ::std::unary_function< vector< uno::Any >, OUString >
+struct lcl_getStringFromLevelVector : public ::std::unary_function< vector< OUString >, OUString >
 {
 public:
 
     explicit lcl_getStringFromLevelVector( sal_Int32 nLevel ) : m_nLevel( nLevel )
     {}
 
-    OUString operator() ( const vector< uno::Any >& rVector )
+    OUString operator() ( const vector< OUString >& rVector )
     {
         OUString aString;
         if( m_nLevel < static_cast< sal_Int32 >(rVector.size()) )
-            aString = CommonFunctors::AnyToString()(rVector[m_nLevel]);
+            aString = rVector[m_nLevel];
         return aString;
     }
 
@@ -245,19 +227,19 @@ private:
 };
 
 
-struct lcl_setAnyAtLevel : public ::std::binary_function< vector< uno::Any >, uno::Any, vector< uno::Any > >
+struct lcl_setStringAtLevel : public ::std::binary_function< vector< OUString >, OUString, vector< OUString > >
 {
 public:
 
-    explicit lcl_setAnyAtLevel( sal_Int32 nLevel ) : m_nLevel( nLevel )
+    explicit lcl_setStringAtLevel( sal_Int32 nLevel ) : m_nLevel( nLevel )
     {}
 
-    vector< uno::Any > operator() ( const vector< uno::Any >& rVector, const uno::Any& rNewValue )
+    vector< OUString > operator() ( const vector< OUString >& rVector, const OUString& rNewText )
     {
-        vector< uno::Any > aRet( rVector );
+        vector< OUString > aRet( rVector );
         if( m_nLevel >= static_cast< sal_Int32 >(aRet.size()) )
             aRet.resize( m_nLevel+1 );
-        aRet[ m_nLevel ]=rNewValue;
+        aRet[ m_nLevel ]=rNewText;
         return aRet;
     }
 
@@ -265,61 +247,41 @@ private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_setAnyAtLevelFromStringSequence : public ::std::binary_function< vector< uno::Any >, OUString, vector< uno::Any > >
+struct lcl_insertStringAtLevel : public ::std::unary_function< vector< OUString >, void >
 {
 public:
 
-    explicit lcl_setAnyAtLevelFromStringSequence( sal_Int32 nLevel ) : m_nLevel( nLevel )
+    explicit lcl_insertStringAtLevel( sal_Int32 nLevel ) : m_nLevel( nLevel )
     {}
 
-    vector< uno::Any > operator() ( const vector< uno::Any >& rVector, const OUString& rNewValue )
-    {
-        vector< uno::Any > aRet( rVector );
-        if( m_nLevel >= static_cast< sal_Int32 >(aRet.size()) )
-            aRet.resize( m_nLevel+1 );
-        aRet[ m_nLevel ]=uno::makeAny(rNewValue);
-        return aRet;
-    }
-
-private:
-    sal_Int32 m_nLevel;
-};
-
-struct lcl_insertAnyAtLevel : public ::std::unary_function< vector< uno::Any >, void >
-{
-public:
-
-    explicit lcl_insertAnyAtLevel( sal_Int32 nLevel ) : m_nLevel( nLevel )
-    {}
-
-    void operator() ( vector< uno::Any >& rVector )
+    void operator() ( vector< OUString >& rVector )
     {
         if( m_nLevel > static_cast< sal_Int32 >(rVector.size()) )
             rVector.resize( m_nLevel );
 
-        vector< uno::Any >::iterator aIt( rVector.begin() );
+        vector< OUString >::iterator aIt( rVector.begin() );
         for( sal_Int32 nN=0; aIt<rVector.end(); aIt++, nN++)
         {
             if( nN==m_nLevel )
                 break;
         }
-        rVector.insert( aIt, uno::Any() );
+        rVector.insert( aIt, OUString() );
     }
 
 private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_removeAnyAtLevel : public ::std::unary_function< vector< uno::Any >, void >
+struct lcl_removeStringAtLevel : public ::std::unary_function< vector< OUString >, void >
 {
 public:
 
-    explicit lcl_removeAnyAtLevel( sal_Int32 nLevel ) : m_nLevel( nLevel )
+    explicit lcl_removeStringAtLevel( sal_Int32 nLevel ) : m_nLevel( nLevel )
     {}
 
-    void operator() ( vector< uno::Any >& rVector )
+    void operator() ( vector< OUString >& rVector )
     {
-        vector< uno::Any >::iterator aIt( rVector.begin() );
+        vector< OUString >::iterator aIt( rVector.begin() );
         for( sal_Int32 nN=0; aIt<rVector.end(); aIt++, nN++)
         {
             if( nN==m_nLevel )
@@ -333,6 +295,23 @@ public:
 private:
     sal_Int32 m_nLevel;
 };
+
+vector< OUString > lcl_AnyToStringVector( const Sequence< uno::Any >& aAnySeq )
+{
+    vector< OUString > aStringVec;
+    transform( aAnySeq.getConstArray(), aAnySeq.getConstArray() + aAnySeq.getLength(),
+               back_inserter( aStringVec ), CommonFunctors::AnyToString() );
+    return aStringVec;
+}
+
+Sequence< OUString > lcl_AnyToStringSequence( const Sequence< uno::Any >& aAnySeq )
+{
+    Sequence< OUString > aResult;
+    aResult.realloc( aAnySeq.getLength() );
+    transform( aAnySeq.getConstArray(), aAnySeq.getConstArray() + aAnySeq.getLength(),
+               aResult.getArray(), CommonFunctors::AnyToString() );
+    return aResult;
+}
 
 } // anonymous namespace
 
@@ -363,10 +342,9 @@ InternalDataProvider::InternalDataProvider( const Reference< chart2::XChartDocum
 
             // categories
             {
-                vector< vector< uno::Any > > aNewCategories;//inner count is level
+                vector< vector< OUString > > aNewCategories;//inner count is level
                 {
                     ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(xChartModel), xChartModel );
-
                     const Sequence< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
                     sal_Int32 nLevelCount = rSplitCategoriesList.getLength();
                     for( sal_Int32 nL = 0; nL<nLevelCount; nL++ )
@@ -374,18 +352,16 @@ InternalDataProvider::InternalDataProvider( const Reference< chart2::XChartDocum
                         Reference< chart2::data::XLabeledDataSequence > xLDS( rSplitCategoriesList[nL] );
                         if( !xLDS.is() )
                             continue;
-                        Sequence< uno::Any > aDataSeq;
-                        Reference< chart2::data::XDataSequence > xSeq( xLDS->getValues() );
+                        Reference< chart2::data::XTextualDataSequence > xSeq( xLDS->getValues(), uno::UNO_QUERY );
+                        Sequence< OUString > aStringSeq;
                         if( xSeq.is() )
-                            aDataSeq = xSeq->getData();
-                        sal_Int32 nLength = aDataSeq.getLength();
-                        sal_Int32 nCatLength = static_cast< sal_Int32 >(aNewCategories.size());
-                        if( nCatLength < nLength )
+                            aStringSeq = xSeq->getTextualData(); // @todo: be able to deal with XDataSequence, too
+                        sal_Int32 nLength = aStringSeq.getLength();
+                        if( static_cast< sal_Int32 >(aNewCategories.size()) < nLength )
                             aNewCategories.resize( nLength );
-                        else if( nLength < nCatLength )
-                            aDataSeq.realloc( nCatLength );
-                        transform( aNewCategories.begin(), aNewCategories.end(), aDataSeq.getConstArray(),
-                            aNewCategories.begin(), lcl_setAnyAtLevel(nL) );
+
+                        transform( aNewCategories.begin(), aNewCategories.end(), aStringSeq.getConstArray(),
+                            aNewCategories.begin(), lcl_setStringAtLevel(nL) );
                     }
                     if( !nLevelCount )
                     {
@@ -394,9 +370,9 @@ InternalDataProvider::InternalDataProvider( const Reference< chart2::XChartDocum
                         aNewCategories.reserve( nLength );
                         for( sal_Int32 nN=0; nN<nLength; nN++)
                         {
-                            vector< uno::Any > aVector(1);
-                            aVector[0] = uno::makeAny( aSimplecategories[nN] );
-                            aNewCategories.push_back( aVector );
+                            vector< OUString > aStringVector(1);
+                            aStringVector[0] = aSimplecategories[nN];
+                            aNewCategories.push_back( aStringVector );
                         }
                     }
                 }
@@ -516,7 +492,7 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSeq
     if( aRangeRepresentation.indexOf('{') >= 0 )
     {
         ::std::vector< double > aNewData;
-        ::std::vector< uno::Any > aNewLabels;
+        ::std::vector< OUString > aNewLabels;
         OUString    aToken;
         sal_Int32   nCategories     = 0;
         sal_Int32   nIndex          = 0;
@@ -542,12 +518,12 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSeq
             }
             else
             {
-                aNewLabels.push_back( uno::makeAny(aToken.replace('"', ' ').trim()) );
+                aNewLabels.push_back( aToken.replace('"', ' ').trim() );
                 if( !nCategories &&
                    ( !m_aInternalData.getComplexColumnLabel(n).size() ||
-                     !m_aInternalData.getComplexColumnLabel(n).front().hasValue() ) )
+                     !m_aInternalData.getComplexColumnLabel(n).front().getLength() ) )
                 {
-                    m_aInternalData.setComplexColumnLabel( n,  aNewLabels );
+                    m_aInternalData.setComplexColumnLabel( n, aNewLabels );
                     bLabelSet = true;
                 }
                 else
@@ -555,7 +531,7 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSeq
                     m_aInternalData.setComplexRowLabel(nCategories, aNewLabels);
                     if(nCategories==1 && bLabelSet)
                     {
-                        ::std::vector< uno::Any > aLabels;
+                        ::std::vector< OUString > aLabels;
                         m_aInternalData.setComplexRowLabel( 0, m_aInternalData.getComplexColumnLabel( n ) );
                         m_aInternalData.setComplexColumnLabel( n, aLabels );
                     }
@@ -613,14 +589,14 @@ void InternalDataProvider::createDefaultData()
 namespace
 {
 
-sal_Int32 lcl_getInnerLevelCount( const vector< vector< uno::Any > >& rLabels )
+sal_Int32 lcl_getInnerLevelCount( const vector< vector< OUString > >& rLabels )
 {
     sal_Int32 nCount = 1;//minimum is 1!
-    vector< vector< uno::Any > >::const_iterator aLevelIt( rLabels.begin() );
-    vector< vector< uno::Any > >::const_iterator aLevelEnd( rLabels.end() );
+    vector< vector< OUString > >::const_iterator aLevelIt( rLabels.begin() );
+    vector< vector< OUString > >::const_iterator aLevelEnd( rLabels.end() );
     for( ;aLevelIt!=aLevelEnd; ++aLevelIt )
     {
-        const vector< uno::Any >& rCurrentLevelLabels = *aLevelIt;
+        const vector< ::rtl::OUString >& rCurrentLevelLabels = *aLevelIt;
         nCount = std::max<sal_Int32>( rCurrentLevelLabels.size(), nCount );
     }
     return nCount;
@@ -644,7 +620,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     {
         //return split complex categories if we have any:
         ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aComplexCategories;
-        vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
+        vector< vector< OUString > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
         if( bUseColumns==m_bDataInColumns )
         {
             sal_Int32 nLevelCount = lcl_getInnerLevelCount( aCategories );
@@ -666,7 +642,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
         //don't add the created sequences to the map as they are used temporarily only ...
         return new DataSource( ContainerHelper::ContainerToSequence(aComplexCategories) );
     }
-
+    
     OSL_ASSERT( aRangeRepresentation.equals( lcl_aCompleteRange ));
 
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultLSeqVec;
@@ -825,48 +801,46 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
     if( aRange.match( lcl_aLabelRangePrefix ) )
     {
         sal_Int32 nIndex = aRange.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
-        vector< uno::Any > aComplexLabel = m_bDataInColumns
+        vector< OUString > aComplexLabel = m_bDataInColumns
             ? m_aInternalData.getComplexColumnLabel( nIndex )
             : m_aInternalData.getComplexRowLabel( nIndex );
         if( !aComplexLabel.empty() )
-            aResult = ContainerHelper::ContainerToSequence(aComplexLabel);
+        {
+            aResult.realloc( aComplexLabel.size() );
+            transform( aComplexLabel.begin(), aComplexLabel.end(),
+                       aResult.getArray(), CommonFunctors::makeAny< OUString >());
+        }
     }
     else if( aRange.match( lcl_aCategoriesPointRangeNamePrefix ) )
     {
         sal_Int32 nPointIndex = aRange.copy( lcl_aCategoriesPointRangeNamePrefix.getLength() ).toInt32();
-        vector< uno::Any > aComplexCategory = m_bDataInColumns
+        vector< OUString > aComplexCategory = m_bDataInColumns
             ? m_aInternalData.getComplexRowLabel( nPointIndex )
             : m_aInternalData.getComplexColumnLabel( nPointIndex );
         if( !aComplexCategory.empty() )
-            aResult = ContainerHelper::ContainerToSequence(aComplexCategory);
+        {
+            aResult.realloc( aComplexCategory.size() );
+            transform( aComplexCategory.begin(), aComplexCategory.end(),
+                       aResult.getArray(), CommonFunctors::makeAny< OUString >());
+        }
     }
     else if( aRange.match( lcl_aCategoriesLevelRangeNamePrefix ) )
     {
         sal_Int32 nLevel = aRange.copy( lcl_aCategoriesLevelRangeNamePrefix.getLength() ).toInt32();
-        vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
+        vector< vector< OUString > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
         if( nLevel < lcl_getInnerLevelCount( aCategories ) )
         {
             aResult.realloc( aCategories.size() );
             transform( aCategories.begin(), aCategories.end(),
-                       aResult.getArray(), lcl_copyFromLevel(nLevel) );
+                       aResult.getArray(), lcl_makeAnyFromLevelVector(nLevel) );
         }
     }
     else if( aRange.equals( lcl_aCategoriesRangeName ) )
     {
-        vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
-        sal_Int32 nLevelCount = lcl_getInnerLevelCount( aCategories );
-        if( nLevelCount == 1 )
-        {
-            sal_Int32 nL=0;
-            aResult = this->getDataByRangeRepresentation( lcl_aCategoriesLevelRangeNamePrefix + OUString::valueOf( nL ) );
-        }
-        else
-        {
-            Sequence< OUString > aLabels = m_bDataInColumns ? this->getRowDescriptions() : this->getColumnDescriptions();
-            aResult.realloc( aLabels.getLength() );
-            transform( aLabels.getConstArray(), aLabels.getConstArray() + aLabels.getLength(),
-                       aResult.getArray(), CommonFunctors::makeAny< OUString >() );
-        }
+        Sequence< OUString > aLabels = m_bDataInColumns ? this->getRowDescriptions() : this->getColumnDescriptions();
+        aResult.realloc( aLabels.getLength() );
+        transform( aLabels.getConstArray(), aLabels.getConstArray() + aLabels.getLength(),
+                   aResult.getArray(), CommonFunctors::makeAny< OUString >() );
     }
     else
     {
@@ -894,37 +868,39 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     const OUString& aRange, const Sequence< uno::Any >& aNewData )
     throw (uno::RuntimeException)
 {
-    vector< uno::Any > aNewVector( ContainerHelper::SequenceToVector(aNewData) );
     if( aRange.match( lcl_aLabelRangePrefix ) )
     {
+        vector< OUString > aNewStrings( lcl_AnyToStringVector( aNewData ) );
         sal_uInt32 nIndex = aRange.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
         if( m_bDataInColumns )
-            m_aInternalData.setComplexColumnLabel( nIndex, aNewVector );
+            m_aInternalData.setComplexColumnLabel( nIndex, aNewStrings );
         else
-            m_aInternalData.setComplexRowLabel( nIndex, aNewVector );
+            m_aInternalData.setComplexRowLabel( nIndex, aNewStrings );
     }
     else if( aRange.match( lcl_aCategoriesPointRangeNamePrefix ) )
     {
+        vector< OUString > aNewStrings( lcl_AnyToStringVector( aNewData ) );
         sal_Int32 nPointIndex = aRange.copy( lcl_aCategoriesLevelRangeNamePrefix.getLength()).toInt32();
         if( m_bDataInColumns )
-            m_aInternalData.setComplexRowLabel( nPointIndex, aNewVector );
+            m_aInternalData.setComplexRowLabel( nPointIndex, aNewStrings );
         else
-            m_aInternalData.setComplexColumnLabel( nPointIndex, aNewVector );
+            m_aInternalData.setComplexColumnLabel( nPointIndex, aNewStrings );
     }
     else if( aRange.match( lcl_aCategoriesLevelRangeNamePrefix ) )
     {
+        vector< OUString > aNewStrings( lcl_AnyToStringVector( aNewData ) );
         sal_Int32 nLevel = aRange.copy( lcl_aCategoriesLevelRangeNamePrefix.getLength()).toInt32();
-        vector< vector< uno::Any > > aComplexCategories = m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels();
+        vector< vector< OUString > > aComplexCategories = m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels();
 
         //ensure equal length
-        if( aNewVector.size() > aComplexCategories.size() )
-            aComplexCategories.resize( aNewVector.size() );
-        else if( aNewVector.size() < aComplexCategories.size() )
-            aNewVector.resize( aComplexCategories.size() );
+        if( aNewStrings.size() > aComplexCategories.size() )
+            aComplexCategories.resize( aNewStrings.size() );
+        else if( aNewStrings.size() < aComplexCategories.size() )
+            aNewStrings.resize( aComplexCategories.size() );
 
-        transform( aComplexCategories.begin(), aComplexCategories.end(), aNewVector.begin(),
-                   aComplexCategories.begin(), lcl_setAnyAtLevel(nLevel) );
-
+        transform( aComplexCategories.begin(), aComplexCategories.end(), aNewStrings.begin(),
+                   aComplexCategories.begin(), lcl_setStringAtLevel(nLevel) );
+        
         if( m_bDataInColumns )
             m_aInternalData.setComplexRowLabels( aComplexCategories );
         else
@@ -932,14 +908,10 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     }
     else if( aRange.equals( lcl_aCategoriesRangeName ) )
     {
-        vector< vector< uno::Any > > aComplexCategories;
-        aComplexCategories.resize( aNewVector.size() );
-        transform( aComplexCategories.begin(), aComplexCategories.end(), aNewVector.begin(),
-                            aComplexCategories.begin(), lcl_setAnyAtLevel(0) );
         if( m_bDataInColumns )
-            m_aInternalData.setComplexRowLabels( aComplexCategories );
+            this->setRowDescriptions( lcl_AnyToStringSequence(aNewData) );
         else
-            m_aInternalData.setComplexColumnLabels( aComplexCategories );
+            this->setColumnDescriptions( lcl_AnyToStringSequence(aNewData) );
     }
     else
     {
@@ -1004,8 +976,8 @@ void SAL_CALL InternalDataProvider::insertComplexCategoryLevel( sal_Int32 nLevel
     OSL_ENSURE( nLevel> 0, "you can only insert category levels > 0" );//the first categories level cannot be deleted, check the calling code for error
     if( nLevel>0 )
     {
-        vector< vector< uno::Any > > aComplexCategories = m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels();
-        ::std::for_each( aComplexCategories.begin(), aComplexCategories.end(), lcl_insertAnyAtLevel(nLevel) );
+        vector< vector< OUString > > aComplexCategories = m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels();
+        ::std::for_each( aComplexCategories.begin(), aComplexCategories.end(), lcl_insertStringAtLevel(nLevel) );
         if( m_bDataInColumns )
             m_aInternalData.setComplexRowLabels( aComplexCategories );
         else
@@ -1021,8 +993,8 @@ void SAL_CALL InternalDataProvider::deleteComplexCategoryLevel( sal_Int32 nLevel
     OSL_ENSURE( nLevel>0, "you can only delete category levels > 0" );//the first categories level cannot be deleted, check the calling code for error
     if( nLevel>0 )
     {
-        vector< vector< uno::Any > > aComplexCategories = m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels();
-        ::std::for_each( aComplexCategories.begin(), aComplexCategories.end(), lcl_removeAnyAtLevel(nLevel) );
+        vector< vector< OUString > > aComplexCategories = m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels();
+        ::std::for_each( aComplexCategories.begin(), aComplexCategories.end(), lcl_removeStringAtLevel(nLevel) );
         if( m_bDataInColumns )
             m_aInternalData.setComplexRowLabels( aComplexCategories );
         else
@@ -1232,36 +1204,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
 
 namespace
 {
-
-template< class Type >
-Sequence< Sequence< Type > > lcl_convertVectorVectorToSequenceSequence( const vector< vector< Type > >& rIn )
-{
-    Sequence< Sequence< Type > > aRet;
-    sal_Int32 nOuterCount = rIn.size();
-    if( nOuterCount )
-    {
-        aRet.realloc(nOuterCount);
-        for( sal_Int32 nN=0; nN<nOuterCount; nN++)
-            aRet[nN]= ContainerHelper::ContainerToSequence( rIn[nN] );
-    }
-    return aRet;
-}
-
-template< class Type >
-vector< vector< Type > > lcl_convertSequenceSequenceToVectorVector( const Sequence< Sequence< Type > >& rIn )
-{
-    vector< vector< Type > > aRet;
-    sal_Int32 nOuterCount = rIn.getLength();
-    if( nOuterCount )
-    {
-        aRet.resize(nOuterCount);
-        for( sal_Int32 nN=0; nN<nOuterCount; nN++)
-            aRet[nN]= ContainerHelper::SequenceToVector( rIn[nN] );
-    }
-    return aRet;
-}
-
-Sequence< Sequence< OUString > > lcl_convertComplexAnyVectorToStringSequence( const vector< vector< uno::Any > >& rIn )
+Sequence< Sequence< OUString > > lcl_convertComplexVectorToSequence( const vector< vector< OUString > >& rIn )
 {
     Sequence< Sequence< OUString > > aRet;
     sal_Int32 nOuterCount = rIn.size();
@@ -1269,17 +1212,17 @@ Sequence< Sequence< OUString > > lcl_convertComplexAnyVectorToStringSequence( co
     {
         aRet.realloc(nOuterCount);
         for( sal_Int32 nN=0; nN<nOuterCount; nN++)
-            aRet[nN]= lcl_AnyToStringSequence( ContainerHelper::ContainerToSequence( rIn[nN] ) );
+            aRet[nN]=ContainerHelper::ContainerToSequence( rIn[nN] );
     }
     return aRet;
 }
 
-vector< vector< uno::Any > > lcl_convertComplexStringSequenceToAnyVector( const Sequence< Sequence< OUString > >& rIn )
+vector< vector< OUString > > lcl_convertComplexSequenceToVector( const Sequence< Sequence< OUString > >& rIn )
 {
-    vector< vector< uno::Any > > aRet;
+    vector< vector< OUString > > aRet;
     sal_Int32 nOuterCount = rIn.getLength();
     for( sal_Int32 nN=0; nN<nOuterCount; nN++)
-        aRet.push_back( ContainerHelper::SequenceToVector( lcl_StringToAnySequence( rIn[nN] ) ) );
+        aRet.push_back( ContainerHelper::SequenceToVector( rIn[nN] ) );
     return aRet;
 }
 
@@ -1287,7 +1230,7 @@ class SplitCategoriesProvider_ForComplexDescriptions : public SplitCategoriesPro
 {
 public:
 
-    explicit SplitCategoriesProvider_ForComplexDescriptions( const ::std::vector< ::std::vector< uno::Any > >& rComplexDescriptions )
+    explicit SplitCategoriesProvider_ForComplexDescriptions( const ::std::vector< ::std::vector< ::rtl::OUString > >& rComplexDescriptions )
         : m_rComplexDescriptions( rComplexDescriptions )
     {}
     virtual ~SplitCategoriesProvider_ForComplexDescriptions()
@@ -1297,7 +1240,7 @@ public:
     virtual uno::Sequence< rtl::OUString > getStringsForLevel( sal_Int32 nIndex ) const;
 
 private:
-    const ::std::vector< ::std::vector< uno::Any > >& m_rComplexDescriptions;
+    const ::std::vector< ::std::vector< ::rtl::OUString > >& m_rComplexDescriptions;
 };
 
 sal_Int32 SplitCategoriesProvider_ForComplexDescriptions::getLevelCount() const
@@ -1318,78 +1261,22 @@ uno::Sequence< rtl::OUString > SplitCategoriesProvider_ForComplexDescriptions::g
 
 }//anonymous namespace
 
-// ____ XDateCategories ____
-Sequence< double > SAL_CALL InternalDataProvider::getDateCategories() throw (uno::RuntimeException)
-{
-    double fNan = InternalDataProvider::getNotANumber();
-    double fValue = fNan;
-    vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
-    sal_Int32 nCount = aCategories.size();
-    Sequence< double > aDoubles( nCount );
-    vector< vector< uno::Any > >::iterator aIt( aCategories.begin() );
-    vector< vector< uno::Any > >::const_iterator aEnd( aCategories.end() );
-    for(sal_Int32 nN=0; nN<nCount && aIt!=aEnd; ++nN, ++aIt )
-    {
-        if( !( !aIt->empty() && ((*aIt)[0]>>=fValue) ) )
-            fValue = fNan;
-        aDoubles[nN]=fValue;
-    }
-    return aDoubles;
-}
-
-void SAL_CALL InternalDataProvider::setDateCategories( const Sequence< double >& rDates ) throw (uno::RuntimeException)
-{
-    sal_Int32 nCount = rDates.getLength();
-    vector< vector< uno::Any > > aNewCategories;
-    aNewCategories.reserve(nCount);
-    vector< uno::Any > aSingleLabel(1);
-
-    for(sal_Int32 nN=0; nN<nCount; ++nN )
-    {
-        aSingleLabel[0]=uno::makeAny(rDates[nN]);
-        aNewCategories.push_back(aSingleLabel);
-    }
-
-    if( m_bDataInColumns )
-        m_aInternalData.setComplexRowLabels( aNewCategories );
-    else
-        m_aInternalData.setComplexColumnLabels( aNewCategories );
-}
-
-// ____ XAnyDescriptionAccess ____
-Sequence< Sequence< uno::Any > > SAL_CALL InternalDataProvider::getAnyRowDescriptions() throw (uno::RuntimeException)
-{
-    return lcl_convertVectorVectorToSequenceSequence( m_aInternalData.getComplexRowLabels() );
-}
-void SAL_CALL InternalDataProvider::setAnyRowDescriptions( const Sequence< Sequence< uno::Any > >& aRowDescriptions ) throw (uno::RuntimeException)
-{
-    m_aInternalData.setComplexRowLabels( lcl_convertSequenceSequenceToVectorVector( aRowDescriptions ) );
-}
-Sequence< Sequence< uno::Any > > SAL_CALL InternalDataProvider::getAnyColumnDescriptions() throw (uno::RuntimeException)
-{
-    return lcl_convertVectorVectorToSequenceSequence( m_aInternalData.getComplexColumnLabels() );
-}
-void SAL_CALL InternalDataProvider::setAnyColumnDescriptions( const Sequence< Sequence< uno::Any > >& aColumnDescriptions ) throw (uno::RuntimeException)
-{
-    m_aInternalData.setComplexColumnLabels( lcl_convertSequenceSequenceToVectorVector( aColumnDescriptions ) );
-}
-
 // ____ XComplexDescriptionAccess ____
 Sequence< Sequence< OUString > > SAL_CALL InternalDataProvider::getComplexRowDescriptions() throw (uno::RuntimeException)
 {
-    return lcl_convertComplexAnyVectorToStringSequence( m_aInternalData.getComplexRowLabels() );
+    return lcl_convertComplexVectorToSequence( m_aInternalData.getComplexRowLabels() );
 }
 void SAL_CALL InternalDataProvider::setComplexRowDescriptions( const Sequence< Sequence< ::rtl::OUString > >& aRowDescriptions ) throw (uno::RuntimeException)
 {
-    m_aInternalData.setComplexRowLabels( lcl_convertComplexStringSequenceToAnyVector(aRowDescriptions) );
+    m_aInternalData.setComplexRowLabels( lcl_convertComplexSequenceToVector(aRowDescriptions) );
 }
 Sequence< Sequence< ::rtl::OUString > > SAL_CALL InternalDataProvider::getComplexColumnDescriptions() throw (uno::RuntimeException)
 {
-    return lcl_convertComplexAnyVectorToStringSequence( m_aInternalData.getComplexColumnLabels() );
+    return lcl_convertComplexVectorToSequence( m_aInternalData.getComplexColumnLabels() );
 }
 void SAL_CALL InternalDataProvider::setComplexColumnDescriptions( const Sequence< Sequence< ::rtl::OUString > >& aColumnDescriptions ) throw (uno::RuntimeException)
 {
-    m_aInternalData.setComplexColumnLabels( lcl_convertComplexStringSequenceToAnyVector(aColumnDescriptions) );
+    m_aInternalData.setComplexColumnLabels( lcl_convertComplexSequenceToVector(aColumnDescriptions) );
 }
 
 // ____ XChartDataArray ____
@@ -1408,25 +1295,25 @@ void SAL_CALL InternalDataProvider::setData( const Sequence< Sequence< double > 
 void SAL_CALL InternalDataProvider::setRowDescriptions( const Sequence< OUString >& aRowDescriptions )
     throw (uno::RuntimeException)
 {
-    vector< vector< uno::Any > > aComplexDescriptions( aRowDescriptions.getLength() );
+    vector< vector< OUString > > aComplexDescriptions( aRowDescriptions.getLength() );
     transform( aComplexDescriptions.begin(), aComplexDescriptions.end(), aRowDescriptions.getConstArray(),
-               aComplexDescriptions.begin(), lcl_setAnyAtLevelFromStringSequence(0) );
+               aComplexDescriptions.begin(), lcl_setStringAtLevel(0) );
     m_aInternalData.setComplexRowLabels( aComplexDescriptions );
 }
 
 void SAL_CALL InternalDataProvider::setColumnDescriptions( const Sequence< OUString >& aColumnDescriptions )
     throw (uno::RuntimeException)
 {
-    vector< vector< uno::Any > > aComplexDescriptions( aColumnDescriptions.getLength() );
+    vector< vector< OUString > > aComplexDescriptions( aColumnDescriptions.getLength() );
     transform( aComplexDescriptions.begin(), aComplexDescriptions.end(), aColumnDescriptions.getConstArray(),
-               aComplexDescriptions.begin(), lcl_setAnyAtLevelFromStringSequence(0) );
+               aComplexDescriptions.begin(), lcl_setStringAtLevel(0) );
     m_aInternalData.setComplexColumnLabels( aComplexDescriptions );
 }
 
 Sequence< OUString > SAL_CALL InternalDataProvider::getRowDescriptions()
     throw (uno::RuntimeException)
 {
-    vector< vector< uno::Any > > aComplexLabels( m_aInternalData.getComplexRowLabels() );
+    vector< vector< OUString > > aComplexLabels( m_aInternalData.getComplexRowLabels() );
     SplitCategoriesProvider_ForComplexDescriptions aProvider( aComplexLabels );
     return ExplicitCategoriesProvider::getExplicitSimpleCategories( aProvider );
 }
@@ -1434,7 +1321,7 @@ Sequence< OUString > SAL_CALL InternalDataProvider::getRowDescriptions()
 Sequence< OUString > SAL_CALL InternalDataProvider::getColumnDescriptions()
     throw (uno::RuntimeException)
 {
-    vector< vector< uno::Any > > aComplexLabels( m_aInternalData.getComplexColumnLabels() );
+    vector< vector< OUString > > aComplexLabels( m_aInternalData.getComplexColumnLabels() );
     SplitCategoriesProvider_ForComplexDescriptions aProvider( aComplexLabels );
     return ExplicitCategoriesProvider::getExplicitSimpleCategories( aProvider );
 }

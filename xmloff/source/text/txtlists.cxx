@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,9 @@ XMLTextListsHelper::XMLTextListsHelper()
    :  mpProcessedLists( 0 ),
       msLastProcessedListId(),
       msListStyleOfLastProcessedList(),
-      // Inconsistent behavior regarding lists (#i92811#)
+      // --> OD 2008-08-15 #i92811#
       mpMapListIdToListStyleDefaultListId( 0 ),
+      // <--
       mpContinuingLists( 0 ),
       mpListStack( 0 )
 {
@@ -66,12 +67,13 @@ XMLTextListsHelper::~XMLTextListsHelper()
         mpProcessedLists->clear();
         delete mpProcessedLists;
     }
-    // Inconsistent behavior regarding lists (#i92811#)#
+    // --> OD 2008-08-15 #i92811#
     if ( mpMapListIdToListStyleDefaultListId )
     {
         mpMapListIdToListStyleDefaultListId->clear();
         delete mpMapListIdToListStyleDefaultListId;
     }
+    // <--
     if ( mpContinuingLists )
     {
         mpContinuingLists->clear();
@@ -107,7 +109,7 @@ void XMLTextListsHelper::PopListContext()
     OSL_ENSURE(mListStack.size(),
         "internal error: PopListContext: mListStack empty");
 //    fprintf(stderr, "PopListContext\n");
-    if ( !mListStack.empty())
+    if ( !mListStack.empty()) 
         mListStack.pop();
 }
 
@@ -142,7 +144,7 @@ void XMLTextListsHelper::SetListItem( XMLTextListItemContext *i_pListItem )
     }
 }
 
-// Handling for parameter <sListStyleDefaultListId> (#i92811#)
+// --> OD 2008-08-15 #i92811# - handling for parameter <sListStyleDefaultListId>
 void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
                                               ::rtl::OUString sListStyleName,
                                               ::rtl::OUString sContinueListId,
@@ -167,7 +169,7 @@ void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
     msLastProcessedListId = sListId;
     msListStyleOfLastProcessedList = sListStyleName;
 
-    // Inconsistent behavior regarding lists (#i92811#)
+    // --> OD 2008-08-15 #i92811#
     if ( sListStyleDefaultListId.getLength() != 0 )
     {
         if ( mpMapListIdToListStyleDefaultListId == 0 )
@@ -184,6 +186,7 @@ void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
                                                                 aListIdMapData;
         }
     }
+    // <--
 }
 
 sal_Bool XMLTextListsHelper::IsListProcessed( const ::rtl::OUString sListId ) const
@@ -238,13 +241,15 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
 
 ::rtl::OUString XMLTextListsHelper::GenerateNewListId() const
 {
-    // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
-    ::rtl::OUString sTmpStr( RTL_CONSTASCII_USTRINGPARAM( "list" ) );
+    // --> OD 2008-08-06 #i92478#
+    ::rtl::OUString sTmpStr( ::rtl::OUString::createFromAscii( "list" ) );
+    // <--
     sal_Int64 n = Time().GetTime();
     n += Date().GetDate();
     n += rand();
-    // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
+    // --> OD 2008-08-06 #i92478#
     sTmpStr += ::rtl::OUString::valueOf( n );
+    // <--
 
     long nHitCount = 0;
     ::rtl::OUString sNewListId( sTmpStr );
@@ -261,7 +266,8 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
     return sNewListId;
 }
 
-// Provide list id for a certain list block for import (#i92811#)
+// --> OD 2008-08-15 #i92811#
+// provide list id for a certain list block for import
 ::rtl::OUString XMLTextListsHelper::GetListIdForListBlock( XMLTextListBlockContext& rListBlock )
 {
     ::rtl::OUString sListBlockListId( rListBlock.GetContinueListId() );
@@ -291,6 +297,7 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
 
     return sListBlockListId;
 }
+// <--
 
 void XMLTextListsHelper::StoreLastContinuingList( ::rtl::OUString sListId,
                                                   ::rtl::OUString sContinuingListId )
@@ -352,7 +359,7 @@ XMLTextListsHelper::GetNumberedParagraphListId(
     const ::rtl::OUString i_StyleName)
 {
     if (!i_StyleName.getLength()) {
-        OSL_FAIL("invalid numbered-paragraph: no style-name");
+        OSL_ENSURE(false, "invalid numbered-paragraph: no style-name");
     }
     if (i_StyleName.getLength()
         && (i_Level < mLastNumberedParagraphs.size())
@@ -464,6 +471,15 @@ XMLTextListsHelper::MakeNumRule(
             uno::Any any = rNumStyles->getByName( sDisplayStyleName );
             any >>= xStyle;
 
+            // --> OD 2008-05-07 #refactorlists# - no longer needed
+//            // If the style has not been used, the restart numbering has
+//            // to be set never.
+//            if ( mbRestartNumbering && !xStyle->isInUse() )
+//            {
+//                mbRestartNumbering = sal_False;
+//            }
+            // <--
+
             uno::Reference< beans::XPropertySet > xPropSet( xStyle,
                 uno::UNO_QUERY );
             any = xPropSet->getPropertyValue(s_NumberingRules);
@@ -476,11 +492,18 @@ XMLTextListsHelper::MakeNumRule(
             if( pListStyle )
             {
                 xNumRules = pListStyle->GetNumRules();
+                // --> OD 2008-05-07 #refactorlists# - no longer needed
+//                sal_Bool bUsed = mxNumRules.is();
+                // <--
                 if( !xNumRules.is() )
                 {
                     pListStyle->CreateAndInsertAuto();
                     xNumRules = pListStyle->GetNumRules();
                 }
+                // --> OD 2008-05-07 #refactorlists# - no longer needed
+//                if( mbRestartNumbering && !bUsed )
+//                    mbRestartNumbering = sal_False;
+                // <--
             }
         }
     }

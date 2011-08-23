@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,15 +53,15 @@ using namespace ::com::sun::star;
 uno::Sequence< ::rtl::OUString > SAL_CALL FSStorageFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.FileSystemStorageFactory"));
-    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.FileSystemStorageFactory"));
+    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.FileSystemStorageFactory");
+    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.FileSystemStorageFactory");
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FSStorageFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.FileSystemStorageFactory"));
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.FileSystemStorageFactory");
 }
 
 //-------------------------------------------------------------------------
@@ -83,12 +83,12 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
     if ( !aTempURL.getLength() )
         throw uno::RuntimeException(); // TODO: can not create tempfile
 
-    ::ucbhelper::Content aResultContent(
+    ::ucbhelper::Content aResultContent( 
         aTempURL, uno::Reference< ucb::XCommandEnvironment >() );
 
-    return uno::Reference< uno::XInterface >(
-        static_cast< OWeakObject* >(
-            new FSStorage(  aResultContent,
+    return uno::Reference< uno::XInterface >( 
+        static_cast< OWeakObject* >( 
+            new FSStorage(	aResultContent,
                             embed::ElementModes::READWRITE,
                             uno::Sequence< beans::PropertyValue >(),
                             m_xFactory ) ),
@@ -121,7 +121,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     {
         if( !( aArguments[1] >>= nStorageMode ) )
         {
-            OSL_FAIL( "Wrong second argument!\n" );
+            OSL_ENSURE( sal_False, "Wrong second argument!\n" );
             throw uno::Exception(); // TODO: Illegal argument
         }
         // it's allways possible to read written storage in this implementation
@@ -135,31 +135,31 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     {
         if ( !aURL.getLength() )
         {
-            OSL_FAIL( "Empty URL is provided!\n" );
+            OSL_ENSURE( sal_False, "Empty URL is provided!\n" );
             throw uno::Exception(); // TODO: illegal argument
         }
     }
     else
     {
-        OSL_FAIL( "Wrong first argument!\n" );
+        OSL_ENSURE( sal_False, "Wrong first argument!\n" );
         throw uno::Exception(); // TODO: Illegal argument
     }
 
     // retrieve mediadescriptor and set storage properties
     uno::Sequence< beans::PropertyValue > aDescr;
     uno::Sequence< beans::PropertyValue > aPropsToSet;
-
+    
     if ( nArgNum >= 3 )
     {
         if( aArguments[2] >>= aDescr )
         {
             aPropsToSet.realloc(1);
-            aPropsToSet[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+            aPropsToSet[0].Name = ::rtl::OUString::createFromAscii( "URL" );
             aPropsToSet[0].Value <<= aURL;
 
             for ( sal_Int32 nInd = 0, nNumArgs = 1; nInd < aDescr.getLength(); nInd++ )
             {
-                if ( aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
+                if ( aDescr[nInd].Name.equalsAscii( "InteractionHandler" ) )
                 {
                     aPropsToSet.realloc( ++nNumArgs );
                     aPropsToSet[nNumArgs-1].Name = aDescr[nInd].Name;
@@ -167,12 +167,12 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
                     break;
                 }
                 else
-                    OSL_FAIL( "Unacceptable property, will be ignored!\n" );
+                    OSL_ENSURE( sal_False, "Unacceptable property, will be ignored!\n" );
             }
         }
         else
         {
-            OSL_FAIL( "Wrong third argument!\n" );
+            OSL_ENSURE( sal_False, "Wrong third argument!\n" );
             throw uno::Exception(); // TODO: Illegal argument
         }
     }
@@ -183,7 +183,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
       || aURL.equalsIgnoreAsciiCaseAsciiL( "vnd.sun.star.zip", 16 )
       || ::utl::UCBContentHelper::IsDocument( aURL ) )
     {
-        OSL_FAIL( "File system storages can be based only on file URLs!\n" ); // ???
+        OSL_ENSURE( sal_False, "File system storages can be based only on file URLs!\n" ); // ???
         throw uno::Exception(); // TODO: illegal argument
     }
 
@@ -192,14 +192,14 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     else if ( !::utl::UCBContentHelper::IsFolder( aURL ) )
         throw io::IOException(); // there is no such folder
 
-    ::ucbhelper::Content aResultContent(
+    ::ucbhelper::Content aResultContent( 
         aURL, uno::Reference< ucb::XCommandEnvironment >() );
 
     // create storage based on source
-    return uno::Reference< uno::XInterface >(
-        static_cast< OWeakObject* >( new FSStorage( aResultContent,
-                                                    nStorageMode,
-                                                    aPropsToSet,
+    return uno::Reference< uno::XInterface >( 
+        static_cast< OWeakObject* >( new FSStorage( aResultContent, 
+                                                    nStorageMode, 
+                                                    aPropsToSet, 
                                                     m_xFactory ) ),
         uno::UNO_QUERY );
 }
@@ -239,6 +239,30 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
     const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
+    void * /* pServiceManager */, void * pRegistryKey)
+{
+    if (pRegistryKey)
+    {
+        uno::Reference< registry::XRegistryKey > xRegistryKey (
+            reinterpret_cast< registry::XRegistryKey*>(pRegistryKey));
+
+        uno::Reference< registry::XRegistryKey > xNewKey;
+        xNewKey = xRegistryKey->createKey(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + 
+            FSStorageFactory::impl_staticGetImplementationName() +
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES")));
+
+        const uno::Sequence< ::rtl::OUString > aServices (
+            FSStorageFactory::impl_staticGetSupportedServiceNames());
+        for( sal_Int32 i = 0; i < aServices.getLength(); i++ )
+            xNewKey->createKey( aServices.getConstArray()[i] );
+
+        return sal_True;
+    }
+    return sal_False;
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (

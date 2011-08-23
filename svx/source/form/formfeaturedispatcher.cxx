@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,7 +125,7 @@ namespace svx
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OSingleFeatureDispatcher::notifyStatus: caught an exception!" );
+                OSL_ENSURE( sal_False, "OSingleFeatureDispatcher::notifyStatus: caught an exception!" );
             }
         }
         else
@@ -141,12 +141,12 @@ namespace svx
                 }
                 catch( const DisposedException& )
                 {
-                    OSL_FAIL( "OSingleFeatureDispatcher::notifyStatus: caught a DisposedException - removing the listener!" );
+                    OSL_ENSURE( sal_False, "OSingleFeatureDispatcher::notifyStatus: caught a DisposedException - removing the listener!" );
                     aIter.remove( );
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "OSingleFeatureDispatcher::notifyStatus: caught a generic exception while notifying a single listener!" );
+                    OSL_ENSURE( sal_False, "OSingleFeatureDispatcher::notifyStatus: caught a generic exception while notifying a single listener!" );
                 }
             }
         }

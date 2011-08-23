@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@ ScGridMerger::ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePix
     nOneX( nOnePixelX ),
     nOneY( nOnePixelY ),
     nCount( 0 ),
-    bVertical( false )
+    bVertical( FALSE )
 {
-    //  optimize (DrawGrid) only for pixel MapMode,
-    //  to avoid rounding errors
+    //	optimize (DrawGrid) only for pixel MapMode,
+    //	to avoid rounding errors
 
     bOptimize = ( pDev->GetMapMode().GetMapUnit() == MAP_PIXEL );
 }
@@ -59,8 +59,8 @@ void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
 {
     if ( nCount )
     {
-        //  not first line - test fix position
-        //  more than one previous line - test distance
+        //	not first line - test fix position
+        //	more than one previous line - test distance
 
         if ( nStart != nFixStart || nEnd != nFixEnd )
         {
@@ -68,8 +68,8 @@ void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
                     ( nStart == nFixEnd ||
                         nStart == nFixEnd + ( bVertical ? nOneY : nOneX ) ) )
             {
-                //  additional optimization: extend connected lines
-                //  keep nCount at 1
+                //	additional optimization: extend connected lines
+                //	keep nCount at 1
                 nFixEnd = nEnd;
             }
             else
@@ -80,7 +80,7 @@ void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
             nVarDiff = nPos - nVarStart;
             ++nCount;
         }
-        else if ( nPos != nVarStart + nCount * nVarDiff )       //! keep VarEnd?
+        else if ( nPos != nVarStart + nCount * nVarDiff )		//! keep VarEnd?
             Flush();
         else
             ++nCount;
@@ -88,7 +88,7 @@ void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
 
     if ( !nCount )
     {
-        //  first line (or flushed above) - just store
+        //	first line (or flushed above) - just store
 
         nFixStart = nStart;
         nFixEnd   = nEnd;
@@ -105,7 +105,7 @@ void ScGridMerger::AddHorLine( long nX1, long nX2, long nY )
         if ( bVertical )
         {
             Flush();
-            bVertical = false;
+            bVertical = FALSE;
         }
         AddLine( nX1, nX2, nY );
     }
@@ -120,7 +120,7 @@ void ScGridMerger::AddVerLine( long nX, long nY1, long nY2 )
         if ( !bVertical )
         {
             Flush();
-            bVertical = sal_True;
+            bVertical = TRUE;
         }
         AddLine( nY1, nY2, nX );
     }
@@ -141,9 +141,9 @@ void ScGridMerger::Flush()
                 long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
                 if ( nVarDiff < 0 )
                 {
-                    //  nVarDiff is negative in RTL layout mode
-                    //  Change the positions so DrawGrid is called with a positive distance
-                    //  (nVarStart / nVarDiff can be modified, aren't used after Flush)
+                    //	nVarDiff is negative in RTL layout mode
+                    //	Change the positions so DrawGrid is called with a positive distance
+                    //	(nVarStart / nVarDiff can be modified, aren't used after Flush)
 
                     nVarDiff = -nVarDiff;
                     long nTemp = nVarStart;

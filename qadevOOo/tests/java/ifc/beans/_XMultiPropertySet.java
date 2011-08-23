@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -177,7 +177,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
         boolean result  = true ;
         // Creating listener
         oObj.addPropertiesChangeListener(testPropsNames, PClistener);
-
+        
         if ((testPropsAmount==1) && (testPropsNames[0].equals("none"))) {
             testPropsAmount = 0;
         }
@@ -198,15 +198,15 @@ public class _XMultiPropertySet extends MultiMethodTest {
                 result &= propertiesChanged ;
                 log.println(" ... done");
             } catch (com.sun.star.beans.PropertyVetoException e) {
-                log.println("Exception occurred while trying to change "+
+                log.println("Exception occured while trying to change "+
                     "property '"+testPropsNames[i] + "' :" + e);
                 e.printStackTrace(log);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
-                log.println("Exception occurred while trying to change "+
+                log.println("Exception occured while trying to change "+
                     "property '"+testPropsNames[i] + "' :" + e);
                 e.printStackTrace(log);
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                log.println("Exception occurred while trying to change "+
+                log.println("Exception occured while trying to change "+
                     "property '"+testPropsNames[i] + "' :" + e);
                 e.printStackTrace(log);
             } // end of try-catch
@@ -278,15 +278,15 @@ public class _XMultiPropertySet extends MultiMethodTest {
             log.println("all properties are readOnly");
             tRes.tested("setPropertyValues()",Status.skipped(true));
             return;
-        }
-
+        }        
+        
         log.println("Changing all properties");
         Object[] gValues = oObj.getPropertyValues(testPropsNames);
         for (int i=0; i<testPropsAmount;i++) {
             Object oldValue = gValues[i];
             Object newValue = ValueChanger.changePValue(oldValue);
             gValues[i] = newValue;
-        }
+        }        
 
         try {
             oObj.setPropertyValues(testPropsNames, gValues);
@@ -297,15 +297,15 @@ public class _XMultiPropertySet extends MultiMethodTest {
                 }
             }
         } catch (com.sun.star.beans.PropertyVetoException e) {
-            log.println("Exception occurred while setting properties");
+            log.println("Exception occured while setting properties");
             e.printStackTrace(log);
             bResult = false;
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occurred while setting properties");
+            log.println("Exception occured while setting properties");
             e.printStackTrace(log);
             bResult = false;
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occurred while setting properties");
+            log.println("Exception occured while setting properties");
             e.printStackTrace(log);
             bResult = false;
         } // end of try-catch
@@ -329,7 +329,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
             boolean isBound = ((property.Attributes &
                 PropertyAttribute.BOUND) != 0);
             boolean isExcluded = exclProps.contains(name);
-
+            
             //exclude UserDefined, because we can't change XNameContainer
             if (name.indexOf("UserDefined")>0 || name.indexOf("Device")>0) {
                 isWritable=false;

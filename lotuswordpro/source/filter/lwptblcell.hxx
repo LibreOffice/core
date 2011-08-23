@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005           Created
+ Mar 2005		 	Created
  ************************************************************************/
 #ifndef _LWPLAYOUTNUMERICSOVERRIDE_HXX_
 #define _LWPLAYOUTNUMERICSOVERRIDE_HXX_
@@ -205,16 +205,16 @@ public:
 protected:
     void Read();
     LwpObjectID cFormulaInfo;
-    sal_uInt16 cReferenceOffset;    // Used to fix dependent formula when we're
+    sal_uInt16 cReferenceOffset;	// Used to fix dependent formula when we're
                                 //  dropped, sorted.
     // Flags:
     enum
     {
-        START_CELL  = 0x01,
-        END_CELL    = 0x02,
-        REGISTERED  = 0x04
+        START_CELL	= 0x01,
+        END_CELL	= 0x02,
+        REGISTERED	= 0x04
     };
-    sal_uInt8 cFlags;                // Used to fix dependent formula when we're
+    sal_uInt8 cFlags;				 // Used to fix dependent formula when we're
                                 //  dropped, sorted.
 };
 
@@ -244,11 +244,11 @@ public:
     void QuickRead(LwpObjectStream *pStrm);
 
 private:
-    enum    // cFlags bit definitions
+    enum	// cFlags bit definitions
     {
-        REF_ABSOLUTE    = 0x01,
-        REF_AFTER       = 0x02,
-        REF_BAD         = 0x04
+        REF_ABSOLUTE	= 0x01,
+        REF_AFTER		= 0x02,
+        REF_BAD			= 0x04
     };
     sal_uInt8 cFlags;
 };
@@ -311,10 +311,10 @@ public:
     ~LwpRowSpecifier(){}
 
     void QuickRead(LwpObjectStream *pStrm);
-    String ToString(sal_uInt16 nFormulaRow);
+    String ToString(USHORT nFormulaRow);
 
-    sal_uInt16 RowID(sal_uInt16 FormulaRow);
-    sal_uInt16 &Row(void);
+    USHORT RowID(USHORT FormulaRow);
+    USHORT &Row(void);
 
     void SetAbsolute(void);
     void ClearAbsolute(void);
@@ -326,15 +326,15 @@ public:
 
     void SetBad(sal_Bool Bad);
     sal_Bool IsBad(void);
-    void SetRowDelta(sal_uInt16 ReferenceRowID, sal_uInt16 FormulaRowID);
+    void SetRowDelta(USHORT ReferenceRowID, USHORT FormulaRowID);
 
 private:
     sal_uInt16 cRow;
     LwpRowColumnQualifier cQualifier;
 };
 
-inline sal_uInt16
-LwpRowSpecifier::RowID(sal_uInt16 FormulaRow)
+inline USHORT
+LwpRowSpecifier::RowID(USHORT FormulaRow)
 {
     if (cQualifier.IsBad())
     {
@@ -348,7 +348,7 @@ LwpRowSpecifier::RowID(sal_uInt16 FormulaRow)
     return FormulaRow - cRow;
 }
 
-inline sal_uInt16 &
+inline USHORT &
 LwpRowSpecifier::Row()
 {
     return cRow;
@@ -408,8 +408,8 @@ LwpRowSpecifier::IsBad()
 class LwpColumnSpecifier
 {
 public:
-    LwpColumnSpecifier(void){}
-    ~LwpColumnSpecifier(){}
+    LwpColumnSpecifier(void){};
+    ~LwpColumnSpecifier(){};
 
     void QuickRead(LwpObjectStream *pStrm);
     sal_uInt8 Column(){return cColumn;}

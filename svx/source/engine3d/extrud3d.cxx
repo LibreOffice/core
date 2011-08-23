@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdstr.hrc"
+#include "svdglob.hxx"
 #include <svx/svdpage.hxx>
-#include "svx/globl3d.hxx"
+#include "globl3d.hxx"
 #include <svx/extrud3d.hxx>
 #include <svx/scene3d.hxx>
 
@@ -75,7 +75,7 @@ TYPEINIT1(E3dExtrudeObj, E3dCompoundObject);
 \************************************************************************/
 
 E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth)
-:   E3dCompoundObject(rDefault),
+:	E3dCompoundObject(rDefault),
     maExtrudePolygon(rPP)
 {
     // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
@@ -91,7 +91,7 @@ E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DP
 }
 
 E3dExtrudeObj::E3dExtrudeObj()
-:   E3dCompoundObject()
+:	E3dCompoundObject()
 {
     // Defaults setzen
     E3dDefaultAttributes aDefault;
@@ -117,14 +117,26 @@ void E3dExtrudeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-sal_uInt16 E3dExtrudeObj::GetObjIdentifier() const
+UINT16 E3dExtrudeObj::GetObjIdentifier() const
 {
     return E3D_EXTRUDEOBJ_ID;
 }
 
-E3dExtrudeObj* E3dExtrudeObj::Clone() const
+/*************************************************************************
+|*
+|* Zuweisungsoperator
+|*
+\************************************************************************/
+
+void E3dExtrudeObj::operator=(const SdrObject& rObj)
 {
-    return CloneHelper< E3dExtrudeObj >();
+    // erstmal alle Childs kopieren
+    E3dCompoundObject::operator=(rObj);
+
+    // weitere Parameter kopieren
+    const E3dExtrudeObj& r3DObj = (const E3dExtrudeObj&)rObj;
+
+    maExtrudePolygon = r3DObj.maExtrudePolygon;
 }
 
 /*************************************************************************
@@ -179,9 +191,9 @@ void E3dExtrudeObj::TakeObjNamePlural(XubString& rName) const
 |*
 \************************************************************************/
 
-sal_Bool E3dExtrudeObj::IsBreakObjPossible()
+BOOL E3dExtrudeObj::IsBreakObjPossible()
 {
-    return sal_True;
+    return TRUE;
 }
 
 SdrAttrObj* E3dExtrudeObj::GetBreakObj()
@@ -200,7 +212,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
         {
             aTemp.flip();
         }
-
+    
         aFrontSide = basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(aTemp);
     }
 
@@ -212,7 +224,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
         {
             basegfx::B3DHomMatrix aTransform;
 
-            if(100 != GetPercentBackScale())
+            if(100 != GetPercentBackScale()) 
             {
                 // scale polygon from center
                 const double fScaleFactor(GetPercentBackScale() / 100.0);
@@ -226,7 +238,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
 
             // translate by extrude depth
             aTransform.translate(0.0, 0.0, (double)GetExtrudeDepth());
-
+            
             aBackSide.transform(aTransform);
         }
     }

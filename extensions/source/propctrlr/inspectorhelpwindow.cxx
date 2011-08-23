@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,14 +54,14 @@ namespace pcr
         ,m_nMaxLines( 8 )
     {
         SetBackground();
-        SetPaintTransparent(sal_True);
+        SetPaintTransparent(TRUE);
         m_aSeparator.SetText( String( PcrRes( RID_STR_HELP_SECTION_LABEL ) ) );
         m_aSeparator.SetBackground();
         m_aSeparator.Show();
 
         m_aHelpText.SetControlBackground( /*m_aSeparator.GetBackground().GetColor() */);
         m_aHelpText.SetBackground();
-        m_aHelpText.SetPaintTransparent(sal_True);
+        m_aHelpText.SetPaintTransparent(TRUE);
         m_aHelpText.Show();
     }
 

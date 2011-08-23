@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
+#include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
-#include <vector>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -172,7 +172,7 @@ sal_Bool LocalFileHelper::IsFileContent( const String& rName )
     return ConvertURLToSystemPath( rName, aTmp );
 }
 
-typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
+DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
 
 ::com::sun::star::uno::Sequence < ::rtl::OUString > LocalFileHelper::GetFolderContents( const ::rtl::OUString& rFolder, sal_Bool bFolder )
 {
@@ -183,7 +183,7 @@ typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
         Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aProps(1);
         ::rtl::OUString* pProps = aProps.getArray();
-        pProps[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Url"));
+        pProps[0] = ::rtl::OUString::createFromAscii( "Url" );
 
         try
         {
@@ -207,7 +207,7 @@ typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
                 {
                     ::rtl::OUString aId = xContentAccess->queryContentIdentifierString();
                     ::rtl::OUString* pFile = new ::rtl::OUString( aId );
-                    pFiles->push_back( pFile );
+                    pFiles->Insert( pFile, LIST_APPEND );
                 }
             }
             catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -224,12 +224,12 @@ typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
 
     if ( pFiles )
     {
-        size_t nCount = pFiles->size();
+        ULONG nCount = pFiles->Count();
         Sequence < ::rtl::OUString > aRet( nCount );
         ::rtl::OUString* pRet = aRet.getArray();
-        for ( size_t i = 0; i < nCount; ++i )
+        for ( USHORT i = 0; i < nCount; ++i )
         {
-            ::rtl::OUString* pFile = (*pFiles)[ i ];
+            ::rtl::OUString* pFile = pFiles->GetObject(i);
             pRet[i] = *( pFile );
             delete pFile;
         }

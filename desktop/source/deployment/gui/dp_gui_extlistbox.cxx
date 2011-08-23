@@ -77,7 +77,6 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
         m_sTitle = xPackage->getDisplayName();
         m_sVersion = xPackage->getVersion();
         m_sDescription = xPackage->getDescription();
-    m_sLicenseText = xPackage->getLicenseText();
 
         beans::StringPair aInfo( m_xPackage->getPublisherInfo() );
         m_sPublisher = aInfo.First;
@@ -185,9 +184,13 @@ ExtensionBox_Impl::ExtensionBox_Impl( Dialog* pParent, TheExtensionManager *pMan
     m_nActiveHeight( 0 ),
     m_nExtraHeight( 2 ),
     m_aSharedImage( DialogHelper::getResId( RID_IMG_SHARED ) ),
+    m_aSharedImageHC( DialogHelper::getResId( RID_IMG_SHARED_HC ) ),
     m_aLockedImage( DialogHelper::getResId( RID_IMG_LOCKED ) ),
+    m_aLockedImageHC( DialogHelper::getResId( RID_IMG_LOCKED_HC ) ),
     m_aWarningImage( DialogHelper::getResId( RID_IMG_WARNING ) ),
+    m_aWarningImageHC( DialogHelper::getResId( RID_IMG_WARNING_HC ) ),
     m_aDefaultImage( DialogHelper::getResId( RID_IMG_EXTENSION ) ),
+    m_aDefaultImageHC( DialogHelper::getResId( RID_IMG_EXTENSION_HC ) ),
     m_pScrollBar( NULL ),
     m_pManager( pManager )
 {
@@ -331,7 +334,7 @@ void ExtensionBox_Impl::select( sal_Int32 nIndex )
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
     checkIndex( nIndex );
-    selectEntry( nIndex );
+    selectEntry( nIndex );   
 }
 
 //------------------------------------------------------------------------------
@@ -351,6 +354,7 @@ void ExtensionBox_Impl::select( const rtl::OUString & sName )
     }
 }
 
+//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 // Title + description
 void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
@@ -378,7 +382,7 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     if ( aText.getLength() )
         aText += OUSTR("\n");
     aText += m_vEntries[ nPos ]->m_sDescription;
-
+    
     Rectangle aRect = GetTextRect( Rectangle( Point(), aSize ), aText,
                                    TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
     aTextHeight += aRect.GetHeight();
@@ -451,10 +455,10 @@ void ExtensionBox_Impl::DeleteRemoved()
 void ExtensionBox_Impl::selectEntry( const long nPos )
 {
     //ToDo whe should not use the guard at such a big scope here.
-    //Currently it is used to gard m_vEntries and m_nActive. m_nActive will be
+    //Currently it is used to gard m_vEntries and m_nActive. m_nActive will be 
     //modified in this function.
     //It would be probably best to always use a copy of m_vEntries
-    //and some other state variables from ExtensionBox_Impl for
+    //and some other state variables from ExtensionBox_Impl for 
     //the whole painting operation. See issue i86993
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
 
@@ -527,9 +531,9 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     aPos += Point( TOP_OFFSET, TOP_OFFSET );
     Image aImage;
     if ( ! pEntry->m_aIcon )
-        aImage = m_aDefaultImage;
+        aImage = isHCMode() ? m_aDefaultImageHC : m_aDefaultImage;
     else
-        aImage = pEntry->m_aIcon;
+        aImage = isHCMode() ? pEntry->m_aIconHC : pEntry->m_aIcon;
     Size aImageSize = aImage.GetSizePixel();
     if ( ( aImageSize.Width() <= ICON_WIDTH ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
         DrawImage( Point( aPos.X()+((ICON_WIDTH-aImageSize.Width())/2), aPos.Y()+((ICON_HEIGHT-aImageSize.Height())/2) ), aImage );
@@ -635,16 +639,16 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SMALL_ICON_SIZE), TOP_OFFSET );
         if ( pEntry->m_bLocked )
-            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aLockedImage );
+            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aLockedImageHC : m_aLockedImage );
         else
-            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aSharedImage );
+            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aSharedImageHC : m_aSharedImage );
     }
     if ( ( pEntry->m_eState == AMBIGUOUS ) || pEntry->m_bMissingDeps || pEntry->m_bMissingLic )
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2*SMALL_ICON_SIZE), TOP_OFFSET );
-        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aWarningImage );
+        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aWarningImageHC : m_aWarningImage );
     }
-
+    
     SetLineColor( Color( COL_LIGHTGRAY ) );
     DrawLine( rRect.BottomLeft(), rRect.BottomRight() );
 }
@@ -707,7 +711,7 @@ bool ExtensionBox_Impl::HandleTabKey( bool )
 }
 
 // -----------------------------------------------------------------------
-bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
+bool ExtensionBox_Impl::HandleCursorKey( USHORT nKeyCode )
 {
     if ( m_vEntries.empty() )
         return true;
@@ -872,7 +876,7 @@ long ExtensionBox_Impl::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         KeyCode         aKeyCode = pKEvt->GetKeyCode();
-        sal_uInt16          nKeyCode = aKeyCode.GetCode();
+        USHORT          nKeyCode = aKeyCode.GetCode();
 
         if ( nKeyCode == KEY_TAB )
             bHandled = HandleTabKey( aKeyCode.IsShift() );
@@ -985,7 +989,7 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
         }
         else if ( !m_bInCheckMode )
         {
-            OSL_FAIL( "ExtensionBox_Impl::addEntry(): Will not add duplicate entries"  );
+            OSL_ENSURE( 0, "ExtensionBox_Impl::addEntry(): Will not add duplicate entries"  );
         }
     }
 
@@ -1058,7 +1062,7 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
                 long nPos = iIndex - m_vEntries.begin();
 
                 // Entries mustn't removed here, because they contain a hyperlink control
-                // which can only be deleted when the thread has the solar mutex. Therefor
+                // which can only be deleted when the thread has the solar mutex. Therefor 
                 // the entry will be moved into the m_vRemovedEntries list which will be
                 // cleared on the next paint event
                 m_vRemovedEntries.push_back( *iIndex );
@@ -1133,7 +1137,7 @@ void ExtensionBox_Impl::checkEntries()
     long nNewPos = -1;
     long nPos = 0;
     bool bNeedsUpdate = false;
-
+    
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     typedef std::vector< TEntry_Impl >::iterator ITER;
     ITER iIndex = m_vEntries.begin();
@@ -1150,7 +1154,7 @@ void ExtensionBox_Impl::checkEntries()
                     nNewPos = nPos;
                 if ( nPos <= m_nActive )
                     m_nActive += 1;
-                ++iIndex;
+                iIndex++;
             }
             else
             {   // remove entry from list
@@ -1164,7 +1168,7 @@ void ExtensionBox_Impl::checkEntries()
             }
         }
         else
-            ++iIndex;
+            iIndex++;
     }
     guard.clear();
 
@@ -1179,6 +1183,11 @@ void ExtensionBox_Impl::checkEntries()
         if ( IsReallyVisible() )
             Invalidate();
     }
+}
+//------------------------------------------------------------------------------
+bool ExtensionBox_Impl::isHCMode()
+{
+    return (bool)GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 //------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 class ExampleAddInResult implements com.sun.star.sheet.XVolatileResult
@@ -116,7 +116,7 @@ public class ExampleAddIn
     {
         static private final String aExampleService = "org.openoffice.sheet.addin.ExampleAddIn";
         static private final String aAddInService = "com.sun.star.sheet.AddIn";
-        static private final String aImplName = _ExampleAddIn.class.getName();
+        static private final String aImplName = "ExampleAddIn";
 
         private static final short FUNCTION_INVALID   = -1;
         private static final short FUNCTION_INCREMENT = 0;
@@ -250,11 +250,11 @@ public class ExampleAddIn
             // ignored in this example
             aFuncLocale = aLocale;
         }
-
+        
         public com.sun.star.lang.Locale getLocale()
         {
             return aFuncLocale;
-        }
+        }       
 
         //  XServiceName
 
@@ -300,19 +300,15 @@ public class ExampleAddIn
                     multiFactory, regKey);
         return xSingleServiceFactory;
     }
-
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
-
-//     public static boolean __writeRegistryServiceInfo(
-//         com.sun.star.registry.XRegistryKey regKey)
-//     {
-//         //  register for both the base AddIn and the own service
-//         return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-//                     _ExampleAddIn.aImplName, _ExampleAddIn.aExampleService, regKey)
-//             && com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-//                     _ExampleAddIn.aImplName, _ExampleAddIn.aAddInService, regKey);
-//     }
+    
+    public static boolean __writeRegistryServiceInfo(
+        com.sun.star.registry.XRegistryKey regKey)
+    {
+        //  register for both the base AddIn and the own service
+        return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
+                    _ExampleAddIn.aImplName, _ExampleAddIn.aExampleService, regKey)
+            && com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
+                    _ExampleAddIn.aImplName, _ExampleAddIn.aAddInService, regKey);
+    }
 }
 

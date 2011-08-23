@@ -3,12 +3,12 @@ import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleExtendedComponent;
 
 
-class AccessibleExtendedComponentHandler
+class AccessibleExtendedComponentHandler 
     extends NodeHandler
 {
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
-        XAccessibleExtendedComponent xEComponent =
+        XAccessibleExtendedComponent xEComponent = 
             (XAccessibleExtendedComponent) UnoRuntime.queryInterface (
                 XAccessibleExtendedComponent.class, xContext);
         if (xEComponent != null)
@@ -30,7 +30,7 @@ class AccessibleExtendedComponentHandler
     private static XAccessibleExtendedComponent getComponent (AccTreeNode aNode)
     {
         return (XAccessibleExtendedComponent) UnoRuntime.queryInterface (
-            XAccessibleExtendedComponent.class,
+            XAccessibleExtendedComponent.class, 
             aNode.getContext());
     }
 
@@ -41,7 +41,7 @@ class AccessibleExtendedComponentHandler
         if (aParent instanceof AccTreeNode)
         {
             XAccessibleExtendedComponent xEComponent = getComponent ((AccTreeNode)aParent);
-
+        
             if (xEComponent != null)
             {
                 int nColor;

@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -48,10 +47,6 @@ SmCaretPosGraphEntry* SmCaretPosGraph::Add(SmCaretPosGraphEntry entry){
             pNext = new SmCaretPosGraph();
         return pNext->Add(entry);
     }else{
-        //Set Left and Right to point to the entry itself if they are NULL
-        entry.Left = entry.Left ? entry.Left : Graph + nOffset;
-        entry.Right = entry.Right ? entry.Right : Graph + nOffset;
-        //Save the entry
         Graph[nOffset] = entry;
         return Graph + nOffset++;
     }
@@ -62,5 +57,3 @@ SmCaretPosGraph::~SmCaretPosGraph(){
         delete pNext;
     pNext = NULL;
 }
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

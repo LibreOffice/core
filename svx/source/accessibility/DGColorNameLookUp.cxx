@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,9 +99,9 @@ DGColorNameLookUp::DGColorNameLookUp (void)
         // Create color table in which to look up the given color.
         uno::Reference<container::XNameContainer> xColorTable (
             ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ColorTable")) ),
+                OUString::createFromAscii("com.sun.star.drawing.ColorTable")),
             uno::UNO_QUERY);
-
+    
         // Get list of color names in order to iterate over the color table.
         xNA = uno::Reference<container::XNameAccess>(xColorTable, uno::UNO_QUERY);
         if (xNA.is())
@@ -112,9 +112,9 @@ DGColorNameLookUp::DGColorNameLookUp (void)
             aNames = xNA->getElementNames();
         }
     }
-    catch (uno::RuntimeException const&)
+    catch (uno::RuntimeException e)
     {
-        // When an exception occurred then whe have an empty name sequence
+        // When an excpetion occured then whe have an empty name sequence
         // and the loop below is not entered.
     }
 
@@ -130,9 +130,9 @@ DGColorNameLookUp::DGColorNameLookUp (void)
                 aColor >>= nColor;
                 maColorValueToNameMap[nColor] = aNames[i];
             }
-            catch (uno::RuntimeException const&)
+            catch (uno::RuntimeException e)
             {
-                // Ignore the exception: the color who lead to the exception
+                // Ignore the exception: the color who lead to the excpetion
                 // is not included into the map.
             }
         }

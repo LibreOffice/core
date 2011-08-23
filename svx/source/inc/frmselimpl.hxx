@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,12 +57,10 @@ public:
     inline bool         IsSelected() const { return mbSelected; }
     inline void         Select( bool bSelect ) { mbSelected = bSelect; }
 
-    const editeng::SvxBorderLine& GetCoreStyle() const { return maCoreStyle; }
-    void                SetCoreStyle( const editeng::SvxBorderLine* pStyle );
+    const SvxBorderLine& GetCoreStyle() const { return maCoreStyle; }
+    void                SetCoreStyle( const SvxBorderLine* pStyle );
 
-    inline void         SetUIColorPrim( const Color& rColor ) {maUIStyle.SetColorPrim( rColor ); }
-    inline void         SetUIColorSecn( const Color& rColor ) {maUIStyle.SetColorSecn( rColor ); }
-    inline void         SetUIColorGap( bool bUseIt, const Color& rColor ) {maUIStyle.SetColorGap(bUseIt, rColor);}
+    inline void         SetUIColor( const Color& rColor ) {maUIStyle.SetColor( rColor ); }
     inline const frame::Style& GetUIStyle() const { return maUIStyle; }
 
     inline void         ClearFocusArea() { maFocusArea.Clear(); }
@@ -78,12 +76,12 @@ public:
     void                SetKeyboardNeighbors(
                             FrameBorderType eLeft, FrameBorderType eRight,
                             FrameBorderType eTop, FrameBorderType eBottom );
-    FrameBorderType     GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const;
+    FrameBorderType     GetKeyboardNeighbor( USHORT nKeyCode ) const;
 
 private:
     const FrameBorderType meType;       /// Frame border type (position in control).
     FrameBorderState    meState;        /// Frame border state (on/off/don't care).
-    editeng::SvxBorderLine       maCoreStyle;    /// Core style from application.
+    SvxBorderLine       maCoreStyle;    /// Core style from application.
     frame::Style        maUIStyle;      /// Internal style to draw lines.
     FrameBorderType     meKeyLeft;      /// Left neighbor for keyboard control.
     FrameBorderType     meKeyRight;     /// Right neighbor for keyboard control.
@@ -124,7 +122,7 @@ struct FrameSelectorImpl : public Resource
     FrameBorder         maVer;          /// All data of inner vertical frame border.
     FrameBorder         maTLBR;         /// All data of top-left to bottom-right frame border.
     FrameBorder         maBLTR;         /// All data of bottom-left to top-right frame border.
-    editeng::SvxBorderLine       maCurrStyle;    /// Current style and color for new borders.
+    SvxBorderLine       maCurrStyle;    /// Current style and color for new borders.
     frame::Array        maArray;        /// Frame link array to draw an array of frame borders.
 
     FrameSelFlags       mnFlags;        /// Flags for enabled frame borders.
@@ -216,7 +214,7 @@ struct FrameSelectorImpl : public Resource
     /** Sets the state of the specified frame border. */
     void                SetBorderState( FrameBorder& rBorder, FrameBorderState eState );
     /** Sets the core style of the specified frame border, or hides the frame border, if pStyle is 0. */
-    void                SetBorderCoreStyle( FrameBorder& rBorder, const editeng::SvxBorderLine* pStyle );
+    void                SetBorderCoreStyle( FrameBorder& rBorder, const SvxBorderLine* pStyle );
     /** Sets the color of the specified frame border. */
     void                SetBorderColor( FrameBorder& rBorder, const Color& rColor );
 

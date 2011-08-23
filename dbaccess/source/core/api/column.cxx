@@ -147,7 +147,7 @@ void SAL_CALL OColumn::setName( const ::rtl::OUString& _rName ) throw(::com::sun
 
 void OColumn::fireValueChange(const ::connectivity::ORowSetValue& /*_rOldValue*/)
 {
-    OSL_FAIL( "OColumn::fireValueChange: not implemented!" );
+    DBG_ERROR( "OColumn::fireValueChange: not implemented!" );
 }
 
 void OColumn::registerProperty( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, void* _pPointerToMember, const Type& _rMemberType )
@@ -317,9 +317,9 @@ Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeExcepti
     }
     else if(!m_pTable || (m_pTable && !m_pTable->isNew()))
     {
-        if(!m_bAddColumn    && rType == getCppuType( (Reference<XAppend>*)0))
+        if(!m_bAddColumn	&& rType == getCppuType( (Reference<XAppend>*)0))
             return Any();
-        if(!m_bDropColumn   && rType == getCppuType( (Reference<XDrop>*)0))
+        if(!m_bDropColumn	&& rType == getCppuType( (Reference<XDrop>*)0))
             return Any();
     }
 
@@ -335,7 +335,7 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
 
     sal_Int32 nSize = 0;
     Type aAppendType = getCppuType( (Reference<XAppend>*)0);
-    Type aDropType   = getCppuType( (Reference<XDrop>*)0);
+    Type aDropType	 = getCppuType( (Reference<XDrop>*)0);
     if(m_xDrvColumns.is())
     {
         Reference<XTypeProvider> xTypes(m_xDrvColumns,UNO_QUERY);
@@ -360,8 +360,8 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
         nSize = ((m_pTable && m_pTable->isNew()) ? 0 :
                     ((m_bDropColumn ?
                         (m_bAddColumn ? 0 : 1) : (m_bAddColumn ? 1 : 2))));
-        bDropFound      = (m_pTable && m_pTable->isNew()) || m_bDropColumn;
-        bAppendFound    = (m_pTable && m_pTable->isNew()) || m_bAddColumn;
+        bDropFound		= (m_pTable && m_pTable->isNew()) || m_bDropColumn;
+        bAppendFound	= (m_pTable && m_pTable->isNew()) || m_bAddColumn;
     }
     Sequence< Type > aTypes(::comphelper::concatSequences(OColumns_BASE::getTypes(),TXChild::getTypes()));
     Sequence< Type > aRet(aTypes.getLength() - nSize);

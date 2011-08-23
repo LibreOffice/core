@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 
 #include <comphelper/docpasswordhelper.hxx>
 #include <filter/msfilter/mscodec.hxx>
-#include <boost/shared_ptr.hpp>
 #include "xlstream.hxx"
 #include "xlconst.hxx"
 
@@ -49,7 +48,7 @@ Input stream class for Excel import
 // ============================================================================
 
 class XclImpDecrypter;
-typedef boost::shared_ptr< XclImpDecrypter > XclImpDecrypterRef;
+typedef ScfRef< XclImpDecrypter > XclImpDecrypterRef;
 
 /** Base class for BIFF stream decryption. */
 class XclImpDecrypter : public ::comphelper::IDocPasswordVerifier
@@ -66,9 +65,10 @@ public:
     /** Creates a (ref-counted) copy of this decrypter object. */
     XclImpDecrypterRef  Clone() const;
 
-    /** Implementation of the ::comphelper::IDocPasswordVerifier interface */
-    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const ::rtl::OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData );
-    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
+    /** Implementation of the ::comphelper::IDocPasswordVerifier interface,
+        calls the new virtual function implVerify(). */
+    virtual ::comphelper::DocPasswordVerifierResult
+                        verifyPassword( const ::rtl::OUString& rPassword );
 
     /** Updates the decrypter on start of a new record or after seeking stream. */
     void                Update( SvStream& rStrm, sal_uInt16 nRecSize );
@@ -85,10 +85,7 @@ private:
     virtual XclImpDecrypter* OnClone() const = 0;
     /** Derived classes implement password verification and initialization of
         the decoder. */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
-        OnVerifyPassword( const ::rtl::OUString& rPassword ) = 0;
-    virtual bool OnVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) = 0;
-
+    virtual bool        OnVerify( const ::rtl::OUString& rPassword ) = 0;
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize ) = 0;
     /** Implementation of the decryption. */
@@ -115,9 +112,7 @@ private:
     /** Implementation of cloning this object. */
     virtual XclImpBiff5Decrypter* OnClone() const;
     /** Implements password verification and initialization of the decoder. */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
-        OnVerifyPassword( const ::rtl::OUString& rPassword );
-    virtual bool OnVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
+    virtual bool        OnVerify( const ::rtl::OUString& rPassword );
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize );
     /** Implementation of the decryption. */
@@ -125,7 +120,7 @@ private:
 
 private:
     ::msfilter::MSCodec_XorXLS95 maCodec;       /// Crypto algorithm implementation.
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > maEncryptionData;
+    ::std::vector< sal_uInt8 > maPassword;
     sal_uInt16          mnKey;
     sal_uInt16          mnHash;
 };
@@ -146,9 +141,7 @@ private:
     /** Implementation of cloning this object. */
     virtual XclImpBiff8Decrypter* OnClone() const;
     /** Implements password verification and initialization of the decoder. */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
-        OnVerifyPassword( const ::rtl::OUString& rPassword );
-    virtual bool OnVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
+    virtual bool        OnVerify( const ::rtl::OUString& rPassword );
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize );
     /** Implementation of the decryption. */
@@ -161,7 +154,7 @@ private:
 
 private:
     ::msfilter::MSCodec_Std97 maCodec;       /// Crypto algorithm implementation.
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > maEncryptionData;
+    ::std::vector< sal_uInt16 > maPassword;
     ::std::vector< sal_uInt8 > maSalt;
     ::std::vector< sal_uInt8 > maVerifier;
     ::std::vector< sal_uInt8 > maVerifierHash;
@@ -342,11 +335,13 @@ public:
     XclImpStream&       operator>>( float& rfValue );
     XclImpStream&       operator>>( double& rfValue );
 
+    sal_Int8            ReadInt8();
     sal_uInt8           ReaduInt8();
     sal_Int16           ReadInt16();
     sal_uInt16          ReaduInt16();
     sal_Int32           ReadInt32();
     sal_uInt32          ReaduInt32();
+    float               ReadFloat();
     double              ReadDouble();
 
     /** Reads nBytes bytes to the existing(!) buffer pData.
@@ -420,6 +415,8 @@ public:
     void                IgnoreUniString( sal_uInt16 nChars, sal_uInt8 nFlags );
     /** Ignores 8 bit flags, ext. header, nChar characters, ext. data. */
     void                IgnoreUniString( sal_uInt16 nChars );
+    /** Ignores 16 bit character count, 8 bit flags, ext. header, character array, ext. data. */
+    void                IgnoreUniString();
 
     // *** read/ignore 8-bit-strings, store in String *** ---------------------
 

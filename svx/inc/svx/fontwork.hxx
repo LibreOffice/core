@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,11 +70,11 @@ class SvxFontWorkControllerItem : public SfxControllerItem
     SvxFontWorkDialog  &rFontWorkDlg;
 
 protected:
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
+    virtual void StateChanged(USHORT nSID, SfxItemState eState,
                               const SfxPoolItem* pState);
 
 public:
-    SvxFontWorkControllerItem(sal_uInt16 nId, SvxFontWorkDialog&, SfxBindings&);
+    SvxFontWorkControllerItem(USHORT nId, SvxFontWorkDialog&, SfxBindings&);
 };
 
 /*************************************************************************
@@ -86,7 +86,7 @@ public:
 class SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWindow
 {
  public:
-    SvxFontWorkChildWindow(Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
+    SvxFontWorkChildWindow(Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
     SFX_DECL_CHILDWINDOW(SvxFontWorkChildWindow);
 };
 
@@ -102,38 +102,39 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 
     SvxFontWorkControllerItem* pCtrlItems[CONTROLLER_COUNT];
 
-    ValueSet        aFormSet;
+    ValueSet		aFormSet;
 
-    ToolBox         aTbxStyle;
-    ToolBox         aTbxAdjust;
+    ToolBox			aTbxStyle;
+    ToolBox			aTbxAdjust;
 
-    FixedImage      aFbDistance;
-    MetricField     aMtrFldDistance;
-    FixedImage      aFbTextStart;
-    MetricField     aMtrFldTextStart;
+    FixedImage		aFbDistance;
+    MetricField		aMtrFldDistance;
+    FixedImage		aFbTextStart;
+    MetricField		aMtrFldTextStart;
 
-    ToolBox         aTbxShadow;
+    ToolBox			aTbxShadow;
 
-    FixedImage      aFbShadowX;
-    MetricField     aMtrFldShadowX;
-    FixedImage      aFbShadowY;
-    MetricField     aMtrFldShadowY;
+    FixedImage		aFbShadowX;
+    MetricField		aMtrFldShadowX;
+    FixedImage		aFbShadowY;
+    MetricField		aMtrFldShadowY;
 
-    ColorLB         aShadowColorLB;
+    ColorLB			aShadowColorLB;
 
-    SfxBindings&    rBindings;
-    Timer           aInputTimer;
-    sal_Bool            bUserZoomedIn;
+    SfxBindings&	rBindings;
+    Timer			aInputTimer;
+    BOOL			bUserZoomedIn;
 
-    sal_uInt16          nLastStyleTbxId;
-    sal_uInt16          nLastAdjustTbxId;
-    sal_uInt16          nLastShadowTbxId;
-    long            nSaveShadowX;
-    long            nSaveShadowY;
-    long            nSaveShadowAngle;
-    long            nSaveShadowSize;
+    USHORT			nLastStyleTbxId;
+    USHORT			nLastAdjustTbxId;
+    USHORT			nLastShadowTbxId;
+    long			nSaveShadowX;
+    long			nSaveShadowY;
+    long			nSaveShadowAngle;
+    long			nSaveShadowSize;
 
-    ImageList       maImageList;
+    ImageList		maImageList;
+    ImageList		maImageListH;
 
     const XColorTable* pColorTable;
 
@@ -160,7 +161,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     void SetShowForm_Impl(const XFormTextHideFormItem*);
     void SetOutline_Impl(const XFormTextOutlineItem*);
     void SetShadow_Impl(const XFormTextShadowItem*,
-                        sal_Bool bRestoreValues = sal_False);
+                        BOOL bRestoreValues = FALSE);
     void SetShadowColor_Impl(const XFormTextShadowColorItem*);
     void SetShadowXVal_Impl(const XFormTextShadowXValItem*);
     void SetShadowYVal_Impl(const XFormTextShadowYValItem*);
@@ -170,25 +171,25 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     void ApplyImageList();
 
  protected:
-    virtual void    Zoom();
+    virtual void	Zoom();
     virtual SfxChildAlignment CheckAlignment( SfxChildAlignment eActAlign,
                                               SfxChildAlignment eAlign );
 
  public:
-    SvxFontWorkDialog(  SfxBindings *pBindinx,
+    SvxFontWorkDialog(	SfxBindings *pBindinx,
                         SfxChildWindow *pCW,
                         Window* pParent,
                         const ResId& rResId );
     ~SvxFontWorkDialog();
 
     void SetColorTable(const XColorTable* pTable);
-    void SetActive(sal_Bool bActivate = sal_True);
+    void SetActive(BOOL bActivate = TRUE);
 
     void CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
                           const SfxItemSet& rAttr, SdrObject& rOldObj,
                           XFormTextStdForm eForm);
 };
 
-#endif      // _SVX_FONTWORK_HXX
+#endif		// _SVX_FONTWORK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@
 #include <oleidl.h>
 #include <objidl.h>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/SEQUENCE.h>
 
 #include "embeddocaccess.hxx"
 #include "docholder.hxx"
 
-typedef ::boost::unordered_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
-typedef ::boost::unordered_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterator;
+typedef ::std::hash_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
+typedef ::std::hash_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterator;
 
 class GDIMetaFile;
 class CIIAObj;
@@ -164,29 +164,29 @@ public:
     HRESULT OLENotifyDeactivation();
 
 protected:
-    oslInterlockedCount                 m_refCount;
+    oslInterlockedCount					m_refCount;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
-    DocumentHolder*                     m_pDocHolder;
-    ::rtl::OUString                     m_aFileName;
+    DocumentHolder*						m_pDocHolder;
+    ::rtl::OUString						m_aFileName;
 
-    CComPtr< IStorage >                 m_pMasterStorage;
-    CComPtr< IStream >                  m_pOwnStream;
-    CComPtr< IStream >                  m_pExtStream;
-    GUID                                m_guid;
+    CComPtr< IStorage >					m_pMasterStorage;
+    CComPtr< IStream >					m_pOwnStream;
+    CComPtr< IStream >					m_pExtStream;
+    GUID								m_guid;
 
-    sal_Bool                            m_bIsDirty;
+    sal_Bool							m_bIsDirty;
 
-    CComPtr< IOleClientSite >           m_pClientSite;
-    CComPtr< IDataAdviseHolder >        m_pDAdviseHolder;
+    CComPtr< IOleClientSite >			m_pClientSite;
+    CComPtr< IDataAdviseHolder >		m_pDAdviseHolder;
 
-    AdviseSinkHashMap                   m_aAdviseHashMap;
-    DWORD                               m_nAdviseNum;
+    AdviseSinkHashMap					m_aAdviseHashMap;
+    DWORD								m_nAdviseNum;
 
     ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > m_xOwnAccess;
 
-    sal_Bool                            m_bIsInVerbHandling;
+    sal_Bool							m_bIsInVerbHandling;
 };
 
 class BooleanGuard_Impl

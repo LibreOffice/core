@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,48 +24,48 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_AreaDiagram_idl__
-#define __com_sun_star_chart_AreaDiagram_idl__
-
-#ifndef __com_sun_star_chart_Diagram_idl__
-#include <com/sun/star/chart/Diagram.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartStatistics_idl__
-#include <com/sun/star/chart/ChartStatistics.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartAxisXSupplier_idl__
-#include <com/sun/star/chart/ChartAxisXSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartTwoAxisYSupplier_idl__
-#include <com/sun/star/chart/ChartTwoAxisYSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartAxisZSupplier_idl__
-#include <com/sun/star/chart/ChartAxisZSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_chart_Dim3DDiagram_idl__
-#include <com/sun/star/chart/Dim3DDiagram.idl>
-#endif
-
-#ifndef __com_sun_star_chart_StackableDiagram_idl__
-#include <com/sun/star/chart/StackableDiagram.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module chart {
-
-//=============================================================================
-
+#ifndef __com_sun_star_chart_AreaDiagram_idl__ 
+#define __com_sun_star_chart_AreaDiagram_idl__ 
+ 
+#ifndef __com_sun_star_chart_Diagram_idl__ 
+#include <com/sun/star/chart/Diagram.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_chart_ChartStatistics_idl__ 
+#include <com/sun/star/chart/ChartStatistics.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_chart_ChartAxisXSupplier_idl__ 
+#include <com/sun/star/chart/ChartAxisXSupplier.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_chart_ChartTwoAxisYSupplier_idl__ 
+#include <com/sun/star/chart/ChartTwoAxisYSupplier.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_chart_ChartAxisZSupplier_idl__ 
+#include <com/sun/star/chart/ChartAxisZSupplier.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_chart_Dim3DDiagram_idl__ 
+#include <com/sun/star/chart/Dim3DDiagram.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_chart_StackableDiagram_idl__ 
+#include <com/sun/star/chart/StackableDiagram.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module chart {  
+ 
+//============================================================================= 
+ 
 /** This is a service for area diagrams.
  */
 published service AreaDiagram
-{
+{ 
     service com::sun::star::chart::Diagram;
     service com::sun::star::chart::ChartStatistics;
     service com::sun::star::chart::ChartAxisXSupplier;
@@ -73,10 +73,10 @@ published service AreaDiagram
     service com::sun::star::chart::ChartAxisZSupplier;
     service com::sun::star::chart::Dim3DDiagram;
     service com::sun::star::chart::StackableDiagram;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

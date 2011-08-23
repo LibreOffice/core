@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,6 +39,7 @@
 #include <vcl/salbmp.hxx>
 #include <vcl/salobj.hxx>
 #include <vcl/salmenu.hxx>
+#include <vcl/salctrlhandle.hxx>
 
 // this file contains the virtual destructors of the sal interface
 // compilers ususally put their vtables where the destructor is
@@ -74,29 +75,6 @@ void SalInstance::FillFontPathList( std::list< rtl::OString >& )
     // do nothing
 }
 
-SalMenu* SalInstance::CreateMenu( sal_Bool, Menu* )
-{
-    // default: no native menus
-    return NULL;
-}
-
-void SalInstance::DestroyMenu( SalMenu* pMenu )
-{
-    (void)pMenu;
-    OSL_ENSURE( pMenu == 0, "DestroyMenu called with non-native menus" );
-}
-
-SalMenuItem* SalInstance::CreateMenuItem( const SalItemParams* )
-{
-    return NULL;
-}
-
-void SalInstance::DestroyMenuItem( SalMenuItem* pItem )
-{
-    (void)pItem;
-    OSL_ENSURE( pItem == 0, "DestroyMenu called with non-native menus" );
-}
-
 SalTimer::~SalTimer()
 {
 }
@@ -117,10 +95,10 @@ SalPrinter::~SalPrinter()
 {
 }
 
-sal_Bool SalPrinter::StartJob( const String*, const String&, const String&,
+BOOL SalPrinter::StartJob( const String*, const String&, const String&,
                            ImplJobSetup*, vcl::PrinterController& )
 {
-    return sal_False;
+    return FALSE;
 }
 
 SalInfoPrinter::~SalInfoPrinter()
@@ -139,7 +117,7 @@ SalMenu::~SalMenu()
 {
 }
 
-bool SalMenu::ShowNativePopupMenu(FloatingWindow *, const Rectangle&, sal_uLong )
+bool SalMenu::ShowNativePopupMenu(FloatingWindow *, const Rectangle&, ULONG )
 {
     return false;
 }
@@ -149,16 +127,19 @@ bool SalMenu::AddMenuBarButton( const SalMenuButtonItem& )
     return false;
 }
 
-void SalMenu::RemoveMenuBarButton( sal_uInt16 )
+void SalMenu::RemoveMenuBarButton( USHORT )
 {
 }
 
-Rectangle SalMenu::GetMenuBarButtonRectPixel( sal_uInt16, SalFrame* )
+Rectangle SalMenu::GetMenuBarButtonRectPixel( USHORT, SalFrame* )
 {
     return Rectangle();
 }
 
 SalMenuItem::~SalMenuItem()
+{
+}
+SalControlHandle::~SalControlHandle()
 {
 }
 

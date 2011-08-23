@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -158,90 +158,90 @@ published service TextSection
         @see GraphicLocation
     */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
-    /** determines whether footnotes inside the section are displayed at the end of the
+    /** determins whether footnotes inside the section are displayed at the end of the
      section text.
     */
     [property] boolean FootnoteIsCollectAtTextEnd;
     //-------------------------------------------------------------------------
-    /** determines whether the footnotes numbering restarts within the section.
+    /** determins whether the footnotes numbering restarts within the section.
      This is only valid if <code>FootnoteIsRestartNumbering</code> is set.
     */
     [property] boolean FootnoteIsRestartNumbering;
     //-------------------------------------------------------------------------
-    /** determines at which number the footnote numbering inside of the section starts.
+    /** determins at which number the footnote numbering inside of the section starts.
      This is only valid if <code>FootnoteIsRestartNumbering</code> is set.
     */
     [property] short FootnoteRestartNumberingAt;
     //-------------------------------------------------------------------------
-    /** determines whether the footnotes within the section use an own numbering format.
+    /** determins whether the footnotes within the section use an own numbering format.
      This is only valid if <code>FootnoteIsRestartNumbering</code> is set.
     */
     [property] boolean FootnoteIsOwnNumbering;
     //-------------------------------------------------------------------------
-    /** determines the numbering type of the footnote numbering as a value of
+    /** determins the numbering type of the footnote numbering as a value of
      <type scope="com::sun::star::style">NumberingType</type>.
      This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
     */
     [property] short FootnoteNumberingType;
     //-------------------------------------------------------------------------
-    /** determines the prefix that is display before the footnote number.
+    /** determins the prefix that is display before the footnote number.
      This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
     */
     [property] string FootnoteNumberingPrefix;
     //-------------------------------------------------------------------------
-    /** determines the suffix that is display after of the footnote number.
+    /** determins the suffix that is display after of the footnote number.
      This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
     */
     [property] string FootnoteNumberingSuffix;
     //-------------------------------------------------------------------------
-    /** determines whether endnotes inside the section are displayed at the end of the
+    /** determins whether endnotes inside the section are displayed at the end of the
      section text.
     */
     [property] boolean EndnoteIsCollectAtTextEnd;
     //-------------------------------------------------------------------------
-    /** determines whether the endnotes numbering restarts within the section.
+    /** determins whether the endnotes numbering restarts within the section.
      This is only valid if <code>EndnoteIsRestartNumbering</code> is set.
     */
     [property] boolean EndnoteIsRestartNumbering;
     //-------------------------------------------------------------------------
-    /** determines at which number the endnote numbering inside of the section starts.
+    /** determins at which number the endnote numbering inside of the section starts.
      This is only valid if <code>EndnoteIsRestartNumbering</code> is set.
     */
     [property] short EndnoteRestartNumberingAt;
     //-------------------------------------------------------------------------
-    /** determines whether the endnotes within the section use an own numbering format.
+    /** determins whether the endnotes within the section use an own numbering format.
      This is only valid if <code>EndnoteIsRestartNumbering</code> is set.
     */
     [property] boolean EndnoteIsOwnNumbering;
     //-------------------------------------------------------------------------
-    /** determines the numbering type of the endnote numbering as a value of
+    /** determins the numbering type of the endnote numbering as a value of
      <type scope="com::sun::star::style">NumberingType</type>.
      This is only valid if <code>EndoteIsOwnNumbering</code> is set.
     */
     [property] short EndnoteNumberingType;
     //-------------------------------------------------------------------------
-    /** determines the prefix that is display before the endnote number.
+    /** determins the prefix that is display before the endnote number.
      This is only valid if <code>EndnoteIsOwnNumbering</code> is set.
     */
     [property] string EndnoteNumberingPrefix;
     //-------------------------------------------------------------------------
-    /** determines the suffix that is display after the endnote number.
+    /** determins the suffix that is display after the endnote number.
      This is only valid if <code>EndnoteIsOwnNumbering</code> is set.
     */
     [property] string EndnoteNumberingSuffix;
     //-------------------------------------------------------------------------
-    /** determines if a DDE link is updated automatically.
+    /** determins if a DDE link is updated automatically.
     */
     [property] boolean IsAutomaticUpdate;
     //-------------------------------------------------------------------------
     /** allows columns to be set into the text section
     */
     [property] com::sun::star::text::XTextColumns TextColumns;
-    /** determines the left margin of the section
+    /** determins the left margin of the section
      */
     [optional, property] long SectionLeftMargin;
     //-------------------------------------------------------------------------
-    /** determines the left margin of the section
+    /** determins the left margin of the section
      */
     [optional, property] long SectionRightMargin;
     //-------------------------------------------------------------------------

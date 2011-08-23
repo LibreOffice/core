@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 
 #include <vcl/button.hxx>
 
@@ -45,77 +45,77 @@ class SwWrtShell;
 
 class SwWrapDlg : public SfxSingleTabDialog
 {
-    SwWrtShell*         pWrtShell;
+    SwWrtShell* 		pWrtShell;
 
 public:
-     SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode);
+     SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode);
     ~SwWrapDlg();
 
-    inline SwWrtShell*  GetWrtShell()   { return pWrtShell; }
+    inline SwWrtShell* 	GetWrtShell()	{ return pWrtShell; }
 };
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Umlauf-TabPage
+    Beschreibung:	Umlauf-TabPage
  --------------------------------------------------------------------*/
 
 class SwWrapTabPage: public SfxTabPage
 {
     // WRAPPING
     FixedLine           aWrapFLC;
-    ImageRadioButton    aNoWrapRB;
-    ImageRadioButton    aWrapLeftRB;
-    ImageRadioButton    aWrapRightRB;
-    ImageRadioButton    aWrapParallelRB;
-    ImageRadioButton    aWrapThroughRB;
-    ImageRadioButton    aIdealWrapRB;
+    ImageRadioButton	aNoWrapRB;
+    ImageRadioButton	aWrapLeftRB;
+    ImageRadioButton	aWrapRightRB;
+    ImageRadioButton	aWrapParallelRB;
+    ImageRadioButton	aWrapThroughRB;
+    ImageRadioButton	aIdealWrapRB;
 
     // MARGIN
     FixedLine           aMarginFL;
-    FixedText           aLeftMarginFT;
-    MetricField         aLeftMarginED;
-    FixedText           aRightMarginFT;
-    MetricField         aRightMarginED;
-    FixedText           aTopMarginFT;
-    MetricField         aTopMarginED;
-    FixedText           aBottomMarginFT;
-    MetricField         aBottomMarginED;
+    FixedText			aLeftMarginFT;
+    MetricField 		aLeftMarginED;
+    FixedText			aRightMarginFT;
+    MetricField 		aRightMarginED;
+    FixedText			aTopMarginFT;
+    MetricField 		aTopMarginED;
+    FixedText			aBottomMarginFT;
+    MetricField 		aBottomMarginED;
 
     // OPTIONS
     FixedLine           aOptionsSepFL;
     FixedLine           aOptionsFL;
     CheckBox            aWrapAnchorOnlyCB;
-    CheckBox            aWrapTransparentCB;
-    CheckBox            aWrapOutlineCB;
-    CheckBox            aWrapOutsideCB;
+    CheckBox			aWrapTransparentCB;
+    CheckBox			aWrapOutlineCB;
+    CheckBox			aWrapOutsideCB;
 
-    ImageList           aWrapIL;
+    ImageList			aWrapIL;
     ImageList           aWrapILH;
 
-    sal_uInt16              nOldLeftMargin;
-    sal_uInt16              nOldRightMargin;
-    sal_uInt16              nOldUpperMargin;
-    sal_uInt16              nOldLowerMargin;
+    USHORT				nOldLeftMargin;
+    USHORT				nOldRightMargin;
+    USHORT				nOldUpperMargin;
+    USHORT				nOldLowerMargin;
 
     RndStdIds           nAnchorId;
-    sal_uInt16              nHtmlMode;
+    USHORT 				nHtmlMode;
 
     Size aFrmSize;
-    SwWrtShell*         pWrtSh;
+    SwWrtShell*			pWrtSh;
 
-    sal_Bool bFormat;
-    sal_Bool bNew;
-    sal_Bool bHtmlMode;
-    sal_Bool bDrawMode;
-    sal_Bool bContourImage;
+    BOOL bFormat;
+    BOOL bNew;
+    BOOL bHtmlMode;
+    BOOL bDrawMode;
+    BOOL bContourImage;
 
     SwWrapTabPage(Window *pParent, const SfxItemSet &rSet);
     ~SwWrapTabPage();
 
     void            ApplyImageList();
     void            EnableModes(const SfxItemSet& rSet);
-    virtual void    ActivatePage(const SfxItemSet& rSet);
-    virtual int     DeactivatePage(SfxItemSet *pSet);
+    virtual void 	ActivatePage(const SfxItemSet& rSet);
+    virtual int 	DeactivatePage(SfxItemSet *pSet);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     DECL_LINK( RangeModifyHdl, MetricField * );
@@ -129,14 +129,14 @@ public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
-    virtual sal_Bool    FillItemSet(SfxItemSet &rSet);
-    virtual void    Reset(const SfxItemSet &rSet);
+    virtual BOOL 	FillItemSet(SfxItemSet &rSet);
+    virtual void 	Reset(const SfxItemSet &rSet);
 
-    static sal_uInt16*  GetRanges();
-    inline void     SetNewFrame(sal_Bool bNewFrame) { bNew = bNewFrame; }
-    inline void     SetFormatUsed(sal_Bool bFmt, sal_Bool bDrw) { bFormat = bFmt;
+    static USHORT*	GetRanges();
+    inline void		SetNewFrame(BOOL bNewFrame) { bNew = bNewFrame; }
+    inline void		SetFormatUsed(BOOL bFmt, BOOL bDrw) { bFormat = bFmt;
                                                             bDrawMode = bDrw; }
-    inline void     SetShell(SwWrtShell* pSh) { pWrtSh = pSh; }
+    inline void		SetShell(SwWrtShell* pSh) { pWrtSh = pSh; }
 };
 
 #endif

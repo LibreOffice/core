@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,12 +34,12 @@
 #include <vcl/button.hxx>
 #include <svtools/svtreebx.hxx>
 
-#include "hlmarkwn_def.hxx"
+#include "hlmarkwn_def.hxx" //ADD CHINA001 
 class SvxHyperlinkTabPageBase;
 
 //########################################################################
 //#                                                                      #
-//# Tree-Window                                                          #
+//# Tree-Window 														 #
 //#                                                                      #
 //########################################################################
 
@@ -58,7 +58,7 @@ public:
 
 //########################################################################
 //#                                                                      #
-//# Window-Class                                                         #
+//# Window-Class														 #
 //#                                                                      #
 //########################################################################
 
@@ -67,21 +67,22 @@ class SvxHlinkDlgMarkWnd : public ModalDialog //FloatingWindow
 private:
     friend class SvxHlmarkTreeLBox;
 
-    PushButton      maBtApply;
-    PushButton      maBtClose;
+    PushButton		maBtApply;
+    PushButton		maBtClose;
+    //SvTreeListBox	maLbTree;
     SvxHlmarkTreeLBox maLbTree;
 
-    sal_Bool            mbUserMoved;
-    sal_Bool            mbFirst;
+    BOOL			mbUserMoved;
+    BOOL			mbFirst;
 
     SvxHyperlinkTabPageBase* mpParent;
 
-    String          maStrLastURL;
+    String			maStrLastURL;
 
-    sal_uInt16          mnError;
+    USHORT			mnError;
 
 protected:
-    sal_Bool RefreshFromDoc( ::rtl::OUString aURL );
+    BOOL RefreshFromDoc( ::rtl::OUString aURL );
 
     SvLBoxEntry* FindEntry ( String aStrName );
     void ClearTree();
@@ -96,16 +97,16 @@ public:
     SvxHlinkDlgMarkWnd (SvxHyperlinkTabPageBase *pParent);
     ~SvxHlinkDlgMarkWnd();
 
-    sal_Bool MoveTo ( Point aNewPos );
+    BOOL MoveTo ( Point aNewPos );
     void RefreshTree ( String aStrURL );
     void SelectEntry ( String aStrMark );
 
-    sal_Bool ConnectToDialog( sal_Bool bDoit = sal_True );
+    BOOL ConnectToDialog( BOOL bDoit = TRUE );
 
-    sal_uInt16 SetError( sal_uInt16 nError);
+    USHORT SetError( USHORT nError);
 };
 
 
-#endif  // _SVX_BKWND_HYPERLINK_HXX
+#endif	// _SVX_BKWND_HYPERLINK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,10 @@
 // - Defines -
 // -----------
 
-#define AVMEDIA_MEDIAWINDOW()                                                                                           \
-(static_cast< ::avmedia::MediaFloater* >( (                                                                             \
-SfxViewFrame::Current() && SfxViewFrame::Current()->GetChildWindow(::avmedia::MediaPlayer::GetChildWindowId())) ?   \
-SfxViewFrame::Current()->GetChildWindow(::avmedia::MediaPlayer::GetChildWindowId())->GetWindow() :              \
+#define AVMEDIA_MEDIAWINDOW() 																							\
+(static_cast< ::avmedia::MediaFloater* >( (																				\
+SfxViewFrame::Current() && SfxViewFrame::Current()->GetChildWindow(::avmedia::MediaPlayer::GetChildWindowId())) ?	\
+SfxViewFrame::Current()->GetChildWindow(::avmedia::MediaPlayer::GetChildWindowId())->GetWindow() : 				\
 NULL))
 
 namespace avmedia
@@ -53,7 +53,7 @@ namespace avmedia
 class MediaPlayer : public SfxChildWindow
 {
 public:
-                        MediaPlayer( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
+                        MediaPlayer( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
                         ~MediaPlayer();
 
                         SFX_DECL_CHILDWINDOW( MediaPlayer );
@@ -67,29 +67,29 @@ class MediaWindow;
 
 class MediaFloater : public SfxDockingWindow
 {
-public:
+public:						
 
                             MediaFloater( SfxBindings* pBindings, SfxChildWindow* pCW, Window* pParent );
                             ~MediaFloater();
 
-    void                    setURL( const ::rtl::OUString& rURL, bool bPlayImmediately );
-    const ::rtl::OUString&  getURL() const;
+    void					setURL( const ::rtl::OUString& rURL, bool bPlayImmediately );
+    const ::rtl::OUString&	getURL() const;
 
-    void                    dispatchCurrentURL();
+    void					dispatchCurrentURL();
 
 protected:
 
-    virtual void            Resize();
-    virtual void            ToggleFloatingMode();
+    virtual void			Resize();
+    virtual void			ToggleFloatingMode();
 
 private:
 
-    MediaWindow*            mpMediaWindow;
-    Size                    maLastSize;
-    long                    mnDummy1;
-    long                    mnDummy2;
+    MediaWindow*			mpMediaWindow;
+    Size					maLastSize;
+    long					mnDummy1;
+    long					mnDummy2;
 
-    void                    implInit();
+    void                	implInit();
 };
 
 }

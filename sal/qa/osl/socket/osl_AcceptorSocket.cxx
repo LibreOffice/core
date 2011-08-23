@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
     if you are not including ws2_32.lib in makefile.mk,  the including format will be like this:
 
     .IF "$(GUI)" == "WNT"
-    SHL1STDLIBS +=  $(SOLARLIBDIR)$/cppunit.lib
+    SHL1STDLIBS +=	$(SOLARLIBDIR)$/cppunit.lib
     SHL1STDLIBS +=  ws2_32.lib
     .ENDIF
 
@@ -59,15 +59,13 @@
 // include files
 //------------------------------------------------------------------------
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <testshl/simpleheader.hxx>
 
 #include "osl_Socket_Const.h"
 #include "sockethelper.hxx"
 
 using namespace osl;
-using ::rtl::OUString;
+using namespace rtl;
 
 #define IP_PORT_FTP     21
 #define IP_PORT_MYPORT9 8897
@@ -137,8 +135,8 @@ namespace osl_AcceptorSocket
 
     /** testing the methods:
         inline AcceptorSocket(oslAddrFamily Family = osl_Socket_FamilyInet,
-                              oslProtocol   Protocol = osl_Socket_ProtocolIp,
-                              oslSocketType Type = osl_Socket_TypeStream);
+                              oslProtocol	Protocol = osl_Socket_ProtocolIp,
+                              oslSocketType	Type = osl_Socket_TypeStream);
     */
 
     class ctors : public CppUnit::TestFixture
@@ -163,7 +161,7 @@ namespace osl_AcceptorSocket
     /** testing the method:
         inline sal_Bool SAL_CALL listen(sal_Int32 MaxPendingConnections= -1);
         inline oslSocketResult SAL_CALL acceptConnection( StreamSocket& Connection);
-        inline oslSocketResult SAL_CALL acceptConnection( StreamSocket& Connection, SocketAddr & PeerAddr);
+        inline oslSocketResult SAL_CALL acceptConnection( StreamSocket&	Connection, SocketAddr & PeerAddr);
     */
 
     class listen_accept : public CppUnit::TestFixture
@@ -181,13 +179,13 @@ namespace osl_AcceptorSocket
             pTimeout->Seconds = 3;
             pTimeout->Nanosec = 0;
             asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1);
-        //  sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
+        //	sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
         }
 
         void tearDown( )
         {
             free( pTimeout );
-        //  sHandle = NULL;
+        //	sHandle = NULL;
             asAcceptorSocket.close( );
             csConnectorSocket.close( );
         }
@@ -195,8 +193,8 @@ namespace osl_AcceptorSocket
 
         void listen_accept_001()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT3 );
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT3 );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
+            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
             ::osl::StreamSocket ssConnection;
 
             /// launch server socket
@@ -217,9 +215,9 @@ namespace osl_AcceptorSocket
 
         void listen_accept_002()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT4 );
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT4 );
-            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT4 );
+            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT4 );
+            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
             ::osl::StreamSocket ssConnection;
 
             /// launch server socket
@@ -251,9 +249,9 @@ namespace osl_AcceptorSocket
 
 // -----------------------------------------------------------------------------
 
-CPPUNIT_TEST_SUITE_REGISTRATION(osl_AcceptorSocket::ctors);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::ctors, "osl_AcceptorSocket");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::operator_assign, "osl_AcceptorSocket");
-CPPUNIT_TEST_SUITE_REGISTRATION(osl_AcceptorSocket::listen_accept);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::listen_accept, "osl_AcceptorSocket");
 
 } // namespace osl_AcceptorSocket
 
@@ -261,6 +259,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_AcceptorSocket::listen_accept);
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-CPPUNIT_PLUGIN_IMPLEMENT();
+NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

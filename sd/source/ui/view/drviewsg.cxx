@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,6 +57,12 @@
 
 namespace sd {
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void DrawViewShell::ExecIMap( SfxRequest& rReq )
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
@@ -69,13 +75,13 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
 
         if ( pMark )
         {
-            SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
+            SdrObject*	pSdrObj = pMark->GetMarkedSdrObj();
             SvxIMapDlg* pDlg = ViewShell::Implementation::GetImageMapDialog();
 
             if ( pDlg->GetEditingObject() == (void*) pSdrObj )
             {
                 const ImageMap& rImageMap = pDlg->GetImageMap();
-                SdIMapInfo*     pIMapInfo = GetDoc()->GetIMapInfo( pSdrObj );
+                SdIMapInfo* 	pIMapInfo = GetDoc()->GetIMapInfo( pSdrObj );
 
                 if ( !pIMapInfo )
                     pSdrObj->InsertUserData( new SdIMapInfo( rImageMap ) );
@@ -88,15 +94,22 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
     }
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 {
-    sal_Bool bDisable = sal_True;
+    BOOL bDisable = TRUE;
 
     if( GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
-        const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
-        const SdrObject*    pObj = NULL;
-        sal_uLong               nMarkCount = rMarkList.GetMarkCount();
+        const SdrMarkList&	rMarkList = mpDrawView->GetMarkedObjectList();
+        const SdrObject*	pObj = NULL;
+        ULONG				nMarkCount = rMarkList.GetMarkCount();
 
         if ( nMarkCount == 1 )
         {
@@ -107,7 +120,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
                 && pImageMapDialog!=NULL
                 && ( pImageMapDialog->GetEditingObject() == (void*) pObj ) )
             {
-                bDisable = sal_False;
+                bDisable = FALSE;
             }
         }
     }
@@ -117,7 +130,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 
 /*************************************************************************
 |*
-|*  Execute-Methode der Optionsleiste
+|*	Execute-Methode der Optionsleiste
 |*
 \************************************************************************/
 
@@ -127,8 +140,8 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
-    sal_Bool   bDefault = sal_False;
-    sal_uInt16 nSlot = rReq.GetSlot();
+    BOOL   bDefault = FALSE;
+    USHORT nSlot = rReq.GetSlot();
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
 
@@ -226,7 +239,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         break;
 
         default:
-            bDefault = sal_True;
+            bDefault = TRUE;
         break;
     }
 
@@ -250,7 +263,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
 /*************************************************************************
 |*
-|*  State-Methode der Optionsleiste
+|*	State-Methode der Optionsleiste
 |*
 \************************************************************************/
 
@@ -269,7 +282,7 @@ void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_SNAP_POINTS, mpDrawView->IsOPntSnap() ) );
 
     rSet.Put( SfxBoolItem( SID_QUICKEDIT, mpDrawView->IsQuickTextEditMode() ) );
-    rSet.Put( SfxBoolItem( SID_PICK_THROUGH, (sal_Bool)
+    rSet.Put( SfxBoolItem( SID_PICK_THROUGH, (BOOL)
                 mpDrawView->GetModel()->IsPickThroughTransparentTextFrames() ) );
 
     rSet.Put( SfxBoolItem( SID_BIG_HANDLES, mpFrameView->IsBigHandles() ) );

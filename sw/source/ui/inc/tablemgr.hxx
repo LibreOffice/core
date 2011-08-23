@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,28 +51,28 @@ const char cParaDelim = 0x0a;
 
 class SW_DLLPUBLIC SwTableFUNC
 {
-    SwFrmFmt    *pFmt;
-    SwWrtShell  *pSh;
-    sal_Bool        bCopy;
-    SwTabCols   aCols;
+    SwFrmFmt	*pFmt;
+    SwWrtShell	*pSh;
+    BOOL		bCopy;
+    SwTabCols	aCols;
 
 private:
     SW_DLLPRIVATE int GetRightSeparator(int nNum) const;
 
 public:
     inline SwTableFUNC(SwFrmFmt &);
-           SwTableFUNC(SwWrtShell *pShell, sal_Bool bCopyFmt = sal_False);
+           SwTableFUNC(SwWrtShell *pShell, BOOL bCopyFmt = FALSE);
            ~SwTableFUNC();
 
-    void    InitTabCols();
-    void    ColWidthDlg(Window *pParent );
-    SwTwips GetColWidth(sal_uInt16 nNum) const;
-    SwTwips GetMaxColWidth(sal_uInt16 nNum) const;
-    void    SetColWidth(sal_uInt16 nNum, SwTwips nWidth );
-    sal_uInt16  GetColCount() const;
-    sal_uInt16  GetCurColNum() const;
+    void	InitTabCols();
+    void	ColWidthDlg(Window *pParent );
+    SwTwips GetColWidth(USHORT nNum) const;
+    SwTwips GetMaxColWidth(USHORT nNum) const;
+    void	SetColWidth(USHORT nNum, SwTwips nWidth );
+    USHORT	GetColCount() const;
+    USHORT	GetCurColNum() const;
 
-    sal_Bool IsTableSelected() const { return pFmt != 0; }
+    BOOL IsTableSelected() const { return pFmt != 0; }
 
     const SwFrmFmt *GetTableFmt() const { return pFmt; }
 
@@ -82,14 +82,14 @@ public:
     void UpdateChart();
 
     /// @return the XModel of the newly inserted chart if successfull
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > 
         InsertChart( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > &rxDataProvider, sal_Bool bFillWithData, const rtl::OUString &rCellRange, SwFlyFrmFmt** ppFlyFrmFmt = 0 );
 };
 
 inline SwTableFUNC::SwTableFUNC(SwFrmFmt &rFmt) :
     pFmt(&rFmt),
     pSh(0),
-    bCopy(sal_False)
+    bCopy(FALSE)
 {
 }
 

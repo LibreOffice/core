@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,18 +39,18 @@ DBG_NAME(SfxVoidItem)
 // @@@ DBG_NAME(SfxInvalidItem);
 DBG_NAME(SfxItemHandle)
 
-sal_uInt8 nSfxFlag8Val[8] =
+BYTE nSfxFlag8Val[8] =
 {
     1, 2, 4, 8, 16, 32, 64, 128
 };
 
-sal_uInt16 nSfxFlag16Val[16] =
+USHORT nSfxFlag16Val[16] =
 {
     1, 2, 4, 8, 16, 32, 64, 128, 256, 512,
     1024, 2048, 4096, 8192, 16384, 32768
 };
 
-sal_uLong nSfxFlag32Val[32] =
+ULONG nSfxFlag32Val[32] =
 {
     0x1L, 0x2L, 0x4L, 0x8L,
     0x10L, 0x20L, 0x40L, 0x80L,
@@ -72,7 +72,7 @@ TYPEINIT1(SfxSetItem, SfxPoolItem);
 
 // ------------------------------------------------------------------------
 #if OSL_DEBUG_LEVEL > 1
-static sal_uLong nItemCount = 0;
+static ULONG nItemCount = 0;
 
 const char* pw1 = "Wow! 10.000 items!";
 const char* pw2 = "Wow! 100.000 items!";
@@ -84,7 +84,7 @@ const char* pw5 = "Wow! 10.000.000 items!";
 IMPL_PTRHINT(SfxPoolItemHint,SfxPoolItem)
 
 // SfxPoolItem -----------------------------------------------------------
-SfxPoolItem::SfxPoolItem( sal_uInt16 nW )
+SfxPoolItem::SfxPoolItem( USHORT nW )
     : nRefCount( 0 ),
       nWhich( nW )
       , nKind( 0 )
@@ -123,8 +123,8 @@ SfxPoolItem::SfxPoolItem( sal_uInt16 nW )
 
 // -----------------------------------------------------------------------
 SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
-    : nRefCount( 0 ),               // wird ja ein neues Object!
-      nWhich( rCpy.Which() )    // Funktion rufen wg. ChkThis()
+    : nRefCount( 0 ),				// wird ja ein neues Object!
+      nWhich( rCpy.Which() )	// Funktion rufen wg. ChkThis()
       , nKind( 0 )
 {
     DBG_CTOR(SfxPoolItem, 0);
@@ -193,26 +193,26 @@ int SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 int SfxPoolItem::IsPoolable() const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
-    return sal_True;
+    return TRUE;
 }
 #endif
 
 // -----------------------------------------------------------------------
-SfxPoolItem* SfxPoolItem::Create(SvStream &, sal_uInt16) const
+SfxPoolItem* SfxPoolItem::Create(SvStream &, USHORT) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return Clone(0);
 }
 
 // -----------------------------------------------------------------------
-sal_uInt16 SfxPoolItem::GetVersion( sal_uInt16 ) const
+USHORT SfxPoolItem::GetVersion( USHORT ) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return 0;
 }
 
 // -----------------------------------------------------------------------
-SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
+SvStream& SfxPoolItem::Store(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return rStream;
@@ -256,21 +256,21 @@ void SfxPoolItem::writeUnicodeString(SvStream & rStream,
 // ------------------------------------------------------------------------
 SfxItemPresentation SfxPoolItem::GetPresentation
 (
-    SfxItemPresentation /*ePresentation*/,       // IN:  wie formatiert werden soll
-    SfxMapUnit          /*eCoreMetric*/,         // IN:  Ma\seinheit des SfxPoolItems
-    SfxMapUnit          /*ePresentationMetric*/, // IN:  Wunsch-Ma\einheit der Darstellung
-    XubString&          /*rText*/,               // OUT: textuelle Darstellung
+    SfxItemPresentation	/*ePresentation*/,       // IN:  wie formatiert werden soll
+    SfxMapUnit			/*eCoreMetric*/,		 // IN:  Ma\seinheit des SfxPoolItems
+    SfxMapUnit			/*ePresentationMetric*/, // IN:  Wunsch-Ma\einheit der Darstellung
+    XubString&			/*rText*/,				 // OUT: textuelle Darstellung
     const IntlWrapper *
-)   const
+) 	const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     "Uber diese virtuelle Methode kann von den SfxPoolItem-Subklassen
     eine textuelle Datstellung des Wertes erhalten werden. Sie sollte
     von allen UI-relevanten SfxPoolItem-Subklassen "uberladen werden.
 
     Da die Ma\seinheit des Wertes im SfxItemPool nur "uber
-    <SfxItemPool::GetMetric(sal_uInt16)const> erfragbar ist, und nicht etwa
+    <SfxItemPool::GetMetric(USHORT)const> erfragbar ist, und nicht etwa
     in der SfxPoolItem-Instanz oder -Subklasse  verf"ugbar ist, wird die
     eigene Ma\seinheit als 'eCoreMetric' "ubergeben.
 
@@ -280,7 +280,7 @@ SfxItemPresentation SfxPoolItem::GetPresentation
 
     [R"uckgabewert]
 
-    SfxItemPresentation     SFX_ITEM_PRESENTATION_NONE
+    SfxItemPresentation		SFX_ITEM_PRESENTATION_NONE
                             es konnte keine Text-Darstellung erzeugt werden
 
                             SFX_ITEM_PRESENTATION_NAMELESS
@@ -313,7 +313,7 @@ SfxItemPresentation SfxPoolItem::GetPresentation
 }
 
 // SfxVoidItem ------------------------------------------------------------
-SfxVoidItem::SfxVoidItem( sal_uInt16 which ):
+SfxVoidItem::SfxVoidItem( USHORT which ):
     SfxPoolItem(which)
 {
     DBG_CTOR(SfxVoidItem, 0);
@@ -335,18 +335,18 @@ rCmp
 {
     DBG_CHKTHIS(SfxVoidItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "unequal type" );
-    return sal_True;
+    return TRUE;
 }
 
 // ------------------------------------------------------------------------
 SfxItemPresentation SfxVoidItem::GetPresentation
 (
-    SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    SfxItemPresentation 	/*ePresentation*/,
+    SfxMapUnit				/*eCoreMetric*/,
+    SfxMapUnit				/*ePresentationMetric*/,
+    XubString& 				rText,
     const IntlWrapper *
-)   const
+)	const
 {
     DBG_CHKTHIS(SfxVoidItem, 0);
     rText.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Void"));
@@ -364,7 +364,7 @@ SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
 
 // SfxItemHandle ----------------------------------------------------------
 SfxItemHandle::SfxItemHandle(SfxPoolItem &rItem):
-    pRef(new sal_uInt16(1)),
+    pRef(new USHORT(1)),
     pItem(rItem.Clone(0))
 {
     DBG_CTOR(SfxItemHandle, 0);
@@ -422,17 +422,17 @@ bool SfxPoolItem::HasMetrics() const
 
 // -----------------------------------------------------------------------
 
-bool SfxPoolItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8 ) const
+bool SfxPoolItem::QueryValue( com::sun::star::uno::Any&, BYTE ) const
 {
-    OSL_FAIL("There is no implementation for QueryValue for this item!");
+    DBG_ERROR("There is no implementation for QueryValue for this item!");
     return false;
 }
 
 // -----------------------------------------------------------------------
 
-bool SfxPoolItem::PutValue( const com::sun::star::uno::Any&, sal_uInt8 )
+bool SfxPoolItem::PutValue( const com::sun::star::uno::Any&, BYTE )
 {
-    OSL_FAIL("There is no implementation for PutValue for this item!");
+    DBG_ERROR("There is no implementation for PutValue for this item!");
     return false;
 }
 

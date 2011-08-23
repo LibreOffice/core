@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@
 
 #include "splash.hxx"
 
+
+using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::desktop;
-
-using ::rtl::OUString;
 
 static const char* pServices[] =
 {
@@ -65,11 +65,12 @@ static const fProvider pInstanceProviders[] =
     NULL
 };
 
+
 static const char** pSupportedServices[] =
 {
     SplashScreen::interfaces,
     NULL
-};
+};	
 
 static Sequence<OUString>
 getSupportedServiceNames(int p) {
@@ -80,19 +81,45 @@ getSupportedServiceNames(int p) {
         aSeq[i] = OUString::createFromAscii(names[i]);
     }
     return aSeq;
-}
+}   
 
 extern "C"
 {
-void SAL_CALL
+void SAL_CALL 
 component_getImplementationEnvironment(
-    const sal_Char** ppEnvironmentTypeName,
+    const sal_Char** ppEnvironmentTypeName, 
     uno_Environment**)
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-void* SAL_CALL
+sal_Bool SAL_CALL 
+component_writeInfo(
+    void* pServiceManager, 
+    void* pRegistryKey)
+{
+    Reference<XMultiServiceFactory> xMan( 
+        reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
+    Reference<XRegistryKey> xKey( 
+        reinterpret_cast< XRegistryKey* >( pRegistryKey ) ) ;
+
+    // iterate over service names and register them...
+    OUString aImpl;
+    const char* pServiceName = NULL;
+    const char* pImplName = NULL;
+    for (int i = 0; (pServices[i]!=NULL)&&(pImplementations[i]!=NULL); i++) {
+        pServiceName= pServices[i];
+        pImplName = pImplementations[i];
+        aImpl = OUString::createFromAscii("/") 
+              + OUString::createFromAscii(pImplName)
+              + OUString::createFromAscii("/UNO/SERVICES");
+        Reference<XRegistryKey> xNewKey = xKey->createKey(aImpl);
+        xNewKey->createKey(OUString::createFromAscii(pServiceName));
+    }
+    return sal_True;
+}
+
+void* SAL_CALL 
 component_getFactory(
     const sal_Char* pImplementationName,
     void* pServiceManager,
@@ -102,11 +129,11 @@ component_getFactory(
     if  ( pImplementationName && pServiceManager )
     {
         Reference< XSingleServiceFactory > xFactory;
-        Reference< XMultiServiceFactory > xServiceManager(
+        Reference< XMultiServiceFactory > xServiceManager( 
             reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-
+    
         // search implementation
-        for (int i = 0; (pImplementations[i]!=NULL); i++) {
+        for (int i = 0; (pImplementations[i]!=NULL); i++) {            
             if ( strcmp(pImplementations[i], pImplementationName ) == 0 ) {
                 // found implementation
                 xFactory = Reference<XSingleServiceFactory>(cppu::createSingleFactory(

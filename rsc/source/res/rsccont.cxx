@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,11 @@
 /****************** E N T R Y S T R U C T ********************************/
 /*************************************************************************
 |*
-|*    ENTRYSTRUCT::Destroy()
+|*	  ENTRYSTRUCT::Destroy()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 06.08.91
+|*	  Letzte Aenderung	MM 06.08.91
 |*
 *************************************************************************/
 void ENTRY_STRUCT::Destroy()
@@ -59,11 +63,15 @@ void ENTRY_STRUCT::Destroy()
 /****************** R s c B a s e C o n t ********************************/
 /*************************************************************************
 |*
-|*    RscBaseCont::RscBaseCont()
+|*	  RscBaseCont::RscBaseCont()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.05.91
+|*	  Letzte Aenderung	MM 25.05.91
 |*
 *************************************************************************/
 RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
-                          sal_Bool bNoIdent )
+                          BOOL bNoIdent )
     : RscTop( nId, nTypeId, pSuper ),
       nSize( 0 )
 {
@@ -76,7 +84,11 @@ RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
 
 /*************************************************************************
 |*
-|*    RscBaseCont::~RscBaseCont()
+|*	  RscBaseCont::~RscBaseCont()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.05.91
+|*	  Letzte Aenderung	MM 25.05.91
 |*
 *************************************************************************/
 RscBaseCont::~RscBaseCont()
@@ -85,7 +97,11 @@ RscBaseCont::~RscBaseCont()
 
 /*************************************************************************
 |*
-|*    RscBaseCont::GetClassType()
+|*	  RscBaseCont::GetClassType()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.05.91
+|*	  Letzte Aenderung	MM 25.05.91
 |*
 *************************************************************************/
 RSCCLASS_TYPE RscBaseCont::GetClassType() const
@@ -95,12 +111,16 @@ RSCCLASS_TYPE RscBaseCont::GetClassType() const
 
 /*************************************************************************
 |*
-|*    DestroyElements()
+|*	  DestroyElements()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 26.04.91
+|*	  Letzte Aenderung	MM 26.04.91
 |*
 *************************************************************************/
 void RscBaseCont::DestroyElements( RscBaseContInst * pClassData )
 {
-    sal_uInt32  i = 0;
+    sal_uInt32	i = 0;
 
     if( pClassData->nEntries ){
         for( i = 0; i < pClassData->nEntries; i++ ){
@@ -114,13 +134,17 @@ void RscBaseCont::DestroyElements( RscBaseContInst * pClassData )
 
 /*************************************************************************
 |*
-|*    RscBaseCont::Create()
+|*	  RscBaseCont::Create()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 26.04.91
+|*	  Letzte Aenderung	MM 26.04.91
 |*
 *************************************************************************/
 RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
-                             sal_Bool bOwnClass )
+                             BOOL bOwnClass )
 {
-    sal_uInt32  i = 0;
+    sal_uInt32	i = 0;
     RSCINST aInst;
     RscBaseContInst * pClassData;
 
@@ -138,11 +162,11 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
     pClassData = (RscBaseContInst *)(aInst.pData + nOffInstData);
     pClassData->nEntries = 0;
     pClassData->pEntries = NULL;
-    pClassData->bDflt = sal_True;
+    pClassData->bDflt = TRUE;
 
     if( bOwnClass ){
-        RscBaseContInst *   pDfltClassData;
-        RSCINST         aDfltI;
+        RscBaseContInst *	pDfltClassData;
+        RSCINST 		aDfltI;
 
         pDfltClassData = (RscBaseContInst *)(rDflt.pData + nOffInstData);
 
@@ -167,7 +191,11 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
 
 /*************************************************************************
 |*
-|*    RscBaseCont::Destroy()
+|*	  RscBaseCont::Destroy()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.05.91
+|*	  Letzte Aenderung	MM 25.05.91
 |*
 *************************************************************************/
 void RscBaseCont::Destroy( const RSCINST & rInst ){
@@ -181,13 +209,17 @@ void RscBaseCont::Destroy( const RSCINST & rInst ){
 
 /*************************************************************************
 |*
-|*    RscBaseCont::SearchEle()
+|*	  RscBaseCont::SearchEle()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 17.05.91
+|*	  Letzte Aenderung	MM 17.05.91
 |*
 *************************************************************************/
 RSCINST RscBaseCont::SearchElePos( const RSCINST & rInst, const RscId & rEleName,
                                    RscTop * pClass, sal_uInt32 nPos )
 {
-    sal_uInt32  i = 0;
+    sal_uInt32	i = 0;
     RscBaseContInst * pClassData;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
@@ -208,7 +240,11 @@ RSCINST RscBaseCont::SearchElePos( const RSCINST & rInst, const RscId & rEleName
 
 /*************************************************************************
 |*
-|*    RscBaseCont::SearchEle()
+|*	  RscBaseCont::SearchEle()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 17.05.91
+|*	  Letzte Aenderung	MM 17.05.91
 |*
 *************************************************************************/
 RSCINST RscBaseCont::SearchEle( const RSCINST & rInst, const RscId & rEleName,
@@ -219,7 +255,11 @@ RSCINST RscBaseCont::SearchEle( const RSCINST & rInst, const RscId & rEleName,
 
 /*************************************************************************
 |*
-|*    RscBaseCont::GetElement()
+|*	  RscBaseCont::GetElement()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 26.04.91
+|*	  Letzte Aenderung	MM 26.04.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
@@ -227,8 +267,8 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
                                  const RSCINST & rCreateInst, RSCINST * pGetInst )
 {
     RscBaseContInst * pClassData;
-    RSCINST           aTmpI;
-    ERRTYPE           aError;
+    RSCINST 		  aTmpI;
+    ERRTYPE 		  aError;
 
     if( !bNoId && !rEleName.IsId() )
         aError = WRN_CONT_NOID;
@@ -251,7 +291,7 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
     else
         pCreateClass = pTypeClass;
 
-    pClassData->bDflt = sal_False;
+    pClassData->bDflt = FALSE;
     if( !bNoId )
         aTmpI = SearchEle( rInst, rEleName, pCreateClass );
     // Eintrag gefunden
@@ -297,7 +337,11 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
 
 /*************************************************************************
 |*
-|*    RscBaseCont::GetCount()
+|*	  RscBaseCont::GetCount()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 08.05.91
+|*	  Letzte Aenderung	MM 08.05.91
 |*
 *************************************************************************/
 sal_uInt32 RscBaseCont::GetCount( const RSCINST & rInst ){
@@ -309,7 +353,11 @@ sal_uInt32 RscBaseCont::GetCount( const RSCINST & rInst ){
 
 /*************************************************************************
 |*
-|*    RscBaseCont::GetPosEle()
+|*	  RscBaseCont::GetPosEle()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 08.05.91
+|*	  Letzte Aenderung	MM 08.05.91
 |*
 *************************************************************************/
 RSCINST RscBaseCont::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos ){
@@ -324,7 +372,11 @@ RSCINST RscBaseCont::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos ){
 
 /*************************************************************************
 |*
-|*    RscBaseCont::MovePosEle()
+|*	  RscBaseCont::MovePosEle()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 23.10.91
+|*	  Letzte Aenderung	MM 23.10.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
@@ -337,8 +389,8 @@ ERRTYPE RscBaseCont::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
 
     if( (nDestPos < pClassData->nEntries) && (nSourcePos < pClassData->nEntries) ){
         ENTRY_STRUCT aEntry;
-        int          nInc = 1;
-        sal_uInt32       i = 0;
+        int		     nInc = 1;
+        sal_uInt32		 i = 0;
 
         // Quelle Merken
         aEntry = pClassData->pEntries[ nSourcePos ];
@@ -359,14 +411,18 @@ ERRTYPE RscBaseCont::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
 
 /*************************************************************************
 |*
-|*    RscBaseCont::SetPosRscId()
+|*	  RscBaseCont::SetPosRscId()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 30.09.91
+|*	  Letzte Aenderung	MM 30.09.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
                                   const RscId & rId ){
     RscBaseContInst * pClassData;
-    RSCINST           aTmpI;
-    ERRTYPE           aError;
+    RSCINST 		  aTmpI;
+    ERRTYPE 		  aError;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -386,18 +442,22 @@ ERRTYPE RscBaseCont::SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
 
 /*************************************************************************
 |*
-|*    RscBaseCont::GetInfoEle()
+|*	  RscBaseCont::GetInfoEle()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 08.05.91
+|*	  Letzte Aenderung	MM 08.05.91
 |*
 *************************************************************************/
 SUBINFO_STRUCT RscBaseCont::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos ){
     RscBaseContInst * pClassData;
-    SUBINFO_STRUCT  aInfo;
+    SUBINFO_STRUCT	aInfo;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
     if( nPos < pClassData->nEntries ){
-        aInfo.aId    = pClassData->pEntries[ nPos ].aName;
-        aInfo.nPos   = nPos;
+        aInfo.aId	 = pClassData->pEntries[ nPos ].aName;
+        aInfo.nPos	 = nPos;
         aInfo.pClass = pClassData->pEntries[ nPos ].aInst.pClass;
     }
     return( aInfo );
@@ -405,7 +465,11 @@ SUBINFO_STRUCT RscBaseCont::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos )
 
 /*************************************************************************
 |*
-|*    RscBaseCont::SetString()
+|*	  RscBaseCont::SetString()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 29.04.91
+|*	  Letzte Aenderung	MM 29.04.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::SetString( const RSCINST & rInst, const char * pStr )
@@ -413,7 +477,7 @@ ERRTYPE RscBaseCont::SetString( const RSCINST & rInst, const char * pStr )
     RscBaseContInst * pClassData;
     RSCINST aTmpI;
     ERRTYPE aError;
-    char    *pTmpStr;
+    char	*pTmpStr;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -443,14 +507,18 @@ else
 
 /*************************************************************************
 |*
-|*    RscBaseCont::SetNumber()
+|*	  RscBaseCont::SetNumber()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 12.06.91
+|*	  Letzte Aenderung	MM 12.06.91
 |*
 *************************************************************************/
-ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, sal_Int32 lValue ){
+ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, INT32 lValue ){
     RscBaseContInst * pClassData;
     RSCINST aTmpI;
     ERRTYPE aError;
-    sal_Int32   lNumber;
+    INT32	lNumber;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -482,13 +550,13 @@ else
 ERRTYPE RscBaseCont::SetBool
 (
     const RSCINST & rInst,
-    sal_Bool bValue
+    BOOL bValue
 )
 {
     RscBaseContInst * pClassData;
     RSCINST aTmpI;
     ERRTYPE aError;
-    sal_Bool    bBool;
+    BOOL	bBool;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -522,13 +590,13 @@ ERRTYPE RscBaseCont::SetConst
 (
     const RSCINST & rInst,
     Atom nValueId,
-    sal_Int32 lValue
+    INT32 lValue
 )
 {
     RscBaseContInst * pClassData;
     RSCINST aTmpI;
     ERRTYPE aError;
-    Atom    nConst;
+    Atom	nConst;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -558,14 +626,18 @@ else
 
 /*************************************************************************
 |*
-|*    RscBaseCont::SetRef()
+|*	  RscBaseCont::SetRef()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 02.12.91
+|*	  Letzte Aenderung	MM 02.12.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::SetRef( const RSCINST & rInst, const RscId & rRefId ){
     RscBaseContInst * pClassData;
     RSCINST aTmpI;
     ERRTYPE aError;
-    RscId   aId;
+    RscId	aId;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -595,15 +667,19 @@ else
 
 /*************************************************************************
 |*
-|*    RscBaseCont::IsConsistent()
+|*	  RscBaseCont::IsConsistent()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 23.09.91
+|*	  Letzte Aenderung	MM 23.09.91
 |*
 *************************************************************************/
-sal_Bool RscBaseCont::IsConsistent( const RSCINST & rInst ) {
-    sal_uInt32  i = 0;
+BOOL RscBaseCont::IsConsistent( const RSCINST & rInst, RscInconsList * pList ){
+    sal_uInt32	i = 0;
     RscBaseContInst * pClassData;
-    sal_Bool    bRet;
+    BOOL	bRet;
 
-    bRet = RscTop::IsConsistent( rInst );
+    bRet = RscTop::IsConsistent( rInst, pList );
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -611,19 +687,27 @@ sal_Bool RscBaseCont::IsConsistent( const RSCINST & rInst ) {
     // Komplexitaet = n^2 / 2
     for( i = 0; i < pClassData->nEntries; i++ ){
         if( !bNoId ){
-            if( (sal_Int32)pClassData->pEntries[ i ].aName > 0x7FFF
-              || (sal_Int32)pClassData->pEntries[ i ].aName < 1 ){
-                bRet = sal_False;
+            if( (INT32)pClassData->pEntries[ i ].aName > 0x7FFF
+              || (INT32)pClassData->pEntries[ i ].aName < 1 ){
+                bRet = FALSE;
+                if( pList )
+                    pList->Insert( new RscInconsistent(
+                        pClassData->pEntries[ i ].aName,
+                        pClassData->pEntries[ i ].aName ) );
             }
             else if( SearchElePos( rInst, pClassData->pEntries[ i ].aName,
                 pClassData->pEntries[ i ].aInst.pClass, i +1 ).IsInst() )
             {
-                 bRet = sal_False;
+                 bRet = FALSE;
+                 if( pList )
+                     pList->Insert( new RscInconsistent(
+                         pClassData->pEntries[ i	].aName,
+                         pClassData->pEntries[ i +1 ].aName ) );
              };
         }
         if( ! pClassData->pEntries[ i ].aInst.pClass->
-              IsConsistent( pClassData->pEntries[ i ].aInst ) )
-            bRet = sal_False;
+              IsConsistent( pClassData->pEntries[ i ].aInst, pList ) )
+            bRet = FALSE;
     };
 
     return( bRet );
@@ -631,12 +715,16 @@ sal_Bool RscBaseCont::IsConsistent( const RSCINST & rInst ) {
 
 /*************************************************************************
 |*
-|*    RscBaseCont::SetToDefault()
+|*	  RscBaseCont::SetToDefault()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.04.91
+|*	  Letzte Aenderung	MM 25.04.91
 |*
 *************************************************************************/
 void RscBaseCont::SetToDefault( const RSCINST & rInst )
 {
-    sal_uInt32  i = 0;
+    sal_uInt32	i = 0;
     RscBaseContInst * pClassData;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
@@ -652,23 +740,27 @@ void RscBaseCont::SetToDefault( const RSCINST & rInst )
 
 /*************************************************************************
 |*
-|*    RscBaseCont::IsDefault()
+|*	  RscBaseCont::IsDefault()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.04.91
+|*	  Letzte Aenderung	MM 25.04.91
 |*
 *************************************************************************/
-sal_Bool RscBaseCont::IsDefault( const RSCINST & rInst ){
-    sal_uInt32  i = 0;
+BOOL RscBaseCont::IsDefault( const RSCINST & rInst ){
+    sal_uInt32	i = 0;
     RscBaseContInst * pClassData;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
     if( !pClassData->bDflt )
-        return sal_False;
+        return FALSE;
 
     for( i = 0; i < pClassData->nEntries; i++ ){
         if( ! pClassData->pEntries[ i ].aInst.pClass->
                   IsDefault( pClassData->pEntries[ i ].aInst ) )
         {
-            return( sal_False );
+            return( FALSE );
         };
     };
 
@@ -677,33 +769,41 @@ sal_Bool RscBaseCont::IsDefault( const RSCINST & rInst ){
 
 /*************************************************************************
 |*
-|*    RscBaseCont::IsValueDefault()
+|*	  RscBaseCont::IsValueDefault()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.04.91
+|*	  Letzte Aenderung	MM 15.01.92
 |*
 *************************************************************************/
-sal_Bool RscBaseCont::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
+BOOL RscBaseCont::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     RscBaseContInst * pClassData;
 
     if( !RscTop::IsValueDefault( rInst, pDef ) )
-        return sal_False;
+        return FALSE;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
     if( pClassData->nEntries )
-        return sal_False;
+        return FALSE;
     else
-        return sal_True;
+        return TRUE;
 }
 
 /*************************************************************************
 |*
-|*    RscBaseCont::Delete()
+|*	  RscBaseCont::Delete()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 12.06.91
+|*	  Letzte Aenderung	MM 12.06.91
 |*
 *************************************************************************/
 void RscBaseCont::Delete( const RSCINST & rInst, RscTop * pClass,
                           const RscId & rId )
 {
-    sal_uInt32  i = 0;
+    sal_uInt32	i = 0;
     RscBaseContInst * pClassData;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
@@ -722,12 +822,16 @@ void RscBaseCont::Delete( const RSCINST & rInst, RscTop * pClass,
 
 /*************************************************************************
 |*
-|*    RscBaseCont::DeletePos()
+|*	  RscBaseCont::DeletePos()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 12.06.91
+|*	  Letzte Aenderung	MM 12.06.91
 |*
 *************************************************************************/
 void RscBaseCont::DeletePos( const RSCINST & rInst, sal_uInt32 nPos ){
-    RscBaseContInst *   pClassData;
-    sal_uInt32              i = 0;
+    RscBaseContInst *	pClassData;
+    sal_uInt32				i = 0;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -745,14 +849,18 @@ void RscBaseCont::DeletePos( const RSCINST & rInst, sal_uInt32 nPos ){
 
 /*************************************************************************
 |*
-|*    RscBaseCont::ContWriteSrc()
+|*	  RscBaseCont::ContWriteSrc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 26.04.91
+|*	  Letzte Aenderung	MM 26.04.91
 |*
 *************************************************************************/
 void RscBaseCont::ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
                                 RscTypCont * pTC, sal_uInt32 nTab,
                                 const char * pVarName )
 {
-    sal_uInt32  i = 0, t = 0;
+    sal_uInt32	i = 0, t = 0;
     RscBaseContInst * pClassData;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
@@ -771,18 +879,22 @@ void RscBaseCont::ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
 
 /*************************************************************************
 |*
-|*    RscBaseCont::ContWriteRc()
+|*	  RscBaseCont::ContWriteRc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 26.04.91
+|*	  Letzte Aenderung	MM 26.04.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                              RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
+                              RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
 {
-    sal_uInt32        i = 0;
+    sal_uInt32		  i = 0;
     RscBaseContInst * pClassData;
-    ERRTYPE       aError;
+    ERRTYPE 	  aError;
 
     if( bExtra || bNoId )
-    { // Nur Subresourcen schreiben, wenn bExtra == sal_True
+    { // Nur Subresourcen schreiben, wenn bExtra == TRUE
         pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
         for( i = 0; i < pClassData->nEntries && aError.IsOk(); i++ ){
@@ -803,7 +915,7 @@ void RscBaseCont::ContWriteRcAccess
     FILE * fOutput,
     RscTypCont * pTC,
     const char * pName,
-    sal_Bool bWriteSize
+    BOOL bWriteSize
 )
 {
     if( (bNoId || bWriteSize) && !pTypeClass1 )
@@ -829,7 +941,11 @@ void RscBaseCont::ContWriteRcAccess
 
 /*************************************************************************
 |*
-|*    RscBaseCont::WriteSrc()
+|*	  RscBaseCont::WriteSrc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 26.04.91
+|*	  Letzte Aenderung	MM 26.04.91
 |*
 *************************************************************************/
 void RscBaseCont::WriteSrc( const RSCINST & rInst, FILE * fOutput,
@@ -842,13 +958,17 @@ void RscBaseCont::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 
 /*************************************************************************
 |*
-|*    RscBaseCont::WriteRc()
+|*	  RscBaseCont::WriteRc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 26.04.91
+|*	  Letzte Aenderung	MM 26.04.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                              RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
+                              RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
 {
-    ERRTYPE       aError;
+    ERRTYPE 	  aError;
 
     aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
     if( aError.IsOk() )
@@ -859,15 +979,19 @@ ERRTYPE RscBaseCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 
 /*************************************************************************
 |*
-|*    RscBaseCont::WriteHxx()
+|*	  RscBaseCont::WriteHxx()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 26.04.91
+|*	  Letzte Aenderung	MM 26.04.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::WriteHxx( const RSCINST & rInst, FILE * fOutput,
                                RscTypCont * pTC, const RscId & rRscId )
 {
-    sal_uInt32        i = 0;
+    sal_uInt32		  i = 0;
     RscBaseContInst * pClassData;
-    ERRTYPE       aError;
+    ERRTYPE 	  aError;
 
     aError = RscTop::WriteHxx( rInst, fOutput, pTC, rRscId );
 
@@ -890,15 +1014,19 @@ ERRTYPE RscBaseCont::WriteHxx( const RSCINST & rInst, FILE * fOutput,
 
 /*************************************************************************
 |*
-|*    RscBaseCont::WriteCxx()
+|*	  RscBaseCont::WriteCxx()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 26.04.91
+|*	  Letzte Aenderung	MM 26.04.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::WriteCxx( const RSCINST & rInst, FILE * fOutput,
                                RscTypCont * pTC, const RscId & rRscId )
 {
-    sal_uInt32        i = 0;
+    sal_uInt32		  i = 0;
     RscBaseContInst * pClassData;
-    ERRTYPE       aError;
+    ERRTYPE 	  aError;
 
     aError = RscTop::WriteCxx( rInst, fOutput, pTC, rRscId );
 
@@ -922,24 +1050,32 @@ ERRTYPE RscBaseCont::WriteCxx( const RSCINST & rInst, FILE * fOutput,
 /*************** R s c C o n t W r i t e S r c ***************************/
 /*************************************************************************
 |*
-|*    RscContWriteSrc::RscContWriteSrc()
+|*	  RscContWriteSrc::RscContWriteSrc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 08.05.91
+|*	  Letzte Aenderung	MM 08.05.91
 |*
 *************************************************************************/
 RscContWriteSrc::RscContWriteSrc( Atom nId, sal_uInt32 nTypeId,
-                                 RscTop * pSuper, sal_Bool bNoIdent )
+                                 RscTop * pSuper, BOOL bNoIdent )
                   : RscBaseCont( nId, nTypeId, pSuper, bNoIdent )
 {}
 
 /*************************************************************************
 |*
-|*    RscContWriteSrc::WriteSrc()
+|*	  RscContWriteSrc::WriteSrc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 08.05.91
+|*	  Letzte Aenderung	MM 08.05.91
 |*
 *************************************************************************/
 void RscContWriteSrc::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                                 RscTypCont * pTC, sal_uInt32 nTab,
                                 const char * pVarName )
 {
-    sal_uInt32  i;
+    sal_uInt32	i;
 
     RscTop::WriteSrc( rInst, fOutput, pTC, nTab, pVarName );
 
@@ -958,20 +1094,28 @@ void RscContWriteSrc::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 /*************** R s c C o n t *******************************************/
 /*************************************************************************
 |*
-|*    RscCont::RscCont()
+|*	  RscCont::RscCont()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 08.05.91
+|*	  Letzte Aenderung	MM 08.05.91
 |*
 *************************************************************************/
-RscCont::RscCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper, sal_Bool bNoIdent )
+RscCont::RscCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper, BOOL bNoIdent )
               : RscContWriteSrc( nId, nTypeId, pSuper, bNoIdent )
 {}
 
 /*************************************************************************
 |*
-|*    RscCont::WriteRc()
+|*	  RscCont::WriteRc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 08.05.91
+|*	  Letzte Aenderung	MM 08.05.91
 |*
 *************************************************************************/
 ERRTYPE RscCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                                 RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
+                                 RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
 {
     RscBaseContInst * pClassData;
     ERRTYPE aError;
@@ -996,26 +1140,34 @@ void RscCont::WriteRcAccess
     const char * pName
 )
 {
-    ContWriteRcAccess( fOutput, pTC, pName, sal_True );
+    ContWriteRcAccess( fOutput, pTC, pName, TRUE );
 }
 
 /*************************************************************************
 |*
-|*    RscContExtraData::RscContExtraData()
+|*	  RscContExtraData::RscContExtraData()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 08.05.91
+|*	  Letzte Aenderung	MM 08.05.91
 |*
 *************************************************************************/
 RscContExtraData::RscContExtraData( Atom nId, sal_uInt32 nTypeId,
-                             RscTop * pSuper, sal_Bool bNoIdent )
+                             RscTop * pSuper, BOOL bNoIdent )
                      : RscContWriteSrc( nId, nTypeId, pSuper, bNoIdent )
 {}
 
 /*************************************************************************
 |*
-|*    RscContExtraData::WriteRc()
+|*	  RscContExtraData::WriteRc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 08.05.91
+|*	  Letzte Aenderung	MM 08.05.91
 |*
 *************************************************************************/
 ERRTYPE RscContExtraData::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                             RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
+                             RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
 {
     ERRTYPE aError;
 

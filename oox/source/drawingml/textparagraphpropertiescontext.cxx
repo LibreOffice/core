@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,11 @@
 #include "oox/drawingml/textcharacterpropertiescontext.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/core/namespaces.hxx"
+#include "properties.hxx"
 #include "textspacingcontext.hxx"
 #include "texttabstoplistcontext.hxx"
+#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -69,16 +72,16 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
         sal_Int32 nAlign = xAttribs->getOptionalValueToken( XML_algn, XML_l );
         rPropertyMap[ PROP_ParaAdjust ] <<= GetParaAdjust( nAlign );
     }
-//  OSL_TRACE( "OOX: para adjust %d", GetParaAdjust( nAlign ));
+//	OSL_TRACE( "OOX: para adjust %d", GetParaAdjust( nAlign ));
     // TODO see to do the same with RubyAdjust
 
     // ST_Coordinate32
-//  sValue = xAttribs->getOptionalValue( XML_defTabSz );    SJ: we need to be able to set the default tab size for each text object,
-//                                                          this is possible at the moment only for the whole document.
-//  sal_Int32 nDefTabSize = ( sValue.getLength() == 0 ? 0 : GetCoordinate(  sValue ) );
+//	sValue = xAttribs->getOptionalValue( XML_defTabSz );	SJ: we need to be able to set the default tab size for each text object,
+//															this is possible at the moment only for the whole document.
+//	sal_Int32 nDefTabSize = ( sValue.getLength() == 0 ? 0 : GetCoordinate(  sValue ) );
     // TODO
 
-//  bool bEaLineBrk = attribs.getBool( XML_eaLnBrk, true );
+//	bool bEaLineBrk = attribs.getBool( XML_eaLnBrk, true );
     if ( xAttribs->hasAttribute( XML_latinLnBrk ) )
     {
         bool bLatinLineBrk = attribs.getBool( XML_latinLnBrk, true );
@@ -88,7 +91,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
 
     // ST_TextFontAlignType
     // TODO
-//  sal_Int32 nFontAlign = xAttribs->getOptionalValueToken( XML_fontAlgn, XML_base );
+//	sal_Int32 nFontAlign = xAttribs->getOptionalValueToken( XML_fontAlgn, XML_base );
 
     if ( xAttribs->hasAttribute( XML_hangingPunct ) )
     {
@@ -185,49 +188,49 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case A_TOKEN( lnSpc ):          // CT_TextSpacing
+        case NMSP_DRAWINGML|XML_lnSpc:			// CT_TextSpacing
             xRet.set( new TextSpacingContext( *this, maLineSpacing ) );
             break;
-        case A_TOKEN( spcBef ):         // CT_TextSpacing
+        case NMSP_DRAWINGML|XML_spcBef:			// CT_TextSpacing
             xRet.set( new TextSpacingContext( *this, mrSpaceBefore ) );
             break;
-        case A_TOKEN( spcAft ):         // CT_TextSpacing
+        case NMSP_DRAWINGML|XML_spcAft:			// CT_TextSpacing
             xRet.set( new TextSpacingContext( *this, mrSpaceAfter ) );
             break;
 
         // EG_TextBulletColor
-        case A_TOKEN( buClrTx ):        // CT_TextBulletColorFollowText ???
+        case NMSP_DRAWINGML|XML_buClrTx:		// CT_TextBulletColorFollowText ???
             mrBulletList.mbBulletColorFollowText <<= sal_True;
             break;
-        case A_TOKEN( buClr ):          // CT_Color
+        case NMSP_DRAWINGML|XML_buClr:			// CT_Color
             xRet.set( new ColorContext( *this, *mrBulletList.maBulletColorPtr ) );
             break;
 
         // EG_TextBulletSize
-        case A_TOKEN( buSzTx ):         // CT_TextBulletSizeFollowText
+        case NMSP_DRAWINGML|XML_buSzTx:			// CT_TextBulletSizeFollowText
             mrBulletList.setBulletSize(100);
             break;
-        case A_TOKEN( buSzPct ):        // CT_TextBulletSizePercent
+        case NMSP_DRAWINGML|XML_buSzPct:		// CT_TextBulletSizePercent
             mrBulletList.setBulletSize( static_cast<sal_Int16>( GetPercent( rXAttributes->getOptionalValue( XML_val ) ) / 1000 ) );
             break;
-        case A_TOKEN( buSzPts ):        // CT_TextBulletSizePoint
+        case NMSP_DRAWINGML|XML_buSzPts:		// CT_TextBulletSizePoint
             mrBulletList.setBulletSize(0);
             mrBulletList.setFontSize( static_cast<sal_Int16>(GetTextSize( rXAttributes->getOptionalValue( XML_val ) ) ) );
             break;
 
         // EG_TextBulletTypeface
-        case A_TOKEN( buFontTx ):       // CT_TextBulletTypefaceFollowText
+        case NMSP_DRAWINGML|XML_buFontTx:		// CT_TextBulletTypefaceFollowText
             mrBulletList.mbBulletFontFollowText <<= sal_True;
             break;
-        case A_TOKEN( buFont ):         // CT_TextFont
+        case NMSP_DRAWINGML|XML_buFont:			// CT_TextFont
             mrBulletList.maBulletFont.setAttributes( aAttribs );
             break;
 
         // EG_TextBullet
-        case A_TOKEN( buNone ):         // CT_TextNoBullet
+        case NMSP_DRAWINGML|XML_buNone:			// CT_TextNoBullet
             mrBulletList.setNone();
             break;
-        case A_TOKEN( buAutoNum ):      // CT_TextAutonumberBullet
+        case NMSP_DRAWINGML|XML_buAutoNum:		// CT_TextAutonumberBullet
         {
             AttributeList attribs( rXAttributes );
             try {
@@ -250,7 +253,7 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
             }
             break;
         }
-        case A_TOKEN( buChar ):         // CT_TextCharBullet
+        case NMSP_DRAWINGML|XML_buChar:			// CT_TextCharBullet
             try {
                 mrBulletList.setBulletChar( rXAttributes->getValue( XML_char ) );
             }
@@ -259,17 +262,17 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
                 OSL_TRACE("OOX: SAXException in XML_buChar");
             }
             break;
-        case A_TOKEN( buBlip ):         // CT_TextBlipBullet
+        case NMSP_DRAWINGML|XML_buBlip:			// CT_TextBlipBullet
             {
                 mxBlipProps.reset( new BlipFillProperties );
                 xRet.set( new BlipFillContext( *this, rXAttributes, *mxBlipProps ) );
             }
             break;
 
-        case A_TOKEN( tabLst ):         // CT_TextTabStopList
+        case NMSP_DRAWINGML|XML_tabLst:			// CT_TextTabStopList
             xRet.set( new TextTabStopListContext( *this, maTabList ) );
             break;
-        case A_TOKEN( defRPr ):         // CT_TextCharacterProperties
+        case NMSP_DRAWINGML|XML_defRPr:			// CT_TextCharacterProperties
             xRet.set( new TextCharacterPropertiesContext( *this, rXAttributes, mrTextParagraphProperties.getTextCharacterProperties() ) );
             break;
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,6 @@ TabPage TP_LINENUMBERING
     Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CB_NUMBERING_ON
     {
-        HelpID = "sw:CheckBox:TP_LINENUMBERING:CB_NUMBERING_ON";
         Pos = MAP_APPFONT ( 12 , 6 ) ;
         Size = MAP_APPFONT ( 242 , 8 ) ;
         TabStop = TRUE ;
@@ -61,7 +60,6 @@ TabPage TP_LINENUMBERING
     };
     ListBox LB_CHAR_STYLE
     {
-        HelpID = "sw:ListBox:TP_LINENUMBERING:LB_CHAR_STYLE";
         Pos = MAP_APPFONT ( 100 , 30 ) ;
         Size = MAP_APPFONT ( 148 , 80 ) ;
         TabStop = TRUE ;
@@ -76,7 +74,6 @@ TabPage TP_LINENUMBERING
     };
     ListBox LB_FORMAT
     {
-        HelpID = "sw:ListBox:TP_LINENUMBERING:LB_FORMAT";
         Pos = MAP_APPFONT ( 100 , 44 ) ;
         Size = MAP_APPFONT ( 148 , 80 ) ;
         TabStop = TRUE ;
@@ -90,7 +87,6 @@ TabPage TP_LINENUMBERING
     };
     ListBox LB_POS
     {
-        HelpID = "sw:ListBox:TP_LINENUMBERING:LB_POS";
         Pos = MAP_APPFONT ( 100 , 60 ) ;
         Size = MAP_APPFONT ( 148 , 60 ) ;
         TabStop = TRUE ;
@@ -111,7 +107,6 @@ TabPage TP_LINENUMBERING
     };
     MetricField MF_OFFSET
     {
-        HelpID = "sw:MetricField:TP_LINENUMBERING:MF_OFFSET";
         Pos = MAP_APPFONT ( 100 , 76 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         Border = TRUE ;
@@ -135,7 +130,6 @@ TabPage TP_LINENUMBERING
     };
     NumericField NF_NUM_INVERVAL
     {
-        HelpID = "sw:NumericField:TP_LINENUMBERING:NF_NUM_INVERVAL";
         Pos = MAP_APPFONT ( 100 , 92 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
@@ -169,7 +163,6 @@ TabPage TP_LINENUMBERING
     };
     Edit ED_DIVISOR
     {
-        HelpID = "sw:Edit:TP_LINENUMBERING:ED_DIVISOR";
         Pos = MAP_APPFONT ( 45 , 121 ) ;
         Size = MAP_APPFONT ( 76 , 12 ) ;
         Left = TRUE ;
@@ -184,7 +177,6 @@ TabPage TP_LINENUMBERING
     };
     NumericField NF_DIV_INTERVAL
     {
-        HelpID = "sw:NumericField:TP_LINENUMBERING:NF_DIV_INTERVAL";
         Pos = MAP_APPFONT ( 45 , 137 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Border = TRUE ;
@@ -213,7 +205,6 @@ TabPage TP_LINENUMBERING
     };
     CheckBox CB_COUNT_EMPTYLINES
     {
-        HelpID = "sw:CheckBox:TP_LINENUMBERING:CB_COUNT_EMPTYLINES";
         Pos = MAP_APPFONT ( 139 , 121 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         TabStop = TRUE ;
@@ -221,7 +212,6 @@ TabPage TP_LINENUMBERING
     };
     CheckBox CB_COUNT_FRAMELINES
     {
-        HelpID = "sw:CheckBox:TP_LINENUMBERING:CB_COUNT_FRAMELINES";
         Pos = MAP_APPFONT ( 139 , 135 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         TabStop = TRUE ;
@@ -229,7 +219,6 @@ TabPage TP_LINENUMBERING
     };
     CheckBox CB_RESTART_PAGE
     {
-        HelpID = "sw:CheckBox:TP_LINENUMBERING:CB_RESTART_PAGE";
         Pos = MAP_APPFONT ( 139 , 149 );
         Size = MAP_APPFONT ( 110 , 10 );
         TabStop = TRUE;

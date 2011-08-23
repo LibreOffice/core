@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,19 +32,19 @@
 #include <stdio.h>
 
 #include <../../inc/tools/string.hxx>
-#include <vector>
+#include <../../inc/tools/list.hxx>
 
 class TextFilter
 {
 protected:
-    FILE            *pIn, *pOut;
-    virtual void    Filter();
+    FILE			*pIn, *pOut;
+    virtual void	Filter();
 public:
-                    TextFilter( ByteString aInFile = "stdin",
+                    TextFilter( ByteString aInFile = "stdin", 
                         ByteString aOutFile = "stdout" );
-    virtual         ~TextFilter();
+    virtual			~TextFilter();
 
-    virtual void    Execute();
+    virtual void	Execute();
 };
 
 TextFilter::TextFilter( ByteString aInFile, ByteString aOutFile )
@@ -82,35 +82,35 @@ void TextFilter::Filter()
 
 #define LINE_LEN 2048
 
-class MkLine;
-typedef ::std::vector< MkLine* > ByteStringList;
+class ByteStringList;
 
 class MkLine
 {
 public:
-    ByteString          aLine;
-    ByteStringList*     pPrivateTnrLst;
-    sal_Bool            bOut;
-    sal_Bool            bHier;
-
+    ByteString			aLine;
+    ByteStringList*		pPrivateTnrLst;
+    BOOL			bOut;
+    BOOL			bHier;
+        
                     MkLine();
 };
 
 MkLine::MkLine()
 {
-    bOut = sal_False;
-    bHier = sal_False;
+    bOut = FALSE;
+    bHier = FALSE;
     pPrivateTnrLst = NULL;
 }
 
+DECLARE_LIST( ByteStringList, MkLine * )
 
 class MkFilter : public TextFilter
 {
-    static ByteString   aTnr;
-    ByteStringList      *pLst;
-    ByteStringList      *pTnrLst;
+    static ByteString	aTnr;
+    ByteStringList		*pLst;
+    ByteStringList		*pTnrLst;
 protected:
-    virtual void    Filter();
+    virtual void	Filter();
 public:
                     MkFilter( ByteString aInFile = "stdin", ByteString aOutFile = "stdout");
                     ~MkFilter();
@@ -125,13 +125,7 @@ MkFilter::MkFilter( ByteString aInFile, ByteString aOutFile ) :
 
 MkFilter::~MkFilter()
 {
-    for ( size_t i = 0, n = pLst->size(); i < n; ++i ) {
-        delete (*pTnrLst)[ i ];
-    }
     delete pTnrLst;
-    for ( size_t i = 0, n = pLst->size(); i < n; ++i ) {
-        delete (*pLst)[ i ];
-    }
     delete pLst;
 }
 
@@ -145,9 +139,10 @@ void MkFilter::Filter()
     while(( fgets(aLineBuf, LINE_LEN, pIn)) != NULL )
     {
         ByteString aLine( aLineBuf );
+        //fprintf(stderr, "aLine :%s\n", aLine.GetBuffer());
         if ( aLine.Search("mkfilter1" ) != STRING_NOTFOUND )
         {
-            // Zeilen unterdruecken
+            // Zeilen unterdruecken 
             fprintf( stderr, "mkfilter1\n" );
             nState = 0;
         }
@@ -158,79 +153,75 @@ void MkFilter::Filter()
             nState = 1;
         }
         ;
-
+        
         if ( nState == 0  )
         {
             fprintf( stderr, "." );
             MkLine *pMkLine = new MkLine();
             ByteString *pStr = new ByteString( aLineBuf );
             pMkLine->aLine = *pStr;
-            pMkLine->bOut = sal_False;
-
-            pLst->push_back( pMkLine );
+            pMkLine->bOut = FALSE;
+        
+            pLst->Insert( pMkLine, LIST_APPEND );
         }
         else if ( nState == 1 )
         {
-            sal_Bool bInTnrList = sal_True;
+            BOOL bInTnrList = TRUE;
             fprintf( stderr, ":" );
             MkLine *pMkLine = new MkLine();
             if ( aLine.Search("unroll end") != STRING_NOTFOUND )
             {
                 fprintf( stderr, ";\nunroll end\n" );
                 MkLine *p_MkLine = new MkLine();
-                p_MkLine->bHier = sal_True;
+                p_MkLine->bHier = TRUE;
                 ByteString *pByteString = new ByteString("# do not delete this line === mkfilter3i\n");
                 p_MkLine->aLine = *pByteString;
-                p_MkLine->bOut = sal_False;
+                p_MkLine->bOut = FALSE;
                 p_MkLine->pPrivateTnrLst = pTnrLst;
                 pTnrLst = new ByteStringList();
-                pLst->push_back( p_MkLine );
+                pLst->Insert( p_MkLine, LIST_APPEND );
                 nState = 0;
-                bInTnrList = sal_False;
+                bInTnrList = FALSE;
             }
             ByteString *pStr = new ByteString( aLineBuf );
             pMkLine->aLine = *pStr;
-            pMkLine->bOut = sal_False;
-
+            pMkLine->bOut = FALSE;
+        
             if ( bInTnrList )
-                pTnrLst->push_back( pMkLine );
+                pTnrLst->Insert( pMkLine, LIST_APPEND );
         }
         else {
             /* Zeilen ignorieren */;
         }
-    }   // End Of File
+    }	// End Of File
     fprintf( stderr, "\n" );
-
+    
     // das File wieder ausgegeben
-    size_t nLines = pLst->size();
-    for ( size_t j=0; j<nLines; j++ )
+    ULONG nLines = pLst->Count();
+    for ( ULONG j=0; j<nLines; j++ )
     {
-        MkLine *pLine = (*pLst)[ j ];
+        MkLine *pLine = pLst->GetObject( j );
         if ( pLine->bHier )
         {
             // die List n - Mal abarbeiten
-            for ( sal_uInt16 n=1; n<11; n++)
+            for ( USHORT n=1; n<11; n++)
             {
-                size_t nCount = pLine->pPrivateTnrLst->size();
-                for ( size_t i=0; i<nCount; i++ )
+                ULONG nCount = pLine->pPrivateTnrLst->Count();
+                for ( ULONG i=0; i<nCount; i++ )
                 {
-                    MkLine *pMkLine = (*pLine->pPrivateTnrLst)[ i ];
+                    MkLine *pMkLine = pLine->pPrivateTnrLst->GetObject(i);
                     ByteString aLine = pMkLine->aLine;
-                    while( aLine.SearchAndReplace( aTnr, ByteString::CreateFromInt32( n )) != (sal_uInt16)-1 ) ;
+                    while( aLine.SearchAndReplace( aTnr, ByteString::CreateFromInt32( n )) != (USHORT)-1 ) ;
                     fputs( aLine.GetBuffer(), pOut );
                     fprintf( stderr, "o" );
                 }
             }
-            if ( pLine->pPrivateTnrLst != NULL ) {
-                for ( size_t i = 0, n = pLine->pPrivateTnrLst->size(); i < n; ++i ) {
-                    delete (*pLine->pPrivateTnrLst)[ i ];
-                }
+            if ( pLine->pPrivateTnrLst != NULL )
                 delete pLine->pPrivateTnrLst;
-            }
             pLine->pPrivateTnrLst = NULL;
         }
         if ( pLine->bOut )
-                fputs(pLine->aLine.GetBuffer(), pOut );
+                fputs(pLine->aLine.GetBuffer(), pOut );			
     }
     fprintf( stderr, "\n" );
 }

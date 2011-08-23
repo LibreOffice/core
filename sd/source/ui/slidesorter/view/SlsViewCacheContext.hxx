@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,9 @@ namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
 } } }
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
-
 namespace sd { namespace slidesorter { namespace view {
+
+class SlideSorterView;
 
 /** The cache context for the SlideSorter as used by Draw and Impress.  See
     the base class for documentation of the individual methods.
@@ -48,19 +46,21 @@ namespace sd { namespace slidesorter { namespace view {
 class ViewCacheContext : public cache::CacheContext
 {
 public:
-    ViewCacheContext (SlideSorter& rSlideSorter);
+    ViewCacheContext (
+        model::SlideSorterModel& rModel,
+        SlideSorterView& rView);
     virtual ~ViewCacheContext (void);
-    virtual void NotifyPreviewCreation (cache::CacheKey aKey, const Bitmap& rPreview);
+    virtual void NotifyPreviewCreation (cache::CacheKey aKey, const ::boost::shared_ptr<BitmapEx>& rPreview);
     virtual bool IsIdle (void);
     virtual bool IsVisible (cache::CacheKey aKey);
     virtual const SdrPage* GetPage (cache::CacheKey aKey);
     virtual ::boost::shared_ptr<std::vector<cache::CacheKey> > GetEntryList (bool bVisible);
     virtual sal_Int32 GetPriority (cache::CacheKey aKey);
     virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel (void);
-
+    
 private:
     model::SlideSorterModel& mrModel;
-    SlideSorter& mrSlideSorter;
+    SlideSorterView& mrView;
 
     model::SharedPageDescriptor GetDescriptor (cache::CacheKey aKey);
 };

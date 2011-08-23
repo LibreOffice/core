@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,14 +39,12 @@
 #include "ChartModelHelper.hxx"
 #include "AxisHelper.hxx"
 #include "CommonConverters.hxx"
-#include "ChartTypeHelper.hxx"
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/AxisOrientation.hpp>
-#include <com/sun/star/chart2/AxisType.hpp>
 
 // for SfxBoolItem
 #include <svl/eitem.hxx>
@@ -61,8 +59,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::chart::TimeInterval;
-using ::com::sun::star::chart::TimeIncrement;
 
 namespace
 {
@@ -70,13 +66,13 @@ namespace
 {
     static ::comphelper::ItemPropertyMapType aAxisPropertyMap(
         ::comphelper::MakeItemPropertyMap
-        IPM_MAP_ENTRY( SCHATTR_AXIS_SHOWDESCR,     "DisplayLabels",    0 )
-        IPM_MAP_ENTRY( SCHATTR_AXIS_TICKS,         "MajorTickmarks",   0 )
-        IPM_MAP_ENTRY( SCHATTR_AXIS_HELPTICKS,     "MinorTickmarks",   0 )
-        IPM_MAP_ENTRY( SCHATTR_AXIS_LABEL_ORDER,   "ArrangeOrder",     0 )
-        IPM_MAP_ENTRY( SCHATTR_TEXT_STACKED,       "StackCharacters",  0 )
-        IPM_MAP_ENTRY( SCHATTR_AXIS_LABEL_BREAK,   "TextBreak",        0 )
-        IPM_MAP_ENTRY( SCHATTR_AXIS_LABEL_OVERLAP, "TextOverlap",      0 )
+        IPM_MAP_ENTRY( SCHATTR_AXIS_SHOWDESCR, "DisplayLabels",    0 )
+        IPM_MAP_ENTRY( SCHATTR_AXIS_TICKS,     "MajorTickmarks",   0 )
+        IPM_MAP_ENTRY( SCHATTR_AXIS_HELPTICKS, "MinorTickmarks",   0 )
+        IPM_MAP_ENTRY( SCHATTR_TEXT_ORDER,     "ArrangeOrder",     0 )
+        IPM_MAP_ENTRY( SCHATTR_TEXT_STACKED,   "StackCharacters",  0 )
+        IPM_MAP_ENTRY( SCHATTR_TEXTBREAK,      "TextBreak",        0 )
+        IPM_MAP_ENTRY( SCHATTR_TEXT_OVERLAP,   "TextOverlap",      0 )
         );
 
     return aAxisPropertyMap;
@@ -93,8 +89,8 @@ AxisItemConverter::AxisItemConverter(
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const Reference< chart2::XChartDocument > & xChartDoc,
-    ::chart::ExplicitScaleData * pScale /* = NULL */,
-    ::chart::ExplicitIncrementData * pIncrement /* = NULL */,
+    chart2::ExplicitScaleData * pScale /* = NULL */,
+    chart2::ExplicitIncrementData * pIncrement /* = NULL */,
     ::std::auto_ptr< awt::Size > pRefSize /* = NULL */ ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_xChartDoc( xChartDoc ),
@@ -104,10 +100,10 @@ AxisItemConverter::AxisItemConverter(
     Reference< lang::XMultiServiceFactory > xNamedPropertyContainerFactory( xChartDoc, uno::UNO_QUERY );
 
     if( pScale )
-        m_pExplicitScale = new ::chart::ExplicitScaleData( *pScale );
+        m_pExplicitScale = new chart2::ExplicitScaleData( *pScale );
     if( pIncrement )
-        m_pExplicitIncrement = new ::chart::ExplicitIncrementData( *pIncrement );
-
+        m_pExplicitIncrement = new chart2::ExplicitIncrementData( *pIncrement );
+   
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
                                  xNamedPropertyContainerFactory,
@@ -148,7 +144,7 @@ bool AxisItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const sal_uInt16 * AxisItemConverter::GetWhichPairs() const
+const USHORT * AxisItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nAxisWhichPairs;
@@ -167,40 +163,30 @@ bool AxisItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWit
     return true;
 }
 
-bool lcl_hasTimeIntervalValue( const uno::Any& rAny )
-{
-    bool bRet = false;
-    TimeInterval aValue;
-    if( rAny >>= aValue )
-        bRet = true;
-    return bRet;
-}
-
-void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
+void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
-    if( !m_xAxis.is() )
+    if( ! m_xAxis.is() )
         return;
 
-    const chart2::ScaleData&     rScale( m_xAxis->getScaleData() );
-    const chart2::IncrementData& rIncrement( rScale.IncrementData );
-    const uno::Sequence< chart2::SubIncrement >& rSubIncrements( rScale.IncrementData.SubIncrements );
-    const TimeIncrement& rTimeIncrement( rScale.TimeIncrement );
-    bool bDateAxis = (chart2::AxisType::DATE == rScale.AxisType);
-    if( m_pExplicitScale )
-        bDateAxis = (chart2::AxisType::DATE == m_pExplicitScale->AxisType);
+    const chart2::ScaleData     aScale( m_xAxis->getScaleData() );
+    const chart2::IncrementData aInc( aScale.IncrementData );
+    const uno::Sequence< chart2::SubIncrement > aSubIncs( aScale.IncrementData.SubIncrements );
 
     switch( nWhichId )
     {
         case SCHATTR_AXIS_AUTO_MAX:
-                rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(rScale.Maximum) ) );
+            // if the any has no value => auto is on
+            rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(aScale.Maximum) ) );
             break;
 
         case SCHATTR_AXIS_MAX:
             {
                 double fMax = 10.0;
-                if( rScale.Maximum >>= fMax )
+                if( aScale.Maximum >>= fMax )
+                {
                     rOutItemSet.Put( SvxDoubleItem( fMax, nWhichId ) );
+                }
                 else
                 {
                     if( m_pExplicitScale )
@@ -211,141 +197,106 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             break;
 
         case SCHATTR_AXIS_AUTO_MIN:
-                rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(rScale.Minimum) ) );
+            // if the any has no value => auto is on
+            rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(aScale.Minimum) ) );
             break;
 
         case SCHATTR_AXIS_MIN:
             {
                 double fMin = 0.0;
-                if( rScale.Minimum >>= fMin )
+                if( aScale.Minimum >>= fMin )
+                {
                     rOutItemSet.Put( SvxDoubleItem( fMin, nWhichId ) );
-                else if( m_pExplicitScale )
-                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitScale->Minimum, nWhichId ));
+                }
+                else
+                {
+                    if( m_pExplicitScale )
+                        rOutItemSet.Put( SvxDoubleItem( m_pExplicitScale->Minimum, nWhichId ));
+                }
             }
             break;
 
         case SCHATTR_AXIS_LOGARITHM:
-            {
-                sal_Bool bValue = AxisHelper::isLogarithmic( rScale.Scaling );
-                rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
-            }
-            break;
+        {
+            BOOL bValue = AxisHelper::isLogarithmic( aScale.Scaling );
+            rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
+        }
+        break;
 
         case SCHATTR_AXIS_REVERSE:
-                rOutItemSet.Put( SfxBoolItem( nWhichId, (AxisOrientation_REVERSE == rScale.Orientation) ));
+            rOutItemSet.Put( SfxBoolItem( nWhichId, (AxisOrientation_REVERSE == aScale.Orientation) ));
             break;
 
         // Increment
         case SCHATTR_AXIS_AUTO_STEP_MAIN:
-            if( bDateAxis )
-                rOutItemSet.Put( SfxBoolItem( nWhichId, !lcl_hasTimeIntervalValue(rTimeIncrement.MajorTimeInterval) ) );
-            else
-                rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(rIncrement.Distance) ) );
-            break;
-
-        case SCHATTR_AXIS_MAIN_TIME_UNIT:
-            {
-                TimeInterval aTimeInterval;
-                if( rTimeIncrement.MajorTimeInterval >>= aTimeInterval )
-                    rOutItemSet.Put( SfxInt32Item( nWhichId, aTimeInterval.TimeUnit ) );
-                else if( m_pExplicitIncrement )
-                    rOutItemSet.Put( SfxInt32Item( nWhichId, m_pExplicitIncrement->MajorTimeInterval.TimeUnit ) );
-            }
+            // if the any has no value => auto is on
+            rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(aInc.Distance) ) );
             break;
 
         case SCHATTR_AXIS_STEP_MAIN:
-            if( bDateAxis )
-            {
-                TimeInterval aTimeInterval;
-                if( rTimeIncrement.MajorTimeInterval >>= aTimeInterval )
-                    rOutItemSet.Put( SvxDoubleItem(aTimeInterval.Number, nWhichId ));
-                else if( m_pExplicitIncrement )
-                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitIncrement->MajorTimeInterval.Number, nWhichId ));
-            }
-            else
             {
                 double fDistance = 1.0;
-                if( rIncrement.Distance >>= fDistance )
+                if( aInc.Distance >>= fDistance )
+                {
                     rOutItemSet.Put( SvxDoubleItem(fDistance, nWhichId ));
-                else if( m_pExplicitIncrement )
-                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitIncrement->Distance, nWhichId ));
+                }
+                else
+                {
+                    if( m_pExplicitIncrement )
+                        rOutItemSet.Put( SvxDoubleItem( m_pExplicitIncrement->Distance, nWhichId ));
+                }
             }
             break;
 
         // SubIncrement
         case SCHATTR_AXIS_AUTO_STEP_HELP:
-            if( bDateAxis )
-                rOutItemSet.Put( SfxBoolItem( nWhichId, !lcl_hasTimeIntervalValue(rTimeIncrement.MinorTimeInterval) ) );
-            else
-                rOutItemSet.Put( SfxBoolItem( nWhichId,
-                    ! ( rSubIncrements.getLength() > 0 && rSubIncrements[0].IntervalCount.hasValue() )));
-            break;
-
-        case SCHATTR_AXIS_HELP_TIME_UNIT:
-            {
-                TimeInterval aTimeInterval;
-                if( rTimeIncrement.MinorTimeInterval >>= aTimeInterval )
-                    rOutItemSet.Put( SfxInt32Item( nWhichId, aTimeInterval.TimeUnit ) );
-                else if( m_pExplicitIncrement )
-                    rOutItemSet.Put( SfxInt32Item( nWhichId, m_pExplicitIncrement->MinorTimeInterval.TimeUnit ) );
-            }
-            break;
+        {
+            // if the any has no value => auto is on
+            rOutItemSet.Put(
+                SfxBoolItem(
+                    nWhichId,
+                    ! ( aSubIncs.getLength() > 0 &&
+                        aSubIncs[0].IntervalCount.hasValue() )));
+        }
+        break;
 
         case SCHATTR_AXIS_STEP_HELP:
-            if( bDateAxis )
+        {
+            if( aSubIncs.getLength() > 0 &&
+                aSubIncs[0].IntervalCount.hasValue())
             {
-                TimeInterval aTimeInterval;
-                if( rTimeIncrement.MinorTimeInterval >>= aTimeInterval )
-                    rOutItemSet.Put( SfxInt32Item( nWhichId, aTimeInterval.Number ));
-                else if( m_pExplicitIncrement )
-                    rOutItemSet.Put( SfxInt32Item( nWhichId, m_pExplicitIncrement->MinorTimeInterval.Number ));
+                OSL_ASSERT( aSubIncs[0].IntervalCount.getValueTypeClass() == uno::TypeClass_LONG );
+                rOutItemSet.Put(
+                    SfxInt32Item(
+                        nWhichId,
+                        *reinterpret_cast< const sal_Int32 * >(
+                            aSubIncs[0].IntervalCount.getValue()) ));
             }
             else
             {
-                if( rSubIncrements.getLength() > 0 && rSubIncrements[0].IntervalCount.hasValue())
+                if( m_pExplicitIncrement &&
+                    m_pExplicitIncrement->SubIncrements.getLength() > 0 )
                 {
-                    OSL_ASSERT( rSubIncrements[0].IntervalCount.getValueTypeClass() == uno::TypeClass_LONG );
-                    rOutItemSet.Put( SfxInt32Item( nWhichId,
-                            *reinterpret_cast< const sal_Int32 * >(
-                                rSubIncrements[0].IntervalCount.getValue()) ));
-                }
-                else
-                {
-                    if( m_pExplicitIncrement && !m_pExplicitIncrement->SubIncrements.empty() )
-                    {
-                        rOutItemSet.Put( SfxInt32Item( nWhichId,
-                                m_pExplicitIncrement->SubIncrements[0].IntervalCount ));
-                    }
+                    rOutItemSet.Put(
+                        SfxInt32Item(
+                            nWhichId,
+                            m_pExplicitIncrement->SubIncrements[0].IntervalCount ));
                 }
             }
-            break;
-
-        case SCHATTR_AXIS_AUTO_TIME_RESOLUTION:
-            {
-                rOutItemSet.Put( SfxBoolItem( nWhichId,
-                        !rTimeIncrement.TimeResolution.hasValue() ));
-            }
-            break;
-        case SCHATTR_AXIS_TIME_RESOLUTION:
-            {
-                long nTimeResolution=0;
-                if( rTimeIncrement.TimeResolution >>= nTimeResolution )
-                    rOutItemSet.Put( SfxInt32Item( nWhichId, nTimeResolution ) );
-                else if( m_pExplicitScale )
-                    rOutItemSet.Put( SfxInt32Item( nWhichId, m_pExplicitScale->TimeResolution ) );
-            }
-            break;
+        }
+        break;
 
         case SCHATTR_AXIS_AUTO_ORIGIN:
         {
-            rOutItemSet.Put( SfxBoolItem( nWhichId, ( !hasDoubleValue(rScale.Origin) )));
+            // if the any has no double value => auto is on
+            rOutItemSet.Put( SfxBoolItem( nWhichId, ( !hasDoubleValue(aScale.Origin) )));
         }
         break;
 
         case SCHATTR_AXIS_ORIGIN:
         {
             double fOrigin = 0.0;
-            if( !(rScale.Origin >>= fOrigin) )
+            if( !(aScale.Origin >>= fOrigin) )
             {
                 if( m_pExplicitScale )
                     fOrigin = m_pExplicitScale->Origin;
@@ -374,12 +325,12 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         {
             //read only item
             //necessary tp display the crossing value with an appropriate format
-
+            
             Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
                 m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
 
             Reference< chart2::XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys ) );
-
+            
             sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                 xCrossingMainAxis, xCooSys, Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ) );
 
@@ -417,6 +368,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         break;
 
         case SID_ATTR_NUMBERFORMAT_VALUE:
+//         case SCHATTR_AXIS_NUMFMT:
         {
             if( m_pExplicitScale )
             {
@@ -440,52 +392,19 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         break;
 
         case SCHATTR_AXISTYPE:
-            rOutItemSet.Put( SfxInt32Item( nWhichId, rScale.AxisType ));
-        break;
-
-        case SCHATTR_AXIS_AUTO_DATEAXIS:
-            rOutItemSet.Put( SfxBoolItem( nWhichId, rScale.AutoDateAxis ));
-        break;
-
-        case SCHATTR_AXIS_ALLOW_DATEAXIS:
-        {
-            Reference< chart2::XCoordinateSystem > xCooSys(
-                AxisHelper::getCoordinateSystemOfAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
-            sal_Int32 nDimensionIndex=0; sal_Int32 nAxisIndex=0;
-            AxisHelper::getIndicesForAxis(m_xAxis, xCooSys, nDimensionIndex, nAxisIndex );
-            bool bChartTypeAllowsDateAxis = ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( xCooSys, 0 ), 2, nDimensionIndex );
-            rOutItemSet.Put( SfxBoolItem( nWhichId, bChartTypeAllowsDateAxis ));
-        }
+        rOutItemSet.Put( SfxInt32Item( nWhichId, aScale.AxisType ));
         break;
     }
 }
 
-bool lcl_isDateAxis( const SfxItemSet & rItemSet )
-{
-    sal_Int32 nAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( SCHATTR_AXISTYPE )).GetValue();//::com::sun::star::chart2::AxisType
-    return (chart2::AxisType::DATE == nAxisType);
-}
-
-bool lcl_isAutoMajor( const SfxItemSet & rItemSet )
-{
-    bool bRet = static_cast< const SfxBoolItem & >( rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_MAIN )).GetValue();
-    return bRet;
-}
-
-bool lcl_isAutoMinor( const SfxItemSet & rItemSet )
-{
-    bool bRet = static_cast< const SfxBoolItem & >( rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_HELP )).GetValue();
-    return bRet;
-}
-
-bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
+bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     if( !m_xAxis.is() )
         return false;
-
+    
     chart2::ScaleData     aScale( m_xAxis->getScaleData() );
-
+    
     bool bSetScale    = false;
     bool bChangedOtherwise = false;
 
@@ -571,7 +490,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_REVERSE:
         {
-            bool bWasReverse = ( AxisOrientation_REVERSE == aScale.Orientation );
+            bool bWasReverse = ( AxisOrientation_REVERSE == aScale.Orientation );  
             bool bNewReverse = (static_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() );
             if( bWasReverse != bNewReverse )
@@ -584,47 +503,23 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         // Increment
         case SCHATTR_AXIS_AUTO_STEP_MAIN:
-            if( lcl_isAutoMajor(rItemSet) )
+            if( (static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue() ))
             {
                 aScale.IncrementData.Distance.clear();
-                aScale.TimeIncrement.MajorTimeInterval.clear();
                 bSetScale = true;
             }
             // else SCHATTR_AXIS_STEP_MAIN must have some value
             break;
 
-        case SCHATTR_AXIS_MAIN_TIME_UNIT:
-            if( !lcl_isAutoMajor(rItemSet) )
-            {
-                if( rItemSet.Get( nWhichId ).QueryValue( aValue ) )
-                {
-                    TimeInterval aTimeInterval;
-                    aScale.TimeIncrement.MajorTimeInterval >>= aTimeInterval;
-                    aValue >>= aTimeInterval.TimeUnit;
-                    aScale.TimeIncrement.MajorTimeInterval = uno::makeAny( aTimeInterval );
-                    bSetScale = true;
-                }
-            }
-            break;
-
         case SCHATTR_AXIS_STEP_MAIN:
             // only if auto if false
-            if( !lcl_isAutoMajor(rItemSet) )
+            if( ! (static_cast< const SfxBoolItem & >(
+                       rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_MAIN )).GetValue() ))
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
-                if( lcl_isDateAxis(rItemSet) )
-                {
-                    double fValue = 1.0;
-                    if( aValue >>= fValue )
-                    {
-                        TimeInterval aTimeInterval;
-                        aScale.TimeIncrement.MajorTimeInterval >>= aTimeInterval;
-                        aTimeInterval.Number = static_cast<double>(fValue);
-                        aScale.TimeIncrement.MajorTimeInterval = uno::makeAny( aTimeInterval );
-                        bSetScale = true;
-                    }
-                }
-                else if( aScale.IncrementData.Distance != aValue )
+
+                if( aScale.IncrementData.Distance != aValue )
                 {
                     aScale.IncrementData.Distance = aValue;
                     bSetScale = true;
@@ -634,84 +529,34 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         // SubIncrement
         case SCHATTR_AXIS_AUTO_STEP_HELP:
-            if( lcl_isAutoMinor(rItemSet) )
+            if( (static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue() ) &&
+                aScale.IncrementData.SubIncrements.getLength() > 0 &&
+                aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() )
             {
-                if( aScale.IncrementData.SubIncrements.getLength() > 0 &&
-                    aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() )
-                {
-                        aScale.IncrementData.SubIncrements[0].IntervalCount.clear();
-                        bSetScale = true;
-                }
-                if( aScale.TimeIncrement.MinorTimeInterval.hasValue() )
-                {
-                    aScale.TimeIncrement.MinorTimeInterval.clear();
+                    aScale.IncrementData.SubIncrements[0].IntervalCount.clear();
                     bSetScale = true;
-                }
             }
             // else SCHATTR_AXIS_STEP_MAIN must have some value
             break;
 
-        case SCHATTR_AXIS_HELP_TIME_UNIT:
-            if( !lcl_isAutoMinor(rItemSet) )
-            {
-                if( rItemSet.Get( nWhichId ).QueryValue( aValue ) )
-                {
-                    TimeInterval aTimeInterval;
-                    aScale.TimeIncrement.MinorTimeInterval >>= aTimeInterval;
-                    aValue >>= aTimeInterval.TimeUnit;
-                    aScale.TimeIncrement.MinorTimeInterval = uno::makeAny( aTimeInterval );
-                    bSetScale = true;
-                }
-            }
-            break;
-
         case SCHATTR_AXIS_STEP_HELP:
-            // only if auto is false
-            if( !lcl_isAutoMinor(rItemSet) )
-            {
-                rItemSet.Get( nWhichId ).QueryValue( aValue );
-                if( lcl_isDateAxis(rItemSet) )
-                {
-                    TimeInterval aTimeInterval;
-                    aScale.TimeIncrement.MinorTimeInterval >>= aTimeInterval;
-                    aValue >>= aTimeInterval.Number;
-                    aScale.TimeIncrement.MinorTimeInterval = uno::makeAny(aTimeInterval);
-                    bSetScale = true;
-                }
-                else if( aScale.IncrementData.SubIncrements.getLength() > 0 )
-                {
-                    if( ! aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() ||
-                        aScale.IncrementData.SubIncrements[0].IntervalCount != aValue )
-                    {
-                        OSL_ASSERT( aValue.getValueTypeClass() == uno::TypeClass_LONG );
-                        aScale.IncrementData.SubIncrements[0].IntervalCount = aValue;
-                        bSetScale = true;
-                    }
-                }
-            }
-            break;
-
-        case SCHATTR_AXIS_AUTO_TIME_RESOLUTION:
-            if( (static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue() ))
-            {
-                aScale.TimeIncrement.TimeResolution.clear();
-                bSetScale = true;
-            }
-            break;
-        case SCHATTR_AXIS_TIME_RESOLUTION:
-            // only if auto is false
-            if( ! (static_cast< const SfxBoolItem & >( rItemSet.Get( SCHATTR_AXIS_AUTO_TIME_RESOLUTION )).GetValue() ))
+            // only if auto if false
+            if( ! (static_cast< const SfxBoolItem & >(
+                       rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_HELP )).GetValue() ) &&
+                aScale.IncrementData.SubIncrements.getLength() > 0 )
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
 
-                if( aScale.TimeIncrement.TimeResolution != aValue )
+                if( ! aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() ||
+                    aScale.IncrementData.SubIncrements[0].IntervalCount != aValue )
                 {
-                    aScale.TimeIncrement.TimeResolution = aValue;
+                    OSL_ASSERT( aValue.getValueTypeClass() == uno::TypeClass_LONG );
+                    aScale.IncrementData.SubIncrements[0].IntervalCount = aValue;
                     bSetScale = true;
                 }
             }
             break;
-
 
         case SCHATTR_AXIS_AUTO_ORIGIN:
         {
@@ -768,7 +613,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_POSITION:
         {
-            ::com::sun::star::chart::ChartAxisPosition eAxisPos =
+            ::com::sun::star::chart::ChartAxisPosition eAxisPos = 
                 (::com::sun::star::chart::ChartAxisPosition)
                 static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
 
@@ -840,7 +685,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_LABEL_POSITION:
         {
-            ::com::sun::star::chart::ChartAxisLabelPosition ePos =
+            ::com::sun::star::chart::ChartAxisLabelPosition ePos = 
                 (::com::sun::star::chart::ChartAxisLabelPosition)
                 static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
 
@@ -878,7 +723,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_MARK_POSITION:
         {
-            ::com::sun::star::chart::ChartAxisMarkPosition ePos =
+            ::com::sun::star::chart::ChartAxisMarkPosition ePos = 
                 (::com::sun::star::chart::ChartAxisMarkPosition)
                 static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
 
@@ -913,6 +758,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         break;
 
         case SID_ATTR_NUMBERFORMAT_VALUE:
+//         case SCHATTR_AXIS_NUMFMT:
         {
             if( m_pExplicitScale )
             {
@@ -976,29 +822,13 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         break;
 
         case SCHATTR_AXISTYPE:
-        {
-            sal_Int32 nNewAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();//::com::sun::star::chart2::AxisType
-            aScale.AxisType = nNewAxisType;
-            bSetScale = true;
-        }
-        break;
-
-        case SCHATTR_AXIS_AUTO_DATEAXIS:
-        {
-            bool bNewValue = static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
-            bool bOldValue = aScale.AutoDateAxis;
-            if( bOldValue != bNewValue )
-            {
-                aScale.AutoDateAxis = bNewValue;
-                bSetScale = true;
-            }
-        }
+        //don't allow to change the axis type so far
         break;
     }
 
     if( bSetScale )
         m_xAxis->setScaleData( aScale );
-
+    
     return (bSetScale || bChangedOtherwise);
 }
 

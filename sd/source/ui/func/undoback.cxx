@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,10 @@ TYPEINIT1( SdBackgroundObjUndoAction, SdUndoAction );
 
 // -----------------------------------------------------------------------------
 
-SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
-    SdDrawDocument& rDoc,
+SdBackgroundObjUndoAction::SdBackgroundObjUndoAction( 
+    SdDrawDocument& rDoc, 
     SdPage& rPage,
-    const SfxItemSet& rItenSet)
+    const SfxItemSet& rItenSet) 
 :   SdUndoAction(&rDoc),
     mrPage(rPage),
     mpItemSet(new SfxItemSet(rItenSet))
@@ -72,6 +72,7 @@ void SdBackgroundObjUndoAction::ImplRestoreBackgroundObj()
     delete mpItemSet;
     mpItemSet = pNew;
 
+    // #110094#-15
     // tell the page that it's visualization has changed
     mrPage.ActionChanged();
 }

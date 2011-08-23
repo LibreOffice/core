@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,17 +73,17 @@
 SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MOD_REDLINE_ACCEPT))
 {
-    pImplDlg = new SwRedlineAcceptDlg(this, sal_True);
+    pImplDlg = new SwRedlineAcceptDlg(this, TRUE);
 
     pImplDlg->Initialize(GetExtraData());
-    pImplDlg->Activate();   // Zur Initialisierung der Daten
+    pImplDlg->Activate();	// Zur Initialisierung der Daten
 
     FreeResource();
 }
 
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 {
-    AcceptAll(sal_False);   // Alles uebriggebliebene ablehnen
+    AcceptAll(FALSE);	// Alles uebriggebliebene ablehnen
     pImplDlg->FillInfo(GetExtraData());
 
     delete pImplDlg;
@@ -99,21 +99,21 @@ void SwModalRedlineAcceptDlg::Resize()
     SfxModalDialog::Resize();
 }
 
-void SwModalRedlineAcceptDlg::AcceptAll( sal_Bool bAccept )
+void SwModalRedlineAcceptDlg::AcceptAll( BOOL bAccept )
 {
     SvxTPFilter* pFilterTP = pImplDlg->GetChgCtrl()->GetFilterPage();
 
     if (pFilterTP->IsDate() || pFilterTP->IsAuthor() ||
         pFilterTP->IsRange() || pFilterTP->IsAction())
     {
-        pFilterTP->CheckDate(sal_False);    // Alle Filter abschalten
-        pFilterTP->CheckAuthor(sal_False);
-        pFilterTP->CheckRange(sal_False);
-        pFilterTP->CheckAction(sal_False);
+        pFilterTP->CheckDate(FALSE);	// Alle Filter abschalten
+        pFilterTP->CheckAuthor(FALSE);
+        pFilterTP->CheckRange(FALSE);
+        pFilterTP->CheckAction(FALSE);
         pImplDlg->FilterChangedHdl();
     }
 
-    pImplDlg->CallAcceptReject( sal_False, bAccept );
+    pImplDlg->CallAcceptReject( FALSE, bAccept );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

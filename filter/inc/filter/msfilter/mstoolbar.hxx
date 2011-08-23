@@ -1,33 +1,4 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
- * Version: MPL 1.1 / GPLv3+ / LGPLv3+
- *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License or as specified alternatively below. You may obtain a copy of
- * the License at http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- * The Initial Developer of the Original Code is
- *       Noel Power <noel.power@novell.com>
- * Portions created by the Initial Developer are Copyright (C) 2010 the
- * Initial Developer. All Rights Reserved.
- *
- * Contributor(s):
- *       Noel Power <noel.power@novell.com>
- *
- * For minor contributions see the git repository.
- *
- * Alternatively, the contents of this file may be used under the terms of
- * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
- * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
- * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
- * instead of those above.
- */
 #ifndef _MSTOOLBAR_HXX
 #define _MSTOOLBAR_HXX
 #include "filter/msfilter/msfilterdllapi.h"
@@ -55,8 +26,8 @@ class MSOCommandConvertor
 {
 public:
     virtual ~MSOCommandConvertor() {}
-    virtual rtl::OUString MSOCommandToOOCommand( sal_Int16 msoCmd ) = 0;
-    virtual rtl::OUString MSOTCIDToOOCommand( sal_Int16 msoTCID ) = 0;
+    virtual rtl::OUString MSOCommandToOOCommand( sal_Int16 msoCmd ) = 0; 
+    virtual rtl::OUString MSOTCIDToOOCommand( sal_Int16 msoTCID ) = 0; 
 };
 
 class SfxObjectShell;
@@ -96,14 +67,14 @@ public:
 class MSFILTER_DLLPUBLIC TBBase
 {
 friend class Indent;
-    static int nIndent; // num spaces to indent before printing
+    static int nIndent; // num spaces to indent before printing 
 protected:
     void indent_printf(FILE* fp, const char* format, ... );
     sal_uInt32 nOffSet; // usually for debug we can store the offset in the stream to this record
 public:
     TBBase() : nOffSet( 0 ) {}
     virtual ~TBBase(){}
-    rtl::OUString readUnicodeString( SvStream* pS, sal_Size nChars );
+    rtl::OUString readUnicodeString( SvStream* pS, sal_Int32 nChars );
 
     virtual bool Read(SvStream *pS) = 0;
     virtual void Print( FILE* ) {} // #FIXME remove this an implement the debug routines in all the classes below to enable some sort of readable output
@@ -113,12 +84,12 @@ public:
 class Indent
 {
 public:
-    Indent( bool binit = false )
-    {
+    Indent( bool binit = false ) 
+    { 
         if ( binit )
             init();
         else
-            TBBase::nIndent = TBBase::nIndent + 2;
+            TBBase::nIndent = TBBase::nIndent + 2; 
     }
     ~Indent() { TBBase::nIndent = TBBase::nIndent - 2; }
     void init() { TBBase::nIndent = 0; }
@@ -186,7 +157,7 @@ public:
     ~TBCBitMap();
     bool Read(SvStream *pS);
     void Print( FILE* );
-    Bitmap& getBitMap();
+    Bitmap& getBitMap(); 
 };
 
 class MSFILTER_DLLPUBLIC TBCMenuSpecific : public TBBase
@@ -207,7 +178,7 @@ class MSFILTER_DLLPUBLIC TBCCDData : public TBBase
     std::vector< WString > wstrList;  // Zero-based index array of WString structures. Number of elements MUST be equal to cwstrItems.
     sal_Int16 cwstrMRU; // Signed integer that specifies the number of most recently used string
     sal_Int16 iSel ; // Signed integer that specifies the zero-based index of the selected item in the wstrList field. MUST be equal to 0xFFFF (-1) or greater than or equal to 0x0000.
-    sal_Int16 cLines; // Signed integer that specifies the suggested number of lines that the toolbar control will display at any time when displaying the elements of wstrList of available items.
+    sal_Int16 cLines; // Signed integer that specifies the suggested number of lines that the toolbar control will display at any time when displaying the elements of wstrList of available items. 
     sal_Int16 dxWidth; // Signed integer that specifies the width in pixels that the interior of the dropdown has. This excludes the width of the toolbar control border and scroll bar.
     WString wstrEdit; //Structure of type WString. Editable text for editable area of the ComboBox toolbar control.
 
@@ -235,7 +206,7 @@ class TBCBSpecific :  public TBBase
     boost::shared_ptr< TBCBitMap > iconMask; // optional
     boost::shared_ptr< sal_uInt16 > iBtnFace; // optional
     boost::shared_ptr< WString > wstrAcc; // optional
-
+   
 public:
     TBCBSpecific();
     ~TBCBSpecific(){}
@@ -270,10 +241,10 @@ public:
 */
 class MSFILTER_DLLPUBLIC TBCHeader : public TBBase
 {
-    sal_Int8 bSignature;
-    sal_Int8 bVersion;
-    sal_uInt8 bFlagsTCR;
-    sal_uInt8 tct;
+    sal_Int8 bSignature; 
+    sal_Int8 bVersion; 
+    sal_uInt8 bFlagsTCR; 
+    sal_uInt8 tct; 
     sal_uInt16 tcid;
     sal_uInt32 tbct;
     sal_uInt8 bPriority;
@@ -296,7 +267,7 @@ class MSFILTER_DLLPUBLIC TBCData : public TBBase
 {
     TBCHeader rHeader;
     TBCGeneralInfo controlGeneralInfo;
-    boost::shared_ptr< TBBase > controlSpecificInfo; // can be one of TBCBSpecific, TBCMenuSpecific or TBCComboDropdow nSpecific depending on the control type specified by TBCHeader.tct
+    boost::shared_ptr< TBBase > controlSpecificInfo; // can be one of TBCBSpecific, TBCMenuSpecific or TBCComboDropdow nSpecific depending on the control type specified by TBCHeader.tct 
     TBCData(const TBCData&);
     TBCData& operator = ( const TBCData&);
 public:

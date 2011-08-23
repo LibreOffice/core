@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@ class AccessibleViewForwarder : public ::accessibility::IAccessibleViewForwarder
 public:
     AccessibleViewForwarder( AccessibleChartView* pAccChartView, Window* pWindow );
     virtual ~AccessibleViewForwarder();
-
+    
     // ________ IAccessibleViewforwarder ________
-    virtual sal_Bool IsValid() const;
+    virtual BOOL IsValid() const;
     virtual Rectangle GetVisibleArea() const;
     virtual Point LogicToPixel( const Point& rPoint ) const;
     virtual Size LogicToPixel( const Size& rSize ) const;

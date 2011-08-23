@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,7 @@
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>
 #include "cmdid.h"
+#include "errhdl.hxx"
 #include "swmodule.hxx"
 #include "wrtsh.hxx"
 #include "IMark.hxx"
@@ -57,10 +58,10 @@ class BookmarkPopup_Impl : public PopupMenu
 public:
     BookmarkPopup_Impl();
 
-    sal_uInt16          GetCurId() const { return nCurId; }
+    USHORT			GetCurId() const { return nCurId; }
 
 private:
-    sal_uInt16          nCurId;
+    USHORT			nCurId;
 
     virtual void    Select();
 };
@@ -78,8 +79,8 @@ void BookmarkPopup_Impl::Select()
 
 // class SvxZoomStatusBarControl ------------------------------------------
 
-SwBookmarkControl::SwBookmarkControl( sal_uInt16 _nSlotId,
-                                      sal_uInt16 _nId,
+SwBookmarkControl::SwBookmarkControl( USHORT _nSlotId,
+                                      USHORT _nId,
                                       StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
@@ -90,7 +91,7 @@ SwBookmarkControl::~SwBookmarkControl()
 }
 
 void SwBookmarkControl::StateChanged(
-    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState != SFX_ITEM_AVAILABLE || pState->ISA( SfxVoidItem ) )
         GetStatusBar().SetItemText( GetId(), String() );
@@ -118,8 +119,8 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
         {
             IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
             IDocumentMarkAccess::const_iterator_t ppBookmarkStart = pMarkAccess->getBookmarksBegin();
-            sal_uInt16 nPopupId = 1;
-            ::std::map<sal_Int32, sal_uInt16> aBookmarkIdx;
+            USHORT nPopupId = 1;
+            ::std::map<sal_Int32, USHORT> aBookmarkIdx;
             for(IDocumentMarkAccess::const_iterator_t ppBookmark = ppBookmarkStart;
                 ppBookmark != pMarkAccess->getBookmarksEnd();
                 ppBookmark++)
@@ -127,12 +128,12 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
                 if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
                 {
                     aPop.InsertItem( nPopupId, ppBookmark->get()->GetName() );
-                    aBookmarkIdx[nPopupId] = static_cast<sal_uInt16>(ppBookmark - ppBookmarkStart);
+                    aBookmarkIdx[nPopupId] = static_cast<USHORT>(ppBookmark - ppBookmarkStart);
                     nPopupId++;
                 }
             }
             aPop.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
-            sal_uInt16 nCurrId = aPop.GetCurId();
+            USHORT nCurrId = aPop.GetCurId();
             if( nCurrId != USHRT_MAX)
             {
                 SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookmarkIdx[nCurrId] );

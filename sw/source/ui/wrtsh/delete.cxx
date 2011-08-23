@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ inline void SwWrtShell::OpenMark()
     SetMark();
 }
 
-inline void SwWrtShell::CloseMark( sal_Bool bOkFlag )
+inline void SwWrtShell::CloseMark( BOOL bOkFlag )
 {
     if( bOkFlag )
         UpdateAttr();
@@ -59,9 +59,9 @@ inline void SwWrtShell::CloseMark( sal_Bool bOkFlag )
 }
 
 // #i23725#
-sal_Bool SwWrtShell::TryRemoveIndent()
+BOOL SwWrtShell::TryRemoveIndent()
 {
-    sal_Bool bResult = sal_False;
+    BOOL bResult = FALSE;
 
     SfxItemSet aAttrSet(GetAttrPool(), RES_LR_SPACE, RES_LR_SPACE);
     GetCurAttr(aAttrSet);
@@ -72,19 +72,19 @@ sal_Bool SwWrtShell::TryRemoveIndent()
     if (aOldFirstLineOfst > 0)
     {
         aItem.SetTxtFirstLineOfst(0);
-        bResult = sal_True;
+        bResult = TRUE;
     }
     else if (aOldFirstLineOfst < 0)
     {
         aItem.SetTxtFirstLineOfst(0);
         aItem.SetLeft(aItem.GetLeft() + aOldFirstLineOfst);
 
-        bResult = sal_True;
+        bResult = TRUE;
     }
     else if (aItem.GetLeft() != 0)
     {
         aItem.SetLeft(0);
-        bResult = sal_True;
+        bResult = TRUE;
     }
 
     if (bResult)
@@ -97,7 +97,7 @@ sal_Bool SwWrtShell::TryRemoveIndent()
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Zeile loeschen
+ Beschreibung:	Zeile loeschen
 ------------------------------------------------------------------------*/
 
 
@@ -112,9 +112,11 @@ long SwWrtShell::DelLine()
     SwCrsrShell::LeftMargin();
     SetMark();
     SwCrsrShell::RightMargin();
-
+//Warum soll hier noch ein Zeichen in der naechsten Zeile geloescht werden?
+//	if(!IsEndOfPara())
+//		SwCrsrShell::Right();
     long nRet = Delete();
-    Pop(sal_False);
+    Pop(FALSE);
     if( nRet )
         UpdateAttr();
     return nRet;
@@ -198,7 +200,7 @@ long SwWrtShell::DelLeft()
     }
 
     // JP 29.06.95: nie eine davor stehende Tabelle loeschen.
-    sal_Bool bSwap = sal_False;
+    BOOL bSwap = FALSE;
     const SwTableNode * pWasInTblNd = SwCrsrShell::IsCrsrInTbl();
 
     if( SwCrsrShell::IsSttPara())
@@ -234,7 +236,7 @@ long SwWrtShell::DelLeft()
         OpenMark();
         SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
         SwCrsrShell::SwapPam();
-        bSwap = sal_True;
+        bSwap = TRUE;
     }
     else
     {
@@ -267,7 +269,7 @@ long SwWrtShell::DelRight()
     case nsSelectionType::SEL_TXT:
     case nsSelectionType::SEL_TBL:
     case nsSelectionType::SEL_NUM:
-            //  wenn eine Selektion existiert, diese loeschen.
+            //	wenn eine Selektion existiert, diese loeschen.
         if( IsSelection() )
         {
             if( !IsBlockMode() || HasSelection() )
@@ -311,7 +313,7 @@ long SwWrtShell::DelRight()
             }
 
             // restore cursor
-            SwCrsrShell::Pop( sal_False );
+            SwCrsrShell::Pop( FALSE );
 
             if( bDelFull )
             {
@@ -351,14 +353,14 @@ long SwWrtShell::DelRight()
                             have moved to a different cell */
                         if (pSNdOld != pSNdNew)
                         {
-                            SwCrsrShell::Pop( sal_True );
+                            SwCrsrShell::Pop( TRUE );
                             break;
                         }
                     }
                 }
 
                 // restore cursor
-                SwCrsrShell::Pop( sal_False );
+                SwCrsrShell::Pop( FALSE );
             }
         }
 
@@ -435,11 +437,11 @@ long SwWrtShell::DelToEndOfPara()
     SetMark();
     if( !MovePara(fnParaCurr,fnParaEnd))
     {
-        Pop(sal_False);
+        Pop(FALSE);
         return 0;
     }
     long nRet = Delete();
-    Pop(sal_False);
+    Pop(FALSE);
     if( nRet )
         UpdateAttr();
     return nRet;
@@ -455,11 +457,11 @@ long SwWrtShell::DelToStartOfPara()
     SetMark();
     if( !MovePara(fnParaCurr,fnParaStart))
     {
-        Pop(sal_False);
+        Pop(FALSE);
         return 0;
     }
     long nRet = Delete();
-    Pop(sal_False);
+    Pop(FALSE);
     if( nRet )
         UpdateAttr();
     return nRet;
@@ -539,11 +541,11 @@ long SwWrtShell::DelPrvWord()
             {
                 // skip over all-1 spaces
                 short n = -1;
-                while( ' ' == GetChar( sal_False, n ))
+                while( ' ' == GetChar( FALSE, n ))
                     --n;
 
                 if( ++n )
-                    ExtendSelection( sal_False, -n );
+                    ExtendSelection( FALSE, -n );
             }
         }
         else if( IsSttPara())

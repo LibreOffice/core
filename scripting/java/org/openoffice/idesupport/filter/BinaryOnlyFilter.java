@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,10 +31,10 @@ public class BinaryOnlyFilter implements FileFilter {
     private static final String[] EXTENSIONS = {".class", ".jar", ".bsh"};
     private static final String DESCRIPTION = "Executable Files Only";
     private static final BinaryOnlyFilter filter = new BinaryOnlyFilter();
-
+    
     private BinaryOnlyFilter() {
     }
-
+    
     public static BinaryOnlyFilter getInstance() {
         return filter;
     }

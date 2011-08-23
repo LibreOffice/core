@@ -51,7 +51,7 @@
 namespace {
 
 /** Fills the passed Calc address with the passed Excel cell coordinates without checking any limits. */
-inline void lclFillAddress( ScAddress& rScPos, sal_uInt16 nXclCol, sal_uInt32 nXclRow, SCTAB nScTab )
+inline void lclFillAddress( ScAddress& rScPos, sal_uInt16 nXclCol, sal_uInt16 nXclRow, SCTAB nScTab )
 {
     rScPos.SetCol( static_cast< SCCOL >( nXclCol ) );
     rScPos.SetRow( static_cast< SCROW >( nXclRow ) );
@@ -108,6 +108,11 @@ ScAddress XclImpAddressConverter::CreateValidAddress(
 
 // cell range -----------------------------------------------------------------
 
+bool XclImpAddressConverter::CheckRange( const XclRange& rXclRange, bool bWarn )
+{
+    return CheckAddress( rXclRange.maFirst, bWarn ) && CheckAddress( rXclRange.maLast, bWarn );
+}
+
 bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
         const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
 {
@@ -119,7 +124,7 @@ bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
 
         // check & correct end position
         sal_uInt16 nXclCol2 = rXclRange.maLast.mnCol;
-        sal_uInt32 nXclRow2 = rXclRange.maLast.mnRow;
+        sal_uInt16 nXclRow2 = rXclRange.maLast.mnRow;
         if( !CheckAddress( rXclRange.maLast, bWarn ) )
         {
             nXclCol2 = ::std::min( nXclCol2, mnMaxCol );
@@ -596,7 +601,7 @@ namespace {
 
 void lclAppendUrlChar( String& rUrl, sal_Unicode cChar )
 {
-    // encode special characters
+    // #126855# encode special characters
     switch( cChar )
     {
         case '#':   rUrl.AppendAscii( "%23" );  break;
@@ -811,7 +816,7 @@ XclImpCachedValue::~XclImpCachedValue()
 {
 }
 
-sal_uInt16 XclImpCachedValue::GetScError() const
+USHORT XclImpCachedValue::GetScError() const
 {
     return (mnType == EXC_CACHEDVAL_ERROR) ? XclTools::GetScErrorCode( mnBoolErr ) : 0;
 }
@@ -840,7 +845,7 @@ XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
 
     for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
         for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
-            maValueList.push_back( new XclImpCachedValue( rStrm ) );
+            maValueList.Append( new XclImpCachedValue( rStrm ) );
 }
 
 XclImpCachedMatrix::~XclImpCachedMatrix()
@@ -850,38 +855,38 @@ XclImpCachedMatrix::~XclImpCachedMatrix()
 ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
 {
     ScMatrixRef xScMatrix;
-    DBG_ASSERT( mnScCols * mnScRows == maValueList.size(), "XclImpCachedMatrix::CreateScMatrix - element count mismatch" );
-    if( mnScCols && mnScRows && static_cast< sal_uLong >( mnScCols * mnScRows ) <= maValueList.size() )
+    DBG_ASSERT( mnScCols * mnScRows == maValueList.Count(), "XclImpCachedMatrix::CreateScMatrix - element count mismatch" );
+    if( mnScCols && mnScRows && static_cast< ULONG >( mnScCols * mnScRows ) <= maValueList.Count() )
     {
         xScMatrix = new ScMatrix( mnScCols, mnScRows );
-        XclImpValueList::const_iterator itValue = maValueList.begin();
+        const XclImpCachedValue* pValue = maValueList.First();
         for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
         {
             for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
             {
-                switch( itValue->GetType() )
+                switch( pValue->GetType() )
                 {
                     case EXC_CACHEDVAL_EMPTY:
                         // Excel shows 0.0 here, not an empty cell
                         xScMatrix->PutEmpty( nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_DOUBLE:
-                        xScMatrix->PutDouble( itValue->GetValue(), nScCol, nScRow );
+                        xScMatrix->PutDouble( pValue->GetValue(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_STRING:
-                        xScMatrix->PutString( itValue->GetString(), nScCol, nScRow );
+                        xScMatrix->PutString( pValue->GetString(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_BOOL:
-                        xScMatrix->PutBoolean( itValue->GetBool(), nScCol, nScRow );
+                        xScMatrix->PutBoolean( pValue->GetBool(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_ERROR:
-                        xScMatrix->PutError( itValue->GetScError(), nScCol, nScRow );
+                        xScMatrix->PutError( pValue->GetScError(), nScCol, nScRow );
                     break;
                     default:
                         DBG_ERRORFILE( "XclImpCachedMatrix::CreateScMatrix - unknown value type" );
                         xScMatrix->PutEmpty( nScCol, nScRow );
                 }
-                ++itValue;
+                pValue = maValueList.Next();
             }
         }
     }

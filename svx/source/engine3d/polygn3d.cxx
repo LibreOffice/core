@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 #include <svx/polygn3d.hxx>
 #include <svx/svdpage.hxx>
-#include "svx/globl3d.hxx"
+#include "globl3d.hxx"
 #include <basegfx/point/b3dpoint.hxx>
 #include <svx/sdr/contact/viewcontactofe3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
@@ -55,8 +55,8 @@ sdr::contact::ViewContact* E3dPolygonObj::CreateObjectSpecificViewContact()
 E3dPolygonObj::E3dPolygonObj(
     E3dDefaultAttributes& rDefault,
     const basegfx::B3DPolyPolygon& rPolyPoly3D,
-    sal_Bool bLinOnly)
-:   E3dCompoundObject(rDefault),
+    BOOL bLinOnly)
+:	E3dCompoundObject(rDefault),
     bLineOnly(bLinOnly)
 {
     // Geometrie setzen
@@ -79,8 +79,8 @@ E3dPolygonObj::E3dPolygonObj(
     E3dDefaultAttributes& rDefault,
     const basegfx::B3DPolyPolygon& rPolyPoly3D,
     const basegfx::B3DPolyPolygon& rPolyNormals3D,
-    sal_Bool bLinOnly)
-:   E3dCompoundObject(rDefault),
+    BOOL bLinOnly)
+:	E3dCompoundObject(rDefault),
     bLineOnly(bLinOnly)
 {
     // Geometrie und Normalen setzen
@@ -102,8 +102,8 @@ E3dPolygonObj::E3dPolygonObj(
     const basegfx::B3DPolyPolygon& rPolyPoly3D,
     const basegfx::B3DPolyPolygon& rPolyNormals3D,
     const basegfx::B2DPolyPolygon& rPolyTexture2D,
-    sal_Bool bLinOnly)
-:   E3dCompoundObject(rDefault),
+    BOOL bLinOnly)
+:	E3dCompoundObject(rDefault),
     bLineOnly(bLinOnly)
 {
     SetPolyPolygon3D(rPolyPoly3D);
@@ -118,7 +118,7 @@ E3dPolygonObj::E3dPolygonObj(
 \************************************************************************/
 
 E3dPolygonObj::E3dPolygonObj()
-:   E3dCompoundObject(),
+:	E3dCompoundObject(),
     bLineOnly(false) // added missing initialisation
 {
     // Keine Geometrie erzeugen
@@ -189,7 +189,7 @@ void E3dPolygonObj::CreateDefaultTexture()
 
         // Entscheiden, welche Koordinaten als Source fuer das
         // Mapping benutzt werden sollen
-        sal_uInt16 nSourceMode = 0;
+        UINT16 nSourceMode = 0;
 
         // Groessten Freiheitsgrad ermitteln
         if(!(aNormal.getX() > aNormal.getY() && aNormal.getX() > aNormal.getZ()))
@@ -217,21 +217,21 @@ void E3dPolygonObj::CreateDefaultTexture()
 
             switch(nSourceMode)
             {
-                case 0: // Quelle ist Y,Z
+                case 0:	// Quelle ist Y,Z
                     if(aVolume.getHeight())
                         aTex.setX((aCandidate.getY() - aVolume.getMinY()) / aVolume.getHeight());
                     if(aVolume.getDepth())
                         aTex.setY((aCandidate.getZ() - aVolume.getMinZ()) / aVolume.getDepth());
                     break;
 
-                case 1: // Quelle ist X,Z
+                case 1:	// Quelle ist X,Z
                     if(aVolume.getWidth())
                         aTex.setX((aCandidate.getX() - aVolume.getMinX()) / aVolume.getWidth());
                     if(aVolume.getDepth())
                         aTex.setY((aCandidate.getZ() - aVolume.getMinZ()) / aVolume.getDepth());
                     break;
 
-                case 2: // Quelle ist X,Y
+                case 2:	// Quelle ist X,Y
                     if(aVolume.getWidth())
                         aTex.setX((aCandidate.getX() - aVolume.getMinX()) / aVolume.getWidth());
                     if(aVolume.getHeight())
@@ -266,7 +266,7 @@ E3dPolygonObj::~E3dPolygonObj()
 |*
 \************************************************************************/
 
-sal_uInt16 E3dPolygonObj::GetObjIdentifier() const
+UINT16 E3dPolygonObj::GetObjIdentifier() const
 {
     return E3D_POLYGONOBJ_ID;
 }
@@ -319,14 +319,29 @@ void E3dPolygonObj::SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyText
 |*
 \************************************************************************/
 
-SdrObject *E3dPolygonObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
+SdrObject *E3dPolygonObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
 {
     return NULL;
 }
 
-E3dPolygonObj* E3dPolygonObj::Clone() const
+/*************************************************************************
+|*
+|* Zuweisungsoperator
+|*
+\************************************************************************/
+
+void E3dPolygonObj::operator=(const SdrObject& rObj)
 {
-    return CloneHelper< E3dPolygonObj >();
+    // erstmal alle Childs kopieren
+    E3dCompoundObject::operator=(rObj);
+
+    // weitere Parameter kopieren
+    const E3dPolygonObj& r3DObj = (const E3dPolygonObj&)rObj;
+
+    aPolyPoly3D		 = r3DObj.aPolyPoly3D;
+    aPolyNormals3D	 = r3DObj.aPolyNormals3D;
+    aPolyTexture2D	 = r3DObj.aPolyTexture2D;
+    bLineOnly		 = r3DObj.bLineOnly;
 }
 
 /*************************************************************************
@@ -335,7 +350,7 @@ E3dPolygonObj* E3dPolygonObj::Clone() const
 |*
 \************************************************************************/
 
-void E3dPolygonObj::SetLineOnly(sal_Bool bNew)
+void E3dPolygonObj::SetLineOnly(BOOL bNew)
 {
     if(bNew != bLineOnly)
     {

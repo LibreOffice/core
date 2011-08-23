@@ -41,11 +41,11 @@ import com.sun.star.uno.UnoRuntime;
 
 public class RoadmapItemStateChangeListener implements XItemListener {
     protected com.sun.star.lang.XMultiServiceFactory m_xMSFDialogModel;
-
+   
     public RoadmapItemStateChangeListener(com.sun.star.lang.XMultiServiceFactory xMSFDialogModel) {
         m_xMSFDialogModel = xMSFDialogModel;
     }
-
+    
     public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent) {
         try {
             // get the new ID of the roadmap that is supposed to refer to the new step of the dialogmodel
@@ -61,7 +61,7 @@ public class RoadmapItemStateChangeListener implements XItemListener {
             exception.printStackTrace(System.out);
         }
     }
-
+    
     public void disposing(EventObject eventObject) {
     }
 }

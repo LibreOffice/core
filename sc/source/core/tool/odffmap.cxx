@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -138,11 +138,13 @@ ScCompiler::AddInMap ScCompiler::maAddInMap[] =
     { "FVSCHEDULE", "FVSCHEDULE", false, "com.sun.star.sheet.addin.Analysis.getFvschedule", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFVSCHEDULE" },
 };
 
+// static
 const ScCompiler::AddInMap* ScCompiler::GetAddInMap()
 {
     return maAddInMap;
 }
 
+// static
 size_t ScCompiler::GetAddInMapCount()
 {
     return SAL_N_ELEMENTS(maAddInMap);

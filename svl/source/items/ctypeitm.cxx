@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,8 @@
 
 //============================================================================
 // The following defines are copied from chaos/source/items/cstritem.cxx:
-#define CNTSTRINGITEM_STREAM_MAGIC   ( (sal_uInt32)0xfefefefe )
-#define CNTSTRINGITEM_STREAM_SEEKREL (-( (long)( sizeof( sal_uInt32 ) ) ) )
+#define CNTSTRINGITEM_STREAM_MAGIC   ( (UINT32)0xfefefefe )
+#define CNTSTRINGITEM_STREAM_SEEKREL (-( (long)( sizeof( UINT32 ) ) ) )
 
 //============================================================================
 //
@@ -57,14 +57,14 @@ CntContentTypeItem::CntContentTypeItem()
 }
 
 //----------------------------------------------------------------------------
-CntContentTypeItem::CntContentTypeItem( sal_uInt16 which, const XubString& rType )
+CntContentTypeItem::CntContentTypeItem(	USHORT which, const XubString& rType )
 : CntUnencodedStringItem( which, rType ),
   _eType( CONTENT_TYPE_NOT_INIT )
 {
 }
 
 //----------------------------------------------------------------------------
-CntContentTypeItem::CntContentTypeItem( sal_uInt16 which,
+CntContentTypeItem::CntContentTypeItem(	USHORT which,
                                         const INetContentType eType )
 : CntUnencodedStringItem( which, INetContentTypes::GetContentType( eType ) ),
   _eType( eType )
@@ -81,7 +81,7 @@ CntContentTypeItem::CntContentTypeItem( const CntContentTypeItem& rOrig )
 
 //============================================================================
 // virtual
-sal_uInt16 CntContentTypeItem::GetVersion(sal_uInt16) const
+USHORT CntContentTypeItem::GetVersion(USHORT) const
 {
     return 1; // because it uses SfxPoolItem::read/writeUnicodeString()
 }
@@ -89,17 +89,17 @@ sal_uInt16 CntContentTypeItem::GetVersion(sal_uInt16) const
 //----------------------------------------------------------------------------
 // virtual
 SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream,
-                                         sal_uInt16 nItemVersion ) const
+                                         USHORT nItemVersion ) const
 {
     // CntContentTypeItem used to be derived from CntStringItem, so take that
     // into account:
     UniString aValue;
     readUnicodeString(rStream, aValue, nItemVersion >= 1);
-    sal_uInt32 nMagic = 0;
+    UINT32 nMagic = 0;
     rStream >> nMagic;
     if (nMagic == CNTSTRINGITEM_STREAM_MAGIC)
     {
-        sal_Bool bEncrypted = sal_False;
+        BOOL bEncrypted = FALSE;
         rStream >> bEncrypted;
         DBG_ASSERT(!bEncrypted,
                    "CntContentTypeItem::Create() reads encrypted data");
@@ -112,12 +112,12 @@ SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream,
 
 //----------------------------------------------------------------------------
 // virtual
-SvStream & CntContentTypeItem::Store(SvStream & rStream, sal_uInt16) const
+SvStream & CntContentTypeItem::Store(SvStream & rStream, USHORT) const
 {
     // CntContentTypeItem used to be derived from CntStringItem, so take that
     // into account:
     writeUnicodeString(rStream, GetValue());
-    rStream << CNTSTRINGITEM_STREAM_MAGIC << sal_Bool(sal_False);
+    rStream << CNTSTRINGITEM_STREAM_MAGIC << BOOL(FALSE);
     return rStream;
 }
 
@@ -224,7 +224,7 @@ void CntContentTypeItem::SetValue( const INetContentType eType )
 
 //----------------------------------------------------------------------------
 // virtual
-bool CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
 {
     rVal <<= rtl::OUString(GetValue());
     return true;
@@ -232,7 +232,7 @@ bool CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8) 
 
 //----------------------------------------------------------------------------
 // virtual
-bool CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
 {
     rtl::OUString aValue;
     if ( rVal >>= aValue )
@@ -247,7 +247,7 @@ bool CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uIn
         return true;
     }
 
-    OSL_FAIL( "CntContentTypeItem::PutValue - Wrong type!" );
+    DBG_ERROR( "CntContentTypeItem::PutValue - Wrong type!" );
     return false;
 }
 

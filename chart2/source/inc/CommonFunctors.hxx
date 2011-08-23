@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,6 @@
 
 #include <algorithm>
 #include <functional>
-#include <o3tl/compat_functional.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
@@ -69,7 +68,18 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble : public ::std::unary_function< ::co
         ::rtl::math::setNan( & fResult );
 
         ::com::sun::star::uno::TypeClass eClass( rAny.getValueType().getTypeClass() );
-        if( eClass == ::com::sun::star::uno::TypeClass_DOUBLE )
+        if( eClass == ::com::sun::star::uno::TypeClass_STRING )
+        {
+            rtl_math_ConversionStatus eConversionStatus;
+            fResult = ::rtl::math::stringToDouble(
+                * reinterpret_cast< const ::rtl::OUString * >( rAny.getValue() ),
+                sal_Char( '.' ), sal_Char( ',' ),
+                & eConversionStatus, NULL );
+
+            if( eConversionStatus != rtl_math_ConversionStatus_Ok )
+                ::rtl::math::setNan( & fResult );
+        }
+        else if( eClass == ::com::sun::star::uno::TypeClass_DOUBLE )
         {
             fResult = * reinterpret_cast< const double * >( rAny.getValue() );
         }
@@ -196,10 +206,10 @@ template< class MapType >
     findValueInMap( const MapType & rMap, const typename MapType::mapped_type & rData )
 {
     return ::std::find_if( rMap.begin(), rMap.end(),
-                           ::o3tl::compose1( ::std::bind2nd(
+                           ::std::compose1( ::std::bind2nd(
                                                 ::std::equal_to< typename MapType::mapped_type >(),
                                                 rData ),
-                                            ::o3tl::select2nd< typename MapType::value_type >()));
+                                            ::std::select2nd< typename MapType::value_type >()));
 }
 
 /** Functor that deletes the object behind the given pointer by calling the

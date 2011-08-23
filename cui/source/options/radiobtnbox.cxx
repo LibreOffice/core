@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 
@@ -51,7 +54,7 @@ void SvxRadioButtonListBox::SetTabs()
 {
     SvxSimpleTable::SetTabs();
 /*
-    sal_uInt16 nAdjust = SV_LBOXTAB_ADJUST_RIGHT | SV_LBOXTAB_ADJUST_LEFT |
+    USHORT nAdjust = SV_LBOXTAB_ADJUST_RIGHT | SV_LBOXTAB_ADJUST_LEFT |
                      SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_ADJUST_NUMERIC | SV_LBOXTAB_FORCE;
     if ( aTabs.Count() > 0 )
     {
@@ -86,7 +89,7 @@ void SvxRadioButtonListBox::KeyInput( const KeyEvent& rKEvt )
 
 void SvxRadioButtonListBox::HandleEntryChecked( SvLBoxEntry* _pEntry )
 {
-    Select( _pEntry, sal_True );
+    Select( _pEntry, TRUE );
     SvButtonState eState = GetCheckButtonState( _pEntry );
 
     if ( SV_BUTTON_CHECKED == eState )

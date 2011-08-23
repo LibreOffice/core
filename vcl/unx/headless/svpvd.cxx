@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
     delete pGraphics;
 }
 
-sal_Bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
+BOOL SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 {
     B2IVector aDevSize( nNewDX, nNewDY );
     if( aDevSize.getX() == 0 )
@@ -87,12 +87,12 @@ sal_Bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
         m_aDevice = aDevPal.empty()
                     ? createBitmapDevice( aDevSize, false, nFormat )
                     : createBitmapDevice( aDevSize, false, nFormat, PaletteMemorySharedVector( new std::vector< basebmp::Color >(aDevPal) ) );
-
+        
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )
              (*it)->setDevice( m_aDevice );
-
+             
     }
     return true;
 }

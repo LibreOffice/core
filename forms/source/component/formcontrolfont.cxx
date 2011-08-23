@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,7 +123,7 @@ namespace frm
                 break;
 
             default:
-                OSL_FAIL( "lcl_extractFontDescriptorAggregate: invalid handle!" );
+                OSL_ENSURE( sal_False, "lcl_extractFontDescriptorAggregate: invalid handle!" );
                 break;
             }
             return aValue;
@@ -357,7 +357,7 @@ namespace frm
             break;
 
         default:
-            OSL_FAIL( "FontControlModel::convertFastPropertyValue: no font aggregate!" );
+            DBG_ERROR( "FontControlModel::convertFastPropertyValue: no font aggregate!" );
         }
         return bModified;
     }
@@ -460,7 +460,7 @@ namespace frm
         break;
 
         default:
-            OSL_FAIL( "FontControlModel::setFastPropertyValue_NoBroadcast: invalid property!" );
+            DBG_ERROR( "FontControlModel::setFastPropertyValue_NoBroadcast: invalid property!" );
         }
     }
 
@@ -539,7 +539,7 @@ namespace frm
             break;
 
         default:
-            OSL_FAIL( "FontControlModel::getPropertyDefaultByHandle: invalid property!" );
+            DBG_ERROR( "FontControlModel::getPropertyDefaultByHandle: invalid property!" );
         }
 
         return aReturn;

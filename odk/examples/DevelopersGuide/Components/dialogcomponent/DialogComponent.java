@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,11 +29,11 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.uno.Type;
-import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.UnoRuntime; 
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lang.XTypeProvider;
@@ -61,7 +61,7 @@ import com.sun.star.awt.WindowAttribute;
 import com.sun.star.awt.WindowClass;
 import com.sun.star.awt.WindowDescriptor;
 import com.sun.star.awt.Rectangle;
-
+ 
 import com.sun.star.test.XTestDialogHandler;
 
 // DialogComponent implements all necessary interfaces self, this is only
@@ -69,15 +69,15 @@ import com.sun.star.test.XTestDialogHandler;
 // ComponentBase, see implementation of TestComponentA.
 public class DialogComponent {
 
-    // public static class _DialogComponent extends WeakBase
+    // public static class _DialogComponent extends WeakBase 
     public static class _DialogComponent
         implements XTypeProvider, XServiceInfo, XTestDialogHandler, XDialogEventHandler {
 
         static final String __serviceName= "com.sun.star.test.TestDialogHandler";
-
+ 
            static byte[] _implementationId;
         private XComponentContext m_xCmpCtx;
-
+        
         private XFrame m_xFrame;
         private XToolkit m_xToolkit;
 
@@ -89,17 +89,17 @@ public class DialogComponent {
                 m_xToolkit = (XToolkit) UnoRuntime.queryInterface(
                     XToolkit.class,
                     m_xCmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.awt.Toolkit",
-                                                                            m_xCmpCtx));
+                                                                            m_xCmpCtx)); 
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
+        
         // XTestDialogHandler
         public String createDialog( String DialogURL, XModel xModel, XFrame xFrame ) {
             m_xFrame = xFrame;
-
+    
             try {
                 XMultiComponentFactory xMCF = m_xCmpCtx.getServiceManager();
                 Object obj;
@@ -108,7 +108,7 @@ public class DialogComponent {
                 if( xModel != null ) {
                     Object[] args = new Object[1];
                     args[0] = xModel;
-
+                                   
                     obj = xMCF.createInstanceWithArgumentsAndContext(
                         "com.sun.star.awt.DialogProvider2", args, m_xCmpCtx );
                 }
@@ -119,7 +119,7 @@ public class DialogComponent {
 
                 XDialogProvider2 xDialogProvider = (XDialogProvider2)
                     UnoRuntime.queryInterface( XDialogProvider2.class, obj );
-
+                        
                 XDialog xDialog = xDialogProvider.createDialogWithHandler( DialogURL, this );
                 if( xDialog != null )
                     xDialog.execute();
@@ -129,13 +129,13 @@ public class DialogComponent {
             }
             return "Created dialog \"" + DialogURL + "\"";
         }
-
+    
         public void copyText( XDialog xDialog, Object aEventObject ) {
             XControlContainer xControlContainer = (XControlContainer)UnoRuntime.queryInterface(
                 XControlContainer.class, xDialog );
             String aTextPropertyStr = "Text";
             String aText = "";
-            XControl xTextField1Control = xControlContainer.getControl( "TextField1" );
+            XControl xTextField1Control = xControlContainer.getControl( "TextField1" );	
             XControlModel xControlModel1 = xTextField1Control.getModel();
             XPropertySet xPropertySet1 = (XPropertySet)UnoRuntime.queryInterface(
                 XPropertySet.class, xControlModel1 );
@@ -146,8 +146,8 @@ public class DialogComponent {
             catch (Exception e) {
                 e.printStackTrace();
             }
-
-            XControl xTextField2Control = xControlContainer.getControl( "TextField2" );
+  
+            XControl xTextField2Control = xControlContainer.getControl( "TextField2" );	
             XControlModel xControlModel2 = xTextField2Control.getModel();
             XPropertySet xPropertySet2 = (XPropertySet)UnoRuntime.queryInterface(
                 XPropertySet.class, xControlModel2 );
@@ -165,7 +165,7 @@ public class DialogComponent {
         public void handleEvent() {
             showMessageBox( "DialogComponent", "handleEvent() called" );
         }
-
+    
         public void handleEventWithArguments( XDialog xDialog, Object aEventObject ) {
             showMessageBox( "DialogComponent", "handleEventWithArguments() called\n\n" +
                 "Event Object = " + aEventObject );
@@ -236,7 +236,7 @@ public class DialogComponent {
             String[] sSupportedServiceNames = { __serviceName };
             return sSupportedServiceNames;
         }
-
+      
         //XServiceInfo
         public String[] getSupportedServiceNames() {
             return getServiceNames();
@@ -246,12 +246,12 @@ public class DialogComponent {
         public boolean supportsService( String sServiceName ) {
             return sServiceName.equals( __serviceName );
         }
-
+    
         //XServiceInfo
         public String getImplementationName() {
             // return  DialogComponent.class.getName();
             return  _DialogComponent.class.getName();
-        }
+        }        
 
         public void showMessageBox(String sTitle, String sMessage) {
             try {
@@ -268,7 +268,7 @@ public class DialogComponent {
                     aDescriptor.WindowAttributes  = WindowAttribute.BORDER |
                         WindowAttribute.MOVEABLE |
                         WindowAttribute.CLOSEABLE;
-
+                
                     XWindowPeer xPeer = m_xToolkit.createWindow( aDescriptor );
                     if ( null != xPeer ) {
                         XMessageBox xMsgBox = (XMessageBox)UnoRuntime.queryInterface(
@@ -282,9 +282,9 @@ public class DialogComponent {
                     }
                 }
             } catch ( com.sun.star.uno.Exception e) {
-                // do your error handling
+                // do your error handling 
             }
-        }
+        } 
     }
 
     /**
@@ -300,11 +300,11 @@ public class DialogComponent {
     public static XSingleComponentFactory __getComponentFactory(String sImplName)
     {
         XSingleComponentFactory xFactory = null;
-
+    
         if ( sImplName.equals( _DialogComponent.class.getName() ) )
             xFactory = Factory.createComponentFactory(_DialogComponent.class,
                                              _DialogComponent.getServiceNames());
-
+        
         return xFactory;
     }
 
@@ -316,13 +316,9 @@ public class DialogComponent {
      * @param   regKey the registryKey
      * @see     com.sun.star.comp.loader.JavaLoader
      */
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
-
-//    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-//         return Factory.writeRegistryServiceInfo(_DialogComponent.class.getName(),
-//                                                 _DialogComponent.getServiceNames(),
-//                                                 regKey);
-//    }
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
+        return Factory.writeRegistryServiceInfo(_DialogComponent.class.getName(),
+                                                _DialogComponent.getServiceNames(),
+                                                regKey);
+    }
 }

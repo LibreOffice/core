@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/sdrpaintwindow.hxx>
+#include <sdrpaintwindow.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <osl/mutex.hxx>
@@ -80,13 +80,13 @@ using namespace ::com::sun::star;
             // , thus it seems not necessary to make
             // it visible her at all.
             // #58917# Das Show darf nicht am VCL-Fenster landen, weil dann Assertion vom SFX
-            // sal_Bool bVis = pWindow->IsVisible();
-            // xC->setVisible(sal_True);
+            // BOOL bVis = pWindow->IsVisible();
+            // xC->setVisible(TRUE);
             // if ( !bVis )
-            //  pWindow->Hide();
-            //  if( !mxContext.is() && bVisible )
-            //      // Es ist ein TopWindow, also automatisch anzeigen
-            //      createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > () );
+            // 	pWindow->Hide();
+            //	if( !mxContext.is() && bVisible )
+            //		// Es ist ein TopWindow, also automatisch anzeigen
+            //		createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > () );
 
             uno::Reference< awt::XControl > xControl(mxControlContainer, uno::UNO_QUERY);
             if(xControl.is())
@@ -105,8 +105,8 @@ using namespace ::com::sun::star;
             uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
             if( xFactory.is() )
             {
-                const_cast< SdrPageWindow* >( this )->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlContainer"))), uno::UNO_QUERY);
-                uno::Reference< awt::XControlModel > xModel(xFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlContainerModel"))), uno::UNO_QUERY);
+                const_cast< SdrPageWindow* >( this )->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlContainer")), uno::UNO_QUERY);
+                uno::Reference< awt::XControlModel > xModel(xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlContainerModel")), uno::UNO_QUERY);
                 uno::Reference< awt::XControl > xControl(mxControlContainer, uno::UNO_QUERY);
                 if (xControl.is())
                     xControl->setModel(xModel);
@@ -129,7 +129,7 @@ using namespace ::com::sun::star;
 }
 
 SdrPageWindow::SdrPageWindow(SdrPageView& rPageView, SdrPaintWindow& rPaintWindow)
-:   mpObjectContact(0L),
+:	mpObjectContact(0L),
     mrPageView(rPageView),
     mpPaintWindow(&rPaintWindow),
     mpOriginalPaintWindow(NULL)
@@ -163,9 +163,9 @@ sdr::contact::ObjectContact* SdrPageWindow::CreateViewSpecificObjectContact()
 }
 
 // OVERLAYMANAGER
-::sdr::overlay::OverlayManager* SdrPageWindow::GetOverlayManager() const
-{
-    return GetPaintWindow().GetOverlayManager();
+::sdr::overlay::OverlayManager* SdrPageWindow::GetOverlayManager() const 
+{ 
+    return GetPaintWindow().GetOverlayManager(); 
 }
 
 void SdrPageWindow::patchPaintWindow(SdrPaintWindow& rPaintWindow)
@@ -193,10 +193,6 @@ void SdrPageWindow::PrePaint()
     }
 }
 
-void SdrPageWindow::PostPaint()
-{
-}
-
 void SdrPageWindow::PrepareRedraw(const Region& rReg)
 {
     // evtl. give OC the chance to do ProcessDisplay preparations
@@ -215,7 +211,7 @@ void SdrPageWindow::PrepareRedraw(const Region& rReg)
 #ifdef CLIPPER_TEST
 #include <svx/svdopath.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <vcl/salbtype.hxx>     // FRound
+#include <vcl/salbtype.hxx>		// FRound
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -289,6 +285,8 @@ namespace
                         Color aColor(rand()%255, rand()%255, rand()%255);
                         impPaintStrokePolygon(aResult.getB2DPolygon(a), rOutDev, aColor);
                     }
+
+                    bool bBla = true;
                 }
             }
         }
@@ -419,7 +417,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
         }
 
         const Rectangle aVCLDiscreteRectangle(
-                (sal_Int32)floor(aDiscreteRange.getMinX()), (sal_Int32)floor(aDiscreteRange.getMinY()),
+                (sal_Int32)floor(aDiscreteRange.getMinX()), (sal_Int32)floor(aDiscreteRange.getMinY()), 
                 (sal_Int32)ceil(aDiscreteRange.getMaxX()), (sal_Int32)ceil(aDiscreteRange.getMaxY()));
         const bool bWasMapModeEnabled(rWindow.IsMapModeEnabled());
 
@@ -446,12 +444,12 @@ bool SdrPageWindow::HasObjectContact() const
 }
 
 // #i26631#
-void SdrPageWindow::ResetObjectContact()
-{
-    if(mpObjectContact)
-    {
-        delete mpObjectContact;
-        mpObjectContact = 0L;
+void SdrPageWindow::ResetObjectContact() 
+{ 
+    if(mpObjectContact) 
+    { 
+        delete mpObjectContact; 
+        mpObjectContact = 0L; 
     }
 }
 

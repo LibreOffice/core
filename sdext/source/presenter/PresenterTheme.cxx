@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,12 +61,12 @@ class BorderSize
 {
 public:
     const static sal_Int32 mnInvalidValue = -10000;
-
+    
     BorderSize (void) : mnLeft(mnInvalidValue),
                         mnTop(mnInvalidValue),
                         mnRight(mnInvalidValue),
                         mnBottom(mnInvalidValue) {}
-
+    
     sal_Int32 mnLeft;
     sal_Int32 mnTop;
     sal_Int32 mnRight;
@@ -341,7 +341,7 @@ void SAL_CALL PresenterTheme::disposing (void)
 
     PresenterConfigurationAccess aConfiguration (
         mxContext,
-        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+        OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
         PresenterConfigurationAccess::READ_ONLY);
 
     return aReadContext.ReadTheme(aConfiguration, msThemeName);
@@ -451,7 +451,7 @@ bool PresenterTheme::ConvertToColor (
     ::boost::shared_ptr<PresenterConfigurationAccess> pConfiguration (
         new PresenterConfigurationAccess(
             mxContext,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+            OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
             PresenterConfigurationAccess::READ_WRITE));
 
     // Get configuration node for the view style container of the current
@@ -585,7 +585,7 @@ PresenterTheme::SharedFontDescriptor PresenterTheme::GetFont (
             Theme::FontContainer::const_iterator iFont (pTheme->maFontContainer.find(rsStyleName));
             if (iFont != pTheme->maFontContainer.end())
                 return iFont->second;
-
+            
             pTheme = pTheme->mpParentTheme;
         }
     }
@@ -603,7 +603,7 @@ PresenterTheme::FontDescriptor::FontDescriptor (void)
       msStyleName(),
       mnSize(12),
       mnColor(0x00000000),
-      msAnchor(OUString(RTL_CONSTASCII_USTRINGPARAM("Left"))),
+      msAnchor(OUString::createFromAscii("Left")),
       mnXOffset(0),
       mnYOffset(0)
 {
@@ -618,7 +618,7 @@ PresenterTheme::FontDescriptor::FontDescriptor (
       msStyleName(),
       mnSize(12),
       mnColor(0x00000000),
-      msAnchor(OUString(RTL_CONSTASCII_USTRINGPARAM("Left"))),
+      msAnchor(OUString::createFromAscii("Left")),
       mnXOffset(0),
       mnYOffset(0)
 {
@@ -649,7 +649,7 @@ bool PresenterTheme::FontDescriptor::PrepareFont (
 
     const double nCellSize (GetCellSizeForDesignSize(rxCanvas, mnSize));
     mxFont = CreateFont(rxCanvas, nCellSize);
-
+    
     return mxFont.is();
 }
 
@@ -767,7 +767,7 @@ void PresenterTheme::Theme::Read (
     {
         rReadContext.SetBitmapSourceExtension(PresenterComponent::gsExtensionIdentifier);
     }
-
+    
     // Background.
     mpBackground = PresenterBitmapContainer::LoadBitmap(
         mxThemeRoot,
@@ -782,7 +782,7 @@ void PresenterTheme::Theme::Read (
 
     // Pane styles.
     maPaneStyles.Read(rReadContext, mxThemeRoot);
-
+    
     // View styles.
     maViewStyles.Read(rReadContext, mxThemeRoot);
 
@@ -869,7 +869,7 @@ ReadContext::ReadContext (
     {
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
+                OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
                 rxContext),
             UNO_QUERY_THROW);
     }
@@ -895,7 +895,7 @@ PresenterTheme::SharedFontDescriptor ReadContext::ReadFont (
 {
     if ( ! rxNode.is())
         return PresenterTheme::SharedFontDescriptor();
-
+    
     try
     {
         Reference<container::XHierarchicalNameAccess> xFont (
@@ -1080,7 +1080,7 @@ void PaneStyleContainer::ProcessPaneStyle(
         return;
 
     ::boost::shared_ptr<PaneStyle> pStyle (new PaneStyle());
-
+    
     rValues[0] >>= pStyle->msStyleName;
 
     OUString sParentStyleName;
@@ -1222,7 +1222,7 @@ void ViewStyleContainer::Read (
     const Reference<container::XHierarchicalNameAccess>& rxThemeRoot)
 {
     (void)rReadContext;
-
+    
     Reference<container::XNameAccess> xViewStyleList (
         PresenterConfigurationAccess::GetConfigurationNode(
             rxThemeRoot,
@@ -1245,7 +1245,7 @@ void ViewStyleContainer::ProcessViewStyle(
     const Reference<beans::XPropertySet>& rxProperties)
 {
     ::boost::shared_ptr<ViewStyle> pStyle (new ViewStyle());
-
+    
     PresenterConfigurationAccess::GetProperty(rxProperties, A2S("StyleName"))
         >>= pStyle->msStyleName;
 
@@ -1285,7 +1285,7 @@ void ViewStyleContainer::ProcessViewStyle(
         SharedBitmapDescriptor()));
     if (pBackground.get() != NULL && pBackground->GetNormalBitmap().is())
         pStyle->mpBackground = pBackground;
-
+    
     push_back(pStyle);
 }
 

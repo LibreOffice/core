@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ protected:
     virtual ~SwXRedlines();
 public:
     SwXRedlines(SwDoc* pDoc);
-
+    
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -68,35 +68,37 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    static ::com::sun::star::beans::XPropertySet*           GetObject( SwRedline& rRedline, SwDoc& rDoc );
+    static ::com::sun::star::beans::XPropertySet* 			GetObject( SwRedline& rRedline, SwDoc& rDoc );
 };
+/* -----------------------------12.01.01 14:58--------------------------------
 
+ ---------------------------------------------------------------------------*/
 class SwXRedlineEnumeration
     : public SwSimpleEnumeration_Base
     , public SwClient
 {
     SwDoc* pDoc;
-    sal_uInt16 nCurrentIndex;
+    USHORT nCurrentIndex;
 protected:
     virtual ~SwXRedlineEnumeration();
 public:
     SwXRedlineEnumeration(SwDoc& rDoc);
-
+    
 
     //XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement(void) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
-protected:
+
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void 			Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
 
 

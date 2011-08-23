@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,13 +40,13 @@
 #include "impex.hxx"
 #include "brdcst.hxx"
 #include "rangenam.hxx"
-#include "sc.hrc"               // SC_HINT_AREAS_CHANGED
+#include "sc.hrc"				// SC_HINT_AREAS_CHANGED
 
 using namespace formula;
 
 // -----------------------------------------------------------------------
 
-sal_Bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& rName )
+BOOL lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& rName )
 {
     if (pDocSh)
     {
@@ -54,15 +54,16 @@ sal_Bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const Strin
         ScRangeName* pNames = pDoc->GetRangeName();
         if (pNames)
         {
-            const ScRangeData* pData = pNames->findByName(rName);
-            if (pData)
+            USHORT nPos;
+            if( pNames->SearchName( rName, nPos ) )
             {
+                ScRangeData* pData = (*pNames)[ nPos ];
                 if ( pData->IsValidReference( rRange ) )
-                    return sal_True;
+                    return TRUE;
             }
         }
     }
-    return false;
+    return FALSE;
 }
 
 ScServerObjectSvtListenerForwarder::ScServerObjectSvtListenerForwarder(
@@ -84,17 +85,17 @@ void ScServerObjectSvtListenerForwarder::Notify( SvtBroadcaster& /* rBC */, cons
 ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
     aForwarder( this ),
     pDocSh( pShell ),
-    bRefreshListener( false )
+    bRefreshListener( FALSE )
 {
-    //  parse item string
+    //	parse item string
 
     if ( lcl_FillRangeFromName( aRange, pDocSh, rItem ) )
     {
-        aItemStr = rItem;               // must be parsed again on ref update
+        aItemStr = rItem;				// must be parsed again on ref update
     }
     else
     {
-        //  parse ref
+        //	parse ref
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = pDocSh->GetCurTab();
         aRange.aStart.SetTab( nTab );
@@ -112,18 +113,18 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
         }
         else
         {
-            OSL_FAIL("ScServerObject: invalid item");
+            DBG_ERROR("ScServerObject: invalid item");
         }
     }
 
     pDocSh->GetDocument()->GetLinkManager()->InsertServer( this );
     pDocSh->GetDocument()->StartListeningArea( aRange, &aForwarder );
 
-    StartListening(*pDocSh);        // um mitzubekommen, wenn die DocShell geloescht wird
-    StartListening(*SFX_APP());     // for SC_HINT_AREAS_CHANGED
+    StartListening(*pDocSh);		// um mitzubekommen, wenn die DocShell geloescht wird
+    StartListening(*SFX_APP());		// for SC_HINT_AREAS_CHANGED
 }
 
-ScServerObject::~ScServerObject()
+__EXPORT ScServerObject::~ScServerObject()
 {
     Clear();
 }
@@ -148,12 +149,12 @@ void ScServerObject::EndListeningAll()
     SfxListener::EndListeningAll();
 }
 
-sal_Bool ScServerObject::GetData(
+BOOL __EXPORT ScServerObject::GetData(
         ::com::sun::star::uno::Any & rData /*out param*/,
-        const String & rMimeType, sal_Bool /* bSynchron */ )
+        const String & rMimeType, BOOL /* bSynchron */ )
 {
     if (!pDocSh)
-        return false;
+        return FALSE;
 
     // named ranges may have changed -> update aRange
     if ( aItemStr.Len() )
@@ -162,19 +163,19 @@ sal_Bool ScServerObject::GetData(
         if ( lcl_FillRangeFromName( aNew, pDocSh, aItemStr ) && aNew != aRange )
         {
             aRange = aNew;
-            bRefreshListener = sal_True;
+            bRefreshListener = TRUE;
         }
     }
 
     if ( bRefreshListener )
     {
-        //  refresh the listeners now (this is called from a timer)
+        //	refresh the listeners now (this is called from a timer)
 
         EndListeningAll();
         pDocSh->GetDocument()->StartListeningArea( aRange, &aForwarder );
         StartListening(*pDocSh);
         StartListening(*SFX_APP());
-        bRefreshListener = false;
+        bRefreshListener = FALSE;
     }
 
     String aDdeTextFmt = pDocSh->GetDdeTextFmt();
@@ -184,7 +185,7 @@ sal_Bool ScServerObject::GetData(
     {
         ScImportExport aObj( pDoc, aRange );
         if( aDdeTextFmt.GetChar(0) == 'F' )
-            aObj.SetFormulas( sal_True );
+            aObj.SetFormulas( TRUE );
         if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
             aDdeTextFmt.EqualsAscii( "FSYLK" ) )
         {
@@ -212,19 +213,19 @@ sal_Bool ScServerObject::GetData(
     return 0;
 }
 
-void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    sal_Bool bDataChanged = false;
+    BOOL bDataChanged = FALSE;
 
-    //  DocShell can't be tested via type info, because SFX_HINT_DYING comes from the dtor
+    //	DocShell can't be tested via type info, because SFX_HINT_DYING comes from the dtor
     if ( &rBC == pDocSh )
     {
-        //  from DocShell, only SFX_HINT_DYING is interesting
+        //	from DocShell, only SFX_HINT_DYING is interesting
         if ( rHint.ISA(SfxSimpleHint) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
         {
             pDocSh = NULL;
             EndListening(*SFX_APP());
-            //  don't access DocShell anymore for EndListening etc.
+            //	don't access DocShell anymore for EndListening etc.
         }
     }
     else if (rBC.ISA(SfxApplication))
@@ -232,37 +233,37 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if ( aItemStr.Len() && rHint.ISA(SfxSimpleHint) &&
                 ((const SfxSimpleHint&)rHint).GetId() == SC_HINT_AREAS_CHANGED )
         {
-            //  check if named range was modified
+            //	check if named range was modified
             ScRange aNew;
             if ( lcl_FillRangeFromName( aNew, pDocSh, aItemStr ) && aNew != aRange )
-                bDataChanged = sal_True;
+                bDataChanged = TRUE;
         }
     }
     else
     {
-        //  must be from Area broadcasters
+        //	must be from Area broadcasters
 
         const ScHint* pScHint = PTR_CAST( ScHint, &rHint );
         if( pScHint && (pScHint->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING)) )
-            bDataChanged = sal_True;
-        else if (rHint.ISA(ScAreaChangedHint))      // position of broadcaster changed
+            bDataChanged = TRUE;
+        else if (rHint.ISA(ScAreaChangedHint))		// position of broadcaster changed
         {
             ScRange aNewRange = ((const ScAreaChangedHint&)rHint).GetRange();
             if ( aRange != aNewRange )
             {
-                bRefreshListener = sal_True;
-                bDataChanged = sal_True;
+                bRefreshListener = TRUE;
+                bDataChanged = TRUE;
             }
         }
         else if (rHint.ISA(SfxSimpleHint))
         {
-            sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+            ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
             if (nId == SFX_HINT_DYING)
             {
-                //  If the range is being deleted, listening must be restarted
-                //  after the deletion is complete (done in GetData)
-                bRefreshListener = sal_True;
-                bDataChanged = sal_True;
+                //	If the range is being deleted, listening must be restarted
+                //	after the deletion is complete (done in GetData)
+                bRefreshListener = TRUE;
+                bDataChanged = TRUE;
             }
         }
     }

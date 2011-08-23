@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@ typedef cppu::ImplInheritanceHelper1< VbaDialogsBase, ov::excel::XDialogs > ScVb
 class ScVbaDialogs : public ScVbaDialogs_BASE
 {
 public:
-    ScVbaDialogs( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > &xContext, const css::uno::Reference< css::frame::XModel >& xModel ): ScVbaDialogs_BASE( xParent, xContext, xModel ) {}
+    ScVbaDialogs( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > &xContext, const css::uno::Reference< css::frame::XModel >& xModel ): ScVbaDialogs_BASE( xParent, xContext, xModel ) {} 
     virtual ~ScVbaDialogs() {}
 
     // XCollection
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException); //liuchen 2009-7-27
 
     // XDialogs
     virtual void SAL_CALL Dummy() throw (css::uno::RuntimeException);

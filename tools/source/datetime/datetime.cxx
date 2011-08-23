@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,80 +36,104 @@
 |*
 |*    DateTime::IsBetween()
 |*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 18.05.92
+|*    Letzte Aenderung  TH 18.05.92
+|*
 *************************************************************************/
 
-sal_Bool DateTime::IsBetween( const DateTime& rFrom,
+BOOL DateTime::IsBetween( const DateTime& rFrom,
                           const DateTime& rTo ) const
 {
     if ( (*this >= rFrom) && (*this <= rTo) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 /*************************************************************************
 |*
 |*    DateTime::operator >()
 |*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 18.05.92
+|*    Letzte Aenderung  TH 18.05.92
+|*
 *************************************************************************/
 
-sal_Bool DateTime::operator >( const DateTime& rDateTime ) const
+BOOL DateTime::operator >( const DateTime& rDateTime ) const
 {
     if ( (Date::operator>( rDateTime )) ||
          (Date::operator==( rDateTime ) && Time::operator>( rDateTime )) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 /*************************************************************************
 |*
 |*    DateTime::operator <()
 |*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 18.05.92
+|*    Letzte Aenderung  TH 18.05.92
+|*
 *************************************************************************/
 
-sal_Bool DateTime::operator <( const DateTime& rDateTime ) const
+BOOL DateTime::operator <( const DateTime& rDateTime ) const
 {
     if ( (Date::operator<( rDateTime )) ||
          (Date::operator==( rDateTime ) && Time::operator<( rDateTime )) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 /*************************************************************************
 |*
 |*    DateTime::operator >=()
 |*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 18.05.92
+|*    Letzte Aenderung  TH 18.05.92
+|*
 *************************************************************************/
 
-sal_Bool DateTime::operator >=( const DateTime& rDateTime ) const
+BOOL DateTime::operator >=( const DateTime& rDateTime ) const
 {
     if ( (Date::operator>( rDateTime )) ||
          (Date::operator==( rDateTime ) && Time::operator>=( rDateTime )) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 /*************************************************************************
 |*
 |*    DateTime::operator <=()
 |*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 18.05.92
+|*    Letzte Aenderung  TH 18.05.92
+|*
 *************************************************************************/
 
-sal_Bool DateTime::operator <=( const DateTime& rDateTime ) const
+BOOL DateTime::operator <=( const DateTime& rDateTime ) const
 {
     if ( (Date::operator<( rDateTime )) ||
          (Date::operator==( rDateTime ) && Time::operator<=( rDateTime )) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 /*************************************************************************
 |*
 |*    DateTime::GetSecFromDateTime()
+|*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 02.10.96
+|*    Letzte Aenderung  TH 02.10.96
 |*
 *************************************************************************/
 
@@ -132,16 +156,20 @@ long DateTime::GetSecFromDateTime( const Date& rDate ) const
 |*
 |*    DateTime::GetSecFromDateTime()
 |*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 02.10.96
+|*    Letzte Aenderung  TH 02.10.96
+|*
 *************************************************************************/
 
-void DateTime::MakeDateTimeFromSec( const Date& rDate, sal_uIntPtr nSec )
+void DateTime::MakeDateTimeFromSec( const Date& rDate, ULONG nSec )
 {
     long nDays = nSec / (24UL*60*60);
     ((Date*)this)->operator=( rDate );
     nSec -= nDays * (24UL*60*60);
-    sal_uInt16 nMin = (sal_uInt16)(nSec / 60);
+    USHORT nMin = (USHORT)(nSec / 60);
     nSec -= nMin * 60;
-    ((Time*)this)->operator=( Time( 0, nMin, (sal_uInt16)nSec ) );
+    ((Time*)this)->operator=( Time( 0, nMin, (USHORT)nSec ) );
     operator+=( nDays );
 }
 
@@ -149,13 +177,17 @@ void DateTime::MakeDateTimeFromSec( const Date& rDate, sal_uIntPtr nSec )
 |*
 |*    DateTime::operator +=()
 |*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 02.10.96
+|*    Letzte Aenderung  TH 02.10.96
+|*
 *************************************************************************/
 
 DateTime& DateTime::operator +=( const Time& rTime )
 {
     Time aTime = *this;
     aTime += rTime;
-    sal_uInt16 nHours = aTime.GetHour();
+    USHORT nHours = aTime.GetHour();
     if ( aTime.GetTime() > 0 )
     {
         while ( nHours >= 24 )
@@ -184,13 +216,17 @@ DateTime& DateTime::operator +=( const Time& rTime )
 |*
 |*    DateTime::operator -=()
 |*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 02.10.96
+|*    Letzte Aenderung  TH 02.10.96
+|*
 *************************************************************************/
 
 DateTime& DateTime::operator -=( const Time& rTime )
 {
     Time aTime = *this;
     aTime -= rTime;
-    sal_uInt16 nHours = aTime.GetHour();
+    USHORT nHours = aTime.GetHour();
     if ( aTime.GetTime() > 0 )
     {
         while ( nHours >= 24 )
@@ -219,6 +255,10 @@ DateTime& DateTime::operator -=( const Time& rTime )
 |*
 |*    DateTime::operator+()
 |*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 02.10.96
+|*    Letzte Aenderung  TH 02.10.96
+|*
 *************************************************************************/
 
 DateTime operator +( const DateTime& rDateTime, long nDays )
@@ -231,6 +271,10 @@ DateTime operator +( const DateTime& rDateTime, long nDays )
 /*************************************************************************
 |*
 |*    DateTime::operator-()
+|*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 02.10.96
+|*    Letzte Aenderung  TH 02.10.96
 |*
 *************************************************************************/
 
@@ -245,6 +289,10 @@ DateTime operator -( const DateTime& rDateTime, long nDays )
 |*
 |*    DateTime::operator+()
 |*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 02.10.96
+|*    Letzte Aenderung  TH 02.10.96
+|*
 *************************************************************************/
 
 DateTime operator +( const DateTime& rDateTime, const Time& rTime )
@@ -257,6 +305,10 @@ DateTime operator +( const DateTime& rDateTime, const Time& rTime )
 /*************************************************************************
 |*
 |*    DateTime::operator-()
+|*
+|*    Beschreibung      DATETIME.SDW
+|*    Ersterstellung    TH 02.10.96
+|*    Letzte Aenderung  TH 02.10.96
 |*
 *************************************************************************/
 
@@ -286,12 +338,12 @@ DateTime& DateTime::operator +=( double fTimeInDays )
         fInt = ::rtl::math::approxFloor( fTimeInDays );
         fFrac = fInt >= fTimeInDays ? 0.0 : fTimeInDays - fInt;
     }
-    Date::operator+=( long(fInt) );     // full days
+    Date::operator+=( long(fInt) );		// full days
     if ( fFrac )
     {
-        Time aTime(0);  // default ctor calls system time, we don't need that
-        fFrac *= 24UL * 60 * 60 * 1000;     // time expressed in milliseconds
-        aTime.MakeTimeFromMS( long(fFrac) );    // method handles negative ms
+        Time aTime(0);	// default ctor calls system time, we don't need that
+        fFrac *= 24UL * 60 * 60 * 1000;		// time expressed in milliseconds
+        aTime.MakeTimeFromMS( long(fFrac) );	// method handles negative ms
         operator+=( aTime );
     }
     return *this;
@@ -323,7 +375,7 @@ double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
     if ( nTime )
     {
         double fTime = double(nTime);
-        fTime /= 24UL * 60 * 60 * 1000; // convert from milliseconds to fraction
+        fTime /= 24UL * 60 * 60 * 1000;	// convert from milliseconds to fraction
         if ( nDays < 0 && fTime > 0.0 )
             fTime = 1.0 - fTime;
         return double(nDays) + fTime;
@@ -370,22 +422,22 @@ DateTime DateTime::CreateFromWin32FileDateTime( const sal_uInt32 & rLower, const
           ( nDays / ( 400 * 365 ) ) ) / 365;
     nDays -= nYears * 365 + nYears / 4 - nYears / 100 + nYears / 400;
 
-    sal_uInt16 nMonths = 0;
+    USHORT nMonths = 0;
     for( sal_Int64 nDaysCount = nDays; nDaysCount >= 0; )
     {
         nDays = nDaysCount;
         nMonths ++;
         nDaysCount -= Date(
-            1, nMonths, sal::static_int_cast< sal_uInt16 >(1601 + nYears) ).
+            1, nMonths, sal::static_int_cast< USHORT >(1601 + nYears) ).
             GetDaysInMonth();
     }
 
     Date _aDate(
-        (sal_uInt16)( nDays + 1 ), nMonths,
-        sal::static_int_cast< sal_uInt16 >(nYears + 1601) );
-    Time _aTime( sal_uIntPtr( ( aTime / ( a100nPerSecond * 60 * 60 ) ) % sal_Int64( 24 ) ),
-            sal_uIntPtr( ( aTime / ( a100nPerSecond * 60 ) ) % sal_Int64( 60 ) ),
-            sal_uIntPtr( ( aTime / ( a100nPerSecond ) ) % sal_Int64( 60 ) ) );
+        (USHORT)( nDays + 1 ), nMonths,
+        sal::static_int_cast< USHORT >(nYears + 1601) );
+    Time _aTime( ULONG( ( aTime / ( a100nPerSecond * 60 * 60 ) ) % sal_Int64( 24 ) ),
+            ULONG( ( aTime / ( a100nPerSecond * 60 ) ) % sal_Int64( 60 ) ),
+            ULONG( ( aTime / ( a100nPerSecond ) ) % sal_Int64( 60 ) ) );
 
     return DateTime( _aDate, _aTime );
 }

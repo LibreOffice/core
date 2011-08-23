@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -156,7 +156,7 @@ void SAL_CALL ColorPropertySet::addPropertyChangeListener( const OUString& /* aP
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_FAIL( "Not Implemented" );
+    OSL_ENSURE( false, "Not Implemented" );
     return;
 }
 
@@ -165,7 +165,7 @@ void SAL_CALL ColorPropertySet::removePropertyChangeListener( const OUString& /*
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_FAIL( "Not Implemented" );
+    OSL_ENSURE( false, "Not Implemented" );
     return;
 }
 
@@ -174,7 +174,7 @@ void SAL_CALL ColorPropertySet::addVetoableChangeListener( const OUString& /* Pr
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_FAIL( "Not Implemented" );
+    OSL_ENSURE( false, "Not Implemented" );
     return;
 }
 
@@ -183,7 +183,7 @@ void SAL_CALL ColorPropertySet::removeVetoableChangeListener( const OUString& /*
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_FAIL( "Not Implemented" );
+    OSL_ENSURE( false, "Not Implemented" );
     return;
 }
 

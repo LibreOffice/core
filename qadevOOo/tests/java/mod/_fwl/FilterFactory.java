@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ public class FilterFactory extends TestCase {
         XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface
             (XNameAccess.class, oObj);
         String[] filterNames = xNA.getElementNames();
-
+        
         // XNameContainer; XNameReplace
         String filterName = filterNames[0];
         Object[] instance = null;;
@@ -119,14 +119,14 @@ public class FilterFactory extends TestCase {
             throw new StatusException(
             Status.failed("Couldn't get elements from object"));
         }
-
+        
         log.println("adding INSTANCE 1 as obj relation to environment");
-
+        
         log.println("fill property 'TemplateName' with 'INSTANCE1'");
         setPropertyValueValue((PropertyValue[])instance, "TemplateName", "INSTANCE1");
         tEnv.addObjRelation("INSTANCE" +1, instance);
-
-
+        
+        
         // XMSF
         Vector vFTypes = new Vector();
         Vector vFArgs = new Vector();
@@ -163,16 +163,16 @@ public class FilterFactory extends TestCase {
             vFArgs.toArray(new Object[vFArgs.size()][]));
 
         // com.sun.star.container.XContainerQuery
-        NamedValue[] querySequenze = new NamedValue[1];
+        NamedValue[] querySequenze = new NamedValue[1]; 
         NamedValue query = new NamedValue();
         query.Name = "Name";
         query.Value = "Rich Text Format";
         querySequenze[0] = query;
-
+        
         tEnv.addObjRelation("XContainerQuery.createSubSetEnumerationByProperties",
             querySequenze);
-
-
+        
+        
         return tEnv;
     } // finish method getTestEnvironment
 
@@ -182,7 +182,7 @@ public class FilterFactory extends TestCase {
             i++;
         }
         return i < props.length ? props[i].Value : null;
-
+        
     }
 
     protected void setPropertyValueValue(PropertyValue[] props, String pName, Object pValue) {
@@ -199,7 +199,7 @@ public class FilterFactory extends TestCase {
             i++;
         }
         return i < props.length ? props[i] : null;
-
+        
     }
 }
 

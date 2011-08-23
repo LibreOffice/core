@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,9 +85,9 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                        rtl::OUStringToOString( pAttribs[i].Name, RTL_TEXTENCODING_UTF8 ).getStr(),
                        rtl::OUStringToOString( aVal, RTL_TEXTENCODING_UTF8 ).getStr() );
             #endif
-            if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EmbeddedSubstream" ) ) )
+            if( pAttribs[i].Name.equalsAscii( "EmbeddedSubstream" ) )
                 pAttribs[i].Value >>= xSubStream;
-            else if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) )
+            else if( pAttribs[i].Name.equalsAscii( "Password" ) )
             {
                 nPwPos = i;
                 pAttribs[i].Value >>= aPwd;
@@ -99,7 +99,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             uno::Reference< io::XInputStream > xInput;
             for( sal_Int32 i = 0; i < nAttribs; i++ )
             {
-                if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
+                if( pAttribs[i].Name.equalsAscii( "InputStream" ) )
                 {
                     pAttribs[i].Value >>= xInput;
                     break;
@@ -168,7 +168,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             catch(uno::Exception& e)
             {
                 (void)e;
-                OSL_TRACE( "subfilter exception: %s\n",
+                OSL_TRACE( "subfilter exception: %s\n", 
                            OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             }
 
@@ -182,7 +182,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                     {
                         nPwPos = aFilterData.getLength();
                         aFilterData.realloc( nPwPos+1 );
-                        aFilterData[nPwPos].Name = rtl::OUString(
+                        aFilterData[nPwPos].Name = rtl::OUString( 
                             RTL_CONSTASCII_USTRINGPARAM( "Password" ) );
                     }
                     aFilterData[nPwPos].Value <<= aPwd;
@@ -201,7 +201,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
     else
         OSL_TRACE( "PDFIAdaptor::filter: no model set\n" );
     #endif
-
+    
     return bRet;
 }
 
@@ -238,12 +238,12 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
                             const uno::Reference<task::XInteractionHandler>& xIHdl,
                             const rtl::OUString&                          rPwd,
                             const uno::Reference<task::XStatusIndicator>& xStatus,
-                            const XmlEmitterSharedPtr&                    rEmitter,
+                            const XmlEmitterSharedPtr&                    rEmitter, 
                             const rtl::OUString&                          rURL )
 {
     // container for metaformat
     boost::shared_ptr<PDFIProcessor> pSink(
-        new PDFIProcessor(xStatus, m_xContext));
+        new PDFIProcessor(xStatus, m_xContext)); 
 
     // TEMP! TEMP!
     if( m_bEnableToplevelText )
@@ -274,7 +274,7 @@ bool PDFIRawAdaptor::odfConvert( const rtl::OUString&                          r
 
     // tell input stream that it is no longer needed
     xOutput->closeOutput();
-
+    
     return bSuccess;
 }
 
@@ -294,15 +294,15 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
     for( sal_Int32 i = 0; i < nAttribs; i++, pAttribs++ )
     {
         OSL_TRACE("importer Attrib: %s\n", OUStringToOString( pAttribs->Name, RTL_TEXTENCODING_UTF8 ).getStr() );
-        if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
+        if( pAttribs->Name.equalsAscii( "InputStream" ) )
             pAttribs->Value >>= xInput;
-        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
+        else if( pAttribs->Name.equalsAscii( "URL" ) )
             pAttribs->Value >>= aURL;
-        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
+        else if( pAttribs->Name.equalsAscii( "StatusIndicator" ) )
             pAttribs->Value >>= xStatus;
-        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
+        else if( pAttribs->Name.equalsAscii( "InteractionHandler" ) )
             pAttribs->Value >>= xInteractionHandler;
-        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) )
+        else if( pAttribs->Name.equalsAscii( "Password" ) )
             pAttribs->Value >>= aPwd;
     }
     if( !xInput.is() )
@@ -313,8 +313,8 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
 
     // tell input stream that it is no longer needed
     xInput->closeInput();
-    xInput.clear();
-
+    xInput.clear();    
+    
     return bSuccess;
 }
 

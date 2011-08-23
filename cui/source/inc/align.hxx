@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 
 #include <svx/orienthelper.hxx>
 #include <vcl/field.hxx>
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -53,9 +53,9 @@ public:
     virtual             ~AlignmentTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    static sal_uInt16*      GetRanges();
+    static USHORT*      GetRanges();
 
-    virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
@@ -66,7 +66,7 @@ private:
     void                InitVsRefEgde();
     void                UpdateEnableControls();
 
-    bool                HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 nWhich ) const;
+    bool                HasAlignmentChanged( const SfxItemSet& rNew, USHORT nWhich ) const;
 
     DECL_LINK( UpdateEnableHdl, void* );
 

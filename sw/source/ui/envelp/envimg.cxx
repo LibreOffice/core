@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,6 +39,7 @@
 #include <unotools/useroptions.hxx>
 #include <tools/shl.hxx>
 #include <swmodule.hxx>
+#include <errhdl.hxx>
 #include <swtypes.hxx>
 #include <envimg.hxx>
 
@@ -47,16 +48,15 @@
 
 #include <unomid.h>
 
-#ifdef WNT
+#ifdef WIN
 #define NEXTLINE  UniString::CreateFromAscii("\r\n")
 #else
 #define NEXTLINE  '\n'
 #endif
 
 using namespace utl;
+using namespace rtl;
 using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
 
 
 TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
@@ -68,7 +68,7 @@ SW_DLLPUBLIC String MakeSender()
     String sRet;
     String sSenderToken(SW_RES(STR_SENDER_TOKENS));
     xub_StrLen nSttPos = 0, nTokenCount = sSenderToken.GetTokenCount(';');
-    sal_Bool bLastLength = sal_True;
+    BOOL bLastLength = TRUE;
     for( xub_StrLen i = 0; i < nTokenCount; i++ )
     {
         String sToken = sSenderToken.GetToken( 0, ';', nSttPos );
@@ -82,7 +82,7 @@ SW_DLLPUBLIC String MakeSender()
         {
             if(bLastLength)
                 sRet +=NEXTLINE;
-            bLastLength = sal_True;
+            bLastLength = TRUE;
         }
         else if(sToken.EqualsAscii("FIRSTNAME"))
             sRet += (String)rUserOpt.GetFirstName();
@@ -108,7 +108,7 @@ SwEnvItem::SwEnvItem() :
     SfxPoolItem(FN_ENVELOP)
 {
     aAddrText       = aEmptyStr;
-    bSend           = sal_True;
+    bSend           = TRUE;
     aSendText       = MakeSender();
     lSendFromLeft   = 566; // 1 cm
     lSendFromTop    = 566; // 1 cm
@@ -116,7 +116,7 @@ SwEnvItem::SwEnvItem() :
     lWidth          = aEnvSz.Width();
     lHeight         = aEnvSz.Height();
     eAlign          = ENV_HOR_LEFT;
-    bPrintFromAbove = sal_True;
+    bPrintFromAbove = TRUE;
     lShiftRight     = 0;
     lShiftDown      = 0;
 
@@ -251,7 +251,7 @@ SwEnvCfgItem::~SwEnvCfgItem()
 {
 }
 
-void    SwEnvCfgItem::Commit()
+void	SwEnvCfgItem::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -286,19 +286,19 @@ Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Inscription/Addressee",    //  0
-        "Inscription/Sender",       //  1
-        "Inscription/UseSender",    //  2
-        "Format/AddresseeFromLeft", //  3
-        "Format/AddresseeFromTop",  //  4
-        "Format/SenderFromLeft",    //  5
-        "Format/SenderFromTop",     //  6
-        "Format/Width",             //  7
-        "Format/Height",            //  8
-        "Print/Alignment",          //  9
-        "Print/FromAbove",          // 10
-        "Print/Right",              // 11
-        "Print/Down"                // 12
+        "Inscription/Addressee",	//	0
+        "Inscription/Sender",		//  1
+        "Inscription/UseSender",	//  2
+        "Format/AddresseeFromLeft",	//  3
+        "Format/AddresseeFromTop",	//  4
+        "Format/SenderFromLeft",	//  5
+        "Format/SenderFromTop",		//  6
+        "Format/Width",				//  7
+        "Format/Height",			//  8
+        "Print/Alignment",			//  9
+        "Print/FromAbove",			// 10
+        "Print/Right",				// 11
+        "Print/Down"				// 12
     };
     const int nCount = 13;
     Sequence<OUString> aNames(nCount);
@@ -310,7 +310,7 @@ Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
     return aNames;
 }
 
-bool SwEnvItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
+bool SwEnvItem::QueryValue( Any& rVal, BYTE nMemberId ) const
 {
     sal_Bool bRet = true;
     switch(nMemberId & ~CONVERT_TWIPS)
@@ -329,13 +329,13 @@ bool SwEnvItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
         case MID_ENV_SHIFT_RIGHT      : rVal <<= lShiftRight; break;
         case MID_ENV_SHIFT_DOWN       : rVal <<= lShiftDown; break;
         default:
-            OSL_FAIL("Wrong memberId");
+            OSL_ENSURE(false, "Wrong memberId");
             bRet = false;
     }
     return bRet;
 }
 
-bool SwEnvItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
+bool SwEnvItem::PutValue(const Any& rVal, BYTE nMemberId)
 {
     bool bRet = false;
     switch(nMemberId  & ~CONVERT_TWIPS)
@@ -361,7 +361,7 @@ bool SwEnvItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
         case MID_ENV_SHIFT_RIGHT      : bRet = (rVal >>= lShiftRight); break;
         case MID_ENV_SHIFT_DOWN       : bRet = (rVal >>= lShiftDown); break;
         default:
-            OSL_FAIL("Wrong memberId");
+            OSL_ENSURE(false,"Wrong memberId");
     }
     return bRet;
 }

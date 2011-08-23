@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class FilterHelper;
 
 - (void)setFilterHelper:(FilterHelper*)filterHelper;
 
-- (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename;
+- (MacOSBOOL)panel:(id)sender shouldShowFilename:(NSString *)filename;
 - (void)panelSelectionDidChange:(id)sender;
 - (void)panel:(id)sender directoryDidChange:(NSString *)path;
 

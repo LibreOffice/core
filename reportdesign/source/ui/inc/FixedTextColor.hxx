@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,6 +53,8 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > getXControl(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFixedText >& _xFixedText) throw(::com::sun::star::uno::RuntimeException);
 
         void setPropertyTextColor(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >& _xVclWindowPeer, sal_Int32 _nFormatKey);
+
+        // sal_Int32 getTextColor();
 
     public:
         FixedTextColor(const OReportController & _aObserver);

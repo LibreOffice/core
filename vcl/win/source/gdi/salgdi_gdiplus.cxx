@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,17 +31,17 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <svsys.h>
+#include <tools/svwin.h>
 #include <wincomp.hxx>
 #include <saldata.hxx>
 #include <salgdi.h>
 #include <tools/debug.hxx>
 
 #ifndef min
-#define min(a,b)    (((a) < (b)) ? (a) : (b))
+#define min(a,b)	(((a) < (b)) ? (a) : (b))
 #endif
 #ifndef max
-#define max(a,b)    (((a) > (b)) ? (a) : (b))
+#define max(a,b)	(((a) > (b)) ? (a) : (b))
 #endif
 
 #if defined _MSC_VER
@@ -83,7 +83,7 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(Gdiplus::GraphicsPath& rPath, con
                 const basegfx::B2DPoint aCb(rPolygon.getPrevControlPoint(nNextIndex));
 
                 rPath.AddBezier(
-                    aFCurr,
+                    aFCurr, 
                     Gdiplus::PointF(Gdiplus::REAL(aCa.getX()), Gdiplus::REAL(aCa.getY())),
                     Gdiplus::PointF(Gdiplus::REAL(aCb.getX()), Gdiplus::REAL(aCb.getY())),
                     aFNext);
@@ -129,7 +129,7 @@ void impAddB2DPolygonToGDIPlusGraphicsPathInteger(Gdiplus::GraphicsPath& rPath, 
                 const basegfx::B2DPoint aCb(rPolygon.getPrevControlPoint(nNextIndex));
 
                 rPath.AddBezier(
-                    aICurr,
+                    aICurr, 
                     Gdiplus::Point(INT(aCa.getX()), INT(aCa.getY())),
                     Gdiplus::Point(INT(aCb.getX()), INT(aCb.getY())),
                     aINext);
@@ -247,7 +247,7 @@ bool WinSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolygon, double f
             // #i101491# needed to create the correct line joins
             aPath.CloseFigure();
         }
-
+        
         if(getAntiAliasB2DDraw())
         {
             aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);

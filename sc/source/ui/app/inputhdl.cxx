@@ -84,31 +84,31 @@
 #include "userlist.hxx"
 #include "rfindlst.hxx"
 #include "inputopt.hxx"
-#include "cell.hxx"             // fuer Formel-Preview
-#include "compiler.hxx"         // fuer Formel-Preview
+#include "cell.hxx"				// fuer Formel-Preview
+#include "compiler.hxx"			// fuer Formel-Preview
 #include "editable.hxx"
 #include "funcdesc.hxx"
 
 #define _INPUTHDL_CXX
 #include "inputhdl.hxx"
 
-//  max. Ranges im RangeFinder
-#define RANGEFIND_MAX   32
+//	max. Ranges im RangeFinder
+#define RANGEFIND_MAX	32
 
 using namespace formula;
 
 // STATIC DATA -----------------------------------------------------------
 
-sal_Bool ScInputHandler::bOptLoaded = false;            // App-Optionen ausgewertet
-sal_Bool ScInputHandler::bAutoComplete = false;         // wird in KeyInput gesetzt
+BOOL ScInputHandler::bOptLoaded = FALSE;			// App-Optionen ausgewertet
+BOOL ScInputHandler::bAutoComplete = FALSE;			// wird in KeyInput gesetzt
 
-//  delimiters (in addition to ScEditUtil) needed for range finder:
-//  only characters that are allowed in formulas next to references
-//  and the quotation mark (so string constants can be skipped)
+//	delimiters (in addition to ScEditUtil) needed for range finder:
+//	only characters that are allowed in formulas next to references
+//	and the quotation mark (so string constants can be skipped)
 
-static const sal_Char pMinDelimiters[] = " !\"";
+static const sal_Char __FAR_DATA pMinDelimiters[] = " !\"";
 
-extern sal_uInt16 nEditAdjust;      //! Member an ViewData
+extern USHORT nEditAdjust;		//! Member an ViewData
 
 //==================================================================
 
@@ -129,37 +129,38 @@ void ScInputHandler::InitRangeFinder( const String& rFormula )
     if ( !pActiveViewSh || !SC_MOD()->GetInputOptions().GetRangeFinder() )
         return;
 
+//	String aDelimiters = pEngine->GetWordDelimiters();
     String aDelimiters = ScEditUtil::ModifyDelimiters(
                             String::CreateFromAscii( pMinDelimiters ) );
 
     xub_StrLen nColon = aDelimiters.Search(':');
     if ( nColon != STRING_NOTFOUND )
-        aDelimiters.Erase( nColon, 1 );             // Delimiter ohne Doppelpunkt
+        aDelimiters.Erase( nColon, 1 );				// Delimiter ohne Doppelpunkt
     xub_StrLen nDot = aDelimiters.Search(cSheetSep);
     if ( nDot != STRING_NOTFOUND )
-        aDelimiters.Erase( nDot, 1 );               // Delimiter ohne Punkt
+        aDelimiters.Erase( nDot, 1 );				// Delimiter ohne Punkt
 
     const sal_Unicode* pChar = rFormula.GetBuffer();
     xub_StrLen nLen = rFormula.Len();
     xub_StrLen nPos = 0;
     xub_StrLen nStart = 0;
-    sal_uInt16 nCount = 0;
+    USHORT nCount = 0;
     ScRange aRange;
     while ( nPos < nLen && nCount < RANGEFIND_MAX )
     {
-        //  Trenner ueberlesen
+        //	Trenner ueberlesen
         while ( nPos<nLen && ScGlobal::UnicodeStrChr( aDelimiters.GetBuffer(), pChar[nPos] ) )
         {
-            if ( pChar[nPos] == '"' )                       // String
+            if ( pChar[nPos] == '"' )						// String
             {
                 ++nPos;
-                while (nPos<nLen && pChar[nPos] != '"')     // bis zum Ende ueberlesen
+                while (nPos<nLen && pChar[nPos] != '"')		// bis zum Ende ueberlesen
                     ++nPos;
             }
-            ++nPos;                     // Trennzeichen oder schliessender Quote
+            ++nPos;						// Trennzeichen oder schliessender Quote
         }
 
-        //  Text zwischen Trennern
+        //	Text zwischen Trennern
         nStart = nPos;
 handle_r1c1:
         while ( nPos<nLen && !ScGlobal::UnicodeStrChr( aDelimiters.GetBuffer(), pChar[nPos] ) )
@@ -181,10 +182,10 @@ handle_r1c1:
         {
             String aTest = rFormula.Copy( nStart, nPos-nStart );
             const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
-            sal_uInt16 nFlags = aRange.ParseAny( aTest, pDoc, aAddrDetails );
+            USHORT nFlags = aRange.ParseAny( aTest, pDoc, aAddrDetails );
             if ( nFlags & SCA_VALID )
             {
-                //  Tabelle setzen, wenn nicht angegeben
+                //	Tabelle setzen, wenn nicht angegeben
                 if ( (nFlags & SCA_TAB_3D) == 0 )
                     aRange.aStart.SetTab( pActiveViewSh->GetViewData()->GetTabNo() );
                 if ( (nFlags & SCA_TAB2_3D) == 0 )
@@ -194,13 +195,13 @@ handle_r1c1:
                 {
                     // #i73766# if a single ref was parsed, set the same "abs" flags for ref2,
                     // so Format doesn't output a double ref because of different flags.
-                    sal_uInt16 nAbsFlags = nFlags & ( SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE );
+                    USHORT nAbsFlags = nFlags & ( SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE );
                     nFlags |= nAbsFlags << 4;
                 }
 
                 if (!nCount)
                 {
-                    pEngine->SetUpdateMode( false );
+                    pEngine->SetUpdateMode( FALSE );
                     pRangeFindList = new ScRangeFindList( pDocSh->GetTitle() );
                 }
 
@@ -216,12 +217,12 @@ handle_r1c1:
             }
         }
 
-        //  letzten Trenner nicht ueberlesen, koennte ja ein Quote sein (?)
+        //	letzten Trenner nicht ueberlesen, koennte ja ein Quote sein (?)
     }
 
     if (nCount)
     {
-        pEngine->SetUpdateMode( sal_True );
+        pEngine->SetUpdateMode( TRUE );
 
         pDocSh->Broadcast( SfxSimpleHint( SC_HINT_SHOWRANGEFINDER ) );
     }
@@ -239,17 +240,17 @@ void lcl_Replace( EditView* pView, const String& rNewStr, const ESelection& rOld
         EditEngine* pEngine = pView->GetEditEngine();
         pEngine->QuickInsertText( rNewStr, rOldSel );
 
-        //  Dummy-InsertText fuer Update und Paint
-        //  dafuer muss oben die Selektion aufgehoben werden (vor QuickInsertText)
-        pView->InsertText( EMPTY_STRING, false );
+        //	Dummy-InsertText fuer Update und Paint
+        //	dafuer muss oben die Selektion aufgehoben werden (vor QuickInsertText)
+        pView->InsertText( EMPTY_STRING, FALSE );
 
         xub_StrLen nLen = pEngine->GetTextLen(0);
         ESelection aSel( 0, nLen, 0, nLen );
-        pView->SetSelection( aSel );                // Cursor ans Ende
+        pView->SetSelection( aSel );				// Cursor ans Ende
     }
 }
 
-void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
+void ScInputHandler::UpdateRange( USHORT nIndex, const ScRange& rNew )
 {
     ScTabViewShell* pDocView = pRefViewSh ? pRefViewSh : pActiveViewSh;
     if ( pDocView && pRangeFindList && nIndex < pRangeFindList->Count() )
@@ -259,7 +260,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         xub_StrLen nOldEnd = pData->nSelEnd;
 
         ScRange aJustified = rNew;
-        aJustified.Justify();           // Ref in der Formel immer richtigherum anzeigen
+        aJustified.Justify();			// Ref in der Formel immer richtigherum anzeigen
         String aNewStr;
         ScDocument* pDoc = pDocView->GetViewData()->GetDocument();
         const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
@@ -271,17 +272,17 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         lcl_Replace( pTopView, aNewStr, aOldSel );
         lcl_Replace( pTableView, aNewStr, aOldSel );
 
-        bInRangeUpdate = sal_True;
+        bInRangeUpdate = TRUE;
         DataChanged();
-        bInRangeUpdate = false;
+        bInRangeUpdate = FALSE;
 
         long nDiff = aNewStr.Len() - (long)(nOldEnd-nOldStart);
 
         pData->aRef = rNew;
         pData->nSelEnd = (xub_StrLen)(pData->nSelEnd + nDiff);
 
-        sal_uInt16 nCount = (sal_uInt16) pRangeFindList->Count();
-        for (sal_uInt16 i=nIndex+1; i<nCount; i++)
+        USHORT nCount = (USHORT) pRangeFindList->Count();
+        for (USHORT i=nIndex+1; i<nCount; i++)
         {
             ScRangeFindData* pNext = pRangeFindList->GetObject( i );
             pNext->nSelStart = (xub_StrLen)(pNext->nSelStart + nDiff);
@@ -290,7 +291,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
     }
     else
     {
-        OSL_FAIL("UpdateRange: da fehlt was");
+        DBG_ERROR("UpdateRange: da fehlt was");
     }
 }
 
@@ -300,8 +301,8 @@ void ScInputHandler::DeleteRangeFinder()
     if ( pRangeFindList && pPaintView )
     {
         ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
-        pRangeFindList->SetHidden(sal_True);
-        pDocSh->Broadcast( SfxSimpleHint( SC_HINT_SHOWRANGEFINDER ) );  // wegnehmen
+        pRangeFindList->SetHidden(TRUE);
+        pDocSh->Broadcast( SfxSimpleHint( SC_HINT_SHOWRANGEFINDER ) );	// wegnehmen
         DELETEZ(pRangeFindList);
     }
 }
@@ -376,7 +377,7 @@ xub_StrLen lcl_MatchParenthesis( const String& rStr, xub_StrLen nPos )
     const sal_Unicode* p0 = rStr.GetBuffer();
     register const sal_Unicode* p;
     const sal_Unicode* p1;
-    sal_uInt16 nQuotes = 0;
+    USHORT nQuotes = 0;
     if ( nPos < nLen / 2 )
     {
         p = p0;
@@ -393,11 +394,11 @@ xub_StrLen lcl_MatchParenthesis( const String& rStr, xub_StrLen nPos )
             nQuotes++;
     }
     // Odd number of quotes that we find ourselves in a string
-    sal_Bool bLookInString = ((nQuotes % 2) != 0);
-    sal_Bool bInString = bLookInString;
+    BOOL bLookInString = ((nQuotes % 2) != 0);
+    BOOL bInString = bLookInString;
     p = p0 + nPos;
     p1 = (nDir < 0 ? p0 : p0 + nLen) ;
-    sal_uInt16 nLevel = 1;
+    USHORT nLevel = 1;
     while ( p != p1 && nLevel )
     {
         p += nDir;
@@ -405,7 +406,7 @@ xub_StrLen lcl_MatchParenthesis( const String& rStr, xub_StrLen nPos )
         {
             bInString = !bInString;
             if ( bLookInString && !bInString )
-                p = p1;     //That's it then
+                p = p1;		//That's it then
         }
         else if ( bInString == bLookInString )
         {
@@ -435,23 +436,23 @@ ScInputHandler::ScInputHandler()
         pTipVisibleSecParent( NULL ),
         nTipVisibleSec( 0 ),
         nAutoPos( SCPOS_INVALID ),
-        bUseTab( false ),
-        bTextValid( sal_True ),
+        bUseTab( FALSE ),
+        bTextValid( TRUE ),
         nFormSelStart( 0 ),
         nFormSelEnd( 0 ),
         nAutoPar( 0 ),
         eMode( SC_INPUT_NONE ),
-        bModified( false ),
-        bSelIsRef( false ),
-        bFormulaMode( false ),
-        bInRangeUpdate( false ),
-        bParenthesisShown( false ),
-        bCreatingFuncView( false ),
-        bInEnterHandler( false ),
-        bCommandErrorShown( false ),
-        bInOwnChange( false ),
-        bProtected( false ),
-        bCellHasPercentFormat( false ),
+        bModified( FALSE ),
+        bSelIsRef( FALSE ),
+        bFormulaMode( FALSE ),
+        bInRangeUpdate( FALSE ),
+        bParenthesisShown( FALSE ),
+        bCreatingFuncView( FALSE ),
+        bInEnterHandler( FALSE ),
+        bCommandErrorShown( FALSE ),
+        bInOwnChange( FALSE ),
+        bProtected( FALSE ),
+        bCellHasPercentFormat( FALSE ),
         nValidation( 0 ),
         eAttrAdjust( SVX_HOR_JUSTIFY_STANDARD ),
         aScaleX( 1,1 ),
@@ -459,25 +460,25 @@ ScInputHandler::ScInputHandler()
         pRefViewSh( NULL ),
         pLastPattern( NULL ),
         pEditDefaults( NULL ),
-        bLastIsSymbol( false ),
+        bLastIsSymbol( FALSE ),
         pLastState( NULL ),
         pDelayTimer( NULL ),
         pRangeFindList( NULL )
 {
-    //  The InputHandler is constructed with the view, so SfxViewShell::Current
-    //  doesn't have the right view yet. pActiveViewSh is updated in NotifyChange.
+    //	The InputHandler is constructed with the view, so SfxViewShell::Current
+    //	doesn't have the right view yet. pActiveViewSh is updated in NotifyChange.
     pActiveViewSh = NULL;
 
-    //  Bindings (nur noch fuer Invalidate benutzt) werden bei Bedarf aktuell geholt
+    //	Bindings (nur noch fuer Invalidate benutzt) werden bei Bedarf aktuell geholt
 }
 
-ScInputHandler::~ScInputHandler()
+__EXPORT ScInputHandler::~ScInputHandler()
 {
-    //  Wenn dies der Applikations-InputHandler ist, wird der dtor erst nach SfxApplication::Main
-    //  gerufen, darf sich also auf keine Sfx-Funktionen mehr verlassen
+    //	Wenn dies der Applikations-InputHandler ist, wird der dtor erst nach SfxApplication::Main
+    //	gerufen, darf sich also auf keine Sfx-Funktionen mehr verlassen
 
-    if ( !SFX_APP()->IsDowning() )          // inplace
-        EnterHandler();                     // Eingabe noch abschliessen
+    if ( !SFX_APP()->IsDowning() )			// inplace
+        EnterHandler();						// Eingabe noch abschliessen
 
     if (SC_MOD()->GetRefInputHdl()==this)
         SC_MOD()->SetRefInputHdl(NULL);
@@ -514,7 +515,7 @@ void ScInputHandler::UpdateRefDevice()
     if (!pEngine)
         return;
 
-    sal_Bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
+    BOOL bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
     if ( bTextWysiwyg && pActiveViewSh )
         pEngine->SetRefDevice( pActiveViewSh->GetViewData()->GetDocument()->GetPrinter() );
     else
@@ -523,8 +524,8 @@ void ScInputHandler::UpdateRefDevice()
     MapMode aMode( MAP_100TH_MM, Point(), aScaleX, aScaleY );
     pEngine->SetRefMapMode( aMode );
 
-    //  SetRefDevice(NULL) uses VirtualDevice, SetRefMapMode forces creation of a local VDev,
-    //  so the DigitLanguage can be safely modified (might use an own VDev instead of NULL).
+    //	SetRefDevice(NULL) uses VirtualDevice, SetRefMapMode forces creation of a local VDev,
+    //	so the DigitLanguage can be safely modified (might use an own VDev instead of NULL).
     if ( !( bTextWysiwyg && pActiveViewSh ) )
     {
         pEngine->GetRefDevice()->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
@@ -541,9 +542,9 @@ void ScInputHandler::ImplCreateEditEngine()
             pEngine = new ScFieldEditEngine( pDoc->GetEnginePool(), pDoc->GetEditPool() );
         }
         else
-            pEngine = new ScFieldEditEngine( EditEngine::CreatePool(), NULL, sal_True );
+            pEngine = new ScFieldEditEngine( EditEngine::CreatePool(), NULL, TRUE );
         pEngine->SetWordDelimiters( ScEditUtil::ModifyDelimiters( pEngine->GetWordDelimiters() ) );
-        UpdateRefDevice();      // also sets MapMode
+        UpdateRefDevice();		// also sets MapMode
         pEngine->SetPaperSize( Size( 1000000, 1000000 ) );
         pEditDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
 
@@ -554,12 +555,12 @@ void ScInputHandler::ImplCreateEditEngine()
 
 void ScInputHandler::UpdateAutoCorrFlag()
 {
-    sal_uLong nCntrl = pEngine->GetControlWord();
-    sal_uLong nOld = nCntrl;
+    ULONG nCntrl = pEngine->GetControlWord();
+    ULONG nOld = nCntrl;
 
-    //  don't use pLastPattern here (may be invalid because of AutoStyle)
+    //	don't use pLastPattern here (may be invalid because of AutoStyle)
 
-    sal_Bool bDisable = bLastIsSymbol || bFormulaMode;
+    BOOL bDisable = bLastIsSymbol || bFormulaMode;
     if ( bDisable )
         nCntrl &= ~EE_CNTRL_AUTOCORRECT;
     else
@@ -569,26 +570,26 @@ void ScInputHandler::UpdateAutoCorrFlag()
         pEngine->SetControlWord(nCntrl);
 }
 
-void ScInputHandler::UpdateSpellSettings( sal_Bool bFromStartTab )
+void ScInputHandler::UpdateSpellSettings( BOOL bFromStartTab )
 {
     if ( pActiveViewSh )
     {
         ScViewData* pViewData = pActiveViewSh->GetViewData();
-        sal_Bool bOnlineSpell = pViewData->GetDocument()->GetDocOptions().IsAutoSpell();
+        BOOL bOnlineSpell = pViewData->GetDocument()->GetDocOptions().IsAutoSpell();
 
-        //  SetDefaultLanguage is independent of the language attributes,
-        //  ScGlobal::GetEditDefaultLanguage is always used.
-        //  It must be set every time in case the office language was changed.
+        //	SetDefaultLanguage is independent of the language attributes,
+        //	ScGlobal::GetEditDefaultLanguage is always used.
+        //	It must be set every time in case the office language was changed.
 
         pEngine->SetDefaultLanguage( ScGlobal::GetEditDefaultLanguage() );
 
-        //  if called for changed options, update flags only if already editing
-        //  if called from StartTable, always update flags
+        //	if called for changed options, update flags only if already editing
+        //	if called from StartTable, always update flags
 
         if ( bFromStartTab || eMode != SC_INPUT_NONE )
         {
-            sal_uLong nCntrl = pEngine->GetControlWord();
-            sal_uLong nOld = nCntrl;
+            ULONG nCntrl = pEngine->GetControlWord();
+            ULONG nOld = nCntrl;
             if( bOnlineSpell )
                 nCntrl |= EE_CNTRL_ONLINESPELLING;
             else
@@ -607,18 +608,18 @@ void ScInputHandler::UpdateSpellSettings( sal_Bool bFromStartTab )
             pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
             pEngine->SetDefaultHorizontalTextDirection(
                 (EEHorizontalTextDirection)pDoc->GetEditTextDirection( pViewData->GetTabNo() ) );
-            pEngine->SetFirstWordCapitalization( false );
+            pEngine->SetFirstWordCapitalization( FALSE );
         }
 
-        //  language is set separately, so the speller is needed only if online
-        //  spelling is active
+        //	language is set separately, so the speller is needed only if online
+        //	spelling is active
 
         if ( bOnlineSpell ) {
             com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1> xXSpellChecker1( LinguMgr::GetSpellChecker() );
             pEngine->SetSpeller( xXSpellChecker1 );
         }
 
-        sal_Bool bHyphen = pLastPattern && ((const SfxBoolItem&)pLastPattern->GetItem(ATTR_HYPHENATE)).GetValue();
+        BOOL bHyphen = pLastPattern && ((const SfxBoolItem&)pLastPattern->GetItem(ATTR_HYPHENATE)).GetValue();
         if ( bHyphen ) {
             com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
             pEngine->SetHyphenator( xXHyphenator );
@@ -627,11 +628,11 @@ void ScInputHandler::UpdateSpellSettings( sal_Bool bFromStartTab )
 }
 
 //
-//      Funktionen/Bereichsnamen etc. als Tip-Hilfe
+//		Funktionen/Bereichsnamen etc. als Tip-Hilfe
 //
 
-#define SC_STRTYPE_FUNCTIONS    1
-//  die anderen Typen sind in ScDocument::GetFormulaEntries festgelegt
+#define SC_STRTYPE_FUNCTIONS	1
+//	die anderen Typen sind in ScDocument::GetFormulaEntries festgelegt
 
 void ScInputHandler::GetFormulaData()
 {
@@ -649,20 +650,20 @@ void ScInputHandler::GetFormulaData()
         else
             pFormulaDataPara = new TypedScStrCollection;
 
-        //      MRU-Funktionen aus dem Funktions-Autopiloten
-        //      wie in ScPosWnd::FillFunctions (inputwin.cxx)
+        //		MRU-Funktionen aus dem Funktions-Autopiloten
+        //		wie in ScPosWnd::FillFunctions (inputwin.cxx)
 
         const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
-        sal_uInt16 nMRUCount = rOpt.GetLRUFuncListCount();
-        const sal_uInt16* pMRUList = rOpt.GetLRUFuncList();
+        USHORT nMRUCount = rOpt.GetLRUFuncListCount();
+        const USHORT* pMRUList = rOpt.GetLRUFuncList();
         const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
-        sal_uLong nListCount = pFuncList->GetCount();
+        ULONG nListCount = pFuncList->GetCount();
         if (pMRUList)
         {
-            for (sal_uInt16 i=0; i<nMRUCount; i++)
+            for (USHORT i=0; i<nMRUCount; i++)
             {
-                sal_uInt16 nId = pMRUList[i];
-                for (sal_uLong j=0; j<nListCount; j++)
+                USHORT nId = pMRUList[i];
+                for (ULONG j=0; j<nListCount; j++)
                 {
                     const ScFuncDesc* pDesc = pFuncList->GetFunction( j );
                     if ( pDesc->nFIndex == nId && pDesc->pFuncName )
@@ -677,13 +678,13 @@ void ScInputHandler::GetFormulaData()
                 }
             }
         }
-        for(sal_uLong i=0;i<nListCount;i++)
+        for(ULONG i=0;i<nListCount;i++)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
             if ( pDesc->pFuncName )
             {
                 pDesc->initArgumentInfo();
-                String aEntry = pDesc->getSignature();
+                String aEntry = pDesc->GetSignature();
                 TypedStrData* pData = new TypedStrData( aEntry, 0.0, SC_STRTYPE_FUNCTIONS );
                 if (!pFormulaDataPara->Insert(pData))
                     delete pData;
@@ -744,9 +745,10 @@ void ScInputHandler::ShowTipCursor()
 
     if ( bFormulaMode && pActiveView && pFormulaDataPara && pEngine->GetParagraphCount() == 1 )
     {
-        String aFormula = pEngine->GetText( (sal_uInt16) 0 );
+        String aFormula = pEngine->GetText( (USHORT) 0 );
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
+        xub_StrLen  nLeftParentPos = 0;
         if( aSel.nEndPos )
         {
             if ( aFormula.Len() < aSel.nEndPos )
@@ -758,53 +760,56 @@ void ScInputHandler::ShowTipCursor()
             xub_StrLen  nArgPos = 0;
             const IFunctionDescription* ppFDesc;
             ::std::vector< ::rtl::OUString> aArgs;
-            sal_uInt16      nArgs;
-            sal_Bool  bFound = false;
+            USHORT	    nArgs;
+            BOOL  bFound = FALSE;
             FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
 
             while( !bFound )
             {
                 aSelText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
-                xub_StrLen nLeftParentPos = lcl_MatchParenthesis( aSelText, aSelText.Len()-1 );
+                nLeftParentPos = lcl_MatchParenthesis( aSelText, aSelText.Len()-1 );
                 if( nLeftParentPos != STRING_NOTFOUND )
                 {
                     sal_Unicode c = ( nLeftParentPos > 0 ) ? aSelText.GetChar( nLeftParentPos-1 ) : 0;
                     if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z' )) )
                         continue;
-                    nNextFStart = aHelper.GetFunctionStart( aSelText, nLeftParentPos, sal_True);
-                    if( aHelper.GetNextFunc( aSelText, false, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
+                    nNextFStart = aHelper.GetFunctionStart( aSelText, nLeftParentPos, TRUE);
+                    if( aHelper.GetNextFunc( aSelText, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
                     {
                         if( ppFDesc->getFunctionName().getLength() )
                         {
                             nArgPos = aHelper.GetArgStart( aSelText, nNextFStart, 0 );
-                            nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
+                            nArgs = static_cast<USHORT>(ppFDesc->getParameterCount());
 
-                            sal_Bool   bFlag = false;
+                            USHORT nActive = 0;
+                            USHORT nCount = 0;
+                            USHORT nCountSemicolon = 0;
+                            USHORT nCountDot = 0;
+                            USHORT nStartPosition = 0;
+                            USHORT nEndPosition = 0;
+                            BOOL   bFlag = FALSE;
                             String aNew;
-                            sal_uInt16 nParAutoPos = SCPOS_INVALID;
-                            if( pFormulaDataPara->FindText( ppFDesc->getFunctionName(), aNew, nParAutoPos, false ) )
+                            USHORT nParAutoPos = SCPOS_INVALID;
+                            if( pFormulaDataPara->FindText( ppFDesc->getFunctionName(), aNew, nParAutoPos, FALSE ) )
                             {
-                                sal_uInt16 nActive = 0;
-                                for( sal_uInt16 i=0; i < nArgs; i++ )
+                                for( USHORT i=0; i < nArgs; i++ )
                                 {
                                     xub_StrLen nLength = static_cast<xub_StrLen>(aArgs[i].getLength());
                                     if( nArgPos <= aSelText.Len()-1 )
                                     {
                                         nActive = i+1;
-                                        bFlag = sal_True;
+                                        bFlag = TRUE;
                                     }
                                     nArgPos+=nLength+1;
                                 }
                                 if( bFlag )
                                 {
-                                    sal_uInt16 nCountSemicolon = aNew.GetTokenCount(cSep)-1;
-                                    sal_uInt16 nCountDot = aNew.GetTokenCount(cSheetSep)-1;
-                                    sal_uInt16 nStartPosition = 0;
-                                    sal_uInt16 nEndPosition = 0;
+                                    nCountSemicolon = aNew.GetTokenCount(cSep)-1;
+                                    nCountDot = aNew.GetTokenCount(cSheetSep)-1;
 
                                     if( !nCountSemicolon )
                                     {
-                                        for( sal_uInt16 i = 0; i < aNew.Len(); i++ )
+                                        for( USHORT i = 0; i < aNew.Len(); i++ )
                                         {
                                             sal_Unicode cNext = aNew.GetChar( i );
                                             if( cNext == '(' )
@@ -815,8 +820,7 @@ void ScInputHandler::ShowTipCursor()
                                     }
                                     else if( !nCountDot )
                                     {
-                                        sal_uInt16 nCount = 0;
-                                        for( sal_uInt16 i = 0; i < aNew.Len(); i++ )
+                                        for( USHORT i = 0; i < aNew.Len(); i++ )
                                         {
                                             sal_Unicode cNext = aNew.GetChar( i );
                                             if( cNext == '(' )
@@ -837,8 +841,7 @@ void ScInputHandler::ShowTipCursor()
                                     }
                                     else
                                     {
-                                        sal_uInt16 nCount = 0;
-                                        for( sal_uInt16 i = 0; i < aNew.Len(); i++ )
+                                        for( USHORT i = 0; i < aNew.Len(); i++ )
                                         {
                                             sal_Unicode cNext = aNew.GetChar( i );
                                             if( cNext == '(' )
@@ -866,13 +869,13 @@ void ScInputHandler::ShowTipCursor()
                                     {
                                         aNew.Insert( 0x25BA, nStartPosition );
                                         ShowTipBelow( aNew );
-                                        bFound = sal_True;
+                                        bFound = TRUE;
                                     }
                                 }
                                 else
                                 {
                                     ShowTipBelow( aNew );
-                                    bFound = sal_True;
+                                    bFound = TRUE;
                                 }
                             }
                         }
@@ -880,21 +883,21 @@ void ScInputHandler::ShowTipCursor()
                 }
                 else
                 {
-                    sal_uInt16 nPosition = 0;
+                    USHORT nPosition = 0;
                     String aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
                     if( aText.GetChar( aSel.nEndPos-1 ) == '=' )
                     {
                         break;
                     }
                     String aNew;
-                    sal_uInt16 nParAutoPos = SCPOS_INVALID;
+                    USHORT nParAutoPos = SCPOS_INVALID;
                     nPosition = aText.Len()+1;
-                    if( pFormulaDataPara->FindText( aText, aNew, nParAutoPos, false ) )
+                    if( pFormulaDataPara->FindText( aText, aNew, nParAutoPos, FALSE ) )
                     {
                         if( aFormula.GetChar( nPosition ) =='(' )
                         {
                             ShowTipBelow( aNew );
-                            bFound = sal_True;
+                            bFound = TRUE;
                         }
                         else
                             break;
@@ -911,7 +914,7 @@ void ScInputHandler::ShowTipCursor()
 
 void ScInputHandler::ShowTip( const String& rText )
 {
-    //  aManualTip muss hinterher von aussen gesetzt werden
+    //	aManualTip muss hinterher von aussen gesetzt werden
     HideTip();
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
@@ -925,7 +928,7 @@ void ScInputHandler::ShowTip( const String& rText )
         aPos = pTipVisibleParent->OutputToScreenPixel( aPos );
         Rectangle aRect( aPos, aPos );
 
-        sal_uInt16 nAlign = QUICKHELP_LEFT|QUICKHELP_BOTTOM;
+        USHORT nAlign = QUICKHELP_LEFT|QUICKHELP_BOTTOM;
         nTipVisible = Help::ShowTip(pTipVisibleParent, aRect, rText, nAlign);
         pTipVisibleParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
     }
@@ -949,7 +952,7 @@ void ScInputHandler::ShowTipBelow( const String& rText )
         }
         aPos = pTipVisibleSecParent->OutputToScreenPixel( aPos );
         Rectangle aRect( aPos, aPos );
-        sal_uInt16 nAlign = QUICKHELP_LEFT | QUICKHELP_TOP | QUICKHELP_NOEVADEPOINTER;
+        USHORT nAlign = QUICKHELP_LEFT | QUICKHELP_TOP | QUICKHELP_NOEVADEPOINTER;
         nTipVisibleSec = Help::ShowTip(pTipVisibleSecParent, aRect, rText, nAlign);
         pTipVisibleSecParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
     }
@@ -962,21 +965,21 @@ void ScInputHandler::UseFormulaData()
     const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDocSh->GetDocument());
 
-    //  Formeln duerfen nur 1 Absatz haben
+    //	Formeln duerfen nur 1 Absatz haben
     if ( pActiveView && pFormulaData && pEngine->GetParagraphCount() == 1 )
     {
-        String aTotal = pEngine->GetText( (sal_uInt16) 0 );
+        String aTotal = pEngine->GetText( (USHORT) 0 );
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
 
-        //  Durch Differenzen zwischen Tabelle und Eingabezeile
-        //  (z.B. Clipboard mit Zeilenumbruechen) kann es sein, dass die Selektion
-        //  nicht mehr zur EditEngine passt. Dann halt kommentarlos abbrechen:
+        //	#59348# Durch Differenzen zwischen Tabelle und Eingabezeile
+        //	(z.B. Clipboard mit Zeilenumbruechen) kann es sein, dass die Selektion
+        //	nicht mehr zur EditEngine passt. Dann halt kommentarlos abbrechen:
 
         if ( aSel.nEndPos > aTotal.Len() )
             return;
 
-        //  steht der Cursor am Ende eines Wortes?
+        //	steht der Cursor am Ende eines Wortes?
 
         if ( aSel.nEndPos > 0 )
         {
@@ -988,15 +991,15 @@ void ScInputHandler::UseFormulaData()
             xub_StrLen  nArgPos = 0;
             const IFunctionDescription* ppFDesc;
             ::std::vector< ::rtl::OUString> aArgs;
-            sal_uInt16      nArgs;
-            sal_Bool  bFound = false;
+            USHORT	    nArgs;
+            BOOL  bFound = FALSE;
 
             String aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
             if ( aText.Len() )
             {
                 String aNew;
                 nAutoPos = SCPOS_INVALID;
-                if ( pFormulaData->FindText( aText, aNew, nAutoPos, false ) )
+                if ( pFormulaData->FindText( aText, aNew, nAutoPos, FALSE ) )
                 {
                     ShowTip( aNew );
                     aAutoSearch = aText;
@@ -1011,44 +1014,47 @@ void ScInputHandler::UseFormulaData()
                 if( nLeftParentPos == STRING_NOTFOUND )
                     break;
 
-                // nLeftParentPos can be 0 if a parenthesis is inserted before the formula
+                // #160063# nLeftParentPos can be 0 if a parenthesis is inserted before the formula
                 sal_Unicode c = ( nLeftParentPos > 0 ) ? aFormula.GetChar( nLeftParentPos-1 ) : 0;
                 if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z') ) )
                     continue;
-                nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, sal_True);
-                if( aHelper.GetNextFunc( aFormula, false, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
+                nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, TRUE);
+                if( aHelper.GetNextFunc( aFormula, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
                 {
                     if( ppFDesc->getFunctionName().getLength() )
                     {
                         nArgPos = aHelper.GetArgStart( aFormula, nNextFStart, 0 );
-                        nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
+                        nArgs = static_cast<USHORT>(ppFDesc->getParameterCount());
 
-                        sal_Bool   bFlag = false;
+                        USHORT nActive = 0;
+                        USHORT nCount = 0;
+                        USHORT nCountSemicolon = 0;
+                        USHORT nCountDot = 0;
+                        USHORT nStartPosition = 0;
+                        USHORT nEndPosition = 0;
+                        BOOL   bFlag = FALSE;
                         String aNew;
-                        sal_uInt16 nParAutoPos = SCPOS_INVALID;
-                        if( pFormulaDataPara->FindText( ppFDesc->getFunctionName(), aNew, nParAutoPos, false ) )
+                        USHORT nParAutoPos = SCPOS_INVALID;
+                        if( pFormulaDataPara->FindText( ppFDesc->getFunctionName(), aNew, nParAutoPos, FALSE ) )
                         {
-                            sal_uInt16 nActive = 0;
-                            for( sal_uInt16 i=0; i < nArgs; i++ )
+                            for( USHORT i=0; i < nArgs; i++ )
                             {
                                 xub_StrLen nLength = static_cast<xub_StrLen>(aArgs[i].getLength());
                                 if( nArgPos <= aFormula.Len()-1 )
                                 {
                                     nActive = i+1;
-                                    bFlag = sal_True;
+                                    bFlag = TRUE;
                                 }
                                 nArgPos+=nLength+1;
                             }
                             if( bFlag )
                             {
-                                sal_uInt16 nCountSemicolon = aNew.GetTokenCount(cSep)-1;
-                                sal_uInt16 nCountDot = aNew.GetTokenCount(cSheetSep)-1;
-                                sal_uInt16 nStartPosition = 0;
-                                sal_uInt16 nEndPosition = 0;
+                                nCountSemicolon = aNew.GetTokenCount(cSep)-1;
+                                nCountDot = aNew.GetTokenCount(cSheetSep)-1;
 
                                if( !nCountSemicolon )
                                {
-                                    for( sal_uInt16 i = 0; i < aNew.Len(); i++ )
+                                    for( USHORT i = 0; i < aNew.Len(); i++ )
                                     {
                                         sal_Unicode cNext = aNew.GetChar( i );
                                         if( cNext == '(' )
@@ -1059,8 +1065,7 @@ void ScInputHandler::UseFormulaData()
                                 }
                                 else if( !nCountDot )
                                 {
-                                    sal_uInt16 nCount = 0;
-                                    for( sal_uInt16 i = 0; i < aNew.Len(); i++ )
+                                    for( USHORT i = 0; i < aNew.Len(); i++ )
                                     {
                                         sal_Unicode cNext = aNew.GetChar( i );
                                         if( cNext == '(' )
@@ -1081,8 +1086,7 @@ void ScInputHandler::UseFormulaData()
                                 }
                                 else
                                 {
-                                    sal_uInt16 nCount = 0;
-                                    for( sal_uInt16 i = 0; i < aNew.Len(); i++ )
+                                    for( USHORT i = 0; i < aNew.Len(); i++ )
                                     {
                                         sal_Unicode cNext = aNew.GetChar( i );
                                         if( cNext == '(' )
@@ -1110,13 +1114,13 @@ void ScInputHandler::UseFormulaData()
                                 {
                                     aNew.Insert( 0x25BA, nStartPosition );
                                     ShowTipBelow( aNew );
-                                    bFound = sal_True;
+                                    bFound = TRUE;
                                 }
                             }
                             else
                             {
                                 ShowTipBelow( aNew );
-                                bFound = sal_True;
+                                bFound = TRUE;
                             }
                         }
                     }
@@ -1126,23 +1130,23 @@ void ScInputHandler::UseFormulaData()
     }
 }
 
-void ScInputHandler::NextFormulaEntry( sal_Bool bBack )
+void ScInputHandler::NextFormulaEntry( BOOL bBack )
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pFormulaData )
     {
         String aNew;
         if ( pFormulaData->FindText( aAutoSearch, aNew, nAutoPos, bBack ) )
-            ShowTip( aNew );        //  als QuickHelp anzeigen
+            ShowTip( aNew );		//	als QuickHelp anzeigen
     }
 
-    //  bei Tab wird vorher immer HideCursor gerufen
+    //	bei Tab wird vorher immer HideCursor gerufen
 
     if (pActiveView)
         pActiveView->ShowCursor();
 }
 
-void lcl_CompleteFunction( EditView* pView, const String& rInsert, sal_Bool& rParInserted )
+void lcl_CompleteFunction( EditView* pView, const String& rInsert, BOOL& rParInserted )
 {
     if (pView)
     {
@@ -1154,33 +1158,34 @@ void lcl_CompleteFunction( EditView* pView, const String& rInsert, sal_Bool& rPa
 
         String aInsStr = rInsert;
         xub_StrLen nInsLen = aInsStr.Len();
-        sal_Bool bDoParen = ( nInsLen > 1 && aInsStr.GetChar(nInsLen-2) == '('
+        BOOL bDoParen = ( nInsLen > 1 && aInsStr.GetChar(nInsLen-2) == '('
                                       && aInsStr.GetChar(nInsLen-1) == ')' );
         if ( bDoParen )
         {
-            //  Klammern hinter Funktionsnamen nicht einfuegen, wenn direkt dahinter
-            //  schon eine Klammer steht (z.B. wenn der Funktionsname geaendert wurde).
+            //	Klammern hinter Funktionsnamen nicht einfuegen, wenn direkt dahinter
+            //	schon eine Klammer steht (z.B. wenn der Funktionsname geaendert wurde,
+            //	#39393#).
 
             ESelection aWordSel = pView->GetSelection();
-            String aOld = pView->GetEditEngine()->GetText((sal_uInt16)0);
+            String aOld = pView->GetEditEngine()->GetText((USHORT)0);
             sal_Unicode cNext = aOld.GetChar(aWordSel.nEndPos);
             if ( cNext == '(' )
             {
-                bDoParen = false;
-                aInsStr.Erase( nInsLen - 2 );   // Klammern weglassen
+                bDoParen = FALSE;
+                aInsStr.Erase( nInsLen - 2 );	// Klammern weglassen
             }
         }
 
-        pView->InsertText( aInsStr, false );
+        pView->InsertText( aInsStr, FALSE );
 
-        if ( bDoParen )                         // Cursor zwischen die Klammern setzen
+        if ( bDoParen )							// Cursor zwischen die Klammern setzen
         {
             aSel = pView->GetSelection();
             --aSel.nStartPos;
             --aSel.nEndPos;
             pView->SetSelection(aSel);
 
-            rParInserted = sal_True;
+            rParInserted = TRUE;
         }
     }
 }
@@ -1193,9 +1198,9 @@ void ScInputHandler::PasteFunctionData()
         if (pData)
         {
             String aInsert = pData->GetString();
-            sal_Bool bParInserted = false;
+            BOOL bParInserted = FALSE;
 
-            DataChanging();                         // kann nicht neu sein
+            DataChanging(); 						// kann nicht neu sein
             lcl_CompleteFunction( pTopView, aInsert, bParInserted );
             lcl_CompleteFunction( pTableView, aInsert, bParInserted );
             DataChanged();
@@ -1214,13 +1219,13 @@ void ScInputHandler::PasteFunctionData()
 }
 
 //
-//      Selektion berechnen und als Tip-Hilfe anzeigen
+//		Selektion berechnen und als Tip-Hilfe anzeigen
 //
 
 String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScAddress &rPos )
 {
-    //!     mit ScFormulaDlg::CalcValue zusammenfassen und ans Dokument verschieben !!!!
-    //!     (Anfuehrungszeichen bei Strings werden nur hier eingefuegt)
+    //!		mit ScFormulaDlg::CalcValue zusammenfassen und ans Dokument verschieben !!!!
+    //!		(Anfuehrungszeichen bei Strings werden nur hier eingefuegt)
 
     String aValue;
 
@@ -1228,16 +1233,16 @@ String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScAddress 
     {
         ScFormulaCell* pCell = new ScFormulaCell( pDoc, rPos, rFormula );
 
-        // HACK! um bei ColRowNames kein #REF! zu bekommen,
+        // #35521# HACK! um bei ColRowNames kein #REF! zu bekommen,
         // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
         // eingefuegt wird, bei der Einzeldarstellung aber als
         // single-Zellbezug interpretiert wird
-        sal_Bool bColRowName = pCell->HasColRowName();
+        BOOL bColRowName = pCell->HasColRowName();
         if ( bColRowName )
         {
             // ColRowName im RPN-Code?
             if ( pCell->GetCode()->GetCodeLen() <= 1 )
-            {   // ==1: einzelner ist als Parameter immer Bereich
+            {	// ==1: einzelner ist als Parameter immer Bereich
                 // ==0: es waere vielleicht einer, wenn..
                 String aBraced( '(' );
                 aBraced += rFormula;
@@ -1246,10 +1251,10 @@ String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScAddress 
                 pCell = new ScFormulaCell( pDoc, rPos, aBraced );
             }
             else
-                bColRowName = false;
+                bColRowName = FALSE;
         }
 
-        sal_uInt16 nErrCode = pCell->GetErrCode();
+        USHORT nErrCode = pCell->GetErrCode();
         if ( nErrCode == 0 )
         {
             SvNumberFormatter& aFormatter = *(pDoc->GetFormatTable());
@@ -1257,29 +1262,29 @@ String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScAddress 
             if ( pCell->IsValue() )
             {
                 double n = pCell->GetValue();
-                sal_uLong nFormat = aFormatter.GetStandardFormat( n, 0,
+                ULONG nFormat = aFormatter.GetStandardFormat( n, 0,
                                 pCell->GetFormatType(), ScGlobal::eLnge );
                 aFormatter.GetInputLineString( n, nFormat, aValue );
-                //! display OutputString but insert InputLineString
+                //!	display OutputString but insert InputLineString
             }
             else
             {
                 String aStr;
 
                 pCell->GetString( aStr );
-                sal_uLong nFormat = aFormatter.GetStandardFormat(
+                ULONG nFormat = aFormatter.GetStandardFormat(
                                 pCell->GetFormatType(), ScGlobal::eLnge);
                 aFormatter.GetOutputString( aStr, nFormat,
                                             aValue, &pColor );
 
-                aValue.Insert('"',0);   // in Anfuehrungszeichen
+                aValue.Insert('"',0);	// in Anfuehrungszeichen
                 aValue+='"';
-                //! Anfuehrungszeichen im String escapen ????
+                //!	Anfuehrungszeichen im String escapen ????
             }
 
             ScRange aTestRange;
             if ( bColRowName || (aTestRange.Parse(rFormula) & SCA_VALID) )
-                aValue.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ..." ));       // Bereich
+                aValue.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ..." ));		// Bereich
         }
         else
             aValue = ScGlobal::GetErrorString(nErrCode);
@@ -1297,34 +1302,34 @@ void ScInputHandler::FormulaPreview()
     {
         String aPart = pActiveView->GetSelected();
         if (!aPart.Len())
-            aPart = pEngine->GetText((sal_uInt16)0);
+            aPart = pEngine->GetText((USHORT)0);
         ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocShell()->GetDocument();
         aValue = lcl_Calculate( aPart, pDoc, aCursorPos );
     }
 
     if (aValue.Len())
     {
-        ShowTip( aValue );          //  als QuickHelp anzeigen
-        aManualTip = aValue;        //  nach ShowTip setzen
-        nAutoPos = SCPOS_INVALID;   //  Formel-Autocomplete aufheben
+        ShowTip( aValue );			//	als QuickHelp anzeigen
+        aManualTip = aValue;		//	nach ShowTip setzen
+        nAutoPos = SCPOS_INVALID;	//	Formel-Autocomplete aufheben
     }
 }
 
 void ScInputHandler::PasteManualTip()
 {
-    //  drei Punkte am Ende -> Bereichsreferenz -> nicht einfuegen
-    //  (wenn wir mal Matrix-Konstanten haben, kann das geaendert werden)
+    //	drei Punkte am Ende -> Bereichsreferenz -> nicht einfuegen
+    //	(wenn wir mal Matrix-Konstanten haben, kann das geaendert werden)
 
     xub_StrLen nTipLen = aManualTip.Len();
     if ( nTipLen && ( nTipLen < 3 || !aManualTip.Copy( nTipLen-3 ).EqualsAscii("...") ) )
     {
-        DataChanging();                                     // kann nicht neu sein
+        DataChanging(); 									// kann nicht neu sein
 
         String aInsert = aManualTip;
         EditView* pActiveView = pTopView ? pTopView : pTableView;
         if (!pActiveView->HasSelection())
         {
-            //  nichts selektiert -> alles selektieren
+            //	nichts selektiert -> alles selektieren
             xub_StrLen nOldLen = pEngine->GetTextLen(0);
             ESelection aAllSel( 0, 0, 0, nOldLen );
             if ( pTopView )
@@ -1336,11 +1341,11 @@ void ScInputHandler::PasteManualTip()
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
         DBG_ASSERT( !aSel.nStartPara && !aSel.nEndPara, "Zuviele Absaetze in Formel" );
-        if ( !aSel.nStartPos )  // Selektion ab Anfang?
+        if ( !aSel.nStartPos )	// Selektion ab Anfang?
         {
             if ( aSel.nEndPos == pEngine->GetTextLen(0) )
             {
-                //  alles selektiert -> Anfuehrungszeichen weglassen
+                //	alles selektiert -> Anfuehrungszeichen weglassen
                 if ( aInsert.GetChar(0) == '"' )
                     aInsert.Erase(0,1);
                 xub_StrLen nInsLen = aInsert.Len();
@@ -1349,8 +1354,8 @@ void ScInputHandler::PasteManualTip()
             }
             else if ( aSel.nEndPos )
             {
-                //  nicht alles selektiert -> Gleichheitszeichen nicht ueberschreiben
-                //! doppelte Gleichheitszeichen auch ???
+                //	nicht alles selektiert -> Gleichheitszeichen nicht ueberschreiben
+                //!	doppelte Gleichheitszeichen auch ???
 
                 aSel.nStartPos = 1;
                 if ( pTopView )
@@ -1360,9 +1365,9 @@ void ScInputHandler::PasteManualTip()
             }
         }
         if ( pTopView )
-            pTopView->InsertText( aInsert, sal_True );
+            pTopView->InsertText( aInsert, TRUE );
         if ( pTableView )
-            pTableView->InsertText( aInsert, sal_True );
+            pTableView->InsertText( aInsert, TRUE );
 
         DataChanged();
     }
@@ -1377,30 +1382,30 @@ void ScInputHandler::ResetAutoPar()
 
 void ScInputHandler::AutoParAdded()
 {
-    ++nAutoPar;     //  closing parenthesis can be overwritten
+    ++nAutoPar;		//	closing parenthesis can be overwritten
 }
 
-sal_Bool ScInputHandler::CursorAtClosingPar()
+BOOL ScInputHandler::CursorAtClosingPar()
 {
-    //  test if the cursor is before a closing parenthesis
+    //	test if the cursor is before a closing parenthesis
 
-    //  selection from SetReference has been removed before
+    //	selection from SetReference has been removed before
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && !pActiveView->HasSelection() && bFormulaMode )
     {
         ESelection aSel = pActiveView->GetSelection();
         xub_StrLen nPos = aSel.nStartPos;
-        String aFormula = pEngine->GetText((sal_uInt16)0);
+        String aFormula = pEngine->GetText((USHORT)0);
         if ( nPos < aFormula.Len() && aFormula.GetChar(nPos) == ')' )
-            return sal_True;
+            return TRUE;
     }
-    return false;
+    return FALSE;
 }
 
 void ScInputHandler::SkipClosingPar()
 {
-    //  this is called when a ')' is typed and the cursor is before a ')'
-    //  that can be overwritten -> just set the cursor behind the ')'
+    //	this is called when a ')' is typed and the cursor is before a ')'
+    //	that can be overwritten -> just set the cursor behind the ')'
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (pActiveView)
@@ -1409,8 +1414,8 @@ void ScInputHandler::SkipClosingPar()
         ++aSel.nStartPos;
         ++aSel.nEndPos;
 
-        //  this is in a formula (only one paragraph), so the selection
-        //  can be used directly for the TopView
+        //	this is in a formula (only one paragraph), so the selection
+        //	can be used directly for the TopView
 
         if ( pTopView )
             pTopView->SetSelection( aSel );
@@ -1423,7 +1428,7 @@ void ScInputHandler::SkipClosingPar()
 }
 
 //
-//      Auto-Eingabe
+//		Auto-Eingabe
 //
 
 void ScInputHandler::GetColData()
@@ -1437,25 +1442,25 @@ void ScInputHandler::GetColData()
         else
         {
             pColumnData = new TypedScStrCollection;
-            pColumnData->SetCaseSensitive( sal_True );      // equal strings are handled in FindText
+            pColumnData->SetCaseSensitive( TRUE );		// equal strings are handled in FindText
         }
 
         pDoc->GetDataEntries( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(),
-                                *pColumnData, sal_True );
+                                *pColumnData, TRUE );
     }
 }
 
-void ScInputHandler::UseColData()           // beim Tippen
+void ScInputHandler::UseColData()			// beim Tippen
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pColumnData )
     {
-        //  nur anpassen, wenn Cursor am Ende steht
+        //	nur anpassen, wenn Cursor am Ende steht
 
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
 
-        sal_uInt16 nParCnt = pEngine->GetParagraphCount();
+        USHORT nParCnt = pEngine->GetParagraphCount();
         if ( aSel.nEndPara+1 == nParCnt )
         {
             xub_StrLen nParLen = pEngine->GetTextLen( aSel.nEndPara );
@@ -1465,51 +1470,51 @@ void ScInputHandler::UseColData()           // beim Tippen
                 if (aText.Len())
                 {
                     String aNew;
-                    nAutoPos = SCPOS_INVALID;   // nix
-                    if ( pColumnData->FindText( aText, aNew, nAutoPos, false ) )
+                    nAutoPos = SCPOS_INVALID;	// nix
+                    if ( pColumnData->FindText( aText, aNew, nAutoPos, FALSE ) )
                     {
-                        //  durch dBase Import etc. koennen Umbrueche im String sein,
-                        //  das wuerde hier mehrere Absaetze ergeben -> nicht gut
-                        //! GetExactMatch funktioniert dann auch nicht
+                        //	#45434# durch dBase Import etc. koennen Umbrueche im String sein,
+                        //	das wuerde hier mehrere Absaetze ergeben -> nicht gut
+                        //!	GetExactMatch funktioniert dann auch nicht
                         lcl_RemoveLineEnd( aNew );
 
                         //  Absaetze beibehalten, nur den Rest anfuegen
-                        //! genaue Ersetzung im EnterHandler !!!
+                        //!	genaue Ersetzung im EnterHandler !!!
 
                         // ein Space zwischen Absaetzen:
-                        sal_uLong nEdLen = pEngine->GetTextLen() + nParCnt - 1;
+                        ULONG nEdLen = pEngine->GetTextLen() + nParCnt - 1;
                         String aIns = aNew.Copy( (xub_StrLen)nEdLen );
 
-                        //  selection must be "backwards", so the cursor stays behind the last
-                        //  typed character
+                        //	selection must be "backwards", so the cursor stays behind the last
+                        //	typed character
                         ESelection aSelection( aSel.nEndPara, aSel.nEndPos + aIns.Len(),
                                                aSel.nEndPara, aSel.nEndPos );
 
-                        //  when editing in input line, apply to both edit views
+                        //	when editing in input line, apply to both edit views
                         if ( pTableView )
                         {
-                            pTableView->InsertText( aIns, false );
+                            pTableView->InsertText( aIns, FALSE );
                             pTableView->SetSelection( aSelection );
                         }
                         if ( pTopView )
                         {
-                            pTopView->InsertText( aIns, false );
+                            pTopView->InsertText( aIns, FALSE );
                             pTopView->SetSelection( aSelection );
                         }
 
-                        aAutoSearch = aText;    // zum Weitersuchen - nAutoPos ist gesetzt
+                        aAutoSearch = aText;	// zum Weitersuchen - nAutoPos ist gesetzt
 
                         if ( aText.Len() == aNew.Len() )
                         {
-                            //  Wenn der eingegebene Text gefunden wurde, TAB nur dann
-                            //  verschlucken, wenn noch etwas kommt
+                            //	Wenn der eingegebene Text gefunden wurde, TAB nur dann
+                            //	verschlucken, wenn noch etwas kommt
 
                             String aDummy;
-                            sal_uInt16 nNextPos = nAutoPos;
-                            bUseTab = pColumnData->FindText( aText, aDummy, nNextPos, false );
+                            USHORT nNextPos = nAutoPos;
+                            bUseTab = pColumnData->FindText( aText, aDummy, nNextPos, FALSE );
                         }
                         else
-                            bUseTab = sal_True;
+                            bUseTab = TRUE;
                     }
                 }
             }
@@ -1517,18 +1522,18 @@ void ScInputHandler::UseColData()           // beim Tippen
     }
 }
 
-void ScInputHandler::NextAutoEntry( sal_Bool bBack )
+void ScInputHandler::NextAutoEntry( BOOL bBack )
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pColumnData )
     {
         if ( nAutoPos != SCPOS_INVALID && aAutoSearch.Len() )
         {
-            //  stimmt die Selektion noch? (kann per Maus geaendert sein)
+            //	stimmt die Selektion noch? (kann per Maus geaendert sein)
 
             ESelection aSel = pActiveView->GetSelection();
             aSel.Adjust();
-            sal_uInt16 nParCnt = pEngine->GetParagraphCount();
+            USHORT nParCnt = pEngine->GetParagraphCount();
             if ( aSel.nEndPara+1 == nParCnt && aSel.nStartPara == aSel.nEndPara )
             {
                 String aText = GetEditText(pEngine);
@@ -1539,16 +1544,16 @@ void ScInputHandler::NextAutoEntry( sal_Bool bBack )
                     String aNew;
                     if ( pColumnData->FindText( aAutoSearch, aNew, nAutoPos, bBack ) )
                     {
-                        bInOwnChange = sal_True;        // disable ModifyHdl (reset below)
+                        bInOwnChange = TRUE;		// disable ModifyHdl (reset below)
 
                         lcl_RemoveLineEnd( aNew );
                         String aIns = aNew.Copy( aAutoSearch.Len() );
 
-                        //  when editing in input line, apply to both edit views
+                        //	when editing in input line, apply to both edit views
                         if ( pTableView )
                         {
                             pTableView->DeleteSelected();
-                            pTableView->InsertText( aIns, false );
+                            pTableView->InsertText( aIns, FALSE );
                             pTableView->SetSelection( ESelection(
                                                         aSel.nEndPara, aSel.nStartPos + aIns.Len(),
                                                         aSel.nEndPara, aSel.nStartPos ) );
@@ -1556,13 +1561,13 @@ void ScInputHandler::NextAutoEntry( sal_Bool bBack )
                         if ( pTopView )
                         {
                             pTopView->DeleteSelected();
-                            pTopView->InsertText( aIns, false );
+                            pTopView->InsertText( aIns, FALSE );
                             pTopView->SetSelection( ESelection(
                                                         aSel.nEndPara, aSel.nStartPos + aIns.Len(),
                                                         aSel.nEndPara, aSel.nStartPos ) );
                         }
 
-                        bInOwnChange = false;
+                        bInOwnChange = FALSE;
                     }
                     else
                     {
@@ -1575,34 +1580,34 @@ void ScInputHandler::NextAutoEntry( sal_Bool bBack )
         }
     }
 
-    //  bei Tab wird vorher immer HideCursor gerufen
+    //	bei Tab wird vorher immer HideCursor gerufen
 
     if (pActiveView)
         pActiveView->ShowCursor();
 }
 
 //
-//      Klammern hervorheben
+//		Klammern hervorheben
 //
 
 void ScInputHandler::UpdateParenthesis()
 {
-    //  Klammern suchen
+    //	Klammern suchen
 
-    //! Klammer-Hervorhebung einzeln abschaltbar ????
+    //!	Klammer-Hervorhebung einzeln abschaltbar ????
 
-    sal_Bool bFound = false;
+    BOOL bFound = FALSE;
     if ( bFormulaMode && eMode != SC_INPUT_TOP )
     {
-        if ( pTableView && !pTableView->HasSelection() )        // Selektion ist immer unten
+        if ( pTableView && !pTableView->HasSelection() )		// Selektion ist immer unten
         {
             ESelection aSel = pTableView->GetSelection();
             if (aSel.nStartPos)
             {
-                //  Das Zeichen links vom Cursor wird angeschaut
+                //	Das Zeichen links vom Cursor wird angeschaut
 
                 xub_StrLen nPos = aSel.nStartPos - 1;
-                String aFormula = pEngine->GetText((sal_uInt16)0);
+                String aFormula = pEngine->GetText((USHORT)0);
                 sal_Unicode c = aFormula.GetChar(nPos);
                 if ( c == '(' || c == ')' )
                 {
@@ -1611,13 +1616,13 @@ void ScInputHandler::UpdateParenthesis()
                     {
                         SfxItemSet aSet( pEngine->GetEmptyItemSet() );
                         aSet.Put( SvxWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT ) );
-                        //! Unterscheidung, wenn die Zelle schon fett ist !!!!
+                        //!	Unterscheidung, wenn die Zelle schon fett ist !!!!
 
                         if (bParenthesisShown)
                         {
-                            //  alte Hervorhebung wegnehmen
-                            sal_uInt16 nCount = pEngine->GetParagraphCount();
-                            for (sal_uInt16 i=0; i<nCount; i++)
+                            //	alte Hervorhebung wegnehmen
+                            USHORT nCount = pEngine->GetParagraphCount();
+                            for (USHORT i=0; i<nCount; i++)
                                 pEngine->QuickRemoveCharAttribs( i, EE_CHAR_WEIGHT );
                         }
 
@@ -1626,32 +1631,32 @@ void ScInputHandler::UpdateParenthesis()
                         ESelection aSelOther( 0,nOther, 0,nOther+1 );
                         pEngine->QuickSetAttribs( aSet, aSelOther );
 
-                        //  Dummy-InsertText fuer Update und Paint (Selektion ist leer)
-                        pTableView->InsertText( EMPTY_STRING, false );
+                        //	Dummy-InsertText fuer Update und Paint (Selektion ist leer)
+                        pTableView->InsertText( EMPTY_STRING, FALSE );
 
-                        bFound = sal_True;
+                        bFound = TRUE;
                     }
                 }
             }
 
-            //  mark parenthesis right of cursor if it will be overwritten (nAutoPar)
-            //  with different color (COL_LIGHTBLUE) ??
+            //	mark parenthesis right of cursor if it will be overwritten (nAutoPar)
+            //	with different color (COL_LIGHTBLUE) ??
         }
     }
 
-    //  alte Hervorhebung wegnehmen, wenn keine neue gesetzt
+    //	alte Hervorhebung wegnehmen, wenn keine neue gesetzt
 
     if ( bParenthesisShown && !bFound && pTableView )
     {
-        sal_uInt16 nCount = pEngine->GetParagraphCount();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        USHORT nCount = pEngine->GetParagraphCount();
+        for (USHORT i=0; i<nCount; i++)
             pTableView->RemoveCharAttribs( i, EE_CHAR_WEIGHT );
     }
 
     bParenthesisShown = bFound;
 }
 
-void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh)     // wird synchron aufgerufen!
+void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh) 	// wird synchron aufgerufen!
 {
     if ( pViewSh == pActiveViewSh )
     {
@@ -1663,15 +1668,15 @@ void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh)     // wird synchron
     if ( pViewSh == pRefViewSh )
     {
         //! Die Eingabe kommt aus dem EnterHandler nicht mehr an
-        //  Trotzdem wird immerhin der Editmodus beendet
+        //	Trotzdem wird immerhin der Editmodus beendet
 
         EnterHandler();
-        bFormulaMode = false;
+        bFormulaMode = FALSE;
         pRefViewSh = NULL;
         SFX_APP()->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
         SC_MOD()->SetRefInputHdl(NULL);
         if (pInputWin)
-            pInputWin->SetFormulaMode(false);
+            pInputWin->SetFormulaMode(FALSE);
         UpdateAutoCorrFlag();
     }
 
@@ -1679,12 +1684,12 @@ void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh)     // wird synchron
 
     if ( pActiveViewSh && pActiveViewSh == pViewSh )
     {
-        OSL_FAIL("pActiveViewSh weg");
+        DBG_ERROR("pActiveViewSh weg");
         pActiveViewSh = NULL;
     }
 
     if ( SC_MOD()->GetInputOptions().GetTextWysiwyg() )
-        UpdateRefDevice();      // don't keep old document's printer as RefDevice
+        UpdateRefDevice();		// don't keep old document's printer as RefDevice
 }
 
 void ScInputHandler::UpdateActiveView()
@@ -1700,11 +1705,11 @@ void ScInputHandler::UpdateActiveView()
                 pActiveViewSh->GetWindowByPos( pActiveViewSh->GetViewData()->GetEditActivePart() ) :
                 NULL;
 
-    sal_uInt16 nCount = pEngine->GetViewCount();
+    USHORT nCount = pEngine->GetViewCount();
     if (nCount > 0)
     {
         pTableView = pEngine->GetView(0);
-        for (sal_uInt16 i=1; i<nCount; i++)
+        for (USHORT i=1; i<nCount; i++)
         {
             EditView* pThis = pEngine->GetView(i);
             Window* pWin = pThis->GetWindow();
@@ -1721,12 +1726,12 @@ void ScInputHandler::UpdateActiveView()
         pTopView = NULL;
 }
 
-void ScInputHandler::StopInputWinEngine( sal_Bool bAll )
+void ScInputHandler::StopInputWinEngine( BOOL bAll )
 {
     if (pInputWin)
         pInputWin->StopEditEngine( bAll );
 
-    pTopView = NULL;        // invalid now
+    pTopView = NULL;		// invalid now
 }
 
 EditView* ScInputHandler::GetActiveView()
@@ -1739,9 +1744,9 @@ void ScInputHandler::ForgetLastPattern()
 {
     pLastPattern = NULL;
     if ( !pLastState && pActiveViewSh )
-        pActiveViewSh->UpdateInputHandler( sal_True );      // Status neu holen
+        pActiveViewSh->UpdateInputHandler( TRUE );		// Status neu holen
     else
-        NotifyChange( pLastState, sal_True );
+        NotifyChange( pLastState, TRUE );
 }
 
 void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
@@ -1751,9 +1756,9 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
     {
         case SVX_HOR_JUSTIFY_STANDARD:
             {
-                sal_Bool bNumber = false;
-                if (cTyped)                                     // neu angefangen
-                    bNumber = (cTyped>='0' && cTyped<='9');     // nur Ziffern sind Zahlen
+                BOOL bNumber = FALSE;
+                if (cTyped)										// neu angefangen
+                    bNumber = (cTyped>='0' && cTyped<='9');		// nur Ziffern sind Zahlen
                 else if ( pActiveViewSh )
                 {
                     ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocShell()->GetDocument();
@@ -1771,59 +1776,59 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
         case SVX_HOR_JUSTIFY_RIGHT:
             eSvxAdjust = SVX_ADJUST_RIGHT;
             break;
-        default:    // SVX_HOR_JUSTIFY_LEFT
+        default:	// SVX_HOR_JUSTIFY_LEFT
             eSvxAdjust = SVX_ADJUST_LEFT;
             break;
     }
 
-    sal_Bool bAsianVertical = pLastPattern &&
+    BOOL bAsianVertical = pLastPattern &&
         ((const SfxBoolItem&)pLastPattern->GetItem( ATTR_STACKED )).GetValue() &&
         ((const SfxBoolItem&)pLastPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
     if ( bAsianVertical )
     {
-        //  always edit at top of cell -> LEFT when editing vertically
+        //	always edit at top of cell -> LEFT when editing vertically
         eSvxAdjust = SVX_ADJUST_LEFT;
     }
 
     pEditDefaults->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
     pEngine->SetDefaults( *pEditDefaults );
 
-    nEditAdjust = sal::static_int_cast<sal_uInt16>(eSvxAdjust);     //! set at ViewData or with PostEditView
+    nEditAdjust = sal::static_int_cast<USHORT>(eSvxAdjust);     //! set at ViewData or with PostEditView
 
     pEngine->SetVertical( bAsianVertical );
 }
 
 void ScInputHandler::RemoveAdjust()
 {
-    //  harte Ausrichtungs-Attribute loeschen
+    //	harte Ausrichtungs-Attribute loeschen
 
-    sal_Bool bUndo = pEngine->IsUndoEnabled();
+    BOOL bUndo = pEngine->IsUndoEnabled();
     if ( bUndo )
-        pEngine->EnableUndo( false );
+        pEngine->EnableUndo( FALSE );
 
-    //  non-default paragraph attributes (e.g. from clipboard)
-    //  must be turned into character attributes
+    //	#89403# non-default paragraph attributes (e.g. from clipboard)
+    //	must be turned into character attributes
     pEngine->RemoveParaAttribs();
 
     if ( bUndo )
-        pEngine->EnableUndo( sal_True );
+        pEngine->EnableUndo( TRUE );
 
 }
 
 void ScInputHandler::RemoveRangeFinder()
 {
-    //  pRangeFindList und Farben loeschen
+    //	pRangeFindList und Farben loeschen
 
-    pEngine->SetUpdateMode(false);
-    sal_uInt16 nCount = pEngine->GetParagraphCount();   // koennte gerade neu eingefuegt worden sein
-    for (sal_uInt16 i=0; i<nCount; i++)
+    pEngine->SetUpdateMode(FALSE);
+    USHORT nCount = pEngine->GetParagraphCount();	// koennte gerade neu eingefuegt worden sein
+    for (USHORT i=0; i<nCount; i++)
         pEngine->QuickRemoveCharAttribs( i, EE_CHAR_COLOR );
-    pEngine->SetUpdateMode(sal_True);
+    pEngine->SetUpdateMode(TRUE);
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
-    pActiveView->ShowCursor( false, sal_True );
+    pActiveView->ShowCursor( FALSE, TRUE );
 
-    DeleteRangeFinder();        // loescht die Liste und die Markierungen auf der Tabelle
+    DeleteRangeFinder();		// loescht die Liste und die Markierungen auf der Tabelle
 }
 
 bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated )
@@ -1853,7 +1858,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
 
         if (!aTester.IsEditable())
         {
-            bProtected = true;
+            bProtected = TRUE;
             // We allow read-only input mode activation when explicit cell
             // activation is requested (double-click or F2) and if it's not
             // part of an array.
@@ -1861,16 +1866,16 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             if (bShowError)
             {
                 eMode = SC_INPUT_NONE;
-                StopInputWinEngine( true );
+                StopInputWinEngine( TRUE );
                 UpdateFormulaMode();
                 if ( pActiveViewSh && ( !bFromCommand || !bCommandErrorShown ) )
                 {
-                    //  Prevent repeated error messages for the same cell from command events
+                    //  #97673# Prevent repeated error messages for the same cell from command events
                     //  (for keyboard events, multiple messages are wanted).
                     //  Set the flag before showing the error message because the command handler
                     //  for the next IME command may be called when showing the dialog.
                     if ( bFromCommand )
-                        bCommandErrorShown = true;
+                        bCommandErrorShown = TRUE;
 
                     pActiveViewSh->GetActiveWin()->GrabFocus();
                     pActiveViewSh->ErrorMessage(aTester.GetMessageId());
@@ -1882,7 +1887,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
         if (bStartInputMode)
         {
             // UpdateMode is enabled again in ScViewData::SetEditEngine (and not needed otherwise)
-            pEngine->SetUpdateMode( false );
+            pEngine->SetUpdateMode( FALSE );
 
             //  Attribute in EditEngine uebernehmen
 
@@ -1896,18 +1901,18 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 const SfxItemSet& rAttrSet = pPattern->GetItemSet();
                 const SfxPoolItem* pItem;
 
-                if ( SFX_ITEM_SET == rAttrSet.GetItemState( ATTR_VALUE_FORMAT, true, &pItem ) )
+                if ( SFX_ITEM_SET == rAttrSet.GetItemState( ATTR_VALUE_FORMAT, TRUE, &pItem ) )
                 {
-                    sal_uLong nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+                    ULONG nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
                     bCellHasPercentFormat = ( NUMBERFORMAT_PERCENT ==
                                               pDoc->GetFormatTable()->GetType( nFormat ) );
                 }
                 else
-                    bCellHasPercentFormat = false; // Default: kein Prozent
+                    bCellHasPercentFormat = FALSE; // Default: kein Prozent
 
                 //  Gueltigkeit angegeben?
 
-                if ( SFX_ITEM_SET == rAttrSet.GetItemState( ATTR_VALIDDATA, true, &pItem ) )
+                if ( SFX_ITEM_SET == rAttrSet.GetItemState( ATTR_VALIDDATA, TRUE, &pItem ) )
                     nValidation = ((const SfxUInt32Item*)pItem)->GetValue();
                 else
                     nValidation = 0;
@@ -1918,7 +1923,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 //  schon gefuellt ist (bei Edit-Zellen).
                 //  SetParaAttribs wuerde dann den Inhalt aendern
 
-                //! The SetDefaults is now (since MUST/src602
+                //! ER 30.08.00  The SetDefaults is now (since MUST/src602
                 //! EditEngine changes) implemented as a SetParaAttribs.
                 //! Any problems?
 
@@ -1933,7 +1938,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 Color aBackCol = ((const SvxBrushItem&)
                                 pPattern->GetItem( ATTR_BACKGROUND )).GetColor();
                 ScModule* pScMod = SC_MOD();
-                //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+                //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
                 if ( aBackCol.GetTransparency() > 0 ||
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                     aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
@@ -1954,7 +1959,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             //  UpdateSpellSettings enables online spelling if needed
             //  -> also call if attributes are unchanged
 
-            UpdateSpellSettings( true );    // uses pLastPattern
+            UpdateSpellSettings( TRUE );    // uses pLastPattern
 
             //  Edit-Engine fuellen
 
@@ -1963,7 +1968,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             {
                 pEngine->SetText(aCurrentText);
                 aStr = aCurrentText;
-                bTextValid = false;
+                bTextValid = FALSE;
                 aCurrentText.Erase();
             }
             else
@@ -2005,20 +2010,20 @@ void lcl_SetTopSelection( EditView* pEditView, ESelection& rSel )
     DBG_ASSERT( rSel.nStartPara==0 && rSel.nEndPara==0, "SetTopSelection: Para != 0" );
 
     EditEngine* pEngine = pEditView->GetEditEngine();
-    sal_uInt16 nCount = pEngine->GetParagraphCount();
+    USHORT nCount = pEngine->GetParagraphCount();
     if (nCount > 1)
     {
         xub_StrLen nParLen = pEngine->GetTextLen(rSel.nStartPara);
         while (rSel.nStartPos > nParLen && rSel.nStartPara+1 < nCount)
         {
-            rSel.nStartPos -= nParLen + 1;          // incl. Leerzeichen vom Umbruch
+            rSel.nStartPos -= nParLen + 1;			// incl. Leerzeichen vom Umbruch
             nParLen = pEngine->GetTextLen(++rSel.nStartPara);
         }
 
         nParLen = pEngine->GetTextLen(rSel.nEndPara);
         while (rSel.nEndPos > nParLen && rSel.nEndPara+1 < nCount)
         {
-            rSel.nEndPos -= nParLen + 1;            // incl. Leerzeichen vom Umbruch
+            rSel.nEndPos -= nParLen + 1;			// incl. Leerzeichen vom Umbruch
             nParLen = pEngine->GetTextLen(++rSel.nEndPara);
         }
     }
@@ -2054,8 +2059,8 @@ IMPL_LINK( ScInputHandler, ModifyHdl, void *, EMPTYARG )
     if ( !bInOwnChange && ( eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE ) &&
          pEngine && pEngine->GetUpdateMode() && pInputWin )
     {
-        //  update input line from ModifyHdl for changes that are not
-        //  wrapped by DataChanging/DataChanged calls (like Drag&Drop)
+        //	#102745# update input line from ModifyHdl for changes that are not
+        //	wrapped by DataChanging/DataChanged calls (like Drag&Drop)
 
         String aText = GetEditText(pEngine);
         lcl_RemoveTabs(aText);
@@ -2064,18 +2069,18 @@ IMPL_LINK( ScInputHandler, ModifyHdl, void *, EMPTYARG )
     return 0;
 }
 
-sal_Bool ScInputHandler::DataChanging( sal_Unicode cTyped, sal_Bool bFromCommand )      // return sal_True = new view created
+BOOL ScInputHandler::DataChanging( sal_Unicode cTyped, BOOL bFromCommand )		// return TRUE = new view created
 {
     pActiveViewSh->GetViewData()->SetPasteMode( SC_PASTE_NONE );
-    bInOwnChange = true;                // disable ModifyHdl (reset in DataChanged)
+    bInOwnChange = TRUE;				// disable ModifyHdl (reset in DataChanged)
 
     if ( eMode == SC_INPUT_NONE )
         return StartTable( cTyped, bFromCommand, false );
     else
-        return false;
+        return FALSE;
 }
 
-void ScInputHandler::DataChanged( sal_Bool bFromTopNotify )
+void ScInputHandler::DataChanged( BOOL bFromTopNotify )
 {
     ImplCreateEditEngine();
 
@@ -2084,23 +2089,26 @@ void ScInputHandler::DataChanged( sal_Bool bFromTopNotify )
 
     if ( eMode == SC_INPUT_TOP && pTopView && !bFromTopNotify )
     {
-        //  table EditEngine is formatted below, input line needs formatting after paste
-        //  #i20282# not when called from the input line's modify handler
-        pTopView->GetEditEngine()->QuickFormatDoc( sal_True );
+        //	table EditEngine is formatted below, input line needs formatting after paste
+        //	#i20282# not when called from the input line's modify handler
+        pTopView->GetEditEngine()->QuickFormatDoc( TRUE );
 
-        //  #i23720# QuickFormatDoc hides the cursor, but can't show it again because it
-        //  can't safely access the EditEngine's current view, so the cursor has to be
-        //  shown again here.
+        //	#i23720# QuickFormatDoc hides the cursor, but can't show it again because it
+        //	can't safely access the EditEngine's current view, so the cursor has to be
+        //	shown again here.
         pTopView->ShowCursor();
     }
 
-    bModified = sal_True;
-    bSelIsRef = false;
+    bModified = TRUE;
+    bSelIsRef = FALSE;
 
     if ( pRangeFindList && !bInRangeUpdate )
-        RemoveRangeFinder();                    // Attribute und Markierung loeschen
+        RemoveRangeFinder();					// Attribute und Markierung loeschen
 
-    UpdateParenthesis();    //  Hervorhebung der Klammern neu
+    UpdateParenthesis();	//	Hervorhebung der Klammern neu
+
+    // ER 31.08.00  New SetDefaults sets ParaAttribs, don't clear them away ...
+//	RemoveAdjust();		//	#40255# harte Ausrichtungs-Attribute loeschen
 
     if (eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE)
     {
@@ -2111,12 +2119,12 @@ void ScInputHandler::DataChanged( sal_Bool bFromTopNotify )
             pInputWin->SetTextString(aText);
     }
 
-        //  wenn der Cursor vor dem Absatzende steht, werden Teile rechts rausgeschoben
-        //  (unabhaengig von eMode)     -> View anpassen!
-        //  wenn der Cursor am Ende steht, reicht der Status-Handler an der ViewData
+        //	wenn der Cursor vor dem Absatzende steht, werden Teile rechts rausgeschoben
+        //	(unabhaengig von eMode)		-> View anpassen!
+        //	wenn der Cursor am Ende steht, reicht der Status-Handler an der ViewData
 
-    //  first make sure the status handler is called now if the cursor
-    //  is outside the visible area
+    //	#93767# first make sure the status handler is called now if the cursor
+    //	is outside the visible area
     pEngine->QuickFormatDoc();
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
@@ -2124,10 +2132,10 @@ void ScInputHandler::DataChanged( sal_Bool bFromTopNotify )
     {
         ScViewData* pViewData = pActiveViewSh->GetViewData();
 
-        sal_Bool bNeedGrow = ( nEditAdjust != SVX_ADJUST_LEFT );        // rechtsbuendig immer
+        BOOL bNeedGrow = ( nEditAdjust != SVX_ADJUST_LEFT );		// rechtsbuendig immer
         if (!bNeedGrow)
         {
-                //  Cursor vor dem Ende?
+                //	Cursor vor dem Ende?
             ESelection aSel = pActiveView->GetSelection();
             aSel.Adjust();
             bNeedGrow = ( aSel.nEndPos != pEngine->GetTextLen(aSel.nEndPara) );
@@ -2145,8 +2153,8 @@ void ScInputHandler::DataChanged( sal_Bool bFromTopNotify )
     }
 
     UpdateFormulaMode();
-    bTextValid = false;         // Aenderungen sind nur in der Edit-Engine
-    bInOwnChange = false;
+    bTextValid = FALSE;			// Aenderungen sind nur in der Edit-Engine
+    bInOwnChange = FALSE;
 }
 
 void ScInputHandler::UpdateFormulaMode()
@@ -2154,19 +2162,19 @@ void ScInputHandler::UpdateFormulaMode()
     SfxApplication* pSfxApp = SFX_APP();
 
     if ( pEngine->GetParagraphCount() == 1 &&
-         ( pEngine->GetText((sal_uInt16)0).GetChar(0) == '=' ||
-           pEngine->GetText((sal_uInt16)0).GetChar(0) == '+' ||
-           pEngine->GetText((sal_uInt16)0).GetChar(0) == '-' ) &&
+         ( pEngine->GetText((USHORT)0).GetChar(0) == '=' ||
+           pEngine->GetText((USHORT)0).GetChar(0) == '+' ||
+           pEngine->GetText((USHORT)0).GetChar(0) == '-' ) &&
          !bProtected )
     {
         if (!bFormulaMode)
         {
-            bFormulaMode = sal_True;
+            bFormulaMode = TRUE;
             pRefViewSh = pActiveViewSh;
             pSfxApp->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
             SC_MOD()->SetRefInputHdl(this);
             if (pInputWin)
-                pInputWin->SetFormulaMode(sal_True);
+                pInputWin->SetFormulaMode(TRUE);
 
             if ( bAutoComplete )
                 GetFormulaData();
@@ -2175,17 +2183,17 @@ void ScInputHandler::UpdateFormulaMode()
             UpdateAutoCorrFlag();
         }
     }
-    else        // ausschalten
+    else		// ausschalten
     {
         if (bFormulaMode)
         {
             ShowRefFrame();
-            bFormulaMode = false;
+            bFormulaMode = FALSE;
             pRefViewSh = NULL;
             pSfxApp->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
             SC_MOD()->SetRefInputHdl(NULL);
             if (pInputWin)
-                pInputWin->SetFormulaMode(false);
+                pInputWin->SetFormulaMode(FALSE);
             UpdateAutoCorrFlag();
         }
     }
@@ -2193,34 +2201,34 @@ void ScInputHandler::UpdateFormulaMode()
 
 void ScInputHandler::ShowRefFrame()
 {
-    // Modifying pActiveViewSh here would interfere with the bInEnterHandler / bRepeat
+    // #123169# Modifying pActiveViewSh here would interfere with the bInEnterHandler / bRepeat
     // checks in NotifyChange, and lead to keeping the wrong value in pActiveViewSh.
     // A local variable is used instead.
     ScTabViewShell* pVisibleSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
     if ( pRefViewSh && pRefViewSh != pVisibleSh )
     {
-        sal_Bool bFound = false;
+        BOOL bFound = FALSE;
         SfxViewFrame* pRefFrame = pRefViewSh->GetViewFrame();
         SfxViewFrame* pOneFrame = SfxViewFrame::GetFirst();
         while ( pOneFrame && !bFound )
         {
             if ( pOneFrame == pRefFrame )
-                bFound = sal_True;
+                bFound = TRUE;
             pOneFrame = SfxViewFrame::GetNext( *pOneFrame );
         }
 
         if (bFound)
         {
-            //  Hier wird sich darauf verlassen, dass Activate synchron funktioniert
-            //  (dabei wird pActiveViewSh umgesetzt)
+            //	Hier wird sich darauf verlassen, dass Activate synchron funktioniert
+            //	(dabei wird pActiveViewSh umgesetzt)
 
-            pRefViewSh->SetActive();    // Appear und SetViewFrame
+            pRefViewSh->SetActive();	// Appear und SetViewFrame
 
-            //  pLastState wird im NotifyChange aus dem Activate richtig gesetzt
+            //	pLastState wird im NotifyChange aus dem Activate richtig gesetzt
         }
         else
         {
-            OSL_FAIL("ViewFrame fuer Referenzeingabe ist nicht mehr da");
+            DBG_ERROR("ViewFrame fuer Referenzeingabe ist nicht mehr da");
         }
     }
 }
@@ -2264,7 +2272,7 @@ void ScInputHandler::InvalidateAttribs()
 }
 
 //
-//      --------------- public Methoden --------------------------------------------
+//		--------------- public Methoden --------------------------------------------
 //
 
 void ScInputHandler::SetMode( ScInputMode eNewMode )
@@ -2277,7 +2285,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
     if (bProtected)
     {
         eMode = SC_INPUT_NONE;
-        StopInputWinEngine( sal_True );
+        StopInputWinEngine( TRUE );
         if (pActiveViewSh)
             pActiveViewSh->GetActiveWin()->GrabFocus();
         return;
@@ -2287,16 +2295,16 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
         // Disable paste mode when edit mode starts.
         pActiveViewSh->GetViewData()->SetPasteMode( SC_PASTE_NONE );
 
-    bInOwnChange = true;                // disable ModifyHdl (reset below)
+    bInOwnChange = TRUE;				// disable ModifyHdl (reset below)
 
     ScInputMode eOldMode = eMode;
     eMode = eNewMode;
     if (eOldMode == SC_INPUT_TOP && eNewMode != eOldMode)
-        StopInputWinEngine( false );
+        StopInputWinEngine( FALSE );
 
     if (eMode==SC_INPUT_TOP || eMode==SC_INPUT_TABLE)
     {
-        if (eOldMode == SC_INPUT_NONE)      // not when switching between modes
+        if (eOldMode == SC_INPUT_NONE)		// not when switching between modes
         {
             if (StartTable(0, false, eMode == SC_INPUT_TABLE))
             {
@@ -2305,22 +2313,22 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
             }
         }
 
-        sal_uInt16 nPara    = pEngine->GetParagraphCount()-1;
+        USHORT nPara    = pEngine->GetParagraphCount()-1;
         xub_StrLen nLen = pEngine->GetText(nPara).Len();
-        sal_uInt16 nCount   = pEngine->GetViewCount();
+        USHORT nCount   = pEngine->GetViewCount();
 
-        for (sal_uInt16 i=0; i<nCount; i++)
+        for (USHORT i=0; i<nCount; i++)
         {
             if ( eMode == SC_INPUT_TABLE && eOldMode == SC_INPUT_TOP )
             {
-                //  Selektion bleibt
+                //	Selektion bleibt
             }
             else
             {
                 pEngine->GetView(i)->
                     SetSelection( ESelection( nPara, nLen, nPara, nLen ) );
             }
-            pEngine->GetView(i)->ShowCursor(false);
+            pEngine->GetView(i)->ShowCursor(FALSE);
         }
     }
 
@@ -2328,34 +2336,34 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
     if (eMode==SC_INPUT_TABLE || eMode==SC_INPUT_TYPE)
     {
         if (pTableView)
-            pTableView->SetEditEngineUpdateMode(sal_True);
+            pTableView->SetEditEngineUpdateMode(TRUE);
     }
     else
     {
         if (pTopView)
-            pTopView->SetEditEngineUpdateMode(sal_True);
+            pTopView->SetEditEngineUpdateMode(TRUE);
     }
 
     if (eNewMode != eOldMode)
         UpdateFormulaMode();
 
-    bInOwnChange = false;
+    bInOwnChange = FALSE;
 }
 
 //----------------------------------------------------------------------------------------
 
-//  lcl_IsNumber - sal_True, wenn nur Ziffern (dann keine Autokorrektur)
+//	lcl_IsNumber - TRUE, wenn nur Ziffern (dann keine Autokorrektur)
 
-sal_Bool lcl_IsNumber(const String& rString)
+BOOL lcl_IsNumber(const String& rString)
 {
     xub_StrLen nLen = rString.Len();
     for (xub_StrLen i=0; i<nLen; i++)
     {
         sal_Unicode c = rString.GetChar(i);
         if ( c < '0' || c > '9' )
-            return false;
+            return FALSE;
     }
-    return sal_True;
+    return TRUE;
 }
 
 void lcl_SelectionToEnd( EditView* pView )
@@ -2363,7 +2371,7 @@ void lcl_SelectionToEnd( EditView* pView )
     if ( pView )
     {
         EditEngine* pEngine = pView->GetEditEngine();
-        sal_uInt16 nParCnt = pEngine->GetParagraphCount();
+        USHORT nParCnt = pEngine->GetParagraphCount();
         if ( nParCnt == 0 )
             nParCnt = 1;
         ESelection aSel( nParCnt-1, pEngine->GetTextLen(nParCnt-1) );   // empty selection, cursor at the end
@@ -2371,24 +2379,24 @@ void lcl_SelectionToEnd( EditView* pView )
     }
 }
 
-void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
+void ScInputHandler::EnterHandler( BYTE nBlockMode )
 {
-    //  Bei Makro-Aufrufen fuer Gueltigkeit kann Tod und Teufel passieren,
-    //  darum dafuer sorgen, dass EnterHandler nicht verschachtelt gerufen wird:
+    //	#62806# Bei Makro-Aufrufen fuer Gueltigkeit kann Tod und Teufel passieren,
+    //	darum dafuer sorgen, dass EnterHandler nicht verschachtelt gerufen wird:
 
     if (bInEnterHandler) return;
-    bInEnterHandler = sal_True;
-    bInOwnChange = sal_True;                // disable ModifyHdl (reset below)
+    bInEnterHandler = TRUE;
+    bInOwnChange = TRUE;				// disable ModifyHdl (reset below)
 
     ImplCreateEditEngine();
 
-    sal_Bool bMatrix = ( nBlockMode == SC_ENTER_MATRIX );
+    BOOL bMatrix = ( nBlockMode == SC_ENTER_MATRIX );
 
-    SfxApplication* pSfxApp     = SFX_APP();
-    EditTextObject* pObject     = NULL;
-    ScPatternAttr*  pCellAttrs  = NULL;
-    sal_Bool            bAttrib     = false;    // Formatierung vorhanden ?
-    sal_Bool            bForget     = false;    // wegen Gueltigkeit streichen ?
+    SfxApplication*	pSfxApp		= SFX_APP();
+    EditTextObject* pObject		= NULL;
+    ScPatternAttr*	pCellAttrs	= NULL;
+    BOOL			bAttrib		= FALSE;	// Formatierung vorhanden ?
+    BOOL			bForget		= FALSE;	// wegen Gueltigkeit streichen ?
 
     String aString = GetEditText(pEngine);
     EditView* pActiveView = pTopView ? pTopView : pTableView;
@@ -2406,36 +2414,36 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
         Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : NULL;
 
         if (pTopView)
-            pTopView->CompleteAutoCorrect();    // CompleteAutoCorrect fuer beide Views
+            pTopView->CompleteAutoCorrect();	// #59759# CompleteAutoCorrect fuer beide Views
         if (pTableView)
             pTableView->CompleteAutoCorrect(pFrameWin);
         aString = GetEditText(pEngine);
     }
     lcl_RemoveTabs(aString);
 
-    //  Test, ob zulaessig (immer mit einfachem String)
+    //	Test, ob zulaessig (immer mit einfachem String)
 
     if ( bModified && nValidation && pActiveViewSh )
     {
         ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocument();
-        const ScValidationData* pData = pDoc->GetValidationEntry( nValidation );
+        const ScValidationData*	pData = pDoc->GetValidationEntry( nValidation );
         if (pData && pData->HasErrMsg())
         {
             // #i67990# don't use pLastPattern in EnterHandler
             const ScPatternAttr* pPattern = pDoc->GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
-            sal_Bool bOk = pData->IsDataValid( aString, *pPattern, aCursorPos );
+            BOOL bOk = pData->IsDataValid( aString, *pPattern, aCursorPos );
 
             if (!bOk)
             {
-                if ( pActiveViewSh )                // falls aus MouseButtonDown gekommen
-                    pActiveViewSh->StopMarking();   // (die InfoBox verschluckt das MouseButtonUp)
+                if ( pActiveViewSh )				// falls aus MouseButtonDown gekommen
+                    pActiveViewSh->StopMarking();	// (die InfoBox verschluckt das MouseButtonUp)
 
-                    //! es gibt noch Probleme, wenn die Eingabe durch Aktivieren einer
-                    //! anderen View ausgeloest wurde
+                    //!	es gibt noch Probleme, wenn die Eingabe durch Aktivieren einer
+                    //!	anderen View ausgeloest wurde
 
                 Window* pParent = Application::GetDefDialogParent();
                 if ( pData->DoError( pParent, aString, aCursorPos ) )
-                    bForget = sal_True;                 // Eingabe nicht uebernehmen
+                    bForget = TRUE;					// Eingabe nicht uebernehmen
             }
         }
     }
@@ -2452,16 +2460,16 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             // or an invalid action - normal cell input is always aborted
 
             pActiveViewSh->DataPilotInput( aCursorPos, aString );
-            bForget = sal_True;
+            bForget = TRUE;
         }
     }
 
     pEngine->CompleteOnlineSpelling();
-    sal_Bool bSpellErrors = !bFormulaMode && pEngine->HasOnlineSpellErrors();
+    BOOL bSpellErrors = !bFormulaMode && pEngine->HasOnlineSpellErrors();
     if ( bSpellErrors )
     {
-        //  #i3820# If the spell checker flags numerical input as error,
-        //  it still has to be treated as number, not EditEngine object.
+        //	#i3820# If the spell checker flags numerical input as error,
+        //	it still has to be treated as number, not EditEngine object.
 
         if ( pActiveViewSh )
         {
@@ -2474,25 +2482,25 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             double nVal;
             if ( pFormatter->IsNumberFormat( aString, nFormat, nVal ) )
             {
-                bSpellErrors = false;       // ignore the spelling errors
+                bSpellErrors = FALSE;		// ignore the spelling errors
             }
         }
     }
 
-    //  After RemoveAdjust, the EditView must not be repainted (has wrong font size etc).
-    //  SetUpdateMode must come after CompleteOnlineSpelling.
-    //  The view is hidden in any case below (Broadcast).
-    pEngine->SetUpdateMode( false );
+    //	After RemoveAdjust, the EditView must not be repainted (has wrong font size etc).
+    //	SetUpdateMode must come after CompleteOnlineSpelling.
+    //	The view is hidden in any case below (Broadcast).
+    pEngine->SetUpdateMode( FALSE );
 
-    if ( bModified && !bForget )            // was wird eingeben (Text/Objekt) ?
+    if ( bModified && !bForget )			// was wird eingeben (Text/Objekt) ?
     {
-        sal_uInt16 nParCnt = pEngine->GetParagraphCount();
+        USHORT nParCnt = pEngine->GetParagraphCount();
         if ( nParCnt == 0 )
             nParCnt = 1;
 
         bool bUniformAttribs = true;
         SfxItemSet aPara1Attribs = pEngine->GetAttribs(0, 0, pEngine->GetTextLen(0));
-        for (sal_uInt16 nPara = 1; nPara < nParCnt; ++nPara)
+        for (USHORT nPara = 1; nPara < nParCnt; ++nPara)
         {
             SfxItemSet aPara2Attribs = pEngine->GetAttribs(nPara, 0, pEngine->GetTextLen(nPara));
             if (!(aPara1Attribs == aPara2Attribs))
@@ -2507,14 +2515,14 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
         SfxItemSet aOldAttribs = pEngine->GetAttribs( aSel );
         const SfxPoolItem* pItem = NULL;
 
-        //  find common (cell) attributes before RemoveAdjust
+        //	find common (cell) attributes before RemoveAdjust
 
         if ( pActiveViewSh && bUniformAttribs )
         {
             SfxItemSet* pCommonAttrs = NULL;
-            for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END; nId++)
+            for (USHORT nId = EE_CHAR_START; nId <= EE_CHAR_END; nId++)
             {
-                SfxItemState eState = aOldAttribs.GetItemState( nId, false, &pItem );
+                SfxItemState eState = aOldAttribs.GetItemState( nId, FALSE, &pItem );
                 if ( eState == SFX_ITEM_SET &&
                         nId != EE_CHAR_ESCAPEMENT && nId != EE_CHAR_PAIRKERNING &&
                         nId != EE_CHAR_KERNING && nId != EE_CHAR_XMLATTRIBS &&
@@ -2535,61 +2543,61 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             }
         }
 
-        //  clear ParaAttribs (including adjustment)
+        //	clear ParaAttribs (including adjustment)
 
         RemoveAdjust();
 
-        //  check if EditObject is needed
+        //	check if EditObject is needed
 
         if ( bSpellErrors || nParCnt > 1 )
-            bAttrib = sal_True;
+            bAttrib = TRUE;
         else
         {
-            for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END && !bAttrib; nId++)
+            for (USHORT nId = EE_CHAR_START; nId <= EE_CHAR_END && !bAttrib; nId++)
             {
-                SfxItemState eState = aOldAttribs.GetItemState( nId, false, &pItem );
+                SfxItemState eState = aOldAttribs.GetItemState( nId, FALSE, &pItem );
                 if (eState == SFX_ITEM_DONTCARE)
-                    bAttrib = sal_True;
+                    bAttrib = TRUE;
                 else if (eState == SFX_ITEM_SET)
                 {
-                    //  keep same items in EditEngine as in ScEditAttrTester
+                    //	keep same items in EditEngine as in ScEditAttrTester
                     if ( nId == EE_CHAR_ESCAPEMENT || nId == EE_CHAR_PAIRKERNING ||
                          nId == EE_CHAR_KERNING || nId == EE_CHAR_XMLATTRIBS )
                     {
                         if ( *pItem != pEditDefaults->Get(nId) )
-                            bAttrib = sal_True;
+                            bAttrib = TRUE;
                     }
                 }
             }
 
-            //  Feldbefehle enthalten?
+            //	Feldbefehle enthalten?
 
-            SfxItemState eFieldState = aOldAttribs.GetItemState( EE_FEATURE_FIELD, false );
+            SfxItemState eFieldState = aOldAttribs.GetItemState( EE_FEATURE_FIELD, FALSE );
             if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
-                bAttrib = sal_True;
+                bAttrib = TRUE;
 
-            //  not converted characters?
+            //	not converted characters?
 
-            SfxItemState eConvState = aOldAttribs.GetItemState( EE_FEATURE_NOTCONV, false );
+            SfxItemState eConvState = aOldAttribs.GetItemState( EE_FEATURE_NOTCONV, FALSE );
             if ( eConvState == SFX_ITEM_DONTCARE || eConvState == SFX_ITEM_SET )
-                bAttrib = sal_True;
+                bAttrib = TRUE;
 
-            //  Formeln immer als Formeln erkennen (#38309#)
-            //  (der Test vorher ist trotzdem noetig wegen Zell-Attributen)
+            //	Formeln immer als Formeln erkennen (#38309#)
+            //	(der Test vorher ist trotzdem noetig wegen Zell-Attributen)
         }
 
         if (bMatrix)
-            bAttrib = false;
+            bAttrib = FALSE;
 
         if (bAttrib)
         {
-            sal_uLong nCtrl = pEngine->GetControlWord();
-            sal_uLong nWantBig = bSpellErrors ? EE_CNTRL_ALLOWBIGOBJS : 0;
+            ULONG nCtrl = pEngine->GetControlWord();
+            ULONG nWantBig = bSpellErrors ? EE_CNTRL_ALLOWBIGOBJS : 0;
             if ( ( nCtrl & EE_CNTRL_ALLOWBIGOBJS ) != nWantBig )
                 pEngine->SetControlWord( (nCtrl & ~EE_CNTRL_ALLOWBIGOBJS) | nWantBig );
             pObject = pEngine->CreateTextObject();
         }
-        else if (bAutoComplete)         // Gross-/Kleinschreibung anpassen
+        else if (bAutoComplete)			// Gross-/Kleinschreibung anpassen
         {
             // Perform case-matching only when the typed text is partial.
             if (pColumnData && aAutoSearch.Len() < aString.Len())
@@ -2597,9 +2605,9 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
         }
     }
 
-    //  don't rely on ShowRefFrame switching the active view synchronously
-    //  execute the function directly on the correct view's bindings instead
-    //  pRefViewSh is reset in ShowRefFrame - get pointer before ShowRefFrame call
+    //	don't rely on ShowRefFrame switching the active view synchronously
+    //	execute the function directly on the correct view's bindings instead
+    //	pRefViewSh is reset in ShowRefFrame - get pointer before ShowRefFrame call
     ScTabViewShell* pExecuteSh = pRefViewSh ? pRefViewSh : pActiveViewSh;
 
     if (bFormulaMode)
@@ -2612,31 +2620,31 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             pExecuteSh->ActiveGrabFocus();
         }
 
-        bFormulaMode = false;
+        bFormulaMode = FALSE;
         pSfxApp->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
         SC_MOD()->SetRefInputHdl(NULL);
         if (pInputWin)
-            pInputWin->SetFormulaMode(false);
+            pInputWin->SetFormulaMode(FALSE);
         UpdateAutoCorrFlag();
     }
-    pRefViewSh = NULL;          // auch ohne FormulaMode wegen Funktions-AP
+    pRefViewSh = NULL;			// auch ohne FormulaMode wegen Funktions-AP
     DeleteRangeFinder();
     ResetAutoPar();
 
-    sal_Bool bOldMod = bModified;
+    BOOL bOldMod = bModified;
 
-    bModified = false;
-    bSelIsRef = false;
-    eMode     = SC_INPUT_NONE;
-    StopInputWinEngine( sal_True );
+    bModified = FALSE;
+    bSelIsRef = FALSE;
+    eMode 	  = SC_INPUT_NONE;
+    StopInputWinEngine( TRUE );
 
-    // Text input (through number formats) or ApplySelectionPattern modify
+    // #123344# Text input (through number formats) or ApplySelectionPattern modify
     // the cell's attributes, so pLastPattern is no longer valid
     pLastPattern = NULL;
 
     if (bOldMod && !bProtected && !bForget)
     {
-        //  keine typographische Anfuehrungszeichen in Formeln
+        //	keine typographische Anfuehrungszeichen in Formeln
 
         if ( aString.GetChar(0) == '=' )
         {
@@ -2675,7 +2683,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
         {
             SfxBindings& rBindings = pExecuteSh->GetViewFrame()->GetBindings();
 
-            sal_uInt16 nId = FID_INPUTLINE_ENTER;
+            USHORT nId = FID_INPUTLINE_ENTER;
             if ( nBlockMode == SC_ENTER_BLOCK )
                 nId = FID_INPUTLINE_BLOCK;
             else if ( nBlockMode == SC_ENTER_MATRIX )
@@ -2690,7 +2698,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             rBindings.Execute( nId, aArgs );
         }
 
-        delete pLastState;      // pLastState enthaelt noch den alten Text
+        delete pLastState;		// pLastState enthaelt noch den alten Text
         pLastState = NULL;
     }
     else
@@ -2698,8 +2706,8 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
 
     if ( bOldMod && pExecuteSh && pCellAttrs && !bForget )
     {
-        //  mit Eingabe zusammenfassen ?
-        pExecuteSh->ApplySelectionPattern( *pCellAttrs, sal_True, sal_True );
+        //	mit Eingabe zusammenfassen ?
+        pExecuteSh->ApplySelectionPattern( *pCellAttrs, TRUE, TRUE );
         pExecuteSh->AdjustBlockHeight();
     }
 
@@ -2712,21 +2720,21 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
     nFormSelStart = nFormSelEnd = 0;
     aFormText.Erase();
 
-    bInOwnChange = false;
-    bInEnterHandler = false;
+    bInOwnChange = FALSE;
+    bInEnterHandler = FALSE;
 }
 
 void ScInputHandler::CancelHandler()
 {
-    bInOwnChange = sal_True;                // disable ModifyHdl (reset below)
+    bInOwnChange = TRUE;				// disable ModifyHdl (reset below)
 
     ImplCreateEditEngine();
 
-    bModified = false;
+    bModified = FALSE;
 
-    //  don't rely on ShowRefFrame switching the active view synchronously
-    //  execute the function directly on the correct view's bindings instead
-    //  pRefViewSh is reset in ShowRefFrame - get pointer before ShowRefFrame call
+    //	don't rely on ShowRefFrame switching the active view synchronously
+    //	execute the function directly on the correct view's bindings instead
+    //	pRefViewSh is reset in ShowRefFrame - get pointer before ShowRefFrame call
     ScTabViewShell* pExecuteSh = pRefViewSh ? pRefViewSh : pActiveViewSh;
 
     if (bFormulaMode)
@@ -2737,39 +2745,39 @@ void ScInputHandler::CancelHandler()
             pExecuteSh->SetTabNo(aCursorPos.Tab());
             pExecuteSh->ActiveGrabFocus();
         }
-        bFormulaMode = false;
+        bFormulaMode = FALSE;
         SFX_APP()->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
         SC_MOD()->SetRefInputHdl(NULL);
         if (pInputWin)
-            pInputWin->SetFormulaMode(false);
+            pInputWin->SetFormulaMode(FALSE);
         UpdateAutoCorrFlag();
     }
-    pRefViewSh = NULL;          // auch ohne FormulaMode wegen Funktions-AP
+    pRefViewSh = NULL;			// auch ohne FormulaMode wegen Funktions-AP
     DeleteRangeFinder();
     ResetAutoPar();
 
     eMode = SC_INPUT_NONE;
-    StopInputWinEngine( sal_True );
+    StopInputWinEngine( TRUE );
     if (pExecuteSh)
         pExecuteSh->StopEditShell();
 
-    aCursorPos.Set(MAXCOL+1,0,0);       // Flag, dass ungueltig
+    aCursorPos.Set(MAXCOL+1,0,0);		// Flag, dass ungueltig
     pEngine->SetText(String());
 
     if ( !pLastState && pExecuteSh )
-        pExecuteSh->UpdateInputHandler( sal_True );     // Status neu holen
+        pExecuteSh->UpdateInputHandler( TRUE );		// Status neu holen
     else
-        NotifyChange( pLastState, sal_True );
+        NotifyChange( pLastState, TRUE );
 
     nFormSelStart = nFormSelEnd = 0;
     aFormText.Erase();
 
-    bInOwnChange = false;
+    bInOwnChange = FALSE;
 }
 
-sal_Bool ScInputHandler::IsModalMode( SfxObjectShell* pDocSh )
+BOOL ScInputHandler::IsModalMode( SfxObjectShell* pDocSh )
 {
-    //  Referenzen auf unbenanntes Dokument gehen nicht
+    //	Referenzen auf unbenanntes Dokument gehen nicht
 
     return bFormulaMode && pRefViewSh
             && pRefViewSh->GetViewData()->GetDocument()->GetDocumentShell() != pDocSh
@@ -2781,15 +2789,15 @@ void ScInputHandler::AddRefEntry()
     const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     UpdateActiveView();
     if (!pTableView && !pTopView)
-        return;                             // z.B. FillMode
+        return; 							// z.B. FillMode
 
-    DataChanging();                         // kann nicht neu sein
+    DataChanging(); 						// kann nicht neu sein
 
     RemoveSelection();
     if (pTableView)
-        pTableView->InsertText( cSep, false );
+        pTableView->InsertText( cSep, FALSE );
     if (pTopView)
-        pTopView->InsertText( cSep, false );
+        pTopView->InsertText( cSep, FALSE );
 
     DataChanged();
 }
@@ -2798,31 +2806,31 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
 {
     HideTip();
 
-    sal_Bool bOtherDoc = ( pRefViewSh &&
+    BOOL bOtherDoc = ( pRefViewSh &&
                         pRefViewSh->GetViewData()->GetDocument() != pDoc );
     if (bOtherDoc)
         if (!pDoc->GetDocumentShell()->HasName())
         {
-            //  Referenzen auf unbenanntes Dokument gehen nicht
-            //  (SetReference sollte dann auch nicht gerufen werden)
+            //	Referenzen auf unbenanntes Dokument gehen nicht
+            //	(SetReference sollte dann auch nicht gerufen werden)
 
             return;
         }
 
     UpdateActiveView();
     if (!pTableView && !pTopView)
-        return;                             // z.B. FillMode
+        return; 							// z.B. FillMode
 
-    //  nie das "=" ueberschreiben!
+    //	nie das "=" ueberschreiben!
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     ESelection aSel = pActiveView->GetSelection();
     aSel.Adjust();
     if ( aSel.nStartPara == 0 && aSel.nStartPos == 0 )
         return;
 
-    DataChanging();                         // kann nicht neu sein
+    DataChanging(); 						// kann nicht neu sein
 
-            //  Selektion umdrehen, falls rueckwaerts (noetig ???)
+            //	Selektion umdrehen, falls rueckwaerts (noetig ???)
 
     if (pTableView)
     {
@@ -2843,21 +2851,22 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
         }
     }
 
-    //  String aus Referenz erzeugen
+    //	String aus Referenz erzeugen
 
     String aRefStr;
     const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
     if (bOtherDoc)
     {
-        //  Referenz auf anderes Dokument
+        //	Referenz auf anderes Dokument
 
         DBG_ASSERT(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
         String aTmp;
-        rRef.Format( aTmp, SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails );      // immer 3d
+        rRef.Format( aTmp, SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails );		// immer 3d
 
         SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
         // #i75893# convert escaped URL of the document to something user friendly
+//       String aFileName = pObjSh->GetMedium()->GetName();
         String aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
 
         aRefStr = '\'';
@@ -2877,29 +2886,29 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
     if (pTableView || pTopView)
     {
         if (pTableView)
-            pTableView->InsertText( aRefStr, sal_True );
+            pTableView->InsertText( aRefStr, TRUE );
         if (pTopView)
-            pTopView->InsertText( aRefStr, sal_True );
+            pTopView->InsertText( aRefStr, TRUE );
 
         DataChanged();
     }
 
-    bSelIsRef = sal_True;
+    bSelIsRef = TRUE;
 }
 
-void ScInputHandler::InsertFunction( const String& rFuncName, sal_Bool bAddPar )
+void ScInputHandler::InsertFunction( const String& rFuncName, BOOL bAddPar )
 {
     if ( eMode == SC_INPUT_NONE )
     {
-        OSL_FAIL("InsertFunction, nicht im Eingabemodus");
+        DBG_ERROR("InsertFunction, nicht im Eingabemodus");
         return;
     }
 
     UpdateActiveView();
     if (!pTableView && !pTopView)
-        return;                             // z.B. FillMode
+        return; 							// z.B. FillMode
 
-    DataChanging();                         // kann nicht neu sein
+    DataChanging(); 						// kann nicht neu sein
 
     String aText = rFuncName;
     if (bAddPar)
@@ -2907,7 +2916,7 @@ void ScInputHandler::InsertFunction( const String& rFuncName, sal_Bool bAddPar )
 
     if (pTableView)
     {
-        pTableView->InsertText( aText, false );
+        pTableView->InsertText( aText, FALSE );
         if (bAddPar)
         {
             ESelection aSel = pTableView->GetSelection();
@@ -2918,7 +2927,7 @@ void ScInputHandler::InsertFunction( const String& rFuncName, sal_Bool bAddPar )
     }
     if (pTopView)
     {
-        pTopView->InsertText( aText, false );
+        pTopView->InsertText( aText, FALSE );
         if (bAddPar)
         {
             ESelection aSel = pTopView->GetSelection();
@@ -2938,15 +2947,15 @@ void ScInputHandler::ClearText()
 {
     if ( eMode == SC_INPUT_NONE )
     {
-        OSL_FAIL("ClearText, nicht im Eingabemodus");
+        DBG_ERROR("ClearText, nicht im Eingabemodus");
         return;
     }
 
     UpdateActiveView();
     if (!pTableView && !pTopView)
-        return;                             // z.B. FillMode
+        return; 							// z.B. FillMode
 
-    DataChanging();                         // darf nicht neu sein
+    DataChanging(); 						// darf nicht neu sein
 
     String aEmpty;
     if (pTableView)
@@ -2963,20 +2972,20 @@ void ScInputHandler::ClearText()
     DataChanged();
 }
 
-sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /* = sal_False */ )
+BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE */ )
 {
     if (!bOptLoaded)
     {
         bAutoComplete = SC_MOD()->GetAppOptions().GetAutoComplete();
-        bOptLoaded = sal_True;
+        bOptLoaded = TRUE;
     }
 
     KeyCode aCode = rKEvt.GetKeyCode();
-    sal_uInt16 nModi  = aCode.GetModifier();
-    sal_Bool bShift   = aCode.IsShift();
-    sal_Bool bControl = aCode.IsMod1();
-    sal_Bool bAlt     = aCode.IsMod2();
-    sal_uInt16 nCode  = aCode.GetCode();
+    USHORT nModi  = aCode.GetModifier();
+    BOOL bShift   = aCode.IsShift();
+    BOOL bControl = aCode.IsMod1();
+    BOOL bAlt	  = aCode.IsMod2();
+    USHORT nCode  = aCode.GetCode();
     sal_Unicode nChar = rKEvt.GetCharCode();
 
     if (bAlt && !bControl && nCode != KEY_RETURN)
@@ -2993,30 +3002,30 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
         return true;
     }
 
-    sal_Bool bInputLine = ( eMode==SC_INPUT_TOP );
+    BOOL bInputLine = ( eMode==SC_INPUT_TOP );
 
-    sal_Bool bUsed = false;
-    sal_Bool bSkip = false;
-    sal_Bool bDoEnter = false;
+    BOOL bUsed = FALSE;
+    BOOL bSkip = FALSE;
+    BOOL bDoEnter = FALSE;
 
     switch ( nCode )
     {
         case KEY_RETURN:
             if (bControl && !bShift && !bInputLine)
-                bDoEnter = sal_True;
+                bDoEnter = TRUE;
             else if ( nModi == 0 && nTipVisible && pFormulaData && nAutoPos != SCPOS_INVALID )
             {
                 PasteFunctionData();
-                bUsed = sal_True;
+                bUsed = TRUE;
             }
             else if ( nModi == 0 && nTipVisible && aManualTip.Len() )
             {
                 PasteManualTip();
-                bUsed = sal_True;
+                bUsed = TRUE;
             }
             else
             {
-                sal_uInt8 nMode = SC_ENTER_NORMAL;
+                BYTE nMode = SC_ENTER_NORMAL;
                 if ( bShift && bControl )
                     nMode = SC_ENTER_MATRIX;
                 else if ( bAlt )
@@ -3026,7 +3035,7 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
                 if (pActiveViewSh)
                     pActiveViewSh->MoveCursorEnter( bShift && !bControl );
 
-                bUsed = sal_True;
+                bUsed = TRUE;
             }
             break;
         case KEY_TAB:
@@ -3034,14 +3043,14 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
             {
                 if ( pFormulaData && nTipVisible && nAutoPos != SCPOS_INVALID )
                 {
-                    //  blaettern
+                    //	blaettern
 
                     NextFormulaEntry( bShift );
                     bUsed = true;
                 }
                 else if ( pColumnData && bUseTab && nAutoPos != SCPOS_INVALID )
                 {
-                    //  in den Eintraegen der AutoEingabe blaettern
+                    //	in den Eintraegen der AutoEingabe blaettern
 
                     NextAutoEntry( bShift );
                     bUsed = true;
@@ -3052,35 +3061,35 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
             if ( nTipVisible )
             {
                 HideTip();
-                bUsed = sal_True;
+                bUsed = TRUE;
             }
             else if( nTipVisibleSec )
             {
                 HideTipBelow();
-                bUsed = sal_True;
+                bUsed = TRUE;
             }
             else if (eMode != SC_INPUT_NONE)
             {
                 CancelHandler();
-                bUsed = sal_True;
+                bUsed = TRUE;
             }
             else
-                bSkip = sal_True;
+                bSkip = TRUE;
             break;
         case KEY_F2:
             if ( !bShift && !bControl && !bAlt && eMode == SC_INPUT_TABLE )
             {
                 eMode = SC_INPUT_TYPE;
-                bUsed = sal_True;
+                bUsed = TRUE;
             }
             break;
     }
 
-    //  Cursortasten nur ausfuehren, wenn schon im Edit-Modus
-    //  z.B. wegen Shift-Ctrl-PageDn (ist nicht als Accelerator definiert)
+    //	Cursortasten nur ausfuehren, wenn schon im Edit-Modus
+    //	z.B. wegen Shift-Ctrl-PageDn (ist nicht als Accelerator definiert)
 
-    sal_Bool bCursorKey = EditEngine::DoesKeyMoveCursor(rKEvt);
-    sal_Bool bInsKey = ( nCode == KEY_INSERT && !nModi );   // Insert wie Cursortasten behandeln
+    BOOL bCursorKey = EditEngine::DoesKeyMoveCursor(rKEvt);
+    BOOL bInsKey = ( nCode == KEY_INSERT && !nModi );	// Insert wie Cursortasten behandeln
     if ( !bUsed && !bSkip && ( bDoEnter || EditEngine::DoesKeyChangeText(rKEvt) ||
                     ( eMode != SC_INPUT_NONE && ( bCursorKey || bInsKey ) ) ) )
     {
@@ -3090,17 +3099,17 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
         if (bSelIsRef)
         {
             RemoveSelection();
-            bSelIsRef = false;
+            bSelIsRef = FALSE;
         }
 
         UpdateActiveView();
-        sal_Bool bNewView = DataChanging( nChar );
+        BOOL bNewView = DataChanging( nChar );
 
-        if (bProtected)                             // Zelle geschuetzt?
-            bUsed = sal_True;                           // Key-Event nicht weiterleiten
-        else                                        // Aenderungen erlaubt
+        if (bProtected)								// Zelle geschuetzt?
+            bUsed = TRUE;							// Key-Event nicht weiterleiten
+        else										// Aenderungen erlaubt
         {
-            if (bNewView )                          // neu anlegen
+            if (bNewView )							// neu anlegen
             {
                 if (pActiveViewSh)
                     pActiveViewSh->GetViewData()->GetDocShell()->PostEditView( pEngine, aCursorPos );
@@ -3117,7 +3126,7 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
                         {
                             pTableView->GetEditEngine()->SetText( aStrLoP );
                             if ( aStrLoP.Len() )
-                                pTableView->SetSelection( ESelection(0,0, 0,0) );   // before the '%'
+                                pTableView->SetSelection( ESelection(0,0, 0,0) );	// before the '%'
 
                             // don't call SetSelection if the string is empty anyway,
                             // to avoid breaking the bInitial handling in ScViewData::EditGrowY
@@ -3126,7 +3135,7 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
                         {
                             pTopView->GetEditEngine()->SetText( aStrLoP );
                             if ( aStrLoP.Len() )
-                                pTopView->SetSelection( ESelection(0,0, 0,0) );     // before the '%'
+                                pTopView->SetSelection( ESelection(0,0, 0,0) );		// before the '%'
                         }
                     }
                 SyncViews();
@@ -3134,19 +3143,21 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
 
             if (pTableView || pTopView)
             {
+//				pActiveView->SetEditEngineUpdateMode(TRUE); 		//! gibt Muell !!!!
+
                 if (bDoEnter)
                 {
                     if (pTableView)
                         if( pTableView->PostKeyEvent( KeyEvent( CHAR_CR, KeyCode(KEY_RETURN) ) ) )
-                            bUsed = sal_True;
+                            bUsed = TRUE;
                     if (pTopView)
                         if( pTopView->PostKeyEvent( KeyEvent( CHAR_CR, KeyCode(KEY_RETURN) ) ) )
-                            bUsed = sal_True;
+                            bUsed = TRUE;
                 }
                 else if ( nAutoPar && nChar == ')' && CursorAtClosingPar() )
                 {
                     SkipClosingPar();
-                    bUsed = sal_True;
+                    bUsed = TRUE;
                 }
                 else
                 {
@@ -3154,23 +3165,23 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
                     {
                         Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : NULL;
                         if ( pTableView->PostKeyEvent( rKEvt, pFrameWin ) )
-                            bUsed = true;
+                            bUsed = TRUE;
                     }
                     if (pTopView)
                         if ( pTopView->PostKeyEvent( rKEvt ) )
-                            bUsed = sal_True;
+                            bUsed = TRUE;
                 }
 
-                //  Auto-Eingabe:
+                //	Auto-Eingabe:
 
                 if ( bUsed && bAutoComplete )
                 {
-                    bUseTab = false;
-                    nAutoPos = SCPOS_INVALID;                       // do not search further
+                    bUseTab = FALSE;
+                    nAutoPos = SCPOS_INVALID;						// do not search further
 
                     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
-                    if ( nChar && nChar != 8 && nChar != 127 &&     // no 'backspace', no 'delete'
-                         KEYFUNC_CUT != eFunc)                      // and no 'CTRL-X'
+                    if ( nChar && nChar != 8 && nChar != 127 &&		// no 'backspace', no 'delete'
+                         KEYFUNC_CUT != eFunc)						// and no 'CTRL-X'
                     {
                         if (bFormulaMode)
                             UseFormulaData();
@@ -3179,8 +3190,8 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
                     }
                 }
 
-                //  when the selection is changed manually or an opening parenthesis
-                //  is typed, stop overwriting parentheses
+                //	when the selection is changed manually or an opening parenthesis
+                //	is typed, stop overwriting parentheses
                 if ( bUsed && nChar == '(' )
                     ResetAutoPar();
 
@@ -3196,8 +3207,8 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
                 }
             }
 
-            DataChanged();              //  ruft auch UpdateParenthesis()
-            InvalidateAttribs();        //! in DataChanged ?
+            DataChanged();				//	ruft auch UpdateParenthesis()
+            InvalidateAttribs();		//! in DataChanged ?
         }
     }
 
@@ -3207,14 +3218,14 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
     return bUsed;
 }
 
-sal_Bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, sal_Bool bForce )
+BOOL ScInputHandler::InputCommand( const CommandEvent& rCEvt, BOOL bForce )
 {
-    sal_Bool bUsed = false;
+    BOOL bUsed = FALSE;
 
     if ( rCEvt.GetCommand() == COMMAND_CURSORPOS )
     {
-        //  for COMMAND_CURSORPOS, do as little as possible, because
-        //  with remote VCL, even a ShowCursor will generate another event.
+        //	#90346# for COMMAND_CURSORPOS, do as little as possible, because
+        //	with remote VCL, even a ShowCursor will generate another event.
         if ( eMode != SC_INPUT_NONE )
         {
             UpdateActiveView();
@@ -3222,9 +3233,9 @@ sal_Bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, sal_Bool bForc
             {
                 if (pTableView)
                     pTableView->Command( rCEvt );
-                else if (pTopView)                      // call only once
+                else if (pTopView)						// call only once
                     pTopView->Command( rCEvt );
-                bUsed = sal_True;
+                bUsed = TRUE;
             }
         }
     }
@@ -3235,7 +3246,7 @@ sal_Bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, sal_Bool bForc
             if (!bOptLoaded)
             {
                 bAutoComplete = SC_MOD()->GetAppOptions().GetAutoComplete();
-                bOptLoaded = sal_True;
+                bOptLoaded = TRUE;
             }
 
             HideTip();
@@ -3244,17 +3255,17 @@ sal_Bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, sal_Bool bForc
             if ( bSelIsRef )
             {
                 RemoveSelection();
-                bSelIsRef = false;
+                bSelIsRef = FALSE;
             }
 
             UpdateActiveView();
-            sal_Bool bNewView = DataChanging( 0, sal_True );
+            BOOL bNewView = DataChanging( 0, TRUE );
 
-            if (bProtected)                             // cell protected
-                bUsed = sal_True;                           // event is used
-            else                                        // changes allowed
+            if (bProtected)								// cell protected
+                bUsed = TRUE;							// event is used
+            else										// changes allowed
             {
-                if (bNewView)                           // create new edit view
+                if (bNewView)							// create new edit view
                 {
                     if (pActiveViewSh)
                         pActiveViewSh->GetViewData()->GetDocShell()->PostEditView( pEngine, aCursorPos );
@@ -3284,11 +3295,11 @@ sal_Bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, sal_Bool bForc
                     if (pTopView)
                         pTopView->Command( rCEvt );
 
-                    bUsed = sal_True;
+                    bUsed = TRUE;
 
                     if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
                     {
-                        //  AutoInput after ext text input
+                        //	AutoInput after ext text input
 
                         nAutoPos = SCPOS_INVALID;
                         if (bFormulaMode)
@@ -3298,8 +3309,8 @@ sal_Bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, sal_Bool bForc
                     }
                 }
 
-                DataChanged();              //  calls UpdateParenthesis()
-                InvalidateAttribs();        //! in DataChanged ?
+                DataChanged();				//	calls UpdateParenthesis()
+                InvalidateAttribs();		//! in DataChanged ?
             }
         }
 
@@ -3311,26 +3322,26 @@ sal_Bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, sal_Bool bForc
 }
 
 void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
-                                   sal_Bool bForce, ScTabViewShell* pSourceSh,
-                                   sal_Bool bStopEditing)
+                                   BOOL bForce, ScTabViewShell* pSourceSh,
+                                   BOOL bStopEditing)
 {
-    //  Wenn der Aufruf aus einem Makro-Aufruf im EnterHandler kommt,
-    //  gleich abbrechen und nicht den Status durcheinander bringen
+    //	#62806# Wenn der Aufruf aus einem Makro-Aufruf im EnterHandler kommt,
+    //	gleich abbrechen und nicht den Status durcheinander bringen
     if (bInEnterHandler)
         return;
 
-    sal_Bool bRepeat = (pState == pLastState);
+    BOOL bRepeat = (pState == pLastState);
     if (!bRepeat && pState && pLastState)
-        bRepeat = sal::static_int_cast<sal_Bool>(*pState == *pLastState);
+        bRepeat = sal::static_int_cast<BOOL>(*pState == *pLastState);
     if (bRepeat && !bForce)
         return;
 
-    bInOwnChange = sal_True;                // disable ModifyHdl (reset below)
+    bInOwnChange = TRUE;				// disable ModifyHdl (reset below)
 
-    if ( pState && !pLastState )        // wieder enablen
-        bForce = sal_True;
+    if ( pState && !pLastState )		// wieder enablen
+        bForce = TRUE;
 
-    sal_Bool bHadObject = pLastState && pLastState->GetEditData();
+    BOOL bHadObject = pLastState && pLastState->GetEditData();
 
     //! Before EditEngine gets eventually created (so it gets the right pools)
     if ( pSourceSh )
@@ -3352,10 +3363,10 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
         if ( pState )
         {
-            sal_Bool bIgnore = false;
+            BOOL bIgnore = FALSE;
 
-            //  hier auch fremde Referenzeingabe beruecksichtigen (z.B. Funktions-AP),
-            //  FormEditData falls gerade von der Hilfe auf Calc umgeschaltet wird:
+            //	hier auch fremde Referenzeingabe beruecksichtigen (z.B. Funktions-AP),
+            //	FormEditData falls gerade von der Hilfe auf Calc umgeschaltet wird:
 
             if ( !bFormulaMode && !pScMod->IsFormulaMode() && !pScMod->GetFormEditData() )
             {
@@ -3367,25 +3378,25 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                             EnterHandler();
                     }
                     else
-                        bIgnore = sal_True;
+                        bIgnore = TRUE;
                 }
 
-                if ( !bIgnore )
+                if ( !bIgnore /* || bRepeat */ )
                 {
-                    const ScAddress&        rSPos   = pState->GetStartPos();
-                    const ScAddress&        rEPos   = pState->GetEndPos();
-                    const EditTextObject*   pData   = pState->GetEditData();
-                    String                  aString = pState->GetString();
-                    sal_Bool                    bTxtMod = false;
+                    const ScAddress& 		rSPos	= pState->GetStartPos();
+                    const ScAddress& 		rEPos	= pState->GetEndPos();
+                    const EditTextObject*	pData	= pState->GetEditData();
+                    String					aString = pState->GetString();
+                    BOOL					bTxtMod = FALSE;
                     ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
                     ScDocument* pDoc = pDocSh->GetDocument();
 
-                    aCursorPos  = pState->GetPos();
+                    aCursorPos	= pState->GetPos();
 
-                    if ( pData )
-                        bTxtMod = true;
+                    if ( pData /* || bRepeat */ )
+                        bTxtMod = TRUE;
                     else if ( bHadObject )
-                        bTxtMod = sal_True;
+                        bTxtMod = TRUE;
                     else if ( bTextValid )
                         bTxtMod = ( aString != aCurrentText );
                     else
@@ -3398,34 +3409,34 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                             pEngine->SetText( *pData );
                             aString = GetEditText(pEngine);
                             lcl_RemoveTabs(aString);
-                            bTextValid = false;
+                            bTextValid = FALSE;
                             aCurrentText.Erase();
                         }
                         else
                         {
                             aCurrentText = aString;
-                            bTextValid = sal_True;              //! erst nur als String merken
+                            bTextValid = TRUE;				//! erst nur als String merken
                         }
 
                         if ( pInputWin )
                             pInputWin->SetTextString(aString);
                     }
 
-                    if ( pInputWin )                        // Bereichsanzeige
+                    if ( pInputWin )						// Bereichsanzeige
                     {
                         String aPosStr;
                         const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
 
-                        //  Ist der Bereich ein Name?
-                        //! per Timer suchen ???
+                        //	Ist der Bereich ein Name?
+                        //!	per Timer suchen ???
 
                         if ( pActiveViewSh )
                             pActiveViewSh->GetViewData()->GetDocument()->
                                 GetRangeAtBlock( ScRange( rSPos, rEPos ), &aPosStr );
 
-                        if ( !aPosStr.Len() )           // kein Name -> formatieren
+                        if ( !aPosStr.Len() )			// kein Name -> formatieren
                         {
-                            sal_uInt16 nFlags = 0;
+                            USHORT nFlags = 0;
                             if( aAddrDetails.eConv == formula::FormulaGrammar::CONV_XL_R1C1 )
                                 nFlags |= SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE;
                             if ( rSPos != rEPos )
@@ -3437,39 +3448,36 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                             else
                                 aCursorPos.Format( aPosStr, SCA_VALID | nFlags, pDoc, aAddrDetails );
                         }
-                        //IAccessibility2 Implementation 2009-----
-                        // Disable the accessible VALUE_CHANGE event
-                        sal_Bool bIsSuppressed = pInputWin->IsAccessibilityEventsSuppressed(false);
-                        pInputWin->SetAccessibilityEventsSuppressed(sal_True);
+
                         pInputWin->SetPosString(aPosStr);
-                        pInputWin->SetAccessibilityEventsSuppressed(bIsSuppressed);
-                        //-----IAccessibility2 Implementation 2009
                         pInputWin->SetSumAssignMode();
                     }
 
                     if (bStopEditing)
                         SFX_APP()->Broadcast( SfxSimpleHint( FID_KILLEDITVIEW ) );
 
-                    //  As long as the content is not edited, turn off online spelling.
-                    //  Online spelling is turned back on in StartTable, after setting
-                    //  the right language from cell attributes.
+                    //	As long as the content is not edited, turn off online spelling.
+                    //	Online spelling is turned back on in StartTable, after setting
+                    //	the right language from cell attributes.
 
-                    sal_uLong nCntrl = pEngine->GetControlWord();
+                    ULONG nCntrl = pEngine->GetControlWord();
                     if ( nCntrl & EE_CNTRL_ONLINESPELLING )
                         pEngine->SetControlWord( nCntrl & ~EE_CNTRL_ONLINESPELLING );
 
-                    bModified = false;
-                    bSelIsRef = false;
-                    bProtected = false;
-                    bCommandErrorShown = false;
+                    bModified = FALSE;
+                    bSelIsRef = FALSE;
+                    bProtected = FALSE;
+                    bCommandErrorShown = FALSE;
                 }
             }
         }
 
+//		bProtected = FALSE;
+
         if ( pInputWin)
         {
-            if(!pScMod->IsFormulaMode()&& !pScMod->IsRefDialogOpen())   //BugID 54702
-            {                                                           //Wenn RefDialog offen, dann nicht enablen
+            if(!pScMod->IsFormulaMode()&& !pScMod->IsRefDialogOpen())	//BugID 54702
+            {															//Wenn RefDialog offen, dann nicht enablen
                 if ( !pInputWin->IsEnabled())
                 {
                     pInputWin->Enable();
@@ -3480,9 +3488,9 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                 }
             }
             else if(pScMod->IsRefDialogOpen())
-            {                                   // Da jedes Dokument eigenes InputWin hat, sollte
-                if ( !pDelayTimer )             // nochmals Timer gestartet werden, da sonst Ein-
-                {                               // gabezeile evt. noch aktiv ist.
+            {									// Da jedes Dokument eigenes InputWin hat, sollte
+                if ( !pDelayTimer )				// nochmals Timer gestartet werden, da sonst Ein-
+                {								// gabezeile evt. noch aktiv ist.
                     pDelayTimer = new Timer;
                     pDelayTimer->SetTimeout( 500 ); // 100ms Verzoegerung
                     pDelayTimer->SetTimeoutHdl( LINK( this, ScInputHandler, DelayTimer ) );
@@ -3504,7 +3512,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
     HideTip();
     HideTipBelow();
-    bInOwnChange = false;
+    bInOwnChange = FALSE;
 }
 
 void ScInputHandler::UpdateCellAdjust( SvxCellHorJustify eJust )
@@ -3534,20 +3542,20 @@ IMPL_LINK( ScInputHandler, DelayTimer, Timer*, pTimer )
 
         if ( NULL == pLastState || SC_MOD()->IsFormulaMode() || SC_MOD()->IsRefDialogOpen())
         {
-            //! new method at ScModule to query if function autopilot is open
+            //!	new method at ScModule to query if function autopilot is open
 
             SfxViewFrame* pViewFrm = SfxViewFrame::Current();
             if ( pViewFrm && pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) )
             {
                 if ( pInputWin)
                 {
-                    pInputWin->EnableButtons( false );
+                    pInputWin->EnableButtons( FALSE );
                     pInputWin->Disable();
                 }
             }
-            else if ( !bFormulaMode )   // Formel auch z.B. bei Hilfe behalten
+            else if ( !bFormulaMode )	// #39210# Formel auch z.B. bei Hilfe behalten
             {
-                bInOwnChange = sal_True;    // disable ModifyHdl (reset below)
+                bInOwnChange = TRUE;	// disable ModifyHdl (reset below)
 
                 pActiveViewSh = NULL;
                 pEngine->SetText( EMPTY_STRING );
@@ -3558,7 +3566,7 @@ IMPL_LINK( ScInputHandler, DelayTimer, Timer*, pTimer )
                     pInputWin->Disable();
                 }
 
-                bInOwnChange = false;
+                bInOwnChange = FALSE;
             }
         }
     }
@@ -3569,24 +3577,26 @@ void ScInputHandler::InputSelection( EditView* pView )
 {
     SyncViews( pView );
     ShowTipCursor();
-    UpdateParenthesis();    //  Selektion geaendert -> Klammer-Hervorhebung neu
+    UpdateParenthesis();	//	Selektion geaendert -> Klammer-Hervorhebung neu
 
-    //  when the selection is changed manually, stop overwriting parentheses
+    //	when the selection is changed manually, stop overwriting parentheses
     ResetAutoPar();
 }
 
-void ScInputHandler::InputChanged( EditView* pView, sal_Bool bFromNotify )
+void ScInputHandler::InputChanged( EditView* pView, BOOL bFromNotify )
 {
+    ESelection aSelection = pView->GetSelection();
+
     UpdateActiveView();
 
     // #i20282# DataChanged needs to know if this is from the input line's modify handler
-    sal_Bool bFromTopNotify = ( bFromNotify && pView == pTopView );
+    BOOL bFromTopNotify = ( bFromNotify && pView == pTopView );
 
-    sal_Bool bNewView = DataChanging();                     //! kann das hier ueberhaupt sein?
-    aCurrentText = pView->GetEditEngine()->GetText();   // auch den String merken
+    BOOL bNewView = DataChanging();						//!	kann das hier ueberhaupt sein?
+    aCurrentText = pView->GetEditEngine()->GetText();	// auch den String merken
     pEngine->SetText( aCurrentText );
     DataChanged( bFromTopNotify );
-    bTextValid = sal_True;      // wird in DataChanged auf sal_False gesetzt
+    bTextValid = TRUE;		// wird in DataChanged auf FALSE gesetzt
 
     if ( pActiveViewSh )
     {
@@ -3605,8 +3615,8 @@ const String& ScInputHandler::GetEditString()
 {
     if (pEngine)
     {
-        aCurrentText = pEngine->GetText();      // immer neu aus Engine
-        bTextValid = sal_True;
+        aCurrentText = pEngine->GetText();		// immer neu aus Engine
+        bTextValid = TRUE;
     }
 
     return aCurrentText;
@@ -3621,40 +3631,40 @@ Size ScInputHandler::GetTextSize()
     return aSize;
 }
 
-sal_Bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
+BOOL ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
 {
-    sal_Bool bRet = false;
+    BOOL bRet = FALSE;
     if (pEngine)
     {
-        //  Feldbefehle enthalten?
+        //	Feldbefehle enthalten?
 
-        sal_uInt16 nParCnt = pEngine->GetParagraphCount();
+        USHORT nParCnt = pEngine->GetParagraphCount();
         SfxItemSet aSet = pEngine->GetAttribs( ESelection(0,0,nParCnt,0) );
-        SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
+        SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, FALSE );
         if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
         {
-            //  Inhalt kopieren
+            //	Inhalt kopieren
 
             EditTextObject* pObj = pEngine->CreateTextObject();
             rDestEngine.SetText(*pObj);
             delete pObj;
 
-            //  Attribute loeschen
+            //	Attribute loeschen
 
-            for (sal_uInt16 i=0; i<nParCnt; i++)
+            for (USHORT i=0; i<nParCnt; i++)
                 rDestEngine.QuickRemoveCharAttribs( i );
 
-            //  Absaetze zusammenfassen
+            //	Absaetze zusammenfassen
 
             while ( nParCnt > 1 )
             {
-                xub_StrLen nLen = rDestEngine.GetTextLen( (sal_uInt16)0 );
+                xub_StrLen nLen = rDestEngine.GetTextLen( (USHORT)0 );
                 ESelection aSel( 0,nLen, 1,0 );
-                rDestEngine.QuickInsertText( ' ', aSel );       // Umbruch durch Space ersetzen
+                rDestEngine.QuickInsertText( ' ', aSel );		// Umbruch durch Space ersetzen
                 --nParCnt;
             }
 
-            bRet = sal_True;
+            bRet = TRUE;
         }
     }
     return bRet;
@@ -3675,7 +3685,7 @@ void ScInputHandler::InputGetSelection( xub_StrLen& rStart, xub_StrLen& rEnd )
 
 EditView* ScInputHandler::GetFuncEditView()
 {
-    UpdateActiveView();     // wegen pTableView
+    UpdateActiveView();		// wegen pTableView
 
     EditView* pView = NULL;
     if ( pInputWin )
@@ -3687,9 +3697,9 @@ EditView* ScInputHandler::GetFuncEditView()
     {
         if ( eMode != SC_INPUT_TABLE )
         {
-            bCreatingFuncView = sal_True;       // RangeFinder nicht anzeigen
+            bCreatingFuncView = TRUE;		// RangeFinder nicht anzeigen
             SetMode( SC_INPUT_TABLE );
-            bCreatingFuncView = false;
+            bCreatingFuncView = FALSE;
             if ( pTableView )
                 pTableView->GetEditEngine()->SetText( EMPTY_STRING );
         }
@@ -3718,7 +3728,7 @@ void ScInputHandler::InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd )
     if (pView)
         pView->SetSelection( ESelection(0,nStart, 0,nEnd) );
 
-    bModified = sal_True;
+    bModified = TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -3741,23 +3751,24 @@ void ScInputHandler::InputReplaceSelection( const String& rStr )
     EditView* pView = GetFuncEditView();
     if (pView)
     {
-        pView->SetEditEngineUpdateMode( false );
+        pView->SetEditEngineUpdateMode( FALSE );
+//		pView->InsertText( rStr, TRUE );
         pView->GetEditEngine()->SetText( aFormText );
         pView->SetSelection( ESelection(0,nFormSelStart, 0,nFormSelEnd) );
-        pView->SetEditEngineUpdateMode( sal_True );
+        pView->SetEditEngineUpdateMode( TRUE );
     }
-    bModified = sal_True;
+    bModified = TRUE;
 }
 
 //------------------------------------------------------------------------
 
 String ScInputHandler::InputGetFormulaStr()
 {
-    return aFormText;   //! eigene Membervariable?
+    return aFormText;	//!	eigene Membervariable?
 }
 
 //========================================================================
-//  ScInputHdlState
+//	ScInputHdlState
 //========================================================================
 
 ScInputHdlState::ScInputHdlState( const ScAddress& rCurPos,
@@ -3765,18 +3776,18 @@ ScInputHdlState::ScInputHdlState( const ScAddress& rCurPos,
                                   const ScAddress& rEndPos,
                                   const String& rString,
                                   const EditTextObject* pData )
-    :   aCursorPos  ( rCurPos ),
-        aStartPos   ( rStartPos ),
-        aEndPos     ( rEndPos ),
-        aString     ( rString ),
-        pEditData   ( pData ? pData->Clone() : NULL )
+    :   aCursorPos	( rCurPos ),
+        aStartPos	( rStartPos ),
+        aEndPos		( rEndPos ),
+        aString		( rString ),
+        pEditData	( pData ? pData->Clone() : NULL )
 {
 }
 
 //------------------------------------------------------------------------
 
 ScInputHdlState::ScInputHdlState( const ScInputHdlState& rCpy )
-    :   pEditData   ( NULL )
+    :	pEditData	( NULL )
 {
     *this = rCpy;
 }
@@ -3792,10 +3803,10 @@ ScInputHdlState::~ScInputHdlState()
 
 int ScInputHdlState::operator==( const ScInputHdlState& r ) const
 {
-    return (    (aStartPos  == r.aStartPos)
-             && (aEndPos    == r.aEndPos)
-             && (aCursorPos == r.aCursorPos)
-             && (aString    == r.aString)
+    return (    (aStartPos 	== r.aStartPos)
+             &&	(aEndPos   	== r.aEndPos)
+             &&	(aCursorPos == r.aCursorPos)
+             && (aString   	== r.aString)
              && ScGlobal::EETextObjEqual( pEditData, r.pEditData ) );
 }
 
@@ -3805,11 +3816,11 @@ ScInputHdlState& ScInputHdlState::operator=( const ScInputHdlState& r )
 {
     delete pEditData;
 
-    aCursorPos  = r.aCursorPos;
-    aStartPos   = r.aStartPos;
-    aEndPos     = r.aEndPos;
-    aString     = r.aString;
-    pEditData   = r.pEditData ? r.pEditData->Clone() : NULL;
+    aCursorPos	= r.aCursorPos;
+    aStartPos	= r.aStartPos;
+    aEndPos		= r.aEndPos;
+    aString		= r.aString;
+    pEditData	= r.pEditData ? r.pEditData->Clone() : NULL;
 
     return *this;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,14 +114,14 @@ namespace frm
             sMessage += "\n (URL: ";
             sMessage += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += ")";
-            OSL_FAIL( sMessage.getStr() );
+            DBG_ERROR( sMessage.getStr() );
         }
 #endif
 
         if ( m_pMasterDispatcher )
             m_pMasterDispatcher->executeAttribute( m_nAttributeId, NULL );
     }
-
+    
     //--------------------------------------------------------------------
     void OAttributeDispatcher::onAttributeStateChanged( AttributeId _nAttributeId, const AttributeState& /*_rState*/ )
     {

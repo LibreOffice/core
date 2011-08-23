@@ -57,8 +57,12 @@
  * @file
  * Circle object.
  ************************************************************************/
-#ifndef _LWPFILTER_HXX
-#define _LWPFILTER_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-17  create this file.
+ ************************************************************************/
+#ifndef	_LWPFILTER_HXX
+#define	_LWPFILTER_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -101,20 +105,20 @@ public:
 
 public:
     /**
-     * @descr   loading the file. It's call be SfxObejctShell::ImportFrom.
-     * @param   aDescriptor the parameters include file URL or XInputStream obejct, from which the filter can
-     *          get which file to import.
+     * @descr	loading the file. It's call be SfxObejctShell::ImportFrom.
+     * @param	aDescriptor the parameters include file URL or XInputStream obejct, from which the filter can
+     *			get which file to import.
      */
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor )
         throw( RuntimeException );
 
     /**
-     * @descr   stop loading the file.
+     * @descr	stop loading the file.
      */
     virtual void SAL_CALL cancel() throw (com::sun::star::uno::RuntimeException);
 
     /**
-     * @descr   get the XDocumentHandler interface.
+     * @descr	get the XDocumentHandler interface.
      */
     void setDocumentHandler( uno::Reference< XDocumentHandler >& xHandler )
     {
@@ -142,13 +146,13 @@ public:
     static OUString getImplementationName_Static() throw();
 public:
     /**
-     * @descr   see LWPFilterReader::filter.
+     * @descr	see LWPFilterReader::filter.
      */
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor )
         throw( RuntimeException );
 
     /**
-     * @descr   see LWPFilterReader::cancel.
+     * @descr	see LWPFilterReader::cancel.
      */
     virtual void SAL_CALL cancel() throw (com::sun::star::uno::RuntimeException);
 
@@ -164,8 +168,8 @@ public:
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw ();
 
     /**
-     * @descr   function of interface XExtendedFilterDetection. If this interface is registed, it will be called whenever
-     *          a file is to be loaded.
+     * @descr	function of interface XExtendedFilterDetection. If this interface is registed, it will be called whenever
+     *			a file is to be loaded.
      */
     virtual ::rtl::OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -174,9 +178,9 @@ public:
     uno::Reference< XImporter > rImporter;
 };
 
-int     ReadWordproFile(String& strName,uno::Reference<XDocumentHandler>& XDoc);
+int		ReadWordproFile(String& strName,uno::Reference<XDocumentHandler>& XDoc);
 //test code
-int     ReadWordproFile(SvStream* pStream, uno::Reference<XDocumentHandler>& XDoc);
+int		ReadWordproFile(SvStream* pStream, uno::Reference<XDocumentHandler>& XDoc);
 
 #endif
 

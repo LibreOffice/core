@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,9 +72,9 @@ TYPEINIT1( FuConstructBezierPolygon, FuConstruct );
 \************************************************************************/
 
 FuConstructBezierPolygon::FuConstructBezierPolygon (
-    ViewShell* pViewSh,
+    ViewShell* pViewSh, 
     ::sd::Window* pWin,
-    ::sd::View* pView,
+    ::sd::View* pView, 
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq),
@@ -99,7 +99,7 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
     if( pArgs )
     {
         const SfxPoolItem*  pPoolItem = NULL;
-        if( SFX_ITEM_SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, TRUE, &pPoolItem ) )
             maTargets = ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue();
     }
 }
@@ -110,9 +110,9 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     SdrViewEvent aVEvt;
     SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
@@ -130,11 +130,11 @@ sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     {
         // Texteingabe hier nicht zulassen
         aVEvt.eEvent = SDREVENT_BEGDRAGOBJ;
-        mpView->EnableExtendedMouseEventDispatcher(sal_False);
+        mpView->EnableExtendedMouseEventDispatcher(FALSE);
     }
     else
     {
-        mpView->EnableExtendedMouseEventDispatcher(sal_True);
+        mpView->EnableExtendedMouseEventDispatcher(TRUE);
     }
 
     if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
@@ -167,9 +167,9 @@ sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstructBezierPolygon::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstructBezierPolygon::MouseMove(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseMove(rMEvt);
+    BOOL bReturn = FuConstruct::MouseMove(rMEvt);
     return(bReturn);
 }
 
@@ -179,15 +179,15 @@ sal_Bool FuConstructBezierPolygon::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
+BOOL FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 {
-    sal_Bool bReturn = sal_False;
-    sal_Bool bCreated = sal_False;
+    BOOL bReturn = FALSE;
+    BOOL bCreated = FALSE;
 
     SdrViewEvent aVEvt;
     mpView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt);
 
-    sal_uLong nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
+    ULONG nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
 
     if (mpView->IsInsObjPoint())
     {
@@ -200,15 +200,15 @@ sal_Bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 
     if (aVEvt.eEvent == SDREVENT_ENDCREATE)
     {
-        bReturn = sal_True;
+        bReturn = TRUE;
 
         if (nCount == (mpView->GetSdrPageView()->GetObjList()->GetObjCount() - 1))
         {
-            bCreated = sal_True;
+            bCreated = TRUE;
         }
 
         // Trick, um FuDraw::DoubleClick nicht auszuloesen
-        bMBDown = sal_False;
+        bMBDown = FALSE;
 
     }
 
@@ -248,7 +248,7 @@ sal_Bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
         mpView->DeleteMarked();
         bDeleted = true;
     }
-
+    
     if ((!bPermanent && bCreated) || bDeleted)
     {
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
@@ -261,14 +261,14 @@ sal_Bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuConstructBezierPolygon::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstructBezierPolygon::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
+    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
 
     return(bReturn);
 }
@@ -281,7 +281,7 @@ sal_Bool FuConstructBezierPolygon::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstructBezierPolygon::Activate()
 {
-    mpView->EnableExtendedMouseEventDispatcher(sal_True);
+    mpView->EnableExtendedMouseEventDispatcher(TRUE);
 
     SdrObjKind eKind;
 
@@ -332,7 +332,7 @@ void FuConstructBezierPolygon::Activate()
         break;
     }
 
-    mpView->SetCurrentObj((sal_uInt16)eKind);
+    mpView->SetCurrentObj((UINT16)eKind);
 
     FuConstruct::Activate();
 }
@@ -345,7 +345,7 @@ void FuConstructBezierPolygon::Activate()
 
 void FuConstructBezierPolygon::Deactivate()
 {
-    mpView->EnableExtendedMouseEventDispatcher(sal_False);
+    mpView->EnableExtendedMouseEventDispatcher(FALSE);
 
     FuConstruct::Deactivate();
 }
@@ -374,7 +374,7 @@ void FuConstructBezierPolygon::SelectionHasChanged()
 |*
 \************************************************************************/
 
-void FuConstructBezierPolygon::SetEditMode(sal_uInt16 nMode)
+void FuConstructBezierPolygon::SetEditMode(USHORT nMode)
 {
     nEditMode = nMode;
     ForcePointer();
@@ -384,6 +384,7 @@ void FuConstructBezierPolygon::SetEditMode(sal_uInt16 nMode)
     rBindings.Invalidate(SID_BEZIER_INSERT);
 }
 
+// #97016#
 SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_POLYGON:
@@ -443,7 +444,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                     basegfx::B2DPolygon aInnerPoly;
 
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
-
+                    
                     aInnerPoly.appendBezierSegment(
                         basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()),
                         basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()),
@@ -462,7 +463,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                     {
                         aInnerPoly.setClosed(true);
                     }
-
+                    
                     aPoly.append(aInnerPoly);
                     break;
                 }
@@ -470,14 +471,14 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                 case SID_DRAW_XPOLYGON_NOFILL:
                 {
                     basegfx::B2DPolygon aInnerPoly;
-
+                    
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Right(), rRectangle.Center().Y()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()));
-
+                    
                     if(SID_DRAW_XPOLYGON_NOFILL == nID)
                     {
                         aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));
@@ -496,7 +497,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                     basegfx::B2DPolygon aInnerPoly;
                     const sal_Int32 nWdt(rRectangle.GetWidth());
                     const sal_Int32 nHgt(rRectangle.GetHeight());
-
+                    
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 30) / 100, rRectangle.Top() + (nHgt * 70) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top() + (nHgt * 15) / 100));
@@ -505,7 +506,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 80) / 100, rRectangle.Top() + (nHgt * 50) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 80) / 100, rRectangle.Top() + (nHgt * 75) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Bottom(), rRectangle.Right()));
-
+                    
                     if(SID_DRAW_POLYGON_NOFILL == nID)
                     {
                         aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));
@@ -524,7 +525,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
         }
         else
         {
-            OSL_FAIL("Object is NO path object");
+            DBG_ERROR("Object is NO path object");
         }
 
         pObj->SetLogicRect(rRectangle);

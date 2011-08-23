@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,6 +144,7 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeEx
 {
     static uno::Sequence< uno::Type > aTypeList;
 
+    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !aTypeList.getLength() )
     {
@@ -161,6 +162,7 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeEx
     }
 
     return aTypeList;
+    // \--
 }
 uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId( void ) throw( uno::RuntimeException )
 {
@@ -292,6 +294,7 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
     m_xChartModel.clear();
     m_xParentWindow.clear();
 
+    // /--
     SolarMutexGuard aSolarGuard;
     if( m_pDialog )
     {
@@ -314,13 +317,14 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
     {
         ASSERT_EXCEPTION( ex );
     }
+    // \--
 }
 
 //XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL CreationWizardUnoDlg::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");
+    OSL_ENSURE(false,"not implemented");
     return 0;
 }
 
@@ -404,25 +408,25 @@ void SAL_CALL CreationWizardUnoDlg::addPropertyChangeListener(
         const ::rtl::OUString& /* aPropertyName */, const uno::Reference< beans::XPropertyChangeListener >& /* xListener */ )
         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");
+    OSL_ENSURE(false,"not implemented");
 }
 void SAL_CALL CreationWizardUnoDlg::removePropertyChangeListener(
     const ::rtl::OUString& /* aPropertyName */, const uno::Reference< beans::XPropertyChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");
+    OSL_ENSURE(false,"not implemented");
 }
 
 void SAL_CALL CreationWizardUnoDlg::addVetoableChangeListener( const ::rtl::OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");
+    OSL_ENSURE(false,"not implemented");
 }
 
 void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const ::rtl::OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");
+    OSL_ENSURE(false,"not implemented");
 }
 
 //.............................................................................

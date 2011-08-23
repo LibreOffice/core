@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,21 +26,33 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 #include <readonlyimage.hxx>
 #include <vcl/help.hxx>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 
+/*-- 26.02.2004 13:31:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
 ReadOnlyImage::ReadOnlyImage(Window* pParent, const ResId rResId) :
             FixedImage(pParent, rResId)
 {
-    SetImage( Image(CUI_RES( RID_SVXBMP_LOCK )));
+    sal_Bool bHighContrast = pParent->GetSettings().GetStyleSettings().GetHighContrastMode();
+    SetImage( Image(CUI_RES(bHighContrast ? RID_SVXBMP_LOCK_HC : RID_SVXBMP_LOCK )));
 }
 
+/*-- 26.02.2004 13:31:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
 ReadOnlyImage::~ReadOnlyImage()
 {
 }
+/*-- 26.02.2004 13:31:04---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
 {
     if( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
@@ -51,7 +63,7 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
 
         String aStr(ReadOnlyImage::GetHelpTip());
         if ( Help::IsBalloonHelpEnabled() )
-            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aScreenRect,
+            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aScreenRect, 
             aStr );
         else if ( Help::IsQuickHelpEnabled() )
             Help::ShowQuickHelp( this, aScreenRect, aStr );
@@ -60,6 +72,9 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp( rHEvt );
 }
 
+/*-- 26.02.2004 14:20:21---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
 const String& ReadOnlyImage::GetHelpTip()
 {
      static String  aStr(CUI_RES(RID_SVXSTR_READONLY_CONFIG_TIP));

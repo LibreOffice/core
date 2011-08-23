@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,10 @@
 |*
 |*    WildCard::Match()
 |*
+|*    Beschreibung      WLDCRD.SDW
+|*    Ersterstellung    MA 19.06.91
+|*    Letzte Aenderung  MA 03.07.91
+|*
 *************************************************************************/
 
 /* Diese Methode ueberprueft, ob die Wilde Karte in pWild mit dem String
@@ -45,7 +49,7 @@
  *
  */
 
-sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
+USHORT WildCard::ImpMatch( const char *pWild, const char *pStr ) const
 {
     int    pos=0;
     int    flag=0;
@@ -108,14 +112,18 @@ sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
 |*
 |*    WildCard::Matches()
 |*
+|*    Beschreibung      WLDCRD.SDW
+|*    Ersterstellung    MA 19.06.91
+|*    Letzte Aenderung  TH 02.02.96
+|*
 *************************************************************************/
 
-sal_Bool WildCard::Matches( const String& rString ) const
+BOOL WildCard::Matches( const String& rString ) const
 {
     ByteString aTmpWild = aWildString;
     ByteString aString(rString, osl_getThreadTextEncoding());
-
-    sal_uInt16  nSepPos;
+    
+    USHORT  nSepPos;
 
     if ( cSepSymbol != '\0' )
     {
@@ -123,16 +131,16 @@ sal_Bool WildCard::Matches( const String& rString ) const
         {
             // alle getrennten WildCard's pruefen
             if ( ImpMatch( aTmpWild.Copy( 0, nSepPos ).GetBuffer(), aString.GetBuffer() ) )
-                return sal_True;
+                return TRUE;
             aTmpWild.Erase( 0, nSepPos + 1 ); // Trennsymbol entfernen
         }
         // und noch den hinter dem letzen Trennsymbol bzw. den einzigen
     }
 
     if ( ImpMatch( aTmpWild.GetBuffer(), aString.GetBuffer() ) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

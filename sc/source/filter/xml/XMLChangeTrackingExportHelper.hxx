@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,13 @@ typedef std::list<ScChangeActionDel*> ScMyDeletionsList;
 
 class ScChangeTrackingExportHelper
 {
-    ScXMLExport&    rExport;
+    ScXMLExport&	rExport;
 
-    ScChangeTrack*  pChangeTrack;
+    ScChangeTrack*	pChangeTrack;
     ScEditEngineTextObj* pEditTextObj;
     ScChangeActionTable* pDependings;
-    rtl::OUString   sChangeIDPrefix;
-    com::sun::star::uno::Reference<com::sun::star::text::XText> xText;
+    rtl::OUString	sChangeIDPrefix;
+    com::sun::star::uno::Reference<com::sun::star::text::XText>	xText;
 
     rtl::OUString GetChangeID(const sal_uInt32 nActionNumber);
     void GetAcceptanceState(const ScChangeAction* pAction);

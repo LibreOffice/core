@@ -55,14 +55,14 @@
 
 namespace
 {
-    bool lcl_GetPageDesc(SwWrtShell *pSh, sal_uInt16 &rPageNo, const SwFmtPageDesc **ppPageFmtDesc)
+    bool lcl_GetPageDesc(SwWrtShell *pSh, USHORT &rPageNo, const SwFmtPageDesc **ppPageFmtDesc)
     {
         bool bRet = false;
         SfxItemSet aSet( pSh->GetAttrPool(), RES_PAGEDESC, RES_PAGEDESC );
         if (pSh->GetCurAttr( aSet ))
         {
             const SfxPoolItem* pItem(0);
-            if (SFX_ITEM_SET == aSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) && pItem)
+            if (SFX_ITEM_SET == aSet.GetItemState( RES_PAGEDESC, TRUE, &pItem ) && pItem)
             {
                 rPageNo = ((const SwFmtPageDesc *)pItem)->GetNumOffset();
                 if (ppPageFmtDesc)
@@ -73,26 +73,26 @@ namespace
         return bRet;
     }
 
-    bool lcl_SkipNPages(SwWrtShell *pSh, sal_uInt16 nNoPages)
+    bool lcl_SkipNPages(SwWrtShell *pSh, USHORT nNoPages)
     {
         bool bAllOk = true;
-        for (sal_uInt16 nI = 0; nI < nNoPages && bAllOk; ++nI)
+        for (USHORT nI = 0; nI < nNoPages && bAllOk; ++nI)
             bAllOk = pSh->SttNxtPg();
         return bAllOk;
     }
 
-    void lcl_ChangePage(SwWrtShell *pSh, sal_uInt16 nNewNumber,
+    void lcl_ChangePage(SwWrtShell *pSh, USHORT nNewNumber,
         const SwPageDesc *pNewDesc)
     {
-        const sal_uInt16 nCurIdx = pSh->GetCurPageDesc();
+        const USHORT nCurIdx = pSh->GetCurPageDesc();
         const SwPageDesc &rCurrentDesc = pSh->GetPageDesc( nCurIdx );
 
         const SwFmtPageDesc *pPageFmtDesc(0);
-        sal_uInt16 nDontCare;
+        USHORT nDontCare;
         lcl_GetPageDesc(pSh, nDontCare, &pPageFmtDesc);
 
         //If we want a new number then set it, otherwise reuse the existing one
-        sal_uInt16 nPgNo = nNewNumber ?
+        USHORT nPgNo = nNewNumber ?
             nNewNumber : ( pPageFmtDesc ? pPageFmtDesc->GetNumOffset() : 0 );
 
         //If we want a new descriptior then set it, otherwise reuse the existing one
@@ -114,22 +114,22 @@ namespace
 
     void lcl_PushCursor(SwWrtShell *pSh)
     {
-        pSh->LockView( sal_True );
+        pSh->LockView( TRUE );
         pSh->StartAllAction();
         pSh->SwCrsrShell::Push();
     }
 
     void lcl_PopCursor(SwWrtShell *pSh)
     {
-        pSh->SwCrsrShell::Pop( sal_False );
+        pSh->SwCrsrShell::Pop( FALSE );
         pSh->EndAllAction();
-        pSh->LockView( sal_False );
+        pSh->LockView( FALSE );
     }
 
-    sal_uInt16 lcl_GetCurrentPage(SwWrtShell *pSh)
+    USHORT lcl_GetCurrentPage(SwWrtShell *pSh)
     {
         String sDummy;
-        sal_uInt16 nPhyNum=1, nVirtNum=1;
+        USHORT nPhyNum=1, nVirtNum=1;
         pSh->GetPageNumber(0, true, nPhyNum, nVirtNum, sDummy);
         return nPhyNum;
     }
@@ -141,7 +141,7 @@ namespace
  */
 void SwTitlePageDlg::FillList()
 {
-    sal_uInt16 nTitlePages = aPageCountNF.GetValue();
+    USHORT nTitlePages = aPageCountNF.GetValue();
     aPagePropertiesLB.Clear();
     if (mpTitleDesc)
         aPagePropertiesLB.InsertEntry(mpTitleDesc->GetName());
@@ -152,9 +152,9 @@ void SwTitlePageDlg::FillList()
     aPagePropertiesLB.SelectEntryPos(0);
 }
 
-sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
+USHORT SwTitlePageDlg::GetInsertPosition() const
 {
-    sal_uInt16 nPage = 1;
+    USHORT nPage = 1;
     if (aPageStartNF.IsEnabled())
         nPage = aPageStartNF.GetValue();
     return nPage;
@@ -162,9 +162,7 @@ sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
 
 SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
     SfxModalDialog( pParent, SW_RES(DLG_TITLEPAGE) ),
-#ifdef MSC
 #pragma warning (disable : 4355)
-#endif
     aMakeInsertFL       ( this, SW_RES( FL_MAKEINSERT )),
     aUseExistingPagesRB ( this, SW_RES( RB_USE_EXISTING_PAGES )),
     aInsertNewPagesRB   ( this, SW_RES( RB_INSERT_NEW_PAGES )),
@@ -190,9 +188,7 @@ SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
     aCancelPB           ( this, SW_RES( PB_CANCEL )),
     aHelpPB             ( this, SW_RES( PB_HELP )),
     mpPageFmtDesc       (0)
-#ifdef MSC
 #pragma warning (default : 4355)
-#endif
 {
     FreeResource();
 
@@ -200,9 +196,9 @@ SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
     aRestartNumberingCB.SetClickHdl(LINK(this, SwTitlePageDlg, RestartNumberingHdl));
     aSetPageNumberCB.SetClickHdl(LINK(this, SwTitlePageDlg, SetPageNumberHdl));
 
-    sal_uInt16 nSetPage = 1;
-    sal_uInt16 nResetPage = 1;
-    sal_uInt16 nTitlePages = 1;
+    USHORT nSetPage = 1;
+    USHORT nResetPage = 1;
+    USHORT nTitlePages = 1;
     mpSh = ::GetActiveView()->GetWrtShellPtr();
     lcl_PushCursor(mpSh);
 
@@ -222,7 +218,7 @@ SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
         {
             while (mpSh->SttNxtPg())
             {
-                const sal_uInt16 nCurIdx = mpSh->GetCurPageDesc();
+                const USHORT nCurIdx = mpSh->GetCurPageDesc();
                 const SwPageDesc &rPageDesc = mpSh->GetPageDesc( nCurIdx );
 
                 if (mpIndexDesc != &rPageDesc)
@@ -297,7 +293,7 @@ IMPL_LINK(SwTitlePageDlg, StartPageHdl, RadioButton*, EMPTYARG)
     return 0;
 }
 
-SwTitlePageDlg::~SwTitlePageDlg()
+__EXPORT SwTitlePageDlg::~SwTitlePageDlg()
 {
     delete mpPageFmtDesc;
 }
@@ -324,16 +320,16 @@ IMPL_LINK( SwTitlePageDlg, OKHdl, Button *, /*pBtn*/ )
     else if (mpPageFmtDesc)
         aTitleDesc.SetNumOffset(mpPageFmtDesc->GetNumOffset());
 
-    sal_uInt16 nNoPages = aPageCountNF.GetValue();
+    USHORT nNoPages = aPageCountNF.GetValue();
     if (!aUseExistingPagesRB.IsChecked())
     {
         mpSh->GotoPage(GetInsertPosition(), false);
-        for (sal_uInt16 nI=0; nI < nNoPages; ++nI)
+        for (USHORT nI=0; nI < nNoPages; ++nI)
             mpSh->InsertPageBreak();
     }
 
     mpSh->GotoPage(GetInsertPosition(), false);
-    for (sal_uInt16 nI=1; nI < nNoPages; ++nI)
+    for (USHORT nI=1; nI < nNoPages; ++nI)
     {
         if (mpSh->SttNxtPg())
             lcl_ChangePage(mpSh, 0, mpIndexDesc);
@@ -350,7 +346,7 @@ IMPL_LINK( SwTitlePageDlg, OKHdl, Button *, /*pBtn*/ )
 
     if (aRestartNumberingCB.IsChecked() || nNoPages > 1)
     {
-        sal_uInt16 nPgNo = aRestartNumberingCB.IsChecked() ? aRestartNumberingNF.GetValue() : 0;
+        USHORT nPgNo = aRestartNumberingCB.IsChecked() ? aRestartNumberingNF.GetValue() : 0;
         const SwPageDesc *pNewDesc = nNoPages > 1 ? mpNormalDesc : 0;
         mpSh->GotoPage(GetInsertPosition() + nNoPages, false);
         lcl_ChangePage(mpSh, nPgNo, pNewDesc);

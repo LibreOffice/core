@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,10 @@ import org.apache.lucene.search.WildcardQuery;
 import com.sun.star.script.XInvocation;
 import com.sun.star.beans.XIntrospectionAccess;
 
-/** This class capsulates the class, that implements the minimal component and a
- * factory for creating the service (<CODE>__getComponentFactory</CODE>).
+/** This class capsulates the class, that implements the minimal component, a
+ * factory for creating the service (<CODE>__getComponentFactory</CODE>) and a
+ * method, that writes the information into the given registry key
+ * (<CODE>__writeRegistryServiceInfo</CODE>).
  */
 public class HelpSearch
 {
@@ -70,7 +72,7 @@ public class HelpSearch
         static private final String __serviceName =
             "com.sun.star.help.HelpSearch";
         static private final String aSearchMethodName = "search";
-
+    
         /** The initial component contextr, that gives access to
          * the service manager, supported singletons, ...
          * It's often later used
@@ -81,7 +83,7 @@ public class HelpSearch
          * It's often later used
          */
         private XMultiComponentFactory m_xMCF;
-
+    
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
@@ -90,13 +92,13 @@ public class HelpSearch
         {
             try {
                 m_cmpCtx = xCompContext;
-                m_xMCF = m_cmpCtx.getServiceManager();
+                m_xMCF = m_cmpCtx.getServiceManager();                
             }
             catch( Exception e ) {
                 e.printStackTrace();
             }
         }
-
+        
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */
@@ -114,7 +116,7 @@ public class HelpSearch
             String[] sSupportedServiceNames = { __serviceName };
             return sSupportedServiceNames;
         }
-
+      
         /** This method returns true, if the given service will be
          * supported by the component.
          * @param sServiceName Service name.
@@ -124,25 +126,25 @@ public class HelpSearch
         {
             return sServiceName.equals( __serviceName );
         }
-
+    
         /** Return the class name of the component.
          * @return Class name of the component.
          */
         public String getImplementationName()
         {
             return  _HelpSearch.class.getName();
-        }
+        }        
 
         //===================================================
         // XInvocation
         public XIntrospectionAccess getIntrospection()
         {
             return  null;
-        }
+        }        
 
         public Object invoke( String aFunctionName, java.lang.Object[] aParams,
             short[][] aOutParamIndex, java.lang.Object[][] aOutParam )
-                throws  com.sun.star.lang.IllegalArgumentException,
+                throws	com.sun.star.lang.IllegalArgumentException,
                         com.sun.star.script.CannotConvertException,
                         com.sun.star.reflection.InvocationTargetException
         {
@@ -181,7 +183,7 @@ public class HelpSearch
         }
 
         public void setValue( String aPropertyName, java.lang.Object aValue )
-            throws  com.sun.star.beans.UnknownPropertyException,
+            throws	com.sun.star.beans.UnknownPropertyException,
                     com.sun.star.script.CannotConvertException,
                     com.sun.star.reflection.InvocationTargetException {
             throw new com.sun.star.beans.UnknownPropertyException();
@@ -191,7 +193,7 @@ public class HelpSearch
             throws com.sun.star.beans.UnknownPropertyException {
             throw new com.sun.star.beans.UnknownPropertyException();
         }
-
+        
         public boolean hasMethod( String aMethodName ) {
             boolean bRet = (aMethodName.equals( aSearchMethodName ) );
             return bRet;
@@ -199,7 +201,7 @@ public class HelpSearch
         public boolean hasProperty( String aName ) {
             return false;
         }
-
+        
         // Command line interface for testing
         private static String[] doQuery( Object[] args, Object[] aScoreOutArray ) throws Exception
         {
@@ -250,7 +252,7 @@ public class HelpSearch
             return aDocs;
         }
 
-        private static String[] queryImpl( String aLanguageStr, String aIndexStr, String aQueryStr,
+        private static String[] queryImpl( String aLanguageStr, String aIndexStr, String aQueryStr, 
             boolean bCaptionOnly, Object[] aScoreOutArray ) throws Exception
         {
             IndexReader reader = IndexReader.open( aIndexStr );
@@ -273,7 +275,7 @@ public class HelpSearch
             Hits aHits = searcher.search( aQuery );
             int nHitCount = aHits.length();
 
-            String aDocs[] = new String[nHitCount];
+            String aDocs[] = new String[nHitCount];	
             float aScores[] = null;
             aScores = new float[nHitCount];
             for( int iHit = 0 ; iHit < nHitCount ; iHit++ )
@@ -304,14 +306,27 @@ public class HelpSearch
     public static XSingleComponentFactory __getComponentFactory(String sImplName)
     {
         XSingleComponentFactory xFactory = null;
-
+    
         if ( sImplName.equals( _HelpSearch.class.getName() ) )
             xFactory = Factory.createComponentFactory(_HelpSearch.class,
                                              _HelpSearch.getServiceNames());
-
+        
         return xFactory;
     }
 
+    /**
+     * Writes the service information into the given registry key.
+     * This method is called by the <code>JavaLoader</code>
+     * <p>
+     * @return  returns true if the operation succeeded
+     * @param   regKey the registryKey
+     * @see     com.sun.star.comp.loader.JavaLoader
+     */
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
+        return Factory.writeRegistryServiceInfo(_HelpSearch.class.getName(),
+                                                _HelpSearch.getServiceNames(),
+                                                regKey);
+    }
         /** This method is a member of the interface for initializing an object
          * directly after its creation.
          * @param object This array of arbitrary objects will be passed to the

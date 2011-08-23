@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,21 +48,20 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 
 using namespace padmin;
+using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace comphelper;
-
-using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
 class MyApp : public Application
 {
 public:
-    int Main();
-    virtual sal_uInt16  Exception( sal_uInt16 nError );
-
+    void			Main();
+    virtual USHORT	Exception( USHORT nError );
+    
     static void ReadStringHook( String& );
 };
 
@@ -84,7 +83,7 @@ void MyApp::ReadStringHook( String& rStr )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 MyApp::Exception( sal_uInt16 nError )
+USHORT MyApp::Exception( USHORT nError )
 {
     switch( nError & EXC_MAJORTYPE )
     {
@@ -95,7 +94,7 @@ sal_uInt16 MyApp::Exception( sal_uInt16 nError )
     return 0;
 }
 
-int MyApp::Main()
+void MyApp::Main()
 {
     PADialog* pPADialog;
 
@@ -115,7 +114,7 @@ int MyApp::Main()
     catch( com::sun::star::uno::Exception& rExc)
     {
     }
-
+    
     if( ! xFactory.is() )
     {
         fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
@@ -127,11 +126,11 @@ int MyApp::Main()
         new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
     /*
-     *  Create UCB.
+     *	Create UCB.
      */
     Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
-    aArgs[ 1 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bSuccess =
 #endif
@@ -144,25 +143,25 @@ int MyApp::Main()
         exit( 1 );
     }
 #endif
-
+    
     /*
-     * Initialize the Java UNO AccessBridge if accessibility is turned on
+     * Initialize the Java UNO AccessBridge if accessibility is turned on 
      */
-
+     
     if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
     {
-        sal_Bool bQuitApp;
+        BOOL bQuitApp;
         if( !InitAccessBridge( true, bQuitApp ) )
             if( bQuitApp )
-                return EXIT_FAILURE;
+                return;
     }
 
     // initialize test-tool library (if available)
     tools::InitTestToolLib();
-
+    
     ResMgr::SetReadStringHook( MyApp::ReadStringHook );
 
-    pPADialog = PADialog::Create( NULL , sal_False );
+    pPADialog = PADialog::Create( NULL , FALSE );
     Application::SetDisplayName( pPADialog->GetText() );
     pPADialog->SetIcon(501);
     pPADialog->Execute();
@@ -175,7 +174,6 @@ int MyApp::Main()
      */
     ::ucbhelper::ContentBroker::deinitialize();
 
-    return EXIT_SUCCESS;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

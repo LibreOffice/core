@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,30 +43,30 @@
  ---------------------------------------------------------------------------*/
 class SwParagraphNumTabPage : public SfxTabPage
 {
-    FixedLine               aOutlineStartFL;
-    FixedText               aOutlineLvFT;
-    ListBox                 aOutlineLvLB;
+    FixedLine				aOutlineStartFL;
+    FixedText				aOutlineLvFT;
+    ListBox					aOutlineLvLB;
+
+    FixedText               aNumberStyleFT;
+    ListBox					aNumberStyleLB;
 
     FixedLine               aNewStartFL;
-    FixedText               aNumberStyleFT;
-    ListBox                 aNumberStyleLB;
-
-    TriStateBox             aNewStartCB;
+    TriStateBox				aNewStartCB;
     TriStateBox             aNewStartNumberCB;
-    NumericField            aNewStartNF;
+    NumericField			aNewStartNF;
 
     FixedLine               aCountParaFL;
-    TriStateBox             aCountParaCB;
-    TriStateBox             aRestartParaCountCB;
-    FixedText               aRestartFT;
-    NumericField            aRestartNF;
+    TriStateBox				aCountParaCB;
+    TriStateBox				aRestartParaCountCB;
+    FixedText				aRestartFT;
+    NumericField			aRestartNF;
 
     // --> OD 2008-04-14 #outlinelevel#
     const String msOutlineNumbering;
     // <--
 
-    sal_Bool                    bModified : 1;
-    sal_Bool                    bCurNumrule : 1;
+    BOOL					bModified : 1;
+    BOOL					bCurNumrule : 1;
 
     DECL_LINK( NewStartHdl_Impl, CheckBox* );
     DECL_LINK( StyleHdl_Impl, ListBox* );
@@ -78,18 +78,18 @@ protected:
 public:
         ~SwParagraphNumTabPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create(	Window* pParent,
                                 const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static USHORT*		GetRanges();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual BOOL		FillItemSet( SfxItemSet& rSet );
+    virtual void		Reset( const SfxItemSet& rSet );
 
-    void                EnableNewStart();
-    void                DisableOutline();
-    void                DisableNumbering();
+    void				EnableNewStart();
+    void				DisableOutline();
+    void				DisableNumbering();
 
-    ListBox&            GetStyleBox() {return aNumberStyleLB;};
+    ListBox&			GetStyleBox() {return aNumberStyleLB;};
 };
 
 

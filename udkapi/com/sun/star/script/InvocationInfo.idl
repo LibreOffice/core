@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,27 +24,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_InvocationInfo_idl__
-#define __com_sun_star_script_InvocationInfo_idl__
+#ifndef __com_sun_star_script_InvocationInfo_idl__ 
+#define __com_sun_star_script_InvocationInfo_idl__ 
+ 
+#ifndef __com_sun_star_script_MemberType_idl__
+#include <com/sun/star/script/MemberType.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_reflection_ParamMode_idl__
+#include <com/sun/star/reflection/ParamMode.idl> 
+#endif 
 
-#include <com/sun/star/script/MemberType.idl>
-
-#include <com/sun/star/reflection/ParamMode.idl>
-
-//=============================================================================
-
- module com {  module sun {  module star {  module script {
-
-//=============================================================================
-
-/**
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module script {  
+ 
+//============================================================================= 
+ 
+/** 
     This struct is used to specify information about object members
-    (methods or properties) accessed via XInvocation, such as names,
+    (methods or properties) accessed via XInvocation, such as names, 
     types, or parameters.
     </p>
  */
 published struct InvocationInfo
-{
+{ 
 
     /** Name of the method or property.
      */
@@ -56,13 +60,13 @@ published struct InvocationInfo
 
     /** Only for property members:
         This field may contain zero or more constants of the
-        <type scope="com::sun::star::beans">PropertyAttribute</type>
-        constants group. It is not guaranteed that all necessary
+        <type scope="com::sun::star::beans">PropertyAttribute</type> 
+        constants group. It is not guaranteed that all necessary 
         constants are set to describe the property completely,
         but a flag will only be set, if the corresponding charac-
         teristic really exists. Example: If the READONLY flag
         is set, the property is readonly. If it isn't set, the
-        property nevertheless can be readonly.
+        property nevertheless can be readonly. 
 
         For methods this field is irrelevant and is set to 0.
      */
@@ -76,14 +80,14 @@ published struct InvocationInfo
      */
     sequence< type > aParamTypes;
 
-    /** Mode of method parameters (IN, OUT, INOUT),
+    /** Mode of method parameters (IN, OUT, INOUT), 
         for properties this sequence is empty.
      */
-    sequence< com::sun::star::reflection::ParamMode > aParamModes;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    sequence< com::sun::star::reflection::ParamMode > aParamModes; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,30 +60,30 @@ public:
                     ScUndoInsertCells( ScDocShell* pNewDocShell,
                                        const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
                                        InsCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData,
-                                       sal_Bool bNewPartOfPaste );
-    virtual         ~ScUndoInsertCells();
+                                       BOOL bNewPartOfPaste );
+    virtual			~ScUndoInsertCells();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat( SfxRepeatTarget& rTarget );
-    virtual sal_Bool    CanRepeat( SfxRepeatTarget& rTarget ) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat( SfxRepeatTarget& rTarget );
+    virtual BOOL	CanRepeat( SfxRepeatTarget& rTarget ) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
-    virtual sal_Bool    Merge( SfxUndoAction *pNextAction );
+    virtual BOOL	Merge( SfxUndoAction *pNextAction );
 
 private:
-    ScRange         aEffRange;
+    ScRange			aEffRange;
     SCTAB           nCount;
     SCTAB*          pTabs;
     SCTAB*          pScenarios;
-    sal_uLong           nEndChangeAction;
-    InsCellCmd      eCmd;
-    sal_Bool            bPartOfPaste;
-    SfxUndoAction*  pPasteUndo;
+    ULONG			nEndChangeAction;
+    InsCellCmd		eCmd;
+    BOOL			bPartOfPaste;
+    SfxUndoAction*	pPasteUndo;
 
-    void            DoChange ( const sal_Bool bUndo );
-    void            SetChangeTrack();
+    void			DoChange ( const BOOL bUndo );
+    void			SetChangeTrack();
 };
 
 
@@ -92,28 +92,28 @@ class ScUndoDeleteCells: public ScMoveUndo
 public:
                     TYPEINFO();
                     ScUndoDeleteCells( ScDocShell* pNewDocShell,
-                                       const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios,
+                                       const ScRange& rRange, SCTAB nNewCount, SCTAB* pNewTabs, SCTAB* pNewScenarios, 
                                        DelCellCmd eNewCmd, ScDocument* pUndoDocument, ScRefUndoData* pRefData );
-    virtual         ~ScUndoDeleteCells();
+    virtual 		~ScUndoDeleteCells();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScRange         aEffRange;
+    ScRange			aEffRange;
     SCTAB           nCount;
     SCTAB*          pTabs;
     SCTAB*          pScenarios;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
-    DelCellCmd      eCmd;
+    ULONG			nStartChangeAction;
+    ULONG			nEndChangeAction;
+    DelCellCmd		eCmd;
 
-    void            DoChange ( const sal_Bool bUndo );
-    void            SetChangeTrack();
+    void			DoChange ( const BOOL bUndo );
+    void			SetChangeTrack();
 };
 
 
@@ -122,29 +122,29 @@ class ScUndoDeleteMulti: public ScMoveUndo
 public:
                     TYPEINFO();
                     ScUndoDeleteMulti( ScDocShell* pNewDocShell,
-                                       sal_Bool bNewRows, sal_Bool bNeedsRefresh, SCTAB nNewTab,
+                                       BOOL bNewRows, BOOL bNeedsRefresh, SCTAB nNewTab,
                                        const SCCOLROW* pRng, SCCOLROW nRngCnt,
                                        ScDocument* pUndoDocument, ScRefUndoData* pRefData );
-    virtual         ~ScUndoDeleteMulti();
+    virtual			~ScUndoDeleteMulti();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    sal_Bool            bRows;
-    sal_Bool            bRefresh;
-    SCTAB           nTab;
-    SCCOLROW*       pRanges;
-    SCCOLROW        nRangeCnt;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
+    BOOL			bRows;
+    BOOL            bRefresh;
+    SCTAB			nTab;
+    SCCOLROW*		pRanges;
+    SCCOLROW		nRangeCnt;
+    ULONG			nStartChangeAction;
+    ULONG			nEndChangeAction;
 
-    void            DoChange() const;
-    void            SetChangeTrack();
+    void			DoChange() const;
+    void			SetChangeTrack();
 };
 
 
@@ -157,40 +157,40 @@ public:
                                ScAddress aOldEnd,           // end position without adjustment
                                const ScMarkData& rMark,     // selected sheets
                                ScDocument* pNewUndoDoc );
-    virtual         ~ScUndoCut();
+    virtual			~ScUndoCut();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
     ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
-    ScRange         aExtendedRange;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
+    ScDocument*		pUndoDoc;
+    ScRange			aExtendedRange;
+    ULONG			nStartChangeAction;
+    ULONG			nEndChangeAction;
 
-    void            DoChange( const sal_Bool bUndo );
-    void            SetChangeTrack();
+    void			DoChange( const BOOL bUndo );
+    void			SetChangeTrack();
 };
 
 
 struct ScUndoPasteOptions
 {
-    sal_uInt16 nFunction;
-    sal_Bool bSkipEmpty;
-    sal_Bool bTranspose;
-    sal_Bool bAsLink;
+    USHORT nFunction;
+    BOOL bSkipEmpty;
+    BOOL bTranspose;
+    BOOL bAsLink;
     InsCellCmd eMoveMode;
 
     ScUndoPasteOptions() :
         nFunction( PASTE_NOFUNC ),
-        bSkipEmpty( false ),
-        bTranspose( false ),
-        bAsLink( false ),
+        bSkipEmpty( FALSE ),
+        bTranspose( FALSE ),
+        bAsLink( FALSE ),
         eMoveMode( INS_NONE )
     {}
 };
@@ -204,33 +204,33 @@ public:
                                  SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                  const ScMarkData& rMark,
                                  ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
-                                 sal_uInt16 nNewFlags,
+                                 USHORT nNewFlags,
                                  ScRefUndoData* pRefData, void* pFill1, void* pFill2, void* pFill3,
-                                 sal_Bool bRedoIsFilled = sal_True,
+                                 BOOL bRedoIsFilled = TRUE,
                                  const ScUndoPasteOptions* pOptions = NULL );
-    virtual         ~ScUndoPaste();
+    virtual 		~ScUndoPaste();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
-    ScDocument*     pRedoDoc;
-    sal_uInt16          nFlags;
-    ScRefUndoData*  pRefUndoData;
-    ScRefUndoData*  pRefRedoData;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
-    sal_Bool            bRedoFilled;
+    ScMarkData		aMarkData;
+    ScDocument*		pUndoDoc;
+    ScDocument*		pRedoDoc;
+    USHORT			nFlags;
+    ScRefUndoData*	pRefUndoData;
+    ScRefUndoData*	pRefRedoData;
+    ULONG			nStartChangeAction;
+    ULONG			nEndChangeAction;
+    BOOL			bRedoFilled;
     ScUndoPasteOptions aPasteOptions;
 
-    void            DoChange( const sal_Bool bUndo );
-    void            SetChangeTrack();
+    void			DoChange( const BOOL bUndo );
+    void			SetChangeTrack();
 };
 
 
@@ -239,30 +239,30 @@ class ScUndoDragDrop: public ScMoveUndo
 public:
                     TYPEINFO();
                     ScUndoDragDrop( ScDocShell* pNewDocShell,
-                                    const ScRange& rRange, ScAddress aNewDestPos, sal_Bool bNewCut,
+                                    const ScRange& rRange, ScAddress aNewDestPos, BOOL bNewCut,
                                     ScDocument* pUndoDocument, ScRefUndoData* pRefData,
-                                    sal_Bool bScenario );
-    virtual         ~ScUndoDragDrop();
+                                    BOOL bScenario );
+    virtual 		~ScUndoDragDrop();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScRange         aSrcRange;
-    ScRange         aDestRange;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
-    sal_Bool            bCut;
-    sal_Bool            bKeepScenarioFlags;
+    ScRange			aSrcRange;
+    ScRange			aDestRange;
+    ULONG			nStartChangeAction;
+    ULONG			nEndChangeAction;
+    BOOL			bCut;
+    BOOL			bKeepScenarioFlags;
 
-    void            PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const;
-    void            DoUndo( ScRange aRange ) const;
+    void			PaintArea( ScRange aRange, USHORT nExtFlags ) const;
+    void			DoUndo( ScRange aRange ) const;
 
-    void            SetChangeTrack();
+    void			SetChangeTrack();
 };
 
 
@@ -273,29 +273,29 @@ public:
                     ScUndoDeleteContents( ScDocShell* pNewDocShell,
                                           const ScMarkData& rMark,
                                           const ScRange& rRange,
-                                          ScDocument* pNewUndoDoc, sal_Bool bNewMulti,
-                                          sal_uInt16 nNewFlags, sal_Bool bObjects );
-    virtual         ~ScUndoDeleteContents();
+                                          ScDocument* pNewUndoDoc, BOOL bNewMulti,
+                                          USHORT nNewFlags, BOOL bObjects );
+    virtual 		~ScUndoDeleteContents();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScRange         aRange;
-    ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;       // Blockmarkierung und geloeschte Daten
-    SdrUndoAction*  pDrawUndo;      // geloeschte Objekte
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
-    sal_uInt16          nFlags;
-    sal_Bool            bMulti;         // Mehrfachselektion
+    ScRange			aRange;
+    ScMarkData		aMarkData;
+    ScDocument*		pUndoDoc;		// Blockmarkierung und geloeschte Daten
+    SdrUndoAction*	pDrawUndo;		// geloeschte Objekte
+    ULONG			nStartChangeAction;
+    ULONG			nEndChangeAction;
+    USHORT			nFlags;
+    BOOL			bMulti;			// Mehrfachselektion
 
-    void            DoChange( const sal_Bool bUndo );
-    void            SetChangeTrack();
+    void			DoChange( const BOOL bUndo );
+    void			SetChangeTrack();
 };
 
 
@@ -307,32 +307,32 @@ public:
                                      const ScMarkData& rMark,
                                      SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                      SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                                     ScDocument* pNewUndoDoc, sal_Bool bNewMulti, SCTAB nSrc,
-                                     sal_uInt16 nFlg, sal_uInt16 nFunc, sal_Bool bSkip, sal_Bool bLink );
-    virtual         ~ScUndoFillTable();
+                                     ScDocument* pNewUndoDoc, BOOL bNewMulti, SCTAB nSrc,
+                                     USHORT nFlg, USHORT nFunc, BOOL bSkip, BOOL bLink );
+    virtual			~ScUndoFillTable();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScRange         aRange;
-    ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;       // Blockmarkierung und geloeschte Daten
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
-    sal_uInt16          nFlags;
-    sal_uInt16          nFunction;
-    SCTAB           nSrcTab;
-    sal_Bool            bMulti;         // Mehrfachselektion
-    sal_Bool            bSkipEmpty;
-    sal_Bool            bAsLink;
+    ScRange			aRange;
+    ScMarkData		aMarkData;
+    ScDocument*		pUndoDoc;		// Blockmarkierung und geloeschte Daten
+    ULONG			nStartChangeAction;
+    ULONG			nEndChangeAction;
+    USHORT			nFlags;
+    USHORT			nFunction;
+    SCTAB			nSrcTab;
+    BOOL			bMulti;			// Mehrfachselektion
+    BOOL			bSkipEmpty;
+    BOOL			bAsLink;
 
-    void            DoChange( const sal_Bool bUndo );
-    void            SetChangeTrack();
+    void			DoChange( const BOOL bUndo );
+    void			SetChangeTrack();
 };
 
 
@@ -344,31 +344,31 @@ public:
                                          const ScMarkData& rMark,
                                          SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                          SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                                         ScDocument* pNewUndoDoc, sal_Bool bNewMulti,
+                                         ScDocument* pNewUndoDoc, BOOL bNewMulti,
                                          const ScPatternAttr* pNewApply,
                                          const SvxBoxItem* pNewOuter = NULL,
                                          const SvxBoxInfoItem* pNewInner = NULL );
-    virtual         ~ScUndoSelectionAttr();
+    virtual 		~ScUndoSelectionAttr();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
     ScEditDataArray*    GetDataArray();
 private:
-    ScMarkData      aMarkData;
-    ScRange         aRange;
+    ScMarkData		aMarkData;
+    ScRange			aRange;
     ScEditDataArray aDataArray;
-    ScDocument*     pUndoDoc;
-    sal_Bool            bMulti;
-    ScPatternAttr*  pApplyPattern;
-    SvxBoxItem*     pLineOuter;
-    SvxBoxInfoItem* pLineInner;
+    ScDocument*		pUndoDoc;
+    BOOL			bMulti;
+    ScPatternAttr*	pApplyPattern;
+    SvxBoxItem*		pLineOuter;
+    SvxBoxInfoItem*	pLineInner;
 
-    void            DoChange( const sal_Bool bUndo );
+    void			DoChange( const BOOL bUndo );
     void            ChangeEditData( const bool bUndo );
 };
 
@@ -384,31 +384,31 @@ public:
                                     ScDocument* pNewUndoDoc,
                                     SCCOLROW nNewCnt, SCCOLROW* pNewRanges,
                                     ScOutlineTable* pNewUndoTab,
-                                    ScSizeMode eNewMode, sal_uInt16 nNewSizeTwips,
-                                    sal_Bool bNewWidth );
-    virtual                 ~ScUndoWidthOrHeight();
+                                    ScSizeMode eNewMode, USHORT nNewSizeTwips,
+                                    BOOL bNewWidth );
+    virtual 				~ScUndoWidthOrHeight();
 
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual void            Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool            CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void			Undo();
+    virtual void			Redo();
+    virtual void			Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL			CanRepeat(SfxRepeatTarget& rTarget) const;
 
     virtual String          GetComment() const;
 
 private:
-    ScMarkData      aMarkData;
-    SCCOLROW        nStart;
-    SCCOLROW        nEnd;
-    SCTAB           nStartTab;
-    SCTAB           nEndTab;
-    ScDocument*     pUndoDoc;
-    ScOutlineTable* pUndoTab;
-    SCCOLROW        nRangeCnt;
-    SCCOLROW*       pRanges;
-    sal_uInt16          nNewSize;
-    sal_Bool            bWidth;
-    ScSizeMode      eMode;
-    SdrUndoAction*  pDrawUndo;
+    ScMarkData		aMarkData;
+    SCCOLROW		nStart;
+    SCCOLROW		nEnd;
+    SCTAB			nStartTab;
+    SCTAB			nEndTab;
+    ScDocument*		pUndoDoc;
+    ScOutlineTable*	pUndoTab;
+    SCCOLROW		nRangeCnt;
+    SCCOLROW*		pRanges;
+    USHORT			nNewSize;
+    BOOL			bWidth;
+    ScSizeMode		eMode;
+    SdrUndoAction*	pDrawUndo;
 };
 
 
@@ -422,31 +422,31 @@ public:
                                     FillDir eNewFillDir,
                                     FillCmd eNewFillCmd, FillDateCmd eNewFillDateCmd,
                                     double fNewStartValue, double fNewStepValue, double fNewMaxValue,
-                                    sal_uInt16 nMaxShIndex );
-    virtual         ~ScUndoAutoFill();
+                                    USHORT nMaxShIndex );
+    virtual 		~ScUndoAutoFill();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScRange         aSource;
-    ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
-    FillDir         eFillDir;
-    FillCmd         eFillCmd;
-    FillDateCmd     eFillDateCmd;
-    double          fStartValue;
-    double          fStepValue;
-    double          fMaxValue;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
-    sal_uInt16          nMaxSharedIndex;
+    ScRange			aSource;
+    ScMarkData		aMarkData;
+    ScDocument*		pUndoDoc;
+    FillDir			eFillDir;
+    FillCmd			eFillCmd;
+    FillDateCmd		eFillDateCmd;
+    double			fStartValue;
+    double			fStepValue;
+    double			fMaxValue;
+    ULONG			nStartChangeAction;
+    ULONG			nEndChangeAction;
+    USHORT			nMaxSharedIndex;
 
-    void            SetChangeTrack();
+    void			SetChangeTrack();
 };
 
 
@@ -456,22 +456,22 @@ public:
                     TYPEINFO();
                     ScUndoMerge( ScDocShell* pNewDocShell, const ScCellMergeOption& rOption,
                                  bool bMergeContents, ScDocument* pUndoDoc, SdrUndoAction* pDrawUndo);
-    virtual         ~ScUndoMerge();
+    virtual 		~ScUndoMerge();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
     ScCellMergeOption maOption;
     bool            mbMergeContents;        // Merge contents in Redo().
-    ScDocument*     mpUndoDoc;              // wenn Daten zusammengefasst
+    ScDocument*		mpUndoDoc;              // wenn Daten zusammengefasst
     SdrUndoAction*  mpDrawUndo;
 
-    void            DoChange( bool bUndo ) const;
+    void			DoChange( bool bUndo ) const;
 };
 
 
@@ -482,21 +482,21 @@ public:
                     ScUndoAutoFormat( ScDocShell* pNewDocShell,
                                       const ScRange& rRange, ScDocument* pNewUndoDoc,
                                       const ScMarkData& rMark,
-                                      sal_Bool bNewSize, sal_uInt16 nNewFormatNo );
-    virtual         ~ScUndoAutoFormat();
+                                      BOOL bNewSize, USHORT nNewFormatNo );
+    virtual 		~ScUndoAutoFormat();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScDocument*     pUndoDoc;       // geloeschte Daten
-    ScMarkData      aMarkData;
-    sal_Bool            bSize;
-    sal_uInt16          nFormatNo;
+    ScDocument*		pUndoDoc;		// geloeschte Daten
+    ScMarkData		aMarkData;
+    BOOL			bSize;
+    USHORT			nFormatNo;
 };
 
 
@@ -509,25 +509,25 @@ public:
                                    SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                    const String& rNewUndoStr, ScDocument* pNewUndoDoc,
                                    const SvxSearchItem* pItem );
-    virtual         ~ScUndoReplace();
+    virtual 		~ScUndoReplace();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScAddress       aCursorPos;
-    ScMarkData      aMarkData;
-    String          aUndoStr;           // Daten bei Einfachmarkierung
-    ScDocument*     pUndoDoc;           // Blockmarkierung und geloeschte Daten
-    SvxSearchItem*  pSearchItem;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
+    ScAddress		aCursorPos;
+    ScMarkData		aMarkData;
+    String			aUndoStr;			// Daten bei Einfachmarkierung
+    ScDocument*		pUndoDoc;			// Blockmarkierung und geloeschte Daten
+    SvxSearchItem*	pSearchItem;
+    ULONG			nStartChangeAction;
+    ULONG			nEndChangeAction;
 
-            void    SetChangeTrack();
+            void	SetChangeTrack();
 };
 
 
@@ -543,24 +543,24 @@ public:
                                  const ScRefAddress& rFormulaEnd,
                                  const ScRefAddress& rRowCell,
                                  const ScRefAddress& rColCell,
-                                 sal_uInt8 nMode );
-    virtual         ~ScUndoTabOp();
+                                 BYTE nMode );
+    virtual			~ScUndoTabOp();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScRange         aRange;
-    ScDocument*     pUndoDoc;       // geloeschte Daten
-    ScRefAddress    theFormulaCell;
-    ScRefAddress    theFormulaEnd;
-    ScRefAddress    theRowCell;
-    ScRefAddress    theColCell;
-    sal_uInt8           nMode;
+    ScRange			aRange;
+    ScDocument*		pUndoDoc;		// geloeschte Daten
+    ScRefAddress	theFormulaCell;
+    ScRefAddress	theFormulaEnd;
+    ScRefAddress	theRowCell;
+    ScRefAddress	theColCell;
+    BYTE			nMode;
 };
 
 
@@ -579,7 +579,7 @@ public:
     virtual void            Undo();
     virtual void            Redo();
     virtual void            Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool            CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual BOOL            CanRepeat(SfxRepeatTarget& rTarget) const;
 
     virtual String          GetComment() const;
 
@@ -589,8 +589,8 @@ private:
     ScDocument*             pUndoDoc;           // Blockmarkierung und geloeschte Daten
     ScAddress               aNewCursorPos;
     ScDocument*             pRedoDoc;           // Blockmarkierung und neue Daten
-    sal_uLong                   nStartChangeAction;
-    sal_uLong                   nEndChangeAction;
+    ULONG                   nStartChangeAction;
+    ULONG                   nEndChangeAction;
     ScConversionParam       maConvParam;        /// Conversion type and parameters.
 
     void                    DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPos );
@@ -603,13 +603,13 @@ public:
                         TYPEINFO();
                         ScUndoRefConversion( ScDocShell* pNewDocShell,
                             const ScRange& aMarkRange, const ScMarkData& rMark,
-                            ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, sal_Bool bNewMulti, sal_uInt16 nNewFlag);
+                            ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, BOOL bNewMulti, USHORT nNewFlag);
     virtual             ~ScUndoRefConversion();
 
     virtual void        Undo();
     virtual void        Redo();
     virtual void        Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool        CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual BOOL        CanRepeat(SfxRepeatTarget& rTarget) const;
 
     virtual String      GetComment() const;
 
@@ -618,10 +618,10 @@ private:
     ScDocument*         pUndoDoc;
     ScDocument*         pRedoDoc;
     ScRange             aRange;
-    sal_Bool                bMulti;
-    sal_uInt16              nFlags;
-    sal_uLong               nStartChangeAction;
-    sal_uLong               nEndChangeAction;
+    BOOL                bMulti;
+    USHORT              nFlags;
+    ULONG               nStartChangeAction;
+    ULONG               nEndChangeAction;
 
     void                DoChange( ScDocument* pRefDoc);
     void                SetChangeTrack();
@@ -634,20 +634,20 @@ public:
                     ScUndoListNames( ScDocShell* pNewDocShell,
                                      const ScRange& rRange,
                                      ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc );
-    virtual         ~ScUndoListNames();
+    virtual 		~ScUndoListNames();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScDocument*     pUndoDoc;
-    ScDocument*     pRedoDoc;
+    ScDocument*		pUndoDoc;
+    ScDocument*		pRedoDoc;
 
-    void            DoChange( ScDocument* pSrcDoc ) const;
+    void			DoChange( ScDocument* pSrcDoc ) const;
 };
 
 
@@ -659,20 +659,20 @@ public:
                                     const ScMarkData& rMark,
                                     const ScArea& rDestArea, ScDocument* pNewUndoDoc,
                                     const String& rNewName );
-    virtual                 ~ScUndoUseScenario();
+    virtual 				~ScUndoUseScenario();
 
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual void            Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool            CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void			Undo();
+    virtual void			Redo();
+    virtual void			Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL			CanRepeat(SfxRepeatTarget& rTarget) const;
 
     virtual String          GetComment() const;
 
 private:
-    ScDocument*     pUndoDoc;
-    ScRange         aRange;
-    ScMarkData      aMarkData;
-    String          aName;
+    ScDocument*		pUndoDoc;
+    ScRange			aRange;
+    ScMarkData		aMarkData;
+    String			aName;
 };
 
 
@@ -685,23 +685,23 @@ public:
                                           const ScRange& rRange,
                                           const String& rName,
                                           ScDocument* pNewUndoDoc );
-    virtual         ~ScUndoSelectionStyle();
+    virtual 		~ScUndoSelectionStyle();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
-    virtual sal_uInt16  GetId() const;
+    virtual String	GetComment() const;
+    virtual USHORT	GetId() const;
 
 private:
-    ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
-    String          aStyleName;
-    ScRange         aRange;
+    ScMarkData		aMarkData;
+    ScDocument*		pUndoDoc;
+    String			aStyleName;
+    ScRange			aRange;
 
-    void            DoChange( const sal_Bool bUndo );
+    void			DoChange( const BOOL bUndo );
 };
 
 
@@ -711,18 +711,18 @@ public:
                     TYPEINFO();
                     ScUndoRefreshLink( ScDocShell* pNewDocShell,
                                        ScDocument* pNewUndoDoc );
-    virtual         ~ScUndoRefreshLink();
+    virtual 		~ScUndoRefreshLink();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScDocument*     pUndoDoc;
-    ScDocument*     pRedoDoc;
+    ScDocument*		pUndoDoc;
+    ScDocument*		pRedoDoc;
 };
 
 
@@ -734,23 +734,23 @@ public:
                                        const ScRange& rArea,
                                        ScDocument* pNewUndoDoc,
                                        const String& rForm );
-    virtual         ~ScUndoEnterMatrix();
+    virtual 		~ScUndoEnterMatrix();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScDocument*     pUndoDoc;
-    String          aFormula;
+    ScDocument*		pUndoDoc;
+    String			aFormula;
     formula::FormulaGrammar::AddressConvention eConv;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
+    ULONG			nStartChangeAction;
+    ULONG			nEndChangeAction;
 
-    void            SetChangeTrack();
+    void			SetChangeTrack();
 };
 
 
@@ -762,23 +762,23 @@ public:
                                           const String& rDoc,
                                           const String& rFlt, const String& rOpt,
                                           const String& rArea, const ScRange& rDestRange,
-                                          sal_uLong nRefreshDelay );
-    virtual         ~ScUndoInsertAreaLink();
+                                          ULONG nRefreshDelay );
+    virtual			~ScUndoInsertAreaLink();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    String          aDocName;
-    String          aFltName;
-    String          aOptions;
-    String          aAreaName;
-    ScRange         aRange;
-    sal_uLong           nRefreshDelay;
+    String			aDocName;
+    String			aFltName;
+    String			aOptions;
+    String			aAreaName;
+    ScRange			aRange;
+    ULONG			nRefreshDelay;
 };
 
 
@@ -790,27 +790,27 @@ public:
                                           const String& rDoc,
                                           const String& rFlt, const String& rOpt,
                                           const String& rArea, const ScRange& rDestRange,
-                                          sal_uLong nRefreshDelay );
-    virtual         ~ScUndoRemoveAreaLink();
+                                          ULONG nRefreshDelay );
+    virtual			~ScUndoRemoveAreaLink();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    String          aDocName;
-    String          aFltName;
-    String          aOptions;
-    String          aAreaName;
-    ScRange         aRange;
-    sal_uLong           nRefreshDelay;
+    String			aDocName;
+    String			aFltName;
+    String			aOptions;
+    String			aAreaName;
+    ScRange			aRange;
+    ULONG			nRefreshDelay;
 };
 
 
-class ScUndoUpdateAreaLink : public ScSimpleUndo        //! auch BlockUndo umstellen?
+class ScUndoUpdateAreaLink : public ScSimpleUndo		//! auch BlockUndo umstellen?
 {
 public:
                     TYPEINFO();
@@ -818,40 +818,40 @@ public:
                                           const String& rOldD,
                                           const String& rOldF, const String& rOldO,
                                           const String& rOldA, const ScRange& rOldR,
-                                          sal_uLong nOldRD,
+                                          ULONG nOldRD,
                                           const String& rNewD,
                                           const String& rNewF, const String& rNewO,
                                           const String& rNewA, const ScRange& rNewR,
-                                          sal_uLong nNewRD,
+                                          ULONG nNewRD,
                                           ScDocument* pUndo, ScDocument* pRedo,
-                                          sal_Bool bDoInsert );
-    virtual         ~ScUndoUpdateAreaLink();
+                                          BOOL bDoInsert );
+    virtual			~ScUndoUpdateAreaLink();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    String          aOldDoc;
-    String          aOldFlt;
-    String          aOldOpt;
-    String          aOldArea;
-    ScRange         aOldRange;
-    String          aNewDoc;
-    String          aNewFlt;
-    String          aNewOpt;
-    String          aNewArea;
-    ScRange         aNewRange;
-    ScDocument*     pUndoDoc;
-    ScDocument*     pRedoDoc;
-    sal_uLong           nOldRefresh;
-    sal_uLong           nNewRefresh;
-    sal_Bool            bWithInsert;
+    String			aOldDoc;
+    String			aOldFlt;
+    String			aOldOpt;
+    String			aOldArea;
+    ScRange			aOldRange;
+    String			aNewDoc;
+    String			aNewFlt;
+    String			aNewOpt;
+    String			aNewArea;
+    ScRange			aNewRange;
+    ScDocument*		pUndoDoc;
+    ScDocument*		pRedoDoc;
+    ULONG			nOldRefresh;
+    ULONG			nNewRefresh;
+    BOOL			bWithInsert;
 
-    void            DoChange( const sal_Bool bUndo ) const;
+    void			DoChange( const BOOL bUndo ) const;
 };
 
 
@@ -860,20 +860,20 @@ class ScUndoIndent: public ScBlockUndo
 public:
                     TYPEINFO();
                     ScUndoIndent( ScDocShell* pNewDocShell, const ScMarkData& rMark,
-                                    ScDocument* pNewUndoDoc, sal_Bool bIncrement );
-    virtual         ~ScUndoIndent();
+                                    ScDocument* pNewUndoDoc, BOOL bIncrement );
+    virtual 		~ScUndoIndent();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
-    sal_Bool            bIsIncrement;
+    ScMarkData		aMarkData;
+    ScDocument*		pUndoDoc;
+    BOOL			bIsIncrement;
 };
 
 
@@ -883,19 +883,19 @@ public:
                     TYPEINFO();
                     ScUndoTransliterate( ScDocShell* pNewDocShell, const ScMarkData& rMark,
                                         ScDocument* pNewUndoDoc, sal_Int32 nType );
-    virtual         ~ScUndoTransliterate();
+    virtual 		~ScUndoTransliterate();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
-    sal_Int32       nTransliterationType;
+    ScMarkData		aMarkData;
+    ScDocument*		pUndoDoc;
+    sal_Int32		nTransliterationType;
 };
 
 
@@ -904,20 +904,20 @@ class ScUndoClearItems: public ScBlockUndo
 public:
                     TYPEINFO();
                     ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& rMark,
-                                        ScDocument* pNewUndoDoc, const sal_uInt16* pW );
-    virtual         ~ScUndoClearItems();
+                                        ScDocument* pNewUndoDoc, const USHORT* pW );
+    virtual 		~ScUndoClearItems();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
-    sal_uInt16*         pWhich;
+    ScMarkData		aMarkData;
+    ScDocument*		pUndoDoc;
+    USHORT*			pWhich;
 };
 
 
@@ -927,18 +927,18 @@ public:
                     TYPEINFO();
                     ScUndoRemoveBreaks( ScDocShell* pNewDocShell,
                                     SCTAB nNewTab, ScDocument* pNewUndoDoc );
-    virtual         ~ScUndoRemoveBreaks();
+    virtual 		~ScUndoRemoveBreaks();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    SCTAB           nTab;
-    ScDocument*     pUndoDoc;
+    SCTAB			nTab;
+    ScDocument*		pUndoDoc;
 };
 
 
@@ -949,20 +949,20 @@ public:
                     ScUndoRemoveMerge( ScDocShell* pNewDocShell,
                                        const ScCellMergeOption& rOption,
                                        ScDocument* pNewUndoDoc );
-    virtual         ~ScUndoRemoveMerge();
+    virtual 		~ScUndoRemoveMerge();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
     void            SetCurTab();
 
     ScCellMergeOption maOption;
-    ScDocument*     pUndoDoc;
+    ScDocument*		pUndoDoc;
 };
 
 
@@ -975,20 +975,20 @@ public:
                                     ScDocument* pNewUndoDoc,
                                     const SvxBoxItem& rNewOuter,
                                     const SvxBoxInfoItem& rNewInner );
-    virtual         ~ScUndoBorder();
+    virtual 		~ScUndoBorder();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void	Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL	CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String	GetComment() const;
 
 private:
-    ScDocument*     pUndoDoc;
-    ScRangeList*    pRanges;
-    SvxBoxItem*     pOuter;
-    SvxBoxInfoItem* pInner;
+    ScDocument*		pUndoDoc;
+    ScRangeList*	pRanges;
+    SvxBoxItem*		pOuter;
+    SvxBoxInfoItem*	pInner;
 };
 
 

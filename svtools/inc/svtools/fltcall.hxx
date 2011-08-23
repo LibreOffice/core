@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,33 +42,33 @@ class Window;
 struct FltCallDialogParameter
 {
 
-    Window*     pWindow;
-    ResMgr*     pResMgr;
-    FieldUnit   eFieldUnit;
-    String      aFilterExt;
+    Window*		pWindow;
+    ResMgr*		pResMgr;
+    FieldUnit	eFieldUnit;
+    String		aFilterExt;
 
     // In and Out PropertySequence for all filter dialogs
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
 
     FltCallDialogParameter( Window* pW, ResMgr* pRsMgr, FieldUnit eFiUni ) :
-        pWindow         ( pW ),
-        pResMgr         ( pRsMgr ),
-        eFieldUnit      ( eFiUni ) {};
+        pWindow			( pW ),
+        pResMgr			( pRsMgr ),
+        eFieldUnit		( eFiUni ) {};
 };
 
-typedef sal_Bool (*PFilterCall)(SvStream & rStream, Graphic & rGraphic,
+typedef BOOL (*PFilterCall)(SvStream & rStream, Graphic & rGraphic,
                                 FilterConfigItem* pConfigItem, sal_Bool bPrefDialog);
     // Von diesem Typ sind sowohl Export-Filter-Funktionen als auch Import-Filter-Funktionen.
     // rFileName ist der komplette Pfadname der zu importierenden bzw. zu exportierenden Datei.
     // pCallBack darf auch NULL sein. pCallerData wird der Callback-Funktion uebergeben.
     // pOptionsConfig darf NULL sein. Anderenfalls ist die Gruppe des Config schon gesetzt
     // und darf von dem Filter nicht geaendert werden!
-    // Wenn bPrefDialog==sal_True gilt, wird ggf. ein Preferences-Dialog durchgefuehrt.
+    // Wenn bPrefDialog==TRUE gilt, wird ggf. ein Preferences-Dialog durchgefuehrt.
 
-typedef sal_Bool ( *PFilterDlgCall )( FltCallDialogParameter& );
+typedef BOOL ( *PFilterDlgCall )( FltCallDialogParameter& );
     // Von diesem Typ sind sowohl Export-Filter-Funktionen als auch Import-Filter-Funktionen.
     // Uebergeben wird ein Pointer auf ein Parent-Fenster und auf die Options-Config.
-    // pOptions und pWindow duerfen NULL sein, in diesem Fall wird sal_False zurueckgeliefert.
+    // pOptions und pWindow duerfen NULL sein, in diesem Fall wird FALSE zurueckgeliefert.
     // Anderenfalls ist die Gruppe der Config schon gesetzt
     // und darf von dem Filter nicht geaendert werden!
 

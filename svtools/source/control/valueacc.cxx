@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,12 @@ using namespace ::com::sun::star;
 // - ValueSetItem -
 // ----------------
 
-ValueSetItem::ValueSetItem( ValueSet& rParent )
-    : mrParent(rParent)
-    , mnId(0)
-    , mnBits(0)
-    , meType(VALUESETITEM_NONE)
-    , mpData(NULL)
-    , mpxAcc(NULL)
+ValueSetItem::ValueSetItem( ValueSet& rParent ) :
+    mrParent( rParent ),
+    mnId( 0 ),
+    mnBits( 0 ),
+    mpData( NULL ),
+    mpxAcc( NULL )
 {
 }
 
@@ -227,7 +226,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xRet;
-    ValueSetItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(i));
+    ValueSetItem* pItem = getItem (sal::static_int_cast< USHORT >(i));
 
     if( pItem )
         xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
@@ -267,7 +266,7 @@ sal_Int32 SAL_CALL ValueSetAcc::getAccessibleIndexInParent()
     {
         sal_Bool bFound = sal_False;
 
-        for( sal_uInt16 i = 0, nCount = pParent->GetChildCount(); ( i < nCount ) && !bFound; i++ )
+        for( USHORT i = 0, nCount = pParent->GetChildCount(); ( i < nCount ) && !bFound; i++ )
         {
             if( pParent->GetChild( i ) == mpParent )
             {
@@ -319,7 +318,7 @@ sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
 
     if ( !aRet.Len() )
     {
-        Window* pLabel = mpParent->GetAccessibleRelationLabeledBy();
+        Window* pLabel = mpParent->GetLabeledBy();
         if ( pLabel && pLabel != mpParent )
             aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
     }
@@ -452,16 +451,16 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const sal_uInt16                                    nItemId = mpParent->GetItemId( Point( aPoint.X, aPoint.Y ) );
+    const USHORT                                    nItemId = mpParent->GetItemId( Point( aPoint.X, aPoint.Y ) );
     uno::Reference< accessibility::XAccessible >    xRet;
 
-    if( ((sal_uInt16)-1) != nItemId )
+    if( VALUESET_ITEM_NOTFOUND != nItemId )
     {
-        const size_t nItemPos = mpParent->GetItemPos( nItemId );
+        const USHORT nItemPos = mpParent->GetItemPos( nItemId );
 
         if( VALUESET_ITEM_NONEITEM != nItemPos )
         {
-            ValueSetItem* pItem = (*mpParent->mpImpl->mpItemList)[ nItemPos ];
+            ValueSetItem* pItem = mpParent->mpImpl->mpItemList->GetObject( nItemPos );
 
             if( ( pItem->meType != VALUESETITEM_SPACE ) && !pItem->maRect.IsEmpty() )
                xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
@@ -561,7 +560,7 @@ sal_Int32 SAL_CALL ValueSetAcc::getForeground(  )
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -571,7 +570,7 @@ sal_Int32 SAL_CALL ValueSetAcc::getBackground(  )
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -582,7 +581,7 @@ void SAL_CALL ValueSetAcc::selectAccessibleChild( sal_Int32 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    ValueSetItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
+    ValueSetItem* pItem = getItem (sal::static_int_cast< USHORT >(nChildIndex));
 
     if(pItem != NULL)
     {
@@ -600,7 +599,7 @@ sal_Bool SAL_CALL ValueSetAcc::isAccessibleChildSelected( sal_Int32 nChildIndex 
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    ValueSetItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
+    ValueSetItem* pItem = getItem (sal::static_int_cast< USHORT >(nChildIndex));
     sal_Bool            bRet = sal_False;
 
     if (pItem != NULL)
@@ -639,7 +638,7 @@ sal_Int32 SAL_CALL ValueSetAcc::getSelectedAccessibleChildCount()
     const SolarMutexGuard aSolarGuard;
     sal_Int32           nRet = 0;
 
-    for( sal_uInt16 i = 0, nCount = getItemCount(); i < nCount; i++ )
+    for( USHORT i = 0, nCount = getItemCount(); i < nCount; i++ )
     {
         ValueSetItem* pItem = getItem (i);
 
@@ -659,7 +658,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getSelectedAc
     const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xRet;
 
-    for( sal_uInt16 i = 0, nCount = getItemCount(), nSel = 0; ( i < nCount ) && !xRet.is(); i++ )
+    for( USHORT i = 0, nCount = getItemCount(), nSel = 0; ( i < nCount ) && !xRet.is(); i++ )
     {
         ValueSetItem* pItem = getItem(i);
 
@@ -736,9 +735,9 @@ void SAL_CALL ValueSetAcc::disposing (void)
 }
 
 
-sal_uInt16 ValueSetAcc::getItemCount (void) const
+USHORT ValueSetAcc::getItemCount (void) const
 {
-    sal_uInt16 nCount = mpParent->ImplGetVisibleItemCount();
+    USHORT nCount = mpParent->ImplGetVisibleItemCount();
     // When the None-Item is visible then increase the number of items by
     // one.
     if (HasNoneField())
@@ -747,7 +746,7 @@ sal_uInt16 ValueSetAcc::getItemCount (void) const
 }
 
 
-ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
+ValueSetItem* ValueSetAcc::getItem (USHORT nIndex) const
 {
     ValueSetItem* pItem = NULL;
 
@@ -761,7 +760,7 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
             nIndex -= 1;
     }
     if (pItem == NULL)
-        pItem = mpParent->ImplGetVisibleItem (static_cast<sal_uInt16>(nIndex));
+        pItem = mpParent->ImplGetVisibleItem (static_cast<USHORT>(nIndex));
 
     return pItem;
 }
@@ -937,9 +936,9 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
     {
         bool bDone = false;
 
-        sal_uInt16 nCount = mpParent->mrParent.ImplGetVisibleItemCount();
+        USHORT nCount = mpParent->mrParent.ImplGetVisibleItemCount();
         ValueSetItem* pItem;
-        for (sal_uInt16 i=0; i<nCount && !bDone; i++)
+        for (USHORT i=0; i<nCount && !bDone; i++)
         {
             // Guard the retrieval of the i-th child with a try/catch block
             // just in case the number of children changes in the mean time.
@@ -1030,13 +1029,13 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueItemAcc::getA
 
         // SELECTABLE
         pStateSet->AddState( accessibility::AccessibleStateType::SELECTABLE );
-        //      pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
+        //	    pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
 
         // SELECTED
         if( mpParent->mrParent.GetSelectItemId() == mpParent->mnId )
         {
             pStateSet->AddState( accessibility::AccessibleStateType::SELECTED );
-            //              pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );
+            //       	    pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );
         }
     }
 
@@ -1228,16 +1227,16 @@ uno::Any SAL_CALL ValueItemAcc::getAccessibleKeyBinding()
 sal_Int32 SAL_CALL ValueItemAcc::getForeground(  )
     throw (uno::RuntimeException)
 {
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
+sal_Int32 SAL_CALL ValueItemAcc::getBackground(  ) 
     throw (uno::RuntimeException)
 {
-    sal_uInt32 nColor;
+    UINT32 nColor;
     if (mpParent && mpParent->meType == VALUESETITEM_COLOR)
         nColor = mpParent->maColor.GetColor();
     else

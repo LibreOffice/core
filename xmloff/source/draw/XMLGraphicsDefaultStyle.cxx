@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
 #include <xmloff/families.hxx>
@@ -83,10 +83,10 @@ SvXMLImportContext *XMLGraphicsDefaultStyle::CreateChildContext( sal_uInt16 nPre
         {
             UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() );
             if( xImpPrMap.is() )
-                pContext = new XMLShapePropertySetContext( GetImport(), nPrefix, rLocalName, xAttrList, nFamily, GetProperties(), xImpPrMap );
+                pContext = new XMLShapePropertySetContext( GetImport(), nPrefix, rLocalName, xAttrList,	nFamily, GetProperties(), xImpPrMap );
         }
     }
-
+        
     if( !pContext )
         pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
@@ -100,27 +100,9 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     if( !xFact.is() )
         return;
 
-    Reference< XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), UNO_QUERY );
+    Reference< XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), UNO_QUERY ); 
     if( !xDefaults.is() )
         return;
-                                            // SJ: #i114750#
-    sal_Bool bWordWrapDefault = sal_True;   // initializing with correct odf fo:wrap-option default
-    sal_Int32 nUPD( 0 );
-    sal_Int32 nBuild( 0 );
-    const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
-    if ( bBuildIdFound && (
-        ((nUPD >= 600) &&  (nUPD < 700))
-        ||
-        ((nUPD == 300) && (nBuild <= 9535))
-        ||
-        ((nUPD > 300) && (nUPD <= 330))
-    ) )
-        bWordWrapDefault = sal_False;
-
-    const OUString sTextWordWrap( RTL_CONSTASCII_USTRINGPARAM( "TextWordWrap" ) );
-    Reference< XPropertySetInfo > xInfo( xDefaults->getPropertySetInfo() );
-    if ( xInfo->hasPropertyByName( sTextWordWrap ) )
-        xDefaults->setPropertyValue( sTextWordWrap, Any( bWordWrapDefault ) );
 
     FillPropertySet( xDefaults );
 }

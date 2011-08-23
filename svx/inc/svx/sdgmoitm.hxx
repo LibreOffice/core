@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,15 +44,15 @@ public:
 
                             TYPEINFO();
 
-                            SdrGrafModeItem( GraphicDrawMode eMode = GRAPHICDRAWMODE_STANDARD ) : SfxEnumItem( SDRATTR_GRAFMODE, (sal_uInt16)eMode ) {}
+                            SdrGrafModeItem( GraphicDrawMode eMode = GRAPHICDRAWMODE_STANDARD ) : SfxEnumItem( SDRATTR_GRAFMODE, (USHORT)eMode ) {}
                             SdrGrafModeItem( SvStream& rIn ) : SfxEnumItem( SDRATTR_GRAFMODE, rIn ) {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
-    virtual sal_uInt16          GetValueCount() const;
-    GraphicDrawMode         GetValue() const { return (GraphicDrawMode) SfxEnumItem::GetValue(); }
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = NULL ) const;
+    virtual SfxPoolItem*	Create( SvStream& rIn, USHORT nVer ) const;
+    virtual USHORT			GetValueCount() const;
+    GraphicDrawMode			GetValue() const { return (GraphicDrawMode) SfxEnumItem::GetValue(); }
 
-    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual String			GetValueTextByPos( USHORT nPos ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,

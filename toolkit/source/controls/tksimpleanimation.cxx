@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,7 @@ namespace toolkit
     //= UnoSimpleAnimationControlModel
     //====================================================================
     //--------------------------------------------------------------------
-    UnoSimpleAnimationControlModel::UnoSimpleAnimationControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
-        :UnoControlModel( i_factory )
+    UnoSimpleAnimationControlModel::UnoSimpleAnimationControlModel()
     {
         ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
         ImplRegisterProperty( BASEPROPERTY_REPEAT );
@@ -121,15 +120,35 @@ namespace toolkit
     //= UnoSimpleAnimationControl
     //====================================================================
     //--------------------------------------------------------------------
-    UnoSimpleAnimationControl::UnoSimpleAnimationControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
-        :UnoSimpleAnimationControl_Base( i_factory )
+    UnoSimpleAnimationControl::UnoSimpleAnimationControl()
     {
     }
 
     //--------------------------------------------------------------------
     ::rtl::OUString UnoSimpleAnimationControl::GetComponentServiceName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SimpleAnimation"));
+        return ::rtl::OUString::createFromAscii( "SimpleAnimation" );
+    }
+
+    //--------------------------------------------------------------------
+    uno::Any UnoSimpleAnimationControl::queryAggregation( const uno::Type & rType )
+        throw( uno::RuntimeException )
+    {
+        uno::Any aRet = UnoControlBase::queryAggregation( rType );
+        if ( !aRet.hasValue() )
+            aRet = UnoSimpleAnimationControl_Base::queryInterface( rType );
+        return aRet;
+    }
+
+    //--------------------------------------------------------------------
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoSimpleAnimationControl, UnoControlBase, UnoSimpleAnimationControl_Base )
+
+    //--------------------------------------------------------------------
+    void UnoSimpleAnimationControl::dispose() throw( uno::RuntimeException )
+    {
+        ::osl::ClearableMutexGuard aGuard( GetMutex() );
+
+        UnoControl::dispose();
     }
 
     //--------------------------------------------------------------------
@@ -143,45 +162,47 @@ namespace toolkit
     uno::Sequence< ::rtl::OUString > SAL_CALL UnoSimpleAnimationControl::getSupportedServiceNames()
         throw( uno::RuntimeException )
     {
-        uno::Sequence< ::rtl::OUString > aServices( UnoSimpleAnimationControl_Base::getSupportedServiceNames() );
+        uno::Sequence< ::rtl::OUString > aServices( UnoControlBase::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
         aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoSimpleAnimationControl );
         return aServices;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL UnoSimpleAnimationControl::start() throw ( uno::RuntimeException )
+    void UnoSimpleAnimationControl::createPeer( const uno::Reference< awt::XToolkit > &rxToolkit,
+                                                const uno::Reference< awt::XWindowPeer >  &rParentPeer )
+        throw( uno::RuntimeException )
     {
-        uno::Reference< XSimpleAnimation > xAnimation;
-        {
-            ::osl::MutexGuard aGuard( GetMutex() );
-            xAnimation.set( getPeer(), uno::UNO_QUERY );
-        }
-        if ( xAnimation.is() )
-            xAnimation->start();
+        UnoControl::createPeer( rxToolkit, rParentPeer );
     }
 
     //--------------------------------------------------------------------
+    void SAL_CALL UnoSimpleAnimationControl::start() throw ( uno::RuntimeException )
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+
+        uno::Reference< XSimpleAnimation > xAnimation( getPeer(), uno::UNO_QUERY );
+        if ( xAnimation.is() )
+            xAnimation->start();
+    }
+    
+    //--------------------------------------------------------------------
     void SAL_CALL UnoSimpleAnimationControl::stop() throw ( uno::RuntimeException )
     {
-        uno::Reference< XSimpleAnimation > xAnimation;
-        {
-            ::osl::MutexGuard aGuard( GetMutex() );
-            xAnimation.set( getPeer(), uno::UNO_QUERY );
-        }
+        ::osl::MutexGuard aGuard( GetMutex() );
+
+        uno::Reference< XSimpleAnimation > xAnimation( getPeer(), uno::UNO_QUERY );
         if ( xAnimation.is() )
             xAnimation->stop();
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL UnoSimpleAnimationControl::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& ImageList )
         throw ( uno::RuntimeException )
     {
-        uno::Reference< XSimpleAnimation > xAnimation;
-        {
-            ::osl::MutexGuard aGuard( GetMutex() );
-            xAnimation.set( getPeer(), uno::UNO_QUERY );
-        }
+        ::osl::MutexGuard aGuard( GetMutex() );
+
+        uno::Reference< XSimpleAnimation > xAnimation( getPeer(), uno::UNO_QUERY );
         if ( xAnimation.is() )
             xAnimation->setImageList( ImageList );
     }

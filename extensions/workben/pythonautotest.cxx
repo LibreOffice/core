@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,8 @@
 #include <tools/string.hxx>
 #include <osl/conditn.hxx>
 
+using namespace rtl;
 using namespace usr;
-
-using ::rtl::StringToOUString;
-using ::rtl::OUStringToString;
 
 #define PCHAR_TO_USTRING(x) StringToOUString(String(x),CHARSET_SYSTEM)
 #define USTRING_TO_PCHAR(x) OUStringToString(x , CHARSET_DONTKNOW ).GetCharStr()
@@ -65,34 +63,34 @@ class MyPythonRoot :
 {
 public:
     MyPythonRoot() { m_iTestValue = 15; }
-    BOOL                queryInterface( Uik aUik, XInterfaceRef & rOut );
-    void                acquire()                        { OWeakObject::acquire(); }
-    void                release()                        { OWeakObject::release(); }
-    void*               getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
+    BOOL				queryInterface( Uik aUik, XInterfaceRef & rOut );
+    void 				acquire() 						 { OWeakObject::acquire(); }
+    void 				release() 						 { OWeakObject::release(); }
+    void* 				getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 public:
-    XIntrospectionAccessRef getIntrospection(void) const        THROWS( (UsrSystemException) )
+    XIntrospectionAccessRef getIntrospection(void) const 		THROWS( (UsrSystemException) )
                 { return XIntrospectionAccessRef();  }
 
-    UsrAny                  invoke( const UString& FunctionName,
+    UsrAny					invoke(	const UString& FunctionName,
                                     const Sequence< UsrAny >& Params,
                                     Sequence< INT16 >& OutParamIndex,
                                     Sequence< UsrAny >& OutParam)
-                                                                THROWS( (   IllegalArgumentException,
+                                                                THROWS( (	IllegalArgumentException,
                                                                             CannotConvertException,
                                                                             InvocationTargetException,
                                                                             UsrSystemException) );
-    void                    setValue(const UString& PropertyName, const UsrAny& Value)
-                                                                THROWS( (   UnknownPropertyException,
+    void					setValue(const UString& PropertyName, const UsrAny& Value)
+                                                                THROWS( (	UnknownPropertyException,
                                                                             CannotConvertException,
                                                                             InvocationTargetException,
                                                                             UsrSystemException) );
 
-    UsrAny                  getValue(const UString& PropertyName)
-                                                                THROWS( (   UnknownPropertyException,
+    UsrAny					getValue(const UString& PropertyName)
+                                                                THROWS( (	UnknownPropertyException,
                                                                             UsrSystemException) );
-    BOOL                    hasMethod(const UString& Name) const THROWS( (UsrSystemException) );
-    BOOL                    hasProperty(const UString& Name) const THROWS( (UsrSystemException) );
+    BOOL					hasMethod(const UString& Name) const THROWS( (UsrSystemException) );
+    BOOL					hasProperty(const UString& Name) const THROWS( (UsrSystemException) );
 
 
     void getTestValueViaInout( int &inout )
@@ -127,11 +125,11 @@ BOOL MyPythonRoot::queryInterface( Uik aUik, XInterfaceRef &rOut )
 
 }
 
-UsrAny  MyPythonRoot::invoke(   const UString& FunctionName,
+UsrAny	MyPythonRoot::invoke(	const UString& FunctionName,
                                 const Sequence< UsrAny >& Params,
                                 Sequence< INT16 >& OutParamIndex,
                                 Sequence< UsrAny >& OutParam)
-                                                                THROWS( (   IllegalArgumentException,
+                                                                THROWS( (	IllegalArgumentException,
                                                                             CannotConvertException,
                                                                             InvocationTargetException,
                                                                             UsrSystemException) )
@@ -154,8 +152,8 @@ UsrAny  MyPythonRoot::invoke(   const UString& FunctionName,
     return UsrAny();
 }
 
-void    MyPythonRoot::setValue(const UString& PropertyName, const UsrAny& Value)
-                                                                THROWS( (   UnknownPropertyException,
+void	MyPythonRoot::setValue(const UString& PropertyName, const UsrAny& Value)
+                                                                THROWS( (	UnknownPropertyException,
                                                                             CannotConvertException,
                                                                             InvocationTargetException,
                                                                             UsrSystemException) )
@@ -168,8 +166,8 @@ void    MyPythonRoot::setValue(const UString& PropertyName, const UsrAny& Value)
     }
 }
 
-UsrAny  MyPythonRoot::getValue(const UString& PropertyName)
-                                                                THROWS( (   UnknownPropertyException,
+UsrAny	MyPythonRoot::getValue(const UString& PropertyName)
+                                                                THROWS( (	UnknownPropertyException,
                                                                             UsrSystemException) )
 {
     UsrAny aRet;
@@ -185,7 +183,7 @@ UsrAny  MyPythonRoot::getValue(const UString& PropertyName)
 }
 
 
-BOOL    MyPythonRoot::hasMethod(const UString& Name) const      THROWS( (UsrSystemException) )
+BOOL	MyPythonRoot::hasMethod(const UString& Name) const 		THROWS( (UsrSystemException) )
 {
     if( L"printTestValue" == Name ) {
         return TRUE;
@@ -200,7 +198,7 @@ BOOL    MyPythonRoot::hasMethod(const UString& Name) const      THROWS( (UsrSyst
 }
 
 
-BOOL    MyPythonRoot::hasProperty(const UString& Name) const THROWS( (UsrSystemException) )
+BOOL	MyPythonRoot::hasProperty(const UString& Name) const THROWS( (UsrSystemException) )
 {
     if( L"TestValue" == Name ) {
         return TRUE;
@@ -239,10 +237,10 @@ public:
         }
     }
 
-    BOOL                queryInterface( Uik aUik, XInterfaceRef & rOut );
-    void                acquire()                        { OWeakObject::acquire(); }
-    void                release()                        { OWeakObject::release(); }
-    void*               getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
+    BOOL				queryInterface( Uik aUik, XInterfaceRef & rOut );
+    void 				acquire() 						 { OWeakObject::acquire(); }
+    void 				release() 						 { OWeakObject::release(); }
+    void* 				getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 
     void attach( XDebuggingRef *p )
@@ -333,7 +331,7 @@ void checkInvokation( const XInvokationRef &xInvoke )
     any = (*pRef)->invoke( L"count" , seq , Sequence<INT16>(), Sequence<UsrAny>() );
     int nOldSize = any.getINT32();
 
-    any = (*pRef)->invoke( L"append" , seq  , Sequence<INT16>(), Sequence<UsrAny>() );
+    any = (*pRef)->invoke( L"append" , seq	, Sequence<INT16>(), Sequence<UsrAny>() );
     any = (*pRef)->invoke( L"count" , seq , Sequence<INT16>(), Sequence<UsrAny>() );
 
     OSL_ASSERT( nOldSize + 1 == any.getINT32() );
@@ -345,32 +343,32 @@ class PythonCodeLibrary :
         public OWeakObject
 {
 
-    BOOL                queryInterface( Uik aUik, XInterfaceRef & rOut );
-    void                acquire()                        { OWeakObject::acquire(); }
-    void                release()                        { OWeakObject::release(); }
-    void*               getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
+    BOOL				queryInterface( Uik aUik, XInterfaceRef & rOut );
+    void 				acquire() 						 { OWeakObject::acquire(); }
+    void 				release() 						 { OWeakObject::release(); }
+    void* 				getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 
-    virtual BOOL isFunction(const UString& FunctionName)            THROWS( (UsrSystemException) )
+    virtual BOOL isFunction(const UString& FunctionName) 			THROWS( (UsrSystemException) )
       {
           return FALSE;
       }
 
-    virtual BOOL isValidPath(const UString& PathName)               THROWS( (UsrSystemException) )
+    virtual BOOL isValidPath(const UString& PathName) 				THROWS( (UsrSystemException) )
     {
         return FALSE;
     }
 
-    virtual Sequence< UString > getModuleNames(void)                THROWS( (UsrSystemException) )
+    virtual Sequence< UString > getModuleNames(void) 				THROWS( (UsrSystemException) )
     {
         return Sequence<UString> ();
     }
 
-    virtual UString getModuleSource(const UString& ModulName)       THROWS( (UsrSystemException) )
+    virtual UString getModuleSource(const UString& ModulName) 		THROWS( (UsrSystemException) )
     {
         if( ModulName == L"testmodul" ) {
             return UString( L"def testmethod():\n"
-                            L"  return 42\n");
+                            L"	return 42\n");
         }
         return UString();
     }
@@ -432,7 +430,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
 
 
     // execute a simple script
-    xEngine->run(   L"nIntTest = 5\n"
+    xEngine->run( 	L"nIntTest = 5\n"
                     L"list = [2,3,4]\n" , XInterfaceRef(), Sequence<UsrAny> () );
 
     /****
@@ -459,9 +457,9 @@ int __LOADONCALLAPI main (int argc, char **argv)
     //  call a python method !
     {
         xEngine->run( L"def foo():\n"
-                      L"    return 'this is foo'\n" , XInterfaceRef() , Sequence<UsrAny> () );
-        OSL_ASSERT( xInvoke->hasMethod( L"foo" ) );
-        UsrAny any = xInvoke->invoke(   L"foo" ,
+                      L"	return 'this is foo'\n" , XInterfaceRef() , Sequence<UsrAny> () );
+        OSL_ASSERT( xInvoke->hasMethod(	L"foo" ) );
+        UsrAny any = xInvoke->invoke(	L"foo" ,
                                         Sequence<UsrAny>(),
                                         Sequence<INT16>() ,
                                         Sequence<UsrAny> () );
@@ -558,7 +556,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
         XLibraryAccessRef xLibrary( ( XLibraryAccess * ) new PythonCodeLibrary , USR_QUERY );
         xEngine->setLibraryAccess( xLibrary );
 
-        xEngine->run(   L"import testmodul\n"
+        xEngine->run( 	L"import testmodul\n"
                         L"x = testmodul.testmethod()\n" , XInterfaceRef() , Sequence<UsrAny>() );
         UsrAny any = xInvoke->getValue( L"x" );
         OSL_ASSERT( any.getReflection()->getTypeClass() == TypeClass_LONG );
@@ -568,7 +566,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
     // check other imports
     {
         // Check, if the libraries are available at run time
-        xEngine->run(   L"import math\n"
+        xEngine->run(	L"import math\n"
                         L"dMathTest = math.exp(0)\n"  , XInterfaceRef() , Sequence<UsrAny> () );
 
         OSL_ASSERT( xInvoke->hasProperty( L"dMathTest" ) );
@@ -580,7 +578,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
 
     // Test connection to root object !
     {
-        xEngine->run(   L"x = stardiv.root.TestValue\n"
+        xEngine->run( 	L"x = stardiv.root.TestValue\n"
                         L"y = stardiv.inout(5)\n"
                         L"stardiv.root.getTestValueViaInout(y)\n"
                         L"z = y.value\n" , XInterfaceRef() , Sequence<UsrAny> () );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,12 +56,14 @@ public class DatabaseApplication
 
         // load it into a frame
         final Object object = db.getORB().createInstance("com.sun.star.frame.Desktop");
-        final XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, object);
+        final XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, object);
         final XComponent loadedComponent = xComponentLoader.loadComponentFromURL(db.getDocumentURL(), "_blank", FrameSearchFlag.ALL, new PropertyValue[0]);
 
         // get the controller, which provides access to various UI operations
-        final XModel docModel = UnoRuntime.queryInterface(XModel.class, loadedComponent);
-        documentUI = UnoRuntime.queryInterface(XDatabaseDocumentUI.class, docModel.getCurrentController());
+        final XModel docModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+                loadedComponent);
+        documentUI = (XDatabaseDocumentUI) UnoRuntime.queryInterface(XDatabaseDocumentUI.class,
+                docModel.getCurrentController());
         documentUI.connect();
     }
 
@@ -85,7 +87,8 @@ public class DatabaseApplication
         // store the doc in a new location
         try
         {
-            final XStorable storeDoc = UnoRuntime.queryInterface(XStorable.class, databaseDocument);
+            final XStorable storeDoc = (XStorable) UnoRuntime.queryInterface(XStorable.class,
+                    databaseDocument);
             if (storeDoc != null)
             {
                 storeDoc.store();

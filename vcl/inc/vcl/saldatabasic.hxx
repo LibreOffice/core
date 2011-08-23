@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,17 +33,11 @@
 #include <vcl/salinst.hxx>
 #include <osl/module.h>
 
-namespace psp
-{
-    class PrinterInfoManager;
-}
-
-class VCL_PLUGIN_PUBLIC SalData
+class VCL_DLLPUBLIC SalData
 {
 public:
-    SalInstance*                  m_pInstance; // pointer to instance
-    oslModule                     m_pPlugin;   // plugin library handle
-    psp::PrinterInfoManager*      m_pPIManager;
+    SalInstance*		m_pInstance; // pointer to instance
+    oslModule		   	m_pPlugin;   // plugin library handle
 
     SalData();
     virtual ~SalData();

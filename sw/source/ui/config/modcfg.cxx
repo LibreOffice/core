@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ using namespace utl;
 using rtl::OUString;
 using namespace com::sun::star::uno;
 
-#define GLOB_NAME_CALC      0
+#define GLOB_NAME_CALC		0
 #define GLOB_NAME_IMPRESS   1
 #define GLOB_NAME_DRAW      2
 #define GLOB_NAME_MATH      3
@@ -64,7 +64,7 @@ SV_IMPL_PTRARR_SORT(InsCapOptArr, InsCaptionOptPtr)
 
 InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalName *pOleId) const
 {
-    for (sal_uInt16 i = 0; i < Count(); i++ )
+    for (USHORT i = 0; i < Count(); i++ )
     {
         InsCaptionOpt* pObj = GetObject(i);
         if (pObj->GetObjType() == eType &&
@@ -78,19 +78,19 @@ InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalNa
 }
 
 const InsCaptionOpt* SwModuleOptions::GetCapOption(
-    sal_Bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId)
+    BOOL bHTML, const SwCapObjType eType, const SvGlobalName *pOleId)
 {
     if(bHTML)
     {
-        OSL_FAIL("no caption option in sw/web!");
+        OSL_ENSURE(false, "no caption option in sw/web!");
         return 0;
     }
     else
     {
-        sal_Bool bFound = sal_False;
+        sal_Bool bFound = FALSE;
         if(eType == OLE_CAP && pOleId)
         {
-            for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART && !bFound; nId++)
+            for( USHORT nId = 0; nId <= GLOB_NAME_CHART && !bFound; nId++)
                 bFound = *pOleId == aInsertConfig.aGlobalNames[nId  ];
             if(!bFound)
                 return aInsertConfig.pOLEMiscOpt;
@@ -99,20 +99,20 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
     }
 }
 
-sal_Bool SwModuleOptions::SetCapOption(sal_Bool bHTML, const InsCaptionOpt* pOpt)
+BOOL SwModuleOptions::SetCapOption(BOOL bHTML, const InsCaptionOpt* pOpt)
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     if(bHTML)
     {
-        OSL_FAIL("no caption option in sw/web!");
+        OSL_ENSURE(false, "no caption option in sw/web!");
     }
     else if (pOpt)
     {
-        sal_Bool bFound = sal_False;
+        sal_Bool bFound = FALSE;
         if(pOpt->GetObjType() == OLE_CAP && &pOpt->GetOleId())
         {
-            for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART; nId++)
+            for( USHORT nId = 0; nId <= GLOB_NAME_CHART; nId++)
                 bFound = pOpt->GetOleId() == aInsertConfig.aGlobalNames[nId  ];
             if(!bFound)
             {
@@ -134,22 +134,22 @@ sal_Bool SwModuleOptions::SetCapOption(sal_Bool bHTML, const InsCaptionOpt* pOpt
             rArr.Insert(new InsCaptionOpt(*pOpt));
 
         aInsertConfig.SetModified();
-        bRet = sal_True;
+        bRet = TRUE;
     }
 
     return bRet;
 }
 
 SwModuleOptions::SwModuleOptions() :
-    aInsertConfig(sal_False),
-    aWebInsertConfig(sal_True),
-    aTableConfig(sal_False),
-    aWebTableConfig(sal_True),
-    bHideFieldTips(sal_False)
+    aInsertConfig(FALSE),
+    aWebInsertConfig(TRUE),
+    aTableConfig(FALSE),
+    aWebTableConfig(TRUE),
+    bHideFieldTips(FALSE)
 {
 }
 
-String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFromUI)
+String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, BOOL bFromUI)
 {
     String sReturn;
     if(bFromUI)
@@ -169,14 +169,14 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFro
 
                 switch (c)
                 {
-                    case 'n':   sReturn += '\n';    break;
-                    case 't':   sReturn += '\t';    break;
-                    case '\\':  sReturn += '\\';    break;
+                    case 'n':	sReturn += '\n';	break;
+                    case 't':	sReturn += '\t';	break;
+                    case '\\':	sReturn += '\\';	break;
 
                     case 'x':
                     {
                         sal_Unicode nVal, nChar;
-                        sal_Bool bValidData = sal_True;
+                        BOOL bValidData = TRUE;
                         xub_StrLen n;
                         for( n = 0, nChar = 0; n < 2 && i < rDelim.Len(); ++n, ++i )
                         {
@@ -188,8 +188,8 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFro
                                 nVal -= 'a' - 10;
                             else
                             {
-                                OSL_FAIL("wrong hex value" );
-                                bValidData = sal_False;
+                                OSL_ENSURE(false,  "wrong hex value" );
+                                bValidData = FALSE;
                                 break;
                             }
 
@@ -219,9 +219,9 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFro
 
             switch (c)
             {
-                case '\n':  sReturn.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\n")); break;
-                case '\t':  sReturn.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\t")); break;
-                case '\\':  sReturn.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\\\"));    break;
+                case '\n':	sReturn.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\n"));	break;
+                case '\t':	sReturn.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\t"));	break;
+                case '\\':	sReturn.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\\\"));	break;
 
                 default:
                     if( c <= 0x1f || c >= 0x7f )
@@ -246,14 +246,14 @@ const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
-            "TextDisplay/Insert/Attribute",             // 0
-            "TextDisplay/Insert/Color",                 // 1
-            "TextDisplay/Delete/Attribute",             // 2
-            "TextDisplay/Delete/Color",                 // 3
+            "TextDisplay/Insert/Attribute",   			// 0
+            "TextDisplay/Insert/Color",   				// 1
+            "TextDisplay/Delete/Attribute",   			// 2
+            "TextDisplay/Delete/Color",   				// 3
             "TextDisplay/ChangedAttribute/Attribute",   // 4
-            "TextDisplay/ChangedAttribute/Color",       // 5
-            "LinesChanged/Mark",                        // 6
-            "LinesChanged/Color"                        // 7
+            "TextDisplay/ChangedAttribute/Color",   	// 5
+            "LinesChanged/Mark",   						// 6
+            "LinesChanged/Color"   						// 7
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -288,7 +288,7 @@ sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
     sal_Int32 nRet = 0;
     switch(rAttr.nItemId)
     {
-        case  SID_ATTR_CHAR_WEIGHT: nRet = 1; break;
+        case  SID_ATTR_CHAR_WEIGHT:	nRet = 1; break;
         case  SID_ATTR_CHAR_POSTURE: nRet = 2; break;
         case  SID_ATTR_CHAR_UNDERLINE: nRet = UNDERLINE_SINGLE == rAttr.nAttr ? 3 : 4; break;
         case  SID_ATTR_CHAR_STRIKEOUT: nRet = 3; break;
@@ -322,12 +322,12 @@ void SwRevisionConfig::Commit()
         switch(nProp)
         {
             case 0 : nVal = lcl_ConvertAttrToCfg(aInsertAttr); break;
-            case 1 : nVal = aInsertAttr.nColor  ; break;
+            case 1 : nVal = aInsertAttr.nColor 	; break;
             case 2 : nVal = lcl_ConvertAttrToCfg(aDeletedAttr); break;
             case 3 : nVal = aDeletedAttr.nColor ; break;
             case 4 : nVal = lcl_ConvertAttrToCfg(aFormatAttr); break;
-            case 5 : nVal = aFormatAttr.nColor  ; break;
-            case 6 : nVal = nMarkAlign          ; break;
+            case 5 : nVal = aFormatAttr.nColor 	; break;
+            case 6 : nVal = nMarkAlign 			; break;
             case 7 : nVal = aMarkColor.GetColor(); break;
         }
         pValues[nProp] <<= nVal;
@@ -340,7 +340,7 @@ void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, sal_Bool bDelet
     rAttr.nItemId = rAttr.nAttr = 0;
     switch(nVal)
     {
-        case 1: rAttr.nItemId = SID_ATTR_CHAR_WEIGHT;   rAttr.nAttr = WEIGHT_BOLD              ; break;
+        case 1: rAttr.nItemId = SID_ATTR_CHAR_WEIGHT;	rAttr.nAttr = WEIGHT_BOLD              ; break;
         case 2: rAttr.nItemId = SID_ATTR_CHAR_POSTURE;  rAttr.nAttr = ITALIC_NORMAL            ; break;
         case 3: if(bDelete)
                 {
@@ -358,7 +358,7 @@ void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, sal_Bool bDelet
         case 6: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_GEMEINE      ; break;
         case 7: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_KAPITAELCHEN ; break;
         case 8: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_TITEL        ; break;
-        case 9: rAttr.nItemId = SID_ATTR_BRUSH; break;
+        case 9: rAttr.nItemId = SID_ATTR_BRUSH;	break;
     }
 }
 void SwRevisionConfig::Load()
@@ -378,11 +378,11 @@ void SwRevisionConfig::Load()
                 switch(nProp)
                 {
                     case 0 : lcl_ConvertCfgToAttr(nVal, aInsertAttr); break;
-                    case 1 : aInsertAttr.nColor     = nVal; break;
+                    case 1 : aInsertAttr.nColor 	= nVal; break;
                     case 2 : lcl_ConvertCfgToAttr(nVal, aDeletedAttr, sal_True); break;
-                    case 3 : aDeletedAttr.nColor    = nVal; break;
+                    case 3 : aDeletedAttr.nColor 	= nVal; break;
                     case 4 : lcl_ConvertCfgToAttr(nVal, aFormatAttr); break;
-                    case 5 : aFormatAttr.nColor     = nVal; break;
+                    case 5 : aFormatAttr.nColor 	= nVal; break;
                     case 6 : nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(nVal); break;
                     case 7 : aMarkColor.SetColor(nVal); break;
                 }
@@ -487,7 +487,7 @@ enum InsertConfigProp
     INS_PROP_CAP_OBJECT_OLEMISC_POSITION,               //91
     INS_PROP_CAP_OBJECT_OLEMISC_CHARACTERSTYLE,         //92
     INS_PROP_CAP_OBJECT_OLEMISC_APPLYATTRIBUTES        //93
-};
+};    
 const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -590,7 +590,7 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
             "Caption/OfficeObject/OLEMisc/Settings/Position",               //91
             "Caption/OfficeObject/OLEMisc/Settings/CharacterStyle",         //92
             "Caption/OfficeObject/OLEMisc/Settings/ApplyAttributes"         //93
-        };
+        };                                                                  
         const int nCount = INS_PROP_CAP_OBJECT_OLEMISC_APPLYATTRIBUTES + 1;
         const int nWebCount = INS_PROP_TABLE_BORDER + 1;
         aNames.realloc(nCount);
@@ -599,9 +599,9 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
         OUString* pWebNames = aWebNames.getArray();
         int i;
         for(i = 0; i < nCount; i++)
-            pNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
+            pNames[i] = C2U(aPropNames[i]);
         for(i = 0; i < nWebCount; i++)
-            pWebNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
+            pWebNames[i] = C2U(aPropNames[i]);
     }
     return bIsWeb ? aWebNames : aNames;
 }
@@ -616,7 +616,7 @@ SwInsertConfig::SwInsertConfig(sal_Bool bWeb) :
     aInsTblOpts(0,0),
     bIsWeb(bWeb)
 {
-    aGlobalNames[GLOB_NAME_CALC   ] = SvGlobalName(SO3_SC_CLASSID);
+    aGlobalNames[GLOB_NAME_CALC	  ] = SvGlobalName(SO3_SC_CLASSID);
     aGlobalNames[GLOB_NAME_IMPRESS] = SvGlobalName(SO3_SIMPRESS_CLASSID);
     aGlobalNames[GLOB_NAME_DRAW   ] = SvGlobalName(SO3_SDRAW_CLASSID);
     aGlobalNames[GLOB_NAME_MATH   ] = SvGlobalName(SO3_SM_CLASSID);
@@ -708,7 +708,7 @@ void SwInsertConfig::Commit()
             }
             break;//"Table/Split",
             case INS_PROP_CAP_AUTOMATIC: pValues[nProp].setValue(&bInsWithCaption, rType);break;//"Caption/Automatic",
-            case INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST:
+            case INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST: 
                 pValues[nProp] <<= bCaptionOrderNumberingFirst;
             break;//"Caption/CaptionOrderNumberingFirst"
 
@@ -867,7 +867,7 @@ void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_I
         break;//CaptionText",
         case 5:
         {
-            OUString sTemp;
+            OUString sTemp; 
             if(pValues[nProp] >>= sTemp)
                 rOpt.SetSeparator(sTemp);
         }
@@ -930,7 +930,7 @@ void SwInsertConfig::Load()
         else if(!bIsWeb)
             return;
 
-        sal_uInt16 nInsTblFlags = 0;
+        USHORT nInsTblFlags = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
             if(pValues[nProp].hasValue())
@@ -1137,14 +1137,14 @@ const Sequence<OUString>& SwTableConfig::GetPropertyNames()
     static Sequence<OUString> aNames(nCount);
     static const char* aPropNames[] =
     {
-        "Shift/Row",                    //  0
-        "Shift/Column",                 //  1
-        "Insert/Row",                   //  2
-        "Insert/Column",                //  3
-        "Change/Effect",                //  4
-        "Input/NumberRecognition",      //  5
+        "Shift/Row", 					//	0
+        "Shift/Column", 				//  1
+        "Insert/Row", 					//  2
+        "Insert/Column", 				//  3
+        "Change/Effect", 				//  4
+        "Input/NumberRecognition",		//  5
         "Input/NumberFormatRecognition",//  6
-        "Input/Alignment"               //  7
+        "Input/Alignment" 				//  7
     };
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -1204,12 +1204,12 @@ void SwTableConfig::Load()
                 sal_Int32 nTemp = 0;
                 switch(nProp)
                 {
-                    case 0 : pValues[nProp] >>= nTemp; nTblHMove = (sal_uInt16)MM100_TO_TWIP(nTemp); break;  //"Shift/Row",
-                    case 1 : pValues[nProp] >>= nTemp; nTblVMove = (sal_uInt16)MM100_TO_TWIP(nTemp); break;     //"Shift/Column",
-                    case 2 : pValues[nProp] >>= nTemp; nTblHInsert = (sal_uInt16)MM100_TO_TWIP(nTemp); break;   //"Insert/Row",
-                    case 3 : pValues[nProp] >>= nTemp; nTblVInsert = (sal_uInt16)MM100_TO_TWIP(nTemp); break;   //"Insert/Column",
+                    case 0 : pValues[nProp] >>= nTemp; nTblHMove = (USHORT)MM100_TO_TWIP(nTemp); break;	 //"Shift/Row",
+                    case 1 : pValues[nProp] >>= nTemp; nTblVMove = (USHORT)MM100_TO_TWIP(nTemp); break;     //"Shift/Column",
+                    case 2 : pValues[nProp] >>= nTemp; nTblHInsert = (USHORT)MM100_TO_TWIP(nTemp); break;   //"Insert/Row",
+                    case 3 : pValues[nProp] >>= nTemp; nTblVInsert = (USHORT)MM100_TO_TWIP(nTemp); break;   //"Insert/Column",
                     case 4 : pValues[nProp] >>= nTemp; eTblChgMode = (TblChgMode)nTemp; break;   //"Change/Effect",
-                    case 5 : bInsTblFormatNum = *(sal_Bool*)pValues[nProp].getValue();  break;  //"Input/NumberRecognition",
+                    case 5 : bInsTblFormatNum = *(sal_Bool*)pValues[nProp].getValue(); 	break;  //"Input/NumberRecognition",
                     case 6 : bInsTblChangeNumFormat = *(sal_Bool*)pValues[nProp].getValue(); break;  //"Input/NumberFormatRecognition",
                     case 7 : bInsTblAlignNum = *(sal_Bool*)pValues[nProp].getValue(); break;  //"Input/Alignment"
                 }
@@ -1246,22 +1246,22 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
-            "Statistics/WordNumber/Delimiter",          // 0
-            "DefaultFont/Document",                     // 1
-            "Index/ShowPreview",                        // 2
-            "Misc/GraphicToGalleryAsLink",              // 3
-            "Numbering/Graphic/KeepRatio",              // 4
+            "Statistics/WordNumber/Delimiter",   		// 0
+            "DefaultFont/Document",   					// 1
+            "Index/ShowPreview",   						// 2
+            "Misc/GraphicToGalleryAsLink",   			// 3
+            "Numbering/Graphic/KeepRatio",   			// 4
             "FormLetter/PrintOutput/SinglePrintJobs",   // 5
-            "FormLetter/MailingOutput/Format",          // 6
+            "FormLetter/MailingOutput/Format",   		// 6
             "FormLetter/FileOutput/FileName/FromDatabaseField",  // 7
-            "FormLetter/FileOutput/Path",               // 8
+            "FormLetter/FileOutput/Path",   			// 8
             "FormLetter/FileOutput/FileName/FromManualSetting",   // 9
             "FormLetter/FileOutput/FileName/Generation",//10
             "FormLetter/PrintOutput/AskForMerge"        //11
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
-            pNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
+            pNames[i] = C2U(aPropNames[i]);
     }
     return aNames;
 }
@@ -1284,14 +1284,14 @@ void SwMiscConfig::Commit()
                     SwModuleOptions::ConvertWordDelimiter(sWordDelimiter, sal_False));
             break;
             case 1 : pValues[nProp].setValue(&bDefaultFontsInCurrDocOnly, rType); break;
-            case 2 : pValues[nProp].setValue(&bShowIndexPreview, rType) ;        break;
-            case 3 : pValues[nProp].setValue(&bGrfToGalleryAsLnk, rType);        break;
-            case 4 : pValues[nProp].setValue(&bNumAlignSize, rType);            break;
-            case 5 : pValues[nProp].setValue(&bSinglePrintJob, rType);          break;
-            case 6 : pValues[nProp] <<= nMailingFormats;             break;
+            case 2 : pValues[nProp].setValue(&bShowIndexPreview, rType) ;  		 break;
+            case 3 : pValues[nProp].setValue(&bGrfToGalleryAsLnk, rType); 		 break;
+            case 4 : pValues[nProp].setValue(&bNumAlignSize, rType);			break;
+            case 5 : pValues[nProp].setValue(&bSinglePrintJob, rType);			break;
+            case 6 : pValues[nProp] <<= nMailingFormats;			 break;
             case 7 : pValues[nProp] <<= OUString(sNameFromColumn);  break;
-            case 8 : pValues[nProp] <<= OUString(sMailingPath);     break;
-            case 9 : pValues[nProp] <<= OUString(sMailName);        break;
+            case 8 : pValues[nProp] <<= OUString(sMailingPath);		break;
+            case 9 : pValues[nProp] <<= OUString(sMailName);		break;
             case 10: pValues[nProp].setValue(&bIsNameFromColumn, rType);break;
             case 11: pValues[nProp] <<= bAskForMailMergeInPrint; break;
         }
@@ -1322,10 +1322,10 @@ void SwMiscConfig::Load()
                     case 3 : bGrfToGalleryAsLnk = *(sal_Bool*)pValues[nProp].getValue(); break;
                     case 4 : bNumAlignSize = *(sal_Bool*)pValues[nProp].getValue(); break;
                     case 5 : bSinglePrintJob = *(sal_Bool*)pValues[nProp].getValue(); break;
-                    case 6 : pValues[nProp] >>= nMailingFormats;              ; break;
+                    case 6 : pValues[nProp] >>= nMailingFormats;			  ; break;
                     case 7 : pValues[nProp] >>= sTmp; sNameFromColumn = sTmp; break;
-                    case 8 : pValues[nProp] >>= sTmp; sMailingPath = sTmp;  break;
-                    case 9 : pValues[nProp] >>= sTmp; sMailName = sTmp;     break;
+                    case 8 : pValues[nProp] >>= sTmp; sMailingPath = sTmp; 	break;
+                    case 9 : pValues[nProp] >>= sTmp; sMailName = sTmp; 	break;
                     case 10: bIsNameFromColumn = *(sal_Bool*)pValues[nProp].getValue(); break;
                     case 11: pValues[nProp] >>= bAskForMailMergeInPrint; break;
                 }

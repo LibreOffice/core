@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,11 @@ class OutputDevice;
 #define XPOLYPOLY_APPEND     0xFFFF
 #define XPOLY_APPEND         0xFFFF
 
+#ifdef WIN // Windows 16 Bit
+#define XPOLY_MAXPOINTS      8160   /* =0xFF00/sizeof(Point), also mit etwas Platz! */
+#else
 #define XPOLY_MAXPOINTS      0xFFF0 /* Auch fuer die 32-Bitter etwas Luft lassen */
+#endif
 
 /************************************************************************/
 // Punktstile im XPolygon:
@@ -76,59 +80,59 @@ protected:
     void    CheckReference();
 
     // Hilfsfunktionen fuer Bezierkonvertierung
-    void    SubdivideBezier(sal_uInt16 nPos, sal_Bool bCalcFirst, double fT);
+    void    SubdivideBezier(USHORT nPos, BOOL bCalcFirst, double fT);
     void    GenBezArc(const Point& rCenter, long nRx, long nRy,
-                      long nXHdl, long nYHdl, sal_uInt16 nStart, sal_uInt16 nEnd,
-                      sal_uInt16 nQuad, sal_uInt16 nFirst);
-    sal_Bool    CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2);
+                      long nXHdl, long nYHdl, USHORT nStart, USHORT nEnd,
+                      USHORT nQuad, USHORT nFirst);
+    BOOL    CheckAngles(USHORT& nStart, USHORT nEnd, USHORT& nA1, USHORT& nA2);
 
 public:
-    XPolygon( sal_uInt16 nSize=16, sal_uInt16 nResize=16 );
+    XPolygon( USHORT nSize=16, USHORT nResize=16 );
     XPolygon( const XPolygon& rXPoly );
     XPolygon( const Polygon& rPoly );
     XPolygon( const Rectangle& rRect, long nRx = 0, long nRy = 0 );
     XPolygon( const Point& rCenter, long nRx, long nRy,
-              sal_uInt16 nStartAngle = 0, sal_uInt16 nEndAngle = 3600,
-              sal_Bool bClose = sal_True );
+              USHORT nStartAngle = 0, USHORT nEndAngle = 3600,
+              BOOL bClose = TRUE );
 
     ~XPolygon();
 
-    void        SetSize( sal_uInt16 nSize );
-    sal_uInt16      GetSize() const;
+    void        SetSize( USHORT nSize );
+    USHORT      GetSize() const;
 
-    void        SetPointCount( sal_uInt16 nPoints );
-    sal_uInt16      GetPointCount() const;
+    void        SetPointCount( USHORT nPoints );
+    USHORT      GetPointCount() const;
 
-    void        Insert( sal_uInt16 nPos, const Point& rPt, XPolyFlags eFlags );
-    void        Insert( sal_uInt16 nPos, const XPolygon& rXPoly );
-    void        Insert( sal_uInt16 nPos, const Polygon& rPoly );
-    void        Remove( sal_uInt16 nPos, sal_uInt16 nCount );
+    void        Insert( USHORT nPos, const Point& rPt, XPolyFlags eFlags );
+    void        Insert( USHORT nPos, const XPolygon& rXPoly );
+    void        Insert( USHORT nPos, const Polygon& rPoly );
+    void        Remove( USHORT nPos, USHORT nCount );
     void        Move( long nHorzMove, long nVertMove );
     Rectangle   GetBoundRect() const;
 
-    const Point&    operator[]( sal_uInt16 nPos ) const;
-          Point&    operator[]( sal_uInt16 nPos );
+    const Point&    operator[]( USHORT nPos ) const;
+          Point&    operator[]( USHORT nPos );
     XPolygon&       operator=( const XPolygon& rXPoly );
-    sal_Bool            operator==( const XPolygon& rXPoly ) const;
-    sal_Bool            operator!=( const XPolygon& rXPoly ) const;
+    BOOL            operator==( const XPolygon& rXPoly ) const;
+    BOOL            operator!=( const XPolygon& rXPoly ) const;
 
-    XPolyFlags  GetFlags( sal_uInt16 nPos ) const;
-    void        SetFlags( sal_uInt16 nPos, XPolyFlags eFlags );
-    sal_Bool        IsControl(sal_uInt16 nPos) const;
-    sal_Bool        IsSmooth(sal_uInt16 nPos) const;
+    XPolyFlags  GetFlags( USHORT nPos ) const;
+    void        SetFlags( USHORT nPos, XPolyFlags eFlags );
+    BOOL        IsControl(USHORT nPos) const;
+    BOOL        IsSmooth(USHORT nPos) const;
 
     // Abstand zwischen zwei Punkten
-    double  CalcDistance(sal_uInt16 nP1, sal_uInt16 nP2);
+    double  CalcDistance(USHORT nP1, USHORT nP2);
 
     // Bezierkonvertierungen
-    void CalcSmoothJoin(sal_uInt16 nCenter, sal_uInt16 nDrag, sal_uInt16 nPnt);
-    void CalcTangent(sal_uInt16 nCenter, sal_uInt16 nPrev, sal_uInt16 nNext);
-    void PointsToBezier(sal_uInt16 nFirst);
+    void CalcSmoothJoin(USHORT nCenter, USHORT nDrag, USHORT nPnt);
+    void CalcTangent(USHORT nCenter, USHORT nPrev, USHORT nNext);
+    void PointsToBezier(USHORT nFirst);
 
     // Transformationen
     void Translate(const Point& rTrans);
     void Rotate(const Point& rCenter, double fSin, double fCos);
-    void Rotate(const Point& rCenter, sal_uInt16 nAngle);
+    void Rotate(const Point& rCenter, USHORT nAngle);
     void Scale(double fSx, double fSy);
     void SlantX(long nYRef, double fSin, double fCos);
     void SlantY(long nXRef, double fSin, double fCos);
@@ -161,7 +165,7 @@ protected:
     void    CheckReference();
 
 public:
-                    XPolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 );
+                    XPolyPolygon( USHORT nInitSize = 16, USHORT nResize = 16 );
                     XPolyPolygon( const XPolygon& rXPoly );
                     XPolyPolygon( const XPolyPolygon& rXPolyPoly );
                     XPolyPolygon( const PolyPolygon& rPolyPoly);
@@ -169,31 +173,31 @@ public:
                     ~XPolyPolygon();
 
     void            Insert( const XPolygon& rXPoly,
-                            sal_uInt16 nPos = XPOLYPOLY_APPEND );
+                            USHORT nPos = XPOLYPOLY_APPEND );
     void            Insert( const XPolyPolygon& rXPoly,
-                            sal_uInt16 nPos=XPOLYPOLY_APPEND );
-    XPolygon        Remove( sal_uInt16 nPos );
-    XPolygon        Replace( const XPolygon& rXPoly, sal_uInt16 nPos );
-    const XPolygon& GetObject( sal_uInt16 nPos ) const;
+                            USHORT nPos=XPOLYPOLY_APPEND );
+    XPolygon        Remove( USHORT nPos );
+    XPolygon        Replace( const XPolygon& rXPoly, USHORT nPos );
+    const XPolygon& GetObject( USHORT nPos ) const;
 
     void            Clear();
-    sal_uInt16          Count() const;
+    USHORT          Count() const;
 
     void            Move( long nHorzMove, long nVertMove );
     Rectangle       GetBoundRect() const;
 
-    const XPolygon& operator[]( sal_uInt16 nPos ) const
+    const XPolygon& operator[]( USHORT nPos ) const
                         { return GetObject( nPos ); }
-    XPolygon&       operator[]( sal_uInt16 nPos );
+    XPolygon&       operator[]( USHORT nPos );
 
     XPolyPolygon&   operator=( const XPolyPolygon& rXPolyPoly );
-    sal_Bool            operator==( const XPolyPolygon& rXPolyPoly ) const;
-    sal_Bool            operator!=( const XPolyPolygon& rXPolyPoly ) const;
+    BOOL            operator==( const XPolyPolygon& rXPolyPoly ) const;
+    BOOL            operator!=( const XPolyPolygon& rXPolyPoly ) const;
 
     // Transformationen
     void Translate(const Point& rTrans);
     void Rotate(const Point& rCenter, double fSin, double fCos);
-    void Rotate(const Point& rCenter, sal_uInt16 nAngle);
+    void Rotate(const Point& rCenter, USHORT nAngle);
     void Scale(double fSx, double fSy);
     void SlantX(long nYRef, double fSin, double fCos);
     void SlantY(long nXRef, double fSin, double fCos);

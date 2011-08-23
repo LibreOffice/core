@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ namespace connectivity
     {
         struct OExtendedTypeInfo
         {
-            ::connectivity::OTypeInfo       aSimpleType;    // the general type info
-            DataTypeEnum                    eType;
+            ::connectivity::OTypeInfo		aSimpleType;	// the general type info
+            DataTypeEnum					eType;
 
             inline ::rtl::OUString getDBName() const { return aSimpleType.aTypeName; }
         };
@@ -53,8 +53,8 @@ namespace connectivity
         class WpADOConnection;
         class ODriver;
         class OCatalog;
-        typedef ::std::multimap<DataTypeEnum, OExtendedTypeInfo*>       OTypeInfoMap;
-        typedef connectivity::OMetaConnection                           OConnection_BASE;
+        typedef ::std::multimap<DataTypeEnum, OExtendedTypeInfo*>		OTypeInfoMap;
+        typedef connectivity::OMetaConnection							OConnection_BASE;
 
 
         class OConnection : public OConnection_BASE,
@@ -66,24 +66,24 @@ namespace connectivity
             //====================================================================
             // Data attributes
             //====================================================================
-            OTypeInfoMap                m_aTypeInfo;    //  vector containing an entry
+            OTypeInfoMap				m_aTypeInfo;	//	vector containing an entry
                                                                                 //  for each row returned by
                                                                                 //  DatabaseMetaData.getTypeInfo.
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>      m_xCatalog;
-            ODriver*                    m_pDriver;
+            ODriver*					m_pDriver;
         private:
-            WpADOConnection*            m_pAdoConnection;
-            OCatalog*                   m_pCatalog;
-            sal_Int32                   m_nEngineType;
-            sal_Bool                    m_bClosed;
-            sal_Bool                    m_bAutocommit;
+            WpADOConnection*			m_pAdoConnection;
+            OCatalog*					m_pCatalog;
+            sal_Int32					m_nEngineType;
+            sal_Bool					m_bClosed;
+            sal_Bool					m_bAutocommit;
 
         protected:
             void buildTypeInfo() throw( ::com::sun::star::sdbc::SQLException);
         public:
 
             OConnection(ODriver*        _pDriver) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            //  OConnection(const SQLHANDLE _pConnectionHandle);
+            //	OConnection(const SQLHANDLE _pConnectionHandle);
             ~OConnection();
             void construct(const ::rtl::OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info);
 
@@ -136,8 +136,8 @@ namespace connectivity
                 return NULL;
             }
 
-            sal_Int32 getEngineType()   const { return m_nEngineType; }
-            ODriver*  getDriver()       const { return m_pDriver; }
+            sal_Int32 getEngineType()	const { return m_nEngineType; }
+            ODriver*  getDriver()		const { return m_pDriver; }
 
             static const OExtendedTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                DataTypeEnum _nType,

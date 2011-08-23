@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/swframeexample.hxx>
+#include <swframeexample.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -44,7 +44,7 @@
 using namespace ::com::sun::star::text;
 
 #define FLYINFLY_BORDER 3
-#define DEMOTEXT        "Ij"
+#define DEMOTEXT		"Ij"
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 
@@ -58,7 +58,7 @@ SvxSwFrameExample::SvxSwFrameExample( Window *pParent, const ResId& rResID ) :
     nVRel       (RelOrientation::PRINT_AREA),
     nWrap       (WrapTextMode_NONE),
     nAnchor     (TextContentAnchorType_AT_PAGE),
-    bTrans      (sal_False),
+    bTrans      (FALSE),
     aRelPos     (Point(0,0))
 {
     InitColors_Impl();
@@ -72,9 +72,9 @@ SvxSwFrameExample::~SvxSwFrameExample()
 void SvxSwFrameExample::InitColors_Impl( void )
 {
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    m_aBgCol = Color( rSettings.GetWindowColor() );
+    m_aBgCol = Color( rSettings.GetWindowColor() );								// old: COL_WHITE
 
-    sal_Bool bHC = rSettings.GetHighContrastMode();
+    BOOL bHC = rSettings.GetHighContrastMode();
 
     m_aFrameColor = Color( COL_LIGHTGREEN );
     m_aAlignColor = Color( COL_LIGHTRED );
@@ -82,9 +82,9 @@ void SvxSwFrameExample::InitColors_Impl( void )
 
     m_aTxtCol = bHC?
         svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR).nColor :
-        Color( COL_GRAY );
+        Color( COL_GRAY );      // old: COL_GRAY
     m_aPrintAreaCol = bHC? m_aTxtCol : Color( COL_GRAY );
-    m_aBorderCol = m_aTxtCol;
+    m_aBorderCol = m_aTxtCol;													// old: COL_BLACK;
     m_aBlankCol = bHC? m_aTxtCol : Color( COL_LIGHTGRAY );
     m_aBlankFrameCol = bHC? m_aTxtCol : Color( COL_GRAY );
 }
@@ -99,21 +99,25 @@ void SvxSwFrameExample::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxSwFrameExample::InitAllRects_Impl()
 {
+//    const Size aSz(GetOutputSizePixel());
+
+    // Seite
+//    aPage.SetSize(Size(aSz.Width() - 3, aSz.Height() - 3));
     aPage.SetSize( GetOutputSizePixel() );
 
-    sal_uIntPtr nOutWPix = aPage.GetWidth();
-    sal_uIntPtr nOutHPix = aPage.GetHeight();
+    ULONG nOutWPix = aPage.GetWidth();
+    ULONG nOutHPix = aPage.GetHeight();
 
     // PrintArea
-    sal_uIntPtr nLBorder;
-    sal_uIntPtr nRBorder;
-    sal_uIntPtr nTBorder;
-    sal_uIntPtr nBBorder;
+    ULONG nLBorder;
+    ULONG nRBorder;
+    ULONG nTBorder;
+    ULONG nBBorder;
 
-    sal_uIntPtr nLTxtBorder;
-    sal_uIntPtr nRTxtBorder;
-    sal_uIntPtr nTTxtBorder;
-    sal_uIntPtr nBTxtBorder;
+    ULONG nLTxtBorder;
+    ULONG nRTxtBorder;
+    ULONG nTTxtBorder;
+    ULONG nBTxtBorder;
 
     if (nAnchor != TextContentAnchorType_AS_CHARACTER)
     {
@@ -141,27 +145,27 @@ void SvxSwFrameExample::InitAllRects_Impl()
     }
     aPagePrtArea = Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
 
-    // Example text: Preparing for the text output
-    // A line of text
+    // Beispiel-Text: Vorbereiten fuer die Textausgabe
+    // Eine Textzeile
     aTextLine = aPagePrtArea;
     aTextLine.SetSize(Size(aTextLine.GetWidth(), 2));
-    aTextLine.Left()    += nLTxtBorder;
-    aTextLine.Right()   -= nRTxtBorder;
+    aTextLine.Left()	+= nLTxtBorder;
+    aTextLine.Right()	-= nRTxtBorder;
     aTextLine.Move(0, nTTxtBorder);
 
-    // Rectangle to edges including paragraph
-    sal_uInt16 nLines = (sal_uInt16)((aPagePrtArea.GetHeight() / 2 - nTTxtBorder - nBTxtBorder)
+    // Rechteck um Absatz incl. Raender
+    USHORT nLines = (USHORT)((aPagePrtArea.GetHeight() / 2 - nTTxtBorder - nBTxtBorder)
              / (aTextLine.GetHeight() + 2));
     aPara = aPagePrtArea;
     aPara.SetSize(Size(aPara.GetWidth(),
         (aTextLine.GetHeight() + 2) * nLines + nTTxtBorder + nBTxtBorder));
 
-    // Rectangle around paragraph without borders
+    // Rechteck um Absatz ohne Raender
     aParaPrtArea = aPara;
-    aParaPrtArea.Left()     += nLTxtBorder;
-    aParaPrtArea.Right()    -= nRTxtBorder;
-    aParaPrtArea.Top()      += nTTxtBorder;
-    aParaPrtArea.Bottom()   -= nBTxtBorder;
+    aParaPrtArea.Left()		+= nLTxtBorder;
+    aParaPrtArea.Right()	-= nRTxtBorder;
+    aParaPrtArea.Top()		+= nTTxtBorder;
+    aParaPrtArea.Bottom()	-= nBTxtBorder;
 
     if (nAnchor == TextContentAnchorType_AS_CHARACTER || nAnchor == TextContentAnchorType_AT_CHARACTER)
     {
@@ -188,18 +192,18 @@ void SvxSwFrameExample::InitAllRects_Impl()
         }
     }
 
-    // Inner Frame anchored at the Frame
+    // Innerer Frame fuer am Frame verankerte Rahmen
     aFrameAtFrame = aPara;
     aFrameAtFrame.Left() += 9;
     aFrameAtFrame.Right() -= 5;
     aFrameAtFrame.Bottom() += 5;
     aFrameAtFrame.SetPos(Point(aFrameAtFrame.Left() + 2, (aPagePrtArea.Bottom() - aFrameAtFrame.GetHeight()) / 2 + 5));
 
-    // Size of the frame to be positioned
+    // Groesse des zu positionierenden Rahmens
     if (nAnchor != TextContentAnchorType_AS_CHARACTER)
     {
-        sal_uIntPtr nLFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nLBorder : nLTxtBorder;
-        sal_uIntPtr nRFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nRBorder : nRTxtBorder;
+        ULONG nLFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nLBorder : nLTxtBorder;
+        ULONG nRFBorder = nAnchor == TextContentAnchorType_AT_PAGE ? nRBorder : nRTxtBorder;
 
         switch (nHRel)
         {
@@ -222,7 +226,7 @@ void SvxSwFrameExample::InitAllRects_Impl()
     }
     else
     {
-        sal_uIntPtr nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(C2S(DEMOTEXT));
+        ULONG nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(C2S(DEMOTEXT));
 
         aFrmSize = Size(nFreeWidth / 2, (aTextLine.GetHeight() + 2) * 3);
         aDrawObj.SetSize(Size(Max(5L, (long)nFreeWidth / 3L), Max(5L, aFrmSize.Height() * 3L)));
@@ -448,7 +452,7 @@ Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(const Rectangle &rRect, const C
     DrawRect_Impl(rRect, rFillColor, rBorderColor);
 
     // Bereich, zu dem relativ positioniert wird, bestimmen
-    Rectangle aRect(rRect); // aPagePrtArea = Default
+    Rectangle aRect(rRect);	// aPagePrtArea = Default
     CalcBoundRect_Impl(aRect);
 
     if (nAnchor == TextContentAnchorType_AT_FRAME && &rRect == &aPagePrtArea)
@@ -456,9 +460,9 @@ Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(const Rectangle &rRect, const C
         // Testabsatz zeichnen
         Rectangle aTxt(aTextLine);
         sal_Int32 nStep = aTxt.GetHeight() + 2;
-        sal_uInt16 nLines = (sal_uInt16)(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
+        USHORT nLines = (USHORT)(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
 
-        for (sal_uInt16 i = 0; i < nLines; i++)
+        for (USHORT i = 0; i < nLines; i++)
         {
             if (i == nLines - 1)
                 aTxt.SetSize(Size(aTxt.GetWidth() / 2, aTxt.GetHeight()));
@@ -474,19 +478,25 @@ void SvxSwFrameExample::Paint(const Rectangle&)
 {
     InitAllRects_Impl();
 
-    // Draw page
+    // Schatten zeichnen
+//    Rectangle aShadow(aPage);
+//    aShadow += Point(3, 3);
+//    DrawRect_Impl(aShadow, Color(COL_GRAY), aTransColor);
+
+    // Seite zeichnen
     DrawRect_Impl( aPage, m_aBgCol, m_aBorderCol );
 
-    // Draw PrintArea
+    // PrintArea zeichnen
     Rectangle aRect = DrawInnerFrame_Impl( aPagePrtArea, m_aTransColor, m_aPrintAreaCol );
 
     if (nAnchor == TextContentAnchorType_AT_FRAME)
         aRect = DrawInnerFrame_Impl( aFrameAtFrame, m_aBgCol, m_aBorderCol );
 
-    long lXPos    = 0;
-    long lYPos    = 0;
+    long lXPos 	  = 0;
+    long lYPos 	  = 0;
 
-    // Horizontal alignment
+    // Horizontale Ausrichtung
+    //
     if (nAnchor != TextContentAnchorType_AS_CHARACTER)
     {
         switch (nHAlign)
@@ -515,7 +525,8 @@ void SvxSwFrameExample::Paint(const Rectangle&)
     else
        lXPos = aRect.Right() + 2;
 
-    // Vertical Alignment
+    // Vertikale Ausrichtung
+    //
     if (nAnchor != TextContentAnchorType_AS_CHARACTER)
     {
         switch (nVAlign)
@@ -523,7 +534,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
             case VertOrientation::BOTTOM:
             case VertOrientation::LINE_BOTTOM:
             {
-                // #i22341#
+                // OD 12.11.2003 #i22341#
                 if ( nVRel != RelOrientation::TEXT_LINE )
                 {
                     lYPos = aRect.Bottom() - aFrmSize.Height() + 1;
@@ -542,7 +553,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
             }
             case VertOrientation::NONE:
             {
-                // #i22341#
+                // OD 12.11.2003 #i22341#
                 if ( nVRel != RelOrientation::CHAR && nVRel != RelOrientation::TEXT_LINE )
                     lYPos = aRect.Top() + aRelPos.Y();
                 else
@@ -550,7 +561,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
                 break;
             }
             default:
-                // #i22341#
+                // OD 12.11.2003 #i22341#
                 if ( nVRel != RelOrientation::TEXT_LINE )
                 {
                     lYPos = aRect.Top();
@@ -578,6 +589,10 @@ void SvxSwFrameExample::Paint(const Rectangle&)
                 lYPos = aRect.Bottom() - aFrmSize.Height() + 1;
                 break;
 
+/*          case VertOrientation::NONE:
+            case VertOrientation::BOTTOM:
+            case VertOrientation::CHAR_TOP:
+            case VertOrientation::LINE_TOP:*/
             default:
                 lYPos = aRect.Top() - aRelPos.Y();
                 break;
@@ -601,11 +616,11 @@ void SvxSwFrameExample::Paint(const Rectangle&)
     if (aFrmRect.Bottom() > pOuterFrame->Bottom())
         aFrmRect.Move(0, pOuterFrame->Bottom() - aFrmRect.Bottom());
 
-    // Draw Test paragraph
+    // Testabsatz zeichnen
     const long nTxtLineHeight = aTextLine.GetHeight();
     Rectangle aTxt(aTextLine);
     sal_Int32 nStep;
-    sal_uInt16 nLines;
+    USHORT nLines;
 
     if (nAnchor == TextContentAnchorType_AT_FRAME)
     {
@@ -615,27 +630,28 @@ void SvxSwFrameExample::Paint(const Rectangle&)
         aTxt.Bottom() = aTxt.Top() + aTextLine.GetHeight() - 1;
 
         nStep = aTxt.GetHeight() + 2;
-        nLines = (sal_uInt16)(((aFrameAtFrame.GetHeight() - 2 * FLYINFLY_BORDER) * 2 / 3)
+        nLines = (USHORT)(((aFrameAtFrame.GetHeight() - 2 * FLYINFLY_BORDER) * 2 / 3)
                  / (aTxt.GetHeight() + 2));
     }
     else
     {
         nStep = aTxt.GetHeight() + 2;
-        nLines = (sal_uInt16)(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
+        nLines = (USHORT)(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
     }
 
     if (nAnchor != TextContentAnchorType_AS_CHARACTER)
     {
-        // Simulate text
+        // Text simulieren
+        //
         const long nOldR = aTxt.Right();
         const long nOldL = aTxt.Left();
 
-        // #i22341#
+        // OD 12.11.2003 #i22341#
         const bool bIgnoreWrap = nAnchor == TextContentAnchorType_AT_CHARACTER &&
                            ( nHRel == RelOrientation::CHAR || nVRel == RelOrientation::CHAR ||
                              nVRel == RelOrientation::TEXT_LINE );
 
-        for (sal_uInt16 i = 0; i < nLines; ++i)
+        for (USHORT i = 0; i < nLines; ++i)
         {
             if (i == (nLines - 1))
                 aTxt.SetSize(Size(aTxt.GetWidth() / 2, aTxt.GetHeight()));
@@ -645,7 +661,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
                 switch(nWrap)
                 {
                     case WrapTextMode_NONE:
-                        aTxt.Top()    = aFrmRect.Bottom() + nTxtLineHeight;
+                        aTxt.Top() 	  = aFrmRect.Bottom() + nTxtLineHeight;
                         aTxt.Bottom() = aTxt.Top() + nTxtLineHeight - 1;
                         break;
 
@@ -669,8 +685,8 @@ void SvxSwFrameExample::Paint(const Rectangle&)
 
         if (nAnchor != TextContentAnchorType_AT_FRAME && aTxt.Bottom() > aParaPrtArea.Bottom())
         {
-            // Text has been replaced by frame, so adjust parameters height
-            sal_uIntPtr nDiff = aTxt.Bottom() - aParaPrtArea.Bottom();
+            // Text wurde durch Rahmen verdraengt, daher Para-Hoehe anpassen
+            ULONG nDiff = aTxt.Bottom() - aParaPrtArea.Bottom();
             aParaPrtArea.Bottom() += nDiff;
             aPara.Bottom() += nDiff;
 
@@ -688,11 +704,11 @@ void SvxSwFrameExample::Paint(const Rectangle&)
         DrawRect_Impl(aDrawObj, m_aBlankCol, m_aBlankFrameCol );
     }
 
-    // Draw rectangle on which the frame is aligned:
+    // Rechteck zeichnen, zu dem der Rahmen ausgerichtet wird:
     DrawRect_Impl(aRect, m_aTransColor, m_aAlignColor);
 
-    // Frame View
-    sal_Bool bDontFill = (nAnchor == TextContentAnchorType_AT_CHARACTER && aFrmRect.IsOver(aAutoCharFrame)) ? sal_True : bTrans;
+    // Frame anzeigen
+    BOOL bDontFill = (nAnchor == TextContentAnchorType_AT_CHARACTER && aFrmRect.IsOver(aAutoCharFrame)) ? TRUE : bTrans;
     DrawRect_Impl( aFrmRect, bDontFill? m_aTransColor : m_aBgCol, m_aFrameColor );
 }
 

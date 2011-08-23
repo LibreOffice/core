@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw) :
     GetOKButton()->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
 }
 
-SwLineNumberingDlg::~SwLineNumberingDlg()
+__EXPORT SwLineNumberingDlg::~SwLineNumberingDlg()
 {
 }
 
@@ -84,42 +84,31 @@ IMPL_LINK( SwLineNumberingDlg, OKHdl, Button *, EMPTYARG )
 SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_LINENUMBERING), rSet),
-    aNumberingOnCB      ( this, SW_RES( CB_NUMBERING_ON )),
+    aNumberingOnCB		( this, SW_RES( CB_NUMBERING_ON )),
+    aCharStyleFT		( this, SW_RES( FT_CHAR_STYLE )),
+    aCharStyleLB		( this, SW_RES( LB_CHAR_STYLE )),
+    aFormatFT			( this, SW_RES( FT_FORMAT )),
+    aFormatLB			( this, SW_RES( LB_FORMAT ), INSERT_NUM_EXTENDED_TYPES),
+    aPosFT				( this, SW_RES( FT_POS )),
+    aPosLB				( this, SW_RES( LB_POS )),
+    aOffsetFT   		( this, SW_RES( FT_OFFSET )),
+    aOffsetMF   		( this, SW_RES( MF_OFFSET )),
+    aNumIntervalFT		( this, SW_RES( FT_NUM_INVERVAL )),
+    aNumIntervalNF		( this, SW_RES( NF_NUM_INVERVAL )),
+    aNumRowsFT			( this, SW_RES( FT_NUM_ROWS )),
     aDisplayFL          ( this, SW_RES( FL_DISPLAY )),
-    aCharStyleFT        ( this, SW_RES( FT_CHAR_STYLE )),
-    aCharStyleLB        ( this, SW_RES( LB_CHAR_STYLE )),
-    aFormatFT           ( this, SW_RES( FT_FORMAT )),
-    aFormatLB           ( this, SW_RES( LB_FORMAT ), INSERT_NUM_EXTENDED_TYPES),
-    aPosFT              ( this, SW_RES( FT_POS )),
-    aPosLB              ( this, SW_RES( LB_POS )),
-    aOffsetFT           ( this, SW_RES( FT_OFFSET )),
-    aOffsetMF           ( this, SW_RES( MF_OFFSET )),
-    aNumIntervalFT      ( this, SW_RES( FT_NUM_INVERVAL )),
-    aNumIntervalNF      ( this, SW_RES( NF_NUM_INVERVAL )),
-    aNumRowsFT          ( this, SW_RES( FT_NUM_ROWS )),
+    aDivisorFT			( this, SW_RES( FT_DIVISOR )),
+    aDivisorED			( this, SW_RES( ED_DIVISOR )),
+    aDivIntervalFT		( this, SW_RES( FT_DIV_INTERVAL )),
+    aDivIntervalNF		( this, SW_RES( NF_DIV_INTERVAL )),
+    aDivRowsFT			( this, SW_RES( FT_DIV_ROWS )),
     aDivisorFL          ( this, SW_RES( FL_DIVISOR )),
-    aDivisorFT          ( this, SW_RES( FT_DIVISOR )),
-    aDivisorED          ( this, SW_RES( ED_DIVISOR )),
-    aDivIntervalFT      ( this, SW_RES( FT_DIV_INTERVAL )),
-    aDivIntervalNF      ( this, SW_RES( NF_DIV_INTERVAL )),
-    aDivRowsFT          ( this, SW_RES( FT_DIV_ROWS )),
-    aCountFL            ( this, SW_RES( FL_COUNT )),
-    aCountEmptyLinesCB  ( this, SW_RES( CB_COUNT_EMPTYLINES )),
-    aCountFrameLinesCB  ( this, SW_RES( CB_COUNT_FRAMELINES )),
-    aRestartEachPageCB  ( this, SW_RES( CB_RESTART_PAGE ))
+    aCountEmptyLinesCB	( this, SW_RES( CB_COUNT_EMPTYLINES )),
+    aCountFrameLinesCB	( this, SW_RES( CB_COUNT_FRAMELINES )),
+    aRestartEachPageCB	( this, SW_RES( CB_RESTART_PAGE )),
+    aCountFL            ( this, SW_RES( FL_COUNT ))
 
 {
-    String sIntervalName = aDivIntervalFT.GetAccessibleName();
-    sIntervalName += String::CreateFromAscii("(");
-    sIntervalName += aDivRowsFT.GetAccessibleName();
-    sIntervalName += String::CreateFromAscii(")");
-    aDivIntervalNF.SetAccessibleName(sIntervalName);
-    sIntervalName = aNumIntervalFT.GetAccessibleName();
-    sIntervalName += String::CreateFromAscii("(");
-    sIntervalName += aNumRowsFT.GetAccessibleName();
-    sIntervalName += String::CreateFromAscii(")");
-    aNumIntervalNF.SetAccessibleName(sIntervalName);
-
     FreeResource();
     SwLineNumberingDlg *pDlg = (SwLineNumberingDlg *)GetParent();
     pSh = pDlg->GetWrtShell();
@@ -127,22 +116,22 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
     ::FillCharStyleListBox(aCharStyleLB, pSh->GetView().GetDocShell());
 }
 
-SwLineNumberingPage::~SwLineNumberingPage()
+__EXPORT SwLineNumberingPage::~SwLineNumberingPage()
 {
 }
 
-SfxTabPage* SwLineNumberingPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage*	__EXPORT SwLineNumberingPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SwLineNumberingPage( pParent, rSet );
 }
 
-void SwLineNumberingPage::Reset( const SfxItemSet&  )
+void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
 {
     const SwLineNumberInfo &rInf = pSh->GetLineNumberInfo();
     IDocumentStylePoolAccess* pIDSPA = pSh->getIDocumentStylePoolAccess();
 
     String sStyleName(rInf.GetCharFmt( *pIDSPA )->GetName());
-    const sal_uInt16 nPos = aCharStyleLB.GetEntryPos(sStyleName);
+    const USHORT nPos = aCharStyleLB.GetEntryPos(sStyleName);
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
         aCharStyleLB.SelectEntryPos(nPos);
@@ -156,15 +145,28 @@ void SwLineNumberingPage::Reset( const SfxItemSet&  )
     }
 
     // Format
-    sal_uInt16 nSelFmt = rInf.GetNumType().GetNumberingType();
+//	SwFldMgr aMgr( pSh );
+    USHORT nSelFmt = rInf.GetNumType().GetNumberingType();
+//	USHORT nCnt = aMgr.GetFormatCount( TYP_SEQFLD, FALSE );
 
+//	for( USHORT i = 0; i < nCnt; i++)
+//	{
+//		aFormatLB.InsertEntry(aMgr.GetFormatStr( TYP_SEQFLD, i));
+//		USHORT nFmtId = aMgr.GetFormatId( TYP_SEQFLD, i );
+//		aFormatLB.SetEntryData( i, (void*)nFmtId );
+//		if( nFmtId == nSelFmt )
+//			aFormatLB.SelectEntryPos( i );
+//	}
     aFormatLB.SelectNumberingType(nSelFmt);
 
+//	if ( !aFormatLB.GetSelectEntryCount() )
+//		aFormatLB.SelectEntryPos(aFormatLB.GetEntryCount() - 1);
+
     // Position
-    aPosLB.SelectEntryPos((sal_uInt16)rInf.GetPos());
+    aPosLB.SelectEntryPos((USHORT)rInf.GetPos());
 
     // Offset
-    sal_uInt16 nOffset = rInf.GetPosFromLeft();
+    USHORT nOffset = rInf.GetPosFromLeft();
     if (nOffset == USHRT_MAX)
         nOffset = 0;
 
@@ -197,7 +199,7 @@ void SwLineNumberingPage::Reset( const SfxItemSet&  )
  --------------------------------------------------------------------*/
 IMPL_LINK( SwLineNumberingPage, ModifyHdl, Edit *, EMPTYARG )
 {
-    sal_Bool bHasValue = aDivisorED.GetText().Len() != 0;
+    BOOL bHasValue = aDivisorED.GetText().Len() != 0;
 
     aDivIntervalFT.Enable(bHasValue);
     aDivIntervalNF.Enable(bHasValue);
@@ -211,7 +213,7 @@ IMPL_LINK( SwLineNumberingPage, ModifyHdl, Edit *, EMPTYARG )
  --------------------------------------------------------------------*/
 IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
 {
-    sal_Bool bEnable = aNumberingOnCB.IsChecked();
+    BOOL bEnable = aNumberingOnCB.IsChecked();
 
     aCharStyleFT.Enable(bEnable);
     aCharStyleLB.Enable(bEnable);
@@ -239,7 +241,7 @@ IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
     return 0;
 }
 
-sal_Bool SwLineNumberingPage::FillItemSet( SfxItemSet& )
+BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& )
 {
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
@@ -269,16 +271,16 @@ sal_Bool SwLineNumberingPage::FillItemSet( SfxItemSet& )
     aInf.SetPos((LineNumberPosition)aPosLB.GetSelectEntryPos());
 
     // Offset
-    aInf.SetPosFromLeft((sal_uInt16)aOffsetMF.Denormalize(aOffsetMF.GetValue(FUNIT_TWIP)));
+    aInf.SetPosFromLeft((USHORT)aOffsetMF.Denormalize(aOffsetMF.GetValue(FUNIT_TWIP)));
 
     // Numerierungsoffset
-    aInf.SetCountBy((sal_uInt16)aNumIntervalNF.GetValue());
+    aInf.SetCountBy((USHORT)aNumIntervalNF.GetValue());
 
     // Teiler
     aInf.SetDivider(aDivisorED.GetText());
 
     // Teileroffset
-    aInf.SetDividerCountBy((sal_uInt16)aDivIntervalNF.GetValue());
+    aInf.SetDividerCountBy((USHORT)aDivIntervalNF.GetValue());
 
     // Zaehlen
     aInf.SetCountBlankLines(aCountEmptyLinesCB.IsChecked());
@@ -289,7 +291,7 @@ sal_Bool SwLineNumberingPage::FillItemSet( SfxItemSet& )
 
     pSh->SetLineNumberInfo(aInf);
 
-    return sal_False;
+    return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

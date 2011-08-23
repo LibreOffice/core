@@ -35,18 +35,17 @@
 
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
-#include "xmlreader/xmlreader.hxx"
 
 #include "node.hxx"
 #include "parser.hxx"
 #include "valueparser.hxx"
-
-namespace xmlreader { struct Span; }
+#include "xmlreader.hxx"
 
 namespace configmgr {
 
 class SetNode;
 struct Data;
+struct Span;
 
 class XcsParser: public Parser {
 public:
@@ -55,29 +54,29 @@ public:
 private:
     virtual ~XcsParser();
 
-    virtual xmlreader::XmlReader::Text getTextMode();
+    virtual XmlReader::Text getTextMode();
 
     virtual bool startElement(
-        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name);
+        XmlReader & reader, XmlReader::Namespace ns, Span const & name);
 
-    virtual void endElement(xmlreader::XmlReader const & reader);
+    virtual void endElement(XmlReader const & reader);
 
-    virtual void characters(xmlreader::Span const & text);
+    virtual void characters(Span const & text);
 
-    void handleComponentSchema(xmlreader::XmlReader & reader);
+    void handleComponentSchema(XmlReader & reader);
 
-    void handleNodeRef(xmlreader::XmlReader & reader);
+    void handleNodeRef(XmlReader & reader);
 
-    void handleProp(xmlreader::XmlReader & reader);
+    void handleProp(XmlReader & reader);
 
     void handlePropValue(
-        xmlreader::XmlReader & reader, rtl::Reference< Node > const & property);
+        XmlReader & reader, rtl::Reference< Node > const & property);
 
-    void handleGroup(xmlreader::XmlReader & reader, bool isTemplate);
+    void handleGroup(XmlReader & reader, bool isTemplate);
 
-    void handleSet(xmlreader::XmlReader & reader, bool isTemplate);
+    void handleSet(XmlReader & reader, bool isTemplate);
 
-    void handleSetItem(xmlreader::XmlReader & reader, SetNode * set);
+    void handleSetItem(XmlReader & reader, SetNode * set);
 
     enum State {
         STATE_START, STATE_COMPONENT_SCHEMA, STATE_TEMPLATES,

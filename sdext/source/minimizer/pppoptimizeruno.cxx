@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ extern "C"
     }
 
     // -------------------------------------------------------------------------
-
+    
     sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
     {
         if (pRegistryKey)
@@ -62,14 +62,14 @@ extern "C"
                 sal_Int32                   nPos;
 
                 xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PPPOptimizer_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
+                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
                 const Sequence< OUString > & rSNL1 = PPPOptimizer_getSupportedServiceNames();
                 const OUString * pArray1 = rSNL1.getConstArray();
                 for ( nPos = rSNL1.getLength(); nPos--; )
                     xNewKey->createKey( pArray1[nPos] );
 
-                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PPPOptimizerDialog_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
+                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PPPOptimizerDialog_getImplementationName() ); 
+                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
                 const Sequence< OUString > & rSNL2 = PPPOptimizerDialog_getSupportedServiceNames();
                 const OUString * pArray2 = rSNL2.getConstArray();
                 for ( nPos = rSNL2.getLength(); nPos--; )
@@ -79,7 +79,7 @@ extern "C"
             }
             catch (InvalidRegistryException &)
             {
-                OSL_FAIL( "### InvalidRegistryException!" );
+                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
             }
         }
         return sal_False;
@@ -99,7 +99,7 @@ extern "C"
             {
                 xFactory = createSingleComponentFactory(
                         PPPOptimizer_createInstance,
-                        OUString::createFromAscii( pImplName ),
+                        OUString::createFromAscii( pImplName ), 
                         PPPOptimizer_getSupportedServiceNames() );
 
             }

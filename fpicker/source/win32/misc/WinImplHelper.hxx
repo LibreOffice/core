@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,30 +59,30 @@ bool SAL_CALL IsWindowsXP();
 bool SAL_CALL IsWindows98();
 bool SAL_CALL IsWindowsME();
 
-// returns true if the platform is
+// returns true if the platform is 
 // Windows 2000 or above
 bool SAL_CALL IsWindows2000Platform();
 
 #define IsWin2000 IsWindows2000
 
 // set actions
-void SAL_CALL ListboxAddItem(
+void SAL_CALL ListboxAddItem( 
     HWND hwnd, const ::com::sun::star::uno::Any& aItem, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( ::com::sun::star::lang::IllegalArgumentException );
 
-void SAL_CALL ListboxAddItems(
+void SAL_CALL ListboxAddItems( 
     HWND hwnd, const ::com::sun::star::uno::Any& aItemList, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( ::com::sun::star::lang:: IllegalArgumentException );
 
-void SAL_CALL ListboxDeleteItem(
+void SAL_CALL ListboxDeleteItem( 
     HWND hwnd, const ::com::sun::star::uno::Any& aPosition, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( ::com::sun::star::lang::IllegalArgumentException );
 
-void SAL_CALL ListboxDeleteItems(
+void SAL_CALL ListboxDeleteItems( 
     HWND hwnd, const ::com::sun::star::uno::Any& aUnused, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( ::com::sun::star::lang::IllegalArgumentException );
 
-void SAL_CALL ListboxSetSelectedItem(
+void SAL_CALL ListboxSetSelectedItem( 
     HWND hwnd, const ::com::sun::star::uno::Any& aPosition, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( ::com::sun::star::lang::IllegalArgumentException );
 
@@ -94,7 +94,7 @@ void SAL_CALL ListboxSetSelectedItem(
 // checkbox helper functions
 ::com::sun::star::uno::Any SAL_CALL CheckboxGetState( HWND hwnd );
 
-void SAL_CALL CheckboxSetState(
+void SAL_CALL CheckboxSetState( 
     HWND hwnd, const ::com::sun::star::uno::Any& aState, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( ::com::sun::star::lang::IllegalArgumentException );
 

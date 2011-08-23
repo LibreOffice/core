@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <svtools/filedlg.hxx>
+#include <filedlg.hxx>
 #include <filedlg2.hxx>
 
-PathDialog::PathDialog( Window* _pParent, WinBits nStyle, sal_Bool bCreateDir ) :
+PathDialog::PathDialog( Window* _pParent, WinBits nStyle, BOOL bCreateDir ) :
     ModalDialog( _pParent, WB_STDMODAL | nStyle )
 {
     pImpFileDlg = new ImpSvFileDlg;
@@ -71,7 +71,7 @@ long PathDialog::OK()
     if( aOKHdlLink.IsSet() )
         return aOKHdlLink.Call( this );
     else
-        return sal_True;
+        return TRUE;
 }
 
 
@@ -81,7 +81,7 @@ FileDialog::FileDialog( Window* _pParent, WinBits nStyle ) :
     // Dadurch dass hier bei VCL nicht der CTOR mit ResType verwendet wird,
     // wurde im PathDialog-CTOR leider ein ImpPathDialog angelegt...
     // So zwar scheisse, aber der Dialog ist eh' nur ein Hack:
-    pImpFileDlg->CreateDialog( this, nStyle, WINDOW_FILEDIALOG, sal_False );
+    pImpFileDlg->CreateDialog( this, nStyle, WINDOW_FILEDIALOG, FALSE );
 }
 
 FileDialog::~FileDialog()
@@ -123,17 +123,17 @@ void FileDialog::FilterSelect()
     aFilterHdlLink.Call( this );
 }
 
-sal_uInt16 FileDialog::GetFilterCount() const
+USHORT FileDialog::GetFilterCount() const
 {
   return ((ImpFileDialog*)pImpFileDlg->GetDialog())->GetFilterCount();
 }
 
-UniString FileDialog::GetFilterName( sal_uInt16 nPos ) const
+UniString FileDialog::GetFilterName( USHORT nPos ) const
 {
   return ((ImpFileDialog*)pImpFileDlg->GetDialog())->GetFilterName( nPos );
 }
 
-UniString FileDialog::GetFilterType( sal_uInt16 nPos ) const
+UniString FileDialog::GetFilterType( USHORT nPos ) const
 {
   return ((ImpFileDialog*)pImpFileDlg->GetDialog())->GetFilterType( nPos );
 }

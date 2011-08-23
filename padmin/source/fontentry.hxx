@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,52 +48,52 @@ namespace padmin {
         public ModalDialog,
         public ::psp::PrintFontManager::ImportFontCallback
     {
-        OKButton                            m_aOKBtn;
-        CancelButton                        m_aCancelBtn;
-        PushButton                          m_aSelectAllBtn;
-        ListBox                             m_aNewFontsBox;
-        FixedLine                           m_aFromFL;
-        Edit                                m_aFromDirEdt;
-        PushButton                          m_aFromBtn;
-        CheckBox                            m_aSubDirsBox;
-        FixedLine                           m_aTargetOptFL;
-        CheckBox                            m_aLinkOnlyBox;
-        FixedText                           m_aFixedText;
-        bool                                m_bOverwriteAll;
-        bool                                m_bOverwriteNone;
-        ProgressDialog*                     m_pProgress;
-        int                                 m_nFont;
+        OKButton							m_aOKBtn;
+        CancelButton						m_aCancelBtn;
+        PushButton							m_aSelectAllBtn;
+        ListBox								m_aNewFontsBox;
+        FixedLine							m_aFromFL;
+        Edit								m_aFromDirEdt;
+        PushButton							m_aFromBtn;
+        CheckBox							m_aSubDirsBox;
+        FixedLine							m_aTargetOptFL;
+        CheckBox							m_aLinkOnlyBox;
+        FixedText							m_aFixedText;
+        bool								m_bOverwriteAll;
+        bool								m_bOverwriteNone;
+        ProgressDialog*						m_pProgress;
+        int									m_nFont;
+        
+        String								m_aImportOperation;
+        String								m_aOverwriteQueryText;
+        String								m_aOverwriteAllText;
+        String								m_aOverwriteNoneText;
+        String								m_aNoAfmText;
+        String								m_aAfmCopyFailedText;
+        String								m_aFontCopyFailedText;
+        String								m_aNoWritableFontsDirText;
+        String								m_aFontsImportedText;
 
-        String                              m_aImportOperation;
-        String                              m_aOverwriteQueryText;
-        String                              m_aOverwriteAllText;
-        String                              m_aOverwriteNoneText;
-        String                              m_aNoAfmText;
-        String                              m_aAfmCopyFailedText;
-        String                              m_aFontCopyFailedText;
-        String                              m_aNoWritableFontsDirText;
-        String                              m_aFontsImportedText;
-
-        ::boost::unordered_map< ::rtl::OString, ::std::list< ::psp::FastPrintFontInfo >, ::rtl::OStringHash >
+        ::std::hash_map< ::rtl::OString, ::std::list< ::psp::FastPrintFontInfo >, ::rtl::OStringHash >
                                             m_aNewFonts;
-
-        Timer                               m_aRefreshTimer;
+        
+        Timer								m_aRefreshTimer;
         DECL_LINK( RefreshTimeoutHdl, void* );
 
-
-        ::psp::PrintFontManager&            m_rFontManager;
-
+        
+        ::psp::PrintFontManager&			m_rFontManager;
+        
         DECL_LINK( ClickBtnHdl, Button* );
         DECL_LINK( ModifyHdl, Edit* );
         DECL_LINK( ToggleHdl, CheckBox* );
-
+        
         // implement ImportFontCallback
         virtual void importFontsFailed( ::psp::PrintFontManager::ImportFontCallback::FailCondition eReason );
         virtual void progress( const ::rtl::OUString& rFile );
         virtual bool queryOverwriteFile( const ::rtl::OUString& rFile );
         virtual void importFontFailed( const ::rtl::OUString& rFile, ::psp::PrintFontManager::ImportFontCallback::FailCondition eReason );
         virtual bool isCanceled();
-
+        
         void copyFonts();
         void fillFontBox();
     public:
@@ -104,28 +104,28 @@ namespace padmin {
     class FontNameDlg : public ModalDialog
     {
     private:
-        OKButton                    m_aOKButton;
-        PushButton                  m_aRenameButton;
-        PushButton                  m_aRemoveButton;
-        PushButton                  m_aImportButton;
+        OKButton           			m_aOKButton;
+        PushButton					m_aRenameButton;
+        PushButton         			m_aRemoveButton;
+        PushButton					m_aImportButton;
+        
+        DelListBox            		m_aFontBox;		
+        FixedText          			m_aFixedText;
 
-        DelListBox                  m_aFontBox;
-        FixedText                   m_aFixedText;
+        String						m_aRenameString;
+        String						m_aRenameTTCString;
+        String						m_aNoRenameString;
 
-        String                      m_aRenameString;
-        String                      m_aRenameTTCString;
-        String                      m_aNoRenameString;
-
-        ::psp::PrintFontManager&    m_rFontManager;
+        ::psp::PrintFontManager&	m_rFontManager;
 
         // maps fontID to XLFD
-        ::boost::unordered_map< ::psp::fontID, String >
+        ::std::hash_map< ::psp::fontID, String >
                                     m_aFonts;
         void init();
     public:
         FontNameDlg( Window* );
         ~FontNameDlg();
-
+        
         DECL_LINK( ClickBtnHdl, Button* );
         DECL_LINK( DelPressedHdl, ListBox* );
         DECL_LINK( SelectHdl, ListBox* );

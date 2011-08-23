@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ void Pane::disposing (void)
 
 
 //----- XPane -----------------------------------------------------------------
-
+    
 Reference<awt::XWindow> SAL_CALL Pane::getWindow (void)
     throw (RuntimeException)
 {
@@ -107,7 +107,7 @@ Reference<rendering::XCanvas> SAL_CALL Pane::getCanvas (void)
 
     if ( ! mxCanvas.is())
         mxCanvas = CreateCanvas();
-
+    
     return mxCanvas;
 }
 
@@ -150,7 +150,7 @@ Reference<accessibility::XAccessible> SAL_CALL Pane::getAccessible (void)
     ThrowIfDisposed();
     ::Window* pWindow = GetWindow();
     if (pWindow != NULL)
-        return pWindow->GetAccessible(sal_False);
+        return pWindow->GetAccessible(FALSE);
     else
         return NULL;
 }
@@ -216,7 +216,7 @@ const Sequence<sal_Int8>& Pane::getUnoTunnelId (void)
 
 sal_Int64 SAL_CALL Pane::getSomething (const Sequence<sal_Int8>& rId)
     throw (RuntimeException)
-{
+{    
     sal_Int64 nResult = 0;
 
     if (rId.getLength() == 16
@@ -237,7 +237,7 @@ Reference<rendering::XCanvas> Pane::CreateCanvas (void)
     throw (RuntimeException)
 {
     Reference<rendering::XCanvas> xCanvas;
-
+    
     if (mpWindow != NULL)
     {
         ::cppcanvas::SpriteCanvasSharedPtr pCanvas (
@@ -245,7 +245,7 @@ Reference<rendering::XCanvas> Pane::CreateCanvas (void)
         if (pCanvas.get() != NULL)
             xCanvas = Reference<rendering::XCanvas>(pCanvas->getUNOSpriteCanvas(), UNO_QUERY);
     }
-
+    
     return xCanvas;
 }
 

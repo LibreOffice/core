@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace frm
     //= OSpinButtonModel
     //====================================================================
     // implemented elsewhere
-    Any translateExternalDoubleToControlIntValue(
+    Any translateExternalDoubleToControlIntValue( 
         const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
         const ::rtl::OUString& _rMinValueName, const ::rtl::OUString& _rMaxValueName );
     Any translateControlIntToExternalDoubleValue( const Any& _rControlIntValue );
@@ -187,14 +187,14 @@ namespace frm
     //------------------------------------------------------------------------------
     Any OSpinButtonModel::translateDbColumnToControlValue( )
     {
-        OSL_FAIL( "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
+        OSL_ENSURE( sal_False, "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return Any();
     }
 
     //------------------------------------------------------------------------------
     sal_Bool OSpinButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
-        OSL_FAIL( "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
+        OSL_ENSURE( sal_False, "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return sal_True;
     }
 
@@ -253,7 +253,7 @@ namespace frm
     //--------------------------------------------------------------------
     Any OSpinButtonModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
-        return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
+        return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet, 
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SpinValueMin" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SpinValueMax" ) ) );
     }

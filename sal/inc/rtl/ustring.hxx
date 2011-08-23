@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace rtl
 /**
   This String class provide base functionality for C++ like Unicode
   character array handling. The advantage of this class is, that it
-  handle all the memory management for you - and it do it
+  handle all the memory managament for you - and it do it
   more efficient. If you assign a string to another string, the
   data of both strings are shared (without any copy operation or
   memory allocation) as long as you do not change the string. This class
@@ -230,13 +230,13 @@ public:
     {
         rtl_uString_release( pData );
     }
-
+    
     /** Provides an OUString const & passing a storage pointer of an
         rtl_uString * handle.
         It is more convenient to use C++ OUString member functions when dealing
         with rtl_uString * handles.  Using this function avoids unnecessary
         acquire()/release() calls for a temporary OUString object.
-
+        
         @param ppHandle
                pointer to storage
         @return
@@ -244,7 +244,7 @@ public:
     */
     static inline OUString const & unacquired( rtl_uString * const * ppHandle )
         { return * reinterpret_cast< OUString const * >( ppHandle ); }
-
+    
     /**
       Assign a new string.
 
@@ -276,22 +276,6 @@ public:
                 object.
     */
     sal_Int32 getLength() const SAL_THROW(()) { return pData->length; }
-
-    /**
-      Checks if a string is empty.
-
-      @return   sal_True if the string is empty;
-                sal_False, otherwise.
-
-      @since LibreOffice 3.4
-    */
-    sal_Bool isEmpty() const SAL_THROW(())
-    {
-        if ( pData->length )
-            return sal_False;
-        else
-            return sal_True;
-    }
 
     /**
       Returns a pointer to the Unicode character buffer from this string.
@@ -569,7 +553,7 @@ public:
         if ( pData->length != asciiStrLength )
             return sal_False;
 
-        return rtl_ustr_asciil_reverseEquals_WithLength(
+        return rtl_ustr_asciil_reverseEquals_WithLength( 
                     pData->buffer, asciiStr, asciiStrLength );
     }
 
@@ -748,7 +732,7 @@ public:
 
       @return   a hash code value for this object.
 
-      @see rtl::OUStringHash for convenient use of boost::unordered_map
+      @see rtl::OUStringHash for convenient use of STLPort's hash_map
     */
     sal_Int32 hashCode() const SAL_THROW(())
     {
@@ -964,7 +948,8 @@ public:
     */
     OUString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
     {
-        OSL_ASSERT(beginIndex >= 0 && beginIndex <= getLength() && count >= 0);
+        OSL_ASSERT(beginIndex >= 0 && beginIndex <= getLength()
+                   && count >= 0 && count <= getLength() - beginIndex);
         if ( (beginIndex == 0) && (count == getLength()) )
             return *this;
         else
@@ -1478,7 +1463,7 @@ public:
 /** A helper to use OUStrings with hash maps.
 
     Instances of this class are unary function objects that can be used as
-    hash function arguments to boost::unordered_map and similar constructs.
+    hash function arguments to STLPort's hash_map and similar constructs.
  */
 struct OUStringHash
 {

@@ -182,7 +182,7 @@ testcase tVariablesSetValueToNumber
    for i = 0 to j
        Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sResult(i) then
-           Warnlog i & "Should get " & sResult(i) & " but get " & fGetFieldContent()
+           QaErrorLog i & "#i94596# - Should get " & sResult(i) & " but get " & fGetFieldContent()
        end if
        Call wTypeKeys "<Down><Home>"
    next i
@@ -194,6 +194,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tVariablesSetFormats
+    qaerrorlog "#i94596# - tVariablesSetFormats outcommented due to bug."
+    goto endsub
 
   Dim sName     as String
   Dim sValue    as String
@@ -720,7 +722,7 @@ testcase tVariablesDDEFieldManual
 
     '/// Open the test file which you just closed , add something ,
     '/// Save the file
-    hFileOpenLocally( sDDEFile)
+    Call hFileOpen(sDDEFile)
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "XYZ"
     FileSave
@@ -816,7 +818,7 @@ testcase tVariablesDDEFieldAutomatic
 
   '/// Open the test file which you just closed , add something ,
   '/// Save the file
-   hFileOpenLocally( sDDEFile)
+   Call hFileOpen(sDDEFile)
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "XYZ"
     FileSave

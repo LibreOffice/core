@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,6 @@
 
 using namespace webdav_ucp;
 using namespace com::sun::star;
-
-#define BEEHIVE_BUGS_WORKAROUND
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -131,26 +129,13 @@ extern "C" int LockSequence_startelement_callback(
 extern "C" int LockSequence_chardata_callback(
     void *userdata,
     int state,
-#ifdef BEEHIVE_BUGS_WORKAROUND
-    const char *buf1,
-#else
     const char *buf,
-#endif
     size_t len )
 {
     LockSequenceParseContext * pCtx
                     = static_cast< LockSequenceParseContext * >( userdata );
     if ( !pCtx->pLock )
         pCtx->pLock = new ucb::Lock;
-
-#ifdef BEEHIVE_BUGS_WORKAROUND
-    // Beehive sends XML values containing trailing newlines.
-    if ( buf1[ len - 1 ] == 0x0a )
-        len--;
-
-    char * buf = new char[ len + 1 ]();
-    strncpy( buf, buf1, len );
-#endif
 
     switch ( state )
     {
@@ -174,7 +159,8 @@ extern "C" int LockSequence_chardata_callback(
                 pCtx->hasDepth = true;
             }
             else
-                OSL_FAIL( "LockSequence_chardata_callback - Unknown depth!" );
+                OSL_ENSURE( sal_False,
+                            "LockSequence_chardata_callback - Unknown depth!" );
             break;
 
         case STATE_OWNER:
@@ -221,7 +207,8 @@ extern "C" int LockSequence_chardata_callback(
             {
                 pCtx->pLock->Timeout = sal_Int64( -1 );
                 pCtx->hasTimeout = true;
-                OSL_FAIL( "LockSequence_chardata_callback - Unknown timeout!" );
+                OSL_ENSURE( sal_False,
+                        "LockSequence_chardata_callback - Unknown timeout!" );
             }
             break;
 
@@ -237,11 +224,6 @@ extern "C" int LockSequence_chardata_callback(
         }
 
     }
-
-#ifdef BEEHIVE_BUGS_WORKAROUND
-    delete [] buf;
-#endif
-
     return 0; // zero to continue, non-zero to abort parsing
 }
 
@@ -342,7 +324,11 @@ bool LockSequence::createFromXML( const rtl::OString & rInData,
                       rInData.getStr() + nStart,
                       nEnd - nStart + TOKEN_LENGTH );
 
+#if NEON_VERSION >= 0x0250
         success = !ne_xml_failed( parser );
+#else
+        success = !!ne_xml_valid( parser );
+#endif
 
         ne_xml_destroy( parser );
 

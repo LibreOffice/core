@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 
 #include <cmdid.h>
 #include "globals.hrc"
@@ -57,6 +58,7 @@
 #include <mmconfigitem.hxx>
 
 #include <view.hrc>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -98,7 +100,7 @@ SwView_Impl::~SwView_Impl()
            pScanEvtLstnr->ViewDestroyed();
     if( xClipEvtLstnr.is() )
     {
-        pClipEvtLstnr->AddRemoveListener( sal_False );
+        pClipEvtLstnr->AddRemoveListener( FALSE );
         pClipEvtLstnr->ViewDestroyed();
     }
     delete pConfigItem;
@@ -112,12 +114,12 @@ void SwView_Impl::SetShellMode(ShellModes eSet)
     eShellMode = eSet;
 }
 
-view::XSelectionSupplier*   SwView_Impl::GetUNOObject()
+view::XSelectionSupplier*	SwView_Impl::GetUNOObject()
 {
     return pxXTextView->get();
 }
 
-SwXTextView*    SwView_Impl::GetUNOObject_Impl()
+SwXTextView*	SwView_Impl::GetUNOObject_Impl()
 {
         view::XSelectionSupplier* pTextView = pxXTextView->get();
         return ((SwXTextView*)pTextView);
@@ -125,12 +127,12 @@ SwXTextView*    SwView_Impl::GetUNOObject_Impl()
 
 void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 {
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     switch(nSlot)
     {
         case SID_TWAIN_SELECT:
         {
-            sal_Bool bDone = sal_False;
+            BOOL bDone = FALSE;
             Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
 
             if( xScanMgr.is() )
@@ -156,13 +158,15 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
             else
             {
                 rReq.Ignore();
+// KA 04.07.2002
+//              InfoBox( 0, SW_RES(MSG_SCAN_NOSOURCE) ).Execute();
             }
         }
         break;
 
         case SID_TWAIN_TRANSFER:
         {
-            sal_Bool bDone = sal_False;
+            BOOL bDone = FALSE;
 
             Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
             if( xScanMgr.is() )
@@ -175,7 +179,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
                     {
                         Reference< XEventListener > xLstner = &rListener;
                         xScanMgr->startScan( aContexts.getConstArray()[ 0 ], xLstner );
-                        bDone = sal_True;
+                        bDone = TRUE;
                     }
                 }
                 catch(...)
@@ -212,7 +216,7 @@ void SwView_Impl::AddClipboardListener()
     if(!xClipEvtLstnr.is())
     {
         xClipEvtLstnr = pClipEvtLstnr = new SwClipboardChangeListener( *pView );
-        pClipEvtLstnr->AddRemoveListener( sal_True );
+        pClipEvtLstnr->AddRemoveListener( TRUE );
     }
 }
 
@@ -265,8 +269,8 @@ SwScannerEventListener::~SwScannerEventListener()
 
 void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject) throw(uno::RuntimeException)
 {
-#if defined WNT || defined UNX
     SolarMutexGuard aGuard;
+#if defined WIN || defined WNT || defined UNX
     if( pView )
         pView->ScannerEventHdl( rEventObject );
 #endif
@@ -307,7 +311,7 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const CLIP_NMSPC::Clip
     }
 }
 
-void SwClipboardChangeListener::AddRemoveListener( sal_Bool bAdd )
+void SwClipboardChangeListener::AddRemoveListener( BOOL bAdd )
 {
     pView->AddRemoveClipboardListener( Reference< XClipboardListener >( this ), bAdd );
 }

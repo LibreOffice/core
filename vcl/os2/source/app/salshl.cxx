@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,16 +41,16 @@ static HMODULE mhMod = ImplGetModule();
 
 // =======================================================================
 
-APIRET APIENTRY DosQueryModFromEIP (HMODULE *phMod, ULONG *pObjNum,
-          ULONG BuffLen, PCHAR pBuff, ULONG *pOffset, ULONG Address);
+APIRET APIENTRY DosQueryModFromEIP (HMODULE *phMod, ULONG *pObjNum, 
+          ULONG BuffLen, PCHAR pBuff, ULONG *pOffset, ULONG Address); 
 
 HMODULE ImplGetModule(void)
 {
-    HMODULE hMod;
-    ULONG   ObjNum;
-    CHAR    Buff[2*_MAX_PATH];
-    ULONG   Offset;
-    APIRET  rc;
+    HMODULE	hMod;
+    ULONG	ObjNum;
+    CHAR	Buff[2*_MAX_PATH];
+    ULONG	Offset;
+    APIRET	rc;
 
     // get module handle (and name)
     rc = DosQueryModFromEIP( &hMod, &ObjNum, sizeof( Buff), Buff, &Offset, (ULONG)ImplGetModule);
@@ -70,7 +70,7 @@ HPOINTER ImplLoadSalCursor( int nId )
     HPOINTER hPointer = WinLoadPointer( HWND_DESKTOP, aSalShlData.mhMod, nId );
 
     DBG_ASSERT( hPointer, "pointer not found in sal resource" );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL>0
     if (!hPointer)
         debug_printf( "ImplLoadSalCursor: pointer %d not found in sal resource\n", nId);
 #endif

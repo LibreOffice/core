@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,9 @@
 #undef WINVER
 #define WINVER 0x0400
 #define USE_APP_SHORTCUTS
+//
 // the systray icon is only available on windows
+//
 
 #include <unotools/moduleoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
@@ -78,39 +80,39 @@ using namespace ::osl;
 #define ID_QUICKSTART               1
 #define IDM_EXIT                    2
 #if defined(USE_APP_SHORTCUTS)
-#   define IDM_OPEN                    3
-#   define IDM_WRITER                  4
-#   define IDM_CALC                    5
-#   define IDM_IMPRESS                 6
-#   define IDM_DRAW                    7
+#	define IDM_OPEN                    3
+#	define IDM_WRITER                  4
+#	define IDM_CALC                    5
+#	define IDM_IMPRESS                 6
+#	define IDM_DRAW                    7
 #   define IDM_BASE                    8
 #   define IDM_TEMPLATE                9
-#   define IDM_MATH                   12
+#	define IDM_MATH					  12
 #endif
 #define IDM_INSTALL                 10
 #define IDM_UNINSTALL               11
 
 
-#define ICON_SO_DEFAULT                 1
-#define ICON_TEXT_DOCUMENT              2
-#define ICON_TEXT_TEMPLATE              3
-#define ICON_SPREADSHEET_DOCUMENT       4
-#define ICON_SPREADSHEET_TEMPLATE       5
-#define ICON_DRAWING_DOCUMENT           6
-#define ICON_DRAWING_TEMPLATE           7
-#define ICON_PRESENTATION_DOCUMENT      8
-#define ICON_PRESENTATION_TEMPLATE      9
-#define ICON_PRESENTATION_COMPRESSED    10
-#define ICON_GLOBAL_DOCUMENT            11
-#define ICON_HTML_DOCUMENT              12
-#define ICON_CHART_DOCUMENT             13
-#define ICON_DATABASE_DOCUMENT          14
-#define ICON_MATH_DOCUMENT              15
-#define ICON_TEMPLATE                   16
-#define ICON_MACROLIBRARY               17
-#define ICON_CONFIGURATION              18
-#define ICON_OPEN                       5   // See index of open folder icon in shell32.dll
-#define ICON_SETUP                      500
+#define ICON_SO_DEFAULT 				1
+#define ICON_TEXT_DOCUMENT				2
+#define ICON_TEXT_TEMPLATE				3
+#define ICON_SPREADSHEET_DOCUMENT		4
+#define ICON_SPREADSHEET_TEMPLATE		5
+#define ICON_DRAWING_DOCUMENT			6
+#define ICON_DRAWING_TEMPLATE			7
+#define ICON_PRESENTATION_DOCUMENT		8
+#define ICON_PRESENTATION_TEMPLATE		9
+#define ICON_PRESENTATION_COMPRESSED	10
+#define ICON_GLOBAL_DOCUMENT			11
+#define ICON_HTML_DOCUMENT				12
+#define ICON_CHART_DOCUMENT				13
+#define ICON_DATABASE_DOCUMENT			14
+#define ICON_MATH_DOCUMENT				15
+#define ICON_TEMPLATE					16
+#define ICON_MACROLIBRARY				17
+#define ICON_CONFIGURATION				18
+#define ICON_OPEN						5   // See index of open folder icon in shell32.dll
+#define ICON_SETUP						500
 
 #define SFX_TASKBAR_NOTIFICATION    WM_USER+1
 
@@ -202,7 +204,7 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
 
 static HMENU createSystrayMenu( )
 {
-    SvtModuleOptions    aModuleOptions;
+    SvtModuleOptions	aModuleOptions;
 
     HMENU hMenu = CreatePopupMenu();
     int pos=0;
@@ -244,7 +246,7 @@ static HMENU createSystrayMenu( )
         { SvtModuleOptions::E_SIMPRESS,   IDM_IMPRESS,ICON_PRESENTATION_DOCUMENT, IMPRESS_WIZARD_URL },
         { SvtModuleOptions::E_SDRAW,      IDM_DRAW,   ICON_DRAWING_DOCUMENT,      DRAW_URL },
         { SvtModuleOptions::E_SDATABASE,  IDM_BASE,   ICON_DATABASE_DOCUMENT,     BASE_URL },
-        { SvtModuleOptions::E_SMATH,      IDM_MATH,   ICON_MATH_DOCUMENT,         MATH_URL },
+        { SvtModuleOptions::E_SMATH,      IDM_MATH,   ICON_MATH_DOCUMENT,	      MATH_URL },
     };
 
     OUString aEmpty;
@@ -267,13 +269,13 @@ static HMENU createSystrayMenu( )
             pShutdownIcon->GetUrlDescription( sURL ), pos, true, aEmpty );
     }
 
-
-
+    
+    
     // insert the remaining menu entries
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true, aEmpty);
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
-    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, OUString(RTL_CONSTASCII_USTRINGPARAM("SHELL32")));
+    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, OUString::createFromAscii( "SHELL32" ));
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
 #endif
     addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false, aEmpty );
@@ -340,6 +342,30 @@ static void addTaskbarIcon( HWND hWnd )
 
 // -------------------------------
 
+/*
+static void removeTaskbarIcon()
+{
+    ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
+    OSL_ENSURE( pShutdownIcon, "ShutdownIcon instance empty!");
+
+    if( !pShutdownIcon )
+        return;
+
+    if ( IsWindow( aListenerWindow ))
+    {
+        deleteSystrayMenu( popupMenu );
+
+        NOTIFYICONDATAA nid;
+        nid.cbSize=sizeof(NOTIFYICONDATA);
+        nid.hWnd = aListenerWindow;
+        nid.uID = ID_QUICKSTART;
+        Shell_NotifyIconA(NIM_DELETE, &nid);
+    }
+}
+*/
+
+// -------------------------------
+
 LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static UINT s_uTaskbarRestart = 0;
@@ -403,6 +429,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 #endif
                     int m = TrackPopupMenuEx( popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
                                               pt.x, pt.y, hWnd, NULL );
+                    // BUGFIX: See Q135788 (PRB: Menus for Notification Icons Don't Work Correctly)
                     PostMessage( hWnd, NULL, 0, 0 );
                     switch( m )
                     {
@@ -468,7 +495,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 static sal_Bool checkOEM() {
     Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
     Reference<XJob> rOemJob(rFactory->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.OEMPreloadJob"))),
+        OUString::createFromAscii("com.sun.star.office.OEMPreloadJob")),
         UNO_QUERY );
     Sequence<NamedValue> args;
     sal_Bool bResult = sal_False;
@@ -550,20 +577,20 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
 {
     aListenerWindow = CreateWindowExA(0,
-        QUICKSTART_CLASSNAME,       // registered class name
+        QUICKSTART_CLASSNAME,	    // registered class name
         QUICKSTART_WINDOWNAME,        // window name
-        0,                          // window style
-        CW_USEDEFAULT,              // horizontal position of window
-        CW_USEDEFAULT,              // vertical position of window
-        CW_USEDEFAULT,              // window width
-        CW_USEDEFAULT,              // window height
-        (HWND) NULL,                // handle to parent or owner window
-        NULL,                       // menu handle or child identifier
+        0,          				// window style
+        CW_USEDEFAULT,			    // horizontal position of window
+        CW_USEDEFAULT,			    // vertical position of window
+        CW_USEDEFAULT,			    // window width
+        CW_USEDEFAULT,			    // window height
+        (HWND) NULL,	            // handle to parent or owner window
+        NULL,						// menu handle or child identifier
         (HINSTANCE) GetModuleHandle( NULL ),    // handle to application instance
-        NULL                        // window-creation data
+        NULL						// window-creation data
         );
 
-    MSG msg;
+    MSG	msg;
 
     while ( GetMessage( &msg, NULL, 0, 0 ) )
     {
@@ -581,52 +608,52 @@ void win32_init_sys_tray()
     if ( ShutdownIcon::IsQuickstarterInstalled() )
     {
         WNDCLASSEXA listenerClass;
-        listenerClass.cbSize        = sizeof(WNDCLASSEX);
-        listenerClass.style         = 0;
-        listenerClass.lpfnWndProc   = listenerWndProc;
-        listenerClass.cbClsExtra    = 0;
-        listenerClass.cbWndExtra    = 0;
-        listenerClass.hInstance     = (HINSTANCE) GetModuleHandle( NULL );
-        listenerClass.hIcon         = NULL;
-        listenerClass.hCursor       = NULL;
-        listenerClass.hbrBackground = NULL;
-        listenerClass.lpszMenuName  = NULL;
-        listenerClass.lpszClassName = QUICKSTART_CLASSNAME;
-        listenerClass.hIconSm       = NULL;
+        listenerClass.cbSize		= sizeof(WNDCLASSEX);
+        listenerClass.style			= 0;
+        listenerClass.lpfnWndProc	= listenerWndProc;
+        listenerClass.cbClsExtra	= 0;
+        listenerClass.cbWndExtra	= 0;
+        listenerClass.hInstance		= (HINSTANCE) GetModuleHandle( NULL );
+        listenerClass.hIcon			= NULL;
+        listenerClass.hCursor		= NULL;
+        listenerClass.hbrBackground	= NULL;
+        listenerClass.lpszMenuName	= NULL;
+        listenerClass.lpszClassName	= QUICKSTART_CLASSNAME;
+        listenerClass.hIconSm	    = NULL;
 
         RegisterClassExA(&listenerClass);
 
         WNDCLASSEXA executerClass;
-        executerClass.cbSize        = sizeof(WNDCLASSEX);
-        executerClass.style         = 0;
-        executerClass.lpfnWndProc   = executerWndProc;
-        executerClass.cbClsExtra    = 0;
-        executerClass.cbWndExtra    = 0;
-        executerClass.hInstance     = (HINSTANCE) GetModuleHandle( NULL );
-        executerClass.hIcon         = NULL;
-        executerClass.hCursor       = NULL;
-        executerClass.hbrBackground = NULL;
-        executerClass.lpszMenuName  = NULL;
-        executerClass.lpszClassName = EXECUTER_WINDOWCLASS;
-        executerClass.hIconSm       = NULL;
+        executerClass.cbSize		= sizeof(WNDCLASSEX);
+        executerClass.style			= 0;
+        executerClass.lpfnWndProc	= executerWndProc;
+        executerClass.cbClsExtra	= 0;
+        executerClass.cbWndExtra	= 0;
+        executerClass.hInstance		= (HINSTANCE) GetModuleHandle( NULL );
+        executerClass.hIcon			= NULL;
+        executerClass.hCursor		= NULL;
+        executerClass.hbrBackground	= NULL;
+        executerClass.lpszMenuName	= NULL;
+        executerClass.lpszClassName	= EXECUTER_WINDOWCLASS;
+        executerClass.hIconSm	    = NULL;
 
         RegisterClassExA( &executerClass );
 
         aExecuterWindow = CreateWindowExA(0,
-            EXECUTER_WINDOWCLASS,       // registered class name
+            EXECUTER_WINDOWCLASS,	    // registered class name
             EXECUTER_WINDOWNAME,        // window name
-            0,                          // window style
-            CW_USEDEFAULT,              // horizontal position of window
-            CW_USEDEFAULT,              // vertical position of window
-            CW_USEDEFAULT,              // window width
-            CW_USEDEFAULT,              // window height
-            (HWND) NULL,                // handle to parent or owner window
-            NULL,                       // menu handle or child identifier
+            0,          				// window style
+            CW_USEDEFAULT,			    // horizontal position of window
+            CW_USEDEFAULT,			    // vertical position of window
+            CW_USEDEFAULT,			    // window width
+            CW_USEDEFAULT,			    // window height
+            (HWND) NULL,	            // handle to parent or owner window
+            NULL,						// menu handle or child identifier
             (HINSTANCE) GetModuleHandle( NULL ),    // handle to application instance
-            NULL                        // window-creation data
+            NULL						// window-creation data
             );
 
-        DWORD   dwThreadId;
+        DWORD	dwThreadId;
         CreateThread( NULL, 0, SystrayThread, NULL, 0, &dwThreadId );
     }
 }
@@ -688,8 +715,8 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     HFONT hfntOld;
     HBRUSH hbrOld;
     int x, y;
-    BOOL    fSelected = lpdis->itemState & ODS_SELECTED;
-    BOOL    fDisabled = lpdis->itemState & (ODS_DISABLED | ODS_GRAYED);
+    BOOL	fSelected = lpdis->itemState & ODS_SELECTED;
+    BOOL	fDisabled = lpdis->itemState & (ODS_DISABLED | ODS_GRAYED);
 
     // Set the appropriate foreground and background colors.
 
@@ -721,7 +748,7 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     int     cy = GetSystemMetrics( SM_CYSMICON );
     HICON   hIcon( 0 );
     HMODULE hModule( GetModuleHandle( NULL ) );
-
+    
     if ( pMyItem->module.getLength() > 0 )
     {
         LPCWSTR pModuleName = reinterpret_cast<LPCWSTR>( pMyItem->module.getStr() );
@@ -732,11 +759,12 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
             hModule = GetModuleHandleW( pModuleName );
         }
     }
-
+    
     hIcon = (HICON) LoadImageA( hModule, MAKEINTRESOURCE( pMyItem->iconId ),
                                 IMAGE_ICON, cx, cy,
                                 LR_DEFAULTCOLOR | LR_SHARED );
 
+    // DrawIconEx( lpdis->hDC, x, y+(height-cy)/2, hIcon, cx, cy, 0, NULL, DI_NORMAL );
 
     HBRUSH hbrIcon = CreateSolidBrush( GetSysColor( COLOR_GRAYTEXT ) );
 
@@ -760,7 +788,7 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     hfntOld = (HFONT) SelectObject(lpdis->hDC, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
 
 
-    SIZE    size;
+    SIZE	size;
     GetTextExtentPointW( lpdis->hDC, reinterpret_cast<LPCWSTR>(pMyItem->text.getStr()), pMyItem->text.getLength(), &size );
 
     DrawStateW( lpdis->hDC, (HBRUSH)NULL, (DRAWSTATEPROC)NULL, (LPARAM)pMyItem->text.getStr(), (WPARAM)0, aRect.left, aRect.top + (height - size.cy)/2, 0, 0, DST_TEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) );
@@ -778,7 +806,7 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
 
 void _SHFree( void *pv )
 {
-    IMalloc *pMalloc;
+    IMalloc	*pMalloc;
     if( NOERROR == SHGetMalloc(&pMalloc) )
     {
         pMalloc->Free( pv );
@@ -792,9 +820,9 @@ void _SHFree( void *pv )
 static OUString _SHGetSpecialFolder( int nFolderID )
 {
 
-    LPITEMIDLIST    pidl;
-    HRESULT         hHdl = SHGetSpecialFolderLocation( NULL, nFolderID, &pidl );
-    OUString        aFolder;
+    LPITEMIDLIST	pidl;
+    HRESULT			hHdl = SHGetSpecialFolderLocation( NULL, nFolderID, &pidl );
+    OUString		aFolder;
 
     if( hHdl == NOERROR )
     {
@@ -817,14 +845,14 @@ OUString ShutdownIcon::GetAutostartFolderNameW32()
 
 static HRESULT WINAPI SHCoCreateInstance( LPVOID lpszReserved, REFCLSID clsid, LPUNKNOWN pUnkUnknown, REFIID iid, LPVOID *ppv )
 {
-    HRESULT hResult = E_NOTIMPL;
-    HMODULE hModShell = GetModuleHandle( "SHELL32" );
+    HRESULT	hResult = E_NOTIMPL;
+    HMODULE	hModShell = GetModuleHandle( "SHELL32" );
 
     if ( hModShell != NULL )
     {
-        typedef HRESULT (WINAPI *SHCoCreateInstance_PROC)( LPVOID lpszReserved, REFCLSID clsid, LPUNKNOWN pUnkUnknwon, REFIID iid, LPVOID *ppv );
+        typedef	HRESULT (WINAPI *SHCoCreateInstance_PROC)( LPVOID lpszReserved, REFCLSID clsid, LPUNKNOWN pUnkUnknwon, REFIID iid, LPVOID *ppv );
 
-        SHCoCreateInstance_PROC lpfnSHCoCreateInstance = (SHCoCreateInstance_PROC)GetProcAddress( hModShell, MAKEINTRESOURCE(102) );
+        SHCoCreateInstance_PROC	lpfnSHCoCreateInstance = (SHCoCreateInstance_PROC)GetProcAddress( hModShell, MAKEINTRESOURCE(102) );
 
         if ( lpfnSHCoCreateInstance )
             hResult = lpfnSHCoCreateInstance( lpszReserved, clsid, pUnkUnknown, iid, ppv );
@@ -872,10 +900,10 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
 
 static bool FileExistsW( LPCWSTR lpPath )
 {
-    bool    bExists = false;
-    WIN32_FIND_DATAW    aFindData;
+    bool	bExists = false;
+    WIN32_FIND_DATAW	aFindData;
 
-    HANDLE  hFind = FindFirstFileW( lpPath, &aFindData );
+    HANDLE	hFind = FindFirstFileW( lpPath, &aFindData );
 
     if ( INVALID_HANDLE_VALUE != hFind )
     {

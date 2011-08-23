@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@
 #include "itemholder1.hxx"
 
 using namespace utl;
+using namespace rtl;
 using namespace com::sun::star::uno;
-using ::rtl::OUString;
 
 static SvtUndoOptions_Impl* pOptions = NULL;
 static sal_Int32           nRefCount = 0;
@@ -69,7 +69,7 @@ public:
 // -----------------------------------------------------------------------
 
 SvtUndoOptions_Impl::SvtUndoOptions_Impl()
-    : ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Undo")) )
+    : ConfigItem( OUString::createFromAscii("Office.Common/Undo") )
     , nUndoCount( 20 )
 {
     Load();
@@ -132,13 +132,13 @@ void SvtUndoOptions_Impl::Load()
                             nUndoCount = nTemp;
                         else
                         {
-                            OSL_FAIL( "Wrong Type!" );
+                            DBG_ERROR( "Wrong Type!" );
                         }
                         break;
                     }
 
                     default:
-                        OSL_FAIL( "Wrong Type!" );
+                        DBG_ERROR( "Wrong Type!" );
                         break;
                 }
             }

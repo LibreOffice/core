@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ SfxSimpleHint(SFX_HINT_DYING) from:
 
 SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *p ) from:
    SfxStyleSheetBasePool::Make( const String& rName,
-   SfxStyleFamily eFam, sal_uInt16 mask, sal_uInt16 nPos)
+   SfxStyleFamily eFam, USHORT mask, USHORT nPos)
 
 SfxStyleSheetHint( SFX_STYLESHEET_CHANGED, *pNew ) from:
    SfxStyleSheetBasePool::Add( SfxStyleSheetBase& rSheet )
@@ -92,24 +92,24 @@ class SVL_DLLPUBLIC SfxStyleSheetBase : public comphelper::OWeakTypeObject
     friend class SfxStyleSheetBasePool;
 
 protected:
-    SfxStyleSheetBasePool&  rPool;          // zugehoeriger Pool
-    SfxStyleFamily          nFamily;        // Familie
+    SfxStyleSheetBasePool& 	rPool;			// zugehoeriger Pool
+    SfxStyleFamily 			nFamily;		// Familie
 
-    UniString               aName, aParent, aFollow;
-    rtl::OUString           maDisplayName;
-    String                  aHelpFile;      // Name der Hilfedatei
-    SfxItemSet*             pSet;           // ItemSet
-    sal_uInt16                  nMask;          // Flags
+    UniString				aName, aParent, aFollow;
+    rtl::OUString			maDisplayName;
+    String 					aHelpFile;		// Name der Hilfedatei
+    SfxItemSet* 			pSet;           // ItemSet
+    USHORT  				nMask;			// Flags
 
-    sal_uLong                   nHelpId;        // Hilfe-ID
+    ULONG 					nHelpId;		// Hilfe-ID
 
-    sal_Bool                    bMySet;         // sal_True: Set loeschen im dtor
+    BOOL   					bMySet;			// TRUE: Set loeschen im dtor
 
     SfxStyleSheetBase(); // do not use!
-    SfxStyleSheetBase( const UniString&, SfxStyleSheetBasePool&, SfxStyleFamily eFam, sal_uInt16 mask );
+    SfxStyleSheetBase( const UniString&, SfxStyleSheetBasePool&, SfxStyleFamily eFam, USHORT mask );
     SfxStyleSheetBase( const SfxStyleSheetBase& );
     virtual ~SfxStyleSheetBase();
-    virtual void Load( SvStream&, sal_uInt16 );
+    virtual void Load( SvStream&, USHORT );
     virtual void Store( SvStream& );
 
 public:
@@ -119,7 +119,7 @@ public:
     virtual const UniString& GetName() const;
 
     // sets the internal name of this style
-    virtual sal_Bool SetName( const UniString& );
+    virtual BOOL SetName( const UniString& );
 
     /** returns the display name of this style, it is used at the user interface.
         If the display name is empty, this method returns the internal name. */
@@ -129,30 +129,30 @@ public:
     virtual void SetDisplayName( const rtl::OUString& );
 
     virtual const UniString& GetParent() const;
-    virtual sal_Bool SetParent( const UniString& );
+    virtual BOOL SetParent( const UniString& );
     virtual const UniString& GetFollow() const;
-    virtual sal_Bool SetFollow( const UniString& );
-    virtual sal_Bool HasFollowSupport() const;      // Default sal_True
-    virtual sal_Bool HasParentSupport() const;      // Default sal_True
-    virtual sal_Bool HasClearParentSupport() const; // Default sal_False
-    virtual sal_Bool IsUsed() const;                // Default sal_True
+    virtual BOOL SetFollow( const UniString& );
+    virtual BOOL HasFollowSupport() const;		// Default TRUE
+    virtual BOOL HasParentSupport() const;		// Default TRUE
+    virtual BOOL HasClearParentSupport() const;	// Default FALSE
+    virtual BOOL IsUsed() const;				// Default TRUE
         // Default aus dem Itemset; entweder dem uebergebenen
         // oder aus dem per GetItemSet() zurueckgelieferten Set
     virtual UniString GetDescription();
-    virtual UniString GetDescription( SfxMapUnit eMetric );
+    virtual	UniString GetDescription( SfxMapUnit eMetric );
 
     SfxStyleSheetBasePool& GetPool() { return rPool;   }
     SfxStyleFamily GetFamily() const     { return nFamily; }
-    sal_uInt16   GetMask() const     { return nMask; }
-    void     SetMask( sal_uInt16 mask) { nMask = mask; }
-    sal_Bool   IsUserDefined() const
-           { return sal_Bool( ( nMask & SFXSTYLEBIT_USERDEF) != 0 ); }
+    USHORT 	 GetMask() const     { return nMask; }
+    void	 SetMask( USHORT mask) { nMask = mask; }
+    BOOL   IsUserDefined() const
+           { return BOOL( ( nMask & SFXSTYLEBIT_USERDEF) != 0 ); }
 
-    virtual sal_uLong GetHelpId( String& rFile );
-    virtual void   SetHelpId( const String& r, sal_uLong nId );
+    virtual ULONG GetHelpId( String& rFile );
+    virtual void   SetHelpId( const String& r, ULONG nId );
 
     virtual SfxItemSet& GetItemSet();
-    virtual sal_uInt16 GetVersion() const;
+    virtual USHORT GetVersion() const;
 };
 
 //=========================================================================
@@ -163,7 +163,7 @@ typedef std::vector< rtl::Reference< SfxStyleSheetBase > > SfxStyles;
 
 class SVL_DLLPUBLIC SfxStyleSheetIterator
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Klasse zum Iterieren und Suchen auf einem SfxStyleSheetBasePool.
 
@@ -172,11 +172,11 @@ class SVL_DLLPUBLIC SfxStyleSheetIterator
 {
 public:
     SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
-                          SfxStyleFamily eFam, sal_uInt16 n=0xFFFF );
-    virtual sal_uInt16 GetSearchMask() const;
+                          SfxStyleFamily eFam, USHORT n=0xFFFF );
+    virtual USHORT GetSearchMask() const;
     virtual SfxStyleFamily GetSearchFamily() const;
-    virtual sal_uInt16 Count();
-    virtual SfxStyleSheetBase *operator[](sal_uInt16 nIdx);
+    virtual USHORT Count();
+    virtual SfxStyleSheetBase *operator[](USHORT nIdx);
     virtual SfxStyleSheetBase* First();
     virtual SfxStyleSheetBase* Next();
     virtual SfxStyleSheetBase* Find(const UniString& rStr);
@@ -184,20 +184,20 @@ public:
 
 protected:
 
-    SfxStyleSheetBasePool*  pBasePool;
-    SfxStyleFamily          nSearchFamily;
-    sal_uInt16                  nMask;
-    sal_Bool                    SearchUsed() const { return bSearchUsed; }
+    SfxStyleSheetBasePool*	pBasePool;
+    SfxStyleFamily 			nSearchFamily;
+    USHORT 					nMask;
+    BOOL                    SearchUsed() const { return bSearchUsed; }
 
 private:
-    sal_uInt16                  GetPos(){return nAktPosition;}
-    SVL_DLLPRIVATE sal_Bool                     IsTrivialSearch();
-    SVL_DLLPRIVATE sal_Bool                     DoesStyleMatch(SfxStyleSheetBase *pStyle);
+    USHORT 					GetPos(){return nAktPosition;}
+    SVL_DLLPRIVATE BOOL 					IsTrivialSearch();
+    SVL_DLLPRIVATE BOOL 					DoesStyleMatch(SfxStyleSheetBase *pStyle);
 
-    void*                   pImp;
-    SfxStyleSheetBase*      pAktStyle;
-    sal_uInt16                  nAktPosition;
-    sal_Bool                    bSearchUsed;
+    void*					pImp;
+    SfxStyleSheetBase*		pAktStyle;
+    USHORT 					nAktPosition;
+    BOOL 					bSearchUsed;
 
 friend class SfxStyleSheetBasePool;
 };
@@ -214,19 +214,19 @@ friend class SfxStyleSheetBase;
     SfxStyleSheetBasePool_Impl *pImp;
 
 private:
-    SVL_DLLPRIVATE sal_Bool                         Load1_Impl( SvStream& );
+    SVL_DLLPRIVATE BOOL 						Load1_Impl( SvStream& );
     SVL_DLLPRIVATE SfxStyleSheetIterator&      GetIterator_Impl();
 protected:
-    String                      aAppName;
-    SfxItemPool&                rPool;
-    SfxStyles                   aStyles;
-    SfxStyleFamily              nSearchFamily;
-    sal_uInt16                      nMask;
+    String 						aAppName;
+    SfxItemPool& 				rPool;
+    SfxStyles	 				aStyles;
+    SfxStyleFamily 				nSearchFamily;
+    USHORT 		 				nMask;
 
-    SfxStyleSheetBase&          Add( SfxStyleSheetBase& );
-    void                        ChangeParent( const UniString&, const UniString&, sal_Bool bVirtual = sal_True );
-    virtual SfxStyleSheetBase*  Create( const UniString&, SfxStyleFamily, sal_uInt16 );
-    virtual SfxStyleSheetBase*  Create( const SfxStyleSheetBase& );
+    SfxStyleSheetBase& 			Add( SfxStyleSheetBase& );
+    void 						ChangeParent( const UniString&, const UniString&, BOOL bVirtual = TRUE );
+    virtual SfxStyleSheetBase* 	Create( const UniString&, SfxStyleFamily, USHORT );
+    virtual SfxStyleSheetBase* 	Create( const SfxStyleSheetBase& );
 
                                 ~SfxStyleSheetBasePool();
 
@@ -234,51 +234,51 @@ public:
                                 SfxStyleSheetBasePool( SfxItemPool& );
                                 SfxStyleSheetBasePool( const SfxStyleSheetBasePool& );
 
-    static String               GetStreamName();
+    static String 				GetStreamName();
 
-    const String&               GetAppName() const { return aAppName;   }
+    const String& 				GetAppName() const { return aAppName; 	}
 
-    SfxItemPool&                GetPool();
-    const SfxItemPool&          GetPool() const;
+    SfxItemPool& 				GetPool();
+    const SfxItemPool& 			GetPool() const;
 
-    virtual SfxStyleSheetIterator* CreateIterator(SfxStyleFamily, sal_uInt16 nMask);
-    virtual sal_uInt16              Count();
-    virtual SfxStyleSheetBase*  operator[](sal_uInt16 nIdx);
+    virtual SfxStyleSheetIterator* CreateIterator(SfxStyleFamily, USHORT nMask);
+    virtual USHORT 				Count();
+    virtual SfxStyleSheetBase*	operator[](USHORT nIdx);
 
-    virtual SfxStyleSheetBase&  Make(const UniString&,
+    virtual SfxStyleSheetBase& 	Make(const UniString&,
                                      SfxStyleFamily eFam,
-                                     sal_uInt16 nMask = 0xffff ,
-                                     sal_uInt16 nPos = 0xffff);
+                                     USHORT nMask = 0xffff ,
+                                     USHORT nPos = 0xffff);
 
     virtual void             Replace(
         SfxStyleSheetBase& rSource, SfxStyleSheetBase& rTarget );
+    
+    virtual void				Remove( SfxStyleSheetBase* );
+    virtual void 				Insert( SfxStyleSheetBase* );
 
-    virtual void                Remove( SfxStyleSheetBase* );
-    virtual void                Insert( SfxStyleSheetBase* );
+    virtual void 				Clear();
 
-    virtual void                Clear();
+    SfxStyleSheetBasePool& 		operator=( const SfxStyleSheetBasePool& );
+    SfxStyleSheetBasePool& 		operator+=( const SfxStyleSheetBasePool& );
 
-    SfxStyleSheetBasePool&      operator=( const SfxStyleSheetBasePool& );
-    SfxStyleSheetBasePool&      operator+=( const SfxStyleSheetBasePool& );
+    const SfxStyles&	 		GetStyles();
+    virtual SfxStyleSheetBase* 	First();
+    virtual SfxStyleSheetBase* 	Next();
+    virtual SfxStyleSheetBase* 	Find( const UniString&, SfxStyleFamily eFam, USHORT n=0xFFFF );
 
-    const SfxStyles&            GetStyles();
-    virtual SfxStyleSheetBase*  First();
-    virtual SfxStyleSheetBase*  Next();
-    virtual SfxStyleSheetBase*  Find( const UniString&, SfxStyleFamily eFam, sal_uInt16 n=0xFFFF );
-
-    virtual sal_Bool                SetParent(SfxStyleFamily eFam,
+    virtual BOOL                SetParent(SfxStyleFamily eFam,
                                           const UniString &rStyle,
                                           const UniString &rParent);
 
-    SfxStyleSheetBase*          Find(const UniString& rStr)
+    SfxStyleSheetBase* 			Find(const UniString& rStr)
                                 { return Find(rStr, nSearchFamily, nMask); }
 
-    void                        SetSearchMask(SfxStyleFamily eFam, sal_uInt16 n=0xFFFF );
-    sal_uInt16                      GetSearchMask() const;
-    SfxStyleFamily              GetSearchFamily() const  { return nSearchFamily; }
+    void   						SetSearchMask(SfxStyleFamily eFam, USHORT n=0xFFFF );
+    USHORT 						GetSearchMask() const;
+    SfxStyleFamily 				GetSearchFamily() const  { return nSearchFamily; }
 
-    sal_Bool                        Load( SvStream& );
-    sal_Bool                        Store( SvStream&, sal_Bool bUsed = sal_True );
+    BOOL 						Load( SvStream& );
+    BOOL 						Store( SvStream&, BOOL bUsed = TRUE );
 };
 
 //=========================================================================
@@ -289,15 +289,15 @@ class SVL_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,
 public:
                         TYPEINFO();
 
-                        SfxStyleSheet( const UniString&, const SfxStyleSheetBasePool&, SfxStyleFamily, sal_uInt16 );
+                        SfxStyleSheet( const UniString&, const SfxStyleSheetBasePool&, SfxStyleFamily, USHORT );
                         SfxStyleSheet( const SfxStyleSheet& );
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual sal_Bool        SetParent( const UniString& );
+    virtual void 		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual BOOL 		SetParent( const UniString& );
 
 protected:
     SfxStyleSheet(); // do not use!
-    virtual             ~SfxStyleSheet();
+    virtual 			~SfxStyleSheet();
 };
 
 //=========================================================================
@@ -306,22 +306,22 @@ class SVL_DLLPUBLIC SfxStyleSheetPool: public SfxStyleSheetBasePool
 {
 protected:
     using SfxStyleSheetBasePool::Create;
-    virtual SfxStyleSheetBase* Create(const UniString&, SfxStyleFamily, sal_uInt16 mask);
+    virtual SfxStyleSheetBase* Create(const UniString&, SfxStyleFamily, USHORT mask);
     virtual SfxStyleSheetBase* Create(const SfxStyleSheet &);
 
 public:
     SfxStyleSheetPool( SfxItemPool const& );
 
-//  virtual sal_Bool CopyTo(SfxStyleSheetPool &rDest, const String &rSourceName);
+//	virtual BOOL CopyTo(SfxStyleSheetPool &rDest, const String &rSourceName);
 };
 
 //=========================================================================
 
-#define SFX_STYLESHEET_CREATED       1  // neu
-#define SFX_STYLESHEET_MODIFIED      2  // ver"andert
-#define SFX_STYLESHEET_CHANGED       3  // gel"oscht und neu (ausgetauscht)
-#define SFX_STYLESHEET_ERASED        4  // gel"oscht
-#define SFX_STYLESHEET_INDESTRUCTION 5  // wird gerade entfernt
+#define SFX_STYLESHEET_CREATED		 1	// neu
+#define SFX_STYLESHEET_MODIFIED      2	// ver"andert
+#define SFX_STYLESHEET_CHANGED       3	// gel"oscht und neu (ausgetauscht)
+#define SFX_STYLESHEET_ERASED        4	// gel"oscht
+#define SFX_STYLESHEET_INDESTRUCTION 5	// wird gerade entfernt
 
 #define SFX_STYLESHEETPOOL_CHANGES  1  // Aenderungen, die den Zustand
                                        // des Pools anedern, aber nicht
@@ -332,13 +332,13 @@ public:
 
 class SVL_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
 {
-    sal_uInt16 nHint;
+    USHORT nHint;
 
 public:
     TYPEINFO();
 
-                        SfxStyleSheetPoolHint(sal_uInt16 nArgHint) :  nHint(nArgHint){}
-    sal_uInt16              GetHint() const
+                        SfxStyleSheetPoolHint(USHORT nArgHint) :  nHint(nArgHint){}
+    USHORT				GetHint() const
                         { return nHint; }
 };
 
@@ -346,17 +346,17 @@ public:
 
 class SVL_DLLPUBLIC SfxStyleSheetHint: public SfxHint
 {
-    SfxStyleSheetBase*  pStyleSh;
-    sal_uInt16              nHint;
+    SfxStyleSheetBase*	pStyleSh;
+    USHORT              nHint;
 
 public:
                         TYPEINFO();
 
-                        SfxStyleSheetHint( sal_uInt16 );
-                        SfxStyleSheetHint( sal_uInt16, SfxStyleSheetBase& );
-    SfxStyleSheetBase*  GetStyleSheet() const
+                        SfxStyleSheetHint( USHORT );
+                        SfxStyleSheetHint( USHORT, SfxStyleSheetBase& );
+    SfxStyleSheetBase*	GetStyleSheet() const
                         { return pStyleSh; }
-    sal_uInt16              GetHint() const
+    USHORT				GetHint() const
                         { return nHint; }
 };
 
@@ -368,9 +368,9 @@ public:
                         TYPEINFO();
 
                         SfxStyleSheetHintExtended(
-                            sal_uInt16, const String& rOld );
+                            USHORT, const String& rOld );
                         SfxStyleSheetHintExtended(
-                            sal_uInt16, const String& rOld,
+                            USHORT, const String& rOld,
                             SfxStyleSheetBase& );
     const String&       GetOldName() { return aName; }
 };
@@ -378,7 +378,7 @@ public:
 class SVL_DLLPUBLIC SfxUnoStyleSheet : public ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >
 {
 public:
-    SfxUnoStyleSheet( const UniString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, sal_uInt16 _nMaske );
+    SfxUnoStyleSheet( const UniString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, USHORT _nMaske );
     SfxUnoStyleSheet( const SfxStyleSheet& _rSheet );
 
     static SfxUnoStyleSheet* getUnoStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >& xStyle );

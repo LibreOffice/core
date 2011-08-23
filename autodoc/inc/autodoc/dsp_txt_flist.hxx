@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace autodoc
 class TextDisplay_FunctionList_Ifc
 {
   public:
-    virtual             ~TextDisplay_FunctionList_Ifc() {}
+    virtual			    ~TextDisplay_FunctionList_Ifc() {}
 
     /** Displays the names of all C++ functions and methods within the
         given namespace (or the global namespace as default). All

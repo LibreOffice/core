@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <svl/memberid.hrc>
 #include <basic/sbxvar.hxx>
 
-#include "svx/hlnkitem.hxx"
+#include "hlnkitem.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -45,7 +45,11 @@ TYPEINIT1_FACTORY(SvxHyperlinkItem, SfxPoolItem, new SvxHyperlinkItem(0));
 
 // class SvxHyperlinkItem ------------------------------------------------
 
-#define HYPERLINKFF_MARKER  0x599401FE
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
+#define HYPERLINKFF_MARKER	0x599401FE
 
 SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
@@ -126,6 +130,10 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
     return rStrm;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     SvxHyperlinkItem* pNew = new SvxHyperlinkItem( Which() );
@@ -200,6 +208,10 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
     return pNew;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
             SfxPoolItem(rHyperlinkItem)
 {
@@ -217,14 +229,18 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
 
 };
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, String& rName, String& rURL,
                                     String& rTarget, String& rIntName, SvxLinkInsertMode eTyp,
                                     sal_uInt16 nEvents, SvxMacroTableDtor *pMacroTbl ):
     SfxPoolItem (_nWhich),
-    sName       (rName),
-    sURL        (rURL),
-    sTarget     (rTarget),
-    eType       (eTyp),
+    sName		(rName),
+    sURL    	(rURL),
+    sTarget 	(rTarget),
+    eType   	(eTyp),
     sIntName (rIntName),
     nMacroEvents (nEvents)
 {
@@ -234,10 +250,18 @@ SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, String& rName, String& r
         pMacroTable=NULL;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SfxPoolItem* SvxHyperlinkItem::Clone( SfxItemPool* ) const
 {
     return new SvxHyperlinkItem( *this );
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 int SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -272,7 +296,7 @@ int SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
     {
         const SvxMacro *pOwnMac = rOwn.GetObject(nNo);
         const SvxMacro *pOtherMac = rOther.GetObject(nNo);
-        if (    rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
+        if ( 	rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
                 pOwnMac->GetLibName() != pOtherMac->GetLibName() ||
                 pOwnMac->GetMacName() != pOtherMac->GetMacName() )
             return sal_False;
@@ -280,6 +304,11 @@ int SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
 
     return sal_True;
 }
+
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 void SvxHyperlinkItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
@@ -312,6 +341,10 @@ void SvxHyperlinkItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
         pMacroTable->Insert( nEvent, new SvxMacro( rMacro ) );
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
 {
     if ( pMacroTable )
@@ -320,7 +353,7 @@ void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
     pMacroTable = new SvxMacroTableDtor ( rTbl );
 }
 
-bool SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -348,7 +381,7 @@ bool SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     return true;
 }
 
-bool SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;

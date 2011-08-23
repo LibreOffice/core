@@ -57,9 +57,13 @@
  * @file
  * Image style object.
  ************************************************************************/
-#include    "xfimagestyle.hxx"
-#include    "xfborders.hxx"
-#include    "xfshadow.hxx"
+/*************************************************************************
+ * Change History
+   2005-02-22	create and implemente.
+ ************************************************************************/
+#include	"xfimagestyle.hxx"
+#include	"xfborders.hxx"
+#include	"xfshadow.hxx"
 
 XFImageStyle::XFImageStyle()
 {

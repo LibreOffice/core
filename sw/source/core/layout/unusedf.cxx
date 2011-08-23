@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,63 +29,66 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
+
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
+#include "errhdl.hxx"
 
 
 void SwFrm::Format( const SwBorderAttrs * )
 {
-    OSL_FAIL( "Format() der Basisklasse gerufen." );
+    OSL_ENSURE( FALSE, "Format() der Basisklasse gerufen." );
 }
 
-void SwFrm::Paint(SwRect const&, SwPrintData const*const) const
+void SwFrm::Paint(const SwRect &, const SwPrtOptions * ) const
 {
-    OSL_FAIL( "Paint() der Basisklasse gerufen." );
+    OSL_ENSURE( FALSE, "Paint() der Basisklasse gerufen." );
 }
 
 sal_Bool SwCntntFrm::WouldFit( SwTwips &, sal_Bool&, sal_Bool )
 {
-    OSL_FAIL( "WouldFit des CntntFrm gerufen." );
-    return sal_False;
+    OSL_ENSURE( FALSE, "WouldFit des CntntFrm gerufen." );
+    return FALSE;
 }
 
 bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const
 {
-    OSL_FAIL( "Don't call this function at the base class!" );
+    OSL_ENSURE( false, "Don't call this function at the base class!" );
     return false;
 }
 
-sal_Bool SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
+BOOL SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
 {
-    OSL_FAIL( "GetCrsrOfst der Basisklasse, hi!" );
-    return sal_False;
+    OSL_ENSURE( FALSE, "GetCrsrOfst der Basisklasse, hi!" );
+    return FALSE;
 }
 
 #if OSL_DEBUG_LEVEL > 1
 
 void SwRootFrm::Cut()
 {
-    OSL_FAIL( "Cut() des RootFrm gerufen." );
+    OSL_ENSURE( FALSE, "Cut() des RootFrm gerufen." );
 }
 
 void SwRootFrm::Paste( SwFrm *, SwFrm * )
 {
-    OSL_FAIL( "Paste() des RootFrm gerufen." );
+    OSL_ENSURE( FALSE, "Paste() des RootFrm gerufen." );
 }
 
 void SwFlyFrm::Paste( SwFrm *, SwFrm * )
 {
-    OSL_FAIL( "Paste() des FlyFrm gerufen." );
+    OSL_ENSURE( FALSE, "Paste() des FlyFrm gerufen." );
 }
 
 #endif
 
-sal_Bool SwFrm::GetCharRect( SwRect&, const SwPosition&,
+BOOL SwFrm::GetCharRect( SwRect&, const SwPosition&,
                          SwCrsrMoveState* ) const
 {
-    OSL_FAIL( "GetCharRect() der Basis gerufen." );
-    return sal_False;
+    OSL_ENSURE( FALSE, "GetCharRect() der Basis gerufen." );
+    return FALSE;
 }
 
 

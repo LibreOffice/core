@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,59 +54,59 @@ extern LotGlob *pLotGlob;
 class FilterGlobals
 {
 protected:
-    SvPtrarr        aTblFmts;
-    sal_uInt16          nColStart;
-    sal_uInt16          nColEnd;
-    sal_uInt16          nRowStart;
-    sal_uInt16          nRowEnd;
-    sal_uInt16          nAnzCols;
-    sal_uInt16          nAnzRows;
+    SvPtrarr 		aTblFmts;
+    USHORT			nColStart;
+    USHORT			nColEnd;
+    USHORT			nRowStart;
+    USHORT			nRowEnd;
+    USHORT			nAnzCols;
+    USHORT			nAnzRows;
 
 public:
     FilterGlobals( SwDoc& rDoc, const SwPaM& rPam );
     ~FilterGlobals();
 
-    SwDoc           *pD;
-    SwPaM           *pPam;
-    const SwTable   *pTable;
+    SwDoc			*pD;
+    SwPaM			*pPam;
+    const SwTable	*pTable;
 
     SvNumberFormatter *pNumFormatter;
-    LanguageType    eDefLanguage;
-    sal_uLong           nStandard;
-    sal_uLong           nDefFormat;     // = 0xFFFFFFFF
+    LanguageType	eDefLanguage;
+    ULONG			nStandard;
+    ULONG			nDefFormat;		// = 0xFFFFFFFF
 
-    void SetRange( sal_uInt16 nCS, sal_uInt16 nCE, sal_uInt16 nRS, sal_uInt16 nRE );
+    void SetRange( USHORT nCS, USHORT nCE, USHORT nRS, USHORT nRE );
 
-    sal_Bool IsInColRange( sal_uInt16 nCol )
-                {   return ( nCol >= nColStart && nCol <= nColEnd ); }
-    sal_Bool IsInRowRange( sal_uInt16 nRow )
-                {   return ( nRow >= nRowStart && nRow <= nRowEnd ); }
-    sal_Bool IsInRange( sal_uInt16 nCol, sal_uInt16 nRow )
-                {   return IsInRowRange(nRow) && IsInColRange(nCol); }
+    BOOL IsInColRange( USHORT nCol )
+                { 	return ( nCol >= nColStart && nCol <= nColEnd ); }
+    BOOL IsInRowRange( USHORT nRow )
+                {	return ( nRow >= nRowStart && nRow <= nRowEnd ); }
+    BOOL IsInRange( USHORT nCol, USHORT nRow )
+                {	return IsInRowRange(nRow) && IsInColRange(nCol); }
 
-    void NormalizeCol( sal_uInt16 &rCol )   { rCol -= nColStart; }
-    void NormalizeRow( sal_uInt16 &rRow )   { rRow -= nRowStart; }
-    void Normalize( sal_uInt16 &rCol, sal_uInt16 &rRow )
-                        {   NormalizeCol( rCol ); NormalizeRow( rRow ); }
+    void NormalizeCol( USHORT &rCol )	{ rCol -= nColStart; }
+    void NormalizeRow( USHORT &rRow )	{ rRow -= nRowStart; }
+    void Normalize( USHORT &rCol, USHORT &rRow )
+                        {	NormalizeCol( rCol ); NormalizeRow( rRow ); }
 
-    sal_uInt16 AnzCols() const  { return nAnzCols; }
-    sal_uInt16 AnzRows() const  { return nAnzRows; }
+    USHORT AnzCols() const 	{ return nAnzCols; }
+    USHORT AnzRows() const	{ return nAnzRows; }
 
-    sal_Bool ColRangeLimitter( sal_uInt16 &rCS, sal_uInt16 &rCE );
+    BOOL ColRangeLimitter( USHORT &rCS, USHORT &rCE );
 
-    void InsertText( sal_uInt16 nCol, sal_uInt16 nRow, const String& rStr );
+    void InsertText( USHORT nCol, USHORT nRow, const String& rStr );
     void CreateTable();
     void InsertAttr( const SfxPoolItem& rItem );
 
-    inline void     ColLimitter( sal_uInt16 &rCol );
-    inline void     RowLimitter( sal_uInt16 &rRow );
+    inline void		ColLimitter( USHORT &rCol );
+    inline void		RowLimitter( USHORT &rRow );
 };
 
 
 
 
 
-inline void FilterGlobals::ColLimitter( sal_uInt16 &rCol )
+inline void FilterGlobals::ColLimitter( USHORT &rCol )
 {
     if( rCol < nColStart )
         rCol = nColStart;
@@ -114,7 +114,7 @@ inline void FilterGlobals::ColLimitter( sal_uInt16 &rCol )
         rCol = nColEnd;
 }
 
-inline void FilterGlobals::RowLimitter( sal_uInt16 &rRow )
+inline void FilterGlobals::RowLimitter( USHORT &rRow )
 {
     if( rRow < nRowStart )
         rRow = nRowStart;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ public class _XFlushable extends MultiMethodTest {
     /**
     * Test call method <code>flush</code> and checks if added listener
     * was called and removed one wasn't. <p>
-    * Has OK status if no exception has occurred. <p>
+    * Has OK status if no exception has occured. <p>
     *     Methods to be executed before :
     * {@link #_addFlushListener},
     * {@link #_removeFlushListener}

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString&, const Reference< 
     // To pass as column parameter to Key's Apppend method
     OLEVariant vOptional;
     vOptional.setNoArg();
-
+    
 #if OSL_DEBUG_LEVEL > 0
     KeyTypeEnum eKey =
 #endif
@@ -88,7 +88,7 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString&, const Reference< 
     WpADOKey aKey = pKey->getImpl();
     ::rtl::OUString sName = aKey.get_Name();
     if(!sName.getLength())
-        aKey.put_Name(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrimaryKey")) );
+        aKey.put_Name(::rtl::OUString::createFromAscii("PrimaryKey") );
 
     ADOKeys* pKeys = m_aCollection;
     if ( FAILED(pKeys->Append(OLEVariant((ADOKey*)aKey),

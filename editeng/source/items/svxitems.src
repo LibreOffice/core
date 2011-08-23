@@ -1,10 +1,13 @@
 ﻿/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: svxitems.src,v $
+ * $Revision: 1.83.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +31,7 @@
 #include <editeng/editrids.hrc>
  // pragma -------------------------------------------------------------------
 
- // Value strings ------------------------------------------------------------
+ // Value-Strings ------------------------------------------------------------
 String RID_SVXITEMS_TRUE
 {
     Text [ en-US ] = "True" ;
@@ -541,61 +544,69 @@ String RID_SVXITEMS_TAB_ADJUST_DEFAULT
 {
     Text [ en-US ] = "Default" ;
 };
-String RID_SOLID
+String RID_SINGLE_LINE0
 {
-    Text [ en-US ] = "Single, solid" ;
+    Text [ en-US ] = "Single, fine lines" ;
 };
-String RID_DOTTED
+String RID_SINGLE_LINE1
 {
-    Text [ en-US ] = "Single, dotted" ;
+    Text [ en-US ] = "Single, thin" ;
 };
-String RID_DASHED
+String RID_SINGLE_LINE2
 {
-    Text [ en-US ] = "Single, dashed" ;
+    Text [ en-US ] = "Single, thick" ;
 };
-String RID_DOUBLE
+String RID_SINGLE_LINE3
 {
-    Text [ en-US ] = "Double" ;
+    Text [ en-US ] = "Single, very thick" ;
 };
-String RID_THINTHICK_SMALLGAP
+String RID_SINGLE_LINE4
 {
-    Text [ en-US ] = "Double, inside: fine, outside: thick, spacing: small";
+    Text [ en-US ] = "Single, bold" ;
 };
-String RID_THINTHICK_MEDIUMGAP
+String RID_DOUBLE_LINE0
 {
-    Text [ en-US ] = "Double, inside: fine, outside: thick, spacing: medium";
+    Text [ en-US ] = "Double, fine lines, spacing: small" ;
 };
-String RID_THINTHICK_LARGEGAP
+String RID_DOUBLE_LINE1
 {
-    Text [ en-US ] = "Double, inside: fine, outside: thick, spacing: large";
+    Text [ en-US ] = "Double, fine line, spacing: large" ;
 };
-String RID_THICKTHIN_SMALLGAP
+String RID_DOUBLE_LINE2
 {
-    Text [ en-US ] = "Double, inside: thick, outside: fine, spacing: small";
+    Text [ en-US ] = "Double, thin, spacing: small" ;
 };
-String RID_THICKTHIN_MEDIUMGAP
+String RID_DOUBLE_LINE3
 {
-    Text [ en-US ] = "Double, inside: thick, outside: fine, spacing: medium";
+    Text [ en-US ] = "Double, thick, spacing: large" ;
 };
-String RID_THICKTHIN_LARGEGAP
+String RID_DOUBLE_LINE4
 {
-    Text [ en-US ] = "Double, inside: thick, outside: fine, spacing: large";
+    Text [ en-US ] = "Double, inside: fine lines, outside: thin, spacing: large" ;
 };
-String RID_EMBOSSED
+String RID_DOUBLE_LINE5
 {
-    Text [ en-US ] = "3D embossed" ;
+    Text [ en-US ] = "Double, inside: fine lines, outside: thick, spacing: large" ;
 };
-String RID_ENGRAVED
+String RID_DOUBLE_LINE6
 {
-    Text [ en-US ] = "3D engraved" ;
+    Text [ en-US ] = "Double, inside: fine lines, outside: very thick, spacing: large" ;
 };
-String RID_INSET
+String RID_DOUBLE_LINE7
 {
-    Text [ en-US ] = "Inset" ;
+    Text [ en-US ] = "Double, inside: thin, outside: thick, spacing: large" ;
 };
-String RID_OUTSET
+String RID_DOUBLE_LINE8
 {
-    Text [ en-US ] = "Outset" ;
+    Text [ en-US ] = "Double, inside: thick, outside: thin, spacing: small" ;
+};
+String RID_DOUBLE_LINE9
+{
+    Text [ en-US ] = "Double, inside: thick, outside: very thick, spacing: large" ;
+};
+String RID_DOUBLE_LINE10
+{
+    Text [ en-US ] = "Double, inside: very thick, outside: thick, Spacing: large" ;
 };
 String RID_SVXITEMS_METRIC_MM
 {

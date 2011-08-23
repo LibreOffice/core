@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
-#include "svx/DescriptionGenerator.hxx"
+#include "DescriptionGenerator.hxx"
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -40,27 +40,27 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <svx/svdouno.hxx>
-#include "svx/unoapi.hxx"
+#include "unoapi.hxx"
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/accessiblewrapper.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
-#include "svx/svdstr.hrc"
+#include "svdstr.hrc"
 #include <algorithm>
 
 using namespace ::comphelper;
 using namespace ::accessibility;
-using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::reflection;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::container;
+using namespace	::com::sun::star::accessibility;
+using namespace	::com::sun::star::uno;
+using namespace	::com::sun::star::awt;
+using namespace	::com::sun::star::beans;
+using namespace	::com::sun::star::util;
+using namespace	::com::sun::star::lang;
+using namespace	::com::sun::star::reflection;
+using namespace	::com::sun::star::drawing;
+using namespace	::com::sun::star::container;
 
 //--------------------------------------------------------------------
 namespace
@@ -96,23 +96,23 @@ namespace
     //................................................................
     // determines whether or not a state which belongs to the inner context needs to be forwarded to the "composed"
     // context
-    sal_Bool    isComposedState( const sal_Int16 _nState )
+    sal_Bool	isComposedState( const sal_Int16 _nState )
     {
-        return  (   ( AccessibleStateType::INVALID != _nState )
-                &&  ( AccessibleStateType::DEFUNC != _nState )
-                &&  ( AccessibleStateType::ICONIFIED != _nState )
-                &&  ( AccessibleStateType::RESIZABLE != _nState )
-                &&  ( AccessibleStateType::SELECTABLE != _nState )
-                &&  ( AccessibleStateType::SHOWING != _nState )
-                &&  ( AccessibleStateType::MANAGES_DESCENDANTS != _nState )
-                &&  ( AccessibleStateType::VISIBLE != _nState )
+        return	(	( AccessibleStateType::INVALID != _nState )
+                &&	( AccessibleStateType::DEFUNC != _nState )
+                &&	( AccessibleStateType::ICONIFIED != _nState )
+                &&	( AccessibleStateType::RESIZABLE != _nState )
+                &&	( AccessibleStateType::SELECTABLE != _nState )
+                &&	( AccessibleStateType::SHOWING != _nState )
+                &&	( AccessibleStateType::MANAGES_DESCENDANTS != _nState )
+                &&	( AccessibleStateType::VISIBLE != _nState )
                 );
     }
 
     //................................................................
     /** determines whether the given control is in alive mode
     */
-    inline  sal_Bool    isAliveMode( const Reference< XControl >& _rxControl )
+    inline	sal_Bool	isAliveMode( const Reference< XControl >& _rxControl )
     {
         OSL_PRECOND( _rxControl.is(), "AccessibleControlShape::isAliveMode: invalid control" );
         return _rxControl.is() && !_rxControl->isDesignMode();
@@ -128,9 +128,9 @@ AccessibleControlShape::AccessibleControlShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo)
     :      AccessibleShape (rShapeInfo, rShapeTreeInfo)
-    ,   m_bListeningForName( sal_False )
-    ,   m_bListeningForDesc( sal_False )
-    ,   m_bMultiplexingStates( sal_False )
+    ,	m_bListeningForName( sal_False )
+    ,	m_bListeningForDesc( sal_False )
+    ,	m_bMultiplexingStates( sal_False )
     ,   m_bDisposeNativeContext( sal_False )
     ,   m_bWaitingForControl( sal_False )
 {
@@ -208,6 +208,9 @@ void AccessibleControlShape::Init()
         // be aggregated, as by definition the proxy's ref count is exactly 1 when returned from the factory.
         // Sounds better. Though this yields the problem of slightly degraded performance, it's the only solution
         // I'm aware of at the moment .....
+        //
+        // 98750 - 30.04.2002 - fs@openoffice.org
+        //
 
         // get the control which belongs to our model (relative to our view)
         const Window* pViewWindow = maShapeTreeInfo.GetWindow();
@@ -252,7 +255,7 @@ void AccessibleControlShape::Init()
                 // .................................................................
                 // add as listener to the context - we want to multiplex some states
                 if ( isAliveMode( m_xUnoControl ) && xNativeControlContext.is() )
-                {   // (but only in alive mode)
+                {	// (but only in alive mode)
                     startStateMultiplexing( );
                 }
 
@@ -302,7 +305,7 @@ void AccessibleControlShape::Init()
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "AccessibleControlShape::Init: could not \"aggregate\" the controls XAccessibleContext!" );
+        OSL_ENSURE( sal_False, "AccessibleControlShape::Init: could not \"aggregate\" the controls XAccessibleContext!" );
     }
 }
 
@@ -375,12 +378,12 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
             // check if we can obtain the "Desc" property from the model
             ::rtl::OUString sDesc( getControlModelStringProperty( lcl_getDescPropertyName() ) );
             if ( !sDesc.getLength() )
-            {   // no -> use the default
+            {	// no -> use the default
                 aDG.Initialize (STR_ObjNameSingulUno);
-                aDG.AddProperty (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBackground")),
+                aDG.AddProperty (::rtl::OUString::createFromAscii ("ControlBackground"),
                     DescriptionGenerator::COLOR,
                     ::rtl::OUString());
-                aDG.AddProperty (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBorder")),
+                aDG.AddProperty (::rtl::OUString::createFromAscii ("ControlBorder"),
                     DescriptionGenerator::INTEGER,
                     ::rtl::OUString());
             }
@@ -390,8 +393,8 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
         break;
 
         default:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Unknown accessible control shape")) );
+            aDG.Initialize (::rtl::OUString::createFromAscii (
+                "Unknown accessible control shape"));
             Reference< XShapeDescriptor > xDescriptor (mxShape, UNO_QUERY);
             if (xDescriptor.is())
             {
@@ -413,8 +416,8 @@ void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent&
     ::osl::MutexGuard aGuard( maMutex );
 
     // check if it is the name or the description
-    if  (   _rEvent.PropertyName.equals( lcl_getNamePropertyName() )
-        ||  _rEvent.PropertyName.equals( lcl_getLabelPropertyName( ) )
+    if	(	_rEvent.PropertyName.equals( lcl_getNamePropertyName() )
+        ||	_rEvent.PropertyName.equals( lcl_getLabelPropertyName( ) )
         )
     {
         SetAccessibleName(
@@ -430,7 +433,7 @@ void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent&
 #if OSL_DEBUG_LEVEL > 0
     else
     {
-        OSL_FAIL( "AccessibleControlShape::propertyChange: where did this come from?" );
+        OSL_ENSURE( sal_False, "AccessibleControlShape::propertyChange: where did this come from?" );
     }
 #endif
 }
@@ -489,10 +492,10 @@ void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& 
         _rEvent.NewValue >>= nGainedState;
 
         // don't multiplex states which the inner context is not resposible for
-        if  ( isComposedState( nLostState ) )
+        if	( isComposedState( nLostState ) )
             AccessibleShape::ResetState( nLostState );
 
-        if  ( isComposedState( nGainedState ) )
+        if	( isComposedState( nGainedState ) )
             AccessibleShape::SetState( nGainedState );
     }
     else
@@ -519,7 +522,7 @@ void SAL_CALL AccessibleControlShape::modeChanged( const ModeChangeEvent& _rSour
 {
     // did it come from our inner context (the real one, not it's proxy!)?
     OSL_TRACE ("AccessibleControlShape::modeChanged");
-    Reference< XControl > xSource( _rSource.Source, UNO_QUERY );    // for faster compare
+    Reference< XControl > xSource( _rSource.Source, UNO_QUERY );	// for faster compare
     if ( xSource.get() == m_xUnoControl.get() )
     {
         // If our "pseudo-aggregated" inner context does not live anymore,
@@ -531,7 +534,7 @@ void SAL_CALL AccessibleControlShape::modeChanged( const ModeChangeEvent& _rSour
     }
 #if OSL_DEBUG_LEVEL > 0
     else
-        OSL_FAIL( "AccessibleControlShape::modeChanged: where did this come from?" );
+        OSL_ENSURE( sal_False, "AccessibleControlShape::modeChanged: where did this come from?" );
 #endif
 }
 
@@ -561,12 +564,12 @@ sal_Bool AccessibleControlShape::ensureListeningState(
                 m_xControlModel->removePropertyChangeListener( _rPropertyName, static_cast< XPropertyChangeListener* >( this ) );
         }
         else
-            OSL_FAIL( "AccessibleControlShape::ensureListeningState: this property does not exist at this model!" );
+            OSL_ENSURE( sal_False, "AccessibleControlShape::ensureListeningState: this property does not exist at this model!" );
     }
     catch( const Exception& e )
     {
         (void)e;    // make compiler happy
-        OSL_FAIL( "AccessibleControlShape::ensureListeningState: could not change the listening state!" );
+        OSL_ENSURE( sal_False, "AccessibleControlShape::ensureListeningState: could not change the listening state!" );
     }
 
     return _bNeedNewListening;
@@ -651,7 +654,7 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
 
     ::rtl::OUString sName( getControlModelStringProperty( rAccNameProperty ) );
     if ( !sName.getLength() )
-    {   // no -> use the default
+    {	// no -> use the default
         sName = AccessibleShape::CreateAccessibleName();
     }
 
@@ -682,7 +685,7 @@ void SAL_CALL AccessibleControlShape::disposing (void)
     // stop listening at the control container (should never be necessary here, but who knows ....)
     if ( m_bWaitingForControl )
     {
-        OSL_FAIL( "AccessibleControlShape::disposing: this should never happen!" );
+        OSL_ENSURE( sal_False, "AccessibleControlShape::disposing: this should never happen!" );
         Reference< XContainer > xContainer = lcl_getControlContainer( maShapeTreeInfo.GetWindow(), maShapeTreeInfo.GetSdrView() );
         if ( xContainer.is() )
         {
@@ -732,7 +735,7 @@ sal_Bool AccessibleControlShape::ensureControlModelAccess() SAL_THROW(())
     catch( const Exception& e )
     {
         (void)e;    // make compiler happy
-        OSL_FAIL( "AccessibleControlShape::ensureControlModelAccess: caught an exception!" );
+        OSL_ENSURE( sal_False, "AccessibleControlShape::ensureControlModelAccess: caught an exception!" );
     }
 
     return m_xControlModel.is();
@@ -776,14 +779,14 @@ void AccessibleControlShape::stopStateMultiplexing()
 }
 
 //--------------------------------------------------------------------
-::rtl::OUString AccessibleControlShape::getControlModelStringProperty( const ::rtl::OUString& _rPropertyName ) const SAL_THROW(())
+::rtl::OUString	AccessibleControlShape::getControlModelStringProperty( const ::rtl::OUString& _rPropertyName ) const SAL_THROW(())
 {
     ::rtl::OUString sReturn;
     try
     {
         if ( const_cast< AccessibleControlShape* >( this )->ensureControlModelAccess() )
         {
-            if ( !m_xModelPropsMeta.is() || m_xModelPropsMeta->hasPropertyByName( _rPropertyName ) )
+            if ( !m_xModelPropsMeta.is() ||	m_xModelPropsMeta->hasPropertyByName( _rPropertyName ) )
                 // ask only if a) the control does not have a PropertySetInfo object or b) it has, and the
                 // property in question is available
                 m_xControlModel->getPropertyValue( _rPropertyName ) >>= sReturn;
@@ -791,7 +794,7 @@ void AccessibleControlShape::stopStateMultiplexing()
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OAccessibleControlContext::getModelStringProperty: caught an exception!" );
+        OSL_ENSURE( sal_False, "OAccessibleControlContext::getModelStringProperty: caught an exception!" );
     }
     return sReturn;
 }
@@ -835,10 +838,10 @@ void AccessibleControlShape::initializeComposedState()
 
     // we need to reset some states of the composed set, because they either do not apply
     // for controls in alive mode, or are in the responsibility of the UNO-control, anyway
-    pComposedStates->RemoveState( AccessibleStateType::ENABLED );       // this is controlled by the UNO-control
-    pComposedStates->RemoveState( AccessibleStateType::SENSITIVE );     // this is controlled by the UNO-control
-    pComposedStates->RemoveState( AccessibleStateType::FOCUSABLE );     // this is controlled by the UNO-control
-    pComposedStates->RemoveState( AccessibleStateType::SELECTABLE );    // this does not hold for an alive UNO-control
+    pComposedStates->RemoveState( AccessibleStateType::ENABLED );		// this is controlled by the UNO-control
+    pComposedStates->RemoveState( AccessibleStateType::SENSITIVE );		// this is controlled by the UNO-control
+    pComposedStates->RemoveState( AccessibleStateType::FOCUSABLE );		// this is controlled by the UNO-control
+    pComposedStates->RemoveState( AccessibleStateType::SELECTABLE );	// this does not hold for an alive UNO-control
 #if OSL_DEBUG_LEVEL > 0
     // now, only states which are not in the responsibility of the UNO control should be part of this state set
     {

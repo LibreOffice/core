@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <comphelper/extract.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "layerimp.hxx"
@@ -66,7 +66,7 @@ public:
     SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager );
     virtual ~SdXMLLayerContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
     virtual void EndElement();
 
 private:
@@ -106,7 +106,7 @@ SdXMLLayerContext::~SdXMLLayerContext()
 {
 }
 
-SvXMLImportContext * SdXMLLayerContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const Reference< XAttributeList >& )
+SvXMLImportContext * SdXMLLayerContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const Reference< XAttributeList >& )
 {
     if( (XML_NAMESPACE_SVG == nPrefix) && IsXMLToken(rLocalName, XML_TITLE) )
     {
@@ -153,14 +153,14 @@ void SdXMLLayerContext::EndElement()
     }
     catch( Exception& )
     {
-        OSL_FAIL("SdXMLLayerContext::EndElement(), exception caught!");
+        DBG_ERROR("SdXMLLayerContext::EndElement(), exception caught!");
     }
 }
 
 
 TYPEINIT1( SdXMLLayerSetContext, SvXMLImportContext );
 
-SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
+SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,	const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>&)
 : SvXMLImportContext(rImport, nPrfx, rLocalName)
 {
@@ -174,7 +174,7 @@ SdXMLLayerSetContext::~SdXMLLayerSetContext()
 {
 }
 
-SvXMLImportContext * SdXMLLayerSetContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+SvXMLImportContext * SdXMLLayerSetContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     return new SdXMLLayerContext( GetImport(), nPrefix, rLocalName, xAttrList, mxLayerManager );

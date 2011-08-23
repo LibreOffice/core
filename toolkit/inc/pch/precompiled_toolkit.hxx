@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -303,6 +303,7 @@
 #include "tools/diagnose_ex.h"
 #include "tools/gen.hxx"
 #include "tools/link.hxx"
+#include "tools/list.hxx"
 #include "tools/poly.hxx"
 #include "tools/simplerm.hxx"
 #include "tools/solar.h"
@@ -326,7 +327,7 @@
 #include "vcl/gradient.hxx"
 #include "vcl/image.hxx"
 #include "vcl/jobset.hxx"
-#include "tools/mapunit.hxx"
+#include "vcl/mapunit.hxx"
 #include "vcl/menu.hxx"
 #include "vcl/metric.hxx"
 #include "vcl/outdev.hxx"

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,66 +25,18 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 #include "ReportDefinition.hxx"
-
-#include "FixedLine.hxx"
-#include "FixedText.hxx"
-#include "FormattedField.hxx"
-#include "Functions.hxx"
-#include "Groups.hxx"
-#include "ImageControl.hxx"
-#include "ReportComponent.hxx"
-#include "ReportHelperImpl.hxx"
-#include "RptDef.hxx"
-#include "RptModel.hxx"
-#include "Section.hxx"
-#include "Shape.hxx"
-#include "Tools.hxx"
-#include "UndoEnv.hxx"
-#include "core_resource.hrc"
-#include "core_resource.hxx"
-#include "corestrings.hrc"
-
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/XMultiPropertyStates.hpp>
-#include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
-#include <com/sun/star/document/EventObject.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/EmbedMapUnits.hpp>
-#include <com/sun/star/embed/EntryInitModes.hpp>
-#include <com/sun/star/embed/XEmbedPersist.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/report/GroupKeepTogether.hpp>
 #include <com/sun/star/report/ReportPrintOption.hpp>
 #include <com/sun/star/report/XFunction.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#include <com/sun/star/style/GraphicLocation.hpp>
-#include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/style/PageStyleLayout.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
-#include <com/sun/star/task/ErrorCodeIOException.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
+#include <com/sun/star/style/PageStyleLayout.hpp>
+#include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-/** === end UNO includes === **/
-
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -93,111 +45,154 @@
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numberedcollection.hxx>
+#include <comphelper/propertystatecontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <comphelper/propertystatecontainer.hxx>
-#include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/seqstream.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/uno3.hxx>
-#include <connectivity/CommonTools.hxx>
-#include <connectivity/dbconversion.hxx>
-#include <connectivity/dbtools.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/interfacecontainer.h>
-#include <dbaccess/dbaundomanager.hxx>
-#include <editeng/paperinf.hxx>
-#include <framework/titlehelper.hxx>
-#include <osl/thread.hxx>
-#include <svl/itempool.hxx>
-#include <svl/undo.hxx>
-#include <svx/svdlayer.hxx>
-#include <svx/unofill.hxx>
-#include <svx/xmleohlp.hxx>
-#include <svx/xmlgrhlp.hxx>
-#include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
-#include <unotools/moduleoptions.hxx>
-#include <unotools/saveopt.hxx>
-#include <unotools/streamwrap.hxx>
+#include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-
-#include <boost/bind.hpp>
+#include <osl/mutex.hxx>
+#include <com/sun/star/beans/XMultiPropertyStates.hpp>
+#include <com/sun/star/document/EventObject.hpp>
+#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/EmbedMapUnits.hpp>
+#include <com/sun/star/embed/EntryInitModes.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/task/ErrorCodeIOException.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include "corestrings.hrc"
+#include "Groups.hxx"
+#include "RptDef.hxx"
+#include "Section.hxx"
+#include "FixedLine.hxx"
+#include "core_resource.hrc"
+#include "core_resource.hxx"
+#include "Tools.hxx"
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <unotools/streamwrap.hxx>
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/dbconversion.hxx>
+#include <framework/titlehelper.hxx>
+#include <connectivity/dbtools.hxx>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#include "Functions.hxx"
 #include <boost/mem_fn.hpp>
+#include <boost/bind.hpp>
 #include <boost/utility.hpp>
+#include <unotools/saveopt.hxx>
+#include "RptModel.hxx"
+#include "UndoEnv.hxx"
+#include "FormattedField.hxx"
+#include "FixedText.hxx"
+#include "ImageControl.hxx"
+#include "Shape.hxx"
+#include "ReportHelperImpl.hxx"
+#include <svl/itempool.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <osl/thread.hxx>
+
+#include <editeng/paperinf.hxx>
+#include <svx/svdlayer.hxx>
+#include <svx/xmleohlp.hxx>
+#include <svx/xmlgrhlp.hxx>
+#include <svx/unofill.hxx>
+#include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/exc_hlp.hxx>
+#include "ReportComponent.hxx"
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 #define MAP_CHAR_LEN(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))
-//  page styles
-#define SC_UNO_PAGE_GRAPHICFILT     "BackGraphicFilter"
-#define SC_UNO_PAGE_LEFTBORDER      "LeftBorder"
-#define SC_UNO_PAGE_RIGHTBORDER     "RightBorder"
-#define SC_UNO_PAGE_BOTTBORDER      "BottomBorder"
-#define SC_UNO_PAGE_TOPBORDER       "TopBorder"
-#define SC_UNO_PAGE_LEFTBRDDIST     "LeftBorderDistance"
-#define SC_UNO_PAGE_RIGHTBRDDIST    "RightBorderDistance"
-#define SC_UNO_PAGE_BOTTBRDDIST     "BottomBorderDistance"
-#define SC_UNO_PAGE_TOPBRDDIST      "TopBorderDistance"
-#define SC_UNO_PAGE_BORDERDIST      "BorderDistance"
-#define SC_UNO_PAGE_SHADOWFORM      "ShadowFormat"
-#define SC_UNO_PAGE_PAPERTRAY       "PrinterPaperTray"
-#define SC_UNO_PAGE_SCALEVAL        "PageScale"
-#define SC_UNO_PAGE_SCALETOPAG      "ScaleToPages"
+//	page styles
+#define SC_UNO_PAGE_GRAPHICFILT		"BackGraphicFilter"
+#define SC_UNO_PAGE_LEFTBORDER		"LeftBorder"
+#define SC_UNO_PAGE_RIGHTBORDER		"RightBorder"
+#define SC_UNO_PAGE_BOTTBORDER		"BottomBorder"
+#define SC_UNO_PAGE_TOPBORDER		"TopBorder"
+#define SC_UNO_PAGE_LEFTBRDDIST		"LeftBorderDistance"
+#define SC_UNO_PAGE_RIGHTBRDDIST	"RightBorderDistance"
+#define SC_UNO_PAGE_BOTTBRDDIST		"BottomBorderDistance"
+#define SC_UNO_PAGE_TOPBRDDIST		"TopBorderDistance"
+#define SC_UNO_PAGE_BORDERDIST		"BorderDistance"
+#define SC_UNO_PAGE_SHADOWFORM		"ShadowFormat"
+#define SC_UNO_PAGE_PAPERTRAY		"PrinterPaperTray"
+#define SC_UNO_PAGE_SCALEVAL		"PageScale"
+#define SC_UNO_PAGE_SCALETOPAG		"ScaleToPages"
 #define SC_UNO_PAGE_SCALETOX        "ScaleToPagesX"
 #define SC_UNO_PAGE_SCALETOY        "ScaleToPagesY"
-#define SC_UNO_PAGE_FIRSTPAGE       "FirstPageNumber"
-#define SC_UNO_PAGE_LEFTHDRCONT     "LeftPageHeaderContent"
-#define SC_UNO_PAGE_LEFTFTRCONT     "LeftPageFooterContent"
-#define SC_UNO_PAGE_RIGHTHDRCON     "RightPageHeaderContent"
-#define SC_UNO_PAGE_RIGHTFTRCON     "RightPageFooterContent"
-#define SC_UNO_PAGE_PRINTFORMUL     "PrintFormulas"
-#define SC_UNO_PAGE_PRINTZERO       "PrintZeroValues"
-#define SC_UNO_PAGE_HDRBACKCOL      "HeaderBackColor"
-#define SC_UNO_PAGE_HDRBACKTRAN     "HeaderBackTransparent"
-#define SC_UNO_PAGE_HDRGRFFILT      "HeaderBackGraphicFilter"
-#define SC_UNO_PAGE_HDRGRFLOC       "HeaderBackGraphicLocation"
-#define SC_UNO_PAGE_HDRGRFURL       "HeaderBackGraphicURL"
-#define SC_UNO_PAGE_HDRLEFTBOR      "HeaderLeftBorder"
-#define SC_UNO_PAGE_HDRRIGHTBOR     "HeaderRightBorder"
-#define SC_UNO_PAGE_HDRBOTTBOR      "HeaderBottomBorder"
-#define SC_UNO_PAGE_HDRTOPBOR       "HeaderTopBorder"
-#define SC_UNO_PAGE_HDRLEFTBDIS     "HeaderLeftBorderDistance"
-#define SC_UNO_PAGE_HDRRIGHTBDIS    "HeaderRightBorderDistance"
-#define SC_UNO_PAGE_HDRBOTTBDIS     "HeaderBottomBorderDistance"
-#define SC_UNO_PAGE_HDRTOPBDIS      "HeaderTopBorderDistance"
-#define SC_UNO_PAGE_HDRBRDDIST      "HeaderBorderDistance"
-#define SC_UNO_PAGE_HDRSHADOW       "HeaderShadowFormat"
-#define SC_UNO_PAGE_HDRLEFTMAR      "HeaderLeftMargin"
-#define SC_UNO_PAGE_HDRRIGHTMAR     "HeaderRightMargin"
-#define SC_UNO_PAGE_HDRBODYDIST     "HeaderBodyDistance"
-#define SC_UNO_PAGE_HDRHEIGHT       "HeaderHeight"
-#define SC_UNO_PAGE_HDRON           "HeaderIsOn"
-#define SC_UNO_PAGE_HDRDYNAMIC      "HeaderIsDynamicHeight"
-#define SC_UNO_PAGE_HDRSHARED       "HeaderIsShared"
-#define SC_UNO_PAGE_FTRBACKCOL      "FooterBackColor"
-#define SC_UNO_PAGE_FTRBACKTRAN     "FooterBackTransparent"
-#define SC_UNO_PAGE_FTRGRFFILT      "FooterBackGraphicFilter"
-#define SC_UNO_PAGE_FTRGRFLOC       "FooterBackGraphicLocation"
-#define SC_UNO_PAGE_FTRGRFURL       "FooterBackGraphicURL"
-#define SC_UNO_PAGE_FTRLEFTBOR      "FooterLeftBorder"
-#define SC_UNO_PAGE_FTRRIGHTBOR     "FooterRightBorder"
-#define SC_UNO_PAGE_FTRBOTTBOR      "FooterBottomBorder"
-#define SC_UNO_PAGE_FTRTOPBOR       "FooterTopBorder"
-#define SC_UNO_PAGE_FTRLEFTBDIS     "FooterLeftBorderDistance"
-#define SC_UNO_PAGE_FTRRIGHTBDIS    "FooterRightBorderDistance"
-#define SC_UNO_PAGE_FTRBOTTBDIS     "FooterBottomBorderDistance"
-#define SC_UNO_PAGE_FTRTOPBDIS      "FooterTopBorderDistance"
-#define SC_UNO_PAGE_FTRBRDDIST      "FooterBorderDistance"
-#define SC_UNO_PAGE_FTRSHADOW       "FooterShadowFormat"
-#define SC_UNO_PAGE_FTRLEFTMAR      "FooterLeftMargin"
-#define SC_UNO_PAGE_FTRRIGHTMAR     "FooterRightMargin"
-#define SC_UNO_PAGE_FTRBODYDIST     "FooterBodyDistance"
-#define SC_UNO_PAGE_FTRHEIGHT       "FooterHeight"
-#define SC_UNO_PAGE_FTRON           "FooterIsOn"
-#define SC_UNO_PAGE_FTRDYNAMIC      "FooterIsDynamicHeight"
-#define SC_UNO_PAGE_FTRSHARED       "FooterIsShared"
+#define SC_UNO_PAGE_FIRSTPAGE		"FirstPageNumber"
+#define SC_UNO_PAGE_LEFTHDRCONT		"LeftPageHeaderContent"
+#define SC_UNO_PAGE_LEFTFTRCONT		"LeftPageFooterContent"
+#define SC_UNO_PAGE_RIGHTHDRCON		"RightPageHeaderContent"
+#define SC_UNO_PAGE_RIGHTFTRCON		"RightPageFooterContent"
+#define SC_UNO_PAGE_PRINTFORMUL		"PrintFormulas"
+#define SC_UNO_PAGE_PRINTZERO		"PrintZeroValues"
+#define SC_UNO_PAGE_HDRBACKCOL		"HeaderBackColor"
+#define SC_UNO_PAGE_HDRBACKTRAN		"HeaderBackTransparent"
+#define SC_UNO_PAGE_HDRGRFFILT		"HeaderBackGraphicFilter"
+#define SC_UNO_PAGE_HDRGRFLOC		"HeaderBackGraphicLocation"
+#define SC_UNO_PAGE_HDRGRFURL		"HeaderBackGraphicURL"
+#define SC_UNO_PAGE_HDRLEFTBOR		"HeaderLeftBorder"
+#define SC_UNO_PAGE_HDRRIGHTBOR		"HeaderRightBorder"
+#define SC_UNO_PAGE_HDRBOTTBOR		"HeaderBottomBorder"
+#define SC_UNO_PAGE_HDRTOPBOR		"HeaderTopBorder"
+#define SC_UNO_PAGE_HDRLEFTBDIS		"HeaderLeftBorderDistance"
+#define SC_UNO_PAGE_HDRRIGHTBDIS	"HeaderRightBorderDistance"
+#define SC_UNO_PAGE_HDRBOTTBDIS		"HeaderBottomBorderDistance"
+#define SC_UNO_PAGE_HDRTOPBDIS		"HeaderTopBorderDistance"
+#define SC_UNO_PAGE_HDRBRDDIST		"HeaderBorderDistance"
+#define SC_UNO_PAGE_HDRSHADOW		"HeaderShadowFormat"
+#define SC_UNO_PAGE_HDRLEFTMAR		"HeaderLeftMargin"
+#define SC_UNO_PAGE_HDRRIGHTMAR		"HeaderRightMargin"
+#define SC_UNO_PAGE_HDRBODYDIST		"HeaderBodyDistance"
+#define SC_UNO_PAGE_HDRHEIGHT		"HeaderHeight"
+#define SC_UNO_PAGE_HDRON			"HeaderIsOn"
+#define SC_UNO_PAGE_HDRDYNAMIC		"HeaderIsDynamicHeight"
+#define SC_UNO_PAGE_HDRSHARED		"HeaderIsShared"
+#define SC_UNO_PAGE_FTRBACKCOL		"FooterBackColor"
+#define SC_UNO_PAGE_FTRBACKTRAN		"FooterBackTransparent"
+#define SC_UNO_PAGE_FTRGRFFILT		"FooterBackGraphicFilter"
+#define SC_UNO_PAGE_FTRGRFLOC		"FooterBackGraphicLocation"
+#define SC_UNO_PAGE_FTRGRFURL		"FooterBackGraphicURL"
+#define SC_UNO_PAGE_FTRLEFTBOR		"FooterLeftBorder"
+#define SC_UNO_PAGE_FTRRIGHTBOR		"FooterRightBorder"
+#define SC_UNO_PAGE_FTRBOTTBOR		"FooterBottomBorder"
+#define SC_UNO_PAGE_FTRTOPBOR		"FooterTopBorder"
+#define SC_UNO_PAGE_FTRLEFTBDIS		"FooterLeftBorderDistance"
+#define SC_UNO_PAGE_FTRRIGHTBDIS	"FooterRightBorderDistance"
+#define SC_UNO_PAGE_FTRBOTTBDIS		"FooterBottomBorderDistance"
+#define SC_UNO_PAGE_FTRTOPBDIS		"FooterTopBorderDistance"
+#define SC_UNO_PAGE_FTRBRDDIST		"FooterBorderDistance"
+#define SC_UNO_PAGE_FTRSHADOW		"FooterShadowFormat"
+#define SC_UNO_PAGE_FTRLEFTMAR		"FooterLeftMargin"
+#define SC_UNO_PAGE_FTRRIGHTMAR		"FooterRightMargin"
+#define SC_UNO_PAGE_FTRBODYDIST		"FooterBodyDistance"
+#define SC_UNO_PAGE_FTRHEIGHT		"FooterHeight"
+#define SC_UNO_PAGE_FTRON			"FooterIsOn"
+#define SC_UNO_PAGE_FTRDYNAMIC		"FooterIsDynamicHeight"
+#define SC_UNO_PAGE_FTRSHARED		"FooterIsShared"
 
 // =============================================================================
 namespace reportdesign
@@ -243,14 +238,15 @@ void lcl_extractAndStartStatusIndicator( const ::comphelper::MediaDescriptor& _r
     }
     catch( const uno::Exception& )
     {
-        OSL_FAIL( "lcl_extractAndStartStatusIndicator: caught an exception!" );
+        OSL_ENSURE( sal_False, "lcl_extractAndStartStatusIndicator: caught an exception!" );
+//         DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
-typedef ::comphelper::OPropertyStateContainer       OStyle_PBASE;
+typedef ::comphelper::OPropertyStateContainer		OStyle_PBASE;
 class OStyle;
-typedef ::comphelper::OPropertyArrayUsageHelper <   OStyle
-                                                >   OStyle_PABASE;
+typedef ::comphelper::OPropertyArrayUsageHelper	<	OStyle
+                                                >	OStyle_PABASE;
 typedef ::cppu::WeakImplHelper2< style::XStyle, beans::XMultiPropertyStates> TStyleBASE;
 
 class OStyle :   public ::comphelper::OMutexAndBroadcastHelper
@@ -321,88 +317,109 @@ OStyle::OStyle()
     sal_Int32 i = 0;
     registerPropertyNoMember( PROPERTY_NAME, ++i,nBound,::getCppuType( static_cast< ::rtl::OUString *>(NULL) ), &sName );
 
-    registerPropertyNoMember(PROPERTY_BACKCOLOR,                    ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nTransparent);
+    registerPropertyNoMember(PROPERTY_BACKCOLOR,	                ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nTransparent);
+    //registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_GRAPHICFILT),	++i,nBound,::getCppuType((const ::rtl::OUString*)0) ,&sEmpty);
 
-    registerPropertyNoMember(PROPERTY_BACKGRAPHICLOCATION,  ++i,nBound,::getCppuType((const style::GraphicLocation*)0) ,&eGraphicLocation);
-    registerPropertyNoMember(PROPERTY_BACKTRANSPARENT,  ++i,nBound,::getBooleanCppuType() ,&bTrue);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_BORDERDIST),  ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_BOTTBORDER),  ++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_BOTTBRDDIST), ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(PROPERTY_BOTTOMMARGIN, ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nMargin);
-    registerPropertyNoMember(MAP_CHAR_LEN("DisplayName"),       ++i,nBound,::getCppuType((rtl::OUString*)0) ,&sEmpty);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKCOL),  ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nTransparent);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFFILT),  ++i,nBound,::getCppuType((const ::rtl::OUString*)0) ,&sEmpty);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFLOC),   ++i,nBound,::getCppuType((const style::GraphicLocation*)0) ,&eGraphicLocation);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFURL),   ++i,nBound,::getCppuType((const ::rtl::OUString*)0) ,&sEmpty);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKTRAN), ++i,nBound,::getBooleanCppuType() ,&bTrue);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRBODYDIST), ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRBRDDIST),  ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRBOTTBOR),  ++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRBOTTBDIS), ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRHEIGHT),   ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRDYNAMIC),  ++i,nBound,::getBooleanCppuType() ,&bFalse);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRON),       ++i,nBound,::getBooleanCppuType() ,&bFalse);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRSHARED),   ++i,nBound,::getBooleanCppuType() ,&bFalse);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTBOR),  ++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTBDIS), ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTMAR),  ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTBOR), ++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
+    registerPropertyNoMember(PROPERTY_BACKGRAPHICLOCATION,	++i,nBound,::getCppuType((const style::GraphicLocation*)0) ,&eGraphicLocation);
+    //registerPropertyNoMember(PROPERTY_BACKGRAPHICURL,	++i,nBound,::getCppuType((const ::rtl::OUString*)0) ,&sEmpty);
+    registerPropertyNoMember(PROPERTY_BACKTRANSPARENT,	++i,nBound,::getBooleanCppuType() ,&bTrue);
+    //registerPropertyNoMember(MAP_CHAR_LEN(OLD_UNO_PAGE_BACKCOLOR),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_BORDERDIST),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_BOTTBORDER),	++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_BOTTBRDDIST),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(PROPERTY_BOTTOMMARGIN,	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nMargin);
+    registerPropertyNoMember(MAP_CHAR_LEN("DisplayName"),		++i,nBound,::getCppuType((rtl::OUString*)0) ,&sEmpty);
+    //registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FIRSTPAGE),	++i,nBound,::getCppuType((const sal_Int16*)0) ,&n16Zero);
+    //
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKCOL),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nTransparent);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFFILT),	++i,nBound,::getCppuType((const ::rtl::OUString*)0) ,&sEmpty);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFLOC),	++i,nBound,::getCppuType((const style::GraphicLocation*)0) ,&eGraphicLocation);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFURL),	++i,nBound,::getCppuType((const ::rtl::OUString*)0) ,&sEmpty);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKTRAN),	++i,nBound,::getBooleanCppuType() ,&bTrue);
+    //registerPropertyNoMember(MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKCOL),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRBODYDIST),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRBRDDIST),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRBOTTBOR),	++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRBOTTBDIS),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    //registerPropertyNoMember(MAP_CHAR_LEN(OLD_UNO_PAGE_FTRDYNAMIC),	++i,nBound,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRHEIGHT),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRDYNAMIC),	++i,nBound,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRON),		++i,nBound,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRSHARED),	++i,nBound,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTBOR),	++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTBDIS),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTMAR),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    //registerPropertyNoMember(MAP_CHAR_LEN(OLD_UNO_PAGE_FTRON),		++i,nBound,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTBOR),	++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
     registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTBDIS),++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTMAR), ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRSHADOW),   ++i,nBound,::getCppuType((const table::ShadowFormat*)0) ,&eShadowFormat);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRTOPBOR),   ++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRTOPBDIS),  ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTMAR),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRSHADOW),	++i,nBound,::getCppuType((const table::ShadowFormat*)0) ,&eShadowFormat);
+    //registerPropertyNoMember(MAP_CHAR_LEN(OLD_UNO_PAGE_FTRSHARED),	++i,nBound,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRTOPBOR),	++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_FTRTOPBDIS),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
     //
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKCOL),  ++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nTransparent);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFFILT),  ++i,nBound|nMayBeVoid,::getCppuType((const ::rtl::OUString*)0) ,&sEmpty);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFLOC),   ++i,nBound|nMayBeVoid,::getCppuType((const style::GraphicLocation*)0) ,&eGraphicLocation);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFURL),   ++i,nBound|nMayBeVoid,::getCppuType((const ::rtl::OUString*)0) ,&sEmpty);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKTRAN), ++i,nBound|nMayBeVoid,::getBooleanCppuType() ,&bTrue);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRBODYDIST), ++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRBRDDIST),  ++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRBOTTBOR),  ++i,nBound|nMayBeVoid,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRBOTTBDIS), ++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRHEIGHT),   ++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRDYNAMIC),  ++i,nBound|nMayBeVoid,::getBooleanCppuType() ,&bFalse);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRON),       ++i,nBound|nMayBeVoid,::getBooleanCppuType() ,&bFalse);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRSHARED),   ++i,nBound|nMayBeVoid,::getBooleanCppuType() ,&bFalse);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTBOR),  ++i,nBound|nMayBeVoid,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTBDIS), ++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTMAR),  ++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTBOR), ++i,nBound|nMayBeVoid,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKCOL),	++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nTransparent);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFFILT),	++i,nBound|nMayBeVoid,::getCppuType((const ::rtl::OUString*)0) ,&sEmpty);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFLOC),	++i,nBound|nMayBeVoid,::getCppuType((const style::GraphicLocation*)0) ,&eGraphicLocation);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFURL),	++i,nBound|nMayBeVoid,::getCppuType((const ::rtl::OUString*)0) ,&sEmpty);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKTRAN),	++i,nBound|nMayBeVoid,::getBooleanCppuType() ,&bTrue);
+    //registerPropertyNoMember(MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKCOL),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRBODYDIST),	++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRBRDDIST),	++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRBOTTBOR),	++i,nBound|nMayBeVoid,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRBOTTBDIS),	++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
+    //registerPropertyNoMember(MAP_CHAR_LEN(OLD_UNO_PAGE_HDRDYNAMIC),	++i,nBound,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRHEIGHT),	++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRDYNAMIC),	++i,nBound|nMayBeVoid,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRON),		++i,nBound|nMayBeVoid,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRSHARED),	++i,nBound|nMayBeVoid,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTBOR),	++i,nBound|nMayBeVoid,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTBDIS),	++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTMAR),	++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
+    //registerPropertyNoMember(MAP_CHAR_LEN(OLD_UNO_PAGE_HDRON),		++i,nBound,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTBOR),	++i,nBound|nMayBeVoid,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
     registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTBDIS),++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTMAR), ++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRSHADOW),   ++i,nBound|nMayBeVoid,::getCppuType((const table::ShadowFormat*)0) ,&eShadowFormat);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRTOPBOR),   ++i,nBound|nMayBeVoid,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRTOPBDIS),  ++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTMAR),	++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRSHADOW),	++i,nBound|nMayBeVoid,::getCppuType((const table::ShadowFormat*)0) ,&eShadowFormat);
+    //registerPropertyNoMember(MAP_CHAR_LEN(OLD_UNO_PAGE_HDRSHARED),	++i,nBound,::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRTOPBOR),	++i,nBound|nMayBeVoid,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_HDRTOPBDIS),	++i,nBound|nMayBeVoid,::getCppuType((const sal_Int32*)0) ,&nZero);
     //
-    registerProperty(PROPERTY_HEIGHT,       ++i,nBound,&m_aSize.Height,     ::getCppuType((const sal_Int32*)0) );
-    registerPropertyNoMember(PROPERTY_ISLANDSCAPE,                  ++i,nBound,         ::getBooleanCppuType() ,&bFalse);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_LEFTBORDER),  ++i,nBound,     ::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_LEFTBRDDIST), ++i,nBound,     ::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(PROPERTY_LEFTMARGIN,   ++i,beans::PropertyAttribute::BOUND,        ::getCppuType((const sal_Int32*)0) ,&nMargin);
-    registerPropertyNoMember(PROPERTY_NUMBERINGTYPE,                ++i,nBound,::getCppuType((const sal_Int16*)0) ,&nNummeringType);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_SCALEVAL),    ++i,nBound,::getCppuType((const sal_Int16*)0) ,&n16Zero);
-    registerPropertyNoMember(PROPERTY_PAGESTYLELAYOUT,              ++i,nBound,::getCppuType((const style::PageStyleLayout*)0) ,&ePageStyleLayout);
+    registerProperty(PROPERTY_HEIGHT,		++i,nBound,&m_aSize.Height,		::getCppuType((const sal_Int32*)0) );
+    //registerPropertyNoMember(MAP_CHAR_LEN(OLD_UNO_PAGE_BACKTRANS),	++i,nBound,	::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(PROPERTY_ISLANDSCAPE,	                ++i,nBound,			::getBooleanCppuType() ,&bFalse);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_LEFTBORDER),	++i,nBound,		::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_LEFTBRDDIST),	++i,nBound,		::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(PROPERTY_LEFTMARGIN,	++i,beans::PropertyAttribute::BOUND,		::getCppuType((const sal_Int32*)0) ,&nMargin);
+    //registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_LEFTFTRCONT),	++i,nBound,::getCppuType((const uno::Reference< sheet::XHeaderFooterContent >*)0) ,NULL);
+    //registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_LEFTHDRCONT),	++i,nBound,::getCppuType((const uno::Reference< sheet::XHeaderFooterContent >*)0) ,NULL);
+    registerPropertyNoMember(PROPERTY_NUMBERINGTYPE,	            ++i,nBound,::getCppuType((const sal_Int16*)0) ,&nNummeringType);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_SCALEVAL),	++i,nBound,::getCppuType((const sal_Int16*)0) ,&n16Zero);
+    registerPropertyNoMember(PROPERTY_PAGESTYLELAYOUT,	            ++i,nBound,::getCppuType((const style::PageStyleLayout*)0) ,&ePageStyleLayout);
     const ::rtl::OUString sPaperTray(RTL_CONSTASCII_USTRINGPARAM("[From printer settings]"));
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_PAPERTRAY),   ++i,nBound,::getCppuType((const ::rtl::OUString*)0) ,&sPaperTray);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTBORDER), ++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_PAPERTRAY),	++i,nBound,::getCppuType((const ::rtl::OUString*)0) ,&sPaperTray);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTBORDER),	++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
     registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTBRDDIST),++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(PROPERTY_RIGHTMARGIN,  ++i,beans::PropertyAttribute::BOUND,::getCppuType((const sal_Int32*)0) ,&nMargin);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_SCALETOPAG),  ++i,nBound,::getCppuType((const sal_Int16*)0) ,&n16Zero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_SCALETOX),    ++i,nBound,::getCppuType((const sal_Int16*)0) ,&n16Zero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_SCALETOY),    ++i,nBound,::getCppuType((const sal_Int16*)0) ,&n16Zero);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_SHADOWFORM),  ++i,nBound,::getCppuType((const table::ShadowFormat*)0) ,&eShadowFormat);
-    registerProperty(PROPERTY_PAPERSIZE,                    ++i,beans::PropertyAttribute::BOUND,&m_aSize,::getCppuType((const awt::Size*)0) );
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_TOPBORDER),   ++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
-    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_TOPBRDDIST),  ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
-    registerPropertyNoMember(PROPERTY_TOPMARGIN,    ++i,nBound,::getCppuType((const sal_Int32*)0) ,&nMargin);
+    registerPropertyNoMember(PROPERTY_RIGHTMARGIN,	++i,beans::PropertyAttribute::BOUND,::getCppuType((const sal_Int32*)0) ,&nMargin);
+    //registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTFTRCON),	++i,nBound,::getCppuType((const uno::Reference< sheet::XHeaderFooterContent >*)0) ,NULL);
+    //registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTHDRCON),	++i,nBound,::getCppuType((const uno::Reference< sheet::XHeaderFooterContent >*)0) ,NULL);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_SCALETOPAG),	++i,nBound,::getCppuType((const sal_Int16*)0) ,&n16Zero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_SCALETOX),	++i,nBound,::getCppuType((const sal_Int16*)0) ,&n16Zero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_SCALETOY),	++i,nBound,::getCppuType((const sal_Int16*)0) ,&n16Zero);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_SHADOWFORM),	++i,nBound,::getCppuType((const table::ShadowFormat*)0) ,&eShadowFormat);
+    registerProperty(PROPERTY_PAPERSIZE,		            ++i,beans::PropertyAttribute::BOUND,&m_aSize,::getCppuType((const awt::Size*)0) );
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_TOPBORDER),	++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
+    registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_TOPBRDDIST),	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
+    registerPropertyNoMember(PROPERTY_TOPMARGIN,	++i,nBound,::getCppuType((const sal_Int32*)0) ,&nMargin);
+    //registerPropertyNoMember(MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKTRAN),++i,nBound,::getBooleanCppuType() ,&bFalse);
+    //registerPropertyNoMember(MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKTRAN),++i,nBound,::getBooleanCppuType() ,&bFalse);
     uno::Reference< container::XNameContainer> xAttribs = ::comphelper::NameContainer_createInstance(::getCppuType(static_cast< xml::AttributeData* >(NULL)));
-    registerPropertyNoMember(MAP_CHAR_LEN("UserDefinedAttributes"),     ++i,nBound,::getCppuType((uno::Reference<container::XNameContainer>*)0) ,&xAttribs);
-    registerProperty(PROPERTY_WIDTH,        ++i,nBound,&m_aSize.Width,::getCppuType((const sal_Int32*)0) );
-    registerPropertyNoMember(MAP_CHAR_LEN("PrinterName"),               ++i,nBound,::getCppuType((const ::rtl::OUString*)0),&sEmpty);
+    registerPropertyNoMember(MAP_CHAR_LEN("UserDefinedAttributes"),		++i,nBound,::getCppuType((uno::Reference<container::XNameContainer>*)0) ,&xAttribs);
+    registerProperty(PROPERTY_WIDTH,		++i,nBound,&m_aSize.Width,::getCppuType((const sal_Int32*)0) );
+    //registerPropertyNoMember(MAP_CHAR_LEN(SC_UNONAME_WRITING),		++i,nBound,:.getCppuType((sal_Int16*)0) ,&n16Zero);
+    registerPropertyNoMember(MAP_CHAR_LEN("PrinterName"),				++i,nBound,::getCppuType((const ::rtl::OUString*)0),&sEmpty);
     uno::Sequence<sal_Int8> aSe;
-    registerPropertyNoMember(MAP_CHAR_LEN("PrinterSetup"),              ++i,nBound,::getCppuType((const uno::Sequence<sal_Int8>*)0),&aSe);
+    registerPropertyNoMember(MAP_CHAR_LEN("PrinterSetup"),				++i,nBound,::getCppuType((const uno::Sequence<sal_Int8>*)0),&aSe);
 
 
 }
@@ -470,7 +487,7 @@ void SAL_CALL OStyle::setAllPropertiesToDefault(  ) throw (uno::RuntimeException
 void SAL_CALL OStyle::setPropertiesToDefault( const uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     const ::rtl::OUString* pIter = aPropertyNames.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aPropertyNames.getLength();
+    const ::rtl::OUString* pEnd	  = pIter + aPropertyNames.getLength();
     for(;pIter != pEnd;++pIter)
         setPropertyToDefault(*pIter);
 }
@@ -479,7 +496,7 @@ uno::Sequence< uno::Any > SAL_CALL OStyle::getPropertyDefaults( const uno::Seque
 {
     uno::Sequence< uno::Any > aRet(aPropertyNames.getLength());
     const ::rtl::OUString* pIter = aPropertyNames.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aPropertyNames.getLength();
+    const ::rtl::OUString* pEnd	  = pIter + aPropertyNames.getLength();
     for(sal_Int32 i = 0;pIter != pEnd;++pIter,++i)
         aRet[i] = getPropertyDefault(*pIter);
     return aRet;
@@ -555,22 +572,22 @@ namespace
 // -----------------------------------------------------------------------------
 struct OReportDefinitionImpl
 {
-    uno::WeakReference< uno::XInterface >                   m_xParent;
-    ::cppu::OInterfaceContainerHelper                       m_aStorageChangeListeners;
-    ::cppu::OInterfaceContainerHelper                       m_aCloseListener;
-    ::cppu::OInterfaceContainerHelper                       m_aModifyListeners;
-    ::cppu::OInterfaceContainerHelper                       m_aDocEventListeners;
+    uno::WeakReference< uno::XInterface >	                m_xParent;
+    ::cppu::OInterfaceContainerHelper			            m_aStorageChangeListeners;
+    ::cppu::OInterfaceContainerHelper			            m_aCloseListener;
+    ::cppu::OInterfaceContainerHelper			            m_aModifyListeners;
+    ::cppu::OInterfaceContainerHelper			            m_aDocEventListeners;
     ::std::vector< uno::Reference< frame::XController> >    m_aControllers;
-    uno::Sequence< beans::PropertyValue >                   m_aArgs;
+    uno::Sequence< beans::PropertyValue >	                m_aArgs;
 
-    uno::Reference< report::XGroups >                       m_xGroups;
-    uno::Reference< report::XSection>                       m_xReportHeader;
-    uno::Reference< report::XSection>                       m_xReportFooter;
-    uno::Reference< report::XSection>                       m_xPageHeader;
-    uno::Reference< report::XSection>                       m_xPageFooter;
-    uno::Reference< report::XSection>                       m_xDetail;
-    uno::Reference< embed::XStorage >                       m_xStorage;
-    uno::Reference< frame::XController >                    m_xCurrentController;
+    uno::Reference< report::XGroups >		                m_xGroups;
+    uno::Reference< report::XSection>		                m_xReportHeader;
+    uno::Reference< report::XSection>		                m_xReportFooter;
+    uno::Reference< report::XSection>		                m_xPageHeader;
+    uno::Reference< report::XSection>		                m_xPageFooter;
+    uno::Reference< report::XSection>		                m_xDetail;
+    uno::Reference< embed::XStorage >		                m_xStorage;
+    uno::Reference< frame::XController >	                m_xCurrentController;
     uno::Reference< container::XIndexAccess >               m_xViewData;
     uno::Reference< container::XNameAccess >                m_xStyles;
     uno::Reference< container::XNameAccess>                 m_xXMLNamespaceMap;
@@ -591,24 +608,22 @@ struct OReportDefinitionImpl
     ::boost::shared_ptr< ::comphelper::EmbeddedObjectContainer>
                                                             m_pObjectContainer;
     ::boost::shared_ptr<rptui::OReportModel>                m_pReportModel;
-    ::rtl::Reference< ::dbaui::UndoManager >                m_pUndoManager;
-    ::rtl::OUString                                         m_sCaption;
-    ::rtl::OUString                                         m_sCommand;
-    ::rtl::OUString                                         m_sFilter;
-    ::rtl::OUString                                         m_sMimeType;
-    ::rtl::OUString                                         m_sIdentifier;
-    ::rtl::OUString                                         m_sDataSourceName;
-    awt::Size                                               m_aVisualAreaSize;
-    ::sal_Int64                                             m_nAspect;
-    ::sal_Int16                                             m_nGroupKeepTogether;
-    ::sal_Int16                                             m_nPageHeaderOption;
-    ::sal_Int16                                             m_nPageFooterOption;
-    ::sal_Int32                                             m_nCommandType;
-    sal_Bool                                                m_bControllersLocked;
-    sal_Bool                                                m_bModified;
-    sal_Bool                                                m_bEscapeProcessing;
+    ::rtl::OUString 										m_sCaption;
+    ::rtl::OUString 										m_sCommand;
+    ::rtl::OUString 										m_sFilter;
+    ::rtl::OUString 										m_sMimeType;
+    ::rtl::OUString 										m_sIdentifier;
+    ::rtl::OUString 										m_sDataSourceName;
+    awt::Size												m_aVisualAreaSize;
+    ::sal_Int64												m_nAspect;
+    ::sal_Int16 											m_nGroupKeepTogether;
+    ::sal_Int16 											m_nPageHeaderOption;
+    ::sal_Int16 											m_nPageFooterOption;
+    ::sal_Int32 											m_nCommandType;
+    sal_Bool												m_bControllersLocked;
+    sal_Bool												m_bModified;
+    sal_Bool												m_bEscapeProcessing;
     sal_Bool                                                m_bSetModifiedEnabled;
-
     OReportDefinitionImpl(::osl::Mutex& _aMutex)
     :m_aStorageChangeListeners(_aMutex)
     ,m_aCloseListener(_aMutex)
@@ -732,6 +747,7 @@ OReportDefinition::~OReportDefinition()
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_REFCOUNT( OReportDefinition, ReportDefinitionBase )
+//IMPLEMENT_FORWARD_XINTERFACE2(OReportDefinition,ReportDefinitionBase,ReportDefinitionPropertySet)
 void OReportDefinition::init()
 {
     try
@@ -749,7 +765,7 @@ void OReportDefinition::init()
                 pCreatorThread->createSuspended();
                 pCreatorThread->setPriority(osl_Thread_PriorityBelowNormal);
                 pCreatorThread->resume();
-            }
+            } // for ( ; pIter != pEnd; ++pIter )
         }
 
         m_pImpl->m_pReportModel.reset(new OReportModel(this));
@@ -759,9 +775,6 @@ void OReportDefinition::init()
         rAdmin.NewStandardLayer(RPT_LAYER_FRONT);
         rAdmin.NewLayer(UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "back" ) ), RPT_LAYER_BACK );
         rAdmin.NewLayer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), RPT_LAYER_HIDDEN );
-
-        m_pImpl->m_pUndoManager = new ::dbaui::UndoManager( *this, m_aMutex );
-        m_pImpl->m_pReportModel->SetSdrUndoManager( &m_pImpl->m_pUndoManager->GetSfxUndoManager() );
 
         m_pImpl->m_xFunctions = new OFunctions(this,m_aProps->m_xContext);
         if ( !m_pImpl->m_xStorage.is() )
@@ -777,9 +790,9 @@ void OReportDefinition::init()
         }
         m_pImpl->m_pObjectContainer.reset( new comphelper::EmbeddedObjectContainer(m_pImpl->m_xStorage , static_cast<cppu::OWeakObject*>(this) ) );
     }
-    catch ( const uno::Exception& )
+    catch(uno::Exception)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        OSL_ENSURE(0,"Error!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -813,13 +826,18 @@ void SAL_CALL OReportDefinition::disposing()
     m_pImpl->m_xPageHeader.clear();
     m_pImpl->m_xPageFooter.clear();
     m_pImpl->m_xDetail.clear();
+    //::comphelper::disposeComponent(m_pImpl->m_xReportHeader);
+    //::comphelper::disposeComponent(m_pImpl->m_xReportFooter);
+    //::comphelper::disposeComponent(m_pImpl->m_xPageHeader);
+    //::comphelper::disposeComponent(m_pImpl->m_xPageFooter);
+    //::comphelper::disposeComponent(m_pImpl->m_xDetail);
     ::comphelper::disposeComponent(m_pImpl->m_xFunctions);
 
     //::comphelper::disposeComponent(m_pImpl->m_xStorage);
         // don't dispose, this currently is the task of either the ref count going to
         // 0, or of the embedded object (if we're embedded, which is the only possible
         // case so far)
-        // #i78366#
+        // #i78366# / 2007-06-18 / frank.schoenheit@sun.com
     m_pImpl->m_xStorage.clear();
     m_pImpl->m_xViewData.clear();
     m_pImpl->m_xCurrentController.clear();
@@ -1193,13 +1211,13 @@ void SAL_CALL OReportDefinition::setParent( const uno::Reference< uno::XInterfac
 // XCloneable
 uno::Reference< util::XCloneable > SAL_CALL OReportDefinition::createClone(  ) throw (uno::RuntimeException)
 {
-    OSL_FAIL("Not yet implemented correctly");
+    OSL_ENSURE(0,"Not yet implemented correctly");
     uno::Reference< report::XReportComponent> xSource = this;
     uno::Reference< report::XReportDefinition> xSet(cloneObject(xSource,m_aProps->m_xFactory,SERVICE_REPORTDEFINITION),uno::UNO_QUERY_THROW);
     return xSet.get();
 }
 // -----------------------------------------------------------------------------
-void OReportDefinition::setSection(  const ::rtl::OUString& _sProperty
+void OReportDefinition::setSection(	 const ::rtl::OUString& _sProperty
                             ,const sal_Bool& _bOn
                             ,const ::rtl::OUString& _sName
                             ,uno::Reference< report::XSection>& _member)
@@ -1260,7 +1278,7 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
             catch( const util::CloseVetoException& ) { throw; }
             catch( const uno::Exception& )
             {
-                OSL_FAIL( "ODatabaseDocument::impl_closeControllerFrames: caught an unexpected exception!" );
+                OSL_ENSURE( sal_False, "ODatabaseDocument::impl_closeControllerFrames: caught an unexpected exception!" );
             }
         }
     }
@@ -1279,21 +1297,10 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
     SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     ::comphelper::MediaDescriptor aDescriptor( _aArguments );
-
-    m_pImpl->m_pUndoManager->GetSfxUndoManager().EnableUndo( false );
-    try
-    {
-        fillArgs(aDescriptor);
-        m_pImpl->m_pReportModel->SetModified(sal_False);
-    }
-    catch ( ... )
-    {
-        m_pImpl->m_pUndoManager->GetSfxUndoManager().EnableUndo( true );
-        throw;
-    }
-    m_pImpl->m_pUndoManager->GetSfxUndoManager().EnableUndo( true );
+    fillArgs(aDescriptor);
+    m_pImpl->m_pReportModel->SetModified(sal_False);
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -1402,6 +1409,10 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::getCurrentSelectio
 void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< embed::XStorage >& _xStorageToLoadFrom,
         const uno::Sequence< beans::PropertyValue >& _aMediaDescriptor )
 {
+//	::osl::MutexGuard aGuard(m_aMutex);
+//	::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+//
+
     m_pImpl->m_xStorage = _xStorageToLoadFrom;
 
     ::comphelper::MediaDescriptor aDescriptor( _aMediaDescriptor );
@@ -1501,7 +1512,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     {
         const ::rtl::OUString sVal( aDescriptor.getUnpackedValueOrDefault(aDescriptor.PROP_DOCUMENTBASEURL(),::rtl::OUString()) );
         xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(sVal));
-    }
+    } // if ( aSaveOpt.IsSaveRelFSys() )
     const ::rtl::OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HierarchicalDocumentName")),::rtl::OUString()) );
     xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath")), uno::makeAny(sHierarchicalDocumentName));
 
@@ -1554,7 +1565,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
                 sWarnFile = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml"));
             }
         }
-    }
+    } // if( !bErr )
 
     if( !bErr )
     {
@@ -1583,7 +1594,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
             bErr = sal_True;
             sErrFile = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"));
         }
-    }
+    } // if ( !bErr )
 
     uno::Any aImage;
     uno::Reference< embed::XVisualObject > xCurrentController(getCurrentController(),uno::UNO_QUERY);
@@ -1621,7 +1632,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         }
         catch(uno::Exception)
         {
-            OSL_FAIL("Exception Caught: Could not commit report storage!");
+            OSL_ENSURE(0,"Exception Caught: Could not commit report storage!");
             throw io::IOException();
         }
 
@@ -1832,6 +1843,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
     else if ( sURL.getLength() )
         aStorageSource <<= sURL;
     else
+        // TODO: error message
         throw lang::IllegalArgumentException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No input source (URL or InputStream) found." ) ),
                 // TODO: resource
@@ -1874,7 +1886,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
         {
             if ( i == nLastOpenMode )
                 throw lang::WrappedTargetException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "An error occurred while creating the document storage." ) ),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "An error occured while creating the document storage." ) ),
                         // TODO: resource
                     *this,
                     ::cppu::getCaughtException()
@@ -1897,12 +1909,15 @@ void SAL_CALL OReportDefinition::setVisualAreaSize( ::sal_Int64 _nAspect, const 
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+    //if( nAspect == embed::Aspects::MSOLE_CONTENT )
+    {
         bool bChanged =
             (m_pImpl->m_aVisualAreaSize.Width != _aSize.Width ||
              m_pImpl->m_aVisualAreaSize.Height != _aSize.Height);
         m_pImpl->m_aVisualAreaSize = _aSize;
         if( bChanged )
             setModified( sal_True );
+    }
     m_pImpl->m_nAspect = _nAspect;
 }
 // -----------------------------------------------------------------------------
@@ -2066,6 +2081,8 @@ uno::Reference< container::XIndexAccess > SAL_CALL OReportDefinition::getViewDat
     {
         m_pImpl->m_xViewData.set(m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues")),m_aProps->m_xContext ),uno::UNO_QUERY);
+        //uno::Sequence< beans::PropertyValue > aProps;
+        //m_pImpl->m_xViewData->insertByIndex(m_pImpl->m_xViewData->getCount(),uno::makeAny(aProps));
         uno::Reference< container::XIndexContainer > xContainer(m_pImpl->m_xViewData,uno::UNO_QUERY);
         ::std::vector< uno::Reference< frame::XController> >::iterator aIter = m_pImpl->m_aControllers.begin();
         ::std::vector< uno::Reference< frame::XController> >::iterator aEnd = m_pImpl->m_aControllers.end();
@@ -2080,7 +2097,7 @@ uno::Reference< container::XIndexAccess > SAL_CALL OReportDefinition::getViewDat
                 catch(uno::Exception&)
                 {
                 }
-            }
+            } // if ( aIter->is() )
         }
 
     }
@@ -2252,9 +2269,9 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWith
         {
             beans::NamedValue aValue;
             *pIter >>= aValue;
-            if( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Storage" ) ) )
+            if( aValue.Name.equalsAscii( "Storage" ) )
                 aValue.Value >>= xStorage;
-        }
+        } // for(;pIter != pEnd ;++pIter)
         m_pImpl->m_pObjectContainer->SwitchPersistence(xStorage);
         xRet = static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( xStorage,*this, EMBEDDEDOBJECTHELPER_MODE_READ ));
     }
@@ -2266,7 +2283,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     uno::Reference< drawing::XShape > xShape;
-    if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.")) ) == 0 )
+    if ( aServiceSpecifier.indexOf( ::rtl::OUString::createFromAscii("com.sun.star.report.") ) == 0 )
     {
         if ( aServiceSpecifier == SERVICE_SHAPE )
             xShape.set(SvxUnoDrawMSFactory::createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")) ),uno::UNO_QUERY_THROW);
@@ -2278,7 +2295,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
         else
             xShape.set(SvxUnoDrawMSFactory::createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape")) ),uno::UNO_QUERY_THROW);
     }
-    else if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.")) ) == 0 )
+    else if ( aServiceSpecifier.indexOf( ::rtl::OUString::createFromAscii("com.sun.star.form.component.") ) == 0 )
     {
         xShape.set(m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(aServiceSpecifier,m_aProps->m_xContext),uno::UNO_QUERY);
     }
@@ -2310,30 +2327,35 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     {
         if ( !m_pImpl->m_xGradientTable.is() )
             m_pImpl->m_xGradientTable.set(SvxUnoGradientTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
+            //comphelper::NameContainer_createInstance( ::getCppuType( (const awt::Gradient*) 0 ) ).get();
         return m_pImpl->m_xGradientTable;
     }
     else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.HatchTable") ) == 0 )
     {
         if ( !m_pImpl->m_xHatchTable.is() )
             m_pImpl->m_xHatchTable.set(SvxUnoHatchTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
+            //comphelper::NameContainer_createInstance( ::getCppuType( (const drawing::Hatch*) 0 ) ).get();
         return m_pImpl->m_xHatchTable;
     }
     else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.BitmapTable") ) == 0 )
     {
         if ( !m_pImpl->m_xBitmapTable.is() )
             m_pImpl->m_xBitmapTable.set(SvxUnoBitmapTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
+            //comphelper::NameContainer_createInstance( ::getCppuType( (const ::rtl::OUString*) 0 ) ).get();
         return m_pImpl->m_xBitmapTable;
     }
     else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) == 0 )
     {
         if ( !m_pImpl->m_xTransparencyGradientTable.is() )
             m_pImpl->m_xTransparencyGradientTable.set(SvxUnoTransGradientTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
+            //comphelper::NameContainer_createInstance( ::getCppuType( (const awt::Gradient*) 0 ) ).get();
         return m_pImpl->m_xTransparencyGradientTable;
     }
     else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DashTable") ) == 0 )
     {
         if ( !m_pImpl->m_xDashTable.is() )
             m_pImpl->m_xDashTable.set(SvxUnoDashTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
+            //comphelper::NameContainer_createInstance( ::getCppuType( (const drawing::LineDash*) 0 ) ).get();
         return m_pImpl->m_xDashTable;
     }
     else if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
@@ -2739,7 +2761,7 @@ uno::Reference< frame::XUntitledNumbers > OReportDefinition::impl_getUntitledHel
         m_pImpl->m_xNumberedControllers = uno::Reference< frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
 
         pHelper->setOwner          (xThis);
-        pHelper->setUntitledPrefix (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" : ")));
+        pHelper->setUntitledPrefix (::rtl::OUString::createFromAscii(" : "));
     }
 
     return m_pImpl->m_xNumberedControllers;
@@ -2910,15 +2932,8 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL OReportDefinition::getTransfe
 {
     return aFlavor.MimeType.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/png")));
 }
-
 // -----------------------------------------------------------------------------
-uno::Reference< document::XUndoManager > SAL_CALL OReportDefinition::getUndoManager(  ) throw (uno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    return m_pImpl->m_pUndoManager.get();
-}
-
-
+// -----------------------------------------------------------------------------
 // =============================================================================
 }// namespace reportdesign
 // =============================================================================

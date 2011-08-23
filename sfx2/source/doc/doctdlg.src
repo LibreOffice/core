@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,11 +28,10 @@
 #include <sfx2/sfx.hrc>
 #include "doc.hrc"
 #include "doctdlg.hrc"
-#include <sfx2/sfxcommands.h>
 
 ModalDialog DLG_DOC_TEMPLATE
 {
-    HelpId = CMD_SID_DOCTEMPLATE ;
+    HelpId = SID_DOCTEMPLATE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 128 ) ;
@@ -46,7 +45,6 @@ ModalDialog DLG_DOC_TEMPLATE
     };
     Edit ED_NAME
     {
-        HelpID = "sfx2:Edit:DLG_DOC_TEMPLATE:ED_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 200 , 12 ) ;
@@ -65,7 +63,6 @@ ModalDialog DLG_DOC_TEMPLATE
     };
     ListBox LB_SECTION
     {
-        HelpID = "sfx2:ListBox:DLG_DOC_TEMPLATE:LB_SECTION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 97 , 66 ) ;
@@ -78,7 +75,6 @@ ModalDialog DLG_DOC_TEMPLATE
     };
     ListBox LB_STYLESHEETS
     {
-        HelpID = "sfx2:ListBox:DLG_DOC_TEMPLATE:LB_STYLESHEETS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 115 , 56 ) ;
         Size = MAP_APPFONT ( 97 , 66 ) ;
@@ -102,14 +98,12 @@ ModalDialog DLG_DOC_TEMPLATE
     };
     PushButton BT_EDIT
     {
-        HelpID = "sfx2:PushButton:DLG_DOC_TEMPLATE:BT_EDIT";
         Pos = MAP_APPFONT ( 224 , 62 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Edit" ;
     };
     PushButton BT_ORGANIZE
     {
-        HelpID = "sfx2:PushButton:DLG_DOC_TEMPLATE:BT_ORGANIZE";
         Pos = MAP_APPFONT ( 224 , 79 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Organizer..." ;

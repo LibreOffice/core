@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdParagraphTabDlg(NULL, &aNewAttr ) : 0;
         if( pDlg )
         {
-            sal_uInt16 nResult = pDlg->Execute();
+            USHORT nResult = pDlg->Execute();
 
             switch( nResult )
             {
@@ -155,7 +155,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
     }
 
     // invalidieren der Slots
-    static sal_uInt16 SidArray[] = {
+    static USHORT SidArray[] = {
         SID_ATTR_TABSTOP,
         SID_ATTR_PARA_ADJUST_LEFT,
         SID_ATTR_PARA_ADJUST_RIGHT,

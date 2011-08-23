@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <ooo/vba/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 typedef CollTestImplHelper< ov::XDocumentProperties > SwVbaDocumentproperties_BASE;
 
@@ -47,7 +47,7 @@ public:
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
-    // ScVbaCollectionBaseImpl
+    // ScVbaCollectionBaseImpl      
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
 
     // XHelperInterface

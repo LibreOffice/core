@@ -34,7 +34,7 @@
 class TopLevelElementStyle
 {
 public:
-    TopLevelElementStyle() : mpsMasterPageName(0) { }
+    TopLevelElementStyle() : mpsMasterPageName(NULL) { }
     virtual ~TopLevelElementStyle() { if (mpsMasterPageName) delete mpsMasterPageName; }
     void setMasterPageName(WPXString &sMasterPageName) { mpsMasterPageName = new WPXString(sMasterPageName); }
     const WPXString * getMasterPageName() const { return mpsMasterPageName; }

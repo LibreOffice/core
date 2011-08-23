@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,13 @@ class ImplWallpaper
     friend class Wallpaper;
 
 private:
-    Color           maColor;
-    BitmapEx*       mpBitmap;
-    Gradient*       mpGradient;
-    Rectangle*      mpRect;
-    WallpaperStyle  meStyle;
-    sal_uLong           mnRefCount;
-    BitmapEx*       mpCache;
+    Color			maColor;
+    BitmapEx*		mpBitmap;
+    Gradient*		mpGradient;
+    Rectangle*		mpRect;
+    WallpaperStyle	meStyle;
+    ULONG			mnRefCount;
+    BitmapEx*		mpCache;
 
     friend SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper );
     friend SvStream& operator<<( SvStream& rOStm, const ImplWallpaper& rImplWallpaper );
@@ -52,12 +52,12 @@ public:
                     ImplWallpaper( const ImplWallpaper& rImplWallpaper );
                     ~ImplWallpaper();
 
-    void            ImplSetCachedBitmap( BitmapEx& rBmp );
-    const BitmapEx* ImplGetCachedBitmap() { return mpCache; }
-    void            ImplReleaseCachedBitmap();
+    void			ImplSetCachedBitmap( BitmapEx& rBmp );
+    const BitmapEx*	ImplGetCachedBitmap() { return mpCache; }
+    void			ImplReleaseCachedBitmap();
 };
 
 
-#endif  // _SV_WALL2_HXX
+#endif	// _SV_WALL2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

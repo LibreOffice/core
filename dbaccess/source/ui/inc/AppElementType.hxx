@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,20 +37,20 @@ namespace dbaui
 
     enum ElementType
     {
-        E_TABLE     = ::com::sun::star::sdb::application::DatabaseObject::TABLE,
-        E_QUERY     = ::com::sun::star::sdb::application::DatabaseObject::QUERY,
-        E_FORM      = ::com::sun::star::sdb::application::DatabaseObject::FORM,
-        E_REPORT    = ::com::sun::star::sdb::application::DatabaseObject::REPORT,
+        E_TABLE		= ::com::sun::star::sdb::application::DatabaseObject::TABLE,
+        E_QUERY		= ::com::sun::star::sdb::application::DatabaseObject::QUERY,
+        E_FORM		= ::com::sun::star::sdb::application::DatabaseObject::FORM,
+        E_REPORT	= ::com::sun::star::sdb::application::DatabaseObject::REPORT,
 
-        E_NONE      = 4,
+        E_NONE		= 4,
         E_ELEMENT_TYPE_COUNT = E_NONE
     };
 
     enum PreviewMode
     {
-        E_PREVIEWNONE   = 0,
-        E_DOCUMENT      = 1,
-        E_DOCUMENTINFO  = 2
+        E_PREVIEWNONE	= 0,
+        E_DOCUMENT		= 1,
+        E_DOCUMENTINFO	= 2
     };
 
     enum ElementOpenMode

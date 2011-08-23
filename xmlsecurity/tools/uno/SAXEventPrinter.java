@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,25 +48,25 @@ class SAXEventPrinter implements XDocumentHandler
      * how many spaces as the indent of line
      */
     private int m_nIndent;
-
+    
     /*
-     * whether a NEW LINE character need to be appended to
+     * whether a NEW LINE character need to be appended to 
      * each line
      */
     private boolean m_bIsFormatted;
-
+    
     /*
      * the output stream to write
      */
     private FileOutputStream m_fileOutputStream;
-
+    
     SAXEventPrinter(FileOutputStream fileOutputStream, boolean isFormatted)
     {
         m_nIndent = 0;
         m_fileOutputStream = fileOutputStream;
         m_bIsFormatted = isFormatted;
     }
-
+    
     protected static void outputIndent(int m_nIndent, FileOutputStream fileOutputStream)
         throws IOException
     {
@@ -75,7 +75,7 @@ class SAXEventPrinter implements XDocumentHandler
             fileOutputStream.write(" ".getBytes());
         }
     }
-
+    
     /*
      * displays the tree of a Node.
      */
@@ -88,67 +88,67 @@ class SAXEventPrinter implements XDocumentHandler
             String message;
             NodeList children;
             int i, length;
-
+            
             switch (type)
             {
             case Node.DOCUMENT_NODE:
                 children = node.getChildNodes();
-                length = children.getLength();
+                length = children.getLength(); 
                 for (i=0; i<length; ++i)
                 {
                     display(children.item(i), indent+2, fileOutputStream, isFormatted);
                 }
-
+                
                 break;
-
+                
             case Node.ELEMENT_NODE:
                 message = new String("<"+node.getNodeName());
                 NamedNodeMap attrs = node.getAttributes();
-
+                
                 length = attrs.getLength();
                 for (i=0; i<length; ++i)
                 {
                     Attr attr = (Attr)attrs.item(i);
                     message += " "+attr.getNodeName()+"=\""+attr.getNodeValue()+"\"";
                 }
-
+                
                 message += ">";
-
+                
                 if (isFormatted)
                 {
                     outputIndent(indent, fileOutputStream);
                 }
-
+                
                 fileOutputStream.write(message.getBytes("UTF-8"));
-
+                
                 if (isFormatted)
                 {
                     fileOutputStream.write("\n".getBytes());
                 }
-
+                
                 children = node.getChildNodes();
                 length = children.getLength();
                 for (i=0; i<length; ++i)
                 {
                     display(children.item(i), indent+2, fileOutputStream, isFormatted);
                 }
-
+                
                 if (isFormatted)
                 {
                     outputIndent(indent, fileOutputStream);
                 }
-
+                
                 fileOutputStream.write("</".getBytes());
                 fileOutputStream.write(node.getNodeName().getBytes("UTF-8"));
                 fileOutputStream.write(">".getBytes());
-
+                
                 if (isFormatted)
                 {
                     fileOutputStream.write("\n".getBytes());
                 }
-
+                
                 break;
-
+                
             case Node.TEXT_NODE:
                 message = node.getNodeValue();
                 if (message != null )
@@ -157,32 +157,32 @@ class SAXEventPrinter implements XDocumentHandler
                     {
                         outputIndent(indent, fileOutputStream);
                     }
-
+                    
                     fileOutputStream.write(node.getNodeValue().getBytes("UTF-8"));
-
+                    
                     if (isFormatted)
                     {
                         fileOutputStream.write("\n".getBytes());
                     }
                 }
                 break;
-
+                
             case Node.PROCESSING_INSTRUCTION_NODE:
                 if (isFormatted)
                 {
                     outputIndent(indent, fileOutputStream);
                 }
-
+                
                 fileOutputStream.write("<?".getBytes());
                 fileOutputStream.write(node.getNodeName().getBytes("UTF-8"));
                 fileOutputStream.write(node.getNodeValue().getBytes("UTF-8"));
                 fileOutputStream.write("?>".getBytes());
-
+                
                 if (isFormatted)
                 {
                     fileOutputStream.write("\n".getBytes());
                 }
-
+                
                 break;
             default:
                 break;
@@ -193,20 +193,20 @@ class SAXEventPrinter implements XDocumentHandler
     /*
      * XDocumentHandler
      */
-    public void  startDocument ()
+    public void  startDocument ()	
     {
     }
-
+    
     public void endDocument()
     {
     }
-
+    
     public void startElement (String str, com.sun.star.xml.sax.XAttributeList xattribs)
     {
         try
         {
             String message;
-
+            
             message = new String("<"+str);
             if (xattribs !=null)
             {
@@ -217,19 +217,19 @@ class SAXEventPrinter implements XDocumentHandler
                 }
             }
             message += ">";
-
+            
             if (m_bIsFormatted)
             {
                 outputIndent(m_nIndent, m_fileOutputStream);
             }
-
+            
             m_fileOutputStream.write(message.getBytes("UTF-8"));
-
+            
             if (m_bIsFormatted)
             {
                 m_fileOutputStream.write("\n".getBytes());
             }
-
+            
             m_nIndent += 2;
         }
         catch (IOException e)
@@ -247,11 +247,11 @@ class SAXEventPrinter implements XDocumentHandler
             {
                 outputIndent(m_nIndent, m_fileOutputStream);
             }
-
+            
             m_fileOutputStream.write("</".getBytes());
             m_fileOutputStream.write(str.getBytes("UTF-8"));
             m_fileOutputStream.write(">".getBytes());
-
+            
             if (m_bIsFormatted)
             {
                 m_fileOutputStream.write("\n".getBytes());
@@ -262,7 +262,7 @@ class SAXEventPrinter implements XDocumentHandler
             e.printStackTrace();
         }
     }
-
+    
     public void characters(String str)
     {
         try
@@ -271,9 +271,9 @@ class SAXEventPrinter implements XDocumentHandler
             {
                 outputIndent(m_nIndent, m_fileOutputStream);
             }
-
+            
             m_fileOutputStream.write(str.getBytes("UTF-8"));
-
+            
             if (m_bIsFormatted)
             {
                 m_fileOutputStream.write("\n".getBytes());
@@ -284,11 +284,11 @@ class SAXEventPrinter implements XDocumentHandler
             e.printStackTrace();
         }
     }
-
+    
     public void ignorableWhitespace(String str)
     {
     }
-
+    
     public void processingInstruction(String aTarget, String aData)
     {
         try
@@ -297,11 +297,11 @@ class SAXEventPrinter implements XDocumentHandler
             {
                 outputIndent(m_nIndent, m_fileOutputStream);
             }
-
+            
             m_fileOutputStream.write("<?".getBytes());
             m_fileOutputStream.write(aTarget.getBytes("UTF-8"));
             m_fileOutputStream.write("?>".getBytes());
-
+            
             if (m_bIsFormatted)
             {
                 m_fileOutputStream.write("\n".getBytes());
@@ -313,7 +313,7 @@ class SAXEventPrinter implements XDocumentHandler
         }
     }
 
-    public void setDocumentLocator (com.sun.star.xml.sax.XLocator xLocator )
+    public void setDocumentLocator (com.sun.star.xml.sax.XLocator xLocator ) 
         throws com.sun.star.xml.sax.SAXException
     {
     }

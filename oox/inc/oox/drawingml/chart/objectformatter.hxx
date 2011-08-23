@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,7 @@
 #ifndef OOX_DRAWINGML_CHART_OBJECTFORMATTER_HXX
 #define OOX_DRAWINGML_CHART_OBJECTFORMATTER_HXX
 
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/chart/modelbase.hxx"

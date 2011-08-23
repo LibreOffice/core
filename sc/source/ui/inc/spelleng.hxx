@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,7 +121,7 @@ public:
 
 protected:
     /** Callback from edit engine to check the next cell. */
-    virtual sal_Bool        SpellNextDocument();
+    virtual BOOL        SpellNextDocument();
 
     /** Returns true, if the current text contains a spelling error. */
     virtual bool        NeedsConversion();
@@ -155,7 +155,7 @@ public:
 
 protected:
     /** Callback from edit engine to convert the next cell. */
-    virtual sal_Bool        ConvertNextDocument();
+    virtual BOOL        ConvertNextDocument();
 
     /** Returns true, if the current text contains text to convert. */
     virtual bool        NeedsConversion();

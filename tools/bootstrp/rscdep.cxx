@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,13 @@
 #include "sal/main.h"
 
 #include <tools/string.hxx>
+#include <tools/list.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 
 #include "cppdep.hxx"
 
-#if defined WNT
+#if defined WNT 
 #if !defined HAVE_GETOPT
 #define __STDC__ 1
 #define __GNU_LIBRARY__
@@ -59,12 +60,12 @@ class RscHrcDep : public CppDep
 {
 public:
                     RscHrcDep();
-    virtual         ~RscHrcDep();
+    virtual			~RscHrcDep();
 
-    virtual void    Execute();
+    virtual void 	Execute();
 };
 
-RscHrcDep::RscHrcDep()  :
+RscHrcDep::RscHrcDep()	:
     CppDep()
 {
 }
@@ -78,7 +79,9 @@ void RscHrcDep::Execute()
     CppDep::Execute();
 }
 
-int main( int argc, char** argv )
+//static String aDelim;
+
+SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
     int c;
     char aBuf[255];
@@ -86,14 +89,14 @@ int main( int argc, char** argv )
     char pOutputFileName[255];
     char pSrsFileName[255];
     String aSrsBaseName;
-    sal_Bool bSource = sal_False;
+    BOOL bSource = FALSE;
     ByteString aRespArg;
 //  who needs anything but '/' ?
-//  String aDelim = String(DirEntry::GetAccessDelimiter());
+//	String aDelim = String(DirEntry::GetAccessDelimiter());
     String aDelim = '/';
 
     RscHrcDep *pDep = new RscHrcDep;
-
+    
     pOutputFileName[0] = 0;
     pSrsFileName[0] = 0;
 
@@ -103,10 +106,12 @@ int main( int argc, char** argv )
         if ( aBuf[0] == '-' && aBuf[1] == 'p' && aBuf[2] == '=' )
         {
             strcpy(pFileNamePrefix, &aBuf[3]);
+            //break;
         }
         if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'o' && aBuf[3] == '=' )
         {
             strcpy(pOutputFileName, &aBuf[4]);
+            //break;
         }
         if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'p' && aBuf[3] == '=' )
         {
@@ -114,13 +119,16 @@ int main( int argc, char** argv )
             String aName( pSrsFileName, gsl_getSystemTextEncoding());
             DirEntry aDest( aName );
             aSrsBaseName = aDest.GetBase();
+            //break;
         }
         if (aBuf[0] == '-' &&  aBuf[1] == 'i' )
         {
+            //printf("Include : %s\n", &aBuf[2] );
             pDep->AddSearchPath( &aBuf[2] );
         }
         if (aBuf[0] == '-' &&  aBuf[1] == 'I' )
         {
+            //printf("Include : %s\n", &aBuf[2] );
             pDep->AddSearchPath( &aBuf[2] );
         }
         if (aBuf[0] == '@' )
@@ -135,10 +143,12 @@ int main( int argc, char** argv )
                 if ( aBuf[0] == '-' && aBuf[1] == 'p' && aBuf[2] == '=' )
                 {
                     strcpy(pFileNamePrefix, &aBuf[3]);
+                    //break;
                 }
                 if ( aBuf2[0] == '-' && aBuf2[1] == 'f' && aBuf2[2] == 'o' )
                 {
                     strcpy(pOutputFileName, &aBuf2[3]);
+                    //break;
                 }
                 if ( aBuf2[0] == '-' && aBuf2[1] == 'f' && aBuf2[2] == 'p' )
                 {
@@ -146,13 +156,16 @@ int main( int argc, char** argv )
                     String aName( pSrsFileName, gsl_getSystemTextEncoding());
                     DirEntry aDest( aName );
                     aSrsBaseName = aDest.GetBase();
+                    //break;
                 }
                 if (aBuf2[0] == '-' &&  aBuf2[1] == 'i' )
                 {
+                    //printf("Include : %s\n", &aBuf[2] );
                     pDep->AddSearchPath( &aBuf2[2] );
                 }
                 if (aBuf2[0] == '-' &&  aBuf2[1] == 'I' )
                 {
+                    //printf("Include : %s\n", &aBuf[2] );
                     pDep->AddSearchPath( &aBuf2[2] );
                 }
                 if (( aBuf2[0] != '-' ) && ( aBuf2[0] != '@' ))
@@ -160,7 +173,7 @@ int main( int argc, char** argv )
                     pDep->AddSource( &aBuf2[0] );
                     aRespArg += " ";
                     aRespArg += &aBuf2[0];
-                    bSource = sal_True;
+                    bSource = TRUE;
                 }
             }
         }
@@ -193,7 +206,7 @@ int main( int argc, char** argv )
             case 'h' :
             case 'H' :
             case '?' :
-                printf("RscDep 1.0\n");
+                printf("RscDep 1.0 (c)2000 StarOffice\n");
                 break;
 
             default:
@@ -205,7 +218,20 @@ int main( int argc, char** argv )
     }
 
 
+    DirEntry aEntry(".");
+    aEntry.ToAbs();
+//	String aCwd = aEntry.GetName();
     String aCwd(pFileNamePrefix, gsl_getSystemTextEncoding());
+/*	USHORT nPos;
+#ifndef UNX
+    while ( (nPos = aCwd.Search('\\') != STRING_NOTFOUND  ))
+#else
+    while ( (nPos = aCwd.Search('/') != STRING_NOTFOUND  ))
+#endif
+    {
+        String attt = aCwd.Copy( 0, nPos );
+        aCwd.Erase( 0, nPos );
+    } */
     SvFileStream aOutStream;
     String aOutputFileName( pOutputFileName, gsl_getSystemTextEncoding());
     DirEntry aOutEntry( aOutputFileName );
@@ -217,6 +243,7 @@ int main( int argc, char** argv )
     aFileName += String(".", gsl_getSystemTextEncoding());
     aFileName += aSrsBaseName;
     aFileName += String(".dprr", gsl_getSystemTextEncoding());
+    //fprintf( stderr, "OutFileName : %s \n",aFileName.GetStr());
     aOutStream.Open( aFileName, STREAM_WRITE );
 
     ByteString aString;
@@ -233,7 +260,7 @@ int main( int argc, char** argv )
         {
             if (!bSource )
             {
-                aString += ByteString(" " );
+                aString += ByteString("	" );
                 aString += ByteString( argv[optind]);
                 pDep->AddSource( argv[optind++]);
             }
@@ -246,7 +273,7 @@ int main( int argc, char** argv )
     aString += aRespArg;
     pDep->Execute();
     ByteStringList *pLst = pDep->GetDepList();
-    size_t nCount = pLst->size();
+    ULONG nCount = pLst->Count();
     if ( nCount == 0 )
     {
         aOutStream.WriteLine( aString );
@@ -257,9 +284,9 @@ int main( int argc, char** argv )
         aOutStream.WriteLine( aString );
     }
 
-    for ( size_t j = 0; j < nCount; j++ )
+    for ( ULONG j=0; j<nCount; j++ )
     {
-        ByteString *pStr = (*pLst)[ j ];
+        ByteString *pStr = pLst->GetObject(j);
         pStr->SearchAndReplaceAll('\\', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));
         if ( j != (nCount-1) )
             *pStr += ByteString( "\\" );

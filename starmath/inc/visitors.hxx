@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -153,15 +152,13 @@ class SmCaretDrawingVisitor : public SmDefaultingVisitor
 {
 public:
     /** Given position and device this constructor will draw the caret */
-    SmCaretDrawingVisitor( OutputDevice& rDevice, SmCaretPos position, Point offset, bool caretVisible );
+    SmCaretDrawingVisitor( OutputDevice& rDevice, SmCaretPos position, Point offset );
     void Visit( SmTextNode* pNode );
-    using SmDefaultingVisitor::Visit;
 private:
     OutputDevice &rDev;
     SmCaretPos pos;
     /** Offset to draw from */
     Point Offset;
-    bool isCaretVisible;
 protected:
     /** Default method for drawing pNodes */
     void DefaultVisit( SmNode* pNode );
@@ -177,12 +174,11 @@ public:
     SmCaretPos2LineVisitor( OutputDevice *pDevice, SmCaretPos position ) {
         pDev = pDevice;
         pos = position;
-        OSL_ENSURE( position.IsValid( ), "Cannot draw invalid position!" );
+        j_assert( position.IsValid( ), "Cannot draw invalid position!" );
 
         pos.pSelectedNode->Accept( this );
     }
     void Visit( SmTextNode* pNode );
-    using SmDefaultingVisitor::Visit;
     SmCaretLine GetResult( ){
         return line;
     }
@@ -267,15 +263,18 @@ private:
 class SmSetSelectionVisitor : public SmDefaultingVisitor
 {
 public:
-    SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pNode);
+    SmSetSelectionVisitor( SmCaretPos startPos,
+                        SmCaretPos endPos ){
+        StartPos    = startPos;
+        EndPos      = endPos;
+        IsSelecting = false;
+    }
     void Visit( SmBinHorNode* pNode );
     void Visit( SmUnHorNode* pNode );
     void Visit( SmFontNode* pNode );
     void Visit( SmTextNode* pNode );
     void Visit( SmExpressionNode* pNode );
-    void Visit( SmLineNode* pNode );
     void Visit( SmAlignNode* pNode );
-    using SmDefaultingVisitor::Visit;
     /** Set IsSelected on all pNodes of pSubTree */
     static void SetSelectedOnAll( SmNode* pSubTree, bool IsSelected = true );
 private:
@@ -296,7 +295,7 @@ private:
      * or EndPos. This means that anything visited in between will be
      * selected.
      */
-    bool IsSelecting;
+    BOOL IsSelecting;
 };
 
 
@@ -418,12 +417,11 @@ public:
     /** Draws a selection on rDevice for the selection on pTree */
     SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, Point Offset );
     void Visit( SmTextNode* pNode );
-    using SmDefaultingVisitor::Visit;
 private:
     /** Reference to drawing device */
     OutputDevice& rDev;
     /** True if  aSelectionArea have been initialized */
-    bool bHasSelectionArea;
+    BOOL bHasSelectionArea;
     /** The current area that is selected */
     Rectangle aSelectionArea;
     /** Extend the area that must be selected  */
@@ -487,7 +485,7 @@ private:
     }
     /** Append a blank for separation, if needed */
     inline void Separate( ){
-        if( !rCmdText.Len() || rCmdText.GetChar( rCmdText.Len( ) - 1 ) != ' ' )
+        if( rCmdText.GetChar( rCmdText.Len( ) - 1 ) != ' ' )
             rCmdText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " " ) );
     }
     /** Output text generated from the pNodes */
@@ -495,5 +493,3 @@ private:
 };
 
 #endif /* SMVISITORS_H */
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

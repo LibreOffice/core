@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,14 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include "oox/helper/containerhelper.hxx"
+#include "properties.hxx"
+#include "tokens.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/modelobjecthelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/token/tokens.hxx"
 
 using namespace ::com::sun::star::drawing;
 
@@ -111,7 +112,7 @@ void lclConvertPresetDash( LineDash& orLineDash, sal_Int32 nPresetDash )
         case XML_sysDashDotDot: lclSetDashData( orLineDash, 2, 1, 1, 3, 1 );    break;
 
         default:
-            OSL_FAIL( "lclConvertPresetDash - unsupported preset dash" );
+            OSL_ENSURE( false, "lclConvertPresetDash - unsupported preset dash" );
             lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );
     }
 }
@@ -125,7 +126,7 @@ void lclConvertCustomDash( LineDash& orLineDash, const LineProperties::DashStopV
 {
     if( rCustomDash.empty() )
     {
-        OSL_FAIL( "lclConvertCustomDash - unexpected empty custom dash" );
+        OSL_ENSURE( false, "lclConvertCustomDash - unexpected empty custom dash" );
         lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );
         return;
     }

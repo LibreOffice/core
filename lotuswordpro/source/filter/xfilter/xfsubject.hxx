@@ -57,22 +57,26 @@
  * @file
  * Page number field.
  ************************************************************************/
-#ifndef     _XFSUBJECT_HXX
-#define     _XFSUBJECT_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-31 create this file.
+ ************************************************************************/
+#ifndef		_XFSUBJECT_HXX
+#define		_XFSUBJECT_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
-#include    "xfnumfmt.hxx"
+#include	"xfglobal.hxx"
+#include	"xfcontent.hxx"
+#include	"xfnumfmt.hxx"
 
 class XFSubject : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 inline void XFSubject::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     pStrm->StartElement( A2OUSTR("text:subject") );

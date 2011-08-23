@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 
@@ -84,13 +87,13 @@ SvxSearchFormatDialog::~SvxSearchFormatDialog()
 
 // -----------------------------------------------------------------------
 
-void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
+void SvxSearchFormatDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
 {
     switch ( nId )
     {
         case RID_SVXPAGE_CHAR_NAME:
         {
-            const FontList* pAppFontList = 0;
+            const FontList*	pAppFontList = 0;
             SfxObjectShell* pSh = SfxObjectShell::Current();
 
             if ( pSh )
@@ -125,7 +128,7 @@ void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
             ( (SvxParaAlignTabPage&)rPage ).EnableJustifyExt();
             break;
         case RID_SVXPAGE_BACKGROUND :
-            ( (SvxBackgroundTabPage&)rPage ).ShowParaControl(sal_True);
+            ( (SvxBackgroundTabPage&)rPage ).ShowParaControl(TRUE);
             break;
     }
 }
@@ -134,14 +137,14 @@ void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
 
 SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
                                                     SearchAttrItemList& rLst,
-                                                    const sal_uInt16* pWhRanges ) :
+                                                    const USHORT* pWhRanges ) :
 
     ModalDialog( pParent, CUI_RES( RID_SVXDLG_SEARCHATTR )  ),
 
     aAttrFL ( this, CUI_RES( FL_ATTR ) ),
     aAttrLB ( this, CUI_RES( LB_ATTR ) ),
     aOKBtn  ( this, CUI_RES( BTN_ATTR_OK ) ),
-    aEscBtn ( this, CUI_RES( BTN_ATTR_CANCEL ) ),
+    aEscBtn	( this, CUI_RES( BTN_ATTR_CANCEL ) ),
     aHelpBtn( this, CUI_RES( BTN_ATTR_HELP ) ),
 
     rList( rLst )
@@ -149,7 +152,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
 {
     FreeResource();
 
-    aAttrLB.SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
+    aAttrLB.SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     aAttrLB.GetModel()->SetSortMode( SortAscending );
 
     aOKBtn.SetClickHdl( LINK( this, SvxSearchAttributeDialog, OKHdl ) );
@@ -161,26 +164,26 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
     SfxItemPool& rPool = pSh->GetPool();
     SfxItemSet aSet( rPool, pWhRanges );
     SfxWhichIter aIter( aSet );
-    sal_uInt16 nWhich = aIter.FirstWhich();
+    USHORT nWhich = aIter.FirstWhich();
 
     while ( nWhich )
     {
-        sal_uInt16 nSlot = rPool.GetSlotId( nWhich );
+        USHORT nSlot = rPool.GetSlotId( nWhich );
         if ( nSlot >= SID_SVX_START )
         {
-            sal_Bool bChecked = sal_False, bFound = sal_False;
-            for ( sal_uInt16 i = 0; !bFound && i < rList.Count(); ++i )
+            BOOL bChecked = FALSE, bFound = FALSE;
+            for ( USHORT i = 0; !bFound && i < rList.Count(); ++i )
             {
                 if ( nSlot == rList[i].nSlot )
                 {
-                    bFound = sal_True;
+                    bFound = TRUE;
                     if ( IsInvalidItem( rList[i].pItem ) )
-                        bChecked = sal_True;
+                        bChecked = TRUE;
                 }
             }
 
             // item resources are in svx
-            sal_uInt32 nId  = aAttrNames.FindIndex( nSlot );
+            sal_uInt32 nId  = aAttrNames.FindIndex( nSlot );		
             SvLBoxEntry* pEntry = NULL;
             if ( RESARRAY_INDEX_NOTFOUND != nId )
                 pEntry = aAttrLB.SvTreeListBox::InsertEntry( aAttrNames.GetString(nId) );
@@ -194,7 +197,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
             if ( pEntry )
             {
                 aAttrLB.SetCheckButtonState( pEntry, bChecked ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
-                pEntry->SetUserData( (void*)(sal_uLong)nSlot );
+                pEntry->SetUserData( (void*)(ULONG)nSlot );
             }
         }
         nWhich = aIter.NextWhich();
@@ -211,12 +214,12 @@ IMPL_LINK( SvxSearchAttributeDialog, OKHdl, Button *, EMPTYARG )
     SearchAttrItem aInvalidItem;
     aInvalidItem.pItem = (SfxPoolItem*)-1;
 
-    for ( sal_uInt16 i = 0; i < aAttrLB.GetEntryCount(); ++i )
+    for ( USHORT i = 0; i < aAttrLB.GetEntryCount(); ++i )
     {
-        sal_uInt16 nSlot = (sal_uInt16)(sal_uLong)aAttrLB.GetEntryData(i);
-        sal_Bool bChecked = aAttrLB.IsChecked(i);
+        USHORT nSlot = (USHORT)(ULONG)aAttrLB.GetEntryData(i);
+        BOOL bChecked = aAttrLB.IsChecked(i);
 
-        sal_uInt16 j;
+        USHORT j;
         for ( j = rList.Count(); j; )
         {
             SearchAttrItem& rItem = rList[ --j ];
@@ -243,7 +246,7 @@ IMPL_LINK( SvxSearchAttributeDialog, OKHdl, Button *, EMPTYARG )
     }
 
     // remove invalid items (pItem == NULL)
-    for ( sal_uInt16 n = rList.Count(); n; )
+    for ( USHORT n = rList.Count(); n; )
         if ( !rList[ --n ].pItem )
             rList.Remove( n );
 
@@ -256,25 +259,25 @@ IMPL_LINK( SvxSearchAttributeDialog, OKHdl, Button *, EMPTYARG )
 SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
 (
     Window* pParent,
-    sal_Bool bRelax,
-    sal_uInt16 nOther,
-    sal_uInt16 nShorter,
-    sal_uInt16 nLonger
+    BOOL bRelax,
+    USHORT nOther,
+    USHORT nShorter,
+    USHORT nLonger
 ) :
     ModalDialog( pParent, CUI_RES( RID_SVXDLG_SEARCHSIMILARITY ) ),
 
     aFixedLine  ( this, CUI_RES( FL_SIMILARITY ) ),
     aOtherTxt   ( this, CUI_RES( FT_OTHER ) ),
-    aOtherFld   ( this, CUI_RES( NF_OTHER   ) ),
+    aOtherFld	( this, CUI_RES( NF_OTHER	) ),
     aLongerTxt  ( this, CUI_RES( FT_LONGER ) ),
     aLongerFld  ( this, CUI_RES( NF_LONGER ) ),
     aShorterTxt ( this, CUI_RES( FT_SHORTER ) ),
-    aShorterFld ( this, CUI_RES( NF_SHORTER ) ),
+    aShorterFld	( this, CUI_RES( NF_SHORTER ) ),
     aRelaxBox   ( this, CUI_RES( CB_RELAX ) ),
 
-    aOKBtn      ( this, CUI_RES( BTN_ATTR_OK ) ),
-    aEscBtn     ( this, CUI_RES( BTN_ATTR_CANCEL ) ),
-    aHelpBtn    ( this, CUI_RES( BTN_ATTR_HELP ) )
+    aOKBtn		( this, CUI_RES( BTN_ATTR_OK ) ),
+    aEscBtn		( this, CUI_RES( BTN_ATTR_CANCEL ) ),
+    aHelpBtn	( this, CUI_RES( BTN_ATTR_HELP ) )
 
 {
     FreeResource();

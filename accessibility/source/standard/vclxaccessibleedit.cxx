@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,10 +93,10 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
         {
             sal_Int32 nOldCaretPosition = m_nCaretPosition;
             sal_Int32 nOldSelectionStart = m_nSelectionStart;
-
+            
             m_nCaretPosition = getCaretPosition();
             m_nSelectionStart = getSelectionStart();
-
+            
             Window* pWindow = GetWindow();
             if ( pWindow && pWindow->HasChildPathFocus() )
             {
@@ -107,7 +107,7 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                     aNewValue <<= (sal_Int32) m_nCaretPosition;
                     NotifyAccessibleEvent( AccessibleEventId::CARET_CHANGED, aOldValue, aNewValue );
                 }
-
+                
                 // #i104470# VCL only has SELECTION_CHANGED, but UAA distinguishes between SELECTION_CHANGED and CARET_CHANGED
                 sal_Bool bHasSelection = ( m_nSelectionStart != m_nCaretPosition );
                 sal_Bool bHadSelection = ( nOldSelectionStart != nOldCaretPosition );
@@ -115,7 +115,7 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                 {
                     NotifyAccessibleEvent( AccessibleEventId::TEXT_SELECTION_CHANGED, Any(), Any() );
                 }
-
+            
             }
         }
         break;
@@ -159,7 +159,7 @@ void VCLXAccessibleEdit::FillAccessibleStateSet( utl::AccessibleStateSetHelper& 
             if ( !cEchoChar )
                 cEchoChar = '*';
             XubString sTmp;
-            aText = sTmp.Fill( (sal_uInt16)aText.getLength(), cEchoChar );
+            aText = sTmp.Fill( (USHORT)aText.getLength(), cEchoChar );
         }
     }
 
@@ -197,7 +197,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleEdit, VCLXAccessibleTextComponen
 
 ::rtl::OUString VCLXAccessibleEdit::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleEdit") );
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleEdit" );
 }
 
 // -----------------------------------------------------------------------------
@@ -205,7 +205,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleEdit, VCLXAccessibleTextComponen
 Sequence< ::rtl::OUString > VCLXAccessibleEdit::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleEdit") );
+    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleEdit" );
     return aNames;
 }
 
@@ -603,7 +603,7 @@ sal_Bool VCLXAccessibleEdit::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEn
     if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;   // attributes cannot be set for an edit
+    return sal_False;	// attributes cannot be set for an edit
 }
 
 // -----------------------------------------------------------------------------
@@ -619,7 +619,7 @@ sal_Bool VCLXAccessibleEdit::setText( const ::rtl::OUString& sText ) throw (Runt
     }
     catch( const IndexOutOfBoundsException& )
     {
-        OSL_FAIL( "VCLXAccessibleText::setText: caught an exception!" );
+        OSL_ENSURE( sal_False, "VCLXAccessibleText::setText: caught an exception!" );
     }
     return bSuccess;
 }

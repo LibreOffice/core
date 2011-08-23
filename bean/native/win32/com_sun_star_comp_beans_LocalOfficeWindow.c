@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -151,7 +151,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
      */
     if (GetProp( hWnd, OLD_PROC_KEY )==0)
     {
-        hFuncPtr = SetWindowLongPtr( hWnd, GWLP_WNDPROC, (LONG_PTR)OpenOfficeWndProc );
+        hFuncPtr = SetWindowLong( hWnd, GWL_WNDPROC, (DWORD)OpenOfficeWndProc );
         SetProp( hWnd, OLD_PROC_KEY, (HANDLE)hFuncPtr );
     }
 
@@ -206,5 +206,14 @@ static LRESULT APIENTRY OpenOfficeWndProc(
 #pragma warning(pop)
 #endif
 }
+
+
+
+
+
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

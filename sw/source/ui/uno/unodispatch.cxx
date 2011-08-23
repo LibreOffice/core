@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,12 @@
 
 
 using namespace ::com::sun::star;
+using namespace rtl;
 
-using ::rtl::OUString;
-
-const char* cURLStart           = ".uno:DataSourceBrowser/";
-const char* cURLFormLetter      = ".uno:DataSourceBrowser/FormLetter";
-const char* cURLInsertContent   = ".uno:DataSourceBrowser/InsertContent";//data into fields
-const char* cURLInsertColumns   = ".uno:DataSourceBrowser/InsertColumns";//data into text
+const char* cURLStart 			= ".uno:DataSourceBrowser/";
+const char* cURLFormLetter 		= ".uno:DataSourceBrowser/FormLetter";
+const char* cURLInsertContent 	= ".uno:DataSourceBrowser/InsertContent";//data into fields
+const char* cURLInsertColumns 	= ".uno:DataSourceBrowser/InsertColumns";//data into text
 const char* cURLDocumentDataSource  = ".uno:DataSourceBrowser/DocumentDataSource";//current data source of the document
 const sal_Char* cInternalDBChangeNotification = ".uno::Writer/DataSourceChanged";
 
@@ -235,10 +234,11 @@ void SwXDispatch::dispatch(
             FN_MAILMERGE_WIZARD,
             SFX_CALLMODE_ASYNCHRON,
             &aDBProperties, 0L);
+//      pNewDBMgr->ExecuteFormLetter(rSh, aArgs);
     }
     else if(!aURL.Complete.compareToAscii(cURLDocumentDataSource))
     {
-        OSL_FAIL("SwXDispatch::dispatch: this URL is not to be dispatched!");
+        OSL_ENSURE(sal_False, "SwXDispatch::dispatch: this URL is not to be dispatched!");
     }
     else if(!aURL.Complete.compareToAscii(cInternalDBChangeNotification))
     {
@@ -393,6 +393,7 @@ const sal_Char* SwXDispatch::GetDBChangeURL()
 
 SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::DispatchMutexLock_Impl(
                                                  SwXDispatchProviderInterceptor& ) :
+//    aGuard(rInterceptor.m_aMutex) #102295# solar mutex has to be used currently
     aGuard(Application::GetSolarMutex())
 {
 }

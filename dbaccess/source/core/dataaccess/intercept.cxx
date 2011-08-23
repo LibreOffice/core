@@ -57,12 +57,12 @@ using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-#define DISPATCH_SAVEAS     0
-#define DISPATCH_SAVE       1
-#define DISPATCH_CLOSEDOC   2
-#define DISPATCH_CLOSEWIN   3
-#define DISPATCH_CLOSEFRAME 4
-#define DISPATCH_RELOAD     5
+#define DISPATCH_SAVEAS		0
+#define DISPATCH_SAVE		1
+#define DISPATCH_CLOSEDOC	2
+#define DISPATCH_CLOSEWIN	3
+#define DISPATCH_CLOSEFRAME	4
+#define DISPATCH_RELOAD		5
 // the OSL_ENSURE in CTOR has to be changed too, when adding new defines
 
 void SAL_CALL OInterceptor::dispose()
@@ -98,12 +98,12 @@ OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder,sal_Bool _bAllo
 
     OSL_ENSURE(DISPATCH_RELOAD < m_aInterceptedURL.getLength(),"Illegal size.");
 
-    m_aInterceptedURL[DISPATCH_SAVEAS]      = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAs"));
-    m_aInterceptedURL[DISPATCH_SAVE]        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save"));
-    m_aInterceptedURL[DISPATCH_CLOSEDOC]    = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc"));
-    m_aInterceptedURL[DISPATCH_CLOSEWIN]    = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));
-    m_aInterceptedURL[DISPATCH_CLOSEFRAME]  = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
-    m_aInterceptedURL[DISPATCH_RELOAD]      = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Reload"));
+    m_aInterceptedURL[DISPATCH_SAVEAS]		= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAs"));
+    m_aInterceptedURL[DISPATCH_SAVE]		= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save"));
+    m_aInterceptedURL[DISPATCH_CLOSEDOC]	= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc"));
+    m_aInterceptedURL[DISPATCH_CLOSEWIN]	= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));
+    m_aInterceptedURL[DISPATCH_CLOSEFRAME]	= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
+    m_aInterceptedURL[DISPATCH_RELOAD]		= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Reload"));
 }
 
 
@@ -160,7 +160,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyVal
 
             while( nInd < aNewArgs.getLength() )
             {
-                if ( aNewArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SaveTo" ) ) )
+                if ( aNewArgs[nInd].Name.equalsAscii( "SaveTo" ) )
                 {
                     aNewArgs[nInd].Value <<= sal_True;
                     break;
@@ -171,12 +171,12 @@ void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyVal
             if ( nInd == aNewArgs.getLength() )
             {
                 aNewArgs.realloc( nInd + 1 );
-                aNewArgs[nInd].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveTo"));
+                aNewArgs[nInd].Name = ::rtl::OUString::createFromAscii( "SaveTo" );
                 aNewArgs[nInd].Value <<= sal_True;
             }
 
             Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                _URL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")), 0 );
+                _URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
             if ( xDispatch.is() )
                 xDispatch->dispatch( _URL, aNewArgs );
         }
@@ -204,7 +204,7 @@ IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher )
         if ( m_pContentHolder && m_pContentHolder->prepareClose() && m_xSlaveDispatchProvider.is() )
         {
             Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                pHelper->aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")), 0 );
+                pHelper->aURL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
             if ( xDispatch.is() )
             {
                 Reference< ::com::sun::star::document::XEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
@@ -326,7 +326,7 @@ void SAL_CALL OInterceptor::removeStatusListener(
 
 
 //XInterceptorInfo
-Sequence< ::rtl::OUString > SAL_CALL OInterceptor::getInterceptedURLs(  )   throw ( RuntimeException    )
+Sequence< ::rtl::OUString > SAL_CALL OInterceptor::getInterceptedURLs(  ) 	throw ( RuntimeException	)
 {
     // now implemented as update
     return m_aInterceptedURL;
@@ -340,7 +340,7 @@ Reference< XDispatch > SAL_CALL OInterceptor::queryDispatch( const URL& _URL,con
 {
     osl::MutexGuard aGuard(m_aMutex);
     const ::rtl::OUString* pIter = m_aInterceptedURL.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + m_aInterceptedURL.getLength();
+    const ::rtl::OUString* pEnd	  = pIter + m_aInterceptedURL.getLength();
     for(;pIter != pEnd;++pIter)
     {
         if ( _URL.Complete == *pIter )
@@ -353,7 +353,7 @@ Reference< XDispatch > SAL_CALL OInterceptor::queryDispatch( const URL& _URL,con
         return Reference<XDispatch>();
 }
 
-Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  const Sequence<DispatchDescriptor >& Requests ) throw (     RuntimeException    )
+Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches( 	const Sequence<DispatchDescriptor >& Requests )	throw (		RuntimeException	)
 {
     Sequence< Reference< XDispatch > > aRet;
     osl::MutexGuard aGuard(m_aMutex);
@@ -365,7 +365,7 @@ Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  cons
     for(sal_Int32 i = 0; i < Requests.getLength(); ++i)
     {
         const ::rtl::OUString* pIter = m_aInterceptedURL.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + m_aInterceptedURL.getLength();
+        const ::rtl::OUString* pEnd	  = pIter + m_aInterceptedURL.getLength();
         for(;pIter != pEnd;++pIter)
         {
             if ( Requests[i].FeatureURL.Complete == *pIter )
@@ -383,15 +383,15 @@ Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  cons
 
 //XDispatchProviderInterceptor
 
-Reference< XDispatchProvider > SAL_CALL OInterceptor::getSlaveDispatchProvider(  )  throw ( RuntimeException    )
+Reference< XDispatchProvider > SAL_CALL OInterceptor::getSlaveDispatchProvider(  ) 	throw ( RuntimeException 	)
 {
     osl::MutexGuard aGuard(m_aMutex);
     return m_xSlaveDispatchProvider;
 }
 
 void SAL_CALL
-OInterceptor::setSlaveDispatchProvider( const Reference< XDispatchProvider >& NewDispatchProvider )
-    throw (     RuntimeException    )
+OInterceptor::setSlaveDispatchProvider(	const Reference< XDispatchProvider >& NewDispatchProvider )
+    throw (		RuntimeException	)
 {
     osl::MutexGuard aGuard(m_aMutex);
     m_xSlaveDispatchProvider = NewDispatchProvider;
@@ -421,7 +421,7 @@ void SAL_CALL OInterceptor::setMasterDispatchProvider(
 void SAL_CALL OInterceptor::notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
     osl::ResettableMutexGuard _rGuard(m_aMutex);
-    if ( m_pStatCL &&   Event.EventName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnModifyChanged")) )
+    if ( m_pStatCL &&	Event.EventName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnModifyChanged")) )
     {
         OInterfaceContainerHelper* pListener = m_pStatCL->getContainer(m_aInterceptedURL[DISPATCH_SAVE]);
         if ( pListener )
@@ -442,5 +442,5 @@ void SAL_CALL OInterceptor::disposing( const ::com::sun::star::lang::EventObject
 {
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -63,7 +63,6 @@ testcase tLoadSaveGeneral
             printlog( "    -  " & DokumentTyp.getSelText)
         next i
     endif
-    
     for i=1 to AppCount
         Dokumenttyp.Select(i)
         lsSave(2+i)          = Dokumenttyp.GetSelText
@@ -71,55 +70,18 @@ testcase tLoadSaveGeneral
     next i
 
     printlog " - invert/change settings"
-    if lbSave(13) then
-        BenutzerspezifischeEinstellungen.UnCheck
-    else
-        BenutzerspezifischeEinstellungen.Check
-    endif
-
-    if lbSave(1) then
-        DokumenteigenschaftenBearbeiten.Uncheck
-    else
-        DokumenteigenschaftenBearbeiten.Check
-    endif
-
-    if lbSave(2) then
-        Sicherungskopie.Uncheck
-    else
-        Sicherungskopie.Check
-    endif
-
-    if lbSave(3) then
-        AutomatischSpeichern.Uncheck
-    else
-        AutomatischSpeichern.Check
-    endif
-
+    if lbSave(13) then BenutzerspezifischeEinstellungen.UnCheck else BenutzerspezifischeEinstellungen.Check
+    if lbSave(1) then DokumenteigenschaftenBearbeiten.Uncheck else DokumenteigenschaftenBearbeiten.Check
+    if lbSave(2) then Sicherungskopie.Uncheck else Sicherungskopie.Check
+    if lbSave(3) then AutomatischSpeichern.Uncheck else AutomatischSpeichern.Check
     if AutomatischSpeichern.IsChecked then
         lsSave(1) = Minuten.GetText
         Minuten.SetText "23"
     endif
-
-    if lbSave(10) then
-        NoPrettyPrinting.Uncheck
-    else
-        NoPrettyPrinting.Check
-    endif
-
-    if lbSave(11) then
-        URLimDateisystem.Uncheck
-    else
-        URLimDateisystem.Check
-    endif
-
-    if lbSave(12) then
-        URLimInternet.Uncheck
-    else
-        URLimInternet.Check
-    endif
-
+    if lbSave(10) then NoPrettyPrinting.Uncheck else NoPrettyPrinting.Check
+    if lbSave(11) then URLimDateisystem.Uncheck else URLimDateisystem.Check
+    if lbSave(12) then URLimInternet.Uncheck else URLimInternet.Check
     printlog( "Setting filters for documenttypes: Select third item from every list" )
-
     for i=1 to AppCount
         Dokumenttyp.Select(i)
         Filter.Select(3)
@@ -128,7 +90,8 @@ testcase tLoadSaveGeneral
 
     printlog " - close options-dlg with OK"
     kontext "ExtrasOptionenDlg"
-    hCloseDialog( ExtrasOptionenDlg, "ok" )
+    ExtrasOptionenDlg.OK
+    sleep(3)
 
     printlog " - exit/restart StarOffice"
     ExitRestartTheOffice
@@ -140,19 +103,15 @@ testcase tLoadSaveGeneral
     if BenutzerspezifischeEinstellungen.IsChecked = lbSave ( 13 ) then
         Warnlog "'Load user setting with document' => changes not saved"
     endif
-
     if DokumenteigenschaftenBearbeiten.IsChecked = lbSave ( 1 ) then
         Warnlog "'Edit document properties before saving' => changes not saved"
     endif
-
     if Sicherungskopie.IsChecked = lbSave ( 2 ) then
         Warnlog "'Create backup copy' => changes not saved"
     endif
-
     if AutomatischSpeichern.IsChecked = lbSave ( 3 ) then
         printlog "AutoSave => changes not saved"
     endif
-
     if AutomatischSpeichern.IsChecked then
         if Minuten.GetText <> "23" then
             Warnlog "Minutes for AutoSave => changes not saved"
@@ -161,23 +120,20 @@ testcase tLoadSaveGeneral
     if NoPrettyPrinting.IsChecked = lbSave ( 10 ) then
         Warnlog "no pretty printing => changes not saved"
     endif
-
     if URLimDateisystem.IsChecked = lbSave ( 11 ) then
         Warnlog "URL: File system => changes not saved"
     endif
-
     if URLimInternet.IsChecked = lbSave ( 12 ) then
         Warnlog "URL: Internet => changes not saved"
     endif
-
+    
     printlog( "Verifying filters for documenttypes: Select third item from every list" )
     for i=1 to AppCount
         Dokumenttyp.Select(i)
-        printlog( "Doctype: " & Dokumenttyp.getSelText() & " has filter: " & Filter.getSelText() )
-
+      	printlog( "Doctype: " & Dokumenttyp.getSelText() & " has filter: " & Filter.getSelText() )
+        
         if Filter.GetSelIndex <> 3 then
-            '#i79150# 
-            warnlog( "Some options in Tools/Options->Load/Save->General are not saved" )
+            warnlog( "#i79150# some options in Tools/Options->Load/Save->General are not saved" )
         endif
     next i
 
@@ -190,7 +146,6 @@ testcase tLoadSaveGeneral
     NoPrettyPrinting.Uncheck
     URLimDateisystem.Uncheck
     URLimInternet.Uncheck
-
     for i=1 to AppCount
         Dokumenttyp.Select(i)
         Filter.Select(4)
@@ -199,7 +154,8 @@ testcase tLoadSaveGeneral
     printlog " - close options-dlg with OK"
 
     kontext "extrasoptionendlg"
-    hCloseDialog( ExtrasOptionenDlg, "ok" )
+    ExtrasOptionenDlg.OK
+    Sleep (1)
 
     printlog "    - react on messageboxes for loosing settings after changing default-filters"
     kontext "FilterWarning"
@@ -210,7 +166,7 @@ testcase tLoadSaveGeneral
             i = AppCount + 1
         endif
     next i
-    WaitSlot()
+    Sleep (3)
 
     printlog " - check second changes"
     ToolsOptions
@@ -219,35 +175,27 @@ testcase tLoadSaveGeneral
     if BenutzerspezifischeEinstellungen.IsChecked <> FALSE then
         Warnlog "'Load user setting with document' => changes not saved"
     endif
-
     if DokumenteigenschaftenBearbeiten.IsChecked <> TRUE then
         Warnlog "'Edit document properties before saving' => changes not saved"
     endif
-
     if Sicherungskopie.IsChecked <> FALSE then
         Warnlog "'Create backup copy' => changes not saved"
     endif
-
     if AutomatischSpeichern.IsChecked <> TRUE then
         Warnlog "AutoSave => changes not saved"
     endif
-
     if Minuten.GetText <> "1" then
         Warnlog "Minutes for AutoSave => changes not saved"
     endif
-
     if NoPrettyPrinting.IsChecked <> FALSE then
         Warnlog "no pretty printing => changes not saved"
     endif
-
     if URLimDateisystem.IsChecked <> FALSE then
         Warnlog "URL: File system => changes not saved"
     endif
-
     if URLimInternet.IsChecked <> FALSE  then
         Warnlog "URL: Internet => changes not saved"
     endif
-
     for i=1 to AppCount
         Dokumenttyp.Select(i)
         if Filter.GetSelIndex <> 4 then
@@ -259,33 +207,26 @@ testcase tLoadSaveGeneral
     if lbSave ( 13 ) = FALSE then
         BenutzerspezifischeEinstellungen.UnCheck else BenutzerspezifischeEinstellungen.Check
     endif
-
     if lbSave ( 1  ) = FALSE then
         DokumenteigenschaftenBearbeiten.UnCheck else DokumenteigenschaftenBearbeiten.Check
     endif
     if lbSave ( 2  ) = FALSE then
         Sicherungskopie.Uncheck else Sicherungskopie.Check
     endif
-
     AutomatischSpeichern.Check
     Minuten.SetText lsSave ( 1 )
-
     if lbSave ( 3  ) = FALSE then
         AutomatischSpeichern.Uncheck else AutomatischSpeichern.Check
     endif
-
     if lbSave ( 10 ) = FALSE then
         NoPrettyPrinting.Uncheck else NoPrettyPrinting.Check
     endif
-
     if lbSave ( 11 ) = FALSE then
         URLimDateisystem.UnCheck else URLimDateisystem.Check
     endif
-
     if lbSave ( 12 ) = FALSE then
         URLimInternet.UnCheck else URLimInternet.Check
     endif
-
     for i=1 to AppCount
         Dokumenttyp.Select(i)
         if Dokumenttyp.GetSelText <> lsSave ( 2 + i ) then
@@ -295,8 +236,8 @@ testcase tLoadSaveGeneral
     next i
 
     kontext "ExtrasOptionenDlg"
-    hCloseDialog( ExtrasOptionenDlg, "ok" )
-
+    ExtrasOptionenDlg.OK
+    Sleep (3)
 
     printlog " - check settings"
     ToolsOptions
@@ -305,37 +246,29 @@ testcase tLoadSaveGeneral
     if BenutzerspezifischeEinstellungen.IsChecked <> lbSave ( 13 ) then
         Warnlog "'Load user setting with document' => changes not saved"
     endif
-
     if DokumenteigenschaftenBearbeiten.IsChecked <> lbSave ( 1 ) then
         Warnlog "'Edit document properties before saving' => changes not saved"
     endif
-
     if Sicherungskopie.IsChecked <> lbSave ( 2 ) then
         Warnlog "'Create backup copy' => changes not saved"
     endif
-
     if AutomatischSpeichern.IsChecked <> lbSave ( 3 ) then
         Warnlog "AutoSave => changes not saved"
     endif
-
     if AutomatischSpeichern.IsChecked then
         if Minuten.GetText <> lsSave( 1 ) then
             Warnlog "Minutes for AutoSave => changes not saved"
         endif
     endif
-
     if NoPrettyPrinting.IsChecked <> lbSave ( 10 ) then
         Warnlog "no pretty printing => changes not saved"
     endif
-
     if URLimDateisystem.IsChecked <> lbSave ( 11 ) then
         Warnlog "URL: File system => changes not saved"
     endif
-
     if URLimInternet.IsChecked <> lbSave ( 12 ) then
         Warnlog "URL: Internet => changes not saved"
     endif
-
     for i=1 to AppCount
         Dokumenttyp.Select(i)
         if Dokumenttyp.GetSelText <> lsSave ( 2 + i ) then
@@ -347,6 +280,5 @@ testcase tLoadSaveGeneral
     next i
 
     kontext "extrasoptionendlg"
-    hCloseDialog( ExtrasOptionenDlg, "ok" )
-
+    ExtrasOptionenDlg.OK
 endcase

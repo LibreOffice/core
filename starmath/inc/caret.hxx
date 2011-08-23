@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -178,17 +177,11 @@ public:
         nOffset = 0;
     }
     ~SmCaretPosGraph();
-    /** Add a caret position
-     *  @remarks If Left and/or Right are set NULL, they will point back to the entry.
-     */
     SmCaretPosGraphEntry* Add(SmCaretPosGraphEntry entry);
-    /** Add a caret position
-     *  @remarks If left and/or right are set NULL, they will point back to the entry.
-     */
     SmCaretPosGraphEntry* Add(SmCaretPos pos,
                             SmCaretPosGraphEntry* left = NULL,
                             SmCaretPosGraphEntry* right = NULL){
-        OSL_ENSURE(pos.Index >= 0, "Index shouldn't be -1!");
+        j_assert(pos.Index >= 0, "Index shouldn't be -1!");
         return Add(SmCaretPosGraphEntry(pos, left, right));
     }
     /** Get an iterator for this graph */
@@ -476,5 +469,3 @@ private:
  */
 
 #endif /* CARET_H */
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

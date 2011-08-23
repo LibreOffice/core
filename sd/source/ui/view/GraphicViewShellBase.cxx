@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,15 +46,21 @@ TYPEINIT1(GraphicViewShellBase, ViewShellBase);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new GraphicViewShellBase object has been constructed.
 
+/*
+SFX_IMPL_VIEWFACTORY(GraphicViewShellBase, SdResId(STR_DEFAULTVIEW))
+{
+    SFX_VIEW_REGISTRATION(GraphicDocShell);
+}
+*/
 SfxViewFactory* GraphicViewShellBase::pFactory;
-SfxViewShell* GraphicViewShellBase::CreateInstance (
+SfxViewShell* __EXPORT GraphicViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     GraphicViewShellBase* pBase = new GraphicViewShellBase(pFrame, pOldView);
     pBase->LateInit(framework::FrameworkHelper::msDrawViewURL);
     return pBase;
 }
-void GraphicViewShellBase::RegisterFactory( sal_uInt16 nPrio )
+void GraphicViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"Default");
@@ -73,7 +79,7 @@ void GraphicViewShellBase::InitFactory()
 
 
 GraphicViewShellBase::GraphicViewShellBase (
-    SfxViewFrame* _pFrame,
+    SfxViewFrame* _pFrame, 
     SfxViewShell* pOldShell)
     : ViewShellBase (_pFrame, pOldShell)
 {
@@ -91,7 +97,7 @@ GraphicViewShellBase::~GraphicViewShellBase (void)
 
 void GraphicViewShellBase::Execute (SfxRequest& rRequest)
 {
-    sal_uInt16 nSlotId = rRequest.GetSlot();
+    USHORT nSlotId = rRequest.GetSlot();
 
     switch (nSlotId)
     {

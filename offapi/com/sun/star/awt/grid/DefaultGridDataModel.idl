@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,29 +26,28 @@
  ************************************************************************/
 #ifndef __com_sun_star_awt_DefaultGridDataModel_idl__
 #define __com_sun_star_awt_DefaultGridDataModel_idl__
+ 
+#ifndef __com_sun_star_awt_grid_XGridDataModel_idl__ 
+#include <com/sun/star/awt/grid/XGridDataModel.idl> 
+#endif
 
-#include <com/sun/star/awt/grid/XMutableGridDataModel.idl>
-
-//=============================================================================
-
+//============================================================================= 
+ 
  module com {  module sun {  module star {  module awt {  module grid {
-
-//=============================================================================
-
+ 
+//============================================================================= 
+ 
 /** If you do not want to implement the <type>XGridDataModel</type> yourself, use this service.
 
-    <p>The <code>DefaultGridDataModel</code> implementation is a dumb container of tabular data. You can add
-    and remove rows, modify cell values, and the like.</p>
-
-    <p>The implementation will implicitly increase its column count if you add a row which has more values than
-    the current column count.</p>
-
-    @since OOo 3.3
- */
-service DefaultGridDataModel : ::com::sun::star::awt::grid::XMutableGridDataModel;
-
-//=============================================================================
-
+    @since OOo 3.3.0
+ */ 
+service DefaultGridDataModel
+{ 
+    interface com::sun::star::awt::grid::XGridDataModel;
+}; 
+ 
+//============================================================================= 
+ 
 }; }; }; };};
-
-#endif
+ 
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,7 @@
 ScCbWarningBox::ScCbWarningBox( Window* pParent, const String& rMsgStr, bool bDefYes ) :
     WarningBox( pParent, WB_YES_NO | (bDefYes ? WB_DEF_YES : WB_DEF_NO), rMsgStr )
 {
-    // By default, the check box is ON, and the user needs to un-check it to
-    // disable all future warnings.
-    SetCheckBoxState(true);
-    SetCheckBoxText(String(ScResId(SCSTR_WARN_ME_IN_FUTURE_CHECK)));
+    SetDefaultCheckBoxText();
 }
 
 sal_Int16 ScCbWarningBox::Execute()
@@ -53,7 +50,7 @@ sal_Int16 ScCbWarningBox::Execute()
     if( IsDialogEnabled() )
     {
         nRet = WarningBox::Execute();
-        if (!GetCheckBoxState())
+        if( GetCheckBoxState() )
             DisableDialog();
     }
     return nRet;
@@ -79,14 +76,14 @@ ScReplaceWarnBox::ScReplaceWarnBox( Window* pParent ) :
 
 bool ScReplaceWarnBox::IsDialogEnabled()
 {
-    return SC_MOD()->GetInputOptions().GetReplaceCellsWarn() == true;
+    return SC_MOD()->GetInputOptions().GetReplaceCellsWarn() == TRUE;
 }
 
 void ScReplaceWarnBox::DisableDialog()
 {
     ScModule* pScMod = SC_MOD();
     ScInputOptions aInputOpt( pScMod->GetInputOptions() );
-    aInputOpt.SetReplaceCellsWarn( false );
+    aInputOpt.SetReplaceCellsWarn( FALSE );
     pScMod->SetInputOptions( aInputOpt );
 }
 

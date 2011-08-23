@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,6 +51,7 @@
 #include <comphelper/types.hxx>
 
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include "dbustrings.hrc"
@@ -65,7 +66,6 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/roadmapwizard.hxx>
 #include "TextConnectionHelper.hxx"
-#include <osl/diagnose.h>
 
 
 //.........................................................................
@@ -73,8 +73,16 @@ namespace dbaui
 {
 //.........................................................................
 using namespace ::com::sun::star;
+//	using namespace ::com::sun::star::ucb;
+//	using namespace ::com::sun::star::ui::dialogs;
+//	using namespace ::com::sun::star::sdbc;
+//	using namespace ::com::sun::star::beans;
+//	using namespace ::com::sun::star::lang;
+//	using namespace ::com::sun::star::container;
+//	using namespace ::dbtools;
+//	using namespace ::svt;
 
-    OGenericAdministrationPage* OTextConnectionPageSetup::CreateTextTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OTextConnectionPageSetup::CreateTextTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OTextConnectionPageSetup( pParent, _rAttrSet ) );
     }
@@ -157,7 +165,7 @@ DBG_NAME(OTextConnectionPageSetup)
     }
 
 
-    OGenericAdministrationPage* OLDAPConnectionPageSetup::CreateLDAPTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OLDAPConnectionPageSetup::CreateLDAPTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OLDAPConnectionPageSetup( pParent, _rAttrSet ) );
     }
@@ -170,12 +178,12 @@ DBG_NAME(OTextConnectionPageSetup)
         :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_LDAP), _rCoreAttrs)
         ,m_aFTHeaderText        (this, ModuleRes(FT_LDAP_HEADERTEXT))
         ,m_aFTHelpText          (this, ModuleRes(FT_LDAP_HELPTEXT))
-        ,m_aFTHostServer        (this, ModuleRes(FT_AUTOHOSTNAME))
-        ,m_aETHostServer        (this, ModuleRes(ET_AUTOHOSTNAME))
-        ,m_aFTBaseDN            (this, ModuleRes(FT_AUTOBASEDN))
-        ,m_aETBaseDN            (this, ModuleRes(ET_AUTOBASEDN))
-        ,m_aFTPortNumber        (this, ModuleRes(FT_AUTOPORTNUMBER))
-        ,m_aNFPortNumber        (this, ModuleRes(NF_AUTOPORTNUMBER))
+        ,m_aFTHostServer	    (this, ModuleRes(FT_AUTOHOSTNAME))
+        ,m_aETHostServer	    (this, ModuleRes(ET_AUTOHOSTNAME))
+        ,m_aFTBaseDN			(this, ModuleRes(FT_AUTOBASEDN))
+        ,m_aETBaseDN		    (this, ModuleRes(ET_AUTOBASEDN))
+        ,m_aFTPortNumber		(this, ModuleRes(FT_AUTOPORTNUMBER))
+        ,m_aNFPortNumber	    (this, ModuleRes(NF_AUTOPORTNUMBER))
         ,m_aFTDefaultPortNumber (this, ModuleRes(FT_AUTOPORTNUMBERDEFAULT))
         ,m_aCBUseSSL            (this, ModuleRes(CB_WIZ_USESSL))
     {
@@ -202,7 +210,7 @@ DBG_NAME(OTextConnectionPageSetup)
             ::dbaccess::ODsnTypeCollection* pCollection = NULL;
             if (pCollectionItem)
                 pCollection = pCollectionItem->getCollection();
-            OSL_ENSURE(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
+            DBG_ASSERT(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
 
             String sUrl = pCollection->getPrefix( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:ldap:")));
             sUrl += m_aETHostServer.GetText();
@@ -210,6 +218,7 @@ DBG_NAME(OTextConnectionPageSetup)
             bChangedSomething = sal_True;
         }
 
+        // fillString(_rSet,&m_aETHostServer, DSID_CONNECTURL, bChangedSomething);
         fillBool(_rSet,&m_aCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
         return bChangedSomething;
     }
@@ -333,9 +342,9 @@ DBG_NAME(OMySQLIntroPageSetup)
 
 
     // -----------------------------------------------------------------------
-    sal_Bool OMySQLIntroPageSetup::FillItemSet(SfxItemSet& /*_rSet*/)
+    BOOL OMySQLIntroPageSetup::FillItemSet(SfxItemSet& /*_rSet*/)
     {
-        OSL_FAIL("Who called me?! Please ask oj for more information.");
+        OSL_ENSURE(sal_False,"Who called me?! Please ask oj for more information.");
         return sal_True;
     }
 
@@ -421,19 +430,19 @@ DBG_NAME(OMySQLIntroPageSetup)
     //========================================================================
     //= OMySQLJDBCConnectionPageSetup
     //========================================================================
-    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( Window* pParent,sal_uInt16 _nResId, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, sal_uInt16 _nDefaultPortResId, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderTextResId, sal_uInt16 _nDriverClassId)
+    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, USHORT _nDefaultPortResId, USHORT _nHelpTextResId, USHORT _nHeaderTextResId, USHORT _nDriverClassId)
         :OGenericAdministrationPage(pParent, ModuleRes(_nResId), _rCoreAttrs)
         ,m_aFTHelpText          (this, ModuleRes(FT_AUTOWIZARDHELPTEXT))
-        ,m_aFTDatabasename      (this, ModuleRes(FT_AUTODATABASENAME))
-        ,m_aETDatabasename      (this, ModuleRes(ET_AUTODATABASENAME))
-        ,m_aFTHostname          (this, ModuleRes(FT_AUTOHOSTNAME))
-        ,m_aETHostname          (this, ModuleRes(ET_AUTOHOSTNAME))
-        ,m_aFTPortNumber        (this, ModuleRes(FT_AUTOPORTNUMBER))
+        ,m_aFTDatabasename	    (this, ModuleRes(FT_AUTODATABASENAME))
+        ,m_aETDatabasename	    (this, ModuleRes(ET_AUTODATABASENAME))
+        ,m_aFTHostname		    (this, ModuleRes(FT_AUTOHOSTNAME))
+        ,m_aETHostname		    (this, ModuleRes(ET_AUTOHOSTNAME))
+        ,m_aFTPortNumber	    (this, ModuleRes(FT_AUTOPORTNUMBER))
         ,m_aFTDefaultPortNumber (this, ModuleRes(FT_AUTOPORTNUMBERDEFAULT))
-        ,m_aNFPortNumber        (this, ModuleRes(NF_AUTOPORTNUMBER))
-        ,m_aFTDriverClass       (this, ModuleRes(FT_AUTOJDBCDRIVERCLASS))
-        ,m_aETDriverClass       (this, ModuleRes(ET_AUTOJDBCDRIVERCLASS))
-        ,m_aPBTestJavaDriver    (this, ModuleRes(PB_AUTOTESTDRIVERCLASS))
+        ,m_aNFPortNumber	    (this, ModuleRes(NF_AUTOPORTNUMBER))
+        ,m_aFTDriverClass	    (this, ModuleRes(FT_AUTOJDBCDRIVERCLASS))
+        ,m_aETDriverClass	    (this, ModuleRes(ET_AUTOJDBCDRIVERCLASS))
+        ,m_aPBTestJavaDriver	(this, ModuleRes(PB_AUTOTESTDRIVERCLASS))
         ,m_nPortId(_nPortId)
     {
         m_aFTDriverClass.SetText(String(ModuleRes(_nDriverClassId)));
@@ -465,7 +474,7 @@ DBG_NAME(OMySQLIntroPageSetup)
 
 
     // -----------------------------------------------------------------------
-    OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCConnectionPageSetup( pParent,
                                                          PAGE_DBWIZARD_MYSQL_JDBC,
@@ -478,7 +487,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     }
 
     // -----------------------------------------------------------------------
-    OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCConnectionPageSetup( pParent,
                                                           PAGE_DBWIZARD_ORACLE,
@@ -579,7 +588,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         {
         }
 
-        sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        USHORT nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String() );
         aMsg.Execute();
         return 0L;
@@ -597,7 +606,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     }
 
     // -----------------------------------------------------------------------
-    OGenericAdministrationPage* OJDBCConnectionPageSetup::CreateJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OJDBCConnectionPageSetup::CreateJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OJDBCConnectionPageSetup( pParent, _rAttrSet));
     }
@@ -608,9 +617,9 @@ DBG_NAME(OMySQLIntroPageSetup)
     //========================================================================
     OJDBCConnectionPageSetup::OJDBCConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs)
         :OConnectionTabPageSetup(pParent, PAGE_DBWIZARD_JDBC, _rCoreAttrs, STR_JDBC_HELPTEXT, STR_JDBC_HEADERTEXT, STR_COMMONURL)
-        ,m_aFTDriverClass       (this, ModuleRes(FT_AUTOJDBCDRIVERCLASS))
-        ,m_aETDriverClass       (this, ModuleRes(ET_AUTOJDBCDRIVERCLASS))
-        ,m_aPBTestJavaDriver    (this, ModuleRes(PB_AUTOTESTDRIVERCLASS))
+        ,m_aFTDriverClass	    (this, ModuleRes(FT_AUTOJDBCDRIVERCLASS))
+        ,m_aETDriverClass	    (this, ModuleRes(ET_AUTOJDBCDRIVERCLASS))
+        ,m_aPBTestJavaDriver	(this, ModuleRes(PB_AUTOTESTDRIVERCLASS))
     {
         m_aETDriverClass.SetModifyHdl(LINK(this, OJDBCConnectionPageSetup, OnEditModified));
         m_aPBTestJavaDriver.SetClickHdl(LINK(this,OJDBCConnectionPageSetup,OnTestJavaClickHdl));
@@ -655,8 +664,8 @@ DBG_NAME(OMySQLIntroPageSetup)
                 {
                     m_aETDriverClass.SetText(sDefaultJdbcDriverName);
                     m_aETDriverClass.SetModifyFlag();
-                }
-            }
+                } // if ( sDefaultJdbcDriverName.Len() )
+            } // if ( !pJdbcDrvItem->GetValue().Len() )
             else
             {
                 m_aETDriverClass.SetText(pDrvItem->GetValue());
@@ -674,9 +683,10 @@ DBG_NAME(OMySQLIntroPageSetup)
     bool OJDBCConnectionPageSetup::checkTestConnection()
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        sal_Bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
+        BOOL bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
         bEnableTestConnection = bEnableTestConnection && (m_aETDriverClass.GetText().Len() != 0);
         return bEnableTestConnection;
+//		m_aTestConnection.Enable(bEnableTestConnection);
     }
 
 
@@ -698,7 +708,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         {
         }
 
-        sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        USHORT nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String() );
         aMsg.Execute();
         return 0L;
@@ -716,7 +726,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     }
 
 
-    OGenericAdministrationPage* OSpreadSheetConnectionPageSetup::CreateSpreadSheetTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OSpreadSheetConnectionPageSetup::CreateSpreadSheetTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OSpreadSheetConnectionPageSetup( pParent, _rAttrSet ) );
     }
@@ -768,7 +778,7 @@ DBG_NAME(OSpreadSheetConnectionPageSetup)
         return bChangedSomething;
     }
 
-    OGenericAdministrationPage* OAuthentificationPageSetup::CreateAuthentificationTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
+    OGenericAdministrationPage*	OAuthentificationPageSetup::CreateAuthentificationTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OAuthentificationPageSetup( pParent, _rAttrSet) );
     }
@@ -791,8 +801,6 @@ DBG_NAME(OAuthentificationPageSetup)
         m_aCBPasswordRequired.SetClickHdl(getControlModifiedLink());
            m_aPBTestConnection.SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
         FreeResource();
-
-        LayoutHelper::fitSizeRightAligned( m_aPBTestConnection );
     }
 
 
@@ -849,7 +857,7 @@ DBG_NAME(OAuthentificationPageSetup)
     }
 
 
-    OGenericAdministrationPage* OFinalDBPageSetup::CreateFinalDBTabPageSetup( Window* pParent, const SfxItemSet& _rAttrSet)
+    OGenericAdministrationPage*	OFinalDBPageSetup::CreateFinalDBTabPageSetup( Window* pParent, const SfxItemSet& _rAttrSet)
     {
         return ( new OFinalDBPageSetup( pParent, _rAttrSet) );
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
 
 // -----------------------------------------------------------------------
 
-void ImplFreePrnDlgListBox( ListBox* pBox, sal_Bool bClear )
+void ImplFreePrnDlgListBox( ListBox* pBox, BOOL bClear )
 {
     if ( bClear )
         pBox->Clear();
@@ -90,7 +90,7 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
                     pTempPrinter = new Printer( *pInfo );
                 }
             }
-
+    
             pPropBtn->Enable( pTempPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
         }
         else
@@ -145,7 +145,7 @@ static void ImplPrnDlgAddString( XubString& rStr, const XubString& rAddStr )
 
 // -----------------------------------------------------------------------
 
-static void ImplPrnDlgAddResString( XubString& rStr, sal_uInt16 nResId )
+static void ImplPrnDlgAddResString( XubString& rStr, USHORT nResId )
 {
     SvtResId aResId( nResId );
     XubString aAddStr( aResId );
@@ -156,8 +156,8 @@ static void ImplPrnDlgAddResString( XubString& rStr, sal_uInt16 nResId )
 
 XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 {
-    XubString   aStr;
-    sal_uLong       nStatus = rInfo.GetStatus();
+    XubString	aStr;
+    ULONG		nStatus = rInfo.GetStatus();
 
     // Default-Printer
     if ( rInfo.GetPrinterName().Len() &&
@@ -217,7 +217,7 @@ XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
         ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_POWER_SAVE );
 
     // Anzahl Jobs
-    sal_uLong nJobs = rInfo.GetJobs();
+    ULONG nJobs = rInfo.GetJobs();
     if ( nJobs && (nJobs != QUEUE_JOBS_DONTKNOW) )
     {
         XubString aJobStr( SvtResId( STR_SVT_PRNDLG_JOBCOUNT ) );
@@ -232,32 +232,32 @@ XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 // =======================================================================
 
 PrinterSetupDialog::PrinterSetupDialog( Window* pWindow ) :
-    ModalDialog     ( pWindow, SvtResId( DLG_SVT_PRNDLG_PRNSETUPDLG ) ),
-    maFlPrinter     ( this, SvtResId( FL_PRINTER ) ),
-    maFtName        ( this, SvtResId( FT_NAME ) ),
-    maLbName        ( this, SvtResId( LB_NAMES ) ),
+    ModalDialog 	( pWindow, SvtResId( DLG_SVT_PRNDLG_PRNSETUPDLG ) ),
+    maFlPrinter		( this, SvtResId( FL_PRINTER ) ),
+    maFtName		( this, SvtResId( FT_NAME ) ),
+    maLbName		( this, SvtResId( LB_NAMES ) ),
     maBtnProperties ( this, SvtResId( BTN_PROPERTIES ) ),
     maBtnOptions    ( this, SvtResId( BTN_OPTIONS ) ),
-    maFtStatus      ( this, SvtResId( FT_STATUS ) ),
-    maFiStatus      ( this, SvtResId( FI_STATUS ) ),
-    maFtType        ( this, SvtResId( FT_TYPE ) ),
-    maFiType        ( this, SvtResId( FI_TYPE ) ),
-    maFtLocation    ( this, SvtResId( FT_LOCATION ) ),
-    maFiLocation    ( this, SvtResId( FI_LOCATION ) ),
-    maFtComment     ( this, SvtResId( FT_COMMENT ) ),
-    maFiComment     ( this, SvtResId( FI_COMMENT ) ),
-    maFlSepButton   ( this, SvtResId( FL_SEPBUTTON ) ),
-    maBtnOK         ( this, SvtResId( BTN_OK ) ),
-    maBtnCancel     ( this, SvtResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, SvtResId( BTN_HELP ) )
+    maFtStatus		( this, SvtResId( FT_STATUS ) ),
+    maFiStatus		( this, SvtResId( FI_STATUS ) ),
+    maFtType		( this, SvtResId( FT_TYPE ) ),
+    maFiType		( this, SvtResId( FI_TYPE ) ),
+    maFtLocation	( this, SvtResId( FT_LOCATION ) ),
+    maFiLocation	( this, SvtResId( FI_LOCATION ) ),
+    maFtComment 	( this, SvtResId( FT_COMMENT ) ),
+    maFiComment 	( this, SvtResId( FI_COMMENT ) ),
+    maFlSepButton	( this, SvtResId( FL_SEPBUTTON ) ),
+    maBtnOK 		( this, SvtResId( BTN_OK ) ),
+    maBtnCancel 	( this, SvtResId( BTN_CANCEL ) ),
+    maBtnHelp		( this, SvtResId( BTN_HELP ) )
 {
     FreeResource();
-
+    
     // show options button only if link is set
     maBtnOptions.Hide();
 
-    mpPrinter       = NULL;
-    mpTempPrinter   = NULL;
+    mpPrinter		= NULL;
+    mpTempPrinter	= NULL;
 
     maStatusTimer.SetTimeout( IMPL_PRINTDLG_STATUS_UPDATE );
     maStatusTimer.SetTimeoutHdl( LINK( this, PrinterSetupDialog, ImplStatusHdl ) );
@@ -269,7 +269,7 @@ PrinterSetupDialog::PrinterSetupDialog( Window* pWindow ) :
 
 PrinterSetupDialog::~PrinterSetupDialog()
 {
-    ImplFreePrnDlgListBox( &maLbName, sal_False );
+    ImplFreePrnDlgListBox( &maLbName, FALSE );
     delete mpTempPrinter;
 }
 
@@ -374,7 +374,7 @@ short PrinterSetupDialog::Execute()
     if ( !mpPrinter || mpPrinter->IsPrinting() || mpPrinter->IsJobActive() )
     {
         DBG_ERRORFILE( "PrinterSetupDialog::Execute() - No Printer or printer is printing" );
-        return sal_False;
+        return FALSE;
     }
 
     Printer::updatePrinters();
@@ -387,7 +387,7 @@ short PrinterSetupDialog::Execute()
     short nRet = ModalDialog::Execute();
 
     // Wenn Dialog mit OK beendet wurde, dann die Daten updaten
-    if ( nRet == sal_True )
+    if ( nRet == TRUE )
     {
         if ( mpTempPrinter )
             mpPrinter->SetPrinterProps( mpTempPrinter );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
         const SalDisplay::ScreenData& rScreen = pSalDisp->getDataForScreen( nScreen );
         aRet = Rectangle( Point( 0, 0 ), rScreen.m_aSize );
     }
-
+    
     return aRet;
 }
 
@@ -153,14 +153,14 @@ int X11SalSystem::ShowNativeDialog( const String& rTitle, const String& rMessage
     aWarn.SetText( rTitle );
     aWarn.Clear();
 
-    sal_uInt16 nButton = 0;
+    USHORT nButton = 0;
     for( std::list< String >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
     {
-            aWarn.AddButton( *it, nButton+1, nButton == (sal_uInt16)nDefButton ? BUTTONDIALOG_DEFBUTTON : 0 );
+            aWarn.AddButton( *it, nButton+1, nButton == (USHORT)nDefButton ? BUTTONDIALOG_DEFBUTTON : 0 );
             nButton++;
     }
-    aWarn.SetFocusButton( (sal_uInt16)nDefButton+1 );
-
+    aWarn.SetFocusButton( (USHORT)nDefButton+1 );
+    
     nRet = ((int)aWarn.Execute()) - 1;
 
     // normalize behaviour, actually this should never happen

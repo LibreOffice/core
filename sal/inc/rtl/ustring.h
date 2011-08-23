@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -162,7 +162,7 @@ sal_Int32 SAL_CALL rtl_ustr_reverseCompare_WithLength( const sal_Unicode * first
 /** Compare two strings from back to front for equality.
 
     The comparison is based on the numeric value of each character in the
-    strings and returns 'true' if, ans only if, both strings are equal.
+    strings and returns 'true' if, ans only if, both strings are equal.  
     This function cannot be used for language-specific sorting.
 
     @param first
@@ -1449,7 +1449,7 @@ sal_Int32 SAL_CALL rtl_uString_getToken( rtl_uString ** newStr , rtl_uString * s
     its value should be 0x00.  Depending on where this macro is used, the nature
     of the supplied expression might be further restricted.
 */
-#define RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)(SAL_N_ELEMENTS(constAsciiStr)-1)), RTL_TEXTENCODING_ASCII_US
+#define RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)(sizeof(constAsciiStr)-1)), RTL_TEXTENCODING_ASCII_US
 
 /* ======================================================================= */
 

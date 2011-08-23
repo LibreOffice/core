@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFmtFollowTextFlow : public SfxBoolItem
 {
 public:
-    SwFmtFollowTextFlow( sal_Bool bFlag = sal_False )
+    SwFmtFollowTextFlow( BOOL bFlag = FALSE )
         : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag ) {}
 
     TYPEINFO();
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -56,10 +56,10 @@ public:
 
 #if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx; revisit with gcc3
-inline const SwFmtFollowTextFlow &SwAttrSet::GetFollowTextFlow(sal_Bool bInP) const
+inline const SwFmtFollowTextFlow &SwAttrSet::GetFollowTextFlow(BOOL bInP) const
     { return (const SwFmtFollowTextFlow&)Get( RES_FOLLOW_TEXT_FLOW, bInP ); }
 
-inline const SwFmtFollowTextFlow &SwFmt::GetFollowTextFlow(sal_Bool bInP) const
+inline const SwFmtFollowTextFlow &SwFmt::GetFollowTextFlow(BOOL bInP) const
     { return aSet.GetFollowTextFlow( bInP ); }
 #endif
 

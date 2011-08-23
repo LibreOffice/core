@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,39 +24,43 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_io_TextOutputStream_idl__
-#define __com_sun_star_io_TextOutputStream_idl__
-
-#include <com/sun/star/io/XTextOutputStream.idl>
-
-#include <com/sun/star/io/XActiveDataSource.idl>
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module io {
-
-//=============================================================================
+#ifndef __com_sun_star_io_TextOutputStream_idl__ 
+#define __com_sun_star_io_TextOutputStream_idl__ 
+ 
+#ifndef __com_sun_star_io_XTextOutputStream_idl__ 
+#include <com/sun/star/io/XTextOutputStream.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_XActiveDataSource_idl__ 
+#include <com/sun/star/io/XActiveDataSource.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module io {  
+ 
+//============================================================================= 
 /** provides functionality to write text data to a
-    <type scope="com::sun::star::io">XOutputStream</type>
+    <type scope="com::sun::star::io">XOutputStream</type> 
     that initially has to be passed to the method
     <member>XActiveDataSource::setOutputStream()</member>.
-
-    <p>For details about the text functionality see
+    
+    <p>For details about the text functionality see 
     <type scope="com::sun::star::io">XTextOutputStream</type>.
  */
 published service TextOutputStream
-{
+{ 
     /// Interface to write text data
-    interface com::sun::star::io::XTextOutputStream;
-
-    /// Interface to specify the used <type scope="com::sun::star::io">XOutputStream</type>
-    interface com::sun::star::io::XActiveDataSource;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    interface com::sun::star::io::XTextOutputStream; 
+    
+    /// Interface to specify the used <type scope="com::sun::star::io">XOutputStream</type> 
+    interface com::sun::star::io::XActiveDataSource; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

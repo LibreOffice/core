@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,26 +26,19 @@
  *
  ************************************************************************/
 
-#include <xpathapi.hxx>
+#include "xpathapi.hxx"
+#include "nodelist.hxx"
+#include "xpathobject.hxx"
+#include "../dom/node.hxx"
 
-#include <stdarg.h>
-#include <string.h>
+#include <rtl/ustrbuf.hxx>
 
-#include <libxml/tree.h>
 #include <libxml/xmlerror.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
 
-#include <rtl/ustrbuf.hxx>
-
-#include <nodelist.hxx>
-#include <xpathobject.hxx>
-
-#include "../dom/node.hxx"
-#include "../dom/document.hxx"
-
-
-using ::com::sun::star::lang::XMultiServiceFactory;
+#include <stdarg.h>
+#include <string.h>
 
 
 namespace XPath
@@ -113,8 +106,6 @@ namespace XPath
             const OUString& aURI)
         throw (RuntimeException)
     {
-        ::osl::MutexGuard const g(m_Mutex);
-
         m_nsmap.insert(nsmap_t::value_type(aPrefix, aURI));
     }
 
@@ -123,16 +114,13 @@ namespace XPath
             const OUString& aURI)
         throw (RuntimeException)
     {
-        ::osl::MutexGuard const g(m_Mutex);
-
-        if ((m_nsmap.find(aPrefix))->second.equals(aURI)) {
+        if ((m_nsmap.find(aPrefix))->second.equals(aURI))
             m_nsmap.erase(aPrefix);
-        }
     }
 
     // register all namespaces stored in the namespace list for this object
     // with the current xpath evaluation context
-    static void lcl_registerNamespaces(
+    static void _registerNamespaces(
             xmlXPathContextPtr ctx,
             const nsmap_t& nsmap)
     {
@@ -146,53 +134,34 @@ namespace XPath
             p = (xmlChar*)oprefix.getStr();
             u = (xmlChar*)ouri.getStr();
             xmlXPathRegisterNs(ctx, p, u);
-            ++i;
+            i++;
         }
     }
 
-    // get all ns decls on a node (and parent nodes, if any)
-    static void lcl_collectNamespaces(
-            nsmap_t & rNamespaces, Reference< XNode > const& xNamespaceNode)
+    // get all ns decls on a node (and parent nodes, if any) and register them
+    static void _collectNamespaces(
+            CXPathAPI* pAPI,
+            const Reference< XNode >&  namespaceNode)
     {
-        DOM::CNode *const pCNode(DOM::CNode::GetImplementation(xNamespaceNode));
-        if (!pCNode) { throw RuntimeException(); }
-
-        ::osl::MutexGuard const g(pCNode->GetOwnerDocument().GetMutex());
-
-        xmlNodePtr pNode = pCNode->GetNodePtr();
+        // get namespace decls from node...
+        xmlNodePtr pNode = DOM::CNode::getNodePtr(namespaceNode);
         while (pNode != 0) {
             xmlNsPtr curDef = pNode->nsDef;
             while (curDef != 0) {
-                const xmlChar* xHref = curDef->href;
+                const xmlChar* xHref = curDef->href; 
                 OUString aURI((sal_Char*)xHref, strlen((char*)xHref), RTL_TEXTENCODING_UTF8);
-                const xmlChar* xPre = curDef->prefix;
+                const xmlChar* xPre = curDef->prefix; 
                 OUString aPrefix((sal_Char*)xPre, strlen((char*)xPre), RTL_TEXTENCODING_UTF8);
-                // we could already have this prefix from a child node
-                if (rNamespaces.find(aPrefix) == rNamespaces.end())
-                {
-                    rNamespaces.insert(::std::make_pair(aPrefix, aURI));
-                }
+                pAPI->registerNS(aPrefix, aURI);
                 curDef = curDef->next;
             }
             pNode = pNode->parent;
         }
     }
 
-    static void lcl_collectRegisterNamespaces(
-            CXPathAPI & rAPI, Reference< XNode > const& xNamespaceNode)
-    {
-        nsmap_t namespaces;
-        lcl_collectNamespaces(namespaces, xNamespaceNode);
-        for (nsmap_t::const_iterator iter = namespaces.begin();
-                iter != namespaces.end(); ++iter)
-        {
-            rAPI.registerNS(iter->first, iter->second);
-        }
-    }
-
     // register function and variable lookup functions with the current
     // xpath evaluation context
-    static void lcl_registerExtensions(
+    static void _registerExtensions(
             xmlXPathContextPtr ctx,
             const extensions_t& extensions)
     {
@@ -200,23 +169,23 @@ namespace XPath
         while (i != extensions.end())
         {
             Libxml2ExtensionHandle aHandle = (*i)->getLibxml2ExtensionHandle();
-            if ( aHandle.functionLookupFunction != 0 )
+            if ( aHandle.functionLookupFunction != 0 ) 
             {
-                xmlXPathRegisterFuncLookup(ctx,
+                xmlXPathRegisterFuncLookup(ctx, 
                     reinterpret_cast<xmlXPathFuncLookupFunc>(
                         sal::static_int_cast<sal_IntPtr>(aHandle.functionLookupFunction)),
                     reinterpret_cast<void*>(
                         sal::static_int_cast<sal_IntPtr>(aHandle.functionData)));
             }
-            if ( aHandle.variableLookupFunction != 0 )
+            if ( aHandle.variableLookupFunction != 0 ) 
             {
-                xmlXPathRegisterVariableLookup(ctx,
+                xmlXPathRegisterVariableLookup(ctx, 
                     reinterpret_cast<xmlXPathVariableLookupFunc>(
                         sal::static_int_cast<sal_IntPtr>(aHandle.variableLookupFunction)),
                     reinterpret_cast<void*>(
                         sal::static_int_cast<sal_IntPtr>(aHandle.variableData)));
             }
-            ++i;
+            i++;
         }
     }
 
@@ -241,7 +210,7 @@ namespace XPath
             const Reference< XNode >&  namespaceNode)
         throw (RuntimeException, XPathException)
     {
-        lcl_collectRegisterNamespaces(*this, namespaceNode);
+        _collectNamespaces(this, namespaceNode);
         return selectNodeList(contextNode, expr);
     }
 
@@ -268,7 +237,7 @@ namespace XPath
             const Reference< XNode >&  namespaceNode )
         throw (RuntimeException, XPathException)
     {
-        lcl_collectRegisterNamespaces(*this, namespaceNode);
+        _collectNamespaces(this, namespaceNode);
         return selectSingleNode(contextNode, expr);
     }
 
@@ -310,26 +279,26 @@ namespace XPath
             va_end(args);
 
             ::rtl::OUStringBuffer buf(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 error:\n")));
+                OUString::createFromAscii("libxml2 error:\n"));
             buf.appendAscii(str);
             OString msg = OUStringToOString(buf.makeStringAndClear(),
                 RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(msg.getStr());
+            OSL_ENSURE(sal_False, msg.getStr());
         }
 
         static void structured_error_func(void * userData, xmlErrorPtr error)
         {
             (void) userData;
             ::rtl::OUStringBuffer buf(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 error:\n")));
+                OUString::createFromAscii("libxml2 error:\n"));
             if (error) {
                 buf.append(make_error_message(error));
             } else {
-                buf.append(OUString(RTL_CONSTASCII_USTRINGPARAM("no error argument!")));
+                buf.append(OUString::createFromAscii("no error argument!"));
             }
             OString msg = OUStringToOString(buf.makeStringAndClear(),
                 RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(msg.getStr());
+            OSL_ENSURE(sal_False, msg.getStr());
         }
 
     } // extern "C"
@@ -339,34 +308,15 @@ namespace XPath
      * the context Node
      */
     Reference< XXPathObject > SAL_CALL CXPathAPI::eval(
-            Reference< XNode > const& xContextNode,
+            const Reference< XNode >& contextNode,
             const OUString& expr)
         throw (RuntimeException, XPathException)
     {
-        if (!xContextNode.is()) { throw RuntimeException(); }
-
-        nsmap_t nsmap;
-        extensions_t extensions;
-
-        {
-            ::osl::MutexGuard const g(m_Mutex);
-            nsmap = m_nsmap;
-            extensions = m_extensions;
-        }
+        xmlXPathContextPtr xpathCtx;
+        xmlXPathObjectPtr xpathObj;
 
         // get the node and document
-        ::rtl::Reference<DOM::CDocument> const pCDoc(
-                dynamic_cast<DOM::CDocument*>( DOM::CNode::GetImplementation(
-                        xContextNode->getOwnerDocument())));
-        if (!pCDoc.is()) { throw RuntimeException(); }
-
-        DOM::CNode *const pCNode = DOM::CNode::GetImplementation(xContextNode);
-        if (!pCNode) { throw RuntimeException(); }
-
-        ::osl::MutexGuard const g(pCDoc->GetMutex()); // lock the document!
-
-        xmlNodePtr const pNode = pCNode->GetNodePtr();
-        if (!pNode) { throw RuntimeException(); }
+        xmlNodePtr pNode = DOM::CNode::getNodePtr(contextNode);
         xmlDocPtr pDoc = pNode->doc;
 
         /* NB: workaround for #i87252#:
@@ -381,9 +331,8 @@ namespace XPath
         }
 
         /* Create xpath evaluation context */
-        ::boost::shared_ptr<xmlXPathContext> const xpathCtx(
-                xmlXPathNewContext(pDoc), xmlXPathFreeContext);
-        if (xpathCtx == NULL) { throw XPathException(); }
+        xpathCtx = xmlXPathNewContext(pDoc);
+        if (xpathCtx == NULL) throw XPathException();
 
         // set context node
         xpathCtx->node = pNode;
@@ -392,21 +341,20 @@ namespace XPath
         xmlSetGenericErrorFunc(NULL, generic_error_func);
 
         // register namespaces and extension
-        lcl_registerNamespaces(xpathCtx.get(), nsmap);
-        lcl_registerExtensions(xpathCtx.get(), extensions);
+        _registerNamespaces(xpathCtx, m_nsmap);
+        _registerExtensions(xpathCtx, m_extensions);
 
         /* run the query */
         OString o1 = OUStringToOString(expr, RTL_TEXTENCODING_UTF8);
         xmlChar *xStr = (xmlChar*)o1.getStr();
-        ::boost::shared_ptr<xmlXPathObject> const xpathObj(
-                xmlXPathEval(xStr, xpathCtx.get()), xmlXPathFreeObject);
-        if (0 == xpathObj) {
+        if ((xpathObj = xmlXPathEval(xStr, xpathCtx)) == NULL) {
             // OSL_ENSURE(xpathCtx->lastError == NULL, xpathCtx->lastError->message);
+            xmlXPathFreeContext(xpathCtx);
             throw XPathException();
         }
-        Reference<XXPathObject> const xObj(
-                new CXPathObject(pCDoc, pCDoc->GetMutex(), xpathObj));
-        return xObj;
+        xmlXPathFreeContext(xpathCtx);
+        Reference< XXPathObject > aObj(new CXPathObject(xpathObj, contextNode));
+        return aObj;
     }
 
     /**
@@ -418,7 +366,7 @@ namespace XPath
             const Reference< XNode >& namespaceNode)
         throw (RuntimeException, XPathException)
     {
-        lcl_collectRegisterNamespaces(*this, namespaceNode);
+        _collectNamespaces(this, namespaceNode);
         return eval(contextNode, expr);
     }
 
@@ -431,27 +379,24 @@ namespace XPath
             const OUString& aName)
         throw (RuntimeException)
     {
-        ::osl::MutexGuard const g(m_Mutex);
-
         // get extension from service manager
-        Reference< XXPathExtension > const xExtension(
-                m_aFactory->createInstance(aName), UNO_QUERY_THROW);
-        m_extensions.push_back(xExtension);
+        Reference< XXPathExtension > aExtension(m_aFactory->createInstance(aName), UNO_QUERY_THROW);
+        m_extensions.push_back( aExtension );
     }
 
     /**
-     * registers the given extension instance to be used by XPath evaluations performed through this
+     * registers the given extension instance to be used by XPath evaluations performed through this 
      * XPathAPI instance
      */
     void SAL_CALL CXPathAPI::registerExtensionInstance(
-            Reference< XXPathExtension> const& xExtension)
+            const Reference< XXPathExtension>& aExtension)
         throw (RuntimeException)
     {
-        if (!xExtension.is()) {
+        if (aExtension.is()) {
+            m_extensions.push_back( aExtension );
+        } else {
             throw RuntimeException();
         }
-        ::osl::MutexGuard const g(m_Mutex);
-        m_extensions.push_back( xExtension );
     }
 }
 

@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: BookmarkSet.cxx,v $
+ * $Revision: 1.21 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -43,9 +46,11 @@ using namespace ::dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
+//	using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+//	using namespace ::cppu;
 using namespace ::osl;
 
 void WrappedResultSet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter)
@@ -187,6 +192,8 @@ void WrappedResultSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xPar
                     break;
                 case DataType::CHAR:
                 case DataType::VARCHAR:
+                //case DataType::DECIMAL:
+                //case DataType::NUMERIC:
                     _xParameter->updateString(nPos,_rValue);
                     break;
                 case DataType::BIGINT:

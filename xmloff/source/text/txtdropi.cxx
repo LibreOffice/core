@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 
@@ -55,13 +55,13 @@ enum SvXMLTokenMapDropAttrs
     XML_TOK_DROP_END=XML_TOK_UNKNOWN
 };
 
-static SvXMLTokenMapEntry aDropAttrTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aDropAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE, XML_LINES,       XML_TOK_DROP_LINES  },
-    { XML_NAMESPACE_STYLE, XML_LENGTH,      XML_TOK_DROP_LENGTH },
-    { XML_NAMESPACE_STYLE, XML_DISTANCE,    XML_TOK_DROP_DISTANCE   },
-    { XML_NAMESPACE_STYLE, XML_STYLE_NAME,  XML_TOK_DROP_STYLE  },
-    XML_TOKEN_MAP_END
+    { XML_NAMESPACE_STYLE, XML_LINES, 		XML_TOK_DROP_LINES	},
+    { XML_NAMESPACE_STYLE, XML_LENGTH, 	    XML_TOK_DROP_LENGTH	},
+    { XML_NAMESPACE_STYLE, XML_DISTANCE,	XML_TOK_DROP_DISTANCE	},
+    { XML_NAMESPACE_STYLE, XML_STYLE_NAME,	XML_TOK_DROP_STYLE	},
+    XML_TOKEN_MAP_END 
 };
 
 TYPEINIT1( XMLTextDropCapImportContext, XMLElementPropertyContext );
@@ -104,7 +104,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
                 aFormat.Count = (sal_Int8)nTmp;
             }
             break;
-
+                
         case XML_TOK_DROP_DISTANCE:
             if( GetImport().GetMM100UnitConverter().convertMeasure( nTmp, rValue, 0 ) )
             {
@@ -117,7 +117,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
             break;
         }
     }
-
+    
     if( aFormat.Lines > 1 && aFormat.Count < 1 )
         aFormat.Count = 1;
 
@@ -125,7 +125,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
 
     aWholeWordProp.maValue.setValue( &bWholeWord, ::getBooleanCppuType() );
 }
-
+  
 XMLTextDropCapImportContext::XMLTextDropCapImportContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@ class ImpSjJScriptControlBase
   public:
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
-    String      ImpGetName() const;
-    void        ImpSetName( const String & aStrg );
-    String      ImpGetValue() const;
-    void        ImpSetValue( const String & aStrg );
-    String      ImpGetType() const;
+    String  	ImpGetName() const;
+    void    	ImpSetName( const String & aStrg );
+    String   	ImpGetValue() const;
+    void    	ImpSetValue( const String & aStrg );
+    String   	ImpGetType() const;
 
     // Constructor
     ImpSjJScriptControlBase::ImpSjJScriptControlBase( VCControl* _pControl );
@@ -64,23 +64,23 @@ class ImpSjJScriptButtonObject : public SjJScriptButtonObject, ImpSjJScriptContr
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
     // Base class properties, are passed through to ImpSjJScriptControlBase
-    virtual String      getName() const;
-    virtual void        setName( const String & aStrg );
-    virtual String      getValue() const;
-    virtual void        setValue( const String & aStrg );
-    virtual String      getType() const;
+    virtual String  	getName() const;
+    virtual void    	setName( const String & aStrg );
+    virtual String   	getValue() const;
+    virtual void    	setValue( const String & aStrg );
+    virtual String   	getType() const;
 
     // Methods of the object
-    virtual void        click();
+    virtual void		click();
 
     // Events (C++ --> Java)
     //----------------------
     // New event interface with function objects
     virtual SjJScriptFunctionObject* getOnClick_Fct() const;
     virtual void setOnClick_Fct( SjJScriptFunctionObject* pFunctionObject );
-    virtual String      getOnClick() const;
-    virtual void        setOnClick( const String & aSourceStrg );
-            void        onClick();
+    virtual String		getOnClick() const;
+    virtual void		setOnClick( const String & aSourceStrg );
+            void 		onClick();
 
     // constructor
     ImpSjJScriptButtonObject( VCControl* _pControl, SjJSbxObject * p );
@@ -95,19 +95,19 @@ class ImpSjJScriptPasswordObject : public SjJScriptPasswordObject, ImpSjJScriptC
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
     // Base class properties, are passed through to ImpSjJScriptControlBase
-    virtual String      getName() const;
-    virtual void        setName( const String & aStrg );
-    virtual String      getValue() const;
-    virtual String      getType() const;
+    virtual String  	getName() const;
+    virtual void    	setName( const String & aStrg );
+    virtual String   	getValue() const;
+    virtual String   	getType() const;
 
-    virtual String      getDefaultValue() const;
-    virtual void        setDefaultValue( const String & aStrg );
-    virtual void        setValue( const String & aStrg );
+    virtual String  	getDefaultValue() const;
+    virtual void    	setDefaultValue( const String & aStrg );
+    virtual void    	setValue( const String & aStrg );
 
     // Methods of the object
-    virtual void        focus();
-    virtual void        blur();
-    virtual void        select();
+    virtual void		focus();
+    virtual void		blur();
+    virtual void		select();
 
     // Events (C++ --> Java)
     //----------------------
@@ -125,28 +125,28 @@ class ImpSjJScriptCheckboxObject : public SjJScriptCheckboxObject, ImpSjJScriptC
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
     // Base class properties, are passed through to ImpSjJScriptControlBase
-    virtual String      getName() const;
-    virtual void        setName( const String & aStrg );
-    virtual String      getValue() const;
-    virtual String      getType() const;
+    virtual String  	getName() const;
+    virtual void    	setName( const String & aStrg );
+    virtual String   	getValue() const;
+    virtual String   	getType() const;
 
-    virtual sal_Bool        getChecked() const;
-    virtual void        setChecked( sal_Bool bCheck );
-    virtual sal_Bool        getDefaultChecked() const;
-    virtual void        setDefaultChecked( sal_Bool bCheck );
-    virtual void        setValue( const String & aStrg );
+    virtual BOOL		getChecked() const;
+    virtual void		setChecked( BOOL bCheck );
+    virtual BOOL		getDefaultChecked() const;
+    virtual void		setDefaultChecked( BOOL bCheck );
+    virtual void    	setValue( const String & aStrg );
 
     // Methods of the object
-    virtual void        click();
+    virtual void		click();
 
     // Events (C++ --> Java)
     //----------------------
     // New event interface with function objects
     virtual SjJScriptFunctionObject* getOnClick_Fct() const;
     virtual void setOnClick_Fct( SjJScriptFunctionObject* pFunctionObject );
-    virtual String      getOnClick() const;
-    virtual void        setOnClick( const String & aSourceStrg );
-            void        onClick();
+    virtual String		getOnClick() const;
+    virtual void		setOnClick( const String & aSourceStrg );
+            void 		onClick();
 
     // construktor
     ImpSjJScriptCheckboxObject( VCControl* _pControl, SjJSbxObject * p );
@@ -157,10 +157,10 @@ class ImpSjJScriptCheckboxObject : public SjJScriptCheckboxObject, ImpSjJScriptC
 // Wrapper class for RadioArray
 class ImpSjJScriptRadioArray: public SjJSbxArrayObject
 {
-    VCRadioManager* pMgr;
+    VCRadioManager*	pMgr;
 public:
-    sal_Int32 ImpSjJScriptRadioArray::getLength() const;
-    SjJSbxObject* ImpSjJScriptRadioArray::getElement( sal_Int32 nIndex ) const;
+    INT32 ImpSjJScriptRadioArray::getLength() const;
+    SjJSbxObject* ImpSjJScriptRadioArray::getElement( INT32 nIndex ) const;
     SjJSbxObject* ImpSjJScriptRadioArray::getElement_String( const String & aName ) const;
 
     // construktor
@@ -175,28 +175,28 @@ class ImpSjJScriptRadioObject : public SjJScriptRadioObject, ImpSjJScriptControl
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
     // Base class properties, are passed through to ImpSjJScriptControlBase
-    virtual String      getName() const;
-    virtual void        setName( const String & aStrg );
-    virtual String      getValue() const;
-    virtual String      getType() const;
+    virtual String  	getName() const;
+    virtual void    	setName( const String & aStrg );
+    virtual String   	getValue() const;
+    virtual String   	getType() const;
 
     // Properties of SjJScriptCheckboxObject
-    virtual sal_Bool        getChecked() const;
-    virtual void        setChecked( sal_Bool bCheck );
-    virtual sal_Bool        getDefaultChecked() const;
-    virtual void        setDefaultChecked( sal_Bool bCheck );
-    virtual void        setValue( const String & aStrg );
+    virtual BOOL		getChecked() const;
+    virtual void		setChecked( BOOL bCheck );
+    virtual BOOL		getDefaultChecked() const;
+    virtual void		setDefaultChecked( BOOL bCheck );
+    virtual void    	setValue( const String & aStrg );
 
     // Methods of the object
-    virtual void        click();
+    virtual void		click();
 
     // Events (C++ --> Java)
     // New event interface with function objects
     virtual SjJScriptFunctionObject* getOnClick_Fct() const;
     virtual void setOnClick_Fct( SjJScriptFunctionObject* pFunctionObject );
-    virtual String      getOnClick() const;
-    virtual void        setOnClick( const String & aSourceStrg );
-            void        onClick();
+    virtual String		getOnClick() const;
+    virtual void		setOnClick( const String & aSourceStrg );
+            void 		onClick();
 
     // Constructor
     ImpSjJScriptRadioObject( VCControl* _pControl, SjJSbxObject * p );
@@ -210,18 +210,18 @@ class ImpSjJScriptSelectObject : public SjJScriptSelectObject, ImpSjJScriptContr
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
     // Base class properties, are passed through to ImpSjJScriptControlBase
-    virtual String      getName() const;
-    virtual void        setName( const String & aStrg );
-    virtual String      getValue() const;
-    virtual String      getType() const;
+    virtual String  	getName() const;
+    virtual void    	setName( const String & aStrg );
+    virtual String   	getValue() const;
+    virtual String   	getType() const;
 
-    virtual sal_Int32       getLength();
-    virtual sal_Int32       getSelectedIndex() const;
-    virtual void        setSelectedIndex( sal_Int32 nNo );
+    virtual INT32		getLength();
+    virtual INT32		getSelectedIndex() const;
+    virtual void    	setSelectedIndex( INT32 nNo );
 
     // Methods of the object
-    virtual void        focus();
-    virtual void        blur();
+    virtual void		focus();
+    virtual void		blur();
 
     // Events (C++ --> Java)
     //----------------------
@@ -232,58 +232,58 @@ class ImpSjJScriptSelectObject : public SjJScriptSelectObject, ImpSjJScriptContr
     virtual void setOnChange_Fct( SjJScriptFunctionObject* pFunctionObject );
     virtual SjJScriptFunctionObject* getOnFocus_Fct() const;
     virtual void setOnFocus_Fct( SjJScriptFunctionObject* pFunctionObject );
-    virtual String      getOnBlur() const;
-    virtual void        setOnBlur( const String & aSourceStrg );
-            void        onBlur();
-    virtual String      getOnChange() const;
-    virtual void        setOnChange( const String & aSourceStrg );
-            void        onChange();
-    virtual String      getOnFocus() const;
-    virtual void        setOnFocus( const String & aSourceStrg );
-            void        onFocus();
+    virtual String		getOnBlur() const;
+    virtual void		setOnBlur( const String & aSourceStrg );
+            void 		onBlur();
+    virtual String		getOnChange() const;
+    virtual void		setOnChange( const String & aSourceStrg );
+            void 		onChange();
+    virtual String		getOnFocus() const;
+    virtual void		setOnFocus( const String & aSourceStrg );
+            void 		onFocus();
 
     // SjJSbxArrayObject methods
-    virtual sal_Int32           getLength() const;
+    virtual INT32			getLength() const;
     // Access through the index
-    virtual SjJSbxObject *  getElement( sal_Int32 nIndex ) const;
+    virtual SjJSbxObject * 	getElement( INT32 nIndex ) const;
 
     // Constructor
     ImpSjJScriptSelectObject( VCControl* _pControl, SjJSbxObject * p );
 
     // for setting entries of the object (to be called from Java)
-    virtual void        setOption( sal_Int32 nIndex, const String & aOptionText,
-                                   const String & aOptionValue,
-                                   sal_Bool bDefaultSelected, sal_Bool bSelected );
+    virtual void		setOption( INT32 nIndex, const String & aOptionText,
+                                   const String	& aOptionValue,
+                                   BOOL bDefaultSelected, BOOL bSelected );
 
     // interface for the properties of the option objects
-    virtual sal_Bool        getOptionDefaultSelected( sal_Int32 nIndex ) const;
-    virtual void        setOptionDefaultSelected( sal_Bool bSelected, sal_Int32 nIndex );
-    virtual sal_Bool        getOptionSelected( sal_Int32 nIndex ) const;
-    virtual void        setOptionSelected( sal_Bool bSelected, sal_Int32 nIndex );
-    virtual String      getOptionText( sal_Int32 nIndex ) const;
-    virtual void        setOptionText( const String & sText, sal_Int32 nIndex );
-    virtual void        setOptionValue( const String & sText, sal_Int32 nIndex );
-    virtual String      getOptionValue( sal_Int32 nIndex ) const;
+    virtual BOOL    	getOptionDefaultSelected( INT32 nIndex ) const;
+    virtual void		setOptionDefaultSelected( BOOL bSelected, INT32 nIndex );
+    virtual BOOL    	getOptionSelected( INT32 nIndex ) const;
+    virtual void		setOptionSelected( BOOL bSelected, INT32 nIndex );
+    virtual String		getOptionText( INT32 nIndex ) const;
+    virtual void		setOptionText( const String & sText, INT32 nIndex );
+    virtual void		setOptionValue( const String & sText, INT32 nIndex );
+    virtual String		getOptionValue( INT32 nIndex ) const;
 };
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 class ImpSjJScriptOptionObject : public SjJScriptOptionObject, ImpSjJScriptControlBase
 {
-    sal_uInt16              nListBoxIndex;
+    USHORT				nListBoxIndex;
   public:
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
-    virtual sal_Bool        getdefaultSelected() const;
-    virtual void        setdefaultSelected( sal_Bool bSelected );
-    virtual sal_Int32       getIndex() const;
-    virtual sal_Bool        getSelected() const;
-    virtual void        setSelected( sal_Bool bSelected );
+    virtual BOOL  		getdefaultSelected() const;
+    virtual void		setdefaultSelected( BOOL bSelected );
+    virtual INT32		getIndex() const;
+    virtual BOOL    	getSelected() const;
+    virtual void    	setSelected( BOOL bSelected );
 
-    virtual String      getText() const;
-    virtual void        setText( const String & sText );
-    virtual String      getValue() const;
-    virtual void        setValue( const String & aStrg );
+    virtual String		getText() const;
+    virtual void		setText( const String & sText );
+    virtual String   	getValue() const;
+    virtual void    	setValue( const String & aStrg );
 
 
     // DUMMY methods
@@ -298,7 +298,7 @@ class ImpSjJScriptOptionObject : public SjJScriptOptionObject, ImpSjJScriptContr
     // none !
 
     // Constructor
-    ImpSjJScriptOptionObject( VCControl* _pControl, SjJSbxObject * p, sal_uInt16 _nListBoxIndex );
+    ImpSjJScriptOptionObject( VCControl* _pControl, SjJSbxObject * p, USHORT _nListBoxIndex );
 };
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -310,12 +310,12 @@ class SjJSbxFormsArray: public SfxJSArray
 
   public:
     // SjJSbxArrayObject methods
-    virtual sal_Int32           getLength() const;
+    virtual INT32			getLength() const;
     // access through the index
-    virtual SjJSbxObject *  getElement( sal_Int32 nIndex ) const;
+    virtual SjJSbxObject * 	getElement( INT32 nIndex ) const;
     // access through the name
     // cannot overload native java methods (yet)
-    virtual SjJSbxObject *  getElement_String( const String & aName ) const;
+    virtual SjJSbxObject * 	getElement_String( const String & aName ) const;
 
     // Constructor
     SjJSbxFormsArray( VCManager * _pManager, SjJSbxObject * p );
@@ -329,19 +329,19 @@ class ImpSjJScriptTextObject : public SjJScriptTextObject, ImpSjJScriptControlBa
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
     // Base class properties, are passed through to ImpSjJScriptControlBase
-    virtual String      getName() const;
-    virtual void        setName( const String & aStrg );
-    virtual String      getValue() const;
-    virtual String      getType() const;
+    virtual String  	getName() const;
+    virtual void    	setName( const String & aStrg );
+    virtual String   	getValue() const;
+    virtual String   	getType() const;
 
-    virtual String      getDefaultValue() const;
-    virtual void        setDefaultValue( const String & aStrg );
-    virtual void        setValue( const String & aStrg );
+    virtual String		getDefaultValue() const;
+    virtual void		setDefaultValue( const String & aStrg );
+    virtual void    	setValue( const String & aStrg );
 
     // Methods of the object
-    virtual void        focus();
-    virtual void        blur();
-    virtual void        select();
+    virtual void		focus();
+    virtual void		blur();
+    virtual void		select();
 
     // Events (C++ --> Java)
     //----------------------
@@ -354,18 +354,18 @@ class ImpSjJScriptTextObject : public SjJScriptTextObject, ImpSjJScriptControlBa
     virtual void setOnFocus_Fct( SjJScriptFunctionObject* pFunctionObject );
     virtual SjJScriptFunctionObject* getOnSelect_Fct() const;
     virtual void setOnSelect_Fct( SjJScriptFunctionObject* pFunctionObject );
-    virtual String      getOnBlur() const;
-    virtual void        setOnBlur( const String & aSourceStrg );
-            void        onBlur();
-    virtual String      getOnChange() const;
-    virtual void        setOnChange( const String & aSourceStrg );
-            void        onChange();
-    virtual String      getOnFocus() const;
-    virtual void        setOnFocus( const String & aSourceStrg );
-            void        onFocus();
-    virtual String      getOnSelect() const;
-    virtual void        setOnSelect( const String & aSourceStrg );
-            void        onSelect();
+    virtual String		getOnBlur() const;
+    virtual void		setOnBlur( const String & aSourceStrg );
+            void 		onBlur();
+    virtual String		getOnChange() const;
+    virtual void		setOnChange( const String & aSourceStrg );
+            void 		onChange();
+    virtual String		getOnFocus() const;
+    virtual void		setOnFocus( const String & aSourceStrg );
+            void 		onFocus();
+    virtual String		getOnSelect() const;
+    virtual void		setOnSelect( const String & aSourceStrg );
+            void 		onSelect();
 
     // Constructor
     ImpSjJScriptTextObject( VCControl* _pControl, SjJSbxObject * p );
@@ -379,19 +379,19 @@ class ImpSjJScriptTextareaObject : public SjJScriptTextareaObject, ImpSjJScriptC
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
     // Base class properties, are passed through to ImpSjJScriptControlBase
-    virtual String      getName() const;
-    virtual void        setName( const String & aStrg );
-    virtual String      getValue() const;
-    virtual String      getType() const;
+    virtual String  	getName() const;
+    virtual void    	setName( const String & aStrg );
+    virtual String   	getValue() const;
+    virtual String   	getType() const;
 
-    virtual String      getDefaultValue() const;
-    virtual void        setDefaultValue( const String & aStrg );
-    virtual void        setValue( const String & aStrg );
+    virtual String		getDefaultValue() const;
+    virtual void		setDefaultValue( const String & aStrg );
+    virtual void    	setValue( const String & aStrg );
 
     // Methods of the object
-    virtual void        focus();
-    virtual void        blur();
-    virtual void        select();
+    virtual void		focus();
+    virtual void		blur();
+    virtual void		select();
 
     // Events (C++ --> Java)
     //----------------------
@@ -404,18 +404,18 @@ class ImpSjJScriptTextareaObject : public SjJScriptTextareaObject, ImpSjJScriptC
     virtual void setOnFocus_Fct( SjJScriptFunctionObject* pFunctionObject );
     virtual SjJScriptFunctionObject* getOnSelect_Fct() const;
     virtual void setOnSelect_Fct( SjJScriptFunctionObject* pFunctionObject );
-    virtual String      getOnBlur() const;
-    virtual void        setOnBlur( const String & aSourceStrg );
-            void        onBlur();
-    virtual String      getOnChange() const;
-    virtual void        setOnChange( const String & aSourceStrg );
-            void        onChange();
-    virtual String      getOnFocus() const;
-    virtual void        setOnFocus( const String & aSourceStrg );
-            void        onFocus();
-    virtual String      getOnSelect() const;
-    virtual void        setOnSelect( const String & aSourceStrg );
-            void        onSelect();
+    virtual String		getOnBlur() const;
+    virtual void		setOnBlur( const String & aSourceStrg );
+            void 		onBlur();
+    virtual String		getOnChange() const;
+    virtual void		setOnChange( const String & aSourceStrg );
+            void 		onChange();
+    virtual String		getOnFocus() const;
+    virtual void		setOnFocus( const String & aSourceStrg );
+            void 		onFocus();
+    virtual String		getOnSelect() const;
+    virtual void		setOnSelect( const String & aSourceStrg );
+            void 		onSelect();
 
     // Constructor
     ImpSjJScriptTextareaObject( VCControl* _pControl, SjJSbxObject * p );
@@ -430,23 +430,23 @@ class ImpSjJScriptSubmitObject : public SjJScriptSubmitObject, ImpSjJScriptContr
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
     // Base class properties, are passed through to ImpSjJScriptControlBase
-    virtual String      getName() const;
-    virtual void        setName( const String & aStrg );
-    virtual String      getValue() const;
-    virtual void        setValue( const String & aStrg );
-    virtual String      getType() const;
+    virtual String  	getName() const;
+    virtual void    	setName( const String & aStrg );
+    virtual String   	getValue() const;
+    virtual void    	setValue( const String & aStrg );
+    virtual String   	getType() const;
 
     // Methods of the object
-    virtual void        click();
+    virtual void		click();
 
     // Events (C++ --> Java)
     //----------------------
     // New event interface with function objects
     virtual SjJScriptFunctionObject* getOnClick_Fct() const;
     virtual void setOnClick_Fct( SjJScriptFunctionObject* pFunctionObject );
-    virtual String      getOnClick() const;
-    virtual void        setOnClick( const String & aSourceStrg );
-            void        onClick();
+    virtual String		getOnClick() const;
+    virtual void		setOnClick( const String & aSourceStrg );
+            void 		onClick();
 
     // Constructor
     ImpSjJScriptSubmitObject( VCControl* _pControl, SjJSbxObject * p );
@@ -461,23 +461,23 @@ class ImpSjJScriptResetObject : public SjJScriptResetObject, ImpSjJScriptControl
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
     // Base class properties, are passed through to ImpSjJScriptControlBase
-    virtual String      getName() const;
-    virtual void        setName( const String & aStrg );
-    virtual String      getValue() const;
-    virtual void        setValue( const String & aStrg );
-    virtual String      getType() const;
+    virtual String  	getName() const;
+    virtual void    	setName( const String & aStrg );
+    virtual String   	getValue() const;
+    virtual void    	setValue( const String & aStrg );
+    virtual String   	getType() const;
 
     // Methods of the object
-    virtual void        click();
+    virtual void		click();
 
     // Events (C++ --> Java)
     //----------------------
     // New event interface with function objects
     virtual SjJScriptFunctionObject* getOnClick_Fct() const;
     virtual void setOnClick_Fct( SjJScriptFunctionObject* pFunctionObject );
-    virtual String      getOnClick() const;
-    virtual void        setOnClick( const String & aSourceStrg );
-            void        onClick();
+    virtual String		getOnClick() const;
+    virtual void		setOnClick( const String & aSourceStrg );
+            void 		onClick();
 
     // Constructor
     ImpSjJScriptResetObject( VCControl* _pControl, SjJSbxObject * p );
@@ -491,12 +491,12 @@ class ImpSjJScriptHiddenObject : public SjJScriptHiddenObject, ImpSjJScriptContr
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
     // Base class properties, are passed through to ImpSjJScriptControlBase
-    virtual String      getName() const;
-    virtual void        setName( const String & aStrg );
-    virtual String      getValue() const;
-    virtual String      getType() const;
+    virtual String  	getName() const;
+    virtual void    	setName( const String & aStrg );
+    virtual String   	getValue() const;
+    virtual String   	getType() const;
 
-    virtual void        setValue( const String & aStrg );
+    virtual void    	setValue( const String & aStrg );
 
     // Methods of the object
     // none !
@@ -517,10 +517,10 @@ class ImpSjJScriptFileUploadObject : public SjJScriptFileUploadObject, ImpSjJScr
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
     // Base class properties, are passed through to ImpSjJScriptControlBase
-    virtual String      getName() const;
-    virtual void        setName( const String & aStrg );
-    virtual String      getValue() const;
-    virtual String      getType() const;
+    virtual String  	getName() const;
+    virtual void    	setName( const String & aStrg );
+    virtual String   	getValue() const;
+    virtual String   	getType() const;
 
     // Methods of the object
     // none !
@@ -542,28 +542,28 @@ class ImpSjJScriptFormObject : public SjJScriptFormObject
   public:
     // Methods from Java --> C++ (for properties)
     //--------------------------------------------
-    virtual String      getName() const;
-    virtual void        setName( const String & aStrg );
-    virtual String      getValue() const;
-    virtual String      getType() const;
+    virtual String  	getName() const;
+    virtual void    	setName( const String & aStrg );
+    virtual String   	getValue() const;
+    virtual String   	getType() const;
 
-    virtual String      getAction() const;
-    virtual void        setAction( const String & sValue );
-    virtual String      getEncoding() const;
-    virtual void        setEncoding( const String & sValue );
-    virtual String      getMethod() const;
-    virtual void        setMethod( const String & sValue );
-    virtual String      getTarget() const;
-    virtual void        setTarget( const String & sValue );
+    virtual String		getAction() const;
+    virtual void		setAction( const String & sValue );
+    virtual String		getEncoding() const;
+    virtual void		setEncoding( const String & sValue );
+    virtual String		getMethod() const;
+    virtual void		setMethod( const String & sValue );
+    virtual String		getTarget() const;
+    virtual void		setTarget( const String & sValue );
 
     // SjJSbxArrayObject methods
-    sal_Int32               getLength() const;
-    SjJSbxObject*       getElement( sal_Int32 nIndex ) const;
-    SjJSbxObject*       getElement_String( const String & aName ) const;
+    INT32				getLength() const;
+    SjJSbxObject*		getElement( INT32 nIndex ) const;
+    SjJSbxObject*		getElement_String( const String & aName ) const;
 
     // Methods of the object
-    virtual void        submit();
-    virtual void        reset();
+    virtual void 		submit();
+    virtual void		reset();
 
     // Events (C++ --> Java)
     //----------------------
@@ -572,12 +572,12 @@ class ImpSjJScriptFormObject : public SjJScriptFormObject
     virtual void setOnSubmit_Fct( SjJScriptFunctionObject* pFunctionObject );
     virtual SjJScriptFunctionObject* getOnReset_Fct() const;
     virtual void setOnReset_Fct( SjJScriptFunctionObject* pFunctionObject );
-    virtual String      getOnSubmit() const;
-    virtual void        setOnSubmit( const String & aSourceStrg );
-            void        onSubmit();
-    virtual String      getOnReset() const;
-    virtual void        setOnReset( const String & aSourceStrg );
-            void        onReset();
+    virtual String		getOnSubmit() const;
+    virtual void		setOnSubmit( const String & aSourceStrg );
+            void 		onSubmit();
+    virtual String		getOnReset() const;
+    virtual void		setOnReset( const String & aSourceStrg );
+            void 		onReset();
 
     // Constructor
     ImpSjJScriptFormObject( VCForm* _pVCForm, SjJSbxObject * p );

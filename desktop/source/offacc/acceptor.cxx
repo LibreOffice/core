@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,14 +65,14 @@ Acceptor::Acceptor( const Reference< XMultiServiceFactory >& rFactory )
     , m_aConnectString()
     , m_aProtocol()
     , m_bInit(sal_False)
-    , m_bDying(false)
+    , m_bDying(false)  
 {
     m_rSMgr = rFactory;
     m_rAcceptor = Reference< XAcceptor > (m_rSMgr->createInstance(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.connection.Acceptor" ))),
+        rtl::OUString::createFromAscii( "com.sun.star.connection.Acceptor" )),
         UNO_QUERY );
     m_rBridgeFactory = Reference < XBridgeFactory > (m_rSMgr->createInstance(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.BridgeFactory" ))),
+        rtl::OUString::createFromAscii( "com.sun.star.bridge.BridgeFactory" )),
         UNO_QUERY );
     // get component context
     m_rContext = getComponentContext(m_rSMgr);
@@ -156,7 +156,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
     throw( Exception )
 {
     // prevent multiple initialization
-    ClearableMutexGuard aGuard( m_aMutex );
+    ClearableMutexGuard	aGuard(	m_aMutex );
     RTL_LOGFILE_CONTEXT( aLog, "destop (lo119109) Acceptor::initialize()" );
 
     sal_Bool bOk = sal_False;
@@ -174,7 +174,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
         // "<connectString>;<protocol>"
         sal_Int32 nIndex1 = m_aAcceptString.indexOf( (sal_Unicode) ';' );
         if (nIndex1 < 0) throw IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid accept-string format")), m_rContext, 1);
+            OUString::createFromAscii("Invalid accept-string format"), m_rContext, 1);
         m_aConnectString = m_aAcceptString.copy( 0 , nIndex1 ).trim();
         nIndex1++;
         sal_Int32 nIndex2 = m_aAcceptString.indexOf( (sal_Unicode) ';' , nIndex1 );
@@ -190,7 +190,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
     // do we want to enable accepting?
     sal_Bool bEnable = sal_False;
     if (((nArgs == 1 && (aArguments[0] >>= bEnable)) ||
-         (nArgs == 2 && (aArguments[1] >>= bEnable))) &&
+         (nArgs == 2 && (aArguments[1] >>= bEnable))) && 
         bEnable )
     {
         m_cEnable.set();
@@ -200,7 +200,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
     if (!bOk)
     {
         throw IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("invalid initialization")), m_rContext, 1);
+            OUString::createFromAscii("invalid initialization"), m_rContext, 1);
     }
 }
 
@@ -275,17 +275,29 @@ Reference<XInterface> SAL_CALL AccInstanceProvider::getInstance (const OUString&
     else if ( aName.compareToAscii("StarOffice.NamingService" ) == 0 )
     {
         Reference< XNamingService > rNamingService(
-            m_rSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uno.NamingService" ))),
+            m_rSMgr->createInstance( OUString::createFromAscii( "com.sun.star.uno.NamingService" )),
             UNO_QUERY );
         if ( rNamingService.is() )
         {
             rNamingService->registerObject(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ServiceManager" )), m_rSMgr );
+                OUString::createFromAscii( "StarOffice.ServiceManager" ), m_rSMgr );
             rNamingService->registerObject(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ComponentContext" )), getComponentContext( m_rSMgr ));
+                OUString::createFromAscii( "StarOffice.ComponentContext" ), getComponentContext( m_rSMgr ));
             rInstance = rNamingService;
         }
     }
+    /*
+    else if ( aName.compareToAscii("com.sun.star.ucb.RemoteContentProviderAcceptor" ))
+    {
+        Reference< XMultiServiceFactory > rSMgr = ::comphelper::getProcessServiceFactory();
+        if ( rSMgr.is() ) {
+            try {
+                rInstance = rSMgr->createInstance( sObjectName );
+            }
+            catch (Exception const &) {}
+        }
+    }
+    */
     return rInstance;
 }
 
@@ -301,6 +313,23 @@ void SAL_CALL
 component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, uno_Environment **)
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
+}
+
+sal_Bool SAL_CALL
+component_writeInfo(void *pServiceManager, void *pRegistryKey)
+{
+    Reference< XMultiServiceFactory > xMan(reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
+    Reference< XRegistryKey > xKey(reinterpret_cast< XRegistryKey* >(pRegistryKey));
+
+    // register service
+    ::rtl::OUString aTempStr;
+    ::rtl::OUString aImpl(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += Acceptor::impl_getImplementationName();
+    aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    Reference< XRegistryKey > xNewKey = xKey->createKey(aImpl);
+    xNewKey->createKey(Acceptor::impl_getSupportedServiceNames()[0]);
+
+    return sal_True;
 }
 
 void * SAL_CALL

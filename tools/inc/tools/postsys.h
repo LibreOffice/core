@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,12 @@
 #undef PolyPolygon
 #undef Polygon
 #undef Rectangle
+#undef BYTE
+#undef BOOL
 #undef DELETE
 
 /* Hilfe-Ids umbenennen */
-#define WIN_HELP_INDEX       0x0003
+#define WIN_HELP_INDEX		 0x0003
 #define WIN_HELP_HELPONHELP  0x0004
 #undef HELP_INDEX
 #undef HELP_HELPONHELP
@@ -45,86 +47,86 @@
 #define WIN_MOUSE_MOVED 0x0001
 #undef MOUSE_MOVED
 
-#define WIN_WB_LEFT               0
-#define WIN_WB_RIGHT              1
+#define WIN_WB_LEFT 			  0
+#define WIN_WB_RIGHT			  1
 #undef WB_LEFT
 #undef WB_RIGHT
 
 #ifdef GetObject
 #undef GetObject
 #ifdef UNICODE
-#define WIN_GetObject   GetObjectW
+#define WIN_GetObject	GetObjectW
 #else
-#define WIN_GetObject   GetObjectA
+#define WIN_GetObject	GetObjectA
 #endif
 #else
-#define WIN_GetObject   GetObject
+#define WIN_GetObject	GetObject
 #endif
 
 #ifdef SetPrinter
 #undef SetPrinter
 #ifdef UNICODE
-#define WIN_SetPrinter  SetPrinterW
+#define WIN_SetPrinter	SetPrinterW
 #else
-#define WIN_SetPrinter  SetPrinterA
+#define WIN_SetPrinter	SetPrinterA
 #endif
 #else
-#define WIN_SetPrinter  SetPrinter
+#define WIN_SetPrinter	SetPrinter
 #endif
 
 #ifdef GetPrinter
 #undef GetPrinter
 #ifdef UNICODE
-#define WIN_GetPrinter  GetPrinterW
+#define WIN_GetPrinter	GetPrinterW
 #else
-#define WIN_GetPrinter  GetPrinterA
+#define WIN_GetPrinter	GetPrinterA
 #endif
 #else
-#define WIN_GetPrinter  GetPrinter
+#define WIN_GetPrinter	GetPrinter
 #endif
 
 #ifdef DrawText
 #undef DrawText
 #ifdef UNICODE
-#define WIN_DrawText    DrawTextW
+#define WIN_DrawText	DrawTextW
 #else
-#define WIN_DrawText    DrawTextA
+#define WIN_DrawText	DrawTextA
 #endif
 #else
-#define WIN_DrawText    DrawText
+#define WIN_DrawText	DrawText
 #endif
 
 #ifdef mciSetCommand
 #undef mciSetCommand
 #ifdef UNICODE
-#define WIN_mciSetCommand   mciSetCommandW
+#define WIN_mciSetCommand	mciSetCommandW
 #else
-#define WIN_mciSetCommand   mciSetCommandA
+#define WIN_mciSetCommand	mciSetCommandA
 #endif
 #else
-#define mciSetCommand   mciSetCommand
+#define mciSetCommand	mciSetCommand
 #endif
 
 #ifdef SetPort
 #undef SetPort
 #ifdef UNICODE
-#define WIN_SetPort     SetPortW
+#define WIN_SetPort 	SetPortW
 #else
-#define WIN_SetPort     SetPortA
+#define WIN_SetPort 	SetPortA
 #endif
 #else
-#define WIN_SetPort     SetPort
+#define WIN_SetPort 	SetPort
 #endif
 
 #ifdef CopyFile
 #undef CopyFile
 #ifdef UNICODE
-#define WIN_CopyFile    CopyFileW
+#define WIN_CopyFile	CopyFileW
 #else
-#define WIN_CopyFile    CopyFileA
+#define WIN_CopyFile	CopyFileA
 #endif
 #else
-#define WIN_CopyFile    CopyFile
+#define WIN_CopyFile	CopyFile
 #endif
 
 #ifdef GetUserName
@@ -220,20 +222,20 @@
 
 /* new StretchBlt() Modes (simpler names) */
 #ifndef STRETCH_ANDSCANS
-#define STRETCH_ANDSCANS        1
+#define STRETCH_ANDSCANS		1
 #endif
 #ifndef STRETCH_ORSCANS
-#define STRETCH_ORSCANS         2
+#define STRETCH_ORSCANS 		2
 #endif
 #ifndef STRETCH_DELETESCANS
-#define STRETCH_DELETESCANS     3
+#define STRETCH_DELETESCANS 	3
 #endif
 
 extern "C"
 {
-    BOOL WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 );
-    BOOL WINAPI WIN_Polygon( HDC hDC, CONST POINT * ppt, int ncnt );
-    BOOL WINAPI WIN_PolyPolygon( HDC hDC, CONST POINT * ppt, LPINT npcnt, int ncnt );
+WIN_BOOL WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 );
+WIN_BOOL WINAPI WIN_Polygon( HDC hDC, CONST POINT * ppt, int ncnt );
+WIN_BOOL WINAPI WIN_PolyPolygon( HDC hDC, CONST POINT * ppt, LPINT npcnt, int ncnt );
 }
 
 #endif

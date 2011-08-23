@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,6 @@
 #include "PageBackground.hxx"
 #include "CloneHelper.hxx"
 #include "NameContainer.hxx"
-#include "UndoManager.hxx"
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 
@@ -75,7 +74,6 @@
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
 using ::osl::MutexGuard;
@@ -106,7 +104,6 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_bModified( sal_False )
     , m_nInLoad(0)
     , m_bUpdateNotificationsPending(false)
-    , m_pUndoManager( NULL )
     , m_aControllers( m_aModelMutex )
     , m_nControllerLockCount(0)
     , m_xContext( xContext )
@@ -118,21 +115,14 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
                 C2U( "com.sun.star.xml.NamespaceMap" ), C2U( "com.sun.star.comp.chart.XMLNameSpaceMap" ) ), uno::UNO_QUERY)
 {
     OSL_TRACE( "ChartModel: CTOR called" );
-
     osl_incrementInterlockedCount(&m_refCount);
-    {
-        m_xOldModelAgg.set(
-            m_xContext->getServiceManager()->createInstanceWithContext(
-            CHART_CHARTAPIWRAPPER_SERVICE_NAME,
-            m_xContext ), uno::UNO_QUERY_THROW );
-        m_xOldModelAgg->setDelegator( *this );
-    }
 
-    {
-        ModifyListenerHelper::addListener( m_xPageBackground, this );
-        m_xChartTypeManager.set( xContext->getServiceManager()->createInstanceWithContext(
-                C2U( "com.sun.star.chart2.ChartTypeManager" ), m_xContext ), uno::UNO_QUERY );
-    }
+    ModifyListenerHelper::addListener( m_xPageBackground, this );
+    m_xChartTypeManager.set( xContext->getServiceManager()->createInstanceWithContext(
+            C2U( "com.sun.star.chart2.ChartTypeManager" ), m_xContext ), uno::UNO_QUERY );
+    m_xUndoManager = Reference< chart2::XUndoManager >(
+        this->createInstance( CHART_UNDOMANAGER_SERVICE_NAME ), uno::UNO_QUERY );
+
     osl_decrementInterlockedCount(&m_refCount);
 }
 
@@ -156,39 +146,33 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_aGraphicObjectVector( rOther.m_aGraphicObjectVector )
     , m_xDataProvider( rOther.m_xDataProvider )
     , m_xInternalDataProvider( rOther.m_xInternalDataProvider )
+    , m_xUndoManager( rOther.m_xUndoManager )
 {
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
-
     osl_incrementInterlockedCount(&m_refCount);
+
+    Reference< util::XModifyListener > xListener;
+    Reference< chart2::XTitle > xNewTitle = CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle );
+    Reference< chart2::XDiagram > xNewDiagram = CreateRefClone< Reference< chart2::XDiagram > >()( rOther.m_xDiagram );
+    Reference< beans::XPropertySet > xNewPageBackground = CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xPageBackground );
+    Reference< chart2::XChartTypeManager > xChartTypeManager = CreateRefClone< Reference< chart2::XChartTypeManager > >()( rOther.m_xChartTypeManager );
+    Reference< container::XNameAccess > xXMLNamespaceMap = CreateRefClone< Reference< container::XNameAccess > >()( rOther.m_xXMLNamespaceMap );
+    
     {
-        m_xOldModelAgg.set(
-            m_xContext->getServiceManager()->createInstanceWithContext(
-            CHART_CHARTAPIWRAPPER_SERVICE_NAME,
-            m_xContext ), uno::UNO_QUERY_THROW );
-        m_xOldModelAgg->setDelegator( *this );
-
-        Reference< util::XModifyListener > xListener;
-        Reference< chart2::XTitle > xNewTitle = CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle );
-        Reference< chart2::XDiagram > xNewDiagram = CreateRefClone< Reference< chart2::XDiagram > >()( rOther.m_xDiagram );
-        Reference< beans::XPropertySet > xNewPageBackground = CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xPageBackground );
-        Reference< chart2::XChartTypeManager > xChartTypeManager = CreateRefClone< Reference< chart2::XChartTypeManager > >()( rOther.m_xChartTypeManager );
-        Reference< container::XNameAccess > xXMLNamespaceMap = CreateRefClone< Reference< container::XNameAccess > >()( rOther.m_xXMLNamespaceMap );
-
-        {
-            MutexGuard aGuard( m_aModelMutex );
-            xListener = this;
-            m_xTitle = xNewTitle;
-            m_xDiagram = xNewDiagram;
-            m_xPageBackground = xNewPageBackground;
-            m_xChartTypeManager = xChartTypeManager;
-            m_xXMLNamespaceMap = xXMLNamespaceMap;
-        }
-
-        ModifyListenerHelper::addListener( xNewTitle, xListener );
-        ModifyListenerHelper::addListener( xNewDiagram, xListener );
-        ModifyListenerHelper::addListener( xNewPageBackground, xListener );
-        xListener.clear();
+        MutexGuard aGuard( m_aModelMutex );
+        xListener = this;
+        m_xTitle = xNewTitle;
+        m_xDiagram = xNewDiagram;
+        m_xPageBackground = xNewPageBackground;
+        m_xChartTypeManager = xChartTypeManager;
+        m_xXMLNamespaceMap = xXMLNamespaceMap;
     }
+    
+    ModifyListenerHelper::addListener( xNewTitle, xListener );
+    ModifyListenerHelper::addListener( xNewDiagram, xListener );
+    ModifyListenerHelper::addListener( xNewPageBackground, xListener );
+    xListener.clear();
+    
     osl_decrementInterlockedCount(&m_refCount);
 }
 
@@ -196,19 +180,9 @@ ChartModel::~ChartModel()
 {
     OSL_TRACE( "ChartModel: DTOR called" );
     if( m_xOldModelAgg.is())
-        m_xOldModelAgg->setDelegator( NULL );
+        m_xOldModelAgg->setDelegator( 0 );
 }
 
-void SAL_CALL ChartModel::initialize( const Sequence< Any >& /*rArguments*/ )
-                throw (uno::Exception, uno::RuntimeException)
-{
-    //#i113722# avoid duplicate creation
-
-    //maybe additional todo?:
-    //support argument "EmbeddedObject"?
-    //support argument "EmbeddedScriptSupport"?
-    //support argument "DocumentRecoverySupport"?
-}
 
 //-----------------------------------------------------------------
 // private methods
@@ -411,11 +385,11 @@ void SAL_CALL ChartModel::disconnectController( const uno::Reference< frame::XCo
     //case: current controller is disconnected:
     if( m_xCurrentController == xController )
         m_xCurrentController.clear();
-
+    
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
 }
 
-void SAL_CALL ChartModel::lockControllers() throw(uno::RuntimeException)
+void SAL_CALL ChartModel::lockControllers()	throw(uno::RuntimeException)
 {
     /*
     suspends some notifications to the controllers which are used for display updates.
@@ -521,7 +495,9 @@ uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection() thr
             uno::Any aSel = xSelectionSupl->getSelection();
             rtl::OUString aObjectCID;
             if( aSel >>= aObjectCID )
+            {
                 xReturn.set( ObjectIdentifier::getObjectPropertySet( aObjectCID, Reference< XChartDocument >(this)));
+            }
         }
     }
     return xReturn;
@@ -533,8 +509,6 @@ uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection() thr
 //-----------------------------------------------------------------
 void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
 {
-    Reference< XInterface > xKeepAlive( *this );
-
     //This object should release all resources and references in the
     //easiest possible manner
     //This object must notify all registered listeners using the method
@@ -547,9 +521,6 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
     //--release all resources and references
     //// @todo
 
-    if ( m_xDiagram.is() )
-        ModifyListenerHelper::removeListener( m_xDiagram, this );
-
     m_xDataProvider.clear();
     m_xInternalDataProvider.clear();
     m_xNumberFormatsSupplier.clear();
@@ -560,17 +531,26 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
     DisposeHelper::DisposeAndClear( m_xPageBackground );
     DisposeHelper::DisposeAndClear( m_xXMLNamespaceMap );
 
+    // not owner of storage
+//     if( m_xStorage.is())
+//     {
+//         Reference< lang::XComponent > xComp( m_xStorage, uno::UNO_QUERY );
+//         if( xComp.is())
+//             xComp->dispose();
+//     }
     m_xStorage.clear();
-        // just clear, don't dispose - we're not the owner
 
-    if ( m_pUndoManager.is() )
-        m_pUndoManager->disposing();
-    m_pUndoManager.clear();
-        // that's important, since the UndoManager implementation delegates its ref counting to ourself.
+    if( m_xOldModelAgg.is())
+    {
+        m_xOldModelAgg->setDelegator( 0 );
+        m_xOldModelAgg.clear();
+    }
 
     m_aControllers.disposeAndClear( lang::EventObject( static_cast< cppu::OWeakObject * >( this )));
     m_xCurrentController.clear();
 
+    m_xStorage.clear();
+    m_xParent.clear();
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
     OSL_TRACE( "ChartModel: dispose() called" );
 }
@@ -597,7 +577,7 @@ void SAL_CALL ChartModel::removeEventListener( const uno::Reference< lang::XEven
 //-----------------------------------------------------------------
 // util::XCloseBroadcaster (base of XCloseable)
 //-----------------------------------------------------------------
-void SAL_CALL ChartModel::addCloseListener( const uno::Reference<   util::XCloseListener > & xListener )
+void SAL_CALL ChartModel::addCloseListener( const uno::Reference<	util::XCloseListener > & xListener )
         throw(uno::RuntimeException)
 {
     m_aLifeTimeManager.g_addCloseListener( xListener );
@@ -700,7 +680,6 @@ uno::Sequence< uno::Type > SAL_CALL ChartModel::getTypes()
 uno::Reference< document::XDocumentProperties > SAL_CALL
         ChartModel::getDocumentProperties() throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aModelMutex );
     if ( !m_xDocumentProperties.is() )
     {
         uno::Reference< document::XDocumentProperties > xDocProps(
@@ -709,17 +688,6 @@ uno::Reference< document::XDocumentProperties > SAL_CALL
         m_xDocumentProperties.set(xDocProps);
     }
     return m_xDocumentProperties;
-}
-
-//-----------------------------------------------------------------
-// document::XDocumentPropertiesSupplier
-//-----------------------------------------------------------------
-Reference< document::XUndoManager > SAL_CALL ChartModel::getUndoManager(  ) throw (RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aModelMutex );
-    if ( !m_pUndoManager.is() )
-        m_pUndoManager.set( new UndoManager( *this, m_aModelMutex ) );
-    return m_pUndoManager.get();
 }
 
 //-----------------------------------------------------------------
@@ -770,16 +738,16 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
             //create data
             uno::Sequence< beans::PropertyValue > aArgs( 4 );
             aArgs[0] = beans::PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellRangeRepresentation" )), -1,
+                ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
                 uno::makeAny( C2U("all") ), beans::PropertyState_DIRECT_VALUE );
             aArgs[1] = beans::PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasCategories" )), -1,
+                ::rtl::OUString::createFromAscii("HasCategories"), -1,
                 uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
             aArgs[2] = beans::PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstCellAsLabel" )), -1,
+                ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
                 uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
             aArgs[3] = beans::PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), -1,
+                ::rtl::OUString::createFromAscii("DataRowSource"), -1,
                 uno::makeAny( ::com::sun::star::chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
             xDataSource = m_xInternalDataProvider->createDataSource( aArgs );
         }
@@ -814,8 +782,10 @@ sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
 uno::Reference< chart2::data::XDataProvider > SAL_CALL ChartModel::getDataProvider()
             throw (uno::RuntimeException)
 {
+    // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_xDataProvider;
+    // \--
 }
 
 // ____ XDataReceiver ____
@@ -824,6 +794,7 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
             throw (uno::RuntimeException)
 {
     {
+        // /--
         MutexGuard aGuard( m_aModelMutex );
         uno::Reference< beans::XPropertySet > xProp( xDataProvider, uno::UNO_QUERY );
         if( xProp.is() )
@@ -842,6 +813,7 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
         m_xInternalDataProvider.clear();
 
         //the numberformatter is kept independent of the data provider!
+        // \--
     }
     setModified( sal_True );
 }
@@ -850,6 +822,7 @@ void SAL_CALL ChartModel::attachNumberFormatsSupplier( const uno::Reference< uti
             throw (uno::RuntimeException)
 {
     {
+        // /--
         MutexGuard aGuard( m_aModelMutex );
         if( xNewSupplier==m_xNumberFormatsSupplier )
             return;
@@ -872,6 +845,7 @@ void SAL_CALL ChartModel::attachNumberFormatsSupplier( const uno::Reference< uti
 
         m_xNumberFormatsSupplier.set( xNewSupplier );
         m_xOwnNumberFormatsSupplier.clear();
+        // \--
     }
     setModified( sal_True );
 }
@@ -881,6 +855,7 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
                    uno::RuntimeException)
 {
     {
+        // /--
         MutexGuard aGuard( m_aModelMutex );
         if( !m_xDataProvider.is() )
             return;
@@ -891,15 +866,28 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
             Reference< chart2::data::XDataSource > xDataSource( m_xDataProvider->createDataSource( aArguments ) );
             if( xDataSource.is() )
             {
+                // set new data
+                Reference< chart2::XChartTypeTemplate > xTemplate;
                 Reference< chart2::XDiagram > xDia( getFirstDiagram() );
-                if( !xDia.is() )
+                if( xDia.is())
                 {
-                    Reference< chart2::XChartTypeTemplate > xTemplate( impl_createDefaultChartTypeTemplate() );
-                    if( xTemplate.is())
+                    // apply new data
+                    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
+                        DiagramHelper::getTemplateForDiagram(
+                            xDia, Reference< lang::XMultiServiceFactory >( m_xChartTypeManager, uno::UNO_QUERY ));
+                    xTemplate.set( aTemplateAndService.first );
+                }
+
+                if( !xTemplate.is())
+                    xTemplate.set( impl_createDefaultChartTypeTemplate() );
+
+                if( xTemplate.is())
+                {
+                    if( xDia.is())
+                        xTemplate->changeDiagramData( xDia, xDataSource, aArguments );
+                    else
                         setFirstDiagram( xTemplate->createDiagramByDataSource( xDataSource, aArguments ) );
                 }
-                else
-                    xDia->setDiagramData( xDataSource, aArguments );
             }
         }
         catch( lang::IllegalArgumentException & )
@@ -911,6 +899,7 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
             ASSERT_EXCEPTION( ex );
         }
         unlockControllers();
+        // \--
     }
     setModified( sal_True );
 }
@@ -952,8 +941,10 @@ void SAL_CALL ChartModel::setChartTypeManager( const uno::Reference< chart2::XCh
             throw (uno::RuntimeException)
 {
     {
+        // /--
         MutexGuard aGuard( m_aModelMutex );
         m_xChartTypeManager = xNewManager;
+        // \--
     }
     setModified( sal_True );
 }
@@ -961,36 +952,56 @@ void SAL_CALL ChartModel::setChartTypeManager( const uno::Reference< chart2::XCh
 uno::Reference< chart2::XChartTypeManager > SAL_CALL ChartModel::getChartTypeManager()
             throw (uno::RuntimeException)
 {
+    // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_xChartTypeManager;
+    // \--
 }
 
 uno::Reference< beans::XPropertySet > SAL_CALL ChartModel::getPageBackground()
     throw (uno::RuntimeException)
 {
+    // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_xPageBackground;
+    // \--
 }
 
 // ____ XTitled ____
 uno::Reference< chart2::XTitle > SAL_CALL ChartModel::getTitleObject()
     throw (uno::RuntimeException)
 {
+    // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_xTitle;
+    // \--
 }
 
 void SAL_CALL ChartModel::setTitleObject( const uno::Reference< chart2::XTitle >& xTitle )
     throw (uno::RuntimeException)
 {
     {
+        // /--
         MutexGuard aGuard( m_aModelMutex );
         if( m_xTitle.is() )
             ModifyListenerHelper::removeListener( m_xTitle, this );
         m_xTitle = xTitle;
         ModifyListenerHelper::addListener( m_xTitle, this );
+        // \--
     }
     setModified( sal_True );
+}
+
+void ChartModel::impl_createOldModelAgg()
+{
+    if( ! m_xOldModelAgg.is())
+    {
+        m_xOldModelAgg.set(
+            m_xContext->getServiceManager()->createInstanceWithContext(
+            CHART_CHARTAPIWRAPPER_SERVICE_NAME,
+            m_xContext ), uno::UNO_QUERY_THROW );
+        m_xOldModelAgg->setDelegator( static_cast< ::cppu::OWeakObject* >( this ));
+    }
 }
 
 // ____ XInterface (for old API wrapper) ____
@@ -1004,6 +1015,7 @@ uno::Any SAL_CALL ChartModel::queryInterface( const uno::Type& aType )
         // try old API wrapper
         try
         {
+            impl_createOldModelAgg();
             if( m_xOldModelAgg.is())
                 aResult = m_xOldModelAgg->queryAggregation( aType );
         }
@@ -1049,7 +1061,7 @@ void SAL_CALL ChartModel::setVisualAreaSize( ::sal_Int64 nAspect, const awt::Siz
     }
     else
     {
-        OSL_FAIL( "setVisualAreaSize: Aspect not implemented yet.");
+        OSL_ENSURE( false, "setVisualAreaSize: Aspect not implemented yet.");
     }
 }
 
@@ -1158,6 +1170,9 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 {
     uno::Sequence< datatransfer::DataFlavor > aRet(1);
 
+//     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMEType,
+//         C2U( "GDIMetaFile" ),
+// 		::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
         C2U( "GDIMetaFile" ),
         ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
@@ -1168,6 +1183,8 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 ::sal_Bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
     throw (uno::RuntimeException)
 {
+//     return ( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType) ||
+//              aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast) );
     return aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast);
 }
 
@@ -1237,6 +1254,7 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
     }
     else
     {
+        impl_createOldModelAgg();
         if( m_xOldModelAgg.is() )
         {
             Any aAny = m_xOldModelAgg->queryAggregation( ::getCppuType((const uno::Reference< lang::XMultiServiceFactory >*)0) );
@@ -1264,6 +1282,7 @@ Sequence< OUString > SAL_CALL ChartModel::getAvailableServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aResult;
 
+    impl_createOldModelAgg();
     if( m_xOldModelAgg.is())
     {
         Any aAny = m_xOldModelAgg->queryAggregation( ::getCppuType((const uno::Reference< lang::XMultiServiceFactory >*)0) );
@@ -1283,8 +1302,7 @@ Reference< util::XNumberFormatsSupplier > ChartModel::impl_getNumberFormatsSuppl
         if( !m_xOwnNumberFormatsSupplier.is() )
         {
             Reference< lang::XMultiServiceFactory > xFactory( m_xContext->getServiceManager(), uno::UNO_QUERY );
-            m_apSvNumberFormatter.reset( new SvNumberFormatter( xFactory, LANGUAGE_SYSTEM ) );
-            m_xOwnNumberFormatsSupplier = new SvNumberFormatsSupplierObj( m_apSvNumberFormatter.get() );
+            m_xOwnNumberFormatsSupplier = new SvNumberFormatsSupplierObj( new SvNumberFormatter( xFactory, LANGUAGE_SYSTEM ) );
             //pOwnNumberFormatter->ChangeStandardPrec( 15 ); todo?
         }
         m_xNumberFormatsSupplier = m_xOwnNumberFormatsSupplier;
@@ -1340,11 +1358,18 @@ void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent 
         m_xParent.set( Parent, uno::UNO_QUERY );
 }
 
+// ____ XUndoManager ____
+Reference< chart2::XUndoManager > SAL_CALL ChartModel::getUndoManager()
+    throw (uno::RuntimeException)
+{
+    return m_xUndoManager;
+}
+
 // ____ XDataSource ____
 uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartModel::getDataSequences()
     throw (uno::RuntimeException)
 {
-    Reference< chart2::data::XDataSource > xSource(
+    Reference< chart2::data::XDataSource > xSource( 
         DataSourceHelper::getUsedData( uno::Reference< frame::XModel >(this) ) );
     if( xSource.is())
         return xSource->getDataSequences();

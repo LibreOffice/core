@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,6 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -52,62 +51,58 @@ namespace drawinglayer
         {
         private:
             /// the line definition
-            basegfx::B2DPoint                               maStart;
-            basegfx::B2DPoint                               maEnd;
+            basegfx::B2DPoint								maStart;
+            basegfx::B2DPoint								maEnd;
 
             /// the widths of single/double line
-            double                                          mfLeftWidth;
-            double                                          mfDistance;
-            double                                          mfRightWidth;
+            double											mfLeftWidth;
+            double											mfDistance;
+            double											mfRightWidth;
 
             /// edge overlap sizes
-            double                                          mfExtendLeftStart;
-            double                                          mfExtendLeftEnd;
-            double                                          mfExtendRightStart;
-            double                                          mfExtendRightEnd;
+            double											mfExtendInnerStart;
+            double											mfExtendInnerEnd;
+            double											mfExtendOuterStart;
+            double											mfExtendOuterEnd;
 
-            /// the line colors
-            basegfx::BColor                                 maRGBColorRight;
-            basegfx::BColor                                 maRGBColorLeft;
-            basegfx::BColor                                 maRGBColorGap;
-            bool                                            mbHasGapColor;
-
+            /// the line color
+            basegfx::BColor									maRGBColor;
             short                                           mnStyle;
 
             /// bitfield
             /// flags to influence inside/outside creation
-            unsigned                                        mbCreateInside : 1;
-            unsigned                                        mbCreateOutside : 1;
+            unsigned										mbCreateInside : 1;
+            unsigned										mbCreateOutside : 1;
 
             /// local helpers
-            double getCorrectedLeftWidth() const
-            {
-                return basegfx::fTools::equal(1.0, mfLeftWidth) ? 0.0 : mfLeftWidth;
+            double getCorrectedLeftWidth() const 
+            { 
+                return basegfx::fTools::equal(1.0, mfLeftWidth) ? 0.0 : mfLeftWidth; 
+            }
+            
+            double getCorrectedDistance() const 
+            { 
+                return basegfx::fTools::equal(1.0, mfDistance) ? 0.0 : mfDistance; 
             }
 
-            double getCorrectedDistance() const
-            {
-                return basegfx::fTools::equal(1.0, mfDistance) ? 0.0 : mfDistance;
+            double getCorrectedRightWidth() const 
+            { 
+                return basegfx::fTools::equal(1.0, mfRightWidth) ? 0.0 : mfRightWidth; 
             }
-
-            double getCorrectedRightWidth() const
-            {
-                return basegfx::fTools::equal(1.0, mfRightWidth) ? 0.0 : mfRightWidth;
-            }
-
-            double getWidth() const
-            {
+            
+            double getWidth() const 
+            { 
                 return getCorrectedLeftWidth() + getCorrectedDistance() + getCorrectedRightWidth();
             }
 
             bool leftIsHairline() const
             {
-                return basegfx::fTools::equal(1.0, mfLeftWidth);
+                return basegfx::fTools::equal(1.0, mfLeftWidth); 
             }
 
             bool rightIsHairline() const
             {
-                return basegfx::fTools::equal(1.0, mfRightWidth);
+                return basegfx::fTools::equal(1.0, mfRightWidth); 
             }
 
             bool isInsideUsed() const
@@ -121,8 +116,6 @@ namespace drawinglayer
             }
 
         protected:
-            virtual basegfx::B2DPolyPolygon getClipPolygon( ) const;
-
             /// create local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -134,14 +127,13 @@ namespace drawinglayer
                 double fLeftWidth,
                 double fDistance,
                 double fRightWidth,
-                double fExtendLeftStart,
-                double fExtendLeftEnd,
-                double fExtendRightStart,
-                double fExtendRightEnd,
-                const basegfx::BColor& rRGBColorRight,
-                const basegfx::BColor& rRGBColorLeft,
-                const basegfx::BColor& rRGBColorGap,
-                bool bHasGapColor,
+                double fExtendInnerStart,
+                double fExtendInnerEnd,
+                double fExtendOuterStart,
+                double fExtendOuterEnd,
+                bool bCreateInside,
+                bool bCreateOutside,
+                const basegfx::BColor& rRGBColor,
                 const short nStyle );
 
             /// data read access
@@ -150,14 +142,13 @@ namespace drawinglayer
             double getLeftWidth() const { return mfLeftWidth; }
             double getDistance() const { return mfDistance; }
             double getRightWidth() const { return mfRightWidth; }
-            double getExtendLeftStart() const { return mfExtendLeftStart; }
-            double getExtendLeftEnd() const { return mfExtendLeftEnd; }
-            double getExtendRightStart() const { return mfExtendRightStart; }
-            double getExtendRightEnd() const { return mfExtendRightEnd; }
-            const basegfx::BColor& getRGBColorRight () const { return maRGBColorRight; }
-            const basegfx::BColor& getRGBColorLeft () const { return maRGBColorLeft; }
-            const basegfx::BColor& getRGBColorGap () const { return maRGBColorGap; }
-            bool hasGapColor( ) const { return mbHasGapColor; }
+            double getExtendInnerStart() const { return mfExtendInnerStart; }
+            double getExtendInnerEnd() const { return mfExtendInnerEnd; }
+            double getExtendOuterStart() const { return mfExtendOuterStart; }
+            double getExtendOuterEnd() const { return mfExtendOuterEnd; }
+            bool getCreateInside() const { return mbCreateInside; }
+            bool getCreateOutside() const { return mbCreateOutside; }
+            const basegfx::BColor& getRGBColor () const { return maRGBColor; }
             short getStyle () const { return mnStyle; }
 
             /// compare operator

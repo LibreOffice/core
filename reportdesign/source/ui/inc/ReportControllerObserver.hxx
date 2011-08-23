@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,11 +49,12 @@ namespace rptui
     class OXReportControllerObserverImpl;
 
     //========================================================================
-    class OXReportControllerObserver
-        : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
-                                        ,   ::com::sun::star::container::XContainerListener
-                                        ,   ::com::sun::star::util::XModifyListener
+    class /* REPORTDESIGN_DLLPUBLIC */ OXReportControllerObserver
+        : public ::cppu::WeakImplHelper3<	::com::sun::star::beans::XPropertyChangeListener
+                                        ,   ::com::sun::star::container::XContainerListener 
+                                        ,	::com::sun::star::util::XModifyListener
                                         >
+        /*,public SfxListener*/
     {
 
         const ::std::auto_ptr<OXReportControllerObserverImpl> m_pImpl;
@@ -68,6 +69,7 @@ namespace rptui
     public:
         OXReportControllerObserver(const OReportController& _rController);
 
+// protected:
         // XPropertyChangeListener
         virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
@@ -88,6 +90,9 @@ namespace rptui
 
         void AddSection( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection);
         void RemoveSection( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection );
+
+        // SfxListener
+        // virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
         /**
            Create an object ob OUndoEnvLock locks the undo possibility
@@ -112,13 +117,14 @@ namespace rptui
         void switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxContainer, bool _bStartListening ) SAL_THROW(());
         void switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(());
 
+        // void ModeChanged(); // will be called from 'Notify'
         DECL_LINK(SettingsChanged, VclWindowEvent* );
     private:
-
+        
         ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> >::const_iterator getSection(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild>& _xContainer) const;
-
+        
     };
-
+    
 } // namespace rptui
 
 #endif /* INCLUDED_REPORTCONTROLLEROBSERVER_HXX */

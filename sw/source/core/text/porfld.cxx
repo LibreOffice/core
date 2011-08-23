@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,21 +33,22 @@
 #include <hintids.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hdl>
+
 #include <vcl/graph.hxx>
 #include <editeng/brshitem.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
-#include <viewopt.hxx>  // SwViewOptions
+#include <viewopt.hxx>	// SwViewOptions
+#include <txtcfg.hxx>
 #include <SwPortionHandler.hxx>
 #include <porlay.hxx>
 #include <porfld.hxx>
 #include <inftxt.hxx>
-#include <blink.hxx>    // pBlink
+#include <blink.hxx>	// pBlink
 #include <frmtool.hxx>  // DrawGraphic
 #include <viewsh.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
-#include "rootfrm.hxx"
 #include <breakit.hxx>
 #include <porrst.hxx>
 #include <porftn.hxx>   // SwFtnPortion
@@ -152,7 +153,7 @@ KSHORT SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 // 8653: in keinem Fall nur SetLen(0);
 
 /*************************************************************************
- *   Hilfsklasse SwFldSlot
+ *	 Hilfsklasse SwFldSlot
  **************************************************************************/
 
 class SwFldSlot
@@ -212,8 +213,8 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
     String aTxt;
     if( GetExpTxt( rInf, aTxt ) && aTxt.Len() && pBreakIt->GetBreakIter().is() )
     {
-        sal_uInt8 nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
-        sal_uInt16 nScript;
+        BYTE nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
+        USHORT nScript;
         {
             nScript = pBreakIt->GetBreakIter()->getScriptType( aTxt, 0 );
             xub_StrLen nChg = 0;
@@ -233,7 +234,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                 nNextScriptChg = aTxt.Len();
 
         }
-        sal_uInt8 nTmp;
+        BYTE nTmp;
         switch ( nScript ) {
             case i18n::ScriptType::LATIN : nTmp = SW_LATIN; break;
             case i18n::ScriptType::ASIAN : nTmp = SW_CJK; break;
@@ -244,8 +245,8 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         // #i16354# Change script type for RTL text to CTL.
         const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
         // --> OD 2009-01-29 #i98418#
-//        const sal_uInt8 nFldDir = IsNumberPortion() ?
-        const sal_uInt8 nFldDir = ( IsNumberPortion() || IsFtnNumPortion() ) ?
+//        const BYTE nFldDir = IsNumberPortion() ?
+        const BYTE nFldDir = ( IsNumberPortion() || IsFtnNumPortion() ) ?
                              rSI.GetDefaultDir() :
                              rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
         // <--
@@ -406,12 +407,12 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         //        case CHAR_RLM :
         //        case CHAR_LRM :
                 // <--
-                // --> OD 2010-06-03 #i111750#
+                // --> OD 2010-06-03 #i111750# 
                 // - Erasing further control characters from field string in
                 // to avoid loop.
                 case CH_TXTATR_BREAKWORD:
-                case CH_TXTATR_INWORD:
-                // <--
+                case CH_TXTATR_INWORD:                    
+                // <--                    
                 {
                     aNew.Erase( 0, 1 );
                     ++nNextOfst;
@@ -538,6 +539,7 @@ sal_Bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt 
  *                      class SwNumberPortion
  *************************************************************************/
 
+// --> OD 2008-01-23 #newlistlevelattrs#
 SwNumberPortion::SwNumberPortion( const XubString &rExpand,
                                   SwFont *pFont,
                                   const sal_Bool bLft,
@@ -547,7 +549,9 @@ SwNumberPortion::SwNumberPortion( const XubString &rExpand,
         : SwFldPortion( rExpand, pFont ),
           nFixWidth(0),
           nMinDist( nMinDst ),
+          // --> OD 2008-01-23 #newlistlevelattrs#
           mbLabelAlignmentPosAndSpaceModeActive( bLabelAlignmentPosAndSpaceModeActive )
+          // <--
 {
     SetWhichPor( POR_NUMBER );
     SetLeft( bLft );
@@ -565,9 +569,10 @@ SwFldPortion *SwNumberPortion::Clone( const XubString &rExpand ) const
     SwFont *pNewFnt;
     if( 0 != ( pNewFnt = pFnt ) )
         pNewFnt = new SwFont( *pFnt );
-
+    // --> OD 2008-01-23 #newlistlevelattrs#
     return new SwNumberPortion( rExpand, pNewFnt, IsLeft(), IsCenter(),
                                 nMinDist, mbLabelAlignmentPosAndSpaceModeActive );
+    // <--
 }
 
 /*************************************************************************
@@ -593,7 +598,7 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
         OSL_ENSURE( Height() && nAscent, "NumberPortions without Height | Ascent" );
 
         long nDiff( 0 );
-
+        // --> OD 2008-01-23 #newlistlevelattrs#
         if ( !mbLabelAlignmentPosAndSpaceModeActive )
         {
             if ( !rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
@@ -612,6 +617,7 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
                 nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
             }
         }
+        // <--
         // Ein Vorschlag von Juergen und Volkmar:
         // Der Textteil hinter der Numerierung sollte immer
         // mindestens beim linken Rand beginnen.
@@ -652,8 +658,8 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
 
 void SwNumberPortion::FormatEOL( SwTxtFormatInfo& )
 {
-/*  Ein FormatEOL deutet daraufhin, dass der folgende Text
- *  nicht mit auf die Zeile passte. Damit die Numerierung mitwandert,
+/*	Ein FormatEOL deutet daraufhin, dass der folgende Text
+ *	nicht mit auf die Zeile passte. Damit die Numerierung mitwandert,
  *  wird diese NumberPortion verborgen.
  */
 
@@ -670,8 +676,8 @@ void SwNumberPortion::FormatEOL( SwTxtFormatInfo& )
 
 void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-/*  Eine verborgene NumberPortion wird nicht angezeigt, es sei denn, es gibt
- *  Textportions in dieser Zeile oder es gibt ueberhaupt nur eine einzige Zeile.
+/*	Eine verborgene NumberPortion wird nicht angezeigt, es sei denn, es gibt
+ * 	Textportions in dieser Zeile oder es gibt ueberhaupt nur eine einzige Zeile.
  */
 
     if ( IsHide() && rInf.GetParaPortion() && rInf.GetParaPortion()->GetNext() )
@@ -685,8 +691,8 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     // calculate the width of the number portion, including follows
     const KSHORT nOldWidth = Width();
-    sal_uInt16 nSumWidth = 0;
-    sal_uInt16 nOffset = 0;
+    USHORT nSumWidth = 0;
+    USHORT nOffset = 0;
 
     const SwLinePortion* pTmp = this;
     while ( pTmp && pTmp->InNumberGrp() )
@@ -765,7 +771,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
             if( bPaintSpace && nOldWidth > nSpaceOffs )
             {
                 SwTxtPaintInfo aInf( rInf );
-static sal_Char const sDoubleSpace[] = "  ";
+static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 aInf.X( aInf.X() + nSpaceOffs );
 
                 // --> FME 2005-08-12 #i53199# Adjust position of underline:
@@ -792,6 +798,7 @@ static sal_Char const sDoubleSpace[] = "  ";
  *                      class SwBulletPortion
  *************************************************************************/
 
+// --> OD 2008-01-23 #newlistlevelattrs#
 SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet,
                                   const XubString& rBulletFollowedBy,
                                   SwFont *pFont,
@@ -802,6 +809,7 @@ SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet,
     : SwNumberPortion( XubString( rBulletFollowedBy ).Insert( cBullet, 0 ) ,
                        pFont, bLft, bCntr, nMinDst,
                        bLabelAlignmentPosAndSpaceModeActive )
+// <--
 {
     SetWhichPor( POR_BULLET );
 }
@@ -812,6 +820,7 @@ SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet,
 
 #define GRFNUM_SECURE 10
 
+// --> OD 2008-01-23 #newlistlevelattrs#
 SwGrfNumPortion::SwGrfNumPortion(
         SwFrm*,
         const XubString& rGraphicFollowedBy,
@@ -821,6 +830,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         const bool bLabelAlignmentPosAndSpaceModeActive ) :
     SwNumberPortion( rGraphicFollowedBy, NULL, bLft, bCntr, nMinDst,
                      bLabelAlignmentPosAndSpaceModeActive ),
+// <--
     pBrush( new SvxBrushItem(RES_BACKGROUND) ), nId( 0 )
 {
     SetWhichPor( POR_GRFNUM );
@@ -845,7 +855,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         nYPos = 0;
         eOrient = text::VertOrientation::TOP;
     }
-    Width( static_cast<sal_uInt16>(rGrfSize.Width() + 2 * GRFNUM_SECURE) );
+    Width( static_cast<USHORT>(rGrfSize.Width() + 2 * GRFNUM_SECURE) );
     nFixWidth = Width();
     nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
     Height( KSHORT(nGrfHeight) );
@@ -868,6 +878,7 @@ void SwGrfNumPortion::StopAnimation( OutputDevice* pOut )
 sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
 {
     SetHide( sal_False );
+    // --> OD 2008-01-29 #newlistlevelattrs#
 //    Width( nFixWidth );
     KSHORT nFollowedByWidth( 0 );
     if ( mbLabelAlignmentPosAndSpaceModeActive )
@@ -881,7 +892,7 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
     const sal_Bool bFull = rInf.Width() < rInf.X() + Width();
     const sal_Bool bFly = rInf.GetFly() ||
         ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
-    SetAscent( static_cast<sal_uInt16>(GetRelPos() > 0 ? GetRelPos() : 0) );
+    SetAscent( static_cast<USHORT>(GetRelPos() > 0 ? GetRelPos() : 0) );
     if( GetAscent() > Height() )
         Height( GetAscent() );
 
@@ -897,6 +908,7 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
         }
     }
     rInf.SetNumDone( sal_True );
+    // --> OD 2008-01-23 #newlistlevelattrs#
 //    long nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
     long nDiff = mbLabelAlignmentPosAndSpaceModeActive
                  ? 0
@@ -931,8 +943,8 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( DontPaint() )
         return;
-/*  Eine verborgene NumberPortion wird nicht angezeigt, es sei denn, es gibt
- *  Textportions in dieser Zeile oder es gibt ueberhaupt nur eine einzige Zeile.
+/*	Eine verborgene NumberPortion wird nicht angezeigt, es sei denn, es gibt
+ * 	Textportions in dieser Zeile oder es gibt ueberhaupt nur eine einzige Zeile.
  */
     if ( IsHide() && rInf.GetParaPortion() && rInf.GetParaPortion()->GetNext() )
     {
@@ -946,9 +958,11 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
     long nTmpWidth = Max( (long)0, (long)(nFixWidth - 2 * GRFNUM_SECURE) );
     Size aSize( nTmpWidth, GetGrfHeight() - 2 * GRFNUM_SECURE );
 
+    // --> OD 2008-02-05 #newlistlevelattrs#
     const sal_Bool bTmpLeft = mbLabelAlignmentPosAndSpaceModeActive ||
                               ( IsLeft() && ! rInf.GetTxtFrm()->IsRightToLeft() ) ||
                               ( ! IsLeft() && ! IsCenter() && rInf.GetTxtFrm()->IsRightToLeft() );
+    // <--
 
     if( nFixWidth < Width() && !bTmpLeft )
     {
@@ -997,7 +1011,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
                 pViewShell && pViewShell->GetWin()  )
             {
                 ( (Graphic*) pBrush->GetGraphic() )->StopAnimation(0,nId);
-                rInf.GetTxtFrm()->getRootFrm()->GetCurrShell()->InvalidateWindows( aTmp );
+                rInf.GetTxtFrm()->GetShell()->InvalidateWindows( aTmp );
             }
 
 
@@ -1114,12 +1128,12 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
         aExpand.Erase( 6 );
     // Initialization of the scripttype array,
     // the arrays of width and position are filled by the format function
-    if( pBreakIt->GetBreakIter().is() )
+    if(	pBreakIt->GetBreakIter().is() )
     {
-        sal_uInt8 nScr = SW_SCRIPTS;
-        for( sal_uInt16 i = 0; i < rTxt.Len(); ++i )
+        BYTE nScr = SW_SCRIPTS;
+        for( USHORT i = 0; i < rTxt.Len(); ++i )
         {
-            sal_uInt16 nScript = pBreakIt->GetBreakIter()->getScriptType( rTxt, i );
+            USHORT nScript = pBreakIt->GetBreakIter()->getScriptType( rTxt, i );
             switch ( nScript ) {
                 case i18n::ScriptType::LATIN : nScr = SW_LATIN; break;
                 case i18n::ScriptType::ASIAN : nScr = SW_CJK; break;
@@ -1130,7 +1144,7 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
     }
     else
     {
-        for( sal_uInt16 i = 0; i < 6; aScrType[i++] = 0 )
+        for( USHORT i = 0; i < 6; aScrType[i++] = 0 )
             ; // nothing
     }
     memset( &aWidth, 0, sizeof(aWidth) );
@@ -1152,27 +1166,27 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( rInf.OnWin() && pPortion && !pPortion->Width() )
             pPortion->PrePaint( rInf, this );
 
-        sal_uInt16 nCount = aExpand.Len();
+        USHORT nCount = aExpand.Len();
         if( !nCount )
             return;
         OSL_ENSURE( nCount < 7, "Too much combined characters" );
 
         // the first character of the second row
-        sal_uInt16 nTop = ( nCount + 1 ) / 2;
+        USHORT nTop = ( nCount + 1 ) / 2;
 
         SwFont aTmpFont( *rInf.GetFont() );
-        aTmpFont.SetProportion( nProportion );  // a smaller font
+        aTmpFont.SetProportion( nProportion );	// a smaller font
         SwFontSave aFontSave( rInf, &aTmpFont );
 
-        sal_uInt16 i = 0;
+        USHORT i = 0;
         Point aOldPos = rInf.GetPos();
         Point aOutPos( aOldPos.X(), aOldPos.Y() - nUpPos );// Y of the first row
         while( i < nCount )
         {
             if( i == nTop ) // change the row
-                aOutPos.Y() = aOldPos.Y() + nLowPos;    // Y of the second row
-            aOutPos.X() = aOldPos.X() + aPos[i];        // X position
-            const sal_uInt8 nAct = aScrType[i];             // script type
+                aOutPos.Y() = aOldPos.Y() + nLowPos;	// Y of the second row
+            aOutPos.X() = aOldPos.X() + aPos[i];		// X position
+            const BYTE nAct = aScrType[i];				// script type
             aTmpFont.SetActual( nAct );
             // if there're more than 4 characters to display, we choose fonts
             // with 2/3 of the original font width.
@@ -1200,7 +1214,7 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
 {
-    sal_uInt16 nCount = aExpand.Len();
+    USHORT nCount = aExpand.Len();
     if( !nCount )
     {
         Width( 0 );
@@ -1210,7 +1224,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     OSL_ENSURE( nCount < 7, "Too much combined characters" );
     // If there are leading "weak"-scripttyped characters in this portion,
     // they get the actual scripttype.
-    sal_uInt16 i = 0;
+    USHORT i = 0;
     while( i < nCount && SW_SCRIPTS == aScrType[i] )
         aScrType[i++] = rInf.GetFont()->GetActual();
     if( nCount > 4 )
@@ -1224,22 +1238,22 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
             {
                 rInf.GetOut()->SetFont( rInf.GetFont()->GetFnt( aScrType[i] ) );
                 aWidth[ aScrType[i] ] =
-                        static_cast<sal_uInt16>(2 * rInf.GetOut()->GetFontMetric().GetSize().Width() / 3);
+                        static_cast<USHORT>(2 * rInf.GetOut()->GetFontMetric().GetSize().Width() / 3);
             }
             ++i;
         }
     }
 
-    sal_uInt16 nTop = ( nCount + 1 ) / 2; // the first character of the second line
-    ViewShell *pSh = rInf.GetTxtFrm()->getRootFrm()->GetCurrShell();
+    USHORT nTop = ( nCount + 1 ) / 2; // the first character of the second line
+    ViewShell *pSh = rInf.GetTxtFrm()->GetShell();
     SwFont aTmpFont( *rInf.GetFont() );
     SwFontSave aFontSave( rInf, &aTmpFont );
     nProportion = 55;
     // In nMainAscent/Descent we store the ascent and descent
     // of the original surrounding font
-    sal_uInt16 nMaxDescent, nMaxAscent, nMaxWidth;
-    sal_uInt16 nMainDescent = rInf.GetFont()->GetHeight( pSh, *rInf.GetOut() );
-    const sal_uInt16 nMainAscent = rInf.GetFont()->GetAscent( pSh, *rInf.GetOut() );
+    USHORT nMaxDescent, nMaxAscent, nMaxWidth;
+    USHORT nMainDescent = rInf.GetFont()->GetHeight( pSh, *rInf.GetOut() );
+    const USHORT nMainAscent = rInf.GetFont()->GetAscent( pSh, *rInf.GetOut() );
     nMainDescent = nMainDescent - nMainAscent;
     // we start with a 50% font, but if we notice that the combined portion
     // becomes bigger than the surrounding font, we check 45% and maybe 40%.
@@ -1261,7 +1275,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
         // local nMaxAscent, nMaxDescent and nMaxWidth variables.
         while( i < nCount )
         {
-            sal_uInt8 nScrp = aScrType[i];
+            BYTE nScrp = aScrType[i];
             aTmpFont.SetActual( nScrp );
             if( aWidth[ nScrp ] )
             {
@@ -1272,8 +1286,8 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
 
             SwDrawTextInfo aDrawInf( pSh, *rInf.GetOut(), 0, aExpand, i, 1 );
             Size aSize = aTmpFont._GetTxtSize( aDrawInf );
-            sal_uInt16 nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
-            aPos[ i ] = (sal_uInt16)aSize.Width();
+            USHORT nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
+            aPos[ i ] = (USHORT)aSize.Width();
             if( i == nTop ) // enter the second line
             {
                 nLowPos = nMaxDescent;
@@ -1288,7 +1302,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
             if( nAsc > nMaxAscent )
                 nMaxAscent = nAsc;
             if( aSize.Height() - nAsc > nMaxDescent )
-                nMaxDescent = static_cast<sal_uInt16>(aSize.Height() - nAsc);
+                nMaxDescent = static_cast<USHORT>(aSize.Height() - nAsc);
         }
         // for one or two characters we double the width of the portion
         if( nCount < 3 )
@@ -1317,8 +1331,8 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
         Height( nMainAscent + nMainDescent );
 
     // We calculate the x positions of the characters in both lines..
-    sal_uInt16 nTopDiff = 0;
-    sal_uInt16 nBotDiff = 0;
+    USHORT nTopDiff = 0;
+    USHORT nBotDiff = 0;
     if( nMaxWidth > Width() )
     {
         nTopDiff = ( nMaxWidth - Width() ) / 2;
@@ -1334,10 +1348,10 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     aPos[0] = 0;
     switch( nCount )
     {
-        case 5: aPos[4] = aPos[3] + nBotDiff;   // no break
-        case 3: aPos[nTop] = nBotDiff;          break;
-        case 6: aPos[4] = aPos[3] + nBotDiff;   // no break
-        case 4: aPos[nTop] = 0;                 // no break
+        case 5: aPos[4] = aPos[3] + nBotDiff;	// no break
+        case 3: aPos[nTop] = nBotDiff;			break;
+        case 6: aPos[4] = aPos[3] + nBotDiff;	// no break
+        case 4: aPos[nTop] = 0;					// no break
         case 2: aPos[nCount-1] = Width() - aPos[nCount-1];
     }
 
@@ -1345,9 +1359,9 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     const sal_Bool bFull = rInf.Width() < rInf.X() + Width();
     if( bFull )
     {
-        if( rInf.GetLineStart() == rInf.GetIdx() && (!rInf.GetLast()->InFldGrp()
+        if( rInf.GetLineStart() == rInf.GetIdx() &&	(!rInf.GetLast()->InFldGrp()
             || !((SwFldPortion*)rInf.GetLast())->IsFollow() ) )
-            Width( (sal_uInt16)( rInf.Width() - rInf.X() ) );
+            Width( (USHORT)( rInf.Width() - rInf.X() ) );
         else
         {
             Truncate();
@@ -1366,8 +1380,8 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
 
 KSHORT SwCombinedPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
-    if( !GetLen() ) // for the dummy part at the end of the line, where
-        return 0;   // the combined portion doesn't fit.
+    if( !GetLen() )	// for the dummy part at the end of the line, where
+        return 0;	// the combined portion doesn't fit.
     return SwFldPortion::GetViewWidth( rInf );
 }
 

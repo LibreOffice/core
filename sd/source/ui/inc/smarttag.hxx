@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ public:
     virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& );
 
     /** returns true if the SmartTag consumes this event. */
-    virtual bool KeyInput( const KeyEvent& rKEvt );
+    virtual bool KeyInput( const KeyEvent& rKEvt ); 
 
     /** returns true if the SmartTag consumes this event. */
     virtual bool RequestHelp( const HelpEvent& rHEvt );
@@ -77,11 +77,11 @@ public:
     ::sd::View& getView() const { return mrView; }
 
 protected:
-    virtual sal_uLong GetMarkablePointCount() const;
-    virtual sal_uLong GetMarkedPointCount() const;
-    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
+    virtual ULONG GetMarkablePointCount() const;
+    virtual ULONG GetMarkedPointCount() const;
+    virtual BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
     virtual void CheckPossibilities();
-    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
+    virtual BOOL MarkPoints(const Rectangle* pRect, BOOL bUnmark);
 
     virtual void addCustomHandles( SdrHdlList& rHandlerList );
     virtual void select();
@@ -94,8 +94,8 @@ protected:
     bool mbSelected;
 
 private:
-    SmartTag( const SmartTag& );                // not implemented
-    SmartTag& operator=( const SmartTag& ); // not implemented
+    SmartTag( const SmartTag& );				// not implemented
+    SmartTag& operator=( const SmartTag& );	// not implemented
 };
 
 typedef rtl::Reference< SmartTag > SmartTagReference;
@@ -121,7 +121,7 @@ public:
     bool MouseButtonDown( const MouseEvent& );
 
     /** returns true if a SmartTag consumes this event. */
-    bool KeyInput( const KeyEvent& rKEvt );
+    bool KeyInput( const KeyEvent& rKEvt ); 
 
     /** returns true if a SmartTag consumes this event. */
     bool RequestHelp( const HelpEvent& rHEvt );
@@ -140,19 +140,19 @@ public:
     bool getContext( SdrViewContext& rContext ) const;
 
     // support point editing
-    sal_Bool HasMarkablePoints() const;
-    sal_uLong GetMarkablePointCount() const;
-    sal_Bool HasMarkedPoints() const;
-    sal_uLong GetMarkedPointCount() const;
-    sal_Bool IsPointMarkable(const SdrHdl& rHdl) const;
-    sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
-    sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
+    BOOL HasMarkablePoints() const;
+    ULONG GetMarkablePointCount() const;
+    BOOL HasMarkedPoints() const;
+    ULONG GetMarkedPointCount() const;
+    BOOL IsPointMarkable(const SdrHdl& rHdl) const;
+    BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
+    BOOL MarkPoints(const Rectangle* pRect, BOOL bUnmark);
 
     void CheckPossibilities();
 
 private:
-    SmartTagSet( const SmartTagSet& );              // not implemented
-    SmartTagSet& operator=( const SmartTagSet& );   // not implemented
+    SmartTagSet( const SmartTagSet& );				// not implemented
+    SmartTagSet& operator=( const SmartTagSet& );	// not implemented
 
     /** adds a new smart tag to this set */
     void add( const SmartTagReference& xTag );
@@ -185,6 +185,6 @@ protected:
 
 } // end of namespace sd
 
-#endif      // _SD_SMARTTAG_HXX_
+#endif		// _SD_SMARTTAG_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

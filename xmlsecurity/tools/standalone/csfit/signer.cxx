@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,18 +77,18 @@ using namespace ::com::sun::star::xml::crypto ;
 
 int SAL_CALL main( int argc, char **argv )
 {
-    CERTCertDBHandle*   certHandle ;
-    PK11SlotInfo*       slot ;
-    xmlDocPtr           doc ;
-    xmlNodePtr          tplNode ;
-    xmlNodePtr          tarNode ;
-    xmlAttrPtr          idAttr ;
-    xmlChar*            idValue ;
-    xmlAttrPtr          uriAttr ;
-    xmlChar*            uriValue ;
-    OUString*           uri ;
-    Reference< XUriBinding >    xUriBinding ;
-    FILE*               dstFile ;
+    CERTCertDBHandle*	certHandle ;
+    PK11SlotInfo*		slot ;
+    xmlDocPtr			doc ;
+    xmlNodePtr			tplNode ;
+    xmlNodePtr			tarNode ;
+    xmlAttrPtr			idAttr ;
+    xmlChar*			idValue ;
+    xmlAttrPtr			uriAttr ;
+    xmlChar*			uriValue ;
+    OUString*			uri ;
+    Reference< XUriBinding >	xUriBinding ;
+    FILE*				dstFile ;
 
     if( argc != 5 ) {
         fprintf( stderr, "Usage: %s < CertDir > <file_url of template> <file_url of result> <rdb file>\n\n" , argv[0] ) ;
@@ -109,7 +109,7 @@ int SAL_CALL main( int argc, char **argv )
     xmlSubstituteEntitiesDefault(1);
 
     #ifndef XMLSEC_NO_XSLT
-    xmlIndentTreeOutput = 1;
+    xmlIndentTreeOutput = 1; 
     #endif // XMLSEC_NO_XSLT
 
 
@@ -202,7 +202,7 @@ int SAL_CALL main( int argc, char **argv )
 
     if( strchr( ( const char* )uriValue, '/' ) != NULL && strchr( ( const char* )uriValue, '#' ) == NULL ) {
         fprintf( stdout , "### Find a stream URI [%s]\n", uriValue ) ;
-    //  uri = new ::rtl::OUString( ( const sal_Unicode* )uriValue ) ;
+    //	uri = new ::rtl::OUString( ( const sal_Unicode* )uriValue ) ;
         uri = new ::rtl::OUString( ( const sal_Char* )uriValue, xmlStrlen( uriValue ), RTL_TEXTENCODING_ASCII_US ) ;
     }
 
@@ -221,14 +221,14 @@ int SAL_CALL main( int argc, char **argv )
         Reference< XMultiComponentFactory > xManager = NULL ;
         Reference< XComponentContext > xContext = NULL ;
 
-        xManager = serviceManager( xContext , OUString(RTL_CONSTASCII_USTRINGPARAM("local")), OUString::createFromAscii( argv[4] ) ) ;
+        xManager = serviceManager( xContext , OUString::createFromAscii( "local" ), OUString::createFromAscii( argv[4] ) ) ;
         OSL_ENSURE( xManager.is() ,
             "ServicesManager - "
             "Cannot get service manager" ) ;
 
         //Create signature template
         Reference< XInterface > element =
-            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLElementWrapper_XmlSecImpl")) , xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLElementWrapper_XmlSecImpl" ) , xContext ) ;
         OSL_ENSURE( element.is() ,
             "Signer - "
             "Cannot get service instance of \"wrapper.XMLElementWrapper\"" ) ;
@@ -253,7 +253,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Build XML Signature template
         Reference< XInterface > signtpl =
-            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLSignatureTemplate")) , xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.xml.crypto.XMLSignatureTemplate" ) , xContext ) ;
         OSL_ENSURE( signtpl.is() ,
             "Signer - "
             "Cannot get service instance of \"xsec.XMLSignatureTemplate\"" ) ;
@@ -273,7 +273,7 @@ int SAL_CALL main( int argc, char **argv )
         //Create security environment
         //Build Security Environment
         Reference< XInterface > xsecenv =
-            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl")), xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl"), xContext ) ;
         OSL_ENSURE( xsecenv.is() ,
             "Signer - "
             "Cannot get service instance of \"xsec.SecurityEnvironment\"" ) ;
@@ -299,7 +299,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Build XML Security Context
         Reference< XInterface > xmlsecctx =
-            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_NssImpl")), xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_NssImpl"), xContext ) ;
         OSL_ENSURE( xsecenv.is() ,
             "Signer - "
             "Cannot get service instance of \"xsec.XMLSecurityContext\"" ) ;
@@ -313,7 +313,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Generate XML signature
         Reference< XInterface > xmlsigner =
-            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl")), xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl"), xContext ) ;
         OSL_ENSURE( xmlsigner.is() ,
             "Signer - "
             "Cannot get service instance of \"xsec.XMLSignature\"" ) ;
@@ -360,7 +360,7 @@ done:
 
     /* Shutdown libxslt/libxml */
     #ifndef XMLSEC_NO_XSLT
-    xsltCleanupGlobals();
+    xsltCleanupGlobals();            
     #endif /* XMLSEC_NO_XSLT */
     xmlCleanupParser();
 

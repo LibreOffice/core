@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,23 +29,29 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
+
 #include "cmdid.h"
 #include "uiitems.hxx"
+#include <tools/list.hxx>
 #include <vcl/window.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <rsc/rscsfx.hxx>
 
+
+#include "errhdl.hxx"
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "basesh.hxx"
+
 
 void SwView::ExecColl(SfxRequest &rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
-    sal_uInt16 nWhich = rReq.GetSlot();
+    USHORT nWhich = rReq.GetSlot();
     switch( nWhich )
     {
         case FN_SET_PAGE:
@@ -58,10 +64,10 @@ void SwView::ExecColl(SfxRequest &rReq)
             if( pArgs )
             {
                 if (pArgs &&
-                    SFX_ITEM_SET == pArgs->GetItemState( nWhich , sal_True, &pItem ))
+                    SFX_ITEM_SET == pArgs->GetItemState( nWhich , TRUE, &pItem ))
                 {
                     if( ((SfxStringItem*)pItem)->GetValue() !=
-                                            GetWrtShell().GetCurPageStyle(sal_False) )
+                                            GetWrtShell().GetCurPageStyle(FALSE) )
                     {
                         SfxStringItem aName(SID_STYLE_APPLY,
                                    ((SfxStringItem*)pItem)->GetValue());
@@ -84,7 +90,7 @@ void SwView::ExecColl(SfxRequest &rReq)
         }
         break;
         default:
-            OSL_FAIL("wrong CommandProcessor for Dispatch");
+            OSL_ENSURE(false, "wrong CommandProcessor for Dispatch");
             return;
     }
 }

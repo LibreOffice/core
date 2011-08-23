@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : gregor.hartmann@oracle.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : "10ner/Smoke Test" from release engineering
 '*
@@ -131,7 +131,7 @@ testcase tSmokeTest
                 ' If macro fails for whatever reason, a message comes up
                 Kontext
                 if active.exists() then
-                    warnlog "Macro failed " + active.getText
+                    warnlog "#i87290# " + active.getText
                     active.ok
                     call hCloseDocument()
                     goto endsub

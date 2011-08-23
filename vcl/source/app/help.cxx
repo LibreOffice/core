@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,20 +37,19 @@
 #include "vcl/help.hxx"
 #include "vcl/helpwin.hxx"
 #include "tools/debug.hxx"
-#include "tools/diagnose_ex.h"
 #include "tools/time.hxx"
 
 // =======================================================================
 
-#define HELPWINSTYLE_QUICK      0
-#define HELPWINSTYLE_BALLOON    1
+#define HELPWINSTYLE_QUICK		0
+#define HELPWINSTYLE_BALLOON	1
 
-#define HELPTEXTMARGIN_QUICK    3
-#define HELPTEXTMARGIN_BALLOON  6
+#define HELPTEXTMARGIN_QUICK	3
+#define HELPTEXTMARGIN_BALLOON	6
 
-#define HELPDELAY_NORMAL        1
-#define HELPDELAY_SHORT         2
-#define HELPDELAY_NONE          3
+#define HELPDELAY_NORMAL		1
+#define HELPDELAY_SHORT 		2
+#define HELPDELAY_NONE			3
 
 // =======================================================================
 
@@ -64,20 +63,27 @@ Help::~Help()
 
 // -----------------------------------------------------------------------
 
-void Help::OpenHelpAgent( const rtl::OString& )
+BOOL Help::Start( ULONG, const Window* )
+{
+    return FALSE;
+}
+
+void Help::OpenHelpAgent( ULONG )
 {
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::Start( const XubString&, const Window* )
+BOOL Help::Start( const XubString&, const Window* )
 {
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool Help::SearchKeyword( const XubString& )
+// -----------------------------------------------------------------------
+
+XubString Help::GetHelpText( ULONG, const Window* )
 {
-    return sal_False;
+    return ImplGetSVEmptyStr();
 }
 
 // -----------------------------------------------------------------------
@@ -91,26 +97,26 @@ XubString Help::GetHelpText( const String&, const Window* )
 
 void Help::EnableContextHelp()
 {
-    ImplGetSVData()->maHelpData.mbContextHelp = sal_True;
+    ImplGetSVData()->maHelpData.mbContextHelp = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 void Help::DisableContextHelp()
 {
-    ImplGetSVData()->maHelpData.mbContextHelp = sal_False;
+    ImplGetSVData()->maHelpData.mbContextHelp = FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::IsContextHelpEnabled()
+BOOL Help::IsContextHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbContextHelp;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::StartContextHelp()
+BOOL Help::StartContextHelp()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -119,77 +125,77 @@ sal_Bool Help::StartContextHelp()
         Window* pWindow = pSVData->maWinData.mpFocusWin;
         if ( pWindow )
         {
-            Point       aMousePos = pWindow->OutputToScreenPixel( pWindow->GetPointerPosPixel() );
-            HelpEvent   aHelpEvent( aMousePos, HELPMODE_CONTEXT );
+            Point		aMousePos = pWindow->OutputToScreenPixel( pWindow->GetPointerPosPixel() );
+            HelpEvent	aHelpEvent( aMousePos, HELPMODE_CONTEXT );
             pWindow->RequestHelp( aHelpEvent );
-            return sal_True;
+            return TRUE;
         }
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
 void Help::EnableExtHelp()
 {
-    ImplGetSVData()->maHelpData.mbExtHelp = sal_True;
+    ImplGetSVData()->maHelpData.mbExtHelp = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 void Help::DisableExtHelp()
 {
-    ImplGetSVData()->maHelpData.mbExtHelp = sal_False;
+    ImplGetSVData()->maHelpData.mbExtHelp = FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::IsExtHelpEnabled()
+BOOL Help::IsExtHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbExtHelp;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::StartExtHelp()
+BOOL Help::StartExtHelp()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maHelpData.mbExtHelp && !pSVData->maHelpData.mbExtHelpMode )
     {
-        pSVData->maHelpData.mbExtHelpMode = sal_True;
+        pSVData->maHelpData.mbExtHelpMode = TRUE;
         pSVData->maHelpData.mbOldBalloonMode = pSVData->maHelpData.mbBalloonHelp;
-        pSVData->maHelpData.mbBalloonHelp = sal_True;
+        pSVData->maHelpData.mbBalloonHelp = TRUE;
         if ( pSVData->maWinData.mpAppWin )
             pSVData->maWinData.mpAppWin->ImplGenerateMouseMove();
-        return sal_True;
+        return TRUE;
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::EndExtHelp()
+BOOL Help::EndExtHelp()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maHelpData.mbExtHelp && pSVData->maHelpData.mbExtHelpMode )
     {
-        pSVData->maHelpData.mbExtHelpMode = sal_False;
+        pSVData->maHelpData.mbExtHelpMode = FALSE;
         pSVData->maHelpData.mbBalloonHelp = pSVData->maHelpData.mbOldBalloonMode;
         if ( pSVData->maWinData.mpAppWin )
             pSVData->maWinData.mpAppWin->ImplGenerateMouseMove();
-        return sal_True;
+        return TRUE;
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::IsExtHelpActive()
+BOOL Help::IsExtHelpActive()
 {
     return ImplGetSVData()->maHelpData.mbExtHelpMode;
 }
@@ -198,115 +204,101 @@ sal_Bool Help::IsExtHelpActive()
 
 void Help::EnableBalloonHelp()
 {
-    ImplGetSVData()->maHelpData.mbBalloonHelp = sal_True;
+    ImplGetSVData()->maHelpData.mbBalloonHelp = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 void Help::DisableBalloonHelp()
 {
-    ImplGetSVData()->maHelpData.mbBalloonHelp = sal_False;
+    ImplGetSVData()->maHelpData.mbBalloonHelp = FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::IsBalloonHelpEnabled()
+BOOL Help::IsBalloonHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbBalloonHelp;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::ShowBalloon( Window* pParent,
+BOOL Help::ShowBalloon( Window* pParent,
                         const Point& rScreenPos,
                         const XubString& rHelpText )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_BALLOON, 0,
                         rHelpText, ImplGetSVEmptyStr(), rScreenPos );
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::ShowBalloon( Window* pParent,
+BOOL Help::ShowBalloon( Window* pParent,
                         const Point& rScreenPos, const Rectangle& rRect,
                         const XubString& rHelpText )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_BALLOON, 0,
                         rHelpText, ImplGetSVEmptyStr(), rScreenPos, &rRect );
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 void Help::EnableQuickHelp()
 {
-    ImplGetSVData()->maHelpData.mbQuickHelp = sal_True;
+    ImplGetSVData()->maHelpData.mbQuickHelp = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 void Help::DisableQuickHelp()
 {
-    ImplGetSVData()->maHelpData.mbQuickHelp = sal_False;
+    ImplGetSVData()->maHelpData.mbQuickHelp = FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::IsQuickHelpEnabled()
+BOOL Help::IsQuickHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbQuickHelp;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::ShowQuickHelp( Window* pParent,
+BOOL Help::ShowQuickHelp( Window* pParent,
                           const Rectangle& rScreenRect,
                           const XubString& rHelpText,
                           const XubString& rLongHelpText,
-                          sal_uInt16 nStyle )
+                          USHORT nStyle )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_QUICK, nStyle,
                         rHelpText, rLongHelpText,
                         pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rScreenRect );
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
-                     const XubString& rText, sal_uInt16 nStyle )
+ULONG Help::ShowTip( Window* pParent, const Rectangle& rRect,
+                     const XubString& rText, USHORT nStyle )
 {
-    sal_uInt16 nHelpWinStyle = ( ( nStyle & QUICKHELP_TIP_STYLE_BALLOON ) != 0 ) ? HELPWINSTYLE_BALLOON : HELPWINSTYLE_QUICK;
+    USHORT nHelpWinStyle = HELPWINSTYLE_QUICK;
     HelpTextWindow* pHelpWin = new HelpTextWindow( pParent, rText, nHelpWinStyle, nStyle );
-
-    sal_uIntPtr nId = reinterpret_cast< sal_uIntPtr >( pHelpWin );
-    UpdateTip( nId, pParent, rScreenRect, rText );
-
-    pHelpWin->ShowHelp( HELPDELAY_NONE );
-    return nId;
-}
-
-// -----------------------------------------------------------------------
-
-void Help::UpdateTip( sal_uIntPtr nId, Window* pParent, const Rectangle& rScreenRect, const XubString& rText )
-{
-    HelpTextWindow* pHelpWin = reinterpret_cast< HelpTextWindow* >( nId );
-    ENSURE_OR_RETURN_VOID( pHelpWin != NULL, "Help::UpdateTip: invalid ID!" );
 
     Size aSz = pHelpWin->CalcOutSize();
     pHelpWin->SetOutputSizePixel( aSz );
-    ImplSetHelpWindowPos( pHelpWin, pHelpWin->GetWinStyle(), pHelpWin->GetStyle(),
-        pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rScreenRect );
-
-    pHelpWin->SetHelpText( rText );
+    ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle,
+        pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rRect );
+    pHelpWin->ShowHelp( HELPDELAY_NONE );
+    return (ULONG)pHelpWin;
 }
 
 // -----------------------------------------------------------------------
 
-void Help::HideTip( sal_uLong nId )
+void Help::HideTip( ULONG nId )
 {
     HelpTextWindow* pHelpWin = (HelpTextWindow*)nId;
     Window* pFrameWindow = pHelpWin->ImplGetFrameWindow();
@@ -320,17 +312,17 @@ void Help::HideTip( sal_uLong nId )
 
 // =======================================================================
 
-HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle ) :
+HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT nHelpWinStyle, USHORT nStyle ) :
     //FloatingWindow( pParent->ImplGetFrameWindow(), WB_SYSTEMWINDOW ),
     FloatingWindow( pParent, WB_SYSTEMWINDOW|WB_TOOLTIPWIN ), // #105827# if we change the parent, mirroring will not work correctly when positioning this window
     maHelpText( rText )
 {
     SetType( WINDOW_HELPTEXTWINDOW );
-    ImplSetMouseTransparent( sal_True );
+    ImplSetMouseTransparent( TRUE );
     mnHelpWinStyle = nHelpWinStyle;
     mnStyle = nStyle;
 //  on windows this will raise the application window, because help windows are system windows now
-//  EnableAlwaysOnTop();
+//	EnableAlwaysOnTop();
     EnableSaveBackground();
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -339,9 +331,9 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, sal_uIn
     SetTextAlign( ALIGN_TOP );
     if ( IsNativeControlSupported( CTRL_TOOLTIP, PART_ENTIRE_CONTROL ) )
     {
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( TRUE );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( sal_True );
+        SetPaintTransparent( TRUE );
         SetBackground();
     }
     else
@@ -354,7 +346,7 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, sal_uIn
 
     if( mnStyle & QUICKHELP_BIDI_RTL )
     {
-        sal_uLong nLayoutMode = GetLayoutMode();
+        ULONG nLayoutMode = GetLayoutMode();
         nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
         SetLayoutMode( nLayoutMode );
     }
@@ -363,7 +355,7 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, sal_uIn
 
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maHelpData.mbSetKeyboardHelp )
-        pSVData->maHelpData.mbKeyboardHelp = sal_True;
+        pSVData->maHelpData.mbKeyboardHelp = TRUE;
 
     const HelpSettings& rHelpSettings = pParent->GetSettings().GetHelpSettings();
     maShowTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
@@ -380,6 +372,12 @@ HelpTextWindow::~HelpTextWindow()
 
     if( this == ImplGetSVData()->maHelpData.mpHelpWin )
         ImplGetSVData()->maHelpData.mpHelpWin = NULL;
+
+    if ( maStatusText.Len() )
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        pSVData->mpApp->HideHelpStatusText();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -399,14 +397,14 @@ void HelpTextWindow::SetHelpText( const String& rHelpText )
     }
     else // HELPWINSTYLE_BALLOON
     {
-        Point       aTmpPoint;
-        sal_uInt16      nCharsInLine = 35 + ((maHelpText.Len()/100)*5);
-        XubString   aXXX;
+        Point		aTmpPoint;
+        USHORT		nCharsInLine = 35 + ((maHelpText.Len()/100)*5);
+        XubString	aXXX;
         aXXX.Fill( nCharsInLine, 'x' );   // Durchschnittliche Breite, damit nicht jedes Fenster anders.
         long nWidth = GetTextWidth( aXXX );
         Size aTmpSize( nWidth, 0x7FFFFFFF );
         Rectangle aTry1( aTmpPoint, aTmpSize );
-        sal_uInt16 nDrawFlags = TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK |
+        USHORT nDrawFlags = TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK |
                             TEXT_DRAW_LEFT | TEXT_DRAW_TOP;
         if ( mnStyle & QUICKHELP_CTRLTEXT )
             nDrawFlags |= TEXT_DRAW_MNEMONIC;
@@ -428,7 +426,12 @@ void HelpTextWindow::SetHelpText( const String& rHelpText )
 void HelpTextWindow::ImplShow()
 {
     ImplDelData aDogTag( this );
-    Show( sal_True, SHOW_NOACTIVATE );
+    if ( maStatusText.Len() )
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        pSVData->mpApp->ShowHelpStatusText( maStatusText );
+    }
+    Show( TRUE, SHOW_NOACTIVATE );
     if( !aDogTag.IsDelete() )
     Update();
 }
@@ -458,7 +461,7 @@ void HelpTextWindow::Paint( const Rectangle& )
     }
     else // HELPWINSTYLE_BALLOON
     {
-        sal_uInt16 nDrawFlags = TEXT_DRAW_MULTILINE|TEXT_DRAW_WORDBREAK|
+        USHORT nDrawFlags = TEXT_DRAW_MULTILINE|TEXT_DRAW_WORDBREAK|
                                 TEXT_DRAW_LEFT|TEXT_DRAW_TOP;
         if ( mnStyle & QUICKHELP_CTRLTEXT )
             nDrawFlags |= TEXT_DRAW_MNEMONIC;
@@ -484,9 +487,9 @@ void HelpTextWindow::Paint( const Rectangle& )
 
 // -----------------------------------------------------------------------
 
-void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
+void HelpTextWindow::ShowHelp( USHORT nDelayMode )
 {
-    sal_uLong nTimeout = 0;
+    ULONG nTimeout = 0;
     if ( nDelayMode != HELPDELAY_NONE )
     {
         // Im ExtendedHelp-Fall die Hilfe schneller anzeigen
@@ -567,9 +570,9 @@ String HelpTextWindow::GetText() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool HelpTextWindow::RegisterAccessibleParent()
+BOOL HelpTextWindow::RegisterAccessibleParent()
 {
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -580,7 +583,7 @@ void HelpTextWindow::RevokeAccessibleParent()
 
 // =======================================================================
 
-void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
+void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
                          const XubString& rHelpText, const XubString& rStatusText,
                          const Point& rScreenPos, const Rectangle* pHelpArea )
 {
@@ -590,19 +593,15 @@ void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 n
         return;
 
     HelpTextWindow* pHelpWin = pSVData->maHelpData.mpHelpWin;
-    sal_uInt16 nDelayMode = HELPDELAY_NORMAL;
+    USHORT nDelayMode = HELPDELAY_NORMAL;
     if ( pHelpWin )
     {
         DBG_ASSERT( pHelpWin != pParent, "HelpInHelp ?!" );
 
-        if  (   (   ( pHelpWin->GetHelpText() != rHelpText )
-                ||  ( pHelpWin->GetWinStyle() != nHelpWinStyle )
-                ||  (   pHelpArea
-                    &&  ( pHelpWin->GetHelpArea() != *pHelpArea )
-                    )
-                )
-            &&  pSVData->maHelpData.mbRequestingHelp
-            )
+            if ( (( pHelpWin->GetHelpText() != rHelpText ) ||
+                 ( pHelpWin->GetWinStyle() != nHelpWinStyle ) ||
+                 ( pHelpArea && ( pHelpWin->GetHelpArea() != *pHelpArea ) ) )
+                 && pSVData->maHelpData.mbRequestingHelp )
         {
             // remove help window if no HelpText or other HelpText or
             // other help mode. but keep it if we are scrolling, ie not requesting help
@@ -614,8 +613,8 @@ void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 n
         }
         else
         {
-            bool const bTextChanged = rHelpText != pHelpWin->GetHelpText();
-            if ( bTextChanged || ( ( nStyle & QUICKHELP_FORCE_REPOSITION ) != 0 ) )
+            bool bTextChanged = rHelpText != pHelpWin->GetHelpText();
+            if( bTextChanged )
             {
                 Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
                 Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
@@ -633,12 +632,10 @@ void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 n
 
     if ( !pHelpWin && rHelpText.Len() )
     {
-        sal_uLong nCurTime = Time::GetSystemTicks();
-        if  (   ( ( nCurTime - pSVData->maHelpData.mnLastHelpHideTime ) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
-            ||  ( ( nStyle & QUICKHELP_NO_DELAY ) != 0 )
-            )
+        ULONG nCurTime = Time::GetSystemTicks();
+        if( (nCurTime - pSVData->maHelpData.mnLastHelpHideTime) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
             nDelayMode = HELPDELAY_NONE;
-
+        
         DBG_ASSERT( !pHelpWin, "Noch ein HelpWin ?!" );
         pHelpWin = new HelpTextWindow( pParent, rHelpText, nHelpWinStyle, nStyle );
         pSVData->maHelpData.mpHelpWin = pHelpWin;
@@ -646,7 +643,7 @@ void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 n
         if ( pHelpArea )
             pHelpWin->SetHelpArea( *pHelpArea );
 
-        //  positioning
+        //	positioning
         Size aSz = pHelpWin->CalcOutSize();
         pHelpWin->SetOutputSizePixel( aSz );
         ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, pHelpArea );
@@ -671,7 +668,7 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
         if( pHelpWin->IsVisible() )
             pWindow->Invalidate( aInvRect );
         pSVData->maHelpData.mpHelpWin = NULL;
-        pSVData->maHelpData.mbKeyboardHelp = sal_False;
+        pSVData->maHelpData.mbKeyboardHelp = FALSE;
         pHelpWin->Hide();
         delete pHelpWin;
         if( bUpdateHideTime )
@@ -681,12 +678,12 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
 
 // -----------------------------------------------------------------------
 
-void ImplSetHelpWindowPos( Window* pHelpWin, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
+void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle,
                            const Point& rPos, const Rectangle* pHelpArea )
 {
-    Point       aPos = rPos;
-    Size        aSz = pHelpWin->GetSizePixel();
-    Rectangle   aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
+    Point		aPos = rPos;
+    Size		aSz = pHelpWin->GetSizePixel();
+    Rectangle	aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
     aPos = pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( aPos );
     // get mouse screen coords
     Point mPos( pHelpWin->GetParent()->ImplGetFrameWindow()->GetPointerPosPixel() );

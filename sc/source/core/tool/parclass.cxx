@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,15 +38,12 @@
 #include "funcdesc.hxx"
 #include <unotools/charclass.hxx>
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
-#include <sal/macros.h>
 #include <string.h>
 
 #if OSL_DEBUG_LEVEL > 1
 // the documentation thingy
 #include <stdio.h>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
-#include <rtl/strbuf.hxx>
 #include "compiler.hxx"
 #include "sc.hrc"   // VAR_ARGS
 #endif
@@ -217,7 +214,7 @@ void ScParameterClassification::Init()
     memset( pData, 0, sizeof(RunData) * (SC_OPCODE_LAST_OPCODE_ID + 1));
 
     // init from specified static data above
-    for ( size_t i=0; i < SAL_N_ELEMENTS(pRawData); ++i )
+    for ( size_t i=0; i < sizeof(pRawData) / sizeof(RawData); ++i )
     {
         const RawData* pRaw = &pRawData[i];
         if ( pRaw->eOp > SC_OPCODE_LAST_OPCODE_ID )
@@ -227,10 +224,10 @@ void ScParameterClassification::Init()
         else
         {
             RunData* pRun = &pData[ pRaw->eOp ];
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
             if ( pRun->aData.nParam[0] != Unknown )
             {
-                OSL_TRACE( "already assigned: %d", pRaw->eOp);
+                DBG_ERROR1( "already assigned: %d", pRaw->eOp);
             }
 #endif
             memcpy( &(pRun->aData), &(pRaw->aData), sizeof(CommonData));
@@ -243,7 +240,7 @@ void ScParameterClassification::Init()
                     if ( pRun->aData.nParam[j] )
                     {
                         eLast = pRun->aData.nParam[j];
-                        pRun->nMinParams = sal::static_int_cast<sal_uInt8>( j+1 );
+                        pRun->nMinParams = sal::static_int_cast<BYTE>( j+1 );
                     }
                     else
                         pRun->aData.nParam[j] = eLast;
@@ -256,7 +253,7 @@ void ScParameterClassification::Init()
                     if ( !pRun->aData.nParam[j] )
                     {
                         if ( j == 0 || pRun->aData.nParam[j-1] != Bounds )
-                            pRun->nMinParams = sal::static_int_cast<sal_uInt8>( j );
+                            pRun->nMinParams = sal::static_int_cast<BYTE>( j );
                         pRun->aData.nParam[j] = Bounds;
                     }
                 }
@@ -289,7 +286,7 @@ void ScParameterClassification::Exit()
 
 
 ScParameterClassification::Type ScParameterClassification::GetParameterType(
-        const formula::FormulaToken* pToken, sal_uInt16 nParameter)
+        const formula::FormulaToken* pToken, USHORT nParameter)
 {
     OpCode eOp = pToken->GetOpCode();
     switch ( eOp )
@@ -323,11 +320,11 @@ ScParameterClassification::Type ScParameterClassification::GetParameterType(
 
 ScParameterClassification::Type
 ScParameterClassification::GetExternalParameterType( const formula::FormulaToken* pToken,
-        sal_uInt16 nParameter)
+        USHORT nParameter)
 {
     Type eRet = Unknown;
     // similar to ScInterpreter::ScExternal()
-    sal_uInt16 nIndex;
+    USHORT nIndex;
     String aUnoName;
     String aFuncName( ScGlobal::pCharClass->upper( pToken->GetExternal()));
     if ( ScGlobal::GetFuncCollection()->SearchFunc( aFuncName, nIndex) )
@@ -351,7 +348,7 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
         }
     }
     else if ( (aUnoName = ScGlobal::GetAddInCollection()->FindFunction(
-                    aFuncName, false)).Len() )
+                    aFuncName, FALSE)).Len() )
     {
         // the relevant parts of ScUnoAddInCall without having to create one
         const ScUnoAddInFuncData* pFuncData =
@@ -409,7 +406,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
             continue;   // not an internal opcode or already done
 
         RunData* pRun = &pData[ pDesc->nFIndex ];
-        sal_Int32 nArgs = pDesc->GetSuppressedArgCount();
+        USHORT nArgs = pDesc->GetSuppressedArgCount();
         if ( nArgs >= VAR_ARGS )
         {
             nArgs -= VAR_ARGS - 1;
@@ -417,16 +414,13 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
         }
         if ( nArgs > CommonData::nMaxParams )
         {
-            rtl::OStringBuffer aBuf;
-            aBuf.append("ScParameterClassification::Init: too many arguments in listed function: ");
-            aBuf.append(rtl::OUStringToOString(*(pDesc->pFuncName), RTL_TEXTENCODING_UTF8));
-            aBuf.append(": ");
-            aBuf.append(nArgs);
-            OSL_FAIL( aBuf.getStr());
+            DBG_ERROR2( "ScParameterClassification::Init: too many arguments in listed function: %s: %d",
+                    ByteString( *(pDesc->pFuncName),
+                        RTL_TEXTENCODING_UTF8).GetBuffer(), nArgs);
             nArgs = CommonData::nMaxParams;
             pRun->aData.bRepeatLast = true;
         }
-        pRun->nMinParams = static_cast< sal_uInt8 >( nArgs );
+        pRun->nMinParams = static_cast< BYTE >( nArgs );
         for ( size_t j=0; j < nArgs; ++j )
         {
             pRun->aData.nParam[j] = Value;
@@ -471,7 +465,7 @@ void ScParameterClassification::GenerateDocumentation()
             ByteString aStr( xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8);
             aStr += "(";
             formula::FormulaByteToken aToken( eOp);
-            sal_uInt8 nParams = GetMinimumParameters( eOp);
+            BYTE nParams = GetMinimumParameters( eOp);
             // preset parameter count according to opcode value, with some
             // special handling
             if ( eOp < SC_OPCODE_STOP_DIV )
@@ -522,7 +516,7 @@ void ScParameterClassification::GenerateDocumentation()
             if ( nParams != aToken.GetParamCount() )
                 fprintf( stdout, "(parameter count differs, token ParamCount: %d  classification: %d) ",
                         aToken.GetParamCount(), nParams);
-            for ( sal_uInt16 j=0; j < nParams; ++j )
+            for ( USHORT j=0; j < nParams; ++j )
             {
                 if ( j > 0 )
                     aStr += ",";

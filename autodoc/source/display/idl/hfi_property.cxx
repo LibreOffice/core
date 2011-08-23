@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -329,6 +329,7 @@ HF_IdlCommentedRelationElement::produce_Summary( Environment &   io_env,
 {
     csv_assert( i_commentedRef.Info() );
 
+    const ary::idl::Type_id aType = i_commentedRef.Type();
     const ce_info &         rDocu = *i_commentedRef.Info();
 
     bool bShort = NOT rDocu.Short().IsEmpty();

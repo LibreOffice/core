@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,15 +30,14 @@
 #define OOX_XLS_STYLESBUFFER_HXX
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
 #include <com/sun/star/table/CellVertJustify.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
-#include <com/sun/star/util/CellProtection.hpp>
-#include "oox/drawingml/color.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/graphichelper.hxx"
-#include "oox/helper/refmap.hxx"
-#include "oox/helper/refvector.hxx"
+#include "oox/drawingml/color.hxx"
 #include "oox/xls/numberformatsbuffer.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -113,11 +112,11 @@ public:
     void                importColor( const AttributeList& rAttribs );
 
     /** Imports a 64-bit color from the passed binary stream. */
-    void                importColor( SequenceInputStream& rStrm );
-    /** Imports a 32-bit palette color identifier from the passed BIFF12 stream. */
-    void                importColorId( SequenceInputStream& rStrm );
-    /** Imports a 32-bit RGBA color value from the passed BIFF12 stream. */
-    void                importColorRgb( SequenceInputStream& rStrm );
+    void                importColor( RecordInputStream& rStrm );
+    /** Imports a 32-bit palette color identifier from the passed OOBIN stream. */
+    void                importColorId( RecordInputStream& rStrm );
+    /** Imports a 32-bit RGBA color value from the passed OOBIN stream. */
+    void                importColorRgb( RecordInputStream& rStrm );
 
     /** Imports an 8-bit or 16-bit palette color identifier from the passed BIFF stream. */
     void                importColorId( BiffInputStream& rStrm, bool b16Bit = true );
@@ -130,7 +129,7 @@ public:
 
 // ----------------------------------------------------------------------------
 
-SequenceInputStream& operator>>( SequenceInputStream& rStrm, Color& orColor );
+RecordInputStream& operator>>( RecordInputStream& rStrm, Color& orColor );
 
 // ============================================================================
 
@@ -144,11 +143,9 @@ public:
     /** Appends a new color from the passed attributes. */
     void                importPaletteColor( const AttributeList& rAttribs );
     /** Appends a new color from the passed RGBCOLOR record. */
-    void                importPaletteColor( SequenceInputStream& rStrm );
+    void                importPaletteColor( RecordInputStream& rStrm );
     /** Imports the PALETTE record from the passed stream. */
     void                importPalette( BiffInputStream& rStrm );
-    /** Imports a color palette from a UNO sequence in the passed any. */
-    void                importPalette( const ::com::sun::star::uno::Any& rPalette );
 
     /** Rturns the RGB value of the color with the passed index. */
     sal_Int32           getColor( sal_Int32 nPaletteIdx ) const;
@@ -183,7 +180,7 @@ struct FontModel
 
     explicit            FontModel();
 
-    void                setBiff12Scheme( sal_uInt8 nScheme );
+    void                setBinScheme( sal_uInt8 nScheme );
     void                setBiffHeight( sal_uInt16 nHeight );
     void                setBiffWeight( sal_uInt16 nWeight );
     void                setBiffUnderline( sal_uInt16 nUnderline );
@@ -263,23 +260,23 @@ public:
     void                importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );
 
     /** Imports the FONT record from the passed stream. */
-    void                importFont( SequenceInputStream& rStrm );
+    void                importFont( RecordInputStream& rStrm );
     /** Imports the font name from a DXF record. */
-    void                importDxfName( SequenceInputStream& rStrm );
+    void                importDxfName( RecordInputStream& rStrm );
     /** Imports the font color from a DXF record. */
-    void                importDxfColor( SequenceInputStream& rStrm );
+    void                importDxfColor( RecordInputStream& rStrm );
     /** Imports the font scheme from a DXF record. */
-    void                importDxfScheme( SequenceInputStream& rStrm );
+    void                importDxfScheme( RecordInputStream& rStrm );
     /** Imports the font height from a DXF record. */
-    void                importDxfHeight( SequenceInputStream& rStrm );
+    void                importDxfHeight( RecordInputStream& rStrm );
     /** Imports the font weight from a DXF record. */
-    void                importDxfWeight( SequenceInputStream& rStrm );
+    void                importDxfWeight( RecordInputStream& rStrm );
     /** Imports the font underline style from a DXF record. */
-    void                importDxfUnderline( SequenceInputStream& rStrm );
+    void                importDxfUnderline( RecordInputStream& rStrm );
     /** Imports the font escapement style from a DXF record. */
-    void                importDxfEscapement( SequenceInputStream& rStrm );
+    void                importDxfEscapement( RecordInputStream& rStrm );
     /** Imports a font style flag from a DXF record. */
-    void                importDxfFlag( sal_Int32 nElement, SequenceInputStream& rStrm );
+    void                importDxfFlag( sal_Int32 nElement, RecordInputStream& rStrm );
 
     /** Imports the FONT record from the passed stream. */
     void                importFont( BiffInputStream& rStrm );
@@ -350,12 +347,12 @@ struct AlignmentModel
 
     explicit            AlignmentModel();
 
-    /** Sets horizontal alignment from the passed BIFF data. */
-    void                setBiffHorAlign( sal_uInt8 nHorAlign );
-    /** Sets vertical alignment from the passed BIFF data. */
-    void                setBiffVerAlign( sal_uInt8 nVerAlign );
-    /** Sets rotation from the passed BIFF text orientation. */
-    void                setBiffTextOrient( sal_uInt8 nTextOrient );
+    /** Sets horizontal alignment from the passed OOBIN or BIFF data. */
+    void                setBinHorAlign( sal_uInt8 nHorAlign );
+    /** Sets vertical alignment from the passed OOBIN or BIFF data. */
+    void                setBinVerAlign( sal_uInt8 nVerAlign );
+    /** Sets rotation from the passed OOBIN or BIFF text orientation. */
+    void                setBinTextOrient( sal_uInt8 nTextOrient );
 };
 
 // ----------------------------------------------------------------------------
@@ -392,8 +389,8 @@ public:
     /** Sets all attributes from the alignment element. */
     void                importAlignment( const AttributeList& rAttribs );
 
-    /** Sets the alignment attributes from the passed BIFF12 XF record data. */
-    void                setBiff12Data( sal_uInt32 nFlags );
+    /** Sets the alignment attributes from the passed OOBIN XF record data. */
+    void                setBinData( sal_uInt32 nFlags );
     /** Sets the alignment attributes from the passed BIFF2 XF record data. */
     void                setBiff2Data( sal_uInt8 nFlags );
     /** Sets the alignment attributes from the passed BIFF3 XF record data. */
@@ -458,8 +455,8 @@ public:
     /** Sets all attributes from the protection element. */
     void                importProtection( const AttributeList& rAttribs );
 
-    /** Sets the protection attributes from the passed BIFF12 XF record data. */
-    void                setBiff12Data( sal_uInt32 nFlags );
+    /** Sets the protection attributes from the passed OOBIN XF record data. */
+    void                setBinData( sal_uInt32 nFlags );
     /** Sets the protection attributes from the passed BIFF2 XF record data. */
     void                setBiff2Data( sal_uInt8 nNumFmt );
     /** Sets the protection attributes from the passed BIFF3-BIFF8 XF record data. */
@@ -494,7 +491,7 @@ struct BorderLineModel
 
     explicit            BorderLineModel( bool bDxf );
 
-    /** Sets the passed BIFF line style. */
+    /** Sets the passed OOBIN or BIFF line style. */
     void                setBiffStyle( sal_Int32 nLineStyle );
     /** Sets line style and line color from the passed BIFF data. */
     void                setBiffData( sal_uInt8 nLineStyle, sal_uInt16 nLineColor );
@@ -555,9 +552,9 @@ public:
     void                importColor( sal_Int32 nElement, const AttributeList& rAttribs );
 
     /** Imports the BORDER record from the passed stream. */
-    void                importBorder( SequenceInputStream& rStrm );
+    void                importBorder( RecordInputStream& rStrm );
     /** Imports a border from a DXF record from the passed stream. */
-    void                importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm );
+    void                importDxfBorder( sal_Int32 nElement, RecordInputStream& rStrm );
 
     /** Sets the border attributes from the passed BIFF2 XF record data. */
     void                setBiff2Data( sal_uInt8 nFlags );
@@ -614,8 +611,8 @@ struct PatternFillModel
 
     explicit            PatternFillModel( bool bDxf );
 
-    /** Sets the passed BIFF pattern identifier. */
-    void                setBiffPattern( sal_Int32 nPattern );
+    /** Sets the passed OOBIN or BIFF pattern identifier. */
+    void                setBinPattern( sal_Int32 nPattern );
     /** Sets the pattern and pattern colors from the passed BIFF data. */
     void                setBiffData( sal_uInt16 nPatternColor, sal_uInt16 nFillColor, sal_uInt8 nPattern );
 };
@@ -637,10 +634,10 @@ struct GradientFillModel
 
     explicit            GradientFillModel();
 
-    /** Reads BIFF12 gradient settings from a FILL or DXF record. */
-    void                readGradient( SequenceInputStream& rStrm );
-    /** Reads BIFF12 gradient stop settings from a FILL or DXF record. */
-    void                readGradientStop( SequenceInputStream& rStrm, bool bDxf );
+    /** Reads OOBIN gradient settings from a FILL or DXF record. */
+    void                readGradient( RecordInputStream& rStrm );
+    /** Reads OOBIN gradient stop settings from a FILL or DXF record. */
+    void                readGradientStop( RecordInputStream& rStrm, bool bDxf );
 };
 
 // ----------------------------------------------------------------------------
@@ -677,17 +674,17 @@ public:
     void                importColor( const AttributeList& rAttribs, double fPosition );
 
     /** Imports the FILL record from the passed stream. */
-    void                importFill( SequenceInputStream& rStrm );
+    void                importFill( RecordInputStream& rStrm );
     /** Imports the fill pattern from a DXF record. */
-    void                importDxfPattern( SequenceInputStream& rStrm );
+    void                importDxfPattern( RecordInputStream& rStrm );
     /** Imports the pattern color from a DXF record. */
-    void                importDxfFgColor( SequenceInputStream& rStrm );
+    void                importDxfFgColor( RecordInputStream& rStrm );
     /** Imports the background color from a DXF record. */
-    void                importDxfBgColor( SequenceInputStream& rStrm );
+    void                importDxfBgColor( RecordInputStream& rStrm );
     /** Imports gradient settings from a DXF record. */
-    void                importDxfGradient( SequenceInputStream& rStrm );
+    void                importDxfGradient( RecordInputStream& rStrm );
     /** Imports gradient stop settings from a DXF record. */
-    void                importDxfStop( SequenceInputStream& rStrm );
+    void                importDxfStop( RecordInputStream& rStrm );
 
     /** Sets the fill attributes from the passed BIFF2 XF record data. */
     void                setBiff2Data( sal_uInt8 nFlags );
@@ -771,7 +768,7 @@ public:
     void                importProtection( const AttributeList& rAttribs );
 
     /** Imports the XF record from the passed stream. */
-    void                importXf( SequenceInputStream& rStrm, bool bCellXf );
+    void                importXf( RecordInputStream& rStrm, bool bCellXf );
 
     /** Imports the XF record from the passed stream. */
     void                importXf( BiffInputStream& rStrm );
@@ -832,7 +829,7 @@ public:
     void                importProtection( const AttributeList& rAttribs );
 
     /** Imports the DXF record from the passed stream. */
-    void                importDxf( SequenceInputStream& rStrm );
+    void                importDxf( RecordInputStream& rStrm );
 
     /** Imports font, border, and fill settings from the CFRULE record. */
     void                importCfRule( BiffInputStream& rStrm, sal_uInt32 nFlags );
@@ -887,7 +884,7 @@ public:
     /** Imports passed attributes from the cellStyle element. */
     void                importCellStyle( const AttributeList& rAttribs );
     /** Imports style settings from a CELLSTYLE record. */
-    void                importCellStyle( SequenceInputStream& rStrm );
+    void                importCellStyle( RecordInputStream& rStrm );
     /** Imports style settings from a STYLE record. */
     void                importStyle( BiffInputStream& rStrm );
 
@@ -920,7 +917,7 @@ public:
     /** Appends and returns a new named cell style object. */
     CellStyleRef        importCellStyle( const AttributeList& rAttribs );
     /** Imports the CELLSTYLE record from the passed stream. */
-    CellStyleRef        importCellStyle( SequenceInputStream& rStrm );
+    CellStyleRef        importCellStyle( RecordInputStream& rStrm );
     /** Imports the STYLE record from the passed stream. */
     CellStyleRef        importStyle( BiffInputStream& rStrm );
 
@@ -948,21 +945,6 @@ private:
     CellStyleVector     maUserStyles;       /// All user defined cell styles.
     CellStyleXfIdMap    maStylesByXf;       /// All cell styles, mapped by XF identifier.
     CellStyleRef        mxDefStyle;         /// Default cell style.
-};
-
-// ============================================================================
-
-struct AutoFormatModel
-{
-    sal_Int32           mnAutoFormatId;     /// Index of predefined autoformatting.
-    bool                mbApplyNumFmt;      /// True = apply number format from autoformatting.
-    bool                mbApplyFont;        /// True = apply font from autoformatting.
-    bool                mbApplyAlignment;   /// True = apply alignment from autoformatting.
-    bool                mbApplyBorder;      /// True = apply border from autoformatting.
-    bool                mbApplyFill;        /// True = apply fill from autoformatting.
-    bool                mbApplyProtection;  /// True = apply protection from autoformatting.
-
-    explicit            AutoFormatModel();
 };
 
 // ============================================================================
@@ -1001,11 +983,11 @@ public:
     CellStyleRef        importCellStyle( const AttributeList& rAttribs );
 
     /** Appends a new color to the color palette. */
-    void                importPaletteColor( SequenceInputStream& rStrm );
+    void                importPaletteColor( RecordInputStream& rStrm );
     /** Imports the NUMFMT record from the passed stream. */
-    void                importNumFmt( SequenceInputStream& rStrm );
+    void                importNumFmt( RecordInputStream& rStrm );
     /** Imports the CELLSTYLE record from the passed stream. */
-    void                importCellStyle( SequenceInputStream& rStrm );
+    void                importCellStyle( RecordInputStream& rStrm );
 
     /** Imports the PALETTE record from the passed stream. */
     void                importPalette( BiffInputStream& rStrm );
@@ -1019,9 +1001,6 @@ public:
     void                importXf( BiffInputStream& rStrm );
     /** Imports the STYLE record from the passed stream. */
     void                importStyle( BiffInputStream& rStrm );
-
-    /** Imports a color palette from a UNO sequence in the passed any. */
-    void                importPalette( const ::com::sun::star::uno::Any& rPalette );
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();

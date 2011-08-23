@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,16 +33,15 @@
 
 class String;
 class ScXMLExport;
-struct ScMatrixValue;
 
 class ScXMLExportDDELinks
 {
-    ScXMLExport&        rExport;
+    ScXMLExport&		rExport;
 
-    sal_Bool            CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, const double& fPrevValue,
-                                    const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue) const;
-    void                WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat);
-    void                WriteTable(const sal_Int32 nPos);
+    sal_Bool			CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, const double& fPrevValue,
+                                    const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue);
+    void 				WriteCell(const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue, const sal_Int32 nRepeat);
+    void				WriteTable(const sal_Int32 nPos);
 public:
     ScXMLExportDDELinks(ScXMLExport& rExport);
     ~ScXMLExportDDELinks();

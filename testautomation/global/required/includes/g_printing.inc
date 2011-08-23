@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : gregor.hartmann@oracle.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Resource test for the printing dialog
 '*
@@ -172,8 +172,7 @@ testcase tPrintGeneral()
             else
                 warnlog( "Pages setting disabled" )
             endif
-
-            cb_test( PrintReverse, false, "" )
+            
             'Selection.check()
             'AllPages.check()
             
@@ -409,7 +408,7 @@ testcase tPrintLayout()
                 endif
             endif
             
-            lb_test( PrintOrder, 4, 1, "" )
+            lb_test( PrintOrder, 2, 1, "" )
             cb_test( BorderAroundPages, false, "" )
             
             select case( gApplication )
@@ -486,6 +485,7 @@ testcase tPrintOptions()
         printlog( "Controls common for all applications" )
         cb_test( PrintToFile, false, "" )
         cb_test( PrintAsSingleJobs, false, "" )        
+        cb_test( PrintReverse, false, "" )
         
         printlog( "Application specific controls" )    
         select case( gApplication )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,8 @@
 
 
 class DragSource;
-class AquaSalFrame;
 
-/* The functions declared in this protocol are actually
+/* The functions declared in this protocol are actually 
    declared in vcl/aqua/inc/salframe.h. Because we want
    to avoid importing VCL headers in UNO services and
    on the other hand want to avoid warnings caused by
@@ -73,7 +72,7 @@ class AquaSalFrame;
 -(void)mouseDown: (NSEvent*)theEvent;
 -(void)mouseDragged: (NSEvent*)theEvent;
 
--(unsigned int)draggingSourceOperationMaskForLocal:(BOOL)isLocal;
+-(unsigned int)draggingSourceOperationMaskForLocal:(MacOSBOOL)isLocal;
 -(void)draggedImage:(NSImage*)anImage beganAt:(NSPoint)aPoint;
 -(void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation;
 -(void)draggedImage:(NSImage *)draggedImage movedTo:(NSPoint)screenPoint;
@@ -82,8 +81,8 @@ class AquaSalFrame;
 
 
 class DragSource : public ::cppu::BaseMutex,
-                   public ::cppu::WeakComponentImplHelper3< com::sun::star::datatransfer::dnd::XDragSource,
-                                                            com::sun::star::lang::XInitialization,
+                   public ::cppu::WeakComponentImplHelper3< com::sun::star::datatransfer::dnd::XDragSource, 
+                                                            com::sun::star::lang::XInitialization, 
                                                             com::sun::star::lang::XServiceInfo >,
                    private ::boost::noncopyable
 {
@@ -100,7 +99,7 @@ public:
 
   virtual sal_Int32 SAL_CALL getDefaultCursor(sal_Int8 dragAction)
     throw(com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException);
-
+  
   virtual void SAL_CALL startDrag( const com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
                                    sal_Int8 sourceActions,
                                    sal_Int32 cursor,
@@ -122,7 +121,6 @@ public:
   com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDragSourceContext > mXCurrentContext;
 
   id mView;
-  AquaSalFrame* mpFrame;
   NSEvent* mLastMouseEventBeforeStartDrag;
   DragSourceHelper* mDragSourceHelper;
   com::sun::star::awt::MouseEvent mMouseEvent;
@@ -131,7 +129,7 @@ public:
   // The mouse button that set off the drag and drop operation
   short m_MouseButton;
   sal_Int8 mDragSourceActions;
-
+  
   static com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > g_XTransferable;
   static NSView* g_DragSourceView;
   static bool    g_DropSuccessSet;

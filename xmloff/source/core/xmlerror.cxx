@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "xmloff/xmlerror.hxx"
+#include "xmlerror.hxx"
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/xml/sax/XLocator.hpp>
@@ -60,7 +60,7 @@ class ErrorRecord
 {
 public:
 
-    ErrorRecord( sal_Int32 nId,
+    ErrorRecord( sal_Int32 nId, 
                  const Sequence<OUString>& rParams,
                  const OUString& rExceptionMessage,
                  sal_Int32 nRow,
@@ -74,13 +74,13 @@ public:
     OUString sExceptionMessage;/// message of original exception (if available)
 
     // XLocator information:
-    sal_Int32 nRow;     /// row number where error occurred (or -1 for unknown)
-    sal_Int32 nColumn;  /// column number where error occurred (or -1)
+    sal_Int32 nRow;     /// row number where error occured (or -1 for unknown)
+    sal_Int32 nColumn;  /// column number where error occured (or -1)
     OUString sPublicId; /// public identifier
     OUString sSystemId; /// public identifier
 
     /// message Parameters
-    Sequence<OUString> aParams;
+    Sequence<OUString> aParams;  
 };
 
 
@@ -96,7 +96,7 @@ ErrorRecord::ErrorRecord( sal_Int32 nID, const Sequence<OUString>& rParams,
         aParams(rParams)
 {
 }
-
+    
 ErrorRecord::~ErrorRecord()
 {
 }
@@ -112,7 +112,7 @@ XMLErrors::~XMLErrors()
 {
 }
 
-void XMLErrors::AddRecord(
+void XMLErrors::AddRecord( 
     sal_Int32 nId,
     const Sequence<OUString> & rParams,
     const OUString& rExceptionMessage,
@@ -121,7 +121,7 @@ void XMLErrors::AddRecord(
     const OUString& rPublicId,
     const OUString& rSystemId )
 {
-    aErrors.push_back( ErrorRecord( nId, rParams, rExceptionMessage,
+    aErrors.push_back( ErrorRecord( nId, rParams, rExceptionMessage, 
                                     nRow, nColumn, rPublicId, rSystemId ) );
 
 #ifdef DBG_UTIL
@@ -130,7 +130,7 @@ void XMLErrors::AddRecord(
 
     OUStringBuffer sMessage;
 
-    sMessage.appendAscii( "An error or a warning has occurred during XML import/export!\n" );
+    sMessage.appendAscii( "An error or a warning has occured during XML import/export!\n" );
 
     // ID & flags
     sMessage.appendAscii( "Error-Id: 0x");
@@ -193,13 +193,13 @@ void XMLErrors::AddRecord(
     }
 
     // convert to byte string and signal the error
-    ByteString aError( String( sMessage.makeStringAndClear() ),
+    ByteString aError( String( sMessage.makeStringAndClear() ), 
                        RTL_TEXTENCODING_ASCII_US );
-    OSL_FAIL( aError.GetBuffer() );
-#endif
+    DBG_ERROR( aError.GetBuffer() );
+#endif    
 }
 
-void XMLErrors::AddRecord(
+void XMLErrors::AddRecord( 
     sal_Int32 nId,
     const Sequence<OUString> & rParams,
     const OUString& rExceptionMessage,
@@ -207,19 +207,19 @@ void XMLErrors::AddRecord(
 {
     if ( rLocator.is() )
     {
-        AddRecord( nId, rParams, rExceptionMessage,
+        AddRecord( nId, rParams, rExceptionMessage, 
                    rLocator->getLineNumber(), rLocator->getColumnNumber(),
                    rLocator->getPublicId(), rLocator->getSystemId() );
     }
     else
     {
         OUString sEmpty;
-        AddRecord( nId, rParams, rExceptionMessage,
+        AddRecord( nId, rParams, rExceptionMessage, 
                    -1, -1, sEmpty, sEmpty );
     }
 }
 
-void XMLErrors::AddRecord(
+void XMLErrors::AddRecord( 
     sal_Int32 nId,
     const Sequence<OUString> & rParams,
     const OUString& rExceptionMessage)
@@ -228,21 +228,21 @@ void XMLErrors::AddRecord(
     AddRecord( nId, rParams, rExceptionMessage, -1, -1, sEmpty, sEmpty );
 }
 
-void XMLErrors::AddRecord(
+void XMLErrors::AddRecord( 
     sal_Int32 nId,
     const Sequence<OUString> & rParams)
 {
     OUString sEmpty;
     AddRecord( nId, rParams, sEmpty, -1, -1, sEmpty, sEmpty );
 }
-
+    
 void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
     throw( SAXParseException )
 {
     // search first error/warning that matches the nIdMask
     for( ErrorList::iterator aIter = aErrors.begin();
          aIter != aErrors.end();
-         ++aIter )
+         aIter++ )
     {
         if ( (aIter->nId & nIdMask) != 0 )
         {
@@ -250,7 +250,7 @@ void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
             ErrorRecord& rErr = aErrors[0];
             Any aAny;
             aAny <<= rErr.aParams;
-            throw SAXParseException(
+            throw SAXParseException( 
                 rErr.sExceptionMessage, NULL, aAny,
                 rErr.sPublicId, rErr.sSystemId, rErr.nRow, rErr.nColumn );
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
  ************************************************************************/
 #ifndef _CONTENT_HXX
 #define _CONTENT_HXX
-#include <limits.h>     // USHRT_MAX
+#include <limits.h>		// USHRT_MAX
 #include "swcont.hxx"
 
 #include <vcl/menu.hxx>
@@ -41,12 +41,12 @@ class SwTOXBase;
 class SwRedline;
 
 //----------------------------------------------------------------------------
-//  Hilfsklassen
+//	Hilfsklassen
 //----------------------------------------------------------------------------
 
 class SwPopup : public PopupMenu
 {
-    sal_uInt16          nCurId;
+    USHORT			nCurId;
     virtual void    Select(){nCurId = GetCurItemId();}
 
 public:
@@ -54,7 +54,7 @@ public:
         PopupMenu(),
         nCurId(USHRT_MAX){}
 
-    sal_uInt16          GetCurId() const { return nCurId; }
+    USHORT			GetCurId() const { return nCurId; }
 
 };
 
@@ -62,38 +62,38 @@ public:
 
 class SwOutlineContent : public SwContent
 {
-    sal_uInt16  nOutlinePos;
-    sal_uInt8   nOutlineLevel;
-    sal_Bool    bIsMoveable;
+    USHORT	nOutlinePos;
+    BYTE	nOutlineLevel;
+    BOOL	bIsMoveable;
     public:
-        SwOutlineContent(   const SwContentType* pCnt,
+        SwOutlineContent(	const SwContentType* pCnt,
                             const String& rName,
-                            sal_uInt16 nArrPos,
-                            sal_uInt8 nLevel,
-                            sal_Bool bMove,
+                            USHORT nArrPos,
+                            BYTE nLevel,
+                            BOOL bMove,
                             long nYPos) :
-            SwContent(pCnt, rName, nYPos),
+            SwContent(pCnt, rName, nYPos), 
             nOutlinePos(nArrPos), nOutlineLevel(nLevel), bIsMoveable(bMove) {}
 
-    sal_uInt16  GetPos(){return nOutlinePos;}
-    sal_uInt8   GetOutlineLevel(){return nOutlineLevel;}
-    sal_Bool    IsMoveable(){return bIsMoveable;};
+    USHORT 	GetPos(){return nOutlinePos;}
+    BYTE 	GetOutlineLevel(){return nOutlineLevel;}
+    BOOL	IsMoveable(){return bIsMoveable;};
 };
 
 //----------------------------------------------------------------------------
 class SwRegionContent : public SwContent
 {
 
-    sal_uInt8   nRegionLevel;
+    BYTE	nRegionLevel;
 
     public:
-        SwRegionContent(    const SwContentType* pCnt,
+        SwRegionContent(	const SwContentType* pCnt,
                             const String& rName,
-                            sal_uInt8 nLevel,
+                            BYTE nLevel,
                             long nYPos) :
             SwContent(pCnt, rName, nYPos),
                         nRegionLevel(nLevel){}
-    sal_uInt8   GetRegionLevel() const {return nRegionLevel;}
+    BYTE 	GetRegionLevel() const {return nRegionLevel;}
 };
 //----------------------------------------------------------------------------
 
@@ -103,7 +103,7 @@ class SwURLFieldContent : public SwContent
     const SwTxtINetFmt* pINetAttr;
 
 public:
-    SwURLFieldContent(  const SwContentType* pCnt,
+    SwURLFieldContent(	const SwContentType* pCnt,
                             const String& rName,
                             const String& rURL,
                             const SwTxtINetFmt* pAttr,
@@ -111,17 +111,17 @@ public:
         : SwContent( pCnt, rName, nYPos ), sURL( rURL ), pINetAttr( pAttr )
     {}
 
-    virtual sal_Bool    IsProtect() const;
-    const String&   GetURL()                { return sURL; }
-    const SwTxtINetFmt* GetINetAttr()       { return pINetAttr; }
+    virtual BOOL	IsProtect() const;
+    const String& 	GetURL() 				{ return sURL; }
+    const SwTxtINetFmt* GetINetAttr()		{ return pINetAttr; }
 };
 
 //----------------------------------------------------------------------------
 class SwPostItContent : public SwContent
 {
-    const SwFmtFld*     pFld;
-    SwRedline*          pRedline;
-    bool                mbPostIt;
+    const SwFmtFld* 	pFld;
+    SwRedline* 			pRedline;
+    bool				mbPostIt;
 public:
     SwPostItContent( const SwContentType* pCnt,
                             const String& rName,
@@ -136,24 +136,24 @@ public:
         : SwContent( pCnt, rName, nYPos ), pRedline( pRed ),mbPostIt(false)
     {}
 
-    const SwFmtFld* GetPostIt()     { return pFld; }
-    SwRedline* GetRedline() { return pRedline; }
-    virtual sal_Bool    IsProtect()     const;
-    bool            IsPostIt()      {return mbPostIt; }
+    const SwFmtFld* GetPostIt()		{ return pFld; }
+    SwRedline* GetRedline()	{ return pRedline; }
+    virtual BOOL	IsProtect()		const;
+    bool			IsPostIt()		{return mbPostIt; }
 };
 
 //----------------------------------------------------------------------------
 
 class SwGraphicContent : public SwContent
 {
-    String      sLink;
+    String 		sLink;
 public:
     SwGraphicContent(const SwContentType* pCnt, const String& rName, const String& rLink, long nYPos)
         : SwContent( pCnt, rName, nYPos ), sLink( rLink )
         {}
     virtual ~SwGraphicContent();
 
-    const String&   GetLink() const {return sLink;}
+    const String& 	GetLink() const {return sLink;}
 };
 
 //----------------------------------------------------------------------------
@@ -179,45 +179,45 @@ public:
 
 class SwContentType : public SwTypeNumber
 {
-    SwWrtShell*         pWrtShell;
-    SwContentArr*       pMember;            // Array fuer Inhalte
-    String              sContentTypeName;   // Name der Inhaltsform
-    String              sSingleContentTypeName; // Name der Inhaltsform, Singular
-    String              sTypeToken;         // Anhaengsel fuer URL
-    sal_uInt16              nMemberCount;       // Inhaltsanzahl
-    sal_uInt16              nContentType;       // Id der Inhaltsform
-    sal_uInt8               nOutlineLevel;
-    sal_Bool                bMemberFilled : 1;  // wurden die Inhalte bereits eingefuegt?
-    sal_Bool                bIsInternalDrag:1;  // koennen die Inhalte verschoben werden?
-    sal_Bool                bDataValid :    1;  //
-    sal_Bool                bEdit:          1;  // kann diese Type bearbeitet werden ?
-    sal_Bool                bDelete:        1;  // kann diese Type geloescht werden ?
+    SwWrtShell* 		pWrtShell;
+    SwContentArr* 		pMember;			// Array fuer Inhalte
+    String 				sContentTypeName; 	// Name der Inhaltsform
+    String 				sSingleContentTypeName; // Name der Inhaltsform, Singular
+    String 				sTypeToken;			// Anhaengsel fuer URL
+    USHORT				nMemberCount;		// Inhaltsanzahl
+    USHORT				nContentType;		// Id der Inhaltsform
+    BYTE 				nOutlineLevel;
+    BOOL 				bMemberFilled : 1; 	// wurden die Inhalte bereits eingefuegt?
+    BOOL 				bIsInternalDrag:1;	// koennen die Inhalte verschoben werden?
+    BOOL				bDataValid : 	1;  //
+    BOOL				bEdit:			1;	// kann diese Type bearbeitet werden ?
+    BOOL				bDelete:		1;	// kann diese Type geloescht werden ?
 protected:
-        void            RemoveNewline(String&);
+        void			RemoveNewline(String&);
 public:
-        SwContentType(SwWrtShell* pParent, sal_uInt16 nType, sal_uInt8 nLevel );
+        SwContentType(SwWrtShell* pParent, USHORT nType, BYTE nLevel );
         ~SwContentType();
 
-        void                Init(sal_Bool* pbInvalidateWindow = 0);
-        void                FillMemberList(sal_Bool* pbLevelChanged = NULL);
-        sal_uInt16              GetMemberCount() const
+        void				Init(BOOL* pbInvalidateWindow = 0);
+        void				FillMemberList(BOOL* pbLevelChanged = NULL);
+        USHORT				GetMemberCount() const
                                 {return nMemberCount;};
-        sal_uInt16              GetType() const {return nContentType;}
-        const SwContent*    GetMember(sal_uInt16 nIndex);
-        const String&       GetName() {return sContentTypeName;}
-        const String&       GetSingleName() const {return sSingleContentTypeName;}
-        const String&       GetTypeToken() const{return sTypeToken;}
+        USHORT				GetType() const {return nContentType;}
+        const SwContent*	GetMember(USHORT nIndex);
+        const String&		GetName() {return sContentTypeName;}
+        const String&		GetSingleName() const {return sSingleContentTypeName;}
+        const String&		GetTypeToken() const{return sTypeToken;}
 
-        void                SetOutlineLevel(sal_uInt8 nNew)
+        void				SetOutlineLevel(BYTE nNew)
                             {
                                 nOutlineLevel = nNew;
                                 Invalidate();
                             }
 
-        void                Invalidate(); // nur nMemberCount wird neu gelesen
+        void				Invalidate(); // nur nMemberCount wird neu gelesen
 
-        sal_Bool                IsEditable() const {return bEdit;}
-        sal_Bool                IsDeletable() const {return bDelete;}
+        BOOL 				IsEditable() const {return bEdit;}
+        BOOL				IsDeletable() const {return bDelete;}
 };
 
 #endif

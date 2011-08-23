@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,6 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
-#include "printtrace.h"
-
 BYTE oslTraceEnv[] = "OSL_TRACE_TO_FILE";
 
 typedef pfunc_osl_printDebugMessage oslDebugMessageFunc;
@@ -56,11 +54,29 @@ void SAL_CALL osl_breakDebug()
 /************************************************************************/
 /* osl_trace */
 /************************************************************************/
-void osl_trace(char const * pszFormat, ...) {
+/* comment this define to stop output thread identifier*/
+#define OSL_TRACE_THREAD 1
+void SAL_CALL osl_trace (
+    const sal_Char* lpszFormat, ...)
+{
     va_list args;
-    va_start(args, pszFormat);
-    printTrace(0, pszFormat, args); /* TODO: pid */
+
+#if defined(OSL_PROFILING)
+    fprintf(stderr, "Time: %06lu : ", osl_getGlobalTimer() );
+#else
+#if defined(OSL_TRACE_THREAD)
+    fprintf(stderr,"Thread: %6d :",osl_getThreadIdentifier(NULL));
+#else
+    fprintf(stderr, "Trace Message: ");
+#endif
+#endif
+
+    va_start(args, lpszFormat);
+    vfprintf(stderr, lpszFormat, args);
     va_end(args);
+
+    fprintf(stderr,"\n");
+    fflush(stderr);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -81,7 +97,7 @@ void SAL_CALL osl_trace__yd_os2(const sal_Char* lpszFormat, ...)
     {
         return;
     }
-
+    
     va_start(args, lpszFormat);
 
     nBuf = vsprintf(szBuffer, lpszFormat, args);
@@ -125,8 +141,7 @@ sal_Bool SAL_CALL osl_assertFailedLine( const sal_Char* pszFileName, sal_Int32 n
 
     fputs(szMessage, stderr);
 
-    char const * env = getenv( "SAL_DIAGNOSE_ABORT" );
-    return ( ( env != NULL ) && ( *env != '\0' ) );
+    return sal_True;   /* abort */
 }
 
 /*----------------------------------------------------------------------------*/

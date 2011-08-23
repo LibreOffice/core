@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,6 @@
 #include <toolkit/helper/property.hxx>
 #include <tools/debug.hxx>
 #include <vcl/scrbar.hxx>
-#include <vcl/svapp.hxx>
 
 #include "forward.hxx"
 
@@ -70,7 +69,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER1( VCLXScroller, VCLXWindow );
 void SAL_CALL VCLXScroller::dispose() throw(RuntimeException)
 {
     {
-        SolarMutexGuard aGuard;
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -155,7 +154,7 @@ void VCLXScroller::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 
 void SAL_CALL VCLXScroller::setProperty( const ::rtl::OUString& PropertyName, const Any &Value ) throw(RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
     {
@@ -174,7 +173,7 @@ void SAL_CALL VCLXScroller::setProperty( const ::rtl::OUString& PropertyName, co
 
 Any SAL_CALL VCLXScroller::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     Any aReturn;
     if ( GetWindow() )

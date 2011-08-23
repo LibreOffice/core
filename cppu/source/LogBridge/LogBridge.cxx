@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include "rtl/logfile.hxx"
 #include "uno/environment.hxx"
 #include <com/sun/star/uno/Type.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <memory>
 
 namespace
@@ -105,7 +105,7 @@ void LogBridge::v_enter(void)
 
     ++ m_count;
 }
-
+    
 void LogBridge::v_leave(void)
 {
     OSL_ASSERT(m_count > 0);
@@ -236,7 +236,7 @@ void LogProbe(
                 if ( i > 0 )
                     rtl_logfile_trace( ",");
                 traceValue(pParams[i].pTypeRef,pArgs[i]);
-
+                
             }
             rtl_logfile_trace( ")");
         } // if ( nParams )
@@ -247,7 +247,7 @@ void LogProbe(
         rtl_logfile_longTrace( "} LogBridge () %s",sTemp.getStr());
         if ( ppException && *ppException )
         {
-            rtl_logfile_trace( " excption occurred : ");
+            rtl_logfile_trace( " excption occured : ");
             typelib_TypeDescription * pElementTypeDescr = 0;
             TYPELIB_DANGER_GET( &pElementTypeDescr, (*ppException)->pType );
             const ::rtl::OString sValue( ::rtl::OUStringToOString(pElementTypeDescr->pTypeName,osl_getThreadTextEncoding()));

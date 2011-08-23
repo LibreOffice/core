@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,27 +56,36 @@ class RulerCtrlItem : public SfxControllerItem
     Ruler &rRuler;
 
  protected:
-    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
+    virtual void StateChanged( USHORT nSId, SfxItemState eState,
                                 const SfxPoolItem* pItem );
 
  public:
-    RulerCtrlItem(sal_uInt16 nId, Ruler& rRlr, SfxBindings& rBind);
+    RulerCtrlItem(USHORT nId, Ruler& rRlr, SfxBindings& rBind);
 };
 
-RulerCtrlItem::RulerCtrlItem(sal_uInt16 _nId, Ruler& rRlr, SfxBindings& rBind)
+/*************************************************************************
+|*
+\************************************************************************/
+
+RulerCtrlItem::RulerCtrlItem(USHORT _nId, Ruler& rRlr, SfxBindings& rBind)
 : SfxControllerItem(_nId, rBind)
 , rRuler(rRlr)
 {
 }
 
-void RulerCtrlItem::StateChanged( sal_uInt16 nSId, SfxItemState, const SfxPoolItem* pState )
+
+/*************************************************************************
+|*
+\************************************************************************/
+
+void RulerCtrlItem::StateChanged( USHORT nSId, SfxItemState, const SfxPoolItem* pState )
 {
     switch( nSId )
     {
         case SID_RULER_NULL_OFFSET:
         {
             const SfxPointItem* pItem = dynamic_cast< const SfxPointItem* >(pState);
-            DBG_ASSERT(pState ? pItem != NULL : sal_True, "SfxPointItem erwartet");
+            DBG_ASSERT(pState ? pItem != NULL : TRUE, "SfxPointItem erwartet");
             if ( pItem )
                 rRuler.SetNullOffset(pItem->GetValue());
         }
@@ -91,7 +100,7 @@ void RulerCtrlItem::StateChanged( sal_uInt16 nSId, SfxItemState, const SfxPoolIt
 |*
 \************************************************************************/
 
-Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, sal_uInt16 nRulerFlags,  SfxBindings& rBindings, WinBits nWinStyle)
+Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, USHORT nRulerFlags,  SfxBindings& rBindings, WinBits nWinStyle) 
 : SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle)
 , pSdWin(pWin)
 , pDrViewShell(&rViewSh)
@@ -102,12 +111,12 @@ Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, sal
 
     if ( nWinStyle & WB_HSCROLL )
     {
-        bHorz = sal_True;
+        bHorz = TRUE;
         SetHelpId( HID_SD_RULER_HORIZONTAL );
     }
     else
     {
-        bHorz = sal_False;
+        bHorz = FALSE;
         SetHelpId( HID_SD_RULER_VERTICAL );
     }
 }
@@ -179,8 +188,8 @@ void Ruler::SetNullOffset(const Point& rOffset)
 {
     long nOffset;
 
-    if ( bHorz )    nOffset = rOffset.X();
-    else            nOffset = rOffset.Y();
+    if ( bHorz )	nOffset = rOffset.X();
+    else			nOffset = rOffset.Y();
 
     SetNullOffsetLogic(nOffset);
 }

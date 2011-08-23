@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,11 +44,11 @@ SfxIntegerListItem::SfxIntegerListItem()
 {
 }
 
-SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const SvULongs& rList )
+SfxIntegerListItem::SfxIntegerListItem( USHORT which, const SvULongs& rList )
     : SfxPoolItem( which )
 {
     m_aList.realloc( rList.Count() );
-    for ( sal_uInt16 n=0; n<rList.Count(); n++ )
+    for ( USHORT n=0; n<rList.Count(); n++ )
         m_aList[n] = rList[n];
 }
 
@@ -65,7 +65,7 @@ SfxIntegerListItem::~SfxIntegerListItem()
 int SfxIntegerListItem::operator==( const SfxPoolItem& rPoolItem ) const
 {
     if ( !rPoolItem.ISA( SfxIntegerListItem ) )
-        return sal_False;
+        return FALSE;
 
     const SfxIntegerListItem rItem = (const SfxIntegerListItem&) rPoolItem;
     return rItem.m_aList == m_aList;
@@ -76,10 +76,10 @@ SfxPoolItem* SfxIntegerListItem::Clone( SfxItemPool * ) const
     return new SfxIntegerListItem( *this );
 }
 
-bool SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, BYTE )
 {
     ::com::sun::star::uno::Reference < ::com::sun::star::script::XTypeConverter > xConverter
-            ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
+            ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
             ::com::sun::star::uno::UNO_QUERY );
     ::com::sun::star::uno::Any aNew;
     try { aNew = xConverter->convertTo( rVal, ::getCppuType((const ::com::sun::star::uno::Sequence < sal_Int32 >*)0) ); }
@@ -91,7 +91,7 @@ bool SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, sal_u
     return ( aNew >>= m_aList );
 }
 
-bool SfxIntegerListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxIntegerListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 {
     rVal <<= m_aList;
     return true;
@@ -100,7 +100,7 @@ bool SfxIntegerListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 )
 void SfxIntegerListItem::GetList( SvULongs& rList ) const
 {
     for ( sal_Int32 n=0; n<m_aList.getLength(); n++ )
-        rList.Insert( m_aList[n], sal::static_int_cast< sal_uInt16 >(n) );
+        rList.Insert( m_aList[n], sal::static_int_cast< USHORT >(n) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

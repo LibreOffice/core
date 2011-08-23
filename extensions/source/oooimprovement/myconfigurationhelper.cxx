@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ namespace
         buf.appendAscii("The requested path \"");
         buf.append(path);
         buf.appendAscii("\" does not exists.");
-        return buf.makeStringAndClear();
+        return buf.makeStringAndClear(); 
     };
 }
 
@@ -74,28 +74,28 @@ namespace oooimprovement
         sal_Int32 eMode)
     {
         Reference<XMultiServiceFactory> xConfigProvider(
-            xSMGR->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
+            xSMGR->createInstance(OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
             UNO_QUERY_THROW);
 
         vector<Any> lParams;
         css::beans::PropertyValue aParam;
 
         // set root path
-        aParam.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+        aParam.Name = OUString::createFromAscii("nodepath");
         aParam.Value <<= sPackage;
         lParams.push_back(makeAny(aParam));
 
         // enable all locales mode
         if ((eMode & MyConfigurationHelper::E_ALL_LOCALES)==MyConfigurationHelper::E_ALL_LOCALES)
         {
-            aParam.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("locale"));
-            aParam.Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+            aParam.Name = OUString::createFromAscii("locale");
+            aParam.Value <<= OUString::createFromAscii("*");
             lParams.push_back(makeAny(aParam));
         }
 
         // enable lazy writing
         sal_Bool bLazy = ((eMode & MyConfigurationHelper::E_LAZY_WRITE)==MyConfigurationHelper::E_LAZY_WRITE);
-        aParam.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite"));
+        aParam.Name = OUString::createFromAscii("lazywrite");
         aParam.Value = makeAny(bLazy);
         lParams.push_back(makeAny(aParam));
 
@@ -105,11 +105,11 @@ namespace oooimprovement
         sal_Bool bReadOnly = ((eMode & MyConfigurationHelper::E_READONLY)==MyConfigurationHelper::E_READONLY);
         if (bReadOnly)
             xCFG = xConfigProvider->createInstanceWithArguments(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
                 sequenceFromVector(lParams));
         else
             xCFG = xConfigProvider->createInstanceWithArguments(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess")),
+                OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
                 sequenceFromVector(lParams));
         return xCFG;
     }

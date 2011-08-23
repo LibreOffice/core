@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -311,6 +311,7 @@
 #include "osl/conditn.hxx"
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
+#include "osl/mutex.hxx"
 
 #include "rtl/alloc.h"
 #include "rtl/logfile.hxx"
@@ -328,6 +329,7 @@
 #include "sfx2/imgmgr.hxx"
 #include "sfx2/msgpool.hxx"
 #include "sfx2/sfxuno.hxx"
+
 
 #include "svtools/cliplistener.hxx"
 #include "svtools/imageresourceaccess.hxx"
@@ -363,6 +365,7 @@
 #include "tools/diagnose_ex.h"
 #include "tools/inetmsg.hxx"
 #include "tools/link.hxx"
+#include "tools/list.hxx"
 #include "tools/resid.hxx"
 #include "tools/simplerm.hxx"
 #include "tools/solar.h"
@@ -372,6 +375,7 @@
 
 #include "ucbhelper/activedatasink.hxx"
 #include "ucbhelper/content.hxx"
+
 
 #include "uno/lbnames.h"
 #include "uno/mapping.hxx"
@@ -386,10 +390,10 @@
 #include "vcl/bmpacc.hxx"
 #include "vcl/cvtgrf.hxx"
 #include "vcl/mapmod.hxx"
-#include "tools/mapunit.hxx"
+#include "vcl/mapunit.hxx"
 #include "vcl/stdtext.hxx"
 #include "vcl/timer.hxx"
-#include "tools/wintypes.hxx"
+#include "vcl/wintypes.hxx"
 
 #include "osl/mutex.hxx"
 #include "osl/thread.hxx"

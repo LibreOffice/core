@@ -31,8 +31,9 @@ PRJNAME=connectivity
 TARGET=ado
 VISIBILITY_HIDDEN=TRUE
 
-# --- Settings ----------------------------------
+#	ENABLE_EXCEPTIONS=TRUE
 
+# --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
@@ -96,6 +97,7 @@ SHL1STDLIBS=\
 SHL1STDLIBS+= icomphelp2.lib
 .ENDIF
 
+#SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
@@ -110,11 +112,3 @@ dummy:
 # --- Targets ----------------------------------
 .INCLUDE : $(PRJ)$/target.pmk
 
-
-ALLTAR : $(MISC)/ado.component
-
-$(MISC)/ado.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        ado.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt ado.component

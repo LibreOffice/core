@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,11 +33,15 @@
 #include <vcl/outdev.hxx>
 #include <SwPortionHandler.hxx>
 
+#include "errhdl.hxx"   // ASSERT
+
+#include "txtcfg.hxx"
 #include "porlin.hxx"
 #include "inftxt.hxx"
 #include "portxt.hxx"
 #include "pormulti.hxx"
 #include "porglue.hxx"
+#include "inftxt.hxx"
 #include "blink.hxx"
 #if OSL_DEBUG_LEVEL > 1
 
@@ -86,7 +90,7 @@ KSHORT SwLinePortion::GetViewWidth( const SwTxtSizeInfo & ) const
 }
 
 /*************************************************************************
- *               SwLinePortion::SwLinePortion( )
+ *				 SwLinePortion::SwLinePortion( )
  *************************************************************************/
 
 SwLinePortion::SwLinePortion( ) :
@@ -112,18 +116,18 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
         return;
 
     const KSHORT nHalfView = nViewWidth / 2;
-    sal_uInt16 nLastWidth = pLast->Width();
+    USHORT nLastWidth = pLast->Width();
 
     if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd() )
-        nLastWidth = nLastWidth + (sal_uInt16)pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
+        nLastWidth = nLastWidth + (USHORT)pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
 
     KSHORT nPos;
     SwTxtPaintInfo aInf( rInf );
 
-    const sal_Bool bBidiPor = ( rInf.GetTxtFrm()->IsRightToLeft() ) !=
+    const BOOL bBidiPor = ( rInf.GetTxtFrm()->IsRightToLeft() ) !=
                           ( 0 != ( TEXT_LAYOUT_BIDI_RTL & rInf.GetOut()->GetLayoutMode() ) );
 
-    sal_uInt16 nDir = bBidiPor ?
+    USHORT nDir = bBidiPor ?
                   1800 :
                   rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
 
@@ -162,7 +166,7 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
 }
 
 /*************************************************************************
- *                  SwLinePortion::CalcTxtSize()
+ *					SwLinePortion::CalcTxtSize()
  *************************************************************************/
 
 void SwLinePortion::CalcTxtSize( const SwTxtSizeInfo &rInf )
@@ -178,7 +182,7 @@ void SwLinePortion::CalcTxtSize( const SwTxtSizeInfo &rInf )
 }
 
 /*************************************************************************
- *                  SwLinePortion::Truncate()
+ *					SwLinePortion::Truncate()
  *
  * Es werden alle nachfolgenden Portions geloescht.
  *************************************************************************/
@@ -199,7 +203,7 @@ void SwLinePortion::_Truncate()
 }
 
 /*************************************************************************
- *                virtual SwLinePortion::Insert()
+ *				  virtual SwLinePortion::Insert()
  *
  * Es wird immer hinter uns eingefuegt.
  *************************************************************************/
@@ -215,7 +219,7 @@ SwLinePortion *SwLinePortion::Insert( SwLinePortion *pIns )
 }
 
 /*************************************************************************
- *                  SwLinePortion::FindLastPortion()
+ *					SwLinePortion::FindLastPortion()
  *************************************************************************/
 
 SwLinePortion *SwLinePortion::FindLastPortion()
@@ -224,13 +228,14 @@ SwLinePortion *SwLinePortion::FindLastPortion()
     // An das Ende wandern und pLinPortion an den letzten haengen ...
     while( pPos->GetPortion() )
     {
+        DBG_LOOP;
         pPos = pPos->GetPortion();
     }
     return pPos;
 }
 
 /*************************************************************************
- *                virtual SwLinePortion::Append()
+ *				  virtual SwLinePortion::Append()
  *************************************************************************/
 
 SwLinePortion *SwLinePortion::Append( SwLinePortion *pIns )
@@ -245,7 +250,7 @@ SwLinePortion *SwLinePortion::Append( SwLinePortion *pIns )
 }
 
 /*************************************************************************
- *                virtual SwLinePortion::Cut()
+ *				  virtual SwLinePortion::Cut()
  *************************************************************************/
 
 SwLinePortion *SwLinePortion::Cut( SwLinePortion *pVictim )
@@ -258,7 +263,7 @@ SwLinePortion *SwLinePortion::Cut( SwLinePortion *pVictim )
 }
 
 /*************************************************************************
- *                SwLinePortion::FindPrevPortion()
+ *				  SwLinePortion::FindPrevPortion()
  *************************************************************************/
 
 SwLinePortion *SwLinePortion::FindPrevPortion( const SwLinePortion *pRoot )
@@ -267,6 +272,7 @@ SwLinePortion *SwLinePortion::FindPrevPortion( const SwLinePortion *pRoot )
     SwLinePortion *pPos = (SwLinePortion*)pRoot;
     while( pPos->GetPortion() && pPos->GetPortion() != this )
     {
+        DBG_LOOP;
         pPos = pPos->GetPortion();
     }
     OSL_ENSURE( pPos->GetPortion(),
@@ -275,7 +281,7 @@ SwLinePortion *SwLinePortion::FindPrevPortion( const SwLinePortion *pRoot )
 }
 
 /*************************************************************************
- *                virtual SwLinePortion::GetCrsrOfst()
+ *				  virtual SwLinePortion::GetCrsrOfst()
  *************************************************************************/
 
 xub_StrLen SwLinePortion::GetCrsrOfst( const KSHORT nOfst ) const
@@ -287,7 +293,7 @@ xub_StrLen SwLinePortion::GetCrsrOfst( const KSHORT nOfst ) const
 }
 
 /*************************************************************************
- *                virtual SwLinePortion::GetTxtSize()
+ *				  virtual SwLinePortion::GetTxtSize()
  *************************************************************************/
 
 SwPosSize SwLinePortion::GetTxtSize( const SwTxtSizeInfo & ) const
@@ -300,7 +306,7 @@ SwPosSize SwLinePortion::GetTxtSize( const SwTxtSizeInfo & ) const
 #if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
- *                virtual SwLinePortion::Check()
+ *				  virtual SwLinePortion::Check()
  *************************************************************************/
 
 sal_Bool SwLinePortion::Check( SvStream &, SwTxtSizeInfo & ) //$ ostream
@@ -310,7 +316,7 @@ sal_Bool SwLinePortion::Check( SvStream &, SwTxtSizeInfo & ) //$ ostream
 #endif
 
 /*************************************************************************
- *                 virtual SwLinePortion::Format()
+ *				   virtual SwLinePortion::Format()
  *************************************************************************/
 
 sal_Bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
@@ -325,7 +331,7 @@ sal_Bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
     const SwLinePortion *pLast = rInf.GetLast();
     Height( pLast->Height() );
     SetAscent( pLast->GetAscent() );
-    const KSHORT nNewWidth = static_cast<sal_uInt16>(rInf.X() + PrtWidth());
+    const KSHORT nNewWidth = static_cast<USHORT>(rInf.X() + PrtWidth());
     // Nur Portions mit echter Breite koennen ein sal_True zurueckliefern
     // Notizen beispielsweise setzen niemals bFull==sal_True
     if( rInf.Width() <= nNewWidth && PrtWidth() && ! IsKernPortion() )
@@ -340,7 +346,7 @@ sal_Bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                 virtual SwLinePortion::FormatEOL()
+ *				   virtual SwLinePortion::FormatEOL()
  *************************************************************************/
 
 // Format end of line
@@ -349,19 +355,19 @@ void SwLinePortion::FormatEOL( SwTxtFormatInfo & )
 { }
 
 /*************************************************************************
- *                      SwLinePortion::Move()
+ *						SwLinePortion::Move()
  *************************************************************************/
 
 void SwLinePortion::Move( SwTxtPaintInfo &rInf )
 {
-    sal_Bool bB2T = rInf.GetDirection() == DIR_BOTTOM2TOP;
-    const sal_Bool bFrmDir = rInf.GetTxtFrm()->IsRightToLeft();
-    sal_Bool bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
+    BOOL bB2T = rInf.GetDirection() == DIR_BOTTOM2TOP;
+    const BOOL bFrmDir = rInf.GetTxtFrm()->IsRightToLeft();
+    BOOL bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
                        (   bFrmDir && DIR_LEFT2RIGHT == rInf.GetDirection() );
 
     if ( InSpaceGrp() && rInf.GetSpaceAdd() )
     {
-        SwTwips nTmp = PrtWidth() + CalcSpacing( rInf.GetSpaceAdd(), rInf );
+        SwTwips nTmp = PrtWidth() +	CalcSpacing( rInf.GetSpaceAdd(), rInf );
         if( rInf.IsRotated() )
             rInf.Y( rInf.Y() + ( bB2T ? -nTmp : nTmp ) );
         else if ( bCounterDir )
@@ -390,7 +396,7 @@ void SwLinePortion::Move( SwTxtPaintInfo &rInf )
 }
 
 /*************************************************************************
- *              virtual SwLinePortion::CalcSpacing()
+ *				virtual SwLinePortion::CalcSpacing()
  *************************************************************************/
 
 long SwLinePortion::CalcSpacing( long , const SwTxtSizeInfo & ) const
@@ -399,7 +405,7 @@ long SwLinePortion::CalcSpacing( long , const SwTxtSizeInfo & ) const
 }
 
 /*************************************************************************
- *              virtual SwLinePortion::GetExpTxt()
+ *				virtual SwLinePortion::GetExpTxt()
  *************************************************************************/
 
 sal_Bool SwLinePortion::GetExpTxt( const SwTxtSizeInfo &, XubString & ) const

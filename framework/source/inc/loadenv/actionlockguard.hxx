@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,8 +123,8 @@ class ActionLockGuard : private ThreadHelpBase
             @param  xLock
                     points to the outside resource, which should be locked.
 
-            @return sal_True, if new resource could be set and locked.
-                    sal_False otherwhise.
+            @return TRUE, if new resource could be set and locked.
+                    FALSE otherwhise.
          */
         virtual sal_Bool setResource(const css::uno::Reference< css::document::XActionLockable >& xLock)
         {
@@ -151,8 +151,8 @@ class ActionLockGuard : private ThreadHelpBase
             @param  xLock
                     points to the outside resource, which should be locked.
 
-            @return sal_True, if new resource could be set and locked.
-                    sal_False otherwhise.
+            @return TRUE, if new resource could be set and locked.
+                    FALSE otherwhise.
          */
         virtual void freeResource()
         {

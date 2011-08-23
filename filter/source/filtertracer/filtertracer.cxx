@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ rtl::OUString FilterTracer_getImplementationName()
 {
     return B2UCONST( "com.sun.star.util.FilterTracer" );
 }
-sal_Bool SAL_CALL FilterTracer_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL FilterTracer_supportsService( const rtl::OUString& ServiceName ) 
     throw( NMSP_UNO::RuntimeException )
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.util.logging.Logger" ) );
 }
-SEQ( rtl::OUString ) SAL_CALL FilterTracer_getSupportedServiceNames()
+SEQ( rtl::OUString ) SAL_CALL FilterTracer_getSupportedServiceNames() 
     throw( NMSP_UNO::RuntimeException )
 {
     SEQ( rtl::OUString ) aRet(1);
@@ -58,11 +58,11 @@ SEQ( rtl::OUString ) SAL_CALL FilterTracer_getSupportedServiceNames()
 // -----------------------------------------------------------------------------
 
 FilterTracer::FilterTracer( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr ) :
-    xFact       ( rxMgr ),
-    mpStream    ( NULL ),
-    mnLogLevel  ( NMSP_LOGGING::LogLevel::ALL )
+    xFact		( rxMgr ),
+    mpStream	( NULL ),
+    mnLogLevel	( NMSP_LOGGING::LogLevel::ALL )
 {
-    REF( NMSP_UNO::XInterface ) xObj( rxMgr->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.TextSearch" )) ) );
+    REF( NMSP_UNO::XInterface ) xObj( rxMgr->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.TextSearch" ) ) );
     mxTextSearch = REF( NMSP_UTIL::XTextSearch )( xObj, ::com::sun::star::uno::UNO_QUERY );
 }
 FilterTracer::~FilterTracer()
@@ -118,19 +118,19 @@ void SAL_CALL FilterTracer::initialize( const SEQ( NMSP_UNO::Any )& aArguments )
     for ( i = 0; i < aParameter.getLength(); i++ )
     {
         const NMSP_BEANS::PropertyValue& rProp = aParameter[ i ];
-        if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LogLevel" ) ) )
+        if ( rProp.Name.equalsAscii( "LogLevel" ) )
             rProp.Value >>= mnLogLevel;
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ClassFilter" ) ) )
+        else if ( rProp.Name.equalsAscii( "ClassFilter" ) )
             rProp.Value >>= msClassFilter;
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MethodFilter" ) ) )
+        else if ( rProp.Name.equalsAscii( "MethodFilter" ) )
             rProp.Value >>= msMethodFilter;
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MessageFilter" ) ) )
+        else if ( rProp.Name.equalsAscii( "MessageFilter" ) )
             rProp.Value >>= msMessageFilter;
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutputStream" ) ) )
+        else if ( rProp.Name.equalsAscii( "OutputStream" ) )
             rProp.Value >>= mxOutputStream;
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
+        else if ( rProp.Name.equalsAscii( "URL" ) )
             rProp.Value >>= msURL;
-        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentHandler" ) ) )
+        else if ( rProp.Name.equalsAscii( "DocumentHandler" ) )
             rProp.Value >>= mxDocumentHandler;
     }
 
@@ -149,17 +149,17 @@ void SAL_CALL FilterTracer::initialize( const SEQ( NMSP_UNO::Any )& aArguments )
 // -----------------------------------------------------------------------------
 
 // XServiceInfo
-rtl::OUString SAL_CALL FilterTracer::getImplementationName()
+rtl::OUString SAL_CALL FilterTracer::getImplementationName() 
     throw( NMSP_UNO::RuntimeException )
 {
     return FilterTracer_getImplementationName();
 }
-sal_Bool SAL_CALL FilterTracer::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL FilterTracer::supportsService( const rtl::OUString& rServiceName ) 
     throw( NMSP_UNO::RuntimeException )
 {
     return FilterTracer_supportsService( rServiceName );
 }
-SEQ( rtl::OUString ) SAL_CALL FilterTracer::getSupportedServiceNames()
+SEQ( rtl::OUString ) SAL_CALL FilterTracer::getSupportedServiceNames() 
     throw ( NMSP_UNO::RuntimeException )
 {
     return FilterTracer_getSupportedServiceNames();
@@ -226,7 +226,7 @@ void SAL_CALL FilterTracer::logp( sal_Int32 /* nLevel */, const rtl::OUString& r
 // -----------------------------------------------------------------------------
 
 // XTextSearch
-void SAL_CALL  FilterTracer::setOptions( const NMSP_UTIL::SearchOptions& rSearchOptions )
+void SAL_CALL  FilterTracer::setOptions( const NMSP_UTIL::SearchOptions& rSearchOptions ) 
     throw (::com::sun::star::uno::RuntimeException)
 {
     maSearchOptions = rSearchOptions;

@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/image.hxx>
+#include <vcl/smartid.hxx>
 
 #include <boost/noncopyable.hpp>
 
@@ -62,7 +63,7 @@ namespace svt
         virtual Image GetImage() const = 0;
 
         /// retrieves the help ID associated with the panel, if any.
-        virtual rtl::OString GetHelpID() const = 0;
+        virtual SmartId GetHelpID() const = 0;
 
         /** activates the panel
 

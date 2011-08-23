@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ ItemHolder1::ItemHolder1()
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
         css::uno::Reference< css::lang::XComponent > xCfg(
-            xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
+            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
             css::uno::UNO_QUERY);
         if (xCfg.is())
             xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
@@ -104,7 +104,7 @@ ItemHolder1::ItemHolder1()
             sMsg += ::rtl::OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                         RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(sMsg.getStr());
+            OSL_ENSURE(sal_False, sMsg.getStr());
         }
     }
 #else
@@ -313,7 +313,7 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             break;
 
         default:
-            OSL_FAIL( "unknown item type" );
+            OSL_ASSERT( "unknown item type" );
             break;
     }
 }

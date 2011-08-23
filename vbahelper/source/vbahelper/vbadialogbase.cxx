@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ sal_Bool SAL_CALL VbaDialogBase::Show() throw ( uno::RuntimeException )
                 uno::Reference< XInterface > () );
 
         uno::Sequence< beans::PropertyValue > dispatchProps(0);
-        if ( aURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:PrinterSetup")) )
+        if ( aURL.equalsAscii(".uno:PrinterSetup") )
         {
             dispatchProps.realloc(1);
             dispatchProps[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBADialogResultRequest" ) );

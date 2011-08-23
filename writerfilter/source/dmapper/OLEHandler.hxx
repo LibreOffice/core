@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define INCLUDED_OLEHANDLER_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/LoggedResources.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
@@ -59,7 +59,7 @@ namespace dmapper
 //class PropertyMap;
 /** Handler for OLE objects
  */
-class WRITERFILTER_DLLPRIVATE OLEHandler : public LoggedProperties
+class WRITERFILTER_DLLPRIVATE OLEHandler : public Properties
 {
     ::rtl::OUString     m_sObjectType;
     ::rtl::OUString     m_sProgId;
@@ -78,16 +78,15 @@ class WRITERFILTER_DLLPRIVATE OLEHandler : public LoggedProperties
     ::com::sun::star::awt::Point m_aShapePosition;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > m_xReplacement;
-
+    
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream;
-
-    // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
-
 public:
     OLEHandler();
     virtual ~OLEHandler();
+
+    // Properties
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
 
     inline ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getShape( ) { return m_xShape; };
 
@@ -97,7 +96,7 @@ public:
 
     ::com::sun::star::awt::Size     getSize() const { return m_aShapeSize;}
     ::com::sun::star::awt::Point    getPosition() const { return m_aShapePosition;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > 
                                     getReplacement() const { return m_xReplacement; }
 
 };

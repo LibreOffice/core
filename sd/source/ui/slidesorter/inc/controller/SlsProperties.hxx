@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,6 @@ class Properties
 public:
     Properties (void);
     ~Properties (void);
-
-    /** Call this method after receiving a VCLEVENT_APPLICATION_DATACHANGED
-        event.
-    */
-    void HandleDataChangeEvent (void);
 
     /** When this method returns <TRUE/> then the current slide is
         highlighted in the view.  The default value is <FALSE/>.
@@ -114,15 +109,6 @@ public:
     bool IsUIReadOnly (void) const;
     void SetUIReadOnly (const bool bIsUIReadOnly);
 
-    /** The mouse over effect (and whether a mouse motion starts a multi
-        selection or a drag-and-drop) can be triggered by just the preview
-        area or the whole page object area.
-    */
-    bool IsOnlyPreviewTriggersMouseOver (void) const;
-    void SetOnlyPreviewTriggersMouseOver (const bool bFlag);
-
-    bool IsHighContrastModeActive (void) const;
-
 private:
     bool mbIsHighlightCurrentSlide;
     bool mbIsShowSelection;
@@ -135,8 +121,6 @@ private:
     Color maSelectionColor;
     Color maHighlightColor;
     bool mbIsUIReadOnly;
-    bool mbIsOnlyPreviewTriggersMouseOver;
-    bool mbIsHighContrastModeActive;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

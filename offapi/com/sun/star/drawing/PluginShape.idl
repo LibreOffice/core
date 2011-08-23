@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module drawing {
+module com { module sun { module star { module drawing { 
 
 //=============================================================================
 /** This <type>Shape</type> encapsulates a plugin.
@@ -47,28 +47,28 @@ module com { module sun { module star { module drawing {
 */
 published service PluginShape
 {
-    /** basic service for position, size and z-order.
-
+    /** basic service for position, size and z-order. 
+        
         <p>A <type>PluginShape</type> cannot be rotated.
      */
     service com::sun::star::drawing::Shape;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** This property specifies the media-type to which this plugin should
         be registered.
     */
     [property] string PluginMimeType;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** This property specifies the url to the binary object.
     */
     [property] string PluginURL;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /** This sequence contains parameters that are passed to the application
+    /** This sequence contains paramaters that are passed to the application
         that renders the plugin when it is initialized.
     */
     [property] sequence< com::sun::star::beans::PropertyValue > PluginCommands;
@@ -76,7 +76,7 @@ published service PluginShape
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif
 

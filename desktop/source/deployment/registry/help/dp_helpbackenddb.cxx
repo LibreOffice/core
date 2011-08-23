@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,14 +84,11 @@ OUString HelpBackendDb::getKeyElementName()
 void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
 {
     try{
-        if (!activateEntry(url))
-        {
-            Reference<css::xml::dom::XNode> helpNode
-                = writeKeyElement(url);
+        Reference<css::xml::dom::XNode> helpNode
+            = writeKeyElement(url);
 
-            writeSimpleElement(OUSTR("data-url"), data.dataUrl, helpNode);
-            save();
-        }
+        writeSimpleElement(OUSTR("data-url"), data.dataUrl, helpNode);
+        save();
     }
     catch (css::deployment::DeploymentException& )
     {
@@ -139,8 +136,39 @@ HelpBackendDb::getEntry(::rtl::OUString const & url)
 
 ::std::list<OUString> HelpBackendDb::getAllDataUrls()
 {
-    return getOneChildFromAllEntries(OUString(RTL_CONSTASCII_USTRINGPARAM("data-url")));
+    try
+    {
+        ::std::list<OUString> listRet;
+        Reference<css::xml::dom::XDocument> doc = getDocument();
+        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
+
+        Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
+        const OUString sPrefix = getNSPrefix();
+        OUString sExpression(
+            sPrefix + OUSTR(":help/") + sPrefix + OUSTR(":data-url/text()"));
+        Reference<css::xml::dom::XNodeList> nodes =
+            xpathApi->selectNodeList(root, sExpression);
+        if (nodes.is())
+        {
+            sal_Int32 length = nodes->getLength();
+            for (sal_Int32 i = 0; i < length; i++)
+                listRet.push_back(nodes->item(i)->getNodeValue());
+        }
+        return listRet;
+    }
+    catch (css::deployment::DeploymentException& )
+    {
+        throw;
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to read data entry in help backend db: ") +
+            m_urlDb, 0, exc);
+    }
 }
+
 
 } // namespace help
 } // namespace backend

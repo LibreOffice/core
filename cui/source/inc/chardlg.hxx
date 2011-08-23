@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,44 +44,45 @@ class FontList;
 
 // -----------------------------------------------------------------------
 
-#define DISABLE_CASEMAP             ((sal_uInt16)0x0001)
-#define DISABLE_WORDLINE            ((sal_uInt16)0x0002)
-#define DISABLE_BLINK               ((sal_uInt16)0x0004)
-#define DISABLE_UNDERLINE_COLOR     ((sal_uInt16)0x0008)
+#define DISABLE_CASEMAP				((USHORT)0x0001)
+#define DISABLE_WORDLINE			((USHORT)0x0002)
+#define DISABLE_BLINK				((USHORT)0x0004)
+#define DISABLE_UNDERLINE_COLOR		((USHORT)0x0008)
 
-#define DISABLE_LANGUAGE            ((sal_uInt16)0x0010)
-#define DISABLE_HIDE_LANGUAGE       ((sal_uInt16)0x0020)
+#define DISABLE_LANGUAGE			((USHORT)0x0010)
+#define DISABLE_HIDE_LANGUAGE		((USHORT)0x0020)
 
 // class SvxCharBasePage -------------------------------------------------
 
 class SvxCharBasePage : public SfxTabPage
 {
 protected:
-    SvxFontPrevWindow   m_aPreviewWin;
-    FixedInfo           m_aFontTypeFT;
+    SvxFontPrevWindow	m_aPreviewWin;
+    FixedInfo			m_aFontTypeFT;
 
-    sal_Bool                m_bPreviewBackgroundToCharacter;
+    BOOL				m_bPreviewBackgroundToCharacter;
 
                         SvxCharBasePage( Window* pParent, const ResId& rResIdTabPage, const SfxItemSet&,
-                                            sal_uInt16 nResIdPrewievWin, sal_uInt16 nResIdFontTypeFT );
-    virtual             ~SvxCharBasePage();
+                                            USHORT nResIdPrewievWin, USHORT nResIdFontTypeFT );
+    virtual				~SvxCharBasePage();
 
-    void                SetPrevFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
-    void                SetPrevFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
-    void                SetPrevFontStyle( const SfxItemSet& rSet, sal_uInt16 nSlotPosture, sal_uInt16 nSlotWeight, SvxFont& rFont ); // posture/weight
-    void                SetPrevFontWidthScale( const SfxItemSet& rSet );
+    void				SetPrevFontSize( const SfxItemSet& rSet, USHORT nSlot, SvxFont& rFont );
+    void				SetPrevFont( const SfxItemSet& rSet, USHORT nSlot, SvxFont& rFont );
+    void				SetPrevFontStyle( const SfxItemSet& rSet, USHORT nSlotPosture, USHORT nSlotWeight, SvxFont& rFont ); // posture/weight
+    void				SetPrevFontWidthScale( const SfxItemSet& rSet );
 
-    void                SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
+    void				SetPrevFontEscapement( BYTE nProp, BYTE nEscProp, short nEsc );
 
-    inline SvxFont&     GetPreviewFont();
-    inline SvxFont&     GetPreviewCJKFont();
-    inline SvxFont&     GetPreviewCTLFont();
+    inline SvxFont&		GetPreviewFont();
+    inline SvxFont&		GetPreviewCJKFont();
+    inline SvxFont&		GetPreviewCTLFont();
 
 public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-
+    
     virtual void        ActivatePage( const SfxItemSet& rSet );
+//    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 };
 
@@ -127,12 +128,12 @@ private:
     FixedText*          m_pColorFT;
     ColorListBox*       m_pColorLB;
 
-    SvxCharNamePage_Impl*   m_pImpl;
+    SvxCharNamePage_Impl*	m_pImpl;
 
                         SvxCharNamePage( Window* pParent, const SfxItemSet& rSet );
 
-    void                Initialize();
-    const FontList*     GetFontList() const;
+    void				Initialize();
+    const FontList*		GetFontList() const;
     void                UpdatePreview_Impl();
     void                FillStyleBox_Impl( const FontNameBox* rBox );
     void                FillSizeBox_Impl( const FontNameBox* rBox );
@@ -152,18 +153,19 @@ private:
         Ctl
     };
 
-    void                Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp );
-    sal_Bool                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
-    void                ResetColor_Impl( const SfxItemSet& rSet );
+    void				Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp );
+    BOOL				FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
+    void				ResetColor_Impl( const SfxItemSet& rSet );
+    BOOL				FillItemSetColor_Impl( SfxItemSet& rSet );
 
-    DECL_LINK(          UpdateHdl_Impl, Timer* );
-    DECL_LINK(          FontModifyHdl_Impl, void* );
-    DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
+    DECL_LINK( 			UpdateHdl_Impl, Timer* );
+    DECL_LINK(			FontModifyHdl_Impl, void* );
+    DECL_LINK( 			ColorBoxSelectHdl_Impl, ColorListBox* );
 
 public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-
+    
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
@@ -171,19 +173,19 @@ public:
                         ~SvxCharNamePage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static USHORT*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
 
     void                SetFontList( const SvxFontListItem& rItem );
     void                EnableRelativeMode();
-    void                EnableSearchMode();
+    void				EnableSearchMode();
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
 
-    void                DisableControls( sal_uInt16 nDisable );
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    void                DisableControls( USHORT nDisable );
+    virtual void		PageCreated (SfxAllItemSet aSet); 
 };
 
 // class SvxCharEffectsPage ----------------------------------------------
@@ -192,82 +194,84 @@ class SvxCharEffectsPage : public SvxCharBasePage
 {
 
 private:
-    FixedText           m_aFontColorFT;
-    ColorListBox        m_aFontColorLB;
+    FixedText			m_aFontColorFT;
+    ColorListBox		m_aFontColorLB;
 
-    FixedText           m_aEffectsFT;
-    SvxCheckListBox     m_aEffectsLB;
+    FixedText			m_aEffectsFT;
+    SvxCheckListBox		m_aEffectsLB;
 
-    ListBox             m_aEffects2LB;
+    ListBox				m_aEffects2LB;
 
     FixedText           m_aReliefFT;
     ListBox             m_aReliefLB;
 
     TriStateBox         m_aOutlineBtn;
-    TriStateBox         m_aShadowBtn;
-    TriStateBox         m_aBlinkingBtn;
+    TriStateBox			m_aShadowBtn;
+    TriStateBox			m_aBlinkingBtn;
     TriStateBox         m_aHiddenBtn;
 
-    FixedLine           m_aVerticalLine;
+    FixedLine			m_aVerticalLine;
 
-    FixedText           m_aOverlineFT;
-    ListBox             m_aOverlineLB;
-    FixedText           m_aOverlineColorFT;
-    ColorListBox        m_aOverlineColorLB;
+    FixedText			m_aOverlineFT;
+    ListBox				m_aOverlineLB;
+    FixedText			m_aOverlineColorFT;
+    ColorListBox		m_aOverlineColorLB;
 
-    FixedText           m_aStrikeoutFT;
-    ListBox             m_aStrikeoutLB;
+    FixedText			m_aStrikeoutFT;
+    ListBox				m_aStrikeoutLB;
 
-    FixedText           m_aUnderlineFT;
-    ListBox             m_aUnderlineLB;
-    FixedText           m_aUnderlineColorFT;
-    ColorListBox        m_aUnderlineColorLB;
+    FixedText			m_aUnderlineFT;
+    ListBox				m_aUnderlineLB;
+    FixedText			m_aUnderlineColorFT;
+    ColorListBox		m_aUnderlineColorLB;
 
-    CheckBox            m_aIndividualWordsBtn;
+    CheckBox			m_aIndividualWordsBtn;
 
-    FixedLine           m_aAsianLine;
+    FixedLine			m_aAsianLine;
 
-    FixedText           m_aEmphasisFT;
-    ListBox             m_aEmphasisLB;
+    FixedText			m_aEmphasisFT;
+    ListBox				m_aEmphasisLB;
 
-    FixedText           m_aPositionFT;
-    ListBox             m_aPositionLB;
+    FixedText			m_aPositionFT;
+    ListBox				m_aPositionLB;
 
-    sal_uInt16              m_nHtmlMode;
+    USHORT				m_nHtmlMode;
 
-    String              m_aTransparentColorName;
+    String				m_aTransparentColorName;
 
                         SvxCharEffectsPage( Window* pParent, const SfxItemSet& rSet );
 
-    void                Initialize();
+    void				Initialize();
     void                UpdatePreview_Impl();
     void                SetCaseMap_Impl( SvxCaseMap eCaseMap );
-    void                ResetColor_Impl( const SfxItemSet& rSet );
-    sal_Bool                FillItemSetColor_Impl( SfxItemSet& rSet );
+    void				ResetColor_Impl( const SfxItemSet& rSet );
+    BOOL				FillItemSetColor_Impl( SfxItemSet& rSet );
 
-    DECL_LINK(          SelectHdl_Impl, ListBox* );
+    DECL_LINK(			SelectHdl_Impl, ListBox* );
     DECL_LINK(          CbClickHdl_Impl, CheckBox* );
     DECL_LINK(          TristClickHdl_Impl, TriStateBox* );
-    DECL_LINK(          UpdatePreview_Impl, ListBox* );
-    DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
+    DECL_LINK(			UpdatePreview_Impl, ListBox* );
+    DECL_LINK( 			ColorBoxSelectHdl_Impl, ColorListBox* );
 
 public:
+//    using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
+//    virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static USHORT*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
 
-    void                DisableControls( sal_uInt16 nDisable );
+    void                DisableControls( USHORT nDisable );
     void                EnableFlash();
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void		PageCreated (SfxAllItemSet aSet); 
 };
 
 // class SvxCharPositionPage ---------------------------------------------
@@ -276,73 +280,73 @@ class SvxCharPositionPage : public SvxCharBasePage
 {
 
 private:
-    FixedLine           m_aPositionLine;
-    RadioButton         m_aHighPosBtn;
-    RadioButton         m_aNormalPosBtn;
-    RadioButton         m_aLowPosBtn;
-    FixedText           m_aHighLowFT;
-    MetricField         m_aHighLowEdit;
-    CheckBox            m_aHighLowRB;
-    FixedText           m_aFontSizeFT;
-    MetricField         m_aFontSizeEdit;
-    FixedLine           m_aRotationScalingFL;
-    FixedLine           m_aScalingFL;
-    RadioButton         m_a0degRB;
-    RadioButton         m_a90degRB;
-    RadioButton         m_a270degRB;
-    CheckBox            m_aFitToLineCB;
-    FixedText           m_aScaleWidthFT;
-    MetricField         m_aScaleWidthMF;
+    FixedLine			m_aPositionLine;
+    RadioButton			m_aHighPosBtn;
+    RadioButton			m_aNormalPosBtn;
+    RadioButton			m_aLowPosBtn;
+    FixedText			m_aHighLowFT;
+    MetricField			m_aHighLowEdit;
+    CheckBox			m_aHighLowRB;
+    FixedText			m_aFontSizeFT;
+    MetricField			m_aFontSizeEdit;
+    FixedLine			m_aRotationScalingFL;
+    FixedLine			m_aScalingFL;
+    RadioButton			m_a0degRB;
+    RadioButton			m_a90degRB;
+    RadioButton			m_a270degRB;
+    CheckBox			m_aFitToLineCB;
+    FixedText			m_aScaleWidthFT;
+    MetricField			m_aScaleWidthMF;
 
-    FixedLine           m_aKerningLine;
-    ListBox             m_aKerningLB;
-    FixedText           m_aKerningFT;
-    MetricField         m_aKerningEdit;
-    CheckBox            m_aPairKerningBtn;
+    FixedLine			m_aKerningLine;
+    ListBox				m_aKerningLB;
+    FixedText			m_aKerningFT;
+    MetricField			m_aKerningEdit;
+    CheckBox			m_aPairKerningBtn;
 
     short               m_nSuperEsc;
     short               m_nSubEsc;
 
-    sal_uInt16              m_nScaleWidthItemSetVal;
-    sal_uInt16              m_nScaleWidthInitialVal;
+    UINT16				m_nScaleWidthItemSetVal;
+    UINT16				m_nScaleWidthInitialVal;
 
-    sal_uInt8                m_nSuperProp;
-    sal_uInt8                m_nSubProp;
+    BYTE                m_nSuperProp;
+    BYTE                m_nSubProp;
 
                         SvxCharPositionPage( Window* pParent, const SfxItemSet& rSet );
 
-    void                Initialize();
-    void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
-    void                SetEscapement_Impl( sal_uInt16 nEsc );
+    void				Initialize();
+    void                UpdatePreview_Impl( BYTE nProp, BYTE nEscProp, short nEsc );
+    void                SetEscapement_Impl( USHORT nEsc );
 
-    DECL_LINK(          PositionHdl_Impl, RadioButton* );
-    DECL_LINK(          RotationHdl_Impl, RadioButton* );
-    DECL_LINK(          FontModifyHdl_Impl, MetricField* );
-    DECL_LINK(          AutoPositionHdl_Impl, CheckBox* );
-    DECL_LINK(          FitToLineHdl_Impl, CheckBox* );
-    DECL_LINK(          KerningSelectHdl_Impl, ListBox* );
-    DECL_LINK(          KerningModifyHdl_Impl, MetricField* );
-    DECL_LINK(          PairKerningHdl_Impl, CheckBox* );
-    DECL_LINK(          LoseFocusHdl_Impl, MetricField* );
-    DECL_LINK(          ScaleWidthModifyHdl_Impl, MetricField* );
+    DECL_LINK(			PositionHdl_Impl, RadioButton* );
+    DECL_LINK(			RotationHdl_Impl, RadioButton* );
+    DECL_LINK(			FontModifyHdl_Impl, MetricField* );
+    DECL_LINK(			AutoPositionHdl_Impl, CheckBox* );
+    DECL_LINK(			FitToLineHdl_Impl, CheckBox* );
+    DECL_LINK(			KerningSelectHdl_Impl, ListBox* );
+    DECL_LINK(			KerningModifyHdl_Impl, MetricField* );
+    DECL_LINK( 			PairKerningHdl_Impl, CheckBox* );
+    DECL_LINK(			LoseFocusHdl_Impl, MetricField* );
+    DECL_LINK(			ScaleWidthModifyHdl_Impl, MetricField* );
 
 public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-
+    
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
     virtual void        ActivatePage( const SfxItemSet& rSet );
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static USHORT*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        FillUserData();
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void		PageCreated (SfxAllItemSet aSet); 
 };
 
 // class SvxCharTwoLinesPage ---------------------------------------------
@@ -350,44 +354,44 @@ public:
 class SvxCharTwoLinesPage : public SvxCharBasePage
 {
 private:
-    FixedLine           m_aSwitchOnLine;
-    CheckBox            m_aTwoLinesBtn;
+    FixedLine			m_aSwitchOnLine;
+    CheckBox			m_aTwoLinesBtn;
 
-    FixedLine           m_aEncloseLine;
-    FixedText           m_aStartBracketFT;
-    ListBox             m_aStartBracketLB;
-    FixedText           m_aEndBracketFT;
-    ListBox             m_aEndBracketLB;
+    FixedLine			m_aEncloseLine;
+    FixedText			m_aStartBracketFT;
+    ListBox				m_aStartBracketLB;
+    FixedText			m_aEndBracketFT;
+    ListBox				m_aEndBracketLB;
 
-    sal_uInt16              m_nStartBracketPosition;
-    sal_uInt16              m_nEndBracketPosition;
+    USHORT				m_nStartBracketPosition;
+    USHORT				m_nEndBracketPosition;
 
                         SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rSet );
 
-    void                UpdatePreview_Impl();
-    void                Initialize();
-    void                SelectCharacter( ListBox* pBox );
-    void                SetBracket( sal_Unicode cBracket, sal_Bool bStart );
+    void				UpdatePreview_Impl();
+    void				Initialize();
+    void				SelectCharacter( ListBox* pBox );
+    void				SetBracket( sal_Unicode cBracket, BOOL bStart );
 
-    DECL_LINK(          TwoLinesHdl_Impl, CheckBox* );
-    DECL_LINK(          CharacterMapHdl_Impl, ListBox* );
+    DECL_LINK( 			TwoLinesHdl_Impl, CheckBox* );
+    DECL_LINK(			CharacterMapHdl_Impl, ListBox* );
 
 public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-
+    
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static USHORT*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void		PageCreated (SfxAllItemSet aSet); 
 };
 
 #endif // #ifndef _SVX_CHARDLG_HXX

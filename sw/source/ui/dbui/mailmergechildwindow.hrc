@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,6 +27,7 @@
 
 #define TB_BACK                     1
 #define ILIST_TBX                   90
+#define ILIST_TBX_HC                91
 
 #define FL_SEPARATOR                7
 
@@ -46,6 +47,7 @@
 #define ST_TASK                     73
 #define ST_STATUS                   74
 #define ILIST                       75
+#define ILIST_HC                    76
 #define ST_SEND                     77
 #define ST_SENDINGTO                78
 #define ST_COMPLETED                79

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ protected:
     virtual void CursorMoved();
     // called whenever the control of the current cell has been modified
     virtual void CellModified();
-    virtual void ColumnResized( sal_uInt16 nColId );
+    virtual void ColumnResized( USHORT nColId );
     virtual void EndScroll();
     virtual void MouseButtonDown( const BrowserMouseEvent& rEvt );
 
@@ -80,21 +80,19 @@ public:
     virtual ~DataBrowser();
 
     /** GetCellText returns the text at the given position
-        @param  nRow
+        @param	nRow
             the number of the row
-        @param  nColId
+        @param	nColId
             the ID of the column
         @return
             the text out of the cell
     */
-    virtual String  GetCellText(long nRow, sal_uInt16 nColId) const;
+    virtual String	GetCellText(long nRow, USHORT nColId) const;
 
     /** returns the number in the given cell. If a cell is empty or contains a
         string, the result will be Nan
     */
-    double GetCellNumber( long nRow, sal_uInt16 nColumnId ) const;
-
-    bool isDateString( rtl::OUString aInputString, double& fOutDateValue );
+    double GetCellNumber( long nRow, USHORT nColumnId ) const;
 
     // Window
     virtual void Resize();
@@ -110,6 +108,8 @@ public:
                                ::com::sun::star::chart2::XChartDocument > & xChartDoc,
                            const ::com::sun::star::uno::Reference<
                                ::com::sun::star::uno::XComponentContext > & xContext );
+
+//     void setNumberFormatter();
 
     // predicates to determine what actions are possible at the current cursor
     // position.  This depends on the implementation of the according mutators
@@ -183,7 +183,7 @@ private:
     /// note: m_aTextEditField must precede this member!
     ::svt::CellControllerRef m_rTextEditController;
 
-    Link                m_aCursorMovedHdlLink;
+    Link				m_aCursorMovedHdlLink;
     Link                m_aCellModifiedLink;
 
     void clearHeaders();
@@ -202,6 +202,6 @@ private:
 
 } // namespace chart
 
-#endif  // CHART_DATA_BROWSER_HXX
+#endif	// CHART_DATA_BROWSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

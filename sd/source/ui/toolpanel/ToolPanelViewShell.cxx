@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -219,7 +219,7 @@ public:
     static const size_t mnInvalidId = static_cast< size_t >( -1 );
 
     ToolPanelViewShell_Impl( ToolPanelViewShell& i_rPanelViewShell, ::Window& i_rPanelDeckParent );
-    virtual ~ToolPanelViewShell_Impl();
+    ~ToolPanelViewShell_Impl();
 
     ToolPanelViewShell& GetAntiImpl() { return m_rPanelViewShell; }
 
@@ -240,7 +240,7 @@ public:
         If the panel is not active currently, nothing happens.
     */
     void    DeactivatePanelByResource( const ::rtl::OUString& i_rPanelResourceURL );
-
+    
     /** provides access to the the VCL window of the panel deck
     */
           ::sfx2::ModuleTaskPane& GetTaskPane()       { return *m_pTaskPane; }
@@ -513,18 +513,13 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
 
     SetName( String( RTL_CONSTASCII_USTRINGPARAM( "ToolPanelViewShell" ) ) );
 
-    // enforce the creation of the Accessible object here.
-    // In some not-always-to-reproduce situations, creating the accessible on demand only leads to some
-    // cycliy parenthood references between the involved objects, which make some AT tools (accerciser, in particular)
-    // loop (which is /not/ a bug in the tool, of course).
-    // However, since those situations were not reproducible anymore, we deliberately leave the Accessible creation
-    // (which originally was intended as a workaround) herein. Better to be safe ...
-    // Note that this is not a performance problem: The implementation of the ToolPanelDeck's Accessible
-    // is separated from the implementation of its AccessibleContext (which even is in a separate library) - we only
-    // create the former here, the latter is still created on demand, when somebody requests it.
-    // #i113671# / 2010-09-17 / frank.schoenheit@oracle.com
+    // Some recent changes to the toolpanel make it necessary to create the
+    // accessibility object now.  Creating it on demand would lead to a
+    // pointer cycle in the tree of accessibility objects and would lead
+    // e.g. the accerciser AT tool into an infinite loop.
+    // It would be nice to get rid of this workaround in the future.
     if (mpContentWindow.get())
-        mpContentWindow->GetAccessible( sal_True );
+        mpContentWindow->SetAccessible(mpImpl->CreateAccessible(*mpContentWindow));
 
     // For accessibility we have to shortly hide the content window.  This
     // triggers the construction of a new accessibility object for the new
@@ -601,15 +596,27 @@ void ToolPanelViewShell::KeyInput( const KeyEvent& i_rKeyEvent )
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-SdPage* ToolPanelViewShell::GetActualPage()
+SdPage*	ToolPanelViewShell::GetActualPage()
 {
     return NULL;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-SdPage* ToolPanelViewShell::getCurrentPage() const
+SdPage*	ToolPanelViewShell::getCurrentPage() const
 {
     return NULL;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::Execute( SfxRequest& )
+{
+    OSL_ENSURE( false, "ToolPanelViewShell::Execute: not to be called! (right?)" );
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ToolPanelViewShell::GetState( SfxItemSet& )
+{
+    OSL_ENSURE( false, "ToolPanelViewShell::GetState: not to be called! (right?)" );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -635,7 +642,12 @@ DockingWindow* ToolPanelViewShell::GetDockingWindow()
 Reference< XAccessible > ToolPanelViewShell::CreateAccessibleDocumentView( ::sd::Window* i_pWindow )
 {
     ENSURE_OR_RETURN( i_pWindow, "ToolPanelViewShell::CreateAccessibleDocumentView: illegal window!", NULL );
-    return mpImpl->CreateAccessible( *i_pWindow );
+    // As said above, we have to create the accessibility object
+    // (unconditionally) in the constructor, not here on demand, or
+    // otherwise we would create a cycle in the tree of accessible objects
+    // which could lead to infinite loops in AT tools.
+    // return mpImpl->CreateAccessible( *i_pWindow );
+    return Reference<XAccessible>();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -682,10 +694,10 @@ namespace
     struct PanelFactory
     {
         ControlFactoryFactory   pFactory;
-        rtl::OString            sHelpID;
-        PanelFactory( const ControlFactoryFactory i_pFactory, const rtl::OString& i_nHelpID )
+        ULONG                   nHelpID;
+        PanelFactory( const ControlFactoryFactory i_pFactory, const ULONG i_nHelpID )
             :pFactory( i_pFactory )
-            ,sHelpID( i_nHelpID )
+            ,nHelpID( i_nHelpID )
         {
         }
     };
@@ -723,7 +735,7 @@ Reference< XUIElement > ToolPanelViewShell::CreatePanelUIElement( const Referenc
     ::std::auto_ptr< TreeNode > pNode( pControlFactory->CreateControl( mpImpl->GetToolPanelDeck().GetPanelWindowAnchor() ) );
     ENSURE_OR_THROW( ( pNode.get() != NULL ) && ( pNode->GetWindow() != NULL ),
         "illegal node returned by the control factory" );
-    pNode->GetWindow()->SetHelpId( aPanelFactory.sHelpID );
+    pNode->GetWindow()->SetHelpId( aPanelFactory.nHelpID );
 
     // create an XToolPanel
     Reference< XToolPanel > xPanel( new ToolPanel( pNode ) );
@@ -882,7 +894,7 @@ void ToolPanelViewShell_Impl::ConnectToDockingWindow()
 // ---------------------------------------------------------------------------------------------------------------------
 Reference< XAccessible > ToolPanelViewShell_Impl::CreateAccessible( ::sd::Window& i_rWindow )
 {
-    Reference< XAccessible > xAccessible( GetToolPanelDeck().GetAccessible( sal_False ) );
+    Reference< XAccessible > xAccessible( GetToolPanelDeck().GetAccessible( FALSE ) );
     if ( !xAccessible.is() )
     {
         // determine the XAccessible which is the parent of the to-be-created object
@@ -890,7 +902,7 @@ Reference< XAccessible > ToolPanelViewShell_Impl::CreateAccessible( ::sd::Window
         OSL_ENSURE( pAccessibleParent, "ToolPanelViewShell_Impl::CreateAccessible: illegal accessible parent provided by the sd::Window!" );
         GetToolPanelDeck().SetAccessibleParentWindow( pAccessibleParent );
 
-        xAccessible = GetToolPanelDeck().GetAccessible( sal_True );
+        xAccessible = GetToolPanelDeck().GetAccessible( TRUE );
         ENSURE_OR_RETURN( xAccessible.is(), "ToolPanelViewShell_Impl::CreateAccessible: illegal ToolPanelDeck accessible!", NULL );
         OSL_ENSURE( xAccessible->getAccessibleContext().is()
                 &&  xAccessible->getAccessibleContext()->getAccessibleParent() == pAccessibleParent->GetAccessible(),

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +32,11 @@
 #include <xmloff/XMLTextTableContext.hxx>
 
 // STL include
-#include <boost/unordered_map.hpp>
-#include <vector>
+#include <hash_map>
 
-#if !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_STRINGSDTOR_DECL)
+#if !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_BOOLS_DECL) || !defined(_SVSTDARR_STRINGSDTOR_DECL)
 #define _SVSTDARR_USHORTS
+#define _SVSTDARR_BOOLS
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #endif
@@ -63,19 +63,14 @@ namespace com { namespace sun { namespace star {
 
 class SwXMLTableContext : public XMLTextTableContext
 {
-    ::rtl::OUString     aStyleName;
-    ::rtl::OUString     aDfltCellStyleName;
+    ::rtl::OUString		aStyleName;
+    ::rtl::OUString		aDfltCellStyleName;
     /// NB: this contains the xml:id only if this table is a subtable!
     ::rtl::OUString     mXmlId;
 
-    //! Holds basic information about a column's width.
-    struct ColumnWidthInfo {
-        sal_uInt16 width;      //!< Column width (absolute or relative).
-        bool   isRelative; //!< True for a relative width, false for absolute.
-        inline ColumnWidthInfo(sal_uInt16 wdth, bool isRel) : width(wdth), isRelative(isRel) {};
-    };
-    std::vector<ColumnWidthInfo> aColumnWidths;
-    SvStringsDtor       *pColumnDefaultCellStyleNames;
+    SvUShorts			aColumnWidths;
+    SvBools				aColumnRelWidths;
+    SvStringsDtor		*pColumnDefaultCellStyleNames;
 
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextCursor > xOldCursor;
@@ -84,31 +79,31 @@ class SwXMLTableContext : public XMLTextTableContext
 
     SwXMLTableRows_Impl *pRows;
 
-    SwTableNode         *pTableNode;
-    SwTableBox          *pBox1;
-    const SwStartNode   *pSttNd1;
+    SwTableNode			*pTableNode;
+    SwTableBox 			*pBox1;
+    const SwStartNode	*pSttNd1;
 
-    SwTableBoxFmt       *pBoxFmt;
-    SwTableLineFmt      *pLineFmt;
+    SwTableBoxFmt		*pBoxFmt;
+    SwTableLineFmt 		*pLineFmt;
 
     // hash map of shared format, indexed by the (XML) style name,
     // the column width, and protection flag
-    typedef boost::unordered_map<TableBoxIndex,SwTableBoxFmt*,
+    typedef std::hash_map<TableBoxIndex,SwTableBoxFmt*,
                           TableBoxIndexHasher> map_BoxFmt;
     map_BoxFmt* pSharedBoxFormats;
 
-    SvXMLImportContextRef   xParentTable;   // if table is a sub table
+    SvXMLImportContextRef	xParentTable;	// if table is a sub table
 
-    SwXMLDDETableContext_Impl   *pDDESource;
+    SwXMLDDETableContext_Impl	*pDDESource;
 
-    sal_Bool            bFirstSection : 1;
-    sal_Bool            bRelWidth : 1;
+    sal_Bool			bFirstSection : 1;
+    sal_Bool			bRelWidth : 1;
     sal_Bool            bHasSubTables : 1;
 
-    sal_uInt16              nHeaderRows;
-    sal_uInt32          nCurRow;
-    sal_uInt32          nCurCol;
-    sal_Int32           nWidth;
+    USHORT              nHeaderRows;
+    sal_uInt32 			nCurRow;
+    sal_uInt32			nCurCol;
+    sal_Int32			nWidth;
 
     SwTableBox *NewTableBox( const SwStartNode *pStNd,
                              SwTableLine *pUpper );
@@ -215,7 +210,7 @@ inline SwXMLTableContext *SwXMLTableContext::GetParentTable() const
 
 inline sal_uInt32 SwXMLTableContext::GetColumnCount() const
 {
-    return aColumnWidths.size();
+    return aColumnWidths.Count();
 }
 
 inline const SwStartNode *SwXMLTableContext::GetLastStartNode() const

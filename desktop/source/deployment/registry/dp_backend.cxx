@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
-
+ 
 #include "dp_backend.h"
 #include "dp_ucb.h"
 #include "rtl/uri.hxx"
@@ -40,13 +40,11 @@
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/deployment/InvalidRemovedParameterException.hpp"
-#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
 #include "com/sun/star/ucb/IOErrorCode.hpp"
 #include "com/sun/star/beans/StringPair.hpp"
 #include "com/sun/star/sdbc/XResultSet.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
-#include "unotools/tempfile.hxx"
 
 
 using namespace ::dp_misc;
@@ -93,7 +91,7 @@ PackageRegistryBackend::PackageRegistryBackend(
         m_cachePath = *cachePath;
     if (readOnly)
         m_readOnly = *readOnly;
-
+    
     if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("user") ))
         m_eContext = CONTEXT_USER;
     else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") ))
@@ -102,8 +100,6 @@ PackageRegistryBackend::PackageRegistryBackend(
         m_eContext = CONTEXT_BUNDLED;
     else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("tmp") ))
         m_eContext = CONTEXT_TMP;
-    else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled_prereg") ))
-        m_eContext = CONTEXT_BUNDLED_PREREG;
     else if (m_context.matchIgnoreAsciiCaseAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") ))
         m_eContext = CONTEXT_DOCUMENT;
@@ -126,11 +122,11 @@ void PackageRegistryBackend::check()
 void PackageRegistryBackend::disposing()
 {
     try {
-        for ( t_string2ref::const_iterator i = m_bound.begin(); i != m_bound.end(); ++i)
+        for ( t_string2ref::const_iterator i = m_bound.begin(); i != m_bound.end(); i++)
             i->second->removeEventListener(this);
         m_bound.clear();
         m_xComponentContext.clear();
-        WeakComponentImplHelperBase::disposing();
+        WeakComponentImplHelperBase::disposing();    
     }
     catch (RuntimeException &) {
         throw;
@@ -157,10 +153,10 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     check();
 
     t_string2ref::const_iterator const iFind( m_bound.find( url ) );
-    if (iFind != m_bound.end())
+    if (iFind != m_bound.end())     
     {
         Reference<deployment::XPackage> xPackage( iFind->second );
-        if (xPackage.is())
+        if (xPackage.is())        
         {
             if (mediaType.getLength() &&
                 mediaType != xPackage->getPackageType()->getMediaType())
@@ -171,15 +167,15 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
                 throw deployment::InvalidRemovedParameterException(
                     OUSTR("XPackageRegistry::bindPackage: bRemoved parameter does not match"),
                     static_cast<OWeakObject*>(this), xPackage->isRemoved(), xPackage);
-            return xPackage;
+            return xPackage;  
         }
     }
 
     guard.clear();
-
+    
     Reference<deployment::XPackage> xNewPackage;
     try {
-        xNewPackage = bindPackage_( url, mediaType, bRemoved,
+        xNewPackage = bindPackage_( url, mediaType, bRemoved, 
             identifier, xCmdEnv );
     }
     catch (RuntimeException &) {
@@ -200,7 +196,7 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
             OUSTR("Error binding package: ") + url,
             static_cast<OWeakObject *>(this), exc );
     }
-
+    
     guard.reset();
 
     ::std::pair< t_string2ref::iterator, bool > insertion(
@@ -227,43 +223,42 @@ OUString PackageRegistryBackend::createFolder(
     OUString const & relUrl,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
-    const OUString sDataFolder = makeURL(getCachePath(), relUrl);
+    OUString sDataFolder = makeURL(getCachePath(), relUrl);
     //make sure the folder exist
     ucbhelper::Content dataContent;
     ::dp_misc::create_folder(&dataContent, sDataFolder, xCmdEnv);
+    
+    OUString sDataFolderURL = dp_misc::expandUnoRcUrl(sDataFolder);
 
-    const OUString sDataFolderURL = dp_misc::expandUnoRcUrl(sDataFolder);
-    const String baseDir(sDataFolder);
-    const ::utl::TempFile aTemp(&baseDir, sal_True);
-    const OUString url = aTemp.GetURL();
-    return sDataFolder + url.copy(url.lastIndexOf('/'));
+    OUString tempEntry;
+    if (::osl::File::createTempFile(
+            &sDataFolderURL, 0, &tempEntry ) != ::osl::File::E_None)
+        throw RuntimeException(
+            OUSTR("::osl::File::createTempFile() failed!"), 0 );
+    tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
+    OUString destFolder= makeURL(sDataFolder, tempEntry) + OUSTR("_");
+    ::ucbhelper::Content destFolderContent;
+    dp_misc::create_folder( &destFolderContent, destFolder, xCmdEnv );
+
+    return destFolder;
 }
 
-//folderURL can have the extension .tmp or .tmp_
-//Before OOo 3.4 the created a tmp file with osl_createTempFile and
-//then created a Folder with a same name and a trailing '_'
-//If the folderURL has no '_' then there is no corresponding tmp file.
 void PackageRegistryBackend::deleteTempFolder(
     OUString const & folderUrl)
 {
-    if (folderUrl.getLength())
+    OSL_ASSERT(folderUrl.getLength()
+               && folderUrl[folderUrl.getLength() - 1] == '_');
+    if (folderUrl.getLength()
+               && folderUrl[folderUrl.getLength() - 1] == '_')
     {
+        const OUString  tempFile = folderUrl.copy(0, folderUrl.getLength() - 1);
         erase_path( folderUrl, Reference<XCommandEnvironment>(),
                     false /* no throw: ignore errors */ );
-
-        if (folderUrl[folderUrl.getLength() - 1] == '_')
-        {
-            const OUString  tempFile = folderUrl.copy(0, folderUrl.getLength() - 1);
-            erase_path( tempFile, Reference<XCommandEnvironment>(),
-                        false /* no throw: ignore errors */ );
-        }
+        erase_path( tempFile, Reference<XCommandEnvironment>(),
+                    false /* no throw: ignore errors */ );
     }
 }
 
-//usedFolders can contain folder names which have the extension .tmp or .tmp_
-//Before OOo 3.4 we created a tmp file with osl_createTempFile and
-//then created a Folder with a same name and a trailing '_'
-//If the folderURL has no '_' then there is no corresponding tmp file.
 void PackageRegistryBackend::deleteUnusedFolders(
     OUString const & relUrl,
     ::std::list< OUString> const & usedFolders)
@@ -271,16 +266,16 @@ void PackageRegistryBackend::deleteUnusedFolders(
     try
     {
         const OUString sDataFolder = makeURL(getCachePath(), relUrl);
-        ::ucbhelper::Content tempFolder(
+        ::ucbhelper::Content tempFolder( 
             sDataFolder, Reference<ucb::XCommandEnvironment>());
         Reference<sdbc::XResultSet> xResultSet(
             tempFolder.createCursor(
                 Sequence<OUString>( &StrTitle::get(), 1 ),
-                ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
+                ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
         // get all temp directories:
         ::std::vector<OUString> tempEntries;
 
-        const char tmp[] = ".tmp";
+        char tmp[] = ".tmp";
 
         while (xResultSet->next())
         {
@@ -289,17 +284,21 @@ void PackageRegistryBackend::deleteUnusedFolders(
                     xResultSet, UNO_QUERY_THROW )->getString(
                         1 /* Title */ ) );
 
-            if (title.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(tmp)))
+            if (title.endsWithAsciiL(tmp, sizeof(tmp) - 1))
                 tempEntries.push_back(
                     makeURLAppendSysPathSegment(sDataFolder, title));
         }
 
         for ( ::std::size_t pos = 0; pos < tempEntries.size(); ++pos )
         {
-            if (::std::find( usedFolders.begin(), usedFolders.end(), tempEntries[pos] ) ==
+            //usedFolders contains the urls to the folders which have
+            //a trailing underscore
+            const OUString tempFolderName = tempEntries[ pos ] + OUSTR("_");
+
+            if (::std::find( usedFolders.begin(), usedFolders.end(), tempFolderName ) ==
                 usedFolders.end())
             {
-                deleteTempFolder(tempEntries[pos]);
+                deleteTempFolder(tempFolderName);
             }
         }
     }
@@ -313,6 +312,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
 
 }
 
+//##############################################################################
 
 //______________________________________________________________________________
 Package::~Package()
@@ -435,14 +435,14 @@ sal_Bool Package::isBundle() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-::sal_Int32 Package::checkPrerequisites(
-        const css::uno::Reference< css::task::XAbortChannel >&,
+::sal_Int32 Package::checkPrerequisites( 
+        const css::uno::Reference< css::task::XAbortChannel >&, 
         const css::uno::Reference< css::ucb::XCommandEnvironment >&,
-        sal_Bool)
+        sal_Bool) 
         throw (css::deployment::DeploymentException,
                css::deployment::ExtensionRemovedException,
-               css::ucb::CommandFailedException,
-               css::ucb::CommandAbortedException,
+               css::ucb::CommandFailedException, 
+               css::ucb::CommandAbortedException, 
                css::uno::RuntimeException)
 {
     if (m_bRemoved)
@@ -451,11 +451,11 @@ sal_Bool Package::isBundle() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-::sal_Bool Package::checkDependencies(
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& )
+::sal_Bool Package::checkDependencies( 
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& ) 
         throw (css::deployment::DeploymentException,
                css::deployment::ExtensionRemovedException,
-               css::ucb::CommandFailedException,
+               css::ucb::CommandFailedException, 
                css::uno::RuntimeException)
 {
     if (m_bRemoved)
@@ -485,7 +485,7 @@ beans::Optional<OUString> Package::getIdentifier() throw (RuntimeException)
 {
     if (m_bRemoved)
         return beans::Optional<OUString>(true, m_identifier);
-
+    
     return beans::Optional<OUString>();
 }
 
@@ -524,20 +524,11 @@ OUString Package::getDescription() throw (
 }
 
 //______________________________________________________________________________
-OUString Package::getLicenseText() throw (
-    deployment::ExtensionRemovedException,RuntimeException)
-{
-    if (m_bRemoved)
-        throw deployment::ExtensionRemovedException();
-    return OUString();
-}
-
-//______________________________________________________________________________
 Sequence<OUString> Package::getUpdateInformationURLs() throw (
     deployment::ExtensionRemovedException, RuntimeException)
 {
     if (m_bRemoved)
-        throw deployment::ExtensionRemovedException();
+        throw deployment::ExtensionRemovedException();    
     return Sequence<OUString>();
 }
 
@@ -546,7 +537,7 @@ css::beans::StringPair Package::getPublisherInfo() throw (
     deployment::ExtensionRemovedException, RuntimeException)
 {
     if (m_bRemoved)
-        throw deployment::ExtensionRemovedException();
+        throw deployment::ExtensionRemovedException();    
     css::beans::StringPair aEmptyPair;
     return aEmptyPair;
 }
@@ -556,7 +547,7 @@ uno::Reference< css::graphic::XGraphic > Package::getIcon( sal_Bool /*bHighContr
     throw (deployment::ExtensionRemovedException, RuntimeException )
 {
     if (m_bRemoved)
-        throw deployment::ExtensionRemovedException();
+        throw deployment::ExtensionRemovedException();    
 
     uno::Reference< css::graphic::XGraphic > aEmpty;
     return aEmpty;
@@ -577,7 +568,7 @@ void Package::exportTo(
            CommandFailedException, CommandAbortedException, RuntimeException)
 {
     if (m_bRemoved)
-        throw deployment::ExtensionRemovedException();
+        throw deployment::ExtensionRemovedException();    
 
     ::ucbhelper::Content destFolder( destFolderURL, xCmdEnv );
     ::ucbhelper::Content sourceContent( getURL(), xCmdEnv );
@@ -636,7 +627,7 @@ beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
     catch (Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw deployment::DeploymentException(
-            OUSTR("unexpected exception occurred!"),
+            OUSTR("unexpected exception occured!"),
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -650,7 +641,7 @@ void Package::processPackage_impl(
 {
     check();
     bool action = false;
-
+    
     try {
         try {
             ::osl::ResettableMutexGuard guard( getMutex() );
@@ -678,7 +669,7 @@ void Package::processPackage_impl(
             }
         }
         catch (RuntimeException &) {
-            OSL_FAIL( "### unexpected RuntimeException!" );
+            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
             throw;
         }
         catch (CommandFailedException &) {
@@ -710,7 +701,7 @@ void Package::processPackage_impl(
 
 //______________________________________________________________________________
 void Package::registerPackage(
-    sal_Bool startup,
+    sal_Bool startup,                              
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
     throw (deployment::DeploymentException,
@@ -739,12 +730,12 @@ PackageRegistryBackend * Package::getMyBackend() const
 {
     PackageRegistryBackend * pBackend = m_myBackend.get();
     if (NULL == pBackend)
-    {
+    {    
         //May throw a DisposedException
         check();
         //We should never get here...
         throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
+            OUSTR("Failed to get the BackendImpl"), 
             static_cast<OWeakObject*>(const_cast<Package *>(this)));
     }
     return pBackend;
@@ -762,7 +753,7 @@ beans::Optional< OUString > Package::getRegistrationDataURL()
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
-    return beans::Optional<OUString>();
+    return beans::Optional<OUString>();    
 }
 
 sal_Bool Package::isRemoved()
@@ -771,6 +762,7 @@ sal_Bool Package::isRemoved()
     return m_bRemoved;
 }
 
+//##############################################################################
 
 //______________________________________________________________________________
 Package::TypeInfo::~TypeInfo()
@@ -805,19 +797,12 @@ OUString Package::TypeInfo::getFileFilter() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-/**************************
- * Get Icon
- *
- * @param highContrast NOTE: disabled the returning of high contrast icons.
- *                     This bool is a noop now.
- * @param smallIcon    Return the small version of the icon
- */
-Any Package::TypeInfo::getIcon( sal_Bool /*highContrast*/, sal_Bool smallIcon )
+Any Package::TypeInfo::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
     throw (RuntimeException)
 {
     if (! smallIcon)
         return Any();
-    const sal_uInt16 nIconId = m_smallIcon;
+    const sal_uInt16 nIconId = (highContrast ? m_smallIcon_HC : m_smallIcon);
     return Any( &nIconId, getCppuType( static_cast<sal_uInt16 const *>(0) ) );
 }
 

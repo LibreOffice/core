@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include "dpsave.hxx"
 #include "queryparam.hxx"
 
-#include <boost/unordered_set.hpp>
+#include <hash_set>
 
 class ScXMLImport;
 class ScDPSaveNumGroupDimension;
@@ -63,14 +63,14 @@ class ScXMLDataPilotTablesContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDataPilotTablesContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotTablesContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLDataPilotTablesContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -80,7 +80,7 @@ public:
 
 class ScXMLDataPilotTableContext : public SvXMLImportContext
 {
-    typedef ::boost::unordered_set< ::rtl::OUString, ::rtl::OUStringHash > StringSet;
+    typedef ::std::hash_set< ::rtl::OUString, ::rtl::OUStringHash > StringSet;
     StringSet       maHiddenMemberFields;
 
     struct GrandTotalItem
@@ -89,43 +89,42 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
         bool            mbVisible;
         GrandTotalItem();
     };
-    ScDocument*     pDoc;
-    ScDPObject*     pDPObject;
-    ScDPSaveData*   pDPSave;
+    ScDocument*		pDoc;
+    ScDPObject*		pDPObject;
+    ScDPSaveData*	pDPSave;
     ScDPDimensionSaveData* pDPDimSaveData;
     GrandTotalItem  maRowGrandTotal;
     GrandTotalItem  maColGrandTotal;
-    rtl::OUString   sDataPilotTableName;
-    rtl::OUString   sApplicationData;
-    rtl::OUString   sGrandTotal;
-    rtl::OUString   sDatabaseName;
-    rtl::OUString   sSourceObject;
-    rtl::OUString   sServiceName;
-    rtl::OUString   sServiceSourceName;
-    rtl::OUString   sServiceSourceObject;
-    rtl::OUString   sServiceUsername;
-    rtl::OUString   sServicePassword;
-    rtl::OUString   sButtons;
-    rtl::OUString   sSourceRangeName;
-    ScRange         aSourceCellRangeAddress;
-    ScRange         aTargetRangeAddress;
-    ScRange         aFilterSourceRange;
-    ScAddress       aFilterOutputPosition;
-    ScQueryParam    aSourceQueryParam;
-    ScMySourceType  nSourceType;
+    rtl::OUString	sDataPilotTableName;
+    rtl::OUString	sApplicationData;
+    rtl::OUString	sGrandTotal;
+    rtl::OUString	sDatabaseName;
+    rtl::OUString	sSourceObject;
+    rtl::OUString	sServiceName;
+    rtl::OUString	sServiceSourceName;
+    rtl::OUString	sServiceSourceObject;
+    rtl::OUString	sServiceUsername;
+    rtl::OUString	sServicePassword;
+    rtl::OUString	sButtons;
+    ScRange			aSourceCellRangeAddress;
+    ScRange			aTargetRangeAddress;
+    ScRange			aFilterSourceRange;
+    ScAddress		aFilterOutputPosition;
+    ScQueryParam	aSourceQueryParam;
+    ScMySourceType	nSourceType;
     sal_uInt32      mnRowFieldCount;
     sal_uInt32      mnColFieldCount;
     sal_uInt32      mnPageFieldCount;
     sal_uInt32      mnDataFieldCount;
-    sal_Bool        bIsNative;
-    sal_Bool        bIgnoreEmptyRows;
-    sal_Bool        bIdentifyCategories;
-    sal_Bool        bUseRegularExpression;
-    sal_Bool        bIsCaseSensitive;
-    sal_Bool        bSkipDuplicates;
-    sal_Bool        bFilterCopyOutputData;
-    sal_Bool        bTargetRangeAddress;
-    sal_Bool        bSourceCellRange;
+    sal_Bool		bIsNative;
+    sal_Bool		bIgnoreEmptyRows;
+    sal_Bool		bIdentifyCategories;
+    sal_Bool		bUseRegularExpression;
+    sal_Bool		bIsCaseSensitive;
+    sal_Bool		bSkipDuplicates;
+    sal_Bool		bFilterCopyOutputData;
+    sal_Bool		bTargetRangeAddress;
+    sal_Bool		bSourceCellRange;
     sal_Bool        bShowFilter;
     sal_Bool        bDrillDown;
     sal_Bool        bHeaderGridLayout;
@@ -135,14 +134,14 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDataPilotTableContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotTableContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLDataPilotTableContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -158,15 +157,14 @@ public:
     void SetServiceSourceObject(const rtl::OUString& sValue) { sServiceSourceObject = sValue; }
     void SetServiceUsername(const rtl::OUString& sValue) { sServiceUsername = sValue; }
     void SetServicePassword(const rtl::OUString& sValue) { sServicePassword = sValue; }
-    void SetSourceRangeName(const rtl::OUString& sValue) { sSourceRangeName = sValue; bSourceCellRange = true; }
     void SetSourceCellRangeAddress(const ScRange& aValue) { aSourceCellRangeAddress = aValue; bSourceCellRange = sal_True; }
     void SetSourceQueryParam(const ScQueryParam& aValue) { aSourceQueryParam = aValue; }
-//  void SetFilterUseRegularExpressions(const sal_Bool bValue) { aSourceQueryParam.bRegExp = bValue; }
+//	void SetFilterUseRegularExpressions(const sal_Bool bValue) { aSourceQueryParam.bRegExp = bValue; }
     void SetFilterOutputPosition(const ScAddress& aValue) { aFilterOutputPosition = aValue; }
     void SetFilterCopyOutputData(const sal_Bool bValue) { bFilterCopyOutputData = bValue; }
     void SetFilterSourceRange(const ScRange& aValue) { aFilterSourceRange = aValue; }
-//  void SetFilterIsCaseSensitive(const sal_Bool bValue) { aSourceQueryParam.bCaseSens = bValue; }
-//  void SetFilterSkipDuplicates(const sal_Bool bValue) { aSourceQueryParam.bDuplicate = !bValue; }
+//	void SetFilterIsCaseSensitive(const sal_Bool bValue) { aSourceQueryParam.bCaseSens = bValue; }
+//	void SetFilterSkipDuplicates(const sal_Bool bValue) { aSourceQueryParam.bDuplicate = !bValue; }
     void AddDimension(ScDPSaveDimension* pDim, bool bHasHiddenMember);
     void AddGroupDim(const ScDPSaveNumGroupDimension& aNumGroupDim);
     void AddGroupDim(const ScDPSaveGroupDimension& aGroupDim);
@@ -175,14 +173,14 @@ public:
 
 class ScXMLDPSourceSQLContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLDPSourceSQLContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDPSourceSQLContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -190,7 +188,7 @@ public:
 
     virtual ~ScXMLDPSourceSQLContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -200,14 +198,14 @@ public:
 
 class ScXMLDPSourceTableContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLDPSourceTableContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDPSourceTableContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -215,7 +213,7 @@ public:
 
     virtual ~ScXMLDPSourceTableContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -225,14 +223,14 @@ public:
 
 class ScXMLDPSourceQueryContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLDPSourceQueryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDPSourceQueryContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -240,7 +238,7 @@ public:
 
     virtual ~ScXMLDPSourceQueryContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -250,14 +248,14 @@ public:
 
 class ScXMLSourceServiceContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLSourceServiceContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLSourceServiceContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -265,7 +263,7 @@ public:
 
     virtual ~ScXMLSourceServiceContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -283,17 +281,17 @@ class ScXMLDataPilotGrandTotalContext : public SvXMLImportContext
     ::rtl::OUString             maDisplayName;
     Orientation                 meOrientation;
     bool                        mbVisible;
-
+    
 public:
-    ScXMLDataPilotGrandTotalContext(
-        ScXMLImport& rImport, sal_uInt16 nPrefix, const ::rtl::OUString& rLName,
-        const ::com::sun::star::uno::Reference<
+    ScXMLDataPilotGrandTotalContext( 
+        ScXMLImport& rImport, USHORT nPrefix, const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
         ScXMLDataPilotTableContext* pTableContext );
 
     virtual ~ScXMLDataPilotGrandTotalContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -303,14 +301,14 @@ public:
 
 class ScXMLSourceCellRangeContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLSourceCellRangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLSourceCellRangeContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -318,7 +316,7 @@ public:
 
     virtual ~ScXMLSourceCellRangeContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -334,8 +332,8 @@ struct ScXMLDataPilotGroup
 
 class ScXMLDataPilotFieldContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
-    ScDPSaveDimension*          pDim;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
+    ScDPSaveDimension*			pDim;
 
     ::std::vector<ScXMLDataPilotGroup> aGroups;
     rtl::OUString               sGroupSource;
@@ -344,11 +342,11 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
     double                      fStart;
     double                      fEnd;
     double                      fStep;
-    sal_Int32                   nUsedHierarchy;
+    sal_Int32					nUsedHierarchy;
     sal_Int32                   nGroupPart;
-    sal_Int16                   nFunction;
-    sal_Int16                   nOrientation;
-    sal_Bool                    bShowEmpty:1;
+    sal_Int16					nFunction;
+    sal_Int16					nOrientation;
+    sal_Bool					bShowEmpty:1;
     sal_Bool                    bSelectedPage:1;
     sal_Bool                    bIsGroupField:1;
     sal_Bool                    bDateValue:1;
@@ -361,7 +359,7 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDataPilotFieldContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotFieldContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -369,7 +367,7 @@ public:
 
     virtual ~ScXMLDataPilotFieldContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -384,7 +382,7 @@ public:
     void SetAutoShowInfo(const com::sun::star::sheet::DataPilotFieldAutoShowInfo& aInfo) { if (pDim) pDim->SetAutoShowInfo(&aInfo); }
     void SetSortInfo(const com::sun::star::sheet::DataPilotFieldSortInfo& aInfo) { if (pDim) pDim->SetSortInfo(&aInfo); }
     void SetLayoutInfo(const com::sun::star::sheet::DataPilotFieldLayoutInfo& aInfo) { if (pDim) pDim->SetLayoutInfo(&aInfo); }
-    void SetGrouping(const rtl::OUString& rGroupSource, const double& rStart, const double& rEnd, const double& rStep,
+    void SetGrouping(const rtl::OUString& rGroupSource, const double& rStart, const double& rEnd, const double& rStep, 
         sal_Int32 nPart, sal_Bool bDate, sal_Bool bAutoSt, sal_Bool bAutoE)
     {
         bIsGroupField = sal_True;
@@ -409,7 +407,7 @@ class ScXMLDataPilotFieldReferenceContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDataPilotFieldReferenceContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotFieldReferenceContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -420,14 +418,14 @@ public:
 
 class ScXMLDataPilotLevelContext : public SvXMLImportContext
 {
-    ScXMLDataPilotFieldContext* pDataPilotField;
+    ScXMLDataPilotFieldContext*	pDataPilotField;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLDataPilotLevelContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotLevelContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -435,7 +433,7 @@ public:
 
     virtual ~ScXMLDataPilotLevelContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -452,7 +450,7 @@ class ScXMLDataPilotDisplayInfoContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDataPilotDisplayInfoContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotDisplayInfoContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -470,7 +468,7 @@ class ScXMLDataPilotSortInfoContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDataPilotSortInfoContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotSortInfoContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -488,7 +486,7 @@ class ScXMLDataPilotLayoutInfoContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDataPilotLayoutInfoContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotLayoutInfoContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -501,8 +499,8 @@ class ScXMLDataPilotSubTotalsContext : public SvXMLImportContext
 {
     ScXMLDataPilotFieldContext* pDataPilotField;
 
-    sal_Int16   nFunctionCount;
-    sal_uInt16* pFunctions;
+    sal_Int16	nFunctionCount;
+    sal_uInt16*	pFunctions;
     ::rtl::OUString maDisplayName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -512,7 +510,7 @@ public:
 
     ScXMLDataPilotFieldContext* GetDataPilotField() { return pDataPilotField; }
 
-    ScXMLDataPilotSubTotalsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotSubTotalsContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -520,7 +518,7 @@ public:
 
     virtual ~ScXMLDataPilotSubTotalsContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -532,14 +530,14 @@ public:
 
 class ScXMLDataPilotSubTotalContext : public SvXMLImportContext
 {
-    ScXMLDataPilotSubTotalsContext* pDataPilotSubTotals;
+    ScXMLDataPilotSubTotalsContext*	pDataPilotSubTotals;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLDataPilotSubTotalContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotSubTotalContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -547,7 +545,7 @@ public:
 
     virtual ~ScXMLDataPilotSubTotalContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -564,7 +562,7 @@ class ScXMLDataPilotMembersContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDataPilotMembersContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotMembersContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -572,7 +570,7 @@ public:
 
     virtual ~ScXMLDataPilotMembersContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -582,12 +580,12 @@ public:
 
 class ScXMLDataPilotMemberContext : public SvXMLImportContext
 {
-    ScXMLDataPilotFieldContext* pDataPilotField;
+    ScXMLDataPilotFieldContext*	pDataPilotField;
 
     rtl::OUString sName;
     rtl::OUString maDisplayName;
-    sal_Bool    bDisplay;
-    sal_Bool    bDisplayDetails;
+    sal_Bool	bDisplay;
+    sal_Bool	bDisplayDetails;
     sal_Bool    bHasName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -595,7 +593,7 @@ class ScXMLDataPilotMemberContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDataPilotMemberContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotMemberContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -603,7 +601,7 @@ public:
 
     virtual ~ScXMLDataPilotMemberContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -613,14 +611,14 @@ public:
 
 class ScXMLDataPilotGroupsContext : public SvXMLImportContext
 {
-    ScXMLDataPilotFieldContext* pDataPilotField;
+    ScXMLDataPilotFieldContext*	pDataPilotField;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLDataPilotGroupsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotGroupsContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -628,7 +626,7 @@ public:
 
     virtual ~ScXMLDataPilotGroupsContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -638,7 +636,7 @@ public:
 
 class ScXMLDataPilotGroupContext : public SvXMLImportContext
 {
-    ScXMLDataPilotFieldContext* pDataPilotField;
+    ScXMLDataPilotFieldContext*	pDataPilotField;
 
     rtl::OUString sName;
     ::std::vector<rtl::OUString> aMembers;
@@ -648,7 +646,7 @@ class ScXMLDataPilotGroupContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDataPilotGroupContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotGroupContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -656,7 +654,7 @@ public:
 
     virtual ~ScXMLDataPilotGroupContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -668,7 +666,7 @@ public:
 
 class ScXMLDataPilotGroupMemberContext : public SvXMLImportContext
 {
-    ScXMLDataPilotGroupContext* pDataPilotGroup;
+    ScXMLDataPilotGroupContext*	pDataPilotGroup;
 
     rtl::OUString sName;
 
@@ -677,7 +675,7 @@ class ScXMLDataPilotGroupMemberContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDataPilotGroupMemberContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDataPilotGroupMemberContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -685,7 +683,7 @@ public:
 
     virtual ~ScXMLDataPilotGroupMemberContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

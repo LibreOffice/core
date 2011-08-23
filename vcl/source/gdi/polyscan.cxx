@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@
 // ----------------
 
 PolyScanline::PolyScanline() :
-        mpFirst ( NULL ),
-        mpLast  ( NULL ),
-        mpAct   ( NULL ),
-        mnLeft  ( 0L ),
-        mnRight ( 0L )
+        mpFirst	( NULL ),
+        mpLast	( NULL ),
+        mpAct	( NULL ),
+        mnLeft	( 0L ),
+        mnRight	( 0L )
 {
 }
 
@@ -90,7 +90,7 @@ void PolyScanline::Insert( long nX )
         {
             ScanlinePoint* pLast = mpFirst;
             ScanlinePoint* pAct = mpFirst->mpNext;
-
+            
             while( pAct )
             {
                 // insert in the midlle of the scanline?
@@ -99,10 +99,10 @@ void PolyScanline::Insert( long nX )
                     pLast->mpNext = new ScanlinePoint( nX, pAct );
                     break;
                 }
-
+                 
                 pLast = pAct;
                 pAct = pAct->mpNext;
-            }
+            }	
         }
     }
 }
@@ -122,9 +122,9 @@ void PolyScanline::Set( long nStart, long nEnd )
 
 // ------------------------------------------------------------------------
 
-sal_Bool PolyScanline::GetFirstSegment( PolyScanSegment& rSegment )
+BOOL PolyScanline::GetFirstSegment( PolyScanSegment& rSegment )
 {
-    sal_Bool bRet = GetFirstX( rSegment.mnStart );
+    BOOL bRet = GetFirstX( rSegment.mnStart );
 
     if( bRet && !GetNextX( rSegment.mnEnd ) )
         rSegment.mnEnd = rSegment.mnStart;
@@ -134,9 +134,9 @@ sal_Bool PolyScanline::GetFirstSegment( PolyScanSegment& rSegment )
 
 // ------------------------------------------------------------------------
 
-sal_Bool PolyScanline::GetNextSegment( PolyScanSegment& rSegment )
+BOOL PolyScanline::GetNextSegment( PolyScanSegment& rSegment )
 {
-    sal_Bool bRet = GetNextX( rSegment.mnStart );
+    BOOL bRet = GetNextX( rSegment.mnStart );
 
     if( bRet && !GetNextX( rSegment.mnEnd ) )
         rSegment.mnEnd = rSegment.mnStart;
@@ -152,8 +152,8 @@ PolyScanner::PolyScanner( const Rectangle& rRect )
 {
     if( !rRect.IsEmpty() )
     {
-        Rectangle   aRect( rRect );
-        sal_uLong       nHeight;
+        Rectangle	aRect( rRect );
+        ULONG		nHeight;
 
         aRect.Justify();
         mnLeft = aRect.Left();
@@ -162,7 +162,7 @@ PolyScanner::PolyScanner( const Rectangle& rRect )
         mnBottom = aRect.Bottom();
         mpArray = new PolyScanline[ nHeight = Height() ];
 
-        for( sal_uLong i = 0UL; i < nHeight; i++ )
+        for( ULONG i = 0UL; i < nHeight; i++ )
             mpArray[ i ].Set( mnLeft, mnRight );
     }
     else
@@ -180,12 +180,12 @@ PolyScanner::PolyScanner( const Polygon& rPoly )
 
     if( nCount )
     {
-        long    nLast = nCount - 1;
-        Point   aFirst( rPoly[ 0 ] );
-        Point   aLast( rPoly[ (sal_uInt16) nLast ] );
+        long	nLast = nCount - 1;
+        Point	aFirst( rPoly[ 0 ] );
+        Point	aLast( rPoly[ (USHORT) nLast ] );
 
         while( nLast && ( aLast == aFirst ) )
-            aLast = rPoly[ (sal_uInt16) --nLast ];
+            aLast = rPoly[ (USHORT) --nLast ];
 
         if( !nLast )
         {
@@ -198,10 +198,10 @@ PolyScanner::PolyScanner( const Polygon& rPoly )
         else
         {
             const Rectangle aRect( rPoly.GetBoundRect() );
-            sal_uLong           nHeight;
+            ULONG			nHeight;
 
             mnLeft = aRect.Left();
-            mnTop = aRect.Top();
+            mnTop = aRect.Top(); 
             mnRight = aRect.Right();
             mnBottom = aRect.Bottom();
             aLast = aFirst;
@@ -209,7 +209,7 @@ PolyScanner::PolyScanner( const Polygon& rPoly )
 
             for( long i = 1L; i <= nLast; i++ )
             {
-                const Point& rPt = rPoly[ (sal_uInt16) i ];
+                const Point& rPt = rPoly[ (USHORT) i ];
 
                 if( rPt != aLast )
                 {
@@ -241,7 +241,7 @@ PolyScanner::~PolyScanner()
 
 // ------------------------------------------------------------------------
 
-PolyScanline* PolyScanner::operator[]( sal_uLong nPos ) const
+PolyScanline* PolyScanner::operator[]( ULONG nPos ) const
 {
     DBG_ASSERT( nPos < Count(), "nPos out of range!" );
     return( mpArray ? ( mpArray + nPos ) : NULL );
@@ -268,21 +268,21 @@ void PolyScanner::InsertLine( const Point& rStart, const Point& rEnd )
                 mpArray[ nY++ - mnTop ].Insert( nX );
         else
             while( nY > nEndY )
-                mpArray[ nY-- - mnTop ].Insert( nX );
+                mpArray[ nY-- - mnTop ].Insert( nX ); 
     }
     else
     {
         const long  nDX = labs( rEnd.X() - rStart.X() );
         const long  nDY = labs( rEnd.Y() - rStart.Y() );
-        const long  nStartX = rStart.X();
-        const long  nStartY = rStart.Y();
-        const long  nEndX = rEnd.X();
-        const long  nEndY = rEnd.Y();
-        const long  nXInc = ( nStartX < nEndX ) ? 1L : -1L;
-        const long  nYInc = ( nStartY < nEndY ) ? 1L : -1L;
-        long        nLastX = nStartX;
-        long        nLastY = nStartY;
-        sal_Bool        bLast = sal_False;
+        const long	nStartX = rStart.X();
+        const long	nStartY = rStart.Y();
+        const long	nEndX = rEnd.X();
+        const long	nEndY = rEnd.Y();	
+        const long	nXInc = ( nStartX < nEndX ) ? 1L : -1L;
+        const long	nYInc = ( nStartY < nEndY ) ? 1L : -1L;
+        long		nLastX = nStartX;
+        long		nLastY = nStartY;
+        BOOL		bLast = FALSE;
 
         mpArray[ nStartY - mnTop ].Insert( nStartX );
 
@@ -300,14 +300,14 @@ void PolyScanner::InsertLine( const Point& rStart, const Point& rEnd )
                         mpArray[ nLastY - mnTop ].Insert( nLastX );
 
                     mpArray[ nY - mnTop ].Insert( nX );
-                    bLast = sal_False;
+                    bLast = FALSE;
                 }
                 else
-                    bLast = sal_True;
+                    bLast = TRUE;
 
                 nLastX = nX;
                 nLastY = nY;
-
+                
                 if( nD < 0L )
                     nD += nDY2;
                 else
@@ -333,10 +333,10 @@ void PolyScanner::InsertLine( const Point& rStart, const Point& rEnd )
                         mpArray[ nLastY - mnTop ].Insert( nLastX );
 
                     mpArray[ nY - mnTop ].Insert( nX );
-                    bLast = sal_False;
+                    bLast = FALSE;
                 }
                 else
-                    bLast = sal_True;
+                    bLast = TRUE;
 
                 nLastX = nX;
                 nLastY = nY;

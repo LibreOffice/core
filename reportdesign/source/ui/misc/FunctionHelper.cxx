@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ sal_Unicode FunctionManager::getSingleToken(const formula::IFunctionManager::ETo
             return sal_Unicode('{');
         case eArrayClose:
             return sal_Unicode('}');
-    }
+    } // switch(_eToken)
     return 0;
 }
 // -----------------------------------------------------------------------------
@@ -93,6 +93,11 @@ const formula::IFunctionDescription* FunctionManager::getFunctionByName(const ::
 // -----------------------------------------------------------------------------
 void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& /*_rLastRUFunctions*/) const
 {
+    //const sal_uInt32 nCount = getCount();
+    //for(sal_uInt32 i = 0 ; i < nCount ; ++i)
+    //{
+    //    const formula::IFunctionCategory* pCategory = getCategory(
+    //}
 }
 // -----------------------------------------------------------------------------
 ::boost::shared_ptr< FunctionDescription > FunctionManager::get(const uno::Reference< report::meta::XFunctionDescription>& _xFunctionDescription) const
@@ -113,9 +118,9 @@ void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula
                 m_aCategoryIndex.push_back( aCategoryFind );
             }
             aFunctionFind = m_aFunctions.insert(TFunctionsMap::value_type(sFunctionName,::boost::shared_ptr<FunctionDescription>(new FunctionDescription(aCategoryFind->second.get(),_xFunctionDescription)))).first;
-        }
+        } // if ( aFind == m_aFunctions.end() )
         pDesc = aFunctionFind->second;
-    }
+    } // if ( _xFunctionDescription.is() )
     return pDesc;
 }
 // -----------------------------------------------------------------------------
@@ -194,15 +199,15 @@ xub_StrLen FunctionDescription::getSuppressedArgumentCount() const
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL("Exception caught!");
+        DBG_ERROR("Exception caught!");
     }
     return sFormula;
 }
 // -----------------------------------------------------------------------------
-void FunctionDescription::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const
+void FunctionDescription::fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const
 {
     const sal_Int32 nCount = m_aParameter.getLength();
-    for(sal_uInt16 i = 0;i < nCount; ++i)
+    for(USHORT i = 0;i < nCount; ++i)
     {
         _rArguments.push_back(i);
     }
@@ -212,36 +217,36 @@ void FunctionDescription::initArgumentInfo()  const
 {
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString FunctionDescription::getSignature() const
+::rtl::OUString FunctionDescription::getSignature() const 
 {
     return m_xFunctionDescription->getSignature();
 }
 // -----------------------------------------------------------------------------
-rtl::OString FunctionDescription::getHelpId() const
+long FunctionDescription::getHelpId() const 
 {
-    return rtl::OString();
+    return 0;
 }
 // -----------------------------------------------------------------------------
-sal_uInt32 FunctionDescription::getParameterCount() const
+sal_uInt32 FunctionDescription::getParameterCount() const 
 {
     return m_aParameter.getLength();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString FunctionDescription::getParameterName(sal_uInt32 _nPos) const
+::rtl::OUString FunctionDescription::getParameterName(sal_uInt32 _nPos) const 
 {
     if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )
         return m_aParameter[_nPos].Name;
     return ::rtl::OUString();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString FunctionDescription::getParameterDescription(sal_uInt32 _nPos) const
+::rtl::OUString FunctionDescription::getParameterDescription(sal_uInt32 _nPos) const 
 {
     if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )
         return m_aParameter[_nPos].Description;
     return ::rtl::OUString();
 }
 // -----------------------------------------------------------------------------
-bool FunctionDescription::isParameterOptional(sal_uInt32 _nPos) const
+bool FunctionDescription::isParameterOptional(sal_uInt32 _nPos) const 
 {
     if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )
         return m_aParameter[_nPos].IsOptional;

@@ -59,11 +59,3 @@ CUSTOMMANIFESTFILE      = manifest
 # --- Targets ------------------------------------------------------
 
 .INCLUDE: target.mk
-
-ALLTAR : $(MISC)/avmedia.jar.component
-
-$(MISC)/avmedia.jar.component .ERRREMOVE : \
-        $(SOLARENV)/bin/createcomponent.xslt avmedia.jar.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_JAVA)avmedia.jar' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt avmedia.jar.component

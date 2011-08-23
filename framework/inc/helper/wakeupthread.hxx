@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,31 +65,31 @@ class WakeUpThread : public ThreadHelpBase
     //-------------------------------------------
     // member
     private:
-
+    
         /** @short  this listener will be notified if this thread
                     waked up. */
         css::uno::WeakReference< css::util::XUpdatable > m_xListener;
-
+        
     //-------------------------------------------
     // interface
     public:
-
+    
         /** @short  Register a new listener on this thread.
-
+        
             @descr  The listener is holded as a weak reference.
                     If the thread detects, that no listener exists ...
                     he will terminate itself.
          */
         WakeUpThread(const css::uno::Reference< css::util::XUpdatable >& xListener);
-
+        
         /** @descr  The thread waits on a condition using a fix timeout value.
                     If the thread wakes up he notify the internal set listener.
                     The listener can use this "timeout" info for it's own purpose.
                     The thread itself will wait on the condition again.
          */
         virtual void SAL_CALL run();
-
-        virtual void SAL_CALL onTerminated();
+        
+        virtual void SAL_CALL onTerminated(); 
 };
 
 } // namespace framework

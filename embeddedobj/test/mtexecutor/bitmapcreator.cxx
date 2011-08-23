@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,15 +41,15 @@ using namespace ::com::sun::star;
 uno::Sequence< ::rtl::OUString > SAL_CALL VCLBitmapCreator::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.BitmapCreator"));
-    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.BitmapCreator"));
+    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.BitmapCreator");
+    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.BitmapCreator");
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL VCLBitmapCreator::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.BitmapCreator"));
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.BitmapCreator");
 }
 
 //-------------------------------------------------------------------------

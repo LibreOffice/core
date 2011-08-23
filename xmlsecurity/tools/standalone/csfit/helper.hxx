@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,6 +45,8 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -86,7 +88,7 @@ class OInputStream : public WeakImplHelper1 < XInputStream >
 {
     public:
         OInputStream( const Sequence< sal_Int8 >&seq ) : m_seq( seq ), nPos( 0 ) {}
-
+        
         virtual sal_Int32 SAL_CALL readBytes(
             Sequence< sal_Int8 >& aData ,
             sal_Int32 nBytesToRead
@@ -197,7 +199,7 @@ class OUriBinding : public WeakImplHelper1 < ::com::sun::star::xml::crypto::XUri
 
         virtual void SAL_CALL setUriBinding(
             const ::rtl::OUString& aUri ,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aInputStream
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aInputStream 
         ) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException ) {
             m_vUris.push_back( aUri ) ;
             m_vStreams.push_back( aInputStream ) ;
@@ -213,7 +215,7 @@ class OUriBinding : public WeakImplHelper1 < ::com::sun::star::xml::crypto::XUri
                     break;
                 }
             }
-
+                                        
             return xInputStream;
         }
 

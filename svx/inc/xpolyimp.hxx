@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,21 +31,20 @@
 
 #include <tools/gen.hxx>
 #include <svx/xpoly.hxx>
-#include <vector>
 
 class ImpXPolygon
 {
 public:
     Point*          pPointAry;
-    sal_uInt8*           pFlagAry;
+    BYTE*           pFlagAry;
     Point*          pOldPointAry;
-    sal_Bool            bDeleteOldPoints;
-    sal_uInt16          nSize;
-    sal_uInt16          nResize;
-    sal_uInt16          nPoints;
-    sal_uInt16          nRefCount;
+    BOOL            bDeleteOldPoints;
+    USHORT          nSize;
+    USHORT          nResize;
+    USHORT          nPoints;
+    USHORT          nRefCount;
 
-    ImpXPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize=16 );
+    ImpXPolygon( USHORT nInitSize = 16, USHORT nResize=16 );
     ImpXPolygon( const ImpXPolygon& rImpXPoly );
     ~ImpXPolygon();
 
@@ -57,24 +56,26 @@ public:
         if ( bDeleteOldPoints )
         {
             delete[] (char*)pOldPointAry;
-            bDeleteOldPoints = sal_False;
+            bDeleteOldPoints = FALSE;
         }
     }
 
-    void Resize( sal_uInt16 nNewSize, sal_Bool bDeletePoints = sal_True );
-    void InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount );
-    void Remove( sal_uInt16 nPos, sal_uInt16 nCount );
+    void Resize( USHORT nNewSize, BOOL bDeletePoints = TRUE );
+    void InsertSpace( USHORT nPos, USHORT nCount );
+    void Remove( USHORT nPos, USHORT nCount );
 };
 
-typedef ::std::vector< XPolygon* > XPolygonList;
+DECLARE_LIST( XPolygonList, XPolygon* )
 
 class ImpXPolyPolygon
 {
 public:
     XPolygonList aXPolyList;
-    sal_uInt16       nRefCount;
+    USHORT       nRefCount;
 
-                ImpXPolyPolygon() { nRefCount = 1; }
+                 ImpXPolyPolygon( USHORT nInitSize = 16, USHORT nResize = 16 ) :
+                    aXPolyList( 1024, nInitSize, nResize )
+                    { nRefCount = 1; }
                 ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly );
                 ~ImpXPolyPolygon();
 

@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005           Created
+ Mar 2005		 	Created
  ************************************************************************/
 #include "lwpfootnote.hxx"
 #include "lwpstory.hxx"
@@ -89,7 +89,7 @@ void LwpFribFootnote::Read(LwpObjectStream * pObjStrm, sal_uInt16 /*len*/)
 /**
  * @descr  Register footnote style by calling LwpFootnote::RegisterStyle()
  */
-void LwpFribFootnote::RegisterNewStyle()
+void LwpFribFootnote::RegisterStyle()
 {
     LwpFootnote* pFootnote = GetFootnote();
     if(pFootnote)

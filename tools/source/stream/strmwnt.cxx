@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,9 +35,7 @@
 #include <string.h>
 #include <limits.h>
 
-#ifdef WNT
-#include <windows.h>
-#endif
+#include <tools/svwin.h>
 
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
@@ -66,9 +64,9 @@ public:
 
 // -----------------------------------------------------------------------
 
-static sal_uIntPtr GetSvError( DWORD nWntError )
+static ULONG GetSvError( DWORD nWntError )
 {
-    static struct { DWORD wnt; sal_uIntPtr sv; } errArr[] =
+    static struct { DWORD wnt; ULONG sv; } errArr[] =
     {
         { ERROR_SUCCESS,                SVSTREAM_OK },
         { ERROR_ACCESS_DENIED,          SVSTREAM_ACCESS_DENIED },
@@ -108,7 +106,7 @@ static sal_uIntPtr GetSvError( DWORD nWntError )
         { (DWORD)0xFFFFFFFF, SVSTREAM_GENERALERROR }
     };
 
-    sal_uIntPtr nRetVal = SVSTREAM_GENERALERROR;    // Standardfehler
+    ULONG nRetVal = SVSTREAM_GENERALERROR;    // Standardfehler
     int i=0;
     do
     {
@@ -126,13 +124,17 @@ static sal_uIntPtr GetSvError( DWORD nWntError )
 |*
 |*    SvFileStream::SvFileStream()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 17.06.94
+|*    Letzte Aenderung  TPF 15.07.98
+|*
 *************************************************************************/
 
 SvFileStream::SvFileStream( const String& rFileName, StreamMode nMode )
 {
-    bIsOpen             = sal_False;
+    bIsOpen             = FALSE;
     nLockCounter        = 0;
-    bIsWritable         = sal_False;
+    bIsWritable         = FALSE;
     pInstanceData       = new StreamData;
 
     SetBufferSize( 8192 );
@@ -148,13 +150,17 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nMode )
 |*
 |*    SvFileStream::SvFileStream()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 22.11.94
+|*    Letzte Aenderung  TPF 15.07.98
+|*
 *************************************************************************/
 
 SvFileStream::SvFileStream()
 {
-    bIsOpen             = sal_False;
+    bIsOpen             = FALSE;
     nLockCounter        = 0;
-    bIsWritable         = sal_False;
+    bIsWritable         = FALSE;
     pInstanceData       = new StreamData;
 
     SetBufferSize( 8192 );
@@ -163,6 +169,10 @@ SvFileStream::SvFileStream()
 /*************************************************************************
 |*
 |*    SvFileStream::~SvFileStream()
+|*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 14.06.94
+|*    Letzte Aenderung  OV 14.06.94
 |*
 *************************************************************************/
 
@@ -177,20 +187,28 @@ SvFileStream::~SvFileStream()
 |*
 |*    SvFileStream::GetFileHandle()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 14.06.94
+|*    Letzte Aenderung  OV 14.06.94
+|*
 *************************************************************************/
 
-sal_uIntPtr SvFileStream::GetFileHandle() const
+ULONG SvFileStream::GetFileHandle() const
 {
-    return (sal_uIntPtr)pInstanceData->hFile;
+    return (ULONG)pInstanceData->hFile;
 }
 
 /*************************************************************************
 |*
 |*    SvFileStream::IsA()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 14.06.94
+|*    Letzte Aenderung  OV 14.06.94
+|*
 *************************************************************************/
 
-sal_uInt16 SvFileStream::IsA() const
+USHORT SvFileStream::IsA() const
 {
     return ID_FILESTREAM;
 }
@@ -200,10 +218,12 @@ sal_uInt16 SvFileStream::IsA() const
 |*    SvFileStream::GetData()
 |*
 |*    Beschreibung      STREAM.SDW, Prueft nicht Eof; IsEof danach rufbar
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  TPF 15.07.98
 |*
 *************************************************************************/
 
-sal_uIntPtr SvFileStream::GetData( void* pData, sal_uIntPtr nSize )
+ULONG SvFileStream::GetData( void* pData, ULONG nSize )
 {
     DWORD nCount = 0;
     if( IsOpen() )
@@ -211,7 +231,7 @@ sal_uIntPtr SvFileStream::GetData( void* pData, sal_uIntPtr nSize )
         bool bResult = ReadFile(pInstanceData->hFile,(LPVOID)pData,nSize,&nCount,NULL);
         if( !bResult )
         {
-            sal_uIntPtr nTestError = GetLastError();
+            ULONG nTestError = GetLastError();
             SetError(::GetSvError( nTestError ) );
         }
     }
@@ -222,9 +242,13 @@ sal_uIntPtr SvFileStream::GetData( void* pData, sal_uIntPtr nSize )
 |*
 |*    SvFileStream::PutData()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  TPF 15.07.98
+|*
 *************************************************************************/
 
-sal_uIntPtr SvFileStream::PutData( const void* pData, sal_uIntPtr nSize )
+ULONG SvFileStream::PutData( const void* pData, ULONG nSize )
 {
     DWORD nCount = 0;
     if( IsOpen() )
@@ -239,9 +263,13 @@ sal_uIntPtr SvFileStream::PutData( const void* pData, sal_uIntPtr nSize )
 |*
 |*    SvFileStream::SeekPos()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  TPF 15.07.98
+|*
 *************************************************************************/
 
-sal_uIntPtr SvFileStream::SeekPos( sal_uIntPtr nPos )
+ULONG SvFileStream::SeekPos( ULONG nPos )
 {
     DWORD nNewPos = 0;
     if( IsOpen() )
@@ -260,12 +288,44 @@ sal_uIntPtr SvFileStream::SeekPos( sal_uIntPtr nPos )
     }
     else
         SetError( SVSTREAM_GENERALERROR );
-    return (sal_uIntPtr)nNewPos;
+    return (ULONG)nNewPos;
 }
 
 /*************************************************************************
 |*
+|*    SvFileStream::Tell()
+|*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  OV 15.06.94
+|*
+*************************************************************************/
+/*
+ULONG SvFileStream::Tell()
+{
+    ULONG nPos = 0L;
+
+    if( IsOpen() )
+    {
+        DWORD nPos;
+        nPos = SetFilePointer(pInstanceData->hFile,0L,NULL,FILE_CURRENT);
+        if( nPos = 0xFFFFFFFF )
+        {
+            SetError( ::GetSvError( GetLastError() ) );
+            nPos = 0L;
+        }
+    }
+    return nPos;
+}
+*/
+
+/*************************************************************************
+|*
 |*    SvFileStream::FlushData()
+|*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  TPF 15.07.98
 |*
 *************************************************************************/
 
@@ -282,9 +342,13 @@ void SvFileStream::FlushData()
 |*
 |*    SvFileStream::LockRange()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  TPF 15.07.98
+|*
 *************************************************************************/
 
-sal_Bool SvFileStream::LockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
+BOOL SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
 {
     bool bRetVal = false;
     if( IsOpen() )
@@ -300,9 +364,13 @@ sal_Bool SvFileStream::LockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
 |*
 |*    SvFileStream::UnlockRange()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  TPF 15.07.98
+|*
 *************************************************************************/
 
-sal_Bool SvFileStream::UnlockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
+BOOL SvFileStream::UnlockRange( ULONG nByteOffset, ULONG nBytes )
 {
     bool bRetVal = false;
     if( IsOpen() )
@@ -318,23 +386,27 @@ sal_Bool SvFileStream::UnlockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes 
 |*
 |*    SvFileStream::LockFile()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  OV 15.06.94
+|*
 *************************************************************************/
 
-sal_Bool SvFileStream::LockFile()
+BOOL SvFileStream::LockFile()
 {
-    sal_Bool bRetVal = sal_False;
+    BOOL bRetVal = FALSE;
     if( !nLockCounter )
     {
         if( LockRange( 0L, LONG_MAX ) )
         {
             nLockCounter = 1;
-            bRetVal = sal_True;
+            bRetVal = TRUE;
         }
     }
     else
     {
         nLockCounter++;
-        bRetVal = sal_True;
+        bRetVal = TRUE;
     }
     return bRetVal;
 }
@@ -343,11 +415,15 @@ sal_Bool SvFileStream::LockFile()
 |*
 |*    SvFileStream::UnlockFile()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  OV 15.06.94
+|*
 *************************************************************************/
 
-sal_Bool SvFileStream::UnlockFile()
+BOOL SvFileStream::UnlockFile()
 {
-    sal_Bool bRetVal = sal_False;
+    BOOL bRetVal = FALSE;
     if( nLockCounter > 0)
     {
         if( nLockCounter == 1)
@@ -355,13 +431,13 @@ sal_Bool SvFileStream::UnlockFile()
             if( UnlockRange( 0L, LONG_MAX ) )
             {
                 nLockCounter = 0;
-                bRetVal = sal_True;
+                bRetVal = TRUE;
             }
         }
         else
         {
             nLockCounter--;
-            bRetVal = sal_True;
+            bRetVal = TRUE;
         }
     }
     return bRetVal;
@@ -371,6 +447,10 @@ sal_Bool SvFileStream::UnlockFile()
 /*************************************************************************
 |*
 |*    SvFileStream::Open()
+|*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  TPF 15.07.98
 |*
 *************************************************************************/
 /*
@@ -403,7 +483,15 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
     ByteString aFileNameA( aFilename, osl_getThreadTextEncoding());
     FSysRedirector::DoRedirect( aFilename );
 #endif
-    SetLastError( ERROR_SUCCESS );  // ggf. durch Redirector geaendert!
+    SetLastError( ERROR_SUCCESS );	// ggf. durch Redirector geaendert!
+
+    /*
+    #ifdef DBG_UTIL
+    String aTraceStr( "SvFileStream::Open(): " );
+    aTraceStr += aFilename;
+    DBG_TRACE( aTraceStr );
+    #endif
+    */
 
     DWORD   nOpenAction;
     DWORD   nShareMode      = FILE_SHARE_READ | FILE_SHARE_WRITE;
@@ -468,7 +556,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
     if( (pInstanceData->hFile==INVALID_HANDLE_VALUE) &&
          (nAccessMode & GENERIC_WRITE))
     {
-        sal_uIntPtr nErr = ::GetSvError( GetLastError() );
+        ULONG nErr = ::GetSvError( GetLastError() );
         if(nErr==SVSTREAM_ACCESS_DENIED || nErr==SVSTREAM_SHARING_VIOLATION)
         {
             nMode &= (~STREAM_WRITE);
@@ -493,15 +581,15 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
 
     if( GetLastError() != ERROR_SUCCESS )
     {
-        bIsOpen = sal_False;
+        bIsOpen = FALSE;
         SetError(::GetSvError( GetLastError() ) );
     }
     else
     {
-        bIsOpen     = sal_True;
-        // pInstanceData->bIsEof = sal_False;
+        bIsOpen     = TRUE;
+        // pInstanceData->bIsEof = FALSE;
         if( nAccessMode & GENERIC_WRITE )
-            bIsWritable = sal_True;
+            bIsWritable = TRUE;
     }
     SetErrorMode( nOldErrorMode );
 }
@@ -509,6 +597,10 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
 /*************************************************************************
 |*
 |*    SvFileStream::ReOpen()
+|*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -521,6 +613,10 @@ void SvFileStream::ReOpen()
 /*************************************************************************
 |*
 |*    SvFileStream::Close()
+|*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  TPF 15.07.98
 |*
 *************************************************************************/
 
@@ -536,9 +632,9 @@ void SvFileStream::Close()
         Flush();
         CloseHandle( pInstanceData->hFile );
     }
-    bIsOpen     = sal_False;
+    bIsOpen     = FALSE;
     nLockCounter= 0;
-    bIsWritable = sal_False;
+    bIsWritable = FALSE;
     SvStream::ClearBuffer();
     SvStream::ClearError();
 }
@@ -548,6 +644,8 @@ void SvFileStream::Close()
 |*    SvFileStream::ResetError()
 |*
 |*    Beschreibung      STREAM.SDW; Setzt Filepointer auf Dateianfang
+|*    Ersterstellung    OV 15.06.94
+|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -560,26 +658,30 @@ void SvFileStream::ResetError()
 |*
 |*    SvFileStream::SetSize()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 19.10.95
+|*    Letzte Aenderung  TPF 15.07.98
+|*
 *************************************************************************/
 
-void SvFileStream::SetSize( sal_uIntPtr nSize )
+void SvFileStream::SetSize( ULONG nSize )
 {
 
     if( IsOpen() )
     {
-        int bError = sal_False;
+        int bError = FALSE;
         HANDLE hFile = pInstanceData->hFile;
-        sal_uIntPtr nOld = SetFilePointer( hFile, 0L, NULL, FILE_CURRENT );
+        ULONG nOld = SetFilePointer( hFile, 0L, NULL, FILE_CURRENT );
         if( nOld != 0xffffffff )
         {
             if( SetFilePointer(hFile,nSize,NULL,FILE_BEGIN ) != 0xffffffff)
             {
                 bool bSucc = SetEndOfFile( hFile );
                 if( !bSucc )
-                    bError = sal_True;
+                    bError = TRUE;
             }
             if( SetFilePointer( hFile,nOld,NULL,FILE_BEGIN ) == 0xffffffff)
-                bError = sal_True;
+                bError = TRUE;
         }
         if( bError )
             SetError(::GetSvError( GetLastError() ) );

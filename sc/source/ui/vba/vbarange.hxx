@@ -52,7 +52,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include "vbaquerytable.hxx"
+#include "vbaquerytable.hxx" //09-09-18 add by limingl
 
 #include "vbaformat.hxx"
 #include <formula/grammar.hxx>
@@ -71,7 +71,7 @@ class ArrayVisitor
 {
 public:
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const css::uno::Reference< css::table::XCell >& xCell ) = 0;
-    virtual ~ArrayVisitor(){}
+    virtual	~ArrayVisitor(){}
 };
 
 class ValueSetter : public ArrayVisitor
@@ -101,7 +101,7 @@ class ScVbaRange : public ScVbaRange_BASE
     sal_Bool mbIsRows;
     sal_Bool mbIsColumns;
     css::uno::Reference< ov::excel::XValidation > m_xValidation;
-    css::uno::Reference<excel::XQueryTable> m_xQueryTable;
+    css::uno::Reference<excel::XQueryTable> m_xQueryTable; //09-09-16 add by limingl
     double getCalcColWidth( const css::table::CellRangeAddress& ) throw (css::uno::RuntimeException);
     double getCalcRowHeight( const css::table::CellRangeAddress& ) throw (css::uno::RuntimeException);
     void visitArray( ArrayVisitor& vistor );
@@ -110,25 +110,19 @@ class ScVbaRange : public ScVbaRange_BASE
 
     void fillSeries(  css::sheet::FillDirection nFillDirection, css::sheet::FillMode nFillMode, css::sheet::FillDateMode nFillDateMode, double fStep, double fEndValue ) throw( css::uno::RuntimeException );
 
-    void ClearContents( sal_Int32 nFlags, bool bFireEvent ) throw (css::uno::RuntimeException);
-
-    css::uno::Any getValue( ValueGetter& rValueGetter ) throw (css::uno::RuntimeException);
-    void setValue( const css::uno::Any& aValue, ValueSetter& setter, bool bFireEvent ) throw ( css::uno::RuntimeException);
-
-    css::uno::Any getFormulaValue( formula::FormulaGrammar::Grammar ) throw (css::uno::RuntimeException);
-    void setFormulaValue( const css::uno::Any& aValue, formula::FormulaGrammar::Grammar, bool bFireEvent ) throw ( css::uno::RuntimeException);
-
+    void ClearContents( sal_Int32 nFlags ) throw (css::uno::RuntimeException);
+    virtual void   setValue( const css::uno::Any& aValue, ValueSetter& setter) throw ( css::uno::RuntimeException);
+    virtual css::uno::Any getValue( ValueGetter& rValueGetter ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any getFormulaValue( formula::FormulaGrammar::Grammar ) throw (css::uno::RuntimeException);
+    virtual void   setFormulaValue( const css::uno::Any& aValue, formula::FormulaGrammar::Grammar ) throw ( css::uno::RuntimeException);
     css::uno::Reference< ov::excel::XRange > getArea( sal_Int32 nIndex  ) throw( css::uno::RuntimeException );
     ScCellRangeObj* getCellRangeObj( )  throw ( css::uno::RuntimeException );
+    ScCellRangesObj* getCellRangesObj() throw ( css::uno::RuntimeException );
     css::uno::Reference< ov::XCollection >& getBorders();
     void groupUnGroup( bool bUnGroup = false ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
      css::uno::Reference< ov::excel::XRange > PreviousNext( bool bIsPrevious );
      css::uno::Reference< ov::excel::XRange > SpecialCellsImpl( sal_Int32 nType, const css::uno::Any& _oValue) throw ( css::script::BasicErrorException );
     css::awt::Point getPosition() throw ( css::uno::RuntimeException );
-
-    /** Fires a Worksheet_Change event for this range or range list. */
-    void fireChangeEvent();
-
 protected:
     virtual ScCellRangesBase* getCellRangesBase() throw ( css::uno::RuntimeException );
     virtual SfxItemSet* getCurrentDataSet( )  throw ( css::uno::RuntimeException );
@@ -158,12 +152,6 @@ public:
         const rtl::OUString& sRangeName, ScDocShell* pDocSh,
         formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1  ) throw ( css::uno::RuntimeException );
     css::table::CellAddress getLeftUpperCellAddress();
-
-    static css::uno::Reference< ov::excel::XRange > CellsHelper(
-        const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::table::XCellRange >& xRange,
-        const css::uno::Any &nRowIndex, const css::uno::Any &nColumnIndex ) throw(css::uno::RuntimeException);
 
     // Attributes
     virtual css::uno::Any SAL_CALL getName() throw (css::uno::RuntimeException);
@@ -207,10 +195,10 @@ public:
     virtual css::uno::Any SAL_CALL getPrefixCharacter() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getShowDetail() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setShowDetail(const css::uno::Any& aShowDetail) throw (css::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::ooo::vba::excel::XQueryTable > SAL_CALL getQueryTable() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::ooo::vba::excel::XQueryTable > SAL_CALL getQueryTable() throw (::com::sun::star::uno::RuntimeException); //09-09-16 add by limingl
     // Methods
-    sal_Bool IsRows() const { return mbIsRows; }
-    sal_Bool IsColumns() const { return mbIsColumns; }
+    sal_Bool IsRows() { return mbIsRows; }
+    sal_Bool IsColumns() { return mbIsColumns; }
     virtual css::uno::Reference< ov::excel::XComment > SAL_CALL AddComment( const css::uno::Any& Text ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Clear() throw (css::uno::RuntimeException);
     virtual void SAL_CALL ClearComments() throw (css::uno::RuntimeException);
@@ -221,7 +209,7 @@ public:
     virtual void SAL_CALL FillRight() throw (css::uno::RuntimeException);
     virtual void SAL_CALL FillUp() throw (css::uno::RuntimeException);
     virtual void SAL_CALL FillDown() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Offset( const css::uno::Any &nRowOffset, const css::uno::Any &nColOffset )
+    virtual	css::uno::Reference< ov::excel::XRange > SAL_CALL Offset( const css::uno::Any &nRowOffset, const css::uno::Any &nColOffset )
                                                            throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL CurrentRegion() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL CurrentArray() throw (css::uno::RuntimeException);
@@ -287,7 +275,7 @@ public:
 
     virtual css::uno::Reference< ov::excel::XPivotTable > SAL_CALL PivotTable(  ) throw (css::uno::RuntimeException);
 
-    virtual ::sal_Int32 SAL_CALL CopyFromRecordset( const ::com::sun::star::uno::Any& Data,  const ::com::sun::star::uno::Any& MaxRows, const ::com::sun::star::uno::Any& MaxColumns ) throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL CopyFromRecordset( const ::com::sun::star::uno::Any& Data,  const ::com::sun::star::uno::Any& MaxRows, const ::com::sun::star::uno::Any& MaxColumns ) throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::RuntimeException); //2008-08-25 add by limingl
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
     // XElementAccess
@@ -300,7 +288,7 @@ public:
     // XDefaultMethod
     ::rtl::OUString SAL_CALL getDefaultMethodName(  ) throw (css::uno::RuntimeException);
         // XDefaultProperty
-        ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")); }
+        ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString::createFromAscii("Value"); }
 
 
 // #TODO completely rewrite ScVbaRange, its become a hackfest

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ public class _XFilePickerControlAccess extends MultiMethodTest {
 
     /**
     * Gets the value of the control and stores it. <p>
-    * Has <b>OK</b> status if no runtime exceptions occurred.
+    * Has <b>OK</b> status if no runtime exceptions occured.
     */
     public void _getValue() {
         boolean result = true ;
@@ -136,7 +136,7 @@ public class _XFilePickerControlAccess extends MultiMethodTest {
 
     /**
     * Gets the label of the control and stores it. <p>
-    * Has <b>OK</b> status if no runtime exceptions occurred.
+    * Has <b>OK</b> status if no runtime exceptions occured.
     */
     public void _getLabel() {
 
@@ -182,7 +182,7 @@ public class _XFilePickerControlAccess extends MultiMethodTest {
     /**
     * Disables and then enables the control. Can be checked only
     * interactively. <p>
-    * Has <b>OK</b> status if no runtime exceptions occurred.
+    * Has <b>OK</b> status if no runtime exceptions occured.
     */
     public void _enableControl() {
         boolean result = true ;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@ namespace dbaui
     class OQueryDesignUndoAction : public OCommentUndoAction
     {
     protected:
-        OJoinTableView* m_pOwner;       // in diesem Container spielt sich alles ab
+        OJoinTableView*	m_pOwner;		// in diesem Container spielt sich alles ab
 
     public:
-        OQueryDesignUndoAction(OJoinTableView* pOwner, sal_uInt16 nCommentID) : OCommentUndoAction(nCommentID), m_pOwner(pOwner) { }
+        OQueryDesignUndoAction(OJoinTableView* pOwner, USHORT nCommentID) : OCommentUndoAction(nCommentID), m_pOwner(pOwner) { }
     };
 }
 #endif // DBAUI_QUERYDESIGNUNDOACTION_HXX

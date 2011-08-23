@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -261,6 +261,26 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
             throws DataSourceException, ReportProcessingException
     {
         super.endReport(report);
-        copyMeta();
+        try
+        {
+            // now copy the meta.xml
+            if (getInputRepository().isReadable("meta.xml"))
+            {
+                final InputStream inputStream = getInputRepository().createInputStream("meta.xml");
+                try
+                {
+                    final OutputStream outputMetaStream = getOutputRepository().createOutputStream("meta.xml", "text/xml");
+                    IOUtils.getInstance().copyStreams(inputStream, outputMetaStream);
+                    outputMetaStream.close();
+                } finally
+                {
+                    inputStream.close();
+                }
+            }
+        }
+        catch (IOException ioe)
+        {
+            throw new ReportProcessingException("Failed to write settings document", ioe);
+        }
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,16 +42,18 @@
 #include <unotools/syslocale.hxx>
 #include <svl/smplhint.hxx>
 
-#define CORNER_SPACE     5
+#define CORNER_SPACE	 5
 
 //=====================================================================
 namespace rptui
 {
 //=====================================================================
 
-Image*  OStartMarker::s_pDefCollapsed       = NULL;
-Image*  OStartMarker::s_pDefExpanded        = NULL;
-oslInterlockedCount OStartMarker::s_nImageRefCount  = 0;
+Image*	OStartMarker::s_pDefCollapsed		= NULL;
+Image*	OStartMarker::s_pDefExpanded		= NULL;
+Image*	OStartMarker::s_pDefCollapsedHC	= NULL;
+Image*	OStartMarker::s_pDefExpandedHC	= NULL;
+oslInterlockedCount OStartMarker::s_nImageRefCount	= 0;
 
 DBG_NAME( rpt_OStartMarker )
 // -----------------------------------------------------------------------------
@@ -82,17 +84,19 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sCol
     m_aVRuler.SetMargin2();
     const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     m_aVRuler.SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
-    SetPaintTransparent(sal_True);
+    SetPaintTransparent(TRUE);
 }
 // -----------------------------------------------------------------------------
 OStartMarker::~OStartMarker()
 {
-    DBG_DTOR( rpt_OStartMarker,NULL);
+    DBG_DTOR( rpt_OStartMarker,NULL);	
     if ( osl_decrementInterlockedCount(&s_nImageRefCount) == 0 )
     {
         DELETEZ(s_pDefCollapsed);
         DELETEZ(s_pDefExpanded);
-    }
+        DELETEZ(s_pDefCollapsedHC);
+        DELETEZ(s_pDefExpandedHC);
+    } // if ( osl_decrementInterlockedCount(&s_nImageRefCount) == 0 )
 }
 // -----------------------------------------------------------------------------
 sal_Int32 OStartMarker::getMinHeight() const
@@ -105,6 +109,7 @@ sal_Int32 OStartMarker::getMinHeight() const
 void OStartMarker::Paint( const Rectangle& rRect )
 {
     Window::Paint( rRect );
+    //SetUpdateMode(FALSE);
     Size aSize = GetOutputSizePixel();
     long nSize = aSize.Width();
     const long nCornerWidth = long(CORNER_SPACE * (double)GetMapMode().GetScaleX());
@@ -112,10 +117,10 @@ void OStartMarker::Paint( const Rectangle& rRect )
     if ( !isCollapsed() )
     {
         const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
-        nSize = aSize.Width() - nVRulerWidth;
+        nSize = aSize.Width() - nVRulerWidth/* - m_nCornerSize*/;
         SetClipRegion(Region(PixelToLogic(Rectangle(Point(),Size( nSize,aSize.Height())))));
         aSize.Width() += nCornerWidth;
-    }
+    } // if ( !isCollapsed() )
     else
         SetClipRegion();
 
@@ -128,14 +133,14 @@ void OStartMarker::Paint( const Rectangle& rRect )
 
         Color aStartColor(m_nColor);
         aStartColor.IncreaseLuminance(10);
-        sal_uInt16 nHue = 0;
-        sal_uInt16 nSat = 0;
-        sal_uInt16 nBri = 0;
+        USHORT nHue = 0;
+        USHORT nSat = 0;
+        USHORT nBri = 0;
         aStartColor.RGBtoHSB(nHue, nSat, nBri);
         nSat += 40;
         Color aEndColor(Color::HSBtoRGB(nHue, nSat, nBri));
         Gradient aGradient(GRADIENT_LINEAR,aStartColor,aEndColor);
-        aGradient.SetSteps(static_cast<sal_uInt16>(aSize.Height()));
+        aGradient.SetSteps(static_cast<USHORT>(aSize.Height()));
 
         DrawGradient(PixelToLogic(aPoly) ,aGradient);
     }
@@ -163,7 +168,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( !rMEvt.IsLeft() )
         return;
-
+    
     Point aPos( rMEvt.GetPosPixel());
 
     const Size aOutputSize = GetOutputSizePixel();
@@ -173,7 +178,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
     if ( rMEvt.GetClicks() == 2 || aRect.IsInside( aPos ) )
     {
         m_bCollapsed = !m_bCollapsed;
-
+        
         changeImage();
 
         m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);
@@ -186,7 +191,11 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
 // -----------------------------------------------------------------------------
 void OStartMarker::changeImage()
 {
-    Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
+    Image* pImage = NULL;
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
+        pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
+    else
+        pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
     m_aImage.SetImage(*pImage);
 }
 // -----------------------------------------------------------------------
@@ -195,19 +204,30 @@ void OStartMarker::initDefaultNodeImages()
     if ( !s_pDefCollapsed )
     {
         s_pDefCollapsed     = new Image( ModuleRes( RID_IMG_TREENODE_COLLAPSED      ) );
+        s_pDefCollapsedHC   = new Image( ModuleRes( RID_IMG_TREENODE_COLLAPSED_HC   ) );
         s_pDefExpanded      = new Image( ModuleRes( RID_IMG_TREENODE_EXPANDED       ) );
+        s_pDefExpandedHC    = new Image( ModuleRes( RID_IMG_TREENODE_EXPANDED_HC    ) );
     }
 
-    Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
+    Image* pImage = NULL;	
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
+    }
+    else
+    {
+        pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
+    }
     m_aImage.SetImage(*pImage);
-    m_aImage.SetMouseTransparent(sal_True);
+    m_aImage.SetMouseTransparent(TRUE);
     m_aImage.SetBackground();
     m_aText.SetBackground();
-    m_aText.SetMouseTransparent(sal_True);
+    m_aText.SetMouseTransparent(TRUE);
 }
 // -----------------------------------------------------------------------
 void OStartMarker::ImplInitSettings()
 {
+    // SetBackground( Wallpaper( COL_YELLOW ));
     SetBackground( );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     setColor();
@@ -216,7 +236,7 @@ void OStartMarker::ImplInitSettings()
 void OStartMarker::Resize()
 {
     const Size aOutputSize( GetOutputSizePixel() );
-    const long nOutputWidth  = aOutputSize.Width();
+    const long nOutputWidth	 = aOutputSize.Width();
     const long nOutputHeight = aOutputSize.Height();
 
     const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
@@ -253,6 +273,7 @@ void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
             == SFX_HINT_COLORS_CHANGED))
     {
         setColor();
+        //m_aText.Invalidate();
         Invalidate(INVALIDATE_CHILDREN);
     }
 }
@@ -269,6 +290,7 @@ void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
     {
         // Hilfe anzeigen
         Rectangle aItemRect(rHEvt.GetMousePosPixel(),Size(GetSizePixel().Width(),getMinHeight()));
+        //aItemRect = LogicToPixel( aItemRect );
         Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
         aItemRect.Left()   = aPt.X();
         aItemRect.Top()    = aPt.Y();
@@ -283,7 +305,7 @@ void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
 }
 // -----------------------------------------------------------------------------
 void OStartMarker::setCollapsed(sal_Bool _bCollapsed)
-{
+{ 
     OColorListener::setCollapsed(_bCollapsed);
     showRuler(_bCollapsed);
     changeImage();

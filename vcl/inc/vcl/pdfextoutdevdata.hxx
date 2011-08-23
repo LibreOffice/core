@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 
 class Graphic;
 
-namespace vcl { class PDFWriter; }
+namespace vcl {	class PDFWriter; }
 
 namespace vcl
 {
@@ -53,8 +53,8 @@ namespace vcl
 */
 struct PDFExtOutDevBookmarkEntry
 {
-    sal_Int32       nLinkId;
-    rtl::OUString   aBookmark;
+    sal_Int32		nLinkId;
+    rtl::OUString	aBookmark;
 };
 
 /*
@@ -69,19 +69,19 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
     const OutputDevice& mrOutDev;
 
     sal_Bool                        mbTaggedPDF;
-    sal_Bool                        mbExportNotes;
-    sal_Bool                        mbTransitionEffects;
-    sal_Bool                        mbUseLosslessCompression;
-    sal_Bool                        mbReduceImageResolution;
+    sal_Bool				    	mbExportNotes;
+    sal_Bool					    mbTransitionEffects;
+    sal_Bool					    mbUseLosslessCompression;
+    sal_Bool					    mbReduceImageResolution;
     sal_Bool                        mbExportFormFields;
     sal_Bool                        mbExportBookmarks;
     sal_Bool                        mbExportNDests; //i56629
     sal_Int32                       mnFormsFormat;
-    sal_Int32                       mnPage;
+    sal_Int32					    mnPage;
     com::sun::star::lang::Locale    maDocLocale;
 
-    PageSyncData*               mpPageSyncData;
-    GlobalSyncData*             mpGlobalSyncData;
+    PageSyncData*				mpPageSyncData;
+    GlobalSyncData*				mpGlobalSyncData;
 
     std::vector< PDFExtOutDevBookmarkEntry > maBookmarks;
 
@@ -98,20 +98,20 @@ public :
 
 
 
-    sal_Bool    GetIsExportNotes() const;
-    void        SetIsExportNotes( const sal_Bool bExportNotes );
+    sal_Bool	GetIsExportNotes() const;
+    void		SetIsExportNotes( const sal_Bool bExportNotes );
 
-    sal_Bool    GetIsExportTaggedPDF() const;
-    void        SetIsExportTaggedPDF( const sal_Bool bTaggedPDF );
+    sal_Bool	GetIsExportTaggedPDF() const;
+    void		SetIsExportTaggedPDF( const sal_Bool bTaggedPDF );
 
-    sal_Bool    GetIsExportTransitionEffects() const;
-    void        SetIsExportTransitionEffects( const sal_Bool bTransitionalEffects );
+    sal_Bool	GetIsExportTransitionEffects() const;
+    void		SetIsExportTransitionEffects( const sal_Bool bTransitionalEffects );
 
     sal_Bool    GetIsExportFormFields() const;
     void        SetIsExportFormFields( const sal_Bool bExportFormFields );
 
-    sal_Int32   GetFormsFormat() const;
-    void        SetFormsFormat( const sal_Int32 nFormsFormat );
+    sal_Int32	GetFormsFormat() const;
+    void		SetFormsFormat( const sal_Int32 nFormsFormat );
 
     sal_Bool    GetIsExportBookmarks() const;
     void        SetIsExportBookmarks( const sal_Bool bExportBookmarks );
@@ -120,14 +120,14 @@ public :
     void        SetIsExportNamedDestinations( const sal_Bool bExportNDests ); //i56629
 
     // PageNumber, Compression is being set by the PDFExport
-    sal_Int32   GetCurrentPageNumber() const;
-    void        SetCurrentPageNumber( const sal_Int32 nPage );
+    sal_Int32	GetCurrentPageNumber() const;
+    void		SetCurrentPageNumber( const sal_Int32 nPage );
 
-    sal_Bool    GetIsLosslessCompression() const;
-    void        SetIsLosslessCompression( const sal_Bool bLosslessCompression );
+    sal_Bool	GetIsLosslessCompression() const;
+    void		SetIsLosslessCompression( const sal_Bool bLosslessCompression );
 
-    sal_Bool    GetIsReduceImageResolution() const;
-    void        SetIsReduceImageResolution( const sal_Bool bReduceImageResolution );
+    sal_Bool	GetIsReduceImageResolution() const;
+    void		SetIsReduceImageResolution( const sal_Bool bReduceImageResolution );
 
     const com::sun::star::lang::Locale& GetDocumentLocale() const;
     void        SetDocumentLocale( const com::sun::star::lang::Locale& rLoc );
@@ -138,14 +138,14 @@ public :
 
         Use this method to group render output.
      */
-    void        BeginGroup();
+    void		BeginGroup();
 
     /** End render output
 
         This method ends grouped render output without
         further actions.
      */
-    void        EndGroup();
+    void		EndGroup();
 
     /** End render output
 
@@ -170,20 +170,20 @@ public :
         The visible part of the output. This might be less than
         rOutputRect, e.g. for cropped graphics.
      */
-    void        EndGroup( const Graphic&    rGraphic,
-                          sal_uInt8             nTransparency,
-                          const Rectangle&  rOutputRect,
-                          const Rectangle&  rVisibleOutputRect );
+    void		EndGroup( const Graphic& 	rGraphic,
+                          BYTE				nTransparency,
+                          const Rectangle& 	rOutputRect,
+                          const Rectangle& 	rVisibleOutputRect );
 //--->i56629
     /** Create a new named destination to be used in a link to this document from another PDF document
  (see PDF spec 1.4, 8.2.1)
-
+ 
     @parm sDestName
     the name this destination will be addressed with from others PDF document
 
     @param rRect
     target rectangle on page to be displayed if dest is jumped to
-
+    
     @param nPageNr
     number of page the dest is on (as returned by NewPage)
     or -1 in which case the current page is used
@@ -202,7 +202,7 @@ public :
 
     @param rRect
     target rectangle on page to be displayed if dest is jumped to
-
+    
     @param nPageNr
     number of page the dest is on (as returned by NewPage)
     or -1 in which case the current page is used
@@ -248,14 +248,14 @@ public :
         <p>will change a dest type link to an URL type link if necessary</p>
         @param nLinkId
         the link to be changed
-
+       
         @param rURL
         the URL the link shall point to.
         there will be no error checking or any kind of
         conversion done to this parameter execept this:
         it will be output as 7bit Ascii. The URL
         will appear literally in the PDF file produced
-
+        
         @returns
         0 for success
         -1 in case the link id does not exist
@@ -307,7 +307,7 @@ public :
     -1 if the item does not exist
     */
     sal_Int32 SetOutlineItemText( sal_Int32 nItem, const rtl::OUString& rText );
-
+    
     /** Set an outline item's destination
 
     @param nItem
@@ -374,7 +374,7 @@ public :
      */
      sal_Int32 BeginStructureElement( PDFWriter::StructElement eType, const rtl::OUString& rAlias = rtl::OUString() );
     /** end a logical structure element
-
+        
     @see BeginStructureElement
      */
     void EndStructureElement();
@@ -399,14 +399,14 @@ public :
      */
     bool SetCurrentStructureElement( sal_Int32 nElement );
     /** get the current structure element id
-
+        
     @returns
     the id of the current structure element
     */
     sal_Int32 GetCurrentStructureElement();
 
     /** set a structure attribute on the current structural element
-
+        
     SetStructureAttribute sets an attribute of the current structural element to a
     new value. A consistency check is performed before actually setting the value;
     if the check fails, the function returns <FALSE/> and the attribute remains
@@ -424,7 +424,7 @@ public :
      */
     bool SetStructureAttribute( PDFWriter::StructAttribute eAttr, PDFWriter::StructAttributeValue eVal );
     /** set a structure attribute on the current structural element
-
+        
     SetStructureAttributeNumerical sets an attribute of the current structural element
     to a new numerical value. A consistency check is performed before actually setting
     the value; if the check fails, the function returns <FALSE/> and the attribute

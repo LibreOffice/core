@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: ToolPanelViewShell.hxx,v $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,7 +76,7 @@ public:
     SFX_DECL_INTERFACE(SD_IF_SDTOOLPANELSHELL)
 
     ToolPanelViewShell (
-        SfxViewFrame* pFrame,
+        SfxViewFrame* pFrame, 
         ViewShellBase& rViewShellBase,
         ::Window* pParentWindow,
         FrameView* pFrameView);
@@ -90,8 +93,11 @@ public:
     virtual void KeyInput (const KeyEvent& rEvent);
     using sd::ViewShell::KeyInput;
 
-    virtual SdPage* GetActualPage (void);
-    virtual SdPage* getCurrentPage (void) const;
+    virtual SdPage*	GetActualPage (void);
+    virtual SdPage*	getCurrentPage (void) const;
+
+    void Execute (SfxRequest& rRequest);
+    void GetState (SfxItemSet& rItemSet);
 
     virtual void ArrangeGUIElements (void);
 
@@ -143,7 +149,7 @@ private:
     /** The id of the menu in the menu bar/tool box of the parent docking
         window.
     */
-    sal_uInt16 mnMenuId;
+    USHORT mnMenuId;
 
     /** Create a popup menu.  it contains two sections, one for
         docking or un-docking the tool panel, one for toggling the

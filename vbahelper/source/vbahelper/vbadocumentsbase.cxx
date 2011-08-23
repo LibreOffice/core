@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,10 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-#include "vbahelper/vbadocumentsbase.hxx"
-
-#include <comphelper/mediadescriptor.hxx>
+#include <vbahelper/vbadocumentsbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -53,20 +50,18 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
+#include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbadocumentbase.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <osl/file.hxx>
-
-#include "vbahelper/vbahelper.hxx"
-#include "vbahelper/vbaapplicationbase.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const rtl::OUString sSpreadsheetDocument( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument") );
-static const rtl::OUString sTextDocument( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument") );
+static const rtl::OUString sSpreadsheetDocument( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) );
+static const rtl::OUString sTextDocument( rtl::OUString::createFromAscii( "com.sun.star.text.TextDocument" ) );
 
-typedef  boost::unordered_map< rtl::OUString,
+typedef  std::hash_map< rtl::OUString,
 sal_Int32, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
 
@@ -94,7 +89,7 @@ public:
             m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
         uno::Reference< frame::XDesktop > xDesktop
-            (xSMgr->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), m_xContext), uno::UNO_QUERY_THROW );
+            (xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"), m_xContext), uno::UNO_QUERY_THROW );
         uno::Reference< container::XEnumeration > mxComponents = xDesktop->getComponents()->createEnumeration();
         while( mxComponents->hasMoreElements() )
         {
@@ -105,13 +100,13 @@ public:
         m_it = m_documents.begin();
     }
     // XEnumeration
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
-    {
+    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException) 
+    { 
         return m_it != m_documents.end();
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    {
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException) 
+    { 
         if ( !hasMoreElements() )
         {
             throw container::NoSuchElementException();
@@ -124,9 +119,9 @@ public:
 // a very similar one is used in vbawindow ( SelectedSheetsEnumAccess )
 // Maybe a template base class that does all of the operations on the hashmap
 // and vector only, and the sub-class does everything else
-// => ctor, createEnumeration & factory method need be defined ( to be called
+// => ctor, createEnumeration & factory method need be defined ( to be called 
 // by getByIndex, getByName )
-typedef ::cppu::WeakImplHelper3< container::XEnumerationAccess
+typedef ::cppu::WeakImplHelper3< container::XEnumerationAccess 
     , com::sun::star::container::XIndexAccess
     , com::sun::star::container::XNameAccess
     > DocumentsAccessImpl_BASE;
@@ -137,7 +132,7 @@ class DocumentsAccessImpl : public DocumentsAccessImpl_BASE
     Documents m_documents;
     NameIndexHash namesToIndices;
     VbaDocumentsBase::DOCUMENT_TYPE meDocType;
-public:
+public:	
     DocumentsAccessImpl( const uno::Reference< uno::XComponentContext >& xContext, VbaDocumentsBase::DOCUMENT_TYPE eDocType ) throw (uno::RuntimeException) :m_xContext( xContext ), meDocType( eDocType )
     {
         uno::Reference< container::XEnumeration > xEnum = new DocumentsEnumImpl( m_xContext );
@@ -145,7 +140,7 @@ public:
         while( xEnum->hasMoreElements() )
         {
             uno::Reference< lang::XServiceInfo > xServiceInfo( xEnum->nextElement(), uno::UNO_QUERY );
-            if ( xServiceInfo.is()
+            if ( xServiceInfo.is() 
                 && (  ( xServiceInfo->supportsService( sSpreadsheetDocument ) && meDocType == VbaDocumentsBase::EXCEL_DOCUMENT )
                 || ( xServiceInfo->supportsService( sTextDocument ) && meDocType == VbaDocumentsBase::WORD_DOCUMENT ) ) )
             {
@@ -160,61 +155,61 @@ public:
                 namesToIndices[ sName ] = nIndex++;
             }
         }
-
+            
     }
-
+    
     //XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
-        return new DocumentsEnumImpl( m_xContext, m_documents );
+        return new DocumentsEnumImpl( m_xContext, m_documents ); 
     }
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
-    {
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException) 
+    { 
         return m_documents.size();
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw ( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
-    {
-        if ( Index < 0
-            || static_cast< Documents::size_type >(Index) >= m_documents.size() )
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw ( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException) 
+    { 
+        if ( Index < 0 
+            || static_cast< Documents::size_type >(Index) >= m_documents.size() ) 
             throw lang::IndexOutOfBoundsException();
         return makeAny( m_documents[ Index ] ); // returns xspreadsheetdoc
     }
 
     //XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
-    {
-        return frame::XModel::static_type(0);
+    { 
+        return frame::XModel::static_type(0); 
     }
 
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
-    {
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) 
+    { 
         return (m_documents.size() > 0);
     }
 
     //XNameAccess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    {
+    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException) 
+    { 
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         if ( it == namesToIndices.end() )
             throw container::NoSuchElementException();
         return makeAny( m_documents[ it->second ] );
-
+        
     }
 
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
-    {
+    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException) 
+    { 
         uno::Sequence< ::rtl::OUString > names( namesToIndices.size() );
         ::rtl::OUString* pString = names.getArray();
         NameIndexHash::const_iterator it = namesToIndices.begin();
         NameIndexHash::const_iterator it_end = namesToIndices.end();
         for ( ; it != it_end; ++it, ++pString )
-            *pString = it->first;
-        return names;
+            *pString = it->first;	
+        return names;	
     }
 
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
-    {
+    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException) 
+    { 
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         return (it != namesToIndices.end());
     }
@@ -225,45 +220,15 @@ VbaDocumentsBase::VbaDocumentsBase( const uno::Reference< XHelperInterface >& xP
 {
 }
 
-namespace {
-
-void lclSetupComponent( const uno::Reference< lang::XComponent >& rxComponent, sal_Bool bScreenUpdating, sal_Bool bInteractive )
+uno::Any SAL_CALL
+VbaDocumentsBase::Add() throw (uno::RuntimeException)
 {
-    if( !bScreenUpdating ) try
-    {
-        uno::Reference< frame::XModel >( rxComponent, uno::UNO_QUERY_THROW )->lockControllers();
-    }
-    catch( uno::Exception& )
-    {
-    }
-
-    if( !bInteractive ) try
-    {
-        uno::Reference< frame::XModel > xModel( rxComponent, uno::UNO_QUERY_THROW );
-        uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
-        uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
-        uno::Reference< awt::XWindow >( xFrame->getContainerWindow(), uno::UNO_SET_THROW )->setEnable( sal_False );
-    }
-    catch( uno::Exception& )
-    {
-    }
-}
-
-} // namespace
-
-uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException)
-{
-    // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
-    uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );
-    sal_Bool bScreenUpdating = !xApplication.is() || xApplication->getScreenUpdating();
-    sal_Bool bInteractive = !xApplication.is() || xApplication->getInteractive();
-
-     uno::Reference< lang::XMultiComponentFactory > xSMgr(
+    uno::Reference< lang::XMultiComponentFactory > xSMgr(
         mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
      uno::Reference< frame::XComponentLoader > xLoader(
         xSMgr->createInstanceWithContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")),
+            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),
                 mxContext), uno::UNO_QUERY_THROW );
     rtl::OUString sURL;
     if( meDocType == WORD_DOCUMENT )
@@ -272,25 +237,15 @@ uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException)
         sURL = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc") );
     else
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-
-    // prepare the media descriptor
-    ::comphelper::MediaDescriptor aMediaDesc;
-    aMediaDesc[ ::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE() ] <<= document::MacroExecMode::USE_CONFIG;
-    aMediaDesc.setComponentDataEntry( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ApplyFormDesignMode" ) ), uno::Any( false ) );
-
-    // craete the new document
     uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL(
                                        sURL ,
-                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0,
-                                       aMediaDesc.getAsConstPropertyValueList() );
-
-    // #163808# lock document controllers and container window if specified by application
-    lclSetupComponent( xComponent, bScreenUpdating, bInteractive );
-
+                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0, 
+                                       uno::Sequence< beans::PropertyValue >(0) );			   
     return uno::makeAny( xComponent );
 }
 
-void VbaDocumentsBase::closeDocuments() throw (uno::RuntimeException)
+void
+VbaDocumentsBase::Close() throw (uno::RuntimeException)
 {
 // #FIXME this *MUST* be wrong documents::close surely closes ALL documents
 // in the collection, use of getCurrentDocument here is totally wrong
@@ -304,13 +259,9 @@ void VbaDocumentsBase::closeDocuments() throw (uno::RuntimeException)
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
-uno::Any VbaDocumentsBase::openDocument( const rtl::OUString& rFileName, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (uno::RuntimeException)
+uno::Any
+VbaDocumentsBase::Open( const rtl::OUString& rFileName, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (uno::RuntimeException)
 {
-    // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
-    uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );
-    sal_Bool bScreenUpdating = !xApplication.is() || xApplication->getScreenUpdating();
-    sal_Bool bInteractive = !xApplication.is() || xApplication->getInteractive();
-
     // we need to detect if this is a URL, if not then assume its a file path
         rtl::OUString aURL;
         INetURLObject aObj;
@@ -323,27 +274,30 @@ uno::Any VbaDocumentsBase::openDocument( const rtl::OUString& rFileName, const u
     uno::Reference< lang::XMultiComponentFactory > xSMgr(
         mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XDesktop > xDesktop
-        (xSMgr->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))                    , mxContext),
+        (xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")                    , mxContext),
         uno::UNO_QUERY_THROW );
     uno::Reference< frame::XComponentLoader > xLoader(
         xSMgr->createInstanceWithContext(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")),
+        ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),
         mxContext),
         uno::UNO_QUERY_THROW );
 
     uno::Sequence< beans::PropertyValue > sProps( rProps );
     sProps.realloc( sProps.getLength() + 1 );
     sProps[ sProps.getLength() - 1 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode") );
-    sProps[ sProps.getLength() - 1 ].Value <<= document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+    sProps[ sProps.getLength() - 1 ].Value <<= uno::makeAny( document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN );
 
+    sal_Int32 nIndex = sProps.getLength() - 1;
+    
     if ( ReadOnly.hasValue()  )
     {
         sal_Bool bIsReadOnly = sal_False; ReadOnly >>= bIsReadOnly;
         if ( bIsReadOnly )
         {
+            static const rtl::OUString sReadOnly( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") );
             sProps.realloc( sProps.getLength() + 1 );
-            sProps[ sProps.getLength() - 1 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") );
-            sProps[ sProps.getLength() - 1 ].Value <<= true;
+            sProps[ nIndex ].Name = sReadOnly;
+            sProps[ nIndex++ ].Value = uno::makeAny( (sal_Bool)sal_True );
         }
     }
 
@@ -351,10 +305,6 @@ uno::Any VbaDocumentsBase::openDocument( const rtl::OUString& rFileName, const u
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_default") ),
         frame::FrameSearchFlag::CREATE,
         sProps);
-
-    // #163808# lock document controllers and container window if specified by application
-    lclSetupComponent( xComponent, bScreenUpdating, bInteractive );
-
     return uno::makeAny( xComponent );
 }
 

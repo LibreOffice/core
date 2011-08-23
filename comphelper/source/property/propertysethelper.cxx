@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ class PropertySetHelperImpl
 {
 public:
     PropertyMapEntry* find( const OUString& aName ) const throw();
-
+    
     PropertySetInfo* mpInfo;
 };
 }
@@ -170,7 +170,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< ::rtl::OUStr
     if( nCount )
     {
         PropertyMapEntry** pEntries = new PropertyMapEntry*[nCount+1];
-        pEntries[nCount] = NULL;
+        pEntries[nCount] = NULL;	
         const OUString* pNames = aPropertyNames.getConstArray();
 
         sal_Bool bUnknown = sal_False;
@@ -312,17 +312,17 @@ Any SAL_CALL PropertySetHelper::getPropertyDefault( const ::rtl::OUString& aProp
 
 void PropertySetHelper::_getPropertyStates( const comphelper::PropertyMapEntry**, PropertyState* ) throw(UnknownPropertyException )
 {
-    OSL_FAIL( "you have to implement this yourself!");
+    OSL_ENSURE( sal_False, "you have to implement this yourself!");
 }
 
 void PropertySetHelper::_setPropertyToDefault( const comphelper::PropertyMapEntry* )  throw(UnknownPropertyException )
 {
-    OSL_FAIL( "you have to implement this yourself!");
+    OSL_ENSURE( sal_False, "you have to implement this yourself!");
 }
 
 Any PropertySetHelper::_getPropertyDefault( const comphelper::PropertyMapEntry* ) throw(UnknownPropertyException, WrappedTargetException )
 {
-    OSL_FAIL( "you have to implement this yourself!");
+    OSL_ENSURE( sal_False, "you have to implement this yourself!");
 
     Any aAny;
     return aAny;

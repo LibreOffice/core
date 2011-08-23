@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,10 +35,10 @@
 class SVX_DLLPUBLIC SdrTextAniAmountItem: public SfxInt16Item {
 public:
     TYPEINFO();
-    SdrTextAniAmountItem(sal_Int16 nVal=0): SfxInt16Item(SDRATTR_TEXT_ANIAMOUNT,nVal) {}
+    SdrTextAniAmountItem(INT16 nVal=0): SfxInt16Item(SDRATTR_TEXT_ANIAMOUNT,nVal) {}
     SdrTextAniAmountItem(SvStream& rIn): SfxInt16Item(SDRATTR_TEXT_ANIAMOUNT,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
     virtual bool HasMetrics() const;
     virtual bool ScaleMetrics(long nMul, long nDiv);
 

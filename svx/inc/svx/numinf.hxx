@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,51 +47,51 @@ class SVX_DLLPUBLIC SvxNumberInfoItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxNumberInfoItem( const sal_uInt16 nId  );
+    SvxNumberInfoItem( const USHORT nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
-                       const sal_uInt16 nId  );
+                       const USHORT nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const String& rVal,
-                       const sal_uInt16 nId  );
+                       const USHORT nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
-                       const sal_uInt16 nId  );
+                       const USHORT nId  );
     // if both double and String are supplied, String is used for text formats
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
-                       const String& rValueStr, const sal_uInt16 nId );
+                       const String& rValueStr, const USHORT nId );
     SvxNumberInfoItem( const SvxNumberInfoItem& );
     ~SvxNumberInfoItem();
 
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const;
-    virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*     Create( SvStream& rStream, USHORT nVer ) const;
+    virtual SvStream&		 Store( SvStream& , USHORT nItemVersion ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    SvNumberFormatter*      GetNumberFormatter() const { return pFormatter; }
-    void                    SetNumberFormatter( SvNumberFormatter* pNumFrmt );
-    const String&           GetValueString() const { return aStringVal; }
-    void                    SetStringValue( const String& rNewVal );
-    double                  GetValueDouble() const  { return nDoubleVal; }
-    void                    SetDoubleValue( const double& rNewVal );
+    SvNumberFormatter*		GetNumberFormatter() const { return pFormatter; }
+    void					SetNumberFormatter( SvNumberFormatter* pNumFrmt );
+    const String&			GetValueString() const { return aStringVal; }
+    void					SetStringValue( const String& rNewVal );
+    double					GetValueDouble() const 	{ return nDoubleVal; }
+    void					SetDoubleValue( const double& rNewVal );
 
-    const sal_uInt32*       GetDelArray() const { return pDelFormatArr; }
-    void                    SetDelFormatArray( const sal_uInt32* pData,
+    const sal_uInt32*		GetDelArray() const { return pDelFormatArr; }
+    void					SetDelFormatArray( const sal_uInt32* pData,
                                                const sal_uInt32  nCount );
 
-    SvxNumberValueType      GetValueType() const { return eValueType; }
-    sal_uInt32              GetDelCount() const  { return nDelCount; }
+    SvxNumberValueType		GetValueType() const { return eValueType; }
+    sal_uInt32				GetDelCount() const  { return nDelCount; }
 
 private:
-    SvNumberFormatter*  pFormatter;
-    SvxNumberValueType  eValueType;
-    String              aStringVal;
-    double              nDoubleVal;
+    SvNumberFormatter*	pFormatter;
+    SvxNumberValueType	eValueType;
+    String				aStringVal;
+    double				nDoubleVal;
 
-    sal_uInt32*         pDelFormatArr;
-    sal_uInt32          nDelCount;
+    sal_uInt32*			pDelFormatArr;
+    sal_uInt32			nDelCount;
 };
 
 

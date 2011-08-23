@@ -113,7 +113,7 @@ Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException
             Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
             if ( ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ) == rType && xGRes.is() )
                 aIface = ::cppu::queryInterface(rType,static_cast< XGeneratedResultSet * >( this ));
-        }
+        } // if ( !aIface.hasValue() )
         if ( !aIface.hasValue() )
         {
             Reference< XPreparedBatchExecution > xGRes(m_xAggregateAsSet, UNO_QUERY);
@@ -200,15 +200,15 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (Runtim
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::createArrayHelper" );
     BEGIN_PROPERTY_HELPER(10)
-        DECL_PROP0(CURSORNAME,              ::rtl::OUString);
+        DECL_PROP0(CURSORNAME,				::rtl::OUString);
         DECL_PROP0_BOOL(ESCAPE_PROCESSING);
-        DECL_PROP0(FETCHDIRECTION,          sal_Int32);
-        DECL_PROP0(FETCHSIZE,               sal_Int32);
-        DECL_PROP0(MAXFIELDSIZE,            sal_Int32);
-        DECL_PROP0(MAXROWS,                 sal_Int32);
-        DECL_PROP0(QUERYTIMEOUT,            sal_Int32);
-        DECL_PROP0(RESULTSETCONCURRENCY,    sal_Int32);
-        DECL_PROP0(RESULTSETTYPE,           sal_Int32);
+        DECL_PROP0(FETCHDIRECTION,			sal_Int32);
+        DECL_PROP0(FETCHSIZE,				sal_Int32);
+        DECL_PROP0(MAXFIELDSIZE,			sal_Int32);
+        DECL_PROP0(MAXROWS,					sal_Int32);
+        DECL_PROP0(QUERYTIMEOUT,			sal_Int32);
+        DECL_PROP0(RESULTSETCONCURRENCY,	sal_Int32);
+        DECL_PROP0(RESULTSETTYPE,			sal_Int32);
         DECL_PROP0_BOOL(USEBOOKMARKS);
     END_PROPERTY_HELPER();
 }

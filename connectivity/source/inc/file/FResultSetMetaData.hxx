@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,18 +46,18 @@ namespace connectivity
         typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
         class OOO_DLLPUBLIC_FILE OResultSetMetaData :
-            public  OResultSetMetaData_BASE
+            public 	OResultSetMetaData_BASE
         {
-            ::rtl::OUString     m_aTableName;
-            ::rtl::Reference<connectivity::OSQLColumns> m_xColumns;
-            OFileTable*         m_pTable;
+            ::rtl::OUString		m_aTableName;
+            ::rtl::Reference<connectivity::OSQLColumns>	m_xColumns;
+            OFileTable*			m_pTable;
 
             void checkColumnIndex(sal_Int32 column) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         protected:
             virtual ~OResultSetMetaData();
         public:
-            // a Constructor, that is needed for when Returning the Object is needed:
-            OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable* _pTable);
+            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*	_pTable);
 
             /// Avoid ambigous cast error from the compiler.
             inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()

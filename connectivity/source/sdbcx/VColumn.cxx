@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,17 +47,17 @@ using namespace ::com::sun::star::sdbc;
 ::rtl::OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.VColumnDescription"));
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.VColumn"));
+        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VColumnDescription");
+    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VColumn");
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ColumnDescription"));
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.ColumnDescription");
     else
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Column"));
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Column");
 
     return aSupported;
 }
@@ -87,18 +87,18 @@ OColumn::OColumn(sal_Bool _bCase)
     construct();
 }
 // -------------------------------------------------------------------------
-OColumn::OColumn(   const ::rtl::OUString& _Name,
+OColumn::OColumn(	const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _TypeName,
                     const ::rtl::OUString& _DefaultValue,
                     const ::rtl::OUString& _Description,
-                    sal_Int32       _IsNullable,
-                    sal_Int32       _Precision,
-                    sal_Int32       _Scale,
-                    sal_Int32       _Type,
-                    sal_Bool        _IsAutoIncrement,
-                    sal_Bool        _IsRowVersion,
-                    sal_Bool        _IsCurrency,
-                    sal_Bool        _bCase)
+                    sal_Int32		_IsNullable,
+                    sal_Int32		_Precision,
+                    sal_Int32		_Scale,
+                    sal_Int32		_Type,
+                    sal_Bool		_IsAutoIncrement,
+                    sal_Bool		_IsRowVersion,
+                    sal_Bool		_IsCurrency,
+                    sal_Bool		_bCase)
     :OColumnDescriptor_BASE(m_aMutex)
     ,ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase)
     ,m_TypeName(_TypeName)
@@ -168,16 +168,16 @@ void OColumn::construct()
 
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME),            PROPERTY_ID_TYPENAME,           nAttrib,&m_TypeName,        ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION),     PROPERTY_ID_DESCRIPTION,        nAttrib,&m_Description,     ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE),        PROPERTY_ID_DEFAULTVALUE,       nAttrib,&m_DefaultValue,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION),       PROPERTY_ID_PRECISION,          nAttrib,&m_Precision,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),                PROPERTY_ID_TYPE,               nAttrib,&m_Type,            ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE),           PROPERTY_ID_SCALE,              nAttrib,&m_Scale,           ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE),      PROPERTY_ID_ISNULLABLE,         nAttrib,&m_IsNullable,      ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT), PROPERTY_ID_ISAUTOINCREMENT,    nAttrib,&m_IsAutoIncrement, ::getBooleanCppuType());
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISROWVERSION),        PROPERTY_ID_ISROWVERSION,       nAttrib,&m_IsRowVersion,    ::getBooleanCppuType());
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY),      PROPERTY_ID_ISCURRENCY,         nAttrib,&m_IsCurrency,      ::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME),			PROPERTY_ID_TYPENAME,			nAttrib,&m_TypeName,		::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION),		PROPERTY_ID_DESCRIPTION,		nAttrib,&m_Description,		::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE),		PROPERTY_ID_DEFAULTVALUE,		nAttrib,&m_DefaultValue,	::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION),		PROPERTY_ID_PRECISION,			nAttrib,&m_Precision,		::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),				PROPERTY_ID_TYPE,				nAttrib,&m_Type,			::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE),			PROPERTY_ID_SCALE,				nAttrib,&m_Scale,			::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE),		PROPERTY_ID_ISNULLABLE,			nAttrib,&m_IsNullable,		::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT),	PROPERTY_ID_ISAUTOINCREMENT,	nAttrib,&m_IsAutoIncrement,	::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISROWVERSION),		PROPERTY_ID_ISROWVERSION,		nAttrib,&m_IsRowVersion,	::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY),		PROPERTY_ID_ISCURRENCY,			nAttrib,&m_IsCurrency,		::getBooleanCppuType());
 }
 // -------------------------------------------------------------------------
 void OColumn::disposing(void)
@@ -195,7 +195,7 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(Runti
     checkDisposed(OColumnDescriptor_BASE::rBHelper.bDisposed);
 
 
-    OColumn* pNewColumn = new OColumn(  m_Name,
+    OColumn* pNewColumn = new OColumn(	m_Name,
                                         m_TypeName,
                                         m_DefaultValue,
                                         m_Description,

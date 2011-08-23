@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPSECTION_HXX
@@ -67,7 +67,7 @@
 #include "lwppagelayout.hxx"
 
 /**
- * @brief       COrderedObject class in .lwp file
+ * @brief		COrderedObject class in .lwp file
  *
  */
 class LwpDLNFVList;
@@ -75,17 +75,17 @@ class LwpOrderedObject : public LwpDLNFVList
 {
 public:
     LwpOrderedObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpOrderedObject(){}
+    virtual ~LwpOrderedObject(){};
     void Read();
-    LwpObjectID* GetPosition(){ return &m_Para;}
-    LwpObjectID* GetListList(){ return &m_ListList;}
+    LwpObjectID* GetPosition(){ return &m_Para;};
+    LwpObjectID* GetListList(){ return &m_ListList;};
 protected:
     LwpObjectID m_ListList;//lwplistlist object,
     LwpObjectID m_Para;
 };
 
 /**
- * @brief       VO_SECTION object in .lwp file
+ * @brief		VO_SECTION object in .lwp file
  *
  */
 class LwpColor;

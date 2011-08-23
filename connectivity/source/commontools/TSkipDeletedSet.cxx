@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
     {
         case IResultSetHelper::ABSOLUTE:
             return moveAbsolute(_nOffset,_bRetrieveData);
-        case IResultSetHelper::FIRST:                   // set the movement when positioning failed
+        case IResultSetHelper::FIRST:					// set the movement when positioning failed
             eDelPosition = IResultSetHelper::NEXT;
             nDelOffset = 1;
             break;
@@ -75,8 +75,8 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             break;
     }
 
-    sal_Bool bDone          = sal_True;
-    sal_Bool bDataFound     = sal_False;
+    sal_Bool bDone			= sal_True;
+    sal_Bool bDataFound		= sal_False;
 
     if (_eCursorPosition == IResultSetHelper::LAST)
     {
@@ -105,7 +105,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
         {
             bDataFound = m_pHelper->move(IResultSetHelper::NEXT, 1, sal_False); // we don't need the data here
             if( bDataFound && ( m_bDeletedVisible || !m_pHelper->isRowDeleted()) )
-            {   // we weren't on the last row we remember it and move on
+            {	// we weren't on the last row we remember it and move on
                 m_aBookmarksPositions.push_back(m_pHelper->getDriverPos());
                 //m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(m_pHelper->getDriverPos(),m_aBookmarksPositions.size()+1)).first);
             }
@@ -139,7 +139,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             bDone = sal_False;
     }
 
-    while (bDataFound && !bDone)            // Iterate until we are at the valid set
+    while (bDataFound && !bDone)            // solange iterieren bis man auf einem gueltigen Satz ist
     {
         bDataFound = m_pHelper->move(eDelPosition, 1, _bRetrieveData);
         if (_eCursorPosition != IResultSetHelper::RELATIVE)
@@ -155,15 +155,10 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             bDone = sal_False;
     }
 
-    if(bDataFound && bDone)
+    if(bDataFound && bDone )
     {
         const sal_Int32 nDriverPos = m_pHelper->getDriverPos();
-        if ( m_bDeletedVisible )
-        {
-            if ( nDriverPos > (sal_Int32)m_aBookmarksPositions.size() )
-                m_aBookmarksPositions.push_back(nDriverPos);
-        }
-        else if ( ::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),nDriverPos) == m_aBookmarksPositions.end() )
+        if ( ::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),nDriverPos) == m_aBookmarksPositions.end() )
             m_aBookmarksPositions.push_back(nDriverPos);
         /*sal_Int32 nDriverPos = m_pHelper->getDriverPos();
         if(m_aBookmarks.find(nDriverPos) == m_aBookmarks.end())
@@ -198,12 +193,12 @@ sal_Bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nPos,sal_Bool _bRetrieveData)
             } // if ( m_aBookmarksPositions.empty() )
             else
             {
-                nLastBookmark   = (*m_aBookmarksPositions.rbegin())/*->first*/;
-                nCurPos         = /*(**/m_aBookmarksPositions.size()/*->second*/;
-                nNewPos         = nNewPos - nCurPos;
-                bDataFound      = m_pHelper->move(IResultSetHelper::BOOKMARK, nLastBookmark, _bRetrieveData);
+                nLastBookmark	= (*m_aBookmarksPositions.rbegin())/*->first*/;
+                nCurPos			= /*(**/m_aBookmarksPositions.size()/*->second*/;
+                nNewPos		    = nNewPos - nCurPos;
+                bDataFound		= m_pHelper->move(IResultSetHelper::BOOKMARK, nLastBookmark, _bRetrieveData);
             }
-
+            
             // now move to that row we need and don't count deleted rows
             while (bDataFound && nNewPos)
             {
@@ -252,7 +247,7 @@ sal_Int32 OSkipDeletedSet::getMappedPosition(sal_Int32 _nPos) const
     /*TInt2IntMap::const_iterator aFind = m_aBookmarks.find(_nPos);
     OSL_ENSURE(aFind != m_aBookmarks.end(),"OSkipDeletedSet::getMappedPosition() invalid bookmark!");
     return aFind->second;*/
-    OSL_FAIL("Why!");
+    OSL_ENSURE(0,"Why!");
     return -1;
 }
 // -----------------------------------------------------------------------------

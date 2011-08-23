@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ TYPEINIT1( FuDisplayOrder, FuPoor );
 |*
 \************************************************************************/
 
-FuDisplayOrder::FuDisplayOrder( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
+FuDisplayOrder::FuDisplayOrder( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq) 
 : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 , mpRefObj(NULL)
 , mpOverlay(0L)
@@ -92,12 +92,12 @@ FunctionReference FuDisplayOrder::Create( ViewShell* pViewSh, ::sd::Window* pWin
 |*
 \************************************************************************/
 
-sal_Bool FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************
@@ -106,7 +106,7 @@ sal_Bool FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
+BOOL FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
 {
     SdrObject* pPickObj;
     SdrPageView* pPV;
@@ -132,7 +132,7 @@ sal_Bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
         implClearOverlay();
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************
@@ -141,9 +141,9 @@ sal_Bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     SdrPageView* pPV = NULL;
@@ -163,7 +163,7 @@ sal_Bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 
     mpViewShell->Cancel();
 
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************

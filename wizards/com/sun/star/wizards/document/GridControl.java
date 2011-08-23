@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ public class GridControl extends Shape
             xGridColumnFactory = UnoRuntime.queryInterface( XGridColumnFactory.class, oGridModel );
             xComponent = UnoRuntime.queryInterface( XComponent.class, oGridModel );
 
-//      Helper.setUnoPropertyValue(oGridModel, PropertyNames.PROPERTY_NAME, _sname);
+//      Helper.setUnoPropertyValue(oGridModel, "Name", _sname);
             for (int i = 0; i < fieldcolumns.length; i++)
             {
                 FieldColumn curfieldcolumn = fieldcolumns[i];

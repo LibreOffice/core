@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ namespace cairocanvas
     {}
 
     void SpriteDeviceHelper::init( Window&                   rOutputWindow,
-                                   SpriteCanvas&             rSpriteCanvas,
+                                   SpriteCanvas&			 rSpriteCanvas,
                                    const ::basegfx::B2ISize& rSize,
                                    bool                      bFullscreen )
     {
@@ -99,20 +99,20 @@ namespace cairocanvas
 
     ::sal_Bool SpriteDeviceHelper::showBuffer( bool, ::sal_Bool )
     {
-        OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
+        OSL_ENSURE(false,"Not supposed to be called, handled by SpriteCanvas");
         return sal_False;
     }
 
     ::sal_Bool SpriteDeviceHelper::switchBuffer( bool, ::sal_Bool )
     {
-        OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
+        OSL_ENSURE(false,"Not supposed to be called, handled by SpriteCanvas");
         return sal_False;
     }
 
     uno::Any SpriteDeviceHelper::isAccelerated() const
     {
         return ::com::sun::star::uno::makeAny(true);
-    }
+    }  
 
     uno::Any SpriteDeviceHelper::getDeviceHandle() const
     {
@@ -136,8 +136,8 @@ namespace cairocanvas
         if( mpBufferSurface && maSize != rSize )
             mpBufferSurface.reset();
         if( !mpBufferSurface )
-            mpBufferSurface = getWindowSurface()->getSimilar(
-                CAIRO_CONTENT_COLOR,
+            mpBufferSurface = getWindowSurface()->getSimilar( 
+                CAIRO_CONTENT_COLOR, 
                 rSize.getX(), rSize.getY() );
 
         if( maSize != rSize )

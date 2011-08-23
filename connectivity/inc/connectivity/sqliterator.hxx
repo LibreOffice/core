@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,24 +66,24 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS OSQLParseTreeIterator
     {
     private:
-        ::com::sun::star::sdbc::SQLException            m_aErrors;          // conatins the error while iterating through the statement
-        const OSQLParseNode*                            m_pParseTree;       // current ParseTree
-        const OSQLParser&                               m_rParser;          // if set used for general error messages from the context
-        OSQLStatementType                               m_eStatementType;
-        ::rtl::Reference<OSQLColumns>                       m_aSelectColumns;   // all columns from the Select clause
-        ::rtl::Reference<OSQLColumns>                       m_aParameters;      // all parameters
-        ::rtl::Reference<OSQLColumns>                       m_aGroupColumns;    // the group by columns
-        ::rtl::Reference<OSQLColumns>                       m_aOrderColumns;    // the order by columns
-        ::rtl::Reference<OSQLColumns>                       m_aCreateColumns;   // the columns for Create table clause
+        ::com::sun::star::sdbc::SQLException            m_aErrors;		    // conatins the error while iterating through the statement
+        const OSQLParseNode*				            m_pParseTree;		// aktueller ParseTree
+        const OSQLParser&					            m_rParser;			// if set used for general error messages from the context
+        OSQLStatementType					            m_eStatementType;	// Art des Statements
+        ::rtl::Reference<OSQLColumns>			            m_aSelectColumns;	// alle Spalten aus dem Select-Clause
+        ::rtl::Reference<OSQLColumns>			            m_aParameters;		// all parameters
+        ::rtl::Reference<OSQLColumns>			            m_aGroupColumns;	// the group by columns
+        ::rtl::Reference<OSQLColumns>			            m_aOrderColumns;	// the order by columns
+        ::rtl::Reference<OSQLColumns>			            m_aCreateColumns;	// the columns for Create table clause
 
         ::std::auto_ptr< OSQLParseTreeIteratorImpl >    m_pImpl;
 
-        void                traverseParameter(const OSQLParseNode* _pParseNode,const OSQLParseNode* _pColumnRef,const ::rtl::OUString& _aColumnName,const ::rtl::OUString& _aTableRange, const ::rtl::OUString& _rColumnAlias);
-        // inserts a table into the map
-        void                traverseOneTableName( OSQLTables& _rTables,const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange );
-        void                traverseORCriteria(OSQLParseNode * pSearchCondition);
-        void                traverseANDCriteria(OSQLParseNode * pSearchCondition);
-        void                traverseOnePredicate(
+        void				traverseParameter(const OSQLParseNode* _pParseNode,const OSQLParseNode* _pColumnRef,const ::rtl::OUString& _aColumnName,const ::rtl::OUString& _aTableRange, const ::rtl::OUString& _rColumnAlias);
+        // F"ugt eine Tabelle in die Map ein
+        void				traverseOneTableName( OSQLTables& _rTables,const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange );
+        void				traverseORCriteria(OSQLParseNode * pSearchCondition);
+        void				traverseANDCriteria(OSQLParseNode * pSearchCondition);
+        void				traverseOnePredicate(
                                                 OSQLParseNode * pColumnRef,
                                                 ::rtl::OUString& aValue,
                                                 OSQLParseNode * pParameter);
@@ -92,8 +92,8 @@ namespace connectivity
 
         const OSQLParseNode*    getTableNode( OSQLTables& _rTables, const OSQLParseNode* pTableRef, ::rtl::OUString& aTableRange );
         void                    getQualified_join( OSQLTables& _rTables, const OSQLParseNode *pTableRef, ::rtl::OUString& aTableRange );
-        void                    getSelect_statement(OSQLTables& _rTables,const OSQLParseNode* pSelect);
-        ::rtl::OUString         getUniqueColumnName(const ::rtl::OUString & rColumnName)    const;
+        void				    getSelect_statement(OSQLTables& _rTables,const OSQLParseNode* pSelect);
+        ::rtl::OUString		    getUniqueColumnName(const ::rtl::OUString & rColumnName)	const;
 
         /** finds the column with a given name, belonging to a given table, in a given tables collection
             @param  _rTables
@@ -124,10 +124,11 @@ namespace connectivity
       protected:
         void setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR,sal_Bool bAggFkt=sal_False);
         void appendColumns(::rtl::Reference<OSQLColumns>& _rColumns,const ::rtl::OUString& _rTableAlias,const OSQLTable& _rTable);
-        // Other member variables that should be available in the "set" functions
-        // can be defined in the derived class. They can be initialized
-        // in its constructor and, after the "traverse" routines have been used,
-        // they can be queried using other functions.
+        // Weitere Member-Variable, die in den "set"-Funktionen zur
+        // Verfuegung stehen sollen, koennen in der abgeleiteten Klasse
+        // definiert werden und z. B. in deren Konstruktor initialisiert
+        // bzw. nach Benutzung der "traverse"-Routinen mit Hilfe weiterer
+        // Funktionen abgefragt werden.
 
 
       private:
@@ -153,13 +154,13 @@ namespace connectivity
 
         void dispose();
         bool isCaseSensitive() const;
-        // The parse tree to be analysed/traversed:
-        // If NULL is passed, the current parse tree will be deleted and the error status cleared.
+        // Der zu analysierende/zu traversierende Parse Tree:
+        // bei "Ubergabe von NULL wird der aktuelle Parsetree gel"oscht und der Fehlerstatus gecleared
         void setParseTree(const OSQLParseNode * pNewParseTree);
-//      void setParser(const OSQLParser* _pParser) { m_pParser = _pParser; }
+//		void setParser(const OSQLParser* _pParser) { m_pParser = _pParser; }
         const OSQLParseNode * getParseTree() const { return m_pParseTree; };
 
-        // subtrees in case of a select statement
+        // Teilbaueme bei einem select statement
         const OSQLParseNode* getWhereTree() const;
         const OSQLParseNode* getOrderTree() const;
         const OSQLParseNode* getGroupByTree() const;
@@ -170,14 +171,14 @@ namespace connectivity
         const OSQLParseNode* getSimpleGroupByTree() const;
         const OSQLParseNode* getSimpleHavingTree() const;
 
-        /** returns the errors which occurred during parsing.
+        /** returns the errors which occured during parsing.
 
             The returned object contains a chain (via SQLException::NextException) of SQLExceptions.
         */
         inline const ::com::sun::star::sdbc::SQLException&   getErrors() const { return m_aErrors; }
         inline bool hasErrors() const { return m_aErrors.Message.getLength() > 0; }
 
-        // statement type (already set in setParseTree):
+        // Statement-Typ (wird bereits in setParseTree gesetzt):
         OSQLStatementType getStatementType() const { return m_eStatementType; }
 
         /** traverses the complete statement tree, and fills all our data with
@@ -207,38 +208,38 @@ namespace connectivity
 
             @param _nIncludeMask
                 set of TraversalParts bits, specifying which information is to be collected.
-                Note TraversalParts is currently not
+                Note TraversalParts is currently not 
         */
         void traverseSome( sal_uInt32 _nIncludeMask );
 
-        // The TableRangeMap contains all tables associated with the range name found first.
+        // Die TableRangeMap enth"alt alle Tabellen unter dem zugeh"origen Rangenamen der zuerst gefunden wird
         const OSQLTables& getTables() const;
 
         ::rtl::Reference<OSQLColumns> getSelectColumns() const { return m_aSelectColumns;}
         ::rtl::Reference<OSQLColumns> getGroupColumns() const { return m_aGroupColumns;}
         ::rtl::Reference<OSQLColumns> getOrderColumns() const { return m_aOrderColumns;}
-        ::rtl::Reference<OSQLColumns> getParameters()   const { return m_aParameters; }
+        ::rtl::Reference<OSQLColumns> getParameters()	const { return m_aParameters; }
         ::rtl::Reference<OSQLColumns> getCreateColumns() const { return m_aCreateColumns;}
 
         /** return the columname and the table range
-            @param  _pColumnRef
+            @param	_pColumnRef
                 The column ref parse node.
-            @param  _rColumnName
+            @param	_rColumnName
                 The column name to be set.
-            @param  _rTableRange
+            @param	_rTableRange
                 The table range to be set.
         */
-        void getColumnRange(    const OSQLParseNode* _pColumnRef,
+        void getColumnRange(	const OSQLParseNode* _pColumnRef,
                                 ::rtl::OUString &_rColumnName,
                                 ::rtl::OUString& _rTableRange) const;
 
         /** retrieves a column's name, table range, and alias
 
-            @param  _pColumnRef
+            @param	_pColumnRef
                 The column_ref parse node.
-            @param  _out_rColumnName
+            @param	_out_rColumnName
                 The column name to be set.
-            @param  _out_rTableRange
+            @param	_out_rTableRange
                 The table range to be set.
             @param _out_rColumnAliasIfPresent
                 If the column specified by _pColumnRef is part of the select columns, and contains a column alias there,
@@ -249,9 +250,9 @@ namespace connectivity
                                 ::rtl::OUString& _out_rTableRange,
                                 ::rtl::OUString& _out_rColumnAliasIfPresent
                                 ) const;
-
+        
         /** return the alias name of a column
-            @param  _pDerivedColumn
+            @param	_pDerivedColumn
                 The parse node where SQL_ISRULE(_pDerivedColumn,derived_column) must be true
             @return
                 The alias name of the column or an empty string.
@@ -259,21 +260,22 @@ namespace connectivity
         static ::rtl::OUString getColumnAlias(const OSQLParseNode* _pDerivedColumn);
 
         /** return the columname and the table range
-            @param  _pColumnRef
+            @param	_pColumnRef
                 The column ref parse node.
-            @param  _xMetaData
+            @param	_xMetaData
                 The database meta data.
-            @param  _rColumnName
+            @param	_rColumnName
                 The column name to be set.
-            @param  _rTableRange
+            @param	_rTableRange
                 The table range to be set.
         */
-        static void getColumnRange( const OSQLParseNode* _pColumnRef,
+        static void getColumnRange(	const OSQLParseNode* _pColumnRef,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                                     ::rtl::OUString &_rColumnName,
                                     ::rtl::OUString& _rTableRange);
 
-        // empty if ambiguous
+        // Ermittelt fuer eine Funktion, Spalten den zugehoeren TableRange,
+        // wenn nicht eindeutig, dann leer
         sal_Bool getColumnTableRange(const OSQLParseNode* pNode, ::rtl::OUString &rTableRange) const;
 
         // return true when the tableNode is a rule like catalog_name, schema_name or table_name
@@ -336,12 +338,12 @@ namespace connectivity
         /** appends an SQLException corresponding to the given error code to our error collection
 
             @param  _eError
-                the code of the error which occurred
+                the code of the error which occured
             @param  _pReplaceToken1
-                if not <NULL/>, the first occurrence of '#' in the error message will be replaced
+                if not <NULL/>, the first occurance of '#' in the error message will be replaced
                 with the given token
             @param  _pReplaceToken2
-                if not <NULL/>, and if _rReplaceToken1 is not <NULL/>, the second occurrence of '#'
+                if not <NULL/>, and if _rReplaceToken1 is not <NULL/>, the second occurance of '#'
                 in the error message will be replaced with _rReplaceToken2
         */
         void impl_appendError( IParseContext::ErrorCode _eError,

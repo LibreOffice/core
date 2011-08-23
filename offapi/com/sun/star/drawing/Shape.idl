@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ published service Shape
         on screen outputs. Please note that the <type>Shape</type> may still
         be visible when printed, see <member>Printable</member>.
      */
-    [optional, property] boolean Visible;
+    [optional, property] boolean Visible; 
 
     //-------------------------------------------------------------------------
 
@@ -179,7 +179,7 @@ published service Shape
     /** this property lets you get and set the transformation matrix
         for this shape.
 
-        The transformation is a 3x3 homogeneous matrix and can contain
+        The transformation is a 3x3 homogen matrix and can contain
         translation, rotation, shearing and scaling.
      */
     [optional, property] com::sun::star::drawing::HomogenMatrix3 Transformation;
@@ -201,9 +201,9 @@ published service Shape
     */
     [optional, property] long NavigationOrder;
 
-    /** this property lets you get and set a hyperlink for this shape.
-     */
-    [optional, property] string Hyperlink;
+	/** this property lets you get and set a hyperlink for this shape.
+	 */
+	[optional, property] string Hyperlink;
 };
 
 //=============================================================================

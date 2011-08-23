@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@
 
 //==================================================================
 
-ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, sal_Bool bInsList )
+ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, BOOL bInsList )
     : ModalDialog( pParent, ScResId( RID_SCDLG_NAMES_PASTE ) ),
-    aLabelText      ( this, ScResId( FT_LABEL ) ),
-    aNameList       ( this, ScResId( LB_ENTRYLIST ) ),
-    aOKButton       ( this, ScResId( BTN_OK ) ),
-    aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
-    aHelpButton     ( this, ScResId( BTN_HELP ) ),
-    aInsListButton  ( this, ScResId( BTN_ADD ) )
+    aLabelText		( this, ScResId( FT_LABEL ) ),
+    aNameList		( this, ScResId( LB_ENTRYLIST ) ),
+    aOKButton		( this, ScResId( BTN_OK ) ),
+    aCancelButton	( this, ScResId( BTN_CANCEL ) ),
+    aHelpButton		( this, ScResId( BTN_HELP ) ),
+    aInsListButton	( this, ScResId( BTN_ADD ) )
 {
     if( ! bInsList )
         aInsListButton.Disable();
@@ -60,11 +60,22 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, sal_
     aNameList.SetSelectHdl( LINK( this,ScNamePasteDlg,ListSelHdl) );
     aNameList.SetDoubleClickHdl( LINK( this,ScNamePasteDlg,ListDblClickHdl) );
 
-    ScRangeName::const_iterator itr = pList->begin(), itrEnd = pList->end();
-    for (; itr != itrEnd; ++itr)
+    USHORT	nCnt = pList->GetCount();
+    String	aText;
+
+    for( USHORT i=0 ; i<nCnt ; i++ )
     {
-        if (!itr->HasType(RT_DATABASE) && !itr->HasType(RT_SHARED))
-            aNameList.InsertEntry(itr->GetName());
+        ScRangeData* pData = (*pList)[ i ];
+
+        if( pData )
+        {
+            if (   !pData->HasType( RT_DATABASE )
+                && !pData->HasType( RT_SHARED ) )
+            {
+                pData->GetName( aText );
+                aNameList.InsertEntry( aText );
+            }
+        }
     }
 
     ListSelHdl( &aNameList );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@
 
 class BasicFrame;
 #include <basic/mybasic.hxx>
-#include <vector>
 
+class EditList;
 class AppWin;
 class AppEdit;
 class AppBasEd;
@@ -50,19 +50,19 @@ class StatusLine;
 class BasicPrinter;
 struct TTLogMsg;
 
-typedef ::std::vector< AppWin* > EditList;
-
 class BasicApp : public Application {
-    short       nWait;              // Wait-Zaehler
+    short		nWait;				// Wait-Zaehler
 public:
-    BasicFrame* pFrame;             // Frame Window
-    Accelerator*    pMainAccel;     // Acceleratoren
+//	Help*		pHelp;				// Hilfesystem
+    BasicFrame*	pFrame;				// Frame Window
+//	MenuBar*	pMainMenu;			// Hauptmenue
+    Accelerator*	pMainAccel;		// Acceleratoren
 
-    int Main( );
+    void  Main( );
 
     void  LoadIniFile();
     void  SetFocus();
-    void  Wait( sal_Bool );
+    void  Wait( BOOL );
     DECL_LINK( LateInit, void * );
 
 #ifdef DBG_UTIL
@@ -71,14 +71,14 @@ public:
 };
 
 
-typedef sal_uInt16 FileType;
+typedef USHORT FileType;
 
 #define FT_NO_FILE              (FileType)0x00  // An error has occurred ...
-#define FT_BASIC_SOURCE         (FileType)0x01
-#define FT_BASIC_INCLUDE    (FileType)0x02
-#define FT_RESULT_FILE      (FileType)0x04
-#define FT_RESULT_FILE_TXT  (FileType)0x08
-#define FT_BASIC_LIBRARY    (FileType)0x10
+#define FT_BASIC_SOURCE	        (FileType)0x01
+#define FT_BASIC_INCLUDE	(FileType)0x02
+#define FT_RESULT_FILE		(FileType)0x04
+#define FT_RESULT_FILE_TXT	(FileType)0x08
+#define FT_BASIC_LIBRARY	(FileType)0x10
 
 struct WinInfoRec;
 class DisplayHidDlg;
@@ -90,32 +90,33 @@ class BasicFrame : public WorkWindow, public SfxBroadcaster, public SfxListener
 using SystemWindow::Notify;
 using Window::Command;
 
-    virtual sal_Bool Close();
-    sal_Bool CloseAll();          // Close all windows
-    sal_Bool CompileAll();        // Compile all texts
+virtual BOOL Close();
+    BOOL CloseAll();          // Close all windows
+    BOOL CompileAll();        // Compile all texts
     AutoTimer aLineNum;       // Show the line numbers
-    virtual void Resize();
-    virtual void Move();
-    virtual void GetFocus();
+virtual void Resize();
+virtual void Move();
+virtual void GetFocus();
     void LoadLibrary();
     void SaveLibrary();
-    sal_Bool bIsAutoRun;
+    BOOL bIsAutoRun;
     DisplayHidDlg* pDisplayHidDlg;
 
+//	BreakPoint *pRunToCursorBP;
 
     SbxVariable *pEditVar;
 
 
 
-    Timer aCheckFiles;      // Checks the files for changes
-    sal_Bool bAutoReload;
-    sal_Bool bAutoSave;
+    Timer aCheckFiles;		// Checks the files for changes
+    BOOL bAutoReload;
+    BOOL bAutoSave;
     DECL_LINK( CheckAllFiles, Timer* );
 
-    MyBasicRef  pBasic;             // BASIC-Engine
+    MyBasicRef	pBasic;				// BASIC-Engine
 
-    String aAppName;                // Title bar content
-    String aAppFile;                // AppName AppFile [AppMode]
+    String aAppName;				// Title bar content
+    String aAppFile;				// AppName AppFile [AppMode]
     String aAppMode;
     void UpdateTitle();
     DECL_LINK( CloseButtonClick, void* );
@@ -125,16 +126,16 @@ using Window::Command;
     FloatingExecutionStatus *pExecutionStatus;
 
 public:
-    sal_Bool IsAutoRun();
-    void SetAutoRun( sal_Bool bAuto );
-    sal_Bool bInBreak;                  // sal_True if in Break-Handler
-    StatusLine* pStatus;            // Status line
-    EditList*   pList;              // List of edit windows
-    AppWin*     pWork;              // Current edit window
-    BasicPrinter* pPrn;             // Printer
-    sal_Bool bDisas;                    // sal_True: disassemble
-    sal_uInt16 nFlags;                  // Debugging-Flags
-    sal_uInt16 nMaximizedWindows;       // Number of maximized windows
+    BOOL IsAutoRun();
+    void SetAutoRun( BOOL bAuto );
+    BOOL bInBreak;					// TRUE if in Break-Handler
+    StatusLine* pStatus;			// Status line
+    EditList*	pList;				// List of edit windows
+    AppWin* 	pWork;				// Current edit window
+    BasicPrinter* pPrn;				// Printer
+    BOOL bDisas;					// TRUE: disassemble
+    USHORT nFlags;					// Debugging-Flags
+    USHORT nMaximizedWindows;		// Number of maximized windows
     void FocusWindow( AppWin *pWin );
     void WinMax_Restore();
     void WinShow_Hide();
@@ -144,7 +145,7 @@ public:
 
     BasicFrame();
    ~BasicFrame();
-    MyBasic& Basic()                { return *pBasic; }
+    MyBasic& Basic()				{ return *pBasic; }
     void AddToLRU(String const& aFile);
     void LoadLRU();
     DECL_LINK( InitMenu, Menu * );
@@ -156,25 +157,25 @@ public:
     MsgEdit* GetMsgTree( String aLogFileName );
     DECL_LINK( Log, TTLogMsg * );
     DECL_LINK( WinInfo, WinInfoRec * );
-    sal_Bool LoadFile( String aFilename );
-    long Command( short,sal_Bool=sal_False );  // Command handler
+    BOOL LoadFile( String aFilename );
+    long Command( short,BOOL=FALSE );  // Command handler
     virtual void Command( const CommandEvent& rCEvt );      // Command handler
-    sal_Bool SaveAll();                 // Save all windows
-    sal_Bool QueryFileName( String& rName, FileType nFileType, sal_Bool bSave ); // Query for filename
+    BOOL SaveAll();					// Save all windows
+    BOOL QueryFileName( String& rName, FileType nFileType, BOOL bSave ); // Query for filename
     DECL_LINK( ModuleWinExists, String* );
     DECL_LINK( WriteString, String* );
     AppBasEd* CreateModuleWin( SbModule* pMod );
     AppBasEd* FindModuleWin( const String& );
     AppError* FindErrorWin( const String& );
     AppWin* FindWin( const String& );
-    AppWin* FindWin( sal_uInt16 nWinId );
+    AppWin* FindWin( USHORT nWinId );
     AppWin* IsWinValid( AppWin* pMaybeWin );
-    sal_uInt16 BreakHandler();          // Break-Handler-Callback
+    USHORT BreakHandler();			// Break-Handler-Callback
 
     void SetEditVar( SbxVariable *pVar ){ pEditVar = pVar;}
     SbxVariable* GetEditVar(){ return pEditVar;}
-    sal_Bool IsAutoReload() { return bAutoReload; }
-    sal_Bool IsAutoSave() { return bAutoSave; }
+    BOOL IsAutoReload() { return bAutoReload; }
+    BOOL IsAutoSave() { return bAutoSave; }
     void LoadIniFile();
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -182,7 +183,6 @@ public:
     void SetAppMode( const String &aNewMode ){ aAppMode = aNewMode; UpdateTitle(); }
 
     String GenRealString( const String &aResString );
-    Rectangle GetInnerRect() const;
 
 };
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,67 +47,67 @@ import lib.StatusException;
 */
 
 public class _XPropertyWithState extends MultiMethodTest {
-
+    
     /**
      * the test object
      */
     public XPropertyWithState oObj;
-
-
+    
+    
     /**
-     * Test calls the method.
-     * Test has ok status if no
+     * Test calls the method. 
+     * Test has ok status if no 
      * <CODE>com.sun.star.lang.WrappedTargetException</CODE>
      * was thrown
      */
     public void _getDefaultAsProperty() {
         try{
-
+            
             XInterface defaultState = (XInterface) oObj.getDefaultAsProperty();
-
+            
         } catch (com.sun.star.lang.WrappedTargetException e){
             e.printStackTrace(log);
             throw new StatusException(Status.failed("'com.sun.star.lang.WrappedTargetException' was thrown"));
         }
-
+        
         tRes.tested("getDefaultAsProperty()", true);
     }
-
+    
     /**
      * Test is ok if <CODE>getStateAsProperty()</CODE> returns
      * as <CODE>PropertyState</CODE> which is not <CODE>null</CODE>
      */
     public void _getStateAsProperty() {
-
+        
         boolean res = true;
-
+        
         PropertyState propState = oObj.getStateAsProperty();
-
+        
         if (propState == null) {
             log.println("the returned PropertyState is null -> FALSE");
             res = false;
         }
-
+        
         tRes.tested("getStateAsProperty()", res);
     }
-
+    
     /**
-     * Test calls the method.
-     * Test has ok status if no
+     * Test calls the method. 
+     * Test has ok status if no 
      * <CODE>com.sun.star.lang.WrappedTargetException</CODE>
      * was thrown
      */
     public void _setToDefaultAsProperty() {
         try{
-
+            
             oObj.setToDefaultAsProperty();
-
+            
         } catch (com.sun.star.lang.WrappedTargetException e){
             e.printStackTrace(log);
             throw new StatusException(Status.failed("'com.sun.star.lang.WrappedTargetException' was thrown"));
         }
-
+        
         tRes.tested("setToDefaultAsProperty()", true);
     }
-
+    
 }

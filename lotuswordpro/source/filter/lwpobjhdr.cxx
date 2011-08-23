@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwpobjhdr.hxx"
@@ -70,7 +70,7 @@ LwpObjectHeader::LwpObjectHeader()
     : m_nTag(0), m_ID(), m_nSize(0), m_bCompressed(sal_False)
     // m_nHeaderSize(0), m_nVersionID(0), m_nRefCount(0), m_nFlagBits(0),
     //m_nNextVersionOffset(0), m_nNextVersionID(0),
-{}
+{};
 /**
  * @descr  read header from stream
   */
@@ -135,10 +135,10 @@ void LwpObjectHeader::Read(LwpSvStream &rStrm)
                 rStrm.Read(&nVersionID, sizeof(nVersionID));
                 nHeaderSize += 4;
                 break;
-            case DEFAULT_VERSION:   //fall through
+            case DEFAULT_VERSION:	//fall through
             default:
                 nVersionID = 2;
-                break;      // nothing
+                break;		// nothing
         }
 
         switch (nFlagBits & REFCOUNT_BITS)
@@ -155,7 +155,7 @@ void LwpObjectHeader::Read(LwpSvStream &rStrm)
                 nHeaderSize += 2;
                 break;
 
-            case FOUR_BYTE_REFCOUNT:    //through
+            case FOUR_BYTE_REFCOUNT:	//through
             default:
                 rStrm.Read(&nRefCount, sizeof(nRefCount));
                 nHeaderSize += 4;
@@ -184,7 +184,7 @@ void LwpObjectHeader::Read(LwpSvStream &rStrm)
                 nHeaderSize += 2;
                 break;
 
-            case FOUR_BYTE_SIZE:    //go through
+            case FOUR_BYTE_SIZE:	//go through
             default:
                 rStrm.Read(&m_nSize, sizeof(m_nSize));
                 nHeaderSize += 4;

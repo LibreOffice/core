@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ struct AccessibleElementInfo
 
 namespace impl
 {
-typedef ::cppu::PartialWeakComponentImplHelper6<
+typedef ::cppu::WeakComponentImplHelper6<
         ::com::sun::star::accessibility::XAccessible,
         ::com::sun::star::accessibility::XAccessibleContext,
         ::com::sun::star::accessibility::XAccessibleComponent,
@@ -233,15 +233,6 @@ protected:
     void SetInfo( const AccessibleElementInfo & rNewInfo );
     AccessibleUniqueId GetId() const;
 
-    // ________ XComponent ________
-    virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException)
-        { WeakComponentImplHelperBase::dispose(); }
-    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
-        { WeakComponentImplHelperBase::addEventListener(xListener); }
-    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
-        { WeakComponentImplHelperBase::removeEventListener(xListener); }
-
-
     // ________ WeakComponentImplHelper (XComponent::dispose) ________
     virtual void SAL_CALL disposing();
 
@@ -316,6 +307,9 @@ protected:
     virtual void SAL_CALL disposing(
         const ::com::sun::star::lang::EventObject& Source )
         throw (::com::sun::star::uno::RuntimeException);
+
+    using ::cppu::WeakComponentImplHelperBase::addEventListener;
+    using ::cppu::WeakComponentImplHelperBase::removeEventListener;
 
     // ________ XAccessibleEventBroadcaster ________
     virtual void SAL_CALL addEventListener(

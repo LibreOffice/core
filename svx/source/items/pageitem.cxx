@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,11 +53,11 @@ TYPEINIT1_FACTORY( SvxPageItem, SfxPoolItem , new  SvxPageItem(0));
     Beschreibung: Konstruktor
  --------------------------------------------------------------------*/
 
-SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
+SvxPageItem::SvxPageItem( const USHORT nId ) : SfxPoolItem( nId ),
 
-    eNumType    ( SVX_ARABIC ),
-    bLandscape  ( sal_False ),
-    eUse        ( SVX_PAGE_ALL )
+    eNumType	( SVX_ARABIC ),
+    bLandscape	( sal_False ),
+    eUse		( SVX_PAGE_ALL )
 {
 }
 
@@ -68,9 +68,9 @@ SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
 SvxPageItem::SvxPageItem( const SvxPageItem& rItem )
     : SfxPoolItem( rItem )
 {
-    eNumType    = rItem.eNumType;
-    bLandscape  = rItem.bLandscape;
-    eUse        = rItem.eUse;
+    eNumType 	= rItem.eNumType;
+    bLandscape 	= rItem.bLandscape;
+    eUse 		= rItem.eUse;
 }
 
 /*--------------------------------------------------------------------
@@ -90,12 +90,12 @@ int SvxPageItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
     const SvxPageItem& rItem = (SvxPageItem&)rAttr;
-    return ( eNumType   == rItem.eNumType   &&
+    return ( eNumType 	== rItem.eNumType 	&&
              bLandscape == rItem.bLandscape &&
-             eUse       == rItem.eUse );
+             eUse 		== rItem.eUse );
 }
 
-inline XubString GetUsageText( const sal_uInt16 eU )
+inline XubString GetUsageText( const USHORT eU )
 {
     if ( eU & SVX_PAGE_LEFT )
         return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_LEFT);
@@ -116,7 +116,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -165,7 +165,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
 }
 
 //------------------------------------------------------------------------
-bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxPageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -173,7 +173,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_PAGE_NUMTYPE:
         {
-            //! die Konstanten sind nicht mehr in den IDLs ?!?
+            //!	die Konstanten sind nicht mehr in den IDLs ?!?
             rVal <<= (sal_Int16)( eNumType );
         }
         break;
@@ -186,12 +186,12 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             style::PageStyleLayout eRet;
             switch(eUse & 0x0f)
             {
-                case SVX_PAGE_LEFT  : eRet = style::PageStyleLayout_LEFT;      break;
-                case SVX_PAGE_RIGHT : eRet = style::PageStyleLayout_RIGHT;     break;
-                case SVX_PAGE_ALL   : eRet = style::PageStyleLayout_ALL;       break;
+                case SVX_PAGE_LEFT	: eRet = style::PageStyleLayout_LEFT;	   break;
+                case SVX_PAGE_RIGHT	: eRet = style::PageStyleLayout_RIGHT;	   break;
+                case SVX_PAGE_ALL	: eRet = style::PageStyleLayout_ALL;	   break;
                 case SVX_PAGE_MIRROR: eRet = style::PageStyleLayout_MIRRORED; break;
                 default:
-                    OSL_FAIL("was fuer ein Layout ist das?");
+                    DBG_ERROR("was fuer ein Layout ist das?");
                     return sal_False;
             }
             rVal <<= eRet;
@@ -202,7 +202,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 //------------------------------------------------------------------------
-bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxPageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     switch( nMemberId )
     {
@@ -231,7 +231,7 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             eUse &= 0xfff0;
             switch( eLayout )
             {
-                case style::PageStyleLayout_LEFT     : eUse |= SVX_PAGE_LEFT ; break;
+                case style::PageStyleLayout_LEFT  	 : eUse |= SVX_PAGE_LEFT ; break;
                 case style::PageStyleLayout_RIGHT   : eUse |= SVX_PAGE_RIGHT; break;
                 case style::PageStyleLayout_ALL     : eUse |= SVX_PAGE_ALL  ; break;
                 case style::PageStyleLayout_MIRRORED: eUse |= SVX_PAGE_MIRROR;break;
@@ -245,12 +245,12 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
+SfxPoolItem* SvxPageItem::Create( SvStream& rStream, USHORT ) const
 {
     XubString sStr;
-    sal_uInt8 eType;
+    BYTE eType;
     sal_Bool bLand;
-    sal_uInt16 nUse;
+    USHORT nUse;
 
     // UNICODE: rStream >> sStr;
     rStream.ReadByteString( sStr );
@@ -269,20 +269,20 @@ SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
 
 //------------------------------------------------------------------------
 
-SvStream& SvxPageItem::Store( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxPageItem::Store( SvStream &rStrm, USHORT /*nItemVersion*/ ) const
 {
     // UNICODE: rStrm << aDescName;
     rStrm.WriteByteString(aDescName);
 
-    rStrm << (sal_uInt8)eNumType << bLandscape << eUse;
+    rStrm << (BYTE)eNumType << bLandscape << eUse;
     return rStrm;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   HeaderFooterSet
+    Beschreibung:	HeaderFooterSet
  --------------------------------------------------------------------*/
 
-SvxSetItem::SvxSetItem( const sal_uInt16 nId, const SfxItemSet& rSet ) :
+SvxSetItem::SvxSetItem( const USHORT nId, const SfxItemSet& rSet ) :
 
     SfxSetItem( nId, rSet )
 {
@@ -294,7 +294,7 @@ SvxSetItem::SvxSetItem( const SvxSetItem& rItem ) :
 {
 }
 
-SvxSetItem::SvxSetItem( const sal_uInt16 nId, SfxItemSet* _pSet ) :
+SvxSetItem::SvxSetItem( const USHORT nId, SfxItemSet* _pSet ) :
 
     SfxSetItem( nId, _pSet )
 {
@@ -313,13 +313,13 @@ SfxItemPresentation SvxSetItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-SfxPoolItem* SvxSetItem::Create(SvStream &rStrm, sal_uInt16 /*nVersion*/) const
+SfxPoolItem* SvxSetItem::Create(SvStream &rStrm, USHORT /*nVersion*/) const
 {
     SfxItemSet* _pSet = new SfxItemSet( *GetItemSet().GetPool(),
                                        GetItemSet().GetRanges() );
@@ -329,7 +329,7 @@ SfxPoolItem* SvxSetItem::Create(SvStream &rStrm, sal_uInt16 /*nVersion*/) const
     return new SvxSetItem( Which(), *_pSet );
 }
 
-SvStream& SvxSetItem::Store(SvStream &rStrm, sal_uInt16 nItemVersion) const
+SvStream& SvxSetItem::Store(SvStream &rStrm, USHORT nItemVersion) const
 {
     GetItemSet().Store( rStrm, nItemVersion );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ namespace rtl
 
 // class SvxWidowsItem ---------------------------------------------------
 
-/*  [Description]
-
-    This item describes the number of lines for the widows control.
+/*
+[Beschreibung]
+Dieses Item beschreibt die Anzahl der Zeilen fuer die Hurenkinderregelung.
 */
 
 class EDITENG_DLLPUBLIC SvxWidowsItem: public SfxByteItem
@@ -52,12 +52,12 @@ class EDITENG_DLLPUBLIC SvxWidowsItem: public SfxByteItem
 public:
     TYPEINFO();
 
-    SvxWidowsItem( const sal_uInt8 nL /*= 0*/, const sal_uInt16 nId  );
+    SvxWidowsItem( const BYTE nL /*= 0*/, const USHORT nId  );
 
-    // "pure virtual Methods" from SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream &, sal_uInt16 ) const;
-    virtual SvStream&       Store( SvStream & , sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream &, USHORT ) const;
+    virtual SvStream&		Store( SvStream & , USHORT nItemVersion ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

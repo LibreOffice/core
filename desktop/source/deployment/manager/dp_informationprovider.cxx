@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,9 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
 #include "com/sun/star/task/XAbortChannel.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/ucb/CommandFailedException.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/xml/dom/XElement.hpp"
 #include "com/sun/star/xml/dom/XNode.hpp"
 
@@ -70,9 +71,10 @@ namespace xml = com::sun::star::xml ;
 
 namespace dp_info {
 
-class PackageInformationProvider :
-        public ::cppu::WeakImplHelper1< deployment::XPackageInformationProvider >
-
+class PackageInformationProvider : 
+    public ::cppu::WeakImplHelper3< deployment::XPackageInformationProvider, 
+                                    css_ucb::XCommandEnvironment,
+                                    task::XInteractionHandler >
 {
     public:
                  PackageInformationProvider( uno::Reference< uno::XComponentContext >const& xContext);
@@ -81,6 +83,16 @@ class PackageInformationProvider :
     static uno::Sequence< rtl::OUString > getServiceNames();
     static rtl::OUString getImplName();
 
+    // XInteractionHandler
+    virtual void SAL_CALL handle( const uno::Reference< task::XInteractionRequest >& Request )
+                                throw( uno::RuntimeException );
+    // XCommandEnvironment
+    virtual uno::Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler()
+        throw ( uno::RuntimeException ) { return static_cast<task::XInteractionHandler*>(this); };
+
+    virtual uno::Reference< css_ucb::XProgressHandler > SAL_CALL getProgressHandler()
+        throw ( uno::RuntimeException ) { return uno::Reference< css_ucb::XProgressHandler >(); }; 
+        
     // XPackageInformationProvider
     virtual rtl::OUString SAL_CALL getPackageLocation( const rtl::OUString& extensionId )
         throw ( uno::RuntimeException );
@@ -90,7 +102,7 @@ class PackageInformationProvider :
         throw ( uno::RuntimeException );
 //---------
 private:
-
+    
     uno::Reference< uno::XComponentContext> mxContext;
 
     rtl::OUString getPackageLocation( const rtl::OUString& repository,
@@ -101,7 +113,7 @@ private:
 
 //------------------------------------------------------------------------------
 
-PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XComponentContext > const& xContext) :
+PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XComponentContext > const& xContext) : 
     mxContext( xContext ),
     mxUpdateInformation( deployment::UpdateInformationProvider::create( xContext ) )
 {
@@ -114,6 +126,17 @@ PackageInformationProvider::~PackageInformationProvider()
 }
 
 //------------------------------------------------------------------------------
+void SAL_CALL PackageInformationProvider::handle( uno::Reference< task::XInteractionRequest > const & rRequest)
+    throw (uno::RuntimeException)
+{
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > xContinuations = rRequest->getContinuations();
+    if ( xContinuations.getLength() == 1 )
+    {
+        xContinuations[0]->select();
+    }
+}
+
+//------------------------------------------------------------------------------
 rtl::OUString PackageInformationProvider::getPackageLocation(
     const rtl::OUString & repository,
     const rtl::OUString& _rExtensionId )
@@ -121,14 +144,14 @@ rtl::OUString PackageInformationProvider::getPackageLocation(
     rtl::OUString aLocationURL;
     uno::Reference<deployment::XExtensionManager> xManager =
         deployment::ExtensionManager::get(mxContext);
-
+    
     if ( xManager.is() )
     {
         const uno::Sequence< uno::Reference< deployment::XPackage > > packages(
                 xManager->getDeployedExtensions(
                     repository,
                     uno::Reference< task::XAbortChannel >(),
-                    uno::Reference< css_ucb::XCommandEnvironment > () ) );
+                    static_cast < XCommandEnvironment *> (this) ) );
 
         for ( int pos = packages.getLength(); pos--; )
         {
@@ -149,6 +172,8 @@ rtl::OUString PackageInformationProvider::getPackageLocation(
     return aLocationURL;
 }
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
 rtl::OUString SAL_CALL
@@ -180,7 +205,7 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
     throw ( uno::RuntimeException )
 {
     uno::Sequence< uno::Sequence< rtl::OUString > > aList;
-
+     
     uno::Reference<deployment::XExtensionManager> extMgr =
         deployment::ExtensionManager::get(mxContext);
 
@@ -216,7 +241,7 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
     }
 
     int nCount = 0;
-    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); ++i)
+    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); i++)
     {
         dp_misc::UpdateInfo const & info = i->second;
 
@@ -230,7 +255,7 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
             if ( ! ds.getLength() )
                 sOnlineVersion = info.version;
         }
-
+        
         rtl::OUString sVersionUser;
         rtl::OUString sVersionShared;
         rtl::OUString sVersionBundled;
@@ -249,9 +274,9 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
             sVersionShared = extensions[1]->getVersion();
         if (extensions[2].is() )
             sVersionBundled = extensions[2]->getVersion();
-
+            
         bool bSharedReadOnly = extMgr->isReadOnlyRepository(OUSTR("shared"));
-
+            
         dp_misc::UPDATE_SOURCE sourceUser = dp_misc::isUpdateUserExtension(
             bSharedReadOnly, sVersionUser, sVersionShared, sVersionBundled, sOnlineVersion);
         dp_misc::UPDATE_SOURCE sourceShared = dp_misc::isUpdateSharedExtension(
@@ -272,13 +297,13 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
             updateVersion = updateVersionShared;
         if (updateVersion.getLength())
         {
-
+            
             rtl::OUString aNewEntry[2];
             aNewEntry[0] = i->first;
             aNewEntry[1] = updateVersion;
             aList.realloc( ++nCount );
             aList[ nCount-1 ] = ::uno::Sequence< rtl::OUString >( aNewEntry, 2 );
-        }
+        }                
     }
     return aList;
 }
@@ -296,10 +321,10 @@ uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL PackageInformationProvi
     const uno::Sequence< uno::Sequence< uno::Reference<deployment::XPackage > > >
         allExt =  mgr->getAllExtensions(
             uno::Reference< task::XAbortChannel >(),
-            uno::Reference< css_ucb::XCommandEnvironment > () );
-
+            static_cast < XCommandEnvironment *> (this) );
+    
     uno::Sequence< uno::Sequence< rtl::OUString > > retList;
-
+    
     sal_Int32 cAllIds = allExt.getLength();
     retList.realloc(cAllIds);
 
@@ -331,6 +356,8 @@ uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL PackageInformationProvi
 
 
 //------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<PackageInformationProvider> servicePIP;
@@ -356,7 +383,7 @@ bool singleton_entries(
     }
     catch (registry::InvalidRegistryException & exc) {
         (void) exc; // avoid warnings
-        OSL_FAIL( ::rtl::OUStringToOString(
+        OSL_ENSURE( 0, ::rtl::OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return false;
     }

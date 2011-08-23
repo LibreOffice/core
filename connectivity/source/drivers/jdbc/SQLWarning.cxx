@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ java_sql_SQLWarning_BASE::~java_sql_SQLWarning_BASE()
 
 jclass java_sql_SQLWarning_BASE::getMyClass() const
 {
-    // the class needs to be fetched only once, that is why it is static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/SQLWarning");
     return theClass;

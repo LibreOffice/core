@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 #include "cuihyperdlg.hxx"
 #include <unotools/localfilehelper.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -35,11 +38,11 @@
 #include "hyperdlg.hrc"
 #include "hlmarkwn_def.hxx"
 
-sal_Char const sHash[]              = "#";
-sal_Char const sFileScheme[]            = INET_FILE_SCHEME;
-sal_Char const sNewsSRVScheme[] = "news://";
+sal_Char __READONLY_DATA sHash[]				= "#";
+sal_Char __READONLY_DATA sFileScheme[]			= INET_FILE_SCHEME;
+sal_Char __READONLY_DATA sNewsSRVScheme[] = "news://";
     // TODO news:// is nonsense
-sal_Char const sHTTPScheme[]    = INET_HTTP_SCHEME;
+sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
 
 /*************************************************************************
 |*
@@ -50,20 +53,22 @@ sal_Char const sHTTPScheme[]    = INET_HTTP_SCHEME;
 SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemSet)
     : SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_DOCUMENT ), rItemSet ),
     maGrpDocument   ( this, CUI_RES (GRP_DOCUMENT) ),
-    maFtPath        ( this, CUI_RES (FT_PATH_DOC) ),
-    maCbbPath       ( this, INET_PROT_FILE ),
-    maBtFileopen    ( this, CUI_RES (BTN_FILEOPEN) ),
-    maGrpTarget     ( this, CUI_RES (GRP_TARGET) ),
-    maFtTarget      ( this, CUI_RES (FT_TARGET_DOC) ),
-    maEdTarget      ( this, CUI_RES (ED_TARGET_DOC) ),
-    maFtURL         ( this, CUI_RES (FT_URL) ),
-    maFtFullURL     ( this, CUI_RES (FT_FULL_URL) ),
-    maBtBrowse      ( this, CUI_RES (BTN_BROWSE) ),
-    mbMarkWndOpen   ( sal_False )
+    maFtPath		( this, CUI_RES (FT_PATH_DOC) ),
+    maCbbPath		( this, INET_PROT_FILE ),
+    maBtFileopen	( this, CUI_RES (BTN_FILEOPEN) ),
+    maGrpTarget		( this, CUI_RES (GRP_TARGET) ),
+    maFtTarget		( this, CUI_RES (FT_TARGET_DOC) ),
+    maEdTarget		( this, CUI_RES (ED_TARGET_DOC) ),
+    maFtURL			( this, CUI_RES (FT_URL) ),
+    maFtFullURL		( this, CUI_RES (FT_FULL_URL) ),
+    maBtBrowse		( this, CUI_RES (BTN_BROWSE) ),
+    mbMarkWndOpen   ( FALSE )
 {
-    // Disable display of bitmap names.
-    maBtBrowse.EnableTextDisplay (sal_False);
-    maBtFileopen.EnableTextDisplay (sal_False);
+    // Set HC bitmaps and disable display of bitmap names.
+    maBtBrowse.SetModeImage( Image( CUI_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtBrowse.EnableTextDisplay (FALSE);
+    maBtFileopen.SetModeImage( Image( CUI_RES( IMG_FILEOPEN_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtFileopen.EnableTextDisplay (FALSE);
 
     InitStdControls();
     FreeResource();
@@ -86,10 +91,6 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
 
     maCbbPath.SetLoseFocusHdl( LINK ( this, SvxHyperlinkDocTp, LostFocusPathHdl_Impl ) );
 
-    maBtBrowse.SetAccessibleRelationMemberOf( &maGrpTarget );
-    maBtBrowse.SetAccessibleRelationLabeledBy( &maFtTarget );
-    maBtFileopen.SetAccessibleRelationMemberOf( &maGrpDocument );
-    maBtFileopen.SetAccessibleRelationLabeledBy( &maFtPath );
     maTimer.SetTimeoutHdl ( LINK ( this, SvxHyperlinkDocTp, TimeoutHdl_Impl ) );
 }
 

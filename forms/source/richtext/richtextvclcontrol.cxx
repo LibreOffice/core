@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ namespace frm
     void RichTextControl::implInit( RichTextEngine* _pEngine, ITextAttributeListener* _pTextAttribListener, ITextSelectionListener* _pSelectionListener )
     {
         m_pImpl = new RichTextControlImpl( this, _pEngine, _pTextAttribListener, _pSelectionListener );
-        SetCompoundControl( sal_True );
+        SetCompoundControl( TRUE );
     }
 
     //--------------------------------------------------------------------
@@ -105,7 +105,7 @@ namespace frm
         SfxItemSet aToApplyAttributes( getView().GetEmptyItemSet() );
         if ( !m_pImpl->executeAttribute( getView().GetAttribs(), aToApplyAttributes, _nAttributeId, _pArgument, m_pImpl->getSelectedScriptType() ) )
         {
-            OSL_FAIL( "RichTextControl::executeAttribute: cannot handle the given attribute!" );
+            OSL_ENSURE( sal_False, "RichTextControl::executeAttribute: cannot handle the given attribute!" );
             return;
         }
 
@@ -119,8 +119,8 @@ namespace frm
         if ( HasChildPathFocus() )
             getView().HideCursor();
 
-        sal_Bool bOldUpdateMode = getEngine().GetUpdateMode();   // TODO: guard?
-        getEngine().SetUpdateMode( sal_False );
+        BOOL bOldUpdateMode = getEngine().GetUpdateMode();   // TODO: guard?
+        getEngine().SetUpdateMode( FALSE );
 
         getView().SetAttribs( _rAttributesToApply );
 
@@ -321,7 +321,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void RichTextControl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, sal_uLong _nFlags )
+    void RichTextControl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, ULONG _nFlags )
     {
         m_pImpl->Draw( _pDev, _rPos, _rSize, _nFlags );
     }

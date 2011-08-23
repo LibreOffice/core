@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ void OAccessibleMenuComponent::FillAccessibleStateSet( utl::AccessibleStateSetHe
 }
 
 // -----------------------------------------------------------------------------
-// OCommonAccessibleComponent
+// OCommonAccessibleComponent 
 // -----------------------------------------------------------------------------
 
 awt::Rectangle OAccessibleMenuComponent::implGetBounds() throw (RuntimeException)
@@ -133,7 +133,7 @@ awt::Rectangle OAccessibleMenuComponent::implGetBounds() throw (RuntimeException
             Reference< XAccessible > xParent = getAccessibleParent();
             if ( xParent.is() )
             {
-                Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), UNO_QUERY );
+                Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), UNO_QUERY );				
                 if ( xParentComponent.is() )
                 {
                     awt::Point aParentScreenLoc = xParentComponent->getLocationOnScreen();
@@ -169,7 +169,7 @@ sal_Int32 OAccessibleMenuComponent::getAccessibleChildCount() throw (RuntimeExce
 {
     OExternalLockGuard aGuard( this );
 
-    return GetChildCount();
+    return GetChildCount(); 
 }
 
 // -----------------------------------------------------------------------------
@@ -217,7 +217,7 @@ sal_Int16 OAccessibleMenuComponent::getAccessibleRole(  ) throw (RuntimeExceptio
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OAccessibleMenuComponent::getAccessibleDescription( ) throw (RuntimeException)
+::rtl::OUString OAccessibleMenuComponent::getAccessibleDescription(	) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -286,7 +286,7 @@ awt::Point OAccessibleMenuComponent::getLocationOnScreen(  ) throw (RuntimeExcep
         if ( pWindow )
         {
             Rectangle aRect = pWindow->GetWindowExtentsRelative( NULL );
-            aPos = AWTPoint( aRect.TopLeft() );
+            aPos = AWTPoint( aRect.TopLeft() );			
         }
     }
 
@@ -309,7 +309,7 @@ void OAccessibleMenuComponent::grabFocus(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-sal_Int32 OAccessibleMenuComponent::getForeground(  ) throw (RuntimeException)
+sal_Int32 OAccessibleMenuComponent::getForeground(	) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -392,13 +392,13 @@ void OAccessibleMenuComponent::selectAccessibleChild( sal_Int32 nChildIndex ) th
 // -----------------------------------------------------------------------------
 
 sal_Bool OAccessibleMenuComponent::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
-{
+{	
     OExternalLockGuard aGuard( this );
 
     if ( nChildIndex < 0 || nChildIndex >= GetChildCount() )
         throw IndexOutOfBoundsException();
 
-    return IsChildSelected( nChildIndex );
+    return IsChildSelected( nChildIndex );	
 }
 
 // -----------------------------------------------------------------------------
@@ -426,7 +426,7 @@ sal_Int32 OAccessibleMenuComponent::getSelectedAccessibleChildCount(  ) throw (R
     sal_Int32 nRet = 0;
 
     for ( sal_Int32 i = 0, nCount = GetChildCount(); i < nCount; i++ )
-    {
+    {		
         if ( IsChildSelected( i ) )
             ++nRet;
     }
@@ -446,7 +446,7 @@ Reference< XAccessible > OAccessibleMenuComponent::getSelectedAccessibleChild( s
     Reference< XAccessible > xChild;
 
     for ( sal_Int32 i = 0, j = 0, nCount = GetChildCount(); i < nCount; i++ )
-    {
+    {		
         if ( IsChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
         {
             xChild = GetChild( i );

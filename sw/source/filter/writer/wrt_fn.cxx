@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 
 Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
 {
-    sal_uInt16 nId = rHt.Which();
+    USHORT nId = rHt.Which();
     OSL_ENSURE(  nId < POOLATTR_END && nId >= POOLATTR_BEGIN, "SwAttrFnTab::Out()" );
     FnAttrOut pOut;
     if( 0 != ( pOut = pTab[ nId - RES_CHRATR_BEGIN] ))
@@ -51,8 +51,8 @@ Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
 }
 
 Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
-                        const SfxItemSet& rSet, sal_Bool bDeep,
-                        sal_Bool bTstForDefault )
+                        const SfxItemSet& rSet, BOOL bDeep,
+                        BOOL bTstForDefault )
 {
     // erst die eigenen Attribute ausgeben
     const SfxItemPool& rPool = *rSet.GetPool();
@@ -66,7 +66,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
         if( !pSet )
             return rWrt;
     }
-    const SfxPoolItem* pItem(0);
+    const SfxPoolItem* pItem;
     FnAttrOut pOut;
     if( !bDeep || !pSet->GetParent() )
     {
@@ -81,7 +81,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
     else
     {
         SfxWhichIter aIter( *pSet );
-        sal_uInt16 nWhich = aIter.FirstWhich();
+        USHORT nWhich = aIter.FirstWhich();
         while( nWhich )
         {
             if( SFX_ITEM_SET == pSet->GetItemState( nWhich, bDeep, &pItem ) &&
@@ -106,7 +106,7 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
     if( !pCNd )
         return rWrt;
 
-    sal_uInt16 nId = RES_TXTNODE;
+    USHORT nId = RES_TXTNODE;
     switch (pCNd->GetNodeType())
     {
         case ND_TEXTNODE:
@@ -119,7 +119,7 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
             nId = RES_OLENODE;
             break;
         default:
-            OSL_FAIL("was fuer ein Node ist es denn nun?");
+            OSL_ENSURE(false, "was fuer ein Node ist es denn nun?");
             break;
     }
     FnNodeOut pOut;

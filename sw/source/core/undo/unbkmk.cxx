@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,18 +29,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <UndoBookmark.hxx>
 
 #include "doc.hxx"
 #include "docary.hxx"
-#include "swundo.hxx"           // fuer die UndoIds
+#include "swundo.hxx"			// fuer die UndoIds
 #include "pam.hxx"
 
-#include <UndoCore.hxx>
+#include "undobj.hxx"
 #include "IMark.hxx"
 #include "rolbck.hxx"
 
 #include "SwRewriter.hxx"
+
+
+inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 
 SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId,
@@ -58,6 +60,7 @@ void SwUndoBookmark::SetInDoc( SwDoc* pDoc )
 {
     m_pHistoryBookmark->SetInDoc( pDoc, false );
 }
+
 
 void SwUndoBookmark::ResetInDoc( SwDoc* pDoc )
 {
@@ -84,7 +87,7 @@ SwRewriter SwUndoBookmark::GetRewriter() const
     return aResult;
 }
 
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------- 
 
 
 SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )
@@ -93,14 +96,15 @@ SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )
 }
 
 
-void SwUndoInsBookmark::UndoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoInsBookmark::Undo( SwUndoIter& rUndoIter )
 {
-    ResetInDoc( &rContext.GetDoc() );
+    ResetInDoc( &rUndoIter.GetDoc() );
 }
 
-void SwUndoInsBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
+
+void SwUndoInsBookmark::Redo( SwUndoIter& rUndoIter )
 {
-    SetInDoc( &rContext.GetDoc() );
+    SetInDoc( &rUndoIter.GetDoc() );
 }
 
 

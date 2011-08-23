@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ public class _XRadioButton extends MultiMethodTest {
 
     /**
     * Gets state and stores it. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     */
     public void _getState() {
 
@@ -137,7 +137,7 @@ public class _XRadioButton extends MultiMethodTest {
 
     /**
     * Just sets a new label. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     */
     public void _setLabel() {
 

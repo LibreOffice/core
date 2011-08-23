@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static sal_uInt16 pCalcOptRanges[] =
+static USHORT pCalcOptRanges[] =
 {
     SID_SCDOCOPTIONS,
     SID_SCDOCOPTIONS,
@@ -65,38 +65,39 @@ static sal_uInt16 pCalcOptRanges[] =
 
 //========================================================================
 
-ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
+ScTpCalcOptions::ScTpCalcOptions( Window*			pParent,
                                   const SfxItemSet& rCoreAttrs )
 
-    :   SfxTabPage      ( pParent,
+    :	SfxTabPage		( pParent,
                           ScResId( RID_SCPAGE_CALC ),
                           rCoreAttrs ),
 
-        aGbZRefs        ( this, ScResId( GB_ZREFS ) ),
-        aBtnIterate     ( this, ScResId( BTN_ITERATE ) ),
-        aFtSteps        ( this, ScResId( FT_STEPS ) ),
-        aEdSteps        ( this, ScResId( ED_STEPS ) ),
-        aFtEps          ( this, ScResId( FT_EPS ) ),
-        aEdEps          ( this, ScResId( ED_EPS ) ),
+        aGbZRefs		( this, ScResId( GB_ZREFS ) ),
+        aBtnIterate 	( this, ScResId( BTN_ITERATE ) ),
+        aFtSteps		( this, ScResId( FT_STEPS ) ),
+        aEdSteps		( this, ScResId( ED_STEPS ) ),
+        aFtEps			( this, ScResId( FT_EPS ) ),
+        aEdEps			( this, ScResId( ED_EPS ) ),
         aSeparatorFL    ( this, ScResId( FL_SEPARATOR ) ),
-        aGbDate         ( this, ScResId( GB_DATE ) ),
-        aBtnDateStd     ( this, ScResId( BTN_DATESTD ) ),
-        aBtnDateSc10    ( this, ScResId( BTN_DATESC10 ) ),
-        aBtnDate1904    ( this, ScResId( BTN_DATE1904 ) ),
-        aBtnCase        ( this, ScResId( BTN_CASE ) ),
-        aBtnCalc        ( this, ScResId( BTN_CALC ) ),
-        aBtnMatch       ( this, ScResId( BTN_MATCH ) ),
+        aGbDate 		( this, ScResId( GB_DATE ) ),
+        aBtnDateStd 	( this, ScResId( BTN_DATESTD ) ),
+        aBtnDateSc10	( this, ScResId( BTN_DATESC10 ) ),
+        aBtnDate1904	( this, ScResId( BTN_DATE1904 ) ),
+        aHSeparatorFL   ( this, ScResId( FL_H_SEPARATOR ) ),
+        aBtnCase	 	( this, ScResId( BTN_CASE ) ),
+        aBtnCalc	 	( this, ScResId( BTN_CALC ) ),
+        aBtnMatch	 	( this, ScResId( BTN_MATCH ) ),
         aBtnRegex       ( this, ScResId( BTN_REGEX ) ),
-        aBtnLookUp      ( this, ScResId( BTN_LOOKUP ) ),
+        aBtnLookUp   	( this, ScResId( BTN_LOOKUP ) ),
         aBtnGeneralPrec ( this, ScResId( BTN_GENERAL_PREC ) ),
-        aFtPrec         ( this, ScResId( FT_PREC ) ),
-        aEdPrec         ( this, ScResId( ED_PREC ) ),
-        pOldOptions     ( new ScDocOptions(
+        aFtPrec 		( this, ScResId( FT_PREC ) ),
+        aEdPrec 		( this, ScResId( ED_PREC ) ),
+        pOldOptions 	( new ScDocOptions(
                             ((const ScTpCalcItem&)rCoreAttrs.Get(
                                 GetWhich( SID_SCDOCOPTIONS ))).
                                     GetDocOptions() ) ),
-        pLocalOptions   ( new ScDocOptions ),
-        nWhichCalc      ( GetWhich( SID_SCDOCOPTIONS ) )
+        pLocalOptions	( new ScDocOptions ),
+        nWhichCalc		( GetWhich( SID_SCDOCOPTIONS ) )
 {
     aSeparatorFL.SetStyle( aSeparatorFL.GetStyle() | WB_VERT );
     Init();
@@ -106,7 +107,7 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
 
 //-----------------------------------------------------------------------
 
-ScTpCalcOptions::~ScTpCalcOptions()
+__EXPORT ScTpCalcOptions::~ScTpCalcOptions()
 {
     delete pOldOptions;
     delete pLocalOptions;
@@ -125,25 +126,25 @@ void ScTpCalcOptions::Init()
 
 //-----------------------------------------------------------------------
 
-sal_uInt16* ScTpCalcOptions::GetRanges()
+USHORT* __EXPORT ScTpCalcOptions::GetRanges()
 {
     return pCalcOptRanges;
 }
 
 //-----------------------------------------------------------------------
 
-SfxTabPage* ScTpCalcOptions::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* __EXPORT ScTpCalcOptions::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new ScTpCalcOptions( pParent, rAttrSet ) );
 }
 
 //-----------------------------------------------------------------------
 
-void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
+void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 {
-    sal_uInt16  d,m,y;
+    USHORT	d,m,y;
 
-    *pLocalOptions  = *pOldOptions;
+    *pLocalOptions	= *pOldOptions;
 
     aBtnCase   .Check( !pLocalOptions->IsIgnoreCase() );
     aBtnCalc   .Check( pLocalOptions->IsCalcAsShown() );
@@ -190,10 +191,10 @@ void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 
 //-----------------------------------------------------------------------
 
-sal_Bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
+BOOL __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     // alle weiteren Optionen werden in den Handlern aktualisiert
-    pLocalOptions->SetIterCount( (sal_uInt16)aEdSteps.GetValue() );
+    pLocalOptions->SetIterCount( (USHORT)aEdSteps.GetValue() );
     pLocalOptions->SetIgnoreCase( !aBtnCase.IsChecked() );
     pLocalOptions->SetCalcAsShown( aBtnCalc.IsChecked() );
     pLocalOptions->SetMatchWholeCell( aBtnMatch.IsChecked() );
@@ -209,15 +210,15 @@ sal_Bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
     if ( *pLocalOptions != *pOldOptions )
     {
         rCoreAttrs.Put( ScTpCalcItem( nWhichCalc, *pLocalOptions ) );
-        return sal_True;
+        return TRUE;
     }
     else
-        return false;
+        return FALSE;
 }
 
 //------------------------------------------------------------------------
 
-int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
+int __EXPORT ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     int nReturn = KEEP_PAGE;
 
@@ -285,15 +286,15 @@ IMPL_LINK( ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
     {
         if ( pBtn->IsChecked() )
         {
-            pLocalOptions->SetIter( sal_True );
-            aFtSteps.Enable();  aEdSteps.Enable();
-            aFtEps  .Enable();  aEdEps  .Enable();
+            pLocalOptions->SetIter( TRUE );
+            aFtSteps.Enable();	aEdSteps.Enable();
+            aFtEps	.Enable();	aEdEps	.Enable();
         }
         else
         {
-            pLocalOptions->SetIter( false );
+            pLocalOptions->SetIter( FALSE );
             aFtSteps.Disable(); aEdSteps.Disable();
-            aFtEps  .Disable(); aEdEps  .Disable();
+            aFtEps	.Disable(); aEdEps	.Disable();
         }
     }
 

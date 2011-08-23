@@ -95,6 +95,9 @@ SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 #Specifies the library name to parse for symbols. For Win32 only.
 DEFLIB1NAME=	$(TARGET)
 
+#A file of symbols to export.
+#DEF1EXPORTFILE=	$(PRJ)$/source$/inc$/exports.dxp
+
 #--------definition file
 
 #name of the definition file:
@@ -115,11 +118,3 @@ DEF1DES=		Viewable Component Chart View
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk \
                             exports.flt
     $(TYPE) exports.flt > $@
-
-ALLTAR : $(MISC)/chartview.component
-
-$(MISC)/chartview.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        chartview.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt chartview.component

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ class SwTabCenterPortion : public SwTabPortion
 public:
     inline SwTabCenterPortion( const KSHORT nTabPosVal, const xub_Unicode cFillChar='\0' )
          : SwTabPortion( nTabPosVal, cFillChar )
-    { SetWhichPor( POR_TABCENTER ); }
+    { SetWhichPor( POR_TABCENTER );	}
     OUTPUT_OPERATOR
 };
 
@@ -108,7 +108,7 @@ class SwTabDecimalPortion : public SwTabPortion
      * following the tab stop up to the decimal position. This value is
      * evaluated during pLastTab->FormatEOL. FME 2006-01-06 #127428#.
      */
-    sal_uInt16 mnWidthOfPortionsUpTpDecimalPosition;
+    USHORT mnWidthOfPortionsUpTpDecimalPosition;
 
 public:
     inline SwTabDecimalPortion( const KSHORT nTabPosVal, const xub_Unicode cTab,
@@ -120,11 +120,11 @@ public:
 
     inline xub_Unicode GetTabDecimal() const { return mcTab; }
 
-    inline void SetWidthOfPortionsUpToDecimalPosition( sal_uInt16 nNew )
+    inline void SetWidthOfPortionsUpToDecimalPosition( USHORT nNew )
     {
         mnWidthOfPortionsUpTpDecimalPosition = nNew;
     }
-    inline sal_uInt16 GetWidthOfPortionsUpToDecimalPosition() const
+    inline USHORT GetWidthOfPortionsUpToDecimalPosition() const
     {
         return mnWidthOfPortionsUpTpDecimalPosition;
     }

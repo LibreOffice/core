@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,33 +44,33 @@ class SW_DLLPUBLIC SwTextGridItem : public SfxPoolItem
     sal_uInt16 nLines;
     sal_uInt16 nBaseHeight, nRubyHeight;
     SwTextGrid eGridType;
-    sal_Bool bRubyTextBelow;
-    sal_Bool bPrintGrid;
-    sal_Bool bDisplayGrid;
+    BOOL bRubyTextBelow;
+    BOOL bPrintGrid;
+    BOOL bDisplayGrid;
 
     //for textgrid enhancement
     sal_uInt16 nBaseWidth;
-    sal_Bool bSnapToChars;
-    sal_Bool bSquaredMode;
+    BOOL bSnapToChars;
+    BOOL bSquaredMode;
 public:
     SwTextGridItem();
     virtual ~SwTextGridItem();
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual	bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     SwTextGridItem&  operator=( const SwTextGridItem& );
 
     const Color& GetColor() const { return aColor; }
-    void SetColor( const Color& rCol )  { aColor = rCol; }
+    void SetColor( const Color& rCol ) 	{ aColor = rCol; }
 
     sal_uInt16 GetLines() const { return nLines; }
     void SetLines( sal_uInt16 nNew ) { nLines = nNew; }
@@ -84,37 +84,37 @@ public:
     SwTextGrid GetGridType() const { return eGridType; }
     void SetGridType( SwTextGrid eNew ) { eGridType = eNew; }
 
-    sal_Bool IsRubyTextBelow() const { return bRubyTextBelow; }
-    sal_Bool GetRubyTextBelow() const { return bRubyTextBelow; }
-    void SetRubyTextBelow( sal_Bool bNew ) { bRubyTextBelow = bNew; }
+    BOOL IsRubyTextBelow() const { return bRubyTextBelow; }
+    BOOL GetRubyTextBelow() const { return bRubyTextBelow; }
+    void SetRubyTextBelow( BOOL bNew ) { bRubyTextBelow = bNew; }
 
-    sal_Bool IsPrintGrid() const { return bPrintGrid; }
-    sal_Bool GetPrintGrid() const { return bPrintGrid; }
-    void SetPrintGrid( sal_Bool bNew ) { bPrintGrid = bNew; }
+    BOOL IsPrintGrid() const { return bPrintGrid; }
+    BOOL GetPrintGrid() const { return bPrintGrid; }
+    void SetPrintGrid( BOOL bNew ) { bPrintGrid = bNew; }
 
-    sal_Bool IsDisplayGrid() const { return bDisplayGrid; }
-    sal_Bool GetDisplayGrid() const { return bDisplayGrid; }
-    void SetDisplayGrid( sal_Bool bNew ) { bDisplayGrid = bNew; }
-
+    BOOL IsDisplayGrid() const { return bDisplayGrid; }
+    BOOL GetDisplayGrid() const { return bDisplayGrid; }
+    void SetDisplayGrid( BOOL bNew ) { bDisplayGrid = bNew; }
+    
     //for textgrid enhancement
     sal_uInt16 GetBaseWidth() const { return nBaseWidth;}
     void SetBaseWidth( sal_uInt16 nNew ) { nBaseWidth = nNew; }
-
-    sal_Bool IsSnapToChars() const { return bSnapToChars; }
-    sal_Bool GetSnapToChars() const { return bSnapToChars; }
-    void SetSnapToChars( sal_Bool bNew ) { bSnapToChars = bNew; }
-
-    sal_Bool IsSquaredMode() const { return bSquaredMode; }
-    sal_Bool GetSquaredMode() const { return bSquaredMode; }
-    void SetSquaredMode( sal_Bool bNew ) { bSquaredMode = bNew; }
-    void SwitchPaperMode(sal_Bool bNew );
-
+    
+    BOOL IsSnapToChars() const { return bSnapToChars; }
+    BOOL GetSnapToChars() const { return bSnapToChars; }
+    void SetSnapToChars( BOOL bNew ) { bSnapToChars = bNew; }
+    
+    BOOL IsSquaredMode() const { return bSquaredMode; }
+    BOOL GetSquaredMode() const { return bSquaredMode; }
+    void SetSquaredMode( BOOL bNew ) { bSquaredMode = bNew; }
+    void SwitchPaperMode(BOOL bNew );
+    
     void Init();
 };
 
-inline const SwTextGridItem &SwAttrSet::GetTextGrid(sal_Bool bInP) const
+inline const SwTextGridItem &SwAttrSet::GetTextGrid(BOOL bInP) const
     {   return (const SwTextGridItem&)Get( RES_TEXTGRID, bInP ); }
-inline const SwTextGridItem &SwFmt::GetTextGrid(sal_Bool bInP) const
+inline const SwTextGridItem &SwFmt::GetTextGrid(BOOL bInP) const
     {   return (const SwTextGridItem&)aSet.Get( RES_TEXTGRID, bInP ); }
 
 #endif

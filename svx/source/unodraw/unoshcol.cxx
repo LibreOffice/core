@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 #include <com/sun/star/document/EventObject.hpp>
 
-#include "svx/unoshcol.hxx"
+#include "unoshcol.hxx"
 #include <svx/unoprov.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ using namespace basegfx;
 
 SvpSalFrame* SvpSalFrame::s_pFocusFrame = NULL;
 
-SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
+SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance, 
                           SalFrame* pParent,
-                          sal_uLong nSalFrameStyle,
+                          ULONG nSalFrameStyle,
                           SystemParentData* ) :
     m_pInstance( pInstance ),
     m_pParent( static_cast<SvpSalFrame*>(pParent) ),
@@ -51,24 +51,24 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_nMaxWidth( 0 ),
     m_nMaxHeight( 0 )
 {
-    m_aSystemChildData.nSize        = sizeof( SystemChildData );
-    m_aSystemChildData.pDisplay     = NULL;
-    m_aSystemChildData.aWindow      = 0;
-    m_aSystemChildData.pSalFrame    = this;
-    m_aSystemChildData.pWidget      = NULL;
-    m_aSystemChildData.pVisual      = NULL;
-    m_aSystemChildData.nDepth       = 24;
-    m_aSystemChildData.aColormap    = 0;
-    m_aSystemChildData.pAppContext  = NULL;
-    m_aSystemChildData.aShellWindow = 0;
-    m_aSystemChildData.pShellWidget = NULL;
-
+    m_aSystemChildData.nSize 		= sizeof( SystemChildData );
+    m_aSystemChildData.pDisplay		= NULL;
+    m_aSystemChildData.aWindow		= 0;
+    m_aSystemChildData.pSalFrame 	= this;
+    m_aSystemChildData.pWidget		= NULL;
+    m_aSystemChildData.pVisual		= NULL;
+    m_aSystemChildData.nDepth		= 24;
+    m_aSystemChildData.aColormap	= 0;
+    m_aSystemChildData.pAppContext	= NULL;
+    m_aSystemChildData.aShellWindow	= 0;
+    m_aSystemChildData.pShellWidget	= NULL;
+    
     if( m_pParent )
         m_pParent->m_aChildren.push_back( this );
-
+    
     if( m_pInstance )
         m_pInstance->registerFrame( this );
-
+    
     SetPosSize( 0, 0, 800, 600, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
 }
 
@@ -76,14 +76,14 @@ SvpSalFrame::~SvpSalFrame()
 {
     if( m_pInstance )
         m_pInstance->deregisterFrame( this );
-
+    
     std::list<SvpSalFrame*> Children = m_aChildren;
     for( std::list<SvpSalFrame*>::iterator it = Children.begin();
          it != Children.end(); ++it )
          (*it)->SetParent( m_pParent );
     if( m_pParent )
         m_pParent->m_aChildren.remove( this );
-
+    
     if( s_pFocusFrame == this )
     {
         s_pFocusFrame = NULL;
@@ -147,10 +147,10 @@ void SvpSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
     delete pSvpGraphics;
 }
 
-sal_Bool SvpSalFrame::PostEvent( void* pData )
+BOOL SvpSalFrame::PostEvent( void* pData )
 {
     m_pInstance->PostEvent( this, pData, SALEVENT_USEREVENT );
-    return sal_True;
+    return TRUE;
 }
 
 void SvpSalFrame::PostPaint() const
@@ -166,7 +166,7 @@ void SvpSalFrame::SetTitle( const XubString& )
 {
 }
 
-void SvpSalFrame::SetIcon( sal_uInt16 )
+void SvpSalFrame::SetIcon( USHORT )
 {
 }
 
@@ -182,7 +182,7 @@ void SvpSalFrame::SetExtendedFrameStyle( SalExtStyle )
 {
 }
 
-void SvpSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
+void SvpSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 {
     if( bVisible && ! m_bVisible )
     {
@@ -199,7 +199,7 @@ void SvpSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
     }
 }
 
-void SvpSalFrame::Enable( sal_Bool )
+void SvpSalFrame::Enable( BOOL )
 {
 }
 
@@ -215,7 +215,7 @@ void SvpSalFrame::SetMaxClientSize( long nWidth, long nHeight )
     m_nMaxHeight = nHeight;
 }
 
-void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags )
 {
     if( (nFlags & SAL_FRAME_POSSIZE_X) != 0 )
         maGeometry.nX = nX;
@@ -305,40 +305,40 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
             nWidth = pState->mnWidth;
         if (pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT)
             nHeight = pState->mnHeight;
-
+            
         SetPosSize( nX, nY, nWidth, nHeight,
                     SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y |
                     SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
     }
 }
 
-sal_Bool SvpSalFrame::GetWindowState( SalFrameState* pState )
+BOOL SvpSalFrame::GetWindowState( SalFrameState* pState )
 {
     pState->mnState = SAL_FRAMESTATE_NORMAL;
-    pState->mnX      = maGeometry.nX;
-    pState->mnY      = maGeometry.nY;
+    pState->mnX 	 = maGeometry.nX;
+    pState->mnY 	 = maGeometry.nY;
     pState->mnWidth  = maGeometry.nWidth;
     pState->mnHeight = maGeometry.nHeight;
     pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | SAL_FRAMESTATE_MASK_STATE;
 
-    return sal_True;
+    return TRUE;
 }
 
-void SvpSalFrame::ShowFullScreen( sal_Bool, sal_Int32 )
+void SvpSalFrame::ShowFullScreen( BOOL, sal_Int32 )
 {
     SetPosSize( 0, 0, VIRTUAL_DESKTOP_WIDTH, VIRTUAL_DESKTOP_HEIGHT,
                 SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
 }
 
-void SvpSalFrame::StartPresentation( sal_Bool )
+void SvpSalFrame::StartPresentation( BOOL )
 {
 }
 
-void SvpSalFrame::SetAlwaysOnTop( sal_Bool )
+void SvpSalFrame::SetAlwaysOnTop( BOOL )
 {
 }
 
-void SvpSalFrame::ToTop( sal_uInt16 )
+void SvpSalFrame::ToTop( USHORT )
 {
     GetFocus();
 }
@@ -347,7 +347,7 @@ void SvpSalFrame::SetPointer( PointerStyle )
 {
 }
 
-void SvpSalFrame::CaptureMouse( sal_Bool )
+void SvpSalFrame::CaptureMouse( BOOL )
 {
 }
 
@@ -367,23 +367,23 @@ void SvpSalFrame::SetInputContext( SalInputContext* )
 {
 }
 
-void SvpSalFrame::EndExtTextInput( sal_uInt16 )
+void SvpSalFrame::EndExtTextInput( USHORT )
 {
 }
 
-String SvpSalFrame::GetKeyName( sal_uInt16 )
+String SvpSalFrame::GetKeyName( USHORT )
 {
     return String();
 }
 
-String SvpSalFrame::GetSymbolKeyName( const XubString&, sal_uInt16 )
+String SvpSalFrame::GetSymbolKeyName( const XubString&, USHORT )
 {
     return String();
 }
 
-sal_Bool SvpSalFrame::MapUnicodeToKeyCode( sal_Unicode, LanguageType, KeyCode& )
+BOOL SvpSalFrame::MapUnicodeToKeyCode( sal_Unicode, LanguageType, KeyCode& )
 {
-    return sal_False;
+    return FALSE;
 }
 
 LanguageType SvpSalFrame::GetInputLanguage()
@@ -423,7 +423,7 @@ SalFrame::SalIndicatorState SvpSalFrame::GetIndicatorState()
     return aState;
 }
 
-void SvpSalFrame::SimulateKeyPress( sal_uInt16 /*nKeyCode*/ )
+void SvpSalFrame::SimulateKeyPress( USHORT /*nKeyCode*/ )
 {
 }
 
@@ -447,7 +447,7 @@ void SvpSalFrame::ResetClipRegion()
 {
 }
 
-void SvpSalFrame::BeginSetClipRegion( sal_uLong )
+void SvpSalFrame::BeginSetClipRegion( ULONG )
 {
 }
 

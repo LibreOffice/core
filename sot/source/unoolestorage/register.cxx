@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
-
+    
     ::rtl::OUString aImplName( ::rtl::OUString::createFromAscii( pImplName ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
@@ -60,14 +60,42 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImp
                                             OLESimpleStorage::impl_staticCreateSelfInstance,
                                             OLESimpleStorage::impl_staticGetSupportedServiceNames() );
     }
-
+        
     if ( xFactory.is() )
     {
         xFactory->acquire();
         pRet = xFactory.get();
     }
-
+    
     return pRet;
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, void * pRegistryKey )
+{
+    if (pRegistryKey)
+    {
+        try
+        {
+            uno::Reference< registry::XRegistryKey > xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) );
+
+            uno::Reference< registry::XRegistryKey >  xNewKey;
+
+            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + 
+                                        OLESimpleStorage::impl_staticGetImplementationName() +
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+
+            const uno::Sequence< ::rtl::OUString > &rServices = OLESimpleStorage::impl_staticGetSupportedServiceNames();
+            for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
+                xNewKey->createKey( rServices.getConstArray()[ind] );
+
+            return sal_True;
+        }
+        catch (registry::InvalidRegistryException &)
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+    return sal_False;
 }
 
 } // extern "C"

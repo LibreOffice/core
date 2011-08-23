@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,14 @@
 #elif defined UNX
 #if defined AIX
 #define TOOLS_INETDEF_OS "AIX"
+#elif defined HPUX
+#define TOOLS_INETDEF_OS "HP/UX"
 #elif defined SOLARIS && defined SPARC
 #define TOOLS_INETDEF_OS "Solaris Sparc"
 #elif defined SOLARIS && defined INTEL
 #define TOOLS_INETDEF_OS "Solaris x86"
+#elif defined SCO
+#define TOOLS_INETDEF_OS "SCO"
 #elif defined NETBSD && defined X86
 #define TOOLS_INETDEF_OS "NetBSD/i386"
 #elif defined NETBSD && defined X86_64
@@ -59,19 +63,29 @@
 #define TOOLS_INETDEF_OS "OpenBSD/i386"
 #elif defined OPENBSD && defined X86_64
 #define TOOLS_INETDEF_OS "OpenBSD/amd64"
-#elif defined DRAGONFLY && defined X86
-#define TOOLS_INETDEF_OS "DragonFly/i386"
-#elif defined DRAGONFLY && defined X86_64
-#define TOOLS_INETDEF_OS "DragonFly/amd64"
-#else // AIX, SOLARIS, ...
+#elif defined SINIX
+#define TOOLS_INETDEF_OS "SINIX"
+#else // AIX, HPUX, SOLARIS, ...
 #define TOOLS_INETDEF_OS "Unix"
-#endif // AIX, SOLARIS, ...
+#endif // AIX, HPUX, SOLARIS, ...
 #else // WNT, ...
 #define TOOLS_INETDEF_OS "unknown OS"
 #endif // WN, ...
 
+#define TOOLS_INETDEF_PRODUCT "StarOffice/5.2"
+#define TOOLS_INETDEF_MOZILLA "Mozilla/3.0"
+
+#define INET_PRODUCTNAME TOOLS_INETDEF_PRODUCT " (" TOOLS_INETDEF_OS ")"
+#define INET_DEF_CALLERNAME TOOLS_INETDEF_MOZILLA " (compatible; "			 \
+     TOOLS_INETDEF_PRODUCT "; " TOOLS_INETDEF_OS ")"
+
 //============================================================================
 // The following definitions seem obsolete and might get removed in future.
+
+#define INET_PERS_CERT_HOMEPAGE "http://www.stardivision.de/certs.html"
+#define INET_PERS_CERT_HOMEPAGE_INT											 \
+     "http://www.stardivision.de/certs/certs##.html"
+    // the above definitions are only used in svx/source/options/optinet2.cxx
 
 #if defined __RSC
 #define INET_UNDEFINED 0

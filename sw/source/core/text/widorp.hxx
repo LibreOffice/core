@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,16 +39,16 @@ private:
     SwTwips  nOrigin;
 protected:
     SwTxtFrm *pFrm;
-    sal_Bool     bBreak;
-    sal_Bool     bKeep;
+    sal_Bool	 bBreak;
+    sal_Bool	 bKeep;
 public:
     SwTxtFrmBreak( SwTxtFrm *pFrm, const SwTwips nRst = 0  );
     sal_Bool IsBreakNow( SwTxtMargin &rLine );
 
-    sal_Bool IsBroken() const   { return bBreak; }
+    sal_Bool IsBroken() const 	{ return bBreak; }
     sal_Bool IsKeepAlways() const { return bKeep; }
-    void Keep()             { bKeep = sal_True; }
-    void Break()                { bKeep = sal_False; bBreak = sal_True; }
+    void Keep()				{ bKeep = sal_True; }
+    void Break()				{ bKeep = sal_False; bBreak = sal_True; }
 
     inline sal_Bool GetKeep() const { return bKeep; }
     inline void SetKeep( const sal_Bool bNew ) { bKeep = bNew; }
@@ -70,7 +70,7 @@ public:
 class WidowsAndOrphans : public SwTxtFrmBreak
 {
 private:
-    MSHORT   nWidLines, nOrphLines;
+    MSHORT	 nWidLines, nOrphLines;
 
 public:
     WidowsAndOrphans( SwTxtFrm *pFrm, const SwTwips nRst = 0,

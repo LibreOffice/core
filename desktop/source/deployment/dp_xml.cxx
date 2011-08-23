@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,6 +45,20 @@ namespace dp_misc
 
 //==============================================================================
 void xml_parse(
+    Reference<xml::input::XRoot> const & xRoot,
+    ::ucbhelper::Content & ucb_content,
+    Reference<XComponentContext> const & xContext )
+{
+    const Any arg(xRoot);
+    const Reference<xml::sax::XDocumentHandler> xDocHandler(
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            OUSTR("com.sun.star.xml.input.SaxDocumentHandler"),
+            Sequence<Any>( &arg, 1 ), xContext ), UNO_QUERY_THROW );
+    xml_parse( xDocHandler, ucb_content, xContext );
+ }
+
+//==============================================================================
+void xml_parse(
     Reference<xml::sax::XDocumentHandler> const & xDocHandler,
     ::ucbhelper::Content & ucb_content,
     Reference<XComponentContext> const & xContext )
@@ -53,7 +67,7 @@ void xml_parse(
     Reference<xml::sax::XParser> xParser(
         xContext->getServiceManager()->createInstanceWithContext(
             OUSTR("com.sun.star.xml.sax.Parser"), xContext ), UNO_QUERY_THROW );
-
+    
     // error handler, entity resolver omitted
     xParser->setDocumentHandler( xDocHandler );
     xml::sax::InputSource source;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@ class TreeControlPeer;
 class UnoTreeListBoxImpl;
 class TreeNodeMap;
 
-//  ----------------------------------------------------
-//  class TreeControlPeer
-//  ----------------------------------------------------
-class TreeControlPeer : public ::cppu::ImplInheritanceHelper2< VCLXWindow, ::com::sun::star::awt::tree::XTreeControl, ::com::sun::star::awt::tree::XTreeDataModelListener >
+//	----------------------------------------------------
+//	class TreeControlPeer
+//	----------------------------------------------------
+class TreeControlPeer :	public ::cppu::ImplInheritanceHelper2< VCLXWindow, ::com::sun::star::awt::tree::XTreeControl, ::com::sun::star::awt::tree::XTreeDataModelListener >
 {
     friend class UnoTreeListBoxImpl;
     friend class UnoTreeListEntry;
@@ -129,7 +129,7 @@ private:
     void fillTree( UnoTreeListBoxImpl& rTree, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModel >& xDataModel );
     void addNode( UnoTreeListBoxImpl& rTree, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParentEntry );
 
-    UnoTreeListEntry* createEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos = LIST_APPEND );
+    UnoTreeListEntry* createEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParent, ULONG nPos = LIST_APPEND );
     bool updateEntry( UnoTreeListEntry* pEntry );
 
     void updateTree( const ::com::sun::star::awt::tree::TreeDataModelEvent& rEvent, bool bRecursive );

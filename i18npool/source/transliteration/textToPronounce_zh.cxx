@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,7 @@
 #include <textToPronounce_zh.hxx>
 
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
+using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -105,7 +103,7 @@ TextToPronounce_zh::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeExc
 sal_Bool SAL_CALL
 TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32 & nMatch1,
         const OUString & str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32 & nMatch2)
-        throw (RuntimeException)
+        throw (RuntimeException) 
 {
     sal_Int32 realCount;
     int i;  // loop variable
@@ -151,9 +149,9 @@ extern "C" { static void SAL_CALL thisModule() {} }
 TextToPronounce_zh::TextToPronounce_zh(const sal_Char* func_name)
 {
 #ifdef SAL_DLLPREFIX
-    OUString lib(RTL_CONSTASCII_USTRINGPARAM(SAL_DLLPREFIX"index_data"SAL_DLLEXTENSION));
+    OUString lib=OUString::createFromAscii(SAL_DLLPREFIX"index_data"SAL_DLLEXTENSION);
 #else
-    OUString lib(RTL_CONSTASCII_USTRINGPARAM("index_data"SAL_DLLEXTENSION));
+    OUString lib=OUString::createFromAscii("index_data"SAL_DLLEXTENSION);
 #endif
     hModule = osl_loadModuleRelative(
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );

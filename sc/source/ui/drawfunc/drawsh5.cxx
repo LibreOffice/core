@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
 {
     ScDrawView* pView = pViewData->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_uLong nMarkCount = rMarkList.GetMarkCount();
+    ULONG nMarkCount = rMarkList.GetMarkCount();
 
         //  Hyperlink
 
@@ -108,10 +108,10 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
             uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-            rtl::OUString sPropButtonType(RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ));
-            rtl::OUString sPropTargetURL(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
-            rtl::OUString sPropTargetFrame(RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" ));
-            rtl::OUString sPropLabel(RTL_CONSTASCII_USTRINGPARAM( "Label" ));
+            rtl::OUString sPropButtonType  = rtl::OUString::createFromAscii( "ButtonType" );
+            rtl::OUString sPropTargetURL   = rtl::OUString::createFromAscii( "TargetURL" );
+            rtl::OUString sPropTargetFrame = rtl::OUString::createFromAscii( "TargetFrame" );
+            rtl::OUString sPropLabel       = rtl::OUString::createFromAscii( "Label" );
 
             if(xInfo->hasPropertyByName( sPropButtonType ))
             {
@@ -160,14 +160,14 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
         case SID_HYPERLINK_SETLINK:
             if( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, sal_True, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, TRUE, &pItem ) == SFX_ITEM_SET )
                 {
                     const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
                     const String& rName     = pHyper->GetName();
@@ -175,7 +175,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                     const String& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
-                    sal_Bool bDone = false;
+                    BOOL bDone = FALSE;
                     if ( eMode == HLINK_FIELD || eMode == HLINK_BUTTON )
                     {
                         ScDrawView* pView = pViewData->GetScDrawView();
@@ -195,16 +195,20 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                                 uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
                                 uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-                                rtl::OUString sPropTargetURL(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
+                                rtl::OUString sPropTargetURL =
+                                    rtl::OUString::createFromAscii( "TargetURL" );
 
                                 // Darf man eine URL an dem Objekt setzen?
                                 if (xInfo->hasPropertyByName( sPropTargetURL ))
                                 {
                                     // Ja!
 
-                                    rtl::OUString sPropButtonType(RTL_CONSTASCII_USTRINGPARAM( "ButtonType") );
-                                    rtl::OUString sPropTargetFrame(RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" ));
-                                    rtl::OUString sPropLabel(RTL_CONSTASCII_USTRINGPARAM( "Label" ));
+                                    rtl::OUString sPropButtonType =
+                                        rtl::OUString::createFromAscii( "ButtonType" );
+                                    rtl::OUString sPropTargetFrame =
+                                        rtl::OUString::createFromAscii( "TargetFrame" );
+                                    rtl::OUString sPropLabel =
+                                        rtl::OUString::createFromAscii( "Label" );
 
                                     uno::Any aAny;
                                     if ( xInfo->hasPropertyByName( sPropLabel ) )
@@ -232,31 +236,31 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
 
                                     //! Undo ???
                                     pViewData->GetDocShell()->SetDocumentModified();
-                                    bDone = sal_True;
+                                    bDone = TRUE;
                                 }
                             }
                             else
                             {
                                 SetHlinkForObject( pObj, rURL );
-                                bDone = sal_True;
+                                bDone = TRUE;
                             }
                         }
                     }
 
                     if (!bDone)
                         pViewData->GetViewShell()->
-                            InsertURL( rName, rURL, rTarget, (sal_uInt16) eMode );
+                            InsertURL( rName, rURL, rTarget, (USHORT) eMode );
 
                     //  InsertURL an der ViewShell schaltet bei "Text" die DrawShell ab !!!
                 }
             }
             break;
         default:
-            OSL_FAIL("falscher Slot");
+            DBG_ERROR("falscher Slot");
     }
 }
 
-sal_uInt16 ScGetFontWorkId();       // wegen CLOOKs - in drtxtob2
+USHORT ScGetFontWorkId();       // wegen CLOOKs - in drtxtob2
 
 //------------------------------------------------------------------
 
@@ -270,7 +274,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
     ScTabView*   pTabView  = pViewData->GetView();
     ScDrawView*  pView     = pTabView->GetScDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
-    sal_uInt16 nSlotId = rReq.GetSlot();
+    USHORT nSlotId = rReq.GetSlot();
 
     //!!!
     // wer weiss, wie lange das funktioniert? (->vom Abreisscontrol funktioniert es)
@@ -291,7 +295,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             rBindings.Invalidate(SID_OBJECT_HELL);
             //  leave draw shell if nothing selected (layer may be locked)
             if ( pView->GetMarkedObjectList().GetMarkCount() == 0 )
-                pViewData->GetViewShell()->SetDrawShell( false );
+                pViewData->GetViewShell()->SetDrawShell( FALSE );
             break;
 
         case SID_FRAME_TO_TOP:
@@ -362,13 +366,13 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         case SID_DELETE_CONTENTS:
             pView->DeleteMarked();
             if (!pTabView->IsDrawSelMode())
-                pViewData->GetViewShell()->SetDrawShell( false );
+                pViewData->GetViewShell()->SetDrawShell( FALSE );
         break;
 
         case SID_CUT:
             pView->DoCut();
             if (!pTabView->IsDrawSelMode())
-                pViewData->GetViewShell()->SetDrawShell( false );
+                pViewData->GetViewShell()->SetDrawShell( FALSE );
             break;
 
         case SID_COPY:
@@ -376,7 +380,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_PASTE:
-            OSL_FAIL( "SdrView::PasteClipboard not supported anymore" );
+            DBG_ERROR( "SdrView::PasteClipboard not supported anymore" );
+            // pView->PasteClipboard( pWin );
             break;
 
         case SID_SELECTALL:
@@ -384,26 +389,26 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_ANCHOR_PAGE:
-            pView->SetPageAnchored();
+            pView->SetAnchor( SCA_PAGE );
             rBindings.Invalidate( SID_ANCHOR_PAGE );
             rBindings.Invalidate( SID_ANCHOR_CELL );
             break;
 
         case SID_ANCHOR_CELL:
-            pView->SetCellAnchored();
+            pView->SetAnchor( SCA_CELL );
             rBindings.Invalidate( SID_ANCHOR_PAGE );
             rBindings.Invalidate( SID_ANCHOR_CELL );
             break;
 
         case SID_ANCHOR_TOGGLE:
             {
-                switch( pView->GetAnchorType() )
+                switch( pView->GetAnchor() )
                 {
                     case SCA_CELL:
-                    pView->SetPageAnchored();
+                    pView->SetAnchor( SCA_PAGE );
                     break;
                     default:
-                    pView->SetCellAnchored();
+                    pView->SetAnchor( SCA_CELL );
                     break;
                 }
             }
@@ -423,7 +428,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 rBindings.Invalidate( SID_OBJECT_MIRROR );
                 if (eMode == SDRDRAG_ROTATE && !pView->IsFrameDragSingles())
                 {
-                    pView->SetFrameDragSingles( sal_True );
+                    pView->SetFrameDragSingles( TRUE );
                     rBindings.Invalidate( SID_BEZIER_EDIT );
                 }
             }
@@ -440,14 +445,14 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 rBindings.Invalidate( SID_OBJECT_MIRROR );
                 if (eMode == SDRDRAG_MIRROR && !pView->IsFrameDragSingles())
                 {
-                    pView->SetFrameDragSingles( sal_True );
+                    pView->SetFrameDragSingles( TRUE );
                     rBindings.Invalidate( SID_BEZIER_EDIT );
                 }
             }
             break;
         case SID_BEZIER_EDIT:
             {
-                sal_Bool bOld = pView->IsFrameDragSingles();
+                BOOL bOld = pView->IsFrameDragSingles();
                 pView->SetFrameDragSingles( !bOld );
                 rBindings.Invalidate( SID_BEZIER_EDIT );
                 if (bOld && pView->GetDragMode() != SDRDRAG_MOVE)
@@ -461,7 +466,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_FONTWORK:
         {
-            sal_uInt16 nId = ScGetFontWorkId();
+            USHORT nId = ScGetFontWorkId();
             SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
 
             if ( rReq.GetArgs() )
@@ -483,11 +488,11 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_ENABLE_HYPHENATION:
             {
-                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, false);
+                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, FALSE);
                 if( pItem )
                 {
                     SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
-                    sal_Bool bValue = ( (const SfxBoolItem*) pItem)->GetValue();
+                    BOOL bValue = ( (const SfxBoolItem*) pItem)->GetValue();
                     aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                     pView->SetAttributes( aSet );
                 }
@@ -526,8 +531,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                                 if(OBJ_GRAF == nObjType && 0L == aName.Len())
                                 {
-                                    //  graphics objects must have names
-                                    //  (all graphics are supposed to be in the navigator)
+                                    //	graphics objects must have names
+                                    //	(all graphics are supposed to be in the navigator)
                                     ScDrawLayer* pModel = pViewData->GetDocument()->GetDrawLayer();
 
                                     if(pModel)
@@ -536,9 +541,9 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                     }
                                 }
 
-                                //  An undo action for renaming is missing in svdraw (99363).
-                                //  For OLE objects (which can be identified using the persist name),
-                                //  ScUndoRenameObject can be used until there is a common action for all objects.
+                                //	An undo action for renaming is missing in svdraw (99363).
+                                //	For OLE objects (which can be identified using the persist name),
+                                //	ScUndoRenameObject can be used until there is a common action for all objects.
                                 if(OBJ_OLE2 == nObjType)
                                 {
                                     const String aPersistName = static_cast<SdrOle2Obj*>(pSelected)->GetPersistName();
@@ -555,7 +560,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             }
 
                             // ChartListenerCollectionNeedsUpdate is needed for Navigator update
-                            pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( sal_True );
+                            pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( TRUE );
                             pDocSh->SetDrawModified();
                         }
 
@@ -594,7 +599,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             pSelected->SetDescription(aDescription);
 
                             // ChartListenerCollectionNeedsUpdate is needed for Navigator update
-                            pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( sal_True );
+                            pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( TRUE );
                             pDocSh->SetDrawModified();
                         }
 
@@ -661,7 +666,7 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
         }
     }
 
-    return 1;   // name is valid
+    return 1;	// name is valid
 }
 
 //------------------------------------------------------------------
@@ -680,12 +685,12 @@ void ScDrawShell::ExecFormText(SfxRequest& rReq)
             pDrView->ScEndTextEdit();
 
         if (    SFX_ITEM_SET ==
-                rSet.GetItemState(XATTR_FORMTXTSTDFORM, sal_True, &pItem)
+                rSet.GetItemState(XATTR_FORMTXTSTDFORM, TRUE, &pItem)
              && XFTFORM_NONE !=
                 ((const XFormTextStdFormItem*) pItem)->GetValue() )
         {
 
-            sal_uInt16 nId              = SvxFontWorkChildWindow::GetChildWindowId();
+            USHORT nId              = SvxFontWorkChildWindow::GetChildWindowId();
             SfxViewFrame* pViewFrm  = pViewData->GetViewShell()->GetViewFrame();
             SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)
                                        (pViewFrm->
@@ -713,7 +718,7 @@ void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
     }
     else
     {
-        sal_Bool bLock = false;
+        BOOL bLock = FALSE;
         const SfxItemSet *pArgs = rReq.GetArgs();
         if( pArgs && pArgs->Count() >= 1 )
             bLock = static_cast<const SfxBoolItem&>(pArgs->Get(SID_FORMATPAINTBRUSH)).GetValue();
@@ -721,7 +726,7 @@ void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
         ScDrawView* pDrawView = pViewData->GetScDrawView();
         if ( pDrawView && pDrawView->AreObjectsMarked() )
         {
-            sal_Bool bOnlyHardAttr = sal_True;
+            BOOL bOnlyHardAttr = TRUE;
             SfxItemSet* pItemSet = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
             pView->SetDrawBrushSet( pItemSet, bLock );
         }
@@ -731,8 +736,8 @@ void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
 void ScDrawShell::StateFormatPaintbrush( SfxItemSet& rSet )
 {
     ScDrawView* pDrawView = pViewData->GetScDrawView();
-    sal_Bool bSelection = pDrawView && pDrawView->AreObjectsMarked();
-    sal_Bool bHasPaintBrush = pViewData->GetView()->HasPaintBrush();
+    BOOL bSelection = pDrawView && pDrawView->AreObjectsMarked();
+    BOOL bHasPaintBrush = pViewData->GetView()->HasPaintBrush();
 
     if ( !bHasPaintBrush && !bSelection )
         rSet.DisableItem( SID_FORMATPAINTBRUSH );

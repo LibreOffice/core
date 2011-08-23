@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,14 +77,14 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 {
     EndListening(*pDrawDoc);
 
-    EnableExtendedKeyInputDispatcher(sal_False);
-    EnableExtendedMouseEventDispatcher(sal_False);
-    EnableExtendedCommandEventDispatcher(sal_False);
+    EnableExtendedKeyInputDispatcher(FALSE);
+    EnableExtendedMouseEventDispatcher(FALSE);
+    EnableExtendedCommandEventDispatcher(FALSE);
 
-    SetGridFront( sal_False );
-    SetHlplFront( sal_False );
-    SetOConSnap( sal_False );
-    SetFrameDragSingles( sal_True );
+    SetGridFront( FALSE );
+    SetHlplFront( FALSE );
+    SetOConSnap( FALSE );
+    SetFrameDragSingles( TRUE );
     SetSlidesPerRow(4);
 
     if( NULL == pFrameView )
@@ -96,7 +96,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
             /**********************************************************************
             * Das Dokument wurde geladen, ist eine FrameView vorhanden?
             **********************************************************************/
-            sal_uLong nSdViewShellCount = 0;
+            ULONG nSdViewShellCount = 0;
             ViewShellBase* pBase = NULL;
             SfxViewShell* pSfxViewSh = NULL;
             SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(pDocShell);
@@ -125,7 +125,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                     {
                         default:
 //                        case ViewShell::ST_IMPRESS:
-//                        case ViewShell::ST_NOTES:
+//	                      case ViewShell::ST_NOTES:
 //                        case ViewShell::ST_HANDOUT:
                             mnPresViewShellId = SID_VIEWSHELL0;
                             break;
@@ -181,6 +181,8 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetOrtho( pFrameView->IsOrtho() );
         SetEliminatePolyPointLimitAngle( pFrameView->GetEliminatePolyPointLimitAngle() );
         SetEliminatePolyPoints( pFrameView->IsEliminatePolyPoints() );
+// #110094#-7
+//		SetMasterPagePaintCaching( pFrameView->IsMasterPagePaintCaching() );
         SetDesignMode( pFrameView->IsDesignMode() );
 
         SetSolidMarkHdl( pFrameView->IsSolidMarkHdl() );
@@ -206,12 +208,12 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetViewShEditModeOnLoad(pFrameView->GetViewShEditModeOnLoad());
         mbLayerMode = pFrameView->IsLayerMode();
         mbQuickEdit = pFrameView->IsQuickEdit();
-
+        
         // #i26631#
         SetMasterPagePaintCaching( pFrameView->IsMasterPagePaintCaching() );
-
+        
         SetDragWithCopy( pFrameView->IsDragWithCopy() );
-        mbBigHandles         = pFrameView->IsBigHandles();
+        mbBigHandles 		 = pFrameView->IsBigHandles();
         mbDoubleClickTextEdit = pFrameView->IsDoubleClickTextEdit();
         mbClickChangeRotation = pFrameView->IsClickChangeRotation();
         mnSlidesPerRow = pFrameView->GetSlidesPerRow();
@@ -231,8 +233,8 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetGridCoarse( Size( 1000, 1000 ) );
         SetSnapGridWidth(Fraction(1000, 1), Fraction(1000, 1));
         SetActiveLayer( String( SdResId(STR_LAYER_LAYOUT) ) );
-        mbNoColors = sal_True;
-        mbNoAttribs = sal_False;
+        mbNoColors = TRUE;
+        mbNoAttribs = FALSE;
         maVisArea = Rectangle( Point(), Size(0, 0) );
         mePageKind = PK_STANDARD;
         mePageKindOnLoad = PK_STANDARD;
@@ -242,11 +244,11 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         meNotesEditMode = EM_PAGE;
         meHandoutEditMode = EM_MASTERPAGE;
         SetViewShEditModeOnLoad(EM_PAGE);
-        mbLayerMode = sal_False;
-        SetEliminatePolyPoints(sal_False);
-        mbBigHandles = sal_False;
-        mbDoubleClickTextEdit = sal_False;
-        mbClickChangeRotation = sal_False;
+        mbLayerMode = FALSE;
+        SetEliminatePolyPoints(FALSE);
+        mbBigHandles = FALSE;
+        mbDoubleClickTextEdit = FALSE;
+        mbClickChangeRotation = FALSE;
         mnSlidesPerRow = 4;
 
         {
@@ -348,6 +350,8 @@ void FrameView::Update(SdOptions* pOptions)
         SetBigOrtho( pOptions->IsBigOrtho() );
         SetOrtho( pOptions->IsOrtho() );
         SetEliminatePolyPointLimitAngle( pOptions->GetEliminatePolyPointLimitAngle() );
+// #110094#-7
+//		SetMasterPagePaintCaching( pOptions->IsMasterPagePaintCaching() );
         GetModel()->SetPickThroughTransparentTextFrames( pOptions->IsPickThrough() );
 
         SetSolidMarkHdl( pOptions->IsSolidMarkHdl() );
@@ -359,10 +363,10 @@ void FrameView::Update(SdOptions* pOptions)
         Fraction aFractY(pOptions->GetFldDrawY(), pOptions->GetFldDrawY() / ( pOptions->GetFldDivisionY() ? pOptions->GetFldDivisionY() : 1 ));
         SetSnapGridWidth(aFractX, aFractY);
         SetQuickEdit(pOptions->IsQuickEdit());
-
+        
         // #i26631#
         SetMasterPagePaintCaching( pOptions->IsMasterPagePaintCaching() );
-
+        
         SetDragWithCopy(pOptions->IsDragWithCopy());
         SetBigHandles( pOptions->IsBigHandles() );
         SetDoubleClickTextEdit( pOptions->IsDoubleClickTextEdit() );
@@ -443,8 +447,8 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 {
     ::rtl::OUStringBuffer aLines;
 
-    const sal_uInt16 nCount = rHelpLines.GetCount();
-    for( sal_uInt16 nHlpLine = 0; nHlpLine < nCount; nHlpLine++ )
+    const USHORT nCount = rHelpLines.GetCount();
+    for( USHORT nHlpLine = 0; nHlpLine < nCount; nHlpLine++ )
     {
         const SdrHelpLine& rHelpLine = rHelpLines[nHlpLine];
         const Point& rPos = rHelpLine.GetPos();
@@ -466,7 +470,7 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
                 aLines.append( (sal_Int32)rPos.Y() );
                 break;
             default:
-                OSL_FAIL( "Unsupported helpline Kind!" );
+                DBG_ERROR( "Unsupported helpline Kind!" );
         }
     }
 
@@ -486,11 +490,39 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     aUserData.addValue( sUNO_View_IsSnapToObjectFrame, makeAny( (sal_Bool)IsOFrmSnap() ) );
     aUserData.addValue( sUNO_View_IsSnapToObjectPoints, makeAny( (sal_Bool)IsOPntSnap() ) );
 
+//	pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsSnapLinesVisible ) );
+//	pValue->Value <<= (sal_Bool)IsHlplVisible();
+//  pValue++;nIndex++;
+
+//	pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsDragStripes ) );
+//	pValue->Value <<= (sal_Bool)IsDragStripes();
+//  pValue++;nIndex++;
+
     aUserData.addValue( sUNO_View_IsPlusHandlesAlwaysVisible, makeAny( (sal_Bool)IsPlusHandlesAlwaysVisible() ) );
     aUserData.addValue( sUNO_View_IsFrameDragSingles, makeAny( (sal_Bool)IsFrameDragSingles() ) );
 
+//	pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsMarkedHitMovesAlways ) );
+//	pValue->Value <<= (sal_Bool)IsMarkedHitMovesAlways();
+//  pValue++;nIndex++;
+
     aUserData.addValue( sUNO_View_EliminatePolyPointLimitAngle, makeAny( (sal_Int32)GetEliminatePolyPointLimitAngle() ) );
     aUserData.addValue( sUNO_View_IsEliminatePolyPoints, makeAny( (sal_Bool)IsEliminatePolyPoints() ) );
+
+//	pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsLineDraft ) );
+//	pValue->Value <<= (sal_Bool)IsLineDraft();
+//  pValue++;nIndex++;
+
+//	pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsFillDraft ) );
+//	pValue->Value <<= (sal_Bool)IsFillDraft();
+//  pValue++;nIndex++;
+
+//	pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsTextDraft ) );
+//	pValue->Value <<= (sal_Bool)IsTextDraft();
+//  pValue++;nIndex++;
+
+//	pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsGrafDraft ) );
+//	pValue->Value <<= (sal_Bool)IsGrafDraft();
+//  pValue++;nIndex++;
 
     Any aAny;
     GetVisibleLayers().QueryValue( aAny );
@@ -519,11 +551,23 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     aUserData.addValue( sUNO_View_SelectedPage, makeAny( (sal_Int16)GetSelectedPage() ) );
     aUserData.addValue( sUNO_View_IsLayerMode, makeAny( (sal_Bool)IsLayerMode() ) );
 
+//	pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsQuickEdit ) );
+//	pValue->Value <<= (sal_Bool)IsQuickEdit();
+//  pValue++;nIndex++;
+
     aUserData.addValue( sUNO_View_IsBigHandles, makeAny( (sal_Bool)IsBigHandles() ) );
     aUserData.addValue( sUNO_View_IsDoubleClickTextEdit,  makeAny( (sal_Bool)IsDoubleClickTextEdit() ) );
     aUserData.addValue( sUNO_View_IsClickChangeRotation, makeAny( (sal_Bool)IsClickChangeRotation() ) );
 
+//	pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsDragWithCopy ) );
+//	pValue->Value <<= (sal_Bool)IsDragWithCopy();
+//  pValue++;nIndex++;
+
     aUserData.addValue( sUNO_View_SlidesPerRow, makeAny( (sal_Int16)GetSlidesPerRow() ) );
+/* #107128# Product managment decided to not make this persistent
+    aUserData.addValue( sUNO_View_DrawMode, makeAny( (sal_Int32)GetDrawMode() ) );
+    aUserData.addValue( sUNO_View_PreviewDrawMode, makeAny( (sal_Int32)GetPreviewDrawMode() ) );
+*/
     aUserData.addValue( sUNO_View_EditModeStandard, makeAny( (sal_Int32)GetViewShEditMode( PK_STANDARD ) ) );
     aUserData.addValue( sUNO_View_EditModeNotes, makeAny( (sal_Int32)GetViewShEditMode( PK_NOTES ) ) );
     aUserData.addValue( sUNO_View_EditModeHandout, makeAny( (sal_Int32)GetViewShEditMode( PK_HANDOUT ) ) );
@@ -554,7 +598,7 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     PropertyValue* pValue = &(rValues.getArray()[nOldLength]);
 
     std::vector< std::pair< OUString, Any > >::iterator aIter( aUserData.begin() );
-    for( ; aIter != aUserData.end(); ++aIter, ++pValue )
+    for( ; aIter != aUserData.end(); aIter++, pValue++ )
     {
         pValue->Name = (*aIter).first;
         pValue->Value = (*aIter).second;
@@ -584,7 +628,7 @@ static void createHelpLinesFromString( const rtl::OUString& rLines, SdrHelpLineL
             aNewHelpLine.SetKind( SDRHELPLINE_HORIZONTAL );
             break;
         default:
-            OSL_FAIL( "syntax error in snap lines settings string" );
+            DBG_ERROR( "syntax error in snap lines settings string" );
             return;
         }
 
@@ -704,9 +748,9 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 {
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                     if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
-                        SetSelectedPage( (sal_uInt16)nInt16 );
+                        SetSelectedPage( (USHORT)nInt16 );
 
-                    SetSelectedPageOnLoad( (sal_uInt16)nInt16 );
+                    SetSelectedPageOnLoad( (USHORT)nInt16 );
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsLayerMode ) ) )
@@ -716,7 +760,14 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                     SetLayerMode( bBool );
                 }
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsBigHandles ) ) )
+/*			else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsQuickEdit ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    SetQuickEdit( bBool );
+                }
+            }
+*/			else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsBigHandles ) ) )
             {
                 if( pValue->Value >>= bBool )
                 {
@@ -737,13 +788,43 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                     SetClickChangeRotation( bBool );
                 }
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_SlidesPerRow ) ) )
+/*			else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsDragWithCopy ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    SetDragWithCopy( bBool );
+                }
+            }
+*/			else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_SlidesPerRow ) ) )
             {
                 if( pValue->Value >>= nInt16 )
                 {
-                    SetSlidesPerRow( (sal_uInt16)nInt16 );
+                    SetSlidesPerRow( (USHORT)nInt16 );
                 }
             }
+/* #107128# Product managment decided to not make this persistent
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_DrawMode ) ) )
+            {
+                if( pValue->Value >>= nInt32 )
+                {
+                    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+                    if( rStyleSettings.GetHighContrastMode() )
+                        continue;
+                    SetDrawMode( (ULONG)nInt32 );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_PreviewDrawMode ) ) )
+            {
+                if( pValue->Value >>= nInt32 )
+                {
+                    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+                    SvtAccessibilityOptions aAccOptions;
+                    if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
+                        continue;
+                    SetPreviewDrawMode( (ULONG)nInt32 );
+                }
+            }
+*/
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_EditModeStandard ) ) )
             {
                 if( pValue->Value >>= nInt32 )
@@ -867,7 +948,21 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                     SetOPntSnap( bBool );
                 }
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsPlusHandlesAlwaysVisible ) ) )
+/*			else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsSnapLinesVisible ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    SetHlplVisible( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsDragStripes ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    SetDragStripes( bBool );
+                }
+            }
+*/			else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsPlusHandlesAlwaysVisible ) ) )
             {
                 if( pValue->Value >>= bBool )
                 {
@@ -881,7 +976,14 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                     SetFrameDragSingles( bBool );
                 }
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_EliminatePolyPointLimitAngle ) ) )
+/*			else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsMarkedHitMovesAlways ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    SetMarkedHitMovesAlways( bBool );
+                }
+            }
+*/			else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_EliminatePolyPointLimitAngle ) ) )
             {
                 if( pValue->Value >>= nInt32 )
                 {
@@ -895,6 +997,36 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                     SetEliminatePolyPoints( bBool );
                 }
             }
+/*
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsLineDraft ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    SetLineDraft( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsFillDraft ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    SetFillDraft( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsTextDraft ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    SetTextDraft( bBool );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsGrafDraft ) ) )
+            {
+                if( pValue->Value >>= bBool )
+                {
+                    SetGrafDraft( bBool );
+                }
+            }
+*/
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_ActiveLayer ) ) )
             {
                 if( pValue->Value >>= aString )
@@ -1048,17 +1180,17 @@ ViewShell::ShellType FrameView::GetViewShellTypeOnLoad (void) const
 
 
 
-void FrameView::SetSelectedPage(sal_uInt16 nPage)
-{
-    mnSelectedPage = nPage;
+void FrameView::SetSelectedPage(USHORT nPage)
+{ 
+    mnSelectedPage = nPage; 
 }
 
 
 
 
-sal_uInt16 FrameView::GetSelectedPage (void) const
+USHORT FrameView::GetSelectedPage (void) const
 {
-    return mnSelectedPage;
+    return mnSelectedPage; 
 }
 
 

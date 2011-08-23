@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,13 +85,10 @@ FunctionReference FuExpandPage::Create( ViewShell* pViewSh, ::sd::Window* pWin, 
 
 void FuExpandPage::DoExecute( SfxRequest& )
 {
-    if ( mpView && mpView->IsTextEdit() )
-        mpView->SdrEndTextEdit();
-
     // Selektierte Seite finden (nur Standard-Seiten)
     SdPage* pActualPage = NULL;
-    sal_uInt16 i = 0;
-    sal_uInt16 nCount = mpDoc->GetSdPageCount(PK_STANDARD);
+    USHORT i = 0;
+    USHORT nCount = mpDoc->GetSdPageCount(PK_STANDARD);
 
     while (!pActualPage && i < nCount)
     {
@@ -107,8 +104,8 @@ void FuExpandPage::DoExecute( SfxRequest& )
     {
         ::sd::Outliner* pOutl =
               new ::sd::Outliner( mpDoc, OUTLINERMODE_OUTLINEOBJECT );
-        pOutl->SetUpdateMode(sal_False);
-        pOutl->EnableUndo(sal_False);
+        pOutl->SetUpdateMode(FALSE);
+        pOutl->EnableUndo(FALSE);
 
         if (mpDocSh)
             pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
@@ -117,7 +114,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
         pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mpDoc->GetStyleSheetPool());
 
         SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
-        sal_uInt16 nActualPageNum = pActualPage->GetPageNum();
+        USHORT nActualPageNum = pActualPage->GetPageNum();
         SdPage* pActualNotesPage = (SdPage*) mpDoc->GetPage(nActualPageNum + 1);
         SdrTextObj* pActualOutline = (SdrTextObj*) pActualPage->GetPresObj(PRESOBJ_OUTLINE);
 
@@ -134,25 +131,25 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
             // Harte Absatz- und Zeichenattribute entfernen
             SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
-            sal_uLong nParaCount1 = pOutl->GetParagraphCount();
+            ULONG nParaCount1 = pOutl->GetParagraphCount();
 
-            for (sal_uInt16 nPara = 0; nPara < nParaCount1; nPara++)
+            for (USHORT nPara = 0; nPara < nParaCount1; nPara++)
             {
                 pOutl->QuickRemoveCharAttribs(nPara);
                 pOutl->SetParaAttribs(nPara, aEmptyEEAttr);
             }
 
-            sal_uInt16 nPos = 2;
+            USHORT nPos = 2;
             Paragraph* pPara = pOutl->GetParagraph( 0 );
 
             while (pPara)
             {
-                sal_uLong nParaPos = pOutl->GetAbsPos( pPara );
-                sal_Int16 nDepth = pOutl->GetDepth( (sal_uInt16) nParaPos );
+                ULONG nParaPos = pOutl->GetAbsPos( pPara );
+                sal_Int16 nDepth = pOutl->GetDepth( (USHORT) nParaPos );
                 if ( nDepth == 0 )
                 {
                     // Seite mit Titel & Gliederung!
-                    SdPage* pPage = (SdPage*) mpDoc->AllocPage(sal_False);
+                    SdPage* pPage = (SdPage*) mpDoc->AllocPage(FALSE);
                     pPage->SetSize(pActualPage->GetSize() );
                     pPage->SetBorder(pActualPage->GetLftBorder(),
                                      pActualPage->GetUppBorder(),
@@ -170,11 +167,11 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     // MasterPage der aktuellen Seite verwenden
                     pPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
                     pPage->SetLayoutName(pActualPage->GetLayoutName());
-                    pPage->SetAutoLayout(AUTOLAYOUT_ENUM, sal_True);
+                    pPage->SetAutoLayout(AUTOLAYOUT_ENUM, TRUE);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                     // Notiz-Seite
-                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(sal_False);
+                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(FALSE);
                     pNotesPage->SetSize(pActualNotesPage->GetSize());
                     pNotesPage->SetBorder(pActualNotesPage->GetLftBorder(),
                                           pActualNotesPage->GetUppBorder(),
@@ -193,13 +190,14 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     // MasterPage der aktuellen Seite verwenden
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
                     pNotesPage->SetLayoutName(pActualNotesPage->GetLayoutName());
-                    pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), sal_True);
+                    pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), TRUE);
                     pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                     // Title-Textobjekt erstellen
                     SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
-
-                    OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( (sal_uInt16) nParaPos, 1);
+                    
+//
+                    OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( (USHORT) nParaPos, 1);
                     pOutlinerParaObject->SetOutlinerMode(OUTLINERMODE_TITLEOBJECT);
 
                     if( pOutlinerParaObject->GetDepth(0) != -1 )
@@ -218,12 +216,12 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                     pTextObj->SetOutlinerParaObject(pOutlinerParaObject);
 
-                    pTextObj->SetEmptyPresObj(sal_False);
+                    pTextObj->SetEmptyPresObj(FALSE);
 
                     SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
-                    pTextObj->NbcSetStyleSheet(pSheet, sal_False);
+                    pTextObj->NbcSetStyleSheet(pSheet, FALSE);
 
-                    sal_uLong nChildCount = pOutl->GetChildCount(pPara);
+                    ULONG nChildCount = pOutl->GetChildCount(pPara);
 
                     if (nChildCount > 0)
                     {
@@ -231,28 +229,30 @@ void FuExpandPage::DoExecute( SfxRequest& )
                         SdrTextObj* pOutlineObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE);
                         pPara = pOutl->GetParagraph( ++nParaPos );
 
-                        OutlinerParaObject* pOPO = pOutl->CreateParaObject( (sal_uInt16) nParaPos, (sal_uInt16) nChildCount);
+                        OutlinerParaObject* pOPO = pOutl->CreateParaObject( (USHORT) nParaPos, (USHORT) nChildCount);
 
+// --
                         SdrOutliner* pTempOutl = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, mpDoc );
                         pTempOutl->SetText( *pOPO );
-
-                        sal_uLong nParaCount2 = pTempOutl->GetParagraphCount();
-                        sal_uLong nPara;
+                        
+                        ULONG nParaCount2 = pTempOutl->GetParagraphCount();
+                        ULONG nPara;
                         for( nPara = 0; nPara < nParaCount2; nPara++ )
                         {
                             pTempOutl->SetDepth (
-                                pTempOutl->GetParagraph( nPara ),
-                                pTempOutl->GetDepth((sal_uInt16) nPara ) - 1);
+                                pTempOutl->GetParagraph( nPara ), 
+                                pTempOutl->GetDepth((USHORT) nPara ) - 1);
                         }
 
                         delete pOPO;
                         pOPO = pTempOutl->CreateParaObject();
                         delete pTempOutl;
 
+// --
                         pOutlineObj->SetOutlinerParaObject( pOPO );
-                        pOutlineObj->SetEmptyPresObj(sal_False);
+                        pOutlineObj->SetEmptyPresObj(FALSE);
 
-                        // Harte Attribute entfernen (Flag auf sal_True)
+                        // Harte Attribute entfernen (Flag auf TRUE)
                         SfxItemSet aAttr(mpDoc->GetPool());
                         aAttr.Put(XLineStyleItem(XLINE_NONE));
                         aAttr.Put(XFillStyleItem(XFILL_NONE));

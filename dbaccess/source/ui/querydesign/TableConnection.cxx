@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace dbaui
         :Window(_pContainer)
         ,m_pData( _pTabConnData )
         ,m_pParent( _pContainer )
-        ,m_bSelected( sal_False )
+        ,m_bSelected( FALSE )
     {
         DBG_CTOR(OTableConnection,NULL);
         Init();
@@ -168,20 +168,20 @@ namespace dbaui
     //------------------------------------------------------------------------
     void OTableConnection::Select()
     {
-        m_bSelected = sal_True;
+        m_bSelected = TRUE;
         m_pParent->Invalidate( GetBoundingRect(), INVALIDATE_NOCHILDREN);
     }
 
     //------------------------------------------------------------------------
     void OTableConnection::Deselect()
     {
-        m_bSelected = sal_False;
+        m_bSelected = FALSE;
         InvalidateConnection();
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OTableConnection::CheckHit( const Point& rMousePos ) const
-    {
+    BOOL OTableConnection::CheckHit( const Point& rMousePos ) const
+    {								 
         //////////////////////////////////////////////////////////////////////
         // check if the point hit our line
         ::std::vector<OConnectionLine*>::const_iterator aIter = ::std::find_if(m_vConnLine.begin(),

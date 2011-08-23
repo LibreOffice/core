@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,9 @@
 
 #include "editeng/editengdllapi.h"
 #include <unotools/configitem.hxx>
+/* -----------------------------12.10.00 11:40--------------------------------
 
+ ---------------------------------------------------------------------------*/
 class SvxAutoCorrect;
 class SvxAutoCorrCfg;
 class EDITENG_DLLPUBLIC SvxBaseAutoCorrCfg : public utl::ConfigItem
@@ -49,7 +51,9 @@ public:
     virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
     void                    SetModified() {ConfigItem::SetModified();}
 };
+/* -----------------------------12.10.00 11:40--------------------------------
 
+ ---------------------------------------------------------------------------*/
 class EDITENG_DLLPUBLIC SvxSwAutoCorrCfg : public utl::ConfigItem
 {
     SvxAutoCorrCfg& rParent;
@@ -65,7 +69,7 @@ public:
     void                    SetModified() {ConfigItem::SetModified();}
 };
 /*--------------------------------------------------------------------
-    Description:   Configuration for Auto Correction
+    Beschreibung:   Konfiguration fuer Auto Correction
  --------------------------------------------------------------------*/
 class EDITENG_DLLPUBLIC SvxAutoCorrCfg
 {
@@ -77,10 +81,10 @@ class EDITENG_DLLPUBLIC SvxAutoCorrCfg
     SvxBaseAutoCorrCfg      aBaseConfig;
     SvxSwAutoCorrCfg        aSwConfig;
 
-    // Flags for Autotext:
+    // Flags f"ur Autotext:
     sal_Bool    bFileRel;
     sal_Bool    bNetRel;
-    // Help tip for Autotext as you type
+    // Tiphilfe f"ur Autotext w"ahrend der Eingabe
     sal_Bool    bAutoTextTip;
     sal_Bool    bAutoTextPreview;
     sal_Bool    bAutoFmtByInput;
@@ -100,7 +104,7 @@ public:
 
           SvxAutoCorrect* GetAutoCorrect()          { return pAutoCorrect; }
     const SvxAutoCorrect* GetAutoCorrect() const    { return pAutoCorrect; }
-    // the pointer is transfered to the possession of the ConfigItems!
+    // der Pointer geht in den Besitz des ConfigItems!
     void SetAutoCorrect( SvxAutoCorrect* );
 
     sal_Bool IsAutoFmtByInput() const       { return bAutoFmtByInput; }

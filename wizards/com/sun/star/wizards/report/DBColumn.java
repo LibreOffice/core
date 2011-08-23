@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -451,7 +451,7 @@ public class DBColumn
             {
                 XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
                 XPropertySet xMaster = xDependent.getTextFieldMaster();
-                String UserFieldName = (String) xMaster.getPropertyValue(PropertyNames.PROPERTY_NAME);
+                String UserFieldName = (String) xMaster.getPropertyValue("Name");
                 boolean bIsNameCell = false;
                 if ((UserFieldName.startsWith(CompString)) || (UserFieldName.equals(CurFieldName)))
                 {

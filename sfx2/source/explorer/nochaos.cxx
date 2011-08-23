@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,21 +38,23 @@
 
 #define WID_CHAOS_START 500
 //=========================================================================
+//
 // class CntStaticPoolDefaults_Impl
+//
 //=========================================================================
 
 class CntItemPool;
 
 class CntStaticPoolDefaults_Impl
 {
-    sal_uInt32        m_nItems;
+    sal_uInt32		  m_nItems;
     SfxPoolItem** m_ppDefaults;
     SfxItemInfo*  m_pItemInfos;
 
 private:
     // Forbidden and not implemented...
     CntStaticPoolDefaults_Impl( const CntStaticPoolDefaults_Impl& );
-    CntStaticPoolDefaults_Impl& operator=( const CntStaticPoolDefaults_Impl& );
+    CntStaticPoolDefaults_Impl&	operator=( const CntStaticPoolDefaults_Impl& );
 
     inline void Insert( SfxPoolItem* pItem, sal_uInt16 nSID, sal_uInt16 nFlags );
 
@@ -60,7 +62,7 @@ public:
     CntStaticPoolDefaults_Impl( CntItemPool* pPool );
     ~CntStaticPoolDefaults_Impl();
 
-    SfxPoolItem**      GetDefaults() const  { return m_ppDefaults; }
+    SfxPoolItem** 	   GetDefaults() const  { return m_ppDefaults; }
     const SfxItemInfo* GetItemInfos() const { return m_pItemInfos; }
 };
 
@@ -71,7 +73,7 @@ public:
 class CntItemPool: public SfxItemPool
 {
     static CntItemPool* _pThePool;
-    sal_uInt16              _nRefs;
+    USHORT              _nRefs;
 
 protected:
              CntItemPool();
@@ -79,7 +81,7 @@ protected:
 
 public:
     static CntItemPool* Acquire();
-    static sal_uInt16       Release();
+    static USHORT 		Release();
 };
 
 //----------------------------------------------------------------------------
@@ -94,14 +96,16 @@ SfxItemPool* NoChaos::GetItemPool()
 
 //----------------------------------------------------------------------------
 // static
-sal_uInt16 NoChaos::ReleaseItemPool()
+USHORT NoChaos::ReleaseItemPool()
 {
     // Release CHAOS item pool.
     return CntItemPool::Release();
 }
 
 //=========================================================================
-//  CntItemPool implementation
+//
+//	CntItemPool implementation
+//
 //=========================================================================
 
 static CntStaticPoolDefaults_Impl* pPoolDefs_Impl = NULL;
@@ -171,12 +175,14 @@ sal_uInt16 CntItemPool::Release()
 }
 
 //=========================================================================
+//
 // CntStaticPoolDefaults_Impl implementation.
+//
 //=========================================================================
 
 inline void CntStaticPoolDefaults_Impl::Insert(
-         SfxPoolItem* pItem,        /* Static Pool Default Item */
-         sal_uInt16 nSID, sal_uInt16 nFlags  /* Item Info */    )
+         SfxPoolItem* pItem, 		/* Static Pool Default Item */
+         sal_uInt16 nSID, sal_uInt16 nFlags  /* Item Info */	)
 {
     sal_uInt16 nPos = pItem->Which() - WID_CHAOS_START;
 
@@ -204,7 +210,7 @@ CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl( CntItemPool* /*pPool*/ )
     rtl_zeroMemory( m_ppDefaults, sizeof( SfxPoolItem* ) * m_nItems );
     rtl_zeroMemory( m_pItemInfos, sizeof( SfxItemInfo ) * m_nItems );
     Insert(
-        new SfxStringItem( WID_CHAOS_START, String() ),
+        new	SfxStringItem( WID_CHAOS_START, String() ),
         0,
         SFX_ITEM_POOLABLE );
 }

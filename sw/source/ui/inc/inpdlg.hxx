@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,28 +46,28 @@ class SwWrtShell;
 
 class SwFldInputDlg: public SvxStandardDialog
 {
-    virtual void    Apply();
+    virtual void 	Apply();
     virtual void    StateChanged( StateChangedType );
 
-    SwWrtShell         &rSh;
-    SwInputField*       pInpFld;
-    SwSetExpField*      pSetFld;
-    SwUserFieldType*    pUsrType;
+    SwWrtShell		   &rSh;
+    SwInputField*		pInpFld;
+    SwSetExpField*		pSetFld;
+    SwUserFieldType*	pUsrType;
 
-    Edit                aLabelED;
+    Edit 				aLabelED;
 
-    MultiLineEdit       aEditED;
+    MultiLineEdit 		aEditED;
     FixedLine           aEditFL;
 
-    OKButton            aOKBT;
-    CancelButton        aCancelBT;
-    PushButton          aNextBT;
-    HelpButton          aHelpBT;
+    OKButton  			aOKBT;
+    CancelButton 		aCancelBT;
+    PushButton			aNextBT;
+    HelpButton			aHelpBT;
 
     DECL_LINK(NextHdl, PushButton*);
 public:
-    SwFldInputDlg(  Window *pParent, SwWrtShell &rSh,
-                    SwField* pField, sal_Bool bNextButton = sal_False );
+    SwFldInputDlg( 	Window *pParent, SwWrtShell &rSh,
+                    SwField* pField, BOOL bNextButton = FALSE );
     ~SwFldInputDlg();
 };
 

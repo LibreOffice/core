@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,31 +28,25 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
+
 #include <tools/urlobj.hxx>
-
-#include <svl/fstathelper.hxx>
-
 #include <svtools/txtcmp.hxx>
-
+#include <svl/fstathelper.hxx>
 #include <sfx2/docfile.hxx>
-
-#include <xmloff/odffields.hxx>
-
-#include <editeng/unolingu.hxx>
-
+#include "editeng/unolingu.hxx"
 #include <swtypes.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <viewopt.hxx>
 #include <ndtxt.hxx>
+#include <errhdl.hxx>
 #include <swundo.hxx>
+#include <undobj.hxx>
 #include <txttxmrk.hxx>
 #include <edimp.hxx>
 #include <tox.hxx>
@@ -61,7 +55,8 @@
 #include <mdiexp.hxx>
 #include <statstr.hrc>
 #include <bookmrk.hxx>
-
+#include <xmloff/odffields.hxx>
+ 
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -75,7 +70,7 @@ using namespace ::com::sun::star::util;
 
 void SwEditShell::Insert(const SwTOXMark& rMark)
 {
-    sal_Bool bInsAtPos = rMark.IsAlternativeText();
+    BOOL bInsAtPos = rMark.IsAlternativeText();
     StartAllAction();
     FOREACHPAM_START(this)
 
@@ -113,19 +108,24 @@ void SwEditShell::DeleteTOXMark( SwTOXMark* pMark )
      Beschreibung: Alle Verzeichnismarkierungen am SPoint zusammensuchen
  --------------------------------------------------------------------*/
 
-sal_uInt16 SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
+USHORT SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
 {
     return GetDoc()->GetCurTOXMark( *GetCrsr()->Start(), rMarks );
 }
 
-sal_Bool SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const
+/* -----------------01.09.99 16:05-------------------
+
+ --------------------------------------------------*/
+BOOL SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const
 {
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
-    return  rTOXSect.IsProtect();
+    return 	rTOXSect.IsProtect();
 }
+/* -----------------18.10.99 15:53-------------------
 
-void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, sal_Bool bReadonly)
+ --------------------------------------------------*/
+void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, BOOL bReadonly)
 {
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
@@ -137,12 +137,17 @@ void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, sal_Bool bReadon
     UpdateSection( GetSectionFmtPos( *rTOXSect.GetFmt()  ), aSectionData, 0 );
 }
 
-const SwTOXBase*    SwEditShell::GetDefaultTOXBase( TOXTypes eTyp, sal_Bool bCreate )
+/* -----------------02.09.99 07:47-------------------
+
+ --------------------------------------------------*/
+const SwTOXBase* 	SwEditShell::GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate )
 {
     return GetDoc()->GetDefaultTOXBase( eTyp, bCreate );
 }
+/* -----------------02.09.99 08:05-------------------
 
-void    SwEditShell::SetDefaultTOXBase(const SwTOXBase& rBase)
+ --------------------------------------------------*/
+void	SwEditShell::SetDefaultTOXBase(const SwTOXBase& rBase)
 {
     GetDoc()->SetDefaultTOXBase(rBase);
 }
@@ -162,7 +167,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 
     // Einfuegen des Verzeichnisses
     const SwTOXBaseSection* pTOX = pDoc->InsertTableOf(
-                                        *GetCrsr()->GetPoint(), rTOX, pSet, sal_True );
+                                        *GetCrsr()->GetPoint(), rTOX, pSet, TRUE );
     OSL_ENSURE(pTOX, "Kein aktuelles Verzeichnis");
 
     // Formatierung anstossen
@@ -183,9 +188,9 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
      Beschreibung: Verzeichnisinhalt erneuern
  --------------------------------------------------------------------*/
 
-sal_Bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
+BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     OSL_ENSURE( rTOX.ISA( SwTOXBaseSection ),  "keine TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOX;
@@ -196,14 +201,14 @@ sal_Bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pS
         SwDoc* pMyDoc = GetDoc();
         SwDocShell* pDocSh = pMyDoc->GetDocShell();
 
-        sal_Bool bInIndex = pTOX == GetCurTOX();
+        BOOL bInIndex = pTOX == GetCurTOX();
         SET_CURR_SHELL( this );
         StartAllAction();
 
         ::StartProgress( STR_STATSTR_TOX_UPDATE, 0, 0, pDocSh );
         ::SetProgressText( STR_STATSTR_TOX_UPDATE, pDocSh );
 
-        pMyDoc->GetIDocumentUndoRedo().StartUndo(UNDO_TOXCHANGE, NULL);
+        pMyDoc->StartUndo(UNDO_TOXCHANGE, NULL);
 
         // Verzeichnisrumpf erzeugen
         pTOX->Update(pSet);
@@ -218,7 +223,7 @@ sal_Bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pS
         // Seitennummern eintragen
         pTOX->UpdatePageNum();
 
-        pMyDoc->GetIDocumentUndoRedo().EndUndo(UNDO_TOXCHANGE, NULL);
+        pMyDoc->EndUndo(UNDO_TOXCHANGE, NULL);
 
         ::EndProgress( pDocSh );
         EndAllAction();
@@ -236,7 +241,7 @@ const SwTOXBase* SwEditShell::GetCurTOX() const
     return GetDoc()->GetCurTOX( *GetCrsr()->GetPoint() );
 }
 
-sal_Bool SwEditShell::DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes )
+BOOL SwEditShell::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
 {
     return GetDoc()->DeleteTOX( (SwTOXBase&)rTOXBase, bDelNodes );
 }
@@ -245,7 +250,7 @@ sal_Bool SwEditShell::DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes )
      Beschreibung: Typen der Verzeichnisse verwalten
  --------------------------------------------------------------------*/
 
-const SwTOXType* SwEditShell::GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const
+const SwTOXType* SwEditShell::GetTOXType(TOXTypes eTyp, USHORT nId) const
 {
     return pDoc->GetTOXType(eTyp, nId);
 }
@@ -254,17 +259,17 @@ const SwTOXType* SwEditShell::GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const
      Beschreibung: Schluessel fuer Stichwortverzeichnisse verwalten
  --------------------------------------------------------------------*/
 
-sal_uInt16 SwEditShell::GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const
+USHORT SwEditShell::GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const
 {
     return GetDoc()->GetTOIKeys( eTyp, rArr );
 }
 
 
-sal_uInt16 SwEditShell::GetTOXCount() const
+USHORT SwEditShell::GetTOXCount() const
 {
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    sal_uInt16 nRet = 0;
-    for( sal_uInt16 n = rFmts.Count(); n; )
+    USHORT nRet = 0;
+    for( USHORT n = rFmts.Count(); n; )
     {
         const SwSection* pSect = rFmts[ --n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -275,10 +280,10 @@ sal_uInt16 SwEditShell::GetTOXCount() const
 }
 
 
-const SwTOXBase* SwEditShell::GetTOX( sal_uInt16 nPos ) const
+const SwTOXBase* SwEditShell::GetTOX( USHORT nPos ) const
 {
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = 0, nCnt = 0; n < rFmts.Count(); ++n )
+    for( USHORT n = 0, nCnt = 0; n < rFmts.Count(); ++n )
     {
         const SwSection* pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -294,34 +299,41 @@ const SwTOXBase* SwEditShell::GetTOX( sal_uInt16 nPos ) const
 
 
     // nach einlesen einer Datei alle Verzeichnisse updaten
-void SwEditShell::SetUpdateTOX( sal_Bool bFlag )
+void SwEditShell::SetUpdateTOX( BOOL bFlag )
 {
     GetDoc()->SetUpdateTOX( bFlag );
 }
 
 
-sal_Bool SwEditShell::IsUpdateTOX() const
+BOOL SwEditShell::IsUpdateTOX() const
 {
     return GetDoc()->IsUpdateTOX();
 }
 
-const String&   SwEditShell::GetTOIAutoMarkURL() const
+/* -----------------26.08.99 13:49-------------------
+
+ --------------------------------------------------*/
+const String&	SwEditShell::GetTOIAutoMarkURL() const
 {
     return GetDoc()->GetTOIAutoMarkURL();
 }
+/* -----------------26.08.99 13:49-------------------
 
+ --------------------------------------------------*/
 void SwEditShell::SetTOIAutoMarkURL(const String& rSet)
 {
     GetDoc()->SetTOIAutoMarkURL(rSet);
 }
+/* -----------------26.08.99 09:29-------------------
 
+ --------------------------------------------------*/
 void SwEditShell::ApplyAutoMark()
 {
     StartAllAction();
-    sal_Bool bDoesUndo = DoesUndo();
-    DoUndo(sal_False);
+    BOOL bDoesUndo = DoesUndo();
+    DoUndo(FALSE);
     //1. remove all automatic generated index entries if AutoMarkURL has a
-    //   length and the file exists
+    //	 length and the file exists
     //2. load file
     //3. select all occurrences of the searched words
     //4. apply index entries
@@ -331,19 +343,17 @@ void SwEditShell::ApplyAutoMark()
     {
         //1.
         const SwTOXType* pTOXType = GetTOXType(TOX_INDEX, 0);
-
-        SwTOXMarks aMarks;
-        SwTOXMark::InsertTOXMarks( aMarks, *pTOXType );
-        for( sal_uInt16 nMark=0; nMark<aMarks.Count(); nMark++ )
+        SwClientIter aIter(*(SwTOXType*)pTOXType);
+        SwTOXMark* pMark = (SwTOXMark*)aIter.First(TYPE(SwTOXMark));
+        while( pMark )
         {
-            SwTOXMark* pMark = aMarks[nMark];
             if(pMark->IsAutoGenerated() && pMark->GetTxtTOXMark())
-                // mba: test iteration; objects are deleted in iteration
                 DeleteTOXMark(pMark);
+            pMark = (SwTOXMark*)aIter.Next();
         }
 
         //2.
-        SfxMedium aMedium( sAutoMarkURL, STREAM_STD_READ, sal_True );
+        SfxMedium aMedium( sAutoMarkURL, STREAM_STD_READ, TRUE );
         SvStream& rStrm = *aMedium.GetInStream();
         const String sZero('0');
         Push();
@@ -352,16 +362,18 @@ void SwEditShell::ApplyAutoMark()
         //
         // SearchOptions to be used in loop below
         //
-        sal_Bool bCaseSensitive = sal_True;
-        sal_Bool bWordOnly      = sal_False;
-        sal_Bool bSrchInSel     = sal_False;
-        sal_Bool bLEV_Relaxed   = sal_True;
-        sal_Int32 nLEV_Other    = 2;    //  -> changedChars;
-        sal_Int32 nLEV_Longer   = 3;    //! -> deletedChars;
-        sal_Int32 nLEV_Shorter  = 1;    //! -> insertedChars;
-        sal_Int32 nTransliterationFlags = 0;
+        //SearchAlgorithms eSrchType	= SearchAlgorithms_ABSOLUTE;
+        //OUString aSrchStr	= rText;
+        BOOL bCaseSensitive	= TRUE;
+        BOOL bWordOnly		= FALSE;
+        BOOL bSrchInSel		= FALSE;
+        BOOL bLEV_Relaxed	= TRUE;
+        INT32 nLEV_Other	= 2;	//  -> changedChars;
+        INT32 nLEV_Longer	= 3;	//! -> deletedChars;
+        INT32 nLEV_Shorter	= 1;	//!	-> insertedChars;
+        INT32 nTransliterationFlags = 0;
         //
-        sal_Int32 nSrchFlags = 0;
+        INT32 nSrchFlags = 0;
         if (!bCaseSensitive)
         {
             nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
@@ -401,22 +413,24 @@ void SwEditShell::ApplyAutoMark()
                 if( sToSelect.Len() )
                 {
                     String sAlternative = sLine.GetToken(0, ';', nTokenPos);
-                    String sPrimary     = sLine.GetToken(0, ';', nTokenPos);
-                    String sSecondary   = sLine.GetToken(0, ';', nTokenPos);
+                    String sPrimary 	= sLine.GetToken(0, ';', nTokenPos);
+                    String sSecondary 	= sLine.GetToken(0, ';', nTokenPos);
                     String sCase        = sLine.GetToken(0, ';', nTokenPos);
-                    String sWordOnly    = sLine.GetToken(0, ';', nTokenPos);
+                    String sWordOnly 	= sLine.GetToken(0, ';', nTokenPos);
 
                     //3.
-                    bCaseSensitive  = sCase.Len() && sCase != sZero;
-                    bWordOnly       = sWordOnly.Len() && sWordOnly != sZero;
+                    bCaseSensitive	= sCase.Len() && sCase != sZero;
+                    bWordOnly		= sWordOnly.Len() && sWordOnly != sZero;
                     //
                     if (!bCaseSensitive)
                     {
+                        //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
                         aSearchOpt.transliterateFlags |=
                                      TransliterationModules_IGNORE_CASE;
                     }
                     else
                     {
+                        //aSearchOpt.searchFlag &= ~SearchFlags::ALL_IGNORE_CASE;
                         aSearchOpt.transliterateFlags &=
                                     ~TransliterationModules_IGNORE_CASE;
                     }
@@ -428,13 +442,13 @@ void SwEditShell::ApplyAutoMark()
                     aSearchOpt.searchString = sToSelect;
 
                     KillPams();
-                    sal_Bool bCancel;
+                    BOOL bCancel;
 
                     // todo/mba: assuming that notes shouldn't be searched
-                    sal_Bool bSearchInNotes = sal_False;
-                    sal_uLong nRet = Find( aSearchOpt,  bSearchInNotes, DOCPOS_START, DOCPOS_END, bCancel,
+                    BOOL bSearchInNotes = FALSE;
+                    ULONG nRet = Find( aSearchOpt,  bSearchInNotes, DOCPOS_START, DOCPOS_END, bCancel,
                                     (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY),
-                                    sal_False );
+                                    FALSE );
 
                     if(nRet)
                     {
@@ -447,8 +461,8 @@ void SwEditShell::ApplyAutoMark()
                         }
                         if(sAlternative.Len())
                             pTmpMark->SetAlternativeText(sAlternative);
-                        pTmpMark->SetMainEntry(sal_False);
-                        pTmpMark->SetAutoGenerated(sal_True);
+                        pTmpMark->SetMainEntry(FALSE);
+                        pTmpMark->SetAutoGenerated(TRUE);
                         //4.
                         SwEditShell::Insert(*pTmpMark);
                     }
@@ -456,7 +470,7 @@ void SwEditShell::ApplyAutoMark()
             }
         }
         KillPams();
-        Pop(sal_False);
+        Pop(FALSE);
     }
     DoUndo(bDoesUndo);
     EndAllAction();

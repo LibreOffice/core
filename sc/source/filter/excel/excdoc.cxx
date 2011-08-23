@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,15 +87,13 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <oox/token/tokens.hxx>
-#include <boost/shared_ptr.hpp>
+#include <oox/core/tokens.hxx>
 
 using ::rtl::OString;
-using namespace oox;
 
 static String lcl_GetVbaTabName( SCTAB n )
 {
-    String  aRet( RTL_CONSTASCII_USTRINGPARAM( "__VBA__" ) );
+    String	aRet( RTL_CONSTASCII_USTRINGPARAM( "__VBA__" ) );
     aRet += String::CreateFromInt32( static_cast<sal_uInt16>(n) );
     return aRet;
 }
@@ -133,7 +131,9 @@ static void lcl_AddWorkbookProtection( XclExpRecordList<>& aRecList, ExcTable& s
     {
         aRecList.AppendNewRecord( new XclExpWindowProtection(pProtect->isOptionEnabled(ScDocProtection::WINDOWS)) );
         aRecList.AppendNewRecord( new XclExpProtection(pProtect->isOptionEnabled(ScDocProtection::STRUCTURE)) );
+#if ENABLE_SHEET_PROTECTION
         aRecList.AppendNewRecord( new XclExpPassHash(pProtect->getPasswordHash(PASSHASH_XL)) );
+#endif
     }
 
     aRecList.AppendNewRecord( new XclExpXmlEndSingleElementRecord() );   // XML_workbookProtection
@@ -192,11 +192,11 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     else
         Add( new ExcBofW8 );
 
-    SCTAB   nC;
-    String  aTmpString;
+    SCTAB	nC;
+    String	aTmpString;
     SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
-    sal_uInt16  nExcTabCount    = rTabInfo.GetXclTabCount();
-    sal_uInt16  nCodenames      = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
+    UINT16  nExcTabCount    = rTabInfo.GetXclTabCount();
+    UINT16  nCodenames      = static_cast< UINT16 >( GetExtDocOptions().GetCodeNameCount() );
 
     SfxObjectShell* pShell = GetDocShell();
     sal_uInt16 nWriteProtHash = pShell ? pShell->GetModifyPasswordHash() : 0;
@@ -220,7 +220,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     else
     {
         if( IsDocumentEncrypted() )
-            Add( new XclExpFileEncryption( GetRoot() ) );
+            Add( new XclExpFilePass( GetRoot() ) );
         Add( new XclExpInterfaceHdr( nCodePage ) );
         Add( new XclExpUInt16Record( EXC_ID_MMS, 0 ) );
         Add( new XclExpInterfaceEnd );
@@ -248,7 +248,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     Add( new XclExpUInt16Record( EXC_ID_FNGROUPCOUNT, 14 ) );
 
     // erst Namen- und Tabellen-Eintraege aufbauen
-    String          aName;
+    String			aName;
 
     for( nC = 0 ; nC < nScTabCount ; nC++ )
         if( rTabInfo.IsExportTab( nC ) )
@@ -439,7 +439,7 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
 
 
     // WSBOOL needs data from page settings, create it here, add it later
-    boost::shared_ptr< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
+    ScfRef< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
     bool bFitToPages = xPageSett->GetPageData().mbFitToPages;
 
     if( eBiff <= EXC_BIFF5 )
@@ -473,7 +473,9 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
         Add( new XclExpProtection(true) );
         Add( new XclExpBoolRecord(0x00DD, pTabProtect->isOptionEnabled(ScTableProtection::SCENARIOS)) );
         Add( new XclExpBoolRecord(0x0063, pTabProtect->isOptionEnabled(ScTableProtection::OBJECTS)) );
+#if ENABLE_SHEET_PROTECTION
         Add( new XclExpPassHash(pTabProtect->getPasswordHash(PASSHASH_XL)) );
+#endif
     }
 
     // local link table: EXTERNCOUNT, EXTERNSHEET
@@ -546,7 +548,7 @@ void ExcTable::FillAsXmlTable( SCTAB nCodeNameIdx )
     RootData& rR = GetOldRoot();
 
     // WSBOOL needs data from page settings, create it here, add it later
-    boost::shared_ptr< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
+    ScfRef< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
     bool bFitToPages = xPageSett->GetPageData().mbFitToPages;
 
     Add( new ExcBof8 );
@@ -758,7 +760,7 @@ void ExcDocument::Write( SvStream& rSvStrm )
 
         aHeader.Write( aXclStrm );
 
-        OSL_ENSURE( maTableList.GetSize() == maBoundsheetList.GetSize(),
+        DBG_ASSERT( maTableList.GetSize() == maBoundsheetList.GetSize(),
             "ExcDocument::Write - different number of sheets and BOUNDSHEET records" );
 
         for( size_t nTab = 0, nTabCount = maTableList.GetSize(); nTab < nTabCount; ++nTab )

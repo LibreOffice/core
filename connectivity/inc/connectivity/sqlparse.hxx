@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -146,33 +146,33 @@ namespace connectivity
 
     private:
         typedef ::std::map< sal_uInt32, OSQLParseNode::Rule >   RuleIDMap;
-    //  static parts for parsers
-        static sal_uInt32           s_nRuleIDs[OSQLParseNode::rule_count + 1];
+    //	static parts for parsers
+        static sal_uInt32			s_nRuleIDs[OSQLParseNode::rule_count + 1];
         static RuleIDMap            s_aReverseRuleIDLookup;
-        static OParseContext        s_aDefaultContext;
+        static OParseContext		s_aDefaultContext;
 
-        static OSQLScanner*                     s_pScanner;
+        static OSQLScanner*			            s_pScanner;
         static OSQLParseNodesGarbageCollector*  s_pGarbageCollector;
-        static sal_Int32                        s_nRefCount;
+        static sal_Int32			            s_nRefCount;
 
     // informations on the current parse action
-        const IParseContext*        m_pContext;
-        OSQLParseNode*              m_pParseTree;   // result from parsing
+        const IParseContext*		m_pContext;
+        OSQLParseNode*				m_pParseTree;	// result from parsing
         ::std::auto_ptr< OSQLParser_Data >
                                     m_pData;
-        ::rtl::OUString                     m_sFieldName;   // current field name for a predicate
-        ::rtl::OUString                     m_sErrorMessage;// current error msg
+        ::rtl::OUString						m_sFieldName;	// current field name for a predicate
+        ::rtl::OUString						m_sErrorMessage;// current error msg
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                    m_xField;       // current field
+                                    m_xField;		// current field
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >
-                                    m_xFormatter;   // current number formatter
-        sal_Int32                   m_nFormatKey;   // numberformat, which should be used
-        sal_Int32                   m_nDateFormatKey;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+                                    m_xFormatter;	// current number formatter
+        sal_Int32					m_nFormatKey;	// numberformat, which should be used
+        sal_Int32					m_nDateFormatKey;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_xServiceFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification> m_xCharClass;
-        static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData>       s_xLocaleData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData>      xDummy; // can be deleted after 627
+        static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData>		s_xLocaleData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData>		xDummy; // can be deleted after 627
 
         // convert a string into double trim it to scale of _nscale and than transform it back to string
         ::rtl::OUString stringToDouble(const ::rtl::OUString& _rValue,sal_Int16 _nScale);
@@ -208,23 +208,24 @@ namespace connectivity
         /// access to the SQLError instance owned by this parser
         const SQLError& getErrorHelper() const;
 
-        // TokenIDToStr: token name belonging to a token number.
+        // TokenIDToStr: Token-Name zu einer Token-Nr.
         static ::rtl::OString TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext = NULL);
 
-        // StrToTokenID: token number belonging to a token name.
+        // StrToTokenID: Token-Nr. zu einem Token-Namen.
         // static sal_uInt32 StrToTokenID(const ::rtl::OString & rName);
 
-        // (empty string if not found)
+        // RuleIDToStr gibt den zu einer RuleID gehoerenden ::rtl::OUString zurueck
+        // (Leerstring, falls nicht gefunden)
         static ::rtl::OUString RuleIDToStr(sal_uInt32 nRuleID);
 
-        // StrToRuleID calculates the RuleID for a ::rtl::OUString (that is, ::com::sun::star::sdbcx::Index in yytname)
-        // (0 if not found). The search for an ID based on a String is
-        // extremely inefficient (sequential search for ::rtl::OUString)!
+        // StrToRuleID berechnet zu einem ::rtl::OUString die RuleID (d.h. ::com::sun::star::sdbcx::Index in yytname)
+        // (0, falls nicht gefunden). Die Suche nach der ID aufgrund eines Strings ist
+        // extrem ineffizient (sequentielle Suche nach ::rtl::OUString)!
         static sal_uInt32 StrToRuleID(const ::rtl::OString & rValue);
 
         static OSQLParseNode::Rule RuleIDToRule( sal_uInt32 _nRule );
 
-        // RuleId with enum, far more efficient
+        // RuleId mit enum, wesentlich effizienter
         static sal_uInt32 RuleID(OSQLParseNode::Rule eRule);
         // compares the _sFunctionName with all known function names and return the DataType of the return value
         static sal_Int32 getFunctionReturnType(const ::rtl::OUString& _sFunctionName, const IParseContext* pContext = NULL);
@@ -245,7 +246,7 @@ namespace connectivity
         void reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank);
          // does not change the pLiteral argument
         sal_Int16 buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pCompare,OSQLParseNode* pLiteral,OSQLParseNode* pLiteral2);
-
+        
         sal_Int16 buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral);
         // pCompre will be deleted if it is not used
         sal_Int16 buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare,OSQLParseNode* pLiteral2 = NULL);

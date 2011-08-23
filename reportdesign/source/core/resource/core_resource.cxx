@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,11 +62,12 @@ namespace reportdesign
         if (!m_pImpl)
         {
             // now that we have an impl class make sure it's deleted on unloading the library
-            static ResourceManager::EnsureDelete    s_aDeleteTheImplClass;
-
+            static ResourceManager::EnsureDelete	s_aDeleteTheImplClass;
+            
             ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
-            m_pImpl = SimpleResMgr::Create("rpt", aLocale);
+            rtl::OString sResLibName = rtl::OString( "rpt" );
+            m_pImpl = SimpleResMgr::Create(sResLibName, aLocale);
         }
     }
 

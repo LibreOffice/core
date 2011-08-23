@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ public:
 
     void SetText( const ::rtl::OUString &rTitle );
     void Show();
-    void ToTop( sal_uInt16 nFlags );
+    void ToTop( USHORT nFlags );
     bool Close();
     bool isVisible();
 

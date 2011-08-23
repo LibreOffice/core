@@ -7,6 +7,10 @@
  
   OpenOffice.org - a multi-platform office productivity suite
  
+  $RCSfile: fastresources_wml.xsl,v $
+ 
+  $Revision: 1.3 $
+ 
   This file is part of OpenOffice.org.
  
   OpenOffice.org is free software: you can redistribute it and/or modify
@@ -74,10 +78,6 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
     uno::Reference &lt; xml::sax::XFastContextHandler &gt; aResult;
     Id nDefine = pHandler->getDefine();
     
-#ifdef DEBUG_FACTORY
-    debug_logger->startElement("factory.createFastChildContextFromFactory");            
-#endif
-
     if (pFactory.get() != NULL)
     {
         CreateElementMapPointer pMap = pFactory-&gt;getCreateElementMap(nDefine);
@@ -86,13 +86,12 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
         if (pMap.get() != NULL)
         {
             Id nId = (*pTokenMap)[Element];
-#ifdef DEBUG_FACTORY
-            string sFactoryName(pFactory->getName());
+#ifdef DEBUG_CREATE
             string sDefine(pFactory->getDefineName(nDefine));
             string sElement(fastTokenToId(Element));
             string sQName((*QNameToString::Instance())(nId));
             
-            debug_logger->attribute("factory-name", sFactoryName);
+            debug_logger->startElement("createFastChildContextFromFactory");            
             debug_logger->attribute("define", sDefine);
             debug_logger->attribute("element", sElement);
             debug_logger->attribute("qname", sQName);
@@ -135,13 +134,12 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
                 break;
             }
 
+#ifdef DEBUG_CREATE
+            debug_logger->endElement("createFastChildContextFromFactory");        
+#endif
         }
     }
     
-#ifdef DEBUG_FACTORY
-    debug_logger->endElement("factory.createFastChildContextFromFactory");        
-#endif
-
     return aResult;
 }
 </xsl:text>
@@ -180,8 +178,8 @@ OOXMLFactory_ns::Pointer_t OOXMLFactory::getFactoryForNamespace(Id nId)
 uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastChildContextFromStart
 (OOXMLFastContextHandler * pHandler, Token_t Element)
 {
-#ifdef DEBUG_FACTORY
-    debug_logger->startElement("factory.createFastChildContextFromStart");
+#ifdef DEBUG_CREATE
+    debug_logger->startElement("createFastChildContextFromStart");
 #endif
 
     uno::Reference &lt; xml::sax::XFastContextHandler &gt; aResult;
@@ -200,8 +198,8 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
     </xsl:for-each>
     <xsl:text>
     
-#ifdef DEBUG_FACTORY
-    debug_logger->endElement("factory.createFastChildContextFromStart");
+#ifdef DEBUG_CREATE
+    debug_logger->endElement("createFastChildContextFromStart");
 #endif
     return aResult;
 }
@@ -338,8 +336,8 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
             (mxContext->getServiceManager());
 
         mxFastParser.set(xFactory->createInstanceWithContext
-            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                ( "com.sun.star.xml.sax.FastParser" )), 
+            ( ::rtl::OUString::createFromAscii
+                ( "com.sun.star.xml.sax.FastParser" ), 
                     mxContext ), uno::UNO_QUERY_THROW);
 </xsl:text>
 <xsl:for-each select="//namespace-alias">

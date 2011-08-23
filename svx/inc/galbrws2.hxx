@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <svtools/transfer.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/miscopt.hxx>
-#include "svx/galbrws.hxx"
+#include "galbrws.hxx"
 
 // ----------------------
 // - GalleryBrowserMode -
@@ -108,35 +108,35 @@ class GalleryBrowser2 : public Control, public SfxListener
 
 private:
 
-    SvtMiscOptions      maMiscOptions;
-    Gallery*            mpGallery;
-    GalleryTheme*       mpCurTheme;
-    GalleryIconView*    mpIconView;
-    GalleryListView*    mpListView;
-    GalleryPreview*     mpPreview;
+    SvtMiscOptions		maMiscOptions;
+    Gallery*			mpGallery;
+    GalleryTheme*		mpCurTheme;
+    GalleryIconView*	mpIconView;
+    GalleryListView*	mpListView;
+    GalleryPreview*		mpPreview;
     GalleryToolBox      maViewBox;
     FixedLine           maSeparator;
-    FixedText           maInfoBar;
-    Point               maDragStartPos;
-    sal_uIntPtr             mnCurActionPos;
+    FixedText			maInfoBar;
+    Point				maDragStartPos;
+    ULONG				mnCurActionPos;
     GalleryBrowserMode  meMode;
     GalleryBrowserMode  meLastMode;
-    sal_Bool                mbCurActionIsLinkage;
+    BOOL				mbCurActionIsLinkage;
 
     void                InitSettings();
 
-    void                ImplUpdateViews( sal_uInt16 nSelectionId );
-    void                ImplUpdateInfoBar();
-    sal_uIntPtr               ImplGetSelectedItemId( const Point* pSelPosPixel, Point& rSelPos );
-    void                ImplSelectItemId( sal_uIntPtr nItemId );
-    void                ImplExecute( sal_uInt16 nId );
+    void				ImplUpdateViews( USHORT nSelectionId );
+    void				ImplUpdateInfoBar();
+    ULONG               ImplGetSelectedItemId( const Point* pSelPosPixel, Point& rSelPos );
+    void                ImplSelectItemId( ULONG nItemId );
+    void                ImplExecute( USHORT nId );
 
     // Control
-    virtual void        Resize();
+    virtual void		Resize();
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
     // SfxListener
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                         DECL_LINK( MenuSelectHdl, Menu* pMenu );
                         DECL_LINK( SelectObjectHdl, void* );
@@ -149,15 +149,15 @@ private:
 
 public:
 
-    static String       GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, sal_uIntPtr nItemTextFlags );
+    static String		GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, ULONG nItemTextFlags );
 
 public:
 
                         GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery );
                         ~GalleryBrowser2();
 
-    void                SelectTheme( const String& rThemeName );
-
+    void				SelectTheme( const String& rThemeName );
+    
     GalleryBrowserMode  GetMode() const { return meMode; }
     void                SetMode( GalleryBrowserMode eMode );
 
@@ -165,18 +165,18 @@ public:
 
     void                Travel( GalleryBrowserTravel eTravel );
 
-    INetURLObject       GetURL() const;
-    String              GetFilterName() const;
-    Graphic             GetGraphic() const;
-    sal_Bool                GetVCDrawModel( FmFormModel& rModel ) const;
-    sal_Bool                IsLinkage() const;
+    INetURLObject		GetURL() const;
+    String				GetFilterName() const;
+    Graphic				GetGraphic() const;
+    BOOL				GetVCDrawModel( FmFormModel& rModel ) const;
+    BOOL				IsLinkage() const;
 
-    sal_Int8            AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& rEvt );
-    sal_Int8            ExecuteDrop( DropTargetHelper& rTarget, const ExecuteDropEvent& rEvt );
+    sal_Int8			AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& rEvt );
+    sal_Int8			ExecuteDrop( DropTargetHelper& rTarget, const ExecuteDropEvent& rEvt );
     void                StartDrag( Window* pWindow, const Point* pDragPoint = NULL );
     void                TogglePreview( Window* pWindow, const Point* pPreviewPoint = NULL );
     void                ShowContextMenu( Window* pWindow, const Point* pContextPoint = NULL );
-    sal_Bool                KeyInput( const KeyEvent& rEvt, Window* pWindow );
+    BOOL                KeyInput( const KeyEvent& rEvt, Window* pWindow );
 };
 
 #endif

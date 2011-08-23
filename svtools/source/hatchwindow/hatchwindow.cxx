@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,6 @@
 #include "ipwin.hxx"
 
 #include <toolkit/helper/convert.hxx>
-#include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -53,8 +51,6 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
                 const awt::Rectangle& aBounds,
                 const awt::Size& aSize )
 {
-    SolarMutexGuard aGuard;
-
     Window* pParent = NULL;
     VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( xParent );
 
@@ -88,7 +84,7 @@ void VCLXHatchWindow::QueryObjAreaPixel( Rectangle & aRect )
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "Can't adjust rectangle size!\n" );
+            OSL_ENSURE( sal_False, "Can't adjust rectangle size!\n" );
         }
     }
 }
@@ -104,7 +100,7 @@ void VCLXHatchWindow::RequestObjAreaPixel( const Rectangle & aRect )
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "Can't request resizing!\n" );
+            OSL_ENSURE( sal_False, "Can't request resizing!\n" );
         }
     }
 }
@@ -122,7 +118,7 @@ uno::Any SAL_CALL VCLXHatchWindow::queryInterface( const uno::Type & rType )
     throw( uno::RuntimeException )
 {
     // Attention:
-    //    Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     uno::Any aReturn( ::cppu::queryInterface( rType,
                                            static_cast< embed::XHatchWindow* >( this ) ) );

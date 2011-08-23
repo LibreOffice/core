@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,7 +119,7 @@ public class SwXNumberingRules extends TestCase {
                     ControlCharacter.PARAGRAPH_BREAK, false);
             }
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error, exception occurred...");
+            log.println("Error, exception occured...");
             e.printStackTrace(log);
         }
 
@@ -134,16 +134,16 @@ public class SwXNumberingRules extends TestCase {
             NumStyleI = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class,NumStyles);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error, exception occurred...");
+            log.println("Error, exception occured...");
             e.printStackTrace(log);
         } catch ( com.sun.star.container.NoSuchElementException e ) {
             log.println("Error, no such style family...");
             e.printStackTrace(log);
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error, exception occurred...");
+            log.println("Error, exception occured...");
             e.printStackTrace(log);
         }
-
+        
         Object instance1 = null;
 
         try {
@@ -156,21 +156,21 @@ public class SwXNumberingRules extends TestCase {
             XIndexAccess nRules = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, props.getPropertyValue("NumberingRules"));
             instance1 = nRules.getByIndex(0);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error, exception occurred...");
+            log.println("Error, exception occured...");
             e.printStackTrace(log);
         } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
-            log.println("Error, exception occurred...");
+            log.println("Error, exception occured...");
             e.printStackTrace(log);
         } catch ( com.sun.star.beans.UnknownPropertyException e ) {
-            log.println("Error, exception occurred...");
+            log.println("Error, exception occured...");
             e.printStackTrace(log);
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error, exception occurred...");
+            log.println("Error, exception occured...");
             e.printStackTrace(log);
-        }
-
+        }        
+        
         TestEnvironment tEnv = new TestEnvironment( oObj );
-
+        
         tEnv.addObjRelation("INSTANCE1", instance1);
         return tEnv;
     }

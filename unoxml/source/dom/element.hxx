@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,19 +26,16 @@
  *
  ************************************************************************/
 
-#ifndef DOM_ELEMENT_HXX
-#define DOM_ELEMENT_HXX
-
-#include <libxml/tree.h>
-
+#ifndef _ELEMENT_HXX
+#define _ELEMENT_HXX
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
-
-#include <node.hxx>
-
+#include <libxml/tree.h>
+#include "node.hxx"
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -46,28 +43,22 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1<CNode, XElement > CElement_Base;
-
-    class CElement
-        : public CElement_Base
+    class CElement : public cppu::ImplInheritanceHelper1<CNode, XElement >
     {
+        friend class CNode;
     private:
-        friend class CDocument;
-
-        Reference< XAttr > setAttributeNode_Impl_Lock(
-                Reference< XAttr > const& xNewAttr, bool const bNS);
+        Reference< XAttr > _setAttributeNode(const Reference< XAttr >& newAttr, sal_Bool bNS)
+            throw (RuntimeException);
 
     protected:
-        CElement(CDocument const& rDocument, ::osl::Mutex const& rMutex,
-                xmlNodePtr const pNode);
+        CElement(const xmlNodePtr aNodePtr);
 
     public:
 
-        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
+        virtual void SAL_CALL saxify(
+            const Reference< XDocumentHandler >& i_xHandler);
 
-        virtual void fastSaxify( Context& i_rContext );
-
-        virtual bool IsChildTypeAllowed(NodeType const nodeType);
+        virtual void SAL_CALL fastSaxify( Context& i_rContext );
 
         /**
         Retrieves an attribute value by name.
@@ -94,15 +85,15 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        Returns a NodeList of all descendant Elements with a given tag name,
-        in the order in which they are
+        Returns a NodeList of all descendant Elements with a given tag name, 
+        in the order in which they are 
         encountered in a preorder traversal of this Element tree.
         */
         virtual Reference< XNodeList > SAL_CALL getElementsByTagName(const OUString& name)
             throw (RuntimeException);
 
         /**
-        Returns a NodeList of all the descendant Elements with a given local
+        Returns a NodeList of all the descendant Elements with a given local 
         name and namespace URI in the order in which they are encountered in
         a preorder traversal of this Element tree.
         */
@@ -167,7 +158,7 @@ namespace DOM
             throw (RuntimeException, DOMException);
 
         /**
-        Adds a new attribute.
+        Adds a new attribute. 
         */
         virtual void SAL_CALL setAttributeNS(
                 const OUString& namespaceURI, const OUString& qualifiedName, const OUString& value)

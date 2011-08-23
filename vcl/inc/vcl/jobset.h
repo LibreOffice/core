@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <tools/string.hxx>
 #include <vcl/sv.h>
 #include <vcl/prntypes.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <rtl/ustring.hxx>
 
 // ------------------
@@ -40,11 +40,11 @@
 // ------------------
 
 // see com.sun.star.portal.client.JobSetupSystem.idl:
-#define JOBSETUP_SYSTEM_DONTKNOW    0
-#define JOBSETUP_SYSTEM_WINDOWS     1
-#define JOBSETUP_SYSTEM_OS2         2
-#define JOBSETUP_SYSTEM_UNIX        3
-#define JOBSETUP_SYSTEM_MAC         4
+#define JOBSETUP_SYSTEM_DONTKNOW	0
+#define JOBSETUP_SYSTEM_WINDOWS 	1
+#define JOBSETUP_SYSTEM_OS2 		2
+#define JOBSETUP_SYSTEM_UNIX		3
+#define JOBSETUP_SYSTEM_MAC 		4
 #define JOBSETUP_SYSTEM_JAVA        5
 
 // ----------------
@@ -53,19 +53,19 @@
 
 struct ImplJobSetup
 {
-    sal_uInt16          mnRefCount;         // RefCount (only independ data)
-    sal_uInt16          mnSystem;           // Sytem - JOBSETUP_SYSTEM_xxxx
-    String          maPrinterName;      // Printer-Name
-    String          maDriver;           // Driver-Name
-    Orientation     meOrientation;      // Orientation
+    USHORT			mnRefCount; 		// RefCount (only independ data)
+    USHORT			mnSystem;			// Sytem - JOBSETUP_SYSTEM_xxxx
+    String			maPrinterName;		// Printer-Name
+    String			maDriver;			// Driver-Name
+    Orientation 	meOrientation;		// Orientation
     DuplexMode      meDuplexMode;       // Duplex
-    sal_uInt16          mnPaperBin;         // paper bin / in tray
-    Paper           mePaperFormat;      // paper format
-    long            mnPaperWidth;       // paper width (100th mm)
-    long            mnPaperHeight;      // paper height (100th mm)
-    sal_uIntPtr         mnDriverDataLen;    // length of system specific data
-    sal_uInt8*          mpDriverData;       // system specific data (will be streamed a byte block)
-    ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >         maValueMap;
+    USHORT			mnPaperBin; 		// paper bin / in tray
+    Paper			mePaperFormat;		// paper format
+    long			mnPaperWidth;		// paper width (100th mm)
+    long			mnPaperHeight;		// paper height (100th mm)
+    ULONG			mnDriverDataLen;	// length of system specific data
+    BYTE*			mpDriverData;		// system specific data (will be streamed a byte block)
+    ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >			maValueMap;
 
                     ImplJobSetup();
                     ImplJobSetup( const ImplJobSetup& rJobSetup );
@@ -77,6 +77,6 @@ struct ImplJobSetup
 // Papierbreite/hoehe wird wenn 0 im unabhaengigen Teil automatisch aus
 // Papierformat berechnet, wenn dieses ungleich PAPER_USER ist
 
-#endif  // _SV_JOBSET_H
+#endif	// _SV_JOBSET_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

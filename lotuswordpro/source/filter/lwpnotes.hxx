@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- May 2005       Created
+ May 2005		Created
  ************************************************************************/
 #ifndef _LWPNOTES_HXX_
 #define _LWPNOTES_HXX_
@@ -68,23 +68,23 @@
 #include "lwpframelayout.hxx"
 
 /**
- * @brief       TAG_NOTE_FRIB object
+ * @brief		TAG_NOTE_FRIB object
  *
  */
 class LwpFribNote: public LwpFrib
 {
 public:
     LwpFribNote(LwpPara* pPara );
-    ~LwpFribNote(){}
+    ~LwpFribNote(){};
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
-    void RegisterNewStyle();
+    void RegisterStyle();
     void XFConvert(XFContentContainer* pCont);
 private:
     LwpObjectID m_Layout;
 };
 
 /**
- * @brief       VO_NOTELAYOUT object
+ * @brief		VO_NOTELAYOUT object
  *
  */
 class LwpNoteLayout: public LwpFrameLayout
@@ -95,7 +95,7 @@ public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_NOTE_LAYOUT;}
     virtual void RegisterStyle();
     virtual void XFConvert(XFContentContainer* pCont);
-    sal_uInt32 GetTime(){ return m_nTime;}
+    sal_uInt32 GetTime(){ return m_nTime;};
     OUString GetAuthor();
 
 protected:
@@ -109,7 +109,7 @@ private:
 
 
 /**
- * @brief       VO_NOTEHEADERLAYOUT object
+ * @brief		VO_NOTEHEADERLAYOUT object
  *
  */
 class LwpNoteHeaderLayout: public LwpFrameLayout
@@ -126,7 +126,7 @@ protected:
 };
 
 /**
- * @brief       VO_NOTETEXTLAYOUT object
+ * @brief		VO_NOTETEXTLAYOUT object
  *
  */
 class LwpNoteTextLayout: public LwpFrameLayout
@@ -143,7 +143,7 @@ protected:
 };
 
 /**
- * @brief       VO_VPLAYOUT object
+ * @brief		VO_VPLAYOUT object
  *
  */
 class LwpViewportLayout: public LwpPlacableLayout

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,21 +36,21 @@
 
 class ScTpPrintOptions : public SfxTabPage
 {
-    FixedLine       aPagesFL;
-    CheckBox        aSkipEmptyPagesCB;
-    FixedLine       aSheetsFL;
-    CheckBox        aSelectedSheetsCB;
+    FixedLine		aPagesFL;
+    CheckBox		aSkipEmptyPagesCB;
+    FixedLine		aSheetsFL;
+    CheckBox		aSelectedSheetsCB;
 
             ScTpPrintOptions( Window* pParent, const SfxItemSet& rCoreSet );
             ~ScTpPrintOptions();
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static sal_uInt16*      GetRanges();
-    virtual sal_Bool        FillItemSet( SfxItemSet& rCoreSet );
-    virtual void        Reset( const SfxItemSet& rCoreSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rCoreSet );
+    static USHORT*		GetRanges();
+    virtual BOOL		FillItemSet( SfxItemSet& rCoreSet );
+    virtual void		Reset( const SfxItemSet& rCoreSet );
     using SfxTabPage::DeactivatePage;
-    virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
+    virtual int 		DeactivatePage( SfxItemSet* pSet = NULL );
 };
 
 #endif

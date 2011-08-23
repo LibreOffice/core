@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ interface XConfigurationChangeRequest;
 
 /** The request queue of the configuration controller handles requests for
     changes to the current configuration.
-
+    
     <p>This interface allows callers to add requests to the back of the
-    queue and to determine whether the queue is empty.  Using this interface
+    queue and to determine wheter the queue is empty.  Using this interace
     should normally not be necessary for anyone else than the
     <type>XConfigurationController</type>.  It may be removed in the future.</p>
 */
@@ -56,7 +56,7 @@ interface XConfigurationControllerRequestQueue
 
     /** Add a request for a configuration change to the request queue.
         <p>This method should not be called from outside the drawing
-        framework.  Other sub controllers of the drawing framework are typical
+        famework.  Other sub conrollers of the drawing framework are typical
         callers.  They can add change requests that can not be made with the
         <member>requestResourceActivation()</member> and
         <member>requestResourceDeactivation()</member> methods.</p>

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,28 +35,28 @@
 
 namespace dbaui
 {
-    const sal_uInt16 CARDINAL_UNDEFINED = 0x0000;
-    const sal_uInt16 CARDINAL_ONE_MANY  = 0x0001;
-    const sal_uInt16 CARDINAL_MANY_ONE  = 0x0002;
-    const sal_uInt16 CARDINAL_ONE_ONE   = 0x0004;
+    const UINT16 CARDINAL_UNDEFINED	= 0x0000;
+    const UINT16 CARDINAL_ONE_MANY	= 0x0001;
+    const UINT16 CARDINAL_MANY_ONE	= 0x0002;
+    const UINT16 CARDINAL_ONE_ONE	= 0x0004;
 
     class OConnectionLineData;
     //==================================================================
-    class ORelationTableConnectionData :    public OTableConnectionData
+    class ORelationTableConnectionData :	public OTableConnectionData
     {
         friend bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs);
         friend bool operator!=(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs) { return !(lhs == rhs); }
 
-        ::osl::Mutex    m_aMutex;
+        ::osl::Mutex	m_aMutex;
 
         // @see com.sun.star.sdbc.KeyRule
         sal_Int32 m_nUpdateRules;
         sal_Int32 m_nDeleteRules;
         sal_Int32 m_nCardinality;
 
-        sal_Bool checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const;
-        sal_Bool IsSourcePrimKey()  const { return checkPrimaryKey(getReferencingTable()->getTable(),JTCS_FROM);    }
-        sal_Bool IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getTable(),JTCS_TO);       }
+        BOOL checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const;
+        BOOL IsSourcePrimKey()	const { return checkPrimaryKey(getReferencingTable()->getTable(),JTCS_FROM);	}
+        BOOL IsDestPrimKey()	const { return checkPrimaryKey(getReferencedTable()->getTable(),JTCS_TO);		}
 
     protected:
         virtual OConnectionLineDataRef CreateLineDataObj();
@@ -78,20 +78,20 @@ namespace dbaui
 
             @return true if successful
         */
-        virtual sal_Bool Update();
+        virtual BOOL Update();
+        
 
+        void		SetCardinality();
+        inline void	SetUpdateRules( sal_Int32 nAttr ){ m_nUpdateRules = nAttr; }
+        inline void	SetDeleteRules( sal_Int32 nAttr ){ m_nDeleteRules = nAttr; }
 
-        void        SetCardinality();
-        inline void SetUpdateRules( sal_Int32 nAttr ){ m_nUpdateRules = nAttr; }
-        inline void SetDeleteRules( sal_Int32 nAttr ){ m_nDeleteRules = nAttr; }
+        inline sal_Int32	GetUpdateRules() const { return m_nUpdateRules; }
+        inline sal_Int32	GetDeleteRules() const { return m_nDeleteRules; }
+        inline sal_Int32	GetCardinality() const { return m_nCardinality; }
 
-        inline sal_Int32    GetUpdateRules() const { return m_nUpdateRules; }
-        inline sal_Int32    GetDeleteRules() const { return m_nDeleteRules; }
-        inline sal_Int32    GetCardinality() const { return m_nCardinality; }
-
-        sal_Bool        IsConnectionPossible();
-        void        ChangeOrientation();
-        sal_Bool        DropRelation();
+        BOOL		IsConnectionPossible();
+        void		ChangeOrientation();
+        BOOL		DropRelation();
     };
 }
 

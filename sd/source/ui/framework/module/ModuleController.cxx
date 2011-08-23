@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/stl_types.hxx>
 #include <boost/bind.hpp>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include <tools/diagnose_ex.h>
 
@@ -56,7 +56,7 @@ static const sal_uInt32 snStartupPropertyCount (1);
 
 
 class ModuleController::ResourceToFactoryMap
-    : public ::boost::unordered_map<
+    : public ::std::hash_map<
     rtl::OUString,
     rtl::OUString,
     ::comphelper::UStringHash,
@@ -68,7 +68,7 @@ public:
 
 
 class ModuleController::LoadedFactoryContainer
-    : public ::boost::unordered_map<
+    : public ::std::hash_map<
     rtl::OUString,
     WeakReference<XInterface>,
     ::comphelper::UStringHash,
@@ -104,7 +104,7 @@ Sequence<rtl::OUString> SAL_CALL ModuleController_getSupportedServiceNames (void
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.ModuleController"));
+        ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.ModuleController"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -144,10 +144,6 @@ ModuleController::~ModuleController (void) throw()
 
 void SAL_CALL ModuleController::disposing (void)
 {
-    // Break the cyclic reference back to DrawController object
-    mpLoadedFactories.reset();
-    mpResourceToFactoryMap.reset();
-    mxController.clear();
 }
 
 
@@ -159,15 +155,15 @@ void ModuleController::LoadFactories (const Reference<XComponentContext>& rxCont
     {
         ConfigurationAccess aConfiguration (
             rxContext,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Impress/")),
+            OUString::createFromAscii("/org.openoffice.Office.Impress/"),
             ConfigurationAccess::READ_ONLY);
         Reference<container::XNameAccess> xFactories (
             aConfiguration.GetConfigurationNode(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("MultiPaneGUI/Framework/ResourceFactories"))),
+                OUString::createFromAscii("MultiPaneGUI/Framework/ResourceFactories")),
             UNO_QUERY);
         ::std::vector<rtl::OUString> aProperties (snFactoryPropertyCount);
-        aProperties[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceName"));
-        aProperties[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("ResourceList"));
+        aProperties[0] = OUString::createFromAscii("ServiceName");
+        aProperties[1] = OUString::createFromAscii("ResourceList");
         ConfigurationAccess::ForAll(
             xFactories,
             aProperties,
@@ -195,7 +191,7 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
     ::std::vector<rtl::OUString> aURLs;
     tools::ConfigurationAccess::FillList(
         xResources,
-        OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),
+        OUString::createFromAscii("URL"),
         aURLs);
 
 #if defined VERBOSE && VERBOSE>0
@@ -223,14 +219,14 @@ void ModuleController::InstantiateStartupServices (void)
     try
     {
         tools::ConfigurationAccess aConfiguration (
-            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Impress/")),
+            OUString::createFromAscii("/org.openoffice.Office.Impress/"),
             tools::ConfigurationAccess::READ_ONLY);
         Reference<container::XNameAccess> xFactories (
             aConfiguration.GetConfigurationNode(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("MultiPaneGUI/Framework/StartupServices"))),
+                OUString::createFromAscii("MultiPaneGUI/Framework/StartupServices")),
             UNO_QUERY);
         ::std::vector<rtl::OUString> aProperties (snStartupPropertyCount);
-        aProperties[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceName"));
+        aProperties[0] = OUString::createFromAscii("ServiceName");
         tools::ConfigurationAccess::ForAll(
             xFactories,
             aProperties,
@@ -248,7 +244,7 @@ void ModuleController::InstantiateStartupServices (void)
 void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
 {
     OSL_ASSERT(rValues.size() == snStartupPropertyCount);
-
+    
     try
     {
         // Get the service name of the startup service.
@@ -324,7 +320,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
 
 
 //----- XInitialization -------------------------------------------------------
-
+    
 void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
     throw (Exception, RuntimeException)
 {

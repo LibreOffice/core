@@ -3,34 +3,34 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Editor extends JFrame{
-    Object[]    columnnames     = { "File" , "GID" , "LID" , "String" };
+    Object[] 	columnnames		= { "File" , "GID" , "LID" , "String" };
     Object[]    stringcolnames  = { "Language", "Text", "Helptext" , "Quickhelptext","Title"};
-    //Object[][]    data            = new Object[4][1];//{  { "a " }, { "v " }, { "v " } , { "a " } };
-    JTable      table           = null;
-    JTable      rectable        = null;
-    JComboBox   cBox            = null;
-    JMenuBar    menubar         = null;
-    JMenu       filemenu        = null;
-    JMenuItem   miNew           = null;
-    JMenuItem   miSave          = null;
-    JMenuItem   miExit          = null;
-    //JButton     button            = null;
-
+    //Object[][] 	data			= new Object[4][1];//{  { "a " }, { "v " }, { "v " } , { "a " } };
+    JTable 		table 			= null;
+    JTable 		rectable		= null;
+    JComboBox 	cBox			= null;
+    JMenuBar    menubar			= null;
+    JMenu 		filemenu		= null;
+    JMenuItem   miNew			= null;
+    JMenuItem   miSave			= null;
+    JMenuItem   miExit			= null;
+    //JButton     button			= null;
+    
     public Editor( Object[][] tabledata , Object[][] firstdata ){
-        table                   = new JTable( tabledata , columnnames );
-        rectable                = new SdfTable( firstdata , stringcolnames );
-        menubar                 = new JMenuBar();
-        filemenu                = new JMenu("File");
-        //miNew                 = new JMenuItem("New");
-        miSave                  = new JMenuItem("Save");
-        miExit                  = new JMenuItem("Exit");
-        //button                    = new JButton("Edit");
+        table 					= new JTable( tabledata , columnnames );
+        rectable				= new SdfTable( firstdata , stringcolnames );
+        menubar 				= new JMenuBar();
+        filemenu 				= new JMenu("File");
+        //miNew					= new JMenuItem("New");
+        miSave					= new JMenuItem("Save");
+        miExit					= new JMenuItem("Exit");
+        //button					= new JButton("Edit");
         //filemenu.add( miNew   );
         filemenu.add( miSave  );
         filemenu.add( miExit  );
         menubar.add( filemenu );
-
-        Container contentPane   = getContentPane();
+        
+        Container contentPane 	= getContentPane();
         //contentPane.add( new ControlPanel() , BorderLayout.NORTH );
         contentPane.add( menubar , BorderLayout.NORTH );
         //JPanel aPanel = new JPanel( new FlowLayout( FlowLayout.CENTER) );
@@ -44,7 +44,7 @@ public class Editor extends JFrame{
         //contentPane.add( new JScrollPane( rectable ), BorderLayout.SOUTH );
         //contentPane.add( new JScrollPane( rectable ), BorderLayout.SOUTH );
         this.repaint();
-
+        
     }
 
     public JTable getRectable() {
@@ -86,11 +86,11 @@ public class Editor extends JFrame{
     public void setMiSave(JMenuItem miSave) {
         this.miSave = miSave;
     }
-
+    
     /*public void setTableData(){
-
+        
     }*/
-
+    
 }
 
 //class ControlPanel extends JPanel{}

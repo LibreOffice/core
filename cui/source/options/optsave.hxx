@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,6 +88,7 @@ private:
     DECL_LINK( FilterHdl_Impl, ListBox * );
     DECL_LINK( ODFVersionHdl_Impl, ListBox * );
 
+    bool    AcceptFilter( USHORT nPos );
     void    DetectHiddenControls();
 #endif
 
@@ -95,12 +96,12 @@ public:
     SvxSaveTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxSaveTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
-#endif  // #ifndef _SVX_OPTSAVE_HXX
+#endif	// #ifndef _SVX_OPTSAVE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,13 +31,12 @@
 
 #include "TablesSingleDlg.hxx"
 #include "DbAdminImpl.hxx"
+#include "dbaccess_helpid.hrc"
 #include "tablespage.hxx"
 #include <vcl/msgbox.hxx>
 #include "dsitems.hxx"
 
 #include "propertysetitem.hxx"
-
-#include "dbu_dlg.hrc"
 
 //.........................................................................
 namespace dbaui
@@ -57,7 +56,7 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
             ,SfxItemSet* _pItems
             ,const Reference< XMultiServiceFactory >& _rxORB
             ,const ::com::sun::star::uno::Any& _aDataSourceName)
-    :SfxSingleTabDialog(pParent,DLG_TABLE_FILTER,_pItems)
+    :SfxSingleTabDialog(pParent,UID_DLG_TABLE_FILTER,_pItems)
     ,m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, pParent, this ) )
     ,m_bStopExecution(sal_False)
     ,m_pOutSet(_pItems)
@@ -132,7 +131,7 @@ SfxItemSet* OTableSubscriptionDialog::getWriteOutputSet()
 }
 // -----------------------------------------------------------------------------
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 

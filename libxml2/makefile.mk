@@ -56,10 +56,6 @@ PATCH_FILES=libxml2-configure.patch \
             libxml2-aix.patch \
             libxml2-vc10.patch
 
-.IF "$(OS)" == "WNT"
-PATCH_FILES+= libxml2-long-path.patch
-.ENDIF
-
 # This is only for UNX environment now
 
 .IF "$(OS)"=="WNT"
@@ -70,7 +66,7 @@ xml2_CC+=-shared-libgcc
 .ENDIF
 xml2_LIBS=-lws2_32
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-xml2_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
+xml2_LIBS+=-lstdc++_s
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
@@ -96,6 +92,10 @@ xml2_CFLAGS+=$(ARCH_FLAGS) $(C_RESTRICTIONFLAGS)
 xml2_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
+.IF "$(OS)$(COM)"=="LINUXGCC"
+xml2_LDFLAGS+=-Wl,-z,noexecstack
+.ENDIF
+
 CONFIGURE_DIR=
 .IF "$(OS)"=="OS2"
 CONFIGURE_ACTION=sh .$/configure
@@ -107,9 +107,6 @@ CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-shared
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
-.IF "$(debug)"!=""
-CONFIGURE_FLAGS+=--with-mem-debug --with-run-debug
-.ENDIF
 .ENDIF
 
 

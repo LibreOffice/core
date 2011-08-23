@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,26 +42,25 @@
 #include "miscuno.hxx"
 
 using namespace utl;
+using namespace rtl;
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
 
 //------------------------------------------------------------------
 
-#define CFGPATH_FILTER          "Office.Calc/Filter/Import"
+#define CFGPATH_FILTER			"Office.Calc/Filter/Import"
 
-#define SCFILTOPT_COLSCALE      0
-#define SCFILTOPT_ROWSCALE      1
-#define SCFILTOPT_WK3           2
-#define SCFILTOPT_COUNT         3
+#define SCFILTOPT_COLSCALE		0
+#define SCFILTOPT_ROWSCALE		1
+#define SCFILTOPT_WK3			2
+#define SCFILTOPT_COUNT			3
 
 Sequence<OUString> ScFilterOptions::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "MS_Excel/ColScale",            // SCFILTOPT_COLSCALE
-        "MS_Excel/RowScale",            // SCFILTOPT_ROWSCALE
-        "Lotus123/WK3"                  // SCFILTOPT_WK3
+        "MS_Excel/ColScale",			// SCFILTOPT_COLSCALE
+        "MS_Excel/RowScale",			// SCFILTOPT_ROWSCALE
+        "Lotus123/WK3"					// SCFILTOPT_WK3
     };
     Sequence<OUString> aNames(SCFILTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -72,13 +71,14 @@ Sequence<OUString> ScFilterOptions::GetPropertyNames()
 }
 
 ScFilterOptions::ScFilterOptions() :
-    ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_FILTER )) ),
-    bWK3Flag( false ),
+    ConfigItem( OUString::createFromAscii( CFGPATH_FILTER ) ),
+    bWK3Flag( FALSE ),
     fExcelColScale( 0 ),
     fExcelRowScale( 0 )
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
+//	EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
@@ -110,12 +110,12 @@ void ScFilterOptions::Commit()
 {
     // options are never modified from office
 
-    OSL_FAIL("trying to commit changed ScFilterOptions?");
+    DBG_ERROR("trying to commit changed ScFilterOptions?");
 }
 
-void ScFilterOptions::Notify( const Sequence<OUString>& /* aPropertyNames */ )
+void ScFilterOptions::Notify( const Sequence<rtl::OUString>& /* aPropertyNames */ )
 {
-    OSL_FAIL("properties have been changed");
+    DBG_ERROR("properties have been changed");
 }
 
 

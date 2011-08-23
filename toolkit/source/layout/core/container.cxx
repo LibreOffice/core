@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ Container::allocateChildAt( const uno::Reference< awt::XLayoutConstrains > &xChi
                                  awt::PosSize::POSSIZE );
         else
         {
-            OSL_FAIL( "Error: non-sizeable child" );
+            DBG_ERROR( "Error: non-sizeable child" );
         }
     }
 }
@@ -121,7 +121,7 @@ void Container::propertiesChanged()
 {
     // cl: why this assertion? This is also called to set properties at the top level widget which has no parent!?
     // DBG_ASSERT( mxParent.is(), "Properties listener: error container doesn't have parent" );
-
+    
     if ( mxLayoutUnit.is() && mxParent.is() )
         mxLayoutUnit->queueResize( mxParent );
 }

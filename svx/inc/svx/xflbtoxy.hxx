@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@ class SVX_DLLPUBLIC XFillBmpTileOffsetXItem : public SfxUInt16Item
 {
 public:
                             TYPEINFO();
-                            XFillBmpTileOffsetXItem( sal_uInt16 nOffX = 0 );
+                            XFillBmpTileOffsetXItem( USHORT nOffX = 0 );
                             SVX_DLLPRIVATE XFillBmpTileOffsetXItem( SvStream& rIn );
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
 
     SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -65,11 +65,11 @@ class SVX_DLLPUBLIC XFillBmpTileOffsetYItem : public SfxUInt16Item
 {
 public:
                             TYPEINFO();
-                            XFillBmpTileOffsetYItem( sal_uInt16 nOffX = 0 );
+                            XFillBmpTileOffsetYItem( USHORT nOffX = 0 );
                             SVX_DLLPRIVATE XFillBmpTileOffsetYItem( SvStream& rIn );
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
 
     SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

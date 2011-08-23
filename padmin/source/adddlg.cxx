@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,18 +38,13 @@
 
 #include "osl/thread.h"
 
-#include <boost/unordered_set.hpp>
+#include <hash_set>
 
 
+using namespace rtl;
 using namespace psp;
 using namespace padmin;
 using namespace std;
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringHash;
-using ::rtl::OUStringToOString;
-
 
 APTabPage::APTabPage( AddPrinterDialog* pParent, const ResId& rResId )
             : TabPage( pParent, rResId ),
@@ -67,18 +62,18 @@ APChooseDevicePage::APChooseDevicePage( AddPrinterDialog* pParent ) :
         m_aOverTxt( this, PaResId( RID_ADDP_CHDEV_TXT_OVER ) )
 {
     FreeResource();
-    m_aPrinterBtn.Check( sal_True );
-    m_aFaxBtn.Check( sal_False );
-    m_aPDFBtn.Check( sal_False );
-    m_aOldBtn.Check( sal_False );
+    m_aPrinterBtn.Check( TRUE );
+    m_aFaxBtn.Check( FALSE );
+    m_aPDFBtn.Check( FALSE );
+    m_aOldBtn.Check( FALSE );
     if( ! AddPrinterDialog::getOldPrinterLocation().Len() )
-        m_aOldBtn.Enable( sal_False );
+        m_aOldBtn.Enable( FALSE );
     if( ! PrinterInfoManager::get().addOrRemovePossible() )
     {
-        m_aPrinterBtn.Check( sal_False );
-        m_aFaxBtn.Check( sal_True );
-        m_aPrinterBtn.Enable( sal_False );
-        m_aOldBtn.Enable( sal_False );
+        m_aPrinterBtn.Check( FALSE );
+        m_aFaxBtn.Check( TRUE );
+        m_aPrinterBtn.Enable( FALSE );
+        m_aOldBtn.Enable( FALSE );
     }
 }
 
@@ -95,11 +90,11 @@ void APChooseDevicePage::fill( PrinterInfo& rInfo )
 {
     if( m_aPDFBtn.IsChecked() )
     {
-        rInfo.m_aFeatures = OUString(RTL_CONSTASCII_USTRINGPARAM("pdf="));
+        rInfo.m_aFeatures = OUString::createFromAscii( "pdf=" );
     }
     else if( m_aFaxBtn.IsChecked() )
     {
-        rInfo.m_aFeatures = OUString(RTL_CONSTASCII_USTRINGPARAM("fax"));
+        rInfo.m_aFeatures = OUString::createFromAscii( "fax" );
     }
     else
         rInfo.m_aFeatures = OUString();
@@ -135,7 +130,7 @@ bool APChooseDriverPage::check()
 
 void APChooseDriverPage::fill( PrinterInfo& rInfo )
 {
-    sal_uInt16 nPos = m_aDriverBox.GetSelectEntryPos();
+    USHORT nPos = m_aDriverBox.GetSelectEntryPos();
     String* pDriver = (String*)m_aDriverBox.GetEntryData( nPos );
     rInfo.m_aDriverName = *pDriver;
 #if OSL_DEBUG_LEVEL > 1
@@ -158,7 +153,7 @@ void APChooseDriverPage::updateDrivers( bool bRefresh, const rtl::OUString& rSel
 
     std::list< rtl::OUString > aDrivers;
     psp::PPDParser::getKnownPPDDrivers( aDrivers, bRefresh );
-
+    
     rtl::OUString aSelectDriver( psp::PPDParser::getPPDPrinterName( rSelectDriver ) );
 
     rtl::OUString aSelectedEntry;
@@ -275,7 +270,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 std::list< rtl::OUString > aDirs;
                 // get only psprint's directories, not eventual system dirs
                 psp::getPrinterPathList( aDirs, NULL );
-                std::list< rtl::OUString >::iterator dir;
+                std::list< rtl::OUString >::iterator dir;                
                 for( dir = aDirs.begin(); dir != aDirs.end(); ++dir )
                 {
                     ::std::list< String > aFiles;
@@ -338,15 +333,15 @@ APNamePage::APNamePage( AddPrinterDialog* pParent, const String& rInitName, Devi
 {
     FreeResource();
     if( eKind != DeviceKind::Printer )
-        m_aDefaultBox.Show( sal_False );
+        m_aDefaultBox.Show( FALSE );
     else
         m_aNameEdt.SetText( rInitName );
     if( eKind != DeviceKind::Fax )
-        m_aFaxSwallowBox.Show( sal_False );
+        m_aFaxSwallowBox.Show( FALSE );
 
     m_aNameEdt.SetText( AddPrinterDialog::uniquePrinterName( m_aNameEdt.GetText() ) );
-    m_aDefaultBox.Check( sal_False );
-    m_aFaxSwallowBox.Check( sal_False );
+    m_aDefaultBox.Check( FALSE );
+    m_aFaxSwallowBox.Check( FALSE );
 }
 
 APNamePage::~APNamePage()
@@ -380,22 +375,22 @@ APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind 
     ::std::list< String > aCommands;
     if( m_eKind == DeviceKind::Printer )
     {
-        m_aHelpBtn.Show( sal_False );
+        m_aHelpBtn.Show( FALSE );
         Size aSize = m_aCommandTxt.GetSizePixel();
         aSize.Width() = m_aCommandBox.GetSizePixel().Width();
         m_aCommandTxt.SetSizePixel( aSize );
     }
     if( m_eKind != DeviceKind::Pdf )
     {
-        m_aPdfDirBtn.Show( sal_False );
-        m_aPdfDirEdt.Show( sal_False );
-        m_aPdfDirTxt.Show( sal_False );
+        m_aPdfDirBtn.Show( FALSE );
+        m_aPdfDirEdt.Show( FALSE );
+        m_aPdfDirTxt.Show( FALSE );
     }
     switch( m_eKind )
     {
-        case DeviceKind::Printer:   CommandStore::getPrintCommands( aCommands );break;
-        case DeviceKind::Fax:       CommandStore::getFaxCommands( aCommands );break;
-        case DeviceKind::Pdf:       CommandStore::getPdfCommands( aCommands );break;
+        case DeviceKind::Printer:	CommandStore::getPrintCommands( aCommands );break;
+        case DeviceKind::Fax:		CommandStore::getFaxCommands( aCommands );break;
+        case DeviceKind::Pdf:		CommandStore::getPdfCommands( aCommands );break;
     }
     // adjust height of command text and help button
     Rectangle aPosSize( m_aCommandTxt.GetPosPixel(), m_aCommandTxt.GetSizePixel() );
@@ -438,9 +433,9 @@ APCommandPage::~APCommandPage()
     aCommands.push_back( aLastCommand );
     switch( m_eKind )
     {
-        case DeviceKind::Printer:   CommandStore::setPrintCommands( aCommands );break;
-        case DeviceKind::Fax:       CommandStore::setFaxCommands( aCommands );break;
-        case DeviceKind::Pdf:       CommandStore::setPdfCommands( aCommands );break;
+        case DeviceKind::Printer:	CommandStore::setPrintCommands( aCommands );break;
+        case DeviceKind::Fax:		CommandStore::setFaxCommands( aCommands );break;
+        case DeviceKind::Pdf:		CommandStore::setPdfCommands( aCommands );break;
     }
 }
 
@@ -551,11 +546,11 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         String aUPrinter( AddPrinterDialog::uniquePrinterName( String( aPrinter, aEncoding ) ) );
 
         PrinterInfo aInfo;
-        aInfo.m_aDriverName     = String( aNewDriver, aEncoding );
-        aInfo.m_pParser         = pParser;
+        aInfo.m_aDriverName		= String( aNewDriver, aEncoding );
+        aInfo.m_pParser			= pParser;
         aInfo.m_aContext.setParser( pParser );
-        aInfo.m_aPrinterName    = aUPrinter;
-        aInfo.m_aCommand        = String( aCommand, aEncoding );
+        aInfo.m_aPrinterName	= aUPrinter;
+        aInfo.m_aCommand		= String( aCommand, aEncoding );
 
         // read the printer settings
         ByteString aGroup( aDriver );
@@ -681,8 +676,8 @@ APFaxDriverPage::APFaxDriverPage( AddPrinterDialog* pParent )
 {
     FreeResource();
 
-    m_aDefBtn.Check( sal_True );
-    m_aSelectBtn.Check( sal_False );
+    m_aDefBtn.Check( TRUE );
+    m_aSelectBtn.Check( FALSE );
     m_aSelectBtn.SetStyle( m_aSelectBtn.GetStyle() | WB_WORDBREAK );
 }
 
@@ -699,7 +694,7 @@ void APFaxDriverPage::fill( PrinterInfo& rInfo )
 {
     if( isDefault() )
     {
-        rInfo.m_aDriverName = OUString(RTL_CONSTASCII_USTRINGPARAM("SGENPRT"));
+        rInfo.m_aDriverName = OUString::createFromAscii( "SGENPRT" );
     }
 }
 
@@ -714,9 +709,9 @@ APPdfDriverPage::APPdfDriverPage( AddPrinterDialog* pParent )
 {
     FreeResource();
 
-    m_aDefBtn.Check( sal_True );
-    m_aDistBtn.Check( sal_False );
-    m_aSelectBtn.Check( sal_False );
+    m_aDefBtn.Check( TRUE );
+    m_aDistBtn.Check( FALSE );
+    m_aSelectBtn.Check( FALSE );
     m_aSelectBtn.SetStyle( m_aSelectBtn.GetStyle() | WB_WORDBREAK );
 }
 
@@ -732,9 +727,9 @@ bool APPdfDriverPage::check()
 void APPdfDriverPage::fill( PrinterInfo& rInfo )
 {
     if( isDefault() )
-        rInfo.m_aDriverName = OUString(RTL_CONSTASCII_USTRINGPARAM("SGENPRT"));
+        rInfo.m_aDriverName = OUString::createFromAscii( "SGENPRT" );
     else if( isDist() )
-        rInfo.m_aDriverName = OUString(RTL_CONSTASCII_USTRINGPARAM("ADISTILL"));
+        rInfo.m_aDriverName = OUString::createFromAscii( "ADISTILL" );
 }
 
 //--------------------------------------------------------------------
@@ -764,9 +759,9 @@ AddPrinterDialog::AddPrinterDialog( Window* pParent )
 {
     FreeResource();
     m_pCurrentPage = m_pChooseDevicePage = new APChooseDevicePage( this );
-    m_pCurrentPage->Show( sal_True );
-    m_aFinishPB.Enable( sal_False );
-    m_aPrevPB.Enable( sal_False );
+    m_pCurrentPage->Show( TRUE );
+    m_aFinishPB.Enable( FALSE );
+    m_aPrevPB.Enable( FALSE );
 
     m_aNextPB.SetClickHdl( LINK( this, AddPrinterDialog, ClickBtnHdl ) );
     m_aPrevPB.SetClickHdl( LINK( this, AddPrinterDialog, ClickBtnHdl ) );
@@ -810,7 +805,10 @@ AddPrinterDialog::~AddPrinterDialog()
 
 void AddPrinterDialog::updateSettings()
 {
-    m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER ) ) ) );
+    if( ! GetSettings().GetStyleSettings().GetHighContrastMode() )
+        m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER ) ) ) );
+    else
+        m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER_HC ) ) ) );
 }
 
 void AddPrinterDialog::DataChanged( const DataChangedEvent& rEv )
@@ -825,7 +823,7 @@ void AddPrinterDialog::DataChanged( const DataChangedEvent& rEv )
 
 void AddPrinterDialog::advance()
 {
-    m_pCurrentPage->Show( sal_False );
+    m_pCurrentPage->Show( FALSE );
     if( m_pCurrentPage == m_pChooseDevicePage )
     {
         if( m_pChooseDevicePage->isPrinter() )
@@ -833,30 +831,30 @@ void AddPrinterDialog::advance()
             if( ! m_pChooseDriverPage )
                 m_pChooseDriverPage = new APChooseDriverPage( this );
             m_pCurrentPage = m_pChooseDriverPage;
-            m_aPrevPB.Enable( sal_True );
+            m_aPrevPB.Enable( TRUE );
         }
         else if( m_pChooseDevicePage->isOld() )
         {
             if( ! m_pOldPrinterPage )
                 m_pOldPrinterPage = new APOldPrinterPage( this );
             m_pCurrentPage = m_pOldPrinterPage;
-            m_aPrevPB.Enable( sal_True );
-            m_aFinishPB.Enable( sal_True );
-            m_aNextPB.Enable( sal_False );
+            m_aPrevPB.Enable( TRUE );
+            m_aFinishPB.Enable( TRUE );
+            m_aNextPB.Enable( FALSE );
         }
         else if( m_pChooseDevicePage->isFax() )
         {
             if( ! m_pFaxDriverPage )
                 m_pFaxDriverPage = new APFaxDriverPage( this );
             m_pCurrentPage = m_pFaxDriverPage;
-            m_aPrevPB.Enable( sal_True );
+            m_aPrevPB.Enable( TRUE );
         }
         else if( m_pChooseDevicePage->isPDF() )
         {
             if( ! m_pPdfDriverPage )
                 m_pPdfDriverPage = new APPdfDriverPage( this );
             m_pCurrentPage = m_pPdfDriverPage;
-            m_aPrevPB.Enable( sal_True );
+            m_aPrevPB.Enable( TRUE );
         }
     }
     else if( m_pCurrentPage == m_pChooseDriverPage )
@@ -872,8 +870,8 @@ void AddPrinterDialog::advance()
         else
             m_pNamePage->setText( m_aPrinter.m_aPrinterName );
         m_pCurrentPage = m_pNamePage;
-        m_aFinishPB.Enable( sal_True );
-        m_aNextPB.Enable( sal_False );
+        m_aFinishPB.Enable( TRUE );
+        m_aNextPB.Enable( FALSE );
     }
     else if( m_pCurrentPage == m_pFaxDriverPage )
     {
@@ -901,8 +899,8 @@ void AddPrinterDialog::advance()
         if( ! m_pFaxNamePage )
             m_pFaxNamePage = new APNamePage( this, String(), DeviceKind::Fax );
         m_pCurrentPage = m_pFaxNamePage;
-        m_aNextPB.Enable( sal_False );
-        m_aFinishPB.Enable( sal_True );
+        m_aNextPB.Enable( FALSE );
+        m_aFinishPB.Enable( TRUE );
     }
     else if( m_pCurrentPage == m_pPdfDriverPage )
     {
@@ -930,26 +928,26 @@ void AddPrinterDialog::advance()
         if( ! m_pPdfNamePage )
             m_pPdfNamePage = new APNamePage( this, String(), DeviceKind::Pdf );
         m_pCurrentPage = m_pPdfNamePage;
-        m_aNextPB.Enable( sal_False );
-        m_aFinishPB.Enable( sal_True );
+        m_aNextPB.Enable( FALSE );
+        m_aFinishPB.Enable( TRUE );
     }
 
-    m_pCurrentPage->Show( sal_True );
+    m_pCurrentPage->Show( TRUE );
     m_aTitleImage.SetText( m_pCurrentPage->getTitle() );
 }
 
 void AddPrinterDialog::back()
 {
-    m_pCurrentPage->Show( sal_False );
+    m_pCurrentPage->Show( FALSE );
     if( m_pCurrentPage == m_pChooseDriverPage )
     {
         m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( sal_False );
+        m_aPrevPB.Enable( FALSE );
     }
     else if( m_pCurrentPage == m_pNamePage )
     {
         m_pCurrentPage = m_pCommandPage;
-        m_aNextPB.Enable( sal_True );
+        m_aNextPB.Enable( TRUE );
     }
     else if( m_pCurrentPage == m_pCommandPage )
     {
@@ -958,13 +956,13 @@ void AddPrinterDialog::back()
     else if( m_pCurrentPage == m_pOldPrinterPage )
     {
         m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( sal_False );
-        m_aNextPB.Enable( sal_True );
+        m_aPrevPB.Enable( FALSE );
+        m_aNextPB.Enable( TRUE );
     }
     else if( m_pCurrentPage == m_pFaxDriverPage )
     {
         m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( sal_False );
+        m_aPrevPB.Enable( FALSE );
     }
     else if( m_pCurrentPage == m_pFaxSelectDriverPage )
     {
@@ -973,17 +971,17 @@ void AddPrinterDialog::back()
     else if( m_pCurrentPage == m_pFaxNamePage )
     {
         m_pCurrentPage = m_pFaxCommandPage;
-        m_aNextPB.Enable( sal_True );
+        m_aNextPB.Enable( TRUE );
     }
     else if( m_pCurrentPage == m_pFaxCommandPage )
     {
         m_pCurrentPage = m_pFaxDriverPage->isDefault() ? (APTabPage*)m_pFaxDriverPage : (APTabPage*)m_pFaxSelectDriverPage;
-        m_aNextPB.Enable( sal_True );
+        m_aNextPB.Enable( TRUE );
     }
     else if( m_pCurrentPage == m_pPdfDriverPage )
     {
         m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( sal_False );
+        m_aPrevPB.Enable( FALSE );
     }
     else if( m_pCurrentPage == m_pPdfSelectDriverPage )
     {
@@ -992,14 +990,14 @@ void AddPrinterDialog::back()
     else if( m_pCurrentPage == m_pPdfNamePage )
     {
         m_pCurrentPage = m_pPdfCommandPage;
-        m_aNextPB.Enable( sal_True );
+        m_aNextPB.Enable( TRUE );
     }
     else if( m_pCurrentPage == m_pPdfCommandPage )
     {
         m_pCurrentPage = m_pPdfDriverPage->isDefault() || m_pPdfDriverPage->isDist() ? (APTabPage*)m_pPdfDriverPage : (APTabPage*)m_pPdfSelectDriverPage;
-        m_aNextPB.Enable( sal_True );
+        m_aNextPB.Enable( TRUE );
     }
-    m_pCurrentPage->Show( sal_True );
+    m_pCurrentPage->Show( TRUE );
     m_aTitleImage.SetText( m_pCurrentPage->getTitle() );
 }
 
@@ -1020,13 +1018,13 @@ void AddPrinterDialog::addPrinter()
             }
             else if( m_pChooseDevicePage->isFax() )
             {
-                aInfo.m_aFeatures = OUString(RTL_CONSTASCII_USTRINGPARAM("fax="));
+                aInfo.m_aFeatures = OUString::createFromAscii( "fax=" );
                 if( m_pFaxNamePage->isFaxSwallow() )
-                    aInfo.m_aFeatures += OUString(RTL_CONSTASCII_USTRINGPARAM("swallow"));
+                    aInfo.m_aFeatures += OUString::createFromAscii( "swallow" );
             }
             else if( m_pChooseDevicePage->isPDF() )
             {
-                OUString aPdf( RTL_CONSTASCII_USTRINGPARAM("pdf=") );
+                OUString aPdf( OUString::createFromAscii( "pdf=" ) );
                 aPdf += m_pPdfCommandPage->getPdfDir();
                 aInfo.m_aFeatures = aPdf;
             }
@@ -1078,7 +1076,7 @@ String AddPrinterDialog::uniquePrinterName( const String& rBase )
     int nVersion = 1;
     list< OUString > aPrinterList;
     rManager.listPrinters( aPrinterList );
-    boost::unordered_set< OUString, OUStringHash > aPrinters;
+    hash_set< OUString, OUStringHash > aPrinters;
     for( list< OUString >::const_iterator it = aPrinterList.begin(); it != aPrinterList.end(); ++it )
         aPrinters.insert( *it );
     while( aPrinters.find( aResult ) != aPrinters.end() )

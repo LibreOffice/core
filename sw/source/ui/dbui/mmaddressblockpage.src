@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,6 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
     PushButton      PB_ADDRESSLIST
     {
-        HelpID = "sw:PushButton:DLG_MM_ADDRESSBLOCK_PAGE:PB_ADDRESSLIST";
         Pos = MAP_APPFONT ( 154 , 27 ) ;
         Size = MAP_APPFONT ( 100 , 14 ) ;
         Text[ en-US ] = "Select A~ddress List...";
@@ -79,12 +78,12 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
         Hide = TRUE;
         Text[ en-US ] = "Current address list: %1";
     };
-    FixedLine FL_FIRST
+    FixedLine FL_FIRST 
     {
         Pos = MAP_APPFONT ( 6 , 55 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
     };
-    FixedText       FI_SECOND
+    FixedText       FI_SECOND   
     {
         Pos = MAP_APPFONT ( 6 , 66 ) ;
         Size = MAP_APPFONT ( 10 , 8 ) ;
@@ -92,7 +91,6 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
     CheckBox        CB_ADDRESS
     {
-        HelpID = "sw:CheckBox:DLG_MM_ADDRESSBLOCK_PAGE:CB_ADDRESS";
         Pos = MAP_APPFONT ( 16 , 66 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text[ en-US ] = "~This document shall contain an address block";
@@ -105,7 +103,6 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
     PushButton      PB_SETTINGS
     {
-        HelpID = "sw:PushButton:DLG_MM_ADDRESSBLOCK_PAGE:PB_SETTINGS";
         Pos = MAP_APPFONT ( 194 , 110 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Group = FALSE;
@@ -113,7 +110,6 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
     CheckBox CB_HIDE_EMPTY_PARA
     {
-        HelpID = "sw:CheckBox:DLG_MM_ADDRESSBLOCK_PAGE:CB_HIDE_EMPTY_PARA";
         Pos = MAP_APPFONT ( 24 , 127 ) ;
         Size = MAP_APPFONT ( 230 , 10 ) ;
         Text[ en-US ] = "~Suppress lines with just empty fields";
@@ -138,12 +134,11 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
     PushButton      PB_ASSIGN
     {
-        HelpID = "sw:PushButton:DLG_MM_ADDRESSBLOCK_PAGE:PB_ASSIGN";
         Pos = MAP_APPFONT ( 194 , 151 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text[ en-US ] = "Match ~Fields...";
     };
-    FixedLine FL_THIRD
+    FixedLine FL_THIRD 
     {
         Pos = MAP_APPFONT ( 6 , 169 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -154,19 +149,19 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
         Size = MAP_APPFONT ( 10 , 8 ) ;
         Text[ en-US ] = "4.";
     };
-    FixedText       FI_PREVIEW
+    FixedText       FI_PREVIEW    
     {
         Pos = MAP_APPFONT ( 16 , 180 ) ;
         Size = MAP_APPFONT ( 228 , 8 ) ;
         Text[ en-US ] = "Check if the address data matches correctly.";
     };
-    Window          WIN_PREVIEW
+    Window          WIN_PREVIEW   
     {
         Border = TRUE;
         Pos = MAP_APPFONT ( 12 , 191 ) ;
         Size = MAP_APPFONT ( 176 , 46 ) ;
     };
-    FixedText       FI_DOCINDEX
+    FixedText       FI_DOCINDEX   
     {
         Pos = MAP_APPFONT ( 111 , 239 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
@@ -174,7 +169,6 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
     ImageButton     IB_PREVSET
     {
-        HelpID = "sw:ImageButton:DLG_MM_ADDRESSBLOCK_PAGE:IB_PREVSET";
         Pos = MAP_APPFONT ( 167 , 238 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_PREV;
@@ -182,7 +176,6 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
     ImageButton     IB_NEXTSET
     {
-        HelpID = "sw:ImageButton:DLG_MM_ADDRESSBLOCK_PAGE:IB_NEXTSET";
         Pos = MAP_APPFONT ( 178 , 238 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_NEXT ;
@@ -194,6 +187,9 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
 };
 
+/*-- 13.04.2004 16:07:28---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
 ModalDialog DLG_MM_SELECTADDRESSBLOCK
 {
     OutputSize = TRUE ;
@@ -219,21 +215,18 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
     };
     PushButton      PB_NEW
     {
-        HelpID = "sw:PushButton:DLG_MM_SELECTADDRESSBLOCK:PB_NEW";
         Pos = MAP_APPFONT ( 204 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text[ en-US ] = "~New...";
     };
     PushButton      PB_CUSTOMIZE
     {
-        HelpID = "sw:PushButton:DLG_MM_SELECTADDRESSBLOCK:PB_CUSTOMIZE";
         Pos = MAP_APPFONT ( 204 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text[ en-US ] = "~Edit...";
     };
     PushButton      PB_DELETE
     {
-        HelpID = "sw:PushButton:DLG_MM_SELECTADDRESSBLOCK:PB_DELETE";
         Pos = MAP_APPFONT ( 204 , 48 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Group = FALSE;
@@ -248,28 +241,24 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
     };
     RadioButton     RB_NEVER
     {
-        HelpID = "sw:RadioButton:DLG_MM_SELECTADDRESSBLOCK:RB_NEVER";
         Pos = MAP_APPFONT ( 12 , 131 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "N~ever include the country/region";
     };
     RadioButton     RB_ALWAYS
     {
-        HelpID = "sw:RadioButton:DLG_MM_SELECTADDRESSBLOCK:RB_ALWAYS";
         Pos = MAP_APPFONT ( 12 , 145 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "~Always include the country/region";
     };
     RadioButton     RB_DEPENDENT
     {
-        HelpID = "sw:RadioButton:DLG_MM_SELECTADDRESSBLOCK:RB_DEPENDENT";
         Pos = MAP_APPFONT ( 12 , 159 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text[ en-US ] = "Only ~include the country/region if it is not:";
     };
     Edit ED_COUNTRY
     {
-        HelpID = "sw:Edit:DLG_MM_SELECTADDRESSBLOCK:ED_COUNTRY";
         Pos = MAP_APPFONT ( 18 , 172 ) ;
         Size = MAP_APPFONT ( 180 , 12 ) ;
         Border = TRUE;
@@ -298,6 +287,10 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
     };
 };
 
+/*-- 13.04.2004 16:07:28---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+
 #define WORKAROUND\
     Text [ en-US ] = "New Address Block";
 
@@ -309,8 +302,8 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     HelpID = HID_MM_CUSTOMIZEADDRESSBLOCK;
     Size = MAP_APPFONT ( 320 , 176 ) ;
     Moveable = TRUE ;
-
-    WORKAROUND
+   
+    WORKAROUND 
 
     String ST_TITLE_EDIT
     {
@@ -344,7 +337,6 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     };
     ImageButton     IB_INSERTFIELD
     {
-        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_INSERTFIELD";
         Pos = MAP_APPFONT ( 80 , 29 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_RIGHT;
@@ -356,7 +348,6 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     };
     ImageButton     IB_REMOVEFIELD
     {
-        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_REMOVEFIELD";
         Pos = MAP_APPFONT ( 80 , 46 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_LEFT;
@@ -378,14 +369,12 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     };
     MultiLineEdit ED_DRAG
     {
-        HelpID = "sw:MultiLineEdit:DLG_MM_CUSTOMIZEADDRESSBLOCK:ED_DRAG";
         Pos = MAP_APPFONT ( 106 , 14 ) ;
         Size = MAP_APPFONT ( 160 , 60 ) ;
         Border = TRUE;
     };
     ImageButton     IB_UP
     {
-        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_UP";
         Pos = MAP_APPFONT ( 285 , 14 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_UP;
@@ -393,7 +382,6 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     };
     ImageButton     IB_LEFT
     {
-        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_LEFT";
         Pos = MAP_APPFONT ( 270 , 29 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_LEFT;
@@ -401,7 +389,6 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     };
     ImageButton     IB_RIGHT
     {
-        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_RIGHT";
         Pos = MAP_APPFONT ( 300 , 29 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_RIGHT;
@@ -409,7 +396,6 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     };
     ImageButton     IB_DOWN
     {
-        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_DOWN";
         Pos = MAP_APPFONT ( 285 , 48 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_DOWN;
@@ -424,7 +410,6 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     };
     ComboBox  CB_FIELD
     {
-        HelpID = "sw:ComboBox:DLG_MM_CUSTOMIZEADDRESSBLOCK:CB_FIELD";
         Pos = MAP_APPFONT ( 106 , 89 ) ;
         Size = MAP_APPFONT ( 160 , 50 ) ;
         Border = TRUE;
@@ -527,7 +512,9 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
         };
     };
 };
+/*-- 13.04.2004 17:45:24---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 ModalDialog DLG_MM_ASSIGNFIELDS
 {
     OutputSize = TRUE ;
@@ -573,7 +560,6 @@ ModalDialog DLG_MM_ASSIGNFIELDS
         };
         ListBox LB_FIELDS
         {
-            HelpID = "sw:ListBox:DLG_MM_ASSIGNFIELDS:LB_FIELDS";
             Pos = MAP_APPFONT ( 83 , 4 ) ;
             Size = MAP_APPFONT ( 74 , 50 ) ;
             TabStop = TRUE;

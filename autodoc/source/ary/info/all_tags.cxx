@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,19 +43,19 @@ namespace info
 
 
 
-//*****************************     StdTag      ***********************//
+//*****************************		StdTag		***********************//
 
 
 StdTag::StdTag( E_AtTagId i_eId )
-    :   eId(i_eId),
+    :	eId(i_eId),
         // aText,
         pNext(0)
 {
 }
 
 bool
-StdTag::Add_SpecialMeaningToken( const char *   ,
-                                 intt           )
+StdTag::Add_SpecialMeaningToken( const char *	,
+                                 intt		    )
 {
     // Does nothing
 
@@ -94,18 +94,18 @@ StdTag::Text()
 
 
 
-//*****************************     BaseTag     ***********************//
+//*****************************		BaseTag		***********************//
 
 BaseTag::BaseTag()
-    :   // sBase
+    :	// sBase
         // aText
         pNext(0)
 {
 }
 
 bool
-BaseTag::Add_SpecialMeaningToken( const char *      i_sText,
-                                  intt              i_nNr )
+BaseTag::Add_SpecialMeaningToken( const char *		i_sText,
+                                  intt				i_nNr )
 {
     if ( i_nNr == 1 )
     {
@@ -144,18 +144,18 @@ BaseTag::Text()
 
 
 
-//*****************************     ExceptionTag    ***********************//
+//*****************************		ExceptionTag	***********************//
 
 ExceptionTag::ExceptionTag()
-    :   // sException,
+    :	// sException,
         // aText
         pNext(0)
 {
 }
 
 bool
-ExceptionTag::Add_SpecialMeaningToken( const char *     i_sText,
-                                       intt             i_nNr )
+ExceptionTag::Add_SpecialMeaningToken( const char *		i_sText,
+                                       intt				i_nNr )
 {
     if ( i_nNr == 1 )
     {
@@ -193,18 +193,18 @@ ExceptionTag::Text()
 }
 
 
-//*****************************     ImplementsTag   ***********************//
+//*****************************		ImplementsTag	***********************//
 
 ImplementsTag::ImplementsTag()
-    :   // sBase
+    :	// sBase
         // aText
         pNext(0)
 {
 }
 
 bool
-ImplementsTag::Add_SpecialMeaningToken( const char *        i_sText,
-                                        intt                i_nNr )
+ImplementsTag::Add_SpecialMeaningToken( const char *		i_sText,
+                                        intt				i_nNr )
 {
     if ( i_nNr == 1 )
     {
@@ -245,17 +245,17 @@ ImplementsTag::Text()
 }
 
 
-//*****************************     KeywordTag      ***********************//
+//*****************************		KeywordTag		***********************//
 
 
 KeywordTag::KeywordTag()
-//  :   sKeys
+//	:	sKeys
 {
 }
 
 bool
-KeywordTag::Add_SpecialMeaningToken( const char *       i_sText,
-                                     intt               )
+KeywordTag::Add_SpecialMeaningToken( const char *		i_sText,
+                                     intt				)
 {
     sKeys.push_back(i_sText);
     return true;
@@ -287,19 +287,19 @@ KeywordTag::Text()
 
 
 
-//*****************************     ParameterTag    ***********************//
+//*****************************		ParameterTag	***********************//
 
 
 ParameterTag::ParameterTag()
-    :   // sName
+    :	// sName
         // aText
         pNext(0)
 {
 }
 
 bool
-ParameterTag::Add_SpecialMeaningToken( const char *     i_sText,
-                                       intt             i_nNr )
+ParameterTag::Add_SpecialMeaningToken( const char *		i_sText,
+                                       intt				i_nNr )
 {
     if ( i_nNr == 1 )
     {
@@ -346,18 +346,18 @@ ParameterTag::do_StoreAt( DocuDisplay &  o_rDisplay ) const
 
 
 
-//*****************************     SeeTag          ***********************//
+//*****************************		SeeTag		    ***********************//
 
 
 
 SeeTag::SeeTag()
-//  :   sReferences
+//	:	sReferences
 {
 }
 
 bool
-SeeTag::Add_SpecialMeaningToken( const char *       i_sText,
-                                 intt               )
+SeeTag::Add_SpecialMeaningToken( const char *		i_sText,
+                                 intt				)
 {
     static QualifiedName aNull_;
     sReferences.push_back(aNull_);
@@ -398,19 +398,19 @@ SeeTag::Text()
 
 
 
-//*****************************     TemplateTag     ***********************//
+//*****************************		TemplateTag		***********************//
 
 
 TemplateTag::TemplateTag()
-    :   // sName
+    :	// sName
         // aText
         pNext(0)
 {
 }
 
 bool
-TemplateTag::Add_SpecialMeaningToken( const char *      i_sText,
-                                       intt             i_nNr )
+TemplateTag::Add_SpecialMeaningToken( const char *		i_sText,
+                                       intt				i_nNr )
 {
     if ( i_nNr == 1 )
     {
@@ -454,18 +454,18 @@ TemplateTag::Text()
 }
 
 
-//*****************************     LabelTag        ***********************//
+//*****************************		LabelTag		***********************//
 
 
 
 LabelTag::LabelTag()
-    :   sLabel()
+    :	sLabel()
 {
 }
 
 bool
-LabelTag::Add_SpecialMeaningToken( const char *     i_sText,
-                                   intt             i_nNr )
+LabelTag::Add_SpecialMeaningToken( const char *		i_sText,
+                                   intt				i_nNr )
 {
     if ( i_nNr == 1 AND sLabel.length() == 0 )
     {
@@ -473,7 +473,7 @@ LabelTag::Add_SpecialMeaningToken( const char *     i_sText,
         return true;
     }
     // KORR_FUTURE
-//  else    // Throw exception because of double label.
+//	else	// Throw exception because of double label.
     return false;
 }
 
@@ -502,16 +502,16 @@ LabelTag::Text()
 }
 
 
-//*****************************     SinceTag        ***********************//
+//*****************************		SinceTag		***********************//
 
 SinceTag::SinceTag()
-    :   sVersion()
+    :	sVersion()
 {
 }
 
 bool
-SinceTag::Add_SpecialMeaningToken( const char *     i_sText,
-                                   intt             )
+SinceTag::Add_SpecialMeaningToken( const char *		i_sText,
+                                   intt				)
 {
     const char cCiphersend = '9' + 1;
     if ( sVersion.empty()

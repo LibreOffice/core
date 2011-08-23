@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ using namespace com::sun::star;
 
 namespace {
 
-sal_uInt16
+USHORT
 executeErrorDialog(
     Window * pParent,
     task::InteractionClassification eClassification,
@@ -113,7 +113,7 @@ executeErrorDialog(
             uno::Reference< uno::XInterface >());
     }
 
-    sal_uInt16 aResult = xBox->Execute();
+    USHORT aResult = xBox->Execute();
     switch( aResult )
     {
     case BUTTONID_OK:
@@ -165,7 +165,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
                 CREATEVERSIONRESMGR_NAME(cnt),
                 CREATEVERSIONRESMGR_NAME(svx),
                 CREATEVERSIONRESMGR_NAME(uui) };
-        static sal_uInt16 const aId[4]
+        static USHORT const aId[4]
             = { RID_ERRHDL,
                 RID_CHAOS_START + 12,
                 // cf. chaos/source/inc/cntrids.hrc, where
@@ -277,7 +277,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             }
         }
 
-        sal_uInt16 nResult = executeErrorDialog(
+        USHORT nResult = executeErrorDialog(
             getParentProperty(), eClassification, aContext, aMessage, nButtonMask );
 
         switch (nResult)

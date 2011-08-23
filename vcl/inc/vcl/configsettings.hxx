@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,14 +33,14 @@
 #include <unotools/configitem.hxx>
 #include <vcl/dllapi.h>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 //........................................................................
 namespace vcl
 {
 //........................................................................
 
-    typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > OUStrMap;
+    typedef std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > OUStrMap;
     class SmallOUStrMap : public OUStrMap { public: SmallOUStrMap() : OUStrMap(1) {} };
 
     //====================================================================
@@ -49,7 +49,7 @@ namespace vcl
     class VCL_DLLPUBLIC SettingsConfigItem : public ::utl::ConfigItem
     {
 
-        boost::unordered_map< rtl::OUString, SmallOUStrMap, rtl::OUStringHash > m_aSettings;
+        std::hash_map< rtl::OUString, SmallOUStrMap, rtl::OUStringHash > m_aSettings;
 
         virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
 
@@ -62,7 +62,7 @@ namespace vcl
 
         const rtl::OUString& getValue( const rtl::OUString& rGroup, const rtl::OUString& rKey ) const;
         void setValue( const rtl::OUString& rGroup, const rtl::OUString& rKey, const rtl::OUString& rValue );
-
+        
         virtual void Commit();
     };
 

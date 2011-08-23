@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,12 +53,13 @@
 #include "AccessibleChartView.hxx"
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
-#include "UndoActions.hxx"
+#include "UndoManager.hxx"
 
 #include <comphelper/InlineContainer.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XUndoSupplier.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -66,8 +67,6 @@
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
-#include <com/sun/star/document/XUndoManagerSupplier.hpp>
-#include <com/sun/star/document/XUndoAction.hpp>
 
 //-------
 // header for define RET_OK
@@ -87,7 +86,6 @@
 // object in the DTOR
 #include <svtools/acceleratorexecute.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
-#include <tools/diagnose_ex.h>
 
 // enable the following define to let the controller listen to model changes and
 // react on this by rebuilding the view
@@ -178,8 +176,8 @@ ChartController::TheModel::~TheModel()
 
 void ChartController::TheModel::SetOwnerShip( sal_Bool bGetsOwnership )
 {
-    m_bOwnership                = bGetsOwnership;
-    m_bOwnershipIsWellKnown = sal_True;
+    m_bOwnership				= bGetsOwnership;
+    m_bOwnershipIsWellKnown	= sal_True;
 }
 
 void ChartController::TheModel::addListener( ChartController* pController )
@@ -231,21 +229,21 @@ void ChartController::TheModel::tryTermination()
                 //so stop listening before trying to terminate or check the source of queryclosing event
                 m_xCloseable->close(sal_True);
 
-                m_bOwnership                = false;
-                m_bOwnershipIsWellKnown = sal_True;
+                m_bOwnership				= false;
+                m_bOwnershipIsWellKnown	= sal_True;
             }
             catch( util::CloseVetoException& )
             {
                 //since we have indicated to give up the ownership with paramter true in close call
                 //the one who has thrown the CloseVetoException is the new owner
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
                 OSL_ENSURE( !m_bOwnership,
                     "INFO: a well known owner has catched a CloseVetoException after calling close(true)" );
 #endif
 
-                m_bOwnership                = false;
-                m_bOwnershipIsWellKnown = sal_True;
+                m_bOwnership				= false;
+                m_bOwnershipIsWellKnown	= sal_True;
                 return;
             }
 
@@ -260,7 +258,7 @@ void ChartController::TheModel::tryTermination()
     catch( uno::Exception& ex)
     {
         (void)(ex); // no warning in non-debug builds
-        OSL_FAIL( ( rtl::OString("Termination of model failed: ")
+        OSL_ENSURE( sal_False, ( rtl::OString("Termination of model failed: ")
             + rtl::OUStringToOString( ex.Message, RTL_TEXTENCODING_ASCII_US ) ).getStr() );
     }
 }
@@ -331,7 +329,7 @@ sal_Bool ChartController::TheModelRef::is() const
 
     if( m_bSuspended )
     {
-        OSL_FAIL( "This Controller is suspended" );
+        OSL_ENSURE( sal_False, "This Controller is suspended" );
         return sal_True;
     }
     return sal_False;
@@ -362,14 +360,14 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-
+    
     if( impl_isDisposedOrSuspended() ) //@todo? allow attaching the frame while suspended?
         return; //behave passive if already disposed or suspended
 
     if(m_xFrame.is()) //what happens, if we do have a Frame already??
     {
         //@todo? throw exception?
-        OSL_FAIL( "there is already a frame attached to the controller" );
+        OSL_ENSURE( sal_False, "there is already a frame attached to the controller" );
         return;
     }
 
@@ -408,7 +406,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
     }
     {
         awt::Size aPageSize( ChartModelHelper::getPageSize(getModel()) );
-
+        
         // calls to VCL
         SolarMutexGuard aSolarGuard;
         m_pChartWindow = new ChartWindow(this,pParent,pParent?pParent->GetStyle():0);
@@ -472,7 +470,6 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     if( rEvent.NewMode.equals(C2U("dirty")) )
     {
         //the view has become dirty, we should repaint it if we have a window
-        SolarMutexGuard aGuard;
         if( m_pChartWindow )
             m_pChartWindow->ForceInvalidate();
     }
@@ -486,6 +483,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
         if( m_pDrawViewWrapper )
         {
             m_pDrawViewWrapper->UnmarkAll();
+            //m_pDrawViewWrapper->hideMarkHandles(); todo??
             m_pDrawViewWrapper->HideSdrPage();
         }
     }
@@ -515,11 +513,8 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 
                     impl_initializeAccessible();
 
-                    {
-                        SolarMutexGuard aGuard;
-                        if( m_pChartWindow )
-                            m_pChartWindow->Invalidate();
-                    }
+                    if( m_pChartWindow )
+                        m_pChartWindow->Invalidate();
                 }
 
                 m_bConnectingToView = false;
@@ -528,7 +523,8 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     }
 }
 
-sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XModel > & xModel )
+        sal_Bool SAL_CALL ChartController
+::attachModel( const uno::Reference< frame::XModel > & xModel )
         throw(uno::RuntimeException)
 {
     impl_invalidateAccessible();
@@ -536,10 +532,15 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     //is called to attach the controller to a new model.
     //return true if attach was successfully, false otherwise (e.g. if you do not work with a model)
 
-    SolarMutexClearableGuard aClearableGuard;
-    if( impl_isDisposedOrSuspended() ) //@todo? allow attaching a new model while suspended?
-        return sal_False; //behave passive if already disposed or suspended
-    aClearableGuard.clear();
+    {
+        // FIXME: ths is suspicious: why just proctect the call to isDisposedOrSuspened
+        // and not all the way until he new model is attached ?
+        // seems racy to me
+        SolarMutexGuard aGuard;
+        if( impl_isDisposedOrSuspended() ) //@todo? allow attaching a new model while suspended?
+            return sal_False; //behave passive if already disposed or suspended
+    }
+
 
     TheModelRef aNewModelRef( new TheModel( xModel), m_aModelMutex);
     TheModelRef aOldModelRef(m_aModel,m_aModelMutex);
@@ -554,7 +555,9 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
         m_pDrawModelWrapper.reset();
 
         aOldModelRef->removeListener( this );
- #ifdef TEST_ENABLE_MODIFY_LISTENER
+        //@todo?? termination correct?
+// 		aOldModelRef->tryTermination();
+#ifdef TEST_ENABLE_MODIFY_LISTENER
         uno::Reference< util::XModifyBroadcaster > xMBroadcaster( aOldModelRef->getModel(),uno::UNO_QUERY );
         if( xMBroadcaster.is())
             xMBroadcaster->removeModifyListener( this );
@@ -608,20 +611,18 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     }
 
     //the frameloader is responsible to call xModel->connectController
-    {
-        SolarMutexGuard aGuard;
-        if( m_pChartWindow )
-            m_pChartWindow->Invalidate();
-    }
+    if( m_pChartWindow )
+        m_pChartWindow->Invalidate();
 
-    uno::Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
-    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW );
+    uno::Reference< chart2::XUndoSupplier > xUndoSupplier( getModel(), uno::UNO_QUERY );
+    if( xUndoSupplier.is())
+        m_xUndoManager.set( xUndoSupplier->getUndoManager());
 
     return sal_True;
 }
 
         uno::Reference< frame::XFrame > SAL_CALL ChartController
-::getFrame()    throw(uno::RuntimeException)
+::getFrame()	throw(uno::RuntimeException)
 {
     //provides access to owner frame of this controller
     //return the frame containing this controller
@@ -630,7 +631,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
 }
 
         uno::Reference< frame::XModel > SAL_CALL ChartController
-::getModel()    throw(uno::RuntimeException)
+::getModel()	throw(uno::RuntimeException)
 {
     //provides access to currently attached model
     //returns the currently attached model
@@ -648,7 +649,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
 {
     //provides access to current view status
     //set of data that can be used to restore the current view status at later time
-    //  by using XController::restoreViewData()
+    //	by using XController::restoreViewData()
 
     SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() )
@@ -691,18 +692,26 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
 
     if(bSuspend==m_bSuspended)
     {
-        OSL_FAIL( "new suspend mode equals old suspend mode" );
+        OSL_ENSURE( sal_False, "new suspend mode equals old suspend mode" );
         return sal_True;
     }
 
     //change suspend mode
     if(bSuspend)
     {
+        //aGuard.clear();
+        //@todo ???  try to stop all what may prevent me from becoming disposed
+        //aGuard.reset();
+
         m_bSuspended = bSuspend;
         return sal_True;
     }
     else
     {
+        //aGuard.clear();
+        //@todo ??? redo what was made in section bSuspend==true
+        //aGuard.reset();
+
         m_bSuspended = bSuspend;
     }
     return sal_True;
@@ -750,7 +759,7 @@ void ChartController::impl_deleteDrawViewController()
         if( !m_aLifeTimeManager.dispose() )
             return;
 
-//  OSL_ENSURE( m_bSuspended, "dispose was called but controller is not suspended" );
+//	OSL_ENSURE( m_bSuspended, "dispose was called but controller is not suspended" );
 
         this->stopDoubleClickWaiting();
 
@@ -775,7 +784,7 @@ void ChartController::impl_deleteDrawViewController()
             uno::Reference< util::XModeChangeBroadcaster > xViewBroadcaster( m_xChartView, uno::UNO_QUERY );
             if( xViewBroadcaster.is() )
                 xViewBroadcaster->removeModeChangeListener(this);
-
+            // /--
             impl_invalidateAccessible();
             SolarMutexGuard aSolarGuard;
             impl_deleteDrawViewController();
@@ -788,6 +797,7 @@ void ChartController::impl_deleteDrawViewController()
             m_pChartWindow = NULL;//m_pChartWindow is deleted via UNO due to dispose of m_xViewWindow (trigerred by Framework (Controller pretends to be XWindow also))
             m_xViewWindow->dispose();
             m_xChartView.clear();
+            // \--
         }
 
         // remove as listener to layout manager events
@@ -878,7 +888,7 @@ void ChartController::impl_deleteDrawViewController()
 
     if( !(aModelRef->getModel() == rSource.Source) )
     {
-        OSL_FAIL( "queryClosing was called on a controller from an unknown source" );
+        OSL_ENSURE( sal_False, "queryClosing was called on a controller from an unknown source" );
         return;
     }
 
@@ -1050,7 +1060,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     return uno::Reference< frame::XDispatch > ();
 }
 
-        uno::Sequence<uno::Reference<frame::XDispatch > >   ChartController
+        uno::Sequence<uno::Reference<frame::XDispatch > >	ChartController
 ::queryDispatches( const uno::Sequence<
         frame::DispatchDescriptor>& xDescripts)
         throw(uno::RuntimeException)
@@ -1071,7 +1081,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             , const uno::Sequence< beans::PropertyValue >& rArgs )
             throw (uno::RuntimeException)
 {
-    //@todo avoid OString
+    //@todo avoid OString (see Mathias mail on bug #104387#)
     rtl::OString aCommand( rtl::OUStringToOString( rURL.Path, RTL_TEXTENCODING_ASCII_US ) );
 
     if(aCommand.equals("Paste"))
@@ -1086,7 +1096,6 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     else if(aCommand.equals("Update")) //Update Chart
     {
         ChartViewHelper::setViewToDirtyState( getModel() );
-        SolarMutexGuard aGuard;
         if( m_pChartWindow )
             m_pChartWindow->Invalidate();
     }
@@ -1248,7 +1257,13 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             , const util::URL& /* aURL */ )
             throw (uno::RuntimeException)
 {
-    //@todo
+//     // TODO: add listener by URL !
+// 	SolarMutexGuard aGuard;
+// 	if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
+// 		return; //behave passive if already disposed or suspended
+
+// 	//--add listener
+//  	m_aLifeTimeManager.m_aListenerContainer.addInterface( ::getCppuType( & xControl ), xControl );
 }
 
     void SAL_CALL ChartController
@@ -1256,7 +1271,13 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             , const util::URL& /* aURL */ )
             throw (uno::RuntimeException)
 {
-    //@todo
+//     // TODO: remove listener by URL !
+// 	SolarMutexGuard aGuard;
+//     if( m_aLifeTimeManager.impl_isDisposed() )
+// 		return; //behave passive if already disposed or suspended
+
+// 	//--remove listener
+// 	m_aLifeTimeManager.m_aListenerContainer.removeInterface( ::getCppuType( & xControl ), xControl );
 }
 
 //-----------------------------------------------------------------
@@ -1289,16 +1310,18 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
 {
     // using assignment for broken gcc 3.3
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-        String( SchResId( STR_ACTION_EDIT_CHARTTYPE )), m_xUndoManager );
+        ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHARTTYPE ))), m_xUndoManager, getModel() );
 
+    // /--
     SolarMutexGuard aSolarGuard;
     //prepare and open dialog
     ChartTypeDialog aDlg( m_pChartWindow, getModel(), m_xCC );
     if( aDlg.Execute() == RET_OK )
     {
         impl_adaptDataSeriesAutoResize();
-        aUndoGuard.commit();
+        aUndoGuard.commitAction();
     }
+    // \--
 }
 
 void SAL_CALL ChartController::executeDispatch_SourceData()
@@ -1312,16 +1335,18 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
 
     // using assignment for broken gcc 3.3
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-        String( SchResId( STR_ACTION_EDIT_DATA_RANGES )), m_xUndoManager );
+        ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_DATA_RANGES ))), m_xUndoManager, getModel() );
     if( xChartDoc.is())
     {
+        // /--
         SolarMutexGuard aSolarGuard;
         ::chart::DataSourceDialog aDlg( m_pChartWindow, xChartDoc, m_xCC );
         if( aDlg.Execute() == RET_OK )
         {
             impl_adaptDataSeriesAutoResize();
-            aUndoGuard.commit();
+            aUndoGuard.commitAction();
         }
+        // \--
     }
 }
 
@@ -1337,14 +1362,14 @@ void SAL_CALL ChartController::executeDispatch_MoveSeries( sal_Bool bForward )
     UndoGuardWithSelection aUndoGuard(
         ActionDescriptionProvider::createDescription(
             (bForward ? ActionDescriptionProvider::MOVE_TOTOP : ActionDescriptionProvider::MOVE_TOBOTTOM),
-            String( SchResId( STR_OBJECT_DATASERIES ))),
-        m_xUndoManager );
+            ::rtl::OUString( String( SchResId( STR_OBJECT_DATASERIES )))),
+        m_xUndoManager, getModel());
 
     bool bChanged = DiagramHelper::moveSeries( ChartModelHelper::findDiagram( getModel() ), xGivenDataSeries, bForward );
     if( bChanged )
     {
         m_aSelection.setSelection( ObjectIdentifier::getMovedSeriesCID( aObjectCID, bForward ) );
-        aUndoGuard.commit();
+        aUndoGuard.commitAction();
     }
 }
 
@@ -1392,28 +1417,25 @@ void SAL_CALL ChartController::modified( const lang::EventObject& /* aEvent */ )
 {
     // the source can also be a subobject of the ChartModel
     // @todo: change the source in ChartModel to always be the model itself ?
+//     if( getModel() == aEvent.Source )
+    
+
     //todo? update menu states ?
 }
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )
 {
-    ENSURE_OR_RETURN( pUndoAction, "invalid Undo action", 1L );
-
     ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
     if ( aObjectCID.getLength() == 0 )
     {
-        try
+        UndoManager* pUndoManager = UndoManager::getImplementation( m_xUndoManager );
+        if ( pUndoManager )
         {
-            const Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
-            const Reference< document::XUndoManager > xUndoManager( xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW );
-            const Reference< document::XUndoAction > xAction( new impl::ShapeUndoElement( *pUndoAction ) );
-            xUndoManager->addUndoAction( xAction );
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
+            pUndoManager->addShapeUndoAction( pUndoAction );
         }
     }
     return 0L;
@@ -1452,7 +1474,6 @@ uno::Reference< XAccessible > ChartController::CreateAccessible()
 
 void ChartController::impl_invalidateAccessible()
 {
-    SolarMutexGuard aGuard;
     if( m_pChartWindow )
     {
         Reference< lang::XInitialization > xInit( m_pChartWindow->GetAccessible(false), uno::UNO_QUERY );
@@ -1465,7 +1486,6 @@ void ChartController::impl_invalidateAccessible()
 }
 void ChartController::impl_initializeAccessible()
 {
-    SolarMutexGuard aGuard;
     if( m_pChartWindow )
         this->impl_initializeAccessible( Reference< lang::XInitialization >( m_pChartWindow->GetAccessible(false), uno::UNO_QUERY ) );
 }
@@ -1480,14 +1500,11 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         aArguments[1]=uno::makeAny(xModel);
         aArguments[2]=uno::makeAny(m_xChartView);
         uno::Reference< XAccessible > xParent;
+        if( m_pChartWindow )
         {
-            SolarMutexGuard aGuard;
-            if( m_pChartWindow )
-            {
-                Window* pParentWin( m_pChartWindow->GetAccessibleParentWindow());
-                if( pParentWin )
-                    xParent.set( pParentWin->GetAccessible());
-            }
+            Window* pParentWin( m_pChartWindow->GetAccessibleParentWindow());
+            if( pParentWin )
+                xParent.set( pParentWin->GetAccessible());
         }
         aArguments[3]=uno::makeAny(xParent);
         aArguments[4]=uno::makeAny(m_xViewWindow);
@@ -1512,7 +1529,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( C2U("InsertMenuLegend") )   ( C2U("InsertLegend") )         ( C2U("DeleteLegend") )
         ( C2U("InsertMenuDataLabels") )
         ( C2U("InsertMenuAxes") )     ( C2U("InsertRemoveAxes") )         ( C2U("InsertMenuGrids") )
-        ( C2U("InsertSymbol") )
+        ( C2U("InsertSymbol") )       
         ( C2U("InsertTrendlineEquation") )  ( C2U("InsertTrendlineEquationAndR2") )
         ( C2U("InsertR2Value") )      ( C2U("DeleteR2Value") )
         ( C2U("InsertMenuTrendlines") )  ( C2U("InsertTrendline") )
@@ -1540,7 +1557,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         //context menu - format objects entries
         ( C2U("FormatWall") )        ( C2U("FormatFloor") )         ( C2U("FormatChartArea") )
         ( C2U("FormatLegend") )
-
+        
         ( C2U("FormatAxis") )           ( C2U("FormatTitle") )
         ( C2U("FormatDataSeries") )     ( C2U("FormatDataPoint") )
         ( C2U("ResetAllDataPoints") )   ( C2U("ResetDataPoint") )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameCont
             script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
             uno::Any aObject( aModuleInfo.ModuleObject );
             uno::Reference< lang::XServiceInfo > xServiceInfo( aObject, uno::UNO_QUERY );
-            if( xServiceInfo.is() && xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Worksheet" )) ) )
+            if( xServiceInfo.is() && xServiceInfo->supportsService( rtl::OUString::createFromAscii( "ooo.vba.excel.Worksheet" ) ) )
             {
                 uno::Reference< container::XNamed > xNamed( aObject, uno::UNO_QUERY );
                 if( xNamed.is() )
@@ -93,7 +93,7 @@ sal_Int32 ModuleInfoHelper::getModuleType(  const uno::Reference< container::XNa
         script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
         nType = aModuleInfo.ModuleType;
     }
-    return nType;
+    return nType;    
 }
 
 BasicEntry::~BasicEntry()
@@ -192,12 +192,12 @@ bool BasicEntryDescriptor::operator==( const BasicEntryDescriptor& rDesc ) const
 }
 
 BasicTreeListBox::BasicTreeListBox( Window* pParent, const ResId& rRes ) :
-    SvTreeListBox( pParent, IDEResId( sal::static_int_cast<sal_uInt16>( rRes.GetId() ) ) ),
+    SvTreeListBox( pParent, IDEResId( sal::static_int_cast<USHORT>( rRes.GetId() ) ) ),
     m_aNotifier( *this )
 {
     SetNodeDefaultImages();
     SetSelectionMode( SINGLE_SELECTION );
-    nMode = 0xFF;   // Alles
+    nMode = 0xFF;	// Alles
 }
 
 
@@ -224,7 +224,7 @@ void BasicTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocati
     // can be called multiple times for updating!
 
     // eigentlich prueffen, ob Basic bereits im Baum ?!
-    SetUpdateMode( sal_False );
+    SetUpdateMode( FALSE );
 
     // level 1: BasicManager (application, document, ...)
     SvLBoxEntry* pDocumentRootEntry = FindRootEntry( rDocument, eLocation );
@@ -234,15 +234,17 @@ void BasicTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocati
     {
         String aRootName( GetRootEntryName( rDocument, eLocation ) );
         Image aImage;
-        GetRootEntryBitmaps( rDocument, aImage );
+        Image aImageHC;
+        GetRootEntryBitmaps( rDocument, aImage, aImageHC );
         pDocumentRootEntry = AddEntry(
             aRootName,
             aImage,
+            aImageHC,
             0, true,
             std::auto_ptr< BasicEntry >( new BasicDocumentEntry( rDocument, eLocation ) ) );
     }
 
-    SetUpdateMode( sal_True );
+    SetUpdateMode( TRUE );
 }
 
 void BasicTreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation )
@@ -259,19 +261,19 @@ void BasicTreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, con
         if ( eLocation == rDocument.getLibraryLocation( aLibName ) )
         {
             // check, if the module library is loaded
-            sal_Bool bModLibLoaded = sal_False;
+            BOOL bModLibLoaded = FALSE;
             ::rtl::OUString aOULibName( aLibName );
             Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
-            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLoaded( aOULibName ) )
-                bModLibLoaded = sal_True;
+            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLoaded( aOULibName ) ) 
+                bModLibLoaded = TRUE;
 
             // check, if the dialog library is loaded
-            sal_Bool bDlgLibLoaded = sal_False;
+            BOOL bDlgLibLoaded = FALSE;
             Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
-            if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLoaded( aOULibName ) )
-                bDlgLibLoaded = sal_True;
+            if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLoaded( aOULibName ) ) 
+                bDlgLibLoaded = TRUE;
 
-            sal_Bool bLoaded = bModLibLoaded || bDlgLibLoaded;
+            BOOL bLoaded = bModLibLoaded || bDlgLibLoaded;
 
             // if only one of the libraries is loaded, load also the other
             if ( bLoaded )
@@ -284,23 +286,30 @@ void BasicTreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, con
             }
 
             // create tree list box entry
-            sal_uInt16 nId;
+            USHORT nId, nIdHC;
             if ( ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES ) )
+            {
                 nId = bLoaded ? RID_IMG_DLGLIB : RID_IMG_DLGLIBNOTLOADED;
+                nIdHC = bLoaded ? RID_IMG_DLGLIB_HC : RID_IMG_DLGLIBNOTLOADED_HC;
+            }
             else
+            {
                 nId = bLoaded ? RID_IMG_MODLIB : RID_IMG_MODLIBNOTLOADED;
+                nIdHC = bLoaded ? RID_IMG_MODLIB_HC : RID_IMG_MODLIBNOTLOADED_HC;
+            }
             SvLBoxEntry* pLibRootEntry = FindEntry( pDocumentRootEntry, aLibName, OBJ_TYPE_LIBRARY );
             if ( pLibRootEntry )
             {
-                SetEntryBitmaps( pLibRootEntry, Image( IDEResId( nId ) ) );
+                SetEntryBitmaps( pLibRootEntry, Image( IDEResId( nId ) ), Image( IDEResId( nIdHC ) ) );
                 if ( IsExpanded( pLibRootEntry ) )
                     ImpCreateLibSubEntries( pLibRootEntry, rDocument, aLibName );
             }
             else
             {
                 pLibRootEntry = AddEntry(
-                    aLibName,
-                    Image( IDEResId( nId ) ),
+                    aLibName,                  
+                    Image( IDEResId( nId ) ), 
+                    Image( IDEResId( nIdHC ) ),
                     pDocumentRootEntry, true,
                     std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_LIBRARY ) ) );
             }
@@ -338,6 +347,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
                             pModuleEntry = AddEntry(
                                 aModName,
                                 Image( IDEResId( RID_IMG_MODULE ) ),
+                                Image( IDEResId( RID_IMG_MODULE_HC ) ),
                                 pLibRootEntry, false,
                                 std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
 
@@ -347,7 +357,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
                             Sequence< ::rtl::OUString > aNames = BasicIDE::GetMethodNames( rDocument, rLibName, aModName );
                             sal_Int32 nCount = aNames.getLength();
                             const ::rtl::OUString* pNames = aNames.getConstArray();
-
+    
                             for ( sal_Int32 j = 0 ; j < nCount ; j++ )
                             {
                                 String aName = pNames[ j ];
@@ -356,6 +366,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
                                     pEntry = AddEntry(
                                         aName,
                                         Image( IDEResId( RID_IMG_MACRO ) ),
+                                        Image( IDEResId( RID_IMG_MACRO_HC ) ),
                                         pModuleEntry, false,
                                         std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_METHOD ) ) );
                             }
@@ -367,13 +378,13 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
-        }
+        }   
     }
 
     // dialogs
     if ( nMode & BROWSEMODE_DIALOGS )
     {
-         Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
+         Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
 
          if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLoaded( aOULibName ) )
          {
@@ -392,6 +403,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
                         pDialogEntry = AddEntry(
                             aDlgName,
                             Image( IDEResId( RID_IMG_DIALOG ) ),
+                            Image( IDEResId( RID_IMG_DIALOG_HC ) ),
                             pLibRootEntry, false,
                             std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_DIALOG ) ) );
                 }
@@ -406,7 +418,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
 
 void BasicTreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName )
 {
-
+    
     ::std::vector< std::pair< BasicEntryType, ::rtl::OUString > > aEntries;
     aEntries.push_back( ::std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) );
     aEntries.push_back( ::std::make_pair( OBJ_TYPE_USERFORMS,  String( IDEResId( RID_STR_USERFORMS ) ) ) );
@@ -421,7 +433,7 @@ void BasicTreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEnt
         SvLBoxEntry* pLibSubRootEntry = FindEntry( pLibRootEntry, aEntryName, eType );
         if( pLibSubRootEntry )
         {
-            SetEntryBitmaps( pLibSubRootEntry, Image( IDEResId( RID_IMG_MODLIB ) ) );
+            SetEntryBitmaps( pLibSubRootEntry, Image( IDEResId( RID_IMG_MODLIB ) ), Image( IDEResId( RID_IMG_MODLIB_HC ) ) );
             if ( IsExpanded( pLibSubRootEntry ) )
                 ImpCreateLibSubSubEntriesInVBAMode( pLibSubRootEntry, rDocument, rLibName );
         }
@@ -430,6 +442,7 @@ void BasicTreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEnt
             pLibSubRootEntry = AddEntry(
                 aEntryName,
                 Image( IDEResId( RID_IMG_MODLIB ) ),
+                Image( IDEResId( RID_IMG_MODLIB_HC ) ),
                 pLibRootEntry, true,
                 std::auto_ptr< BasicEntry >( new BasicEntry( eType ) ) );
         }
@@ -491,6 +504,7 @@ void BasicTreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubR
                 pModuleEntry = AddEntry(
                     aEntryName,
                     Image( IDEResId( RID_IMG_MODULE ) ),
+                    Image( IDEResId( RID_IMG_MODULE_HC ) ),
                     pLibSubRootEntry, false,
                     std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
 
@@ -509,6 +523,7 @@ void BasicTreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubR
                         pEntry = AddEntry(
                             aName,
                             Image( IDEResId( RID_IMG_MACRO ) ),
+                            Image( IDEResId( RID_IMG_MACRO_HC ) ),
                             pModuleEntry, false,
                             std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_METHOD ) ) );
                 }
@@ -523,11 +538,11 @@ void BasicTreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubR
 
 SvLBoxEntry* BasicTreeListBox::ImpFindEntry( SvLBoxEntry* pParent, const String& rText )
 {
-    sal_uLong nRootPos = 0;
+    ULONG nRootPos = 0;
     SvLBoxEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
     while ( pEntry )
     {
-        if (  GetEntryText( pEntry ) == rText )
+        if (  GetEntryText( pEntry ) == rText ) 
             return pEntry;
 
         pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );
@@ -605,7 +620,7 @@ void BasicTreeListBox::UpdateEntries()
     SetCurrentEntry( aCurDesc );
 }
 
-SvLBoxEntry* BasicTreeListBox::CloneEntry( SvLBoxEntry* pSource )
+SvLBoxEntry* __EXPORT BasicTreeListBox::CloneEntry( SvLBoxEntry* pSource )
 {
     SvLBoxEntry* pNew = SvTreeListBox::CloneEntry( pSource );
     BasicEntry* pUser = (BasicEntry*)pSource->GetUserData();
@@ -620,7 +635,7 @@ SvLBoxEntry* BasicTreeListBox::CloneEntry( SvLBoxEntry* pSource )
 
 SvLBoxEntry* BasicTreeListBox::FindEntry( SvLBoxEntry* pParent, const String& rText, BasicEntryType eType )
 {
-    sal_uLong nRootPos = 0;
+    ULONG nRootPos = 0;
     SvLBoxEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
     while ( pEntry )
     {
@@ -637,7 +652,7 @@ SvLBoxEntry* BasicTreeListBox::FindEntry( SvLBoxEntry* pParent, const String& rT
 long BasicTreeListBox::ExpandingHdl()
 {
     // Expanding oder Collaps?
-    sal_Bool bOK = sal_True;
+    BOOL bOK = TRUE;
     if ( GetModel()->GetDepth( GetHdlEntry() ) == 1 )
     {
         SvLBoxEntry* pCurEntry = GetCurEntry();
@@ -657,7 +672,7 @@ long BasicTreeListBox::ExpandingHdl()
                 ::rtl::OUString aOULibName( aLibName );
                 Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
-                {
+                {                
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                     {
@@ -671,9 +686,9 @@ long BasicTreeListBox::ExpandingHdl()
     return bOK;
 }
 
-sal_Bool BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
+BOOL BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
 {
-    sal_Bool bProtected = sal_False;
+    BOOL bProtected = FALSE;
     if ( pEntry && ( GetModel()->GetDepth( pEntry ) == 1 ) )
     {
         BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
@@ -684,11 +699,11 @@ sal_Bool BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
             ::rtl::OUString aOULibName( aDesc.GetLibName() );
             Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
-            {
+            {                
                 Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                 {
-                    bProtected = sal_True;
+                    bProtected = TRUE;
                 }
             }
         }
@@ -696,24 +711,24 @@ sal_Bool BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
     return bProtected;
 }
 
-SvLBoxEntry* BasicTreeListBox::AddEntry(
-    const String& rText,
-    const Image& rImage,
-    SvLBoxEntry* pParent,
-    bool bChildrenOnDemand,
-    std::auto_ptr< BasicEntry > aUserData
-)
+SvLBoxEntry* BasicTreeListBox::AddEntry( 
+    const String& rText, const Image& rImage, const Image& rImageHC,
+    SvLBoxEntry* pParent, bool bChildrenOnDemand, std::auto_ptr< BasicEntry > aUserData )
 {
     SvLBoxEntry* p = InsertEntry(
         rText, rImage, rImage, pParent, bChildrenOnDemand, LIST_APPEND,
         aUserData.release() ); // XXX possible leak
+    SetExpandedEntryBmp( p, rImageHC, BMP_COLOR_HIGHCONTRAST );
+    SetCollapsedEntryBmp( p, rImageHC, BMP_COLOR_HIGHCONTRAST );
     return p;
 }
 
-void BasicTreeListBox::SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage )
+void BasicTreeListBox::SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage, const Image& rImageHC )
 {
-    SetExpandedEntryBmp(  pEntry, rImage );
-    SetCollapsedEntryBmp( pEntry, rImage );
+    SetExpandedEntryBmp( pEntry, rImage, BMP_COLOR_NORMAL );
+    SetCollapsedEntryBmp( pEntry, rImage, BMP_COLOR_NORMAL );
+    SetExpandedEntryBmp( pEntry, rImageHC, BMP_COLOR_HIGHCONTRAST );
+    SetCollapsedEntryBmp( pEntry, rImageHC, BMP_COLOR_HIGHCONTRAST );
 }
 
 LibraryType BasicTreeListBox::GetLibraryType() const
@@ -731,7 +746,7 @@ String BasicTreeListBox::GetRootEntryName( const ScriptDocument& rDocument, Libr
     return rDocument.getTitle( eLocation, GetLibraryType() );
 }
 
-void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage )
+void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage, Image& rImageHC )
 {
     OSL_ENSURE( rDocument.isValid(), "BasicTreeListBox::GetRootEntryBitmaps: illegal document!" );
     if ( !rDocument.isValid() )
@@ -751,12 +766,12 @@ void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Ima
                 if ( xModuleConfig.is() )
                 {
                     Sequence< beans::PropertyValue > aModuleDescr;
-                    xModuleConfig->getByName( sModule ) >>= aModuleDescr;
+                    xModuleConfig->getByName( sModule ) >>= aModuleDescr;                
                     sal_Int32 nCount = aModuleDescr.getLength();
                     const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
                     for ( sal_Int32 i = 0; i < nCount; ++i )
                     {
-                        if ( pModuleDescr[ i ].Name.equalsAsciiL(
+                        if ( pModuleDescr[ i ].Name.equalsAsciiL( 
                             RTL_CONSTASCII_STRINGPARAM( "ooSetupFactoryEmptyDocumentURL" ) ) )
                         {
                             pModuleDescr[ i ].Value >>= sFactoryURL;
@@ -773,17 +788,25 @@ void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Ima
 
         if ( sFactoryURL.getLength() )
         {
-            rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ), sal_False );
+            rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ), 
+                FALSE /* small */, 
+                FALSE /* normal */ );
+
+            rImageHC = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ), 
+                FALSE /* small */, 
+                TRUE /* high contrast */ );
         }
         else
         {
             // default icon
             rImage = Image( IDEResId( RID_IMG_DOCUMENT ) );
+            rImageHC = Image( IDEResId( RID_IMG_DOCUMENT_HC ) );
         }
     }
     else
     {
         rImage = Image( IDEResId( RID_IMG_INSTALLATION ) );
+        rImageHC = Image( IDEResId( RID_IMG_INSTALLATION_HC ) );
     }
 }
 
@@ -795,7 +818,7 @@ void BasicTreeListBox::SetCurrentEntry( BasicEntryDescriptor& rDesc )
     {
         aDesc = BasicEntryDescriptor(
             ScriptDocument::getApplicationScriptDocument(),
-            LIBRARY_LOCATION_USER, String::CreateFromAscii( "Standard" ),
+            LIBRARY_LOCATION_USER, String::CreateFromAscii( "Standard" ), 
             String(), String::CreateFromAscii( "." ), OBJ_TYPE_UNKNOWN );
     }
     ScriptDocument aDocument( aDesc.GetDocument() );

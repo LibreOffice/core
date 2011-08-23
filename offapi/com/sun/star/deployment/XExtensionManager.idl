@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,41 +43,41 @@ module com { module sun { module star { module deployment {
 
 /** The <type>XExtensionManager</type> interface is used to manage extensions
     in the user, shared and bundled repository.
-
+    
     @see ExtensionManager
-    @since OOo 3.3
+    @since OOo 3.3.0
 */
 interface XExtensionManager
 {
     /** interface to notify disposing
      */
     interface com::sun::star::lang::XComponent;
-
+    
     /** interface to notify changes of the set of deployed packages of
         this manager
     */
     interface com::sun::star::util::XModifyBroadcaster;
-
-
+    
+    
     /** gets the supported <type>XPackageTypeInfo</type>s.
-
+        
         @return
                 supported <type>XPackageTypeInfo</type>s.
     */
     sequence<XPackageTypeInfo> getSupportedPackageTypes();
-
+    
     /** creates a command channel to be used to asynchronously abort a command.
-
+        
         @return
                 abort channel
     */
     com::sun::star::task::XAbortChannel createAbortChannel();
-
+    
     /** adds an extension.
 
         The properties argument is currently only used to suppress the license information
         for shared extensions.
-
+        
         @param url
                package URL, must be UCB conform
         @param properties
@@ -91,7 +91,7 @@ interface XExtensionManager
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               object representing the extension.
+               object representing the extension.                
     */
     XPackage addExtension( [in] string url,
                            [in] sequence<com::sun::star::beans::NamedValue> properties,
@@ -102,9 +102,9 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
-
+    
     /** removes an extension.
-
+        
         @param identifier
                package identifier
         @param fileName
@@ -127,15 +127,15 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
-
+    
 
     /** enable an extension.
 
         If the extension is not from the user repository then an
         IllegalArgumentException is thrown.
-
+        
         @param extension
-               the extension which is to be enabled.
+               the extension which is to be enabled. 
         @param xAbortChannel
                abort channel to asynchronously abort the removing process,
                or null
@@ -155,7 +155,7 @@ interface XExtensionManager
 
         If the extension is not from the user repository then an
         IllegalArgumentException is thrown.
-
+        
         @param extension
                the extension which is to be disabled
         @param xAbortChannel
@@ -175,7 +175,7 @@ interface XExtensionManager
 
     /** gets all currently installed extensions, including disabled
         user extensions.
-
+        
         @param repository
                the repository from which the extensions are returned
         @param xAbortChannel
@@ -218,7 +218,7 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** gets all extensions with the same identifier from all repositories.
+    /** gets all extensions with the same identifer from all repositories.
 
         The extension at the first position in the returned sequence represents
         the extension from the user repository. The next element is from the shared
@@ -233,12 +233,12 @@ interface XExtensionManager
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::lang::IllegalArgumentException);
-
+    
 
     /** returns a sequence containing all installed extensions.
 
         The members of the returned sequence correspond to an extension with a
-        particular extension identifier. The members are also sequences which
+        particular extension identifer. The members are also sequences which
         contain as many elements as there are repositories. Those are ordered
         according to the priority of the repository. That is, the first member
         is the extension from the user repository, the second is from the shared
@@ -277,16 +277,14 @@ interface XExtensionManager
 
 
     /** synchronizes the extension database with the contents of the extensions
-       folder of shared and bundled extensions.
+       folder of shared and bundled extensinos.
 
        Added extensions will be added to the database and removed extensions
        will be removed from the database.
-       The active extensions are determined. That is, shared or bundled extensions
-       are not necessaryly registered (<member>XPackage::registerPackage</member>).
-
+       
        @return
               If true - then at least one extension was removed or added. Otherwise
-              nothing was changed.
+              nothing was chaned.
     */
     boolean synchronize(
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
@@ -295,25 +293,6 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
-
-
-    /** synchronizes the special bundled_prereg repository, which is based on
-       the bundled extensions and has its registration data folder at
-       $BUNDLED_EXTENSIONS_PREREG (for example openoffice.org3/share/prereg).
-
-       All bundled extensions are registered (<member>XPackage::registerPackage</member>).
-       The active extensions are NOT determined, because this function only works
-       with bundled extensions.
-
-       This function is intended to be called during the installation of OOo.
-       OOo will copy parts of the registration data folder to the user installation at the
-       first startup.
-    */
-
-    void synchronizeBundledPrereg(
-        [in] com::sun::star::task::XAbortChannel xAbortChannel,
-        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
-        raises (DeploymentException);
 
 
     /** returns all extensions which are currently not in use

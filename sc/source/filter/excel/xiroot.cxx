@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ void XclImpRoot::SetAppFontEncoding( rtl_TextEncoding eAppFontEnc )
         SetTextEncoding( eAppFontEnc );
 }
 
-void XclImpRoot::InitializeTable( SCTAB nScTab )
+void XclImpRoot::InitializeTable( SCTAB /*nScTab*/ )
 {
     if( GetBiff() <= EXC_BIFF4 )
     {
@@ -121,8 +121,6 @@ void XclImpRoot::InitializeTable( SCTAB nScTab )
     GetXFRangeBuffer().Initialize();
     GetPageSettings().Initialize();
     GetTabViewSettings().Initialize();
-    // delete the automatically generated codename
-    GetDoc().SetCodeName( nScTab, String::EmptyString() );
 }
 
 void XclImpRoot::FinalizeTable()
@@ -151,7 +149,7 @@ ExcelToSc& XclImpRoot::GetOldFmlaConverter() const
 
 XclImpSst& XclImpRoot::GetSst() const
 {
-    DBG_ASSERT( mrImpData.mxSst, "XclImpRoot::GetSst - invalid call, wrong BIFF" );
+    DBG_ASSERT( mrImpData.mxSst.is(), "XclImpRoot::GetSst - invalid call, wrong BIFF" );
     return *mrImpData.mxSst;
 }
 
@@ -204,7 +202,7 @@ XclImpNameManager& XclImpRoot::GetNameManager() const
 
 XclImpLinkManager& XclImpRoot::GetLinkManager() const
 {
-    DBG_ASSERT( mrImpData.mxLinkMgr, "XclImpRoot::GetLinkManager - invalid call, wrong BIFF" );
+    DBG_ASSERT( mrImpData.mxLinkMgr.is(), "XclImpRoot::GetLinkManager - invalid call, wrong BIFF" );
     return *mrImpData.mxLinkMgr;
 }
 
@@ -221,13 +219,13 @@ XclImpSheetDrawing& XclImpRoot::GetCurrSheetDrawing() const
 
 XclImpCondFormatManager& XclImpRoot::GetCondFormatManager() const
 {
-    DBG_ASSERT( mrImpData.mxCondFmtMgr, "XclImpRoot::GetCondFormatManager - invalid call, wrong BIFF" );
+    DBG_ASSERT( mrImpData.mxCondFmtMgr.is(), "XclImpRoot::GetCondFormatManager - invalid call, wrong BIFF" );
     return *mrImpData.mxCondFmtMgr;
 }
 
 XclImpValidationManager& XclImpRoot::GetValidationManager() const
 {
-    DBG_ASSERT( mrImpData.mxValidMgr, "XclImpRoot::GetValidationManager - invalid call, wrong BIFF" );
+    DBG_ASSERT( mrImpData.mxValidMgr.is(), "XclImpRoot::GetValidationManager - invalid call, wrong BIFF" );
     return *mrImpData.mxValidMgr;
 }
 
@@ -240,25 +238,25 @@ XclImpAutoFilterBuffer& XclImpRoot::GetFilterManager() const
 
 XclImpWebQueryBuffer& XclImpRoot::GetWebQueryBuffer() const
 {
-    DBG_ASSERT( mrImpData.mxWebQueryBfr, "XclImpRoot::GetWebQueryBuffer - invalid call, wrong BIFF" );
+    DBG_ASSERT( mrImpData.mxWebQueryBfr.is(), "XclImpRoot::GetWebQueryBuffer - invalid call, wrong BIFF" );
     return *mrImpData.mxWebQueryBfr;
 }
 
 XclImpPivotTableManager& XclImpRoot::GetPivotTableManager() const
 {
-    DBG_ASSERT( mrImpData.mxPTableMgr, "XclImpRoot::GetPivotTableManager - invalid call, wrong BIFF" );
+    DBG_ASSERT( mrImpData.mxPTableMgr.is(), "XclImpRoot::GetPivotTableManager - invalid call, wrong BIFF" );
     return *mrImpData.mxPTableMgr;
 }
 
 XclImpSheetProtectBuffer& XclImpRoot::GetSheetProtectBuffer() const
 {
-    DBG_ASSERT( mrImpData.mxTabProtect, "XclImpRoot::GetSheetProtectBuffer - invalid call, wrong BIFF" );
+    DBG_ASSERT( mrImpData.mxTabProtect.is(), "XclImpRoot::GetSheetProtectBuffer - invalid call, wrong BIFF" );
     return *mrImpData.mxTabProtect;
 }
 
 XclImpDocProtectBuffer& XclImpRoot::GetDocProtectBuffer() const
 {
-    DBG_ASSERT( mrImpData.mxDocProtect, "XclImpRoot::GetDocProtectBuffer - invalid call, wrong BIFF" );
+    DBG_ASSERT( mrImpData.mxDocProtect.is(), "XclImpRoot::GetDocProtectBuffer - invalid call, wrong BIFF" );
     return *mrImpData.mxDocProtect;
 }
 

@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,6 +51,9 @@ namespace oooimprovement
             ::rtl::OUString getSoapId() const;
             ::rtl::OUString getSoapUrl() const;
             sal_Int32 getReportCount() const;
+#ifdef FUTURE
+            sal_Int32 getFailedAttempts() const;
+#endif
             sal_Int32 getOfficeStartCounterdown() const;
             sal_Int32 incrementEventCount(sal_Int32 by);
             sal_Int32 incrementReportCount(sal_Int32 by);

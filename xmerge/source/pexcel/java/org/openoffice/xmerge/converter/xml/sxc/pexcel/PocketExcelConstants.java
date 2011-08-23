@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@ package org.openoffice.xmerge.converter.xml.sxc.pexcel;
 /**
  * Interface defining constants for Pocket Excel attributes.
  *
- * @author  Martin Maher
+ * @author	Martin Maher 
  */
 public interface PocketExcelConstants {
     /** File extension for Pocket Word files. */
@@ -59,9 +59,9 @@ public interface PocketExcelConstants {
     public static final int DEF_COL_WIDTH      = 0x55;
     public static final int COLINFO            = 0x7D;
     public static final int BOUND_SHEET        = 0x85;
-    public static final int EXTENDED_FORMAT    = 0xE0;
+    public static final int EXTENDED_FORMAT    = 0xE0;  
 
-    /** Colour lookup table for mapping pexcel color values
+    /** Colour lookup table for mapping pexcel color values 
         (See util/ColourConverter.java */
     public short cLookup[] = { 0, 14, 15, 1, 2, 3, 4, 7, 6, 5, 8, 9, 10, 13, 12, 11 };
 }

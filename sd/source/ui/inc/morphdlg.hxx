@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef SD_MORPH_DLG_HXX
 #define SD_MORPH_DLG_HXX
 
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
@@ -39,34 +39,40 @@ class SdrObject;
 
 namespace sd {
 
-class MorphDlg
+/******************************************************************************
+|*
+|*
+|*
+\******************************************************************************/
+
+class MorphDlg 
     : public ModalDialog
 {
 public:
     MorphDlg (
-        ::Window* pParent,
-        const SdrObject* pObj1,
+        ::Window* pParent, 
+        const SdrObject* pObj1, 
         const SdrObject* pObj2);
     virtual ~MorphDlg (void);
 
-    void            SaveSettings() const;
-    sal_uInt16          GetFadeSteps() const { return (sal_uInt16) aMtfSteps.GetValue(); }
-    sal_Bool            IsAttributeFade() const { return aCbxAttributes.IsChecked(); }
-    sal_Bool            IsOrientationFade() const { return aCbxOrientation.IsChecked(); }
+    void			SaveSettings() const;
+    USHORT			GetFadeSteps() const { return (USHORT) aMtfSteps.GetValue(); }
+    BOOL			IsAttributeFade() const { return aCbxAttributes.IsChecked(); }
+    BOOL			IsOrientationFade() const { return aCbxOrientation.IsChecked(); }
 
 private:
-    FixedLine       aGrpPreset;
-    FixedText       aFtSteps;
-    MetricField     aMtfSteps;
-    CheckBox        aCbxAttributes;
-    CheckBox        aCbxOrientation;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
+    FixedLine		aGrpPreset;
+    FixedText		aFtSteps;
+    MetricField		aMtfSteps;
+    CheckBox		aCbxAttributes;
+    CheckBox		aCbxOrientation;
+    OKButton		aBtnOK;
+    CancelButton	aBtnCancel;
     HelpButton      aBtnHelp;
-    SdrObject*      pSdrObj1;
-    SdrObject*      pSdrObj2;
+    SdrObject*		pSdrObj1;
+    SdrObject*		pSdrObj2;
 
-    void            LoadSettings();
+    void			LoadSettings();
 };
 
 

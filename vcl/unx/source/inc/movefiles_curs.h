@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define movefiles_curs_height 32
 #define movefiles_curs_x_hot 8
 #define movefiles_curs_y_hot 9
-static unsigned char movefiles_curs_bits[] = {
+static char movefiles_curs_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0xe0, 0x0f, 0x00, 0x00, 0xe0, 0x2f, 0x00, 0x00,
    0xe8, 0x0f, 0x00, 0x00, 0xe8, 0x7f, 0x00, 0x00, 0xea, 0x7f, 0x00, 0x00,
    0xea, 0x7f, 0x00, 0x00, 0xea, 0x7f, 0x00, 0x00, 0x6a, 0x7e, 0x00, 0x00,

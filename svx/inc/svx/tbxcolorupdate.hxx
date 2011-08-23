@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@ namespace svx
 {
 //........................................................................
 
-#define TBX_UPDATER_MODE_NONE               0x00
-#define TBX_UPDATER_MODE_CHAR_COLOR         0x01
-#define TBX_UPDATER_MODE_CHAR_BACKGROUND    0x02
-#define TBX_UPDATER_MODE_CHAR_COLOR_NEW     0x03
+#define TBX_UPDATER_MODE_NONE 				0x00
+#define TBX_UPDATER_MODE_CHAR_COLOR 		0x01
+#define TBX_UPDATER_MODE_CHAR_BACKGROUND 	0x02
+#define TBX_UPDATER_MODE_CHAR_COLOR_NEW		0x03
 
     //====================================================================
     //= ToolboxButtonColorUpdater
@@ -57,26 +57,26 @@ namespace svx
     class SVX_DLLPUBLIC ToolboxButtonColorUpdater
     {
     public:
-                    ToolboxButtonColorUpdater( sal_uInt16   nSlotId,
-                                                sal_uInt16   nTbxBtnId,
-                                                ToolBox* ptrTbx,
-                                                sal_uInt16   nMode = 0 );
+                    ToolboxButtonColorUpdater( USHORT   nSlotId,
+                                                USHORT   nTbxBtnId,
+                                                ToolBox* ptrTbx, 
+                                                USHORT   nMode = 0 );
                     ~ToolboxButtonColorUpdater();
 
-        void        Update( const Color& rColor );
+        void 		Update( const Color& rColor );
 
     protected:
-        void        DrawChar(VirtualDevice&, const Color&);
+        void 		DrawChar(VirtualDevice&, const Color&);
 
     private:
-        sal_uInt16      mnDrawMode;
-        sal_uInt16      mnBtnId;
-        sal_uInt16      mnSlotId;
-        ToolBox*    mpTbx;
-        Color       maCurColor;
-        Rectangle   maUpdRect;
-        Size        maBmpSize;
-        sal_Bool        mbWasHiContrastMode;
+        USHORT		mnDrawMode;
+        USHORT		mnBtnId;
+        USHORT      mnSlotId;
+        ToolBox*	mpTbx;
+        Color		maCurColor;
+        Rectangle	maUpdRect;
+        Size		maBmpSize;
+        BOOL		mbWasHiContrastMode;
     };
 
 //........................................................................

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,48 +32,48 @@
 #include <tools/globname.hxx>
 #include <tools/rtti.hxx>
 #include "sot/sotdllapi.h"
-#include <vector>
 
 /*************************************************************************
 *************************************************************************/
 class SotObject;
 class SotFactory;
 
-typedef ::std::vector< SotFactory* > SotFactoryList;
+DECLARE_LIST( SotFactoryList, SotFactory * )
 typedef void * (*CreateInstanceType)( SotObject ** );
 
 //==================class SotFactory=======================================
 class SOT_DLLPUBLIC SotFactory : public SvGlobalName
 {
-    sal_uInt16              nSuperCount;    // Anzahl der Superklassen
+    USHORT              nSuperCount;    // Anzahl der Superklassen
     const SotFactory ** pSuperClasses;  // Superklassen
     CreateInstanceType  pCreateFunc;
 
     String              aClassName;
 
-    static  sal_Bool        ExistTest( const SvGlobalName & );
+    static  BOOL        ExistTest( const SvGlobalName & );
 protected:
     virtual             ~SotFactory();
 public:
                         TYPEINFO();
-    static  void        DeInit();
+    static	void		DeInit();
     static  void        IncSvObjectCount( SotObject * = NULL );
     static  void        DecSvObjectCount( SotObject * = NULL );
-    static  sal_uInt32      GetSvObjectCount();
+    static  UINT32      GetSvObjectCount();
     static  void        TestInvariant();
 
-    static  const SotFactory *      Find( const SvGlobalName & );
-    static  const SotFactoryList *  GetFactoryList();
+    static  const SotFactory * 		Find( const SvGlobalName & );
+    static  const SotFactoryList *	GetFactoryList();
 
             SotFactory( const SvGlobalName &,
                        const String & rClassName, CreateInstanceType );
 
     void                PutSuperClass( const SotFactory * );
     virtual void *      CreateInstance( SotObject ** ppObj = NULL ) const;
-    void *              CastAndAddRef( SotObject * ) const;
+    void *				CastAndAddRef( SotObject * ) const;
+    void * 				AggCastAndAddRef( SotObject * ) const;
 
-    sal_Bool                Is( const SotFactory * pSuperClass ) const;
-    const SotFactory *  GetSuper( sal_uInt16 nPos ) const
+    BOOL                Is( const SotFactory * pSuperClass ) const;
+    const SotFactory *  GetSuper( USHORT nPos ) const
                         {
                             return nPos < nSuperCount ?
                                          pSuperClasses[ nPos ]

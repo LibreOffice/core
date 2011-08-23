@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,11 +77,11 @@ namespace vclcanvas
     {
         ENSURE_OR_THROW( rOwningSpriteCanvas.get() && rBackBuffer && rBackBufferMask,
                          "SpriteHelper::init(): Invalid sprite canvas or back buffer" );
-
-        mpBackBuffer        = rBackBuffer;
-        mpBackBufferMask    = rBackBufferMask;
-        mbShowSpriteBounds  = bShowSpriteBounds;
-
+        
+        mpBackBuffer 		= rBackBuffer;
+        mpBackBufferMask 	= rBackBufferMask;
+        mbShowSpriteBounds 	= bShowSpriteBounds;
+        
         init( rSpriteSize, rOwningSpriteCanvas );
     }
 
@@ -93,22 +93,22 @@ namespace vclcanvas
         // forward to parent
         CanvasCustomSpriteHelper::disposing();
     }
-
+   
     void SpriteHelper::redraw( OutputDevice&                rTargetSurface,
-                               const ::basegfx::B2DPoint&   rPos,
-                               bool&                        io_bSurfacesDirty,
+                               const ::basegfx::B2DPoint&	rPos,
+                               bool& 						io_bSurfacesDirty,
                                bool                         bBufferedUpdate ) const
     {
         (void)bBufferedUpdate; // not used on every platform
 
-        if( !mpBackBuffer ||
+        if( !mpBackBuffer || 
             !mpBackBufferMask )
         {
             return; // we're disposed
         }
 
         // log output pos in device pixel
-        VERBOSE_TRACE( "SpriteHelper::redraw(): output pos is (%f, %f)",
+        VERBOSE_TRACE( "SpriteHelper::redraw(): output pos is (%f, %f)", 
                        rPos.getX(),
                        rPos.getY() );
 
@@ -117,16 +117,16 @@ namespace vclcanvas
         if( isActive() &&
             !::basegfx::fTools::equalZero( fAlpha ) )
         {
-            const Point                 aEmptyPoint;
-            const ::basegfx::B2DVector& rOrigOutputSize( getSizePixel() );
+            const Point					aEmptyPoint;
+            const ::basegfx::B2DVector&	rOrigOutputSize( getSizePixel() );
 
             // might get changed below (e.g. adapted for
             // transformations). IMPORTANT: both position and size are
             // rounded to integer values. From now on, only those
             // rounded values are used, to keep clip and content in
             // sync.
-            ::Size  aOutputSize( ::vcl::unotools::sizeFromB2DSize( rOrigOutputSize ) );
-            ::Point aOutPos( ::vcl::unotools::pointFromB2DPoint( rPos ) );
+            ::Size 	aOutputSize( ::vcl::unotools::sizeFromB2DSize( rOrigOutputSize ) );
+            ::Point	aOutPos( ::vcl::unotools::pointFromB2DPoint( rPos ) );
 
 
             // TODO(F3): Support for alpha-VDev
@@ -141,10 +141,10 @@ namespace vclcanvas
             // longer dirty in relation to our cache
             io_bSurfacesDirty = false;
             transformUpdated();
-
+                
             if( bNeedBitmapUpdate )
             {
-                Bitmap aBmp( mpBackBuffer->getOutDev().GetBitmap( aEmptyPoint,
+                Bitmap aBmp( mpBackBuffer->getOutDev().GetBitmap( aEmptyPoint, 
                                                                   aOutputSize ) );
 
                 if( isContentFullyOpaque() )
@@ -159,7 +159,7 @@ namespace vclcanvas
                 {
                     // sprite content might contain alpha, create
                     // BmpEx, then.
-                    Bitmap aMask( mpBackBufferMask->getOutDev().GetBitmap( aEmptyPoint,
+                    Bitmap aMask( mpBackBufferMask->getOutDev().GetBitmap( aEmptyPoint, 
                                                                            aOutputSize ) );
 
                     // bitmasks are much faster than alphamasks on some platforms
@@ -167,7 +167,8 @@ namespace vclcanvas
 #ifndef QUARTZ
                     if( aMask.GetBitCount() != 1 )
                     {
-                        OSL_FAIL("CanvasCustomSprite::redraw(): Mask bitmap is not "
+                        OSL_ENSURE(false,
+                                   "CanvasCustomSprite::redraw(): Mask bitmap is not "
                                    "monochrome (performance!)");
                         aMask.MakeMono(255);
                     }
@@ -192,7 +193,7 @@ namespace vclcanvas
             // to translate the clip polygon
             aTransform.translate( aOutPos.X(),
                                   aOutPos.Y() );
-
+            
             if( !bIdentityTransform )
             {
                 if( !::basegfx::fTools::equalZero( aTransform.get(0,1) ) ||
@@ -204,14 +205,14 @@ namespace vclcanvas
                     // modify output position, to account for the fact
                     // that transformBitmap() always normalizes its output
                     // bitmap into the smallest enclosing box.
-                    ::basegfx::B2DRectangle aDestRect;
-                    ::canvas::tools::calcTransformedRectBounds( aDestRect,
+                    ::basegfx::B2DRectangle	aDestRect;            
+                    ::canvas::tools::calcTransformedRectBounds( aDestRect, 
                                                                 ::basegfx::B2DRectangle(0,
                                                                                         0,
                                                                                         rOrigOutputSize.getX(),
                                                                                         rOrigOutputSize.getY()),
                                                                 aTransform );
-
+                        
                     aOutPos.X() = ::basegfx::fround( aDestRect.getMinX() );
                     aOutPos.Y() = ::basegfx::fround( aDestRect.getMinY() );
 
@@ -220,7 +221,7 @@ namespace vclcanvas
                     // actually re-create the bitmap ONLY if necessary
                     if( bNeedBitmapUpdate )
                         maContent = tools::transformBitmap( *maContent,
-                                                            aTransform,
+                                                            aTransform, 
                                                             uno::Sequence<double>(),
                                                             tools::MODULATE_NONE );
 
@@ -230,9 +231,9 @@ namespace vclcanvas
                 {
                     // relatively 'simplistic' transformation -
                     // retrieve scale and translational offset
-                    aOutputSize.setWidth (
+                    aOutputSize.setWidth ( 
                         ::basegfx::fround( rOrigOutputSize.getX() * aTransform.get(0,0) ) );
-                    aOutputSize.setHeight(
+                    aOutputSize.setHeight( 
                         ::basegfx::fround( rOrigOutputSize.getY() * aTransform.get(1,1) ) );
 
                     aOutPos.X() = ::basegfx::fround( aTransform.get(0,2) );
@@ -249,12 +250,12 @@ namespace vclcanvas
                 bool bSpriteRedrawn( false );
 
                 rTargetSurface.Push( PUSH_CLIPREGION );
-
+                
                 // apply clip (if any)
                 if( getClip().is() )
                 {
                     ::basegfx::B2DPolyPolygon aClipPoly(
-                        ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
+                        ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D( 
                             getClip() ));
 
                     if( aClipPoly.count() )
@@ -277,7 +278,7 @@ namespace vclcanvas
                         // when filling complex polypolygons.
                         bool bAtLeastOnePolygon( false );
                         const sal_Int32 nPolygons( aClipPoly.count() );
-
+    
                         for( sal_Int32 i=0; i<nPolygons; ++i )
                         {
                             if( !::basegfx::tools::isRectangle(
@@ -320,8 +321,8 @@ namespace vclcanvas
                             // underneath.
                             rTargetSurface.Push( PUSH_RASTEROP );
                             rTargetSurface.SetRasterOp( ROP_XOR );
-                            rTargetSurface.DrawBitmap( aOutPos,
-                                                       aOutputSize,
+                            rTargetSurface.DrawBitmap( aOutPos, 
+                                                       aOutputSize, 
                                                        maContent->GetBitmap() );
 
                             rTargetSurface.SetLineColor();
@@ -330,10 +331,10 @@ namespace vclcanvas
                             rTargetSurface.DrawPolyPolygon(PolyPolygon(aClipPoly)); // #i76339#
 
                             rTargetSurface.SetRasterOp( ROP_XOR );
-                            rTargetSurface.DrawBitmap( aOutPos,
-                                                       aOutputSize,
+                            rTargetSurface.DrawBitmap( aOutPos, 
+                                                       aOutputSize, 
                                                        maContent->GetBitmap() );
-
+                            
                             rTargetSurface.Pop();
 
                             bSpriteRedrawn = true;
@@ -341,8 +342,21 @@ namespace vclcanvas
                         else
 #endif
                         {
-                            Region aClipRegion( aClipPoly );
-                            rTargetSurface.SetClipRegion( aClipRegion );
+                            // redraw is direcly on the front buffer,
+                            // or using alpha blending - cannot use
+                            // XOR, thus, employing the still somewhat
+                            // speedier triangle clip method
+                            ::basegfx::B2DPolygon aTriangulatedClip(::basegfx::triangulator::triangulate(aClipPoly)); 
+
+                            // restrict the clipping area to the visible portion of the output device.
+                            Size aSize(rTargetSurface.GetOutputSizePixel());
+                            ::basegfx::B2DRange aOutputRect(::basegfx::B2DPoint(0,0),::basegfx::B2DPoint(aSize.Width(),aSize.Height()));
+                            ::basegfx::B2DPolygon aClippedClip(::basegfx::tools::clipTriangleListOnRange(aTriangulatedClip,aOutputRect));
+
+                            // #i76339#
+                            const Polygon aPoly(aClippedClip);
+                            const PolyPolygon aPolyPoly(aPoly);
+                            rTargetSurface.SetTriangleClipRegion(aPolyPoly);
                         }
                     }
                 }
@@ -363,17 +377,17 @@ namespace vclcanvas
                         // here
 
                         // draw semi-transparent
-                        sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
-                        AlphaMask aAlpha( maContent->GetSizePixel(),
+                        BYTE nColor( static_cast<UINT8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
+                        AlphaMask aAlpha( maContent->GetSizePixel(), 
                                           &nColor );
-
+            
                         // mask out fully transparent areas
                         if( maContent->IsTransparent() )
                             aAlpha.Replace( maContent->GetMask(), 255 );
 
-                        // alpha-blend to output
-                        rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize,
-                                                     BitmapEx( maContent->GetBitmap(),
+                        // alpha-blend to output                    
+                        rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize, 
+                                                     BitmapEx( maContent->GetBitmap(), 
                                                                aAlpha ) );
                     }
                 }
@@ -382,7 +396,7 @@ namespace vclcanvas
 
                 if( mbShowSpriteBounds )
                 {
-                    ::PolyPolygon aMarkerPoly(
+                    ::PolyPolygon aMarkerPoly( 
                         ::canvas::tools::getBoundMarksPolyPolygon(
                             ::basegfx::B2DRectangle(aOutPos.X(),
                                                     aOutPos.Y(),
@@ -395,26 +409,26 @@ namespace vclcanvas
 
                     for( int i=0; i<aMarkerPoly.Count(); ++i )
                     {
-                        rTargetSurface.DrawPolyLine( aMarkerPoly.GetObject((sal_uInt16)i) );
+                        rTargetSurface.DrawPolyLine( aMarkerPoly.GetObject((USHORT)i) );
                     }
 
                     // paint sprite prio
                     Font aVCLFont;
                     aVCLFont.SetHeight( std::min(long(20),aOutputSize.Height()) );
                     aVCLFont.SetColor( COL_RED );
-
+                    
                     rTargetSurface.SetTextAlign(ALIGN_TOP);
                     rTargetSurface.SetTextColor( COL_RED );
                     rTargetSurface.SetFont( aVCLFont );
-
+                    
                     ::rtl::OUString text( ::rtl::math::doubleToUString( getPriority(),
                                                                         rtl_math_StringFormat_F,
                                                                         2,'.',NULL,' ') );
-
+                    
                     rTargetSurface.DrawText( aOutPos+Point(2,2), text );
 
 #if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
-                    OSL_TRACE( "SpriteHelper::redraw(): sprite %X has prio %f\n",
+                    OSL_TRACE( "SpriteHelper::redraw(): sprite %X has prio %f\n", 
                                this, getPriority() );
 #endif
                 }

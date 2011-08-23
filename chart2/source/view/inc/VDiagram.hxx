@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ public: //methods
                 , sal_Int32 nDimension=3, sal_Bool bPolar=sal_False );
     virtual ~VDiagram();
 
-    void init( const ::com::sun::star::uno::Reference<
+    void SAL_CALL init( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::drawing::XShapes >& xLogicTarget
              , const ::com::sun::star::uno::Reference<
                      ::com::sun::star::drawing::XShapes >& xFinalTarget
@@ -78,6 +78,9 @@ public: //methods
 
     ::basegfx::B2IRectangle    adjustInnerSize( const ::basegfx::B2IRectangle& rConsumedOuterRect );
 
+    //    updateShapes(..);
+    // const awt::Point& rPos, const awt::Size& rSize );
+
 private: //methods
     void    createShapes_2d();
     void    createShapes_3d();
@@ -97,7 +100,7 @@ private: //members
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >                    m_xFinalTarget;
     ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory>           m_xShapeFactory;
+                    ::com::sun::star::lang::XMultiServiceFactory>	        m_xShapeFactory;
     ShapeFactory*                                                           m_pShapeFactory;
 
     // this is the surrounding shape which contains floor, wall and coordinate

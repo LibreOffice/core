@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,91 +59,91 @@ inline static void callVirtualMethod(
     OSL_ENSURE( pStackLongs && pAdjustedThisPtr, "### null ptr!" );
     OSL_ENSURE( (sizeof(void *) == 4) &&
                  (sizeof(sal_Int32) == 4), "### unexpected size of int!" );
-
+    
 __asm
     {
-        mov     eax, nStackLongs
-        test    eax, eax
-        je      Lcall
+        mov		eax, nStackLongs
+        test	eax, eax
+        je		Lcall
         // copy values
-        mov     ecx, eax
-        shl     eax, 2           // sizeof(sal_Int32) == 4
-        add     eax, pStackLongs // params stack space
-Lcopy:  sub     eax, 4
-        push    dword ptr [eax]
-        dec     ecx
-        jne     Lcopy
+        mov		ecx, eax
+        shl		eax, 2			 // sizeof(sal_Int32) == 4
+        add		eax, pStackLongs // params stack space
+Lcopy:	sub		eax, 4
+        push	dword ptr [eax]
+        dec		ecx
+        jne		Lcopy
 Lcall:
         // call
-        mov     ecx, pAdjustedThisPtr
-        push    ecx             // this ptr
-        mov     edx, [ecx]      // pvft
-        mov     eax, nVtableIndex
-        shl     eax, 2          // sizeof(void *) == 4
-        add     edx, eax
-        call    [edx]           // interface method call must be __cdecl!!!
+        mov		ecx, pAdjustedThisPtr
+        push	ecx				// this ptr
+        mov		edx, [ecx]		// pvft
+        mov		eax, nVtableIndex
+        shl		eax, 2			// sizeof(void *) == 4
+        add		edx, eax
+        call	[edx]			// interface method call must be __cdecl!!!
 
         // register return
-        mov     ecx, eReturnTypeClass
-        cmp     ecx, typelib_TypeClass_VOID
-        je      Lcleanup
-        mov     ebx, pRegisterReturn
+        mov		ecx, eReturnTypeClass
+        cmp		ecx, typelib_TypeClass_VOID
+        je		Lcleanup
+        mov		ebx, pRegisterReturn
 // int32
-        cmp     ecx, typelib_TypeClass_LONG
-        je      Lint32
-        cmp     ecx, typelib_TypeClass_UNSIGNED_LONG
-        je      Lint32
-        cmp     ecx, typelib_TypeClass_ENUM
-        je      Lint32
+        cmp		ecx, typelib_TypeClass_LONG
+        je		Lint32
+        cmp		ecx, typelib_TypeClass_UNSIGNED_LONG
+        je		Lint32
+        cmp		ecx, typelib_TypeClass_ENUM
+        je		Lint32
 // int8
-        cmp     ecx, typelib_TypeClass_BOOLEAN
-        je      Lint8
-        cmp     ecx, typelib_TypeClass_BYTE
-        je      Lint8
+        cmp		ecx, typelib_TypeClass_BOOLEAN
+        je		Lint8
+        cmp		ecx, typelib_TypeClass_BYTE
+        je		Lint8
 // int16
-        cmp     ecx, typelib_TypeClass_CHAR
-        je      Lint16
-        cmp     ecx, typelib_TypeClass_SHORT
-        je      Lint16
-        cmp     ecx, typelib_TypeClass_UNSIGNED_SHORT
-        je      Lint16
+        cmp		ecx, typelib_TypeClass_CHAR
+        je		Lint16
+        cmp		ecx, typelib_TypeClass_SHORT
+        je		Lint16
+        cmp		ecx, typelib_TypeClass_UNSIGNED_SHORT
+        je		Lint16
 // float
-        cmp     ecx, typelib_TypeClass_FLOAT
-        je      Lfloat
+        cmp		ecx, typelib_TypeClass_FLOAT
+        je		Lfloat
 // double
-        cmp     ecx, typelib_TypeClass_DOUBLE
-        je      Ldouble
+        cmp		ecx, typelib_TypeClass_DOUBLE
+        je		Ldouble
 // int64
-        cmp     ecx, typelib_TypeClass_HYPER
-        je      Lint64
-        cmp     ecx, typelib_TypeClass_UNSIGNED_HYPER
-          je        Lint64
-        jmp     Lcleanup // no simple type
+        cmp		ecx, typelib_TypeClass_HYPER
+        je		Lint64
+        cmp		ecx, typelib_TypeClass_UNSIGNED_HYPER
+          je		Lint64
+        jmp		Lcleanup // no simple type
 Lint8:
-        mov     byte ptr [ebx], al
-        jmp     Lcleanup
+        mov		byte ptr [ebx], al
+        jmp		Lcleanup
 Lint16:
-        mov     word ptr [ebx], ax
-        jmp     Lcleanup
+        mov		word ptr [ebx], ax
+        jmp		Lcleanup
 Lfloat:
-        fstp    dword ptr [ebx]
-        jmp     Lcleanup
+        fstp	dword ptr [ebx]
+        jmp		Lcleanup
 Ldouble:
-        fstp    qword ptr [ebx]
-        jmp     Lcleanup
+        fstp	qword ptr [ebx]
+        jmp		Lcleanup
 Lint64:
-        mov     dword ptr [ebx], eax
-        mov     dword ptr [ebx+4], edx
-        jmp     Lcleanup
+        mov		dword ptr [ebx], eax
+        mov		dword ptr [ebx+4], edx
+        jmp		Lcleanup
 Lint32:
-        mov     dword ptr [ebx], eax
-        jmp     Lcleanup
+        mov		dword ptr [ebx], eax
+        jmp		Lcleanup
 Lcleanup:
         // cleanup stack (obsolete though because of function)
-        mov     eax, nStackLongs
-        shl     eax, 2          // sizeof(sal_Int32) == 4
-        add     eax, 4          // this ptr
-        add     esp, eax
+        mov		eax, nStackLongs
+        shl		eax, 2			// sizeof(sal_Int32) == 4
+        add		eax, 4			// this ptr
+        add		esp, eax
     }
 }
 
@@ -156,16 +156,16 @@ static void cpp_call(
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc ) throw ()
 {
     // max space for: [complex ret ptr], values|ptr ...
-    char * pCppStack        = (char *)alloca( sizeof(sal_Int32) + (nParams * sizeof(sal_Int64)) );
-    char * pCppStackStart   = pCppStack;
-
+    char * pCppStack		= (char *)alloca( sizeof(sal_Int32) + (nParams * sizeof(sal_Int64)) );
+    char * pCppStackStart	= pCppStack;
+    
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
     OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
-
+    
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
-
+    
     if (pReturnTypeDescr)
     {
         if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
@@ -193,22 +193,22 @@ static void cpp_call(
     sal_Int32 * pTempIndizes = (sal_Int32 *)(pCppArgs + nParams);
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
-
+    
     sal_Int32 nTempIndizes   = 0;
-
+    
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
-
+        
         if (!rParam.bOut
             && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
             ::uno_copyAndConvertData(
                 pCppArgs[nPos] = pCppStack, pUnoArgs[nPos], pParamTypeDescr,
                 pThis->getBridge()->getUno2Cpp() );
-
+            
             switch (pParamTypeDescr->eTypeClass)
             {
             case typelib_TypeClass_HYPER:
@@ -242,7 +242,7 @@ static void cpp_call(
                     *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                     pUnoArgs[nPos], pParamTypeDescr,
                     pThis->getBridge()->getUno2Cpp() );
-
+                
                 pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
                 // will be released at reconversion
                 ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
@@ -290,17 +290,17 @@ static void cpp_call(
         // end here
         return;
     }
-
-    // NO exception occurred
+    
+    // NO exception occured
     *ppUnoExc = 0;
-
+    
     // reconvert temporary params
     while (nTempIndizes--)
     {
         sal_Int32 nIndex = pTempIndizes[nTempIndizes];
         typelib_TypeDescription * pParamTypeDescr =
             ppTempParamTypeDescr[nTempIndizes];
-
+        
         if (pParams[nIndex].bIn)
         {
             if (pParams[nIndex].bOut) // inout
@@ -321,7 +321,7 @@ static void cpp_call(
         // destroy temp cpp param => cpp: every param was constructed
         ::uno_destructData(
             pCppArgs[nIndex], pParamTypeDescr, cpp_release );
-
+        
         TYPELIB_DANGER_RELEASE( pParamTypeDescr );
     }
     // return value
@@ -351,7 +351,7 @@ void unoInterfaceProxyDispatch(
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
         = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy * >(pUnoI);
-
+    
     switch (pMemberDescr->eTypeClass)
     {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -376,14 +376,14 @@ void unoInterfaceProxyDispatch(
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef;
-            aParam.bIn      = sal_True;
-            aParam.bOut     = sal_False;
-
+            aParam.bIn		= sal_True;
+            aParam.bOut		= sal_False;
+            
             typelib_TypeDescriptionReference * pReturnTypeRef = 0;
             OUString aVoidName( RTL_CONSTASCII_USTRINGPARAM("void") );
             typelib_typedescriptionreference_new(
                 &pReturnTypeRef, typelib_TypeClass_VOID, aVoidName.pData );
-
+            
             // dependent dispatch
             aVtableSlot.index += 1; // get, then set method
             cpp_call(
@@ -391,10 +391,10 @@ void unoInterfaceProxyDispatch(
                 pReturnTypeRef,
                 1, &aParam,
                 pReturn, pArgs, ppException );
-
+            
             typelib_typedescriptionreference_release( pReturnTypeRef );
         }
-
+        
         break;
     }
     case typelib_TypeClass_INTERFACE_METHOD:
@@ -425,7 +425,7 @@ void unoInterfaceProxyDispatch(
                 (*pThis->pBridge->getUnoEnv()->getRegisteredInterface)(
                     pThis->pBridge->getUnoEnv(),
                     (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
-
+            
                 if (pInterface)
                 {
                     ::uno_any_construct(
@@ -455,7 +455,7 @@ void unoInterfaceProxyDispatch(
         ::com::sun::star::uno::RuntimeException aExc(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal member type description!") ),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
-
+        
         Type const & rExcType = ::getCppuType( &aExc );
         // binary identical null reference
         ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );

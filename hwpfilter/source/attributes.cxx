@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,12 @@
 #include "precompiled_hwpfilter.hxx"
 
 #include <assert.h>
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
 #include "attributes.hxx"
+
+//using namespace ::std;
 
 struct TagAttribute
 {
@@ -110,7 +114,7 @@ OUString AttributeListImpl::getTypeByName( const OUString& sName ) throw (Runtim
 {
     std::vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
+    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ )
     {
         if( (*ii).sName == sName )
         {
@@ -125,7 +129,7 @@ OUString AttributeListImpl::getValueByName(const OUString& sName) throw (Runtime
 {
     std::vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
+    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ )
     {
         if( (*ii).sName == sName )
         {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,10 +65,10 @@ class SwASC_AttrIter
 public:
     SwASC_AttrIter( SwASCWriter& rWrt, const SwTxtNode& rNd, xub_StrLen nStt );
 
-    void NextPos()      { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos() 		{ nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
-    xub_StrLen WhereNext() const        { return nAktSwPos; }
-    sal_Bool OutAttr( xub_StrLen nSwPos );
+    xub_StrLen WhereNext() const		{ return nAktSwPos; }
+    BOOL OutAttr( xub_StrLen nSwPos );
 };
 
 
@@ -89,7 +89,7 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
 // kann noch optimiert werden, wenn ausgenutzt wird, dass die TxtAttrs
 // nach der Anfangsposition geordnet sind. Dann muessten
 // allerdings noch 2 Indices gemerkt werden
-        for ( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
+        for ( USHORT i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if (pHt->HasDummyChar())
@@ -108,25 +108,25 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
 }
 
 
-sal_Bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
+BOOL SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
-        sal_uInt16 i;
+        USHORT i;
         for( i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if ( pHt->HasDummyChar() && nSwPos == *pHt->GetStart() )
             {
-                bRet = sal_True;
+                bRet = TRUE;
                 String sOut;
                 switch( pHt->Which() )
                 {
                 case RES_TXTATR_FIELD:
                     sOut = static_cast<SwTxtFld const*>(pHt)->GetFld().GetFld()
-                            ->ExpandField(true);
+                            ->ExpandField(rWrt.pDoc->IsClipBoard());
                     break;
 
                 case RES_TXTATR_FTN:
@@ -164,7 +164,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     xub_StrLen nStrPos = rWrt.pCurPam->GetPoint()->nContent.GetIndex();
     xub_StrLen nNodeEnde = rNd.Len(), nEnde = nNodeEnde;
-    sal_Bool bLastNd =  rWrt.pCurPam->GetPoint()->nNode == rWrt.pCurPam->GetMark()->nNode;
+    BOOL bLastNd =  rWrt.pCurPam->GetPoint()->nNode == rWrt.pCurPam->GetMark()->nNode;
     if( bLastNd )
         nEnde = rWrt.pCurPam->GetMark()->nContent.GetIndex();
 
@@ -206,8 +206,8 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     } while( nStrPos < nEnde );
 
     if( !bLastNd ||
-        ( ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
-            && !nStrPos && nEnde == nNodeEnde ) )
+        ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
+            && !nStrPos && nEnde == nNodeEnde )
         rWrt.Strm().WriteUnicodeOrByteText( ((SwASCWriter&)rWrt).GetLineEnd());
 
     return rWrt;
@@ -221,9 +221,9 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
  */
 
 SwNodeFnTab aASCNodeFnTab = {
-/* RES_TXTNODE  */                   OutASC_SwTxtNode,
-/* RES_GRFNODE  */                   0,
-/* RES_OLENODE  */                   0
+/* RES_TXTNODE	*/					 OutASC_SwTxtNode,
+/* RES_GRFNODE	*/					 0,
+/* RES_OLENODE	*/					 0
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

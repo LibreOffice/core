@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,6 +52,7 @@
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
+#include <errhdl.hxx>
 #include <docsh.hxx>
 #include <content.hxx>
 #include <edglbldc.hxx>
@@ -77,16 +78,18 @@ using ::rtl::OUString;
 
 // Kontextmenue fuer GlobalTree
 #define CTX_INSERT_ANY_INDEX 10
+//#define CTX_INSERT_CNTIDX   11
+//#define CTX_INSERT_USRIDX   12
 #define CTX_INSERT_FILE     11
 #define CTX_INSERT_NEW_FILE 12
 #define CTX_INSERT_TEXT     13
 
-#define CTX_UPDATE_SEL      20
+#define CTX_UPDATE_SEL		20
 #define CTX_UPDATE_INDEX    21
 #define CTX_UPDATE_LINK     22
 #define CTX_UPDATE_ALL      23
 
-#define CTX_UPDATE          1
+#define CTX_UPDATE			1
 #define CTX_INSERT          2
 #define CTX_EDIT            3
 #define CTX_DELETE          4
@@ -95,12 +98,12 @@ using ::rtl::OUString;
 #define GLOBAL_UPDATE_TIMEOUT 2000
 
 // Flags fuer PopupMenu-enable/disable
-#define ENABLE_INSERT_IDX   0x0001
+#define ENABLE_INSERT_IDX	0x0001
 #define ENABLE_INSERT_FILE  0x0002
 #define ENABLE_INSERT_TEXT  0x0004
 #define ENABLE_EDIT         0x0008
 #define ENABLE_DELETE       0x0010
-#define ENABLE_UPDATE       0x0020
+#define ENABLE_UPDATE		0x0020
 #define ENABLE_UPDATE_SEL   0x0040
 #define ENABLE_EDIT_LINK    0x0080
 
@@ -108,54 +111,54 @@ using ::rtl::OUString;
 #define  GLBL_TABPOS_SUB 5
 
 const SfxObjectShell* SwGlobalTree::pShowShell = 0;
-static const char* aHelpForMenu[] =
+static const USHORT __FAR_DATA aHelpForMenu[] =
 {
-    0,                          //
-    HID_GLBLTREE_UPDATE,        //CTX_UPDATE
-    HID_GLBLTREE_INSERT,        //CTX_INSERT
-    HID_GLBLTREE_EDIT,          //CTX_EDIT
-    HID_GLBLTREE_DEL,           //CTX_DELETE
+    0, 							//
+    HID_GLBLTREE_UPDATE, 		//CTX_UPDATE
+    HID_GLBLTREE_INSERT,		//CTX_INSERT
+    HID_GLBLTREE_EDIT,			//CTX_EDIT
+    HID_GLBLTREE_DEL,			//CTX_DELETE
     HID_GLBLTREE_EDIT_LINK,     //CTX_EDIT_LINK
-    0,                        //
-    0,                        //
-    0,                        //
-    0,                        //
-    HID_GLBLTREE_INS_IDX,       //CTX_INSERT_ANY_INDEX
-    HID_GLBLTREE_INS_FILE,      //CTX_INSERT_FILE
-    HID_GLBLTREE_INS_NEW_FILE,  //CTX_INSERT_NEW_FILE
-    HID_GLBLTREE_INS_TEXT,      //CTX_INSERT_TEXT
-    0,                          //
-    0,                          //
-    0,                          //
-    0,                          //
-    0,                          //
-    0,                          //
-    HID_GLBLTREE_UPD_SEL,       //CTX_UPDATE_SEL
-    HID_GLBLTREE_UPD_IDX,       //CTX_UPDATE_INDEX
-    HID_GLBLTREE_UPD_LINK,      //CTX_UPDATE_LINK
-    HID_GLBLTREEUPD_ALL         //CTX_UPDATE_ALL
+    0,						  //
+    0,						  //
+    0,						  //
+    0,						  //
+    HID_GLBLTREE_INS_IDX, 		//CTX_INSERT_ANY_INDEX
+    HID_GLBLTREE_INS_FILE,		//CTX_INSERT_FILE
+    HID_GLBLTREE_INS_NEW_FILE,	//CTX_INSERT_NEW_FILE
+    HID_GLBLTREE_INS_TEXT,		//CTX_INSERT_TEXT
+    0,							//
+    0,							//
+    0,							//
+    0,							//
+    0,							//
+    0,							//
+    HID_GLBLTREE_UPD_SEL, 		//CTX_UPDATE_SEL
+    HID_GLBLTREE_UPD_IDX, 		//CTX_UPDATE_INDEX
+    HID_GLBLTREE_UPD_LINK,		//CTX_UPDATE_LINK
+    HID_GLBLTREEUPD_ALL			//CTX_UPDATE_ALL
 };
 
 class SwGlobalFrameListener_Impl : public SfxListener
 {
-    sal_Bool bValid;
+    BOOL bValid;
 public:
     SwGlobalFrameListener_Impl(SfxViewFrame& rFrame) :
-        bValid(sal_True)
+        bValid(TRUE)
         {
             StartListening(rFrame);
         }
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    sal_Bool                IsValid() const {return bValid;}
+    BOOL 				IsValid() const {return bValid;}
 };
 
 void    SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if( rHint.ISA(SfxSimpleHint) &&
             (((SfxSimpleHint&) rHint).GetId() == SFX_HINT_DYING))
-        bValid = sal_False;
+        bValid = FALSE;
 }
 
 SwGlobalTree::SwGlobalTree(Window* pParent, const ResId& rResId) :
@@ -170,9 +173,9 @@ SwGlobalTree::SwGlobalTree(Window* pParent, const ResId& rResId) :
     pDocContent         ( NULL ),
     pDocInserter        ( NULL ),
 
-    bIsInternalDrag         ( sal_False ),
-    bLastEntryEmphasis      ( sal_False ),
-    bIsImageListInitialized ( sal_False )
+    bIsInternalDrag         ( FALSE ),
+    bLastEntryEmphasis      ( FALSE ),
+    bIsImageListInitialized ( FALSE )
 
 {
     SetDragDropMode(SV_DRAGDROP_APP_COPY  |
@@ -182,7 +185,7 @@ SwGlobalTree::SwGlobalTree(Window* pParent, const ResId& rResId) :
     aUpdateTimer.SetTimeout(GLOBAL_UPDATE_TIMEOUT);
     aUpdateTimer.SetTimeoutHdl(LINK(this, SwGlobalTree, Timeout));
     aUpdateTimer.Start();
-    for(sal_uInt16 i = 0; i < GLOBAL_CONTEXT_COUNT; i++)
+    for(USHORT i = 0; i < GLOBAL_CONTEXT_COUNT; i++)
     {
         aContextStrings[i] = SW_RESSTR(i+ ST_GLOBAL_CONTEXT_FIRST);
     }
@@ -204,19 +207,19 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
     SvLBoxEntry* pLast = (SvLBoxEntry*)LastVisible();
     if(pEmphasisEntry)
     {
-        ImplShowTargetEmphasis( Prev(pEmphasisEntry), sal_False );
+        ImplShowTargetEmphasis( Prev(pEmphasisEntry), FALSE );
         pEmphasisEntry = 0;
     }
     else if(bLastEntryEmphasis && pLast)
     {
-        ImplShowTargetEmphasis( pLast, sal_False);
+        ImplShowTargetEmphasis( pLast, FALSE);
     }
 
     SvLBoxEntry* pDropEntry = bLastEntryEmphasis ? 0 : GetEntry(rEvt.maPosPixel);
     if( bIsInternalDrag )
     {
         SvLBoxEntry* pDummy = 0;
-        sal_uLong nInsertionPos = LIST_APPEND;
+        ULONG nInsertionPos = LIST_APPEND;
         NotifyMoving( pDropEntry, pDDSource, pDummy, nInsertionPos );
     }
     else
@@ -234,12 +237,12 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
             int nAbsContPos = pDropEntry ?
                                 (int) GetModel()->GetAbsPos(pDropEntry):
                                     - 1;
-            sal_uInt16 nEntryCount = (sal_uInt16)GetEntryCount();
+            USHORT nEntryCount = (USHORT)GetEntryCount();
 
             // Daten holen
             FileList aFileList;
             aData.GetFileList( FORMAT_FILE_LIST, aFileList );
-            for ( sal_uInt16 n = (sal_uInt16)aFileList.Count(); n--; )
+            for ( USHORT n = (USHORT)aFileList.Count(); n--; )
             {
                 sFileName = aFileList.GetFile(n);
                 InsertRegion(pCnt, &sFileName);
@@ -255,7 +258,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     {
                         nEntryCount++;
                         nAbsContPos++;
-                        pCnt = pTempContents->GetObject( static_cast< sal_uInt16 >(nAbsContPos) );
+                        pCnt = pTempContents->GetObject( static_cast< USHORT >(nAbsContPos) );
                     }
                 }
             }
@@ -266,14 +269,14 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
         {
             INetURLObject aTemp(sFileName);
             GraphicDescriptor aDesc(aTemp);
-            if( !aDesc.Detect() )   // keine Grafiken annehmen
+            if( !aDesc.Detect() )	// keine Grafiken annehmen
             {
                 nRet = rEvt.mnAction;
                 InsertRegion(pCnt, &sFileName);
             }
         }
     }
-    bLastEntryEmphasis = sal_False;
+    bLastEntryEmphasis = FALSE;
     return nRet;
 
 }
@@ -289,14 +292,14 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
     {
         if( pEmphasisEntry )
         {
-            ImplShowTargetEmphasis( Prev(pEmphasisEntry), sal_False );
+            ImplShowTargetEmphasis( Prev(pEmphasisEntry), FALSE );
             pEmphasisEntry = 0;
         }
         else if(bLastEntryEmphasis && pLast)
         {
-            ImplShowTargetEmphasis( pLast, sal_False);
+            ImplShowTargetEmphasis( pLast, FALSE);
         }
-        bLastEntryEmphasis = sal_False;
+        bLastEntryEmphasis = FALSE;
     }
     else
     {
@@ -318,11 +321,11 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
                 nRet = DND_ACTION_LINK;
 
         if(pEmphasisEntry && pEmphasisEntry != pDropEntry)
-            ImplShowTargetEmphasis( Prev(pEmphasisEntry), sal_False );
+            ImplShowTargetEmphasis( Prev(pEmphasisEntry), FALSE );
         else if(pLast && bLastEntryEmphasis  && pDropEntry)
         {
-            ImplShowTargetEmphasis( pLast, sal_False);
-            bLastEntryEmphasis = sal_False;
+            ImplShowTargetEmphasis( pLast, FALSE);
+            bLastEntryEmphasis = FALSE;
         }
 
         if(pDropEntry)
@@ -330,7 +333,7 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
         else if(pLast)
         {
             ImplShowTargetEmphasis( pLast, DND_ACTION_NONE != nRet );
-            bLastEntryEmphasis = sal_True;
+            bLastEntryEmphasis = TRUE;
         }
         pEmphasisEntry = pDropEntry;
     }
@@ -343,12 +346,12 @@ PopupMenu* SwGlobalTree::CreateContextMenu()
     if(pActiveShell &&
         !pActiveShell->GetView().GetDocShell()->IsReadOnly())
     {
-        sal_uInt16 nEnableFlags = GetEnableFlags();
+        USHORT nEnableFlags = GetEnableFlags();
         pPop = new PopupMenu;
         PopupMenu* pSubPop1 = new PopupMenu;
         PopupMenu* pSubPop2 = new PopupMenu;
 
-        for (sal_uInt16 i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
+        for (USHORT i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
         {
             pSubPop2->InsertItem( i, aContextStrings[ST_UPDATE_SEL - ST_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
             pSubPop2->SetHelpId(i, aHelpForMenu[i]);
@@ -398,23 +401,25 @@ PopupMenu* SwGlobalTree::CreateContextMenu()
     return pPop;
 }
 
-void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
+void SwGlobalTree::TbxMenuHdl(USHORT nTbxId, ToolBox* pBox)
 {
-    sal_uInt16 nEnableFlags = GetEnableFlags();
+    USHORT nEnableFlags = GetEnableFlags();
     if(FN_GLOBAL_OPEN == nTbxId)
     {
         PopupMenu *pMenu = new PopupMenu;
-        for (sal_uInt16 i = CTX_INSERT_ANY_INDEX; i <= CTX_INSERT_TEXT; i++)
+        for (USHORT i = CTX_INSERT_ANY_INDEX; i <= CTX_INSERT_TEXT; i++)
         {
             pMenu->InsertItem( i, aContextStrings[ST_INDEX  - ST_GLOBAL_CONTEXT_FIRST - CTX_INSERT_ANY_INDEX + i] );
             pMenu->SetHelpId(i, aHelpForMenu[i] );
         }
         pMenu->EnableItem(CTX_INSERT_ANY_INDEX, 0 != (nEnableFlags & ENABLE_INSERT_IDX ));
+//      pMenu->EnableItem(CTX_INSERT_CNTIDX,    0 != (nEnableFlags & ENABLE_INSERT_IDX ));
+//      pMenu->EnableItem(CTX_INSERT_USRIDX,    0 != (nEnableFlags & ENABLE_INSERT_IDX ));
         pMenu->EnableItem(CTX_INSERT_TEXT,      0 != (nEnableFlags & ENABLE_INSERT_TEXT));
         pMenu->EnableItem(CTX_INSERT_FILE,      0 != (nEnableFlags & ENABLE_INSERT_FILE));
         pMenu->EnableItem(CTX_INSERT_NEW_FILE,  0 != (nEnableFlags & ENABLE_INSERT_FILE));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
-        pMenu->Execute( pBox, pBox->GetItemRect(nTbxId).BottomLeft());
+        pMenu->Execute(	pBox, pBox->GetItemRect(nTbxId).BottomLeft());
         delete pMenu;
         pBox->EndSelection();
         pBox->Invalidate();
@@ -422,34 +427,34 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
     else if(FN_GLOBAL_UPDATE == nTbxId)
     {
         PopupMenu *pMenu = new PopupMenu;
-        for (sal_uInt16 i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
+        for (USHORT i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
         {
             pMenu->InsertItem( i, aContextStrings[ST_UPDATE_SEL - ST_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
             pMenu->SetHelpId(i, aHelpForMenu[i] );
         }
         pMenu->EnableItem(CTX_UPDATE_SEL, 0 != (nEnableFlags & ENABLE_UPDATE_SEL));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
-        pMenu->Execute( pBox, pBox->GetItemRect(nTbxId).BottomLeft());
+        pMenu->Execute(	pBox, pBox->GetItemRect(nTbxId).BottomLeft());
         delete pMenu;
         pBox->EndSelection();
         pBox->Invalidate();
     }
 }
 
-sal_uInt16  SwGlobalTree::GetEnableFlags() const
+USHORT	SwGlobalTree::GetEnableFlags() const
 {
     SvLBoxEntry* pEntry = FirstSelected();
-    sal_uInt16 nSelCount = (sal_uInt16)GetSelectionCount();
-    sal_uInt16 nEntryCount = (sal_uInt16)GetEntryCount();
+    USHORT nSelCount = (USHORT)GetSelectionCount();
+    USHORT nEntryCount = (USHORT)GetEntryCount();
     SvLBoxEntry* pPrevEntry = pEntry ? Prev(pEntry) : 0;
 
-    sal_uInt16 nRet = 0;
+    USHORT nRet = 0;
     if(nSelCount == 1 || !nEntryCount)
         nRet |= ENABLE_INSERT_IDX|ENABLE_INSERT_FILE;
     if(nSelCount == 1)
     {
         nRet |= ENABLE_EDIT;
-        if( ((SwGlblDocContent*)pEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN &&
+        if(	((SwGlblDocContent*)pEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN &&
                     (!pPrevEntry || ((SwGlblDocContent*)pPrevEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN))
             nRet |= ENABLE_INSERT_TEXT;
         if( GLBLDOC_SECTION == ((SwGlblDocContent*)pEntry->GetUserData())->GetType() )
@@ -466,11 +471,11 @@ sal_uInt16  SwGlobalTree::GetEnableFlags() const
     return nRet;
 }
 
-void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
+void	 SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
 {
-    sal_Bool bParent = sal_True;
-    Update(sal_True);
-    Display(sal_True);
+    BOOL bParent = TRUE;
+    Update(TRUE);
+    Display(TRUE);
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
@@ -479,7 +484,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
                             (const SwGlblDocContent*)pEntry->GetUserData() : 0;
         if( pCont &&  GLBLDOC_SECTION == pCont->GetType())
         {
-            bParent = sal_False;
+            bParent = FALSE;
             SvLBoxTab* pTab;
             SvLBoxItem* pItem = GetItem( pEntry, aPos.X(), &pTab );
             if(pItem && SV_ITEM_ID_LBOXSTRING == pItem->IsA())
@@ -514,14 +519,14 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
         SvTreeListBox::RequestHelp(rHEvt);
 }
 
-void     SwGlobalTree::SelectHdl()
+void	 SwGlobalTree::SelectHdl()
 {
 
-    sal_uInt16 nSelCount = (sal_uInt16)GetSelectionCount();
+    USHORT nSelCount = (USHORT)GetSelectionCount();
     SvLBoxEntry* pSel = FirstSelected();
-    sal_uInt16 nAbsPos = pSel ? (sal_uInt16)GetModel()->GetAbsPos(pSel) : 0;
+    USHORT nAbsPos = pSel ? (USHORT)GetModel()->GetAbsPos(pSel) : 0;
     SwNavigationPI* pNavi = GetParentWindow();
-    sal_Bool bReadonly = !pActiveShell ||
+    BOOL bReadonly = !pActiveShell ||
                 pActiveShell->GetView().GetDocShell()->IsReadOnly();
     pNavi->aGlobalToolBox.EnableItem(FN_GLOBAL_EDIT,  nSelCount == 1 && !bReadonly);
     pNavi->aGlobalToolBox.EnableItem(FN_GLOBAL_OPEN,  nSelCount <= 1 && !bReadonly);
@@ -529,11 +534,11 @@ void     SwGlobalTree::SelectHdl()
     pNavi->aGlobalToolBox.EnableItem(FN_ITEM_UP,
                     nSelCount == 1 && nAbsPos && !bReadonly);
     pNavi->aGlobalToolBox.EnableItem(FN_ITEM_DOWN,
-                    nSelCount == 1 && nAbsPos < ((sal_uInt16)GetEntryCount()) - 1 && !bReadonly);
+                    nSelCount == 1 && nAbsPos < ((USHORT)GetEntryCount()) - 1 && !bReadonly);
 
 }
 
-void     SwGlobalTree::DeselectHdl()
+void	 SwGlobalTree::DeselectHdl()
 {
     SelectHdl();
 }
@@ -541,7 +546,7 @@ void     SwGlobalTree::DeselectHdl()
 DragDropMode SwGlobalTree::NotifyStartDrag( TransferDataContainer& ,
                                                 SvLBoxEntry* pEntry )
 {
-    bIsInternalDrag = sal_True;
+    bIsInternalDrag = TRUE;
     pDDSource = pEntry;
     return SV_DRAGDROP_CTRL_MOVE;
 }
@@ -551,33 +556,33 @@ long     SwGlobalTree::GetTabPos( SvLBoxEntry*, SvLBoxTab* pTab)
     return pTab->GetPos() - GLBL_TABPOS_SUB;
 }
 
-sal_Bool     SwGlobalTree::NotifyMoving(   SvLBoxEntry*  pTarget,
+BOOL     SwGlobalTree::NotifyMoving(   SvLBoxEntry*  pTarget,
                                         SvLBoxEntry*  pSource,
                                         SvLBoxEntry*&,
-                                        sal_uLong&
+                                        ULONG&
                                     )
 {
     SvTreeList* _pModel = GetModel();
-    sal_uInt16 nSource = (sal_uInt16) _pModel->GetAbsPos(pSource);
-    sal_uInt16 nDest   = pTarget ? (sal_uInt16) _pModel->GetAbsPos(pTarget) : pSwGlblDocContents->Count();
+    USHORT nSource = (USHORT) _pModel->GetAbsPos(pSource);
+    USHORT nDest   = pTarget ? (USHORT) _pModel->GetAbsPos(pTarget) : pSwGlblDocContents->Count();
 
-    if( pActiveShell->MoveGlobalDocContent(
+    if(	pActiveShell->MoveGlobalDocContent(
             *pSwGlblDocContents, nSource, nSource + 1, nDest ) &&
-            Update( sal_False ))
+            Update( FALSE ))
         Display();
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool     SwGlobalTree::NotifyCopying(  SvLBoxEntry*  /*pTarget*/,
+BOOL     SwGlobalTree::NotifyCopying(  SvLBoxEntry*  /*pTarget*/,
                                         SvLBoxEntry*  /*pEntry*/,
                                         SvLBoxEntry*& /*rpNewParent*/,
-                                        sal_uLong&        /*rNewChildPos*/
+                                        ULONG&        /*rNewChildPos*/
                                     )
 {
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool SwGlobalTree::NotifyAcceptDrop( SvLBoxEntry* pEntry)
+BOOL SwGlobalTree::NotifyAcceptDrop( SvLBoxEntry* pEntry)
 {
     return pEntry != 0;
 }
@@ -591,17 +596,17 @@ void SwGlobalTree::StartDrag( sal_Int8 nAction, const Point& rPt )
 void SwGlobalTree::DragFinished( sal_Int8 nAction )
 {
     SvTreeListBox::DragFinished( nAction );
-    bIsInternalDrag = sal_False;
+    bIsInternalDrag = FALSE;
 }
 
 /***************************************************************************
-    Beschreibung:   Wird ein Ctrl+DoubleClick in einen freien Bereich ausgefuehrt,
- *                  dann soll die Basisfunktion des Controls gerufen werden
+    Beschreibung: 	Wird ein Ctrl+DoubleClick in einen freien Bereich ausgefuehrt,
+ * 					dann soll die Basisfunktion des Controls gerufen werden
 ***************************************************************************/
 void  SwGlobalTree::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Point aPos( rMEvt.GetPosPixel());
-    SvLBoxEntry* pEntry = GetEntry( aPos, sal_True );
+    SvLBoxEntry* pEntry = GetEntry( aPos, TRUE );
     if( !pEntry && rMEvt.IsLeft() && rMEvt.IsMod1() && (rMEvt.GetClicks() % 2) == 0)
         Control::MouseButtonDown( rMEvt );
     else
@@ -610,7 +615,7 @@ void  SwGlobalTree::MouseButtonDown( const MouseEvent& rMEvt )
 
 void     SwGlobalTree::GetFocus()
 {
-    if(Update( sal_False ))
+    if(Update( FALSE ))
         Display();
     SvTreeListBox::GetFocus();
 }
@@ -638,18 +643,19 @@ void SwGlobalTree::Clear()
     SvTreeListBox::Clear();
 }
 
-void    SwGlobalTree::Display(sal_Bool bOnlyUpdateUserData)
+void 	SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
 {
     if(!bIsImageListInitialized)
     {
-        aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
-        bIsImageListInitialized = sal_True;
+        USHORT nResId = GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        aEntryImages = ImageList(SW_RES(nResId));
+        bIsImageListInitialized = TRUE;
     }
-    sal_uInt16 nCount = pSwGlblDocContents->Count();
+    USHORT nCount = pSwGlblDocContents->Count();
     if(bOnlyUpdateUserData && GetEntryCount() == pSwGlblDocContents->Count())
     {
         SvLBoxEntry* pEntry = First();
-        for( sal_uInt16 i = 0; i < nCount; i++)
+        for( USHORT i = 0; i < nCount; i++)
         {
             SwGlblDocContentPtr pCont = pSwGlblDocContents->GetObject(i);
             pEntry->SetUserData(pCont);
@@ -658,21 +664,21 @@ void    SwGlobalTree::Display(sal_Bool bOnlyUpdateUserData)
     }
     else
     {
-        SetUpdateMode( sal_False );
+        SetUpdateMode( FALSE );
         SvLBoxEntry* pOldSelEntry = FirstSelected();
-        String sEntryName;  // Name des Eintrags
-        sal_uInt16 nSelPos = USHRT_MAX;
+        String sEntryName;	// Name des Eintrags
+        USHORT nSelPos = USHRT_MAX;
         if(pOldSelEntry)
         {
             sEntryName = GetEntryText(pOldSelEntry);
-            nSelPos = (sal_uInt16)GetModel()->GetAbsPos(pOldSelEntry);
+            nSelPos = (USHORT)GetModel()->GetAbsPos(pOldSelEntry);
         }
         Clear();
         if(!pSwGlblDocContents)
-            Update( sal_False );
+            Update( FALSE );
 
         SvLBoxEntry* pSelEntry = 0;
-        for( sal_uInt16 i = 0; i < nCount; i++)
+        for( USHORT i = 0; i < nCount; i++)
         {
             SwGlblDocContentPtr pCont = pSwGlblDocContents->GetObject(i);
             String sEntry;
@@ -701,7 +707,7 @@ void    SwGlobalTree::Display(sal_Bool bOnlyUpdateUserData)
                 break;
             }
             SvLBoxEntry* pEntry = InsertEntry(sEntry, aImage, aImage,
-                        0, sal_False, LIST_APPEND, pCont);
+                        0, FALSE, LIST_APPEND, pCont);
             if(sEntry == sEntryName)
             {
                 pSelEntry = pEntry;
@@ -719,7 +725,7 @@ void    SwGlobalTree::Display(sal_Bool bOnlyUpdateUserData)
             Select(First());
         else
             SelectHdl();
-        SetUpdateMode( sal_True );
+        SetUpdateMode( TRUE );
     }
 }
 
@@ -745,9 +751,9 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const String* pF
     }
 }
 
-void    SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
+void 	SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
 {
-    sal_uInt16 nSlot = 0;
+    USHORT nSlot = 0;
     switch( pCont->GetType() )
     {
         case GLBLDOC_UNKNOWN:
@@ -774,7 +780,7 @@ void    SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
     if(nSlot)
     {
         pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(nSlot);
-        if(Update( sal_False ))
+        if(Update( FALSE ))
             Display();
     }
 }
@@ -782,11 +788,13 @@ void    SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
 IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
 {
     ExcecuteContextMenuAction( pMenu->GetCurItemId());
-    return sal_True;
+    return TRUE;
 }
 
-void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
+void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
+//IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
 {
+//  USHORT nId = pMenu->GetCurItemId();
     SvLBoxEntry* pEntry = FirstSelected();
     SwGlblDocContent* pCont = pEntry ? (SwGlblDocContent*)pEntry->GetUserData() : 0;
     // wird waehrend des Dialogs ein RequestHelp gerufen,
@@ -796,7 +804,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
     if(pCont)
         pContCopy = new SwGlblDocContent(pCont->GetDocPos());
     SfxDispatcher& rDispatch = *pActiveShell->GetView().GetViewFrame()->GetDispatcher();
-    sal_uInt16 nSlot = 0;
+    USHORT nSlot = 0;
     bool bDeleteContentCopy = true;
     switch( nSelectedPopupEntry )
     {
@@ -835,7 +843,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
         case CTX_UPDATE_LINK:
         case CTX_UPDATE_ALL:
         {
-            pActiveShell->GetLinkManager().UpdateAllLinks(sal_True);
+            pActiveShell->GetLinkManager().UpdateAllLinks(TRUE);
             if(CTX_UPDATE_ALL == nSelectedPopupEntry)
                 nSlot = FN_UPDATE_TOX;
             pCont = 0;
@@ -867,7 +875,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             {
                 pActiveShell->DeleteGlobalDocContent(
                     pTempContents ? *pTempContents : *pSwGlblDocContents,
-                                     (sal_uInt16)GetModel()->GetAbsPos(pSelEntry));
+                                     (USHORT)GetModel()->GetAbsPos(pSelEntry));
                 pSelEntry = PrevSelected(pSelEntry);
                 if(pSelEntry)
                 {
@@ -881,6 +889,8 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
         }
         break;
         case CTX_INSERT_ANY_INDEX:
+//		case CTX_INSERT_CNTIDX:
+//		case CTX_INSERT_USRIDX:
         {
             if(pContCopy)
             {
@@ -900,7 +910,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                                                         *pActiveShell,
                                                         0,
                                                         USHRT_MAX,
-                                                        sal_True);
+                                                        TRUE);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if(RET_OK == pDlg->Execute())
                 {
@@ -929,7 +939,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             SfxViewFrame* pGlobFrm = pActiveShell->GetView().GetViewFrame();
             SwGlobalFrameListener_Impl aFrmListener(*pGlobFrm);
 
-            sal_uLong nEntryPos = pEntry ? GetModel()->GetAbsPos(pEntry) : (sal_uLong)-1;
+            ULONG nEntryPos = pEntry ? GetModel()->GetAbsPos(pEntry) : (ULONG)-1;
             // neues Dok anlegen
             SfxStringItem aFactory(SID_NEWDOCDIRECT,
                             SwDocShell::Factory().GetFilterContainer()->GetName());
@@ -956,9 +966,9 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                 {
                     pGlobFrm->ToTop();
                     // durch das Update sind die Eintraege invalid
-                    if(nEntryPos != (sal_uLong)-1)
+                    if(nEntryPos != (ULONG)-1)
                     {
-                        Update( sal_False );
+                        Update( FALSE );
                         Display();
                         Select(GetModel()->GetEntryAtAbsPos(nEntryPos));
                         pEntry = FirstSelected();
@@ -993,7 +1003,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             else
             {
                 pActiveShell->SplitNode(); // leeres Dokument
-                pActiveShell->Up( sal_False, 1 );
+                pActiveShell->Up( FALSE, 1 );
             }
             pActiveShell->GetView().GetEditWin().GrabFocus();
         }
@@ -1008,17 +1018,18 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
         GotoContent(pCont);
     if(nSlot)
         rDispatch.Execute(nSlot);
-    if(Update( sal_False ))
+    if(Update( FALSE ))
         Display();
     if ( bDeleteContentCopy )
         delete pContCopy;
     else
         bDeleteContentCopy = true;
+//  return TRUE;
 }
 
 IMPL_LINK( SwGlobalTree, Timeout, Timer*, EMPTYARG )
 {
-    if(!HasFocus() && Update( sal_False ))
+    if(!HasFocus() && Update( FALSE ))
         Display();
     return 0;
 }
@@ -1045,19 +1056,19 @@ void SwGlobalTree::GotoContent(const SwGlblDocContent* pCont)
 
 }
 
-void    SwGlobalTree::ShowTree()
+void	SwGlobalTree::ShowTree()
 {
     aUpdateTimer.Start();
     SvTreeListBox::Show();
 }
 
-void    SwGlobalTree::HideTree()
+void	SwGlobalTree::HideTree()
 {
     aUpdateTimer.Stop();
     SvTreeListBox::Hide();
 }
 
-void    SwGlobalTree::ExecCommand(sal_uInt16 nCmd)
+void 	SwGlobalTree::ExecCommand(USHORT nCmd)
 {
     SvLBoxEntry* pEntry = FirstSelected();
     OSL_ENSURE(pEntry, "gleich knallt's");
@@ -1071,14 +1082,14 @@ void    SwGlobalTree::ExecCommand(sal_uInt16 nCmd)
     {
         if(GetSelectionCount() == 1)
         {
-            sal_Bool bMove = sal_False;
-            sal_uInt16 nSource = (sal_uInt16)GetModel()->GetAbsPos(pEntry);
-            sal_uInt16 nDest = nSource;
+            BOOL bMove = FALSE;
+            USHORT nSource = (USHORT)GetModel()->GetAbsPos(pEntry);
+            USHORT nDest = nSource;
             switch(nCmd)
             {
                 case FN_ITEM_DOWN:
                 {
-                    sal_uInt16 nEntryCount = (sal_uInt16)GetEntryCount();
+                    USHORT nEntryCount = (USHORT)GetEntryCount();
                     bMove = nEntryCount > nSource + 1;
                     nDest+= 2;
                 }
@@ -1091,18 +1102,18 @@ void    SwGlobalTree::ExecCommand(sal_uInt16 nCmd)
                 }
                 break;
             }
-            if( bMove && pActiveShell->MoveGlobalDocContent(
+            if(	bMove && pActiveShell->MoveGlobalDocContent(
                 *pSwGlblDocContents, nSource, nSource + 1, nDest ) &&
-                    Update( sal_False ))
+                    Update( FALSE ))
                 Display();
         }
     }
 }
 
-sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
+BOOL  	SwGlobalTree::Update(BOOL bHard)
 {
     SwView* pActView = GetParentWindow()->GetCreateView();
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     if(pActView && pActView->GetWrtShellPtr())
     {
         const SwWrtShell* pOldShell = pActiveShell;
@@ -1115,23 +1126,23 @@ sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
         if(!pSwGlblDocContents)
         {
             pSwGlblDocContents = new SwGlblDocContents;
-            bRet = sal_True;
+            bRet = TRUE;
             pActiveShell->GetGlobalDocContent(*pSwGlblDocContents);
         }
         else
         {
-            sal_Bool bCopy = sal_False;
+            BOOL bCopy = FALSE;
             SwGlblDocContents* pTempContents  = new SwGlblDocContents;
             pActiveShell->GetGlobalDocContent(*pTempContents);
             if(pTempContents->Count() != pSwGlblDocContents->Count() ||
                     pTempContents->Count() != GetEntryCount())
             {
-                bRet = sal_True;
-                bCopy = sal_True;
+                bRet = TRUE;
+                bCopy = TRUE;
             }
             else
             {
-                for(sal_uInt16 i = 0; i < pTempContents->Count() && !bCopy; i++)
+                for(USHORT i = 0; i < pTempContents->Count() && !bCopy; i++)
                 {
                     SwGlblDocContent* pLeft = pTempContents->GetObject(i);
                     SwGlblDocContent* pRight = pSwGlblDocContents->GetObject(i);
@@ -1150,13 +1161,13 @@ sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
                          )
                        )
                     {
-                        bCopy = bRet = sal_True;
+                        bCopy = bRet = TRUE;
                     }
                 }
             }
             if(bCopy || bHard)
             {
-                sal_uInt16 i;
+                USHORT i;
 
                 pSwGlblDocContents->DeleteAndDestroy(0, pSwGlblDocContents->Count());
                 for( i = 0; i < pTempContents->Count(); i++)
@@ -1185,14 +1196,14 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
 {
     String sFileName(pCont->GetSection()->GetLinkFileName().GetToken(0,
             sfx2::cTokenSeperator));
-    sal_Bool bFound = sal_False;
+    BOOL bFound = FALSE;
     const SfxObjectShell* pCurr = SfxObjectShell::GetFirst();
     while( !bFound && pCurr )
     {
         if(pCurr->GetMedium() &&
             String(pCurr->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI)) == sFileName)
         {
-            bFound = sal_True;
+            bFound = TRUE;
             SwGlobalTree::SetShowShell(pCurr);
             Application::PostUserEvent( STATIC_LINK(
                         this, SwGlobalTree, ShowFrameHdl ) );
@@ -1205,7 +1216,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     {
         SfxStringItem aURL(SID_FILE_NAME,
             sFileName);
-        SfxBoolItem aReadOnly(SID_DOC_READONLY, sal_False);
+        SfxBoolItem aReadOnly(SID_DOC_READONLY, FALSE);
         SfxStringItem aTargetFrameName( SID_TARGETNAME, String::CreateFromAscii("_blank") );
         SfxStringItem aReferer(SID_REFERER, pActiveShell->GetView().GetDocShell()->GetTitle());
         pActiveShell->GetView().GetViewFrame()->GetDispatcher()->
@@ -1214,7 +1225,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     }
 }
 
-IMPL_LINK(  SwGlobalTree, DoubleClickHdl, SwGlobalTree *, EMPTYARG )
+IMPL_LINK( 	SwGlobalTree, DoubleClickHdl, SwGlobalTree *, EMPTYARG )
 {
     SvLBoxEntry* pEntry = GetCurEntry();
     SwGlblDocContent* pCont = (SwGlblDocContent*)pEntry->GetUserData();
@@ -1240,19 +1251,20 @@ void SwGlobalTree::InitEntry(SvLBoxEntry* pEntry,
         const XubString& rStr ,const Image& rImg1,const Image& rImg2,
         SvLBoxButtonKind eButtonKind)
 {
-    sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
+    USHORT nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
     SwLBoxString* pStr = new SwLBoxString( pEntry, 0, pCol->GetText() );
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
 
-void SwLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+void SwLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
     SvLBoxEntry* pEntry )
 {
     SwGlblDocContent* pCont = (SwGlblDocContent*)pEntry->GetUserData();
+    const SwSection* pSect;
     if(pCont->GetType() == GLBLDOC_SECTION &&
-        !(pCont->GetSection())->IsConnectFlag() )
+        !(pSect = pCont->GetSection())->IsConnectFlag()	)
     {
         Font aOldFont( rDev.GetFont());
         Font aFont(aOldFont);
@@ -1271,7 +1283,8 @@ void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
+        USHORT nResId = GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        aEntryImages = ImageList(SW_RES(nResId));
         Update(sal_True);
     }
     SvTreeListBox::DataChanged( rDCEvt );
@@ -1282,24 +1295,24 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
     sal_Int32 nFiles = _rFiles.getLength();
     if ( nFiles )
     {
-        sal_Bool bMove = sal_False;
+        BOOL bMove = FALSE;
         if ( !_pContent )
         {
             SvLBoxEntry* pLast = (SvLBoxEntry*)LastVisible();
             _pContent = (SwGlblDocContent*)pLast->GetUserData();
-            bMove = sal_True;
+            bMove = TRUE;
         }
         String sFilePassword;
-        sal_uInt16 nEntryCount = (sal_uInt16)GetEntryCount();
+        USHORT nEntryCount = (USHORT)GetEntryCount();
         const OUString* pFileNames = _rFiles.getConstArray();
         SwWrtShell& rSh = GetParentWindow()->GetCreateView()->GetWrtShell();
         rSh.StartAction();
         // after insertion of the first new content the 'pCont' parameter becomes invalid
         // find the index of the 'anchor' content to always use a current anchor content
-        sal_uInt16 nAnchorContent = pSwGlblDocContents->Count() - 1;
+        USHORT nAnchorContent = pSwGlblDocContents->Count() - 1;
         if ( !bMove )
         {
-            for( sal_uInt16 nContent = 0; nContent < pSwGlblDocContents->Count(); ++nContent )
+            for( USHORT nContent = 0; nContent < pSwGlblDocContents->Count(); ++nContent )
             {
                 if( *_pContent == *pSwGlblDocContents->GetObject( nContent ) )
                 {
@@ -1316,7 +1329,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             SwGlblDocContent* pAnchorContent = 0;
             OSL_ENSURE(aTempContents.Count() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed");
             if ( aTempContents.Count() > (nAnchorContent + nFile) )
-                pAnchorContent = aTempContents.GetObject(nAnchorContent + (sal_uInt16)nFile);
+                pAnchorContent = aTempContents.GetObject(nAnchorContent + (USHORT)nFile);
             else
                 pAnchorContent = aTempContents.GetObject(aTempContents.Count() - 1);
             String sFileName(pFileNames[nFile]);
@@ -1325,10 +1338,10 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             String sSectionName(String(aFileUrl.GetLastName(
                 INetURLObject::DECODE_UNAMBIGUOUS)).GetToken(0,
                 sfx2::cTokenSeperator));
-            sal_uInt16 nSectCount = rSh.GetSectionFmtCount();
+            USHORT nSectCount = rSh.GetSectionFmtCount();
             String sTempSectionName(sSectionName);
-            sal_uInt16 nAddNumber = 0;
-            sal_uInt16 nCount = 0;
+            USHORT nAddNumber = 0;
+            USHORT nCount = 0;
             // evtl : und Index anhaengen, wenn der Bereichsname schon vergeben ist
             while ( nCount < nSectCount )
             {
@@ -1361,12 +1374,12 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
         }
         if ( bMove )
         {
-            Update( sal_False );
+            Update( FALSE );
             rSh.MoveGlobalDocContent(
-                *pSwGlblDocContents, nEntryCount, nEntryCount + (sal_uInt16)nFiles, nEntryCount - (sal_uInt16)nFiles );
+                *pSwGlblDocContents, nEntryCount, nEntryCount + (USHORT)nFiles, nEntryCount - (USHORT)nFiles );
         }
         rSh.EndAction();
-        Update( sal_False );
+        Update( FALSE );
         Display();
     }
 }
@@ -1379,17 +1392,18 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
         SfxMediumList* pMedList = pDocInserter->CreateMediumList();
         if ( pMedList )
         {
-            Sequence< OUString >aFileNames( pMedList->size() );
+            Sequence< OUString >aFileNames( pMedList->Count() );
             OUString* pFileNames = aFileNames.getArray();
+            SfxMedium* pMed = pMedList->First();
             sal_Int32 nPos = 0;
-            for ( size_t i = 0, n = pMedList->size(); i < n; ++i )
+            while ( pMed )
             {
-                SfxMedium* pMed = pMedList->at( i );
                 String sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
                 sFileName += sfx2::cTokenSeperator;
                 sFileName += pMed->GetFilter()->GetFilterName();
                 sFileName += sfx2::cTokenSeperator;
                 pFileNames[nPos++] = sFileName;
+                pMed = pMedList->Next();
             }
             delete pMedList;
             InsertRegion( pDocContent, aFileNames );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -150,7 +150,7 @@ TickmarkProperties AxisProperties::makeTickmarkPropertiesForComplexCategories(
     sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis, sal_Int32 /*nTextLevel*/ ) const
 {
     sal_Int32 nTickmarkStyle = (m_fLabelDirectionSign==m_fInnerDirectionSign) ? 2/*outside*/ : 1/*inside*/;
-
+    
     TickmarkProperties aTickmarkProperties;
     aTickmarkProperties.Length = nTickLength;// + nTextLevel*( lcl_calcTickLengthForDepth(0,nTickmarkStyle) );
     aTickmarkProperties.RelativePos = static_cast<sal_Int32>(lcl_getTickOffset(aTickmarkProperties.Length+nTickStartDistanceToAxis,nTickmarkStyle));
@@ -158,6 +158,7 @@ TickmarkProperties AxisProperties::makeTickmarkPropertiesForComplexCategories(
     return aTickmarkProperties;
 }
 
+//static
 TickmarkProperties AxisProperties::getBiggestTickmarkProperties()
 {
     TickmarkProperties aTickmarkProperties;
@@ -183,6 +184,7 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_pfExrtaLinePositionAtOtherAxis(NULL)
     , m_bCrossingAxisHasReverseDirection(false)
     , m_bCrossingAxisIsCategoryAxes(false)
+    , m_bAxisBetweenCategories(false)
     , m_fLabelDirectionSign(1.0)
     , m_fInnerDirectionSign(1.0)
     , m_aLabelAlignment(LABEL_ALIGN_RIGHT_TOP)
@@ -212,6 +214,7 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_pfExrtaLinePositionAtOtherAxis( NULL )
     , m_bCrossingAxisHasReverseDirection( rAxisProperties.m_bCrossingAxisHasReverseDirection )
     , m_bCrossingAxisIsCategoryAxes( rAxisProperties.m_bCrossingAxisIsCategoryAxes )
+    , m_bAxisBetweenCategories( rAxisProperties.m_bAxisBetweenCategories )
     , m_fLabelDirectionSign( rAxisProperties.m_fLabelDirectionSign )
     , m_fInnerDirectionSign( rAxisProperties.m_fInnerDirectionSign )
     , m_aLabelAlignment( rAxisProperties.m_aLabelAlignment )
@@ -278,7 +281,11 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
                 xAxisProp->getPropertyValue(C2U( "CrossoverValue" )) >>= fValue;
 
                 if( m_bCrossingAxisIsCategoryAxes )
+                {
                     fValue = ::rtl::math::round(fValue);
+                    if( m_bAxisBetweenCategories )
+                        fValue-=0.5;
+                }
                 m_pfMainLinePositionAtOtherAxis = new double(fValue);
             }
             else if( ::com::sun::star::chart::ChartAxisPosition_ZERO == m_eCrossoverType )
@@ -312,22 +319,13 @@ void AxisProperties::init( bool bCartesian )
     if( m_nDimensionIndex<2 )
         initAxisPositioning( xProp );
 
-    ScaleData aScaleData = m_xAxisModel->getScaleData();
-    if( m_nDimensionIndex==0 )
-        AxisHelper::checkDateAxis( aScaleData, m_pExplicitCategoriesProvider, bCartesian );
-    m_nAxisType = aScaleData.AxisType;
-
     if( bCartesian )
     {
-        if( m_nDimensionIndex == 0 && m_nAxisType == AxisType::CATEGORY
-                && m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
-            m_bComplexCategories = true;
-
         if( ::com::sun::star::chart::ChartAxisPosition_END == m_eCrossoverType )
             m_fInnerDirectionSign = m_bCrossingAxisHasReverseDirection ? 1 : -1;
         else
             m_fInnerDirectionSign = m_bCrossingAxisHasReverseDirection ? -1 : 1;
-
+        
         if( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS == m_eLabelPos )
             m_fLabelDirectionSign = m_fInnerDirectionSign;
         else if( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE == m_eLabelPos )
@@ -336,7 +334,7 @@ void AxisProperties::init( bool bCartesian )
             m_fLabelDirectionSign = m_bCrossingAxisHasReverseDirection ? -1 : 1;
         else if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END == m_eLabelPos )
             m_fLabelDirectionSign = m_bCrossingAxisHasReverseDirection ? 1 : -1;
-
+        
         if( m_nDimensionIndex==2 )
             m_aLabelAlignment = lcl_getLabelAlignmentForZAxis(*this);
         else
@@ -361,9 +359,13 @@ void AxisProperties::init( bool bCartesian )
         //init LineProperties
         m_aLineProperties.initFromPropertySet( xProp );
 
-        //init display labels
+        //init display labels    
         xProp->getPropertyValue( C2U( "DisplayLabels" ) ) >>= m_bDisplayLabels;
 
+        //init categories
+        ScaleData aScaleData = m_xAxisModel->getScaleData();
+        m_nAxisType = aScaleData.AxisType;
+                
         //init TickmarkProperties
         xProp->getPropertyValue( C2U( "MajorTickmarks" ) ) >>= m_nMajorTickmarks;
         xProp->getPropertyValue( C2U( "MinorTickmarks" ) ) >>= m_nMinorTickmarks;
@@ -401,7 +403,16 @@ AxisLabelProperties::AxisLabelProperties()
                         , nRhythm( 1 )
                         , bRhythmIsFix(false)
 {
+    /*
+    aLocale.Language = C2U( "en" );
+    aLocale.Country  = C2U( "US" );
 
+    //aLocale.Language = C2U( "ar" );
+    //aLocale.Country  = C2U( "IR" );
+
+    //aLocale.Language = C2U( "ja" );
+    //aLocale.Country  = C2U( "JP" );
+    */
 }
 
 void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
@@ -441,6 +452,28 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
         }
     }
 }
+
+/*
+sal_Int16 getSwappedWritingMode( sal_Int16 nWritingMode )
+{
+    //LR_TB == LT
+    //RL_TB == RT (Arabic, Hebrew)
+    //TB_RL == TR (Japanese, Chinese, Korean)
+    // ?? TL (Mongolian) see also text::WritingMode2
+
+    switch(nWritingMode)
+    {
+        case text::WritingMode2::RL_TB:
+            return  text::WritingMode2::TB_RL;
+        case text::WritingMode2::TB_RL:
+            return  text::WritingMode2::RL_TB;
+        case text::WritingMode2::LR_TB:
+            return  text::WritingMode2::TB_LR;
+        default:
+            return  text::WritingMode2::LR_TB;
+    }
+}
+*/
 
 sal_Bool AxisLabelProperties::getIsStaggered() const
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <comphelper/sequence.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
-#include <stdio.h>      //sprintf
+#include <stdio.h>		//sprintf
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
 #include "LDriver.hxx"
@@ -72,7 +72,7 @@ using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
 void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
-    sal_Bool bRead = sal_True;
+    BOOL bRead = TRUE;
 
     QuotedTokenizedString aHeaderLine;
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
@@ -115,7 +115,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     m_aPrecisions.reserve(nFieldCount);
     m_aScales.reserve(nFieldCount);
 
-    sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
+    sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
     CharClass aCharClass(pConnection->getDriver()->getFactory(),_aLocale);
     // read description
     sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
@@ -141,11 +141,11 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         //OSL_TRACE("OEvoabTable::aColumnName = %s\n", ((OUtoCStr(::rtl::OUString(aColumnName))) ? (OUtoCStr(::rtl::OUString(aColumnName))):("NULL")) );
 
         sal_Int32 eType;
-        sal_uInt16 nPrecision = 0;
-        sal_uInt16 nScale = 0;
+        UINT16 nPrecision = 0;
+        UINT16 nScale = 0;
 
-        sal_Bool bNumeric = sal_False;
-        sal_uIntPtr  nIndex = 0;
+        BOOL bNumeric = FALSE;
+        ULONG  nIndex = 0;
 
         // first without fielddelimiter
         String aField;
@@ -155,7 +155,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         if (aField.Len() == 0 ||
             (pConnection->getStringDelimiter() && pConnection->getStringDelimiter() == aField.GetChar(0)))
         {
-            bNumeric = sal_False;
+            bNumeric = FALSE;
         }
         else
         {
@@ -169,21 +169,21 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 
             if (aField2.Len() == 0)
             {
-                bNumeric = sal_False;
+                bNumeric = FALSE;
             }
             else
             {
-                bNumeric = sal_True;
+                bNumeric = TRUE;
                 xub_StrLen nDot = 0;
                 for (xub_StrLen j = 0; j < aField2.Len(); j++)
                 {
                     sal_Unicode c = aField2.GetChar(j);
-                    // only digits, decimalpoint and thousands-delimiter
+                    // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
                     if ((!cDecimalDelimiter || c != cDecimalDelimiter) &&
                         (!cThousandDelimiter || c != cThousandDelimiter) &&
                         !aCharClass.isDigit(aField2,j))
                     {
-                        bNumeric = sal_False;
+                        bNumeric = FALSE;
                         break;
                     }
                     if (cDecimalDelimiter && c == cDecimalDelimiter)
@@ -195,26 +195,26 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                 }
 
                 if (nDot > 1) // if there is more than one dot it isn't a number
-                    bNumeric = sal_False;
+                    bNumeric = FALSE;
                 if (bNumeric && cThousandDelimiter)
                 {
-                    // is the delimiter given correctly
+                    // Ist der Trenner richtig angegeben?
                     String aValue = aField2.GetToken(0,cDecimalDelimiter);
                     for (sal_Int32 j = aValue.Len() - 4; j >= 0; j -= 4)
                     {
                         sal_Unicode c = aValue.GetChar(j);
-                        // only digits, decimalpoint and thousands-delimiter?
+                        // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
                         if (c == cThousandDelimiter && j)
                             continue;
                         else
                         {
-                            bNumeric = sal_False;
+                            bNumeric = FALSE;
                             break;
                         }
                     }
                 }
 
-                // Now it might still be a Date-field
+                // jetzt koennte es noch ein Datumsfeld sein
                 if (!bNumeric)
                 {
                     try
@@ -236,12 +236,12 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                 if(nPrecision)
                 {
                     eType = DataType::DECIMAL;
-                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL"));
+                    aTypeName = ::rtl::OUString::createFromAscii("DECIMAL");
                 }
                 else
                 {
                     eType = DataType::DOUBLE;
-                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOUBLE"));
+                    aTypeName = ::rtl::OUString::createFromAscii("DOUBLE");
                 }
             }
             else
@@ -255,21 +255,21 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
             {
                 case NUMBERFORMAT_DATE:
                     eType = DataType::DATE;
-                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE"));
+                    aTypeName = ::rtl::OUString::createFromAscii("DATE");
                     break;
                 case NUMBERFORMAT_DATETIME:
                     eType = DataType::TIMESTAMP;
-                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP"));
+                    aTypeName = ::rtl::OUString::createFromAscii("TIMESTAMP");
                     break;
                 case NUMBERFORMAT_TIME:
                     eType = DataType::TIME;
-                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIME"));
+                    aTypeName = ::rtl::OUString::createFromAscii("TIME");
                     break;
                 default:
                     eType = DataType::VARCHAR;
-                    nPrecision = 0; // nyi: Data can be longer
+                    nPrecision = 0;	// nyi: Daten koennen aber laenger sein!
                     nScale = 0;
-                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
+                    aTypeName = ::rtl::OUString::createFromAscii("VARCHAR");
             };
             nFlags |= ColumnSearch::CHAR;
         }
@@ -338,8 +338,8 @@ void OEvoabTable::construct()
     Sequence< ::com::sun::star::uno::Any > aArg(1);
     aArg[0] <<= aAppLocale;
 
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(m_pConnection->getDriver()->getFactory()->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier")),aArg),UNO_QUERY);
-    m_xNumberFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(m_pConnection->getDriver()->getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))),UNO_QUERY);
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(m_pConnection->getDriver()->getFactory()->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier"),aArg),UNO_QUERY);
+    m_xNumberFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(m_pConnection->getDriver()->getFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")),UNO_QUERY);
     m_xNumberFormatter->attachNumberFormatsSupplier(xSupplier);
 
     INetURLObject aURL;
@@ -362,10 +362,10 @@ void OEvoabTable::construct()
         sal_Int32 nSize = m_pFileStream->Tell();
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-        // Buffer size is dependent on the file-size
+        // Buffersize abhaengig von der Filegroesse
         m_pFileStream->SetBufferSize(nSize > 1000000 ? 32768 :
-                                    nSize > 100000  ? 16384 :
-                                    nSize > 10000   ? 4096  : 1024);
+                                    nSize > 100000	? 16384 :
+                                    nSize > 10000	? 4096	: 1024);
         OSL_TRACE("OEvoabTable::construct()::m_pFileStream->Tell() = %d\n", nSize );
 
         fillColumns(aAppLocale);
@@ -431,7 +431,7 @@ void OEvoabTable::refreshColumns()
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        m_pColumns  = new OEvoabColumns(this,m_aMutex,aVector);
+        m_pColumns	= new OEvoabColumns(this,m_aMutex,aVector);
 
     OSL_TRACE("OEvoabTable::refreshColumns()::end\n" );
 }
@@ -453,10 +453,10 @@ Sequence< Type > SAL_CALL OEvoabTable::getTypes(  ) throw(RuntimeException)
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!(*pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0)   ||
-            *pBegin == ::getCppuType((const Reference<XRename>*)0)          ||
+        if(!(*pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0)	||
+            *pBegin == ::getCppuType((const Reference<XRename>*)0)			||
             *pBegin == ::getCppuType((const Reference<XIndexesSupplier>*)0) ||
-            *pBegin == ::getCppuType((const Reference<XAlterTable>*)0)      ||
+            *pBegin == ::getCppuType((const Reference<XAlterTable>*)0)		||
             *pBegin == ::getCppuType((const Reference<XDataDescriptorFactory>*)0)))
         {
             aOwnTypes.push_back(*pBegin);
@@ -469,10 +469,10 @@ Sequence< Type > SAL_CALL OEvoabTable::getTypes(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Any SAL_CALL OEvoabTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)      ||
-        rType == ::getCppuType((const Reference<XIndexesSupplier>*)0)   ||
-        rType == ::getCppuType((const Reference<XRename>*)0)            ||
-        rType == ::getCppuType((const Reference<XAlterTable>*)0)        ||
+    if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)		||
+        rType == ::getCppuType((const Reference<XIndexesSupplier>*)0)	||
+        rType == ::getCppuType((const Reference<XRename>*)0)			||
+        rType == ::getCppuType((const Reference<XAlterTable>*)0)		||
         rType == ::getCppuType((const Reference<XDataDescriptorFactory>*)0))
         return Any();
 
@@ -510,10 +510,10 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
-        return sal_True;
+        return TRUE;
 
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
-    // Fields:
+    // Felder:
     xub_StrLen nStartPos = 0;
     String aStr;
     OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
@@ -526,19 +526,19 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
             (_rRow->get())[i+1]->setNull();
         else
         {
-            // Lengths for each data-type:
-            sal_Int32   nLen,
+            // Laengen je nach Datentyp:
+            sal_Int32	nLen,
                         nType = 0;
             if(bIsTable)
             {
-                nLen    = m_aPrecisions[i];
-                nType   = m_aTypes[i];
+                nLen	= m_aPrecisions[i];
+                nType	= m_aTypes[i];
             }
             else
             {
                 Reference< XPropertySet> xColumn = *aIter;
-                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))  >>= nLen;
-                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))       >>= nType;
+                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))	>>= nLen;
+                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))		>>= nType;
             }
             switch(nType)
             {
@@ -552,7 +552,7 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
                         nRes = m_xNumberFormatter->convertStringToNumber(::com::sun::star::util::NumberFormat::ALL,aStr);
                         Reference<XPropertySet> xProp(m_xNumberFormatter->getNumberFormatsSupplier()->getNumberFormatSettings(),UNO_QUERY);
                         com::sun::star::util::Date aDate;
-                        xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= aDate;
+                        xProp->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= aDate;
 
                         switch(nType)
                         {
@@ -570,10 +570,10 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
                     {
                         (_rRow->get())[i+1]->setNull();
                     }
-                }   break;
+                }	break;
                 case DataType::DOUBLE:
                 case DataType::INTEGER:
-                case DataType::DECIMAL:
+                case DataType::DECIMAL:				// #99178# OJ
                 case DataType::NUMERIC:
                 {
                     sal_Unicode cDecimalDelimiter = pConnection->getDecimalDelimiter();
@@ -584,22 +584,23 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
                                !cDecimalDelimiter && nType == DataType::INTEGER,
                                "FalscherTyp");
 
-                    // Convert to standard-notation (DecimalPOINT without Thousands-comma):
+                    // In Standard-Notation (DezimalPUNKT ohne Tausender-Komma) umwandeln:
                     for (xub_StrLen j = 0; j < aStr.Len(); ++j)
                     {
                         if (cDecimalDelimiter && aStr.GetChar(j) == cDecimalDelimiter)
                             aStrConverted += '.';
                         else if ( aStr.GetChar(j) == '.' ) // special case, if decimal seperator isn't '.' we have to vut the string after it
-                            break;
+                            break; // #99189# OJ
                         else if (cThousandDelimiter && aStr.GetChar(j) == cThousandDelimiter)
                         {
-                            // leave out
+                            // weglassen
                         }
                         else
                             aStrConverted += aStr.GetChar(j) ;
                     }
                     double nVal = ::rtl::math::stringToDouble(aStrConverted.GetBuffer(),',','.',NULL,NULL);
 
+                    // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
                         *(_rRow->get())[i+1] = ORowSetValue(String::CreateFromDouble(nVal));
                     else
@@ -608,7 +609,7 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
 
                 default:
                 {
-                    // Copy Value as String in Row-variable
+                    // Wert als String in Variable der Row uebernehmen
                     *(_rRow->get())[i+1] = ORowSetValue(aStr);
                 }
                 break;
@@ -663,15 +664,15 @@ sal_Bool OEvoabTable::setColumnAliases()
                 }
             }
             else
-                OSL_FAIL( "OEvoabTable::setColumnAliases: did not find one of the aliases!" );
+                OSL_ENSURE( sal_False, "OEvoabTable::setColumnAliases: did not find one of the aliases!" );
         }
         if(!bFound)
             aColumnFinalName = aColumnReadName;
         sColumnFinalName = aColumnFinalName;
 
-        sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
+        sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
         ::rtl::OUString aTypeName;
-        aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
+        aTypeName = ::rtl::OUString::createFromAscii("VARCHAR");
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(sColumnFinalName,aTypeName,::rtl::OUString(),
                                                 ColumnValue::NULLABLE,
                                                 m_aPrecisions[i],
@@ -695,7 +696,7 @@ sal_Bool OEvoabTable::checkHeaderLine()
 {
     if (m_nFilePos == 0 && ((OEvoabConnection*)m_pConnection)->isHeaderLine())
     {
-        sal_Bool bRead2;
+        BOOL bRead2;
         do
         {
             bRead2 = m_pFileStream->ReadByteStringLine(m_aCurrentLine,m_pConnection->getTextEncoding());
@@ -717,7 +718,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
         return sal_False;
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
     // ----------------------------------------------------------
-    // prepare positioning:
+    // Positionierung vorbereiten:
     //OSL_TRACE("OEvoabTable::(before SeekRow,m_pFileStriam Exist)m_aCurrentLine = %d\n", ((OUtoCStr(::rtl::OUString(m_aCurrentLine))) ? (OUtoCStr(::rtl::OUString(m_aCurrentLine))):("NULL")) );
 
     m_nFilePos = nCurPos;
@@ -823,7 +824,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
                     aIter = m_aRowToFilePos.upper_bound(nOffset);
                     if(aIter == m_aRowToFilePos.end())
                     {
-                        m_nRowPos   = m_aRowToFilePos.rbegin()->first;
+                        m_nRowPos	= m_aRowToFilePos.rbegin()->first;
                         nCurPos = m_nFilePos = m_aRowToFilePos.rbegin()->second;
                         while(m_nRowPos != nOffset)
                             seekRow(IResultSetHelper::NEXT,1,nCurPos);
@@ -831,8 +832,8 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
                     else
                     {
                         --aIter;
-                        m_nRowPos   = aIter->first;
-                        m_nFilePos  = aIter->second;
+                        m_nRowPos	= aIter->first;
+                        m_nFilePos	= aIter->second;
                         m_pFileStream->Seek(m_nFilePos);
                         if (m_pFileStream->IsEof() || !checkHeaderLine())
                             return sal_False;
@@ -850,7 +851,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
             if (m_pFileStream->IsEof())
                 return sal_False;
 
-            m_nFilePos = m_pFileStream->Tell(); // save Byte-Position in the file (at start of line)
+            m_nFilePos = m_pFileStream->Tell();	// Byte-Position in der Datei merken (am ZeilenANFANG)
             m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
             if (m_pFileStream->IsEof())
                 return sal_False;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,17 +34,17 @@
 
 // ---------------------------------------------------------------
 
-#define ImplSetUnderlineMode()                                  \
+#define ImplSetUnderlineMode()									\
                                                                 \
-    sal_uInt32 nMode = ImplGetUI16();                               \
-    switch ( nMode )                                            \
-    {                                                           \
-        case 1 : pElement->eUnderlineMode = UM_LOW; break;      \
-        case 2 : pElement->eUnderlineMode = UM_HIGH; break;     \
+    sal_uInt32 nMode = ImplGetUI16();								\
+    switch ( nMode )											\
+    {															\
+        case 1 : pElement->eUnderlineMode = UM_LOW; break;		\
+        case 2 : pElement->eUnderlineMode = UM_HIGH; break;		\
         case 4 : pElement->eUnderlineMode = UM_STRIKEOUT; break;\
         case 8 : pElement->eUnderlineMode = UM_OVERSCORE; break;\
-        default: pElement->eUnderlineMode = UM_OFF; break;      \
-    }                                                           \
+        default: pElement->eUnderlineMode = UM_OFF; break;		\
+    }															\
     pElement->nUnderlineColor = ImplGetBitmapColor();
 
 // ---------------------------------------------------------------
@@ -55,11 +55,11 @@ void CGM::ImplDoClass6()
     {
         case 0x01 : ComOut( CGM_LEVEL1, "Escape" )
         {
-            long    nIdentifier = ImplGetI( pElement->nIntegerPrecision );
+            long	nIdentifier = ImplGetI( pElement->nIntegerPrecision );
             switch ( nIdentifier )
             {
                 case 0 : ComOut( CGM_DESCRIPTION, "inquire function support" ) break;
-                case -1 : ComOut( CGM_DESCRIPTION, "set underline mode" )
+                case -1	: ComOut( CGM_DESCRIPTION, "set underline mode" )
                 {
                     ImplSetUnderlineMode()
                 }
@@ -135,7 +135,7 @@ void CGM::ImplDoClass6()
                 case -32746 : ComOut( CGM_DESCRIPTION, "set text font" ) break;
                 case -32747 : ComOut( CGM_DESCRIPTION, "font selection mode" ) break;
                 case -32752 : ComOut( CGM_DESCRIPTION, "connecting edge" ) break;
-                case -32753 : ComOut( CGM_DESCRIPTION, "set drawing mode" ) break;
+                case -32753	: ComOut( CGM_DESCRIPTION, "set drawing mode" ) break;
                 case -32754 : ComOut( CGM_DESCRIPTION, "inquire clip rectangle" ) break;
                 case -32755 : ComOut( CGM_DESCRIPTION, "protection region indicator" ) break;
                 case -32756 : ComOut( CGM_DESCRIPTION, "end protection region" ) break;
@@ -149,7 +149,7 @@ void CGM::ImplDoClass6()
                     mbFigure = sal_False;
                 }
                 break;
-                case -32762 : ComOut( CGM_DESCRIPTION, "begin figure" )
+                case -32762	: ComOut( CGM_DESCRIPTION, "begin figure" )
                 {
                     mbFigure = sal_True;
                     mpOutAct->BeginFigure();
@@ -214,16 +214,16 @@ void CGM::ImplDoClass8()
 {
     switch ( mnElementID )
     {
-        case 0x01 : ComOut( CGM_LEVEL2, "Copy Segment" ) break;                     // NS
-        case 0x02 : ComOut( CGM_LEVEL2, "Inheritance Filter" ) break;               // NS
-        case 0x03 : ComOut( CGM_LEVEL2, "Clip Inheritance" ) break;                 // NS
+        case 0x01 : ComOut( CGM_LEVEL2, "Copy Segment" ) break;						// NS
+        case 0x02 : ComOut( CGM_LEVEL2, "Inheritance Filter" ) break;				// NS
+        case 0x03 : ComOut( CGM_LEVEL2, "Clip Inheritance" ) break;					// NS
         case 0x04 : ComOut( CGM_LEVEL2, "Segment Transformation" ) break;
-        case 0x05 : ComOut( CGM_LEVEL2, "Segment HighLighting" ) break;             // NS
-        case 0x06 : ComOut( CGM_LEVEL2, "Segment Display Priority" ) break;         // NS
-        case 0x07 : ComOut( CGM_LEVEL2, "Segment Pick Priority" ) break;            // NS
+        case 0x05 : ComOut( CGM_LEVEL2, "Segment HighLighting" ) break;				// NS
+        case 0x06 : ComOut( CGM_LEVEL2, "Segment Display Priority" ) break;			// NS
+        case 0x07 : ComOut( CGM_LEVEL2, "Segment Pick Priority" ) break;			// NS
         case 0xfe : ComOut( CGM_GDSF_ONLY, "INQ Current Position" ) break;
         case 0xff : ComOut( CGM_GDSF_ONLY, "INQ Inserted Object Extent" ) break;
-        default: ComOut( CGM_UNKNOWN_COMMAND, "" ) break;                           // NS
+        default: ComOut( CGM_UNKNOWN_COMMAND, "" ) break;							// NS
     }
 };
 
@@ -233,16 +233,16 @@ void CGM::ImplDoClass9()
 {
     switch ( mnElementID )
     {
-        case 0x01 : ComOut( CGM_UNKNOWN_LEVEL, "Pixel Array" ) break;                   // NS
-        case 0x02 : ComOut( CGM_UNKNOWN_LEVEL, "Create Bitmap" ) break;                 // NS
-        case 0x03 : ComOut( CGM_UNKNOWN_LEVEL, "Delete Bitmap" ) break;                 // NS
-        case 0x04 : ComOut( CGM_UNKNOWN_LEVEL, "Select Drawing Bitmap" ) break;         // NS
-        case 0x05 : ComOut( CGM_UNKNOWN_LEVEL, "Display Bitmap" ) break;                // NS
+        case 0x01 : ComOut( CGM_UNKNOWN_LEVEL, "Pixel Array" ) break;					// NS
+        case 0x02 : ComOut( CGM_UNKNOWN_LEVEL, "Create Bitmap" ) break;					// NS
+        case 0x03 : ComOut( CGM_UNKNOWN_LEVEL, "Delete Bitmap" ) break;					// NS
+        case 0x04 : ComOut( CGM_UNKNOWN_LEVEL, "Select Drawing Bitmap" ) break;			// NS
+        case 0x05 : ComOut( CGM_UNKNOWN_LEVEL, "Display Bitmap" ) break;				// NS
         case 0x06 : ComOut( CGM_UNKNOWN_LEVEL, "Drawing Mode" ) break;
-        case 0x07 : ComOut( CGM_UNKNOWN_LEVEL, "Mapped Bitmap ForeGrnd Color" ) break;  // NS
-        case 0x08 : ComOut( CGM_UNKNOWN_LEVEL, "Fill Bitmap" ) break;                   // NS
-        case 0x09 : ComOut( CGM_UNKNOWN_LEVEL, "Two Operand BitBlt" ) break;            // NS
-        case 0x0a : ComOut( CGM_UNKNOWN_LEVEL, "Three Operand BitBlt" ) break;          // NS
+        case 0x07 : ComOut( CGM_UNKNOWN_LEVEL, "Mapped Bitmap ForeGrnd Color" ) break;	// NS
+        case 0x08 : ComOut( CGM_UNKNOWN_LEVEL, "Fill Bitmap" ) break;					// NS
+        case 0x09 : ComOut( CGM_UNKNOWN_LEVEL, "Two Operand BitBlt" ) break;			// NS
+        case 0x0a : ComOut( CGM_UNKNOWN_LEVEL, "Three Operand BitBlt" ) break;			// NS
         default: ComOut( CGM_UNKNOWN_COMMAND, "" ) break;
     }
 };

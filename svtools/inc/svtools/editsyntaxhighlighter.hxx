@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,16 +37,16 @@
 class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public MultiLineEdit
 {
     private:
-        bool                mbDoBracketHilight;
-        SyntaxHighlighter   aHighlighter;
+        bool				mbDoBracketHilight;
+        SyntaxHighlighter	aHighlighter;
         svtools::ColorConfig m_aColorConfig;
-
+        
     private:
-        virtual void DoBracketHilight(sal_uInt16 aKey);
+        virtual void DoBracketHilight(USHORT aKey);
 
     protected:
         virtual long PreNotify( NotifyEvent& rNEvt );
-
+    
     public:
         MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER , HighlighterLanguage aLanguage = HIGHLIGHT_SQL);
         MultiLineEditSyntaxHighlight( Window* pParent, const ResId& rResId , HighlighterLanguage aLanguage = HIGHLIGHT_SQL);
@@ -58,7 +58,7 @@ class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public MultiLineEdit
         virtual void SetText(const String& rNewText);
         virtual void SetText( const XubString& rStr, const Selection& rNewSelection )
                     { SetText( rStr ); SetSelection( rNewSelection ); }
-
+        
         Color GetColorValue(TokenTypes aToken);
 };
 

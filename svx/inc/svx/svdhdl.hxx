@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,30 +66,30 @@ class MouseEvent;
 // Modus selektiert wird.
 // HDL_MOVE...HDL_LWRGT muessen im enum immer zusammen stehen bleiben!
 
-enum SdrHdlKind
+enum SdrHdlKind 
 {
-    HDL_MOVE,       // Handle zum Verschieben des Objekts
-    HDL_UPLFT,      // Oben links
-    HDL_UPPER,      // Oben
-    HDL_UPRGT,      // Oben rechts
-    HDL_LEFT,       // Links
-    HDL_RIGHT,      // Rechts
-    HDL_LWLFT,      // Unten links
-    HDL_LOWER,      // Unten
-    HDL_LWRGT,      // Unten rechts
-    HDL_POLY,       // Punktselektion an Polygon oder Bezierkurve
-    HDL_BWGT,       // Gewicht an einer Bezierkurve
-    HDL_CIRC,       // Winkel an Kreissegmenten, Eckenradius am Rect
-    HDL_REF1,       // Referenzpunkt 1, z.B. Rotationsmitte
-    HDL_REF2,       // Referenzpunkt 2, z.B. Endpunkt der Spiegelachse
-    HDL_MIRX,       // Die Spiegelachse selbst
-    HDL_GLUE,       // GluePoint
-    HDL_ANCHOR,     // anchor symbol (SD, SW)
-    HDL_TRNS,       // interactive transparence
-    HDL_GRAD,       // interactive gradient
-    HDL_COLR,       // interactive color
+    HDL_MOVE,		// Handle zum Verschieben des Objekts
+    HDL_UPLFT,		// Oben links
+    HDL_UPPER,		// Oben
+    HDL_UPRGT,		// Oben rechts
+    HDL_LEFT,		// Links
+    HDL_RIGHT,		// Rechts
+    HDL_LWLFT,		// Unten links
+    HDL_LOWER,		// Unten
+    HDL_LWRGT,		// Unten rechts
+    HDL_POLY,		// Punktselektion an Polygon oder Bezierkurve
+    HDL_BWGT,		// Gewicht an einer Bezierkurve
+    HDL_CIRC,		// Winkel an Kreissegmenten, Eckenradius am Rect
+    HDL_REF1,		// Referenzpunkt 1, z.B. Rotationsmitte
+    HDL_REF2,		// Referenzpunkt 2, z.B. Endpunkt der Spiegelachse
+    HDL_MIRX,		// Die Spiegelachse selbst
+    HDL_GLUE,		// GluePoint
+    HDL_ANCHOR,		// anchor symbol (SD, SW)
+    HDL_TRNS,		// interactive transparence
+    HDL_GRAD,		// interactive gradient
+    HDL_COLR,		// interactive color
     HDL_USER,
-    HDL_ANCHOR_TR,  // #101688# Anchor handle with (0,0) at top right for SW
+    HDL_ANCHOR_TR,	// #101688# Anchor handle with (0,0) at top right for SW
 
     // for SJ and the CustomShapeHandles:
     HDL_CUSTOMSHAPE1,
@@ -146,36 +146,36 @@ enum BitmapMarkerKind
 
 class SVX_DLLPUBLIC SdrHdl
 {
-    friend class                SdrMarkView; // fuer den Zugriff auf nObjHdlNum
-    friend class                SdrHdlList;
+    friend class				SdrMarkView; // fuer den Zugriff auf nObjHdlNum
+    friend class				SdrHdlList;
 
     // #101928#
-    BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine );
+    BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine, sal_Bool bIsHighContrast);
 
 protected:
-    SdrObject*                  pObj;      // Gehoert das Handle zu einem Objekt?
-    SdrPageView*                pPV;       // Gehoert das Handle zu einem Objekt in einer bestimmten PageView?
-    SdrHdlList*                 pHdlList;  // Zum Feststelen der Handlegroesse
+    SdrObject*					pObj;      // Gehoert das Handle zu einem Objekt?
+    SdrPageView*				pPV;       // Gehoert das Handle zu einem Objekt in einer bestimmten PageView?
+    SdrHdlList*					pHdlList;  // Zum Feststelen der Handlegroesse
 
     // OVERLAYMANAGER
-    ::sdr::overlay::OverlayObjectList           maOverlayGroup;
+    ::sdr::overlay::OverlayObjectList			maOverlayGroup;
 
-    Point                       aPos;
+    Point						aPos;
 
-    SdrHdlKind                  eKind;
+    SdrHdlKind					eKind;
 
-    long                        nDrehWink; // Handles bzw. Mauszeiger drehen
-    sal_uInt32                  nObjHdlNum; // wird von der MarkView benoetigt
-    sal_uInt32                  nPolyNum;  // Polygonpunktes
-    sal_uInt32                  nPPntNum;  // Punktnummer des Polygons
-    sal_uInt32                  nSourceHdlNum; // ist noch vollstaendig zu implementieren
+    long						nDrehWink; // Handles bzw. Mauszeiger drehen
+    sal_uInt32					nObjHdlNum; // wird von der MarkView benoetigt
+    sal_uInt32					nPolyNum;  // Polygonpunktes
+    sal_uInt32					nPPntNum;  // Punktnummer des Polygons
+    sal_uInt32					nSourceHdlNum; // ist noch vollstaendig zu implementieren
 
-    unsigned                    bSelect : 1;   // Ein selektierter Polygonpunkt?
-    unsigned                    b1PixMore : 1; // True=Handle wird 1 Pixel groesser dargestellt
-    unsigned                    bPlusHdl : 1;  // u.a. fuer Hld-Paint Optimierung bei MarkPoint/UnmarkPoint, ...
-
-    bool                        mbMoveOutside; // forces this handle to be moved outside of the selection rectangle
-
+    unsigned					bSelect : 1;   // Ein selektierter Polygonpunkt?
+    unsigned					b1PixMore : 1; // True=Handle wird 1 Pixel groesser dargestellt
+    unsigned					bPlusHdl : 1;  // u.a. fuer Hld-Paint Optimierung bei MarkPoint/UnmarkPoint, ...
+    
+    bool						mbMoveOutside; // forces this handle to be moved outside of the selection rectangle
+    
     // create marker for this kind
     virtual void CreateB2dIAObject();
 
@@ -183,11 +183,11 @@ protected:
     void GetRidOfIAObject();
 
 private:
-    bool                        mbMouseOver;    // is true if the mouse is over this handle
+    bool						mbMouseOver;	// is true if the mouse is over this handle
 
 protected:
     ::sdr::overlay::OverlayObject* CreateOverlayObject(
-        const basegfx::B2DPoint& rPos,
+        const basegfx::B2DPoint& rPos, 
         BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, Point aMoveOutsideOffset = Point());
     BitmapMarkerKind GetNextBigger(BitmapMarkerKind eKnd) const;
 
@@ -211,14 +211,14 @@ public:
     SdrObject* GetObj() const { return pObj;  }
     void SetObj(SdrObject* pNewObj);
 
-    sal_Bool IsSelected() const { return bSelect; }
-    void SetSelected(sal_Bool bJa=sal_True);
+    BOOL IsSelected() const { return bSelect; }
+    void SetSelected(BOOL bJa=TRUE);
 
-    void Set1PixMore(sal_Bool bJa=sal_True);
+    void Set1PixMore(BOOL bJa=TRUE);
     void SetDrehWink(long n);
 
-    sal_Bool IsCornerHdl() const { return eKind==HDL_UPLFT || eKind==HDL_UPRGT || eKind==HDL_LWLFT || eKind==HDL_LWRGT; }
-    sal_Bool IsVertexHdl() const { return eKind==HDL_UPPER || eKind==HDL_LOWER || eKind==HDL_LEFT  || eKind==HDL_RIGHT; }
+    BOOL IsCornerHdl() const { return eKind==HDL_UPLFT || eKind==HDL_UPRGT || eKind==HDL_LWLFT || eKind==HDL_LWRGT; }
+    BOOL IsVertexHdl() const { return eKind==HDL_UPPER || eKind==HDL_LOWER || eKind==HDL_LEFT  || eKind==HDL_RIGHT; }
 
     void SetObjHdlNum(sal_uInt32 nNum) { nObjHdlNum=nNum; }
     sal_uInt32 GetObjHdlNum() const { return nObjHdlNum; }
@@ -229,8 +229,8 @@ public:
     void SetPointNum(sal_uInt32 nNum) { nPPntNum=nNum; }
     sal_uInt32 GetPointNum() const { return nPPntNum; }
 
-    void SetPlusHdl(sal_Bool bOn) { bPlusHdl=bOn; }
-    sal_Bool IsPlusHdl() const { return bPlusHdl; }
+    void SetPlusHdl(BOOL bOn) { bPlusHdl=bOn; }
+    BOOL IsPlusHdl() const { return bPlusHdl; }
 
     void SetSourceHdlNum(sal_uInt32 nNum) { nSourceHdlNum=nNum; }
     sal_uInt32 GetSourceHdlNum() const { return nSourceHdlNum; }
@@ -239,7 +239,7 @@ public:
     bool IsHdlHit(const Point& rPnt) const;
 
     // #97016# II
-    virtual sal_Bool IsFocusHdl() const;
+    virtual BOOL IsFocusHdl() const;
 
     void SetMoveOutside( bool bMoveOutside );
 
@@ -256,23 +256,23 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define SDR_HANDLE_COLOR_SIZE_NORMAL            Size(13, 13)
-#define SDR_HANDLE_COLOR_SIZE_SELECTED          Size(17, 17)
+#define	SDR_HANDLE_COLOR_SIZE_NORMAL			Size(13, 13)
+#define	SDR_HANDLE_COLOR_SIZE_SELECTED			Size(17, 17)
 
 class SVX_DLLPUBLIC SdrHdlColor : public SdrHdl
 {
 private:
     // size of colr markers
-    Size                        aMarkerSize;
+    Size						aMarkerSize;
 
     // color
-    Color                       aMarkerColor;
+    Color						aMarkerColor;
 
     // callback link when value changed
-    Link                        aColorChangeHdl;
+    Link						aColorChangeHdl;
 
     // use luminance values only
-    unsigned                    bUseLuminance : 1;
+    unsigned					bUseLuminance : 1;
 
     // create marker for this kind
     SVX_DLLPRIVATE virtual void CreateB2dIAObject();
@@ -283,13 +283,13 @@ private:
     SVX_DLLPRIVATE void CallColorChangeLink();
 
 public:
-    SdrHdlColor(const Point& rRef, Color aCol = Color(COL_BLACK), const Size& rSize = Size(11, 11), sal_Bool bLum = sal_False);
+    SdrHdlColor(const Point& rRef, Color aCol = Color(COL_BLACK), const Size& rSize = Size(11, 11), BOOL bLum = FALSE);
     virtual ~SdrHdlColor();
 
-    sal_Bool IsUseLuminance() const { return bUseLuminance; }
+    BOOL IsUseLuminance() const { return bUseLuminance; }
 
     Color GetColor() const { return aMarkerColor; }
-    void SetColor(Color aNew, sal_Bool bCallLink = sal_False);
+    void SetColor(Color aNew, BOOL bCallLink = FALSE);
 
     const Size& GetSize() const { return aMarkerSize; }
     void SetSize(const Size& rNew);
@@ -304,27 +304,27 @@ class SdrHdlGradient : public SdrHdl
 {
 private:
     // pointer to used color handles
-    SdrHdlColor*                pColHdl1;
-    SdrHdlColor*                pColHdl2;
+    SdrHdlColor*				pColHdl1;
+    SdrHdlColor*				pColHdl2;
 
     // 2nd position
-    Point                       a2ndPos;
+    Point						a2ndPos;
 
     // is this a gradient or a transparence
-    unsigned                    bGradient : 1;
+    unsigned					bGradient : 1;
 
     // select which handle to move
-    unsigned                    bMoveSingleHandle : 1;
-    unsigned                    bMoveFirstHandle : 1;
+    unsigned					bMoveSingleHandle : 1;
+    unsigned					bMoveFirstHandle : 1;
 
     // create marker for this kind
     virtual void CreateB2dIAObject();
 
 public:
-    SdrHdlGradient(const Point& rRef1, const Point& rRef2, sal_Bool bGrad = sal_True);
+    SdrHdlGradient(const Point& rRef1, const Point& rRef2, BOOL bGrad = TRUE);
     virtual ~SdrHdlGradient();
 
-    sal_Bool IsGradient() const { return bGradient; }
+    BOOL IsGradient() const { return bGradient; }
 
     // set the associated color handles
     void SetColorHandles(SdrHdlColor* pL1, SdrHdlColor* pL2) { pColHdl1 = pL1; pColHdl2 = pL2; }
@@ -338,13 +338,13 @@ public:
     DECL_LINK(ColorChangeHdl, SdrHdl*);
 
     // transformation call, create gradient from this handle
-    void FromIAOToItem(SdrObject* pObj, sal_Bool bSetItemOnObject, sal_Bool bUndo);
+    void FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL bUndo);
 
     // selection flags for interaction
-    sal_Bool IsMoveSingleHandle() const { return bMoveSingleHandle; }
-    void SetMoveSingleHandle(sal_Bool bNew) { bMoveSingleHandle = bNew; }
-    sal_Bool IsMoveFirstHandle() const { return bMoveFirstHandle; }
-    void SetMoveFirstHandle(sal_Bool bNew) { bMoveFirstHandle = bNew; }
+    BOOL IsMoveSingleHandle() const { return bMoveSingleHandle; }
+    void SetMoveSingleHandle(BOOL bNew) { bMoveSingleHandle = bNew; }
+    BOOL IsMoveFirstHandle() const { return bMoveFirstHandle; }
+    void SetMoveFirstHandle(BOOL bNew) { bMoveFirstHandle = bNew; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -356,8 +356,8 @@ class SdrHdlLine: public SdrHdl
     virtual void CreateB2dIAObject();
 
 protected:
-    SdrHdl*                     pHdl1;
-    SdrHdl*                     pHdl2;
+    SdrHdl*						pHdl1;
+    SdrHdl*						pHdl2;
 
 public:
     SdrHdlLine(SdrHdl& rHdl1, SdrHdl& rHdl2, SdrHdlKind eNewKind=HDL_MIRX) { eKind=eNewKind; pHdl1=&rHdl1; pHdl2=&rHdl2; }
@@ -387,7 +387,7 @@ public:
 
 class E3dVolumeMarker : public SdrHdl
 {
-    basegfx::B2DPolyPolygon             aWireframePoly;
+    basegfx::B2DPolyPolygon				aWireframePoly;
 
     // create marker for this kind
     virtual void CreateB2dIAObject();
@@ -411,7 +411,7 @@ public:
 
     void SetLineCode(SdrEdgeLineCode eCode);
     SdrEdgeLineCode GetLineCode() const     { return eLineCode; }
-    sal_Bool IsHorzDrag() const;
+    BOOL IsHorzDrag() const;
     virtual Pointer GetPointer() const;
 };
 
@@ -452,21 +452,21 @@ class ImplHdlListData;
 class SVX_DLLPUBLIC SdrHdlList
 {
 protected:
-    sal_uIntPtr                 mnFocusIndex;
-    SdrMarkView*                pView;
-    Container                   aList;
-    sal_uInt16                      nHdlSize;
+    ULONG					mnFocusIndex;
+    SdrMarkView*				pView;
+    Container					aList;
+    USHORT						nHdlSize;
 
-    unsigned                    bRotateShear : 1;
-    unsigned                    bDistortShear : 1;
-    unsigned                    bMoveOutside : 1;      // Handles nach aussen ruecken (fuer TextEdit)
-    unsigned                    bFineHandles : 1;
+    unsigned					bRotateShear : 1;
+    unsigned					bDistortShear : 1;
+    unsigned					bMoveOutside : 1;      // Handles nach aussen ruecken (fuer TextEdit)
+    unsigned					bFineHandles : 1;
 
 private:
     SVX_DLLPRIVATE SdrHdlList(const SdrHdlList&): aList(1024,64,64)  {}
     SVX_DLLPRIVATE void operator=(const SdrHdlList&)                 {}
-    SVX_DLLPRIVATE sal_Bool operator==(const SdrHdlList&) const      { return sal_False; }
-    SVX_DLLPRIVATE sal_Bool operator!=(const SdrHdlList&) const      { return sal_False; }
+    SVX_DLLPRIVATE BOOL operator==(const SdrHdlList&) const      { return FALSE; }
+    SVX_DLLPRIVATE BOOL operator!=(const SdrHdlList&) const      { return FALSE; }
 
 public:
     SdrHdlList(SdrMarkView* pV);
@@ -486,28 +486,28 @@ public:
     //             2.Level PageView (Pointer)
     //             3.Level Position (x+y)
     void     Sort();
-    sal_uIntPtr    GetHdlCount() const                       { return aList.Count(); }
-    SdrHdl*  GetHdl(sal_uIntPtr nNum) const                  { return (SdrHdl*)(aList.GetObject(nNum)); }
-    sal_uIntPtr    GetHdlNum(const SdrHdl* pHdl) const;
-    void     SetHdlSize(sal_uInt16 nSiz);
-    sal_uInt16   GetHdlSize() const                        { return nHdlSize; }
-    void     SetMoveOutside(sal_Bool bOn);
-    sal_Bool IsMoveOutside() const                     { return bMoveOutside; }
-    void     SetRotateShear(sal_Bool bOn);
-    sal_Bool IsRotateShear() const                     { return bRotateShear; }
-    void     SetDistortShear(sal_Bool bOn);
-    sal_Bool IsDistortShear() const                    { return bDistortShear; }
-    void     SetFineHdl(sal_Bool bOn);
-    sal_Bool IsFineHdl() const                        { return bFineHandles; }
+    ULONG    GetHdlCount() const                       { return aList.Count(); }
+    SdrHdl*  GetHdl(ULONG nNum) const                  { return (SdrHdl*)(aList.GetObject(nNum)); }
+    ULONG    GetHdlNum(const SdrHdl* pHdl) const;
+    void     SetHdlSize(USHORT nSiz);
+    USHORT   GetHdlSize() const                        { return nHdlSize; }
+    void     SetMoveOutside(BOOL bOn);
+    BOOL IsMoveOutside() const                     { return bMoveOutside; }
+    void     SetRotateShear(BOOL bOn);
+    BOOL IsRotateShear() const                     { return bRotateShear; }
+    void     SetDistortShear(BOOL bOn);
+    BOOL IsDistortShear() const                    { return bDistortShear; }
+    void     SetFineHdl(BOOL bOn);
+    BOOL IsFineHdl() const                        { return bFineHandles; }
 
     // AddHdl uebernimmt das Handle in sein Eigentum. Es muss
     // also auf dem Heap stehen, da Clear() ein delete macht.
-    void    AddHdl(SdrHdl* pHdl, sal_Bool bAtBegin=sal_False);
-    SdrHdl* RemoveHdl(sal_uIntPtr nNum);
+    void    AddHdl(SdrHdl* pHdl, BOOL bAtBegin=FALSE);
+    SdrHdl* RemoveHdl(ULONG nNum);
 
     // Zuletzt eingefuegte Handles werden am ehesten getroffen
     // (wenn Handles uebereinander liegen).
-    SdrHdl* IsHdlListHit(const Point& rPnt, sal_Bool bBack=sal_False, sal_Bool bNext=sal_False, SdrHdl* pHdl0=NULL) const;
+    SdrHdl* IsHdlListHit(const Point& rPnt, BOOL bBack=FALSE, BOOL bNext=FALSE, SdrHdl* pHdl0=NULL) const;
     SdrHdl* GetHdl(SdrHdlKind eKind1) const;
 };
 
@@ -524,7 +524,7 @@ protected:
 
     BitmapEx GetBitmapForHandle( const BitmapEx& rBitmap, int nSize );
 
-    static BitmapEx GetHandlesBitmap( bool bIsFineHdl );
+    static BitmapEx GetHandlesBitmap( bool bIsFineHdl, bool bIsHighContrast );
 };
 
 #endif //_SVDHDL_HXX

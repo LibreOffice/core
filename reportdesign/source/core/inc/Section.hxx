@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,41 +44,41 @@
 
 namespace reportdesign
 {
-    typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::report::XSection
+    typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::report::XSection 
                                             ,   ::com::sun::star::lang::XServiceInfo
-                                            ,   ::com::sun::star::lang::XUnoTunnel> SectionBase;
+                                            ,	::com::sun::star::lang::XUnoTunnel> SectionBase;
     typedef ::cppu::PropertySetMixin<com::sun::star::report::XSection> SectionPropertySet;
 
     class OSection : public comphelper::OMutexAndBroadcastHelper,
                     public SectionBase,
                     public SectionPropertySet
     {
-        ::cppu::OInterfaceContainerHelper                                                   m_aContainerListeners;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >              m_xDrawPage;
+        ::cppu::OInterfaceContainerHelper													m_aContainerListeners;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >		m_xContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >		        m_xDrawPage;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >             m_xProxy;
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XGroup >            m_xGroup;
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XGroup >			m_xGroup;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XReportDefinition > m_xReportDefinition;
-        ::rtl::OUString                                                                     m_sName;
-        ::rtl::OUString                                                                     m_sConditionalPrintExpression;
-        ::sal_uInt32                                                                        m_nHeight;
-        ::sal_Int32                                                                         m_nBackgroundColor;
-        ::sal_Int16                                                                         m_nForceNewPage;
-        ::sal_Int16                                                                         m_nNewRowOrCol;
-        ::sal_Bool                                                                          m_bKeepTogether;
-        ::sal_Bool                                                                          m_bCanGrow;
-        ::sal_Bool                                                                          m_bCanShrink;
-        ::sal_Bool                                                                          m_bRepeatSection;
-        ::sal_Bool                                                                          m_bVisible;
-        ::sal_Bool                                                                          m_bBacktransparent;
+        ::rtl::OUString 																	m_sName;
+        ::rtl::OUString 																	m_sConditionalPrintExpression;
+        ::sal_uInt32																		m_nHeight;
+        ::sal_Int32 																		m_nBackgroundColor;
+        ::sal_Int16 																		m_nForceNewPage;
+        ::sal_Int16 																		m_nNewRowOrCol;
+        ::sal_Bool 																			m_bKeepTogether;
+        ::sal_Bool 																			m_bCanGrow;
+        ::sal_Bool 																			m_bCanShrink;
+        ::sal_Bool 																			m_bRepeatSection;
+        ::sal_Bool																			m_bVisible;
+        ::sal_Bool																			m_bBacktransparent;
         bool                                                                                m_bInRemoveNotify;
         bool                                                                                m_bInInsertNotify;
-
+        
     private:
         OSection(const OSection&);
         OSection& operator=(const OSection&);
-
-        template <typename T> void set(  const ::rtl::OUString& _sProperty
+        
+        template <typename T> void set(	 const ::rtl::OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
         {
@@ -101,17 +101,17 @@ namespace reportdesign
 
         void init();
     protected:
-        // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+        // TODO: VirtualFunctionFinder: This is virtual function! 
+        // 
         virtual ~OSection();
 
         /** this function is called upon disposing the component
         */
-        // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+        // TODO: VirtualFunctionFinder: This is virtual function! 
+        // 
         virtual void SAL_CALL disposing();
     public:
-        typedef ::comphelper::ImplementationReference< OSection ,::com::sun::star::report::XSection,::com::sun::star::uno::XWeak > TSection;
+        typedef ::comphelper::ImplementationReference< OSection	,::com::sun::star::report::XSection,::com::sun::star::uno::XWeak > TSection;
 
         OSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xParent
                 ,const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& context,bool _bPageSection=false);
@@ -119,7 +119,7 @@ namespace reportdesign
                 ,const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& context,bool _bPageSection=false);
 
         DECLARE_XINTERFACE( )
-
+        
         // ::com::sun::star::lang::XServiceInfo
         virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -185,12 +185,12 @@ namespace reportdesign
 
         // XComponent
         virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        {
+        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException) 
+        { 
             cppu::WeakComponentImplHelperBase::addEventListener(aListener);
         }
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        {
+        { 
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }
 

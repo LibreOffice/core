@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <svtools/asynclink.hxx>
+#include <asynclink.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
@@ -43,11 +43,11 @@ void AsynchronLink::CreateMutex()
     if( !_pMutex ) _pMutex = new osl::Mutex;
 }
 
-void AsynchronLink::Call( void* pObj, sal_Bool
+void AsynchronLink::Call( void* pObj, BOOL
 #ifdef DBG_UTIL
 bAllowDoubles
 #endif
-, sal_Bool bUseTimer )
+, BOOL bUseTimer )
 {
 #ifdef DBG_UTIL
     if ( bUseTimer || !_bInCall )
@@ -93,7 +93,7 @@ AsynchronLink::~AsynchronLink()
         Application::RemoveUserEvent( _nEventId );
     }
     delete _pTimer;
-    if( _pDeleted ) *_pDeleted = sal_True;
+    if( _pDeleted ) *_pDeleted = TRUE;
     delete _pMutex;
 }
 
@@ -126,13 +126,13 @@ void AsynchronLink::ClearPendingCall()
 
 void AsynchronLink::Call_Impl( void* pArg )
 {
-    _bInCall = sal_True;
-    sal_Bool bDeleted = sal_False;
+    _bInCall = TRUE;
+    BOOL bDeleted = FALSE;
     _pDeleted = &bDeleted;
     _aLink.Call( pArg );
     if( !bDeleted )
     {
-        _bInCall = sal_False;
+        _bInCall = FALSE;
         _pDeleted = 0;
     }
 }

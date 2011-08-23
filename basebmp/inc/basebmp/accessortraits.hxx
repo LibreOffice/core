@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,13 +61,13 @@ template< typename T, typename M, bool polarity > struct outputMaskFunctorSelect
     Specialize this metafunction for your case, and pass FastMask to
     the outputMaskFunctorSelector.
  */
-template< class Accessor,
-          class MaskAccessor,
+template< class Accessor, 
+          class MaskAccessor, 
           class Iterator,
           class MaskIterator,
           bool  polarity > struct maskedAccessorSelector
 {
-    typedef TernarySetterFunctionAccessorAdapter<
+    typedef TernarySetterFunctionAccessorAdapter< 
         Accessor,
         MaskAccessor,
         typename outputMaskFunctorSelector<
@@ -91,13 +91,13 @@ template< class Accessor > struct AccessorTraits
     typedef typename Accessor::value_type           value_type;
 
     /// Retrieve stand-alone color lookup function for given Accessor type
-    typedef project2nd< Accessor, value_type > color_lookup;
+    typedef std::project2nd< Accessor, value_type > color_lookup;
 
     /// Retrieve raw pixel data accessor for given Accessor type
     typedef Accessor                                raw_accessor;
 
     /// Retrieve wrapped accessor for XOR setter access
-    typedef BinarySetterFunctionAccessorAdapter<
+    typedef BinarySetterFunctionAccessorAdapter< 
         Accessor,
         XorFunctor< value_type > >                  xor_accessor;
 
@@ -113,7 +113,7 @@ template< class Accessor > struct AccessorTraits
         partial specializations that take an optimized functor for
         certain mask accessors.
      */
-    template< class MaskAccessor,
+    template< class MaskAccessor, 
               class Iterator,
               class MaskIterator,
               bool  polarity > struct               masked_accessor :

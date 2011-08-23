@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,12 +31,12 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.lang.XMultiServiceFactory;
-// import com.sun.star.sheet.TableFilterField;
+import com.sun.star.sheet.TableFilterField;
 import com.sun.star.sheet.XDataPilotDescriptor;
 import com.sun.star.sheet.XDataPilotTable;
 import com.sun.star.sheet.XDataPilotTables;
 import com.sun.star.sheet.XDataPilotTablesSupplier;
-// import com.sun.star.sheet.XSheetFilterDescriptor;
+import com.sun.star.sheet.XSheetFilterDescriptor;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
@@ -46,36 +46,22 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.util.XCloseable;
-import complex.dataPilot._XPropertySet;
-import complex.dataPilot._XNamed;
-import complex.dataPilot._XDataPilotDescriptor;
-import complex.dataPilot._XDataPilotTable;
-// import complexlib.ComplexTestCase;
+import complex.dataPilot.interfaceTests.beans._XPropertySet;
+import complex.dataPilot.interfaceTests.container._XNamed;
+import complex.dataPilot.interfaceTests.sheet._XDataPilotDescriptor;
+import complex.dataPilot.interfaceTests.sheet._XDataPilotTable;
+import complexlib.ComplexTestCase;
 import lib.StatusException;
-import lib.TestParameters;
 import util.SOfficeFactory;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
-
 
 /**
  * check the DataPilot of Calc.
  */
-public class CheckDataPilot {
+public class CheckDataPilot extends ComplexTestCase {
     /** The data pilot field object **/
     private XInterface mDataPilotFieldObject = null;
     /** The data pilot table object **/
     private XInterface mDataPilotTableObject = null;
-
-
-    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
      * A field is filled some values. This integer determines the size of the
@@ -83,10 +69,6 @@ public class CheckDataPilot {
      */
     private int mMaxFieldIndex = 6;
 
-    /**
-     * The test parameters
-     */
-    private static TestParameters param = null;
 
     /**
      * Get all test methods
@@ -101,27 +83,27 @@ public class CheckDataPilot {
      * Test the data pilot field object:
      * simply execute the interface tests in a row
      */
-    @Test public void testDataPilotFieldObject() {
-        System.out.println("Starting 'testDataPilotFieldObject'");
+    public void testDataPilotFieldObject() {
+        log.println("Starting 'testDataPilotFieldObject'");
         // _XNamed
-        XNamed xNamed = UnoRuntime.queryInterface(
+        XNamed xNamed = (XNamed)UnoRuntime.queryInterface(
                                     XNamed.class, mDataPilotFieldObject);
 
-        _XNamed _xNamed = new _XNamed(xNamed/*, log*/, param);
-        assertTrue("_getName failed.",_xNamed._getName());
-        assertTrue("_setName failed.",_xNamed._setName());
+        _XNamed _xNamed = new _XNamed(xNamed, log, param);
+        assure("_getName failed.",_xNamed._getName());
+        assure("_setName failed.",_xNamed._setName());
 
         // _XPropertySet
-        XPropertySet xProp = UnoRuntime.queryInterface(
+        XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
                                     XPropertySet.class, mDataPilotFieldObject);
-        _XPropertySet _xProp = new _XPropertySet(xProp/*, log*/, param);
-        assertTrue("_getPropertySetInfo failed.",_xProp._getPropertySetInfo());
-        assertTrue("_addPropertyChangeListener failed.",_xProp._addPropertyChangeListener());
-        assertTrue("_addVetoableChangeListener failed.",_xProp._addVetoableChangeListener());
-        assertTrue("_setPropertyValue failed.",_xProp._setPropertyValue());
-        assertTrue("_getPropertyValue failed.",_xProp._getPropertyValue());
-        assertTrue("_removePropertyChangeListener failed.",_xProp._removePropertyChangeListener());
-        assertTrue("_removeVetoableChangeListener failed.",_xProp._removeVetoableChangeListener());
+        _XPropertySet _xProp = new _XPropertySet(xProp, log, param);
+        assure("_getPropertySetInfo failed.",_xProp._getPropertySetInfo());
+        assure("_addPropertyChangeListener failed.",_xProp._addPropertyChangeListener());
+        assure("_addVetoableChangeListener failed.",_xProp._addVetoableChangeListener());
+        assure("_setPropertyValue failed.",_xProp._setPropertyValue());
+        assure("_getPropertyValue failed.",_xProp._getPropertyValue());
+        assure("_removePropertyChangeListener failed.",_xProp._removePropertyChangeListener());
+        assure("_removeVetoableChangeListener failed.",_xProp._removeVetoableChangeListener());
 
     }
 
@@ -129,57 +111,53 @@ public class CheckDataPilot {
      * Test the data pilot table object:
      * simply execute the interface tests in a row
      */
-    @Test public void testDataPilotTableObject() {
-        System.out.println("Starting 'testDataPilotTableObject'");
+    public void testDataPilotTableObject() {
+        log.println("Starting 'testDataPilotTableObject'");
         // _XNamed
-        XNamed xNamed = UnoRuntime.queryInterface(
+        XNamed xNamed = (XNamed)UnoRuntime.queryInterface(
                                     XNamed.class, mDataPilotTableObject);
-        _XNamed _xNamed = new _XNamed(xNamed/*, log*/, param);
-        assertTrue("_getName failed.",_xNamed._getName());
-        assertTrue("_setName failed.",_xNamed._setName());
+        _XNamed _xNamed = new _XNamed(xNamed, log, param);
+        assure("_getName failed.",_xNamed._getName());
+        assure("_setName failed.",_xNamed._setName());
 
         // _XDataPilotTable
-        XDataPilotTable xDataPilotTable =
+        XDataPilotTable xDataPilotTable = (XDataPilotTable)
                     UnoRuntime.queryInterface(XDataPilotTable.class,
                     mDataPilotTableObject);
         _XDataPilotTable _xDataPilotTable =
-                    new _XDataPilotTable(xDataPilotTable/*, log*/, param);
-        assertTrue("before failed.", _xDataPilotTable.before());
-        assertTrue("_getOutputRange failed.", _xDataPilotTable._getOutputRange()) ;
-//        assertTrue("_refresh failed.", _xDataPilotTable._refresh()) ;
+                    new _XDataPilotTable(xDataPilotTable, log, param);
+        assure("before failed.", _xDataPilotTable.before());
+        assure("_getOutputRange failed.", _xDataPilotTable._getOutputRange()) ;
+        assure("_refresh failed.", _xDataPilotTable._refresh()) ;
 
         // _XDataPilotDescriptor
-        XDataPilotDescriptor xDataPilotDescriptor =
+        XDataPilotDescriptor xDataPilotDescriptor = (XDataPilotDescriptor)
                     UnoRuntime.queryInterface(XDataPilotDescriptor.class,
                     mDataPilotTableObject);
         _XDataPilotDescriptor _xDataPilotDescriptor =
-                    new _XDataPilotDescriptor(xDataPilotDescriptor/*, log*/, param);
-        assertTrue("before failed.", _xDataPilotDescriptor.before());
-        assertTrue("_setTag failed.", _xDataPilotDescriptor._setTag()) ;
-        assertTrue("_getTag failed.", _xDataPilotDescriptor._getTag()) ;
-        assertTrue("_getFilterDescriptor failed.", _xDataPilotDescriptor._getFilterDescriptor()) ;
-        assertTrue("_getDataPilotFields failed.", _xDataPilotDescriptor._getDataPilotFields()) ;
-        assertTrue("_getColumnFields failed.", _xDataPilotDescriptor._getColumnFields()) ;
-        assertTrue("_getRowFields failed.", _xDataPilotDescriptor._getRowFields()) ;
-        assertTrue("_getDataFields failed.", _xDataPilotDescriptor._getDataFields()) ;
-        assertTrue("_getHiddenFields failed.", _xDataPilotDescriptor._getHiddenFields()) ;
-        assertTrue("_getPageFields failed.", _xDataPilotDescriptor._getPageFields()) ;
-        assertTrue("_setSourceRange failed.", _xDataPilotDescriptor._setSourceRange()) ;
-        assertTrue("_getSourceRange failed.", _xDataPilotDescriptor._getSourceRange()) ;
+                    new _XDataPilotDescriptor(xDataPilotDescriptor, log, param);
+        assure("before failed.", _xDataPilotDescriptor.before());
+        assure("_setTag failed.", _xDataPilotDescriptor._setTag()) ;
+        assure("_getTag failed.", _xDataPilotDescriptor._getTag()) ;
+        assure("_getFilterDescriptor failed.", _xDataPilotDescriptor._getFilterDescriptor()) ;
+        assure("_getDataPilotFields failed.", _xDataPilotDescriptor._getDataPilotFields()) ;
+        assure("_getColumnFields failed.", _xDataPilotDescriptor._getColumnFields()) ;
+        assure("_getRowFields failed.", _xDataPilotDescriptor._getRowFields()) ;
+        assure("_getDataFields failed.", _xDataPilotDescriptor._getDataFields()) ;
+        assure("_getHiddenFields failed.", _xDataPilotDescriptor._getHiddenFields()) ;
+        assure("_getPageFields failed.", _xDataPilotDescriptor._getPageFields()) ;
+        assure("_setSourceRange failed.", _xDataPilotDescriptor._setSourceRange()) ;
+        assure("_getSourceRange failed.", _xDataPilotDescriptor._getSourceRange()) ;
     }
 
     /**
      * create an environment for the test
      */
-    @Before public void before() {
-//        Object oInterface = null;
+    public void before() {
+        Object oInterface = null;
+        XSpreadsheetDocument xSheetDoc = null;
 
-        // SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)param.getMSF() );
-        final XMultiServiceFactory xMsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        SOfficeFactory SOF = SOfficeFactory.getFactory(xMsf);
-
-        param = new TestParameters();
-        param.put("ServiceFactory", xMsf);
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)param.getMSF() );
 
         // the cell range
         CellRangeAddress sCellRangeAdress = new CellRangeAddress();
@@ -196,7 +174,7 @@ public class CheckDataPilot {
         sCellAdress.Row = 8;
 
         try {
-            System.out.println( "Creating a Spreadsheet document" );
+            log.println( "Creating a Spreadsheet document" );
             xSheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
@@ -204,11 +182,11 @@ public class CheckDataPilot {
             throw new StatusException( "Couldn't create document", e );
         }
 
-        System.out.println("Getting a sheet");
-        XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
+        log.println("Getting a sheet");
+        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSheetDoc.getSheets();
         XSpreadsheet oSheet = null;
         XSpreadsheet oSheet2 = null;
-        XIndexAccess oIndexAccess =
+        XIndexAccess oIndexAccess = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
 
         try {
@@ -228,7 +206,7 @@ public class CheckDataPilot {
         }
 
         try {
-            System.out.println("Filling a table");
+            log.println("Filling a table");
             for (int i = 1; i < mMaxFieldIndex; i++) {
                 oSheet.getCellByPosition(i, 0).setFormula("Col" + i);
                 oSheet.getCellByPosition(0, i).setFormula("Row" + i);
@@ -237,13 +215,10 @@ public class CheckDataPilot {
             }
 
             for (int i = 1; i < mMaxFieldIndex; i++)
-            {
-                for (int j = 1; j < mMaxFieldIndex; j++)
-                {
+                for (int j = 1; j < mMaxFieldIndex; j++) {
                     oSheet.getCellByPosition(i, j).setValue(i * (j + 1));
                     oSheet2.getCellByPosition(i, j).setValue(i * (j + 2));
                 }
-            }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace();
             throw new StatusException("Couldn't fill some cells", e);
@@ -269,8 +244,8 @@ public class CheckDataPilot {
 
 
         // create the test objects
-        System.out.println("Getting test objects") ;
-        XDataPilotTablesSupplier DPTS =
+        log.println("Getting test objects") ;
+        XDataPilotTablesSupplier DPTS = (XDataPilotTablesSupplier)
             UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, oSheet);
         XDataPilotTables DPT = DPTS.getDataPilotTables();
         XDataPilotDescriptor DPDsc = DPT.createDataPilotDescriptor();
@@ -279,7 +254,7 @@ public class CheckDataPilot {
         XPropertySet fieldPropSet = null;
         try {
             Object oDataPilotField = DPDsc.getDataPilotFields().getByIndex(0);
-            fieldPropSet =
+            fieldPropSet = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class, oDataPilotField);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace();
@@ -308,7 +283,7 @@ public class CheckDataPilot {
             throw new StatusException("Couldn't create a test environment", e);
         }
 
-        System.out.println("Insert the DataPilotTable");
+        log.println("Insert the DataPilotTable");
         if (DPT.hasByName("DataPilotTable")) {
             DPT.removeByName("DataPilotTable");
         }
@@ -350,54 +325,5 @@ public class CheckDataPilot {
         param.put("FIELDSAMOUNT", new Integer(5));
 
     }
-
-        /*
-     * this method closes a calc document and resets the corresponding class variable xSheetDoc
-     */
-    protected boolean closeSpreadsheetDocument() {
-        boolean worked = true;
-
-        System.out.println("    disposing xSheetDoc ");
-
-        try {
-            XCloseable oCloser =  UnoRuntime.queryInterface(
-                                         XCloseable.class, xSheetDoc);
-            oCloser.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            worked = false;
-            System.out.println("Couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            worked = false;
-            System.out.println("Document already disposed");
-        } catch (java.lang.NullPointerException e) {
-            worked = false;
-            System.out.println("Couldn't get XCloseable");
-        }
-
-        xSheetDoc = null;
-
-        return worked;
-    }
-
-    @After public void after()
-        {
-            closeSpreadsheetDocument();
-        }
-
-
-    @BeforeClass public static void setUpConnection() throws Exception {
-        System.out.println("setUpConnection()");
-        connection.setUp();
-    }
-
-    @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
-    {
-        System.out.println("tearDownConnection()");
-        connection.tearDown();
-    }
-
-    private static final OfficeConnection connection = new OfficeConnection();
-
 
 }

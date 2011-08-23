@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@ public class MediaUno
     private static final String s_serviceName = "com.sun.star.media.Manager_Java";
 
     // -------------------------------------------------------------------------
-
+    
     public MediaUno()
     {
     }
 
     // -------------------------------------------------------------------------
-
+    
     public static com.sun.star.lang.XSingleServiceFactory __getServiceFactory(
         String implName,
         com.sun.star.lang.XMultiServiceFactory multiFactory,
@@ -61,7 +61,16 @@ public class MediaUno
             {
             }
         }
-
+                
         return null;
+    }
+
+    // -------------------------------------------------------------------------
+    
+    public static boolean __writeRegistryServiceInfo(
+        com.sun.star.registry.XRegistryKey regKey )
+    {
+        return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
+            s_implName, s_serviceName, regKey );
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
+#include <tools/list.hxx>
 
 // local includes
 #include "tagtest.hxx"
@@ -40,7 +41,7 @@
 
 /*****************************************************************************/
 void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, sal_Bool bPrintContext, sal_uLong nLine, ByteString aUniqueId = ByteString() )
+    ByteString aContext, BOOL bPrintContext, ULONG nLine, ByteString aUniqueId = ByteString() )
 /*****************************************************************************/
 {
     fprintf( stdout, "%s %s, Line %lu", aType.GetBuffer(), aPrefix.GetBuffer(), nLine );
@@ -55,19 +56,19 @@ void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix,
 
 /*****************************************************************************/
 void PrintError( ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, sal_Bool bPrintContext, sal_uLong nLine, ByteString aUniqueId = ByteString() )
+    ByteString aContext, BOOL bPrintContext, ULONG nLine, ByteString aUniqueId = ByteString() )
 /*****************************************************************************/
 {
     PrintMessage( "Error:", aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
 }
 
-sal_Bool LanguageOK( ByteString aLang )
+BOOL LanguageOK( ByteString aLang )
 {
     if ( !aLang.Len() )
-        return sal_False;
+        return FALSE;
 
     if ( aLang.IsNumericAscii() )
-        return sal_True;
+        return TRUE;
 
     if ( aLang.GetTokenCount( '-' ) == 1 )
         return aLang.IsAlphaAscii() && aLang.IsLowerAscii();
@@ -80,7 +81,7 @@ sal_Bool LanguageOK( ByteString aLang )
              && !aTok1.EqualsIgnoreCaseAscii( aTok0 );
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 
@@ -94,13 +95,13 @@ class LazySvFileStream : public SvFileStream
 
 private:
     String aFileName;
-    sal_Bool bOpened;
+    BOOL bOpened;
     StreamMode eOpenMode;
 
 public:
     LazySvFileStream()
     : aFileName()
-    , bOpened( sal_False )
+    , bOpened( FALSE )
     , eOpenMode( 0 )
     {};
 
@@ -123,7 +124,7 @@ void LazySvFileStream::LazyOpen()
             fprintf( stderr, "\nERROR: Could not open Output-File %s!\n\n", ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
             exit ( 4 );
         }
-        bOpened = sal_True;
+        bOpened = TRUE;
     }
 }
 
@@ -133,12 +134,12 @@ void LazySvFileStream::LazyOpen()
 //
 
 /*****************************************************************************/
-GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
+GSILine::GSILine( const ByteString &rLine, ULONG nLine )
 /*****************************************************************************/
                 : ByteString( rLine )
                 , nLineNumber( nLine )
-                , bOK( sal_True )
-                , bFixed ( sal_False )
+                , bOK( TRUE )
+                , bFixed ( FALSE )
 {
     if ( rLine.GetTokenCount( '\t' ) == 15 )
     {
@@ -154,18 +155,18 @@ GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
         // do some more format checks here
         if ( !rLine.GetToken( 8, '\t' ).IsNumericAscii() )
         {
-            PrintError( "The length field does not contain a number!", "Line format", rLine.GetToken( 8, '\t' ), sal_True, GetLineNumber(), GetUniqId() );
+            PrintError( "The length field does not contain a number!", "Line format", rLine.GetToken( 8, '\t' ), TRUE, GetLineNumber(), GetUniqId() );
             NotOK();
         }
         if ( !LanguageOK( aLangId ) )
         {
-            PrintError( "The Language is invalid!", "Line format", aLangId, sal_True, GetLineNumber(), GetUniqId() );
+            PrintError( "The Language is invalid!", "Line format", aLangId, TRUE, GetLineNumber(), GetUniqId() );
             NotOK();
         }
         // limit GID and LID to MAX_GID_LID_LEN chars each for database conformity, see #137575#
         if ( rLine.GetToken( 4, '\t' ).Len() > MAX_GID_LID_LEN || rLine.GetToken( 5, '\t' ).Len() > MAX_GID_LID_LEN )
         {
-            PrintError( ByteString("GID and LID may only be ").Append( ByteString::CreateFromInt32(MAX_GID_LID_LEN) ).Append( " chars long each!" ), "Line format", aLangId, sal_True, GetLineNumber(), GetUniqId() );
+            PrintError( ByteString("GID and LID may only be ").Append( ByteString::CreateFromInt32(MAX_GID_LID_LEN) ).Append( " chars long each!" ), "Line format", aLangId, TRUE, GetLineNumber(), GetUniqId() );
             NotOK();
         }
     }
@@ -173,8 +174,8 @@ GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
     {
         aFormat = FORMAT_GSI;
         ByteString sTmp( rLine );
-        sal_uInt16 nPos = sTmp.Search( "($$)" );
-        sal_uInt16 nStart = 0;
+        USHORT nPos = sTmp.Search( "($$)" );
+        USHORT nStart = 0;
         if ( nPos != STRING_NOTFOUND )
         {
             aUniqId = sTmp.Copy( nStart, nPos - nStart );
@@ -197,6 +198,7 @@ GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
         }
         if ( nPos != STRING_NOTFOUND )
         {
+//        	ByteString aStatus = sTmp.Copy( nStart, nPos - nStart );     // ext int ...
             nStart = nPos + 4;  // + length of the delemiter
         }
         if ( nPos != STRING_NOTFOUND )
@@ -213,7 +215,7 @@ GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
 void GSILine::NotOK()
 /*****************************************************************************/
 {
-    bOK = sal_False;
+    bOK = FALSE;
 }
 
 /*****************************************************************************/
@@ -223,7 +225,7 @@ void GSILine::ReassembleLine()
     ByteString aReassemble;
     if ( GetLineFormat() == FORMAT_SDF )
     {
-        sal_uInt16 i;
+        USHORT i;
         for ( i = 0 ; i < 10 ; i++ )
         {
             aReassemble.Append( GetToken( i, '\t' ) );
@@ -245,8 +247,8 @@ void GSILine::ReassembleLine()
     }
     else if ( GetLineFormat() == FORMAT_GSI )
     {
-        sal_uInt16 nPos = Search( "($$)" );
-        sal_uInt16 nStart = 0;
+        USHORT nPos = Search( "($$)" );
+        USHORT nStart = 0;
         if ( nPos != STRING_NOTFOUND )
         {
             nStart = nPos + 4;  // + length of the delemiter
@@ -273,17 +275,17 @@ void GSILine::ReassembleLine()
             *(ByteString*)this = aReassemble;
         }
         else
-            PrintError( "Cannot reassemble GSI line (internal Error).", "Line format", "", sal_False, GetLineNumber(), GetUniqId() );
+            PrintError( "Cannot reassemble GSI line (internal Error).", "Line format", "", FALSE, GetLineNumber(), GetUniqId() );
     }
-    else
-        PrintError( "Cannot reassemble line of unknown type (internal Error).", "Line format", "", sal_False, GetLineNumber(), GetUniqId() );
+    else 
+        PrintError( "Cannot reassemble line of unknown type (internal Error).", "Line format", "", FALSE, GetLineNumber(), GetUniqId() );
 }
 
 //
 // class GSIBlock
 //
 /*****************************************************************************/
-GSIBlock::GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, sal_Bool bRef, sal_Bool bAllowKID, sal_Bool bAllowSusp )
+GSIBlock::GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef, BOOL bAllowKID, BOOL bAllowSusp )
 /*****************************************************************************/
             : pSourceLine( NULL )
             , pReferenceLine( NULL )
@@ -293,7 +295,7 @@ GSIBlock::GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, 
             , bReference( bRef )
             , bAllowKeyIDs( bAllowKID )
             , bAllowSuspicious( bAllowSusp )
-            , bHasBlockError( sal_False )
+            , bHasBlockError( FALSE )
 {
 }
 
@@ -304,9 +306,8 @@ GSIBlock::~GSIBlock()
     delete pSourceLine;
     delete pReferenceLine;
 
-    for ( size_t i = 0, n = maList.size(); i < n; ++i )
-        delete maList[ i ];
-    maList.clear();
+    for ( ULONG i = 0; i < Count(); i++ )
+        delete ( GetObject( i ));
 }
 
 /*****************************************************************************/
@@ -318,7 +319,7 @@ void GSIBlock::InsertLine( GSILine* pLine, ByteString aSourceLang)
         if ( pSourceLine )
         {
             PrintError( "Source Language entry double. Treating as Translation.", "File format", "", pLine->GetLineNumber(), pLine->GetUniqId() );
-            bHasBlockError = sal_True;
+            bHasBlockError = TRUE;
             pSourceLine->NotOK();
             pLine->NotOK();
         }
@@ -328,22 +329,23 @@ void GSIBlock::InsertLine( GSILine* pLine, ByteString aSourceLang)
             return;
         }
     }
+    ULONG nPos = 0;
 
     if ( aSourceLang.Len() ) // only check blockstructure if source lang is given
     {
-        for ( size_t nPos = 0, n = maList.size(); nPos < n; ++nPos )
+        while ( nPos < Count() )
         {
-            if ( maList[ nPos ]->GetLanguageId().Equals( pLine->GetLanguageId() ) )
+            if ( GetObject( nPos )->GetLanguageId().Equals( pLine->GetLanguageId() ) )
             {
                 PrintError( "Translation Language entry double. Checking both.", "File format", "", pLine->GetLineNumber(), pLine->GetUniqId() );
-                bHasBlockError = sal_True;
-                maList[ nPos ]->NotOK();
+                bHasBlockError = TRUE;
+                GetObject( nPos )->NotOK();
                 pLine->NotOK();
             }
             nPos++;
         }
     }
-    maList.push_back( pLine );
+    Insert( pLine, LIST_APPEND );
 }
 
 /*****************************************************************************/
@@ -355,7 +357,7 @@ void GSIBlock::SetReferenceLine( GSILine* pLine )
 
 /*****************************************************************************/
 void GSIBlock::PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, sal_uLong nLine, ByteString aUniqueId )
+    ByteString aContext, ULONG nLine, ByteString aUniqueId )
 /*****************************************************************************/
 {
     ::PrintMessage( aType, aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
@@ -363,7 +365,7 @@ void GSIBlock::PrintMessage( ByteString aType, ByteString aMsg, ByteString aPref
 
 /*****************************************************************************/
 void GSIBlock::PrintError( ByteString aMsg, ByteString aPrefix,
-    ByteString aContext, sal_uLong nLine, ByteString aUniqueId )
+    ByteString aContext, ULONG nLine, ByteString aUniqueId )
 /*****************************************************************************/
 {
     PrintMessage( "Error:", aMsg, aPrefix, aContext, nLine, aUniqueId );
@@ -374,9 +376,10 @@ void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
     GSILine *pLine )
 /*****************************************************************************/
 {
-    for ( size_t i = 0 ; i < pList->size() ; i++ )
+    ULONG i;
+    for ( i = 0 ; i < pList->Count() ; i++ )
     {
-        ParserMessage *pMsg = (*pList)[ i ];
+        ParserMessage *pMsg = pList->GetObject( i );
         ByteString aContext;
         if ( bPrintContext )
         {
@@ -393,7 +396,7 @@ void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
 }
 
 /*****************************************************************************/
-sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uInt16 &nErrorPos, ByteString &aErrorMsg, sal_Bool &bHasBeenFixed, ByteString &aFixed ) const
+BOOL GSIBlock::IsUTF8( const ByteString &aTestee, BOOL bFixTags, USHORT &nErrorPos, ByteString &aErrorMsg, BOOL &bHasBeenFixed, ByteString &aFixed ) const
 /*****************************************************************************/
 {
     String aUTF8Tester( aTestee, RTL_TEXTENCODING_UTF8 );
@@ -402,7 +405,7 @@ sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uIn
         aUTF8Tester = String( aTestee.GetBuffer(), nErrorPos, RTL_TEXTENCODING_UTF8 );
         nErrorPos = aUTF8Tester.Len();
         aErrorMsg = ByteString( "UTF8 Encoding seems to be broken" );
-        return sal_False;
+        return FALSE;
     }
 
     nErrorPos = aUTF8Tester.SearchChar( String::CreateFromAscii( "\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0b\x0c\x0e\x0f"
@@ -410,25 +413,25 @@ sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uIn
     if ( nErrorPos != STRING_NOTFOUND )
     {
         aErrorMsg = ByteString( "String contains illegal character" );
-        return sal_False;
+        return FALSE;
     }
 
     if ( bFixTags )
     {
-        bHasBeenFixed = sal_False;
+        bHasBeenFixed = FALSE;
         aFixed.Erase();
     }
 
     if ( !bAllowKeyIDs )
     {
-        sal_Bool bIsKeyID = sal_False;
-        sal_Bool bNewId = sal_False;
+        BOOL bIsKeyID = FALSE;
+        BOOL bNewId = FALSE;
         ByteString aID( aTestee );
-        sal_uInt16 nAfterID = 0;
+        USHORT nAfterID = 0;
 
         if ( aTestee.Equals( "{&", 0, 2 ) )
         {   // check for strings from instset_native like "{&Tahoma8}335795.Installation Wiza ..."
-            sal_uInt16 nTagEnd = aTestee.Search( '}' );
+            USHORT nTagEnd = aTestee.Search( '}' );
             if ( nTagEnd != STRING_NOTFOUND )
             {
                 if ( bFixTags )
@@ -443,23 +446,23 @@ sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uIn
 
         if ( aID.Equals( aDelimiter, 6, aDelimiter.Len() ) )
         {   // New KeyId     6 Letters, digits and spechial chars followed by delimiter
-            bNewId = sal_True;
+            bNewId = TRUE;
             nErrorPos = 1;
             aID = aID.Copy( 0, 6 );
             nAfterID += 6;
             nAfterID = nAfterID + aDelimiter.Len();
         }
         else if ( ( aID.GetChar(6) == '*' ) && aID.Equals( aDelimiter, 7, aDelimiter.Len() ) )
-        {   // New KeyId     6 Letters, digits and spechial chars followed by '*delimiter' to indicate translation in progress
-            bNewId = sal_True;
+        {   // New KeyId     6 Letters, digits and spechial chars followed by '*delimiter' to indicate translation in progress 
+            bNewId = TRUE;
             nErrorPos = 1;
             aID = aID.Copy( 0, 6 );
             nAfterID += 7;
             nAfterID = nAfterID + aDelimiter.Len();
         }
         else if ( aID.GetTokenCount( '.' ) > 1 )
-        {   // test for old KeyIDs       5 to 6 digits followed by a dot   '44373.'
-            bNewId = sal_False;
+        {	// test for old KeyIDs       5 to 6 digits followed by a dot   '44373.'
+            bNewId = FALSE;
             nErrorPos = 1;
             aID = aID.GetToken( 0, '.' );
             nAfterID = nAfterID + aID.Len();
@@ -473,12 +476,12 @@ sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uIn
             {
                 if ( aID.Len() == 6 )
                 {
-                    bIsKeyID = sal_True;
+                    bIsKeyID = TRUE;
                     ByteString aDigits("0123456789abcdefghijklmnopqrstuvwxyz+-<=>");
-                    for ( sal_uInt16 i=0 ; i < aID.Len() ;i++ )
+                    for ( USHORT i=0 ; i < aID.Len() ;i++ )
                     {
                         if ( aDigits.Search( aID.GetChar(i) ) == STRING_NOTFOUND )
-                            bIsKeyID = sal_False;
+                            bIsKeyID = FALSE;
                     }
                 }
             }
@@ -488,7 +491,7 @@ sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uIn
                 aID.Erase( aID.Len()-1 );
 
             if ( aID.IsNumericAscii() && aID.Len() >= 5 )
-                bIsKeyID = sal_True;
+                bIsKeyID = TRUE;
         }
 
         if ( bIsKeyID )
@@ -497,32 +500,32 @@ sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uIn
             if ( bFixTags )
             {
                 aFixed += aTestee.Copy( nAfterID );
-                bHasBeenFixed = sal_True;
+                bHasBeenFixed = TRUE;
                 aErrorMsg = ByteString( "FIXED String containing KeyID" );
             }
             else
                 aErrorMsg = ByteString( "String contains KeyID" );
-            return sal_False;
+            return FALSE;
         }
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 /*****************************************************************************/
-sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
+BOOL GSIBlock::TestUTF8( GSILine* pTestee, BOOL bFixTags )
 /*****************************************************************************/
 {
-    sal_uInt16 nErrorPos = 0;
+    USHORT nErrorPos = 0;
     ByteString aErrorMsg;
-    sal_Bool bError = sal_False;
+    BOOL bError = FALSE;
     ByteString aFixed;
-    sal_Bool bHasBeenFixed = sal_False;
+    BOOL bHasBeenFixed = FALSE;
     if ( !IsUTF8( pTestee->GetText(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
         ByteString aContext( pTestee->GetText().Copy( nErrorPos, 20 ) );
         PrintError( aErrorMsg.Append(" in Text at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
-        bError = sal_True;
+        bError = TRUE;
         if ( bHasBeenFixed )
         {
             pTestee->SetText( aFixed );
@@ -533,7 +536,7 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
     {
         ByteString aContext( pTestee->GetQuickHelpText().Copy( nErrorPos, 20 ) );
         PrintError( aErrorMsg.Append(" in QuickHelpText at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
-        bError = sal_True;
+        bError = TRUE;
         if ( bHasBeenFixed )
         {
             pTestee->SetQuickHelpText( aFixed );
@@ -544,7 +547,7 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
     {
         ByteString aContext( pTestee->GetTitle().Copy( nErrorPos, 20 ) );
         PrintError( aErrorMsg.Append(" in Title at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
-        bError = sal_True;
+        bError = TRUE;
         if ( bHasBeenFixed )
         {
             pTestee->SetTitle( aFixed );
@@ -558,38 +561,38 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
 
 
 /*****************************************************************************/
-sal_Bool GSIBlock::HasSuspiciousChars( GSILine* pTestee, GSILine* pSource )
+BOOL GSIBlock::HasSuspiciousChars( GSILine* pTestee, GSILine* pSource )
 /*****************************************************************************/
 {
-    sal_uInt16 nPos = 0;
+    USHORT nPos = 0;
     if ( !bAllowSuspicious && ( nPos = pTestee->GetText().Search("??")) != STRING_NOTFOUND )
         if ( pSource->GetText().Search("??") == STRING_NOTFOUND )
         {
             String aUTF8Tester = String( pTestee->GetText(), 0, nPos, RTL_TEXTENCODING_UTF8 );
-            sal_uInt16 nErrorPos = aUTF8Tester.Len();
+            USHORT nErrorPos = aUTF8Tester.Len();
             ByteString aContext( pTestee->GetText().Copy( nPos, 20 ) );
             PrintError( ByteString("Found double questionmark in translation only. Looks like an encoding problem at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
             pTestee->NotOK();
-            return sal_True;
+            return TRUE;
         }
 
-    return sal_False;
+    return FALSE;
 }
 
 
 /*****************************************************************************/
-sal_Bool GSIBlock::CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags )
+BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags )
 /*****************************************************************************/
 {
     static LingTest aTester;
-    sal_Bool bHasError = sal_False;
+    BOOL bHasError = FALSE;
 
     if ( !pSourceLine )
     {
         if ( bRequireSourceLine )
         {
             PrintError( "No source language entry defined!", "File format", "", nLine );
-            bHasBlockError = sal_True;
+            bHasBlockError = TRUE;
         }
     }
     else
@@ -599,7 +602,7 @@ sal_Bool GSIBlock::CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sa
         {
             PrintList( pSourceLine->GetMessageList(), "ReferenceString", pSourceLine );
             pSourceLine->NotOK();
-            bHasError = sal_True;
+            bHasError = TRUE;
         }
     }
     if ( bReference )
@@ -610,12 +613,12 @@ sal_Bool GSIBlock::CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sa
             if ( pSourceLine )
                 pSource = pSourceLine;
             else
-                pSource = maList.empty() ? NULL : maList[ 0 ];   // get some other line
+                pSource = GetObject( 0 );   // get some other line
             if ( pSource )
                 PrintError( "No reference line found. Entry is new in source file", "File format", "", pSource->GetLineNumber(), pSource->GetUniqId() );
             else
                 PrintError( "No reference line found. Entry is new in source file", "File format", "", nLine );
-            bHasBlockError = sal_True;
+            bHasBlockError = TRUE;
         }
         else
         {
@@ -626,7 +629,7 @@ sal_Bool GSIBlock::CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sa
                 aContext.Append( "\" --> \"" ).Append( pSourceLine->Copy( nPos - 5, 15) );
                 PrintError( "Source Language Entry has changed.", "File format", aContext, pSourceLine->GetLineNumber(), pSourceLine->GetUniqId() );
                 pSourceLine->NotOK();
-                bHasError = sal_True;
+                bHasError = TRUE;
             }
         }
     }
@@ -634,41 +637,41 @@ sal_Bool GSIBlock::CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sa
     if ( pSourceLine )
         bHasError |= !TestUTF8( pSourceLine, bFixTags );
 
-    for ( size_t i = 0, n = maList.size(); i < n; ++i )
+    ULONG i;
+    for ( i = 0; i < Count(); i++ )
     {
-        GSILine* pItem = maList[ i ];
-        aTester.CheckTestee( pItem, pSourceLine != NULL, bFixTags );
-        if ( pItem->HasMessages() || aTester.HasCompareWarnings() )
+        aTester.CheckTestee( GetObject( i ), pSourceLine != NULL, bFixTags );
+        if ( GetObject( i )->HasMessages() || aTester.HasCompareWarnings() )
         {
-            if ( pItem->HasMessages() || aTester.GetCompareWarnings().HasErrors() )
-                pItem->NotOK();
-            bHasError = sal_True;
-            PrintList( pItem->GetMessageList(), "Translation", pItem );
-            PrintList( &(aTester.GetCompareWarnings()), "Translation Tag Mismatch", pItem );
+            if ( GetObject( i )->HasMessages() || aTester.GetCompareWarnings().HasErrors() )
+                GetObject( i )->NotOK();
+            bHasError = TRUE;
+            PrintList( GetObject( i )->GetMessageList(), "Translation", GetObject( i ) );
+            PrintList( &(aTester.GetCompareWarnings()), "Translation Tag Missmatch", GetObject( i ) );
         }
-        bHasError |= !TestUTF8( pItem, bFixTags );
+        bHasError |= !TestUTF8( GetObject( i ), bFixTags );
         if ( pSourceLine )
-            bHasError |= HasSuspiciousChars( pItem, pSourceLine );
+            bHasError |= HasSuspiciousChars( GetObject( i ), pSourceLine );
     }
 
     return bHasError || bHasBlockError;
 }
 
-void GSIBlock::WriteError( LazySvFileStream &aErrOut, sal_Bool bRequireSourceLine  )
+void GSIBlock::WriteError( LazySvFileStream &aErrOut, BOOL bRequireSourceLine  )
 {
     if ( pSourceLine && pSourceLine->IsOK() && bCheckSourceLang && !bHasBlockError )
         return;
 
-    sal_Bool bHasError = sal_False;
-    sal_Bool bCopyAll = ( !pSourceLine && bRequireSourceLine ) || ( pSourceLine && !pSourceLine->IsOK() && !bCheckTranslationLang ) || bHasBlockError;
-    for ( size_t i = 0, n = maList.size(); i < n; ++i )
+    BOOL bHasError = FALSE;
+    BOOL bCopyAll = ( !pSourceLine && bRequireSourceLine ) || ( pSourceLine && !pSourceLine->IsOK() && !bCheckTranslationLang ) || bHasBlockError;
+    ULONG i;
+    for ( i = 0; i < Count(); i++ )
     {
-        GSILine* pItem = maList[ i ];
-        if ( !pItem->IsOK() || bCopyAll )
+        if ( !GetObject( i )->IsOK() || bCopyAll )
         {
-            bHasError = sal_True;
+            bHasError = TRUE;
             aErrOut.LazyOpen();
-            aErrOut.WriteLine( *pItem );
+            aErrOut.WriteLine( *GetObject( i ) );
         }
     }
 
@@ -679,44 +682,44 @@ void GSIBlock::WriteError( LazySvFileStream &aErrOut, sal_Bool bRequireSourceLin
     }
 }
 
-void GSIBlock::WriteCorrect( LazySvFileStream &aOkOut, sal_Bool bRequireSourceLine )
+void GSIBlock::WriteCorrect( LazySvFileStream &aOkOut, BOOL bRequireSourceLine )
 {
     if ( ( !pSourceLine && bRequireSourceLine ) || ( pSourceLine && !pSourceLine->IsOK() && !bCheckTranslationLang ) )
         return;
 
-    sal_Bool bHasOK = sal_False;
-    for ( size_t i = 0, n = maList.size(); i < n; ++i )
+    BOOL bHasOK = FALSE;
+    ULONG i;
+    for ( i = 0; i < Count(); i++ )
     {
-        GSILine* pItem = maList[ i ];
-        if ( ( pItem->IsOK() || bCheckSourceLang ) && !bHasBlockError )
+        if ( ( GetObject( i )->IsOK() || bCheckSourceLang ) && !bHasBlockError )
         {
-            bHasOK = sal_True;
+            bHasOK = TRUE;
             aOkOut.LazyOpen();
-            aOkOut.WriteLine( *pItem );
+            aOkOut.WriteLine( *GetObject( i ) );
         }
     }
 
-    if ( ( pSourceLine && pSourceLine->IsOK() && ( !maList.empty() || !bCheckTranslationLang ) ) || ( bHasOK && bCheckTranslationLang ) )
+    if ( ( pSourceLine && pSourceLine->IsOK() && ( Count() || !bCheckTranslationLang ) ) || ( bHasOK && bCheckTranslationLang ) )
     {
         aOkOut.LazyOpen();
         aOkOut.WriteLine( *pSourceLine );
     }
 }
 
-void GSIBlock::WriteFixed( LazySvFileStream &aFixOut, sal_Bool /*bRequireSourceLine*/ )
+void GSIBlock::WriteFixed( LazySvFileStream &aFixOut, BOOL /*bRequireSourceLine*/ )
 {
     if ( pSourceLine && !pSourceLine->IsFixed() && bCheckSourceLang )
         return;
 
-    sal_Bool bHasFixes = sal_False;
-    for ( size_t i = 0, n = maList.size(); i < n; ++i )
+    BOOL bHasFixes = FALSE;
+    ULONG i;
+    for ( i = 0; i < Count(); i++ )
     {
-        GSILine* pItem = maList[ i ];
-        if ( pItem->IsFixed() )
+        if ( GetObject( i )->IsFixed() )
         {
-            bHasFixes = sal_True;
+            bHasFixes = TRUE;
             aFixOut.LazyOpen();
-            aFixOut.WriteLine( *pItem );
+            aFixOut.WriteLine( *GetObject( i ) );
         }
     }
 
@@ -783,31 +786,31 @@ int _cdecl main( int argc, char *argv[] )
 /*****************************************************************************/
 {
 
-    sal_Bool bError = sal_False;
-    sal_Bool bPrintContext = sal_False;
-    sal_Bool bCheckSourceLang = sal_False;
-    sal_Bool bCheckTranslationLang = sal_False;
-    sal_Bool bWriteError = sal_False;
-    sal_Bool bWriteCorrect = sal_False;
-    sal_Bool bWriteFixed = sal_False;
-    sal_Bool bFixTags = sal_False;
-    sal_Bool bAllowKID = sal_False;
-    sal_Bool bAllowSuspicious = sal_False;
+    BOOL bError = FALSE;
+    BOOL bPrintContext = FALSE;
+    BOOL bCheckSourceLang = FALSE;
+    BOOL bCheckTranslationLang = FALSE;
+    BOOL bWriteError = FALSE;
+    BOOL bWriteCorrect = FALSE;
+    BOOL bWriteFixed = FALSE;
+    BOOL bFixTags = FALSE;
+    BOOL bAllowKID = FALSE;
+    BOOL bAllowSuspicious = FALSE;
     String aErrorFilename;
     String aCorrectFilename;
     String aFixedFilename;
-    sal_Bool bFileHasError = sal_False;
+    BOOL bFileHasError = FALSE;
     ByteString aSourceLang( "en-US" );     // English is default
     ByteString aFilename;
     ByteString aReferenceFilename;
-    sal_Bool bReferenceFile = sal_False;
-    for ( sal_uInt16 i = 1 ; i < argc ; i++ )
+    BOOL bReferenceFile = FALSE;
+    for ( USHORT i = 1 ; i < argc ; i++ )
     {
         if ( *argv[ i ] == '-' )
         {
             switch (*(argv[ i ]+1))
             {
-                case 'c':bPrintContext = sal_True;
+                case 'c':bPrintContext = TRUE;
                     break;
                 case 'w':
                     {
@@ -817,61 +820,61 @@ int _cdecl main( int argc, char *argv[] )
                                 if ( (i+1) < argc )
                                 {
                                     aErrorFilename = String( argv[ i+1 ], RTL_TEXTENCODING_ASCII_US );
-                                    bWriteError = sal_True;
+                                    bWriteError = TRUE;
                                     i++;
                                 }
                                 else
                                 {
                                     fprintf( stderr, "\nERROR: Switch %s requires parameter!\n\n", argv[ i ] );
-                                    bError = sal_True;
+                                    bError = TRUE;
                                 }
                             else
-                                   bWriteError = sal_True;
+                                   bWriteError = TRUE;
                         }
                         else if ( (*(argv[ i ]+2)) == 'c' )
                             if ( (*(argv[ i ]+3)) == 'f' )
                                 if ( (i+1) < argc )
                                 {
                                     aCorrectFilename = String( argv[ i+1 ], RTL_TEXTENCODING_ASCII_US );
-                                    bWriteCorrect = sal_True;
+                                    bWriteCorrect = TRUE;
                                     i++;
                                 }
                                 else
                                 {
                                     fprintf( stderr, "\nERROR: Switch %s requires parameter!\n\n", argv[ i ] );
-                                    bError = sal_True;
+                                    bError = TRUE;
                                 }
                             else
-                                   bWriteCorrect = sal_True;
+                                   bWriteCorrect = TRUE;
                         else if ( (*(argv[ i ]+2)) == 'f' )
                             if ( (*(argv[ i ]+3)) == 'f' )
                                 if ( (i+1) < argc )
                                 {
                                     aFixedFilename = String( argv[ i+1 ], RTL_TEXTENCODING_ASCII_US );
-                                    bWriteFixed = sal_True;
-                                    bFixTags = sal_True;
+                                    bWriteFixed = TRUE;
+                                    bFixTags = TRUE;
                                     i++;
                                 }
                                 else
                                 {
                                     fprintf( stderr, "\nERROR: Switch %s requires parameter!\n\n", argv[ i ] );
-                                    bError = sal_True;
+                                    bError = TRUE;
                                 }
                             else
                             {
-                                   bWriteFixed = sal_True;
-                                bFixTags = sal_True;
+                                   bWriteFixed = TRUE;
+                                bFixTags = TRUE;
                             }
                         else
                         {
                             fprintf( stderr, "\nERROR: Unknown Switch %s!\n\n", argv[ i ] );
-                            bError = sal_True;
+                            bError = TRUE;
                         }
                     }
                     break;
-                case 's':bCheckSourceLang = sal_True;
+                case 's':bCheckSourceLang = TRUE;
                     break;
-                case 't':bCheckTranslationLang = sal_True;
+                case 't':bCheckTranslationLang = TRUE;
                     break;
                 case 'l':
                     {
@@ -885,7 +888,7 @@ int _cdecl main( int argc, char *argv[] )
                         else
                         {
                             fprintf( stderr, "\nERROR: Switch %s requires parameter!\n\n", argv[ i ] );
-                            bError = sal_True;
+                            bError = TRUE;
                         }
                     }
                     break;
@@ -894,34 +897,34 @@ int _cdecl main( int argc, char *argv[] )
                         if ( (i+1) < argc )
                         {
                             aReferenceFilename = argv[ i+1 ];
-                            bReferenceFile = sal_True;
+                            bReferenceFile = TRUE;
                             i++;
                         }
                         else
                         {
                             fprintf( stderr, "\nERROR: Switch %s requires parameter!\n\n", argv[ i ] );
-                            bError = sal_True;
+                            bError = TRUE;
                         }
                     }
                     break;
                 case 'f':
                     {
-                        bFixTags = sal_True;
+                        bFixTags = TRUE;
                     }
                     break;
                 case 'k':
                     {
-                        bAllowKID = sal_True;
+                        bAllowKID = TRUE;
                     }
                     break;
                 case 'e':
                     {
-                        bAllowSuspicious = sal_True;
+                        bAllowSuspicious = TRUE;
                     }
                     break;
                 default:
                     fprintf( stderr, "\nERROR: Unknown Switch %s!\n\n", argv[ i ] );
-                    bError = sal_True;
+                    bError = TRUE;
             }
         }
         else
@@ -931,7 +934,7 @@ int _cdecl main( int argc, char *argv[] )
             else
             {
                 fprintf( stderr, "\nERROR: Only one filename may be specified!\n\n");
-                bError = sal_True;
+                bError = TRUE;
             }
         }
     }
@@ -1031,20 +1034,20 @@ int _cdecl main( int argc, char *argv[] )
     ByteString sReferenceLine;
     GSILine* pReferenceLine = NULL;
     ByteString aOldReferenceId("No Valid ID");   // just set to something which can never be an ID
-    sal_uLong nReferenceLine = 0;
+    ULONG nReferenceLine = 0;
 
     ByteString sGSILine;
     GSILine* pGSILine = NULL;
     ByteString aOldId("No Valid ID");   // just set to something which can never be an ID
     GSIBlock *pBlock = NULL;
-    sal_uLong nLine = 0;
+    ULONG nLine = 0;
 
     while ( !aGSI.IsEof() )
     {
         aGSI.ReadLine( sGSILine );
         nLine++;
         pGSILine = new GSILine( sGSILine, nLine );
-        sal_Bool bDelete = sal_True;
+        BOOL bDelete = TRUE;
 
 
         if ( pGSILine->Len() )
@@ -1055,7 +1058,7 @@ int _cdecl main( int argc, char *argv[] )
                 pGSILine->NotOK();
                 if ( bWriteError )
                 {
-                    bFileHasError = sal_True;
+                    bFileHasError = TRUE;
                     aErrOut.LazyOpen();
                     aErrOut.WriteLine( *pGSILine );
                 }
@@ -1094,7 +1097,7 @@ int _cdecl main( int argc, char *argv[] )
                     // find corresponding line in reference file
                     if ( bReferenceFile )
                     {
-                        sal_Bool bContinueSearching = sal_True;
+                        BOOL bContinueSearching = TRUE;
                         while ( ( !aReferenceGSI.IsEof() || pReferenceLine ) && bContinueSearching )
                         {
                             if ( !pReferenceLine )
@@ -1105,14 +1108,16 @@ int _cdecl main( int argc, char *argv[] )
                             }
                             if ( pReferenceLine->GetLineFormat() != FORMAT_UNKNOWN )
                             {
-                                if ( pReferenceLine->GetUniqId() == aId && pReferenceLine->GetLanguageId().Equals( aSourceLang ) )
+                                if ( pReferenceLine->GetUniqId() == aId && pReferenceLine->GetLanguageId().Equals( aSourceLang ) ) 
                                 {
                                     pBlock->SetReferenceLine( pReferenceLine );
                                     pReferenceLine = NULL;
                                 }
                                 else if ( pReferenceLine->GetUniqId() > aId )
                                 {
-                                    bContinueSearching = sal_False;
+//                                    if ( pGSILine->GetLanguageId() == aSourceLang )
+//                    		            PrintError( "No reference line found. Entry is new in source file", "File format", "", bPrintContext, pGSILine->GetLineNumber(), aId );
+                                    bContinueSearching = FALSE;
                                 }
                                 else
                                 {
@@ -1134,7 +1139,7 @@ int _cdecl main( int argc, char *argv[] )
                 }
 
                 pBlock->InsertLine( pGSILine, aSourceLang );
-                bDelete = sal_False;
+                bDelete = FALSE;
             }
         }
         if ( bDelete )

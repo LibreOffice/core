@@ -39,10 +39,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 .IF "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCLINUXIgcc3" || \
-    "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCOPENBSDIgcc3" || \
-    "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCFREEBSDIgcc3" || \
-    "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCNETBSDIgcc3" || \
-    "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCDRAGONFLYIgcc3"
+	"$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCOPENBSDIgcc3" || \
+	"$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCFREEBSDIgcc3" || \
+	"$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCNETBSDIgcc3"
 
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA

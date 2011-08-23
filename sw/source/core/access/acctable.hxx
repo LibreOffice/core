@@ -47,8 +47,8 @@ class SwAccessibleTable :
         public ::com::sun::star::accessibility::XAccessibleSelection,
         public SwClient
 {
-    SwAccessibleTableData_Impl *mpTableData;    // the table's data, prot by Sol-Mutex
-    ::rtl::OUString sDesc;
+    SwAccessibleTableData_Impl *mpTableData;	// the table's data, prot by Sol-Mutex
+    ::rtl::OUString	sDesc;
     const SwSelBoxes *GetSelBoxes() const;
 
     void FireTableChangeEvent( const SwAccessibleTableData_Impl& rTableData );
@@ -68,13 +68,15 @@ protected:
 
     virtual ~SwAccessibleTable();
 
-    // #i77106#
+    // --> OD 2007-06-27 #i77106#
     inline void SetDesc( ::rtl::OUString sNewDesc )
     {
         sDesc = sNewDesc;
     }
 
-    virtual SwAccessibleTableData_Impl* CreateNewTableData(); // #i77106#
+    // --> OD 2007-06-28 #i77106#
+    virtual SwAccessibleTableData_Impl* CreateNewTableData();
+    // <--
 
     // force update of table data
     void UpdateTableData();
@@ -88,11 +90,11 @@ protected:
     // Is table data evailable?
     sal_Bool HasTableData() const { return (mpTableData != 0); }
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
-
 public:
 
     SwAccessibleTable( SwAccessibleMap* pInitMap, const SwTabFrm* pTableFrm );
+
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //=====  XInterface  ======================================================
 
@@ -116,7 +118,7 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    /// Return this object's description.
+    ///	Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException);
@@ -193,13 +195,13 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return whether the specified service is supported by this class.
+    /**	Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
         supportsService (const ::rtl::OUString& sServiceName)
@@ -251,7 +253,7 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
 
-    // index has to be treated as global child index.
+    // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
     virtual void SAL_CALL deselectAccessibleChild(
         sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
@@ -266,7 +268,8 @@ inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()
     return *mpTableData;
 }
 
-// #i77106# - subclass to represent table column headers
+// --> OD 2007-06-28 #i77106#
+// subclass to represent table column headers
 class SwAccessibleTableColHeaders : public SwAccessibleTable
 {
 protected:
@@ -275,11 +278,12 @@ protected:
     {}
 
     virtual SwAccessibleTableData_Impl* CreateNewTableData();
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
 
     SwAccessibleTableColHeaders( SwAccessibleMap *pMap, const SwTabFrm *pTabFrm );
+
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //=====  XInterface  ======================================================
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include "svtools/genericunodialog.hxx"
-#include <svtools/addresstemplate.hxx>
-#include <comphelper/extract.hxx>
+#include "addresstemplate.hxx"
+#include <cppuhelper/extract.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -44,8 +44,8 @@ namespace svt
 {
 // .......................................................................
 
-#define UNODIALOG_PROPERTY_ID_ALIASES       100
-#define UNODIALOG_PROPERTY_ALIASES          "FieldMapping"
+#define UNODIALOG_PROPERTY_ID_ALIASES		100
+#define UNODIALOG_PROPERTY_ALIASES			"FieldMapping"
 
     using namespace com::sun::star::uno;
     using namespace com::sun::star::lang;
@@ -62,10 +62,10 @@ namespace svt
             ,public ::comphelper::OPropertyArrayUsageHelper< OAddressBookSourceDialogUno >
     {
     protected:
-        Sequence< AliasProgrammaticPair >   m_aAliases;
+        Sequence< AliasProgrammaticPair >	m_aAliases;
         Reference< XDataSource >            m_xDataSource;
         ::rtl::OUString                     m_sDataSourceName;
-        ::rtl::OUString                     m_sTable;
+        ::rtl::OUString						m_sTable;
 
     protected:
         OAddressBookSourceDialogUno(const Reference< XMultiServiceFactory >& _rxORB);
@@ -93,7 +93,7 @@ namespace svt
 
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog* createDialog(Window* _pParent);
+        virtual Dialog*	createDialog(Window* _pParent);
 
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
 
@@ -113,7 +113,7 @@ namespace svt
     OAddressBookSourceDialogUno::OAddressBookSourceDialogUno(const Reference< XMultiServiceFactory >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
-        registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_ALIASES)), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
+        registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_ALIASES), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
             &m_aAliases, getCppuType(&m_aAliases));
     }
 
@@ -139,7 +139,7 @@ namespace svt
     //-------------------------------------------------------------------------
     ::rtl::OUString OAddressBookSourceDialogUno::getImplementationName_Static() throw(RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.OAddressBookSourceDialogUno" ));
+        return ::rtl::OUString::createFromAscii("com.sun.star.comp.svtools.OAddressBookSourceDialogUno");
     }
 
     //-------------------------------------------------------------------------
@@ -152,7 +152,7 @@ namespace svt
     ::comphelper::StringSequence OAddressBookSourceDialogUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.AddressBookSourceDialog" ));
+        aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.ui.AddressBookSourceDialog");
         return aSupported;
     }
 
@@ -228,7 +228,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------
-    Dialog* OAddressBookSourceDialogUno::createDialog(Window* _pParent)
+    Dialog*	OAddressBookSourceDialogUno::createDialog(Window* _pParent)
     {
         if ( m_xDataSource.is() && m_sTable.getLength() )
             return new AddressBookSourceDialog(_pParent, m_aContext.getLegacyServiceFactory(), m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases );
@@ -237,7 +237,7 @@ namespace svt
     }
 
 // .......................................................................
-}   // namespace svt
+}	// namespace svt
 // .......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

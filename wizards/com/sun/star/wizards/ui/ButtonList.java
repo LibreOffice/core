@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,17 +34,16 @@ import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XItemEventBroadcaster;
 import com.sun.star.awt.XItemListener;
+// import com.sun.star.awt.XView;
 import com.sun.star.awt.XWindow;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.IRenderer;
 import com.sun.star.wizards.common.PropertySetHelper;
-import com.sun.star.wizards.common.PropertyNames;
+// import com.sun.star.wizards.ui.event.*;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
-import com.sun.star.wizards.common.HelpIds;
-import com.sun.star.wizards.common.PropertyNames;
 
 /**
  *
@@ -94,7 +93,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     {
         m_aControlName = _sName;
     }
-
+    
     /** Setter for property m_aButtonSize.
      * @param imageSize  New value of property m_aButtonSize.
      */
@@ -122,15 +121,15 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         lblImageText = dialog.insertLabel(m_aControlName + "_imageText",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT,
-                    PropertyNames.PROPERTY_HELPURL,
-                    PropertyNames.PROPERTY_LABEL,
-                    PropertyNames.PROPERTY_POSITION_X,
-                    PropertyNames.PROPERTY_POSITION_Y,
-                    PropertyNames.PROPERTY_STEP,
-                    PropertyNames.PROPERTY_TABINDEX,
+                    "Height",
+                    "HelpURL",
+                    "Label",
+                    "PositionX",
+                    "PositionY",
+                    "Step",
+                    "TabIndex",
                     "Tabstop",
-                    PropertyNames.PROPERTY_WIDTH
+                    "Width"
                 },
                 new Object[]
                 {
@@ -150,14 +149,14 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         {
             final String[] pNames1 = new String[]
             {
-                PropertyNames.PROPERTY_HEIGHT,
-                PropertyNames.PROPERTY_HELPURL,
-                PropertyNames.PROPERTY_POSITION_X,
-                PropertyNames.PROPERTY_POSITION_Y,
-                PropertyNames.PROPERTY_STEP,
-                PropertyNames.PROPERTY_TABINDEX,
+                "Height",
+                "HelpURL",
+                "PositionX",
+                "PositionY",
+                "Step",
+                "TabIndex",
                 "Tabstop",
-                PropertyNames.PROPERTY_WIDTH
+                "Width"
             };
 
             final Integer btnSize = Integer.valueOf(14);
@@ -166,7 +165,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             btnBack = dialog.insertButton(m_aControlName + "_btnBack", "prevPage", this, pNames1, new Object[]
                     {
                         btnSize,
-                        HelpIds.getHelpIdString(helpURL++),
+                        "HID:" + helpURL++,
                         Integer.valueOf(pos.Width),
                         Integer.valueOf(pos.Height + (m_aButtonSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                         step,
@@ -178,7 +177,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             btnNext = dialog.insertButton(m_aControlName + "_btnNext", "nextPage", this, pNames1, new Object[]
                     {
                         btnSize,
-                        HelpIds.getHelpIdString(helpURL++),
+                        "HID:" + helpURL++,
                         Integer.valueOf(pos.Width + (m_aButtonSize.Width + gap.Width) * cols + gap.Width - btnSize.intValue() + 1),
                         Integer.valueOf(pos.Height + (m_aButtonSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                         step,
@@ -200,8 +199,8 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                     });
 
             Helper.setUnoPropertyValue(getModel(lblCounter), "Align", new Short((short) 1));
-            Helper.setUnoPropertyValue(getModel(btnBack), PropertyNames.PROPERTY_LABEL, "<");
-            Helper.setUnoPropertyValue(getModel(btnNext), PropertyNames.PROPERTY_LABEL, ">");
+            Helper.setUnoPropertyValue(getModel(btnBack), "Label", "<");
+            Helper.setUnoPropertyValue(getModel(btnNext), "Label", ">");
 
 
         }
@@ -240,24 +239,24 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                 {
                     /* "Border", */
                     /* "BackgroundColor", */
-                    PropertyNames.PROPERTY_HEIGHT,
-                    PropertyNames.PROPERTY_HELPURL,
-                    /* PropertyNames.PROPERTY_LABEL, */
-                    PropertyNames.PROPERTY_POSITION_X,
-                    PropertyNames.PROPERTY_POSITION_Y,
+                    "Height",
+                    "HelpURL",
+                    /* "Label", */
+                    "PositionX",
+                    "PositionY",
                     /* "ScaleImage", */
-                    PropertyNames.PROPERTY_STEP,
-                    PropertyNames.PROPERTY_TABINDEX,
+                    "Step",
+                    "TabIndex",
                     "Tabstop",
                     "Toggle",
-                    PropertyNames.PROPERTY_WIDTH
+                    "Width"
                 },
                 new Object[]
                 {
                     /* Short.valueOf((short) 1), */ /* NO_BORDER, */
                     /* BACKGROUND_COLOR, */
                     m_aButtonHeight,
-                    HelpIds.getHelpIdString(helpURL++),
+                    "HID:" + helpURL++,
                     /* "Test", */
                     Integer.valueOf(nButtonX),
                     Integer.valueOf(nButtonY),
@@ -308,16 +307,16 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             {
                 if (oResources.length == 1)
                 {
-                    Helper.setUnoPropertyValue(m_aButtons[i].getModel(), PropertyNames.PROPERTY_IMAGEURL, (String) oResources[0]);
+                    Helper.setUnoPropertyValue(m_aButtons[i].getModel(), "ImageURL", (String) oResources[0]);
                 }
                 else if (oResources.length == 2)
                 {
                     oUnoDialog.getPeerConfiguration().setImageUrl(m_aButtons[i].getModel(), oResources[0], oResources[1]);
-//                    Helper.setUnoPropertyValue(m_aButtons[i].getModel(), PropertyNames.PROPERTY_IMAGEURL, oResources[0]);
+//                    Helper.setUnoPropertyValue(m_aButtons[i].getModel(), "ImageURL", oResources[0]);
                 }
                 boolean bTabStop = Boolean.TRUE; // focusable ? Boolean.TRUE : Boolean.FALSE;
                 Helper.setUnoPropertyValue(m_aButtons[i].getModel(), "Tabstop", bTabStop);
-                // Object aEnabled = Helper.getUnoPropertyValue(m_aButtons[i].getModel(), PropertyNames.PROPERTY_ENABLED);
+                // Object aEnabled = Helper.getUnoPropertyValue(m_aButtons[i].getModel(), "Enabled");
                 if (refreshOverNull)
                 {
                     setVisible(m_aButtons[i], true);
@@ -330,7 +329,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
     private void refreshCounterText()
     {
-        Helper.setUnoPropertyValue(getModel(lblCounter), PropertyNames.PROPERTY_LABEL, counterRenderer.render(new Counter(pageStart + 1, pageEnd(), listModel.getSize())));
+        Helper.setUnoPropertyValue(getModel(lblCounter), "Label", counterRenderer.render(new Counter(pageStart + 1, pageEnd(), listModel.getSize())));
     }
 
     private int pageEnd()
@@ -355,7 +354,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     }
 
     /**
-     *
+     * 
      * @param i
      * @return the Object in the list model corresponding to the given image index.
      */
@@ -373,7 +372,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     }
 
     /**
-     *
+     * 
      * @param i
      * @return the index in the listModel for the given image index.
      */
@@ -452,7 +451,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
      */
     private void fireItemSelected()
     {
-//      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0,
+//      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0, 
 //          getSelectedObject(), java.awt.event.ItemEvent.SELECTED);
         java.util.ArrayList list;
         synchronized(this)
@@ -676,7 +675,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     {
         Object item = m_nCurrentSelection >= 0 ? getListModel().getElementAt(m_nCurrentSelection) : null;
         final String sText = " " + renderer.render(item);
-        Helper.setUnoPropertyValue(getModel(lblImageText), PropertyNames.PROPERTY_LABEL, sText);
+        Helper.setUnoPropertyValue(getModel(lblImageText), "Label", sText);
     }
 
     /**
@@ -725,7 +724,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
     private void enable(Object control, Boolean enable)
     {
-        Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_ENABLED, enable);
+        Helper.setUnoPropertyValue(getModel(control), "Enabled", enable);
     }
 
     private Object getModel(Object control)
@@ -756,9 +755,9 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     {
 
         /**
-         *
+         * 
          * @param listItem
-         * @return two resource ids for an image referenced in the imaglist resourcefile of the
+         * @return two resource ids for an image referenced in the imaglist resourcefile of the 
          * wizards project; The second one of them is designed to be used for High Contrast Mode.
          */
         public Object[] getImageUrls(Object listItem);
@@ -860,12 +859,12 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                 if (i == m_nCurrentSelection)
                 {
                     final short one = 1;
-                    aHelper.setPropertyValueDontThrow(PropertyNames.PROPERTY_STATE, Short.valueOf(one));
+                    aHelper.setPropertyValueDontThrow("State", Short.valueOf(one));
                 }
                 else
                 {
                     final short zero = 0;
-                    aHelper.setPropertyValueDontThrow(PropertyNames.PROPERTY_STATE, Short.valueOf(zero));
+                    aHelper.setPropertyValueDontThrow("State", Short.valueOf(zero));
                 }
             }
         }
@@ -883,15 +882,15 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         XControlModel xModel = (XControlModel)UnoDialog2.getModel(actionEvent.Source);
         PropertySetHelper aHelper = new PropertySetHelper(xModel);
 
-        int nState = aHelper.getPropertyValueAsInteger(PropertyNames.PROPERTY_STATE, -1);
+        int nState = aHelper.getPropertyValueAsInteger("State", -1);
         if (nState == 0)
         {
             // this will avoid a wrong state, if already pressed.
-            aHelper.setPropertyValueDontThrow(PropertyNames.PROPERTY_STATE, Short.valueOf((short)1));
+            aHelper.setPropertyValueDontThrow("State", Short.valueOf((short)1));
         }
 
         // check which Button is pressed.
-        String sControlName = aHelper.getPropertyValueAsString(PropertyNames.PROPERTY_NAME, "");
+        String sControlName = aHelper.getPropertyValueAsString("Name", "");
         final String sButton = sControlName.substring(7 + m_aControlName.length());
         int nButton = new Integer(sButton).intValue();
 

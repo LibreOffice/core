@@ -32,10 +32,16 @@ TARGET=cosv_storage
 
 ENABLE_EXCEPTIONS=true
 
+
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
 .INCLUDE : $(PRJ)$/source$/fullcpp.mk
+
+
+
 
 # --- Files --------------------------------------------------------
 
@@ -48,6 +54,16 @@ OBJFILES= \
     $(OBJ)$/ploc_dir.obj    \
     $(OBJ)$/plocroot.obj
 
+#SLOFILES= \
+#	$(SLO)$/file.obj 		\
+#	$(SLO)$/csfileim.obj 	\
+#	$(SLO)$/memstorg.obj
+
+
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+
+

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include "sot/filelist.hxx"
-#include "sot/clsids.hxx"
+#include "filelist.hxx"
+#include "clsids.hxx"
 
 #include <tools/globname.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -47,14 +47,14 @@ using namespace::com::sun::star::datatransfer;
 
 struct SotAction_Impl
 {
-    sal_uLong   nFormatId;          // Clipboard Id
-    sal_uInt16  nAction;            // Action Id
-    sal_uInt8   nContextCheckId;    // additional check of content in clipboard
+    ULONG 	nFormatId;			// Clipboard Id
+    USHORT	nAction;			// Action Id
+    BYTE 	nContextCheckId;	// additional check of content in clipboard
 };
 
 
 // define a context check Id for every formatid
-#define FILEGRPDSC_ONLY_URL     1
+#define FILEGRPDSC_ONLY_URL		1
 
 /*
     Fuer jedes Ziel existiert in der Tabelle genau ein SotDestinationEntry_Impl.
@@ -69,11 +69,11 @@ struct SotAction_Impl
 
 struct SotDestinationEntry_Impl
 {
-    sal_uInt16                  nDestination;
-    const SotAction_Impl*   aDefaultActions;
-    const SotAction_Impl*   aMoveActions;
-    const SotAction_Impl*   aCopyActions;
-    const SotAction_Impl*   aLinkActions;
+    USHORT					nDestination;
+    const SotAction_Impl*	aDefaultActions;
+    const SotAction_Impl*	aMoveActions;
+    const SotAction_Impl*	aCopyActions;
+    const SotAction_Impl*	aLinkActions;
 };
 
 
@@ -93,14 +93,14 @@ struct SotDestinationEntry_Impl
 */
 
 #define EXCHG_EMPYT_ARRAY                                                 \
-static SotAction_Impl const aEmptyArr[] =                         \
+static SotAction_Impl __READONLY_DATA aEmptyArr[] =			              \
     {                                                                     \
         { 0xffff, 0, 0 }                                                  \
     };
 
 /*  */
 #define EXCHG_DEST_DOC_OLEOBJ_ARRAY                                         \
-static SotAction_Impl const aEXCHG_DEST_DOC_OLEOBJ_Def[] =        \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_OLEOBJ_Def[] =        \
     {                                                                       \
         { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_LINK, 0 },              \
         { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_LINK, 0 },          \
@@ -111,12 +111,12 @@ static SotAction_Impl const aEXCHG_DEST_DOC_OLEOBJ_Def[] =        \
         { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },       \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_OLEOBJ_Move[] =       \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_OLEOBJ_Move[] =       \
     {                                                                       \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP, 0 },        \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_OLEOBJ_Link[] =       \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_OLEOBJ_Link[] =       \
     {                                                                       \
         { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },       \
         { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },   \
@@ -131,7 +131,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_OLEOBJ_Link[] =       \
 
 /*  */
 #define EXCHG_DEST_CHARTDOC_OLEOBJ_ARRAY                                    \
-static SotAction_Impl const aEXCHG_DEST_CHARTDOC_OLEOBJ_Def[] =   \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_CHARTDOC_OLEOBJ_Def[] =   \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_LINK, 0 },                     \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK, 0 },                          \
@@ -142,12 +142,12 @@ static SotAction_Impl const aEXCHG_DEST_CHARTDOC_OLEOBJ_Def[] =   \
         { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_LINK, 0 },       \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_CHARTDOC_OLEOBJ_Move[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_CHARTDOC_OLEOBJ_Move[] =  \
     {                                                                       \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP, 0 },        \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_CHARTDOC_OLEOBJ_Link[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_CHARTDOC_OLEOBJ_Link[] =  \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },      \
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_INTERACTIVE, 0 },           \
@@ -162,7 +162,7 @@ static SotAction_Impl const aEXCHG_DEST_CHARTDOC_OLEOBJ_Link[] =  \
 
 /*  */
 #define EXCHG_DEST_DOC_TEXTFRAME_ARRAY                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Def[] =     \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_Def[] =     \
     {                                                                       \
         { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
@@ -173,8 +173,8 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Def[] =     \
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
         { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
         { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_COPY, 0 },                   \
-        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_COPY, 0 },               \
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },           \
+        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_COPY, 0 },       		\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },   		\
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
         { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_COPY, 0 },       \
@@ -189,7 +189,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Def[] =     \
         { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_MOVE, 0 },                     \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Move[] =    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_Move[] =    \
     {                                                                       \
         { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_MOVE, 0 },                   \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_MOVE, 0 },\
@@ -203,7 +203,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Move[] =    \
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },   		\
         { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -213,7 +213,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Move[] =    \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Copy[] =    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_Copy[] =    \
     {                                                                       \
         { SOT_FORMATSTR_ID_SBA_DATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },        \
         { SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },   \
@@ -232,7 +232,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Copy[] =    \
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },   		\
         { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
@@ -244,7 +244,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Copy[] =    \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Link[] =    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_Link[] =    \
     {                                                                       \
         { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_LINK, 0 },                   \
         { SOT_FORMATSTR_ID_SBA_DATAEXCHANGE, EXCHG_IN_ACTION_LINK, 0 },        \
@@ -265,7 +265,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Link[] =    \
     };
 
 #define EXCHG_DEST_DOC_TEXTFRAME_WEB_ARRAY                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_WEB_Def[] =     \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_WEB_Def[] =     \
     {                                                                       \
         { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
         { SOT_FORMAT_BITMAP, EXCHG_IN_ACTION_COPY, 0 },                        \
@@ -275,8 +275,8 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_WEB_Def[] =     \
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
         { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
         { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_COPY, 0 },                   \
-        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_COPY, 0 },               \
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },           \
+        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_COPY, 0 },       		\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },   		\
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
         { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_COPY, 0 },       \
@@ -286,7 +286,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_WEB_Def[] =     \
         { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_MOVE, 0 },                     \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_WEB_Move[] =    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_WEB_Move[] =    \
     {                                                                       \
         { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_MOVE, 0 },                   \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_MOVE, 0 },\
@@ -296,7 +296,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_WEB_Move[] =    \
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },   		\
         { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -304,7 +304,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_WEB_Move[] =    \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_WEB_Copy[] =    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_WEB_Copy[] =    \
     {                                                                       \
         { SOT_FORMATSTR_ID_SBA_DATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },        \
         { SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },   \
@@ -319,7 +319,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_WEB_Copy[] =    \
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },   		\
         { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
@@ -329,7 +329,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_WEB_Copy[] =    \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_WEB_Link[] =    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_WEB_Link[] =    \
     {                                                                       \
         { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_LINK, 0 },                   \
         { SOT_FORMATSTR_ID_SOLK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -344,7 +344,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_WEB_Link[] =    \
 
 /*  */
 #define EXCHG_DEST_DOC_GRAPHOBJ_ARRAY                                       \
-static SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Def[] =      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPHOBJ_Def[] =      \
     {                                                                       \
         { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
@@ -361,7 +361,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Def[] =      \
         { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Move[] =     \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPHOBJ_Move[] =     \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -374,7 +374,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Move[] =     \
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Copy[] =     \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPHOBJ_Copy[] =     \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -387,7 +387,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Copy[] =     \
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Link[] =     \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPHOBJ_Link[] =     \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -403,7 +403,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Link[] =     \
 
 /*  */
 #define EXCHG_DEST_DOC_LNKD_GRAPHOBJ_ARRAY                                  \
-static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Def[] = \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Def[] = \
     {                                                                       \
         { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
@@ -420,7 +420,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Def[] = \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Move[] =\
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Move[] =\
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -433,7 +433,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Move[] =\
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Copy[] =\
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Copy[] =\
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -446,7 +446,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Copy[] =\
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Link[] =\
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Link[] =\
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -462,7 +462,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Link[] =\
 
 /*  */
 #define EXCHG_DEST_DOC_GRAPH_W_IMAP_ARRAY                                   \
-static SotAction_Impl const aEXCHG_DEST_DOC_GRAPH_W_IMAP_Def[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPH_W_IMAP_Def[] =  \
     {                                                                       \
         { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
@@ -480,7 +480,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GRAPH_W_IMAP_Def[] =  \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_GRAPH_W_IMAP_Move[] = \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPH_W_IMAP_Move[] = \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB| EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -493,7 +493,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GRAPH_W_IMAP_Move[] = \
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_GRAPH_W_IMAP_Copy[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPH_W_IMAP_Copy[] =  \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -506,7 +506,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GRAPH_W_IMAP_Copy[] =  \
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_GRAPH_W_IMAP_Link[] = \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GRAPH_W_IMAP_Link[] = \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -522,7 +522,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GRAPH_W_IMAP_Link[] = \
 
 /*  */
 #define EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_ARRAY                              \
-static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Def[] =\
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Def[] =\
     {                                                                       \
         { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
@@ -540,7 +540,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Def[] =\
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Move[] =\
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Move[] =\
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB| EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -553,7 +553,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Move[] =\
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Copy[] =\
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Copy[] =\
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -566,7 +566,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Copy[] =\
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                           \
     };                                                                       \
-static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Link[] =\
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Link[] =\
     {                                                                        \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -583,7 +583,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Link[] =\
 
 /*  */
 #define EXCHG_DEST_DOC_IMAPREGION_ARRAY                                     \
-static SotAction_Impl const aEXCHG_DEST_DOC_IMAPREGION_Def[] =    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_IMAPREGION_Def[] =    \
     {                                                                       \
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
@@ -591,7 +591,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_IMAPREGION_Def[] =    \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_IMAPREGION_Copy[] =   \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_IMAPREGION_Copy[] =   \
     {                                                                       \
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
@@ -603,7 +603,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_IMAPREGION_Copy[] =   \
 
 /*  */
 #define EXCHG_DEST_DOC_DRAWOBJ_ARRAY                                        \
-static SotAction_Impl const aEXCHG_DEST_DOC_DRAWOBJ_Def[] =       \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_DRAWOBJ_Def[] =       \
     {                                                                       \
         { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
@@ -620,7 +620,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_DRAWOBJ_Def[] =       \
         { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_DRAWOBJ_Copy[] =      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_DRAWOBJ_Copy[] =      \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -633,7 +633,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_DRAWOBJ_Copy[] =      \
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_DRAWOBJ_Move[] =      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_DRAWOBJ_Move[] =      \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -646,7 +646,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_DRAWOBJ_Move[] =      \
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_DRAWOBJ_Link[] =      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_DRAWOBJ_Link[] =      \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -663,7 +663,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_DRAWOBJ_Link[] =      \
 
 /*  */
 #define EXCHG_DEST_DOC_URLBUTTON_ARRAY                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_URLBUTTON_Def[] =     \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_URLBUTTON_Def[] =     \
     {                                                                       \
         { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
@@ -676,14 +676,14 @@ static SotAction_Impl const aEXCHG_DEST_DOC_URLBUTTON_Def[] =     \
         { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_URLBUTTON_Move[] =    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_URLBUTTON_Move[] =    \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_URLBUTTON_Copy[] =    \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_URLBUTTON_Copy[] =    \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },      \
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },            \
@@ -700,7 +700,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_URLBUTTON_Copy[] =    \
 
 /*  */
 #define EXCHG_DEST_DOC_URLFIELD_ARRAY                                       \
-static SotAction_Impl const aEXCHG_DEST_DOC_URLFIELD_Def[] =      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_URLFIELD_Def[] =      \
     {                                                                       \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
@@ -708,7 +708,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_URLFIELD_Def[] =      \
         { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_URLFIELD_Copy[] =     \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_URLFIELD_Copy[] =     \
     {                                                                       \
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
@@ -716,7 +716,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_URLFIELD_Copy[] =     \
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                  \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_URLFIELD_Link[] =     \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_URLFIELD_Link[] =     \
     {                                                                       \
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_HYPERLINK, 0 },        \
         { 0xffff, 0, 0 }                                                          \
@@ -724,7 +724,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_URLFIELD_Link[] =     \
 
 /*  */
 #define EXCHG_DEST_DOC_GROUPOBJ_ARRAY                                       \
-static SotAction_Impl const aEXCHG_DEST_DOC_GROUPOBJ_Def[] =      \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GROUPOBJ_Def[] =      \
     {                                                                       \
         { SOT_FORMAT_GDIMETAFILE, EXCHG_IN_ACTION_COPY, 0 },                   \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_IN_ACTION_COPY, 0 },                 \
@@ -741,7 +741,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GROUPOBJ_Def[] =      \
         { SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, EXCHG_IN_ACTION_COPY, 0 },       \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_GROUPOBJ_Move[] =     \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GROUPOBJ_Move[] =     \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_REPLACE_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_REPLACE_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -754,7 +754,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GROUPOBJ_Move[] =     \
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_REPLACE_GRAPH | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_GROUPOBJ_Copy[] =     \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GROUPOBJ_Copy[] =     \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_INSERT_DRAWOBJ | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_INSERT_SVXB| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -767,7 +767,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GROUPOBJ_Copy[] =     \
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_DOC_GROUPOBJ_Link[] =     \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_GROUPOBJ_Link[] =     \
     {                                                                       \
         { SOT_FORMATSTR_ID_DRAWING, EXCHG_OUT_ACTION_GET_ATTRIBUTES | EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_SVXB, EXCHG_OUT_ACTION_GET_ATTRIBUTES| EXCHG_OUT_ACTION_FLAG_FILL | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -784,7 +784,7 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GROUPOBJ_Link[] =     \
 
 /*  */
 #define EXCHG_DEST_SWDOC_FREE_AREA_ARRAY                                    \
-static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Def[] =   \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_Def[] =   \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
@@ -793,7 +793,7 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Def[] =   \
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY, 0 },                           \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_IN_ACTION_COPY, 0 },                    \
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },           \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },   		\
         { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
@@ -812,7 +812,7 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Def[] =   \
         { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_MOVE, 0 },                     \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Move[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_Move[] =  \
     {                                                                       \
         { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_MOVE, 0 },                   \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_MOVE, 0 },\
@@ -835,7 +835,7 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Move[] =  \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Copy[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_Copy[] =  \
     {                                                                       \
         { SOT_FORMATSTR_ID_SBA_DATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },        \
         { SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE, EXCHG_IN_ACTION_COPY, 0 },   \
@@ -854,7 +854,7 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Copy[] =  \
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                           \
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },   		\
         { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },              \
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
@@ -867,7 +867,7 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Copy[] =  \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Link[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_Link[] =  \
     {                                                                       \
         { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_LINK, 0 },                   \
         { SOT_FORMATSTR_ID_SBA_DATAEXCHANGE, EXCHG_IN_ACTION_LINK, 0 },        \
@@ -888,7 +888,7 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Link[] =  \
     };
 
 #define EXCHG_DEST_SWDOC_FREE_AREA_WEB_ARRAY                                    \
-static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Def[] =   \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Def[] =   \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
@@ -898,7 +898,7 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Def[] =   \
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY, 0 },                           \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_IN_ACTION_COPY, 0 },                    \
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },           \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },   		\
         { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
@@ -910,7 +910,7 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Def[] =   \
         { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_MOVE, 0 },                     \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Move[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Move[] =  \
     {                                                                       \
         { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_MOVE, 0 },                   \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_MOVE, 0 },\
@@ -927,7 +927,7 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Move[] =  \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Copy[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Copy[] =  \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },\
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -938,7 +938,7 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Copy[] =  \
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                           \
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },   		\
         { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },              \
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
@@ -949,7 +949,7 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Copy[] =  \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Link[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Link[] =  \
     {                                                                       \
         { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_LINK, 0 },                   \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_LINK, 0 },        \
@@ -965,7 +965,7 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Link[] =  \
 
 /*  */
 #define EXCHG_DEST_SCDOC_FREE_AREA_ARRAY                                    \
-static SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Def[] =   \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SCDOC_FREE_AREA_Def[] =   \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
@@ -989,7 +989,7 @@ static SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Def[] =   \
         { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_MOVE, 0 },                     \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Move[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SCDOC_FREE_AREA_Move[] =  \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_MOVE, 0 },\
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -1013,7 +1013,7 @@ static SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Move[] =  \
         { SOT_FORMATSTR_ID_BIFF_8, EXCHG_IN_ACTION_MOVE | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                  \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Copy[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SCDOC_FREE_AREA_Copy[] =  \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },\
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -1040,7 +1040,7 @@ static SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Copy[] =  \
         { SOT_FORMATSTR_ID_BIFF_8, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                  \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Link[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SCDOC_FREE_AREA_Link[] =  \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_LINK, 0 },        \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
@@ -1058,7 +1058,7 @@ static SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Link[] =  \
 
 /*  */
 #define EXCHG_DEST_SDDOC_FREE_AREA_ARRAY                                    \
-static SotAction_Impl const aEXCHG_DEST_SDDOC_FREE_AREA_Def[] =   \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SDDOC_FREE_AREA_Def[] =   \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
@@ -1082,7 +1082,7 @@ static SotAction_Impl const aEXCHG_DEST_SDDOC_FREE_AREA_Def[] =   \
         { SOT_FORMATSTR_ID_LINK, EXCHG_IN_ACTION_MOVE, 0 },                    \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_SDDOC_FREE_AREA_Move[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SDDOC_FREE_AREA_Move[] =  \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_MOVE, 0 },\
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -1103,7 +1103,7 @@ static SotAction_Impl const aEXCHG_DEST_SDDOC_FREE_AREA_Move[] =  \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_SDDOC_FREE_AREA_Copy[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SDDOC_FREE_AREA_Copy[] =  \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },\
         { SOT_FORMAT_FILE, EXCHG_OUT_ACTION_INSERT_FILE | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -1127,7 +1127,7 @@ static SotAction_Impl const aEXCHG_DEST_SDDOC_FREE_AREA_Copy[] =  \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },        \
         { 0xffff, 0, 0 }                                                          \
     };                                                                      \
-static SotAction_Impl const aEXCHG_DEST_SDDOC_FREE_AREA_Link[] =  \
+static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SDDOC_FREE_AREA_Link[] =  \
     {                                                                       \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_LINK, 0 },        \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_LINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },             \
@@ -1145,16 +1145,16 @@ static SotAction_Impl const aEXCHG_DEST_SDDOC_FREE_AREA_Link[] =  \
 
 /*  */
 
-#define IMPL_DATA_ARRAY_1                                                 \
+#define IMPL_DATA_ARRAY_1				                                  \
 EXCHG_EMPYT_ARRAY                                                         \
 EXCHG_DEST_DOC_OLEOBJ_ARRAY                                               \
 EXCHG_DEST_CHARTDOC_OLEOBJ_ARRAY                                          \
 EXCHG_DEST_DOC_TEXTFRAME_ARRAY                                            \
 EXCHG_DEST_DOC_GRAPHOBJ_ARRAY                                             \
-EXCHG_DEST_DOC_LNKD_GRAPHOBJ_ARRAY                                        \
+EXCHG_DEST_DOC_LNKD_GRAPHOBJ_ARRAY										  \
 EXCHG_DEST_DOC_TEXTFRAME_WEB_ARRAY
 
-#define IMPL_DATA_ARRAY_2                                                 \
+#define IMPL_DATA_ARRAY_2				                                  \
 EXCHG_DEST_DOC_GRAPH_W_IMAP_ARRAY                                         \
 EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_ARRAY                                    \
 EXCHG_DEST_DOC_IMAPREGION_ARRAY                                           \
@@ -1165,10 +1165,10 @@ EXCHG_DEST_DOC_GROUPOBJ_ARRAY                                             \
 EXCHG_DEST_SWDOC_FREE_AREA_ARRAY                                          \
 EXCHG_DEST_SCDOC_FREE_AREA_ARRAY                                          \
 EXCHG_DEST_SDDOC_FREE_AREA_ARRAY                                          \
-EXCHG_DEST_SWDOC_FREE_AREA_WEB_ARRAY                                      \
+EXCHG_DEST_SWDOC_FREE_AREA_WEB_ARRAY									  \
 
-#define IMPL_DATA_ARRAY_3                                                 \
-static SotDestinationEntry_Impl const aDestinationArray[] =     \
+#define IMPL_DATA_ARRAY_3				                                  \
+static SotDestinationEntry_Impl __READONLY_DATA aDestinationArray[] =     \
 {                                                                         \
     { EXCHG_DEST_DOC_OLEOBJ,                                              \
         aEXCHG_DEST_DOC_OLEOBJ_Def,                                       \
@@ -1260,18 +1260,18 @@ static SotDestinationEntry_Impl const aDestinationArray[] =     \
         aEXCHG_DEST_SDDOC_FREE_AREA_Copy,                                 \
         aEXCHG_DEST_SDDOC_FREE_AREA_Link                                  \
     },                                                                    \
-    { EXCHG_DEST_DOC_TEXTFRAME_WEB,                                       \
+    { EXCHG_DEST_DOC_TEXTFRAME_WEB,								  		  \
         aEXCHG_DEST_DOC_TEXTFRAME_WEB_Def,                                \
         aEXCHG_DEST_DOC_TEXTFRAME_WEB_Move,                               \
         aEXCHG_DEST_DOC_TEXTFRAME_WEB_Copy,                               \
-        aEXCHG_DEST_DOC_TEXTFRAME_WEB_Link                                \
-    },                                                                    \
-    { EXCHG_DEST_SWDOC_FREE_AREA_WEB,                                     \
-        aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Def,                              \
+        aEXCHG_DEST_DOC_TEXTFRAME_WEB_Link	                              \
+    },																	  \
+    { EXCHG_DEST_SWDOC_FREE_AREA_WEB,									  \
+        aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Def,						  	  \
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Move,                             \
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Copy,                             \
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Link                              \
-    },                                                                    \
+    },																	  \
     {                                                                     \
         0xffff, 0, 0, 0, 0                                                \
     }                                                                     \
@@ -1284,11 +1284,11 @@ static SotDestinationEntry_Impl const aDestinationArray[] =     \
 // - new style GetExchange methods -
 // ---------------------------------
 
-sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_uLong nId )
+sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, ULONG nId )
 {
-    DataFlavorExVector::iterator    aIter( ( (DataFlavorExVector&) rDataFlavorExVector ).begin() );
-    DataFlavorExVector::iterator    aEnd( ( (DataFlavorExVector&) rDataFlavorExVector ).end() );
-    sal_Bool                        bRet = sal_False;
+    DataFlavorExVector::iterator	aIter( ( (DataFlavorExVector&) rDataFlavorExVector ).begin() );
+    DataFlavorExVector::iterator	aEnd( ( (DataFlavorExVector&) rDataFlavorExVector ).end() );
+    sal_Bool						bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -1304,14 +1304,14 @@ sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_u
 
 // -----------------------------------------------------------------------------
 
-static sal_Bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxTransferable, const SotAction_Impl&
+static BOOL CheckTransferableContext_Impl( const Reference< XTransferable >* pxTransferable, const SotAction_Impl&
 #ifdef WNT
 rEntry
 #endif
 )
 {
-    DataFlavor  aFlavor;
-    sal_Bool        bRet = sal_True;
+    DataFlavor	aFlavor;
+    BOOL		bRet = TRUE;
 
     try
     {
@@ -1324,9 +1324,9 @@ rEntry
             {
                 case FILEGRPDSC_ONLY_URL:
                 {
-                    bRet = sal_False;
+                    bRet = FALSE;
 
-                    if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILECONTENT, aFlavor ) &&
+                    if(	SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILECONTENT, aFlavor ) &&
                         (*pxTransferable)->isDataFlavorSupported( aFlavor ) &&
                         SotExchange::GetFormatDataFlavor( rEntry.nFormatId, aFlavor ) &&
                         (*pxTransferable)->isDataFlavorSupported( aFlavor ) )
@@ -1368,24 +1368,24 @@ rEntry
 
 // -----------------------------------------------------------------------------
 
-static sal_uInt16 GetTransferableAction_Impl(
+static USHORT GetTransferableAction_Impl(
                             const DataFlavorExVector& rDataFlavorExVector,
                              const SotAction_Impl* pArray,
-                            sal_uLong& rFormat,
-                            sal_uLong nOnlyTestFormat,
+                            ULONG& rFormat,
+                            ULONG nOnlyTestFormat,
                             const Reference< XTransferable >* pxTransferable )
 {
     try
     {
         if( rDataFlavorExVector.size() )
         {
-            DataFlavor              aFlavor;
-            const SotAction_Impl*   pArrayStart = pArray;
-            sal_uLong                   nId = pArray->nFormatId;
+            DataFlavor				aFlavor;
+            const SotAction_Impl*	pArrayStart = pArray;
+            ULONG					nId = pArray->nFormatId;
 
 #if OSL_DEBUG_LEVEL > 1
 // used for testing a specific format - change in the debugger the value
-    static sal_uLong nChkFormat = 0;
+    static ULONG nChkFormat = 0;
     if( nChkFormat )
     {
         for( ; 0xffff != pArray->nFormatId &&
@@ -1405,7 +1405,7 @@ static sal_uInt16 GetTransferableAction_Impl(
                 {
                     if( pxTransferable && (*pxTransferable).is() && ( SOT_FORMAT_FILE_LIST == rFormat ) )
                     {
-                        if( IsFormatSupported( rDataFlavorExVector, SOT_FORMAT_FILE ) )
+                        if(	IsFormatSupported( rDataFlavorExVector, SOT_FORMAT_FILE ) )
                         {
                             DataFlavor aFileListFlavor;
                             SotExchange::GetFormatDataFlavor( SOT_FORMAT_FILE_LIST, aFileListFlavor );
@@ -1413,9 +1413,9 @@ static sal_uInt16 GetTransferableAction_Impl(
 
                             if( aAny.hasValue() )
                             {
-                                Sequence< sal_Int8 >    aSeq; aAny >>= aSeq;
-                                SvMemoryStream          aMemStm( (void*) aSeq.getConstArray(), aSeq.getLength(), STREAM_READ );
-                                FileList                aFileList;
+                                Sequence< sal_Int8 >	aSeq; aAny >>= aSeq;
+                                SvMemoryStream			aMemStm( (void*) aSeq.getConstArray(), aSeq.getLength(), STREAM_READ );
+                                FileList				aFileList;
 
                                 aMemStm >> aFileList;
 
@@ -1455,13 +1455,13 @@ static sal_uInt16 GetTransferableAction_Impl(
 
 // -----------------------------------------------------------------------------
 
-sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorExVector,
-                                       sal_uInt16 nDestination,
-                                       sal_uInt16 nSourceOptions,
-                                       sal_uInt16 nUserAction,
-                                       sal_uLong& rFormat,
-                                       sal_uInt16& rDefaultAction,
-                                       sal_uLong nOnlyTestFormat,
+USHORT SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorExVector,
+                                       USHORT nDestination,
+                                       USHORT nSourceOptions,
+                                       USHORT nUserAction,
+                                       ULONG& rFormat,
+                                       USHORT& rDefaultAction,
+                                       ULONG nOnlyTestFormat,
                                        const Reference< XTransferable >* pxTransferable )
 {
     // hier wird jetzt die oben definierte Tabelle "implementiert"
@@ -1514,7 +1514,7 @@ sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavor
                         rFormat, nOnlyTestFormat, pxTransferable );
                     if ( nUserAction )
                         return nUserAction;
-                }
+                }        
                 rDefaultAction = (EXCHG_IN_ACTION_LINK & nSourceOptions);
                 if( rDefaultAction )
                 {
@@ -1569,11 +1569,11 @@ sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavor
 
 // -----------------------------------------------------------------------------
 
-sal_uInt16 SotExchange::GetExchangeAction(
+USHORT SotExchange::GetExchangeAction(
                         const Reference< XTransferable >& rxTransferable,
-                        sal_uInt16 nDestination, sal_uInt16 nSourceOptions,
-                        sal_uInt16 nUserAction, sal_uLong& rFormat,
-                        sal_uInt16& rDefaultAction, sal_uLong nOnlyTestFormat )
+                        USHORT nDestination, USHORT nSourceOptions,
+                        USHORT nUserAction, ULONG& rFormat,
+                        USHORT& rDefaultAction, ULONG nOnlyTestFormat )
 {
     DataFlavorExVector aVector;
 
@@ -1585,8 +1585,8 @@ sal_uInt16 SotExchange::GetExchangeAction(
 
             for( sal_Int32 i = 0; i < aFlavors.getLength(); i++ )
             {
-                DataFlavorEx        aFlavorEx;
-                const DataFlavor&   rFlavor = aFlavors[ i ];
+                DataFlavorEx		aFlavorEx;
+                const DataFlavor&	rFlavor = aFlavors[ i ];
 
                 aFlavorEx.MimeType = rFlavor.MimeType;
                 aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;
@@ -1626,12 +1626,12 @@ sal_uInt16 SotExchange::GetExchangeAction(
                                             nOnlyTestFormat, &rxTransferable ) );
 }
 
-sal_uInt16 SotExchange::IsChart(  const SvGlobalName& rName )
+USHORT SotExchange::IsChart(  const SvGlobalName& rName )
 {
-    sal_uInt16 nRet=0;
-//  if ( rName == SvGlobalName( SO3_SCH_CLASSID_8 ) )
-//      nRet = SOFFICE_FILEFORMAT_8;
-//  else
+    USHORT nRet=0;
+//	if ( rName == SvGlobalName( SO3_SCH_CLASSID_8 ) )
+//		nRet = SOFFICE_FILEFORMAT_8;
+//	else 
     if ( rName == SvGlobalName( SO3_SCH_CLASSID_60 ) )
         nRet = SOFFICE_FILEFORMAT_60;
     else if ( rName == SvGlobalName( SO3_SCH_CLASSID_50 ) )
@@ -1644,12 +1644,12 @@ sal_uInt16 SotExchange::IsChart(  const SvGlobalName& rName )
     return nRet;
 }
 
-sal_uInt16 SotExchange::IsMath(  const SvGlobalName& rName )
+USHORT SotExchange::IsMath(  const SvGlobalName& rName )
 {
-    sal_uInt16 nRet=0;
-//  if ( rName == SvGlobalName( SO3_SM_CLASSID_8 ) )
-//      nRet = SOFFICE_FILEFORMAT_8;
-//  else
+    USHORT nRet=0;
+//	if ( rName == SvGlobalName( SO3_SM_CLASSID_8 ) )
+//		nRet = SOFFICE_FILEFORMAT_8;
+//	else
     if ( rName == SvGlobalName( SO3_SM_CLASSID_60 ) )
         nRet = SOFFICE_FILEFORMAT_60;
     else if ( rName == SvGlobalName( SO3_SM_CLASSID_50 ) )

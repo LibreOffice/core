@@ -57,18 +57,23 @@
  * @file
  * single list.
  ************************************************************************/
-#ifndef     _LWPSLVLIST_HXX
-#define     _LWPSLVLIST_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-12 create and implement.
+ ************************************************************************/
 
-#include    "lwpobjstrm.hxx"
-#include    "lwpfilehdr.hxx"
-#include    "lwpobjid.hxx"
+#ifndef		_LWPSLVLIST_HXX
+#define		_LWPSLVLIST_HXX
+
+#include	"lwpobjstrm.hxx"
+#include	"lwpfilehdr.hxx"
+#include	"lwpobjid.hxx"
 
 class LwpSLVList
 {
 public:
     LwpSLVList(){}
-    LwpSLVList(LwpObjectStream* pStrm){Read(pStrm);}
+    LwpSLVList(LwpObjectStream* pStrm){Read(pStrm);};
 public:
     void Read(LwpObjectStream* pStrm)
     {
@@ -79,7 +84,7 @@ public:
     LwpObjectID* GetNext(){return &m_NextID;}
 public:
 private:
-    LwpObjectID     m_NextID;
+    LwpObjectID		m_NextID;
 };
 
 #endif

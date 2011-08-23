@@ -139,7 +139,7 @@ throw (uno::RuntimeException)
     {
         return sal_True;
     }
-    return false;
+    return sal_False;
 }
 
 uno::Any SAL_CALL

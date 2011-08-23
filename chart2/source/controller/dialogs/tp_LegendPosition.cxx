@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,6 @@ SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow,
     , m_aFtTextDirection( this, SchResId( FT_LEGEND_TEXTDIR ) )
     , m_aLbTextDirection( this, SchResId( LB_LEGEND_TEXTDIR ), &m_aFlTextOrient, &m_aFtTextDirection )
 {
-    m_apLegendPositionResources->SetAccessibleRelationMemberOf(&aGrpLegend);
     FreeResource();
 }
 
@@ -66,14 +65,14 @@ SfxTabPage* SchLegendPosTabPage::Create(Window* pWindow,
     return new SchLegendPosTabPage(pWindow, rOutAttrs);
 }
 
-sal_Bool SchLegendPosTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+BOOL SchLegendPosTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     m_apLegendPositionResources->writeToItemSet(rOutAttrs);
 
     if( m_aLbTextDirection.GetSelectEntryCount() > 0 )
         rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_aLbTextDirection.GetSelectEntryValue() ) );
 
-    return sal_True;
+    return TRUE;
 }
 
 void SchLegendPosTabPage::Reset(const SfxItemSet& rInAttrs)
@@ -81,7 +80,7 @@ void SchLegendPosTabPage::Reset(const SfxItemSet& rInAttrs)
     m_apLegendPositionResources->initFromItemSet(rInAttrs);
 
     const SfxPoolItem* pPoolItem = 0;
-    if( rInAttrs.GetItemState( EE_PARA_WRITINGDIR, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( EE_PARA_WRITINGDIR, TRUE, &pPoolItem ) == SFX_ITEM_SET )
         m_aLbTextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
 }
 

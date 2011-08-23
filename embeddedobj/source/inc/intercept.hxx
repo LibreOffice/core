@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,102 +57,102 @@ public:
     addEventListener(
         const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
         throw( com::sun::star::uno::RuntimeException );
-
+    
     virtual void SAL_CALL
     removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
         throw( com::sun::star::uno::RuntimeException );
-
+    
     //XDispatch
-    virtual void SAL_CALL
-    dispatch(
+    virtual void SAL_CALL 
+    dispatch( 
         const ::com::sun::star::util::URL& URL,
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::PropertyValue >& Arguments )
         throw (::com::sun::star::uno::RuntimeException);
-
+    
     virtual void SAL_CALL
-    addStatusListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XStatusListener >& Control,
+    addStatusListener( 
+        const ::com::sun::star::uno::Reference< 
+        ::com::sun::star::frame::XStatusListener >& Control, 
         const ::com::sun::star::util::URL& URL )
         throw (
             ::com::sun::star::uno::RuntimeException
         );
-
+    
     virtual void SAL_CALL
-    removeStatusListener(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XStatusListener >& Control,
-        const ::com::sun::star::util::URL& URL )
+    removeStatusListener( 
+        const ::com::sun::star::uno::Reference< 
+        ::com::sun::star::frame::XStatusListener >& Control, 
+        const ::com::sun::star::util::URL& URL ) 
         throw (
             ::com::sun::star::uno::RuntimeException
         );
-
+    
     //XInterceptorInfo
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > 
     SAL_CALL getInterceptedURLs(  )
         throw (
             ::com::sun::star::uno::RuntimeException
         );
-
+    
     //XDispatchProvider ( inherited by XDispatchProviderInterceptor )
-    virtual ::com::sun::star::uno::Reference<
+    virtual ::com::sun::star::uno::Reference< 
     ::com::sun::star::frame::XDispatch > SAL_CALL
-    queryDispatch(
+    queryDispatch( 
         const ::com::sun::star::util::URL& URL,
-        const ::rtl::OUString& TargetFrameName,
+        const ::rtl::OUString& TargetFrameName, 
         sal_Int32 SearchFlags )
         throw (
             ::com::sun::star::uno::RuntimeException
         );
-
-    virtual ::com::sun::star::uno::Sequence<
-    ::com::sun::star::uno::Reference<
+    
+    virtual ::com::sun::star::uno::Sequence< 
+    ::com::sun::star::uno::Reference< 
     ::com::sun::star::frame::XDispatch > > SAL_CALL
-    queryDispatches(
+    queryDispatches( 
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::frame::DispatchDescriptor >& Requests )
         throw (
             ::com::sun::star::uno::RuntimeException
         );
-
-
+    
+    
     //XDispatchProviderInterceptor
     virtual ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XDispatchProvider > SAL_CALL
-    getSlaveDispatchProvider(  )
+    ::com::sun::star::frame::XDispatchProvider > SAL_CALL 
+    getSlaveDispatchProvider(  ) 
         throw (
             ::com::sun::star::uno::RuntimeException
         );
-
+    
     virtual void SAL_CALL
-    setSlaveDispatchProvider(
-        const ::com::sun::star::uno::Reference<
+    setSlaveDispatchProvider( 
+        const ::com::sun::star::uno::Reference< 
         ::com::sun::star::frame::XDispatchProvider >& NewDispatchProvider )
         throw (
             ::com::sun::star::uno::RuntimeException
         );
 
-    virtual ::com::sun::star::uno::Reference<
+    virtual ::com::sun::star::uno::Reference< 
     ::com::sun::star::frame::XDispatchProvider > SAL_CALL
-    getMasterDispatchProvider(  )
+    getMasterDispatchProvider(  ) 
         throw (
             ::com::sun::star::uno::RuntimeException
         );
-
+    
     virtual void SAL_CALL
-    setMasterDispatchProvider(
-        const ::com::sun::star::uno::Reference<
+    setMasterDispatchProvider( 
+        const ::com::sun::star::uno::Reference< 
         ::com::sun::star::frame::XDispatchProvider >& NewSupplier )
         throw (
             ::com::sun::star::uno::RuntimeException
-        );
-
-
+        );	
+    
+    
 private:
-
+    
     osl::Mutex   m_aMutex;
-
+    
     DocumentHolder*   m_pDocHolder;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xSlaveDispatchProvider;

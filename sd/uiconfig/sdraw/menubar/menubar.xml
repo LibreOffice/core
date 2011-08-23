@@ -55,7 +55,6 @@
       <menu:menuitem menu:id=".uno:PasteSpecial"/>
       <menu:menuitem menu:id=".uno:SelectAll"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
       <menu:menuitem menu:id=".uno:SearchDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CopyObjects"/>
@@ -109,6 +108,7 @@
       <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Navigator"/>
+      <menu:menuitem menu:id=".uno:TaskPane"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Zoom"/>
     </menu:menupopup>
@@ -222,6 +222,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:BmpMask"/>
+      <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:MacrosMenu">
         <menu:menupopup>

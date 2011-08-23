@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ namespace toolkit
     // ===================================================================
     class UnoControlFormattedFieldModel : public UnoControlModel
     {
-    protected:
-        ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    protected:	
+        ::com::sun::star::uno::Any 		ImplGetDefaultValue( sal_uInt16 nPropId ) const;
         ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         ::com::sun::star::uno::Any      m_aCachedFormat;
         bool                            m_bRevokedAsClient;
@@ -68,14 +68,11 @@ namespace toolkit
                 ) throw (::com::sun::star::uno::Exception);
 
     public:
-                            UnoControlFormattedFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
-                            UnoControlFormattedFieldModel( const UnoControlFormattedFieldModel& rModel )
-                                :UnoControlModel( rModel )
-                            {
-                            }
-
-        UnoControlModel*    Clone() const { return new UnoControlFormattedFieldModel( *this ); }
-
+                            UnoControlFormattedFieldModel();
+                            UnoControlFormattedFieldModel( const UnoControlFormattedFieldModel& rModel ) : UnoControlModel( rModel ) {;}
+                            
+        UnoControlModel*	Clone() const { return new UnoControlFormattedFieldModel( *this ); }
+                            
         // ::com::sun::star::io::XPersistObject
         ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
@@ -97,11 +94,11 @@ namespace toolkit
 
         // UnoControlModel
         virtual void ImplNormalizePropertySequence(
-                        const sal_Int32                 _nCount,        /// the number of entries in the arrays
-                        sal_Int32*                      _pHandles,      /// the handles of the properties to set
-                        ::com::sun::star::uno::Any*     _pValues,       /// the values of the properties to set
-                        sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
-                    )   const SAL_THROW(());
+                        const sal_Int32					_nCount,		/// the number of entries in the arrays
+                        sal_Int32*						_pHandles,		/// the handles of the properties to set
+                        ::com::sun::star::uno::Any*		_pValues,		/// the values of the properties to set
+                        sal_Int32*						_pValidHandles	/// pointer to the valid handles, allowed to be adjusted
+                    )	const SAL_THROW(());
     private:
         void    impl_updateTextFromValue_nothrow();
         void    impl_updateCachedFormatter_nothrow();
@@ -114,18 +111,18 @@ namespace toolkit
     class UnoFormattedFieldControl : public UnoSpinFieldControl
     {
     public:
-                            UnoFormattedFieldControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
-        ::rtl::OUString     GetComponentServiceName();
+                            UnoFormattedFieldControl();
+        ::rtl::OUString		GetComponentServiceName();
 
         // ::com::sun::star::awt::XTextListener
         void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
-
+        
         // ::com::sun::star::lang::XServiceInfo
         DECLIMPL_SERVICEINFO_DERIVED( UnoFormattedFieldControl, UnoEditControl, szServiceName2_UnoControlFormattedField )
     };
 
 //........................................................................
-}   // namespace toolkit
+}	// namespace toolkit
 //........................................................................
 
 #endif // TOOLKIT_FORMATTED_CONTROL_HXX

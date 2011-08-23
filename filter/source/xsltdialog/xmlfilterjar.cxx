@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,6 +57,7 @@
 #include "typedetectionexport.hxx"
 #include "typedetectionimport.hxx"
 
+using namespace rtl;
 using namespace osl;
 using namespace comphelper;
 using namespace com::sun::star;
@@ -67,9 +68,6 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;
-
-using ::rtl::OUString;
-using ::rtl::Uri;
 
 XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF )
 : mxMSF( xMSF ),
@@ -83,7 +81,7 @@ XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF 
 {
     try
     {
-        Reference< XConfigManager > xCfgMgr( xMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" ))), UNO_QUERY );
+        Reference< XConfigManager > xCfgMgr( xMSF->createInstance(OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")), UNO_QUERY );
         if( xCfgMgr.is() )
         {
             sProgPath = xCfgMgr->substituteVariables( sProgPath );
@@ -131,7 +129,7 @@ static void _addFile( Reference< XInterface >& xRootFolder, Reference< XSingleSe
     Reference< XActiveDataSink > xSink( xFactory->createInstance(), UNO_QUERY );
     Reference< XUnoTunnel > xTunnel( xSink, UNO_QUERY );
     if( xSink.is() && xTunnel.is())
-    {
+    {    
         Reference< XNameContainer > xNameContainer(xRootFolder, UNO_QUERY );
         xNameContainer->insertByName(aName = encodeZipUri( aName ), makeAny(xTunnel));
         xSink->setInputStream( xInput );
@@ -148,7 +146,7 @@ static void addFile( Reference< XInterface > xRootFolder, Reference< XSingleServ
 
 void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference< XSingleServiceFactory > xFactory, const OUString& rSourceFile ) throw( Exception )
 {
-    if( rSourceFile.getLength() &&
+    if( rSourceFile.getLength() && 
         (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("http:") ) != 0) &&
         (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("shttp:") ) != 0) &&
         (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("jar:") ) != 0) &&
@@ -189,7 +187,8 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxMSF->createInstanceWithArguments(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.packages.comp.ZipPackage" )),
+                rtl::OUString::createFromAscii(
+                                "com.sun.star.packages.comp.ZipPackage" ),
                 aArguments ), UNO_QUERY );
 
         if( xIfc.is() )
@@ -207,7 +206,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
             {
                 const filter_info_impl* pFilter = (*aIter);
 
-                Reference< XInterface > xFilterRoot( addFolder( xRootFolder, xFactory, pFilter->maFilterName ) );
+                Reference< XInterface > xFilterRoot( addFolder( xRootFolder, xFactory, pFilter->maFilterName ) );	
 
                 if( xFilterRoot.is() )
                 {
@@ -223,16 +222,16 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                     }
                     catch( com::sun::star::container::ElementExistException&)
                     {
-                    // in case of same named import / export XSLT the latter
+                    // in case of same named import / export XSLT the latter 
                     // is ignored
-                        OSL_FAIL( "XMLFilterJarHelper::same named xslt filter exception!" );
+                        DBG_ERROR( "XMLFilterJarHelper::same named xslt filter exception!" );
                     }
 
                     if( pFilter->maImportTemplate.getLength() )
                         addFile( xFilterRoot, xFactory, pFilter->maImportTemplate );
                 }
 
-                ++aIter;
+                aIter++;
             }
 
             // create TypeDetection.xcu
@@ -242,7 +241,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
             {
                 osl::File aOutputFile( aTempFileURL );
-                /* osl::File::RC rc = */ aOutputFile.open( osl_File_OpenFlag_Write );
+                /* osl::File::RC rc = */ aOutputFile.open( OpenFlag_Write );
                 Reference< XOutputStream > xOS( new OSLOutputStreamWrapper( aOutputFile ) );
 
                 TypeDetectionExporter aExporter( mxMSF );
@@ -262,7 +261,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
     }
     catch( Exception& )
     {
-        OSL_FAIL( "XMLFilterJarHelper::savePackage exception catched!" );
+        DBG_ERROR( "XMLFilterJarHelper::savePackage exception catched!" );
     }
 
     osl::File::remove( rPackageURL );
@@ -291,7 +290,8 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxMSF->createInstanceWithArguments(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.packages.comp.ZipPackage" )),
+                rtl::OUString::createFromAscii(
+                                "com.sun.star.packages.comp.ZipPackage" ),
                 aArguments ), UNO_QUERY );
 
         if( xIfc.is() )
@@ -330,7 +330,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
                             // failed to copy all files
                             delete (*aIter);
                         }
-                        ++aIter;
+                        aIter++;
                     }
                 }
             }
@@ -338,7 +338,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
     }
     catch( Exception& )
     {
-        OSL_FAIL( "XMLFilterJarHelper::savePackage exception catched!" );
+        DBG_ERROR( "XMLFilterJarHelper::savePackage exception catched!" );
     }
 }
 
@@ -379,7 +379,7 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
             if( xFileEntry.is() )
             {
                 Reference< XInputStream > xIS( xFileEntry->getInputStream() );
-
+    
                 INetURLObject aBaseURL( rTargetURL );
 
                 rURL = URIHelper::SmartRel2Abs( aBaseURL, szPackagePath, Link(), false );
@@ -390,20 +390,8 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
                     if( !createDirectory( rURL ) )
                         return false;
 
-                    ::osl::File file(rURL);
-                    ::osl::FileBase::RC rc =
-                        file.open(osl_File_OpenFlag_Write|osl_File_OpenFlag_Create);
-                    if (::osl::FileBase::E_EXIST == rc) {
-                        rc = file.open(osl_File_OpenFlag_Write);
-                        if (::osl::FileBase::E_None == rc) {
-                            file.setSize(0); // #i97170# truncate
-                        }
-                    }
-                    if (::osl::FileBase::E_None != rc) {
-                        throw RuntimeException();
-                    }
-                    Reference< XOutputStream > const xOS(
-                            new comphelper::OSLOutputStreamWrapper(file));
+                    SvFileStream aOutputStream(rURL, STREAM_WRITE );
+                    Reference< XOutputStream > xOS(  new utl::OOutputStreamWrapper( aOutputStream ) );
 
                     return copyStreams( xIS, xOS );
                 }
@@ -412,7 +400,7 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
     }
     catch( Exception& )
     {
-        OSL_FAIL( "XMLFilterJarHelper::copyFile exception catched" );
+        DBG_ERROR( "XMLFilterJarHelper::copyFile exception catched" );
     }
     return false;
 }

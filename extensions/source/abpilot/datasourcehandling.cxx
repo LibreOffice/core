@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ namespace abp
     //---------------------------------------------------------------------
     static Reference< XNameAccess > lcl_getDataSourceContext( const Reference< XMultiServiceFactory >& _rxORB ) SAL_THROW (( Exception ))
     {
-        Reference< XNameAccess > xContext( _rxORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DatabaseContext" )) ), UNO_QUERY );
+        Reference< XNameAccess > xContext( _rxORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ) ), UNO_QUERY );
         DBG_ASSERT(xContext.is(), "lcl_getDataSourceContext: could not access the data source context!");
         return xContext;
     }
@@ -113,7 +113,7 @@ namespace abp
         DBG_ASSERT( xDynamicContext.is(), "lcl_implCreateAndInsert: missing an interface on the context (XNamingService)!" );
         if (xDynamicContext.is())
         {
-            //  xDynamicContext->registerObject( _rName, xNewDataSource );
+            //	xDynamicContext->registerObject( _rName, xNewDataSource );
             _rxNewDataSource = xNewDataSource;
         }
     }
@@ -136,7 +136,7 @@ namespace abp
             if (xNewDataSource.is())
             {
                 xNewDataSource->setPropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "URL" )),
+                    ::rtl::OUString::createFromAscii( "URL" ),
                     makeAny( ::rtl::OUString::createFromAscii( _pInitialAsciiURL ) )
                 );
             }
@@ -145,7 +145,7 @@ namespace abp
         }
         catch(const Exception&)
         {
-            OSL_FAIL( "lcl_implCreateAndSetURL: caught an exception while creating the data source!" );
+            DBG_ERROR( "lcl_implCreateAndSetURL: caught an exception while creating the data source!" );
         }
 
         return aReturn;
@@ -180,14 +180,14 @@ namespace abp
     //=====================================================================
     struct ODataSourceContextImpl
     {
-        Reference< XMultiServiceFactory >   xORB;
-        Reference< XNameAccess >            xContext;           /// the UNO data source context
-        StringBag                           aDataSourceNames;   /// for quicker name checks (without the UNO overhead)
+        Reference< XMultiServiceFactory >	xORB;
+        Reference< XNameAccess >			xContext;			/// the UNO data source context
+        StringBag							aDataSourceNames;	/// for quicker name checks (without the UNO overhead)
 
         ODataSourceContextImpl( const Reference< XMultiServiceFactory >& _rxORB ) : xORB( _rxORB ) { }
         ODataSourceContextImpl( const ODataSourceContextImpl& _rSource )
-            :xORB       ( _rSource.xORB )
-            ,xContext   ( _rSource.xContext )
+            :xORB		( _rSource.xORB )
+            ,xContext	( _rSource.xContext )
         {
         }
     };
@@ -217,7 +217,7 @@ namespace abp
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ODataSourceContext::ODataSourceContext: caught an exception!" );
+            DBG_ERROR( "ODataSourceContext::ODataSourceContext: caught an exception!" );
         }
     }
 
@@ -229,7 +229,7 @@ namespace abp
 
         sal_Int32 nPostFix = 1;
         while ( ( m_pImpl->aDataSourceNames.end() != aPos ) && ( nPostFix < 65535 ) )
-        {   // there already is a data source with this name
+        {	// there already is a data source with this name
             sCheck = _rDataSourceName;
             sCheck += ::rtl::OUString::valueOf( nPostFix++ );
 
@@ -247,65 +247,65 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    ODataSource ODataSourceContext::createNewLDAP( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    ODataSource	ODataSourceContext::createNewLDAP( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:ldap:" );
     }
 
     //---------------------------------------------------------------------
-    ODataSource ODataSourceContext::createNewMORK( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    ODataSource	ODataSourceContext::createNewMORK( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:mozilla" );
     }
 
     //---------------------------------------------------------------------
-    ODataSource ODataSourceContext::createNewThunderbird( const ::rtl::OUString& _rName ) SAL_THROW (( ))
+    ODataSource	ODataSourceContext::createNewThunderbird( const ::rtl::OUString& _rName ) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:thunderbird" );
     }
 
     //---------------------------------------------------------------------
-    ODataSource ODataSourceContext::createNewEvolutionLdap( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    ODataSource	ODataSourceContext::createNewEvolutionLdap( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:evolution:ldap" );
     }
     //---------------------------------------------------------------------
-    ODataSource ODataSourceContext::createNewEvolutionGroupwise( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    ODataSource	ODataSourceContext::createNewEvolutionGroupwise( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:evolution:groupwise" );
     }
     //---------------------------------------------------------------------
-    ODataSource ODataSourceContext::createNewEvolution( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    ODataSource	ODataSourceContext::createNewEvolution( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:evolution:local" );
     }
 
     //---------------------------------------------------------------------
-    ODataSource ODataSourceContext::createNewKab( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    ODataSource	ODataSourceContext::createNewKab( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:kab" );
     }
 
     //---------------------------------------------------------------------
-    ODataSource ODataSourceContext::createNewMacab( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    ODataSource	ODataSourceContext::createNewMacab( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:macab" );
     }
 
     //---------------------------------------------------------------------
-    ODataSource ODataSourceContext::createNewOutlook( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    ODataSource	ODataSourceContext::createNewOutlook( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:outlook" );
     }
 
     //---------------------------------------------------------------------
-    ODataSource ODataSourceContext::createNewOE( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    ODataSource	ODataSourceContext::createNewOE( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:outlookexp" );
     }
 
     //---------------------------------------------------------------------
-    ODataSource ODataSourceContext::createNewDBase( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    ODataSource	ODataSourceContext::createNewDBase( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:dbase:" );
     }
@@ -316,13 +316,13 @@ namespace abp
     struct ODataSourceImpl
     {
     public:
-        Reference< XMultiServiceFactory >       xORB;               /// the service factory
-        Reference< XPropertySet >               xDataSource;        /// the UNO data source
+        Reference< XMultiServiceFactory >		xORB;				/// the service factory
+        Reference< XPropertySet >				xDataSource;		/// the UNO data source
         ::utl::SharedUNOComponent< XConnection >
                                                 xConnection;
-        StringBag                               aTables;            // the cached table names
-        ::rtl::OUString                         sName;
-        sal_Bool                                bTablesUpToDate;    // table name cache up-to-date?
+        StringBag								aTables;			// the cached table names
+        ::rtl::OUString							sName;
+        sal_Bool								bTablesUpToDate;	// table name cache up-to-date?
 
         ODataSourceImpl( const Reference< XMultiServiceFactory >& _rxORB )
             :xORB( _rxORB )
@@ -357,11 +357,9 @@ namespace abp
     //---------------------------------------------------------------------
     ODataSource& ODataSource::operator=( const ODataSource& _rSource )
     {
-        if( this != &_rSource )
-        {
-            delete m_pImpl;
-            m_pImpl = new ODataSourceImpl( *_rSource.m_pImpl );
-        }
+        delete m_pImpl;
+        m_pImpl = new ODataSourceImpl( *_rSource.m_pImpl );
+
         return *this;
     }
 
@@ -395,7 +393,7 @@ namespace abp
         }
         catch(const Exception&)
         {
-            OSL_FAIL( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
+            DBG_ERROR( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
         }
     }
     //---------------------------------------------------------------------
@@ -412,8 +410,8 @@ namespace abp
         }
         catch(const Exception&)
         {
-            OSL_FAIL( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
-        }
+            DBG_ERROR( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
+        }		
     }
 
     //---------------------------------------------------------------------
@@ -444,7 +442,7 @@ namespace abp
         }
         catch(const Exception&)
         {
-            OSL_FAIL( "ODataSource::remove: caught an exception while creating the data source!" );
+            DBG_ERROR( "ODataSource::remove: caught an exception while creating the data source!" );
         }
     }
 
@@ -483,7 +481,7 @@ namespace abp
         m_pImpl->aTables.clear();
         if ( !isConnected() )
         {
-            OSL_FAIL( "ODataSource::getTableNames: not connected!" );
+            DBG_ERROR( "ODataSource::getTableNames: not connected!" );
         }
         else
         {
@@ -526,7 +524,7 @@ namespace abp
 
         // ................................................................
         // create the interaction handler (needed for authentication and error handling)
-        static ::rtl::OUString s_sInteractionHandlerServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler"));
+        static ::rtl::OUString s_sInteractionHandlerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler");
         Reference< XInteractionHandler > xInteractions;
         try
         {
@@ -564,7 +562,7 @@ namespace abp
         catch( const SQLException& e ) { aError <<= e; }
         catch( const Exception& )
         {
-            OSL_FAIL( "ODataSource::connect: caught a generic exception!" );
+            DBG_ERROR( "ODataSource::connect: caught a generic exception!" );
         }
 
         // ................................................................
@@ -593,7 +591,7 @@ namespace abp
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "ODataSource::connect: caught an exception while trying to display the error!" );
+                DBG_ERROR( "ODataSource::connect: caught an exception while trying to display the error!" );
             }
         }
 
@@ -635,7 +633,7 @@ namespace abp
     }
 
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,6 @@
 #define SD_SLIDESORTER_CURRENT_SLIDE_MANAGER_HXX
 
 #include "model/SlsSharedPageDescriptor.hxx"
-#include <vcl/timer.hxx>
-#include <tools/link.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 class SdPage;
@@ -46,10 +44,6 @@ namespace sd { namespace slidesorter { namespace controller {
 /** Manage the current slide.  This includes setting the according flags at
     the PageDescriptor objects and setting the current slide at the main
     view shell.
-
-    Switching pages is triggered only after a little delay.  This allows
-    fast travelling through a larger set of slides without having to wait
-    for the edit view to update its content after every slide change.
 */
 class CurrentSlideManager
 {
@@ -64,24 +58,14 @@ public:
     /** Call this when the current page of the main view shell has been
         switched.  Use SwitchCurrentSlide() to initiate such a switch.
     */
-    void NotifyCurrentSlideChange (const sal_Int32 nSlideIndex);
-    void NotifyCurrentSlideChange (const SdPage* pPage);
+    void CurrentSlideHasChanged (const sal_Int32 nSlideIndex);
 
     /** Call this method to switch the current page of the main view shell
         to the given slide.  Use CurrentSlideHasChanged() when the current
         slide change has been initiated by someone else.
-        @param nSlideIndex
-            Zero based index in the range [0,number-of-slides).
-        @param bUpdateSelection
-            When <TRUE/> then the page selection is cleared and only the new
-            current slide is selected.
     */
-    void SwitchCurrentSlide (
-        const sal_Int32 nSlideIndex,
-        const bool bUpdateSelection = false);
-    void SwitchCurrentSlide (
-        const model::SharedPageDescriptor& rpSlide,
-        const bool bUpdateSelection = false);
+    void SwitchCurrentSlide (const sal_Int32 nSlideIndex);
+    void SwitchCurrentSlide (const model::SharedPageDescriptor& rpSlide);
 
     /** Return the page descriptor for the current slide.  Note, that when
         there is no current slide then the returned pointer is empty.
@@ -91,7 +75,7 @@ public:
     /** Release all references to model data.
     */
     void PrepareModelChange (void);
-
+    
     /** Modify inner state in reaction to a change of the SlideSorterModel.
     */
     void HandleModelChange (void);
@@ -100,14 +84,9 @@ private:
     SlideSorter& mrSlideSorter;
     sal_Int32 mnCurrentSlideIndex;
     model::SharedPageDescriptor mpCurrentSlide;
-    /** Timer to control the delay after which to ask
-        XController/ViewShellBase to switch to another slide.
-    */
-    Timer maSwitchPageDelayTimer;
 
     bool IsCurrentSlideIsValid (void);
     void SetCurrentSlideAtViewShellBase (const model::SharedPageDescriptor& rpSlide);
-    void SetCurrentSlideAtTabControl (const model::SharedPageDescriptor& rpSlide);
     void SetCurrentSlideAtXController (const model::SharedPageDescriptor& rpSlide);
 
     /** When switching from one slide to a new current slide then this
@@ -119,8 +98,6 @@ private:
         method connects to the new current slide.
     */
     void AcquireCurrentSlide (const sal_Int32 nSlideIndex);
-
-    DECL_LINK(SwitchPageCallback,void*);
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@
 #include "miscdlgs.hrc"
 
 
-static sal_uInt8 nInsItemChecked=0;
+static BYTE nInsItemChecked=0;
 
 //==================================================================
 
-ScInsertCellDlg::ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove) :
+ScInsertCellDlg::ScInsertCellDlg( Window* pParent,BOOL bDisallowCellMove) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_INSCELL ) ),
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
@@ -113,7 +113,7 @@ InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
     return nReturn;
 }
 
-ScInsertCellDlg::~ScInsertCellDlg()
+__EXPORT ScInsertCellDlg::~ScInsertCellDlg()
 {
 }
 

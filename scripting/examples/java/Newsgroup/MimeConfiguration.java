@@ -65,7 +65,7 @@ public class MimeConfiguration
                 for( int i=0; i<lines.length; i++ )
                 {
                     out.write( lines[i], 0, lines[i].length() );
-                }
+                }			
                 out.close();
                     }
                     else
@@ -127,7 +127,7 @@ public class MimeConfiguration
                 for( int i=0; i<lines.length; i++ )
                 {
                     out.write( lines[i], 0, lines[i].length() );
-                }
+                }			
                 out.close();
                     }
                     else

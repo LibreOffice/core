@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/stl_types.hxx>
 #include <vcl/svapp.hxx>
-#include <dbaccess/dbsubcomponentcontroller.hxx>
+#include <dbaccess/singledoccontroller.hxx>
 #include <svx/unoshape.hxx>
 #include <osl/mutex.hxx>
 
@@ -97,17 +97,17 @@ namespace rptui
 TYPEINIT1( OCommentUndoAction,          SdrUndoAction );
 DBG_NAME(rpt_OCommentUndoAction)
 //----------------------------------------------------------------------------
-OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,sal_uInt16 nCommentID)
+OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,USHORT nCommentID) 
     :SdrUndoAction(_rMod)
-{
-    DBG_CTOR(rpt_OCommentUndoAction,NULL);
+{ 
+    DBG_CTOR(rpt_OCommentUndoAction,NULL);    
     m_pController = static_cast< OReportModel& >( _rMod ).getController();
     if ( nCommentID )
-        m_strComment = String(ModuleRes(nCommentID));
+        m_strComment = String(ModuleRes(nCommentID)); 
 }
 OCommentUndoAction::~OCommentUndoAction()
 {
-    DBG_DTOR(rpt_OCommentUndoAction,NULL);
+    DBG_DTOR(rpt_OCommentUndoAction,NULL);    
 }
 //----------------------------------------------------------------------------
 void OCommentUndoAction::Undo()
@@ -123,7 +123,7 @@ OUndoContainerAction::OUndoContainerAction(SdrModel& _rMod
                                              ,Action _eAction
                                              ,const uno::Reference< container::XIndexContainer > _xContainer
                                              ,const Reference< XInterface > & xElem
-                                             ,sal_uInt16 _nCommentId)
+                                             ,USHORT _nCommentId)
                       :OCommentUndoAction(_rMod,_nCommentId)
                       ,m_xElement(xElem)
                       ,m_xContainer(_xContainer)
@@ -170,7 +170,7 @@ OUndoContainerAction::~OUndoContainerAction()
 }
 //------------------------------------------------------------------------------
 void OUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
-{
+{	
     if ( m_xContainer.is() )
     {
         // insert the element
@@ -224,13 +224,13 @@ void OUndoContainerAction::Undo()
                 implReInsert();
                 break;
             default:
-                OSL_FAIL("Illegal case value");
+                OSL_ENSURE(0,"Illegal case value");
                 break;
             }
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OUndoContainerAction::Undo: caught an exception!" );
+            OSL_ENSURE( sal_False, "OUndoContainerAction::Undo: caught an exception!" );
         }
     }
 }
@@ -252,13 +252,13 @@ void OUndoContainerAction::Redo()
                 implReRemove();
                 break;
             default:
-                OSL_FAIL("Illegal case value");
+                OSL_ENSURE(0,"Illegal case value");
                 break;
             }
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OUndoContainerAction::Redo: caught an exception!" );
+            OSL_ENSURE( sal_False, "OUndoContainerAction::Redo: caught an exception!" );
         }
     }
 }
@@ -269,7 +269,7 @@ OUndoGroupSectionAction::OUndoGroupSectionAction(SdrModel& _rMod
                                                     ,OGroupHelper> _pMemberFunction
                                              ,const uno::Reference< report::XGroup >& _xGroup
                                              ,const Reference< XInterface > & xElem
-                                             ,sal_uInt16 _nCommentId)
+                                             ,USHORT _nCommentId)
 :OUndoContainerAction(_rMod,_eAction,NULL,xElem,_nCommentId)
 ,m_aGroupHelper(_xGroup)
 ,m_pMemberFunction(_pMemberFunction)
@@ -277,7 +277,7 @@ OUndoGroupSectionAction::OUndoGroupSectionAction(SdrModel& _rMod
 }
 //------------------------------------------------------------------------------
 void OUndoGroupSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
-{
+{	
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
     try
     {
@@ -315,7 +315,7 @@ OUndoReportSectionAction::OUndoReportSectionAction(SdrModel& _rMod
                                                 ,OReportHelper> _pMemberFunction
                                              ,const uno::Reference< report::XReportDefinition >& _xReport
                                              ,const Reference< XInterface > & xElem
-                                             ,sal_uInt16 _nCommentId)
+                                             ,USHORT _nCommentId)
 :OUndoContainerAction(_rMod,_eAction,NULL,xElem,_nCommentId)
 ,m_aReportHelper(_xReport)
 ,m_pMemberFunction(_pMemberFunction)
@@ -323,7 +323,7 @@ OUndoReportSectionAction::OUndoReportSectionAction(SdrModel& _rMod
 }
 //------------------------------------------------------------------------------
 void OUndoReportSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
-{
+{	
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
     try
     {
@@ -397,7 +397,7 @@ void ORptUndoPropertyAction::setProperty(sal_Bool _bOld)
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ORptUndoPropertyAction::Redo: caught an exception!" );
+            OSL_ENSURE( sal_False, "ORptUndoPropertyAction::Redo: caught an exception!" );
         }
     }
 }
@@ -406,7 +406,7 @@ void ORptUndoPropertyAction::setProperty(sal_Bool _bOld)
 String ORptUndoPropertyAction::GetComment() const
 {
     String aStr(ModuleRes(RID_STR_UNDO_PROPERTY));
-
+    
     aStr.SearchAndReplace( '#', m_aPropertyName );
     return aStr;
 }

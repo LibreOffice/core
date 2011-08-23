@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,12 +31,14 @@ import java.util.zip.*;
 
 public class XmlWrapper
 {
-    public static void main(String args[]) throws IOException
+    public static void main(String args[]) throws IOException 
     {
         System.out.println("args.length is " + args.length);
         if (args.length < 2) {
             System.out.println("Usage: java XmlWrapper [<zipfile1> <zipfile2>].");
+            //return;
              System.exit(-1);
+            
         }
 
         XmlWrapper w = new XmlWrapper();
@@ -45,6 +47,7 @@ public class XmlWrapper
          currdirfp = new File(".");
         } catch (Exception fx) {
          System.out.println("Could not get File instance for current directory \n");
+         //return;
          System.exit(-1);
         }
 
@@ -57,6 +60,7 @@ public class XmlWrapper
         } catch (Exception tx) {
          System.out.println("Could not create TempFile ");
          System.out.println("Exception: " + tx.toString());
+         //return;
          System.exit(-1);
         }
 
@@ -72,12 +76,14 @@ public class XmlWrapper
          System.out.println("Exception: file is not a ZIP file: " + args[0]);
          f1.delete();
          f2.delete();
+         //return;
          System.exit(-1);
         } catch (Exception e) {
          System.out.println("Exception: Could not extract XML from " + args[0]);
          System.out.println("Exception: " + e.toString());
          f1.delete();
          f2.delete();
+         //return;
          System.exit(-1);
         }
 
@@ -90,6 +96,7 @@ public class XmlWrapper
          System.out.println("Exception: file is not a ZIP file: " + args[0]);
          f1.delete();
          f2.delete();
+         //return;
          System.exit(-1);
         } catch (Exception ex) {
          System.out.println(ex.getMessage());
@@ -97,6 +104,7 @@ public class XmlWrapper
          System.out.println("Exception: " + ex.toString());
          f1.delete();
          f2.delete();
+         //return;
          System.exit(-1);
         }
 
@@ -112,16 +120,17 @@ public class XmlWrapper
                same = xmldiff.diff();
            }
         }
-        catch (Exception ex)
+        catch (Exception ex) 
         {
          System.out.println("XmlDiff failed");
          System.out.println("Exception: " + ex.toString());
          f1.delete();
          f2.delete();
+         //return;
          System.exit(-1);
         }
 
-        System.out.println("Diff result: " + same);
+        System.out.println("Diff result: " + same); 
         if (same)
         {
           System.out.println("XMLDIFFRESULT:PASSED");

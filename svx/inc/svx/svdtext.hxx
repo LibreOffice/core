@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class SdrTextObj;
 class SdrModel;
 class SfxItemSet;
 
-namespace sdr { namespace properties {
+namespace sdr {	namespace properties {
     class TextProperties;
 }}
 
@@ -55,7 +55,7 @@ public:
     virtual ~SdrText();
 
     virtual void SetModel(SdrModel* pNewModel);
-    virtual void ForceOutlinerParaObject( sal_uInt16 nOutlMode );
+    virtual void ForceOutlinerParaObject( USHORT nOutlMode );
 
     virtual void SetOutlinerParaObject( OutlinerParaObject* pTextObject );
     virtual OutlinerParaObject* GetOutlinerParaObject() const;

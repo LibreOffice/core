@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,13 +56,13 @@
 
 namespace sd {
 
-const sal_Unicode CHAR_HARDBLANK    =   ((sal_Unicode)0x00A0);
-const sal_Unicode CHAR_HARDHYPHEN   =   ((sal_Unicode)0x2011);
-const sal_Unicode CHAR_SOFTHYPHEN   =   ((sal_Unicode)0x00AD);
-const sal_Unicode CHAR_RLM          =   ((sal_Unicode)0x200F);
-const sal_Unicode CHAR_LRM          =   ((sal_Unicode)0x200E);
-const sal_Unicode CHAR_ZWSP         =   ((sal_Unicode)0x200B);
-const sal_Unicode CHAR_ZWNBSP       =   ((sal_Unicode)0x2060);
+const sal_Unicode CHAR_HARDBLANK	=	((sal_Unicode)0x00A0);
+const sal_Unicode CHAR_HARDHYPHEN	=	((sal_Unicode)0x2011);
+const sal_Unicode CHAR_SOFTHYPHEN	=	((sal_Unicode)0x00AD);
+const sal_Unicode CHAR_RLM          =	((sal_Unicode)0x200F);
+const sal_Unicode CHAR_LRM          =	((sal_Unicode)0x200E);
+const sal_Unicode CHAR_ZWSP			=	((sal_Unicode)0x200B);
+const sal_Unicode CHAR_ZWNBSP		=	((sal_Unicode)0x2060);
 
 TYPEINIT1( FuBullet, FuPoor );
 
@@ -99,8 +99,8 @@ void FuBullet::DoExecute( SfxRequest& rReq )
         switch( rReq.GetSlot() )
         {
             case FN_INSERT_SOFT_HYPHEN: cMark = CHAR_SOFTHYPHEN ; break;
-            case FN_INSERT_HARDHYPHEN:  cMark = CHAR_HARDHYPHEN ; break;
-            case FN_INSERT_HARD_SPACE:  cMark = CHAR_HARDBLANK ; break;
+            case FN_INSERT_HARDHYPHEN:	cMark = CHAR_HARDHYPHEN ; break;
+            case FN_INSERT_HARD_SPACE:	cMark = CHAR_HARDBLANK ; break;
             case SID_INSERT_RLM : cMark = CHAR_RLM ; break;
             case SID_INSERT_LRM : cMark = CHAR_LRM ; break;
             case SID_INSERT_ZWSP : cMark = CHAR_ZWSP ; break;
@@ -118,7 +118,7 @@ void FuBullet::DoExecute( SfxRequest& rReq )
 void FuBullet::InsertFormattingMark( sal_Unicode cMark )
 {
     OutlinerView* pOV = NULL;
-    ::Outliner*   pOL = NULL;
+    ::Outliner*	  pOL = NULL;
 
     // depending on ViewShell set Outliner and OutlinerView
     if (mpViewShell->ISA(DrawViewShell))
@@ -139,19 +139,19 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     {
         // prevent flickering
         pOV->HideCursor();
-        pOL->SetUpdateMode(sal_False);
+        pOL->SetUpdateMode(FALSE);
 
         // remove old selected text
         pOV->InsertText( aEmptyStr );
 
         // prepare undo
-        ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
+        SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
         rUndoMgr.EnterListAction(String(SdResId(STR_UNDO_INSERT_SPECCHAR)),
                                     aEmptyStr );
 
         // insert given text
         String aStr( cMark );
-        pOV->InsertText( cMark, sal_True);
+        pOV->InsertText( cMark, TRUE);
 
         ESelection aSel = pOV->GetSelection();
         aSel.nStartPara = aSel.nEndPara;
@@ -161,7 +161,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
         rUndoMgr.LeaveListAction();
 
         // restart repainting
-        pOL->SetUpdateMode(sal_True);
+        pOL->SetUpdateMode(TRUE);
         pOV->ShowCursor();
     }
 }
@@ -171,7 +171,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     if( pArgs )
-        pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
+        pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_CHARMAP), FALSE, &pItem);
 
     String aChars, aFontName;
     Font aFont;
@@ -179,7 +179,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     {
         aChars = ((const SfxStringItem*)pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
-        pArgs->GetItemState( mpDoc->GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
+        pArgs->GetItemState( mpDoc->GetPool().GetWhich(SID_ATTR_SPECIALCHAR), FALSE, &pFtItem);
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
         if ( pFontItem )
         {
@@ -199,7 +199,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     if (!aChars.Len() )
     {
         SfxAllItemSet aSet( mpDoc->GetPool() );
-        aSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
+        aSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
 
         SfxItemSet aFontAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aFontAttr );
@@ -217,11 +217,11 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         // Wenn Zeichen selektiert ist kann es angezeigt werden
         // pDLg->SetFont( );
         // pDlg->SetChar( );
-        sal_uInt16 nResult = pDlg->Execute();
+        USHORT nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, sal_False );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, FALSE );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFItem, SvxFontItem, SID_ATTR_CHAR_FONT, FALSE );
             if ( pFItem )
             {
                 aFont.SetName( pFItem->GetFamilyName() );
@@ -240,7 +240,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     if( aChars.Len() )
     {
         OutlinerView* pOV = NULL;
-        ::Outliner*   pOL = NULL;
+        ::Outliner*	  pOL = NULL;
 
         // je nach ViewShell Outliner und OutlinerView bestimmen
         if(mpViewShell && mpViewShell->ISA(DrawViewShell))
@@ -263,7 +263,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         {
             // nicht flackern
             pOV->HideCursor();
-            pOL->SetUpdateMode(sal_False);
+            pOL->SetUpdateMode(FALSE);
 
             // alte Attributierung merken;
             // dazu vorher selektierten Bereich loeschen, denn der muss eh weg
@@ -275,14 +275,14 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             SfxItemSet aOldSet( mpDoc->GetPool(), EE_CHAR_FONTINFO, EE_CHAR_FONTINFO, 0 );
             aOldSet.Put( pOV->GetAttribs() );
 
-            ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
+            SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
             rUndoMgr.EnterListAction(String(SdResId(STR_UNDO_INSERT_SPECCHAR)),
                                      aEmptyStr );
-            pOV->InsertText(aChars, sal_True);
+            pOV->InsertText(aChars, TRUE);
 
             // attributieren (Font setzen)
             SfxItemSet aSet(pOL->GetEmptyItemSet());
-            SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
+            SvxFontItem aFontItem (aFont.GetFamily(),	 aFont.GetName(),
                                    aFont.GetStyleName(), aFont.GetPitch(),
                                    aFont.GetCharSet(),
                                    EE_CHAR_FONTINFO);
@@ -302,7 +302,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             rUndoMgr.LeaveListAction();
 
             // ab jetzt wieder anzeigen
-            pOL->SetUpdateMode(sal_True);
+            pOL->SetUpdateMode(TRUE);
             pOV->ShowCursor();
         }
     }

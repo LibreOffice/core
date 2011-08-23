@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,25 +47,25 @@
 class ScSortDlg : public SfxTabDialog
 {
 public:
-                ScSortDlg( Window*           pParent,
+                ScSortDlg( Window*			 pParent,
                            const SfxItemSet* pArgSet );
                 ~ScSortDlg();
 
-    void    SetHeaders( sal_Bool bHeaders );
-    void    SetByRows ( sal_Bool bByRows );
-    sal_Bool    GetHeaders() const;
-    sal_Bool    GetByRows () const;
+    void	SetHeaders( BOOL bHeaders );
+    void	SetByRows ( BOOL bByRows );
+    BOOL	GetHeaders() const;
+    BOOL	GetByRows () const;
 
 
 private:
-    sal_Bool    bIsHeaders;
-    sal_Bool    bIsByRows;
+    BOOL	bIsHeaders;
+    BOOL	bIsByRows;
 };
 
-inline void ScSortDlg::SetHeaders( sal_Bool bHeaders )  { bIsHeaders = bHeaders; }
-inline void ScSortDlg::SetByRows ( sal_Bool bByRows  )  { bIsByRows = bByRows; }
-inline sal_Bool ScSortDlg::GetHeaders() const           { return bIsHeaders; }
-inline sal_Bool ScSortDlg::GetByRows () const           { return bIsByRows; }
+inline void ScSortDlg::SetHeaders( BOOL bHeaders )	{ bIsHeaders = bHeaders; }
+inline void ScSortDlg::SetByRows ( BOOL bByRows  )	{ bIsByRows = bByRows; }
+inline BOOL ScSortDlg::GetHeaders() const 			{ return bIsHeaders; }
+inline BOOL ScSortDlg::GetByRows () const 			{ return bIsByRows; }
 
 class ScSortWarningDlg : public ModalDialog
 {

@@ -33,18 +33,19 @@ VISIBILITY_HIDDEN = TRUE
 .INCLUDE: settings.mk
 
 CDEFS += -DOOO_DLLIMPLEMENTATION_TEST
-
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
-.IF "$(USE_SYSTEM_STL)" != "YES" && "$(SYSTEM_CPPUNIT)" == "YES"
-CFLAGSCXX += -DADAPT_EXT_STL
-.END
+
+#building with stlport, but cppunit was not built with stlport
+.IF "$(USE_SYSTEM_STL)"!="YES"
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGSCXX+=-DADAPT_EXT_STL
+.ENDIF
+.ENDIF
 
 SLOFILES = \
     $(SLO)/getargument.obj \
-    $(SLO)/gettestargument.obj \
     $(SLO)/officeconnection.obj \
-    $(SLO)/toabsolutefileurl.obj \
-    $(SLO)/uniquepipename.obj
+    $(SLO)/toabsolutefileurl.obj
 
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLOFILES)

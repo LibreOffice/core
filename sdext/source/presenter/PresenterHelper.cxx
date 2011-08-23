@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,35 +44,35 @@ using ::rtl::OUString;
 namespace sdext { namespace presenter {
 
 const OUString PresenterHelper::msPaneURLPrefix(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/"));
+    OUString::createFromAscii("private:resource/pane/"));
 const OUString PresenterHelper::msCenterPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("CenterPane")));
+    msPaneURLPrefix + OUString::createFromAscii("CenterPane"));
 const OUString PresenterHelper::msFullScreenPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("FullScreenPane")));
+    msPaneURLPrefix + OUString::createFromAscii("FullScreenPane"));
 
 const OUString PresenterHelper::msViewURLPrefix(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/view/"));
+    OUString::createFromAscii("private:resource/view/"));
 const OUString PresenterHelper::msPresenterScreenURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterScreen")));
+    msViewURLPrefix + OUString::createFromAscii("PresenterScreen"));
 const OUString PresenterHelper::msSlideSorterURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("SlideSorter")));
+    msViewURLPrefix + OUString::createFromAscii("SlideSorter"));
 
 const OUString PresenterHelper::msResourceActivationEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ResourceActivation"));
+    OUString::createFromAscii("ResourceActivation"));
 const OUString PresenterHelper::msResourceDeactivationEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ResourceDeactivation"));
+    OUString::createFromAscii("ResourceDeactivation"));
 
 const OUString PresenterHelper::msDefaultPaneStyle (
-    RTL_CONSTASCII_USTRINGPARAM("DefaultPaneStyle"));
+    OUString::createFromAscii("DefaultPaneStyle"));
 const OUString PresenterHelper::msDefaultViewStyle (
-    RTL_CONSTASCII_USTRINGPARAM("DefaultViewStyle"));
+    OUString::createFromAscii("DefaultViewStyle"));
 
 
 Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowController (
     const Reference<frame::XController>& rxController)
 {
     Reference<presentation::XSlideShowController> xSlideShowController;
-
+    
     if( rxController.is() ) try
     {
         Reference<XPresentationSupplier> xPS ( rxController->getModel(), UNO_QUERY_THROW);

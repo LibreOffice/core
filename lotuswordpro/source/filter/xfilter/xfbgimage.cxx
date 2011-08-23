@@ -57,8 +57,12 @@
  * @file
  * Background image.
  ************************************************************************/
-#include    "xfbgimage.hxx"
-#include    "xfbase64.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-03-01	created.
+ ************************************************************************/
+#include	"xfbgimage.hxx"
+#include	"xfbase64.hxx"
 
 XFBGImage::XFBGImage()
 {
@@ -76,14 +80,14 @@ void XFBGImage::SetImageData(sal_uInt8 *buf, int len)
     m_bUserFileLink = sal_False;
 }
 
-sal_Bool    XFBGImage::Equal(IXFStyle * /* pStyle */)
+sal_Bool	XFBGImage::Equal(IXFStyle * /* pStyle */)
 {
     return sal_False;
 }
 
-void    XFBGImage::ToXml(IXFStream *pStrm)
+void	XFBGImage::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     if( m_bUserFileLink )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,20 +27,18 @@
  ************************************************************************/
 
 #include "oox/core/relationshandler.hxx"
-
 #include <rtl/ustrbuf.hxx>
+#include "tokens.hxx"
 #include "oox/helper/attributelist.hxx"
-
-namespace oox {
-namespace core {
-
-// ============================================================================
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
+#include "oox/core/namespaces.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
+
+namespace oox {
+namespace core {
 
 // ============================================================================
 
@@ -79,7 +77,7 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
     AttributeList aAttribs( rxAttribs );
     switch( nElement )
     {
-        case PR_TOKEN( Relationship ):
+        case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationship:
         {
             Relation aRelation;
             aRelation.maId     = aAttribs.getString( XML_Id, OUString() );
@@ -98,7 +96,7 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
             }
         }
         break;
-        case PR_TOKEN( Relationships ):
+        case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationships:
             xRet = getFastContextHandler();
         break;
     }

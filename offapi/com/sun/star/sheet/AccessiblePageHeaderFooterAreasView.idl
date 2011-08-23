@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,14 +59,14 @@ published service AccessiblePageHeaderFooterAreasView
         <li>The parent returned by <method scope="::com::sun::star::accessibility"
             >XAccessibleContext::getAccessibleParent</method>
             is the accessible spreadsheet page preview.</li>
-        <li>The children returned by
+        <li>The children returned by 
             <method scope="::com::sun::star::accessibility"
             >XAccessibleContext::getAccessibleChild</method> all
-            support the interface
-            <type scope="::com::sun::star::accessibility">XAccessible</type.
+            support the interface 
+            <type scope="::com::sun::star::accessibility">XAccessible</type. 
             Calling
             <method scope="::com::sun::star::accessibility"
-            >XAccessible::getAccessibleContext</method> for these children
+            >XAccessible::getAccessibleContext</method> for these children 
             returns an object that supports one of the following services.</li>
         <ul>
             <li><type scope="::com::sun::star::text">AccessibleHeaderFooterView</type>:
@@ -77,13 +77,13 @@ published service AccessiblePageHeaderFooterAreasView
         </ul>
         <p>The following rules apply to the children order.</p>
         <ul>
-            <li>The first is the left area, than the center area and the last
+            <li>The first is the left area, than the centre area and the last
             is the right area.</li>
         </ul>
         <li>The description is ???.</li>
         <li>The name is Header or Footer respectively.</li>
         <li>The role is <const scope="::com::sun::star::accessibility"
-            >AccessibleRole::HEADER</const> or
+            >AccessibleRole::HEADER</const> or 
             <const scope="::com::sun::star::accessibility"
             >AccessibleRole::FOOTER</const>.</li>
         <li>There are no relations.</li>
@@ -93,8 +93,8 @@ published service AccessiblePageHeaderFooterAreasView
                     >AccessibleStateType::DEFUNC</const> is always false until
                     the preview is closed.</li>
                 <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::EDITABLE</const> is always false,
-                    because the document is not editable in the page preview.
+                    >AccessibleStateType::EDITABLE</const> is always false, 
+                    because the document is not editable in the page preview. 
                     So it is left out of the list.</li>
                 <li><const scope="::com::sun::star::accessibility"
                     >AccessibleStateType::ENABLED</const> is always true.</li>
@@ -102,15 +102,15 @@ published service AccessiblePageHeaderFooterAreasView
                     >AccessibleStateType::MULTILINE</const> makes no sense on
                     a document and so it is left out of the list.</li>
                 <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::MULTISELECTABLE</const> is always
-                    false, because in a page preview a selection is not
+                    >AccessibleStateType::MULTISELECTABLE</const> is always 
+                    false, because in a page preview a selection is not 
                     possible. So it is left out of the list.</li>
                 <li><const scope="::com::sun::star::accessibility"
                     >AccessibleStateType::OPAQUE</const> is always true.</li>
                 <li><const scope="::com::sun::star::accessibility"
                     >AccessibleStateType::RESIZEABLE</const> is always false,
                     because you can resize the window of the page preview, but
-                    not the page preview itself. So it is left out of the
+                    not the page preview itself. So it is left out of the 
                     list.</li>
                 <li><const scope="::com::sun::star::accessibility"
                     >AccessibleStateType::SELECTABLE</const> is always false,
@@ -121,8 +121,8 @@ published service AccessiblePageHeaderFooterAreasView
                     because in the page preview is no selection possible. So it
                     is left out of the list.</li>
                 <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SHOWING</const>Is true if the
-                    Bounding Box lies in the Bounding Box of the parent.
+                    >AccessibleStateType::SHOWING</const>Is true if the 
+                    Bounding Box lies in the Bounding Box of the parent. 
                     Otherwise it is false.</li>
                 <li><const scope="::com::sun::star::accessibility"
                     >AccessibleStateType::VISIBLE</const>Is always true.</li>

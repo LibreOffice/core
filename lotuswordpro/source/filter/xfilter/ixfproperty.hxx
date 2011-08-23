@@ -57,10 +57,14 @@
  * @file
  * Property for styles. ie. Margins,shadow,columns and so on.
  ************************************************************************/
-#ifndef     _IXFPROPERTY_HXX
-#define     _IXFPROPERTY_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-19 create this file.
+ ************************************************************************/
+#ifndef		_IXFPROPERTY_HXX
+#define		_IXFPROPERTY_HXX
 
-#include    "ixfobject.hxx"
+#include	"ixfobject.hxx"
 
 class IXFStream;
 

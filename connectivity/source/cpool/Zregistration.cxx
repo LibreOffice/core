@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,6 +51,35 @@ extern "C"
 }
 
 //---------------------------------------------------------------------------------------
+sal_Bool SAL_CALL component_writeInfo(void* /*_pServiceManager*/, com::sun::star::registry::XRegistryKey* _pRegistryKey)
+{
+    ::rtl::OUString sMainKeyName = ::rtl::OUString::createFromAscii("/");
+    sMainKeyName += OPoolCollection::getImplementationName_Static();
+    sMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
+
+    try
+    {
+        Reference< XRegistryKey > xMainKey = _pRegistryKey->createKey(sMainKeyName);
+        if (!xMainKey.is())
+            return sal_False;
+
+        Sequence< ::rtl::OUString > sServices = OPoolCollection::getSupportedServiceNames_Static();
+        const ::rtl::OUString* pServices = sServices.getConstArray();
+        for (sal_Int32 i=0; i<sServices.getLength(); ++i, ++pServices)
+            xMainKey->createKey(*pServices);
+    }
+    catch(InvalidRegistryException&)
+    {
+        return sal_False;
+    }
+    catch(InvalidValueException&)
+    {
+        return sal_False;
+    }
+    return sal_True;
+}
+
+//---------------------------------------------------------------------------------------
 void* SAL_CALL component_getFactory(const sal_Char* _pImplName, ::com::sun::star::lang::XMultiServiceFactory* _pServiceManager, void* /*_pRegistryKey*/)
 {
     void* pRet = NULL;
@@ -75,7 +104,7 @@ void* SAL_CALL component_getFactory(const sal_Char* _pImplName, ::com::sun::star
     return pRet;
 }
 
-}   // extern "C"
+}	// extern "C"
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

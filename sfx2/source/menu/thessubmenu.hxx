@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: thessubmenu.hxx,v $
+ * $Revision: 1.0 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -42,24 +45,31 @@ class Menu;
 
 namespace css = ::com::sun::star;
 
+////////////////////////////////////////////////////////////
+
+String GetThesaurusReplaceText_Impl( const ::rtl::OUString &rText );
+
+////////////////////////////////////////////////////////////
+
 class SfxThesSubMenuControl : public SfxMenuControl
 {
-    PopupMenu*          pMenu;
-    Menu&               rParent;
+    PopupMenu*			pMenu;
+    Menu&				rParent;
 
 private:
-    virtual void    StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState );
+    virtual void    StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
     DECL_LINK( MenuSelect, Menu * );
 
 public:
-    SfxThesSubMenuControl(sal_uInt16, Menu&, SfxBindings&);
+    SfxThesSubMenuControl(USHORT, Menu&, SfxBindings&);
     ~SfxThesSubMenuControl();
-
+    
     virtual PopupMenu*  GetPopup() const;
-
+    
     SFX_DECL_MENU_CONTROL();
 };
 
+////////////////////////////////////////////////////////////
 
 class SfxThesSubMenuHelper
 {
@@ -67,17 +77,17 @@ class SfxThesSubMenuHelper
     css::uno::Reference< css::linguistic2::XThesaurus >             m_xThesarus;
 
 private:
-
-    // don't use copy constructor and assignment operator
+    
+    // don't use copy c-tor and assignment operator
     SfxThesSubMenuHelper( const SfxThesSubMenuHelper & );
     SfxThesSubMenuHelper & operator = ( const SfxThesSubMenuHelper & );
-
+    
 public:
     SfxThesSubMenuHelper();
     ~SfxThesSubMenuHelper();
 
     static ::rtl::OUString     GetText( const String &rLookUpString, xub_StrLen nDelimPos );
-
+    
     // returns the Locale to be used for the selected text when the thesaurus is to be called
     static void GetLocale( css::lang::Locale /*out */ &rLocale, const String &rLookUpString, xub_StrLen nDelimPos );
 
@@ -90,8 +100,9 @@ public:
     String  GetThesImplName( const css::lang::Locale &rLocale ) const;
 };
 
+////////////////////////////////////////////////////////////
 
-
+    
 #endif
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,6 @@ struct Entry_Impl
     String          m_sPublisher;
     String          m_sPublisherURL;
     String          m_sErrorText;
-    String          m_sLicenseText;
     Image           m_aIcon;
     Image           m_aIconHC;
     svt::FixedHyperlink *m_pPublisher;
@@ -138,18 +137,22 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     long            m_nExtraHeight;
     Size            m_aOutputSize;
     Image           m_aSharedImage;
+    Image           m_aSharedImageHC;
     Image           m_aLockedImage;
+    Image           m_aLockedImageHC;
     Image           m_aWarningImage;
+    Image           m_aWarningImageHC;
     Image           m_aDefaultImage;
+    Image           m_aDefaultImageHC;
     Link            m_aClickHdl;
-
+    
     ScrollBar      *m_pScrollBar;
 
     com::sun::star::uno::Reference< ExtensionRemovedListener > m_xRemoveListener;
 
     TheExtensionManager      *m_pManager;
     //This mutex is used for synchronizing access to m_vEntries.
-    //Currently it is used to synchronize adding, removing entries and
+    //Currently it is used to synchronize adding, removing entries and 
     //functions like getItemName, getItemDescription, etc. to prevent
     //that m_vEntries is accessed at an invalid index.
     //ToDo: There are many more places where m_vEntries is read and which may
@@ -167,8 +170,9 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     void            SetupScrollBar();
     void            DrawRow( const Rectangle& rRect, const TEntry_Impl pEntry );
     bool            HandleTabKey( bool bReverse );
-    bool            HandleCursorKey( sal_uInt16 nKeyCode );
+    bool            HandleCursorKey( USHORT nKeyCode );
     bool            FindEntryPos( const TEntry_Impl pEntry, long nStart, long nEnd, long &nFound );
+    bool            isHCMode();
     void            DeleteRemoved();
 
     //-----------------
@@ -190,7 +194,7 @@ public:
 
     const Size      GetMinOutputSizePixel() const;
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }
-    TEntry_Impl     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
+    TEntry_Impl     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; } 
     long            GetEntryCount() { return (long) m_vEntries.size(); }
     Rectangle       GetEntryRect( const long nPos ) const;
     bool            HasActive() { return m_bHasActive; }

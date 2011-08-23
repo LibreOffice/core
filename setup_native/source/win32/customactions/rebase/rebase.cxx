@@ -47,8 +47,8 @@ static bool IsValidHandle( HANDLE handle )
 static std::string GetMsiProperty(MSIHANDLE handle, const std::string& sProperty)
 {
     std::string result;
-    TCHAR       szDummy[1] = TEXT("");
-    DWORD       nChars = 0;
+    TCHAR		szDummy[1] = TEXT("");
+    DWORD		nChars = 0;
 
     if (MsiGetProperty(handle, sProperty.c_str(), szDummy, &nChars) == ERROR_MORE_DATA)
     {
@@ -67,7 +67,7 @@ static BOOL rebaseImage( const std::string& filePath, LPVOID address )
     ULONG_PTR lpOldImageBase;
     ULONG ulNewImageSize;
     ULONG_PTR lpNewImageBase = reinterpret_cast<ULONG_PTR>(address);
-
+    
     BOOL bResult = ReBaseImage(
         (PSTR)filePath.c_str(),
         (PSTR)"",
@@ -80,17 +80,17 @@ static BOOL rebaseImage( const std::string& filePath, LPVOID address )
         &ulNewImageSize,
         &lpNewImageBase,
         (ULONG)time(NULL) );
-
+    
     return bResult;
 }
 
 static BOOL rebaseImage( MSIHANDLE /*handle*/, const std::string& sFilePath, LPVOID address )
 {
-    std::string mystr;
+    std::string	mystr;
     mystr = "Full file: " + sFilePath;
 
     BOOL bResult = rebaseImage( sFilePath, address );
-
+    
     if ( !bResult )
     {
         OutputDebugStringFormat( "Rebasing library %s failed", mystr.c_str() );
@@ -102,10 +102,10 @@ static BOOL rebaseImage( MSIHANDLE /*handle*/, const std::string& sFilePath, LPV
 static BOOL rebaseImagesInFolder( MSIHANDLE handle, const std::string& sPath, LPVOID address )
 {
     std::string   sDir     = sPath;
-    std::string   sPattern = sPath + TEXT("*.dll");
+    std::string	  sPattern = sPath + TEXT("*.dll");
 
-    WIN32_FIND_DATA aFindFileData;
-    HANDLE  hFind = FindFirstFile( sPattern.c_str(), &aFindFileData );
+    WIN32_FIND_DATA	aFindFileData;
+    HANDLE	hFind = FindFirstFile( sPattern.c_str(), &aFindFileData );
 
     if ( IsValidHandle(hFind) )
     {
@@ -113,7 +113,7 @@ static BOOL rebaseImagesInFolder( MSIHANDLE handle, const std::string& sPath, LP
 
         do
         {
-            std::string sLibFile = sDir + aFindFileData.cFileName;
+            std::string	sLibFile = sDir + aFindFileData.cFileName;
             rebaseImage( handle, sLibFile, address );
             fSuccess = FindNextFile( hFind, &aFindFileData );
         }
@@ -128,15 +128,15 @@ static BOOL rebaseImagesInFolder( MSIHANDLE handle, const std::string& sPath, LP
 static BOOL rebaseImages( MSIHANDLE handle, LPVOID pAddress )
 {
     std::string sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
-
+ 
     std::string sBasisDir  = sInstallPath + TEXT("Basis\\program\\");
     std::string sOfficeDir = sInstallPath + TEXT("program\\");
     std::string sUreDir    = sInstallPath + TEXT("URE\\bin\\");
-
+    
     BOOL bResult = rebaseImagesInFolder( handle, sBasisDir, pAddress );
     bResult &= rebaseImagesInFolder( handle, sOfficeDir, pAddress );
     bResult &= rebaseImagesInFolder( handle, sUreDir, pAddress );
-
+    
     return bResult;
 }
 
@@ -155,11 +155,11 @@ static BOOL IsServerSystem( MSIHANDLE /*handle*/ )
 extern "C" BOOL __stdcall RebaseLibrariesOnProperties( MSIHANDLE handle )
 {
     static LPVOID pDefault = reinterpret_cast<LPVOID>(0x10000000);
-
+    
     std::string sDontOptimizeLibs = GetMsiProperty(handle, TEXT("DONTOPTIMIZELIBS"));
     if ( sDontOptimizeLibs.length() > 0 && sDontOptimizeLibs == "1" )
         return TRUE;
-
+    
     if ( !IsServerSystem( handle ))
         return rebaseImages( handle, pDefault );
 

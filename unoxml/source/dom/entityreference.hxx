@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,16 +26,13 @@
  *
  ************************************************************************/
 
-#ifndef DOM_ENTITYREFERENCE_HXX
-#define DOM_ENTITYREFERENCE_HXX
-
-#include <libxml/tree.h>
-
+#ifndef _ENTITYREFERENCE_HXX
+#define _ENTITYREFERENCE_HXX
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XEntityReference.hpp>
-
-#include <node.hxx>
-
+#include "node.hxx"
+#include <libxml/tree.h>
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -43,23 +40,13 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1< CNode, XEntityReference >
-        CEntityReference_Base;
-
-    class CEntityReference
-        : public CEntityReference_Base
+    class CEntityReference : public cppu::ImplInheritanceHelper1< CNode, XEntityReference >
     {
-    private:
-        friend class CDocument;
-
+        friend class CNode;
     protected:
-        CEntityReference(
-            CDocument const& rDocument, ::osl::Mutex const& rMutex,
-            xmlNodePtr const pNode);
+        CEntityReference(const xmlNodePtr aNodePtr);
 
     public:
-        virtual bool IsChildTypeAllowed(NodeType const nodeType);
-
         // ---- resolve uno inheritance problems...
         // overrides for XNode base
         virtual OUString SAL_CALL getNodeName()

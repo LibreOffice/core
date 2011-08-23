@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,15 +29,11 @@
 #ifndef SD_SLIDESORTER_VIEW_LAYOUTER_HXX
 #define SD_SLIDESORTER_VIEW_LAYOUTER_HXX
 
-#include "SlideSorter.hxx"
-#include "view/SlsPageObjectLayouter.hxx"
-#include "view/SlsTheme.hxx"
 #include <sal/types.h>
 #include <tools/fract.hxx>
 #include <vcl/mapmod.hxx>
 #include <vector>
 #include <utility>
-
 
 class MapMode;
 class OutputDevice;
@@ -45,11 +41,7 @@ class Size;
 
 namespace sd { namespace slidesorter { namespace view {
 
-class InsertPosition;
-
-
-
-/** Calculate the size and position of page objects displayed by a slide
+/** Calculate the size and position of page objects displayed by a slide 
     sorter.  The layouter takes into account various input values:
     1.) Size of the window in which the slide sorter is displayed.
     2.) Desired and minimal and maximal widths of page objects.
@@ -63,7 +55,7 @@ class InsertPosition;
     2.) The number of columns.
     3.) The size of the enclosing page.
 
-    <p>Sizes and lengths are all in pixel except where explicitly stated
+    <p>Sizes and lengths are all in pixel except where explicitly stated 
     otherwise.</p>
 
     <p>The GetIndex... methods may return indices that are larger than or
@@ -75,14 +67,9 @@ class InsertPosition;
 class Layouter
 {
 public:
-    enum Orientation { HORIZONTAL, VERTICAL, GRID };
-
-    Layouter (
-        const SharedSdWindow& rpWindow,
-        const ::boost::shared_ptr<Theme>& rpTheme);
+    Layouter (void);
     ~Layouter (void);
 
-    ::boost::shared_ptr<PageObjectLayouter> GetPageObjectLayouter (void) const;
     /** Set the horizontal and vertical borders in pixel coordinates between
         the enclosing window and page objects.  The borders may be painted
         larger then the given values when the space for the insertion marker
@@ -103,6 +90,23 @@ public:
     void SetBorders (sal_Int32 nLeftBorder, sal_Int32 nRightBorder,
         sal_Int32 nTopBorder, sal_Int32 nBottomBorder);
 
+    /** Set the borders arround every page object.
+        @param nLeftBorder
+            A negative value indicates that the left border shall not be
+            modified.  A value of 0 is the default.
+        @param nRightBorder
+            A negative value indicates that the left border shall not be
+            modified.  A value of 0 is the default.
+        @param nTopBorder
+            A negative value indicates that the left border shall not be
+            modified.  A value of 0 is the default.
+        @param nBottomBorder
+            A negative value indicates that the left border shall not be
+            modified.  A value of 0 is the default.
+    */
+    void SetPageBorders (sal_Int32 nLeftBorder, sal_Int32 nRightBorder,
+        sal_Int32 nTopBorder, sal_Int32 nBottomBorder);
+
     /** Set the interval of valid column counts.  When nMinimalColumnCount
         <= nMaximalColumnCount is not fullfilled then the call is ignored.
         @param nMinimalColumnCount
@@ -111,51 +115,42 @@ public:
         @param nMaximalColumnCount
             The default value is 5.
     */
-    void SetColumnCount (sal_Int32 nMinimalColumnCount,
+    void SetColumnCount (sal_Int32 nMinimalColumnCount, 
         sal_Int32 nMaximalColumnCount);
 
     /** Central method of this class.  It takes the input values and
         calculates the output values.  Both given sizes must not be 0 in any
         dimension or the call is ignored.
-        @param eOrientation
-            This defines the generaly layout and specifies whether there may
-            be more than one row or more than one column.
         @param rWindowSize
             The size of the window in pixels that the slide sorter is
-            displayed in.  This can differ from the size of mpWindow during
-            detection of whether or not the scroll bars should be visible.
-        @param rPreviewModelSize
+            displayed in.
+        @param rPageObjectSize
             Size of each page in model coordinates.
-        @param rpWindow
-            The map mode of this window is adapted to the new layout of the
-            page objects.
+        @param pDevice
+            The map mode of this output device is adapted to the new layout
+            of the page objects.
         @return
             The return value indicates whether the Get... methods can be
             used to obtain valid values (<TRUE/>).
     */
-    bool Rearrange (
-        const Orientation eOrientation,
-        const Size& rWindowSize,
-        const Size& rPreviewModelSize,
+    bool RearrangeHorizontal (
+        const Size& rWindowSize, 
+        const Size& rPageObjectSize,
+        OutputDevice* pDevice,
         const sal_uInt32 nPageCount);
+    bool RearrangeVertical (
+        const Size& rWindowSize, 
+        const Size& rPageObjectSize,
+        OutputDevice* pDevice);
 
     /** Change the zoom factor.  This does not change the general layout
         (number of columns).
     */
-    void _SetZoom (double nZoomFactor);
-    void _SetZoom (Fraction nZoomFactor);
+    void SetZoom (Fraction nZoomFactor, OutputDevice* pDevice);
 
     /** Return the number of columns.
     */
     sal_Int32 GetColumnCount (void) const;
-
-    sal_Int32 GetRowCount (void) const;
-
-    sal_Int32 GetRow (const sal_Int32 nIndex) const;
-
-    sal_Int32 GetColumn (const sal_Int32 nIndex) const;
-
-    sal_Int32 GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const;
 
     /** Return the scale factor that can be set at the map mode of the
         output window.
@@ -164,25 +159,52 @@ public:
 
     Size GetPageObjectSize (void) const;
 
-    /** Return the bounding box in window coordinates of the nIndex-th page
+    /** Return the bounding box in model coordinates of the nIndex-th page
         object.
     */
-    Rectangle GetPageObjectBox (
-        const sal_Int32 nIndex,
-        const bool bIncludeBorderAndGap = false) const;
+    Rectangle GetPageObjectBox (sal_Int32 nIndex) const;
 
     /** Return the bounding box in model coordinates of the page that
         contains the given amount of page objects.
     */
-    Rectangle GetTotalBoundingBox (void) const;
+    Rectangle GetPageBox (sal_Int32 nObjectCount) const;
+
+    /** Return the rectangle that bounds the insertion marker that is
+        specified by the parameters.
+        @param nIndex
+            Index of the page object from which the position of the marker
+            will be calculated.
+        @param bVertical
+            When <TRUE/> then the insertion marker will be calculated with a
+            vertical orientation positioned to the left or right of the
+            specified page object.  A horizontal orientation is indicated by
+            <FALSE/>.  In this case the marker will be positioned above or
+            below the page object.
+        @param bLeftOrTop
+            This flag indicates whether the insertion marker will be
+            positioned above or to the left (<TRUE/>) the page object.  When
+            <FALSE/> is given then the marker will be positioned below or to
+            the right of the page object.
+    */
+    Rectangle GetInsertionMarkerBox (
+        sal_Int32 nIndex, 
+        bool bVertical,
+        bool bLeftOrTop) const;
 
     /** Return the index of the first fully or partially visible page
         object.  This takes into account only the vertical dimension.
+    */
+    sal_Int32 GetIndexOfFirstVisiblePageObject (
+        const Rectangle& rVisibleArea) const;
+
+    /** Return the index of the last fully or partially visible page
+        object.  This takes into account only the vertical dimension.
         @return
-            The second index may be larger than the number of existing
+            The returned index may be larger than the number of existing
             page objects.
     */
-    Range GetRangeOfVisiblePageObjects (const Rectangle& rVisibleArea) const;
+    sal_Int32 GetIndexOfLastVisiblePageObject (
+        const Rectangle& rVisibleArea) const;
 
     /** Return the index of the page object that is rendered at the given
         point.
@@ -195,102 +217,166 @@ public:
             the actual page area the index of that page is returned;
             otherwise -1 would be returned to indicate that no page object
             has been hit.
-        @param bClampToValidRange
-            When <TRUE/> then values outside the valid range [0,mnPageCount)
-            are mapped to 0 (when smaller than 0) or mnPageCount-1 when
-            equal to or larger than mnPageCount.
-            When <FALSE/> then -1 is returned for values outside the valid range.
         @return
             The returned index may be larger than the number of existing
             page objects.
     */
     sal_Int32 GetIndexAtPoint (
         const Point& rModelPosition,
-        const bool bIncludePageBorders = false,
-        const bool bClampToValidRange = true) const;
+        bool bIncludePageBorders = false) const;
 
-    /** Return an object that describes the logical and visual properties of
-        where to do an insert operation when the user would release the the
-        mouse button at the given position after a drag operation and of
-        where and how to display an insertion indicator.
-        @param rModelPosition
+    /** Return the page index of where to do an insert operation when the
+        user would release the the mouse button at the given position after
+        a drag operation.
+        @param rPosition
             The position in the model coordinate system for which to
             determine the insertion page index.  The position does not have
             to be over a page object to return a valid value.
-        @param rIndicatorSize
-            The size of the insertion indicator.  This size is used to adapt
-            the location when at the left or right of a row or at the top or
-            bottom of a column.
-        @param rModel
-            The model is used to get access to the selection states of the
-            pages.  This in turn is used to determine the visual bounding
-            boxes.
+        @param bAllowVerticalPosition
+            When this flag is <TRUE/> then the vertical gaps between rows
+            may be taken into account for calculating the insertion index as
+            well as the horizontal gaps between columns.  This will happen
+            only when there is only one column.
+        (better name, anyone?)
+        @return
+            Returns the page index, as accepted by the slide sorter model,
+            of the page after which an insertion would take place.  An index
+            of 0 means that insertion will take place before the first page,
+            An index equal to or greater than the page count means to insert
+            after the last page.
+            A value of -1 indicates that no valid insertion index exists for
+            the given point.
     */
-    InsertPosition GetInsertPosition (
+    sal_Int32 GetInsertionIndex (
         const Point& rModelPosition,
-        const Size& rIndicatorSize,
-        model::SlideSorterModel& rModel) const;
+        bool bAllowVerticalPosition) const;
 
-    Range GetValidHorizontalSizeRange (void) const;
-    Range GetValidVerticalSizeRange (void) const;
+    typedef ::std::pair<double,double> DoublePoint;
+    /** Transform a point given in model coordinates in to layouter
+        coordinates.  Layouter coordinates are floating point numbers where
+        the integer part denotes a row or a column and the part after the
+        decimal point is a relative position in that row or column.
+    */
+    DoublePoint ConvertModelToLayouterCoordinates (
+        const Point& rModelPoint) const;
 
-    class Implementation;
+    /** Transform a point given in layouter coordinates to model
+        coordinates.  See ConvertModelToLayouterCoordinates for a
+        description of layouter coordinates.
+    */
+    Point ConvertLayouterToModelCoordinates (
+        const DoublePoint&rLayouterPoint) const;
 
+    typedef ::std::vector<Rectangle> BackgroundRectangleList;
+    
 private:
-    ::boost::scoped_ptr<Implementation> mpImplementation;
-    SharedSdWindow mpWindow;
+    class ScreenAndModelValue {public: 
+        sal_Int32 mnScreen,mnModel;
+        explicit ScreenAndModelValue (sal_Int32 nScreen, sal_Int32 nModel = 0)
+            : mnScreen(nScreen),mnModel(nModel) {} 
+    };
+    ScreenAndModelValue mnRequestedLeftBorder;
+    ScreenAndModelValue mnRequestedRightBorder;
+    ScreenAndModelValue mnRequestedTopBorder;
+    ScreenAndModelValue mnRequestedBottomBorder;
+    ScreenAndModelValue mnLeftBorder;
+    ScreenAndModelValue mnRightBorder;
+    ScreenAndModelValue mnTopBorder;
+    ScreenAndModelValue mnBottomBorder;
+    ScreenAndModelValue mnLeftPageBorder;
+    ScreenAndModelValue mnRightPageBorder;
+    ScreenAndModelValue mnTopPageBorder;
+    ScreenAndModelValue mnBottomPageBorder;
+    ScreenAndModelValue mnVerticalGap;
+    ScreenAndModelValue mnHorizontalGap;
+    ScreenAndModelValue mnInsertionMarkerThickness;
+    ScreenAndModelValue mnTotalVerticalGap;
+    ScreenAndModelValue mnTotalHorizontalGap;
+    sal_Int32 mnMinimalWidth;
+    sal_Int32 mnPreferredWidth;
+    sal_Int32 mnMaximalWidth;
+    sal_Int32 mnMinimalColumnCount;
+    sal_Int32 mnMaximalColumnCount;
+    sal_Int32 mnColumnCount;
+    Size maPageObjectModelSize;
+    Size maPageObjectPixelSize;
+
+    BackgroundRectangleList maBackgroundRectangleList;
+
+    enum GapMembership { GM_NONE, GM_PREVIOUS, GM_BOTH, GM_NEXT,
+                         GM_PAGE_BORDER};
+
+    /** Calculate the row that the point with the given vertical coordinate
+        is over.  The horizontal component is ignored.
+        @param nYPosition
+            Vertical position in model coordinates.
+        @param bIncludeBordersAndGaps
+            When this flag is <TRUE/> then the area of borders and gaps are
+            interpreted as belonging to one of the rows.
+        @param eGapMembership
+            Specifies to what row the gap areas belong.  Here GM_NONE
+            corresponds to bIncludeBordersAndGaps being <FALSE/>.  When
+            GM_BOTH is given then the upper half is associated to the row
+            above and the lower half to the row below.  Values of
+            GM_PREVIOUS and GM_NEXT associate the whole gap area with the
+            row above or below respectively.
+    */
+    sal_Int32 GetRowAtPosition (
+        sal_Int32 nYPosition, 
+        bool bIncludeBordersAndGaps,
+        GapMembership eGapMembership = GM_NONE) const;
+
+    /** Calculate the column that the point with the given horizontal
+        coordinate is over.  The verical component is ignored.
+        @param nXPosition
+            Horizontal position in model coordinates.
+        @param bIncludeBordersAndGaps
+            When this flag is <TRUE/> then the area of borders and gaps are
+            interpreted as belonging to one of the columns.
+        @param eGapMembership
+            Specifies to what column the gap areas belong.  Here GM_NONE
+            corresponds to bIncludeBordersAndGaps being <FALSE/>.  When
+            GM_BOTH is given then the left half is associated with the
+            column at the left and the right half with the column to the
+            right.  Values of GM_PREVIOUS and GM_NEXT associate the whole
+            gap area with the column to the left or right respectively.
+    */
+    sal_Int32 GetColumnAtPosition (
+        sal_Int32 nXPosition, 
+        bool bIncludeBordersAndGaps,
+        GapMembership eGapMembership = GM_NONE) const;
+
+    /** This method is typically called from GetRowAtPosition() and
+        GetColumnAtPosition() to handle a position that lies inside the gap
+        between two adjacent rows or columns. 
+        @param nDistanceIntoGap
+            Vertical distance from the bottom of the upper row down into the
+            gap or or horizontal distance from the right edge right into the
+            gap.
+        @param eGapMemberhship
+            This value decides what areas in the gap belong to which (or no)
+            row or column.
+        @param nIndex
+            The row index of the upper row or the column index of the left
+            column.
+        @param nLeftOrTopPageBorder
+            Width in model coordinates of the border the the right of or
+            below a page.
+        @param nGap
+             Width or height of the gap in model coordiantes between the
+             page borders.
+        @return
+           Returns either the index of the upper row (as given as nRow), the
+           index of the lower row (nRow+1) or -1 to indicate that the
+           position belongs to no row.
+        */
+    sal_Int32 ResolvePositionInGap (
+        sal_Int32 nDistanceIntoGap,
+        GapMembership eGapMembership,
+        sal_Int32 nIndex,
+        sal_Int32 nLeftOrTopPageBorder,
+        sal_Int32 nGap) const;
 };
-
-
-
-
-
-/** Collect all values concerning the logical and visual properties of the
-    insertion position that is used for drag-and-drop and copy-and-past.
-*/
-class InsertPosition
-{
-public:
-    InsertPosition (void);
-    InsertPosition& operator= (const InsertPosition& rInsertPosition);
-    bool operator== (const InsertPosition& rInsertPosition) const;
-    bool operator!= (const InsertPosition& rInsertPosition) const;
-
-    void SetLogicalPosition (
-        const sal_Int32 nRow,
-        const sal_Int32 nColumn,
-        const sal_Int32 nIndex,
-        const bool bIsAtRunStart,
-        const bool bIsAtRunEnd,
-        const bool bIsExtraSpaceNeeded);
-    void SetGeometricalPosition(
-        const Point aLocation,
-        const Point aLeadingOffset,
-        const Point aTrailingOffset);
-
-    sal_Int32 GetRow (void) const { return mnRow; }
-    sal_Int32 GetColumn (void) const { return mnColumn; }
-    sal_Int32 GetIndex (void) const { return mnIndex; }
-    Point GetLocation (void) const { return maLocation; }
-    Point GetLeadingOffset (void) const { return maLeadingOffset; }
-    Point GetTrailingOffset (void) const { return maTrailingOffset; }
-    bool IsAtRunStart (void) const { return mbIsAtRunStart; }
-    bool IsAtRunEnd (void) const { return mbIsAtRunEnd; }
-    bool IsExtraSpaceNeeded (void) const { return mbIsExtraSpaceNeeded; }
-
-private:
-    sal_Int32 mnRow;
-    sal_Int32 mnColumn;
-    sal_Int32 mnIndex;
-    bool mbIsAtRunStart : 1;
-    bool mbIsAtRunEnd : 1;
-    bool mbIsExtraSpaceNeeded : 1;
-    Point maLocation;
-    Point maLeadingOffset;
-    Point maTrailingOffset;
-};
-
-
 
 } } } // end of namespace ::sd::slidesorter::view
 

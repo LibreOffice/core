@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,22 +24,22 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_presentation_EffectNodeType_idl__
-#define __com_sun_star_presentation_EffectNodeType_idl__
+#ifndef __com_sun_star_presentation_EffectNodeType_idl__ 
+#define __com_sun_star_presentation_EffectNodeType_idl__ 
 
-//=============================================================================
-
- module com {  module sun {  module star {  module presentation {
-
-//=============================================================================
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module presentation {  
+ 
+//============================================================================= 
 
 /** This constants defines a type for an animation effect node.
     <br>
     This is stored with the name <i>node-type</i> inside the
     <member>::com::sun::star::animations::XAnimationNode::UserData</member> sequence.
     <br>
-    This does not manipulate the timing or synchronization.
-    It can be used to quickly identify semantic blocks inside an animation hierarchy.
+    This does not manipulate the timing or syncronization.
+    It can be used to quickly identify semantic blocks inside an animation hierachy.
 
     @see ::com::sun::star::animations::AnimationNode
 */
@@ -61,7 +61,7 @@ constants EffectNodeType
     */
     const short AFTER_PREVIOUS = 3;
 
-    /** This is the main sequence for effects that is automatically started.
+    /** This is the main sequence for effects that is automaticaly started.
     */
     const short MAIN_SEQUENCE = 4;
 
@@ -74,8 +74,8 @@ constants EffectNodeType
     const short INTERACTIVE_SEQUENCE = 6;
 };
 
-//=============================================================================
-
-}; }; }; };
+//============================================================================= 
+ 
+}; }; }; };  
 
 #endif

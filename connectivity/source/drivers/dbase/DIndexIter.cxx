@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,20 +46,20 @@ OIndexIterator::~OIndexIterator()
 }
 
 //------------------------------------------------------------------
-sal_uIntPtr OIndexIterator::First()
+ULONG OIndexIterator::First()
 {
-    return Find(sal_True);
+    return Find(TRUE);
 }
 
 //------------------------------------------------------------------
-sal_uIntPtr OIndexIterator::Next()
+ULONG OIndexIterator::Next()
 {
-    return Find(sal_False);
+    return Find(FALSE);
 }
 //------------------------------------------------------------------
-sal_uIntPtr OIndexIterator::Find(sal_Bool bFirst)
+ULONG OIndexIterator::Find(BOOL bFirst)
 {
-    sal_uIntPtr nRes = STRING_NOTFOUND;
+    ULONG nRes = STRING_NOTFOUND;
 
     if (bFirst)
     {
@@ -69,7 +69,7 @@ sal_uIntPtr OIndexIterator::Find(sal_Bool bFirst)
 
     if (!m_pOperator)
     {
-        // Preparation, position on the smallest element
+        // Vorbereitung , auf kleinstes Element positionieren
         if (bFirst)
         {
             ONDXPage* pPage = m_aRoot;
@@ -97,17 +97,18 @@ sal_uIntPtr OIndexIterator::Find(sal_Bool bFirst)
 //------------------------------------------------------------------
 ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
 {
-    // searches a given key
-    // Speciality: At the end of the algorithm
-    // the actual page and the position of the node which fulfil the
-    // '<='-condition are saved. this is considered for inserts.
-    //  ONDXIndex* m_pIndex = GetNDXIndex();
+    // sucht den vorgegeben key
+    // Besonderheit: gelangt der Algorithmus ans Ende
+    // wird immer die aktuelle Seite und die Knotenposition vermerkt
+    // auf die die Bedingung <= zutrifft
+    // dieses findet beim Insert besondere Beachtung
+    //	ONDXIndex* m_pIndex = GetNDXIndex();
     OOp_COMPARE aTempOp(SQLFilterOperator::GREATER);
-    sal_uInt16 i = 0;
+    USHORT i = 0;
 
     if (pPage->IsLeaf())
     {
-        // in the leaf the actual operation is run, otherwise temp. (>)
+        // im blatt wird die eigentliche Operation ausgefuehrt, sonst die temp. (>)
         while (i < pPage->Count() && !m_pOperator->operate(&((*pPage)[i]).GetKey(),&rKey))
                i++;
     }
@@ -119,7 +120,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     ONDXKey* pFoundKey = NULL;
     if (!pPage->IsLeaf())
     {
-        // descend further
+        // weiter absteigen
         ONDXPagePtr aPage = (i==0) ? pPage->GetChild(m_pIndex)
                                      : ((*pPage)[i-1]).GetChild(m_pIndex, pPage);
         pFoundKey = aPage.Is() ? GetFirstKey(aPage, rKey) : NULL;
@@ -141,14 +142,14 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
 }
 
 //------------------------------------------------------------------
-sal_uIntPtr OIndexIterator::GetCompare(sal_Bool bFirst)
+ULONG OIndexIterator::GetCompare(BOOL bFirst)
 {
     ONDXKey* pKey = NULL;
     sal_Int32 ePredicateType = PTR_CAST(file::OOp_COMPARE,m_pOperator)->getPredicateType();
 
     if (bFirst)
     {
-        // Preparation, position on the smallest element
+        // Vorbereitung , auf kleinstes Element positionieren
         ONDXPage* pPage = m_aRoot;
         switch (ePredicateType)
         {
@@ -211,7 +212,7 @@ sal_uIntPtr OIndexIterator::GetCompare(sal_Bool bFirst)
 }
 
 //------------------------------------------------------------------
-sal_uIntPtr OIndexIterator::GetLike(sal_Bool bFirst)
+ULONG OIndexIterator::GetLike(BOOL bFirst)
 {
     if (bFirst)
     {
@@ -231,7 +232,7 @@ sal_uIntPtr OIndexIterator::GetLike(sal_Bool bFirst)
 }
 
 //------------------------------------------------------------------
-sal_uIntPtr OIndexIterator::GetNull(sal_Bool bFirst)
+ULONG OIndexIterator::GetNull(BOOL bFirst)
 {
     if (bFirst)
     {
@@ -253,15 +254,15 @@ sal_uIntPtr OIndexIterator::GetNull(sal_Bool bFirst)
 }
 
 //------------------------------------------------------------------
-sal_uIntPtr OIndexIterator::GetNotNull(sal_Bool bFirst)
+ULONG OIndexIterator::GetNotNull(BOOL bFirst)
 {
     ONDXKey* pKey;
     if (bFirst)
     {
         // erst alle NULL werte abklappern
-        for (sal_uIntPtr nRec = GetNull(bFirst);
+        for (ULONG nRec = GetNull(bFirst);
              nRec != STRING_NOTFOUND;
-             nRec = GetNull(sal_False))
+             nRec = GetNull(FALSE))
                  ;
         pKey = m_aCurLeaf.Is() ? &(*m_aCurLeaf)[m_nCurNode].GetKey() : NULL;
     }
@@ -277,15 +278,15 @@ ONDXKey* OIndexIterator::GetNextKey()
     if (m_aCurLeaf.Is() && ((++m_nCurNode) >= m_aCurLeaf->Count()))
     {
         ONDXPage* pPage = m_aCurLeaf;
-        // search next page
+        // naechste Seite suchen
         while (pPage)
         {
             ONDXPage* pParentPage = pPage->GetParent();
             if (pParentPage)
             {
-                sal_uInt16 nPos = pParentPage->Search(pPage);
+                USHORT nPos = pParentPage->Search(pPage);
                 if (nPos != pParentPage->Count() - 1)
-                {   // page found
+                {	// Seite gefunden
                     pPage = (*pParentPage)[nPos+1].GetChild(m_pIndex,pParentPage);
                     break;
                 }
@@ -293,7 +294,7 @@ ONDXKey* OIndexIterator::GetNextKey()
             pPage = pParentPage;
         }
 
-        // now go on with leaf
+        // jetzt wieder zum Blatt
         while (pPage && !pPage->IsLeaf())
             pPage = pPage->GetChild(m_pIndex);
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "rtl/string.h"
 #include "rtl/string.h"
 #include "stgole.hxx"
-#include "sot/storinfo.hxx"     // Read/WriteClipboardFormat()
+#include "storinfo.hxx"		// Read/WriteClipboardFormat()
 
 #include <tools/debug.hxx>
 #if defined(_MSC_VER) && (_MSC_VER>=1400)
@@ -41,10 +41,10 @@
 ///////////////////////// class StgInternalStream ////////////////////////
 
 StgInternalStream::StgInternalStream
-    ( BaseStorage& rStg, const String& rName, sal_Bool bWr )
+    ( BaseStorage& rStg, const String& rName, BOOL bWr )
 {
-    bIsWritable = sal_True;
-    sal_uInt16 nMode = bWr
+    bIsWritable = TRUE;
+    USHORT nMode = bWr
                  ? STREAM_WRITE | STREAM_SHARE_DENYALL
                  : STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE;
     pStrm = rStg.OpenStream( rName, nMode );
@@ -59,7 +59,7 @@ StgInternalStream::~StgInternalStream()
     delete pStrm;
 }
 
-sal_uLong StgInternalStream::GetData( void* pData, sal_uLong nSize )
+ULONG StgInternalStream::GetData( void* pData, ULONG nSize )
 {
     if( pStrm )
     {
@@ -71,7 +71,7 @@ sal_uLong StgInternalStream::GetData( void* pData, sal_uLong nSize )
         return 0;
 }
 
-sal_uLong StgInternalStream::PutData( const void* pData, sal_uLong nSize )
+ULONG StgInternalStream::PutData( const void* pData, ULONG nSize )
 {
     if( pStrm )
     {
@@ -83,7 +83,7 @@ sal_uLong StgInternalStream::PutData( const void* pData, sal_uLong nSize )
         return 0;
 }
 
-sal_uLong StgInternalStream::SeekPos( sal_uLong nPos )
+ULONG StgInternalStream::SeekPos( ULONG nPos )
 {
     return pStrm ? pStrm->Seek( nPos ) : 0;
 }
@@ -105,100 +105,128 @@ void StgInternalStream::Commit()
 
 ///////////////////////// class StgCompObjStream /////////////////////////
 
-StgCompObjStream::StgCompObjStream( BaseStorage& rStg, sal_Bool bWr )
+StgCompObjStream::StgCompObjStream( BaseStorage& rStg, BOOL bWr )
             : StgInternalStream( rStg, String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1CompObj" ) ), bWr )
 {
     memset( &aClsId, 0, sizeof( ClsId ) );
     nCbFormat = 0;
 }
 
-sal_Bool StgCompObjStream::Load()
+BOOL StgCompObjStream::Load()
 {
     memset( &aClsId, 0, sizeof( ClsId ) );
     nCbFormat = 0;
     aUserName.Erase();
     if( GetError() != SVSTREAM_OK )
-        return sal_False;
-    Seek( 8L );     // skip the first part
-    sal_Int32 nMarker = 0;
+        return FALSE;
+    Seek( 8L );		// skip the first part
+    INT32 nMarker = 0;
     *this >> nMarker;
     if( nMarker == -1L )
     {
         *this >> aClsId;
-        sal_Int32 nLen1 = 0;
+        INT32 nLen1 = 0;
         *this >> nLen1;
         // higher bits are ignored
         nLen1 &= 0xFFFF;
-        sal_Char* p = new sal_Char[ (sal_uInt16) nLen1 ];
-        if( Read( p, nLen1 ) == (sal_uLong) nLen1 )
+        sal_Char* p = new sal_Char[ (USHORT) nLen1 ];
+        if( Read( p, nLen1 ) == (ULONG) nLen1 )
         {
-            //The encoding here is "ANSI", which is pretty useless seeing as
-            //the actual codepage used doesn't seem to be specified/stored
-            //anywhere :-(. Might as well pick 1252 and be consistent on
-            //all platforms and envs
-            //http://www.openoffice.org/nonav/issues/showattachment.cgi/68668/Orginal%20Document.doc
-            //for a good edge-case example
-            aUserName = nLen1 ? String( p, RTL_TEXTENCODING_MS_1252 ) : String();
+            aUserName = nLen1 ? String( p, gsl_getSystemTextEncoding() ) : String();
+/*			// Now we can read the CB format
+            INT32 nLen2 = 0;
+            *this >> nLen2;
+            if( nLen2 > 0 )
+            {
+                // get a string name
+                if( nLen2 > nLen1 )
+                    delete p, p = new char[ nLen2 ];
+                if( Read( p, nLen2 ) == (ULONG) nLen2 && nLen2 )
+                    nCbFormat = Exchange::RegisterFormatName( String( p ) );
+                else
+                    SetError( SVSTREAM_GENERALERROR );
+            }
+            else if( nLen2 == -1L )
+                // Windows clipboard format
+                *this >> nCbFormat;
+            else
+                // unknown identifier
+                SetError( SVSTREAM_GENERALERROR );
+*/
             nCbFormat = ReadClipboardFormat( *this );
         }
         else
             SetError( SVSTREAM_GENERALERROR );
         delete [] p;
     }
-    return sal_Bool( GetError() == SVSTREAM_OK );
+    return BOOL( GetError() == SVSTREAM_OK );
 }
 
-sal_Bool StgCompObjStream::Store()
+BOOL StgCompObjStream::Store()
 {
     if( GetError() != SVSTREAM_OK )
-        return sal_False;
+        return FALSE;
     Seek( 0L );
-    ByteString aAsciiUserName( aUserName, RTL_TEXTENCODING_MS_1252 );
-    *this << (sal_Int16) 1          // Version?
-              << (sal_Int16) -2                     // 0xFFFE = Byte Order Indicator
-              << (sal_Int32) 0x0A03         // Windows 3.10
-              << (sal_Int32) -1L
-              << aClsId             // Class ID
-              << (sal_Int32) (aAsciiUserName.Len() + 1)
+    ByteString aAsciiUserName( aUserName, RTL_TEXTENCODING_ASCII_US );
+    *this << (INT16) 1			// Version?
+              << (INT16) -2                     // 0xFFFE = Byte Order Indicator
+              << (INT32) 0x0A03			// Windows 3.10
+              << (INT32) -1L
+              << aClsId				// Class ID
+              << (INT32) (aAsciiUserName.Len() + 1)
               << (const char *)aAsciiUserName.GetBuffer()
-              << (sal_uInt8) 0;             // string terminator
+              << (UINT8) 0;				// string terminator
+/*	// determine the clipboard format string
+    String aCbFmt;
+    if( nCbFormat > FORMAT_GDIMETAFILE )
+    aCbFmt = Exchange::GetFormatName( nCbFormat );
+    if( aCbFmt.Len() )
+        *this << (INT32) aCbFmt.Len() + 1
+               << (const char*) aCbFmt
+               << (UINT8) 0;
+    else if( nCbFormat )
+         *this << (INT32) -1	   		// for Windows
+                << (INT32) nCbFormat;
+    else
+        *this << (INT32) 0;			// no clipboard format
+*/
     WriteClipboardFormat( *this, nCbFormat );
-    *this << (sal_Int32) 0;             // terminator
+    *this << (INT32) 0;				// terminator
     Commit();
-    return sal_Bool( GetError() == SVSTREAM_OK );
+    return BOOL( GetError() == SVSTREAM_OK );
 }
 
 /////////////////////////// class StgOleStream ///////////////////////////
 
-StgOleStream::StgOleStream( BaseStorage& rStg, sal_Bool bWr )
+StgOleStream::StgOleStream( BaseStorage& rStg, BOOL bWr )
             : StgInternalStream( rStg, String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole" ) ), bWr )
 {
     nFlags = 0;
 }
 
-sal_Bool StgOleStream::Load()
+BOOL StgOleStream::Load()
 {
     nFlags = 0;
     if( GetError() != SVSTREAM_OK )
-        return sal_False;
-    sal_Int32 version = 0;
+        return FALSE;
+    INT32 version = 0;
     Seek( 0L );
     *this >> version >> nFlags;
-    return sal_Bool( GetError() == SVSTREAM_OK );
+    return BOOL( GetError() == SVSTREAM_OK );
 }
 
-sal_Bool StgOleStream::Store()
+BOOL StgOleStream::Store()
 {
     if( GetError() != SVSTREAM_OK )
-        return sal_False;
+        return FALSE;
     Seek( 0L );
-    *this << (sal_Int32) 0x02000001         // OLE version, format
-          << (sal_Int32) nFlags             // Object flags
-          << (sal_Int32) 0                  // Update Options
-          << (sal_Int32) 0                  // reserved
-          << (sal_Int32) 0;                 // Moniker 1
+    *this << (INT32) 0x02000001			// OLE version, format
+          << (INT32) nFlags				// Object flags
+          << (INT32) 0					// Update Options
+          << (INT32) 0					// reserved
+          << (INT32) 0;			   		// Moniker 1
     Commit();
-    return sal_Bool( GetError() == SVSTREAM_OK );
+    return BOOL( GetError() == SVSTREAM_OK );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

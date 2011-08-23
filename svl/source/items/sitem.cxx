@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,16 +42,16 @@ DBG_NAME(SfxSetItem)
 
 // --------------------------------------------------------------------------
 
-SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
+SfxSetItem::SfxSetItem( USHORT which, const SfxItemSet &rSet) :
     SfxPoolItem(which),
-    pSet(rSet.Clone(sal_True))
+    pSet(rSet.Clone(TRUE))
 {
     DBG_CTOR(SfxSetItem, 0);
 }
 
 // --------------------------------------------------------------------------
 
-SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet *pS) :
+SfxSetItem::SfxSetItem( USHORT which, SfxItemSet *pS) :
     SfxPoolItem(which),
     pSet(pS)
 {
@@ -63,7 +63,7 @@ SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet *pS) :
 
 SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
     SfxPoolItem(rCopy.Which()),
-    pSet(rCopy.pSet->Clone(sal_True, pPool))
+    pSet(rCopy.pSet->Clone(TRUE, pPool))
 {
     DBG_CTOR(SfxSetItem, 0);
 }
@@ -102,7 +102,7 @@ SfxItemPresentation SfxSetItem::GetPresentation
 
 // --------------------------------------------------------------------------
 
-SvStream& SfxSetItem::Store(SvStream& rStream, sal_uInt16) const
+SvStream& SfxSetItem::Store(SvStream& rStream, USHORT) const
 {
     GetItemSet().Store(rStream);
     return rStream;

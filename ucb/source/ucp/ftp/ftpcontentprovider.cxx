@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,8 +105,8 @@ XTYPEPROVIDER_IMPL_3(FTPContentProvider,
 
 XSERVICEINFO_IMPL_1(
     FTPContentProvider,
-    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.FTPContentProvider")),
-    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(FTP_CONTENT_PROVIDER_SERVICE_NAME)));
+    rtl::OUString::createFromAscii("com.sun.star.comp.FTPContentProvider"),
+    rtl::OUString::createFromAscii(FTP_CONTENT_PROVIDER_SERVICE_NAME));
 
 //=========================================================================
 //
@@ -137,7 +137,7 @@ FTPContentProvider::queryContent(
     Reference<XContent> xContent = queryExistingContent(xCanonicId).get();
     if(xContent.is())
         return xContent;
-
+    
     // A new content has to be returned:
     {
         // Initialize
@@ -149,18 +149,18 @@ FTPContentProvider::queryContent(
             } catch( ... ) {
                 throw RuntimeException();
             }
-
+            
             if(!m_ftpLoaderThread || !m_pProxyDecider)
                 throw RuntimeException();
         }
     }
-
+    
     try {
         FTPURL aURL(xCanonicId->getContentIdentifier(),
                     this);
-
+        
         if(!m_pProxyDecider->shouldUseProxy(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ftp")),
+            rtl::OUString::createFromAscii("ftp"),
             aURL.host(),
             aURL.port().toInt32()))
         {
@@ -178,7 +178,7 @@ FTPContentProvider::queryContent(
     } catch(const malformed_exception&) {
         throw IllegalIdentifierException();
     }
-
+    
     // may throw IllegalIdentifierException
     return xContent;
 }
@@ -208,15 +208,15 @@ bool FTPContentProvider::forHost(
 {
     osl::MutexGuard aGuard(m_aMutex);
     for(unsigned int i = 0; i < m_ServerInfo.size(); ++i)
-        if(host == m_ServerInfo[i].host &&
-           port == m_ServerInfo[i].port &&
+        if(host == m_ServerInfo[i].host && 
+           port == m_ServerInfo[i].port && 
            username == m_ServerInfo[i].username )
         {
             password = m_ServerInfo[i].password;
             account = m_ServerInfo[i].account;
             return true;
         }
-
+    
     return false;
 }
 
@@ -238,7 +238,7 @@ bool  FTPContentProvider::setHost(
     bool present(false);
     osl::MutexGuard aGuard(m_aMutex);
     for(unsigned int i = 0; i < m_ServerInfo.size(); ++i)
-        if(host == m_ServerInfo[i].host &&
+        if(host == m_ServerInfo[i].host && 
            port == m_ServerInfo[i].port &&
            username == m_ServerInfo[i].username)
         {
@@ -246,10 +246,10 @@ bool  FTPContentProvider::setHost(
             m_ServerInfo[i].password = password;
             m_ServerInfo[i].account = account;
         }
-
+    
     if(!present)
         m_ServerInfo.push_back(inf);
-
+    
     return !present;
 }
 
@@ -265,7 +265,7 @@ FTPContentProvider::getHttpProvider()
     if(pBroker) {
         Reference<XContentProviderManager > xManager(
             pBroker->getContentProviderManagerInterface());
-
+        
         if(xManager.is())
             return
                 xManager->queryContentProvider(

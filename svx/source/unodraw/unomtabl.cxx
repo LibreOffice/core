@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,15 +45,15 @@
 #include <svx/svdmodel.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xflhtit.hxx>
-
+    
 #include <vector>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 
-#include "svx/unofill.hxx"
+#include "unofill.hxx"
 
-#include "svx/unoapi.hxx"
+#include "unoapi.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -65,14 +65,14 @@ class SvxUnoMarkerTable : public WeakImplHelper2< container::XNameContainer, lan
                           public SfxListener
 {
 private:
-    SdrModel*       mpModel;
-    SfxItemPool*    mpModelPool;
+    SdrModel*		mpModel;
+    SfxItemPool*	mpModelPool;
 
     ItemPoolVector maItemSetVector;
 
 public:
     SvxUnoMarkerTable( SdrModel* pModel ) throw();
-    virtual ~SvxUnoMarkerTable() throw();
+    virtual	~SvxUnoMarkerTable() throw();
 
     void dispose();
 
@@ -145,11 +145,11 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::supportsService( const  OUString& ServiceNa
     uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
     const OUString * pArray = aSNL.getConstArray();
 
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
+    for( INT32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return sal_True;
+            return TRUE;
 
-    return sal_False;
+    return FALSE;
 }
 
 OUString SAL_CALL SvxUnoMarkerTable::getImplementationName() throw( uno::RuntimeException )
@@ -173,9 +173,9 @@ void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const 
     XLineEndItem aEndMarker;
     aEndMarker.SetName( String( aName ) );
     aEndMarker.PutValue( aElement );
-
+    
     mpInSet->Put( aEndMarker, XATTR_LINEEND );
-
+    
     XLineStartItem aStartMarker;
     aStartMarker.SetName( String( aName ) );
     aStartMarker.PutValue( aElement );
@@ -229,7 +229,7 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
             maItemSetVector.erase( aIter );
             return;
         }
-        ++aIter;
+        aIter++;
     }
 
     if( !hasByName( Name ) )
@@ -260,27 +260,27 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
             aEndMarker.SetName( aSearchName );
             if( !aEndMarker.PutValue( aElement ) )
                 throw lang::IllegalArgumentException();
-
+            
             (*aIter)->Put( aEndMarker, XATTR_LINEEND );
 
             XLineStartItem aStartMarker;
             aStartMarker.SetName( aSearchName );
             aStartMarker.PutValue( aElement );
-
+            
             (*aIter)->Put( aStartMarker, XATTR_LINESTART );
             return;
         }
-        ++aIter;
+        aIter++;
     }
 
     // if it is not in our own sets, modify the pool!
     sal_Bool bFound = sal_False;
 
-    sal_uInt32 nSurrogate;
-    const sal_uInt32 nStartCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINESTART ) : 0;
+    USHORT nSurrogate;
+    const USHORT nStartCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINESTART ) : 0;
     for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( XATTR_LINESTART, nSurrogate);
+        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINESTART, nSurrogate);
         if( pItem && pItem->GetName() == aSearchName )
         {
             pItem->PutValue( aElement );
@@ -289,10 +289,10 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         }
     }
 
-    const sal_uInt32 nEndCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINEEND ) : 0;
+    const USHORT nEndCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINEEND ) : 0;
     for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( XATTR_LINEEND, nSurrogate);
+        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINEEND, nSurrogate);
         if( pItem && pItem->GetName() == aSearchName )
         {
             pItem->PutValue( aElement );
@@ -307,13 +307,13 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         throw container::NoSuchElementException();
 }
 
-static sal_Bool getByNameFromPool( const String& rSearchName, SfxItemPool* pPool, sal_uInt16 nWhich, uno::Any& rAny )
+static sal_Bool getByNameFromPool( const String& rSearchName, SfxItemPool* pPool, USHORT nWhich, uno::Any& rAny )
 {
     NameOrIndex *pItem;
-    const sal_uInt32 nSurrogateCount = pPool ? pPool->GetItemCount2( nWhich ) : 0;
-    for( sal_uInt32 nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
+    const sal_Int32 nSurrogateCount = pPool ? (sal_Int32)pPool->GetItemCount( nWhich ) : 0;
+    for( sal_Int32 nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)pPool->GetItem2( nWhich, nSurrogate );
+        pItem = (NameOrIndex*)pPool->GetItem( nWhich, (USHORT)nSurrogate );
 
         if( pItem && pItem->GetName() == rSearchName )
         {
@@ -355,17 +355,17 @@ uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
     return aAny;
 }
 
-static void createNamesForPool( SfxItemPool* pPool, sal_uInt16 nWhich, std::set< OUString, comphelper::UStringLess >& rNameSet )
+static void createNamesForPool( SfxItemPool* pPool, USHORT nWhich, std::set< OUString, comphelper::UStringLess >& rNameSet )
 {
-    const sal_uInt32 nSuroCount = pPool->GetItemCount2( nWhich );
-    sal_uInt32 nSurrogate;
+    const sal_Int32 nSuroCount = pPool->GetItemCount( nWhich );
+    sal_Int32 nSurrogate;
 
-    NameOrIndex* pItem;
+    NameOrIndex *pItem;
     OUString aName;
 
     for( nSurrogate = 0; nSurrogate < nSuroCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)pPool->GetItem2( nWhich, nSurrogate );
+        pItem = (NameOrIndex*)pPool->GetItem( nWhich, (USHORT)nSurrogate );
 
         if( pItem == NULL || pItem->GetName().Len() == 0 )
             continue;
@@ -415,20 +415,20 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
     NameOrIndex *pItem;
 
     SvxUnogetInternalNameForItem( XATTR_LINESTART, aName, aSearchName );
-    sal_uInt32 nStartCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINESTART ) : 0;
-    sal_uInt32 nSurrogate;
+    USHORT nStartCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINESTART ) : 0;
+    USHORT nSurrogate;
     for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( XATTR_LINESTART, nSurrogate);
+        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINESTART, nSurrogate);
         if( pItem && pItem->GetName() == aSearchName )
             return sal_True;
     }
 
     SvxUnogetInternalNameForItem( XATTR_LINEEND, aName, aSearchName );
-    sal_uInt32 nEndCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINEEND ) : 0;
+    USHORT nEndCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINEEND ) : 0;
     for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( XATTR_LINEEND, nSurrogate);
+        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINEEND, nSurrogate);
         if( pItem && pItem->GetName() == aSearchName )
             return sal_True;
     }
@@ -450,19 +450,19 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
 
     NameOrIndex *pItem;
 
-    const sal_uInt32 nStartCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINESTART ) : 0;
-    sal_uInt32 nSurrogate;
+    const USHORT nStartCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINESTART ) : 0;
+    USHORT nSurrogate;
     for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( XATTR_LINESTART, nSurrogate);
+        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINESTART, nSurrogate);
         if( pItem && pItem->GetName().Len() != 0 )
             return sal_True;
     }
 
-    const sal_uInt32 nEndCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINEEND ) : 0;
+    const USHORT nEndCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINEEND ) : 0;
     for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( XATTR_LINEEND, nSurrogate);
+        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINEEND, nSurrogate);
         if( pItem && pItem->GetName().Len() != 0 )
             return sal_True;
     }

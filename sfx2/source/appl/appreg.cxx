@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,11 +34,11 @@
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include "arrdecl.hxx"
-#include "sfx2/sfxhelp.hxx"
+#include "sfxhelp.hxx"
 #include <sfx2/templdlg.hxx>
 #include "objmnctl.hxx"
 #include "inettbc.hxx"
-#include "sfx2/stbitem.hxx"
+#include "stbitem.hxx"
 #include <sfx2/navigat.hxx>
 #include <sfx2/taskpane.hxx>
 #include <sfx2/module.hxx>
@@ -63,9 +63,9 @@ void SfxApplication::Registrations_Impl()
 
     // ChildWindows
     SfxRecordingFloatWrapper_Impl::RegisterChildWindow();
-    SfxNavigatorWrapper::RegisterChildWindow( sal_False, NULL, SFX_CHILDWIN_NEVERHIDE );
+    SfxNavigatorWrapper::RegisterChildWindow( FALSE, NULL, SFX_CHILDWIN_NEVERHIDE );
     SfxPartChildWnd_Impl::RegisterChildWindow();
-    SfxTemplateDialogWrapper::RegisterChildWindow(sal_True);
+    SfxTemplateDialogWrapper::RegisterChildWindow(TRUE);
     SfxDockingWrapper::RegisterChildWindow();
 
     // Controller
@@ -86,13 +86,13 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFac
     }
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pAppData_Impl->pTbxCtrlFac->Count(); n++ )
+    for ( USHORT n=0; n<pAppData_Impl->pTbxCtrlFac->Count(); n++ )
     {
         SfxTbxCtrlFactory *pF = (*pAppData_Impl->pTbxCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
-            DBG_WARNING("TbxController registration is not clearly defined!");
+            DBG_WARNING("TbxController-Registrierung ist nicht eindeutig!");
         }
     }
 #endif
@@ -111,13 +111,13 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlF
     }
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pAppData_Impl->pStbCtrlFac->Count(); n++ )
+    for ( USHORT n=0; n<pAppData_Impl->pStbCtrlFac->Count(); n++ )
     {
         SfxStbCtrlFactory *pF = (*pAppData_Impl->pStbCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
-            DBG_WARNING("StbController registration is not clearly defined!");
+            DBG_WARNING("StbController-Registrierung ist nicht eindeutig!");
         }
     }
 #endif
@@ -136,13 +136,13 @@ void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFacto
     }
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pAppData_Impl->pMenuCtrlFac->Count(); n++ )
+    for ( USHORT n=0; n<pAppData_Impl->pMenuCtrlFac->Count(); n++ )
     {
         SfxMenuCtrlFactory *pF = (*pAppData_Impl->pMenuCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
-            DBG_WARNING("MenuController register is not clearly defined!");
+            DBG_WARNING("MenuController-Registrierung ist nicht eindeutig!");
         }
     }
 #endif

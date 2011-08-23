@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@
 
 //------------------------------------
 // class SdrCaptionFixedAngleItem
-// sal_True=Winkel durch SdrCaptionAngleItem vorgegeben
-// sal_False=Freier Winkel
+// TRUE=Winkel durch SdrCaptionAngleItem vorgegeben
+// FALSE=Freier Winkel
 //------------------------------------
 class SdrCaptionFixedAngleItem: public SdrOnOffItem {
 public:
-    SdrCaptionFixedAngleItem(sal_Bool bFix=sal_True): SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE,bFix) {}
+    SdrCaptionFixedAngleItem(BOOL bFix=TRUE): SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE,bFix) {}
     SdrCaptionFixedAngleItem(SvStream& rIn) : SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE,rIn)  {}
 };
 

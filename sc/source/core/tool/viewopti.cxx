@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,15 +46,14 @@
 #include "miscuno.hxx"
 
 using namespace utl;
+using namespace rtl;
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
 
 //------------------------------------------------------------------
 
-TYPEINIT1(ScTpViewItem, SfxPoolItem);
+TYPEINIT1(ScTpViewItem,	SfxPoolItem);
 
-#define SC_VERSION ((sal_uInt16)302)
+#define SC_VERSION ((USHORT)302)
 
 
 //========================================================================
@@ -66,19 +65,19 @@ void ScGridOptions::SetDefaults()
 {
     *this = ScGridOptions();
 
-    //  Raster-Defaults sind jetzt zwischen den Apps unterschiedlich
-    //  darum hier selber eintragen (alles in 1/100mm)
+    //	Raster-Defaults sind jetzt zwischen den Apps unterschiedlich
+    //	darum hier selber eintragen (alles in 1/100mm)
 
     if ( ScOptionsUtil::IsMetricSystem() )
     {
-        nFldDrawX = 1000;   // 1cm
+        nFldDrawX = 1000;	// 1cm
         nFldDrawY = 1000;
         nFldSnapX = 1000;
         nFldSnapY = 1000;
     }
     else
     {
-        nFldDrawX = 1270;   // 0,5"
+        nFldDrawX = 1270;	// 0,5"
         nFldDrawY = 1270;
         nFldSnapX = 1270;
         nFldSnapY = 1270;
@@ -91,17 +90,17 @@ void ScGridOptions::SetDefaults()
 
 const ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
 {
-    nFldDrawX       = rCpy.nFldDrawX;       // UINT32
-    nFldDrawX       = rCpy.nFldDrawX;
-    nFldDivisionX   = rCpy.nFldDivisionX;
-    nFldDrawY       = rCpy.nFldDrawY;
-    nFldDivisionY   = rCpy.nFldDivisionY;
-    nFldSnapX       = rCpy.nFldSnapX;
-    nFldSnapY       = rCpy.nFldSnapY;
-    bUseGridsnap    = rCpy.bUseGridsnap;    // BitBool
-    bSynchronize    = rCpy.bSynchronize;
-    bGridVisible    = rCpy.bGridVisible;
-    bEqualGrid      = rCpy.bEqualGrid;
+    nFldDrawX		= rCpy.nFldDrawX;		// UINT32
+    nFldDrawX		= rCpy.nFldDrawX;
+    nFldDivisionX	= rCpy.nFldDivisionX;
+    nFldDrawY		= rCpy.nFldDrawY;
+    nFldDivisionY	= rCpy.nFldDivisionY;
+    nFldSnapX		= rCpy.nFldSnapX;
+    nFldSnapY		= rCpy.nFldSnapY;
+    bUseGridsnap	= rCpy.bUseGridsnap;	// BitBool
+    bSynchronize	= rCpy.bSynchronize;
+    bGridVisible	= rCpy.bGridVisible;
+    bEqualGrid		= rCpy.bEqualGrid;
 
     return *this;
 }
@@ -110,17 +109,17 @@ const ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
 
 int ScGridOptions::operator==( const ScGridOptions& rCpy ) const
 {
-    return (   nFldDrawX        == rCpy.nFldDrawX
-            && nFldDrawX        == rCpy.nFldDrawX
-            && nFldDivisionX    == rCpy.nFldDivisionX
-            && nFldDrawY        == rCpy.nFldDrawY
-            && nFldDivisionY    == rCpy.nFldDivisionY
-            && nFldSnapX        == rCpy.nFldSnapX
-            && nFldSnapY        == rCpy.nFldSnapY
-            && bUseGridsnap     == rCpy.bUseGridsnap
-            && bSynchronize     == rCpy.bSynchronize
-            && bGridVisible     == rCpy.bGridVisible
-            && bEqualGrid       == rCpy.bEqualGrid );
+    return (   nFldDrawX		== rCpy.nFldDrawX
+            && nFldDrawX		== rCpy.nFldDrawX
+            && nFldDivisionX	== rCpy.nFldDivisionX
+            && nFldDrawY		== rCpy.nFldDrawY
+            && nFldDivisionY	== rCpy.nFldDivisionY
+            && nFldSnapX		== rCpy.nFldSnapX
+            && nFldSnapY		== rCpy.nFldSnapY
+            && bUseGridsnap		== rCpy.bUseGridsnap
+            && bSynchronize		== rCpy.bSynchronize
+            && bGridVisible		== rCpy.bGridVisible
+            && bEqualGrid		== rCpy.bEqualGrid );
 }
 
 
@@ -142,7 +141,7 @@ ScViewOptions::ScViewOptions( const ScViewOptions& rCpy )
 
 //------------------------------------------------------------------------
 
-ScViewOptions::~ScViewOptions()
+__EXPORT ScViewOptions::~ScViewOptions()
 {
 }
 
@@ -150,22 +149,22 @@ ScViewOptions::~ScViewOptions()
 
 void ScViewOptions::SetDefaults()
 {
-    aOptArr[ VOPT_FORMULAS    ] =
-    aOptArr[ VOPT_SYNTAX      ] =
+    aOptArr[ VOPT_FORMULAS	  ] =
+    aOptArr[ VOPT_SYNTAX	  ] =
     aOptArr[ VOPT_HELPLINES   ] =
-    aOptArr[ VOPT_BIGHANDLES  ] = false;
-    aOptArr[ VOPT_NOTES       ] =
-    aOptArr[ VOPT_NULLVALS    ] =
-    aOptArr[ VOPT_VSCROLL     ] =
-    aOptArr[ VOPT_HSCROLL     ] =
+    aOptArr[ VOPT_BIGHANDLES  ] = FALSE;
+    aOptArr[ VOPT_NOTES		  ] =
+    aOptArr[ VOPT_NULLVALS	  ] =
+    aOptArr[ VOPT_VSCROLL	  ] =
+    aOptArr[ VOPT_HSCROLL	  ] =
     aOptArr[ VOPT_TABCONTROLS ] =
-    aOptArr[ VOPT_OUTLINER    ] =
-    aOptArr[ VOPT_HEADER      ] =
-    aOptArr[ VOPT_GRID        ] =
-    aOptArr[ VOPT_ANCHOR      ] =
+    aOptArr[ VOPT_OUTLINER	  ] =
+    aOptArr[ VOPT_HEADER	  ] =
+    aOptArr[ VOPT_GRID		  ] =
+    aOptArr[ VOPT_ANCHOR	  ] =
     aOptArr[ VOPT_PAGEBREAKS  ] =
     aOptArr[ VOPT_SOLIDHANDLES] =
-    aOptArr[ VOPT_CLIPMARKS   ] = sal_True;
+    aOptArr[ VOPT_CLIPMARKS	  ] = TRUE;
 
     aModeArr[VOBJ_TYPE_OLE ]  =
     aModeArr[VOBJ_TYPE_CHART] =
@@ -191,14 +190,14 @@ Color ScViewOptions::GetGridColor( String* pStrName ) const
 
 const ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
 {
-    sal_uInt16 i;
+    USHORT i;
 
-    for ( i=0; i<MAX_OPT; i++ )  aOptArr [i] = rCpy.aOptArr[i];
+    for ( i=0; i<MAX_OPT; i++ )	 aOptArr [i] = rCpy.aOptArr[i];
     for ( i=0; i<MAX_TYPE; i++ ) aModeArr[i] = rCpy.aModeArr[i];
 
-    aGridCol        = rCpy.aGridCol;
-    aGridColName    = rCpy.aGridColName;
-    aGridOpt        = rCpy.aGridOpt;
+    aGridCol     	= rCpy.aGridCol;
+    aGridColName 	= rCpy.aGridColName;
+    aGridOpt		= rCpy.aGridOpt;
 
     return *this;
 }
@@ -207,35 +206,35 @@ const ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
 
 int ScViewOptions::operator==( const ScViewOptions& rOpt ) const
 {
-    sal_Bool    bEqual = sal_True;
-    sal_uInt16  i;
+    BOOL	bEqual = TRUE;
+    USHORT	i;
 
     for ( i=0; i<MAX_OPT && bEqual; i++ )  bEqual = (aOptArr [i] == rOpt.aOptArr[i]);
     for ( i=0; i<MAX_TYPE && bEqual; i++ ) bEqual = (aModeArr[i] == rOpt.aModeArr[i]);
 
     bEqual = bEqual && (aGridCol       == rOpt.aGridCol);
     bEqual = bEqual && (aGridColName   == rOpt.aGridColName);
-    bEqual = bEqual && (aGridOpt       == rOpt.aGridOpt);
+    bEqual = bEqual && (aGridOpt 	   == rOpt.aGridOpt);
 
     return bEqual;
 }
 
 //------------------------------------------------------------------------
 
-SvxGridItem* ScViewOptions::CreateGridItem( sal_uInt16 nId /* = SID_ATTR_GRID_OPTIONS */ ) const
+SvxGridItem* ScViewOptions::CreateGridItem( USHORT nId /* = SID_ATTR_GRID_OPTIONS */ ) const
 {
     SvxGridItem* pItem = new SvxGridItem( nId );
 
-    pItem->SetFldDrawX      ( aGridOpt.GetFldDrawX() );
-    pItem->SetFldDivisionX  ( aGridOpt.GetFldDivisionX() );
-    pItem->SetFldDrawY      ( aGridOpt.GetFldDrawY() );
-    pItem->SetFldDivisionY  ( aGridOpt.GetFldDivisionY() );
-    pItem->SetFldSnapX      ( aGridOpt.GetFldSnapX() );
-    pItem->SetFldSnapY      ( aGridOpt.GetFldSnapY() );
-    pItem->SetUseGridSnap   ( aGridOpt.GetUseGridSnap() );
-    pItem->SetSynchronize   ( aGridOpt.GetSynchronize() );
-    pItem->SetGridVisible   ( aGridOpt.GetGridVisible() );
-    pItem->SetEqualGrid     ( aGridOpt.GetEqualGrid() );
+    pItem->SetFldDrawX		( aGridOpt.GetFldDrawX() );
+    pItem->SetFldDivisionX	( aGridOpt.GetFldDivisionX() );
+    pItem->SetFldDrawY   	( aGridOpt.GetFldDrawY() );
+    pItem->SetFldDivisionY	( aGridOpt.GetFldDivisionY() );
+    pItem->SetFldSnapX		( aGridOpt.GetFldSnapX() );
+    pItem->SetFldSnapY   	( aGridOpt.GetFldSnapY() );
+    pItem->SetUseGridSnap	( aGridOpt.GetUseGridSnap() );
+    pItem->SetSynchronize	( aGridOpt.GetSynchronize() );
+    pItem->SetGridVisible	( aGridOpt.GetGridVisible() );
+    pItem->SetEqualGrid		( aGridOpt.GetEqualGrid() );
 
     return pItem;
 }
@@ -246,36 +245,36 @@ SvxGridItem* ScViewOptions::CreateGridItem( sal_uInt16 nId /* = SID_ATTR_GRID_OP
 
 //------------------------------------------------------------------------
 
-ScTpViewItem::ScTpViewItem( sal_uInt16 nWhichP, const ScViewOptions& rOpt )
+ScTpViewItem::ScTpViewItem( USHORT nWhichP, const ScViewOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),
-        theOptions  ( rOpt )
+        theOptions	( rOpt )
 {
 }
 
 //------------------------------------------------------------------------
 
 ScTpViewItem::ScTpViewItem( const ScTpViewItem& rItem )
-    :   SfxPoolItem ( rItem ),
-        theOptions  ( rItem.theOptions )
+    :   SfxPoolItem	( rItem ),
+        theOptions	( rItem.theOptions )
 {
 }
 
 //------------------------------------------------------------------------
 
-ScTpViewItem::~ScTpViewItem()
+__EXPORT ScTpViewItem::~ScTpViewItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String ScTpViewItem::GetValueText() const
+String __EXPORT ScTpViewItem::GetValueText() const
 {
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("ScTpViewItem") );
 }
 
 //------------------------------------------------------------------------
 
-int ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
+int __EXPORT ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -286,73 +285,73 @@ int ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT ScTpViewItem::Clone( SfxItemPool * ) const
 {
     return new ScTpViewItem( *this );
 }
 
 //==================================================================
-//  Config Item containing view options
+//	Config Item containing view options
 //==================================================================
 
-#define CFGPATH_LAYOUT      "Office.Calc/Layout"
+#define CFGPATH_LAYOUT		"Office.Calc/Layout"
 
-#define SCLAYOUTOPT_GRIDLINES       0
-#define SCLAYOUTOPT_GRIDCOLOR       1
-#define SCLAYOUTOPT_PAGEBREAK       2
-#define SCLAYOUTOPT_GUIDE           3
-#define SCLAYOUTOPT_SIMPLECONT      4
-#define SCLAYOUTOPT_LARGECONT       5
-#define SCLAYOUTOPT_COLROWHDR       6
-#define SCLAYOUTOPT_HORISCROLL      7
-#define SCLAYOUTOPT_VERTSCROLL      8
-#define SCLAYOUTOPT_SHEETTAB        9
-#define SCLAYOUTOPT_OUTLINE         10
-#define SCLAYOUTOPT_COUNT           11
+#define SCLAYOUTOPT_GRIDLINES		0
+#define SCLAYOUTOPT_GRIDCOLOR		1
+#define SCLAYOUTOPT_PAGEBREAK		2
+#define SCLAYOUTOPT_GUIDE			3
+#define SCLAYOUTOPT_SIMPLECONT		4
+#define SCLAYOUTOPT_LARGECONT		5
+#define SCLAYOUTOPT_COLROWHDR		6
+#define SCLAYOUTOPT_HORISCROLL		7
+#define SCLAYOUTOPT_VERTSCROLL		8
+#define SCLAYOUTOPT_SHEETTAB		9
+#define SCLAYOUTOPT_OUTLINE			10
+#define SCLAYOUTOPT_COUNT			11
 
-#define CFGPATH_DISPLAY     "Office.Calc/Content/Display"
+#define CFGPATH_DISPLAY		"Office.Calc/Content/Display"
 
-#define SCDISPLAYOPT_FORMULA        0
-#define SCDISPLAYOPT_ZEROVALUE      1
-#define SCDISPLAYOPT_NOTETAG        2
-#define SCDISPLAYOPT_VALUEHI        3
-#define SCDISPLAYOPT_ANCHOR         4
-#define SCDISPLAYOPT_TEXTOVER       5
-#define SCDISPLAYOPT_OBJECTGRA      6
-#define SCDISPLAYOPT_CHART          7
-#define SCDISPLAYOPT_DRAWING        8
-#define SCDISPLAYOPT_COUNT          9
+#define SCDISPLAYOPT_FORMULA		0
+#define SCDISPLAYOPT_ZEROVALUE		1
+#define SCDISPLAYOPT_NOTETAG		2
+#define SCDISPLAYOPT_VALUEHI		3
+#define SCDISPLAYOPT_ANCHOR			4
+#define SCDISPLAYOPT_TEXTOVER		5
+#define SCDISPLAYOPT_OBJECTGRA		6
+#define SCDISPLAYOPT_CHART			7
+#define SCDISPLAYOPT_DRAWING		8
+#define SCDISPLAYOPT_COUNT			9
 
-#define CFGPATH_GRID        "Office.Calc/Grid"
+#define CFGPATH_GRID		"Office.Calc/Grid"
 
-#define SCGRIDOPT_RESOLU_X          0
-#define SCGRIDOPT_RESOLU_Y          1
-#define SCGRIDOPT_SUBDIV_X          2
-#define SCGRIDOPT_SUBDIV_Y          3
-#define SCGRIDOPT_OPTION_X          4
-#define SCGRIDOPT_OPTION_Y          5
-#define SCGRIDOPT_SNAPTOGRID        6
-#define SCGRIDOPT_SYNCHRON          7
-#define SCGRIDOPT_VISIBLE           8
-#define SCGRIDOPT_SIZETOGRID        9
-#define SCGRIDOPT_COUNT             10
+#define SCGRIDOPT_RESOLU_X			0
+#define SCGRIDOPT_RESOLU_Y			1
+#define SCGRIDOPT_SUBDIV_X			2
+#define SCGRIDOPT_SUBDIV_Y			3
+#define SCGRIDOPT_OPTION_X			4
+#define SCGRIDOPT_OPTION_Y			5
+#define SCGRIDOPT_SNAPTOGRID		6
+#define SCGRIDOPT_SYNCHRON			7
+#define SCGRIDOPT_VISIBLE			8
+#define SCGRIDOPT_SIZETOGRID		9
+#define SCGRIDOPT_COUNT				10
 
 
 Sequence<OUString> ScViewCfg::GetLayoutPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Line/GridLine",            // SCLAYOUTOPT_GRIDLINES
-        "Line/GridLineColor",       // SCLAYOUTOPT_GRIDCOLOR
-        "Line/PageBreak",           // SCLAYOUTOPT_PAGEBREAK
-        "Line/Guide",               // SCLAYOUTOPT_GUIDE
-        "Line/SimpleControlPoint",  // SCLAYOUTOPT_SIMPLECONT
-        "Line/LargeControlPoint",   // SCLAYOUTOPT_LARGECONT
-        "Window/ColumnRowHeader",   // SCLAYOUTOPT_COLROWHDR
-        "Window/HorizontalScroll",  // SCLAYOUTOPT_HORISCROLL
-        "Window/VerticalScroll",    // SCLAYOUTOPT_VERTSCROLL
-        "Window/SheetTab",          // SCLAYOUTOPT_SHEETTAB
-        "Window/OutlineSymbol"      // SCLAYOUTOPT_OUTLINE
+        "Line/GridLine",			// SCLAYOUTOPT_GRIDLINES
+        "Line/GridLineColor",		// SCLAYOUTOPT_GRIDCOLOR
+        "Line/PageBreak",			// SCLAYOUTOPT_PAGEBREAK
+        "Line/Guide",				// SCLAYOUTOPT_GUIDE
+        "Line/SimpleControlPoint",	// SCLAYOUTOPT_SIMPLECONT
+        "Line/LargeControlPoint",	// SCLAYOUTOPT_LARGECONT
+        "Window/ColumnRowHeader",	// SCLAYOUTOPT_COLROWHDR
+        "Window/HorizontalScroll",	// SCLAYOUTOPT_HORISCROLL
+        "Window/VerticalScroll",	// SCLAYOUTOPT_VERTSCROLL
+        "Window/SheetTab",			// SCLAYOUTOPT_SHEETTAB
+        "Window/OutlineSymbol"		// SCLAYOUTOPT_OUTLINE
     };
     Sequence<OUString> aNames(SCLAYOUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -366,15 +365,15 @@ Sequence<OUString> ScViewCfg::GetDisplayPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Formula",                  // SCDISPLAYOPT_FORMULA
-        "ZeroValue",                // SCDISPLAYOPT_ZEROVALUE
-        "NoteTag",                  // SCDISPLAYOPT_NOTETAG
-        "ValueHighlighting",        // SCDISPLAYOPT_VALUEHI
-        "Anchor",                   // SCDISPLAYOPT_ANCHOR
-        "TextOverflow",             // SCDISPLAYOPT_TEXTOVER
-        "ObjectGraphic",            // SCDISPLAYOPT_OBJECTGRA
-        "Chart",                    // SCDISPLAYOPT_CHART
-        "DrawingObject"             // SCDISPLAYOPT_DRAWING
+        "Formula",					// SCDISPLAYOPT_FORMULA
+        "ZeroValue",				// SCDISPLAYOPT_ZEROVALUE
+        "NoteTag",					// SCDISPLAYOPT_NOTETAG
+        "ValueHighlighting",		// SCDISPLAYOPT_VALUEHI
+        "Anchor",					// SCDISPLAYOPT_ANCHOR
+        "TextOverflow",				// SCDISPLAYOPT_TEXTOVER
+        "ObjectGraphic",			// SCDISPLAYOPT_OBJECTGRA
+        "Chart",					// SCDISPLAYOPT_CHART
+        "DrawingObject"				// SCDISPLAYOPT_DRAWING
     };
     Sequence<OUString> aNames(SCDISPLAYOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -388,29 +387,29 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Resolution/XAxis/NonMetric",   // SCGRIDOPT_RESOLU_X
-        "Resolution/YAxis/NonMetric",   // SCGRIDOPT_RESOLU_Y
-        "Subdivision/XAxis",            // SCGRIDOPT_SUBDIV_X
-        "Subdivision/YAxis",            // SCGRIDOPT_SUBDIV_Y
-        "Option/XAxis/NonMetric",       // SCGRIDOPT_OPTION_X
-        "Option/YAxis/NonMetric",       // SCGRIDOPT_OPTION_Y
-        "Option/SnapToGrid",            // SCGRIDOPT_SNAPTOGRID
-        "Option/Synchronize",           // SCGRIDOPT_SYNCHRON
-        "Option/VisibleGrid",           // SCGRIDOPT_VISIBLE
-        "Option/SizeToGrid"             // SCGRIDOPT_SIZETOGRID
+        "Resolution/XAxis/NonMetric",	// SCGRIDOPT_RESOLU_X
+        "Resolution/YAxis/NonMetric",	// SCGRIDOPT_RESOLU_Y
+        "Subdivision/XAxis",			// SCGRIDOPT_SUBDIV_X
+        "Subdivision/YAxis",			// SCGRIDOPT_SUBDIV_Y
+        "Option/XAxis/NonMetric",		// SCGRIDOPT_OPTION_X
+        "Option/YAxis/NonMetric",		// SCGRIDOPT_OPTION_Y
+        "Option/SnapToGrid",			// SCGRIDOPT_SNAPTOGRID
+        "Option/Synchronize",			// SCGRIDOPT_SYNCHRON
+        "Option/VisibleGrid",			// SCGRIDOPT_VISIBLE
+        "Option/SizeToGrid"				// SCGRIDOPT_SIZETOGRID
     };
     Sequence<OUString> aNames(SCGRIDOPT_COUNT);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < SCGRIDOPT_COUNT; i++)
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
 
-    //  adjust for metric system
+    //	adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
     {
-        pNames[SCGRIDOPT_RESOLU_X] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Resolution/XAxis/Metric" ));
-        pNames[SCGRIDOPT_RESOLU_Y] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Resolution/YAxis/Metric" ));
-        pNames[SCGRIDOPT_OPTION_X] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Option/XAxis/Metric" ));
-        pNames[SCGRIDOPT_OPTION_Y] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Option/YAxis/Metric" ));
+        pNames[SCGRIDOPT_RESOLU_X] = OUString::createFromAscii( "Resolution/XAxis/Metric" );
+        pNames[SCGRIDOPT_RESOLU_Y] = OUString::createFromAscii( "Resolution/YAxis/Metric" );
+        pNames[SCGRIDOPT_OPTION_X] = OUString::createFromAscii( "Option/XAxis/Metric" );
+        pNames[SCGRIDOPT_OPTION_Y] = OUString::createFromAscii( "Option/YAxis/Metric" );
     }
 
     return aNames;
@@ -418,9 +417,9 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
 
 
 ScViewCfg::ScViewCfg() :
-    aLayoutItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_LAYOUT )) ),
-    aDisplayItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_DISPLAY )) ),
-    aGridItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_GRID )) )
+    aLayoutItem( OUString::createFromAscii( CFGPATH_LAYOUT ) ),
+    aDisplayItem( OUString::createFromAscii( CFGPATH_DISPLAY ) ),
+    aGridItem( OUString::createFromAscii( CFGPATH_GRID ) )
 {
     sal_Int32 nIntVal = 0;
 
@@ -544,7 +543,7 @@ ScViewCfg::ScViewCfg() :
     }
     aDisplayItem.SetCommitLink( LINK( this, ScViewCfg, DisplayCommitHdl ) );
 
-    ScGridOptions aGrid = GetGridOptions();     //! initialization necessary?
+    ScGridOptions aGrid = GetGridOptions();		//! initialization necessary?
     aNames = GetGridPropertyNames();
     aValues = aGridItem.GetProperties(aNames);
     aGridItem.EnableNotification(aNames);

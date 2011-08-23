@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #define INCLUDED_ALLOCA_H
 #endif
 
-#elif defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
+#elif defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD)
 
 #ifndef INCLUDED_STDLIB_H
 #include <stdlib.h>

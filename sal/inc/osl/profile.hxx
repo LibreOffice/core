@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace osl {
             if( ! profile )
                 throw std::exception();
         }
-
+                
 
         /** Close the opened profile an flush all data to the disk.
             @param Profile handle to a opened profile.
@@ -75,25 +75,25 @@ namespace osl {
             return osl_flushProfile(profile);
         }
 
-        rtl::OString readString( const rtl::OString& rSection, const rtl::OString& rEntry,
+        rtl::OString readString( const rtl::OString& rSection, const rtl::OString& rEntry, 
                                  const rtl::OString& rDefault)
         {
             sal_Char aBuf[1024];
             return osl_readProfileString( profile,
-                                          rSection.getStr(),
-                                          rEntry.getStr(),
+                                          rSection,
+                                          rEntry,
                                           aBuf,
                                           sizeof( aBuf ),
-                                          rDefault.getStr() ) ? rtl::OString( aBuf ) : rtl::OString();
+                                          rDefault ) ? rtl::OString( aBuf ) : rtl::OString();
 
         }
 
         sal_Bool readBool( const rtl::OString& rSection, const rtl::OString& rEntry, sal_Bool bDefault )
         {
-            return osl_readProfileBool( profile, rSection.getStr(), rEntry.getStr(), bDefault );
+            return osl_readProfileBool( profile, rSection, rEntry, bDefault );
         }
 
-        sal_uInt32 readIdent(const rtl::OString& rSection, const rtl::OString& rEntry,
+        sal_uInt32 readIdent(const rtl::OString& rSection, const rtl::OString& rEntry, 
                              sal_uInt32 nFirstId, const std::list< rtl::OString >& rStrings,
                              sal_uInt32 nDefault)
         {
@@ -103,28 +103,28 @@ namespace osl {
             nItems = 0;
             while( it != rStrings.end() )
             {
-                pStrings[ nItems++ ] = it->getStr();
+                pStrings[ nItems++ ] = *it;
                 ++it;
             }
             pStrings[ nItems ] = NULL;
-            sal_uInt32 nRet = osl_readProfileIdent(profile, rSection.getStr(), rEntry.getStr(), nFirstId, pStrings, nDefault);
+            sal_uInt32 nRet = osl_readProfileIdent(profile, rSection, rEntry, nFirstId, pStrings, nDefault);
             delete pStrings;
             return nRet;
         }
 
-        sal_Bool writeString(const rtl::OString& rSection, const rtl::OString& rEntry,
+        sal_Bool writeString(const rtl::OString& rSection, const rtl::OString& rEntry, 
                              const rtl::OString& rString)
         {
-            return osl_writeProfileString(profile, rSection.getStr(), rEntry.getStr(), rString.getStr());
+            return osl_writeProfileString(profile, rSection, rEntry, rString);
         }
 
         sal_Bool writeBool(const rtl::OString& rSection, const rtl::OString& rEntry, sal_Bool Value)
         {
-            return osl_writeProfileBool(profile, rSection.getStr(), rEntry.getStr(), Value);
+            return osl_writeProfileBool(profile, rSection, rEntry, Value);
         }
 
-        sal_Bool writeIdent(const rtl::OString& rSection, const rtl::OString& rEntry,
-                            sal_uInt32 nFirstId, const std::list< rtl::OString >& rStrings,
+        sal_Bool writeIdent(const rtl::OString& rSection, const rtl::OString& rEntry, 
+                            sal_uInt32 nFirstId, const std::list< rtl::OString >& rStrings, 
                             sal_uInt32 nValue)
         {
             int nItems = rStrings.size();
@@ -133,12 +133,12 @@ namespace osl {
             nItems = 0;
             while( it != rStrings.end() )
             {
-                pStrings[ nItems++ ] = it->getStr();
+                pStrings[ nItems++ ] = *it;
                 ++it;
             }
             pStrings[ nItems ] = NULL;
             sal_Bool bRet =
-                osl_writeProfileIdent(profile, rSection.getStr(), rEntry.getStr(), nFirstId, pStrings, nValue );
+                osl_writeProfileIdent(profile, rSection, rEntry, nFirstId, pStrings, nValue );
             delete pStrings;
             return bRet;
         }
@@ -149,7 +149,7 @@ namespace osl {
         */
         sal_Bool removeEntry(const rtl::OString& rSection, const rtl::OString& rEntry)
         {
-            return osl_removeProfileEntry(profile, rSection.getStr(), rEntry.getStr());
+            return osl_removeProfileEntry(profile, rSection, rEntry);
         }
 
         /** Get all entries belonging to the specified section.
@@ -161,11 +161,11 @@ namespace osl {
             std::list< rtl::OString > aEntries;
 
             // count buffer size necessary
-            int n = osl_getProfileSectionEntries( profile, rSection.getStr(), NULL, 0 );
+            int n = osl_getProfileSectionEntries( profile, rSection, NULL, 0 );
             if( n > 1 )
             {
                 sal_Char* pBuf = new sal_Char[ n+1 ];
-                osl_getProfileSectionEntries( profile, rSection.getStr(), pBuf, n+1 );
+                osl_getProfileSectionEntries( profile, rSection, pBuf, n+1 );
                 int nLen;
                 for( n = 0; ( nLen = strlen( pBuf+n ) ); n += nLen+1 )
                     aEntries.push_back( rtl::OString( pBuf+n ) );
@@ -200,7 +200,7 @@ namespace osl {
     };
 }
 
-#endif  /* _OSL_PROFILE_HXX_ */
+#endif	/* _OSL_PROFILE_HXX_ */
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

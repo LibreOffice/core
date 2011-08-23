@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace table {
 
 // ============================================================================
 
-TableStyleListFragmentHandler::TableStyleListFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, TableStyleList& rTableStyleList ):
+TableStyleListFragmentHandler::TableStyleListFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, TableStyleList& rTableStyleList ): 
 FragmentHandler2( rFilter, rFragmentPath ),
 mrTableStyleList( rTableStyleList )
 {
@@ -63,10 +63,10 @@ Reference< XFastContextHandler > TableStyleListFragmentHandler::createFastChildC
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case A_TOKEN( tblStyleLst ):    // CT_TableStyleList
+        case NMSP_DRAWINGML|XML_tblStyleLst:	// CT_TableStyleList
             mrTableStyleList.getDefaultStyleId() = xAttribs->getOptionalValue( XML_def );
             break;
-        case A_TOKEN( tblStyle ):       // CT_TableStyle
+        case NMSP_DRAWINGML|XML_tblStyle:		// CT_TableStyle
             std::vector< TableStyle >& rTableStyles = mrTableStyleList.getTableStyles();
             rTableStyles.resize( rTableStyles.size() + 1 );
             xRet = new TableStyleContext( *this, xAttribs, rTableStyles.back() );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,20 +38,20 @@ class GlobalEditData;
 class EDITENG_DLLPUBLIC EditResId: public ResId
 {
 public:
-    EditResId( sal_uInt16 nId );
+    EditResId( USHORT nId );
 };
 
 class EditDLL
 {
-    ResMgr*         pResMgr;
-    GlobalEditData* pGlobalData;
+    ResMgr*			pResMgr;
+    GlobalEditData*	pGlobalData;
 
 public:
                     EditDLL();
                     ~EditDLL();
 
-    ResMgr*         GetResMgr() const       { return pResMgr; }
-    GlobalEditData* GetGlobalData() const   { return pGlobalData; }
+    ResMgr*			GetResMgr() const 		{ return pResMgr; }
+    GlobalEditData*	GetGlobalData() const	{ return pGlobalData; }
     static EditDLL* Get();
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ namespace rtl
 
 // class SvxCaseMapItem --------------------------------------------------
 
-/*  [Description]
+/*	[Beschreibung]
 
-    This item describe the font type (uppercase, small caps ,...).
+    Dieses Item beschreibt die Schrift-Ausrichtung (Versalien, Kapitaelchen,...).
 */
 
 class EDITENG_DLLPUBLIC SvxCaseMapItem : public SfxEnumItem
@@ -53,22 +53,22 @@ public:
     TYPEINFO();
 
     SvxCaseMapItem( const SvxCaseMap eMap /*= SVX_CASEMAP_NOT_MAPPED*/,
-                    const sal_uInt16 nId );
+                    const USHORT nId );
 
-    // "pure virtual Methods" from SfxPoolItem + SfxEnumItem
+    // "pure virtual Methoden" vom SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
-    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
-    virtual sal_uInt16          GetValueCount() const;
+    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
+    virtual SvStream&		Store(SvStream &, USHORT nItemVersion) const;
+    virtual String			GetValueTextByPos( USHORT nPos ) const;
+    virtual USHORT          GetValueCount() const;
 
     // MS VC4.0 kommt durcheinander
-    void                    SetValue( sal_uInt16 nNewVal )
+    void			 		SetValue( USHORT nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
 
     inline SvxCaseMapItem& operator=(const SvxCaseMapItem& rMap)
@@ -78,12 +78,12 @@ public:
         }
 
     // enum cast
-    SvxCaseMap              GetCaseMap() const
+    SvxCaseMap 				GetCaseMap() const
                                 { return (SvxCaseMap)GetValue(); }
-    void                    SetCaseMap( SvxCaseMap eNew )
-                                { SetValue( (sal_uInt16)eNew ); }
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    void 					SetCaseMap( SvxCaseMap eNew )
+                                { SetValue( (USHORT)eNew ); }
+    virtual	bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 #endif

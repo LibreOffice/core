@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: tabbgcolordlg.hxx,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,8 +33,7 @@
 #define SC_TABBGCOLORDLG_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <svtools/valueset.hxx>
 
 //------------------------------------------------------------------------
@@ -43,7 +45,7 @@ public:
                      const String& rTitle,
                      const String& rTabBgColorNoColorText,
                      const Color& rDefaultColor,
-                     const rtl::OString& nHelpId );
+                     ULONG nHelpId );
     ~ScTabBgColorDlg();
 
     void GetSelectedColor( Color& rColor ) const;
@@ -66,7 +68,7 @@ private:
     HelpButton              aBtnHelp;
     Color                   aTabBgColor;
     const String            aTabBgColorNoColorText;
-    rtl::OString            msHelpId;
+    ULONG                   mnHelpId;
 
     void            FillColorValueSets_Impl();
 

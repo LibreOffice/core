@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@ public:
 
                             TYPEINFO();
 
-                            SdrGrafInvertItem( sal_Bool bInvert = sal_False ) : SdrOnOffItem( SDRATTR_GRAFINVERT, bInvert ) {}
+                            SdrGrafInvertItem( BOOL bInvert = FALSE ) : SdrOnOffItem( SDRATTR_GRAFINVERT, bInvert ) {}
                             SdrGrafInvertItem( SvStream& rIn ) : SdrOnOffItem( SDRATTR_GRAFINVERT, rIn ) {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = NULL ) const;
+    virtual SfxPoolItem*	Create( SvStream& rIn, USHORT nVer ) const;
 };
 
 #endif // _SDGINITM_HXX

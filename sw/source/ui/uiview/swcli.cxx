@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,23 +28,21 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+
+
 #include <wrtsh.hxx>
-#include <doc.hxx>
 #include <swtypes.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
 #include <swcli.hxx>
-#include <cmdid.h>
-#include <cfgitems.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 
 using namespace com::sun::star;
 
 SwOleClient::SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& xObj ) :
-    SfxInPlaceClient( pView, pWin, xObj.GetViewAspect() ), bInDoVerb( sal_False ),
+    SfxInPlaceClient( pView, pWin, xObj.GetViewAspect() ), bInDoVerb( FALSE ),
     bOldCheckForOLEInCaption( pView->GetWrtShell().IsCheckForOLEInCaption() )
 {
     SetObject( xObj.GetObject() );
@@ -67,7 +65,7 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
 
     // the aLogRect will get the preliminary size now
     aLogRect.SetSize( rSh.RequestObjectResize( SwRect( aLogRect ), GetObject() ) );
-
+        
     // the EndAllAction() call will trigger CalcAndSetScale() call,
     // so the embedded object must get the correct size before
     if ( aLogRect.GetSize() != GetScaledObjArea().GetSize() )
@@ -137,13 +135,13 @@ void SwOleClient::ViewChanged()
     catch( uno::Exception& )
     {
         // this is an error
-        OSL_FAIL( "Something goes wrong on requesting object size!\n" );
+        OSL_ENSURE( sal_False, "Something goes wrong on requesting object size!\n" );
     }
-
+    
     Size aVisSize( aSz.Width, aSz.Height );
 
-    // solange keine vernuenftige Size vom Object kommt,
-    // kann nichts skaliert werden
+    // Bug 24833: solange keine vernuenftige Size vom Object kommt,
+    // 				kann nichts skaliert werden
     if( !aVisSize.Width() || !aVisSize.Height() )
         return;
 
@@ -158,29 +156,17 @@ void SwOleClient::ViewChanged()
     aVisSize.Height()= Fraction( aVisSize.Height() ) * GetScaleHeight();
 
     SwRect aRect( Point( LONG_MIN, LONG_MIN ), aVisSize );
-    rSh.LockView( sal_True );   //Scrollen im EndAction verhindern
+    rSh.LockView( TRUE );	//Scrollen im EndAction verhindern
     rSh.StartAllAction();
     rSh.RequestObjectResize( aRect, GetObject() );
     rSh.EndAllAction();
-    rSh.LockView( sal_False );
+    rSh.LockView( FALSE );
 }
 
 void SwOleClient::MakeVisible()
 {
     const SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
     rSh.MakeObjVisible( GetObject() );
-}
-
-void SwOleClient::FormatChanged()
-{
-    const uno::Reference < embed::XEmbeddedObject >& xObj( GetObject() );
-    SwView * pView = dynamic_cast< SwView * >( GetViewShell() );
-    if ( pView && xObj.is() && SotExchange::IsMath( xObj->getClassID() ) )
-    {
-        SwWrtShell & rWrtSh = pView->GetWrtShell();
-        if (rWrtSh.GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ))
-            rWrtSh.AlignFormulaToBaseline( xObj );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

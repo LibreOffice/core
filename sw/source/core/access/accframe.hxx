@@ -52,7 +52,8 @@ class SwAccessibleFrame
     const sal_Bool mbIsInPagePreview;
 
 protected:
-    // #i77106# - method needs to be called by new class <SwAccessibleTableColHeaders>
+    // --> OD 2007-06-29 #i77106#
+    // method needs to be called by new class <SwAccessibleTableColHeaders>
     static sal_Int32 GetChildCount( SwAccessibleMap& rAccMap,
                                     const SwRect& rVisArea,
                                     const SwFrm *pFrm,

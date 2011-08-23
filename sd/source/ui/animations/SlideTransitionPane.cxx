@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,9 +132,9 @@ struct TransitionEffect
         mfDuration = 2.0;
         mnTime = 0;
         mePresChange = PRESCHANGE_MANUAL;
-        mbSoundOn = sal_False;
-        mbLoopSound = sal_False;
-        mbStopSound = sal_False;
+        mbSoundOn = FALSE;
+        mbLoopSound = FALSE;
+        mbStopSound = FALSE;
 
         mbEffectAmbiguous = false;
         mbDurationAmbiguous = false;
@@ -183,12 +183,12 @@ struct TransitionEffect
         {
             if( mbStopSound )
             {
-                rOutPage.SetStopSound( sal_True );
-                rOutPage.SetSound( sal_False );
+                rOutPage.SetStopSound( TRUE );
+                rOutPage.SetSound( FALSE );
             }
             else
             {
-                rOutPage.SetStopSound( sal_False );
+                rOutPage.SetStopSound( FALSE );
                 rOutPage.SetSound( mbSoundOn );
                 rOutPage.SetSoundFile( maSound );
             }
@@ -221,13 +221,13 @@ struct TransitionEffect
     sal_Int32 mnFadeColor;
 
     // other settings
-    double      mfDuration;
-    sal_uLong       mnTime;
+    double		mfDuration;
+    ULONG       mnTime;
     PresChange  mePresChange;
-    sal_Bool        mbSoundOn;
+    BOOL        mbSoundOn;
     String      maSound;
-    bool        mbLoopSound;
-    bool        mbStopSound;
+    bool		mbLoopSound;
+    bool		mbStopSound;
 
     bool mbEffectAmbiguous;
     bool mbDurationAmbiguous;
@@ -264,9 +264,9 @@ void lcl_CreateUndoForPages(
     const ::sd::slidesorter::SharedPageSelection& rpPages,
     ::sd::ViewShellBase& rBase )
 {
-    ::sd::DrawDocShell* pDocSh      = rBase.GetDocShell();
-    ::svl::IUndoManager* pManager   = pDocSh->GetUndoManager();
-    SdDrawDocument* pDoc            = pDocSh->GetDoc();
+    ::sd::DrawDocShell* pDocSh	= rBase.GetDocShell();
+    SfxUndoManager* pManager	= pDocSh->GetUndoManager();
+    SdDrawDocument*	pDoc		= pDocSh->GetDoc();
     if( pManager && pDocSh && pDoc )
     {
         String aComment( SdResId(STR_UNDO_SLIDE_PARAMS) );
@@ -345,7 +345,7 @@ struct lcl_EqualsSoundFileName : public ::std::unary_function< String, bool >
     {
         // note: formerly this was a case insensitive search for all
         // platforms. It seems more sensible to do this platform-dependent
-#if defined( WNT )
+#if defined( WIN ) || defined( WNT )
         return maStr.EqualsIgnoreCaseAscii( rStr );
 #else
         return maStr.Equals( rStr );
@@ -495,6 +495,7 @@ SlideTransitionPane::SlideTransitionPane(
 
     // update control states before adding handlers
     updateLayout();
+    //    updateSoundList();
     updateControls();
 
     // set handlers
@@ -544,6 +545,7 @@ void SlideTransitionPane::onChangeCurrentPage()
 {
     ::sd::slidesorter::SlideSorterViewShell * pSlideSorterViewShell
         = ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(mrBase);
+//    DBG_ASSERT( pSlideSorterViewShell, "No Slide-Sorter available" );
     ::boost::shared_ptr<sd::slidesorter::SlideSorterViewShell::PageSelection> pSelection;
 
     if( pSlideSorterViewShell )
@@ -836,7 +838,7 @@ void SlideTransitionPane::updateControls()
             if( lcl_findSoundInList( maSoundList, aEffect.maSound, nPos ))
             {
                 // skip first three entries
-                maLB_SOUND.SelectEntryPos( (sal_uInt16)nPos + 3 );
+                maLB_SOUND.SelectEntryPos( (USHORT)nPos + 3 );
                 maCurrentSoundFile = aEffect.maSound;
             }
         }
@@ -857,8 +859,8 @@ void SlideTransitionPane::updateControls()
 
     if( aEffect.mbPresChangeAmbiguous )
     {
-        maRB_ADVANCE_ON_MOUSE.Check( sal_False );
-        maRB_ADVANCE_AUTO.Check( sal_False );
+        maRB_ADVANCE_ON_MOUSE.Check( FALSE );
+        maRB_ADVANCE_AUTO.Check( FALSE );
     }
     else
     {
@@ -887,6 +889,7 @@ void SlideTransitionPane::updateControlState()
 
     maPB_APPLY_TO_ALL.Enable( mbHasSelection );
     maPB_PLAY.Enable( mbHasSelection );
+//     maPB_SLIDE_SHOW.Enable( TRUE );
     maCB_AUTO_PREVIEW.Enable( mbHasSelection );
 }
 
@@ -960,7 +963,7 @@ void SlideTransitionPane::openSoundFileDialog()
                 String aStr( sal_Unicode( '%' ));
                 aStrWarning.SearchAndReplace( aStr , aFile );
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
-                aWarningBox.SetModalInputMode (sal_True);
+                aWarningBox.SetModalInputMode (TRUE);
                 bQuitLoop = (aWarningBox.Execute() != RET_RETRY);
 
                 bValidSoundFile = false;
@@ -969,7 +972,7 @@ void SlideTransitionPane::openSoundFileDialog()
 
         if( bValidSoundFile )
             // skip first three entries in list
-            maLB_SOUND.SelectEntryPos( (sal_uInt16)nPos + 3 );
+            maLB_SOUND.SelectEntryPos( (USHORT)nPos + 3 );
     }
 
     if( ! bValidSoundFile )
@@ -978,7 +981,7 @@ void SlideTransitionPane::openSoundFileDialog()
         {
             tSoundListType::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, maCurrentSoundFile, nPos ))
-                maLB_SOUND.SelectEntryPos( (sal_uInt16)nPos + 3 );
+                maLB_SOUND.SelectEntryPos( (USHORT)nPos + 3 );
             else
                 maLB_SOUND.SelectEntryPos( 0 );  // NONE
         }
@@ -1037,7 +1040,9 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             aResult.mePresChange = PRESCHANGE_AUTO;
             if( maMF_ADVANCE_AUTO_AFTER.IsEnabled())
             {
+//                 sal_uInt16 nDigits = maMF_ADVANCE_AUTO_AFTER.GetDecimalDigits();
                 aResult.mnTime = static_cast<long>(maMF_ADVANCE_AUTO_AFTER.GetValue());
+                // / static_cast< sal_uInt16 >( pow( 10.0, static_cast< double >( nDigits )));
                 aResult.mbTimeAmbiguous = false;
             }
         }

@@ -57,8 +57,12 @@
  * @file
  * Interfer face for all object that will responsible for xml element output
  ************************************************************************/
-#ifndef     IXFOBJECT_INC
-#define     IXFOBJECT_INC
+/*************************************************************************
+ * Change History
+ * 2004-12-23 create this file.
+ ************************************************************************/
+#ifndef		IXFOBJECT_INC
+#define		IXFOBJECT_INC
 
 class IXFStream;
 /*************************************************************************
@@ -79,10 +83,10 @@ public:
     /**
      * The funciton to serial the object to the sax stream.
      * The objects that must implements ToXml is divided into two types:
-     *          1.  IXFStyle objects that has something to do with styles.
-     *          2.  IXFContent objects that contents text or picture.
+     *			1.	IXFStyle objects that has something to do with styles.
+     *			2.	IXFContent objects that contents text or picture.
      */
-    virtual void    ToXml(IXFStream     *pSaxStream) = 0;
+    virtual void	ToXml(IXFStream		*pSaxStream) = 0;
 };
 
 #endif //IXFOBJECT_INC

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@
 #include "editwin.hxx"
 
 
-#define EXECUTE_NO                  0
+#define EXECUTE_NO					0
 #define EXECUTE_POSSIBLE            1
 #define EXECUTE_YES                 2
-#define EXECUTEMODE_ASYNCHRON       1
+#define EXECUTEMODE_ASYNCHRON		1
 #define EXECUTEMODE_DIALOGASYNCHRON 2
 
 
@@ -58,12 +58,12 @@ class MainWindow : public WorkWindow
 
 public:
     MainWindow(MyApp *pAppl);
-    virtual sal_Bool Close(); // derived
+    virtual BOOL Close(); // derived
 
     void FileExit();
     void FileOpen();
     void TestGross();
-    void Tree(GHEditWindow *aEditWin, Window *pBase, sal_uInt16 Indent);
+    void Tree(GHEditWindow *aEditWin, Window *pBase, USHORT Indent);
     void WinTree();
     void SysDlg();
     DECL_LINK(MenuSelectHdl,MenuBar*);
@@ -77,11 +77,11 @@ class MyDispatcher
 public:
     MyDispatcher(MainWindow  *MainWin) : pMainWin(MainWin) {};
     virtual ~MyDispatcher() {};
-    virtual sal_uInt16 ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs = 0, sal_uInt16 nMode = 0);
-    virtual void SetExecuteMode( sal_uInt16 nMode )
+    virtual USHORT ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs = 0, USHORT nMode = 0);
+    virtual void SetExecuteMode( USHORT nMode )
     {
         (void) nMode; /* avoid warning about unused parameter */
-    };  // Ist hier sowieso egal
+    };	// Ist hier sowieso egal
 };
 
 class MyApp : public Application
@@ -92,10 +92,10 @@ class MyApp : public Application
 
 public:
     MyApp();
-    int Main();
+    void Main();
 
-    virtual void                Property( ApplicationProperty& );
-    virtual PlugInDispatcher*   GetDispatcher();
+    virtual void				Property( ApplicationProperty& );
+    virtual PlugInDispatcher*	GetDispatcher();
 
     MainWindow  *pMainWin;
 };

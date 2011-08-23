@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,6 @@
 #include <hints.hxx>
 #include <swtblfmt.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <shellres.hxx>
 #include <docary.hxx>
 #include <ndole.hxx>
@@ -70,10 +69,8 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
-#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -84,6 +81,7 @@
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
+#include <unotbl.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
@@ -103,12 +101,9 @@
 #include <unochart.hxx>
 #include <sortopt.hxx>
 #include <rtl/math.hxx>
-#include <editeng/frmdiritem.hxx>
-#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
-using ::editeng::SvxBorderLine;
 
 // from swtable.cxx
 extern void lcl_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
@@ -117,38 +112,26 @@ extern void lcl_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
 
 table::BorderLine lcl_SvxLineToLine(const SvxBorderLine* pLine)
 {
-    table::BorderLine2 aLine;
+     table::BorderLine2 aLine;
     if(pLine)
     {
-        aLine.Color          = pLine->GetColor().GetColor() ;
-        aLine.LineWidth      = TWIP_TO_MM100_UNSIGNED( pLine->GetWidth() );
-
-        // Set only for backwards compatibility
+        aLine.Color			 = pLine->GetColor().GetColor() ;
         aLine.InnerLineWidth = TWIP_TO_MM100_UNSIGNED( pLine->GetInWidth() );
         aLine.OuterLineWidth = TWIP_TO_MM100_UNSIGNED( pLine->GetOutWidth() );
-        aLine.LineDistance   = TWIP_TO_MM100_UNSIGNED( pLine->GetDistance() );
+        aLine.LineDistance	 = TWIP_TO_MM100_UNSIGNED( pLine->GetDistance() );
     }
     else
-        aLine.Color          = aLine.InnerLineWidth = aLine.OuterLineWidth = aLine.LineDistance  = 0;
+        aLine.Color			 = aLine.InnerLineWidth = aLine.OuterLineWidth = aLine.LineDistance	 = 0;
     return aLine;
 }
 
 sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
 {
-    const table::BorderLine2& rLine2 = static_cast< const table::BorderLine2& >( rLine );
     rSvxLine.SetColor(   Color(rLine.Color));
-
-    if ( rLine2.LineWidth > 0 )
-    {
-        rSvxLine.SetStyle( editeng::SvxBorderStyle( rLine2.LineStyle ) );
-        rSvxLine.SetWidth( MM100_TO_TWIP_UNSIGNED( rLine2.LineWidth ) );
-    }
-    else
-        rSvxLine.GuessLinesWidths( editeng::SvxBorderStyle( rLine2.LineStyle ),
-                                    MM100_TO_TWIP( rLine.OuterLineWidth ),
-                                    MM100_TO_TWIP( rLine.InnerLineWidth ),
-                                    MM100_TO_TWIP( rLine.LineDistance   ) );
-    sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0 || rLine2.LineWidth > 0;
+    rSvxLine.SetInWidth( MM100_TO_TWIP( rLine.InnerLineWidth ) );
+    rSvxLine.SetOutWidth(MM100_TO_TWIP( rLine.OuterLineWidth ) );
+    rSvxLine.SetDistance(MM100_TO_TWIP( rLine.LineDistance	) );
+    sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
     return bRet;
 }
 
@@ -174,7 +157,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pE
                     sal_Int32 nRepeat = 0;
                     aValue >>= nRepeat;
                     if( nRepeat >= 0 && nRepeat < USHRT_MAX )
-                        pFmt->GetDoc()->SetRowsToRepeat( *pTable, (sal_uInt16) nRepeat );
+                        pFmt->GetDoc()->SetRowsToRepeat( *pTable, (USHORT) nRepeat );
                 }
             }
         }
@@ -183,10 +166,10 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pE
         case  FN_TABLE_WIDTH:
         case  FN_TABLE_RELATIVE_WIDTH:
         {
+            sal_Int32 nWidth = 0;
             SwFmtFrmSize aSz( pFmt->GetFrmSize() );
             if(FN_TABLE_WIDTH == pEntry->nWID)
             {
-                sal_Int32 nWidth = 0;
                 aValue >>= nWidth;
                 aSz.SetWidthPercent(0);
                 aSz.SetWidth ( MM100_TO_TWIP ( nWidth ) );
@@ -196,7 +179,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pE
                 sal_Int16 nSet = 0;
                 aValue >>= nSet;
                 if(nSet && nSet <=100)
-                    aSz.SetWidthPercent( (sal_uInt8)nSet );
+                    aSz.SetWidthPercent( (BYTE)nSet );
             }
             else if(FN_TABLE_IS_RELATIVE_WIDTH == pEntry->nWID)
             {
@@ -242,10 +225,10 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry
         case  FN_TABLE_HEADLINE_COUNT:
         {
             SwTable* pTable = SwTable::FindTable( pFmt );
-            sal_uInt16 nRepeat = pTable->GetRowsToRepeat();
+            USHORT nRepeat = pTable->GetRowsToRepeat();
             if(pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
             {
-                sal_Bool bTemp = nRepeat > 0;
+                BOOL bTemp = nRepeat > 0;
                 aRet.setValue(&bTemp, ::getCppuBooleanType());
             }
             else
@@ -263,7 +246,7 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry
                 rSz.QueryValue(aRet, MID_FRMSIZE_REL_WIDTH);
             else
             {
-                sal_Bool bTemp = 0 != rSz.GetWidthPercent();
+                BOOL bTemp = 0 != rSz.GetWidthPercent();
                 aRet.setValue(&bTemp, ::getBooleanCppuType());
             }
         }
@@ -311,16 +294,16 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry
             if(FN_UNO_REDLINE_NODE_END == pEntry->nWID)
                 pTblNode = pTblNode->EndOfSectionNode();
             const SwRedlineTbl& rRedTbl = pFmt->GetDoc()->GetRedlineTbl();
-            for(sal_uInt16 nRed = 0; nRed < rRedTbl.Count(); nRed++)
+            for(USHORT nRed = 0; nRed < rRedTbl.Count(); nRed++)
             {
                 const SwRedline* pRedline = rRedTbl[nRed];
-                const SwNode* pRedPointNode = pRedline->GetNode(sal_True);
-                const SwNode* pRedMarkNode = pRedline->GetNode(sal_False);
+                const SwNode* pRedPointNode = pRedline->GetNode(TRUE);
+                const SwNode* pRedMarkNode = pRedline->GetNode(FALSE);
                 if(pRedPointNode == pTblNode || pRedMarkNode == pTblNode)
                 {
                     const SwNode* pStartOfRedline = SwNodeIndex(*pRedPointNode) <= SwNodeIndex(*pRedMarkNode) ?
                         pRedPointNode : pRedMarkNode;
-                    sal_Bool bIsStart = pStartOfRedline == pTblNode;
+                    BOOL bIsStart = pStartOfRedline == pTblNode;
                     aRet <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline, bIsStart);
                     break;
                 }
@@ -380,7 +363,7 @@ void lcl_GetCellPosition( const String &rCellName,
                 }
 
                 rColumn = nColIdx;
-                rRow    = aRowTxt.ToInt32() - 1;    // - 1 because indices ought to be 0 based
+                rRow    = aRowTxt.ToInt32() - 1;	// - 1 because indices ought to be 0 based
             }
         }
     }
@@ -482,7 +465,7 @@ String lcl_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
     String sCellName;
     if (nColumn < 0 || nRow < 0)
         return sCellName;
-    lcl_GetTblBoxColStr( static_cast< sal_uInt16 >(nColumn), sCellName );
+    lcl_GetTblBoxColStr( static_cast< USHORT >(nColumn), sCellName );
     sCellName += String::CreateFromInt32( nRow + 1 );
     return sCellName;
 }
@@ -592,16 +575,16 @@ void lcl_InspectLines(SwTableLines& rLines, SvStrings& rAllNames)
 
 void lcl_FormatTable(SwFrmFmt* pTblFmt)
 {
-    SwIterator<SwFrm,SwFmt> aIter( *pTblFmt );
-    for( SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+    SwClientIter aIter( *pTblFmt );
+    for( SwClient* pC = aIter.First( TYPE( SwFrm ));
+            pC; pC = aIter.Next() )
     {
-        // mba: no TYPEINFO for SwTabFrm
-        if( pFrm->IsTabFrm() )
+        if( ((SwFrm*)pC)->IsTabFrm() )
         {
-            if(pFrm->IsValid())
-                pFrm->InvalidatePos();
-            ((SwTabFrm*)pFrm)->SetONECalcLowers();
-            ((SwTabFrm*)pFrm)->Calc();
+            if(((SwFrm*)pC)->IsValid())
+                ((SwFrm*)pC)->InvalidatePos();
+            ((SwTabFrm*)pC)->SetONECalcLowers();
+            ((SwTabFrm*)pC)->Calc();
         }
     }
 }
@@ -675,7 +658,7 @@ void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBo
         {
             aCols[i] = pArray[i].Position;
             if(pArray[i].IsVisible == aCols.IsHidden(i) ||
-                (!bRow && aCols.IsHidden(i)) ||
+               (!bRow && aCols.IsHidden(i)) ||
                 long(aCols[i] - long(nLastValue)) < 0 ||
                 UNO_TABLE_COLUMN_SUM < aCols[i] )
             {
@@ -697,9 +680,11 @@ inline rtl::OUString lcl_getString( SwXCell &rCell )
     return rCell.getString();
 }
 
-/*  non UNO function call to set string in SwXCell */
+/* -----------------30.04.02 08:00-------------------
+ * non UNO function call to set string in SwXCell
+ * --------------------------------------------------*/
 void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
-        sal_Bool bKeepNumberFmt )
+        BOOL bKeepNumberFmt )
 {
     if(rCell.IsValid())
     {
@@ -714,7 +699,9 @@ void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
     rCell.SwXText::setString(rTxt);
 }
 
-/* non UNO function call to get value from SwXCell */
+/* -----------------30.04.02 08:00-------------------
+ * non UNO function call to get value from SwXCell
+ * --------------------------------------------------*/
 double lcl_getValue( SwXCell &rCell )
 {
     double fRet;
@@ -725,15 +712,17 @@ double lcl_getValue( SwXCell &rCell )
     return fRet;
 }
 
-/* non UNO function call to set value in SwXCell */
+/* -----------------30.04.02 08:00-------------------
+ * non UNO function call to set value in SwXCell
+ * --------------------------------------------------*/
 void lcl_setValue( SwXCell &rCell, double nVal )
 {
     if(rCell.IsValid())
     {
         // Der Text mu? zunaechst (vielleicht) geloescht werden
-        sal_uLong nNdPos = rCell.pBox->IsValidNumTxtNd( sal_True );
+        ULONG nNdPos = rCell.pBox->IsValidNumTxtNd( sal_True );
         if(ULONG_MAX != nNdPos)
-            lcl_setString( rCell, OUString(), sal_True );   // sal_True == keep number format
+            lcl_setString( rCell, OUString(), TRUE );   // TRUE == keep number format
         SwDoc* pDoc = rCell.GetDoc();
         UnoActionContext aAction(pDoc);
         SwFrmFmt* pBoxFmt = rCell.pBox->ClaimFrmFmt();
@@ -746,7 +735,7 @@ void lcl_setValue( SwXCell &rCell, double nVal )
         // - the current number format is not even a valid number formatter number format, but rather Writer's own 'special' text number format
         if(SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
             ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue())
-            ||  ((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT)
+            ||	((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT)
         {
             aSet.Put(SwTblBoxNumFormat(0));
         }
@@ -923,7 +912,7 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
         // Der Text mu? zunaechst (vielleicht) geloescht werden
         sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
         if(USHRT_MAX == nNdPos)
-            lcl_setString( *this, OUString(), sal_True );
+            lcl_setString( *this, OUString(), TRUE );
         String sFml(rFormula);
         if( sFml.EraseLeadingChars().Len() && '=' == sFml.GetChar( 0 ) )
                     sFml.Erase( 0, 1 );
@@ -969,12 +958,12 @@ table::CellContentType SwXCell::getType(void) throw( uno::RuntimeException )
     sal_uInt32 nNdPos = pBox->IsFormulaOrValueBox();
     switch (nNdPos)
     {
-        case 0 :                    nRes = table::CellContentType_TEXT; break;
-        case USHRT_MAX :            nRes = table::CellContentType_EMPTY; break;
-        case RES_BOXATR_VALUE :     nRes = table::CellContentType_VALUE; break;
-        case RES_BOXATR_FORMULA :   nRes = table::CellContentType_FORMULA; break;
+        case 0 :					nRes = table::CellContentType_TEXT; break;
+        case USHRT_MAX :			nRes = table::CellContentType_EMPTY; break;
+        case RES_BOXATR_VALUE :		nRes = table::CellContentType_VALUE; break;
+        case RES_BOXATR_FORMULA :	nRes = table::CellContentType_FORMULA; break;
         default :
-            OSL_FAIL( "unexpected case" );
+            DBG_ERROR( "unexpected case" );
     }
     return  nRes;
 }
@@ -995,7 +984,7 @@ sal_Int32 SwXCell::getError(void) throw( uno::RuntimeException )
 uno::Reference< text::XTextCursor >  SwXCell::createTextCursor(void) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XTextCursor >     aRef;
+    uno::Reference< text::XTextCursor >  	aRef;
     if(pStartNode || IsValid())
     {
         const SwStartNode* pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
@@ -1005,11 +994,11 @@ uno::Reference< text::XTextCursor >  SwXCell::createTextCursor(void) throw( uno:
         SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
         aRef =  static_cast<text::XWordCursor*>(pXCursor);
-//      // no Cursor in protected sections
-//      SwCrsrSaveState aSave( *pUnoCrsr );
-//      if(pUnoCrsr->IsInProtectTable( sal_True ) ||
+//		// no Cursor in protected sections
+//		SwCrsrSaveState aSave( *pUnoCrsr );
+//		if(pUnoCrsr->IsInProtectTable( sal_True ) ||
 //          pUnoCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE | nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ))
-//          throw( uno::RuntimeException() );
+//			throw( uno::RuntimeException() );
     }
     else
         throw uno::RuntimeException();
@@ -1055,53 +1044,26 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     SolarMutexGuard aGuard;
     if(IsValid())
     {
-        // Hack to support hidden property to transfer textDirection
-        if  ( rPropertyName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FRMDirection") ) ) )
+        const SfxItemPropertySimpleEntry* pEntry = 
+            m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+        if( !pEntry )
         {
-            SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
-            sal_Int16 nNum = 0;
-            aValue >>= nNum;
-            OSL_TRACE("FRMDirection val %d", nNum );
-            switch (nNum)
-            {
-                case 0:
-                    eDir = FRMDIR_HORI_LEFT_TOP;
-                    break;
-                case 1:
-                    eDir = FRMDIR_HORI_RIGHT_TOP;
-                    break;
-                case 2:
-                    eDir = FRMDIR_VERT_TOP_RIGHT;
-                    break;
-                default:
-                    OSL_FAIL( "unknown direction code, maybe its a bitfield");
-            }
-            SvxFrameDirectionItem aItem( eDir, RES_FRAMEDIR);
-            pBox->GetFrmFmt()->SetFmtAttr(aItem);
+            beans::UnknownPropertyException aEx;
+            aEx.Message = rPropertyName;
+            throw( aEx );
+        }
+        if( pEntry->nWID == FN_UNO_CELL_ROW_SPAN )
+        {
+            sal_Int32 nRowSpan = 0;
+            if( aValue >>= nRowSpan )
+                pBox->setRowSpan( nRowSpan );
         }
         else
         {
-            const SfxItemPropertySimpleEntry* pEntry =
-                m_pPropSet->getPropertyMap()->getByName(rPropertyName);
-            if( !pEntry )
-            {
-                beans::UnknownPropertyException aEx;
-                aEx.Message = rPropertyName;
-                throw( aEx );
-            }
-            if( pEntry->nWID == FN_UNO_CELL_ROW_SPAN )
-            {
-                sal_Int32 nRowSpan = 0;
-                if( aValue >>= nRowSpan )
-                    pBox->setRowSpan( nRowSpan );
-            }
-            else
-            {
-                SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
-                SwAttrSet aSet(pBoxFmt->GetAttrSet());
-                m_pPropSet->setPropertyValue(rPropertyName, aValue, aSet);
-                pBoxFmt->GetDoc()->SetAttr(aSet, *pBoxFmt);
-            }
+            SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
+            SwAttrSet aSet(pBoxFmt->GetAttrSet());
+            m_pPropSet->setPropertyValue(rPropertyName, aValue, aSet);
+            pBoxFmt->GetDoc()->SetAttr(aSet, *pBoxFmt);
         }
     }
 }
@@ -1202,11 +1164,11 @@ uno::Reference< container::XEnumeration >  SwXCell::createEnumeration(void) thro
                     pSttNd, pTable);
 
         aRef = pEnum;
-//      // no Cursor in protected sections
-//      SwCrsrSaveState aSave( *pUnoCrsr );
-//      if(pUnoCrsr->IsInProtectTable( sal_True ) ||
+//		// no Cursor in protected sections
+//		SwCrsrSaveState aSave( *pUnoCrsr );
+//		if(pUnoCrsr->IsInProtectTable( sal_True ) ||
 //          pUnoCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE | nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ))
-//          throw( uno::RuntimeException() );
+//			throw( uno::RuntimeException() );
     }
     return aRef;
 }
@@ -1222,7 +1184,7 @@ sal_Bool SwXCell::hasElements(void) throw( uno::RuntimeException )
     return sal_True;
 }
 
-void SwXCell::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXCell::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -1241,14 +1203,15 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
         //wenn es die Box gibt, dann wird auch eine Zelle zurueckgegeben
         if(pFoundBox)
         {
-            SwIterator<SwXCell,SwFmt> aIter( *pTblFmt );
-            SwXCell* pXCell = aIter.First();
+            SwClientIter aIter( *pTblFmt );
+            SwXCell* pXCell = (SwXCell*)aIter.
+                                    First( TYPE( SwXCell ));
             while( pXCell )
             {
                 // gibt es eine passende Zelle bereits?
                 if(pXCell->GetTblBox() == pBox)
                     break;
-                pXCell = aIter.Next();
+                pXCell = (SwXCell*)aIter.Next();
             }
             //sonst anlegen
             if(!pXCell)
@@ -1259,7 +1222,9 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
     return pRet;
 }
 
-/* does box exist in given table? */
+/* -----------------12.06.98 07:37-------------------
+ * 	exitstiert die Box in der angegebenen Tabelle?
+ * --------------------------------------------------*/
 SwTableBox* SwXCell::FindBox(SwTable* pTable, SwTableBox* pBox2)
 {
     // check if nFndPos happens to point to the right table box
@@ -1281,7 +1246,7 @@ OUString SwXCell::getImplementationName(void) throw( uno::RuntimeException )
     return C2U("SwXCell");
 }
 
-sal_Bool SwXCell::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+BOOL SwXCell::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     String sServiceName(rServiceName);
     return sServiceName.EqualsAscii("com.sun.star.text.CellProperties");
@@ -1303,7 +1268,7 @@ OUString SwXTextTableRow::getImplementationName(void) throw( uno::RuntimeExcepti
     return C2U("SwXTextTableRow");
 }
 
-sal_Bool SwXTextTableRow::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+BOOL SwXTextTableRow::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.TextTableRow") == rServiceName;
 }
@@ -1348,7 +1313,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
         SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
         if(pLn)
         {
-            const SfxItemPropertySimpleEntry* pEntry =
+            const SfxItemPropertySimpleEntry* pEntry = 
                 m_pPropSet->getPropertyMap()->getByName(rPropertyName);
             SwDoc* pDoc = pFmt->GetDoc();
             if (!pEntry)
@@ -1408,7 +1373,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
         SwTableLine* pLn = SwXTextTableRow::FindLine(pTable, pLine);
         if(pLn)
         {
-            const SfxItemPropertySimpleEntry* pEntry =
+            const SfxItemPropertySimpleEntry* pEntry = 
                                     m_pPropSet->getPropertyMap()->getByName(rPropertyName);
             if (!pEntry)
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -1421,7 +1386,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
                     const SwFmtFrmSize& rSize = pLn->GetFrmFmt()->GetFrmSize();
                     if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
                     {
-                        sal_Bool bTmp =  ATT_VAR_SIZE == rSize.GetHeightSizeType();
+                        BOOL bTmp =  ATT_VAR_SIZE == rSize.GetHeightSizeType();
                         aRet.setValue(&bTmp, ::getCppuBooleanType());
                     }
                     else
@@ -1464,7 +1429,7 @@ void SwXTextTableRow::removeVetoableChangeListener(const OUString& /*rPropertyNa
     DBG_WARNING("not implemented");
 }
 
-void SwXTextTableRow::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXTextTableRow::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -1490,18 +1455,18 @@ OUString SwXTextTableCursor::getImplementationName(void) throw( uno::RuntimeExce
     return C2U("SwXTextTableCursor");
 }
 
-sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+BOOL SwXTextTableCursor::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.TextTableCursor") == rServiceName;
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2(SwXTextTableCursor,SwXTextTableCursor_Base,OTextCursorHelper)
-const SwPaM*        SwXTextTableCursor::GetPaM() const  { return GetCrsr(); }
-SwPaM*              SwXTextTableCursor::GetPaM()        { return GetCrsr(); }
-const SwDoc*        SwXTextTableCursor::GetDoc() const  { return GetFrmFmt()->GetDoc(); }
-SwDoc*              SwXTextTableCursor::GetDoc()        { return GetFrmFmt()->GetDoc(); }
-const SwUnoCrsr*    SwXTextTableCursor::GetCrsr() const { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
-SwUnoCrsr*          SwXTextTableCursor::GetCrsr()       { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
+const SwPaM*		SwXTextTableCursor::GetPaM() const	{ return GetCrsr(); }
+SwPaM*				SwXTextTableCursor::GetPaM()		{ return GetCrsr(); }
+const SwDoc* 		SwXTextTableCursor::GetDoc() const	{ return GetFrmFmt()->GetDoc(); }
+SwDoc* 				SwXTextTableCursor::GetDoc()		{ return GetFrmFmt()->GetDoc(); }
+const SwUnoCrsr*	SwXTextTableCursor::GetCrsr() const	{ return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
+SwUnoCrsr*			SwXTextTableCursor::GetCrsr()		{ return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
 
 uno::Sequence< OUString > SwXTextTableCursor::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
@@ -1526,7 +1491,7 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt* pFmt, SwTableBox* pBox) :
     pTblCrsr->MakeBoxSels();
 }
 
-SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor* pTableSelection) :
+SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt,	const SwTableCursor* pTableSelection) :
     SwClient(&rTableFmt),
     aCrsrDepend(this, 0),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
@@ -1604,7 +1569,7 @@ sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& CellName, sal_Bool E
     if(pUnoCrsr)
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
+        lcl_CrsrSelect(	pTblCrsr, Expand );
         String sCellName(CellName);
         bRet = pTblCrsr->GotoTblBox(sCellName);
     }
@@ -1619,8 +1584,8 @@ sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool Expand) throw( uno
     if(pUnoCrsr)
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->Left( Count,CRSR_SKIP_CHARS, sal_False, sal_False);
+        lcl_CrsrSelect(	pTblCrsr, Expand );
+        bRet = pTblCrsr->Left( Count,CRSR_SKIP_CHARS, FALSE, FALSE);
     }
     return bRet;
 }
@@ -1633,8 +1598,8 @@ sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool Expand) throw( un
     if(pUnoCrsr)
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->Right( Count, CRSR_SKIP_CHARS, sal_False, sal_False);
+        lcl_CrsrSelect(	pTblCrsr, Expand );
+        bRet = pTblCrsr->Right( Count, CRSR_SKIP_CHARS, FALSE, FALSE);
     }
     return bRet;
 }
@@ -1647,7 +1612,7 @@ sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool Expand) throw( uno::
     if(pUnoCrsr)
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
+        lcl_CrsrSelect(	pTblCrsr, Expand );
         bRet = pTblCrsr->UpDown(sal_True, Count, 0, 0);
     }
     return bRet;
@@ -1661,7 +1626,7 @@ sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool Expand) throw( uno
     if(pUnoCrsr)
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
+        lcl_CrsrSelect(	pTblCrsr, Expand );
         bRet = pTblCrsr->UpDown(sal_False, Count, 0, 0);
     }
     return bRet;
@@ -1674,7 +1639,7 @@ void SwXTextTableCursor::gotoStart(sal_Bool Expand) throw( uno::RuntimeException
     if(pUnoCrsr)
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
+        lcl_CrsrSelect(	pTblCrsr, Expand );
         pTblCrsr->MoveTable(fnTableCurr, fnTableStart);
     }
 }
@@ -1686,7 +1651,7 @@ void SwXTextTableCursor::gotoEnd(sal_Bool Expand) throw( uno::RuntimeException )
     if(pUnoCrsr)
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
+        lcl_CrsrSelect(	pTblCrsr, Expand );
         pTblCrsr->MoveTable(fnTableCurr, fnTableEnd);
     }
 }
@@ -1710,7 +1675,7 @@ sal_Bool SwXTextTableCursor::mergeRange(void) throw( uno::RuntimeException )
             bRet = TBLMERGE_OK == pTblCrsr->GetDoc()->MergeTbl(*pTblCrsr);
             if(bRet)
             {
-                sal_uInt16 nCount = pTblCrsr->GetBoxesCount();
+                USHORT nCount = pTblCrsr->GetBoxesCount();
                 while(nCount--)
                     pTblCrsr->DeleteBox(nCount);
             }
@@ -1766,7 +1731,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        const SfxItemPropertySimpleEntry* pEntry =
+        const SfxItemPropertySimpleEntry* pEntry = 
                                     m_pPropSet->getPropertyMap()->getByName(rPropertyName);
         if(pEntry)
         {
@@ -1828,7 +1793,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        const SfxItemPropertySimpleEntry* pEntry =
+        const SfxItemPropertySimpleEntry* pEntry = 
                                     m_pPropSet->getPropertyMap()->getByName(rPropertyName);
         if(pEntry)
         {
@@ -1850,7 +1815,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                 case FN_UNO_PARA_STYLE:
                 {
                     SwFmtColl *const pFmt =
-                        SwUnoCursorHelper::GetCurTxtFmtColl(*pUnoCrsr, sal_False);
+                        SwUnoCursorHelper::GetCurTxtFmtColl(*pUnoCrsr, FALSE);
                     OUString sRet;
                     if(pFmt)
                         sRet = pFmt->GetName();
@@ -1860,7 +1825,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                 default:
                 {
                     SfxItemSet aSet(pTblCrsr->GetDoc()->GetAttrPool(),
-                        RES_CHRATR_BEGIN,       RES_FRMATR_END -1,
+                        RES_CHRATR_BEGIN, 		RES_FRMATR_END -1,
                         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                         0L);
                     // erstmal die Attribute des Cursors
@@ -1896,7 +1861,7 @@ void SwXTextTableCursor::removeVetoableChangeListener(const OUString& /*rPropert
     DBG_WARNING("not implemented");
 }
 
-void SwXTextTableCursor::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXTextTableCursor::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -1914,12 +1879,11 @@ public:
     SwTableProperties_Impl();
     ~SwTableProperties_Impl();
 
-    void        SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& aVal);
-    sal_Bool    GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny);
+    void        SetProperty(USHORT nWhichId, USHORT nMemberId, const uno::Any& aVal);
+    sal_Bool    GetProperty(USHORT nWhichId, USHORT nMemberId, const uno::Any*& rpAny);
 
     void        ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc);
 };
-
 
 SwTableProperties_Impl::SwTableProperties_Impl()
 {
@@ -1929,27 +1893,27 @@ SwTableProperties_Impl::~SwTableProperties_Impl()
 {
 }
 
-void SwTableProperties_Impl::SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rVal)
+void SwTableProperties_Impl::SetProperty(USHORT nWhichId, USHORT nMemberId, const uno::Any& rVal)
 {
     aAnyMap.SetValue( nWhichId, nMemberId, rVal );
 }
 
-sal_Bool SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny )
+sal_Bool SwTableProperties_Impl::GetProperty(USHORT nWhichId, USHORT nMemberId, const uno::Any*& rpAny )
 {
     return aAnyMap.FillValue( nWhichId, nMemberId, rpAny );
 }
 
-void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
+void	SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
 {
     SfxItemSet aSet(rDoc.GetAttrPool(),
-        RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
-        RES_BACKGROUND,     RES_BACKGROUND,
-        RES_FRM_SIZE,       RES_UL_SPACE,
-        RES_HORI_ORIENT,    RES_HORI_ORIENT,
-        RES_BREAK,          RES_BREAK,
-        RES_KEEP,           RES_KEEP,
-        RES_SHADOW,         RES_SHADOW,
-        RES_PAGEDESC,       RES_PAGEDESC,
+        RES_LAYOUT_SPLIT, 	RES_LAYOUT_SPLIT,
+        RES_BACKGROUND,		RES_BACKGROUND,
+        RES_FRM_SIZE,		RES_UL_SPACE,
+        RES_HORI_ORIENT,	RES_HORI_ORIENT,
+        RES_BREAK, 			RES_BREAK,
+        RES_KEEP,			RES_KEEP,
+        RES_SHADOW, 		RES_SHADOW,
+        RES_PAGEDESC, 		RES_PAGEDESC,
         0
         );
     const uno::Any* pRepHead;
@@ -2004,7 +1968,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
                 const uno::Any* pPgNo;
                 if(GetProperty(RES_PAGEDESC, MID_PAGEDESC_PAGENUMOFFSET, pPgNo ))
                 {
-                    sal_Int16 nTmp = 0;
+                    INT16 nTmp = 0;
                     (*pPgNo) >>= nTmp;
                     aDesc.SetNumOffset( nTmp );
                 }
@@ -2036,13 +2000,16 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         aSet.Put(aKeep);
     }
 
+    sal_Bool bFullAlign = sal_True;
     const uno::Any* pHOrient;
     if(GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, pHOrient))
     {
         SwFmtHoriOrient aOrient ( rFrmFmt.GetHoriOrient() );
         ((SfxPoolItem&)aOrient).PutValue(*pHOrient, MID_HORIORIENT_ORIENT|CONVERT_TWIPS);
+        bFullAlign = (aOrient.GetHoriOrient() == text::HoriOrientation::FULL);
         aSet.Put(aOrient);
     }
+
 
     const uno::Any* pSzRel       = 0;
     GetProperty(FN_TABLE_IS_RELATIVE_WIDTH, 0xff, pSzRel  );
@@ -2058,7 +2025,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         ((SfxPoolItem&)aSz).PutValue(*pWidth, MID_FRMSIZE_WIDTH);
         bPutSize = sal_True;
     }
-    sal_Bool bTemp = pSzRel ? *(sal_Bool*)pSzRel->getValue() : sal_False;
+    sal_Bool bTemp = pSzRel ? *(sal_Bool*)pSzRel->getValue() : FALSE;
     if(pSzRel && bTemp && pRelWidth)
     {
         ((SfxPoolItem&)aSz).PutValue(*pRelWidth, MID_FRMSIZE_REL_WIDTH|CONVERT_TWIPS);
@@ -2105,15 +2072,16 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     }
 
     //TODO: folgende Propertiers noch impl.
-//  FN_UNO_RANGE_ROW_LABEL
-//  FN_UNO_RANGE_COL_LABEL
-//  FN_UNO_TABLE_BORDER
+//	FN_UNO_RANGE_ROW_LABEL
+//	FN_UNO_RANGE_COL_LABEL
+//	FN_UNO_TABLE_BORDER
 
     if(aSet.Count())
     {
         rDoc.SetAttr( aSet, *rTbl.GetFrmFmt() );
     }
 }
+
 const uno::Sequence< sal_Int8 > & SwXTextTable::getUnoTunnelId()
 {
     static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
@@ -2145,6 +2113,7 @@ SwXTextTable::SwXTextTable() :
     bFirstRowAsLabel(sal_False),
     bFirstColumnAsLabel(sal_False)
 {
+
 }
 
 SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt) :
@@ -2159,6 +2128,7 @@ SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt) :
     bFirstRowAsLabel(sal_False),
     bFirstColumnAsLabel(sal_False)
 {
+
 }
 
 SwXTextTable::~SwXTextTable()
@@ -2183,7 +2153,8 @@ uno::Reference< table::XTableRows >  SwXTextTable::getRows(void) throw( uno::Run
     uno::Reference< table::XTableRows >  xRet;
     if (SwFrmFmt* pFmt = GetFrmFmt())
     {
-        SwXTableRows* pRows = SwIterator<SwXTableRows,SwFmt>::FirstElement(*pFmt);
+        SwXTableRows* pRows = (SwXTableRows*)SwClientIter(*pFmt).
+            First(TYPE(SwXTableRows));
         if (!pRows)
             pRows = new SwXTableRows(*pFmt);
         xRet = pRows;
@@ -2199,7 +2170,8 @@ uno::Reference< table::XTableColumns >  SwXTextTable::getColumns(void) throw( un
     uno::Reference< table::XTableColumns >  xRet;
     if (SwFrmFmt* pFmt = GetFrmFmt())
     {
-        SwXTableColumns* pCols = SwIterator<SwXTableColumns,SwFmt>::FirstElement(*pFmt);
+        SwXTableColumns* pCols = (SwXTableColumns*)SwClientIter(*pFmt).
+            First(TYPE(SwXTableColumns));
         if (!pCols)
             pCols = new SwXTableColumns(*pFmt);
         xRet = pCols;
@@ -2287,7 +2259,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
     OTextCursorHelper* pCursor = 0;
     if(xRangeTunnel.is())
     {
-        pRange  = reinterpret_cast< SwXTextRange * >(
+        pRange 	= reinterpret_cast< SwXTextRange * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
         pCursor = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
@@ -2302,7 +2274,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
         {
             UnoActionContext aCont( pDoc );
 
-            pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+            pDoc->StartUndo(UNDO_EMPTY, NULL);
             const SwTable *pTable = 0;
             if( 0 != aPam.Start()->nContent.GetIndex() )
             {
@@ -2324,7 +2296,18 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
                 // hier muessen die Properties des Descriptors ausgewertet werden
                 pTableProps->ApplyTblAttr(*pTable, *pDoc);
                 SwFrmFmt* pTblFmt = pTable->GetFrmFmt();
-                lcl_FormatTable( pTblFmt );
+                SwClientIter aIter( *pTblFmt );
+                for( SwClient* pC = aIter.First( TYPE( SwFrm ));
+                        pC; pC = aIter.Next() )
+                {
+                    if( ((SwFrm*)pC)->IsTabFrm() )
+                    {
+                        if(((SwFrm*)pC)->IsValid())
+                            ((SwFrm*)pC)->InvalidatePos();
+                        ((SwTabFrm*)pC)->SetONECalcLowers();
+                        ((SwTabFrm*)pC)->Calc();
+                    }
+                }
 
                 pTblFmt->Add(this);
                 if(m_sTableName.Len())
@@ -2350,8 +2333,9 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
                 bIsDescriptor = sal_False;
                 DELETEZ(pTableProps);
             }
-            pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+            pDoc->EndUndo( UNDO_END, NULL );
         }
+
     }
     else
         throw lang::IllegalArgumentException();
@@ -2567,12 +2551,12 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
                 {
                     // check if table box value item is set
                     SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-                    sal_Bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
+                    BOOL bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, FALSE ) == SFX_ITEM_SET;
                     //const SfxPoolItem* pItem;
                     //SwDoc* pDoc = pXCell->GetDoc();
-                    //sal_Bool bIsText = (SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
-                    //          ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue())
-                    //          ||  ((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT);
+                    //BOOL bIsText = (SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
+                    //			||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue())
+                    //			||	((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT);
 
                     if(!bIsNum/*bIsText*/)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
@@ -2647,7 +2631,7 @@ void SAL_CALL SwXTextTable::setDataArray(
                         if( (rAny >>= d) )
                             lcl_setValue( *pXCell, d );
                         else
-                            lcl_setString( *pXCell, OUString(), sal_True );
+                            lcl_setString( *pXCell, OUString(), TRUE );
 
                     }
                 }
@@ -2778,7 +2762,7 @@ uno::Sequence< OUString > SwXTextTable::getRowDescriptions(void) throw( uno::Run
         }
         else
         {
-            OSL_FAIL("Wo kommen die Labels her?");
+            DBG_ERROR("Wo kommen die Labels her?");
         }
     }
     else
@@ -2814,7 +2798,7 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
         }
         else
         {
-            OSL_FAIL("Wohin mit den Labels?");
+            DBG_ERROR("Wohin mit den Labels?");
         }
     }
     else
@@ -2854,7 +2838,7 @@ uno::Sequence< OUString > SwXTextTable::getColumnDescriptions(void)
         }
         else
         {
-            OSL_FAIL("Wo kommen die Labels her?");
+            DBG_ERROR("Wo kommen die Labels her?");
         }
     }
     else
@@ -2892,7 +2876,7 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColum
         }
         else
         {
-            OSL_FAIL("Wo kommen die Labels her?");
+            DBG_ERROR("Wo kommen die Labels her?");
         }
     }
     else
@@ -3008,7 +2992,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
     SwFrmFmt* pFmt = GetFrmFmt();
     if(!aValue.hasValue())
         throw lang::IllegalArgumentException();
-    const SfxItemPropertySimpleEntry* pEntry =
+    const SfxItemPropertySimpleEntry* pEntry = 
                                 m_pPropSet->getPropertyMap()->getByName(rPropertyName);
     if( !pEntry )
         throw lang::IllegalArgumentException();
@@ -3060,9 +3044,9 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                         && pBorder)
                     {
                         SwDoc* pDoc = pFmt->GetDoc();
-                        SwFrm* pFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
+                        SwClientIter aIter( *pFmt );
                         //Tabellen ohne Layout (unsichtbare Header/Footer )
-                        if( pFrm )
+                        if(0 != aIter.First( TYPE( SwFrm )))
                         {
                             lcl_FormatTable(pFmt);
                             SwTable* pTable = SwTable::FindTable( pFmt );
@@ -3143,14 +3127,14 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                         !aTableBorderDistances.IsBottomDistanceValid ))
                         break;
 
-                    sal_uInt16 nLeftDistance =     MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.LeftDistance);
-                    sal_uInt16 nRightDistance =    MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.RightDistance);
-                    sal_uInt16 nTopDistance =      MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.TopDistance);
-                    sal_uInt16 nBottomDistance =   MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.BottomDistance);
+                    USHORT nLeftDistance =     MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.LeftDistance);
+                    USHORT nRightDistance =    MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.RightDistance);
+                    USHORT nTopDistance =      MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.TopDistance);
+                    USHORT nBottomDistance =   MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.BottomDistance);
                     SwDoc* pDoc = pFmt->GetDoc();
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     SwTableLines &rLines = pTable->GetTabLines();
-                    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START, NULL);
+                    pDoc->StartUndo(UNDO_START, NULL);
                     for(sal_uInt16 i = 0; i < rLines.Count(); i++)
                     {
                         SwTableLine* pLine = rLines.GetObject(i);
@@ -3161,9 +3145,9 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                             const SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
                             const SvxBoxItem& rBox = pBoxFmt->GetBox();
                             if(
-                                (aTableBorderDistances.IsLeftDistanceValid && nLeftDistance !=   rBox.GetDistance( BOX_LINE_LEFT )) ||
-                                (aTableBorderDistances.IsRightDistanceValid && nRightDistance !=  rBox.GetDistance( BOX_LINE_RIGHT )) ||
-                                (aTableBorderDistances.IsTopDistanceValid && nTopDistance !=    rBox.GetDistance( BOX_LINE_TOP )) ||
+                                (aTableBorderDistances.IsLeftDistanceValid && nLeftDistance != rBox.GetDistance( BOX_LINE_LEFT )) ||
+                                (aTableBorderDistances.IsRightDistanceValid && nRightDistance != rBox.GetDistance( BOX_LINE_RIGHT )) ||
+                                (aTableBorderDistances.IsTopDistanceValid && nTopDistance != rBox.GetDistance( BOX_LINE_TOP )) ||
                                 (aTableBorderDistances.IsBottomDistanceValid && nBottomDistance != rBox.GetDistance( BOX_LINE_BOTTOM )))
                             {
                                 SvxBoxItem aSetBox( rBox );
@@ -3180,7 +3164,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                             }
                         }
                     }
-                    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
+                    pDoc->EndUndo(UNDO_END, NULL);
                 }
                 break;
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
@@ -3214,7 +3198,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
     SolarMutexGuard aGuard;
     uno::Any aRet;
     SwFrmFmt* pFmt = GetFrmFmt();
-    const SfxItemPropertySimpleEntry* pEntry =
+    const SfxItemPropertySimpleEntry* pEntry = 
                                 m_pPropSet->getPropertyMap()->getByName(rPropertyName);
     if(pFmt)
     {
@@ -3255,9 +3239,9 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                 case FN_UNO_TABLE_BORDER:
                 {
                     SwDoc* pDoc = pFmt->GetDoc();
-                    SwFrm* pFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
+                    SwClientIter aIter( *pFmt );
                     //Tabellen ohne Layout (unsichtbare Header/Footer )
-                    if( pFrm )
+                    if(0 != aIter.First( TYPE( SwFrm )))
                     {
                         lcl_FormatTable(pFmt);
                         SwTable* pTable = SwTable::FindTable( pFmt );
@@ -3277,7 +3261,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                         pUnoCrsr->SetMark();
                         const SwStartNode* pLastNd = pBRBox->GetSttNd();
                         pUnoCrsr->GetPoint()->nNode = *pLastNd;
-
+                        
                         pUnoCrsr->Move( fnMoveForward, fnGoNode );
                         SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
                         pCrsr->MakeBoxSels();
@@ -3291,36 +3275,36 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                         const SvxBoxInfoItem& rBoxInfoItem = (const SvxBoxInfoItem&)aSet.Get(SID_ATTR_BORDER_INNER);
                         const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
 
-                        table::TableBorder aTableBorder;
-                        aTableBorder.TopLine                = lcl_SvxLineToLine(rBox.GetTop());
-                        aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(VALID_TOP);
-                        aTableBorder.BottomLine             = lcl_SvxLineToLine(rBox.GetBottom());
-                        aTableBorder.IsBottomLineValid      = rBoxInfoItem.IsValid(VALID_BOTTOM);
-                        aTableBorder.LeftLine               = lcl_SvxLineToLine(rBox.GetLeft());
-                        aTableBorder.IsLeftLineValid        = rBoxInfoItem.IsValid(VALID_LEFT);
-                        aTableBorder.RightLine              = lcl_SvxLineToLine(rBox.GetRight());
-                        aTableBorder.IsRightLineValid       = rBoxInfoItem.IsValid(VALID_RIGHT );
-                        aTableBorder.HorizontalLine         = lcl_SvxLineToLine(rBoxInfoItem.GetHori());
-                        aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(VALID_HORI);
-                        aTableBorder.VerticalLine           = lcl_SvxLineToLine(rBoxInfoItem.GetVert());
-                        aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(VALID_VERT);
-                        aTableBorder.Distance               = TWIP_TO_MM100_UNSIGNED( rBox.GetDistance() );
-                        aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(VALID_DISTANCE);
+                         table::TableBorder aTableBorder;
+                        aTableBorder.TopLine 				= lcl_SvxLineToLine(rBox.GetTop());
+                        aTableBorder.IsTopLineValid 		= rBoxInfoItem.IsValid(VALID_TOP);
+                        aTableBorder.BottomLine				= lcl_SvxLineToLine(rBox.GetBottom());
+                        aTableBorder.IsBottomLineValid		= rBoxInfoItem.IsValid(VALID_BOTTOM);
+                        aTableBorder.LeftLine				= lcl_SvxLineToLine(rBox.GetLeft());
+                        aTableBorder.IsLeftLineValid		= rBoxInfoItem.IsValid(VALID_LEFT);
+                        aTableBorder.RightLine				= lcl_SvxLineToLine(rBox.GetRight());
+                        aTableBorder.IsRightLineValid		= rBoxInfoItem.IsValid(VALID_RIGHT );
+                        aTableBorder.HorizontalLine			= lcl_SvxLineToLine(rBoxInfoItem.GetHori());
+                        aTableBorder.IsHorizontalLineValid 	= rBoxInfoItem.IsValid(VALID_HORI);
+                        aTableBorder.VerticalLine			= lcl_SvxLineToLine(rBoxInfoItem.GetVert());
+                        aTableBorder.IsVerticalLineValid	= rBoxInfoItem.IsValid(VALID_VERT);
+                        aTableBorder.Distance 				= TWIP_TO_MM100_UNSIGNED( rBox.GetDistance() );
+                        aTableBorder.IsDistanceValid 		= rBoxInfoItem.IsValid(VALID_DISTANCE);
                         aRet.setValue(&aTableBorder, ::getCppuType((const table::TableBorder*)0));
                         delete pUnoCrsr;
                     }
                 }
                 break;
                 case FN_UNO_TABLE_BORDER_DISTANCES :
-                {
+                {    
                     table::TableBorderDistances aTableBorderDistances( 0, sal_True, 0, sal_True, 0, sal_True, 0, sal_True ) ;
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     const SwTableLines &rLines = pTable->GetTabLines();
                     bool bFirst = true;
-                    sal_uInt16 nLeftDistance = 0;
-                    sal_uInt16 nRightDistance = 0;
-                    sal_uInt16 nTopDistance = 0;
-                    sal_uInt16 nBottomDistance = 0;
+                    USHORT nLeftDistance = 0; 
+                    USHORT nRightDistance = 0; 
+                    USHORT nTopDistance = 0; 
+                    USHORT nBottomDistance = 0; 
 
                     for(sal_uInt16 i = 0; i < rLines.Count(); i++)
                     {
@@ -3341,38 +3325,38 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                             }
                             else
                             {
-                                if( aTableBorderDistances.IsLeftDistanceValid &&
+                                if( aTableBorderDistances.IsLeftDistanceValid && 
                                     nLeftDistance != TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_LEFT   )))
                                     aTableBorderDistances.IsLeftDistanceValid = sal_False;
-                                if( aTableBorderDistances.IsRightDistanceValid &&
+                                if( aTableBorderDistances.IsRightDistanceValid && 
                                     nRightDistance != TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_RIGHT   )))
                                     aTableBorderDistances.IsRightDistanceValid = sal_False;
-                                if( aTableBorderDistances.IsTopDistanceValid &&
+                                if( aTableBorderDistances.IsTopDistanceValid && 
                                     nTopDistance != TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_TOP   )))
                                     aTableBorderDistances.IsTopDistanceValid = sal_False;
-                                if( aTableBorderDistances.IsBottomDistanceValid &&
+                                if( aTableBorderDistances.IsBottomDistanceValid && 
                                     nBottomDistance != TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_BOTTOM   )))
                                     aTableBorderDistances.IsBottomDistanceValid = sal_False;
-                            }
+                            }    
 
-                        }
-                        if( !aTableBorderDistances.IsLeftDistanceValid &&
-                                !aTableBorderDistances.IsRightDistanceValid &&
-                                !aTableBorderDistances.IsTopDistanceValid &&
+                        }    
+                        if( !aTableBorderDistances.IsLeftDistanceValid && 
+                                !aTableBorderDistances.IsRightDistanceValid && 
+                                !aTableBorderDistances.IsTopDistanceValid && 
                                 !aTableBorderDistances.IsBottomDistanceValid )
                             break;
                     }
                     if( aTableBorderDistances.IsLeftDistanceValid)
-                        aTableBorderDistances.LeftDistance = nLeftDistance;
+                        aTableBorderDistances.LeftDistance = nLeftDistance; 
                     if( aTableBorderDistances.IsRightDistanceValid)
                         aTableBorderDistances.RightDistance  = nRightDistance;
                     if( aTableBorderDistances.IsTopDistanceValid)
                         aTableBorderDistances.TopDistance    = nTopDistance;
                     if( aTableBorderDistances.IsBottomDistanceValid)
                         aTableBorderDistances.BottomDistance = nBottomDistance;
-
+                    
                     aRet <<= aTableBorderDistances;
-                }
+                }        
                 break;
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
                 {
@@ -3381,7 +3365,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                 }
                 break;
                 case FN_UNO_TABLE_COLUMN_RELATIVE_SUM:
-                    aRet <<= (sal_Int16) UNO_TABLE_COLUMN_SUM;
+                    aRet <<= (INT16) UNO_TABLE_COLUMN_SUM;
                 break;
                 case RES_ANCHOR:
                     //AnchorType ist readonly und maybevoid und wird nicht geliefert
@@ -3496,7 +3480,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
         while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
         {
             aIdx++;
-            SwNode *const pNd = & aIdx.GetNode();
+            SwNode *pNd = pFmt->GetDoc()->GetNodes()[aIdx];
             if ( pNd->IsOLENode() &&
                 aOldName == ((SwOLENode*)pNd)->GetChartTblName() )
             {
@@ -3550,7 +3534,7 @@ sal_uInt16 SwXTextTable::getColumnCount(void)
     return nRet;
 }
 
-void SwXTextTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXTextTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     if(pOld && pOld->Which() == RES_REMOVE_UNO_OBJECT &&
         (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
@@ -3616,7 +3600,7 @@ OUString SwXCellRange::getImplementationName(void) throw( uno::RuntimeException 
     return C2U("SwXCellRange");
 }
 
-sal_Bool SwXCellRange::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+BOOL SwXCellRange::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return
         rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.CellRange" ) ) ||
@@ -3776,7 +3760,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
     {
         /* ASK OLIVER
         lcl_FormatTable(pFmt);*/
-        const SfxItemPropertySimpleEntry* pEntry =
+        const SfxItemPropertySimpleEntry* pEntry = 
                                     m_pPropSet->getPropertyMap()->getByName(rPropertyName);
         if(pEntry)
         {
@@ -3808,8 +3792,8 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                                     SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                     0);
                     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
-                    aBoxInfo.SetValid(0xff, sal_False);
-                    sal_uInt8 nValid = 0;
+                    aBoxInfo.SetValid(0xff, FALSE);
+                    BYTE nValid = 0;
                     switch(pEntry->nMemberId & ~CONVERT_TWIPS)
                     {
                         case  LEFT_BORDER :             nValid = VALID_LEFT; break;
@@ -3823,7 +3807,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                             nValid = VALID_DISTANCE;
                         break;
                     }
-                    aBoxInfo.SetValid(nValid, sal_True);
+                    aBoxInfo.SetValid(nValid, TRUE);
 
 
                     aSet.Put(aBoxInfo);
@@ -3841,14 +3825,6 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                     SfxUInt32Item aNumberFormat(RES_BOXATR_FORMAT);
                     ((SfxPoolItem&)aNumberFormat).PutValue(aValue, 0);
                     pDoc->SetBoxAttr( *pCrsr, aNumberFormat);
-                }
-                break;
-                case RES_VERT_ORIENT:
-                {
-                    sal_Int16 nAlign = -1;
-                    aValue >>= nAlign;
-                    if( nAlign >= text::VertOrientation::NONE && nAlign <= text::VertOrientation::BOTTOM)
-                        pDoc->SetBoxAlign( *pCrsr, nAlign );
                 }
                 break;
                 case FN_UNO_RANGE_ROW_LABEL:
@@ -3901,7 +3877,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
     {
         /* ASK OLIVER
         lcl_FormatTable(pFmt);*/
-        const SfxItemPropertySimpleEntry* pEntry =
+        const SfxItemPropertySimpleEntry* pEntry = 
                                     m_pPropSet->getPropertyMap()->getByName(rPropertyName);
         if(pEntry)
         {
@@ -3928,15 +3904,6 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                     rBoxItem.QueryValue(aRet, pEntry->nMemberId);
                 }
                 break;
-                case RES_VERT_ORIENT:
-                {
-                    SwFmtVertOrient aVertOrient;
-                    if( pTblCrsr->GetDoc()->GetBoxAttr( *pTblCrsr, aVertOrient ) )
-                    {
-                        aVertOrient.QueryValue( aRet, pEntry->nMemberId );
-                    }
-                }
-                break;
                 case RES_BOXATR_FORMAT:
                     //GetAttr fuer Tabellenselektion am Doc fehlt noch
                     DBG_WARNING("not implemented");
@@ -3944,7 +3911,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                 case FN_UNO_PARA_STYLE:
                 {
                     SwFmtColl *const pTmpFmt =
-                        SwUnoCursorHelper::GetCurTxtFmtColl(*pTblCrsr, sal_False);
+                        SwUnoCursorHelper::GetCurTxtFmtColl(*pTblCrsr, FALSE);
                     OUString sRet;
                     if(pFmt)
                         sRet = pTmpFmt->GetName();
@@ -3966,7 +3933,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                 default:
                 {
                     SfxItemSet aSet(pTblCrsr->GetDoc()->GetAttrPool(),
-                        RES_CHRATR_BEGIN,       RES_FRMATR_END -1,
+                        RES_CHRATR_BEGIN, 		RES_FRMATR_END -1,
                         RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                         0L);
@@ -4035,7 +4002,7 @@ void SwXCellRange::GetDataSequence(
         pDblSeq->realloc( nSize );
     else
     {
-        OSL_FAIL( "argument missing" );
+        DBG_ERROR( "argument missing" );
         return;
     }
     uno::Any   *pAnyData = pAnySeq ? pAnySeq->getArray() : 0;
@@ -4070,8 +4037,8 @@ void SwXCellRange::GetDataSequence(
                     if (pAnyData)
                     {
                         // check if table box value item is set
-                        sal_Bool bIsNum = pBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
-                        //sal_uLong nNdPos = pBox->IsValidNumTxtNd( sal_True );
+                        BOOL bIsNum = pBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, FALSE ) == SFX_ITEM_SET;
+                        //ULONG nNdPos = pBox->IsValidNumTxtNd( sal_True );
                         if (!bIsNum/* && ULONG_MAX == nNdPos*/)
                             pAnyData[nDtaCnt++] <<= lcl_getString(*pXCell);
                         else
@@ -4132,7 +4099,7 @@ void SwXCellRange::GetDataSequence(
                         pDblData[nDtaCnt++] = fVal;
                     }
                     else {
-                        OSL_FAIL( "output sequence missing" );
+                        DBG_ERROR( "output sequence missing" );
                     }
                 }
             }
@@ -4190,12 +4157,12 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
                 {
                     // check if table box value item is set
                     SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-                    sal_Bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
+                    BOOL bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, FALSE ) == SFX_ITEM_SET;
                     //const SfxPoolItem* pItem;
                     //SwDoc* pDoc = pXCell->GetDoc();
-                    //sal_Bool bIsText = (SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
-                    //          ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue())
-                    //          ||  ((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT);
+                    //BOOL bIsText = (SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
+                    //			||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue())
+                    //			||	((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT);
 
                     if(!bIsNum/*bIsText*/)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
@@ -4267,7 +4234,7 @@ void SAL_CALL SwXCellRange::setDataArray(
                         if( (rAny >>= d) )
                             lcl_setValue( *pXCell, d );
                         else
-                            lcl_setString( *pXCell, OUString(), sal_True );
+                            lcl_setString( *pXCell, OUString(), TRUE );
                     }
                 }
             }
@@ -4389,7 +4356,7 @@ uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
         }
         else
         {
-            OSL_FAIL("Wo kommen die Labels her?");
+            DBG_ERROR("Wo kommen die Labels her?");
         }
     }
     else
@@ -4426,7 +4393,7 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
         }
         else
         {
-            OSL_FAIL("Wohin mit den Labels?");
+            DBG_ERROR("Wohin mit den Labels?");
         }
     }
 }
@@ -4463,7 +4430,7 @@ uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
         }
         else
         {
-            OSL_FAIL("Wo kommen die Labels her?");
+            DBG_ERROR("Wo kommen die Labels her?");
         }
     }
     else
@@ -4497,7 +4464,7 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& Column
         }
         else
         {
-            OSL_FAIL("Wo kommen die Labels her?");
+            DBG_ERROR("Wo kommen die Labels her?");
         }
     }
 }
@@ -4570,7 +4537,7 @@ const SwUnoCrsr* SwXCellRange::GetTblCrsr() const
     return pRet;
 }
 
-void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXCellRange::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew );
     if(!GetRegisteredIn() || !aCursorDepend.GetRegisteredIn())
@@ -4589,14 +4556,14 @@ void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 }
 
 /******************************************************************
- *  SwXTableRows
+ *	SwXTableRows
  ******************************************************************/
 OUString SwXTableRows::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXTableRows");
 }
 
-sal_Bool SwXTableRows::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+BOOL SwXTableRows::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.TableRows") == rServiceName;
 }
@@ -4648,14 +4615,15 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
         if(pTable->GetTabLines().Count() > nIndex)
         {
             SwTableLine* pLine = pTable->GetTabLines().GetObject((sal_uInt16)nIndex);
-            SwIterator<SwXTextTableRow,SwFmt> aIter( *pFrmFmt );
-            SwXTextTableRow* pXRow = aIter.First();
+            SwClientIter aIter( *pFrmFmt );
+            SwXTextTableRow* pXRow = (SwXTextTableRow*)aIter.
+                                    First( TYPE( SwXTextTableRow ));
             while( pXRow )
             {
                 // gibt es eine passende Zelle bereits?
                 if(pXRow->GetTblRow() == pLine)
                     break;
-                pXRow = aIter.Next();
+                pXRow = (SwXTextTableRow*)aIter.Next();
             }
             //sonst anlegen
             if(!pXRow)
@@ -4749,7 +4717,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         throw uno::RuntimeException();
     else
     {
-        sal_Bool bSuccess = sal_False;
+        BOOL bSuccess = FALSE;
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
@@ -4781,7 +4749,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                         UnoActionContext aAction(pFrmFmt->GetDoc());
                         pFrmFmt->GetDoc()->DeleteRow(*pUnoCrsr);
                         delete pUnoCrsr;
-                        bSuccess = sal_True;
+                        bSuccess = TRUE;
                     }
                     {
                         // hier muessen die Actions aufgehoben werden
@@ -4799,7 +4767,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
     }
 }
 
-void SwXTableRows::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXTableRows::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -4812,7 +4780,7 @@ OUString SwXTableColumns::getImplementationName(void) throw( uno::RuntimeExcepti
     return C2U("SwXTableColumns");
 }
 
-sal_Bool SwXTableColumns::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+BOOL SwXTableColumns::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.TableColumns") == rServiceName;
 }
@@ -4866,7 +4834,7 @@ uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
         throw uno::RuntimeException();
     else
     {
-        sal_uInt16 nCount = 0;
+        USHORT nCount = 0;
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
@@ -4958,7 +4926,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         throw uno::RuntimeException();
     else
     {
-        sal_Bool bSuccess = sal_False;
+        BOOL bSuccess = FALSE;
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
@@ -4990,7 +4958,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                         UnoActionContext aAction(pFrmFmt->GetDoc());
                         pFrmFmt->GetDoc()->DeleteCol(*pUnoCrsr);
                         delete pUnoCrsr;
-                        bSuccess = sal_True;
+                        bSuccess = TRUE;
                     }
                     {
                         // hier muessen die Actions aufgehoben werden
@@ -5008,7 +4976,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
     }
 }
 
-void SwXTableColumns::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXTableColumns::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }

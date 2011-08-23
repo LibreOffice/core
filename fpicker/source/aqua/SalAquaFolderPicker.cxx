@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,8 +80,8 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FolderPicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(2);
-        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFolderPicker" ));
-        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.AquaFolderPicker" ));
+        aRet[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFolderPicker" );
+        aRet[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AquaFolderPicker" );
         return aRet;
     }
 }
@@ -137,7 +137,7 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
         break;
 
     default:
-        throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The dialog returned with an unknown result!")), static_cast< XFolderPicker* >( this ));
+        throw uno::RuntimeException(rtl::OUString::createFromAscii("The dialog returned with an unknown result!"), static_cast< XFolderPicker* >( this ));
         break;
     }
 
@@ -184,16 +184,16 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory() throw( uno::RuntimeEx
     if (m_nDialogType == NAVIGATIONSERVICES_DIRECTORY) {
         files = [(NSOpenPanel*)m_pDialog URLs];
     }
-
+    
     long nFiles = [files count];
     OSL_TRACE("# of items: %d", nFiles);
-
+    
     if (nFiles < 1) {
-        throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no directory selected")), static_cast< XFolderPicker* >( this ));
+        throw uno::RuntimeException(rtl::OUString::createFromAscii("no directory selected"), static_cast< XFolderPicker* >( this ));
     }
-
+    
     rtl::OUString aDirectory;
-
+    
     NSURL *url = [files objectAtIndex:0];
     OSL_TRACE("handling %s", [[url description] UTF8String]);
 
@@ -211,7 +211,7 @@ void SAL_CALL SalAquaFolderPicker::setDescription( const rtl::OUString& rDescrip
     throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "description", rDescription);
-
+    
     [m_pDialog setMessage:[NSString stringWithOUString:rDescription]];
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
@@ -226,7 +226,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    rtl::OUString retVal(RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_IMPL_NAME ));
+    rtl::OUString retVal = rtl::OUString::createFromAscii( FOLDER_PICKER_IMPL_NAME );
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
 

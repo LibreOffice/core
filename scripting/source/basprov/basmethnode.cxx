@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,17 +87,17 @@ namespace basprov
                 StarBASIC* pBasic = static_cast< StarBASIC* >( pModule->GetParent() );
                 if ( pBasic )
                 {
-                    m_sURI = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:"));
+                    m_sURI = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
                     m_sURI += pBasic->GetName();
-                    m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+                    m_sURI += ::rtl::OUString::createFromAscii( "." );
                     m_sURI += pModule->GetName();
-                    m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+                    m_sURI += ::rtl::OUString::createFromAscii( "." );
                     m_sURI += m_pMethod->GetName();
-                    m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?language=Basic&location="));
+                    m_sURI += ::rtl::OUString::createFromAscii( "?language=Basic&location=" );
                     if ( m_bIsAppScript )
-                        m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application"));
+                        m_sURI += ::rtl::OUString::createFromAscii( "application" );
                     else
-                        m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("document"));
+                        m_sURI += ::rtl::OUString::createFromAscii( "document" );
                 }
             }
         }
@@ -145,7 +145,7 @@ namespace basprov
     {
         SolarMutexGuard aGuard;
 
-        return Sequence< Reference< browse::XBrowseNode > >();
+        return Sequence< Reference< browse::XBrowseNode > >(); 
     }
 
     // -----------------------------------------------------------------------------
@@ -207,9 +207,9 @@ namespace basprov
 
     // -----------------------------------------------------------------------------
 
-    Any BasicMethodNodeImpl::invoke( const ::rtl::OUString& aFunctionName, const Sequence< Any >& aParams,
-        Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
-        throw (IllegalArgumentException, script::CannotConvertException,
+    Any BasicMethodNodeImpl::invoke( const ::rtl::OUString& aFunctionName, const Sequence< Any >& aParams, 
+        Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) 
+        throw (IllegalArgumentException, script::CannotConvertException, 
                reflection::InvocationTargetException, RuntimeException)
     {
         (void)aParams;
@@ -219,7 +219,7 @@ namespace basprov
         if ( aFunctionName == BASPROV_PROPERTY_EDITABLE )
         {
             ::rtl::OUString sDocURL, sLibName, sModName;
-            sal_uInt16 nLine1 = 0, nLine2;
+            USHORT nLine1 = 0, nLine2;
 
             if ( !m_bIsAppScript )
             {
@@ -236,13 +236,13 @@ namespace basprov
                         for ( sal_Int32 i = 0; i < nProps; ++i )
                         {
                             // TODO: according to MBA the property 'Title' may change in future
-                            if ( pProps[i].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) )
+                            if ( pProps[i].Name == ::rtl::OUString::createFromAscii( "Title" ) )
                             {
                                 pProps[i].Value >>= sDocURL;
                                 break;
                             }
                         }
-                    }
+                    }                  
                 }
             }
 
@@ -265,7 +265,7 @@ namespace basprov
 
                 if ( xSMgr.is() )
                 {
-                    Reference< frame::XDesktop > xDesktop( xSMgr->createInstanceWithContext(
+                    Reference< frame::XDesktop > xDesktop( xSMgr->createInstanceWithContext( 
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ), m_xContext ), UNO_QUERY );
 
                     if ( xDesktop.is() )
@@ -274,23 +274,23 @@ namespace basprov
 
                         if ( xProv.is() )
                         {
-                            Reference< frame::XDispatchHelper > xHelper( xSMgr->createInstanceWithContext(
+                            Reference< frame::XDispatchHelper > xHelper( xSMgr->createInstanceWithContext( 
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.DispatchHelper" ) ), m_xContext ), UNO_QUERY );
 
                             if ( xHelper.is() )
                             {
                                 Sequence < PropertyValue > aArgs(7);
-                                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"));
+                                aArgs[0].Name = ::rtl::OUString::createFromAscii( "Document" );
                                 aArgs[0].Value <<= sDocURL;
-                                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LibName"));
+                                aArgs[1].Name = ::rtl::OUString::createFromAscii( "LibName" );
                                 aArgs[1].Value <<= sLibName;
-                                aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+                                aArgs[2].Name = ::rtl::OUString::createFromAscii( "Name" );
                                 aArgs[2].Value <<= sModName;
-                                aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type"));
-                                aArgs[3].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Module"));
-                                aArgs[4].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Line"));
+                                aArgs[3].Name = ::rtl::OUString::createFromAscii( "Type" );
+                                aArgs[3].Value <<= ::rtl::OUString::createFromAscii( "Module" );
+                                aArgs[4].Name = ::rtl::OUString::createFromAscii( "Line" );
                                 aArgs[4].Value <<= static_cast< sal_uInt32 >( nLine1 );
-                                xHelper->executeDispatch( xProv, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:BasicIDEAppear")), ::rtl::OUString(), 0, aArgs );
+                                xHelper->executeDispatch( xProv, ::rtl::OUString::createFromAscii( ".uno:BasicIDEAppear" ), ::rtl::OUString(), 0, aArgs );
                             }
                         }
                     }
@@ -309,8 +309,8 @@ namespace basprov
 
     // -----------------------------------------------------------------------------
 
-    void BasicMethodNodeImpl::setValue( const ::rtl::OUString& aPropertyName, const Any& aValue )
-        throw (UnknownPropertyException, script::CannotConvertException,
+    void BasicMethodNodeImpl::setValue( const ::rtl::OUString& aPropertyName, const Any& aValue ) 
+        throw (UnknownPropertyException, script::CannotConvertException, 
                reflection::InvocationTargetException, RuntimeException)
     {
         (void)aPropertyName;
@@ -355,7 +355,7 @@ namespace basprov
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace basprov
+}	// namespace basprov
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

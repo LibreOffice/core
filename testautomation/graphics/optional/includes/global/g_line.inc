@@ -43,46 +43,35 @@ testcase tiFormatLine
     Dim k               'Variable fuer Transparenz (Anzahl)
     Dim l
     Dim ZaehlerStilLinks
-
-    printlog "New impress document"
-    Call hNewDocument       
+    
+    Call hNewDocument       '/// New impress document
     sleep 3
-    printlog "create rectangle"
-    Call hRechteckErstellen (10,10,60,60)     
+    Call hRechteckErstellen (10,10,60,60)     '/// create rectangle
     sleep 2
-    printlog "open Format line dialog"
-    FormatLine        
+    FormatLine        '/// open Format line dialog
     Kontext
-    printlog "Open TabLine Tabpage"
-    Active.SetPage TabLinie 
+    Active.SetPage TabLinie '///Open TabLine Tabpage
     Kontext "TabLinie"
     sleep 2
-    printlog "Get item count for style"
-    Stil.GetItemCount
-    printlog "Get item count for color"
-    Farbe.GetItemCount
-    printlog "change value for"
-    Breite.More 1        
+    Stil.GetItemCount       '/// Get item count for style ///'
+    Farbe.GetItemCount       '/// Get item count for color ///'
+    Breite.More 1        '/// change value for ///'
     ZaehlerStil = Stil.GetItemCount
     ZaehlerFarbe = Farbe.GetItemCount
-
-    printlog "Apply every style to the rectangle"
-    for i=1 to ZaehlerStil      
-        wait 10
-        Stil.Select i
-        wait 10
-        printlog "Closing dialog with ok"
-        TabLinie.OK 
-        '    Kontext "DocumentImpress"
-        printlog "Open TabLine Tabpage"
-        FormatLine
-        Kontext
-        Active.SetPage TabLinie
-        Kontext "TabLinie"
+    
+    for i=1 to ZaehlerStil      '/// Apply every style to the rectangle ///'
+       wait 10
+       Stil.Select i
+       wait 10
+       TabLinie.OK '/// Closing dialog with ok
+    '    Kontext "DocumentImpress"
+       FormatLine '///Open TabLine Tabpage
+       Kontext
+       Active.SetPage TabLinie
+       Kontext "TabLinie"
     next i
-
-    printlog "Apply every color to the rectangle"
-    for j=1 to ZaehlerFarbe      
+    
+    for j=1 to ZaehlerFarbe      '/// Apply every color to the rectangle///'
        PrintLog "-- " + Farbe.GetSelText
        wait 10
        Farbe.Select j
@@ -94,46 +83,38 @@ testcase tiFormatLine
        Active.SetPage TabLinie
        Kontext "TabLinie"
     next j
-    printlog "change Breite"
-    Breite.More 3        
+    Breite.More 3        '/// change Breite ///'
     Breite.Less 2
     for k=1 to 6
-        printlog "change tranparence"
-        Transparenz.More 1
+       Transparenz.More 1      '/// change tranparence///'
     next k
     TabLinie.OK
     '---------------------------------------
     sleep 2
-    printlog "Select all objects in document"
-    EditSelectAll     
+    EditSelectAll     '/// Select all objects in document ///'
     sleep 2
-    printlog "Delete objects"
-    hTypeKeys "<DELETE>"     
+    hTypeKeys "<DELETE>"     '/// Delete objects ///'
     sleep 2
     FormatLine
     
     Kontext
-    printlog "TabLine"
-    Active.SetPage TabLinie      
+    Active.SetPage TabLinie      '/// TabLine ///'
     Kontext "TabLinie"
     StilLinks.GetItemCount
     ZaehlerStilLinks=StilLinks.GetItemCount
-    printlog "Apply all line end styles"
-    for l=1 to ZaehlerStilLinks      
-        wait 10
-        printlog "check synchronize"
-        if EndenSynchronisieren.IsChecked=False Then EndenSynchronisieren.Check
-        wait 10
-        StilLinks.Select l
-        printlog "check if style is automatically applied for both ends"
-        if StilLinks.GetSelText<>StilRechts.GetSelText Then
-            WarnLog "  Ends not synchronized. " + StilLinks.GetSelText + "   Right:  " + StilRechts.GetSelText
-        else
-            PrintLog "  Left:  " + StilLinks.GetSelText + "   Right:  " + StilRechts.GetSelText
-        end if
-        EndenSynchronisieren.UnCheck
+    for l=1 to ZaehlerStilLinks      '/// Apply all line end styles///'
+      wait 10
+      if EndenSynchronisieren.IsChecked=False Then EndenSynchronisieren.Check '/// check synchronize ///'
+      wait 10
+      StilLinks.Select l
+      if StilLinks.GetSelText<>StilRechts.GetSelText Then
+         WarnLog "  Ends not synchronized. " + StilLinks.GetSelText + "   Right:  " + StilRechts.GetSelText   '/// check if style is automatically applied for both ends ///'
+      else
+         PrintLog "  Left:  " + StilLinks.GetSelText + "   Right:  " + StilRechts.GetSelText
+      end if
+       EndenSynchronisieren.UnCheck
     next l
-ZentriertLinks.Check
+    ZentriertLinks.Check
     if ZentriertRechts.isChecked = True Then PrintLog "  Centered right does work"
     i = CornerStyle.GetItemCount
     if i <> 4 then warnlog "CornerStyle should contain four options, but currently has: " + i
@@ -149,18 +130,15 @@ ZentriertLinks.Check
     Kontext
     Active.SetPage TabLinienstile
     Kontext "TabLinienstile"
-    printlog "Add new line style"
-    Hinzufuegen.Click        
+    Hinzufuegen.Click        '/// Add new line style ///'
     Kontext "NameDlg"
-    printlog "insert name of style (Testlinie2)"
-    Eingabefeld.SetText "Testlinie2"      
+    Eingabefeld.SetText "Testlinie2"      '/// insert name of style (Testlinie2) ///'
     NameDlg.OK
     sleep 1
     Kontext
     Active.SetPage TabLinienstile
     Kontext "TabLinienstile"
-    printlog "delete created style"
-    Loeschen.Click         
+    Loeschen.Click         '/// delete created style ///'
     Kontext "Active"
     Active.Yes
     Kontext
@@ -173,41 +151,33 @@ ZentriertLinks.Check
     LaengeLinks.More 3
     LaengeRechts.More 3
     Abstand.SetText "0,1"
-    printlog "all fields changed in TabLinienstile"
-    if AnLinienbreite.IsChecked = True Then AnLinienbreite.Click   
+    if AnLinienbreite.IsChecked = True Then AnLinienbreite.Click   '/// all fields changed in TabLinienstile ///'
     PrintLog "  All controls could be manipulated."
     TypLinks.Select 1
     TypRechts.Select 1
-    printlog "check if its possible to apply a length to a point"
-    if LaengeLinks.IsEnabled And LaengeRechts.IsEnabled =True Then  
-        WarnLog "  A point where you can change its length is not a point anymore"
+    if LaengeLinks.IsEnabled And LaengeRechts.IsEnabled =True Then  '/// check if its possible to apply a length to a point ///'
+     WarnLog "  A point where you can change its length is not a point anymore"
     else
-        printlog "All styles for points are changed "
-        PrintLog "  Line style pint tested"
+     PrintLog "  Line style pint tested"    '/// All styles for points are changed  ///'
     end if
     sleep 1
     try
-        Linienstil.Select 1
+     Linienstil.Select 1
     catch
-        printlog "check if style list is filled"
-        if Linienstil.GetItemCount = 0 then
-            Warnlog "- The list for line styles is empty"
-            printlog "new style"
-            Hinzufuegen.Click
-            Kontext "NameDlg"
-            NameDlg.OK
-        end if
+     if Linienstil.GetItemCount = 0 then     '/// check if style list is filled ///'
+        Warnlog "- The list for line styles is empty"
+        Hinzufuegen.Click      '/// new style ///'
+        Kontext "NameDlg"
+        NameDlg.OK
+     end if
     endcatch
     Kontext
     Active.SetPage TabLinienstile
     Kontext "TabLinienstile"
-    printlog "change style"
-    Aendern.Click         
+    Aendern.Click         '/// change style ///'
     Kontext "NameDlg"
-    printlog "new name for changed style"
-    Eingabefeld.SetText Eingabefeld.GetText + "1"
-    printlog "put name into clipboard"
-    SetClipboard Eingabefeld.GetText      
+    Eingabefeld.SetText Eingabefeld.GetText + "1"     '/// new name for changed style ///'
+    SetClipboard Eingabefeld.GetText      '/// put name into clipboard ///'
     NameDlg.OK
     Kontext
     Active.SetPage TabLinienstile
@@ -224,8 +194,7 @@ ZentriertLinks.Check
     Hinzufuegen.Click
     endcatch
     Kontext "NameDlg"
-    printlog "check if changed style is in list"
-    if Eingabefeld.GetText <> GetClipboardText Then WarnLog "No changes for Line style"  
+    if Eingabefeld.GetText <> GetClipboardText Then WarnLog "No changes for Line style"  '/// check if changed style is in list ///'
     NameDlg.Cancel
     sleep 2
     Kontext
@@ -233,19 +202,18 @@ ZentriertLinks.Check
     Kontext "TabLinienstile"
     sleep 1
     try
-        printlog "delete changed style"
-        Loeschen.Click
-        Kontext "Active"
-        Active.Yes
-        sleep 3
+     Loeschen.Click           '/// delete changed style ///'
+     Kontext "Active"
+     Active.Yes
+     sleep 3
     catch
-        if Linienstile.GetItemCount = 0 Then
-            Hinzufuegen.Click
-            Kontext "NameDlg"
-            sleep 1
-            Eingabefeld.SetText "Delete"
-            NameDlg.OK
-        end if
+    if Linienstile.GetItemCount = 0 Then
+       Hinzufuegen.Click
+       Kontext "NameDlg"
+       sleep 1
+       Eingabefeld.SetText "Delete"
+       NameDlg.OK
+    end if
     endcatch
     Kontext
     Active.SetPage TabLinienstile
@@ -254,8 +222,7 @@ ZentriertLinks.Check
     TabLinienstile.OK
     '--------------------------------------------
     sleep 2
-    printlog "create rectangle"
-    Call hRechteckErstellen (40,40,80,50)         
+    Call hRechteckErstellen (40,40,80,50)         '/// create rectangle ///'
     sleep 2
     FormatLine
     Kontext
@@ -263,8 +230,7 @@ ZentriertLinks.Check
     Kontext "TabLinienenden"
     sleep 2
     Kontext "Linienstil"
-    printlog "change style"
-    if Linienstil.Exists then Aendern.Click        
+    if Linienstil.Exists then Aendern.Click        '/// change style ///'
     sleep 1
     Kontext
     Active.SetPage TabLinienenden
@@ -272,16 +238,14 @@ ZentriertLinks.Check
     sleep 1
     Liste.GetItemCount
     Liste.Select 3
-    printlog "add style"
-    Hinzufuegen.Click           
+    Hinzufuegen.Click           '/// add style ///'
     Kontext "NameDlg"
     NameDlg.OK
     
     Kontext
     Active.SetPage TabLinienenden
     Kontext "TabLinienenden"
-    printlog "change style"
-    Aendern.Click            
+    Aendern.Click            '/// change style ///'
     Kontext "Active"
     Printlog Active.GetText
     Active.OK
@@ -292,21 +256,20 @@ ZentriertLinks.Check
     
     Kontext
     if active.GetRt=304 then
-        active.ok
-        Kontext "NameDlg"
-        Eingabefeld.SetText Eingabefeld.GetText + "1"
-        PrintLog "  Name inserted"
-        NameDlg.OK
+     active.ok
+     Kontext "NameDlg"
+     Eingabefeld.SetText Eingabefeld.GetText + "1"
+     PrintLog "  Name inserted"
+     NameDlg.OK
     endif
     if active.GetRt=304 then
-        active.ok
-        warnlog "still not a valid name :-("
+     active.ok
+     warnlog "still not a valid name :-("
     endif
     Kontext
     Active.SetPage TabLinienenden
     Kontext "TabLinienenden"
-    printlog "delete style"
-    Loeschen.Click           
+    Loeschen.Click           '/// delete style ///'
     Kontext "Active"
     Active.Yes
     
@@ -314,8 +277,7 @@ ZentriertLinks.Check
     Active.SetPage TabLinienenden
     Kontext "TabLinienenden"
     sleep 1
-    printlog "save style"
-    Speichern.Click          
+    Speichern.Click          '/// save style ///'
     sleep 1
     Kontext "SpeichernDlg"
     sleep 1
@@ -325,13 +287,13 @@ ZentriertLinks.Check
     TabLinienenden.Cancel
     sleep 2
     
-    'New part for line
-    'EditSelectAll     printlog "Select all objects in document"
+    '///New part for line
+    'EditSelectAll     '/// Select all objects in document ///'
     'sleep 2
-    'hTypeKeys "<DELETE>"     printlog "Delete objects"
+    'hTypeKeys "<DELETE>"     '/// Delete objects ///'
     'sleep 2
     
-    'printlog "Create line to test shadow tabpage in line dialog
+    '/// Create line to test shadow tabpage in line dialog
     'kontext "Toolbar"
     'Kurven.Click
     'sleep 1
@@ -349,8 +311,7 @@ ZentriertLinks.Check
     'Active.SetPage TabSchatten
     
    ' FormatLine.Cancel
-    printlog "close document"
-    Call hCloseDocument
+    Call hCloseDocument          '/// close document ///'
     
 endcase 'tiFormatLine
 '-------------------------------------------------------------------------------'
@@ -368,9 +329,8 @@ testcase tLineConnect
      QaErrorLog "tLineConnect ends because Asian languages are not fully supported."
      goto Endsub
     end if
-
-    printlog "New Impress / Draw document"
-    Call hNewDocument   
+    
+    Call hNewDocument   '/// New Impress / Draw document ///'
     Call sSelectEmptyLayout
     sleep 3
     kontext "GraphicObjectbar"
@@ -392,7 +352,7 @@ testcase tLineConnect
      end if
     endif
     
-    printlog "Create 2 lines"
+    '/// Create 2 lines ///'
     kontext "Toolbar"
     Kurven.Click
     sleep 1
@@ -416,7 +376,7 @@ testcase tLineConnect
     
     printlog "'" + (gApplication) +"'"
     
-    printlog "Check the amount of objects"
+    '/// Check the amount of objects ///'
     gMouseClick (10, 10)
     sleep 1
     EditSelectAll
@@ -440,12 +400,12 @@ testcase tLineConnect
         end if
     end if
     
-    printlog "Connect the two objects selected"
+    '/// Connect the two objects selected ///'
     hOpenContextMenu
     sleep 1
     hMenuSelectNr(13)
     sleep 1
-    printlog "Check the amount of objects"
+    '/// Check the amount of objects ///'
     gMouseClick (10, 10)
     sleep 1
     EditSelectAll
@@ -459,7 +419,7 @@ testcase tLineConnect
     value2 = left(StatusBarText,1)
     printlog "StatusBarText was: " + StatusBarText
     
-    printlog "if same as the first value = wrong"
+    '/// if same as the first value = wrong ///'
     if value1 = value2 then
      warnlog "Expected to find one object, but found " + value2 + " instead."
     endif
@@ -467,22 +427,22 @@ testcase tLineConnect
      warnlog "Connect was not successful. We should have one object, but have " + value2 + " instead."
     endif
     
-    printlog "unmark the objects, thereafter mark them again"
+    '/// unmark the objects, thereafter mark them again ///'
     gMouseClick (10, 10)
     sleep 1
     EditSelectAll
     sleep 1
-    printlog "Break them from eachother"
+    '/// Break them from eachother ///'
     hOpenContextMenu
     sleep 1
     hMenuSelectNr(11)
     sleep 1
-    printlog "unmark the objects, thereafter mark them again"
+    '/// unmark the objects, thereafter mark them again ///'
     gMouseClick (10, 10)
     sleep 1
     EditSelectAll
     sleep 1
-    printlog "Check the amount of objects"
+    '/// Check the amount of objects ///'
     if (gApplication = "IMPRESS") then
      StatusBarText = DocumentImpress.StatusGetText(DocumentImpress.StatusGetItemID(1))
     else
@@ -493,19 +453,19 @@ testcase tLineConnect
     
     printlog "StatusBarText was: " + StatusBarText
     
-    printlog "if the same as any of the ones before: Wrong"
+    '/// if the same as any of the ones before: Wrong ///'
     if (value3 = value1 OR value3 = value2) then
      warnlog "Expected to find three objects, but found " + value3 + " instead."
     endif
     
-    printlog "if 3 objects, then everything is ok"
+    '/// if 3 objects, then everything is ok ///'
     if value3 = 3 then
      printlog "Found three objects. Means the test was successful."
     else
      warnlog "Wrong value, expected three objects, but found " + value3 + "."
     endif
     
-    printlog "Go through the different Corner-styles"
+    '/// Go through the different Corner-styles ///'
     
     hOpenContextMenu
     sleep 1
@@ -536,7 +496,7 @@ testcase tLineConnect
     CornerStyle.Select cfirst
     TabLinie.Ok
     
-    printlog "And a nice finish to make life a bit happier for anyone who looks at the test"
+    '/// And a nice finish to make life a bit happier for anyone who looks at the test ///'
     kontext "Toolbar"
     Ellipsen.Click
     if (gApplication = "DRAW") then
@@ -565,9 +525,9 @@ testcase tLineConnect
     gMouseMove (48,43, 53,50)
     endif
     gMouseClick (10, 10)
-    printlog "Close the document"
+    '/// Close the document ///'
     hCloseDocument
-    printlog "Endcase"
+    '/// Endcase ///'
     
 endcase 'tiLineConnect
 '-------------------------------------------------------------------------------'

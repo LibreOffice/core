@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,6 @@
 
 #include <rtl/ustring.hxx>
 
-SFX2_DLLPUBLIC void SAL_CALL RefreshToolbars(
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame
-);
+SFX2_DLLPUBLIC void SAL_CALL RefreshToolbars( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

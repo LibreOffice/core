@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,24 +31,26 @@
 
 #include <tools/simplerm.hxx>
 
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include <sfx2/app.hxx>
 
 // -----------------------------------------------------------------------
 
 static ResMgr* pMgr=NULL;
 
-SfxResId::SfxResId( sal_uInt16 nId ) :
+SfxResId::SfxResId( USHORT nId ) :
 
     ResId( nId, *GetResMgr() )
 {
 }
 
 //============================================================================
+//
 // SfxSimpleResId Implementation.
+//
 //============================================================================
 
-SfxSimpleResId::SfxSimpleResId(sal_uInt16 nID):
+SfxSimpleResId::SfxSimpleResId(USHORT nID):
     m_sText( SFX_APP()->GetSimpleResManager()->ReadString(nID) )
 {}
 

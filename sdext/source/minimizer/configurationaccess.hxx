@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,24 +47,24 @@
 
 struct OptimizerSettings
 {
-    rtl::OUString   maName;
-    sal_Bool        mbJPEGCompression;
-    sal_Int32       mnJPEGQuality;
-    sal_Bool        mbRemoveCropArea;
-    sal_Int32       mnImageResolution;
-    sal_Bool        mbEmbedLinkedGraphics;
-    sal_Bool        mbOLEOptimization;
-    sal_Int16       mnOLEOptimizationType;
-    sal_Bool        mbDeleteUnusedMasterPages;
-    sal_Bool        mbDeleteHiddenSlides;
-    sal_Bool        mbDeleteNotesPages;
-    rtl::OUString   maCustomShowName;
-    sal_Bool        mbSaveAs;
-    rtl::OUString   maSaveAsURL;
-    rtl::OUString   maFilterName;
-    sal_Bool        mbOpenNewDocument;
-    sal_Int64       mnEstimatedFileSize;
-
+    rtl::OUString	maName;
+    sal_Bool		mbJPEGCompression;
+    sal_Int32		mnJPEGQuality;
+    sal_Bool		mbRemoveCropArea;
+    sal_Int32		mnImageResolution;
+    sal_Bool		mbEmbedLinkedGraphics;
+    sal_Bool		mbOLEOptimization;
+    sal_Int16		mnOLEOptimizationType;
+    sal_Bool		mbDeleteUnusedMasterPages;
+    sal_Bool		mbDeleteHiddenSlides;
+    sal_Bool		mbDeleteNotesPages;
+    rtl::OUString	maCustomShowName;
+    sal_Bool		mbSaveAs;
+    rtl::OUString	maSaveAsURL;
+    rtl::OUString	maFilterName;
+    sal_Bool		mbOpenNewDocument;
+    sal_Int64		mnEstimatedFileSize;
+    
     OptimizerSettings() :
         mbJPEGCompression( sal_False ),
         mnJPEGQuality( 90 ),
@@ -80,13 +80,13 @@ struct OptimizerSettings
         mbOpenNewDocument( sal_True ),
         mnEstimatedFileSize( 0 ){};
         ~OptimizerSettings(){};
-
+    
         void LoadSettingsFromConfiguration( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rSettings );
         void SaveSettingsToConfiguration( const com::sun::star::uno::Reference< com::sun::star::container::XNameReplace >& rSettings );
 
         sal_Bool operator==( const OptimizerSettings& rOptimizerSettings ) const;
 
-};
+}; 
 class ConfigurationAccess
 {
     public :
@@ -108,7 +108,7 @@ class ConfigurationAccess
         sal_Int32 GetConfigProperty( const PPPOptimizerTokenEnum, const sal_Int32 nDefault ) const;
 
         com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > GetConfigurationSequence();
-
+        
         // getting access to the OptimizerSettings list
         std::vector< OptimizerSettings >& GetOptimizerSettings() { return maSettings; };
         std::vector< OptimizerSettings >::iterator GetOptimizerSettingsByName( const rtl::OUString& rName );
@@ -136,6 +136,6 @@ class ConfigurationAccess
             const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& xRoot, const rtl::OUString& sPathToNode );
 };
 
-#endif  // _CONFIGURATION_ACCESS_HXX_
+#endif	// _CONFIGURATION_ACCESS_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,30 +31,30 @@
 #include <com/sun/star/configuration/backend/SingleLayerStratum.idl>
 #endif
 
-//=============================================================================
+//============================================================================= 
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
+//============================================================================= 
 
 /**
    implements <type>SingleLayerStratum</type> that
-    provides access to a single layer of configuration data from LDAP source
+    provides access to a single layer of configuration data from ldap source
 */
 service LdapSingleStratum
 {
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+    
     /**
       provides access to configuration data.
      */
     service  SingleLayerStratum;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 } ;
 
-//=============================================================================
+//============================================================================= 
 
-} ; } ; } ; } ; } ;
+} ; } ; } ; } ; } ; 
 
-#endif
+#endif 

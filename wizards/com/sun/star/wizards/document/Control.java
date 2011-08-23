@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -133,7 +133,7 @@ public class Control extends Shape
             {
                 XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xFormName);
                 String sControlName = Desktop.getUniqueName(xNameAccess, getControlName(_fieldname));
-                xPropertySet.setPropertyValue(PropertyNames.PROPERTY_NAME, sControlName);
+                xPropertySet.setPropertyValue("Name", sControlName);
                 xFormName.insertByName(sControlName, xControlModel);
             }
         }
@@ -248,9 +248,9 @@ public class Control extends Shape
             {
                 xPropertySet.setPropertyValue("Text", sText);
             }
-            else if (xPropertySet.getPropertySetInfo().hasPropertyByName(PropertyNames.PROPERTY_LABEL))
+            else if (xPropertySet.getPropertySetInfo().hasPropertyByName("Label"))
             {
-                xPropertySet.setPropertyValue(PropertyNames.PROPERTY_LABEL, sText);
+                xPropertySet.setPropertyValue("Label", sText);
             }
             else
             {
@@ -273,9 +273,9 @@ public class Control extends Shape
         }
     }
 
-    /** the peer should be retrieved every time before it is used because it
+    /** the peer should be retrieved every time before it is used because it 
      * might be disposed otherwise
-     *
+     * 
      * @return
      */
     public XLayoutConstrains getPeer()

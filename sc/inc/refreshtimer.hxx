@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,107 +29,131 @@
 #ifndef SC_REFRESHTIMER_HXX
 #define SC_REFRESHTIMER_HXX
 
+#include <tools/list.hxx>
 #include <vcl/timer.hxx>
 #include <osl/mutex.hxx>
 #include <scdllapi.h>
+
+#define SC_REFRESHTIMER_CONTROL_LIST 0
+#if SC_REFRESHTIMER_CONTROL_LIST
+class ScRefreshTimer;
+DECLARE_LIST( ScRefreshTimerList, ScRefreshTimer* )
+#endif
 
 class ScRefreshTimerControl
 {
 private:
     ::osl::Mutex   aMutex;
-    sal_uInt16         nBlockRefresh;
+    USHORT         nBlockRefresh;
 
 public:
-    ScRefreshTimerControl() : nBlockRefresh(0) {}
+#if SC_REFRESHTIMER_CONTROL_LIST
+            ScRefreshTimerList	aList;
+#endif
 
-    void SetAllowRefresh( sal_Bool b )
-    {
-        if ( b && nBlockRefresh )
-            --nBlockRefresh;
-        else if ( !b && nBlockRefresh < (sal_uInt16)(~0) )
-            ++nBlockRefresh;
-    }
+                                ScRefreshTimerControl() : nBlockRefresh(0) {}
 
-    sal_Bool IsRefreshAllowed() const { return !nBlockRefresh; }
-
-    ::osl::Mutex& GetMutex() { return aMutex; }
+            void				SetAllowRefresh( BOOL b )
+                                    {
+                                        if ( b && nBlockRefresh )
+                                            --nBlockRefresh;
+                                        else if ( !b && nBlockRefresh < (USHORT)(~0) )
+                                            ++nBlockRefresh;
+                                    }
+            BOOL				IsRefreshAllowed() const	{ return !nBlockRefresh; }
+            ::osl::Mutex&       GetMutex()					{ return aMutex; }
 };
+
 
 class ScRefreshTimerProtector
 {
 private:
-    ScRefreshTimerControl * const * ppControl;
-
+    ScRefreshTimerControl * const *	ppControl;
 public:
-    ScRefreshTimerProtector( ScRefreshTimerControl * const * pp );
-
-    ~ScRefreshTimerProtector()
-    {
-        if ( ppControl && *ppControl )
-            (*ppControl)->SetAllowRefresh( true );
-    }
+                                ScRefreshTimerProtector( ScRefreshTimerControl * const *	 pp );
+                                ~ScRefreshTimerProtector()
+                                    {
+                                        if ( ppControl && *ppControl )
+                                            (*ppControl)->SetAllowRefresh( TRUE );
+                                    }
 };
+
 
 class ScRefreshTimer : public AutoTimer
 {
 private:
-    ScRefreshTimerControl * const * ppControl;
+    ScRefreshTimerControl * const *	ppControl;
 
-    void AppendToControl() {}
+            void				AppendToControl()
+                                    {
+#if SC_REFRESHTIMER_CONTROL_LIST
+                                        if ( ppControl && *ppControl )
+                                            (*ppControl)->aList.Insert( this, LIST_APPEND );
+#endif
+                                    }
+            void				RemoveFromControl()
+                                    {
+#if SC_REFRESHTIMER_CONTROL_LIST
+                                        if ( ppControl && *ppControl )
+                                            (*ppControl)->aList.Remove( this );
+#endif
+                                    }
 
-    void RemoveFromControl() {}
-
-    void Start()
-    {
-        if ( GetTimeout() )
-            AutoTimer::Start();
-    }
+            void				Start()
+                                    {
+                                        if ( GetTimeout() )
+                                            AutoTimer::Start();
+                                    }
 
 public:
-    ScRefreshTimer() : ppControl(0) { SetTimeout( 0 ); }
+                                ScRefreshTimer() : ppControl(0)
+                                    { SetTimeout( 0 ); }
+                                ScRefreshTimer( ULONG nSeconds ) : ppControl(0)
+                                    {
+                                        SetTimeout( nSeconds * 1000 );
+                                        Start();
+                                    }
+                                ScRefreshTimer( const ScRefreshTimer& r )
+                                    : AutoTimer( r ), ppControl(0)
+                                    {}
+    virtual						~ScRefreshTimer();
 
-    ScRefreshTimer( sal_uLong nSeconds ) : ppControl(0)
-    {
-        SetTimeout( nSeconds * 1000 );
-        Start();
-    }
+            ScRefreshTimer&		operator=( const ScRefreshTimer& r )
+                                    {
+                                        SetRefreshControl(0);
+                                        AutoTimer::operator=( r );
+                                        return *this;
+                                    }
 
-    ScRefreshTimer( const ScRefreshTimer& r ) : AutoTimer( r ), ppControl(0) {}
+            BOOL				operator==( const ScRefreshTimer& r ) const
+                                    { return GetTimeout() == r.GetTimeout(); }
 
-    virtual ~ScRefreshTimer();
+            BOOL				operator!=( const ScRefreshTimer& r ) const
+                                    { return !ScRefreshTimer::operator==( r ); }
 
-    ScRefreshTimer& operator=( const ScRefreshTimer& r )
-    {
-        SetRefreshControl(0);
-        AutoTimer::operator=( r );
-        return *this;
-    }
+            void				StartRefreshTimer()
+                                    { Start(); }
 
-    sal_Bool operator==( const ScRefreshTimer& r ) const
-        { return GetTimeout() == r.GetTimeout(); }
+            void				SetRefreshControl( ScRefreshTimerControl * const * pp )
+                                    {
+                                        RemoveFromControl();
+                                        ppControl = pp;
+                                        AppendToControl();
+                                    }
 
-    sal_Bool operator!=( const ScRefreshTimer& r ) const
-        { return !ScRefreshTimer::operator==( r ); }
+            void				SetRefreshHandler( const Link& rLink )
+                                    { SetTimeoutHdl( rLink ); }
 
-    void StartRefreshTimer() { Start(); }
+            ULONG				GetRefreshDelay() const
+                                    { return GetTimeout() / 1000; }
 
-    void SetRefreshControl( ScRefreshTimerControl * const * pp )
-    {
-        RemoveFromControl();
-        ppControl = pp;
-        AppendToControl();
-    }
+            void				StopRefreshTimer()
+                                    { Stop(); }
 
-    void SetRefreshHandler( const Link& rLink ) { SetTimeoutHdl( rLink ); }
-
-    sal_uLong GetRefreshDelay() const { return GetTimeout() / 1000; }
-
-    void StopRefreshTimer() { Stop(); }
-
-    SC_DLLPUBLIC virtual void SetRefreshDelay( sal_uLong nSeconds );
-
-    SC_DLLPUBLIC virtual void Timeout();
+    SC_DLLPUBLIC virtual	void				SetRefreshDelay( ULONG nSeconds );
+    SC_DLLPUBLIC virtual	void				Timeout();
 };
+
 
 #endif // SC_REFRESHTIMER_HXX
 

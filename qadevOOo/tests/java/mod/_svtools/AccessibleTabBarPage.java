@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,11 +152,11 @@ public class AccessibleTabBarPage extends TestCase {
             UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
-        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));        
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Sheet1");
         XAccessibleContext acc = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Sheet2");
         XAccessibleComponent accComp = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                               XAccessibleComponent.class,
+                                               XAccessibleComponent.class, 
                                                acc);
         final Point point = accComp.getLocationOnScreen();
         log.println("ImplementationName: " + util.utils.getImplName(oObj));

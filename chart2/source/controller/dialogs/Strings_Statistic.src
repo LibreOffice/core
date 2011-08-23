@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,22 +51,22 @@ String STR_CONTROLTEXT_ERROR_BARS_FROM_DATA
 
 String STR_REGRESSION_LINEAR
 {
-    Text [ en-US ] = "Linear (%SERIESNAME)" ;
+    Text [ en-US ] = "Linear Regression" ;
 };
 String STR_REGRESSION_LOG
 {
-    Text [ en-US ] = "Logarithmic (%SERIESNAME)" ;
+    Text [ en-US ] = "Logarithmic Regression" ;
 };
 String STR_REGRESSION_EXP
 {
-    Text [ en-US ] = "Exponential (%SERIESNAME)" ;
+    Text [ en-US ] = "Exponential Regression" ;
 };
 String STR_REGRESSION_POWER
 {
-    Text [ en-US ] = "Power (%SERIESNAME)" ;
+    Text [ en-US ] = "Power Regression" ;
 };
 
-String STR_REGRESSION_MEAN
+String STR_STATISTICS_IN_LEGEND
 {
-    Text [ en-US ] = "Mean (%SERIESNAME)" ;
+    Text [ en-US ] = "%REGRESSIONCURVE for %SERIESNAME" ;
 };

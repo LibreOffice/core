@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class GalleryCodec
 {
 private:
 
-    SvStream&   rStm;
+    SvStream&	rStm;
 
 public:
                 GalleryCodec( SvStream& rIOStm );
@@ -48,7 +48,7 @@ public:
     void        Write( SvStream& rStmToWrite );
     void        Read( SvStream& rStmToRead );
 
-    static sal_Bool IsCoded( SvStream& rStm, sal_uInt32& rVersion );
+    static BOOL IsCoded( SvStream& rStm, UINT32& rVersion );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

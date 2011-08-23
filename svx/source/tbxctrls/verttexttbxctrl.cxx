@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/verttexttbxctrl.hxx>
+#include <verttexttbxctrl.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>
 #include <svl/eitem.hxx>
@@ -41,39 +41,46 @@
 SFX_IMPL_TOOLBOX_CONTROL(SvxCTLTextTbxCtrl, SfxBoolItem);
 SFX_IMPL_TOOLBOX_CONTROL(SvxVertTextTbxCtrl, SfxBoolItem);
 
-SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+// -----------------------------27.04.01 15:50--------------------------------
+
+SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SvxVertCTLTextTbxCtrl( nSlotId, nId, rTbx )
 {
-    SetVert(sal_False);
+    SetVert(FALSE);
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CTLFontState" )));
 }
 
-SvxVertTextTbxCtrl::SvxVertTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxVertTextTbxCtrl::SvxVertTextTbxCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SvxVertCTLTextTbxCtrl( nSlotId, nId, rTbx )
 {
-    SetVert(sal_True);
+    SetVert(TRUE);
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:VerticalTextState" )));
 }
 
 /* ---------------------------------------------------------------------------*/
-SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     bCheckVertical(sal_True)
 {
 }
 
+/* -----------------------------27.04.01 15:53--------------------------------
+
+ ---------------------------------------------------------------------------*/
 SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
 {
 }
+/* -----------------------------27.04.01 15:50--------------------------------
 
-void SvxVertCTLTextTbxCtrl::StateChanged(
-    sal_uInt16 nSID,
+ ---------------------------------------------------------------------------*/
+void SvxVertCTLTextTbxCtrl::StateChanged( 
+    USHORT nSID, 
     SfxItemState eState,
     const SfxPoolItem* pState )
 {
     SvtLanguageOptions aLangOptions;
-    sal_Bool bCalc = sal_False;
-    sal_Bool bVisible = GetToolBox().IsItemVisible(GetId());
+    BOOL bCalc = sal_False;
+    BOOL bVisible = GetToolBox().IsItemVisible(GetId());
     sal_Bool bEnabled = sal_False;
     if ( nSID == SID_VERTICALTEXT_STATE )
         bEnabled = aLangOptions.IsVerticalTextEnabled();
@@ -89,7 +96,7 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
     {
         if(!bVisible)
         {
-            GetToolBox().ShowItem( GetId(), sal_True );
+            GetToolBox().ShowItem( GetId(), TRUE );
             bCalc = sal_True;
         }
     }
@@ -111,5 +118,8 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
         }
     }
 }
+/* -----------------------------27.04.01 15:50--------------------------------
+
+ ---------------------------------------------------------------------------*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

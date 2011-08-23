@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,27 +24,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_report_XReportDefinition_idl__
-#define __com_sun_star_report_XReportDefinition_idl__
-
-#ifndef __com_sun_star_report_XReportComponent_idl__
-#include <com/sun/star/report/XReportComponent.idl>
+#ifndef __com_sun_star_report_XReportDefinition_idl__ 
+#define __com_sun_star_report_XReportDefinition_idl__ 
+ 
+#ifndef __com_sun_star_report_XReportComponent_idl__ 
+#include <com/sun/star/report/XReportComponent.idl> 
 #endif
-#ifndef __com_sun_star_report_XFunctionsSupplier_idl__
+#ifndef __com_sun_star_report_XFunctionsSupplier_idl__ 
 #include <com/sun/star/report/XFunctionsSupplier.idl>
 #endif
-#ifndef __com_sun_star_view_PaperOrientation_idl__
-#include <com/sun/star/view/PaperOrientation.idl>
-#endif
+#ifndef __com_sun_star_view_PaperOrientation_idl__ 
+#include <com/sun/star/view/PaperOrientation.idl> 
+#endif 
 #ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
 #endif
 #ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
 #endif
-#ifndef __com_sun_star_view_PaperFormat_idl__
-#include <com/sun/star/view/PaperFormat.idl>
-#endif
+#ifndef __com_sun_star_view_PaperFormat_idl__ 
+#include <com/sun/star/view/PaperFormat.idl> 
+#endif 
 #ifndef __com_sun_star_util_XClosable_idl__
 #include <com/sun/star/util/XCloseable.idl>
 #endif
@@ -78,24 +78,24 @@
 #ifndef __com_sun_star_document_XEventBroadcaster_idl__
 #include <com/sun/star/document/XEventBroadcaster.idl>
 #endif
-#ifndef __com_sun_star_lang_DisposedException_idl__
+#ifndef __com_sun_star_lang_DisposedException_idl__ 
 #include <com/sun/star/lang/DisposedException.idl>
 #endif
-#ifndef __com_sun_star_style_XStyleFamiliesSupplier_idl__
+#ifndef __com_sun_star_style_XStyleFamiliesSupplier_idl__ 
 #include <com/sun/star/style/XStyleFamiliesSupplier.idl>
 #endif
 
-module com {  module sun {  module star {  module sdbc {
-published interface XConnection;
-};};};};
-//=============================================================================
-
- module com {  module sun {  module star {  module report {
-
+module com {  module sun {  module star {  module sdbc { 
+published interface XConnection; 
+};};};}; 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module report {  
+ 
      interface XSection;
      interface XGroups;
-//=============================================================================
-
+//============================================================================= 
+ 
 /** identifies a <type>XReportComponent</type> as being a (sub-) report.
 
     <p>This interface does not really provide an own functionality, it is only for easier
@@ -108,7 +108,7 @@ published interface XConnection;
     @see XReportComponent
  */
 interface XReportDefinition
-{
+{ 
     /** allows the access to the model embedded in the database storage.
     */
     interface com::sun::star::frame::XModel;
@@ -117,7 +117,7 @@ interface XReportDefinition
     */
     interface com::sun::star::frame::XLoadable;
 
-    /** represents common visualization functionality for the embedded report.
+    /** represents common visualisation functionality for the embedded report.
     */
     interface com::sun::star::embed::XVisualObject;
 
@@ -151,7 +151,7 @@ interface XReportDefinition
 
         <p>
         With this interface it's possible too, to reset the modify state.
-        That can be necessary to prevent code against problem during closing
+        That can be neccessary to prevent code against problem during closing
         of the document without saving any changes.
         </p>
      */
@@ -181,8 +181,8 @@ interface XReportDefinition
         raises( ::com::sun::star::lang::DisposedException,
                 ::com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+    
     /** Represents the output format (media (mime) type) of the resulting document when executing this report.
     */
     [attribute,bound] string MimeType
@@ -224,8 +224,8 @@ interface XReportDefinition
     The default value for <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
     is <TRUE/>. By switching it to <FALSE/>, you can pass backend-specific SQL statements,
     which are not standard SQL, to your database.</p>
-
-
+    
+    
     @see com::sun::star::sdb::CommandType
     */
     [attribute,bound] string Command;
@@ -234,14 +234,14 @@ interface XReportDefinition
 
         <p><member>Command</member> needs to be interpreted depending on the value of this property.</p>
 
-        <p>This property is only meaningful together with the <member>Command</member>
+        <p>This property is only meaningfull together with the <member>Command</member>
         property, thus either <em>both</em> or <em>none</em> of them are present.</p>
 
         @see com::sun::star::sdb::CommandType
      */
     [attribute,bound] long CommandType;
 
-    /** specifies an additional filter to optionally use.
+    /** specifies an addtional filter to optinally use.
 
         <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
 
@@ -303,7 +303,7 @@ interface XReportDefinition
 
     /** Represents the groups of the report.
     */
-    [attribute,readonly] com::sun::star::report::XGroups Groups;
+    [attribute,readonly] com::sun::star::report::XGroups Groups; 
 
     /** returns the report header if the <member>ReportHeaderOn</member>is <TRUE/>.
         @throws <type scope="com::sun::star::container">NoSuchElementException</type>
@@ -312,7 +312,7 @@ interface XReportDefinition
     */
     [attribute,readonly] com::sun::star::report::XSection ReportHeader
     {
-        get raises (com::sun::star::container::NoSuchElementException);
+        get raises (com::sun::star::container::NoSuchElementException); 
     };
 
     /** returns the page header if the <member>PageHeaderOn</member>is <TRUE/>.
@@ -322,7 +322,7 @@ interface XReportDefinition
     */
     [attribute,readonly] com::sun::star::report::XSection PageHeader
     {
-        get raises (com::sun::star::container::NoSuchElementException);
+        get raises (com::sun::star::container::NoSuchElementException); 
     };
 
     /** returns the detail section.
@@ -337,7 +337,7 @@ interface XReportDefinition
     */
     [attribute,readonly] com::sun::star::report::XSection PageFooter
     {
-        get raises (com::sun::star::container::NoSuchElementException);
+        get raises (com::sun::star::container::NoSuchElementException); 
     };
 
     /** returns the report footer if the <member>ReportFooterOn</member>is <TRUE/>.
@@ -347,16 +347,16 @@ interface XReportDefinition
     */
     [attribute,readonly] com::sun::star::report::XSection ReportFooter
     {
-        get raises (com::sun::star::container::NoSuchElementException);
+        get raises (com::sun::star::container::NoSuchElementException); 
     };
-};
-
+}; 
+ 
 service ReportDefinition : XReportDefinition;
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

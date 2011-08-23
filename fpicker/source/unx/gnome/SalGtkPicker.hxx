@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,11 +30,11 @@
 #define _SALGTKFPICKER_HXX_
 
 //_____________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_____________________________________________________________________________
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
@@ -43,14 +43,12 @@
 
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/XTerminateListener.hpp>
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 //----------------------------------------------------------
-// class declaration
+// class declaration		
 //----------------------------------------------------------
 
 class SalGtkPicker
@@ -62,7 +60,7 @@ class SalGtkPicker
         osl::Mutex m_rbHelperMtx;
         GtkWidget  *m_pDialog;
     protected:
-        virtual void SAL_CALL implsetTitle( const ::rtl::OUString& aTitle )
+        virtual void SAL_CALL implsetTitle( const ::rtl::OUString& aTitle ) 
             throw( ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL implsetDisplayDirectory( const rtl::OUString& rDirectory )
@@ -84,19 +82,16 @@ public:
 //Run the Gtk Dialog. Watch for any "new windows" created while we're
 //executing and consider that a CANCEL event to avoid e.g. "file cannot be opened"
 //modal dialogs and this one getting locked if some other API call causes this
-//to happen while we're opened waiting for user input, e.g.
+//to happen while we're opened waiting for user input, e.g. 
 //https://bugzilla.redhat.com/show_bug.cgi?id=441108
 class RunDialog :
-    public cppu::WeakComponentImplHelper2<
-        ::com::sun::star::awt::XTopWindowListener,
-        ::com::sun::star::frame::XTerminateListener >
+    public cppu::WeakComponentImplHelper1< ::com::sun::star::awt::XTopWindowListener >
 {
 private:
     osl::Mutex maLock;
     GtkWidget *mpDialog;
     GdkWindow *mpCreatedParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit>  mxToolkit;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop >  mxDesktop;
 public:
 
     // XTopWindowListener
@@ -117,17 +112,8 @@ public:
         throw (::com::sun::star::uno::RuntimeException) {}
     virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& )
         throw (::com::sun::star::uno::RuntimeException) {}
-
-    // XTerminateListener
-    virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
-        throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
-        throw(::com::sun::star::uno::RuntimeException);
 public:
-    RunDialog(GtkWidget *pDialog,
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit > &rToolkit,
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop > &rDesktop
-        );
+    RunDialog(GtkWidget *pDialog, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit > &rToolkit);
     gint run();
     void cancel();
     ~RunDialog();

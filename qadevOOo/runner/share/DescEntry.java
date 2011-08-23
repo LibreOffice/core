@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@ package share;
 /**
  *
  * Structure to describe the entries to be tested
- *
+ * 
  */
 public class DescEntry {
 
@@ -41,15 +41,15 @@ public class DescEntry {
     public String entryName;
     /**
      * Contains the name that may be used by state writers
-     */
+     */    
     public String longName;
     /**
      * Contains information if this entry is Optional
-     */
+     */    
     public boolean isOptional;
     /**
      * Contains information if this entry should be tested
-     */
+     */    
     public boolean isToTest;
     /**
      * Contains the information about the number of SubEntries
@@ -57,41 +57,41 @@ public class DescEntry {
     public int SubEntryCount;
     /**
      * Contains the SubEntries
-     */
+     */    
     public DescEntry[] SubEntries;
-
+    
     /**
      * Contains information about the Type of the entry<br>
      * possible 'component', 'interface', 'service', 'method', 'property', 'unit'
      */
     public String EntryType;
-
+    
     /**
      * Contains the ErrorMsg is something went wrong while gaining<br>
      * the description
-     */
+     */        
     public String ErrorMsg;
-
+    
     /**
-     * Contains information if errors occurred while gaining the Description
-     */
-    public boolean hasErrorMsg;
-
+     * Contains information if errors occured while gaining the Description
+     */        
+    public boolean hasErrorMsg;    
+    
     /**
      * Contains the state for this entry
-     */
-    public String State = "UNKNOWN";
-
+     */        
+    public String State = "UNKNOWN";    
+    
     /**
      * Contains the LogWriter to be used by the entry-test
      */
-
+    
     public share.LogWriter Logger;
-
+    
     /**
      * Contains an arbitrary set of parameters
      */
-
+    
     public java.util.Hashtable UserDefinedParams = new java.util.Hashtable();
-
+    
 }

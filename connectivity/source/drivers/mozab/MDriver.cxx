@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ MozabDriver::~MozabDriver()
 void MozabDriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-
+    
     // when driver will be destroied so all our connections have to be destroied as well
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
     {
@@ -93,14 +93,14 @@ void MozabDriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString MozabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MOZAB_DRIVER_IMPL_NAME));
+    return rtl::OUString::createFromAscii(MOZAB_DRIVER_IMPL_NAME);
         // this name is referenced in the configuration and in the mozab.xml
         // Please take care when changing it.
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > MozabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    // which service is supported
+    // which service is supported 
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
     aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
@@ -149,8 +149,8 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
 
         OConnection* pCon = reinterpret_cast<OConnection*>((*m_pCreationFunc)(this));
-        xCon = pCon;    // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
-        pCon->construct(url,info);              // late constructor call which can throw exception and allows a correct dtor call when so
+        xCon = pCon;	// important here because otherwise the connection could be deleted inside (refcount goes -> 0)
+        pCon->construct(url,info);				// late constructor call which can throw exception and allows a correct dtor call when so
         m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     }
@@ -159,16 +159,16 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
         ::connectivity::SharedResources aResources;
         const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
                 STR_COULD_NOT_LOAD_LIB,
-                "$libname$", ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "mozabdrv" )) )
+                "$libname$", ::rtl::OUString::createFromAscii( SVLIBRARY( "mozabdrv" ) )
              ) );
-
+        
         ::dbtools::throwGenericSQLException(sError,*this);
     }
-
+    
     return xCon;
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL MozabDriver::acceptsURL( const ::rtl::OUString& url )
+sal_Bool SAL_CALL MozabDriver::acceptsURL( const ::rtl::OUString& url ) 
         throw(SQLException, RuntimeException)
 {
     if ( !ensureInit() )
@@ -203,7 +203,7 @@ Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rt
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("100"))
                 ,Sequence< ::rtl::OUString >())
                 );
-        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size()); 
     }
     ::connectivity::SharedResources aResources;
     const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
@@ -237,7 +237,7 @@ EDriverType MozabDriver::impl_classifyURL( const ::rtl::OUString& url )
         // There isn't any subschema: - but could be just subschema
         if ( aAddrbookURI.getLength() > 0 )
             aAddrbookScheme= aAddrbookURI;
-        else if(url == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:")) )
+        else if(url == ::rtl::OUString::createFromAscii("sdbc:address:") )
             return Unknown; // TODO check
         else
             return Unknown;
@@ -251,7 +251,7 @@ EDriverType MozabDriver::impl_classifyURL( const ::rtl::OUString& url )
         const sal_Char* pScheme;
     } aSchemeMap[] =
     {
-#if defined(WNT)
+#if defined(WNT) || defined(WIN)
         { Outlook,          "outlook" },
         { OutlookExpress,   "outlookexp" },
 #endif
@@ -283,7 +283,7 @@ namespace
 
             if ( !_rFunction )
             {   // did not find the symbol
-                OSL_FAIL( ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) );
+                OSL_ENSURE( false, ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) );
                 osl_unloadModule( _rModule );
                 _rModule = NULL;
             }
@@ -301,7 +301,7 @@ bool MozabDriver::ensureInit()
 
     OSL_ENSURE(NULL == m_pCreationFunc, "MozabDriver::ensureInit: inconsistence: already have a factory function!");
 
-    const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY( "mozabdrv" )));
+    const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SVLIBRARY( "mozabdrv" ));
 
     // load the mozabdrv library
     m_hModule = osl_loadModuleRelative(&thisModule, sModuleName.pData, 0);

@@ -60,7 +60,6 @@ SLOFILES=	\
     $(SLO)$/StockBar.obj \
     $(SLO)$/Title.obj \
     $(SLO)$/Wall.obj \
-    $(SLO)$/UndoManager.obj \
     $(SLO)$/_serviceregistration_model.obj
 
 # --- Targets -----------------------------------------------------------------

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,10 +26,12 @@
  *
  ************************************************************************/
 
+#include <tools/prewin.h>
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
 #endif
+#include <windows.h>
 #include <objbase.h>
 #include <strmif.h>
 #include <control.h>
@@ -38,6 +40,7 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
+#include <tools/postwin.h>
 
 #include "player.hxx"
 #include "framegrabber.hxx"
@@ -101,22 +104,22 @@ Player::~Player()
 
     if( mpMP )
         mpMP->Release();
-
+        
     if( mpMS )
         mpMS->Release();
-
+    
     if( mpME )
         mpME->Release();
-
+        
     if( mpMC )
         mpMC->Release();
-
+    
     if( mpEV )
         mpEV->Release();
-
+        
     if( mpOMF )
         mpOMF->Release();
-
+    
     if( mpGB )
         mpGB->Release();
 
@@ -140,12 +143,12 @@ bool Player::create( const ::rtl::OUString& rURL )
             if( SUCCEEDED( CoCreateInstance( CLSID_OverlayMixer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**) &mpOMF ) ) )
             {
                 mpGB->AddFilter( mpOMF, L"com_sun_star_media_OverlayMixerFilter" );
-
+                
                 if( !SUCCEEDED( mpOMF->QueryInterface( IID_IDDrawExclModeVideo, (void**) &mpEV ) ) )
                     mpEV = NULL;
             }
         }
-
+        
         if( SUCCEEDED( hR = mpGB->RenderFile( reinterpret_cast<LPCWSTR>(rURL.getStr()), NULL ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaControl, (void**) &mpMC ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaEventEx, (void**) &mpME ) ) &&
@@ -165,7 +168,7 @@ bool Player::create( const ::rtl::OUString& rURL )
             bRet = true;
         }
     }
-
+    
     if( bRet )
         maURL = rURL;
     else
@@ -203,16 +206,15 @@ void Player::setDDrawParams( IDirectDraw* pDDraw, IDirectDrawSurface* pDDrawSurf
 // ------------------------------------------------------------------------------
 
 long Player::processEvent()
-{
-    long nCode;
-    LONG_PTR nParam1, nParam2;
-
+{   
+    long nCode, nParam1, nParam2;
+    
     if( mpME && SUCCEEDED( mpME->GetEvent( &nCode, &nParam1, &nParam2, 0 ) ) )
     {
         if( EC_COMPLETE == nCode )
         {
             if( mbLooping )
-            {
+            { 
                 setMediaTime( 0.0 );
                 start();
             }
@@ -222,10 +224,10 @@ long Player::processEvent()
                 stop();
             }
         }
-
+   
         mpME->FreeEventParams( nCode, nParam1, nParam2 );
     }
-
+    
     return 0;
 }
 
@@ -270,7 +272,7 @@ double SAL_CALL Player::getDuration(  )
 
     if( mpMP  )
         mpMP->get_Duration( &aRefTime );
-
+        
     return aRefTime;
 }
 
@@ -299,8 +301,8 @@ double SAL_CALL Player::getMediaTime(  )
 
     if( mpMP  )
         mpMP->get_CurrentPosition( &aRefTime );
-
-    return aRefTime;
+    
+    return aRefTime; 
 }
 
 // ------------------------------------------------------------------------------
@@ -322,7 +324,7 @@ double SAL_CALL Player::getStopTime(  )
     if( mpMP  )
         mpMP->get_StopTime( &aRefTime );
 
-    return aRefTime;
+    return aRefTime; 
 }
 
 // ------------------------------------------------------------------------------
@@ -343,7 +345,7 @@ double SAL_CALL Player::getRate(  )
 
     if( mpMP  )
         mpMP->get_Rate( &fRet );
-
+    
     return fRet;
 }
 
@@ -385,7 +387,7 @@ sal_Bool SAL_CALL Player::isMute(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
+void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB ) 
     throw (uno::RuntimeException)
 {
     mnUnmutedVolume = static_cast< long >( nVolumeDB ) * 100;
@@ -395,8 +397,8 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 }
 
 // ------------------------------------------------------------------------------
-
-sal_Int16 SAL_CALL Player::getVolumeDB(  )
+    
+sal_Int16 SAL_CALL Player::getVolumeDB(  ) 
     throw (uno::RuntimeException)
 {
     return( static_cast< sal_Int16 >( mnUnmutedVolume / 100 ) );
@@ -408,9 +410,9 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     throw (uno::RuntimeException)
 {
     awt::Size aSize( 0, 0 );
-
+    
     if( mpBV )
-    {
+    { 
         long nWidth = 0, nHeight = 0;
 
         mpBV->GetVideoSize( &nWidth, &nHeight );
@@ -452,13 +454,13 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
     if( maURL.getLength() > 0 )
     {
         FrameGrabber* pGrabber = new FrameGrabber( mxMgr );
-
+        
         xRet = pGrabber;
-
+        
         if( !pGrabber->create( maURL ) )
             xRet.clear();
     }
-
+    
     return xRet;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 #include <sfx2/dispatch.hxx>
 
 namespace sd{
-
+    
 SFX_IMPL_CHILDWINDOW(SpellDialogChildWindow, SID_SPELL_DIALOG)
-}
+}        
 
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
@@ -51,9 +51,9 @@ SFX_IMPL_CHILDWINDOW(SpellDialogChildWindow, SID_SPELL_DIALOG)
 namespace sd {
 
 SpellDialogChildWindow::SpellDialogChildWindow (
-    ::Window* _pParent,
-    sal_uInt16 nId,
-    SfxBindings* pBindings,
+    ::Window* _pParent, 
+    USHORT nId,
+    SfxBindings* pBindings, 
     SfxChildWinInfo* pInfo)
     : ::svx::SpellDialogChildWindow (_pParent, nId, pBindings, pInfo),
       mpSdOutliner (NULL),
@@ -111,7 +111,7 @@ void SpellDialogChildWindow::InvalidateSpellDialog (void)
     // check.
     if (aResult.size() == 0)
     {
-        SfxBoolItem aItem (SID_SPELL_DIALOG, sal_False);
+        SfxBoolItem aItem (SID_SPELL_DIALOG, FALSE);
         GetBindings().GetDispatcher()->Execute(
             SID_SPELL_DIALOG,
             SFX_CALLMODE_ASYNCHRON,

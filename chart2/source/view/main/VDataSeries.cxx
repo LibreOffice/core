@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -352,22 +352,6 @@ void VDataSeries::setCategoryXAxis()
     m_bAllowPercentValueInDataLabel = true;
 }
 
-void VDataSeries::setXValues( const Reference< chart2::data::XDataSequence >& xValues )
-{
-    m_aValues_X.clear();
-    m_aValues_X.init( xValues );
-    m_bAllowPercentValueInDataLabel = true;
-}
-
-void VDataSeries::setXValuesIfNone( const Reference< chart2::data::XDataSequence >& xValues )
-{
-    if( m_aValues_X.is() )
-        return;
-
-    m_aValues_X.init( xValues );
-    lcl_clearIfNoValuesButTextIsContained( m_aValues_X, xValues );
-}
-
 void VDataSeries::setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex )
 {
     m_nGlobalSeriesIndex = nGlobalSeriesIndex;
@@ -547,7 +531,7 @@ double VDataSeries::getBubble_Size( sal_Int32 index ) const
 
 bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
 {
-    rtl::OUString aPropName( bForPercentage ? C2U( "PercentageNumberFormat" ) : C2U( "NumberFormat" ) );
+    rtl::OUString aPropName( bForPercentage ? C2U( "PercentageNumberFormat" ) : C2U( "NumberFormat" ) ); 
     bool bHasNumberFormat = false;
     uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( nPointIndex ));
     sal_Int32 nNumberFormat = -1;
@@ -557,7 +541,7 @@ bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPerce
 }
 sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
 {
-    rtl::OUString aPropName( bForPercentage ? C2U( "PercentageNumberFormat" ) : C2U( "NumberFormat" ) );
+    rtl::OUString aPropName( bForPercentage ? C2U( "PercentageNumberFormat" ) : C2U( "NumberFormat" ) ); 
     sal_Int32 nNumberFormat = -1;
     uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( nPointIndex ));
     if( xPointProp.is() )
@@ -622,7 +606,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
             return nLabelPlacement;
         }
 
-        OSL_FAIL("no label placement supported");
+        DBG_ERROR("no label placement supported");
     }
     catch( uno::Exception& e )
     {
@@ -644,7 +628,7 @@ double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
         double fY_Max = getY_Max( index );
         double fY_First = getY_First( index );
         double fY_Last = getY_Last( index );
-
+        
         if(fMin>fY_First)
             fMin=fY_First;
         if(fMin>fY_Last)
@@ -680,7 +664,7 @@ double VDataSeries::getMaximumofAllDifferentYValues( sal_Int32 index ) const
         double fY_Max = getY_Max( index );
         double fY_First = getY_First( index );
         double fY_Last = getY_Last( index );
-
+        
         if(fMax<fY_First)
             fMax=fY_First;
         if(fMax<fY_Last)

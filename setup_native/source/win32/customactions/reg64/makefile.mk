@@ -39,6 +39,10 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE : settings.mk
 
+.IF "$(USE_SYSTEM_STL)" != "YES"
+CFLAGS+=-D_STLP_USE_STATIC_LIB
+.ENDIF
+
 #Disable precompiled header
 CDEFS+=-Dnot_used_define_to_disable_pch
 
@@ -59,6 +63,8 @@ STDSHL += \
     $(MSILIB)\
     $(SHLWAPILIB)\
     
+#	msvcprt.lib 							
+
 SHL1TARGET = $(TARGET)
 SHL1IMPLIB = i$(TARGET)
 
@@ -70,8 +76,33 @@ DEF1EXPORTFILE=exports.dxp
 
 .ENDIF
 
+
+# --- mapimailer --------------------------------------------------------
+
+#TARGETTYPE=CUI
+
+#OBJFILES=   $(OBJ)$/reg64.obj
+
+#APP1TARGET=reg64
+#APP1OBJS=$(OBJFILES)
+#APP1STDLIBS=$(KERNEL32LIB)\
+#	$(ADVAPI32LIB)\
+#	$(MSILIB)\
+#   $(SHELL32LIB)\
+#    msvcprt.lib\
+#    $(OLE32LIB)\
+#    $(COMCTL32LIB)\
+#    $(UUIDLIB)
+
+            
+#APP1DEF=$(MISC)$/$(APP1TARGET).def 
+
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
 INCLUDE!:=$(subst,/stl, $(INCLUDE))
 .EXPORT : INCLUDE
+
+# -------------------------------------------------------------------------
+
+

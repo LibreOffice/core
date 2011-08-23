@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
     if ( nActPos < USHRT_MAX && rSh.IsOutlineMovable( nActPos ) )
     {
         rSh.Push();
-        rSh.MakeOutlineSel( nActPos, nActPos, sal_True );
+        rSh.MakeOutlineSel( nActPos, nActPos, TRUE );
 
         if ( bMove )
         {
@@ -148,7 +148,7 @@ void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
 void SwListShell::Execute(SfxRequest &rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     SwWrtShell& rSh = GetShell();
 
     // #i35572#
@@ -165,9 +165,9 @@ void SwListShell::Execute(SfxRequest &rReq)
 
                 rReq.Done();
                 rSh.NumUpDown( ( nSlot == FN_NUM_BULLET_DOWN )
-                               ? sal_True
-                               : sal_False );
-                pFrame->GetBindings().Invalidate( SID_TABLE_CELL ); // StatusZeile updaten!
+                               ? TRUE
+                               : FALSE );
+                pFrame->GetBindings().Invalidate( SID_TABLE_CELL );	// StatusZeile updaten!
             }
             break;
 
@@ -185,7 +185,7 @@ void SwListShell::Execute(SfxRequest &rReq)
         {
             rReq.Ignore();
             SfxRequest aReq( GetView().GetViewFrame(), FN_NUM_BULLET_ON );
-            aReq.AppendItem( SfxBoolItem( FN_PARAM_1, sal_False ) );
+            aReq.AppendItem( SfxBoolItem( FN_PARAM_1, FALSE ) );
             aReq.Done();
             rSh.DelNumRules();
             break;
@@ -195,7 +195,7 @@ void SwListShell::Execute(SfxRequest &rReq)
             if ( bOutline )
                 lcl_OutlineUpDownWithSubPoints( rSh, false, false );
             else
-                rSh.MoveNumParas(sal_False, sal_False);
+                rSh.MoveNumParas(FALSE, FALSE);
             rReq.Done();
             break;
 
@@ -203,7 +203,7 @@ void SwListShell::Execute(SfxRequest &rReq)
             if ( bOutline )
                 lcl_OutlineUpDownWithSubPoints( rSh, true, false );
             else
-                rSh.MoveNumParas(sal_True, sal_False);
+                rSh.MoveNumParas(TRUE, FALSE);
             rReq.Done();
             break;
 
@@ -211,7 +211,7 @@ void SwListShell::Execute(SfxRequest &rReq)
             if ( bOutline )
                 lcl_OutlineUpDownWithSubPoints( rSh, true, true );
             else
-                rSh.MoveNumParas(sal_True, sal_True);
+                rSh.MoveNumParas(TRUE, TRUE);
             rReq.Done();
             break;
 
@@ -219,7 +219,7 @@ void SwListShell::Execute(SfxRequest &rReq)
             if ( bOutline )
                 lcl_OutlineUpDownWithSubPoints( rSh, false, true );
             else
-                rSh.MoveNumParas(sal_False, sal_True);
+                rSh.MoveNumParas(FALSE, TRUE);
             rReq.Done();
             break;
 
@@ -230,8 +230,8 @@ void SwListShell::Execute(SfxRequest &rReq)
 
         case FN_NUM_OR_NONUM:
         {
-            sal_Bool bApi = rReq.IsAPI();
-            sal_Bool bDelete = !rSh.IsNoNum(!bApi);
+            BOOL bApi = rReq.IsAPI();
+            BOOL bDelete = !rSh.IsNoNum(!bApi);
             if(pArgs )
                 bDelete = ((SfxBoolItem &)pArgs->Get(rReq.GetSlot())).GetValue();
             rSh.NumOrNoNum( bDelete, !bApi );
@@ -249,15 +249,15 @@ void SwListShell::Execute(SfxRequest &rReq)
 void SwListShell::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter( rSet );
-    sal_uInt16 nWhich = aIter.FirstWhich();
+    USHORT nWhich = aIter.FirstWhich();
     SwWrtShell& rSh = GetShell();
-    sal_uInt8 nCurrentNumLevel = rSh.GetNumLevel();
+    BYTE nCurrentNumLevel = rSh.GetNumLevel();
     while ( nWhich )
     {
         switch( nWhich )
         {
             case FN_NUM_OR_NONUM:
-                rSet.Put(SfxBoolItem(nWhich, GetShell().IsNoNum(sal_False)));
+                rSet.Put(SfxBoolItem(nWhich, GetShell().IsNoNum(FALSE)));
             break;
             case FN_NUM_BULLET_OUTLINE_UP:
             case FN_NUM_BULLET_UP:

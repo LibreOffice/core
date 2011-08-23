@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ public:
                         , const ::com::sun::star::uno::Reference<
                             ::com::sun::star::frame::XModel >& xChartModel );
     static rtl::OUString getTitleNameByType( TitleHelper::eTitleType eType );
-
+    
     static rtl::OUString getNameForCID(
         const rtl::OUString& rObjectCID,
         const ::com::sun::star::uno::Reference<

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,9 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
+using namespace rtl;
 
-using ::rtl::OUString;
-
-CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > xOrigin )
+CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > xOrigin	)
                 : ContentResultSetWrapper( xOrigin )
                 , m_nColumnCount( 0 )
                 , m_bColumnCountCached( sal_False )
@@ -52,8 +51,8 @@ CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > 
                 , m_bFirstFetchSizePropagationDone( sal_False )
                 , m_nLastFetchSize( 1 )//this value is not important at all
                 , m_bLastFetchDirection( sal_True )//this value is not important at all
-                , m_aPropertyNameForFetchSize( OUString(RTL_CONSTASCII_USTRINGPARAM("FetchSize")) )
-                , m_aPropertyNameForFetchDirection( OUString(RTL_CONSTASCII_USTRINGPARAM("FetchDirection")) )
+                , m_aPropertyNameForFetchSize( OUString::createFromAscii( "FetchSize" ) )
+                , m_aPropertyNameForFetchDirection( OUString::createFromAscii( "FetchDirection" ) )
 {
     impl_init();
 }
@@ -101,7 +100,7 @@ void SAL_CALL CachedContentResultSetStub
 
     //don't notify events on fetchsize and fetchdirection to the above CachedContentResultSet
     //because it will ignore them anyway and we can save this remote calls
-    if(    rEvt.PropertyName == m_aPropertyNameForFetchSize
+    if(	   rEvt.PropertyName == m_aPropertyNameForFetchSize
         || rEvt.PropertyName == m_aPropertyNameForFetchDirection )
         return;
 
@@ -109,7 +108,7 @@ void SAL_CALL CachedContentResultSetStub
     aEvt.Source = static_cast< XPropertySet * >( this );
     aEvt.Further = sal_False;
 
-    impl_notifyPropertyChangeListeners( aEvt );
+    impl_notifyPropertyChangeListeners(	aEvt );
 }
 
 
@@ -120,10 +119,10 @@ void SAL_CALL CachedContentResultSetStub
            RuntimeException )
 {
     impl_EnsureNotDisposed();
-
+    
     //don't notify events on fetchsize and fetchdirection to the above CachedContentResultSet
     //because it will ignore them anyway and we can save this remote calls
-    if(    rEvt.PropertyName == m_aPropertyNameForFetchSize
+    if(	   rEvt.PropertyName == m_aPropertyNameForFetchSize
         || rEvt.PropertyName == m_aPropertyNameForFetchDirection )
         return;
 
@@ -167,6 +166,73 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
         }
     }
     return *pTypes;
+    /*
+    static cppu::OTypeCollection * pCollection = 0;
+    if (!pCollection)
+    {
+        osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
+        if (!pCollection)
+        {
+            static cppu::OTypeCollection
+                aTheCollection(
+                    getCppuType(
+                        static_cast< Reference< XTypeProvider >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XServiceInfo >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XComponent >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XCloseable >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XResultSetMetaDataSupplier >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XPropertySet >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XPropertyChangeListener >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XVetoableChangeListener >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XResultSet >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XContentAccess >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XRow >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XFetchProvider >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XFetchProviderForContentAccess >
+                                         const * >(
+                            0))
+                            );
+            pCollection = &aTheCollection;
+        }
+    }
+    return pCollection->getTypes();
+    */
 }
 
 //--------------------------------------------------------------------------
@@ -174,10 +240,10 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSetStub,
-                        OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.comp.ucb.CachedContentResultSetStub" )),
-                        OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        CACHED_CRS_STUB_SERVICE_NAME )) );
+                        OUString::createFromAscii(
+                        "com.sun.star.comp.ucb.CachedContentResultSetStub" ),
+                        OUString::createFromAscii(
+                        CACHED_CRS_STUB_SERVICE_NAME ) );
 
 //-----------------------------------------------------------------
 // XFetchProvider methods.
@@ -187,7 +253,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSetStub,
 impl_EnsureNotDisposed(); \
 if( !m_xResultSetOrigin.is() ) \
 { \
-    OSL_FAIL( "broadcaster was disposed already" ); \
+    OSL_ENSURE( sal_False, "broadcaster was disposed already" ); \
     throw RuntimeException(); \
 } \
 impl_propagateFetchSizeAndDirection( nRowCount, bDirection ); \
@@ -325,7 +391,7 @@ sal_Int32 SAL_CALL CachedContentResultSetStub
         }
         catch( SQLException& )
         {
-            OSL_FAIL( "couldn't determine the column count" );
+            OSL_ENSURE( sal_False, "couldn't determine the column count" );
             nCount = 0;
         }
     }
@@ -371,10 +437,10 @@ void SAL_CALL CachedContentResultSetStub
     sal_Bool bFirstPropagationDone;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        bNeedAction             = m_bNeedToPropagateFetchSize;
-        nLastSize               = m_nLastFetchSize;
-        bLastDirection          = m_bLastFetchDirection;
-        bFirstPropagationDone   = m_bFirstFetchSizePropagationDone;
+        bNeedAction				= m_bNeedToPropagateFetchSize;
+        nLastSize				= m_nLastFetchSize;
+        bLastDirection			= m_bLastFetchDirection;
+        bFirstPropagationDone	= m_bFirstFetchSizePropagationDone;
     }
     if( bNeedAction )
     {
@@ -386,10 +452,10 @@ void SAL_CALL CachedContentResultSetStub
         if(!bFirstPropagationDone)
         {
             //check wether the properties 'FetchSize' and 'FetchDirection' do exist
-
+            
             Reference< XPropertySetInfo > xPropertySetInfo = getPropertySetInfo();
-            sal_Bool bHasSize = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchSize );
-            sal_Bool bHasDirection = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchDirection );
+            sal_Bool bHasSize = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchSize ); 
+            sal_Bool bHasDirection = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchDirection ); 
 
             if(!bHasSize || !bHasDirection)
             {
@@ -398,17 +464,17 @@ void SAL_CALL CachedContentResultSetStub
                 return;
             }
         }
-
-        sal_Bool bSetSize       = ( nLastSize       !=nFetchSize        ) || !bFirstPropagationDone;
-        sal_Bool bSetDirection  = ( bLastDirection  !=bFetchDirection   ) || !bFirstPropagationDone;
+        
+        sal_Bool bSetSize		= ( nLastSize		!=nFetchSize		) || !bFirstPropagationDone;
+        sal_Bool bSetDirection	= ( bLastDirection	!=bFetchDirection	) || !bFirstPropagationDone;
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             m_bFirstFetchSizePropagationDone = sal_True;
-            m_nLastFetchSize        = nFetchSize;
-            m_bLastFetchDirection   = bFetchDirection;
+            m_nLastFetchSize		= nFetchSize;
+            m_bLastFetchDirection	= bFetchDirection;
         }
-
+        
         if( bSetSize )
         {
             Any aValue;
@@ -533,10 +599,10 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetStubFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedContentResultSetStubFactory,
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                     "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" )),
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                     CACHED_CRS_STUB_FACTORY_NAME )) );
+                     OUString::createFromAscii(
+                     "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" ),
+                     OUString::createFromAscii(
+                     CACHED_CRS_STUB_FACTORY_NAME ) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

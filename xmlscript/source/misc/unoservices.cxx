@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,6 +110,15 @@ extern "C"
         const sal_Char ** ppEnvTypeName, uno_Environment ** )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+    }
+
+    // -----------------------------------------------------------------------------
+
+    sal_Bool SAL_CALL component_writeInfo(
+        void * pServiceManager, void * pRegistryKey )
+    {
+        return ::cppu::component_writeInfoHelper(
+            pServiceManager, pRegistryKey, ::xmlscript::s_entries );
     }
 
     // -----------------------------------------------------------------------------

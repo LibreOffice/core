@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,6 @@
 #include "FactoryIds.hxx"
 #include "ViewShell.hxx"
 #include "SlideShowRestarter.hxx"
-#include "DrawController.hxx"
 #include <boost/bind.hpp>
 
 using ::com::sun::star::presentation::XSlideShowController;
@@ -122,26 +121,28 @@ const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
     // NOTE: First member must be sorted
     static const SfxItemPropertyMapEntry aPresentationPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("AllowAnimations"),          ATTR_PRESENT_ANIMATION_ALLOWED, &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("CustomShow"),               ATTR_PRESENT_CUSTOMSHOW,        &::getCppuType((const OUString*)0),     0, 0 },
-        { MAP_CHAR_LEN("Display"),                  ATTR_PRESENT_DISPLAY,           &::getCppuType((const sal_Int32*)0),    0, 0 },
-        { MAP_CHAR_LEN("FirstPage"),                ATTR_PRESENT_DIANAME,           &::getCppuType((const OUString*)0),     0, 0 },
-        { MAP_CHAR_LEN("IsAlwaysOnTop"),            ATTR_PRESENT_ALWAYS_ON_TOP,     &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsAutomatic"),              ATTR_PRESENT_MANUEL,            &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsEndless"),                ATTR_PRESENT_ENDLESS,           &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsFullScreen"),             ATTR_PRESENT_FULLSCREEN,        &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsShowAll"),                ATTR_PRESENT_ALL,               &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsMouseVisible"),           ATTR_PRESENT_MOUSE,             &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsShowLogo"),               ATTR_PRESENT_SHOW_PAUSELOGO,    &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsTransitionOnClick"),      ATTR_PRESENT_CHANGE_PAGE,       &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("Pause"),                    ATTR_PRESENT_PAUSE_TIMEOUT,     &::getCppuType((const sal_Int32*)0),    0, 0 },
-        { MAP_CHAR_LEN("StartWithNavigator"),       ATTR_PRESENT_NAVIGATOR,         &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("UsePen"),                   ATTR_PRESENT_PEN,               &::getBooleanCppuType(),                0, 0 },
+        { MAP_CHAR_LEN("AllowAnimations"),			ATTR_PRESENT_ANIMATION_ALLOWED,	&::getBooleanCppuType(),				0, 0 },
+        { MAP_CHAR_LEN("CustomShow"),				ATTR_PRESENT_CUSTOMSHOW,		&::getCppuType((const OUString*)0),		0, 0 },
+        { MAP_CHAR_LEN("Display"),					ATTR_PRESENT_DISPLAY,			&::getCppuType((const sal_Int32*)0),	0, 0 },
+        { MAP_CHAR_LEN("FirstPage"),				ATTR_PRESENT_DIANAME,			&::getCppuType((const OUString*)0),		0, 0 },
+        { MAP_CHAR_LEN("IsAlwaysOnTop"),			ATTR_PRESENT_ALWAYS_ON_TOP,		&::getBooleanCppuType(),				0, 0 },
+        { MAP_CHAR_LEN("IsAutomatic"),				ATTR_PRESENT_MANUEL,			&::getBooleanCppuType(),				0, 0 },
+        { MAP_CHAR_LEN("IsEndless"),				ATTR_PRESENT_ENDLESS,			&::getBooleanCppuType(),				0, 0 },
+        { MAP_CHAR_LEN("IsFullScreen"),				ATTR_PRESENT_FULLSCREEN,		&::getBooleanCppuType(),				0, 0 },
+        { MAP_CHAR_LEN("IsShowAll"),				ATTR_PRESENT_ALL,				&::getBooleanCppuType(),				0, 0 },
+        { MAP_CHAR_LEN("IsMouseVisible"),			ATTR_PRESENT_MOUSE,				&::getBooleanCppuType(),				0, 0 },
+        { MAP_CHAR_LEN("IsShowLogo"),				ATTR_PRESENT_SHOW_PAUSELOGO,	&::getBooleanCppuType(),				0, 0 },
+        { MAP_CHAR_LEN("IsTransitionOnClick"),		ATTR_PRESENT_CHANGE_PAGE,		&::getBooleanCppuType(),				0, 0 },
+        { MAP_CHAR_LEN("Pause"),					ATTR_PRESENT_PAUSE_TIMEOUT,		&::getCppuType((const sal_Int32*)0),	0, 0 },
+        { MAP_CHAR_LEN("StartWithNavigator"),		ATTR_PRESENT_NAVIGATOR,			&::getBooleanCppuType(),				0, 0 },
+        { MAP_CHAR_LEN("UsePen"),					ATTR_PRESENT_PEN,				&::getBooleanCppuType(),				0, 0 },
         { 0,0,0,0,0,0}
     };
 
     return aPresentationPropertyMap_Impl;
 }
+
+//SfxItemPropertyMap map_impl[] = { { 0,0,0,0,0,0 } };
 
 // --------------------------------------------------------------------
 // class SlideShow
@@ -183,7 +184,7 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument* pDocument )
 
     if( pDocument )
         xRet = rtl::Reference< SlideShow >( dynamic_cast< SlideShow* >( pDocument->getPresentation().get() ) );
-
+    
     return xRet;
 }
 
@@ -199,7 +200,7 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase& rBase )
 ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowController > SlideShow::GetSlideShowController(ViewShellBase& rBase )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
-
+    
     Reference< XSlideShowController > xRet;
     if( xSlideShow.is() )
         xRet = xSlideShow->getController();
@@ -321,7 +322,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
     case ATTR_PRESENT_ALL:
     {
         sal_Bool bVal = sal_False;
-
+        
         if( aValue >>= bVal )
         {
             bIllegalArgument = false;
@@ -343,7 +344,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         if( aValue >>= bVal )
         {
             bIllegalArgument = false;
-
+            
             if( bVal == rPresSettings.mbLockedPages )
             {
                 bValuesChanged = true;
@@ -356,7 +357,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
     case ATTR_PRESENT_ANIMATION_ALLOWED:
     {
         sal_Bool bVal = sal_False;
-
+        
         if( aValue >>= bVal )
         {
             bIllegalArgument = false;
@@ -685,7 +686,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
     // gone wrong.
     OSL_ASSERT(!mbIsInStartup);
     mbIsInStartup = false;
-
+    
     rtl::Reference< SlideshowImpl > xController( mxController );
     if( xController.is() )
     {
@@ -716,7 +717,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                 WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
                 if( pWorkWindow )
                 {
-                    pWorkWindow->StartPresentationMode( sal_False, isAlwaysOnTop() );
+                    pWorkWindow->StartPresentationMode( FALSE, isAlwaysOnTop() );
                 }
             }
         }
@@ -755,7 +756,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                         framework::FrameworkHelper::GetViewURL(ePreviousType),
                         framework::FrameworkHelper::msCenterPaneURL);
 
-                    pViewShell->GetViewFrame()->GetBindings().InvalidateAll( sal_True );
+                    pViewShell->GetViewFrame()->GetBindings().InvalidateAll( TRUE );
                 }
             }
         }
@@ -774,17 +775,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                     // switch to the previously visible Slide
                     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>( pViewShell );
                     if( pDrawViewShell )
-                        pDrawViewShell->SwitchPage( (sal_uInt16)xController->getRestoreSlide() );
-                    else
-                    {
-                        Reference<XDrawView> xDrawView (
-                            Reference<XWeak>(&mpCurrentViewShellBase->GetDrawController()), UNO_QUERY);
-                        if (xDrawView.is())
-                            xDrawView->setCurrentPage(
-                                Reference<XDrawPage>(
-                                    mpDoc->GetSdPage(xController->getRestoreSlide(), PK_STANDARD)->getUnoPage(),
-                                    UNO_QUERY));
-                    }
+                        pDrawViewShell->SwitchPage( (USHORT)xController->getRestoreSlide() );
                 }
 
                 if( pViewShell->GetDoc()->IsStartWithPresentation() )
@@ -796,7 +787,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                     if( xProvider.is() )
                     {
                         util::URL aURL;
-                        aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
+                        aURL.Complete = ::rtl::OUString::createFromAscii(".uno:CloseFrame");
 
                         uno::Reference< frame::XDispatch > xDispatch(
                             xProvider->queryDispatch(
@@ -1017,7 +1008,7 @@ void SlideShow::activate( ViewShellBase& rBase )
         {
             pShell->FinishInitialization( mpFullScreenFrameView );
             mpFullScreenFrameView = 0;
-
+            
             CreateController( pShell.get(), pShell->GetView(), rBase.GetViewWindow() );
 
             if( mxController->startShow(mxCurrentSettings.get()) )
@@ -1194,8 +1185,8 @@ void SlideShow::StartInPlacePresentation()
         {
             bSuccess = mxController->startShow(mxCurrentSettings.get());
         }
-
-        if( !bSuccess )
+            
+        if( !bSuccess )	
             end();
     }
 }
@@ -1209,9 +1200,9 @@ void SlideShow::StartFullscreenPresentation( )
     // fullscreen.
     const sal_Int32 nDisplay (GetDisplay());
     WorkWindow* pWorkWindow = new FullScreenWorkWindow(this, mpCurrentViewShellBase);
+    pWorkWindow->StartPresentationMode( TRUE, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
+    //    pWorkWindow->ShowFullScreenMode(FALSE, nDisplay);
     pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
-    pWorkWindow->StartPresentationMode( sal_True, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
-    //    pWorkWindow->ShowFullScreenMode(sal_False, nDisplay);
 
     if (pWorkWindow->IsVisible())
     {
@@ -1225,11 +1216,13 @@ void SlideShow::StartFullscreenPresentation( )
             delete mpFullScreenFrameView;
         mpFullScreenFrameView = new FrameView(mpDoc, pOriginalFrameView);
 
+//	    Reference<XController> xController;
+
         // The new frame is created hidden.  To make it visible and activate the
         // new view shell--a prerequisite to process slot calls and initialize
         // its panes--a GrabFocus() has to be called later on.
         SfxFrame* pNewFrame = SfxFrame::Create( *mpDoc->GetDocSh(), *pWorkWindow, PRESENTATION_FACTORY_ID, true );
-        pNewFrame->SetPresentationMode(sal_True);
+        pNewFrame->SetPresentationMode(TRUE);
 
         mpFullScreenViewShellBase = static_cast<ViewShellBase*>(pNewFrame->GetCurrentViewFrame()->GetViewShell());
         if(mpFullScreenViewShellBase != NULL)
@@ -1253,7 +1246,7 @@ sal_Int32 SlideShow::GetDisplay()
     if( pOptions )
         nDisplay = pOptions->GetDisplay();
 
-    if (nDisplay <= 0 )
+    if (nDisplay <= 0 ) 
     {
         try
         {

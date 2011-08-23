@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@ namespace frm
     private:
         // <properties>
         ::com::sun::star::awt::FontDescriptor   m_aFont;
-        sal_Int16                               m_nFontRelief;
-        sal_Int16                               m_nFontEmphasis;
-        ::com::sun::star::uno::Any              m_aTextLineColor;
+        sal_Int16								m_nFontRelief;
+        sal_Int16								m_nFontEmphasis;
+        ::com::sun::star::uno::Any				m_aTextLineColor;
         ::com::sun::star::uno::Any              m_aTextColor;
         // </properties>
 

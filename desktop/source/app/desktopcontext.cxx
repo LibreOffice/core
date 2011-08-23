@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,9 @@
 #include <vcl/svapp.hxx>
 #include <svtools/javainteractionhandler.hxx>
 
+using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
-
-using ::rtl::OUString;
 
 namespace desktop
 {
@@ -50,7 +49,7 @@ Any SAL_CALL DesktopContext::getValueByName( const OUString& Name) throw (Runtim
 {
     Any retVal;
 
-    if (Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(JAVA_INTERACTION_HANDLER_NAME)))
+    if ( 0 == Name.compareToAscii( JAVA_INTERACTION_HANDLER_NAME ))
     {
         retVal = makeAny( Reference< XInteractionHandler >( new svt::JavaInteractionHandler()) );
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,6 +48,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <unostyle.hxx>
 #include <SwStyleNameMapper.hxx>
+#include "errhdl.hxx"
 #include "paratr.hxx"
 #include "charfmt.hxx"
 #include "cmdid.h"
@@ -60,7 +61,9 @@ TYPEINIT1_AUTOFACTORY( SwNumRuleItem, SfxStringItem);
 TYPEINIT1_AUTOFACTORY( SwParaConnectBorderItem, SfxBoolItem);
 
 /*************************************************************************
-|*    Beschreibung      Methoden von SwFmtDrop
+|*    Beschreibung		Methoden von SwFmtDrop
+|*    Ersterstellung	MS  19.02.91
+|*    Letzte Aenderung	JP 08.08.94
 *************************************************************************/
 
 
@@ -81,7 +84,7 @@ SwFmtDrop::SwFmtDrop()
 
 SwFmtDrop::SwFmtDrop( const SwFmtDrop &rCpy )
     : SfxPoolItem( RES_PARATR_DROP ),
-    SwClient( rCpy.GetRegisteredInNonConst() ),
+    SwClient( rCpy.pRegisteredIn ),
     pDefinedIn( 0 ),
     nDistance( rCpy.GetDistance() ),
     nReadFmt( rCpy.nReadFmt ),
@@ -102,8 +105,8 @@ SwFmtDrop::~SwFmtDrop()
 void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
 {
     //Ummelden
-    if ( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove( this );
+    if ( pRegisteredIn )
+        pRegisteredIn->Remove( this );
     if(pNew)
         pNew->Add( this );
     nReadFmt = USHRT_MAX;
@@ -111,19 +114,26 @@ void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
 
 
 
-void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
+void SwFmtDrop::Modify( SfxPoolItem *, SfxPoolItem * )
 {
     if( pDefinedIn )
     {
         if( !pDefinedIn->ISA( SwFmt ))
-            pDefinedIn->ModifyNotification( this, this );
+            pDefinedIn->Modify( this, this );
         else if( pDefinedIn->GetDepends() &&
                 !pDefinedIn->IsModifyLocked() )
         {
             // selbst den Abhaengigen vom Format bescheid sagen. Das
             // Format selbst wuerde es nicht weitergeben, weil es ueber
             // die Abpruefung nicht hinauskommt.
-            pDefinedIn->ModifyBroadcast( this, this );
+            SwClientIter aIter( *pDefinedIn );
+            SwClient * pLast = aIter.GoStart();
+            if( pLast ) 	// konnte zum Anfang gesprungen werden ??
+                do {
+                    pLast->Modify( this, this );
+                    if( !pDefinedIn->GetDepends() )	// Baum schon Weg ??
+                        break;
+                } while( 0 != ( pLast = aIter++ ));
         }
     }
 }
@@ -159,9 +169,9 @@ bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_DROPCAP_FORMAT:
         {
              style::DropCapFormat aDrop;
-            aDrop.Lines = nLines   ;
-            aDrop.Count = nChars   ;
-            aDrop.Distance  = TWIP_TO_MM100_UNSIGNED(nDistance);
+            aDrop.Lines	= nLines   ;
+            aDrop.Count	= nChars   ;
+            aDrop.Distance	= TWIP_TO_MM100_UNSIGNED(nDistance);
             rVal.setValue(&aDrop, ::getCppuType((const style::DropCapFormat*)0));
         }
         break;
@@ -190,7 +200,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int8 nTemp = 0;
             rVal >>= nTemp;
             if(nTemp >=1 && nTemp < 0x7f)
-                nLines = (sal_uInt8)nTemp;
+                nLines = (BYTE)nTemp;
         }
         break;
         case MID_DROPCAP_COUNT :
@@ -198,7 +208,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nTemp = 0;
             rVal >>= nTemp;
             if(nTemp >=1 && nTemp < 0x7f)
-                nChars = (sal_uInt8)nTemp;
+                nChars = (BYTE)nTemp;
         }
         break;
         case MID_DROPCAP_DISTANCE :
@@ -215,11 +225,13 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(rVal.getValueType()  == ::getCppuType((const style::DropCapFormat*)0))
             {
                 const style::DropCapFormat* pDrop = (const style::DropCapFormat*)rVal.getValue();
-                nLines      = pDrop->Lines;
-                nChars      = pDrop->Count;
-                nDistance   = MM100_TO_TWIP(pDrop->Distance);
+                nLines 		= pDrop->Lines;
+                nChars 		= pDrop->Count;
+                nDistance 	= MM100_TO_TWIP(pDrop->Distance);
             }
             else {
+                //exception( wrong_type)
+                ;
             }
         }
         break;
@@ -227,7 +239,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             bWholeWord = *(sal_Bool*)rVal.getValue();
         break;
         case MID_DROPCAP_CHAR_STYLE_NAME :
-            OSL_FAIL("char format cannot be set in PutValue()!");
+            DBG_ERROR("char format cannot be set in PutValue()!");
         break;
     }
     return true;
@@ -249,25 +261,32 @@ SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-
+    // --> OD 2008-03-04 #refactorlists# - removed <pDefinedIn>
     return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
+    // <--
 }
+/* -----------------------------27.06.00 11:05--------------------------------
 
-bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+ ---------------------------------------------------------------------------*/
+bool    SwNumRuleItem::QueryValue( uno::Any& rVal, BYTE ) const
 {
     rtl::OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
     rVal <<= sRet;
     return true;
 }
+/* -----------------------------27.06.00 11:05--------------------------------
 
-bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
+ ---------------------------------------------------------------------------*/
+bool    SwNumRuleItem::PutValue( const uno::Any& rVal, BYTE )
 {
     rtl::OUString uName;
     rVal >>= uName;
     SetValue(SwStyleNameMapper::GetUIName(uName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE));
     return true;
 }
+/* -----------------19.05.2003 10:44-----------------
 
+ --------------------------------------------------*/
 SfxPoolItem* SwParaConnectBorderItem::Clone( SfxItemPool * ) const
 {
     return new SwParaConnectBorderItem( *this );

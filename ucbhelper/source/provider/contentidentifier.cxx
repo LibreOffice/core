@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,10 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/mutex.hxx>
 
+using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
-
-using ::rtl::OUString;
 
 namespace ucbhelper
 {
@@ -59,9 +58,9 @@ namespace ucbhelper
 struct ContentIdentifier_Impl
 {
     Reference< XMultiServiceFactory > m_xSMgr;
-    OUString                          m_aContentId;
-    OUString                          m_aProviderScheme;
-    osl::Mutex                        m_aMutex;
+    OUString 						  m_aContentId;
+    OUString 						  m_aProviderScheme;
+    osl::Mutex						  m_aMutex;
 
     ContentIdentifier_Impl( const Reference< XMultiServiceFactory >& rSMgr,
                               const OUString& rURL );

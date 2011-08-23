@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,6 +51,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     mbVBName( false )
 {
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
+    ScRangeName& rRangeNames = GetNamedRanges();
 
     // 1) *** read data from stream *** ---------------------------------------
 
@@ -136,11 +137,18 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     if( nXclTab != EXC_NAME_GLOBAL )
     {
         sal_uInt16 nUsedTab = (GetBiff() == EXC_BIFF8) ? nXclTab : nExtSheet;
-        // do not rename sheet-local names by default, this breaks VBA scripts
+        // #163146# do not rename sheet-local names by default, this breaks VBA scripts
 //        maScName.Append( '_' ).Append( String::CreateFromInt32( nUsedTab ) );
         // TODO: may not work for BIFF5, handle skipped sheets (all BIFF)
         mnScTab = static_cast< SCTAB >( nUsedTab - 1 );
     }
+
+    // find an unused name
+    String aOrigName( maScName );
+    sal_Int32 nCounter = 0;
+    USHORT nDummy;
+    while( rRangeNames.SearchName( maScName, nDummy ) )
+        maScName.Assign( aOrigName ).Append( ' ' ).Append( String::CreateFromInt32( ++nCounter ) );
 
     // 3) *** convert the name definition formula *** -------------------------
 
@@ -208,28 +216,30 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
 
     // 4) *** create a defined name in the Calc document *** ------------------
 
-    // do not ignore hidden names (may be regular names created by VBA scripts)
+    // #163146# do not ignore hidden names (may be regular names created by VBA scripts)
     if( pTokArr /*&& (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN ))*/ && !mbFunction && !mbVBName )
     {
         // create the Calc name data
         ScRangeData* pData = new ScRangeData( GetDocPtr(), maScName, *pTokArr, ScAddress(), nNameType );
         pData->GuessPosition();             // calculate base position for relative refs
         pData->SetIndex( nXclNameIdx );     // used as unique identifier in formulas
-        if (nXclTab == EXC_NAME_GLOBAL)
-            GetDoc().GetRangeName()->insert(pData);
-        else
+        rRangeNames.Insert( pData );        // takes ownership of pData
+        if( nXclTab != EXC_NAME_GLOBAL )
         {
-            ScRangeName* pLocalNames = GetDoc().GetRangeName(mnScTab);
-            if (pLocalNames)
-                pLocalNames->insert(pData);
-
             if (GetBiff() == EXC_BIFF8)
             {
                 ScRange aRange;
                 // discard deleted ranges ( for the moment at least )
                 if ( pData->IsValidReference( aRange ) )
                 {
-                    GetExtDocOptions().GetOrCreateTabSettings( nXclTab );
+                    ScExtTabSettings& rTabSett = GetExtDocOptions().GetOrCreateTabSettings( nXclTab );
+                    // create a mapping between the unmodified localname to
+                    // the name in the global name container for named ranges
+                    OSL_TRACE(" mapping local name to global name for tab %d which exists? %s", nXclTab, GetDoc().HasTable( mnScTab ) ? "true" : "false" );
+                    SCTAB nTab( static_cast< SCTAB >( mnScTab ) );
+                    NameToNameMap* pMap = GetDoc().GetLocalNameMap( nTab );
+                    if ( pMap )
+                       (*pMap)[ aRealOrigName ] = maScName;
                 }
             }
         }
@@ -246,23 +256,23 @@ XclImpNameManager::XclImpNameManager( const XclImpRoot& rRoot ) :
 
 void XclImpNameManager::ReadName( XclImpStream& rStrm )
 {
-    sal_uLong nCount = maNameList.size();
+    ULONG nCount = maNameList.Count();
     if( nCount < 0xFFFF )
-        maNameList.push_back( new XclImpName( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
+        maNameList.Append( new XclImpName( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
 }
 
 const XclImpName* XclImpNameManager::FindName( const String& rXclName, SCTAB nScTab ) const
 {
     const XclImpName* pGlobalName = 0;   // a found global name
     const XclImpName* pLocalName = 0;    // a found local name
-    for( XclImpNameList::const_iterator itName = maNameList.begin(); itName != maNameList.end() && !pLocalName; ++itName )
+    for( const XclImpName* pName = maNameList.First(); pName && !pLocalName; pName = maNameList.Next() )
     {
-        if( itName->GetXclName() == rXclName )
+        if( pName->GetXclName() == rXclName )
         {
-            if( itName->GetScTab() == nScTab )
-                pLocalName = &(*itName);
-            else if( itName->IsGlobal() )
-                pGlobalName = &(*itName);
+            if( pName->GetScTab() == nScTab )
+                pLocalName = pName;
+            else if( pName->IsGlobal() )
+                pGlobalName = pName;
         }
     }
     return pLocalName ? pLocalName : pGlobalName;
@@ -271,7 +281,7 @@ const XclImpName* XclImpNameManager::FindName( const String& rXclName, SCTAB nSc
 const XclImpName* XclImpNameManager::GetName( sal_uInt16 nXclNameIdx ) const
 {
     DBG_ASSERT( nXclNameIdx > 0, "XclImpNameManager::GetName - index must be >0" );
-    return &(maNameList.at( nXclNameIdx - 1 ));
+    return maNameList.GetObject( nXclNameIdx - 1 );
 }
 
 // ============================================================================

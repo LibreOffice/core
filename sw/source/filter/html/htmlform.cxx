@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,34 +96,34 @@ using ::rtl::OUString;
 const sal_uInt16 TABINDEX_MIN = 0;
 const sal_uInt16 TABINDEX_MAX = 32767;
 
-static HTMLOptionEnum aHTMLFormMethodTable[] =
+static HTMLOptionEnum __FAR_DATA aHTMLFormMethodTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_METHOD_get,       FormSubmitMethod_GET    },
-    { OOO_STRING_SVTOOLS_HTML_METHOD_post,  FormSubmitMethod_POST   },
-    { 0,                    0                       }
+    { OOO_STRING_SVTOOLS_HTML_METHOD_get,		FormSubmitMethod_GET	},
+    { OOO_STRING_SVTOOLS_HTML_METHOD_post,	FormSubmitMethod_POST	},
+    { 0,					0						}
 };
 
-static HTMLOptionEnum aHTMLFormEncTypeTable[] =
+static HTMLOptionEnum __FAR_DATA aHTMLFormEncTypeTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_ET_url,           FormSubmitEncoding_URL          },
-    { OOO_STRING_SVTOOLS_HTML_ET_multipart, FormSubmitEncoding_MULTIPART    },
-    { OOO_STRING_SVTOOLS_HTML_ET_text,      FormSubmitEncoding_TEXT         },
-    { 0,                    0                               }
+    { OOO_STRING_SVTOOLS_HTML_ET_url,			FormSubmitEncoding_URL			},
+    { OOO_STRING_SVTOOLS_HTML_ET_multipart,	FormSubmitEncoding_MULTIPART	},
+    { OOO_STRING_SVTOOLS_HTML_ET_text,		FormSubmitEncoding_TEXT			},
+    { 0,					0								}
 };
 
 enum HTMLWordWrapMode { HTML_WM_OFF, HTML_WM_HARD, HTML_WM_SOFT };
 
-static HTMLOptionEnum aHTMLTextAreaWrapTable[] =
+static HTMLOptionEnum __FAR_DATA aHTMLTextAreaWrapTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_WW_off,       HTML_WM_OFF },
-    { OOO_STRING_SVTOOLS_HTML_WW_hard,  HTML_WM_HARD    },
-    { OOO_STRING_SVTOOLS_HTML_WW_soft,  HTML_WM_SOFT    },
-    { OOO_STRING_SVTOOLS_HTML_WW_physical,HTML_WM_HARD  },
-    { OOO_STRING_SVTOOLS_HTML_WW_virtual,   HTML_WM_SOFT    },
-    { 0,                0               }
+    { OOO_STRING_SVTOOLS_HTML_WW_off,		HTML_WM_OFF	},
+    { OOO_STRING_SVTOOLS_HTML_WW_hard,	HTML_WM_HARD	},
+    { OOO_STRING_SVTOOLS_HTML_WW_soft,	HTML_WM_SOFT	},
+    { OOO_STRING_SVTOOLS_HTML_WW_physical,HTML_WM_HARD	},
+    { OOO_STRING_SVTOOLS_HTML_WW_virtual,	HTML_WM_SOFT	},
+    { 0,				0			   	}
 };
 
-HTMLEventType aEventTypeTable[] =
+HTMLEventType __FAR_DATA aEventTypeTable[] =
 {
     HTML_ET_ONSUBMITFORM,
     HTML_ET_ONRESETFORM,
@@ -136,7 +136,7 @@ HTMLEventType aEventTypeTable[] =
     HTML_ET_END
 };
 
-const sal_Char * aEventListenerTable[] =
+const sal_Char * __FAR_DATA aEventListenerTable[] =
 {
     "XSubmitListener",
     "XResetListener",
@@ -148,7 +148,7 @@ const sal_Char * aEventListenerTable[] =
     ""
 };
 
-const sal_Char * aEventMethodTable[] =
+const sal_Char * __FAR_DATA aEventMethodTable[] =
 {
     "approveSubmit",
     "approveReset",
@@ -160,7 +160,7 @@ const sal_Char * aEventMethodTable[] =
     ""
 };
 
-const sal_Char * aEventSDOptionTable[] =
+const sal_Char * __FAR_DATA aEventSDOptionTable[] =
 {
     OOO_STRING_SVTOOLS_HTML_O_SDonsubmit,
     OOO_STRING_SVTOOLS_HTML_O_SDonreset,
@@ -172,7 +172,7 @@ const sal_Char * aEventSDOptionTable[] =
     0
 };
 
-const sal_Char * aEventOptionTable[] =
+const sal_Char * __FAR_DATA aEventOptionTable[] =
 {
     OOO_STRING_SVTOOLS_HTML_O_onsubmit,
     OOO_STRING_SVTOOLS_HTML_O_onreset,
@@ -188,28 +188,28 @@ const sal_Char * aEventOptionTable[] =
 
 class SwHTMLForm_Impl
 {
-    SwDocShell                  *pDocSh;
+    SwDocShell 					*pDocSh;
 
-    SvKeyValueIterator          *pHeaderAttrs;
+    SvKeyValueIterator			*pHeaderAttrs;
 
     // gecachte Interfaces
-    uno::Reference< drawing::XDrawPage >            xDrawPage;
-    uno::Reference< container::XIndexContainer >    xForms;
-    uno::Reference< drawing::XShapes >              xShapes;
-    uno::Reference< XMultiServiceFactory >          xServiceFactory;
+    uno::Reference< drawing::XDrawPage >  			xDrawPage;
+    uno::Reference< container::XIndexContainer > 	xForms;
+    uno::Reference< drawing::XShapes >   			xShapes;
+    uno::Reference< XMultiServiceFactory > 			xServiceFactory;
 
-    uno::Reference< script::XEventAttacherManager >     xControlEventManager;
-    uno::Reference< script::XEventAttacherManager >     xFormEventManager;
+    uno::Reference< script::XEventAttacherManager > 	xControlEventManager;
+    uno::Reference< script::XEventAttacherManager > 	xFormEventManager;
 
     // Kontext-Informationen
-    uno::Reference< container::XIndexContainer >    xFormComps;
-    uno::Reference< beans::XPropertySet >           xFCompPropSet;
-    uno::Reference< drawing::XShape >               xShape;
+    uno::Reference< container::XIndexContainer > 	xFormComps;
+    uno::Reference< beans::XPropertySet > 			xFCompPropSet;
+    uno::Reference< drawing::XShape > 				xShape;
 
-    String                      sText;
-    SvStringsDtor               aStringList;
-    SvStringsDtor               aValueList;
-    SvUShorts                   aSelectedList;
+    String						sText;
+    SvStringsDtor				aStringList;
+    SvStringsDtor				aValueList;
+    SvUShorts					aSelectedList;
 
 public:
 
@@ -380,11 +380,11 @@ const uno::Reference< script::XEventAttacherManager >&
 class SwHTMLImageWatcher :
     public cppu::WeakImplHelper2< awt::XImageConsumer, XEventListener >
 {
-    uno::Reference< drawing::XShape >       xShape;     // das control
-    uno::Reference< XImageProducerSupplier >    xSrc;
-    uno::Reference< awt::XImageConsumer >   xThis;      // man selbst
-    sal_Bool                            bSetWidth;
-    sal_Bool                            bSetHeight;
+    uno::Reference< drawing::XShape >  		xShape;		// das control
+    uno::Reference< XImageProducerSupplier >	xSrc;
+    uno::Reference< awt::XImageConsumer > 	xThis;		// man selbst
+    sal_Bool 							bSetWidth;
+    sal_Bool							bSetHeight;
 
     void clear();
 
@@ -545,7 +545,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
             SwNode *pANd;
             SwTableNode *pTblNd;
             if( pAPos &&
-                0 != (pANd = & pAPos->nNode.GetNode()) &&
+                0 != (pANd = pDoc->GetNodes()[pAPos->nNode]) &&
                 0 != (pTblNd = pANd->FindTableNode()) )
             {
                 const sal_Bool bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
@@ -557,7 +557,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
                         pLayout->GetBrowseWidthByTable( *pDoc );
 
                     if ( nBrowseWidth )
-                    {
+                    {        
                         pLayout->Resize( nBrowseWidth, sal_True, sal_True,
                                          bLastGrf ? HTMLTABLE_RESIZE_NOW
                                                   : 500 );
@@ -660,10 +660,10 @@ static void lcl_html_setFixedFontProperty(
 
 class SwHTMLFormPendingStackData_Impl: public SwPendingStackData
 {
-    uno::Reference< drawing::XShape >   xShape;
-    Size            aTextSz;
-    sal_Bool        bMinWidth;
-    sal_Bool        bMinHeight;
+    uno::Reference< drawing::XShape >  	xShape;
+    Size			aTextSz;
+    sal_Bool		bMinWidth;
+    sal_Bool		bMinHeight;
 
 public:
 
@@ -682,7 +682,7 @@ public:
     sal_Bool IsMinHeight() const { return bMinHeight; }
 };
 
-void SwHTMLParser::SetPendingControlSize()
+void SwHTMLParser::SetPendingControlSize( int nToken )
 {
     OSL_ENSURE( pPendStack, "Wo ist der Pending Stack?" );
     SwHTMLFormPendingStackData_Impl *pData =
@@ -694,15 +694,18 @@ void SwHTMLParser::SetPendingControlSize()
     OSL_ENSURE( !pPendStack, "Wo kommt der Pending-Stack her?" );
 
     SetControlSize( pData->GetShape(), pData->GetTextSize(),
-                    pData->IsMinWidth(), pData->IsMinHeight() );
+                    pData->IsMinWidth(), pData->IsMinHeight(),
+                    nToken );
     delete pData;
 }
 
 void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rShape,
                                    const Size& rTextSz,
                                    sal_Bool bMinWidth,
-                                   sal_Bool bMinHeight )
+                                   sal_Bool bMinHeight,
+                                   int nToken )
 {
+    nToken = 0;
     if( !rTextSz.Width() && !rTextSz.Height() && !bMinWidth  && !bMinHeight )
         return;
 
@@ -726,7 +729,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
                 SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
                 bRemoveHidden = ( pHiddenItem == NULL || !pHiddenItem->GetValue() );
             }
-
+                
             pTempViewFrame = SfxViewFrame::LoadHiddenDocument( *pDocSh, 0 );
             CallStartAction();
             pDoc->GetEditShell( &pVSh );
@@ -1052,9 +1055,11 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             const Color &rColor = ((const SvxBrushItem *)pItem)->GetColor();
+            /// OD 02.09.2002 #99657#
             /// copy color, if color is not "no fill"/"auto fill"
             if( rColor.GetColor() != COL_TRANSPARENT )
             {
+                /// OD 02.09.2002 #99657#
                 /// copy complete color with transparency
                 aTmp <<= static_cast<sal_Int32>(rColor.GetColor());
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
@@ -1164,10 +1169,10 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         sal_Int16 nSurround = text::WrapTextMode_NONE;
         if( SVX_CSS1_POS_ABSOLUTE == rCSS1PropInfo.ePosition &&
             SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eLeftType &&
-            SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eTopType )
+            SVX_CSS1_LTYPE_TWIP	== rCSS1PropInfo.eTopType )
         {
             const SwStartNode *pFlySttNd =
-                pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
+                pDoc->GetNodes()[pPam->GetPoint()->nNode]->FindFlyStartNode();
 
             if( pFlySttNd )
             {
@@ -1347,7 +1352,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent = 0;
+        sal_uInt16 nEvent;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -1488,7 +1493,7 @@ void SwHTMLParser::InsertInput()
 {
     if( pPendStack )
     {
-        SetPendingControlSize();
+        SetPendingControlSize( HTML_INPUT );
         return;
     }
 
@@ -1521,7 +1526,7 @@ void SwHTMLParser::InsertInput()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent = 0;
+        sal_uInt16 nEvent;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -1586,7 +1591,7 @@ void SwHTMLParser::InsertInput()
             bSetEvent = sal_True;
             break;
 
-        case HTML_O_SDONBLUR:               // eigtl. nur EDIT
+        case HTML_O_SDONBLUR:				// eigtl. nur EDIT
             eScriptType2 = STARBASIC;
         case HTML_O_ONBLUR:
             nEvent = HTML_ET_ONLOSEFOCUS;
@@ -1600,14 +1605,14 @@ void SwHTMLParser::InsertInput()
             bSetEvent = sal_True;
             break;
 
-        case HTML_O_SDONCHANGE:             // eigtl. nur EDIT
+        case HTML_O_SDONCHANGE:				// eigtl. nur EDIT
             eScriptType2 = STARBASIC;
         case HTML_O_ONCHANGE:
             nEvent = HTML_ET_ONCHANGE;
             bSetEvent = sal_True;
             break;
 
-        case HTML_O_SDONSELECT:             // eigtl. nur EDIT
+        case HTML_O_SDONSELECT:				// eigtl. nur EDIT
             eScriptType2 = STARBASIC;
         case HTML_O_ONSELECT:
             nEvent = HTML_ET_ONSELECT;
@@ -1647,6 +1652,7 @@ void SwHTMLParser::InsertInput()
         // ALIGN fuer alle Controls auszuwerten ist keine so gute Idee,
         // solange Absatz-gebundene Controls die Hoehe von Tabellen-Zellen
         // nicht beeinflussen
+        // (#64110#, http://www.telekom.de/katalog-online/onlineshop.html)
         eVertOri = text::VertOrientation::TOP;
         eHoriOri = text::HoriOrientation::NONE;
     }
@@ -1734,7 +1740,7 @@ void SwHTMLParser::InsertInput()
 
         if( bDisabled )
         {
-            sal_Bool bFalse = sal_False;
+            BOOL bFalse = sal_False;
             aTmp.setValue(&bFalse, ::getBooleanCppuType()  );
             xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")), aTmp );
         }
@@ -1742,8 +1748,8 @@ void SwHTMLParser::InsertInput()
 
     aTmp <<= OUString(sText);
 
-    Size aSz( 0, 0 );       // defaults
-    Size aTextSz( 0, 0 );   // Text-Size
+    Size aSz( 0, 0 );		// defaults
+    Size aTextSz( 0, 0 );	// Text-Size
     sal_Bool bMinWidth = sal_False, bMinHeight = sal_False;
     sal_Bool bUseSize = sal_False;
     switch( eType )
@@ -1752,13 +1758,13 @@ void SwHTMLParser::InsertInput()
     case HTML_IT_RADIO:
         {
             if( !bValue )
-                aTmp <<= OUString(RTL_CONSTASCII_USTRINGPARAM( OOO_STRING_SVTOOLS_HTML_on ));
+                aTmp <<= OUString::createFromAscii( OOO_STRING_SVTOOLS_HTML_on );
             xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("RefValue")),
                                         aTmp );
             aTmp <<= OUString();
             xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Label")),
                                         aTmp );
-            // Beim RadioButton darf die DefaultChecked-Property
+            // #53559#: Beim RadioButton darf die DefaultChecked-Property
             // erst gesetzt werden, wenn das Control angelegt und ein
             // activateTabOrder gerufen wurde, weil es sonst noch zu der
             // vorhergehenden Gruppe gehoert.
@@ -1947,7 +1953,7 @@ void SwHTMLParser::InsertInput()
     if( aTextSz.Width() || aTextSz.Height() || bMinWidth || bMinHeight )
     {
         OSL_ENSURE( !(bSetGrfWidth || bSetGrfHeight), "Grafikgroesse anpassen???" );
-        SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight );
+        SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight, HTML_INPUT );
     }
 
     if( HTML_IT_RADIO == eType )
@@ -1979,7 +1985,7 @@ void SwHTMLParser::NewTextArea()
 {
     if( pPendStack )
     {
-        SetPendingControlSize();
+        SetPendingControlSize( HTML_TEXTAREA_ON );
         return;
     }
 
@@ -2012,7 +2018,7 @@ void SwHTMLParser::NewTextArea()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent = 0;
+        sal_uInt16 nEvent;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -2127,7 +2133,7 @@ void SwHTMLParser::NewTextArea()
     aTmp <<= OUString(sName);
     xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aTmp );
 
-    sal_Bool bTrue = sal_True;
+    BOOL bTrue = sal_True;
     aTmp.setValue( &bTrue, ::getBooleanCppuType() );
     xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("MultiLine")),
                                 aTmp );
@@ -2150,7 +2156,7 @@ void SwHTMLParser::NewTextArea()
 
     if( bDisabled )
     {
-        sal_Bool bFalse = sal_False;
+        BOOL bFalse = sal_False;
         aTmp.setValue( &bFalse, ::getBooleanCppuType() );
         xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")),
                                     aTmp );
@@ -2196,7 +2202,8 @@ void SwHTMLParser::NewTextArea()
                                       aMacroTbl, aUnoMacroTbl,
                                       aUnoMacroParamTbl );
     if( aTextSz.Width() || aTextSz.Height() )
-        SetControlSize( xShape, aTextSz, sal_False, sal_False );
+        SetControlSize( xShape, aTextSz, sal_False, sal_False,
+                        HTML_TEXTAREA_ON );
 
     // einen neuen Kontext anlegen
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_TEXTAREA_ON );
@@ -2273,7 +2280,7 @@ void SwHTMLParser::NewSelect()
 {
     if( pPendStack )
     {
-        SetPendingControlSize();
+        SetPendingControlSize( HTML_SELECT_ON );
         return;
     }
 
@@ -2302,7 +2309,7 @@ void SwHTMLParser::NewSelect()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent = 0;
+        sal_uInt16 nEvent;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -2415,7 +2422,7 @@ void SwHTMLParser::NewSelect()
 
     if( bDisabled )
     {
-        sal_Bool bFalse = sal_False;
+        BOOL bFalse = sal_False;
         aTmp.setValue( &bFalse, ::getBooleanCppuType() );
         xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")),
                                     aTmp );
@@ -2425,19 +2432,19 @@ void SwHTMLParser::NewSelect()
     sal_Bool bMinWidth = sal_True, bMinHeight = sal_True;
     if( !bMultiple && 1==nSelectEntryCnt )
     {
-        sal_Bool bTrue = sal_True;
+        BOOL bTrue = sal_True;
         aTmp.setValue( &bTrue, ::getBooleanCppuType() );
         xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Dropdown")),
                                     aTmp );
     }
     else
     {
-        if( nSelectEntryCnt <= 1 )      // 4 Zeilen als default
+        if( nSelectEntryCnt <= 1 )		// 4 Zeilen als default
             nSelectEntryCnt = 4;
 
         if( bMultiple )
         {
-            sal_Bool bTrue = sal_True;
+            BOOL bTrue = sal_True;
             aTmp.setValue( &bTrue, ::getBooleanCppuType() );
             xPropSet->setPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("MultiSelection")), aTmp );
@@ -2482,7 +2489,8 @@ void SwHTMLParser::NewSelect()
     if( bFixSelectWidth )
         pFormImpl->SetShape( xShape );
     if( aTextSz.Height() || bMinWidth || bMinHeight )
-        SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight );
+        SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight,
+                        HTML_SELECT_ON );
 
     // einen neuen Kontext anlegen
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_SELECT_ON );
@@ -2498,7 +2506,7 @@ void SwHTMLParser::EndSelect()
 {
     if( pPendStack )
     {
-        SetPendingControlSize();
+        SetPendingControlSize( HTML_SELECT_OFF );
         return;
     }
 
@@ -2575,7 +2583,8 @@ void SwHTMLParser::EndSelect()
     {
         OSL_ENSURE( pFormImpl->GetShape().is(), "Kein Shape gemerkt" );
         Size aTextSz( -1, 0 );
-        SetControlSize( pFormImpl->GetShape(), aTextSz, sal_False, sal_False );
+        SetControlSize( pFormImpl->GetShape(), aTextSz, sal_False, sal_False,
+                        HTML_SELECT_OFF );
     }
 
     pFormImpl->ReleaseFCompPropSet();

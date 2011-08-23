@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,6 +40,7 @@ namespace rptui
 //============================================================================
 
 class OReportModel;
+//class OReportSection;
 
 class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 {
@@ -49,7 +50,7 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
     std::vector<SdrObject*> m_aTemporaryObjectList;
 
     OReportPage(const OReportPage&);
-
+    
     // methode to remove temporary objects, created by 'special mode'
     // (BegDragObj)
     void removeTempObject(SdrObject *_pToRemoveObj);
@@ -64,21 +65,21 @@ public:
     OReportPage( OReportModel& rModel
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
                 ,bool bMasterPage = false );
-
+    
 
     virtual SdrPage* Clone() const;
     using SdrPage::Clone;
 
-    virtual void NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertReason* pReason);
-    virtual SdrObject* RemoveObject(sal_uLong nObjNum);
+    virtual void NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason* pReason);
+    virtual SdrObject* RemoveObject(ULONG nObjNum);
 
     /** returns the index inside the object list which belongs to the report component.
-        @param  _xObject    the report component
+        @param	_xObject	the report component
     */
-    sal_uLong getIndexOf(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
+    ULONG getIndexOf(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
 
     /** removes the SdrObject which belongs to the report component.
-        @param  _xObject    the report component
+        @param	_xObject	the report component
     */
     void removeSdrObject(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
 
@@ -88,7 +89,7 @@ public:
     void resetSpecialMode();
 
     /** insert a new SdrObject which belongs to the report component.
-        @param  _xObject    the report component
+        @param	_xObject	the report component
     */
     void insertObject(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
 

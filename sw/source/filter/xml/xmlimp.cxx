@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <unotools/saveopt.hxx>
 #include <tools/diagnose_ex.h>
-#include <boost/unordered_set.hpp>
+#include <hash_set>
 #include <stringhash.hxx>
 
 // for locking SolarMutex: svapp + mutex
@@ -114,16 +114,16 @@ enum SwXMLDocTokens
     XML_TOK_OFFICE_END=XML_TOK_UNKNOWN
 };
 
-static SvXMLTokenMapEntry aDocTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
 {
-    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,     XML_TOK_DOC_FONTDECLS  },
-    { XML_NAMESPACE_OFFICE, XML_STYLES,         XML_TOK_DOC_STYLES      },
-    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES    },
-    { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,   XML_TOK_DOC_MASTERSTYLES   },
-    { XML_NAMESPACE_OFFICE, XML_META,           XML_TOK_DOC_META        },
-    { XML_NAMESPACE_OFFICE, XML_BODY,           XML_TOK_DOC_BODY        },
-    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,        XML_TOK_DOC_SCRIPT      },
-    { XML_NAMESPACE_OFFICE, XML_SETTINGS,       XML_TOK_DOC_SETTINGS    },
+    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,     XML_TOK_DOC_FONTDECLS	},
+    { XML_NAMESPACE_OFFICE, XML_STYLES,	        XML_TOK_DOC_STYLES		},
+    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES	},
+    { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,	 XML_TOK_DOC_MASTERSTYLES	},
+    { XML_NAMESPACE_OFFICE, XML_META, 		    XML_TOK_DOC_META		},
+    { XML_NAMESPACE_OFFICE, XML_BODY, 		    XML_TOK_DOC_BODY		},
+    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,	    XML_TOK_DOC_SCRIPT		},
+    { XML_NAMESPACE_OFFICE, XML_SETTINGS,	    XML_TOK_DOC_SETTINGS	},
     { XML_NAMESPACE_XFORMS, XML_MODEL,          XML_TOK_DOC_XFORMS      },
     XML_TOKEN_MAP_END
 };
@@ -173,14 +173,15 @@ SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
 
 // ----------------------------------------------------------------------------
 
-// #i69629#
+// --> OD 2006-10-11 #i69629#
 // enhance class <SwXMLDocContext_Impl> in order to be able to create subclasses
 // NB: virtually inherit so we can multiply inherit properly
 //     in SwXMLOfficeDocContext_Impl
 class SwXMLDocContext_Impl : public virtual SvXMLImportContext
 {
-
-protected: // #i69629#
+// --> OD 2006-10-11 #i69629#
+protected:
+// <--
     const SwXMLImport& GetSwImport() const
         { return (const SwXMLImport&)GetImport(); }
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
@@ -239,7 +240,10 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
                                                       sal_True );
         break;
-
+//	case XML_TOK_DOC_USESTYLES:
+//		pContext = GetSwImport().CreateUseStylesContext( rLocalName,
+//														 xAttrList );
+//		break;
     case XML_TOK_DOC_MASTERSTYLES:
         pContext = GetSwImport().CreateMasterStylesContext( rLocalName,
                                                             xAttrList );
@@ -270,7 +274,8 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
     return pContext;
 }
 
-// #i69629# - new subclass <SwXMLOfficeDocContext_Impl> of class <SwXMLDocContext_Impl>
+// --> OD 2006-10-11 #i69629#
+// new subclass <SwXMLOfficeDocContext_Impl> of class <SwXMLDocContext_Impl>
 class SwXMLOfficeDocContext_Impl :
          public SwXMLDocContext_Impl, public SvXMLMetaDocumentContext
 {
@@ -339,7 +344,8 @@ SvXMLImportContext* SwXMLOfficeDocContext_Impl::CreateChildContext(
 }
 // <--
 
-// #i69629# - new subclass <SwXMLDocStylesContext_Impl> of class <SwXMLDocContext_Impl>
+// --> OD 2006-10-11 #i69629#
+// new subclass <SwXMLDocStylesContext_Impl> of class <SwXMLDocContext_Impl>
 class SwXMLDocStylesContext_Impl : public SwXMLDocContext_Impl
 {
 public:
@@ -398,9 +404,13 @@ SvXMLImportContext *SwXMLImport::CreateContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    // #i69629# - own subclasses for <office:document> and <office:document-styles>
+    // --> OD 2006-10-11 #i69629#
+    // own subclasses for <office:document> and <office:document-styles>
     if( XML_NAMESPACE_OFFICE==nPrefix &&
+//        ( IsXMLToken( rLocalName, XML_DOCUMENT ) ||
+//        ( IsXMLToken( rLocalName, XML_DOCUMENT_META ) ||
         ( IsXMLToken( rLocalName, XML_DOCUMENT_SETTINGS ) ||
+//          IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) ||
           IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ))
         pContext = new SwXMLDocContext_Impl( *this, nPrefix, rLocalName,
                                              xAttrList );
@@ -435,10 +445,11 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     return pContext;
 }
 
+// #110680#
 SwXMLImport::SwXMLImport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nImportFlags)
-:   SvXMLImport( xServiceFactory, nImportFlags ),
+:	SvXMLImport( xServiceFactory, nImportFlags ),
     pSttNdIdx( 0 ),
     pTableItemMapper( 0 ),
     pDocElemTokenMap( 0 ),
@@ -460,7 +471,7 @@ SwXMLImport::SwXMLImport(
 }
 
 #ifdef XML_CORE_API
-
+// #110680#
 SwXMLImport::SwXMLImport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SwDoc& rDoc,
@@ -471,7 +482,7 @@ SwXMLImport::SwXMLImport(
     const uno::Reference<   frame::XModel > & rModel,
     const uno::Reference<   document::XGraphicObjectResolver > & rEGO,
     SvStorage *pPkg )
-:   SvXMLImport( xServiceFactory, rModel, rEGO ),
+:	SvXMLImport( xServiceFactory, rModel, rEGO ),
     bLoadDoc( bLDoc ),
     bInsert( bInsertMode ),
     nStyleFamilyMask( nStyleFamMask ),
@@ -557,7 +568,7 @@ OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rT
     if( !xCrsrTunnel.is() )
         return 0;
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper *>(
-            sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething(  OTextCursorHelper::getUnoTunnelId() )));
+            sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething(	OTextCursorHelper::getUnoTunnelId() )));
     OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
     return pTxtCrsr;
 }
@@ -748,12 +759,14 @@ void SwXMLImport::startDocument( void )
     }
 
     // We need a draw model to be able to set the z order
-    pDoc->GetOrCreateDrawModel(); // #i52858# - method name changed
+    // --> OD 2005-08-08 #i52858# - method name changed
+    pDoc->GetOrCreateDrawModel();
+    // <--
 
     // SJ: #i49801# locking the modell to disable repaints
     SdrModel* pDrawModel = pDoc->GetDrawModel();
     if ( pDrawModel )
-        pDrawModel->setLock(true);
+        pDrawModel->setLock( sal_True );
 
     if( !GetGraphicResolver().is() )
     {
@@ -869,7 +882,7 @@ void SwXMLImport::endDocument( void )
         if( !pPos->nContent.GetIndex() )
         {
             SwTxtNode* pCurrNd;
-            sal_uLong nNodeIdx = pPos->nNode.GetIndex();
+            ULONG nNodeIdx = pPos->nNode.GetIndex();
             pDoc = pPaM->GetDoc();
 
             DBG_ASSERT( pPos->nNode.GetNode().IsCntntNode(),
@@ -908,6 +921,10 @@ void SwXMLImport::endDocument( void )
                     if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) &&
                          *pSttNdIdx != pPos->nNode )
                     {
+//						SwTxtNode* pPrevNd = pPos->nNode.GetNode().GetTxtNode();
+//						pPos->nContent.Assign( pPrevNd, 0 );
+//						pPaM->SetMark(); pPaM->DeleteMark();
+//						pPrevNd->JoinNext();
                         pNextNd->JoinPrev();
                     }
                 }
@@ -922,7 +939,8 @@ void SwXMLImport::endDocument( void )
         }
     }
 
-    /* Was called too early. Moved from SwXMLBodyContext_Impl::EndElement */
+    /* #108146# Was called too early. Moved from
+        SwXMLBodyContext_Impl::EndElement */
 
     GetTextImport()->RedlineAdjustStartNodeCursor( sal_False );
 
@@ -944,9 +962,9 @@ void SwXMLImport::endDocument( void )
         // Notify math objects. If we are in the package filter this will
         // be done by the filter object itself
         if( IsInsertMode() )
-            pDoc->PrtOLENotify( sal_False );
+            pDoc->PrtOLENotify( FALSE );
         else if ( pDoc->IsOLEPrtNotifyPending() )
-            pDoc->PrtOLENotify( sal_True );
+            pDoc->PrtOLENotify( TRUE );
     }
 
     // SJ: #i49801# -> now permitting repaints
@@ -954,7 +972,7 @@ void SwXMLImport::endDocument( void )
     {
         SdrModel* pDrawModel = pDoc->GetDrawModel();
         if ( pDrawModel )
-            pDrawModel->setLock(false);
+            pDrawModel->setLock( sal_False );
     }
 
     // #i90243#
@@ -1128,7 +1146,9 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
             bShowRedlineChanges = *(sal_Bool *)(pValue->Value.getValue());
             bChangeShowRedline = sal_True;
         }
-// Headers and footers are not displayed in BrowseView anymore
+// #105372#: Headers and footers are not displayed in BrowseView anymore
+//        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowHeaderWhileBrowsing" ) ) )
+//        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowFooterWhileBrowsing" ) ) )
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "InBrowseMode" ) ) )
         {
             bBrowseMode = *(sal_Bool *)(pValue->Value.getValue());
@@ -1163,7 +1183,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xInfo.is() )
         return;
 
-    boost::unordered_set< String, StringHashRef, StringEqRef > aSet;
+    // #111955#
+    hash_set< String, StringHashRef, StringEqRef > aSet;
     aSet.insert(String("ForbiddenCharacters", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("IsKernAsianPunctuation", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("CharacterCompressionType", RTL_TEXTENCODING_ASCII_US));
@@ -1188,20 +1209,22 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     aSet.insert(String("PrintSingleJobs", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("UpdateFromTemplate", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("PrinterIndependentLayout", RTL_TEXTENCODING_ASCII_US));
+    // --> FME 2005-12-13 #b6354161#
     aSet.insert(String("PrintEmptyPages", RTL_TEXTENCODING_ASCII_US));
+    // <--
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
 
     SvtSaveOptions aSaveOpt;
-    sal_Bool bIsUserSetting = aSaveOpt.IsLoadUserSettings(),
+    BOOL bIsUserSetting = aSaveOpt.IsLoadUserSettings(),
          bSet = bIsUserSetting;
 
     // for some properties we don't want to use the application
     // default if they're missing. So we watch for them in the loop
     // below, and set them if not found
     bool bPrinterIndependentLayout = false;
-    bool bUseOldNumbering = false;
+    bool bUseOldNumbering = false; // #111955#
     bool bOutlineLevelYieldsOutlineRule = false;
     bool bAddExternalLeading = false;
     bool bAddParaSpacingToTableCells = false;
@@ -1287,15 +1310,17 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             }
             catch( Exception& )
             {
-                OSL_FAIL( "SwXMLImport::SetConfigurationSettings: Exception!" );
+                DBG_ERROR( "SwXMLImport::SetConfigurationSettings: Exception!" );
             }
         }
         pValues++;
     }
 
     // finally, treat the non-default cases
+    // --> OD 2006-04-18 #b6402800#
     // introduce boolean, that indicates a document, written by version prior SO8.
     const bool bDocumentPriorSO8 = !bConsiderWrapOnObjPos;
+    // <--
 
     if( ! bPrinterIndependentLayout )
     {
@@ -1325,7 +1350,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerObjectPositioning")), makeAny( true ) );
     }
 
-    if( !bUseOldNumbering )
+    if( !bUseOldNumbering ) // #111955#
     {
         Any aAny;
         sal_Bool bOldNum = true;
@@ -1364,7 +1389,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             OUString( RTL_CONSTASCII_USTRINGPARAM("ConsiderTextWrapOnObjPos")), makeAny( false ) );
     }
 
-    // #i47448#
+    // FME 2005-05-27 #i47448#
     // For SO7pp4, part of the 'new numbering' stuff has been backported from
     // SO8. Unfortunately, only part of it and by using the same compatibility option
     // like in SO8. Therefore documents generated with SO7pp4, containing
@@ -1453,7 +1478,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     // it is required to clear it.
                     pDoc->SetOLEPrtNotifyPending( !pPrinter->IsKnown() );
 
-                    // old printer metrics compatibility
+                    // FME 2007-05-14 #147385# old printer metrics compatibility
                     if (  pDoc->get(IDocumentSettingAccess::USE_OLD_PRINTER_METRICS ) &&
                          !pDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
                     {
@@ -1486,7 +1511,7 @@ void SwXMLImport::SetDocumentSpecificSettings(
         if ( xLateInitSettings->hasByName( _rSettingsGroupName ) )
         {
             xLateInitSettings->replaceByName( _rSettingsGroupName, makeAny( _rSettings ) );
-            OSL_FAIL( "SwXMLImport::SetDocumentSpecificSettings: already have settings for this model!" );
+            OSL_ENSURE( false, "SwXMLImport::SetDocumentSpecificSettings: already have settings for this model!" );
         }
         else
             xLateInitSettings->insertByName( _rSettingsGroupName, makeAny( _rSettings ) );
@@ -1554,6 +1579,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
+    // #110680#
+    // return (cppu::OWeakObject*)new SwXMLImport(IMPORT_ALL);
     return (cppu::OWeakObject*)new SwXMLImport( rSMgr, IMPORT_ALL );
 }
 
@@ -1575,6 +1602,10 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
+    // #110680#
+    //return (cppu::OWeakObject*)new SwXMLImport(
+    //	IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
+    //	IMPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLImport(
         rSMgr,
         IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
@@ -1599,9 +1630,13 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
+    // #110680#
+    //return (cppu::OWeakObject*)new SwXMLImport(
+    //	IMPORT_AUTOSTYLES |	IMPORT_CONTENT | IMPORT_SCRIPTS |
+    //	IMPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLImport(
         rSMgr,
-        IMPORT_AUTOSTYLES | IMPORT_CONTENT | IMPORT_SCRIPTS |
+        IMPORT_AUTOSTYLES |	IMPORT_CONTENT | IMPORT_SCRIPTS |
         IMPORT_FONTDECLS );
 }
 
@@ -1623,6 +1658,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
+    // #110680#
+    // return (cppu::OWeakObject*)new SwXMLImport( IMPORT_META );
     return (cppu::OWeakObject*)new SwXMLImport( rSMgr, IMPORT_META );
 }
 
@@ -1644,6 +1681,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
+    // #110680#
+    // return (cppu::OWeakObject*)new SwXMLImport( IMPORT_SETTINGS );
     return (cppu::OWeakObject*)new SwXMLImport( rSMgr, IMPORT_SETTINGS );
 }
 

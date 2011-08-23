@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,18 +35,19 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <testshl/simpleheader.hxx>
 
 #if ( defined UNX ) || ( defined OS2 )  //Unix
-#   include <unistd.h>
+#	include <unistd.h>
 #endif
 #if ( defined WNT )                     // Windows
-#   include <io.h>
+#include <tools/prewin.h>
+// #	include <windows.h>
+#	include <io.h>
+#include <tools/postwin.h>
 #endif
 
-#   define FILE_PREFIX          "file:///"
+#	define FILE_PREFIX          "file:///"
 
 //Korea charactors
 ::rtl::OUString aKname(

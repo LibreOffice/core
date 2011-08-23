@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ public:
 };
 
 //-------------------------------------------------------------------------
-typedef ::std::list< OTableIndex >  TableIndexList;
+typedef ::std::list< OTableIndex >	TableIndexList;
 DECLARE_STL_ITERATORS(TableIndexList);
 
 //=========================================================================
@@ -87,7 +87,7 @@ public:
 };
 
 //-------------------------------------------------------------------------
-typedef ::std::list< OTableInfo >   TableInfoList;
+typedef ::std::list< OTableInfo >	TableInfoList;
 DECLARE_STL_ITERATORS(TableInfoList);
 
 //////////////////////////////////////////////////////////////////////////
@@ -95,20 +95,20 @@ DECLARE_STL_ITERATORS(TableInfoList);
 class ODbaseIndexDialog : public ModalDialog
 {
 protected:
-    OKButton        aPB_OK;
-    CancelButton    aPB_CANCEL;
-    HelpButton      aPB_HELP;
+    OKButton		aPB_OK;
+    CancelButton	aPB_CANCEL;
+    HelpButton		aPB_HELP;
 
-    FixedText       m_FT_Tables;
-    ComboBox        aCB_Tables;
+    FixedText		m_FT_Tables;
+    ComboBox		aCB_Tables;
 
     FixedLine       m_FL_Indexes;
 
-    FixedText       m_FT_TableIndexes;
-    ListBox         aLB_TableIndexes;
+    FixedText		m_FT_TableIndexes;
+    ListBox			aLB_TableIndexes;
 
-    FixedText       m_FT_AllIndexes;
-    ListBox         aLB_FreeIndexes;
+    FixedText		m_FT_AllIndexes;
+    ListBox			aLB_FreeIndexes;
 
     ImageButton      aIB_Add;
     ImageButton      aIB_Remove;
@@ -123,22 +123,22 @@ protected:
     DECL_LINK( OKClickHdl, PushButton* );
     DECL_LINK( OnListEntrySelected, ListBox* );
 
-    String              m_aDSN;
-    TableInfoList       m_aTableInfoList;
-    TableIndexList      m_aFreeIndexList;
-    sal_Bool                m_bCaseSensitiv;
+    String				m_aDSN;
+    TableInfoList		m_aTableInfoList;
+    TableIndexList		m_aFreeIndexList;
+    BOOL				m_bCaseSensitiv;
 
-    void        Init();
-    void        SetCtrls();
-    sal_Bool    GetTable(const String& rName, TableInfoListIterator& _rPosition);
+    void		Init();
+    void		SetCtrls();
+    sal_Bool	GetTable(const String& rName, TableInfoListIterator& _rPosition);
 
-    OTableIndex implRemoveIndex(const String& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist);
-    void        implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, ListBox& _rDisplay);
+    OTableIndex	implRemoveIndex(const String& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist);
+    void		implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, ListBox& _rDisplay);
 
-    OTableIndex RemoveFreeIndex( const String& _rName, sal_Bool _bMustExist ) { return implRemoveIndex(_rName, m_aFreeIndexList, aLB_FreeIndexes, _bMustExist); }
-    void        InsertFreeIndex( const OTableIndex& _rIndex ) { implInsertIndex(_rIndex, m_aFreeIndexList, aLB_FreeIndexes); }
-    OTableIndex RemoveTableIndex( const String& _rTableName, const String& _rIndexName, sal_Bool _bMustExist );
-    void        InsertTableIndex( const String& _rTableName, const OTableIndex& _rIndex );
+    OTableIndex	RemoveFreeIndex( const String& _rName, sal_Bool _bMustExist ) { return implRemoveIndex(_rName, m_aFreeIndexList, aLB_FreeIndexes, _bMustExist); }
+    void		InsertFreeIndex( const OTableIndex& _rIndex ) { implInsertIndex(_rIndex, m_aFreeIndexList, aLB_FreeIndexes); }
+    OTableIndex	RemoveTableIndex( const String& _rTableName, const String& _rIndexName, sal_Bool _bMustExist );
+    void		InsertTableIndex( const String& _rTableName, const OTableIndex& _rIndex );
 
     void checkButtons();
 
@@ -148,7 +148,7 @@ public:
 };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_DBFINDEX_HXX_

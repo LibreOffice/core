@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ sal_Bool writeInfo( void * pRegistryKey,
                     const rtl::OUString & rImplementationName,
                     uno::Sequence< rtl::OUString > const & rServiceNames )
 {
-    rtl::OUString aKeyName( RTL_CONSTASCII_USTRINGPARAM("/") );
+    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
     aKeyName += rImplementationName;
-    aKeyName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
 
     uno::Reference< registry::XRegistryKey > xKey;
     try

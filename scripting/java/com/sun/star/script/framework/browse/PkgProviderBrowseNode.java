@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ import com.sun.star.script.framework.container.*;
 public class PkgProviderBrowseNode extends ProviderBrowseNode
     implements XBrowseNode, XInvocation
 {
-
+    
     public PkgProviderBrowseNode( ScriptProvider provider, ParcelContainer container, XComponentContext xCtx ) {
         super( provider, container, xCtx );
         LogUtils.DEBUG("*** PkgProviderBrowseNode ctor container name = " + container.getName());
@@ -50,7 +50,7 @@ public class PkgProviderBrowseNode extends ProviderBrowseNode
         deletable = false;
         editable  = false;
         creatable = false;
-
+        
     }
 
     public String getName() {

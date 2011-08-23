@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ private:
     FixedLine           aZoomFl;
     RadioButton         aOptimalBtn;
     RadioButton         aWholePageBtn;
-    RadioButton         aPageWidthBtn;
+    RadioButton 		aPageWidthBtn;
     RadioButton         a100Btn;
     RadioButton         aUserBtn;
-    MetricField         aUserEdit;
+    MetricField 		aUserEdit;
 
     FixedLine           aViewLayoutFl;
     RadioButton         aAutomaticBtn;
@@ -58,12 +58,12 @@ private:
 
     FixedLine           aBottomFl;
     OKButton            aOKBtn;
-    CancelButton        aCancelBtn;
-    HelpButton          aHelpBtn;
+    CancelButton		aCancelBtn;
+    HelpButton			aHelpBtn;
 
-    const SfxItemSet&   rSet;
-    SfxItemSet*         pOutSet;
-    sal_Bool                bModified;
+    const SfxItemSet&	rSet;
+    SfxItemSet*			pOutSet;
+    BOOL				bModified;
 
 #ifdef _SVX_ZOOM_CXX
     DECL_LINK( UserHdl, RadioButton* );
@@ -78,13 +78,16 @@ public:
     SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet );
     ~SvxZoomDialog();
 
-    const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
+    static USHORT*		GetRanges();
+    const SfxItemSet*	GetOutputItemSet() const { return pOutSet; }
 
-    sal_uInt16              GetFactor() const;
-    void                SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId = 0 );
+    USHORT				GetFactor() const;
+    void				SetFactor( USHORT nNewFactor, USHORT nBtnId = 0 );
 
-    void                HideButton( sal_uInt16 nBtnId );
-    void                SetLimits( sal_uInt16 nMin, sal_uInt16 nMax );
+    void				SetButtonText( USHORT nBtnId, const String& aNewTxt );
+    void				HideButton( USHORT nBtnId );
+    void				SetLimits( USHORT nMin, USHORT nMax );
+    void				SetSpinSize( USHORT nNewSpin );
 };
 
 #include <layout/layout-post.hxx>

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,7 +153,7 @@ namespace frm
         bool    GetHideInactiveSelection() const;
 
         /// draws the control onto a given output device
-        void    Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, sal_uLong _nFlags );
+        void    Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, ULONG _nFlags );
 
         /// handles command events arrived at the anti-impl control
         long    HandleCommand( const CommandEvent& _rEvent );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,13 @@ class SvNumberFormatter;
 
 class ScDPSaveGroupDimension;
 
+// --------------------------------------------------------------------
 //
 //  Classes to save Data Pilot settings that create new dimensions (fields).
 //  These have to be applied before the other ScDPSaveData settings.
 //
+
+// ============================================================================
 
 class SC_DLLPUBLIC ScDPSaveGroupItem
 {
@@ -76,6 +79,8 @@ public:
 };
 
 typedef ::std::vector<ScDPSaveGroupItem> ScDPSaveGroupItemVec;
+
+// ============================================================================
 
 class SC_DLLPUBLIC ScDPSaveGroupDimension
 {
@@ -116,6 +121,8 @@ public:
     void    Rename( const String& rNewName );
 };
 
+// ============================================================================
+
 class SC_DLLPUBLIC ScDPSaveNumGroupDimension
 {
     String              aDimensionName;
@@ -139,6 +146,8 @@ public:
     void        SetGroupInfo( const ScDPNumGroupInfo& rNew );
     void        SetDateInfo( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
 };
+
+// ============================================================================
 
 class SC_DLLPUBLIC ScDPDimensionSaveData
 {
@@ -187,6 +196,8 @@ private:
     ScDPSaveGroupDimVec maGroupDims;
     ScDPSaveNumGroupDimMap maNumGroupDims;
 };
+
+// ============================================================================
 
 #endif
 

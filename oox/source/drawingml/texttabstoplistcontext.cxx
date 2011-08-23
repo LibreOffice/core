@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,8 +31,10 @@
 
 #include <rtl/ustring.hxx>
 
+#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "texttabstoplistcontext.hxx"
+#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -65,7 +67,7 @@ namespace oox { namespace drawingml {
             Reference< XFastContextHandler > xRet;
             switch( aElement )
             {
-            case A_TOKEN( tab ):
+            case NMSP_DRAWINGML|XML_tab:
             {
                 OUString sValue;
                 TabStop aTabStop;

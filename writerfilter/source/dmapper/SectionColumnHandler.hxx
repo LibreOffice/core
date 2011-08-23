@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define INCLUDED_SECTIONCOLUMNHANDLER_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/LoggedResources.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
 
 
@@ -45,7 +45,7 @@ struct _Column
 };
 
 
-class WRITERFILTER_DLLPRIVATE SectionColumnHandler : public LoggedProperties
+class WRITERFILTER_DLLPRIVATE SectionColumnHandler : public Properties
 {
     bool        bEqualWidth;
     sal_Int32   nSpace;
@@ -53,21 +53,21 @@ class WRITERFILTER_DLLPRIVATE SectionColumnHandler : public LoggedProperties
     bool        bSep;
     std::vector<_Column> aCols;
 
-    _Column   aTempColumn;
-
-    // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
+    _Column   aTempColumn;    
 
 public:
     SectionColumnHandler();
     virtual ~SectionColumnHandler();
 
+    // Properties
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
+
     bool        IsEqualWidth() const { return bEqualWidth; }
     sal_Int32   GetSpace() const { return nSpace; }
     sal_Int32   GetNum() const { return nNum; }
     bool        IsSeparator() const { return bSep; }
-
+    
     const std::vector<_Column>& GetColumns() const { return aCols;}
 
 };

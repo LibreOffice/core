@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,83 +24,83 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_Layer_idl__
-#define __com_sun_star_drawing_Layer_idl__
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_Layer_idl__ 
+#define __com_sun_star_drawing_Layer_idl__ 
+ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: service com::sun::star::drawing::Layer
-/** A layer is an entity inside a document which contains shapes.
-
-
+/** A layer is an entity inside a document which contains shapes. 
+    
+    
     <p>There could be zero or more <type>Shape</type>s attached to
     such a layer.
-
+    
     </p>
     <p>The properties of a <type>Layer</type> instance affect all <type>Shape</type>s
     attached to the Layer.
-
+    
     </p>
 
-    @see    DrawingDocument
+    @see	DrawingDocument 
     @see LayerManager
  */
 published service Layer
-{
-
-
+{ 
+ 
+     
     // DocMerge from xml: service com::sun::star::drawing::Layer: interface com::sun::star::beans::XPropertySet
-    /** The properties in this set affect all <type>Shape</type>s attached to
+    /** The properties in this set affect all <type>Shape</type>s attached to 
                 this Layer.
      */
-    interface com::sun::star::beans::XPropertySet;
-
-    //-------------------------------------------------------------------------
-
+    interface com::sun::star::beans::XPropertySet; 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: property com::sun::star::drawing::Layer::Name
-    /** The name of a <type>Layer</type> is used to identify the
+    /** The name of a <type>Layer</type> is used to identify the 
         <type>Layer</type> in the user interface.
      */
-    [property] string Name;
-
-    //-------------------------------------------------------------------------
-
+    [property] string Name; 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: property com::sun::star::drawing::Layer::IsVisible
     /** If a <type>Layer</type> is not visible, the objects in this
         <type>Layer</type> are not shown in the user interface.
      */
-    [property] boolean IsVisible;
-
-    //-------------------------------------------------------------------------
-
+    [property] boolean IsVisible; 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: property com::sun::star::drawing::Layer::IsPrintable
     /** If a <type>Layer</type> is not printable, the objects in
         this <type>Layer</type> are not printed.
      */
-    [property] boolean IsPrintable;
-
-    //-------------------------------------------------------------------------
-
+    [property] boolean IsPrintable; 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: property com::sun::star::drawing::Layer::IsLocked
     /** If a <type>Layer</type> is locked, the objects in this
         <type>Layer</type> cannot be edited in the user interface.
      */
-    [property] boolean IsLocked;
+    [property] boolean IsLocked; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
 
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+#endif 
 

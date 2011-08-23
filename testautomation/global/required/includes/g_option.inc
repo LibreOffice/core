@@ -756,7 +756,7 @@ testcase tToolsOptionsImprovementProgram
             Active.ok()
         else
             if ( NOT bImportDialogHasBeenDisplayed ) then
-                warnlog( "#i116461# Show Data button enabled but no logged data found" )
+                qaerrorlog( "#i97340# Show Data button enabled but no logged data found" )
             endif
         endif
 
@@ -767,13 +767,8 @@ testcase tToolsOptionsImprovementProgram
         endif
 
         Kontext "OptionenDlg"
-        if OptionenDlg.Exists then
-            OptionenDlg.cancel()
-        endif
-
-        if GetDocumentCount = 1 then
-            Call hCloseDocument
-        endif
+        OptionenDlg.cancel()
+        
     else
         ' hDeleteFile() returns FALSE if the file is still present for some weird reason
         ' We should warn about this because the test breaks at a later point then.

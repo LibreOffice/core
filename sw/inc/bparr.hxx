@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,80 +40,81 @@ class BigPtrEntry
 {
     friend class BigPtrArray;
     BlockInfo* pBlock;
-    sal_uInt16 nOffset;
+    USHORT nOffset;
 public:
     virtual ~BigPtrEntry() {}
 protected:
-    BigPtrEntry() : pBlock(0), nOffset(0) {}
+    BigPtrEntry() : pBlock(0), nOffset(0) {}	
 
-    inline sal_uLong GetPos() const;
+    inline ULONG GetPos() const;
     inline BigPtrArray& GetArray() const;
 };
 typedef BigPtrEntry* ElementPtr;
 
 
-typedef sal_Bool (*FnForEach)( const ElementPtr&, void* pArgs );
+typedef BOOL (*FnForEach)( const ElementPtr&, void* pArgs );
 
-// 1000 entries per Block = a bit less then 4K
+// 1000 Eintr„ge pro Block = etwas weniger als 4K
 #define MAXENTRY 1000
 
 
-// number of entries that may remain free during compression
-// this value is for the worst case; because we defined MAXBLOCK with ca 25%
-// overhead, 80% = 800 entries are enough
-// if complete compression is desired, 100 has to be specified
-#define COMPRESSLVL 80
+// Anzahl Eintraege, die bei der Kompression frei bleiben duerfen
+// dieser Wert ist fuer den Worst Case, da wir MAXBLOCK mit ca 25%
+// Overhead definiert haben, reichen 80% = 800 Eintraege vollkommen aus
+// Will mann voellige Kompression haben, muss eben 100 angegeben werden.
 
-struct BlockInfo {                  // block info:
-    BigPtrArray* pBigArr;           // in this array the block is located
-    ElementPtr* pData;              // data block
-    sal_uLong nStart, nEnd;         // start- and end index
-    sal_uInt16 nElem;               // number of elements
+#define	COMPRESSLVL 80
+
+struct BlockInfo {					// Block-Info:
+    BigPtrArray* pBigArr;			// in diesem Array steht der Block
+    ElementPtr*	pData;				// Datenblock
+    ULONG nStart, nEnd;				// Start- und EndIndex
+    USHORT nElem;					// Anzahl Elemente
 };
 
 class SW_DLLPUBLIC BigPtrArray
 {
-    BlockInfo** ppInf;              // block info
-    sal_uLong       nSize;              // number of elements
-    sal_uInt16      nMaxBlock;          // current max. number of blocks
-    sal_uInt16      nBlock;             // number of blocks
-    sal_uInt16      nCur;               // last block
+    BlockInfo** ppInf;				// Block-Infos
+    ULONG		nSize;				// Anzahl Elemente
+    USHORT		nMaxBlock;			// akt. max Anzahl Bloecke
+    USHORT		nBlock;				// Anzahl Bloecke
+    USHORT		nCur;				// letzter Block
 
-    sal_uInt16      Index2Block( sal_uLong ) const; // block search
-    BlockInfo*  InsBlock( sal_uInt16 );         // insert block
-    void        BlockDel( sal_uInt16 );         // some blocks were deleted
-    void        UpdIndex( sal_uInt16 );         // recalculate indices
+    USHORT		Index2Block( ULONG ) const;	// Blocksuche
+    BlockInfo*	InsBlock( USHORT );			// Block einfuegen
+    void		BlockDel( USHORT );			// es wurden Bloecke geloescht
+    void		UpdIndex( USHORT );			// Indexe neu berechnen
 
 protected:
-    // fill all blocks
-    // the short parameter specifies in percent, how full the blocks should be
-    // made
-    sal_uInt16 Compress( short = COMPRESSLVL );
+    // fuelle alle Bloecke auf.
+    // Der short gibt in Prozent an, wie voll die Bloecke werden sollen.
+    // Der ReturnWert besagt, das irgendetwas "getan" wurde
+    USHORT Compress( short = COMPRESSLVL );
 
 public:
     BigPtrArray();
     ~BigPtrArray();
 
-    sal_uLong Count() const { return nSize; }
+    ULONG Count() const { return nSize; }
 
-    void Insert( const ElementPtr& r, sal_uLong pos );
-    void Remove( sal_uLong pos, sal_uLong n = 1 );
-    void Move( sal_uLong from, sal_uLong to );
-    void Replace( sal_uLong pos, const ElementPtr& r);
+    void Insert( const ElementPtr& r, ULONG pos );
+    void Remove( ULONG pos, ULONG n = 1 );
+    void Move( ULONG from, ULONG to );
+    void Replace( ULONG pos, const ElementPtr& r);
 
-    ElementPtr operator[]( sal_uLong ) const;
+    ElementPtr operator[]( ULONG ) const;
     void ForEach( FnForEach fn, void* pArgs = NULL )
     {
         ForEach( 0, nSize, fn, pArgs );
     }
-    void ForEach( sal_uLong nStart, sal_uLong nEnd, FnForEach fn, void* pArgs = NULL );
+    void ForEach( ULONG nStart, ULONG nEnd, FnForEach fn, void* pArgs = NULL );
 };
 
 
 
-inline sal_uLong BigPtrEntry::GetPos() const
+inline ULONG BigPtrEntry::GetPos() const
 {
-    DBG_ASSERT( this == pBlock->pData[ nOffset ], "element not in the block" );
+    DBG_ASSERT( this == pBlock->pData[ nOffset ], "Element nicht im Block" );
     return pBlock->nStart + nOffset;
 }
 

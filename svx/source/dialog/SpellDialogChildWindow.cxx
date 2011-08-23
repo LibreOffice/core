@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,74 +30,92 @@
 #include "precompiled_svx.hxx"
 #include <svx/SpellDialogChildWindow.hxx>
 
-#include <svx/svxdlg.hxx>
+#include <svx/svxdlg.hxx> 
 
 namespace svx {
 
-
+/*-------------------------------------------------------------------------
+    
+  -----------------------------------------------------------------------*/
 SpellDialogChildWindow::SpellDialogChildWindow (
-    Window* _pParent,
-    sal_uInt16 nId,
+    Window* _pParent, 
+    USHORT nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* /*pInfo*/)
     : SfxChildWindow (_pParent, nId)
 
 {
-
+    
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "SvxAbstractDialogFactory::Create() failed");
-    m_pAbstractSpellDialog = pFact->CreateSvxSpellDialog(_pParent,
+    m_pAbstractSpellDialog = pFact->CreateSvxSpellDialog(_pParent,  
                                             pBindings,
                                             this );
     pWindow = m_pAbstractSpellDialog->GetWindow();
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    SetHideNotDelete (sal_True);
+    SetHideNotDelete (TRUE);
 }
-
+/*-------------------------------------------------------------------------
+    
+  -----------------------------------------------------------------------*/
 SpellDialogChildWindow::~SpellDialogChildWindow (void)
 {
 }
-
+/*-------------------------------------------------------------------------
+    
+  -----------------------------------------------------------------------*/
 SfxBindings& SpellDialogChildWindow::GetBindings (void) const
 {
     OSL_ASSERT (m_pAbstractSpellDialog != NULL);
     return m_pAbstractSpellDialog->GetBindings();
 }
-
+/*-------------------------------------------------------------------------
+    
+  -----------------------------------------------------------------------*/
 void SpellDialogChildWindow::InvalidateSpellDialog()
 {
     OSL_ASSERT (m_pAbstractSpellDialog != NULL);
     if(m_pAbstractSpellDialog)
         m_pAbstractSpellDialog->Invalidate();
-}
-
+}        
+/*-------------------------------------------------------------------------
+    
+  -----------------------------------------------------------------------*/
 bool SpellDialogChildWindow::HasAutoCorrection()
 {
     return false;
-}
-
+}        
+/*-------------------------------------------------------------------------
+    
+  -----------------------------------------------------------------------*/
 void SpellDialogChildWindow::AddAutoCorrection(
-        const String& /*rOld*/,
-        const String& /*rNew*/,
+        const String& /*rOld*/, 
+        const String& /*rNew*/, 
         LanguageType /*eLanguage*/)
 {
-    OSL_FAIL("AutoCorrection should have been overloaded - if available");
-}
+    DBG_ERROR("AutoCorrection should have been overloaded - if available");
+}            
+/*-- 16.06.2008 10:11:57---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 bool SpellDialogChildWindow::HasGrammarChecking()
 {
     return false;
 }
+/*-- 18.06.2008 12:26:35---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 bool SpellDialogChildWindow::IsGrammarChecking()
 {
-    OSL_FAIL("Grammar checking should have been overloaded - if available");
+    DBG_ERROR("Grammar checking should have been overloaded - if available");
     return false;
 }
+/*-- 18.06.2008 12:26:35---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SpellDialogChildWindow::SetGrammarChecking(bool )
 {
-    OSL_FAIL("Grammar checking should have been overloaded - if available");
+    DBG_ERROR("Grammar checking should have been overloaded - if available");
 }
 } // end of namespace ::svx
 

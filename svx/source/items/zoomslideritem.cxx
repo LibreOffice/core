@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ TYPEINIT1_FACTORY(SvxZoomSliderItem,SfxUInt16Item, new SvxZoomSliderItem);
 
 // -----------------------------------------------------------------------
 
-SvxZoomSliderItem::SvxZoomSliderItem( sal_uInt16 nCurrentZoom, sal_uInt16 nMinZoom, sal_uInt16 nMaxZoom, sal_uInt16 _nWhich )
+SvxZoomSliderItem::SvxZoomSliderItem( USHORT nCurrentZoom, USHORT nMinZoom, USHORT nMaxZoom, USHORT _nWhich )
 :   SfxUInt16Item( _nWhich, nCurrentZoom ), mnMinZoom( nMinZoom ), mnMaxZoom( nMaxZoom )
 {
 }
@@ -109,7 +109,7 @@ int SvxZoomSliderItem::operator==( const SfxPoolItem& rAttr ) const
              mnMinZoom == rItem.mnMinZoom && mnMaxZoom == rItem.mnMaxZoom );
 }
 
-bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -150,14 +150,14 @@ bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nM
             }
             break;
         default:
-            OSL_FAIL("svx::SvxZoomSliderItem::QueryValue(), Wrong MemberId!");
+            DBG_ERROR("svx::SvxZoomSliderItem::QueryValue(), Wrong MemberId!");
             return false;
     }
 
     return true;
 }
 
-bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -201,10 +201,10 @@ bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
 
                     if ( bAllConverted && nConvertedCount == ZOOMSLIDER_PARAMS )
                     {
-                        SetValue( (sal_uInt16)nCurrentZoom );
+                        SetValue( (UINT16)nCurrentZoom );
                         maValues = aValues;
-                        mnMinZoom = sal::static_int_cast< sal_uInt16 >( nMinZoom );
-                        mnMaxZoom = sal::static_int_cast< sal_uInt16 >( nMaxZoom );
+                        mnMinZoom = sal::static_int_cast< USHORT >( nMinZoom );
+                        mnMaxZoom = sal::static_int_cast< USHORT >( nMaxZoom );
 
                         return true;
                     }
@@ -218,7 +218,7 @@ bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
                 sal_Int32 nVal = 0;
                 if ( rVal >>= nVal )
                 {
-                    SetValue( (sal_uInt16)nVal );
+                    SetValue( (UINT16)nVal );
                     return true;
                 }
                 else
@@ -241,7 +241,7 @@ bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
                 sal_Int32 nVal = 0;
                 if( rVal >>= nVal )
                 {
-                    mnMinZoom = (sal_uInt16)nVal;
+                    mnMinZoom = (UINT16)nVal;
                     return true;
                 }
                 else
@@ -252,14 +252,14 @@ bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
                 sal_Int32 nVal = 0;
                 if( rVal >>= nVal )
                 {
-                    mnMaxZoom = (sal_uInt16)nVal;
+                    mnMaxZoom = (UINT16)nVal;
                     return true;
                 }
                 else
                     return false;
             }
         default:
-            OSL_FAIL("svx::SvxZoomSliderItem::PutValue(), Wrong MemberId!");
+            DBG_ERROR("svx::SvxZoomSliderItem::PutValue(), Wrong MemberId!");
             return false;
     }
 

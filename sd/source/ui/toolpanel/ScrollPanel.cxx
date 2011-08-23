@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,25 @@
 namespace sd { namespace toolpanel {
 
 ScrollPanel::ScrollPanel (
+    TreeNode* pParent)
+    : Control (pParent->GetWindow(), WB_DIALOGCONTROL),
+      TreeNode(pParent),
+      maScrollWindow(this, WB_DIALOGCONTROL),
+      maVerticalScrollBar(this, WB_VERT),
+      maHorizontalScrollBar(this, WB_HORZ),
+      maScrollBarFiller(this),
+      maScrollWindowFiller(&maScrollWindow),
+      mbIsRearrangePending(true),
+      mbIsLayoutPending(true),
+      mnChildrenWidth(0),
+      mnVerticalBorder(2),
+      mnVerticalGap(3),
+      mnHorizontalBorder(2)
+{
+    Construct();
+}
+
+ScrollPanel::ScrollPanel (
     ::Window& i_rParentWindow)
     : Control (&i_rParentWindow, WB_DIALOGCONTROL),
       TreeNode(NULL),
@@ -63,7 +82,7 @@ ScrollPanel::ScrollPanel (
 void ScrollPanel::Construct()
 {
     SetAccessibleName (
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")));
+        ::rtl::OUString::createFromAscii("Sub Task Panel"));
     mpControlContainer->SetMultiSelection (true);
 
     SetBorderStyle (WINDOW_BORDER_NORMAL);
@@ -81,10 +100,10 @@ void ScrollPanel::Construct()
     // Initialize the scroll bars.
     maVerticalScrollBar.SetScrollHdl (
         LINK(this, ScrollPanel, ScrollBarHandler));
-    maVerticalScrollBar.EnableDrag (sal_True);
+    maVerticalScrollBar.EnableDrag (TRUE);
     maHorizontalScrollBar.SetScrollHdl (
         LINK(this, ScrollPanel, ScrollBarHandler));
-    maHorizontalScrollBar.EnableDrag (sal_True);
+    maHorizontalScrollBar.EnableDrag (TRUE);
 }
 
 
@@ -117,22 +136,22 @@ ScrollPanel::~ScrollPanel (void)
 
 
 TitledControl* ScrollPanel::AddControl (
-    ::std::auto_ptr<TreeNode> pControl,
+    ::std::auto_ptr<TreeNode> pControl, 
     const String& rTitle,
-    const rtl::OString& rHelpId)
+    ULONG nHelpId)
 {
     // We are interested only in the title.  The control itself is
     // managed by the content object.
     TitledControl* pTitledControl = new TitledControl(
         this,
-        pControl,
+        pControl, 
         rTitle,
         TitledControlStandardClickHandler(GetControlContainer(), ControlContainer::ES_TOGGLE),
         TitleBar::TBT_SUB_CONTROL_HEADLINE);
-    pTitledControl->GetTitleBar()->SetHelpId(rHelpId);
+    pTitledControl->GetTitleBar()->SetHelpId(nHelpId);
 
     AddControl(::std::auto_ptr<TreeNode>(pTitledControl));
-
+    
     return pTitledControl;
 }
 
@@ -151,7 +170,7 @@ void ScrollPanel::AddControl (::std::auto_ptr<TreeNode> pControl)
         const Link aWindowListener(LINK(this,ScrollPanel,WindowEventListener));
         OSL_ASSERT(pControl->GetWindow()!=NULL);
         pControl->GetWindow()->AddEventListener(aWindowListener);
-
+        
         TitledControl* pTitledControl = dynamic_cast<TitledControl*>(pControl.get());
         if (pTitledControl != NULL)
         {
@@ -174,8 +193,8 @@ void ScrollPanel::AddControl (::std::auto_ptr<TreeNode> pControl)
             rFocusManager.RegisterLink(pFirst,pControl->GetWindow(), KEY_UP);
             rFocusManager.RegisterLink(pControl->GetWindow(),pFirst, KEY_DOWN);
         }
-
-
+        
+        
         // Add a down link only for the first control so that when entering
         // the sub tool panel the focus is set to the first control.
         if (nControlCount == 0)
@@ -212,7 +231,7 @@ void ScrollPanel::Paint (const Rectangle& rRect)
     Size aSize (maScrollWindow.GetOutputSizePixel());
     // Paint left and right vertical border.
     Rectangle aVerticalArea (
-        Point(0,0),
+        Point(0,0), 
         Size(mnHorizontalBorder,aSize.Height()));
     maScrollWindow.DrawRect (aVerticalArea);
     aVerticalArea.Right() += mnHorizontalBorder + mnChildrenWidth - 1;
@@ -224,7 +243,7 @@ void ScrollPanel::Paint (const Rectangle& rRect)
         Point (mnHorizontalBorder,0),
         Size(mnChildrenWidth,0));
     StripeList::const_iterator iStripe;
-    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); ++iStripe)
+    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); iStripe++)
     {
         aStripeArea.Top() = iStripe->first;
         aStripeArea.Bottom() = iStripe->second;
@@ -234,7 +253,7 @@ void ScrollPanel::Paint (const Rectangle& rRect)
             break;
         maScrollWindow.DrawRect (aStripeArea);
     }
-
+    
     maScrollWindow.SetLineColor (aOriginalLineColor);
     maScrollWindow.SetFillColor (aOriginalFillColor);
 }
@@ -379,7 +398,7 @@ void ScrollPanel::Rearrange (void)
             mnChildrenWidth += aRequiredSize.Width();
         else
             mnChildrenWidth += aAvailableSize.Width();
-
+        
         sal_Int32 nChildrenHeight (LayoutChildren());
         maVerticalScrollBar.SetRangeMax (
             nChildrenHeight + mnVerticalBorder);
@@ -395,7 +414,7 @@ Size ScrollPanel::GetRequiredSize (void)
 {
     // First determine the width of the children.  This is the maximum of
     // the current window width and the individual minimum widths of the
-    // children.
+    // children. 
     int nChildrenWidth (GetSizePixel().Width());
     unsigned int nCount = mpControlContainer->GetControlCount();
     unsigned int nIndex;
@@ -410,7 +429,7 @@ Size ScrollPanel::GetRequiredSize (void)
     // Determine the accumulated width of all children when scaled to the
     // minimum width.
     nChildrenWidth -= 2*mnHorizontalBorder;
-    Size aTotalSize (nChildrenWidth,
+    Size aTotalSize (nChildrenWidth, 
         2*mnVerticalBorder + (nCount-1) * mnVerticalGap);
     for (nIndex=0; nIndex<nCount; nIndex++)
     {
@@ -510,7 +529,7 @@ Size ScrollPanel::SetupScrollBars (const Size& rRequiredSize)
         if (GetMinimumWidth() + aScrollBarSize.Width() > aWindowSize.Width())
             bShowHorizontal = true;
     }
-
+        
     // Setup the scroll bars.
     aRemainingSize.Width()
         = SetupVerticalScrollBar (bShowVertical, rRequiredSize.Height());
@@ -567,7 +586,7 @@ sal_Int32 ScrollPanel::SetupVerticalScrollBar (bool bShow, sal_Int32 nRange)
         long nMinPos = maVerticalScrollBar.GetRangeMin();
         if (maVerticalScrollBar.GetThumbPos() < nMinPos)
             maVerticalScrollBar.SetThumbPos(nMinPos);
-        long nMaxPos = maVerticalScrollBar.GetRangeMax()
+        long nMaxPos = maVerticalScrollBar.GetRangeMax() 
             - maVerticalScrollBar.GetVisibleSize();
         if (maVerticalScrollBar.GetThumbPos() >= nMaxPos)
             maVerticalScrollBar.SetThumbPos(nMaxPos);
@@ -620,7 +639,7 @@ sal_Int32 ScrollPanel::SetupHorizontalScrollBar (bool bShow, sal_Int32 nRange)
         long nMinPos = maHorizontalScrollBar.GetRangeMin();
         if (maHorizontalScrollBar.GetThumbPos() < nMinPos)
             maHorizontalScrollBar.SetThumbPos(nMinPos);
-        long nMaxPos = maHorizontalScrollBar.GetRangeMax()
+        long nMaxPos = maHorizontalScrollBar.GetRangeMax() 
             - maHorizontalScrollBar.GetVisibleSize();
         if (maHorizontalScrollBar.GetThumbPos() >= nMaxPos)
             maHorizontalScrollBar.SetThumbPos(nMaxPos);
@@ -657,14 +676,14 @@ IMPL_LINK(ScrollPanel, ScrollBarHandler, ScrollBar*, EMPTYARG)
 
 long ScrollPanel::Notify( NotifyEvent& rNEvt )
 {
-    long nRet = sal_False;
+    long nRet = FALSE;
     if( rNEvt.GetType() == EVENT_COMMAND )
     {
         // note: dynamic_cast is not possible as GetData() returns a void*
         CommandEvent* pCmdEvent = reinterpret_cast< CommandEvent* >(rNEvt.GetData());
         DBG_ASSERT( pCmdEvent!=0 &&
-                    ( pCmdEvent->IsMouseEvent() == sal_True ||
-                      pCmdEvent->IsMouseEvent() == sal_False ),
+                    ( pCmdEvent->IsMouseEvent() == TRUE ||
+                      pCmdEvent->IsMouseEvent() == FALSE ),
                     "Invalid CommandEvent" );
         if (pCmdEvent)
             switch (pCmdEvent->GetCommand())
@@ -695,8 +714,8 @@ long ScrollPanel::Notify( NotifyEvent& rNEvt )
 {
     return new ::accessibility::AccessibleScrollPanel (
         *this,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scroll Panel")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scroll Panel")));
+        ::rtl::OUString::createFromAscii("Scroll Panel"),
+        ::rtl::OUString::createFromAscii("Scroll Panel"));
 }
 
 
@@ -713,7 +732,7 @@ void ScrollPanel::MakeRectangleVisible (
         aRectangle.Move(
             -maScrollOffset.X() + aRelativeBox.Left(),
             -maScrollOffset.Y() + aRelativeBox.Top());
-
+    
         const int nVisibleHeight (maVerticalScrollBar.GetVisibleSize());
         const int nVisibleTop (maVerticalScrollBar.GetThumbPos());
         if (aRectangle.Bottom() >= nVisibleTop+nVisibleHeight)
@@ -746,12 +765,12 @@ IMPL_LINK(ScrollPanel,WindowEventListener,VclSimpleEvent*,pEvent)
                     Rectangle aBox (pControl->GetItemRect(pControl->GetSelectItemId()));
                     aBox.Top()-=4;
                     aBox.Bottom()+=4;
-
+                    
                     MakeRectangleVisible(aBox, pControl);
                 }
             }
             break;
-
+            
             case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
             {
                 // Make the item under the mouse visible.  We need this case
@@ -772,13 +791,13 @@ IMPL_LINK(ScrollPanel,WindowEventListener,VclSimpleEvent*,pEvent)
                         Rectangle aBox (pControl->GetItemRect(pControl->GetItemId(aPosition)));
                         aBox.Top()-=4;
                         aBox.Bottom()+=4;
-
+                    
                         MakeRectangleVisible(aBox, pControl);
                     }
                 }
             }
             break;
-
+                
 
             case VCLEVENT_WINDOW_GETFOCUS:
             {
@@ -796,7 +815,7 @@ IMPL_LINK(ScrollPanel,WindowEventListener,VclSimpleEvent*,pEvent)
                 }
             }
             break;
-
+                
             case VCLEVENT_WINDOW_SHOW:
             case VCLEVENT_WINDOW_HIDE:
             case VCLEVENT_WINDOW_ACTIVATE:

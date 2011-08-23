@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svx/formatpaintbrushctrl.hxx"
+#include "formatpaintbrushctrl.hxx"
 
 // header for class SfxBoolItem
 #include <svl/eitem.hxx>
@@ -50,12 +50,12 @@ using namespace ::com::sun::star::beans;
 
 SFX_IMPL_TOOLBOX_CONTROL( FormatPaintBrushToolBoxControl, SfxBoolItem );
 
-FormatPaintBrushToolBoxControl::FormatPaintBrushToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
+FormatPaintBrushToolBoxControl::FormatPaintBrushToolBoxControl(	USHORT nSlotId, USHORT nId, ToolBox& rTbx )
     : SfxToolBoxControl( nSlotId, nId, rTbx )
     , m_bPersistentCopy(false)
     , m_aDoubleClickTimer()
 {
-    sal_uIntPtr nDblClkTime = rTbx.GetSettings().GetMouseSettings().GetDoubleClickTime();
+    ULONG nDblClkTime = rTbx.GetSettings().GetMouseSettings().GetDoubleClickTime();
 
     m_aDoubleClickTimer.SetTimeoutHdl( LINK(this, FormatPaintBrushToolBoxControl, WaitDoubleClickHdl) );
     m_aDoubleClickTimer.SetTimeout(nDblClkTime);
@@ -103,12 +103,12 @@ IMPL_LINK(FormatPaintBrushToolBoxControl, WaitDoubleClickHdl, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-void FormatPaintBrushToolBoxControl::Select( sal_Bool )
+void FormatPaintBrushToolBoxControl::Select( BOOL )
 {
 }
 
 // -----------------------------------------------------------------------
-void FormatPaintBrushToolBoxControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
+void FormatPaintBrushToolBoxControl::StateChanged( USHORT nSID, SfxItemState eState,
                 const SfxPoolItem* pState )
 {
     if( ( eState & SFX_ITEM_SET ) == 0 )

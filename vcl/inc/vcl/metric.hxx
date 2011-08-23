@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,22 +46,22 @@ class VCL_DLLPUBLIC FontInfo : public Font
     friend class OutputDevice;
 
 protected:
-    ImplFontMetric*     mpImplMetric;    // Implementation
+    ImplFontMetric* 	mpImplMetric;	 // Implementation
 
 public:
                         FontInfo();
                         FontInfo( const FontInfo& );
                         ~FontInfo();
 
-    FontType            GetType() const;
-    sal_Bool                IsDeviceFont() const;
-    sal_Bool                SupportsLatin() const;
-    sal_Bool                SupportsCJK() const;
-    sal_Bool                SupportsCTL() const;
+    FontType			GetType() const;
+    BOOL				IsDeviceFont() const;
+    BOOL				SupportsLatin() const;
+    BOOL				SupportsCJK() const;
+    BOOL				SupportsCTL() const;
 
-    FontInfo&           operator=( const FontInfo& );
-    sal_Bool                operator==( const FontInfo& ) const;
-    sal_Bool                operator!=( const FontInfo& rInfo ) const
+    FontInfo&			operator=( const FontInfo& );
+    BOOL				operator==( const FontInfo& ) const;
+    BOOL				operator!=( const FontInfo& rInfo ) const
                             { return !operator==( rInfo ); }
 };
 
@@ -76,16 +76,16 @@ public:
                         FontMetric( const FontMetric& );
                         ~FontMetric() {}
 
-    long                GetAscent() const;
-    long                GetDescent() const;
-    long                GetIntLeading() const;
-    long                GetExtLeading() const;
-    long                GetLineHeight() const;
-    long                GetSlant() const;
+    long				GetAscent() const;
+    long				GetDescent() const;
+    long				GetIntLeading() const;
+    long				GetExtLeading() const;
+    long				GetLineHeight() const;
+    long				GetSlant() const;
 
-    FontMetric&         operator=( const FontMetric& rMetric );
-    sal_Bool                operator==( const FontMetric& rMetric ) const;
-    sal_Bool                operator!=( const FontMetric& rMetric ) const
+    FontMetric& 		operator=( const FontMetric& rMetric );
+    BOOL				operator==( const FontMetric& rMetric ) const;
+    BOOL				operator!=( const FontMetric& rMetric ) const
                             { return !operator==( rMetric ); }
 };
 
@@ -96,14 +96,14 @@ public:
 class VCL_DLLPUBLIC FontCharMap
 {
 private:
-    const ImplFontCharMap* mpImpl;
+    ImplFontCharMap*    mpImpl;
 
 public:
                         FontCharMap();
                         ~FontCharMap();
 
-    sal_Bool                IsDefaultMap() const;
-    sal_Bool                HasChar( sal_uInt32 ) const;
+    BOOL                IsDefaultMap() const;
+    BOOL                HasChar( sal_uInt32 ) const;
     int                 CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const;
     int                 GetCharCount() const;
 
@@ -119,7 +119,7 @@ public:
 
 private:
     friend class OutputDevice;
-    void                Reset( const ImplFontCharMap* pNewMap = NULL );
+    void                Reset( ImplFontCharMap* pNewMap = NULL );
 
     // prevent assignment and copy construction
                         FontCharMap( const FontCharMap& );
@@ -135,30 +135,30 @@ class VCL_DLLPUBLIC TextRectInfo
     friend class OutputDevice;
 
 private:
-    long            mnMaxWidth;
-    sal_uInt16          mnLineCount;
-    sal_Bool            mbEllipsis;
+    long			mnMaxWidth;
+    USHORT			mnLineCount;
+    BOOL			mbEllipsis;
 
 public:
                     TextRectInfo();
 
-    sal_uInt16          GetLineCount() const { return mnLineCount; }
-    long            GetMaxLineWidth() const { return mnMaxWidth; }
-    sal_Bool            IsEllipses() const { return mbEllipsis; }
+    USHORT			GetLineCount() const { return mnLineCount; }
+    long			GetMaxLineWidth() const { return mnMaxWidth; }
+    BOOL			IsEllipses() const { return mbEllipsis; }
 
-    sal_Bool            operator ==( const TextRectInfo& rInfo ) const
-                        { return ((mnMaxWidth   == rInfo.mnMaxWidth)    &&
-                                  (mnLineCount  == rInfo.mnLineCount)   &&
-                                  (mbEllipsis   == rInfo.mbEllipsis)); }
-    sal_Bool            operator !=( const TextRectInfo& rInfo ) const
+    BOOL			operator ==( const TextRectInfo& rInfo ) const
+                        { return ((mnMaxWidth	== rInfo.mnMaxWidth)	&&
+                                  (mnLineCount	== rInfo.mnLineCount)	&&
+                                  (mbEllipsis	== rInfo.mbEllipsis)); }
+    BOOL			operator !=( const TextRectInfo& rInfo ) const
                         { return !(TextRectInfo::operator==( rInfo )); }
 };
 
 inline TextRectInfo::TextRectInfo()
 {
-    mnMaxWidth      = 0;
-    mnLineCount     = 0;
-    mbEllipsis      = sal_False;
+    mnMaxWidth		= 0;
+    mnLineCount 	= 0;
+    mbEllipsis		= FALSE;
 }
 
 #endif // _SV_METRIC_HXX

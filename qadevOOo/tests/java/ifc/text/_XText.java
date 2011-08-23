@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,12 +114,12 @@ public class _XText extends MultiMethodTest {
         log.println( "test for insertTextContent" );
         try {
             oObj.insertTextContent(oCursor, null, false);
-            log.println("The expected Exception doesn't occurred");
+            log.println("The expected Exception doesn't occured");
             result &= false;
         }
         catch( com.sun.star.lang.IllegalArgumentException iaE ){
             // Some exception.FAILED
-            log.println("Expected Exception occurred");
+            log.println("Expected Exception occured");
             String msg = iaE.getMessage();
             if (msg.equals("")) {
                 log.println("But there is not detailed message");
@@ -161,7 +161,7 @@ public class _XText extends MultiMethodTest {
             return;
         }
 
-        // no exception occurred so it works
+        // no exception occured so it works
         tRes.tested( "removeTextContent()", true );
 
     }

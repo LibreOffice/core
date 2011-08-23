@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,18 +50,18 @@ cssu::Reference< cssl::XMultiServiceFactory > CreateDemoServiceFactory()
 {
     cssu::Reference< cssl::XMultiServiceFactory > xMSF;
 
-    try
+    try 
     {
         cssu::Reference< cssl::XMultiComponentFactory > xLocalServiceManager = NULL ;
         cssu::Reference< cssu::XComponentContext > xLocalComponentContext = NULL ;
 
-        cssu::Reference< ::com::sun::star::registry::XSimpleRegistry > xSimpleRegistry
-            = ::cppu::createSimpleRegistry();
+        cssu::Reference< ::com::sun::star::registry::XSimpleRegistry > xSimpleRegistry 
+            = ::cppu::createSimpleRegistry(); 
         OSL_ENSURE( xSimpleRegistry.is(),
             "serviceManager - "
             "Cannot create simple registry" ) ;
 
-        xSimpleRegistry->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("demo.rdb")), sal_True, sal_False);
+        xSimpleRegistry->open(rtl::OUString::createFromAscii( "demo.rdb" ), sal_True, sal_False);
         OSL_ENSURE( xSimpleRegistry->isValid() ,
             "serviceManager - "
             "Cannot open xml security registry rdb" ) ;
@@ -77,7 +77,7 @@ cssu::Reference< cssl::XMultiServiceFactory > CreateDemoServiceFactory()
             "Cannot create intial service manager" ) ;
 
         xMSF = cssu::Reference< cssl::XMultiServiceFactory >(xLocalServiceManager, cssu::UNO_QUERY) ;
-
+        
         ::comphelper::setProcessServiceFactory( xMSF );
     }
     catch( cssu::Exception& e )
@@ -93,9 +93,9 @@ cssu::Reference< cssl::XMultiServiceFactory > CreateDemoServiceFactory()
 {
     SvFileStream* pStream = new SvFileStream( rStreamName, STREAM_READ );
     pStream->Seek( STREAM_SEEK_TO_END );
-    sal_uLong nBytes = pStream->Tell();
+    ULONG nBytes = pStream->Tell();
     pStream->Seek( STREAM_SEEK_TO_BEGIN );
-    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, sal_True );
+    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
     uno::Reference< io::XInputStream > xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
 
     return xInputStream;
@@ -105,7 +105,7 @@ cssu::Reference< cssl::XMultiServiceFactory > CreateDemoServiceFactory()
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > OpenOutputStream( const ::rtl::OUString& rStreamName )
 {
     SvFileStream* pStream = new SvFileStream( rStreamName, STREAM_WRITE );
-    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, sal_True );
+    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
     uno::Reference< io::XOutputStream > xOutputStream = new utl::OOutputStreamHelper( xLockBytes );
 
     return xOutputStream;

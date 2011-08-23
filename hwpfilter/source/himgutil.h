@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+/* NAME $Id: himgutil.h,v 1.4 2008-06-04 09:58:33 vg Exp $
+ * PURPOSE
+ *   WIN32 등의 xv image 라이브러리가 없는 경우,
+ *   이미지 파일의 형식을 반환하는데 사용한다.
+ * NOTES
+ *
+ * HISTORY
+ *        frog - Dec 23, 1998: Created.
+ */
 
 #ifndef _HIMGUTIL_H_
 #define _HIMGUTIL_H_

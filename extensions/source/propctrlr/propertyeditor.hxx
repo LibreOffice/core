@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,8 +98,8 @@ namespace pcr
         void                        SetHelpText( const ::rtl::OUString& _rHelpText );
         void                        SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines );
 
-        void                        SetHelpId( const rtl::OString& sHelpId );
-        sal_uInt16                  AppendPage( const String& r, const rtl::OString& _rHelpId );
+        void                        SetHelpId( sal_uInt32 nHelpId );
+        sal_uInt16                  AppendPage( const String& r, const SmartId& _rHelpId );
         void                        SetPage( sal_uInt16 );
         void                        RemovePage(sal_uInt16 nID);
         sal_uInt16                  GetCurPage();
@@ -119,14 +119,14 @@ namespace pcr
         void                        RemoveEntry( const ::rtl::OUString& _rName );
         void                        ChangeEntry( const OLineDescriptor& );
 
-        void    setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
-        Link    getPageActivationHandler() const { return m_aPageActivationHandler; }
+        void	setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
+        Link	getPageActivationHandler() const { return m_aPageActivationHandler; }
 
         // #95343# -------------------------------
         sal_Int32 getMinimumWidth();
         sal_Int32 getMinimumHeight();
 
-        void                        CommitModified();
+        void	                    CommitModified();
 
     protected:
         using Window::SetHelpText;

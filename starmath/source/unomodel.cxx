@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 #include "precompiled_starmath.hxx"
 
 
+#include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/svapp.hxx>
@@ -73,8 +74,8 @@ using namespace ::com::sun::star::script;
 
 using rtl::OUString;
 
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
+#define TWIP_TO_MM100(TWIP) 	((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define MM100_TO_TWIP(MM100)	((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
 ////////////////////////////////////////////////////////////
 
@@ -82,7 +83,7 @@ SmPrintUIOptions::SmPrintUIOptions()
 {
     ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
     OSL_ENSURE( aLocalizedStrings.Count() >= 18, "resource incomplete" );
-    if( aLocalizedStrings.Count() < 9 ) // bad resource ?
+    if( aLocalizedStrings.Count() < 18 ) // bad resource ?
         return;
 
     SmModule *pp = SM_MOD();
@@ -90,66 +91,66 @@ SmPrintUIOptions::SmPrintUIOptions()
     OSL_ENSURE( pConfig, "SmConfig not found" );
     if (!pConfig)
         return;
-
+    
     // create sequence of print UI options
     // (Actually IsIgnoreSpacesRight is a parser option. Without it we need only 8 properties here.)
     m_aUIProperties.realloc( 9 );
-
+    
     // create Section for formula (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
     String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
     aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
-                                    aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) );
-    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:TabPage:AppPage" ) ) );
+                                    aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) ); 
+    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
 
     // create subgroup for print options
     m_aUIProperties[1].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 1 ), rtl::OUString() );
 
     // create a bool option for title row (matches to SID_PRINTTITLE)
     m_aUIProperties[2].Value = getBoolControlOpt( aLocalizedStrings.GetString( 2 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:TitleRow:CheckBox" ) ),
+                                                  aLocalizedStrings.GetString( 3 ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_TITLE_ROW ) ),
                                                   pConfig->IsPrintTitle() );
     // create a bool option for formula text (matches to SID_PRINTTEXT)
-    m_aUIProperties[3].Value = getBoolControlOpt( aLocalizedStrings.GetString( 3 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:FormulaText:CheckBox" ) ),
+    m_aUIProperties[3].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
+                                                  aLocalizedStrings.GetString( 5 ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_FORMULA_TEXT ) ),
                                                   pConfig->IsPrintFormulaText() );
     // create a bool option for border (matches to SID_PRINTFRAME)
-    m_aUIProperties[4].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:Border:CheckBox" ) ),
+    m_aUIProperties[4].Value = getBoolControlOpt( aLocalizedStrings.GetString( 6 ),
+                                                  aLocalizedStrings.GetString( 7 ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_BORDER ) ),
                                                   pConfig->IsPrintFrame() );
 
     // create subgroup for print format
-    m_aUIProperties[5].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 5 ), rtl::OUString() );
+    m_aUIProperties[5].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 8 ), rtl::OUString() );
 
     // create a radio button group for print format (matches to SID_PRINTSIZE)
     Sequence< rtl::OUString > aChoices( 3 );
-    aChoices[0] = aLocalizedStrings.GetString( 6 );
-    aChoices[1] = aLocalizedStrings.GetString( 7 );
-    aChoices[2] = aLocalizedStrings.GetString( 8 );
-    Sequence< rtl::OUString > aHelpIds( 3 );
-    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:0" ) );
-    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:1" ) );
-    aHelpIds[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:2" ) );
+    aChoices[0] = aLocalizedStrings.GetString( 9 );
+    aChoices[1] = aLocalizedStrings.GetString( 11 );
+    aChoices[2] = aLocalizedStrings.GetString( 13 );
+    Sequence< rtl::OUString > aHelpTexts( 3 );
+    aHelpTexts[0] = aLocalizedStrings.GetString( 10 );
+    aHelpTexts[1] = aLocalizedStrings.GetString( 12 );
+    aHelpTexts[2] = aLocalizedStrings.GetString( 14 );
     OUString aPrintFormatProp( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_FORMAT ) );
     m_aUIProperties[6].Value = getChoiceControlOpt( rtl::OUString(),
-                                                    aHelpIds,
+                                                    aHelpTexts,
                                                     aPrintFormatProp,
                                                     aChoices, static_cast< sal_Int32 >(pConfig->GetPrintSize())
                                                     );
-
+    
     // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
     vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, sal_True );
     m_aUIProperties[ 7 ].Value = getRangeControlOpt( rtl::OUString(),
-                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintScale:NumericField" ) ),
+                                                     aLocalizedStrings.GetString( 14 ),
                                                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_SCALE ) ),
                                                      pConfig->GetPrintZoomFactor(),    // initial value
                                                      10,     // min value
                                                      1000,   // max value
                                                      aRangeOpt );
-
+    
     Sequence< PropertyValue > aHintNoLayoutPage( 1 );
     aHintNoLayoutPage[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HintNoLayoutPage" ) );
     aHintNoLayoutPage[0].Value = makeAny( sal_True );
@@ -162,11 +163,7 @@ SmPrintUIOptions::SmPrintUIOptions()
 //
 // class SmModel
 //
-
-// values from com/sun/star/beans/PropertyAttribute
-#define PROPERTY_NONE        0
-#define PROPERTY_READONLY   16
-
+#define PROPERTY_NONE 0
 enum SmModelPropertyHandles
 {
     HANDLE_FORMULA,
@@ -228,86 +225,82 @@ enum SmModelPropertyHandles
     HANDLE_PRINTER_NAME,
     HANDLE_PRINTER_SETUP,
     HANDLE_SYMBOLS,
-    HANDLE_USED_SYMBOLS,
-    HANDLE_BASIC_LIBRARIES,
+    HANDLE_BASIC_LIBRARIES,     /* #93295# */
     HANDLE_RUNTIME_UID,
-    HANDLE_LOAD_READONLY,     // Security Options
-    HANDLE_DIALOG_LIBRARIES,  // #i73329#
-    HANDLE_BASELINE
+    // --> PB 2004-08-25 #i33095# Security Options
+    HANDLE_LOAD_READONLY,
+    // <--
+    HANDLE_DIALOG_LIBRARIES     // #i73329#
 };
 
 PropertySetInfo * lcl_createModelPropertyInfo ()
 {
     static PropertyMapEntry aModelPropertyInfoMap[] =
     {
-        { RTL_CONSTASCII_STRINGPARAM( "Alignment"                          ), HANDLE_ALIGNMENT                          ,       &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, 0},
-        { RTL_CONSTASCII_STRINGPARAM( "BaseFontHeight"                  ), HANDLE_BASE_FONT_HEIGHT                   ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "Alignment"                          ), HANDLE_ALIGNMENT                          , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "BaseFontHeight"                  ), HANDLE_BASE_FONT_HEIGHT                   , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "BasicLibraries"                  ), HANDLE_BASIC_LIBRARIES                   ,      &::getCppuType((const uno::Reference< script::XLibraryContainer > *)0),    PropertyAttribute::READONLY, 0},
-        { RTL_CONSTASCII_STRINGPARAM( "BottomMargin"                      ), HANDLE_BOTTOM_MARGIN                      ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BOTTOMSPACE             },
-        { RTL_CONSTASCII_STRINGPARAM( "CustomFontNameFixed"            ), HANDLE_CUSTOM_FONT_NAME_FIXED             ,       &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_FIXED          },
-        { RTL_CONSTASCII_STRINGPARAM( "CustomFontNameSans"              ), HANDLE_CUSTOM_FONT_NAME_SANS              ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_SANS        },
-        { RTL_CONSTASCII_STRINGPARAM( "CustomFontNameSerif"             ), HANDLE_CUSTOM_FONT_NAME_SERIF             ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_SERIF          },
+        { RTL_CONSTASCII_STRINGPARAM( "BottomMargin"            		  ), HANDLE_BOTTOM_MARGIN              		   , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_BOTTOMSPACE			   },
+        { RTL_CONSTASCII_STRINGPARAM( "CustomFontNameFixed"            ), HANDLE_CUSTOM_FONT_NAME_FIXED             , 		&::getCppuType((const OUString*)0), 	PROPERTY_NONE, FNT_FIXED		  },
+        { RTL_CONSTASCII_STRINGPARAM( "CustomFontNameSans"              ), HANDLE_CUSTOM_FONT_NAME_SANS              , 		&::getCppuType((const OUString*)0), 	PROPERTY_NONE, FNT_SANS		   },
+        { RTL_CONSTASCII_STRINGPARAM( "CustomFontNameSerif"             ), HANDLE_CUSTOM_FONT_NAME_SERIF             , 		&::getCppuType((const OUString*)0), 	PROPERTY_NONE, FNT_SERIF		  },
         { RTL_CONSTASCII_STRINGPARAM( "DialogLibraries"                 ), HANDLE_DIALOG_LIBRARIES                   ,      &::getCppuType((const uno::Reference< script::XLibraryContainer > *)0),    PropertyAttribute::READONLY, 0},
-        { RTL_CONSTASCII_STRINGPARAM( "FontFixedIsBold"),     HANDLE_CUSTOM_FONT_FIXED_WEIGHT    ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_FIXED},
+        { RTL_CONSTASCII_STRINGPARAM( "FontFixedIsBold"),	  HANDLE_CUSTOM_FONT_FIXED_WEIGHT    ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_FIXED},
         { RTL_CONSTASCII_STRINGPARAM( "FontFixedIsItalic"), HANDLE_CUSTOM_FONT_FIXED_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_FIXED},
-        { RTL_CONSTASCII_STRINGPARAM( "FontFunctionsIsBold"),    HANDLE_FONT_FUNCTIONS_WEIGHT    ,  &::getBooleanCppuType(),            PROPERTY_NONE, FNT_FUNCTION},
+        { RTL_CONSTASCII_STRINGPARAM( "FontFunctionsIsBold"),	 HANDLE_FONT_FUNCTIONS_WEIGHT    ,  &::getBooleanCppuType(),  			PROPERTY_NONE, FNT_FUNCTION},
         { RTL_CONSTASCII_STRINGPARAM( "FontFunctionsIsItalic"),   HANDLE_FONT_FUNCTIONS_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_FUNCTION},
-        { RTL_CONSTASCII_STRINGPARAM( "FontNameFunctions"                ), HANDLE_FONT_NAME_FUNCTIONS                ,         &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_FUNCTION },
-        { RTL_CONSTASCII_STRINGPARAM( "FontNameNumbers"                  ), HANDLE_FONT_NAME_NUMBERS                  ,         &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_NUMBER        },
-        { RTL_CONSTASCII_STRINGPARAM( "FontNameText"                     ), HANDLE_FONT_NAME_TEXT                     ,         &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_TEXT        },
-        { RTL_CONSTASCII_STRINGPARAM( "FontNameVariables"                ), HANDLE_FONT_NAME_VARIABLES                ,         &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_VARIABLE },
-        { RTL_CONSTASCII_STRINGPARAM( "FontNumbersIsBold"),  HANDLE_FONT_NUMBERS_WEIGHT    ,  &::getBooleanCppuType(),              PROPERTY_NONE, FNT_NUMBER},
+        { RTL_CONSTASCII_STRINGPARAM( "FontNameFunctions"                ), HANDLE_FONT_NAME_FUNCTIONS                , 		&::getCppuType((const OUString*)0), 	PROPERTY_NONE, FNT_FUNCTION	},
+        { RTL_CONSTASCII_STRINGPARAM( "FontNameNumbers"                  ), HANDLE_FONT_NAME_NUMBERS                  , 		&::getCppuType((const OUString*)0), 	PROPERTY_NONE, FNT_NUMBER		 },
+        { RTL_CONSTASCII_STRINGPARAM( "FontNameText"                     ), HANDLE_FONT_NAME_TEXT                     , 		&::getCppuType((const OUString*)0), 	PROPERTY_NONE, FNT_TEXT		   },
+        { RTL_CONSTASCII_STRINGPARAM( "FontNameVariables"                ), HANDLE_FONT_NAME_VARIABLES                , 		&::getCppuType((const OUString*)0), 	PROPERTY_NONE, FNT_VARIABLE },
+        { RTL_CONSTASCII_STRINGPARAM( "FontNumbersIsBold"),	 HANDLE_FONT_NUMBERS_WEIGHT    ,  &::getBooleanCppuType(),  			PROPERTY_NONE, FNT_NUMBER},
         { RTL_CONSTASCII_STRINGPARAM( "FontNumbersIsItalic"),   HANDLE_FONT_NUMBERS_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_NUMBER},
-        { RTL_CONSTASCII_STRINGPARAM( "FontSansIsBold"),     HANDLE_CUSTOM_FONT_SANS_WEIGHT    ,  &::getBooleanCppuType(),              PROPERTY_NONE, FNT_SANS},
+        { RTL_CONSTASCII_STRINGPARAM( "FontSansIsBold"),	 HANDLE_CUSTOM_FONT_SANS_WEIGHT    ,  &::getBooleanCppuType(),  			PROPERTY_NONE, FNT_SANS},
         { RTL_CONSTASCII_STRINGPARAM( "FontSansIsItalic"),   HANDLE_CUSTOM_FONT_SANS_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_SANS},
-        { RTL_CONSTASCII_STRINGPARAM( "FontSerifIsBold"),    HANDLE_CUSTOM_FONT_SERIF_WEIGHT    ,  &::getBooleanCppuType(),             PROPERTY_NONE,  FNT_SERIF},
+        { RTL_CONSTASCII_STRINGPARAM( "FontSerifIsBold"),	 HANDLE_CUSTOM_FONT_SERIF_WEIGHT    ,  &::getBooleanCppuType(),  			PROPERTY_NONE,  FNT_SERIF},
         { RTL_CONSTASCII_STRINGPARAM( "FontSerifIsItalic"),   HANDLE_CUSTOM_FONT_SERIF_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_SERIF},
         { RTL_CONSTASCII_STRINGPARAM( "FontTextIsBold"),     HANDLE_FONT_TEXT_WEIGHT    ,  &::getBooleanCppuType(),             PROPERTY_NONE, FNT_TEXT},
         { RTL_CONSTASCII_STRINGPARAM( "FontTextIsItalic"),   HANDLE_FONT_TEXT_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_TEXT},
         { RTL_CONSTASCII_STRINGPARAM( "FontVariablesIsBold"),    HANDLE_FONT_VARIABLES_WEIGHT    ,  &::getBooleanCppuType(),            PROPERTY_NONE, FNT_VARIABLE},
         { RTL_CONSTASCII_STRINGPARAM( "FontVariablesIsItalic"),   HANDLE_FONT_VARIABLES_POSTURE,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_VARIABLE},
-        { RTL_CONSTASCII_STRINGPARAM( "Formula"                           ),    HANDLE_FORMULA                             ,        &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0},
-        { RTL_CONSTASCII_STRINGPARAM( "IsScaleAllBrackets"              ), HANDLE_IS_SCALE_ALL_BRACKETS              ,      &::getBooleanCppuType(),    PROPERTY_NONE, 0},
-        { RTL_CONSTASCII_STRINGPARAM( "IsTextMode"                       ), HANDLE_IS_TEXT_MODE                       ,         &::getBooleanCppuType(),    PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "Formula"							  ),	HANDLE_FORMULA							   , 		&::getCppuType((const OUString*)0), 	PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "IsScaleAllBrackets"              ), HANDLE_IS_SCALE_ALL_BRACKETS              , 		&::getBooleanCppuType(), 	PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "IsTextMode"                       ), HANDLE_IS_TEXT_MODE                       , 		&::getBooleanCppuType(), 	PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "GreekCharStyle" ),                   HANDLE_GREEK_CHAR_STYLE,    &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, 0},
-        { RTL_CONSTASCII_STRINGPARAM( "LeftMargin"                        ), HANDLE_LEFT_MARGIN                        ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_LEFTSPACE                 },
-        { RTL_CONSTASCII_STRINGPARAM( "PrinterName"                    ), HANDLE_PRINTER_NAME                        ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0                  },
-        { RTL_CONSTASCII_STRINGPARAM( "PrinterSetup"                       ), HANDLE_PRINTER_SETUP                       ,      &::getCppuType((const Sequence < sal_Int8 >*)0),    PROPERTY_NONE, 0                  },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeBracketDistance"          ), HANDLE_RELATIVE_BRACKET_DISTANCE          ,         &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BRACKETSPACE },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeBracketExcessSize"       ), HANDLE_RELATIVE_BRACKET_EXCESS_SIZE       ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_BRACKETSIZE  },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightFunctions"     ), HANDLE_RELATIVE_FONT_HEIGHT_FUNCTIONS     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_FUNCTION},
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightIndices"       ), HANDLE_RELATIVE_FONT_HEIGHT_INDICES       ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_INDEX      },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightLimits"        ), HANDLE_RELATIVE_FONT_HEIGHT_LIMITS        ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_LIMITS    },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightOperators"     ), HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_OPERATOR},
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightText"            ), HANDLE_RELATIVE_FONT_HEIGHT_TEXT          ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, SIZ_TEXT   },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeFractionBarExcessLength"), HANDLE_RELATIVE_FRACTION_BAR_EXCESS_LENGTH,       &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_FRACTION        },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeFractionBarLineWeight"  ), HANDLE_RELATIVE_FRACTION_BAR_LINE_WEIGHT  ,       &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_STROKEWIDTH  },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeFractionDenominatorDepth"), HANDLE_RELATIVE_FRACTION_DENOMINATOR_DEPTH,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_DENOMINATOR  },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeFractionNumeratorHeight" ), HANDLE_RELATIVE_FRACTION_NUMERATOR_HEIGHT ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_NUMERATOR          },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeIndexSubscript"           ), HANDLE_RELATIVE_INDEX_SUBSCRIPT           ,         &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_SUBSCRIPT          },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeIndexSuperscript"         ), HANDLE_RELATIVE_INDEX_SUPERSCRIPT         ,         &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_SUPERSCRIPT  },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeLineSpacing"              ), HANDLE_RELATIVE_LINE_SPACING              ,         &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_VERTICAL        },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeLowerLimitDistance"      ), HANDLE_RELATIVE_LOWER_LIMIT_DISTANCE      ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_LOWERLIMIT        },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeMatrixColumnSpacing"     ), HANDLE_RELATIVE_MATRIX_COLUMN_SPACING     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_MATRIXCOL},
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeMatrixLineSpacing"       ), HANDLE_RELATIVE_MATRIX_LINE_SPACING       ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_MATRIXROW},
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeOperatorExcessSize"      ), HANDLE_RELATIVE_OPERATOR_EXCESS_SIZE      ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_OPERATORSIZE        },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeOperatorSpacing"          ), HANDLE_RELATIVE_OPERATOR_SPACING          ,         &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_OPERATORSPACE},
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeRootSpacing"              ), HANDLE_RELATIVE_ROOT_SPACING              ,         &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_ROOT               },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeScaleBracketExcessSize" ), HANDLE_RELATIVE_SCALE_BRACKET_EXCESS_SIZE ,       &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_NORMALBRACKETSIZE},
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeSpacing"                   ), HANDLE_RELATIVE_SPACING                   ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_HORIZONTAL        },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeSymbolMinimumHeight"     ), HANDLE_RELATIVE_SYMBOL_MINIMUM_HEIGHT     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_ORNAMENTSPACE         },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeSymbolPrimaryHeight"     ), HANDLE_RELATIVE_SYMBOL_PRIMARY_HEIGHT     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_ORNAMENTSIZE        },
-        { RTL_CONSTASCII_STRINGPARAM( "RelativeUpperLimitDistance"      ),  HANDLE_RELATIVE_UPPER_LIMIT_DISTANCE     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_UPPERLIMIT        },
-        { RTL_CONSTASCII_STRINGPARAM( "RightMargin"                       ),    HANDLE_RIGHT_MARGIN                  ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_RIGHTSPACE               },
+        { RTL_CONSTASCII_STRINGPARAM( "LeftMargin"               		  ), HANDLE_LEFT_MARGIN        		           , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_LEFTSPACE			     },
+        { RTL_CONSTASCII_STRINGPARAM( "PrinterName"                	   ), HANDLE_PRINTER_NAME               		 , 		&::getCppuType((const OUString*)0), 	PROPERTY_NONE, 0			      },
+        { RTL_CONSTASCII_STRINGPARAM( "PrinterSetup"                	   ), HANDLE_PRINTER_SETUP               		 , 		&::getCppuType((const Sequence < sal_Int8 >*)0), 	PROPERTY_NONE, 0			      },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeBracketDistance"          ), HANDLE_RELATIVE_BRACKET_DISTANCE          , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_BRACKETSPACE	},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeBracketExcessSize"       ), HANDLE_RELATIVE_BRACKET_EXCESS_SIZE       , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_BRACKETSIZE 	},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightFunctions"     ), HANDLE_RELATIVE_FONT_HEIGHT_FUNCTIONS     , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, SIZ_FUNCTION},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightIndices"       ), HANDLE_RELATIVE_FONT_HEIGHT_INDICES       , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, SIZ_INDEX	  },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightLimits"        ), HANDLE_RELATIVE_FONT_HEIGHT_LIMITS        , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, SIZ_LIMITS	 },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightOperators"     ), HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS     , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, SIZ_OPERATOR},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFontHeightText"       	  ), HANDLE_RELATIVE_FONT_HEIGHT_TEXT          , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, SIZ_TEXT	  },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFractionBarExcessLength"), HANDLE_RELATIVE_FRACTION_BAR_EXCESS_LENGTH, 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_FRACTION		   },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFractionBarLineWeight"  ), HANDLE_RELATIVE_FRACTION_BAR_LINE_WEIGHT  , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_STROKEWIDTH 	},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFractionDenominatorDepth"), HANDLE_RELATIVE_FRACTION_DENOMINATOR_DEPTH, 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_DENOMINATOR 	},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeFractionNumeratorHeight" ), HANDLE_RELATIVE_FRACTION_NUMERATOR_HEIGHT , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_NUMERATOR		  },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeIndexSubscript"           ), HANDLE_RELATIVE_INDEX_SUBSCRIPT           , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_SUBSCRIPT		  },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeIndexSuperscript"         ), HANDLE_RELATIVE_INDEX_SUPERSCRIPT         , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_SUPERSCRIPT 	},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeLineSpacing"              ), HANDLE_RELATIVE_LINE_SPACING              , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_VERTICAL		   },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeLowerLimitDistance"      ), HANDLE_RELATIVE_LOWER_LIMIT_DISTANCE      , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_LOWERLIMIT		 },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeMatrixColumnSpacing"     ), HANDLE_RELATIVE_MATRIX_COLUMN_SPACING     , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_MATRIXCOL},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeMatrixLineSpacing"       ), HANDLE_RELATIVE_MATRIX_LINE_SPACING       , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_MATRIXROW},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeOperatorExcessSize"      ), HANDLE_RELATIVE_OPERATOR_EXCESS_SIZE      , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_OPERATORSIZE		   },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeOperatorSpacing"          ), HANDLE_RELATIVE_OPERATOR_SPACING          , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_OPERATORSPACE},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeRootSpacing"              ), HANDLE_RELATIVE_ROOT_SPACING              , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_ROOT			      },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeScaleBracketExcessSize" ), HANDLE_RELATIVE_SCALE_BRACKET_EXCESS_SIZE , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_NORMALBRACKETSIZE},
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeSpacing"                   ), HANDLE_RELATIVE_SPACING                   , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_HORIZONTAL		 },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeSymbolMinimumHeight"     ), HANDLE_RELATIVE_SYMBOL_MINIMUM_HEIGHT     , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_ORNAMENTSPACE		 },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeSymbolPrimaryHeight"     ), HANDLE_RELATIVE_SYMBOL_PRIMARY_HEIGHT     , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_ORNAMENTSIZE		   },
+        { RTL_CONSTASCII_STRINGPARAM( "RelativeUpperLimitDistance"      ), 	HANDLE_RELATIVE_UPPER_LIMIT_DISTANCE     , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_UPPERLIMIT		 },
+        { RTL_CONSTASCII_STRINGPARAM( "RightMargin"              		  ), 	HANDLE_RIGHT_MARGIN              	 , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_RIGHTSPACE			    },
         { RTL_CONSTASCII_STRINGPARAM( "RuntimeUID"                      ), HANDLE_RUNTIME_UID                        ,      &::getCppuType(static_cast< const rtl::OUString * >(0)),    PropertyAttribute::READONLY, 0 },
-        { RTL_CONSTASCII_STRINGPARAM( "Symbols"                       ),        HANDLE_SYMBOLS                       ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PROPERTY_NONE, 0  },
-        { RTL_CONSTASCII_STRINGPARAM( "UserDefinedSymbolsInUse"       ),        HANDLE_USED_SYMBOLS                  ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PropertyAttribute::READONLY, 0  },
-        { RTL_CONSTASCII_STRINGPARAM( "TopMargin"                         ),    HANDLE_TOP_MARGIN                    ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_TOPSPACE               },
+        { RTL_CONSTASCII_STRINGPARAM( "Symbols"              		  ), 		HANDLE_SYMBOLS              		 , 		&::getCppuType((const Sequence < SymbolDescriptor > *)0), 	PROPERTY_NONE, 0  },
+        { RTL_CONSTASCII_STRINGPARAM( "TopMargin"                		  ), 	HANDLE_TOP_MARGIN                	 , 		&::getCppuType((const sal_Int16*)0), 	PROPERTY_NONE, DIS_TOPSPACE			      },
         // --> PB 2004-08-25 #i33095# Security Options
         { RTL_CONSTASCII_STRINGPARAM( "LoadReadonly" ), HANDLE_LOAD_READONLY, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
-        // <--
-        // --> 3.7.2010 #i972#
-        { RTL_CONSTASCII_STRINGPARAM( "BaseLine"), HANDLE_BASELINE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
         // <--
         { NULL, 0, 0, NULL, 0, 0 }
     };
@@ -380,7 +373,7 @@ const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
     if(!aSeq.getLength())
     {
         aSeq.realloc( 16 );
-        rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+        rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0,	sal_True );
     }
     return aSeq;
 }
@@ -508,7 +501,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                bool bVal = *(sal_Bool*)(*pValues).getValue();
+                BOOL bVal = *(sal_Bool*)(*pValues).getValue();
                 Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetItalic((bVal) ? ITALIC_NORMAL : ITALIC_NONE);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
@@ -524,7 +517,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                bool bVal = *(sal_Bool*)(*pValues).getValue();
+                BOOL bVal = *(sal_Bool*)(*pValues).getValue();
                 Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetWeight((bVal) ? WEIGHT_BOLD : WEIGHT_NORMAL);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
@@ -544,7 +537,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
                 // apply base size to fonts
                 const Size aTmp( aFormat.GetBaseSize() );
-                for (sal_uInt16  i = FNT_BEGIN;  i <= FNT_END;  i++)
+                for (USHORT  i = FNT_BEGIN;  i <= FNT_END;  i++)
                     aFormat.SetFontSize(i, aTmp);
             }
             break;
@@ -658,7 +651,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     sal_uInt32 nSize = aSequence.getLength();
                     SvMemoryStream aStream ( aSequence.getArray(), nSize, STREAM_READ );
                     aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                    static sal_uInt16 const nRange[] =
+                    static sal_uInt16 __READONLY_DATA nRange[] =
                     {
                         SID_PRINTSIZE,       SID_PRINTSIZE,
                         SID_PRINTZOOM,       SID_PRINTZOOM,
@@ -701,7 +694,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         SmSym aSymbol ( pDescriptor->sName, aFont, static_cast < sal_Unicode > (pDescriptor->nCharacter),
                                         pDescriptor->sSymbolSet );
                         aSymbol.SetExportName ( pDescriptor->sExportName );
-                        aSymbol.SetDocSymbol( sal_True );
+                        aSymbol.SetDocSymbol( TRUE );
                         rManager.AddOrReplaceSymbol ( aSymbol );
                     }
                 }
@@ -714,7 +707,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if ( (*pValues).getValueType() != ::getBooleanCppuType() )
                     throw IllegalArgumentException();
-                sal_Bool bReadonly = sal_False;
+                sal_Bool bReadonly = FALSE;
                 if ( *pValues >>= bReadonly )
                     pDocSh->SetLoadReadonly( bReadonly );
                 break;
@@ -768,7 +761,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_POSTURE        :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                bool bVal = IsItalic( rFace );
+                BOOL bVal = IsItalic( rFace );
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;
@@ -781,7 +774,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_WEIGHT         :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                bool bVal = IsBold( rFace ); // bold?
+                BOOL bVal = IsBold( rFace ); // bold?
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;
@@ -794,7 +787,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 *pValue <<= nVal;
             }
             break;
-            case HANDLE_RELATIVE_FONT_HEIGHT_TEXT           :
+            case HANDLE_RELATIVE_FONT_HEIGHT_TEXT       	:
             case HANDLE_RELATIVE_FONT_HEIGHT_INDICES       :
             case HANDLE_RELATIVE_FONT_HEIGHT_FUNCTIONS     :
             case HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS     :
@@ -873,11 +866,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             }
             break;
             case HANDLE_SYMBOLS:
-            case HANDLE_USED_SYMBOLS:
             {
-                const bool bUsedSymbolsOnly = (*ppEntries)->mnHandle == HANDLE_USED_SYMBOLS;
-                const std::set< rtl::OUString > &rUsedSymbols = pDocSh->GetUsedSymbols();
-
                 // this is get
                 SmModule *pp = SM_MOD();
                 const SmSymbolManager &rManager = pp->GetSymbolManager();
@@ -888,9 +877,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 for (size_t i = 0; i < aSymbols.size(); ++i)
                 {
                     const SmSym * pSymbol = aSymbols[ i ];
-                    const bool bIsUsedSymbol = rUsedSymbols.find( pSymbol->GetName() ) != rUsedSymbols.end();
-                    if (pSymbol && !pSymbol->IsPredefined() &&
-                        (!bUsedSymbolsOnly || bIsUsedSymbol))
+                    if (pSymbol && !pSymbol->IsPredefined () )
                     {
                         aVector.push_back ( pSymbol );
                         nCount++;
@@ -933,21 +920,6 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                  *pValue <<= pDocSh->IsLoadReadonly();
                 break;
             }
-            // <--
-            // --> 3.7.2010 #i972#
-            case HANDLE_BASELINE:
-            {
-                if ( !pDocSh->pTree )
-                    pDocSh->Parse();
-                if ( pDocSh->pTree )
-                {
-                    if ( !pDocSh->IsFormulaArranged() )
-                        pDocSh->ArrangeFormula();
-
-                    *pValue <<= static_cast<sal_Int32>( pDocSh->pTree->GetFormulaBaseline() );
-                }
-            }
-            break;
             // <--
         }
     }
@@ -1020,7 +992,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     if (!m_pPrintUIOptions)
         m_pPrintUIOptions = new SmPrintUIOptions();
     m_pPrintUIOptions->appendPrintUIOptions( aRenderer );
-
+    
     return aRenderer;
 }
 

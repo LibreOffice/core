@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ published interface XJobExecutor : com::sun::star::uno::XInterface
 
         <p>
         Jobs are registered in configuration and will be started by executor
-        automatically, if they are registered for triggered event.
+        automaticly, if they are registered for triggered event.
         The meaning of given string <var>Event</var> mustn't be known. Because
         for the executor it's enough to use it for searching a registered job
         inside his own configuration. So no special events will be defined here.

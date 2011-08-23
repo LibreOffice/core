@@ -57,10 +57,15 @@
  * @file
  * Interface for the all content object,ie. text,paragraph,picture,and so on.
  ************************************************************************/
-#ifndef     _IXFCONTENT_HXX
-#define     _IXFCONTENT_HXX
+/*************************************************************************
+ * Change History
+ * 2004-12-23 create this file.
+ * 2005-04-08 add clone function.
+ ************************************************************************/
+#ifndef		_IXFCONTENT_HXX
+#define		_IXFCONTENT_HXX
 
-#include    "xfglobal.hxx"
+#include	"xfglobal.hxx"
 
 class IXFStyle;
 
@@ -73,25 +78,25 @@ class IXFContent : public IXFObject
 public:
     virtual ~IXFContent(){}
     /**
-     * @descr   Fetch the content type,not quite useful.
+     * @descr	Fetch the content type,not quite useful.
      */
-    virtual enumXFContent   GetContentType() = 0;
+    virtual enumXFContent	GetContentType() = 0;
 
     /**
-     * @descr   Set style to apply. You can get the style name by use XFStyleManager::AddStyle(pStyle),
-     *          or just set a fixed style name.
+     * @descr	Set style to apply. You can get the style name by use XFStyleManager::AddStyle(pStyle),
+     *			or just set a fixed style name.
      */
-    virtual void            SetStyleName(rtl::OUString style) = 0;
+    virtual void			SetStyleName(rtl::OUString style) = 0;
 
     /**
-     * @descr   return the style name.
+     * @descr	return the style name.
      */
-    virtual rtl::OUString   GetStyleName() = 0;
+    virtual rtl::OUString	GetStyleName() = 0;
 
     /**
-     * @descr   Deep copy.
+     * @descr	Deep copy.
      */
-    virtual IXFContent*     Clone() = 0;
+    virtual IXFContent*		Clone() = 0;
 };
 
 #endif

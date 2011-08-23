@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -317,7 +317,8 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
                     {
                         OUString sStyleName;
                         aProperty->maValue >>= sStyleName;
-                        // #i70748# - export also empty list styles
+                        // --> OD 2008-11-19 #i70748#
+                        // export also empty list styles
                         if( sStyleName.getLength() )
                         {
                             OUString sTmp = rExport.GetTextParagraphExport()->GetListAutoStylePool().Find( sStyleName );

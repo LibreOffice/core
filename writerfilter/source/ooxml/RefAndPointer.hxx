@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,6 +48,10 @@ public:
     RefAndPointer()
     : mpHandler(NULL)
     {
+#ifdef DEBUG_MEMORY
+        clog << "MEMORY:" << mpHandler->getInstanceNumber() << ":RefAndPointer"
+             << endl;
+#endif
     }
 
     RefAndPointer(ChildClass * pHandler)
@@ -62,19 +66,24 @@ public:
     RefAndPointer(uno::Reference<Interface> xRef)
     : mRef(xRef)
     {
+#if 0
+        uno::Reference<lang::XUnoTunnel> xTunnel( xRef, uno::UNO_QUERY);
+        
+        if (xTunnel.is())
+            mpHandler = reinterpret_cast<ChildClass *>(xTunnel->getSomething(ChildClass::getUnoTunnelId()));
+#else
         mpHandler = dynamic_cast<ChildClass *>(xRef.get());
-#ifdef DEBUG_MEMORY
-        if (mpHandler != NULL)
-            clog << "MEMORY:" << mpHandler->getInstanceNumber()
-                 << ":RefAndPointer" << endl;
 #endif
+        if (mpHandler != NULL)
+            clog << "MEMORY:" << mpHandler->getInstanceNumber() 
+                 << ":RefAndPointer" << endl;
     }
-
-    virtual ~RefAndPointer()
+    
+    virtual ~RefAndPointer() 
     {
 #ifdef DEBUG_MEMORY
         if (mpHandler != NULL)
-            clog << "MEMORY:" << mpHandler->getInstanceNumber()
+            clog << "MEMORY:" << mpHandler->getInstanceNumber() 
                  << ":~RefAndPointer" << endl;
 #endif
     }

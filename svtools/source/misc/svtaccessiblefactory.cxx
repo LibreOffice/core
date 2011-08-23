@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -284,13 +284,14 @@ namespace svt
             // load the library implementing the factory
             if ( !s_pFactory.get() )
             {
-                const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(
+                const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(
                     SVLIBRARY( "acc" )
-                ));
+                );
                 s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
                 if ( s_hAccessibleImplementationModule != NULL )
                 {
-                    const ::rtl::OUString sFactoryCreationFunc( RTL_CONSTASCII_USTRINGPARAM( "getSvtAccessibilityComponentFactory" ));
+                    const ::rtl::OUString sFactoryCreationFunc =
+                        ::rtl::OUString::createFromAscii( "getSvtAccessibilityComponentFactory" );
                     s_pAccessibleFactoryFunc = (GetSvtAccessibilityComponentFactory)
                         osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData );
 

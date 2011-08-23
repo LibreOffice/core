@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,9 +54,9 @@ module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
-/** The accessible view of a table in a text document or in the page preview
-      of a spreadsheet document. See
-    <type scope="::com::sun::star::sheet">AccessibleSpreadsheet</type> for
+/** The accessible view of a table in a text document or in the page preview 
+      of a spreadsheet document. See 
+    <type scope="::com::sun::star::sheet">AccessibleSpreadsheet</type> for 
     tables in the edit view of a spreadsheet.
     @since OOo 1.1.2
 */
@@ -67,13 +67,13 @@ published service AccessibleTableView
         is the part of a table that is displayed at a single page.
 
     <ul>
-        <li>The parent returned by
+        <li>The parent returned by 
             <method scope="::com::sun::star::accessibility"
             >XAccessibleContext::getAccessibleParent</method>
             is the accessible text document view, a page of the accessible
-            text document page preview, or the accessible spreadsheet
+            text documenent page preview, or the accessible spreadsheet
             page preview.</li>
-        <li>The children returned by
+        <li>The children returned by 
             <method scope="::com::sun::star::accessibility"
             >XAccessibleContext::getAccessibleChild</method> all
             support the interface XAccessible. Calling
@@ -81,7 +81,7 @@ published service AccessibleTableView
             >XAccessible::getAccessibleContext</method> for these children
             returns an object that supports the service.
             <type scope="::com::sun::star::table">AccessibleCellView</type>:
-            A child where calling
+            A child where calling 
             <method scope="::com::sun::star::accessibility"
             >XAccessibleContext::getAccessibleChild</method>
             an object that supports this service is returned for
@@ -92,24 +92,24 @@ published service AccessibleTableView
             the order on the screen. This means that the first cell is the
             cell in the left top edge of the table and the last one is the
             cell in the right bottom edge of the table. The second is the
-            cell in the first row and second column and so on.</li>
+            cell in the first row and second xolumn and so on.</li>
         </ul>
         <li>The description is ???.</li>
         <li>The name is the given table name and a number to make it non-ambiguous.</li>
         <li>The role is <const scope="::com::sun::star::accessibility"
             >AccessibleRole::TABLE</const></li>
-        <li>In a spreadsheet page preview there are relations between the
+        <li>In a spreadsheet page preview there are relations between the 
             table and the shapes with an anchor
             on this table (not with an anchor on a cell in this table).</li>
         <li>The following states are supported:
             <ul>
                 <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::DEFUNC</const> is always false if the
-                    table is not deleted, the document is open. Also it is
+                    >AccessibleStateType::DEFUNC</const> is always false if the 
+                    table is not deleted, the document is open. Also it is 
                     false if the table was showed in a page preview and the
-                    page preview is already opened, otherwise it is true.</li>
+                    page preview is allready opend, otherwise it is true.</li>
                 <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::EDITABLE</const> is false if the
+                    >AccessibleStateType::EDITABLE</const> is false if the 
                     table is showed in a page preview or the table is
                     protected, otherwise it is true.</li>
                 <li><const scope="::com::sun::star::accessibility"
@@ -120,11 +120,11 @@ published service AccessibleTableView
                     true.</li>
                 <li><const scope="::com::sun::star::accessibility"
                     >AccessibleStateType::OPAQUE</const> is false, if the table
-                    has no background color or graphic, otherwise it is
+                    has no background color or graphic, otherwise it is 
                     false.</li>
                 <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SHOWING</const>Is true if the
-                    Bounding Box lies in the Bounding Box of the parent.
+                    >AccessibleStateType::SHOWING</const>Is true if the 
+                    Bounding Box lies in the Bounding Box of the parent. 
                     Otherwise it is false.</li>
                 <li><const scope="::com::sun::star::accessibility"
                     >AccessibleStateType::VISIBLE</const>Is always true.</li>

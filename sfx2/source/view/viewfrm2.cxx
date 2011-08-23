@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include "impviewframe.hxx"
 #include "statcach.hxx"
-#include "sfx2/viewfac.hxx"
+#include "viewfac.hxx"
 #include "workwin.hxx"
 
 #include "sfx2/app.hxx"
@@ -77,7 +77,7 @@ using ::com::sun::star::lang::XComponent;
 
 static ::rtl::OUString GetModuleName_Impl( const ::rtl::OUString& sDocService )
 {
-    uno::Reference< container::XNameAccess > xMM( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"))), uno::UNO_QUERY );
+    uno::Reference< container::XNameAccess > xMM( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager")), uno::UNO_QUERY );
     ::rtl::OUString sVar;
     if ( !xMM.is() )
         return sVar;
@@ -129,7 +129,7 @@ static String _getTabString()
         Sequence< NamedValue > sMaterial;
         if (xHolder->getMaterial() >>= sMaterial) {
             for (int i=0; i < sMaterial.getLength(); i++) {
-                if ((sMaterial[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("title"))) &&
+                if ((sMaterial[i].Name.equalsAscii("title")) &&
                     (sMaterial[i].Value >>= aTabString))
                 {
                     result += ' ';
@@ -146,20 +146,21 @@ static String _getTabString()
 //--------------------------------------------------------------------
 String SfxViewFrame::UpdateTitle()
 
-/*  [Description]
+/*	[Beschreibung]
 
-    With this method, can the SfxViewFrame be forced to immediately provide
-    the new title from the <SfxObjectShell>.
+    Mit dieser Methode kann der SfxViewFrame gezwungen werden, sich sofort
+    den neuen Titel vom der <SfxObjectShell> zu besorgen.
 
-    [Note]
+    [Anmerkung]
 
-    This is for example necessary if one listens to the SfxObjectShell as
-    SfxListener and then react on the <SfxSimpleHint> SFX_HINT_TITLECHANGED,
-    then query the title of his views. However these views (SfxTopViewFrames)
-    are  also SfxListener and because the order of notifications might not be
-    fixed, the title update will be enforced in advance.
+    Dies ist z.B. dann notwendig, wenn man der SfxObjectShell als SfxListener
+    zuh"ort und dort auf den <SfxSimpleHint> SFX_HINT_TITLECHANGED reagieren
+    m"ochte, um dann die Titel seiner Views abzufragen. Diese Views (SfxTopViewFrames)
+    jedoch sind ebenfalls SfxListener und da die Reihenfolge der Benachrichtigung
+    nicht feststeht, mu\s deren Titel-Update vorab erzwungen werden.
 
-    [Example]
+
+    [Beispiel]
 
     void SwDocShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
@@ -192,6 +193,9 @@ String SfxViewFrame::UpdateTitle()
     if ( !pObjSh )
         return String();
 
+//    if  ( pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+//        // kein UpdateTitle mit Embedded-ObjectShell
+//        return String();
 
     const SfxMedium *pMedium = pObjSh->GetMedium();
     String aURL;
@@ -203,10 +207,10 @@ String SfxViewFrame::UpdateTitle()
     }
 
     if ( aURL != pImp->aActualURL )
-        // URL has changed
+        // URL hat sich ge"andert
         pImp->aActualURL = aURL;
 
-    // Is there another view?
+    // gibt es noch eine weitere View?
     sal_uInt16 nViews=0;
     for ( SfxViewFrame *pView= GetFirst(pObjSh);
           pView && nViews<2;
@@ -215,15 +219,15 @@ String SfxViewFrame::UpdateTitle()
              !IsDowning_Impl())
             nViews++;
 
-    // Window Title
+    // Titel des Fensters
     String aTitle;
     if ( nViews == 2 || pImp->nDocViewNo > 1 )
-        // Then attach the number
+        // dann die Nummer dranh"angen
         aTitle = pObjSh->UpdateTitle( NULL, pImp->nDocViewNo );
     else
         aTitle = pObjSh->UpdateTitle();
 
-    // SbxObjects name
+    // Name des SbxObjects
     String aSbxName = pObjSh->SfxShell::GetName();
     if ( IsVisible() )
     {
@@ -245,7 +249,7 @@ String SfxViewFrame::UpdateTitle()
     ::rtl::OUString aDocServiceName( GetObjectShell()->GetFactory().GetDocumentServiceName() );
     aTitle += String( GetModuleName_Impl( aDocServiceName ) );
 #ifdef DBG_UTIL
-    ::rtl::OUString aDefault;
+    ::rtl::OUString	aDefault;
     aTitle += DEFINE_CONST_UNICODE(" [");
     String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
     aTitle += aVerId;
@@ -257,12 +261,17 @@ String SfxViewFrame::UpdateTitle()
 
     GetBindings().Invalidate( SID_NEWDOCDIRECT );
 
+    /* AS_TITLE
+    Window* pWindow = GetFrame()->GetTopWindow_Impl();
+    if ( pWindow && pWindow->GetText() != aTitle )
+        pWindow->SetText( aTitle );
+    */
     return aTitle;
 }
 
 void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 {
-    // If presently the shells are replaced...
+    // Wenn gerade die Shells ausgetauscht werden...
     if ( !GetObjectShell() || !GetViewShell() )
         return;
 
@@ -270,24 +279,25 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
     {
         case SID_SHOWPOPUPS :
         {
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_SHOWPOPUPS, sal_False);
-            sal_Bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
-            SFX_REQUEST_ARG(rReq, pIdItem, SfxUInt16Item, SID_CONFIGITEMID, sal_False);
-            sal_uInt16 nId = pIdItem ? pIdItem->GetValue() : 0;
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_SHOWPOPUPS, FALSE);
+            BOOL bShow = pShowItem ? pShowItem->GetValue() : TRUE;
+            SFX_REQUEST_ARG(rReq, pIdItem, SfxUInt16Item, SID_CONFIGITEMID, FALSE);
+            USHORT nId = pIdItem ? pIdItem->GetValue() : 0;
 
+            // ausfuehren
             SfxWorkWindow *pWorkWin = GetFrame().GetWorkWindow_Impl();
             if ( bShow )
             {
-                // First, make the floats viewable
+                // Zuerst die Floats auch anzeigbar machen
                 pWorkWin->MakeChildsVisible_Impl( bShow );
-                GetDispatcher()->Update_Impl( sal_True );
+                GetDispatcher()->Update_Impl( TRUE );
 
-                // Then view it
+                // Dann anzeigen
                 GetBindings().HidePopups( !bShow );
             }
             else
             {
-                // Hide all
+                // Alles hiden
                 SfxBindings *pBind = &GetBindings();
                 while ( pBind )
                 {
@@ -295,7 +305,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                     pBind = pBind->GetSubBindings_Impl();
                 }
 
-                pWorkWin->HidePopups_Impl( !bShow, sal_True, nId );
+                pWorkWin->HidePopups_Impl( !bShow, TRUE, nId );
                 pWorkWin->MakeChildsVisible_Impl( bShow );
             }
 
@@ -306,14 +316,14 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 
         case SID_ACTIVATE:
         {
-            MakeActive_Impl( sal_True );
+            MakeActive_Impl( TRUE );
             rReq.SetReturnValue( SfxObjectItem( 0, this ) );
             break;
         }
 
         case SID_NEWDOCDIRECT :
         {
-            SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, sal_False);
+            SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, FALSE);
             String aFactName;
             if ( pFactoryItem )
                 aFactName = pFactoryItem->GetValue();
@@ -321,7 +331,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                 aFactName = pImp->aFactoryName;
             else
             {
-                OSL_FAIL("Missing argument!");
+                DBG_ERROR("Missing argument!");
                 break;
             }
 
@@ -347,7 +357,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 
             if ( GetViewShell()->PrepareClose() )
             {
-                // More Views on the same Document?
+                // weitere Views auf dasselbe Doc?
                 SfxObjectShell *pDocSh = GetObjectShell();
                 int bOther = sal_False;
                 for ( const SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocSh );
@@ -355,14 +365,14 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                       pFrame = SfxViewFrame::GetNext( *pFrame, pDocSh ) )
                     bOther = (pFrame != this);
 
-                // Document only needs to be queried, if no other View present.
+                // Doc braucht nur gefragt zu werden, wenn keine weitere View
                 sal_Bool bClosed = sal_False;
-                sal_Bool bUI = sal_True;
+                sal_Bool bUI = TRUE;
                 if ( ( bOther || pDocSh->PrepareClose( bUI ) ) )
                 {
                     if ( !bOther )
-                        pDocSh->SetModified( sal_False );
-                    rReq.Done(); // Must call this before Close()!
+                        pDocSh->SetModified( FALSE );
+                    rReq.Done(); // unbedingt vor Close() rufen!
                     bClosed = sal_False;
                     try
                     {
@@ -392,7 +402,7 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
         return;
 
     const sal_uInt16 *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges, "Set without Range");
+    DBG_ASSERT(pRanges, "Set ohne Bereich");
     while ( *pRanges )
     {
         for ( sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich )
@@ -431,14 +441,14 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
                 {
                     uno::Any aAny;
                     aAny <<= GetViewShell()->GetVerbs();
-                    rSet.Put( SfxUnoAnyItem( sal_uInt16( SID_OBJECT ), aAny ) );
+                    rSet.Put( SfxUnoAnyItem( USHORT( SID_OBJECT ), aAny ) );
                 }
                 else
                     rSet.DisableItem( SID_OBJECT );
                 break;
 
             default:
-                OSL_FAIL( "invalid message-id" );
+                DBG_ERROR( "invalid message-id" );
             }
         }
         ++pRanges;
@@ -452,7 +462,7 @@ void SfxViewFrame::INetExecute_Impl( SfxRequest &rRequest )
     {
         case SID_BROWSE_FORWARD:
         case SID_BROWSE_BACKWARD:
-            OSL_FAIL( "SfxViewFrame::INetExecute_Impl: SID_BROWSE_FORWARD/BACKWARD are dead!" );
+            OSL_ENSURE( false, "SfxViewFrame::INetExecute_Impl: SID_BROWSE_FORWARD/BACKWARD are dead!" );
             break;
         case SID_CREATELINK:
         {
@@ -484,7 +494,7 @@ void SfxViewFrame::INetState_Impl( SfxItemSet &rItemSet )
     rItemSet.DisableItem( SID_BROWSE_FORWARD );
     rItemSet.DisableItem( SID_BROWSE_BACKWARD );
 
-    // Add/SaveToBookmark at BASIC-IDE, QUERY-EDITOR etc. disable
+    // Add/SaveToBookmark bei BASIC-IDE, QUERY-EDITOR etc. disablen
     SfxObjectShell *pDocSh = GetObjectShell();
     sal_Bool bPseudo = pDocSh && !( pDocSh->GetFactory().GetFlags() & SFXOBJECTSHELL_HASOPENDOC );
     sal_Bool bEmbedded = pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
@@ -499,18 +509,18 @@ void SfxViewFrame::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY
 
 void SfxViewFrame::Activate( sal_Bool bMDI )
 {
-    DBG_ASSERT(GetViewShell(), "No Shell");
+    DBG_ASSERT(GetViewShell(), "Keine Shell");
     if ( bMDI )
         pImp->bActive = sal_True;
-//(mba): here maybe as in Beanframe NotifyEvent ?!
+//(mba): hier evtl. wie in Beanframe NotifyEvent ?!
 }
 
 void SfxViewFrame::Deactivate( sal_Bool bMDI )
 {
-    DBG_ASSERT(GetViewShell(), "No Shell");
+    DBG_ASSERT(GetViewShell(), "Keine Shell");
     if ( bMDI )
         pImp->bActive = sal_False;
-//(mba): here maybe as in Beanframe NotifyEvent ?!
+//(mba): hier evtl. wie in Beanframe NotifyEvent ?!
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

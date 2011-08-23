@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,14 +126,14 @@ public:
     /** Mark the FrameworkHelper object for the given ViewShellBase as
         disposed.  A following ReleaseInstance() call will destroy the
         FrameworkHelper object.
-
+        
         Do not call this method.  It is an internally used method that can
         not be made private.
     */
     static void DisposeInstance (ViewShellBase& rBase);
 
     /** Destroy the FrameworkHelper object for the given ViewShellBase.
-
+        
         Do not call this method.  It is an internally used method that can
         not be made private.
     */
@@ -224,23 +224,14 @@ public:
 
     /** Request the activation of the specified task panel in the standard
         task pane.
-        @param rsTaskPanelURL
-            The panel that is to be activated.
-        @param bEnsureTaskPaneIsVisible
-            When this is <TRUE/> then the task pane is activated when not
-            yet active.
-            When this flag is <FALSE/> then the requested panel
-            is activated only when the task pane is already active.  When it
-            is not active then this call is silently ignored.
     */
     void RequestTaskPanel (
-        const ::rtl::OUString& rsTaskPanelURL,
-        const bool bEnsureTaskPaneIsVisible = true);
-
+        const ::rtl::OUString& rsTaskPanelURL);
+    
     /** Process a slot call that requests a view shell change.
     */
     void HandleModeChangeSlot (
-        sal_uLong nSlotId,
+        ULONG nSlotId,
         SfxRequest& rRequest);
 
     /** Run the given callback when the specified event is notified by the
@@ -262,7 +253,7 @@ public:
             rCallback.
         @param rCallback
             The callback to be called when the resource is activated.
-
+        
     */
     void RunOnResourceActivation(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
@@ -278,7 +269,7 @@ public:
         Do not use this method until there is absolutely no other way.
     */
     void RequestSynchronousUpdate (void);
-
+    
     /** Block until the specified event is notified by the configuration
         controller.  When the configuration controller is not processing any
         requests the method returns immediately.
@@ -319,7 +310,7 @@ public:
             CreateResourceId (
                 const ::rtl::OUString& rsResourceURL,
                 const ::rtl::OUString& rsAnchorURL);
-
+    
     /** Create a new XResourceId object for the given resource URL and the
         two given anchor URLs.
     */
@@ -362,7 +353,7 @@ private:
     friend class DisposeListener;
     css::uno::Reference<css::lang::XComponent>
         mxDisposeListener;
-
+    
     FrameworkHelper (ViewShellBase& rBase);
     FrameworkHelper (const FrameworkHelper& rHelper); // Not implemented.
     FrameworkHelper& operator= (const FrameworkHelper& rHelper); // Not implemented.

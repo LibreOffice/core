@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,29 +67,29 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_JAVAEDIT)),
 
-    aTypeFT         ( this, SW_RES( FT_TYPE ) ),
-    aTypeED         ( this, SW_RES( ED_TYPE ) ),
-    aUrlRB          ( this, SW_RES( RB_URL ) ),
+    aTypeFT 		( this, SW_RES( FT_TYPE ) ),
+    aTypeED 		( this, SW_RES( ED_TYPE ) ),
+    aUrlRB 			( this, SW_RES( RB_URL ) ),
     aEditRB         ( this, SW_RES( RB_EDIT ) ),
     aUrlPB          ( this, SW_RES( PB_URL ) ),
-    aUrlED          ( this, SW_RES( ED_URL ) ),
-    aEditED         ( this, SW_RES( ED_EDIT ) ),
+    aUrlED 			( this, SW_RES( ED_URL ) ),
+    aEditED 		( this, SW_RES( ED_EDIT ) ),
     aPostItFL       ( this, SW_RES( FL_POSTIT ) ),
 
     aOKBtn          ( this, SW_RES( BTN_POST_OK ) ),
-    aCancelBtn      ( this, SW_RES( BTN_POST_CANCEL ) ),
-    aPrevBtn        ( this, SW_RES( BTN_PREV ) ),
-    aNextBtn        ( this, SW_RES( BTN_NEXT ) ),
-    aHelpBtn        ( this, SW_RES( BTN_POST_HELP ) ),
+    aCancelBtn		( this, SW_RES( BTN_POST_CANCEL ) ),
+    aPrevBtn		( this, SW_RES( BTN_PREV ) ),
+    aNextBtn		( this, SW_RES( BTN_NEXT ) ),
+    aHelpBtn		( this, SW_RES( BTN_POST_HELP ) ),
 
-    bNew(sal_True),
-    bIsUrl(sal_False),
+    bNew(TRUE),
+    bIsUrl(FALSE),
 
     pSh(pWrtSh),
     pFileDlg(NULL),
     pOldDefDlgParent(NULL)
 {
-    // install handler
+    // Handler installieren
     aPrevBtn.SetClickHdl( LINK( this, SwJavaEditDialog, PrevHdl ) );
     aNextBtn.SetClickHdl( LINK( this, SwJavaEditDialog, NextHdl ) );
     aOKBtn.SetClickHdl( LINK( this, SwJavaEditDialog, OKHdl ) );
@@ -113,7 +113,7 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     if( !bNew )
         SetText( SW_RES( STR_JAVA_EDIT ) );
     else
-        // newly create
+        // neu anlegen
         SetText( SW_RES( STR_JAVA_INSERT ) );
 
     FreeResource();
@@ -121,12 +121,24 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     RadioButtonHdl(NULL);
 }
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
+
 SwJavaEditDialog::~SwJavaEditDialog()
 {
     delete pMgr;
     delete pFileDlg;
     Application::SetDefDialogParent( pOldDefDlgParent );
 }
+
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
 
 IMPL_LINK_INLINE_START( SwJavaEditDialog, PrevHdl, Button *, EMPTYARG )
 {
@@ -140,6 +152,12 @@ IMPL_LINK_INLINE_START( SwJavaEditDialog, PrevHdl, Button *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwJavaEditDialog, PrevHdl, Button *, EMPTYARG )
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
+
 IMPL_LINK_INLINE_START( SwJavaEditDialog, NextHdl, Button *, EMPTYARG )
 {
     SetFld();
@@ -152,6 +170,12 @@ IMPL_LINK_INLINE_START( SwJavaEditDialog, NextHdl, Button *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwJavaEditDialog, NextHdl, Button *, EMPTYARG )
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
+
 IMPL_LINK( SwJavaEditDialog, OKHdl, Button *, EMPTYARG )
 {
     SetFld();
@@ -159,18 +183,30 @@ IMPL_LINK( SwJavaEditDialog, OKHdl, Button *, EMPTYARG )
     return 0;
 }
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
+
 void SwJavaEditDialog::Apply()
 {
 }
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
+
 void SwJavaEditDialog::CheckTravel()
 {
-    sal_Bool bTravel = sal_False;
-    sal_Bool bNext(sal_False), bPrev(sal_False);
+    BOOL bTravel = FALSE;
+    BOOL bNext(FALSE), bPrev(FALSE);
 
     if(!bNew)
     {
-        // Traveling only when more than one field
+        // Traveling nur bei mehr als einem Feld
         pSh->StartAction();
         pSh->CreateCrsr();
 
@@ -219,6 +255,12 @@ void SwJavaEditDialog::CheckTravel()
     }
 }
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
+
 void SwJavaEditDialog::SetFld()
 {
     if( !aOKBtn.IsEnabled() )
@@ -248,14 +290,18 @@ void SwJavaEditDialog::SetFld()
         aType = String::CreateFromAscii("JavaScript");
 }
 
-sal_Bool SwJavaEditDialog::IsUpdate()
+BOOL SwJavaEditDialog::IsUpdate()
 {
     return pFld && ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
 }
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
 IMPL_LINK( SwJavaEditDialog, RadioButtonHdl, RadioButton *, EMPTYARG )
 {
-    sal_Bool bEnable = aUrlRB.IsChecked();
+    BOOL bEnable = aUrlRB.IsChecked();
     aUrlPB.Enable(bEnable);
     aUrlED.Enable(bEnable);
     aEditED.Enable(!bEnable);
@@ -268,10 +314,14 @@ IMPL_LINK( SwJavaEditDialog, RadioButtonHdl, RadioButton *, EMPTYARG )
         aEditED.SetReadOnly( !bEnable);
         aTypeED.SetReadOnly( !bEnable);
         if( aUrlPB.IsEnabled() && !bEnable )
-            aUrlPB.Enable( sal_False );
+            aUrlPB.Enable( FALSE );
     }
     return 0;
 }
+
+/***************************************************************************
+    Beschreibung:
+***************************************************************************/
 
 IMPL_LINK( SwJavaEditDialog, InsertFileHdl, PushButton *, pBtn )
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,7 +144,7 @@ public:
     sal_Int32 mnLastVisibleColumn;
     sal_Int32 mnFirstVisibleRow;
     sal_Int32 mnLastVisibleRow;
-
+    
 private:
     Orientation meOrientation;
     ::rtl::Reference<PresenterScrollBar> mpHorizontalScrollBar;
@@ -334,7 +334,7 @@ PresenterSlideSorter::PresenterSlideSorter (
 
         // Set the orientation.
         const bool bIsVertical (true);
-
+        
         // Create the scroll bar.
         if (bIsVertical)
             mpVerticalScrollBar = ::rtl::Reference<PresenterScrollBar>(
@@ -371,11 +371,11 @@ PresenterSlideSorter::PresenterSlideSorter (
             Layout::Vertical,
             mpHorizontalScrollBar,
             mpVerticalScrollBar));
-
+        
         // Create the preview cache.
         mxPreviewCache = Reference<drawing::XSlidePreviewCache>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterPreviewCache")),
+                OUString::createFromAscii("com.sun.star.drawing.PresenterPreviewCache"),
                 mxComponentContext),
             UNO_QUERY_THROW);
         Reference<container::XIndexAccess> xSlides (mxSlideShowController, UNO_QUERY);
@@ -392,11 +392,11 @@ PresenterSlideSorter::PresenterSlideSorter (
             mpPresenterController->GetTheme(),
             mxWindow,
             mpPresenterController->GetPaintManager()));
-
+        
         // Listen for changes of the current slide.
         Reference<beans::XPropertySet> xControllerProperties (rxController, UNO_QUERY_THROW);
         xControllerProperties->addPropertyChangeListener(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("CurrentPage")),
+            OUString::createFromAscii("CurrentPage"),
             this);
 
         // Move the current slide in the center of the window.
@@ -467,7 +467,7 @@ void SAL_CALL PresenterSlideSorter::disposing (void)
     if (mxPreviewCache.is())
     {
         mxPreviewCache->removePreviewCreationNotifyListener(this);
-
+        
         Reference<XComponent> xComponent (mxPreviewCache, UNO_QUERY);
         mxPreviewCache = NULL;
         if (xComponent.is())
@@ -525,7 +525,7 @@ void SAL_CALL PresenterSlideSorter::disposing (const lang::EventObject& rEventOb
 
 
 //----- XWindowListener -------------------------------------------------------
-
+    
 void SAL_CALL PresenterSlideSorter::windowResized (const awt::WindowEvent& rEvent)
     throw (uno::RuntimeException)
 {
@@ -653,7 +653,7 @@ void SAL_CALL PresenterSlideSorter::mouseExited (const css::awt::MouseEvent& rEv
 
 
 //----- XMouseMotionListener --------------------------------------------------
-
+    
 void SAL_CALL PresenterSlideSorter::mouseMoved (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
@@ -724,13 +724,13 @@ void SAL_CALL PresenterSlideSorter::propertyChange (
 
 
 //----- XSlidePreviewCacheListener --------------------------------------------
-
+    
 void SAL_CALL PresenterSlideSorter::notifyPreviewCreation (
     sal_Int32 nSlideIndex)
     throw(css::uno::RuntimeException)
 {
     OSL_ASSERT(mpLayout.get()!=NULL);
-
+    
     awt::Rectangle aBBox (mpLayout->GetBoundingBox(nSlideIndex));
     mpPresenterController->GetPaintManager()->Invalidate(mxWindow, aBBox, true);
 }
@@ -744,7 +744,7 @@ void SAL_CALL PresenterSlideSorter::setCurrentPage (const Reference<drawing::XDr
     throw (RuntimeException)
 {
     (void)rxSlide;
-
+    
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
@@ -860,7 +860,7 @@ geometry::RealRectangle2D PresenterSlideSorter::PlaceScrollBars (
     Reference<container::XIndexAccess> xSlides (mxSlideShowController, UNO_QUERY_THROW);
     if (xSlides.is())
         bIsScrollBarNeeded = mpLayout->IsScrollBarNeeded(xSlides->getCount());
-
+    
     if (mpLayout->GetOrientation() == Layout::Vertical)
     {
         if (mpVerticalScrollBar.get() != NULL)
@@ -900,7 +900,7 @@ geometry::RealRectangle2D PresenterSlideSorter::PlaceScrollBars (
                     rUpperBox.X2,
                     rUpperBox.Y2));
                 mpHorizontalScrollBar->SetVisible(true);
-
+                
                 // Reduce area covered by the scroll bar from the available
                 // space.
                 return geometry::RealRectangle2D(
@@ -974,7 +974,7 @@ void PresenterSlideSorter::ClearBackground (
 double PresenterSlideSorter::GetSlideAspectRatio (void) const
 {
     double nSlideAspectRatio (28.0/21.0);
-
+    
     try
     {
         Reference<container::XIndexAccess> xSlides(mxSlideShowController, UNO_QUERY_THROW);
@@ -983,8 +983,8 @@ double PresenterSlideSorter::GetSlideAspectRatio (void) const
             Reference<beans::XPropertySet> xProperties(xSlides->getByIndex(0),UNO_QUERY_THROW);
             sal_Int32 nWidth (28000);
             sal_Int32 nHeight (21000);
-            if ((xProperties->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))) >>= nWidth)
-                && (xProperties->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))) >>= nHeight)
+            if ((xProperties->getPropertyValue(OUString::createFromAscii("Width")) >>= nWidth)
+                && (xProperties->getPropertyValue(OUString::createFromAscii("Height")) >>= nHeight)
                 && nHeight > 0)
             {
                 nSlideAspectRatio = double(nWidth) / double(nHeight);
@@ -1152,7 +1152,7 @@ void PresenterSlideSorter::Paint (const awt::Rectangle& rUpdateBox)
         geometry::RealPoint2D(mxWindow->getPosSize().Width, mnSeparatorY),
         rendering::ViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), NULL),
         aRenderState);
-
+        
     // Paint the slides.
     if ( ! PresenterGeometryHelper::AreRectanglesDisjoint(
         rUpdateBox,
@@ -1286,7 +1286,7 @@ void PresenterSlideSorter::Layout::Update (
     const double nSlideAspectRatio)
 {
     maBoundingBox = rBoundingBox;
-
+    
     mnHorizontalBorder = gnHorizontalBorder;
     mnVerticalBorder = gnVerticalBorder;
 
@@ -1296,7 +1296,7 @@ void PresenterSlideSorter::Layout::Update (
         return;
 
     double nPreviewWidth;
-
+    
     // Determine column count, preview width, and horizontal gap (borders
     // are half the gap).  Try to use the preferred values.  Try more to
     // stay in the valid intervalls.  This last constraint may be not
@@ -1404,7 +1404,7 @@ void PresenterSlideSorter::Layout::SetupVisibleArea (void)
         mnFirstVisibleColumn = 0;
         mnFirstVisibleRow = ::std::max(sal_Int32(0), GetRow(aPoint));
     }
-
+    
     aPoint = GetLocalPosition(geometry::RealPoint2D( maBoundingBox.X2, maBoundingBox.Y2));
     if (meOrientation == Horizontal)
     {
@@ -1527,7 +1527,7 @@ geometry::RealPoint2D PresenterSlideSorter::Layout::GetPoint (
 {
     sal_Int32 nColumn (GetColumn(nSlideIndex));
     sal_Int32 nRow (GetRow(nSlideIndex));
-
+        
     geometry::RealPoint2D aPosition (
         mnHorizontalBorder + nColumn*(maPreviewSize.Width+mnHorizontalGap),
         mnVerticalBorder + nRow*(maPreviewSize.Height+mnVerticalGap));
@@ -1657,7 +1657,7 @@ void PresenterSlideSorter::Layout::UpdateScrollBars (void)
         nTotalColumnCount = mnColumnCount;
         nTotalRowCount = sal_Int32(ceil(double(mnSlideCount) / double(mnColumnCount)));
     }
-
+    
     if (mpHorizontalScrollBar.get() != NULL)
     {
         mpHorizontalScrollBar->SetTotalSize(
@@ -1679,7 +1679,7 @@ void PresenterSlideSorter::Layout::UpdateScrollBars (void)
         mpVerticalScrollBar->SetLineHeight(maPreviewSize.Height);
     }
 
-
+    
 
     // No place yet for the vertical scroll bar.
 }
@@ -1771,7 +1771,7 @@ void PresenterSlideSorter::MouseOverManager::Paint (
 {
     if (nSlideIndex != mnSlideIndex)
         return;
-
+    
     if (mxCanvas != rxCanvas)
         SetCanvas(rxCanvas);
     if (rxCanvas != NULL)
@@ -1825,7 +1825,7 @@ void PresenterSlideSorter::MouseOverManager::SetSlide (
 
     maSlideBoundingBox = rBox;
     mnSlideIndex = nSlideIndex;
-
+    
     if (nSlideIndex >= 0)
     {
         if (mxSlides.get() != NULL)
@@ -1871,18 +1871,18 @@ Reference<rendering::XBitmap> PresenterSlideSorter::MouseOverManager::CreateBitm
     // bitmaps that are used to paints its background.  The width is defined
     // by the text.
     geometry::IntegerSize2D aLabelSize (CalculateLabelSize(sText));
-
+    
     // Create a new bitmap that will contain the complete label.
     Reference<rendering::XBitmap> xBitmap (
         mxCanvas->getDevice()->createCompatibleAlphaBitmap(aLabelSize));
 
     if ( ! xBitmap.is())
         return NULL;
-
+    
     Reference<rendering::XBitmapCanvas> xBitmapCanvas (xBitmap, UNO_QUERY);
     if ( ! xBitmapCanvas.is())
         return NULL;
-
+    
     // Paint the background.
     PaintButtonBackground(xBitmapCanvas, aLabelSize);
 
@@ -1902,7 +1902,7 @@ Reference<rendering::XBitmap> PresenterSlideSorter::MouseOverManager::CreateBitm
         const rendering::ViewState aViewState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
             NULL);
-
+                
         rendering::RenderState aRenderState (
             geometry::AffineMatrix2D(1,0,nXOffset, 0,1,nYOffset),
             NULL,
@@ -1999,7 +1999,7 @@ geometry::IntegerSize2D PresenterSlideSorter::MouseOverManager::CalculateLabelSi
     // Width is specified by text width and maximal width.
     const geometry::RealSize2D aTextSize (
         PresenterCanvasHelper::GetTextSize(mpFont->mxFont, rsText));
-
+    
     const sal_Int32 nWidth (round(aTextSize.Width + 2*gnHorizontalLabelPadding));
 
     return geometry::IntegerSize2D(nWidth, nHeight);
@@ -2016,11 +2016,11 @@ void PresenterSlideSorter::MouseOverManager::PaintButtonBackground (
     Reference<rendering::XBitmap> xLeftLabelBitmap;
     if (mpLeftLabelBitmap.get() != NULL)
         xLeftLabelBitmap = mpLeftLabelBitmap->GetNormalBitmap();
-
+            
     Reference<rendering::XBitmap> xCenterLabelBitmap;
     if (mpCenterLabelBitmap.get() != NULL)
         xCenterLabelBitmap = mpCenterLabelBitmap->GetNormalBitmap();
-
+            
     Reference<rendering::XBitmap> xRightLabelBitmap;
     if (mpRightLabelBitmap.get() != NULL)
         xRightLabelBitmap = mpRightLabelBitmap->GetNormalBitmap();
@@ -2066,7 +2066,7 @@ PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
 {
     PresenterConfigurationAccess aConfiguration (
         rxContext,
-        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
+        OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XHierarchicalNameAccess> xBitmaps (
         aConfiguration.GetConfigurationNode(

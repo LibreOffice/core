@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,
 
         Sequence< ::rtl::OUString> aSeq = _xIndexes->getElementNames();
         const ::rtl::OUString* pBegin = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
+        const ::rtl::OUString* pEnd	  = pBegin + aSeq.getLength();
         for(;pBegin != pEnd;++pBegin)
         {
             _xIndexes->getByName(*pBegin) >>= xIndex;
@@ -115,7 +115,7 @@ OEvaluateSet* OFILEOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
                 if (pIter)
                 {
                     pEvaluateSet = new OEvaluateSet();
-                    sal_uIntPtr nRec = pIter->First();
+                    ULONG nRec = pIter->First();
                     while (nRec != NODE_NOTFOUND)
                     {
                         (*pEvaluateSet)[nRec] = nRec;

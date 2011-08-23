@@ -24,7 +24,7 @@
 -o forms.OImageButtonModel
 -o forms.OImageControlControl
 -o forms.OImageControlModel
-#i114669 -o forms.OListBoxControl
+-o forms.OListBoxControl
 -o forms.OListBoxModel
 -o forms.ONavigationBarControl
 -o forms.ONavigationBarModel

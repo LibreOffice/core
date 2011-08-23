@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
-#include <cppuhelper/implbase8.hxx> // helper for implementations
+#include <cppuhelper/implbase8.hxx>	// helper for implementations
 #include <svl/itemprop.hxx>
 #include "calbck.hxx"
 #include "TextCursorHelper.hxx"
@@ -75,8 +75,8 @@ class SwXTextView :
     const SfxItemPropertySet*   m_pPropSet;   // property map for SwXTextView properties
                                         // (not related to pxViewSettings!)
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *         pxViewSettings;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextViewCursor > *   pxTextViewCursor;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > * 		pxViewSettings;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextViewCursor > * 	pxTextViewCursor;
 
 
     SdrObject* GetControl(
@@ -89,7 +89,7 @@ public:
     SwXTextView(SwView* pSwView);
 
 
-    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual 	::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
     virtual void SAL_CALL release(  ) throw();
 
@@ -140,21 +140,21 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //XTransferableSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getTransferable(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::uno::RuntimeException);
 
-    void                    NotifySelChanged();
+    void					NotifySelChanged();
     void                    NotifyDBChanged();
 
     SwView*                 GetView() {return m_pView;}
     void                    Invalidate();
 
     // temporary document used for PDF export of selections/multi-selections
-    SfxObjectShellLock      BuildTmpSelectionDoc();
+    SfxObjectShellRef       BuildTmpSelectionDoc( SfxObjectShellRef& );
 };
 
 typedef cppu::WeakImplHelper8<
@@ -190,12 +190,12 @@ public:
     //XTextCursor - neu
     virtual void SAL_CALL collapseToStart(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL collapseToEnd(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isCollapsed(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL goLeft( sal_Int16 nCount, sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL goRight( sal_Int16 nCount, sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL gotoStart( sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL gotoEnd( sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL gotoRange( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
+    virtual BOOL SAL_CALL isCollapsed(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual BOOL SAL_CALL goLeft( sal_Int16 nCount, BOOL bExpand ) throw(::com::sun::star::uno::RuntimeException);
+    virtual BOOL SAL_CALL goRight( sal_Int16 nCount, BOOL bExpand ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL gotoStart( BOOL bExpand ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL gotoEnd( BOOL bExpand ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL gotoRange( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, BOOL bExpand ) throw(::com::sun::star::uno::RuntimeException);
 
     //XPageCursor
     virtual sal_Bool SAL_CALL jumpToFirstPage(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -247,7 +247,7 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -258,10 +258,10 @@ public:
     void    Invalidate(){m_pView = 0;}
 
     // ITextCursorHelper
-    virtual const SwPaM*        GetPaM() const;
-    virtual SwPaM*              GetPaM();
-    virtual const SwDoc*        GetDoc() const;
-    virtual SwDoc*              GetDoc();
+    virtual const SwPaM*		GetPaM() const;
+    virtual SwPaM*				GetPaM();
+    virtual const SwDoc* 		GetDoc() const;
+    virtual SwDoc* 				GetDoc();
 };
 
 #endif

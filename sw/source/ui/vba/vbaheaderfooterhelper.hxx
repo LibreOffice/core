@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,6 +47,10 @@ public:
     static sal_Bool isEvenPagesFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
     static sal_Bool isPrimaryHeader( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
     static sal_Bool isPrimaryFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+#ifdef TOMORROW
+    static sal_Bool isPrimaryHeader( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XText >& xCurrentText ) throw (css::uno::RuntimeException);
+    static sal_Bool isPrimaryFooter( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XText >& xCurrentText ) throw (css::uno::RuntimeException);
+#endif
 };
 
 #endif

@@ -1,4 +1,3 @@
-
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
@@ -7,6 +6,9 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: OptimisticSet.cxx,v $
+ * $Revision: 1.73 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,9 +103,8 @@ DBG_NAME(OptimisticSet)
 OptimisticSet::OptimisticSet(const ::comphelper::ComponentContext& _rContext,
                              const Reference< XConnection>& i_xConnection,
                              const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
-                             const ORowSetValueVector& _aParameterValueForCache,
-                             sal_Int32 i_nMaxRows)
-            :OKeySet(NULL,NULL,::rtl::OUString(),_xComposer,_aParameterValueForCache,i_nMaxRows)
+                             const ORowSetValueVector& _aParameterValueForCache)
+            :OKeySet(NULL,NULL,::rtl::OUString(),_xComposer,_aParameterValueForCache)
             ,m_aSqlParser( _rContext.getLegacyServiceFactory() )
             ,m_aSqlIterator( i_xConnection, Reference<XTablesSupplier>(_xComposer,UNO_QUERY)->getTables(), m_aSqlParser, NULL )
             ,m_bResultSetChanged(false)
@@ -124,7 +125,7 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
     initColumns();
 
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-    bool bCase = (xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers()) ? true : false;
+    bool bCase = (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers()) ? true : false;
     Reference<XColumnsSupplier> xQueryColSup(m_xComposer,UNO_QUERY);
     const Reference<XNameAccess> xQueryColumns = xQueryColSup->getColumns();
     const Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);
@@ -139,7 +140,7 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
         m_pKeyColumnNames->insert(pKeyColumNames->begin(),pKeyColumNames->end());
     }
 
-    // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
+    // the first row is empty because it's now easier for us to distinguish	when we are beforefirst or first
     // without extra variable to be set
     m_aKeyMap.insert(OKeySetMatrix::value_type(0,OKeySetValue(NULL,::std::pair<sal_Int32,Reference<XRow> >(0,NULL))));
     m_aKeyIter = m_aKeyMap.begin();
@@ -187,7 +188,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
         throw SQLException();
     // list all cloumns that should be set
     static ::rtl::OUString s_sPara(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    ::rtl::OUString aQuote	= getIdentifierQuoteString();
     static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
@@ -199,6 +200,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     TSQLStatements aIndexConditions;
     TSQLStatements aSql;
 
+    // sal_Int32 i = 1;
     // here we build the condition part for the update statement
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
@@ -255,8 +257,10 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
             sSql.append(s_sSET);
             sSql.append(aSqlIter->second);
             ::rtl::OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
+            bool bAddWhere = true;
             if ( rCondition.getLength() )
             {
+                bAddWhere = false;
                 sSql.appendAscii(" WHERE ");
                 sSql.append( rCondition );
             }
@@ -272,7 +276,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
     TSQLStatements aParameter;
     TSQLStatements aKeyConditions;
     ::std::map< ::rtl::OUString,bool > aResultSetChanged;
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    ::rtl::OUString aQuote	= getIdentifierQuoteString();
     static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
@@ -381,7 +385,7 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
     static const ::rtl::OUString s_sAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    ::rtl::OUString aQuote	= getIdentifierQuoteString();
     ::rtl::OUString aColumnName;
     ::rtl::OUStringBuffer sKeyCondition,sIndexCondition;
     ::std::vector<sal_Int32> aIndexColumnPositions;
@@ -389,6 +393,7 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
     TSQLStatements aIndexConditions;
     TSQLStatements aSql;
 
+    // sal_Int32 i = 1;
     // here we build the condition part for the update statement
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
@@ -425,7 +430,7 @@ void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const ::rtl::OUS
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::executeDelete" );
 
-    // now create and execute the prepared statement
+    // now create end execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(i_sSQL));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
@@ -657,7 +662,7 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
     TSQLStatements aSql;
     TSQLStatements aKeyConditions;
     ::std::map< ::rtl::OUString,bool > aResultSetChanged;
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    ::rtl::OUString aQuote	= getIdentifierQuoteString();
     static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));

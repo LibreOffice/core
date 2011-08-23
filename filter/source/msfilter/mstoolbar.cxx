@@ -1,33 +1,4 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
- * Version: MPL 1.1 / GPLv3+ / LGPLv3+
- *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License or as specified alternatively below. You may obtain a copy of
- * the License at http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- * The Initial Developer of the Original Code is
- *       Noel Power <noel.power@novell.com>
- * Portions created by the Initial Developer are Copyright (C) 2010 the
- * Initial Developer. All Rights Reserved.
- *
- * Contributor(s):
- *       Noel Power <noel.power@novell.com>
- *
- * For minor contributions see the git repository.
- *
- * Alternatively, the contents of this file may be used under the terms of
- * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
- * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
- * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
- * instead of those above.
- */
 #include <filter/msfilter/mstoolbar.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <stdarg.h>
@@ -80,7 +51,7 @@ void CustomToolBarImportHelper::ScaleImage( uno::Reference< graphic::XGraphic >&
             aImage = Image( aBitmapex);
             xGraphic = aImage.GetXGraphic();
         }
-    }
+    } 
 }
 
 void CustomToolBarImportHelper::applyIcons()
@@ -91,13 +62,13 @@ void CustomToolBarImportHelper::applyIcons()
         commands[ 0 ] = it->sCommand;
         uno::Sequence< uno::Reference< graphic::XGraphic > > images(1);
         images[ 0 ] = it->image;
-
+       
         OSL_TRACE("About to applyIcons for command %s, have image ? %s", rtl::OUStringToOString( commands[ 0 ], RTL_TEXTENCODING_UTF8 ).getStr(), images[ 0 ].is() ? "yes" : "no" );
         uno::Reference< ui::XImageManager > xImageManager( getCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
-        sal_uInt16 nColor = ui::ImageType::COLOR_NORMAL;
+        sal_uInt16 nColor = ui::ImageType::COLOR_NORMAL; 
 
         Window* topwin = Application::GetActiveTopWindow();
-    if ( topwin != NULL && topwin->GetDisplayBackground().GetColor().IsDark() )
+	if ( topwin != NULL && topwin->GetDisplayBackground().GetColor().IsDark() )
             nColor = css::ui::ImageType::COLOR_HIGHCONTRAST;
 
         ScaleImage( images[ 0 ], 16 );
@@ -115,30 +86,30 @@ void CustomToolBarImportHelper::addIcon( const uno::Reference< graphic::XGraphic
     iconcommands.push_back( item );
 }
 
-CustomToolBarImportHelper::CustomToolBarImportHelper( SfxObjectShell& rDocShell,  const css::uno::Reference< css::ui::XUIConfigurationManager>& rxAppCfgMgr ) : mrDocSh( rDocShell )
+CustomToolBarImportHelper::CustomToolBarImportHelper( SfxObjectShell& rDocShell,  const css::uno::Reference< css::ui::XUIConfigurationManager>& rxAppCfgMgr ) : mrDocSh( rDocShell ) 
 {
     m_xCfgSupp.set( mrDocSh.GetModel(), uno::UNO_QUERY_THROW );
     m_xAppCfgMgr.set( rxAppCfgMgr, uno::UNO_QUERY_THROW );
 }
 
-uno::Reference< ui::XUIConfigurationManager >
+uno::Reference< ui::XUIConfigurationManager > 
 CustomToolBarImportHelper::getCfgManager()
 {
     return m_xCfgSupp->getUIConfigurationManager();
 }
 
-uno::Reference< ui::XUIConfigurationManager >
+uno::Reference< ui::XUIConfigurationManager > 
 CustomToolBarImportHelper::getAppCfgManager()
 {
     return m_xAppCfgMgr;
 }
 
-uno::Any
+uno::Any 
 CustomToolBarImportHelper::createCommandFromMacro( const rtl::OUString& sCmd )
 {
-//"vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
-    static rtl::OUString scheme( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ));
-    static rtl::OUString part2( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ));
+//"vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"    
+    static rtl::OUString scheme = rtl::OUString::createFromAscii( "vnd.sun.star.script:");
+    static rtl::OUString part2 = rtl::OUString::createFromAscii("?language=Basic&location=document");
     // create script url
     rtl::OUString scriptURL = scheme + sCmd + part2;
     return uno::makeAny( scriptURL );
@@ -170,7 +141,7 @@ CustomToolBarImportHelper::createMenu( const rtl::OUString& rName, const uno::Re
         rtl::OUString sMenuBar( RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/") );
         sMenuBar += rName;
         uno::Reference< container::XIndexContainer > xPopup( xCfgManager->createSettings(), uno::UNO_QUERY_THROW );
-        uno::Reference< beans::XPropertySet > xProps( xPopup, uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xProps( xPopup, uno::UNO_QUERY_THROW ); 
         // set name for menubar
         xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UIName") ), uno::makeAny( rName ) );
         if ( xPopup.is() )
@@ -184,7 +155,7 @@ CustomToolBarImportHelper::createMenu( const rtl::OUString& rName, const uno::Re
             aPopupMenu[2].Value = uno::makeAny( xMenuDesc );
             aPopupMenu[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Type" ) );
             aPopupMenu[3].Value <<= sal_Int32( 0 );
-
+            
             xPopup->insertByIndex( xPopup->getCount(), uno::makeAny( aPopupMenu ) );
             if ( bPersist )
             {
@@ -215,13 +186,12 @@ TBBase::indent_printf( FILE* fp, const char* format, ... )
    va_end( ap );
 }
 
-rtl::OUString TBBase::readUnicodeString( SvStream* pS, sal_Size nChars )
+rtl::OUString TBBase::readUnicodeString( SvStream* pS, sal_Int32 nChars )
 {
-    sal_Size nBufSize = nChars * 2;
+    sal_Int32 nBufSize = nChars * 2;
     boost::scoped_array< sal_uInt8 > pArray( new sal_uInt8[ nBufSize ] );
-    sal_Size nReadSize = pS->Read( pArray.get(), nBufSize );
-    OSL_ASSERT(nReadSize == nBufSize);
-    return svt::BinFilterUtils::CreateOUStringFromUniStringArray(  reinterpret_cast< const char* >( pArray.get() ), nReadSize );
+    pS->Read( pArray.get(), nBufSize );
+    return svt::BinFilterUtils::CreateOUStringFromUniStringArray(  reinterpret_cast< const char* >( pArray.get() ), nBufSize );
 }
 
 TBCHeader::TBCHeader() : bSignature( 0x3 )
@@ -243,7 +213,7 @@ bool TBCHeader::Read( SvStream* pS )
     OSL_TRACE("TBCHeader::Read() stream pos 0x%x", pS->Tell() );
     nOffSet = pS->Tell();
     *pS >> bSignature >> bVersion >> bFlagsTCR >> tct >> tcid >> tbct >> bPriority;
-    //  bit 4 ( from lsb )
+    //  bit 4 ( from lsb ) 
     if ( bFlagsTCR & 0x10 )
     {
         width.reset( new sal_uInt16 );
@@ -329,7 +299,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
         TBCBSpecific* pSpecificInfo = dynamic_cast< TBCBSpecific* >( controlSpecificInfo.get() );
         if ( pSpecificInfo )
         {
-            // if we have a icon then lets  set it for the command
+            // if we have a icon then lets  set it for the command 
             rtl::OUString sCommand;
             for ( std::vector< css::beans::PropertyValue >::iterator it = props.begin(); it != props.end(); ++it )
             {
@@ -340,21 +310,21 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
             {
                 // Without a command openoffice won't display the icon
                 if ( sCommand.getLength() )
-                {
+                {    
                     BitmapEx aBitEx( pIcon->getBitMap() );
                     if ( pSpecificInfo->getIconMask() )
                          // according to the spec:
                          // "the iconMask is white in all the areas in which the icon is
                          // displayed as transparent and is black in all other areas."
                          aBitEx = BitmapEx( aBitEx.GetBitmap(), pSpecificInfo->getIconMask()->getBitMap().CreateMask( Color( COL_WHITE ) ) );
-
+    
                     Graphic aGraphic( aBitEx );
                     helper.addIcon( aGraphic.GetXGraphic(), sCommand );
                 }
             }
             else if ( pSpecificInfo->getBtnFace() )
             {
-
+               
                 rtl::OUString sBuiltInCmd = helper.MSOTCIDToOOCommand(  *pSpecificInfo->getBtnFace() );
                 if ( sBuiltInCmd.getLength() )
                 {
@@ -373,7 +343,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     {
         aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CommandURL") ) ;
         rtl::OUString sMenuBar( RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/") );
-
+        
         TBCMenuSpecific* pMenu = getMenuSpecific();
         if ( pMenu )
             aProp.Value = uno::makeAny( sMenuBar += pMenu->Name() ); // name of popup
@@ -390,7 +360,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
             // Text And image
             nStyle |= ui::ItemStyle::ICON;
     }
-    else
+    else 
     {
         if ( ( icontext & 0x02 ) == 0x02 )
             nStyle |= ui::ItemStyle::TEXT;
@@ -423,7 +393,7 @@ WString::Read( SvStream *pS )
     nOffSet = pS->Tell();
     sal_Int8 nChars = 0;
     *pS >> nChars;
-    sString = readUnicodeString( pS, nChars );
+    sString = readUnicodeString( pS, static_cast< sal_Int32 >( nChars  ) );
     return true;
 }
 
@@ -444,7 +414,7 @@ TBCExtraInfo::Read( SvStream *pS )
     if ( !wstrTag.Read( pS ) || !wstrOnAction.Read( pS ) || !wstrParam.Read( pS ) )
         return false;
 
-    *pS >> tbcu >> tbmg;
+    *pS >> tbcu >> tbmg;    
     return true;
 }
 
@@ -453,18 +423,18 @@ TBCExtraInfo::Print( FILE* fp )
 {
     Indent a;
     indent_printf( fp, "[ 0x%x ] TBCExtraInfo -- dump\n", nOffSet );
-    indent_printf( fp, "  wstrHelpFile %s\n",
+    indent_printf( fp, "  wstrHelpFile %s\n", 
         rtl::OUStringToOString( wstrHelpFile.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     indent_printf( fp, "  idHelpContext 0x%x\n", static_cast< unsigned int >( idHelpContext ) );
-    indent_printf( fp, "  wstrTag %s\n",
+    indent_printf( fp, "  wstrTag %s\n", 
         rtl::OUStringToOString( wstrTag.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
-    indent_printf( fp, "  wstrOnAction %s\n",
+    indent_printf( fp, "  wstrOnAction %s\n", 
         rtl::OUStringToOString( wstrOnAction.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
-    indent_printf( fp, "  wstrParam %s\n",
+    indent_printf( fp, "  wstrParam %s\n", 
         rtl::OUStringToOString( wstrParam.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     indent_printf( fp, "  tbcu 0x%x\n", tbcu );
     indent_printf( fp, "  tbmg 0x%x\n", tbmg );
-
+    
 }
 
 rtl::OUString
@@ -492,23 +462,23 @@ bool TBCGeneralInfo::Read( SvStream *pS )
     return true;
 }
 
-void
+void 
 TBCGeneralInfo::Print( FILE* fp )
 {
     Indent a;
     indent_printf( fp, "[ 0x%x ] TBCGeneralInfo -- dump\n", nOffSet );
     indent_printf( fp, "  bFlags 0x%x\n", bFlags );
-    indent_printf( fp, "  customText %s\n",
+    indent_printf( fp, "  customText %s\n", 
         rtl::OUStringToOString( customText.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
-    indent_printf( fp, "  description %s\n",
+    indent_printf( fp, "  description %s\n", 
         rtl::OUStringToOString( descriptionText.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
-    indent_printf( fp, "  tooltip %s\n",
+    indent_printf( fp, "  tooltip %s\n", 
         rtl::OUStringToOString( tooltip.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
-    if ( bFlags & 0x4 )
+    if ( bFlags & 0x4 ) 
         extraInfo.Print( fp );
 }
 
-bool
+bool 
 TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std::vector< beans::PropertyValue >& sControlData )
 {
     if ( ( bFlags & 0x5 ) )
@@ -519,11 +489,11 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
         if ( extraInfo.getOnAction().getLength() )
         {
             aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CommandURL") );
-            ooo::vba::MacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
-            if ( aMacroInf.mbFound )
-                aProp.Value = helper.createCommandFromMacro( aMacroInf.msResolvedMacro );
+            ooo::vba::VBAMacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
+            if ( aMacroInf.IsResolved() )
+                aProp.Value = helper.createCommandFromMacro( aMacroInf.ResolvedMacro() );
             else
-                aProp.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UnResolvedMacro[" )).concat( extraInfo.getOnAction() ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "]" )) );
+                aProp.Value <<= rtl::OUString::createFromAscii("UnResolvedMacro[").concat( extraInfo.getOnAction() ).concat( rtl::OUString::createFromAscii("]") );
             sControlData.push_back( aProp );
         }
 
@@ -532,11 +502,11 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
         sControlData.push_back( aProp );
 
         aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Type") );
-        aProp.Value = uno::makeAny( ui::ItemType::DEFAULT );
+        aProp.Value = uno::makeAny( ui::ItemType::DEFAULT ); 
         sControlData.push_back( aProp );
 
         aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Tooltip") );
-        aProp.Value = uno::makeAny( tooltip.getString() );
+        aProp.Value = uno::makeAny( tooltip.getString() ); 
         sControlData.push_back( aProp );
 /*
 aToolbarItem(0).Name = "CommandURL" wstrOnAction
@@ -546,7 +516,7 @@ aToolbarItem(1).Value = Label
 aToolbarItem(2).Name = "Type"
 aToolbarItem(2).Value = 0
 aToolbarItem(3).Name = "Visible"
-aToolbarItem(3).Value = true
+aToolbarItem(3).Value = true        
 */
     }
     return true;
@@ -562,7 +532,7 @@ TBCMenuSpecific::Read( SvStream *pS)
     OSL_TRACE("TBCMenuSpecific::Read() stream pos 0x%x", pS->Tell() );
     nOffSet = pS->Tell();
     *pS >> tbid;
-    if ( tbid == 1 )
+    if ( tbid == 1 ) 
     {
         name.reset( new WString() );
         return name->Read( pS );
@@ -570,7 +540,7 @@ TBCMenuSpecific::Read( SvStream *pS)
     return true;
 }
 
-void
+void 
 TBCMenuSpecific::Print( FILE* fp )
 {
     Indent a;
@@ -600,7 +570,7 @@ bool TBCBSpecific::Read( SvStream *pS)
 
     // bFlags determines what we read next
 
-    // bFlags.fCustomBitmap = 1 ( 0x8 ) set
+    // bFlags.fCustomBitmap = 1 ( 0x8 ) set 
     if ( bFlags & 0x8 )
     {
         icon.reset( new TBCBitMap() );
@@ -653,19 +623,19 @@ void TBCBSpecific::Print( FILE* fp )
     indent_printf( fp, "  option string present? %s ->%s<-\n", bResult ? "true" : "false", bResult ? rtl::OUStringToOString( wstrAcc->getString(), RTL_TEXTENCODING_UTF8 ).getStr() : "N/A" );
 }
 
-TBCBitMap*
+TBCBitMap* 
 TBCBSpecific::getIcon()
 {
     return icon.get();
 }
 
-TBCBitMap*
+TBCBitMap* 
 TBCBSpecific::getIconMask()
 {
     return iconMask.get();
 }
 
-TBCComboDropdownSpecific::TBCComboDropdownSpecific(const TBCHeader& header )
+TBCComboDropdownSpecific::TBCComboDropdownSpecific(const TBCHeader& header ) 
 {
     if ( header.getTcID() == 0x01 )
         data.reset( new TBCCDData() );
@@ -712,7 +682,7 @@ bool TBCCDData::Read( SvStream *pS)
             if ( !aString.Read( pS ) )
                 return false;
             wstrList.push_back( aString );
-        }
+        } 
     }
     *pS >> cwstrMRU >> iSel >> cLines >> dxWidth;
 
@@ -745,7 +715,7 @@ TBCBitMap::~TBCBitMap()
 }
 
 // #FIXME Const-ness
-Bitmap&
+Bitmap& 
 TBCBitMap::getBitMap()
 {
     return mBitMap;
@@ -757,7 +727,7 @@ bool TBCBitMap::Read( SvStream* pS)
     nOffSet = pS->Tell();
     *pS >> cbDIB;
     // cbDIB = sizeOf(biHeader) + sizeOf(colors) + sizeOf(bitmapData) + 10
-    return mBitMap.Read( *pS, sal_False, sal_True );
+    return mBitMap.Read( *pS, FALSE, TRUE );
 }
 
 void TBCBitMap::Print( FILE* fp )
@@ -784,7 +754,7 @@ bool TB::Read(SvStream *pS)
     *pS >> bSignature >> bVersion >> cCL >> ltbid >> ltbtr >> cRowsDefault >> bFlags;
     name.Read( pS );
     return true;
-
+ 
 }
 
 bool TB::IsEnabled()

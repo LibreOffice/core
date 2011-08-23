@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,12 @@
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 
-#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <tools/debug.hxx>
 
-//  ----------------------------------------------------
-//  class VCLXContainer
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXContainer
+//	----------------------------------------------------
 
 void VCLXContainer::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -78,21 +77,21 @@ IMPL_XTYPEPROVIDER_END
 // ::com::sun::star::awt::XVclContainer
 void VCLXContainer::addVclContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainerListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    osl::SolarGuard aGuard( GetMutex() );
 
     GetContainerListeners().addInterface( rxListener );
 }
 
 void VCLXContainer::removeVclContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainerListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    osl::SolarGuard aGuard( GetMutex() );
 
     GetContainerListeners().removeInterface( rxListener );
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > > VCLXContainer::getWindows(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    osl::SolarGuard aGuard( GetMutex() );
 
     // Bei allen Childs das Container-Interface abfragen...
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > > aSeq;
@@ -120,7 +119,7 @@ void VCLXContainer::removeVclContainerListener( const ::com::sun::star::uno::Ref
 // ::com::sun::star::awt::XVclContainerPeer
 void VCLXContainer::enableDialogControl( sal_Bool bEnable ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    osl::SolarGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -136,7 +135,7 @@ void VCLXContainer::enableDialogControl( sal_Bool bEnable ) throw(::com::sun::st
 
 void VCLXContainer::setTabOrder( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > >& Components, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Tabs, sal_Bool bGroupControl ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    osl::SolarGuard aGuard( GetMutex() );
 
     sal_uInt32 nCount = Components.getLength();
     DBG_ASSERT( nCount == (sal_uInt32)Tabs.getLength(), "setTabOrder: TabCount != ComponentCount" );
@@ -181,7 +180,7 @@ void VCLXContainer::setTabOrder( const ::com::sun::star::uno::Sequence< ::com::s
 
 void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > >& Components ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    osl::SolarGuard aGuard( GetMutex() );
 
     sal_uInt32 nCount = Components.getLength();
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > * pComps = Components.getConstArray();
@@ -200,7 +199,7 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
             {
                 if ( pPrevRadio )
                 {
-                    bNewPrevWin = ( pPrevWin == pPrevRadio );   // Radio-Button wurde vor das PreWin sortiert....
+                    bNewPrevWin = ( pPrevWin == pPrevRadio );	// Radio-Button wurde vor das PreWin sortiert....
                     pSortBehind = pPrevRadio;
                 }
                 pPrevRadio = pWin;

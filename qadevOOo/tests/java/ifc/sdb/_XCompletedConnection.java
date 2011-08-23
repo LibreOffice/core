@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ public class _XCompletedConnection extends MultiMethodTest {
     * Test call the method with handler passed as object relation.
     * Then value returned is checked.<p>
     * Has OK status if not null value returned. <&nbsp>
-    * FAILED if exception occurred, null value returned or object
+    * FAILED if exception occured, null value returned or object
     * relation was not found.
     */
     public void _connectWithCompletion() throws StatusException {

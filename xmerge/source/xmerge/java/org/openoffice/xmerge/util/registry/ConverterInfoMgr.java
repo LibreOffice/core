@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ import java.io.*;
  *  manager can exist at a time.  It is final, so it may not be
  *  subclassed.
  *
- *  @author Brian Cameron
+ *  @author: Brian Cameron
  */
 public final class ConverterInfoMgr {
 
@@ -50,13 +50,15 @@ public final class ConverterInfoMgr {
        converterInfoList = new Vector();
     }
 
+
    /**
     *  Adds a converter plug-in to the registry.  The
     *  <code>ConverterInfo</code> must have a unique DisplayName
     *  and must have non-null values for DisplayName, ClassImpl,
-    *  OfficeMime, and DeviceMime.
+    *  OfficeMime, and DeviceMime.  
     *
-    *  @param  ci  A <code>ConverterInfo</code> object describing a plug-in.
+    *  @param  ConverterInfo  A <code>ConverterInfo</code> object
+    *                         describing a plug-in.
     *
     *  @throws  RegistryException  If the <code>ConverterInfo</code>
     *                              is not valid.
@@ -100,7 +102,7 @@ public final class ConverterInfoMgr {
                 throw re;
             }
         }
-
+       
         // Since this is a adding to a static Vector, make sure this
         // add method call is synchronized.
         //
@@ -108,14 +110,15 @@ public final class ConverterInfoMgr {
             converterInfoList.add(ci);
         }
     }
+   
 
    /**
-    *  Adds a list of converter plug-ins to the registry.
-    *  Each <code>ConverterInfo</code> in the list must have
+    *  Adds a <code>Vector</code> of converter plug-ins to the registry.
+    *  Each <code>ConverterInfo</code> in the <code>Vector</code> must have 
     *  a unique DisplayName and must have non-null values for DisplayName,
-    *  ClassImpl, OfficeMime, and DeviceMime.
+    *  ClassImpl, OfficeMime, and DeviceMime.  
     *
-    *  @param  jarEnum  An <code>Enumeration</code> of <code>ConverterInfo</code>
+    *  @param  ciVectory  A <code>Vector</code> of <code>ConverterInfo</code> 
     *                     objects describing one or more plug-in(s).
     *
     *  @throws  RegistryException  If a <code>ConverterInfo</code> in the
@@ -129,6 +132,7 @@ public final class ConverterInfoMgr {
         }
     }
 
+
    /**
     *  Returns an <code>Enumeration</code> of registered
     *  <code>ConverterInfo</code> objects.
@@ -141,13 +145,14 @@ public final class ConverterInfoMgr {
       return (converterInfoList.elements());
    }
 
+
    /**
     *  Removes any <code>ConverterInfo</code> object from the registry
     *  that have the specified jar name value.
     *
     *  @param  jar  The name of the jarfile.
     *
-    *  @return  True if a <code>ConverterInfo</code> object was
+    *  @return  True if a <code>ConverterInfo</code> object was 
     *           removed, false otherwise.
     */
    public static boolean removeByJar(String jar) {
@@ -178,13 +183,14 @@ public final class ConverterInfoMgr {
         return rc;
     }
 
+
    /**
     *  Removes any <code>ConverterInfo</code> object from the registry
     *  that have the specified display name value.
     *
     *  @param  name  The display name.
     *
-    *  @return  True if a <code>ConverterInfo</code> object was
+    *  @return  True if a <code>ConverterInfo</code> object was 
     *           removed, false otherwise.
     */
    public static boolean removeByName(String name) {
@@ -204,6 +210,7 @@ public final class ConverterInfoMgr {
         return rc;
     }
 
+
    /**
     *  Returns the <code>ConverterInfo</code> object that supports
     *  the specified device/office mime type conversion.  If there
@@ -213,7 +220,7 @@ public final class ConverterInfoMgr {
     *  @param  deviceMime  The device mime.
     *  @param  officeMime  The office mime.
     *
-    *  @return  The first plug-in that supports the specified
+    *  @return  The first plug-in that supports the specified 
     *           conversion.
     */
     public static ConverterInfo findConverterInfo(String deviceMime, String officeMime) {
@@ -247,14 +254,15 @@ public final class ConverterInfoMgr {
         return null;
     }
 
+
    /**
     *  Returns an array of two <code>ConverterInfo</code> objects that
     *  can be chained to perform the specified mime type conversion.
     *  If there are multiple <code>ConverterInfo</code> objects that
     *  support this conversion, only the first is returned.
     *
-    *  @param  deviceFromMime  The device from mime.
-    *  @param  deviceToMime    The device to mime.
+    *  @param  deviceMimeFrom  The device from mime.
+    *  @param  deviceMimeTo    The device to mime.
     *
     *  @return  An array of two <code>ConverterInfo</code> objects
     *           that can be chained to perform the specified
@@ -315,10 +323,11 @@ public final class ConverterInfoMgr {
         return null;
     }
 
+
     /**
-     *  main to let the user specify what plug-ins to register from
+     *  main to let the user specify what plug-ins to register from 
      *  jarfiles and to display the currently registered plug-ins.
-     *
+     * 
      *  @param  args  Not used.
      */
     public static void main(String args[]) {
@@ -351,7 +360,7 @@ public final class ConverterInfoMgr {
             }
 
             System.out.println("");
-
+ 
             // Quit
             //
             if (c == 'Q') {
@@ -383,7 +392,7 @@ public final class ConverterInfoMgr {
                     }
                 }
 
-            // Unload by Display Name or Jarfile
+            // Unload by Display Name or Jarfile 
             //
         } else if (c == 'T') {
         if (validate== true){
@@ -417,7 +426,7 @@ public final class ConverterInfoMgr {
                     } else {
                         System.out.println("Remove failed.");
                     }
-
+             
                 } catch (Exception e) {
                     System.out.println("Error removing value from registry");
                     System.out.println("Error msg: " + e.getMessage());
@@ -442,7 +451,7 @@ public final class ConverterInfoMgr {
                     System.out.println("Error adding data to registry");
                     System.out.println("Error msg: " + e.getMessage());
                 }
-
+            
                 if (c == 'F') {
                     System.out.println("Enter office mime: ");
                 } else {
@@ -497,7 +506,7 @@ public final class ConverterInfoMgr {
                     int feCnt = 1;
                     while (fromEnum.hasMoreElements())
                     {
-                        System.out.println("    DeviceMime   : (#" + feCnt + ") : " +
+                        System.out.println("    DeviceMime   : (#" + feCnt + ") : " + 
                             (String)fromEnum.nextElement());
                         feCnt++;
                     }
@@ -524,3 +533,4 @@ public final class ConverterInfoMgr {
         }
     }
 }
+

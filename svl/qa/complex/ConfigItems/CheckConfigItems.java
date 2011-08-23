@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,155 +27,137 @@
 
 package complex.ConfigItems;
 
-import com.sun.star.beans.NamedValue;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.task.XJob;
-import com.sun.star.uno.UnoRuntime;
+import com.sun.star.beans.*;
+import com.sun.star.lang.*;
+import com.sun.star.uno.*;
+import com.sun.star.task.*;
 
+import complexlib.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
-// import static org.junit.Assert.*;
+import java.lang.*;
+import java.util.*;
 
 //-----------------------------------------------
 /** @short  todo document me
- * @deprecated this tests seems no longer work as expected.
  */
-public class CheckConfigItems
+public class CheckConfigItems extends ComplexTestCase
 {
     //-------------------------------------------
     // some const
-
+    
     //-------------------------------------------
     // member
-
+    
     /** points to the global uno service manager. */
     private XMultiServiceFactory m_xSmgr = null;
-
+    
     /** implements real config item tests in C++. */
     private XJob m_xTest = null;
-
+        
     //-------------------------------------------
     // test environment
-
+    
     //-------------------------------------------
     /** @short  A function to tell the framework,
                 which test functions are available.
-
+                
         @return All test methods.
-        @todo   Think about selection of tests from outside ...
+        @todo   Think about selection of tests from outside ...     
      */
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//        {
-//            "checkPicklist",
-//            "checkURLHistory",
-//            "checkHelpBookmarks",
-//            "checkPrintOptions",
-//            "checkAccessibilityOptions",
-//          "checkUserOptions"
-//        };
-//    }
-
-    //-------------------------------------------
-    /** @short  Create the environment for following tests.
-
-     * @throws java.lang.Exception
-     * @descr  Use either a component loader from desktop or
-                from frame
-     */
-    @Before public void before()
-        throws java.lang.Exception
+    public String[] getTestMethodNames()
     {
-        // get uno service manager from global test environment
-        m_xSmgr = getMSF();
-
-        // TODO register helper service
-
-        // create module manager
-        m_xTest = UnoRuntime.queryInterface(XJob.class, m_xSmgr.createInstance("com.sun.star.comp.svl.ConfigItemTest"));
+        return new String[]
+        {
+            "checkPicklist",
+            "checkURLHistory",
+            "checkHelpBookmarks",
+            "checkPrintOptions",
+            "checkAccessibilityOptions",
+            "checkUserOptions"
+        };
     }
 
     //-------------------------------------------
-    /**
-     * @throws java.lang.Exception
-     * @short  close the environment.
+    /** @short  Create the environment for following tests.
+    
+        @descr  Use either a component loader from desktop or
+                from frame
      */
-    @After public void after()
+    public void before()
+        throws java.lang.Exception
+    {
+        // get uno service manager from global test environment
+        m_xSmgr = (XMultiServiceFactory)param.getMSF();
+    
+        // TODO register helper service
+    
+        // create module manager
+        m_xTest = (XJob)UnoRuntime.queryInterface(
+                    XJob.class, 
+                    m_xSmgr.createInstance("com.sun.star.comp.svl.ConfigItemTest"));
+    }
+
+    //-------------------------------------------
+    /** @short  close the environment.
+     */
+    public void after()
         throws java.lang.Exception
     {
         // TODO deregister helper service
-
+    
         m_xTest = null;
         m_xSmgr = null;
     }
 
     //-------------------------------------------
-    /**
-     * @throws java.lang.Exception
-     * @todo document me
+    /** @todo document me
      */
-    @Test public void checkPicklist()
+    public void checkPicklist()
         throws java.lang.Exception
     {
         impl_triggerTest("checkPicklist");
     }
 
     //-------------------------------------------
-    /**
-     * @throws java.lang.Exception
-     * @todo document me
+    /** @todo document me
      */
-    @Test public void checkURLHistory()
+    public void checkURLHistory()
         throws java.lang.Exception
     {
         impl_triggerTest("checkURLHistory");
     }
 
     //-------------------------------------------
-    /**
-     * @throws java.lang.Exception
-     * @todo document me
+    /** @todo document me
      */
-    @Test public void checkHelpBookmarks()
+    public void checkHelpBookmarks()
         throws java.lang.Exception
     {
         impl_triggerTest("checkHelpBookmarks");
     }
 
     //-------------------------------------------
-    /**
-     * @throws java.lang.Exception
-     * @todo document me
+    /** @todo document me
      */
-//     @Test public void checkPrintOptions()
-//         throws java.lang.Exception
-//     {
-//         impl_triggerTest("checkPrintOptions");
-//     }
-
+    public void checkPrintOptions()
+        throws java.lang.Exception
+    {
+        impl_triggerTest("checkPrintOptions");
+    }
+    
     //-------------------------------------------
-    /**
-     * @throws java.lang.Exception
-     * @todo document me
+    /** @todo document me
      */
-    @Test public void checkAccessibilityOptions()
+    public void checkAccessibilityOptions()
         throws java.lang.Exception
     {
         impl_triggerTest("checkAccessibilityOptions");
     }
 
     //-------------------------------------------
-    /**
-     * @throws java.lang.Exception
-     * @todo document me
+    /** @todo document me
      */
-    @Test public void checkUserOptions()
+    public void checkUserOptions()
         throws java.lang.Exception
     {
         impl_triggerTest("checkUserOptions");
@@ -193,27 +175,4 @@ public class CheckConfigItems
                      lArgs[0].Value = sTest;
         m_xTest.execute(lArgs);
     }
-
-
-       private XMultiServiceFactory getMSF()
-    {
-        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        return xMSF1;
-    }
-
-    // setup and close connections
-    @BeforeClass public static void setUpConnection() throws Exception {
-        System.out.println("setUpConnection()");
-        connection.setUp();
-    }
-
-    @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
-    {
-        System.out.println("tearDownConnection()");
-        connection.tearDown();
-    }
-
-    private static final OfficeConnection connection = new OfficeConnection();
-
 }

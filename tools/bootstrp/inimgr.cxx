@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 /****************************************************************************/
 IniManager::IniManager( ByteString &rDir, ByteString &rLocalDir )
 /****************************************************************************/
-            : bUpdate( sal_True )
+            : bUpdate( TRUE )
 {
     sLocalPath = ByteString( getenv( "LOCALINI" ));
     if ( !sLocalPath.Len())
@@ -60,7 +60,7 @@ IniManager::IniManager( ByteString &rDir, ByteString &rLocalDir )
 /****************************************************************************/
 IniManager::IniManager( ByteString &rDir )
 /****************************************************************************/
-            : bUpdate( sal_True )
+            : bUpdate( TRUE )
 {
     sLocalPath = GetLocalIni();
     sGlobalDir = rDir;
@@ -74,7 +74,7 @@ IniManager::IniManager( ByteString &rDir )
 /****************************************************************************/
 IniManager::IniManager()
 /****************************************************************************/
-            : bUpdate( sal_True )
+            : bUpdate( TRUE )
 {
     sLocalPath = GetLocalIni();
 
@@ -170,7 +170,7 @@ void IniManager::ForceUpdate()
     sLocalPath += "/";
 #endif
 
-    for ( sal_uInt16 i=0; i < aDir.Count(); i++ ) {
+    for ( USHORT i=0; i < aDir.Count(); i++ ) {
         ByteString sEntry( aDir[i].GetName(), gsl_getSystemTextEncoding());
         if (( sEntry != "." ) &&
             ( sEntry != ".." ))
@@ -206,7 +206,7 @@ void IniManager::Update()
     if ( bUpdate )
     {
         ForceUpdate();
-        bUpdate = sal_False;
+        bUpdate = FALSE;
     }
 }
 

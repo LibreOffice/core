@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,11 +56,11 @@ TYPEINIT1( FuCustomShowDlg, FuPoor );
 \************************************************************************/
 
 FuCustomShowDlg::FuCustomShowDlg (
-    ViewShell* pViewSh,
-    ::sd::Window*    pWin,
-    ::sd::View* pView,
-    SdDrawDocument* pDoc,
-    SfxRequest& rReq)
+    ViewShell* pViewSh, 
+    ::sd::Window*	 pWin,
+    ::sd::View*	pView, 
+    SdDrawDocument* pDoc, 
+    SfxRequest& rReq) 
     : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
 {
 }
@@ -78,10 +78,10 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
     AbstractSdCustomShowDlg* pDlg = pFact ? pFact->CreateSdCustomShowDlg( NULL, *mpDoc ) : 0;
     if( pDlg )
     {
-        sal_uInt16 nRet = pDlg->Execute();
+        USHORT nRet = pDlg->Execute();
         if( pDlg->IsModified() )
         {
-            mpDoc->SetChanged( sal_True );
+            mpDoc->SetChanged( TRUE );
             sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
             rSettings.mbCustomShow = pDlg->IsCustomShow();
         }
@@ -97,6 +97,6 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
     }
 }
 
-} // end of namespace
+} // end of namespace 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

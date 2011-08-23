@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : gregor.hartmann@oracle.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Hit update button for an extension
 '*
@@ -82,7 +82,7 @@ testcase tExtensionUpdate
     kontext "ExtensionUpdate"
     if ( ExtensionUpdate.exists() ) then
         printlog( "Close update-dialog. Good." )
-        ExtensionUpdate.close()
+        ExtensionUpdate.cancel()
     else
         warnlog( "Extension update dialog is missing" )
     endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
 #endif
-#define WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN		
 #include <windows.h>
 #include <msiquery.h>
 #ifdef _MSC_VER
@@ -117,42 +117,13 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
             {   // We will replace registration for word pad
                 bRet = true;
             }
-            else if ( strncmp( szBuffer, "OpenOffice.org.", 15 ) == 0 )
+            if ( strncmp( szBuffer, "OpenOffice.org.", 15 ) == 0 )
             {   // We will replace registration for our own types, too
                 bRet = true;
             }
-            else if ( strncmp( szBuffer, "ooostub.", 8 ) == 0 )
+            if ( strncmp( szBuffer, "ooostub.", 8 ) == 0 )
             {   // We will replace registration for ooostub, too
                 bRet = true;
-            }
-            else
-            {
-                OutputDebugStringFormat( "  Checking OpenWithList of [%s].\n", lpSubKey );
-                HKEY hSubKey;
-                lResult = RegOpenKeyExA( hKey, "OpenWithList", 0, KEY_ENUMERATE_SUB_KEYS, &hSubKey );
-                if ( ERROR_SUCCESS == lResult )
-                {
-                    DWORD nIndex = 0;
-                    while ( ERROR_SUCCESS == lResult )
-                    {
-                        nSize = sizeof( szBuffer );
-                        lResult = RegEnumKeyExA( hSubKey, nIndex++, szBuffer, &nSize, NULL, NULL, NULL, NULL );
-                        if ( ERROR_SUCCESS == lResult )
-                        {
-                            OutputDebugStringFormat( "    Found value [%s] in OpenWithList of [%s].\n", szBuffer, lpSubKey );
-                            if ( strncmp( szBuffer, "WordPad.exe", 11 ) == 0 )
-                            {   // We will replace registration for word pad
-                                bRet = true;
-                            }
-                            else if ( nSize > 0 )
-                                bRet = false;
-                        }
-                    }
-                }
-                else
-                {
-                    OutputDebugStringFormat( "  No OpenWithList found!\n" );
-                }
             }
         }
         else    // no default value found -> return TRUE to register for that key
@@ -173,7 +144,7 @@ static LONG DeleteSubKeyTree( HKEY RootKey, LPCSTR lpKey )
     LONG rc = RegOpenKeyExA( RootKey, lpKey, 0, KEY_READ | DELETE, &hKey );
 
     if (ERROR_SUCCESS == rc)
-    {
+    {	
         LPCSTR    lpSubKey;
         DWORD     nMaxSubKeyLen;
 
@@ -212,9 +183,6 @@ static LONG DeleteSubKeyTree( HKEY RootKey, LPCSTR lpKey )
 
     return rc;
 }
-
-// Unused
-#if 0
 
 //----------------------------------------------------------
 static BOOL RemoveExtensionInRegistry( LPCSTR lpSubKey )
@@ -266,8 +234,6 @@ static BOOL RemoveExtensionInRegistry( LPCSTR lpSubKey )
     return ( ERROR_SUCCESS == lResult );
 }
 
-#endif
-
 //----------------------------------------------------------
 bool GetMsiProp( MSIHANDLE handle, LPCSTR name, /*out*/std::string& value )
 {
@@ -282,7 +248,7 @@ bool GetMsiProp( MSIHANDLE handle, LPCSTR name, /*out*/std::string& value )
         MsiGetPropertyA(handle, name, buff, &sz);
         value = buff;
         return true;
-    }
+    }            
     return false;
 }
 
@@ -312,59 +278,11 @@ static void registerForExtension( MSIHANDLE handle, const int nIndex, bool bRegi
 }
 
 //----------------------------------------------------------
-static void saveOldRegistration( LPCSTR lpSubKey )
-{
-    BOOL    bRet = false;
-    HKEY    hKey = NULL;
-    LONG    lResult = RegOpenKeyExA( HKEY_CLASSES_ROOT, lpSubKey, 0,
-                                     KEY_QUERY_VALUE|KEY_SET_VALUE, &hKey );
-
-    if ( ERROR_SUCCESS == lResult )
-    {
-        CHAR    szBuffer[1024];
-        DWORD   nSize = sizeof( szBuffer );
-
-        lResult = RegQueryValueExA( hKey, "", NULL, NULL, (LPBYTE)szBuffer, &nSize );
-        if ( ERROR_SUCCESS == lResult )
-        {
-            szBuffer[nSize] = '\0';
-
-            // No need to save assocations for our own types
-            if ( strncmp( szBuffer, "OpenOffice.org.", 15 ) != 0 )
-            {
-                // Save the old association
-                RegSetValueExA( hKey, "OOoBackupAssociation", 0,
-                                REG_SZ, (LPBYTE)szBuffer, nSize );
-                // Also save what the old association means, just so we can try to verify
-                // if/when restoring it that the old application still exists
-                HKEY hKey2 = NULL;
-                lResult = RegOpenKeyExA( HKEY_CLASSES_ROOT, szBuffer, 0,
-                                         KEY_QUERY_VALUE, &hKey2 );
-                if ( ERROR_SUCCESS == lResult )
-                {
-                    nSize = sizeof( szBuffer );
-                    lResult = RegQueryValueExA( hKey2, "", NULL, NULL, (LPBYTE)szBuffer, &nSize );
-                    if ( ERROR_SUCCESS == lResult )
-                    {
-                        RegSetValueExA( hKey, "OOoBackupAssociationDeref", 0,
-                                        REG_SZ, (LPBYTE)szBuffer, nSize );
-                    }
-                    RegCloseKey( hKey2 );
-                }
-            }
-        }
-        RegCloseKey( hKey );
-    }
-}
-
-//----------------------------------------------------------
 static void registerForExtensions( MSIHANDLE handle, BOOL bRegisterAll )
 { // Check all file extensions
     int nIndex = 0;
     while ( g_Extensions[nIndex] != 0 )
     {
-        saveOldRegistration( g_Extensions[nIndex] );
-
         BOOL bRegister = bRegisterAll || CheckExtensionInRegistry( g_Extensions[nIndex] );
         if ( bRegister )
             registerForExtension( handle, nIndex, true );
@@ -531,10 +449,6 @@ extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
 }
 
 //----------------------------------------------------------
-//
-// This is the (slightly misleadinly named) entry point for the
-// custom action called Regallmsdocdll.
-//
 extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
 {
     if ( IsSetMsiProp( handle, "FILETYPEDIALOGUSED" ) )
@@ -544,7 +458,7 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
     }
 
     OutputDebugStringFormat( "FindRegisteredExtensions:" );
-
+    
     bool bRegisterAll = IsSetMsiProp( handle, "REGISTER_ALL_MSO_TYPES" );
 
     if ( IsSetMsiProp( handle, "REGISTER_NO_MSO_TYPES" ) )
@@ -557,7 +471,7 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
     else
         OutputDebugStringFormat( "FindRegisteredExtensions: " );
 
-    // setting the msi properties SELECT_* will force registering for all corresponding
+    // setting the msi properties SELECT_* will force registering for all corresponding 
     // file types
     if ( IsSetMsiProp( handle, "SELECT_WORD" ) )
         registerSomeExtensions( handle, WORD_START, EXCEL_START, true );
@@ -571,14 +485,9 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
     return ERROR_SUCCESS;
 }
 
-#if 0
-
 //----------------------------------------------------------
-//
-// This entry is not called for any custom action.
-//
 extern "C" UINT __stdcall DeleteRegisteredExtensions( MSIHANDLE /*handle*/ )
-{
+{         
     OutputDebugStringFormat( "DeleteRegisteredExtensions\n" );
 
     // remove all file extensions
@@ -588,80 +497,6 @@ extern "C" UINT __stdcall DeleteRegisteredExtensions( MSIHANDLE /*handle*/ )
         RemoveExtensionInRegistry( g_Extensions[nIndex] );
         ++nIndex;
     }
-
-    return ERROR_SUCCESS;
-}
-
-#endif
-
-//----------------------------------------------------------
-static void restoreOldRegistration( LPCSTR lpSubKey )
-{
-    BOOL    bRet = false;
-    HKEY    hKey = NULL;
-    LONG    lResult = RegOpenKeyExA( HKEY_CLASSES_ROOT, lpSubKey, 0,
-                                     KEY_QUERY_VALUE|KEY_SET_VALUE, &hKey );
-
-    if ( ERROR_SUCCESS == lResult )
-    {
-        CHAR    szBuffer[1024];
-        DWORD   nSize = sizeof( szBuffer );
-
-        lResult = RegQueryValueExA( hKey, "OOoBackupAssociation", NULL, NULL,
-                                    (LPBYTE)szBuffer, &nSize );
-        if ( ERROR_SUCCESS == lResult )
-        {
-            HKEY hKey2 = NULL;
-            lResult = RegOpenKeyExA( HKEY_CLASSES_ROOT, szBuffer, 0,
-                                     KEY_QUERY_VALUE, &hKey2 );
-            if ( ERROR_SUCCESS == lResult )
-            {
-                CHAR   szBuffer2[1024];
-                DWORD  nSize2 = sizeof( szBuffer2 );
-
-                lResult = RegQueryValueExA( hKey2, "", NULL, NULL, (LPBYTE)szBuffer2, &nSize2 );
-                if ( ERROR_SUCCESS == lResult )
-                {
-                    CHAR   szBuffer3[1024];
-                    DWORD  nSize3 = sizeof( szBuffer3 );
-
-                    // Try to verify that the old association is OK to restore
-                    lResult = RegQueryValueExA( hKey, "OOoBackupAssociationDeref", NULL, NULL,
-                                                (LPBYTE)szBuffer3, &nSize3 );
-                    if ( ERROR_SUCCESS == lResult )
-                    {
-                        if ( nSize2 == nSize3 && strcmp (szBuffer2, szBuffer3) == 0)
-                        {
-                            // Yep. So restore it
-                            RegSetValueExA( hKey, "", 0, REG_SZ, (LPBYTE)szBuffer, nSize );
-                        }
-                    }
-                }
-                RegCloseKey( hKey2 );
-            }
-            RegDeleteValueA( hKey, "OOoBackupAssociation" );
-        }
-        RegDeleteValueA( hKey, "OOoBackupAssociationDeref" );
-        RegCloseKey( hKey );
-    }
-}
-
-//----------------------------------------------------------
-//
-// This function is not in OO.o. We call this from the
-// Restoreregallmsdocdll custom action.
-//
-extern "C" UINT __stdcall RestoreRegAllMSDoc( MSIHANDLE /*handle*/ )
-{
-    OutputDebugStringFormat( "RestoreRegAllMSDoc\n" );
-
-    int nIndex = 0;
-    while ( g_Extensions[nIndex] != 0 )
-    {
-        restoreOldRegistration( g_Extensions[nIndex] );
-        ++nIndex;
-    }
-
 
     return ERROR_SUCCESS;
 }

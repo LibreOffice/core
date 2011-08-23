@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 #define __FRAMEWORK_UIELEMENT_NEWMENUCONTROLLER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -52,7 +52,7 @@
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -60,7 +60,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/menu.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 namespace framework
 {
@@ -78,10 +78,10 @@ namespace framework
         public:
             NewMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
             virtual ~NewMenuController();
-
+            
             // XServiceInfo
             DECLARE_XSERVICEINFO
-
+    
             // XInitialization
             virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
@@ -95,8 +95,8 @@ namespace framework
             // XEventListener
             virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
 
-            DECL_STATIC_LINK( NewMenuController, ExecuteHdl_Impl, NewDocument* );
-
+            DECL_STATIC_LINK( NewMenuController, ExecuteHdl_Impl, NewDocument* ); 
+    
         private:
             virtual void impl_setPopupMenu();
             struct AddInfo
@@ -104,20 +104,21 @@ namespace framework
                 rtl::OUString aTargetFrame;
                 rtl::OUString aImageId;
             };
-
-            typedef ::boost::unordered_map< int, AddInfo > AddInfoForId;
-
+            
+            typedef ::std::hash_map< int, AddInfo > AddInfoForId;
+                
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             void retrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                      const ::com::sun::star::uno::Sequence< rtl::OUString >& rCommands,
                                                      std::vector< KeyCode >& aMenuShortCuts );
             void setAccelerators( PopupMenu* pPopupMenu );
             void determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const KeyCode& rKeyCode );
-            void setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages );
+            void setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages, sal_Bool bHiContrast );
 
         private:
             // members
             sal_Bool            m_bShowImages : 1,
+                                m_bHiContrast : 1,
                                 m_bNewMenu    : 1,
                                 m_bModuleIdentified : 1,
                                 m_bAcceleratorCfg : 1;

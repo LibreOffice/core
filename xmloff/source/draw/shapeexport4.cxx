@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@
 #include <tools/string.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include "XMLBase64Export.hxx"
 
 using ::rtl::OUString;
@@ -119,7 +119,7 @@ void ExportParameter( rtl::OUStringBuffer& rStrBuffer, const com::sun::star::dra
                 rStrBuffer.append( rtl::OUString::valueOf( nValue ) );
             }
             break;
-
+            
             case com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM :
                 rStrBuffer.append( GetXMLToken( XML_BOTTOM ) ); break;
             case com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT :
@@ -183,7 +183,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
     sal_uInt32 i, j, nElements = rHandles.getLength();
     if ( nElements )
     {
-        rtl::OUString       aStr;
+        rtl::OUString		aStr;
         rtl::OUStringBuffer aStrBuffer;
 
         for ( i = 0; i < nElements; i++ )
@@ -327,7 +327,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
         const uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments )
 {
 
-    rtl::OUString       aStr;
+    rtl::OUString		aStr;
     rtl::OUStringBuffer aStrBuffer;
 
     sal_Int32 i, j, k, l;
@@ -435,7 +435,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
                 }
                 else
                 {
-                    j = nSegments;  // error -> exiting
+                    j = nSegments;	// error -> exiting
                     break;
                 }
             }
@@ -459,14 +459,14 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
 
     uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentValues;
 
-    rtl::OUString       aStr;
+    rtl::OUString		aStr;
     rtl::OUStringBuffer aStrBuffer;
     SvXMLUnitConverter& rUnitConverter = rExport.GetMM100UnitConverter();
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
     // geometry
-    const rtl::OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
+    const rtl::OUString	sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
     if ( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( sCustomShapeGeometry ) )
     {
         uno::Any aGeoPropSet( xPropSet->getPropertyValue( sCustomShapeGeometry ) );
@@ -474,7 +474,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
 
         if ( aGeoPropSet >>= aGeoPropSeq )
         {
-            const rtl::OUString sCustomShapeType( RTL_CONSTASCII_USTRINGPARAM( "NonPrimitive" ) );
+            const rtl::OUString	sCustomShapeType( RTL_CONSTASCII_USTRINGPARAM( "NonPrimitive" ) );
             rtl::OUString aCustomShapeType( sCustomShapeType );
 
             sal_Int32 j, nGeoPropCount = aGeoPropSeq.getLength();
@@ -832,7 +832,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                             switch ( eTextPathMode )
                                             {
                                                 case com::sun::star::drawing::EnhancedCustomShapeTextPathMode_NORMAL: aStr = GetXMLToken( XML_NORMAL ); break;
-                                                case com::sun::star::drawing::EnhancedCustomShapeTextPathMode_PATH  : aStr = GetXMLToken( XML_PATH );   break;
+                                                case com::sun::star::drawing::EnhancedCustomShapeTextPathMode_PATH	: aStr = GetXMLToken( XML_PATH );   break;
                                                 case com::sun::star::drawing::EnhancedCustomShapeTextPathMode_SHAPE : aStr = GetXMLToken( XML_SHAPE );  break;
                                                 default:
                                                     break;
@@ -1007,7 +1007,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     default:
                         break;
                 }
-            }   // for
+            }	// for
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TYPE, aCustomShapeType );
 
             // adjustments
@@ -1036,7 +1036,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                         }
                     }
                     else
-                        rUnitConverter.convertNumber( aStrBuffer, 0 );          // this should not be, but better than setting nothing
+                        rUnitConverter.convertNumber( aStrBuffer, 0 );			// this should not be, but better than setting nothing
                 }
                 aStr = aStrBuffer.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MODIFIERS, aStr );
@@ -1067,14 +1067,14 @@ void XMLShapeExport::ImpExportCustomShape(
 
         if ( xPropSetInfo.is() )
         {
-            const rtl::OUString sCustomShapeEngine( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeEngine" ) );
+            const rtl::OUString	sCustomShapeEngine( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeEngine" ) );
             if ( xPropSetInfo->hasPropertyByName( sCustomShapeEngine ) )
             {
                 uno::Any aEngine( xPropSet->getPropertyValue( sCustomShapeEngine ) );
                 if ( ( aEngine >>= aStr ) && aStr.getLength() )
                     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ENGINE, aStr );
             }
-            const rtl::OUString sCustomShapeData( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeData" ) );
+            const rtl::OUString	sCustomShapeData( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeData" ) );
             if ( xPropSetInfo->hasPropertyByName( sCustomShapeData ) )
             {
                 uno::Any aData( xPropSet->getPropertyValue( sCustomShapeData ) );
@@ -1114,49 +1114,41 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
 
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW, XML_FRAME, bCreateNewline, sal_True );
 
-        // do not export in ODF 1.1 or older
-        if( mrExport.getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+        if( !bIsEmptyPresObj )
         {
-            if( !bIsEmptyPresObj )
+            uno::Reference< container::XNamed > xTemplate( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TableTemplate" ) ) ), uno::UNO_QUERY );
+            if( xTemplate.is() )
             {
-                uno::Reference< container::XNamed > xTemplate( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TableTemplate" ) ) ), uno::UNO_QUERY );
-                if( xTemplate.is() )
+                const OUString sTemplate( xTemplate->getName() );
+                if( sTemplate.getLength() )
                 {
-                    const OUString sTemplate( xTemplate->getName() );
-                    if( sTemplate.getLength() )
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sTemplate );
+
+                    for( const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0]; pEntry->msApiName; pEntry++ )
                     {
-                        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sTemplate );
-
-                        for( const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0]; pEntry->msApiName; pEntry++ )
+                        try
                         {
-                            try
-                            {
-                                sal_Bool bBool = sal_False;
-                                const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
+                            sal_Bool bBool = sal_False;
+                            const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
 
-                                xPropSet->getPropertyValue( sAPIPropertyName ) >>= bBool;
-                                if( bBool )
-                                    mrExport.AddAttribute(pEntry->mnNameSpace, pEntry->meXMLName, XML_TRUE );
-                            }
-                            catch( uno::Exception& )
-                            {
-                            OSL_FAIL("XMLShapeExport::ImpExportTableShape(), exception caught!");
-                            }
+                            xPropSet->getPropertyValue( sAPIPropertyName ) >>= bBool;
+                            if( bBool )
+                                mrExport.AddAttribute(pEntry->mnNameSpace, pEntry->meXMLName, XML_TRUE );
+                        }
+                        catch( uno::Exception& )
+                        {
+                            DBG_ERROR("XMLShapeExport::ImpExportTableShape(), exception caught!");
                         }
                     }
                 }
-
-
-                uno::Reference< table::XColumnRowRange > xRange( xPropSet->getPropertyValue( msModel ), uno::UNO_QUERY_THROW );
-                GetShapeTableExport()->exportTable( xRange );
             }
-        }
+            uno::Reference< table::XColumnRowRange > xRange( xPropSet->getPropertyValue( msModel ), uno::UNO_QUERY_THROW );
+            
+            GetShapeTableExport()->exportTable( xRange );
 
-        if( !bIsEmptyPresObj )
-        {
             uno::Reference< graphic::XGraphic > xGraphic( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ReplacementGraphic" ) ) ), uno::UNO_QUERY );
             if( xGraphic.is() ) try
-            {
+            {	
                 Reference< lang::XMultiServiceFactory > xSM( GetExport().getServiceFactory(), UNO_QUERY_THROW );
 
                 uno::Reference< embed::XStorage > xPictureStorage;
@@ -1166,7 +1158,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                 OUString sPictureName;
                 if( bExportEmbedded )
                 {
-                    xPictureStream.set( xSM->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.MemoryStream" ) ) ), UNO_QUERY_THROW );
+                    xPictureStream.set( xSM->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.MemoryStream" ) ) ), UNO_QUERY_THROW );					
                 }
                 else
                 {
@@ -1226,7 +1218,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL("xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!");
+                DBG_ERROR("xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!");
             }
         }
 
@@ -1236,7 +1228,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( "xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!" );
+        DBG_ERROR( "xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!" );
     }
 }
 

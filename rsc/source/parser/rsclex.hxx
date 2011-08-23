@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,14 +27,14 @@
  ************************************************************************/
 #include <tools/stack.hxx>
 
-#include <boost/unordered_set.hpp>
+#include <hash_set>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 
 // a buffer for unique strings
 class StringContainer
 {
-    boost::unordered_set< rtl::OString, rtl::OStringHash >      m_aStrings;
+    std::hash_set< rtl::OString, rtl::OStringHash >		m_aStrings;
 public:
     StringContainer() {}
     ~StringContainer() {}
@@ -77,10 +77,10 @@ class ObjectStack {
         ObjectStack ()   { pRoot = NULL; }
 
         const RSCINST & Top  ()     { return pRoot->aInst; }
-        sal_Bool        IsEmpty()   { return( pRoot == NULL ); }
-        void        IncTupelRec() { pRoot->nTupelRec++; }
-        void        DecTupelRec() { pRoot->nTupelRec--; }
-        sal_uInt32  TupelRecCount() const { return pRoot->nTupelRec; }
+        BOOL        IsEmpty()   { return( pRoot == NULL ); }
+        void		IncTupelRec() { pRoot->nTupelRec++; }
+        void		DecTupelRec() { pRoot->nTupelRec--; }
+        sal_uInt32	TupelRecCount() const { return pRoot->nTupelRec; }
         void        Push( RSCINST aInst )
                     {
                         Node* pTmp;
@@ -105,12 +105,12 @@ class ObjectStack {
 extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( char * );
 extern "C" int  yylex( void );
-#elif defined ( SOLARIS )
+#elif defined( HP9000 ) || defined( SCO ) || defined ( SOLARIS )
 extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( const char * );
 extern "C" int  yylex( void );
 #else
-#if defined ( GCC ) || (_MSC_VER >= 1400)
+#if defined ( WTC ) || defined ( GCC ) || (_MSC_VER >= 1400)
 int yyparse();              // forward Deklaration fuer erzeugte Funktion
 #else
 yyparse();              // forward Deklaration fuer erzeugte Funktion
@@ -126,6 +126,6 @@ extern RscTypCont*              pTC;
 extern RscFileInst *            pFI;
 extern RscExpression *          pExp;
 extern ObjectStack              S;
-extern StringContainer*         pStringContainer;
+extern StringContainer*			pStringContainer;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

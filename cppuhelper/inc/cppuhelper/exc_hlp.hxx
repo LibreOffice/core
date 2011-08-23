@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,12 +32,12 @@
 #include <com/sun/star/uno/Any.hxx>
 
 namespace cppu
-{
+{    
 
 /** This function throws the exception given by rExc.  The given value has to
     be of typeclass EXCEPTION and must be dervived from or of
     type com.sun.star.uno.Exception.
-
+    
     @param rExc
            exception to be thrown.
 */
@@ -46,7 +46,7 @@ void SAL_CALL throwException( const ::com::sun::star::uno::Any & rExc )
 
 /** Use this function to get the dynamic type of a caught C++-UNO exception;
     completes the above function throwing exceptions generically.
-
+    
     try
     {
         ...
@@ -61,17 +61,17 @@ void SAL_CALL throwException( const ::com::sun::star::uno::Any & rExc )
         ::com::sun::star::uno::Any caught( ::cppu::getCaughtException() );
         ...
     }
-
+    
     Restrictions:
     - use only for caught C++-UNO exceptions (UNOIDL defined)
     - only as first statement in a catch block!
     - don't do a C++ rethrow (throw;) after you have called this function
     - call getCaughtException() just once in your catch block!
       (function internally uses a C++ rethrow)
-
+      
     @return
               caught UNO exception
-
+              
     @attention Caution!
               This function is limited to the same C++ compiler runtime library.
               E.g. for MSVC, this means that the catch handler code (the one
@@ -86,7 +86,7 @@ void SAL_CALL throwException( const ::com::sun::star::uno::Any & rExc )
               in newer UDK versions without being recompiled, because those
               newer UDK (-> OOo versions) potentially use newer C++ runtime
               libraries which most often become incompatible!
-
+              
               But this function ought to be usable for most OOo internal C++-UNO
               development, because the whole OOo code base is compiled using the
               same C++ compiler (and linking against one runtime library).

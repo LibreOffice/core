@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@ TYPEINIT1_AUTOFACTORY(SfxByteItem, CntByteItem);
 
 //============================================================================
 // virtual
-SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * SfxByteItem::Create(SvStream & rStream, USHORT) const
 {
     short nValue = 0;
     rStream >> nValue;
-    return new SfxByteItem(Which(), sal_uInt8(nValue));
+    return new SfxByteItem(Which(), BYTE(nValue));
 }
 
 //============================================================================
@@ -64,7 +64,7 @@ DBG_NAME(SfxInt16Item);
 TYPEINIT1_AUTOFACTORY(SfxInt16Item, SfxPoolItem);
 
 //============================================================================
-SfxInt16Item::SfxInt16Item(sal_uInt16 which, SvStream & rStream):
+SfxInt16Item::SfxInt16Item(USHORT which, SvStream & rStream):
     SfxPoolItem(which)
 {
     DBG_CTOR(SfxInt16Item, 0);
@@ -112,7 +112,7 @@ SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, BYTE) const
 {
     sal_Int16 nValue = m_nValue;
     rVal <<= nValue;
@@ -121,7 +121,7 @@ bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 
 //============================================================================
 // virtual
-bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, BYTE )
 {
     sal_Int16 nValue = sal_Int16();
     if (rVal >>= nValue)
@@ -130,13 +130,13 @@ bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 )
         return true;
     }
 
-    OSL_FAIL( "SfxInt16Item::PutValue - Wrong type!" );
+    DBG_ERROR( "SfxInt16Item::PutValue - Wrong type!" );
     return false;
 }
 
 //============================================================================
 // virtual
-SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, USHORT) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     return new SfxInt16Item(Which(), rStream);
@@ -144,7 +144,7 @@ SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, sal_uInt16) const
 
 //============================================================================
 // virtual
-SvStream & SfxInt16Item::Store(SvStream & rStream, sal_uInt16) const
+SvStream & SfxInt16Item::Store(SvStream & rStream, USHORT) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     rStream << short(m_nValue);
@@ -159,14 +159,14 @@ SfxPoolItem * SfxInt16Item::Clone(SfxItemPool *) const
 }
 
 //============================================================================
-sal_Int16 SfxInt16Item::GetMin() const
+INT16 SfxInt16Item::GetMin() const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     return -32768;
 }
 
 //============================================================================
-sal_Int16 SfxInt16Item::GetMax() const
+INT16 SfxInt16Item::GetMax() const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     return 32767;
@@ -218,14 +218,14 @@ DBG_NAME(SfxMetricItem);
 TYPEINIT1_AUTOFACTORY(SfxMetricItem, SfxInt32Item);
 
 //============================================================================
-SfxMetricItem::SfxMetricItem(sal_uInt16 which, sal_uInt32 nValue):
+SfxMetricItem::SfxMetricItem(USHORT which, UINT32 nValue):
     SfxInt32Item(which, nValue)
 {
     DBG_CTOR(SfxMetricItem, 0);
 }
 
 //============================================================================
-SfxMetricItem::SfxMetricItem(sal_uInt16 which, SvStream & rStream):
+SfxMetricItem::SfxMetricItem(USHORT which, SvStream & rStream):
     SfxInt32Item(which, rStream)
 {
     DBG_CTOR(SfxMetricItem, 0);

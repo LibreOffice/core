@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 #ifndef _LWPFRIBBREAKS_HXX_
 #define _LWPFRIBBREAKS_HXX_
@@ -90,15 +90,15 @@ private:
 class LwpFribLineBreak: public LwpFrib
 {
 public:
-    LwpFribLineBreak( LwpPara* pPara ) : LwpFrib(pPara){}
-    ~LwpFribLineBreak(){}
+    LwpFribLineBreak( LwpPara* pPara ) : LwpFrib(pPara){};
+    ~LwpFribLineBreak(){};
 };
 
 class LwpFribColumnBreak: public LwpFrib
 {
 public:
-    LwpFribColumnBreak( LwpPara* pPara ) : LwpFrib(pPara){}
-    ~LwpFribColumnBreak(){}
+    LwpFribColumnBreak( LwpPara* pPara ) : LwpFrib(pPara){};
+    ~LwpFribColumnBreak(){};
     void RegisterBreakStyle(LwpPara* pPara);
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,12 @@
 #include <vcl/morebtn.hxx>
 
 #include <tools/rc.h>
-#include <vector>
+
+
 
 // =======================================================================
 
-typedef ::std::vector< Window* > ImplMoreWindowList;
+DECLARE_LIST( ImplMoreWindowList, Window* )
 
 struct ImplMoreButtonData
 {
@@ -49,9 +50,9 @@ struct ImplMoreButtonData
 void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
 {
     mpMBData     = new ImplMoreButtonData;
-    mnDelta      = 0;
-    meUnit       = MAP_PIXEL;
-    mbState      = sal_False;
+    mnDelta 	 = 0;
+    meUnit		 = MAP_PIXEL;
+    mbState 	 = FALSE;
 
     mpMBData->mpItemList = NULL;
 
@@ -65,7 +66,7 @@ void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
     ShowState();
 
     SetSymbolAlign( SYMBOLALIGN_RIGHT );
-    ImplSetSmallSymbol( sal_True );
+    ImplSetSmallSymbol( TRUE );
 
     if ( ! ( nStyle & ( WB_RIGHT | WB_LEFT ) ) )
     {
@@ -117,12 +118,12 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
 {
     PushButton::ImplLoadRes( rResId );
 
-    sal_uLong nObjMask = ReadLongRes();
+    ULONG nObjMask = ReadLongRes();
 
     if ( nObjMask & RSC_MOREBUTTON_STATE )
     {
         // Nicht Methode rufen, da Dialog nicht umgeschaltet werden soll
-        mbState = (sal_Bool)ReadShortRes();
+        mbState = (BOOL)ReadShortRes();
         // SetText( GetText() );
         ShowState();
     }
@@ -146,9 +147,10 @@ MoreButton::~MoreButton()
 
 void MoreButton::Click()
 {
-    Window*     pParent = GetParent();
-    Size        aSize( pParent->GetSizePixel() );
-    long        nDeltaPixel = LogicToPixel( Size( 0, mnDelta ), meUnit ).Height();
+    Window* 	pParent = GetParent();
+    Size		aSize( pParent->GetSizePixel() );
+    Window* 	pWindow = (mpMBData->mpItemList) ? mpMBData->mpItemList->First() : NULL;
+    long		nDeltaPixel = LogicToPixel( Size( 0, mnDelta ), meUnit ).Height();
 
     // Status aendern
     mbState = !mbState;
@@ -162,10 +164,10 @@ void MoreButton::Click()
     if ( mbState )
     {
         // Fenster anzeigen
-        if ( mpMBData->mpItemList ) {
-            for ( size_t i = 0, n = mpMBData->mpItemList->size(); i < n; ++i ) {
-                (*mpMBData->mpItemList)[ i ]->Show();
-            }
+        while ( pWindow )
+        {
+            pWindow->Show();
+            pWindow = mpMBData->mpItemList->Next();
         }
 
         // Dialogbox anpassen
@@ -192,10 +194,10 @@ void MoreButton::Click()
         pParent->SetSizePixel( aSize );
 
         // Fenster nicht mehr anzeigen
-        if ( mpMBData->mpItemList ) {
-            for ( size_t i = 0, n = mpMBData->mpItemList->size(); i < n; ++i ) {
-                (*mpMBData->mpItemList)[ i ]->Hide();
-            }
+        while ( pWindow )
+        {
+            pWindow->Hide();
+            pWindow = mpMBData->mpItemList->Next();
         }
     }
 }
@@ -205,9 +207,9 @@ void MoreButton::Click()
 void MoreButton::AddWindow( Window* pWindow )
 {
     if ( !mpMBData->mpItemList )
-        mpMBData->mpItemList = new ImplMoreWindowList();
+        mpMBData->mpItemList = new ImplMoreWindowList( 1024, 16, 16 );
 
-    mpMBData->mpItemList->push_back( pWindow );
+    mpMBData->mpItemList->Insert( pWindow, LIST_APPEND );
 
     if ( mbState )
         pWindow->Show();
@@ -219,17 +221,8 @@ void MoreButton::AddWindow( Window* pWindow )
 
 void MoreButton::RemoveWindow( Window* pWindow )
 {
-    if ( mpMBData->mpItemList ) {
-        for ( ImplMoreWindowList::iterator it = mpMBData->mpItemList->begin();
-              it < mpMBData->mpItemList->end();
-              ++it
-        ) {
-            if ( *it == pWindow ) {
-                mpMBData->mpItemList->erase( it );
-                break;
-            }
-        }
-    }
+    if ( mpMBData->mpItemList )
+        mpMBData->mpItemList->Remove( pWindow );
 }
 
 // -----------------------------------------------------------------------

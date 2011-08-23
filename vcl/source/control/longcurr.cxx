@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,14 +48,14 @@
 
 // =======================================================================
 
-#define FORMAT_LONGCURRENCY      4
+#define FORMAT_LONGCURRENCY 	 4
 
 // =======================================================================
 
-static BigInt ImplPower10( sal_uInt16 n )
+static BigInt ImplPower10( USHORT n )
 {
-    sal_uInt16 i;
-    BigInt   nValue = 1;
+    USHORT i;
+    BigInt	 nValue = 1;
 
     for ( i=0; i < n; i++ )
         nValue *= 10;
@@ -65,7 +65,7 @@ static BigInt ImplPower10( sal_uInt16 n )
 
 // -----------------------------------------------------------------------
 
-static XubString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt &rNumber, sal_uInt16 nDigits, const String& rCurrSymbol, sal_Bool bShowThousandSep )
+static XubString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt &rNumber, USHORT nDigits, const String& rCurrSymbol, BOOL bShowThousandSep )
 {
     DBG_ASSERT( nDigits < 10, "LongCurrency duerfen nur maximal 9 Nachkommastellen haben" );
 
@@ -82,7 +82,7 @@ static XubString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const
     if ( !aInteger.IsZero() )
     {
         aFraction += aTmp;
-        aTmp       = 1000000000L;
+        aTmp	   = 1000000000L;
     }
     if ( rNumber.IsNeg() )
         aFraction *= -1;
@@ -113,16 +113,16 @@ static XubString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
-                                        sal_Bool bStrictFormat, sal_Bool bThousandSep,
+static BOOL ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
+                                        BOOL bStrictFormat, BOOL bThousandSep,
                                         const LocaleDataWrapper& rLocaleDataWrapper )
 {
     if ( !bStrictFormat )
-        return sal_False;
+        return FALSE;
     else
     {
         sal_Unicode cChar = rKEvt.GetCharCode();
-        sal_uInt16      nGroup = rKEvt.GetKeyCode().GetGroup();
+        USHORT		nGroup = rKEvt.GetKeyCode().GetGroup();
 
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
              (nGroup == KEYGROUP_MISC) ||
@@ -130,28 +130,28 @@ static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
              (bThousandSep && (cChar == rLocaleDataWrapper.getNumThousandSep())) ||
              (cChar == rLocaleDataWrapper.getNumDecimalSep() ) ||
              (cChar == '-') )
-            return sal_False;
+            return FALSE;
         else
-            return sal_True;
+            return TRUE;
     }
 }
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
-                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
-                                 sal_Bool bCurrency = sal_False )
+static BOOL ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
+                                 USHORT nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
+                                 BOOL bCurrency = FALSE )
 {
-    XubString   aStr = rStr;
-    XubString   aStr1;
-    XubString   aStr2;
-    sal_uInt16      nDecPos;
-    sal_Bool        bNegative = sal_False;
-    xub_StrLen  i;
+    XubString	aStr = rStr;
+    XubString	aStr1;
+    XubString	aStr2;
+    USHORT		nDecPos;
+    BOOL		bNegative = FALSE;
+    xub_StrLen	i;
 
     // Reaktion auf leeren String
     if ( !rStr.Len() )
-        return sal_False;
+        return FALSE;
 
     // Fuehrende und nachfolgende Leerzeichen entfernen
     aStr.EraseLeadingAndTrailingChars( ' ' );
@@ -171,7 +171,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     if ( bCurrency )
     {
         if ( (aStr.GetChar( 0 ) == '(') && (aStr.GetChar( aStr.Len()-1 ) == ')') )
-            bNegative = sal_True;
+            bNegative = TRUE;
         if ( !bNegative )
         {
             for ( i=0; i < aStr.Len(); i++ )
@@ -180,24 +180,24 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
                     break;
                 else if ( aStr.GetChar( i ) == '-' )
                 {
-                    bNegative = sal_True;
+                    bNegative = TRUE;
                     break;
                 }
             }
         }
         if ( !bNegative && bCurrency && aStr.Len() )
         {
-            sal_uInt16 nFormat = rLocaleDataWrapper.getCurrNegativeFormat();
+            USHORT nFormat = rLocaleDataWrapper.getCurrNegativeFormat();
             if ( (nFormat == 3) || (nFormat == 6)  ||
                  (nFormat == 7) || (nFormat == 10) )
             {
-                for ( i = (sal_uInt16)(aStr.Len()-1); i > 0; i++ )
+                for ( i = (USHORT)(aStr.Len()-1); i > 0; i++ )
                 {
                     if ( (aStr.GetChar( i ) >= '0') && (aStr.GetChar( i ) <= '9') )
                         break;
                     else if ( aStr.GetChar( i ) == '-' )
                     {
-                        bNegative = sal_True;
+                        bNegative = TRUE;
                         break;
                     }
                 }
@@ -207,7 +207,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     else
     {
         if ( aStr1.GetChar( 0 ) == '-' )
-            bNegative = sal_True;
+            bNegative = TRUE;
     }
 
     // Alle unerwuenschten Zeichen rauswerfen
@@ -227,7 +227,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     }
 
     if ( !aStr1.Len() && !aStr2.Len() )
-        return sal_False;
+        return FALSE;
 
     if ( !aStr1.Len() )
         aStr1.Insert( '0' );
@@ -235,11 +235,11 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
         aStr1.Insert( '-', 0 );
 
     // Nachkommateil zurechtstutzen und dabei runden
-    sal_Bool bRound = sal_False;
+    BOOL bRound = FALSE;
     if ( aStr2.Len() > nDecDigits )
     {
         if ( aStr2.GetChar( nDecDigits ) >= '5' )
-            bRound = sal_True;
+            bRound = TRUE;
         aStr2.Erase( nDecDigits );
     }
     if ( aStr2.Len() < nDecDigits )
@@ -260,38 +260,38 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
 
     rValue = nValue;
 
-    return sal_True;
+    return TRUE;
 }
 
 // =======================================================================
 
-static sal_Bool ImplLongCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                             sal_Bool, sal_Bool bUseThousandSep, const LocaleDataWrapper& rLocaleDataWrapper )
+static BOOL ImplLongCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
+                                             BOOL, BOOL bUseThousandSep, const LocaleDataWrapper& rLocaleDataWrapper )
 {
     // Es gibt hier kein sinnvolles StrictFormat, also alle
     // Zeichen erlauben
-    return ImplNumericProcessKeyInput( pEdit, rKEvt, sal_False, bUseThousandSep, rLocaleDataWrapper  );
+    return ImplNumericProcessKeyInput( pEdit, rKEvt, FALSE, bUseThousandSep, rLocaleDataWrapper  );
 }
 
 // -----------------------------------------------------------------------
 
-inline sal_Bool ImplLongCurrencyGetValue( const XubString& rStr, BigInt& rValue,
-                                      sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )
+inline BOOL ImplLongCurrencyGetValue( const XubString& rStr, BigInt& rValue,
+                                      USHORT nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )
 {
     // Zahlenwert holen
-    return ImplNumericGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper, sal_True );
+    return ImplNumericGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper, TRUE );
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nMax,
-                               sal_uInt16 nDecDigits,
+BOOL ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nMax,
+                               USHORT nDecDigits,
                                const LocaleDataWrapper& rLocaleDataWrapper, String& rOutStr,
                                LongCurrencyFormatter& rFormatter )
 {
     BigInt nValue;
-    if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper, sal_True ) )
-        return sal_True;
+    if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper, TRUE ) )
+        return TRUE;
     else
     {
         BigInt nTempVal = nValue;
@@ -306,7 +306,7 @@ sal_Bool ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nM
             if ( !rFormatter.GetErrorHdl().Call( &rFormatter ) )
             {
                 rFormatter.mnCorrectedValue = 0;
-                return sal_False;
+                return FALSE;
             }
             else
             {
@@ -314,8 +314,8 @@ sal_Bool ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nM
             }
         }
 
-        rOutStr = ImplGetCurr( rLocaleDataWrapper, nTempVal, nDecDigits, rFormatter.GetCurrencySymbol(), rFormatter.IsUseThousandSep() );
-        return sal_True;
+        rOutStr = ImplGetCurr( rLocaleDataWrapper, nTempVal, nDecDigits, rFormatter.GetCurrencySymbol(), rFormatter.IsUseThousandSep() ); 
+        return TRUE;
     }
 }
 
@@ -324,15 +324,15 @@ sal_Bool ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nM
 
 void LongCurrencyFormatter::ImpInit()
 {
-    mnFieldValue        = 0;
-    mnLastValue         = 0;
-    mnMin               = 0;
-    mnMax               = 0x7FFFFFFF;
-    mnMax              *= 0x7FFFFFFF;
-    mnCorrectedValue    = 0;
+    mnFieldValue		= 0;
+    mnLastValue 		= 0;
+    mnMin				= 0;
+    mnMax				= 0x7FFFFFFF;
+    mnMax			   *= 0x7FFFFFFF;
+    mnCorrectedValue	= 0;
     mnDecimalDigits     = 0;
-    mnType              = FORMAT_LONGCURRENCY;
-    mbThousandSep       = sal_True;
+    mnType				= FORMAT_LONGCURRENCY;
+    mbThousandSep       = TRUE;
     SetDecimalDigits( 0 );
 }
 
@@ -349,23 +349,23 @@ void LongCurrencyFormatter::ImplLoadRes( const ResId& rResId )
 {
     ImpInit();
 
-    ResMgr*     pMgr = rResId.GetResMgr();
+    ResMgr* 	pMgr = rResId.GetResMgr();
     if( pMgr )
     {
-        sal_uLong       nMask = pMgr->ReadLong();
-
+        ULONG		nMask = pMgr->ReadLong();
+    
         if ( NUMERICFORMATTER_MIN & nMask )
             mnMin = pMgr->ReadLong();
-
+    
         if ( NUMERICFORMATTER_MAX & nMask )
             mnMax = pMgr->ReadLong();
-
+    
         if ( NUMERICFORMATTER_STRICTFORMAT & nMask )
-            SetStrictFormat(  (sal_Bool)pMgr->ReadShort() );
-
+            SetStrictFormat(  (BOOL)pMgr->ReadShort() );
+    
         if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
             SetDecimalDigits( pMgr->ReadShort() );
-
+    
         if ( NUMERICFORMATTER_VALUE & nMask )
         {
             mnFieldValue = pMgr->ReadLong();
@@ -405,7 +405,7 @@ void LongCurrencyFormatter::SetValue( BigInt nNewValue )
 {
     SetUserValue( nNewValue );
     mnFieldValue = mnLastValue;
-    SetEmptyFieldValueData( sal_False );
+    SetEmptyFieldValueData( FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -430,7 +430,7 @@ void LongCurrencyFormatter::SetUserValue( BigInt nNewValue )
     }
     else
         GetField()->SetText( aStr );
-    MarkToBeReformatted( sal_False );
+    MarkToBeReformatted( FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -464,7 +464,7 @@ void LongCurrencyFormatter::Reformat()
         return;
 
     XubString aStr;
-    sal_Bool bOK = ImplLongCurrencyReformat( GetField()->GetText(), mnMin, mnMax,
+    BOOL bOK = ImplLongCurrencyReformat( GetField()->GetText(), mnMin, mnMax,
                                          GetDecimalDigits(), GetLocaleDataWrapper(), aStr, *this );
     if ( !bOK )
         return;
@@ -472,7 +472,7 @@ void LongCurrencyFormatter::Reformat()
     if ( aStr.Len() )
     {
         GetField()->SetText( aStr );
-        MarkToBeReformatted( sal_False );
+        MarkToBeReformatted( FALSE );
         ImplLongCurrencyGetValue( aStr, mnLastValue, GetDecimalDigits(), GetLocaleDataWrapper() );
     }
     else
@@ -504,7 +504,7 @@ void LongCurrencyFormatter::SetMax( BigInt nNewMax )
 
 // -----------------------------------------------------------------------
 
-void LongCurrencyFormatter::SetUseThousandSep( sal_Bool b )
+void LongCurrencyFormatter::SetUseThousandSep( BOOL b )
 {
     mbThousandSep = b;
     ReformatAll();
@@ -513,34 +513,34 @@ void LongCurrencyFormatter::SetUseThousandSep( sal_Bool b )
 
 // -----------------------------------------------------------------------
 
-void LongCurrencyFormatter::SetDecimalDigits( sal_uInt16 nDigits )
+void LongCurrencyFormatter::SetDecimalDigits( USHORT nDigits )
 {
-//  DBG_ASSERT( nDigits < 10, "LongCurrency duerfen nur maximal 9 Nachkommastellen haben" );
+//	DBG_ASSERT( nDigits < 10, "LongCurrency duerfen nur maximal 9 Nachkommastellen haben" );
 
     if ( nDigits > 9 )
         nDigits = 9;
-
+    
     mnDecimalDigits = nDigits;
     ReformatAll();
 }
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 LongCurrencyFormatter::GetDecimalDigits() const
+USHORT LongCurrencyFormatter::GetDecimalDigits() const
 {
     return mnDecimalDigits;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool LongCurrencyFormatter::IsValueModified() const
+BOOL LongCurrencyFormatter::IsValueModified() const
 {
     if ( ImplGetEmptyFieldValue() )
         return !IsEmptyValue();
     else if ( GetValue() != mnFieldValue )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -548,7 +548,7 @@ sal_Bool LongCurrencyFormatter::IsValueModified() const
 void LongCurrencyFormatter::SetEmptyValue()
 {
     GetField()->SetText( ImplGetSVEmptyStr() );
-    SetEmptyFieldValueData( sal_True );
+    SetEmptyFieldValueData( TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -577,7 +577,7 @@ void ImplNewLongCurrencyFieldValue( LongCurrencyField* pField, BigInt nNewValue 
     Selection aSelect = pField->GetSelection();
     aSelect.Justify();
     XubString aText = pField->GetText();
-    sal_Bool bLastSelected = ((xub_StrLen)aSelect.Max() == aText.Len()) ? sal_True : sal_False;
+    BOOL bLastSelected = ((xub_StrLen)aSelect.Max() == aText.Len()) ? TRUE : FALSE;
 
     BigInt nOldLastValue  = pField->mnLastValue;
     pField->SetUserValue( nNewValue );
@@ -600,9 +600,9 @@ LongCurrencyField::LongCurrencyField( Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
 {
     SetField( this );
-    mnSpinSize   = 1;
-    mnFirst      = mnMin;
-    mnLast       = mnMax;
+    mnSpinSize	 = 1;
+    mnFirst 	 = mnMin;
+    mnLast		 = mnMax;
 
     Reformat();
 }
@@ -617,9 +617,9 @@ LongCurrencyField::LongCurrencyField( Window* pParent, const ResId& rResId ) :
     SpinField::ImplInit( pParent, nStyle );
 
     SetField( this );
-    mnSpinSize   = 1;
-    mnFirst      = mnMin;
-    mnLast       = mnMax;
+    mnSpinSize	 = 1;
+    mnFirst 	 = mnMin;
+    mnLast		 = mnMax;
 
     Reformat();
 
@@ -634,7 +634,7 @@ void LongCurrencyField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     LongCurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
-    sal_uLong nMask = ReadLongRes();
+    ULONG nMask = ReadLongRes();
     if ( CURRENCYFIELD_FIRST & nMask )
         mnFirst = ReadLongRes();
 
@@ -669,7 +669,7 @@ long LongCurrencyField::Notify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_GETFOCUS )
     {
-        MarkToBeReformatted( sal_False );
+        MarkToBeReformatted( FALSE );
     }
     else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
@@ -686,7 +686,7 @@ long LongCurrencyField::Notify( NotifyEvent& rNEvt )
 
 void LongCurrencyField::Modify()
 {
-    MarkToBeReformatted( sal_True );
+    MarkToBeReformatted( TRUE );
     SpinField::Modify();
 }
 
@@ -781,7 +781,7 @@ long LongCurrencyBox::Notify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_GETFOCUS )
     {
-        MarkToBeReformatted( sal_False );
+        MarkToBeReformatted( FALSE );
     }
     else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
@@ -798,7 +798,7 @@ long LongCurrencyBox::Notify( NotifyEvent& rNEvt )
 
 void LongCurrencyBox::Modify()
 {
-    MarkToBeReformatted( sal_True );
+    MarkToBeReformatted( TRUE );
     ComboBox::Modify();
 }
 
@@ -807,9 +807,9 @@ void LongCurrencyBox::Modify()
 void LongCurrencyBox::ReformatAll()
 {
     XubString aStr;
-    SetUpdateMode( sal_False );
-    sal_uInt16 nEntryCount = GetEntryCount();
-    for ( sal_uInt16 i=0; i < nEntryCount; i++ )
+    SetUpdateMode( FALSE );
+    USHORT nEntryCount = GetEntryCount();
+    for ( USHORT i=0; i < nEntryCount; i++ )
     {
         ImplLongCurrencyReformat( GetEntry( i ), mnMin, mnMax,
                                   GetDecimalDigits(), GetLocaleDataWrapper(),
@@ -818,12 +818,12 @@ void LongCurrencyBox::ReformatAll()
         InsertEntry( aStr, i );
     }
     LongCurrencyFormatter::Reformat();
-    SetUpdateMode( sal_True );
+    SetUpdateMode( TRUE );
 }
 
 // -----------------------------------------------------------------------
 
-void LongCurrencyBox::InsertValue( BigInt nValue, sal_uInt16 nPos )
+void LongCurrencyBox::InsertValue( BigInt nValue, USHORT nPos )
 {
     XubString aStr = ImplGetCurr( GetLocaleDataWrapper(), nValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
     ComboBox::InsertEntry( aStr, nPos );
@@ -839,7 +839,7 @@ void LongCurrencyBox::RemoveValue( BigInt nValue )
 
 // -----------------------------------------------------------------------
 
-BigInt LongCurrencyBox::GetValue( sal_uInt16 nPos ) const
+BigInt LongCurrencyBox::GetValue( USHORT nPos ) const
 {
     BigInt nValue = 0;
     ImplLongCurrencyGetValue( ComboBox::GetEntry( nPos ), nValue,
@@ -849,7 +849,7 @@ BigInt LongCurrencyBox::GetValue( sal_uInt16 nPos ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 LongCurrencyBox::GetValuePos( BigInt nValue ) const
+USHORT LongCurrencyBox::GetValuePos( BigInt nValue ) const
 {
     XubString aStr = ImplGetCurr( GetLocaleDataWrapper(), nValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
     return ComboBox::GetEntryPos( aStr );

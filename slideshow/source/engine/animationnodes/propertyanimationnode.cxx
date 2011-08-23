@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@ AnimationActivitySharedPtr PropertyAnimationNode::createActivity() const
     // Create AnimationActivity from common XAnimate parameters:
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
     uno::Reference<animations::XAnimate> const& xAnimateNode =getXAnimateNode();
-    rtl::OUString const attrName( xAnimateNode->getAttributeName() );
+    rtl::OUString const attrName( xAnimateNode->getAttributeName() );    
     AttributableShapeSharedPtr const pShape( getShape() );
-
+    
     switch (AnimationFactory::classifyAttributeName( attrName )) {
     default:
     case AnimationFactory::CLASS_UNKNOWN_PROPERTY:
@@ -56,58 +56,58 @@ AnimationActivitySharedPtr PropertyAnimationNode::createActivity() const
             false,
             "Unexpected attribute class (unknown or empty attribute name)" );
         break;
-
+        
     case AnimationFactory::CLASS_NUMBER_PROPERTY:
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            AnimationFactory::createNumberPropertyAnimation(
+            AnimationFactory::createNumberPropertyAnimation( 
                 attrName,
                 pShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize() ),
             xAnimateNode );
-
+        
     case AnimationFactory::CLASS_ENUM_PROPERTY:
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            AnimationFactory::createEnumPropertyAnimation(
+            AnimationFactory::createEnumPropertyAnimation( 
                 attrName,
                 pShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize() ),
             xAnimateNode );
-
+        
     case AnimationFactory::CLASS_COLOR_PROPERTY:
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            AnimationFactory::createColorPropertyAnimation(
+            AnimationFactory::createColorPropertyAnimation( 
                 attrName,
                 pShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize() ),
             xAnimateNode );
-
+        
     case AnimationFactory::CLASS_STRING_PROPERTY:
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            AnimationFactory::createStringPropertyAnimation(
+            AnimationFactory::createStringPropertyAnimation( 
                 attrName,
                 pShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize() ),
             xAnimateNode );
-
+        
     case AnimationFactory::CLASS_BOOL_PROPERTY:
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            AnimationFactory::createBoolPropertyAnimation(
+            AnimationFactory::createBoolPropertyAnimation( 
                 attrName,
                 pShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize() ),
             xAnimateNode );
     }
-
+    
     return AnimationActivitySharedPtr();
 }
 

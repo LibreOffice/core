@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,6 @@ namespace dbaui
             { DSID_IGNORECURRENCY,          "IgnoreCurrency" },
             { DSID_ESCAPE_DATETIME,         "EscapeDateTime" },
             { DSID_PRIMARY_KEY_SUPPORT,     "PrimaryKeySupport" },
-            { DSID_MAX_ROW_SCAN,            "MaxRowScan" },
             { 0, NULL }
         };
         return s_aMappings;
@@ -116,7 +115,7 @@ namespace dbaui
             {
                 FeatureSet aCurrentSet;
                 const ::comphelper::NamedValueCollection aCurrentFeatures( aDriverConfig.getFeatures( *pattern ).getNamedValues() );
-
+                
                 const FeatureMapping* pFeatureMapping = lcl_getFeatureMappings();
                 while ( pFeatureMapping->pAsciiFeatureName )
                 {
@@ -152,9 +151,9 @@ namespace dbaui
                 {
                     ::rtl::OUString sAuth;
                     aMetaData.get("Authentication") >>= sAuth;
-                    if ( sAuth.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserPassword")) )
+                    if ( sAuth.equalsAscii("UserPassword") )
                         aInit = AuthUserPwd;
-                    else if ( sAuth.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Password")) )
+                    else if ( sAuth.equalsAscii("Password") )
                         aInit = AuthPwd;
                 }
                 s_aSupport.insert(Supported::value_type(*pIter,aInit));

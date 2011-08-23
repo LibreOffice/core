@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ SwXMLBlockContext::SwXMLBlockContext(
 {
     static const CharClass & rCC = GetAppCharClass();
     String aShort, aLong, aPackageName;
-    sal_Bool bTextOnly = sal_False;
+    BOOL bTextOnly = FALSE;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for (sal_Int16 i=0; i < nAttrCount; i++)
@@ -123,7 +123,7 @@ SwXMLBlockContext::SwXMLBlockContext(
             else if ( IsXMLToken ( aLocalName, XML_UNFORMATTED_TEXT ) )
             {
                 if ( IsXMLToken ( rAttrValue, XML_TRUE ) )
-                    bTextOnly = sal_True;
+                    bTextOnly = TRUE;
             }
         }
     }

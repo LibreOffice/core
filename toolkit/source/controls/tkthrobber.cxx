@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,7 @@ namespace toolkit
     //= UnoThrobberControlModel
     //====================================================================
     //--------------------------------------------------------------------
-    UnoThrobberControlModel::UnoThrobberControlModel( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
-        :UnoControlModel( i_factory )
+    UnoThrobberControlModel::UnoThrobberControlModel()
     {
         ImplRegisterProperty( BASEPROPERTY_BORDER );
         ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
@@ -119,15 +118,14 @@ namespace toolkit
     //= UnoThrobberControl
     //====================================================================
     //--------------------------------------------------------------------
-    UnoThrobberControl::UnoThrobberControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
-        :UnoControlBase( i_factory )
+    UnoThrobberControl::UnoThrobberControl()
     {
     }
 
     //--------------------------------------------------------------------
     ::rtl::OUString UnoThrobberControl::GetComponentServiceName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Throbber"));
+        return ::rtl::OUString::createFromAscii( "Throbber" );
     }
 
     //--------------------------------------------------------------------
@@ -185,7 +183,7 @@ namespace toolkit
         if ( xAnimation.is() )
             xAnimation->start();
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL UnoThrobberControl::stop() throw ( uno::RuntimeException )
     {
@@ -195,7 +193,7 @@ namespace toolkit
         if ( xAnimation.is() )
             xAnimation->stop();
     }
-
+    
 //........................................................................
 }  // namespace toolkit
 //........................................................................

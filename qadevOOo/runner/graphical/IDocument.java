@@ -1,8 +1,8 @@
 /*
  * ************************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ public interface IDocument
      * @param _sDocument
      * @param _sResult
      * @param _aParams
-     * @throws OfficeException
+     * @throws OfficeException 
      */
     public void checkOneFile(String _sDocument, String _sResult, ParameterHelper _aParams) throws OfficeException;
 }

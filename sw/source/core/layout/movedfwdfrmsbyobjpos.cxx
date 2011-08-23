@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,11 @@
 #include "precompiled_sw.hxx"
 #include <movedfwdfrmsbyobjpos.hxx>
 #include <txtfrm.hxx>
+// --> OD 2004-10-05 #i26945#
 #include <rowfrm.hxx>
 #include <pagefrm.hxx>
 #include <ndtxt.hxx>
-#include <switerator.hxx>
+// <--
 
 SwMovedFwdFrmsByObjPos::SwMovedFwdFrmsByObjPos()
 {
@@ -86,8 +87,10 @@ bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm
         const NodeMapEntry& rEntry = *(aIter);
         if ( rEntry.second >= nPageNumOfRow )
         {
-            SwIterator<SwTxtFrm,SwTxtNode> aFrmIter( *rEntry.first );
-            for( SwTxtFrm* pTxtFrm = aFrmIter.First(); pTxtFrm; pTxtFrm = (SwTxtFrm*)aFrmIter.Next() )
+            SwClientIter aFrmIter( *const_cast<SwTxtNode*>( rEntry.first ) );
+            for( SwTxtFrm* pTxtFrm = (SwTxtFrm*)aFrmIter.First( TYPE(SwTxtFrm) );
+                 pTxtFrm;
+                 pTxtFrm = (SwTxtFrm*)aFrmIter.Next() )
             {
                 // --> OD 2004-12-03 #115759# - assure that found text frame
                 // is the first one.

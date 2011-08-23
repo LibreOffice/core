@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
+
 
 #include "txtpaint.hxx"
 #include "swrect.hxx"
@@ -56,7 +58,7 @@ void SwSaveClip::Reset()
 }
 
 /*************************************************************************
- *                      SwSaveClip::_ChgClip()
+ *						SwSaveClip::_ChgClip()
  *************************************************************************/
 
 void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
@@ -118,12 +120,14 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
 #endif
         }
 #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 1
         static sal_Bool bDbg = sal_False;
         if( bDbg )
         {
             DbgBackColor aDbg( pOut, bDbg, COL_RED );
             pOut->DrawRect( aRect );
         }
+#endif
 #endif
     }
     bChg = sal_True;

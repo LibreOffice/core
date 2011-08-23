@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ java_sql_Clob::~java_sql_Clob()
 
 jclass java_sql_Clob::getMyClass() const
 {
-    // the class must be fetched only once, therefore static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/Clob");
     return theClass;
@@ -64,12 +64,12 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_Clob::length" );
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
-        // initialize temporary variable
+        // temporaere Variable initialisieren
         static const char * cSignature = "()J";
         static const char * cMethodName = "length";
-        // execute Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallLongMethod( object, mID );
@@ -84,18 +84,18 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::rtl::OUString aStr;
     {
-        // initialize temporary variable
+        // temporaere Variable initialisieren
         static const char * cSignature = "(JI)Ljava/lang/String;";
         static const char * cMethodName = "getSubString";
-        // execute Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID,pos,subStringLength);
         ThrowSQLException(t.pEnv,*this);
         aStr = JavaString2String(t.pEnv,out);
     } //t.pEnv
-    // WARNING: the caller becomes the owner of the returned pointer
-    return  aStr;
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    return 	aStr;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_Clob::getCharacterStream(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
@@ -105,7 +105,7 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     static jmethodID mID(NULL);
     jobject out = callObjectMethod(t.pEnv,"getCharacterStream","()Ljava/io/Reader;", mID);
 
-    // WARNING: the caller becomes the owner of the returned pointer
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? 0 : new java_io_Reader( t.pEnv, out );
 }
 
@@ -114,15 +114,15 @@ sal_Int64 SAL_CALL java_sql_Clob::position( const ::rtl::OUString& searchstr, sa
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_Clob::position" );
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
         jvalue args[1];
-        // convert Parameter
+        // Parameter konvertieren
         args[0].l = convertwchar_tToJavaString(t.pEnv,searchstr);
-        // initialize temporary Variable
+        // temporaere Variable initialisieren
         static const char * cSignature = "(Ljava/lang/String;I)J";
         static const char * cMethodName = "position";
-        // execute Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallLongMethod( object, mID, args[0].l,start );

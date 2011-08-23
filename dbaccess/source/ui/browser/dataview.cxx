@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/imgmgr.hxx>
+#include <vcl/fixed.hxx>
 #include "IController.hxx"
 #include "UITools.hxx"
 #include <sfx2/sfx.hrc>
@@ -57,7 +58,7 @@ namespace dbaui
     class ColorChanger
     {
     protected:
-        OutputDevice*   m_pDev;
+        OutputDevice*	m_pDev;
 
     public:
         ColorChanger( OutputDevice* _pDev, const Color& _rNewLineColor, const Color& _rNewFillColor )
@@ -76,19 +77,18 @@ namespace dbaui
 
     DBG_NAME(ODataView)
     // -------------------------------------------------------------------------
-    ODataView::ODataView(   Window* pParent,
+    ODataView::ODataView(	Window* pParent, 
                             IController& _rController,
-                            const Reference< XMultiServiceFactory >& _rFactory,
+                            const Reference< XMultiServiceFactory >& _rFactory, 
                             WinBits nStyle)
         :Window(pParent,nStyle)
         ,m_xServiceFactory(_rFactory)
         ,m_rController( _rController )
-        ,m_aSeparator( this )
+        ,m_pSeparator( NULL )
     {
         DBG_CTOR(ODataView,NULL);
         m_rController.acquire();
         m_pAccel.reset(::svt::AcceleratorExecute::createAcceleratorHelper());
-        m_aSeparator.Show();
     }
 
     // -------------------------------------------------------------------------
@@ -101,9 +101,29 @@ namespace dbaui
     {
         DBG_DTOR(ODataView,NULL);
 
-        m_rController.release();
+        enableSeparator( sal_False );
+        m_rController.release();		
     }
 
+    // -------------------------------------------------------------------------
+    void ODataView::enableSeparator( const sal_Bool _bEnable )
+    {
+        if ( _bEnable == isSeparatorEnabled() )
+            // nothing to do
+            return;
+
+        if ( _bEnable )
+        {
+            m_pSeparator = new FixedLine( this );
+            m_pSeparator->Show( );
+        }
+        else
+        {
+            ::std::auto_ptr<FixedLine> aTemp(m_pSeparator);
+            m_pSeparator = NULL;
+        }
+        Resize();
+    }
     // -------------------------------------------------------------------------
     void ODataView::resizeDocumentView( Rectangle& /*_rPlayground*/ )
     {
@@ -128,10 +148,15 @@ namespace dbaui
     {
         Rectangle aPlayground( _rPlayground );
 
-        // position the separator
-        const Size aSeparatorSize = Size( aPlayground.GetWidth(), 2 );
-        m_aSeparator.SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
-        aPlayground.Top() += aSeparatorSize.Height() + 1;
+        // position thew separator
+        if ( m_pSeparator )
+        {
+            Size aSeparatorSize = Size( aPlayground.GetWidth(), 2 );
+
+            m_pSeparator->SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
+
+            aPlayground.Top() += aSeparatorSize.Height() + 1;
+        }
 
         // position the controls of the document's view
         resizeDocumentView( aPlayground );
@@ -151,7 +176,7 @@ namespace dbaui
         {
             case EVENT_KEYINPUT:
             {
-                const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
+                const KeyEvent* pKeyEvent =	_rNEvt.GetKeyEvent();
                 const KeyCode& aKeyCode = pKeyEvent->GetKeyCode();
                 if ( m_pAccel.get() && m_pAccel->execute( aKeyCode ) )
                     // the accelerator consumed the event

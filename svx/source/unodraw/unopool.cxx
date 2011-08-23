@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include "svx/unopool.hxx"
+#include "unopool.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/unoprov.hxx>
@@ -47,7 +47,7 @@
 #include <svx/svdetc.hxx>
 #include <editeng/editeng.hxx>
 
-#include "svx/unoapi.hxx"
+#include "unoapi.hxx"
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -85,7 +85,7 @@ void SvxUnoDrawPool::init()
 
 SfxItemPool* SvxUnoDrawPool::getModelPool( sal_Bool bReadOnly ) throw()
 {
-    if( mpModel )
+    if( mpModel	)
     {
         return &mpModel->GetItemPool();
     }
@@ -123,22 +123,22 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
         }
     default:
         {
-            const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((sal_uInt16)pEntry->mnHandle) : SFX_MAPUNIT_100TH_MM;
+            const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pEntry->mnHandle) : SFX_MAPUNIT_100TH_MM;
 
-            sal_uInt8 nMemberId = pEntry->mnMemberId & (~SFX_METRIC_ITEM);
+            BYTE nMemberId = pEntry->mnMemberId & (~SFX_METRIC_ITEM);
             if( eMapUnit == SFX_MAPUNIT_100TH_MM )
                 nMemberId &= (~CONVERT_TWIPS);
 
             // DVO, OD 10.10.2003 #i18732#
             // Assure, that ID is a Which-ID (it could be a Slot-ID.)
             // Thus, convert handle to Which-ID.
-            pPool->GetDefaultItem( pPool->GetWhich( (sal_uInt16)pEntry->mnHandle ) ).QueryValue( rValue, nMemberId );
+            pPool->GetDefaultItem( pPool->GetWhich( (USHORT)pEntry->mnHandle ) ).QueryValue( rValue, nMemberId );
         }
     }
 
 
     // check for needed metric translation
-    const SfxMapUnit eMapUnit = pPool->GetMetric((sal_uInt16)pEntry->mnHandle);
+    const SfxMapUnit eMapUnit = pPool->GetMetric((USHORT)pEntry->mnHandle);
     if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         SvxUnoConvertToMM( eMapUnit, rValue );
@@ -158,7 +158,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
 {
     uno::Any aValue( rValue );
 
-    const SfxMapUnit eMapUnit = pPool->GetMetric((sal_uInt16)pEntry->mnHandle);
+    const SfxMapUnit eMapUnit = pPool->GetMetric((USHORT)pEntry->mnHandle);
     if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         SvxUnoConvertFromMM( eMapUnit, aValue );
@@ -192,7 +192,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
     default:
         {
             ::std::auto_ptr<SfxPoolItem> pNewItem( pPool->GetDefaultItem( nWhich ).Clone() );
-            sal_uInt8 nMemberId = pEntry->mnMemberId & (~SFX_METRIC_ITEM);
+            BYTE nMemberId = pEntry->mnMemberId & (~SFX_METRIC_ITEM);
             if( !pPool || (pPool->GetMetric(nWhich) == SFX_MAPUNIT_100TH_MM) )
                 nMemberId &= (~CONVERT_TWIPS);
 
@@ -307,7 +307,7 @@ void SvxUnoDrawPool::_setPropertyToDefault( const comphelper::PropertyMapEntry* 
     // OD 10.10.2003 #i18732#
     // Assure, that ID is a Which-ID (it could be a Slot-ID.)
     // Thus, convert handle to Which-ID.
-    const sal_uInt16 nWhich = pPool->GetWhich( (sal_uInt16)pEntry->mnHandle );
+    const sal_uInt16 nWhich = pPool->GetWhich( (USHORT)pEntry->mnHandle );
     if ( pPool && pPool != mpDefaultsPool )
     {
         // OD 13.10.2003 #i18732# - use method <ResetPoolDefaultItem(..)>
@@ -325,7 +325,7 @@ uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry
     // using probably incompatible item pool <mpDefaultsPool>
     uno::Any aAny;
     SfxItemPool* pPool = getModelPool( sal_True );
-    const sal_uInt16 nWhich = pPool->GetWhich( (sal_uInt16)pEntry->mnHandle );
+    const sal_uInt16 nWhich = pPool->GetWhich( (USHORT)pEntry->mnHandle );
     const SfxPoolItem *pItem = pPool->GetPoolDefaultItem ( nWhich );
     pItem->QueryValue( aAny, pEntry->mnMemberId );
 
@@ -408,11 +408,11 @@ sal_Bool SAL_CALL SvxUnoDrawPool::supportsService( const  OUString& ServiceName 
     uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
     const OUString * pArray = aSNL.getConstArray();
 
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
+    for( INT32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return sal_True;
+            return TRUE;
 
-    return sal_False;
+    return FALSE;
 }
 
 OUString SAL_CALL SvxUnoDrawPool::getImplementationName() throw( uno::RuntimeException )

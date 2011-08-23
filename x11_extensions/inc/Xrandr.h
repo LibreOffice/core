@@ -18,7 +18,7 @@
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL COMPAQ
  * BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
- * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+ * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  * Author:  Jim Gettys, HP Labs, HP.
@@ -33,10 +33,10 @@
 
 _XFUNCPROTOBEGIN
 
-
+    
 typedef struct {
-    int width, height;
-    int mwidth, mheight;
+    int	width, height;
+    int	mwidth, mheight;
 } XRRScreenSize;
 
 /*
@@ -44,14 +44,14 @@ typedef struct {
  */
 
 typedef struct {
-    int type;           /* event base */
-    unsigned long serial;   /* # of last request processed by server */
-    Bool send_event;        /* true if this came from a SendEvent request */
-    Display *display;       /* Display the event was read from */
-    Window window;      /* window which selected for this event */
-    Window root;        /* Root window for changed screen */
-    Time timestamp;     /* when the screen change occurred */
-    Time config_timestamp;  /* when the last configuration change */
+    int type;			/* event base */
+    unsigned long serial;	/* # of last request processed by server */
+    Bool send_event;		/* true if this came from a SendEvent request */
+    Display *display;		/* Display the event was read from */
+    Window window;		/* window which selected for this event */
+    Window root;		/* Root window for changed screen */
+    Time timestamp;		/* when the screen change occurred */
+    Time config_timestamp;	/* when the last configuration change */
     SizeID size_index;
     SubpixelOrder subpixel_order;
     Rotation rotation;
@@ -63,7 +63,7 @@ typedef struct {
 
 
 /* internal representation is private to the library */
-typedef struct _XRRScreenConfiguration XRRScreenConfiguration;
+typedef struct _XRRScreenConfiguration XRRScreenConfiguration;	
 
 Bool XRRQueryExtension (Display *dpy, int *event_basep, int *error_basep);
 Status XRRQueryVersion (Display *dpy,
@@ -72,17 +72,17 @@ Status XRRQueryVersion (Display *dpy,
 
 XRRScreenConfiguration *XRRGetScreenInfo (Display *dpy,
                       Drawable draw);
-
+    
 void XRRFreeScreenConfigInfo (XRRScreenConfiguration *config);
 
-/*
+/* 
  * Note that screen configuration changes are only permitted if the client can
  * prove it has up to date configuration information.  We are trying to
  * insist that it become possible for screens to change dynamically, so
  * we want to ensure the client knows what it is talking about when requesting
  * changes.
  */
-Status XRRSetScreenConfig (Display *dpy,
+Status XRRSetScreenConfig (Display *dpy, 
                XRRScreenConfiguration *config,
                Drawable draw,
                int size_index,
@@ -90,7 +90,7 @@ Status XRRSetScreenConfig (Display *dpy,
                Time timestamp);
 
 /* added in v1.1, sorry for the lame name */
-Status XRRSetScreenConfigAndRate (Display *dpy,
+Status XRRSetScreenConfigAndRate (Display *dpy, 
                   XRRScreenConfiguration *config,
                   Drawable draw,
                   int size_index,
@@ -107,14 +107,14 @@ XRRScreenSize *XRRConfigSizes(XRRScreenConfiguration *config, int *nsizes);
 
 short *XRRConfigRates (XRRScreenConfiguration *config, int sizeID, int *nrates);
 
-SizeID XRRConfigCurrentConfiguration (XRRScreenConfiguration *config,
+SizeID XRRConfigCurrentConfiguration (XRRScreenConfiguration *config, 
                   Rotation *rotation);
-
+    
 short XRRConfigCurrentRate (XRRScreenConfiguration *config);
 
 int XRRRootToScreen(Display *dpy, Window root);
 
-/*
+/* 
  * returns the screen configuration for the specified screen; does a lazy
  * evalution to delay getting the information, and caches the result.
  * These routines should be used in preference to XRRGetScreenInfo
@@ -127,9 +127,9 @@ XRRScreenConfiguration *XRRScreenConfig(Display *dpy, int screen);
 XRRScreenConfiguration *XRRConfig(Screen *screen);
 void XRRSelectInput(Display *dpy, Window window, int mask);
 
-/*
- * the following are always safe to call, even if RandR is not implemented
- * on a screen
+/* 
+ * the following are always safe to call, even if RandR is not implemented 
+ * on a screen 
  */
 
 
@@ -139,8 +139,8 @@ short *XRRRates (Display *dpy, int screen, int sizeID, int *nrates);
 Time XRRTimes (Display *dpy, int screen, Time *config_timestamp);
 
 
-/*
- * intended to take RRScreenChangeNotify,  or
+/* 
+ * intended to take RRScreenChangeNotify,  or 
  * ConfigureNotify (on the root window)
  * returns 1 if it is an event type it understands, 0 if not
  */

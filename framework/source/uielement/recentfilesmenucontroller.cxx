@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <uielement/recentfilesmenucontroller.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
@@ -40,14 +40,14 @@
 #include <classes/fwkresid.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
@@ -59,17 +59,17 @@
 #include <cppuhelper/implbase1.hxx>
 #include <osl/file.hxx>
 #ifdef WNT
-#define GradientStyle_RECT BLA_GradientStyle_RECT
-#include <windows.h>
-#undef GradientStyle_RECT
+#include <tools/prewin.h>
+#include <tools/postwin.h>
 #include <odma_lib.hxx>
 #endif
 #include <dispatch/uieventloghelper.hxx>
 #include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
+//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -99,7 +99,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
 
 DEFINE_XSERVICEINFO_MULTISERVICE        (   RecentFilesMenuController                   ,
                                             OWeakObject                                 ,
-                                            SERVICENAME_POPUPMENUCONTROLLER             ,
+                                            SERVICENAME_POPUPMENUCONTROLLER		        ,
                                             IMPLEMENTATIONNAME_RECENTFILESMENUCONTROLLER
                                         )
 
@@ -190,10 +190,10 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 }
 
                 // Abbreviate URL
-                rtl::OUString   aURLString( aCmdPrefix + rtl::OUString::valueOf( sal_Int32( i )));
-                rtl::OUString   aTipHelpText;
-                rtl::OUString   aMenuTitle;
-                INetURLObject   aURL( m_aRecentFilesItems[i].aURL );
+                rtl::OUString	aURLString( aCmdPrefix + rtl::OUString::valueOf( sal_Int32( i )));
+                rtl::OUString	aTipHelpText;
+                rtl::OUString	aMenuTitle;
+                INetURLObject	aURL( m_aRecentFilesItems[i].aURL );
 
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
                 {
@@ -201,8 +201,8 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                     // path and abbreviate it with a special function:
                     String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-                    ::rtl::OUString aSystemPath( aFileSystemPath );
-                    ::rtl::OUString aCompactedSystemPath;
+                    ::rtl::OUString	aSystemPath( aFileSystemPath );
+                    ::rtl::OUString	aCompactedSystemPath;
 
                     aTipHelpText = aSystemPath;
                     oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
@@ -211,8 +211,6 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                     else
                         aMenuTitle = aSystemPath;
                 }
-#if 0 // Please don't remove this commented-out code just yet,
-      // we can try to resurrect it later in case somebody complains
 #ifdef WNT
                 else if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_ODMA && ::odma::DMSsAvailable ())
                 {
@@ -248,11 +246,10 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                     aTipHelpText = aURLString;
                 }
 #endif
-#endif
                 else
                 {
                     // Use INetURLObject to abbreviate all other URLs
-                    String  aShortURL;
+                    String	aShortURL;
                     aShortURL = aURL.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
                     aMenuTitle += aShortURL;
                     aTipHelpText = aURLString;
@@ -260,9 +257,9 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
                 ::rtl::OUString aTitle( aMenuShortCut + aMenuTitle );
 
-                pVCLPopupMenu->InsertItem( sal_uInt16( i+1 ), aTitle );
-                pVCLPopupMenu->SetTipHelpText( sal_uInt16( i+1 ), aTipHelpText );
-                pVCLPopupMenu->SetItemCommand( sal_uInt16( i+1 ), aURLString );
+                pVCLPopupMenu->InsertItem( USHORT( i+1 ), aTitle );
+                pVCLPopupMenu->SetTipHelpText( USHORT( i+1 ), aTipHelpText );
+                pVCLPopupMenu->SetItemCommand( USHORT( i+1 ), aURLString );
             }
         }
         else
@@ -270,7 +267,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             // No recent documents => insert "no document" string
             String aNoDocumentStr = String( FwkResId( STR_NODOCUMENT ));
             pVCLPopupMenu->InsertItem( 1, aNoDocumentStr );
-            pVCLPopupMenu->EnableItem( 1, sal_False );
+            pVCLPopupMenu->EnableItem( 1, FALSE );
         }
     }
 }
@@ -303,7 +300,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 
         aArgsList.realloc( NUM_OF_PICKLIST_ARGS );
         aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-        aArgsList[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
+        aArgsList[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
 
         // documents in the picklist will never be opened as templates
         aArgsList[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate" ));
@@ -328,7 +325,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Value <<= aFilter;
 
-        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0 );
+        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_default"), 0 );
     }
 
     if ( xDispatch.is() )
@@ -341,7 +338,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         pLoadRecentFile->aTargetURL = aTargetURL;
         pLoadRecentFile->aArgSeq    = aArgsList;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RecentFilesMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgsList);
+            UiEventLogHelper(::rtl::OUString::createFromAscii("RecentFilesMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgsList);
         Application::PostUserEvent( STATIC_LINK(0, RecentFilesMenuController, ExecuteHdl_Impl), pLoadRecentFile );
     }
 }

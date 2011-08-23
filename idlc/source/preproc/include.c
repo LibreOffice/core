@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,18 +25,25 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#if (defined(_WIN32) || defined(__IBMC__))
-#   include <io.h>
+#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
+#	include <io.h>
 #else
-#   include <unistd.h>
+#	include <unistd.h>
 #endif
 #ifdef _MSC_VER
-#   define _POSIX_
+#	define _POSIX_
 #endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
+
+#ifdef __hpux
+#	define _HPUX_SOURCE
+#endif
+#ifdef SCO
+#define _IBCS2
+#endif
 #include <limits.h>
 
 #include "cpp.h"

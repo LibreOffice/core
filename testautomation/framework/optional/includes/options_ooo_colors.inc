@@ -40,8 +40,8 @@ testcase tOOoColors
     dim currentColor(4) as String
     dim chColor(4)      as String
     
-    const DEFAULT_COLOR_COUNT = 100
-    const CHANGED_COLOR_COUNT = DEFAULT_COLOR_COUNT +1
+    const DEFAULT_COLOR_COUNT = 103
+    const CHANGED_COLOR_COUNT = 104
     const USER_COLOR = "TT-Test-Color"
     
     myColor(1) = USER_COLOR
@@ -66,8 +66,10 @@ testcase tOOoColors
         printlog( "Check the number of currently registered colors - cancel test on error" )
         Kontext "TabFarben"
         if ( Farbe.GetItemCount() <> DEFAULT_COLOR_COUNT ) then
-            warnlog "The number of colors has changed, stopping test; Expected: " & DEFAULT_COLOR_COUNT & "; Found...: " & Farbe.getItemCount() 
-            printlog "Close the Tools/Options dialog with OK" 
+            warnlog( "The number of colors has changed, stopping test" )
+            printlog( "Expected: " & DEFAULT_COLOR_COUNT )
+            printlog( "Found...: " & Farbe.getItemCount() )
+            printlog( "Close the Tools/Options dialog with OK" )
             Kontext "ExtrasOptionenDlg"
             ExtrasOptionenDlg.OK
             WaitSlot( 2000 )
@@ -104,7 +106,8 @@ testcase tOOoColors
 
         printlog( "Close the Tools/Options dialog with OK" )
         Kontext "ExtrasOptionenDlg"
-        hCloseDialog( ExtrasOptionenDlg, "ok" )
+        ExtrasOptionenDlg.OK
+        WaitSlot( 2000 )
     else
         warnlog( "Tools/Options dialog not open" )
     endif
@@ -160,7 +163,9 @@ testcase tOOoColors
         
         printlog( "Close options dialog with OK" )
         Kontext "ExtrasOptionenDlg"
-        hCloseDialog( ExtrasOptionenDlg, "ok" )
+        ExtrasOptionenDlg.OK
+        WaitSlot( 2000 )
+        
     else
         warnlog( "Tools/Options dialog not open" )
     endif
@@ -191,7 +196,9 @@ testcase tOOoColors
 
         printlog( "Close options dialog with OK" )
         Kontext "ExtrasOptionenDlg"
-        hCloseDialog( ExtrasOptionenDlg, "ok" )
+        ExtrasOptionenDlg.OK
+        WaitSlot( 2000 )
+        
     else
         warnlog( "Tools/Options dialog not open" )
     endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ ScRefreshTimerProtector::ScRefreshTimerProtector( ScRefreshTimerControl * const 
 {
     if ( ppControl && *ppControl )
     {
-        (*ppControl)->SetAllowRefresh( false );
+        (*ppControl)->SetAllowRefresh( FALSE );
         // wait for any running refresh in another thread to finnish
         ::osl::MutexGuard aGuard( (*ppControl)->GetMutex() );
     }
@@ -55,9 +55,9 @@ ScRefreshTimer::~ScRefreshTimer()
 }
 
 
-void ScRefreshTimer::SetRefreshDelay( sal_uLong nSeconds )
+void ScRefreshTimer::SetRefreshDelay( ULONG nSeconds )
 {
-    sal_Bool bActive = IsActive();
+    BOOL bActive = IsActive();
     if ( bActive && !nSeconds )
         Stop();
     SetTimeout( nSeconds * 1000 );

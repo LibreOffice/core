@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,9 +67,9 @@ namespace com
 #include <tools/ref.hxx>
 #include <tools/string.hxx>
 #include <svl/brdcst.hxx>
+#include <tools/list.hxx>
 #include <svl/poolitem.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <vector>
 
 class SvBorder;
 class SfxWorkWindow;
@@ -94,7 +94,7 @@ class SystemWindow;
 typedef SfxFrame* SfxFramePtr;
 class SfxFrameArr_Impl;
 
-typedef ::std::vector< String* > TargetList;
+DECLARE_LIST( TargetList, String* )
 
 #define SFXFRAME_HASTITLE     0x0001
 
@@ -119,9 +119,9 @@ class SFX2_DLLPUBLIC SfxFrame
     friend class SfxFrameWindow_Impl;
 
 private:
-    SfxFrame*           pParentFrame;
-    SfxFrameArr_Impl*   pChildArr;
-    SfxFrame_Impl*      pImp;
+    SfxFrame*			pParentFrame;
+    SfxFrameArr_Impl*	pChildArr;
+    SfxFrame_Impl*		pImp;
     Window*             pWindow;
 
 protected:
@@ -139,18 +139,18 @@ public:
     static SfxFrame*    Create( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
     static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                         CreateBlankFrame();
-    static SfxFrame*    Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nViewId, bool bHidden );
+    static SfxFrame*    Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewId, bool bHidden );
 
     SvCompatWeakHdl*    GetHdl();
     Window&             GetWindow() const;
     void                CancelTransfers( sal_Bool bCancelLoadEnv = sal_True );
     sal_Bool            DoClose();
     sal_uInt16          GetChildFrameCount() const;
-    SfxFrame*           GetChildFrame( sal_uInt16 nPos ) const;
-    SfxFrame*           GetParentFrame() const
+    SfxFrame*			GetChildFrame( sal_uInt16 nPos ) const;
+    SfxFrame*	  		GetParentFrame() const
                         { return pParentFrame; }
 
-    void                SetPresentationMode( sal_Bool bSet );
+    void                SetPresentationMode( BOOL bSet );
     SystemWindow*       GetSystemWindow() const;
 
     static SfxFrame*    GetFirst();
@@ -160,25 +160,25 @@ public:
                         OpenDocumentSynchron( SfxItemSet& aSet, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rTargetFrame );
 
     SfxBroadcaster&     GetBroadcaster() const;
-    SfxObjectShell*     GetCurrentDocument() const;
-    SfxViewFrame*       GetCurrentViewFrame() const;
-    SfxFrame&           GetTopFrame() const;
+    SfxObjectShell*		GetCurrentDocument() const;
+    SfxViewFrame*		GetCurrentViewFrame() const;
+    SfxFrame&			GetTopFrame() const;
     sal_Bool            IsParent( SfxFrame* ) const;
 
     sal_uInt32          GetFrameType() const;
-    void                GetTargetList( TargetList& ) const;
+    void				GetTargetList( TargetList& ) const;
     SAL_DLLPRIVATE SfxFrame* GetContainingDocFrame_Impl( SfxFrame* pSelf );
     sal_Bool            IsTop() const;
-    void                UpdateDescriptor( SfxObjectShell *pDoc );
-    void                Resize();
+    void				UpdateDescriptor( SfxObjectShell *pDoc );
+    void				Resize();
     sal_Bool            HasComponent() const;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                             GetComponent() const;
-    void                ReleaseComponent();
+    void				ReleaseComponent();
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                             GetFrameInterface() const;
-    void                Appear();
-    void                AppearWithUpdate();
+    void 				Appear();
+    void 				AppearWithUpdate();
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                             GetController() const;
 
@@ -219,9 +219,9 @@ public:
     SAL_DLLPRIVATE void SetInPlace_Impl( sal_Bool );
 
     SAL_DLLPRIVATE void PrepareForDoc_Impl( SfxObjectShell& i_rDoc );
-    SAL_DLLPRIVATE void LockResize_Impl( sal_Bool bLock );
-    SAL_DLLPRIVATE void SetMenuBarOn_Impl( sal_Bool bOn );
-    SAL_DLLPRIVATE sal_Bool IsMenuBarOn_Impl() const;
+    SAL_DLLPRIVATE void LockResize_Impl( BOOL bLock );
+    SAL_DLLPRIVATE void SetMenuBarOn_Impl( BOOL bOn );
+    SAL_DLLPRIVATE BOOL IsMenuBarOn_Impl() const;
     SAL_DLLPRIVATE SystemWindow* GetTopWindow_Impl() const;
     SAL_DLLPRIVATE void PositionWindow_Impl( const Rectangle& rWinArea ) const;
     SAL_DLLPRIVATE bool IsMarkedHidden_Impl() const;
@@ -233,15 +233,15 @@ SV_DECL_COMPAT_WEAK( SfxFrame )
 
 class SfxFrameIterator
 {
-    const SfxFrame*         pFrame;
+    const SfxFrame*			pFrame;
     sal_Bool                bRecursive;
 
-    SfxFrame*               NextSibling_Impl( SfxFrame& rPrev );
+    SfxFrame*				NextSibling_Impl( SfxFrame& rPrev );
 
 public:
                             SfxFrameIterator( const SfxFrame& rFrame, sal_Bool bRecursive=sal_True );
-    SfxFrame*               FirstFrame();
-    SfxFrame*               NextFrame( SfxFrame& rPrev );
+    SfxFrame*				FirstFrame();
+    SfxFrame*				NextFrame( SfxFrame& rPrev );
 };
 
 //--------------------------------------------------------------------
@@ -250,7 +250,7 @@ class SfxFrameItem_Impl;
 class SFX2_DLLPUBLIC SfxFrameItem: public SfxPoolItem
 {
     SfxFrame*               pFrame;
-    SfxFrameWeak            wFrame;
+    SfxFrameWeak  		    wFrame;
     SAL_DLLPRIVATE void SetFramePtr_Impl( SfxFrame* /*pFrameP*/ ) { pFrame = wFrame; }
 
 public:
@@ -260,16 +260,16 @@ public:
                             SfxFrameItem( SfxFrame *p=0 );
                             SfxFrameItem( sal_uInt16 nWhich, SfxFrame *p );
 
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual String          GetValueText() const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int 			operator==( const SfxPoolItem& ) const;
+    virtual String			GetValueText() const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool		    PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     sal_Bool                FrameKilled() const { return &wFrame != pFrame; }
 
-    SfxFrame*               GetFrame() const
+    SfxFrame*				GetFrame() const
                             { return wFrame; }
 };
 
@@ -283,8 +283,8 @@ public:
                                 { return aValue; }
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 class SFX2_DLLPUBLIC SfxUnoFrameItem : public SfxPoolItem
@@ -301,8 +301,8 @@ public:
                                 { return m_xFrame; }
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 typedef SfxUsrAnyItem SfxUnoAnyItem;

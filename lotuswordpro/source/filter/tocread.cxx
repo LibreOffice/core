@@ -114,7 +114,7 @@ CBenTOCReader::ReadLabel(unsigned long * pTOCOffset, unsigned long * pTOCSize)
         return BenErr_UnknownBentoFormatVersion;
     pCurrLabel += 2;
 
-    UtGetIntelWord(pCurrLabel); pCurrLabel += 2;    // Minor version
+    UtGetIntelWord(pCurrLabel); pCurrLabel += 2;	// Minor version
 
     *pTOCOffset = UtGetIntelDWord(pCurrLabel); pCurrLabel += 4;
     *pTOCSize = UtGetIntelDWord(pCurrLabel);
@@ -132,7 +132,7 @@ CBenTOCReader::SearchForLabel(BenByte * pLabel)
 {
     BenError Err;
 
-    sal_uLong Length;
+    unsigned long Length;
     if ((Err = cpContainer->GetSize(&Length)) != BenErr_OK)
         return Err;
 
@@ -143,7 +143,7 @@ CBenTOCReader::SearchForLabel(BenByte * pLabel)
 
     char Buffer[LABEL_READ_BUFFER_SIZE];
 
-    unsigned long BufferStartOffset = Length;   // Init to big value
+    unsigned long BufferStartOffset = Length;	// Init to big value
 
     while (CurrOffset >= BEN_MAGIC_BYTES_SIZE)
     {
@@ -184,7 +184,7 @@ CBenTOCReader::SearchForLabel(BenByte * pLabel)
         --CurrOffset;
     }
 
-    return BenErr_NotBentoContainer;    // Didn't find magic bytes
+    return BenErr_NotBentoContainer;	// Didn't find magic bytes
 }
 
 BenError

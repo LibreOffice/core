@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace dbaui
 
     protected:
         virtual void Command(const CommandEvent& rEvt);
-        //  virtual void Paint( const Rectangle& rRect );
+        //	virtual void Paint( const Rectangle& rRect );
         virtual void MouseButtonDown( const MouseEvent& rEvt );
         virtual void KeyInput( const KeyEvent& rEvt );
         virtual void DataChanged( const DataChangedEvent& rDCEvt );

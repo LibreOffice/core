@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,10 +31,8 @@
 
 #include <vcl/sv.h>
 #include <vcl/timer.hxx>
-#include <vector>
 
-struct ImplIdleData;
-typedef ::std::vector< ImplIdleData* > ImplIdleList;
+class ImplIdleList;
 
 // ---------------
 // - ImplIdleMgr -
@@ -50,7 +48,7 @@ public:
                     ImplIdleMgr();
                     ~ImplIdleMgr();
 
-    sal_Bool            InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
+    BOOL            InsertIdleHdl( const Link& rLink, USHORT nPriority );
     void            RemoveIdleHdl( const Link& rLink );
 
     void            RestartIdler()

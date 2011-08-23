@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ protected:
     ScTabEditEngine*    mpEngine;
     Table*              mpRowHeights;
 
-    sal_Bool                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
+    BOOL                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                      ScEEParseEntry* );
     void                InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                        ScEEParseEntry* );
@@ -58,9 +58,9 @@ public:
     ScEEImport( ScDocument* pDoc, const ScRange& rRange );
     virtual ~ScEEImport();
 
-    virtual sal_uLong    Read( SvStream& rStream, const String& rBaseURL );
+    virtual ULONG    Read( SvStream& rStream, const String& rBaseURL );
     virtual ScRange  GetRange() { return maRange; }
-    virtual void     WriteToDocument( sal_Bool bSizeColsRows = false,
+    virtual void     WriteToDocument( BOOL bSizeColsRows = FALSE,
                                       double nOutputFactor = 1.0,
                                       SvNumberFormatter* pFormatter = NULL,
                                       bool bConvertDate = true );

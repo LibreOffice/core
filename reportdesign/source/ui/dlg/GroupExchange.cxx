@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ namespace rptui
     // -----------------------------------------------------------------------------
     sal_Bool OGroupExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
-        sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
+        ULONG nFormat = SotExchange::GetFormat(rFlavor);
         if(nFormat == OGroupExchange::getReportGroupId() )
         {
             return SetAny(uno::makeAny(m_aGroupRow),rFlavor);

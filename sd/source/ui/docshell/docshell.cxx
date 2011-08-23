@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,14 +91,15 @@ using namespace sd;
 SFX_IMPL_INTERFACE(DrawDocShell, SfxObjectShell, SdResId(0))
 {
     SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
+        SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_INSERT);
 }
 
 
 namespace sd {
 
-#define POOL_BUFFER_SIZE                (sal_uInt16)32768
-#define BASIC_BUFFER_SIZE               (sal_uInt16)8192
-#define DOCUMENT_BUFFER_SIZE            (sal_uInt16)32768
+#define POOL_BUFFER_SIZE				(USHORT)32768
+#define BASIC_BUFFER_SIZE				(USHORT)8192
+#define DOCUMENT_BUFFER_SIZE            (USHORT)32768
 
 
 GraphicFilter* GetGrfFilter();
@@ -124,7 +125,7 @@ SFX_IMPL_OBJECTFACTORY(
 
 void DrawDocShell::Construct( bool bClipboard )
 {
-    mbInDestruction = sal_False;
+    mbInDestruction = FALSE;
     SetSlotFilter();     // setzt Filter zurueck
 
     mbOwnDocument = mpDoc == 0;
@@ -151,7 +152,7 @@ void DrawDocShell::Construct( bool bClipboard )
 \************************************************************************/
 
 DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
-                               sal_Bool bDataObject,
+                               BOOL bDataObject,
                                DocumentType eDocumentType) :
     SfxObjectShell( eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
     mpDoc(NULL),
@@ -162,7 +163,7 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     meDocType(eDocumentType),
     mpFilterSIDs(0),
     mbSdDataObj(bDataObject),
-    mbOwnPrinter(sal_False),
+    mbOwnPrinter(FALSE),
     mbNewDocument( sal_True )
 {
     Construct( eMode == SFX_CREATE_MODE_INTERNAL );
@@ -174,7 +175,7 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
 |*
 \************************************************************************/
 
-DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, sal_Bool bDataObject, DocumentType eDocumentType ) :
+DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, BOOL bDataObject, DocumentType eDocumentType ) :
     SfxObjectShell( nModelCreationFlags ),
     mpDoc(NULL),
     mpUndoManager(NULL),
@@ -184,10 +185,10 @@ DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, sal_Bool bData
     meDocType(eDocumentType),
     mpFilterSIDs(0),
     mbSdDataObj(bDataObject),
-    mbOwnPrinter(sal_False),
+    mbOwnPrinter(FALSE),
     mbNewDocument( sal_True )
 {
-    Construct( sal_False );
+    Construct( FALSE );
 }
 
 /*************************************************************************
@@ -197,7 +198,7 @@ DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, sal_Bool bData
 \************************************************************************/
 
 DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
-                               sal_Bool bDataObject,
+                               BOOL bDataObject,
                                DocumentType eDocumentType) :
     SfxObjectShell(eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
     mpDoc(pDoc),
@@ -208,7 +209,7 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
     meDocType(eDocumentType),
     mpFilterSIDs(0),
     mbSdDataObj(bDataObject),
-    mbOwnPrinter(sal_False),
+    mbOwnPrinter(FALSE),
     mbNewDocument( sal_True )
 {
     Construct( eMode == SFX_CREATE_MODE_INTERNAL );
@@ -228,7 +229,7 @@ DrawDocShell::~DrawDocShell()
     // may be usefull in other places as well.
     Broadcast(SfxSimpleHint(SFX_HINT_DYING));
 
-    mbInDestruction = sal_True;
+    mbInDestruction = TRUE;
 
     SetDocShellFunction(0);
 
@@ -245,8 +246,8 @@ DrawDocShell::~DrawDocShell()
         delete mpDoc;
 
     // damit der Navigator das Verschwinden des Dokuments mitbekommt
-    SfxBoolItem     aItem(SID_NAVIGATOR_INIT, sal_True);
-    SfxViewFrame*   pFrame = mpViewShell ? mpViewShell->GetFrame() : GetFrame();
+    SfxBoolItem		aItem(SID_NAVIGATOR_INIT, TRUE);
+    SfxViewFrame*	pFrame = mpViewShell ? mpViewShell->GetFrame() : GetFrame();
 
     if( !pFrame )
         pFrame = SfxViewFrame::GetFirst( this );
@@ -266,11 +267,11 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 {
 
     SfxWhichIter aIter( rSet );
-    sal_uInt16 nWhich = aIter.FirstWhich();
+    USHORT nWhich = aIter.FirstWhich();
 
     while ( nWhich )
     {
-        sal_uInt16 nSlotId = SfxItemPool::IsWhich(nWhich)
+        USHORT nSlotId = SfxItemPool::IsWhich(nWhich)
             ? GetPool().GetSlotId(nWhich)
             : nWhich;
 
@@ -284,7 +285,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
             case SID_CLOSEDOC:
             {
-                sal_Bool bDisabled = sal_False;
+                BOOL bDisabled = FALSE;
                 if (bDisabled)
                 {
                     rSet.DisableItem(SID_CLOSEDOC);
@@ -298,11 +299,11 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
             case SID_SEARCH_OPTIONS:
             {
-                sal_uInt16 nOpt = SEARCH_OPTIONS_SEARCH      |
+                UINT16 nOpt = SEARCH_OPTIONS_SEARCH 	 |
                               SEARCH_OPTIONS_WHOLE_WORDS |
-                              SEARCH_OPTIONS_BACKWARDS   |
-                              SEARCH_OPTIONS_REG_EXP     |
-                              SEARCH_OPTIONS_EXACT       |
+                              SEARCH_OPTIONS_BACKWARDS	 |
+                              SEARCH_OPTIONS_REG_EXP	 |
+                              SEARCH_OPTIONS_EXACT		 |
                               SEARCH_OPTIONS_SIMILARITY  |
                               SEARCH_OPTIONS_SELECTION;
 
@@ -347,7 +348,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
     }
 }
 
-void DrawDocShell::InPlaceActivate( sal_Bool bActive )
+void DrawDocShell::InPlaceActivate( BOOL bActive )
 {
     if( !bActive )
     {
@@ -427,7 +428,7 @@ void DrawDocShell::InPlaceActivate( sal_Bool bActive )
 |*
 \************************************************************************/
 
-void DrawDocShell::Activate( sal_Bool bMDI)
+void DrawDocShell::Activate( BOOL bMDI)
 {
     if (bMDI)
     {
@@ -442,7 +443,7 @@ void DrawDocShell::Activate( sal_Bool bMDI)
 |*
 \************************************************************************/
 
-void DrawDocShell::Deactivate( sal_Bool )
+void DrawDocShell::Deactivate( BOOL )
 {
 }
 
@@ -452,7 +453,7 @@ void DrawDocShell::Deactivate( sal_Bool )
 |*
 \************************************************************************/
 
-::svl::IUndoManager* DrawDocShell::GetUndoManager()
+SfxUndoManager* DrawDocShell::GetUndoManager()
 {
     return mpUndoManager;
 }
@@ -476,6 +477,12 @@ void DrawDocShell::UpdateTablePointers()
 
     UpdateFontList();
 }
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 void DrawDocShell::CancelSearching()
 {
@@ -510,19 +517,19 @@ void DrawDocShell::ApplySlotFilter() const
                 pDispatcher->SetSlotFilter();
 
             if( pDispatcher->GetBindings() )
-                pDispatcher->GetBindings()->InvalidateAll( sal_True );
+                pDispatcher->GetBindings()->InvalidateAll( TRUE );
         }
 
         pTestViewShell = SfxViewShell::GetNext( *pTestViewShell );
     }
 }
 
-void DrawDocShell::SetModified( sal_Bool bSet /* = sal_True */ )
+void DrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
 {
     SfxObjectShell::SetModified( bSet );
 
-    // change model state, too
-    // only set the changed state if modification is enabled
+    // #100237# change model state, too
+    // #103182# only set the changed state if modification is enabled
     if( IsEnableSetModified() )
     {
         if ( mpDoc )
@@ -538,7 +545,7 @@ void DrawDocShell::SetModified( sal_Bool bSet /* = sal_True */ )
 |*
 \************************************************************************/
 
-// ExecuteSpellPopup now handled by DrawDocShell. This is necessary
+// #91457# ExecuteSpellPopup now handled by DrawDocShell. This is necessary
 // to get hands on the outliner and the text object.
 IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 {
@@ -583,8 +590,8 @@ void DrawDocShell::ClearUndoBuffer()
         }
         pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
     }
-
-    ::svl::IUndoManager* pUndoManager = GetUndoManager();
+    
+    SfxUndoManager* pUndoManager = GetUndoManager();
     if(pUndoManager && pUndoManager->GetUndoActionCount())
         pUndoManager->Clear();
 }

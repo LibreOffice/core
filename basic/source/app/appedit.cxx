@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,6 +52,9 @@ AppEdit::AppEdit( BasicFrame* pParent )
 
     pDataEdit = new TextEdit( this, WB_LEFT );
     LoadIniFile();
+    // define Icon:
+//	pIcon = new Icon( ResId( RID_WORKICON ) );
+//	if( pIcon ) SetIcon( *pIcon );
 
     pDataEdit->SetText( aEmpty );
 
@@ -79,8 +82,8 @@ AppEdit::~AppEdit()
 void AppEdit::LoadIniFile()
 {
     TextView *pTextView = ((TextEdit*)pDataEdit)->aEdit.pTextView;
-    sal_Bool bWasModified = pTextView->GetTextEngine()->IsModified();
-    pTextView->GetTextEngine()->SetModified( sal_False );
+    BOOL bWasModified = pTextView->GetTextEngine()->IsModified();
+    pTextView->GetTextEngine()->SetModified( FALSE );
 
     FontList aFontList( pFrame );   // Just some Window is needed
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
@@ -89,7 +92,9 @@ void AppEdit::LoadIniFile()
     String aFontStyle = String( aConf.ReadKey( "ScriptFontStyle", "normal" ), RTL_TEXTENCODING_UTF8 );
     String aFontSize = String( aConf.ReadKey( "ScriptFontSize", "12" ), RTL_TEXTENCODING_UTF8 );
     Font aFont = aFontList.Get( aFontName, aFontStyle );
-    sal_uIntPtr nFontSize = aFontSize.ToInt32();
+//    ULONG nFontSize = aFontSize.GetValue( FUNIT_POINT );
+    ULONG nFontSize = aFontSize.ToInt32();
+//    aFont.SetSize( Size( nFontSize, nFontSize ) );
     aFont.SetHeight( nFontSize );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -97,7 +102,9 @@ void AppEdit::LoadIniFile()
         Font aFont2( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0, pFrame ));
     }
 #endif
-    aFont.SetTransparent( sal_False );
+    aFont.SetTransparent( FALSE );
+//    aFont.SetAlign( ALIGN_BOTTOM );
+//    aFont.SetHeight( aFont.GetHeight()+2 );
     pDataEdit->SetFont( aFont );
 
     if ( ((TextEdit*)pDataEdit)->GetBreakpointWindow() )
@@ -106,7 +113,7 @@ void AppEdit::LoadIniFile()
         ((TextEdit*)pDataEdit)->GetBreakpointWindow()->Invalidate();
     }
 
-    pTextView->GetTextEngine()->SetModified( bWasModified );    // Perhaps reset the flag
+    pTextView->GetTextEngine()->SetModified( bWasModified );	// Perhaps reset the flag
 }
 
 void AppEdit::Command( const CommandEvent& rCEvt )
@@ -125,7 +132,7 @@ void AppEdit::Command( const CommandEvent& rCEvt )
 
 IMPL_LINK( AppEdit, Scroll, ScrollBar*, pScroll )
 {
-    (void) pScroll; /* avoid warning about unused parameter */
+    (void) pScroll; /* avoid warning about unused parameter */ 
     if ( !pHScroll || !pVScroll )
         return 0;
 
@@ -152,7 +159,7 @@ void AppEdit::InitScrollBars()
     Size aOutSz( pTextView->GetWindow()->GetOutputSizePixel() );
     pVScroll->SetVisibleSize( aOutSz.Height() );
     pVScroll->SetPageSize( aOutSz.Height() * 8 / 10 );
-    pVScroll->SetLineSize( GetTextHeight() +2 );    // +2 is empirical. don't know why
+    pVScroll->SetLineSize( GetTextHeight() +2 );	// +2 is empirical. don't know why
     pVScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
     pVScroll->Show();
 
@@ -176,9 +183,9 @@ void AppEdit::SetScrollBarRanges()
 
 
 
-sal_uInt16 AppEdit::GetLineNr()
-{
-  return pDataEdit->GetLineNr();
+USHORT AppEdit::GetLineNr()
+{ 
+  return pDataEdit->GetLineNr(); 
 }
 
 FileType AppEdit::GetFileType()
@@ -190,17 +197,17 @@ FileType AppEdit::GetFileType()
 long AppEdit::InitMenu( Menu* pMenu )
 {
     AppWin::InitMenu (pMenu );
-
+    
     if( pDataEdit )
     {
-        size_t UndoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetUndoActionCount();
-        size_t RedoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetRedoActionCount();
-
-        pMenu->EnableItem( RID_EDITUNDO,    UndoCount > 0 );
-        pMenu->EnableItem( RID_EDITREDO,    RedoCount > 0 );
+        USHORT UndoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetUndoActionCount();
+        USHORT RedoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetRedoActionCount();
+    
+        pMenu->EnableItem( RID_EDITUNDO,	UndoCount > 0 );
+        pMenu->EnableItem( RID_EDITREDO, 	RedoCount > 0 );
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 long AppEdit::DeInitMenu( Menu* pMenu )
@@ -210,7 +217,7 @@ long AppEdit::DeInitMenu( Menu* pMenu )
     pMenu->EnableItem( RID_EDITUNDO );
     pMenu->EnableItem( RID_EDITREDO );
 
-    return sal_True;
+    return TRUE;
 }
 
 void AppEdit::Resize()
@@ -225,7 +232,7 @@ void AppEdit::Resize()
     if ( pHScroll )
     {
         rHSize = pHScroll->GetSizePixel();
-        sal_uIntPtr nHieght = rHSize.Height();
+        ULONG nHieght = rHSize.Height();
         rNewSize.Height() -= nHieght;
         rHStart.Y() = rNewSize.Height();
     }
@@ -233,7 +240,7 @@ void AppEdit::Resize()
     if ( pVScroll )
     {
         rVSize = pVScroll->GetSizePixel();
-        sal_uIntPtr nWidth = rVSize.Width();
+        ULONG nWidth = rVSize.Width();
         rNewSize.Width() -= nWidth;
         rVStart.X() = rNewSize.Width();
     }
@@ -269,6 +276,7 @@ void AppEdit::Resize()
         aStartDocPos.Y() = nMaxVisAreaStart;
         pTextView->SetStartDocPos( aStartDocPos );
         pTextView->ShowCursor();
+//              pModulWindow->GetBreakPointWindow().GetCurYOffset() = aStartDocPos.Y();
     }
     InitScrollBars();
     if ( nVisY != pTextView->GetStartDocPos().Y() )
@@ -284,7 +292,7 @@ void AppEdit::PostSaveAs()
 {
 }
 
-void AppEdit::Highlight( sal_uInt16 nLine, sal_uInt16 nCol1, sal_uInt16 nCol2 )
+void AppEdit::Highlight( USHORT nLine, USHORT nCol1, USHORT nCol2 )
 {
     ((TextEdit*)pDataEdit)->Highlight( nLine, nCol1, nCol2 );
     ToTop();

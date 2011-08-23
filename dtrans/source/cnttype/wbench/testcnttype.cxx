@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 
 //_________________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________________
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -56,19 +56,19 @@
 #define RDB_SYSPATH  "d:\\projects\\src621\\dtrans\\wntmsci7\\bin\\applicat.rdb"
 
 //------------------------------------------------------------
-//  namesapces
+//	namesapces
 //------------------------------------------------------------
 
-using namespace ::rtl;
+using namespace	::rtl;
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
+using namespace	::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
 //------------------------------------------------------------
-//  globales
+//	globales
 //------------------------------------------------------------
 
 //################################################################
@@ -81,7 +81,7 @@ void CheckMimeContentType( const OUString& aCntType, const OUString& aType, cons
 
     OSL_ASSERT( aType    == xMimeCntType->getMediaType ( ) );
     OSL_ASSERT( aSubtype == xMimeCntType->getMediaSubtype ( ) );
-
+    
     try
     {
         Sequence< OUString > seqParam = xMimeCntType->getParameters( );
@@ -97,7 +97,7 @@ void CheckMimeContentType( const OUString& aCntType, const OUString& aType, cons
             pvalue = xMimeCntType->getParameterValue( param );
         }
 
-        pvalue = xMimeCntType->getParameterValue( OUString(RTL_CONSTASCII_USTRINGPARAM("aparam")) );
+        pvalue = xMimeCntType->getParameterValue( OUString::createFromAscii( "aparam" ) );
     }
     catch( IllegalArgumentException& )
     {
@@ -105,13 +105,13 @@ void CheckMimeContentType( const OUString& aCntType, const OUString& aType, cons
     }
     catch( NoSuchElementException& )
     {
-
+        
     }
 }
 */
 
 //----------------------------------------------------------------
-//
+//	
 //----------------------------------------------------------------
 
 void ShutdownServiceMgr( Reference< XMultiServiceFactory >& SrvMgr )
@@ -120,8 +120,8 @@ void ShutdownServiceMgr( Reference< XMultiServiceFactory >& SrvMgr )
     Reference< XComponent > xComponent( SrvMgr, UNO_QUERY );
 
     if ( !xComponent.is() )
-        OSL_FAIL("Error shuting down");
-
+        OSL_ENSURE(sal_False, "Error shuting down");
+    
     // Dispose and clear factory
     xComponent->dispose();
     SrvMgr.clear();
@@ -129,7 +129,7 @@ void ShutdownServiceMgr( Reference< XMultiServiceFactory >& SrvMgr )
 }
 
 //----------------------------------------------------------------
-//
+//	
 //----------------------------------------------------------------
 
 sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData )
@@ -145,7 +145,7 @@ sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData 
 
     char line[1024];
     while ( fscanf( fstream, "%[^\n]s", line ) != EOF )
-    {
+    {		
         vecData.push_back( line );
         fgetc( fstream );
     }
@@ -156,7 +156,7 @@ sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData 
 }
 
 //----------------------------------------------------------------
-//
+//	
 //----------------------------------------------------------------
 
 sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& vecData, Reference< XMimeContentTypeFactory > cnttypeFactory )
@@ -174,48 +174,48 @@ sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& v
     const char* pStr = NULL;
 
     for ( vector< string >::iterator iter = vecData.begin( ); iter != iter_end; ++iter )
-    {
+    {	
         try
         {
             fprintf( fstream, "Gelesen: %s\n", iter->c_str( ) );
 
             Reference< XMimeContentType > xMCntTyp = cnttypeFactory->createMimeContentType( OUString::createFromAscii( iter->c_str( ) ) );
 
-            fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("Type: %s\n")),  xMCntTyp->getMediaType( ).getStr( ) );
-            fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("Subtype: %s\n")), xMCntTyp->getMediaSubtype( ).getStr( ) );
+            fwprintf( fstream, OUString::createFromAscii( "Type: %s\n" ),  xMCntTyp->getMediaType( ).getStr( ) );
+            fwprintf( fstream, OUString::createFromAscii( "Subtype: %s\n" ), xMCntTyp->getMediaSubtype( ).getStr( ) );
 
             Sequence< OUString > seqParam = xMCntTyp->getParameters( );
             sal_Int32 nParams = seqParam.getLength( );
 
             for ( sal_Int32 i = 0; i < nParams; i++ )
             {
-                fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("PName: %s\n")), seqParam[i].getStr( ) );
-                fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("PValue: %s\n")), xMCntTyp->getParameterValue( seqParam[i] ).getStr( ) );
-            }
+                fwprintf( fstream, OUString::createFromAscii("PName: %s\n" ), seqParam[i].getStr( ) );
+                fwprintf( fstream, OUString::createFromAscii("PValue: %s\n" ), xMCntTyp->getParameterValue( seqParam[i] ).getStr( ) );
+            }			
         }
         catch( IllegalArgumentException& ex )
         {
-            fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("Fehlerhafter Content-Type gelesen!!!\n\n")) );
+            fwprintf( fstream, OUString::createFromAscii( "Fehlerhafter Content-Type gelesen!!!\n\n" ) ); 
         }
         catch( NoSuchElementException& )
-        {
-            fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("Parameterwert nicht vorhanden\n")) );
+        {		
+            fwprintf( fstream, OUString::createFromAscii( "Parameterwert nicht vorhanden\n" ) );
         }
         catch( ... )
         {
-            fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("Unbekannter Fehler!!!\n\n")) );
+            fwprintf( fstream, OUString::createFromAscii( "Unbekannter Fehler!!!\n\n" ) );
         }
 
-        fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("\n#############################################\n\n")) );
+        fwprintf( fstream, OUString::createFromAscii( "\n#############################################\n\n" ) );
     }
 
     fclose( fstream );
-
+    
     return sal_True;
 }
 
 //----------------------------------------------------------------
-//  main
+//	main
 //----------------------------------------------------------------
 
 int SAL_CALL main( int nArgc, char* argv[] )
@@ -229,10 +229,10 @@ int SAL_CALL main( int nArgc, char* argv[] )
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occurred.
+    // Print a message if an error occured.
     if ( !g_xFactory.is( ) )
     {
-        OSL_FAIL("Can't create RegistryServiceFactory");
+        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -245,12 +245,12 @@ int SAL_CALL main( int nArgc, char* argv[] )
         ShutdownServiceMgr( g_xFactory );
     }
 
-    Reference< XMimeContentTypeFactory >
-        xMCntTypeFactory( g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory")) ), UNO_QUERY );
+    Reference< XMimeContentTypeFactory > 
+        xMCntTypeFactory( g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.MimeContentTypeFactory" ) ), UNO_QUERY );
 
     if ( !xMCntTypeFactory.is( ) )
     {
-        OSL_FAIL( "Error creating MimeContentTypeFactory Service" );
+        OSL_ENSURE( sal_False, "Error creating MimeContentTypeFactory Service" );
         return(-1);
     }
 
@@ -266,7 +266,7 @@ int SAL_CALL main( int nArgc, char* argv[] )
 
     ShutdownServiceMgr( g_xFactory );
 
-    return 0;
+    return 0;	
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

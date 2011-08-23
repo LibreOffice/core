@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ class UsedType : public Type
   public:
     enum E_ClassId { class_id = 1203 };
 
-    explicit            UsedType(
+    explicit		    UsedType(
                             Ce_id               i_scope );
                         ~UsedType();
     // OPERATORS
@@ -138,7 +138,7 @@ class UsedType : public Type
                             const ary::cpp::Gate &
                                                 i_rGate ) const;
     // Local
-    typedef std::vector< ary::cpp::E_ConVol >   PtrLevelVector;
+    typedef std::vector< ary::cpp::E_ConVol >	PtrLevelVector;
 
     uintt               PtrLevel() const        { return uintt(aPtrLevels.size()); }
     Ce_id               RecursiveSearchCe_InBaseClassesOf(
@@ -159,14 +159,14 @@ class UsedType : public Type
 
     // DATA
     ut::NameChain       aPath;
-    PtrLevelVector      aPtrLevels;
+    PtrLevelVector		aPtrLevels;
     ary::cpp::E_ConVol  eConVol_Type;
     bool                bIsReference;
     bool                bIsAbsolute;
-    bool                bRefers2BuiltInType;
+    bool				bRefers2BuiltInType;
     E_TypeSpecialisation
                         eTypeSpecialisation;
-    Ce_id               nRelatedCe;
+    Ce_id			    nRelatedCe;
 
     /// Namespace or class scope where the type occurred.
     Ce_id               nScope;
@@ -193,12 +193,12 @@ class List_TplParameter
                             const ary::cpp::Gate &
                                                 i_rGate ) const;
     /// @return as strcmp().
-    intt                Compare(
+    intt				Compare(
                             const List_TplParameter &
                                                 i_rOther ) const;
 
   private:
-    typedef std::vector< DYN TemplateParameter * >  Vector_TplArgument;
+    typedef std::vector< DYN TemplateParameter * >	Vector_TplArgument;
 
     Vector_TplArgument  aTplParameters;
 };

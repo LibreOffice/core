@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,12 +34,12 @@
 
 namespace accessibility
 {
-    typedef ::cppu::ImplHelper2 <   ::com::sun::star::accessibility::XAccessibleText
-                                ,   ::com::sun::star::accessibility::XAccessible
-                                >   AccessibleTextHelper_BASE;
+    typedef ::cppu::ImplHelper2	<	::com::sun::star::accessibility::XAccessibleText
+                                ,	::com::sun::star::accessibility::XAccessible
+                                >	AccessibleTextHelper_BASE;
 
     // implementation of a table cell of BrowseBox
-    class AccessibleBrowseBoxTableCell  :public AccessibleBrowseBoxCell
+    class AccessibleBrowseBoxTableCell	:public AccessibleBrowseBoxCell
                                         ,public AccessibleTextHelper_BASE
                                         ,public ::comphelper::OCommonAccessibleText
     {
@@ -48,9 +48,9 @@ namespace accessibility
 
     protected:
         // OCommonAccessibleText
-        virtual ::rtl::OUString                 implGetText();
-        virtual ::com::sun::star::lang::Locale  implGetLocale();
-        virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+        virtual ::rtl::OUString					implGetText();
+        virtual ::com::sun::star::lang::Locale	implGetLocale();
+        virtual void							implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
 
     public:
         AccessibleBrowseBoxTableCell( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,

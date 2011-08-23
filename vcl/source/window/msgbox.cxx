@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,11 +54,14 @@ static void ImplInitMsgBoxImageList()
     {
         ResMgr* pResMgr = ImplGetResMgr();
         pSVData->maWinData.mpMsgBoxImgList = new ImageList(4);
+        pSVData->maWinData.mpMsgBoxHCImgList = new ImageList(4);
         if( pResMgr )
         {
             Color aNonAlphaMask( 0xC0, 0xC0, 0xC0 );
             pSVData->maWinData.mpMsgBoxImgList->InsertFromHorizontalBitmap
                 ( ResId( SV_RESID_BITMAP_MSGBOX, *pResMgr ), 4, &aNonAlphaMask );
+            pSVData->maWinData.mpMsgBoxHCImgList->InsertFromHorizontalBitmap
+                ( ResId( SV_RESID_BITMAP_MSGBOX_HC, *pResMgr ), 4, &aNonAlphaMask );
         }
     }
 }
@@ -67,13 +70,13 @@ static void ImplInitMsgBoxImageList()
 
 void MessBox::ImplInitMessBoxData()
 {
-    mpFixedText         = NULL;
-    mpFixedImage        = NULL;
-    mnSoundType         = 0;
-    mbHelpBtn           = sal_False;
-    mbSound             = sal_True;
+    mpFixedText 		= NULL;
+    mpFixedImage		= NULL;
+    mnSoundType 		= 0;
+    mbHelpBtn			= FALSE;
+    mbSound 			= TRUE;
     mpCheckBox          = NULL;
-    mbCheck             = sal_False;
+    mbCheck             = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -81,11 +84,11 @@ void MessBox::ImplInitMessBoxData()
 void MessBox::ImplInitButtons()
 {
     WinBits nStyle = GetStyle();
-    sal_uInt16  nOKFlags = BUTTONDIALOG_OKBUTTON;
-    sal_uInt16  nCancelFlags = BUTTONDIALOG_CANCELBUTTON;
-    sal_uInt16  nRetryFlags = 0;
-    sal_uInt16  nYesFlags = 0;
-    sal_uInt16  nNoFlags = 0;
+    USHORT	nOKFlags = BUTTONDIALOG_OKBUTTON;
+    USHORT	nCancelFlags = BUTTONDIALOG_CANCELBUTTON;
+    USHORT	nRetryFlags = 0;
+    USHORT	nYesFlags = 0;
+    USHORT	nNoFlags = 0;
 
     if ( nStyle & WB_OK_CANCEL )
     {
@@ -133,8 +136,8 @@ void MessBox::ImplInitButtons()
     }
     else if ( nStyle & WB_ABORT_RETRY_IGNORE )
     {
-        sal_uInt16 nAbortFlags = 0;
-        sal_uInt16 nIgnoreFlags = 0;
+        USHORT nAbortFlags = 0;
+        USHORT nIgnoreFlags = 0;
 
         if ( nStyle & WB_DEF_CANCEL )
             nAbortFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
@@ -186,15 +189,16 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     ImplInitMessBoxData();
 
     GetRes( rResId.SetRT( RSC_MESSBOX ) );
-    sal_uInt16 nHiButtons   = ReadShortRes();
-    sal_uInt16 nLoButtons   = ReadShortRes();
-    sal_uInt16 nHiDefButton = ReadShortRes();
-    sal_uInt16 nLoDefButton = ReadShortRes();
-    rtl::OString aHelpId( ReadByteStringRes() );
-    /* sal_uInt16 bSysModal = */ ReadShortRes();
-    SetHelpId( aHelpId );
-    WinBits nBits = (((sal_uLong)nHiButtons << 16) + nLoButtons) |
-                    (((sal_uLong)nHiDefButton << 16) + nLoDefButton);
+    USHORT nHiButtons	= ReadShortRes();
+    USHORT nLoButtons	= ReadShortRes();
+    USHORT nHiDefButton = ReadShortRes();
+    USHORT nLoDefButton = ReadShortRes();
+    USHORT nHiHelpId	= ReadShortRes();
+    USHORT nLoHelpId	= ReadShortRes();
+    /* USHORT bSysModal	= */ ReadShortRes();
+    SetHelpId( ((ULONG)nHiHelpId << 16) + nLoHelpId );
+    WinBits nBits = (((ULONG)nHiButtons << 16) + nLoButtons) |
+                    (((ULONG)nHiDefButton << 16) + nLoDefButton);
     ImplInit( pParent, nBits | WB_MOVEABLE | WB_HORZ | WB_CENTER );
 
     ImplLoadRes( rResId );
@@ -205,7 +209,7 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
 
 void MessBox::ImplLoadRes( const ResId& )
 {
-    SetText(     ReadStringRes() );
+    SetText( ReadStringRes() );
     SetMessText( ReadStringRes() );
     SetHelpText( ReadStringRes() );
 }
@@ -226,12 +230,12 @@ MessBox::~MessBox()
 
 void MessBox::ImplPosControls()
 {
-    if ( GetHelpId().getLength() )
+    if ( GetHelpId() )
     {
         if ( !mbHelpBtn )
         {
             AddButton( BUTTON_HELP, BUTTONID_HELP, BUTTONDIALOG_HELPBUTTON, 3 );
-            mbHelpBtn = sal_True;
+            mbHelpBtn = TRUE;
         }
     }
     else
@@ -239,25 +243,25 @@ void MessBox::ImplPosControls()
         if ( mbHelpBtn )
         {
             RemoveButton( BUTTONID_HELP );
-            mbHelpBtn = sal_False;
+            mbHelpBtn = FALSE;
         }
     }
 
-    XubString       aMessText( maMessText );
-    TextRectInfo    aTextInfo;
-    Rectangle       aRect( 0, 0, 30000, 30000 );
-    Rectangle       aFormatRect;
-    Point           aTextPos( IMPL_DIALOG_OFFSET, IMPL_DIALOG_OFFSET+IMPL_MSGBOX_OFFSET_EXTRA_Y );
-    Size            aImageSize;
-    Size            aPageSize;
-    Size            aFixedSize;
-    long            nTitleWidth;
-    long            nButtonSize = ImplGetButtonSize();
-    long            nMaxWidth = GetDesktopRectPixel().GetWidth()-8;
-    long            nMaxLineWidth;
-    long            nWidth;
-    WinBits         nWinStyle = WB_LEFT | WB_WORDBREAK | WB_NOLABEL | WB_INFO;
-    sal_uInt16          nTextStyle = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP | TEXT_DRAW_LEFT;
+    XubString		aMessText( maMessText );
+    TextRectInfo	aTextInfo;
+    Rectangle		aRect( 0, 0, 30000, 30000 );
+    Rectangle		aFormatRect;
+    Point			aTextPos( IMPL_DIALOG_OFFSET, IMPL_DIALOG_OFFSET+IMPL_MSGBOX_OFFSET_EXTRA_Y );
+    Size			aImageSize;
+    Size			aPageSize;
+    Size			aFixedSize;
+    long			nTitleWidth;
+    long			nButtonSize = ImplGetButtonSize();
+    long			nMaxWidth = GetDesktopRectPixel().GetWidth()-8;
+    long			nMaxLineWidth;
+    long			nWidth;
+    WinBits 		nWinStyle = WB_LEFT | WB_WORDBREAK | WB_NOLABEL | WB_INFO;
+    USHORT			nTextStyle = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP | TEXT_DRAW_LEFT;
 
     if ( mpFixedText )
         delete mpFixedText;
@@ -275,8 +279,8 @@ void MessBox::ImplPosControls()
 
 
     // Message-Text um Tabs bereinigen
-    XubString   aTabStr( RTL_CONSTASCII_USTRINGPARAM( "    " ) );
-    sal_uInt16      nIndex = 0;
+    XubString	aTabStr( RTL_CONSTASCII_USTRINGPARAM( "    " ) );
+    USHORT		nIndex = 0;
     while ( nIndex != STRING_NOTFOUND )
         nIndex = aMessText.SearchAndReplace( '\t', aTabStr, nIndex );
 
@@ -300,7 +304,7 @@ void MessBox::ImplPosControls()
     aImageSize = maImage.GetSizePixel();
     if ( aImageSize.Width() )
     {
-        aImageSize.Width()  += 4;
+        aImageSize.Width()	+= 4;
         aImageSize.Height() += 4;
         aTextPos.X() += aImageSize.Width()+IMPL_SEP_MSGBOX_IMAGE;
         mpFixedImage = new FixedImage( this );
@@ -308,6 +312,9 @@ void MessBox::ImplPosControls()
                                               IMPL_DIALOG_OFFSET-2+IMPL_MSGBOX_OFFSET_EXTRA_Y ),
                                        aImageSize );
         mpFixedImage->SetImage( maImage );
+        // forward the HC image
+        if( !!maImageHC )
+            mpFixedImage->SetModeImage( maImageHC, BMP_COLOR_HIGHCONTRAST );
         mpFixedImage->Show();
         nMaxWidth -= aImageSize.Width()+IMPL_SEP_MSGBOX_IMAGE;
     }
@@ -341,19 +348,19 @@ void MessBox::ImplPosControls()
     }
 
     // Style fuer FixedText ermitteln
-    aPageSize.Width()   = aImageSize.Width();
-    aFixedSize.Width()  = aTextInfo.GetMaxLineWidth()+1;
+    aPageSize.Width()	= aImageSize.Width();
+    aFixedSize.Width()	= aTextInfo.GetMaxLineWidth()+1;
     aFixedSize.Height() = aFormatRect.GetHeight();
     if ( aFixedSize.Height() < aImageSize.Height() )
     {
         nWinStyle |= WB_VCENTER;
-        aPageSize.Height()  = aImageSize.Height();
+        aPageSize.Height()	= aImageSize.Height();
         aFixedSize.Height() = aImageSize.Height();
     }
     else
     {
         nWinStyle |= WB_TOP;
-        aPageSize.Height()  = aFixedSize.Height();
+        aPageSize.Height()	= aFixedSize.Height();
     }
     if ( aImageSize.Width() )
         aPageSize.Width() += IMPL_SEP_MSGBOX_IMAGE;
@@ -413,8 +420,6 @@ void MessBox::ImplPosControls()
     }
 
     mpFixedText = new FixedText( this, nWinStyle );
-    if( mpFixedText->GetStyle() & WB_EXTRAOFFSET ) // TODO: use CalcMinimumSize() instead
-        aFixedSize.Width() += 2;
     mpFixedText->SetPosSizePixel( aTextPos, aFixedSize );
     mpFixedText->SetText( aMessText );
     mpFixedText->Show();
@@ -436,14 +441,14 @@ void MessBox::StateChanged( StateChangedType nType )
 
 // -----------------------------------------------------------------------
 
-sal_Bool MessBox::GetCheckBoxState() const
+BOOL MessBox::GetCheckBoxState() const
 {
     return mpCheckBox ? mpCheckBox->IsChecked() : mbCheck;
 }
 
 // -----------------------------------------------------------------------
 
-void MessBox::SetCheckBoxState( sal_Bool bCheck )
+void MessBox::SetCheckBoxState( BOOL bCheck )
 {
     if( mpCheckBox ) mpCheckBox->Check( bCheck );
     mbCheck = bCheck;
@@ -460,33 +465,28 @@ void MessBox::SetDefaultCheckBoxText()
 
 // -----------------------------------------------------------------------
 
-sal_Bool MessBox::SetModeImage( const Image& rImage )
+BOOL MessBox::SetModeImage( const Image& rImage, BmpColorMode eMode )
 {
-    SetImage( rImage );
-    return sal_True;
+    if( eMode == BMP_COLOR_NORMAL )
+        SetImage( rImage );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+        maImageHC = rImage;
+    else
+        return FALSE;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-const Image& MessBox::GetModeImage( ) const
+const Image& MessBox::GetModeImage( BmpColorMode eMode ) const
 {
-    return maImage;
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maImageHC;
+    else
+        return maImage;
 }
 
 // -----------------------------------------------------------------------
-
-Size MessBox::GetOptimalSize(WindowSizeType eType) const
-{
-    switch( eType ) {
-    case WINDOWSIZE_MINIMUM:
-        // FIXME: base me on the font size ?
-        return Size( 250, 100 );
-    default:
-        return Window::GetOptimalSize( eType );
-    }
-}
-
-// ============================================================================
 
 void InfoBox::ImplInitInfoBoxData()
 {
@@ -494,8 +494,9 @@ void InfoBox::ImplInitInfoBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( InfoBox::GetStandardImage() );
-    mnSoundType = ((sal_uInt16)SOUND_INFO)+1;
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
+                InfoBox::GetStandardImageHC() : InfoBox::GetStandardImage() );
+    mnSoundType = ((USHORT)SOUND_INFO)+1;
 }
 
 // -----------------------------------------------------------------------
@@ -522,7 +523,15 @@ Image InfoBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 4 );
 }
 
-// ============================================================================
+// -----------------------------------------------------------------------
+
+Image InfoBox::GetStandardImageHC()
+{
+    ImplInitMsgBoxImageList();
+    return ImplGetSVData()->maWinData.mpMsgBoxHCImgList->GetImage( 4 );
+}
+
+// -----------------------------------------------------------------------
 
 void WarningBox::ImplInitWarningBoxData()
 {
@@ -531,7 +540,7 @@ void WarningBox::ImplInitWarningBoxData()
         SetText( Application::GetDisplayName() );
 
     SetImage( WarningBox::GetStandardImage() );
-    mnSoundType = ((sal_uInt16)SOUND_WARNING)+1;
+    mnSoundType = ((USHORT)SOUND_WARNING)+1;
 }
 
 // -----------------------------------------------------------------------
@@ -568,7 +577,7 @@ Image WarningBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 3 );
 }
 
-// ============================================================================
+// -----------------------------------------------------------------------
 
 void ErrorBox::ImplInitErrorBoxData()
 {
@@ -576,8 +585,9 @@ void ErrorBox::ImplInitErrorBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( ErrorBox::GetStandardImage() );
-    mnSoundType = ((sal_uInt16)SOUND_ERROR)+1;
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ? 
+        ErrorBox::GetStandardImageHC() : ErrorBox::GetStandardImage() );
+    mnSoundType = ((USHORT)SOUND_ERROR)+1;
 }
 
 // -----------------------------------------------------------------------
@@ -605,7 +615,15 @@ Image ErrorBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 1 );
 }
 
-// ============================================================================
+// -----------------------------------------------------------------------
+
+Image ErrorBox::GetStandardImageHC()
+{
+    ImplInitMsgBoxImageList();
+    return ImplGetSVData()->maWinData.mpMsgBoxHCImgList->GetImage( 1 );
+}
+
+// -----------------------------------------------------------------------
 
 void QueryBox::ImplInitQueryBoxData()
 {
@@ -613,8 +631,9 @@ void QueryBox::ImplInitQueryBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( QueryBox::GetStandardImage() );
-    mnSoundType = ((sal_uInt16)SOUND_QUERY)+1;
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
+        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
+    mnSoundType = ((USHORT)SOUND_QUERY)+1;
 }
 
 // -----------------------------------------------------------------------
@@ -648,6 +667,27 @@ Image QueryBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 2 );
+}
+
+// -----------------------------------------------------------------------
+
+Image QueryBox::GetStandardImageHC()
+{
+    ImplInitMsgBoxImageList();
+    return ImplGetSVData()->maWinData.mpMsgBoxHCImgList->GetImage( 2 );
+}
+
+// -----------------------------------------------------------------------
+
+Size MessBox::GetOptimalSize(WindowSizeType eType) const
+{
+    switch( eType ) {
+    case WINDOWSIZE_MINIMUM:
+        // FIXME: base me on the font size ?
+        return Size( 250, 100 );
+    default:
+        return Window::GetOptimalSize( eType );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

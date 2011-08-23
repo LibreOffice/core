@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@
 
 /* [Description]
 
-    This item describes the script type of the selected text and is only
+        This item describe  the scriptype of the selected text and is only
     used for the user interface.
 */
 
-EDITENG_DLLPUBLIC sal_uInt16 GetI18NScriptTypeOfLanguage( sal_uInt16 nLang );
-sal_uInt16 GetItemScriptType( short nI18NType );
-short  GetI18NScriptType( sal_uInt16 nItemType );
+EDITENG_DLLPUBLIC USHORT GetI18NScriptTypeOfLanguage( USHORT nLang );
+USHORT GetItemScriptType( short nI18NType );
+short  GetI18NScriptType( USHORT nItemType );
 
 class EDITENG_DLLPUBLIC SvxScriptTypeItem : public SfxUInt16Item
 {
@@ -61,30 +61,30 @@ class EDITENG_DLLPUBLIC SvxScriptSetItem : public SfxSetItem
 public:
     TYPEINFO();
 
-    SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool );
+    SvxScriptSetItem( USHORT nSlotId, SfxItemPool& rPool );
 
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem* Create( SvStream &, sal_uInt16 nVersion ) const;
+    virtual SfxPoolItem* Create( SvStream &, USHORT nVersion ) const;
 
     static const SfxPoolItem* GetItemOfScriptSet( const SfxItemSet& rSet,
-                                                    sal_uInt16 nWhich );
-    inline const SfxPoolItem* GetItemOfScriptSet( sal_uInt16 _nWhich ) const
+                                                    USHORT nWhich );
+    inline const SfxPoolItem* GetItemOfScriptSet( USHORT _nWhich ) const
     { return SvxScriptSetItem::GetItemOfScriptSet( GetItemSet(), _nWhich ); }
 
-    static const SfxPoolItem* GetItemOfScript( sal_uInt16 nSlotId, const SfxItemSet& rSet, sal_uInt16 nScript );
+    static const SfxPoolItem* GetItemOfScript( USHORT nSlotId, const SfxItemSet& rSet, USHORT nScript );
 
-    const SfxPoolItem* GetItemOfScript( sal_uInt16 nScript ) const;
+    const SfxPoolItem* GetItemOfScript( USHORT nScript ) const;
 
-    void PutItemForScriptType( sal_uInt16 nScriptType, const SfxPoolItem& rItem );
+    void PutItemForScriptType( USHORT nScriptType, const SfxPoolItem& rItem );
 
-    static void GetWhichIds( sal_uInt16 nSlotId, const SfxItemSet& rSet, sal_uInt16& rLatin, sal_uInt16& rAsian, sal_uInt16& rComplex);
+    static void GetWhichIds( USHORT nSlotId, const SfxItemSet& rSet, USHORT& rLatin, USHORT& rAsian, USHORT& rComplex);
 
-    void GetWhichIds( sal_uInt16& rLatin, sal_uInt16& rAsian, sal_uInt16& rComplex) const;
+    void GetWhichIds( USHORT& rLatin, USHORT& rAsian, USHORT& rComplex) const;
 
-    static void GetSlotIds( sal_uInt16 nSlotId, sal_uInt16& rLatin, sal_uInt16& rAsian,
-                                            sal_uInt16& rComplex );
-    inline void GetSlotIds( sal_uInt16& rLatin, sal_uInt16& rAsian,
-                                sal_uInt16& rComplex ) const
+    static void GetSlotIds( USHORT nSlotId, USHORT& rLatin, USHORT& rAsian,
+                                            USHORT& rComplex );
+    inline void GetSlotIds( USHORT& rLatin, USHORT& rAsian,
+                                USHORT& rComplex ) const
     { GetSlotIds( Which(), rLatin, rAsian, rComplex ); }
 };
 

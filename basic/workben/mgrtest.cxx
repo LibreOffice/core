@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,32 +38,28 @@
 #include <basic/sbmod.hxx>
 #include <basic/basrdll.hxx>
 
-//#include <sv.hxx>
-//#include <basic.hxx>
-//#include <sostor.hxx>
-
 // Defines for ToolBox-Id's
-#define TB_NEW              1
-#define TB_OPENSTORAGE      2
-#define TB_SAVESTORAGE      3
-#define TB_ORG              4
-#define TB_CREATELIB1       10
-#define TB_CREATELIB2       11
-#define TB_CREATELIB3       12
-#define TB_LOADLIB1         20
-#define TB_LOADLIB2         21
-#define TB_LOADLIB3         22
-#define TB_STORELIBX        30
-#define TB_UNLOADX          31
-#define TB_LOADX            32
-#define TB_EXECX            33
-#define TB_REMOVEX          34
-#define TB_REMOVEDELX       35
+#define TB_NEW				1
+#define TB_OPENSTORAGE		2
+#define TB_SAVESTORAGE		3
+#define TB_ORG				4
+#define TB_CREATELIB1		10
+#define TB_CREATELIB2		11
+#define TB_CREATELIB3		12
+#define TB_LOADLIB1			20
+#define TB_LOADLIB2			21
+#define TB_LOADLIB3			22
+#define TB_STORELIBX		30
+#define TB_UNLOADX			31
+#define TB_LOADX			32
+#define TB_EXECX			33
+#define TB_REMOVEX			34
+#define TB_REMOVEDELX		35
 
-#define TB_LIB0             40
-#define TB_LIB1             41
-#define TB_LIB2             42
-#define TB_LIB3             43
+#define TB_LIB0				40
+#define TB_LIB1				41
+#define TB_LIB2				42
+#define TB_LIB3				43
 
 const char* pLib1Str = "Lib1";
 const char* pLib2Str = "Lib2";
@@ -81,11 +78,11 @@ public:
 class TestWindow : public WorkWindow
 {
 private:
-    ToolBox         aToolBox;
-    BasicManager*   pBasMgr;
+    ToolBox 		aToolBox;
+    BasicManager*	pBasMgr;
 
-    void            CheckError();
-    sal_uInt16          nLibX;
+    void			CheckError();
+    USHORT			nLibX;
     DECL_LINK( BasicErrorHdl, StarBASIC * );
 
 
@@ -93,16 +90,16 @@ public:
                     TestWindow();
                     ~TestWindow();
 
-    virtual void    Paint( const Rectangle& );
-    virtual void    Resize();
-    virtual void    KeyInput( const KeyEvent& rKeyEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	Paint( const Rectangle& );
+    virtual void	Resize();
+    virtual void	KeyInput( const KeyEvent& rKeyEvt );
+    virtual void	MouseMove( const MouseEvent& rMEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
 
     DECL_LINK( TBSelect, ToolBox * );
-    void            UpdateToolBox();
-    void            ShowInfo();
+    void			UpdateToolBox();
+    void			ShowInfo();
 };
 
 TestWindow::~TestWindow()
@@ -125,7 +122,7 @@ TestWindow::TestWindow() :
     aFont.SetSize( Size( 0, 6 ) );
     aFont.SetPitch( PITCH_VARIABLE );
     aFont.SetFamily( FAMILY_SWISS );
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( TRUE );
     aFont.SetAlign( ALIGN_TOP );
     aToolBox.SetFont( aFont );
     SetFont( aFont );
@@ -197,7 +194,7 @@ void TestWindow::ShowInfo()
     if ( pBasMgr )
     {
         Point aPos( 10, aToolBox.GetSizePixel().Height()+5 );
-        for ( sal_uInt16 nLib = 0; nLib < pBasMgr->GetLibCount(); nLib++ )
+        for ( USHORT nLib = 0; nLib < pBasMgr->GetLibCount(); nLib++ )
         {
             String aOutStr( nLib );
             aOutStr +=": ";
@@ -212,7 +209,7 @@ void TestWindow::ShowInfo()
             aOutStr += ">, Storage='";
             aOutStr += pBasMgr->GetLibStorageName( nLib );
             aOutStr += "', bLoaded=";
-            aOutStr += (sal_uInt16)pBasMgr->IsLibLoaded( nLib );
+            aOutStr += (USHORT)pBasMgr->IsLibLoaded( nLib );
             DrawText( aPos, aOutStr );
             aPos.Y() += nH;
         }
@@ -223,22 +220,22 @@ void TestWindow::UpdateToolBox()
 {
     // View of some buttons as checked or disabled if
     // wished by tests
-    aToolBox.EnableItem( TB_ORG, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_ORG, (BOOL)(ULONG)pBasMgr );
 
-    aToolBox.EnableItem( TB_CREATELIB1, (sal_Bool)(sal_uIntPtr)pBasMgr );
-    aToolBox.EnableItem( TB_CREATELIB2, (sal_Bool)(sal_uIntPtr)pBasMgr );
-    aToolBox.EnableItem( TB_CREATELIB3, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_CREATELIB1, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_CREATELIB2, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_CREATELIB3, (BOOL)(ULONG)pBasMgr );
 
-    aToolBox.EnableItem( TB_LOADLIB1, (sal_Bool)(sal_uIntPtr)pBasMgr );
-    aToolBox.EnableItem( TB_LOADLIB2, (sal_Bool)(sal_uIntPtr)pBasMgr );
-    aToolBox.EnableItem( TB_LOADLIB3, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_LOADLIB1, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_LOADLIB2, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_LOADLIB3, (BOOL)(ULONG)pBasMgr );
 
-    aToolBox.EnableItem( TB_STORELIBX, (sal_Bool)(sal_uIntPtr)pBasMgr );
-    aToolBox.EnableItem( TB_EXECX, (sal_Bool)(sal_uIntPtr)pBasMgr );
-    aToolBox.EnableItem( TB_UNLOADX, (sal_Bool)(sal_uIntPtr)pBasMgr );
-    aToolBox.EnableItem( TB_LOADX, (sal_Bool)(sal_uIntPtr)pBasMgr );
-    aToolBox.EnableItem( TB_REMOVEX, (sal_Bool)(sal_uIntPtr)pBasMgr );
-    aToolBox.EnableItem( TB_REMOVEDELX, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_STORELIBX, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_EXECX, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_UNLOADX, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_LOADX, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_REMOVEX, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_REMOVEDELX, (BOOL)(ULONG)pBasMgr );
 
     aToolBox.CheckItem( TB_LIB0, nLibX == 0 );
     aToolBox.CheckItem( TB_LIB1, nLibX == 1 );
@@ -248,8 +245,8 @@ void TestWindow::UpdateToolBox()
 
 IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
 {
-    sal_uInt16 nId = aToolBox.GetCurItemId();
-    sal_Bool bChecked = aToolBox.IsItemChecked( nId );
+    USHORT nId = aToolBox.GetCurItemId();
+    BOOL bChecked = aToolBox.IsItemChecked( nId );
     switch ( nId )
     {
         case TB_NEW:
@@ -289,7 +286,7 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
         {
             if ( pBasMgr )
             {
-                sal_uInt16 nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib1Str ) );
+                USHORT nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib1Str ) );
                 if ( nLib != LIB_NOTFOUND )
                 {
                     pBasMgr->SetLibStorageName( nLib, "d:\\mystore.svs" );
@@ -309,7 +306,7 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
         {
             if ( pBasMgr )
             {
-                sal_uInt16 nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib2Str ) );
+                USHORT nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib2Str ) );
                 if ( nLib != LIB_NOTFOUND )
                 {
                     pBasMgr->SetLibStorageName( nLib, "d:\\mystore.svs" );
@@ -327,8 +324,8 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
         {
             if ( pBasMgr )
             {
-                // liegt in einem anderen Storage !!!
-                sal_uInt16 nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib3Str ) );
+                // is located in another storage !!!
+                USHORT nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib3Str ) );
                 if ( nLib != LIB_NOTFOUND )
                 {
                     pBasMgr->SetLibStorageName( nLib, "d:\\mystore2.svs" );
@@ -347,7 +344,7 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
             if ( pBasMgr )
             {
                 SvStorageRef xStorage = new SvStorage( "d:\\mystore.svs" );
-                if ( !pBasMgr->AddLib( *xStorage, pLib1Str, sal_False ) )
+                if ( !pBasMgr->AddLib( *xStorage, pLib1Str, FALSE ) )
                     Sound::Beep();
             }
         }
@@ -357,7 +354,7 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
             if ( pBasMgr )
             {
                 SvStorageRef xStorage = new SvStorage( "d:\\mystore.svs" );
-                if ( !pBasMgr->AddLib( *xStorage, pLib2Str, sal_False ) )
+                if ( !pBasMgr->AddLib( *xStorage, pLib2Str, FALSE ) )
                     Sound::Beep();
             }
         }
@@ -366,9 +363,9 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
         {
             if ( pBasMgr )
             {
-                // liegt in einem anderen Storage !!!
+                // is located in another storage !!!
                 SvStorageRef xStorage = new SvStorage( "d:\\mystore2.svs" );
-                if ( !pBasMgr->AddLib( *xStorage, pLib3Str, sal_False ) )
+                if ( !pBasMgr->AddLib( *xStorage, pLib3Str, FALSE ) )
                     Sound::Beep();
             }
         }
@@ -394,13 +391,13 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
         case TB_REMOVEX:
         {
             if ( pBasMgr )
-                pBasMgr->RemoveLib( nLibX, sal_False );
+                pBasMgr->RemoveLib( nLibX, FALSE );
         }
         break;
         case TB_REMOVEDELX:
         {
             if ( pBasMgr )
-                pBasMgr->RemoveLib( nLibX, sal_True );
+                pBasMgr->RemoveLib( nLibX, TRUE );
         }
         break;
         case TB_EXECX:
@@ -420,13 +417,13 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
         }
         break;
 
-        case TB_LIB0:   nLibX = 0;
+        case TB_LIB0:	nLibX = 0;
         break;
-        case TB_LIB1:   nLibX = 1;
+        case TB_LIB1:	nLibX = 1;
         break;
-        case TB_LIB2:   nLibX = 2;
+        case TB_LIB2:	nLibX = 2;
         break;
-        case TB_LIB3:   nLibX = 3;
+        case TB_LIB3:	nLibX = 3;
         break;
     }
 
@@ -527,9 +524,9 @@ void __EXPORT TestWindow::Resize()
 void __EXPORT TestWindow::KeyInput( const KeyEvent& rKEvt )
 {
     char nCharCode = rKEvt.GetCharCode();
-    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+    USHORT nCode = rKEvt.GetKeyCode().GetCode();
 
-    // Nur bei Alt-Return
+    // Only at Alt-Return
     if ( ( nCode == KEY_RETURN ) && rKEvt.GetKeyCode().IsMod2() )
         ;
     else
@@ -589,3 +586,5 @@ void __EXPORT TestApp::Main( int, char*[] )
 
 
 TestApp aTestApp;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

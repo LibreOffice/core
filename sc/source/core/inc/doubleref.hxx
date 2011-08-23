@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: interpre.hxx,v $
+ * $Revision: 1.35.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +42,8 @@ struct ScQueryParamBase;
 
 // ============================================================================
 
-/**
- * Base class for abstracting range data backends for database functions.
+/** 
+ * Base class for abstracting range data backends for database functions. 
  */
 class ScDBRangeBase
 {
@@ -55,9 +58,9 @@ public:
     virtual SCROW getRowSize() const = 0;
     virtual SCSIZE getVisibleDataCellCount() const = 0;
 
-    /**
-     * Get a string value of a specified cell position.  Note that the
-     * position of the upper left cell of the range is always (0, 0) even if
+    /** 
+     * Get a string value of a specified cell position.  Note that the 
+     * position of the upper left cell of the range is always (0, 0) even if 
      * the reference type is of internal range.
      *
      * @param nCol column position (0 to column size-1)
@@ -67,13 +70,13 @@ public:
 
     virtual SCCOL getFirstFieldColumn() const = 0;
 
-    /**
+    /** 
      * Get a <i>0-based</i> column index that corresponds with the passed field
-     * index.  Note that the field index passed as the 1st parameter is
-     * <i>1-based.</i>
+     * index.  Note that the field index passed as the 1st parameter is 
+     * <i>1-based.</i> 
      *
      * @param nIndex 1-based field index.
-     *
+     * 
      * @return 0-based column index
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const = 0;
@@ -85,8 +88,8 @@ protected:
     ScDBRangeBase(ScDocument* pDoc, RefType eType);
     ScDocument* getDoc() const;
 
-    /**
-     * Populate query options that are always the same for all database
+    /** 
+     * Populate query options that are always the same for all database 
      * queries.
      */
     static void fillQueryOptions(ScQueryParamBase* pParam);
@@ -112,9 +115,9 @@ public:
     virtual SCROW getRowSize() const;
     virtual SCSIZE getVisibleDataCellCount() const;
 
-    /**
-     * Get a string value of a specified cell position.  Note that the
-     * position of the upper left cell of the range is always (0, 0) even if
+    /** 
+     * Get a string value of a specified cell position.  Note that the 
+     * position of the upper left cell of the range is always (0, 0) even if 
      * the reference type is of internal range.
      *
      * @param nCol column position (0 to column size-1)
@@ -123,13 +126,13 @@ public:
     virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const;
 
     virtual SCCOL getFirstFieldColumn() const;
-    /**
+    /** 
      * Get a <i>0-based</i> column index that corresponds with the passed field
-     * index.  Note that the field index passed as the 1st parameter is
-     * <i>1-based.</i>
+     * index.  Note that the field index passed as the 1st parameter is 
+     * <i>1-based.</i> 
      *
      * @param nIndex 1-based field index.
-     *
+     * 
      * @return 0-based column index
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const;
@@ -156,9 +159,9 @@ public:
     virtual SCROW getRowSize() const;
     virtual SCSIZE getVisibleDataCellCount() const;
 
-    /**
-     * Get a string value of a specified cell position.  Note that the
-     * position of the upper left cell of the range is always (0, 0) even if
+    /** 
+     * Get a string value of a specified cell position.  Note that the 
+     * position of the upper left cell of the range is always (0, 0) even if 
      * the reference type is of internal range.
      *
      * @param nCol column position (0 to column size-1)
@@ -168,13 +171,13 @@ public:
 
     virtual SCCOL getFirstFieldColumn() const;
 
-    /**
+    /** 
      * Get a <i>0-based</i> column index that corresponds with the passed field
-     * index.  Note that the field index passed as the 1st parameter is
-     * <i>1-based.</i>
+     * index.  Note that the field index passed as the 1st parameter is 
+     * <i>1-based.</i> 
      *
      * @param nIndex 1-based field index.
-     *
+     * 
      * @return 0-based column index
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const;

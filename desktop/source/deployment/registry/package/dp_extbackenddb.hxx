@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,14 +26,13 @@
  *
  ************************************************************************/
 
+
 #if ! defined INCLUDED_DP_EXTBACKENDDB_HXX
 #define INCLUDED_DP_EXTBACKENDDB_HXX
 
-#include <utility>
-#include <vector>
-
 #include "rtl/ustring.hxx"
-
+#include "rtl/string.hxx"
+#include <vector>
 #include "dp_backenddb.hxx"
 
 namespace css = ::com::sun::star;
@@ -75,17 +74,21 @@ public:
         ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString> > items;
         typedef ::std::vector<
             ::std::pair< ::rtl::OUString, ::rtl::OUString> >::const_iterator ITC_ITEMS;
-    };
 
+    };
+    
 public:
+
     ExtensionBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
                         ::rtl::OUString const & url);
 
     void addEntry(::rtl::OUString const & url, Data const & data);
 
     Data getEntry(::rtl::OUString const & url);
-
+    
 };
+
+
 
 }
 }

@@ -42,18 +42,19 @@ sub main
     use "graphics\optional\includes\global\g_spellcheck.inc"
 
     hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
+
     PrintLog "-------------------------" + gApplication + "-------------------"
-    call tiToolsSpellcheckError
-    call tiToolsSpellcheckCheck_AlwaysIgnore
-    call tiToolsSpellcheckCheck_Change
-    call tiToolsSpellcheckCheck_ChangeAll
+    Call tiToolsSpellcheckCorrect
+    Call tiToolsSpellcheckError
+    Call tiToolsSpellcheckCheck
+    Call tToolsSpellcheckAutoSpellcheck
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-    call tiToolsSpellcheckError
-    call tiToolsSpellcheckCheck_AlwaysIgnore
-    call tiToolsSpellcheckCheck_Change
-    call tiToolsSpellcheckCheck_ChangeAll
+    Call tiToolsSpellcheckCorrect
+    Call tiToolsSpellcheckError
+    Call tiToolsSpellcheckCheck
+    Call tToolsSpellcheckAutoSpellcheck
 
     Call hStatusOut
 end sub

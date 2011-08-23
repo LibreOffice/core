@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,15 +27,13 @@
  ************************************************************************/
 
 #include "oox/helper/binarystreambase.hxx"
-
 #include <osl/diagnose.h>
 
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::io::XSeekable;
+
 namespace oox {
-
-// ============================================================================
-
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
 
 // ============================================================================
 
@@ -104,7 +102,7 @@ sal_Int64 BinaryXSeekableStream::getLength() const
     }
     catch( Exception& )
     {
-        OSL_FAIL( "BinaryXSeekableStream::getLength - exception caught" );
+        OSL_ENSURE( false, "BinaryXSeekableStream::getLength - exception caught" );
     }
     return -1;
 }
@@ -117,7 +115,7 @@ sal_Int64 BinaryXSeekableStream::tell() const
     }
     catch( Exception& )
     {
-        OSL_FAIL( "BinaryXSeekableStream::tell - exception caught" );
+        OSL_ENSURE( false, "BinaryXSeekableStream::tell - exception caught" );
     }
     return -1;
 }

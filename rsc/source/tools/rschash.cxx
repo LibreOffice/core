@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,7 @@
 #include "precompiled_rsc.hxx"
 #include <rschash.hxx>
 
-using ::rtl::OString;
-using ::rtl::OStringHash;
+using namespace rtl;
 
 AtomContainer::AtomContainer()
 {
@@ -47,14 +46,14 @@ AtomContainer::~AtomContainer()
 Atom AtomContainer::getID( const OString& rStr, bool bOnlyIfExists )
 {
     OString aKey = rStr.toAsciiLowerCase();
-    boost::unordered_map< OString, Atom, OStringHash >::const_iterator it =
+    std::hash_map< OString, Atom, OStringHash >::const_iterator it =
         m_aStringToID.find( aKey );
     if( it != m_aStringToID.end() )
         return it->second;
-
+    
     if( bOnlyIfExists )
         return InvalidAtom;
-
+    
     Atom aRet = m_nNextID;
     m_aStringToID[ aKey ] = m_nNextID;
     m_aIDToString[ m_nNextID ] = rStr;
@@ -64,7 +63,7 @@ Atom AtomContainer::getID( const OString& rStr, bool bOnlyIfExists )
 
 const OString& AtomContainer::getString( Atom nAtom )
 {
-    boost::unordered_map< Atom, OString >::const_iterator it =
+    std::hash_map< Atom, OString >::const_iterator it =
         m_aIDToString.find( nAtom );
     return (it != m_aIDToString.end()) ? it->second : m_aIDToString[0];
 }

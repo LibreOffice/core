@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,6 +62,7 @@
 
 using namespace std;
 using namespace cppu;
+using namespace rtl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -70,13 +71,12 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
 using namespace com::sun::star::registry;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
+
 
 static const sal_Int32 CACHE_SIZE = 512;
 
 #define SERVICENAME "com.sun.star.reflection.TypeDescriptionManager"
-#define IMPLNAME    "com.sun.star.comp.stoc.TypeDescriptionManager"
+#define IMPLNAME	"com.sun.star.comp.stoc.TypeDescriptionManager"
 
 //--------------------------------------------------------------------------------------------------
 // exported via tdmgr_common.hxx
@@ -126,7 +126,7 @@ class ManagerImpl;
 //==================================================================================================
 class EventListenerImpl : public ImplHelper1< XEventListener >
 {
-    ManagerImpl *       _pMgr;
+    ManagerImpl *		_pMgr;
 
 public:
     EventListenerImpl( ManagerImpl * pMgr )
@@ -160,15 +160,15 @@ class ManagerImpl
     friend class EnumerationImpl;
     friend class EventListenerImpl;
 
-    Mutex                               _aComponentMutex;
+    Mutex								_aComponentMutex;
     Reference< XComponentContext >      _xContext;
-    EventListenerImpl                   _aEventListener;
+    EventListenerImpl					_aEventListener;
 
     // elements
-    sal_Bool                            _bCaching;
-    LRU_CacheAnyByOUString              _aElements;
+    sal_Bool							_bCaching;
+    LRU_CacheAnyByOUString				_aElements;
     // provider chain
-    ProviderVector                      _aProviders;
+    ProviderVector						_aProviders;
 
     inline Any getSimpleType( const OUString & rName );
 
@@ -222,8 +222,8 @@ public:
 class EnumerationImpl
     : public WeakImplHelper1< XEnumeration >
 {
-    ManagerImpl *       _pMgr;
-    size_t              _nPos;
+    ManagerImpl *		_pMgr;
+    size_t				_nPos;
 
 public:
     EnumerationImpl( ManagerImpl * pManager );
@@ -476,11 +476,11 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
                     catch (container::NoSuchElementException & exc)
                     {
                         throw lang::IllegalArgumentException(
-                            OUSTR("NoSuchElementException occurred: ") +
+                            OUSTR("NoSuchElementException occured: ") +
                             exc.Message, static_cast<OWeakObject *>(this),
                             -1 /* unknown */ );
                     }
-
+                    
                     try
                     {
                         OUString newName( xNewTD->getName() );
@@ -512,18 +512,18 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
             catch (reflection::NoSuchTypeNameException & exc)
             {
                 throw lang::IllegalArgumentException(
-                    OUSTR("NoSuchTypeNameException occurred: ") + exc.Message,
+                    OUSTR("NoSuchTypeNameException occured: ") + exc.Message,
                     static_cast<OWeakObject *>(this), -1 /* unknown */ );
             }
             catch (reflection::InvalidTypeNameException & exc)
             {
                 throw lang::IllegalArgumentException(
-                    OUSTR("InvalidTypeNameException occurred: ") + exc.Message,
+                    OUSTR("InvalidTypeNameException occured: ") + exc.Message,
                     static_cast<OWeakObject *>(this), -1 /* unknown */ );
             }
         }
     }
-
+    
     _aProviders.push_back( xElem );
     Reference< XComponent > xComp( xElem, UNO_QUERY );
     if (xComp.is())
@@ -585,7 +585,7 @@ ManagerImpl::createTypeDescriptionEnumeration(
         if ( xEnumAccess.is() )
             aStack.push( xEnumAccess );
 
-        ++it;
+        it++;
     }
 
     return Reference< XTypeDescriptionEnumeration >(
@@ -679,10 +679,10 @@ class ArrayTypeDescriptionImpl
     : public WeakImplHelper1< XArrayTypeDescription >
 {
     Reference< XTypeDescription > _xElementTD;
-    Mutex                         _aDimensionMutex;
-    sal_Int32                     _nDimensions;
-    Sequence< sal_Int32 >         _seqDimensions;
-    OUString                      _sDimensions;
+    Mutex	 					  _aDimensionMutex;
+    sal_Int32					  _nDimensions;
+    Sequence< sal_Int32 >		  _seqDimensions;
+    OUString					  _sDimensions;
 
     void initDimensions(const OUString& rSDimensions);
 public:
@@ -741,7 +741,7 @@ void ArrayTypeDescriptionImpl::initDimensions(const OUString& rSDimensions)
 {
     MutexGuard aGuard( _aDimensionMutex );
 
-    sal_Int32 *  pDimensions = _seqDimensions.getArray();
+    sal_Int32 *	 pDimensions = _seqDimensions.getArray();
     OUString tmp(rSDimensions);
     sal_Unicode* p = (sal_Unicode*)tmp.getStr()+1;
     sal_Unicode* pOffset = p;
@@ -1063,7 +1063,7 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
                 rMembers = xIfaceTD->getMembers();
             const Reference< XInterfaceMemberTypeDescription > * pMembers =
                 rMembers.getConstArray();
-
+            
             for ( sal_Int32 nPos = rMembers.getLength(); nPos--; )
             {
                 if (rName == pMembers[nPos]->getName())

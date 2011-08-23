@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,8 +55,8 @@ BasicDLL::BasicDLL()
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
     pSttResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(stt), aLocale );
     pBasResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(sb), aLocale );
-    bDebugMode = sal_False;
-    bBreakEnabled = sal_True;
+    bDebugMode = FALSE;
+    bBreakEnabled = TRUE;
 }
 
 BasicDLL::~BasicDLL()
@@ -65,7 +65,7 @@ BasicDLL::~BasicDLL()
     delete pBasResMgr;
 }
 
-void BasicDLL::EnableBreak( sal_Bool bEnable )
+void BasicDLL::EnableBreak( BOOL bEnable )
 {
     BasicDLL* pThis = *(BasicDLL**)GetAppData(SHL_BASIC);
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
@@ -73,7 +73,7 @@ void BasicDLL::EnableBreak( sal_Bool bEnable )
         pThis->bBreakEnabled = bEnable;
 }
 
-void BasicDLL::SetDebugMode( sal_Bool bDebugMode )
+void BasicDLL::SetDebugMode( BOOL bDebugMode )
 {
     BasicDLL* pThis = *(BasicDLL**)GetAppData(SHL_BASIC);
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
@@ -86,7 +86,7 @@ void BasicDLL::BasicBreak()
 {
     //bJustStopping: Wenn jemand wie wild x-mal STOP drueckt, aber das Basic
     // nicht schnell genug anhaelt, kommt die Box ggf. oefters...
-    static sal_Bool bJustStopping = sal_False;
+    static BOOL bJustStopping = FALSE;
 
     BasicDLL* pThis = *(BasicDLL**)GetAppData(SHL_BASIC);
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
@@ -94,11 +94,11 @@ void BasicDLL::BasicBreak()
     {
         if ( StarBASIC::IsRunning() && !bJustStopping && ( pThis->bBreakEnabled || pThis->bDebugMode ) )
         {
-            bJustStopping = sal_True;
+            bJustStopping = TRUE;
             StarBASIC::Stop();
             String aMessageStr( BasResId( IDS_SBERR_TERMINATED ) );
             InfoBox( 0, aMessageStr ).Execute();
-            bJustStopping = sal_False;
+            bJustStopping = FALSE;
         }
     }
 }

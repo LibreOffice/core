@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,6 @@
 
 #define PLATFORM_ALL                "all"
 #define PLATFORM_WIN_X86            "windows_x86"
-#define PLATFORM_WIN_X86_64         "windows_x86_64"
 #define PLATFORM_LINUX_X86          "linux_x86"
 #define PLATFORM_LINUX_X86_64       "linux_x86_64"
 #define PLATFORM_KFREEBSD_X86       "kfreebsd_x86"
@@ -71,8 +70,6 @@
 #define PLATFORM_OS2_X86            "os2_x86"
 #define PLATFORM_OPENBSD_X86        "openbsd_x86"
 #define PLATFORM_OPENBSD_X86_64     "openbsd_x86_64"
-#define PLATFORM_DRAGONFLY_X86      "dragonfly_x86"
-#define PLATFORM_DRAGONFLY_X86_64   "dragonfly_x86_64"
 
 
 #define PLATFORM_AIX_POWERPC        "aix_powerpc"
@@ -89,7 +86,7 @@ namespace css = ::com::sun::star;
 
 namespace dp_misc
 {
-namespace
+namespace 
 {
     struct StrOperatingSystem :
         public rtl::StaticWithInit<const OUString, StrOperatingSystem> {
@@ -116,14 +113,16 @@ namespace
                 ::rtl::OUStringBuffer buf;
                 buf.append( StrOperatingSystem::get() );
                 buf.append( static_cast<sal_Unicode>('_') );
-                buf.append( StrCPU::get() );
+                OUString arch( RTL_CONSTASCII_USTRINGPARAM("$_ARCH") );
+                ::rtl::Bootstrap::expandMacros( arch );
+                buf.append( arch );
                 return buf.makeStringAndClear();
             }
     };
 
     bool checkOSandCPU(OUString const & os, OUString const & cpu)
     {
-        return os.equals(StrOperatingSystem::get())
+        return os.equals(StrOperatingSystem::get()) 
             && cpu.equals(StrCPU::get());
     }
 
@@ -134,42 +133,40 @@ namespace
             ret = true;
         else if (token.equals(OUSTR(PLATFORM_WIN_X86)))
             ret = checkOSandCPU(OUSTR("Windows"), OUSTR("x86"));
-        else if (token.equals(OUSTR(PLATFORM_WIN_X86_64)))
-            ret = checkOSandCPU(OUSTR("Windows"), OUSTR("x86_64"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_X86)))
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_X86_64)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("X86_64"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("X86_64"));  
         else if (token.equals(OUSTR(PLATFORM_KFREEBSD_X86)))
             ret = checkOSandCPU(OUSTR("kFreeBSD"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_KFREEBSD_X86_64)))
-            ret = checkOSandCPU(OUSTR("kFreeBSD"), OUSTR("X86_64"));
+            ret = checkOSandCPU(OUSTR("kFreeBSD"), OUSTR("X86_64"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_SPARC)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("SPARC"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("SPARC"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_POWERPC)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("PowerPC"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("PowerPC"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_POWERPC64)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("PowerPC_64"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("PowerPC_64"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_ARM_EABI)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ARM_EABI"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ARM_EABI"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_ARM_OABI)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ARM_OABI"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ARM_OABI"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_MIPS_EL)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("MIPS_EL"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("MIPS_EL"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_MIPS_EB)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("MIPS_EB"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("MIPS_EB"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_IA64)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("IA64"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("IA64"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_M68K)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("M68K"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("M68K"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_S390)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_S390x)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390x"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("S390x"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_HPPA)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("HPPA"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("HPPA"));  
         else if (token.equals(OUSTR(PLATFORM_LINUX_ALPHA)))
-            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ALPHA"));
+            ret = checkOSandCPU(OUSTR("Linux"), OUSTR("ALPHA"));  
         else if (token.equals(OUSTR(PLATFORM_SOLARIS_SPARC)))
             ret = checkOSandCPU(OUSTR("Solaris"), OUSTR("SPARC"));
         else if (token.equals(OUSTR(PLATFORM_SOLARIS_SPARC64)))
@@ -196,13 +193,9 @@ namespace
             ret = checkOSandCPU(OUSTR("OpenBSD"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_OPENBSD_X86_64)))
             ret = checkOSandCPU(OUSTR("OpenBSD"), OUSTR("X86_64"));
-        else if (token.equals(OUSTR(PLATFORM_DRAGONFLY_X86)))
-            ret = checkOSandCPU(OUSTR("DragonFly"), OUSTR("x86"));
-        else if (token.equals(OUSTR(PLATFORM_DRAGONFLY_X86_64)))
-            ret = checkOSandCPU(OUSTR("DragonFly"), OUSTR("X86_64"));
         else
         {
-            OSL_FAIL("Extension Manager: The extension supports an unknown platform. "
+            OSL_ENSURE(0, "Extension Manager: The extension supports an unknown platform. "
             "Check the platform element in the description.xml");
             ret = false;
         }

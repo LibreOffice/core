@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,11 +50,11 @@ struct EDcrData
     ErrorHandler               *pFirstHdl;
     ErrorContext               *pFirstCtx;
     DisplayFnPtr               pDsp;
-    sal_Bool                       bIsWindowDsp;
+    BOOL                       bIsWindowDsp;
 
 
     DynamicErrorInfo            *ppDcr[ERRCODE_DYNAMIC_COUNT];
-    sal_uInt16                      nNextDcr;
+    USHORT                      nNextDcr;
                                 EDcrData();
 
 static  EDcrData                *GetData();
@@ -63,12 +63,12 @@ static  EDcrData                *GetData();
 
 class EDcr_Impl
 {
-    sal_uIntPtr                       lErrId;
-    sal_uInt16                      nMask;
+    ULONG                       lErrId;
+    USHORT                      nMask;
 
     void                        RegisterEDcr(DynamicErrorInfo *);
     void                        UnRegisterEDcr(DynamicErrorInfo *);
-    static ErrorInfo           *GetDynamicErrorInfo(sal_uIntPtr lId);
+    static ErrorInfo           *GetDynamicErrorInfo(ULONG lId);
 
 friend class DynamicErrorInfo;
 friend class ErrorInfo;
@@ -77,7 +77,7 @@ friend class ErrorInfo;
 
 EDcrData::EDcrData()
 {
-    for(sal_uInt16 n=0;n<ERRCODE_DYNAMIC_COUNT;n++)
+    for(USHORT n=0;n<ERRCODE_DYNAMIC_COUNT;n++)
         ppDcr[n]=0;
     nNextDcr=0;
     pFirstHdl=0;
@@ -106,10 +106,10 @@ void EDcr_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
     //Vergibt eine dynamische Id
 
     EDcrData* pData=EDcrData::GetData();
-    lErrId= (((sal_uIntPtr)pData->nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
+    lErrId= (((ULONG)pData->nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
         pDcr->GetErrorCode();
     DynamicErrorInfo **ppDcr=pData->ppDcr;
-    sal_uInt16 nNext=pData->nNextDcr;
+    USHORT nNext=pData->nNextDcr;
 
     // bei einem Ringbuffer koennen wir uns das ASSERT wohl sparen!
     // DBG_ASSERT(ppDcr[nNext]==0,"ErrHdl: Alle Errors belegt");
@@ -128,8 +128,8 @@ void EDcr_Impl::UnRegisterEDcr(DynamicErrorInfo *pDcr)
 
     EDcrData* pData=EDcrData::GetData();
     DynamicErrorInfo **ppDcr=pData->ppDcr;
-    sal_uIntPtr lIdx=(
-        ((sal_uIntPtr)(*pDcr) & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
+    ULONG lIdx=(
+        ((ULONG)(*pDcr) & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
     DBG_ASSERT(ppDcr[lIdx]==pDcr,"ErrHdl: Error nicht gefunden");
     if(ppDcr[lIdx]==pDcr)
         ppDcr[lIdx]=0;
@@ -143,7 +143,7 @@ TYPEINIT1(TwoStringErrorInfo, DynamicErrorInfo);
 TYPEINIT1(MessageInfo, DynamicErrorInfo);
 
 
-ErrorInfo *ErrorInfo::GetErrorInfo(sal_uIntPtr lId)
+ErrorInfo *ErrorInfo::GetErrorInfo(ULONG lId)
 {
     if(lId & ERRCODE_DYNAMIC_MASK)
         return EDcr_Impl::GetDynamicErrorInfo(lId);
@@ -151,12 +151,12 @@ ErrorInfo *ErrorInfo::GetErrorInfo(sal_uIntPtr lId)
         return new ErrorInfo(lId);
 }
 
-DynamicErrorInfo::operator sal_uIntPtr() const
+DynamicErrorInfo::operator ULONG() const
 {
     return pImpl->lErrId;
 }
 
-DynamicErrorInfo::DynamicErrorInfo(sal_uIntPtr lArgUserId, sal_uInt16 nMask)
+DynamicErrorInfo::DynamicErrorInfo(ULONG lArgUserId, USHORT nMask)
 : ErrorInfo(lArgUserId)
 {
     pImpl=new EDcr_Impl;
@@ -170,32 +170,32 @@ DynamicErrorInfo::~DynamicErrorInfo()
     delete pImpl;
 }
 
-ErrorInfo* EDcr_Impl::GetDynamicErrorInfo(sal_uIntPtr lId)
+ErrorInfo* EDcr_Impl::GetDynamicErrorInfo(ULONG lId)
 {
-    sal_uIntPtr lIdx=((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
+    ULONG lIdx=((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
     DynamicErrorInfo* pDcr=EDcrData::GetData()->ppDcr[lIdx];
-    if(pDcr && (sal_uIntPtr)(*pDcr)==lId)
+    if(pDcr && (ULONG)(*pDcr)==lId)
         return pDcr;
     else
         return new ErrorInfo(lId & ~ERRCODE_DYNAMIC_MASK);
 }
 
 
-sal_uInt16 DynamicErrorInfo::GetDialogMask() const
+USHORT DynamicErrorInfo::GetDialogMask() const
 {
     return pImpl->nMask;
 }
 
 
 StandardErrorInfo::StandardErrorInfo(
-    sal_uIntPtr UserId, sal_uIntPtr lArgExtId, sal_uInt16 nFlags)
+    ULONG UserId, ULONG lArgExtId, USHORT nFlags)
 : DynamicErrorInfo(UserId, nFlags), lExtId(lArgExtId)
 {
 }
 
 
 StringErrorInfo::StringErrorInfo(
-    sal_uIntPtr UserId, const String& aStringP,  sal_uInt16 nFlags)
+    ULONG UserId, const String& aStringP,  USHORT nFlags)
 : DynamicErrorInfo(UserId, nFlags), aString(aStringP)
 {
 }
@@ -206,8 +206,8 @@ class ErrHdl_Impl
   public:
 
     ErrorHandler        *pNext;
-    static sal_Bool         CreateString(const ErrorHandler *pStart,
-                                     const ErrorInfo*, String&, sal_uInt16&);
+    static BOOL         CreateString(const ErrorHandler *pStart,
+                                     const ErrorInfo*, String&, USHORT&);
 };
 
 
@@ -217,7 +217,7 @@ static void aDspFunc(const String &rErr, const String &rAction)
     aErr+= ByteString( rAction, RTL_TEXTENCODING_ASCII_US );
     aErr+=" Fehler: ";
     aErr+= ByteString( rErr, RTL_TEXTENCODING_ASCII_US );
-    OSL_FAIL(aErr.GetBuffer());
+    DBG_ERROR(aErr.GetBuffer());
 }
 
 
@@ -268,19 +268,19 @@ ErrorHandler::~ErrorHandler()
 void ErrorHandler::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
 {
     EDcrData *pData=EDcrData::GetData();
-    pData->bIsWindowDsp=sal_True;
+    pData->bIsWindowDsp=TRUE;
     pData->pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
 {
     EDcrData *pData=EDcrData::GetData();
-    pData->bIsWindowDsp=sal_False;
+    pData->bIsWindowDsp=FALSE;
     pData->pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
-sal_uInt16 ErrorHandler::HandleError_Impl(
-    sal_uIntPtr lId, sal_uInt16 nFlags, sal_Bool bJustCreateString, String & rError)
+USHORT ErrorHandler::HandleError_Impl(
+    ULONG lId, USHORT nFlags, BOOL bJustCreateString, String & rError)
 {
 
 /*  [Beschreibung]
@@ -317,8 +317,8 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
             break;
         }
 
-    sal_Bool bWarning = ((lId & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
-    sal_uInt16 nErrFlags = ERRCODE_BUTTON_DEF_OK | ERRCODE_BUTTON_OK;
+    BOOL bWarning = ((lId & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+    USHORT nErrFlags = ERRCODE_BUTTON_DEF_OK | ERRCODE_BUTTON_OK;
     if (bWarning)
         nErrFlags |= ERRCODE_MSG_WARNING;
     else
@@ -327,7 +327,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
     DynamicErrorInfo* pDynPtr=PTR_CAST(DynamicErrorInfo,pInfo);
     if(pDynPtr)
     {
-        sal_uInt16 nDynFlags = pDynPtr->GetDialogMask();
+        USHORT nDynFlags = pDynPtr->GetDialogMask();
         if( nDynFlags )
             nErrFlags = nDynFlags;
     }
@@ -347,7 +347,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
         aStr += ByteString( aAction, RTL_TEXTENCODING_ASCII_US );
         aStr += ByteString("\nFehler: ");
         aStr += ByteString( aErr, RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aStr.GetBuffer() );
+        DBG_ERROR( aStr.GetBuffer() );
         }
         else
         {
@@ -367,25 +367,25 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
         }
     }
     }
-    OSL_FAIL("Error nicht behandelt");
+    DBG_ERROR("Error nicht behandelt");
     // Error 1 ist General Error im Sfx
     if(pInfo->GetErrorCode()!=1) {
         HandleError_Impl(1, USHRT_MAX, bJustCreateString, rError);
-    }
+    } 
     else {
-        OSL_FAIL("Error 1 nicht gehandeled");
+        DBG_ERROR("Error 1 nicht gehandeled");
     }
     delete pInfo;
     return 0;
 }
 
 // static
-sal_Bool ErrorHandler::GetErrorString(sal_uIntPtr lId, String& rStr)
+BOOL ErrorHandler::GetErrorString(ULONG lId, String& rStr)
 {
-    return (sal_Bool)HandleError_Impl( lId, USHRT_MAX, sal_True, rStr );
+    return (BOOL)HandleError_Impl( lId, USHRT_MAX, TRUE, rStr );
 }
 
-sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, sal_uInt16 nFlags)
+USHORT ErrorHandler::HandleError(ULONG lId, USHORT nFlags)
 {
 
 /*  [Beschreibung]
@@ -405,30 +405,30 @@ sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, sal_uInt16 nFlags)
     */
 
     String aDummy;
-    return HandleError_Impl( lId, nFlags, sal_False, aDummy );
+    return HandleError_Impl( lId, nFlags, FALSE, aDummy );
 }
 
-sal_Bool ErrorHandler::ForwCreateString(const ErrorInfo* pInfo, String& rStr, sal_uInt16 &rFlags) const
+BOOL ErrorHandler::ForwCreateString(const ErrorInfo* pInfo, String& rStr, USHORT &rFlags) const
 {
     return ErrHdl_Impl::CreateString(this->pImpl->pNext, pInfo, rStr, rFlags);
 }
 
-sal_Bool ErrHdl_Impl::CreateString( const ErrorHandler *pStart,
+BOOL ErrHdl_Impl::CreateString( const ErrorHandler *pStart,
                                 const ErrorInfo* pInfo, String& pStr,
-                               sal_uInt16 &rFlags)
+                               USHORT &rFlags)
 {
     for(const ErrorHandler *pHdl=pStart;pHdl;pHdl=pHdl->pImpl->pNext)
     {
         if(pHdl->CreateString( pInfo, pStr, rFlags))
-            return sal_True;
+            return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool SimpleErrorHandler::CreateString(
-    const ErrorInfo *pInfo, String &rStr, sal_uInt16 &) const
+BOOL SimpleErrorHandler::CreateString(
+    const ErrorInfo *pInfo, String &rStr, USHORT &) const
 {
-    sal_uIntPtr nId = pInfo->GetErrorCode();
+    ULONG nId = pInfo->GetErrorCode();
     ByteString aStr;
     aStr="Id ";
     aStr+=ByteString::CreateFromInt32(nId);
@@ -444,7 +444,7 @@ sal_Bool SimpleErrorHandler::CreateString(
     if(pDyn)
     {
         aStr+="\nDId ";
-        aStr+=ByteString::CreateFromInt32((sal_uIntPtr)*pDyn);
+        aStr+=ByteString::CreateFromInt32((ULONG)*pDyn);
     }
     StandardErrorInfo *pStd=PTR_CAST(StandardErrorInfo,pInfo);
     if(pStd)
@@ -453,7 +453,7 @@ sal_Bool SimpleErrorHandler::CreateString(
         aStr+=ByteString::CreateFromInt32(pStd->GetExtendedErrorCode());
     }
     rStr = String( aStr, RTL_TEXTENCODING_ASCII_US );
-    return sal_True;
+    return TRUE;
 }
 
 SimpleErrorHandler::SimpleErrorHandler()

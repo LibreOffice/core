@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,15 +53,15 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
-#include <tools/wintypes.hxx>       // for check states
+#include <tools/wintypes.hxx>		// for check states
 #include <com/sun/star/lang/Locale.hpp>
 #include <xmloff/controlpropertyhdl.hxx>
 #include "controlpropertymap.hxx"
 #include "formevents.hxx"
 #include "formcellbinding.hxx"
-#include "xmloff/xformsimport.hxx"
+#include "xformsimport.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <rtl/logfile.hxx>
 #include <algorithm>
 
@@ -240,6 +240,11 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         TabulatorCycle_RECORDS, OEnumMapper::getEnumMap(OEnumMapper::epTabCyle),
         &::getCppuType( static_cast<TabulatorCycle*>(NULL) ));
 
+    // initialize our style map
+    m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
+        ::rtl::Reference< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(getControlStylePropertyMap(), m_xPropertyHandlerFactory.get());
+        m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.get(), _rImporter);
+
     // 'initialize'
     m_aCurrentPageIds = m_aControlIds.end();
 }
@@ -306,11 +311,11 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
             }
             catch(const Exception&)
             {
-                OSL_FAIL("OFormLayerXMLImport_Impl::applyControlNumberStyle: couldn't set the format!");
+                OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::applyControlNumberStyle: couldn't set the format!");
             }
         }
         else
-            OSL_FAIL("OFormLayerXMLImport_Impl::applyControlNumberStyle: did not find the style with the given name!");
+            OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::applyControlNumberStyle: did not find the style with the given name!");
     }
 }
 
@@ -375,8 +380,8 @@ const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const ::rtl::
         m_pAutoStyles ? m_pAutoStyles->FindStyleChildContext( XML_STYLE_FAMILY_TEXT_PARAGRAPH, _rStyleName ) : NULL;
     OSL_ENSURE( pControlStyle || !m_pAutoStyles,
                 ::rtl::OString( "OFormLayerXMLImport_Impl::getStyleElement: did not find the style named \"" )
-            +=  ::rtl::OString( _rStyleName.getStr(), _rStyleName.getLength(), RTL_TEXTENCODING_ASCII_US )
-            +=  ::rtl::OString( "\"!" ) );
+            +=	::rtl::OString( _rStyleName.getStr(), _rStyleName.getLength(), RTL_TEXTENCODING_ASCII_US )
+            +=	::rtl::OString( "\"!" ) );
     return pControlStyle;
 }
 
@@ -414,6 +419,12 @@ void OFormLayerXMLImport_Impl::registerControlReferences(const Reference< XPrope
 }
 
 //---------------------------------------------------------------------
+::rtl::Reference< SvXMLImportPropertyMapper > OFormLayerXMLImport_Impl::getStylePropertyMapper() const
+{
+    return m_xImportMapper;
+}
+
+//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPage)
 {
     m_xCurrentPageFormsSupp.clear();
@@ -426,7 +437,7 @@ void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPa
 
     // add a new entry to our page map
     ::std::pair< MapDrawPage2MapIterator, bool > aPagePosition;
-    aPagePosition =
+    aPagePosition = 
         m_aControlIds.insert(MapDrawPage2Map::value_type(_rxDrawPage, MapString2PropertySet()));
     OSL_ENSURE(aPagePosition.second, "OFormLayerXMLImport_Impl::startPage: already imported this page!");
     m_aCurrentPageIds = aPagePosition.first;
@@ -447,7 +458,7 @@ void OFormLayerXMLImport_Impl::endPage()
         Reference< XPropertySet > xCurrentReferring;
         sal_Int32 nSeparator, nPrevSep;
         ::std::vector< ModelStringPair >::const_iterator aEnd = m_aControlReferences.end();
-        for (   ::std::vector< ModelStringPair >::const_iterator aReferences = m_aControlReferences.begin();
+        for	(	::std::vector< ModelStringPair >::const_iterator aReferences = m_aControlReferences.begin();
                 aReferences != aEnd;
                 ++aReferences
             )
@@ -474,7 +485,7 @@ void OFormLayerXMLImport_Impl::endPage()
     }
     catch(Exception&)
     {
-        OSL_FAIL("OFormLayerXMLImport_Impl::endPage: unable to knit the control references (caught an exception)!");
+        OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::endPage: unable to knit the control references (caught an exception)!");
     }
 
     // now that we have all children of the forms collection, attach the events
@@ -502,7 +513,7 @@ Reference< XPropertySet > OFormLayerXMLImport_Impl::lookupControlId(const ::rtl:
         if (m_aCurrentPageIds->second.end() != aPos)
             xReturn = aPos->second;
         else
-            OSL_FAIL("OFormLayerXMLImport_Impl::lookupControlId: invalid control id (did not find it)!");
+            OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::lookupControlId: invalid control id (did not find it)!");
     }
     return xReturn;
 }
@@ -526,7 +537,7 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nP
         if ( m_xCurrentPageFormsSupp.is() )
             pContext = new OFormImport(*this, *this, _nPrefix, _rLocalName, m_xCurrentPageFormsSupp->getForms() );
     }
-    else if (  ( _nPrefix == XML_NAMESPACE_XFORMS
+    else if (  ( _nPrefix == XML_NAMESPACE_XFORMS 
             && ( xmloff::token::IsXMLToken( _rLocalName, xmloff::token::XML_MODEL ) ) )
             )
     {
@@ -535,8 +546,8 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nP
 
     if ( !pContext )
     {
-        OSL_FAIL( "unknown element" );
-        pContext =
+        OSL_ENSURE( false, "unknown element" );
+        pContext = 
             new SvXMLImportContext(m_rImporter, _nPrefix, _rLocalName);
     }
 
@@ -593,7 +604,7 @@ void OFormLayerXMLImport_Impl::documentDone( )
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell!" );
+                OSL_ENSURE( sal_False, "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell!" );
             }
         }
         m_aCellValueBindings.clear();
@@ -620,7 +631,7 @@ void OFormLayerXMLImport_Impl::documentDone( )
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell range!" );
+                OSL_ENSURE( sal_False, "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell range!" );
             }
         }
         m_aCellRangeListSources.clear();
@@ -644,7 +655,7 @@ void OFormLayerXMLImport_Impl::documentDone( )
 }
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

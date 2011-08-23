@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,11 +57,11 @@ namespace myucp
 
 struct ResultListEntry
 {
-    rtl::OUString                             aId;
+    rtl::OUString						      aId;
     uno::Reference< ucb::XContentIdentifier > xId;
-    uno::Reference< ucb::XContent >           xContent;
-    uno::Reference< sdbc::XRow >              xRow;
-    const ContentProperties&                  rData;
+    uno::Reference< ucb::XContent > 		  xContent;
+    uno::Reference< sdbc::XRow > 			  xRow;
+    const ContentProperties& 		          rData;
 
     ResultListEntry( const ContentProperties& rEntry ) : rData( rEntry ) {}
 };
@@ -82,21 +82,21 @@ typedef std::vector< ResultListEntry* > ResultList;
 
 struct DataSupplier_Impl
 {
-    osl::Mutex                                   m_aMutex;
-    ResultList                                   m_aResults;
-    rtl::Reference< Content >                    m_xContent;
+    osl::Mutex					                 m_aMutex;
+    ResultList					                 m_aResults;
+    rtl::Reference< Content >     	             m_xContent;
     uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
 // @@@ The data source and an iterator for it
-//  Entry                                        m_aFolder;
-//  Entry::iterator                              m_aIterator;
-      sal_Int32                                  m_nOpenMode;
-      sal_Bool                                   m_bCountFinal;
+//	Entry 		 	      	  		             m_aFolder;
+//	Entry::iterator 		  		             m_aIterator;
+      sal_Int32					                 m_nOpenMode;
+      sal_Bool					                 m_bCountFinal;
 
     DataSupplier_Impl( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
                        const rtl::Reference< Content >& rContent,
                        sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xSMgr( rxSMgr ),
-//    m_aFolder( rxSMgr, rContent->getIdentifier()->getContentIdentifier() ),
+//	  m_aFolder( rxSMgr, rContent->getIdentifier()->getContentIdentifier() ),
       m_nOpenMode( nOpenMode ), m_bCountFinal( sal_False ) {}
     ~DataSupplier_Impl();
 };
@@ -110,7 +110,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
     while ( it != end )
     {
         delete (*it);
-        ++it;
+        it++;
     }
 }
 
@@ -167,7 +167,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 
 //=========================================================================
 // virtual
-uno::Reference< ucb::XContentIdentifier >
+uno::Reference< ucb::XContentIdentifier > 
 DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -186,7 +186,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     rtl::OUString aId = queryContentIdentifierString( nIndex );
     if ( aId.getLength() )
     {
-        uno::Reference< ucb::XContentIdentifier > xId
+        uno::Reference< ucb::XContentIdentifier > xId 
             = new ::ucbhelper::ContentIdentifier( aId );
         m_pImpl->m_aResults[ nIndex ]->xId = xId;
         return xId;
@@ -196,7 +196,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 
 //=========================================================================
 // virtual
-uno::Reference< ucb::XContent >
+uno::Reference< ucb::XContent > 
 DataSupplier::queryContent( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -212,7 +212,7 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
         }
     }
 
-    uno::Reference< ucb::XContentIdentifier > xId
+    uno::Reference< ucb::XContentIdentifier > xId 
         = queryContentIdentifier( nIndex );
     if ( xId.is() )
     {
@@ -343,7 +343,7 @@ sal_Bool DataSupplier::isCountFinal()
 
 //=========================================================================
 // virtual
-uno::Reference< sdbc::XRow >
+uno::Reference< sdbc::XRow > 
 DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );

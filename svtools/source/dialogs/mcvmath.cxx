@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,6 +57,8 @@ static const short SinTab[16]=
 |*    ImpMultBig2()
 |*
 |*    Beschreibung       Multiplikation fuer FixPoint-Berechnungen
+|*    Ersterstellung     SH 01.07.93
+|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -74,6 +76,8 @@ Fix ImpMultBig2( const Fix& a, const Fix& b )
 |*    ImpMultBig2()
 |*
 |*    Beschreibung       Multiplikation fuer FixPoint-Berechnungen
+|*    Ersterstellung     SH 01.07.93
+|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -91,14 +95,16 @@ FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb )
 |*    ImpSqrt()
 |*
 |*    Beschreibung       Wurzelfunktion fuer FixPoint-Berechnungen
+|*    Ersterstellung     SH 01.07.93
+|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
-sal_uInt16 ImpSqrt( sal_uLong nRadi )
+USHORT ImpSqrt( ULONG nRadi )
 {
-    register sal_uLong  inf = 1;
-    register sal_uLong  sup = nRadi;
-    register sal_uLong sqr;
+    register ULONG  inf = 1;
+    register ULONG  sup = nRadi;
+    register ULONG sqr;
 
     if ( !nRadi )
         return 0;
@@ -113,7 +119,7 @@ sal_uInt16 ImpSqrt( sal_uLong nRadi )
     sqr = (nRadi/sqr + sqr) >> 1;       // 2 Newton-Iterationen reichen fuer
     sqr = (nRadi/sqr + sqr) >> 1;       // +- 1 Digit
 
-    return sal::static_int_cast< sal_uInt16 >(sqr);
+    return sal::static_int_cast< USHORT >(sqr);
 }
 
 /**************************************************************************
@@ -121,12 +127,14 @@ sal_uInt16 ImpSqrt( sal_uLong nRadi )
 |*    ImpExPI()
 |*
 |*    Beschreibung       EXPI-Funktion fuer FixPoint-Berechnungen
+|*    Ersterstellung     SH 01.07.93
+|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
 // e**(i*nPhi), Einheit nPhi: 2**16 == 360 Grad
 
-FixCpx ImpExPI( sal_uInt16 nPhi )
+FixCpx ImpExPI( USHORT nPhi )
 {
     short i;
     FixCpx aIter(1L);                   // e**(0*i)
@@ -151,15 +159,17 @@ FixCpx ImpExPI( sal_uInt16 nPhi )
 |*    ImpATanx2()
 |*
 |*    Beschreibung       ATANX2-Funktion fuer FixPoint-Berechnungen
+|*    Ersterstellung     SH 01.07.93
+|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
 // use for x*x+y*y==1 only
 
-static sal_uInt16 ImpATanx2( const Fix& rX, const Fix& rY )
+static USHORT ImpATanx2( const Fix& rX, const Fix& rY )
 {
-    sal_uInt16      phi0 = 0;           // result angel higher part
-    sal_uInt16      phi = 0;            // dito lower part
+    USHORT      phi0 = 0;           // result angel higher part
+    USHORT      phi = 0;            // dito lower part
     long        x = rX.x;
     long        y = rY.x;
     long        z;
@@ -168,7 +178,7 @@ static sal_uInt16 ImpATanx2( const Fix& rX, const Fix& rY )
     FixCpx      aTry;
     FixCpx      aInc;
     FixCpx      aIter(1L);
-    sal_Bool        Small = sal_False;
+    BOOL        Small = FALSE;
 
     if ( (x==0) && (y==0) )
         return 0;
@@ -216,7 +226,7 @@ static sal_uInt16 ImpATanx2( const Fix& rX, const Fix& rY )
                 phi  += (1<<i);
 
                 if ( i > 11 )
-                    Small=sal_True;
+                    Small=TRUE;
             }
         }
     }
@@ -229,12 +239,14 @@ static sal_uInt16 ImpATanx2( const Fix& rX, const Fix& rY )
 |*    ImpATan2()
 |*
 |*    Beschreibung       ATAN-Funktion fuer FixPoint-Berechnungen
+|*    Ersterstellung     SH 01.07.93
+|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
-sal_uInt16 ImpATan2( const short x, const short y )
+USHORT ImpATan2( const short x, const short y )
 {
-    Fix rRad = ImpSqrt(sal_uLong(long(x)*x+long(y)*y));
+    Fix rRad = ImpSqrt(ULONG(long(x)*x+long(y)*y));
 
     if ( !rRad.x )
         return 0;
@@ -251,12 +263,14 @@ sal_uInt16 ImpATan2( const short x, const short y )
 |*    ImpCartToPolar()
 |*
 |*    Beschreibung       Koordinaaten-Wandlung
+|*    Ersterstellung     SH 01.07.93
+|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
-void ImpCartToPolar( const short x, const short y, Fix& rRad, sal_uInt16& rPhi )
+void ImpCartToPolar( const short x, const short y, Fix& rRad, USHORT& rPhi )
 {
-    rRad = Fix( ImpSqrt( sal_uLong( long(x)*x+long(y)*y ) ) );
+    rRad = Fix( ImpSqrt( ULONG( long(x)*x+long(y)*y ) ) );
 
     if ( !rRad.x )
         rPhi=0;
@@ -276,10 +290,12 @@ void ImpCartToPolar( const short x, const short y, Fix& rRad, sal_uInt16& rPhi )
 |*    ImpPolarToCart()
 |*
 |*    Beschreibung       Koordinaaten-Wandlung
+|*    Ersterstellung     SH 01.07.93
+|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
-void ImpPolarToCart( const Fix& rR, const sal_uInt16 Phi, short& rX, short& rY )
+void ImpPolarToCart( const Fix& rR, const USHORT Phi, short& rX, short& rY )
 {
     FixCpx fc = ImpExPI( Phi );  // calculate sin() & cos()
     fc.GetReal().MultBig( rR );

@@ -37,7 +37,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XlFileFormat.hpp>
-#include <ooo/vba/excel/XApplication.hpp>
+#include <ooo/vba/excel/XApplication.hpp>  //liuchen 2009-12-16
 
 #include "scextopt.hxx"
 #include "vbaworksheet.hxx"
@@ -49,7 +49,7 @@
 #include "vbapalette.hxx"
 #include <osl/file.hxx>
 #include <stdio.h>
-#include "vbanames.hxx"
+#include "vbanames.hxx"  // Amelia Wang
 #include "nameuno.hxx"
 #include "docoptio.hxx"
 #include "unonames.hxx"
@@ -135,59 +135,59 @@ ScVbaWorkbook::getFileFormat(  ) throw (::uno::RuntimeException)
 
         // #FIXME - seems suspect should we not walk through the properties
         // to find the FilterName
-        if (aArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilterName"))) {
+        if (aArgs[0].Name.equalsAscii( "FilterName")) {
             aArgs[0].Value >>= aFilterName;
         } else {
            aArgs[1].Value >>= aFilterName;
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Text - txt - csv (StarCalc)"))) {
+        if (aFilterName.equalsAscii("Text - txt - csv (StarCalc)")) {
             aFileFormat = excel::XlFileFormat::xlCSV; //xlFileFormat.
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DBF"))) {
+        if (aFilterName.equalsAscii("DBF")) {
             aFileFormat = excel::XlFileFormat::xlDBF4;
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DIF"))) {
+        if (aFilterName.equalsAscii("DIF")) {
             aFileFormat = excel::XlFileFormat::xlDIF;
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Lotus"))) {
+        if (aFilterName.equalsAscii("Lotus")) {
             aFileFormat = excel::XlFileFormat::xlWK3;
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MS Excel 4.0"))) {
+        if (aFilterName.equalsAscii("MS Excel 4.0")) {
             aFileFormat = excel::XlFileFormat::xlExcel4Workbook;
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MS Excel 5.0/95"))) {
+        if (aFilterName.equalsAscii("MS Excel 5.0/95")) {
             aFileFormat = excel::XlFileFormat::xlExcel5;
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MS Excel 97"))) {
+        if (aFilterName.equalsAscii("MS Excel 97")) {
             aFileFormat = excel::XlFileFormat::xlExcel9795;
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HTML (StarCalc)"))) {
+        if (aFilterName.equalsAscii("HTML (StarCalc)")) {
             aFileFormat = excel::XlFileFormat::xlHtml;
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc_StarOffice_XML_Calc_Template"))) {
+        if (aFilterName.equalsAscii("calc_StarOffice_XML_Calc_Template")) {
             aFileFormat = excel::XlFileFormat::xlTemplate;
         }
 
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StarOffice XML (Calc)"))) {
+        if (aFilterName.equalsAscii("StarOffice XML (Calc)")) {
             aFileFormat = excel::XlFileFormat::xlWorkbookNormal;
         }
-        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc8"))) {
+        if (aFilterName.equalsAscii("calc8")) {
             aFileFormat = excel::XlFileFormat::xlWorkbookNormal;
         }
 
         return aFileFormat;
 }
 
-// Convert Excel fileformat to OO file filter
+//VBA by minz@cn.ibm.com. Convert Excel fileformat to OO file filter
 ::rtl::OUString ScVbaWorkbook::convertFileFormat(sal_Int32 aFileFormat)
 {
     rtl::OUString aFilterName;
@@ -211,7 +211,7 @@ ScVbaWorkbook::init()
     if ( !ColorData.getLength() )
         ResetColors();
 }
-ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext) :ScVbaWorkbook_BASE( xParent, xContext )
+ScVbaWorkbook::ScVbaWorkbook( 	const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext) :ScVbaWorkbook_BASE( xParent, xContext )
 {
     //#FIXME this persists the color data per office instance and
     // not per workbook instance, need to hook the data into XModel
@@ -222,7 +222,7 @@ ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface 
     init();
 }
 
-ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel > xModel ) : ScVbaWorkbook_BASE( xParent, xContext, xModel )
+ScVbaWorkbook::ScVbaWorkbook( 	const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel > xModel ) : ScVbaWorkbook_BASE( xParent, xContext, xModel )
 {
     init();
 }
@@ -233,30 +233,13 @@ ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< uno::Any> const & args,
     init();
 }
 
-const uno::Sequence<sal_Int8>&
-ScVbaWorkbook::getUnoTunnelId()
-{
-    static uno::Sequence< sal_Int8 > aSeq;
-
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex           aCreateMutex;
-        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
-
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-
-    return aSeq;
-}
-
 uno::Reference< excel::XWorksheet >
 ScVbaWorkbook::getActiveSheet() throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getCurrentExcelDoc( mxContext ), uno::UNO_SET_THROW );
     uno::Reference< sheet::XSpreadsheetView > xView( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xSheetProps( xView->getActiveSheet(), uno::UNO_QUERY_THROW );
-    // return the original document module wrapper object, instead of a new instance
+    // #162503# return the original document module wrapper object, instead of a new instance
     ::rtl::OUString aCodeName;
     xSheetProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_CODENAME ) ) ) >>= aCodeName;
     ScDocShell* pShell = excel::getDocShell( xModel );
@@ -342,13 +325,13 @@ ScVbaWorkbook::SaveCopyAs( const rtl::OUString& sFileName ) throw ( uno::Runtime
     xStor->storeToURL( aURL, storeProps );
 }
 
-// Add Workbook.SaveAs.
+//VBA by minz@cn.ibm.com. Add Workbook.SaveAs.
 void
 ScVbaWorkbook::SaveAs( const rtl::OUString& FileName, const uno::Any& FileFormat, const uno::Any& /*CreateBackup*/ ) throw ( uno::RuntimeException)
 {
     rtl::OUString aURL;
     osl::FileBase::getFileURLFromSystemPath( FileName, aURL );
-    //if the input parameter "FileName" takes the form as "MyFile", we need to get the current directory and combine the current directory and the file name
+    //liuchen 2009-12-16 if the input parameter "FileName" takes the form as "MyFile", we need to get the current directory and combine the current directory and the file name
     INetURLObject aFileNameURL( aURL );
     aURL = aFileNameURL.GetMainURL( INetURLObject::NO_DECODE );
     if ( aURL.getLength() == 0 )
@@ -361,7 +344,7 @@ ScVbaWorkbook::SaveAs( const rtl::OUString& FileName, const uno::Any& FileFormat
         aPathURL.Append( FileName );
         aURL = aPathURL.GetMainURL( INetURLObject::NO_DECODE );
     }
-
+    //liuchen 2009-12-16
     uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
 
     sal_Int32 aFileFormat = excel::XlFileFormat::xlExcel9795;
@@ -398,16 +381,19 @@ ScVbaWorkbook::Styles( const::uno::Any& Item ) throw (uno::RuntimeException)
     return uno::makeAny( dStyles );
 }
 
+// Amelia Wang
 uno::Any SAL_CALL
-ScVbaWorkbook::Names( const uno::Any& aIndex ) throw (uno::RuntimeException)
+ScVbaWorkbook::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
+    uno::Reference< frame::XModel > xModel( getModel() );
     uno::Reference< beans::XPropertySet > xProps( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NamedRanges") ) ), uno::UNO_QUERY_THROW );
-    uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, xModel ) );
-    if ( aIndex.hasValue() )
-        return uno::Any( xNames->Item( aIndex, uno::Any() ) );
+    uno::Reference< XCollection > xNames( new ScVbaNames( this , mxContext , xNamedRanges , xModel ));
+    if (  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
+    {
     return uno::Any( xNames );
+}
+    return uno::Any( xNames->Item( aIndex, uno::Any() ) );
 }
 
 rtl::OUString&
@@ -434,17 +420,6 @@ ScVbaWorkbook::getCodeName() throw (css::uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xModelProp( getModel(), uno::UNO_QUERY_THROW );
     return xModelProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CodeName" ) ) ).get< ::rtl::OUString >();
-}
-
-sal_Int64
-ScVbaWorkbook::getSomething(const uno::Sequence<sal_Int8 >& rId ) throw(css::uno::RuntimeException)
-{
-    if (rId.getLength() == 16 &&
-        0 == rtl_compareMemory( ScVbaWorksheet::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ))
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
 }
 
 namespace workbook

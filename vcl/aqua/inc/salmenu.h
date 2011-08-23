@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,42 +58,42 @@ public: // for OOStatusView
     };
 private:
     std::vector< MenuBarButtonEntry >   maButtons;
-
-    MenuBarButtonEntry* findButtonItem( sal_uInt16 i_nItemId );
+    
+    MenuBarButtonEntry* findButtonItem( USHORT i_nItemId );
     void releaseButtonEntry( MenuBarButtonEntry& i_rEntry );
     static void statusLayout();
 public:
     AquaSalMenu( bool bMenuBar );
     virtual ~AquaSalMenu();
 
-    virtual sal_Bool VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
+    virtual BOOL VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
                                     // otherwise only menu messages are processed (eg, OLE on Windows)
 
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos );
     virtual void RemoveItem( unsigned nPos );
     virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos );
     virtual void SetFrame( const SalFrame* pFrame );
-    virtual void CheckItem( unsigned nPos, sal_Bool bCheck );
-    virtual void EnableItem( unsigned nPos, sal_Bool bEnable );
+    virtual void CheckItem( unsigned nPos, BOOL bCheck );
+    virtual void EnableItem( unsigned nPos, BOOL bEnable );
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText );
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
-    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags);
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags);
     virtual bool AddMenuBarButton( const SalMenuButtonItem& );
-    virtual void RemoveMenuBarButton( sal_uInt16 nId );
-    virtual Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame );
+    virtual void RemoveMenuBarButton( USHORT nId );
+    virtual Rectangle GetMenuBarButtonRectPixel( USHORT i_nItemId, SalFrame* i_pReferenceFrame );
 
-    int getItemIndexByPos( sal_uInt16 nPos ) const;
+    int getItemIndexByPos( USHORT nPos ) const;
     const AquaSalFrame* getFrame() const;
-
+    
     void setMainMenu();
     static void unsetMainMenu();
     static void setDefaultMenu();
     static void enableMainMenu( bool bEnable );
     static void addFallbackMenuItem( NSMenuItem* NewItem );
     static void removeFallbackMenuItem( NSMenuItem* pOldItem );
-
+    
     const std::vector< MenuBarButtonEntry >& getButtons() const { return maButtons; }
 
     bool                    mbMenuBar;          // true - Menubar, false - Menu
@@ -101,9 +101,9 @@ public:
     Menu*                   mpVCLMenu;          // the corresponding vcl Menu object
     const AquaSalFrame*     mpFrame;            // the frame to dispatch the menu events to
     AquaSalMenu*            mpParentSalMenu;    // the parent menu that contains us (and perhaps has a frame)
-
+    
     static const AquaSalMenu* pCurrentMenuBar;
-
+    
 };
 
 class AquaSalMenuItem : public SalMenuItem
@@ -112,7 +112,7 @@ public:
     AquaSalMenuItem( const SalItemParams* );
     virtual ~AquaSalMenuItem();
 
-    sal_uInt16          mnId;                 // Item ID
+    USHORT              mnId;                 // Item ID
     Menu*               mpVCLMenu;            // VCL Menu into which this MenuItem is inserted
     AquaSalMenu*        mpParentMenu;         // The menu in which this menu item is inserted
     AquaSalMenu*        mpSubMenu;            // Sub menu of this item (if defined)

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,11 +70,12 @@ class SfxItemSet;
 class SdrModel;
 class SvxDrawPage;
 class SvGlobalName;
-// Dimension arrows change size/position on save/reload (#i59051#)
+// --> OD 2009-01-16 #i59051#
 namespace basegfx
     {
         class B2DPolyPolygon;
     } // end of namespace basegfx
+// <--
 
 class SvxShapeMutex
 {
@@ -88,9 +89,9 @@ class SvxItemPropertySet;
 class SvxItemPropertySimpleEntry;
 class SfxItemSet;
 
-void SVX_DLLPUBLIC SvxItemPropertySet_setPropertyValue( const SvxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry* pMap,
+void SVX_DLLPUBLIC SvxItemPropertySet_setPropertyValue( const SvxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry* pMap, 
         const com::sun::star::uno::Any& rVal, SfxItemSet& rSet );
-
+        
 com::sun::star::uno::Any SVX_DLLPUBLIC SvxItemPropertySet_getPropertyValue( const SvxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet );
 
 
@@ -117,7 +118,7 @@ class SVX_DLLPUBLIC SvxShape : public SvxShape_UnoImplHelper,
 private:
     ::com::sun::star::awt::Size maSize;
     ::com::sun::star::awt::Point maPosition;
-    ::rtl::OUString maShapeType;
+    ::rtl::OUString	maShapeType;
     ::rtl::OUString maShapeName;
 
     /** these members are used to optimize XMultiProperty calls */
@@ -139,11 +140,14 @@ protected:
     // Umrechnungen fuer den Writer, der in TWIPS arbeitet
     void ForceMetricToItemPoolMetric(Pair& rPoint) const throw();
     void ForceMetricTo100th_mm(Pair& rPoint) const throw();
-    // Dimension arrows change size/position on save/reload (#i59051#)
+    // --> OD 2009-01-16 #i59051#
     void ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
     void ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
+    // <--
 
     ::com::sun::star::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap ) const;
+
+    sal_Bool tryQueryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& rAny );
 
     sal_Bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const ::rtl::OUString& rName );
 
@@ -190,7 +194,7 @@ public:
     const SvxItemPropertySet& GetPropertySet() { return *mpPropSet; }
     SdrObject* GetSdrObject() const {return mpObj.get();}
     void SetShapeType( const ::rtl::OUString& ShapeType ) { maShapeType = ShapeType; }
-    ::com::sun::star::uno::Any GetBitmap( sal_Bool bMetaFile = sal_False ) const throw ();
+    ::com::sun::star::uno::Any GetBitmap( BOOL bMetaFile = FALSE ) const throw ();
     static SvxShape* GetShapeForSdrObj( SdrObject* pObj ) throw ();
 
     ::svx::PropertyChangeNotifier& getShapePropertyChangeNotifier();
@@ -206,6 +210,9 @@ public:
         and the property found is returned instead of set at the object
         directly.
      */
+// os: unused function
+//    static ::com::sun::star::uno::Any SAL_CALL GetFillAttributeByName(
+//        const ::rtl::OUString& rPropertyName, const ::rtl::OUString& rName, SdrModel* pModel );
 
     UNO3_GETIMPLEMENTATION_DECL( SvxShape )
 
@@ -216,7 +223,7 @@ public:
 
     ::com::sun::star::beans::PropertyState SAL_CALL _getPropertyState( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     void SAL_CALL _setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Any SAL_CALL _getPropertyDefault( const ::rtl::OUString& aPropertyName )     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any SAL_CALL _getPropertyDefault( const ::rtl::OUString& aPropertyName ) 	throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
@@ -228,6 +235,12 @@ public:
 
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();
+
+
+    /** @obsolete
+        not used anymore
+    */
+    virtual void onUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundRect);
 
     // XAggregation
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
@@ -270,7 +283,7 @@ public:
     virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName )  throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) 	throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XMultiPropertyStates
     virtual void SAL_CALL setAllPropertiesToDefault()
@@ -314,7 +327,7 @@ public:
 private:
     /** initializes SdrObj-dependent members. Only to be called when GetSdrObject() != NULL
     */
-    SVX_DLLPRIVATE void impl_initFromSdrObject();
+    SVX_DLLPRIVATE void	impl_initFromSdrObject();
     /// CTOR-Impl
     SVX_DLLPRIVATE void impl_construct();
 };
@@ -514,7 +527,7 @@ public:
     // XPropertyState
     virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName )  throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) 	throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XShapeDescriptor
     virtual ::rtl::OUString SAL_CALL getShapeType() throw(::com::sun::star::uno::RuntimeException);
@@ -827,6 +840,7 @@ protected:
 public:
     SvxCustomShape( SdrObject* pObj ) throw ();
     // overide these for special property handling in subcasses. Return true if property is handled
+    //virtual bool setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertyMapEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual bool getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 
@@ -868,7 +882,7 @@ class SvxMediaShape : public SvxShape
 {
 public:
     SvxMediaShape( SdrObject* pObj ) throw();
-    virtual     ~SvxMediaShape() throw();
+    virtual 	~SvxMediaShape() throw();
 
 protected:
     // overide these for special property handling in subcasses. Return true if property is handled

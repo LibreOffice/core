@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 #include <propbrw.hxx>
 
 
-#define ITEMID_SEARCH   0
+#define ITEMID_SEARCH	0
 #include <svl/srchitem.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 
@@ -69,7 +69,7 @@ BasicIDEDLL* BasicIDEDLL::GetDLL()
     return pBasicIDEDLL;
 }
 
-IDEResId::IDEResId( sal_uInt16 nId ):
+IDEResId::IDEResId( USHORT nId ):
     ResId( nId, *(*(BasicIDEModule**)GetAppData(SHL_IDE))->GetResMgr() )
 {
 }
@@ -80,7 +80,7 @@ BasicIDEDLL::BasicIDEDLL()
     pShell = 0;
     pExtraData = 0;
 
-    GetExtraData(); // damit GlobalErrorHdl gesetzt wird.
+    GetExtraData();	// damit GlobalErrorHdl gesetzt wird.
 }
 
 BasicIDEDLL::~BasicIDEDLL()
@@ -140,8 +140,8 @@ BasicIDEData* BasicIDEDLL::GetExtraData()
 BasicIDEData::BasicIDEData() : aObjCatPos( INVPOSITION, INVPOSITION )
 {
     nBasicDialogCount = 0;
-    bChoosingMacro = sal_False;
-    bShellInCriticalSection = sal_False;
+    bChoosingMacro = FALSE;
+    bShellInCriticalSection = FALSE;
     pSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
 
     StarBASIC::SetGlobalBreakHdl( LINK( this, BasicIDEData, GlobalBasicBreakHdl ) );
@@ -155,9 +155,9 @@ BasicIDEData::~BasicIDEData()
     // sowieso sehr spaet, nach dem letzten Basic, zerstoert.
     // Durch den Aufruf werden dann aber wieder AppDaten erzeugt und nicht
     // mehr zerstoert => MLK's beim Purify
-//  StarBASIC::SetGlobalErrorHdl( Link() );
-//  StarBASIC::SetGlobalBreakHdl( Link() );
-//  StarBASIC::setGlobalStarScriptListener( XEngineListenerRef() );
+//	StarBASIC::SetGlobalErrorHdl( Link() );
+//	StarBASIC::SetGlobalBreakHdl( Link() );
+//	StarBASIC::setGlobalStarScriptListener( XEngineListenerRef() );
 
     delete pSearchItem;
     //delete pAccelerator;
@@ -211,6 +211,22 @@ IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
     }
 
     return nRet;
+}
+
+IMPL_LINK( BasicIDEData, ExecuteMacroEvent, void *, pData )
+{
+    if ( pData )
+    {
+        SFX_APP()->EnterBasicCall();
+        SbMethod* pMethod = (SbMethod*)pData;
+
+        // Ist es eine StarScript-Methode? Am Parent erkennen
+        DBG_ASSERT( pMethod->GetParent()->GetFlags() & SBX_EXTSEARCH, "Kein EXTSEARCH!" );
+        BasicIDE::RunMethod( pMethod );
+        pMethod->ReleaseRef();	// muss vorher inkrementiert worden sein!
+        SFX_APP()->LeaveBasicCall();
+    }
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

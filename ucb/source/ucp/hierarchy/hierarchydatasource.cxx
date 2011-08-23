@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,9 +54,9 @@ using namespace hierarchy_ucp;
 //=========================================================================
 
 // describe path of cfg entry
-#define CFGPROPERTY_NODEPATH    "nodepath"
+#define	CFGPROPERTY_NODEPATH	"nodepath"
 // true->async. update; false->sync. update
-#define CFGPROPERTY_LAZYWRITE   "lazywrite"
+#define	CFGPROPERTY_LAZYWRITE	"lazywrite"
 
 #define READ_SERVICE_NAME      "com.sun.star.ucb.HierarchyDataReadAccess"
 #define READWRITE_SERVICE_NAME "com.sun.star.ucb.HierarchyDataReadWriteAccess"
@@ -268,14 +268,14 @@ XTYPEPROVIDER_IMPL_4( HierarchyDataSource,
 //=========================================================================
 
 XSERVICEINFO_IMPL_0( HierarchyDataSource,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.comp.ucb.HierarchyDataSource" )) )
+                     rtl::OUString::createFromAscii(
+                        "com.sun.star.comp.ucb.HierarchyDataSource" ) )
 {
     uno::Sequence< rtl::OUString > aSNS( 2 );
-    aSNS[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ucb.DefaultHierarchyDataSource" ));
-    aSNS[ 1 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ucb.HierarchyDataSource" ));
+    aSNS[ 0 ] = rtl::OUString::createFromAscii(
+                    "com.sun.star.ucb.DefaultHierarchyDataSource" );
+    aSNS[ 1 ] = rtl::OUString::createFromAscii(
+                    "com.sun.star.ucb.HierarchyDataSource" );
     return aSNS;
 }
 
@@ -402,7 +402,8 @@ HierarchyDataSource::createInstanceWithArguments(
 
     if ( !bReadOnly && !bReadWrite )
     {
-        OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
+        OSL_ENSURE( false,
+                    "HierarchyDataSource::createInstanceWithArguments - "
                     "Unsupported service specifier!" );
         return uno::Reference< uno::XInterface >();
     }
@@ -433,7 +434,8 @@ HierarchyDataSource::createInstanceWithArguments(
                         rtl::OUString aConfigPath;
                         if ( !createConfigPath( aPath, aConfigPath ) )
                         {
-                            OSL_FAIL( "HierarchyDataSource::"
+                            OSL_ENSURE( false,
+                                "HierarchyDataSource::"
                                 "createInstanceWithArguments - "
                                 "Invalid node path!" );
                             return uno::Reference< uno::XInterface >();
@@ -449,7 +451,8 @@ HierarchyDataSource::createInstanceWithArguments(
                     }
                     else
                     {
-                        OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
+                        OSL_ENSURE( false,
+                            "HierarchyDataSource::createInstanceWithArguments - "
                             "Invalid type for property 'nodepath'!" );
                         return uno::Reference< uno::XInterface >();
                     }
@@ -467,7 +470,8 @@ HierarchyDataSource::createInstanceWithArguments(
                     }
                     else
                     {
-                        OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
+                        OSL_ENSURE( false,
+                            "HierarchyDataSource::createInstanceWithArguments - "
                             "Invalid type for property 'lazywrite'!" );
                         return uno::Reference< uno::XInterface >();
                     }
@@ -477,7 +481,8 @@ HierarchyDataSource::createInstanceWithArguments(
 
         if ( !bHasNodePath )
         {
-            OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
+            OSL_ENSURE( false,
+                        "HierarchyDataSource::createInstanceWithArguments - "
                         "No 'nodepath' property!" );
             return uno::Reference< uno::XInterface >();
         }
@@ -523,14 +528,16 @@ HierarchyDataSource::createInstanceWithArguments(
     }
     catch ( uno::Exception const & )
     {
-        OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
+        OSL_ENSURE( false,
+                    "HierarchyDataSource::createInstanceWithArguments - "
                     "Cannot instanciate configuration access!" );
         throw;
     }
 
     if ( !xConfigAccess.is() )
     {
-        OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
+        OSL_ENSURE( false,
+                    "HierarchyDataSource::createInstanceWithArguments - "
                     "Cannot instanciate configuration access!" );
         return xConfigAccess;
     }
@@ -565,7 +572,8 @@ HierarchyDataSource::getConfigProvider()
             }
             catch ( uno::Exception const & )
             {
-                OSL_FAIL( "HierarchyDataSource::getConfigProvider - "
+                OSL_ENSURE( false,
+                            "HierarchyDataSource::getConfigProvider - "
                                "caught exception!" );
             }
         }
@@ -582,14 +590,16 @@ bool HierarchyDataSource::createConfigPath(
     {
         if ( rInPath.indexOf( '/' ) == 0 )
         {
-            OSL_FAIL( "HierarchyDataSource::createConfigPath - "
+            OSL_ENSURE( false,
+                        "HierarchyDataSource::createConfigPath - "
                         "Leading slash in node path!" );
             return false;
         }
 
         if ( rInPath.lastIndexOf( '/' ) == rInPath.getLength() - 1 )
         {
-            OSL_FAIL( "HierarchyDataSource::createConfigPath - "
+            OSL_ENSURE( false,
+                        "HierarchyDataSource::createConfigPath - "
                         "Trailing slash in node path!" );
             return false;
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,17 +51,17 @@ using namespace ::com::sun::star::lang;
 ::rtl::OUString SAL_CALL OKey::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.VKeyDescription"));
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.VKey"));
+        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VKeyDescription");
+    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VKey");
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OKey::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.KeyDescription"));
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.KeyDescription");
     else
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Key"));
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Key");
 
     return aSupported;
 }
@@ -77,10 +77,10 @@ sal_Bool SAL_CALL OKey::supportsService( const ::rtl::OUString& _rServiceName ) 
     return pSupported != pEnd;
 }
 // -------------------------------------------------------------------------
-OKey::OKey(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
-            ,   ODescriptor(ODescriptor_BASE::rBHelper,_bCase,sal_True)
+OKey::OKey(sal_Bool _bCase) :	ODescriptor_BASE(m_aMutex)
+            ,	ODescriptor(ODescriptor_BASE::rBHelper,_bCase,sal_True)
             ,   m_aProps(new KeyProperties())
-            ,   m_pColumns(NULL)
+            ,	m_pColumns(NULL)
 {
 }
 // -------------------------------------------------------------------------
@@ -92,20 +92,20 @@ OKey::OKey(const ::rtl::OUString& _Name,const TKeyProperties& _rProps,sal_Bool _
 {
     m_Name = _Name;
 }
-//OKey::OKey(   const ::rtl::OUString& _Name,
-//          const ::rtl::OUString& _ReferencedTable,
-//          sal_Int32       _Type,
-//          sal_Int32       _UpdateRule,
-//          sal_Int32       _DeleteRule,
-//          sal_Bool _bCase) :  ODescriptor_BASE(m_aMutex)
-//                      ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
-//                      ,m_ReferencedTable(_ReferencedTable)
-//                      ,m_Type(_Type)
-//                      ,m_UpdateRule(_UpdateRule)
-//                      ,m_DeleteRule(_DeleteRule)
+//OKey::OKey(	const ::rtl::OUString& _Name,
+//			const ::rtl::OUString& _ReferencedTable,
+//			sal_Int32		_Type,
+//			sal_Int32		_UpdateRule,
+//			sal_Int32		_DeleteRule,
+//			sal_Bool _bCase) :	ODescriptor_BASE(m_aMutex)
+//						,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
+//						,m_ReferencedTable(_ReferencedTable)
+//						,m_Type(_Type)
+//						,m_UpdateRule(_UpdateRule)
+//						,m_DeleteRule(_DeleteRule)
 //                        ,m_pColumns(NULL)
 //{
-//  m_Name = _Name;
+//	m_Name = _Name;
 //}
 // -------------------------------------------------------------------------
 OKey::~OKey( )
@@ -141,10 +141,10 @@ void OKey::construct()
 
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE), PROPERTY_ID_REFERENCEDTABLE,    nAttrib,&m_aProps->m_ReferencedTable,   ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),            PROPERTY_ID_TYPE,               nAttrib,&m_aProps->m_Type,          ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_UPDATERULE),      PROPERTY_ID_UPDATERULE,         nAttrib,&m_aProps->m_UpdateRule,        ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE),      PROPERTY_ID_DELETERULE,         nAttrib,&m_aProps->m_DeleteRule,        ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE),	PROPERTY_ID_REFERENCEDTABLE,	nAttrib,&m_aProps->m_ReferencedTable,	::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),			PROPERTY_ID_TYPE,				nAttrib,&m_aProps->m_Type,			::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_UPDATERULE),		PROPERTY_ID_UPDATERULE,			nAttrib,&m_aProps->m_UpdateRule,		::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE),		PROPERTY_ID_DELETERULE,			nAttrib,&m_aProps->m_DeleteRule,		::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OKey::disposing()

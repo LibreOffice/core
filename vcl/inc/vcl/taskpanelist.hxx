@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@
 class VCL_DLLPUBLIC TaskPaneList
 {
     ::std::vector<Window *> mTaskPanes;
-    Window *FindNextPane( Window *pWindow, sal_Bool bForward = sal_True );
-    Window *FindNextFloat( Window *pWindow, sal_Bool bForward = sal_True );
-    Window *FindNextSplitter( Window *pWindow, sal_Bool bForward = sal_True );
+    Window *FindNextPane( Window *pWindow, BOOL bForward = TRUE );
+    Window *FindNextFloat( Window *pWindow, BOOL bForward = TRUE );
+    Window *FindNextSplitter( Window *pWindow, BOOL bForward = TRUE );
 
 public:
-    sal_Bool IsInList( Window *pWindow );
+    BOOL IsInList( Window *pWindow );
 
 public:
     TaskPaneList();
@@ -50,7 +50,7 @@ public:
 
     void AddWindow( Window *pWindow );
     void RemoveWindow( Window *pWindow );
-    sal_Bool HandleKeyEvent( KeyEvent aKeyEvent );
+    BOOL HandleKeyEvent( KeyEvent aKeyEvent );
 };
 
 #endif

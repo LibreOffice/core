@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ using ::rtl::OUString ;
 using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ;
 
-XMLEncryptionTemplateImpl :: XMLEncryptionTemplateImpl( const Reference< XMultiServiceFactory >& aFactory )
+XMLEncryptionTemplateImpl :: XMLEncryptionTemplateImpl( const Reference< XMultiServiceFactory >& aFactory ) 
     : m_xTemplate( NULL ),
       m_xTarget( NULL ),
       m_xServiceManager( aFactory ),
@@ -51,27 +51,27 @@ XMLEncryptionTemplateImpl :: ~XMLEncryptionTemplateImpl() {
 }
 
 /* XXMLEncryptionTemplate */
-void SAL_CALL XMLEncryptionTemplateImpl :: setTemplate( const Reference< XXMLElementWrapper >& aTemplate )
+void SAL_CALL XMLEncryptionTemplateImpl :: setTemplate( const Reference< XXMLElementWrapper >& aTemplate ) 
     throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException)
 {
     m_xTemplate = aTemplate ;
 }
 
 /* XXMLEncryptionTemplate */
-Reference< XXMLElementWrapper > SAL_CALL XMLEncryptionTemplateImpl :: getTemplate()
+Reference< XXMLElementWrapper > SAL_CALL XMLEncryptionTemplateImpl :: getTemplate() 
 throw (com::sun::star::uno::RuntimeException)
 {
     return m_xTemplate ;
 }
 
 /* XXMLEncryptionTemplate */
-void SAL_CALL XMLEncryptionTemplateImpl :: setTarget( const Reference< XXMLElementWrapper >& aTarget )
+void SAL_CALL XMLEncryptionTemplateImpl :: setTarget( const Reference< XXMLElementWrapper >& aTarget ) 
     throw( com::sun::star::lang::IllegalArgumentException ) {
     m_xTarget = aTarget ;
 }
 
 /* XXMLEncryptionTemplate */
-Reference< XXMLElementWrapper > SAL_CALL XMLEncryptionTemplateImpl :: getTarget()
+Reference< XXMLElementWrapper > SAL_CALL XMLEncryptionTemplateImpl :: getTarget() 
 throw (com::sun::star::uno::RuntimeException)
 {
     return m_xTarget ;
@@ -121,12 +121,12 @@ Sequence< OUString > SAL_CALL XMLEncryptionTemplateImpl :: getSupportedServiceNa
 Sequence< OUString > XMLEncryptionTemplateImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLEncryptionTemplate")) ;
+    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.XMLEncryptionTemplate" ) ;
     return seqServiceNames ;
 }
 
 OUString XMLEncryptionTemplateImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.framework.XMLEncryptionTemplateImpl")) ;
+    return OUString::createFromAscii( "com.sun.star.xml.security.framework.XMLEncryptionTemplateImpl" ) ;
 }
 
 //Helper for registry

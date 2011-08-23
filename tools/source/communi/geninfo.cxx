@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ GenericInformation::GenericInformation( const ByteString &rKey,
 
 /*****************************************************************************/
 GenericInformation::GenericInformation( const GenericInformation& rInf,
-                                        sal_Bool bCopySubs)
+                                        BOOL bCopySubs)
 /*****************************************************************************/
                 : ByteString( rInf ),
                 sValue( rInf.sValue ),
@@ -81,15 +81,15 @@ GenericInformation::~GenericInformation()
 }
 
 /*****************************************************************************/
-sal_Bool GenericInformation::InsertSubInfo( GenericInformation *pInfo )
+BOOL GenericInformation::InsertSubInfo( GenericInformation *pInfo )
 /*****************************************************************************/
 {
     return ( pInfoList && pInfoList->InsertInfo( pInfo ));
 }
 
 /*****************************************************************************/
-sal_Bool GenericInformation::InsertSubInfo( const ByteString &rPathKey, const ByteString &rValue,
-                    sal_Bool bSearchByPath, sal_Bool bNewPath )
+BOOL GenericInformation::InsertSubInfo( const ByteString &rPathKey,	const ByteString &rValue,
+                    BOOL bSearchByPath, BOOL bNewPath )
 /*****************************************************************************/
 {
   return (pInfoList && pInfoList->InsertInfo( rPathKey, rValue, bSearchByPath, bNewPath ));
@@ -97,16 +97,30 @@ sal_Bool GenericInformation::InsertSubInfo( const ByteString &rPathKey, const By
 
 /*****************************************************************************/
 void GenericInformation::RemoveSubInfo( GenericInformation *pInfo,
-                            sal_Bool bDelete )
+                            BOOL bDelete )
 /*****************************************************************************/
 {
     pInfoList->RemoveInfo( pInfo, bDelete );
 }
 
 /*****************************************************************************/
+//void GenericInformation::RemoveSelf( BOOL bDelete )
+/*****************************************************************************/
+/*{
+  if ( pParent )
+    pParent->RemoveInfo( this, bDelete ); // loescht sich aus der Liste vom Parent und
+  // bei Bedarf auch mit obiger Methode alle Sublisten
+
+  // loescht sich bei Bedarf auch selbst
+    if ( bDelete )
+    delete this;
+}
+*/
+
+/*****************************************************************************/
 GenericInformation *GenericInformation::GetSubInfo( ByteString &rKey,
-                        sal_Bool bSearchByPath,
-                            sal_Bool bCreatePath )
+                        BOOL bSearchByPath,
+                            BOOL bCreatePath )
 /*****************************************************************************/
 {
   if ( !pInfoList && bCreatePath )
@@ -129,22 +143,22 @@ GenericInformationList::GenericInformationList( GenericInformation *pParent )
 }
 
 /*****************************************************************************/
-GenericInformationList::GenericInformationList(
-    const GenericInformationList& rList,
-    GenericInformation *pParent
-)
+GenericInformationList::GenericInformationList(const GenericInformationList& rList,
+                            GenericInformation *pParent)
 /*****************************************************************************/
+    : GenericInformationList_Impl()
 {
+    USHORT i;
     GenericInformation* pTemp,*pWork;
 
     pOwner = pParent;
 
-    for( size_t i = 0; i < rList.size(); i++ )
+    for(i=0;i<rList.Count();i++)
     {
-        pTemp = rList[ i ];
-        pWork = new GenericInformation(*pTemp,sal_True);
+        pTemp = rList.GetObject(i);
+        pWork = new GenericInformation(*pTemp,TRUE);
 
-        maList.push_back( pWork );
+        Insert(pWork,LIST_APPEND);
     }
 }
 
@@ -153,32 +167,34 @@ GenericInformationList::~GenericInformationList()
 /*****************************************************************************/
 {
     // delete all Informations stored in this List
-    for ( size_t i = 0, n = maList.size(); i < n; ++i ) {
-        maList[ i ]->ListDeleted();
-        delete maList[ i ];
+    // ### GH: Hier werden dann wohl etwa die H�lfte der Eintr�ge gel�scht
+/*	for ( ULONG i = 0; i < Count(); i++ ) {
+        GetObject( i )->ListDeleted();
+        delete GetObject( i );
+        Remove( i );*/
+    // Neue Variante:
+    while ( Count() ) {
+        GetObject( 0 )->ListDeleted();
+        delete GetObject( 0 );
+        Remove( (ULONG)0 );
     }
-    maList.clear();
 }
 
 /*****************************************************************************/
-GenericInformation *GenericInformationList::Search(
-    size_t &rPos,
-    ByteString sKey,
-    size_t nStart,
-    size_t nEnd
-)
+GenericInformation *GenericInformationList::Search( ULONG &rPos, ByteString sKey,
+                                                   ULONG nStart, ULONG nEnd )
 /*****************************************************************************/
 {
-    if ( maList.empty() ) {
+    if ( Count() == 0 ) {
         rPos = 0;
         return NULL;
     }
 
     if ( nStart == nEnd ) {
         rPos = nStart;
-        ByteString sCandidate = ByteString( *maList[ nStart ] );
+        ByteString sCandidate = ByteString( *GetObject( nStart ));
         if ( sCandidate.ToUpperAscii() == sKey.ToUpperAscii()) {
-            return maList[ nStart ]; // found !!!
+            return GetObject( nStart ); // found !!!
         }
         else {
             // requested key not found
@@ -187,12 +203,12 @@ GenericInformation *GenericInformationList::Search(
     }
 
     // search binary in existing list
-    size_t nActPos = nStart + (( nEnd - nStart ) / 2 );
+    ULONG nActPos = nStart + (( nEnd - nStart ) / 2 );
     rPos = nActPos;
-    ByteString sCandidate = ByteString( *maList[ nActPos ] );
+    ByteString sCandidate = ByteString( *GetObject( nActPos ));
 
-    if ( sCandidate.ToUpperAscii()  == sKey.ToUpperAscii() )
-        return maList[ nActPos ]; // found !!!
+    if ( sCandidate.ToUpperAscii()  == sKey.ToUpperAscii())
+        return GetObject( nActPos ); // found !!!
 
     // split the list at ActPos
     if ( sCandidate < sKey )
@@ -203,8 +219,8 @@ GenericInformation *GenericInformationList::Search(
 
 /*****************************************************************************/
 GenericInformation *GenericInformationList::GetInfo( ByteString &rKey,
-                             sal_Bool bSearchByPath,
-                             sal_Bool bCreatePath )
+                             BOOL bSearchByPath,
+                             BOOL bCreatePath )
 /*****************************************************************************/
 {
 
@@ -217,8 +233,8 @@ GenericInformation *GenericInformationList::GetInfo( ByteString &rKey,
     else
         sKey = rKey;
 
-    size_t nPos = 0;
-    GenericInformation *pReturnInfo = Search( nPos, sKey, 0, maList.size() - 1 );
+    ULONG nPos = 0;
+    GenericInformation *pReturnInfo = Search( nPos, sKey, 0, Count() - 1 );
     /* wenn kein Searchpath gesetzt und kein Returninfo vorhanden,
      *   gib NULL zurueck
      * wenn Searchpath gesetzt und returninfo vorhanden,
@@ -226,7 +242,7 @@ GenericInformation *GenericInformationList::GetInfo( ByteString &rKey,
      * wenn searchpath gesetzt kein returninfo vorhanden und newpath gesetzt,
      *   mache neues Verzeichniss
      */
-    sal_uInt16 nTokenCount = rKey.GetTokenCount('/');
+    USHORT nTokenCount = rKey.GetTokenCount('/');
     // search for next key of path in next level of tree
     if ( bSearchByPath && (nTokenCount > 1)) {
       ByteString sPath = ByteString(rKey.Copy( sKey.Len() + 1 ));
@@ -236,7 +252,7 @@ GenericInformation *GenericInformationList::GetInfo( ByteString &rKey,
         pReturnInfo = new GenericInformation( sKey, "", this, NULL);
         pReturnInfo->SetSubList( new GenericInformationList( pReturnInfo ));
       }
-      return pReturnInfo->GetSubInfo( sPath, sal_True, bCreatePath );
+      return pReturnInfo->GetSubInfo( sPath, TRUE, bCreatePath );
     }
     if ( !pReturnInfo && bCreatePath ) {
       pReturnInfo = new GenericInformation ( sKey, "", this, NULL);
@@ -246,96 +262,83 @@ GenericInformation *GenericInformationList::GetInfo( ByteString &rKey,
 }
 
 /*****************************************************************************/
-size_t GenericInformationList::InsertSorted(
-    GenericInformation *pInfo,
-    sal_Bool bOverwrite,
-    size_t nStart,
-    size_t nEnd
-)
+ULONG GenericInformationList::InsertSorted( GenericInformation *pInfo,
+                                        BOOL bOverwrite,
+                                        ULONG nStart, ULONG nEnd )
 /*****************************************************************************/
 {
-    if ( maList.empty() ) {
+    if ( Count() == 0 ) {
         // empty list, so insert at first pos
-        maList.push_back( pInfo );
+        Insert( pInfo, LIST_APPEND );
         return 0;
     }
 
     ByteString sKey( pInfo->GetBuffer());
     sKey.ToUpperAscii();
 
-    // Check to speed up reading a (partially) sorted list
-    if ( nStart == 0 && maList.size()-1 == nEnd )
+    // Check to sppeed up reading a (partially) sorted list
+    if ( nStart == 0 && Count()-1 == nEnd )
     {
-        ByteString sCandidate( *maList[ nEnd ] );
+        ByteString sCandidate( *GetObject( nEnd ));
         if ( sCandidate.ToUpperAscii() < sKey )
         {
-            maList.push_back( pInfo );
+            Insert( pInfo, LIST_APPEND );
             return nEnd+1;
         }
     }
 
-    // Only one element, so insert before or after
-    if ( maList.size() == 1 ) {
-        ByteString sCandidate( *maList[ 0 ] );
+// ### GH: dieser Block schein �berfl�ssig zu sein
+    if ( Count() == 1 ) {
+        ByteString sCandidate( *GetObject( 0 ));
         if ( sCandidate.ToUpperAscii() == sKey ) {
             // key allready exists in list
-            if ( bOverwrite ) {
-                if ( pInfo != maList[ 0 ] )
-                    delete maList[ 0 ];
-                maList[ 0 ] = pInfo;
-            }
+            if ( bOverwrite )
+                Replace( pInfo, ULONG(0));	// ### Laut NF scheint hier ein Memory Leak zu sein
             return 0;
         }
         else if ( sCandidate > sKey ) {
-            maList.insert( maList.begin(), pInfo );
+            Insert( pInfo, ULONG(0));
             return 0;
         }
         else {
-            maList.push_back( pInfo );
+            Insert( pInfo, LIST_APPEND );
             return 1;
         }
     }
+// ### GH: /ENDE/ dieser Block schein �berfl�ssig zu sein
 
-    size_t nActPos = nStart + (( nEnd - nStart ) / 2 );
-    ByteString sCandidate = ByteString( *maList[ nActPos ] );
+    ULONG nActPos = nStart + (( nEnd - nStart ) / 2 );
+    ByteString sCandidate = ByteString( *GetObject( nActPos ));
 
     if ( sCandidate.ToUpperAscii() == sKey ) {
         // key allready exists in list
-        if ( bOverwrite ) {
-            if ( pInfo != maList[ nActPos ] )
-                delete maList[ nActPos ];
-            maList[ nActPos ] = pInfo;
-        }
+        if ( bOverwrite )
+            Replace( pInfo, nActPos );	// ### Laut NF scheint hier ein Memory Leak zu sein
         return nActPos;
     }
 
     if ( nStart == nEnd ) {
         // now more ways to search for key -> insert here
-        GenericInformationList_Impl::iterator it = maList.begin();
-        ::std::advance( it, nStart );
         if ( sCandidate > sKey ) {
-            maList.insert( it, pInfo );
+            Insert( pInfo, nStart );
             return nStart;
         }
         else {
-            ++it;
-            maList.insert( it, pInfo );
+            Insert( pInfo, nStart + 1 );
             return ( nStart + 1 );
         }
     }
 
-    if ( nActPos == maList.size() - 1 ) {
+    if ( nActPos == Count() - 1 ) {
         // reached end of list -> insert here
-        maList.push_back( pInfo );
+        Insert( pInfo, LIST_APPEND );
         return ( nActPos + 1 );
     }
 
-    ByteString sSecondCand = ByteString( *maList[ nActPos + 1 ] );
+    ByteString sSecondCand = ByteString( *GetObject( nActPos + 1 ));
     if (( sCandidate < sKey ) && ( sSecondCand.ToUpperAscii() > sKey )) {
         // optimal position to insert object
-        GenericInformationList_Impl::iterator it = maList.begin();
-        ::std::advance( it, nActPos + 1 );
-        maList.insert( it, pInfo );
+        Insert( pInfo, nActPos + 1 );
         return ( nActPos + 1 );
     }
 
@@ -346,21 +349,21 @@ size_t GenericInformationList::InsertSorted(
 }
 
 /*****************************************************************************/
-sal_Bool GenericInformationList::InsertInfo( GenericInformation *pInfo,
-                                sal_Bool bOverwrite )
+BOOL GenericInformationList::InsertInfo( GenericInformation *pInfo,
+                                BOOL bOverwrite )
 /*****************************************************************************/
 {
     if ( !pInfo->Len())
-        return sal_False;
+        return FALSE;
 
-    InsertSorted( pInfo, bOverwrite, 0, maList.size() - 1 );
-    return sal_True;
+    InsertSorted( pInfo, bOverwrite, 0, Count() - 1 );
+    return TRUE;
 }
 
 
 /*****************************************************************************/
-sal_Bool GenericInformationList::InsertInfo( const ByteString &rPathKey, const ByteString &rValue,
-                     sal_Bool bSearchByPath, sal_Bool bNewPath )
+BOOL GenericInformationList::InsertInfo( const ByteString &rPathKey, const ByteString &rValue,
+                     BOOL bSearchByPath, BOOL bNewPath )
 /*****************************************************************************/
 {
   GenericInformation *pInfo;
@@ -372,33 +375,30 @@ sal_Bool GenericInformationList::InsertInfo( const ByteString &rPathKey, const B
 
   if ( pInfo ) {
     pInfo->SetValue( rValue );
-    return sal_True;
+    return TRUE;
   }
-  return sal_False;
+  return FALSE;
 }
 
 /*****************************************************************************/
 void GenericInformationList::RemoveInfo( GenericInformation *pInfo,
-                                sal_Bool bDelete )
+                                BOOL bDelete )
 /*****************************************************************************/
 {
-    for (
-        GenericInformationList_Impl::iterator it = maList.begin();
-        it < maList.end();
-        ++it
-    )   {
-        if ( *it == pInfo ) {
-            maList.erase( it );
-        }
-    }
+    Remove( pInfo );
     if ( bDelete )
         delete pInfo;
+/*	if ( Count() == 0 && pOwner )	// Leere Listen entfernen;
+    {
+        SetOwner( NULL );
+        delete this;
+    } Rausgepatched by GH */
 }
 
 GenericInformation* GenericInformationList::SetOwner( GenericInformation *pNewOwner )
 {
     GenericInformation *pOldOwner = pOwner;
-    if ( pOwner )   // bei parent austragen;
+    if ( pOwner )	// bei parent austragen;
         pOwner->SetSubList( NULL );
     if ( pNewOwner )
         pNewOwner->SetSubList( this );
@@ -406,12 +406,5 @@ GenericInformation* GenericInformationList::SetOwner( GenericInformation *pNewOw
     return pOldOwner;
 }
 
-size_t GenericInformationList::size() const {
-    return maList.size();
-}
-
-GenericInformation* GenericInformationList::operator[]( size_t i ) const {
-    return ( i < maList.size() ) ? maList[ i ] : NULL;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #endif
+#include <stdio.h>
+#ifdef DEBUG_DOMAINMAPPER
 #include "dmapperLoggers.hxx"
-
-#if DEBUG_DOMAINMAPPER
 #include <resourcemodel/QNameToString.hxx>
 #endif
 
@@ -51,12 +51,10 @@ struct ThemeTable_Impl
     std::map<sal_uInt32, ::rtl::OUString> m_currentFontThemeEntry;
 };
 
-ThemeTable::ThemeTable()
-: LoggedProperties(dmapper_logger, "ThemeTable")
-, LoggedTable(dmapper_logger, "ThemeTable")
-, m_pImpl( new ThemeTable_Impl )
+ThemeTable::ThemeTable() :
+    m_pImpl( new ThemeTable_Impl )
 {
-
+    // printf("ThemeTable::ThemeTable()\n");
 }
 
 ThemeTable::~ThemeTable()
@@ -64,16 +62,20 @@ ThemeTable::~ThemeTable()
     delete m_pImpl;
 }
 
-void ThemeTable::lcl_attribute(Id Name, Value & val)
+void ThemeTable::attribute(Id Name, Value & val)
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("ThemeTable.attribute");
     dmapper_logger->attribute("name", (*QNameToString::Instance())(Name));
     dmapper_logger->attribute("value", val.toString());
 #endif
+    // int nIntValue = val.getInt();
     ::rtl::OUString sValue = val.getString();
+    // printf ( "ThemeTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+    /* WRITERFILTERSTATUS: table: ThemeTable_attributedata */
     switch(Name)
     {
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TextFont_typeface:
          if (sValue.getLength())
              m_pImpl->m_currentFontThemeEntry[m_pImpl->m_currentThemeFontId] = sValue;
@@ -86,17 +88,17 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
         }
     }
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
+    dmapper_logger->endElement("ThemeTable.attribute");
 #endif
 }
 
-void ThemeTable::lcl_sprm(Sprm& rSprm)
+void ThemeTable::sprm(Sprm& rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("ThemeTable.sprm");
     dmapper_logger->chars(rSprm.toString());
 #endif
-
+    
     sal_uInt32 nSprmId = rSprm.getId();
     (void)nSprmId;
 
@@ -105,8 +107,12 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     (void)nIntValue;
     rtl::OUString sStringValue = pValue->getString();
 
+    // printf ( "ThemeTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+
+    /* WRITERFILTERSTATUS: table: ThemeTable_sprm */
     switch(nSprmId)
     {
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_BaseStyles_fontScheme:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -114,7 +120,9 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
                 pProperties->resolve(*this);
     }
     break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontScheme_majorFont:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontScheme_minorFont:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -124,8 +132,11 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
             m_pImpl->m_themeFontMap[nSprmId] = m_pImpl->m_currentFontThemeEntry;
     }
     break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontCollection_latin:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontCollection_ea:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontCollection_cs:
         {
         m_pImpl->m_currentThemeFontId = nSprmId;
@@ -142,20 +153,20 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
         }
     }
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
+    dmapper_logger->endElement("ThemeTable.sprm");
 #endif
 }
 
-void ThemeTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
+void ThemeTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("ThemeTable.entry");
 #endif
 
     ref->resolve(*this);
-
+    
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
+    dmapper_logger->endElement("ThemeTable.entry");
 #endif
 }
 
@@ -179,7 +190,7 @@ const ::rtl::OUString ThemeTable::getFontNameForTheme(const Id id) const
     default:
         return ::rtl::OUString();
     }
-
+    
     switch (id)
     {
     case NS_ooxml::LN_Value_ST_Theme_majorAscii:

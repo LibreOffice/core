@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,22 +43,22 @@ class ImplVectMap;
 class ImplVectorizer
 {
 private:
-
-    ImplVectMap*    ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor );
-    void            ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, sal_uInt8 cReduce, sal_uLong nFlags );
-    sal_Bool            ImplGetChain( ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain );
-    sal_Bool            ImplIsUp( ImplVectMap* pMap, long nY, long nX ) const;
-    void            ImplLimitPolyPoly( PolyPolygon& rPolyPoly );
-
-public:
+    
+    ImplVectMap*	ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor );
+    void			ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, BYTE cReduce, ULONG nFlags );
+    BOOL			ImplGetChain( ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain );
+    BOOL			ImplIsUp( ImplVectMap* pMap, long nY, long nX ) const;
+    void			ImplLimitPolyPoly( PolyPolygon& rPolyPoly );
+                    
+public:				
 
                     ImplVectorizer();
                     ~ImplVectorizer();
-
-    sal_Bool            ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                                   sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress );
-    sal_Bool            ImplVectorize( const Bitmap& rMonoBmp, PolyPolygon& rPolyPoly,
-                                   sal_uLong nFlags, const Link* pProgress );
+                    
+    BOOL			ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf, 
+                                   BYTE cReduce, ULONG nFlags, const Link* pProgress );
+    BOOL			ImplVectorize( const Bitmap& rMonoBmp, PolyPolygon& rPolyPoly,
+                                   ULONG nFlags, const Link* pProgress );
 };
 
 #endif

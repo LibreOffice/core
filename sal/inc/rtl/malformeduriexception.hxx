@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ public:
     inline SAL_EXCEPTION_DLLPRIVATE ~MalformedUriException() {}
 
     inline SAL_EXCEPTION_DLLPRIVATE MalformedUriException operator =(
-        MalformedUriException const & rOther)
-    { m_aMessage = rOther.m_aMessage; return *this; }
+        MalformedUriException const & other)
+    { m_aMessage = other.m_aMessage; return *this; }
 
     /** Get the message.
 

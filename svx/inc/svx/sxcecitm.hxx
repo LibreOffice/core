@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,26 +42,26 @@ enum SdrCaptionEscDir {SDRCAPT_ESCHORIZONTAL,SDRCAPT_ESCVERTICAL,SDRCAPT_ESCBEST
 class SVX_DLLPUBLIC SdrCaptionEscDirItem: public SfxEnumItem {
 public:
     TYPEINFO();
-    SdrCaptionEscDirItem(SdrCaptionEscDir eDir=SDRCAPT_ESCHORIZONTAL): SfxEnumItem(SDRATTR_CAPTIONESCDIR,sal::static_int_cast< sal_uInt16 >(eDir)) {}
+    SdrCaptionEscDirItem(SdrCaptionEscDir eDir=SDRCAPT_ESCHORIZONTAL): SfxEnumItem(SDRATTR_CAPTIONESCDIR,sal::static_int_cast< USHORT >(eDir)) {}
     SdrCaptionEscDirItem(SvStream& rIn)                              : SfxEnumItem(SDRATTR_CAPTIONESCDIR,rIn)  {}
     virtual SfxPoolItem*     Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem*     Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual sal_uInt16           GetValueCount() const; // { return 3; }
+    virtual SfxPoolItem*     Create(SvStream& rIn, USHORT nVer) const;
+    virtual USHORT           GetValueCount() const; // { return 3; }
     SdrCaptionEscDir GetValue() const      { return (SdrCaptionEscDir)SfxEnumItem::GetValue(); }
 
-    virtual String  GetValueTextByPos(sal_uInt16 nPos) const;
+    virtual String  GetValueTextByPos(USHORT nPos) const;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
 };
 
 //------------------------------------
 // class SdrCaptionEscIsRelItem
-// sal_True=Linienaustrittsposition relativ
-// sal_False=Linienaustrittsposition absolut
+// TRUE=Linienaustrittsposition relativ
+// FALSE=Linienaustrittsposition absolut
 //------------------------------------
 class SdrCaptionEscIsRelItem: public SdrYesNoItem {
 public:
-    SdrCaptionEscIsRelItem(sal_Bool bRel=sal_True): SdrYesNoItem(SDRATTR_CAPTIONESCISREL,bRel) {}
+    SdrCaptionEscIsRelItem(BOOL bRel=TRUE): SdrYesNoItem(SDRATTR_CAPTIONESCISREL,bRel) {}
     SdrCaptionEscIsRelItem(SvStream& rIn) : SdrYesNoItem(SDRATTR_CAPTIONESCISREL,rIn)  {}
 };
 

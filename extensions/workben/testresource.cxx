@@ -37,13 +37,13 @@
 #include <usr/services.hxx>
 #include <vcl/svapp.hxx>
 
+using namespace rtl;
 using namespace usr;
-using ::rtl::StringToOUString;
 
 class MyApp : public Application
 {
 public:
-    void        Main();
+    void		Main();
 };
 
 MyApp aMyApp;

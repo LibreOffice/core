@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
-#include "svx/svditext.hxx"
+#include "svditext.hxx"
 #include <svx/svdotext.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdocirc.hxx>
@@ -67,7 +67,7 @@
 #include <svx/svdetc.hxx>
 #include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <vcl/salbtype.hxx>     // FRound
+#include <vcl/salbtype.hxx>		// FRound
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/xlinjoit.hxx>
@@ -82,11 +82,10 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(SdrModel& rModel):
     nLineWidth(0),
     maLineJoin(basegfx::B2DLINEJOIN_NONE),
     maDash(XDASH_RECT, 0, 0, 0, 0, 0),
-    fScaleX(0.0),fScaleY(0.0),
-    bFntDirty(sal_True),
-    bLastObjWasPolyWithoutLine(sal_False),bNoLine(sal_False),bNoFill(sal_False),bLastObjWasLine(sal_False)
+    bFntDirty(TRUE),
+    bLastObjWasPolyWithoutLine(FALSE),bNoLine(FALSE),bNoFill(FALSE),bLastObjWasLine(FALSE)
 {
-    aVD.EnableOutput(sal_False);
+    aVD.EnableOutput(FALSE);
 
     // #i111954# init to no fill and no line initially
     aVD.SetLineColor();
@@ -106,15 +105,15 @@ ImpSdrGDIMetaFileImport::~ImpSdrGDIMetaFileImport()
     delete pTextAttr;
 }
 
-sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
+ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     SdrObjList& rOL,
-    sal_uIntPtr nInsPos,
+    ULONG nInsPos,
     SvdProgressInfo *pProgrInfo)
 {
     pPage = rOL.GetPage();
     GDIMetaFile* pTmpMtf=NULL;
     GDIMetaFile* pMtf = (GDIMetaFile*) &rMtf;
-    sal_uIntPtr nActionAnz=pMtf->GetActionCount();
+    ULONG nActionAnz=pMtf->GetActionCount();
     sal_Bool bError = sal_False;
 
 
@@ -150,13 +149,13 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     if(65000 < nActionAnz)
     {
         nActionAnz = 65000;
-        bError = sal_True;
+        bError = TRUE;
     }
 
     if(pProgrInfo)
         pProgrInfo->SetActionCount(nActionAnz);
 
-    sal_uIntPtr nActionsToReport = 0;
+    ULONG nActionsToReport = 0;
 
     for( MetaAction* pAct = pMtf->FirstAction(); pAct; pAct = pMtf->NextAction() )
     {
@@ -171,22 +170,22 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
             case META_ARC_ACTION            : DoAction((MetaArcAction            &)*pAct); break;
             case META_PIE_ACTION            : DoAction((MetaPieAction            &)*pAct); break;
             case META_CHORD_ACTION          : DoAction((MetaChordAction          &)*pAct); break;
-            case META_POLYLINE_ACTION       : DoAction((MetaPolyLineAction       &)*pAct); break;
+            case META_POLYLINE_ACTION	    : DoAction((MetaPolyLineAction		 &)*pAct); break;
             case META_POLYGON_ACTION        : DoAction((MetaPolygonAction        &)*pAct); break;
             case META_POLYPOLYGON_ACTION    : DoAction((MetaPolyPolygonAction    &)*pAct); break;
             case META_TEXT_ACTION           : DoAction((MetaTextAction           &)*pAct); break;
             case META_TEXTARRAY_ACTION      : DoAction((MetaTextArrayAction      &)*pAct); break;
             case META_STRETCHTEXT_ACTION    : DoAction((MetaStretchTextAction    &)*pAct); break;
-            case META_BMP_ACTION            : DoAction((MetaBmpAction            &)*pAct); break;
-            case META_BMPSCALE_ACTION       : DoAction((MetaBmpScaleAction       &)*pAct); break;
-            case META_BMPEX_ACTION          : DoAction((MetaBmpExAction          &)*pAct); break;
-            case META_BMPEXSCALE_ACTION     : DoAction((MetaBmpExScaleAction     &)*pAct); break;
+            case META_BMP_ACTION			: DoAction((MetaBmpAction			 &)*pAct); break;
+            case META_BMPSCALE_ACTION		: DoAction((MetaBmpScaleAction		 &)*pAct); break;
+            case META_BMPEX_ACTION			: DoAction((MetaBmpExAction			 &)*pAct); break;
+            case META_BMPEXSCALE_ACTION		: DoAction((MetaBmpExScaleAction	 &)*pAct); break;
             case META_LINECOLOR_ACTION      : DoAction((MetaLineColorAction      &)*pAct); break;
             case META_FILLCOLOR_ACTION      : DoAction((MetaFillColorAction      &)*pAct); break;
             case META_TEXTCOLOR_ACTION      : DoAction((MetaTextColorAction      &)*pAct); break;
             case META_TEXTFILLCOLOR_ACTION  : DoAction((MetaTextFillColorAction  &)*pAct); break;
             case META_FONT_ACTION           : DoAction((MetaFontAction           &)*pAct); break;
-            case META_TEXTALIGN_ACTION      : DoAction((MetaTextAlignAction      &)*pAct); break;
+            case META_TEXTALIGN_ACTION		: DoAction((MetaTextAlignAction		 &)*pAct); break;
             case META_MAPMODE_ACTION        : DoAction((MetaMapModeAction        &)*pAct); break;
             case META_CLIPREGION_ACTION     : DoAction((MetaClipRegionAction     &)*pAct); break;
             case META_MOVECLIPREGION_ACTION : DoAction((MetaMoveClipRegionAction &)*pAct); break;
@@ -195,8 +194,8 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
             case META_RASTEROP_ACTION       : DoAction((MetaRasterOpAction       &)*pAct); break;
             case META_PUSH_ACTION           : DoAction((MetaPushAction           &)*pAct); break;
             case META_POP_ACTION            : DoAction((MetaPopAction            &)*pAct); break;
-            case META_HATCH_ACTION          : DoAction((MetaHatchAction          &)*pAct); break;
-            case META_COMMENT_ACTION        : DoAction((MetaCommentAction        &)*pAct, pMtf); break;
+            case META_HATCH_ACTION			: DoAction((MetaHatchAction          &)*pAct); break;
+            case META_COMMENT_ACTION		: DoAction((MetaCommentAction        &)*pAct, pMtf); break;
 
         }
 
@@ -221,7 +220,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     // MapMode-Scaling  vornehmen
     MapScaling();
     // Objekte in vorgegebenes Rechteck hineinskalieren
-    sal_uIntPtr nAnz=aTmpList.GetObjCount();
+    ULONG nAnz=aTmpList.GetObjCount();
 
     // Beim berechnen der Fortschrittsanzeige wird GetActionCount()*3 benutzt.
     // Da in aTmpList allerdings weniger eintraege als GetActionCount()
@@ -241,7 +240,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     // alle in aTmpList zwischengespeicherten Objekte nun in rOL ab der Position nInsPos einfuegen
     if (nInsPos>rOL.GetObjCount()) nInsPos=rOL.GetObjCount();
     SdrInsertReason aReason(SDRREASON_VIEWCALL);
-    for (sal_uIntPtr i=0; i<nAnz; i++)
+    for (ULONG i=0; i<nAnz; i++)
     {
          SdrObject* pObj=aTmpList.GetObj(i);
          rOL.NbcInsertObject(pObj,nInsPos,&aReason);
@@ -272,7 +271,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
 
 void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
 {
-    bNoLine = sal_False; bNoFill = sal_False;
+    bNoLine = FALSE; bNoFill = FALSE;
     bool bLine = !bForceTextAttr;
     bool bFill = (pObj==NULL) || (pObj->IsClosedObj() && !bForceTextAttr);
     bool bText = bForceTextAttr || (pObj!=NULL && pObj->GetOutlinerParaObject()!=NULL);
@@ -322,7 +321,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
         }
     }
     else
-        bNoLine = sal_True;
+        bNoLine = TRUE;
 
     if ( bFill )
     {
@@ -335,7 +334,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
             pFillAttr->Put(XFillStyleItem(XFILL_NONE));
     }
     else
-        bNoFill = sal_True;
+        bNoFill = TRUE;
 
     if ( bText && bFntDirty )
     {
@@ -362,7 +361,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
         pTextAttr->Put(SvxContourItem(aFnt.IsOutline(), EE_CHAR_OUTLINE));
         pTextAttr->Put(SvxColorItem(aFnt.GetColor(), EE_CHAR_COLOR));
         //... svxfont textitem svditext
-        bFntDirty=sal_False;
+        bFntDirty=FALSE;
     }
     if (pObj!=NULL)
     {
@@ -439,18 +438,19 @@ void ImpSdrGDIMetaFileImport::InsertObj( SdrObject* pObj, sal_Bool bScale )
         }
         else
         {
-            bLastObjWasPolyWithoutLine = sal_False;
-            bLastObjWasLine = sal_False;
+            bLastObjWasPolyWithoutLine = FALSE;
+            bLastObjWasLine = FALSE;
         }
     }
 }
 
 /**************************************************************************************************/
-void ImpSdrGDIMetaFileImport::DoAction(MetaPixelAction& /*rAct*/) const
+
+void ImpSdrGDIMetaFileImport::DoAction(MetaPixelAction& /*rAct*/)
 {
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaPointAction& /*rAct*/) const
+void ImpSdrGDIMetaFileImport::DoAction(MetaPointAction& /*rAct*/)
 {
 }
 
@@ -483,9 +483,9 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
             SdrPathObj* pPath = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aLine));
             nLineWidth = nNewLineWidth;
             maLineJoin = rLineInfo.GetLineJoin();
-            maDash = XDash(XDASH_RECT,
-                rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
-                rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
+            maDash = XDash(XDASH_RECT, 
+                rLineInfo.GetDotCount(), rLineInfo.GetDotLen(), 
+                rLineInfo.GetDashCount(), rLineInfo.GetDashLen(), 
                 rLineInfo.GetDistance());
             SetAttributes(pPath);
             nLineWidth = 0;
@@ -583,7 +583,7 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
                 {
                     return false;
                 }
-
+                
                 if(aDstPoly.count())
                 {
                     const sal_uInt32 nMaxDstPnt(aDstPoly.count() - 1L);
@@ -684,13 +684,13 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
     if(bCreateLineObject)
     {
         SdrPathObj* pPath = new SdrPathObj(
-            aSource.isClosed() ? OBJ_POLY : OBJ_PLIN,
+            aSource.isClosed() ? OBJ_POLY : OBJ_PLIN, 
             basegfx::B2DPolyPolygon(aSource));
         nLineWidth = nNewLineWidth;
         maLineJoin = rLineInfo.GetLineJoin();
-        maDash = XDash(XDASH_RECT,
-            rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
-            rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
+        maDash = XDash(XDASH_RECT, 
+            rLineInfo.GetDotCount(), rLineInfo.GetDotLen(), 
+            rLineInfo.GetDashCount(), rLineInfo.GetDashLen(), 
             rLineInfo.GetDistance());
         SetAttributes(pPath);
         nLineWidth = 0;
@@ -773,7 +773,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
     if ( aFnt.GetWidth() || ( rAct.GetType() == META_STRETCHTEXT_ACTION ) )
     {
         pText->ClearMergedItem( SDRATTR_TEXT_AUTOGROWWIDTH );
-        pText->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
+        pText->SetMergedItem( SdrTextAutoGrowHeightItem( FALSE ) );
         // don't let the margins eat the space needed for the text
         pText->SetMergedItem ( SdrTextUpperDistItem (0));
         pText->SetMergedItem ( SdrTextLowerDistItem (0));
@@ -787,7 +787,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
     pText->SetModel( pModel );
     pText->SetLayer( nLayer );
     pText->NbcSetText( rStr );
-    SetAttributes( pText, sal_True );
+    SetAttributes( pText, TRUE );
     pText->SetSnapRect( aTextRect );
 
     if (!aFnt.IsTransparent())
@@ -928,8 +928,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMapModeAction& rAct)
 {
     MapScaling();
     rAct.Execute(&aVD);
-    bLastObjWasPolyWithoutLine=sal_False;
-    bLastObjWasLine=sal_False;
+    bLastObjWasPolyWithoutLine=FALSE;
+    bLastObjWasLine=FALSE;
 }
 
 void ImpSdrGDIMetaFileImport::MapScaling()
@@ -969,7 +969,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
             {
                 if(!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))
                 {
-                    const Gradient& rGrad = pAct->GetGradient();
+                    const Gradient&	rGrad = pAct->GetGradient();
                     SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, aSource);
                     SfxItemSet aGradAttr(pModel->GetItemPool(),
                        XATTR_FILLSTYLE, XATTR_FILLSTYLE,
@@ -979,7 +979,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
                     aXGradient.SetGradientStyle((XGradientStyle)rGrad.GetStyle());
                     aXGradient.SetStartColor(rGrad.GetStartColor());
                     aXGradient.SetEndColor(rGrad.GetEndColor());
-                    aXGradient.SetAngle((sal_uInt16)rGrad.GetAngle());
+                    aXGradient.SetAngle((USHORT)rGrad.GetAngle());
                     aXGradient.SetBorder(rGrad.GetBorder());
                     aXGradient.SetXOffset(rGrad.GetOfsX());
                     aXGradient.SetYOffset(rGrad.GetOfsY());

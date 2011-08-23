@@ -29,7 +29,11 @@
 
 # setup INCLUDE variable for use by VC++
 .IF "$(GUI)$(COM)"=="WNTMSC"
+.IF "$(EXT_USE_STLPORT)"==""
+INCLUDE!:=. $(subst,/stl, $(SOLARINC))
+.ELSE			# "$(EXT_USE_STLPORT)"==""
 INCLUDE!:=. $(SOLARINC)
+.ENDIF			# "$(EXT_USE_STLPORT)"==""
 INCLUDE!:=$(INCLUDE:s/ -I/;/)
 .EXPORT : INCLUDE
 .ENDIF			# "$(GUI)$(COM)"=="WNTMSC"
@@ -106,9 +110,9 @@ clean:
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.bz2
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - ")
+    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
@@ -116,40 +120,34 @@ $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.bz2
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.Z
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - ")
+    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.gz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(GNUTAR) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tgz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(GNUTAR) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar)
+    @noop $(assign UNPACKCMD := $(GNUTAR) -x$(tar_verbose_switch)f $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.zip
     @-$(RM) $@
     @noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).zip)
-    @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
-    @$(RENAME) $@.$(INPATH) $@
-
-$(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.oxt
-    @-$(RM) $@
-    @noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).oxt)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
@@ -171,8 +169,8 @@ $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) : $(PRJ)/$(ROUT)/misc/$(TARFILE_MD5)-$(TARFILE
     @$(TOUCH) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR).exists # $(IFEXIST) only works with files
     $(COMMAND_ECHO)cd $(PACKAGE_DIR)$(fake_root_dir) && ( $(shell @$(TYPE) $(PRJ)/$(ROUT)/misc/$(TARFILE_MD5)-$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @echo make writeable...
-    @-cd $(PACKAGE_DIR) && chmod -R +rw $(TARFILE_ROOTDIR) && $(TOUCH) $(UNTAR_FLAG_FILE)
-    @-cd $(PACKAGE_DIR) && find $(TARFILE_ROOTDIR) -type d -print0 | xargs -0 chmod a+x
+    @cd $(PACKAGE_DIR) && chmod -R +rw $(TARFILE_ROOTDIR) && $(TOUCH) $(UNTAR_FLAG_FILE)
+    @cd $(PACKAGE_DIR) && find $(TARFILE_ROOTDIR) -type d -exec chmod a+x {{}} \;
 
 #add new files to patch
 $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) $(T_ADDITIONAL_FILES:+".dummy")
@@ -189,7 +187,13 @@ $(PACKAGE_DIR)/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE)
     $(COMMAND_ECHO)$(TOUCH) $@
 .ELSE			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
 .IF "$(GUI)"=="WNT"
+# hack to make 4nt version 4,01 work and still get propper
+# errorcodes for versions < 3,00
+#.IF "$(my4ver:s/.//:s/,//)" >= "300"
+#	$(COMMAND_ECHO)cd $(PACKAGE_DIR) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
+#.ELSE			# "$(my4ver:s/.//:s/,//)" >= "300"
     $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+#.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
 .ELSE           # "$(GUI)"=="WNT"
 .IF "$(BSCLIENT)"=="TRUE"
     $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) -f $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
@@ -309,11 +313,11 @@ $(MISC)/$(TARFILE_ROOTDIR).done : $(MISC)/$(TARFILE_MD5)-$(TARFILE_NAME).unpack 
 #.IF "$(my4ver:s/.//:s/,//)" >= "300"
 #	$(COMMAND_ECHO)cd $(MISC) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 )
 #.ELSE			# "$(my4ver:s/.//:s/,//)" >= "300"
-    $(COMMAND_ECHO)cd $(MISC) && $(TYPE:s/+//) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2
+    $(COMMAND_ECHO)cd $(MISC) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2
 #.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
 .ELSE           # "$(GUI)"=="WNT"
 .IF "$(BSCLIENT)"=="TRUE"
-    $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) -f $(PATCHFLAGS) -p2
+    $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) -f $(PATCHFLAGS) -p2
 .ELSE           # "$(BSCLIENT)"!=""
     $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) $(PATCHFLAGS) -p2
 .ENDIF          # "$(BSCLIENT)"!=""

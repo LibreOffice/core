@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ void ShapeList::addShape( SdrObject& rObject )
     }
     else
     {
-        OSL_FAIL("sd::ShapeList::addShape(), given shape already part of list!");
+        DBG_ERROR("sd::ShapeList::addShape(), given shape already part of list!");
     }
 }
 
@@ -80,9 +80,47 @@ SdrObject* ShapeList::removeShape( SdrObject& rObject )
     }
     else
     {
-        OSL_FAIL("sd::ShapeList::removeShape(), given shape not part of list!");
+        DBG_ERROR("sd::ShapeList::removeShape(), given shape not part of list!");
     }
     return 0;
+}
+
+void ShapeList::replaceShape( SdrObject& rOldObject, SdrObject& rNewObject )
+{
+    if( &rOldObject == &rNewObject )
+        return;
+
+    ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rNewObject ) );
+    if( aIter != maShapeList.end() )
+    {
+        bool bIterErased = aIter == maIter;
+        (*aIter)->RemoveObjectUser(*this);
+        aIter = maShapeList.erase( aIter );
+
+        if( bIterErased )
+            maIter = aIter;
+    }
+
+    aIter = std::find( maShapeList.begin(), maShapeList.end(), &rOldObject );
+    if( aIter != maShapeList.end() )
+    {
+        bool bIterErased = aIter == maIter;
+
+        ListImpl::iterator iNew( maShapeList.insert( aIter, &rNewObject ) );
+
+        (*aIter)->RemoveObjectUser(*this);
+        aIter = maShapeList.erase( aIter );
+
+        rNewObject.AddObjectUser( *this );
+
+        if( bIterErased )
+            maIter = iNew;
+    }
+    else
+    {
+        DBG_ERROR("sd::ShapeList::replaceShape(), given shape not part of list!");
+        addShape( rNewObject );
+    }
 }
 
 /** removes all shapes from this list
@@ -147,7 +185,7 @@ void ShapeList::ObjectInDestruction(const SdrObject& rObject)
     }
     else
     {
-        OSL_FAIL("sd::ShapeList::ObjectInDestruction(), got a call from an unknown friend!");
+        DBG_ERROR("sd::ShapeList::ObjectInDestruction(), got a call from an unknown friend!");
     }
 }
 

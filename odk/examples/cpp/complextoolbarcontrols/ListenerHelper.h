@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
@@ -27,7 +27,7 @@ struct eqObjectName_Impl
 
 typedef std::vector < com::sun::star::uno::Reference < com::sun::star::frame::XStatusListener > > StatusListeners;
 
-typedef boost::unordered_map
+typedef std::hash_map
 <
     ::rtl::OUString,
     StatusListeners,
@@ -38,10 +38,10 @@ ListenerMap;
 
 // For every frame there is *one* Dispatch object for all possible commands
 // this struct contains an array of listeners for every supported command
-// these arrays are accessed by a boost::unordered_map (with the command string as index)
+// these arrays are accessed by a hash_map (with the command string as index)
 struct ListenerItem
 {
-    ListenerMap aContainer;
+    ListenerMap	aContainer;
     ::com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > xDispatch;
     ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame;
 };

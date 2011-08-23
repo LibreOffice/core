@@ -1104,8 +1104,8 @@ testcase tRedlining_16
    '/// + Redlining test => OK_2  <--  Numbering style : list 2
    '/// + Redlining test => OK_3  <--  Numbering style : list 3
 
-   hFileOpenLocally(  gTesttoolPath + "writer\optional\input\redlining\tRedlining_15.sxw" )
-   
+   Call hFileOpen ( gTesttoolPath + "writer\optional\input\redlining\tRedlining_15.sxw" )
+   Call sMakeReadOnlyDocumentEditable
 
    Call wTypeKeys "<Up>" , 3
 
@@ -1149,7 +1149,7 @@ testcase tRedlining_16
    try
        EditCopy
    catch
-       Warnlog "Bullets cannot be removed by Del key"
+       Warnlog "#i41424# Bullets cannot be removed by Del key"
        Call wTypeKeys "<Down><End>"
        Call wTypeKeys "<Shift Left>"
        EditCopy
@@ -1199,7 +1199,7 @@ testcase tRedlining_16
    try
        EditCopy
    catch
-       Warnlog "Bullets cannot be removed by Del key"
+       Warnlog "#i41424# Bullets cannot be removed by Del key"
        Call wTypeKeys "<Down><End>"
        Call wTypeKeys "<Shift Left>"
        EditCopy

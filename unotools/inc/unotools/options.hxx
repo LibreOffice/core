@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 
 #include "sal/config.h"
 #include "unotools/unotoolsdllapi.h"
-#include <vector>
 
 /*
     The class utl::detail::Options provides a kind of multiplexer. It implements a ConfigurationListener
@@ -45,6 +44,7 @@
 namespace utl {
 
     class ConfigurationBroadcaster;
+    class IMPL_ConfigurationListenerList;
 
     // interface for configuration listener
     class UNOTOOLS_DLLPUBLIC ConfigurationListener
@@ -52,14 +52,13 @@ namespace utl {
     public:
         virtual void ConfigurationChanged( ConfigurationBroadcaster* p, sal_uInt32 nHint=0 ) = 0;
     };
-    typedef ::std::vector< ConfigurationListener* > IMPL_ConfigurationListenerList;
 
     // complete broadcasting implementation
     class UNOTOOLS_DLLPUBLIC ConfigurationBroadcaster
     {
         IMPL_ConfigurationListenerList* mpList;
         sal_Int32               m_nBroadcastBlocked;     // broadcast only if this is 0
-        sal_uInt32              m_nBlockedHint;
+        sal_uInt32				m_nBlockedHint;
 
     public:
         void AddListener( utl::ConfigurationListener* pListener );

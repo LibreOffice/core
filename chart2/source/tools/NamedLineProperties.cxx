@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,6 +82,7 @@ void NamedLineProperties::AddDefaultsToMap(
 {
 }
 
+// static
 OUString NamedLineProperties::GetPropertyNameForHandle( sal_Int32 nHandle )
 {
     //will return e.g. "LineDashName" for PROP_LINE_DASH_NAME

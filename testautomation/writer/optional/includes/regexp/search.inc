@@ -64,8 +64,10 @@ end sub
 
 '---------------------------------------------------------
 testcase tCheckDialog
+    warnlog( "#i111908# - Control <Replace> cannot be accessed" )
+    goto endsub
     
-    Dim Checkboxtitel
+ Dim Checkboxtitel
    Call hNewDocument
    EditSearchAndReplace
    Sleep 2
@@ -1522,11 +1524,11 @@ sub wSetFindAndReplaceToDefault(WhichDocument as integer)
         Case 0
             Call hNewDocument  ' empty Document
         Case 1
-            hFileOpenLocally(  gTesttoolPath +"writer\optional\input\search\such_u_e.sxw")
-            
+            Call hFileOpen ( gTesttoolPath +"writer\optional\input\search\such_u_e.sxw")
+            Call sMakeReadOnlyDocumentEditable
         case 2
-            hFileOpenLocally(  gTesttoolPath +"writer\optional\input\search\attrib.sxw")
-            
+            Call hFileOpen ( gTesttoolPath +"writer\optional\input\search\attrib.sxw")
+            Call sMakeReadOnlyDocumentEditable
     end select
     kontext "FindAndReplace"
     Sleep 2

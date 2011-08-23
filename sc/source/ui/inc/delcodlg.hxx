@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include "global.hxx"
 
 //------------------------------------------------------------------------
@@ -40,33 +40,33 @@ class ScDeleteContentsDlg : public ModalDialog
 {
 private:
     FixedLine       aFlFrame;
-    CheckBox        aBtnDelAll;
-    CheckBox        aBtnDelStrings;
-    CheckBox        aBtnDelNumbers;
-    CheckBox        aBtnDelDateTime;
-    CheckBox        aBtnDelFormulas;
-    CheckBox        aBtnDelNotes;
-    CheckBox        aBtnDelAttrs;
-    CheckBox        aBtnDelObjects;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    CheckBox		aBtnDelAll;
+    CheckBox		aBtnDelStrings;
+    CheckBox		aBtnDelNumbers;
+    CheckBox		aBtnDelDateTime;
+    CheckBox		aBtnDelFormulas;
+    CheckBox		aBtnDelNotes;
+    CheckBox		aBtnDelAttrs;
+    CheckBox		aBtnDelObjects;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
-    sal_Bool            bObjectsDisabled;
+    BOOL			bObjectsDisabled;
 
-    static sal_Bool     bPreviousAllCheck;
-    static sal_uInt16   nPreviousChecks;
+    static BOOL		bPreviousAllCheck;
+    static USHORT	nPreviousChecks;
 
-    void DisableChecks( sal_Bool bDelAllChecked = sal_True );
+    void DisableChecks( BOOL bDelAllChecked = TRUE );
     DECL_LINK( DelAllHdl, void * );
 
 public:
             ScDeleteContentsDlg( Window* pParent,
-                                 sal_uInt16  nCheckDefaults = 0 );
+                                 USHORT  nCheckDefaults = 0 );
             ~ScDeleteContentsDlg();
-    void    DisableObjects();
+    void	DisableObjects();
 
-    sal_uInt16  GetDelContentsCmdBits() const;
+    USHORT	GetDelContentsCmdBits() const;
 };
 
 

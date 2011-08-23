@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,20 +57,20 @@
 
 module com {  module sun {  module star {  module sheet {
 
-/** additional methods to extend <type scope="com::sun::star::sheet">XDataPilotTable</type>.
+/** additional methods to extend <type scope="com::sun::star::sheet">XDataPilotTable</type>. 
 
-   <type scope="com::sun::star::sheet">XDataPilotTable2</type> extends the old
-   <type scope="com::sun::star::sheet">XDataPilotTable</type> interface with
+   <type scope="com::sun::star::sheet">XDataPilotTable2</type> extends the old 
+   <type scope="com::sun::star::sheet">XDataPilotTable</type> interface with 
    additional methods.
 
    @see com::sun::star::sheet::XDataPilotTable
 
-   @since OOo 3.0
+   @since OOo 3.0.0
  */
 interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
 {
-    /** When the address of a cell within the result area is given,
-        <method>XDataPilotTable2::getDrillDownData</method> returns its drill-down
+    /** When the address of a cell within the result area is given, 
+        <method>XDataPilotTable2::getDrillDownData</method> returns its drill-down 
         output table that includes only those rows that contribute to the value of
         that cell.
 
@@ -82,13 +82,13 @@ interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
      */
     sequence< sequence< any > > getDrillDownData( [in] com::sun::star::table::CellAddress aAddr );
 
-    /** Given a cell address, it returns the information about that cell.  The
-        type of information returned depends upon whether the cell is within
+    /** Given a cell address, it returns the information about that cell.  The 
+        type of information returned depends upon whether the cell is within 
         the result area or column/row header area.
 
         @param aAddr address of the cell whose information is to be returned.
 
-        @returns <type>DataPilotTablePositionData</type> which contains the
+        @returns <type>DataPilotTablePositionData</type> which contains the 
         position type and the information for that cell position.
 
         @see com::sun::star::sheet::DataPilotTablePositionData
@@ -97,9 +97,9 @@ interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
      */
     DataPilotTablePositionData getPositionData( [in] com::sun::star::table::CellAddress aAddr );
 
-    /** <p>This method inserts a new sheet to display the drill-down data for a
-        specified result cell.  A drill-down data for a result cell consists
-        of a subset of rows from the original data source that contribute to
+    /** <p>This method inserts a new sheet to display the drill-down data for a 
+        specified result cell.  A drill-down data for a result cell consists 
+        of a subset of rows from the original data source that contribute to 
         the value displayed in that cell.</p>
 
         <p>The new sheet is always inserted to the immediate left of the current
@@ -112,7 +112,7 @@ interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
      */
     void insertDrillDownSheet( [in] com::sun::star::table::CellAddress aAddr );
 
-    /** <p>This method returns a different output range of a DataPilot table
+    /** <p>This method returns a different output range of a DataPilot table 
         per specified output range type.</p>
 
         @returns <type scope="com::sun::star::table">CellRangeAddress</type> depicting
@@ -121,7 +121,7 @@ interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
 
         @see com::sun::star::sheet::DataPilotOutputRangeType
      */
-    com::sun::star::table::CellRangeAddress getOutputRangeByType( [in] long nType )
+    com::sun::star::table::CellRangeAddress getOutputRangeByType( [in] long nType ) 
         raises (com::sun::star::lang::IllegalArgumentException);
 };
 

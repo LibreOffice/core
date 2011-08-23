@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,10 @@
 #include <svtools/texteng.hxx>
 #include <svtools/textview.hxx>
 
+#define XTEXTUNDO_REPLACEALL	(XTEXTUNDO_START+1)
+#define XTEXTUNDO_INDENTBLOCK		122
+#define XTEXTUNDO_UNINDENTBLOCK		123
+
 namespace com {
 namespace sun {
 namespace star {
@@ -42,35 +46,35 @@ namespace util {
 class SVT_DLLPUBLIC ExtTextEngine : public TextEngine
 {
 private:
-    String              maGroupChars;
+    String				maGroupChars;
 
 public:
                         ExtTextEngine();
                         ~ExtTextEngine();
 
-    const String&       GetGroupChars() const { return maGroupChars; }
-    void                SetGroupChars( const String& r ) { maGroupChars = r; }
-    TextSelection       MatchGroup( const TextPaM& rCursor ) const;
+    const String&		GetGroupChars() const { return maGroupChars; }
+    void				SetGroupChars( const String& r ) { maGroupChars = r; }
+    TextSelection		MatchGroup( const TextPaM& rCursor ) const;
 
-    sal_Bool                Search( TextSelection& rSel, const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bForward = sal_True );
+    BOOL				Search( TextSelection& rSel, const ::com::sun::star::util::SearchOptions& rSearchOptions, BOOL bForward = TRUE );
 };
 
 class SVT_DLLPUBLIC ExtTextView : public TextView
 {
 protected:
-    sal_Bool                ImpIndentBlock( sal_Bool bRight );
+    BOOL				ImpIndentBlock( BOOL bRight );
 
 public:
                         ExtTextView( ExtTextEngine* pEng, Window* pWindow );
                         ~ExtTextView();
 
-    sal_Bool                MatchGroup();
+    BOOL				MatchGroup();
 
-    sal_Bool                Search( const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bForward );
-    sal_uInt16              Replace( const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bAll, sal_Bool bForward );
+    BOOL				Search( const ::com::sun::star::util::SearchOptions& rSearchOptions, BOOL bForward );
+    USHORT				Replace( const ::com::sun::star::util::SearchOptions& rSearchOptions, BOOL bAll, BOOL bForward );
 
-    sal_Bool                IndentBlock();
-    sal_Bool                UnindentBlock();
+    BOOL				IndentBlock();
+    BOOL				UnindentBlock();
 };
 
 #endif // _XTEXTEDT_HXX

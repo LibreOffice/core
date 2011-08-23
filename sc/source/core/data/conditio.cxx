@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
+
+
 
 //------------------------------------------------------------------
 
@@ -55,7 +57,7 @@ SV_IMPL_OP_PTRARR_SORT( ScConditionalFormats_Impl, ScConditionalFormatPtr );
 
 //------------------------------------------------------------------------
 
-sal_Bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRecursion = 0 )
+BOOL lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, USHORT nRecursion = 0 )
 {
     if (pFormula)
     {
@@ -69,7 +71,7 @@ sal_Bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRe
                 {
                     ScSingleRefData& rRef2 = static_cast<ScToken*>(t)->GetDoubleRef().Ref2;
                     if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
-                        return sal_True;
+                        return TRUE;
                 }
                 // fall through
 
@@ -77,16 +79,16 @@ sal_Bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRe
                 {
                     ScSingleRefData& rRef1 = static_cast<ScToken*>(t)->GetSingleRef();
                     if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
-                        return sal_True;
+                        return TRUE;
                 }
                 break;
 
                 case svIndex:
                 {
                     if( t->GetOpCode() == ocName )      // DB areas always absolute
-                        if( ScRangeData* pRangeData = pDoc->GetRangeName()->findByIndex( t->GetIndex() ) )
+                        if( ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( t->GetIndex() ) )
                             if( (nRecursion < 42) && lcl_HasRelRef( pDoc, pRangeData->GetCode(), nRecursion + 1 ) )
-                                return sal_True;
+                                return TRUE;
                 }
                 break;
 
@@ -99,7 +101,7 @@ sal_Bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRe
                         case ocColumn:  // COLUMN() returns own column index
                         case ocTable:   // SHEET() returns own sheet index
                         case ocCell:    // CELL() may return own cell address
-                            return sal_True;
+                            return TRUE;
 //                        break;
                         default:
                         {
@@ -116,7 +118,7 @@ sal_Bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRe
             }
         }
     }
-    return false;
+    return FALSE;
 }
 
 ScConditionEntry::ScConditionEntry( const ScConditionEntry& r ) :
@@ -141,17 +143,16 @@ ScConditionEntry::ScConditionEntry( const ScConditionEntry& r ) :
     pDoc(r.pDoc),
     bRelRef1(r.bRelRef1),
     bRelRef2(r.bRelRef2),
-    bFirstRun(true),
-    pCondFormat(r.pCondFormat)
+    bFirstRun(TRUE)
 {
-    //  ScTokenArray copy ctor erzeugt flache Kopie
+    //	ScTokenArray copy ctor erzeugt flache Kopie
 
     if (r.pFormula1)
         pFormula1 = new ScTokenArray( *r.pFormula1 );
     if (r.pFormula2)
         pFormula2 = new ScTokenArray( *r.pFormula2 );
 
-    //  Formelzellen werden erst bei IsValid angelegt
+    //	Formelzellen werden erst bei IsValid angelegt
 }
 
 ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntry& r ) :
@@ -176,8 +177,7 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
     pDoc(pDocument),
     bRelRef1(r.bRelRef1),
     bRelRef2(r.bRelRef2),
-    bFirstRun(true),
-    pCondFormat(r.pCondFormat)
+    bFirstRun(TRUE)
 {
     // echte Kopie der Formeln (fuer Ref-Undo)
 
@@ -186,8 +186,8 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
     if (r.pFormula2)
         pFormula2 = r.pFormula2->Clone();
 
-    //  Formelzellen werden erst bei IsValid angelegt
-    //! im Clipboard nicht - dann vorher interpretieren !!!
+    //	Formelzellen werden erst bei IsValid angelegt
+    //!	im Clipboard nicht - dann vorher interpretieren !!!
 }
 
 ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
@@ -195,52 +195,50 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
         const String& rExprNmsp1, const String& rExprNmsp2,
         FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2 ) :
     eOp(eOper),
-    nOptions(0),    // spaeter...
+    nOptions(0),	// spaeter...
     nVal1(0.0),
     nVal2(0.0),
     aStrNmsp1(rExprNmsp1),
     aStrNmsp2(rExprNmsp2),
     eTempGrammar1(eGrammar1),
     eTempGrammar2(eGrammar2),
-    bIsStr1(false),
-    bIsStr2(false),
+    bIsStr1(FALSE),
+    bIsStr2(FALSE),
     pFormula1(NULL),
     pFormula2(NULL),
     aSrcPos(rPos),
     pFCell1(NULL),
     pFCell2(NULL),
     pDoc(pDocument),
-    bRelRef1(false),
-    bRelRef2(false),
-    bFirstRun(true),
-    pCondFormat(NULL)
+    bRelRef1(FALSE),
+    bRelRef2(FALSE),
+    bFirstRun(TRUE)
 {
-    Compile( rExpr1, rExpr2, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2, false );
+    Compile( rExpr1, rExpr2, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2, FALSE );
 
-    //  Formelzellen werden erst bei IsValid angelegt
+    //	Formelzellen werden erst bei IsValid angelegt
 }
 
 ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos ) :
     eOp(eOper),
-    nOptions(0),    // spaeter...
+    nOptions(0),	// spaeter...
     nVal1(0.0),
     nVal2(0.0),
     eTempGrammar1(FormulaGrammar::GRAM_DEFAULT),
     eTempGrammar2(FormulaGrammar::GRAM_DEFAULT),
-    bIsStr1(false),
-    bIsStr2(false),
+    bIsStr1(FALSE),
+    bIsStr2(FALSE),
     pFormula1(NULL),
     pFormula2(NULL),
     aSrcPos(rPos),
     pFCell1(NULL),
     pFCell2(NULL),
     pDoc(pDocument),
-    bRelRef1(false),
-    bRelRef2(false),
-    bFirstRun(true),
-    pCondFormat(NULL)
+    bRelRef1(FALSE),
+    bRelRef2(FALSE),
+    bFirstRun(TRUE)
 {
     if ( pArr1 )
     {
@@ -254,13 +252,13 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
                 if ( pToken->GetType() == svDouble )
                 {
                     nVal1 = pToken->GetDouble();
-                    DELETEZ(pFormula1);             // nicht als Formel merken
+                    DELETEZ(pFormula1);				// nicht als Formel merken
                 }
                 else if ( pToken->GetType() == svString )
                 {
-                    bIsStr1 = sal_True;
+                    bIsStr1 = TRUE;
                     aStrVal1 = pToken->GetString();
-                    DELETEZ(pFormula1);             // nicht als Formel merken
+                    DELETEZ(pFormula1);				// nicht als Formel merken
                 }
             }
         }
@@ -278,20 +276,20 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
                 if ( pToken->GetType() == svDouble )
                 {
                     nVal2 = pToken->GetDouble();
-                    DELETEZ(pFormula2);             // nicht als Formel merken
+                    DELETEZ(pFormula2);				// nicht als Formel merken
                 }
                 else if ( pToken->GetType() == svString )
                 {
-                    bIsStr2 = sal_True;
+                    bIsStr2 = TRUE;
                     aStrVal2 = pToken->GetString();
-                    DELETEZ(pFormula2);             // nicht als Formel merken
+                    DELETEZ(pFormula2);				// nicht als Formel merken
                 }
             }
         }
         bRelRef2 = lcl_HasRelRef( pDoc, pFormula2 );
     }
 
-    //  formula cells are created at IsValid
+    //	formula cells are created at IsValid
 }
 
 ScConditionEntry::~ScConditionEntry()
@@ -305,7 +303,7 @@ ScConditionEntry::~ScConditionEntry()
 
 void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
         const String& rExprNmsp1, const String& rExprNmsp2,
-        FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2, sal_Bool bTextToReal )
+        FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2, BOOL bTextToReal )
 {
     if ( rExpr1.Len() || rExpr2.Len() )
     {
@@ -316,8 +314,8 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
             aComp.SetGrammar( eGrammar1 );
             if ( pDoc->IsImportingXML() && !bTextToReal )
             {
-                //  temporary formula string as string tokens
-                //! merge with lcl_ScDocFunc_CreateTokenArrayXML
+                //	temporary formula string as string tokens
+                //!	merge with lcl_ScDocFunc_CreateTokenArrayXML
                 pFormula1 = new ScTokenArray;
                 pFormula1->AddString( rExpr1 );
                 // bRelRef1 is set when the formula is compiled again (CompileXML)
@@ -334,13 +332,13 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
                         if ( pToken->GetType() == svDouble )
                         {
                             nVal1 = pToken->GetDouble();
-                            DELETEZ(pFormula1);             // nicht als Formel merken
+                            DELETEZ(pFormula1);				// nicht als Formel merken
                         }
                         else if ( pToken->GetType() == svString )
                         {
-                            bIsStr1 = sal_True;
+                            bIsStr1 = TRUE;
                             aStrVal1 = pToken->GetString();
-                            DELETEZ(pFormula1);             // nicht als Formel merken
+                            DELETEZ(pFormula1);				// nicht als Formel merken
                         }
                     }
                 }
@@ -353,8 +351,8 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
             aComp.SetGrammar( eGrammar2 );
             if ( pDoc->IsImportingXML() && !bTextToReal )
             {
-                //  temporary formula string as string tokens
-                //! merge with lcl_ScDocFunc_CreateTokenArrayXML
+                //	temporary formula string as string tokens
+                //!	merge with lcl_ScDocFunc_CreateTokenArrayXML
                 pFormula2 = new ScTokenArray;
                 pFormula2->AddString( rExpr2 );
                 // bRelRef2 is set when the formula is compiled again (CompileXML)
@@ -371,13 +369,13 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
                         if ( pToken->GetType() == svDouble )
                         {
                             nVal2 = pToken->GetDouble();
-                            DELETEZ(pFormula2);             // nicht als Formel merken
+                            DELETEZ(pFormula2);				// nicht als Formel merken
                         }
                         else if ( pToken->GetType() == svString )
                         {
-                            bIsStr2 = sal_True;
+                            bIsStr2 = TRUE;
                             aStrVal2 = pToken->GetString();
-                            DELETEZ(pFormula2);             // nicht als Formel merken
+                            DELETEZ(pFormula2);				// nicht als Formel merken
                         }
                     }
                 }
@@ -387,9 +385,9 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
     }
 }
 
-void ScConditionEntry::MakeCells( const ScAddress& rPos )           // Formelzellen anlegen
+void ScConditionEntry::MakeCells( const ScAddress& rPos )			// Formelzellen anlegen
 {
-    if ( !pDoc->IsClipOrUndo() )            // nie im Clipboard rechnen!
+    if ( !pDoc->IsClipOrUndo() )			// nie im Clipboard rechnen!
     {
         if ( pFormula1 && !pFCell1 && !bRelRef1 )
         {
@@ -405,10 +403,10 @@ void ScConditionEntry::MakeCells( const ScAddress& rPos )           // Formelzel
     }
 }
 
-void ScConditionEntry::SetIgnoreBlank(sal_Bool bSet)
+void ScConditionEntry::SetIgnoreBlank(BOOL bSet)
 {
-    //  Das Bit SC_COND_NOBLANKS wird gesetzt, wenn Blanks nicht ignoriert werden
-    //  (nur bei Gueltigkeit)
+    //	Das Bit SC_COND_NOBLANKS wird gesetzt, wenn Blanks nicht ignoriert werden
+    //	(nur bei Gueltigkeit)
 
     if (bSet)
         nOptions &= ~SC_COND_NOBLANKS;
@@ -418,7 +416,7 @@ void ScConditionEntry::SetIgnoreBlank(sal_Bool bSet)
 
 void ScConditionEntry::CompileAll()
 {
-    //  Formelzellen loeschen, dann wird beim naechsten IsValid neu kompiliert
+    //	Formelzellen loeschen, dann wird beim naechsten IsValid neu kompiliert
 
     DELETEZ(pFCell1);
     DELETEZ(pFCell2);
@@ -426,7 +424,7 @@ void ScConditionEntry::CompileAll()
 
 void ScConditionEntry::CompileXML()
 {
-    //  First parse the formula source position if it was stored as text
+    //  #b4974740# First parse the formula source position if it was stored as text
 
     if ( aSrcString.Len() )
     {
@@ -439,11 +437,11 @@ void ScConditionEntry::CompileXML()
         aSrcString.Erase();
     }
 
-    //  Convert the text tokens that were created during XML import into real tokens.
+    //	Convert the text tokens that were created during XML import into real tokens.
 
     Compile( GetExpression(aSrcPos, 0, 0, eTempGrammar1),
              GetExpression(aSrcPos, 1, 0, eTempGrammar2),
-             aStrNmsp1, aStrNmsp2, eTempGrammar1, eTempGrammar2, sal_True );
+             aStrNmsp1, aStrNmsp2, eTempGrammar1, eTempGrammar2, TRUE );
 }
 
 void ScConditionEntry::SetSrcString( const String& rNew )
@@ -474,10 +472,10 @@ void ScConditionEntry::SetFormula2( const ScTokenArray& rArray )
     }
 }
 
-void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab, sal_Bool& rChanged )
+void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab, BOOL& rChanged )
 {
     //  Insert table: only update absolute table references.
-    //  (Similar to ScCompiler::UpdateInsertTab with bIsName=sal_True, result is the same as for named ranges)
+    //  (Similar to ScCompiler::UpdateInsertTab with bIsName=TRUE, result is the same as for named ranges)
     //  For deleting, ScCompiler::UpdateDeleteTab is used because of the handling of invalid references.
 
     rCode.Reset();
@@ -489,7 +487,7 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab,
         {
             rRef1.nTab += 1;
             rRef1.nRelTab = rRef1.nTab - nPosTab;
-            rChanged = sal_True;
+            rChanged = TRUE;
         }
         if( p->GetType() == svDoubleRef )
         {
@@ -498,7 +496,7 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab,
             {
                 rRef2.nTab += 1;
                 rRef2.nRelTab = rRef2.nTab - nPosTab;
-                rChanged = sal_True;
+                rChanged = TRUE;
             }
         }
         p = static_cast<ScToken*>(rCode.GetNextReference());
@@ -508,11 +506,11 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab,
 void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    sal_Bool bInsertTab = ( eUpdateRefMode == URM_INSDEL && nDz == 1 );
-    sal_Bool bDeleteTab = ( eUpdateRefMode == URM_INSDEL && nDz == -1 );
+    BOOL bInsertTab = ( eUpdateRefMode == URM_INSDEL && nDz == 1 );
+    BOOL bDeleteTab = ( eUpdateRefMode == URM_INSDEL && nDz == -1 );
 
-    sal_Bool bChanged1 = false;
-    sal_Bool bChanged2 = false;
+    BOOL bChanged1 = FALSE;
+    BOOL bChanged2 = FALSE;
 
     if (pFormula1)
     {
@@ -523,13 +521,13 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             ScCompiler aComp( pDoc, aSrcPos, *pFormula1 );
             aComp.SetGrammar(pDoc->GetGrammar());
             if ( bDeleteTab )
-                aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, sal_True, bChanged1 );
+                aComp.UpdateDeleteTab( rRange.aStart.Tab(), FALSE, TRUE, bChanged1 );
             else
                 aComp.UpdateNameReference( eUpdateRefMode, rRange, nDx, nDy, nDz, bChanged1 );
         }
 
         if (bChanged1)
-            DELETEZ(pFCell1);       // is created again in IsValid
+            DELETEZ(pFCell1);		// is created again in IsValid
     }
     if (pFormula2)
     {
@@ -540,13 +538,13 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             ScCompiler aComp( pDoc, aSrcPos, *pFormula2);
             aComp.SetGrammar(pDoc->GetGrammar());
             if ( bDeleteTab )
-                aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, sal_True, bChanged2 );
+                aComp.UpdateDeleteTab( rRange.aStart.Tab(), FALSE, TRUE, bChanged2 );
             else
                 aComp.UpdateNameReference( eUpdateRefMode, rRange, nDx, nDy, nDz, bChanged2 );
         }
 
         if (bChanged2)
-            DELETEZ(pFCell2);       // is created again in IsValid
+            DELETEZ(pFCell2);		// is created again in IsValid
     }
 }
 
@@ -556,47 +554,47 @@ void ScConditionEntry::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
     {
         ScCompiler aComp( pDoc, aSrcPos, *pFormula1);
         aComp.SetGrammar(pDoc->GetGrammar());
-        aComp.UpdateMoveTab(nOldPos, nNewPos, sal_True );
+        aComp.UpdateMoveTab(nOldPos, nNewPos, TRUE );
         DELETEZ(pFCell1);
     }
     if (pFormula2)
     {
         ScCompiler aComp( pDoc, aSrcPos, *pFormula2);
         aComp.SetGrammar(pDoc->GetGrammar());
-        aComp.UpdateMoveTab(nOldPos, nNewPos, sal_True );
+        aComp.UpdateMoveTab(nOldPos, nNewPos, TRUE );
         DELETEZ(pFCell2);
     }
 }
 
-//! als Vergleichsoperator ans TokenArray ???
+//!	als Vergleichsoperator ans TokenArray ???
 
-sal_Bool lcl_IsEqual( const ScTokenArray* pArr1, const ScTokenArray* pArr2 )
+BOOL lcl_IsEqual( const ScTokenArray* pArr1, const ScTokenArray* pArr2 )
 {
-    //  verglichen wird nur das nicht-UPN Array
+    //	verglichen wird nur das nicht-UPN Array
 
     if ( pArr1 && pArr2 )
     {
-        sal_uInt16 nLen = pArr1->GetLen();
+        USHORT nLen = pArr1->GetLen();
         if ( pArr2->GetLen() != nLen )
-            return false;
+            return FALSE;
 
         FormulaToken** ppToken1 = pArr1->GetArray();
         FormulaToken** ppToken2 = pArr2->GetArray();
-        for (sal_uInt16 i=0; i<nLen; i++)
+        for (USHORT i=0; i<nLen; i++)
         {
             if ( ppToken1[i] != ppToken2[i] &&
                  !(*ppToken1[i] == *ppToken2[i]) )
-                return false;                       // Unterschied
+                return FALSE;						// Unterschied
         }
-        return sal_True;                    // alle Eintraege gleich
+        return TRUE;					// alle Eintraege gleich
     }
     else
-        return !pArr1 && !pArr2;        // beide 0 -> gleich
+        return !pArr1 && !pArr2;		// beide 0 -> gleich
 }
 
 int ScConditionEntry::operator== ( const ScConditionEntry& r ) const
 {
-    sal_Bool bEq = (eOp == r.eOp && nOptions == r.nOptions &&
+    BOOL bEq = (eOp == r.eOp && nOptions == r.nOptions &&
                 lcl_IsEqual( pFormula1, r.pFormula1 ) &&
                 lcl_IsEqual( pFormula2, r.pFormula2 ));
     if (bEq)
@@ -604,13 +602,13 @@ int ScConditionEntry::operator== ( const ScConditionEntry& r ) const
         // for formulas, the reference positions must be compared, too
         // (including aSrcString, for inserting the entries during XML import)
         if ( ( pFormula1 || pFormula2 ) && ( aSrcPos != r.aSrcPos || aSrcString != r.aSrcString ) )
-            bEq = false;
+            bEq = FALSE;
 
-        //  wenn keine Formeln, Werte vergleichen
+        //	wenn keine Formeln, Werte vergleichen
         if ( !pFormula1 && ( nVal1 != r.nVal1 || aStrVal1 != r.aStrVal1 || bIsStr1 != r.bIsStr1 ) )
-            bEq = false;
+            bEq = FALSE;
         if ( !pFormula2 && ( nVal2 != r.nVal2 || aStrVal2 != r.aStrVal2 || bIsStr2 != r.bIsStr2 ) )
-            bEq = false;
+            bEq = FALSE;
     }
 
     return bEq;
@@ -618,39 +616,39 @@ int ScConditionEntry::operator== ( const ScConditionEntry& r ) const
 
 void ScConditionEntry::Interpret( const ScAddress& rPos )
 {
-    //  Formelzellen anlegen
-    //  dabei koennen neue Broadcaster (Note-Zellen) ins Dokument eingefuegt werden !!!!
+    //	Formelzellen anlegen
+    //	dabei koennen neue Broadcaster (Note-Zellen) ins Dokument eingefuegt werden !!!!
 
     if ( ( pFormula1 && !pFCell1 ) || ( pFormula2 && !pFCell2 ) )
         MakeCells( rPos );
 
-    //  Formeln auswerten
+    //	Formeln auswerten
 
-    sal_Bool bDirty = false;        //! 1 und 2 getrennt ???
+    BOOL bDirty = FALSE;		//! 1 und 2 getrennt ???
 
     ScFormulaCell* pTemp1 = NULL;
     ScFormulaCell* pEff1 = pFCell1;
     if ( bRelRef1 )
     {
-        pTemp1 = new ScFormulaCell( pDoc, rPos, pFormula1 );    // ohne Listening
+        pTemp1 = new ScFormulaCell( pDoc, rPos, pFormula1 );	// ohne Listening
         pEff1 = pTemp1;
     }
     if ( pEff1 )
     {
-        if (!pEff1->IsRunning())        // keine 522 erzeugen
+        if (!pEff1->IsRunning())		// keine 522 erzeugen
         {
-            //! Changed statt Dirty abfragen !!!
+            //!	Changed statt Dirty abfragen !!!
             if (pEff1->GetDirty() && !bRelRef1)
-                bDirty = sal_True;
+                bDirty = TRUE;
             if (pEff1->IsValue())
             {
-                bIsStr1 = false;
+                bIsStr1 = FALSE;
                 nVal1 = pEff1->GetValue();
                 aStrVal1.Erase();
             }
             else
             {
-                bIsStr1 = sal_True;
+                bIsStr1 = TRUE;
                 pEff1->GetString( aStrVal1 );
                 nVal1 = 0.0;
             }
@@ -662,24 +660,24 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     ScFormulaCell* pEff2 = pFCell2; //@ 1!=2
     if ( bRelRef2 )
     {
-        pTemp2 = new ScFormulaCell( pDoc, rPos, pFormula2 );    // ohne Listening
+        pTemp2 = new ScFormulaCell( pDoc, rPos, pFormula2 );	// ohne Listening
         pEff2 = pTemp2;
     }
     if ( pEff2 )
     {
-        if (!pEff2->IsRunning())        // keine 522 erzeugen
+        if (!pEff2->IsRunning())		// keine 522 erzeugen
         {
             if (pEff2->GetDirty() && !bRelRef2)
-                bDirty = sal_True;
+                bDirty = TRUE;
             if (pEff2->IsValue())
             {
-                bIsStr2 = false;
+                bIsStr2 = FALSE;
                 nVal2 = pEff2->GetValue();
                 aStrVal2.Erase();
             }
             else
             {
-                bIsStr2 = sal_True;
+                bIsStr2 = TRUE;
                 pEff2->GetString( aStrVal2 );
                 nVal2 = 0.0;
             }
@@ -687,131 +685,50 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     }
     delete pTemp2;
 
-    //  wenn IsRunning, bleiben die letzten Werte erhalten
+    //	wenn IsRunning, bleiben die letzten Werte erhalten
 
     if (bDirty && !bFirstRun)
     {
-        //  bei bedingten Formaten neu painten
+        // 	bei bedingten Formaten neu painten
 
-        DataChanged( NULL );    // alles
+        DataChanged( NULL );	// alles
     }
 
-    bFirstRun = false;
+    bFirstRun = FALSE;
 }
 
-static sal_Bool lcl_GetCellContent( ScBaseCell* pCell, sal_Bool bIsStr1, double& rArg, String& rArgStr )
+BOOL ScConditionEntry::IsValid( double nArg ) const
 {
-    sal_Bool bVal = true;
-
-    if ( pCell )
-    {
-        CellType eType = pCell->GetCellType();
-        switch( eType )
-        {
-            case CELLTYPE_VALUE:
-                rArg = ((ScValueCell*)pCell)->GetValue();
-                break;
-            case CELLTYPE_FORMULA:
-                {
-                    ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-                    bVal = pFCell->IsValue();
-                    if (bVal)
-                        rArg = pFCell->GetValue();
-                    else
-                        pFCell->GetString(rArgStr);
-                }
-                break;
-            case CELLTYPE_STRING:
-            case CELLTYPE_EDIT:
-                bVal = false;
-                if ( eType == CELLTYPE_STRING )
-                    ((ScStringCell*)pCell)->GetString(rArgStr);
-                else
-                    ((ScEditCell*)pCell)->GetString(rArgStr);
-                break;
-
-            default:
-                pCell = NULL;           // Note-Zellen wie leere
-                break;
-        }
-    }
-
-    if( !pCell )
-        if( bIsStr1 )
-            bVal = false;               // leere Zellen je nach Bedingung
-
-    return bVal;
-}
-
-static sal_Bool lcl_IsDuplicate( ScDocument *pDoc, double nArg, const String& rStr, const ScAddress& rAddr, const ScRangeListRef& rRanges )
-{
-    size_t nListCount = rRanges->size();
-    for( size_t i = 0; i < nListCount; i++ )
-    {
-        const ScRange *aRange = (*rRanges)[i];
-        SCROW nRow = aRange->aEnd.Row();
-        SCCOL nCol = aRange->aEnd.Col();
-        for( SCROW r = aRange->aStart.Row(); r <= nRow; r++ )
-            for( SCCOL c = aRange->aStart.Col(); c <= nCol; c++ )
-            {
-                double nVal = 0.0;
-                ScBaseCell *pCell = NULL;
-                String aStr;
-
-                if( c == rAddr.Col() && r == rAddr.Row() )
-                    continue;
-                pDoc->GetCell( c, r, rAddr.Tab(), pCell );
-                if( !pCell )
-                    continue;
-
-                if( !lcl_GetCellContent( pCell, false, nVal, aStr ) )
-                {
-                    if( rStr.Len() &&
-                        ( ScGlobal::GetCollator()->compareString( rStr, aStr ) == COMPARE_EQUAL ) )
-                        return true;
-                }
-                else
-                {
-                    if( !rStr.Len() && ::rtl::math::approxEqual( nArg, nVal ) )
-                        return true;
-                }
-            }
-    }
-    return false;
-}
-
-sal_Bool ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
-{
-    //  Interpret muss schon gerufen sein
+    //	Interpret muss schon gerufen sein
 
     if ( bIsStr1 )
     {
-        // wenn auf String getestet wird, bei Zahlen immer sal_False, ausser bei "ungleich"
+        // wenn auf String getestet wird, bei Zahlen immer FALSE, ausser bei "ungleich"
 
         return ( eOp == SC_COND_NOTEQUAL );
     }
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
         if ( bIsStr2 )
-            return false;
+            return FALSE;
 
-    double nComp1 = nVal1;      // Kopie, damit vertauscht werden kann
+    double nComp1 = nVal1;		// Kopie, damit vertauscht werden kann
     double nComp2 = nVal2;
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
         if ( nComp1 > nComp2 )
         {
-            //  richtige Reihenfolge fuer Wertebereich
+            //	richtige Reihenfolge fuer Wertebereich
             double nTemp = nComp1; nComp1 = nComp2; nComp2 = nTemp;
         }
 
-    //  Alle Grenzfaelle muessen per ::rtl::math::approxEqual getestet werden!
+    //	Alle Grenzfaelle muessen per ::rtl::math::approxEqual getestet werden!
 
-    sal_Bool bValid = false;
+    BOOL bValid = FALSE;
     switch (eOp)
     {
         case SC_COND_NONE:
-            break;                  // immer sal_False;
+            break;					// immer FALSE;
         case SC_COND_EQUAL:
             bValid = ::rtl::math::approxEqual( nArg, nComp1 );
             break;
@@ -838,65 +755,43 @@ sal_Bool ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
             bValid = ( nArg < nComp1 || nArg > nComp2 ) &&
                      !::rtl::math::approxEqual( nArg, nComp1 ) && !::rtl::math::approxEqual( nArg, nComp2 );
             break;
-        case SC_COND_DUPLICATE:
-        case SC_COND_NOTDUPLICATE:
-            if( pCondFormat )
-            {
-                ScRangeListRef pRanges = pCondFormat->GetRangeInfo();
-                bValid = lcl_IsDuplicate( pDoc, nArg, String(), rAddr, pRanges );
-                if( eOp == SC_COND_NOTDUPLICATE )
-                    bValid = !bValid;
-            }
-            break;
         case SC_COND_DIRECT:
             bValid = !::rtl::math::approxEqual( nComp1, 0.0 );
             break;
         default:
-            OSL_FAIL("unbekannte Operation bei ScConditionEntry");
+            DBG_ERROR("unbekannte Operation bei ScConditionEntry");
             break;
     }
     return bValid;
 }
 
-sal_Bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAddr ) const
+BOOL ScConditionEntry::IsValidStr( const String& rArg ) const
 {
-    sal_Bool bValid = false;
-    //  Interpret muss schon gerufen sein
+    //	Interpret muss schon gerufen sein
 
-    if ( eOp == SC_COND_DIRECT )                // Formel ist unabhaengig vom Inhalt
+    if ( eOp == SC_COND_DIRECT )				// Formel ist unabhaengig vom Inhalt
         return !::rtl::math::approxEqual( nVal1, 0.0 );
 
-    if ( eOp == SC_COND_DUPLICATE || eOp == SC_COND_NOTDUPLICATE )
-    {
-        if( pCondFormat && rArg.Len() )
-        {
-            ScRangeListRef pRanges = pCondFormat->GetRangeInfo();
-            bValid = lcl_IsDuplicate( pDoc, 0.0, rArg, rAddr, pRanges );
-            if( eOp == SC_COND_NOTDUPLICATE )
-                bValid = !bValid;
-            return bValid;
-        }
-    }
-
-    //  Wenn Bedingung Zahl enthaelt, immer FALSE, ausser bei "ungleich"
+    //	Wenn Bedingung Zahl enthaelt, immer FALSE, ausser bei "ungleich"
 
     if ( !bIsStr1 )
         return ( eOp == SC_COND_NOTEQUAL );
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
         if ( !bIsStr2 )
-            return false;
+            return FALSE;
 
-    String aUpVal1( aStrVal1 );     //! als Member? (dann auch in Interpret setzen)
+    String aUpVal1( aStrVal1 );		//! als Member? (dann auch in Interpret setzen)
     String aUpVal2( aStrVal2 );
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
         if ( ScGlobal::GetCollator()->compareString( aUpVal1, aUpVal2 )
                 == COMPARE_GREATER )
         {
-            //  richtige Reihenfolge fuer Wertebereich
+            //	richtige Reihenfolge fuer Wertebereich
             String aTemp( aUpVal1 ); aUpVal1 = aUpVal2; aUpVal2 = aTemp;
         }
 
+    BOOL bValid;
     switch ( eOp )
     {
         case SC_COND_EQUAL:
@@ -927,17 +822,17 @@ sal_Bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAdd
                     break;
                 case SC_COND_BETWEEN:
                 case SC_COND_NOTBETWEEN:
-                    //  Test auf NOTBETWEEN:
+                    //	Test auf NOTBETWEEN:
                     bValid = ( nCompare == COMPARE_LESS ||
                         ScGlobal::GetCollator()->compareString( rArg,
                         aUpVal2 ) == COMPARE_GREATER );
                     if ( eOp == SC_COND_BETWEEN )
                         bValid = !bValid;
                     break;
-                //  SC_COND_DIRECT schon oben abgefragt
+                //	SC_COND_DIRECT schon oben abgefragt
                 default:
-                    OSL_FAIL("unbekannte Operation bei ScConditionEntry");
-                    bValid = false;
+                    DBG_ERROR("unbekannte Operation bei ScConditionEntry");
+                    bValid = FALSE;
                     break;
             }
         }
@@ -945,21 +840,59 @@ sal_Bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAdd
     return bValid;
 }
 
-sal_Bool ScConditionEntry::IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) const
+BOOL ScConditionEntry::IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) const
 {
-    ((ScConditionEntry*)this)->Interpret(rPos);         // Formeln auswerten
+    ((ScConditionEntry*)this)->Interpret(rPos);			// Formeln auswerten
 
     double nArg = 0.0;
     String aArgStr;
-    sal_Bool bVal = lcl_GetCellContent( pCell, bIsStr1, nArg, aArgStr );
+    BOOL bVal = TRUE;
+
+    if ( pCell )
+    {
+        CellType eType = pCell->GetCellType();
+        switch (eType)
+        {
+            case CELLTYPE_VALUE:
+                nArg = ((ScValueCell*)pCell)->GetValue();
+                break;
+            case CELLTYPE_FORMULA:
+                {
+                    ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
+                    bVal = pFCell->IsValue();
+                    if (bVal)
+                        nArg = pFCell->GetValue();
+                    else
+                        pFCell->GetString(aArgStr);
+                }
+                break;
+            case CELLTYPE_STRING:
+            case CELLTYPE_EDIT:
+                bVal = FALSE;
+                if ( eType == CELLTYPE_STRING )
+                    ((ScStringCell*)pCell)->GetString(aArgStr);
+                else
+                    ((ScEditCell*)pCell)->GetString(aArgStr);
+                break;
+
+            default:
+                pCell = NULL;			// Note-Zellen wie leere
+                break;
+        }
+    }
+
+    if (!pCell)
+        if (bIsStr1)
+            bVal = FALSE;				// leere Zellen je nach Bedingung
+
     if (bVal)
-        return IsValid( nArg, rPos );
+        return IsValid( nArg );
     else
-        return IsValidStr( aArgStr, rPos );
+        return IsValidStr( aArgStr );
 }
 
-String ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 nIndex,
-                                        sal_uLong nNumFmt,
+String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
+                                        ULONG nNumFmt,
                                         const FormulaGrammar::Grammar eGrammar ) const
 {
     String aRet;
@@ -1003,13 +936,13 @@ String ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 nIn
     }
     else
     {
-        OSL_FAIL("GetExpression: falscher Index");
+        DBG_ERROR("GetExpression: falscher Index");
     }
 
     return aRet;
 }
 
-ScTokenArray* ScConditionEntry::CreateTokenArry( sal_uInt16 nIndex ) const
+ScTokenArray* ScConditionEntry::CreateTokenArry( USHORT nIndex ) const
 {
     ScTokenArray* pRet = NULL;
     ScAddress aAddr;
@@ -1042,7 +975,7 @@ ScTokenArray* ScConditionEntry::CreateTokenArry( sal_uInt16 nIndex ) const
     }
     else
     {
-        OSL_FAIL("GetExpression: falscher Index");
+        DBG_ERROR("GetExpression: falscher Index");
     }
 
     return pRet;
@@ -1050,7 +983,7 @@ ScTokenArray* ScConditionEntry::CreateTokenArry( sal_uInt16 nIndex ) const
 
 void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
 {
-    for (sal_uInt16 nPass = 0; nPass < 2; nPass++)
+    for (USHORT nPass = 0; nPass < 2; nPass++)
     {
         ScTokenArray* pFormula = nPass ? pFormula2 : pFormula1;
         if (pFormula)
@@ -1063,9 +996,9 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
                 if ( aProv.Ref1.IsColRel() || aProv.Ref1.IsRowRel() || aProv.Ref1.IsTabRel() ||
                      aProv.Ref2.IsColRel() || aProv.Ref2.IsRowRel() || aProv.Ref2.IsTabRel() )
                 {
-                    //  absolut muss getroffen sein, relativ bestimmt Bereich
+                    //	absolut muss getroffen sein, relativ bestimmt Bereich
 
-                    sal_Bool bHit = sal_True;
+                    BOOL bHit = TRUE;
                     SCsCOL nCol1;
                     SCsROW nRow1;
                     SCsTAB nTab1;
@@ -1119,11 +1052,11 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
 
                     if ( bHit )
                     {
-                        //! begrenzen
+                        //!	begrenzen
 
                         ScRange aPaint( nCol1,nRow1,nTab1, nCol2,nRow2,nTab2 );
 
-                        //  kein Paint, wenn es nur die Zelle selber ist
+                        //	kein Paint, wenn es nur die Zelle selber ist
                         if ( aPaint.aStart != rChanged || aPaint.aEnd != rChanged )
                             DataChanged( &aPaint );
                     }
@@ -1140,7 +1073,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
     SCTAB nMinTab = aSrcPos.Tab();
     SCTAB nMaxTab = nMinTab;
 
-    for (sal_uInt16 nPass = 0; nPass < 2; nPass++)
+    for (USHORT nPass = 0; nPass < 2; nPass++)
     {
         ScTokenArray* pFormula = nPass ? pFormula2 : pFormula1;
         if (pFormula)
@@ -1191,7 +1124,7 @@ void ScConditionEntry::DataChanged( const ScRange* /* pModified */ ) const
 bool ScConditionEntry::MarkUsedExternalReferences() const
 {
     bool bAllMarked = false;
-    for (sal_uInt16 nPass = 0; !bAllMarked && nPass < 2; nPass++)
+    for (USHORT nPass = 0; !bAllMarked && nPass < 2; nPass++)
     {
         ScTokenArray* pFormula = nPass ? pFormula2 : pFormula1;
         if (pFormula)
@@ -1210,7 +1143,8 @@ ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         FormulaGrammar::Grammar eGrammar1,
                                         FormulaGrammar::Grammar eGrammar2 ) :
     ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2 ),
-    aStyleName( rStyle )
+    aStyleName( rStyle ),
+    pParent( NULL )
 {
 }
 
@@ -1219,19 +1153,22 @@ ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         ScDocument* pDocument, const ScAddress& rPos,
                                         const String& rStyle ) :
     ScConditionEntry( eOper, pArr1, pArr2, pDocument, rPos ),
-    aStyleName( rStyle )
+    aStyleName( rStyle ),
+    pParent( NULL )
 {
 }
 
 ScCondFormatEntry::ScCondFormatEntry( const ScCondFormatEntry& r ) :
     ScConditionEntry( r ),
-    aStyleName( r.aStyleName )
+    aStyleName( r.aStyleName ),
+    pParent( NULL )
 {
 }
 
 ScCondFormatEntry::ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r ) :
     ScConditionEntry( pDocument, r ),
-    aStyleName( r.aStyleName )
+    aStyleName( r.aStyleName ),
+    pParent( NULL )
 {
 }
 
@@ -1240,7 +1177,7 @@ int ScCondFormatEntry::operator== ( const ScCondFormatEntry& r ) const
     return ScConditionEntry::operator==( r ) &&
             aStyleName == r.aStyleName;
 
-    //  Range wird nicht verglichen
+    //	Range wird nicht verglichen
 }
 
 ScCondFormatEntry::~ScCondFormatEntry()
@@ -1249,8 +1186,8 @@ ScCondFormatEntry::~ScCondFormatEntry()
 
 void ScCondFormatEntry::DataChanged( const ScRange* pModified ) const
 {
-    if ( pCondFormat )
-        pCondFormat->DoRepaint( pModified );
+    if ( pParent )
+        pParent->DoRepaint( pModified );
 }
 
 //------------------------------------------------------------------------
@@ -1260,8 +1197,7 @@ ScConditionalFormat::ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocume
     pAreas( NULL ),
     nKey( nNewKey ),
     ppEntries( NULL ),
-    nEntryCount( 0 ),
-    pRanges( NULL )
+    nEntryCount( 0 )
 {
 }
 
@@ -1275,13 +1211,12 @@ ScConditionalFormat::ScConditionalFormat(const ScConditionalFormat& r) :
     if (nEntryCount)
     {
         ppEntries = new ScCondFormatEntry*[nEntryCount];
-        for (sal_uInt16 i=0; i<nEntryCount; i++)
+        for (USHORT i=0; i<nEntryCount; i++)
         {
             ppEntries[i] = new ScCondFormatEntry(*r.ppEntries[i]);
             ppEntries[i]->SetParent(this);
         }
     }
-    pRanges = new ScRangeList( *r.pRanges );
 }
 
 ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
@@ -1297,46 +1232,35 @@ ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
     if (nEntryCount)
     {
         pNew->ppEntries = new ScCondFormatEntry*[nEntryCount];
-        for (sal_uInt16 i=0; i<nEntryCount; i++)
+        for (USHORT i=0; i<nEntryCount; i++)
         {
             pNew->ppEntries[i] = new ScCondFormatEntry( pNewDoc, *ppEntries[i] );
             pNew->ppEntries[i]->SetParent(pNew);
         }
         pNew->nEntryCount = nEntryCount;
     }
-    pNew->AddRangeInfo( pRanges );
 
     return pNew;
 }
 
-sal_Bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
+BOOL ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
 {
     if ( nEntryCount != r.nEntryCount )
-        return false;
+        return FALSE;
 
-    //! auf gleiche Eintraege in anderer Reihenfolge testen ???
+    //!	auf gleiche Eintraege in anderer Reihenfolge testen ???
 
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
+    for (USHORT i=0; i<nEntryCount; i++)
         if ( ! (*ppEntries[i] == *r.ppEntries[i]) )
-            return false;
+            return FALSE;
 
-    if( *pRanges != *r.pRanges )
-        return false;
-
-    return true;
-}
-
-void ScConditionalFormat::AddRangeInfo( const ScRangeListRef& rRanges )
-{
-    if( !rRanges.Is() )
-        return;
-    pRanges = new ScRangeList( *rRanges );
+    return TRUE;
 }
 
 void ScConditionalFormat::AddEntry( const ScCondFormatEntry& rNew )
 {
     ScCondFormatEntry** ppNew = new ScCondFormatEntry*[nEntryCount+1];
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
+    for (USHORT i=0; i<nEntryCount; i++)
         ppNew[i] = ppEntries[i];
     ppNew[nEntryCount] = new ScCondFormatEntry(rNew);
     ppNew[nEntryCount]->SetParent(this);
@@ -1347,14 +1271,14 @@ void ScConditionalFormat::AddEntry( const ScCondFormatEntry& rNew )
 
 ScConditionalFormat::~ScConditionalFormat()
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
+    for (USHORT i=0; i<nEntryCount; i++)
         delete ppEntries[i];
     delete[] ppEntries;
 
     delete pAreas;
 }
 
-const ScCondFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
+const ScCondFormatEntry* ScConditionalFormat::GetEntry( USHORT nPos ) const
 {
     if ( nPos < nEntryCount )
         return ppEntries[nPos];
@@ -1364,14 +1288,14 @@ const ScCondFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
 
 const String& ScConditionalFormat::GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
+    for (USHORT i=0; i<nEntryCount; i++)
         if ( ppEntries[i]->IsCellValid( pCell, rPos ) )
             return ppEntries[i]->GetStyle();
 
     return EMPTY_STRING;
 }
 
-void lcl_Extend( ScRange& rRange, ScDocument* pDoc, sal_Bool bLines )
+void lcl_Extend( ScRange& rRange, ScDocument* pDoc, BOOL bLines )
 {
     SCTAB nTab = rRange.aStart.Tab();
     DBG_ASSERT(rRange.aEnd.Tab() == nTab, "lcl_Extend - mehrere Tabellen?");
@@ -1381,12 +1305,12 @@ void lcl_Extend( ScRange& rRange, ScDocument* pDoc, sal_Bool bLines )
     SCCOL nEndCol = rRange.aEnd.Col();
     SCROW nEndRow = rRange.aEnd.Row();
 
-    sal_Bool bEx = pDoc->ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
+    BOOL bEx = pDoc->ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
 
     if (bLines)
     {
-        if (nStartCol > 0)    --nStartCol;
-        if (nStartRow > 0)    --nStartRow;
+        if (nStartCol > 0)	  --nStartCol;
+        if (nStartRow > 0)	  --nStartRow;
         if (nEndCol < MAXCOL) ++nEndCol;
         if (nEndRow < MAXROW) ++nEndRow;
     }
@@ -1398,7 +1322,7 @@ void lcl_Extend( ScRange& rRange, ScDocument* pDoc, sal_Bool bLines )
     }
 }
 
-sal_Bool lcl_CutRange( ScRange& rRange, const ScRange& rOther )
+BOOL lcl_CutRange( ScRange& rRange, const ScRange& rOther )
 {
     rRange.Justify();
     ScRange aCmpRange = rOther;
@@ -1424,45 +1348,47 @@ sal_Bool lcl_CutRange( ScRange& rRange, const ScRange& rOther )
         if ( rRange.aEnd.Tab() > aCmpRange.aEnd.Tab() )
             rRange.aEnd.SetTab( aCmpRange.aEnd.Tab() );
 
-        return sal_True;
+        return TRUE;
     }
 
-    return false;       // ausserhalb
+    return FALSE;		// ausserhalb
 }
 
 void ScConditionalFormat::DoRepaint( const ScRange* pModified )
 {
+    USHORT i;
     SfxObjectShell* pSh = pDoc->GetDocumentShell();
     if (pSh)
     {
-        //  Rahmen/Schatten enthalten?
-        //  (alle Bedingungen testen)
-        sal_Bool bExtend = false;
-        sal_Bool bRotate = false;
-        sal_Bool bAttrTested = false;
+        //	Rahmen/Schatten enthalten?
+        //	(alle Bedingungen testen)
+        BOOL bExtend = FALSE;
+        BOOL bRotate = FALSE;
+        BOOL bAttrTested = FALSE;
 
-        if (!pAreas)        //  RangeList ggf. holen
+        if (!pAreas)		//	RangeList ggf. holen
         {
             pAreas = new ScRangeList;
             pDoc->FindConditionalFormat( nKey, *pAreas );
         }
-        for (size_t i = 0, nCount = pAreas->size(); i < nCount; i++ )
+        USHORT nCount = (USHORT) pAreas->Count();
+        for (i=0; i<nCount; i++)
         {
-            ScRange aRange = *(*pAreas)[i];
-            sal_Bool bDo = true;
+            ScRange aRange = *pAreas->GetObject(i);
+            BOOL bDo = TRUE;
             if ( pModified )
             {
                 if ( !lcl_CutRange( aRange, *pModified ) )
-                    bDo = false;
+                    bDo = FALSE;
             }
             if (bDo)
             {
                 if ( !bAttrTested )
                 {
-                    // Look at the style's content only if the repaint is necessary
+                    // #116562# Look at the style's content only if the repaint is necessary
                     // for any condition, to avoid the time-consuming Find() if there are many
                     // conditional formats and styles.
-                    for (sal_uInt16 nEntry=0; nEntry<nEntryCount; nEntry++)
+                    for (USHORT nEntry=0; nEntry<nEntryCount; nEntry++)
                     {
                         String aStyle = ppEntries[nEntry]->GetStyle();
                         if (aStyle.Len())
@@ -1472,27 +1398,27 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
                             if ( pStyleSheet )
                             {
                                 const SfxItemSet& rSet = pStyleSheet->GetItemSet();
-                                if (rSet.GetItemState( ATTR_BORDER, sal_True ) == SFX_ITEM_SET ||
-                                    rSet.GetItemState( ATTR_SHADOW, sal_True ) == SFX_ITEM_SET)
+                                if (rSet.GetItemState( ATTR_BORDER, TRUE ) == SFX_ITEM_SET ||
+                                    rSet.GetItemState( ATTR_SHADOW, TRUE ) == SFX_ITEM_SET)
                                 {
-                                    bExtend = sal_True;
+                                    bExtend = TRUE;
                                 }
-                                if (rSet.GetItemState( ATTR_ROTATE_VALUE, sal_True ) == SFX_ITEM_SET ||
-                                    rSet.GetItemState( ATTR_ROTATE_MODE, sal_True ) == SFX_ITEM_SET)
+                                if (rSet.GetItemState( ATTR_ROTATE_VALUE, TRUE ) == SFX_ITEM_SET ||
+                                    rSet.GetItemState( ATTR_ROTATE_MODE, TRUE ) == SFX_ITEM_SET)
                                 {
-                                    bRotate = sal_True;
+                                    bRotate = TRUE;
                                 }
                             }
                         }
                     }
-                    bAttrTested = sal_True;
+                    bAttrTested = TRUE;
                 }
 
-                lcl_Extend( aRange, pDoc, bExtend );        // zusammengefasste und bExtend
+                lcl_Extend( aRange, pDoc, bExtend );		// zusammengefasste und bExtend
                 if ( bRotate )
                 {
                     aRange.aStart.SetCol(0);
-                    aRange.aEnd.SetCol(MAXCOL);     // gedreht: ganze Zeilen
+                    aRange.aEnd.SetCol(MAXCOL);		// gedreht: ganze Zeilen
                 }
 
                 // gedreht -> ganze Zeilen
@@ -1507,7 +1433,7 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
                     }
                 }
 
-                pDoc->RepaintRange( aRange );
+                pSh->Broadcast( ScPaintHint( aRange, PAINT_GRID ) );
             }
         }
     }
@@ -1521,52 +1447,52 @@ void ScConditionalFormat::InvalidateArea()
 
 void ScConditionalFormat::CompileAll()
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
+    for (USHORT i=0; i<nEntryCount; i++)
         ppEntries[i]->CompileAll();
 }
 
 void ScConditionalFormat::CompileXML()
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
+    for (USHORT i=0; i<nEntryCount; i++)
         ppEntries[i]->CompileXML();
 }
 
 void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
+    for (USHORT i=0; i<nEntryCount; i++)
         ppEntries[i]->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
 
-    delete pAreas;      // aus dem AttrArray kommt beim Einfuegen/Loeschen kein Aufruf
+    delete pAreas;		// aus dem AttrArray kommt beim Einfuegen/Loeschen kein Aufruf
     pAreas = NULL;
 }
 
 void ScConditionalFormat::RenameCellStyle(const String& rOld, const String& rNew)
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
+    for (USHORT i=0; i<nEntryCount; i++)
         if ( ppEntries[i]->GetStyle() == rOld )
             ppEntries[i]->UpdateStyleName( rNew );
 }
 
 void ScConditionalFormat::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
+    for (USHORT i=0; i<nEntryCount; i++)
         ppEntries[i]->UpdateMoveTab( nOldPos, nNewPos );
 
-    delete pAreas;      // aus dem AttrArray kommt beim Einfuegen/Loeschen kein Aufruf
+    delete pAreas;		// aus dem AttrArray kommt beim Einfuegen/Loeschen kein Aufruf
     pAreas = NULL;
 }
 
 void ScConditionalFormat::SourceChanged( const ScAddress& rAddr )
 {
-    for (sal_uInt16 i=0; i<nEntryCount; i++)
+    for (USHORT i=0; i<nEntryCount; i++)
         ppEntries[i]->SourceChanged( rAddr );
 }
 
 bool ScConditionalFormat::MarkUsedExternalReferences() const
 {
     bool bAllMarked = false;
-    for (sal_uInt16 i=0; !bAllMarked && i<nEntryCount; i++)
+    for (USHORT i=0; !bAllMarked && i<nEntryCount; i++)
         bAllMarked = ppEntries[i]->MarkUsedExternalReferences();
     return bAllMarked;
 }
@@ -1576,103 +1502,103 @@ bool ScConditionalFormat::MarkUsedExternalReferences() const
 ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList) :
     ScConditionalFormats_Impl()
 {
-    //  fuer Ref-Undo - echte Kopie mit neuen Tokens!
+    //	fuer Ref-Undo - echte Kopie mit neuen Tokens!
 
-    sal_uInt16 nCount = rList.Count();
+    USHORT nCount = rList.Count();
 
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for (USHORT i=0; i<nCount; i++)
         InsertNew( rList[i]->Clone() );
 
-    //!     sortierte Eintraege aus rList schneller einfuegen ???
+    //!		sortierte Eintraege aus rList schneller einfuegen ???
 }
 
 ScConditionalFormatList::ScConditionalFormatList(ScDocument* pNewDoc,
                                                 const ScConditionalFormatList& rList)
 {
-    //  fuer neues Dokument - echte Kopie mit neuen Tokens!
+    //	fuer neues Dokument - echte Kopie mit neuen Tokens!
 
-    sal_uInt16 nCount = rList.Count();
+    USHORT nCount = rList.Count();
 
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for (USHORT i=0; i<nCount; i++)
         InsertNew( rList[i]->Clone(pNewDoc) );
 
-    //!     sortierte Eintraege aus rList schneller einfuegen ???
+    //!		sortierte Eintraege aus rList schneller einfuegen ???
 }
 
-sal_Bool ScConditionalFormatList::operator==( const ScConditionalFormatList& r ) const
+BOOL ScConditionalFormatList::operator==( const ScConditionalFormatList& r ) const
 {
     // fuer Ref-Undo - interne Variablen werden nicht verglichen
 
-    sal_uInt16 nCount = Count();
-    sal_Bool bEqual = ( nCount == r.Count() );
-    for (sal_uInt16 i=0; i<nCount && bEqual; i++)           // Eintraege sind sortiert
-        if ( !(*this)[i]->EqualEntries(*r[i]) )         // Eintraege unterschiedlich ?
-            bEqual = false;
+    USHORT nCount = Count();
+    BOOL bEqual = ( nCount == r.Count() );
+    for (USHORT i=0; i<nCount && bEqual; i++)			// Eintraege sind sortiert
+        if ( !(*this)[i]->EqualEntries(*r[i]) )			// Eintraege unterschiedlich ?
+            bEqual = FALSE;
 
     return bEqual;
 }
 
 ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
 {
-    //! binaer suchen
+    //!	binaer suchen
 
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    USHORT nCount = Count();
+    for (USHORT i=0; i<nCount; i++)
         if ((*this)[i]->GetKey() == nKey)
             return (*this)[i];
 
-    OSL_FAIL("ScConditionalFormatList: Eintrag nicht gefunden");
+    DBG_ERROR("ScConditionalFormatList: Eintrag nicht gefunden");
     return NULL;
 }
 
 void ScConditionalFormatList::CompileAll()
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    USHORT nCount = Count();
+    for (USHORT i=0; i<nCount; i++)
         (*this)[i]->CompileAll();
 }
 
 void ScConditionalFormatList::CompileXML()
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    USHORT nCount = Count();
+    for (USHORT i=0; i<nCount; i++)
         (*this)[i]->CompileXML();
 }
 
 void ScConditionalFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    USHORT nCount = Count();
+    for (USHORT i=0; i<nCount; i++)
         (*this)[i]->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
 }
 
 void ScConditionalFormatList::RenameCellStyle( const String& rOld, const String& rNew )
 {
-    sal_uLong nCount=Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    ULONG nCount=Count();
+    for (USHORT i=0; i<nCount; i++)
         (*this)[i]->RenameCellStyle(rOld,rNew);
 }
 
 void ScConditionalFormatList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    USHORT nCount = Count();
+    for (USHORT i=0; i<nCount; i++)
         (*this)[i]->UpdateMoveTab( nOldPos, nNewPos );
 }
 
 void ScConditionalFormatList::SourceChanged( const ScAddress& rAddr )
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    USHORT nCount = Count();
+    for (USHORT i=0; i<nCount; i++)
         (*this)[i]->SourceChanged( rAddr );
 }
 
 bool ScConditionalFormatList::MarkUsedExternalReferences() const
 {
     bool bAllMarked = false;
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; !bAllMarked && i<nCount; i++)
+    USHORT nCount = Count();
+    for (USHORT i=0; !bAllMarked && i<nCount; i++)
         bAllMarked = (*this)[i]->MarkUsedExternalReferences();
     return bAllMarked;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <dispatch/oxt_handler.hxx>
@@ -47,7 +47,7 @@
 #include <comphelper/mediadescriptor.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/io/XInputStream.hpp>
@@ -55,7 +55,7 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <comphelper/sequenceashashmap.hxx>
@@ -63,23 +63,23 @@
 #include <rtl/ustrbuf.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  non exported const
+//	non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported definitions
 //_________________________________________________________________________________________________________________
 
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
@@ -126,7 +126,7 @@ DEFINE_INIT_SERVICE                 (   Oxt_Handler,
     @threadsafe yes
 *//*-*************************************************************************************************************/
 Oxt_Handler::Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //  Init baseclasses first
+        //	Init baseclasses first
         :   ThreadHelpBase      (          )
         ,   ::cppu::OWeakObject (          )
         // Init member
@@ -190,7 +190,7 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
     rtl::OUString sServiceName = UNISTRING( "com.sun.star.deployment.ui.PackageManagerDialog" );
     css::uno::Sequence< css::uno::Any > lParams(1);
     lParams[0] <<= aURL.Main;
-
+    
     css::uno::Reference< css::uno::XInterface > xService;
 
     xService = m_xFactory->createInstanceWithArguments( sServiceName, lParams );
@@ -205,6 +205,17 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
         xListener->dispatchFinished( aEvent );
     }
 
+/*
+    // Try to initialize player.
+    m_xListener = xListener;
+    if (m_aPlayer.SetSoundName(aURL.Complete))
+    {
+        // OK- we can start async playing ...
+        // Count this request and initialize self-holder against dieing by uno ref count ...
+        m_xSelfHold = css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+        m_aPlayer.Play();
+    }
+*/
     // } SAFE
     aLock.unlock();
 }
@@ -258,7 +269,7 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oxt_OpenOffice_Extension"));
+        sTypeName = ::rtl::OUString::createFromAscii("oxt_OpenOffice_Extension");
         aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }

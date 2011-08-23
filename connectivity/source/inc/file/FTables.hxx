@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@ namespace connectivity
             public sdbcx::OCollection
         {
         protected:
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >	m_xMetaData;
 
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
         public:
             OTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const TStringVector &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
+                const TStringVector &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->storesMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
                 ,m_xMetaData(_rMetaData)
             {}
 

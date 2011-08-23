@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ public class ComponentContext_Test {
             Hashtable table = new Hashtable();
             table.put( "bla1", new ComponentContextEntry( null, new Integer( 1 ) ) );
             XComponentContext xInitialContext = Bootstrap.createInitialComponentContext( table );
-
+            
             table = new Hashtable();
             table.put( "bla2", new ComponentContextEntry( new Integer( 2 ) ) );
             table.put( "bla3", new Integer( 3 ) );
             XComponentContext xContext = new ComponentContext( table, xInitialContext );
-
+            
             XMultiComponentFactory xSMgr = xContext.getServiceManager();
             Object o = xSMgr.createInstanceWithContext( "com.sun.star.loader.Java", xContext );
             if (o == null)
@@ -68,7 +68,7 @@ public class ComponentContext_Test {
             o = xSMgr.createInstanceWithContext( "com.sun.star.lang.ServiceManager", xContext );
             if (o == null)
                 System.err.println( "### failed raising service: 6!" );
-
+            
             if (xContext.getValueByName( "bla1" ) == null ||
                 xContext.getValueByName( "bla2" ) == null ||
                 xContext.getValueByName( "bla3" ) == null ||
@@ -84,7 +84,7 @@ public class ComponentContext_Test {
             {
                 System.err.println( "### bootstrap context test failed: 2!" );
             }
-
+            
             XComponent xComp = UnoRuntime.queryInterface(
                 XComponent.class, xInitialContext );
             xComp.dispose();

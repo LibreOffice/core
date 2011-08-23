@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ const DWORD OUTER_FRAME_COLOR     = 0; // black
 const sal_Int32 OUTER_FRAME_WIDTH = 1; // pixel
 
 // it's the standard windows color of an inactive window border
-const DWORD INNER_FRAME_COLOR     = 0xC8D0D4;
+const DWORD INNER_FRAME_COLOR     = 0xC8D0D4; 
 const sal_Int32 INNER_FRAME_WIDTH = 1; // pixel
 
 //---------------------------------------------------
@@ -87,9 +87,9 @@ sal_Int32 CHelpPopupWindow::s_RegisterWndClassCount = 0;
 //
 //---------------------------------------------------
 
-CHelpPopupWindow::CHelpPopupWindow(
-    HINSTANCE hInstance,
-    HWND hwndParent ) :
+CHelpPopupWindow::CHelpPopupWindow( 
+    HINSTANCE hInstance,    
+    HWND hwndParent ) :    
     m_hMargins( 0 ),
     m_vMargins( 0 ),
     m_avCharWidth( 0 ),
@@ -99,13 +99,13 @@ CHelpPopupWindow::CHelpPopupWindow(
     m_hInstance( hInstance ),
     m_hBitmapShadow( NULL ),
     m_hBrushShadow( NULL )
-{
-    m_bWndClassRegistered = RegisterWindowClass( ) ? sal_True : sal_False;
+{	
+    m_bWndClassRegistered = RegisterWindowClass( ) ? sal_True : sal_False;           
 
     // create a pattern brush for the window shadow
     WORD aPattern[] = { 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55 };
-
-    m_hBitmapShadow = CreateBitmap( 8, 8, 1, 1, aPattern );
+        
+    m_hBitmapShadow = CreateBitmap( 8, 8, 1, 1, aPattern );        
     m_hBrushShadow  = CreatePatternBrush( m_hBitmapShadow );
 }
 
@@ -114,7 +114,7 @@ CHelpPopupWindow::CHelpPopupWindow(
 //---------------------------------------------------
 
 CHelpPopupWindow::~CHelpPopupWindow( )
-{
+{	
     // remember: we don't have to destroy the
     // preview window because it will be destroyed
     // by it's parent window (the FileOpen dialog)
@@ -127,7 +127,7 @@ CHelpPopupWindow::~CHelpPopupWindow( )
 }
 
 //---------------------------------------------------
-//
+// 
 //---------------------------------------------------
 
 void SAL_CALL CHelpPopupWindow::setText( const rtl::OUString& aHelpText )
@@ -136,7 +136,7 @@ void SAL_CALL CHelpPopupWindow::setText( const rtl::OUString& aHelpText )
 }
 
 //---------------------------------------------------
-//
+// 
 //---------------------------------------------------
 
 void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
@@ -144,11 +144,11 @@ void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
     OSL_ENSURE( NULL == m_hwnd, "method should not be called twice in sequence" );
 
     // we create a window with length and heigth of 0
-    // first in order to get a device context of this
+    // first in order to get a device context of this 
     // window, then we calculate the upper left corner
     // and the dimensions and resize the window
 
-    m_hwnd = CreateWindowEx(
+    m_hwnd = CreateWindowEx( 
         NULL,
         HELPPOPUPWND_CLASS_NAME,
         NULL,
@@ -195,40 +195,40 @@ HWND SAL_CALL CHelpPopupWindow::setParent( HWND hwndNewParent )
 void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
 {
     OSL_ASSERT( m_hwnd && lprect );
-
+            
     SetRect( lprect, 0, 0, MAX_CHARS_PER_LINE * m_avCharWidth, 0 );
 
     HDC hdc = GetDC( m_hwnd );
 
     // set the font we are using later
-    HGDIOBJ oldFont = SelectObject(
+    HGDIOBJ oldFont = SelectObject( 
         hdc, GetStockObject( DEFAULT_GUI_FONT ) );
-
+    
     UINT nFormat = DT_WORDBREAK | DT_CALCRECT | DT_EXTERNALLEADING | DT_LEFT;
 
     if ( m_HelpText.getLength( ) <= MAX_CHARS_PER_LINE )
         nFormat |= DT_SINGLELINE;
 
-    DrawText(
-      hdc,
-      reinterpret_cast<LPCTSTR>(m_HelpText.getStr( )),
-      m_HelpText.getLength( ),
-      lprect,
+    DrawText( 
+      hdc, 
+      reinterpret_cast<LPCTSTR>(m_HelpText.getStr( )), 
+      m_HelpText.getLength( ), 
+      lprect, 
       nFormat );
-
+   
     // add the necessary space for the frames
     // and margins
 
-    lprect->bottom +=
-        m_vMargins +
-        SHADOW_HEIGHT +
-        OUTER_FRAME_WIDTH * 2 +
+    lprect->bottom += 
+        m_vMargins + 
+        SHADOW_HEIGHT + 
+        OUTER_FRAME_WIDTH * 2 + 
         INNER_FRAME_WIDTH * 2;
-
-    lprect->right +=
-        SHADOW_WIDTH +
-        2 * m_avCharWidth +
-        OUTER_FRAME_WIDTH * 2 +
+   
+    lprect->right += 
+        SHADOW_WIDTH + 
+        2 * m_avCharWidth + 
+        OUTER_FRAME_WIDTH * 2 + 
         INNER_FRAME_WIDTH * 2;
 
     SelectObject( hdc, oldFont );
@@ -265,19 +265,19 @@ void SAL_CALL CHelpPopupWindow::adjustWindowSize( sal_Int32* cx_new, sal_Int32* 
 //
 //---------------------------------------------------
 
-void SAL_CALL CHelpPopupWindow::adjustWindowPos(
+void SAL_CALL CHelpPopupWindow::adjustWindowPos( 
     sal_Int32 x, sal_Int32 y, sal_Int32 cx, sal_Int32 cy )
-{
+{            
     int   popX;
     int   popY;
     int   popWidth;
     int   popHeight;
-
+    
     OSL_ASSERT( m_hwnd );
 
     HDC hdc = GetDC( m_hwnd );
 
-    // assuming these are screen coordinates
+    // assuming these are screen coordinates     
     popWidth  = cx;
     popHeight = cy;
     popX      = x - ( popWidth / 2 );
@@ -288,13 +288,13 @@ void SAL_CALL CHelpPopupWindow::adjustWindowPos(
 
     if (popX < 0)
         popX = 0;
-
+    
     if (popY < 0)
         popY = 0;
-
+        
     if ((popX + popWidth) > xScreen)
         popX = xScreen - popWidth;
-
+        
     if ((popY + popHeight) > yScreen)
         popY = yScreen - popHeight;
 
@@ -305,7 +305,7 @@ void SAL_CALL CHelpPopupWindow::adjustWindowPos(
         popY,
         0,
         0,
-        SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE );
+        SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE );        
 
     ReleaseDC( m_hwnd, hdc );
 }
@@ -319,20 +319,20 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
     RECT        rc;
     RECT        rect;
     HGDIOBJ     hpen, hpenOld;
-    HGDIOBJ     hbrOld;
+    HGDIOBJ     hbrOld;        
     COLORREF    oldBkColor;
     COLORREF    oldTextColor;
     HGDIOBJ     oldFont;
     HGDIOBJ     oldBrush;
     HGDIOBJ     hBrush;
-
+        
     GetClientRect( hWnd, &rc );
 
-    // draw the black border
+    // draw the black border 
 
     hBrush   = CreateSolidBrush( GetSysColor( COLOR_INFOBK ) );
     oldBrush = SelectObject( hdc, hBrush );
-
+    
     hpen    = CreatePen( PS_SOLID, 0, OUTER_FRAME_COLOR );
     hpenOld = SelectObject( hdc, hpen );
 
@@ -367,7 +367,7 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
 
     DeleteObject( hBrush );
     DeleteObject( hpen );
-
+          
     // Write some text to this window
 
     rect.left   = rc.left   + OUTER_FRAME_WIDTH + INNER_FRAME_WIDTH + 1 + m_hMargins;
@@ -377,26 +377,26 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
 
     oldBkColor   = SetBkColor( hdc, GetSysColor( COLOR_INFOBK ) );
     oldTextColor = SetTextColor( hdc, COLOR_INFOTEXT );
-
+            
     oldFont = SelectObject( hdc, GetStockObject( DEFAULT_GUI_FONT ) );
 
     UINT nFormat = DT_WORDBREAK | DT_EXTERNALLEADING | DT_LEFT;
-
+    
     if ( m_HelpText.getLength( ) <= MAX_CHARS_PER_LINE )
         nFormat |= DT_SINGLELINE;
 
-    DrawText(
-        hdc,
-        (LPWSTR)m_HelpText.getStr( ),
-        m_HelpText.getLength( ),
-        &rect,
+    DrawText( 
+        hdc, 
+        (LPWSTR)m_HelpText.getStr( ), 
+        m_HelpText.getLength( ), 
+        &rect, 
         nFormat );
 
     SelectObject( hdc, oldFont );
     SetTextColor( hdc, oldTextColor );
     SetBkColor( hdc, oldBkColor );
 
-    // set text color and text background color
+    // set text color and text background color 
     // see MSDN PatBlt
 
     oldBkColor   = SetBkColor( hdc, RGB( 0, 0, 0 ) );
@@ -449,7 +449,7 @@ void SAL_CALL CHelpPopupWindow::onCreate( HWND hwnd )
 
     HDC hdc = GetDC( m_hwnd );
 
-    HGDIOBJ oldFont = SelectObject(
+    HGDIOBJ oldFont = SelectObject( 
         hdc, GetStockObject( DEFAULT_GUI_FONT ) );
 
     TEXTMETRIC tm;
@@ -461,7 +461,7 @@ void SAL_CALL CHelpPopupWindow::onCreate( HWND hwnd )
     if ( 0 == m_hMargins )
         m_hMargins = m_avCharWidth;
 
-    if ( 0 == m_vMargins )
+    if ( 0 == m_vMargins ) 
         m_vMargins = m_avCharHeight;
 
     SelectObject( hdc, oldFont );
@@ -472,8 +472,8 @@ void SAL_CALL CHelpPopupWindow::onCreate( HWND hwnd )
 //---------------------------------------------------
 //
 //---------------------------------------------------
-
-LRESULT CALLBACK CHelpPopupWindow::WndProc(
+    
+LRESULT CALLBACK CHelpPopupWindow::WndProc( 
     HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     LRESULT lResult = 0;
@@ -481,17 +481,17 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
     switch ( uMsg )
     {
         case WM_CREATE:
-            {
-                LPCREATESTRUCT lpcs =
+            {                                
+                LPCREATESTRUCT lpcs = 
                     reinterpret_cast< LPCREATESTRUCT >( lParam );
 
                 OSL_ASSERT( lpcs->lpCreateParams );
-
+                
                 CHelpPopupWindow* pImpl = reinterpret_cast< CHelpPopupWindow* >(
                     lpcs->lpCreateParams );
-
-                // connect the instance handle to the window
-                SetProp( hWnd, CURRENT_INSTANCE, pImpl );
+                
+                // connect the instance handle to the window            
+                SetProp( hWnd, CURRENT_INSTANCE, pImpl );                        
 
                 pImpl->onCreate( hWnd );
 
@@ -507,7 +507,7 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
 
                 OSL_ASSERT( pImpl );
 
-                PAINTSTRUCT ps;
+                PAINTSTRUCT ps;                
 
                 BeginPaint(hWnd, &ps);
                 pImpl->onPaint( hWnd, ps.hdc );
@@ -518,7 +518,7 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
          case WM_NCDESTROY:
             {
                 // RemoveProp returns the saved value on success
-                CHelpPopupWindow* pImpl = reinterpret_cast< CHelpPopupWindow* >(
+                CHelpPopupWindow* pImpl = reinterpret_cast< CHelpPopupWindow* >( 
                     RemoveProp( hWnd, CURRENT_INSTANCE ) );
 
                 OSL_ASSERT( pImpl );
@@ -527,16 +527,16 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
             }
          break;
 
-         case WM_LBUTTONDOWN:
+         case WM_LBUTTONDOWN:             
          case WM_KEYDOWN:
-         case WM_SYSKEYDOWN:
+         case WM_SYSKEYDOWN:         
          case WM_MBUTTONDOWN:
          case WM_RBUTTONDOWN:
-             ReleaseCapture();
+             ReleaseCapture();             
              DestroyWindow(hWnd);
          break;
 
-         default:
+         default:         
              return DefWindowProc(hWnd, uMsg, wParam, lParam);
        }
 
@@ -548,30 +548,30 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
 //---------------------------------------------------
 
 ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
-{
+{    
     osl::MutexGuard aGuard( s_Mutex );
 
     if ( 0 == s_ClassAtom )
-    {
-        // register the window class
-        WNDCLASSEX wndClsEx;
+    {     
+        // register the window class 
+        WNDCLASSEX wndClsEx;	
 
         ZeroMemory(&wndClsEx, sizeof(wndClsEx));
 
-        wndClsEx.cbSize        = sizeof(wndClsEx);
+        wndClsEx.cbSize        = sizeof(wndClsEx);	    
         wndClsEx.lpfnWndProc   = CHelpPopupWindow::WndProc;
         wndClsEx.hInstance     = m_hInstance;
         wndClsEx.hCursor       = LoadCursor(NULL, IDC_ARROW);
         wndClsEx.hbrBackground = (HBRUSH)GetStockObject( NULL_BRUSH );
         wndClsEx.lpszClassName = HELPPOPUPWND_CLASS_NAME;
-
+                
         // register the preview window class
-        // !!! Win95 -   the window class will be unregistered automaticly
-        //               if the dll is unloaded
+        // !!! Win95 -   the window class will be unregistered automaticly 
+        //			     if the dll is unloaded
         //     Win2000 - the window class must be unregistered manually
-        //               if the dll is unloaded
+        //				 if the dll is unloaded
         s_ClassAtom = RegisterClassEx( &wndClsEx );
-        OSL_ASSERT(s_ClassAtom);
+        OSL_ASSERT(s_ClassAtom);        
     }
 
     // increment the register class counter
@@ -590,13 +590,13 @@ ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
 void SAL_CALL CHelpPopupWindow::UnregisterWindowClass( )
 {
     osl::MutexGuard aGuard( s_Mutex );
-
-    OSL_ASSERT( ( (0 != s_ClassAtom) && (s_RegisterWndClassCount > 0)) ||
+    
+    OSL_ASSERT( ( (0 != s_ClassAtom) && (s_RegisterWndClassCount > 0)) || 
                 ( (0 == s_ClassAtom) && (0 == s_RegisterWndClassCount) ) );
 
-    // update the register class counter
+    // update the register class counter 
     // and unregister the window class if
-    // counter drops to zero
+    // counter drops to zero    
     if ( 0 != s_ClassAtom )
     {
         s_RegisterWndClassCount--;
@@ -608,11 +608,11 @@ void SAL_CALL CHelpPopupWindow::UnregisterWindowClass( )
         if ( !UnregisterClass(
                  (LPCTSTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance ) )
         {
-            OSL_FAIL( "unregister window class failed" );
+            OSL_ENSURE( false, "unregister window class failed" );
         }
 
         s_ClassAtom = 0;
-    }
+    }    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

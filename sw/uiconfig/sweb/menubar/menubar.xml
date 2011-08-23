@@ -60,7 +60,6 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:SelectAll"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
       <menu:menuitem menu:id=".uno:SearchDialog"/>
       <menu:menuitem menu:id=".uno:EditGlossary"/>
       <menu:menuseparator/>
@@ -144,6 +143,8 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertObject"/>
           <menu:menuitem menu:id=".uno:InsertPlugin"/>
+          <menu:menuitem menu:id=".uno:InsertSound"/>
+          <menu:menuitem menu:id=".uno:InsertVideo"/>
           <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
           <menu:menuitem menu:id=".uno:InsertObjectChart"/>
         </menu:menupopup>

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,32 +68,32 @@ public:
             ~ScEditWindow();
 
     using Control::SetFont;
-    void            SetFont( const ScPatternAttr& rPattern );
+    void 			SetFont( const ScPatternAttr& rPattern );
     using Control::SetText;
-    void            SetText( const EditTextObject& rTextObject );
-    EditTextObject* CreateTextObject();
-    void            SetCharAttriutes();
+    void 			SetText( const EditTextObject& rTextObject );
+    EditTextObject*	CreateTextObject();
+    void			SetCharAttriutes();
 
-    void            InsertField( const SvxFieldItem& rFld );
+    void			InsertField( const SvxFieldItem& rFld );
 
-    void            SetNumType(SvxNumType eNumType);
+    void			SetNumType(SvxNumType eNumType);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     inline ScHeaderEditEngine*  GetEditEngine() const {return pEdEngine;}
 protected:
-    virtual void    Paint( const Rectangle& rRec );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    GetFocus();
+    virtual void	Paint( const Rectangle& rRec );
+    virtual void	MouseMove( const MouseEvent& rMEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	KeyInput( const KeyEvent& rKEvt );
+    virtual void	Command( const CommandEvent& rCEvt );
+    virtual void	GetFocus();
     virtual void    LoseFocus();
 
 private:
-    ScHeaderEditEngine* pEdEngine;
-    EditView*           pEdView;
+    ScHeaderEditEngine*	pEdEngine;
+    EditView*			pEdView;
     ScEditWindowLocation eLocation;
     bool mbRTL;
 
@@ -106,33 +106,33 @@ class SC_DLLPUBLIC ScExtIButton : public ImageButton
 {
 private:
 
-    Timer           aTimer;
-    ScPopupMenu*    pPopupMenu;
-    Link            aMLink;
-    sal_uInt16          nSelected;
+    Timer			aTimer;
+    ScPopupMenu*	pPopupMenu;
+    Link			aMLink;
+    USHORT			nSelected;
 
     SC_DLLPRIVATE  DECL_LINK( TimerHdl, Timer*);
 
 protected:
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt);
-    virtual void    Click();
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt);
+    virtual void	Click();
 
-    virtual void    StartPopup();
+    virtual void	StartPopup();
 
 public:
 
     ScExtIButton(Window* pParent, const ResId& rResId );
 
-    void            SetPopupMenu(ScPopupMenu* pPopUp);
+    void			SetPopupMenu(ScPopupMenu* pPopUp);
 
-    sal_uInt16          GetSelected();
+    USHORT			GetSelected();
 
     void            SetMenuHdl( const Link& rLink ) { aMLink = rLink; }
     const Link&     GetMenuHdl() const { return aMLink; }
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual long	PreNotify( NotifyEvent& rNEvt );
 };
 
 #endif // SC_TPHFEDIT_HXX

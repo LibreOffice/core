@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,10 @@
 #define _SGFFILT_HXX
 #include <tools/urlobj.hxx>
 
-sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion);
-sal_Bool SgfBMapFilter(SvStream& rInp, SvStream& rOut);
-sal_Bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf);
-sal_Bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath );
+BYTE CheckSgfTyp(SvStream& rInp, USHORT& nVersion);
+BOOL SgfBMapFilter(SvStream& rInp, SvStream& rOut);
+BOOL SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf);
+BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath );
 
 // Konstanten fÅr CheckSgfTyp()
 #define SGF_BITIMAGE   1     /* Bitmap                      */

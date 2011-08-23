@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,6 @@
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
@@ -100,17 +99,22 @@
 #include <unoframe.hxx>
 #include <unotextbodyhf.hxx>
 #include <SwStyleNameMapper.hxx>
+/// OD 22.08.2002 #99657#
+///     include definition of class SvxBrushItem and GraphicObject
+///     in order to determine, if background is transparent.
 #include <editeng/brshitem.hxx>
 #include <svtools/grfmgr.hxx>
+
 #include <cmdid.h>
 #include <unomid.h>
 #include <comcore.hrc>
 #include <svx/svdundo.hxx> // #111827#
+// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+// --> OD 2006-03-06 #125892#
 #include <HandleAnchorNodeChg.hxx>
+// <--
 #include <svl/cjkoptions.hxx>
-#include <switerator.hxx>
-#include <pagedeschint.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -124,8 +128,8 @@ TYPEINIT2(SwFmtFooter,  SfxPoolItem, SwClient );
 TYPEINIT2(SwFmtPageDesc,  SfxPoolItem, SwClient );
 TYPEINIT1_AUTOFACTORY(SwFmtLineNumber, SfxPoolItem);
 
-/* --------------------------------------------------
- *  Umwandlung fuer QueryValue
+/* -----------------19.05.98 09:26-------------------
+ * 	Umwandlung fuer QueryValue
  * --------------------------------------------------*/
 sal_Int16 lcl_RelToINT(sal_Int16 eRelation)
 {
@@ -186,7 +190,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
     {
         // Klammer, weil im DTOR SwClientIter das Flag bTreeChg zurueck
         // gesetzt wird. Unguenstig, wenn das Format vorher zerstoert wird.
-        SwClientIter aIter( *pFmt );        // TODO
+        SwClientIter aIter( *pFmt );
         SwClient *pLast = aIter.GoStart();
         if( pLast )
             do {
@@ -213,39 +217,47 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                 // <--
                 //Wenn in einem der Nodes noch ein Crsr angemeldet ist, muss das
                 //ParkCrsr einer (beliebigen) Shell gerufen werden.
-                pNode = & aIdx.GetNode();
+                pNode = pDoc->GetNodes()[ aIdx ];
                 sal_uInt32 nEnd = pNode->EndOfSectionIndex();
                 while ( aIdx < nEnd )
                 {
                     if ( pNode->IsCntntNode() &&
                          ((SwCntntNode*)pNode)->GetDepends() )
                     {
-                        SwCrsrShell *pShell = SwIterator<SwCrsrShell,SwCntntNode>::FirstElement( *(SwCntntNode*)pNode );
-                        if( pShell )
+                        SwClientIter aIter( *(SwCntntNode*)pNode );
+                        do
                         {
-                            pShell->ParkCrsr( aIdx );
+                            if( aIter()->ISA( SwCrsrShell ) )
+                            {
+                                ((SwCrsrShell*)aIter())->ParkCrsr( aIdx );
                                 aIdx = nEnd-1;
-                        }
+                                break;
+                            }
+                        } while ( aIter++ );
                     }
                     aIdx++;
-                    pNode = & aIdx.GetNode();
+                    pNode = pDoc->GetNodes()[ aIdx ];
                 }
             }
             rCnt.SetNewCntntIdx( (const SwNodeIndex*)0 );
 
             // beim Loeschen von Header/Footer-Formaten IMMER das Undo
             // abschalten! (Bug 31069)
-            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+            sal_Bool bDoesUndo = pDoc->DoesUndo();
+            pDoc->DoUndo( sal_False );
 
             OSL_ENSURE( pNode, "Ein grosses Problem." );
             pDoc->DeleteSection( pNode );
+
+            if( bDoesUndo )
+                pDoc->DoUndo( sal_True );
         }
         delete pFmt;
     }
 }
 
-//  class SwFmtFrmSize
-//  Implementierung teilweise inline im hxx
+//	class SwFmtFrmSize
+//	Implementierung teilweise inline im hxx
 
 SwFmtFrmSize::SwFmtFrmSize( SwFrmSize eSize, SwTwips nWidth, SwTwips nHeight )
     : SfxPoolItem( RES_FRM_SIZE ),
@@ -271,9 +283,9 @@ int  SwFmtFrmSize::operator==( const SfxPoolItem& rAttr ) const
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return( eFrmHeightType  == ((SwFmtFrmSize&)rAttr).eFrmHeightType &&
             eFrmWidthType  == ((SwFmtFrmSize&)rAttr).eFrmWidthType &&
-            aSize           == ((SwFmtFrmSize&)rAttr).GetSize()&&
-            nWidthPercent   == ((SwFmtFrmSize&)rAttr).GetWidthPercent() &&
-            nHeightPercent  == ((SwFmtFrmSize&)rAttr).GetHeightPercent() );
+            aSize    		== ((SwFmtFrmSize&)rAttr).GetSize()&&
+            nWidthPercent	== ((SwFmtFrmSize&)rAttr).GetWidthPercent() &&
+            nHeightPercent	== ((SwFmtFrmSize&)rAttr).GetHeightPercent() );
 }
 
 SfxPoolItem*  SwFmtFrmSize::Clone( SfxItemPool* ) const
@@ -281,7 +293,11 @@ SfxPoolItem*  SwFmtFrmSize::Clone( SfxItemPool* ) const
     return new SwFmtFrmSize( *this );
 }
 
-bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+
+/* -----------------24.04.98 11:36-------------------
+ *
+ * --------------------------------------------------*/
+bool SwFmtFrmSize::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -303,13 +319,13 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
         {
-            sal_Bool bTmp = 0xFF == GetHeightPercent();
+            BOOL bTmp = 0xFF == GetHeightPercent();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
         case MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT:
         {
-            sal_Bool bTmp = 0xFF == GetWidthPercent();
+            BOOL bTmp = 0xFF == GetWidthPercent();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -328,7 +344,7 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
         {
-            sal_Bool bTmp = ATT_FIX_SIZE != GetHeightSizeType();
+            BOOL bTmp = ATT_FIX_SIZE != GetHeightSizeType();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -339,7 +355,10 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+/* -----------------24.04.98 11:36-------------------
+ *
+ * --------------------------------------------------*/
+bool SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -371,7 +390,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0 && nSet <= 0xfe)
-                SetHeightPercent((sal_uInt8)nSet);
+                SetHeightPercent((BYTE)nSet);
             else
                 bRet = false;
         }
@@ -381,7 +400,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0 && nSet <= 0xfe)
-                SetWidthPercent((sal_uInt8)nSet);
+                SetWidthPercent((BYTE)nSet);
             else
                 bRet = false;
         }
@@ -468,8 +487,8 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-//  class SwFmtFillOrder
-//  Implementierung teilweise inline im hxx
+//	class SwFmtFillOrder
+//	Implementierung teilweise inline im hxx
 
 SwFmtFillOrder::SwFmtFillOrder( SwFillOrder nFO )
     : SfxEnumItem( RES_FILL_ORDER, sal_uInt16(nFO) )
@@ -485,8 +504,8 @@ sal_uInt16  SwFmtFillOrder::GetValueCount() const
     return SW_FILL_ORDER_END - SW_FILL_ORDER_BEGIN;
 }
 
-//  class SwFmtHeader
-//  Implementierung teilweise inline im hxx
+//	class SwFmtHeader
+//	Implementierung teilweise inline im hxx
 
 SwFmtHeader::SwFmtHeader( SwFrmFmt *pHeaderFmt )
     : SfxPoolItem( RES_HEADER ),
@@ -518,7 +537,7 @@ SwFmtHeader::SwFmtHeader( sal_Bool bOn )
 int  SwFmtHeader::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return ( GetRegisteredIn() == ((SwFmtHeader&)rAttr).GetRegisteredIn() &&
+    return ( pRegisteredIn == ((SwFmtHeader&)rAttr).GetRegisteredIn() &&
              bActive == ((SwFmtHeader&)rAttr).IsActive() );
 }
 
@@ -527,13 +546,8 @@ SfxPoolItem*  SwFmtHeader::Clone( SfxItemPool* ) const
     return new SwFmtHeader( *this );
 }
 
-void SwFmtHeader::RegisterToFormat( SwFmt& rFmt )
-{
-    rFmt.Add(this);
-}
-
-//  class SwFmtFooter
-//  Implementierung teilweise inline im hxx
+//	class SwFmtFooter
+//	Implementierung teilweise inline im hxx
 
 SwFmtFooter::SwFmtFooter( SwFrmFmt *pFooterFmt )
     : SfxPoolItem( RES_FOOTER ),
@@ -562,15 +576,10 @@ SwFmtFooter::SwFmtFooter( sal_Bool bOn )
         DelHFFormat( this, GetFooterFmt() );
 }
 
-void SwFmtFooter::RegisterToFormat( SwFmt& rFmt )
-{
-    rFmt.Add(this);
-}
-
 int  SwFmtFooter::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return ( GetRegisteredIn() == ((SwFmtFooter&)rAttr).GetRegisteredIn() &&
+    return ( pRegisteredIn == ((SwFmtFooter&)rAttr).GetRegisteredIn() &&
              bActive == ((SwFmtFooter&)rAttr).IsActive() );
 }
 
@@ -579,8 +588,8 @@ SfxPoolItem*  SwFmtFooter::Clone( SfxItemPool* ) const
     return new SwFmtFooter( *this );
 }
 
-//  class SwFmtCntnt
-//  Implementierung teilweise inline im hxx
+//	class SwFmtCntnt
+//	Implementierung teilweise inline im hxx
 
 SwFmtCntnt::SwFmtCntnt( const SwFmtCntnt &rCpy )
     : SfxPoolItem( RES_CNTNT )
@@ -621,8 +630,8 @@ SfxPoolItem*  SwFmtCntnt::Clone( SfxItemPool* ) const
     return new SwFmtCntnt( *this );
 }
 
-//  class SwFmtPageDesc
-//  Implementierung teilweise inline im hxx
+//	class SwFmtPageDesc
+//	Implementierung teilweise inline im hxx
 
 SwFmtPageDesc::SwFmtPageDesc( const SwFmtPageDesc &rCpy )
     : SfxPoolItem( RES_PAGEDESC ),
@@ -644,15 +653,10 @@ SwFmtPageDesc::SwFmtPageDesc( const SwPageDesc *pDesc )
 
  SwFmtPageDesc::~SwFmtPageDesc() {}
 
-bool SwFmtPageDesc::KnowsPageDesc() const
-{
-    return (GetRegisteredIn() != 0);
-}
-
 int  SwFmtPageDesc::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return  ( pDefinedIn == ((SwFmtPageDesc&)rAttr).pDefinedIn ) &&
+    return	( pDefinedIn == ((SwFmtPageDesc&)rAttr).pDefinedIn ) &&
             ( nNumOffset == ((SwFmtPageDesc&)rAttr).nNumOffset ) &&
             ( GetPageDesc() == ((SwFmtPageDesc&)rAttr).GetPageDesc() );
 }
@@ -662,39 +666,7 @@ SfxPoolItem*  SwFmtPageDesc::Clone( SfxItemPool* ) const
     return new SwFmtPageDesc( *this );
 }
 
-void SwFmtPageDesc::SwClientNotify( const SwModify&, const SfxHint& rHint )
-{
-    const SwPageDescHint* pHint = dynamic_cast<const SwPageDescHint*>(&rHint);
-    if ( pHint )
-    {
-        // mba: shouldn't that be broadcasted also?
-        SwFmtPageDesc aDfltDesc( pHint->GetPageDesc() );
-        SwPageDesc* pDesc = pHint->GetPageDesc();
-        const SwModify* pMod = GetDefinedIn();
-        if ( pMod )
-        {
-            if( pMod->ISA( SwCntntNode ) )
-                ((SwCntntNode*)pMod)->SetAttr( aDfltDesc );
-            else if( pMod->ISA( SwFmt ))
-                ((SwFmt*)pMod)->SetFmtAttr( aDfltDesc );
-            else
-            {
-                OSL_FAIL( "What kind of SwModify is this?" );
-                RegisterToPageDesc( *pDesc );
-            }
-        }
-        else
-            // there could be an Undo-copy
-            RegisterToPageDesc( *pDesc );
-    }
-}
-
-void SwFmtPageDesc::RegisterToPageDesc( SwPageDesc& rDesc )
-{
-    rDesc.Add( this );
-}
-
-void SwFmtPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwFmtPageDesc::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     if( !pDefinedIn )
         return;
@@ -731,11 +703,11 @@ void SwFmtPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 }
 
-bool SwFmtPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtPageDesc::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
-    bool    bRet = true;
+    bool	bRet = true;
     switch ( nMemberId )
     {
         case MID_PAGEDESC_PAGENUMOFFSET:
@@ -762,7 +734,7 @@ bool SwFmtPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFmtPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtPageDesc::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -792,8 +764,8 @@ bool SwFmtPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-//  class SwFmtCol
-//  Implementierung teilweise inline im hxx
+//	class SwFmtCol
+//	Implementierung teilweise inline im hxx
 
 SwColumn::SwColumn() :
     nWish ( 0 ),
@@ -815,7 +787,6 @@ sal_Bool SwColumn::operator==( const SwColumn &rCmp )
 
 SwFmtCol::SwFmtCol( const SwFmtCol& rCpy )
     : SfxPoolItem( RES_COL ),
-    eLineStyle( rCpy.eLineStyle ),
     nLineWidth( rCpy.nLineWidth),
     aLineColor( rCpy.aLineColor),
     nLineHeight( rCpy.GetLineHeight() ),
@@ -835,13 +806,12 @@ SwFmtCol::~SwFmtCol() {}
 
 SwFmtCol& SwFmtCol::operator=( const SwFmtCol& rCpy )
 {
-    eLineStyle  = rCpy.eLineStyle;
     nLineWidth  = rCpy.nLineWidth;
     aLineColor  = rCpy.aLineColor;
-    nLineHeight = rCpy.GetLineHeight();
-    eAdj        = rCpy.GetLineAdj();
-    nWidth      = rCpy.GetWishWidth();
-    bOrtho      = rCpy.IsOrtho();
+    nLineHeight	= rCpy.GetLineHeight();
+    eAdj		= rCpy.GetLineAdj();
+    nWidth		= rCpy.GetWishWidth();
+    bOrtho		= rCpy.IsOrtho();
 
     if ( aColumns.Count() )
         aColumns.DeleteAndDestroy( 0, aColumns.Count() );
@@ -855,7 +825,6 @@ SwFmtCol& SwFmtCol::operator=( const SwFmtCol& rCpy )
 
 SwFmtCol::SwFmtCol()
     : SfxPoolItem( RES_COL ),
-    eLineStyle( editeng::NO_STYLE ),
     nLineWidth(0),
     nLineHeight( 100 ),
     eAdj( COLADJ_NONE ),
@@ -868,13 +837,12 @@ int SwFmtCol::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     const SwFmtCol &rCmp = (const SwFmtCol&)rAttr;
-    if( !(eLineStyle        == rCmp.eLineStyle  &&
-          nLineWidth        == rCmp.nLineWidth  &&
-          aLineColor        == rCmp.aLineColor  &&
-          nLineHeight        == rCmp.GetLineHeight() &&
-          eAdj               == rCmp.GetLineAdj() &&
-          nWidth             == rCmp.GetWishWidth() &&
-          bOrtho             == rCmp.IsOrtho() &&
+    if( !(nLineWidth		== rCmp.nLineWidth  &&
+          aLineColor        == rCmp.aLineColor	&&
+          nLineHeight  		 == rCmp.GetLineHeight() &&
+          eAdj		 		 == rCmp.GetLineAdj() &&
+          nWidth  	 		 == rCmp.GetWishWidth() &&
+          bOrtho  			 == rCmp.IsOrtho() &&
           aColumns.Count() == rCmp.GetNumCols()) )
         return 0;
 
@@ -912,7 +880,7 @@ sal_uInt16 SwFmtCol::GetGutterWidth( sal_Bool bMin ) const
                 }
             }
             else
-            {   bSet = sal_True;
+            {	bSet = sal_True;
                 nRet = nTmp;
             }
         }
@@ -928,7 +896,7 @@ void SwFmtCol::SetGutterWidth( sal_uInt16 nNew, sal_uInt16 nAct )
     {
         sal_uInt16 nHalf = nNew / 2;
         for ( sal_uInt16 i = 0; i < aColumns.Count(); ++i )
-        {   SwColumn *pCol = aColumns[i];
+        {	SwColumn *pCol = aColumns[i];
             pCol->SetLeft ( nHalf );
             pCol->SetRight( nHalf );
             if ( i == 0 )
@@ -947,7 +915,7 @@ void SwFmtCol::Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16 nA
     if ( aColumns.Count() )
         aColumns.DeleteAndDestroy( 0, aColumns.Count() );
     for ( sal_uInt16 i = 0; i < nNumCols; ++i )
-    {   SwColumn *pCol = new SwColumn;
+    {	SwColumn *pCol = new SwColumn;
         aColumns.Insert( pCol, i );
     }
     bOrtho = sal_True;
@@ -1041,13 +1009,13 @@ void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
     }
 }
 
-bool SwFmtCol::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtCol::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
     if(MID_COLUMN_SEPARATOR_LINE == nMemberId)
     {
-        OSL_FAIL("not implemented");
+        DBG_ERROR("not implemented");
     }
     else
     {
@@ -1057,14 +1025,14 @@ bool SwFmtCol::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = false;
     if(MID_COLUMN_SEPARATOR_LINE == nMemberId)
     {
-        OSL_FAIL("not implemented");
+        DBG_ERROR("not implemented");
     }
     else
     {
@@ -1085,10 +1053,10 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 for(sal_uInt16 i = 0; i < nCount; i++)
                 {
                     SwColumn* pCol = new SwColumn;
-                    pCol->SetWishWidth( static_cast<sal_uInt16>(pArray[i].Width) );
-                    nWidthSum = static_cast<sal_uInt16>(nWidthSum + pArray[i].Width);
-                    pCol->SetLeft ( static_cast<sal_uInt16>(MM100_TO_TWIP(pArray[i].LeftMargin)) );
-                    pCol->SetRight( static_cast<sal_uInt16>(MM100_TO_TWIP(pArray[i].RightMargin)) );
+                    pCol->SetWishWidth( static_cast<USHORT>(pArray[i].Width) );
+                    nWidthSum = static_cast<USHORT>(nWidthSum + pArray[i].Width);
+                    pCol->SetLeft ( static_cast<USHORT>(MM100_TO_TWIP(pArray[i].LeftMargin)) );
+                    pCol->SetRight( static_cast<USHORT>(MM100_TO_TWIP(pArray[i].RightMargin)) );
                     aColumns.Insert(pCol, i);
                 }
             bRet = true;
@@ -1109,21 +1077,13 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 nLineWidth = pSwColums->GetSepLineWidth();
                 aLineColor.SetColor(pSwColums->GetSepLineColor());
                 nLineHeight = pSwColums->GetSepLineHeightRelative();
-                switch ( pSwColums->GetSepLineStyle() )
-                {
-                    default:
-                    case 0: eLineStyle = editeng::NO_STYLE; break;
-                    case 1: eLineStyle = editeng::SOLID; break;
-                    case 2: eLineStyle = editeng::DOTTED; break;
-                    case 3: eLineStyle = editeng::DASHED; break;
-                }
                 if(!pSwColums->GetSepLineIsOn())
                     eAdj = COLADJ_NONE;
                 else switch(pSwColums->GetSepLineVertAlign())
                 {
-                    case 0: eAdj = COLADJ_TOP;  break;  //VerticalAlignment_TOP
+                    case 0: eAdj = COLADJ_TOP;	break;	//VerticalAlignment_TOP
                     case 1: eAdj = COLADJ_CENTER;break; //VerticalAlignment_MIDDLE
-                    case 2: eAdj = COLADJ_BOTTOM;break; //VerticalAlignment_BOTTOM
+                    case 2: eAdj = COLADJ_BOTTOM;break;	//VerticalAlignment_BOTTOM
                     default: OSL_ENSURE( !this, "unknown alignment" ); break;
                 }
             }
@@ -1133,8 +1093,8 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-//  class SwFmtSurround
-//  Implementierung teilweise inline im hxx
+//	class SwFmtSurround
+//	Implementierung teilweise inline im hxx
 
 SwFmtSurround::SwFmtSurround( SwSurround eFly ) :
     SfxEnumItem( RES_SURROUND, sal_uInt16( eFly ) )
@@ -1170,7 +1130,7 @@ sal_uInt16  SwFmtSurround::GetValueCount() const
 }
 
 
-bool SwFmtSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtSurround::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1182,19 +1142,19 @@ bool SwFmtSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_SURROUND_ANCHORONLY:
         {
-            sal_Bool bTmp = IsAnchorOnly();
+            BOOL bTmp = IsAnchorOnly();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
                 break;
         case MID_SURROUND_CONTOUR:
         {
-            sal_Bool bTmp = IsContour();
+            BOOL bTmp = IsContour();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
                 break;
         case MID_SURROUND_CONTOUROUTSIDE:
         {
-            sal_Bool bTmp = IsOutside();
+            BOOL bTmp = IsOutside();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
                 break;
@@ -1205,7 +1165,7 @@ bool SwFmtSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtSurround::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1216,7 +1176,7 @@ bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
             if( eVal >= 0 && eVal < (sal_Int16)SURROUND_END )
-                SetValue( static_cast<sal_uInt16>(eVal) );
+                SetValue( static_cast<USHORT>(eVal) );
             else {
                 //exception
                 ;
@@ -1240,8 +1200,8 @@ bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-//  class SwFmtVertOrient
-//  Implementierung teilweise inline im hxx
+//	class SwFmtVertOrient
+//	Implementierung teilweise inline im hxx
 
 SwFmtVertOrient::SwFmtVertOrient( SwTwips nY, sal_Int16 eVert,
                                   sal_Int16 eRel )
@@ -1264,7 +1224,7 @@ SfxPoolItem*  SwFmtVertOrient::Clone( SfxItemPool* ) const
     return new SwFmtVertOrient( nYPos, eOrient, eRelation );
 }
 
-bool SwFmtVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtVertOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1303,7 +1263,7 @@ bool SwFmtVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtVertOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1352,8 +1312,8 @@ bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 
 
-//  class SwFmtHoriOrient
-//  Implementierung teilweise inline im hxx
+//	class SwFmtHoriOrient
+//	Implementierung teilweise inline im hxx
 
 SwFmtHoriOrient::SwFmtHoriOrient( SwTwips nX, sal_Int16 eHori,
                               sal_Int16 eRel, sal_Bool bPos )
@@ -1378,7 +1338,7 @@ SfxPoolItem*  SwFmtHoriOrient::Clone( SfxItemPool* ) const
     return new SwFmtHoriOrient( nXPos, eOrient, eRelation, bPosToggle );
 }
 
-bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1414,7 +1374,7 @@ bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 break;
         case MID_HORIORIENT_PAGETOGGLE:
         {
-            sal_Bool bTmp = IsPosToggle();
+            BOOL bTmp = IsPosToggle();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
                 break;
@@ -1425,7 +1385,7 @@ bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1478,8 +1438,8 @@ bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 
 
-//  class SwFmtAnchor
-//  Implementierung teilweise inline im hxx
+//	class SwFmtAnchor
+//	Implementierung teilweise inline im hxx
 
 SwFmtAnchor::SwFmtAnchor( RndStdIds nRnd, sal_uInt16 nPage )
     : SfxPoolItem( RES_ANCHOR ),
@@ -1560,7 +1520,10 @@ sal_uInt32 SwFmtAnchor::GetOrder() const
     return mnOrder;
 }
 
-bool SwFmtAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+/*-----------------16.02.98 15:21-------------------
+
+--------------------------------------------------*/
+bool SwFmtAnchor::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1614,7 +1577,7 @@ bool SwFmtAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1623,7 +1586,7 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case MID_ANCHOR_ANCHORTYPE:
         {
-            RndStdIds   eAnchor;
+            RndStdIds	eAnchor;
             switch( SWUnoHelper::GetEnumAsInt32( rVal ) )
             {
                 case  text::TextContentAnchorType_AS_CHARACTER:
@@ -1684,8 +1647,8 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-//  class SwFmtURL
-//  Implementierung teilweise inline im hxx
+//	class SwFmtURL
+//	Implementierung teilweise inline im hxx
 
 SwFmtURL::SwFmtURL() :
     SfxPoolItem( RES_URL ),
@@ -1714,10 +1677,10 @@ int SwFmtURL::operator==( const SfxPoolItem &rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     const SwFmtURL &rCmp = (SwFmtURL&)rAttr;
-    sal_Bool bRet = bIsServerMap     == rCmp.IsServerMap() &&
-                sURL             == rCmp.GetURL() &&
+    sal_Bool bRet = bIsServerMap  	 == rCmp.IsServerMap() &&
+                sURL			 == rCmp.GetURL() &&
                 sTargetFrameName == rCmp.GetTargetFrameName() &&
-                sName            == rCmp.GetName();
+                sName 			 == rCmp.GetName();
     if ( bRet )
     {
         if ( pMap && rCmp.GetMap() )
@@ -1747,7 +1710,7 @@ void SwFmtURL::SetMap( const ImageMap *pM )
 }
 extern const SvEventDescription* lcl_GetSupportedMacroItems();
 
-bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtURL::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1787,7 +1750,7 @@ bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_URL_SERVERMAP:
         {
-            sal_Bool bTmp = IsServerMap();
+            BOOL bTmp = IsServerMap();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
             break;
@@ -1798,7 +1761,7 @@ bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFmtURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtURL::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1909,12 +1872,12 @@ int SwFmtFtnEndAtTxtEnd::operator==( const SfxPoolItem& rItem ) const
             sSuffix == rAttr.sSuffix;
 }
 
-bool SwFmtFtnEndAtTxtEnd::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtFtnEndAtTxtEnd::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
-        case MID_COLLECT     :
+        case MID_COLLECT	 :
         {
             sal_Bool bVal = GetValue() >= FTNEND_ATTXTEND;
             rVal.setValue(&bVal, ::getBooleanCppuType());
@@ -1936,18 +1899,18 @@ bool SwFmtFtnEndAtTxtEnd::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
         case MID_NUM_TYPE    : rVal <<= aFmt.GetNumberingType(); break;
         case MID_PREFIX      : rVal <<= OUString(sPrefix); break;
         case MID_SUFFIX      : rVal <<= OUString(sSuffix); break;
-        default: return sal_False;
+        default: return FALSE;
     }
     return true;
 }
 
-bool SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
-        case MID_COLLECT     :
+        case MID_COLLECT	 :
         {
             sal_Bool bVal = *(sal_Bool*)rVal.getValue();
             if(!bVal && GetValue() >= FTNEND_ATTXTEND)
@@ -2075,7 +2038,7 @@ void SwFmtChain::SetNext( SwFlyFrmFmt *pFmt )
         ((SwModify*)aNext.GetRegisteredIn())->Remove( &aNext );
 }
 
-bool SwFmtChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtChain::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -2119,8 +2082,8 @@ int SwFmtLineNumber::operator==( const SfxPoolItem &rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
 
-    return nStartValue  == ((SwFmtLineNumber&)rAttr).GetStartValue() &&
-           bCountLines  == ((SwFmtLineNumber&)rAttr).IsCount();
+    return nStartValue	== ((SwFmtLineNumber&)rAttr).GetStartValue() &&
+           bCountLines	== ((SwFmtLineNumber&)rAttr).IsCount();
 }
 
 SfxPoolItem* SwFmtLineNumber::Clone( SfxItemPool* ) const
@@ -2128,7 +2091,7 @@ SfxPoolItem* SwFmtLineNumber::Clone( SfxItemPool* ) const
     return new SwFmtLineNumber( *this );
 }
 
-bool SwFmtLineNumber::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtLineNumber::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -2137,7 +2100,7 @@ bool SwFmtLineNumber::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_LINENUMBER_COUNT:
         {
-            sal_Bool bTmp = IsCount();
+            BOOL bTmp = IsCount();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -2151,7 +2114,7 @@ bool SwFmtLineNumber::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwFmtLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtLineNumber::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -2231,7 +2194,7 @@ SwTextGridItem& SwTextGridItem::operator=( const SwTextGridItem& rCpy )
     return *this;
 }
 
-bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwTextGridItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     bool bRet = true;
 
@@ -2280,7 +2243,7 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                     rVal <<= text::TextGridMode::LINES_AND_CHARS;
                     break;
                 default:
-                    OSL_FAIL("unknown SwTextGrid value");
+                    DBG_ERROR("unknown SwTextGrid value");
                     bRet = false;
                     break;
             }
@@ -2295,7 +2258,7 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             }
             break;
         default:
-            OSL_FAIL("Unknown SwTextGridItem member");
+            DBG_ERROR("Unknown SwTextGridItem member");
             bRet = false;
             break;
     }
@@ -2303,7 +2266,7 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     bool bRet = true;
     switch( nMemberId & ~CONVERT_TWIPS )
@@ -2346,11 +2309,11 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             nTmp = MM100_TO_TWIP( nTmp );
             if( bRet && (nTmp >= 0) && ( nTmp <= USHRT_MAX) )
                 if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEHEIGHT )
-                    SetBaseHeight( (sal_uInt16)nTmp );
+                    SetBaseHeight( (USHORT)nTmp );
                 else if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEWIDTH )
-                    SetBaseWidth( (sal_uInt16)nTmp );
+                    SetBaseWidth( (USHORT)nTmp );
                 else
-                    SetRubyHeight( (sal_uInt16)nTmp );
+                    SetRubyHeight( (USHORT)nTmp );
             else
                 bRet = false;
         }
@@ -2389,14 +2352,14 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             break;
         }
         default:
-            OSL_FAIL("Unknown SwTextGridItem member");
+            DBG_ERROR("Unknown SwTextGridItem member");
             bRet = false;
     }
 
     return bRet;
 }
 
-void SwTextGridItem::SwitchPaperMode(sal_Bool bNew)
+void SwTextGridItem::SwitchPaperMode(BOOL bNew)
 {
     if( bNew == bSquaredMode )
     {
@@ -2460,8 +2423,8 @@ void SwTextGridItem::Init()
         //if grid type change.
         //if(SvtCJKOptions().IsAsianTypographyEnabled())
         //{
-        //  bDisplayGrid = 0;
-        //  eGridType = GRID_LINES_ONLY;
+        //	bDisplayGrid = 0;
+        //	eGridType = GRID_LINES_ONLY;
         //}
     }
 }
@@ -2474,12 +2437,12 @@ SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
 
 
 //  class SwFrmFmt
-//  Implementierung teilweise inline im hxx
+//	Implementierung teilweise inline im hxx
 
 TYPEINIT1( SwFrmFmt, SwFmt );
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrmFmt, 20, 20 )
 
-void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwFrmFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     SwFmtHeader *pH = 0;
     SwFmtFooter *pF = 0;
@@ -2499,20 +2462,20 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         pF = (SwFmtFooter*)pNew;
 
     if( pH && pH->IsActive() && !pH->GetHeaderFmt() )
-    {   //Hat er keinen, mach ich ihm einen
+    {	//Hat er keinen, mach ich ihm einen
         SwFrmFmt *pFmt = GetDoc()->MakeLayoutFmt( RND_STD_HEADER, 0 );
-        pH->RegisterToFormat( *pFmt );
+        pFmt->Add( pH );
     }
 
     if( pF && pF->IsActive() && !pF->GetFooterFmt() )
-    {   //Hat er keinen, mach ich ihm einen
+    {	//Hat er keinen, mach ich ihm einen
         SwFrmFmt *pFmt = GetDoc()->MakeLayoutFmt( RND_STD_FOOTER, 0 );
-        pF->RegisterToFormat( *pFmt );
+        pFmt->Add( pF );
     }
 
     // MIB 24.3.98: Modify der Basisklasse muss immer gerufen werden, z.B.
     // wegen RESET_FMTWRITTEN.
-//  if ( GetDepends() )
+//	if ( GetDepends() )
         SwFmt::Modify( pOld, pNew );
 
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
@@ -2521,22 +2484,20 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 }
 
-void SwFrmFmt::RegisterToFormat( SwFmt& rFmt )
-{
-    rFmt.Add( this );
-}
-
 //Vernichtet alle Frms, die in aDepend angemeldet sind.
 
 void SwFrmFmt::DelFrms()
 {
-    SwIterator<SwFrm,SwFmt> aIter( *this );
-    SwFrm * pLast = aIter.First();
+    SwClientIter aIter( *this );
+    SwClient * pLast = aIter.GoStart();
     if( pLast )
         do {
-                pLast->Cut();
+            if ( pLast->ISA(SwFrm) )
+            {
+                ((SwFrm*)pLast)->Cut();
                 delete pLast;
-        } while( 0 != ( pLast = aIter.Next() ));
+            }
+        } while( 0 != ( pLast = aIter++ ));
 }
 
 void SwFrmFmt::MakeFrms()
@@ -2560,14 +2521,14 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
             SwNode2Layout aTmp( *pSectNd, pSectNd->GetIndex() - 1 );
             pFrm = aTmp.NextFrm();
 
-            if( pFrm && !pFrm->KnowsFormat(*this) )
+            if( pFrm && pFrm->GetRegisteredIn() != this )
             {
                 // die Section hat keinen eigenen frame::Frame, also falls
                 // jemand die tatsaechliche Groe?e braucht, so muss das
                 // noch implementier werden, in dem sich vom Ende noch
                 // der entsprechende frame::Frame besorgt wird.
                 // PROBLEM: was passiert bei SectionFrames, die auf unter-
-                //          schiedlichen Seiten stehen??
+                //			schiedlichen Seiten stehen??
                 if( bPrtArea )
                     aRet = pFrm->Prt();
                 else
@@ -2575,14 +2536,14 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
                     aRet = pFrm->Frm();
                     --aRet.Pos().Y();
                 }
-                pFrm = 0;       // das Rect ist ja jetzt fertig
+                pFrm = 0;		// das Rect ist ja jetzt fertig
             }
         }
     }
     else
     {
         sal_uInt16 nFrmType = RES_FLYFRMFMT == Which() ? FRM_FLY : USHRT_MAX;
-        pFrm = ::GetFrmOfModify( 0, *(SwModify*)this, nFrmType, pPoint,
+        pFrm = ::GetFrmOfModify( *(SwModify*)this, nFrmType, pPoint,
                                     0, bCalcFrm );
     }
 
@@ -2598,7 +2559,8 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
 
 SwContact* SwFrmFmt::FindContactObj()
 {
-    return SwIterator<SwContact,SwFmt>::FirstElement( *this );
+    SwClientIter aIter( *this );
+    return (SwContact*)aIter.First( TYPE( SwContact ) );
 }
 
 SdrObject* SwFrmFmt::FindSdrObject()
@@ -2615,7 +2577,7 @@ SdrObject* SwFrmFmt::FindRealSdrObject()
     if( RES_FLYFRMFMT == Which() )
     {
         Point aNullPt;
-        SwFlyFrm* pFly = (SwFlyFrm*)::GetFrmOfModify( 0, *this, FRM_FLY,
+        SwFlyFrm* pFly = (SwFlyFrm*)::GetFrmOfModify( *this, FRM_FLY,
                                                     &aNullPt, 0, sal_False );
         return pFly ? pFly->GetVirtDrawObj() : 0;
     }
@@ -2627,10 +2589,12 @@ sal_Bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
 {
     //Auch eine Verkettung von Innen nach aussen oder von aussen
     //nach innen ist nicht zulaessig.
-    SwFlyFrm *pSFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement(*this);
+    SwClientIter aIter( *(SwModify*)this );
+    SwFlyFrm *pSFly = (SwFlyFrm*)aIter.First( TYPE(SwFlyFrm) );
     if( pSFly )
     {
-        SwFlyFrm *pAskFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement(rFmt);
+        SwClientIter aOtherIter( (SwModify&)rFmt );
+        SwFlyFrm *pAskFly = (SwFlyFrm*)aOtherIter.First( TYPE(SwFlyFrm) );
         if( pAskFly )
             return pSFly->IsLowerOf( pAskFly );
     }
@@ -2704,28 +2668,30 @@ String SwFrmFmt::GetDescription() const
     return SW_RES(STR_FRAME);
 }
 
-//  class SwFlyFrmFmt
-//  Implementierung teilweise inline im hxx
+//	class SwFlyFrmFmt
+//	Implementierung teilweise inline im hxx
 
 TYPEINIT1( SwFlyFrmFmt, SwFrmFmt );
-IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrmFmt,  10, 10 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrmFmt,	10, 10 )
 
 SwFlyFrmFmt::~SwFlyFrmFmt()
 {
-    SwIterator<SwFlyFrm,SwFmt> aIter( *this );
-    SwFlyFrm * pLast = aIter.First();
+    SwClientIter aIter( *this );
+    SwClient * pLast = aIter.GoStart();
     if( pLast )
         do {
+            if ( pLast->ISA( SwFlyFrm ) )
                 delete pLast;
-        } while( 0 != ( pLast = aIter.Next() ));
 
-    SwIterator<SwFlyDrawContact,SwFmt> a2ndIter( *this );
-    SwFlyDrawContact* pC = a2ndIter.First();
-    if( pC )
+        } while( 0 != ( pLast = aIter++ ));
+
+    pLast = aIter.GoStart();
+    if( pLast )
         do {
-                delete pC;
+            if ( pLast->ISA( SwFlyDrawContact ) )
+                delete pLast;
 
-        } while( 0 != ( pC = a2ndIter.Next() ));
+        } while( 0 != ( pLast = aIter++ ));
 }
 
 //Erzeugen der Frms wenn das Format einen Absatzgebundenen Rahmen beschreibt.
@@ -2734,8 +2700,8 @@ SwFlyFrmFmt::~SwFlyFrmFmt()
 void SwFlyFrmFmt::MakeFrms()
 {
     // gibts ueberhaupt ein Layout ??
-    if( !GetDoc()->GetCurrentViewShell() )
-        return; //swmod 071108//swmod 071225
+    if( !GetDoc()->GetRootFrm() )
+        return;
 
     SwModify *pModify = 0;
     // OD 24.07.2003 #111032# - create local copy of anchor attribute for possible changes.
@@ -2768,7 +2734,8 @@ void SwFlyFrmFmt::MakeFrms()
             if ( pCNd )
             // <--
             {
-                if( SwIterator<SwFrm,SwCntntNode>::FirstElement( *pCNd ) )
+                SwClientIter aIter( *pCNd );
+                if ( aIter.First( TYPE(SwFrm) ) )
                 {
                     pModify = pCNd;
                 }
@@ -2796,15 +2763,17 @@ void SwFlyFrmFmt::MakeFrms()
     case FLY_AT_PAGE:
         {
             sal_uInt16 nPgNum = aAnchorAttr.GetPageNum();
-            SwPageFrm *pPage = (SwPageFrm*)GetDoc()->GetCurrentLayout()->Lower();   //swmod 080218
+            SwPageFrm *pPage = (SwPageFrm*)GetDoc()->GetRootFrm()->Lower();
             if( !nPgNum && aAnchorAttr.GetCntntAnchor() )
             {
                 SwCntntNode *pCNd =
                     aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
-                SwIterator<SwFrm,SwCntntNode> aIter( *pCNd );
-                for (SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+                SwClientIter aIter( *pCNd );
+                do
                 {
-                        pPage = pFrm->FindPageFrm();
+                    if( aIter()->ISA( SwFrm ) )
+                    {
+                        pPage = ((SwFrm*)aIter())->FindPageFrm();
                         if( pPage )
                         {
                             nPgNum = pPage->GetPhyPageNum();
@@ -2815,6 +2784,7 @@ void SwFlyFrmFmt::MakeFrms()
                         }
                         break;
                     }
+                } while ( aIter++ );
             }
             while ( pPage )
             {
@@ -2835,10 +2805,12 @@ void SwFlyFrmFmt::MakeFrms()
 
     if( pModify )
     {
-        SwIterator<SwFrm,SwModify> aIter( *pModify );
-        for( SwFrm *pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+        SwClientIter aIter( *pModify );
+        for( SwFrm *pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
+             pFrm;
+             pFrm = (SwFrm*)aIter.Next() )
         {
-            sal_Bool bAdd = !pFrm->IsCntntFrm() ||
+            BOOL bAdd = !pFrm->IsCntntFrm() ||
                             !((SwCntntFrm*)pFrm)->IsFollow();
 
             if ( FLY_AT_FLY == aAnchorAttr.GetAnchorId() && !pFrm->IsFlyFrm() )
@@ -2885,16 +2857,16 @@ void SwFlyFrmFmt::MakeFrms()
                 switch( aAnchorAttr.GetAnchorId() )
                 {
                 case FLY_AT_FLY:
-                    pFly = new SwFlyLayFrm( this, pFrm, pFrm );
+                    pFly = new SwFlyLayFrm( this, pFrm );
                     break;
 
                 case FLY_AT_PARA:
                 case FLY_AT_CHAR:
-                    pFly = new SwFlyAtCntFrm( this, pFrm, pFrm );
+                    pFly = new SwFlyAtCntFrm( this, pFrm );
                     break;
 
                 case FLY_AS_CHAR:
-                    pFly = new SwFlyInCntFrm( this, pFrm, pFrm );
+                    pFly = new SwFlyInCntFrm( this, pFrm );
                     break;
                 default:
                     OSL_ENSURE( !this, "Neuer Ankertyp" );
@@ -2911,7 +2883,7 @@ void SwFlyFrmFmt::MakeFrms()
 
 SwFlyFrm* SwFlyFrmFmt::GetFrm( const Point* pPoint, const sal_Bool bCalcFrm ) const
 {
-    return (SwFlyFrm*)::GetFrmOfModify( 0, *(SwModify*)this, FRM_FLY,
+    return (SwFlyFrm*)::GetFrmOfModify( *(SwModify*)this, FRM_FLY,
                                             pPoint, 0, bCalcFrm );
 }
 
@@ -2935,7 +2907,8 @@ sal_Bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
     {
     case RES_CONTENT_VISIBLE:
         {
-            ((SwPtrMsgPoolItem&)rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *this );
+            ((SwPtrMsgPoolItem&)rInfo).pObject =
+                SwClientIter( *(SwFlyFrmFmt*)this ).First( TYPE(SwFrm) );
         }
         return sal_False;
 
@@ -2961,7 +2934,7 @@ void SwFlyFrmFmt::SetObjTitle( const String& rTitle, bool bBroadcast )
         SwStringMsgPoolItem aOld( RES_TITLE_CHANGED, pMasterObject->GetTitle() );
         SwStringMsgPoolItem aNew( RES_TITLE_CHANGED, rTitle );
         pMasterObject->SetTitle( rTitle );
-        ModifyNotification( &aOld, &aNew );
+        Modify( &aOld, &aNew );
     }
     else
     {
@@ -2997,7 +2970,7 @@ void SwFlyFrmFmt::SetObjDescription( const String& rDescription, bool bBroadcast
         SwStringMsgPoolItem aOld( RES_DESCRIPTION_CHANGED, pMasterObject->GetDescription() );
         SwStringMsgPoolItem aNew( RES_DESCRIPTION_CHANGED, rDescription );
         pMasterObject->SetDescription( rDescription );
-        ModifyNotification( &aOld, &aNew );
+        Modify( &aOld, &aNew );
     }
     else
     {
@@ -3105,32 +3078,33 @@ SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrmFmt& _rFlyFrmFmt,
         {
             // determine 'old' number of anchor frames
             sal_uInt32 nOldNumOfAnchFrm( 0L );
-            SwIterator<SwFrm,SwCntntNode> aOldIter( *(aOldAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode()) );
-            for( SwFrm* pOld = aOldIter.First(); pOld; pOld = aOldIter.Next() )
+            SwClientIter aOldIter( *(aOldAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode()) );
+            for( aOldIter.First( TYPE(SwFrm) ); aOldIter(); aOldIter.Next() )
             {
                 ++nOldNumOfAnchFrm;
             }
             // determine 'new' number of anchor frames
             sal_uInt32 nNewNumOfAnchFrm( 0L );
-            SwIterator<SwFrm,SwCntntNode> aNewIter( *(_rNewAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode()) );
-            for( SwFrm* pNew = aNewIter.First(); pNew; pNew = aNewIter.Next() )
+            SwClientIter aNewIter( *(_rNewAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode()) );
+            for( aNewIter.First( TYPE(SwFrm) ); aNewIter(); aNewIter.Next() )
             {
                 ++nNewNumOfAnchFrm;
             }
             if ( nOldNumOfAnchFrm != nNewNumOfAnchFrm )
             {
                 // delete existing fly frames except <_pKeepThisFlyFrm>
-                SwIterator<SwFrm,SwFmt> aIter( mrFlyFrmFmt );
-                SwFrm* pFrm = aIter.First();
-                if ( pFrm )
+                SwClientIter aIter( mrFlyFrmFmt );
+                SwClient* pLast = aIter.GoStart();
+                if ( pLast )
                 {
                     do {
-                        if ( pFrm != _pKeepThisFlyFrm )
+                        SwFrm* pFrm( dynamic_cast<SwFrm*>(pLast) );
+                        if ( pFrm && pFrm != _pKeepThisFlyFrm )
                         {
                             pFrm->Cut();
                             delete pFrm;
                         }
-                    } while( 0 != ( pFrm = aIter.Next() ));
+                    } while( 0 != ( pLast = aIter++ ));
                 }
                 // indicate, that re-creation of fly frames necessary
                 mbAnchorNodeChanged = true;
@@ -3147,11 +3121,11 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
     }
 }
 // <--
-//  class SwDrawFrmFmt
-//  Implementierung teilweise inline im hxx
+//	class SwDrawFrmFmt
+//	Implementierung teilweise inline im hxx
 
 TYPEINIT1( SwDrawFrmFmt, SwFrmFmt );
-IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrmFmt, 10, 10 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrmFmt,	10, 10 )
 
 SwDrawFrmFmt::~SwDrawFrmFmt()
 {
@@ -3202,7 +3176,8 @@ void SwDrawFrmFmt::SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir )
         break;
         default:
         {
-            OSL_FAIL( "<SwDrawFrmFmt::SetPositionLayoutDir(..)> - invalid attribute value." );
+            OSL_ENSURE( false,
+                    "<SwDrawFrmFmt::SetPositionLayoutDir(..)> - invalid attribute value." );
         }
     }
 }
@@ -3243,7 +3218,7 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
 
     if( !pFly )
     {
-        pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement( *this );
+        pFly = (SwFlyFrm*) SwClientIter( *(SwFrmFmt*)this ).First( TYPE( SwFlyFrm ));
         if( !pFly )
             return 0;
     }

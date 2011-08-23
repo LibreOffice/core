@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,7 +116,6 @@ TableRow& TableRow::operator=( const TableRow& r )
     mbIsVisible = r.mbIsVisible;
     mbIsStartOfNewPage = r.mbIsStartOfNewPage;
     maName = r.maName;
-    mnRow = r.mnRow;
 
     return *this;
 }
@@ -320,11 +319,11 @@ Any SAL_CALL TableRow::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownP
 {
     switch( nHandle )
     {
-    case Property_Height:           return Any( mnHeight );
-    case Property_OptimalHeight:    return Any( mbOptimalHeight );
-    case Property_IsVisible:        return Any( mbIsVisible );
-    case Property_IsStartOfNewPage: return Any( mbIsStartOfNewPage );
-    default:                        throw UnknownPropertyException();
+    case Property_Height:			return Any( mnHeight );
+    case Property_OptimalHeight:	return Any( mbOptimalHeight );
+    case Property_IsVisible:		return Any( mbIsVisible );
+    case Property_IsStartOfNewPage:	return Any( mbIsStartOfNewPage );
+    default:						throw UnknownPropertyException();
     }
 }
 

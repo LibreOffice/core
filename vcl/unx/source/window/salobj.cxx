@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,16 +52,16 @@
 // =======================================================================
 // SalInstance member to create and destroy a SalObject
 
-SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
+SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow )
 {
     return X11SalObject::CreateObject( pParent, pWindowData, bShow );
 }
 
-X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
+X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow )
 {
     int error_base, event_base;
-    X11SalObject*       pObject  = new X11SalObject();
-    SystemChildData*    pObjData = const_cast<SystemChildData*>(pObject->GetSystemData());
+    X11SalObject*		pObject  = new X11SalObject();
+    SystemChildData*	pObjData = const_cast<SystemChildData*>(pObject->GetSystemData());
 
     if ( ! XShapeQueryExtension( (Display*)pObjData->pDisplay,
                                   &event_base, &error_base ) )
@@ -71,12 +71,12 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     }
 
     pObject->mpParent = pParent;
-
-    SalDisplay* pSalDisp        = GetX11SalData()->GetDisplay();
-    const SystemEnvData* pEnv   = pParent->GetSystemData();
-    Display* pDisp              = pSalDisp->GetDisplay();
-    XLIB_Window aObjectParent   = (XLIB_Window)pEnv->aWindow;
-
+    
+    SalDisplay* pSalDisp		= GetX11SalData()->GetDisplay();
+    const SystemEnvData* pEnv	= pParent->GetSystemData();
+    Display* pDisp				= pSalDisp->GetDisplay();
+    XLIB_Window aObjectParent	= (XLIB_Window)pEnv->aWindow;
+    
     // find out on which screen that window is
     XWindowAttributes aParentAttr;
     XGetWindowAttributes( pDisp, aObjectParent, &aParentAttr );
@@ -134,7 +134,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
         pSalDisp->GetXLib()->PushXErrorLevel( true );
 
         // create colormap for visual - there might not be one
-        pObject->maColormap = aAttribs.colormap = XCreateColormap(
+        pObject->maColormap = aAttribs.colormap = XCreateColormap( 
             pDisp,
             pSalDisp->GetRootWindow( nScreen ),
             pVisual,
@@ -149,7 +149,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                            pVisual,
                            CWEventMask|CWColormap, &aAttribs );
         XSync( pDisp, False );
-        sal_Bool bWasXError = pSalDisp->GetXLib()->HasXErrorOccurred();
+        BOOL bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
         pSalDisp->GetXLib()->PopXErrorLevel();
         if( bWasXError )
         {
@@ -166,17 +166,17 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
         XMapWindow( pDisp, pObject->maPrimary );
     }
 
-    pObjData->pDisplay      = pDisp;
-    pObjData->aWindow       = pObject->maSecondary;
-    pObjData->pWidget       = NULL;
-    pObjData->pVisual       = pVisual;
-    pObjData->nDepth        = nDepth;
-    pObjData->aColormap     = aVisID == pSalDisp->GetVisual( nScreen ).GetVisualId() ?
+    pObjData->pDisplay		= pDisp;
+    pObjData->aWindow		= pObject->maSecondary;
+    pObjData->pWidget		= NULL;
+    pObjData->pVisual		= pVisual;
+    pObjData->nDepth		= nDepth;
+    pObjData->aColormap		= aVisID == pSalDisp->GetVisual( nScreen ).GetVisualId() ?
                               pSalDisp->GetColormap( nScreen ).GetXColormap() : None;
-    pObjData->pAppContext   = NULL;
+    pObjData->pAppContext	= NULL;
 
     XSync(pDisp, False);
-    sal_Bool bWasXError = pSalDisp->GetXLib()->HasXErrorOccurred();
+    BOOL bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
     pSalDisp->GetXLib()->PopXErrorLevel();
     if( bWasXError )
     {
@@ -216,7 +216,7 @@ SalClipRegion::~SalClipRegion()
 
 
 void
-SalClipRegion::BeginSetClipRegion( sal_uLong nRects )
+SalClipRegion::BeginSetClipRegion( ULONG nRects )
 {
     if (ClipRectangleList)
         delete [] ClipRectangleList;
@@ -234,8 +234,8 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
     {
         XRectangle *aRect = ClipRectangleList + numClipRectangles;
 
-        aRect->x     = (short) nX;
-        aRect->y     = (short) nY;
+        aRect->x	 = (short) nX;
+        aRect->y	 = (short) nY;
         aRect->width = (unsigned short) nWidth;
         aRect->height= (unsigned short) nHeight;
 
@@ -250,19 +250,19 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 
 X11SalObject::X11SalObject()
 {
-    maSystemChildData.nSize     = sizeof( SystemChildData );
-    maSystemChildData.pDisplay  = GetX11SalData()->GetDisplay()->GetDisplay();
-    maSystemChildData.aWindow       = None;
-    maSystemChildData.pSalFrame = 0;
-    maSystemChildData.pWidget       = 0;
-    maSystemChildData.pVisual       = 0;
-    maSystemChildData.nDepth        = 0;
-    maSystemChildData.aColormap = 0;
-    maSystemChildData.pAppContext   = NULL;
-    maSystemChildData.aShellWindow  = 0;
-    maSystemChildData.pShellWidget  = NULL;
-    maPrimary                       = 0;
-    maSecondary                     = 0;
+    maSystemChildData.nSize		= sizeof( SystemChildData );
+    maSystemChildData.pDisplay 	= GetX11SalData()->GetDisplay()->GetDisplay();
+    maSystemChildData.aWindow		= None;
+    maSystemChildData.pSalFrame	= 0;
+    maSystemChildData.pWidget		= 0;
+    maSystemChildData.pVisual		= 0;
+    maSystemChildData.nDepth		= 0;
+    maSystemChildData.aColormap	= 0;
+    maSystemChildData.pAppContext	= NULL;
+    maSystemChildData.aShellWindow	= 0;
+    maSystemChildData.pShellWidget	= NULL;
+    maPrimary						= 0;
+    maSecondary						= 0;
     maColormap                      = 0;
 
     std::list< SalObject* >& rObjects = GetX11SalData()->GetDisplay()->getSalObjects();
@@ -276,7 +276,7 @@ X11SalObject::~X11SalObject()
     rObjects.remove( this );
     SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
     pSalDisp->GetXLib()->PushXErrorLevel( true );
-    if ( maSecondary )
+    if ( maSecondary ) 
         XDestroyWindow( (Display*)maSystemChildData.pDisplay, maSecondary );
     if ( maPrimary )
         XDestroyWindow( (Display*)maSystemChildData.pDisplay, maPrimary );
@@ -292,12 +292,12 @@ X11SalObject::ResetClipRegion()
 {
     maClipRegion.ResetClipRegion();
 
-    const int   dest_kind   = ShapeBounding;
-    const int   op          = ShapeSet;
-    const int   ordering    = YSorted;
+    const int	dest_kind	= ShapeBounding;
+    const int	op			= ShapeSet;
+    const int	ordering	= YSorted;
 
     XWindowAttributes win_attrib;
-    XRectangle        win_size;
+    XRectangle		  win_size;
 
     XLIB_Window aShapeWindow = maPrimary;
 
@@ -305,23 +305,23 @@ X11SalObject::ResetClipRegion()
                            aShapeWindow,
                            &win_attrib );
 
-    win_size.x      = 0;
-    win_size.y      = 0;
-    win_size.width  = win_attrib.width;
+    win_size.x		= 0;
+    win_size.y		= 0;
+    win_size.width	= win_attrib.width;
     win_size.height = win_attrib.height;
 
     XShapeCombineRectangles ( (Display*)maSystemChildData.pDisplay,
                               aShapeWindow,
                               dest_kind,
-                              0, 0,             // x_off, y_off
-                              &win_size,        // list of rectangles
-                              1,                // number of rectangles
+                              0, 0, 			// x_off, y_off
+                              &win_size,		// list of rectangles
+                              1,				// number of rectangles
                               op, ordering );
 }
 
 
 void
-X11SalObject::BeginSetClipRegion( sal_uLong nRectCount )
+X11SalObject::BeginSetClipRegion( ULONG nRectCount )
 {
     maClipRegion.BeginSetClipRegion ( nRectCount );
 }
@@ -338,12 +338,12 @@ void
 X11SalObject::EndSetClipRegion()
 {
     XRectangle *pRectangles = maClipRegion.EndSetClipRegion ();
-    const int   nType       = maClipRegion.GetClipRegionType();
-    const int   nRectangles = maClipRegion.GetRectangleCount();
+    const int	nType		= maClipRegion.GetClipRegionType();
+    const int	nRectangles = maClipRegion.GetRectangleCount();
 
-    const int   dest_kind   = ShapeBounding;
-    const int   ordering    = YSorted;
-    int         op;
+    const int	dest_kind	= ShapeBounding;
+    const int	ordering	= YSorted;
+    int 		op;
 
     switch ( nType )
     {
@@ -361,7 +361,7 @@ X11SalObject::EndSetClipRegion()
     }
 
     XLIB_Window aShapeWindow = maPrimary;
-
+    
     XShapeCombineRectangles ( (Display*)maSystemChildData.pDisplay,
                               aShapeWindow,
                               dest_kind,
@@ -372,7 +372,7 @@ X11SalObject::EndSetClipRegion()
 }
 
 
-sal_uInt16
+USHORT
 X11SalObject::GetClipRegionType()
 {
     return maClipRegion.GetClipRegionType();
@@ -396,9 +396,9 @@ X11SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 
 
 void
-X11SalObject::Show( sal_Bool bVisible )
+X11SalObject::Show( BOOL bVisible )
 {
-    if  ( ! maSystemChildData.aWindow )
+    if	( ! maSystemChildData.aWindow )
         return;
 
     if ( bVisible ) {
@@ -417,7 +417,7 @@ X11SalObject::Show( sal_Bool bVisible )
 
 // -----------------------------------------------------------------------
 
-void X11SalObject::Enable( sal_Bool )
+void X11SalObject::Enable( BOOL )
 {
 }
 
@@ -451,9 +451,9 @@ const SystemChildData* X11SalObject::GetSystemData() const
     return &maSystemChildData;
 }
 
-static sal_uInt16 sal_GetCode( int state )
+static USHORT sal_GetCode( int state )
 {
-    sal_uInt16 nCode = 0;
+    USHORT nCode = 0;
 
     if( state & Button1Mask )
         nCode |= MOUSE_LEFT;
@@ -509,7 +509,7 @@ long X11SalObject::Dispatch( XEvent* pEvent )
                 aEvt.mnTime     = pEvent->xbutton.time;
                 aEvt.mnCode     = sal_GetCode( pEvent->xbutton.state );
                 aEvt.mnButton   = 0;
-                sal_uInt16 nEvent = 0;
+                USHORT nEvent = 0;
                 if( pEvent->type == ButtonPress ||
                     pEvent->type == ButtonRelease )
                 {
@@ -534,10 +534,10 @@ long X11SalObject::Dispatch( XEvent* pEvent )
                 switch( pEvent->type )
                 {
                     case UnmapNotify:
-                    pObject->mbVisible = sal_False;
+                    pObject->mbVisible = FALSE;
                     return 1;
                     case MapNotify:
-                    pObject->mbVisible = sal_True;
+                    pObject->mbVisible = TRUE;
                     return 1;
                     case ButtonPress:
                     pObject->CallCallback( SALOBJ_EVENT_TOTOP, NULL );
@@ -555,12 +555,6 @@ long X11SalObject::Dispatch( XEvent* pEvent )
         }
     }
     return 0;
-}
-
-// -----------------------------------------------------------------------
-
-void X11SalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ void WrappedAutomaticPositionProperty::setPropertyValue( const Any& rOuterValue,
             throw lang::IllegalArgumentException( C2U("Property AutomaticPosition requires value of type boolean"), 0, 0 );
 
         try
-        {
+        { 
             if( bNewValue )
             {
                 Any aRelativePosition( xInnerPropertySet->getPropertyValue( C2U( "RelativePosition" ) ) );
@@ -130,7 +130,9 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList )
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//static
 void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -142,7 +144,9 @@ void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property 
 }
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
+//static
 void WrappedAutomaticPositionProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList )
 {
     lcl_addWrappedProperties( rList );

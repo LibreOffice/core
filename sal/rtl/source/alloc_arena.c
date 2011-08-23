@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,22 @@
 #define _BSD_SOURCE /* sys/mman.h: MAP_ANON */
 #include "alloc_arena.h"
 
+#ifndef INCLUDED_RTL_ARENA_IMPL_H
 #include "alloc_impl.h"
+#endif
 #include "internal/once.h"
 #include "sal/macros.h"
 #include "osl/diagnose.h"
 
+#ifndef INCLUDED_STRING_H
 #include <string.h>
+#endif
+
+#ifndef INCLUDED_STDIO_H
 #include <stdio.h>
+#endif
+
+#include "sal/types.h"
 
 #ifdef OS2
 #undef OSL_TRACE
@@ -300,10 +309,10 @@ rtl_arena_freelist_remove (
 
 /** RTL_ARENA_HASH_INDEX()
  */
-#define RTL_ARENA_HASH_INDEX_IMPL(a, s, q, m) \
+#define	RTL_ARENA_HASH_INDEX_IMPL(a, s, q, m) \
      ((((a) + ((a) >> (s)) + ((a) >> ((s) << 1))) >> (q)) & (m))
-
-#define RTL_ARENA_HASH_INDEX(arena, addr) \
+ 
+#define	RTL_ARENA_HASH_INDEX(arena, addr) \
     RTL_ARENA_HASH_INDEX_IMPL((addr), (arena)->m_hash_shift, (arena)->m_quantum_shift, ((arena)->m_hash_size - 1))
 
 /** rtl_arena_hash_rescale()
@@ -862,7 +871,7 @@ rtl_arena_deactivate (
     {
         rtl_arena_free (
             gp_arena_arena,
-            arena->m_hash_table,
+            arena->m_hash_table, 
             arena->m_hash_size * sizeof(rtl_arena_segment_type*));
 
         arena->m_hash_table = arena->m_hash_table_0;
@@ -944,7 +953,6 @@ try_alloc:
     if (result != 0)
     {
         rtl_arena_type * arena = result;
-        VALGRIND_CREATE_MEMPOOL(arena, 0, 0);
         rtl_arena_constructor (arena);
 
         if (!source_arena)
@@ -967,7 +975,6 @@ try_alloc:
         {
             rtl_arena_deactivate (arena);
             rtl_arena_destructor (arena);
-            VALGRIND_DESTROY_MEMPOOL(arena);
             rtl_arena_free (gp_arena_arena, arena, size);
         }
     }
@@ -987,13 +994,12 @@ try_alloc:
 void
 SAL_CALL rtl_arena_destroy (
     rtl_arena_type * arena
-)
+) 
 {
     if (arena != 0)
     {
         rtl_arena_deactivate (arena);
         rtl_arena_destructor (arena);
-        VALGRIND_DESTROY_MEMPOOL(arena);
         rtl_arena_free (gp_arena_arena, arena, sizeof(rtl_arena_type));
     }
 }
@@ -1049,10 +1055,6 @@ SAL_CALL rtl_arena_alloc (
 
                 rtl_arena_hash_insert (arena, segment);
 
-                /* DEBUG ONLY: mark allocated, undefined */
-                OSL_DEBUG_ONLY(memset((void*)(segment->m_addr), 0x77777777, segment->m_size));
-                VALGRIND_MEMPOOL_ALLOC(arena, segment->m_addr, segment->m_size);
-
                 (*pSize) = segment->m_size;
                 addr = (void*)(segment->m_addr);
             }
@@ -1095,11 +1097,6 @@ SAL_CALL rtl_arena_free (
             if (segment != 0)
             {
                 rtl_arena_segment_type *next, *prev;
-
-                /* DEBUG ONLY: mark unallocated, undefined */
-                VALGRIND_MEMPOOL_FREE(arena, segment->m_addr);
-                /* OSL_DEBUG_ONLY() */ VALGRIND_MAKE_MEM_UNDEFINED(segment->m_addr, segment->m_size);
-                OSL_DEBUG_ONLY(memset((void*)(segment->m_addr), 0x33333333, segment->m_size));
 
                 /* coalesce w/ adjacent free segment(s) */
                 rtl_arena_segment_coalesce (arena, segment);
@@ -1257,7 +1254,7 @@ static sal_Size
 rtl_machdep_pagesize (void)
 {
 #if defined(SAL_UNX)
-#if defined(FREEBSD) || defined(NETBSD) || defined(DRAGONFLY)
+#if defined(FREEBSD) || defined(NETBSD)
     return ((sal_Size)getpagesize());
 #else  /* POSIX */
     return ((sal_Size)sysconf(_SC_PAGESIZE));
@@ -1292,7 +1289,6 @@ rtl_arena_once_init (void)
         static rtl_arena_type g_machdep_arena;
 
         OSL_ASSERT(gp_machdep_arena == 0);
-        VALGRIND_CREATE_MEMPOOL(&g_machdep_arena, 0, 0);
         rtl_arena_constructor (&g_machdep_arena);
 
         gp_machdep_arena = rtl_arena_activate (
@@ -1309,7 +1305,6 @@ rtl_arena_once_init (void)
         static rtl_arena_type g_default_arena;
 
         OSL_ASSERT(gp_default_arena == 0);
-        VALGRIND_CREATE_MEMPOOL(&g_default_arena, 0, 0);
         rtl_arena_constructor (&g_default_arena);
 
         gp_default_arena = rtl_arena_activate (
@@ -1328,7 +1323,6 @@ rtl_arena_once_init (void)
         static rtl_arena_type g_arena_arena;
 
         OSL_ASSERT(gp_arena_arena == 0);
-        VALGRIND_CREATE_MEMPOOL(&g_arena_arena, 0, 0);
         rtl_arena_constructor (&g_arena_arena);
 
         gp_arena_arena = rtl_arena_activate (
@@ -1354,18 +1348,7 @@ rtl_arena_init (void)
 
 /* ================================================================= */
 
-/*
-  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
-
-  Mac OS X does not seem to support "__cxa__atexit", thus leading
-  to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_{memory|cache|arena}_fini") become called
-  _before_ global C++ object d'tors.
-
-  Delegated the call to "rtl_arena_fini()" into a dummy C++ object,
-  see alloc_fini.cxx .
-*/
-#if defined(__GNUC__) && !defined(MACOSX)
+#if defined(__GNUC__)
 static void rtl_arena_fini (void) __attribute__((destructor));
 #elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
 #pragma fini(rtl_arena_fini)

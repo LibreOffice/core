@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,6 @@ import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Properties;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.db.DatabaseObjectWizard;
 import com.sun.star.wizards.db.QueryMetaData;
@@ -154,7 +153,7 @@ public class QueryWizard extends DatabaseObjectWizard
                     curproperties[0] = Properties.createProperty( "DatabaseLocation", settings[ IDX_LOCATION ] );
                 else
                     curproperties[0] = Properties.createProperty( "DataSourceName", settings[ IDX_DSN ] );
-
+ 
                 QueryWizard CurQueryWizard = new QueryWizard( serviceFactory, curproperties );
                 CurQueryWizard.startQueryWizard();
             }
@@ -186,7 +185,7 @@ public class QueryWizard extends DatabaseObjectWizard
                 resmsgNonNumericAsGroupBy = m_oResource.getResText(UIConsts.RID_QUERY + 88);
                 Helper.setUnoPropertyValues(xDialogModel, new String[]
                         {
-                            PropertyNames.PROPERTY_HEIGHT, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Title", PropertyNames.PROPERTY_WIDTH
+                            "Height", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width"
                         },
                         new Object[]
                         {
@@ -227,7 +226,7 @@ public class QueryWizard extends DatabaseObjectWizard
         try
         {
             Object oRoadmapItem;
-            int CurStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP));
+            int CurStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, "Step"));
             boolean bEnabled = false;
             int CurItemID;
             for (int i = 0; i < getRMItemCount(); i++)
@@ -309,9 +308,7 @@ public class QueryWizard extends DatabaseObjectWizard
     {
         try
         {
-            m_DBCommandFieldSelectio = new CommandFieldSelection(
-                this, m_DBMetaData, 120, reslblFields, reslblSelFields, reslblTables,
-                m_DBMetaData.supportsQueriesInFrom(), 40850);
+            m_DBCommandFieldSelectio = new CommandFieldSelection(this, m_DBMetaData, 120, reslblFields, reslblSelFields, reslblTables, true, 40850);
             m_DBCommandFieldSelectio.setAppendMode(true);
             m_DBCommandFieldSelectio.addFieldSelectionListener(new FieldSelectionListener());
             m_sortingComponent = new SortingComponent(this, SOSORTING_PAGE, 95, 27, 210, 40865);
@@ -341,8 +338,8 @@ public class QueryWizard extends DatabaseObjectWizard
     public boolean finishWizard()
     {
         int ncurStep = getCurrentStep();
-        if  (   ( ncurStep == SOSUMMARY_PAGE )
-            ||  ( switchToStep( ncurStep, SOSUMMARY_PAGE ) )
+        if	(	( ncurStep == SOSUMMARY_PAGE )
+            ||	( switchToStep( ncurStep, SOSUMMARY_PAGE ) )
             )
         {
             m_createdQuery = m_finalizer.finish();
@@ -470,8 +467,8 @@ public class QueryWizard extends DatabaseObjectWizard
     private void enableWizardSteps(String[] NewItems)
     {
         boolean bEnabled = NewItems.length > 0;
-        setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, bEnabled);
-        setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, bEnabled);
+        setControlProperty("btnWizardNext", "Enabled", bEnabled);
+        setControlProperty("btnWizardFinish", "Enabled", bEnabled);
         enableRoadmapItems(NewItems, bEnabled); // Note: Performancewise this could be improved
     }
 
@@ -511,7 +508,7 @@ public class QueryWizard extends DatabaseObjectWizard
             else
             {
                 boolean bEnabled = (m_groupFieldSelection.getSelectedFieldNames().length > 0);
-                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPFILTER_PAGE), PropertyNames.PROPERTY_ENABLED, bEnabled);
+                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPFILTER_PAGE), "Enabled", bEnabled);
             }
         }
 
@@ -544,7 +541,7 @@ public class QueryWizard extends DatabaseObjectWizard
                 }
                 else
                 {
-                    Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPFILTER_PAGE), PropertyNames.PROPERTY_ENABLED, bEnabled);
+                    Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPFILTER_PAGE), "Enabled", bEnabled);
                 }
             }
         }

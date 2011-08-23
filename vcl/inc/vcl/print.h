@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include "vcl/dllapi.h"
 
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 struct SalPrinterQueueInfo;
 class QueueInfo;
@@ -48,18 +48,18 @@ namespace vcl
 
 struct ImplPrnQueueData
 {
-    QueueInfo*              mpQueueInfo;
-    SalPrinterQueueInfo*    mpSalQueueInfo;
+    QueueInfo*				mpQueueInfo;
+    SalPrinterQueueInfo*	mpSalQueueInfo;
 };
 
 // --------------------
 // - ImplPrnQueueList -
 // --------------------
 
-class VCL_PLUGIN_PUBLIC ImplPrnQueueList
+class VCL_DLLPUBLIC ImplPrnQueueList
 {
 public:
-    boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash >
+    std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash >
                                         m_aNameToIndex;
     std::vector< ImplPrnQueueData >     m_aQueueInfos;
     std::vector< rtl::OUString >        m_aPrinterList;
@@ -67,7 +67,7 @@ public:
     ImplPrnQueueList() {}
     ~ImplPrnQueueList();
 
-    void                    Add( SalPrinterQueueInfo* pData );
+    void					Add( SalPrinterQueueInfo* pData );
     ImplPrnQueueData*       Get( const rtl::OUString& rPrinter );
 };
 

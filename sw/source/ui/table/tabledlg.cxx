@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,13 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
+
 #include <hintids.hxx>
+#include <tools/list.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <svx/htmlmode.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -50,8 +53,6 @@
 #include <svtools/htmlcfg.hxx>
 #include <fmtrowsplt.hxx>
 #include <svx/htmlmode.hxx>
-
-#include "access.hrc"
 
 #include <docsh.hxx>
 #include <wrtsh.hxx>
@@ -77,15 +78,49 @@
 
 using namespace ::com::sun::star;
 
+#ifdef DEBUG_TBLDLG
+void DbgTblRep(SwTableRep* pRep)
+{
+    OSL_ENSURE(false, String(pRep->GetColCount()));
+    OSL_ENSURE(false, String(pRep->GetAllColCount()));
+    SwTwips nSum = 0;
+    for(USHORT i = 0; i < pRep->GetAllColCount(); i++)
+    {
+        String sMsg(i);
+        sMsg += pRep->GetColumns()[i].bVisible ? " v " : " h ";
+        sMsg += pRep->GetColumns()[i].nWidth;
+        nSum +=pRep->GetColumns()[i].nWidth;
+        OSL_ENSURE(false, sMsg);
+    }
+    String sMsg("Column sum: ");
+    sMsg += nSum;
+    sMsg += " table width: ";
+    sMsg += pRep->GetWidth();
+    OSL_ENSURE(false, sMsg);
+    sMsg = "Gesamt/Links/Rechts: ";
+    sMsg += pRep->GetSpace();
+    sMsg += '/';
+    sMsg += pRep->GetLeftSpace();
+    sMsg += '/';
+    sMsg += pRep->GetRightSpace();
+    OSL_ENSURE(false, sMsg);
+    sMsg = "Align: ";
+    sMsg += pRep->GetAlign();
+    OSL_ENSURE(false, sMsg);
+
+};
+
+#endif
+
 
 SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES( TP_FORMAT_TABLE ), rSet ),
     aOptionsFL(this,    SW_RES( FL_OPTIONS )),
-    aNameFT(this,       SW_RES( FT_NAME )),
-    aNameED(this,       SW_RES( ED_NAME )),
-    aWidthFT(this,      SW_RES( FT_WIDTH )),
-    aWidthMF(this,      SW_RES( ED_WIDTH )),
-    aRelWidthCB(this,   SW_RES( CB_REL_WIDTH )),
+    aNameFT(this,		SW_RES( FT_NAME )),
+    aNameED(this,		SW_RES( ED_NAME )),
+    aWidthFT(this,		SW_RES( FT_WIDTH )),
+    aWidthMF(this,		SW_RES( ED_WIDTH )),
+    aRelWidthCB(this, 	SW_RES( CB_REL_WIDTH )),
 
     aPosFL(this,       SW_RES( FL_POS )),
     aFullBtn(this,      SW_RES( RB_FULL )),
@@ -97,13 +132,13 @@ SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) 
 
     aDistFL(this,       SW_RES( FL_DIST )),
     aLeftFT(this,       SW_RES( FT_LEFT_DIST )),
-    aLeftMF(this,       SW_RES( ED_LEFT_DIST )),
-    aRightFT(this,      SW_RES( FT_RIGHT_DIST )),
-    aRightMF(this,      SW_RES( ED_RIGHT_DIST )),
-    aTopFT (this,       SW_RES( FT_TOP_DIST )),
-    aTopMF(this,        SW_RES( ED_TOP_DIST )),
-    aBottomFT(this,     SW_RES( FT_BOTTOM_DIST )),
-    aBottomMF(this,     SW_RES( ED_BOTTOM_DIST )),
+    aLeftMF(this,		SW_RES( ED_LEFT_DIST )),
+    aRightFT(this,		SW_RES( FT_RIGHT_DIST )),
+    aRightMF(this,		SW_RES( ED_RIGHT_DIST )),
+    aTopFT (this,		SW_RES( FT_TOP_DIST )),
+    aTopMF(this,		SW_RES( ED_TOP_DIST )),
+    aBottomFT(this,		SW_RES( FT_BOTTOM_DIST )),
+    aBottomMF(this,		SW_RES( ED_BOTTOM_DIST )),
 
     aPropertiesFL(this,     SW_RES( FL_PROPERTIES    )),
     aTextDirectionFT(this,  SW_RES( FT_TEXTDIRECTION )),
@@ -112,7 +147,7 @@ SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) 
     pTblData(0),
     nSaveWidth(0),
     nMinTableWidth(MINLAY),
-    bModified(sal_False),
+    bModified(FALSE),
     bFull(0),
     bHtmlMode(sal_False)
 {
@@ -120,7 +155,7 @@ SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) 
     SetExchangeSupport();
 
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem))
         bHtmlMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
 
     sal_Bool bCTL = SW_MOD()->GetCTLOptions().IsCTLFontEnabled();
@@ -134,7 +169,8 @@ SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) 
     Init();
 }
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 void  SwFormatTablePage::Init()
 {
     aLeftMF.MetricField::SetMin(-999999);
@@ -176,7 +212,7 @@ void  SwFormatTablePage::Init()
 IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
 {
     OSL_ENSURE(pTblData, "table data not available?");
-    sal_Bool bIsChecked = pBtn->IsChecked();
+    BOOL bIsChecked = pBtn->IsChecked();
     sal_Int64 nLeft  = aLeftMF.DenormalizePercent(aLeftMF.GetValue(FUNIT_TWIP ));
     sal_Int64 nRight = aRightMF.DenormalizePercent(aRightMF.GetValue(FUNIT_TWIP ));
     aWidthMF.ShowPercent(bIsChecked);
@@ -190,67 +226,68 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
         aRightMF.SetRefValue(pTblData->GetSpace());
         aLeftMF.MetricField::SetMin(0); // wird vom Percentfield ueberschrieben
         aRightMF.MetricField::SetMin(0);//                 -""-
-        aLeftMF.MetricField::SetMax(99); //
-        aRightMF.MetricField::SetMax(99);//
+        aLeftMF.MetricField::SetMax(99); // 
+        aRightMF.MetricField::SetMax(99);// 
         aLeftMF.SetPrcntValue(aLeftMF.NormalizePercent(nLeft ), FUNIT_TWIP );
         aRightMF.SetPrcntValue(aRightMF.NormalizePercent(nRight ), FUNIT_TWIP );
     }
     else
-        ModifyHdl(&aLeftMF);    // Werte wieder korrigieren
+        ModifyHdl(&aLeftMF);	// Werte wieder korrigieren
 
     if(aFreeBtn.IsChecked())
     {
-        sal_Bool bEnable = !pBtn->IsChecked();
+        BOOL bEnable = !pBtn->IsChecked();
         aRightMF.Enable(bEnable);
         aRightFT.Enable(bEnable);
     }
-    bModified = sal_True;
+    bModified = TRUE;
 
     return 0;
 }
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
 {
-    sal_Bool bRestore = sal_True,
-         bLeftEnable = sal_False,
-         bRightEnable= sal_False,
-         bWidthEnable= sal_False,
-         bOthers = sal_True;
+    BOOL bRestore = TRUE,
+         bLeftEnable = FALSE,
+         bRightEnable= FALSE,
+         bWidthEnable= FALSE,
+         bOthers = TRUE;
     if( (RadioButton *) pBox == &aFullBtn )
     {
         aLeftMF.SetPrcntValue(0);
         aRightMF.SetPrcntValue(0);
         nSaveWidth = static_cast< SwTwips >(aWidthMF.DenormalizePercent(aWidthMF.GetValue(FUNIT_TWIP )));
         aWidthMF.SetPrcntValue(aWidthMF.NormalizePercent(pTblData->GetSpace() ), FUNIT_TWIP );
-        bFull = sal_True;
-        bRestore = sal_False;
+        bFull = TRUE;
+        bRestore = FALSE;
     }
     else if( (RadioButton *) pBox == &aLeftBtn )
     {
-        bRightEnable = bWidthEnable = sal_True;
+        bRightEnable = bWidthEnable = TRUE;
         aLeftMF.SetPrcntValue(0);
     }
     else if( (RadioButton *) pBox == &aFromLeftBtn )
     {
-        bLeftEnable = bWidthEnable = sal_True;
+        bLeftEnable = bWidthEnable = TRUE;
         aRightMF.SetPrcntValue(0);
     }
     else if( (RadioButton *) pBox == &aRightBtn )
     {
-        bLeftEnable = bWidthEnable = sal_True;
+        bLeftEnable = bWidthEnable = TRUE;
         aRightMF.SetPrcntValue(0);
     }
     else if( ( RadioButton * ) pBox == &aCenterBtn )
     {
-        bLeftEnable = bWidthEnable = sal_True;
+        bLeftEnable = bWidthEnable = TRUE;
     }
     else if( ( RadioButton * ) pBox == &aFreeBtn )
     {
         RightModifyHdl(&aRightMF);
-        bLeftEnable = sal_True;
-        bWidthEnable = sal_True;
-        bOthers = sal_False;
+        bLeftEnable = TRUE;
+        bWidthEnable = TRUE;
+        bOthers = FALSE;
     }
     aLeftMF.Enable(bLeftEnable);
     aLeftFT.Enable(bLeftEnable);
@@ -267,11 +304,11 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
     {
         // nachdem auf autom. geschaltet wurde, wurde die Breite gemerkt,
         // um sie beim Zurueckschalten restaurieren zu koennen
-        bFull = sal_False;
+        bFull = FALSE;
         aWidthMF.SetPrcntValue(aWidthMF.NormalizePercent(nSaveWidth ), FUNIT_TWIP );
     }
     ModifyHdl(&aWidthMF);
-    bModified = sal_True;
+    bModified = TRUE;
     return 0;
 }
 
@@ -280,11 +317,13 @@ IMPL_LINK( SwFormatTablePage, RightModifyHdl, MetricField *, EMPTYARG )
 {
     if(aFreeBtn.IsChecked())
     {
-        sal_Bool bEnable = aRightMF.GetValue() == 0;
+        BOOL bEnable = aRightMF.GetValue() == 0;
+//		aWidthMF.Enable(bEnable);
         aRelWidthCB.Enable(bEnable);
+//		aWidthFT.Enable(bEnable);
         if ( !bEnable )
         {
-            aRelWidthCB.Check(sal_False);
+            aRelWidthCB.Check(FALSE);
             RelWidthClickHdl(&aRelWidthCB);
         }
         bEnable = aRelWidthCB.IsChecked();
@@ -294,7 +333,8 @@ IMPL_LINK( SwFormatTablePage, RightModifyHdl, MetricField *, EMPTYARG )
     return 0;
 }
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 IMPL_LINK_INLINE_START( SwFormatTablePage, UpDownLoseFocusHdl, MetricField *, pEdit )
 {
     if( &aRightMF == pEdit)
@@ -366,7 +406,7 @@ void  SwFormatTablePage::ModifyHdl( Edit* pEdit )
             nRight -= nDiff/2;
         }
     }
-    if( pEdit == &aRightMF  )
+    if( pEdit == &aRightMF	)
     {
 
         if( nRight + nLeft > pTblData->GetSpace() - MINLAY )
@@ -378,14 +418,14 @@ void  SwFormatTablePage::ModifyHdl( Edit* pEdit )
     {
         if(!aFromLeftBtn.IsChecked())
         {
-            sal_Bool bCenter = aCenterBtn.IsChecked();
+            BOOL bCenter = aCenterBtn.IsChecked();
             if( bCenter )
                 nRight = nLeft;
             if(nRight + nLeft > pTblData->GetSpace() - MINLAY )
             {
-                nLeft  = bCenter ?  (pTblData->GetSpace() - MINLAY) /2 :
+                nLeft  = bCenter ? 	(pTblData->GetSpace() - MINLAY) /2 :
                                     (pTblData->GetSpace() - MINLAY) - nRight;
-                nRight = bCenter ?  (pTblData->GetSpace() - MINLAY) /2 : nRight;
+                nRight = bCenter ? 	(pTblData->GetSpace() - MINLAY) /2 : nRight;
             }
             nCurWidth = pTblData->GetSpace() - nLeft - nRight;
         }
@@ -403,18 +443,20 @@ void  SwFormatTablePage::ModifyHdl( Edit* pEdit )
         aWidthMF.SetPrcntValue( aWidthMF.NormalizePercent( nCurWidth ), FUNIT_TWIP );
     aRightMF.SetPrcntValue( aRightMF.NormalizePercent( nRight ), FUNIT_TWIP );
     aLeftMF.SetPrcntValue( aLeftMF.NormalizePercent( nLeft ), FUNIT_TWIP );
-    bModified = sal_True;
+    bModified = TRUE;
 }
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 SfxTabPage*  SwFormatTablePage::Create( Window* pParent,
                                    const SfxItemSet& rAttrSet)
 {
     return new SwFormatTablePage( pParent, rAttrSet );
 }
 
-
-sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
+/*------------------------------------------------------------------------
+-------------------------------------------------------------------------*/
+BOOL  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
     // Testen, ob eins der Control noch den Focus hat
     if(aWidthMF.HasFocus())
@@ -434,9 +476,9 @@ sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
                                     aTopMF.GetText() != aTopMF.GetSavedValue() )
         {
             SvxULSpaceItem aULSpace(RES_UL_SPACE);
-            aULSpace.SetUpper( (sal_uInt16) aTopMF.Denormalize(
+            aULSpace.SetUpper( (USHORT) aTopMF.Denormalize(
                                         aTopMF.GetValue( FUNIT_TWIP )));
-            aULSpace.SetLower( (sal_uInt16) aBottomMF.Denormalize(
+            aULSpace.SetLower( (USHORT) aBottomMF.Denormalize(
                                         aBottomMF.GetValue( FUNIT_TWIP )));
             rCoreSet.Put(aULSpace);
         }
@@ -444,37 +486,38 @@ sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
     }
     if(aNameED.GetText() != aNameED.GetSavedValue())
     {
-        rCoreSet.Put(SfxStringItem( FN_PARAM_TABLE_NAME, aNameED.GetText()));
-        bModified = sal_True;
+        rCoreSet.Put(SfxStringItem(	FN_PARAM_TABLE_NAME, aNameED.GetText()));
+        bModified = TRUE;
     }
 
-    sal_uInt16 nPos;
+    USHORT nPos;
     if( aTextDirectionLB.IsVisible() &&
         ( nPos = aTextDirectionLB.GetSelectEntryPos() ) !=
                                             aTextDirectionLB.GetSavedValue() )
     {
         sal_uInt32 nDirection = (sal_uInt32)(sal_uIntPtr)aTextDirectionLB.GetEntryData( nPos );
         rCoreSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
-        bModified = sal_True;
+        bModified = TRUE;
     }
 
     return bModified;
 }
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 void  SwFormatTablePage::Reset( const SfxItemSet& )
 {
     const SfxItemSet& rSet = GetItemSet();
-    const SfxPoolItem*  pItem;
+    const SfxPoolItem*	pItem;
 
     if(bHtmlMode)
     {
-        aNameED .Disable();
-        aTopFT  .Hide();
-        aTopMF  .Hide();
+        aNameED	.Disable();
+        aTopFT	.Hide();
+        aTopMF	.Hide();
         aBottomFT.Hide();
         aBottomMF.Hide();
-        aFreeBtn.Enable(sal_False);
+        aFreeBtn.Enable(FALSE);
     }
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
     SetMetric( aWidthMF, aMetric );
@@ -484,20 +527,20 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
     SetMetric( aBottomMF, aMetric );
 
     //Name
-    if(SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, sal_False, &pItem ))
+    if(SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, FALSE, &pItem ))
     {
         aNameED.SetText(((const SfxStringItem*)pItem)->GetValue());
         aNameED.SaveValue();
     }
 
-    if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP, sal_False, &pItem ))
+    if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP, FALSE, &pItem ))
     {
         pTblData = (SwTableRep*)((const SwPtrItem*) pItem)->GetValue();
         nMinTableWidth = pTblData->GetColCount() * MINLAY;
 
         if(pTblData->GetWidthPercent())
         {
-            aRelWidthCB.Check(sal_True);
+            aRelWidthCB.Check(TRUE);
             RelWidthClickHdl(&aRelWidthCB);
             aWidthMF.SetPrcntValue(pTblData->GetWidthPercent(), FUNIT_CUSTOM);
 
@@ -527,45 +570,45 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
 
         nOldAlign = pTblData->GetAlign();
 
-        sal_Bool bSetRight = sal_False, bRightEnable = sal_False,
-             bSetLeft  = sal_False, bLeftEnable  = sal_False;
+        BOOL bSetRight = FALSE, bRightEnable = FALSE,
+             bSetLeft  = FALSE, bLeftEnable  = FALSE;
         switch( nOldAlign )
         {
             case text::HoriOrientation::NONE:
                 aFreeBtn.Check();
                 if(aRelWidthCB.IsChecked())
-                    bSetRight = sal_True;
+                    bSetRight = TRUE;
             break;
             case text::HoriOrientation::FULL:
             {
-                bSetRight = bSetLeft = sal_True;
+                bSetRight = bSetLeft = TRUE;
                 aFullBtn.Check();
-                aWidthMF.Enable(sal_False);
-                aRelWidthCB.Enable(sal_False);
-                aWidthFT.Enable(sal_False);
+                aWidthMF.Enable(FALSE);
+                aRelWidthCB.Enable(FALSE);
+                aWidthFT.Enable(FALSE);
             }
             break;
             case text::HoriOrientation::LEFT:
             {
-                bSetLeft = sal_True;
+                bSetLeft = TRUE;
                 aLeftBtn.Check();
             }
             break;
             case text::HoriOrientation::LEFT_AND_WIDTH :
             {
-                bSetRight = sal_True;
+                bSetRight = TRUE;
                 aFromLeftBtn.Check();
             }
             break;
             case text::HoriOrientation::RIGHT:
             {
-                bSetRight = sal_True;
+                bSetRight = TRUE;
                 aRightBtn.Check();
             }
             break;
             case text::HoriOrientation::CENTER:
             {
-                bSetRight = sal_True;
+                bSetRight = TRUE;
                 aCenterBtn.Check();
             }
             break;
@@ -584,7 +627,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
     }
 
     //Raender
-    if(SFX_ITEM_SET == rSet.GetItemState( RES_UL_SPACE, sal_False,&pItem ))
+    if(SFX_ITEM_SET == rSet.GetItemState( RES_UL_SPACE, FALSE,&pItem ))
     {
         aTopMF.SetValue(aTopMF.Normalize(
                         ((const SvxULSpaceItem*)pItem)->GetUpper()), FUNIT_TWIP);
@@ -595,10 +638,10 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
     }
 
     //text direction
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, sal_True, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, TRUE, &pItem ) )
     {
-        sal_uIntPtr nVal  = ((SvxFrameDirectionItem*)pItem)->GetValue();
-        sal_uInt16 nPos = aTextDirectionLB.GetEntryPos( (void*) nVal );
+        sal_uInt32 nVal  = ((SvxFrameDirectionItem*)pItem)->GetValue();
+        USHORT nPos = aTextDirectionLB.GetEntryPos( (void*) nVal );
         aTextDirectionLB.SelectEntryPos( nPos );
         aTextDirectionLB.SaveValue();
     }
@@ -610,8 +653,9 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
 
 }
 
-
-void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
+void  	SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 {
     OSL_ENSURE(pTblData, "table data not available?");
     if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP ))
@@ -636,7 +680,8 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
     }
 
 }
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 {
     // os: VCL sorgt nicht dafuer, dass das aktive Control im
@@ -671,7 +716,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             if (aRelWidthCB.IsChecked() && aRelWidthCB.IsEnabled())
             {
                 lWidth = pTblData->GetSpace() - lRight - lLeft;
-                sal_uInt16 nPercentWidth = (sal_uInt16)aWidthMF.GetValue(FUNIT_CUSTOM);
+                USHORT nPercentWidth = (USHORT)aWidthMF.GetValue(FUNIT_CUSTOM);
                 if(pTblData->GetWidthPercent() != nPercentWidth)
                 {
                     pTblData->SetWidthPercent(nPercentWidth);
@@ -686,7 +731,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             pTblData->SetWidth(lWidth);
 
             SwTwips nColSum = 0;
-            sal_uInt16 i;
+            USHORT i;
 
             for( i = 0; i < pTblData->GetColCount(); i++)
             {
@@ -740,6 +785,8 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
                 pTblData->SetAlign(nAlign);
             }
 
+
+    //      if(  text::HoriOrientation::CENTER && lWidth != (SwTwips)aWidthMF.GetSavedValue())
             if(pTblData->GetWidth() != lWidth )
             {
                 pTblData->SetWidthChanged();
@@ -749,8 +796,11 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             if(pTblData->HasWidthChanged())
                 _pSet->Put(SwPtrItem(FN_TABLE_REP, pTblData));
         }
+#ifdef DEBUG_TBLDLG
+DbgTblRep(pTblData)
+#endif
     }
-    return sal_True;
+    return TRUE;
 }
 /*------------------------------------------------------------------------
     Beschreibung: Seite Spaltenkonfiguration
@@ -758,40 +808,37 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 SwTableColumnPage::SwTableColumnPage( Window* pParent,
             const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES( TP_TABLE_COLUMN ), rSet ),
-    aModifyTableCB(this,    SW_RES(CB_MOD_TBL)),
-    aProportionalCB(this,   SW_RES(CB_PROP)),
-    aSpaceFT(this,          SW_RES(FT_SPACE)),
-    aSpaceED(this,          SW_RES(ED_SPACE)),
+    aModifyTableCB(this,	SW_RES(CB_MOD_TBL)),
+    aProportionalCB(this,	SW_RES(CB_PROP)),
+    aSpaceFT(this,			SW_RES(FT_SPACE)),
+    aSpaceED(this,			SW_RES(ED_SPACE)),
 
-    aColFL(this,            SW_RES(COL_FL_LAYOUT)),
     aUpBtn(this,            SW_RES(COL_BTN_UP)),
     aFT1(this,              SW_RES(COL_FT_1)),
-    aMF1(this,              SW_RES(COL_MF_1)),
-    aFT2(this,              SW_RES(COL_FT_2)),
-    aMF2(this,              SW_RES(COL_MF_2)),
-    aFT3(this,              SW_RES(COL_FT_3)),
-    aMF3(this,              SW_RES(COL_MF_3)),
-    aFT4(this,              SW_RES(COL_FT_4)),
-    aMF4(this,              SW_RES(COL_MF_4)),
-    aFT5(this,              SW_RES(COL_FT_5)),
-    aMF5(this,              SW_RES(COL_MF_5)),
-    aFT6(this,              SW_RES(COL_FT_6)),
-    aMF6(this,              SW_RES(COL_MF_6)),
+    aMF1(this,				SW_RES(COL_MF_1)),
+    aFT2(this,				SW_RES(COL_FT_2)),
+    aMF2(this,				SW_RES(COL_MF_2)),
+    aFT3(this,				SW_RES(COL_FT_3)),
+    aMF3(this,				SW_RES(COL_MF_3)),
+    aFT4(this,				SW_RES(COL_FT_4)),
+    aMF4(this,				SW_RES(COL_MF_4)),
+    aFT5(this,				SW_RES(COL_FT_5)),
+    aMF5(this,				SW_RES(COL_MF_5)),
+    aFT6(this,				SW_RES(COL_FT_6)),
+    aMF6(this,				SW_RES(COL_MF_6)),
     aDownBtn(this,          SW_RES(COL_BTN_DOWN)),
+    aColFL(this,            SW_RES(COL_FL_LAYOUT)),
 
     nTableWidth(0),
     nMinWidth( MINLAY ),
     nNoOfCols( 0 ),
     nNoOfVisibleCols( 0 ),
-    bModified(sal_False),
-    bModifyTbl(sal_False),
-    bPercentMode(sal_False)
+    bModified(FALSE),
+    bModifyTbl(FALSE),
+    bPercentMode(FALSE)
 {
     FreeResource();
     SetExchangeSupport();
-
-    aDownBtn.SetAccessibleRelationMemberOf(&aColFL);
-    aUpBtn.SetAccessibleRelationMemberOf(&aColFL);
 
     pFieldArr[0] = &aMF1;
     pFieldArr[1] = &aMF2;
@@ -808,7 +855,7 @@ SwTableColumnPage::SwTableColumnPage( Window* pParent,
     pTextArr[5] = &aFT6;
 
     const SfxPoolItem* pItem;
-    Init((SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, sal_False,&pItem )
+    Init((SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, FALSE,&pItem )
         && ((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON));
 
 };
@@ -819,20 +866,22 @@ SwTableColumnPage::SwTableColumnPage( Window* pParent,
 {
 };
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 SfxTabPage*   SwTableColumnPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwTableColumnPage( pParent, rAttrSet );
 };
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 void  SwTableColumnPage::Reset( const SfxItemSet& )
 {
     const SfxItemSet& rSet = GetItemSet();
 
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP, sal_False, &pItem ))
+    if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP, FALSE, &pItem ))
     {
         pTblData = (SwTableRep*)((const SwPtrItem*) pItem)->GetValue();
         nNoOfVisibleCols = pTblData->GetColCount();
@@ -841,7 +890,7 @@ void  SwTableColumnPage::Reset( const SfxItemSet& )
                             pTblData->GetAlign() != text::HoriOrientation::LEFT_AND_WIDTH?
                         pTblData->GetWidth() : pTblData->GetSpace();
 
-        sal_uInt16 i;
+        USHORT i;
         for( i = 0; i < nNoOfCols; i++ )
         {
             if( pTblData->GetColumns()[i].nWidth  < nMinWidth )
@@ -873,14 +922,15 @@ void  SwTableColumnPage::Reset( const SfxItemSet& )
 
 };
 
-
-void  SwTableColumnPage::Init(sal_Bool bWeb)
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
+void  SwTableColumnPage::Init(BOOL bWeb)
 {
     FieldUnit aMetric = ::GetDfltMetric(bWeb);
     Link aLkUp = LINK( this, SwTableColumnPage, UpHdl );
     Link aLkDown = LINK( this, SwTableColumnPage, DownHdl );
     Link aLkLF = LINK( this, SwTableColumnPage, LoseFocusHdl );
-    for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
+    for( USHORT i = 0; i < MET_FIELDS; i++ )
     {
         aValueTbl[i] = i;
         SetMetric(*pFieldArr[i], aMetric);
@@ -900,7 +950,8 @@ void  SwTableColumnPage::Init(sal_Bool bWeb)
     aProportionalCB.SetClickHdl( aLk );
 };
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
 {
     //Anzeigefenster verschieben
@@ -908,7 +959,7 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     {
         if(aValueTbl[0] > 0)
         {
-            for( sal_uInt16 i=0; i < MET_FIELDS; i++ )
+            for( USHORT i=0; i < MET_FIELDS; i++ )
                 aValueTbl[i] -= 1;
         }
     }
@@ -916,23 +967,15 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     {
         if( aValueTbl[ MET_FIELDS -1 ] < nNoOfVisibleCols -1  )
         {
-            for(sal_uInt16 i=0;i < MET_FIELDS;i++)
+            for(USHORT i=0;i < MET_FIELDS;i++)
                 aValueTbl[i] += 1;
         }
     }
-    for( sal_uInt16 i = 0; (i < nNoOfVisibleCols ) && ( i < MET_FIELDS); i++ )
+    for( USHORT i = 0; (i < nNoOfVisibleCols ) && ( i < MET_FIELDS); i++ )
     {
         String sEntry('~');
-        String sIndex = String::CreateFromInt32( aValueTbl[i] + 1 );
-        sEntry += sIndex;
+        sEntry += String::CreateFromInt32( aValueTbl[i] + 1 );
         pTextArr[i]->SetText( sEntry );
-//IAccessibility2 Impplementaton 2009-----
-        //added by menghu for SODC_5143,12/12/2006
-        String sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH);
-        sColumnWidth.SearchAndReplace( DEFINE_CONST_UNICODE("%1"), sIndex );
-        pFieldArr[i]->SetAccessibleName( sColumnWidth );
-        //end of SODC_5143
-//-----IAccessibility2 Impplementaton 2009
     }
 
     aDownBtn.Enable(aValueTbl[0] > 0);
@@ -941,40 +984,44 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     return 0;
 };
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 IMPL_LINK_INLINE_START( SwTableColumnPage, UpHdl, PercentField *, pEdit )
 {
-    bModified = sal_True;
+    bModified = TRUE;
     ModifyHdl( pEdit );
     return 0;
 };
 IMPL_LINK_INLINE_END( SwTableColumnPage, UpHdl, PercentField *, pEdit )
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 IMPL_LINK_INLINE_START( SwTableColumnPage, DownHdl, PercentField *, pEdit )
 {
-    bModified = sal_True;
+    bModified = TRUE;
     ModifyHdl( pEdit );
     return 0;
 };
 IMPL_LINK_INLINE_END( SwTableColumnPage, DownHdl, PercentField *, pEdit )
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, PercentField *, pEdit )
 {
     if(pEdit->IsModified())
     {
-        bModified = sal_True;
+        bModified = TRUE;
         ModifyHdl( pEdit );
     }
     return 0;
 };
 IMPL_LINK_INLINE_END( SwTableColumnPage, LoseFocusHdl, PercentField *, pEdit )
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
 {
-    sal_Bool bCheck = pBox->IsChecked();
+    BOOL bCheck = pBox->IsChecked();
     if(pBox == &aProportionalCB)
     {
         if(bCheck)
@@ -984,10 +1031,11 @@ IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
     return 0;
 };
 
-
-sal_Bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
+BOOL  SwTableColumnPage::FillItemSet( SfxItemSet& )
 {
-    for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
+    for( USHORT i = 0; i < MET_FIELDS; i++ )
     {
         if(pFieldArr[i]->HasFocus())
         {
@@ -1003,11 +1051,12 @@ sal_Bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
     return bModified;
 };
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 void   SwTableColumnPage::ModifyHdl( PercentField* pEdit )
 {
-        sal_uInt16 nAktPos;
-        sal_uInt16 i;
+        USHORT nAktPos;
+        USHORT i;
 
         for( i = 0; i < MET_FIELDS; i++)
             if(pEdit == pFieldArr[i])
@@ -1019,11 +1068,12 @@ void   SwTableColumnPage::ModifyHdl( PercentField* pEdit )
         UpdateCols( nAktPos );
 };
 
-
-void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
+void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
 {
     SwTwips nSum = 0;
-    sal_uInt16 i;
+    USHORT i;
 
     for( i = 0; i < nNoOfCols; i++ )
     {
@@ -1031,23 +1081,17 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
     SwTwips nDiff = nSum - nTableWidth;
 
-    sal_Bool bModifyTable = aModifyTableCB.IsChecked();
-    sal_Bool bProp =    aProportionalCB.IsChecked();
+    BOOL bModifyTable = aModifyTableCB.IsChecked();
+    BOOL bProp =    aProportionalCB.IsChecked();
 
     if(!bModifyTable && !bProp )
     {
-//      the table width is constant, the difference is balanced with the other columns
-        sal_uInt16 nLoopCount = 0;
+//		Tabellenbreite bleibt, Differenz wird mit der/den
+//  	naechsten Zellen ausgeglichen
         while( nDiff )
         {
             if( ++nAktPos == nNoOfVisibleCols)
-            {
                 nAktPos = 0;
-                ++nLoopCount;
-                //#i101353# in small tables it might not be possible to balance column width
-                if( nLoopCount > 1 )
-                    break;
-            }
             if( nDiff < 0 )
             {
                 SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) -nDiff);
@@ -1076,8 +1120,8 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
     else if(bModifyTable && !bProp)
     {
-//      Differenz wird ueber die Tabellenbreite ausgeglichen,
-//      andere Spalten bleiben unveraendert
+//		Differenz wird ueber die Tabellenbreite ausgeglichen,
+//		andere Spalten bleiben unveraendert
         OSL_ENSURE(nDiff <= pTblData->GetSpace() - nTableWidth, "wrong maximum" );
         SwTwips nActSpace = pTblData->GetSpace() - nTableWidth;
         if(nDiff > nActSpace)
@@ -1092,8 +1136,8 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
     else if(bModifyTable & bProp)
     {
-//      Alle Spalten werden proportional mitveraendert, die Tabellenbreite wird
-//      entsprechend angepasst
+//		Alle Spalten werden proportional mitveraendert, die Tabellenbreite wird
+//  	entsprechend angepasst
         OSL_ENSURE(nDiff * nNoOfVisibleCols <= pTblData->GetSpace() - nTableWidth, "wrong maximum" );
         long nAdd = nDiff;
         if(nDiff * nNoOfVisibleCols > pTblData->GetSpace() - nTableWidth)
@@ -1121,7 +1165,34 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
 
             }
         nTableWidth += nAdd;
+
     }
+    else
+    {
+//		Die Differenz wird gleichmaessig auf alle anderen Spalten aufgeteilt
+// 		die Tabellenbreite bleibt konstant
+/*
+        SwTwips nDiffn = nDiff/(nNoOfVisibleCols - 1);
+        if(nDiff < 0 && (nNoOfVisibleCols - 1) * nDiffn != nDiff)
+            nDiffn-- ;
+        USHORT nStart = nAktPos++;
+        if(nAktPos == nNoOfVisibleCols)
+            nStart = 0;
+        for(USHORT i = 0; i < nNoOfVisibleCols; i++ )
+        {
+            if((nVisWidth = GetVisibleWidth(i)) + nDiff < MINLAY)
+            {
+                nAdd += nVisWidth - MINLAY;
+                SetVisibleWidth(i, MINLAY);
+            }
+        }
+*/
+
+    }
+
+#ifdef DEBUG_TBLDLG
+DbgTblRep(pTblData)
+#endif
 
     if(!bPercentMode)
         aSpaceED.SetValue(aSpaceED.Normalize( pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
@@ -1135,17 +1206,18 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
 
 }
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
 {
     bPercentMode = pTblData->GetWidthPercent() != 0;
-    for( sal_uInt16 i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
+    for( USHORT i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
     {
         pFieldArr[i]->SetRefValue(pTblData->GetWidth());
         pFieldArr[i]->ShowPercent( bPercentMode );
     }
 
-    sal_uInt16 nTblAlign = pTblData->GetAlign();
+    USHORT nTblAlign = pTblData->GetAlign();
     if((text::HoriOrientation::FULL != nTblAlign && nTableWidth != pTblData->GetWidth()) ||
     (text::HoriOrientation::FULL == nTblAlign && nTableWidth != pTblData->GetSpace()))
     {
@@ -1154,32 +1226,37 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
                                         pTblData->GetWidth();
         UpdateCols(0);
     }
-    bModifyTbl = sal_True;
+    bModifyTbl = TRUE;
     if(pTblData->GetWidthPercent() ||
                 text::HoriOrientation::FULL == nTblAlign ||
                         pTblData->IsLineSelected()  )
-        bModifyTbl = sal_False;
+        bModifyTbl = FALSE;
     if(bPercentMode)
     {
-        aModifyTableCB  .Check(sal_False);
-        aProportionalCB .Check(sal_False);
+        aModifyTableCB	.Check(FALSE);
+        aProportionalCB .Check(FALSE);
     }
     else if( !bModifyTbl )
     {
-        aProportionalCB.Check(sal_False);
-        aModifyTableCB.Check(sal_False);
+        aProportionalCB.Check(FALSE);
+        aModifyTableCB.Check(FALSE);
     }
     aSpaceFT.Enable(!bPercentMode);
     aSpaceED.Enable(!bPercentMode);
     aModifyTableCB.Enable( !bPercentMode && bModifyTbl );
     aProportionalCB.Enable(!bPercentMode && bModifyTbl );
 
+/*	if(pTblData->IsLineSelected() && pTblData->IsComplex())
+    {
+
+    }*/
     aSpaceED.SetValue(aSpaceED.Normalize(
                 pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
 
 }
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 int  SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
@@ -1237,15 +1314,19 @@ int  SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
             }
             pTblData->SetWidthChanged();
         }
+#ifdef DEBUG_TBLDLG
+DbgTblRep(pTblData)
+#endif
         _pSet->Put(SwPtrItem( FN_TABLE_REP, pTblData ));
     }
-    return sal_True;
+    return TRUE;
 }
 
-
-SwTwips  SwTableColumnPage::GetVisibleWidth(sal_uInt16 nPos)
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
+SwTwips  SwTableColumnPage::GetVisibleWidth(USHORT nPos)
 {
-    sal_uInt16 i=0;
+    USHORT i=0;
 
     while( nPos )
     {
@@ -1258,13 +1339,15 @@ SwTwips  SwTableColumnPage::GetVisibleWidth(sal_uInt16 nPos)
     while(!pTblData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
         nReturn += pTblData->GetColumns()[++i].nWidth;
 
+//	return (*ppTableColumns)[i].nWidth;
     return nReturn;
 }
 
-
-void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
+void SwTableColumnPage::SetVisibleWidth(USHORT nPos, SwTwips nNewWidth)
 {
-    sal_uInt16 i=0;
+    USHORT i=0;
     while( nPos )
     {
         if(pTblData->GetColumns()[i].bVisible && nPos)
@@ -1278,7 +1361,8 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
 
 }
 
-
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool& ,
                     const SfxItemSet* pItemSet, SwWrtShell* pSh ) :
         SfxTabDialog(pParent, SW_RES(DLG_FORMAT_TABLE), pItemSet,0),
@@ -1296,7 +1380,9 @@ SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool& ,
 }
 
 
-void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
+void  SwTableTabDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if( TP_BACKGROUND == nId )
@@ -1316,12 +1402,14 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     else if(TP_TABLE_TEXTFLOW == nId)
     {
         ((SwTextFlowPage&)rPage).SetShell(pShell);
-        const sal_uInt16 eType = pShell->GetFrmType(0,sal_True);
+        const USHORT eType = pShell->GetFrmType(0,TRUE);
         if( !(FRMTYPE_BODY & eType) )
             ((SwTextFlowPage&)rPage).DisablePageBreak();
     }
 }
 
+/*-----------------12.12.96 12.22-------------------
+--------------------------------------------------*/
 SwTextFlowPage::SwTextFlowPage( Window* pParent,
                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES( TP_TABLE_TEXTFLOW ), rSet ),
@@ -1337,7 +1425,7 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
     aPageNoNF       (this, SW_RES(NF_PAGENUM        )),
     aSplitCB        (this, SW_RES(CB_SPLIT          )),
     aSplitRowCB     (this, SW_RES(CB_SPLIT_ROW      )),
-    aKeepCB         (this, SW_RES(CB_KEEP           )),
+    aKeepCB			(this, SW_RES(CB_KEEP			)),
     aHeadLineCB     (this, SW_RES(CB_HEADLINE       )),
     aRepeatHeaderFT         (this, SW_RES(FT_REPEAT_HEADER  )),
     aRepeatHeaderBeforeFT   (this),
@@ -1353,17 +1441,10 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
 
     pShell(0),
 
-    bPageBreak(sal_True),
-    bHtmlMode(sal_False)
+    bPageBreak(TRUE),
+    bHtmlMode(FALSE)
 {
     FreeResource();
-
-    aPgBrkRB.SetAccessibleRelationMemberOf(&aPgBrkCB);
-    aColBrkRB.SetAccessibleRelationMemberOf(&aPgBrkCB);
-    aPgBrkBeforeRB.SetAccessibleRelationMemberOf(&aPgBrkCB);
-    aPgBrkAfterRB.SetAccessibleRelationMemberOf(&aPgBrkCB);
-    aPageCollLB.SetAccessibleRelationLabeledBy(&aPageCollCB);
-    aPageCollLB.SetAccessibleName(aPageCollCB.GetText());
 
     aPgBrkCB.SetClickHdl(LINK(this, SwTextFlowPage, PageBreakHdl_Impl));
     aPgBrkBeforeRB.SetClickHdl(
@@ -1384,7 +1465,7 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
 
 #ifndef SW_FILEFORMAT_40
     const SfxPoolItem *pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, sal_False,&pItem )
+    if(SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, FALSE,&pItem )
         && ((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
 #endif
     {
@@ -1398,26 +1479,32 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
     HeadLineCBClickHdl();
 }
 
+/*-----------------12.12.96 12.22-------------------
+--------------------------------------------------*/
  SwTextFlowPage::~SwTextFlowPage()
 {
 }
 
+/*-----------------12.12.96 12.22-------------------
+--------------------------------------------------*/
 SfxTabPage*   SwTextFlowPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwTextFlowPage(pParent, rAttrSet);
 }
 
-sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
+/*-----------------12.12.96 12.22-------------------
+--------------------------------------------------*/
+BOOL  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bModified = sal_False;
+    BOOL bModified = FALSE;
 
     //Ueberschrift wiederholen
     if(aHeadLineCB.IsChecked() != aHeadLineCB.GetSavedValue() ||
-        String::CreateFromInt32( static_cast< sal_Int32 >(aRepeatHeaderNF.GetValue()) ) != aRepeatHeaderNF.GetSavedValue() )
+        String::CreateFromInt32( static_cast< INT32 >(aRepeatHeaderNF.GetValue()) ) != aRepeatHeaderNF.GetSavedValue() )
     {
         bModified |= 0 != rSet.Put(
-            SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, aHeadLineCB.IsChecked()? sal_uInt16(aRepeatHeaderNF.GetValue()) : 0 ));
+            SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, aHeadLineCB.IsChecked()? USHORT(aRepeatHeaderNF.GetValue()) : 0 ));
     }
     if(aKeepCB.IsChecked() != aKeepCB.GetSavedValue())
         bModified |= 0 != rSet.Put( SvxFmtKeepItem( aKeepCB.IsChecked(), RES_KEEP));
@@ -1433,10 +1520,10 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
     const SwFmtPageDesc* pDesc = (const SwFmtPageDesc*) GetOldItem( rSet, RES_PAGEDESC );
 
 
-    sal_Bool bState = aPageCollCB.IsChecked();
+    BOOL bState = aPageCollCB.IsChecked();
 
     //Wenn Seitenvorlage, dann kein Break
-    sal_Bool bPageItemPut = sal_False;
+    BOOL bPageItemPut = FALSE;
     if ( bState != aPageCollCB.GetSavedValue() ||
          ( bState &&
            aPageCollLB.GetSelectEntryPos() != aPageCollLB.GetSavedValue() )
@@ -1448,22 +1535,22 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
         {
             sPage = aPageCollLB.GetSelectEntry();
         }
-        sal_uInt16 nPgNum = static_cast< sal_uInt16 >(aPageNoNF.GetValue());
+        USHORT nPgNum = static_cast< USHORT >(aPageNoNF.GetValue());
         if ( !pDesc || !pDesc->GetPageDesc() ||
             ( pDesc->GetPageDesc() && ((pDesc->GetPageDesc()->GetName() != sPage) ||
                     aPageNoNF.GetSavedValue() != (String)nPgNum)))
         {
-            SwFmtPageDesc aFmt( pShell->FindPageDescByName( sPage, sal_True ) );
+            SwFmtPageDesc aFmt( pShell->FindPageDescByName( sPage, TRUE ) );
             aFmt.SetNumOffset(bState ? nPgNum : 0);
             bModified |= 0 != rSet.Put( aFmt );
             bPageItemPut = bState;
         }
     }
-    sal_Bool bIsChecked = aPgBrkCB.IsChecked();
+    BOOL bIsChecked = aPgBrkCB.IsChecked();
     if ( !bPageItemPut &&
-        (   bState != aPageCollCB.GetSavedValue() ||
-            bIsChecked != aPgBrkCB.GetSavedValue()              ||
-            aPgBrkBeforeRB.IsChecked() != aPgBrkBeforeRB.GetSavedValue()    ||
+        (	bState != aPageCollCB.GetSavedValue() ||
+            bIsChecked != aPgBrkCB.GetSavedValue()				||
+            aPgBrkBeforeRB.IsChecked() != aPgBrkBeforeRB.GetSavedValue()	||
             aPgBrkRB.IsChecked() != aPgBrkRB.GetSavedValue() ))
     {
         SvxFmtBreakItem aBreak(
@@ -1471,7 +1558,7 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 
         if(bIsChecked)
         {
-            sal_Bool bBefore = aPgBrkBeforeRB.IsChecked();
+            BOOL bBefore = aPgBrkBeforeRB.IsChecked();
 
             if ( aPgBrkRB.IsChecked() )
             {
@@ -1503,13 +1590,13 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
     {
           bModified |= 0 != rSet.Put(
                     SvxFrameDirectionItem(
-                        (SvxFrameDirection)(sal_uLong)aTextDirectionLB.GetEntryData(aTextDirectionLB.GetSelectEntryPos())
+                        (SvxFrameDirection)(ULONG)aTextDirectionLB.GetEntryData(aTextDirectionLB.GetSelectEntryPos())
                         , FN_TABLE_BOX_TEXTDIRECTION));
     }
 
     if(aVertOrientLB.GetSelectEntryPos() != aVertOrientLB.GetSavedValue())
     {
-        sal_uInt16 nOrient = USHRT_MAX;
+        USHORT nOrient = USHRT_MAX;
         switch(aVertOrientLB.GetSelectEntryPos())
         {
             case 0 : nOrient = text::VertOrientation::NONE; break;
@@ -1524,16 +1611,18 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 
 }
 
+/*-----------------12.12.96 12.22-------------------
+--------------------------------------------------*/
 void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
     SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-    sal_Bool bFlowAllowed = !bHtmlMode || pHtmlOpt->IsPrintLayoutExtension();
+    BOOL bFlowAllowed = !bHtmlMode || pHtmlOpt->IsPrintLayoutExtension();
     if(bFlowAllowed)
     {
         // Einfuegen der vorhandenen Seitenvorlagen in die Listbox
-        const sal_uInt16 nCount = pShell->GetPageDescCnt();
-        sal_uInt16 i;
+        const USHORT nCount = pShell->GetPageDescCnt();
+        USHORT i;
 
         for( i = 0; i < nCount; ++i)
         {
@@ -1542,17 +1631,17 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
         }
 
         String aFmtName;
-        for(i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
+        for(i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_REGISTER; ++i)
             if( LISTBOX_ENTRY_NOTFOUND == aPageCollLB.GetEntryPos(
                     aFmtName = SwStyleNameMapper::GetUIName( i, aFmtName ) ))
                 aPageCollLB.InsertEntry( aFmtName );
 
-        if(SFX_ITEM_SET == rSet.GetItemState( RES_KEEP, sal_False, &pItem ))
+        if(SFX_ITEM_SET == rSet.GetItemState( RES_KEEP, FALSE, &pItem ))
         {
             aKeepCB.Check( ((const SvxFmtKeepItem*)pItem)->GetValue() );
             aKeepCB.SaveValue();
         }
-        if(SFX_ITEM_SET == rSet.GetItemState( RES_LAYOUT_SPLIT, sal_False, &pItem ))
+        if(SFX_ITEM_SET == rSet.GetItemState( RES_LAYOUT_SPLIT, FALSE, &pItem ))
         {
             aSplitCB.Check( ((const SwFmtLayoutSplit*)pItem)->GetValue() );
         }
@@ -1562,7 +1651,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
         aSplitCB.SaveValue();
         SplitHdl_Impl(&aSplitCB);
 
-        if(SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, sal_False, &pItem ))
+        if(SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, FALSE, &pItem ))
         {
             aSplitRowCB.Check( ((const SwFmtRowSplit*)pItem)->GetValue() );
         }
@@ -1572,7 +1661,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 
         if(bPageBreak)
         {
-            if(SFX_ITEM_SET == rSet.GetItemState( RES_PAGEDESC, sal_False, &pItem ))
+            if(SFX_ITEM_SET == rSet.GetItemState( RES_PAGEDESC, FALSE, &pItem ))
             {
                 String sPageDesc;
                 const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
@@ -1593,19 +1682,19 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
                     aPageCollCB.Enable();
                     aPgBrkCB.Check();
 
-                    aPgBrkCB.Check( sal_True );
-                    aColBrkRB.Check( sal_False );
-                    aPgBrkBeforeRB.Check( sal_True );
-                    aPgBrkAfterRB.Check( sal_False );
+                    aPgBrkCB.Check( TRUE );
+                    aColBrkRB.Check( FALSE );
+                    aPgBrkBeforeRB.Check( TRUE );
+                    aPgBrkAfterRB.Check( FALSE );
                 }
                 else
                 {
                     aPageCollLB.SetNoSelection();
-                    aPageCollCB.Check(sal_False);
+                    aPageCollCB.Check(FALSE);
                 }
             }
 
-            if(SFX_ITEM_SET == rSet.GetItemState( RES_BREAK, sal_False, &pItem ))
+            if(SFX_ITEM_SET == rSet.GetItemState( RES_BREAK, FALSE, &pItem ))
             {
                 const SvxFmtBreakItem* pPageBreak = (const SvxFmtBreakItem*)pItem;
                 SvxBreak eBreak = (SvxBreak)pPageBreak->GetValue();
@@ -1613,36 +1702,36 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
                 if ( eBreak != SVX_BREAK_NONE )
                 {
                     aPgBrkCB.Check();
-                    aPageCollCB.Enable(sal_False);
-                    aPageCollLB.Enable(sal_False);
-                    aPageNoFT.Enable(sal_False);
-                    aPageNoNF.Enable(sal_False);
+                    aPageCollCB.Enable(FALSE);
+                    aPageCollLB.Enable(FALSE);
+                    aPageNoFT.Enable(FALSE);
+                    aPageNoNF.Enable(FALSE);
                 }
                 switch ( eBreak )
                 {
                     case SVX_BREAK_PAGE_BEFORE:
-                        aPgBrkRB.Check( sal_True );
-                        aColBrkRB.Check( sal_False );
-                        aPgBrkBeforeRB.Check( sal_True );
-                        aPgBrkAfterRB.Check( sal_False );
+                        aPgBrkRB.Check( TRUE );
+                        aColBrkRB.Check( FALSE );
+                        aPgBrkBeforeRB.Check( TRUE );
+                        aPgBrkAfterRB.Check( FALSE );
                         break;
                     case SVX_BREAK_PAGE_AFTER:
-                        aPgBrkRB.Check( sal_True );
-                        aColBrkRB.Check( sal_False );
-                        aPgBrkBeforeRB.Check( sal_False );
-                        aPgBrkAfterRB.Check( sal_True );
+                        aPgBrkRB.Check( TRUE );
+                        aColBrkRB.Check( FALSE );
+                        aPgBrkBeforeRB.Check( FALSE );
+                        aPgBrkAfterRB.Check( TRUE );
                         break;
                     case SVX_BREAK_COLUMN_BEFORE:
-                        aPgBrkRB.Check( sal_False );
-                        aColBrkRB.Check( sal_True );
-                        aPgBrkBeforeRB.Check( sal_True );
-                        aPgBrkAfterRB.Check( sal_False );
+                        aPgBrkRB.Check( FALSE );
+                        aColBrkRB.Check( TRUE );
+                        aPgBrkBeforeRB.Check( TRUE );
+                        aPgBrkAfterRB.Check( FALSE );
                         break;
                     case SVX_BREAK_COLUMN_AFTER:
-                        aPgBrkRB.Check( sal_False );
-                        aColBrkRB.Check( sal_True );
-                        aPgBrkBeforeRB.Check( sal_False );
-                        aPgBrkAfterRB.Check( sal_True );
+                        aPgBrkRB.Check( FALSE );
+                        aColBrkRB.Check( TRUE );
+                        aPgBrkBeforeRB.Check( FALSE );
+                        aPgBrkAfterRB.Check( TRUE );
                         break;
                     default:; //prevent warning
                 }
@@ -1657,20 +1746,20 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        aPgBrkRB.Enable(sal_False);
-        aColBrkRB.Enable(sal_False);
-        aPgBrkBeforeRB.Enable(sal_False);
-        aPgBrkAfterRB.Enable(sal_False);
-        aKeepCB .Enable(sal_False);
-        aSplitCB.Enable(sal_False);
-        aPgBrkCB.Enable(sal_False);
-        aPageCollCB.Enable(sal_False);
-        aPageCollLB.Enable(sal_False);
+        aPgBrkRB.Enable(FALSE);
+        aColBrkRB.Enable(FALSE);
+        aPgBrkBeforeRB.Enable(FALSE);
+        aPgBrkAfterRB.Enable(FALSE);
+        aKeepCB	.Enable(FALSE);
+        aSplitCB.Enable(FALSE);
+        aPgBrkCB.Enable(FALSE);
+        aPageCollCB.Enable(FALSE);
+        aPageCollLB.Enable(FALSE);
     }
 
-    if(SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, sal_False, &pItem ))
+    if(SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, FALSE, &pItem ))
     {
-        sal_uInt16 nRep = ((const SfxUInt16Item*)pItem)->GetValue();
+        USHORT nRep = ((const SfxUInt16Item*)pItem)->GetValue();
         aHeadLineCB.Check( nRep > 0 );
         aHeadLineCB.SaveValue();
         aRepeatHeaderNF.SetValue( nRep );
@@ -1678,14 +1767,14 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
     }
     if ( rSet.GetItemState(FN_TABLE_BOX_TEXTDIRECTION) > SFX_ITEM_AVAILABLE )
     {
-        sal_uLong nDirection = ((const SvxFrameDirectionItem&)rSet.Get(FN_TABLE_BOX_TEXTDIRECTION)).GetValue();
+        ULONG nDirection = ((const SvxFrameDirectionItem&)rSet.Get(FN_TABLE_BOX_TEXTDIRECTION)).GetValue();
         aTextDirectionLB.SelectEntryPos(aTextDirectionLB.GetEntryPos( (const void*)nDirection ));
     }
 
     if ( rSet.GetItemState(FN_TABLE_SET_VERT_ALIGN) > SFX_ITEM_AVAILABLE )
     {
-        sal_uInt16 nVert = ((const SfxUInt16Item&)rSet.Get(FN_TABLE_SET_VERT_ALIGN)).GetValue();
-        sal_uInt16 nPos = 0;
+        USHORT nVert = ((const SfxUInt16Item&)rSet.Get(FN_TABLE_SET_VERT_ALIGN)).GetValue();
+        USHORT nPos = 0;
         switch(nVert)
         {
             case text::VertOrientation::NONE:     nPos = 0;   break;
@@ -1708,6 +1797,9 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 
     HeadLineCBClickHdl();
 }
+/*-----------------16.04.98 14:48-------------------
+
+--------------------------------------------------*/
 
 void SwTextFlowPage::SetShell(SwWrtShell* pSh)
 {
@@ -1715,25 +1807,27 @@ void SwTextFlowPage::SetShell(SwWrtShell* pSh)
     bHtmlMode = 0 != (::GetHtmlMode(pShell->GetView().GetDocShell()) & HTMLMODE_ON);
     if(bHtmlMode)
     {
-        aPageNoNF.Enable(sal_False);
-        aPageNoFT.Enable(sal_False);
+        aPageNoNF.Enable(FALSE);
+        aPageNoFT.Enable(FALSE);
     }
 }
 
+/*-----------------12.12.96 16.18-------------------
+--------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, PageBreakHdl_Impl, CheckBox*, EMPTYARG )
 {
     if( aPgBrkCB.IsChecked() )
     {
-            aPgBrkRB.       Enable();
-            aColBrkRB.      Enable();
-            aPgBrkBeforeRB. Enable();
-            aPgBrkAfterRB.  Enable();
+            aPgBrkRB.		Enable();
+            aColBrkRB.		Enable();
+            aPgBrkBeforeRB.	Enable();
+            aPgBrkAfterRB.	Enable();
 
             if ( aPgBrkRB.IsChecked() && aPgBrkBeforeRB.IsChecked() )
             {
                 aPageCollCB.Enable();
 
-                sal_Bool bEnable = aPageCollCB.IsChecked() &&
+                BOOL bEnable = aPageCollCB.IsChecked() &&
                                             aPageCollLB.GetEntryCount();
                 aPageCollLB.Enable(bEnable);
                 if(!bHtmlMode)
@@ -1745,26 +1839,28 @@ IMPL_LINK( SwTextFlowPage, PageBreakHdl_Impl, CheckBox*, EMPTYARG )
     }
     else
     {
-            aPageCollCB.Check( sal_False );
-            aPageCollCB.Enable(sal_False);
-            aPageCollLB.Enable(sal_False);
-            aPageNoFT.Enable(sal_False);
-            aPageNoNF.Enable(sal_False);
-            aPgBrkRB.       Enable(sal_False);
-            aColBrkRB.      Enable(sal_False);
-            aPgBrkBeforeRB. Enable(sal_False);
-            aPgBrkAfterRB.  Enable(sal_False);
+            aPageCollCB.Check( FALSE );
+            aPageCollCB.Enable(FALSE);
+            aPageCollLB.Enable(FALSE);
+            aPageNoFT.Enable(FALSE);
+            aPageNoNF.Enable(FALSE);
+            aPgBrkRB.		Enable(FALSE);
+            aColBrkRB.		Enable(FALSE);
+            aPgBrkBeforeRB.	Enable(FALSE);
+            aPgBrkAfterRB.	Enable(FALSE);
     }
     return 0;
 }
 
+/*-----------------12.12.96 16.18-------------------
+--------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, ApplyCollClickHdl_Impl, CheckBox*, EMPTYARG )
 {
-    sal_Bool bEnable = sal_False;
+    BOOL bEnable = FALSE;
     if ( aPageCollCB.IsChecked() &&
          aPageCollLB.GetEntryCount() )
     {
-        bEnable = sal_True;
+        bEnable = TRUE;
         aPageCollLB.SelectEntryPos( 0 );
     }
     else
@@ -1780,6 +1876,8 @@ IMPL_LINK( SwTextFlowPage, ApplyCollClickHdl_Impl, CheckBox*, EMPTYARG )
     return 0;
 }
 
+/*-----------------12.12.96 16.18-------------------
+--------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
 {
     if ( aPgBrkCB.IsChecked() )
@@ -1788,7 +1886,7 @@ IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
         {
             aPageCollCB.Enable();
 
-            sal_Bool bEnable = aPageCollCB.IsChecked()  &&
+            BOOL bEnable = aPageCollCB.IsChecked()  &&
                                         aPageCollLB.GetEntryCount();
 
             aPageCollLB.Enable(bEnable);
@@ -1800,40 +1898,46 @@ IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
         }
         else if ( pBtn == &aPgBrkAfterRB )
         {
-            aPageCollCB .Check( sal_False );
-            aPageCollCB .Enable(sal_False);
-            aPageCollLB .Enable(sal_False);
-            aPageNoFT   .Enable(sal_False);
-            aPageNoNF   .Enable(sal_False);
+            aPageCollCB	.Check( FALSE );
+            aPageCollCB	.Enable(FALSE);
+            aPageCollLB	.Enable(FALSE);
+            aPageNoFT 	.Enable(FALSE);
+            aPageNoNF	.Enable(FALSE);
         }
     }
     return 0;
 }
 
+/*-----------------12.12.96 16.18-------------------
+--------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, RadioButton*, pBtn )
 {
     if ( pBtn == &aColBrkRB || aPgBrkAfterRB.IsChecked() )
     {
-        aPageCollCB .Check(sal_False);
-        aPageCollCB .Enable(sal_False);
-        aPageCollLB .Enable(sal_False);
-        aPageNoFT   .Enable(sal_False);
-        aPageNoNF   .Enable(sal_False);
+        aPageCollCB	.Check(FALSE);
+        aPageCollCB	.Enable(FALSE);
+        aPageCollLB	.Enable(FALSE);
+        aPageNoFT	.Enable(FALSE);
+        aPageNoNF	.Enable(FALSE);
     }
     else if ( aPgBrkBeforeRB.IsChecked() )
         PageBreakPosHdl_Impl( &aPgBrkBeforeRB );
     return 0;
 }
-
+/*-----------------17.11.2003 11:30-----------------
+ *
+ * --------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, SplitHdl_Impl, CheckBox*, pBox )
 {
     aSplitRowCB.Enable(pBox->IsChecked());
     return 0;
 }
-
+/*-----------------17.11.2003 11:30-----------------
+ *
+ * --------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, SplitRowHdl_Impl, TriStateBox*, pBox )
 {
-    pBox->EnableTriState(sal_False);
+    pBox->EnableTriState(FALSE);
     return 0;
 }
 
@@ -1844,9 +1948,12 @@ IMPL_LINK( SwTextFlowPage, HeadLineCBClickHdl, void*, EMPTYARG )
     return 0;
 }
 
+/*-----------------30.05.97 07:37-------------------
+
+--------------------------------------------------*/
 void SwTextFlowPage::DisablePageBreak()
 {
-    bPageBreak = sal_False;
+    bPageBreak = FALSE;
     aPgBrkCB       .Disable();
     aPgBrkRB       .Disable();
     aColBrkRB      .Disable();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,7 @@
 #include <ndindex.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
+#include <ndole.hxx>
 #include <calc.hxx>
 #include <frmfmt.hxx>
 #include <cellfml.hxx>
@@ -66,7 +67,7 @@ void SwTable::UpdateCharts() const
     GetFrmFmt()->GetDoc()->UpdateCharts( GetFrmFmt()->GetName() );
 }
 
-sal_Bool SwTable::IsTblComplexForChart( const String& rSelection,
+BOOL SwTable::IsTblComplexForChart( const String& rSelection,
                                     SwChartLines* pGetCLines ) const
 {
     const SwTableBox* pSttBox, *pEndBox;
@@ -115,7 +116,7 @@ IMPL_LINK( SwDoc, DoUpdateAllCharts, Timer *, EMPTYARG )
     if( pVSh )
     {
         const SwFrmFmts& rTblFmts = *GetTblFrmFmts();
-        for( sal_uInt16 n = 0; n < rTblFmts.Count(); ++n )
+        for( USHORT n = 0; n < rTblFmts.Count(); ++n )
         {
             SwTable* pTmpTbl;
             const SwTableNode* pTblNd;
@@ -132,7 +133,7 @@ IMPL_LINK( SwDoc, DoUpdateAllCharts, Timer *, EMPTYARG )
     return 0;
 }
 
-void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
+void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& /*rVSh*/ ) const
 {
     String aName( rTbl.GetFrmFmt()->GetName() );
     SwOLENode *pONd;
@@ -144,7 +145,7 @@ void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
         SwFrm* pFrm;
         if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
             aName.Equals( pONd->GetChartTblName() ) &&
-            0 != ( pFrm = pONd->getLayoutFrm( rVSh.GetLayout() ) ) )
+            0 != ( pFrm = pONd->GetFrm() ) )
         {
             SwChartDataProvider *pPCD = GetChartDataProvider();
             if (pPCD)
@@ -171,20 +172,20 @@ void SwDoc::UpdateCharts( const String &rName ) const
 
 void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
 {
-//  sal_Bool bStop = 1;
+// 	BOOL bStop = 1;
 
     const String aOldName( rTblFmt.GetName() );
 
-    sal_Bool bNameFound = 0 == rNewName.Len();
+    BOOL bNameFound = 0 == rNewName.Len();
     if( !bNameFound )
     {
         SwFrmFmt* pFmt;
         const SwFrmFmts& rTbl = *GetTblFrmFmts();
-        for( sal_uInt16 i = rTbl.Count(); i; )
+        for( USHORT i = rTbl.Count(); i; )
             if( !( pFmt = rTbl[ --i ] )->IsDefault() &&
                 pFmt->GetName() == rNewName && IsUsed( *pFmt ) )
             {
-                bNameFound = sal_True;
+                bNameFound = TRUE;
                 break;
             }
     }
@@ -248,7 +249,7 @@ void SwDoc::CreateChartInternalDataProviders( const SwTable *pTable )
             aIdx++;
             if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
                 aName.Equals( pONd->GetChartTblName() ) /* OLE node is chart? */ &&
-                0 != (pONd->getLayoutFrm( GetCurrentLayout() )) /* chart frame is not hidden */ )
+                0 != (pONd->GetFrm()) /* chart frame is not hidden */ )
             {
                 uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
                 if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )

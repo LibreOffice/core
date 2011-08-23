@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class SdDrawDocument;
 class SdPage;
 class SfxModule;
 
-namespace sd {
+namespace sd { 
 class DrawViewShell;
 class TemplateEntry;
 class TemplateDir;
@@ -88,7 +88,7 @@ public:
     static SdPage* AddMasterPage (
         SdDrawDocument* pTargetDocument,
         SdPage* pMasterPage,
-        sal_uInt16 nInsertionIndex);
+        USHORT nInsertionIndex);
 
     virtual Size GetPreferredSize (void);
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
@@ -122,8 +122,7 @@ public:
     */
     void ClearPageSet (void);
 
-    using SfxShell::SetHelpId;
-    void SetHelpId( const rtl::OString& aId );
+    void SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode = SMART_SET_SMART );
 
     /** Mark the preview that belongs to the given index as not up-to-date
         anymore with respect to page content or preview size.
@@ -151,9 +150,9 @@ protected:
     sal_uInt16 mnDefaultClickAction;
     /** Pages with pointers in this queue have their previews updated
         eventually.  Filled by InvalidatePreview() and operated upon by
-        UpdatePreviews().
+        UpdatePreviews(). 
     */
-    ::std::queue<sal_uInt16> maPreviewUpdateQueue;
+    ::std::queue<USHORT> maPreviewUpdateQueue;
 
     virtual SdPage* GetSelectedMasterPage (void);
 
@@ -220,15 +219,15 @@ private:
     DECL_LINK(RightClickHandler, MouseEvent*);
     DECL_LINK(ContextMenuCallback, CommandEvent*);
     DECL_LINK(ContainerChangeListener, MasterPageContainerChangeEvent*);
-
+    
     void SetItem (
-        sal_uInt16 nIndex,
+        USHORT nIndex,
         MasterPageContainer::Token aToken);
     void AddTokenToIndexEntry (
-        sal_uInt16 nIndex,
+        USHORT nIndex,
         MasterPageContainer::Token aToken);
     void RemoveTokenToIndexEntry (
-        sal_uInt16 nIndex,
+        USHORT nIndex,
         MasterPageContainer::Token aToken);
 };
 

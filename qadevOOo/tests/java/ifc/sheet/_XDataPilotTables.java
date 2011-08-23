@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ public class _XDataPilotTables extends MultiMethodTest {
             bResult &= oSheet.getCellByPosition
                 (CA.Column, CA.Row).getFormula().equals("Filter");
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occurred! " + e);
+            log.println("Exception occured! " + e);
             bResult = false;
         }
 
@@ -136,7 +136,7 @@ public class _XDataPilotTables extends MultiMethodTest {
             bResult &= oSheet.getCellByPosition
                 (CA.Column, CA.Row).getFormula().equals("");
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occurred ! " + e);
+            log.println("Exception occured ! " + e);
             bResult = false;
         }
         log.println(bResult ? "OK" : "FAILED");

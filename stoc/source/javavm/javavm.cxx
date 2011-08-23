@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,7 +105,7 @@
 #endif
 #define TIMEZONE "MEZ"
 #else
-#define INI_FILE "java.ini"
+#define	INI_FILE "java.ini"
 #define DEF_JAVALIB "jvm.dll"
 #define TIMEZONE "MET"
 #endif
@@ -227,10 +227,15 @@ rtl::OUString serviceGetImplementationName()
                              "com.sun.star.comp.stoc.JavaVirtualMachine"));
 }
 
+rtl::OUString serviceGetServiceName()
+{
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                             "com.sun.star.java.JavaVirtualMachine"));
+}
+
 css::uno::Sequence< rtl::OUString > serviceGetSupportedServiceNames()
 {
-    rtl::OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"));
+    rtl::OUString aServiceName = serviceGetServiceName();
     return css::uno::Sequence< rtl::OUString >(&aServiceName, 1);
 }
 
@@ -312,7 +317,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
     xConfRegistry_simple->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")), sal_True, sal_False);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
-//  if ooInetProxyType is not 0 then read the settings
+//	if ooInetProxyType is not 0 then read the settings
     css::uno::Reference<css::registry::XRegistryKey> proxyEnable= xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetProxyType")));
     if( proxyEnable.is() && 0 != proxyEnable->getLongValue())
     {
@@ -384,7 +389,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         }
 
         // read socks settings
-/*      Reference<XRegistryKey> socksProxy_name = xRegistryRootKey->openKey(OUSTR("Settings/ooInetSOCKSProxyName"));
+/*		Reference<XRegistryKey> socksProxy_name = xRegistryRootKey->openKey(OUSTR("Settings/ooInetSOCKSProxyName"));
         if (socksProxy_name.is() && httpProxy_name->getStringValue().getLength()) {
             OUString socksHost = OUSTR("socksProxyHost=");
             socksHost += socksProxy_name->getStringValue();
@@ -399,7 +404,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
                 pjvm->pushProp(socksPort);
             }
         }
-*/  }
+*/	}
     xConfRegistry_simple->close();
 }
 
@@ -535,7 +540,6 @@ static void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
     char * p = tmData->tm_zone;
 #else
     char * p = tzname[0];
-    (void)tmData;
 #endif
 
     if (!strcmp(TIMEZONE, p))
@@ -571,7 +575,7 @@ void initVMConfiguration(
         (void) exception; // unused
 #endif
     }
-
+    
     try
     {
         getJavaPropsFromSafetySettings(&jvm, xSMgr, xCtx);
@@ -614,6 +618,34 @@ component_getImplementationEnvironment(sal_Char const ** pEnvTypeName,
                                        uno_Environment **)
 {
     *pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+extern "C" sal_Bool SAL_CALL component_writeInfo(void * pServiceManager,
+                                                 void * pRegistryKey)
+{
+    if (cppu::component_writeInfoHelper(pServiceManager, pRegistryKey,
+                                        aServiceImplementation))
+    {
+        try
+        {
+            css::uno::Reference< css::registry::XRegistryKey >(
+                    reinterpret_cast< css::registry::XRegistryKey * >(
+                        pRegistryKey)->
+                createKey(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.comp.stoc.JavaVirtualMachine"
+                            "/UNO/SINGLETONS/"
+                            "com.sun.star.java.theJavaVirtualMachine"))))->
+                setStringValue(serviceGetServiceName());
+            return true;
+        }
+        catch (css::uno::Exception &)
+        {
+            OSL_ENSURE(false, "com.sun.star.uno.Exception caught");
+        }
+    }
+    return false;
 }
 
 extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
@@ -774,11 +806,11 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         rtl::OString sJavaOption("-");
         typedef std::vector<rtl::OUString>::const_iterator cit;
         int index = 0;
-        for (cit i = props.begin(); i != props.end(); ++i)
+        for (cit i = props.begin(); i != props.end(); i++)
         {
             rtl::OString sOption = rtl::OUStringToOString(
                 *i, osl_getThreadTextEncoding());
-
+            
             if (!sOption.matchIgnoreAsciiCase(sJavaOption, 0))
                 arPropStrings[index]= rtl::OString("-D") + sOption;
             else
@@ -809,8 +841,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             }
             else if (errFind == JFW_E_NO_JAVA_FOUND)
             {
-
-                //Warning MessageBox:
+                
+                //Warning MessageBox: 
                 //%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task.
                 //Please install a JRE and restart %PRODUCTNAME.
                 css::java::JavaNotFoundException exc(
@@ -833,7 +865,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         }
         case JFW_E_INVALID_SETTINGS:
         {
-            //Warning MessageBox:
+            //Warning MessageBox: 
             // The %PRODUCTNAME configuration has been changed. Under Tools
             // - Options - %PRODUCTNAME - Java, select the Java runtime environment
             // you want to have used by %PRODUCTNAME.
@@ -944,7 +976,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             // TODO this is done too late; changes to the configuration done
             // after the above call to initVMConfiguration are lost
             registerConfigChangesListener();
-
+            
             break;
         }
     }
@@ -1388,7 +1420,7 @@ JavaVirtualMachine::~JavaVirtualMachine()
         }
         catch (css::uno::Exception &)
         {
-            OSL_FAIL("com.sun.star.uno.Exception caught");
+            OSL_ENSURE(false, "com.sun.star.uno.Exception caught");
         }
     if (m_xJavaConfiguration.is())
         // We should never get here, but just in case...
@@ -1398,7 +1430,7 @@ JavaVirtualMachine::~JavaVirtualMachine()
         }
         catch (css::uno::Exception &)
         {
-            OSL_FAIL("com.sun.star.uno.Exception caught");
+            OSL_ENSURE(false, "com.sun.star.uno.Exception caught");
         }
 }
 
@@ -1625,11 +1657,12 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
     }
     catch (css::uno::RuntimeException &)
     {
-        OSL_FAIL("RuntimeException");
+        OSL_ENSURE(false, "RuntimeException");
     }
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        OSL_FAIL("jvmaccess::VirtualMachine::AttachGuard::CreationException");
+        OSL_ENSURE(false,
+                   "jvmaccess::VirtualMachine::AttachGuard::CreationException");
     }
 }
 

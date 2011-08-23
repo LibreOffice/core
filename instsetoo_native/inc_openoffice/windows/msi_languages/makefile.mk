@@ -32,7 +32,6 @@ TARGET=win_ulffiles
 
 # --- Settings -----------------------------------------------------
 
-common_build:=
 .INCLUDE :  settings.mk
 
 # ------------------------------------------------------------------
@@ -49,8 +48,8 @@ ULFFILES = \
     SIS.ulf      \
     UIText.ulf 
     
-MLFFILES = $(foreach,i,$(ULFFILES) $(MISC)$/$(TARGET)$/$(i:b).mlf)
-UULFFILES = $(MISC)$/$(TARGET)$/Nsis.uulf
+MLFFILES = $(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).mlf)
+UULFFILES = $(COMMONMISC)$/$(TARGET)$/Nsis.uulf
 
 # --- Targets ------------------------------------------------------
 

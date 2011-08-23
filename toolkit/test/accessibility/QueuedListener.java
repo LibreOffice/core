@@ -26,14 +26,14 @@ class QueuedListener
                 xContext = xAccessible.getAccessibleContext();
         }
         final XAccessibleContext xSource = xContext;
-        EventQueue.Instance().addDisposingEvent (new Runnable()
+        EventQueue.Instance().addDisposingEvent (new Runnable() 
             {
-                public void run()
+                public void run() 
                 {
                     if (QueuedListener.this.maListener != null)
                         QueuedListener.this.maListener.disposing (xSource);
                 }
-            }
+            } 
             );
     }
 
@@ -45,7 +45,7 @@ class QueuedListener
                 {
                     QueuedListener.this.maListener.notifyEvent( aEvent );
                 }
-            }
+            } 
             );
     }
 

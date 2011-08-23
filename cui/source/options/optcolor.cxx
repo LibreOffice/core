@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 #include <svtools/colorcfg.hxx>
@@ -56,95 +59,7 @@ using namespace ::svtools;
 #define GROUP_CALC      3
 #define GROUP_DRAW      4
 #define GROUP_BASIC     5
-#define GROUP_SQL       6
-
-const char* aColorLBHids[] =
-{
-     HID_COLORPAGE_DOCCOLOR_LB,
-     HID_COLORPAGE_DOCBOUNDARIES_LB,
-     HID_COLORPAGE_APPBACKGROUND_LB,
-     HID_COLORPAGE_OBJECTBOUNDARIES_LB,
-     HID_COLORPAGE_TABLEBOUNDARIES_LB,
-     HID_COLORPAGE_FONTCOLOR_LB,
-     HID_COLORPAGE_LINKS_LB,
-     HID_COLORPAGE_LINKSVISITED_LB,
-     HID_COLORPAGE_ANCHOR_LB,
-     HID_COLORPAGE_SPELL_LB,
-     HID_COLORPAGE_WRITERTEXTGRID_LB,
-     HID_COLORPAGE_WRITERFIELDSHADINGS_LB,
-     HID_COLORPAGE_WRITERIDXSHADINGS_LB,
-     HID_COLORPAGE_WRITERDIRECTCURSOR_LB,
-     HID_COLORPAGE_WRITERNOTESINDICATOR_LB,
-     HID_COLORPAGE_WRITERSCRIPTINDICATOR_LB,
-     HID_COLORPAGE_WRITERSECTIONBOUNDARIES_LB,
-     HID_COLORPAGE_WRITERPAGEBREAKS_LB,
-     HID_COLORPAGE_HTMLSGML_LB,
-     HID_COLORPAGE_HTMLCOMMENT_LB,
-     HID_COLORPAGE_HTMLKEYWORD_LB,
-     HID_COLORPAGE_HTMLUNKNOWN_LB,
-     HID_COLORPAGE_CALCGRID_LB,
-     HID_COLORPAGE_CALCPAGEBREAK_LB,
-     HID_COLORPAGE_CALCPAGEBREAKMANUAL_LB,
-     HID_COLORPAGE_CALCPAGEBREAKAUTOMATIC_LB,
-     HID_COLORPAGE_CALCDETECTIVE_LB,
-     HID_COLORPAGE_CALCDETECTIVEERROR_LB,
-     HID_COLORPAGE_CALCREFERENCE_LB,
-     HID_COLORPAGE_CALCNOTESBACKGROUND_LB,
-     HID_COLORPAGE_DRAWGRID_LB,
-     HID_COLORPAGE_DRAWDRAWING_LB,
-     HID_COLORPAGE_DRAWFILL_LB,
-     HID_COLORPAGE_BASICIDENTIFIER_LB,
-     HID_COLORPAGE_BASICCOMMENT_LB,
-     HID_COLORPAGE_BASICNUMBER_LB,
-     HID_COLORPAGE_BASICSTRING_LB,
-     HID_COLORPAGE_BASICOPERATOR_LB,
-     HID_COLORPAGE_BASICKEYWORD_LB,
-     HID_COLORPAGE_BASICERROR_LB
-};
-
-const char* aColorCBHids[] =
-{
-     HID_COLORPAGE_DOCCOLOR_CB,
-     HID_COLORPAGE_DOCBOUNDARIES_CB,
-     HID_COLORPAGE_APPBACKGROUND_CB,
-     HID_COLORPAGE_OBJECTBOUNDARIES_CB,
-     HID_COLORPAGE_TABLEBOUNDARIES_CB,
-     HID_COLORPAGE_FONTCOLOR_CB,
-     HID_COLORPAGE_LINKS_CB,
-     HID_COLORPAGE_LINKSVISITED_CB,
-     HID_COLORPAGE_ANCHOR_CB,
-     HID_COLORPAGE_SPELL_CB,
-     HID_COLORPAGE_WRITERTEXTGRID_CB,
-     HID_COLORPAGE_WRITERFIELDSHADINGS_CB,
-     HID_COLORPAGE_WRITERIDXSHADINGS_CB,
-     HID_COLORPAGE_WRITERDIRECTCURSOR_CB,
-     HID_COLORPAGE_WRITERNOTESINDICATOR_CB,
-     HID_COLORPAGE_WRITERSCRIPTINDICATOR_CB,
-     HID_COLORPAGE_WRITERSECTIONBOUNDARIES_CB,
-     HID_COLORPAGE_WRITERPAGEBREAKS_CB,
-     HID_COLORPAGE_HTMLSGML_CB,
-     HID_COLORPAGE_HTMLCOMMENT_CB,
-     HID_COLORPAGE_HTMLKEYWORD_CB,
-     HID_COLORPAGE_HTMLUNKNOWN_CB,
-     HID_COLORPAGE_CALCGRID_CB,
-     HID_COLORPAGE_CALCPAGEBREAK_CB,
-     HID_COLORPAGE_CALCPAGEBREAKMANUAL_CB,
-     HID_COLORPAGE_CALCPAGEBREAKAUTOMATIC_CB,
-     HID_COLORPAGE_CALCDETECTIVE_CB,
-     HID_COLORPAGE_CALCDETECTIVEERROR_CB,
-     HID_COLORPAGE_CALCREFERENCE_CB,
-     HID_COLORPAGE_CALCNOTESBACKGROUND_CB,
-     HID_COLORPAGE_DRAWGRID_CB,
-     HID_COLORPAGE_DRAWDRAWING_CB,
-     HID_COLORPAGE_DRAWFILL_CB,
-     HID_COLORPAGE_BASICIDENTIFIER_CB,
-     HID_COLORPAGE_BASICCOMMENT_CB,
-     HID_COLORPAGE_BASICNUMBER_CB,
-     HID_COLORPAGE_BASICSTRING_CB,
-     HID_COLORPAGE_BASICOPERATOR_CB,
-     HID_COLORPAGE_BASICKEYWORD_CB,
-     HID_COLORPAGE_BASICERROR_CB
-};
+#define GROUP_SQL		6
 
 class SvxExtFixedText_Impl : public FixedText
 {
@@ -198,9 +113,6 @@ class ColorConfigWindow_Impl : public Window
     FixedText       aSmarttagsFT;
     ColorListBox    aSmarttagsLB;
     Window          aSmarttagsWN;
-    CheckBox        aShadowColorCB;
-    ColorListBox    aShadowColorLB;
-    Window          aShadowColorWN;
     Window          aWriterBackWN;
     SvxExtFixedText_Impl    aWriterFT;
     FixedText       aWrtTextGridFT;
@@ -316,13 +228,13 @@ class ColorConfigWindow_Impl : public Window
     ColorListBox    aSQLCommentLB;
     Window          aSQLCommentWN;
 
-    ::std::vector< SvxExtFixedText_Impl*>   aChapters;
-    ::std::vector< Window* >                aChapterWins;
-    ::std::vector< FixedText* >             aFixedTexts;
-    ::std::vector< CheckBox* >              aCheckBoxes;
-    ::std::vector< ColorListBox* >          aColorBoxes;
-    ::std::vector< Window* >                aWindows; // [ColorConfigEntryCount]
-    ::std::vector< ::boost::shared_ptr<SvxExtFixedText_Impl> >  m_aExtensionTitles;
+    ::std::vector< SvxExtFixedText_Impl*>	aChapters;
+    ::std::vector< Window* >				aChapterWins;
+    ::std::vector< FixedText* >				aFixedTexts;
+    ::std::vector< CheckBox* >				aCheckBoxes;
+    ::std::vector< ColorListBox* >			aColorBoxes;
+    ::std::vector< Window* >				aWindows; // [ColorConfigEntryCount]
+    ::std::vector< ::boost::shared_ptr<SvxExtFixedText_Impl> >	m_aExtensionTitles;
 
     SvtModuleOptions    m_aModuleOptions;
 
@@ -396,7 +308,6 @@ sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
         case ANCHOR :
         case SPELL :
         case SMARTTAGS :
-        case SHADOWCOLOR :
         {
             nRet = GROUP_GENERAL;
             break;
@@ -470,6 +381,9 @@ sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
     return nRet;
 }
 
+/* -----------------------------25.03.2002 17:05------------------------------
+
+---------------------------------------------------------------------------*/
 ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rResId) :
         Window(pParent, rResId),
         aGeneralBackWN(this),
@@ -504,9 +418,6 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         aSmarttagsFT(this, ResId(        FT_SMARTTAGS, *rResId.GetResMgr() )),
         aSmarttagsLB(this, ResId(        LB_SMARTTAGS, *rResId.GetResMgr() )),
         aSmarttagsWN(this, ResId(        WN_SMARTTAGS, *rResId.GetResMgr() )),
-        aShadowColorCB(this, ResId(      CB_SHADOWCOLOR, *rResId.GetResMgr())),
-        aShadowColorLB(this, ResId(      LB_SHADOWCOLOR, *rResId.GetResMgr())),
-        aShadowColorWN(this, ResId(      WN_SHADOWCOLOR, *rResId.GetResMgr())),
         aWriterBackWN(this),
         aWriterFT(this, ResId(FT_WRITER, *rResId.GetResMgr())),
         aWrtTextGridFT(this, ResId(     FT_WRITERTEXTGRID, *rResId.GetResMgr())),
@@ -644,7 +555,6 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aCheckBoxes[LINKSVISITED        ] = &aLinksVisitedCB         ;
     aFixedTexts[SPELL            ]=& aSpellFT;
     aFixedTexts[SMARTTAGS        ]=& aSmarttagsFT;
-    aCheckBoxes[SHADOWCOLOR      ]=& aShadowColorCB;
     aFixedTexts[WRITERTEXTGRID   ]=& aWrtTextGridFT;
     aCheckBoxes[WRITERFIELDSHADINGS ] = &aWrtFieldCB             ;
     aCheckBoxes[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackCB       ;
@@ -671,14 +581,14 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aFixedTexts[BASICSTRING     ] = &aBasicStringFT;
     aFixedTexts[BASICOPERATOR   ] = &aBasicOperatorFT;
     aFixedTexts[BASICKEYWORD    ] = &aBasicKeywordFT;
-    aFixedTexts[BASICERROR      ] = &aBasicErrorFT;
-    aFixedTexts[SQLIDENTIFIER   ] = &aSQLIdentifierFT;
-    aFixedTexts[SQLNUMBER       ] = &aSQLNumberFT;
-    aFixedTexts[SQLSTRING       ] = &aSQLStringFT;
-    aFixedTexts[SQLOPERATOR     ] = &aSQLOperatorFT;
-    aFixedTexts[SQLKEYWORD      ] = &aSQLKeywordFT;
-    aFixedTexts[SQLPARAMETER    ] = &aSQLParameterFT;
-    aFixedTexts[SQLCOMMENT      ] = &aSQLCommentFT;
+    aFixedTexts[BASICERROR		] = &aBasicErrorFT;
+    aFixedTexts[SQLIDENTIFIER	] = &aSQLIdentifierFT;
+    aFixedTexts[SQLNUMBER		] = &aSQLNumberFT;
+    aFixedTexts[SQLSTRING		] = &aSQLStringFT;
+    aFixedTexts[SQLOPERATOR		] = &aSQLOperatorFT;
+    aFixedTexts[SQLKEYWORD		] = &aSQLKeywordFT;
+    aFixedTexts[SQLPARAMETER	] = &aSQLParameterFT;
+    aFixedTexts[SQLCOMMENT		] = &aSQLCommentFT;
 
     aColorBoxes[DOCCOLOR            ] = &aDocColorLB             ;
     aColorBoxes[DOCBOUNDARIES       ] = &aDocBoundLB             ;
@@ -690,7 +600,6 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aColorBoxes[LINKSVISITED        ] = &aLinksVisitedLB         ;
     aColorBoxes[SPELL               ] = &aSpellLB             ;
     aColorBoxes[SMARTTAGS           ] = &aSmarttagsLB             ;
-    aColorBoxes[SHADOWCOLOR         ] = &aShadowColorLB  ;
     aColorBoxes[WRITERTEXTGRID      ] = &aWrtTextGridLB          ;
     aColorBoxes[WRITERFIELDSHADINGS ] = &aWrtFieldLB             ;
     aColorBoxes[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackLB       ;
@@ -711,20 +620,20 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aColorBoxes[CALCREFERENCE       ] = &aCalcReferenceLB        ;
     aColorBoxes[CALCNOTESBACKGROUND     ] = &aCalcNotesBackLB            ;
     aColorBoxes[DRAWGRID            ] = &aDrawGridLB             ;
-    aColorBoxes[BASICIDENTIFIER     ] = &aBasicIdentifierLB;
-    aColorBoxes[BASICCOMMENT        ] = &aBasicCommentLB;
-    aColorBoxes[BASICNUMBER         ] = &aBasicNumberLB;
-    aColorBoxes[BASICSTRING         ] = &aBasicStringLB;
-    aColorBoxes[BASICOPERATOR       ] = &aBasicOperatorLB;
-    aColorBoxes[BASICKEYWORD        ] = &aBasicKeywordLB;
-    aColorBoxes[BASICERROR          ] = &aBasicErrorLB;
-    aColorBoxes[SQLIDENTIFIER       ] = &aSQLIdentifierLB;
-    aColorBoxes[SQLNUMBER           ] = &aSQLNumberLB;
-    aColorBoxes[SQLSTRING           ] = &aSQLStringLB;
-    aColorBoxes[SQLOPERATOR         ] = &aSQLOperatorLB;
-    aColorBoxes[SQLKEYWORD          ] = &aSQLKeywordLB;
-    aColorBoxes[SQLPARAMETER        ] = &aSQLParameterLB;
-    aColorBoxes[SQLCOMMENT          ] = &aSQLCommentLB;
+    aColorBoxes[BASICIDENTIFIER		] = &aBasicIdentifierLB;
+    aColorBoxes[BASICCOMMENT		] = &aBasicCommentLB;
+    aColorBoxes[BASICNUMBER			] = &aBasicNumberLB;
+    aColorBoxes[BASICSTRING			] = &aBasicStringLB;
+    aColorBoxes[BASICOPERATOR		] = &aBasicOperatorLB;
+    aColorBoxes[BASICKEYWORD		] = &aBasicKeywordLB;
+    aColorBoxes[BASICERROR			] = &aBasicErrorLB;
+    aColorBoxes[SQLIDENTIFIER		] = &aSQLIdentifierLB;
+    aColorBoxes[SQLNUMBER			] = &aSQLNumberLB;
+    aColorBoxes[SQLSTRING			] = &aSQLStringLB;
+    aColorBoxes[SQLOPERATOR			] = &aSQLOperatorLB;
+    aColorBoxes[SQLKEYWORD			] = &aSQLKeywordLB;
+    aColorBoxes[SQLPARAMETER		] = &aSQLParameterLB;
+    aColorBoxes[SQLCOMMENT			] = &aSQLCommentLB;
 
     aWindows[DOCCOLOR            ] = &aDocColorWN             ;
     aWindows[DOCBOUNDARIES       ] = &aDocBoundWN             ;
@@ -736,7 +645,6 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aWindows[LINKSVISITED        ] = &aLinksVisitedWN         ;
     aWindows[SPELL               ] = &aSpellWN             ;
     aWindows[SMARTTAGS           ] = &aSmarttagsWN             ;
-    aWindows[SHADOWCOLOR         ] = &aShadowColorWN    ;
     aWindows[WRITERTEXTGRID      ] = &aWrtTextGridWN          ;
     aWindows[WRITERFIELDSHADINGS ] = &aWrtFieldWN             ;
     aWindows[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackWN       ;
@@ -764,13 +672,13 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aWindows[BASICOPERATOR       ] = &aBasicOperatorWN;
     aWindows[BASICKEYWORD        ] = &aBasicKeywordWN;
     aWindows[BASICERROR          ] = &aBasicErrorWN;
-    aWindows[SQLIDENTIFIER       ] = &aSQLIdentifierWN;
-    aWindows[SQLNUMBER           ] = &aSQLNumberWN;
-    aWindows[SQLSTRING           ] = &aSQLStringWN;
-    aWindows[SQLOPERATOR         ] = &aSQLOperatorWN;
-    aWindows[SQLKEYWORD          ] = &aSQLKeywordWN;
-    aWindows[SQLPARAMETER        ] = &aSQLParameterWN;
-    aWindows[SQLCOMMENT          ] = &aSQLCommentWN;
+    aWindows[SQLIDENTIFIER		 ] = &aSQLIdentifierWN;
+    aWindows[SQLNUMBER			 ] = &aSQLNumberWN;
+    aWindows[SQLSTRING			 ] = &aSQLStringWN;
+    aWindows[SQLOPERATOR	     ] = &aSQLOperatorWN;
+    aWindows[SQLKEYWORD		     ] = &aSQLKeywordWN;
+    aWindows[SQLPARAMETER	     ] = &aSQLParameterWN;
+    aWindows[SQLCOMMENT		     ] = &aSQLCommentWN;
 
     aChapters.push_back(&aGeneralFT); aChapterWins.push_back(&aGeneralBackWN);
     aChapters.push_back(&aWriterFT);  aChapterWins.push_back(&aWriterBackWN);
@@ -798,6 +706,8 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         sal_Int32 nHeight = LogicToPixel( Size( 0, _LINE_HEIGHT ), MAP_APPFONT ).Height();
         sal_Int32 nLineNum = nLastY / nHeight;
 
+        Point aFixedPos = LogicToPixel( Point( _FT_XPOS, nLineNum * _LINE_HEIGHT ), MAP_APPFONT );
+        Point aLBPos = LogicToPixel( Point( _LB_XPOS, nLineNum * _LINE_HEIGHT ), MAP_APPFONT );
         Size aFixedSize = LogicToPixel( Size( _FT_WIDTH , _FT_HEIGHT ), MAP_APPFONT );
         Size aLBSize = LogicToPixel( Size( _LB_WIDTH , _LB_HEIGHT ), MAP_APPFONT );
         Size aWinSize = LogicToPixel( Size( _WN_WIDTH , _WN_HEIGHT ), MAP_APPFONT );
@@ -865,13 +775,13 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         }
     }
     Color aTextColor;
-    sal_Bool bSetTextColor = sal_False;
+    BOOL bSetTextColor = FALSE;
     //#104195# when the window color is the same as the text color it has to be changed
     Color aWinCol = rStyleSettings.GetWindowColor();
     Color aRCheckCol = rStyleSettings.GetRadioCheckTextColor();
     if(aWinCol == aRCheckCol )
     {
-        bSetTextColor = sal_True;
+        bSetTextColor = TRUE;
         aRCheckCol.Invert();
         //if inversion didn't work (gray) then it's set to black
         if(aRCheckCol == aWinCol)
@@ -902,7 +812,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
             else
                 aCheckBoxes[i]->Hide();
             aCheckBoxes[i]->SetBackground(aTransparentWall);
-            aCheckBoxes[i]->SetHelpId( aColorCBHids[i] );
+            aCheckBoxes[i]->SetHelpId(HID_COLORPAGE_CHECKBOX_START + i);
             if(bSetTextColor)
                 aCheckBoxes[i]->SetTextColor(aRCheckCol);
         }
@@ -941,17 +851,13 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         XColorEntry* pEntry = aColorTable.GetColor(i);
         aColorBoxes[0]->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
-
-    aColorBoxes[0]->SetHelpId( aColorLBHids[0] );
-
-    OSL_ENSURE( nCount < sal_Int32(sizeof(aColorLBHids)/sizeof(aColorLBHids[0])), "too few helpIDs for color listboxes" );
+    aColorBoxes[0]->SetHelpId(HID_COLORPAGE_LISTBOX_START);
     for( sal_Int32 i = 1; i < nCount; i++ )
     {
         if(aColorBoxes[i])
         {
             aColorBoxes[i]->CopyEntries( *aColorBoxes[0] );
-            if( i < sal_Int32(sizeof(aColorLBHids)/sizeof(aColorLBHids[0])) )
-               aColorBoxes[i]->SetHelpId( aColorLBHids[i] );
+            aColorBoxes[i]->SetHelpId(HID_COLORPAGE_LISTBOX_START + i);
         }
     }
 }
@@ -1055,8 +961,8 @@ class ColorConfigCtrl_Impl : public Control
     String                  sPreview;
     ColorConfigWindow_Impl  aScrollWindow;
 
-    EditableColorConfig*            pColorConfig;
-    EditableExtendedColorConfig*    pExtColorConfig;
+    EditableColorConfig*			pColorConfig;
+    EditableExtendedColorConfig*	pExtColorConfig;
 
     long            nScrollPos;
 
@@ -1115,11 +1021,11 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
     sal_Int32 nThirdWidth = aScrollWindow.aWindows[0]->GetPosPixel().X() - nFirstWidth - nSecondWidth;
 
     const WinBits nHeadBits = HIB_VCENTER | HIB_FIXED| HIB_FIXEDPOS;
-    aHeaderHB.InsertItem( 1, sOn, nFirstWidth, (sal_uInt16)nHeadBits|HIB_CENTER);
-    aHeaderHB.InsertItem( 2, sUIElem, nSecondWidth, (sal_uInt16)nHeadBits|HIB_LEFT);
-    aHeaderHB.InsertItem( 3, sColSetting, nThirdWidth, (sal_uInt16)nHeadBits|HIB_LEFT);
+    aHeaderHB.InsertItem( 1, sOn, nFirstWidth, (USHORT)nHeadBits|HIB_CENTER);
+    aHeaderHB.InsertItem( 2, sUIElem, nSecondWidth, (USHORT)nHeadBits|HIB_LEFT);
+    aHeaderHB.InsertItem( 3, sColSetting, nThirdWidth, (USHORT)nHeadBits|HIB_LEFT);
     aHeaderHB.InsertItem( 4, sPreview,
-            aHeaderHB.GetSizePixel().Width() - nFirstWidth - nSecondWidth - nThirdWidth, (sal_uInt16)nHeadBits|HIB_LEFT);
+            aHeaderHB.GetSizePixel().Width() - nFirstWidth - nSecondWidth - nThirdWidth, (USHORT)nHeadBits|HIB_LEFT);
     aHeaderHB.Show();
 
     aVScroll.SetRangeMin(0);
@@ -1187,7 +1093,7 @@ void ColorConfigCtrl_Impl::Update()
         if(ANCHOR == i)
             continue;
         const ColorConfigValue& rColorEntry = pColorConfig->GetColorValue(ColorConfigEntry(i));
-        if(COL_AUTO == (sal_uInt32)rColorEntry.nColor)
+        if(COL_AUTO == (UINT32)rColorEntry.nColor)
         {
             if(aScrollWindow.aColorBoxes[i])
                 aScrollWindow.aColorBoxes[i]->SelectEntryPos(0);
@@ -1245,7 +1151,7 @@ void ColorConfigCtrl_Impl::Update()
 
 sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible, sal_Bool _bShow)
 {
-    sal_Bool bHide = sal_True;
+    sal_Bool bHide = TRUE;
     if(pWindow)
     {
         Point aPos = pWindow->GetPosPixel();
@@ -1259,7 +1165,7 @@ sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible, sal_Bo
 }
 IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
 {
-    aScrollWindow.SetUpdateMode(sal_True);
+    aScrollWindow.SetUpdateMode(TRUE);
     sal_Int16 i;
     long nOffset = aScrollWindow.aColorBoxes[1]->GetPosPixel().Y() - aScrollWindow.aColorBoxes[0]->GetPosPixel().Y();
     nOffset *= (nScrollPos - pScrollBar->GetThumbPos());
@@ -1335,7 +1241,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
         Point aPos = aScrollWindow.aChapters[i]->GetPosPixel(); aPos.Y() += nOffset; aScrollWindow.aChapters[i]->SetPosPixel(aPos);
         aPos = aScrollWindow.aChapterWins[i]->GetPosPixel(); aPos.Y() += nOffset; aScrollWindow.aChapterWins[i]->SetPosPixel(aPos);
     }
-    aScrollWindow.SetUpdateMode(sal_True);
+    aScrollWindow.SetUpdateMode(TRUE);
     return 0;
 }
 
@@ -1344,7 +1250,7 @@ long ColorConfigCtrl_Impl::PreNotify( NotifyEvent& rNEvt )
     if(rNEvt.GetType() == EVENT_COMMAND)
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        sal_uInt16 nCmd = pCEvt->GetCommand();
+        USHORT nCmd = pCEvt->GetCommand();
         if( COMMAND_WHEEL == nCmd )
         {
             Command(*pCEvt);
@@ -1423,7 +1329,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
             }
             else
             {
-                Color aColor = pBox->GetSelectEntryColor();     // #i14869# no Color&, 'cause it's a ref to a temp object on the stack!
+                Color aColor = pBox->GetSelectEntryColor();		// #i14869# no Color&, 'cause it's a ref to a temp object on the stack!
                 aColorEntry.nColor = aColor.GetColor();
                 if(aScrollWindow.aWindows[i])
                     aScrollWindow.aWindows[i]->SetBackground(Wallpaper(aColor));
@@ -1448,7 +1354,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
             if(pBox && aScrollWindow.aColorBoxes[i] == pBox)
             {
                 ExtendedColorConfigValue aColorEntry = pExtColorConfig->GetComponentColorConfigValue(sComponentName,k);
-                Color aColor = pBox->GetSelectEntryColor();     // #i14869# no Color&, 'cause it's a ref to a temp object on the stack!
+                Color aColor = pBox->GetSelectEntryColor();		// #i14869# no Color&, 'cause it's a ref to a temp object on the stack!
                 aColorEntry.setColor(aColor.GetColor());
                 if( !pBox->GetSelectEntryPos() ) // auto color
                 {
@@ -1505,7 +1411,7 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
        aSaveSchemePB(   this, CUI_RES( PB_SAVESCHEME) ),
        aDeleteSchemePB( this, CUI_RES( PB_DELETESCHEME ) ),
        aCustomColorsFL( this, CUI_RES( FL_CUSTOMCOLORS ) ),
-       bFillItemSetCalled(sal_False),
+       bFillItemSetCalled(FALSE),
        pColorConfig(0),
        pExtColorConfig(0),
        pColorConfigCT(  new ColorConfigCtrl_Impl(this, CUI_RES( CT_COLORCONFIG ) ))
@@ -1544,9 +1450,9 @@ SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet& r
     return ( new SvxColorOptionsTabPage( pParent, rAttrSet ) );
 }
 
-sal_Bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
+BOOL SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
 {
-    bFillItemSetCalled = sal_True;
+    bFillItemSetCalled = TRUE;
     if(aColorSchemeLB.GetSavedValue() != aColorSchemeLB.GetSelectEntryPos())
     {
         pColorConfig->SetModified();
@@ -1556,7 +1462,7 @@ sal_Bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
         pColorConfig->Commit();
     if(pExtColorConfig->IsModified())
         pExtColorConfig->Commit();
-    return sal_True;
+    return TRUE;
 }
 
 void SvxColorOptionsTabPage::Reset( const SfxItemSet& )

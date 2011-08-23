@@ -89,7 +89,7 @@ public class Test05 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-
+    
 
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
@@ -112,7 +112,7 @@ public class Test05 implements StorageTest {
                                                         pBytes2,
                                                         aRelations2 ) )
                 return false;
-
+    
             // set Relations for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempFileStorage,
                                                             true,
@@ -196,7 +196,7 @@ public class Test05 implements StorageTest {
                 m_aTestHelper.Error( "Wrong exception is thrown by disposed storage: " + e );
                 return false;
             }
-
+    
             try
             {
                 xSubStream1.getInputStream();
@@ -224,7 +224,7 @@ public class Test05 implements StorageTest {
                 m_aTestHelper.Error( "Wrong exception is thrown by disposed stream: " + e );
                 return false;
             }
-
+    
 
             // dispose root storage
             if ( !m_aTestHelper.disposeStorage( xTempFileStorage ) )
@@ -259,7 +259,7 @@ public class Test05 implements StorageTest {
                 m_aTestHelper.Error( "Can't open existing substorage 'SubSubStorage'!" );
                 return false;
             }
-
+    
             if ( !m_aTestHelper.checkStorageProperties( xResSubStorage,
                                                         false,
                                                         ElementModes.READ,
@@ -275,7 +275,7 @@ public class Test05 implements StorageTest {
                 m_aTestHelper.Error( "Can't open existing substorage 'SubSubStorage'!" );
                 return false;
             }
-
+    
             if ( !m_aTestHelper.checkStorageProperties( xResSubSubStorage,
                                                         false,
                                                         ElementModes.READ,
@@ -308,7 +308,7 @@ public class Test05 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    }
+    } 
 
 }
 

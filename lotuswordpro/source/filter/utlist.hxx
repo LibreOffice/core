@@ -80,7 +80,7 @@ public: // Methods
         cpNext = NULL;
     }
     UtBool OnList() { return cpNext != NULL; }
-    void MakeNotOnList() { cpNext = NULL; } // Same as Remove but doesn't
+    void MakeNotOnList() { cpNext = NULL; }	// Same as Remove but doesn't
                                             // patch up list
     pCUtListElmt GetNext() const { return cpNext; }
     void SetNext(pCUtListElmt pNext) { cpNext = pNext; }

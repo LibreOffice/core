@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ SfxXRangeItem::SfxXRangeItem()
 
 // -----------------------------------------------------------------------
 
-SfxXRangeItem::SfxXRangeItem( sal_uInt16 which, NUMTYPE from, NUMTYPE to ):
+SfxXRangeItem::SfxXRangeItem( USHORT which, NUMTYPE from, NUMTYPE to ):
     SfxPoolItem( which ),
     nFrom( from ),
     nTo( to )
@@ -63,7 +63,7 @@ SfxXRangeItem::SfxXRangeItem( sal_uInt16 which, NUMTYPE from, NUMTYPE to ):
 
 // -----------------------------------------------------------------------
 
-SfxXRangeItem::SfxXRangeItem( sal_uInt16 nW, SvStream &rStream ) :
+SfxXRangeItem::SfxXRangeItem( USHORT nW, SvStream &rStream ) :
     SfxPoolItem( nW )
 {
     rStream >> nFrom;
@@ -83,12 +83,12 @@ SfxXRangeItem::SfxXRangeItem( const SfxXRangeItem& rItem ) :
 
 SfxItemPresentation SfxXRangeItem::GetPresentation
 (
-    SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    SfxItemPresentation 	/*ePresentation*/,
+    SfxMapUnit				/*eCoreMetric*/,
+    SfxMapUnit				/*ePresentationMetric*/,
+    XubString& 				rText,
     const IntlWrapper *
-)   const
+)	const
 {
     rText = UniString::CreateFromInt64(nFrom);
     rText += ':';
@@ -116,9 +116,9 @@ SfxPoolItem* SfxXRangeItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxXRangeItem::Create(SvStream &rStream, sal_uInt16) const
+SfxPoolItem* SfxXRangeItem::Create(SvStream &rStream, USHORT) const
 {
-    NUMTYPE     nVon, nBis;
+    NUMTYPE		nVon, nBis;
     rStream >> nVon;
     rStream >> nBis;
     return new SfxXRangeItem( Which(), nVon, nBis );
@@ -126,7 +126,7 @@ SfxPoolItem* SfxXRangeItem::Create(SvStream &rStream, sal_uInt16) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxXRangeItem::Store(SvStream &rStream, sal_uInt16) const
+SvStream& SfxXRangeItem::Store(SvStream &rStream, USHORT) const
 {
     rStream << nFrom;
     rStream << nTo;
@@ -136,14 +136,14 @@ SvStream& SfxXRangeItem::Store(SvStream &rStream, sal_uInt16) const
 //=========================================================================
 
 SfxXRangesItem::SfxXRangesItem()
-:   _pRanges(0)
+:	_pRanges(0)
 {
 }
 
 //-------------------------------------------------------------------------
 
-SfxXRangesItem::SfxXRangesItem( sal_uInt16 nWID, const NUMTYPE *pRanges )
-:   SfxPoolItem( nWID )
+SfxXRangesItem::SfxXRangesItem( USHORT nWID, const NUMTYPE *pRanges )
+:	SfxPoolItem( nWID )
 {
     NUMTYPE nCount = Count_Impl(pRanges) + 1;
     _pRanges = new NUMTYPE[nCount];
@@ -152,8 +152,8 @@ SfxXRangesItem::SfxXRangesItem( sal_uInt16 nWID, const NUMTYPE *pRanges )
 
 //-------------------------------------------------------------------------
 
-SfxXRangesItem::SfxXRangesItem( sal_uInt16 nWID, SvStream &rStream )
-:   SfxPoolItem( nWID )
+SfxXRangesItem::SfxXRangesItem( USHORT nWID, SvStream &rStream )
+:	SfxPoolItem( nWID )
 {
     NUMTYPE nCount;
     rStream >> nCount;
@@ -166,7 +166,7 @@ SfxXRangesItem::SfxXRangesItem( sal_uInt16 nWID, SvStream &rStream )
 //-------------------------------------------------------------------------
 
 SfxXRangesItem::SfxXRangesItem( const SfxXRangesItem& rItem )
-:   SfxPoolItem( rItem )
+:	SfxPoolItem( rItem )
 {
     NUMTYPE nCount = Count_Impl(rItem._pRanges) + 1;
     _pRanges = new NUMTYPE[nCount];
@@ -186,9 +186,9 @@ int SfxXRangesItem::operator==( const SfxPoolItem &rItem ) const
 {
     const SfxXRangesItem &rOther = (const SfxXRangesItem&) rItem;
     if ( !_pRanges && !rOther._pRanges )
-        return sal_True;
+        return TRUE;
     if ( _pRanges || rOther._pRanges )
-        return sal_False;
+        return FALSE;
 
     NUMTYPE n;
     for ( n = 0; _pRanges[n] && rOther._pRanges[n]; ++n )
@@ -219,14 +219,14 @@ SfxPoolItem* SfxXRangesItem::Clone( SfxItemPool * ) const
 
 //-------------------------------------------------------------------------
 
-SfxPoolItem* SfxXRangesItem::Create( SvStream &rStream, sal_uInt16 ) const
+SfxPoolItem* SfxXRangesItem::Create( SvStream &rStream, USHORT ) const
 {
     return new SfxXRangesItem( Which(), rStream );
 }
 
 //-------------------------------------------------------------------------
 
-SvStream& SfxXRangesItem::Store( SvStream &rStream, sal_uInt16 ) const
+SvStream& SfxXRangesItem::Store( SvStream &rStream, USHORT ) const
 {
     NUMTYPE nCount = Count_Impl( _pRanges );
     rStream >> nCount;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 
 /*************************************************************************
 |*
-|*  Ctor
+|*	Ctor
 |*
 \************************************************************************/
 
@@ -63,9 +63,9 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
       aBtnOk          ( this, SdResId( BTN_OK ) ),
       aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
       aBtnHelp        ( this, SdResId( BTN_HELP ) ),
-      pMedium       ( pSfxMedium ),
-      mpDoc         ( pInDoc ),
-      rName         ( rFileName )
+      pMedium 		( pSfxMedium ),
+      mpDoc			( pInDoc ),
+      rName			( rFileName )
 {
     FreeResource();
 
@@ -82,7 +82,7 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
 
 /*************************************************************************
 |*
-|*  Dtor
+|*	Dtor
 |*
 \************************************************************************/
 
@@ -92,8 +92,8 @@ SdInsertPagesObjsDlg::~SdInsertPagesObjsDlg()
 
 /*************************************************************************
 |*
-|*  Fuellt die TreeLB in Abhaengigkeit des Mediums. Ist kein Medium
-|*  vorhanden, handelt es sich um ein Text- und kein Drawdokument
+|*	Fuellt die TreeLB in Abhaengigkeit des Mediums. Ist kein Medium
+|*	vorhanden, handelt es sich um ein Text- und kein Drawdokument
 |*
 \************************************************************************/
 
@@ -111,21 +111,25 @@ void SdInsertPagesObjsDlg::Reset()
         Color aColor( COL_WHITE );
         Bitmap aBmpText( SdResId( BMP_DOC_TEXT ) );
         Image aImgText( aBmpText, aColor );
-        aLbTree.InsertEntry( rName, aImgText, aImgText );
+        Bitmap aBmpTextH( SdResId( BMP_DOC_TEXT_H ) );
+        Image aImgTextH( aBmpTextH, Color( COL_BLACK ) );
+        SvLBoxEntry* pEntry = aLbTree.InsertEntry( rName, aImgText, aImgText );
+        aLbTree.SetExpandedEntryBmp( pEntry, aImgTextH, BMP_COLOR_HIGHCONTRAST );
+        aLbTree.SetCollapsedEntryBmp( pEntry, aImgTextH, BMP_COLOR_HIGHCONTRAST );
     }
 
-    aCbxMasters.Check( sal_True );
+    aCbxMasters.Check( TRUE );
 }
 
 /*************************************************************************
 |*
-|*  Liefert die Liste zurueck
-|*  nType == 0 -> Seiten
-|*  nType == 1 -> Objekte
+|*	Liefert die Liste zurueck
+|*	nType == 0 -> Seiten
+|*	nType == 1 -> Objekte
 |*
 \************************************************************************/
 
-List* SdInsertPagesObjsDlg::GetList( sal_uInt16 nType )
+List* SdInsertPagesObjsDlg::GetList( USHORT nType )
 {
     // Bei Draw-Dokumenten muss bei der Selektion des Dokumentes NULL
     // zurueckgegeben werden
@@ -139,29 +143,29 @@ List* SdInsertPagesObjsDlg::GetList( sal_uInt16 nType )
         // wird das gesamte Dokument (und nicht mehr!) eingefuegt.
         if( aLbTree.GetSelectionCount() == 0 ||
             ( aLbTree.IsSelected( aLbTree.First() ) ) )
-            return( NULL );
+            return( NULL ); // #37350#
     }
     return( aLbTree.GetSelectEntryList( nType ) );
 }
 
 /*************************************************************************
 |*
-|*  Ist Verknuepfung gechecked
+|*	Ist Verknuepfung gechecked
 |*
 \************************************************************************/
 
-sal_Bool SdInsertPagesObjsDlg::IsLink()
+BOOL SdInsertPagesObjsDlg::IsLink()
 {
     return( aCbxLink.IsChecked() );
 }
 
 /*************************************************************************
 |*
-|*  Ist Verknuepfung gechecked
+|*	Ist Verknuepfung gechecked
 |*
 \************************************************************************/
 
-sal_Bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
+BOOL SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
 {
     return( aCbxMasters.IsChecked() );
 }

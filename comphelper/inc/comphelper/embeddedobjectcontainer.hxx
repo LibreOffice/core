@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,8 +76,8 @@ public:
                         ~EmbeddedObjectContainer();
 
     void                SwitchPersistence( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& );
-    sal_Bool            CommitImageSubStorage();
-    void                ReleaseImageSubStorage();
+    sal_Bool			CommitImageSubStorage();
+    void				ReleaseImageSubStorage();
 
     ::rtl::OUString     CreateUniqueObjectName();
 
@@ -153,13 +153,13 @@ public:
     sal_Bool            InsertGraphicStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const ::rtl::OUString& rObjectName, const ::rtl::OUString& rMediaType );
 
     // try to add a graphical representation for an object in optimized way ( might fail )
-    sal_Bool            InsertGraphicStreamDirectly( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const ::rtl::OUString& rObjectName, const rtl::OUString& rMediaType );
+    sal_Bool			InsertGraphicStreamDirectly( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const ::rtl::OUString& rObjectName, const rtl::OUString& rMediaType );
 
     // remove a graphical representation for an object
     sal_Bool            RemoveGraphicStream( const ::rtl::OUString& rObjectName );
 
     // copy the graphical representation from different container
-    sal_Bool            TryToCopyGraphReplacement( EmbeddedObjectContainer& rSrc,
+    sal_Bool			TryToCopyGraphReplacement( EmbeddedObjectContainer& rSrc,
                                                     const ::rtl::OUString& aOrigName,
                                                     const ::rtl::OUString& aTargetName );
 
@@ -178,7 +178,7 @@ public:
     *
     * \param _xStorage The storeage where to store the objects.
     * \param _bClearModifedFlag If <TRUE/> then the modifed flag will be set to <FALSE/> otherwise nothing happen.
-    * \return <FALSE/> if no error occurred, otherwise <TRUE/>.
+    * \return <FALSE/> if no error occured, otherwise <TRUE/>.
     */
     sal_Bool             SetPersistentEntries(const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& _xStorage,bool _bClearModifedFlag = true);
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ namespace utl
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "DisposableComponent::~DisposableComponent: caught an exception!" );
+                OSL_ENSURE( sal_False, "DisposableComponent::~DisposableComponent: caught an exception!" );
             }
             m_xComponent.clear();
         }
@@ -92,7 +92,7 @@ namespace utl
         CloseableComponentImpl( const Reference< XInterface >& _rxComponent );
 
         /** closes the component
-
+        
             @nofail
         */
         void    nf_closeComponent();
@@ -157,7 +157,7 @@ namespace utl
         catch( const CloseVetoException& ) { /* fine */ }
         catch( const Exception& )
         {
-            OSL_FAIL( "CloseableComponentImpl::nf_closeComponent: caught an unexpected exception!" );
+            OSL_ENSURE( sal_False, "CloseableComponentImpl::nf_closeComponent: caught an unexpected exception!" );
         }
 
         // reset
@@ -179,7 +179,7 @@ namespace utl
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "CloseableComponentImpl::impl_nf_switchListening: caught an exception!" );
+            OSL_ENSURE( sal_False, "CloseableComponentImpl::impl_nf_switchListening: caught an exception!" );
         }
     }
 
@@ -195,7 +195,7 @@ namespace utl
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::queryClosing: where did this come from?" );
         throw CloseVetoException();
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL CloseableComponentImpl::notifyClosing( const EventObject&
     #ifdef DBG_UTIL
@@ -208,7 +208,7 @@ namespace utl
         // this should be unreachable: As long as we're a CloseListener, we veto the closing. If we're going
         // to close the component ourself, then we revoke ourself as listener *before* the close call. So,
         // if this here fires, something went definately wrong.
-        OSL_FAIL( "CloseableComponentImpl::notifyClosing: unreachable!" );
+        DBG_ERROR( "CloseableComponentImpl::notifyClosing: unreachable!" );
     }
 
     //--------------------------------------------------------------------
@@ -219,7 +219,7 @@ namespace utl
     ) throw (RuntimeException)
     {
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::disposing: where did this come from?" );
-        OSL_FAIL( "CloseableComponentImpl::disposing: unreachable!" );
+        DBG_ERROR( "CloseableComponentImpl::disposing: unreachable!" );
             // same reasoning for this assertion as in ->notifyClosing
     }
 

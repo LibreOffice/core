@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,7 +115,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
             aSelectedOID = ObjectIdentifier( xSelectionSupplier->getSelection() );
             aSelectedCID = aSelectedOID.getObjectCID();
         }
-
+                
         Reference< chart2::XChartDocument > xChartDoc( xChartController->getModel(), uno::UNO_QUERY );
         ObjectType eType( aSelectedOID.getObjectType() );
         bool bAddSelectionToList = false;
@@ -163,9 +163,9 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
             }
         }
 
-        sal_uInt16 nEntryPosToSelect = 0; bool bSelectionFound = false;
+        USHORT nEntryPosToSelect = 0; bool bSelectionFound = false;
         aIt = m_aEntries.begin();
-        for( sal_uInt16 nN=0; aIt != m_aEntries.end(); ++aIt, ++nN )
+        for( USHORT nN=0; aIt != m_aEntries.end(); ++aIt, ++nN )
         {
             InsertEntry( aIt->UIName );
             if ( !bSelectionFound && aSelectedOID == aIt->OID )
@@ -178,7 +178,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
         if( bSelectionFound )
             SelectEntryPos(nEntryPosToSelect);
 
-        sal_uInt16 nEntryCount = GetEntryCount();
+        USHORT nEntryCount = GetEntryCount();
         if( nEntryCount > 100 )
             nEntryCount = 100;
         SetDropDownLineCount( nEntryCount );
@@ -206,7 +206,7 @@ void SelectorListBox::Select()
 
     if ( !IsTravelSelect() )
     {
-        sal_uInt16 nPos = GetSelectEntryPos();
+        USHORT nPos = GetSelectEntryPos();
         if( nPos < m_aEntries.size() )
         {
             ObjectHierarchy::tOID aOID = m_aEntries[nPos].OID;
@@ -224,7 +224,7 @@ long SelectorListBox::Notify( NotifyEvent& rNEvt )
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+        USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
         switch ( nCode )
         {
@@ -309,7 +309,7 @@ void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::Feat
     if( m_apSelectorListBox.get() )
     {
         SolarMutexGuard aSolarMutexGuard;
-        if( rEvent.FeatureURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ChartElementSelector" ) ) )
+        if( rEvent.FeatureURL.Path.equalsAscii( "ChartElementSelector" ) )
         {
             Reference< frame::XController > xChartController;
             rEvent.State >>= xChartController;
@@ -319,7 +319,7 @@ void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::Feat
     }
 }
 // -----------------------------------------------------------------------------
-uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::createItemWindow( const uno::Reference< awt::XWindow >& xParent )
+uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::createItemWindow( const uno::Reference< awt::XWindow >& xParent ) 
         throw (uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xItemWindow;

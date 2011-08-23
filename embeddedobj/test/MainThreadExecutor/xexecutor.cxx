@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
 {
     uno::Reference< task::XJob > xJob;
 
-    if ( aArguments.getLength() > 0 && aArguments[0].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "JobToExecute" ) ) )
+    if ( aArguments.getLength() > 0 && aArguments[0].Name.equalsAscii( "JobToExecute" ) )
         aArguments[0].Value >>= xJob;
 
     if ( !xJob.is() )
@@ -86,7 +86,7 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
 
     // it is not a main thread, so it can be blocked
     // while( !pExecutor->isExecuted() )
-    //  ::osl::Thread::yield();
+    //	::osl::Thread::yield();
 
     // TODO: implement transfering of the return values and exceptions
 
@@ -97,14 +97,14 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
 uno::Sequence< ::rtl::OUString > SAL_CALL UNOMainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.thread.MainThreadExecutor"));
+    aRet[0] = ::rtl::OUString::createFromAscii( "com.sun.star.comp.thread.MainThreadExecutor" );
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL UNOMainThreadExecutor::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.thread.MainThreadExecutor"));
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.thread.MainThreadExecutor" );
 }
 
 //-------------------------------------------------------------------------

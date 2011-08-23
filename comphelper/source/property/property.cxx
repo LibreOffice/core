@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
 {
     if (!_rxSource.is() || !_rxDest.is())
     {
-        OSL_FAIL("copyProperties: invalid arguments !");
+        OSL_ENSURE(sal_False, "copyProperties: invalid arguments !");
         return;
     }
 
@@ -136,7 +136,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
                 }
                 aBuffer.append( "." );
 
-                OSL_FAIL( aBuffer.getStr() );
+                OSL_ENSURE( sal_False, aBuffer.getStr() );
 #endif
             }
         }
@@ -148,15 +148,15 @@ sal_Bool hasProperty(const rtl::OUString& _rName, const Reference<XPropertySet>&
 {
     if (_rxSet.is())
     {
-        //  XPropertySetInfoRef xInfo(rxSet->getPropertySetInfo());
+        //	XPropertySetInfoRef xInfo(rxSet->getPropertySetInfo());
         return _rxSet->getPropertySetInfo()->hasPropertyByName(_rName);
     }
     return sal_False;
 }
 
 //------------------------------------------------------------------
-bool findProperty(Property&              o_rProp,
-                  Sequence<Property>&    i_seqProps,
+bool findProperty(Property&              o_rProp, 
+                  Sequence<Property>&    i_seqProps, 
                   const ::rtl::OUString& i_rPropName)
 {
     const Property* pAry(i_seqProps.getConstArray());

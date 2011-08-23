@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include "sal/types.h"
 
 namespace cppu
-{
+{     
 
 /** Compares demanded type to given template argument types.
 
@@ -56,7 +56,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
         return ::com::sun::star::uno::Any();
 }
 /** Compares demanded type to given template argument types.
-
+    
     @tplparam Interface1 interface type
     @tplparam Interface2 interface type
     @param rType demanded type
@@ -78,7 +78,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
         return ::com::sun::star::uno::Any();
 }
 /** Compares demanded type to given template argument types.
-
+    
     @tplparam Interface1 interface type
     @tplparam Interface2 interface type
     @tplparam Interface3 interface type
@@ -104,7 +104,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
         return ::com::sun::star::uno::Any();
 }
 /** Compares demanded type to given template argument types.
-
+    
     @tplparam Interface1 interface type
     @tplparam Interface2 interface type
     @tplparam Interface3 interface type
@@ -134,7 +134,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
         return ::com::sun::star::uno::Any();
 }
 /** Compares demanded type to given template argument types.
-
+    
     @tplparam Interface1 interface type
     @tplparam Interface2 interface type
     @tplparam Interface3 interface type
@@ -168,7 +168,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
         return ::com::sun::star::uno::Any();
 }
 /** Compares demanded type to given template argument types.
-
+    
     @tplparam Interface1 interface type
     @tplparam Interface2 interface type
     @tplparam Interface3 interface type
@@ -208,7 +208,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
         return ::com::sun::star::uno::Any();
 }
 /** Compares demanded type to given template argument types.
-
+    
     @tplparam Interface1 interface type
     @tplparam Interface2 interface type
     @tplparam Interface3 interface type
@@ -252,7 +252,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
         return ::com::sun::star::uno::Any();
 }
 /** Compares demanded type to given template argument types.
-
+    
     @tplparam Interface1 interface type
     @tplparam Interface2 interface type
     @tplparam Interface3 interface type
@@ -300,7 +300,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
         return ::com::sun::star::uno::Any();
 }
 /** Compares demanded type to given template argument types.
-
+    
     @tplparam Interface1 interface type
     @tplparam Interface2 interface type
     @tplparam Interface3 interface type
@@ -352,7 +352,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
         return ::com::sun::star::uno::Any();
 }
 /** Compares demanded type to given template argument types.
-
+    
     @tplparam Interface1 interface type
     @tplparam Interface2 interface type
     @tplparam Interface3 interface type
@@ -408,7 +408,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
         return ::com::sun::star::uno::Any();
 }
 /** Compares demanded type to given template argument types.
-
+    
     @tplparam Interface1 interface type
     @tplparam Interface2 interface type
     @tplparam Interface3 interface type
@@ -470,7 +470,7 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
         return ::com::sun::star::uno::Any();
 }
 /** Compares demanded type to given template argument types.
-
+    
     @tplparam Interface1 interface type
     @tplparam Interface2 interface type
     @tplparam Interface3 interface type

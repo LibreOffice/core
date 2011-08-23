@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,7 +163,7 @@ namespace svxform
                     pCharLocalePropertyName = "CharLocaleComplex";
                     break;
                 default:
-                    OSL_FAIL( "lcl_initializeControlFont: unexpected script type for system locale!" );
+                    OSL_ENSURE( false, "lcl_initializeControlFont: unexpected script type for system locale!" );
                     break;
                 }
 
@@ -251,16 +251,16 @@ namespace svxform
                 OSL_VERIFY( aVisualEffect >>= sVisualEffect );
 
                 sal_Int16 nVisualEffect = VisualEffect::NONE;
-                if ( sVisualEffect.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "flat" ) ) )
+                if ( sVisualEffect.equalsAscii( "flat" ) )
                     nVisualEffect = VisualEffect::FLAT;
-                else if ( sVisualEffect.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "3D" ) ) )
+                else if ( sVisualEffect.equalsAscii( "3D" ) )
                     nVisualEffect = VisualEffect::LOOK3D;
 
                 if ( xPSI->hasPropertyByName( FM_PROP_BORDER ) )
                 {
                     if  (  ( nClassId != FormComponentType::COMMANDBUTTON )
                         && ( nClassId != FormComponentType::RADIOBUTTON )
-                        && ( nClassId != FormComponentType::CHECKBOX    )
+                        && ( nClassId != FormComponentType::CHECKBOX	)
                         && ( nClassId != FormComponentType::GROUPBOX )
                         && ( nClassId != FormComponentType::FIXEDTEXT )
                         && ( nClassId != FormComponentType::SCROLLBAR )
@@ -272,7 +272,7 @@ namespace svxform
                             &&  ( xPSI->hasPropertyByName( FM_PROP_BORDERCOLOR ) )
                             )
                             // light gray flat border
-                            _rxControlModel->setPropertyValue( FM_PROP_BORDERCOLOR, makeAny( (sal_Int32)0x00C0C0C0 ) );
+                            _rxControlModel->setPropertyValue( FM_PROP_BORDERCOLOR, makeAny( (sal_Int32)0x00C0C0C0 ) ); 
                     }
                 }
                 if ( xPSI->hasPropertyByName( FM_PROP_VISUALEFFECT ) )
@@ -288,7 +288,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ControlLayouter::initializeControlLayout: caught an exception!" );
+            OSL_ENSURE( sal_False, "ControlLayouter::initializeControlLayout: caught an exception!" );
         }
     }
 

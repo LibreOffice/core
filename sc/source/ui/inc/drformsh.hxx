@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@ public:
     SFX_DECL_INTERFACE(SCID_FORM_SHELL)
 
                 ScDrawFormShell(ScViewData* pData);
-    virtual     ~ScDrawFormShell();
+    virtual		~ScDrawFormShell();
 
-//  void        Execute(SfxRequest &);
-//  void        GetState(SfxItemSet &);
+//	void		Execute(SfxRequest &);
+//	void		GetState(SfxItemSet &);
 };
 
 #endif

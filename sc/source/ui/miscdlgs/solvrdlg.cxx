@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,64 +50,61 @@
 #undef _SOLVERDLG_CXX
 
 
-#define ERRORBOX(s) ErrorBox( this, WinBits( WB_OK | WB_DEF_OK), s ).Execute()
+#define ERRORBOX(s)	ErrorBox( this, WinBits( WB_OK | WB_DEF_OK), s ).Execute()
 
 
 //============================================================================
-//  class ScSolverDlg
+//	class ScSolverDlg
 //----------------------------------------------------------------------------
 
 ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                           ScDocument* pDocument,
-                          ScAddress aCursorPos )
+                          ScAddress	aCursorPos )
 
-    :   ScAnyRefDlg         ( pB, pCW, pParent, RID_SCDLG_SOLVER ),
+    :	ScAnyRefDlg			( pB, pCW, pParent, RID_SCDLG_SOLVER ),
         //
         aFlVariables        ( this, ScResId( FL_VARIABLES ) ),
-        aFtFormulaCell      ( this, ScResId( FT_FORMULACELL ) ),
+        aFtFormulaCell		( this, ScResId( FT_FORMULACELL ) ),
         aEdFormulaCell      ( this, this, ScResId( ED_FORMULACELL ) ),
-        aRBFormulaCell      ( this, ScResId( RB_FORMULACELL ), &aEdFormulaCell, this ),
-        aFtTargetVal        ( this, ScResId( FT_TARGETVAL ) ),
-        aEdTargetVal        ( this, ScResId( ED_TARGETVAL ) ),
-        aFtVariableCell     ( this, ScResId( FT_VARCELL ) ),
+        aRBFormulaCell		( this, ScResId( RB_FORMULACELL ), &aEdFormulaCell, this ),
+        aFtTargetVal		( this, ScResId( FT_TARGETVAL ) ),
+        aEdTargetVal		( this, ScResId( ED_TARGETVAL ) ),
+        aFtVariableCell		( this, ScResId( FT_VARCELL ) ),
         aEdVariableCell     ( this, this, ScResId( ED_VARCELL ) ),
-        aRBVariableCell     ( this, ScResId( RB_VARCELL ), &aEdVariableCell, this ),
-        aBtnOk              ( this, ScResId( BTN_OK ) ),
-        aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp            ( this, ScResId( BTN_HELP ) ),
+        aRBVariableCell		( this, ScResId( RB_VARCELL ), &aEdVariableCell, this ),
+        aBtnOk				( this, ScResId( BTN_OK ) ),
+        aBtnCancel			( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp			( this, ScResId( BTN_HELP ) ),
         //
-        theFormulaCell      ( aCursorPos ),
-        theVariableCell     ( aCursorPos ),
-        pDoc                ( pDocument ),
-        nCurTab             ( aCursorPos.Tab() ),
-        pEdActive           ( NULL ),
-        bDlgLostFocus       ( false ),
-        errMsgInvalidVar    ( ScResId( STR_INVALIDVAR ) ),
-        errMsgInvalidForm   ( ScResId( STR_INVALIDFORM ) ),
-        errMsgNoFormula     ( ScResId( STR_NOFORMULA ) ),
-        errMsgInvalidVal    ( ScResId( STR_INVALIDVAL ) )
+        theFormulaCell		( aCursorPos ),
+        theVariableCell		( aCursorPos ),
+        pDoc				( pDocument ),
+        nCurTab				( aCursorPos.Tab() ),
+        pEdActive			( NULL ),
+        bDlgLostFocus		( FALSE ),
+        errMsgInvalidVar	( ScResId( STR_INVALIDVAR ) ),
+        errMsgInvalidForm	( ScResId( STR_INVALIDFORM ) ),
+        errMsgNoFormula		( ScResId( STR_NOFORMULA ) ),
+        errMsgInvalidVal	( ScResId( STR_INVALIDVAL ) )
 {
     Init();
     FreeResource();
-
-    aRBFormulaCell.SetAccessibleRelationMemberOf(&aFlVariables);
-    aRBVariableCell.SetAccessibleRelationMemberOf(&aFlVariables);
 }
 
 //----------------------------------------------------------------------------
 
-ScSolverDlg::~ScSolverDlg()
+__EXPORT ScSolverDlg::~ScSolverDlg()
 {
 }
 
 //----------------------------------------------------------------------------
 
-void ScSolverDlg::Init()
+void __EXPORT ScSolverDlg::Init()
 {
-    String          aStr;
+    String			aStr;
 
-    aBtnOk.         SetClickHdl     ( LINK( this, ScSolverDlg, BtnHdl ) );
-    aBtnCancel.     SetClickHdl     ( LINK( this, ScSolverDlg, BtnHdl ) );
+    aBtnOk.			SetClickHdl		( LINK( this, ScSolverDlg, BtnHdl ) );
+    aBtnCancel.		SetClickHdl		( LINK( this, ScSolverDlg, BtnHdl ) );
 
     Link aLink = LINK( this, ScSolverDlg, GetFocusHdl );
     aEdFormulaCell. SetGetFocusHdl  ( aLink );
@@ -131,7 +128,7 @@ void ScSolverDlg::Init()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScSolverDlg::Close()
+BOOL __EXPORT ScSolverDlg::Close()
 {
     return DoClose( ScSolverDlgWrapper::GetChildWindowId() );
 }
@@ -142,7 +139,7 @@ void ScSolverDlg::SetActive()
 {
     if ( bDlgLostFocus )
     {
-        bDlgLostFocus = false;
+        bDlgLostFocus = FALSE;
         if( pEdActive )
             pEdActive->GrabFocus();
     }
@@ -162,9 +159,9 @@ void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(pEdActive);
 
-        String      aStr;
-        ScAddress   aAdr = rRef.aStart;
-        sal_uInt16      nFmt = ( aAdr.Tab() == nCurTab )
+        String		aStr;
+        ScAddress	aAdr = rRef.aStart;
+        USHORT	 	nFmt = ( aAdr.Tab() == nCurTab )
                                 ? SCA_ABS
                                 : SCA_ABS_3D;
 
@@ -208,14 +205,14 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScSolverDlg::IsRefInputMode() const
+BOOL ScSolverDlg::IsRefInputMode() const
 {
     return pEdActive != NULL;
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScSolverDlg::CheckTargetValue( String& rStrVal )
+BOOL __EXPORT ScSolverDlg::CheckTargetValue( String& rStrVal )
 {
     sal_uInt32 n1 = 0;
     double n2;
@@ -238,8 +235,8 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
         // 3. wurde ein korrekter Zielwert eingegeben
 
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-        sal_uInt16  nRes1 = theFormulaCell .Parse( aEdFormulaCell.GetText(),  pDoc, eConv );
-        sal_uInt16  nRes2 = theVariableCell.Parse( aEdVariableCell.GetText(), pDoc, eConv );
+        USHORT	nRes1 = theFormulaCell .Parse( aEdFormulaCell.GetText(),  pDoc, eConv );
+        USHORT	nRes2 = theVariableCell.Parse( aEdVariableCell.GetText(), pDoc, eConv );
 
         if ( SCA_VALID == ( nRes1 & SCA_VALID ) )
         {
@@ -258,9 +255,9 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
                         ScSolveParam aOutParam( theFormulaCell,
                                                 theVariableCell,
                                                 theTargetValStr );
-                        ScSolveItem  aOutItem( SCITEM_SOLVEDATA, &aOutParam );
+                        ScSolveItem	 aOutItem( SCITEM_SOLVEDATA, &aOutParam );
 
-                        SetDispatcherLock( false );
+                        SetDispatcherLock( FALSE );
 
                         SwitchToDocument();
                         GetBindings().GetDispatcher()->Execute( SID_SOLVE,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,21 +33,12 @@
 
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/helper/property.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <tools/debug.hxx>
 
-//  ----------------------------------------------------
-//  class UnoControlBase
-//  ----------------------------------------------------
-
-UnoControlBase::UnoControlBase()
-    :UnoControl( ::comphelper::getProcessServiceFactory() )
-{
-    OSL_ENSURE( false, "UnoControlBase::UnoControlBase: not implemented. Well, not really." );
-    // just implemented to let the various FooImplInheritanceHelper compile, you should use the
-    // version taking a service factory
-}
+//	----------------------------------------------------
+//	class UnoControlBase
+//	----------------------------------------------------
 
 sal_Bool UnoControlBase::ImplHasProperty( sal_uInt16 nPropId )
 {
@@ -101,7 +92,7 @@ void UnoControlBase::ImplSetPropertyValues( const ::com::sun::star::uno::Sequenc
 void UnoControlBase::ImplSetPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Bool bUpdateThis )
 {
     // Model ggf. schon abgemeldet, aber ein Event schlaegt noch zu...
-    if ( mxModel.is() )
+    if ( mxModel.is() ) 
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet( mxModel, ::com::sun::star::uno::UNO_QUERY );
         if ( !bUpdateThis )

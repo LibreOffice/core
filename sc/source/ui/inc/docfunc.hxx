@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,8 @@
 #include "formula/grammar.hxx"
 #include "tabbgcolor.hxx"
 #include "token.hxx"
-#include "rangenam.hxx"
 
 #include <vector>
-#include <map>
 
 class ScEditEngineDefaulter;
 class SdrUndoAction;
@@ -47,6 +45,7 @@ class ScMarkData;
 class ScPatternAttr;
 class ScRange;
 class ScRangeList;
+class ScRangeName;
 class ScBaseCell;
 class ScTokenArray;
 struct ScTabOpParam;
@@ -60,11 +59,11 @@ class ScDocFunc
 private:
     ScDocShell&        rDocShell;
 
-    sal_Bool            AdjustRowHeight( const ScRange& rRange, sal_Bool bPaint = true );
+    BOOL            AdjustRowHeight( const ScRange& rRange, BOOL bPaint = TRUE );
     void            CreateOneName( ScRangeName& rList,
                                     SCCOL nPosX, SCROW nPosY, SCTAB nTab,
                                     SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                    sal_Bool& rCancel, sal_Bool bApi );
+                                    BOOL& rCancel, BOOL bApi );
     void            NotifyInputHandler( const ScAddress& rPos );
 
 public:
@@ -73,136 +72,124 @@ public:
 
     DECL_LINK( NotifyDrawUndo, SdrUndoAction* );
 
-    sal_Bool            DetectiveAddPred(const ScAddress& rPos);
-    sal_Bool            DetectiveDelPred(const ScAddress& rPos);
-    sal_Bool            DetectiveAddSucc(const ScAddress& rPos);
-    sal_Bool            DetectiveDelSucc(const ScAddress& rPos);
-    sal_Bool            DetectiveAddError(const ScAddress& rPos);
-    sal_Bool            DetectiveMarkInvalid(SCTAB nTab);
-    sal_Bool            DetectiveDelAll(SCTAB nTab);
-    sal_Bool            DetectiveRefresh(sal_Bool bAutomatic = false);
-    void            DetectiveCollectAllPreds(const ScRangeList& rSrcRanges, ::std::vector<ScTokenRef>& rRefTokens);
-    void            DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, ::std::vector<ScTokenRef>& rRefTokens);
+    BOOL            DetectiveAddPred(const ScAddress& rPos);
+    BOOL            DetectiveDelPred(const ScAddress& rPos);
+    BOOL            DetectiveAddSucc(const ScAddress& rPos);
+    BOOL            DetectiveDelSucc(const ScAddress& rPos);
+    BOOL            DetectiveAddError(const ScAddress& rPos);
+    BOOL            DetectiveMarkInvalid(SCTAB nTab);
+    BOOL            DetectiveDelAll(SCTAB nTab);
+    BOOL            DetectiveRefresh(BOOL bAutomatic = FALSE);
+    void            DetectiveCollectAllPreds(const ScRangeList& rSrcRanges, ::std::vector<ScSharedTokenRef>& rRefTokens);
+    void            DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, ::std::vector<ScSharedTokenRef>& rRefTokens);
 
-    sal_Bool            DeleteContents( const ScMarkData& rMark, sal_uInt16 nFlags,
-                                    sal_Bool bRecord, sal_Bool bApi );
+    BOOL            DeleteContents( const ScMarkData& rMark, USHORT nFlags,
+                                    BOOL bRecord, BOOL bApi );
 
-    sal_Bool            TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
-                                    sal_Bool bRecord, sal_Bool bApi );
+    BOOL            TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
+                                    BOOL bRecord, BOOL bApi );
 
-    sal_Bool            SetNormalString( const ScAddress& rPos, const String& rText, sal_Bool bApi );
-    sal_Bool            PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi );
-    sal_Bool            PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
-                                sal_Bool bInterpret, sal_Bool bApi );
-    sal_Bool            SetCellText( const ScAddress& rPos, const String& rText,
-                                    sal_Bool bInterpret, sal_Bool bEnglish, sal_Bool bApi,
+    BOOL            SetNormalString( const ScAddress& rPos, const String& rText, BOOL bApi );
+    BOOL            PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi );
+    BOOL            PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
+                                BOOL bInterpret, BOOL bApi );
+    BOOL            SetCellText( const ScAddress& rPos, const String& rText,
+                                    BOOL bInterpret, BOOL bEnglish, BOOL bApi,
                                     const String& rFormulaNmsp,
                                     const formula::FormulaGrammar::Grammar eGrammar );
 
                     // creates a new cell for use with PutCell
     ScBaseCell*     InterpretEnglishString( const ScAddress& rPos, const String& rText,
-                        const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar,
-                        short* pRetFormatType = NULL );
+                        const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar );
 
     bool            ShowNote( const ScAddress& rPos, bool bShow = true );
     inline bool     HideNote( const ScAddress& rPos ) { return ShowNote( rPos, false ); }
 
-    bool            SetNoteText( const ScAddress& rPos, const String& rNoteText, sal_Bool bApi );
-    bool            ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate, sal_Bool bApi );
+    bool            SetNoteText( const ScAddress& rPos, const String& rNoteText, BOOL bApi );
+    bool            ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate, BOOL bApi );
 
-    sal_Bool            ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
-                                    sal_Bool bRecord, sal_Bool bApi );
-    sal_Bool            ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
-                                    sal_Bool bRecord, sal_Bool bApi );
+    BOOL            ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
+                                    BOOL bRecord, BOOL bApi );
+    BOOL            ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
+                                    BOOL bRecord, BOOL bApi );
 
-    sal_Bool            InsertCells( const ScRange& rRange,const ScMarkData* pTabMark,
-                                 InsCellCmd eCmd, sal_Bool bRecord, sal_Bool bApi,
-                                    sal_Bool bPartOfPaste = false );
-    sal_Bool            DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark,
-                                 DelCellCmd eCmd, sal_Bool bRecord, sal_Bool bApi );
+    BOOL            InsertCells( const ScRange& rRange,const ScMarkData* pTabMark,
+                                 InsCellCmd eCmd, BOOL bRecord, BOOL bApi,
+                                    BOOL bPartOfPaste = FALSE );
+    BOOL            DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark,
+                                 DelCellCmd eCmd, BOOL bRecord, BOOL bApi );
 
-    sal_Bool            MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
-                                sal_Bool bCut, sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
+    BOOL            MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
+                                BOOL bCut, BOOL bRecord, BOOL bPaint, BOOL bApi );
 
-    sal_Bool            InsertTable( SCTAB nTab, const String& rName, sal_Bool bRecord, sal_Bool bApi );
-    sal_Bool            RenameTable( SCTAB nTab, const String& rName, sal_Bool bRecord, sal_Bool bApi );
-    sal_Bool            DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool bApi );
+    BOOL            InsertTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL bApi );
+    BOOL            RenameTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL bApi );
+    BOOL            DeleteTable( SCTAB nTab, BOOL bRecord, BOOL bApi );
 
     bool            SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bool bApi );
     bool            SetTabBgColor( ScUndoTabColorInfo::List& rUndoTabColorList, bool bRecord, bool bApi );
 
-    sal_Bool            SetTableVisible( SCTAB nTab, sal_Bool bVisible, sal_Bool bApi );
+    BOOL            SetTableVisible( SCTAB nTab, BOOL bVisible, BOOL bApi );
 
-    sal_Bool            SetLayoutRTL( SCTAB nTab, sal_Bool bRTL, sal_Bool bApi );
+    BOOL            SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL bApi );
 
-    SC_DLLPUBLIC sal_Bool            SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
-                                    SCTAB nTab, ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                    sal_Bool bRecord, sal_Bool bApi );
+    SC_DLLPUBLIC BOOL            SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
+                                    SCTAB nTab, ScSizeMode eMode, USHORT nSizeTwips,
+                                    BOOL bRecord, BOOL bApi );
 
-    sal_Bool            InsertPageBreak( sal_Bool bColumn, const ScAddress& rPos,
-                                    sal_Bool bRecord, sal_Bool bSetModified, sal_Bool bApi );
-    sal_Bool            RemovePageBreak( sal_Bool bColumn, const ScAddress& rPos,
-                                    sal_Bool bRecord, sal_Bool bSetModified, sal_Bool bApi );
+    BOOL            InsertPageBreak( BOOL bColumn, const ScAddress& rPos,
+                                    BOOL bRecord, BOOL bSetModified, BOOL bApi );
+    BOOL            RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
+                                    BOOL bRecord, BOOL bSetModified, BOOL bApi );
 
     void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
-    sal_Bool            Protect( SCTAB nTab, const String& rPassword, sal_Bool bApi );
-    sal_Bool            Unprotect( SCTAB nTab, const String& rPassword, sal_Bool bApi );
+    BOOL            Protect( SCTAB nTab, const String& rPassword, BOOL bApi );
+    BOOL            Unprotect( SCTAB nTab, const String& rPassword, BOOL bApi );
 
-    sal_Bool            ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, sal_Bool bApi );
-    sal_Bool            ChangeIndent( const ScMarkData& rMark, sal_Bool bIncrement, sal_Bool bApi );
-    sal_Bool            AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
-                                    sal_uInt16 nFormatNo, sal_Bool bRecord, sal_Bool bApi );
+    BOOL            ClearItems( const ScMarkData& rMark, const USHORT* pWhich, BOOL bApi );
+    BOOL            ChangeIndent( const ScMarkData& rMark, BOOL bIncrement, BOOL bApi );
+    BOOL            AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
+                                    USHORT nFormatNo, BOOL bRecord, BOOL bApi );
 
-    sal_Bool            EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
+    BOOL            EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
                                     const ScTokenArray* pTokenArray,
-                                    const String& rString, sal_Bool bApi, sal_Bool bEnglish,
+                                    const String& rString, BOOL bApi, BOOL bEnglish,
                                     const String& rFormulaNmsp,
                                     const formula::FormulaGrammar::Grammar );
 
-    sal_Bool            TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
-                            const ScTabOpParam& rParam, sal_Bool bRecord, sal_Bool bApi );
+    BOOL            TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
+                            const ScTabOpParam& rParam, BOOL bRecord, BOOL bApi );
 
-    sal_Bool            FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
-                                FillDir eDir, sal_Bool bRecord, sal_Bool bApi );
-    sal_Bool            FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
+    BOOL            FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
+                                FillDir eDir, BOOL bRecord, BOOL bApi );
+    BOOL            FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
                                 FillDir    eDir, FillCmd eCmd, FillDateCmd    eDateCmd,
                                 double fStart, double fStep, double fMax,
-                                sal_Bool bRecord, sal_Bool bApi );
+                                BOOL bRecord, BOOL bApi );
                     // FillAuto: rRange wird von Source-Range auf Dest-Range angepasst
-    SC_DLLPUBLIC    sal_Bool            FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir eDir, FillCmd eCmd, FillDateCmd  eDateCmd, sal_uLong nCount, double fStep, double fMax, sal_Bool bRecord, sal_Bool bApi );
+    SC_DLLPUBLIC	BOOL			FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir eDir, FillCmd eCmd, FillDateCmd	eDateCmd, ULONG nCount, double fStep, double fMax, BOOL bRecord, BOOL bApi );
 
-    sal_Bool            FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
-                                FillDir eDir, sal_uLong nCount, sal_Bool bRecord, sal_Bool bApi );
+    BOOL            FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
+                                FillDir eDir, ULONG nCount, BOOL bRecord, BOOL bApi );
 
-    sal_Bool            ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, sal_Bool bApi );
+    BOOL            ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, BOOL bApi );
 
-    sal_Bool            MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
-                                sal_Bool bRecord, sal_Bool bApi );
-    sal_Bool            UnmergeCells( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi );
-    bool            UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord, sal_Bool bApi );
+    BOOL            MergeCells( const ScCellMergeOption& rOption, BOOL bContents,
+                                BOOL bRecord, BOOL bApi );
+    BOOL            UnmergeCells( const ScRange& rRange, BOOL bRecord, BOOL bApi );
+    bool            UnmergeCells( const ScCellMergeOption& rOption, BOOL bRecord, BOOL bApi );
 
     bool            SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc = true );     // takes ownership of pNewRanges
     bool            ModifyRangeNames( const ScRangeName& rNewRanges );
 
-    /**
-     * Modify all range names, global scope names as well as sheet local ones,
-     * in one go.  Note that this method will <b>not</b> destroy the instances
-     * passed as arguments (it creates copies); the caller is responsible for
-     * destroying them.
-     *
-     * @param pGlobal global scope range names.
-     * @param rTabs sheet local range names.
-     */
-    void            ModifyAllRangeNames( const ScRangeName* pGlobal, const ScRangeName::TabNameCopyMap& rTabs );
+    BOOL            CreateNames( const ScRange& rRange, USHORT nFlags, BOOL bApi );
+    BOOL            InsertNameList( const ScAddress& rStartPos, BOOL bApi );
 
-    sal_Bool            CreateNames( const ScRange& rRange, sal_uInt16 nFlags, sal_Bool bApi );
-    sal_Bool            InsertNameList( const ScAddress& rStartPos, sal_Bool bApi );
-
-    sal_Bool            InsertAreaLink( const String& rFile, const String& rFilter,
+    BOOL            InsertAreaLink( const String& rFile, const String& rFilter,
                                     const String& rOptions, const String& rSource,
-                                    const ScRange& rDestRange, sal_uLong nRefresh,
-                                    sal_Bool bFitBlock, sal_Bool bApi );
+                                    const ScRange& rDestRange, ULONG nRefresh,
+                                    BOOL bFitBlock, BOOL bApi );
 };
 
 

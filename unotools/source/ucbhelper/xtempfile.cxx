@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,8 @@
 #include <XTempFile.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
@@ -39,7 +41,7 @@ namespace css = com::sun::star;
 
 // copy define from desktop\source\app\appinit.cxx
 
-#define DESKTOP_TEMPNAMEBASE_DIR    "/temp/soffice.tmp"
+#define DESKTOP_TEMPNAMEBASE_DIR	"/temp/soffice.tmp"
 
 OTempFileService::OTempFileService(::css::uno::Reference< ::css::uno::XComponentContext > const & context)
 : ::cppu::PropertySetMixin< ::css::io::XTempFile >(
@@ -86,7 +88,7 @@ throw ()
     OTempFileBase::release();
 }
 
-//  XTypeProvider
+//	XTypeProvider
 
 ::css::uno::Sequence< ::css::uno::Type > SAL_CALL OTempFileService::getTypes(  )
 throw ( ::css::uno::RuntimeException )
@@ -112,7 +114,7 @@ throw ( ::css::uno::RuntimeException )
     return OTempFileBase::getImplementationId();
 }
 
-//  XTempFile
+//	XTempFile
 
 sal_Bool SAL_CALL OTempFileService::getRemoveFile()
 throw ( ::css::uno::RuntimeException )
@@ -292,7 +294,7 @@ throw ( ::css::io::NotConnectedException, ::css::io::BufferSizeExceededException
     checkConnected();
     sal_uInt32 nWritten = mpStream->Write(aData.getConstArray(),aData.getLength());
     checkError();
-    if  ( nWritten != (sal_uInt32)aData.getLength())
+    if	( nWritten != (sal_uInt32)aData.getLength())
         throw ::css::io::BufferSizeExceededException( ::rtl::OUString(),static_cast < ::css::uno::XWeak * > ( this ) );
 }
 void SAL_CALL OTempFileService::flush(  )
@@ -484,6 +486,43 @@ throw ( ::css::uno::RuntimeException )
     return ::cppu::createSingleComponentFactory( XTempFile_createInstance, getImplementationName_Static(), getSupportedServiceNames_Static() );
 }
 
+static sal_Bool writeInfo( void * pRegistryKey,
+                          const ::rtl::OUString & rImplementationName,
+                          ::css::uno::Sequence< ::rtl::OUString > const & rServiceNames )
+{
+    ::rtl::OUString aKeyName( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
+    aKeyName += rImplementationName;
+    aKeyName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "/UNO/SERVICES" ) );
+
+    ::css::uno::Reference< ::css::registry::XRegistryKey > xKey;
+    try
+    {
+        xKey = static_cast< ::css::registry::XRegistryKey * >(
+                                    pRegistryKey )->createKey( aKeyName );
+    }
+    catch ( ::css::registry::InvalidRegistryException const & )
+    {
+    }
+
+    if ( !xKey.is() )
+        return sal_False;
+
+    sal_Bool bSuccess = sal_True;
+
+    for ( sal_Int32 n = 0; n < rServiceNames.getLength(); ++n )
+    {
+        try
+        {
+            xKey->createKey( rServiceNames[ n ] );
+        }
+        catch ( ::css::registry::InvalidRegistryException const & )
+        {
+            bSuccess = sal_False;
+            break;
+        }
+    }
+    return bSuccess;
+}
 // C functions to implement this as a component
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
@@ -491,6 +530,21 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnviron
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
+
+/**
+ * This function creates an implementation section in the registry and another subkey
+ * for each supported service.
+ * @param pServiceManager generic uno interface providing a service manager
+ * @param pRegistryKey generic uno interface providing registry key to write
+ */
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
+{
+    return pRegistryKey &&
+    writeInfo (pRegistryKey,
+        OTempFileService::getImplementationName_Static(),
+        OTempFileService::getSupportedServiceNames_Static() );
+}
+
 
 /**
  * This function is called to get service factories for an implementation.

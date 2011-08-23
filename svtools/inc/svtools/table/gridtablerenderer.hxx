@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,6 @@
 
 #include <svtools/table/tablemodel.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 //........................................................................
 namespace svt { namespace table
 {
@@ -46,15 +44,18 @@ namespace svt { namespace table
 
         This class is able to paint a table grid, table headers, and cell
         backgrounds according to the selected/active state of cells.
+
+        TODO update the documentation when it's decided whether this renderer
+        also does value handling
     */
     class GridTableRenderer : public ITableRenderer
     {
     private:
-        ::boost::scoped_ptr< GridTableRenderer_Impl >   m_pImpl;
+        GridTableRenderer_Impl*     m_pImpl;
 
     public:
         /** creates a table renderer associated with the given model
-
+            
             @param _rModel
                 the model which should be rendered. The caller is responsible
                 for lifetime control, that is, the model instance must live
@@ -72,17 +73,9 @@ namespace svt { namespace table
 
             This method returns the index of the last row which has been prepared
         */
-        RowPos  getCurrentRow() const;
+        RowPos  getCurrentRow();
 
-        /** determines whether or not to paint grid lines
-        */
-        bool    useGridLines() const;
-
-        /** controls whether or not to paint grid lines
-        */
-        void    useGridLines( bool const i_use );
-
-    public:
+    protected:
         // ITableRenderer overridables
         virtual void    PaintHeaderArea(
                             OutputDevice& _rDevice, const Rectangle& _rArea,
@@ -97,34 +90,17 @@ namespace svt { namespace table
         virtual void    PaintRowHeader(
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle );
-        virtual void    PaintCell( ColPos const i_col,
+                            const StyleSettings& _rStyle, rtl::OUString& _rText );
+        virtual void    PaintCellImage( ColPos _nColumn,
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle );
+                const StyleSettings& _rStyle, Image* _pCellData );
+    virtual void    PaintCellString( ColPos _nColumn,
+                            bool _bActive, bool _bSelected,
+                            OutputDevice& _rDevice, const Rectangle& _rArea,
+                const StyleSettings& _rStyle, rtl::OUString& _rText );
         virtual void    ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect);
         virtual void    HideCellCursor( Window& _rView, const Rectangle& _rCursorRect);
-        virtual bool    FitsIntoCell(
-                            ::com::sun::star::uno::Any const & i_cellContent,
-                            ColPos const i_colPos, RowPos const i_rowPos,
-                            bool const i_active, bool const i_selected,
-                            OutputDevice& i_targetDevice, Rectangle const & i_targetArea
-                        );
-
-    private:
-        struct CellRenderContext;
-
-        void    impl_paintCellContent(
-                        CellRenderContext const & i_context
-                   );
-        void    impl_paintCellImage(
-                        CellRenderContext const & i_context,
-                        Image const & i_image
-                   );
-        void    impl_paintCellText(
-                        CellRenderContext const & i_context,
-                        ::rtl::OUString const & i_text
-                   );
     };
 //........................................................................
 } } // namespace svt::table

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,6 @@
 #include <comphelper/types.hxx>
 #include "ado/ACatalog.hxx"
 
-#include <o3tl/compat_functional.hxx>
-
 using namespace ::comphelper;
 
 using namespace connectivity::ado;
@@ -74,7 +72,7 @@ OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pC
     construct();
     OSL_ENSURE(_pColumn,"Column can not be null!");
     m_aColumn = WpADOColumn(_pColumn);
-    //  m_aColumn.put_ParentCatalog(_pConnection->getAdoCatalog()->getCatalog());
+    //	m_aColumn.put_ParentCatalog(_pConnection->getAdoCatalog()->getCatalog());
     fillPropertyValues();
 }
 // -------------------------------------------------------------------------
@@ -118,8 +116,8 @@ void OAdoColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING),     PROPERTY_ID_ISASCENDING,    nAttrib,&m_IsAscending, ::getBooleanCppuType());
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),   PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING),		PROPERTY_ID_ISASCENDING,	nAttrib,&m_IsAscending,	::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),	PROPERTY_ID_RELATEDCOLUMN,	nAttrib,&m_ReferencedColumn,	::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)
@@ -155,7 +153,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 }
                 break;
             case PROPERTY_ID_TYPENAME:
-                //  rValue <<= m_pTable->getCatalog()->getConnection()->getTypeInfo()->find();
+                //	rValue <<= m_pTable->getCatalog()->getConnection()->getTypeInfo()->find();
                 break;
             case PROPERTY_ID_PRECISION:
                 {
@@ -183,7 +181,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 break;
 
             case PROPERTY_ID_ISAUTOINCREMENT:
-                OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Autoincrement" )), getBOOL( rValue ) );
+                OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString::createFromAscii( "Autoincrement" ), getBOOL( rValue ) );
                 break;
 
             case PROPERTY_ID_IM001:
@@ -206,16 +204,16 @@ void OAdoColumn::fillPropertyValues()
 {
     if(m_aColumn.IsValid())
     {
-        m_IsAscending       = m_aColumn.get_SortOrder() == adSortAscending;
-        m_ReferencedColumn  = m_aColumn.get_RelatedColumn();
-        m_Name              = m_aColumn.get_Name();
-        m_Precision         = m_aColumn.get_Precision();
-        m_Scale             = m_aColumn.get_NumericScale();
-        m_IsNullable        = ((m_aColumn.get_Attributes() & adColNullable) == adColNullable) ? ColumnValue::NULLABLE : ColumnValue::NO_NULLS;
+        m_IsAscending		= m_aColumn.get_SortOrder() == adSortAscending;
+        m_ReferencedColumn	= m_aColumn.get_RelatedColumn();
+        m_Name				= m_aColumn.get_Name();
+        m_Precision			= m_aColumn.get_Precision();
+        m_Scale				= m_aColumn.get_NumericScale();
+        m_IsNullable		= ((m_aColumn.get_Attributes() & adColNullable) == adColNullable) ? ColumnValue::NULLABLE : ColumnValue::NO_NULLS;
 
-        DataTypeEnum eType  = m_aColumn.get_Type();
-        m_IsCurrency        = (eType == adCurrency);
-        m_Type              = ADOS::MapADOType2Jdbc(eType);
+        DataTypeEnum eType	= m_aColumn.get_Type();
+        m_IsCurrency		= (eType == adCurrency);
+        m_Type				= ADOS::MapADOType2Jdbc(eType);
 
         sal_Bool bForceTo = sal_True;
         const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
@@ -227,11 +225,11 @@ void OAdoColumn::fillPropertyValues()
             ::comphelper::TStringMixEqualFunctor aCase(sal_False);
             OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
                                                             pTypeInfoMap->end(),
-                                                            ::o3tl::compose1(
+                                                            ::std::compose1(
                                                             ::std::bind2nd(aCase, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VarBinary"))),
-                                                                ::o3tl::compose1(
+                                                                ::std::compose1(
                                                                     ::std::mem_fun(&OExtendedTypeInfo::getDBName),
-                                                                    ::o3tl::select2nd<OTypeInfoMap::value_type>())
+                                                                    ::std::select2nd<OTypeInfoMap::value_type>())
                                                                 )
 
                                                     );
@@ -251,7 +249,7 @@ void OAdoColumn::fillPropertyValues()
             if ( pTypeInfo )
             {
                 m_TypeName = pTypeInfo->aSimpleType.aTypeName;
-                m_Type  = ADOS::MapADOType2Jdbc(eType);
+                m_Type	= ADOS::MapADOType2Jdbc(eType);
             }
         }
 
@@ -282,7 +280,7 @@ void OAdoColumn::fillPropertyValues()
     }
 }
 // -----------------------------------------------------------------------------
-WpADOColumn OAdoColumn::getColumnImpl() const
+WpADOColumn	OAdoColumn::getColumnImpl() const
 {
     return m_aColumn;
 }

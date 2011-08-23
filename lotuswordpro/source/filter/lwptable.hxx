@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005           Created
+ Mar 2005		 	Created
  ************************************************************************/
 #ifndef _LWPTABLE_HXX_
 #define _LWPTABLE_HXX_
@@ -98,8 +98,8 @@ protected:
 class LwpForkedNotifyList
 {
 public:
-    LwpForkedNotifyList(){}
-    ~LwpForkedNotifyList() {}
+    LwpForkedNotifyList(){};
+    ~LwpForkedNotifyList() {};
     void Read(LwpObjectStream* pObjStrm)
     {
         m_PersistentList.Read(pObjStrm);
@@ -119,14 +119,14 @@ public:
     virtual ~LwpTable();
 
     virtual void Parse(IXFStream* pOutputStream);
-    double GetWidth() {return LwpTools::ConvertFromUnitsToMetric(m_nWidth);}
-    double GetHeight() {return LwpTools::ConvertFromUnitsToMetric(m_nHeight);}
-    LwpObjectID * GetDefaultCellStyle() {return &m_DefaultCellStyle;}
-    sal_uInt16 GetRow() {return m_nRow;}
-    sal_uInt16 GetColumn() {return m_nColumn;}
-    LwpTableLayout * GetTableLayout(){return static_cast<LwpTableLayout *>(GetLayout(NULL));}
+    double GetWidth() {return LwpTools::ConvertFromUnitsToMetric(m_nWidth);};
+    double GetHeight() {return LwpTools::ConvertFromUnitsToMetric(m_nHeight);};
+    LwpObjectID * GetDefaultCellStyle() {return &m_DefaultCellStyle;};
+    sal_uInt16 GetRow() {return m_nRow;};
+    sal_uInt16 GetColumn() {return m_nColumn;};
+    LwpTableLayout * GetTableLayout(){return static_cast<LwpTableLayout *>(GetLayout(NULL));};
     sal_Bool IsNumberDown();
-    virtual sal_Bool IsTable(){ return sal_True;}
+    virtual sal_Bool IsTable(){ return sal_True;};
     LwpSuperTableLayout* GetSuperTableLayout();
 protected:
     LwpDLVListHeadTail m_RowCache;
@@ -134,20 +134,20 @@ protected:
     LwpNotifyListPersistent m_CPTempVersionedNotifyList;
     LwpForkedNotifyList m_CPNotifyList;
 
-    sal_uInt16      m_nRow, m_nColumn;
-    sal_Int32           m_nHeight;
-    sal_Int32           m_nWidth;
-    sal_Int32           m_nDefaultAutoGrowRowHeight;
-    sal_uInt16      m_nAttributes;
+    sal_uInt16 		m_nRow, m_nColumn;
+    sal_Int32			m_nHeight;
+    sal_Int32			m_nWidth;
+    sal_Int32			m_nDefaultAutoGrowRowHeight;
+    sal_uInt16 		m_nAttributes;
     enum lTableAttributes
     {
-        NUMBER_DOWN                 = 0x01,
-        SIZING_VIA_MOUSE_ENABLED    = 0x02,
-        NUMBER_RESET                = 0x04
+        NUMBER_DOWN					= 0x01,
+        SIZING_VIA_MOUSE_ENABLED	= 0x02,
+        NUMBER_RESET				= 0x04
     };
 
-    LwpObjectID     m_Layout;
-    LwpObjectID     m_DefaultCellStyle; // gCVirtualLayout
+    LwpObjectID		m_Layout;
+    LwpObjectID		m_DefaultCellStyle; // gCVirtualLayout
     void Read();
 };
 
@@ -164,7 +164,7 @@ public:
     virtual void Parse(IXFStream* pOutputStream);
 protected:
     void Read();
-    sal_uInt16  cRow;
+    sal_uInt16	cRow;
     LwpContentHintHead cCellHint;
     sal_Bool cRowContinued;
     LwpObjectID cTable;
@@ -173,7 +173,7 @@ protected:
     LwpObjectID cListNext;
 
     LwpFribPtr cStart;
-    LwpObjectID cLayout;        // if the layout is complex then we
+    LwpObjectID cLayout;		// if the layout is complex then we
                                     // store the parent not the left or
                                     // right
     LwpObjectID cContent;
@@ -181,18 +181,18 @@ protected:
     LwpObjectID cParent;
     //CNumberHintHead cNumberHint;
     sal_uInt32 cLineNumber;
-    LwpObjectID cPageHint;              // the page hint we belong to
+    LwpObjectID cPageHint;				// the page hint we belong to
 
     // cFlags
     enum
     {
-        HF_INVALID      = 0x01,     // hint should not be used to start flowing
-        HF_LASTPAGE     = 0x02,     // content ends with this hint
-        HF_REGISTERED   = 0x04,     // the hint has been registered with a
+        HF_INVALID		= 0x01,		// hint should not be used to start flowing
+        HF_LASTPAGE		= 0x02,		// content ends with this hint
+        HF_REGISTERED	= 0x04,		// the hint has been registered with a
                                     // paragraph
-        HF_DIDBULLET    = 0x08,     // We flowed bullet text right before
+        HF_DIDBULLET	= 0x08,		// We flowed bullet text right before
                                     // the end of this stream
-        HF_PROBLEMPARA  = 0x10      // This hint's paragraph changed from disk
+        HF_PROBLEMPARA	= 0x10		// This hint's paragraph changed from disk
     };
 
 
@@ -219,8 +219,8 @@ public:
     ~LwpParallelColumns();
 protected:
     void Read();
-    LwpObjectID     cDefaultLeftColumnStyle;
-    LwpObjectID cDefaultRightColumnStyle;
+    LwpObjectID 	cDefaultLeftColumnStyle;
+    LwpObjectID	cDefaultRightColumnStyle;
 };
 #define MAX_NUM_ROWS 8192
 class LwpGlossary : public LwpParallelColumns

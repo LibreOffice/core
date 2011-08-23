@@ -57,7 +57,13 @@
  * @file
  * Font object to serial to xml filter.
  ************************************************************************/
-#include    "xffont.hxx"
+/*************************************************************************
+ * Change History
+ * 2004-12-23 create this file.
+ * 2005-01-14 add scale,position,emphasize support.
+ * 2005-01-24 move some tool function to xfutil.hxx
+ ************************************************************************/
+#include	"xffont.hxx"
 
 XFFont::XFFont()
 {
@@ -88,22 +94,22 @@ XFFont::XFFont()
 }
 /*
     The Following variable are to  be compared:
-        rtl::OUString   m_strFontName;
-        rtl::OUString   m_strFontNameAsia;
-        rtl::OUString   m_strFontNameComplex;
-        sal_Int16       m_nFontSize;
-        sal_Int16       m_nFontSizeAsia;
-        sal_Int16       m_nFontSizeComplex;
-        sal_Bool        m_bItalic;
-        sal_Bool        m_bItalicAsia;
-        sal_Bool        m_bItalicComplex;
-        sal_Bool        m_bBold;
-        sal_Bool        m_bBoldAsia;
-        sal_Bool        m_bBoldComplex;
-        sal_Int16       m_nUnderline;
-        sal_uInt32      m_nUnderlineColor;
+        rtl::OUString	m_strFontName;
+        rtl::OUString	m_strFontNameAsia;
+        rtl::OUString	m_strFontNameComplex;
+        sal_Int16		m_nFontSize;
+        sal_Int16		m_nFontSizeAsia;
+        sal_Int16		m_nFontSizeComplex;
+        sal_Bool		m_bItalic;
+        sal_Bool		m_bItalicAsia;
+        sal_Bool		m_bItalicComplex;
+        sal_Bool		m_bBold;
+        sal_Bool		m_bBoldAsia;
+        sal_Bool		m_bBoldComplex;
+        sal_Int16		m_nUnderline;
+        sal_uInt32		m_nUnderlineColor;
 
-        sal_uInt32      m_nFlag;
+        sal_uInt32		m_nFlag;
 */
 bool operator==(XFFont& f1, XFFont& f2)
 {
@@ -317,7 +323,7 @@ void XFFont::ToXml(IXFStream *pStrm)
             pAttrList->AddAttribute( A2OUSTR("style:text-underline-color"), A2OUSTR("font-color") );
     }
 
-    //enumCrossoutType  m_eCrossout;
+    //enumCrossoutType	m_eCrossout;
     if( (m_nFlag & XFFONT_FLAG_CROSSOUT) && m_eCrossout )
     {
         pAttrList->AddAttribute(A2OUSTR("style:text-crossing-out"), GetCrossoutName(m_eCrossout) );

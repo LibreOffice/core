@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,21 +43,21 @@
 //==================================================================
 
 ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
-                                    sal_uInt16          nResId,
-                                    long            nCurrent,
-                                    long            nDefault,
+                                    USHORT			nResId,
+                                    long			nCurrent,
+                                    long			nDefault,
                                     FieldUnit       eFUnit,
-                                    sal_uInt16          nDecimals,
+                                    USHORT          nDecimals,
                                     long            nMaximum,
                                     long            nMinimum,
                                     long            nFirst,
                                     long            nLast )
 
-    :   ModalDialog     ( pParent, ScResId( nResId ) ),
+    :	ModalDialog     ( pParent, ScResId( nResId ) ),
         //
         aFtEditTitle    ( this, ScResId( FT_LABEL ) ),
         aEdValue        ( this, ScResId( ED_VALUE ) ),
-        aBtnDefVal      ( this, ScResId( BTN_DEFVAL ) ),
+        aBtnDefVal		( this, ScResId( BTN_DEFVAL ) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) )
@@ -77,9 +77,9 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
     aEdValue.SetFirst           ( aEdValue.Normalize( nFirst ),   FUNIT_TWIP );
     aEdValue.SetSpinSize        ( aEdValue.Normalize( 1 ) / 10 );
     aEdValue.SetValue           ( aEdValue.Normalize( nDefault ), FUNIT_TWIP );
-    nDefaultValue = sal::static_int_cast<long>( aEdValue.GetValue() );
+    nDefaultValue =	sal::static_int_cast<long>( aEdValue.GetValue() );
     aEdValue.SetValue           ( aEdValue.Normalize( nCurrent ), FUNIT_TWIP );
-    nCurrentValue = sal::static_int_cast<long>( aEdValue.GetValue() );
+    nCurrentValue =	sal::static_int_cast<long>( aEdValue.GetValue() );
     aBtnDefVal.Check( nCurrentValue == nDefaultValue );
 
     FreeResource();
@@ -87,7 +87,7 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
 
 //------------------------------------------------------------------------
 
-ScMetricInputDlg::~ScMetricInputDlg()
+__EXPORT ScMetricInputDlg::~ScMetricInputDlg()
 {
 }
 
@@ -98,15 +98,15 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 /*
     mit Nachkommastellen:
 
-    double  nVal    = aEdValue.GetValue( eUnit );
-    sal_uInt16  nDecs   = aEdValue.GetDecimalDigits();
-    double  nFactor = 0.0;
+    double	nVal	= aEdValue.GetValue( eUnit );
+    USHORT	nDecs	= aEdValue.GetDecimalDigits();
+    double	nFactor = 0.0;
 
-    // static long ImpPower10( sal_uInt16 nDecs )
+    // static long ImpPower10( USHORT nDecs )
     {
         nFactor = 1.0;
 
-        for ( sal_uInt16 i=0; i < nDecs; i++ )
+        for ( USHORT i=0; i < nDecs; i++ )
             nFactor *= 10.0;
     }
 
@@ -129,7 +129,7 @@ void ScMetricInputDlg::CalcPositions()
     Point   aNewPos;
 
     aFtSize.Width() = aFtEditTitle.GetTextWidth(aFtEditTitle.GetText());
-    // add mnemonic char width to fixed text width
+    // #95990# add mnemonic char width to fixed text width
     aFtSize.Width() += aFtEditTitle.GetTextWidth(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("(W)")));
     aFtEditTitle.SetSizePixel( aFtSize );
 

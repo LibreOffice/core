@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,6 +46,7 @@ import com.sun.star.util.DateTime;
 import com.sun.star.util.Time;
 
 import java.sql.Timestamp;
+
 
 public class SDBCReportData implements DataSource
 {
@@ -348,7 +349,7 @@ public class SDBCReportData implements DataSource
 
     private Object convertObject(final int type, final Object obj)
     {
-        Object ret;
+        final Object ret;
         switch (type)
         {
             case DataType.DATE:
@@ -364,14 +365,7 @@ public class SDBCReportData implements DataSource
             case DataType.NUMERIC:
                 if (!(obj instanceof Any))
                 {
-                    try
-                    {
-                        ret = new java.math.BigDecimal(String.valueOf(obj));
-                    }
-                    catch (NumberFormatException ex)
-                    {
-                        ret = obj;
-                    }
+                    ret = new java.math.BigDecimal((String) obj);
                 }
                 else
                 {

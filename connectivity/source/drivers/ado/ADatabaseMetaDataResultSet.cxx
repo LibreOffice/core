@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet
     else
         m_bOnFirstAfterOpen = sal_False;
     osl_decrementInterlockedCount( &m_refCount );
-    //  allocBuffer();
+    //	allocBuffer();
 }
 
 // -------------------------------------------------------------------------
@@ -97,7 +97,7 @@ void ODatabaseMetaDataResultSet::disposing(void)
     ::osl::MutexGuard aGuard(m_aMutex);
     if(m_pRecordSet)
         m_pRecordSet->Close();
-    m_aStatement    = NULL;
+    m_aStatement	= NULL;
 m_xMetaData.clear();
 }
 // -------------------------------------------------------------------------
@@ -109,7 +109,7 @@ Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType ) th
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
+    ::cppu::OTypeCollection aTypes(	::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
@@ -554,7 +554,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  ) throw(SQLException,
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
-{   ::osl::MutexGuard aGuard( m_aMutex );
+{	::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     checkRecordSet();
@@ -709,11 +709,11 @@ void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
     Sequence< com::sun::star::beans::Property > aProps(5);
     com::sun::star::beans::Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,          ::rtl::OUString);
-    DECL_PROP0(FETCHDIRECTION,      sal_Int32);
-    DECL_PROP0(FETCHSIZE,           sal_Int32);
+    DECL_PROP0(CURSORNAME,			::rtl::OUString);
+    DECL_PROP0(FETCHDIRECTION,		sal_Int32);
+    DECL_PROP0(FETCHSIZE,			sal_Int32);
     DECL_PROP0(RESULTSETCONCURRENCY,sal_Int32);
-    DECL_PROP0(RESULTSETTYPE,       sal_Int32);
+    DECL_PROP0(RESULTSETTYPE,		sal_Int32);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
@@ -763,7 +763,7 @@ void ODatabaseMetaDataResultSet::setFastPropertyValue_NoBroadcast(
             throw Exception();
             break;
         default:
-            OSL_FAIL("setFastPropertyValue_NoBroadcast: Illegal handle value!");
+            OSL_ENSURE(0,"setFastPropertyValue_NoBroadcast: Illegal handle value!");
     }
 }
 // -------------------------------------------------------------------------
@@ -804,9 +804,9 @@ void ODatabaseMetaDataResultSet::setProceduresMap()
     m_aColMapping.push_back(4);
 
     TInt2IntMap aMap;
-    aMap[DB_PT_UNKNOWN]     = ProcedureResult::UNKNOWN;
-    aMap[DB_PT_PROCEDURE]   = ProcedureResult::NONE;
-    aMap[DB_PT_FUNCTION]    = ProcedureResult::RETURN;
+    aMap[DB_PT_UNKNOWN]		= ProcedureResult::UNKNOWN;
+    aMap[DB_PT_PROCEDURE]	= ProcedureResult::NONE;
+    aMap[DB_PT_FUNCTION]	= ProcedureResult::RETURN;
     m_aValueRange[4] = aMap;
 
     ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
@@ -869,51 +869,52 @@ void ODatabaseMetaDataResultSet::setColumnsMap()
     m_aColMapping.push_back(11);
 
     TInt2IntMap aMap;
-    aMap[adEmpty]           = ADOS::MapADOType2Jdbc(adEmpty);
-    aMap[adTinyInt]         = ADOS::MapADOType2Jdbc(adTinyInt);
-    aMap[adSmallInt]        = ADOS::MapADOType2Jdbc(adSmallInt);
-    aMap[adInteger]         = ADOS::MapADOType2Jdbc(adInteger);
-    aMap[adBigInt]          = ADOS::MapADOType2Jdbc(adBigInt);
-    aMap[adUnsignedTinyInt] = ADOS::MapADOType2Jdbc(adUnsignedTinyInt);
+    aMap[adEmpty]			= ADOS::MapADOType2Jdbc(adEmpty);
+    aMap[adTinyInt]			= ADOS::MapADOType2Jdbc(adTinyInt);
+    aMap[adSmallInt]		= ADOS::MapADOType2Jdbc(adSmallInt);
+    aMap[adInteger]			= ADOS::MapADOType2Jdbc(adInteger);
+    aMap[adBigInt]			= ADOS::MapADOType2Jdbc(adBigInt);
+    aMap[adUnsignedTinyInt]	= ADOS::MapADOType2Jdbc(adUnsignedTinyInt);
     aMap[adUnsignedSmallInt]= ADOS::MapADOType2Jdbc(adUnsignedSmallInt);
-    aMap[adUnsignedInt]     = ADOS::MapADOType2Jdbc(adUnsignedInt);
-    aMap[adUnsignedBigInt]  = ADOS::MapADOType2Jdbc(adUnsignedBigInt);
-    aMap[adSingle]          = ADOS::MapADOType2Jdbc(adSingle);
-    aMap[adDouble]          = ADOS::MapADOType2Jdbc(adDouble);
-    aMap[adCurrency]        = ADOS::MapADOType2Jdbc(adCurrency);
-    aMap[adDecimal]         = ADOS::MapADOType2Jdbc(adDecimal);
-    aMap[adNumeric]         = ADOS::MapADOType2Jdbc(adNumeric);
-    aMap[adBoolean]         = ADOS::MapADOType2Jdbc(adBoolean);
-    aMap[adError]           = ADOS::MapADOType2Jdbc(adError);
-    aMap[adUserDefined]     = ADOS::MapADOType2Jdbc(adUserDefined);
-    aMap[adVariant]         = ADOS::MapADOType2Jdbc(adVariant);
-    aMap[adIDispatch]       = ADOS::MapADOType2Jdbc(adIDispatch);
-    aMap[adIUnknown]        = ADOS::MapADOType2Jdbc(adIUnknown);
-    aMap[adGUID]            = ADOS::MapADOType2Jdbc(adGUID);
-    aMap[adDate]            = ADOS::MapADOType2Jdbc(adDate);
-    aMap[adDBDate]          = ADOS::MapADOType2Jdbc(adDBDate);
-    aMap[adDBTime]          = ADOS::MapADOType2Jdbc(adDBTime);
-    aMap[adDBTimeStamp]     = ADOS::MapADOType2Jdbc(adDBTimeStamp);
-    aMap[adBSTR]            = ADOS::MapADOType2Jdbc(adBSTR);
-    aMap[adChar]            = ADOS::MapADOType2Jdbc(adChar);
-    aMap[adVarChar]         = ADOS::MapADOType2Jdbc(adVarChar);
-    aMap[adLongVarChar]     = ADOS::MapADOType2Jdbc(adLongVarChar);
-    aMap[adWChar]           = ADOS::MapADOType2Jdbc(adWChar);
-    aMap[adVarWChar]        = ADOS::MapADOType2Jdbc(adVarWChar);
-    aMap[adLongVarWChar]    = ADOS::MapADOType2Jdbc(adLongVarWChar);
-    aMap[adBinary]          = ADOS::MapADOType2Jdbc(adBinary);
-    aMap[adVarBinary]       = ADOS::MapADOType2Jdbc(adVarBinary);
-    aMap[adLongVarBinary]   = ADOS::MapADOType2Jdbc(adLongVarBinary);
-    aMap[adChapter]         = ADOS::MapADOType2Jdbc(adChapter);
-    aMap[adFileTime]        = ADOS::MapADOType2Jdbc(adFileTime);
-    aMap[adPropVariant]     = ADOS::MapADOType2Jdbc(adPropVariant);
-    aMap[adVarNumeric]      = ADOS::MapADOType2Jdbc(adVarNumeric);
+    aMap[adUnsignedInt]		= ADOS::MapADOType2Jdbc(adUnsignedInt);
+    aMap[adUnsignedBigInt]	= ADOS::MapADOType2Jdbc(adUnsignedBigInt);
+    aMap[adSingle]			= ADOS::MapADOType2Jdbc(adSingle);
+    aMap[adDouble]			= ADOS::MapADOType2Jdbc(adDouble);
+    aMap[adCurrency]		= ADOS::MapADOType2Jdbc(adCurrency);
+    aMap[adDecimal]			= ADOS::MapADOType2Jdbc(adDecimal);
+    aMap[adNumeric]			= ADOS::MapADOType2Jdbc(adNumeric);
+    aMap[adBoolean]			= ADOS::MapADOType2Jdbc(adBoolean);
+    aMap[adError]			= ADOS::MapADOType2Jdbc(adError);
+    aMap[adUserDefined]		= ADOS::MapADOType2Jdbc(adUserDefined);
+    aMap[adVariant]			= ADOS::MapADOType2Jdbc(adVariant);
+    aMap[adIDispatch]		= ADOS::MapADOType2Jdbc(adIDispatch);
+    aMap[adIUnknown]		= ADOS::MapADOType2Jdbc(adIUnknown);
+    aMap[adGUID]			= ADOS::MapADOType2Jdbc(adGUID);
+    aMap[adDate]			= ADOS::MapADOType2Jdbc(adDate);
+    aMap[adDBDate]			= ADOS::MapADOType2Jdbc(adDBDate);
+    aMap[adDBTime]			= ADOS::MapADOType2Jdbc(adDBTime);
+    aMap[adDBTimeStamp]		= ADOS::MapADOType2Jdbc(adDBTimeStamp);
+    aMap[adBSTR]			= ADOS::MapADOType2Jdbc(adBSTR);
+    aMap[adChar]			= ADOS::MapADOType2Jdbc(adChar);
+    aMap[adVarChar]			= ADOS::MapADOType2Jdbc(adVarChar);
+    aMap[adLongVarChar]		= ADOS::MapADOType2Jdbc(adLongVarChar);
+    aMap[adWChar]			= ADOS::MapADOType2Jdbc(adWChar);
+    aMap[adVarWChar]		= ADOS::MapADOType2Jdbc(adVarWChar);
+    aMap[adLongVarWChar]	= ADOS::MapADOType2Jdbc(adLongVarWChar);
+    aMap[adBinary]			= ADOS::MapADOType2Jdbc(adBinary);
+    aMap[adVarBinary]		= ADOS::MapADOType2Jdbc(adVarBinary);
+    aMap[adLongVarBinary]	= ADOS::MapADOType2Jdbc(adLongVarBinary);
+    aMap[adChapter]			= ADOS::MapADOType2Jdbc(adChapter);
+    aMap[adFileTime]		= ADOS::MapADOType2Jdbc(adFileTime);
+    aMap[adPropVariant]		= ADOS::MapADOType2Jdbc(adPropVariant);
+    aMap[adVarNumeric]		= ADOS::MapADOType2Jdbc(adVarNumeric);
+//	aMap[adArray]			= ADOS::MapADOType2Jdbc(adArray);
 
     m_aValueRange[12] = aMap;
 
     ::std::map< sal_Int32,::rtl::OUString> aMap2;
-    aMap2[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YES"));
-    aMap2[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NO"));
+    aMap2[0] = ::rtl::OUString::createFromAscii("YES");
+    aMap2[1] = ::rtl::OUString::createFromAscii("NO");
     m_aIntValueRange[18] = aMap2;
 
     ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
@@ -1045,9 +1046,9 @@ void ODatabaseMetaDataResultSet::setIndexInfoMap()
     m_aValueRange[8] = aMap2;
 
     ::std::map< sal_Int32,::rtl::OUString> aMap3;
-    aMap3[0]                    = ::rtl::OUString();
-    aMap3[DB_COLLATION_ASC]     = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("A"));
-    aMap3[DB_COLLATION_DESC]    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("D"));
+    aMap3[0]					= ::rtl::OUString();
+    aMap3[DB_COLLATION_ASC]		= ::rtl::OUString::createFromAscii("A");
+    aMap3[DB_COLLATION_DESC]	= ::rtl::OUString::createFromAscii("D");
 
     m_aIntValueRange[21] = aMap3;
 
@@ -1068,8 +1069,8 @@ void ODatabaseMetaDataResultSet::setTablePrivilegesMap()
     m_aColMapping.push_back(7);
 
     ::std::map< sal_Int32,::rtl::OUString> aMap;
-    aMap[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YES"));
-    aMap[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NO"));
+    aMap[0] = ::rtl::OUString::createFromAscii("YES");
+    aMap[1] = ::rtl::OUString::createFromAscii("NO");
     m_aIntValueRange[7] = aMap;
 
 
@@ -1095,11 +1096,11 @@ void ODatabaseMetaDataResultSet::setCrossReferenceMap()
     m_aColMapping.push_back(18);
 
     ::std::map< ::rtl::OUString,sal_Int32> aMap;
-    aMap[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CASCADE"))] = KeyRule::CASCADE;
-    aMap[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RESTRICT"))] = KeyRule::RESTRICT;
-    aMap[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET NULL"))] = KeyRule::SET_NULL;
-    aMap[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET DEFAULT"))] = KeyRule::SET_DEFAULT;
-    aMap[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NO ACTION"))] = KeyRule::NO_ACTION;
+    aMap[ ::rtl::OUString::createFromAscii("CASCADE")] = KeyRule::CASCADE;
+    aMap[ ::rtl::OUString::createFromAscii("RESTRICT")] = KeyRule::RESTRICT;
+    aMap[ ::rtl::OUString::createFromAscii("SET NULL")] = KeyRule::SET_NULL;
+    aMap[ ::rtl::OUString::createFromAscii("SET DEFAULT")] = KeyRule::SET_DEFAULT;
+    aMap[ ::rtl::OUString::createFromAscii("NO ACTION")] = KeyRule::NO_ACTION;
 
     m_aStrValueRange[14] = aMap;
     m_aStrValueRange[15] = aMap;
@@ -1121,61 +1122,61 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(sal_Bool _bJetEngine)
     m_aStrValueRange[18] = aMap1;
 
     TInt2IntMap aMap;
-    aMap[adEmpty]           = ADOS::MapADOType2Jdbc(adEmpty);
-    aMap[adTinyInt]         = ADOS::MapADOType2Jdbc(adTinyInt);
-    aMap[adSmallInt]        = ADOS::MapADOType2Jdbc(adSmallInt);
-    aMap[adInteger]         = ADOS::MapADOType2Jdbc(adInteger);
-    aMap[adBigInt]          = ADOS::MapADOType2Jdbc(adBigInt);
-    aMap[adUnsignedTinyInt] = ADOS::MapADOType2Jdbc(adUnsignedTinyInt);
+    aMap[adEmpty]			= ADOS::MapADOType2Jdbc(adEmpty);
+    aMap[adTinyInt]			= ADOS::MapADOType2Jdbc(adTinyInt);
+    aMap[adSmallInt]		= ADOS::MapADOType2Jdbc(adSmallInt);
+    aMap[adInteger]			= ADOS::MapADOType2Jdbc(adInteger);
+    aMap[adBigInt]			= ADOS::MapADOType2Jdbc(adBigInt);
+    aMap[adUnsignedTinyInt]	= ADOS::MapADOType2Jdbc(adUnsignedTinyInt);
     aMap[adUnsignedSmallInt]= ADOS::MapADOType2Jdbc(adUnsignedSmallInt);
-    aMap[adUnsignedInt]     = ADOS::MapADOType2Jdbc(adUnsignedInt);
-    aMap[adUnsignedBigInt]  = ADOS::MapADOType2Jdbc(adUnsignedBigInt);
-    aMap[adSingle]          = ADOS::MapADOType2Jdbc(adSingle);
-    aMap[adDouble]          = ADOS::MapADOType2Jdbc(adDouble);
-    aMap[adCurrency]        = ADOS::MapADOType2Jdbc(adCurrency);
-    aMap[adDecimal]         = ADOS::MapADOType2Jdbc(adDecimal);
-    aMap[adNumeric]         = ADOS::MapADOType2Jdbc(adNumeric);
-    aMap[adBoolean]         = ADOS::MapADOType2Jdbc(adBoolean);
-    aMap[adError]           = ADOS::MapADOType2Jdbc(adError);
-    aMap[adUserDefined]     = ADOS::MapADOType2Jdbc(adUserDefined);
-    aMap[adVariant]         = ADOS::MapADOType2Jdbc(adVariant);
-    aMap[adIDispatch]       = ADOS::MapADOType2Jdbc(adIDispatch);
-    aMap[adIUnknown]        = ADOS::MapADOType2Jdbc(adIUnknown);
-    aMap[adGUID]            = ADOS::MapADOType2Jdbc(adGUID);
-    aMap[adDate]            = _bJetEngine ? ADOS::MapADOType2Jdbc(adDBTimeStamp) : ADOS::MapADOType2Jdbc(adDate);
-    aMap[adDBDate]          = ADOS::MapADOType2Jdbc(adDBDate);
-    aMap[adDBTime]          = ADOS::MapADOType2Jdbc(adDBTime);
-    aMap[adDBTimeStamp]     = ADOS::MapADOType2Jdbc(adDBTimeStamp);
-    aMap[adBSTR]            = ADOS::MapADOType2Jdbc(adBSTR);
-    aMap[adChar]            = ADOS::MapADOType2Jdbc(adChar);
-    aMap[adVarChar]         = ADOS::MapADOType2Jdbc(adVarChar);
-    aMap[adLongVarChar]     = ADOS::MapADOType2Jdbc(adLongVarChar);
-    aMap[adWChar]           = ADOS::MapADOType2Jdbc(adWChar);
-    aMap[adVarWChar]        = ADOS::MapADOType2Jdbc(adVarWChar);
-    aMap[adLongVarWChar]    = ADOS::MapADOType2Jdbc(adLongVarWChar);
-    aMap[adBinary]          = ADOS::MapADOType2Jdbc(adBinary);
-    aMap[adVarBinary]       = ADOS::MapADOType2Jdbc(adVarBinary);
-    aMap[adLongVarBinary]   = ADOS::MapADOType2Jdbc(adLongVarBinary);
-    aMap[adChapter]         = ADOS::MapADOType2Jdbc(adChapter);
-    aMap[adFileTime]        = ADOS::MapADOType2Jdbc(adFileTime);
-    aMap[adPropVariant]     = ADOS::MapADOType2Jdbc(adPropVariant);
-    aMap[adVarNumeric]      = ADOS::MapADOType2Jdbc(adVarNumeric);
-//  aMap[adArray]           = ADOS::MapADOType2Jdbc(adArray);
+    aMap[adUnsignedInt]		= ADOS::MapADOType2Jdbc(adUnsignedInt);
+    aMap[adUnsignedBigInt]	= ADOS::MapADOType2Jdbc(adUnsignedBigInt);
+    aMap[adSingle]			= ADOS::MapADOType2Jdbc(adSingle);
+    aMap[adDouble]			= ADOS::MapADOType2Jdbc(adDouble);
+    aMap[adCurrency]		= ADOS::MapADOType2Jdbc(adCurrency);
+    aMap[adDecimal]			= ADOS::MapADOType2Jdbc(adDecimal);
+    aMap[adNumeric]			= ADOS::MapADOType2Jdbc(adNumeric);
+    aMap[adBoolean]			= ADOS::MapADOType2Jdbc(adBoolean);
+    aMap[adError]			= ADOS::MapADOType2Jdbc(adError);
+    aMap[adUserDefined]		= ADOS::MapADOType2Jdbc(adUserDefined);
+    aMap[adVariant]			= ADOS::MapADOType2Jdbc(adVariant);
+    aMap[adIDispatch]		= ADOS::MapADOType2Jdbc(adIDispatch);
+    aMap[adIUnknown]		= ADOS::MapADOType2Jdbc(adIUnknown);
+    aMap[adGUID]			= ADOS::MapADOType2Jdbc(adGUID);
+    aMap[adDate]			= _bJetEngine ? ADOS::MapADOType2Jdbc(adDBTimeStamp) : ADOS::MapADOType2Jdbc(adDate);
+    aMap[adDBDate]			= ADOS::MapADOType2Jdbc(adDBDate);
+    aMap[adDBTime]			= ADOS::MapADOType2Jdbc(adDBTime);
+    aMap[adDBTimeStamp]		= ADOS::MapADOType2Jdbc(adDBTimeStamp);
+    aMap[adBSTR]			= ADOS::MapADOType2Jdbc(adBSTR);
+    aMap[adChar]			= ADOS::MapADOType2Jdbc(adChar);
+    aMap[adVarChar]			= ADOS::MapADOType2Jdbc(adVarChar);
+    aMap[adLongVarChar]		= ADOS::MapADOType2Jdbc(adLongVarChar);
+    aMap[adWChar]			= ADOS::MapADOType2Jdbc(adWChar);
+    aMap[adVarWChar]		= ADOS::MapADOType2Jdbc(adVarWChar);
+    aMap[adLongVarWChar]	= ADOS::MapADOType2Jdbc(adLongVarWChar);
+    aMap[adBinary]			= ADOS::MapADOType2Jdbc(adBinary);
+    aMap[adVarBinary]		= ADOS::MapADOType2Jdbc(adVarBinary);
+    aMap[adLongVarBinary]	= ADOS::MapADOType2Jdbc(adLongVarBinary);
+    aMap[adChapter]			= ADOS::MapADOType2Jdbc(adChapter);
+    aMap[adFileTime]		= ADOS::MapADOType2Jdbc(adFileTime);
+    aMap[adPropVariant]		= ADOS::MapADOType2Jdbc(adPropVariant);
+    aMap[adVarNumeric]		= ADOS::MapADOType2Jdbc(adVarNumeric);
+//	aMap[adArray]			= ADOS::MapADOType2Jdbc(adArray);
 
     m_aValueRange[2] = aMap;
 
     TInt2IntMap aColumnValueMapping;
-    aColumnValueMapping[VARIANT_FALSE]      = ColumnValue::NO_NULLS;
-    aColumnValueMapping[VARIANT_TRUE]       = ColumnValue::NULLABLE;
+    aColumnValueMapping[VARIANT_FALSE]		= ColumnValue::NO_NULLS;
+    aColumnValueMapping[VARIANT_TRUE]		= ColumnValue::NULLABLE;
     m_aValueRange[7] = aColumnValueMapping;
 
     // now adjust the column mapping
     // OJ 24.01.2002  96860
     TInt2IntMap aSerachMapping;
-    aSerachMapping[DB_UNSEARCHABLE]     = ColumnSearch::NONE;
-    aSerachMapping[DB_LIKE_ONLY]        = ColumnSearch::CHAR;
-    aSerachMapping[DB_ALL_EXCEPT_LIKE]  = ColumnSearch::BASIC;
-    aSerachMapping[DB_SEARCHABLE]       = ColumnSearch::FULL;
+    aSerachMapping[DB_UNSEARCHABLE]		= ColumnSearch::NONE;
+    aSerachMapping[DB_LIKE_ONLY]		= ColumnSearch::CHAR;
+    aSerachMapping[DB_ALL_EXCEPT_LIKE]	= ColumnSearch::BASIC;
+    aSerachMapping[DB_SEARCHABLE]		= ColumnSearch::FULL;
 
     m_aValueRange[9] = aSerachMapping;
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ PresenterPaneContainer::PresenterPaneContainer (
     {
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
+                OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
                 rxContext),
             UNO_QUERY_THROW);
     }
@@ -160,7 +160,7 @@ PresenterPaneContainer::SharedPaneDescriptor
             pDescriptor->mxPaneId = xPaneId;
             pDescriptor->mxPane = rxPane;
             pDescriptor->mxPane->SetTitle(pDescriptor->msTitle);
-
+            
             // When there is a call out anchor location set then tell the
             // window about it.
             if (pDescriptor->mbHasCalloutAnchor)
@@ -187,7 +187,7 @@ PresenterPaneContainer::SharedPaneDescriptor
     OUString sPaneURL;
     if (rxPaneId.is())
         sPaneURL = rxPaneId->getResourceURL();
-
+    
     SharedPaneDescriptor pDescriptor (FindPaneURL(sPaneURL));
     if (pDescriptor.get() != NULL)
     {
@@ -207,7 +207,7 @@ PresenterPaneContainer::SharedPaneDescriptor
         const SharedBitmapDescriptor& rpViewBackground)
 {
     SharedPaneDescriptor pDescriptor;
-
+    
     if (rxView.is())
     {
         OUString sPaneURL;
@@ -229,7 +229,7 @@ PresenterPaneContainer::SharedPaneDescriptor
             {
                 if ( ! pDescriptor->maViewInitialization.empty())
                     pDescriptor->maViewInitialization(rxView);
-
+                
                 // Activate or deactivate the pane/view.
                 if ( ! pDescriptor->maActivator.empty())
                     pDescriptor->maActivator(pDescriptor->mbIsActive);
@@ -272,7 +272,7 @@ PresenterPaneContainer::SharedPaneDescriptor
     PresenterPaneContainer::RemoveView (const Reference<XView>& rxView)
 {
     SharedPaneDescriptor pDescriptor;
-
+    
     if (rxView.is())
     {
         OUString sPaneURL;
@@ -407,7 +407,7 @@ void PresenterPaneContainer::ToTop (const SharedPaneDescriptor& rpDescriptor)
         OSL_ASSERT(iPane!=iEnd);
         if (iPane == iEnd)
             return;
-
+        
         if (mxPresenterHelper.is())
             mxPresenterHelper->toTop(rpDescriptor->mxBorderWindow);
 

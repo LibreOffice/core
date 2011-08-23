@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,24 +68,27 @@ using namespace ::com::sun::star::lang;
 
 
 /*--------------------------------------------------------------------
-    Description: edit insert-field
+    Beschreibung: Feldeinfuegen bearbeiten
  --------------------------------------------------------------------*/
 SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), SW_RES(DLG_CHANGE_DB)),
 
     aDBListFL   (this, SW_RES(FL_DBLIST     )),
-    aUsedDBFT   (this, SW_RES(FT_USEDDB     )),
-    aAvailDBFT  (this, SW_RES(FT_AVAILDB    )),
-    aUsedDBTLB  (this, SW_RES(TLB_USEDDB    )),
+    aUsedDBFT	(this, SW_RES(FT_USEDDB  	)),
+    aAvailDBFT	(this, SW_RES(FT_AVAILDB 	)),
+    aUsedDBTLB	(this, SW_RES(TLB_USEDDB  	)),
     aAvailDBTLB (this, SW_RES(TLB_AVAILDB   ), 0),
     aAddDBPB    (this, SW_RES(PB_ADDDB)),
     aDescFT     (this, SW_RES(FT_DESC       )),
-    aDocDBTextFT(this, SW_RES(FT_DOCDBTEXT  )),
-    aDocDBNameFT(this, SW_RES(FT_DOCDBNAME  )),
-    aOKBT       (this, SW_RES(BT_OK         )),
-    aCancelBT   (this, SW_RES(BT_CANCEL     )),
-    aHelpBT     (this, SW_RES(BT_HELP       )),
+    aDocDBTextFT(this, SW_RES(FT_DOCDBTEXT	)),
+    aDocDBNameFT(this, SW_RES(FT_DOCDBNAME	)),
+    aOKBT		(this, SW_RES(BT_OK      	)),
+    aCancelBT	(this, SW_RES(BT_CANCEL  	)),
+    aHelpBT		(this, SW_RES(BT_HELP    	)),
+//	aChangeBT	(this, SW_RES(BT_CHANGEDB    )),
     aImageList      (SW_RES(ILIST_DB_DLG    )),
+    aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
+
     pSh(rVw.GetWrtShellPtr()),
     pMgr( new SwFldMgr() )
 {
@@ -99,9 +102,13 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aAddDBPB.SetClickHdl(LINK(this, SwChangeDBDlg, AddDBHdl));
 
     aUsedDBTLB.SetSelectionMode(MULTIPLE_SELECTION);
-    aUsedDBTLB.SetStyle(aUsedDBTLB.GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
+    aUsedDBTLB.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     aUsedDBTLB.SetSpaceBetweenEntries(0);
-    aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE), aImageList.GetImage(IMG_EXPAND));
+
+    aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
+                    aImageList.GetImage(IMG_EXPAND  ), BMP_COLOR_NORMAL );
+    aUsedDBTLB.SetNodeBitmaps( aImageListHC.GetImage(IMG_COLLAPSE),
+                    aImageListHC.GetImage(IMG_EXPAND  ), BMP_COLOR_HIGHCONTRAST );
 
     Link aLink = LINK(this, SwChangeDBDlg, TreeSelectHdl);
 
@@ -113,7 +120,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
 }
 
 /*--------------------------------------------------------------------
-    Description: initialise database listboxes
+    Beschreibung: Datenbank-Listboxen initialisieren
  --------------------------------------------------------------------*/
 void SwChangeDBDlg::FillDBPopup()
 {
@@ -144,12 +151,12 @@ void SwChangeDBDlg::FillDBPopup()
     SvStringsDtor aDBNameList(5, 1);
     pSh->GetAllUsedDB( aDBNameList, &aAllDBNames );
 
-    sal_uInt16 nCount = aDBNameList.Count();
+    USHORT nCount = aDBNameList.Count();
     aUsedDBTLB.Clear();
     SvLBoxEntry *pFirst = 0;
     SvLBoxEntry *pLast = 0;
 
-    for (sal_uInt16 k = 0; k < nCount; k++)
+    for (USHORT k = 0; k < nCount; k++)
     {
         sDBName = *aDBNameList.GetObject(k);
         sDBName = sDBName.GetToken(0);
@@ -170,17 +177,21 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
 {
     String sDBName(rDBName.GetToken(0, DB_DELIM));
     String sTableName(rDBName.GetToken(1, DB_DELIM));
-    sal_IntPtr nCommandType = rDBName.GetToken(2, DB_DELIM).ToInt32();
+    int nCommandType = rDBName.GetToken(2, DB_DELIM).ToInt32();
     SvLBoxEntry* pParent;
     SvLBoxEntry* pChild;
 
-    sal_uInt16 nParent = 0;
-    sal_uInt16 nChild = 0;
+    USHORT nParent = 0;
+    USHORT nChild = 0;
 
     Image aTableImg = aImageList.GetImage(IMG_DBTABLE);
     Image aDBImg = aImageList.GetImage(IMG_DB);
     Image aQueryImg = aImageList.GetImage(IMG_DBQUERY);
+    Image aHCTableImg = aImageListHC.GetImage(IMG_DBTABLE);
+    Image aHCDBImg = aImageListHC.GetImage(IMG_DB);
+    Image aHCQueryImg = aImageListHC.GetImage(IMG_DBQUERY);
     Image& rToInsert = nCommandType ? aQueryImg : aTableImg;
+    Image& rHCToInsert = nCommandType ? aHCQueryImg : aHCTableImg;
     while ((pParent = aUsedDBTLB.GetEntry(nParent++)) != NULL)
     {
         if (sDBName == aUsedDBTLB.GetEntryText(pParent))
@@ -191,36 +202,42 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
                     return pChild;
             }
             SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
+            aUsedDBTLB.SetExpandedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
+            aUsedDBTLB.SetCollapsedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
             pRet->SetUserData((void*)nCommandType);
             return pRet;
         }
     }
     pParent = aUsedDBTLB.InsertEntry(sDBName, aDBImg, aDBImg);
+    aUsedDBTLB.SetExpandedEntryBmp(pParent, aHCDBImg, BMP_COLOR_HIGHCONTRAST);
+    aUsedDBTLB.SetCollapsedEntryBmp(pParent, aHCDBImg, BMP_COLOR_HIGHCONTRAST);
 
     SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
+    aUsedDBTLB.SetExpandedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
+    aUsedDBTLB.SetCollapsedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
     pRet->SetUserData((void*)nCommandType);
     return pRet;
 }
 
 /*--------------------------------------------------------------------
-    Description: destroy dialog
+    Beschreibung: Dialog zerstoeren
  --------------------------------------------------------------------*/
-SwChangeDBDlg::~SwChangeDBDlg()
+__EXPORT SwChangeDBDlg::~SwChangeDBDlg()
 {
     delete pMgr;
 }
 
 /*--------------------------------------------------------------------
-     Description:   close
+     Beschreibung:	Schliessen
  --------------------------------------------------------------------*/
-void SwChangeDBDlg::Apply()
+void __EXPORT SwChangeDBDlg::Apply()
 {
     UpdateFlds();
 }
 
 void SwChangeDBDlg::UpdateFlds()
 {
-    SvStringsDtor aDBNames( (sal_uInt8)aUsedDBTLB.GetSelectionCount(), 1 );
+    SvStringsDtor aDBNames( (BYTE)aUsedDBTLB.GetSelectionCount(), 1 );
     SvLBoxEntry* pEntry = aUsedDBTLB.FirstSelected();
 
     while( pEntry )
@@ -232,7 +249,7 @@ void SwChangeDBDlg::UpdateFlds()
             *pTmp += DB_DELIM;
             *pTmp += aUsedDBTLB.GetEntryText( pEntry );
             *pTmp += DB_DELIM;
-            int nCommandType = (int)(sal_uLong)pEntry->GetUserData();
+            int nCommandType = (int)(ULONG)pEntry->GetUserData();
             *pTmp += String::CreateFromInt32(nCommandType);
             aDBNames.Insert(pTmp, aDBNames.Count() );
         }
@@ -268,21 +285,21 @@ IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, EMPTYARG )
 
 IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, EMPTYARG )
 {
-    sal_Bool bEnable = sal_False;
+    BOOL bEnable = FALSE;
 
     SvLBoxEntry* pEntry = aAvailDBTLB.GetCurEntry();
 
     if (pEntry)
     {
         if (aAvailDBTLB.GetParent(pEntry))
-            bEnable = sal_True;
+            bEnable = TRUE;
         aOKBT.Enable( bEnable );
     }
     return 0;
 }
 
 /*--------------------------------------------------------------------
-    Description: convert database name for display
+    Beschreibung: Datenbankname fuer Anzeige wandeln
  --------------------------------------------------------------------*/
 void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 {
@@ -291,7 +308,7 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
     sTmp += '.';
     sTmp += (String)rDBData.sCommand;
 
-    for (sal_uInt16 i = 0; i < sTmp.Len(); i++)
+    for (USHORT i = 0; i < sTmp.Len(); i++)
     {
         sName += sTmp.GetChar(i);
         if (sTmp.GetChar(i) == '~')

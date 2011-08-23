@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,19 +29,19 @@
 #ifndef _DBGLOOP_HXX
 #define _DBGLOOP_HXX
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 #include <tools/solar.h>
 
 class SvStream;
 
-#define DBG_MAX_STACK   20      // Verschachtelungstiefe
-#define DBG_MAX_LOOP  1000      // das Abbruchkriterium
+#define DBG_MAX_STACK	20		// Verschachtelungstiefe
+#define DBG_MAX_LOOP  1000		// das Abbruchkriterium
 
 class DbgLoopStack
 {
-    sal_uInt16 aCount[DBG_MAX_STACK];
-    sal_uInt16 nPtr;
+    USHORT aCount[DBG_MAX_STACK];
+    USHORT nPtr;
     const void *pDbg;
     void Reset();
 public:
@@ -64,8 +65,8 @@ inline void PrintLoopStack( SvStream &rOS ) //$ ostream
     DbgLoop::aDbgLoopStack.Print( rOS );
 }
 
-#define DBG_LOOP    DbgLoop aDbgLoop( (const void*)this );
-#define DBG_LOOP_RESET  DbgLoop aDbgLoop( 0 );
+#define DBG_LOOP	DbgLoop aDbgLoop( (const void*)this );
+#define DBG_LOOP_RESET	DbgLoop aDbgLoop( 0 );
 
 #else
 
@@ -75,3 +76,5 @@ inline void PrintLoopStack( SvStream &rOS ) //$ ostream
 #endif
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

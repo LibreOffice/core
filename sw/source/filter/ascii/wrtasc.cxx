@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,13 +34,13 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
-#include <mdiexp.hxx>           // ...Percent()
+#include <mdiexp.hxx>			// ...Percent()
 #include <docary.hxx>
 #include <fmtcntnt.hxx>
 #include <frmfmt.hxx>
 #include <wrtasc.hxx>
 
-#include <statstr.hrc>          // ResId fuer Statusleiste
+#include <statstr.hrc>			// ResId fuer Statusleiste
 
 //-----------------------------------------------------------------
 
@@ -58,17 +58,17 @@ SwASCWriter::SwASCWriter( const String& rFltNm )
                 if( 5 < rFltNm.Len() )
                     switch( rFltNm.Copy( 5 ).ToInt32() )
                     {
-                    case 437: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_437 );  break;
-                    case 850: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );  break;
-                    case 860: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_860 );  break;
-                    case 861: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_861 );  break;
-                    case 863: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_863 );  break;
-                    case 865: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_865 );  break;
+                    case 437: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_437 );	break;
+                    case 850: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );	break;
+                    case 860: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_860 );	break;
+                    case 861: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_861 );	break;
+                    case 863: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_863 );	break;
+                    case 865: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_865 );	break;
                     }
                 break;
 
     case 'A':
-#if !defined(WNT)
+#if !defined(WIN) && !defined(WNT)
                 aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
                 aNewOpts.SetParaFlags( LINEEND_CRLF );
 #endif
@@ -98,11 +98,11 @@ SwASCWriter::SwASCWriter( const String& rFltNm )
 
 SwASCWriter::~SwASCWriter() {}
 
-sal_uLong SwASCWriter::WriteStream()
+ULONG SwASCWriter::WriteStream()
 {
     sal_Char cLineEnd[ 3 ];
     sal_Char* pCEnd = cLineEnd;
-    if( bASCII_ParaAsCR )           // falls vorgegeben ist.
+    if( bASCII_ParaAsCR )			// falls vorgegeben ist.
         *pCEnd++ = '\015';
     else if( bASCII_ParaAsBlanc )
         *pCEnd++ = ' ';
@@ -110,8 +110,8 @@ sal_uLong SwASCWriter::WriteStream()
         switch( GetAsciiOptions().GetParaFlags() )
         {
         case LINEEND_CR:    *pCEnd++ = '\015'; break;
-        case LINEEND_LF:    *pCEnd++ = '\012'; break;
-        case LINEEND_CRLF:  *pCEnd++ = '\015', *pCEnd++ = '\012'; break;
+        case LINEEND_LF:	*pCEnd++ = '\012'; break;
+        case LINEEND_CRLF:	*pCEnd++ = '\015', *pCEnd++ = '\012'; break;
         }
     *pCEnd = 0;
 
@@ -124,7 +124,7 @@ sal_uLong SwASCWriter::WriteStream()
 
     SwPaM* pPam = pOrigPam;
 
-    sal_Bool bWriteSttTag = bUCS2_WithStartChar &&
+    BOOL bWriteSttTag = bUCS2_WithStartChar &&
         (RTL_TEXTENCODING_UCS2 == GetAsciiOptions().GetCharSet() ||
         RTL_TEXTENCODING_UTF8 == GetAsciiOptions().GetCharSet());
 
@@ -133,7 +133,7 @@ sal_uLong SwASCWriter::WriteStream()
 
     // gebe alle Bereich des Pams in das ASC-File aus.
     do {
-        sal_Bool bTstFly = sal_True;
+        BOOL bTstFly = TRUE;
         while( pCurPam->GetPoint()->nNode.GetIndex() < pCurPam->GetMark()->nNode.GetIndex() ||
               (pCurPam->GetPoint()->nNode.GetIndex() == pCurPam->GetMark()->nNode.GetIndex() &&
                pCurPam->GetPoint()->nContent.GetIndex() <= pCurPam->GetMark()->nContent.GetIndex()) )
@@ -166,7 +166,7 @@ sal_uLong SwASCWriter::WriteStream()
                         pCurPam = NewSwPaM( *pDoc, pIdx->GetIndex(),
                                     pIdx->GetNode().EndOfSectionIndex() );
                         pCurPam->Exchange();
-                        continue;       // while-Schleife neu aufsetzen !!
+                        continue;		// while-Schleife neu aufsetzen !!
                     }
                 }
                 else
@@ -176,24 +176,25 @@ sal_uLong SwASCWriter::WriteStream()
                         switch(GetAsciiOptions().GetCharSet())
                         {
                             case RTL_TEXTENCODING_UTF8:
-                                Strm() << sal_uInt8(0xEF) << sal_uInt8(0xBB) <<
-                                    sal_uInt8(0xBF);
+                                Strm() << BYTE(0xEF) << BYTE(0xBB) <<
+                                    BYTE(0xBF);
                                 break;
                             case RTL_TEXTENCODING_UCS2:
-                                Strm().SetEndianSwap(sal_False);
+                                //Strm().StartWritingUnicodeText();
+                                Strm().SetEndianSwap(FALSE);
 #ifdef OSL_LITENDIAN
-                                Strm() << sal_uInt8(0xFF) << sal_uInt8(0xFE);
+                                Strm() << BYTE(0xFF) << BYTE(0xFE);
 #else
-                                Strm() << sal_uInt8(0xFE) << sal_uInt8(0xFF);
+                                Strm() << BYTE(0xFE) << BYTE(0xFF);
 #endif
                                 break;
 
                         }
-                        bWriteSttTag = sal_False;
+                        bWriteSttTag = FALSE;
                     }
                     Out( aASCNodeFnTab, *pNd, *this );
                 }
-                bTstFly = sal_False;        // eimal Testen reicht
+                bTstFly = FALSE;		// eimal Testen reicht
             }
 
             if( !pCurPam->Move( fnMoveForward, fnGoNode ) )
@@ -204,7 +205,7 @@ sal_uLong SwASCWriter::WriteStream()
                                     pDoc->GetDocShell() );   // Wie weit ?
 
         }
-    } while( CopyNextPam( &pPam ) );        // bis alle Pam bearbeitet
+    } while( CopyNextPam( &pPam ) );		// bis alle Pam bearbeitet
 
     Strm().SetStreamCharSet( eOld );
 

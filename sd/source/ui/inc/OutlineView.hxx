@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,12 +62,12 @@ static const int MAX_OUTLINERVIEWS = 4;
 |*
 \************************************************************************/
 
-class OutlineView
+class OutlineView 
     : public ::sd::View
 {
     friend class OutlineViewModelChangeGuard;
 public:
-    OutlineView (DrawDocShell* pDocSh,
+    OutlineView (DrawDocShell* pDocSh, 
         ::Window* pWindow,
         OutlineViewShell* pOutlineViewSh);
     ~OutlineView (void);
@@ -82,30 +82,30 @@ public:
 
     TYPEINFO();
 
-    SdrTextObj*     GetTitleTextObject(SdrPage* pPage);
-    SdrTextObj*     GetOutlineTextObject(SdrPage* pPage);
+    SdrTextObj* 	GetTitleTextObject(SdrPage* pPage);
+    SdrTextObj* 	GetOutlineTextObject(SdrPage* pPage);
 
-    SdrTextObj*     CreateTitleTextObject(SdPage* pPage);
-    SdrTextObj*     CreateOutlineTextObject(SdPage* pPage);
+    SdrTextObj* 	CreateTitleTextObject(SdPage* pPage);
+    SdrTextObj* 	CreateOutlineTextObject(SdPage* pPage);
 
     virtual void AddWindowToPaintView(OutputDevice* pWin);
     virtual void DeleteWindowFromPaintView(OutputDevice* pWin);
 
-    OutlinerView*   GetViewByWindow (::Window* pWin) const;
+    OutlinerView* 	GetViewByWindow (::Window* pWin) const;
     SdrOutliner*    GetOutliner() { return(mpOutliner) ; }
 
-    Paragraph*      GetPrevTitle(const Paragraph* pPara);
-    Paragraph*      GetNextTitle(const Paragraph* pPara);
-    SdPage*         GetActualPage();
-    SdPage*         GetPageForParagraph( Paragraph* pPara );
-    Paragraph*      GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage );
+    Paragraph*		GetPrevTitle(const Paragraph* pPara);
+    Paragraph*		GetNextTitle(const Paragraph* pPara);
+    SdPage* 		GetActualPage();
+    SdPage*			GetPageForParagraph( Paragraph* pPara );
+    Paragraph*		GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage );
 
     /** selects the paragraph for the given page at the outliner view*/
-    void            SetActualPage( SdPage* pActual );
+    void			SetActualPage( SdPage* pActual );
 
     virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
     virtual void AdjustPosSizePixel(
-        const Point &rPos,
+        const Point &rPos, 
         const Size &rSize,
         ::sd::Window* pWindow);
 
@@ -122,14 +122,15 @@ public:
     DECL_LINK( EndDropHdl, void * );
     DECL_LINK( PaintingFirstLineHdl, PaintFirstLineInfo* );
 
-    sal_uLong         GetPaperWidth() const { return 2*21000; }  // DIN A4 Breite
+    ULONG		  GetPaperWidth() const { return 2*21000; }  // DIN A4 Breite
 
-    sal_Bool          PrepareClose(sal_Bool bUI = sal_True);
+    BOOL		  PrepareClose(BOOL bUI = TRUE);
 
-    virtual sal_Bool    GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False ) const;
-    virtual sal_Bool    SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False);
+    virtual BOOL 	GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE ) const;
+    virtual BOOL   	SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
 
-    void               FillOutliner();
+//	virtual BOOL	   HasMarkedObjUnused() const;
+    void			   FillOutliner();
     void               SetLinks();
     void               ResetLinks() const;
 
@@ -138,20 +139,20 @@ public:
     void               SetSelectedPages();
 
     virtual sal_Int8 AcceptDrop (
-        const AcceptDropEvent& rEvt,
-        DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        const AcceptDropEvent& rEvt, 
+        DropTargetHelper& rTargetHelper, 
+        ::sd::Window* pTargetWindow = NULL, 
+        USHORT nPage = SDRPAGE_NOTFOUND, 
+        USHORT nLayer = SDRPAGE_NOTFOUND);
     virtual sal_Int8 ExecuteDrop (
-        const ExecuteDropEvent& rEvt,
-        DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        const ExecuteDropEvent& rEvt, 
+        DropTargetHelper& rTargetHelper, 
+        ::sd::Window* pTargetWindow = NULL, 
+        USHORT nPage = SDRPAGE_NOTFOUND, 
+        USHORT nLayer = SDRPAGE_NOTFOUND);
 
 
-    // Re-implement GetScriptType for this view to get correct results
+    // #97766# Re-implement GetScriptType for this view to get correct results
     virtual sal_uInt16 GetScriptType() const;
 
     /** After this method has been called with <TRUE/> following changes of
@@ -166,14 +167,14 @@ public:
     /** creates and inserts an empty slide for the given paragraph. */
     SdPage* InsertSlideForParagraph( Paragraph* pPara );
 
-    void UpdateParagraph( sal_uInt16 nPara );
+    void UpdateParagraph( USHORT nPara );
 
 protected:
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
     virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos );
 
 private:
-    /** call this method before you do anything that can modify the outliner
+    /** call this method before you do anything that can modify the outliner 
         and or the drawing document model. It will create needed undo actions */
     void BeginModelChange();
 
@@ -187,19 +188,24 @@ private:
     /** updates all changes in the outliner model to the draw model */
     void UpdateDocument();
 
-    OutlineViewShell*   mpOutlineViewShell;
-    SdrOutliner*        mpOutliner;
-    OutlinerView*       mpOutlinerView[MAX_OUTLINERVIEWS];
+    OutlineViewShell*	mpOutlineViewShell;
+    SdrOutliner*		mpOutliner;
+    OutlinerView*		mpOutlinerView[MAX_OUTLINERVIEWS];
 
-    std::vector<Paragraph*> maOldParaOrder;
-    std::vector<Paragraph*> maSelectedParas;
+    List*				mpOldParaOrder;
+    List*				mpSelectedParas;
 
-    sal_uInt16              mnPagesToProcess;    // fuer die Fortschrittsanzeige
-    sal_uInt16              mnPagesProcessed;
+    USHORT				mnPagesToProcess;	 // fuer die Fortschrittsanzeige
+    USHORT				mnPagesProcessed;
 
-    sal_Bool                mbFirstPaint;
+    BOOL				mbFirstPaint;
 
-    SfxProgress*        mpProgress;
+    SfxProgress*		mpProgress;
+
+    /** stores the last used high contrast mode.
+        this is changed in onUpdateStyleSettings()
+    */
+    bool mbHighContrastMode;
 
     /** stores the last used document color.
         this is changed in onUpdateStyleSettings()
@@ -207,7 +213,7 @@ private:
     Color maDocColor;
 
     /** updates the high contrast settings and document color if they changed.
-        @param bForceUpdate forces the method to set all style settings
+        @param bForceUpdate	forces the method to set all style settings
     */
     void onUpdateStyleSettings( bool bForceUpdate = false );
 

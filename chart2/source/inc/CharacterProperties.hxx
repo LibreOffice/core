@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,9 +64,6 @@ public:
         PROP_CHAR_UNDERLINE,
         PROP_CHAR_UNDERLINE_COLOR,
         PROP_CHAR_UNDERLINE_HAS_COLOR,
-        PROP_CHAR_OVERLINE,
-        PROP_CHAR_OVERLINE_COLOR,
-        PROP_CHAR_OVERLINE_HAS_COLOR,
         PROP_CHAR_WEIGHT,
         PROP_CHAR_POSTURE,
         PROP_CHAR_AUTO_KERNING,

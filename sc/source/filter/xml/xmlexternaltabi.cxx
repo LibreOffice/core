@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ using ::com::sun::star::xml::sax::XAttributeList;
 // ============================================================================
 
 ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
     SvXMLImportContext( rImport, nPrefix, rLName ),
     mrScImport(rImport),
@@ -93,17 +93,17 @@ ScXMLExternalRefTabSourceContext::~ScXMLExternalRefTabSourceContext()
 }
 
 SvXMLImportContext* ScXMLExternalRefTabSourceContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
+    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
 {
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }
 
-/**
- * Make sure the URL is a valid relative URL, mainly to avoid storing
- * absolute URL as relative URL by accident.  For now, we only check the first
- * three characters which are assumed to be always '../', because the relative
- * URL for an external document is always in reference to the content.xml
- * fragment of the original document.
+/** 
+ * Make sure the URL is a valid relative URL, mainly to avoid storing 
+ * absolute URL as relative URL by accident.  For now, we only check the first 
+ * three characters which are assumed to be always '../', because the relative 
+ * URL for an external document is always in reference to the content.xml 
+ * fragment of the original document. 
  */
 static bool lcl_isValidRelativeURL(const OUString& rUrl)
 {
@@ -139,7 +139,7 @@ void ScXMLExternalRefTabSourceContext::EndElement()
 // ============================================================================
 
 ScXMLExternalRefRowsContext::ScXMLExternalRefRowsContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& /* xAttrList */, ScXMLExternalTabData& rRefInfo ) :
     SvXMLImportContext( rImport, nPrefix, rLName ),
     mrScImport(rImport),
@@ -152,7 +152,7 @@ ScXMLExternalRefRowsContext::~ScXMLExternalRefRowsContext()
 }
 
 SvXMLImportContext* ScXMLExternalRefRowsContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
+    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
 {
     // #i101319# row elements inside group, rows or header-rows
     // are treated like row elements directly in the table element
@@ -182,7 +182,7 @@ void ScXMLExternalRefRowsContext::EndElement()
 // ============================================================================
 
 ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
     SvXMLImportContext( rImport, nPrefix, rLName ),
     mrScImport(rImport),
@@ -216,7 +216,7 @@ ScXMLExternalRefRowContext::~ScXMLExternalRefRowContext()
 }
 
 SvXMLImportContext* ScXMLExternalRefRowContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
+    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
 {
     const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
@@ -232,7 +232,7 @@ void ScXMLExternalRefRowContext::EndElement()
 
     for (sal_Int32 i = 1; i < mnRepeatRowCount; ++i)
     {
-        // Performance: duplicates of a non-existent row will still not exist.
+        // Performance: duplicates of a non-existent row will still not exist. 
         // Don't find that out for every cell.
         // External references often are a sparse matrix.
         if (i == 1 && !pTab->hasRow( mrExternalRefInfo.mnRow))
@@ -259,7 +259,7 @@ void ScXMLExternalRefRowContext::EndElement()
 // ============================================================================
 
 ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
     SvXMLImportContext( rImport, nPrefix, rLName ),
     mrScImport(rImport),
@@ -366,7 +366,7 @@ ScXMLExternalRefCellContext::~ScXMLExternalRefCellContext()
 }
 
 SvXMLImportContext* ScXMLExternalRefCellContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
+    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
 {
     const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowCellElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
@@ -408,7 +408,7 @@ void ScXMLExternalRefCellContext::SetCellString(const OUString& rStr)
 // ============================================================================
 
 ScXMLExternalRefCellTextContext::ScXMLExternalRefCellTextContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& /*xAttrList*/,
     ScXMLExternalRefCellContext& rParent ) :
     SvXMLImportContext( rImport, nPrefix, rLName ),
@@ -422,7 +422,7 @@ ScXMLExternalRefCellTextContext::~ScXMLExternalRefCellTextContext()
 }
 
 SvXMLImportContext* ScXMLExternalRefCellTextContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
+    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
 {
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }

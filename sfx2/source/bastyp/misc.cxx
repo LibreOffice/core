@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ String SearchAndReplace( const String &rSource,
                          const String &rReplacement )
 {
     String aTarget( rSource );
-    sal_uInt16 nPos = rSource.Search( rToReplace );
+    USHORT nPos = rSource.Search( rToReplace );
     if ( nPos != STRING_NOTFOUND )
     {
         aTarget.Erase( nPos, rToReplace.Len() );

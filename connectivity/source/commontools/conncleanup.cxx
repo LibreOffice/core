@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace dbtools
     //=====================================================================
     static const ::rtl::OUString& getActiveConnectionPropertyName()
     {
-        static const ::rtl::OUString s_sActiveConnectionPropertyName( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ));
+        static const ::rtl::OUString s_sActiveConnectionPropertyName = ::rtl::OUString::createFromAscii("ActiveConnection");
         return s_sActiveConnectionPropertyName;
     }
 
@@ -73,7 +73,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAutoConnectionDisposer::OAutoConnectionDisposer: caught an exception!" );
+            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::OAutoConnectionDisposer: caught an exception!" );
         }
     }
 
@@ -87,7 +87,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAutoConnectionDisposer::startPropertyListening: caught an exception!" );
+            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::startPropertyListening: caught an exception!" );
         }
     }
 
@@ -98,7 +98,7 @@ namespace dbtools
         Reference< XInterface > xKeepAlive(static_cast< XWeak* >(this));
 
         try
-        {   // remove ourself as property change listener
+        {	// remove ourself as property change listener
             OSL_ENSURE( _rxEventSource.is(), "OAutoConnectionDisposer::stopPropertyListening: invalid event source (no XPropertySet)!" );
             if ( _rxEventSource.is() )
             {
@@ -108,7 +108,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAutoConnectionDisposer::stopPropertyListening: caught an exception!" );
+            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::stopPropertyListening: caught an exception!" );
         }
     }
 
@@ -123,7 +123,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAutoConnectionDisposer::startRowSetListening: caught an exception!" );
+            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::startRowSetListening: caught an exception!" );
         }
         m_bRSListening = sal_True;
     }
@@ -138,7 +138,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAutoConnectionDisposer::stopRowSetListening: caught an exception!" );
+            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::stopRowSetListening: caught an exception!" );
         }
         m_bRSListening = sal_False;
     }
@@ -147,7 +147,7 @@ namespace dbtools
     void SAL_CALL OAutoConnectionDisposer::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
     {
         if ( _rEvent.PropertyName.equals( getActiveConnectionPropertyName() ) )
-        {   // somebody set a new ActiveConnection
+        {	// somebody set a new ActiveConnection
 
             Reference< XConnection > xNewConnection;
             _rEvent.NewValue >>= xNewConnection;
@@ -182,6 +182,8 @@ namespace dbtools
                 // check this here.
                 //
                 // Yes, this is a HACK :(
+                //
+                // 94407 - 08.11.2001 - fs@openoffice.org
                 if ( xNewConnection.get() != m_xOriginalConnection.get() )
                 {
 #if OSL_DEBUG_LEVEL > 0
@@ -220,7 +222,7 @@ namespace dbtools
         }
         catch(Exception&)
         {
-            OSL_FAIL("OAutoConnectionDisposer::clearConnection: caught an exception!");
+            OSL_ENSURE(sal_False, "OAutoConnectionDisposer::clearConnection: caught an exception!");
         }
     }
     //---------------------------------------------------------------------
@@ -241,7 +243,7 @@ namespace dbtools
     //---------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace dbtools
+}	// namespace dbtools
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

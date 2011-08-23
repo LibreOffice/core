@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,16 +37,16 @@ namespace dbaui
 {
     class OAppBorderWindow;
     //==================================================================
-    class OApplicationSwapWindow :  public Window,
+    class OApplicationSwapWindow :  public Window, 
                                     public IClipboardTest
     {
-        OApplicationIconControl             m_aIconControl;
-        ElementType                         m_eLastType;
-        OAppBorderWindow&                   m_rBorderWin;
+        OApplicationIconControl				m_aIconControl;
+        ElementType							m_eLastType;
+        OAppBorderWindow&					m_rBorderWin;
 
-        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
 
-        DECL_LINK( OnContainerSelectHdl,    SvtIconChoiceCtrl* );
+        DECL_LINK( OnContainerSelectHdl,	SvtIconChoiceCtrl* );
         DECL_LINK( ChangeToLastSelected, void* );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
@@ -57,17 +57,17 @@ namespace dbaui
         virtual void Resize();
 
 
-        inline sal_Bool isCutAllowed()      { return sal_False; }
-        inline sal_Bool isCopyAllowed()     { return sal_False; }
-        inline sal_Bool isPasteAllowed()    { return sal_False; }
+        inline sal_Bool isCutAllowed()		{ return sal_False; }
+        inline sal_Bool isCopyAllowed()		{ return sal_False; }
+        inline sal_Bool isPasteAllowed()	{ return sal_False; }
         virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
-        inline void copy()  { }
-        inline void cut()   { }
-        inline void paste() { }
+        inline void copy()	{ }
+        inline void cut()	{ }
+        inline void paste()	{ }
 
-        inline sal_uLong                    GetEntryCount() const { return m_aIconControl.GetEntryCount(); }
-        inline SvxIconChoiceCtrlEntry*  GetEntry( sal_uLong nPos ) const { return m_aIconControl.GetEntry(nPos); }
-        inline Rectangle                GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const { return m_aIconControl.GetBoundingBox(pEntry); }
+        inline ULONG					GetEntryCount() const { return m_aIconControl.GetEntryCount(); }
+        inline SvxIconChoiceCtrlEntry*	GetEntry( ULONG nPos ) const { return m_aIconControl.GetEntry(nPos); }
+        inline Rectangle				GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const { return m_aIconControl.GetBoundingBox(pEntry); }
 
         /** automatically creates mnemonics for the icon/texts in our left hand side panel
         */
@@ -90,7 +90,7 @@ namespace dbaui
         void clearSelection();
 
         /** changes the container which should be displayed. The select handler will also be called.
-            @param  _eType
+            @param	_eType
                 Which container to show.
         */
         void selectContainer(ElementType _eType);

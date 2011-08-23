@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
-#include <svx/unoapi.hxx>
+#include <unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -80,20 +80,20 @@ namespace
     class impTextBreakupHandler
     {
     private:
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >  maTextPortionPrimitives;
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >  maLinePrimitives;
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >  maParagraphPrimitives;
+        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >	maTextPortionPrimitives;
+        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >	maLinePrimitives;
+        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >	maParagraphPrimitives;
 
-        SdrOutliner&                                                mrOutliner;
-        basegfx::B2DHomMatrix                                       maNewTransformA;
-        basegfx::B2DHomMatrix                                       maNewTransformB;
+        SdrOutliner&												mrOutliner;
+        basegfx::B2DHomMatrix										maNewTransformA;
+        basegfx::B2DHomMatrix										maNewTransformB;
 
         // the visible area for contour text decomposition
         basegfx::B2DVector                                          maScale;
 
         // #SJ# ClipRange for BlockText decomposition; only text portions completely
         // inside are to be accepted, so this is different from geometric clipping
-        // (which would allow e.g. upper parts of portions to remain). Only used for
+        // (which would allow e.g. upper parts of portions to remain). Only used for 
         // BlockText (see there)
         basegfx::B2DRange                                           maClipRange;
 
@@ -115,7 +115,7 @@ namespace
 
     public:
         impTextBreakupHandler(SdrOutliner& rOutliner)
-        :   maTextPortionPrimitives(),
+        :	maTextPortionPrimitives(),
             maLinePrimitives(),
             maParagraphPrimitives(),
             mrOutliner(rOutliner),
@@ -335,11 +335,11 @@ namespace
 
                 // TextDecoratedPortionPrimitive2D is needed, create one
                 pNewPrimitive = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
-
+                    
                     // attributes for TextSimplePortionPrimitive2D
                     aNewTransform,
-                    rInfo.mrText,
-                    rInfo.mnTextStart,
+                    rInfo.mrText, 
+                    rInfo.mnTextStart, 
                     rInfo.mnTextLen,
                     aDXArray,
                     aFontAttribute,
@@ -365,8 +365,8 @@ namespace
                 // TextSimplePortionPrimitive2D is enough
                 pNewPrimitive = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                     aNewTransform,
-                    rInfo.mrText,
-                    rInfo.mnTextStart,
+                    rInfo.mrText, 
+                    rInfo.mnTextStart, 
                     rInfo.mnTextLen,
                     aDXArray,
                     aFontAttribute,
@@ -435,8 +435,8 @@ namespace
                             // need to take FontScaling out of values; it's already part of
                             // aNewTransform and would be double applied
                             const double fFontScaleX(aFontScaling.getX());
-
-                            if(!basegfx::fTools::equal(fFontScaleX, 1.0)
+                            
+                            if(!basegfx::fTools::equal(fFontScaleX, 1.0) 
                                 && !basegfx::fTools::equalZero(fFontScaleX))
                             {
                                 fStart /= fFontScaleX;
@@ -907,7 +907,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
         // #i106214# To work with an unchangeable PaperSize (CellSize in
         // this case) Set(Min|Max)AutoPaperSize and SetPaperSize have to be used.
-        // #i106214# This was not completely correct; to still measure the real
+        // #i106214# This was not completely correct; to still measure the real 
         // text height to allow vertical adjust (and vice versa for VerticalWritintg)
         // only one aspect has to be set, but the other one to zero
         if(bVerticalWritintg)
@@ -945,9 +945,9 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         {
             // #i103454# maximal paper size hor/ver needs to be limited to text
             // frame size. If it's block text, still allow the 'other' direction
-            // to grow to get a correct real text size when using GetPaperSize().
+            // to grow to get a correct real text size when using GetPaperSize(). 
             // When just using aAnchorTextSize as maximum, GetPaperSize()
-            // would just return aAnchorTextSize again: this means, the wanted
+            // would just return aAnchorTextSize again: this means, the wanted 
             // 'measurement' of the real size of block text would not work
             Size aMaxAutoPaperSize(aAnchorTextSize);
 
@@ -961,7 +961,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
                 // allow to grow horizontal for vertical blocks
                 aMaxAutoPaperSize.setWidth(1000000);
             }
-
+            
             rOutliner.SetMaxAutoPaperSize(aMaxAutoPaperSize);
         }
 
@@ -1028,7 +1028,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         {
             aAdjustTranslate.setY(fFree / 2.0);
         }
-
+        
         if(SDRTEXTVERTADJUST_BOTTOM == eVAdj)
         {
             aAdjustTranslate.setY(fFree);
@@ -1076,7 +1076,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 }
 
 void SdrTextObj::impDecomposeStretchTextPrimitive(
-    drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+    drawinglayer::primitive2d::Primitive2DSequence& rTarget, 
     const drawinglayer::primitive2d::SdrStretchTextPrimitive2D& rSdrStretchTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
 {
@@ -1108,7 +1108,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     // now get back the layouted text size from outliner
     const Size aOutlinerTextSiz(rOutliner.CalcTextSize());
     const basegfx::B2DVector aOutlinerScale(
-        basegfx::fTools::equalZero(aOutlinerTextSiz.Width()) ? 1.0 : aOutlinerTextSiz.Width(),
+        basegfx::fTools::equalZero(aOutlinerTextSiz.Width()) ? 1.0 : aOutlinerTextSiz.Width(), 
         basegfx::fTools::equalZero(aOutlinerTextSiz.Height()) ? 1.0 : aOutlinerTextSiz.Height());
 
     // prepare matrices to apply to newly created primitives
@@ -1155,9 +1155,9 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
 
 //////////////////////////////////////////////////////////////////////////////
 // timing generators
-#define ENDLESS_LOOP    (0xffffffff)
-#define ENDLESS_TIME    ((double)0xffffffff)
-#define PIXEL_DPI       (96.0)
+#define ENDLESS_LOOP	(0xffffffff)
+#define ENDLESS_TIME	((double)0xffffffff)
+#define PIXEL_DPI		(96.0)
 
 void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const
 {

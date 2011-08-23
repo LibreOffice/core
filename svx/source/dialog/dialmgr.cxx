@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,10 @@ static ResMgr* pResMgr=0;
 ResMgr* DialogsResMgr::GetResMgr()
 {
     if ( !pResMgr )
-        pResMgr = ResMgr::CreateResMgr( "svx", Application::GetSettings().GetUILocale() );
+    {
+        ByteString aName( "svx" );
+        pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILocale() );
+    }
 
     return pResMgr;
 }

@@ -93,7 +93,7 @@ namespace sw { namespace sidebarwindows {
 #define POSTIT_SHADOW_BRIGHT    Color(180,180,180)
 #define POSTIT_SHADOW_DARK      Color(83,83,83)
 
-#define EMPTYSTRING             rtl::OUString()
+#define EMPTYSTRING             rtl::OUString::createFromAscii("")
 
 /************** SwSidebarWin************************************/
 SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
@@ -332,7 +332,7 @@ void SwSidebarWin::InitControls()
     SwDocShell* aShell = mrView.GetDocShell();
     mpOutliner = new Outliner(&aShell->GetPool(),OUTLINERMODE_TEXTOBJECT);
     aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner );
-    mpOutliner->SetUpdateMode( sal_True );
+    mpOutliner->SetUpdateMode( TRUE );
     Rescale();
 
     mpOutlinerView = new OutlinerView ( mpOutliner, mpSidebarTxtControl );
@@ -355,7 +355,7 @@ void SwSidebarWin::InitControls()
     mpVScrollbar->AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    sal_uLong nCntrl = mpOutliner->GetControlWord();
+    ULONG nCntrl = mpOutliner->GetControlWord();
     // TODO: crash when AUTOCOMPLETE enabled
     nCntrl |= EE_CNTRL_MARKFIELDS | EE_CNTRL_PASTESPECIAL | EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL | EE_CNTRL_URLSFXEXECUTE; // | EE_CNTRL_AUTOCOMPLETE;
     if (pVOpt->IsFieldShadings())
@@ -400,7 +400,7 @@ void SwSidebarWin::CheckMetaText()
     else if (sMeta.Len() > 22)
     {
         sMeta.Erase(20);
-        sMeta = sMeta + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..."));
+        sMeta = sMeta + rtl::OUString::createFromAscii("...");
     }
     if ( mpMetadataAuthor->GetText() != sMeta )
     {
@@ -426,7 +426,7 @@ void SwSidebarWin::CheckMetaText()
     }
     if (GetTime()!=0)
     {
-        sMeta = sMeta + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "))  + rLocalData.getTime( GetTime(),false );
+        sMeta = sMeta + rtl::OUString::createFromAscii(" ")  + rLocalData.getTime( GetTime(),false );
     }
     if ( mpMetadataDate->GetText() != sMeta )
     {
@@ -493,7 +493,8 @@ void SwSidebarWin::SetPosAndSize()
             }
             break;
             default:
-                OSL_FAIL( "<SwSidebarWin::SetPosAndSize()> - unexpected position of sidebar" );
+                OSL_ENSURE( false,
+                        "<SwSidebarWin::SetPosAndSize()> - unexpected position of sidebar" );
             break;
         }
 
@@ -573,8 +574,8 @@ void SwSidebarWin::SetPosAndSize()
             SwSidebarWin* pWin = GetTopReplyNote();
             // --> OD 2010-06-03 #i111964#
             if ( pWin && pWin->Anchor() )
-            // <--
-            {
+            // <--                    
+            {        
                 pWin->Anchor()->SetAnchorState(AS_END);
             }
         }
@@ -757,7 +758,7 @@ void SwSidebarWin::SetColor(Color aColorDark,Color aColorLight, Color aColorAnch
         AllSettings aSettings2 = mpVScrollbar->GetSettings();
         StyleSettings aStyleSettings2 = aSettings2.GetStyleSettings();
         aStyleSettings2.SetButtonTextColor(Color(0,0,0));
-        aStyleSettings2.SetCheckedColor(mColorLight); // backgound
+        aStyleSettings2.SetCheckedColor(mColorLight); //hintergund
         aStyleSettings2.SetShadowColor(mColorAnchor);
         aStyleSettings2.SetFaceColor(mColorDark);
         aSettings2.SetStyleSettings(aStyleSettings2);
@@ -770,7 +771,7 @@ void SwSidebarWin::SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSideb
     meSidebarPosition = eSidebarPosition;
 }
 
-void SwSidebarWin::SetReadonly(sal_Bool bSet)
+void SwSidebarWin::SetReadonly(BOOL bSet)
 {
     mbReadonly = bSet;
     GetOutlinerView()->SetReadOnly(bSet);
@@ -782,7 +783,7 @@ void SwSidebarWin::SetLanguage(const SvxLanguageItem aNewItem)
     Engine()->SetModifyHdl( Link() );
     ESelection aOld = GetOutlinerView()->GetSelection();
 
-    ESelection aNewSelection( 0, 0, (sal_uInt16)Engine()->GetParagraphCount()-1, USHRT_MAX );
+    ESelection aNewSelection( 0, 0, (USHORT)Engine()->GetParagraphCount()-1, USHRT_MAX );
     GetOutlinerView()->SetSelection( aNewSelection );
     SfxItemSet aEditAttr(GetOutlinerView()->GetAttribs());
     aEditAttr.Put(aNewItem);
@@ -792,7 +793,7 @@ void SwSidebarWin::SetLanguage(const SvxLanguageItem aNewItem)
     Engine()->SetModifyHdl( pLink );
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    sal_uLong nCntrl = Engine()->GetControlWord();
+    ULONG nCntrl = Engine()->GetControlWord();
     // turn off
     if (!pVOpt->IsOnlineSpell())
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
@@ -912,7 +913,7 @@ void SwSidebarWin::ToggleInsMode()
     }
 }
 
-void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
+void SwSidebarWin::ExecuteCommand(USHORT nSlot)
 {
     mrMgr.AssureStdModeAtShell();
 
@@ -935,6 +936,7 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
             break;
         }
         case FN_DELETE_COMMENT:
+        case FN_DELETE_NOTE:
 
                 //Delete(); // do not kill the parent of our open popup menu
                 mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0 );
@@ -970,7 +972,7 @@ long SwSidebarWin::GetPostItTextHeight()
     return mpOutliner ? LogicToPixel(mpOutliner->CalcTextSize()).Height() : 0;
 }
 
-void SwSidebarWin::SwitchToPostIt(sal_uInt16 aDirection)
+void SwSidebarWin::SwitchToPostIt(USHORT aDirection)
 {
     SwSidebarWin* pPostIt = mrMgr.GetNextPostIt(aDirection, this);
     if (pPostIt)
@@ -996,7 +998,11 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
             }
             else if ( pMouseEvt->IsLeaveWindow())
             {
-                if (!IsPreview())
+                if (IsPreview())
+                {
+                    //doLazyDelete();
+                }
+                else
                 {
                     mbMouseOver = false;
                     if ( !HasFocus() )
@@ -1010,8 +1016,8 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
         else if ( pWinEvent->GetId() == VCLEVENT_WINDOW_ACTIVATE &&
                   pWinEvent->GetWindow() == mpSidebarTxtControl )
         {
-            const sal_Bool bLockView = mrView.GetWrtShell().IsViewLocked();
-            mrView.GetWrtShell().LockView( sal_True );
+            const BOOL bLockView = mrView.GetWrtShell().IsViewLocked();
+            mrView.GetWrtShell().LockView( TRUE );
 
             if ( !IsPreview() )
             {
@@ -1051,14 +1057,18 @@ IMPL_LINK(SwSidebarWin, ScrollHdl, ScrollBar*, pScroll)
     return 0;
 }
 
-IMPL_LINK(SwSidebarWin, ModifyHdl, void*, EMPTYARG)
+IMPL_LINK(SwSidebarWin, ModifyHdl, void*, pVoid)
 {
+    // no warnings, please
+    pVoid=0;
     mrView.GetDocShell()->SetModified(sal_True);
     return 0;
 }
 
-IMPL_LINK(SwSidebarWin, DeleteHdl, void*, EMPTYARG)
+IMPL_LINK(SwSidebarWin, DeleteHdl, void*, pVoid)
 {
+    // no warnings, please
+    pVoid=0;
     mnEventId = 0;
     Delete();
     return 0;
@@ -1067,8 +1077,8 @@ IMPL_LINK(SwSidebarWin, DeleteHdl, void*, EMPTYARG)
 
 void SwSidebarWin::ResetAttributes()
 {
-    mpOutlinerView->RemoveAttribsKeepLanguages(sal_True);
-    mpOutliner->RemoveFields(sal_True);
+    mpOutlinerView->RemoveAttribsKeepLanguages(TRUE);
+    mpOutliner->RemoveFields(TRUE);
     mpOutlinerView->SetAttribs(DefaultItem());
 }
 
@@ -1106,7 +1116,7 @@ sal_Int32 SwSidebarWin::GetMinimumSizeWithoutMeta()
 void SwSidebarWin::SetSpellChecking()
 {
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    sal_uLong nCntrl = mpOutliner->GetControlWord();
+    ULONG nCntrl = mpOutliner->GetControlWord();
     if (pVOpt->IsOnlineSpell())
         nCntrl |= EE_CNTRL_ONLINESPELLING;
     else
@@ -1129,8 +1139,8 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                 SwSidebarWin* pWin = GetTopReplyNote();
                 // --> OD 2010-06-03 #i111964#
                 if ( pWin && pWin->Anchor() )
-                // <--
-                {
+                // <--                        
+                {        
                     pWin->Anchor()->SetAnchorState(AS_END);
                 }
                 mpAnchor->setLineSolid(true);
@@ -1166,7 +1176,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                     // <--
                     {
                         if ( pTopWinSelf != mrMgr.GetActiveSidebarWin() )
-                        {
+                        {        
                             pTopWinSelf->Anchor()->setLineSolid(false);
                         }
                         pTopWinSelf->Anchor()->SetAnchorState(AS_ALL);
@@ -1175,7 +1185,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                 mpAnchor->setLineSolid(false);
             }
             if ( mpShadow )
-            {
+            {        
                 mpShadow->SetShadowState(SS_NORMAL);
             }
             break;
@@ -1202,7 +1212,7 @@ void SwSidebarWin::SwitchToFieldPos()
     GotoPos();
     sal_uInt32 aCount = MoveCaret();
     if (aCount)
-        mrView.GetDocShell()->GetWrtShell()->SwCrsrShell::Right(aCount, 0, sal_False);
+        mrView.GetDocShell()->GetWrtShell()->SwCrsrShell::Right(aCount, 0, FALSE);
     GrabFocusToDocument();
 }
 
@@ -1274,5 +1284,113 @@ css::uno::Reference< css::accessibility::XAccessible > SwSidebarWin::CreateAcces
 }
 
 } } // eof of namespace sw::sidebarwindows
+
+/********** SwRedComment**************/
+/*
+SwRedComment::SwRedComment( Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits,SwRedline* pRed)
+    : SwSidebarWin(pParent,nBits,aMgr,aBits),
+    pRedline(pRed)
+{
+}
+
+void SwRedComment::SetPopup()
+{
+    mpButtonPopup = new PopupMenu(SW_RES(MN_REDCOMMENT_BUTTON));
+    //mpButtonPopup->SetMenuFlags(MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES);
+}
+
+void SwRedComment::UpdateData()
+{
+    if ( Engine()->IsModified() )
+    {
+        // so we get a new layout of notes (Anchor position is still the same and we would otherwise not get one)
+        Mgr()->SetLayout();
+        // SetRedline is calling SetModified already
+        DocView()->GetWrtShell().SetRedlineComment(Engine()->GetEditEngine().GetText());
+    }
+    Engine()->ClearModifyFlag();
+    Engine()->GetUndoManager().Clear();
+}
+
+void SwRedComment::SetPostItText()
+{
+    Engine()->SetModifyHdl( Link() );
+    Engine()->EnableUndo( FALSE );
+
+    Engine()->Clear();
+    View()->SetAttribs(DefaultItem());
+    View()->InsertText(pRedline->GetComment(),false);
+
+    Engine()->ClearModifyFlag();
+    Engine()->GetUndoManager().Clear();
+    Engine()->EnableUndo( TRUE );
+    Engine()->SetModifyHdl( LINK( this, SwSidebarWin, ModifyHdl ) );
+    Invalidate();
+}
+
+void SwRedComment::DeactivatePostIt()
+{
+    SwSidebarWin::DeactivatePostIt();
+    // current Redline is still selected
+    DocView()->GetWrtShellPtr()->ClearMark();
+}
+
+void SwRedComment::ActivatePostIt()
+{
+    SwSidebarWin::ActivatePostIt();
+
+    // do we want the redline selected?
+    // otherwise, SwRedComment::ActivatePostIt() as well as SwRedComment::DeactivatePostIt()
+    // can be thrown out completly
+    DocView()->GetDocShell()->GetWrtShell()->GotoRedline(
+        DocView()->GetDocShell()->GetWrtShell()->FindRedlineOfData(pRedline->GetRedlineData()),true);
+}
+
+void SwRedComment::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if (mRectMetaButton.IsInside(PixelToLogic(rMEvt.GetPosPixel())) && rMEvt.IsLeft())
+    {
+        ExecuteCommand( mpButtonPopup->Execute( this,Rectangle(LogicToPixel(mRectMetaButton.BottomLeft()),LogicToPixel(mRectMetaButton.BottomLeft())),POPUPMENU_EXECUTE_DOWN | POPUPMENU_NOMOUSEUPCLOSE) );
+    }
+}
+
+void SwRedComment::Delete()
+{
+    SwSidebarWin::Delete();
+    // we are not neccessarily on our redline, so let's move there
+    GotoPos();
+    DocView()->GetWrtShell().SetRedlineComment(EMPTYSTRING);
+    DocView()->GetWrtShell().ClearMark();
+    // so we get a new layout of notes (Anchor position is still the same and we would otherwise not get one)
+    Mgr()->SetLayout();
+    Mgr()->RemoveItem(pRedline);
+}
+
+void SwRedComment::GotoPos()
+{
+    DocView()->GetDocShell()->GetWrtShell()->GotoRedline(
+        DocView()->GetDocShell()->GetWrtShell()->FindRedlineOfData(pRedline->GetRedlineData()));
+}
+
+String SwRedComment::GetAuthor()
+{
+    return pRedline->GetAuthorString();
+}
+
+Date SwRedComment::GetDate()
+{
+    return pRedline->GetTimeStamp().GetDate();
+}
+
+Time SwRedComment::GetTime()
+{
+    return pRedline->GetTimeStamp().GetTime();
+}
+
+bool SwRedComment::IsProtected()
+{
+    return SwSidebarWin::IsProtected() || pRedline->Start()->nNode.GetNode().GetTxtNode()->IsInProtectSect();
+}
+*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

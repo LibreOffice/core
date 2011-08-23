@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ typedef struct _oslSecurityImpl {
     HANDLE m_hToken;
     sal_Unicode   m_User[USER_BUFFER_SIZE];
 /* ts: Erweiterung um Fileserver-login */
-    NETRESOURCEW *m_pNetResource;
+    NETRESOURCEW *m_pNetResource;	
 } oslSecurityImpl;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

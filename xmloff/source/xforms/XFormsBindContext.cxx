@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@
 #include "xformsapi.hxx"
 
 #include <xmloff/xmlimp.hxx>
-#include "xmloff/xmlerror.hxx"
+#include "xmlerror.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -76,9 +76,9 @@ static struct SvXMLTokenMapEntry aAttributeMap[] =
 void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
                                  Reference<XNameContainer>& );
 
-XFormsBindContext::XFormsBindContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
+XFormsBindContext::XFormsBindContext( 
+    SvXMLImport& rImport, 
+    USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XPropertySet>& xModel ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),
@@ -95,7 +95,7 @@ XFormsBindContext::~XFormsBindContext()
 {
 }
 
-void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
+void XFormsBindContext::HandleAttribute( sal_uInt16 nToken, 
                                          const OUString& rValue )
 {
     switch( nToken )
@@ -128,16 +128,16 @@ void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
                                        rValue ) ) );
         break;
     default:
-        OSL_FAIL( "should not happen" );
+        DBG_ERROR( "should not happen" );
         break;
     }
 }
 
-void XFormsBindContext::StartElement(
+void XFormsBindContext::StartElement( 
     const Reference<XAttributeList>& xAttributeList )
 {
     // we need to register the namespaces
-    Reference<XNameContainer> xContainer(
+    Reference<XNameContainer> xContainer( 
         mxBinding->getPropertyValue( OUSTRING("BindingNamespaces") ),
         UNO_QUERY );
 
@@ -150,18 +150,18 @@ void XFormsBindContext::StartElement(
 }
 
 /** will be called for each child element */
-SvXMLImportContext* XFormsBindContext::HandleChild(
+SvXMLImportContext* XFormsBindContext::HandleChild( 
     sal_uInt16,
     sal_uInt16,
     const OUString&,
     const Reference<XAttributeList>& )
 {
-    OSL_FAIL( "no children supported" );
+    DBG_ERROR( "no children supported" );
     return NULL;
 }
 
 
-void lcl_fillNamespaceContainer(
+void lcl_fillNamespaceContainer( 
     const SvXMLNamespaceMap& aMap,
     Reference<XNameContainer>& xContainer )
 {

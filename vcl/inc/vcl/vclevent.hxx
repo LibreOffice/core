@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,14 +109,14 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_LISTBOX_SCROLLED           1127
 #define VCLEVENT_COMBOBOX_SCROLLED          1128
 #define VCLEVENT_EDIT_SELECTIONCHANGED      1129
-#define VCLEVENT_DROPDOWN_OPEN              1130
-#define VCLEVENT_DROPDOWN_CLOSE             1131
+#define VCLEVENT_DROPDOWN_OPEN				1130
+#define VCLEVENT_DROPDOWN_CLOSE			    1131
 
 #define VCLEVENT_TOOLBOX_ITEMADDED          1132        // pData = itempos
 #define VCLEVENT_TOOLBOX_ITEMREMOVED        1133        // pData = itempos
 #define VCLEVENT_TOOLBOX_ALLITEMSCHANGED    1134
 #define VCLEVENT_TOOLBOX_HIGHLIGHTOFF       1135        // pData = itempos
-#define VCLEVENT_WINDOW_MENUBARADDED        1136        // pData = pMenuBar
+#define VCLEVENT_WINDOW_MENUBARADDED		1136        // pData = pMenuBar
 #define VCLEVENT_TABPAGE_ACTIVATE           1137        // pData = pageid
 #define VCLEVENT_TABPAGE_DEACTIVATE         1138        // pData = pageid
 #define VCLEVENT_TABBAR_PAGEENABLED         1139        // pData = pageid
@@ -146,8 +146,8 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_STATUSBAR_HIDEITEM         1163        // pData = itemid
 #define VCLEVENT_STATUSBAR_SHOWALLITEMS     1164
 #define VCLEVENT_STATUSBAR_HIDEALLITEMS     1165
-#define VCLEVENT_STATUSBAR_DRAWITEM         1166        // pData = itemid
-#define VCLEVENT_STATUSBAR_NAMECHANGED      1167        // pData = itemid
+#define VCLEVENT_STATUSBAR_DRAWITEM			1166		// pData = itemid
+#define VCLEVENT_STATUSBAR_NAMECHANGED		1167		// pData = itemid
 #define VCLEVENT_TOOLBOX_ITEMENABLED        1168        // pData = itempos
 #define VCLEVENT_TOOLBOX_ITEMDISABLED       1169        // pData = itempos
 #define VCLEVENT_TABPAGE_PAGETEXTCHANGED    1170        // pData = pageid
@@ -173,10 +173,10 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_MENU_SUBMENUCHANGED        1209
 #define VCLEVENT_MENU_DEHIGHLIGHT           1210
 #define VCLEVENT_MENU_DISABLE               1211
-#define VCLEVENT_MENU_ITEMTEXTCHANGED       1212
-#define VCLEVENT_MENU_ITEMCHECKED           1213
-#define VCLEVENT_MENU_ITEMUNCHECKED         1214
-#define VCLEVENT_MENU_ACCESSIBLENAMECHANGED 1215
+#define VCLEVENT_MENU_ITEMTEXTCHANGED		1212
+#define VCLEVENT_MENU_ITEMCHECKED			1213
+#define VCLEVENT_MENU_ITEMUNCHECKED			1214
+#define VCLEVENT_MENU_ACCESSIBLENAMECHANGED	1215
 
 #define VCLEVENT_MENU_SHOW                  1250
 #define VCLEVENT_MENU_HIDE                  1251
@@ -187,24 +187,24 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_WINDOW_STARTDOCKING            1217    // pData = DockingData
 #define VCLEVENT_WINDOW_DOCKING                 1218
 #define VCLEVENT_WINDOW_ENDDOCKING              1219    // pData = EndDockingData
-#define VCLEVENT_WINDOW_PREPARETOGGLEFLOATING   1220    // pData = sal_Bool
+#define VCLEVENT_WINDOW_PREPARETOGGLEFLOATING   1220    // pData = BOOL
 #define VCLEVENT_WINDOW_TOGGLEFLOATING          1221
 #define VCLEVENT_WINDOW_ENDPOPUPMODE            1222    // pData = EndPopupModeData
 
 #define VCLEVENT_TOOLBOX_BUTTONSTATECHANGED     1223    // pData = itempos
 #define VCLEVENT_TABLECELL_NAMECHANGED          1224    // pData = struct(Entry, Column, oldText)
-#define VCLEVENT_TABLEROW_SELECT                1225
+#define VCLEVENT_TABLEROW_SELECT				1225
 
 class VCL_DLLPUBLIC VclSimpleEvent
 {
 private:
-    sal_uLong nId;
+    ULONG nId;
 
 public:
-    VclSimpleEvent( sal_uLong n ) { nId = n; }
+    VclSimpleEvent( ULONG n ) { nId = n; }
     TYPEINFO();
 
-    sal_uLong GetId() const { return nId; }
+    ULONG GetId() const { return nId; }
 };
 
 class VCL_DLLPUBLIC VclWindowEvent : public VclSimpleEvent
@@ -214,7 +214,7 @@ private:
     void*   pData;
 
 public:
-    VclWindowEvent( Window* pWin, sal_uLong n, void* pDat = NULL ) : VclSimpleEvent(n) { pWindow = pWin; pData = pDat; }
+    VclWindowEvent( Window* pWin, ULONG n, void* pDat = NULL ) : VclSimpleEvent(n) { pWindow = pWin; pData = pDat; }
     TYPEINFO();
 
     Window* GetWindow() const { return pWindow; }
@@ -228,7 +228,7 @@ private:
     MouseEvent aEvent;
 
 public:
-    VclMouseEvent( Window* pWin, sal_uLong n, const MouseEvent& rEvent ) : VclWindowEvent( pWin, n ), aEvent(rEvent) { ; }
+    VclMouseEvent( Window* pWin, ULONG n, const MouseEvent& rEvent ) : VclWindowEvent( pWin, n ), aEvent(rEvent) { ; }
     TYPEINFO();
 
     const MouseEvent& GetEvent() const { return aEvent; }
@@ -239,20 +239,20 @@ class VCL_DLLPUBLIC VclMenuEvent : public VclSimpleEvent
 {
 private:
     Menu* pMenu;
-    sal_uInt16 mnPos;
+    USHORT mnPos;
 
 public:
-    VclMenuEvent( Menu* pM, sal_uLong n, sal_uInt16 nPos ) : VclSimpleEvent(n) { pMenu = pM; mnPos = nPos; }
+    VclMenuEvent( Menu* pM, ULONG n, USHORT nPos ) : VclSimpleEvent(n) { pMenu = pM; mnPos = nPos; }
     TYPEINFO();
 
     Menu* GetMenu() const { return pMenu; }
-    sal_uInt16 GetItemPos() const { return mnPos; }
+    USHORT GetItemPos() const { return mnPos; }
 };
 
 class VCL_DLLPUBLIC VclAccessibleEvent: public VclSimpleEvent
 {
 public:
-    VclAccessibleEvent( sal_uLong n, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
+    VclAccessibleEvent( ULONG n, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
     virtual ~VclAccessibleEvent();
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible() const;
 
@@ -260,19 +260,15 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
 };
 
-class VCL_DLLPUBLIC VclEventListeners
+class VCL_DLLPUBLIC VclEventListeners : public std::list<Link>
 {
 public:
     void Call( VclSimpleEvent* pEvent ) const;
 
     // stops notifying when any handler has processed the event
-    // and returns sal_True in that case
-    // a handler must return sal_True to signal that it has processed the event
-    sal_Bool Process( VclSimpleEvent* pEvent ) const;
-    void addListener( const Link& rListener );
-    void removeListener( const Link& rListener );
-private:
-    std::list<Link> m_aListeners;
+    // and returns TRUE in that case
+    // a handler must return TRUE to signal that it has processed the event
+    BOOL Process( VclSimpleEvent* pEvent ) const;
 };
 
 class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
@@ -283,7 +279,7 @@ class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
     {
         std::list< Link >::iterator     m_aIt;
         bool                            m_bWasInvalidated;
-
+        
         ListenerIt(const std::list<Link>::iterator& rIt)
             : m_aIt(rIt)
             , m_bWasInvalidated( false )
@@ -291,15 +287,15 @@ class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
     };
 
     std::vector< ListenerIt >      m_aIterators;
-
-
+    
+    
 public:
     VclEventListeners2();
     ~VclEventListeners2();
-
+    
     void addListener( const Link& );
     void removeListener( const Link& );
-
+    
     void callListeners( VclSimpleEvent* );
 };
 

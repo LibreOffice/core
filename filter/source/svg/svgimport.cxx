@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
-#include "svgfilter.hxx"
+#include "svgfilter.hxx" 
 #include "svgreader.hxx"
 
 #include "rtl/ref.hxx"
@@ -63,11 +63,11 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     const beans::PropertyValue* pAttribs = rDescriptor.getConstArray();
     for ( sal_Int32 i=0 ; i<nLength; ++i, ++pAttribs )
     {
-        if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
+        if( pAttribs->Name.equalsAscii( "InputStream" ) )
         {
             pAttribs->Value >>= xInputStream;
         }
-        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
+        else if( pAttribs->Name.equalsAscii( "StatusIndicator" ) )
             pAttribs->Value >>= xStatus;
     }
 
@@ -85,6 +85,6 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     SVGReader aReader(mxMSF, xInputStream, xInternalHandler);
     return aReader.parseAndConvert();
 }
-
+    
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

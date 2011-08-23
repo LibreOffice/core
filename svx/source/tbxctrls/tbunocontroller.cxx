@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,22 +63,22 @@ public:
     void                statusChanged_Impl( long nHeight, bool bErase = false );
     void                UpdateFont( const ::com::sun::star::awt::FontDescriptor& rCurrentFont );
 
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual long		Notify( NotifyEvent& rNEvt );
 
 protected:
     virtual void        Select();
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
 private:
-    FontHeightToolBoxControl*                  m_pCtrl;
-    String                                     m_aCurText;
+    FontHeightToolBoxControl*	               m_pCtrl;
+    String							           m_aCurText;
     Size                                       m_aLogicalSize;
-    sal_Bool                                       m_bRelease;
+    BOOL							           m_bRelease;
     uno::Reference< frame::XDispatchProvider > m_xDispatchProvider;
     uno::Reference< frame::XFrame >            m_xFrame;
     uno::Reference< awt::XWindow >             m_xOldFocusWindow;
 
-    void                ReleaseFocus_Impl();
+    void				ReleaseFocus_Impl();
 };
 
 //========================================================================
@@ -93,9 +93,9 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
 
     FontSizeBox( _pParent, WinBits( WB_DROPDOWN ) ),
 
-    m_pCtrl             ( &_rCtrl ),
+    m_pCtrl		        ( &_rCtrl ),
     m_aLogicalSize      ( 30,100 ),
-    m_bRelease          ( sal_True ),
+    m_bRelease	        ( TRUE ),
     m_xDispatchProvider ( _rDispatchProvider ),
     m_xFrame            ( _xFrame )
 {
@@ -110,7 +110,7 @@ void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
 {
     if ( !m_bRelease )
     {
-        m_bRelease = sal_True;
+        m_bRelease = TRUE;
         return;
     }
 
@@ -128,7 +128,7 @@ void SvxFontSizeBox_Impl::Select()
     {
         sal_Int64 nSelVal = GetValue();
         float fSelVal     = float( nSelVal ) / 10;
-
+        
         uno::Sequence< beans::PropertyValue > aArgs( 1 );
         aArgs[0].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontHeight.Height" ));
         aArgs[0].Value = uno::makeAny( fSelVal );
@@ -198,7 +198,7 @@ long SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+        USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
         switch ( nCode )
         {
@@ -206,7 +206,7 @@ long SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
             case KEY_TAB:
             {
                 if ( KEY_TAB == nCode )
-                    m_bRelease = sal_False;
+                    m_bRelease = FALSE;
                 else
                     nHandled = 1;
                 Select();
@@ -226,7 +226,7 @@ long SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
         if(!HasFocus() && GetSubEdit() != pFocusWin)
             SetText(GetSavedValue());
     }
-
+    
     return nHandled ? nHandled : FontSizeBox::Notify( rNEvt );
 }
 
@@ -249,10 +249,10 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 // class FontHeightToolBoxControl
 //========================================================================
 
-FontHeightToolBoxControl::FontHeightToolBoxControl(
+FontHeightToolBoxControl::FontHeightToolBoxControl( 
     const uno::Reference< lang::XMultiServiceFactory >& rServiceManager ) :
-    svt::ToolboxController( rServiceManager,
-                            uno::Reference< frame::XFrame >(),
+    svt::ToolboxController( rServiceManager, 
+                            uno::Reference< frame::XFrame >(), 
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontHeight" )) ),
     m_pBox( NULL )
 {
@@ -264,13 +264,13 @@ FontHeightToolBoxControl::~FontHeightToolBoxControl()
 }
 
 // XInterface
-::com::sun::star::uno::Any SAL_CALL FontHeightToolBoxControl::queryInterface( const ::com::sun::star::uno::Type& aType )
+::com::sun::star::uno::Any SAL_CALL FontHeightToolBoxControl::queryInterface( const ::com::sun::star::uno::Type& aType ) 
 throw (::com::sun::star::uno::RuntimeException)
 {
     uno::Any a = ToolboxController::queryInterface( aType );
     if ( a.hasValue() )
         return a;
-
+    
     return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ));
 }
 
@@ -285,7 +285,7 @@ void SAL_CALL FontHeightToolBoxControl::release() throw ()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL FontHeightToolBoxControl::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL FontHeightToolBoxControl::supportsService( const ::rtl::OUString& ServiceName ) 
 throw(uno::RuntimeException)
 {
     const uno::Sequence< ::rtl::OUString > aSNL( getSupportedServiceNames() );
@@ -298,7 +298,7 @@ throw(uno::RuntimeException)
     return false;
 }
 
-::rtl::OUString SAL_CALL FontHeightToolBoxControl::getImplementationName()
+::rtl::OUString SAL_CALL FontHeightToolBoxControl::getImplementationName() 
 throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -310,7 +310,7 @@ throw( uno::RuntimeException )
     return getSupportedServiceNames_Static();
 }
 
-uno::Sequence< ::rtl::OUString > FontHeightToolBoxControl::getSupportedServiceNames_Static()
+uno::Sequence< ::rtl::OUString > FontHeightToolBoxControl::getSupportedServiceNames_Static() 
 throw()
 {
     uno::Sequence< ::rtl::OUString > aSNS( 1 );
@@ -319,7 +319,7 @@ throw()
 }
 
 // XComponent
-void SAL_CALL FontHeightToolBoxControl::dispose()
+void SAL_CALL FontHeightToolBoxControl::dispose() 
 throw (uno::RuntimeException)
 {
     svt::ToolboxController::dispose();
@@ -330,14 +330,14 @@ throw (uno::RuntimeException)
 }
 
 // XStatusListener
-void SAL_CALL FontHeightToolBoxControl::statusChanged(
-    const frame::FeatureStateEvent& rEvent )
+void SAL_CALL FontHeightToolBoxControl::statusChanged( 
+    const frame::FeatureStateEvent& rEvent ) 
 throw ( uno::RuntimeException )
 {
     if ( m_pBox )
     {
         SolarMutexGuard aSolarMutexGuard;
-        if ( rEvent.FeatureURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FontHeight" ) ))
+        if ( rEvent.FeatureURL.Path.equalsAscii( "FontHeight" ))
         {
             if ( rEvent.IsEnabled )
             {
@@ -351,7 +351,7 @@ throw ( uno::RuntimeException )
             else
                 m_pBox->Disable();
         }
-        else if ( rEvent.FeatureURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharFontName" ) ))
+        else if ( rEvent.FeatureURL.Path.equalsAscii( "CharFontName" ))
         {
             if ( rEvent.State >>= m_aCurrentFont )
                 m_pBox->UpdateFont( m_aCurrentFont );
@@ -360,39 +360,39 @@ throw ( uno::RuntimeException )
 }
 
 // XToolbarController
-void SAL_CALL FontHeightToolBoxControl::execute( sal_Int16 /*KeyModifier*/ )
+void SAL_CALL FontHeightToolBoxControl::execute( sal_Int16 /*KeyModifier*/ ) 
 throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL FontHeightToolBoxControl::click()
+void SAL_CALL FontHeightToolBoxControl::click() 
 throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL FontHeightToolBoxControl::doubleClick()
+void SAL_CALL FontHeightToolBoxControl::doubleClick() 
 throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createPopupWindow()
+uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createPopupWindow() 
 throw (::com::sun::star::uno::RuntimeException)
 {
     return uno::Reference< awt::XWindow >();
 }
 
-uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWindow(
-    const uno::Reference< awt::XWindow >& Parent )
+uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWindow( 
+    const uno::Reference< awt::XWindow >& Parent ) 
     throw (::com::sun::star::uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xItemWindow;
     uno::Reference< awt::XWindow > xParent( Parent );
-
+    
     Window* pParent = VCLUnoHelper::GetWindow( xParent );
     if ( pParent )
     {
         SolarMutexGuard aSolarMutexGuard;
-        m_pBox = new SvxFontSizeBox_Impl(
+        m_pBox = new SvxFontSizeBox_Impl( 
                         pParent,
                         uno::Reference< frame::XDispatchProvider >( m_xFrame, uno::UNO_QUERY ),
                         m_xFrame,
@@ -403,7 +403,7 @@ uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWind
     return xItemWindow;
 }
 
-void FontHeightToolBoxControl::dispatchCommand(
+void FontHeightToolBoxControl::dispatchCommand( 
     const uno::Sequence< beans::PropertyValue >& rArgs )
 {
     uno::Reference< frame::XDispatchProvider > xDispatchProvider( m_xFrame, uno::UNO_QUERY );
@@ -412,7 +412,7 @@ void FontHeightToolBoxControl::dispatchCommand(
         util::URL                               aURL;
         uno::Reference< frame::XDispatch >      xDispatch;
         uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
-
+        
         aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontHeight" ));
         xURLTransformer->parseStrict( aURL );
         xDispatch = xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
@@ -421,7 +421,7 @@ void FontHeightToolBoxControl::dispatchCommand(
     }
 }
 
-uno::Reference< uno::XInterface > SAL_CALL FontHeightToolBoxControl_createInstance(
+uno::Reference< uno::XInterface > SAL_CALL FontHeightToolBoxControl_createInstance( 
     const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
 {
     return *new FontHeightToolBoxControl( rSMgr );

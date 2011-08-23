@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@
 #define INFOBOX(id) InfoBox(this, ScGlobal::GetRscString(id)).Execute()
 
 //============================================================================
-//  class ScAreaData
+//	class ScAreaData
 
 class ScAreaData
 {
@@ -65,75 +65,75 @@ public:
     ScAreaData()  {}
     ~ScAreaData() {}
 
-    void Set( const String& rName, const String& rArea, sal_Bool bDb )
+    void Set( const String& rName, const String& rArea, BOOL bDb )
                 {
                     aStrName  = rName;
                     aStrArea  = rArea;
                     bIsDbArea = bDb;
                 }
 
-    String  aStrName;
-    String  aStrArea;
-    sal_Bool    bIsDbArea;
+    String	aStrName;
+    String	aStrArea;
+    BOOL	bIsDbArea;
 };
 
 
 //============================================================================
-//  class ScConsolidateDialog
+//	class ScConsolidateDialog
 
 
 ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                                    const SfxItemSet&   rArgSet )
+                                    const SfxItemSet&	rArgSet )
 
-    :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_CONSOLIDATE ),
+    :	ScAnyRefDlg	( pB, pCW, pParent, RID_SCDLG_CONSOLIDATE ),
         //
-        aFtFunc         ( this, ScResId( FT_FUNC ) ),
-        aLbFunc         ( this, ScResId( LB_FUNC ) ),
+        aFtFunc			( this, ScResId( FT_FUNC ) ),
+        aLbFunc			( this, ScResId( LB_FUNC ) ),
 
-        aFtConsAreas    ( this, ScResId( FT_CONSAREAS ) ),
-        aLbConsAreas    ( this, ScResId( LB_CONSAREAS ) ),
+        aFtConsAreas	( this, ScResId( FT_CONSAREAS ) ),
+        aLbConsAreas	( this, ScResId( LB_CONSAREAS ) ),
 
-        aLbDataArea     ( this, ScResId( LB_DATA_AREA ) ),
-        aFtDataArea     ( this, ScResId( FT_DATA_AREA ) ),
+        aLbDataArea		( this, ScResId( LB_DATA_AREA ) ),
+        aFtDataArea		( this, ScResId( FT_DATA_AREA ) ),
         aEdDataArea     ( this, this, ScResId( ED_DATA_AREA ) ),
-        aRbDataArea     ( this, ScResId( RB_DATA_AREA ), &aEdDataArea, this ),
+        aRbDataArea		( this, ScResId( RB_DATA_AREA ), &aEdDataArea, this ),
 
-        aLbDestArea     ( this, ScResId( LB_DEST_AREA ) ),
-        aFtDestArea     ( this, ScResId( FT_DEST_AREA ) ),
+        aLbDestArea		( this, ScResId( LB_DEST_AREA ) ),
+        aFtDestArea		( this, ScResId( FT_DEST_AREA ) ),
         aEdDestArea     ( this, this, ScResId( ED_DEST_AREA ) ),
-        aRbDestArea     ( this, ScResId( RB_DEST_AREA ), &aEdDestArea, this),
+        aRbDestArea		( this, ScResId( RB_DEST_AREA ), &aEdDestArea, this),
 
         aFlConsBy       ( this, ScResId( FL_CONSBY ) ),
-        aBtnByRow       ( this, ScResId( BTN_BYROW ) ),
-        aBtnByCol       ( this, ScResId( BTN_BYCOL) ),
+        aBtnByRow		( this, ScResId( BTN_BYROW ) ),
+        aBtnByCol		( this, ScResId( BTN_BYCOL) ),
 
         aFlSep          ( this, ScResId( FL_SEP ) ),
         aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
-        aBtnRefs        ( this, ScResId( BTN_REFS ) ),
+        aBtnRefs		( this, ScResId( BTN_REFS ) ),
 
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        aBtnAdd         ( this, ScResId( BTN_ADD ) ),
-        aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
-        aBtnMore        ( this, ScResId( BTN_MORE ) ),
+        aBtnOk			( this, ScResId( BTN_OK ) ),
+        aBtnCancel		( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp		( this, ScResId( BTN_HELP ) ),
+        aBtnAdd			( this, ScResId( BTN_ADD ) ),
+        aBtnRemove		( this, ScResId( BTN_REMOVE ) ),
+        aBtnMore		( this, ScResId( BTN_MORE ) ),
 
-        aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
+        aStrUndefined	( ScResId( SCSTR_UNDEFINED ) ),
         //
-        theConsData     ( ((const ScConsolidateItem&)
+        theConsData		( ((const ScConsolidateItem&)
                            rArgSet.Get( rArgSet.GetPool()->
                                             GetWhich( SID_CONSOLIDATE ) )
                                       ).GetData() ),
-        pViewData       ( ((ScTabViewShell*)SfxViewShell::Current())->
+        pViewData		( ((ScTabViewShell*)SfxViewShell::Current())->
                                 GetViewData() ),
-        pDoc            ( ((ScTabViewShell*)SfxViewShell::Current())->
+        pDoc			( ((ScTabViewShell*)SfxViewShell::Current())->
                                 GetViewData()->GetDocument() ),
-        pRangeUtil      ( new ScRangeUtil ),
-        pAreaData       ( NULL ),
-        nAreaDataCount  ( 0 ),
-        nWhichCons      ( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) ),
+        pRangeUtil		( new ScRangeUtil ),
+        pAreaData		( NULL ),
+        nAreaDataCount	( 0 ),
+        nWhichCons		( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) ),
 
-        pRefInputEdit   ( &aEdDataArea )
+        pRefInputEdit	( &aEdDataArea )
 {
     Init();
     FreeResource();
@@ -142,7 +142,7 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
 
 //----------------------------------------------------------------------------
 
-ScConsolidateDlg::~ScConsolidateDlg()
+__EXPORT ScConsolidateDlg::~ScConsolidateDlg()
 {
     delete [] pAreaData;
     delete pRangeUtil;
@@ -156,21 +156,21 @@ void ScConsolidateDlg::Init()
     DBG_ASSERT( pViewData && pDoc && pRangeUtil, "Error in Ctor" );
 
     String aStr;
-    sal_uInt16 i=0;
+    USHORT i=0;
 
-    aEdDataArea .SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
-    aEdDestArea .SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
+    aEdDataArea	.SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
+    aEdDestArea	.SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
     aLbDataArea .SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
     aLbDestArea .SetGetFocusHdl( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
-    aEdDataArea .SetModifyHdl   ( LINK( this, ScConsolidateDlg, ModifyHdl ) );
-    aEdDestArea .SetModifyHdl   ( LINK( this, ScConsolidateDlg, ModifyHdl ) );
-    aLbConsAreas.SetSelectHdl   ( LINK( this, ScConsolidateDlg, SelectHdl ) );
-    aLbDataArea .SetSelectHdl   ( LINK( this, ScConsolidateDlg, SelectHdl ) );
-    aLbDestArea .SetSelectHdl   ( LINK( this, ScConsolidateDlg, SelectHdl ) );
-    aBtnOk      .SetClickHdl    ( LINK( this, ScConsolidateDlg, OkHdl ) );
-    aBtnCancel  .SetClickHdl    ( LINK( this, ScConsolidateDlg, ClickHdl ) );
-    aBtnAdd     .SetClickHdl    ( LINK( this, ScConsolidateDlg, ClickHdl ) );
-    aBtnRemove  .SetClickHdl    ( LINK( this, ScConsolidateDlg, ClickHdl ) );
+    aEdDataArea	.SetModifyHdl	( LINK( this, ScConsolidateDlg, ModifyHdl ) );
+    aEdDestArea	.SetModifyHdl	( LINK( this, ScConsolidateDlg, ModifyHdl ) );
+    aLbConsAreas.SetSelectHdl	( LINK( this, ScConsolidateDlg, SelectHdl ) );
+    aLbDataArea .SetSelectHdl	( LINK( this, ScConsolidateDlg, SelectHdl ) );
+    aLbDestArea .SetSelectHdl	( LINK( this, ScConsolidateDlg, SelectHdl ) );
+    aBtnOk		.SetClickHdl	( LINK( this, ScConsolidateDlg, OkHdl ) );
+    aBtnCancel	.SetClickHdl	( LINK( this, ScConsolidateDlg, ClickHdl ) );
+    aBtnAdd		.SetClickHdl	( LINK( this, ScConsolidateDlg, ClickHdl ) );
+    aBtnRemove	.SetClickHdl	( LINK( this, ScConsolidateDlg, ClickHdl ) );
 
     aBtnMore.AddWindow( &aFlConsBy );
     aBtnMore.AddWindow( &aBtnByRow );
@@ -222,11 +222,11 @@ void ScConsolidateDlg::Init()
 
     ScRangeName*    pRangeNames  = pDoc->GetRangeName();
     ScDBCollection* pDbNames     = pDoc->GetDBCollection();
-    const sal_uInt16    nRangeCount  = pRangeNames ? pRangeNames->size() : 0;
-    const sal_uInt16    nDbCount     = pDbNames    ? pDbNames   ->GetCount() : 0;
+    const USHORT    nRangeCount  = pRangeNames ? pRangeNames->GetCount() : 0;
+    const USHORT    nDbCount	 = pDbNames	   ? pDbNames   ->GetCount() : 0;
 
     nAreaDataCount = nRangeCount+nDbCount;
-    pAreaData      = NULL;
+    pAreaData	   = NULL;
 
     if ( nAreaDataCount > 0 )
     {
@@ -234,7 +234,7 @@ void ScConsolidateDlg::Init()
 
         String aStrName;
         String aStrArea;
-        sal_uInt16 nAt = 0;
+        USHORT nAt = 0;
         ScRange aRange;
         ScAreaNameIterator aIter( pDoc );
         while ( aIter.Next( aStrName, aRange ) )
@@ -269,13 +269,13 @@ void ScConsolidateDlg::FillAreaLists()
     {
         String aString;
 
-        for ( sal_uInt16 i=0;
+        for ( USHORT i=0;
               (i<nAreaDataCount) && (pAreaData[i].aStrName.Len()>0);
               i++ )
         {
             aLbDataArea.InsertEntry( pAreaData[i].aStrName, i+1 );
 
-//          if ( !pAreaData[i].bIsDbArea )
+//			if ( !pAreaData[i].bIsDbArea )
                 aLbDestArea.InsertEntry( pAreaData[i].aStrName, i+1 );
         }
     }
@@ -294,8 +294,8 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( pRefInputEdit );
 
-        String      aStr;
-        sal_uInt16      nFmt = SCR_ABS_3D;       //!!! nCurTab fehlt noch
+        String		aStr;
+        USHORT	 	nFmt = SCR_ABS_3D;		 //!!! nCurTab fehlt noch
         const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
 
         if ( rRef.aStart.Tab() != rRef.aEnd.Tab() )
@@ -315,7 +315,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScConsolidateDlg::Close()
+BOOL __EXPORT ScConsolidateDlg::Close()
 {
     return DoClose( ScConsolidateDlgWrapper::GetChildWindowId() );
 }
@@ -327,7 +327,7 @@ void ScConsolidateDlg::SetActive()
 {
     if ( bDlgLostFocus )
     {
-        bDlgLostFocus = false;
+        bDlgLostFocus = FALSE;
 
         if ( pRefInputEdit )
         {
@@ -344,23 +344,23 @@ void ScConsolidateDlg::SetActive()
 
 //----------------------------------------------------------------------------
 
-void ScConsolidateDlg::Deactivate()
+void __EXPORT ScConsolidateDlg::Deactivate()
 {
-    bDlgLostFocus = sal_True;
+    bDlgLostFocus = TRUE;
 }
 
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
+BOOL ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
     if ( !pRangeUtil || !pDoc || !pViewData ||
          ((pEd != &aEdDataArea) && (pEd != &aEdDestArea)) )
-        return false;
+        return FALSE;
 
-    SCTAB   nTab    = pViewData->GetTabNo();
-    sal_Bool    bEditOk = false;
-    String  theCompleteStr;
+    SCTAB	nTab	= pViewData->GetTabNo();
+    BOOL	bEditOk = FALSE;
+    String	theCompleteStr;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
     if ( pEd == &aEdDataArea )
@@ -411,21 +411,21 @@ IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
 
 IMPL_LINK( ScConsolidateDlg, OkHdl, void*, EMPTYARG )
 {
-    sal_uInt16 nDataAreaCount = aLbConsAreas.GetEntryCount();
+    USHORT nDataAreaCount = aLbConsAreas.GetEntryCount();
 
     if ( nDataAreaCount > 0 )
     {
         ScRefAddress aDestAddress;
-        SCTAB       nTab = pViewData->GetTabNo();
-        String      aDestPosStr( aEdDestArea.GetText() );
+        SCTAB		nTab = pViewData->GetTabNo();
+        String		aDestPosStr( aEdDestArea.GetText() );
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         if ( pRangeUtil->IsAbsPos( aDestPosStr, pDoc, nTab, NULL, &aDestAddress, eConv ) )
         {
-            ScConsolidateParam  theOutParam( theConsData );
-            ScArea**            ppDataAreas = new ScArea*[nDataAreaCount];
-            ScArea*             pArea;
-            sal_uInt16              i=0;
+            ScConsolidateParam	theOutParam( theConsData );
+            ScArea**			ppDataAreas = new ScArea*[nDataAreaCount];
+            ScArea*				pArea;
+            USHORT				i=0;
 
             for ( i=0; i<nDataAreaCount; i++ )
             {
@@ -435,13 +435,13 @@ IMPL_LINK( ScConsolidateDlg, OkHdl, void*, EMPTYARG )
                 ppDataAreas[i] = pArea;
             }
 
-            theOutParam.nCol            = aDestAddress.Col();
-            theOutParam.nRow            = aDestAddress.Row();
-            theOutParam.nTab            = aDestAddress.Tab();
-            theOutParam.eFunction       = LbPosToFunc( aLbFunc.GetSelectEntryPos() );
-            theOutParam.bByCol          = aBtnByCol.IsChecked();
-            theOutParam.bByRow          = aBtnByRow.IsChecked();
-            theOutParam.bReferenceData  = aBtnRefs.IsChecked();
+            theOutParam.nCol			= aDestAddress.Col();
+            theOutParam.nRow			= aDestAddress.Row();
+            theOutParam.nTab			= aDestAddress.Tab();
+            theOutParam.eFunction		= LbPosToFunc( aLbFunc.GetSelectEntryPos() );
+            theOutParam.bByCol			= aBtnByCol.IsChecked();
+            theOutParam.bByRow			= aBtnByRow.IsChecked();
+            theOutParam.bReferenceData	= aBtnRefs.IsChecked();
             theOutParam.SetAreas( ppDataAreas, nDataAreaCount );
 
             for ( i=0; i<nDataAreaCount; i++ )
@@ -450,7 +450,7 @@ IMPL_LINK( ScConsolidateDlg, OkHdl, void*, EMPTYARG )
 
             ScConsolidateItem aOutItem( nWhichCons, &theOutParam );
 
-            SetDispatcherLock( false );
+            SetDispatcherLock( FALSE );
             SwitchToDocument();
             GetBindings().GetDispatcher()->Execute( SID_CONSOLIDATE,
                                       SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -479,18 +479,18 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
     {
         if ( aEdDataArea.GetText().Len() > 0 )
         {
-            String      aNewEntry( aEdDataArea.GetText() );
-            ScArea**    ppAreas = NULL;
-            sal_uInt16      nAreaCount = 0;
+            String		aNewEntry( aEdDataArea.GetText() );
+            ScArea**	ppAreas = NULL;
+            USHORT		nAreaCount = 0;
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-            if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, sal_True, eConv ) )
+            if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, TRUE, eConv ) )
             {
                 // IsAbsTabArea() legt ein Array von ScArea-Zeigern an,
                 // welche ebenfalls dynamisch erzeugt wurden.
                 // Diese Objekte muessen hier abgeraeumt werden.
 
-                for ( sal_uInt16 i=0; i<nAreaCount; i++ )
+                for ( USHORT i=0; i<nAreaCount; i++ )
                 {
                     String aNewArea;
 
@@ -550,8 +550,8 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
     }
     else if ( (pLb == &aLbDataArea) || (pLb == &aLbDestArea) )
     {
-        Edit*   pEd = (pLb == &aLbDataArea) ? &aEdDataArea : &aEdDestArea;
-        sal_uInt16  nSelPos = pLb->GetSelectEntryPos();
+        Edit*	pEd = (pLb == &aLbDataArea) ? &aEdDataArea : &aEdDestArea;
+        USHORT	nSelPos = pLb->GetSelectEntryPos();
 
         if (    pRangeUtil
             && (nSelPos > 0)
@@ -610,20 +610,20 @@ IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
 // auch noch in tpsubt bzw. ueberall, wo StarCalc-Funktionen
 // auswaehlbar sind.
 
-ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( sal_uInt16 nPos )
+ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( USHORT nPos )
 {
     switch ( nPos )
     {
-        case  2:    return SUBTOTAL_FUNC_AVE;
-        case  6:    return SUBTOTAL_FUNC_CNT;
-        case  1:    return SUBTOTAL_FUNC_CNT2;
-        case  3:    return SUBTOTAL_FUNC_MAX;
-        case  4:    return SUBTOTAL_FUNC_MIN;
-        case  5:    return SUBTOTAL_FUNC_PROD;
-        case  7:    return SUBTOTAL_FUNC_STD;
-        case  8:    return SUBTOTAL_FUNC_STDP;
-        case  9:    return SUBTOTAL_FUNC_VAR;
-        case 10:    return SUBTOTAL_FUNC_VARP;
+        case  2:	return SUBTOTAL_FUNC_AVE;
+        case  6:	return SUBTOTAL_FUNC_CNT;
+        case  1:	return SUBTOTAL_FUNC_CNT2;
+        case  3:	return SUBTOTAL_FUNC_MAX;
+        case  4:	return SUBTOTAL_FUNC_MIN;
+        case  5:	return SUBTOTAL_FUNC_PROD;
+        case  7:	return SUBTOTAL_FUNC_STD;
+        case  8:	return SUBTOTAL_FUNC_STDP;
+        case  9:	return SUBTOTAL_FUNC_VAR;
+        case 10:	return SUBTOTAL_FUNC_VARP;
         case  0:
         default:
             return SUBTOTAL_FUNC_SUM;
@@ -633,20 +633,20 @@ ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( sal_uInt16 nPos )
 
 //----------------------------------------------------------------------------
 
-sal_uInt16 ScConsolidateDlg::FuncToLbPos( ScSubTotalFunc eFunc )
+USHORT ScConsolidateDlg::FuncToLbPos( ScSubTotalFunc eFunc )
 {
     switch ( eFunc )
     {
-        case SUBTOTAL_FUNC_AVE:     return 2;
-        case SUBTOTAL_FUNC_CNT:     return 6;
-        case SUBTOTAL_FUNC_CNT2:    return 1;
-        case SUBTOTAL_FUNC_MAX:     return 3;
-        case SUBTOTAL_FUNC_MIN:     return 4;
-        case SUBTOTAL_FUNC_PROD:    return 5;
-        case SUBTOTAL_FUNC_STD:     return 7;
-        case SUBTOTAL_FUNC_STDP:    return 8;
-        case SUBTOTAL_FUNC_VAR:     return 9;
-        case SUBTOTAL_FUNC_VARP:    return 10;
+        case SUBTOTAL_FUNC_AVE:		return 2;
+        case SUBTOTAL_FUNC_CNT:		return 6;
+        case SUBTOTAL_FUNC_CNT2:	return 1;
+        case SUBTOTAL_FUNC_MAX:		return 3;
+        case SUBTOTAL_FUNC_MIN:		return 4;
+        case SUBTOTAL_FUNC_PROD:	return 5;
+        case SUBTOTAL_FUNC_STD:		return 7;
+        case SUBTOTAL_FUNC_STDP:	return 8;
+        case SUBTOTAL_FUNC_VAR:		return 9;
+        case SUBTOTAL_FUNC_VARP:	return 10;
         case SUBTOTAL_FUNC_NONE:
         case SUBTOTAL_FUNC_SUM:
         default:

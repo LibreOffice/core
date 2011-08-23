@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,31 +62,41 @@ typedef void (CALLTYPE* ExFuncPtr14)(void*, void*, void*, void*, void*, void*, v
 typedef void (CALLTYPE* ExFuncPtr15)(void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*);
 typedef void (CALLTYPE* ExFuncPtr16)(void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*);
 
-typedef void (CALLTYPE* GetFuncCountPtr)(sal_uInt16& nCount);
+typedef void (CALLTYPE* GetFuncCountPtr)(USHORT& nCount);
 typedef void (CALLTYPE* GetFuncDataPtr)
-    (sal_uInt16& nNo, sal_Char* pFuncName, sal_uInt16& nParamCount, ParamType* peType, sal_Char* pInternalName);
+    (USHORT& nNo, sal_Char* pFuncName, USHORT& nParamCount, ParamType* peType, sal_Char* pInternalName);
 
-typedef void (CALLTYPE* SetLanguagePtr)( sal_uInt16& nLanguage );
+typedef void (CALLTYPE* SetLanguagePtr)( USHORT& nLanguage );
 typedef void (CALLTYPE* GetParamDesc)
-    (sal_uInt16& nNo, sal_uInt16& nParam, sal_Char* pName, sal_Char* pDesc );
+    (USHORT& nNo, USHORT& nParam, sal_Char* pName, sal_Char* pDesc );
 
-typedef void (CALLTYPE* IsAsync) ( sal_uInt16&      nNo,
-                                   ParamType*   peType );
-typedef void (CALLTYPE* Advice)  ( sal_uInt16&      nNo,
-                                   AdvData&     pfCallback );
-typedef void (CALLTYPE* Unadvice)( double&      nHandle );
+typedef void (CALLTYPE* IsAsync) ( USHORT&		nNo,
+                                   ParamType*	peType );
+typedef void (CALLTYPE* Advice)  ( USHORT&		nNo,
+                                   AdvData&		pfCallback );
+typedef void (CALLTYPE* Unadvice)( double&		nHandle );
 
 typedef void (CALLTYPE* FARPROC) ( void );
 
 }
 
-#define GETFUNCTIONCOUNT        "GetFunctionCount"
-#define GETFUNCTIONDATA         "GetFunctionData"
-#define SETLANGUAGE             "SetLanguage"
-#define GETPARAMDESC            "GetParameterDescription"
-#define ISASYNC                 "IsAsync"
-#define ADVICE                  "Advice"
-#define UNADVICE                "Unadvice"
+#if defined(OS2) && defined(BLC)
+#define GETFUNCTIONCOUNT		"_GetFunctionCount"
+#define GETFUNCTIONDATA			"_GetFunctionData"
+#define SETLANGUAGE				"_SetLanguage"
+#define GETPARAMDESC			"_GetParameterDescription"
+#define ISASYNC					"_IsAsync"
+#define ADVICE					"_Advice"
+#define UNADVICE				"_Unadvice"
+#else // Pascal oder extern "C"
+#define GETFUNCTIONCOUNT		"GetFunctionCount"
+#define GETFUNCTIONDATA			"GetFunctionData"
+#define SETLANGUAGE				"SetLanguage"
+#define GETPARAMDESC			"GetParameterDescription"
+#define ISASYNC					"IsAsync"
+#define ADVICE					"Advice"
+#define UNADVICE				"Unadvice"
+#endif
 
 #define LIBFUNCNAME( name ) \
     (String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( name ) ))
@@ -94,33 +104,34 @@ typedef void (CALLTYPE* FARPROC) ( void );
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 FuncData::FuncData(const String& rIName) :
-    pModuleData     (NULL),
+    pModuleData		(NULL),
     aInternalName   (rIName),
-    nNumber         (0),
-    nParamCount     (0),
-    eAsyncType      (NONE)
+//  aFuncName		(""),
+    nNumber			(0),
+    nParamCount		(0),
+    eAsyncType		(NONE)
 {
-    for (sal_uInt16 i = 0; i < MAXFUNCPARAM; i++)
+    for (USHORT i = 0; i < MAXFUNCPARAM; i++)
         eParamType[i] = PTR_DOUBLE;
 }
 
 //------------------------------------------------------------------------
 
 FuncData::FuncData(const ModuleData*pModule,
-                   const String&    rIName,
-                   const String&    rFName,
-                         sal_uInt16 nNo,
-                    sal_uInt16  nCount,
+                   const String&	rIName,
+                   const String&	rFName,
+                         USHORT	nNo,
+                    USHORT	nCount,
                    const ParamType* peType,
                     ParamType  eType) :
-    pModuleData     (pModule),
+    pModuleData		(pModule),
     aInternalName   (rIName),
-    aFuncName       (rFName),
-    nNumber         (nNo),
-    nParamCount     (nCount),
-    eAsyncType      (eType)
+    aFuncName		(rFName),
+    nNumber			(nNo),
+    nParamCount		(nCount),
+    eAsyncType		(eType)
 {
-    for (sal_uInt16 i = 0; i < MAXFUNCPARAM; i++)
+    for (USHORT i = 0; i < MAXFUNCPARAM; i++)
         eParamType[i] = peType[i];
 }
 
@@ -128,14 +139,14 @@ FuncData::FuncData(const ModuleData*pModule,
 
 FuncData::FuncData(const FuncData& rData) :
     ScDataObject(),
-    pModuleData     (rData.pModuleData),
+    pModuleData		(rData.pModuleData),
     aInternalName   (rData.aInternalName),
-    aFuncName       (rData.aFuncName),
-    nNumber         (rData.nNumber),
-    nParamCount     (rData.nParamCount),
-    eAsyncType      (rData.eAsyncType)
+    aFuncName		(rData.aFuncName),
+    nNumber			(rData.nNumber),
+    nParamCount		(rData.nParamCount),
+    eAsyncType		(rData.eAsyncType)
 {
-    for (sal_uInt16 i = 0; i < MAXFUNCPARAM; i++)
+    for (USHORT i = 0; i < MAXFUNCPARAM; i++)
         eParamType[i] = rData.eParamType[i];
 }
 
@@ -149,7 +160,7 @@ short FuncCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 
 //------------------------------------------------------------------------
 
-sal_Bool FuncCollection::SearchFunc( const String& rName, sal_uInt16& rIndex ) const
+BOOL FuncCollection::SearchFunc( const String& rName, USHORT& rIndex ) const
 {
     FuncData aDataObj(rName);
     return Search( &aDataObj, rIndex );
@@ -159,30 +170,30 @@ sal_Bool FuncCollection::SearchFunc( const String& rName, sal_uInt16& rIndex ) c
 class ModuleData : public ScDataObject
 {
 friend class ModuleCollection;
-    String      aName;
+    String		aName;
     osl::Module* pInstance;
 public:
     ModuleData(const String& rStr, osl::Module* pInst) : aName (rStr), pInstance (pInst) {}
     ModuleData(const ModuleData& rData) : ScDataObject(), aName (rData.aName) {pInstance = new osl::Module(aName);}
     ~ModuleData() { delete pInstance; }
-    virtual ScDataObject*   Clone() const { return new ModuleData(*this); }
+    virtual ScDataObject*	Clone() const { return new ModuleData(*this); }
 
-    const   String&         GetName() const { return aName; }
+    const   String&			GetName() const { return aName; }
             osl::Module*    GetInstance() const { return pInstance; }
-            void            FreeInstance() { delete pInstance; pInstance = 0; }
+            void			FreeInstance() { delete pInstance; pInstance = 0; }
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class ModuleCollection : public ScSortedCollection
 {
 public:
-    ModuleCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false) : ScSortedCollection ( nLim, nDel, bDup ) {}
+    ModuleCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) : ScSortedCollection ( nLim, nDel, bDup ) {}
     ModuleCollection(const ModuleCollection& rModuleCollection) : ScSortedCollection ( rModuleCollection ) {}
 
-    virtual ScDataObject*       Clone() const { return new ModuleCollection(*this); }
-            ModuleData*     operator[]( const sal_uInt16 nIndex) const {return (ModuleData*)At(nIndex);}
-    virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-            sal_Bool            SearchModule( const String& rName,
+    virtual ScDataObject*		Clone() const { return new ModuleCollection(*this); }
+            ModuleData*		operator[]( const USHORT nIndex) const {return (ModuleData*)At(nIndex);}
+    virtual short			Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
+            BOOL			SearchModule( const String& rName,
                                           const ModuleData*& rpModule ) const;
 };
 
@@ -198,12 +209,12 @@ short ModuleCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 
 //------------------------------------------------------------------------
 
-sal_Bool ModuleCollection::SearchModule( const String& rName,
+BOOL ModuleCollection::SearchModule( const String& rName,
                                      const ModuleData*& rpModule ) const
 {
-    sal_uInt16 nIndex;
+    USHORT nIndex;
     ModuleData aSearchModule(rName, 0);
-    sal_Bool bFound = Search( &aSearchModule, nIndex );
+    BOOL bFound = Search( &aSearchModule, nIndex );
     if (bFound)
         rpModule = (ModuleData*)At(nIndex);
     else
@@ -213,19 +224,19 @@ sal_Bool ModuleCollection::SearchModule( const String& rName,
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool InitExternalFunc(const rtl::OUString& rModuleName)
+BOOL InitExternalFunc(const rtl::OUString& rModuleName)
 {
     String aModuleName( rModuleName );
 
     // Module schon geladen?
     const ModuleData* pTemp;
     if (aModuleCollection.SearchModule(aModuleName, pTemp))
-        return false;
+        return FALSE;
 
     rtl::OUString aNP;
     aNP = rModuleName;
 
-    sal_Bool bRet = false;
+    BOOL bRet = FALSE;
     osl::Module* pLib = new osl::Module( aNP );
     if (pLib->is())
     {
@@ -239,7 +250,7 @@ sal_Bool InitExternalFunc(const rtl::OUString& rModuleName)
             if ( fpSetLanguage )
             {
                 LanguageType eLanguage = Application::GetSettings().GetUILanguage();
-                sal_uInt16 nLanguage = (sal_uInt16) eLanguage;
+                USHORT nLanguage = (USHORT) eLanguage;
                 (*((SetLanguagePtr)fpSetLanguage))( nLanguage );
             }
 
@@ -251,20 +262,20 @@ sal_Bool InitExternalFunc(const rtl::OUString& rModuleName)
             AdvData pfCallBack = &ScAddInAsyncCallBack;
             FuncData* pFuncData;
             FuncCollection* pFuncCol = ScGlobal::GetFuncCollection();
-            sal_uInt16 nCount;
+            USHORT nCount;
             (*((GetFuncCountPtr)fpGetCount))(nCount);
-            for (sal_uInt16 i=0; i < nCount; i++)
+            for (USHORT i=0; i < nCount; i++)
             {
                 sal_Char cFuncName[256];
                 sal_Char cInternalName[256];
-                sal_uInt16 nParamCount;
+                USHORT nParamCount;
                 ParamType eParamType[MAXFUNCPARAM];
                 ParamType eAsyncType = NONE;
-                // alles initialisieren, falls das AddIn sich schlecht verhaelt
+                // #62113# alles initialisieren, falls das AddIn sich schlecht verhaelt
                 cFuncName[0] = 0;
                 cInternalName[0] = 0;
                 nParamCount = 0;
-                for ( sal_uInt16 j=0; j<MAXFUNCPARAM; j++ )
+                for ( USHORT j=0; j<MAXFUNCPARAM; j++ )
                 {
                     eParamType[j] = NONE;
                 }
@@ -287,7 +298,7 @@ sal_Bool InitExternalFunc(const rtl::OUString& rModuleName)
                                           eAsyncType );
                 pFuncCol->Insert(pFuncData);
             }
-            bRet = sal_True;
+            bRet = TRUE;
         }
         else
             delete pLib;
@@ -301,8 +312,8 @@ sal_Bool InitExternalFunc(const rtl::OUString& rModuleName)
 
 void ExitExternalFunc()
 {
-    sal_uInt16 nCount = aModuleCollection.GetCount();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    USHORT nCount = aModuleCollection.GetCount();
+    for (USHORT i=0; i<nCount; i++)
     {
         ModuleData* pData = aModuleCollection[i];
         pData->FreeInstance();
@@ -311,9 +322,9 @@ void ExitExternalFunc()
 
 //------------------------------------------------------------------------
 
-sal_Bool FuncData::Call(void** ppParam)
+BOOL FuncData::Call(void** ppParam)
 {
-    sal_Bool bRet = false;
+    BOOL bRet = FALSE;
     osl::Module* pLib = pModuleData->GetInstance();
     FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(aFuncName);
     if (fProc != NULL)
@@ -322,81 +333,81 @@ sal_Bool FuncData::Call(void** ppParam)
         {
             case 1 :
                 (*((ExFuncPtr1)fProc))(ppParam[0]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 2 :
                 (*((ExFuncPtr2)fProc))(ppParam[0], ppParam[1]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 3 :
                 (*((ExFuncPtr3)fProc))(ppParam[0], ppParam[1], ppParam[2]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 4 :
                 (*((ExFuncPtr4)fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 5 :
                 (*((ExFuncPtr5)fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 6 :
                 (*((ExFuncPtr6)fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 7 :
                 (*((ExFuncPtr7)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 8 :
                 (*((ExFuncPtr8)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 9 :
                 (*((ExFuncPtr9)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 10 :
                 (*((ExFuncPtr10)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 11 :
                 (*((ExFuncPtr11)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 12:
                 (*((ExFuncPtr12)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 13:
                 (*((ExFuncPtr13)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 14 :
                 (*((ExFuncPtr14)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12], ppParam[13]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 15 :
                 (*((ExFuncPtr15)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12], ppParam[13], ppParam[14]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             case 16 :
                 (*((ExFuncPtr16)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12], ppParam[13], ppParam[14], ppParam[15]);
-                bRet = sal_True;
+                bRet = TRUE;
                 break;
             default : break;
         }
@@ -406,15 +417,15 @@ sal_Bool FuncData::Call(void** ppParam)
 
 //------------------------------------------------------------------------
 
-sal_Bool FuncData::Unadvice( double nHandle )
+BOOL FuncData::Unadvice( double nHandle )
 {
-    sal_Bool bRet = false;
+    BOOL bRet = FALSE;
     osl::Module* pLib = pModuleData->GetInstance();
     FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(UNADVICE));
     if (fProc != NULL)
     {
         ((::Unadvice)fProc)(nHandle);
-        bRet = sal_True;
+        bRet = TRUE;
     }
     return bRet;
 }
@@ -423,12 +434,15 @@ sal_Bool FuncData::Unadvice( double nHandle )
 
 const String& FuncData::GetModuleName() const
 {
+    // DBG_ASSERT( pModuleData, "Keine Arme, keine Kekse" ):
     return pModuleData->GetName();
 }
 
-bool FuncData::getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam )
+//------------------------------------------------------------------------
+
+BOOL FuncData::GetParamDesc( String& aName, String& aDesc, USHORT nParam )
 {
-    bool bRet = false;
+    BOOL bRet = FALSE;
     if ( nParam <= nParamCount )
     {
         osl::Module* pLib = pModuleData->GetInstance();
@@ -438,19 +452,20 @@ bool FuncData::getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal
             sal_Char pcName[256];
             sal_Char pcDesc[256];
             *pcName = *pcDesc = 0;
-            sal_uInt16 nFuncNo = nNumber;   // nicht per Reference versauen lassen..
+            USHORT nFuncNo = nNumber;	// nicht per Reference versauen lassen..
             ((::GetParamDesc)fProc)( nFuncNo, nParam, pcName, pcDesc );
-            aName = ::rtl::OUString( pcName, 256, osl_getThreadTextEncoding() );
-            aDesc = ::rtl::OUString( pcDesc, 256, osl_getThreadTextEncoding() );
-            bRet = true;
+            aName = String( pcName, osl_getThreadTextEncoding() );
+            aDesc = String( pcDesc, osl_getThreadTextEncoding() );
+            bRet = TRUE;
         }
     }
     if ( !bRet )
     {
-        aName = ::rtl::OUString();
-        aDesc = ::rtl::OUString();
+        aName.Erase();
+        aDesc.Erase();
     }
     return bRet;
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

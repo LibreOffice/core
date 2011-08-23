@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,11 +65,11 @@ public:
     virtual bool KeyInput( const KeyEvent& rKEvt );
 
     // callbacks from sdr view
-    virtual sal_uLong GetMarkablePointCount() const;
-    virtual sal_uLong GetMarkedPointCount() const;
-    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
+    virtual ULONG GetMarkablePointCount() const;
+    virtual ULONG GetMarkedPointCount() const;
+    virtual BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
     virtual void CheckPossibilities();
-    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
+    virtual BOOL MarkPoints(const Rectangle* pRect, BOOL bUnmark);
 
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
 
@@ -77,20 +77,20 @@ public:
 
     // IPolyPolygonEditorController
     virtual void DeleteMarkedPoints();
-    virtual sal_Bool IsDeleteMarkedPointsPossible() const;
+    virtual BOOL IsDeleteMarkedPointsPossible() const;
 
-    virtual void RipUpAtMarkedPoints();
+    virtual	void RipUpAtMarkedPoints();
     virtual bool IsRipUpAtMarkedPointsPossible() const;
 
-    virtual sal_Bool IsSetMarkedSegmentsKindPossible() const;
+    virtual BOOL IsSetMarkedSegmentsKindPossible() const;
     virtual SdrPathSegmentKind GetMarkedSegmentsKind() const;
     virtual void SetMarkedSegmentsKind(SdrPathSegmentKind eKind);
 
-    virtual sal_Bool IsSetMarkedPointsSmoothPossible() const;
+    virtual BOOL IsSetMarkedPointsSmoothPossible() const;
     virtual SdrPathSmoothKind GetMarkedPointsSmooth() const;
     virtual void SetMarkedPointsSmooth(SdrPathSmoothKind eKind);
-
-    virtual void CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen );
+        
+    virtual void CloseMarkedObjects(BOOL bToggle, BOOL bOpen );
     virtual bool IsOpenCloseMarkedObjectsPossible() const;
     virtual SdrObjClosedKind GetMarkedObjectsClosedState() const;
 
@@ -130,6 +130,6 @@ private:
 
 } // end of namespace sd
 
-#endif      // _SD_MOTIONPATHTAG_HXX_
+#endif		// _SD_MOTIONPATHTAG_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

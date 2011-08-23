@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ namespace dbmm
     //--------------------------------------------------------------------
     inline void RangeProgressBar::SetValue( sal_uInt32 _nValue )
     {
-        ProgressBar::SetValue( (sal_uInt16)( 100.0 * _nValue / m_nRange ) );
+        ProgressBar::SetValue( (USHORT)( 100.0 * _nValue / m_nRange ) );
     }
 
     //--------------------------------------------------------------------

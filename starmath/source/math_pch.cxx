@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,14 +33,15 @@
 
 #include "starmath.hrc"
 
-#define ITEMID_FONT         1
-#define ITEMID_FONTHEIGHT   2
-#define ITEMID_LRSPACE      3
-#define ITEMID_WEIGHT       4
+#define ITEMID_FONT 		1
+#define ITEMID_FONTHEIGHT	2
+#define ITEMID_LRSPACE		3
+#define ITEMID_WEIGHT		4
 
 //--------- ab hier die "generierten"
 #include <tools/string.hxx>
 #include <tools/solar.h>
+#include <tools/list.hxx>
 #include <tools/contnr.hxx>
 #include <tools/rtti.hxx>
 #include <tools/ref.hxx>
@@ -70,14 +71,17 @@
 #include <vcl/accel.hxx>
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
+#include <tools/rc.hxx>
 #include <i18npool/lang.h>
 #include <tools/resmgr.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/cmdevt.hxx>
 #include <vcl/font.hxx>
 #include <tools/color.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
 #include <tools/fract.hxx>
@@ -92,11 +96,13 @@
 #include <format.hxx>
 #include <utility.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/window.hxx>
 #include <sfx2/minarray.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/combobox.h>
+#include <vcl/edit.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/lstbox.hxx>
@@ -138,12 +144,14 @@
 #include <osl/thread.h>
 #include <vcl/apptypes.hxx>
 #include <tools/dynary.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
 #include <svl/memberid.hrc>
 #include <vcl/syswin.hxx>
+#include <vcl/virdev.hxx>
 #include <tools/datetime.hxx>
 #include <tools/wldcrd.hxx>
 #include <parse.hxx>
@@ -347,9 +355,13 @@
 #include <sfx2/msg.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <vcl/floatwin.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/window.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/objface.hxx>
+#include <vcl/event.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <symbol.hxx>
@@ -364,26 +376,34 @@
 #include <svl/ownlist.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/mapmod.hxx>
 #include <sfx2/ipfrm.hxx>
 #include <vcl/dialog.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/svstdarr.hxx>
 #include <sfx2/bindings.hxx>
 #include <dialog.hxx>
+#include <vcl/button.hxx>
 #include <vcl/symbol.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/group.hxx>
 #include <svx/optgenrl.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/group.hxx>
 #include <document.hxx>
+#include <vcl/field.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/menubtn.hxx>
+#include <vcl/scrbar.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/interno.hxx>
@@ -406,6 +426,7 @@
 #include <svx/svxids.hrc>
 #include <view.hxx>
 #include <sfx2/dockwin.hxx>
+#include <vcl/dockwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/clientsh.hxx>
 #include <svtools/scrwin.hxx>
@@ -426,6 +447,7 @@
 #include <vcl/gdimtf.hxx>
 #include <sot/exchange.hxx>
 #include <vcl/wrkwin.hxx>
+#include <tools/sstring.hxx>
 #include <action.hxx>
 #include <sfx2/filedlg.hxx>
 #include <sfx2/iodlg.hxx>

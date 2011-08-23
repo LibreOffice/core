@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,23 +40,23 @@ enum SfxChildAlignment
     SFX_ALIGN_LOWESTBOTTOM,
     SFX_ALIGN_FIRSTLEFT,
     SFX_ALIGN_LASTRIGHT,
-    SFX_ALIGN_LEFT,             // z.B. SplitWindow
+    SFX_ALIGN_LEFT,				// z.B. SplitWindow
     SFX_ALIGN_RIGHT,
     SFX_ALIGN_LASTLEFT,
     SFX_ALIGN_FIRSTRIGHT,
-    SFX_ALIGN_TOP,              // z.B. Hyperlink-Builder, SplitWindow
-    SFX_ALIGN_BOTTOM,           // z.B. SplitWindow
-    SFX_ALIGN_TOOLBOXTOP,       // z.B. Objektleiste
+    SFX_ALIGN_TOP,				// z.B. Hyperlink-Builder, SplitWindow
+    SFX_ALIGN_BOTTOM,			// z.B. SplitWindow
+    SFX_ALIGN_TOOLBOXTOP,		// z.B. Objektleiste
     SFX_ALIGN_TOOLBOXBOTTOM,
-    SFX_ALIGN_LOWESTTOP,        // z.B. Calc-Rechenleiste
+    SFX_ALIGN_LOWESTTOP,		// z.B. Calc-Rechenleiste
     SFX_ALIGN_HIGHESTBOTTOM,    // z.B. Statusleiste
-    SFX_ALIGN_TOOLBOXLEFT,      // z.B. Werkzeugleiste
+    SFX_ALIGN_TOOLBOXLEFT,		// z.B. Werkzeugleiste
     SFX_ALIGN_TOOLBOXRIGHT,
-    SFX_ALIGN_NOALIGNMENT       // alle FloatingWindows
+    SFX_ALIGN_NOALIGNMENT		// alle FloatingWindows
 };
 
 // "Uberpr"uft, ob ein g"ultiges Alignment verwendet wird
-inline sal_Bool SfxChildAlignValid( SfxChildAlignment eAlign )
+inline BOOL SfxChildAlignValid( SfxChildAlignment eAlign )
 {
     return ( eAlign >= SFX_ALIGN_HIGHESTTOP && eAlign <= SFX_ALIGN_NOALIGNMENT );
 }

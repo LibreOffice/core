@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,8 +67,8 @@
 
 #include <memory>
 
-#define ID_OPEN_GRAPHICS            1
-#define ID_CLEAR_GRAPHICS           2
+#define ID_OPEN_GRAPHICS			1
+#define	ID_CLEAR_GRAPHICS			2
 
 //.........................................................................
 namespace frm
@@ -180,6 +180,7 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
     osl_incrementInterlockedCount( &m_refCount );
     {
         // simulate a propertyChanged event for the ImageURL
+        // 2003-05-15 - #109591# - fs@openoffice.org
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_handleNewImageURL_lck( eOther );
     }
@@ -212,7 +213,7 @@ IMPLEMENT_DEFAULT_CLONING( OImageControlModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence  OImageControlModel::getSupportedServiceNames() throw()
+StringSequence	OImageControlModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -369,7 +370,7 @@ void OImageControlModel::describeAggregateProperties( Sequence< Property >& /* [
 //------------------------------------------------------------------------------
 ::rtl::OUString OImageControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_IMAGECONTROL;  // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_IMAGECONTROL;	// old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -408,15 +409,15 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
             readCommonProperties(_rxInStream);
             break;
         default :
-            OSL_FAIL("OImageControlModel::read : unknown version !");
+            DBG_ERROR("OImageControlModel::read : unknown version !");
             m_bReadOnly = sal_False;
             defaultCommonProperties();
             break;
     }
     // Nach dem Lesen die Defaultwerte anzeigen
     if ( getControlSource().getLength() )
-    {   // (not if we don't have a control source - the "State" property acts like it is persistent, then
-        ::osl::MutexGuard aGuard(m_aMutex); // resetNoBroadcast expects this mutex guarding
+    {	// (not if we don't have a control source - the "State" property acts like it is persistent, then
+        ::osl::MutexGuard aGuard(m_aMutex);	// resetNoBroadcast expects this mutex guarding
         resetNoBroadcast();
     }
 }
@@ -488,7 +489,7 @@ sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _
     break;
 
     case ImageStoreInvalid:
-        OSL_FAIL( "OImageControlModel::impl_handleNewImageURL_lck: image storage type type!" );
+        OSL_ENSURE( false, "OImageControlModel::impl_handleNewImageURL_lck: image storage type type!" );
         break;
     }
 
@@ -573,7 +574,7 @@ Any OImageControlModel::translateDbColumnToControlValue()
 {
     switch ( lcl_getImageStoreType( getFieldType() ) )
     {
-    case ImageStoreBinary:
+    case ImageStoreBinary: 
     {
         Reference< XInputStream > xImageStream( m_xColumn->getBinaryStream() );
         if ( m_xColumn->wasNull() )
@@ -588,7 +589,7 @@ Any OImageControlModel::translateDbColumnToControlValue()
         return makeAny( sImageLink );
     }
     case ImageStoreInvalid:
-        OSL_FAIL( "OImageControlModel::translateDbColumnToControlValue: invalid field type!" );
+        OSL_ENSURE( false, "OImageControlModel::translateDbColumnToControlValue: invalid field type!" );
         break;
     }
     return Any();
@@ -618,7 +619,7 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
         GetImageProducer()->setImage( xInStream );
         bStartProduction = true;
     }
-    break;
+    break; 
 
     case ImageStoreLink:
     {
@@ -630,7 +631,7 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
     break;
 
     case ImageStoreInvalid:
-        OSL_FAIL( "OImageControlModel::doSetControlValue: invalid field type!" );
+        OSL_ENSURE( false, "OImageControlModel::doSetControlValue: invalid field type!" );
         break;
 
     }   // switch ( lcl_getImageStoreType( getFieldType() ) )
@@ -643,6 +644,7 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
             // release our mutex once (it's acquired in the calling method!), as starting the image production may
             // result in the locking of the solar mutex (unfortunally the default implementation of our aggregate,
             // VCLXImageControl, does this locking)
+            // FS - 74438 - 30.03.00
             MutexRelease aRelease(m_aMutex);
             xProducer->startProduction();
         }
@@ -754,7 +756,7 @@ Any SAL_CALL OImageControlControl::queryAggregation(const Type& _rType) throw (R
 }
 
 //------------------------------------------------------------------------------
-StringSequence  OImageControlControl::getSupportedServiceNames() throw()
+StringSequence	OImageControlControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -856,10 +858,10 @@ bool OImageControlControl::implInsertGraphics()
             implClearGraphics( sal_False );
             sal_Bool bIsLink = sal_False;
             xController->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bIsLink;
-            // Force bIsLink to be sal_True if we're bound to a field. Though we initialized the file picker with IsLink=TRUE
+            // Force bIsLink to be TRUE if we're bound to a field. Though we initialized the file picker with IsLink=TRUE
             // in this case, and disabled the respective control, there might be picker implementations which do not
             // respect this, and return IsLink=FALSE here. In this case, "normalize" the flag.
-            // #i112659#
+            // #i112659# / 2010-08-26 / frank.schoenheit@oracle.com
             bIsLink |= bHasField;
             if ( !bIsLink )
             {
@@ -875,7 +877,7 @@ bool OImageControlControl::implInsertGraphics()
     }
     catch(Exception&)
     {
-        OSL_FAIL("OImageControlControl::implInsertGraphics: caught an exception while attempting to execute the FilePicker!");
+        DBG_ERROR("OImageControlControl::implInsertGraphics: caught an exception while attempting to execute the FilePicker!");
     }
     return false;
 }
@@ -930,8 +932,9 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
 
             awt::Rectangle aRect( e.X, e.Y, 0, 0 );
             if ( ( e.X < 0 ) || ( e.Y < 0 ) )
-            {   // context menu triggered by keyboard
+            {	// context menu triggered by keyboard
                 // position it in the center of the control
+                // 102205 - 16.08.2002 - fs@openoffice.org
                 Reference< XWindow > xWindow( static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY );
                 OSL_ENSURE( xWindow.is(), "OImageControlControl::mousePressed: me not a window? How this?" );
                 if ( xWindow.is() )
@@ -971,6 +974,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
 
             // wenn Control nicht gebunden ist, kein Dialog (da die zu schickende URL hinterher sowieso
             // versanden wuerde)
+            // FS - #64946# - 19.04.99
             Reference<XPropertySet> xBoundField;
             if (hasProperty(PROPERTY_BOUNDFIELD, xSet))
                 ::cppu::extractInterface(xBoundField, xSet->getPropertyValue(PROPERTY_BOUNDFIELD));
@@ -1015,7 +1019,7 @@ void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/) th
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

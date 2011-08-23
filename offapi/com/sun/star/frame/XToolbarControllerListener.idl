@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 /** is used to notify a toolbar controller about events
 
     @see com::sun::star::frame::ToolbarController
-
-    @since OOo 2.0
+    
+    @since OOo 2.0.0
  */
 interface XToolbarControllerListener : com::sun::star::uno::XInterface
 {
@@ -50,7 +50,7 @@ interface XToolbarControllerListener : com::sun::star::uno::XInterface
             a string which identifies the function that has been selected.
 
         <p>
-        This notification is normally used to implement the toolbar button/sub-toolbar
+        This notification is normally used to implement the toolbar button/sub-toolbar 
         function feature. It exchanges the function of the toolbar button, that opened
         the sub-toolbar, with the one that has been selected on the sub-toolbar.
         </p>

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 ' **
-' ** owner : gregor.hartmann@oracle.com
+' ** owner : joerg.skottke@oracle.com
 ' **
 ' ** short description : Tools to draw and select form controls in basic-ide
 ' **

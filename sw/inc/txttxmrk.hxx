@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,7 @@ class SwTxtTOXMark : public SwTxtAttrEnd
     xub_StrLen * m_pEnd;   // 0 if SwTOXMark without AlternativeText
 
 public:
-    SwTxtTOXMark( SwTOXMark& rAttr,
-            xub_StrLen const nStart, xub_StrLen const*const pEnd = 0);
+    SwTxtTOXMark( SwTOXMark& rAttr, xub_StrLen nStart, xub_StrLen * pEnd = 0 );
     virtual ~SwTxtTOXMark();
 
     virtual xub_StrLen *GetEnd();     // SwTxtAttr

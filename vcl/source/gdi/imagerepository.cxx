@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,19 +42,12 @@ namespace vcl
     //= ImageRepository
     //====================================================================
     //--------------------------------------------------------------------
-    bool ImageRepository::loadImage( const ::rtl::OUString& _rName, BitmapEx& _out_rImage, bool _bSearchLanguageDependent, bool loadMissing )
+    bool ImageRepository::loadImage( const ::rtl::OUString& _rName, BitmapEx& _out_rImage, bool _bSearchLanguageDependent )
     {
         ::rtl::OUString sCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
 
         ImplImageTreeSingletonRef aImplImageTree;
-        return aImplImageTree->loadImage( _rName, sCurrentSymbolsStyle, _out_rImage, _bSearchLanguageDependent, loadMissing );
-    }
-
-    bool ImageRepository::loadDefaultImage( BitmapEx& _out_rImage)
-    {
-        ::rtl::OUString sCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
-        ImplImageTreeSingletonRef aImplImageTree;
-        return aImplImageTree->loadDefaultImage( sCurrentSymbolsStyle,_out_rImage);
+        return aImplImageTree->loadImage( _rName, sCurrentSymbolsStyle, _out_rImage, _bSearchLanguageDependent );
     }
 
 //........................................................................

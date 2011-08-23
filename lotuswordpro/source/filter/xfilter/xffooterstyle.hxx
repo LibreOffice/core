@@ -57,11 +57,16 @@
  * @file
  * Footer style,exist in page-master object.
  ************************************************************************/
-#ifndef     _XFFOOTERSTYLE_HXX
-#define     _XFFOOTERSTYLE_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-19 create this file.
+ * 2005-04-05 change to inherit from xfheaderstyle.
+ ************************************************************************/
+#ifndef		_XFFOOTERSTYLE_HXX
+#define		_XFFOOTERSTYLE_HXX
 
-#include    "xfheaderstyle.hxx"
-#include    "xfmargins.hxx"
+#include	"xfheaderstyle.hxx"
+#include	"xfmargins.hxx"
 
 class XFFooterStyle : public XFHeaderStyle
 {
@@ -70,7 +75,7 @@ public:
     {
     }
 
-    void    SetMargins(double left = -1, double right = -1, double top = -1)
+    void	SetMargins(double left = -1, double right = -1, double top = -1)
     {
         if( left != -1 )
             m_aMargin.SetLeft(left);
@@ -85,13 +90,13 @@ public:
         m_fHeight = height;
     }
 
-    void    SetDynamicSpace(sal_Bool dynamic)
+    void	SetDynamicSpace(sal_Bool dynamic)
     {
         m_bDynamicSpace = dynamic;
     }
-    virtual void    ToXml(IXFStream *pStrm)
+    virtual void	ToXml(IXFStream *pStrm)
     {
-        IXFAttrList *pAttrList = pStrm->GetAttrList();
+        IXFAttrList	*pAttrList = pStrm->GetAttrList();
         pAttrList->Clear();
 
         pStrm->StartElement( A2OUSTR("style:footer-style") );
@@ -113,8 +118,8 @@ public:
     }
 
 private:
-    XFMargins   m_aMargin;
-    sal_Bool    m_bDynamicSpace;
+    XFMargins	m_aMargin;
+    sal_Bool	m_bDynamicSpace;
     float m_fHeight;
     */
 };

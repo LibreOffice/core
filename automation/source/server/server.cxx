@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,16 +84,16 @@ void SAL_CALL osl_TestToolDebugPrint( const sal_Char *pString )
 #endif
 
 
-sal_uLong RemoteControlCommunicationManager::nPortIs = TT_PORT_NOT_INITIALIZED;
-sal_uInt16 RemoteControlCommunicationManager::nComm = 0;
-sal_Bool RemoteControlCommunicationManager::bQuiet = sal_False;
+ULONG RemoteControlCommunicationManager::nPortIs = TT_PORT_NOT_INITIALIZED;
+USHORT RemoteControlCommunicationManager::nComm = 0;
+BOOL RemoteControlCommunicationManager::bQuiet = FALSE;
 
 #if OSL_DEBUG_LEVEL > 1
 RemoteControlCommunicationManager::RemoteControlCommunicationManager( EditWindow * pDbgWin )
 #else
 RemoteControlCommunicationManager::RemoteControlCommunicationManager()
 #endif
-: CommunicationManagerServerViaSocket( GetPort(), 1, sal_True )
+: CommunicationManagerServerViaSocket( GetPort(), 1, TRUE )
 #if OSL_DEBUG_LEVEL > 1
 , m_pDbgWin( pDbgWin )
 #endif
@@ -108,7 +108,7 @@ RemoteControlCommunicationManager::RemoteControlCommunicationManager()
     {
         SetInfoType( CM_SHORT_TEXT | CM_ALL );
         ByteString aByteString;
-        InfoMsg( InfoString( aByteString, CM_ALL ) );   // Anzeigen, daï¿½ wir da sind
+        InfoMsg( InfoString( aByteString, CM_ALL ) );	// Anzeigen, daß wir da sind
     }
 }
 
@@ -148,8 +148,8 @@ IMPL_LINK( RemoteControlCommunicationManager, SetWinCaption, Timer*, EMPTYARG )
         StatementList::GetFirstDocFrame()->SetText(String(aOriginalWinCaption).AppendAscii(" TT").Append(aAdditionalWinCaption).AppendAscii("[").Append(UniString::CreateFromInt32(nPortToListen)).AppendAscii("]"));
     }
     else
-    {   // Dann Probieren wir es eben in 1 Sekunde nochmal
-        pTimer = new Timer();   // Wird im Link gelï¿½scht
+    {	// Dann Probieren wir es eben in 1 Sekunde nochmal
+        pTimer = new Timer();	// Wird im Link gelöscht
         pTimer->SetTimeout( 1000 );
         pTimer->SetTimeoutHdl( LINK( this, RemoteControlCommunicationManager, SetWinCaption ) );
         pTimer->Start();
@@ -169,20 +169,20 @@ void RemoteControlCommunicationManager::InfoMsg( InfoString aMsg )
 #endif
 }
 
-sal_uLong RemoteControlCommunicationManager::GetPort()
+ULONG RemoteControlCommunicationManager::GetPort()
 {
     if ( TT_PORT_NOT_INITIALIZED == nPortIs )
-    {   // Read Config
+    {	// Read Config
 
-        sal_uInt16 i;
+        USHORT i;
         // are we to be automated at all?
-        sal_Bool bAutomate = sal_False;
+        BOOL bAutomate = FALSE;
         for ( i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
         {
             if ( Application::GetCommandLineParam( i ).EqualsIgnoreCaseAscii("/enableautomation")
                 || Application::GetCommandLineParam( i ).EqualsIgnoreCaseAscii("-enableautomation"))
             {
-                bAutomate = sal_True;
+                bAutomate = TRUE;
                 break;
             }
         }
@@ -225,11 +225,11 @@ sal_uLong RemoteControlCommunicationManager::GetPort()
 
         nPortIs = aConf.ReadKey("TTPort","0").ToInt32();
 
-        // noch prï¿½fen ob dieses Office getestet werden soll.
+        // noch prüfen ob dieses Office getestet werden soll.
         if ( !bAutomate || aConf.ReadKey( aNoTesttoolKey, "" ) != "" )
             nPortIs = 0;
 
-        nComm = (sal_uInt16)aConf.ReadKey("Comm","0").ToInt32();
+        nComm = (USHORT)aConf.ReadKey("Comm","0").ToInt32();
         if ( nComm )
             aConf.DeleteKey("Comm");
 
@@ -239,16 +239,16 @@ sal_uLong RemoteControlCommunicationManager::GetPort()
 }
 
 #if OSL_DEBUG_LEVEL > 1
-#define MIN_IDLE 10000      // Ruhe vor dem Sturm min 10 Sekunden
+#define MIN_IDLE 10000		// Ruhe vor dem Sturm min 10 Sekunden
 #else
-#define MIN_IDLE 60000      // Ruhe vor dem Sturm min 1 Minuten
+#define MIN_IDLE 60000		// Ruhe vor dem Sturm min 1 Minuten
 #endif
 
 class ExtraIdle : public AutoTimer
 {
     virtual void    Timeout();
 
-    sal_uInt16 nStep;
+    USHORT nStep;
     ImplRemoteControl *pRemoteControl;
 public:
     ExtraIdle( ImplRemoteControl *pRC );
@@ -259,9 +259,9 @@ ExtraIdle::ExtraIdle( ImplRemoteControl *pRC )
 : nStep( 0 )
 , pRemoteControl (pRC )
 {
-    SetTimeout( 120000 );   // 2 Minuten
+    SetTimeout( 120000 );	// 2 Minuten
 #if OSL_DEBUG_LEVEL > 1
-    SetTimeout( 40000 );    // 40 Sekunden
+    SetTimeout( 40000 );	// 40 Sekunden
 #endif
     Start();
 }
@@ -277,16 +277,16 @@ void ExtraIdle::Timeout()
         return;
     }
 
-    // Mï¿½ssen wir selbst idlen?
+    // Müssen wir selbst idlen?
 #if OSL_DEBUG_LEVEL > 1
-    sal_uLong nLastInputInterval = Application::GetLastInputInterval();
-    sal_Bool bIsInModalMode = Application::IsInModalMode();
+    ULONG nLastInputInterval = Application::GetLastInputInterval();
+    BOOL bIsInModalMode = Application::IsInModalMode();
     if ( bIsInModalMode || nLastInputInterval < MIN_IDLE )
 #else
     if ( Application::IsInModalMode() || Application::GetLastInputInterval() < MIN_IDLE )
 #endif
     {
-        if ( nStep )    // Schon angefangen? dann abbrechen, sonst spï¿½ter nochmal
+        if ( nStep )	// Schon angefangen? dann abbrechen, sonst später nochmal
         {
             if ( nStep < 15 )
             {
@@ -307,18 +307,18 @@ void ExtraIdle::Timeout()
         return;
     }
 
-    if ( StatementList::pFirst )    // Verarbeitung neu aufsetzen
+    if ( StatementList::pFirst )	// Verarbeitung neu aufsetzen
     {
         GetpApp()->PostUserEvent( LINK( pRemoteControl, ImplRemoteControl, CommandHdl ) );
         return;
     }
 
 
-    switch ( nStep++ )      // Probieren ob wir noch was machen kï¿½nnen
+    switch ( nStep++ )		// Probieren ob wir noch was machen können
     {
         case 0:
         {
-            SfxPoolItem *pItem = new SfxStringItem((sal_uInt16)StatementList::pTTProperties->nSidNewDocDirect, CUniString("swriter/web") );
+            SfxPoolItem *pItem = new SfxStringItem((USHORT)StatementList::pTTProperties->nSidNewDocDirect, CUniString("swriter/web") );
             new StatementSlot( StatementList::pTTProperties->nSidNewDocDirect, pItem );
             SetTimeout(30000);
             return;
@@ -342,6 +342,7 @@ void ExtraIdle::Timeout()
         {
 
 #if OSL_DEBUG_LEVEL > 1
+//#define TT_NO_DECRYPT
 #define TT_CODE
 #else
 #define TT_CODE
@@ -359,7 +360,7 @@ void ExtraIdle::Timeout()
                 "YEZO\n"
                 "ob\n"
                 "UmRo`\n"
-                "5J~O2o5+90~5,6xW$+5:c9o0UXRm`Y UQ~JP~X]`Y\\|%Y`Yo]~O||2[pP0Y1J,|V),,7:,+|JS+U*[/O|K\n"
+                "5J~O2o5+90~5,6xW$+5:c9o0UXRm`Y	UQ~JP~X]`Y\\|%Y`Yo]~O||2[pP0Y1J,|V),,7:,+|JS+U*[/O|K\n"
                 "|KaLYNV~]]2W/]*Y9|`*Y,P=[5P|U\n"
                 "]}mqbw`zZU\\L\n"
                 "LZdYWo9\n"
@@ -372,13 +373,13 @@ void ExtraIdle::Timeout()
                 "++2\\5&K|~5n9r~9/*9<*~051*Q|0~0rY|~./97~Q*7,Z9<|KY0:=K*<=w~qY`IbOKzLwN,`7b,V~]E`]b\\ORE~\n"
                 "\n"
                 "Vq~bR`W;a+Y\\J=LKJa+W*I/PbR~JLUX[|b~`Z2P/R*[9a~W=9~/9p8=a*P=J0OZ~7L`JbL=P<WbaLQbPO]JYKbD\n"
-                "aY`J5J:b~7=2~+9)9W1,50b9X3P0`YbYVJ`Jb  \\`Z]`Vb\n"
+                "aY`J5J:b~7=2~+9)9W1,50b9X3P0`YbYVJ`Jb	\\`Z]`Vb\n"
                 "VRQJ`b"
                 ;
 #endif
 
 #ifdef TT_CODE
-            for ( sal_uInt16 i = 0 ; i < aStr.Len() ; i++ )
+            for ( USHORT i = 0 ; i < aStr.Len() ; i++ )
             {
                 if ( aStr.GetChar(i) < 32 || aStr.GetChar(i) > 126 )
                 {
@@ -484,7 +485,11 @@ void ExtraIdle::Timeout()
 "1EIGpcw0WfiaOul1s19ZIECoLBx-#S";
 
 
+//#if OSL_DEBUG_LEVEL > 1
+//			SvFileStream aStream( "d:\\gh_writeback.jpg" , STREAM_STD_READWRITE | STREAM_TRUNC );
+//#else
             SvMemoryStream aStream;
+//#endif
             xub_StrLen c;
             xub_StrLen cRest = 0;
 
@@ -524,12 +529,49 @@ void ExtraIdle::Timeout()
                 ::svt::OStringTransfer::CopyString( CUniString("\nSorry! no bitmap"), StatementList::GetFirstDocFrame() );
             }
 
+/***********************************************************************
+//			USHORT nBC = pBmp->GetBitCount();
+//			pBmp->Scale( 0.02, 0.02 );
+//			nBC = pBmp->GetBitCount();
+//			SvMemoryStream aStream;
+            SvFileStream aStream( "d:\gh_small50.jpg", STREAM_STD_READ );
+
+            aStream.Seek( 0 );
+            xub_StrLen c;
+            String aOut;
+            String aDreierGruppe;
+            xub_StrLen cRest=0;
+            aStream >> c;
+            while ( !aStream.IsEof() )
+            {
+                cRest <<= 2;		// Im ersten Durchgang egal, da immer 0
+                cRest |= ( c & 0x03 );
+                c >>= 2;
+                aDreierGruppe += aTr.GetChar( c );
+
+                if ( aDreierGruppe.Len() == 3 )
+                {
+                    aOut += aTr.GetChar( cRest );
+                    aOut += aDreierGruppe;
+                    cRest = 0;
+                    aDreierGruppe = "";
+                }
+                aStream >> c;
+            }
+            if ( aDreierGruppe.Len() )
+            {
+                aOut += cRest;
+                aOut += aDreierGruppe;
+            }
+            ::svt::OStringTransfer::CopyString( aOut );
+**********************************************************************************/
+
             new StatementSlot( StatementList::pTTProperties->nSidPaste );
             return;
         }
         case 7:
         {
-            new StatementSlot( 20384 ); // FN_TOOL_ANKER_CHAR aus SW?
+            new StatementSlot( 20384 );	// FN_TOOL_ANKER_CHAR aus SW?
             return;
         }
     }
@@ -563,7 +605,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
 
     if ( StatementList::MaybeResetSafeReschedule() )
     {
-        StatementList::bExecuting = sal_False;      // Wird nacher im SafeReschedule wieder zurï¿½ckgesetzt
+        StatementList::bExecuting = FALSE;		// Wird nacher im SafeReschedule wieder zurückgesetzt
 #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "SafeReschedule has been reset\n" );
 #endif
@@ -590,19 +632,22 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
             }
             m_pDbgWin->AddText( "Leaving CommandHdl\n" );
 #endif
-            return 0;        // Garnicht erst irgendwelchen blï¿½dsinn machen
+            return 0;        // Garnicht erst irgendwelchen blödsinn machen
         }
 
     while( StatementList::pFirst && ( !StatementList::bReadingCommands || StatementList::bDying ) )
-        // Schleift hier bis Befehl nicht zurï¿½ckkommt,
-        // Wird dann rekursiv ï¿½ber IdleHdl und PostUserEvent aufgerufen.
+        // Schleift hier bis Befehl nicht zurückkommt,
+        // Wird dann rekursiv über IdleHdl und PostUserEvent aufgerufen.
     {
-        m_bInsideExecutionLoop = sal_True;
+        m_bInsideExecutionLoop = TRUE;
 #ifdef TIMERIDLE
         m_aIdleTimer.Stop();
         m_aIdleTimer.Start();
 #endif
         StatementList *pC = StatementList::pFirst;
+
+//      MessBox MB( pMainWin, WB_DEF_OK|WB_OK, "Pause ...", "... und Weiter" );
+//      MB.Execute();
 
         if ( !StatementList::bCatchGPF )
         {
@@ -611,7 +656,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
 #if OSL_DEBUG_LEVEL > 1
                 m_pDbgWin->AddText( "Leaving CommandHdl\n" );
 #endif
-                return 0;        // So dass die App nochmal ï¿½ne chance bekommt
+                return 0;        // So dass die App nochmal ´ne chance bekommt
             }
         }
         else
@@ -623,13 +668,13 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
 #if OSL_DEBUG_LEVEL > 1
                     m_pDbgWin->AddText( "Leaving CommandHdl\n" );
 #endif
-                    return 0;        // So dass die App nochmal ï¿½ne chance bekommt
+                    return 0;        // So dass die App nochmal ´ne chance bekommt
                 }
             }
             catch( ... )
             {
                 if ( !StatementFlow::bUseIPC )
-                    throw;  // aus der Hilfe heraus nicht leise abbrechen
+                    throw;	// aus der Hilfe heraus nicht leise abbrechen
 
                 try
                 {
@@ -637,10 +682,10 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
                     pDlg->SetOutputSizePixel(Size(150,0));
                     pDlg->SetText( String ( TTProperties::GetSvtResId( TT_GPF ) ) );
                     pDlg->Show();
-                    OSL_FAIL("GPF");
+                    DBG_ERROR("GPF");
                     pC->ReportError( GEN_RES_STR0( S_GPF_ABORT ) );
-                    StatementList::bDying = sal_True;
-                    while ( StatementList::pFirst )         // Kommandos werden ï¿½bersprungen
+                    StatementList::bDying = TRUE;
+                    while ( StatementList::pFirst )			// Kommandos werden übersprungen
                         StatementList::NormalReschedule();
                     delete pDlg;
                 }
@@ -652,10 +697,23 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
             }
         }
 
-        m_bInsideExecutionLoop = sal_False;
+/*  #i46293# remove reschedules
+        for (int xx = 1;xx < 20;xx++)
+            StatementList::NormalReschedule();
+*/
+        m_bInsideExecutionLoop = FALSE;
     }
 
-    StatementList::aWindowWaitUId = rtl::OString();  // Warten rï¿½cksetzen, da handler sowieso verlassen wird
+    StatementList::aWindowWaitUId = SmartId();  // Warten rücksetzen, da handler sowieso verlassen wird
+
+/*    if( StatementList::pFirst && !StatementList::bReadingCommands )
+         // Abfrage nötig, da andere CommandHdl aktiv sein können oder
+         // neue Commands gelesen werden können
+    {
+        delete StatementList::pFirst;     // Löscht die gesamte Liste !!
+        StatementList::pFirst   = NULL;
+        StatementList::pCurrent = NULL;   // Nur zur Sicherheit, sollte hier sowieso NULL sein
+    }*/
 
 #if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Leaving CommandHdl\n" );
@@ -671,9 +729,10 @@ IMPL_LINK( ImplRemoteControl, QueCommandsEvent, CommunicationLink*, pCL )
     return 0;
 }
 
-sal_Bool ImplRemoteControl::QueCommands( sal_uLong nServiceId, SvStream *pIn )
+BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
 {
-    sal_uInt16 nId;
+//    return TRUE;
+    USHORT nId;
 
     if( !m_bIdleInserted )
     {
@@ -684,11 +743,11 @@ sal_Bool ImplRemoteControl::QueCommands( sal_uLong nServiceId, SvStream *pIn )
 #else
         GetpApp()->InsertIdleHdl( LINK( this, ImplRemoteControl, IdleHdl ), 1 );
 #endif
-        m_bIdleInserted = sal_True;
+        m_bIdleInserted = TRUE;
     }
 
 
-    StatementList::bReadingCommands = sal_True;
+    StatementList::bReadingCommands = TRUE;
 
 #if OSL_DEBUG_LEVEL > 1
     if (!m_pDbgWin->bQuiet)
@@ -700,8 +759,8 @@ sal_Bool ImplRemoteControl::QueCommands( sal_uLong nServiceId, SvStream *pIn )
 
     if( nServiceId != SI_IPCCommandBlock && nServiceId != SI_DirectCommandBlock )
     {
-        OSL_TRACE( "Ungültiger Request :%i", (int)nServiceId );
-        return sal_False;
+        DBG_ERROR1( "Ungültiger Request :%i", (int)nServiceId );
+        return FALSE;
     }
 
     SCmdStream *pCmdStream = new SCmdStream(pIn);
@@ -713,42 +772,42 @@ sal_Bool ImplRemoteControl::QueCommands( sal_uLong nServiceId, SvStream *pIn )
         {
             case SICommand:
             {
-                new StatementCommand( pCmdStream );     // Wird im Konstruktor an Liste angehï¿½ngt
+                new StatementCommand( pCmdStream );     // Wird im Konstruktor an Liste angehängt
                 break;
             }
             case SIControl:
             case SIStringControl:
             {
-                new StatementControl( pCmdStream, nId );     // Wird im Konstruktor an Liste angehï¿½ngt
+                new StatementControl( pCmdStream, nId );     // Wird im Konstruktor an Liste angehängt
                 break;
             }
             case SISlot:
             {
-                new StatementSlot( pCmdStream );    // Wird im Konstruktor an Liste angehï¿½ngt
+                new StatementSlot( pCmdStream );    // Wird im Konstruktor an Liste angehängt
                 break;
             }
             case SIUnoSlot:
             {
-                new StatementUnoSlot( pCmdStream );    // Wird im Konstruktor an Liste angehï¿½ngt
+                new StatementUnoSlot( pCmdStream );    // Wird im Konstruktor an Liste angehängt
                 break;
             }
             case SIFlow:
             {
-                new StatementFlow( nServiceId, pCmdStream, this );              // Wird im Konstruktor an Liste angehï¿½ngt
+                new StatementFlow( nServiceId, pCmdStream, this );              // Wird im Konstruktor an Liste angehängt
                 break;
             }
             default:
-                OSL_TRACE( "Unbekannter Request Nr:%i", nId );
+                DBG_ERROR1( "Unbekannter Request Nr:%i", nId );
                 break;
         }
         if( !pIn->IsEof() )
             pCmdStream->Read( nId );
         else {
-            OSL_FAIL( "truncated input stream" );
+            DBG_ERROR( "truncated input stream" );
         }
     }
 
-    StatementList::bReadingCommands = sal_False;
+    StatementList::bReadingCommands = FALSE;
 
     delete pCmdStream;
 #if OSL_DEBUG_LEVEL > 1
@@ -758,14 +817,18 @@ sal_Bool ImplRemoteControl::QueCommands( sal_uLong nServiceId, SvStream *pIn )
 #endif
     if ( !m_bInsideExecutionLoop )
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
         m_pDbgWin->AddText( "Posting Event for CommandHdl.\n" );
 #endif
 
         GetpApp()->PostUserEvent( LINK( this, ImplRemoteControl, CommandHdl ) );
     }
-    return sal_True;
-}
+#ifdef DEBUG
+    else
+        m_bInsideExecutionLoop = TRUE;
+#endif
+    return TRUE;
+} // BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
 
 
 SvStream* ImplRemoteControl::GetReturnStream()
@@ -776,8 +839,8 @@ SvStream* ImplRemoteControl::GetReturnStream()
 }
 
 ImplRemoteControl::ImplRemoteControl()
-: m_bIdleInserted( sal_False )
-, m_bInsideExecutionLoop( sal_False )
+: m_bIdleInserted( FALSE )
+, m_bInsideExecutionLoop( FALSE )
 #if OSL_DEBUG_LEVEL > 1
 , m_pDbgWin(NULL)
 #endif
@@ -787,11 +850,8 @@ ImplRemoteControl::ImplRemoteControl()
     if ( RemoteControlCommunicationManager::GetPort() != TT_NO_PORT_DEFINED || RemoteControlCommunicationManager::nComm )
     {
         m_pDbgWin = new EditWindow( NULL, CUniString("Debug Window"), WB_VSCROLL );
-        m_pDbgWin->bQuiet = sal_True;
+        m_pDbgWin->bQuiet = TRUE;
         m_pDbgWin->Hide();
-        m_pDbgWin->bQuiet = sal_False;
-        m_pDbgWin->Show();
-
         StatementList::m_pDbgWin = m_pDbgWin;
     }
 #endif
@@ -816,32 +876,32 @@ ImplRemoteControl::ImplRemoteControl()
 #endif
     }
     if ( RemoteControlCommunicationManager::nComm )
-        new ExtraIdle( this );      // Setzt die Bearbeitung wieder auf
+        new ExtraIdle( this );		// Setzt die Bearbeitung wieder auf
 }
 
 ImplRemoteControl::~ImplRemoteControl()
 {
     if ( MacroRecorder::HasMacroRecorder() )
-        MacroRecorder::GetMacroRecorder()->SetActionRecord( sal_False );   // Will delete MacroRecorder if necessary
+        MacroRecorder::GetMacroRecorder()->SetActionRecord( FALSE );   // Will delete MacroRecorder if necessary
 
-
-    StatementList::bDying = sal_True;
+    
+    StatementList::bDying = TRUE;
 #if OSL_DEBUG_LEVEL > 1
     if ( m_pDbgWin )
-        m_pDbgWin->bQuiet = sal_True;   // Keine Ausgabe mehr im Debugwindow
+        m_pDbgWin->bQuiet = TRUE;	// Keine Ausgabe mehr im Debugwindow
 #endif
 
 #ifdef DBG_UTIL
-    // Zurï¿½cksetzen, so daï¿½ nachfolgende Assertions nicht verloren gehen
+    // Zurücksetzen, so daß nachfolgende Assertions nicht verloren gehen
     DbgSetPrintTestTool( NULL );
     osl_setDebugMessageFunc( StatementCommand::pOriginal_osl_DebugMessageFunc );
 #endif
 
     if ( StatementList::pFirst )
-    {   // Es sind noch Kommandos da, also auch eine Mï¿½glichkeit zurï¿½ckzusenden.
+    {	// Es sind noch Kommandos da, also auch eine Möglichkeit zurückzusenden.
         StatementList::pFirst->ReportError( GEN_RES_STR0( S_APP_SHUTDOWN ) );
-        while ( StatementList::pFirst )             // Kommandos werden ï¿½bersprungen
-            StatementList::NormalReschedule();      // Fehler zurï¿½ckgeschickt
+        while ( StatementList::pFirst )				// Kommandos werden übersprungen
+            StatementList::NormalReschedule();		// Fehler zurückgeschickt
     }
 
     if ( pServiceMgr )
@@ -867,7 +927,7 @@ ImplRemoteControl::~ImplRemoteControl()
 #else
         GetpApp()->RemoveIdleHdl( LINK( this, ImplRemoteControl, IdleHdl ) );
 #endif
-        m_bIdleInserted = sal_False;
+        m_bIdleInserted = FALSE;
     }
     delete pServiceMgr;
 }
@@ -908,7 +968,7 @@ extern "C" void CreateEventLogger()
 
 extern "C" void DestroyEventLogger()
 {
-    MacroRecorder::GetMacroRecorder()->SetActionLog( sal_False );   // Will delete MacroRecorder if necessary
+    MacroRecorder::GetMacroRecorder()->SetActionLog( FALSE );   // Will delete MacroRecorder if necessary
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

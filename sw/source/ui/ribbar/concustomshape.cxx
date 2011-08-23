@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,9 +97,9 @@ rtl::OUString ConstCustomShape::GetShapeTypeFromRequest( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-sal_Bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = SwDrawBase::MouseButtonDown(rMEvt);
+    BOOL bReturn = SwDrawBase::MouseButtonDown(rMEvt);
     if ( bReturn )
     {
         SdrView *pSdrView = m_pSh->GetDrawView();
@@ -109,9 +109,13 @@ sal_Bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
             if ( pObj )
             {
                 SetAttributes( pObj );
+                sal_Bool bForceFillStyle = sal_True;
                 sal_Bool bForceNoFillStyle = sal_False;
                 if ( ((SdrObjCustomShape*)pObj)->UseNoFillStyle() )
+                {
+                    bForceFillStyle = sal_False;
                     bForceNoFillStyle = sal_True;
+                }
 
                 SfxItemSet aAttr( m_pView->GetPool() );
                 if ( bForceNoFillStyle )
@@ -129,7 +133,7 @@ sal_Bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool ConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL ConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
     return SwDrawBase::MouseButtonUp(rMEvt);
 }
@@ -140,7 +144,7 @@ sal_Bool ConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void ConstCustomShape::Activate(const sal_uInt16 nSlotId)
+void ConstCustomShape::Activate(const USHORT nSlotId)
 {
     m_pWin->SetSdrDrawMode( OBJ_CUSTOMSHAPE );
 
@@ -176,7 +180,7 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
                         if( pSourceObj )
                         {
                             const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                            SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
+                            SfxItemSet aDest( pObj->GetModel()->GetItemPool(), 				// ranges from SdrAttrObj
                             SDRATTR_START, SDRATTR_SHADOW_LAST,
                             SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                             SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,

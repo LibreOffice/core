@@ -60,7 +60,6 @@ IDLFILES=\
     XAllListener.idl\
     XAllListenerAdapterService.idl\
     XDebugging.idl\
-    XDirectInvocation.idl\
     XEngine.idl\
     XEngineListener.idl\
     XEventAttacher.idl\

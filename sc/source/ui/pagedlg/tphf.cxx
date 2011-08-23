@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,22 +60,22 @@
 // class ScHFPage
 //==================================================================
 
-ScHFPage::ScHFPage( Window* pParent, sal_uInt16 nResId,
-                    const SfxItemSet& rSet, sal_uInt16 nSetId )
+ScHFPage::ScHFPage( Window* pParent, USHORT nResId,
+                    const SfxItemSet& rSet, USHORT nSetId )
 
-    :   SvxHFPage   ( pParent, nResId, rSet, nSetId ),
-        aBtnEdit    ( this, ScResId( RID_SCBTN_HFEDIT ) ),
-        aDataSet    ( *rSet.GetPool(),
+    :	SvxHFPage	( pParent, nResId, rSet, nSetId ),
+        aBtnEdit	( this, ScResId( RID_SCBTN_HFEDIT ) ),
+        aDataSet 	( *rSet.GetPool(),
                        ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERRIGHT,
                        ATTR_PAGE, ATTR_PAGE, 0 ),
-        nPageUsage  ( (sal_uInt16)SVX_PAGE_ALL ),
-        pStyleDlg   ( NULL )
+        nPageUsage	( (USHORT)SVX_PAGE_ALL ),
+        pStyleDlg	( NULL )
 {
     SetExchangeSupport();
 
-    SfxViewShell*   pSh = SfxViewShell::Current();
+    SfxViewShell*	pSh = SfxViewShell::Current();
     ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,pSh);
-    Point           aPos( aBackgroundBtn.GetPosPixel() );
+    Point			aPos( aBackgroundBtn.GetPosPixel() );
 
     // aBackgroundBtn position not changed anymore
 
@@ -89,31 +89,29 @@ ScHFPage::ScHFPage( Window* pParent, sal_uInt16 nResId,
     if ( pViewSh )
     {
         ScViewData* pViewData = pViewSh->GetViewData();
-        ScDocument* pDoc      = pViewData->GetDocument();
+        ScDocument* pDoc	  = pViewData->GetDocument();
 
         aStrPageStyle = pDoc->GetPageStyle( pViewData->GetTabNo() );
     }
 
-    aBtnEdit.SetClickHdl    ( LINK( this, ScHFPage, BtnHdl ) );
-    aTurnOnBox.SetClickHdl  ( LINK( this, ScHFPage, TurnOnHdl ) );
+    aBtnEdit.SetClickHdl 	( LINK( this, ScHFPage, BtnHdl ) );
+    aTurnOnBox.SetClickHdl	( LINK( this, ScHFPage, TurnOnHdl ) );
 
     if ( nId == SID_ATTR_PAGE_HEADERSET )
         aBtnEdit.SetHelpId( HID_SC_HEADER_EDIT );
     else
         aBtnEdit.SetHelpId( HID_SC_FOOTER_EDIT );
-
-    aBtnEdit.SetAccessibleRelationMemberOf(&aFrm);
 }
 
 //------------------------------------------------------------------
 
-ScHFPage::~ScHFPage()
+__EXPORT ScHFPage::~ScHFPage()
 {
 }
 
 //------------------------------------------------------------------
 
-void ScHFPage::Reset( const SfxItemSet& rSet )
+void __EXPORT ScHFPage::Reset( const SfxItemSet& rSet )
 {
     SvxHFPage::Reset( rSet );
     TurnOnHdl( 0 );
@@ -121,9 +119,9 @@ void ScHFPage::Reset( const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-sal_Bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
+BOOL __EXPORT ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 {
-    sal_Bool bResult = SvxHFPage::FillItemSet( rOutSet );
+    BOOL bResult = SvxHFPage::FillItemSet( rOutSet );
 
     if ( nId == SID_ATTR_PAGE_HEADERSET )
     {
@@ -141,10 +139,10 @@ sal_Bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 
 //------------------------------------------------------------------
 
-void ScHFPage::ActivatePage( const SfxItemSet& rSet )
+void __EXPORT ScHFPage::ActivatePage( const SfxItemSet& rSet )
 {
-    sal_uInt16              nPageWhich = GetWhich( SID_ATTR_PAGE );
-    const SvxPageItem&  rPageItem  = (const SvxPageItem&)
+    USHORT				nPageWhich = GetWhich( SID_ATTR_PAGE );
+    const SvxPageItem&	rPageItem  = (const SvxPageItem&)
                                      rSet.Get(nPageWhich);
 
     nPageUsage = rPageItem.GetPageUsage();
@@ -159,7 +157,7 @@ void ScHFPage::ActivatePage( const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-int ScHFPage::DeactivatePage( SfxItemSet* pSetP )
+int __EXPORT ScHFPage::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( LEAVE_PAGE == SvxHFPage::DeactivatePage( pSetP ) )
         if ( pSetP )
@@ -199,10 +197,10 @@ IMPL_LINK( ScHFPage, TurnOnHdl, CheckBox*, EMPTYARG )
 
 IMPL_LINK( ScHFPage, BtnHdl, PushButton*, EMPTYARG )
 {
-    //  Wenn der Bearbeiten-Dialog direkt aus dem Click-Handler des Buttons
-    //  aufgerufen wird, funktioniert im Bearbeiten-Dialog unter OS/2 das
-    //  GrabFocus nicht (Bug #41805#).
-    //  Mit dem neuen StarView sollte dieser Workaround wieder raus koennen!
+    //	Wenn der Bearbeiten-Dialog direkt aus dem Click-Handler des Buttons
+    //	aufgerufen wird, funktioniert im Bearbeiten-Dialog unter OS/2 das
+    //	GrabFocus nicht (Bug #41805#).
+    //	Mit dem neuen StarView sollte dieser Workaround wieder raus koennen!
 
     Application::PostUserEvent( LINK( this, ScHFPage, HFEditHdl ) );
     return 0;
@@ -210,18 +208,18 @@ IMPL_LINK( ScHFPage, BtnHdl, PushButton*, EMPTYARG )
 
 IMPL_LINK( ScHFPage, HFEditHdl, void*, EMPTYARG )
 {
-    SfxViewShell*   pViewSh = SfxViewShell::Current();
+    SfxViewShell*	pViewSh = SfxViewShell::Current();
 
     if ( !pViewSh )
     {
-        OSL_FAIL( "Current ViewShell not found." );
+        DBG_ERROR( "Current ViewShell not found." );
         return 0;
     }
 
     if (   aCntSharedBox.IsEnabled()
         && !aCntSharedBox.IsChecked() )
     {
-        sal_uInt16 nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
+        USHORT nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
                             ? RID_SCDLG_HFED_HEADER
                             : RID_SCDLG_HFED_FOOTER;
 
@@ -238,9 +236,9 @@ IMPL_LINK( ScHFPage, HFEditHdl, void*, EMPTYARG )
     }
     else
     {
-        String              aText;
+        String				aText;
         SfxSingleTabDialog* pDlg = new SfxSingleTabDialog( this, aDataSet, 42 );
-        sal_Bool bRightPage =   aCntSharedBox.IsChecked()
+        BOOL bRightPage =   aCntSharedBox.IsChecked()
                          || ( SVX_PAGE_LEFT != SvxPageUsage(nPageUsage) );
 
         if ( nId == SID_ATTR_PAGE_HEADERSET )
@@ -293,14 +291,14 @@ ScHeaderPage::ScHeaderPage( Window* pParent, const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-SfxTabPage* ScHeaderPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* __EXPORT ScHeaderPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScHeaderPage( pParent, rCoreSet ) );
 }
 
 //------------------------------------------------------------------
 
-sal_uInt16* ScHeaderPage::GetRanges()
+USHORT* __EXPORT ScHeaderPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }
@@ -316,14 +314,14 @@ ScFooterPage::ScFooterPage( Window* pParent, const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-SfxTabPage* ScFooterPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* __EXPORT ScFooterPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScFooterPage( pParent, rCoreSet ) );
 }
 
 //------------------------------------------------------------------
 
-sal_uInt16* ScFooterPage::GetRanges()
+USHORT* __EXPORT ScFooterPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }

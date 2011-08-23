@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,6 @@
 #include <fmtsrnd.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <frmatr.hxx>
-#include "viewsh.hxx"
-#include "viewopt.hxx"
-#include "rootfrm.hxx"
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 
@@ -122,11 +119,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         if( bVert )
         {
             OSL_ENSURE( !bRev, "<SwToLayoutAnchoredObjectPosition::CalcPosition()> - reverse layout set." );
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-            if ( bVertL2R )
-                   aRelPos.X() = nRelPosY;
-            else
-                   aRelPos.X() = -nRelPosY - aObjBoundRect.Width();
+            aRelPos.X() = -nRelPosY - aObjBoundRect.Width();
             maOffsetToFrmAnchorPos.X() = nVertOffsetToFrmAnchorPos;
         }
         else
@@ -137,9 +130,8 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 
         // if in online-layout the bottom of to-page anchored object is beyond
         // the page bottom, the page frame has to grow by growing its body frame.
-        const ViewShell *pSh = GetAnchorFrm().getRootFrm()->GetCurrShell();
         if ( !bFlyAtFly && GetAnchorFrm().IsPageFrm() &&
-             pSh && pSh->GetViewOptions()->getBrowseMode() )
+             rFrmFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         {
             const long nAnchorBottom = GetAnchorFrm().Frm().Bottom();
             const long nBottom = GetAnchorFrm().Frm().Top() +
@@ -211,12 +203,8 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         // determine absolute 'horizontal' position, depending on layout-direction
         // --> OD 2004-06-17 #i26791# - determine offset to 'horizontal' frame
         // anchor position, depending on layout-direction
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        // --> OD 2009-09-04 #mongolianlayout#
-        if( bVert || bVertL2R )
-        // <--
+        if ( bVert )
         {
-
             aRelPos.Y() = nRelPosX;
             maOffsetToFrmAnchorPos.Y() = nOffset;
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,14 +29,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#ifndef SVX_LIGHT
+
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "svx/XPropertyTable.hxx"
+#include "XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <unotools/pathoptions.hxx>
 
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
+
+#endif
 
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
@@ -48,14 +52,13 @@
 #define GLOBALOVERFLOW
 
 using namespace com::sun::star;
+using namespace rtl;
 
-using ::rtl::OUString;
+sal_Unicode const pszExtColor[]	 = {'s','o','c'};
 
-sal_Unicode const pszExtColor[]  = {'s','o','c'};
-
-static char const aChckColor[]  = { 0x04, 0x00, 'S','O','C','L'};   // < 5.2
-static char const aChckColor0[] = { 0x04, 0x00, 'S','O','C','0'};   // = 5.2
-static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };      // = 6.0
+static char const aChckColor[]  = { 0x04, 0x00, 'S','O','C','L'};	// < 5.2
+static char const aChckColor0[] = { 0x04, 0x00, 'S','O','C','0'};	// = 5.2
+static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };		// = 6.0
 
 // ------------------
 // class XColorTable
@@ -71,7 +74,7 @@ static XColorTable* pTable=0;
 
 XColorTable::XColorTable( const String& rPath,
                             XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
+                            USHORT nInitSize, USHORT nReSize ) :
                 XPropertyTable( rPath, pInPool, nInitSize, nReSize)
 {
     // ColorTable braucht keine eigene BmpTable
@@ -114,18 +117,18 @@ XColorEntry* XColorTable::GetColor(long nIndex) const
 
 /************************************************************************/
 
-sal_Bool XColorTable::Load()
+BOOL XColorTable::Load()
 {
     if( bTableDirty )
     {
-        bTableDirty = sal_False;
+        bTableDirty = FALSE;
 
         INetURLObject aURL( aPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return sal_False;
+            return FALSE;
         }
 
         aURL.Append( aName );
@@ -136,19 +139,19 @@ sal_Bool XColorTable::Load()
         uno::Reference< container::XNameContainer > xTable( SvxUnoXColorTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XColorTable::Save()
+BOOL XColorTable::Save()
 {
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return sal_False;
+        return FALSE;
     }
 
     aURL.Append( aName );
@@ -162,13 +165,13 @@ sal_Bool XColorTable::Save()
 
 /************************************************************************/
 
-sal_Bool XColorTable::Create()
+BOOL XColorTable::Create()
 {
     XubString aStr;
     xub_StrLen nLen;
     ResMgr& rRes = DIALOG_MGR();
 
-    static sal_uInt16 aResId[] =
+    static USHORT __READONLY_DATA aResId[] =
     {
         RID_SVXSTR_BLACK,
         RID_SVXSTR_BLUE,
@@ -197,7 +200,7 @@ sal_Bool XColorTable::Create()
 
     // BM: ifndef VCL part removed (deprecated)
 
-    static ColorData const aColTab[] =
+    static ColorData __READONLY_DATA aColTab[] =
     {
         COL_BLACK,
         COL_BLUE,
@@ -217,7 +220,7 @@ sal_Bool XColorTable::Create()
         COL_WHITE
     };
 
-    for( sal_uInt16 n = 0; n < 16; ++n )
+    for( USHORT n = 0; n < 16; ++n )
     {
         Insert( n, new XColorEntry( Color( aColTab[n] ),
                                     String( ResId( aResId[ n ], rRes )) ) );
@@ -451,14 +454,14 @@ sal_Bool XColorTable::Create()
 
 /************************************************************************/
 
-sal_Bool XColorTable::CreateBitmapsForUI()
+BOOL XColorTable::CreateBitmapsForUI()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
+Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
@@ -475,7 +478,7 @@ Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 
 XColorList::XColorList( const String& rPath,
                             XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
+                            USHORT nInitSize, USHORT nReSize ) :
                 XPropertyList( rPath, pInPool, nInitSize, nReSize)
 {
     // pBmpList = new List( nInitSize, nReSize );
@@ -510,35 +513,35 @@ XColorEntry* XColorList::GetColor(long nIndex) const
 
 /************************************************************************/
 
-sal_Bool XColorList::Load()
+BOOL XColorList::Load()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XColorList::Save()
+BOOL XColorList::Save()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XColorList::Create()
+BOOL XColorList::Create()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XColorList::CreateBitmapsForUI()
+BOOL XColorList::CreateBitmapsForUI()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-Bitmap* XColorList::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
+Bitmap* XColorList::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }

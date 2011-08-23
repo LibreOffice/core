@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,6 +43,11 @@
 #include <pam.hxx>                  //SwPaM
 #include <tools/poly.hxx>           //Polygon, PolyPolygon
 #include <doc.hxx>                  //SwDoc
+
+//Uncomment to dump debugging streams of graphics
+#if OSL_DEBUG_LEVEL > 1
+//#   define DEBUGDUMP
+#endif
 
 class SwTxtFmtColl;
 class SwCharFmt;
@@ -110,11 +115,12 @@ namespace sw
         const SwFrmFmt* mpFlyFrm;
         SwPosition maPos;
         Size maSize;
-        // #i43447# - Size of the frame in the layout.
+        // --> OD 2007-04-19 #i43447#
+        // Size of the frame in the layout.
         // Especially needed for graphics, whose layout size can differ from its
         // size, because it is scaled into its environment.
         Size maLayoutSize;
-
+        // <--
         WriterSource meWriterType;
         const SwNode *mpStartFrameContent;
         bool mbIsInline;
@@ -195,7 +201,8 @@ namespace sw
 
         /** The layout size of the contained element
 
-            #i43447# - Needed for graphics, which are scaled into its environment
+            OD 2007-04-19 #i43447#
+            Needed for graphics, which are scaled into its environment
 
             @return layout size
         */
@@ -556,7 +563,7 @@ namespace sw
             e.g.  given Normal/Heading1/Heading2/.../Heading10 at their default
             assigned outline style list levels of body level/level 1/level 2/.../level 10
 
-            #i98791#
+            OD 2009-02-04 #i98791#
             adjust the sorting algorithm due to introduced outline level attribute
 
             @param rStyles
@@ -819,8 +826,8 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        sal_uInt16 TransformWhichBetweenPools(const SfxItemPool &rDestPool,
-            const SfxItemPool &rSrcPool, sal_uInt16 nWhich);
+        USHORT TransformWhichBetweenPools(const SfxItemPool &rDestPool,
+            const SfxItemPool &rSrcPool, USHORT nWhich);
 
         /** Map a SwDoc WhichId to the equivalent Id for a given SfxItemSet
 
@@ -849,8 +856,8 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        sal_uInt16 GetSetWhichFromSwDocWhich(const SfxItemSet &rSet,
-            const SwDoc &rDoc, sal_uInt16 nWhich);
+        USHORT GetSetWhichFromSwDocWhich(const SfxItemSet &rSet,
+            const SwDoc &rDoc, USHORT nWhich);
 
 
         /** Make inserting an OLE object into a Writer document easy
@@ -914,6 +921,41 @@ namespace sw
             /// No copying allowed
             DrawingOLEAdaptor(const DrawingOLEAdaptor &rDoc);
         };
+
+#ifdef DEBUGDUMP
+        /** Create a SvStream to dump data to during debugging
+
+            This creates a file in the program dir of OOo, delete the SvStream
+            after you are done with it
+
+            @param rSuffix
+            The suffix that will be appened to this debugging file
+
+            @return a SvStream to dump data to
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        SvStream *CreateDebuggingStream(const String &rSuffix);
+
+        /** Dump one SvStream to another
+
+            @param rSrc
+            The source stream
+
+            @param rDest
+            The destination stream
+
+            @param nLen
+            Optional Length of data to copy from rSrc to rDest, if unused copy
+            all available data from rSrc
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        void DumpStream(const SvStream &rSrc, SvStream &rDest,
+            sal_uInt32 nLen = STREAM_SEEK_TO_END);
+#endif
     }
 }
 

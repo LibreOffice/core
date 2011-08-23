@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,11 @@
 
 #include <vector>
 #include <editeng/editeng.hxx>
-#include "svx/xexch.hxx"
+#include "xexch.hxx"
 #include <svx/xflclit.hxx>
 #include <svx/svdxcgv.hxx>
 #include <svx/svdoutl.hxx>
-#include "svx/svditext.hxx"
+#include "svditext.hxx"
 #include <svx/svdetc.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdograf.hxx>
@@ -46,9 +46,9 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdtrans.hxx> // Fuer GetMapFactor zum umskalieren bei PasteModel
-#include "svx/svdstr.hrc"   // Namen aus der Resource
-#include "svx/svdglob.hxx"  // StringCache
-#include "svx/xoutbmp.hxx"
+#include "svdstr.hrc"   // Namen aus der Resource
+#include "svdglob.hxx"  // StringCache
+#include "xoutbmp.hxx"
 #include <vcl/metaact.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itempool.hxx>
@@ -77,7 +77,7 @@ SdrExchangeView::SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut):
 Point SdrExchangeView::GetViewCenter(const OutputDevice* pOut) const
 {
     Point aCenter;
-    if (pOut==NULL)
+    if (pOut==NULL) 
     {
         pOut = GetFirstOutputDevice();
     }
@@ -105,34 +105,34 @@ Point SdrExchangeView::GetPastePos(SdrObjList* pLst, OutputDevice* pOut)
     return aP;
 }
 
-sal_Bool SdrExchangeView::ImpLimitToWorkArea(Point& rPt) const
+BOOL SdrExchangeView::ImpLimitToWorkArea(Point& rPt) const
 {
-    sal_Bool bRet(sal_False);
+    BOOL bRet(FALSE);
 
     if(!aMaxWorkArea.IsEmpty())
     {
         if(rPt.X()<aMaxWorkArea.Left())
         {
             rPt.X() = aMaxWorkArea.Left();
-            bRet = sal_True;
+            bRet = TRUE;
         }
 
         if(rPt.X()>aMaxWorkArea.Right())
         {
             rPt.X() = aMaxWorkArea.Right();
-            bRet = sal_True;
+            bRet = TRUE;
         }
 
         if(rPt.Y()<aMaxWorkArea.Top())
         {
             rPt.Y() = aMaxWorkArea.Top();
-            bRet = sal_True;
+            bRet = TRUE;
         }
 
         if(rPt.Y()>aMaxWorkArea.Bottom())
         {
             rPt.Y() = aMaxWorkArea.Bottom();
-            bRet = sal_True;
+            bRet = TRUE;
         }
     }
     return bRet;
@@ -140,24 +140,24 @@ sal_Bool SdrExchangeView::ImpLimitToWorkArea(Point& rPt) const
 
 void SdrExchangeView::ImpGetPasteObjList(Point& /*rPos*/, SdrObjList*& rpLst)
 {
-    if (rpLst==NULL)
+    if (rpLst==NULL) 
     {
         SdrPageView* pPV = GetSdrPageView();
-
+    
         if (pPV!=NULL) {
             rpLst=pPV->GetObjList();
         }
     }
 }
 
-sal_Bool SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& rLayer) const
+BOOL SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& rLayer) const
 {
-    sal_Bool bRet=sal_False;
+    BOOL bRet=FALSE;
     rLayer=0;
     if (pObjList!=NULL) {
         const SdrPage* pPg=pObjList->GetPage();
         if (pPg!=NULL) {
-            rLayer=pPg->GetLayerAdmin().GetLayerID(aAktLayer,sal_True);
+            rLayer=pPg->GetLayerAdmin().GetLayerID(aAktLayer,TRUE);
             if (rLayer==SDRLAYER_NOTFOUND) rLayer=0;
             SdrPageView* pPV = GetSdrPageView();
             if (pPV!=NULL) {
@@ -170,50 +170,50 @@ sal_Bool SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerI
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-sal_Bool SdrExchangeView::Paste(const GDIMetaFile& rMtf, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+BOOL SdrExchangeView::Paste(const GDIMetaFile& rMtf, const Point& rPos, SdrObjList* pLst, UINT32 nOptions)
 {
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
     ImpLimitToWorkArea( aPos );
-    if (pLst==NULL) return sal_False;
+    if (pLst==NULL) return FALSE;
     SdrLayerID nLayer;
-    if (!ImpGetPasteLayer(pLst,nLayer)) return sal_False;
-    sal_Bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
+    if (!ImpGetPasteLayer(pLst,nLayer)) return FALSE;
+    BOOL bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     SdrGrafObj* pObj=new SdrGrafObj(Graphic(rMtf));
     pObj->SetLayer(nLayer);
     ImpPasteObject(pObj,*pLst,aPos,rMtf.GetPrefSize(),rMtf.GetPrefMapMode(),nOptions);
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SdrExchangeView::Paste(const Bitmap& rBmp, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+BOOL SdrExchangeView::Paste(const Bitmap& rBmp, const Point& rPos, SdrObjList* pLst, UINT32 nOptions)
 {
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
     ImpLimitToWorkArea( aPos );
-    if (pLst==NULL) return sal_False;
+    if (pLst==NULL) return FALSE;
     SdrLayerID nLayer;
-    if (!ImpGetPasteLayer(pLst,nLayer)) return sal_False;
-    sal_Bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
+    if (!ImpGetPasteLayer(pLst,nLayer)) return FALSE;
+    BOOL bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     SdrGrafObj* pObj=new SdrGrafObj(Graphic(rBmp));
     pObj->SetLayer(nLayer);
     ImpPasteObject(pObj,*pLst,aPos,rBmp.GetSizePixel(),MapMode(MAP_PIXEL),nOptions);
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+BOOL SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObjList* pLst, UINT32 nOptions)
 {
     if(!rStr.Len())
-        return sal_False;
+        return FALSE;
 
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
     ImpLimitToWorkArea( aPos );
-    if (pLst==NULL) return sal_False;
+    if (pLst==NULL) return FALSE;
     SdrLayerID nLayer;
-    if (!ImpGetPasteLayer(pLst,nLayer)) return sal_False;
-    sal_Bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
+    if (!ImpGetPasteLayer(pLst,nLayer)) return FALSE;
+    BOOL bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->GetPage();
@@ -239,18 +239,18 @@ sal_Bool SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObj
     MapUnit eMap=pMod->GetScaleUnit();
     Fraction aMap=pMod->GetScaleFraction();
     ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+BOOL SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, USHORT eFormat, const Point& rPos, SdrObjList* pLst, UINT32 nOptions)
 {
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
     ImpLimitToWorkArea( aPos );
-    if (pLst==NULL) return sal_False;
+    if (pLst==NULL) return FALSE;
     SdrLayerID nLayer;
-    if (!ImpGetPasteLayer(pLst,nLayer)) return sal_False;
-    sal_Bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
+    if (!ImpGetPasteLayer(pLst,nLayer)) return FALSE;
+    BOOL bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->GetPage();
@@ -282,7 +282,7 @@ sal_Bool SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, sal_uI
     {
         SdrOutliner& rOutliner = pObj->GetModel()->GetHitTestOutliner();
         rOutliner.SetText(*pObj->GetOutlinerParaObject());
-
+        
         if(1L == rOutliner.GetParagraphCount())
         {
             SfxStyleSheet* pCandidate = rOutliner.GetStyleSheet(0L);
@@ -297,14 +297,14 @@ sal_Bool SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, sal_uI
         }
     }
 
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, UINT32 nOptions)
 {
     const SdrModel* pSrcMod=&rMod;
     if (pSrcMod==pMod)
-        return sal_False; // na so geht's ja nun nicht
+        return FALSE; // na so geht's ja nun nicht
 
     const bool bUndo = IsUndoEnabled();
 
@@ -315,7 +315,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
     {
         if( bUndo )
             EndUndo();
-        return sal_True;
+        return TRUE;
     }
 
     Point aPos(rPos);
@@ -331,9 +331,9 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
 
     ImpLimitToWorkArea( aPos );
     if (pLst==NULL)
-        return sal_False;
+        return FALSE;
 
-    sal_Bool bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
+    BOOL bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
     if (bUnmark)
         UnmarkAllObj();
 
@@ -341,7 +341,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
     // Dafuer erstmal die Faktoren berechnen
     MapUnit eSrcUnit=pSrcMod->GetScaleUnit();
     MapUnit eDstUnit=pMod->GetScaleUnit();
-    sal_Bool bResize=eSrcUnit!=eDstUnit;
+    BOOL bResize=eSrcUnit!=eDstUnit;
     Fraction xResize,yResize;
     Point aPt0;
     if (bResize)
@@ -351,7 +351,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
         yResize=aResize.Y();
     }
     SdrObjList*  pDstLst=pLst;
-    sal_uInt16 nPg,nPgAnz=pSrcMod->GetPageCount();
+    USHORT nPg,nPgAnz=pSrcMod->GetPageCount();
     for (nPg=0; nPg<nPgAnz; nPg++)
     {
         const SdrPage* pSrcPg=pSrcMod->GetPage(nPg);
@@ -363,10 +363,10 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
             ResizeRect(aR,aPt0,xResize,yResize);
         Point aDist(aPos-aR.Center());
         Size  aSiz(aDist.X(),aDist.Y());
-        //sal_uIntPtr nDstObjAnz0=pDstLst->GetObjCount();
-        sal_uIntPtr nCloneErrCnt=0;
-        sal_uIntPtr nOb,nObAnz=pSrcPg->GetObjCount();
-        sal_Bool bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
+        //ULONG nDstObjAnz0=pDstLst->GetObjCount();
+        ULONG nCloneErrCnt=0;
+        ULONG nOb,nObAnz=pSrcPg->GetObjCount();
+        BOOL bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
 
         // #i13033#
         // New mechanism to re-create the connections of cloned connectors
@@ -379,15 +379,15 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
             // #116235#
             SdrObject* pNeuObj = pSrcOb->Clone();
 
-            if (pNeuObj!=NULL)
+            if (pNeuObj!=NULL) 
             {
-                if(bResize)
+                if(bResize) 
                 {
-                    pNeuObj->GetModel()->SetPasteResize(sal_True); // #51139#
+                    pNeuObj->GetModel()->SetPasteResize(TRUE); // #51139#
                     pNeuObj->NbcResize(aPt0,xResize,yResize);
-                    pNeuObj->GetModel()->SetPasteResize(sal_False); // #51139#
+                    pNeuObj->GetModel()->SetPasteResize(FALSE); // #51139#
                 }
-
+                
                 // #i39861#
                 pNeuObj->SetModel(pDstLst->GetModel());
                 pNeuObj->SetPage(pDstLst->GetPage());
@@ -395,13 +395,13 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
                 pNeuObj->NbcMove(aSiz);
 
                 const SdrPage* pPg = pDstLst->GetPage();
-
+                
                 if(pPg)
                 {
                     // #i72535#
                     const SdrLayerAdmin& rAd = pPg->GetLayerAdmin();
                     SdrLayerID nLayer(0);
-
+                    
                     if(pNeuObj->ISA(FmFormObj))
                     {
                         // for FormControls, force to form layer
@@ -409,10 +409,10 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
                     }
                     else
                     {
-                        nLayer = rAd.GetLayerID(aAktLayer, sal_True);
+                        nLayer = rAd.GetLayerID(aAktLayer, TRUE);
                     }
-
-                    if(SDRLAYER_NOTFOUND == nLayer)
+                    
+                    if(SDRLAYER_NOTFOUND == nLayer) 
                     {
                         nLayer = 0;
                     }
@@ -429,7 +429,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
                 if (bMark) {
                     // Markhandles noch nicht sofort setzen!
                     // Das erledigt das ModelHasChanged der MarkView.
-                    MarkObj(pNeuObj,pMarkPV,sal_False,sal_True);
+                    MarkObj(pNeuObj,pMarkPV,FALSE,TRUE);
                 }
 
                 // #i13033#
@@ -463,7 +463,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
 
             aStr += " Objektverbindungen werden nicht mitkopiert.";
 
-            OSL_FAIL(aStr.GetBuffer());
+            DBG_ERROR(aStr.GetBuffer());
 #endif
         }
     }
@@ -471,10 +471,10 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
     if( bUndo )
         EndUndo();
 
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SdrExchangeView::IsExchangeFormatSupported(sal_uIntPtr nFormat) const
+BOOL SdrExchangeView::IsExchangeFormatSupported(ULONG nFormat) const
 {
     return( FORMAT_PRIVATE == nFormat ||
             FORMAT_GDIMETAFILE == nFormat ||
@@ -485,7 +485,7 @@ sal_Bool SdrExchangeView::IsExchangeFormatSupported(sal_uIntPtr nFormat) const
             SOT_FORMATSTR_ID_EDITENGINE == nFormat );
 }
 
-void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, sal_uInt32 nOptions)
+void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, UINT32 nOptions)
 {
     BigInt nSizX(rSiz.Width());
     BigInt nSizY(rSiz.Height());
@@ -525,7 +525,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
             pMarkPV=pPV;
     }
 
-    sal_Bool bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
+    BOOL bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
     if (bMark)
     { // Obj in der ersten gefundenen PageView markieren
         MarkObj(pObj,pMarkPV);
@@ -534,7 +534,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Bitmap SdrExchangeView::GetMarkedObjBitmap( sal_Bool bNoVDevIfOneBmpMarked ) const
+Bitmap SdrExchangeView::GetMarkedObjBitmap( BOOL bNoVDevIfOneBmpMarked ) const
 {
     Bitmap aBmp;
 
@@ -542,8 +542,8 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap( sal_Bool bNoVDevIfOneBmpMarked ) con
     {
         if( bNoVDevIfOneBmpMarked )
         {
-            SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
-            SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() == 1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
+            SdrObject*	pGrafObjTmp	= GetMarkedObjectByIndex( 0 );
+            SdrGrafObj*	pGrafObj = ( GetMarkedObjectCount() == 1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
 
             if( pGrafObj && ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP ) )
                 aBmp = pGrafObj->GetTransformedGraphic().GetBitmap();
@@ -552,7 +552,7 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap( sal_Bool bNoVDevIfOneBmpMarked ) con
         if( !aBmp )
         {
             const Graphic aGraphic( GetMarkedObjMetaFile( bNoVDevIfOneBmpMarked ) );
-
+            
             // #i102089# support user's settings of AA and LineSnap when the MetaFile gets
             // rasterconverted to a bitmap
             const SvtOptionsDrawinglayer aDrawinglayerOpt;
@@ -571,19 +571,19 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap( sal_Bool bNoVDevIfOneBmpMarked ) con
 
 // -----------------------------------------------------------------------------
 
-GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( sal_Bool bNoVDevIfOneMtfMarked ) const
+GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( BOOL bNoVDevIfOneMtfMarked ) const
 {
     GDIMetaFile aMtf;
 
     if( AreObjectsMarked() )
     {
-        Rectangle   aBound( GetMarkedObjBoundRect() );
+        Rectangle	aBound( GetMarkedObjBoundRect() );
         Size        aBoundSize( aBound.GetWidth(), aBound.GetHeight() );
-        MapMode     aMap( pMod->GetScaleUnit(), Point(), pMod->GetScaleFraction(), pMod->GetScaleFraction() );
+        MapMode	    aMap( pMod->GetScaleUnit(), Point(), pMod->GetScaleFraction(), pMod->GetScaleFraction() );
 
         if( bNoVDevIfOneMtfMarked )
         {
-            SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
+            SdrObject*	pGrafObjTmp = GetMarkedObjectByIndex( 0 );
             SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() ==1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
 
             if( pGrafObj )
@@ -609,7 +609,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( sal_Bool bNoVDevIfOneMtfMarke
             Size            aDummySize( 2, 2 );
 
             aOut.SetOutputSizePixel( aDummySize );
-            aOut.EnableOutput( sal_False );
+            aOut.EnableOutput( FALSE );
             aOut.SetMapMode( aMap );
 
             aMtf.Clear();
@@ -650,7 +650,7 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
         if( ( 1 == GetMarkedObjectCount() ) && GetSdrMarkByIndex( 0 ) )
             aRet = SdrExchangeView::GetObjGraphic( pMod, GetMarkedObjectByIndex( 0 ) );
         else
-            aRet = GetMarkedObjMetaFile( sal_False );
+            aRet = GetMarkedObjMetaFile( FALSE );
     }
 
     return aRet;
@@ -667,7 +667,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
         // try to get a graphic from the object first
         const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pObj);
         const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pObj);
-
+        
         if(pSdrGrafObj)
         {
             // #110981# Make behaviour coherent with metafile
@@ -684,15 +684,15 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
         // if graphic could not be retrieved => go the hard way and create a MetaFile
         if( ( GRAPHIC_NONE == aRet.GetType() ) || ( GRAPHIC_DEFAULT == aRet.GetType() ) )
         {
-            VirtualDevice   aOut;
+            VirtualDevice	aOut;
             GDIMetaFile     aMtf;
-            const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
-            const MapMode   aMap( pModel->GetScaleUnit(),
+            const Rectangle	aBoundRect( pObj->GetCurrentBoundRect() );
+            const MapMode	aMap( pModel->GetScaleUnit(),
                                   Point(),
                                   pModel->GetScaleFraction(),
                                   pModel->GetScaleFraction() );
 
-            aOut.EnableOutput( sal_False );
+            aOut.EnableOutput( FALSE );
             aOut.SetMapMode( aMap );
             aMtf.Record( &aOut );
             pObj->SingleObjectPainter( aOut ); // #110094#-17
@@ -726,7 +726,7 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
     ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
     ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
     const SdrLayerAdmin&                        rLayerAdmin = pMod->GetLayerAdmin();
-    const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), sal_False );
+    const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), FALSE );
     sal_uInt32                                  n, nCount;
 
     for( n = 0, nCount = GetMarkedObjectCount(); n < nCount; n++ )
@@ -760,7 +760,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     // werde ich sie mir wohl kopieren muessen.
     SortMarkedObjects();
     SdrModel* pNeuMod=pMod->AllocModel();
-    SdrPage* pNeuPag=pNeuMod->AllocPage(sal_False);
+    SdrPage* pNeuPag=pNeuMod->AllocPage(FALSE);
     pNeuMod->InsertPage(pNeuPag);
 
     if( !mxSelectionController.is() || !mxSelectionController->GetMarkedObjModel( pNeuPag ) )
@@ -769,7 +769,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
         ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
         const SdrLayerAdmin&                        rLayerAdmin = pMod->GetLayerAdmin();
-        const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), sal_False );
+        const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), FALSE );
         sal_uInt32                                  n, nCount, nCloneErrCnt = 0;
 
         for( n = 0, nCount = GetMarkedObjectCount(); n < nCount; n++ )
@@ -849,7 +849,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
             aStr += " Objektverbindungen werden nicht mitkopiert.";
 
-            OSL_FAIL(aStr.GetBuffer());
+            DBG_ERROR(aStr.GetBuffer());
 #endif
         }
     }
@@ -858,40 +858,40 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SdrExchangeView::Cut( sal_uIntPtr /*nFormat */)
+BOOL SdrExchangeView::Cut( ULONG /*nFormat */)
 {
-    OSL_FAIL( "SdrExchangeView::Cut: Not supported anymore" );
-    return sal_False;
+    DBG_ERROR( "SdrExchangeView::Cut: Not supported anymore" );
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------------
 
-void SdrExchangeView::CutMarked( sal_uIntPtr /*nFormat */)
+void SdrExchangeView::CutMarked( ULONG /*nFormat */)
 {
-    OSL_FAIL( "SdrExchangeView::CutMarked: Not supported anymore" );
+    DBG_ERROR( "SdrExchangeView::CutMarked: Not supported anymore" );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SdrExchangeView::Yank(sal_uIntPtr /*nFormat*/)
+BOOL SdrExchangeView::Yank(ULONG /*nFormat*/)
 {
-    OSL_FAIL( "SdrExchangeView::Yank: Not supported anymore" );
-    return sal_False;
+    DBG_ERROR( "SdrExchangeView::Yank: Not supported anymore" );
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------------
 
-void SdrExchangeView::YankMarked(sal_uIntPtr /*nFormat*/)
+void SdrExchangeView::YankMarked(ULONG /*nFormat*/)
 {
-    OSL_FAIL( "YankMarked: Not supported anymore" );
+    DBG_ERROR( "YankMarked: Not supported anymore" );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SdrExchangeView::Paste(Window* /*pWin*/, sal_uIntPtr /*nFormat*/)
+BOOL SdrExchangeView::Paste(Window* /*pWin*/, ULONG /*nFormat*/)
 {
-    OSL_FAIL( "SdrExchangeView::Paste: Not supported anymore" );
-    return sal_False;
+    DBG_ERROR( "SdrExchangeView::Paste: Not supported anymore" );
+    return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

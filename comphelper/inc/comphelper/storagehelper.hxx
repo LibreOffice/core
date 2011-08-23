@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,19 +34,15 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include "comphelper/comphelperdllapi.h"
 
 
-#define PACKAGE_STORAGE_FORMAT_STRING   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageFormat" ) )
-#define ZIP_STORAGE_FORMAT_STRING       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ZipFormat" ) )
-#define OFOPXML_STORAGE_FORMAT_STRING   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OFOPXMLFormat" ) )
-
-#define PACKAGE_ENCRYPTIONDATA_SHA1UTF8   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSHA1UTF8EncryptionKey" ) )
-#define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSHA1MS1252EncryptionKey" ) )
+#define PACKAGE_STORAGE_FORMAT_STRING	::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageFormat" ) )
+#define ZIP_STORAGE_FORMAT_STRING		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ZipFormat" ) )
+#define OFOPXML_STORAGE_FORMAT_STRING	::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OFOPXMLFormat" ) )
 
 namespace comphelper {
 
@@ -117,9 +113,9 @@ public:
                             = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
         throw ( ::com::sun::star::uno::Exception );
 
-    static void SetCommonStorageEncryptionData(
+    static void SetCommonStoragePassword(
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData )
+            const ::rtl::OUString& aPass )
         throw ( ::com::sun::star::uno::Exception );
 
     // the following method supports only storages of OOo formats
@@ -163,9 +159,6 @@ public:
                             = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >(),
             sal_Bool bRepairStorage = sal_False )
         throw ( ::com::sun::star::uno::Exception );
-
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
-        CreatePackageEncryptionData( const ::rtl::OUString& aPassword );
 
     static sal_Bool IsValidZipEntryFileName( const ::rtl::OUString& aName, sal_Bool bSlashAllowed );
     static sal_Bool IsValidZipEntryFileName( const sal_Unicode *pChar, sal_Int32 nLength, sal_Bool bSlashAllowed );

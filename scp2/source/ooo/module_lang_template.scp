@@ -31,6 +31,7 @@ Module gid_Module_Langpack_Basis_Template
     Description = "gid_Module_Langpack_Root_Template";
     Styles = (TEMPLATEMODULE);
     Files = (gid_File_Extra_Autotextshare_Lang,
+             gid_File_Extra_Palettes_Lang,
              gid_File_Extra_Tplpresntimpr_Lang,
              gid_File_Extra_Tplwizagenda_Lang,
              gid_File_Extra_Tplwizdesktop_Lang,
@@ -63,6 +64,9 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Dbw,
              gid_File_Res_Dkt,
              gid_File_Res_Editeng,
+             gid_File_Res_Epb,
+             gid_File_Res_Epg,
+             gid_File_Res_Epp,
              gid_File_Res_Eur,
              gid_File_Res_For,
              gid_File_Res_Forui,
@@ -83,8 +87,9 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Sd,
              gid_File_Res_Sfx,
              gid_File_Res_Spa,
-             gid_File_Res_Svl,
+             gid_File_Res_Svs,
              gid_File_Res_Svt,
+             gid_File_Res_Svp,
              gid_File_Res_Svx,
              gid_File_Res_Cui,
              gid_File_Res_TextConversionDlgs,
@@ -103,6 +108,9 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Stt,
              gid_File_Res_Tfu,
              gid_File_Res_Eps,
+             gid_File_Res_Egi,
+             gid_File_Res_Ept,
+             gid_File_Res_Eme,
              gid_File_Res_UpdChk,
              gid_File_Res_Upd);
 End

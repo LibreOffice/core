@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,9 +62,8 @@ public:
     static bool     isSupportingStartingAngle(       const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
     //starting value for bars or baseline for areas for example
     static bool     isSupportingBaseValue(           const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
-    static bool     shiftCategoryPosAtXAxisPerDefault(     const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
+    static bool     shiftTicksAtXAxisPerDefault(     const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
     static bool     isSupportingAxisPositioning(     const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
-    static bool     isSupportingDateAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
 
     //returns sequence of ::com::sun::star::chart::DataLabelPlacement
     static ::com::sun::star::uno::Sequence < sal_Int32 > getSupportedLabelPlacements(

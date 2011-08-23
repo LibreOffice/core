@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-Jan 2005        Created
+Jan 2005		Created
  ************************************************************************/
 #ifndef _LWPFRIBSECTION_HXX_
 #define _LWPFRIBSECTION_HXX_
@@ -67,14 +67,14 @@ Jan 2005        Created
 #include "lwppara.hxx"
 
 /**
- * @brief       Process page layout for inserting pagelayout or section
+ * @brief		Process page layout for inserting pagelayout or section
  *
  */
 class LwpMasterPage
 {
 public:
     LwpMasterPage(LwpPara* pPara, LwpPageLayout* pLayout);
-    ~LwpMasterPage(){}
+    ~LwpMasterPage(){};
 
 public:
     //for page layout register and parse
@@ -103,7 +103,7 @@ private:
 };
 
 /**
- * @brief       FRIB_TAB_SECTION object
+ * @brief		FRIB_TAB_SECTION object
  *
  */
 class LwpSection;

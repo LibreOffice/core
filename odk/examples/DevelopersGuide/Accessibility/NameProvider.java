@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import java.util.HashMap;
@@ -129,7 +129,7 @@ public class NameProvider
         maStateMap.put (new Integer (AccessibleStateType.OPAQUE), "OPAQUE");
         maStateMap.put (new Integer (AccessibleStateType.PRESSED), "PRESSED");
         maStateMap.put (new Integer (AccessibleStateType.RESIZABLE), "RESIZABLE");
-        maStateMap.put (new Integer (AccessibleStateType.SELECTABLE), "SELECTABLE");
+        maStateMap.put (new Integer (AccessibleStateType.SELECTABLE), "SELECTABLE");           
         maStateMap.put (new Integer (AccessibleStateType.SELECTED), "SELECTED");
         maStateMap.put (new Integer (AccessibleStateType.SENSITIVE), "SENSITIVE");
         maStateMap.put (new Integer (AccessibleStateType.SHOWING), "SHOWING");

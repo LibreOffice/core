@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,6 +44,7 @@ using namespace connectivity::adabas;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -58,7 +59,7 @@ ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
     if(xResult.is())
     {
                 Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aD(RTL_CONSTASCII_USTRINGPARAM("D"));
+        ::rtl::OUString aD(::rtl::OUString::createFromAscii("D"));
         while(xResult->next())
         {
             if(xRow->getString(9) == _rName)
@@ -78,9 +79,9 @@ ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
         {
             if(xRow->getString(4) == _rName)
             {
-                sal_Int32 nType             = xRow->getInt(5);
-                ::rtl::OUString sTypeName   = xRow->getString(6);
-                sal_Int32 nPrec             = xRow->getInt(7);
+                sal_Int32 nType				= xRow->getInt(5);
+                ::rtl::OUString sTypeName	= xRow->getString(6);
+                sal_Int32 nPrec				= xRow->getInt(7);
                 OAdabasCatalog::correctColumnProperties(nPrec,nType,sTypeName);
 
                 OIndexColumn* pRet = new OIndexColumn(bAsc,

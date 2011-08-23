@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,9 +73,9 @@ SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
             uno::Reference< container::XNamed > & xN,
             uno::Reference< container::XNameAccess > & xNA ) :
     ModalDialog(pWin, SW_RES(DLG_RENAME_XNAMED)),
-   aNameFL(this, SW_RES(FL_NAME)),
-    aNewNameFT(this, SW_RES(FT_NEW_NAME)),
+   aNewNameFT(this, SW_RES(FT_NEW_NAME)),
    aNewNameED(this, SW_RES(ED_NEW_NAME)),
+   aNameFL(this, SW_RES(FL_NAME)),
    aOk(this, SW_RES(PB_OK)),
    aCancel(this, SW_RES(PB_CANCEL)),
    aHelp(this, SW_RES(PB_HELP)),
@@ -104,7 +104,7 @@ IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, EMPTYARG)
     }
     catch(uno::RuntimeException&)
     {
-        OSL_FAIL("name wasn't changed");
+        OSL_ENSURE(false, "name wasn't changed");
     }
     EndDialog(RET_OK);
     return 0;

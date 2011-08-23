@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,11 +60,11 @@ public class _XSearchable extends MultiMethodTest {
     private boolean mDispose = false;
     private boolean mExcludeFindNext = false;
 
-    /**
-     * Creates an entry to search for, if the current object does not provide
-     * one. In this case, the environment is disposed after the test, since
+    /** 
+     * Creates an entry to search for, if the current object does not provide 
+     * one. In this case, the environment is disposed after the test, since 
      * the inserted object may influence following tests.
-     *
+     * 
      */
     protected void before() {
         Object o = tEnv.getObjRelation("SEARCHSTRING");
@@ -82,7 +82,7 @@ public class _XSearchable extends MultiMethodTest {
             }
             else {
                 log.println("Needed object relation 'XSearchable.MAKEENTRYINCELL' is there, but is of type '"
-                            + o.getClass().getName() + "'. Should be 'XCell' or 'XCell[]' instead.");
+                            + o.getClass().getName() + "'. Should be 'XCell' or 'XCell[]' instead."); 
             }
             for (int i=0; i<cells.length; i++) {
                 cells[i].setFormula(mSearchString);
@@ -91,7 +91,7 @@ public class _XSearchable extends MultiMethodTest {
         }
         mExcludeFindNext = (tEnv.getObjRelation("EXCLUDEFINDNEXT")==null)?false:true;
     }
-
+    
     /**
      * Creates the search descriptor which searches for
      * 'xTextDoc' string. <p>
@@ -129,7 +129,7 @@ public class _XSearchable extends MultiMethodTest {
 
     /**
      * Performs search using descriptor created before. Storing the
-     * first occurrence result. <p>
+     * first occurence result. <p>
      * Has <b> OK </b> status if the method not <code>null</code>
      * value. <p>
      * The following method tests are to be completed successfully before :
@@ -158,7 +158,7 @@ public class _XSearchable extends MultiMethodTest {
      */
     public void _findNext() {
         if (mExcludeFindNext) {
-            log.println("Testing findNext() excluded, because only one" +
+            log.println("Testing findNext() excluded, because only one" + 
                         " search result is available.");
             tRes.tested("findNext()", true);
         }

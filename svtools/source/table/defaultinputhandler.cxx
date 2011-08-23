@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,133 +29,121 @@
 #include "precompiled_svtools.hxx"
 
 #include "svtools/table/defaultinputhandler.hxx"
-#include "svtools/table/tablecontrolinterface.hxx"
-
-#include "tabledatawindow.hxx"
-#include "mousefunction.hxx"
+#include "svtools/table/abstracttablecontrol.hxx"
 
 #include <tools/debug.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
+#include "svtools/table/tabledatawindow.hxx"
 
-//......................................................................................................................
+//........................................................................
 namespace svt { namespace table
 {
-//......................................................................................................................
+//.......................................................................
 
-    typedef ::rtl::Reference< IMouseFunction >  PMouseFunction;
-    typedef ::std::vector< PMouseFunction >     MouseFunctions;
     struct DefaultInputHandler_Impl
     {
-        PMouseFunction  pActiveFunction;
-        MouseFunctions  aMouseFunctions;
     };
 
-    //==================================================================================================================
+    //====================================================================
     //= DefaultInputHandler
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    //====================================================================
+    //--------------------------------------------------------------------
     DefaultInputHandler::DefaultInputHandler()
         :m_pImpl( new DefaultInputHandler_Impl )
+        ,m_bResize(false)
     {
-        m_pImpl->aMouseFunctions.push_back( new ColumnResize );
-        m_pImpl->aMouseFunctions.push_back( new RowSelection );
-        m_pImpl->aMouseFunctions.push_back( new ColumnSortHandler );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------
     DefaultInputHandler::~DefaultInputHandler()
     {
+        DELETEZ( m_pImpl );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    namespace
+    //--------------------------------------------------------------------
+    bool DefaultInputHandler::MouseMove( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
     {
-        bool lcl_delegateMouseEvent( DefaultInputHandler_Impl& i_impl, ITableControl& i_control, const MouseEvent& i_event,
-            FunctionResult ( IMouseFunction::*i_handlerMethod )( ITableControl&, const MouseEvent& ) )
+        Point aPoint = _rMEvt.GetPosPixel();
+        if(m_bResize)
         {
-            if ( i_impl.pActiveFunction.is() )
-            {
-                bool furtherHandler = false;
-                switch ( (i_impl.pActiveFunction.get()->*i_handlerMethod)( i_control, i_event ) )
-                {
-                case ActivateFunction:
-                    OSL_ENSURE( false, "lcl_delegateMouseEvent: unexpected - function already *is* active!" );
-                    break;
-                case ContinueFunction:
-                    break;
-                case DeactivateFunction:
-                    i_impl.pActiveFunction.clear();
-                    break;
-                case SkipFunction:
-                    furtherHandler = true;
-                    break;
-                }
-                if ( !furtherHandler )
-                    // handled the event
-                    return true;
-            }
-
-            // ask all other handlers
-            bool handled = false;
-            for (   MouseFunctions::iterator handler = i_impl.aMouseFunctions.begin();
-                    ( handler != i_impl.aMouseFunctions.end() ) && !handled;
-                    ++handler
-                )
-            {
-                if ( *handler == i_impl.pActiveFunction )
-                    // we already invoked this function
-                    continue;
-
-                switch ( (handler->get()->*i_handlerMethod)( i_control, i_event ) )
-                {
-                case ActivateFunction:
-                    i_impl.pActiveFunction = *handler;
-                    handled = true;
-                    break;
-                case ContinueFunction:
-                case DeactivateFunction:
-                    OSL_ENSURE( false, "lcl_delegateMouseEvent: unexpected: inactivate handler cannot be continued or deactivated!" );
-                    break;
-                case SkipFunction:
-                    handled = false;
-                    break;
-                }
-            }
-            return handled;
+            _rControl.resizeColumn(aPoint);
+            return true;
         }
+        return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    bool DefaultInputHandler::MouseMove( ITableControl& i_tableControl, const MouseEvent& i_event )
+    //--------------------------------------------------------------------
+    bool DefaultInputHandler::MouseButtonDown( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
     {
-        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseMove );
+        bool bHandled = false;
+        Point aPoint = _rMEvt.GetPosPixel();
+        RowPos nRow = _rControl.getCurrentRow(aPoint);
+        if(nRow == -1)
+        {
+            m_bResize = _rControl.startResizeColumn(aPoint);
+            bHandled = true;
+        }
+        else if(nRow >= 0)
+        {
+            if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
+            {
+                _rControl.setCursorAtCurrentCell(aPoint);
+                bHandled = true;
+            }
+            else
+            {
+                if(!_rControl.isRowSelected(nRow))
+                    bHandled = _rControl.getSelEngine()->SelMouseButtonDown(_rMEvt);
+                else
+                    bHandled = true;
+            }
+        }
+        return bHandled;
     }
-
-    //------------------------------------------------------------------------------------------------------------------
-    bool DefaultInputHandler::MouseButtonDown( ITableControl& i_tableControl, const MouseEvent& i_event )
+    //--------------------------------------------------------------------
+    bool DefaultInputHandler::MouseButtonUp( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
     {
-        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseDown );
+        bool bHandled = false;
+        Point aPoint = _rMEvt.GetPosPixel();
+        if(_rControl.getCurrentRow(aPoint) >= 0)
+        {			
+            if(m_bResize)
+            {
+                m_bResize = _rControl.endResizeColumn(aPoint);
+                bHandled = true;
+            }
+            else if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
+            {
+                bHandled = true;
+            }
+            else
+            {
+                bHandled = _rControl.getSelEngine()->SelMouseButtonUp(_rMEvt);
+            }
+        }
+        else
+        {
+            if(m_bResize)
+            {
+                m_bResize = _rControl.endResizeColumn(aPoint);
+                bHandled = true;
+            }
+        }
+        return bHandled;
     }
-
-    //------------------------------------------------------------------------------------------------------------------
-    bool DefaultInputHandler::MouseButtonUp( ITableControl& i_tableControl, const MouseEvent& i_event )
-    {
-        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseUp );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    bool DefaultInputHandler::KeyInput( ITableControl& _rControl, const KeyEvent& rKEvt )
+    //--------------------------------------------------------------------
+    bool DefaultInputHandler::KeyInput( IAbstractTableControl& _rControl, const KeyEvent& rKEvt )
     {
         bool bHandled = false;
 
         const KeyCode& rKeyCode = rKEvt.GetKeyCode();
-        sal_uInt16 nKeyCode = rKeyCode.GetCode();
+        USHORT nKeyCode = rKeyCode.GetCode();
 
         struct _ActionMapEntry
         {
-            sal_uInt16              nKeyCode;
-            sal_uInt16              nKeyModifier;
+            USHORT              nKeyCode;
+            USHORT              nKeyModifier;
             TableControlAction  eAction;
         }
         static aKnownActions[] = {
@@ -171,11 +159,11 @@ namespace svt { namespace table
             { KEY_PAGEDOWN, KEY_MOD1,   cursorToLastLine },
             { KEY_HOME,     KEY_MOD1,   cursorTopLeft },
             { KEY_END,      KEY_MOD1,   cursorBottomRight },
-            { KEY_SPACE,    KEY_MOD1,   cursorSelectRow },
-            { KEY_UP,       KEY_SHIFT,  cursorSelectRowUp },
-            { KEY_DOWN,     KEY_SHIFT,  cursorSelectRowDown },
-            { KEY_END,      KEY_SHIFT,  cursorSelectRowAreaBottom },
-            { KEY_HOME,     KEY_SHIFT,  cursorSelectRowAreaTop },
+        { KEY_SPACE,    KEY_MOD1,   cursorSelectRow },
+        { KEY_UP,       KEY_SHIFT,  cursorSelectRowUp },
+        { KEY_DOWN,     KEY_SHIFT,  cursorSelectRowDown },
+        { KEY_END,      KEY_SHIFT,  cursorSelectRowAreaBottom },
+        { KEY_HOME,     KEY_SHIFT,  cursorSelectRowAreaTop },
 
             { 0, 0, invalidTableControlAction }
         };
@@ -186,6 +174,7 @@ namespace svt { namespace table
             if ( ( pActions->nKeyCode == nKeyCode ) && ( pActions->nKeyModifier == rKeyCode.GetAllModifier() ) )
             {
                 bHandled = _rControl.dispatchAction( pActions->eAction );
+                bHandled = true; // always handled  issue #i114340
                 break;
             }
         }
@@ -193,22 +182,22 @@ namespace svt { namespace table
         return bHandled;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    bool DefaultInputHandler::GetFocus( ITableControl& _rControl )
+    //--------------------------------------------------------------------
+    bool DefaultInputHandler::GetFocus( IAbstractTableControl& _rControl )
     {
         _rControl.showCursor();
         return false;   // continue processing
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    bool DefaultInputHandler::LoseFocus( ITableControl& _rControl )
+    //--------------------------------------------------------------------
+    bool DefaultInputHandler::LoseFocus( IAbstractTableControl& _rControl )
     {
         _rControl.hideCursor();
         return false;   // continue processing
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    bool DefaultInputHandler::RequestHelp( ITableControl& _rControl, const HelpEvent& _rHEvt )
+    //--------------------------------------------------------------------
+    bool DefaultInputHandler::RequestHelp( IAbstractTableControl& _rControl, const HelpEvent& _rHEvt )
     {
         (void)_rControl;
         (void)_rHEvt;
@@ -216,8 +205,8 @@ namespace svt { namespace table
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    bool DefaultInputHandler::Command( ITableControl& _rControl, const CommandEvent& _rCEvt )
+    //--------------------------------------------------------------------
+    bool DefaultInputHandler::Command( IAbstractTableControl& _rControl, const CommandEvent& _rCEvt )
     {
         (void)_rControl;
         (void)_rCEvt;
@@ -225,8 +214,8 @@ namespace svt { namespace table
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    bool DefaultInputHandler::PreNotify( ITableControl& _rControl, NotifyEvent& _rNEvt )
+    //--------------------------------------------------------------------
+    bool DefaultInputHandler::PreNotify( IAbstractTableControl& _rControl, NotifyEvent& _rNEvt )
     {
         (void)_rControl;
         (void)_rNEvt;
@@ -234,16 +223,16 @@ namespace svt { namespace table
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    bool DefaultInputHandler::Notify( ITableControl& _rControl, NotifyEvent& _rNEvt )
+    //--------------------------------------------------------------------
+    bool DefaultInputHandler::Notify( IAbstractTableControl& _rControl, NotifyEvent& _rNEvt )
     {
         (void)_rControl;
         (void)_rNEvt;
         // TODO
         return false;
     }
-//......................................................................................................................
+//........................................................................
 } } // namespace svt::table
-//......................................................................................................................
+//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

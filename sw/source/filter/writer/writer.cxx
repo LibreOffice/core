@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,8 +73,7 @@ struct Writer_Impl
 
 Writer_Impl::Writer_Impl()
     : m_pStream(0)
-    , pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 )
-    , pBkmkArr( 0 ), pBkmkNodePos( 0 )
+    , pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 ), pBkmkNodePos( 0 )
 {
 }
 
@@ -95,7 +94,7 @@ Writer_Impl::~Writer_Impl()
 void Writer_Impl::RemoveFontList( SwDoc& rDoc )
 {
     OSL_ENSURE( pFontRemoveLst, "wo ist die FontListe?" );
-    for( sal_uInt16 i = pFontRemoveLst->Count(); i; )
+    for( USHORT i = pFontRemoveLst->Count(); i; )
     {
         SvxFontItem* pItem = (SvxFontItem*)(*pFontRemoveLst)[ --i ];
         rDoc.GetAttrPool().Remove( *pItem );
@@ -107,7 +106,7 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
     if( !pBkmkNodePos )
         pBkmkNodePos = new SwBookmarkNodeTable;
 
-    sal_uLong nNd = rBkmk.GetMarkPos().nNode.GetIndex();
+    ULONG nNd = rBkmk.GetMarkPos().nNode.GetIndex();
     SvPtrarr* pArr = pBkmkNodePos->Get( nNd );
     if( !pArr )
     {
@@ -185,18 +184,18 @@ void Writer::ResetWriter()
     pOrigFileName = 0;
     pDoc = 0;
 
-    bShowProgress = bUCS2_WithStartChar = sal_True;
+    bShowProgress = bUCS2_WithStartChar = TRUE;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
         bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock =
-        bOrganizerMode = sal_False;
+        bOrganizerMode = FALSE;
 }
 
-sal_Bool Writer::CopyNextPam( SwPaM ** ppPam )
+BOOL Writer::CopyNextPam( SwPaM ** ppPam )
 {
     if( (*ppPam)->GetNext() == pOrigPam )
     {
-        *ppPam = pOrigPam;          // wieder auf den Anfangs-Pam setzen
-        return sal_False;               // Ende vom Ring
+        *ppPam = pOrigPam;			// wieder auf den Anfangs-Pam setzen
+        return FALSE;				// Ende vom Ring
     }
 
     // ansonsten kopiere den die Werte aus dem naechsten Pam
@@ -205,7 +204,7 @@ sal_Bool Writer::CopyNextPam( SwPaM ** ppPam )
     *pCurPam->GetPoint() = *(*ppPam)->Start();
     *pCurPam->GetMark() = *(*ppPam)->End();
 
-    return sal_True;
+    return TRUE;
 }
 
 // suche die naechste Bookmark-Position aus der Bookmark-Tabelle
@@ -224,16 +223,16 @@ sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 }
 
 
-SwPaM *
-Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndIdx)
+SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
+                        BOOL bNodesArray )
 {
-    SwNodes *const pNds = &rDoc.GetNodes();
+    SwNodes* pNds = bNodesArray ? &rDoc.GetNodes() : (SwNodes*)rDoc.GetUndoNds();
 
     SwNodeIndex aStt( *pNds, nStartIdx );
     SwCntntNode* pCNode = aStt.GetNode().GetCntntNode();
     if( !pCNode && 0 == ( pCNode = pNds->GoNext( &aStt )) )
     {
-        OSL_FAIL( "An StartPos kein ContentNode mehr" );
+        OSL_ENSURE( false, "An StartPos kein ContentNode mehr" );
     }
 
     SwPaM* pNew = new SwPaM( aStt );
@@ -242,7 +241,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
     if( 0 == (pCNode = aStt.GetNode().GetCntntNode()) &&
         0 == (pCNode = pNds->GoPrevious( &aStt )) )
     {
-        OSL_FAIL( "An StartPos kein ContentNode mehr" );
+        OSL_ENSURE( false, "An StartPos kein ContentNode mehr" );
     }
     pCNode->MakeEndIndex( &pNew->GetPoint()->nContent );
     pNew->GetPoint()->nNode = aStt;
@@ -262,11 +261,11 @@ void Writer::SetStream(SvStream *const pStream)
 { m_pImpl->m_pStream = pStream; }
 
 
-SvStream& Writer::OutHex( SvStream& rStrm, sal_uLong nHex, sal_uInt8 nLen )
-{                                                  // in einen Stream aus
+SvStream& Writer::OutHex( SvStream& rStrm, ULONG nHex, BYTE nLen )
+{												   // in einen Stream aus
     // Pointer an das Bufferende setzen
     sal_Char* pStr = aNToABuf + (NTOABUFLEN-1);
-    for( sal_uInt8 n = 0; n < nLen; ++n )
+    for( BYTE n = 0; n < nLen; ++n )
     {
         *(--pStr) = (sal_Char)(nHex & 0xf ) + 48;
         if( *pStr > '9' )
@@ -297,7 +296,7 @@ SvStream& Writer::OutLong( SvStream& rStrm, long nVal )
     return rStrm << pStr;
 }
 
-SvStream& Writer::OutULong( SvStream& rStrm, sal_uLong nVal )
+SvStream& Writer::OutULong( SvStream& rStrm, ULONG nVal )
 {
     // Pointer an das Bufferende setzen
     sal_Char* pStr = aNToABuf + (NTOABUFLEN-1);
@@ -310,12 +309,12 @@ SvStream& Writer::OutULong( SvStream& rStrm, sal_uLong nVal )
 }
 
 
-sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
+ULONG Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
 {
     if ( IsStgWriter() )
     {
         SotStorageRef aRef = new SotStorage( rStrm );
-        sal_uLong nResult = Write( rPaM, *aRef, pFName );
+        ULONG nResult = Write( rPaM, *aRef, pFName );
         if ( nResult == ERRCODE_NONE )
             aRef->Commit();
         return nResult;
@@ -330,40 +329,43 @@ sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
     // zum Vergleich auf den akt. Pam sichern
     pOrigPam = &rPaM;
 
-    sal_uLong nRet = WriteStream();
+    ULONG nRet = WriteStream();
 
     ResetWriter();
 
     return nRet;
 }
 
-sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMed, const String* pFileName )
+ULONG Writer::Write( SwPaM& rPam, SfxMedium& rMed, const String* pFileName )
 {
     // This method must be overloaded in SwXMLWriter a storage from medium will be used there.
     // The microsoft format can write to storage but the storage will be based on the stream.
     return Write( rPam, *rMed.GetOutStream(), pFileName );
 }
 
-sal_uLong Writer::Write( SwPaM& /*rPam*/, SvStorage&, const String* )
+ULONG Writer::Write( SwPaM& /*rPam*/, SvStorage&, const String* )
 {
     OSL_ENSURE( !this, "Schreiben in Storages auf einem Stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
-sal_uLong Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const String*, SfxMedium* )
+ULONG Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const String*, SfxMedium* )
 {
     OSL_ENSURE( !this, "Schreiben in Storages auf einem Stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
-sal_Bool Writer::CopyLocalFileToINet( String& rFileNm )
+BOOL Writer::CopyLocalFileToINet( String& rFileNm )
 {
-    if( !pOrigFileName )                // can be happen, by example if we
-        return sal_False;                   // write into the clipboard
+    if( !pOrigFileName )		        // can be happen, by example if we
+        return FALSE;                   // write into the clipboard
 
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     INetURLObject aFileUrl( rFileNm ), aTargetUrl( *pOrigFileName );
 
+// JP 01.11.00: what is the correct question for the portal??
+//	if( aFileUrl.GetProtocol() == aFileUrl.GetProtocol() )
+//		return bRet;
 // this is our old without the Mail-Export
     if( ! ( INET_PROT_FILE == aFileUrl.GetProtocol() &&
             INET_PROT_FILE != aTargetUrl.GetProtocol() &&
@@ -374,11 +376,11 @@ sal_Bool Writer::CopyLocalFileToINet( String& rFileNm )
     if (m_pImpl->pSrcArr)
     {
         // wurde die Datei schon verschoben
-        sal_uInt16 nPos;
+        USHORT nPos;
         if (m_pImpl->pSrcArr->Seek_Entry( &rFileNm, &nPos ))
         {
             rFileNm = *(*m_pImpl->pDestArr)[ nPos ];
-            return sal_True;
+            return TRUE;
         }
     }
     else
@@ -391,8 +393,8 @@ sal_Bool Writer::CopyLocalFileToINet( String& rFileNm )
     String *pDest = new String( aTargetUrl.GetPartBeforeLastName() );
     *pDest += String(aFileUrl.GetName());
 
-    SfxMedium aSrcFile( *pSrc, STREAM_READ, sal_False );
-    SfxMedium aDstFile( *pDest, STREAM_WRITE | STREAM_SHARE_DENYNONE, sal_False );
+    SfxMedium aSrcFile( *pSrc, STREAM_READ, FALSE );
+    SfxMedium aDstFile( *pDest, STREAM_WRITE | STREAM_SHARE_DENYNONE, FALSE );
 
     *aDstFile.GetOutStream() << *aSrcFile.GetInStream();
 
@@ -425,14 +427,16 @@ void Writer::PutNumFmtFontsInAttrPool()
     const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
     const SwNumRule* pRule;
     const SwNumFmt* pFmt;
+    // --> OD 2006-06-27 #b644095#
+//    const Font *pFont, *pDefFont = &SwNumRule::GetDefBulletFont();
     const Font* pFont;
     const Font* pDefFont = &numfunc::GetDefBulletFont();
     // <--
-    sal_Bool bCheck = sal_False;
+    BOOL bCheck = FALSE;
 
-    for( sal_uInt16 nGet = rListTbl.Count(); nGet; )
+    for( USHORT nGet = rListTbl.Count(); nGet; )
         if( pDoc->IsUsed( *(pRule = rListTbl[ --nGet ] )))
-            for( sal_uInt8 nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
+            for( BYTE nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
                 if( SVX_NUM_CHAR_SPECIAL == (pFmt = &pRule->Get( nLvl ))->GetNumberingType() ||
                     SVX_NUM_BITMAP == pFmt->GetNumberingType() )
                 {
@@ -445,7 +449,7 @@ void Writer::PutNumFmtFontsInAttrPool()
                             continue;
                     }
                     else if( *pFont == *pDefFont )
-                        bCheck = sal_True;
+                        bCheck = TRUE;
 
                     _AddFontItem( rPool, SvxFontItem( pFont->GetFamily(),
                                 pFont->GetName(), pFont->GetStyleName(),
@@ -453,7 +457,7 @@ void Writer::PutNumFmtFontsInAttrPool()
                 }
 }
 
-void Writer::PutEditEngFontsInAttrPool( sal_Bool bIncl_CJK_CTL )
+void Writer::PutEditEngFontsInAttrPool( BOOL bIncl_CJK_CTL )
 {
     SfxItemPool& rPool = pDoc->GetAttrPool();
     if( rPool.GetSecondaryPool() )
@@ -475,7 +479,7 @@ void Writer::PutCJKandCTLFontsInAttrPool()
 }
 
 
-void Writer::_AddFontItems( SfxItemPool& rPool, sal_uInt16 nW )
+void Writer::_AddFontItems( SfxItemPool& rPool, USHORT nW )
 {
     const SvxFontItem* pFont = (const SvxFontItem*)&rPool.GetDefaultItem( nW );
     _AddFontItem( rPool, *pFont );
@@ -483,9 +487,9 @@ void Writer::_AddFontItems( SfxItemPool& rPool, sal_uInt16 nW )
     if( 0 != ( pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem( nW )) )
         _AddFontItem( rPool, *pFont );
 
-    sal_uInt32 nMaxItem = rPool.GetItemCount2( nW );
-    for( sal_uInt32 nGet = 0; nGet < nMaxItem; ++nGet )
-        if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem2( nW, nGet )) )
+    USHORT nMaxItem = rPool.GetItemCount( nW );
+    for( USHORT nGet = 0; nGet < nMaxItem; ++nGet )
+        if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem( nW, nGet )) )
             _AddFontItem( rPool, *pFont );
 }
 
@@ -530,12 +534,12 @@ void Writer::CreateBookmarkTbl()
 
 
 // search alle Bookmarks in the range and return it in the Array
-sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
+USHORT Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
     xub_StrLen nEnd, SvPtrarr& rArr)
 {
     OSL_ENSURE( !rArr.Count(), "es sind noch Eintraege vorhanden" );
 
-    sal_uLong nNd = rNd.GetIndex();
+    ULONG nNd = rNd.GetIndex();
     SvPtrarr* pArr = (m_pImpl->pBkmkNodePos) ?
         m_pImpl->pBkmkNodePos->Get( nNd ) : 0;
     if( pArr )
@@ -546,7 +550,7 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
             rArr.Insert( pArr, 0 );
         else
         {
-            sal_uInt16 n;
+            USHORT n;
             xub_StrLen nCntnt;
             for( n = 0; n < pArr->Count(); ++n )
             {
@@ -575,13 +579,13 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
 
 // Storage-spezifisches
 
-sal_uLong StgWriter::WriteStream()
+ULONG StgWriter::WriteStream()
 {
     OSL_ENSURE( !this, "Schreiben in Streams auf einem Storage?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
-sal_uLong StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
+ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 {
     SetStream(0);
     pStg = &rStg;
@@ -593,7 +597,7 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
     // zum Vergleich auf den akt. Pam sichern
     pOrigPam = &rPaM;
 
-    sal_uLong nRet = WriteStorage();
+    ULONG nRet = WriteStorage();
 
     pStg = NULL;
     ResetWriter();
@@ -601,7 +605,7 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
     return nRet;
 }
 
-sal_uLong StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const String* pFName, SfxMedium* pMedium )
+ULONG StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const String* pFName, SfxMedium* pMedium )
 {
     SetStream(0);
     pStg = 0;
@@ -614,7 +618,7 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage 
     // zum Vergleich auf den akt. Pam sichern
     pOrigPam = &rPaM;
 
-    sal_uLong nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();
+    ULONG nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();
 
     pStg = NULL;
     ResetWriter();

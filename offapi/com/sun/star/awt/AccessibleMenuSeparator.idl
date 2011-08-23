@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #endif
 
 module com { module sun { module star { module awt {
-
+    
 /** specifies accessibility support for a menu separator.
 
     @since OOo 1.1.2
@@ -53,14 +53,14 @@ published service AccessibleMenuSeparator
         menu separator:
 
         <ul>
-        <li>Role: The role of a menu separator is <const
+        <li>Role: The role of a menu separator is <const 
             scope="com::sun::star::accessibility"
             >AccessibleRole::SEPARATOR</const>.</li>
         <li>Name: There is no name.</li>
         <li>Description: There is no description.</li>
         <li>Children: There are no children.</li>
         <li>Parent: The parent of a menu separator is a menu bar,
-            a pop-up menu or a menu, whose accessible context supports the
+            a popup menu or a menu, whose accessible context supports the
             services <type>AccessibleMenuBar</type>,
             <type>AccessiblePopupMenu</type> or
             <type>AccessibleMenu</type>.</li>
@@ -82,7 +82,7 @@ published service AccessibleMenuSeparator
                 >AccessibleStateType::SELECTABLE</const> is always set.</li>
             <li><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::SELECTED</const> is set
-                if the object is selected.</li>
+                if the object is selected.</li>   
             <li><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::SHOWING</const> is set
                 if the object is displayed on the screen.</li>
@@ -93,15 +93,15 @@ published service AccessibleMenuSeparator
         </ul>
      */
     interface ::com::sun::star::accessibility::XAccessibleContext;
-
+    
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
-
+    
     interface ::com::sun::star::accessibility::XAccessibleComponent;
-
+    
     interface ::com::sun::star::accessibility::XAccessibleExtendedComponent;
 
 };
-
+    
 }; }; }; };
 
 #endif

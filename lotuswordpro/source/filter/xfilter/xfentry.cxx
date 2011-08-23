@@ -57,7 +57,11 @@
  * @file
  * index entry object.
  ************************************************************************/
-#include    "xfentry.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-04-26 create this file.
+ ************************************************************************/
+#include	"xfentry.hxx"
 
 XFEntry::XFEntry()
 {
@@ -66,9 +70,9 @@ XFEntry::XFEntry()
     m_nOutlineLevel = 1;
 }
 
-void    XFEntry::ToXml(IXFStream *pStrm)
+void	XFEntry::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     pAttrList->AddAttribute( A2OUSTR("text:string-value"), m_strValue );
@@ -77,7 +81,7 @@ void    XFEntry::ToXml(IXFStream *pStrm)
     {
         pAttrList->AddAttribute( A2OUSTR("text:outline-level"), Int32ToOUString(m_nOutlineLevel) );
         pStrm->StartElement( A2OUSTR("text:toc-mark") );
-//      pStrm->Characters(m_strDisplay);
+//		pStrm->Characters(m_strDisplay);
         pStrm->EndElement( A2OUSTR("text:toc-mark") );
     }
     else if( m_eType == enumXFEntryAlphabetical )
@@ -90,7 +94,7 @@ void    XFEntry::ToXml(IXFStream *pStrm)
             pAttrList->AddAttribute( A2OUSTR("text:main-etry"), A2OUSTR("true") );
 
         pStrm->StartElement( A2OUSTR("text:alphabetical-index-mark") );
-//      pStrm->Characters(m_strDisplay);
+//		pStrm->Characters(m_strDisplay);
         pStrm->EndElement( A2OUSTR("text:alphabetical-index-mark") );
     }
     else if( m_eType == enumXFEntryUserIndex )
@@ -99,7 +103,7 @@ void    XFEntry::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("text:index-name"), m_strName );
 
         pStrm->StartElement( A2OUSTR("text:user-index-mark") );
-//      pStrm->Characters(m_strDisplay);
+//		pStrm->Characters(m_strDisplay);
         pStrm->EndElement( A2OUSTR("text:user-index-mark") );
     }
 }

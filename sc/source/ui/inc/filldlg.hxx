@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,81 +45,82 @@ class ScDocument;
 class ScFillSeriesDlg : public ModalDialog
 {
 public:
-            ScFillSeriesDlg( Window*        pParent,
-                             ScDocument&    rDocument,
-                             FillDir        eFillDir,
-                             FillCmd        eFillCmd,
-                             FillDateCmd    eFillDateCmd,
-                             String         aStartStr,
-                             double         fStep,
-                             double         fMax,
-                             sal_uInt16         nPossDir );
+            ScFillSeriesDlg( Window*		pParent,
+                             ScDocument&	rDocument,
+                             FillDir		eFillDir,
+                             FillCmd		eFillCmd,
+                             FillDateCmd	eFillDateCmd,
+                             String			aStartStr,
+                             double			fStep,
+                             double			fMax,
+                             USHORT			nPossDir );
             ~ScFillSeriesDlg();
 
-    FillDir     GetFillDir() const          { return theFillDir; }
-    FillCmd     GetFillCmd() const          { return theFillCmd; }
-    FillDateCmd GetFillDateCmd() const      { return theFillDateCmd; }
-    double      GetStart() const            { return fStartVal; }
-    double      GetStep() const             { return fIncrement; }
-    double      GetMax() const              { return fEndVal; }
+    FillDir		GetFillDir() const			{ return theFillDir; }
+    FillCmd		GetFillCmd() const			{ return theFillCmd; }
+    FillDateCmd	GetFillDateCmd() const		{ return theFillDateCmd; }
+    double		GetStart() const			{ return fStartVal; }
+    double		GetStep() const				{ return fIncrement; }
+    double		GetMax() const				{ return fEndVal; }
 
-    String      GetStartStr() const         { return aEdStartVal.GetText(); }
+    String		GetStartStr() const			{ return aEdStartVal.GetText(); }
 
-    void        SetEdStartValEnabled(sal_Bool bFlag=false);
+    void		SetEdStartValEnabled(BOOL bFlag=FALSE);
 
 private:
-    FixedText       aFtStartVal;
-    Edit            aEdStartVal;
-    String          aStartStrVal;
-
-    FixedText       aFtEndVal;
-    Edit            aEdEndVal;
-
-    FixedText       aFtIncrement;
-    Edit            aEdIncrement;
     FixedLine       aFlDirection;
-    RadioButton     aBtnDown;
-    RadioButton     aBtnRight;
-    RadioButton     aBtnUp;
-    RadioButton     aBtnLeft;
+    RadioButton		aBtnDown;
+    RadioButton		aBtnRight;
+    RadioButton		aBtnUp;
+    RadioButton		aBtnLeft;
 
     FixedLine       aFlSep1;
     FixedLine       aFlType;
-    RadioButton     aBtnArithmetic;
-    RadioButton     aBtnGeometric;
-    RadioButton     aBtnDate;
-    RadioButton     aBtnAutoFill;
+    RadioButton		aBtnArithmetic;
+    RadioButton		aBtnGeometric;
+    RadioButton		aBtnDate;
+    RadioButton		aBtnAutoFill;
 
     FixedLine       aFlSep2;
     FixedLine       aFlTimeUnit;
-    RadioButton     aBtnDay;
-    RadioButton     aBtnDayOfWeek;
-    RadioButton     aBtnMonth;
-    RadioButton     aBtnYear;
-    sal_Bool        bStartValFlag;
+    RadioButton		aBtnDay;
+    RadioButton		aBtnDayOfWeek;
+    RadioButton		aBtnMonth;
+    RadioButton		aBtnYear;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    BOOL			bStartValFlag;
+    FixedText		aFtStartVal;
+    Edit			aEdStartVal;
+    String			aStartStrVal;
 
-    const String    errMsgInvalidVal;
+    FixedText		aFtEndVal;
+    Edit			aEdEndVal;
+
+    FixedText		aFtIncrement;
+    Edit			aEdIncrement;
+
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
+
+    const String	errMsgInvalidVal;
 
     //----------------------------------------------------------
 
-    ScDocument& rDoc;
-    FillDir     theFillDir;
-    FillCmd     theFillCmd;
-    FillDateCmd theFillDateCmd;
-    double      fStartVal;
-    double      fIncrement;
-    double      fEndVal;
+    ScDocument&	rDoc;
+    FillDir		theFillDir;
+    FillCmd		theFillCmd;
+    FillDateCmd	theFillDateCmd;
+    double		fStartVal;
+    double		fIncrement;
+    double		fEndVal;
 
 #ifdef _FILLDLG_CXX
 private:
-    void Init( sal_uInt16 nPossDir );
-    sal_Bool CheckStartVal();
-    sal_Bool CheckIncrementVal();
-    sal_Bool CheckEndVal();
+    void Init( USHORT nPossDir );
+    BOOL CheckStartVal();
+    BOOL CheckIncrementVal();
+    BOOL CheckEndVal();
 
     DECL_LINK( OKHdl, void * );
     DECL_LINK( DisableHdl, Button * );

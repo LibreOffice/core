@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ private:
 public:
     ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext > xContext, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const rtl::OUString& sResourceUrl, sal_Bool bIsMenu, sal_Bool bTemporary = sal_True ) throw( css::uno::RuntimeException );
 
-    sal_Bool IsMenu() const { return m_bIsMenu; }
+    sal_Bool IsMenu() { return m_bIsMenu; }
 
     // Attributes
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
@@ -101,7 +101,7 @@ public:
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
-
+    
 private:
     ::rtl::OUString maName;
     sal_Int32 mnType;

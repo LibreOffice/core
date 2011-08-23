@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <list>
 #include <vector>
 #include <map>
-#include <boost/unordered_set.hpp>
+#include <hash_set>
 
 #include <cstdio>
 #include <cstdarg>
@@ -71,58 +71,58 @@ class SystemFontList;
 // -----------
 
 class AquaSalFrame;
-struct FrameHash : public boost::hash<sal_IntPtr>
+struct FrameHash : public std::hash<sal_IntPtr>
 {
     size_t operator()(const AquaSalFrame* frame) const
-    { return boost::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
+    { return std::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
 };
 
 #define INVALID_CURSOR_PTR (NSCursor*)0xdeadbeef
 
 struct SalData
 {
-
-    SALTIMERPROC                                  mpTimerProc;      // timer callback proc
-    AquaSalInstance                              *mpFirstInstance;  // pointer of first instance
-    std::list<AquaSalFrame*>                      maFrames;         // pointer of first frame
-    boost::unordered_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existance
-    SalObject                                    *mpFirstObject;    // pointer of first object window
-    SalVirtualDevice                             *mpFirstVD;        // first VirDev
-    SalPrinter                                   *mpFirstPrinter;   // first printing printer
+    
+    SALTIMERPROC                                  mpTimerProc;		// timer callback proc
+    AquaSalInstance                              *mpFirstInstance;	// pointer of first instance
+    std::list<AquaSalFrame*>                      maFrames;	        // pointer of first frame
+    std::hash_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existance
+    SalObject                                    *mpFirstObject;	// pointer of first object window
+    SalVirtualDevice                             *mpFirstVD;    	// first VirDev
+    SalPrinter                                   *mpFirstPrinter; 	// first printing printer
     SystemFontList                               *mpFontList;
     NSStatusItem*                                 mpStatusItem;     // one status item that draws all our stati
                                                                     // at the moment this is only one add menu button
-
+    
     CGColorSpaceRef                               mxRGBSpace;
     CGColorSpaceRef                               mxGraySpace;
     CGColorSpaceRef                               mxP50Space;
     CGPatternRef                                  mxP50Pattern;
-
+    
     std::vector< NSCursor* >                      maCursors;
     std::vector< NSMenuItem* >                    maFallbackMenu;
     std::map< NSEvent*, bool >                    maKeyEventAnswer;
-
+    
     static oslThreadKey                           s_aAutoReleaseKey;
 
-    bool                                          mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
+    bool			                              mbIsScrollbarDoubleMax;	// TODO: support DoubleMin and DoubleBoth too
     SInt32                                        mnSystemVersion;          // Store System Version
     MainController*                               mpMainController;         // Apple Remote
-
+    
     NSObject*                                     mpDockIconClickHandler;
     long                                          mnDPIX;           // #i100617# read DPI only once per office life
     long                                          mnDPIY;           // #i100617# read DPI only once per office life
-
+    
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
                                                   mxClipboard;
 
     SalData();
     ~SalData();
-
+    
     NSCursor* getCursor( PointerStyle i_eStyle );
-
+    
     static void ensureThreadAutoreleasePool();
     static void drainThreadAutoreleasePool();
-
+    
     static NSStatusItem* getStatusItem();
 };
 
@@ -132,10 +132,10 @@ inline SalData *GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData
 
 // --- Prototypes ---
 
-sal_Bool ImplSalYieldMutexTryToAcquire();
+BOOL ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
 
-#endif  // _SV_SALDATA_HXX
+#endif	// _SV_SALDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

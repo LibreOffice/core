@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,10 +69,14 @@ struct Bootstrap :
 
 struct FwkMutex: public ::rtl::Static<osl::Mutex, FwkMutex> {};
 
+//osl::Mutex * getFwkMutex();
+
 rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData);
 rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data);
 
 rtl::OUString getPlatform();
+
+//const rtl::Bootstrap& getBootstrap();
 
 
 rtl::OUString getDirFromFile(const rtl::OUString& usFilePath);
@@ -104,20 +108,20 @@ enum FileStatus
     FILE_DOES_NOT_EXIST,
     FILE_INVALID
 };
-
+    
 /** checks if the URL is a file.
 
     If it is a link to a file than
     it is resolved. Assuming that the argument
     represents a relative URL then FILE_INVALID
     is returned.
-
+    
 
     @return
     one of the values of FileStatus.
-
+    
     @exception
-    Errors occurred during determining if the file exists
+    Errors occured during determining if the file exists
  */
 FileStatus checkFileURL(const rtl::OUString & path);
 
@@ -130,7 +134,7 @@ bool isAccessibilitySupportDesired();
 
 rtl::OUString buildClassPathFromDirectory(const rtl::OUString & relPath);
 
-rtl::OUString retrieveClassPath( ::rtl::OUString const & macro );
+rtl::OUString retrieveClassPath( ::rtl::OUString const & macro );    
 }
 #endif
 

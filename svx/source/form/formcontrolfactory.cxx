@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "formcontrolfactory.hxx"
 #include "fmcontrollayout.hxx"
 #include "fmprop.hrc"
-#include "svx/fmresids.hrc"
+#include "fmresids.hrc"
 #include "fmservs.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/svdouno.hxx"
@@ -232,7 +232,7 @@ namespace svxform
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "lcl_getDataSourceIndirectProperties: caught an exception!" );
+                OSL_ENSURE( sal_False, "lcl_getDataSourceIndirectProperties: caught an exception!" );
             }
             return aInfo;
         }
@@ -546,7 +546,7 @@ namespace svxform
             const PropertyValue* pInfoEnd = pInfo + aInfo.getLength();
             for ( ; pInfo != pInfoEnd; ++pInfo )
             {
-                if ( pInfo->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreferDosLikeLineEnds" ) ) )
+                if ( pInfo->Name.equalsAscii( "PreferDosLikeLineEnds" ) )
                 {
                     pInfo->Value >>= bDosLineEnds;
                     break;
@@ -610,9 +610,9 @@ namespace svxform
                 sal_Int32 nMinValue = -1000000000, nMaxValue = 1000000000;
                 switch ( nDataType )
                 {
-                    case DataType::TINYINT  : nMinValue = 0; nMaxValue = 255; break;
-                    case DataType::SMALLINT : nMinValue = -32768; nMaxValue = 32767; break;
-                    case DataType::INTEGER  : nMinValue = 0x80000000; nMaxValue = 0x7FFFFFFF; break;
+                    case DataType::TINYINT	: nMinValue = 0; nMaxValue = 255; break;
+                    case DataType::SMALLINT	: nMinValue = -32768; nMaxValue = 32767; break;
+                    case DataType::INTEGER	: nMinValue = 0x80000000; nMaxValue = 0x7FFFFFFF; break;
                         // double and singles are ignored
                 }
 
@@ -626,7 +626,7 @@ namespace svxform
                     aValue <<= (sal_Int32)nMinValue;
                 else
                 {
-                    OSL_FAIL( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MinValue)!" );
+                    DBG_ERROR( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MinValue)!" );
                 }
                 _rxControlModel->setPropertyValue( FM_PROP_VALUEMIN, aValue );
 
@@ -638,7 +638,7 @@ namespace svxform
                     aValue <<= (sal_Int32)nMaxValue;
                 else
                 {
-                    OSL_FAIL( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MaxValue)!" );
+                    DBG_ERROR( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MaxValue)!" );
                 }
                 _rxControlModel->setPropertyValue( FM_PROP_VALUEMAX, aValue );
             }

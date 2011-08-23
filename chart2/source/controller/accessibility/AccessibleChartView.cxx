@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,15 +93,20 @@ awt::Rectangle AccessibleChartView::GetWindowPosSize() const
     if( ! xWindow.is())
         return awt::Rectangle();
 
+    // this should do, but it doesn't => HACK
+//     return xWindow->getPosSize();
+
     awt::Rectangle aBBox( xWindow->getPosSize() );
 
     Window* pWindow( VCLUnoHelper::GetWindow( GetInfo().m_xWindow ));
     if( pWindow )
     {
+        // /-- solar
         SolarMutexGuard aSolarGuard;
         Point aVCLPoint( pWindow->OutputToAbsoluteScreenPixel( Point( 0, 0 ) ));
         aBBox.X = aVCLPoint.getX();
         aBBox.Y = aVCLPoint.getY();
+        // \-- solar
     }
 
     return aBBox;

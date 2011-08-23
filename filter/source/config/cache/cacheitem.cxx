@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,15 +50,17 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-
-
+/*-----------------------------------------------
+    04.11.2003 09:27
+-----------------------------------------------*/
 CacheItem::CacheItem()
     : SequenceAsHashMap()
 {
 }
 
-
-
+/*-----------------------------------------------
+    26.06.2003 11:37
+-----------------------------------------------*/
 void CacheItem::update(const CacheItem& rUpdateItem)
 {
     for(const_iterator pItUpdate  = rUpdateItem.begin();
@@ -73,8 +75,9 @@ void CacheItem::update(const CacheItem& rUpdateItem)
     }
 }
 
-
-
+/*-----------------------------------------------
+    26.11.2003 13:27
+-----------------------------------------------*/
 void CacheItem::validateUINames(const ::rtl::OUString& sActLocale)
 {
     if (!sActLocale.getLength())
@@ -107,8 +110,9 @@ void CacheItem::validateUINames(const ::rtl::OUString& sActLocale)
     (*this)[PROPNAME_UINAME ] <<= sUIName;
 }
 
-
-
+/*-----------------------------------------------
+    12.01.2004 13:32
+-----------------------------------------------*/
 css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyValueList()
 {
     sal_Int32 c = (sal_Int32)size();
@@ -116,28 +120,29 @@ css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyVa
 
     css::uno::Sequence< css::beans::PropertyValue > lList(c);
     css::beans::PropertyValue*                      pList = lList.getArray();
-
+    
     for (const_iterator pProp  = begin();
                         pProp != end()  ;
                       ++pProp           )
-    {
+    {                     
         const ::rtl::OUString& rName  = pProp->first;
         const css::uno::Any&   rValue = pProp->second;
-
+        
         if (!rValue.hasValue())
             continue;
-
+        
         pList[i].Name  = rName ;
         pList[i].Value = rValue;
         ++i;
     }
     lList.realloc(i);
-
+    
     return lList;
 }
 
-
-
+/*-----------------------------------------------
+    17.07.2003 08:27
+-----------------------------------------------*/
 sal_Bool isSubSet(const css::uno::Any& aSubSet,
                   const css::uno::Any& aSet   )
 {
@@ -360,12 +365,13 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
         default: break;
     }
 
-    OSL_FAIL("isSubSet() ... this point should not be reached!");
+    OSL_ENSURE(sal_False, "isSubSet() ... this point should not be reached!");
     return sal_False;
 }
 
-
-
+/*-----------------------------------------------
+    14.07.2003 10:24
+-----------------------------------------------*/
 sal_Bool CacheItem::haveProps(const CacheItem& lProps) const
 {
     for (const_iterator pIt  = lProps.begin();
@@ -395,8 +401,9 @@ sal_Bool CacheItem::haveProps(const CacheItem& lProps) const
     return sal_True;
 }
 
-
-
+/*-----------------------------------------------
+    14.07.2003 10:43
+-----------------------------------------------*/
 sal_Bool CacheItem::dontHaveProps(const CacheItem& lProps) const
 {
     for (const_iterator pIt  = lProps.begin();

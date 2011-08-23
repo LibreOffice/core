@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,18 +39,22 @@ class ExternalLink;
 
 // ============================================================================
 
-class WorkbookFragment : public WorkbookFragmentBase
+class OoxWorkbookFragment : public OoxWorkbookFragmentBase
 {
 public:
-    explicit            WorkbookFragment(
+    explicit            OoxWorkbookFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
+
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+
+    // oox.core.FragmentHandler2 interface ------------------------------------
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        finalizeImport();
@@ -60,8 +64,8 @@ private:
     void                importDefinedName( const AttributeList& rAttribs );
     void                importPivotCache( const AttributeList& rAttribs );
 
-    void                importExternalRef( SequenceInputStream& rStrm );
-    void                importPivotCache( SequenceInputStream& rStrm );
+    void                importExternalRef( RecordInputStream& rStrm );
+    void                importPivotCache( RecordInputStream& rStrm );
 
     void                importExternalLinkFragment( ExternalLink& rExtLink );
     void                importPivotCacheDefFragment( const ::rtl::OUString& rRelId, sal_Int32 nCacheId );

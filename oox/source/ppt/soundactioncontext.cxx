@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,10 @@
 
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/embeddedwavaudiofile.hxx"
+#include "properties.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -61,7 +64,7 @@ namespace oox { namespace ppt {
 
     void SoundActionContext::endFastElement( sal_Int32 aElement ) throw (SAXException, RuntimeException)
     {
-        if ( aElement == PPT_TOKEN( sndAc ) )
+        if ( aElement == ( NMSP_PPT|XML_sndAc ) )
         {
             if( mbHasStartSound )
             {
@@ -76,7 +79,7 @@ namespace oox { namespace ppt {
                 else if ( msEmbedded.getLength() != 0 )
                 {
                     RelationsRef xRel = getHandler()->getRelations();
-                    url =   xRel->getRelationById( msEmbedded )->msTarget;
+                    url =	xRel->getRelationById( msEmbedded )->msTarget;
                 }
                 else if ( msLink.getLength() != 0 )
                 {
@@ -89,10 +92,10 @@ namespace oox { namespace ppt {
                     maSlideProperties[ PROP_SoundOn ] <<= sal_True;
                 }
             }
-//          else if( mbStopSound )
-//          {
-//              maSlideProperties[ CREATE_OUSTRING( "" ) ] = Any( sal_True );
-//          }
+//			else if( mbStopSound )
+//			{
+//				maSlideProperties[ CREATE_OUSTRING( "" ) ] = Any( sal_True );
+//			}
         }
     }
 
@@ -104,7 +107,7 @@ namespace oox { namespace ppt {
 
         switch( aElement )
         {
-        case PPT_TOKEN( snd ):
+        case NMSP_PPT|XML_snd:
             if( mbHasStartSound )
             {
                 drawingml::EmbeddedWAVAudioFile aAudio;
@@ -113,11 +116,11 @@ namespace oox { namespace ppt {
                 msSndName = ( aAudio.mbBuiltIn ? aAudio.msName : aAudio.msEmbed );
             }
             break;
-        case PPT_TOKEN( endSnd ):
+        case NMSP_PPT|XML_endSnd:
             // CT_Empty
             mbStopSound = true;
             break;
-        case PPT_TOKEN( stSnd ):
+        case NMSP_PPT|XML_stSnd:
             mbHasStartSound = true;
             mbLoopSound = attribs.getBool( XML_loop, false );
         default:

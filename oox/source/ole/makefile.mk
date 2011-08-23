@@ -51,8 +51,7 @@ SLOFILES =	\
         $(SLO)$/vbahelper.obj           \
         $(SLO)$/vbainputstream.obj      \
         $(SLO)$/vbamodule.obj           \
-        $(SLO)$/vbaproject.obj          \
-        $(SLO)$/vbaprojectfilter.obj
+        $(SLO)$/vbaproject.obj
 
 # --- Targets -------------------------------------------------------
 

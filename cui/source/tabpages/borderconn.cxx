@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 #include "borderconn.hxx"
 #include <svx/frmsel.hxx>
 #include "editeng/bolnitem.hxx"
@@ -46,20 +49,20 @@ of the tab page.
 
 // 1st: item wrappers ---------------------------------------------------------
 
-class LineItemWrapper : public sfx::SingleItemWrapper< SvxLineItem, const editeng::SvxBorderLine* >
+class LineItemWrapper : public sfx::SingleItemWrapper< SvxLineItem, const SvxBorderLine* >
 {
 public:
-    inline explicit     LineItemWrapper( sal_uInt16 nSlot ) : SingleItemWrapperType( nSlot ) {}
+    inline explicit     LineItemWrapper( USHORT nSlot ) : SingleItemWrapperType( nSlot ) {}
 
-    virtual const editeng::SvxBorderLine* GetItemValue( const SvxLineItem& rItem ) const
+    virtual const SvxBorderLine* GetItemValue( const SvxLineItem& rItem ) const
                             { return rItem.GetLine(); }
-    virtual void        SetItemValue( SvxLineItem& rItem, const editeng::SvxBorderLine* pLine ) const
+    virtual void        SetItemValue( SvxLineItem& rItem, const SvxBorderLine* pLine ) const
                             { rItem.SetLine( pLine ); }
 };
 
 // 2nd: control wrappers ------------------------------------------------------
 
-class FrameSelectorWrapper : public sfx::SingleControlWrapper< FrameSelector, const editeng::SvxBorderLine* >
+class FrameSelectorWrapper : public sfx::SingleControlWrapper< FrameSelector, const SvxBorderLine* >
 {
 public:
     inline explicit     FrameSelectorWrapper( FrameSelector& rFrameSel, FrameBorderType eBorder ) :
@@ -68,8 +71,8 @@ public:
     virtual bool        IsControlDontKnow() const;
     virtual void        SetControlDontKnow( bool bSet );
 
-    virtual const editeng::SvxBorderLine* GetControlValue() const;
-    virtual void        SetControlValue( const editeng::SvxBorderLine* pLine );
+    virtual const SvxBorderLine* GetControlValue() const;
+    virtual void        SetControlValue( const SvxBorderLine* pLine );
 
 private:
     FrameBorderType       meBorder;         /// The line this wrapper works with.
@@ -86,12 +89,12 @@ void FrameSelectorWrapper::SetControlDontKnow( bool bSet )
         GetControl().SetBorderDontCare( meBorder );
 }
 
-const editeng::SvxBorderLine* FrameSelectorWrapper::GetControlValue() const
+const SvxBorderLine* FrameSelectorWrapper::GetControlValue() const
 {
     return GetControl().GetFrameBorderStyle( meBorder );
 }
 
-void FrameSelectorWrapper::SetControlValue( const editeng::SvxBorderLine* pLine )
+void FrameSelectorWrapper::SetControlValue( const SvxBorderLine* pLine )
 {
     GetControl().ShowBorder( meBorder, pLine );
 }
@@ -275,10 +278,17 @@ ShadowConnection::ShadowConnection( const SfxItemSet& rItemSet,
 // ============================================================================
 // ============================================================================
 
-sfx::ItemConnectionBase* CreateFrameLineConnection( sal_uInt16 nSlot,
+sfx::ItemConnectionBase* CreateFrameLineConnection( USHORT nSlot,
         FrameSelector& rFrameSel, FrameBorderType eBorder, sfx::ItemConnFlags nFlags )
 {
     return new FrameLineConnection( nSlot, new FrameSelectorWrapper( rFrameSel, eBorder ), nFlags );
+}
+
+sfx::ItemConnectionBase* CreateFrameBoxConnection( USHORT /*nBoxSlot*/, USHORT /*nBoxInfoSlot*/,
+        FrameSelector& /*rFrameSel*/, FrameBorderType /*eBorder*/, sfx::ItemConnFlags /*nFlags*/ )
+{
+    DBG_ERRORFILE( "svx::CreateFrameBoxConnection - not implemented" );
+    return 0;
 }
 
 sfx::ItemConnectionBase* CreateMarginConnection( const SfxItemSet& rItemSet,

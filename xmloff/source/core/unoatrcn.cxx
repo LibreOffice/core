@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 #include <xmloff/xmlcnimp.hxx>
 
-#include "xmloff/unoatrcn.hxx"
+#include "unoatrcn.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 // Interface implementation
 // --------------------------------------------------------------------
 
-#define IMPL    ((AttrContainerImpl*)mpData)
+#define IMPL	((AttrContainerImpl*)mpData)
 
 uno::Reference< uno::XInterface >  SvUnoAttributeContainer_CreateInstance()
 {
@@ -130,7 +130,7 @@ SvUnoAttributeContainer* SvUnoAttributeContainer::getImplementation( uno::Refere
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( xInt, ::com::sun::star::uno::UNO_QUERY );
     if( xUT.is() )
     {
-        return
+        return 
             reinterpret_cast<SvUnoAttributeContainer*>(
                 sal::static_int_cast<sal_IntPtr>(
                     xUT->getSomething( SvUnoAttributeContainer::getUnoTunnelId())));
@@ -160,7 +160,7 @@ uno::Any SAL_CALL SvUnoAttributeContainer::getByName(const OUString& aName)
 
     xml::AttributeData aData;
     aData.Namespace = mpContainer->GetAttrNamespace(nAttr);
-    aData.Type = OUString(RTL_CONSTASCII_USTRINGPARAM("CDATA"));
+    aData.Type = OUString::createFromAscii("CDATA");
     aData.Value = mpContainer->GetAttrValue(nAttr);
 
     uno::Any aAny;
@@ -287,13 +287,13 @@ void SAL_CALL SvUnoAttributeContainer::removeByName(const OUString& Name)
 //XServiceInfo
 OUString SAL_CALL SvUnoAttributeContainer::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "SvUnoAttributeContainer" ));
+    return OUString::createFromAscii( "SvUnoAttributeContainer" );
 }
 
 uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames(void)
     throw( uno::RuntimeException )
 {
-    OUString aSN( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.AttributeContainer" )) );
+    OUString aSN( OUString::createFromAscii( "com.sun.star.xml.AttributeContainer" ) );
     uno::Sequence< OUString > aNS( &aSN, 1L );
     return aNS;
 }

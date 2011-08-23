@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,6 +43,35 @@ namespace sd { namespace toolpanel {
 
 
 SubToolPanel::SubToolPanel (
+    TreeNode* pParent)
+    : Control (pParent->GetWindow(), WB_DIALOGCONTROL),
+      TreeNode(pParent),
+      maWindowFiller(this),
+      mbIsRearrangePending(true),
+      mbIsLayoutPending(true),
+      mnChildrenWidth(0),
+      mnVerticalBorder(0),
+      mnVerticalGap(3),
+      mnHorizontalBorder(2)
+{
+    SetAccessibleName (
+        ::rtl::OUString::createFromAscii("Sub Task Panel"));
+    mpControlContainer->SetMultiSelection (true);
+
+    SetBorderStyle (WINDOW_BORDER_NORMAL);
+    SetMapMode (MapMode(MAP_PIXEL));
+
+    // To reduce flickering during repaints make the container windows
+    // transparent and rely on their children to paint the whole area.
+    SetBackground(Wallpaper());
+    maWindowFiller.SetBackground(
+        Application::GetSettings().GetStyleSettings().GetWindowColor());
+}
+
+
+
+
+SubToolPanel::SubToolPanel (
     Window& i_rParentWindow)
     : Control (&i_rParentWindow, WB_DIALOGCONTROL),
       TreeNode(NULL),
@@ -55,7 +84,7 @@ SubToolPanel::SubToolPanel (
       mnHorizontalBorder(2)
 {
     SetAccessibleName (
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")));
+        ::rtl::OUString::createFromAscii("Sub Task Panel"));
     mpControlContainer->SetMultiSelection (true);
 
     SetBorderStyle (WINDOW_BORDER_NORMAL);
@@ -105,7 +134,7 @@ void SubToolPanel::Paint (const Rectangle& rRect)
     Size aSize (GetOutputSizePixel());
     // Paint left and right vertical border.
     Rectangle aVerticalArea (
-        Point(0,0),
+        Point(0,0), 
         Size(mnHorizontalBorder,aSize.Height()));
     DrawRect (aVerticalArea);
     aVerticalArea.Right() += mnHorizontalBorder + mnChildrenWidth - 1;
@@ -117,7 +146,7 @@ void SubToolPanel::Paint (const Rectangle& rRect)
         Point (mnHorizontalBorder,0),
         Size(mnChildrenWidth,0));
     StripeList::const_iterator iStripe;
-    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); ++iStripe)
+    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); iStripe++)
     {
         aStripeArea.Top() = iStripe->first;
         aStripeArea.Bottom() = iStripe->second;
@@ -127,7 +156,7 @@ void SubToolPanel::Paint (const Rectangle& rRect)
             break;
         DrawRect (aStripeArea);
     }
-
+    
     SetLineColor (aOriginalLineColor);
     SetFillColor (aOriginalFillColor);
 }
@@ -234,7 +263,7 @@ void SubToolPanel::Rearrange (void)
             aRequiredSize.Width() = aAvailableSize.Width();
         mnChildrenWidth = -2*mnHorizontalBorder;
         mnChildrenWidth += aAvailableSize.Width();
-
+        
         LayoutChildren();
 
         mbIsRearrangePending = false;
@@ -248,7 +277,7 @@ Size SubToolPanel::GetRequiredSize (void)
 {
     // First determine the width of the children.  This is the maximum of
     // the current window width and the individual minimum widths of the
-    // children.
+    // children. 
     int nChildrenWidth (GetSizePixel().Width());
     unsigned int nCount = mpControlContainer->GetControlCount();
     unsigned int nIndex;
@@ -263,7 +292,7 @@ Size SubToolPanel::GetRequiredSize (void)
     // Determine the accumulated width of all children when scaled to the
     // minimum width.
     nChildrenWidth -= 2*mnHorizontalBorder;
-    Size aTotalSize (nChildrenWidth,
+    Size aTotalSize (nChildrenWidth, 
         2*mnVerticalBorder + (nCount-1) * mnVerticalGap);
     for (nIndex=0; nIndex<nCount; nIndex++)
     {
@@ -383,8 +412,8 @@ IMPL_LINK(SubToolPanel, WindowEventListener, VclSimpleEvent*, pEvent)
 {
     return new ::accessibility::AccessibleTreeNode (
         *this,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")),
+        ::rtl::OUString::createFromAscii("Sub Task Panel"),
+        ::rtl::OUString::createFromAscii("Sub Task Panel"),
         ::com::sun::star::accessibility::AccessibleRole::PANEL);
 }
 

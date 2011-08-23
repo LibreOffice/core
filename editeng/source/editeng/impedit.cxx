@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
-#define SCRLRANGE   20  // Scroll 1/20 of the width/height, when in QueryDrop
+#define SCRLRANGE	20		// 1/20 der Breite/Hoehe scrollen, wenn im QueryDrop
 
 inline void lcl_AllignToPixel( Point& rPoint, OutputDevice* pOutDev, short nDiffX, short nDiffY )
 {
@@ -73,30 +73,30 @@ inline void lcl_AllignToPixel( Point& rPoint, OutputDevice* pOutDev, short nDiff
     rPoint = pOutDev->PixelToLogic( rPoint );
 }
 
-// ----------------------------------------------------------------------
-//  class ImpEditView
-//  ----------------------------------------------------------------------
+//	----------------------------------------------------------------------
+//	class ImpEditView
+//	----------------------------------------------------------------------
 ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow ) :
     aOutArea( Point(), pEng->GetPaperSize() )
 {
     pEditView           = pView;
-    pEditEngine         = pEng;
-    pOutWin             = pWindow;
-    pPointer            = NULL;
-    pBackgroundColor    = NULL;
-    nScrollDiffX        = 0;
+    pEditEngine			= pEng;
+    pOutWin 			= pWindow;
+    pPointer			= NULL;
+    pBackgroundColor	= NULL;
+    nScrollDiffX		= 0;
     nExtraCursorFlags   = 0;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
-    pCursor             = NULL;
-       pDragAndDropInfo = NULL;
-    bReadOnly           = sal_False;
+    pCursor				= NULL;
+       pDragAndDropInfo	= NULL;
+    bReadOnly			= sal_False;
     bClickedInSelection = sal_False;
-    eSelectionMode      = EE_SELMODE_TXTONLY;
-    eAnchorMode         = ANCHOR_TOP_LEFT;
-    nInvMore            = 1;
-    nTravelXPos         = TRAVEL_X_DONTKNOW;
-    nControl            = EV_CNTRL_AUTOSCROLL | EV_CNTRL_ENABLEPASTE;
-    bActiveDragAndDropListener = sal_False;
+    eSelectionMode		= EE_SELMODE_TXTONLY;
+    eAnchorMode			= ANCHOR_TOP_LEFT;
+    nInvMore			= 1;
+    nTravelXPos			= TRAVEL_X_DONTKNOW;
+    nControl 			= EV_CNTRL_AUTOSCROLL | EV_CNTRL_ENABLEPASTE;
+    bActiveDragAndDropListener = FALSE;
 
     aEditSelection.Min() = pEng->pImpEditEngine->GetEditDoc().GetStartPaM();
     aEditSelection.Max() = pEng->pImpEditEngine->GetEditDoc().GetEndPaM();
@@ -123,7 +123,7 @@ void ImpEditView::SetBackgroundColor( const Color& rColor )
 
 void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 {
-    // set state before notification
+    // #100856# set state before notification
     aEditSelection = rEditSelection;
 
     if ( pEditEngine->pImpEditEngine->GetNotifyHdl().IsSet() )
@@ -141,13 +141,14 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
     if ( GetSelectionMode() == EE_SELMODE_HIDDEN )
         return;
 
-    // It must be ensured before rendering the selection, that the contents of
-    // the window is completely valid! Must be here so that in any case if
-    // empty, then later on two-Paint Events! Must be done even before the
-    // query from bUpdate, if after Invalidate paints still in the queue,
-    // but someone switches the update mode!
+    // Vor dem Zeichnen der Selektion muss sichergestellt werden,
+    // das der Fensterinhalt komplett gueltig ist!
+    // Muss hier stehen, damit auf jeden Fall weg wenn lerr, nicht spaeter
+    // zwei Paint-Events!
+    // 19.10: Muss sogar vor Abfrage von bUpdate, falls nach Invalidate
+    // noch Paints in der Queue, aber jemand schaltet den UpdateMode um!
 
-    // pRegion: When not NULL, then only calculate Region.
+    // pRegion: Wenn nicht NULL, dann nur Region berechnen.
     PolyPolygon* pPolyPoly = NULL;
     if ( pRegion )
         pPolyPoly = new PolyPolygon;
@@ -165,8 +166,8 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
         if ( !aTmpSel.HasRange() )
             return;
 
-        // aTmpOutArea: if OutputArea > Paper width and
-        // Text > Paper width ( over large fields )
+        // aTmpOutArea: Falls OutputArea > Papierbreite und
+        // Text > Papierbreite ( uebergrosse Felder )
         Rectangle aTmpOutArea( aOutArea );
         if ( aTmpOutArea.GetWidth() > pEditEngine->pImpEditEngine->GetPaperSize().Width() )
             aTmpOutArea.Right() = aTmpOutArea.Left() + pEditEngine->pImpEditEngine->GetPaperSize().Width();
@@ -186,8 +187,8 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
     for ( sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         ParaPortion* pTmpPortion = pEditEngine->pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
-        DBG_ASSERT( pTmpPortion, "Portion in Selection not found!" );
-        DBG_ASSERT( !pTmpPortion->IsInvalid(), "Portion in Selection not formatted!" );
+        DBG_ASSERT( pTmpPortion, "Portion in Selektion nicht gefunden!" );
+        DBG_ASSERT( !pTmpPortion->IsInvalid(), "Portion in Selektion nicht formatiert!" );
 
         if ( !pTmpPortion->IsVisible() || pTmpPortion->IsInvalid() )
             continue;
@@ -208,23 +209,23 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
         for ( sal_uInt16 nLine = nStartLine; nLine <= nEndLine; nLine++ )
         {
             EditLine* pLine = pTmpPortion->GetLines().GetObject( nLine );
-            DBG_ASSERT( pLine, "Line not found: DrawSelection()" );
+            DBG_ASSERT( pLine, "Zeile nicht gefunden: DrawSelection()" );
 
-            sal_Bool bPartOfLine = sal_False;
+            BOOL bPartOfLine = FALSE;
             sal_uInt16 nStartIndex = pLine->GetStart();
             sal_uInt16 nEndIndex = pLine->GetEnd();
             if ( ( nPara == nStartPara ) && ( nLine == nStartLine ) && ( nStartIndex != aTmpSel.Min().GetIndex() ) )
             {
                 nStartIndex = aTmpSel.Min().GetIndex();
-                bPartOfLine = sal_True;
+                bPartOfLine = TRUE;
             }
             if ( ( nPara == nEndPara ) && ( nLine == nEndLine ) && ( nEndIndex != aTmpSel.Max().GetIndex() ) )
             {
                 nEndIndex = aTmpSel.Max().GetIndex();
-                bPartOfLine = sal_True;
+                bPartOfLine = TRUE;
             }
 
-            // Can happen if at the beginning of a wrapped line.
+            // Kann passieren, wenn am Anfang einer umgebrochenen Zeile.
             if ( nEndIndex < nStartIndex )
                 nEndIndex = nStartIndex;
 
@@ -235,7 +236,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
             aTopLeft.Y() += nParaStart;
             aBottomRight.Y() += nParaStart;
 
-            // Only paint if in the visible range ...
+            // Nur Painten, wenn im sichtbaren Bereich...
             if ( aTopLeft.Y() > GetVisDocBottom() )
                 break;
 
@@ -252,8 +253,8 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
             }
             else
             {
-                sal_uInt16 nTmpStartIndex = nStartIndex;
-                sal_uInt16 nWritingDirStart, nTmpEndIndex;
+                USHORT nTmpStartIndex = nStartIndex;
+                USHORT nWritingDirStart, nTmpEndIndex;
 
                 while ( nTmpStartIndex < nEndIndex )
                 {
@@ -263,7 +264,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
 
                     DBG_ASSERT( nTmpEndIndex > nTmpStartIndex, "DrawSelection, Start >= End?" );
 
-                    long nX1 = pEditEngine->pImpEditEngine->GetXPos( pTmpPortion, pLine, nTmpStartIndex, sal_True );
+                    long nX1 = pEditEngine->pImpEditEngine->GetXPos( pTmpPortion, pLine, nTmpStartIndex, TRUE );
                     long nX2 = pEditEngine->pImpEditEngine->GetXPos( pTmpPortion, pLine, nTmpEndIndex );
 
                     Point aPt1( Min( nX1, nX2 ), aTopLeft.Y() );
@@ -333,7 +334,7 @@ void ImpEditView::ImplDrawHighlightRect( Window* _pOutWin, const Point& rDocPosT
 }
 
 
-sal_Bool ImpEditView::IsVertical() const
+BOOL ImpEditView::IsVertical() const
 {
     return pEditEngine->pImpEditEngine->IsVertical();
 }
@@ -345,7 +346,7 @@ Rectangle ImpEditView::GetVisDocArea() const
 
 Point ImpEditView::GetDocPos( const Point& rWindowPos ) const
 {
-    // Window Position => Position Document
+    // Fensterposition => Dokumentposition
     Point aPoint;
 
     if ( !pEditEngine->pImpEditEngine->IsVertical() )
@@ -364,7 +365,7 @@ Point ImpEditView::GetDocPos( const Point& rWindowPos ) const
 
 Point ImpEditView::GetWindowPos( const Point& rDocPos ) const
 {
-    // Document position => window position
+    // Dokumentposition => Fensterposition
     Point aPoint;
 
     if ( !pEditEngine->pImpEditEngine->IsVertical() )
@@ -383,7 +384,7 @@ Point ImpEditView::GetWindowPos( const Point& rDocPos ) const
 
 Rectangle ImpEditView::GetWindowPos( const Rectangle& rDocRect ) const
 {
-    // Document position => window position
+    // Dokumentposition => Fensterposition
     Point aPos( GetWindowPos( rDocRect.TopLeft() ) );
     Size aSz = rDocRect.GetSize();
     Rectangle aRect;
@@ -407,19 +408,19 @@ Region* ImpEditView::CalcSelectedRegion()
     return pRegion;
 }
 
-void ImpEditView::SetSelectionMode( EESelectionMode eNewMode )
+void ImpEditView::SetSelectionMode( EESelectionMode	eNewMode )
 {
     if ( eSelectionMode != eNewMode )
     {
-        DrawSelection();
+        DrawSelection();	// 'Wegmalen' ...
         eSelectionMode = eNewMode;
-        DrawSelection();    // redraw
+        DrawSelection();	// und neu zeichnen.
     }
 }
 
 void ImpEditView::SetOutputArea( const Rectangle& rRec )
 {
-    // should be better be aligned on pixels!
+    // sollte besser auf Pixel allignt sein!
     Rectangle aNewRec( pOutWin->LogicToPixel( rRec ) );
     aNewRec = pOutWin->PixelToLogic( aNewRec );
     aOutArea = aNewRec;
@@ -438,7 +439,7 @@ void ImpEditView::ResetOutputArea( const Rectangle& rRec )
 {
     Rectangle aCurArea( aOutArea );
     SetOutputArea( rRec );
-    // Invalidate surrounding areas if in update mode of the engine on sal_True
+    // Umliegende Bereiche invalidieren, wenn UpdateMode der Engine auf sal_True
     if ( !aCurArea.IsEmpty() && pEditEngine->pImpEditEngine->GetUpdateMode() )
     {
         long nMore = 0;
@@ -577,7 +578,7 @@ void ImpEditView::SetAnchorMode( EVAnchorMode eMode )
 
 void ImpEditView::CalcAnchorPoint()
 {
-    // GetHeight() and GetWidth() -1, because rectangle calculation not prefered.
+    // GetHeight() und GetWidth() -1, da Rectangle-Berechnung nicht erwuenscht.
 
     // X:
     switch ( eAnchorMode )
@@ -632,9 +633,9 @@ void ImpEditView::CalcAnchorPoint()
     }
 }
 
-void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sal_uInt16 nShowCursorFlags )
+void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, USHORT nShowCursorFlags )
 {
-    // No ShowCursor in an empty View ...
+    // Kein ShowCursor bei einer leeren View...
     if ( ( aOutArea.Left() >= aOutArea.Right() ) && ( aOutArea.Top() >= aOutArea.Bottom() ) )
         return;
 
@@ -642,8 +643,8 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
     if ( !pEditEngine->pImpEditEngine->IsFormatted() )
         pEditEngine->pImpEditEngine->FormatDoc();
 
-    // For some reasons I end up here during the formatting, if the Outliner
-    // is initialized in Paint, because no SetPool();
+    // Aus irgendwelchen Gruenden lande ich waehrend der Formatierung hier,
+    // wenn sich der Outiner im Paint initialisiert, weil kein SetPool();
     if ( pEditEngine->pImpEditEngine->IsFormatting() )
         return;
     if ( pEditEngine->pImpEditEngine->GetUpdateMode() == sal_False )
@@ -656,8 +657,8 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
 
     EditPaM aPaM( aEditSelection.Max() );
 
-    sal_uInt16 nTextPortionStart = 0;
-    sal_uInt16 nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+    USHORT nTextPortionStart = 0;
+    USHORT nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
     if (nPara == USHRT_MAX) // #i94322
         return;
     ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions().GetObject( nPara );
@@ -683,7 +684,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
             // If we are behind a portion, and the next portion has other direction, we must change position...
             aEditCursor.Left() = aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY|GETCRSR_PREFERPORTIONSTART ).Left();
 
-            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, sal_True );
+            USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, TRUE );
             TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
             if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
             {
@@ -691,7 +692,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
             }
             else
             {
-                EditPaM aNext = pEditEngine->pImpEditEngine->CursorRight( aPaM, (sal_uInt16)i18n::CharacterIteratorMode::SKIPCELL );
+                EditPaM aNext = pEditEngine->pImpEditEngine->CursorRight( aPaM, (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
                 Rectangle aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GETCRSR_TXTONLY );
                 if ( aTmpRect.Top() != aEditCursor.Top() )
                     aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GETCRSR_TXTONLY|GETCRSR_ENDOFLINE );
@@ -706,56 +707,56 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
     }
     if ( bGotoCursor  ) // && (!pEditEngine->pImpEditEngine->GetStatus().AutoPageSize() ) )
     {
-        // check if scrolling is necessary...
-        // if scrolling, then update () and Scroll ()!
+        // pruefen, ob scrollen notwendig...
+        // wenn scrollen, dann Update() und Scroll() !
         long nDocDiffX = 0;
         long nDocDiffY = 0;
 
         Rectangle aTmpVisArea( GetVisDocArea() );
-        // aTmpOutArea: if OutputArea > Paper width and
-        // Text > Paper width ( over large fields )
+        // aTmpOutArea: Falls OutputArea > Papierbreite und
+        // Text > Papierbreite ( uebergrosse Felder )
         long nMaxTextWidth = !IsVertical() ? pEditEngine->pImpEditEngine->GetPaperSize().Width() : pEditEngine->pImpEditEngine->GetPaperSize().Height();
         if ( aTmpVisArea.GetWidth() > nMaxTextWidth )
             aTmpVisArea.Right() = aTmpVisArea.Left() + nMaxTextWidth;
 
         if ( aEditCursor.Bottom() > aTmpVisArea.Bottom() )
-        {   // Scroll up, here positive
+        {   // hochscrollen, hier positiv
             nDocDiffY = aEditCursor.Bottom() - aTmpVisArea.Bottom();
         }
         else if ( aEditCursor.Top() < aTmpVisArea.Top() )
-        {   // Scroll down, here negative
+        {	// runterscrollen, negativ
             nDocDiffY = aEditCursor.Top() - aTmpVisArea.Top();
         }
 
         if ( aEditCursor.Right() > aTmpVisArea.Right() )
         {
-            // Scroll left, positiv
+            // linksscrollen, positiv
             nDocDiffX = aEditCursor.Right() - aTmpVisArea.Right();
-            // Can it be a little more?
+            // Darfs ein bischen mehr sein?
             if ( aEditCursor.Right() < ( nMaxTextWidth - GetScrollDiffX() ) )
                 nDocDiffX += GetScrollDiffX();
             else
             {
                 long n = nMaxTextWidth - aEditCursor.Right();
-                // If MapMode != RefMapMode then the EditCursor can go beyond
-                // the paper width!
+                // Bei einem MapMode != RefMapMode kann der EditCursor auch mal ueber
+                // die Papierbreite Wandern!
                 nDocDiffX += ( n > 0 ? n : -n );
             }
         }
         else if ( aEditCursor.Left() < aTmpVisArea.Left() )
-        {
-            // Scroll right, negative:
+        {	// rechtsscrollen
+            // negativ:
             nDocDiffX = aEditCursor.Left() - aTmpVisArea.Left();
-            // Can it be a little more?
+            // Darfs ein bischen mehr sein?
             if ( aEditCursor.Left() > ( - (long)GetScrollDiffX() ) )
                 nDocDiffX -= GetScrollDiffX();
             else
                 nDocDiffX -= aEditCursor.Left();
         }
-        if ( aPaM.GetIndex() == 0 )     // Olli needed for the Outliner
+        if ( aPaM.GetIndex() == 0 ) 	// braucht Olli fuer den Outliner
         {
-            // But make sure that the cursor is not leaving visible area
-            // because of this!
+            // Aber sicherstellen, dass dadurch der Cursor nicht den
+            // sichtbaren bereich verlaesst!
             if ( aEditCursor.Left() < aTmpVisArea.GetWidth() )
             {
                 nDocDiffX = -aTmpVisArea.Left();
@@ -767,7 +768,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
             long nDiffX = !IsVertical() ? nDocDiffX : -nDocDiffY;
             long nDiffY = !IsVertical() ? nDocDiffY : nDocDiffX;
 
-            // Negative: Back to the top or left edge
+            // Negativ: Zum Anfang bzw. linken Rand
             if ( ( Abs( nDiffY ) > pEditEngine->pImpEditEngine->nOnePixelInRef ) && DoBigScroll() )
             {
                 long nH = aOutArea.GetHeight() / 4;
@@ -801,7 +802,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
         }
     }
 
-    // Cursor may trim a little ...
+    // Cursor evtl. etwas stutzen...
     if ( ( aEditCursor.Bottom() > GetVisDocTop() ) &&
          ( aEditCursor.Top() < GetVisDocBottom() ) )
     {
@@ -852,9 +853,9 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
         unsigned char nCursorDir = CURSOR_DIRECTION_NONE;
         if ( IsInsertMode() && !aEditSelection.HasRange() && ( pEditEngine->pImpEditEngine->HasDifferentRTLLevels( aPaM.GetNode() ) ) )
         {
-            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, nShowCursorFlags & GETCRSR_PREFERPORTIONSTART ? sal_True : sal_False );
+            USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, nShowCursorFlags & GETCRSR_PREFERPORTIONSTART ? TRUE : FALSE );
             TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
-            sal_uInt16 nRTLLevel = pTextPortion->GetRightToLeft();
+            USHORT nRTLLevel = pTextPortion->GetRightToLeft();
             if ( nRTLLevel%2 )
                 nCursorDir = CURSOR_DIRECTION_RTL;
             else
@@ -865,10 +866,13 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
 
         if ( bForceVisCursor )
             GetCursor()->Show();
+
+        // #102936# Call SetInputContext every time, otherwise we may have the wrong font
+        // if ( !pEditEngine->pImpEditEngine->mpIMEInfos )
         {
             SvxFont aFont;
             pEditEngine->pImpEditEngine->SeekCursor( aPaM.GetNode(), aPaM.GetIndex()+1, aFont );
-            sal_uLong nContextFlags = INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT;
+            ULONG nContextFlags = INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT;
             GetWindow()->SetInputContext( InputContext( aFont, nContextFlags ) );
         }
     }
@@ -881,9 +885,9 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
     }
 }
 
-Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
+Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
 {
-    DBG_ASSERT( pEditEngine->pImpEditEngine->IsFormatted(), "Scroll: Not formatted!" );
+    DBG_ASSERT( pEditEngine->pImpEditEngine->IsFormatted(), "Scroll: Nicht formatiert!" );
     if ( !ndX && !ndY )
         return Range( 0, 0 );
 
@@ -891,7 +895,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
     Rectangle aR( aOutArea );
     aR = pOutWin->LogicToPixel( aR );
     aR = pOutWin->PixelToLogic( aR );
-    DBG_ASSERTWARNING( aR == aOutArea, "OutArea before Scroll not aligned" );
+    DBG_ASSERTWARNING( aR == aOutArea, "OutArea vor Scroll nicht aligned" );
 #endif
 
     Rectangle aNewVisArea( GetVisDocArea() );
@@ -910,9 +914,9 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
     }
     if ( ( nRangeCheck == RGCHK_PAPERSZ1 ) && ( aNewVisArea.Bottom() > (long)pEditEngine->pImpEditEngine->GetTextHeight() ) )
     {
-        // GetTextHeight still optimizing!
-        long nDiff = pEditEngine->pImpEditEngine->GetTextHeight() - aNewVisArea.Bottom(); // negative
-        aNewVisArea.Move( 0, nDiff );   // could end up in the negative area...
+        // GetTextHeight noch optimieren!
+        long nDiff = pEditEngine->pImpEditEngine->GetTextHeight() - aNewVisArea.Bottom(); // negativ
+        aNewVisArea.Move( 0, nDiff );	// koennte im neg. Bereich landen...
     }
     if ( ( aNewVisArea.Top() < 0 ) && ( nRangeCheck != RGCHK_NONE ) )
         aNewVisArea.Move( 0, -aNewVisArea.Top() );
@@ -928,15 +932,15 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
         aNewVisArea.Left() -= ndY;
         aNewVisArea.Right() -= ndY;
     }
-    if ( ( nRangeCheck == RGCHK_PAPERSZ1 ) && ( aNewVisArea.Right() > (long)pEditEngine->pImpEditEngine->CalcTextWidth( sal_False ) ) )
+    if ( ( nRangeCheck == RGCHK_PAPERSZ1 ) && ( aNewVisArea.Right() > (long)pEditEngine->pImpEditEngine->CalcTextWidth( FALSE ) ) )
     {
-        long nDiff = pEditEngine->pImpEditEngine->CalcTextWidth( sal_False ) - aNewVisArea.Right();     // negative
-        aNewVisArea.Move( nDiff, 0 );   // could end up in the negative area...
+        long nDiff = pEditEngine->pImpEditEngine->CalcTextWidth( FALSE ) - aNewVisArea.Right(); 	// negativ
+        aNewVisArea.Move( nDiff, 0 );	// koennte im neg. Bereich landen...
     }
     if ( ( aNewVisArea.Left() < 0 ) && ( nRangeCheck != RGCHK_NONE ) )
         aNewVisArea.Move( -aNewVisArea.Left(), 0 );
 
-    // The difference must be alignt on pixel (due to scroll!)
+    // Die Differenz muss auf Pixel alignt sein (wegen Scroll!)
     long nDiffX = !IsVertical() ? ( GetVisDocLeft() - aNewVisArea.Left() ) : -( GetVisDocTop() - aNewVisArea.Top() );
     long nDiffY = !IsVertical() ? ( GetVisDocTop() - aNewVisArea.Top() ) : ( GetVisDocLeft() - aNewVisArea.Left() );
 
@@ -960,8 +964,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
             aVisDocStartPos.Move( -nRealDiffY, nRealDiffX );
         // Das Move um den allignten Wert ergibt nicht unbedingt ein
         // alligntes Rechteck...
-        // Aligned value of the move does not necessarily result in aligned
-        // rectangle ...
+        // MT 11/00: Align VisArea???
         aVisDocStartPos = pOutWin->LogicToPixel( aVisDocStartPos );
         aVisDocStartPos = pOutWin->PixelToLogic( aVisDocStartPos );
         Rectangle aRec( aOutArea );
@@ -989,7 +992,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
 
 sal_Bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin )
 {
-    sal_Bool bDone = sal_False;
+    BOOL bDone = FALSE;
 
     KeyFuncType eFunc = rKeyEvent.GetKeyCode().GetFunction();
     if ( eFunc != KEYFUNC_DONTKNOW )
@@ -1010,7 +1013,7 @@ sal_Bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin
             {
                 Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
                 CutCopy( aClipBoard, sal_False );
-                bDone = sal_True;
+                bDone = TRUE;
             }
             break;
             case KEYFUNC_PASTE:
@@ -1060,7 +1063,7 @@ sal_Bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     else if ( rMouseEvent.IsLeft() && GetEditSelection().HasRange() )
     {
         Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetPrimarySelection());
-        CutCopy( aClipBoard, sal_False );
+        CutCopy( aClipBoard, FALSE );
     }
 
     return pEditEngine->pImpEditEngine->MouseButtonUp( rMouseEvent, GetEditViewPtr() );
@@ -1068,7 +1071,7 @@ sal_Bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
 
 sal_Bool ImpEditView::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
-    pEditEngine->pImpEditEngine->CheckIdleFormatter();  // If fast typing and mouse button downs
+    pEditEngine->pImpEditEngine->CheckIdleFormatter();	// Falls schnelles Tippen und MouseButtonDown
     if ( pEditEngine->pImpEditEngine->aStatus.NotifyCursorMovements() )
         pEditEngine->pImpEditEngine->aStatus.GetPrevParagraph() = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( GetEditSelection().Max().GetNode() );
     nTravelXPos = TRAVEL_X_DONTKNOW;
@@ -1085,7 +1088,7 @@ sal_Bool ImpEditView::MouseMove( const MouseEvent& rMouseEvent )
 
 void ImpEditView::Command( const CommandEvent& rCEvt )
 {
-    pEditEngine->pImpEditEngine->CheckIdleFormatter();  // If fast typing and mouse button down
+    pEditEngine->pImpEditEngine->CheckIdleFormatter();	// Falls schnelles Tippen und MouseButtonDown
     pEditEngine->pImpEditEngine->Command( rCEvt, GetEditViewPtr() );
 }
 
@@ -1102,23 +1105,26 @@ void ImpEditView::SetInsertMode( sal_Bool bInsert )
 sal_Bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfWrong )
 {
     sal_Bool bIsWrong = sal_False;
+#ifndef SVX_LIGHT
     if ( rPaM.GetNode()->GetWrongList() )
     {
         EditSelection aSel = pEditEngine->pImpEditEngine->SelectWord( rPaM, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
         bIsWrong = rPaM.GetNode()->GetWrongList()->HasWrong( aSel.Min().GetIndex(), aSel.Max().GetIndex() );
         if ( bIsWrong && bMarkIfWrong )
         {
-            DrawSelection();
+            DrawSelection();	// alte Selektion 'weg-zeichnen'
             SetEditSelection( aSel );
             DrawSelection();
         }
     }
+#endif // !SVX_LIGHT
     return bIsWrong;
 }
 
 String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
 {
     String aWord;
+#ifndef SVX_LIGHT
     if ( pEditEngine->pImpEditEngine->GetSpeller().is() )
     {
         EditPaM aPaM = GetEditSelection().Max();
@@ -1130,8 +1136,8 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
         else
         {
             aWord = pEditEngine->pImpEditEngine->GetSelected( GetEditSelection() );
-            // And deselect
-            DrawSelection();
+            // Und deselektieren
+            DrawSelection();	// alte Selektion 'weg-zeichnen'
             SetEditSelection( EditSelection( aPaM, aPaM ) );
             DrawSelection();
         }
@@ -1140,7 +1146,7 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
         {
             if ( bAdd )
             {
-                OSL_FAIL( "Sorry, AddWord not implemented" );
+                DBG_ERROR( "Sorry, AddWord not implemented" );
             }
             else // Ignore
             {
@@ -1159,6 +1165,7 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
             pEditEngine->pImpEditEngine->StartOnlineSpellTimer();
         }
     }
+#endif // !SVX_LIGHT
     return aWord;
 }
 
@@ -1174,7 +1181,7 @@ void ImpEditView::DeleteSelected()
 
     SetEditSelection( EditSelection( aPaM, aPaM ) );
     pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
-    ShowCursor( DoAutoScroll(), sal_True );
+    ShowCursor( DoAutoScroll(), TRUE );
 }
 
 const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_uInt16* pPara, sal_uInt16* pPos ) const
@@ -1187,7 +1194,7 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_uInt16* pPara,
 
     if ( aPaM.GetIndex() == aPaM.GetNode()->Len() )
     {
-        // Otherwise, whenever the Field at the very end and mouse under the text
+        // Sonst immer, wenn Feld ganz am Schluss und Mouse unter Text
         return 0;
     }
 
@@ -1199,7 +1206,7 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_uInt16* pPara,
         if ( pAttr->GetStart() == nXPos )
             if ( pAttr->Which() == EE_FEATURE_FIELD )
             {
-                DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "No FieldItem..." );
+                DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "Kein FeldItem..." );
                 if ( pPara )
                     *pPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
                 if ( pPos )
@@ -1210,20 +1217,20 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_uInt16* pPara,
     return NULL;
 }
 
-sal_Bool ImpEditView::IsBulletArea( const Point& rPos, sal_uInt16* pPara )
+BOOL ImpEditView::IsBulletArea( const Point& rPos, sal_uInt16* pPara )
 {
     if ( pPara )
         *pPara = 0xFFFF;
 
     if( !GetOutputArea().IsInside( rPos ) )
-        return sal_False;
+        return FALSE;
 
     Point aDocPos( GetDocPos( rPos ) );
     EditPaM aPaM = pEditEngine->pImpEditEngine->GetPaM( aDocPos, sal_False );
 
     if ( aPaM.GetIndex() == 0 )
     {
-        sal_uInt16 nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+        USHORT nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
         Rectangle aBulletArea = pEditEngine->GetBulletArea( nPara );
         long nY = pEditEngine->GetDocPosTopLeft( nPara ).Y();
         ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions().GetObject( nPara );
@@ -1235,14 +1242,14 @@ sal_Bool ImpEditView::IsBulletArea( const Point& rPos, sal_uInt16* pPara )
         {
             if ( pPara )
                 *pPara = nPara;
-            return sal_True;
+            return TRUE;
         }
     }
 
-    return sal_False;
+    return FALSE;
 }
 
-void ImpEditView::CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, sal_Bool bCut )
+void ImpEditView::CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, BOOL bCut )
 {
     if ( rxClipboard.is() && GetEditSelection().HasRange() )
     {
@@ -1275,7 +1282,7 @@ void ImpEditView::CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::d
     }
 }
 
-void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, sal_Bool bUseSpecial )
+void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, BOOL bUseSpecial )
 {
     if ( rxClipboard.is() )
     {
@@ -1343,97 +1350,99 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
             SetEditSelection( aSel );
             pEditEngine->pImpEditEngine->UpdateSelections();
             pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
-            ShowCursor( DoAutoScroll(), sal_True );
+            ShowCursor( DoAutoScroll(), TRUE );
         }
     }
 }
 
 
-sal_Bool ImpEditView::IsInSelection( const EditPaM& rPaM )
+BOOL ImpEditView::IsInSelection( const EditPaM& rPaM )
 {
     EditSelection aSel = GetEditSelection();
     if ( !aSel.HasRange() )
-        return sal_False;
+        return FALSE;
 
     aSel.Adjust( pEditEngine->pImpEditEngine->GetEditDoc() );
 
-    sal_uInt16 nStartNode = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
-    sal_uInt16 nEndNode = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
-    sal_uInt16 nCurNode = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( rPaM.GetNode() );
+    USHORT nStartNode = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
+    USHORT nEndNode = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
+    USHORT nCurNode = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( rPaM.GetNode() );
 
     if ( ( nCurNode > nStartNode ) && ( nCurNode < nEndNode ) )
-        return sal_True;
+        return TRUE;
 
     if ( nStartNode == nEndNode )
     {
         if ( nCurNode == nStartNode )
             if ( ( rPaM.GetIndex() >= aSel.Min().GetIndex() ) && ( rPaM.GetIndex() < aSel.Max().GetIndex() ) )
-                return sal_True;
+                return TRUE;
     }
     else if ( ( nCurNode == nStartNode ) && ( rPaM.GetIndex() >= aSel.Min().GetIndex() ) )
-        return sal_True;
+        return TRUE;
     else if ( ( nCurNode == nEndNode ) && ( rPaM.GetIndex() < aSel.Max().GetIndex() ) )
-        return sal_True;
+        return TRUE;
 
-    return sal_False;
+    return FALSE;
 }
 
 void ImpEditView::CreateAnchor()
 {
-    pEditEngine->pImpEditEngine->bInSelection = sal_True;
+    pEditEngine->pImpEditEngine->bInSelection = TRUE;
     GetEditSelection().Min() = GetEditSelection().Max();
 }
 
 void ImpEditView::DeselectAll()
 {
-    pEditEngine->pImpEditEngine->bInSelection = sal_False;
+    pEditEngine->pImpEditEngine->bInSelection = FALSE;
     DrawSelection();
     GetEditSelection().Min() = GetEditSelection().Max();
 }
 
-sal_Bool ImpEditView::IsSelectionAtPoint( const Point& rPosPixel )
+BOOL ImpEditView::IsSelectionAtPoint( const Point& rPosPixel )
 {
     if ( pDragAndDropInfo && pDragAndDropInfo->pField )
-        return sal_True;
+        return TRUE;
 
     Point aMousePos( rPosPixel );
 
-    // Logical units ...
+    // Logische Einheiten...
     aMousePos = GetWindow()->PixelToLogic( aMousePos );
 
     if ( ( !GetOutputArea().IsInside( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
     {
-        return sal_False;
+        return FALSE;
     }
 
     Point aDocPos( GetDocPos( aMousePos ) );
-    EditPaM aPaM = pEditEngine->pImpEditEngine->GetPaM( aDocPos, sal_False );
+    EditPaM aPaM = pEditEngine->pImpEditEngine->GetPaM( aDocPos, FALSE );
     return IsInSelection( aPaM );
 }
 
-sal_Bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
+BOOL ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
 {
     pEditEngine->pImpEditEngine->CheckIdleFormatter();
 
     Point aMousePos( rPointPixel );
 
-    // Logical units ...
+    // Logische Einheiten...
     aMousePos = GetWindow()->PixelToLogic( aMousePos );
 
     if ( ( !GetOutputArea().IsInside( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
     {
-        return sal_False;
+        return FALSE;
     }
 
     Point aDocPos( GetDocPos( aMousePos ) );
 
-    // Can be optimized: first go through the lines within a paragraph for PAM,
-    // then again wiht the PaM for the Rect, even though the line is already
-    // known .... This must not be, though!
-    EditPaM aPaM = pEditEngine->pImpEditEngine->GetPaM( aDocPos );
-    sal_Bool bGotoCursor = DoAutoScroll();
+    // Kann optimiert werden: Erst innerhalb eines Absatzes die Zeilen
+    // fuer den PaM durchwuehlen, dann nochmal mit dem PaM fuer das Rect,
+    // obwohl die Zeile schon bekannt ist....
+    // Das muss doch nicht sein !
 
-    // aTmpNewSel: Diff between old and new, not the new selection
+    EditPaM aPaM = pEditEngine->pImpEditEngine->GetPaM( aDocPos );
+    BOOL bGotoCursor = DoAutoScroll();
+
+    // aTmpNewSel: Diff zwischen alt und neu, nicht die neue Selektion
     EditSelection aTmpNewSel( GetEditSelection().Max(), aPaM );
 
     // #i27299#
@@ -1458,9 +1467,9 @@ sal_Bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
         SetEditSelection( aNewEditSelection );
     }
 
-    sal_Bool bForceCursor = ( pDragAndDropInfo ? sal_False : sal_True ) && !pEditEngine->pImpEditEngine->IsInSelectionMode();
+    BOOL bForceCursor = ( pDragAndDropInfo ? FALSE : TRUE ) && !pEditEngine->pImpEditEngine->IsInSelectionMode();
     ShowCursor( bGotoCursor, bForceCursor );
-    return sal_True;
+    return TRUE;
 }
 
 
@@ -1482,11 +1491,11 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
             pOutWin->GetCursor()->Hide();
 
         Color aOldFillColor = GetWindow()->GetFillColor();
-        GetWindow()->SetFillColor( Color(4210752) );    // GRAY BRUSH_50, OLDSV, change to DDCursor!
+        GetWindow()->SetFillColor( Color(4210752) );	// GRAY BRUSH_50, OLDSV, change to DDCursor!
 
-        // Save background ...
+        // Hintergrund sichern...
         Rectangle aSaveRec( GetWindow()->LogicToPixel( rRect ) );
-        // prefer to save some more ...
+        // lieber etwas mehr sichern...
         aSaveRec.Right() += 1;
         aSaveRec.Bottom() += 1;
 
@@ -1505,7 +1514,7 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
         if ( ( aCurSzPx.Width() < aNewSzPx.Width() ) ||( aCurSzPx.Height() < aNewSzPx.Height() ) )
         {
             sal_Bool bDone = pDragAndDropInfo->pBackground->SetOutputSizePixel( aNewSzPx );
-            DBG_ASSERT( bDone, "Virtual Device broken?" );
+            DBG_ASSERT( bDone, "Virtuelles Device kaputt?" );
         }
 #endif
 
@@ -1515,7 +1524,7 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
                                     aSaveRec.TopLeft(), aSaveRec.GetSize(), *GetWindow() );
         pDragAndDropInfo->aCurSavedCursor = aSaveRec;
 
-        // Draw Cursor...
+        // Cursor malen...
         GetWindow()->DrawRect( rRect );
 
         pDragAndDropInfo->bVisCursor = sal_True;
@@ -1545,7 +1554,7 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
     else
     {
         // Field?!
-        sal_uInt16 nPara, nPos;
+        USHORT nPara, nPos;
         Point aMousePos = GetWindow()->PixelToLogic( aMousePosPixel );
         const SvxFieldItem* pField = GetField( aMousePos, &nPara, &nPos );
         if ( pField )
@@ -1556,18 +1565,18 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
             aCopySel = EditSelection( EditPaM( pNode, nPos ), EditPaM( pNode, nPos+1 ) );
             GetEditSelection() = aCopySel;
             DrawSelection();
-            sal_Bool bGotoCursor = DoAutoScroll();
-            sal_Bool bForceCursor = ( pDragAndDropInfo ? sal_False : sal_True ) && !pEditEngine->pImpEditEngine->IsInSelectionMode();
+            BOOL bGotoCursor = DoAutoScroll();
+            BOOL bForceCursor = ( pDragAndDropInfo ? FALSE : TRUE ) && !pEditEngine->pImpEditEngine->IsInSelectionMode();
             ShowCursor( bGotoCursor, bForceCursor );
         }
         else if ( IsBulletArea( aMousePos, &nPara ) )
         {
             pDragAndDropInfo = new DragAndDropInfo();
-            pDragAndDropInfo->bOutlinerMode = sal_True;
+            pDragAndDropInfo->bOutlinerMode = TRUE;
             EditPaM aStartPaM( pEditEngine->pImpEditEngine->GetEditDoc().GetObject( nPara ), 0 );
             EditPaM aEndPaM( aStartPaM );
             const SfxInt16Item& rLevel = (const SfxInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
-            for ( sal_uInt16 n = nPara +1; n < pEditEngine->pImpEditEngine->GetEditDoc().Count(); n++ )
+            for ( USHORT n = nPara +1; n < pEditEngine->pImpEditEngine->GetEditDoc().Count(); n++ )
             {
                 const SfxInt16Item& rL = (const SfxInt16Item&) pEditEngine->GetParaAttrib( n, EE_PARA_OUTLLEVEL );
                 if ( rL.GetValue() > rLevel.GetValue() )
@@ -1589,7 +1598,7 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
 
         pDragAndDropInfo->bStarterOfDD = sal_True;
 
-        // Sensitive area to be scrolled.
+        // Sensibler Bereich, wo gescrollt werden soll.
         Size aSz( 5, 0 );
         aSz = GetWindow()->PixelToLogic( aSz );
         pDragAndDropInfo->nSensibleRange = (sal_uInt16) aSz.Width();
@@ -1601,7 +1610,7 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
         sal_Int8 nActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
 
         rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, xData, mxDnDListener );
-        // If Drag&Move in an Engine, thenCopy&Del has to be optional!
+        // Falls Drag&Move in einer Engine, muessen Copy&Del geklammert sein!
         GetCursor()->Hide();
 
     }
@@ -1620,7 +1629,7 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
         {
             if ( pDragAndDropInfo->bStarterOfDD && pDragAndDropInfo->bDroppedInMe )
             {
-                // DropPos: Where was it dropped, irrespective of length.
+                // DropPos: Wohin wurde gedroppt, unabhaengig von laenge.
                 ESelection aDropPos( pDragAndDropInfo->aDropSel.nStartPara, pDragAndDropInfo->aDropSel.nStartPos, pDragAndDropInfo->aDropSel.nStartPara, pDragAndDropInfo->aDropSel.nStartPos );
                 ESelection aToBeDelSel = pDragAndDropInfo->aBeginDragSel;
                 ESelection aNewSel( pDragAndDropInfo->aDropSel.nEndPara, pDragAndDropInfo->aDropSel.nEndPos,
@@ -1629,11 +1638,11 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
                 sal_uInt16 nParaDiff = pDragAndDropInfo->aBeginDragSel.nEndPara - pDragAndDropInfo->aBeginDragSel.nStartPara;
                 if ( bBeforeSelection )
                 {
-                    // Adjust aToBeDelSel.
-                    DBG_ASSERT( pDragAndDropInfo->aBeginDragSel.nStartPara >= pDragAndDropInfo->aDropSel.nStartPara, "But not before? ");
+                    // aToBeDelSel anpassen.
+                    DBG_ASSERT( pDragAndDropInfo->aBeginDragSel.nStartPara >= pDragAndDropInfo->aDropSel.nStartPara, "Doch nicht davor?" );
                     aToBeDelSel.nStartPara = aToBeDelSel.nStartPara + nParaDiff;
                     aToBeDelSel.nEndPara = aToBeDelSel.nEndPara + nParaDiff;
-                    // To correct the character?
+                    // Zeichen korrigieren?
                     if ( aToBeDelSel.nStartPara == pDragAndDropInfo->aDropSel.nEndPara )
                     {
                         sal_uInt16 nMoreChars;
@@ -1650,12 +1659,12 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
                 }
                 else
                 {
-                    // aToBeDelSel is ok, but the selection of the  View
-                    // has to be adapted, if it was deleted before!
-                    DBG_ASSERT( pDragAndDropInfo->aBeginDragSel.nStartPara <= pDragAndDropInfo->aDropSel.nStartPara, "But not before? ");
+                    // aToBeDelSel ist ok, aber Selektion der View
+                    // muss angepasst werden, wenn davor geloescht wird!
+                    DBG_ASSERT( pDragAndDropInfo->aBeginDragSel.nStartPara <= pDragAndDropInfo->aDropSel.nStartPara, "Doch nicht davor?" );
                     aNewSel.nStartPara = aNewSel.nStartPara - nParaDiff;
                     aNewSel.nEndPara = aNewSel.nEndPara - nParaDiff;
-                    // To correct the character?
+                    // Zeichen korrigieren?
                     if ( pDragAndDropInfo->aBeginDragSel.nEndPara == pDragAndDropInfo->aDropSel.nStartPara )
                     {
                         sal_uInt16 nLessChars;
@@ -1671,7 +1680,7 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
 
                 DrawSelection();
                 EditSelection aDelSel( pEditEngine->pImpEditEngine->CreateSel( aToBeDelSel ) );
-                DBG_ASSERT( !aDelSel.DbgIsBuggy( pEditEngine->pImpEditEngine->aEditDoc ), "ToBeDel is buggy!" );
+                DBG_ASSERT( !aDelSel.DbgIsBuggy( pEditEngine->pImpEditEngine->aEditDoc ), "ToBeDel ist buggy!" );
                 pEditEngine->pImpEditEngine->ImpDeleteSelection( aDelSel );
                 if ( !bBeforeSelection )
                 {
@@ -1683,7 +1692,7 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
             }
             else
             {
-                // other EditEngine ...
+                // andere EditEngine...
                 if ( pEditEngine->pImpEditEngine->ImplHasText() )   // #88630# SC ist removing the content when switching the task
                     DeleteSelected();
             }
@@ -1693,7 +1702,7 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
             pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_DRAGANDDROP );
 
         HideDDCursor();
-        ShowCursor( DoAutoScroll(), sal_True );
+        ShowCursor( DoAutoScroll(), TRUE );
         delete pDragAndDropInfo;
         pDragAndDropInfo = NULL;
         pEditEngine->GetEndDropHdl().Call(GetEditViewPtr());
@@ -1709,19 +1718,19 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
     if ( pDragAndDropInfo && pDragAndDropInfo->bDragAccepted )
     {
         pEditEngine->GetBeginDropHdl().Call(GetEditViewPtr());
-        sal_Bool bChanges = sal_False;
+        BOOL bChanges = FALSE;
 
         HideDDCursor();
 
         if ( pDragAndDropInfo->bStarterOfDD )
         {
             pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_DRAGANDDROP );
-            pDragAndDropInfo->bUndoAction = sal_True;
+            pDragAndDropInfo->bUndoAction = TRUE;
         }
 
         if ( pDragAndDropInfo->bOutlinerMode )
         {
-            bChanges = sal_True;
+            bChanges = TRUE;
             GetEditViewPtr()->MoveParagraphs( Range( pDragAndDropInfo->aBeginDragSel.nStartPara, pDragAndDropInfo->aBeginDragSel.nEndPara ), pDragAndDropInfo->nOutlinerDropDest );
         }
         else
@@ -1729,8 +1738,8 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
             uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
             if ( xDataObj.is() )
             {
-                bChanges = sal_True;
-                // remove Selection ...
+                bChanges = TRUE;
+                // Selektion wegmalen...
                 DrawSelection();
                 EditPaM aPaM( pDragAndDropInfo->aDropDest );
 
@@ -1748,7 +1757,7 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
                 pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
                 if ( pDragAndDropInfo->bStarterOfDD )
                 {
-                    // Only set if the same engine!
+                    // Nur dann setzen, wenn in gleicher Engine!
                     pDragAndDropInfo->aDropSel.nStartPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
                     pDragAndDropInfo->aDropSel.nStartPos = aPaM.GetIndex();
                     pDragAndDropInfo->aDropSel.nEndPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aNewSel.Max().GetNode() );
@@ -1824,7 +1833,9 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
 
     if ( GetOutputArea().IsInside( aMousePos ) && !bReadOnly )
     {
-        if ( pDragAndDropInfo && pDragAndDropInfo->bHasValidData )
+//        sal_Int8 nSupportedActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
+
+        if ( pDragAndDropInfo && pDragAndDropInfo->bHasValidData /* && ( nSupportedActions & rDTDE.DropAction ) MT: Default = 0x80 ?! */ )
         {
             bAccept = sal_True;
 
@@ -1833,7 +1844,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
             {
                 long nScrollX = 0;
                 long nScrollY = 0;
-                // Chech if in the sensitive area
+                // pruefen, ob im sensitiven Bereich
                 if ( ( (aMousePos.X()-pDragAndDropInfo->nSensibleRange) < GetOutputArea().Left() ) && ( ( aMousePos.X() + pDragAndDropInfo->nSensibleRange ) > GetOutputArea().Left() ) )
                         nScrollX = GetOutputArea().GetWidth() / SCRLRANGE;
                 else if ( ( (aMousePos.X()+pDragAndDropInfo->nSensibleRange) > GetOutputArea().Right() ) && ( ( aMousePos.X() - pDragAndDropInfo->nSensibleRange ) < GetOutputArea().Right() ) )
@@ -1856,7 +1867,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
             pDragAndDropInfo->aDropDest = aPaM;
             if ( pDragAndDropInfo->bOutlinerMode )
             {
-                sal_uInt16 nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+                USHORT nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
                 ParaPortion* pPPortion = pEditEngine->pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
                 long nDestParaStartY = pEditEngine->pImpEditEngine->GetParaPortions().GetYOffset( pPPortion );
                 long nRel = aDocPos.Y() - nDestParaStartY;
@@ -1872,19 +1883,19 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
                 if( ( pDragAndDropInfo->nOutlinerDropDest >= pDragAndDropInfo->aBeginDragSel.nStartPara ) &&
                     ( pDragAndDropInfo->nOutlinerDropDest <= (pDragAndDropInfo->aBeginDragSel.nEndPara+1) ) )
                 {
-                    bAccept = sal_False;
+                    bAccept = FALSE;
                 }
             }
             else if ( HasSelection() )
             {
-                // it must not be dropped into a selection
+                // es darf nicht in eine Selektion gedroppt werden
                 EPaM aP = pEditEngine->pImpEditEngine->CreateEPaM( aPaM );
                 ESelection aDestSel( aP.nPara, aP.nIndex, aP.nPara, aP.nIndex);
                 ESelection aCurSel = pEditEngine->pImpEditEngine->CreateESel( GetEditSelection() );
                 aCurSel.Adjust();
                 if ( !aDestSel.IsLess( aCurSel ) && !aDestSel.IsGreater( aCurSel ) )
                 {
-                    bAccept = sal_False;
+                    bAccept = FALSE;
                 }
             }
             if ( bAccept )
@@ -1935,7 +1946,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
                     HideDDCursor();
                     ShowDDCursor(aEditCursor );
                 }
-                pDragAndDropInfo->bDragAccepted = sal_True;
+                pDragAndDropInfo->bDragAccepted = TRUE;
                 rDTDE.Context->acceptDrag( rDTDE.DropAction );
             }
         }
@@ -1945,7 +1956,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
     {
         HideDDCursor();
         if (pDragAndDropInfo)
-            pDragAndDropInfo->bDragAccepted = sal_False;
+            pDragAndDropInfo->bDragAccepted = FALSE;
         rDTDE.Context->rejectDrag();
     }
 }
@@ -1965,7 +1976,7 @@ void ImpEditView::AddDragAndDropListeners()
         pWindow->GetDropTarget()->setActive( sal_True );
         pWindow->GetDropTarget()->setDefaultActions( datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
 
-        bActiveDragAndDropListener = sal_True;
+        bActiveDragAndDropListener = TRUE;
     }
 }
 
@@ -1985,7 +1996,7 @@ void ImpEditView::RemoveDragAndDropListeners()
             mxDnDListener.clear();
         }
 
-        bActiveDragAndDropListener = sal_False;
+        bActiveDragAndDropListener = FALSE;
     }
 }
 

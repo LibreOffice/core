@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@
 #include "helpid.hrc"
 
 //============================================================================
-//  Local Defines and Function
+//	Local Defines and Function
 //----------------------------------------------------------------------------
 
-inline void EnableDisable( Window& rWin, sal_Bool bEnable )
+inline void EnableDisable( Window& rWin, BOOL bEnable )
 {
     if (bEnable)
         rWin.Enable();
@@ -60,15 +60,15 @@ static long nStaticTabs[]=
     5,10,65,120,170,220
 };
 
-#define MIN_DISTANCE    6
+#define	MIN_DISTANCE	6
 #define WRITER_AUTHOR   1
-#define WRITER_DATE     2
-#define CALC_AUTHOR     2
-#define CALC_DATE       3
+#define WRITER_DATE		2
+#define CALC_AUTHOR		2
+#define CALC_DATE		3
 
 RedlinData::RedlinData()
 {
-    bDisabled=sal_False;
+    bDisabled=FALSE;
     pData=NULL;
 }
 RedlinData::~RedlinData()
@@ -76,7 +76,7 @@ RedlinData::~RedlinData()
 }
 
 //============================================================================
-//  class SvxRedlinEntry (Entries for list)
+//	class SvxRedlinEntry (Eintraege fuer Liste)
 //----------------------------------------------------------------------------
 
 SvxRedlinEntry::SvxRedlinEntry()
@@ -93,11 +93,27 @@ SvxRedlinEntry::~SvxRedlinEntry()
     }
 }
 
-// Functions in the inserts Items of SvxRedlinTable
+/*************************************************************************
+#* Funktionen der in den SvxRedlinTable eingefuegten Items
+#************************************************************************/
 
 DBG_NAME(SvLBoxColorString);
 
-SvLBoxColorString::SvLBoxColorString( SvLBoxEntry*pEntry,sal_uInt16 nFlags,const XubString& rStr,
+/*************************************************************************
+#*	Member:		SvLBoxColorString							Datum:23.10.97
+#*------------------------------------------------------------------------
+#*
+#*  Klasse:		SvLBoxColorString
+#*
+#*  Funktion:	Konstruktor der Klasse SvLBoxColorString
+#*
+#*  Input:		Box- Entry,Flags, Text fuer Anzeige, Schrift
+#*
+#*	Output:		---
+#*
+#************************************************************************/
+
+SvLBoxColorString::SvLBoxColorString( SvLBoxEntry*pEntry,USHORT nFlags,const XubString& rStr,
                                     const Color& rCol)
 
 : SvLBoxString( pEntry, nFlags, rStr )
@@ -107,16 +123,59 @@ SvLBoxColorString::SvLBoxColorString( SvLBoxEntry*pEntry,sal_uInt16 nFlags,const
     SetText( pEntry, rStr );
 }
 
+/*************************************************************************
+#*	Member:		SvLBoxColorString							Datum:23.10.97
+#*------------------------------------------------------------------------
+#*
+#*  Klasse:		SvLBoxColorString
+#*
+#*  Funktion:	Default Konstruktor der Klasse SvLBoxColorString
+#*
+#*  Input:		---
+#*
+#*	Output:		---
+#*
+#************************************************************************/
+
 SvLBoxColorString::SvLBoxColorString()
 : SvLBoxString()
 {
     DBG_CTOR(SvLBoxColorString,0);
 }
 
+/*************************************************************************
+#*	Member:		~SvLBoxColorString							Datum:23.10.97
+#*------------------------------------------------------------------------
+#*
+#*  Klasse:		SvLBoxColorString
+#*
+#*  Funktion:	Destruktor der Klasse SvLBoxColorString
+#*
+#*  Input:		---
+#*
+#*	Output:		---
+#*
+#************************************************************************/
+
 SvLBoxColorString::~SvLBoxColorString()
 {
     DBG_DTOR(SvLBoxColorString,0);
 }
+
+
+/*************************************************************************
+#*	Member:		SvLBoxColorString							Datum:23.10.97
+#*------------------------------------------------------------------------
+#*
+#*  Klasse:		SvLBoxColorString
+#*
+#*  Funktion:	Erzeugt einen neuen SvLBoxColorString
+#*
+#*  Input:		---
+#*
+#*	Output:		SvLBoxColorString
+#*
+#************************************************************************/
 
 SvLBoxItem* SvLBoxColorString::Create() const
 {
@@ -124,14 +183,27 @@ SvLBoxItem* SvLBoxColorString::Create() const
     return new SvLBoxColorString;
 }
 
+
+
+/*************************************************************************
+#*	Member:		SvLBoxColorString							Datum:23.10.97
+#*------------------------------------------------------------------------
+#*
+#*  Klasse:		SvLBoxColorString
+#*
+#*  Funktion:	Zeichenroutine des SvLBoxColorString. Gezeichnet wird
+#*				der entsprechende Text mit der eingestellten Farbe
+#*				im Ausgabe- Device.
+#*
+#*  Input:		Position, Ausgabe- Device, Flag fuer Selection,
+#*				Zeiger auf den Eintrag
+#*
+#*	Output:		---
+#*
+#************************************************************************/
+
 void SvLBoxColorString::Paint( const Point& rPos, SvLBox& rDev,
-                             sal_uInt16 nFlags, SvLBoxEntry* pEntry )
-/* [Description]
-
-   Paint function of the SvLBoxColorString class. The relevant text with the
-   selected color is drawn in the output device.
-*/
-
+                             USHORT nFlags,	SvLBoxEntry* pEntry )
 {
     Color aColor=rDev.GetTextColor();
     Color a2Color=aColor;
@@ -144,16 +216,16 @@ void SvLBoxColorString::Paint( const Point& rPos, SvLBox& rDev,
 }
 
 //============================================================================
-//  class SvxRedlinTable
+//	class SvxRedlinTable
 //----------------------------------------------------------------------------
 
 SvxRedlinTable::SvxRedlinTable( Window* pParent,WinBits nBits ):
         SvxSimpleTable(pParent,nBits )
 {
-    bAuthor=sal_False;
-    bDate=sal_False;
-    bIsCalc=sal_False;
-    bComment=sal_False;
+    bAuthor=FALSE;
+    bDate=FALSE;
+    bIsCalc=FALSE;
+    bComment=FALSE;
     nDatePos=WRITER_DATE;
     pCommentSearcher=NULL;
     SetNodeDefaultImages();
@@ -162,10 +234,10 @@ SvxRedlinTable::SvxRedlinTable( Window* pParent,WinBits nBits ):
 SvxRedlinTable::SvxRedlinTable( Window* pParent,const ResId& rResId):
         SvxSimpleTable(pParent,rResId)
 {
-    bAuthor=sal_False;
-    bDate=sal_False;
-    bIsCalc=sal_False;
-    bComment=sal_False;
+    bAuthor=FALSE;
+    bDate=FALSE;
+    bIsCalc=FALSE;
+    bComment=FALSE;
     nDatePos=WRITER_DATE;
     pCommentSearcher=NULL;
     SetNodeDefaultImages();
@@ -218,7 +290,7 @@ StringCompare SvxRedlinTable::ColCompare(SvLBoxEntry* pLeft,SvLBoxEntry* pRight)
 
     return eCompare;
 }
-void SvxRedlinTable::SetCalcView(sal_Bool bFlag)
+void SvxRedlinTable::SetCalcView(BOOL bFlag)
 {
     bIsCalc=bFlag;
     if(bFlag)
@@ -235,7 +307,7 @@ void SvxRedlinTable::SetCalcView(sal_Bool bFlag)
 void SvxRedlinTable::UpdateFilterTest()
 {
     Date aDateMax;
-    sal_uInt16 nYEAR=aDateMax.GetYear()+100;
+    USHORT nYEAR=aDateMax.GetYear()+100;
     aDateMax.SetYear(nYEAR);
     Date aDateMin(1,1,1989);
     Time aTMin(0);
@@ -276,12 +348,12 @@ void SvxRedlinTable::UpdateFilterTest()
 }
 
 
-void SvxRedlinTable::SetFilterDate(sal_Bool bFlag)
+void SvxRedlinTable::SetFilterDate(BOOL bFlag)
 {
     bDate=bFlag;
 }
 
-void SvxRedlinTable::SetDateTimeMode(sal_uInt16 nMode)
+void SvxRedlinTable::SetDateTimeMode(USHORT nMode)
 {
     nDaTiMode=nMode;
 }
@@ -306,7 +378,7 @@ void SvxRedlinTable::SetLastTime(const Time& aTime)
     aDaTiLast.SetTime(aTime.GetTime());
 }
 
-void SvxRedlinTable::SetFilterAuthor(sal_Bool bFlag)
+void SvxRedlinTable::SetFilterAuthor(BOOL bFlag)
 {
     bAuthor=bFlag;
 }
@@ -316,7 +388,7 @@ void SvxRedlinTable::SetAuthor(const String &aString)
     aAuthor=aString;
 }
 
-void SvxRedlinTable::SetFilterComment(sal_Bool bFlag)
+void SvxRedlinTable::SetFilterComment(BOOL bFlag)
 {
     bComment=bFlag;
 }
@@ -331,18 +403,18 @@ void SvxRedlinTable::SetCommentParams( const utl::SearchParam* pSearchPara )
     }
 }
 
-sal_Bool SvxRedlinTable::IsValidWriterEntry(const String& rString,RedlinData *pUserData)
+BOOL SvxRedlinTable::IsValidWriterEntry(const String& rString,RedlinData *pUserData)
 {
-    sal_Bool nTheFlag=sal_True;
+    BOOL nTheFlag=TRUE;
     String aString=rString.GetToken(WRITER_AUTHOR,'\t');
     if(pUserData==NULL)
     {
         if(bAuthor)
         {
             if(aAuthor.CompareTo(aString)==COMPARE_EQUAL)
-                nTheFlag=sal_True;
+                nTheFlag=TRUE;
             else
-                nTheFlag=sal_False;
+                nTheFlag=FALSE;
         }
     }
     else
@@ -353,18 +425,18 @@ sal_Bool SvxRedlinTable::IsValidWriterEntry(const String& rString,RedlinData *pU
     return nTheFlag;
 }
 
-sal_Bool SvxRedlinTable::IsValidCalcEntry(const String& rString,RedlinData *pUserData)
+BOOL SvxRedlinTable::IsValidCalcEntry(const String& rString,RedlinData *pUserData)
 {
-    sal_Bool nTheFlag=sal_True;
+    BOOL nTheFlag=TRUE;
     String aString=rString.GetToken(CALC_AUTHOR,'\t');
     if(pUserData==NULL)
     {
         if(bAuthor)
         {
             if(aAuthor.CompareTo(aString)==COMPARE_EQUAL)
-                nTheFlag=sal_True;
+                nTheFlag=TRUE;
             else
-                nTheFlag=sal_False;
+                nTheFlag=FALSE;
         }
     }
     else
@@ -375,7 +447,7 @@ sal_Bool SvxRedlinTable::IsValidCalcEntry(const String& rString,RedlinData *pUse
     return nTheFlag;
 }
 
-sal_Bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,
+BOOL SvxRedlinTable::IsValidEntry(const String* pAuthorStr,
                                   const DateTime *pDateTime,const String* pCommentStr)
 {
     bool nTheFlag=true;
@@ -404,15 +476,15 @@ sal_Bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,
     return nTheFlag;
 }
 
-sal_Bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,const DateTime *pDateTime)
+BOOL SvxRedlinTable::IsValidEntry(const String* pAuthorStr,const DateTime *pDateTime)
 {
-    sal_Bool nTheFlag=sal_True;
+    BOOL nTheFlag=TRUE;
     if(bAuthor)
     {
         if(aAuthor.CompareTo(*pAuthorStr)==COMPARE_EQUAL)
-            nTheFlag=sal_True;
+            nTheFlag=TRUE;
         else
-            nTheFlag=sal_False;
+            nTheFlag=FALSE;
     }
     if(bDate && nTheFlag)
     {
@@ -428,7 +500,7 @@ sal_Bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,const DateTime *p
     return nTheFlag;
 }
 
-sal_Bool SvxRedlinTable::IsValidComment(const String* pCommentStr)
+BOOL SvxRedlinTable::IsValidComment(const String* pCommentStr)
 {
     bool nTheFlag=true;
 
@@ -443,7 +515,7 @@ sal_Bool SvxRedlinTable::IsValidComment(const String* pCommentStr)
 }
 
 SvLBoxEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserData,
-                                SvLBoxEntry* pParent,sal_uIntPtr nPos)
+                                SvLBoxEntry* pParent,ULONG nPos)
 {
     aEntryColor=GetTextColor();
     if(pUserData!=NULL)
@@ -465,12 +537,12 @@ SvLBoxEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserDat
     else
         aCurEntry.Erase();
 
-    return SvTreeListBox::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
+    return SvTreeListBox::InsertEntry( aFirstStr, pParent, FALSE, nPos, pUserData );
 
 }
 
 SvLBoxEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserData,const Color& aColor,
-                                SvLBoxEntry* pParent,sal_uIntPtr nPos)
+                                SvLBoxEntry* pParent,ULONG nPos)
 {
     aEntryColor=aColor;
 
@@ -487,7 +559,7 @@ SvLBoxEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserDat
     else
         aCurEntry.Erase();
 
-    return SvTreeListBox::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
+    return SvTreeListBox::InsertEntry( aFirstStr, pParent, FALSE, nPos, pUserData );
 }
 
 SvLBoxEntry* SvxRedlinTable::CreateEntry() const
@@ -518,13 +590,14 @@ void SvxRedlinTable::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
     XubString aToken;
 
     xub_Unicode* pCurToken = (xub_Unicode*)aCurEntry.GetBuffer();
-    sal_uInt16 nCurTokenLen;
+    USHORT nCurTokenLen;
     xub_Unicode* pNextToken = (xub_Unicode*)GetToken( pCurToken, nCurTokenLen );
-    sal_uInt16 nCount = TabCount(); nCount--;
+    USHORT nCount = TabCount(); nCount--;
 
-    for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
+    for( USHORT nToken = 0; nToken < nCount; nToken++ )
     {
         if( pCurToken && nCurTokenLen )
+            // aToken.Assign( pCurToken, nCurTokenLen );
             aToken = XubString( pCurToken, nCurTokenLen );
         else
             aToken.Erase();
@@ -544,25 +617,24 @@ void SvxRedlinTable::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
 
 
 //============================================================================
-//  class SvxTPView
+//	class SvxTPView
 //----------------------------------------------------------------------------
 
 SvxTPView::SvxTPView( Window * pParent)
     : TabPage( pParent, SVX_RES(SID_REDLIN_VIEW_PAGE)),
-    aViewData   ( this, SVX_RES( DG_VIEW) ),
-    PbAccept    ( this, SVX_RES(PB_ACCEPT    ) ),
+    aViewData	( this, SVX_RES( DG_VIEW) ),
+    PbAccept	( this, SVX_RES(PB_ACCEPT	 ) ),
     PbReject    ( this, SVX_RES(PB_REJECT  ) ),
     PbAcceptAll ( this, SVX_RES(PB_ACCEPTALL  ) ),
     PbRejectAll ( this, SVX_RES(PB_REJECTALL  ) ),
-    PbUndo      ( this, SVX_RES(PB_UNDO  ) ),
-    aTitle1     ( SVX_RES( STR_TITLE1 ) ),      // local resource
-    aTitle2     ( SVX_RES( STR_TITLE2 ) ),
-    aTitle3     ( SVX_RES( STR_TITLE3 ) ),
-    aTitle4     ( SVX_RES( STR_TITLE4 ) ),
-    aTitle5     ( SVX_RES( STR_TITLE5 ) ),
-    aStrMyName  ( SVX_RES( STR_VIEW) )
+    PbUndo		( this, SVX_RES(PB_UNDO  ) ),
+    aTitle1		( SVX_RES( STR_TITLE1 ) ),		// lokale Resource
+    aTitle2		( SVX_RES( STR_TITLE2 ) ),
+    aTitle3		( SVX_RES( STR_TITLE3 ) ),
+    aTitle4		( SVX_RES( STR_TITLE4 ) ),
+    aTitle5		( SVX_RES( STR_TITLE5 ) ),
+    aStrMyName	( SVX_RES( STR_VIEW) )
 {
-    aViewData.SetAccessibleName(String(SVX_RES(STR_TREE)));
     FreeResource();
 
     aViewData.SetHelpId(HID_REDLINING_VIEW_DG_VIEW_TABLE);
@@ -647,32 +719,32 @@ void SvxTPView::InsertCalcHeader()
     aViewData.InsertHeaderEntry(aString);
 }
 
-void SvxTPView::EnableAccept(sal_Bool nFlag)
+void SvxTPView::EnableAccept(BOOL nFlag)
 {
     PbAccept.Enable(nFlag);
 }
 
-void SvxTPView::EnableAcceptAll(sal_Bool nFlag)
+void SvxTPView::EnableAcceptAll(BOOL nFlag)
 {
     PbAcceptAll.Enable(nFlag);
 }
 
-void SvxTPView::EnableReject(sal_Bool nFlag)
+void SvxTPView::EnableReject(BOOL nFlag)
 {
     PbReject.Enable(nFlag);
 }
 
-void SvxTPView::EnableRejectAll(sal_Bool nFlag)
+void SvxTPView::EnableRejectAll(BOOL nFlag)
 {
     PbRejectAll.Enable(nFlag);
 }
 
-void SvxTPView::ShowUndo(sal_Bool nFlag)
+void SvxTPView::ShowUndo(BOOL nFlag)
 {
     PbUndo.Show(nFlag);
 }
 
-void SvxTPView::EnableUndo(sal_Bool nFlag)
+void SvxTPView::EnableUndo(BOOL nFlag)
 {
     PbUndo.Enable(nFlag);
 }
@@ -682,7 +754,7 @@ Size SvxTPView::GetMinSizePixel()
     Size aSize=aMinSize;
     if(PbUndo.IsVisible())
     {
-        sal_uIntPtr nSize=PbUndo.GetSizePixel().Width()
+        ULONG nSize=PbUndo.GetSizePixel().Width()
                     +PbUndo.GetPosPixel().X()
                     +PbAccept.GetPosPixel().X();
 
@@ -728,45 +800,41 @@ IMPL_LINK( SvxTPView, PbClickHdl, PushButton*, pPushB )
 
 
 //============================================================================
-//  class SvxTPFilter
+//	class SvxTPFilter
 //----------------------------------------------------------------------------
 
 SvxTPFilter::SvxTPFilter( Window * pParent)
     : TabPage( pParent, SVX_RES(SID_REDLIN_FILTER_PAGE)),
     pRedlinTable(NULL),
     aCbDate     ( this, SVX_RES( CB_DATE ) ),
-    aLbDate     ( this, SVX_RES( LB_DATE ) ),
-    aDfDate     ( this, SVX_RES( DF_DATE ) ),
-    aTfDate     ( this, SVX_RES( TF_DATE ) ),
-    aIbClock    ( this, SVX_RES( IB_CLOCK ) ),
-    aFtDate2    ( this, SVX_RES( FT_DATE2 ) ),
-    aDfDate2    ( this, SVX_RES( DF_DATE2 ) ),
-    aTfDate2    ( this, SVX_RES( TF_DATE2 ) ),
-    aIbClock2   ( this, SVX_RES( IB_CLOCK2) ),
-    aCbAuthor   ( this, SVX_RES( CB_AUTOR ) ),
-    aLbAuthor   ( this, SVX_RES( LB_AUTOR ) ),
-    aCbRange    ( this, SVX_RES( CB_RANGE ) ),
-    aEdRange    ( this, SVX_RES( ED_RANGE ) ),
-    aBtnRange   ( this, SVX_RES( BTN_REF ) ),
-    aLbAction   ( this, SVX_RES( LB_ACTION ) ),
-    aCbComment  ( this, SVX_RES( CB_COMMENT) ),
-    aEdComment  ( this, SVX_RES( ED_COMMENT) ),
+    aLbDate		( this, SVX_RES( LB_DATE ) ),
+    aDfDate		( this, SVX_RES( DF_DATE ) ),
+    aTfDate		( this, SVX_RES( TF_DATE ) ),
+    aIbClock 	( this, SVX_RES( IB_CLOCK ) ),
+    aFtDate2	( this, SVX_RES( FT_DATE2 ) ),
+    aDfDate2	( this, SVX_RES( DF_DATE2 ) ),
+    aTfDate2	( this, SVX_RES( TF_DATE2 ) ),
+    aIbClock2 	( this, SVX_RES( IB_CLOCK2) ),
+    aCbAuthor	( this, SVX_RES( CB_AUTOR ) ),
+    aLbAuthor	( this, SVX_RES( LB_AUTOR ) ),
+    aCbRange 	( this, SVX_RES( CB_RANGE ) ),
+    aEdRange 	( this, SVX_RES( ED_RANGE ) ),
+    aBtnRange 	( this, SVX_RES( BTN_REF ) ),
+    aLbAction	( this, SVX_RES( LB_ACTION ) ),
+    aCbComment	( this, SVX_RES( CB_COMMENT) ),
+    aEdComment	( this, SVX_RES( ED_COMMENT) ),
     aActionStr  (       SVX_RES( STR_ACTION) ),
     aStrMyName  (       SVX_RES( STR_FILTER) ),
-    bModified   (sal_False)
+    bModified   (FALSE)
 {
-    aLbDate.SetAccessibleName( String( SVX_RES( STR_DATE_COMBOX) ) );
-    aDfDate.SetAccessibleName( String( SVX_RES( STR_DATE_SPIN) ) );
-    aTfDate.SetAccessibleName( String( SVX_RES( STR_DATE_TIME_SPIN) ) );
-    aDfDate2.SetAccessibleName( String( SVX_RES( STR_DATE_SPIN1) ) );
-    aTfDate2.SetAccessibleName( String( SVX_RES( STR_DATE_TIME_SPIN1) ) );
-    aLbAuthor.SetAccessibleName(aCbAuthor.GetText());
-    aLbAction.SetAccessibleName( String( SVX_RES( STR_ACTION) ) );
-    aEdComment.SetAccessibleName(aCbComment.GetText());
+    Image aImgTimeHC( SVX_RES( IMG_TIME_H ) );
     FreeResource();
 
-    aDfDate.SetShowDateCentury( sal_True );
-    aDfDate2.SetShowDateCentury( sal_True );
+    aIbClock.SetModeImage( aImgTimeHC, BMP_COLOR_HIGHCONTRAST );
+    aIbClock2.SetModeImage( aImgTimeHC, BMP_COLOR_HIGHCONTRAST );
+
+    aDfDate.SetShowDateCentury( TRUE );
+    aDfDate2.SetShowDateCentury( TRUE );
 
     aRangeStr=aCbRange.GetText();
     aLbDate.SelectEntryPos(0);
@@ -806,16 +874,7 @@ SvxTPFilter::SvxTPFilter( Window * pParent)
     aTfDate2.SetTime(aTime);
     HideRange();
     ShowAction();
-    bModified=sal_False;
-
-    aLbDate.SetAccessibleRelationLabeledBy(&aCbDate);
-    aLbAuthor.SetAccessibleRelationLabeledBy(&aCbAuthor);
-    aLbAction.SetAccessibleRelationLabeledBy(&aCbRange);
-    aEdRange.SetAccessibleRelationLabeledBy(&aCbRange);
-    aBtnRange.SetAccessibleRelationLabeledBy(&aCbRange);
-    aEdComment.SetAccessibleRelationLabeledBy(&aCbComment);
-    aDfDate2.SetAccessibleRelationLabeledBy(&aDfDate2);
-    aTfDate2.SetAccessibleRelationLabeledBy(&aTfDate2);
+    bModified=FALSE;
 }
 
 void SvxTPFilter::SetRedlinTable(SvxRedlinTable* pTable)
@@ -828,7 +887,7 @@ String SvxTPFilter::GetMyName() const
     return aStrMyName;
 }
 
-void SvxTPFilter::DisableRange(sal_Bool bFlag)
+void SvxTPFilter::DisableRange(BOOL bFlag)
 {
     if(bFlag)
     {
@@ -844,43 +903,43 @@ void SvxTPFilter::DisableRange(sal_Bool bFlag)
     }
 }
 
-void SvxTPFilter::ShowDateFields(sal_uInt16 nKind)
+void SvxTPFilter::ShowDateFields(USHORT nKind)
 {
     String aEmpty;
     switch(nKind)
     {
         case FLT_DATE_BEFORE:
-                EnableDateLine1(sal_True);
-                EnableDateLine2(sal_False);
+                EnableDateLine1(TRUE);
+                EnableDateLine2(FALSE);
                 break;
         case FLT_DATE_SINCE:
-                EnableDateLine1(sal_True);
-                EnableDateLine2(sal_False);
+                EnableDateLine1(TRUE);
+                EnableDateLine2(FALSE);
                 break;
         case FLT_DATE_EQUAL:
-                EnableDateLine1(sal_True);
+                EnableDateLine1(TRUE);
                 aTfDate.Disable();
                 aTfDate.SetText(aEmpty);
-                EnableDateLine2(sal_False);
+                EnableDateLine2(FALSE);
                 break;
         case FLT_DATE_NOTEQUAL:
-                EnableDateLine1(sal_True);
+                EnableDateLine1(TRUE);
                 aTfDate.Disable();
                 aTfDate.SetText(aEmpty);
-                EnableDateLine2(sal_False);
+                EnableDateLine2(FALSE);
                 break;
         case FLT_DATE_BETWEEN:
-                EnableDateLine1(sal_True);
-                EnableDateLine2(sal_True);
+                EnableDateLine1(TRUE);
+                EnableDateLine2(TRUE);
                 break;
         case FLT_DATE_SAVE:
-                EnableDateLine1(sal_False);
-                EnableDateLine2(sal_False);
+                EnableDateLine1(FALSE);
+                EnableDateLine2(FALSE);
                 break;
     }
 }
 
-void SvxTPFilter::EnableDateLine1(sal_Bool bFlag)
+void SvxTPFilter::EnableDateLine1(BOOL bFlag)
 {
     if(bFlag && aCbDate.IsChecked())
     {
@@ -895,7 +954,7 @@ void SvxTPFilter::EnableDateLine1(sal_Bool bFlag)
         aIbClock.Disable();
     }
 }
-void SvxTPFilter::EnableDateLine2(sal_Bool bFlag)
+void SvxTPFilter::EnableDateLine2(BOOL bFlag)
 {
     String aEmpty;
     if(bFlag && aCbDate.IsChecked())
@@ -957,42 +1016,42 @@ void SvxTPFilter::SetLastTime(const Time &aTime)
     aTfDate2.SetTime(aTime);
 }
 
-void SvxTPFilter::SetDateMode(sal_uInt16 nMode)
+void SvxTPFilter::SetDateMode(USHORT nMode)
 {
     aLbDate.SelectEntryPos(nMode);
     SelDateHdl(&aLbDate);
 }
 
-sal_uInt16 SvxTPFilter::GetDateMode()
+USHORT SvxTPFilter::GetDateMode()
 {
-    return (sal_uInt16) aLbDate.GetSelectEntryPos();
+    return (USHORT) aLbDate.GetSelectEntryPos();
 }
 void SvxTPFilter::ClearAuthors()
 {
     aLbAuthor.Clear();
 }
 
-void SvxTPFilter::InsertAuthor( const String& rString, sal_uInt16 nPos)
+void SvxTPFilter::InsertAuthor( const String& rString, USHORT nPos)
 {
     aLbAuthor.InsertEntry(rString,nPos);
 }
 
-String SvxTPFilter::GetSelectedAuthor() const
+String SvxTPFilter::GetSelectedAuthor()	const
 {
     return aLbAuthor.GetSelectEntry();
 }
 
-sal_uInt16  SvxTPFilter::GetSelectedAuthorPos()
+USHORT	SvxTPFilter::GetSelectedAuthorPos()
 {
-    return (sal_uInt16) aLbAuthor.GetSelectEntryPos();
+    return (USHORT) aLbAuthor.GetSelectEntryPos();
 }
 
-void SvxTPFilter::SelectedAuthorPos(sal_uInt16 nPos)
+void SvxTPFilter::SelectedAuthorPos(USHORT nPos)
 {
     aLbAuthor.SelectEntryPos(nPos);
 }
 
-sal_uInt16 SvxTPFilter::SelectAuthor(const String& aString)
+USHORT SvxTPFilter::SelectAuthor(const String& aString)
 {
     aLbAuthor.SelectEntry(aString);
     return aLbAuthor.GetSelectEntryPos();
@@ -1013,7 +1072,7 @@ void SvxTPFilter::SetFocusToRange()
     aEdRange.GrabFocus();
 }
 
-void SvxTPFilter::HideRange(sal_Bool bHide)
+void SvxTPFilter::HideRange(BOOL bHide)
 {
     if(bHide)
     {
@@ -1023,7 +1082,7 @@ void SvxTPFilter::HideRange(sal_Bool bHide)
     }
     else
     {
-        ShowAction(sal_False);
+        ShowAction(FALSE);
         aCbRange.SetText(aRangeStr);
         aCbRange.Show();
         aEdRange.Show();
@@ -1031,7 +1090,7 @@ void SvxTPFilter::HideRange(sal_Bool bHide)
     }
 }
 
-void SvxTPFilter::HideClocks(sal_Bool bHide)
+void SvxTPFilter::HideClocks(BOOL bHide)
 {
     if(bHide)
     {
@@ -1054,66 +1113,66 @@ String SvxTPFilter::GetComment()const
     return aEdComment.GetText();
 }
 
-sal_Bool SvxTPFilter::IsDate()
+BOOL SvxTPFilter::IsDate()
 {
     return aCbDate.IsChecked();
 }
 
-sal_Bool SvxTPFilter::IsAuthor()
+BOOL SvxTPFilter::IsAuthor()
 {
     return aCbAuthor.IsChecked();
 }
 
-sal_Bool SvxTPFilter::IsRange()
+BOOL SvxTPFilter::IsRange()
 {
     return aCbRange.IsChecked();
 }
-sal_Bool SvxTPFilter::IsAction()
+BOOL SvxTPFilter::IsAction()
 {
     return aCbRange.IsChecked();
 }
 
-sal_Bool SvxTPFilter::IsComment()
+BOOL SvxTPFilter::IsComment()
 {
     return aCbComment.IsChecked();
 }
 
-void SvxTPFilter::CheckDate(sal_Bool bFlag)
+void SvxTPFilter::CheckDate(BOOL bFlag)
 {
     aCbDate.Check(bFlag);
     RowEnableHdl(&aCbDate);
-    bModified=sal_False;
+    bModified=FALSE;
 }
 
-void SvxTPFilter::CheckAuthor(sal_Bool bFlag)
+void SvxTPFilter::CheckAuthor(BOOL bFlag)
 {
     aCbAuthor.Check(bFlag);
     RowEnableHdl(&aCbAuthor);
-    bModified=sal_False;
+    bModified=FALSE;
 }
 
-void SvxTPFilter::CheckRange(sal_Bool bFlag)
+void SvxTPFilter::CheckRange(BOOL bFlag)
 {
     aCbRange.Check(bFlag);
     RowEnableHdl(&aCbRange);
-    bModified=sal_False;
+    bModified=FALSE;
 }
 
-void SvxTPFilter::CheckAction(sal_Bool bFlag)
+void SvxTPFilter::CheckAction(BOOL bFlag)
 {
     aCbRange.Check(bFlag);
     RowEnableHdl(&aCbRange);
-    bModified=sal_False;
+    bModified=FALSE;
 }
 
-void SvxTPFilter::CheckComment(sal_Bool bFlag)
+void SvxTPFilter::CheckComment(BOOL bFlag)
 {
     aCbComment.Check(bFlag);
     RowEnableHdl(&aCbComment);
-    bModified=sal_False;
+    bModified=FALSE;
 }
 
-void SvxTPFilter::ShowAction(sal_Bool bShow)
+void SvxTPFilter::ShowAction(BOOL bShow)
 {
     if(!bShow)
     {
@@ -1139,7 +1198,7 @@ ListBox* SvxTPFilter::GetLbAction()
 
 IMPL_LINK( SvxTPFilter, SelDateHdl, ListBox*, pLb )
 {
-    ShowDateFields((sal_uInt16)aLbDate.GetSelectEntryPos());
+    ShowDateFields((USHORT)aLbDate.GetSelectEntryPos());
     ModifyHdl(pLb);
     return 0;
 }
@@ -1150,8 +1209,8 @@ IMPL_LINK( SvxTPFilter, RowEnableHdl, CheckBox*, pCB )
     {
         aLbDate.Enable(aCbDate.IsChecked());
         aLbDate.Invalidate();
-        EnableDateLine1(sal_False);
-        EnableDateLine2(sal_False);
+        EnableDateLine1(FALSE);
+        EnableDateLine2(FALSE);
         if(aCbDate.IsChecked()) SelDateHdl(&aLbDate);
     }
     else if(pCB==&aCbAuthor)
@@ -1220,7 +1279,7 @@ IMPL_LINK( SvxTPFilter, ModifyHdl, void*, pCtr)
             aModifyComLink.Call(this);
         }
 
-        bModified=sal_True;
+        bModified=TRUE;
         aModifyLink.Call(this);
     }
     return 0;
@@ -1244,7 +1303,7 @@ void SvxTPFilter::DeactivatePage()
             pRedlinTable->SetFilterComment(IsComment());
 
             utl::SearchParam aSearchParam( aEdComment.GetText(),
-                    utl::SearchParam::SRCH_REGEXP,sal_False,sal_False,sal_False );
+                    utl::SearchParam::SRCH_REGEXP,FALSE,FALSE,FALSE );
 
             pRedlinTable->SetCommentParams(&aSearchParam);
 
@@ -1253,7 +1312,7 @@ void SvxTPFilter::DeactivatePage()
 
         aReadyLink.Call(this);
     }
-    bModified=sal_False;
+    bModified=FALSE;
     TabPage::DeactivatePage();
 }
 
@@ -1326,20 +1385,20 @@ IMPL_LINK( SvxTPFilter, RefHandle, PushButton*, pRef )
 
 static Size gDiffSize;
 //============================================================================
-//  class SvxAcceptChgCtr
+//	class SvxAcceptChgCtr
 //----------------------------------------------------------------------------
 
 SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, WinBits nWinStyle)
-        :   Control(pParent,nWinStyle |WB_DIALOGCONTROL),
+        :	Control(pParent,nWinStyle |WB_DIALOGCONTROL),
             aTCAccept(this,WB_TABSTOP |WB_DIALOGCONTROL)
 {
     pTPFilter=new SvxTPFilter(&aTCAccept);
     pTPView=new SvxTPView(&aTCAccept);
     aMinSize=pTPView->GetMinSizePixel();
 
-    aTCAccept.InsertPage( TP_VIEW,   pTPView->GetMyName());
+    aTCAccept.InsertPage( TP_VIEW,	 pTPView->GetMyName());
     aTCAccept.InsertPage( TP_FILTER, pTPFilter->GetMyName());
-    aTCAccept.SetTabPage( TP_VIEW,   pTPView);
+    aTCAccept.SetTabPage( TP_VIEW,	 pTPView);
     aTCAccept.SetTabPage( TP_FILTER, pTPFilter);
     aTCAccept.SetHelpId(HID_REDLINING_TABCONTROL);
 
@@ -1357,16 +1416,16 @@ SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, WinBits nWinStyle)
 }
 
 SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, const ResId& rResId )
-        :   Control(pParent,rResId ),
+        :	Control(pParent,rResId ),
             aTCAccept(this,WB_TABSTOP |WB_DIALOGCONTROL)
 {
     pTPFilter=new SvxTPFilter(&aTCAccept);
     pTPView=new SvxTPView(&aTCAccept);
     aMinSize=pTPView->GetMinSizePixel();
 
-    aTCAccept.InsertPage( TP_VIEW,   pTPView->GetMyName());
+    aTCAccept.InsertPage( TP_VIEW,	 pTPView->GetMyName());
     aTCAccept.InsertPage( TP_FILTER, pTPFilter->GetMyName());
-    aTCAccept.SetTabPage( TP_VIEW,   pTPView);
+    aTCAccept.SetTabPage( TP_VIEW,	 pTPView);
     aTCAccept.SetTabPage( TP_FILTER, pTPFilter);
     aTCAccept.SetHelpId(HID_REDLINING_TABCONTROL);
 
@@ -1396,17 +1455,17 @@ void SvxAcceptChgCtr::Resize()
 {
     aMinSize=pTPView->GetMinSizePixel();
     Size aSize=GetOutputSizePixel();
-    sal_Bool bFlag=sal_False;
+    BOOL bFlag=FALSE;
 
     if(aMinSize.Height()>aSize.Height())
     {
         aSize.Height()=aMinSize.Height();
-        bFlag=sal_True;
+        bFlag=TRUE;
     }
     if(aMinSize.Width()>aSize.Width())
     {
         aSize.Width()=aMinSize.Width();
-        bFlag=sal_True;
+        bFlag=TRUE;
     }
 
     if(bFlag)
@@ -1438,12 +1497,12 @@ void SvxAcceptChgCtr::ShowViewPage()
     aTCAccept.SetCurPageId(TP_VIEW);
 }
 
-sal_Bool SvxAcceptChgCtr::IsFilterPageVisible()
+BOOL SvxAcceptChgCtr::IsFilterPageVisible()
 {
     return (aTCAccept.GetCurPageId()==TP_FILTER);
 }
 
-sal_Bool SvxAcceptChgCtr::IsViewPageVisible()
+BOOL SvxAcceptChgCtr::IsViewPageVisible()
 {
     return (aTCAccept.GetCurPageId()==TP_VIEW);
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,8 @@
 #define ODMA_PROVIDER_HXX
 
 #include <ucbhelper/providerhelper.hxx>
+#include <tools/prewin.h>
+#include <tools/postwin.h>
 #include "odma_lib.hxx"
 
 #include "rtl/ref.hxx"
@@ -45,23 +47,23 @@ namespace odma {
 // create instances of the provider.
 #define ODMA_CONTENT_PROVIDER_SERVICE_NAME \
                 "com.sun.star.ucb.ODMAContentProvider"
-//  #define ODMA_CONTENT_PROVIDER_SERVICE_NAME_LENGTH   34
+//	#define ODMA_CONTENT_PROVIDER_SERVICE_NAME_LENGTH	34
 
 // URL scheme. This is the scheme the provider will be able to create
 // contents for. The UCB will select the provider ( i.e. in order to create
 // contents ) according to this scheme.
-#define ODMA_URL_ODMAID         "::ODMA"
-#define ODMA_URL_SCHEME         "vnd.sun.star.odma"
-#define ODMA_URL_SCHEME_SHORT   "odma"
-#define ODMA_URL_SHORT          ":"
-#define ODMA_URL_SHORT_LGTH     5
-#define ODMA_URL_LGTH           18
-#define ODMA_URL_ODMAID_LGTH    6
+#define ODMA_URL_ODMAID			"::ODMA"
+#define ODMA_URL_SCHEME			"vnd.sun.star.odma"
+#define ODMA_URL_SCHEME_SHORT	"odma"
+#define ODMA_URL_SHORT			":"
+#define ODMA_URL_SHORT_LGTH		5
+#define ODMA_URL_LGTH			18
+#define ODMA_URL_ODMAID_LGTH	6
 
 // UCB Content Type.
-#define ODMA_CONTENT_TYPE       "application/" ODMA_URL_SCHEME "-content"
-#define ODMA_ODMA_REGNAME       "sodma"
-#define ODM_NAME_MAX            64      // Max length of a name document including
+#define ODMA_CONTENT_TYPE 		"application/" ODMA_URL_SCHEME "-content"
+#define ODMA_ODMA_REGNAME		"sodma"
+#define ODM_NAME_MAX			64		// Max length of a name document including
                                         // the terminating NULL character.
 
 //=========================================================================
@@ -69,11 +71,11 @@ class ContentProperties;
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
     typedef ::std::map< ::rtl::OString, ::rtl::Reference<ContentProperties> > ContentsMap;
-    ContentsMap      m_aContents;  // contains all ContentProperties
+    ContentsMap		 m_aContents;  // contains all ContentProperties
     static ODMHANDLE m_aOdmHandle; // the one and only ODMA handle to our DMS
 
     /** fillDocumentProperties fills the given _rProp with ODMA properties
-        @param  _rProp  the ContentProperties
+        @param	_rProp	the ContentProperties
     */
     void fillDocumentProperties(const ::rtl::Reference<ContentProperties>& _rProp);
 
@@ -110,67 +112,67 @@ public:
     //////////////////////////////////////////////////////////////////////
     // Non-interface methods.
     //////////////////////////////////////////////////////////////////////
-    static ODMHANDLE getHandle();
+    static ODMHANDLE getHandle(); 
 
     /** append add an entry to the internal map
-        @param  _rProp  the content properties
+        @param	_rProp	the content properties
     */
     void append(const ::rtl::Reference<ContentProperties>& _rProp);
-
+    
     /** closeDocument closes the document
-        @param  _sDocumentId    the id of the document
+        @param	_sDocumentId	the id of the document
     */
     void closeDocument(const ::rtl::OString& _sDocumentId);
-
-    /** saveDocument saves the document in DMS
-        @param  _sDocumentId    the id of the document
+    
+    /** saveDocument saves the document in DMS 
+        @param	_sDocumentId	the id of the document
     */
     void saveDocument(const ::rtl::OString& _sDocumentId);
 
     /** queryContentProperty query in the DMS for a content which document name is equal to _sDocumentName
-        @param  _sDocumentName  the document to query for
+        @param	_sDocumentName	the document to query for
 
-        @return the content properties for this content or an empty refernce
+        @return	the content properties for this content or an empty refernce
     */
     ::rtl::Reference<ContentProperties> queryContentProperty(const ::rtl::OUString& _sDocumentName);
 
     /** getContentPropertyWithTitle returns the ContentProperties for the first content with that title
-        @param  _sTitle the title of the document
+        @param	_sTitle	the title of the document
 
-        @return the content properties
+        @return	the content properties
     */
     ::rtl::Reference<ContentProperties> getContentPropertyWithTitle(const ::rtl::OUString& _sTitle) const;
 
     /** getContentPropertyWithDocumentId returns the ContentProperties for the first content with that title
-        @param  _sTitle the title of the document
+        @param	_sTitle	the title of the document
 
-        @return the content properties
+        @return	the content properties
     */
     ::rtl::Reference<ContentProperties> getContentPropertyWithDocumentId(const ::rtl::OUString& _sDocumentId) const;
 
     /** getContentPropertyWithSavedAsName returns the ContentProperties for the first content with that SavedAsName
-        @param  _sSaveAsName    the SavedAsName of the document
+        @param	_sSaveAsName	the SavedAsName of the document
 
-        @return the content properties
+        @return	the content properties
     */
     ::rtl::Reference<ContentProperties> getContentPropertyWithSavedAsName(const ::rtl::OUString& _sSaveAsName) const;
 
     /** openDoc returns the URL for the temporary file for the specific Content and opens it
-        @param  _rProp  used for check if already open, the member m_sFileURL will be set if is wan't opened yet
+        @param	_rProp	used for check if already open, the member m_sFileURL will be set if is wan't opened yet
 
         @return the URL of the temporary file
     */
     static ::rtl::OUString openDoc(const ::rtl::Reference<ContentProperties>& _rProp) throw (::com::sun::star::uno::Exception);
-
+    
     /** convertURL converts a normal URL into an ODMA understandable name
-        @param  _sCanonicURL    the URL from ContentIndentifier
+        @param	_sCanonicURL	the URL from ContentIndentifier
 
-        @return the ODMA name
+        @return	the ODMA name 
     */
     static ::rtl::OUString convertURL(const ::rtl::OUString& _sCanonicURL);
 
     /** deleteDocument deletes the document inside the DMS and remove the content properties from inside list
-        @param  _rProp  the ContentProperties
+        @param	_rProp	the ContentProperties
 
         @return true when successful
     */

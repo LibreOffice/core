@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,7 @@
 #include "osl/process.h"
 #include "rtl/bootstrap.hxx"
 
-using ::rtl::Bootstrap;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringToOString;
+using namespace rtl;
 
 namespace psp {
 
@@ -112,7 +107,7 @@ OUString getOfficePath( enum whichOfficePath ePath )
 static OString getEnvironmentPath( const char* pKey )
 {
     OString aPath;
-
+    
     const char* pValue = getenv( pKey );
     if( pValue && *pValue )
     {
@@ -127,9 +122,9 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
 {
     rPathList.clear();
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-
+    
     OUStringBuffer aPathBuffer( 256 );
-
+    
     // append net path
     aPathBuffer.append( getOfficePath( psp::NetPath ) );
     if( aPathBuffer.getLength() )
@@ -174,7 +169,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
 
         rPathList.push_back( OStringToOUString( aDir, aEncoding ) );
     } while( nIndex != -1 );
-
+    
     #ifdef SYSTEM_PPD_DIR
     if( pSubDir && rtl_str_compare( pSubDir, PRINTER_PPDDIR ) == 0 )
     {
@@ -207,7 +202,7 @@ OUString psp::getFontPath()
     if( ! aPath.getLength() )
     {
         OUStringBuffer aPathBuffer( 512 );
-
+        
         OUString aConfigPath( getOfficePath( psp::ConfigPath ) );
         OUString aNetPath( getOfficePath( psp::NetPath ) );
         OUString aUserPath( getOfficePath( psp::UserPath ) );
@@ -282,11 +277,11 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
         if( buffer[0] != 0x80 ) // test for pfb m_agic number
         {
             // this migt be a pfa font already
+            sal_uInt64 nWrite = 0;
             if( ! rInFile.read( buffer+6, 9, nRead ) && nRead == 9 &&
                 ( ! std::strncmp( (char*)buffer, "%!FontType1-", 12 ) ||
                   ! std::strncmp( (char*)buffer, "%!PS-AdobeFont-", 15 ) ) )
             {
-                sal_uInt64 nWrite = 0;
                 if( rOutFile.write( buffer, 15, nWrite ) || nWrite != 15 )
                     bSuccess = false;
                 while( bSuccess &&
@@ -374,7 +369,7 @@ void psp::normPath( OString& rPath )
     char buf[PATH_MAX];
 
     ByteString aPath( rPath );
-
+    
     // double slashes and slash at end are probably
     // removed by realpath anyway, but since this runs
     // on many different platforms let's play it safe

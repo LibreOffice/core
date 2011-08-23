@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,8 +71,8 @@ using namespace ::com::sun::star::xml::crypto ;
 
 int SAL_CALL main( int argc, char **argv )
 {
-    CERTCertDBHandle*   certHandle ;
-    PK11SlotInfo*       slot ;
+    CERTCertDBHandle*	certHandle ;
+    PK11SlotInfo*		slot ;
 
     if( argc != 3 ) {
         fprintf( stderr, "Usage: %s < CertDir > <rdb file>\n\n" , argv[0] ) ;
@@ -106,7 +106,7 @@ int SAL_CALL main( int argc, char **argv )
         Reference< XMultiComponentFactory > xManager = NULL ;
         Reference< XComponentContext > xContext = NULL ;
 
-        xManager = serviceManager( xContext , OUString(RTL_CONSTASCII_USTRINGPARAM("local")), OUString::createFromAscii( argv[2] ) ) ;
+        xManager = serviceManager( xContext , OUString::createFromAscii( "local" ), OUString::createFromAscii( argv[2] ) ) ;
         OSL_ENSURE( xManager.is() ,
             "ServicesManager - "
             "Cannot get service manager" ) ;
@@ -114,7 +114,7 @@ int SAL_CALL main( int argc, char **argv )
         //Create security environment
         //Build Security Environment
         Reference< XInterface > xsecenv =
-            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl")), xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl"), xContext ) ;
         OSL_ENSURE( xsecenv.is() ,
             "Signer - "
             "Cannot get service instance of \"xsec.SecurityEnvironment\"" ) ;
@@ -148,7 +148,7 @@ int SAL_CALL main( int argc, char **argv )
             fprintf( stdout, "\tCertificate Serial Number[%s]\n", OUStringToOString( bigIntegerToNumericString( xPersonalCerts[i]->getSerialNumber() ), RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
             fprintf( stdout, "\tCertificate Subject[%s]\n", OUStringToOString( xPersonalCerts[i]->getSubjectName(), RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
 
-            //build the certificate path
+            //build the certificate path 
             xCertPath = pSecEnv->buildCertificatePath( xPersonalCerts[i] ) ;
             //Print the certificate path.
             fprintf( stdout, "\tCertificate Path\n" ) ;

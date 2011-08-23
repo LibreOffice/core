@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,25 +41,25 @@
 //  @@@@  @@@@@  @@  @@   @@@@  @@@@@   @@@@  @@@@@  @@@@    @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const sal_uInt32 SdrInventor=sal_uInt32('S')*0x00000001+
-                         sal_uInt32('V')*0x00000100+
-                         sal_uInt32('D')*0x00010000+
-                         sal_uInt32('r')*0x01000000;
+const UINT32 SdrInventor=UINT32('S')*0x00000001+
+                         UINT32('V')*0x00000100+
+                         UINT32('D')*0x00010000+
+                         UINT32('r')*0x01000000;
 
 // Kommandos fuer EndCreate()
 enum SdrCreateCmd {SDRCREATE_NEXTPOINT,     // Naechster Polygonpunkt, Kreissegment: Naechste Koordinate
                    SDRCREATE_NEXTOBJECT,    // Naechstes Polygon im PolyPolygon
                    SDRCREATE_FORCEEND};     // Ende erzwungen
 
-enum SdrDragMode
+enum SdrDragMode 
 {
-    SDRDRAG_MOVE,       // Verschieben
-    SDRDRAG_RESIZE,     // Groesse aendern
-    SDRDRAG_ROTATE,     // Drehen
-    SDRDRAG_MIRROR,     // Spiegeln
-    SDRDRAG_SHEAR,      // Schraegstellen
-    SDRDRAG_CROOK,      // Kreisfoermig verbiegen
-    SDRDRAG_DISTORT,    // Freies verzerren (Rect in beliebiges Viereck transformieren)
+    SDRDRAG_MOVE,		// Verschieben
+    SDRDRAG_RESIZE,		// Groesse aendern
+    SDRDRAG_ROTATE,		// Drehen
+    SDRDRAG_MIRROR,		// Spiegeln
+    SDRDRAG_SHEAR,		// Schraegstellen
+    SDRDRAG_CROOK,		// Kreisfoermig verbiegen
+    SDRDRAG_DISTORT,	// Freies verzerren (Rect in beliebiges Viereck transformieren)
 
     // new modes for interactive transparence and gradient tools
     SDRDRAG_TRANSPARENCE,
@@ -91,10 +91,10 @@ enum SdrConvertType {SDRCONVERT_POLY,   // reines Polygon erzeugen
 // dann diesen Wert:
 #define SDRLAYER_NOTFOUND 0xFF
 // Man kann diesen Wert jodoch ohne Bedenken den Methoden des SdrLayerSet
-// zuwerfen, bekommt dann jedoch immer sal_False, bzw. tut die Methode nix.
+// zuwerfen, bekommt dann jedoch immer FALSE, bzw. tut die Methode nix.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Typdeklaration fuer Layer-IDs
-typedef sal_uInt8 SdrLayerID;
+typedef BYTE SdrLayerID;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

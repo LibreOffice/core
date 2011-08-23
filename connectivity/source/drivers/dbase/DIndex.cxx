@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ using namespace com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.sun.star.sdbcx.Index");
 // -------------------------------------------------------------------------
-ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()*/)
+ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers()*/)
     ,m_pFileStream(NULL)
     ,m_nCurNode(NODE_NOTFOUND)
     ,m_pTable(_pTable)
@@ -78,7 +78,7 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getCo
     construct();
 }
 // -------------------------------------------------------------------------
-ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
+ODbaseIndex::ODbaseIndex(	ODbaseTable* _pTable,
                             const NDXHeader& _rHeader,
                             const ::rtl::OUString& _rName)
     :OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True)
@@ -144,7 +144,7 @@ ONDXPagePtr ODbaseIndex::getRoot()
     {
         m_nRootPage = m_aHeader.db_rootpage;
         m_nPageCount = m_aHeader.db_pagecount;
-        m_aRoot = CreatePage(m_nRootPage,NULL,sal_True);
+        m_aRoot = CreatePage(m_nRootPage,NULL,TRUE);
     }
     return m_aRoot;
 }
@@ -186,11 +186,11 @@ OIndexIterator* ODbaseIndex::createIterator(OBoolOperator* pOp,
     return new OIndexIterator(this, pOp, pOperand);
 }
 //------------------------------------------------------------------
-sal_Bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)
+BOOL ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
-    // Search a specific value in Index
-    // If the Index is unique, the key doesn't matter
+    // Sucht ein bestimmten Wert im Index
+    // Wenn der Index Unique ist, interssiert der Key nicht, sonst ja
     try
     {
         if (m_aHeader.db_keytype == 0)
@@ -208,75 +208,75 @@ sal_Bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSet
     catch (Exception&)
     {
         OSL_ASSERT(0);
-        return sal_False;
+        return FALSE;
     }
-    return sal_True;
+    return TRUE;
 }
 
 //------------------------------------------------------------------
-sal_Bool ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
+BOOL ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
-    // Search a specific value in Index
-    // If the Index is unique, the key doesn't matter
+    // Sucht ein bestimmten Wert im Index
+    // Wenn der Index Unique ist, interssiert der Key nicht, sonst ja
     ONDXKey aKey;
     return ConvertToKey(&aKey, nRec, rValue) && getRoot()->Find(aKey);
 }
 
 //------------------------------------------------------------------
-sal_Bool ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
+BOOL ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     ONDXKey aKey;
 
-    // Does the value already exist
-    // Use Find() always to determine the actual leaf
+    // Existiert der Wert bereits
+    // Find immer verwenden um das aktuelle Blatt zu bestimmen
     if (!ConvertToKey(&aKey, nRec, rValue) || (getRoot()->Find(aKey) && isUnique()))
-        return sal_False;
+        return FALSE;
 
     ONDXNode aNewNode(aKey);
 
-    // insert in the current leaf
+    // einfuegen in das aktuelle Blatt
     if (!m_aCurLeaf.Is())
-        return sal_False;
+        return FALSE;
 
-    sal_Bool bResult = m_aCurLeaf->Insert(aNewNode);
+    BOOL bResult = m_aCurLeaf->Insert(aNewNode);
     Release(bResult);
 
     return bResult;
 }
 
 //------------------------------------------------------------------
-sal_Bool ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
+BOOL ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
                          const ORowSetValue& rNewValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     ONDXKey aKey;
     if (!ConvertToKey(&aKey, nRec, rNewValue) || (isUnique() && getRoot()->Find(aKey)))
-        return sal_False;
+        return FALSE;
     else
         return Delete(nRec, rOldValue) && Insert(nRec,rNewValue);
 }
 
 //------------------------------------------------------------------
-sal_Bool ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
+BOOL ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
-    // Does the value already exist
-    // Always use Find() to determine the actual leaf
+    // Existiert der Wert bereits
+    // Find immer verwenden um das aktuelle Blatt zu bestimmen
     ONDXKey aKey;
     if (!ConvertToKey(&aKey, nRec, rValue) || !getRoot()->Find(aKey))
-        return sal_False;
+        return FALSE;
 
     ONDXNode aNewNode(aKey);
 
-    // insert in the current leaf
+    // einfuegen in das aktuelle Blatt
     if (!m_aCurLeaf.Is())
-        return sal_False;
+        return FALSE;
 #if OSL_DEBUG_LEVEL > 1
     m_aRoot->PrintPage();
 #endif
@@ -290,10 +290,10 @@ void ODbaseIndex::Collect(ONDXPage* pPage)
         m_aCollector.push_back(pPage);
 }
 //------------------------------------------------------------------
-void ODbaseIndex::Release(sal_Bool bSave)
+void ODbaseIndex::Release(BOOL bSave)
 {
-    // Release the Index-recources
-    m_bUseCollector = sal_False;
+    // Freigeben der Indexressourcen
+    m_bUseCollector = FALSE;
 
     if (m_aCurLeaf.Is())
     {
@@ -301,19 +301,19 @@ void ODbaseIndex::Release(sal_Bool bSave)
         m_aCurLeaf.Clear();
     }
 
-    // Release the root
+    // Wurzel freigeben
     if (m_aRoot.Is())
     {
         m_aRoot->Release(bSave);
         m_aRoot.Clear();
     }
-    // Release all references, before the FileStream will be closed
-    for (sal_uIntPtr i = 0; i < m_aCollector.size(); i++)
+    // alle Referenzen freigeben, bevor der FileStream geschlossen wird
+    for (ULONG i = 0; i < m_aCollector.size(); i++)
         m_aCollector[i]->QueryDelete();
 
     m_aCollector.clear();
 
-    // Header modified?
+    // Header modifiziert ?
     if (bSave && (m_aHeader.db_rootpage != m_nRootPage ||
         m_aHeader.db_pagecount != m_nPageCount))
     {
@@ -336,7 +336,7 @@ void ODbaseIndex::closeImpl()
     }
 }
 //------------------------------------------------------------------
-ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, sal_Bool bLoad)
+ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, BOOL bLoad)
 {
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
 
@@ -380,20 +380,20 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rInd
     ::rtl::OUString sDir = m_pTable->getConnection()->getURL();
     sDir += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sDir += m_Name;
-    sDir += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".ndx"));
+    sDir += ::rtl::OUString::createFromAscii(".ndx");
     return sDir;
 }
 //------------------------------------------------------------------
 void ODbaseIndex::createINFEntry()
 {
-    // synchronize inf-file
+    // inf Datei abgleichen
     String sEntry = m_Name;
     sEntry += String::CreateFromAscii(".ndx");
 
     ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
     sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sCfgFile += m_pTable->getName();
-    sCfgFile += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".inf"));
+    sCfgFile += ::rtl::OUString::createFromAscii(".inf");
 
     String sPhysicalPath;
     LocalFileHelper::ConvertURLToPhysicalName(sCfgFile,sPhysicalPath);
@@ -401,14 +401,14 @@ void ODbaseIndex::createINFEntry()
     Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);
 
-    sal_uInt16 nSuffix = aInfFile.GetKeyCount();
+    USHORT nSuffix = aInfFile.GetKeyCount();
     ByteString aNewEntry,aKeyName;
-    sal_Bool bCase = isCaseSensitive();
+    BOOL bCase = isCaseSensitive();
     while (!aNewEntry.Len())
     {
         aNewEntry = "NDX";
         aNewEntry += ByteString::CreateFromInt32(++nSuffix);
-        for (sal_uInt16 i = 0; i < aInfFile.GetKeyCount(); i++)
+        for (USHORT i = 0; i < aInfFile.GetKeyCount(); i++)
         {
             aKeyName = aInfFile.GetKeyName(i);
             if (bCase ? aKeyName == aNewEntry : aKeyName.EqualsIgnoreCaseAscii(aNewEntry))
@@ -421,7 +421,7 @@ void ODbaseIndex::createINFEntry()
     aInfFile.WriteKey(aNewEntry,ByteString(sEntry,m_pTable->getConnection()->getTextEncoding()));
 }
 // -------------------------------------------------------------------------
-sal_Bool ODbaseIndex::DropImpl()
+BOOL ODbaseIndex::DropImpl()
 {
     closeImpl();
 
@@ -432,11 +432,12 @@ sal_Bool ODbaseIndex::DropImpl()
             m_pTable->getConnection()->throwGenericSQLException(STR_COULD_NOT_DELETE_INDEX,*m_pTable);
     }
 
-    // synchronize inf-file
+    // InfDatei abgleichen
+
     ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
     sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sCfgFile += m_pTable->getName();
-    sCfgFile += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".inf"));
+    sCfgFile += ::rtl::OUString::createFromAscii(".inf");
 
     String sPhysicalPath;
     String sNDX(sCfgFile);
@@ -444,15 +445,15 @@ sal_Bool ODbaseIndex::DropImpl()
 
     Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);
-    sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
+    USHORT nKeyCnt = aInfFile.GetKeyCount();
     ByteString aKeyName;
     String sEntry = m_Name;
     sEntry += String::CreateFromAscii(".ndx");
 
     // delete entries from the inf file
-    for (sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++)
+    for (USHORT nKey = 0; nKey < nKeyCnt; nKey++)
     {
-        // References the Key to an Index-file?
+        // Verweist der Key auf ein Indexfile?...
         aKeyName = aInfFile.GetKeyName( nKey );
         if (aKeyName.Copy(0,3) == "NDX")
         {
@@ -463,7 +464,7 @@ sal_Bool ODbaseIndex::DropImpl()
             }
         }
     }
-    return sal_True;
+    return TRUE;
 }
 // -------------------------------------------------------------------------
 void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const ::rtl::OUString& _sFile)
@@ -474,9 +475,9 @@ void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const ::
     m_pTable->getConnection()->throwGenericSQLException(_nErrorId,*this);
 }
 //------------------------------------------------------------------
-sal_Bool ODbaseIndex::CreateImpl()
+BOOL ODbaseIndex::CreateImpl()
 {
-    // Create the Index
+    // Anlegen des Index
     const ::rtl::OUString sFile = getCompletePath();
     if(UCBContentHelper::Exists(sFile))
     {
@@ -486,13 +487,13 @@ sal_Bool ODbaseIndex::CreateImpl()
          ) );
         ::dbtools::throwGenericSQLException( sError, *this );
     }
-    // Index comprises only one column
+    // Index ist nur einstufig
     if (m_pColumns->getCount() > 1)
         m_pTable->getConnection()->throwGenericSQLException(STR_ONL_ONE_COLUMN_PER_INDEX,*this);
 
     Reference<XFastPropertySet> xCol(m_pColumns->getByIndex(0),UNO_QUERY);
 
-    // Is the column already indexed?
+    // ist die Spalte schon indiziert ?
     if ( !xCol.is() )
         ::dbtools::throwFunctionSequenceException(*this);
 
@@ -511,7 +512,7 @@ sal_Bool ODbaseIndex::CreateImpl()
     m_pFileStream->SetBufferSize(PAGE_SIZE);
     m_pFileStream->SetFiller('\0');
 
-    // firstly the result must be sorted
+    // Zunaechst muss das Ergebnis sortiert sein
     utl::SharedUNOComponent<XStatement> xStmt;
     utl::SharedUNOComponent<XResultSet> xSet;
     String aName;
@@ -547,7 +548,7 @@ sal_Bool ODbaseIndex::CreateImpl()
         impl_killFileAndthrowError_throw(STR_COULD_NOT_CREATE_INDEX,sFile);
     }
 
-    // Set the header info
+    // Setzen der Headerinfo
     memset(&m_aHeader,0,sizeof(m_aHeader));
     sal_Int32 nType = 0;
     ::rtl::Reference<OSQLColumns> aCols = m_pTable->getTableColumns();
@@ -556,7 +557,7 @@ sal_Bool ODbaseIndex::CreateImpl()
     xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
 
     m_aHeader.db_keytype = (nType == DataType::VARCHAR || nType == DataType::CHAR) ? 0 : 1;
-    m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (sal_uInt16)getINT32(xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
+    m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (USHORT)getINT32(xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
     m_aHeader.db_keylen = (( m_aHeader.db_keylen - 1) / 4 + 1) * 4;
     m_aHeader.db_maxkeys = (PAGE_SIZE - 4) / (8 + m_aHeader.db_keylen);
     if ( m_aHeader.db_maxkeys < 3 )
@@ -567,19 +568,20 @@ sal_Bool ODbaseIndex::CreateImpl()
     m_pFileStream->SetStreamSize(PAGE_SIZE);
 
     ByteString aCol(aName,m_pTable->getConnection()->getTextEncoding());
-    strncpy(m_aHeader.db_name,aCol.GetBuffer(),std::min((sal_uInt16)sizeof(m_aHeader.db_name), aCol.Len()));
+    strncpy(m_aHeader.db_name,aCol.GetBuffer(),std::min((USHORT)sizeof(m_aHeader.db_name), aCol.Len()));
     m_aHeader.db_unique  = m_IsUnique ? 1: 0;
     m_aHeader.db_keyrec  = m_aHeader.db_keylen + 8;
 
-    // modifications of the header are detected by differences between
-    // the HeaderInfo and nRootPage or nPageCount respectively
+    // modifizierung am Header werden ueber Unterschiede zw. HeaderInfo und nRootPage
+    // bzw. nPageCout erkannt
+
     m_nRootPage = 1;
     m_nPageCount = 2;
 
     m_aCurLeaf = m_aRoot = CreatePage(m_nRootPage);
-    m_aRoot->SetModified(sal_True);
+    m_aRoot->SetModified(TRUE);
 
-    m_bUseCollector = sal_True;
+    m_bUseCollector = TRUE;
 
     sal_Int32 nRowsLeft = 0;
     Reference<XRow> xRow(xSet,UNO_QUERY);
@@ -595,14 +597,14 @@ sal_Bool ODbaseIndex::CreateImpl()
         nRowsLeft = xSet->getRow();
 
         xSet->beforeFirst();
-        ORowSetValue    atmpValue=ORowSetValue();
+        ORowSetValue	atmpValue=ORowSetValue();
         ONDXKey aKey(atmpValue, nType, 0);
         ONDXKey aInsertKey(atmpValue, nType, 0);
-        // Create the index structure
+        // Erzeugen der Indexstruktur
         while (xSet->next())
         {
             ORowSetValue aValue(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)));
-            // checking for duplicate entries
+            // ueberpruefen auf doppelten eintrag
             if (m_IsUnique && m_nCurNode != NODE_NOTFOUND)
             {
                 aKey.setValue(aValue);

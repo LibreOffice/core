@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,57 +36,57 @@
 class CommunicationManagerClientViaSocket;
 class CommunicationLink;
 
-class CommunicationWrapper : public SbxObject   // Einer fï¿½r Manager und Links
+class CommunicationWrapper : public SbxObject	// Einer für Manager und Links
 {
     // Definition eines Tabelleneintrags. Dies wird hier gemacht,
     // da dadurch die Methoden und Properties als private deklariert
     // werden koennen.
-#if defined ( ICC ) || defined ( C50 ) || defined ( C52 )
+#if defined ( ICC ) || defined ( HPUX ) || defined ( C50 ) || defined ( C52 )
 public:
 #endif
     typedef void( CommunicationWrapper::*pMeth )
-        ( SbxVariable* pThis, SbxArray* pArgs, sal_Bool bWrite );
-#if defined ( ICC )
+        ( SbxVariable* pThis, SbxArray* pArgs, BOOL bWrite );
+#if defined ( ICC ) || defined ( HPUX )
 private:
 #endif
 
     struct Methods {
-        const char* pName;      // Name des Eintrags
-        SbxDataType eType;      // Datentyp
-        pMeth pFunc;            // Function Pointer
-        short nArgs;            // Argumente und Flags
+        const char* pName;		// Name des Eintrags
+        SbxDataType eType;		// Datentyp
+        pMeth pFunc;			// Function Pointer
+        short nArgs;			// Argumente und Flags
     };
-    static Methods aManagerMethods[];   // Methodentabelle
-    static Methods aLinkMethods[];      // Methodentabelle
-    Methods *m_pMethods;    // Aktuelle Methodentabelle
+    static Methods aManagerMethods[];	// Methodentabelle
+    static Methods aLinkMethods[];		// Methodentabelle
+    Methods *m_pMethods;	// Aktuelle Methodentabelle
 
     // Methoden
-    //      Manager
-    void MStartCommunication( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void MStopAllCommunication( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void MIsCommunicationRunning( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void MGetMyName( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void MIsLinkValid( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void MSetCommunicationEventHandler( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
+    //		Manager
+    void MStartCommunication( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void MStopAllCommunication( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void MIsCommunicationRunning( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void MGetMyName( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void MIsLinkValid( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void MSetCommunicationEventHandler( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
 
-    //      Link
-    void LStopCommunication( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void LGetMyName( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void LGetHostName( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void LSend( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void LGetString( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
+    //		Link
+    void LStopCommunication( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void LGetMyName( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void LGetHostName( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void LSend( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
+    void LGetString( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
 
     // Interne Member und Methoden
     CommunicationManagerClientViaSocket *m_pManager;
     CommunicationLink *m_pLink;
-    sal_Bool m_bIsManager;  // Ist es kein Manager, so ist es ein Link
+    BOOL m_bIsManager;	// Ist es kein Manager, so ist es ein Link
 
-    // Kram fï¿½r Manager
+    // Kram für Manager
     DECL_LINK( Open, CommunicationLink* );
     DECL_LINK( Close, CommunicationLink* );
     DECL_LINK( Data, CommunicationLink* );
     void Events( String aType, CommunicationLink* pLink );
-    sal_Bool m_bCatchOpen;
+    BOOL m_bCatchOpen;
     CommunicationLink *m_pNewLink;
     String m_aEventHandlerName;
 

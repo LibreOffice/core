@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class CrossReferences
   public:
     typedef TYPES::element_type         element;
 
-    /// Checks for double occurrences
+    /// Checks for double occurences
     void                Add(
                             VALUE_LIST::index_type
                                                 i_nPosition

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,9 @@
 #include "editeng/borderline.hxx"
 #include "editeng/boxitem.hxx"
 #include "svx/svdmodel.hxx"
-#include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdstr.hrc"
+#include "svdglob.hxx"
 
-using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using ::com::sun::star::awt::XLayoutConstrains;
 using namespace ::com::sun::star::uno;
@@ -122,9 +121,9 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellPos& rPos  ) const
     }
     catch( Exception& )
     {
-        OSL_FAIL( "TableLayouter::getCellSize(), exception caught!" );
+        DBG_ERROR( "TableLayouter::getCellSize(), exception caught!" );
     }
-
+    
     return basegfx::B2ITuple( width, height );
 }
 
@@ -143,7 +142,7 @@ bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rAr
             {
                 const sal_Int32 x = maColumns[rPos.mnCol].mnPos;
                 const sal_Int32 y = maRows[rPos.mnRow].mnPos;
-
+    
                 rArea = basegfx::B2IRectangle( x, y, x + aCellSize.getX(), y + aCellSize.getY()  );
                 return true;
             }
@@ -151,13 +150,14 @@ bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rAr
     }
     catch( Exception& )
     {
-        OSL_FAIL( "TableLayouter::getCellSize(), exception caught!" );
+        DBG_ERROR( "TableLayouter::getCellSize(), exception caught!" );
     }
     return false;
 }
 
 // -----------------------------------------------------------------------------
-sal_Int32 TableLayouter::getRowHeight( sal_Int32 nRow ) const
+
+sal_Int32 TableLayouter::getRowHeight( sal_Int32 nRow )
 {
     if( isValidRow(nRow) )
         return maRows[nRow].mnSize;
@@ -175,12 +175,13 @@ void TableLayouter::setRowHeight( sal_Int32 nRow, sal_Int32 nHeight )
     }
     else
     {
-        OSL_FAIL( "TableLayouter::setRowHeight(), row out of range!" );
+        DBG_ERROR( "TableLayouter::setRowHeight(), row out of range!" );
     }
 }
 
 // -----------------------------------------------------------------------------
-sal_Int32 TableLayouter::getColumnWidth( sal_Int32 nColumn ) const
+
+sal_Int32 TableLayouter::getColumnWidth( sal_Int32 nColumn )
 {
     if( isValidColumn(nColumn) )
         return maColumns[nColumn].mnSize;
@@ -195,7 +196,7 @@ void TableLayouter::setColumnWidth( sal_Int32 nColumn, sal_Int32 nWidth )
     if( isValidColumn(nColumn) )
         maColumns[nColumn].mnSize = nWidth;
     else
-        OSL_FAIL( "TableLayouter::setColumnWidth(), column out of range!" );
+        DBG_ERROR( "TableLayouter::setColumnWidth(), column out of range!" );
 }
 
 // -----------------------------------------------------------------------------
@@ -211,7 +212,7 @@ bool TableLayouter::isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHor
     }
     else
     {
-        OSL_FAIL( "sdr::table::TableLayouter::getBorderLine(), invalid edge!" );
+        OSL_ENSURE( false, "sdr::table::TableLayouter::getBorderLine(), invalid edge!" );
     }
 
     return false;
@@ -226,7 +227,7 @@ SvxBorderLine* TableLayouter::getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY,
 
     const BorderLineMap& rMap = bHorizontal ? maHorizontalBorders : maVerticalBorders;
 
-    if( (nEdgeX >= 0) && (nEdgeX < sal::static_int_cast<sal_Int32>(rMap.size())) &&
+    if( (nEdgeX >= 0) && (nEdgeX < sal::static_int_cast<sal_Int32>(rMap.size())) && 
         (nEdgeY >= 0) && (nEdgeY < sal::static_int_cast<sal_Int32>(rMap[nEdgeX].size())) )
     {
         pLine = rMap[nEdgeX][nEdgeY];
@@ -235,7 +236,7 @@ SvxBorderLine* TableLayouter::getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY,
     }
     else
     {
-        OSL_FAIL( "sdr::table::TableLayouter::getBorderLine(), invalid edge!" );
+        OSL_ENSURE( false, "sdr::table::TableLayouter::getBorderLine(), invalid edge!" );
     }
 
     return pLine;
@@ -333,12 +334,12 @@ static bool checkMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedX, s
     Reference< XMergeableCell > xCell( xTable->getCellByPosition( nCellX, nCellY ), UNO_QUERY );
     if( xCell.is() && !xCell->isMerged() )
     {
-        const sal_Int32 nRight = xCell->getColumnSpan() + nCellX;
+        const sal_Int32 nRight = xCell->getColumnSpan() + nCellX; 
         const sal_Int32 nBottom = xCell->getRowSpan() + nCellY;
         if( (nMergedX < nRight) && (nMergedY < nBottom) )
             return true;
 
-        bRunning = false;
+        bRunning = false;            
     }
     return false;
 }
@@ -442,7 +443,7 @@ bool findMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedX, sal_Int32
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::TableLayouter::findMergeOrigin(), exception caught!");
+        DBG_ERROR("sdr::table::TableLayouter::findMergeOrigin(), exception caught!");
     }
     return false;
 }
@@ -457,7 +458,7 @@ sal_Int32 TableLayouter::getMinimumColumnWidth( sal_Int32 nColumn )
     }
     else
     {
-        OSL_FAIL( "TableLayouter::getMinimumColumnWidth(), column out of range!" );
+        DBG_ERROR( "TableLayouter::getMinimumColumnWidth(), column out of range!" );
         return 0;
     }
 }
@@ -467,7 +468,7 @@ sal_Int32 TableLayouter::getMinimumColumnWidth( sal_Int32 nColumn )
 sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribute )
 {
     // break loops after 100 runs to avoid freezing office due to developer error
-    sal_Int32 nSafe = 100;
+    sal_Int32 nSafe = 100; 
 
     const sal_Size nCount = rLayouts.size();
     sal_Size nIndex;
@@ -607,7 +608,7 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
             {
                 xColSet->getPropertyValue( msSize ) >>= nColWidth;
             }
-
+        
             maColumns[nCol].mnSize = nColWidth;
 
             if( maColumns[nCol].mnSize < nMinWidth )
@@ -756,9 +757,9 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
             }
             else
             {
-                xRowSet->getPropertyValue( msSize ) >>= nRowHeight;
+                xRowSet->getPropertyValue( msSize ) >>= nRowHeight;	
             }
-
+ 
             maRows[nRow].mnSize = nRowHeight;
 
             if( maRows[nRow].mnSize < nMinHeight )
@@ -913,7 +914,7 @@ CellRef TableLayouter::getCell( const CellPos& rPos ) const
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sdr::table::TableLayouter::getCell(), exception caught!" );
+        DBG_ERROR( "sdr::table::TableLayouter::getCell(), exception caught!" );
     }
     return xCell;
 }
@@ -927,8 +928,8 @@ bool TableLayouter::HasPriority( const SvxBorderLine* pThis, const SvxBorderLine
     if (!pOther || (pOther == &gEmptyBorder))
         return true;
 
-    sal_uInt16 nThisSize = pThis->GetOutWidth() + pThis->GetDistance() + pThis->GetInWidth();
-    sal_uInt16 nOtherSize = pOther->GetOutWidth() + pOther->GetDistance() + pOther->GetInWidth();
+    USHORT nThisSize = pThis->GetOutWidth() + pThis->GetDistance() + pThis->GetInWidth();
+    USHORT nOtherSize = pOther->GetOutWidth() + pOther->GetDistance() + pOther->GetInWidth();
 
     if (nThisSize > nOtherSize)
         return true;
@@ -949,7 +950,7 @@ bool TableLayouter::HasPriority( const SvxBorderLine* pThis, const SvxBorderLine
         }
         else
         {
-            return true;            //! ???
+            return true;			//! ???
         }
     }
 }
@@ -962,7 +963,7 @@ void TableLayouter::SetBorder( sal_Int32 nCol, sal_Int32 nRow, bool bHorizontal,
         pLine = &gEmptyBorder;
 
     SvxBorderLine *pOld = bHorizontal ? maHorizontalBorders[nCol][nRow] : maVerticalBorders[nCol][nRow];
-
+    
     if( HasPriority( pLine, pOld ) )
     {
         if( (pOld != 0) && (pOld != &gEmptyBorder) )
@@ -1107,7 +1108,7 @@ void TableLayouter::SetLayoutToModel()
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::TableLayouter::SetLayoutToModel(), exception caught!");
+        DBG_ERROR("sdr::table::TableLayouter::SetLayoutToModel(), exception caught!");
     }
 }
 */
@@ -1146,7 +1147,7 @@ void TableLayouter::DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, 
     catch( Exception& e )
     {
         (void)e;
-        OSL_FAIL("sdr::table::TableLayouter::DistributeColumns(), exception caught!");
+        DBG_ERROR("sdr::table::TableLayouter::DistributeColumns(), exception caught!");
     }
 }
 
@@ -1198,11 +1199,12 @@ void TableLayouter::DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal
     catch( Exception& e )
     {
         (void)e;
-        OSL_FAIL("sdr::table::TableLayouter::DistributeRows(), exception caught!");
+        DBG_ERROR("sdr::table::TableLayouter::DistributeRows(), exception caught!");
     }
 }
 
 // -----------------------------------------------------------------------------
+
 void TableLayouter::SetWritingMode( com::sun::star::text::WritingMode eWritingMode )
 {
     meWritingMode = eWritingMode;
@@ -1287,7 +1289,7 @@ sal_Int32 TableLayouter::detectInsertedOrRemovedRows()
     catch( Exception& e )
     {
         (void)e;
-        OSL_FAIL("svx::TableLayouter::detectInsertedOrRemovedRows(), exception caught!");
+        DBG_ERROR("svx::TableLayouter::detectInsertedOrRemovedRows(), exception caught!");
     }
 
     return nHeightChange;

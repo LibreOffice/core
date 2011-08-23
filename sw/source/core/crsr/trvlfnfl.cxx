@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,21 +48,21 @@
 #include <viscrs.hxx>
 #include <callnk.hxx>
 
-sal_Bool SwCrsrShell::CallCrsrFN( FNCrsr fnCrsr )
+BOOL SwCrsrShell::CallCrsrFN( FNCrsr fnCrsr )
 {
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
     SwCursor* pCrsr = getShellCrsr( true );
-    sal_Bool bRet = (pCrsr->*fnCrsr)();
+    BOOL bRet = (pCrsr->*fnCrsr)();
     if( bRet )
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
                     SwCrsrShell::READONLY );
     return bRet;
 }
 
-sal_Bool SwCursor::GotoFtnTxt()
+BOOL SwCursor::GotoFtnTxt()
 {
     // springe aus dem Content zur Fussnote
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     SwTxtNode* pTxtNd = GetPoint()->nNode.GetNode().GetTxtNode();
 
     SwTxtAttr *const pFtn( (pTxtNd)
@@ -76,7 +76,7 @@ sal_Bool SwCursor::GotoFtnTxt()
 
         SwCntntNode* pCNd = GetDoc()->GetNodes().GoNextSection(
                                             &GetPoint()->nNode,
-                                            sal_True, !IsReadOnlyAvailable() );
+                                            TRUE, !IsReadOnlyAvailable() );
         if( pCNd )
         {
             GetPoint()->nContent.Assign( pCNd, 0 );
@@ -87,16 +87,16 @@ sal_Bool SwCursor::GotoFtnTxt()
     return bRet;
 }
 
-sal_Bool SwCrsrShell::GotoFtnTxt()
+BOOL SwCrsrShell::GotoFtnTxt()
 {
-    sal_Bool bRet = CallCrsrFN( &SwCursor::GotoFtnTxt );
+    BOOL bRet = CallCrsrFN( &SwCursor::GotoFtnTxt );
     if( !bRet )
     {
         SwTxtNode* pTxtNd = _GetCrsr() ?
                    _GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode() : NULL;
         if( pTxtNd )
         {
-            const SwFrm *pFrm = pTxtNd->getLayoutFrm( GetLayout(), &_GetCrsr()->GetSttPos(),
+            const SwFrm *pFrm = pTxtNd->GetFrm( &_GetCrsr()->GetSttPos(),
                                                  _GetCrsr()->Start() );
             const SwFtnBossFrm* pFtnBoss;
             sal_Bool bSkip = pFrm && pFrm->IsInFtn();
@@ -135,7 +135,7 @@ sal_Bool SwCrsrShell::GotoFtnTxt()
 }
 
 
-sal_Bool SwCursor::GotoFtnAnchor()
+BOOL SwCursor::GotoFtnAnchor()
 {
     // springe aus der Fussnote zum Anker
     const SwNode* pSttNd = GetNode()->FindFootnoteStartNode();
@@ -144,7 +144,7 @@ sal_Bool SwCursor::GotoFtnAnchor()
         // durchsuche alle Fussnoten im Dokument nach diesem StartIndex
         const SwTxtFtn* pTxtFtn;
         const SwFtnIdxs& rFtnArr = pSttNd->GetDoc()->GetFtnIdxs();
-        for( sal_uInt16 n = 0; n < rFtnArr.Count(); ++n )
+        for( USHORT n = 0; n < rFtnArr.Count(); ++n )
             if( 0 != ( pTxtFtn = rFtnArr[ n ])->GetStartNode() &&
                 pSttNd == &pTxtFtn->GetStartNode()->GetNode() )
             {
@@ -159,14 +159,14 @@ sal_Bool SwCursor::GotoFtnAnchor()
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE );
             }
     }
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool SwCrsrShell::GotoFtnAnchor()
+BOOL SwCrsrShell::GotoFtnAnchor()
 {
     // springe aus der Fussnote zum Anker
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
-    sal_Bool bRet = pCurCrsr->GotoFtnAnchor();
+    BOOL bRet = pCurCrsr->GotoFtnAnchor();
     if( bRet )
     {
         // BUG 5996: Tabellen-Kopfzeile sonderbehandeln
@@ -177,22 +177,22 @@ sal_Bool SwCrsrShell::GotoFtnAnchor()
     return bRet;
 }
 
-inline sal_Bool CmpLE( const SwTxtFtn& rFtn, sal_uLong nNd, xub_StrLen nCnt )
+inline sal_Bool CmpLE( const SwTxtFtn& rFtn, ULONG nNd, xub_StrLen nCnt )
 {
-    sal_uLong nTNd = rFtn.GetTxtNode().GetIndex();
+    ULONG nTNd = rFtn.GetTxtNode().GetIndex();
     return nTNd < nNd || ( nTNd == nNd && *rFtn.GetStart() <= nCnt );
 }
-inline sal_Bool CmpL( const SwTxtFtn& rFtn, sal_uLong nNd, xub_StrLen nCnt )
+inline sal_Bool CmpL( const SwTxtFtn& rFtn, ULONG nNd, xub_StrLen nCnt )
 {
-    sal_uLong nTNd = rFtn.GetTxtNode().GetIndex();
+    ULONG nTNd = rFtn.GetTxtNode().GetIndex();
     return nTNd < nNd || ( nTNd == nNd && *rFtn.GetStart() < nCnt );
 }
 
-sal_Bool SwCursor::GotoNextFtnAnchor()
+BOOL SwCursor::GotoNextFtnAnchor()
 {
     const SwFtnIdxs& rFtnArr = GetDoc()->GetFtnIdxs();
     const SwTxtFtn* pTxtFtn = 0;
-    sal_uInt16 nPos;
+    USHORT nPos;
 
     if( rFtnArr.SeekEntry( GetPoint()->nNode, &nPos ))
     {
@@ -200,7 +200,7 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
         // naechstgelegene
         if( nPos < rFtnArr.Count() )
         {
-            sal_uLong nNdPos = GetPoint()->nNode.GetIndex();
+            ULONG nNdPos = GetPoint()->nNode.GetIndex();
             xub_StrLen nCntPos = GetPoint()->nContent.GetIndex();
 
             pTxtFtn = rFtnArr[ nPos ];
@@ -212,7 +212,7 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
                 {
                     pTxtFtn = rFtnArr[ nPos ];
                     if( !CmpLE( *pTxtFtn, nNdPos, nCntPos ) )
-                        break;      // gefunden
+                        break;		// gefunden
                     pTxtFtn = 0;
                 }
             }
@@ -226,9 +226,9 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
                     if( CmpLE( *pTxtFtn, nNdPos, nCntPos ) )
                     {
                         pTxtFtn = rFtnArr[ ++nPos ];
-                        break;      // gefunden
+                        break;		// gefunden
                     }
-//                  pTxtFtn = 0;
+//					pTxtFtn = 0;
                 }
             }
         }
@@ -236,7 +236,7 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
     else if( nPos < rFtnArr.Count() )
         pTxtFtn = rFtnArr[ nPos ];
 
-    sal_Bool bRet = 0 != pTxtFtn;
+    BOOL bRet = 0 != pTxtFtn;
     if( bRet )
     {
         SwCrsrSaveState aSaveState( *this );
@@ -249,17 +249,17 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
     return bRet;
 }
 
-sal_Bool SwCursor::GotoPrevFtnAnchor()
+BOOL SwCursor::GotoPrevFtnAnchor()
 {
     const SwFtnIdxs& rFtnArr = GetDoc()->GetFtnIdxs();
     const SwTxtFtn* pTxtFtn = 0;
-    sal_uInt16 nPos;
+    USHORT nPos;
 
     if( rFtnArr.SeekEntry( GetPoint()->nNode, &nPos ) )
     {
         // es gibt eine Fussnote mit dem Index, suche also die
         // naechstgelegene
-        sal_uLong nNdPos = GetPoint()->nNode.GetIndex();
+        ULONG nNdPos = GetPoint()->nNode.GetIndex();
         xub_StrLen nCntPos = GetPoint()->nContent.GetIndex();
 
         pTxtFtn = rFtnArr[ nPos ];
@@ -284,7 +284,7 @@ sal_Bool SwCursor::GotoPrevFtnAnchor()
             {
                 pTxtFtn = rFtnArr[ --nPos ];
                 if( CmpL( *pTxtFtn, nNdPos, nCntPos ))
-                    break;      // gefunden
+                    break;		// gefunden
                 pTxtFtn = 0;
             }
         }
@@ -294,7 +294,7 @@ sal_Bool SwCursor::GotoPrevFtnAnchor()
     else if( nPos )
         pTxtFtn = rFtnArr[ nPos-1 ];
 
-    sal_Bool bRet = 0 != pTxtFtn;
+    BOOL bRet = 0 != pTxtFtn;
     if( bRet )
     {
         SwCrsrSaveState aSaveState( *this );
@@ -307,12 +307,12 @@ sal_Bool SwCursor::GotoPrevFtnAnchor()
     return bRet;
 }
 
-sal_Bool SwCrsrShell::GotoNextFtnAnchor()
+BOOL SwCrsrShell::GotoNextFtnAnchor()
 {
     return CallCrsrFN( &SwCursor::GotoNextFtnAnchor );
 }
 
-sal_Bool SwCrsrShell::GotoPrevFtnAnchor()
+BOOL SwCrsrShell::GotoPrevFtnAnchor()
 {
     return CallCrsrFN( &SwCursor::GotoPrevFtnAnchor );
 }
@@ -320,7 +320,7 @@ sal_Bool SwCrsrShell::GotoPrevFtnAnchor()
 // springe aus dem Rahmen zum Anker
 
 
-sal_Bool SwCrsrShell::GotoFlyAnchor()
+BOOL SwCrsrShell::GotoFlyAnchor()
 {
     SET_CURR_SHELL( this );
     const SwFrm* pFrm = GetCurrFrm();
@@ -328,8 +328,8 @@ sal_Bool SwCrsrShell::GotoFlyAnchor()
         pFrm = pFrm->GetUpper();
     } while( pFrm && !pFrm->IsFlyFrm() );
 
-    if( !pFrm )     // ist kein FlyFrame
-        return sal_False;
+    if( !pFrm )		// ist kein FlyFrame
+        return FALSE;
 
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
     SwCrsrSaveState aSaveState( *pCurCrsr );
@@ -345,10 +345,10 @@ sal_Bool SwCrsrShell::GotoFlyAnchor()
                 : pFrm->Frm().Left();
 
     const SwPageFrm* pPageFrm = pFrm->FindPageFrm();
-    const SwCntntFrm* pFndFrm = pPageFrm->GetCntntPos( aPt, sal_False, sal_True );
+    const SwCntntFrm* pFndFrm = pPageFrm->GetCntntPos( aPt, FALSE, TRUE );
     pFndFrm->GetCrsrOfst( pCurCrsr->GetPoint(), aPt );
 
-    sal_Bool bRet = !pCurCrsr->IsInProtectTable() && !pCurCrsr->IsSelOvr();
+    BOOL bRet = !pCurCrsr->IsInProtectTable() && !pCurCrsr->IsSelOvr();
     if( bRet )
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
                     SwCrsrShell::READONLY );

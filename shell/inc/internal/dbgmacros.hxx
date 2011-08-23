@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,13 +32,21 @@
 void DbgAssert(bool condition, const char* message);
 
 #if OSL_DEBUG_LEVEL > 0
+
     #define PRE_CONDITION(x, msg) DbgAssert(x, msg)
+
     #define POST_CONDITION(x, msg) DbgAssert(x, msg)
+
     #define ENSURE(x ,msg) DbgAssert(x, msg)
+
 #else // OSL_DEBUG_LEVEL == 0
+
     #define PRE_CONDITION(x, msg)  ((void)0)
+
     #define POST_CONDITION(x, msg) ((void)0)
+
     #define ENSURE(x, msg) ((void)0)
+
 #endif
 
 #endif

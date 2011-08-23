@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ SwFieldType* SwScriptFieldType::Copy() const
 
 SwScriptField::SwScriptField( SwScriptFieldType* pInitType,
                                 const String& rType, const String& rCode,
-                                sal_Bool bURL )
+                                BOOL bURL )
     : SwField( pInitType ), sType( rType ), sCode( rCode ), bCodeURL( bURL )
 {
 }
@@ -105,8 +105,10 @@ String SwScriptField::GetPar2() const
 {
     return sCode;
 }
+/*-----------------05.03.98 15:00-------------------
 
-bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+--------------------------------------------------*/
+bool SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -120,12 +122,14 @@ bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny.setValue(&bCodeURL, ::getBooleanCppuType());
         break;
     default:
-        OSL_FAIL("illegal property");
+        DBG_ERROR("illegal property");
     }
     return true;
 }
+/*-----------------05.03.98 15:00-------------------
 
-bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+--------------------------------------------------*/
+bool SwScriptField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -139,7 +143,7 @@ bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         bCodeURL = *(sal_Bool*)rAny.getValue();
         break;
     default:
-        OSL_FAIL("illegal property");
+        DBG_ERROR("illegal property");
     }
     return true;
 }

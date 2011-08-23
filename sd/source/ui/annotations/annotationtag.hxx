@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,11 +61,11 @@ public:
     virtual bool Command( const CommandEvent& rCEvt );
 
     // callbacks from sdr view
-    virtual sal_uLong GetMarkablePointCount() const;
-    virtual sal_uLong GetMarkedPointCount() const;
-    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
+    virtual ULONG GetMarkablePointCount() const;
+    virtual ULONG GetMarkedPointCount() const;
+    virtual BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
     virtual void CheckPossibilities();
-    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
+    virtual BOOL MarkPoints(const Rectangle* pRect, BOOL bUnmark);
 
     void Move( int nDX, int nDY );
     bool OnMove( const KeyEvent& rKEvt );
@@ -78,7 +78,7 @@ public:
 
     void OpenPopup( bool bEdit );
     void ClosePopup();
-
+    
 protected:
     virtual void addCustomHandles( SdrHdlList& rHandlerList );
     virtual bool getContext( SdrViewContext& rContext );
@@ -88,22 +88,22 @@ protected:
 
     DECL_LINK( WindowEventHandler, VclWindowEvent* );
     DECL_LINK( ClosePopupHdl, void* );
-
+    
 private:
     AnnotationManagerImpl& mrManager;
     css::uno::Reference< css::office::XAnnotation > mxAnnotation;
     std::auto_ptr<AnnotationWindow>                 mpAnnotationWindow;
-    Color                                           maColor;
-    int                                             mnIndex;
-    const Font&                                     mrFont;
+    Color											maColor;
+    int												mnIndex;
+    const Font&										mrFont;
     Size                                            maSize;
-    sal_uLong                                           mnClosePopupEvent;
+    ULONG                                           mnClosePopupEvent;
     ::Window*                                       mpListenWindow;
     Point                                           maMouseDownPos;
 };
 
 } // end of namespace sd
 
-#endif      // _SD_ANNOTATIONTAG_HXX_
+#endif		// _SD_ANNOTATIONTAG_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

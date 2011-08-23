@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,9 +27,17 @@
 #ifndef __com_sun_star_io_XTempFile_idl__
 #define __com_sun_star_io_XTempFile_idl__
 
+#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_io_XStream_idl__
 #include <com/sun/star/io/XStream.idl>
+#endif
+
+#ifndef __com_sun_star_io_XSeekable_idl__
 #include <com/sun/star/io/XSeekable.idl>
+#endif
 
 
 //========================================================================
@@ -43,7 +51,7 @@ interface XTempFile
     // INTERFACES
     //
     // -------------------------------------------------------------------
-    /** interface <type>XStream</type> offers read and write access to
+    /** interface <type>XStream</type> offers read and write access to 
         the same stream.
     */
     interface XStream;

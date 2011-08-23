@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,25 +113,25 @@ String STR_HYP_OK
 };
 String STR_LANGSTATUS_NONE
 {
-    Text [ en-US ] = "None (Do not check spelling)" ;
+    Text [ en-US ] = "None (Do not check spelling)" ; 
 };
 String STR_RESET_TO_DEFAULT_LANGUAGE
 {
-    Text [ en-US ] = "Reset to Default Language" ;
-    Text [ x-comment ] = " ";
+    Text [ en-US ] = "Reset to Default Language" ; 
+    Text [ x-comment ] = " ";   
 };
 String STR_LANGSTATUS_MORE
 {
-    Text [ en-US ] = "More..." ;
+    Text [ en-US ] = "More..." ;   
 };
 String STR_IGNORE_SELECTION
 {
-    Text [ en-US ] = "Ignore" ;
+    Text [ en-US ] = "Ignore" ;   
 };
 
 Image IMG_INFO_16
 {
     ImageBitmap = Bitmap { File = "info_16.png" ; };
     MASKCOLOR
-};
+}; 
 

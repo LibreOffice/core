@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ void SDBThreadAttach::releaseRef()
     }
 }
 // -----------------------------------------------------------------------------
-// static variables of the class
+// statische Variablen der Klasse:
 jclass java_lang_Object::theClass = 0;
 
 jclass java_lang_Object::getMyClass() const
@@ -113,14 +113,14 @@ jclass java_lang_Object::getMyClass() const
         theClass = findMyClass("java/lang/Object");
     return theClass;
 }
-// the actual constructor
+// der eigentliche Konstruktor
 java_lang_Object::java_lang_Object(const Reference<XMultiServiceFactory >& _rxFactory)
             : m_xFactory(_rxFactory),object( 0 )
 {
     SDBThreadAttach::addRef();
 }
 
-// the protected-constructor for the derived classes
+// der protected-Konstruktor fuer abgeleitete Klassen
 java_lang_Object::java_lang_Object( JNIEnv * pXEnv, jobject myObj )
     : object( NULL )
 {
@@ -155,7 +155,7 @@ void java_lang_Object::clearObject()
         clearObject(*t.pEnv);
     }
 }
-// the protected-constructor for the derived classes
+// der protected-Konstruktor fuer abgeleitete Klassen
 void java_lang_Object::saveRef( JNIEnv * pXEnv, jobject myObj )
 {
     OSL_ENSURE( myObj, "object in c++ -> Java Wrapper" );
@@ -281,7 +281,7 @@ sal_Int32 java_lang_Object::callIntMethod( const char* _pMethodName, jmethodID& 
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID ) );
     if ( _bIgnoreException )
-        isExceptionOccurred(t.pEnv,sal_True);
+        isExceptionOccured(t.pEnv,sal_True);
     else
         ThrowSQLException( t.pEnv, NULL );
 
@@ -320,7 +320,7 @@ void java_lang_Object::callVoidMethodWithIntArg( const char* _pMethodName, jmeth
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument );
     if ( _bIgnoreException )
-        isExceptionOccurred(t.pEnv,sal_True);
+        isExceptionOccured(t.pEnv,sal_True);
     else
         ThrowSQLException( t.pEnv, NULL );
 }
@@ -333,7 +333,7 @@ void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmet
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument );
     if ( _bIgnoreException )
-        isExceptionOccurred(t.pEnv,sal_True);
+        isExceptionOccured(t.pEnv,sal_True);
     else
         ThrowSQLException( t.pEnv, NULL );
 }
@@ -342,7 +342,7 @@ void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmet
 {
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_lang_Object::callStringMethod: no Java enviroment anymore!" );
-
+    
     // call method
     jstring out = (jstring)callObjectMethod(t.pEnv,_pMethodName,"()Ljava/lang/String;", _inout_MethodID);
     return JavaString2String( t.pEnv, out );
@@ -412,7 +412,7 @@ sal_Int32 java_lang_Object::callIntMethodWithStringArg( const char* _pMethodName
 // -----------------------------------------------------------------------------
 jclass java_lang_Object::findMyClass(const char* _pClassName)
 {
-    // the class must be fetched only once, therefore static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     SDBThreadAttach t;
     jclass tempClass = t.pEnv->FindClass(_pClassName); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
     if(!tempClass)

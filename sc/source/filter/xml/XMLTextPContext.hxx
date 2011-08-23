@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,19 +38,19 @@ class ScXMLTableRowCellContext;
 class ScXMLTextPContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList> xAttrList;
-    SvXMLImportContext*         pTextPContext;
-    ScXMLTableRowCellContext*   pCellContext;
-    rtl::OUString               sLName;
+    SvXMLImportContext*			pTextPContext;
+    ScXMLTableRowCellContext*	pCellContext;
+    rtl::OUString				sLName;
     rtl::OUString               sSimpleContent;     // copy of the first Character call's argument
     rtl::OUStringBuffer*        pContentBuffer;     // used if there's more than one string
-    sal_uInt16                      nPrefix;
-    sal_Bool                    bIsOwn;
+    USHORT						nPrefix;
+    sal_Bool					bIsOwn;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLTextPContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLTextPContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -58,7 +58,7 @@ public:
 
     virtual ~ScXMLTextPContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

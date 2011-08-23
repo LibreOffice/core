@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,11 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
-
-#include "sal/config.h"
-
-#include <vector>
-
 #include <sal/alloca.h>
 
 #include <osl/diagnose.h>
@@ -51,7 +46,7 @@
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 #include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
 #include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp>
+#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription.hpp>
 #include <com/sun/star/reflection/XMethodParameter.hpp>
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 #include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
@@ -135,9 +130,9 @@ inline static typelib_TypeDescription * createCTD(
         sal_Int32 nMembers = aDiscriminants.getLength();
         OSL_ASSERT( nMembers == aMemberNames.getLength() && nMembers == aMemberTypes.getLength() );
 
-        const Any * pDiscriminants                          = aDiscriminants.getConstArray();
-        const Reference< XTypeDescription > * pMemberTypes  = aMemberTypes.getConstArray();
-        const OUString * pMemberNames                       = aMemberNames.getConstArray();
+        const Any * pDiscriminants							= aDiscriminants.getConstArray();
+        const Reference< XTypeDescription > * pMemberTypes	= aMemberTypes.getConstArray();
+        const OUString * pMemberNames						= aMemberNames.getConstArray();
 
         typelib_Union_Init * pMembers = (typelib_Union_Init *)alloca( nMembers * sizeof(typelib_Union_Init) );
 
@@ -187,10 +182,10 @@ inline static typelib_TypeDescription * createCTD(
 
         // construct member init array
         const Sequence<Reference< XTypeDescription > > & rMemberTypes = xType->getMemberTypes();
-        const Sequence< OUString > & rMemberNames                     = xType->getMemberNames();
+        const Sequence< OUString > & rMemberNames					  = xType->getMemberNames();
 
         const Reference< XTypeDescription > * pMemberTypes = rMemberTypes.getConstArray();
-        const OUString * pMemberNames                      = rMemberNames.getConstArray();
+        const OUString * pMemberNames					   = rMemberNames.getConstArray();
 
         sal_Int32 nMembers = rMemberTypes.getLength();
         OSL_ENSURE( nMembers == rMemberNames.getLength(), "### lens differ!" );
@@ -245,10 +240,10 @@ inline static typelib_TypeDescription * createCTD(
 
         // construct member init array
         const Sequence<Reference< XTypeDescription > > & rMemberTypes = xType->getMemberTypes();
-        const Sequence< OUString > & rMemberNames                     = xType->getMemberNames();
+        const Sequence< OUString > & rMemberNames					  = xType->getMemberNames();
 
         const Reference< XTypeDescription > * pMemberTypes = rMemberTypes.getConstArray();
-        const OUString * pMemberNames                      = rMemberNames.getConstArray();
+        const OUString * pMemberNames					   = rMemberNames.getConstArray();
 
         sal_Int32 nMembers = rMemberTypes.getLength();
         OSL_ENSURE( nMembers == rMemberNames.getLength(), "### lens differ!" );
@@ -308,7 +303,7 @@ inline static typelib_TypeDescription * createCTD(
 }
 //==================================================================================================
 inline static typelib_TypeDescription * createCTD(
-    const Reference< XInterfaceAttributeTypeDescription2 > & xAttribute )
+    const Reference< XInterfaceAttributeTypeDescription > & xAttribute )
 {
     typelib_TypeDescription * pRet = 0;
     if (xAttribute.is())
@@ -316,31 +311,14 @@ inline static typelib_TypeDescription * createCTD(
         OUString aMemberName( xAttribute->getName() );
         Reference< XTypeDescription > xType( xAttribute->getType() );
         OUString aMemberTypeName( xType->getName() );
-        std::vector< rtl_uString * > getExc;
-        Sequence< Reference< XCompoundTypeDescription > > getExcs(
-            xAttribute->getGetExceptions() );
-        for (sal_Int32 i = 0; i != getExcs.getLength(); ++i)
-        {
-            OSL_ASSERT( getExcs[i].is() );
-            getExc.push_back( getExcs[i]->getName().pData );
-        }
-        std::vector< rtl_uString * > setExc;
-        Sequence< Reference< XCompoundTypeDescription > > setExcs(
-            xAttribute->getSetExceptions() );
-        for (sal_Int32 i = 0; i != setExcs.getLength(); ++i)
-        {
-            OSL_ASSERT( setExcs[i].is() );
-            setExc.push_back( setExcs[i]->getName().pData );
-        }
-        typelib_typedescription_newExtendedInterfaceAttribute(
+
+        typelib_typedescription_newInterfaceAttribute(
             (typelib_InterfaceAttributeTypeDescription **)&pRet,
             xAttribute->getPosition(),
             aMemberName.pData, // name
             (typelib_TypeClass)xType->getTypeClass(),
             aMemberTypeName.pData, // type name
-            xAttribute->isReadOnly(),
-            getExc.size(), getExc.empty() ? 0 : &getExc[0],
-            setExc.size(), setExc.empty() ? 0 : &setExc[0] );
+            xAttribute->isReadOnly() );
     }
     return pRet;
 }
@@ -355,7 +333,7 @@ static typelib_TypeDescription * createCTD(
 
         // init all params
         const Sequence<Reference< XMethodParameter > > & rParams = xMethod->getParameters();
-        const Reference< XMethodParameter > * pParams            = rParams.getConstArray();
+        const Reference< XMethodParameter > * pParams			 = rParams.getConstArray();
         sal_Int32 nParams = rParams.getLength();
 
         typelib_Parameter_Init * pParamInit = (typelib_Parameter_Init *)alloca(
@@ -365,7 +343,7 @@ static typelib_TypeDescription * createCTD(
         for ( nPos = nParams; nPos--; )
         {
             const Reference< XMethodParameter > & xParam = pParams[nPos];
-            const Reference< XTypeDescription > & xType  = xParam->getType();
+            const Reference< XTypeDescription > & xType	 = xParam->getType();
             typelib_Parameter_Init & rInit = pParamInit[xParam->getPosition()];
 
             rInit.eTypeClass = (typelib_TypeClass)xType->getTypeClass();
@@ -524,7 +502,8 @@ inline static typelib_TypeDescription * createCTD(
             0, 0 );
 
         // cleanup
-        typelib_typedescription_release( pRefType );
+        if (pRefType)
+            typelib_typedescription_release( pRefType );
     }
     return pRet;
 }
@@ -665,7 +644,7 @@ static typelib_TypeDescription * createCTD(
             pRet = createCTD( Reference< XInterfaceMethodTypeDescription >::query( xType ) );
             break;
         case TypeClass_INTERFACE_ATTRIBUTE:
-            pRet = createCTD( Reference< XInterfaceAttributeTypeDescription2 >::query( xType ) );
+            pRet = createCTD( Reference< XInterfaceAttributeTypeDescription >::query( xType ) );
             break;
         default:
             break;

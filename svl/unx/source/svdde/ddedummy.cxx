@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ DdeData::DdeData( const DdeData& )
 {
 }
 
-DdeData::DdeData( const void*, long, sal_uLong)
+DdeData::DdeData( const void*, long, ULONG)
 {
 }
 
@@ -51,11 +51,11 @@ DdeData::~DdeData( void )
 {
 }
 
-void DdeData::SetFormat( sal_uLong )
+void DdeData::SetFormat( ULONG )
 {
 }
 
-sal_uLong DdeData::GetFormat() const
+ULONG DdeData::GetFormat() const
 {
   return 0L;
 }
@@ -112,7 +112,7 @@ void DdeTransaction::Execute(void)
 {
 }
 
-void DdeTransaction::Done( sal_Bool )
+void DdeTransaction::Done( BOOL )
 {
 }
 
@@ -169,34 +169,34 @@ void DdeTopic::RemoveItem( const DdeItem& )
 {
 }
 
-DdeData* DdeTopic::Get( sal_uLong )
+DdeData* DdeTopic::Get( ULONG )
 {
   return NULL;
 }
 
-sal_Bool DdeTopic::MakeItem( const String& )
+BOOL DdeTopic::MakeItem( const String& )
 {
-  return sal_False;
+  return FALSE;
 }
 
-sal_Bool DdeTopic::StartAdviseLoop()
+BOOL DdeTopic::StartAdviseLoop()
 {
-  return sal_False;
+  return FALSE;
 }
 
-sal_Bool DdeTopic::StopAdviseLoop()
+BOOL DdeTopic::StopAdviseLoop()
 {
-  return sal_False;
+  return FALSE;
 }
 
-sal_Bool DdeTopic::Execute( const String* )
+BOOL DdeTopic::Execute( const String* )
 {
-  return sal_False;
+  return FALSE;
 }
 
-sal_Bool DdeTopic::Put( const DdeData* )
+BOOL DdeTopic::Put( const DdeData* )
 {
-  return sal_False;
+  return FALSE;
 }
 
 const String& DdeTopic::GetName() const
@@ -229,17 +229,17 @@ String DdeService::SysTopicGet(const String& rString) {
     return rString;
 }
 
-sal_Bool DdeService::SysTopicExecute(const String*) {
-    return sal_False;
+BOOL DdeService::SysTopicExecute(const String*) {
+    return FALSE;
 }
 
 DdeService::~DdeService()
 {
 }
 
-sal_Bool DdeService::IsBusy()
+BOOL DdeService::IsBusy()
 {
-  return sal_False;
+  return FALSE;
 }
 
 String DdeService::GetHelp()
@@ -247,7 +247,7 @@ String DdeService::GetHelp()
   return String::EmptyString();
 }
 
-void DdeService::AddFormat( sal_uLong )
+void DdeService::AddFormat( ULONG )
 {
 }
 
@@ -259,9 +259,9 @@ void DdeService::RemoveTopic( const DdeTopic& )
 {
 }
 
-sal_Bool DdeService::MakeTopic( const String& )
+BOOL DdeService::MakeTopic( const String& )
 {
-  return sal_False;
+  return FALSE;
 }
 
 const String& DdeService::GetName() const
@@ -269,10 +269,10 @@ const String& DdeService::GetName() const
   return String::EmptyString();
 }
 
-namespace
-{
-    struct theDdeServices
-        : public rtl::Static< DdeServices, theDdeServices > {};
+namespace 
+{ 
+    struct theDdeServices 
+        : public rtl::Static< DdeServices, theDdeServices > {}; 
 }
 
 DdeServices& DdeService::GetServices()
@@ -306,17 +306,17 @@ DdeItem( rItem )
 {
 }
 
-DdeData* DdeGetPutItem::Get( sal_uLong )
+DdeData* DdeGetPutItem::Get( ULONG )
 {
   return NULL;
 }
 
-sal_Bool DdeGetPutItem::Put( const DdeData* )
+BOOL DdeGetPutItem::Put( const DdeData* )
 {
-  return sal_False;
+  return FALSE;
 }
 
-void DdeGetPutItem::AdviseLoop( sal_Bool )
+void DdeGetPutItem::AdviseLoop( BOOL )
 {
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star {
 class String;
 class SvStrings;
 class SvPtrarr;
-
+        
 namespace SWUnoHelper {
 
 // calls over the compherl the getEnumAsInt32 function and handle the
@@ -51,32 +51,32 @@ sal_Int32 GetEnumAsInt32( const com::sun::star::uno::Any& rVal );
 
 // methods for UCB actions:
     // delete the file under this URL
-SW_DLLPUBLIC sal_Bool UCB_DeleteFile( const String& rURL );
+SW_DLLPUBLIC BOOL UCB_DeleteFile( const String& rURL );
 
     // copy/move the file to a new location
-sal_Bool UCB_CopyFile( const String& rURL, const String& rNewURL,
-                    sal_Bool bCopyIsMove = sal_False );
+BOOL UCB_CopyFile( const String& rURL, const String& rNewURL,
+                    BOOL bCopyIsMove = FALSE );
 
     // is the URL on the current system case sentive?
-SW_DLLPUBLIC sal_Bool UCB_IsCaseSensitiveFileName( const String& rURL );
+SW_DLLPUBLIC BOOL UCB_IsCaseSensitiveFileName( const String& rURL );
 
     // is the URL readonly?
-SW_DLLPUBLIC sal_Bool UCB_IsReadOnlyFileName( const String& rURL );
+SW_DLLPUBLIC BOOL UCB_IsReadOnlyFileName( const String& rURL );
 
     // get a list of files from the folder of the URL
     // options: pExtension = 0 -> all, else this specific extension
-    //          pDateTime != 0 -> returns also the modified date/time of
+    // 			pDateTime != 0 -> returns also the modified date/time of
     //                       the files in a SvPtrarr -->
     //                       !! objects must be deleted from the caller!!
-sal_Bool UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
+BOOL UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
                                 const String* pExtension = 0,
                                 SvPtrarr* pDateTimeList = 0 );
 
     // is the URL an existing file?
-SW_DLLPUBLIC sal_Bool UCB_IsFile( const String& rURL );
+SW_DLLPUBLIC BOOL UCB_IsFile( const String& rURL );
 
     // is the URL a existing directory?
-sal_Bool UCB_IsDirectory( const String& rURL );
+BOOL UCB_IsDirectory( const String& rURL );
 }
 
 #endif

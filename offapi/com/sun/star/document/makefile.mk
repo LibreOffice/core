@@ -117,14 +117,6 @@ IDLFILES=\
     XCodeNameQuery.idl \
     XCompatWriterDocProperties.idl \
     XVbaMethodParameter.idl \
-    XUndoAction.idl \
-    XUndoManager.idl \
-    XUndoManagerListener.idl \
-    XUndoManagerSupplier.idl \
-    UndoManagerEvent.idl \
-    EmptyUndoStackException.idl \
-    UndoContextNotClosedException.idl \
-    UndoFailedException.idl \
 
 
 # ------------------------------------------------------------------

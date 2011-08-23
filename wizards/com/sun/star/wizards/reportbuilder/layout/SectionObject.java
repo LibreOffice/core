@@ -1,8 +1,8 @@
 /*
  * ***********************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,6 @@
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.FontDescriptor;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.PropertySetHelper;
 
 /**
@@ -65,7 +64,7 @@ abstract public class SectionObject
 
     public int getHeight(int _nDefault)
     {
-        final int nHeight = getPropertySetHelper().getPropertyValueAsInteger(PropertyNames.PROPERTY_HEIGHT, _nDefault);
+        final int nHeight = getPropertySetHelper().getPropertyValueAsInteger("Height", _nDefault);
         return nHeight;
     }
 

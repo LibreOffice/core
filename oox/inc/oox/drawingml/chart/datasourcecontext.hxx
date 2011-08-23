@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public:
     virtual             ~DoubleSequenceContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
 
 private:
     sal_Int32           mnPtIndex;          /// Current data point index.
@@ -70,7 +70,7 @@ public:
     virtual             ~StringSequenceContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
 
 private:
     sal_Int32           mnPtIndex;          /// Current data point index.

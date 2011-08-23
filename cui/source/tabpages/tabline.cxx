@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
@@ -63,12 +66,12 @@ SvxLineTabDialog::SvxLineTabDialog
     const SfxItemSet* pAttr,
     SdrModel* pModel,
     const SdrObject* pSdrObj,
-    sal_Bool bHasObj
+    BOOL bHasObj
 ) :
 
-    SfxTabDialog    ( pParent, CUI_RES( RID_SVXDLG_LINE ), pAttr ),
-    pDrawModel      ( pModel ),
-    pObj            ( pSdrObj ),
+    SfxTabDialog	( pParent, CUI_RES( RID_SVXDLG_LINE ), pAttr ),
+    pDrawModel		( pModel ),
+    pObj			( pSdrObj ),
     rOutAttrs       ( *pAttr ),
     pColorTab       ( pModel->GetColorTable() ),
     mpNewColorTab   ( pModel->GetColorTable() ),
@@ -87,7 +90,7 @@ SvxLineTabDialog::SvxLineTabDialog
     nPosLineEndLb( 0 ),
     mnPos( 0 ),
     mbAreaTP( sal_False ),
-    mbDeleteColorTable( sal_True )
+    mbDeleteColorTable( TRUE )
 {
     FreeResource();
 
@@ -118,11 +121,13 @@ SvxLineTabDialog::SvxLineTabDialog
 
     AddTabPage( RID_SVXPAGE_LINE_DEF, SvxLineDefTabPage::Create, 0);
     AddTabPage( RID_SVXPAGE_LINEEND_DEF, SvxLineEndDefTabPage::Create, 0);
+//	AddTabPage( RID_SVXPAGE_COLOR, SvxColorTabPage::Create, 0 );
 
     SetCurPageId( RID_SVXPAGE_LINE );
 
     CancelButton& rBtnCancel = GetCancelButton();
     rBtnCancel.SetClickHdl( LINK( this, SvxLineTabDialog, CancelHdlImpl ) );
+//! rBtnCancel.SetText( CUI_RESSTR( RID_SVXSTR_CLOSE ) );
 }
 
 // -----------------------------------------------------------------------
@@ -204,7 +209,7 @@ short SvxLineTabDialog::Ok()
     SavePalettes();
 
     // Es wird RET_OK zurueckgeliefert, wenn wenigstens eine
-    // TabPage in FillItemSet() sal_True zurueckliefert. Dieses
+    // TabPage in FillItemSet() TRUE zurueckliefert. Dieses
     // geschieht z.Z. standardmaessig.
     return( SfxTabDialog::Ok() );
 }
@@ -222,7 +227,7 @@ IMPL_LINK_INLINE_END( SvxLineTabDialog, CancelHdlImpl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SvxLineTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     switch( nId )
     {
@@ -230,8 +235,8 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxLineTabPage&) rPage ).SetColorTable( pColorTab );
             ( (SvxLineTabPage&) rPage ).SetDashList( pDashList );
             ( (SvxLineTabPage&) rPage ).SetLineEndList( pLineEndList );
-            ( (SvxLineTabPage&) rPage ).SetDlgType( nDlgType );
-            ( (SvxLineTabPage&) rPage ).SetPageType( nPageType );
+            ( (SvxLineTabPage&) rPage ).SetDlgType( nDlgType );//CHINA001 ( (SvxLineTabPage&) rPage ).SetDlgType( &nDlgType );
+            ( (SvxLineTabPage&) rPage ).SetPageType( nPageType );//CHINA001 ( (SvxLineTabPage&) rPage ).SetPageType( &nPageType );
             ( (SvxLineTabPage&) rPage ).SetPosDashLb( &nPosDashLb );
             ( (SvxLineTabPage&) rPage ).SetPosLineEndLb( &nPosLineEndLb );
             ( (SvxLineTabPage&) rPage ).SetDashChgd( &nDashListState );
@@ -274,6 +279,18 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxShadowTabPage&) rPage ).Construct();
         }
         break;
+/*
+        case RID_SVXPAGE_COLOR:
+            ( (SvxColorTabPage&) rPage ).SetColorTable( pColorTab );
+            ( (SvxColorTabPage&) rPage ).SetPageType( &nPageType );
+            ( (SvxColorTabPage&) rPage ).SetDlgType( &nDlgType );
+            ( (SvxColorTabPage&) rPage ).SetPos( &mnPos );
+            ( (SvxColorTabPage&) rPage ).SetAreaTP( &mbAreaTP );
+            ( (SvxColorTabPage&) rPage ).SetColorChgd( &mnColorTableState );
+            ( (SvxColorTabPage&) rPage ).SetDeleteColorTable( mbDeleteColorTable );
+            ( (SvxColorTabPage&) rPage ).Construct();
+        break;
+*/
     }
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,6 @@
 #include "TableFieldControl.hxx"
 #include "dsntypes.hxx"
 
-#include "dbaccess_slotid.hrc"
-
 using namespace ::dbaui;
 using namespace ::comphelper;
 using namespace ::svt;
@@ -78,35 +76,35 @@ namespace dbaui
 }
 //==============================================================================
 
-//  TYPEINIT1(OTableEditorCtrl, DBView);
+//	TYPEINIT1(OTableEditorCtrl, DBView);
 DBG_NAME(OTableEditorCtrl)
 
 //==============================================================================
 
-#define HANDLE_ID       0
+#define HANDLE_ID		0
 
 // default Spaltenbreiten
-#define FIELDNAME_WIDTH     100
-#define FIELDTYPE_WIDTH     150
-#define FIELDDESCR_WIDTH    300
+#define FIELDNAME_WIDTH		100
+#define FIELDTYPE_WIDTH		150
+#define FIELDDESCR_WIDTH	300
 
 // Maximale Eingabelaenge im Beschreibungsfeld
-#define MAX_DESCR_LEN       256
+#define MAX_DESCR_LEN		256
 
 
-#define CONTROL_SPACING_X   18  // 6
-#define CONTROL_SPACING_Y   5
-#define CONTROL_HEIGHT      20
-#define CONTROL_WIDTH_1     140 // 100
-#define CONTROL_WIDTH_2     100 // 60
-#define CONTROL_WIDTH_3     250
-#define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - CONTROL_HEIGHT - 5)
+#define CONTROL_SPACING_X	18	// 6
+#define	CONTROL_SPACING_Y	5
+#define CONTROL_HEIGHT		20
+#define CONTROL_WIDTH_1		140	// 100
+#define CONTROL_WIDTH_2		100 // 60
+#define CONTROL_WIDTH_3		250
+#define CONTROL_WIDTH_4		(CONTROL_WIDTH_3 - CONTROL_HEIGHT - 5)
 
 
 //==================================================================
 DBG_NAME(ClipboardInvalidator)
 //------------------------------------------------------------------
-OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(sal_uLong nTimeout,OTableEditorCtrl* _pOwner)
+OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(ULONG nTimeout,OTableEditorCtrl* _pOwner)
 : m_pOwner(_pOwner)
 {
     DBG_CTOR(ClipboardInvalidator,NULL);
@@ -212,13 +210,13 @@ OTableEditorCtrl::OTableEditorCtrl(Window* pWindow)
 }
 
 //------------------------------------------------------------------------------
-SfxUndoManager& OTableEditorCtrl::GetUndoManager() const
+SfxUndoManager* OTableEditorCtrl::GetUndoManager() const
 {
-    return GetView()->getController().GetUndoManager();
+    return GetView()->getController().getUndoMgr();
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTableEditorCtrl::IsReadOnly()
+BOOL OTableEditorCtrl::IsReadOnly()
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     return bReadOnly;
@@ -243,9 +241,14 @@ void OTableEditorCtrl::SetReadOnly( sal_Bool bRead )
     DeactivateCell();
 
     //////////////////////////////////////////////////////////////////////
+    // ::com::sun::star::beans::Property Controls disablen
+//	if (pDescrWin)
+//		pDescrWin->SetReadOnly(bReadOnly || !SetDataPtr(nRow) || GetActRow()->IsReadOnly());
+
+    //////////////////////////////////////////////////////////////////////
     // Cursor des Browsers anpassen
     BrowserMode nMode(BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
-                      BROWSER_HLINESFULL      | BROWSER_VLINESFULL|BROWSER_AUTOSIZE_LASTCOL);
+                      BROWSER_HLINESFULL	  | BROWSER_VLINESFULL|BROWSER_AUTOSIZE_LASTCOL);
     if( !bReadOnly )
         nMode |= BROWSER_HIDECURSOR;
     SetMode(nMode);
@@ -271,13 +274,13 @@ void OTableEditorCtrl::InitCellController()
         nMaxTextLen = ((xub_StrLen)xMetaData.is() ? static_cast<xub_StrLen>(xMetaData->getMaxColumnNameLength()) : 0);
 
         if( nMaxTextLen == 0 )
-            nMaxTextLen = EDIT_NOLIMIT;
+            nMaxTextLen = EDIT_NOLIMIT;	
         sExtraNameChars = xMetaData.is() ? xMetaData->getExtraNameCharacters() : ::rtl::OUString();
 
     }
     catch(SQLException&)
     {
-        OSL_FAIL("getMaxColumnNameLength");
+        OSL_ASSERT(!"getMaxColumnNameLength");
     }
 
     pNameCell = new OSQLNameEdit( &GetDataWindow(), sExtraNameChars,WB_LEFT );
@@ -310,7 +313,7 @@ void OTableEditorCtrl::InitCellController()
         const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
         if ( aTemp.Height() > aHeight.Height() )
             aHeight.Height() = aTemp.Height();
-    }
+    } // for(int i= 0; i < SAL_N_ELEMENTS(pControls);++i
     SetDataRowHeight(aHeight.Height());
 
     ClearModified();
@@ -332,7 +335,7 @@ OTableEditorCtrl::~OTableEditorCtrl()
     DBG_DTOR(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
     // Undo-Manager zuruecksetzen
-    GetUndoManager().Clear();
+    GetUndoManager()->Clear();
 
     //////////////////////////////////////////////////////////////////////
     // Moegliche Events aus Queue entfernen
@@ -399,6 +402,8 @@ void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const Rectangle& rRect,
 
     if (rDev.IsClipRegion())
         rDev.SetClipRegion();
+//	rDev.DrawText(rRect.TopLeft(), aText);
+//	rDev.SetClipRegion( );
 }
 
 //------------------------------------------------------------------------------
@@ -408,9 +413,9 @@ CellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
     //////////////////////////////////////////////////////////////////////
     // Wenn EditorCtrl ReadOnly ist, darf nicht editiert werden
     Reference<XPropertySet> xTable = GetView()->getController().getTable();
-    if (IsReadOnly() || (   xTable.is() &&
-                            xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_TYPE) &&
-                            ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"))))
+    if (IsReadOnly() || (	xTable.is() && 
+                            xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_TYPE) && 
+                            ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
         return NULL;
 
     //////////////////////////////////////////////////////////////////////
@@ -431,12 +436,12 @@ CellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
         case HELP_TEXT:
             if (pActFieldDescr && (pActFieldDescr->GetName().getLength() != 0))
                 return new EditCellController( pHelpTextCell );
-            else
+            else 
                 return NULL;
         case COLUMN_DESCRIPTION:
             if (pActFieldDescr && (pActFieldDescr->GetName().getLength() != 0))
                 return new EditCellController( pDescrCell );
-            else
+            else 
                 return NULL;
         default:
             return NULL;
@@ -469,7 +474,7 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
                 pTypeCell->Clear();
                 if( !pActFieldDescr )
                     break;
-
+                    
                 const OTypeInfoMap* pTypeInfo = GetView()->getController().getTypeInfo();
                 OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
                 OTypeInfoMap::const_iterator aEnd = pTypeInfo->end();
@@ -625,7 +630,7 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
                 // Wenn FieldDescr existiert, wurde Feld geloescht und alter Inhalt wird wiederhergestellt
                 if (pActFieldDescr)
                 {
-                    GetUndoManager().AddUndoAction(new OTableEditorTypeSelUndoAct(this, nRow, FIELD_TYPE, pActFieldDescr->getTypeInfo()));
+                    GetUndoManager()->AddUndoAction(new OTableEditorTypeSelUndoAct(this, nRow, FIELD_TYPE, pActFieldDescr->getTypeInfo()));
                     SwitchType(TOTypeInfoSP());
                     pActFieldDescr = pActRow->GetActFieldDescr();
                 }
@@ -655,7 +660,7 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
                 pHelpTextCell->SetText(String());
                 pHelpTextCell->ClearModifyFlag();
             }
-            else
+            else 
                 pActFieldDescr->SetHelpText( pHelpTextCell->GetText() );
             break;
         }
@@ -705,6 +710,15 @@ sal_Bool OTableEditorCtrl::SaveModified()
 
     switch( nColId )
     {
+        //////////////////////////////////////////////////////////////
+        // NameCell
+        case FIELD_NAME:
+        {
+            // removed the former duplicate-check. this is done in OTableDocShell::CheckDefConsistency now.
+            // FS - 07.12.99 - 69575
+
+        } break;
+
         //////////////////////////////////////////////////////////////
         // TypeCell
         case FIELD_TYPE:
@@ -791,7 +805,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     default:            sActionDescription = String( ModuleRes( STR_CHANGE_COLUMN_ATTRIBUTE ) ); break;
     }
 
-    GetUndoManager().EnterListAction( sActionDescription, String() );
+    GetUndoManager()->EnterListAction( sActionDescription, String() );
     if (!pActFieldDescr)
     {
         const OTypeInfoMap* pTypeInfoMap = GetView()->getController().getTypeInfo();
@@ -808,25 +822,25 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
         nInvalidateTypeEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, InvalidateFieldType) );
         pActFieldDescr = pActRow->GetActFieldDescr();
         pDescrWin->DisplayData( pActFieldDescr );
-        GetUndoManager().AddUndoAction( new OTableEditorTypeSelUndoAct(this, nRow, nColId+1, TOTypeInfoSP()) );
+        GetUndoManager()->AddUndoAction( new OTableEditorTypeSelUndoAct(this, nRow, nColId+1, TOTypeInfoSP()) );
     }
 
     if( nColId != FIELD_TYPE )
-        GetUndoManager().AddUndoAction( new OTableDesignCellUndoAct(this, nRow, nColId) );
+        GetUndoManager()->AddUndoAction( new OTableDesignCellUndoAct(this, nRow, nColId) );
     else
     {
-        GetUndoManager().AddUndoAction(new OTableEditorTypeSelUndoAct(this, GetCurRow(), nColId, GetFieldDescr(GetCurRow())->getTypeInfo()));
+        GetUndoManager()->AddUndoAction(new OTableEditorTypeSelUndoAct(this, GetCurRow(), nColId, GetFieldDescr(GetCurRow())->getTypeInfo()));
         resetType();
     }
-
+    
     SaveData(nRow,nColId);
     // SaveData could create a undo action as well
-    GetUndoManager().LeaveListAction();
+    GetUndoManager()->LeaveListAction();
     RowModified(nRow);
     CellControllerRef xController(Controller());
     if(xController.Is())
         xController->SetModified();
-
+    
     //////////////////////////////////////////////////////////////////////
     // Das ModifyFlag setzen
     GetView()->getController().setModified( sal_True );
@@ -835,7 +849,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
 // -----------------------------------------------------------------------------
 void OTableEditorCtrl::resetType()
 {
-    sal_uInt16 nPos = pTypeCell->GetSelectEntryPos();
+    USHORT nPos = pTypeCell->GetSelectEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
         SwitchType( GetView()->getController().getTypeInfo(nPos) );
     else
@@ -984,7 +998,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
 
     //////////////////////////////////////////////////////////////////////
     // Undo-Action erzeugen
-    GetUndoManager().AddUndoAction( new OTableEditorInsUndoAct(this, nRow,vInsertedUndoRedoRows) );
+    GetUndoManager()->AddUndoAction( new OTableEditorInsUndoAct(this, nRow,vInsertedUndoRedoRows) );
     GetView()->getController().setModified( sal_True );
     InvalidateFeatures();
 }
@@ -996,8 +1010,8 @@ void OTableEditorCtrl::DeleteRows()
     OSL_ENSURE(GetView()->getController().isDropAllowed(),"Call of DeleteRows not valid here. Please check isDropAllowed!");
     //////////////////////////////////////////////////////////////////////
     // Undo-Action erzeugen
-    GetUndoManager().AddUndoAction( new OTableEditorDelUndoAct(this) );
-
+    GetUndoManager()->AddUndoAction( new OTableEditorDelUndoAct(this) );
+    
 
     //////////////////////////////////////////////////////////////////////
     // Alle markierten Zeilen loeschen
@@ -1044,7 +1058,7 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
     long nInsertRows = GetSelectRowCount();
     if( !nInsertRows )
         nInsertRows = 1;
-    GetUndoManager().AddUndoAction( new OTableEditorInsNewUndoAct(this, nRow, nInsertRows) );
+    GetUndoManager()->AddUndoAction( new OTableEditorInsNewUndoAct(this, nRow, nInsertRows) );
     //////////////////////////////////////////////////////////////////////
     // Zahl der selektierten Zeilen werden neu eingefuegt
     for( long i=nRow; i<(nRow+nInsertRows); i++ )
@@ -1122,7 +1136,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const TOTypeIn
             SwitchType( _pTypeInfo );
             break;
         default:
-            OSL_FAIL("OTableEditorCtrl::SetCellData: invalid column!");
+            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
     }
     SetControlText(nRow,nColId,_pTypeInfo.get() ? _pTypeInfo->aUIName : ::rtl::OUString());
 }
@@ -1137,7 +1151,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
     OFieldDescription* pFieldDescr = GetFieldDescr( nRow );
     if( !pFieldDescr && nColId != FIELD_TYPE)
         return;
-
+    
     String sValue;
     //////////////////////////////////////////////////////////////////////
     // Einzelne Felder setzen
@@ -1149,7 +1163,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
             break;
 
         case FIELD_TYPE:
-            OSL_FAIL("OTableEditorCtrl::SetCellData: invalid column!");
+            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
             break;
 
         case COLUMN_DESCRIPTION:
@@ -1177,7 +1191,8 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
             break;
 
         case FIELD_PROPERTY_NUMTYPE:
-            OSL_FAIL("OTableEditorCtrl::SetCellData: invalid column!");
+            //	pFieldDescr->SetNumType( _rNewData );
+            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
             break;
 
         case FIELD_PROPERTY_AUTOINC:
@@ -1260,8 +1275,8 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
             break;
 
         case FIELD_PROPERTY_NUMTYPE:
-            OSL_FAIL("OTableEditorCtrl::GetCellData: invalid column!");
-            break;
+            OSL_ENSURE(sal_False, "OTableEditorCtrl::GetCellData: invalid column!");
+            //	return pFieldDescr->GetNumType();
 
         case FIELD_PROPERTY_AUTOINC:
             sValue = pFieldDescr->IsAutoIncrement() ? strYes : strNo;
@@ -1307,7 +1322,7 @@ OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
         m_pRowList->size());
     if( (nRow<0) || (sal::static_int_cast< unsigned long >(nRow)>=nListCount) )
     {
-        OSL_FAIL("(nRow<0) || (nRow>=nListCount)");
+        OSL_ENSURE(0,"(nRow<0) || (nRow>=nListCount)");
         return NULL;
     }
      ::boost::shared_ptr<OTableRow>  pRow = (*m_pRowList)[ nRow ];
@@ -1320,7 +1335,7 @@ OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
 sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    sal_Bool bIsCutAllowed = (GetView()->getController().isAddAllowed() && GetView()->getController().isDropAllowed()) ||
+    sal_Bool bIsCutAllowed = (GetView()->getController().isAddAllowed() && GetView()->getController().isDropAllowed()) || 
                             GetView()->getController().isAlterAllowed();
 
     if(bIsCutAllowed)
@@ -1342,9 +1357,14 @@ sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
             default:
                 bIsCutAllowed = sal_False;
                 break;
-        }
+        }			
     }
 
+//	Reference<XPropertySet> xTable = GetView()->getController().getTable();
+//	if( !IsCopyAllowed(nRow) || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
+//		return sal_False;
+
+    //	return bCutAllowed && IsDeleteAllowed( nRow );
     return bIsCutAllowed;
 }
 
@@ -1362,7 +1382,7 @@ sal_Bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
     else if(m_eChildFocus == ROW)
     {
         Reference<XPropertySet> xTable = GetView()->getController().getTable();
-        if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"))))
+        if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
             return sal_False;
 
         //////////////////////////////////////////////////////////////////////
@@ -1380,7 +1400,7 @@ sal_Bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
 
         bIsCopyAllowed = sal_True;
     }
-
+    
     return bIsCopyAllowed;
 }
 
@@ -1531,7 +1551,7 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
     // Key darf nicht veraendert werden
     // Dies gilt jedoch nur, wenn die Tabelle nicht neu ist und keine ::com::sun::star::sdbcx::View. Ansonsten wird kein DROP ausgeführt
 
-    if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")))
+    if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW"))
         return sal_False;
     //////////////////////////////////////////////////////////////
     // Wenn leeres Feld, kein PrimKey
@@ -1577,16 +1597,16 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
             Point aMenuPos( rEvt.GetMousePosPixel() );
             if (!rEvt.IsMouseEvent())
             {
-                if  ( 1 == GetSelectColumnCount() )
+                if	( 1 == GetSelectColumnCount() )
                 {
                     sal_uInt16 nSelId = GetColumnId(
-                        sal::static_int_cast< sal_uInt16 >(
+                        sal::static_int_cast< USHORT >(
                             FirstSelectedColumn() ) );
                     ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
 
                     aMenuPos = aColRect.TopCenter();
                 }
-                else if ( GetSelectRowCount() > 0 )
+                else if	( GetSelectRowCount() > 0 )
                 {
                     ::Rectangle aColRect( GetFieldRectPixel( FirstSelectedRow(), HANDLE_ID, sal_True ) );
 
@@ -1609,9 +1629,9 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                 if ( HANDLE_ID != nColId )
                 {
                     if ( nRow < 0 && nColId != BROWSER_INVALIDID )
-                    {   // hit the header
+                    {	// hit the header
                         if ( 3 != nColId )
-                        {   // 3 would mean the last column, and this last column is auto-sized
+                        {	// 3 would mean the last column, and this last column is auto-sized
                             if ( !IsColumnSelected( nColId ) )
                                 SelectColumnId( nColId );
 
@@ -1704,16 +1724,16 @@ IMPL_LINK( OTableEditorCtrl, DelayedPaste, void*, /*EMPTYTAG*/ )
         nPastePosition = GetSelectRowCount() ? FirstSelectedRow() : GetCurRow();
 
     if (!IsInsertNewAllowed(nPastePosition))
-    {   // kein Einfuegen erlaubt, sondern nur anhaengen, also testen, ob hinter der PastePosition noch
+    {	// kein Einfuegen erlaubt, sondern nur anhaengen, also testen, ob hinter der PastePosition noch
         // belegte Zeilen erscheinen
 
-        sal_Int32 nFreeFromPos; // ab da nur freie Zeilen
+        sal_Int32 nFreeFromPos;	// ab da nur freie Zeilen
         ::std::vector< ::boost::shared_ptr<OTableRow> >::reverse_iterator aIter = m_pRowList->rbegin();
         for(nFreeFromPos = m_pRowList->size();
             aIter != m_pRowList->rend() && (!(*aIter) || !(*aIter)->GetActFieldDescr() || !(*aIter)->GetActFieldDescr()->GetName().getLength());
             --nFreeFromPos, ++aIter)
             ;
-        if (nPastePosition < nFreeFromPos)  // es gibt mindestens eine belegte hinter PastePosition -> ganz nach hinten
+        if (nPastePosition < nFreeFromPos)	// es gibt mindestens eine belegte hinter PastePosition -> ganz nach hinten
             nPastePosition = nFreeFromPos;
     }
 
@@ -1748,7 +1768,7 @@ IMPL_LINK( OTableEditorCtrl, DelayedInsNewRows, void*, /*EMPTYTAG*/ )
     return 0;
 }
 // -----------------------------------------------------------------------------
-void OTableEditorCtrl::AdjustFieldDescription(OFieldDescription* _pFieldDesc,
+void OTableEditorCtrl::AdjustFieldDescription(OFieldDescription* _pFieldDesc, 
                                          MultiSelection& _rMultiSel,
                                          sal_Int32 _nPos,
                                          sal_Bool _bSet,
@@ -1759,7 +1779,7 @@ void OTableEditorCtrl::AdjustFieldDescription(OFieldDescription* _pFieldDesc,
     {
         _pFieldDesc->SetIsNullable(ColumnValue::NO_NULLS);
         _pFieldDesc->SetControlDefault(Any());
-    }
+    } // if(!_bSet && _pFieldDesc->getTypeInfo()->bNullable)
     if ( _pFieldDesc->IsAutoIncrement() && !_bPrimaryKey )
     {
         OTableController& rController = GetView()->getController();
@@ -1783,6 +1803,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     // Evtl. vorhandene Primary Keys loeschen
     MultiSelection aDeletedPrimKeys;
     aDeletedPrimKeys.SetTotalRange( Range(0,GetRowCount()) );
+    long nIndex = 0;
 
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
@@ -1801,7 +1822,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     aInsertedPrimKeys.SetTotalRange( Range(0,GetRowCount()) );
     if( bSet )
     {
-        long nIndex = FirstSelectedRow();
+        nIndex = FirstSelectedRow();
         while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
         {
             //////////////////////////////////////////////////////////////////////
@@ -1815,7 +1836,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
         }
     }
 
-    GetUndoManager().AddUndoAction( new OPrimKeyUndoAct(this, aDeletedPrimKeys, aInsertedPrimKeys) );
+    GetUndoManager()->AddUndoAction( new OPrimKeyUndoAct(this, aDeletedPrimKeys, aInsertedPrimKeys) );
 
     //////////////////////////////////////////////////////////////////////
     // Handle-Spalte invalidieren
@@ -1877,7 +1898,7 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
             ||  ( GetView()->getController().getTypeInfo( nCurrentlySelected ) != _pType )
             )
         {
-            sal_uInt16 nEntryPos = 0;
+            USHORT nEntryPos = 0;
             const OTypeInfoMap* pTypeInfo = GetView()->getController().getTypeInfo();
             OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
             OTypeInfoMap::const_iterator aEnd = pTypeInfo->end();
@@ -1933,7 +1954,7 @@ long OTableEditorCtrl::PreNotify( NotifyEvent& rNEvt )
         else
             m_eChildFocus = ROW;
     }
-
+        
     return OTableRowView::PreNotify(rNEvt);
 }
 // -----------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 SourceTreeIterator::SourceTreeIterator(
     const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal_in )
 /*****************************************************************************/
-                : bInExecute( sal_False ) , bLocal( bLocal_in )
+                : bInExecute( FALSE ) , bLocal( bLocal_in ) 
 {
     (void) rVersion ;
 
@@ -63,35 +63,29 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
 {
     if ( bInExecute ) {
         rtl::OUString sDirName = aDirectory.getDirectoryName();
+        
+        static rtl::OUString WCARD1 ( rtl::OUString::createFromAscii( "unxlng" ) );
+        static rtl::OUString WCARD2 ( rtl::OUString::createFromAscii( "unxsol" ) );
+        static rtl::OUString WCARD3 ( rtl::OUString::createFromAscii( "wntmsc" ) );
+        static rtl::OUString WCARD4 ( rtl::OUString::createFromAscii( "common" ) );
+        static rtl::OUString WCARD5 ( rtl::OUString::createFromAscii( "unxmac" ) );
+        static rtl::OUString WCARD6 ( rtl::OUString::createFromAscii( "unxubt" ) );
+        static rtl::OUString WCARD7 ( rtl::OUString::createFromAscii( ".svn" ) );
 
-        static rtl::OUString WCARD1 ( RTL_CONSTASCII_USTRINGPARAM("unxlng") );
-        static rtl::OUString WCARD2 ( RTL_CONSTASCII_USTRINGPARAM("unxsol") );
-        static rtl::OUString WCARD3 ( RTL_CONSTASCII_USTRINGPARAM("wntmsc") );
-        static rtl::OUString WCARD4 ( RTL_CONSTASCII_USTRINGPARAM("common") );
-        static rtl::OUString WCARD5 ( RTL_CONSTASCII_USTRINGPARAM("unxmac") );
-        static rtl::OUString WCARD6 ( RTL_CONSTASCII_USTRINGPARAM("unxubt") );
-        static rtl::OUString WCARD7 ( RTL_CONSTASCII_USTRINGPARAM(".git") );
-        static rtl::OUString WCARD8 ( RTL_CONSTASCII_USTRINGPARAM("clone") );
-        static rtl::OUString WCARD9 ( RTL_CONSTASCII_USTRINGPARAM("install") );
-
-
+        
         if( sDirName.indexOf( WCARD1 , 0 ) > -1 ||
             sDirName.indexOf( WCARD2 , 0 ) > -1 ||
             sDirName.indexOf( WCARD3 , 0 ) > -1 ||
             sDirName.indexOf( WCARD4 , 0 ) > -1 ||
             sDirName.indexOf( WCARD5 , 0 ) > -1 ||
             sDirName.indexOf( WCARD6 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD7 , 0 ) > -1 ||
-#ifndef WNT
-            sDirName.indexOf( WCARD8 , 0 ) > -1 ||
-#endif
-            sDirName.indexOf( WCARD9 , 0 ) > -1
-           )    return;
+            sDirName.indexOf( WCARD7 , 0 ) > -1 
+           )	return;
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
-
+       
         rtl::OUString sDirNameTmp = aDirectory.getFullName();
         ByteString sDirNameTmpB( rtl::OUStringToOString( sDirNameTmp , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
-
+        
 #ifdef WNT
         sDirNameTmpB.Append( ByteString("\\no_localization") );
 #else
@@ -99,42 +93,42 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
 #endif
         //printf("**** %s \n", OUStringToOString( sDirNameTmp , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 
-        DirEntry aDE( sDirNameTmpB.GetBuffer() );
+        DirEntry aDE( sDirNameTmpB.GetBuffer() ); 
         if( aDE.Exists() )
         {
             //printf("#### no_localization file found ... skipping");
             return;
         }
-
+ 
         aDirectory.setSkipLinks( bSkipLinks );
         aDirectory.readDirectory();
         OnExecuteDirectory( aDirectory.getFullName() );
         if ( aDirectory.getSubDirectories().size() )
-            for ( sal_uLong i=0;i < aDirectory.getSubDirectories().size();i++ )
+            for ( ULONG i=0;i < aDirectory.getSubDirectories().size();i++ )
                 ExecuteDirectory( aDirectory.getSubDirectories()[ i ] );
     }
 }
 
 /*****************************************************************************/
-sal_Bool SourceTreeIterator::StartExecute()
+BOOL SourceTreeIterator::StartExecute()
 /*****************************************************************************/
 {
-
-    bInExecute = sal_True;                  // FIXME
+        
+    bInExecute = TRUE;                  // FIXME
     ExecuteDirectory( aRootDirectory );
 
     if ( bInExecute ) {                 // FIXME
-        bInExecute = sal_False;
-        return sal_True;
+        bInExecute = FALSE;
+        return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
 /*****************************************************************************/
 void SourceTreeIterator::EndExecute()
 /*****************************************************************************/
 {
-    bInExecute = sal_False;
+    bInExecute = FALSE;
 }
 
 /*****************************************************************************/

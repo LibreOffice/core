@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,6 +67,7 @@ enum
 {
     PROP_EQUATION_SHOW,
     PROP_EQUATION_SHOW_CORRELATION_COEFF,
+//     PROP_EQUATION_SEPARATOR,
     PROP_EQUATION_REF_PAGE_SIZE,
     PROP_EQUATION_REL_POS,
     PROP_EQUATION_NUMBER_FORMAT
@@ -88,6 +89,13 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+//     rOutProperties.push_back(
+//         Property( C2U( "Separator" ),
+//                   PROP_EQUATION_SEPARATOR,
+//                   ::getCppuType( reinterpret_cast< ::rtl::OUString * >(0)),
+//                   beans::PropertyAttribute::BOUND
+//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "ReferencePageSize" ),
@@ -111,51 +119,32 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 }
 
-struct StaticRegressionEquationDefaults_Initializer
+void lcl_AddDefaultsToMap(
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
-        ::chart::FillProperties::AddDefaultsToMap( rOutMap );
-        ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW_CORRELATION_COEFF, false );
+//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SEPARATOR, ::rtl::OUString( sal_Unicode( '\n' )));
 
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW_CORRELATION_COEFF, false );
-        //::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SEPARATOR, ::rtl::OUString( sal_Unicode( '\n' )));
+    // override other defaults
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LineProperties::PROP_LINE_STYLE, drawing::LineStyle_NONE );
 
-        // override other defaults
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LineProperties::PROP_LINE_STYLE, drawing::LineStyle_NONE );
+    float fDefaultCharHeight = 10.0;
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
+}
 
-        float fDefaultCharHeight = 10.0;
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
-    }
-};
-
-struct StaticRegressionEquationDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticRegressionEquationDefaults_Initializer >
+const uno::Sequence< Property > & lcl_GetPropertySequence()
 {
-};
+    static uno::Sequence< Property > aPropSeq;
 
-struct StaticRegressionEquationInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    uno::Sequence< Property > lcl_GetPropertySequence()
-    {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
@@ -163,31 +152,25 @@ private:
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-};
+    return aPropSeq;
+}
 
-struct StaticRegressionEquationInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticRegressionEquationInfoHelper_Initializer >
+::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
 {
-};
+    static ::cppu::OPropertyArrayHelper aArrayHelper(
+        lcl_GetPropertySequence(),
+        /* bSorted = */ sal_True );
 
-struct StaticRegressionEquationInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticRegressionEquationInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticRegressionEquationInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticRegressionEquationInfo_Initializer >
-{
-};
+    return aArrayHelper;
+}
 
 } // anonymous namespace
 
@@ -224,24 +207,55 @@ uno::Reference< util::XCloneable > SAL_CALL RegressionEquation::createClone()
 uno::Any RegressionEquation::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticRegressionEquationDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
+    static tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        LineProperties::AddDefaultsToMap( aStaticDefaults );
+        FillProperties::AddDefaultsToMap( aStaticDefaults );
+        CharacterProperties::AddDefaultsToMap( aStaticDefaults );
+
+        // overrides a line property
+        lcl_AddDefaultsToMap( aStaticDefaults );
+    }
+
+    tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
         return uno::Any();
+
     return (*aFound).second;
+    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL RegressionEquation::getInfoHelper()
 {
-    return *StaticRegressionEquationInfoHelper::get();
+    return lcl_getInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL RegressionEquation::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL
+    RegressionEquation::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticRegressionEquationInfo::get();
+    static Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            lcl_getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
+
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL RegressionEquation::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
@@ -303,13 +317,16 @@ void RegressionEquation::fireModifyEvent()
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL RegressionEquation::getText()
     throw (uno::RuntimeException)
 {
+    // /--
     MutexGuard aGuard( GetMutex() );
     return m_aStrings;
+    // \--
 }
 
 void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& Strings )
     throw (uno::RuntimeException)
 {
+    // /--
     MutexGuard aGuard( GetMutex() );
     ModifyListenerHelper::removeListenerFromAllElements(
         ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
@@ -317,6 +334,7 @@ void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< 
     ModifyListenerHelper::addListenerToAllElements(
         ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
     fireModifyEvent();
+    // \--
 }
 
 // ================================================================================

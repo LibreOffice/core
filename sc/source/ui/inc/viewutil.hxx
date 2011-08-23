@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,24 +50,24 @@ enum ScUpdateMode { SC_UPDATE_ALL, SC_UPDATE_CHANGED, SC_UPDATE_MARKS };
 
 // ---------------------------------------------------------------------------
 
-class ScViewUtil                                // static Methoden
+class ScViewUtil								// static Methoden
 {
 public:
-    static sal_Bool ExecuteCharMap( const SvxFontItem&  rOldFont,
-                                SfxViewFrame&       rFrame,
-                                SvxFontItem&        rNewFont,
-                                String&             rString );
+    static BOOL	ExecuteCharMap( const SvxFontItem&	rOldFont,
+                                SfxViewFrame&		rFrame,
+                                SvxFontItem&		rNewFont,
+                                String&				rString );
 
-    static sal_Bool IsActionShown( const ScChangeAction& rAction,
+    static BOOL IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,
                                 ScDocument& rDocument );
 
     static void PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
-                                sal_uInt16 nWhichId, sal_uInt16 nScript );
+                                USHORT nWhichId, USHORT nScript );
 
-    static sal_uInt16 GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos );
+    static USHORT GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos );
 
-    static sal_Int32 GetTransliterationType( sal_uInt16 nSlotID );
+    static sal_Int32 GetTransliterationType( USHORT nSlotID );
 
     static bool HasFiltered( const ScRange& rRange, ScDocument* pDoc );
     /** Fit a range to cover nRows number of unfiltered rows.
@@ -75,7 +75,7 @@ public:
     static bool FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_t nRows );
     static void UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc );
 
-    static void HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal_uInt16 nSlotId );
+    static void HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, USHORT nSlotId );
 
     /** Returns true, if the passed view shell is in full screen mode. */
     static bool IsFullScreen( SfxViewShell& rViewShell );
@@ -88,22 +88,26 @@ public:
 class ScUpdateRect
 {
 private:
-    SCCOL   nOldStartX;
-    SCROW   nOldStartY;
-    SCCOL   nOldEndX;
-    SCROW   nOldEndY;
-    SCCOL   nNewStartX;
-    SCROW   nNewStartY;
-    SCCOL   nNewEndX;
-    SCROW   nNewEndY;
-    SCCOL   nContX1;
-    SCROW   nContY1;
-    SCCOL   nContX2;
-    SCROW   nContY2;
+    SCCOL	nOldStartX;
+    SCROW	nOldStartY;
+    SCCOL	nOldEndX;
+    SCROW	nOldEndY;
+    SCCOL	nNewStartX;
+    SCROW	nNewStartY;
+    SCCOL	nNewEndX;
+    SCROW	nNewEndY;
+    SCCOL	nContX1;
+    SCROW	nContY1;
+    SCCOL	nContX2;
+    SCROW	nContY2;
 public:
             ScUpdateRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
-    void    SetNew( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
-    sal_Bool    GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
+    void	SetNew( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
+    BOOL	GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
+#ifdef OLD_SELECTION_PAINT	
+    BOOL	GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, BOOL& rCont );
+    void    GetContDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
+#endif    
 };
 
 

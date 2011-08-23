@@ -73,8 +73,6 @@ SRC1FILES =\
     layeroptionsdlg.src
 
 SLOFILES =  \
-        $(SLO)$/masterlayoutdlg.obj \
-        $(SLO)$/headerfooterdlg.obj \
         $(SLO)$/inspagob.obj \
         $(SLO)$/ins_paste.obj \
         $(SLO)$/present.obj  \
@@ -145,8 +143,7 @@ LIB1OBJFILES= \
         $(SLO)$/sdabstdlg.obj \
         $(SLO)$/PaneChildWindows.obj		\
         $(SLO)$/PaneDockingWindow.obj		\
-        $(SLO)$/PaneShells.obj			\
-        $(SLO)$/layeroptionsdlg.obj
+        $(SLO)$/PaneShells.obj
 
 
 LIB2TARGET= $(SLB)$/sdui.lib

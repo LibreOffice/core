@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,15 +72,15 @@ namespace
                 // provide new collection sequences
                 drawinglayer::primitive3d::Primitive3DSequence aNewAllTarget;
                 drawinglayer::primitive3d::Primitive3DSequence aNewVisibleTarget;
-
+                
                 // add children recursively
                 for(sal_uInt32 a(0L); a < nChildrenCount; a++)
                 {
                     createSubPrimitive3DVector(
-                        rCandidate.GetViewContact(a),
-                        aNewAllTarget,
+                        rCandidate.GetViewContact(a), 
+                        aNewAllTarget, 
                         o_pVisibleTarget ? &aNewVisibleTarget : 0,
-                        pVisibleLayerSet,
+                        pVisibleLayerSet, 
                         bTestSelectedVisibility);
                 }
 
@@ -91,7 +91,7 @@ namespace
 
                 // add created content to all target
                 drawinglayer::primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(o_rAllTarget, xReference);
-
+                
                 // add created content to visibiel target if exists
                 if(o_pVisibleTarget)
                 {
@@ -107,7 +107,7 @@ namespace
             if(pViewContactOfE3d)
             {
                 drawinglayer::primitive3d::Primitive3DSequence xPrimitive3DSeq(pViewContactOfE3d->getViewIndependentPrimitive3DSequence());
-
+                
                 if(xPrimitive3DSeq.hasElements())
                 {
                     // add to all target vector
@@ -123,10 +123,10 @@ namespace
                             // test layer visibility
                             const E3dObject& rE3dObject = pViewContactOfE3d->GetE3dObject();
                             const SdrLayerID aLayerID(rE3dObject.GetLayer());
-
+                            
                             bVisible = pVisibleLayerSet->IsSet(aLayerID);
                         }
-
+                        
                         if(bVisible && bTestSelectedVisibility)
                         {
                             // test selected visibility (see 3D View's DrawMarkedObj implementation)
@@ -164,7 +164,7 @@ namespace sdr
         }
 
         ViewContactOfE3dScene::ViewContactOfE3dScene(E3dScene& rScene)
-        :   ViewContactOfSdrObj(rScene),
+        :	ViewContactOfSdrObj(rScene),
             maViewInformation3D(),
             maObjectTransformation(),
             maSdrSceneAttribute(),
@@ -231,15 +231,15 @@ namespace sdr
                 if(::com::sun::star::drawing::ProjectionMode_PERSPECTIVE == rSdrSceneAttribute.getProjectionMode())
                 {
                     aProjection.frustum(
-                        aDeviceRange.getMinX(), aDeviceRange.getMaxX(),
-                        aDeviceRange.getMinY(), aDeviceRange.getMaxY(),
+                        aDeviceRange.getMinX(), aDeviceRange.getMaxX(), 
+                        aDeviceRange.getMinY(), aDeviceRange.getMaxY(), 
                         fMinZ, fMaxZ);
                 }
                 else
                 {
                     aProjection.ortho(
-                        aDeviceRange.getMinX(), aDeviceRange.getMaxX(),
-                        aDeviceRange.getMinY(), aDeviceRange.getMaxY(),
+                        aDeviceRange.getMinX(), aDeviceRange.getMaxX(), 
+                        aDeviceRange.getMinY(), aDeviceRange.getMaxY(), 
                         fMinZ, fMaxZ);
                 }
             }
@@ -256,7 +256,7 @@ namespace sdr
 
             const uno::Sequence< beans::PropertyValue > aEmptyProperties;
             maViewInformation3D = drawinglayer::geometry::ViewInformation3D(
-                aTransformation, aOrientation, aProjection,
+                aTransformation, aOrientation, aProjection, 
                 aDeviceToView, 0.0, aEmptyProperties);
         }
 
@@ -305,9 +305,9 @@ namespace sdr
                 for(sal_uInt32 a(0L); a < nChildrenCount; a++)
                 {
                     createSubPrimitive3DVector(
-                        GetViewContact(a),
-                        aAllSequence,
-                        bTestLayerVisibility ? &aVisibleSequence : 0,
+                        GetViewContact(a), 
+                        aAllSequence, 
+                        bTestLayerVisibility ? &aVisibleSequence : 0, 
                         bTestLayerVisibility ? pLayerVisibility : 0,
                         bTestSelectedVisibility);
                 }
@@ -331,9 +331,9 @@ namespace sdr
                     const drawinglayer::primitive2d::Primitive2DReference xReference(
                         new drawinglayer::primitive2d::ScenePrimitive2D(
                             bTestVisibility ? aVisibleSequence : aAllSequence,
-                            getSdrSceneAttribute(),
-                            getSdrLightingAttribute(),
-                            getObjectTransformation(),
+                            getSdrSceneAttribute(), 
+                            getSdrLightingAttribute(), 
+                            getObjectTransformation(), 
                             getViewInformation3D(aContentRange)));
 
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
@@ -341,7 +341,7 @@ namespace sdr
             }
 
             // always append an invisible outline for the cases where no visible content exists
-            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, 
                 drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                     false, getObjectTransformation()));
 
@@ -386,7 +386,7 @@ namespace sdr
                 {
                     // empty scene, no 3d action should be necessary. Prepare some
                     // fallback size
-                    OSL_FAIL("No need to get ViewInformation3D from an empty scene (!)");
+                    OSL_ENSURE(false, "No need to get ViewInformation3D from an empty scene (!)");
                     aContentRange.expand(basegfx::B3DPoint(-100.0, -100.0, -100.0));
                     aContentRange.expand(basegfx::B3DPoint( 100.0,  100.0,  100.0));
                 }
@@ -462,7 +462,7 @@ namespace sdr
             if(xAllSequence.hasElements())
             {
                 // for getting the 3D range using getB3DRangeFromPrimitive3DSequence a ViewInformation3D
-                // needs to be given for evtl. decompositions. Use a neutral ViewInformation3D here. This
+                // needs to be given for evtl. decompositions. Use a neutral ViewInformation3D here. This 
                 // leaves all matrices on identity and the time on 0.0.
                 const uno::Sequence< beans::PropertyValue > aEmptyProperties;
                 const drawinglayer::geometry::ViewInformation3D aNeutralViewInformation3D(aEmptyProperties);

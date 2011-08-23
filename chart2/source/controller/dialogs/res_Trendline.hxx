@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ public:
     virtual ~TrendlineResources();
 
     void Reset(const SfxItemSet& rInAttrs);
-    sal_Bool FillItemSet(SfxItemSet& rOutAttrs) const;
+    BOOL FillItemSet(SfxItemSet& rOutAttrs) const;
 
     void FillValueSets();
 

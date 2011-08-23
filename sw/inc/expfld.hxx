@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_EXPFLD_HXX
-#define SW_EXPFLD_HXX
+#ifndef _EXPFLD_HXX
+#define _EXPFLD_HXX
 
 #include <svl/svarray.hxx>
 #include "swdllapi.h"
@@ -43,18 +43,19 @@ class SwFmtFld;
 class _SetGetExpFlds;
 class SwEditShell;
 
-// Forward declaration: get "BodyTxtNode" for exp.fld in Fly's headers/footers/footnotes.
+// Vorwaertsdeklaration: besorge den "Body-TextNode", fuer Exp.Fld in Fly's
+//						Header/Footers/Footnodes
 const SwTxtNode* GetBodyTxtNode( const SwDoc& pDoc, SwPosition& rPos,
                                  const SwFrm& rFrm );
-
-void ReplacePoint(String& sTmpName, sal_Bool bWithCommandType = sal_False);
+// Wandlung Address -> Adressen
+void ReplacePoint(String& sTmpName, BOOL bWithCommandType = FALSE);
 
 struct _SeqFldLstElem
 {
     String sDlgEntry;
-    sal_uInt16 nSeqNo;
+    USHORT nSeqNo;
 
-    _SeqFldLstElem( const String& rStr, sal_uInt16 nNo )
+    _SeqFldLstElem( const String& rStr, USHORT nNo )
         : sDlgEntry( rStr ), nSeqNo( nNo )
     {}
 };
@@ -63,11 +64,15 @@ SV_DECL_PTRARR_DEL( _SwSeqFldList, _SeqFldLstElem*, 10, 10 )
 class SW_DLLPUBLIC SwSeqFldList : public _SwSeqFldList
 {
 public:
-    SwSeqFldList()  : _SwSeqFldList( 10, 10 ) {}
+    SwSeqFldList()	: _SwSeqFldList( 10, 10 ) {}
 
-    sal_Bool InsertSort( _SeqFldLstElem* );
-    sal_Bool SeekEntry( const _SeqFldLstElem& , sal_uInt16* pPos = 0 );
+    BOOL InsertSort( _SeqFldLstElem* );
+    BOOL SeekEntry( const _SeqFldLstElem& , USHORT* pPos = 0 );
 };
+
+/*--------------------------------------------------------------------
+    Beschreibung: Ausdruck
+ --------------------------------------------------------------------*/
 
 class SwGetExpFieldType : public SwValueFieldType
 {
@@ -75,208 +80,223 @@ public:
         SwGetExpFieldType(SwDoc* pDoc);
         virtual SwFieldType*    Copy() const;
 
-        // Overlay, because get-field cannot be changed and therefore
-        // does not need to be updated. Update at changing of set-values!
-protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+        // ueberlagert, weil das Get-Field nicht veraendert werden kann
+        // und dann auch nicht aktualisiert werden muss. Aktualisierung
+        // erfolgt beim Aendern von Set-Werten !
+
+        virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 };
+
+/*--------------------------------------------------------------------
+    Beschreibung: GetExperession
+ --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 {
-    String          sExpand;
-    sal_Bool            bIsInBodyTxt;
-    sal_uInt16          nSubType;
+    String 			sExpand;
+    BOOL 			bIsInBodyTxt;
+    USHORT			nSubType;
 
-    bool            bLateInitialization; // #i82544#
-
-    virtual String              Expand() const;
-    virtual SwField*            Copy() const;
+    bool            bLateInitialization; // #i82544# 
 
 public:
     SwGetExpField( SwGetExpFieldType*, const String& rFormel,
-                   sal_uInt16 nSubType = nsSwGetSetExpType::GSE_EXPR, sal_uLong nFmt = 0);
+                   USHORT nSubType = nsSwGetSetExpType::GSE_EXPR, ULONG nFmt = 0);
 
-    virtual void                SetValue( const double& rVal );
-    virtual void                SetLanguage(sal_uInt16 nLng);
+    virtual void 				SetValue( const double& rVal );
+    virtual void				SetLanguage(USHORT nLng);
 
-    inline const String&        GetExpStr() const;
-    inline void                 ChgExpStr(const String& rExpand);
+    virtual String	 			Expand() const;
+    virtual SwField* 			Copy() const;
 
-    // Called by formating.
-    inline sal_Bool                 IsInBodyTxt() const;
+    inline const String& 		GetExpStr() const;
+    inline void  				ChgExpStr(const String& rExpand);
 
-    // Set by UpdateExpFlds where node position is known.
-    inline void                 ChgBodyTxtFlag( sal_Bool bIsInBody );
+    // wird von der Formatierung abgefragt
+    inline BOOL 				IsInBodyTxt() const;
+    // wird von UpdateExpFlds gesetzt (dort ist die Node-Position bekannt)
+    inline void 				ChgBodyTxtFlag( BOOL bIsInBody );
+    // fuer Felder in Header/Footer/Footnotes/Flys:
+    // (wird nur von der Formatierung aufgerufen!!)
+    void 						ChangeExpansion( const SwFrm&, const SwTxtFld& );
 
-    // For fields in header/footer/footnotes/flys:
-    // Only called by formating!!
-    void                        ChangeExpansion( const SwFrm&, const SwTxtFld& );
+    virtual	String				GetCntnt(BOOL bName = FALSE) const;
 
-    virtual String      GetFieldName() const;
+    // Die Formel aendern
+    virtual String				GetPar2() const;
+    virtual void				SetPar2(const String& rStr);
 
-    // Change formula.
-    virtual String              GetPar2() const;
-    virtual void                SetPar2(const String& rStr);
+    virtual USHORT				GetSubType() const;
+    virtual void				SetSubType(USHORT nType);
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 
-    virtual sal_uInt16              GetSubType() const;
-    virtual void                SetSubType(sal_uInt16 nType);
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
-
-    static sal_uInt16       GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc);
-    // #i82544#
-    void                SetLateInitialization() { bLateInitialization = true;}
+    static USHORT 		GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc);
+    // #i82544# 
+    void				SetLateInitialization() { bLateInitialization = true;}
 };
 
 inline void SwGetExpField::ChgExpStr(const String& rExpand)
     { sExpand = rExpand;}
 
 inline const String& SwGetExpField::GetExpStr() const
-    { return sExpand;   }
+    { return sExpand; 	}
 
-// Called by formating.
-inline sal_Bool SwGetExpField::IsInBodyTxt() const
+// wird von der Formatierung abgefragt
+inline BOOL SwGetExpField::IsInBodyTxt() const
     { return bIsInBodyTxt; }
 
-// Set by UpdateExpFlds where node position is known.
-inline void SwGetExpField::ChgBodyTxtFlag( sal_Bool bIsInBody )
+// wird von UpdateExpFlds gesetzt (dort ist die Node-Position bekannt)
+inline void SwGetExpField::ChgBodyTxtFlag( BOOL bIsInBody )
     { bIsInBodyTxt = bIsInBody; }
+
+
+/*--------------------------------------------------------------------
+    Beschreibung: Ausdruck setzen
+ --------------------------------------------------------------------*/
 
 class SwSetExpField;
 
 class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 {
-    String      sName;
+    String 		sName;
     const SwNode* pOutlChgNd;
-    String      sDelim;
-    sal_uInt16      nType;
-    sal_uInt8       nLevel;
-    sal_Bool        bDeleted;
-
-protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+//	sal_Unicode cDelim;
+    String		sDelim;
+    USHORT 		nType;
+    BYTE		nLevel;
+    BOOL		bDeleted;
 
 public:
     SwSetExpFieldType( SwDoc* pDoc, const String& rName,
-                        sal_uInt16 nType = nsSwGetSetExpType::GSE_EXPR );
+                        USHORT nType = nsSwGetSetExpType::GSE_EXPR );
     virtual SwFieldType*    Copy() const;
-    virtual const String&   GetName() const;
+    virtual const String&	GetName() const;
 
-    inline void             SetType(sal_uInt16 nTyp);
-    inline sal_uInt16           GetType() const;
+    inline void				SetType(USHORT nTyp);
+    inline USHORT			GetType() const;
 
-    void                    SetSeqFormat(sal_uLong nFormat);
-    sal_uLong                   GetSeqFormat();
+    void					SetSeqFormat(ULONG nFormat);
+    ULONG					GetSeqFormat();
 
-    sal_Bool                    IsDeleted() const       { return bDeleted; }
-    void                    SetDeleted( sal_Bool b )    { bDeleted = b; }
+    BOOL					IsDeleted() const 		{ return bDeleted; }
+    void					SetDeleted( BOOL b )	{ bDeleted = b; }
 
-    // Overlay, because set-field takes care for its being updated by itself.
-    inline const String&    GetSetRefName() const;
+    // ueberlagert, weil das Set-Field selbst dafuer sorgt, das
+    // es aktualisiert wird.
+    virtual void 			Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+    inline const String& 	GetSetRefName() const;
 
-    sal_uInt16 SetSeqRefNo( SwSetExpField& rFld );
+    USHORT SetSeqRefNo( SwSetExpField& rFld );
 
-    sal_uInt16 GetSeqFldList( SwSeqFldList& rList );
-    String MakeSeqName( sal_uInt16 nSeqNo );
+    USHORT GetSeqFldList( SwSeqFldList& rList );
+    String MakeSeqName( USHORT nSeqNo );
 
-    // Number sequence fields chapterwise if required.
-    const String& GetDelimiter() const      { return sDelim; }
-    void SetDelimiter( const String& s )    { sDelim = s; }
-    sal_uInt8 GetOutlineLvl() const                 { return nLevel; }
-    void SetOutlineLvl( sal_uInt8 n )           { nLevel = n; }
+    // Seqencefelder ggfs. Kapitelweise numerieren
+//	sal_Unicode GetDelimiter() const 		{ return cDelim; }
+//	void SetDelimiter( sal_Unicode c ) 		{ cDelim = c; }
+    const String& GetDelimiter() const 		{ return sDelim; }
+    void SetDelimiter( const String& s ) 	{ sDelim = s; }
+    BYTE GetOutlineLvl() const 				{ return nLevel; }
+    void SetOutlineLvl( BYTE n ) 			{ nLevel = n; }
     void SetChapter( SwSetExpField& rFld, const SwNode& rNd );
+    // Member nur fuers SwDoc::UpdateExpFld - wird nur waehrend der Laufzeit
+    // von SequencefeldTypen benoetigt!!!
+    const SwNode* GetOutlineChgNd() const	{ return pOutlChgNd; }
+    void SetOutlineChgNd( const SwNode* p )	{ pOutlChgNd = p; }
 
-    // Member only for SwDoc::UpdateExpFld.
-    // It is needed only at runtime of sequence field types!
-    const SwNode* GetOutlineChgNd() const   { return pOutlChgNd; }
-    void SetOutlineChgNd( const SwNode* p ) { pOutlChgNd = p; }
-
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
-inline void SwSetExpFieldType::SetType( sal_uInt16 nTyp )
+inline void SwSetExpFieldType::SetType( USHORT nTyp )
 {
         nType = nTyp;
         EnableFormat( !(nType & (nsSwGetSetExpType::GSE_SEQ|nsSwGetSetExpType::GSE_STRING)));
 }
 
-inline sal_uInt16 SwSetExpFieldType::GetType() const
-    { return nType;   }
+inline USHORT SwSetExpFieldType::GetType() const
+    { return nType;	  }
 
 inline const String& SwSetExpFieldType::GetSetRefName() const
     { return sName; }
 
 
+/*--------------------------------------------------------------------
+    Beschreibung: Ausdruck
+ --------------------------------------------------------------------*/
+
 class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
 {
-    String          sExpand;
-    String          aPText;
-    String          aSeqText;
-    sal_Bool            bInput;
-    sal_uInt16          nSeqNo;
-    sal_uInt16          nSubType;
-
-    virtual String              Expand() const;
-    virtual SwField*            Copy() const;
+    String 			sExpand;
+    String			aPText;
+    String			aSeqText;
+    BOOL			bInput;
+    USHORT 			nSeqNo;
+    USHORT			nSubType;
 
 public:
-    SwSetExpField(SwSetExpFieldType*, const String& rFormel, sal_uLong nFmt = 0);
+    SwSetExpField(SwSetExpFieldType*, const String& rFormel, ULONG nFmt = 0);
 
-    virtual void                SetValue( const double& rVal );
+    virtual void 				SetValue( const double& rVal );
 
-    inline const String&        GetExpStr() const;
+    virtual String	 			Expand() const;
+    virtual SwField* 			Copy() const;
 
-    inline void                 ChgExpStr( const String& rExpand );
+    inline const String& 		GetExpStr() const;
 
-    inline void                 SetPromptText(const String& rStr);
-    inline const                String& GetPromptText() const;
+    inline void 				ChgExpStr( const String& rExpand );
 
-    inline void                 SetInputFlag(sal_Bool bInp);
-    inline sal_Bool                 GetInputFlag() const;
+    inline void  				SetPromptText(const String& rStr);
+    inline const 				String& GetPromptText() const;
 
-    virtual String              GetFieldName() const;
+    inline void  				SetInputFlag(BOOL bInp);
+    inline BOOL					GetInputFlag() const;
 
-    virtual sal_uInt16              GetSubType() const;
-    virtual void                SetSubType(sal_uInt16 nType);
+    virtual String              GetCntnt(BOOL bName = FALSE) const;
+    virtual USHORT				GetSubType() const;
+    virtual void				SetSubType(USHORT nType);
 
-    inline sal_Bool                 IsSequenceFld() const;
+    inline BOOL 				IsSequenceFld() const;
 
-    // Logical number, sequence fields.
-    inline void                 SetSeqNumber( sal_uInt16 n )    { nSeqNo = n; }
-    inline sal_uInt16               GetSeqNumber() const        { return nSeqNo; }
+    // fuer SequenceFelder - logische Nummer
+    inline void					SetSeqNumber( USHORT n )	{ nSeqNo = n; }
+    inline USHORT				GetSeqNumber() const		{ return nSeqNo; }
 
-    // Query name only.
-    virtual const String&       GetPar1()   const;
+    // Der Name nur erfragen
+    virtual const String&		GetPar1() 	const;
 
-    // Query formula.
-    virtual String              GetPar2()   const;
-    virtual void                SetPar2(const String& rStr);
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    // Die Formel
+    virtual String				GetPar2() 	const;
+    virtual void				SetPar2(const String& rStr);
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 inline const String& SwSetExpField::GetExpStr() const
-    { return sExpand;       }
+    { return sExpand; 		}
 
 inline void SwSetExpField::ChgExpStr( const String& rExpand )
-    { sExpand = rExpand;    }
+    { sExpand = rExpand; 	}
 
 inline void  SwSetExpField::SetPromptText(const String& rStr)
-    { aPText = rStr;        }
+    { aPText = rStr;  		}
 
 inline const String& SwSetExpField::GetPromptText() const
-    { return aPText;        }
+    { return aPText;  		}
 
-inline void SwSetExpField::SetInputFlag(sal_Bool bInp)
+inline void SwSetExpField::SetInputFlag(BOOL bInp)
     { bInput = bInp; }
 
-inline sal_Bool SwSetExpField::GetInputFlag() const
+inline BOOL	SwSetExpField::GetInputFlag() const
     { return bInput; }
 
-inline sal_Bool SwSetExpField::IsSequenceFld() const
+inline BOOL SwSetExpField::IsSequenceFld() const
     { return 0 != (nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)GetTyp())->GetType()); }
 
+/*--------------------------------------------------------------------
+    Beschreibung: Eingabe im Text/Variable setzen
+ --------------------------------------------------------------------*/
 
 class SwInputFieldType : public SwFieldType
 {
@@ -289,33 +309,34 @@ public:
     SwDoc* GetDoc() const { return pDoc; }
 };
 
+/*--------------------------------------------------------------------
+    Beschreibung: Eingabefeld
+ --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwInputField : public SwField
 {
     String  aContent;
-    String  aPText;
+    String	aPText;
     String  aHelp;
     String  aToolTip;
-    sal_uInt16  nSubType;
-
-    virtual String          Expand() const;
-    virtual SwField*        Copy() const;
-
+    USHORT  nSubType;
 public:
-    // Direct input via dialog; delete old value.
+    // Direkte Eingabe ueber Dialog alten Wert loeschen
     SwInputField(SwInputFieldType*, const String& rContent ,
-                 const String& rPrompt, sal_uInt16 nSubType = 0,
-                 sal_uLong nFmt = 0);
+                 const String& rPrompt, USHORT nSubType = 0,
+                 ULONG nFmt = 0);
 
-    virtual String          GetFieldName() const;
+    virtual	String			GetCntnt(BOOL bName = FALSE) const;
+    virtual String	 		Expand() const;
+    virtual SwField* 		Copy() const;
 
     // Content
-    virtual const String&   GetPar1() const;
-    virtual void            SetPar1(const String& rStr);
+    virtual const String&	GetPar1() const;
+    virtual void			SetPar1(const String& rStr);
 
     // aPromptText
-    virtual String          GetPar2() const;
-    virtual void            SetPar2(const String& rStr);
+    virtual String			GetPar2() const;
+    virtual void			SetPar2(const String& rStr);
 
     virtual String          GetHelp() const;
     virtual void            SetHelp(const String & rStr);
@@ -323,12 +344,12 @@ public:
     virtual String          GetToolTip() const;
     virtual void            SetToolTip(const String & rStr);
 
-    virtual sal_Bool            isFormField() const;
+    virtual BOOL            isFormField() const;
 
-    virtual sal_uInt16          GetSubType() const;
-    virtual void            SetSubType(sal_uInt16 nSub);
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual USHORT			GetSubType() const;
+    virtual void			SetSubType(USHORT nSub);
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -338,30 +359,35 @@ public:
 class SwInputFieldList
 {
 public:
-    SwInputFieldList( SwEditShell* pShell, sal_Bool bBuildTmpLst = sal_False );
+    SwInputFieldList( SwEditShell* pShell, BOOL bBuildTmpLst = FALSE );
     ~SwInputFieldList();
 
-    sal_uInt16      Count() const;
-    SwField*    GetField(sal_uInt16 nId);
+    USHORT		Count() const;
+    SwField*    GetField(USHORT nId);
 
-    void        GotoFieldPos(sal_uInt16 nId);
-    void        PushCrsr();
-    void        PopCrsr();
+    void		GotoFieldPos(USHORT nId);
+    void		PushCrsr();
+    void	 	PopCrsr();
 
-    // Put all that are new into SortLst for updating. Returns count.
-    // (For Glossary: only update its input-fields).
-    // Compare TmpLst with current fields.
-    sal_uInt16      BuildSortLst();
+    // vergleiche TmpLst mit akt Feldern. Alle neue kommen in die SortLst
+    // damit sie geupdatet werden koennen. Returnt die Anzahl.
+    // (Fuer Textbausteine: nur seine Input-Felder aktualisieren)
+    USHORT		BuildSortLst();
 
-    void        RemoveUnselectedFlds();
+    // Alle unselektierten Felder aus Liste entfernen
+    void		RemoveUnselectedFlds();
 
 private:
-    SwEditShell*    pSh;
-    _SetGetExpFlds* pSrtLst;
-    SvPtrarr        aTmpLst;
+    SwEditShell*	pSh;
+    _SetGetExpFlds*	pSrtLst;
+    SvPtrarr		aTmpLst;
 };
 
-// Implementation in tblcalc.cxx.
+/*--------------------------------------------------------------------
+    Beschreibung: Tabellen-Formelfeld
+                  (Implementierung steht in tblcalc.cxx)
+ --------------------------------------------------------------------*/
+
 class SwTblFieldType : public SwValueFieldType
 {
 public:
@@ -370,42 +396,44 @@ public:
 };
 
 
+// MSC will den hier nicht
+//typedef void (SwField:: *FnScanFormel)( const SwTable&, String&,
+//									 String&, String* = 0, void* = 0 );
+
+
 class SwTblField : public SwValueField, public SwTableFormula
 {
-    String      sExpand;
-    sal_uInt16      nSubType;
+    String 		sExpand;
+    USHORT		nSubType;
 
-    virtual String      Expand() const;
-    virtual SwField*    Copy() const;
-
-    // Search TextNode containing the field.
+    // suche den TextNode, in dem das Feld steht
     virtual const SwNode* GetNodeOfFormula() const;
-
-    String GetCommand();
 
 public:
     SwTblField( SwTblFieldType*, const String& rFormel,
-                sal_uInt16 nSubType = 0, sal_uLong nFmt = 0);
+                USHORT nSubType = 0, ULONG nFmt = 0);
 
-    virtual void        SetValue( const double& rVal );
-    virtual sal_uInt16      GetSubType() const;
-    virtual void        SetSubType(sal_uInt16 nType);
+    virtual void 		SetValue( const double& rVal );
+    virtual USHORT		GetSubType() const;
+    virtual void		SetSubType(USHORT nType);
+    virtual String	 	Expand() const;
+    virtual SwField* 	Copy() const;
 
-    const String&       GetExpStr() const               { return sExpand; }
-    void                ChgExpStr(const String& rStr)   { sExpand = rStr; }
+    const String& 		GetExpStr() const 				{ return sExpand; }
+    void 				ChgExpStr(const String& rStr) 	{ sExpand = rStr; }
 
-    void                CalcField( SwTblCalcPara& rCalcPara );
+    // berechne sich selbst
+    void 				CalcField( SwTblCalcPara& rCalcPara );
 
-    virtual String      GetFieldName() const;
-
-    // The formula.
-    virtual String      GetPar2()   const;
-    virtual void        SetPar2(const String& rStr);
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual	String		GetCntnt(BOOL bName = FALSE) const;
+    // Die Formel
+    virtual String		GetPar2() 	const;
+    virtual void		SetPar2(const String& rStr);
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 
-#endif // SW_EXPFLD_HXX
+#endif // _EXPFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

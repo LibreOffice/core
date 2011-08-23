@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -167,7 +167,7 @@ private:
 bool Atom::operator==( const Atom& rAtom ) const
 {
     return ( maRecordHeader.nRecType == rAtom.maRecordHeader.nRecType ) &&
-            ( maRecordHeader.nRecVer == rAtom.maRecordHeader.nRecVer ) &&
+            ( maRecordHeader.nRecVer == rAtom.maRecordHeader.nRecVer ) &&	
            ( maRecordHeader.nRecInstance == rAtom.maRecordHeader.nRecInstance );
 }
 
@@ -388,6 +388,7 @@ const Atom* Atom::findNextChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstanc
 Atom* Atom::findFirstEqualAtom( Atom* pCompare, Atom* pContainer, Atom* pSearch, int& nDistance )
 {
     nDistance = 0;
+    Atom* pRet = 0;
 
     while( pSearch )
     {
@@ -514,7 +515,48 @@ public:
         SvLBoxString::Paint( rPos, rOutDev, nViewDataEntryFlags, pEntry );
 
         rOutDev.SetTextColor( aOldTextColor );
+
+/*
+        Color aOldFillColor = rOutDev.GetFillColor();
+
+        SvTreeListBox* pTreeBox = static_cast< SvTreeListBox* >( &rOutDev );
+        long nX = pTreeBox->GetSizePixel().Width();
+
+        ScrollBar* pVScroll = pTreeBox->GetVScroll();
+        if ( pVScroll->IsVisible() )
+        {
+            nX -= pVScroll->GetSizePixel().Width();
+        }
+
+        SvViewDataItem* pItem = rOutDev.GetViewDataItem( pEntry, this );
+        nX -= pItem->aSize.Height();
+
+        long nSize = pItem->aSize.Height() / 2;
+        long nHalfSize = nSize / 2;
+        long nY = rPos.Y() + nHalfSize;
+
+        if ( aOldFillColor == COL_WHITE )
+        {
+            rOutDev.SetFillColor( Color( COL_BLACK ) );
+        }
+        else
+        {
+            rOutDev.SetFillColor( Color( COL_WHITE ) );
+        }
+
+        long n = 0;
+        while ( n <= nHalfSize )
+        {
+            rOutDev.DrawRect( Rectangle( nX+n, nY+n, nX+n, nY+nSize-n ) );
+            n++;
+        }
+
+        rOutDev.SetFillColor( aOldFillColor );
+*/
     }
+
+private:
+    Image* mpImage;
 };
 
 
@@ -538,7 +580,7 @@ public:
     virtual BOOL    Expand( SvLBoxEntry* pParent );
     virtual BOOL    Collapse( SvLBoxEntry* pParent );
 
-    SvLBoxEntry*    findAtom( Atom* pAtom );
+    SvLBoxEntry*	findAtom( Atom* pAtom );
 
     virtual void InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&);
     virtual void SetTabs();
@@ -546,7 +588,7 @@ public:
 private:
     void InsertAtom( const Atom* pAtom, SvLBoxEntry* pParent = 0 );
     const Atom* mpRootAtom;
-    ResMgr* mpResMgr;
+    ResMgr*	mpResMgr;
     Image maImgFolder;
     Image maImgAtom;
     Image maImgExpanded;
@@ -566,8 +608,8 @@ AtomContainerTreeListBox::AtomContainerTreeListBox( Window* pParent )
     maImgCollapsed = Image( ResId( RID_IMG_TREENODE_COLLAPSED, mpResMgr ) );
     maImgExpanded = Image( ResId( RID_IMG_TREENODE_EXPANDED, mpResMgr ) );
 
-//  SetDefaultExpandedEntryBmp( aExpanded );
-//  SetDefaultCollapsedEntryBmp(aCollapsed );
+//	SetDefaultExpandedEntryBmp( aExpanded );
+//	SetDefaultCollapsedEntryBmp(aCollapsed );
 
     maImgFolder = Image( ResId( IMG_SVT_FOLDER, mpResMgr ) );
     maImgAtom = Image( ResId( IMG_SVT_DOCTEMPLATE_DOCINFO_SMALL, mpResMgr ) );
@@ -680,7 +722,7 @@ void AtomContainerTreeListBox::InsertAtom( const Atom* pAtom, SvLBoxEntry* pPare
         if( pAtom->isContainer() && pAtom->findFirstChildAtom() )
         {
             pEntry = InsertEntry( aText, maImgExpanded, maImgCollapsed, pParent );
-
+    
             /** returns the first child atom or NULL */
             const Atom* pChildAtom = pAtom->findFirstChildAtom();
 
@@ -794,11 +836,11 @@ public:
 private:
     void Sync( AtomContainerEntryPair* pPair, int nAction );
 
-    AtomContainerTreeListBox*   mpListBox[2];
-    MultiLineEdit*              mpEdit[2];
-    PPTDocumentPtr              mpDocument[2];
-    MenuBar*                    mpMenuBar;
-    PopupMenu*                  mpFileMenu;
+    AtomContainerTreeListBox*	mpListBox[2];
+    MultiLineEdit*				mpEdit[2];
+    PPTDocumentPtr				mpDocument[2];
+    MenuBar*					mpMenuBar;
+    PopupMenu*					mpFileMenu;
     bool mbSelectHdlGuard;
     DECL_LINK( implSelectHdl, AtomContainerTreeListBox* );
     DECL_LINK( implExpandingHdl, AtomContainerEntryPair* );
@@ -870,13 +912,13 @@ PPTDocumentPtr MSViewerWorkWindow::Load()
     ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.ppt" ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
-//  INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-//  aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+//	INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+//	aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 
     PPTDocumentPtr pDocument;
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
-        pDocument.reset( new PPTDocument( aDlg.GetPath() ) );
+        pDocument.reset( new PPTDocument( aDlg.GetPath() ) );	
     }
 
     return pDocument;
@@ -886,7 +928,7 @@ PPTDocumentPtr MSViewerWorkWindow::Load()
 
 MSViewerWorkWindow::MSViewerWorkWindow() :
     WorkWindow( 0, WB_APP | WB_STDWORK | WB_3DLOOK ),mbSelectHdlGuard(false)
-{
+{  
     Size aOutputSize( 400, 600 );
     SetOutputSizePixel( aOutputSize );
     SetText( String( RTL_CONSTASCII_USTRINGPARAM( "MSViewer" ) ) );
@@ -913,7 +955,7 @@ MSViewerWorkWindow::MSViewerWorkWindow() :
         mpListBox[nPane]->SetSelectHdl( LINK( this, MSViewerWorkWindow, implSelectHdl ) );
         mpListBox[nPane]->SetExpandingHdl( LINK( this, MSViewerWorkWindow, implExpandingHdl ) );
         mpListBox[nPane]->SetCollapsingHdl( LINK( this, MSViewerWorkWindow, implCollapsingHdl ) );
-
+        
         mpEdit[nPane] = new MultiLineEdit(this, WB_3DLOOK | WB_BORDER | WB_LEFT | WB_TOP | WB_READONLY | WB_HSCROLL | WB_VSCROLL );
         mpEdit[nPane]->SetReadOnly( TRUE );
         mpEdit[nPane]->SetReadOnly( TRUE );
@@ -991,7 +1033,7 @@ void MSViewerWorkWindow::Sync( AtomContainerEntryPair* pPair, int nAction )
         if( pAtom && pAtom->getCompareAtom() )
         {
             SvLBoxEntry* pEntry = pDestinationListBox->findAtom( pAtom->getCompareAtom() );
-
+            
             if(pEntry )
             {
                 if( nAction == 0 )
@@ -1103,7 +1145,7 @@ void MSViewerWorkWindow::Resize()
         uno::Reference< uno::XComponentContext > xCtx( cppu::defaultBootstrap_InitialComponentContext() );
         if ( !xCtx.is() )
         {
-            OSL_FAIL( "Error creating initial component context!" );
+            DBG_ERROR( "Error creating initial component context!" );
             return -1;
         }
 
@@ -1111,29 +1153,29 @@ void MSViewerWorkWindow::Resize()
 
         if ( !xMSF.is() )
         {
-            OSL_FAIL( "No service manager!" );
+            DBG_ERROR( "No service manager!" );
             return -1;
         }
 
         // Init UCB
         uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
-        aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+        aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
+        aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
         sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xMSF, aArgs );
         if ( !bSuccess )
         {
-            OSL_FAIL( "Error creating UCB!" );
+            DBG_ERROR( "Error creating UCB!" );
             return -1;
         }
 
     }
     catch ( uno::Exception const & )
     {
-        OSL_FAIL( "Exception during creation of initial component context!" );
+        DBG_ERROR( "Exception during creation of initial component context!" );
         return -1;
     }
     comphelper::setProcessServiceFactory( xMSF );
-
+    
     InitVCL( xMSF );
 
     String aConfigURL;

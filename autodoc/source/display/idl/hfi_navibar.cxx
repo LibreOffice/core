@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@
 #include "hfi_service.hxx"
 #include "hi_linkhelper.hxx"
 
-
+                    
 extern const String
     C_sLocalManualLinks("#devmanual");
 
-
+                    
 const String        C_sTop      = "Overview";
 const String        C_sModule   = "Module";
 const String        C_sUse      = "Use";
@@ -80,18 +80,18 @@ HF_IdlNavigationBar::Produce_CeMainRow( const client & i_ce,
     Env().Get_LinkTo( rLink.reset(),
                       Env().Linker().PositionOf_CurModule() );
     aNaviMain.Add_StdItem( C_sModule, rLink.c_str() );
-
+                   
     if (i_bNoUsePage)
     {
         aNaviMain.Add_NoneItem( C_sUse );
     }
     else
     {
-        Env().Get_LinkTo( rLink.reset(),
+        Env().Get_LinkTo( rLink.reset(), 
                           Env().Linker().PositionOf_CurXRefs(i_ce.LocalName()) );
         aNaviMain.Add_StdItem( C_sUse, rLink.c_str() );
     }
-
+    
     const StringVector &
         rManualDescrs = i_ce.Secondaries().Links2DescriptionInManual();
     if (rManualDescrs.size() == 2)
@@ -148,7 +148,7 @@ HF_IdlNavigationBar::Produce_CeXrefsMainRow( const client & i_ce )
         aNaviMain.Add_NoneItem( C_sManual );
     }
 
-    Env().Get_LinkTo( rLink.reset(),
+    Env().Get_LinkTo( rLink.reset(), 
                       Env().Linker().PositionOf_Index() );
     aNaviMain.Add_StdItem( C_sIndex, rLink.c_str() );
 
@@ -171,23 +171,23 @@ HF_IdlNavigationBar::Produce_ModuleMainRow( const client & i_ce )
     aNaviMain.Add_SelfItem( C_sModule );
 
     aNaviMain.Add_NoneItem( C_sUse );
-
+    
     const StringVector &
         rManualDescrs = i_ce.Secondaries().Links2DescriptionInManual();
     if (rManualDescrs.size() == 1)
     {
         aNaviMain.Add_StdItem(C_sManual, Env().Link2Manual( rManualDescrs.front() ));
-    }
+    }   
     else if (rManualDescrs.size() > 1)
     {
         aNaviMain.Add_StdItem(C_sManual, C_sLocalManualLinks);
-    }
+    }   
     else
     {
         aNaviMain.Add_NoneItem( C_sManual );
     }
 
-    Env().Get_LinkTo( rLink.reset(),
+    Env().Get_LinkTo( rLink.reset(), 
                       Env().Linker().PositionOf_Index() );
     aNaviMain.Add_StdItem( C_sIndex, rLink.c_str() );
 

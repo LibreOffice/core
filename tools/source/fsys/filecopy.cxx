@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,10 @@
 #include "precompiled_tools.hxx"
 
 #if defined WNT
-#include <windows.h>
+#ifndef _SVWIN_H
 #include <io.h>
+#include <tools/svwin.h>
+#endif
 
 #elif defined(OS2)
 #include <sys/types.h>
@@ -64,14 +66,18 @@ using namespace ::osl;
 |*
 |*    FileCopier::FileCopier()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 13.04.94
+|*    Letzte Aenderung  MI 13.04.94
+|*
 *************************************************************************/
 
 FileCopier::FileCopier() :
 
-    nBytesTotal ( 0 ),
+    nBytesTotal	( 0 ),
     nBytesCopied( 0 ),
-    nBlockSize  ( 4096 ),
-    pImp        ( new FileCopier_Impl )
+    nBlockSize	( 4096 ),
+    pImp		( new FileCopier_Impl )
 
 {
 }
@@ -80,12 +86,12 @@ FileCopier::FileCopier() :
 
 FileCopier::FileCopier( const DirEntry& rSource, const DirEntry& rTarget ) :
 
-    aSource     ( rSource ),
-    aTarget     ( rTarget ),
-    nBytesTotal ( 0 ),
+    aSource		( rSource ),
+    aTarget		( rTarget ),
+    nBytesTotal	( 0 ),
     nBytesCopied( 0 ),
-    nBlockSize  ( 4096 ),
-    pImp        ( new FileCopier_Impl )
+    nBlockSize	( 4096 ),
+    pImp		( new FileCopier_Impl )
 
 {
 }
@@ -94,13 +100,13 @@ FileCopier::FileCopier( const DirEntry& rSource, const DirEntry& rTarget ) :
 
 FileCopier::FileCopier( const FileCopier& rCopier ) :
 
-    aSource         ( rCopier.aSource ),
-    aTarget         ( rCopier.aTarget ),
-    nBytesTotal     ( 0 ),
-    nBytesCopied    ( 0 ),
-    aProgressLink   ( rCopier.aProgressLink ),
-    nBlockSize      ( 4096 ),
-    pImp            ( new FileCopier_Impl )
+    aSource			( rCopier.aSource ),
+    aTarget			( rCopier.aTarget ),
+    nBytesTotal		( 0 ),
+    nBytesCopied	( 0 ),
+    aProgressLink	( rCopier.aProgressLink ),
+    nBlockSize		( 4096 ),
+    pImp			( new FileCopier_Impl )
 
 {
 }
@@ -108,6 +114,10 @@ FileCopier::FileCopier( const FileCopier& rCopier ) :
 /*************************************************************************
 |*
 |*    FileCopier::~FileCopier()
+|*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 13.04.94
+|*    Letzte Aenderung  MI 13.04.94
 |*
 *************************************************************************/
 
@@ -119,6 +129,10 @@ FileCopier::~FileCopier()
 /*************************************************************************
 |*
 |*    FileCopier::operator =()
+|*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 13.04.94
+|*    Letzte Aenderung  MI 13.04.94
 |*
 *************************************************************************/
 
@@ -139,16 +153,20 @@ FileCopier& FileCopier::operator = ( const FileCopier &rCopier )
 |*
 |*    FileCopier::Progress()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 13.04.94
+|*    Letzte Aenderung  MI 13.04.94
+|*
 *************************************************************************/
 
-sal_Bool FileCopier::Progress()
+BOOL FileCopier::Progress()
 {
     if ( !aProgressLink )
-        return sal_True;
+        return TRUE;
     else
     {
         if ( aProgressLink.Call( this ) )
-            return sal_True;
+            return TRUE;
         return ( 0 == Error( ERRCODE_ABORT, 0, 0 ) );
     }
 }
@@ -211,6 +229,10 @@ const Link& FileCopier::GetErrorHdl() const
 |*
 |*    FileCopier::Execute()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 13.04.94
+|*    Letzte Aenderung  PB 16.06.00
+|*
 *************************************************************************/
 
 FSysError FileCopier::DoCopy_Impl(
@@ -222,7 +244,7 @@ FSysError FileCopier::DoCopy_Impl(
     // HPFS->FAT?
     FSysPathStyle eSourceStyle = DirEntry::GetPathStyle( rSource.ImpGetTopPtr()->GetName() );
     FSysPathStyle eTargetStyle = DirEntry::GetPathStyle( rTarget.ImpGetTopPtr()->GetName() );
-    sal_Bool bMakeShortNames = ( eSourceStyle == FSYS_STYLE_HPFS && eTargetStyle == FSYS_STYLE_FAT );
+    BOOL bMakeShortNames = ( eSourceStyle == FSYS_STYLE_HPFS && eTargetStyle == FSYS_STYLE_FAT );
 
     // Zieldateiname ggf. kuerzen
     DirEntry aTgt;
@@ -294,7 +316,7 @@ FSysError FileCopier::DoCopy_Impl(
         // recursive copy
         eRet = Error( aTgt.MakeDir() ? FSYS_ERR_OK : FSYS_ERR_UNKNOWN, 0, &aTgt );
         Dir aSourceDir( rSource, FSYS_KIND_DIR|FSYS_KIND_FILE );
-        for ( sal_uInt16 n = 0; ERRCODE_TOERROR(eRet) == FSYS_ERR_OK && n < aSourceDir.Count(); ++n )
+        for ( USHORT n = 0; ERRCODE_TOERROR(eRet) == FSYS_ERR_OK && n < aSourceDir.Count(); ++n )
         {
             const DirEntry &rSubSource = aSourceDir[n];
             DirEntryFlag eFlag = rSubSource.GetFlag();
@@ -391,10 +413,10 @@ FSysError FileCopier::DoCopy_Impl(
 
     if ( FSYS_ERR_OK == ERRCODE_TOERROR(eRet) )
     {
-        WIN32_FIND_DATA fdSource;
+        WIN32_FIND_DATA	fdSource;
         ByteString aFullSource(aSource.GetFull(), osl_getThreadTextEncoding());
         ByteString aFullTarget(aTgt.GetFull(), osl_getThreadTextEncoding());
-        HANDLE  hFind = FindFirstFile( aFullSource.GetBuffer() , &fdSource );
+        HANDLE	hFind = FindFirstFile( aFullSource.GetBuffer() , &fdSource );
         if ( hFind != INVALID_HANDLE_VALUE )
         {
             FindClose( hFind );

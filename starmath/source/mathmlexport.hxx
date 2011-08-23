@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ class SmXMLExportWrapper
 public:
     SmXMLExportWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef)
         : xModel(rRef), bFlat(sal_True) {}
-
+    
     sal_Bool Export(SfxMedium &rMedium);
     void SetFlat(sal_Bool bIn) {bFlat = bIn;}
 
@@ -70,7 +70,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pComponentName );
-
+    
     sal_Bool WriteThroughComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
@@ -114,6 +114,7 @@ protected:
     void ExportBlank(const SmNode *pNode, int nLevel);
 
 public:
+    // #110680#
     SmXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nExportFlags=EXPORT_ALL);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,9 +26,12 @@
  *
  ************************************************************************/
 #ifndef _CONNECTIVITY_JAVA_LANG_OBJECT_HXX_
-#define _CONNECTIVITY_JAVA_LANG_OBJECT_HXX_
+#define	_CONNECTIVITY_JAVA_LANG_OBJECT_HXX_
 
+#if STLPORT_VERSION>=321
+// jni.h needs cstdarg for std::va_list
 #include <cstdarg>
+#endif
 #include <osl/thread.h>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -65,8 +68,8 @@ namespace connectivity
     public:
         SDBThreadAttach();
         ~SDBThreadAttach();
-
-        JNIEnv* pEnv;
+        
+        JNIEnv*	pEnv;
         static void addRef();
         static void releaseRef();
 
@@ -97,7 +100,7 @@ namespace connectivity
         // Klassendefinition
 
         // neu in SJ2:
-        static jclass theClass;             // die Klasse braucht nur einmal angefordert werden !
+        static jclass theClass;				// die Klasse braucht nur einmal angefordert werden !
 
         virtual jclass getMyClass() const;
 
@@ -110,9 +113,9 @@ namespace connectivity
 
         virtual ~java_lang_Object();
 
-        void                saveRef( JNIEnv * pEnv, jobject myObj );
-        jobject             getJavaObject() const { return object; }
-        java_lang_Object *  GetWrapper() { return this; }
+        void				saveRef( JNIEnv * pEnv, jobject myObj );
+        jobject				getJavaObject() const { return object; }
+        java_lang_Object *	GetWrapper() { return this; }
         void clearObject(JNIEnv& rEnv);
         void clearObject();
 
@@ -146,7 +149,7 @@ namespace connectivity
         jobject         callObjectMethod( JNIEnv * pEnv, const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID ) const;
         jobject         callObjectMethodWithIntArg( JNIEnv * pEnv, const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const;
 
-        template< typename T >
+        template< typename T > 
                         T callMethodWithIntArg(T (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) ,const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const
         {
             SDBThreadAttach t;
@@ -156,7 +159,7 @@ namespace connectivity
             return out;
         }
 
-        template< typename T >
+        template< typename T > 
                         void callVoidMethod(const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID,sal_Int32 _nArgument, const T& _aValue) const
         {
             SDBThreadAttach t;
@@ -165,7 +168,7 @@ namespace connectivity
             ThrowSQLException( t.pEnv, NULL );
         }
 
-
+        
     };
 }
 #endif //_CONNECTIVITY_JAVA_LANG_OBJJECT_HXX_

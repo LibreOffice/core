@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,7 @@
 
 #include <svtools/editbrowsebox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "TableConnectionData.hxx"
 #include "TableConnection.hxx"
@@ -44,12 +45,12 @@
 #include "RelControliFace.hxx"
 #include "dbu_control.hrc"
 #include "dbaccess_helpid.hrc"
-#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 #include <algorithm>
 
-#define SOURCE_COLUMN   1
-#define DEST_COLUMN     2
+#define SOURCE_COLUMN	1
+#define DEST_COLUMN		2
 
 namespace dbaui
 {
@@ -66,30 +67,30 @@ namespace dbaui
         friend class OTableListBoxControl;
 
         ::std::auto_ptr< ::svt::ListBoxControl> m_pListCell;
-        TTableConnectionData::value_type        m_pConnData;
-        const OJoinTableView::OTableWindowMap*  m_pTableMap;
-        OTableListBoxControl*                   m_pBoxControl;
-        long                                    m_nDataPos;
-        Reference< XPropertySet>                m_xSourceDef;
-        Reference< XPropertySet>                m_xDestDef;
+        TTableConnectionData::value_type		m_pConnData;
+        const OJoinTableView::OTableWindowMap*	m_pTableMap;
+        OTableListBoxControl*					m_pBoxControl;
+        long									m_nDataPos;
+        Reference< XPropertySet>				m_xSourceDef;
+        Reference< XPropertySet>				m_xDestDef;
 
 
-        void fillListBox(const Reference< XPropertySet>& _xDest,long nRow,sal_uInt16 nColumnId);
+        void fillListBox(const Reference< XPropertySet>& _xDest,long nRow,USHORT nColumnId);
         /** returns the column id for the editbrowsebox
-            @param  _nColId
+            @param	_nColId
                     the column id SOURCE_COLUMN or DEST_COLUMN
 
-            @return the current column id eihter SOURCE_COLUMN or DEST_COLUMN depends on the connection data
+            @return	the current column id eihter SOURCE_COLUMN or DEST_COLUMN depends on the connection data
         */
-        sal_uInt16 getColumnIdent( sal_uInt16 _nColId ) const;
+        USHORT getColumnIdent( USHORT _nColId ) const;
     public:
         ORelationControl( OTableListBoxControl* pParent,const OJoinTableView::OTableWindowMap* _pTableMap );
         virtual ~ORelationControl();
 
         /** searches for a connection between these two tables
-            @param  _pSource
+            @param	_pSource	
                     the left table
-            @param  _pDest
+            @param	_pDest		
                     the right window
         */
         void setWindowTables(const OTableWindow* _pSource,const OTableWindow* _pDest);
@@ -107,16 +108,16 @@ namespace dbaui
 
         virtual long PreNotify(NotifyEvent& rNEvt );
 
-        virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
+        virtual BOOL IsTabAllowed(BOOL bForward) const;
 
         virtual void Init(const TTableConnectionData::value_type& _pConnData);
         virtual void Init() { ORelationControl_Base::Init(); }
-        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
-        virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
-        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
-        virtual sal_Bool SeekRow( long nRow );
-        virtual sal_Bool SaveModified();
-        virtual String GetCellText( long nRow, sal_uInt16 nColId ) const;
+        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, USHORT nCol );
+        virtual ::svt::CellController* GetController( long nRow, USHORT nCol );
+        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColId ) const;
+        virtual BOOL SeekRow( long nRow );
+        virtual BOOL SaveModified();
+        virtual String GetCellText( long nRow, USHORT nColId ) const;
 
         virtual void CellModified();
 
@@ -124,7 +125,7 @@ namespace dbaui
     private:
 
         DECL_LINK( AsynchActivate, void* );
-
+        
     };
 
     //========================================================================
@@ -133,7 +134,7 @@ namespace dbaui
     DBG_NAME(ORelationControl)
     //------------------------------------------------------------------------
     ORelationControl::ORelationControl( OTableListBoxControl* pParent ,const OJoinTableView::OTableWindowMap* _pTableMap)
-        :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
+        :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | /*WB_3DLOOK | */WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
         ,m_pTableMap(_pTableMap)
         ,m_pBoxControl(pParent)
         ,m_xSourceDef( NULL )
@@ -176,19 +177,19 @@ namespace dbaui
 
             //////////////////////////////////////////////////////////////////////
             // set browse mode
-            SetMode(    BROWSER_COLUMNSELECTION |
-                        BROWSER_HLINESFULL      |
-                        BROWSER_VLINESFULL      |
-                        BROWSER_HIDECURSOR      |
-                        BROWSER_HIDESELECT      |
-                        BROWSER_AUTO_HSCROLL    |
+            SetMode(	BROWSER_COLUMNSELECTION |
+                        BROWSER_HLINESFULL		| 
+                        BROWSER_VLINESFULL		|
+                        BROWSER_HIDECURSOR		| 
+                        BROWSER_HIDESELECT		|
+                        BROWSER_AUTO_HSCROLL	|
                         BROWSER_AUTO_VSCROLL);
         }
         else
             // not the first call
             RowRemoved(0, GetRowCount());
 
-        RowInserted(0, m_pConnData->GetConnLineDataList()->size() + 1, sal_True); // add one extra row
+        RowInserted(0, m_pConnData->GetConnLineDataList()->size() + 1, TRUE); // add one extra row
     }
     //------------------------------------------------------------------------------
     void ORelationControl::Resize()
@@ -208,7 +209,7 @@ namespace dbaui
             PostUserEvent(LINK(this, ORelationControl, AsynchDeactivate));
         else if (rNEvt.GetType() == EVENT_GETFOCUS)
             PostUserEvent(LINK(this, ORelationControl, AsynchActivate));
-
+        
         return EditBrowseBox::PreNotify(rNEvt);
     }
 
@@ -227,20 +228,20 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------
-    sal_Bool ORelationControl::IsTabAllowed(sal_Bool bForward) const
+    BOOL ORelationControl::IsTabAllowed(BOOL bForward) const
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         long nRow = GetCurRow();
-        sal_uInt16 nCol = GetCurColumnId();
+        USHORT nCol = GetCurColumnId();
 
-        sal_Bool bRet = !((     ( bForward && (nCol == DEST_COLUMN)     && (nRow == GetRowCount() - 1)))
-                        ||  (!bForward && (nCol == SOURCE_COLUMN)   && (nRow == 0)));
+        BOOL bRet = !((		( bForward && (nCol == DEST_COLUMN)		&& (nRow == GetRowCount() - 1))) 
+                        ||	(!bForward && (nCol == SOURCE_COLUMN)	&& (nRow == 0)));
 
         return bRet && EditBrowseBox::IsTabAllowed(bForward);
     }
 
     //------------------------------------------------------------------------------
-    sal_Bool ORelationControl::SaveModified()
+    BOOL ORelationControl::SaveModified()
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         sal_Int32 nRow = GetCurRow();
@@ -267,19 +268,19 @@ namespace dbaui
             }
         }
 
-        return sal_True;
+        return TRUE;
     }
     //------------------------------------------------------------------------------
-    sal_uInt16 ORelationControl::getColumnIdent( sal_uInt16 _nColId ) const
+    USHORT ORelationControl::getColumnIdent( USHORT _nColId ) const
     {
-        sal_uInt16 nId = _nColId;
+        USHORT nId = _nColId;
         if ( m_pConnData->getReferencingTable() != m_pBoxControl->getReferencingTable() )
             nId = ( _nColId == SOURCE_COLUMN) ? DEST_COLUMN : SOURCE_COLUMN;
         return nId;
     }
 
     //------------------------------------------------------------------------------
-    String ORelationControl::GetCellText( long nRow, sal_uInt16 nColId ) const
+    String ORelationControl::GetCellText( long nRow, USHORT nColId ) const
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         String sText;
@@ -300,22 +301,22 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------
-    void ORelationControl::InitController( CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColumnId )
+    void ORelationControl::InitController( CellControllerRef& /*rController*/, long nRow, USHORT nColumnId )
     {
         DBG_CHKTHIS(ORelationControl,NULL);
-
-        rtl::OString sHelpId( HID_RELATIONDIALOG_LEFTFIELDCELL );
+        
+        ULONG nHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
 
         Reference< XPropertySet> xDef;
         switch ( getColumnIdent(nColumnId) )
         {
             case SOURCE_COLUMN:
-                xDef    = m_xSourceDef;
-                sHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
+                xDef	= m_xSourceDef;
+                nHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
                 break;
             case DEST_COLUMN:
-                xDef    = m_xDestDef;
-                sHelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL;
+                xDef	= m_xDestDef;
+                nHelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL;
                 break;
             default:
                 //  ?????????
@@ -333,32 +334,32 @@ namespace dbaui
                 m_pListCell->SelectEntry( sName );
             }
 
-            m_pListCell->SetHelpId(sHelpId);
+            m_pListCell->SetHelpId(nHelpId);
         }
     }
 
     //------------------------------------------------------------------------------
-    CellController* ORelationControl::GetController( long /*nRow*/, sal_uInt16 /*nColumnId*/ )
+    CellController* ORelationControl::GetController( long /*nRow*/, USHORT /*nColumnId*/ )
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         return new ListBoxCellController( m_pListCell.get() );
     }
 
     //------------------------------------------------------------------------------
-    sal_Bool ORelationControl::SeekRow( long nRow )
+    BOOL ORelationControl::SeekRow( long nRow )
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         m_nDataPos = nRow;
-        return sal_True;
+        return TRUE;
     }
 
     //------------------------------------------------------------------------------
-    void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
+    void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId ) const
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         String aText  =const_cast< ORelationControl*>(this)->GetCellText( m_nDataPos, nColumnId );
 
-        Point aPos( rRect.TopLeft() );
+        Point aPos( rRect.TopLeft() );			
         Size aTextSize( GetDataWindow().GetTextHeight(),GetDataWindow().GetTextWidth( aText ));
 
         if( aPos.X() < rRect.Right() || aPos.X() + aTextSize.Width() > rRect.Right() ||
@@ -371,7 +372,7 @@ namespace dbaui
             rDev.SetClipRegion();
     }
     // -----------------------------------------------------------------------------
-    void ORelationControl::fillListBox(const Reference< XPropertySet>& _xDest,long /*_nRow*/,sal_uInt16 /*nColumnId*/)
+    void ORelationControl::fillListBox(const Reference< XPropertySet>& _xDest,long /*_nRow*/,USHORT /*nColumnId*/)
     {
         m_pListCell->Clear();
         try
@@ -400,7 +401,7 @@ namespace dbaui
     void ORelationControl::setWindowTables(const OTableWindow* _pSource,const OTableWindow* _pDest)
     {
         // wenn ich hier gerade editiere, ausblenden
-        sal_Bool bWasEditing = IsEditing();
+        BOOL bWasEditing = IsEditing();
         if ( bWasEditing )
             DeactivateCell();
 
@@ -408,7 +409,7 @@ namespace dbaui
         {
             m_xSourceDef = _pSource->GetTable();
             SetColumnTitle(1, _pSource->GetName());
-
+        
 
             m_xDestDef = _pDest->GetTable();
             SetColumnTitle(2, _pDest->GetName());
@@ -464,11 +465,11 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
                                             ,IRelationControlInterface* _pParentDialog)
      : Window(_pParent,_rResId)
      , m_aFL_InvolvedTables(    this, ResId(FL_INVOLVED_TABLES,*_rResId.GetResMgr()))
-     , m_lmbLeftTable(          this, ResId(LB_LEFT_TABLE,*_rResId.GetResMgr()))
-     , m_lmbRightTable(         this, ResId(LB_RIGHT_TABLE,*_rResId.GetResMgr()))
+     , m_lmbLeftTable(			this, ResId(LB_LEFT_TABLE,*_rResId.GetResMgr()))
+     , m_lmbRightTable(			this, ResId(LB_RIGHT_TABLE,*_rResId.GetResMgr()))
      , m_aFL_InvolvedFields(    this, ResId(FL_INVOLVED_FIELDS,*_rResId.GetResMgr()))
      , m_pTableMap(_pTableMap)
-     , m_pParentDialog(_pParentDialog)
+     , m_pParentDialog(_pParentDialog) 
     {
         m_pRC_Tables = new ORelationControl( this,m_pTableMap );
         m_pRC_Tables->SetHelpId(HID_RELDLG_KEYFIELDS);
@@ -495,7 +496,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
     // -----------------------------------------------------------------------------
     void OTableListBoxControl::fillListBoxes()
     {
-        OSL_ENSURE( !m_pTableMap->empty(), "OTableListBoxControl::fillListBoxes: no table window!");
+        DBG_ASSERT( !m_pTableMap->empty(), "OTableListBoxControl::fillListBoxes: no table window!");
         OTableWindow* pInitialLeft = NULL;
         OTableWindow* pInitialRight = NULL;
 
@@ -517,7 +518,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
                 pInitialRight = aIter->second;
                 m_strCurrentRight = aIter->first;
             }
-        }
+        } // for(;aIter != m_pTableMap->end();++aIter)
 
         if ( !pInitialRight )
         {
@@ -529,7 +530,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         m_pRC_Tables->setWindowTables(pInitialLeft,pInitialRight);
 
         // die in einer ComboBox ausgewaehlte Tabelle darf nicht in der anderen zur Verfuegung stehen
-
+        
         if ( m_pTableMap->size() > 2 )
         {
             m_lmbLeftTable.RemoveEntry(m_strCurrentRight);
@@ -546,8 +547,8 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
     IMPL_LINK( OTableListBoxControl, OnTableChanged, ListBox*, pListBox )
     {
         String strSelected(pListBox->GetSelectEntry());
-        OTableWindow* pLeft     = NULL;
-        OTableWindow* pRight    = NULL;
+        OTableWindow* pLeft		= NULL;
+        OTableWindow* pRight	= NULL;
 
         // eine Sonderbehandlung : wenn es nur zwei Tabellen gibt, muss ich bei Wechsel in einer LB auch in der anderen umschalten
         if ( m_pTableMap->size() == 2 )
@@ -566,13 +567,13 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
 
             if ( m_lmbLeftTable.GetSelectEntry() == String(pFirst->GetName()) )
             {
-                pLeft   = pFirst;
-                pRight  = pSecond;
+                pLeft	= pFirst;
+                pRight	= pSecond;
             }
             else
             {
-                pLeft   = pSecond;
-                pRight  = pFirst;
+                pLeft	= pSecond;
+                pRight	= pFirst;
             }
         }
         else
@@ -582,7 +583,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
             OTableWindow* pLoop = NULL;
             if( aFind != m_pTableMap->end() )
                 pLoop = aFind->second;
-            OSL_ENSURE(pLoop != NULL, "ORelationDialog::OnTableChanged : ungueltiger Eintrag in ListBox !");
+            DBG_ASSERT(pLoop != NULL, "ORelationDialog::OnTableChanged : ungueltiger Eintrag in ListBox !");
                 // da ich die ListBoxen selber mit eben diesen Tabellennamen, mit denen ich sie jetzt vergleiche, gefuellt habe,
                 // MUSS ich strSelected finden
             if (pListBox == &m_lmbLeftTable)
@@ -591,10 +592,10 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
                 m_lmbRightTable.InsertEntry(m_strCurrentLeft);
                 // und den jetzt selektierten raus
                 m_lmbRightTable.RemoveEntry(strSelected);
-                m_strCurrentLeft    = strSelected;
-
+                m_strCurrentLeft	= strSelected;
+                
                 pLeft = pLoop;
-
+                
                 OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->find(m_lmbRightTable.GetSelectEntry());
                 OSL_ENSURE( aIter != m_pTableMap->end(), "Invalid name");
                 if ( aIter != m_pTableMap->end() )
@@ -636,7 +637,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         if ( pLines->size() >= static_cast<sal_uInt32>(m_pRC_Tables->GetRowCount()) )
         {
             m_pRC_Tables->DeactivateCell();
-            m_pRC_Tables->RowInserted(m_pRC_Tables->GetRowCount(), pLines->size() - static_cast<sal_uInt32>(m_pRC_Tables->GetRowCount()) + 1, sal_True);
+            m_pRC_Tables->RowInserted(m_pRC_Tables->GetRowCount(), pLines->size() - static_cast<sal_uInt32>(m_pRC_Tables->GetRowCount()) + 1, TRUE);
             m_pRC_Tables->ActivateCell();
         }
     }
@@ -667,6 +668,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         {
             _pTableSeparator->SetZOrder(&m_lmbRightTable, WINDOW_ZORDER_BEHIND);
             m_pRC_Tables->SetZOrder(_pTableSeparator, WINDOW_ZORDER_BEHIND);
+            //aDlgPoint = m_pTableSeparator->GetPosPixel() + Point(0,aSize.Height()) + LogicToPixel( Point(0,6), MAP_APPFONT );
             _pTableSeparator->SetPosPixel(Point(0,m_aFL_InvolvedFields.GetPosPixel().Y()));
             const Size aSize = _pTableSeparator->GetSizePixel();
             aDlgPoint.Y() = _pTableSeparator->GetPosPixel().Y() + aSize.Height();
@@ -691,15 +693,15 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         m_pRC_Tables->lateInit();
     }
     // -----------------------------------------------------------------------------
-    sal_Bool OTableListBoxControl::SaveModified()
+    BOOL OTableListBoxControl::SaveModified()
     {
-        sal_Bool bRet = m_pRC_Tables->SaveModified();
+        BOOL bRet = m_pRC_Tables->SaveModified();
         m_pRC_Tables->getData()->normalizeLines();
         return bRet;
     }
     // -----------------------------------------------------------------------------
-    TTableWindowData::value_type OTableListBoxControl::getReferencingTable()    const
-    {
+    TTableWindowData::value_type OTableListBoxControl::getReferencingTable()	const 
+    { 
         return m_pRC_Tables->getData()->getReferencingTable();
     }
     // -----------------------------------------------------------------------------
@@ -708,7 +710,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         if ( !_bEnable )
             PostUserEvent(LINK(m_pRC_Tables, ORelationControl, AsynchDeactivate));
         m_pRC_Tables->Enable(_bEnable);
-
+        
     }
     // -----------------------------------------------------------------------------
 }

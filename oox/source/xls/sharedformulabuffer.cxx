@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,25 +27,27 @@
  ************************************************************************/
 
 #include "oox/xls/sharedformulabuffer.hxx"
-
-#include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <com/sun/star/sheet/XFormulaTokens.hpp>
+#include "properties.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/formulaparser.hxx"
 
-namespace oox {
-namespace xls {
-
-// ============================================================================
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::table;
-
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::table::CellAddress;
+using ::com::sun::star::table::CellRangeAddress;
+using ::com::sun::star::sheet::XFormulaTokens;
+using ::com::sun::star::sheet::XNamedRange;
+
+namespace oox {
+namespace xls {
 
 // ============================================================================
 
@@ -112,7 +114,7 @@ void SharedFormulaBuffer::importSharedFmla( const OUString& rFormula, const OUSt
     }
 }
 
-void SharedFormulaBuffer::importSharedFmla( SequenceInputStream& rStrm, const CellAddress& rBaseAddr )
+void SharedFormulaBuffer::importSharedFmla( RecordInputStream& rStrm, const CellAddress& rBaseAddr )
 {
     BinRange aRange;
     rStrm >> aRange;

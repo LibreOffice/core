@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #if ! defined(_RTL_INSTANCE_HXX_)
 #include "rtl/instance.hxx"
 #endif
-#include <boost/unordered_set.hpp>
+#include <hash_set>
 #include <functional>
 #include <typeinfo>
 
@@ -96,14 +96,14 @@ struct VoidPtrHash : ::std::unary_function<void const*, ::std::size_t> {
     }
 };
 
-typedef ::boost::unordered_set<void const*, VoidPtrHash, ::std::equal_to<void const*>,
+typedef ::std::hash_set<void const*, VoidPtrHash, ::std::equal_to<void const*>,
                         ::rtl::Allocator<void const*> > VoidPointerSet;
 
 struct ObjectRegistryData {
     ObjectRegistryData( ::std::type_info const& rTypeInfo )
         : m_pName(rTypeInfo.name()), m_nCount(0), m_addresses(),
           m_bStoreAddresses(osl_detail_ObjectRegistry_storeAddresses(m_pName)){}
-
+    
     char const* const m_pName;
     oslInterlockedCount m_nCount;
     VoidPointerSet m_addresses;
@@ -116,7 +116,7 @@ class ObjectRegistry
 public:
     ObjectRegistry() : m_data( typeid(T) ) {}
     ~ObjectRegistry() { checkObjectCount(0); }
-
+    
     bool checkObjectCount( ::std::size_t nExpected ) const {
         bool const bRet = osl_detail_ObjectRegistry_checkObjectCount(
             m_data, nExpected );
@@ -131,20 +131,20 @@ public:
         }
         return bRet;
     }
-
+    
     void registerObject( void const* pObj ) {
         osl_detail_ObjectRegistry_registerObject(m_data, pObj);
     }
-
+    
     void revokeObject( void const* pObj ) {
         osl_detail_ObjectRegistry_revokeObject(m_data, pObj);
     }
-
+    
 private:
     // not impl:
     ObjectRegistry( ObjectRegistry const& );
     ObjectRegistry const& operator=( ObjectRegistry const& );
-
+    
     ObjectRegistryData m_data;
 };
 
@@ -152,20 +152,20 @@ private:
 
 /** Helper class which indicates leaking object(s) of a particular class in
     non-pro builds; use e.g.
-
+    
     <pre>
     class MyClass : private osl::DebugBase<MyClass> {...};
     </pre>
-
+    
     Using the environment variable
-
+    
     OSL_DEBUGBASE_STORE_ADDRESSES=MyClass;YourClass;...
-
+    
     you can specify a ';'-separated list of strings matching to class names
     (or "all" for all classes), for which DebugBase stores addresses to created
     objects instead of just counting them.  This enables you to iterate over
     leaking objects in your debugger.
-
+    
     @tpl InheritingClassT binds the template instance to that class
     @internal Use at own risk.
               For now this is just public (yet unpublished) API and may change
@@ -184,7 +184,7 @@ public:
     static bool checkObjectCount( ::std::size_t nExpected = 0 ) {
         return StaticObjectRegistry::get().checkObjectCount(nExpected);
     }
-
+    
 protected:
     DebugBase() {
         StaticObjectRegistry::get().registerObject( this );
@@ -192,7 +192,7 @@ protected:
     ~DebugBase() {
         StaticObjectRegistry::get().revokeObject( this );
     }
-
+    
 private:
     struct StaticObjectRegistry
         : ::rtl::Static<detail::ObjectRegistry<InheritingClassT>,

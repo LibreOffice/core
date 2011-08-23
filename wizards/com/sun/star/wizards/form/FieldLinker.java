@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,14 +32,12 @@ import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XListBox;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.db.RelationController;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.WizardDialog;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.DBLimitedFieldSelection;
-import com.sun.star.wizards.common.PropertyNames;
 
 public class FieldLinker extends DBLimitedFieldSelection
 {
@@ -88,13 +86,13 @@ public class FieldLinker extends DBLimitedFieldSelection
                             SOFIRSTLINKLST, SOSECLINKLST, SOTHIRDLINKLST, SOFOURTHLINKLST
                         };
             }
-            sSlaveHidString = HelpIds.getHelpIdString(FirstHelpIndex + (i * 2));
-            sMasterHidString = HelpIds.getHelpIdString(FirstHelpIndex + (i * 2) + 1);
+            sSlaveHidString = "HID:" + Integer.toString(FirstHelpIndex + (i * 2));
+            sMasterHidString = "HID:" + Integer.toString(FirstHelpIndex + (i * 2) + 1);
             boolean bDoEnable = (i < 2);
             lblSlaveFields[i] = CurUnoDialog.insertLabel("lblSlaveFieldLink" + new Integer(i + 1).toString(),
                     new String[]
                     {
-                        PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                     },
                     new Object[]
                     {
@@ -104,15 +102,15 @@ public class FieldLinker extends DBLimitedFieldSelection
                     new String[]
                     {
                         "Dropdown",
-                        PropertyNames.PROPERTY_ENABLED,
-                        PropertyNames.PROPERTY_HEIGHT,
-                        PropertyNames.PROPERTY_HELPURL,
+                        "Enabled",
+                        "Height",
+                        "HelpURL",
                         "LineCount",
-                        PropertyNames.PROPERTY_POSITION_X,
-                        PropertyNames.PROPERTY_POSITION_Y,
-                        PropertyNames.PROPERTY_STEP,
-                        PropertyNames.PROPERTY_TABINDEX,
-                        PropertyNames.PROPERTY_WIDTH
+                        "PositionX",
+                        "PositionY",
+                        "Step",
+                        "TabIndex",
+                        "Width"
                     },
                     new Object[]
                     {
@@ -131,7 +129,7 @@ public class FieldLinker extends DBLimitedFieldSelection
             lblMasterFields[i] = CurUnoDialog.insertLabel("lblMasterFieldLink" + new Integer(i + 1).toString(),
                     new String[]
                     {
-                        PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                     },
                     new Object[]
                     {
@@ -142,15 +140,15 @@ public class FieldLinker extends DBLimitedFieldSelection
                     new String[]
                     {
                         "Dropdown",
-                        PropertyNames.PROPERTY_ENABLED,
-                        PropertyNames.PROPERTY_HEIGHT,
-                        PropertyNames.PROPERTY_HELPURL,
+                        "Enabled",
+                        "Height",
+                        "HelpURL",
                         "LineCount",
-                        PropertyNames.PROPERTY_POSITION_X,
-                        PropertyNames.PROPERTY_POSITION_Y,
-                        PropertyNames.PROPERTY_STEP,
-                        PropertyNames.PROPERTY_TABINDEX,
-                        PropertyNames.PROPERTY_WIDTH
+                        "PositionX",
+                        "PositionY",
+                        "Step",
+                        "TabIndex",
+                        "Width"
                     },
                     new Object[]
                     {
@@ -206,10 +204,10 @@ public class FieldLinker extends DBLimitedFieldSelection
     {
         if (i < rowcount)
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lblSlaveFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lblMasterFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lblSlaveFields[i]), "Enabled", new Boolean(bDoEnable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), "Enabled", new Boolean(bDoEnable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lblMasterFields[i]), "Enabled", new Boolean(bDoEnable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), "Enabled", new Boolean(bDoEnable));
             if (bDoEnable == false)
             {
                 Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), "SelectedItems", new short[] { 0 });
@@ -265,7 +263,7 @@ public class FieldLinker extends DBLimitedFieldSelection
     /**
      * @return the LinkFieldnames of the joins. When no LinkFieldNames were selected the returned Array is empty.
      * When Joins were assigned duplicate a null value is returned
-     *
+     * 
      */
     public String[][] getLinkFieldNames()
     {
@@ -290,7 +288,7 @@ public class FieldLinker extends DBLimitedFieldSelection
             return null;
         }
             return LinkFieldNames;
-
+        
     }
 
     public void enable(boolean _bdoenable)

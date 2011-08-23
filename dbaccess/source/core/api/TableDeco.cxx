@@ -35,7 +35,6 @@
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
 
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -121,9 +120,9 @@ void SAL_CALL ODBTableDecorator::disposing()
     OTableDescriptor_BASE::disposing();
 
     MutexGuard aGuard(m_aMutex);
-    m_xTable        = NULL;
-    m_xMetaData     = NULL;
-    m_pTables       = NULL;
+    m_xTable		= NULL;
+    m_xMetaData		= NULL;
+    m_pTables		= NULL;
     m_xColumnDefinitions = NULL;
     m_xNumberFormats = NULL;
     if ( m_pColumns )
@@ -187,7 +186,7 @@ void ODBTableDecorator::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, con
     switch(_nHandle)
     {
         case PROPERTY_ID_PRIVILEGES:
-            OSL_FAIL("Property is readonly!");
+            OSL_ENSURE(0,"Property is readonly!");
         case PROPERTY_ID_FILTER:
         case PROPERTY_ID_ORDER:
         case PROPERTY_ID_APPLYFILTER:
@@ -326,7 +325,7 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
             }
             break;
         default:
-            OSL_FAIL("Invalid Handle for table");
+            OSL_ENSURE(0,"Invalid Handle for table");
     }
 }
 
@@ -402,7 +401,7 @@ Any SAL_CALL ODBTableDecorator::queryInterface( const Type & rType ) throw(Runti
     {
         aRet = m_xTable->queryInterface(rType);
         if(aRet.hasValue())
-        {   // now we know that our table supports this type so we return ourself
+        {	// now we know that our table supports this type so we return ourself
             aRet = OTableDescriptor_BASE::queryInterface(rType);
             if(!aRet.hasValue())
                 aRet = ODataSettings::queryInterface(rType);
@@ -428,6 +427,9 @@ void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) thro
     Reference<XRename> xRename(m_xTable,UNO_QUERY);
     if(xRename.is())
     {
+//		::rtl::OUString sOldName;
+//		Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
+//		xProp->getPropertyValue(PROPERTY_NAME) >>= sOldName;
         xRename->rename(_rNewName);
     }
     else // not supported
@@ -537,7 +539,7 @@ Sequence< sal_Int8 > ODBTableDecorator::getUnoTunnelImplementationId()
 void ODBTableDecorator::fillPrivileges() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::fillPrivileges" );
-    // somebody is asking for the privileges and we do not know them, yet
+    // somebody is asking for the privileges an we do not know them, yet
     m_nPrivileges = 0;
     try
     {
@@ -551,9 +553,9 @@ void ODBTableDecorator::fillPrivileges() const
             if ( m_nPrivileges == 0 ) // second chance
             {
                 ::rtl::OUString sCatalog,sSchema,sName;
-                xProp->getPropertyValue(PROPERTY_CATALOGNAME)   >>= sCatalog;
-                xProp->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
-                xProp->getPropertyValue(PROPERTY_NAME)          >>= sName;
+                xProp->getPropertyValue(PROPERTY_CATALOGNAME)	>>= sCatalog;
+                xProp->getPropertyValue(PROPERTY_SCHEMANAME)	>>= sSchema;
+                xProp->getPropertyValue(PROPERTY_NAME)			>>= sName;
                 m_nPrivileges = ::dbtools::getTablePrivileges(getMetaData(),sCatalog,sSchema, sName);
             }
         }
@@ -561,7 +563,7 @@ void ODBTableDecorator::fillPrivileges() const
     catch(const SQLException& e)
     {
         (void)e;
-        OSL_FAIL("ODBTableDecorator::ODBTableDecorator : could not collect the privileges !");
+        DBG_ERROR("ODBTableDecorator::ODBTableDecorator : could not collect the privileges !");
     }
 }
 
@@ -572,7 +574,7 @@ Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) t
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
     Reference< XDataDescriptorFactory > xFactory( m_xTable, UNO_QUERY );
-    OSL_ENSURE( xFactory.is(), "ODBTableDecorator::createDataDescriptor: invalid table!" );
+    DBG_ASSERT( xFactory.is(), "ODBTableDecorator::createDataDescriptor: invalid table!" );
     Reference< XColumnsSupplier > xColsSupp;
     if ( xFactory.is() )
         xColsSupp = xColsSupp.query( xFactory->createDataDescriptor() );
@@ -606,8 +608,8 @@ void ODBTableDecorator::refreshColumns()
         if(xNames.is())
         {
             Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
-            const ::rtl::OUString* pIter    = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
+            const ::rtl::OUString* pIter	= aNames.getConstArray();
+            const ::rtl::OUString* pEnd		= pIter + aNames.getLength();
             for(;pIter != pEnd;++pIter)
                 aVector.push_back(*pIter);
         }
@@ -623,7 +625,7 @@ void ODBTableDecorator::refreshColumns()
         OContainerMediator* pMediator = new OContainerMediator( pCol, m_xColumnDefinitions, m_xConnection, OContainerMediator::eColumns );
         m_xColumnMediator = pMediator;
         pCol->setMediator( pMediator );
-        m_pColumns  = pCol;
+        m_pColumns	= pCol;
     }
     else
         m_pColumns->reFill(aVector);

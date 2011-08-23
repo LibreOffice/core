@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ import util.utils;
 
 
 public class UnoControlContainerModel extends TestCase {
-    public TestEnvironment createTestEnvironment(TestParameters param,
+    public TestEnvironment createTestEnvironment(TestParameters param, 
                                                  PrintWriter log) {
         XInterface oObj = null;
 
@@ -49,7 +49,7 @@ public class UnoControlContainerModel extends TestCase {
                            "com.sun.star.awt.UnoControlContainerModel");
         } catch (Exception e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't create " +
+            throw new StatusException("Couldn't create " + 
                                       "UnoControlContainerModel", e);
         }
 
@@ -57,7 +57,7 @@ public class UnoControlContainerModel extends TestCase {
                 "creating a new environment for UnoControlContainer object");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
-        tEnv.addObjRelation("OBJNAME",
+        tEnv.addObjRelation("OBJNAME", 
                             "stardiv.vcl.controlmodel.ControlContainer");
         System.out.println("ImplementationName: " + utils.getImplName(oObj));
 

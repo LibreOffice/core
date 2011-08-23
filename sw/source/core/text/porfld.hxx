@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,17 +47,17 @@ class SwFldPortion : public SwExpandPortion
 protected:
     XubString  aExpand;            // das expandierte Feld
     SwFont  *pFnt;              // Fuer mehrzeilige Felder
-    xub_StrLen nNextOffset;     // Offset des Follows im Originalstring
+    xub_StrLen nNextOffset;		// Offset des Follows im Originalstring
     xub_StrLen nNextScriptChg;
     KSHORT  nViewWidth;         // Screenbreite fuer leere Felder
     sal_Bool bFollow : 1;           // 2. oder weiterer Teil eines Feldes
-    sal_Bool bLeft : 1;             // wird von SwNumberPortion benutzt
+    sal_Bool bLeft : 1;				// wird von SwNumberPortion benutzt
     sal_Bool bHide : 1;             // wird von SwNumberPortion benutzt
-    sal_Bool bCenter : 1;           // wird von SwNumberPortion benutzt
-    sal_Bool bHasFollow : 1;        // geht in der naechsten Zeile weiter
-    sal_Bool bAnimated : 1;         // wird von SwGrfNumPortion benutzt
-    sal_Bool bNoPaint : 1;          // wird von SwGrfNumPortion benutzt
-    sal_Bool bReplace : 1;          // wird von SwGrfNumPortion benutzt
+    sal_Bool bCenter : 1; 			// wird von SwNumberPortion benutzt
+    sal_Bool bHasFollow : 1; 		// geht in der naechsten Zeile weiter
+    sal_Bool bAnimated : 1; 		// wird von SwGrfNumPortion benutzt
+    sal_Bool bNoPaint : 1; 			// wird von SwGrfNumPortion benutzt
+    sal_Bool bReplace : 1; 			// wird von SwGrfNumPortion benutzt
     const sal_Bool bPlaceHolder : 1;
     sal_Bool m_bNoLength : 1;       // HACK for meta suffix (no CH_TXTATR)
 
@@ -147,16 +147,20 @@ class SwNumberPortion : public SwFldPortion
 {
 protected:
     KSHORT  nFixWidth;      // vgl. Glues
-    KSHORT  nMinDist;       // minimaler Abstand zum Text
+    KSHORT  nMinDist;		// minimaler Abstand zum Text
+    // --> OD 2008-01-23 #newlistlevelattrs#
     bool    mbLabelAlignmentPosAndSpaceModeActive;
+    // <--
 
 public:
+    // --> OD 2008-01-23 #newlistlevelattrs#
     SwNumberPortion( const XubString &rExpand,
                      SwFont *pFnt,
                      const sal_Bool bLeft,
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
+    // <--
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
@@ -175,6 +179,7 @@ public:
 class SwBulletPortion : public SwNumberPortion
 {
 public:
+    // --> OD 2008-01-23 #newlistlevelattrs#
     SwBulletPortion( const xub_Unicode cCh,
                      const XubString& rBulletFollowedBy,
                      SwFont *pFnt,
@@ -182,6 +187,7 @@ public:
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
+    // <--
     OUTPUT_OPERATOR
 };
 
@@ -192,11 +198,12 @@ public:
 class SwGrfNumPortion : public SwNumberPortion
 {
     SvxBrushItem* pBrush;
-    long            nId;    //fuer StopAnimation
-    SwTwips         nYPos;  //Enthaelt _immer_ die aktuelle RelPos.
-    SwTwips         nGrfHeight;
+    long			nId;	//fuer StopAnimation
+    SwTwips			nYPos;	//Enthaelt _immer_ die aktuelle RelPos.
+    SwTwips			nGrfHeight;
     sal_Int16       eOrient;
 public:
+    // --> OD 2008-01-23 #newlistlevelattrs#
     SwGrfNumPortion( SwFrm *pFrm,
                      const XubString& rGraphicFollowedBy,
                      const SvxBrushItem* pGrfBrush,
@@ -206,6 +213,7 @@ public:
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
+    // <--
     ~SwGrfNumPortion();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
@@ -242,12 +250,12 @@ public:
 
 class SwCombinedPortion : public SwFldPortion
 {
-    sal_uInt16 aPos[6];     // up to six X positions
-    sal_uInt16 aWidth[3];   // one width for every scripttype
-    sal_uInt8 aScrType[6];  // scripttype of every character
-    sal_uInt16 nUpPos;      // the Y position of the upper baseline
-    sal_uInt16 nLowPos;     // the Y position of the lower baseline
-    sal_uInt8 nProportion;  // relative font height
+    USHORT aPos[6];		// up to six X positions
+    USHORT aWidth[3];	// one width for every scripttype
+    BYTE aScrType[6];	// scripttype of every character
+    USHORT nUpPos;		// the Y position of the upper baseline
+    USHORT nLowPos;		// the Y position of the lower baseline
+    BYTE nProportion;	// relative font height
 public:
     SwCombinedPortion( const XubString &rExpand );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;

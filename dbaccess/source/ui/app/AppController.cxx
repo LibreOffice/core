@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,8 +78,8 @@
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
 /** === end UNO includes === **/
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 #include <tools/string.hxx>
 
 #include <svl/urihelper.hxx>
@@ -194,7 +194,7 @@ namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::Database
 Sequence< ::rtl::OUString> OApplicationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.application.DefaultViewController"));
+    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.application.DefaultViewController");
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -336,7 +336,7 @@ OApplicationController::~OApplicationController()
 {
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
-        OSL_FAIL("Please check who doesn't dispose this component!");
+        OSL_ENSURE(0,"Please check who doesn't dispose this component!");
         // increment ref count to prevent double call of Dtor
         osl_incrementInterlockedCount( &m_refCount );
         dispose();
@@ -426,8 +426,8 @@ void SAL_CALL OApplicationController::disposing()
                 ::comphelper::NamedValueCollection aArgs( m_xModel->getArgs() );
                 if ( true == aArgs.getOrDefault( "PickListEntry", true ) )
                 {
-                    ::rtl::OUString     aFilter;
-                    INetURLObject       aURL( m_xModel->getURL() );
+                    ::rtl::OUString		aFilter;
+                    INetURLObject		aURL( m_xModel->getURL() );
                     const SfxFilter* pFilter = getStandardDatabaseFilter();
                     if ( pFilter )
                         aFilter = pFilter->GetFilterName();
@@ -473,7 +473,7 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
     }
     catch(Exception&)
     {
-        OSL_FAIL("OApplicationController::Construct : the construction of UnoDataBrowserView failed !");
+        DBG_ERROR("OApplicationController::Construct : the construction of UnoDataBrowserView failed !");
     }
 
     if ( !bSuccess )
@@ -482,6 +482,10 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
         clearView();
         return sal_False;
     }
+
+    DBG_ASSERT( getView(), "OApplicationController::Construct: have no view!" );
+    if ( getView() )
+        getView()->enableSeparator( );
 
     // now that we have a view we can create the clipboard listener
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
@@ -504,7 +508,7 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     Reference<XConnection> xCon(_rSource.Source, UNO_QUERY);
     if ( xCon.is() )
     {
-        OSL_ENSURE( m_xDataSourceConnection == xCon,
+        DBG_ASSERT( m_xDataSourceConnection == xCon,
             "OApplicationController::disposing: which connection does this come from?" );
 
         if ( getContainer() && getContainer()->getElementType() == E_TABLE )
@@ -1115,7 +1119,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         const PropertyValue* pEnd  = pIter + aArgs.getLength();
                         for( ; pIter != pEnd ; ++pIter)
                         {
-                            if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FormatStringId")) )
+                            if ( pIter->Name.equalsAscii("FormatStringId") )
                             {
                                 SotFormatStringId nFormatId = 0;
                                 if ( pIter->Value >>= nFormatId )
@@ -1272,7 +1276,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         case ID_NEW_TABLE_DESIGN:
                             break;
                         default:
-                            OSL_FAIL("illegal switch call!");
+                            OSL_ENSURE(0,"illegal switch call!");
                     }
                     if ( bAutoPilot )
                         getContainer()->PostUserEvent( LINK( this, OApplicationController, OnCreateWithPilot ), reinterpret_cast< void* >( eType ) );
@@ -1445,7 +1449,7 @@ void OApplicationController::describeSupportedFeatures()
 
     implDescribeSupportedFeature( ".uno:Save",               ID_BROWSER_SAVEDOC,        CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:SaveAs",             ID_BROWSER_SAVEASDOC,      CommandGroup::DOCUMENT );
-    implDescribeSupportedFeature( ".uno:SendMail",           SID_MAIL_SENDDOC,          CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:SendMail",			 SID_MAIL_SENDDOC,			CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:DBSendReportAsMail",SID_DB_APP_SENDREPORTASMAIL,
                                                                                         CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:DBSendReportToWriter",SID_DB_APP_SENDREPORTTOWRITER,
@@ -1457,7 +1461,7 @@ void OApplicationController::describeSupportedFeatures()
                                                              SID_FORM_CREATE_REPWIZ_PRE_SEL,
                                                                                         CommandGroup::APPLICATION );
 
-    implDescribeSupportedFeature( ".uno:DBNewReport",        SID_APP_NEW_REPORT,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewReport",		 SID_APP_NEW_REPORT,		CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewReportAutoPilot",
                                                              ID_DOCUMENT_CREATE_REPWIZ, CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewReportAutoPilotWithPreSelection",
@@ -1474,7 +1478,7 @@ void OApplicationController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBNewViewSQL",       SID_DB_NEW_VIEW_SQL,       CommandGroup::INSERT );
 
     implDescribeSupportedFeature( ".uno:DBDelete",           SID_DB_APP_DELETE,         CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:Delete",             SID_DB_APP_DELETE,         CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:Delete",			 SID_DB_APP_DELETE,         CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBRename",           SID_DB_APP_RENAME,         CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBEdit",             SID_DB_APP_EDIT,           CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBEditSqlView",      SID_DB_APP_EDIT_SQL_VIEW,  CommandGroup::EDIT );
@@ -1535,18 +1539,18 @@ void OApplicationController::describeSupportedFeatures()
     // this one should not appear under Tools->Customize->Keyboard
     implDescribeSupportedFeature( ".uno:DBNewReportWithPreSelection",
                                                              SID_APP_NEW_REPORT_PRE_SEL,CommandGroup::INTERNAL );
-    implDescribeSupportedFeature( ".uno:DBDSImport",        SID_DB_APP_DSIMPORT, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBDSExport",        SID_DB_APP_DSEXPORT, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBDBAdmin",         SID_DB_APP_DBADMIN, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBDSImport",		SID_DB_APP_DSIMPORT, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBDSExport",		SID_DB_APP_DSEXPORT, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBDBAdmin",			SID_DB_APP_DBADMIN, CommandGroup::INTERNAL);
 
     // status info
-    implDescribeSupportedFeature( ".uno:DBStatusType",      SID_DB_APP_STATUS_TYPE, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBStatusDBName",    SID_DB_APP_STATUS_DBNAME, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBStatusUserName",  SID_DB_APP_STATUS_USERNAME, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBStatusHostName",  SID_DB_APP_STATUS_HOSTNAME, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBStatusType",		SID_DB_APP_STATUS_TYPE, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBStatusDBName",	SID_DB_APP_STATUS_DBNAME, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBStatusUserName",	SID_DB_APP_STATUS_USERNAME, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBStatusHostName",	SID_DB_APP_STATUS_HOSTNAME, CommandGroup::INTERNAL);
 }
 // -----------------------------------------------------------------------------
-OApplicationView*   OApplicationController::getContainer() const
+OApplicationView*	OApplicationController::getContainer() const
 {
     return static_cast< OApplicationView* >( getView() );
 }
@@ -1663,7 +1667,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
                 default:
                     break;
             }
-            //  getContainer()->elementReplaced(getContainer()->getElementType(),sName,sNewName);
+            //	getContainer()->elementReplaced(getContainer()->getElementType(),sName,sNewName);
         }
         catch( Exception& )
         {
@@ -1693,7 +1697,7 @@ namespace
             case E_NONE:
                 break;
             default:
-                OSL_FAIL("Invalid ElementType!");
+                OSL_ENSURE(0,"Invalid ElementType!");
                 break;
         }
         return sToolbar;
@@ -1927,7 +1931,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     break;
 
     default:
-        OSL_FAIL( "OApplicationController::openElement: illegal object type!" );
+        OSL_ENSURE( false, "OApplicationController::openElement: illegal object type!" );
         break;
     }
     return xRet;
@@ -2035,7 +2039,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
         break;
 
         default:
-            OSL_FAIL( "OApplicationController::newElement: illegal type!" );
+            OSL_ENSURE( false, "OApplicationController::newElement: illegal type!" );
             break;
     }
 
@@ -2163,7 +2167,7 @@ void OApplicationController::renameEntry()
                             {
                                 ::rtl::OUString sName = aDialog->getName();
                                 ::rtl::OUString sCatalog = aDialog->getCatalog();
-                                ::rtl::OUString sSchema  = aDialog->getSchema();
+                                ::rtl::OUString sSchema	 = aDialog->getSchema();
 
                                 sNewName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sName, sal_False, ::dbtools::eInDataManipulation );
                             }
@@ -2274,7 +2278,7 @@ void OApplicationController::showPreviewFor(const ElementType _eType,const ::rtl
                 return;
 
             default:
-                OSL_FAIL( "OApplicationController::showPreviewFor: unexpected element type!" );
+                OSL_ENSURE( false, "OApplicationController::showPreviewFor: unexpected element type!" );
                 break;
         }
     }
@@ -2336,7 +2340,7 @@ void OApplicationController::onDeleteEntry()
             nId = SID_DB_APP_REPORT_DELETE;
             break;
         default:
-            OSL_FAIL("Invalid ElementType!");
+            OSL_ENSURE(0,"Invalid ElementType!");
             break;
     }
     executeChecked(nId,Sequence<PropertyValue>());
@@ -2496,6 +2500,9 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                                 nAction = DND_ACTION_NONE;
                         }
                     }
+                    /*else
+                        nAction = nActionAskedFor & DND_ACTION_COPYMOVE;
+                    */
                 }
                 return nAction;
             }
@@ -2510,7 +2517,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     OApplicationView* pView = getContainer();
     if ( !pView || pView->getElementType() == E_NONE )
     {
-        OSL_FAIL("OApplicationController::executeDrop: what the hell did queryDrop do?");
+        DBG_ERROR("OApplicationController::executeDrop: what the hell did queryDrop do?");
             // queryDrop shoud not have allowed us to reach this situation ....
         return DND_ACTION_NONE;
     }
@@ -2526,18 +2533,18 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
 
     m_nAsyncDrop = 0;
     m_aAsyncDrop.aDroppedData.clear();
-    m_aAsyncDrop.nType          = pView->getElementType();
-    m_aAsyncDrop.nAction        = _rEvt.mnAction;
-    m_aAsyncDrop.bError         = sal_False;
-    m_aAsyncDrop.bHtml          = sal_False;
-    m_aAsyncDrop.aUrl           = ::rtl::OUString();
+    m_aAsyncDrop.nType			= pView->getElementType();
+    m_aAsyncDrop.nAction		= _rEvt.mnAction;
+    m_aAsyncDrop.bError			= sal_False;
+    m_aAsyncDrop.bHtml			= sal_False;
+    m_aAsyncDrop.aUrl			= ::rtl::OUString();
 
 
     // loop through the available formats and see what we can do ...
     // first we have to check if it is our own format, if not we have to copy the stream :-(
     if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(aDroppedData.GetDataFlavorExVector()) )
     {
-        m_aAsyncDrop.aDroppedData   = ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
+        m_aAsyncDrop.aDroppedData	= ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
 
         // asyncron because we some dialogs and we aren't allowed to show them while in D&D
         m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
@@ -2647,7 +2654,7 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
 
     if ( !m_xModel.is() )
     {
-        OSL_FAIL( "OApplicationController::OnFirstControllerConnected: too late!" );
+        OSL_ENSURE( false, "OApplicationController::OnFirstControllerConnected: too late!" );
     }
 
     // if we have forms or reports which contain macros/scripts, then show a warning
@@ -2711,11 +2718,11 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     Reference< XOfficeDatabaseDocument > xOfficeDoc( _rxModel, UNO_QUERY );
     if ( !xOfficeDoc.is() && _rxModel.is() )
     {
-        OSL_FAIL( "OApplicationController::attachModel: invalid model!" );
+        DBG_ERROR( "OApplicationController::attachModel: invalid model!" );
         return sal_False;
     }
 
-    OSL_ENSURE( !( m_xModel.is() && ( m_xModel != _rxModel ) ),
+    DBG_ASSERT( !( m_xModel.is() && ( m_xModel != _rxModel ) ),
         "OApplicationController::attachModel: missing implementation: setting a new model while we have another one!" );
         // at least: remove as property change listener from the old model/data source
 
@@ -2843,10 +2850,10 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
     {
         ElementType eType = E_NONE;
         const NamedValue* pIter = aCurrentSelection.getConstArray();
-        const NamedValue* pEnd  = pIter + aCurrentSelection.getLength();
+        const NamedValue* pEnd	= pIter + aCurrentSelection.getLength();
         for(;pIter != pEnd;++pIter)
         {
-            if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Type")) )
+            if ( pIter->Name.equalsAscii("Type") )
             {
                 sal_Int32 nType = 0;
                 pIter->Value >>= nType;
@@ -2854,7 +2861,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
                     throw IllegalArgumentException();
                 eType = static_cast< ElementType >( nType );
             }
-            else if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Selection")) )
+            else if ( pIter->Name.equalsAscii("Selection") )
                 pIter->Value >>= aSelection;
         }
 
@@ -2970,7 +2977,7 @@ Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
             case E_FORM:    aCurrentSelection[0].Type = DatabaseObjectContainer::FORMS;    break;
             case E_REPORT:  aCurrentSelection[0].Type = DatabaseObjectContainer::REPORTS;  break;
             default:
-                OSL_FAIL( "OApplicationController::getSelection: unexpected current element type!" );
+                OSL_ENSURE( false, "OApplicationController::getSelection: unexpected current element type!" );
                 break;
             }
         }
@@ -3005,7 +3012,7 @@ void OApplicationController::impl_migrateScripts_nothrow()
 }
 
 //........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

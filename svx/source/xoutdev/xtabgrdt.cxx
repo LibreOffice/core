@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,12 +31,16 @@
 
 // include ---------------------------------------------------------------
 
+#ifndef SVX_LIGHT
+
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "svx/XPropertyTable.hxx"
+#include "XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
+
+#endif
 
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
@@ -60,14 +64,13 @@
 #define GLOBALOVERFLOW
 
 using namespace com::sun::star;
+using namespace rtl;
 
-using ::rtl::OUString;
+sal_Unicode const pszExtGradient[]	= {'s','o','g'};
 
-sal_Unicode const pszExtGradient[]  = {'s','o','g'};
-
-char const aChckGradient[]  = { 0x04, 0x00, 'S','O','G','L'};   // < 5.2
-char const aChckGradient0[] = { 0x04, 0x00, 'S','O','G','0'};   // = 5.2
-char const aChckXML[]       = { '<', '?', 'x', 'm', 'l' };      // = 6.0
+char const aChckGradient[]  = { 0x04, 0x00, 'S','O','G','L'};	// < 5.2
+char const aChckGradient0[] = { 0x04, 0x00, 'S','O','G','0'};	// = 5.2
+char const aChckXML[]       = { '<', '?', 'x', 'm', 'l' };		// = 6.0
 
 // ---------------------
 // class XGradientTable
@@ -81,7 +84,7 @@ char const aChckXML[]       = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 
 XGradientTable::XGradientTable( const String& rPath,
                             XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
+                            USHORT nInitSize, USHORT nReSize ) :
                 XPropertyTable( rPath, pInPool, nInitSize, nReSize)
 {
     pBmpTable = new Table( nInitSize, nReSize );
@@ -116,35 +119,35 @@ XGradientEntry* XGradientTable::GetGradient(long nIndex) const
 
 /************************************************************************/
 
-sal_Bool XGradientTable::Load()
+BOOL XGradientTable::Load()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XGradientTable::Save()
+BOOL XGradientTable::Save()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XGradientTable::Create()
+BOOL XGradientTable::Create()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XGradientTable::CreateBitmapsForUI()
+BOOL XGradientTable::CreateBitmapsForUI()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-Bitmap* XGradientTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
+Bitmap* XGradientTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
@@ -157,8 +160,8 @@ class impXGradientList
 {
 private:
     VirtualDevice*          mpVirtualDevice;
-    SdrModel*               mpSdrModel;
-    SdrObject*              mpBackgroundObject;
+    SdrModel*				mpSdrModel;
+    SdrObject*			    mpBackgroundObject;
 
 public:
     impXGradientList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB)
@@ -193,7 +196,7 @@ void XGradientList::impCreate()
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
-
+    
         SdrModel* pSdrModel = new SdrModel();
         OSL_ENSURE(0 != pSdrModel, "XGradientList: no SdrModel created!" );
         pSdrModel->GetItemPool().FreezeIdRanges();
@@ -253,18 +256,18 @@ XGradientEntry* XGradientList::GetGradient(long nIndex) const
     return( (XGradientEntry*) XPropertyList::Get( nIndex, 0 ) );
 }
 
-sal_Bool XGradientList::Load()
+BOOL XGradientList::Load()
 {
     if( bListDirty )
     {
-        bListDirty = sal_False;
+        bListDirty = FALSE;
 
         INetURLObject aURL( aPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return sal_False;
+            return FALSE;
         }
 
         aURL.Append( aName );
@@ -276,17 +279,17 @@ sal_Bool XGradientList::Load()
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 
     }
-    return( sal_False );
+    return( FALSE );
 }
 
-sal_Bool XGradientList::Save()
+BOOL XGradientList::Save()
 {
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return sal_False;
+        return FALSE;
     }
 
     aURL.Append( aName );
@@ -298,35 +301,35 @@ sal_Bool XGradientList::Save()
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 }
 
-sal_Bool XGradientList::Create()
+BOOL XGradientList::Create()
 {
     XubString aStr( SVX_RES( RID_SVXSTR_GRADIENT ) );
     xub_StrLen nLen;
 
     aStr.AppendAscii(" 1");
     nLen = aStr.Len() - 1;
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLACK  ),RGB_Color(COL_WHITE  ),XGRAD_LINEAR    ,    0,10,10, 0,100,100),aStr));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLACK  ),RGB_Color(COL_WHITE	),XGRAD_LINEAR	  ,    0,10,10, 0,100,100),aStr));
     aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLUE   ),RGB_Color(COL_RED    ),XGRAD_AXIAL     ,  300,20,20,10,100,100),aStr));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLUE	 ),RGB_Color(COL_RED	),XGRAD_AXIAL	  ,  300,20,20,10,100,100),aStr));
     aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_RED    ),RGB_Color(COL_YELLOW ),XGRAD_RADIAL    ,  600,30,30,20,100,100),aStr));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_RED	 ),RGB_Color(COL_YELLOW ),XGRAD_RADIAL	  ,  600,30,30,20,100,100),aStr));
     aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_YELLOW ),RGB_Color(COL_GREEN  ),XGRAD_ELLIPTICAL,  900,40,40,30,100,100),aStr));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_YELLOW ),RGB_Color(COL_GREEN	),XGRAD_ELLIPTICAL,  900,40,40,30,100,100),aStr));
     aStr.SetChar(nLen, sal_Unicode('5'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_GREEN  ),RGB_Color(COL_MAGENTA),XGRAD_SQUARE    , 1200,50,50,40,100,100),aStr));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_GREEN  ),RGB_Color(COL_MAGENTA),XGRAD_SQUARE	  , 1200,50,50,40,100,100),aStr));
     aStr.SetChar(nLen, sal_Unicode('6'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_MAGENTA),RGB_Color(COL_YELLOW ),XGRAD_RECT      , 1900,60,60,50,100,100),aStr));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_MAGENTA),RGB_Color(COL_YELLOW ),XGRAD_RECT	  , 1900,60,60,50,100,100),aStr));
 
-    return( sal_True );
+    return( TRUE );
 }
 
-sal_Bool XGradientList::CreateBitmapsForUI()
+BOOL XGradientList::CreateBitmapsForUI()
 {
     impCreate();
 
     for( long i = 0; i < Count(); i++)
     {
-        Bitmap* pBmp = CreateBitmapForUI( i, sal_False );
+        Bitmap* pBmp = CreateBitmapForUI( i, FALSE );
         DBG_ASSERT( pBmp, "XGradientList: Bitmap(UI) konnte nicht erzeugt werden!" );
 
         if( pBmp )
@@ -335,10 +338,10 @@ sal_Bool XGradientList::CreateBitmapsForUI()
 
     impDestroy();
 
-    return( sal_False );
+    return( FALSE );
 }
 
-Bitmap* XGradientList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
+Bitmap* XGradientList::CreateBitmapForUI( long nIndex, BOOL bDelete )
 {
     impCreate();
     VirtualDevice* pVD = mpData->getVirtualDevice();

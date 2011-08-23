@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@ isValidXmlId(::rtl::OUString const & i_rStreamName,
     ::rtl::OUString const & i_rIdref)
 {
     return isValidNCName(i_rIdref) &&
-        (i_rStreamName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("content.xml")) ||
-         i_rStreamName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("styles.xml")));
+        (i_rStreamName.equalsAscii("content.xml") ||
+         i_rStreamName.equalsAscii("styles.xml"));
 }
 
 

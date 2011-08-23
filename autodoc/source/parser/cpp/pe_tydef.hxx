@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,34 +54,34 @@ class PE_Typedef : public cpp::Cpp_PE
         size_of_states
     };
                         PE_Typedef(
-                            Cpp_PE *        i_pParent );
+                            Cpp_PE *		i_pParent );
                         ~PE_Typedef();
 
-    virtual void        Call_Handler(
-                            const cpp::Token &  i_rTok );
+    virtual void		Call_Handler(
+                            const cpp::Token &	i_rTok );
   private:
-    typedef SubPe< PE_Typedef, PE_Type >        SP_Type;
-    typedef SubPeUse< PE_Typedef, PE_Type>      SPU_Type;
+    typedef SubPe< PE_Typedef, PE_Type >		SP_Type;
+    typedef SubPeUse< PE_Typedef, PE_Type> 	    SPU_Type;
 
-    void                Setup_StatusFunctions();
-    virtual void        InitData();
-    virtual void        TransferData();
-    void                Hdl_SyntaxError( const char *);
+    void				Setup_StatusFunctions();
+    virtual void		InitData();
+    virtual void		TransferData();
+    void  				Hdl_SyntaxError( const char *);
 
-    void                SpReturn_Type();
+    void				SpReturn_Type();
 
-    void                On_start_typedef( const char * );
-    void                On_expectName_Identifier( const char * );
-    void                On_afterName_Semicolon( const char * );
+    void				On_start_typedef( const char * );
+    void				On_expectName_Identifier( const char * );
+    void				On_afterName_Semicolon( const char * );
 
     // DATA
     Dyn< PeStatusArray<PE_Typedef> >
                         pStati;
-    Dyn<SP_Type>        pSpType;
-    Dyn<SPU_Type>       pSpuType;
+    Dyn<SP_Type>		pSpType;
+    Dyn<SPU_Type>		pSpuType;
 
     String              sName;
-    ary::cpp::Type_id   nType;
+    ary::cpp::Type_id	nType;
 };
 
 

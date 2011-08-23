@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -151,7 +151,7 @@ namespace svxform
             }
 
             // last: uhm, there is no last resort
-            OSL_FAIL( "DocumentClassification::classifyDocument: unknown document!" );
+            OSL_ENSURE( false, "DocumentClassification::classifyDocument: unknown document!" );
         }
         catch( const Exception& )
         {
@@ -175,7 +175,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "DocumentClassification::classifyHostDocument: caught an exception!" );
+            OSL_ENSURE( sal_False, "DocumentClassification::classifyHostDocument: caught an exception!" );
         }
 
         return eType;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,17 +55,17 @@ class Window;
 
 class SvxLinguConfigUpdate
 {
-    static sal_Int32    nCurrentDataFilesChangedCheckValue;
-    static sal_Int16    nNeedUpdating;  // n == -1 => needs to be checked
+    static INT32    nCurrentDataFilesChangedCheckValue;
+    static INT16    nNeedUpdating;  // n == -1 => needs to be checked
                                     // n ==  0 => already updated, nothing to be done
                                     // n ==  1 => needs to be updated
 
-    static sal_Int32 CalcDataFilesChangedCheckValue();
+    static INT32 CalcDataFilesChangedCheckValue();
 
 public:
 
     EDITENG_DLLPUBLIC static void UpdateAll( sal_Bool bForceCheck = sal_False );
-    static sal_Bool IsNeedUpdateAll( sal_Bool bForceCheck = sal_False );
+    static BOOL IsNeedUpdateAll( sal_Bool bForceCheck = sal_False );
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -79,38 +79,38 @@ class EDITENG_DLLPUBLIC LinguMgr
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 > xSpell;
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >    xHyph;
+        ::com::sun::star::linguistic2::XHyphenator >	xHyph;
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XThesaurus >     xThes;
+        ::com::sun::star::linguistic2::XThesaurus >		xThes;
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryList > xDicList;
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >         xProp;
+        ::com::sun::star::beans::XPropertySet > 		xProp;
 
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    xIgnoreAll;
+        ::com::sun::star::linguistic2::XDictionary >	xIgnoreAll;
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    xChangeAll;
+        ::com::sun::star::linguistic2::XDictionary >	xChangeAll;
 
-    static LinguMgrExitLstnr                           *pExitLstnr;
-    static sal_Bool                                     bExiting;
+    static LinguMgrExitLstnr						   *pExitLstnr;
+    static sal_Bool										bExiting;
 
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 > GetSpell();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >    GetHyph();
+        ::com::sun::star::linguistic2::XHyphenator > 	GetHyph();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XThesaurus >     GetThes();
+        ::com::sun::star::linguistic2::XThesaurus > 	GetThes();
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryList > GetDicList();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >         GetProp();
+        ::com::sun::star::beans::XPropertySet > 		GetProp();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    GetStandard();
+        ::com::sun::star::linguistic2::XDictionary >	GetStandard();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    GetIgnoreAll();
+        ::com::sun::star::linguistic2::XDictionary >	GetIgnoreAll();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    GetChangeAll();
+        ::com::sun::star::linguistic2::XDictionary >	GetChangeAll();
 
     // disallow access to copy-constructor and assignment-operator
     LinguMgr(const LinguMgr &);
@@ -121,23 +121,23 @@ public:
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 > GetSpellChecker();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >    GetHyphenator();
+        ::com::sun::star::linguistic2::XHyphenator > 	GetHyphenator();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XThesaurus >     GetThesaurus();
+        ::com::sun::star::linguistic2::XThesaurus > 	GetThesaurus();
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryList > GetDictionaryList();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >         GetLinguPropertySet();
+        ::com::sun::star::beans::XPropertySet > 		GetLinguPropertySet();
 
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguServiceManager > GetLngSvcMgr();
 
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    GetStandardDic();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    GetIgnoreAllList();
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >    GetChangeAllList();
+        ::com::sun::star::linguistic2::XDictionary > 	GetStandardDic();
+    static ::com::sun::star::uno::Reference< 
+        ::com::sun::star::linguistic2::XDictionary > 	GetIgnoreAllList();
+    static ::com::sun::star::uno::Reference< 
+        ::com::sun::star::linguistic2::XDictionary > 	GetChangeAllList();
 
     // update all configuration entries
     static void UpdateAll();
@@ -152,24 +152,24 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 
 struct SvxAlternativeSpelling
 {
-    String      aReplacement;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenatedWord >    xHyphWord;
-    sal_Int16       nChangedPos,
+    String		aReplacement;
+    ::com::sun::star::uno::Reference< 
+        ::com::sun::star::linguistic2::XHyphenatedWord >	xHyphWord;
+    INT16  		nChangedPos,
                  nChangedLength;
-    sal_Bool        bIsAltSpelling;
+    BOOL		bIsAltSpelling;
 
     inline SvxAlternativeSpelling();
 };
 
 inline SvxAlternativeSpelling::SvxAlternativeSpelling() :
-    nChangedPos(-1), nChangedLength(-1), bIsAltSpelling(sal_False)
+    nChangedPos(-1), nChangedLength(-1), bIsAltSpelling(FALSE)
 {
 }
 
 
-EDITENG_DLLPUBLIC SvxAlternativeSpelling SvxGetAltSpelling(
-        const ::com::sun::star::uno::Reference<
+EDITENG_DLLPUBLIC SvxAlternativeSpelling SvxGetAltSpelling( 
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::linguistic2::XHyphenatedWord > & rHyphWord );
 
 
@@ -178,54 +178,54 @@ EDITENG_DLLPUBLIC SvxAlternativeSpelling SvxGetAltSpelling(
 class EDITENG_DLLPUBLIC SvxDicListChgClamp
 {
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryList >    xDicList;
+    ::com::sun::star::uno::Reference< 
+        ::com::sun::star::linguistic2::XDictionaryList > 	xDicList;
 
     // disallow access to copy-constructor and assignment-operator
     EDITENG_DLLPRIVATE SvxDicListChgClamp(const SvxDicListChgClamp &);
     EDITENG_DLLPRIVATE SvxDicListChgClamp & operator = (const SvxDicListChgClamp &);
 
 public:
-    SvxDicListChgClamp( ::com::sun::star::uno::Reference<
+    SvxDicListChgClamp( ::com::sun::star::uno::Reference< 
         ::com::sun::star::linguistic2::XDictionaryList >  &rxDicList );
     ~SvxDicListChgClamp();
 };
 
 ///////////////////////////////////////////////////////////////////////////
 
-//TODO: remove those functions or make them inline
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XSpellChecker1 > SvxGetSpellChecker();
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XHyphenator >    SvxGetHyphenator();
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XThesaurus >     SvxGetThesaurus();
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
+//TL:TODO: remove those functions or make them inline
+EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< 
+    ::com::sun::star::linguistic2::XSpellChecker1 >	SvxGetSpellChecker();
+EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< 
+    ::com::sun::star::linguistic2::XHyphenator >  	SvxGetHyphenator();
+EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< 
+    ::com::sun::star::linguistic2::XThesaurus >  	SvxGetThesaurus();
+EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< 
     ::com::sun::star::linguistic2::XDictionaryList > SvxGetDictionaryList();
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet >         SvxGetLinguPropertySet();
-//TODO: remove argument or provide SvxGetIgnoreAllList with the same one
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionary >    SvxGetOrCreatePosDic(
-            ::com::sun::star::uno::Reference<
+EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< 
+    ::com::sun::star::beans::XPropertySet > 		SvxGetLinguPropertySet();
+//TL:TODO: remove argument or provide SvxGetIgnoreAllList with the same one
+EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< 
+    ::com::sun::star::linguistic2::XDictionary >  	SvxGetOrCreatePosDic( 
+            ::com::sun::star::uno::Reference< 
                 ::com::sun::star::linguistic2::XDictionaryList >  xDicList );
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionary >    SvxGetIgnoreAllList();
-EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionary >    SvxGetChangeAllList();
+EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< 
+    ::com::sun::star::linguistic2::XDictionary >  	SvxGetIgnoreAllList();
+EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< 
+    ::com::sun::star::linguistic2::XDictionary >  	SvxGetChangeAllList();
 
 ///////////////////////////////////////////////////////////////////////////
 // misc functions
 //
 
-EDITENG_DLLPUBLIC LanguageType                      SvxLocaleToLanguage(
+EDITENG_DLLPUBLIC LanguageType 						SvxLocaleToLanguage( 
         const ::com::sun::star::lang::Locale& rLocale );
-EDITENG_DLLPUBLIC ::com::sun::star::lang::Locale&   SvxLanguageToLocale(
+EDITENG_DLLPUBLIC ::com::sun::star::lang::Locale& 	SvxLanguageToLocale( 
         ::com::sun::star::lang::Locale& rLocale, LanguageType eLang );
 EDITENG_DLLPUBLIC ::com::sun::star::lang::Locale    SvxCreateLocale( LanguageType eLang );
 
 
-EDITENG_DLLPUBLIC short SvxDicError( Window *pParent, sal_Int16 nError );
+EDITENG_DLLPUBLIC short	SvxDicError( Window *pParent, sal_Int16 nError );
 
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,7 @@ package com.sun.star.comp;
 
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
+import com.sun.star.registry.XRegistryKey;
 import com.sun.star.comp.juhtest.SmoketestCommandEnvironment;
 
 
@@ -37,10 +38,10 @@ import com.sun.star.comp.juhtest.SmoketestCommandEnvironment;
  * by this class.
  */
 public class JavaUNOHelperServices {
-
+ 
         static private final String __service_smoketestCommandEnv =
         "com.sun.star.deployment.test.SmoketestCommandEnvironment";
-
+    
      /**
      * Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -54,11 +55,27 @@ public class JavaUNOHelperServices {
     public static XSingleComponentFactory __getComponentFactory(String sImplName)
     {
         XSingleComponentFactory xFactory = null;
-
+    
         if ( sImplName.equals( SmoketestCommandEnvironment.class.getName() ) )
             xFactory = Factory.createComponentFactory(SmoketestCommandEnvironment.class,
                                             SmoketestCommandEnvironment.getServiceNames());
-
+        
         return xFactory;
     }
+
+    /**
+     * Writes the service information into the given registry key.
+     * This method is called by the <code>JavaLoader</code>
+     * <p>
+     * @return  returns true if the operation succeeded
+     * @param   regKey the registryKey
+     * @see     com.sun.star.comp.loader.JavaLoader
+     */
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
+        return Factory.writeRegistryServiceInfo(SmoketestCommandEnvironment.class.getName(),
+                                                SmoketestCommandEnvironment.getServiceNames(),
+                                                regKey);
+    }     
 }
+
+

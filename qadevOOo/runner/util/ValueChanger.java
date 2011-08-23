@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public class ValueChanger {
  public static Object changePValue( Object oldValue ) {
 
    Object newValue = null;
-
+   
    if (oldValue instanceof com.sun.star.uno.Any) {
      try {
         oldValue = AnyConverter.toObject(((Any) oldValue).getType(),oldValue);
@@ -714,7 +714,7 @@ public class ValueChanger {
         newVal.Name = ((PropertyValue)oldValue).Name;
         newVal.Value = changePValue(((PropertyValue)oldValue).Value);
         newValue = newVal;
-    } else
+    } else   
    if (oldValue instanceof com.sun.star.sheet.ValidationAlertStyle){
         com.sun.star.sheet.ValidationAlertStyle VAS1 = com.sun.star.sheet.ValidationAlertStyle.INFO;
         com.sun.star.sheet.ValidationAlertStyle VAS2 = com.sun.star.sheet.ValidationAlertStyle.MACRO;
@@ -773,7 +773,7 @@ public class ValueChanger {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Exception occurred while changing Enumeration value:") ;
+            System.err.println("Exception occured while changing Enumeration value:") ;
             e.printStackTrace(System.err) ;
         }
         if (newValue == null) newValue = oldValue ;
@@ -860,7 +860,7 @@ public class ValueChanger {
         } else {
             if ( oldPPC.Coordinates[0].length == 0 ) {
                 newPPC.Coordinates = pArray;
-                newPPC.Flags = fArray;
+                newPPC.Flags = fArray;                
             } else {
                 newPPC.Coordinates[0][0].X = oldPPC.Coordinates[0][0].X +1;
                 newPPC.Coordinates[0][0].Y = oldPPC.Coordinates[0][0].Y +1;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,9 @@ static const char* pCount;
 static const char* pAdd;
 static const char* pItem;
 static const char* pRemove;
-static sal_uInt16 nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
+static USHORT nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 
+/////////////////////////////////////////////////////////////////////////
 
 SbxCollection::SbxCollection( const XubString& rClass )
              : SbxObject( rClass )
@@ -61,7 +62,7 @@ SbxCollection::SbxCollection( const XubString& rClass )
     }
     Initialize();
     // For Access on itself
-    StartListening( GetBroadcaster(), sal_True );
+    StartListening( GetBroadcaster(), TRUE );
 }
 
 SbxCollection::SbxCollection( const SbxCollection& rColl )
@@ -101,7 +102,7 @@ void SbxCollection::Initialize()
     p->SetFlag( SBX_DONTSTORE );
 }
 
-SbxVariable* SbxCollection::FindUserData( sal_uInt32 nData )
+SbxVariable* SbxCollection::FindUserData( UINT32 nData )
 {
     if( GetParameters() )
     {
@@ -129,9 +130,9 @@ void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
     const SbxHint* p = PTR_CAST(SbxHint,&rHint);
     if( p )
     {
-        sal_uIntPtr nId = p->GetId();
-        sal_Bool bRead  = sal_Bool( nId == SBX_HINT_DATAWANTED );
-        sal_Bool bWrite = sal_Bool( nId == SBX_HINT_DATACHANGED );
+        ULONG nId = p->GetId();
+        BOOL bRead  = BOOL( nId == SBX_HINT_DATAWANTED );
+        BOOL bWrite = BOOL( nId == SBX_HINT_DATACHANGED );
         SbxVariable* pVar = p->GetVar();
         SbxArray* pArg = pVar->GetParameters();
         if( bRead || bWrite )
@@ -191,7 +192,7 @@ void SbxCollection::CollItem( SbxArray* pPar_ )
         {
             short n = p->GetInteger();
             if( n >= 1 && n <= (short) pObjs->Count() )
-                pRes = pObjs->Get( (sal_uInt16) n - 1 );
+                pRes = pObjs->Get( (USHORT) n - 1 );
         }
         if( !pRes )
             SetError( SbxERR_BAD_INDEX );
@@ -211,20 +212,21 @@ void SbxCollection::CollRemove( SbxArray* pPar_ )
         if( n < 1 || n > (short) pObjs->Count() )
             SetError( SbxERR_BAD_INDEX );
         else
-            Remove( pObjs->Get( (sal_uInt16) n - 1 ) );
+            Remove( pObjs->Get( (USHORT) n - 1 ) );
     }
 }
 
-sal_Bool SbxCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+BOOL SbxCollection::LoadData( SvStream& rStrm, USHORT nVer )
 {
-    sal_Bool bRes = SbxObject::LoadData( rStrm, nVer );
+    BOOL bRes = SbxObject::LoadData( rStrm, nVer );
     Initialize();
     return bRes;
 }
 
+/////////////////////////////////////////////////////////////////////////
 
 SbxStdCollection::SbxStdCollection
-                    ( const XubString& rClass, const XubString& rElem, sal_Bool b )
+                    ( const XubString& rClass, const XubString& rElem, BOOL b )
                   : SbxCollection( rClass ), aElemClass( rElem ),
                     bAddRemoveOk( b )
 {}
@@ -276,9 +278,9 @@ void SbxStdCollection::CollRemove( SbxArray* pPar_ )
         SbxCollection::CollRemove( pPar_ );
 }
 
-sal_Bool SbxStdCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+BOOL SbxStdCollection::LoadData( SvStream& rStrm, USHORT nVer )
 {
-    sal_Bool bRes = SbxCollection::LoadData( rStrm, nVer );
+    BOOL bRes = SbxCollection::LoadData( rStrm, nVer );
     if( bRes )
     {
         rStrm.ReadByteString( aElemClass, RTL_TEXTENCODING_ASCII_US );
@@ -287,9 +289,9 @@ sal_Bool SbxStdCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     return bRes;
 }
 
-sal_Bool SbxStdCollection::StoreData( SvStream& rStrm ) const
+BOOL SbxStdCollection::StoreData( SvStream& rStrm ) const
 {
-    sal_Bool bRes = SbxCollection::StoreData( rStrm );
+    BOOL bRes = SbxCollection::StoreData( rStrm );
     if( bRes )
     {
         rStrm.WriteByteString( aElemClass, RTL_TEXTENCODING_ASCII_US );

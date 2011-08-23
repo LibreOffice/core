@@ -9,7 +9,7 @@
 Important: exceptions thrown from that method will contain a readily
 displayable message.
 
-    @return
+    @return 
         The default configuration provider for the application or<br/>
         <NULL/>, if startup was canceled
 
@@ -18,11 +18,11 @@ displayable message.
 
     @throw com::sun::star::lang::ServiceNotRegisteredException
         if the ConfigurationProvider service is unknwon
-
+        
     @throw com::sun::star::lang::WrappedTargetException
         if the configuration backend could be created,
         but incurred a failure later
-
+        
 */
 extern
 com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
@@ -39,7 +39,7 @@ com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
     {
     public:
         typedef com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > InteractionHandler;
-
+        
         /// Constructor: Uses the default interaction handler
         ConfigurationErrorHandler()
         : m_pContext(0), m_xHandler()
@@ -58,11 +58,11 @@ com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
         void activate();
         /// deinstalls the handler from the current context, restoring the previous context
         void deactivate();
-    private:
+    private: 
         class Context;
         Context * m_pContext;
         InteractionHandler m_xHandler;
-    private:
+    private: 
         // not implemented - suppress copy
         ConfigurationErrorHandler(const ConfigurationErrorHandler&);
         void operator=(const ConfigurationErrorHandler&);

@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ namespace scripting_protocolhandler
 
 namespace css = ::com::sun::star;
 
-class ScriptProtocolHandler :
+class ScriptProtocolHandler : 
 public ::cppu::WeakImplHelper4< css::frame::XDispatchProvider,
     css::frame::XNotifyingDispatch, css::lang::XServiceInfo, css::lang::XInitialization >
 {
@@ -90,7 +90,7 @@ private:
     bool getScriptInvocation();
 
 public:
-    ScriptProtocolHandler( const css::uno::Reference <
+    ScriptProtocolHandler( const css::uno::Reference < 
         css::lang::XMultiServiceFactory >& xFactory );
     virtual ~ScriptProtocolHandler();
 
@@ -108,7 +108,7 @@ public:
 
     /* Helper for registry */
     static css::uno::Reference < css::uno::XInterface > SAL_CALL
-    impl_createInstance(
+    impl_createInstance( 
         const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )
     throw( css::uno::RuntimeException );
     static css::uno::Reference < css::lang::XSingleServiceFactory > impl_createFactory(
@@ -124,7 +124,7 @@ public:
     throw( css::uno::RuntimeException );
 
     /* Implementation for X(Notifying)Dispatch */
-    virtual void SAL_CALL dispatchWithNotification(
+    virtual void SAL_CALL dispatchWithNotification( 
     const css::util::URL& aURL,
     const css::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& Listener )

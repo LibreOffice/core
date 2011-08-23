@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,22 +35,22 @@
 
 // class SvxPageModelItem ------------------------------------------------
 
-/*  [Description]
-
-    This item contains a name of a page template.
+/*
+[Beschreibung]
+Dieses Item enthaelt einen Namen einer Seitenvorlage.
 */
 
 class EDITENG_DLLPUBLIC SvxPageModelItem : public SfxStringItem
 {
 private:
-    sal_Bool bAuto;
+    BOOL bAuto;
 
 public:
     TYPEINFO();
 
-    inline SvxPageModelItem( sal_uInt16 nWh  );
-    inline SvxPageModelItem( const String& rModel, sal_Bool bA /*= sal_False*/,
-                             sal_uInt16 nWh  );
+    inline SvxPageModelItem( USHORT nWh  );
+    inline SvxPageModelItem( const String& rModel, BOOL bA /*= FALSE*/,
+                             USHORT nWh  );
     inline SvxPageModelItem& operator=( const SvxPageModelItem& rModel );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -60,19 +60,19 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
-    sal_Bool IsAuto() const { return bAuto; }
+    virtual	bool                 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool                 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    BOOL IsAuto() const { return bAuto; }
 };
 
-inline SvxPageModelItem::SvxPageModelItem( sal_uInt16 nWh )
-    : bAuto( sal_False )
+inline SvxPageModelItem::SvxPageModelItem( USHORT nWh )
+    : bAuto( FALSE )
 {
     SetWhich( nWh );
 }
 
-inline SvxPageModelItem::SvxPageModelItem( const String& rModel, sal_Bool bA,
-                                           sal_uInt16 nWh ) :
+inline SvxPageModelItem::SvxPageModelItem( const String& rModel, BOOL bA,
+                                           USHORT nWh ) :
     SfxStringItem( nWh, rModel ),
     bAuto( bA )
 {}

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,14 @@ import org.openide.util.NbBundle;
 //
 // TODOS:
 // - 'Update' action on the mounted document which saves all recent modifications.
-// - To introduce 'scope' editable property to control editable portion of
+// - To introduce 'scope' editable property to control editable portion of 
 //   the mounted document.
 // - Acceptable document type identification before mount.
 
-/**
+/** 
  * OpenOffice.org Document filesystem.
+ *
+ * @author misha <misha@openoffice.org>
  */
 public class OpenOfficeDocFileSystem
     extends AbstractFileSystem
@@ -65,12 +67,12 @@ public class OpenOfficeDocFileSystem
     private static final int    REFRESH_TIME  = REFRESH_OFF; // (mS)
     private static final String TMP_FILE_PREF = "sx_";
     private static final String TMP_FILE_SUFX = ".sxx";
-
+    
     private transient Map       cache;      // filesystem cache
     private transient File      docFile;    // OpenOffice document
     private transient ZipFile   zipFile;
 
-    private static transient int osType;    // type of OS
+    private static transient int osType;    // type of OS 
 
     private transient ChildrenStrategy childrenStrategy;
     private transient EditableStrategy editableStrategy;
@@ -110,7 +112,7 @@ public class OpenOfficeDocFileSystem
         // Handle filesystem.attributes files normally:
         DefaultAttributes defattr = new DefaultAttributes(
             info, change, new ListImpl());
-
+        
         // Handle filesystem.attributes files normally + adds virtual attribute
         // "java.io.File" that is used in conversion routines FileUtil.toFile and
         // FileUtil.fromFile
@@ -131,10 +133,10 @@ public class OpenOfficeDocFileSystem
         this();
         setCapability(cap);
     }
-
+    
     /**
-     * Provides unique signature of an instance of the filesystem.
-     * NOTE: The scope is not a part of the signature so it is impossible
+     * Provides unique signature of an instance of the filesystem. 
+     * NOTE: The scope is not a part of the signature so it is impossible 
      *       to mount the same archive more then once.
      */
     public static String computeSystemName(File file)
@@ -143,20 +145,20 @@ public class OpenOfficeDocFileSystem
     }
 
     // ----------- PROPERTIES --------------
-
+    
     /**
      * Provides the 'human readable' name of the instance of the filesystem.
      */
     public String getDisplayName()
     {
         if (!isValid())
-            return NbBundle.getMessage(OpenOfficeDocFileSystem.class,
+            return NbBundle.getMessage(OpenOfficeDocFileSystem.class, 
                 "LAB_invalid_file_system", ((docFile != null)? docFile.toString(): ""));
         else
             return NbBundle.getMessage(OpenOfficeDocFileSystem.class,
                 "LAB_valid_file_system", docFile.toString());
     }
-
+    
     /**
      * Retrives the 'document' property.
      */
@@ -164,7 +166,7 @@ public class OpenOfficeDocFileSystem
     {
         return docFile;
     }
-
+    
     /**
      * Sets the 'document' property.
      */
@@ -172,7 +174,7 @@ public class OpenOfficeDocFileSystem
     // of the root file object) should cause everything using this filesystem
     // to refresh. The system name must change and refreshRoot should be used
     // to ensure that everything is correctly updated.
-    public synchronized void setDocument(File file)
+    public synchronized void setDocument(File file) 
         throws java.beans.PropertyVetoException, java.io.IOException
     {
 System.out.println("OpenOfficeDocFileSystem.setDocument: file=\"" + file.toString() + "\"");
@@ -207,20 +209,20 @@ System.out.println("    file: " + ((file != null)? file.toString(): ""));
 System.out.println("    exception: " + ioe.getMessage());
         }
     }
-
+    
     /**
      * Retrives 'readonly' property.
-     * NOTE: The portion of the mounted document available to the user is
+     * NOTE: The portion of the mounted document available to the user is 
      *       always editable.
      */
     public boolean isReadOnly()
     {
         return false;
     }
-
+    
     /**
      * Sets 'readonly' property.
-     * NOTE: The portion of the mounted document available to the user is
+     * NOTE: The portion of the mounted document available to the user is 
      *       always editable.
      */
     public void setReadOnly(boolean flag)
@@ -229,7 +231,7 @@ System.out.println("    exception: " + ioe.getMessage());
     }
 
     // ----------- SPECIAL CAPABILITIES --------------
-
+    
     /**
      * Participates in the environment configuration.
      * This is how you can affect the classpath for execution, compilation, etc.
@@ -239,7 +241,7 @@ System.out.println("    exception: " + ioe.getMessage());
         // BUG: the compiller cannot access files withing the OpenOffice document.
         //environment.addClassPath(docFile.toString());
     }
-
+    
     /* -----------------------------------------------------------
      * Affect the name and icon of files on this filesystem according to their
      * "status", e.g. version-control modification-commit state:
@@ -270,7 +272,7 @@ System.out.println("    exception: " + ioe.getMessage());
     }
     // And use fireFileStatusChanged whenever you know something has changed.
      */
-
+    
     /*
     // Filesystem-specific actions, such as version-control operations.
     // The actions should typically be CookieActions looking for DataObject
@@ -284,7 +286,7 @@ System.out.println("    exception: " + ioe.getMessage());
     };
     }
      */
-
+    
     /**
      * Notifies this filesystem that it has been removed from the repository.
      * Concrete filesystem implementations could perform clean-up here.
@@ -405,7 +407,7 @@ System.out.println("    exception: " + ioe.getMessage());
                 }
                 zipFile = null;
                 // create the document and backup
-                File newFile = new File(docFile.getParentFile() + File.separator +
+                File newFile = new File(docFile.getParentFile() + File.separator + 
                     "~" + docFile.getName());
                 if(newFile.exists())
                     newFile.delete();   // delete old backup
@@ -508,14 +510,14 @@ System.out.println("    exception: " + ioe.getMessage());
      * Converts the name to ZIP file name.
      * Removes the leading file separator if there is one.
      * This is WORKAROUND of the BUG in AbstractFileObject:
-     * While AbstractFileObject reprecents the root of the filesystem it uses
-     * the absolute path (the path starts with '/'). It is inconsistent with
+     * While AbstractFileObject reprecents the root of the filesystem it uses 
+     * the absolute path (the path starts with '/'). It is inconsistent with 
      * the rest of the code.
      * WORKAROUND: we have to strip leading '/' if it is in the name.
      */
     private static String zipName(String name)
     {
-        String zname = ((name.startsWith(File.separator))?
+        String zname = ((name.startsWith(File.separator))? 
             name.substring(File.separator.length()): name);
         switch(osType) {
             case OS_MACOS:
@@ -531,7 +533,7 @@ System.out.println("    exception: " + ioe.getMessage());
     }
 
     // ----------- IMPLEMENTATIONS OF ABSTRACT FUNCTIONALITY ----------
-
+    
     /* -----------------------------------------------------------
      * Information about files and operations on the contents which do
      * not affect the file's presence or name.
@@ -551,21 +553,21 @@ System.out.println("    exception: " + ioe.getMessage());
                 return (childrenStrategy.countChildren() > 0);
             }
         }
-
+        
         public Date lastModified(String name) {
             synchronized(cache) {
                 Entry entry = (Entry)cache.get(zipName(name));
                 return new Date((entry != null)? entry.getTime(): 0L);
             }
         }
-
+        
         public boolean readOnly(String name) {
             synchronized(cache) {
                 Entry entry = (Entry)cache.get(zipName(name));
                 return (entry != null)? entry.isReadOnly(): false;
             }
         }
-
+        
         public String mimeType(String name) {
             // Unless you have some special means of determining MIME type
             // (e.g. HTTP headers), ask IDE to use its normal heuristics:
@@ -573,14 +575,14 @@ System.out.println("    exception: " + ioe.getMessage());
             // matches, just content/unknown.
             return null;
         }
-
+        
         public long size(String name) {
             synchronized(cache) {
                 Entry entry = (Entry)cache.get(zipName(name));
                 return (entry != null)? entry.getSize(): 0;
             } // synchronized
         }
-
+        
         public InputStream inputStream(String name)
             throws FileNotFoundException
         {
@@ -589,13 +591,13 @@ System.out.println("    exception: " + ioe.getMessage());
                 return (entry != null)? entry.getInputStream(): null;
             } // synchronized
         }
-
+        
         public OutputStream outputStream(String name)
             throws IOException
         {
             return getFileEntry(zipName(name)).getOutputStream();
         }
-
+        
         // AbstractFileSystem handles locking the file to the rest of the IDE.
         // This only means that you should define how the file should be locked
         // to the outside world--perhaps it does not need to be.
@@ -605,7 +607,7 @@ System.out.println("    exception: " + ioe.getMessage());
 /*
             File file = getFile(name);
             if (file.exists() == true && file.canWrite() == false) {
-                IOException ioe = new IOException("file " + file +
+                IOException ioe = new IOException("file " + file + 
                     " could not be locked");
                 ErrorManager.getDefault().annotate(ioe, NbBundle.getMessage(
                     OpenOfficeDocFileSystem.class, "EXC_file_could_not_be_locked",
@@ -614,19 +616,19 @@ System.out.println("    exception: " + ioe.getMessage());
             }
 */
         }
-
+        
         public void unlock(String name) {
             // Nothing special needed to unlock a file to the outside world.
         }
-
+        
         public void markUnimportant(String name) {
             // Do nothing special. Version-control systems may use this to mark
             // certain files (e.g. *.class) as not needing to be stored in the VCS
             // while others (source files) are by default important.
         }
-
+        
     }
-
+    
     /* -----------------------------------------------------------
      * Operations that change the available files.
      */
@@ -659,7 +661,7 @@ System.out.println("    exception: " + ioe.getMessage());
                 os.close();
             } // synchronized
         }
-
+        
         public void rename(String oldName, String newName)
             throws IOException
         {
@@ -693,7 +695,7 @@ System.out.println("    exception: " + ioe.getMessage());
                 cache.put(entry.getName(), entry);
             } // synchronized
         }
-
+        
         public void delete(String name)
             throws IOException
         {
@@ -705,7 +707,7 @@ System.out.println("    exception: " + ioe.getMessage());
             synchronized(cache) {
                 Entry entry = (Entry)cache.remove(zname);
                 if(entry != null) {
-                    // BUG: this is the design bug. Cache has to
+                    // BUG: this is the design bug. Cache has to 
                     //      remember that the entry was removed.
                     isModified = true;
                     entry.clean();
@@ -713,7 +715,7 @@ System.out.println("    exception: " + ioe.getMessage());
             } // synchronized
         }
     }
-
+    
     /* -----------------------------------------------------------
      * Operation which provides the directory structure.
      */
@@ -732,7 +734,7 @@ System.out.println("    exception: " + ioe.getMessage());
                         childrenStrategy.setParent(entry.getName());
                     }
                 } else {
-                    // logical zip file entry
+                    // logical zip file entry 
                     // (portion of the path of a real zip file entry)
                     childrenStrategy.setParent(zname);
                 }
@@ -743,8 +745,8 @@ System.out.println("    exception: " + ioe.getMessage());
         }
 
     }
-
-    /** -----------------------------------------------------------
+    
+    /** ----------------------------------------------------------- 
      * This class adds new virtual attribute "java.io.File".
      * Because of the fact that FileObjects of __Sample__FileSystem are convertible
      * to java.io.File by means of attributes. */
@@ -759,15 +761,15 @@ System.out.println("    exception: " + ioe.getMessage());
         public Object readAttribute(String name, String attrName) {
             if (attrName.equals("java.io.File"))  // NOI18N
                 return sfs.getFile(name);
-
+     
             return super.readAttribute(name, attrName);
         }
     }*/
-
+    
     /* -----------------------------------------------------------
     // Optional special implementations of copy and (cross-directory) move.
     private class TransferImpl implements Transfer {
-
+     
     public boolean copy(String name, Transfer target, String targetName) throws IOException {
         // Only permit special implementation within single FS
         // (or you could implement it across filesystems if you wished):
@@ -776,7 +778,7 @@ System.out.println("    exception: " + ioe.getMessage());
         // a copy-on-write algorithm.
         return true;
     }
-
+     
     public boolean move(String name, Transfer target, String targetName) throws IOException {
         // Only permit special implementation within single FS
         // (or you could implement it across filesystems if you wished):
@@ -785,12 +787,12 @@ System.out.println("    exception: " + ioe.getMessage());
         // across directories in a version-control system.
         return true;
     }
-
+     
     }
      */
 
     /* -----------------------------------------------------------
-     * This interface hides an action will be performed on an entry.
+     * This interface hides an action will be performed on an entry. 
      */
     private interface Strategy
     {
@@ -812,9 +814,9 @@ System.out.println("    exception: " + ioe.getMessage());
 
         public boolean evaluate(Entry entry)
         {
-            // recognizes all entries in a subtree of the
+            // recognizes all entries in a subtree of the 
             // 'scope' as editable entries
-            return (entry != null)?
+            return (entry != null)? 
                 entry.getName().startsWith(scope): false;
         }
     }
@@ -842,7 +844,7 @@ System.out.println("    exception: " + ioe.getMessage());
 
         public boolean evaluate(Entry entry)
         {
-            // do not accept "children" of a file
+            // do not accept "children" of a file 
             // ignore "read only" part of the filesystem
             if(entry.isReadOnly() == false) {
                 // identify a child
@@ -1044,7 +1046,7 @@ System.out.println("    exception: " + ioe.getMessage());
         {
 //            throw new IOException(
 //                "cannot rename readonly file: " + getName());   // I18N
-            // BUG: this is the design bug. Cache has to mamage such kind
+            // BUG: this is the design bug. Cache has to mamage such kind 
             //      of operation in order to keep the data integrity.
             this.name = name;
         }

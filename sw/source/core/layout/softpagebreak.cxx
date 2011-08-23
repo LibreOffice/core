@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,12 +36,12 @@
 #include "frmfmt.hxx"
 #include "rowfrm.hxx"
 #include "tabfrm.hxx"
-#include "switerator.hxx"
 
 void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
 {
-    SwIterator<SwTxtFrm,SwTxtNode> aIter( *this );
-    for( const SwTxtFrm *pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+    SwClientIter aIter( const_cast<SwTxtNode&>(*this) );
+    for( const SwTxtFrm *pFrm = (const SwTxtFrm*)aIter.First( TYPE(SwTxtFrm) );
+         pFrm; pFrm = (const SwTxtFrm*)aIter.Next() )
     {
         // No soft page break in header or footer
         if( pFrm->FindFooterOrHeader() || pFrm->IsInFly() )
@@ -64,7 +64,7 @@ void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                 const SwLayoutFrm *pRow = pFrm->GetUpper();
                 // Looking for the "most upper" row frame,
                 // skipping sub tables and/or table in table
-                while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() ||
+                while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() || 
                     pRow->GetUpper()->GetUpper()->IsInTab() )
                     pRow = pRow->GetUpper();
                 const SwTabFrm *pTab = pRow->FindTabFrm();
@@ -100,7 +100,7 @@ void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                 }
             }
             else // No soft page break if there's a "hard" page break attribute
-            if( pFirst2 == pFrm && !pFrm->IsPageBreak( sal_True ) )
+            if( pFirst2 == pFrm && !pFrm->IsPageBreak( TRUE ) )
                 rBreak.insert( pFrm->GetOfst() );
         }
     }
@@ -111,12 +111,13 @@ bool SwTableLine::hasSoftPageBreak() const
     // No soft page break for sub tables
     if( GetUpper() || !GetFrmFmt() )
         return false;
-    SwIterator<SwRowFrm,SwFmt> aIter( *GetFrmFmt() );
-    for( SwRowFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+    SwClientIter aIter( *GetFrmFmt() );
+    for( SwClient* pLast = aIter.First( TYPE( SwFrm ) ); pLast;
+         pLast = aIter.Next() )
     {
-        if( pLast->GetTabLine() == this )
+        if( ((SwRowFrm*)pLast)->GetTabLine() == this )
         {
-            const SwTabFrm* pTab = pLast->FindTabFrm();
+            const SwTabFrm* pTab = static_cast<SwRowFrm*>(pLast)->FindTabFrm();
             // No soft page break for
             //   tables with prevs, i.e. if the frame is not the first in its layout frame
             //   tables in footer or header
@@ -125,7 +126,7 @@ bool SwTableLine::hasSoftPageBreak() const
             //   master table frames with "hard" page break attribute
             if( pTab->GetIndPrev() || pTab->FindFooterOrHeader()
                 || pTab->IsInFly() || pTab->GetUpper()->IsInTab() ||
-                ( !pTab->IsFollow() && pTab->IsPageBreak( sal_True ) ) )
+                ( !pTab->IsFollow() && pTab->IsPageBreak( TRUE ) ) )
                 return false;
             const SwPageFrm* pPage = pTab->FindPageFrm();
             // No soft page break at the first page of the document
@@ -139,7 +140,7 @@ bool SwTableLine::hasSoftPageBreak() const
             // The row which could get a soft page break must be either the first
             // row of a master table frame or the first "non-headline-row" of a
             // follow table frame...
-            const SwFrm* pRow = pTab->IsFollow() ?
+            const SwFrm* pRow = pTab->IsFollow() ? 
                 pTab->GetFirstNonHeadlineRow() : pTab->Lower();
             if( pRow == pLast )
             {

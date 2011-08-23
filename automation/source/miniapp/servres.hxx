@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,14 +52,14 @@ protected:
     DateBox aDateBox1;
     FixedText aFixedText1;
 public:
-    ModalDialogGROSSER_TEST_DLG( Window * pParent, const ResId & rResId, sal_Bool bFreeRes = sal_True );
+    ModalDialogGROSSER_TEST_DLG( Window * pParent, const ResId & rResId, BOOL bFreeRes = TRUE );
 };
 
 class MenuMENU_CLIENT : public MenuBar
 {
 protected:
 public:
-    MenuMENU_CLIENT( const ResId & rResId, sal_Bool bFreeRes = sal_True );
+    MenuMENU_CLIENT( const ResId & rResId, BOOL bFreeRes = TRUE );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

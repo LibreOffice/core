@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 
 namespace dbaui
 {
-
+    
 DBG_NAME(OTitleWindow)
-OTitleWindow::OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,sal_Bool _bShift)
+OTitleWindow::OTitleWindow(Window* _pParent,USHORT _nTitleId,WinBits _nBits,BOOL _bShift)
 : Window(_pParent,_nBits | WB_DIALOGCONTROL)
 , m_aSpace1(this)
 , m_aSpace2(this)
@@ -73,34 +73,35 @@ void OTitleWindow::setChildWindow(Window* _pChild)
 {
     m_pChild = _pChild;
 }
-#define SPACE_BORDER    1
+#define SPACE_BORDER	1
 // -----------------------------------------------------------------------------
 void OTitleWindow::Resize()
 {
-    // parent window dimension
+    //////////////////////////////////////////////////////////////////////
+    // Abmessungen parent window
     Size aOutputSize( GetOutputSize() );
-    long nOutputWidth   = aOutputSize.Width();
-    long nOutputHeight  = aOutputSize.Height();
-
+    long nOutputWidth	= aOutputSize.Width();
+    long nOutputHeight	= aOutputSize.Height();
+    
     Size aTextSize = LogicToPixel( Size( 6, 3 ), MAP_APPFONT );
     sal_Int32 nXOffset = aTextSize.Width();
     sal_Int32 nYOffset = aTextSize.Height();
     sal_Int32 nHeight = GetTextHeight() + 2*nYOffset;
 
-    m_aSpace1.SetPosSizePixel(  Point(SPACE_BORDER, SPACE_BORDER ),
+    m_aSpace1.SetPosSizePixel(	Point(SPACE_BORDER, SPACE_BORDER ),
                                 Size(nXOffset , nHeight - SPACE_BORDER) );
-    m_aSpace2.SetPosSizePixel(  Point(nXOffset + SPACE_BORDER, SPACE_BORDER ),
+    m_aSpace2.SetPosSizePixel(	Point(nXOffset + SPACE_BORDER, SPACE_BORDER ),
                                 Size(nOutputWidth - nXOffset - 2*SPACE_BORDER, nYOffset) );
-    m_aTitle.SetPosSizePixel(   Point(nXOffset + SPACE_BORDER, nYOffset + SPACE_BORDER),
+    m_aTitle.SetPosSizePixel(	Point(nXOffset + SPACE_BORDER, nYOffset + SPACE_BORDER),
                                 Size(nOutputWidth - nXOffset - 2*SPACE_BORDER, nHeight - nYOffset - SPACE_BORDER) );
     if ( m_pChild )
     {
-        m_pChild->SetPosSizePixel(  Point(m_bShift ? (nXOffset+SPACE_BORDER) : sal_Int32(SPACE_BORDER), nHeight + nXOffset + SPACE_BORDER),
+        m_pChild->SetPosSizePixel(	Point(m_bShift ? (nXOffset+SPACE_BORDER) : sal_Int32(SPACE_BORDER), nHeight + nXOffset + SPACE_BORDER),
                                     Size(nOutputWidth - ( m_bShift ? (2*nXOffset - 2*SPACE_BORDER) : sal_Int32(SPACE_BORDER) ), nOutputHeight - nHeight - 2*nXOffset - 2*SPACE_BORDER) );
     }
 }
 // -----------------------------------------------------------------------------
-void OTitleWindow::setTitle(sal_uInt16 _nTitleId)
+void OTitleWindow::setTitle(USHORT _nTitleId)
 {
     if ( _nTitleId != 0 )
     {
@@ -144,7 +145,7 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
     StyleSettings aStyle = aAllSettings.GetStyleSettings();
     aStyle.SetMonoColor(aStyle.GetActiveBorderColor());//GetMenuBorderColor());
     aAllSettings.SetStyleSettings(aStyle);
-    SetSettings(aAllSettings);
+    SetSettings(aAllSettings);	
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
@@ -173,7 +174,7 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
         pWindows[i]->SetFont(aFont);
         pWindows[i]->SetTextColor( aStyle.GetLightColor() );
         pWindows[i]->SetBackground( Wallpaper( aStyle.GetShadowColor() ) );
-    }
+    }	
 }
 // .............................................................
 } // namespace dbaui

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,21 +46,16 @@
 #include "fmtlsplt.hxx"
 #include <xmloff/xmluconv.hxx>
 
-using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 
 
-#define API_LINE_NONE 0x7FFF
-#define API_LINE_SOLID 0
-#define API_LINE_DOTTED 1
-#define API_LINE_DASHED 2
-#define API_LINE_DOUBLE 3
-#define API_LINE_EMBOSSED 10
-#define API_LINE_ENGRAVED 11
-#define API_LINE_OUTSET 12
-#define API_LINE_INSET 13
+#define SVX_XML_BORDER_STYLE_NONE 0
+#define SVX_XML_BORDER_STYLE_SOLID 1
+#define SVX_XML_BORDER_STYLE_DOUBLE 2
+#define SVX_XML_BORDER_STYLE_DOTTED 3
+#define SVX_XML_BORDER_STYLE_DASHED 4
 
 #define SVX_XML_BORDER_WIDTH_THIN 0
 #define SVX_XML_BORDER_WIDTH_MIDDLE 1
@@ -69,16 +64,16 @@ using namespace ::com::sun::star;
 
 const struct SvXMLEnumMapEntry psXML_BorderStyles[] =
 {
-    { XML_NONE,       API_LINE_NONE },
-    { XML_HIDDEN,     API_LINE_NONE },
-    { XML_SOLID,      API_LINE_SOLID },
-    { XML_DOUBLE,     API_LINE_DOUBLE },
-    { XML_DOTTED,     API_LINE_DOTTED },
-    { XML_DASHED,     API_LINE_DASHED },
-    { XML_GROOVE,     API_LINE_ENGRAVED },
-    { XML_RIDGE,      API_LINE_EMBOSSED },
-    { XML_INSET,      API_LINE_INSET },
-    { XML_OUTSET,     API_LINE_OUTSET },
+    { XML_NONE,       SVX_XML_BORDER_STYLE_NONE },
+    { XML_HIDDEN,     SVX_XML_BORDER_STYLE_NONE },
+    { XML_SOLID,      SVX_XML_BORDER_STYLE_SOLID },
+    { XML_DOUBLE,     SVX_XML_BORDER_STYLE_DOUBLE },
+    { XML_DOTTED,     SVX_XML_BORDER_STYLE_DOTTED },
+    { XML_DASHED,     SVX_XML_BORDER_STYLE_DASHED },
+    { XML_GROOVE,     SVX_XML_BORDER_STYLE_SOLID },
+    { XML_RIDGE,      SVX_XML_BORDER_STYLE_SOLID },
+    { XML_INSET,      SVX_XML_BORDER_STYLE_SOLID },
+    { XML_OUTSET,     SVX_XML_BORDER_STYLE_SOLID },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -91,12 +86,45 @@ const struct SvXMLEnumMapEntry psXML_NamedBorderWidths[] =
 };
 // mapping tables to map external xml input to intarnal box line widths
 
+// Ein Eintrag besteht aus vier USHORTs. Der erste ist die Gesamtbreite,
+// die anderen sind die 3 Einzelbreiten
 
-const sal_uInt16 aBorderWidths[] =
+#define SBORDER_ENTRY( n ) \
+        DEF_LINE_WIDTH_##n, DEF_LINE_WIDTH_##n, 0, 0
+
+#define DBORDER_ENTRY( n ) \
+        DEF_DOUBLE_LINE##n##_OUT + DEF_DOUBLE_LINE##n##_IN + \
+        DEF_DOUBLE_LINE##n##_DIST, \
+        DEF_DOUBLE_LINE##n##_OUT, \
+        DEF_DOUBLE_LINE##n##_IN, \
+        DEF_DOUBLE_LINE##n##_DIST
+
+#define TDBORDER_ENTRY( n ) \
+        DEF_DOUBLE_LINE##n##_OUT, \
+        DEF_DOUBLE_LINE##n##_OUT, \
+        DEF_DOUBLE_LINE##n##_IN, \
+        DEF_DOUBLE_LINE##n##_DIST
+
+
+const sal_uInt16 aSBorderWidths[] =
 {
-        DEF_LINE_WIDTH_0,
-        DEF_LINE_WIDTH_5,
-        DEF_LINE_WIDTH_1,
+        SBORDER_ENTRY( 0 ), SBORDER_ENTRY( 5 ), SBORDER_ENTRY( 1 ),
+        SBORDER_ENTRY( 2 ), SBORDER_ENTRY( 3 ), SBORDER_ENTRY( 4 )
+};
+
+const sal_uInt16 aDBorderWidths[5*11] =
+{
+        DBORDER_ENTRY( 0 ),
+        DBORDER_ENTRY( 7 ),
+        DBORDER_ENTRY( 1 ),
+        DBORDER_ENTRY( 8 ),
+        DBORDER_ENTRY( 4 ),
+        DBORDER_ENTRY( 9 ),
+        DBORDER_ENTRY( 3 ),
+        DBORDER_ENTRY( 10 ),
+        DBORDER_ENTRY( 2 ),
+        DBORDER_ENTRY( 6 ),
+        DBORDER_ENTRY( 5 )
 };
 
 sal_Bool lcl_frmitems_parseXMLBorder( const OUString& rValue,
@@ -154,10 +182,57 @@ sal_Bool lcl_frmitems_parseXMLBorder( const OUString& rValue,
 
 void lcl_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
 {
-    ::editeng::SvxBorderStyle eStyle = ::editeng::NO_STYLE;
-    if ( nStyle != API_LINE_NONE )
-        eStyle = ::editeng::SvxBorderStyle( nStyle );
+    SvxBorderStyle eStyle = SOLID;
+    switch ( nStyle )
+    {
+        case SVX_XML_BORDER_STYLE_DOTTED:
+            eStyle = DOTTED;
+            break;
+        case SVX_XML_BORDER_STYLE_DASHED:
+            eStyle = DASHED;
+            break;
+        default:
+            eStyle = SOLID;
+    }
     rLine.SetStyle( eStyle );
+}
+
+void lcl_frmitems_setXMLBorderWidth( SvxBorderLine& rLine,
+                                     sal_uInt16 nOutWidth, sal_uInt16 nInWidth,
+                                     sal_uInt16 nDistance )
+{
+    rLine.SetOutWidth( nOutWidth );
+    rLine.SetInWidth( nInWidth );
+    rLine.SetDistance( nDistance );
+}
+
+void lcl_frmitems_setXMLBorderWidth( SvxBorderLine& rLine,
+                                     sal_uInt16 nWidth, sal_Bool bDouble )
+{
+    const sal_uInt16 *aWidths;
+    sal_uInt16 nSize;
+    if( !bDouble )
+    {
+        aWidths = aSBorderWidths;
+        nSize = sizeof( aSBorderWidths );
+    }
+    else
+    {
+        aWidths = aDBorderWidths;
+        nSize = sizeof( aDBorderWidths );
+    }
+
+    sal_uInt16 i = (nSize / sizeof(sal_uInt16)) - 4;
+    while( i>0 &&
+           nWidth <= ((aWidths[i] + aWidths[i-4]) / 2)  )
+    {
+        DBG_ASSERT( aWidths[i] >= aWidths[i-4], "line widths are unordered!" );
+        i -= 4;
+    }
+
+    rLine.SetOutWidth( aWidths[i+1] );
+    rLine.SetInWidth( aWidths[i+2] );
+    rLine.SetDistance( aWidths[i+3] );
 }
 
 sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
@@ -167,7 +242,7 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                                     sal_Bool bHasColor, const Color& rColor )
 {
     // first of all, delete an empty line
-    if( (bHasStyle && API_LINE_NONE == nStyle) ||
+    if( (bHasStyle && SVX_XML_BORDER_STYLE_NONE == nStyle) ||
         (bHasWidth && USHRT_MAX == nNamedWidth && 0 == nWidth) )
     {
         sal_Bool bRet = 0 != rpLine;
@@ -190,20 +265,25 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
 
 
     if( ( bHasWidth &&
-          (USHRT_MAX != nNamedWidth || (nWidth != rpLine->GetWidth() ) ) ) ||
+          (USHRT_MAX != nNamedWidth || (nWidth != rpLine->GetOutWidth() +
+                                        rpLine->GetInWidth() +
+                                        rpLine->GetDistance()) ) ) ||
         ( bHasStyle &&
-          ((API_LINE_SOLID == nStyle && rpLine->GetDistance()) ||
-            (API_LINE_DOUBLE == nStyle && !rpLine->GetDistance())) ) )
+          ((SVX_XML_BORDER_STYLE_SOLID == nStyle && rpLine->GetDistance()) ||
+            (SVX_XML_BORDER_STYLE_DOUBLE == nStyle && !rpLine->GetDistance())) ))
    {
-       sal_Bool bDouble = (bHasWidth && API_LINE_DOUBLE == nStyle ) ||
+       sal_Bool bDouble = (bHasWidth && SVX_XML_BORDER_STYLE_DOUBLE == nStyle ) ||
            rpLine->GetDistance();
 
        // The width has to be changed
        if( bHasWidth && USHRT_MAX != nNamedWidth )
        {
-           if ( bDouble )
-               rpLine->SetStyle( ::editeng::DOUBLE );
-           rpLine->SetWidth( aBorderWidths[nNamedWidth] );
+           const sal_uInt16 *aWidths = bDouble ? aDBorderWidths :aSBorderWidths;
+
+           sal_uInt16 nNWidth = nNamedWidth * 4;
+           rpLine->SetOutWidth( aWidths[nNWidth+1] );
+           rpLine->SetInWidth( aWidths[nNWidth+2] );
+           rpLine->SetDistance( aWidths[nNWidth+3] );
        }
        else
        {
@@ -211,7 +291,7 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                nWidth = rpLine->GetInWidth() + rpLine->GetDistance() +
                    rpLine->GetOutWidth();
 
-           rpLine->SetWidth( nWidth );
+           lcl_frmitems_setXMLBorderWidth( *rpLine, nWidth, bDouble );
        }
        lcl_frmitems_setXMLBorderStyle( *rpLine, nStyle );
    }
@@ -231,30 +311,31 @@ void lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
         rpLine = new SvxBorderLine;
 
     if( nWidth > 0 )
-        rpLine->SetWidth( nWidth );
+        lcl_frmitems_setXMLBorderWidth( *rpLine, nWidth, sal_True );
     else
-        rpLine->GuessLinesWidths( ::editeng::DOUBLE, nOutWidth, nInWidth, nDistance );
+        lcl_frmitems_setXMLBorderWidth( *rpLine, nOutWidth, nInWidth,
+                                        nDistance );
 }
 
 const struct SvXMLEnumMapEntry psXML_BrushRepeat[] =
 {
-    { XML_BACKGROUND_REPEAT,        GPOS_TILED  },
-    { XML_BACKGROUND_NO_REPEAT,     GPOS_MM     },
-    { XML_BACKGROUND_STRETCH,       GPOS_AREA   },
+    { XML_BACKGROUND_REPEAT,		GPOS_TILED	},
+    { XML_BACKGROUND_NO_REPEAT,     GPOS_MM		},
+    { XML_BACKGROUND_STRETCH,		GPOS_AREA	},
     { XML_TOKEN_INVALID, 0 }
 };
 
 const struct SvXMLEnumMapEntry psXML_BrushHoriPos[] =
 {
-    { XML_LEFT,         GPOS_LM },
-    { XML_RIGHT,        GPOS_RM },
+    { XML_LEFT,		    GPOS_LM	},
+    { XML_RIGHT,		GPOS_RM	},
     { XML_TOKEN_INVALID, 0 }
 };
 
 const struct SvXMLEnumMapEntry psXML_BrushVertPos[] =
 {
-    { XML_TOP,          GPOS_MT },
-    { XML_BOTTOM,       GPOS_MB },
+    { XML_TOP,			GPOS_MT	},
+    { XML_BOTTOM,		GPOS_MB	},
     { XML_TOKEN_INVALID, 0 }
 };
 

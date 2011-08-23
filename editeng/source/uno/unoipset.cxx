@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,10 @@
 #include "precompiled_editeng.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/eitem.hxx>
+#include <tools/list.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
+#include <vector>
 #include <svl/itemprop.hxx>
 
 #include <editeng/unoipset.hxx>
@@ -42,8 +44,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
-
-using ::std::vector;
 
 //----------------------------------------------------------------------
 
@@ -56,15 +56,17 @@ struct SfxItemPropertyMapEntryHash
 
 struct SvxIDPropertyCombine
 {
-    sal_uInt16  nWID;
-    uno::Any    aAny;
+    sal_uInt16	nWID;
+    uno::Any	aAny;
 };
 
+DECLARE_LIST( SvxIDPropertyCombineList, SvxIDPropertyCombine * )
 
 SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, SfxItemPool& rItemPool, sal_Bool bConvertTwips )
 :   m_aPropertyMap( pMap ),
     _pMap(pMap), mbConvertTwips(bConvertTwips), mrItemPool( rItemPool )
 {
+    pCombiList = NULL;
 }
 
 //----------------------------------------------------------------------
@@ -76,11 +78,16 @@ SvxItemPropertySet::~SvxItemPropertySet()
 //----------------------------------------------------------------------
 uno::Any* SvxItemPropertySet::GetUsrAnyForID(sal_uInt16 nWID) const
 {
-    for ( size_t i = 0, n = aCombineList.size(); i < n; ++i )
+    if(pCombiList && pCombiList->Count())
     {
-        SvxIDPropertyCombine* pActual = aCombineList[ i ];
-        if( pActual->nWID == nWID )
-            return &pActual->aAny;
+        SvxIDPropertyCombine* pActual = pCombiList->First();
+        while(pActual)
+        {
+            if(pActual->nWID == nWID)
+                return &pActual->aAny;
+            pActual = pCombiList->Next();
+
+        }
     }
     return NULL;
 }
@@ -88,19 +95,22 @@ uno::Any* SvxItemPropertySet::GetUsrAnyForID(sal_uInt16 nWID) const
 //----------------------------------------------------------------------
 void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
 {
+    if(!pCombiList)
+        pCombiList = new SvxIDPropertyCombineList();
+
     SvxIDPropertyCombine* pNew = new SvxIDPropertyCombine;
     pNew->nWID = nWID;
     pNew->aAny = rAny;
-    aCombineList.push_back( pNew );
+    pCombiList->Insert(pNew);
 }
 
 //----------------------------------------------------------------------
 
 void SvxItemPropertySet::ClearAllUsrAny()
 {
-    for ( size_t i = 0, n = aCombineList.size(); i < n; ++i )
-        delete aCombineList[ i ];
-    aCombineList.clear();
+    if(pCombiList)
+        delete pCombiList;
+    pCombiList = NULL;
 }
 
 //----------------------------------------------------------------------
@@ -128,8 +138,8 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     if( NULL == pItem && pPool )
         pItem = &(pPool->GetDefaultItem( pMap->nWID ));
 
-    const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((sal_uInt16)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
-    sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
+    const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+    BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
     if( eMapUnit == SFX_MAPUNIT_100TH_MM )
         nMemberId &= (~CONVERT_TWIPS);
 
@@ -142,7 +152,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
             {
                 if ( !bDontConvertNegativeValues || SvxUnoCheckForPositiveValue( aVal ) )
                     SvxUnoConvertToMM( eMapUnit, aVal );
-            }
+            }			
         }
         else if ( pMap->pType->getTypeClass() == uno::TypeClass_ENUM &&
               aVal.getValueType() == ::getCppuType((const sal_Int32*)0) )
@@ -155,7 +165,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     }
     else
     {
-        OSL_FAIL( "No SfxPoolItem found for property!" );
+        DBG_ERROR( "No SfxPoolItem found for property!" );
     }
 
     return aVal;
@@ -167,18 +177,18 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
     if(!pMap || !pMap->nWID)
         return;
 
-    // Get item
+    // item holen
     const SfxPoolItem* pItem = 0;
     SfxPoolItem *pNewItem = 0;
     SfxItemState eState = rSet.GetItemState( pMap->nWID, sal_True, &pItem );
     SfxItemPool* pPool = rSet.GetPool();
 
-    // Put UnoAny in the item value
+    // UnoAny in item-Wert stecken
     if(eState < SFX_ITEM_DEFAULT || pItem == NULL)
     {
         if( pPool == NULL )
         {
-            OSL_FAIL( "No default item and no pool?" );
+            DBG_ERROR( "No default item and no pool?" );
             return;
         }
 
@@ -190,7 +200,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
     {
         uno::Any aValue( rVal );
 
-        const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((sal_uInt16)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+        const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
 
         // check for needed metric translation
         if( (pMap->nMemberId & SFX_METRIC_ITEM) && eMapUnit != SFX_MAPUNIT_100TH_MM )
@@ -201,13 +211,13 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 
         pNewItem = pItem->Clone();
 
-        sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
+        BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
         if( eMapUnit == SFX_MAPUNIT_100TH_MM )
             nMemberId &= (~CONVERT_TWIPS);
 
         if( pNewItem->PutValue( aValue, nMemberId ) )
         {
-            // Set new item in item set
+            // neues item in itemset setzen
             rSet.Put( *pNewItem, pMap->nWID );
         }
         delete pNewItem;
@@ -217,22 +227,25 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 //----------------------------------------------------------------------
 uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const
 {
-    // Already entered a value? Then finish quickly
+    // Schon ein Wert eingetragen? Dann schnell fertig
     uno::Any* pUsrAny = GetUsrAnyForID(pMap->nWID);
     if(pUsrAny)
         return *pUsrAny;
 
-    // No UsrAny detected yet, generate Default entry and return this
-    const SfxMapUnit eMapUnit = mrItemPool.GetMetric((sal_uInt16)pMap->nWID);
-    sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
+    // Noch kein UsrAny gemerkt, generiere Default-Eintrag und gib
+    // diesen zurueck
+
+    const SfxMapUnit eMapUnit = mrItemPool.GetMetric((USHORT)pMap->nWID);
+    BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
     if( eMapUnit == SFX_MAPUNIT_100TH_MM )
         nMemberId &= (~CONVERT_TWIPS);
+
     uno::Any aVal;
     SfxItemSet aSet( mrItemPool, pMap->nWID, pMap->nWID);
 
     if( (pMap->nWID < OWN_ATTR_VALUE_START) && (pMap->nWID > OWN_ATTR_VALUE_END ) )
     {
-        // Get Default from ItemPool
+        // Default aus ItemPool holen
         if(mrItemPool.IsWhich(pMap->nWID))
             aSet.Put(mrItemPool.GetDefaultItem(pMap->nWID));
     }
@@ -254,7 +267,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
         if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
         {
             SvxUnoConvertToMM( eMapUnit, aVal );
-        }
+        }			
     }
 
     if ( pMap->pType->getTypeClass() == uno::TypeClass_ENUM &&
@@ -299,10 +312,10 @@ uno::Reference< beans::XPropertySetInfo >  SvxItemPropertySet::getPropertySetInf
 //----------------------------------------------------------------------
 
 #ifndef TWIPS_TO_MM
-#define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
+#define	TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
 #endif
 #ifndef MM_TO_TWIPS
-#define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
+#define	MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
 #endif
 
 /** converts the given any with a metric to 100th/mm if needed */
@@ -331,13 +344,13 @@ void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, uno::Any & rMetric ) th
                 rMetric <<= (sal_uInt32)(TWIPS_TO_MM(*(sal_uInt32*)rMetric.getValue()));
                 break;
             default:
-                OSL_FAIL("AW: Missing unit translation to 100th mm!");
+                DBG_ERROR("AW: Missing unit translation to 100th mm!");
             }
             break;
         }
         default:
         {
-            OSL_FAIL("AW: Missing unit translation to 100th mm!");
+            DBG_ERROR("AW: Missing unit translation to 100th mm!");
         }
     }
 }
@@ -369,13 +382,13 @@ void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, uno::Any & rMetr
                     rMetric <<= (sal_uInt32)(MM_TO_TWIPS(*(sal_uInt32*)rMetric.getValue()));
                     break;
                 default:
-                    OSL_FAIL("AW: Missing unit translation to 100th mm!");
+                    DBG_ERROR("AW: Missing unit translation to 100th mm!");
             }
             break;
         }
         default:
         {
-            OSL_FAIL("AW: Missing unit translation to PoolMetrics!");
+            DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
         }
     }
 }

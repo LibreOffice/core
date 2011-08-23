@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPDLVLISTHEADHOLDER_HXX_
@@ -68,28 +68,28 @@
 #include "lwpobj.hxx"
 #include "lwpdlvlist.hxx"
 /**
- * @brief   VO_HEADHOLDER, LwpDLVListHeadHolder,
- *      contains an id to the head of LwpDLVList
+ * @brief	VO_HEADHOLDER, LwpDLVListHeadHolder,
+ * 		contains an id to the head of LwpDLVList
 */
 class LwpDLVListHeadHolder : public LwpObject
 {
 public:
     LwpDLVListHeadHolder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    ~LwpDLVListHeadHolder(){}
+    ~LwpDLVListHeadHolder(){};
     void Read();
     LwpObjectID* GetHeadID() { return &m_DLVHead;}
 private:
     LwpObjectID m_DLVHead;
 };
 /**
- * @brief   VO_HEADTAILHOLDER, LwpDLVListHeadTailHolder,
- *      contains a LwpDLVListHeadTail (Head and tail id)
+ * @brief	VO_HEADTAILHOLDER, LwpDLVListHeadTailHolder,
+ * 		contains a LwpDLVListHeadTail (Head and tail id)
 */
 class LwpDLVListHeadTailHolder : public LwpObject
 {
 public:
     LwpDLVListHeadTailHolder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    ~LwpDLVListHeadTailHolder(){}
+    ~LwpDLVListHeadTailHolder(){};
     void Read();
     LwpObjectID* GetHead(){ return m_HeadTail.GetHead();}
     LwpObjectID* GetTail(){ return m_HeadTail.GetTail();}
@@ -97,14 +97,14 @@ protected:
     LwpDLVListHeadTail m_HeadTail;
 };
 /**
- * @brief   LwpObjectHolder, which is LwpDLVList, contains an id to an object
- *      VO_OBJECTHOLDER
+ * @brief	LwpObjectHolder, which is LwpDLVList, contains an id to an object
+ *		VO_OBJECTHOLDER
 */
 class LwpObjectHolder : public LwpDLVList
 {
 public:
     LwpObjectHolder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    ~LwpObjectHolder(){}
+    ~LwpObjectHolder(){};
     void Read();
     LwpObjectID* GetObject(){return &m_Object;}
 protected:
@@ -112,14 +112,14 @@ protected:
 };
 
 /**
- * @brief       VO_LISTLIST object in .lwp file
+ * @brief		VO_LISTLIST object in .lwp file
  *
  */
 class LwpListList : public LwpObjectHolder
 {
 public:
     LwpListList(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    ~LwpListList(){}
+    ~LwpListList(){};
     void Read();
     LwpObjectID* GetHead(){ return m_HeadTail.GetHead();}
     LwpObjectID* GetTail(){ return m_HeadTail.GetTail();}

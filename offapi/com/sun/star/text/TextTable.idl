@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,8 +90,8 @@
 
 /** is a table of text cells which is anchored to a surrounding text.
 
-    <p>Note: The anchor of the actual implementation for text tables
-    does not have a position in the text. Thus that anchor can not be
+    <p>Note: The anchor of the actual implementation for text tables 
+    does not have a position in the text. Thus that anchor can not be 
     used for some operation like <member>XTextContent::attach</member> or
     <member>XText::insertTextContent</member>
     or other function that require the object to have a position in the text.</p>
@@ -122,7 +122,7 @@
 published service TextTable
 {
     service com::sun::star::text::TextContent;
-
+    
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
     interface com::sun::star::text::XTextTable;
@@ -139,7 +139,7 @@ published service TextTable
 
     [optional] interface com::sun::star::sheet::XCellRangeData;
 
-    /** determines the type of break that is applied at the beginning of the table.@see com.sun.star.style.BreakType
+    /** determins the type of break that is applied at the beginning of the table.@see com.sun.star.style.BreakType
      */
     [property] com::sun::star::style::BreakType BreakType;
     //-------------------------------------------------------------------------
@@ -183,40 +183,40 @@ published service TextTable
     [property] string PageDescName;
     //-------------------------------------------------------------------------
 
-    /** determines the width of the table relative to its environment.
+    /** determins the width of the table relative to its environment.
      */
     [property] short RelativeWidth;
     //-------------------------------------------------------------------------
-    /** determines if the value of the relative width is valid.
+    /** determins if the value of the relative width is valid.
      */
     [property] boolean IsWidthRelative;
     //-------------------------------------------------------------------------
 
-    /** determines if the first row of the table is repeated on every new page.
+    /** determins if the first row of the table is repeated on every new page.
      */
     [property] boolean RepeatHeadline;
         //-------------------------------------------------------------------------
-        /** determines the number of rows of the table repeated on every new page.
+        /** determins the number of rows of the table repeated on every new page.
          */
         [optional, property] long HeaderRowCount;
         //-------------------------------------------------------------------------
 
-    /** determines the type, color and size of the shadow.@see com.sun.star.table.ShadowFormat
+    /** determins the type, color and size of the shadow.@see com.sun.star.table.ShadowFormat
      */
     [property] com::sun::star::table::ShadowFormat ShadowFormat;
     //-------------------------------------------------------------------------
 
-    /** determines the top margin.
+    /** determins the top margin.
      */
     [property] long TopMargin;
     //-------------------------------------------------------------------------
 
-    /** determines the bottom margin.
+    /** determins the bottom margin.
      */
     [property] long BottomMargin;
     //-------------------------------------------------------------------------
 
-    /** determines if the background color is transparent.
+    /** determins if the background color is transparent.
      */
     [property] boolean BackTransparent;
     //-------------------------------------------------------------------------
@@ -230,13 +230,13 @@ published service TextTable
     [property] long Width;
     //-------------------------------------------------------------------------
 
-    /** determines if the first row of the table should be treated as
+    /** determins if the first row of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartRowAsLabel;
     //-------------------------------------------------------------------------
 
-    /** determines if the first column of the table should be treated as
+    /** determins if the first column of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartColumnAsLabel;
@@ -281,7 +281,7 @@ published service TextTable
 
     //-------------------------------------------------------------------------
 
-    /** determines whether borders of neighboring table cells are
+    /** determines whether borders of neighbouring table cells are
      * collapsed into one
      */
     [optional, property] boolean CollapsingBorders;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 
 #include <pyuno/pyuno.hxx>
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <hash_map>
+#include <hash_set>
 
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -81,7 +81,7 @@ static const sal_Int32 VAL2STR_MODE_SHALLOW = 1;
 rtl::OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef, sal_Int32 mode = VAL2STR_MODE_DEEP ) SAL_THROW( () );
 //--------------------------------------------------
 
-typedef ::boost::unordered_map
+typedef ::std::hash_map
 <
     PyRef,
     com::sun::star::uno::WeakReference< com::sun::star::script::XInvocation >,
@@ -90,7 +90,7 @@ typedef ::boost::unordered_map
 > PyRef2Adapter;
 
 
-typedef ::boost::unordered_map
+typedef ::std::hash_map
 <
 rtl::OUString,
 PyRef,
@@ -98,7 +98,7 @@ rtl::OUStringHash,
 std::equal_to<rtl::OUString>
 > ExceptionClassMap;
 
-typedef ::boost::unordered_map
+typedef ::std::hash_map
 <
     rtl::OUString,
     com::sun::star::uno::Sequence< sal_Int16 >,
@@ -106,7 +106,7 @@ typedef ::boost::unordered_map
     std::equal_to< rtl::OUString >
 > MethodOutIndexMap;
 
-typedef ::boost::unordered_set< PyRef , PyRef::Hash , std::equal_to<PyRef> > ClassSet;
+typedef ::std::hash_set< PyRef , PyRef::Hash , std::equal_to<PyRef> > ClassSet;
 
 PyObject* PyUNO_new(
     const com::sun::star::uno::Any & targetInterface,
@@ -132,7 +132,7 @@ PyRef ustring2PyUnicode( const rtl::OUString &source );
 PyRef ustring2PyString( const ::rtl::OUString & source );
 rtl::OUString pyString2ustring( PyObject *str );
 
-
+    
 PyRef AnyToPyObject (const com::sun::star::uno::Any & a, const Runtime &r )
     throw ( com::sun::star::uno::RuntimeException );
 
@@ -244,7 +244,7 @@ public:
     PyRef getWrappedObject() { return mWrappedObject; }
     com::sun::star::uno::Sequence< com::sun::star::uno::Type > getWrappedTypes() { return mTypes; }
     virtual ~Adapter();
-
+    
     // XInvocation
     virtual com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >
            SAL_CALL getIntrospection(  ) throw (::com::sun::star::uno::RuntimeException);

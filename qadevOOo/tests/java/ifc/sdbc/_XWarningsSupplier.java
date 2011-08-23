@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ public class _XWarningsSupplier extends MultiMethodTest {
         // not sure what the below test was intended to test, but it actually fails with an SQLException (which is
         // correct for what is done there), and thus makes the complete interface test fail (which is not correct)
         // So, for the moment, just let the test succeed all the time - until issue #i84235# is fixed
-
+        
         if ( false )
         {
             int oldVal = 0, newVal = 0;
@@ -95,14 +95,14 @@ public class _XWarningsSupplier extends MultiMethodTest {
 
             boolean res = false;
 
-            try
+            try 
             {
                 Object warns = oObj.getWarnings();
                 res = (!utils.isVoid(warns));
             }
             catch (SQLException e)
             {
-                log.println("Exception occurred :");
+                log.println("Exception occured :");
                 e.printStackTrace(log);
                 tRes.tested("getWarnings()", res);
                 return;
@@ -127,7 +127,7 @@ public class _XWarningsSupplier extends MultiMethodTest {
             Object warns = oObj.getWarnings();
             res = (utils.isVoid(warns));
         } catch (SQLException e) {
-            log.println("Exception occurred :");
+            log.println("Exception occured :");
             e.printStackTrace(log);
             tRes.tested("clearWarnings()", res);
             return;

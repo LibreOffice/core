@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,17 +41,17 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-//  everything is static...
+//	everything is static...
 
 LanguageType ScUnoConversion::GetLanguage( const lang::Locale& rLocale )
 {
-    //  empty language -> LANGUAGE_SYSTEM
+    //	empty language -> LANGUAGE_SYSTEM
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_SYSTEM;
 
     LanguageType eRet = MsLangId::convertLocaleToLanguage( rLocale );
     if ( eRet == LANGUAGE_NONE )
-        eRet = LANGUAGE_SYSTEM;         //! or throw an exception?
+        eRet = LANGUAGE_SYSTEM;			//! or throw an exception?
 
     return eRet;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,8 @@
 #include <itemholder1.hxx>
 
 using namespace utl;
+using namespace rtl;
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
-
 namespace utl
 {
 class SourceViewConfig_Impl : public utl::ConfigItem
@@ -60,7 +58,7 @@ public:
     ~SourceViewConfig_Impl();
 
     virtual void    Notify( const Sequence< rtl::OUString >& aPropertyNames );
-    virtual void    Commit();
+    virtual void	Commit();
 
     const rtl::OUString&    GetFontName() const
                                 {return m_sFontName;}
@@ -99,19 +97,25 @@ public:
 SourceViewConfig_Impl* SourceViewConfig::m_pImplConfig = 0;
 sal_Int32              SourceViewConfig::m_nRefCount = 0;
 namespace { struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {}; }
+/* -----------------------------28.08.2002 16:45------------------------------
 
+ ---------------------------------------------------------------------------*/
 SourceViewConfig_Impl::SourceViewConfig_Impl() :
-    ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Font/SourceViewFont"))),
+    ConfigItem(OUString::createFromAscii("Office.Common/Font/SourceViewFont")),
     m_nFontHeight(12),
     m_bProportionalFontOnly(sal_False)
 {
     Load();
 }
+/* -----------------------------28.08.2002 16:45------------------------------
 
+ ---------------------------------------------------------------------------*/
 SourceViewConfig_Impl::~SourceViewConfig_Impl()
 {
 }
+/* -----------------------------28.08.2002 16:25------------------------------
 
+ ---------------------------------------------------------------------------*/
 Sequence< OUString > SourceViewConfig_Impl::GetPropertyNames()
 {
     //this list needs exactly to mach the enum PropertyNameIndex
@@ -130,6 +134,9 @@ Sequence< OUString > SourceViewConfig_Impl::GetPropertyNames()
     return aNames;
 }
 
+/*-- 28.08.2002 16:37:59---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
 void SourceViewConfig_Impl::Load()
 {
     Sequence< OUString > aNames = GetPropertyNames();
@@ -153,12 +160,16 @@ void SourceViewConfig_Impl::Load()
         }
     }
 }
+/*-- 28.08.2002 16:38:00---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SourceViewConfig_Impl::Notify( const Sequence< OUString >& )
 {
     Load();
 }
+/*-- 28.08.2002 16:38:00---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SourceViewConfig_Impl::Commit()
 {
     ClearModified();
@@ -180,7 +191,9 @@ void SourceViewConfig_Impl::Commit()
 
     NotifyListeners(0);
 }
+/*-- 28.08.2002 16:32:19---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 SourceViewConfig::SourceViewConfig()
 {
     {
@@ -196,7 +209,9 @@ SourceViewConfig::SourceViewConfig()
 
     m_pImplConfig->AddListener( this );
 }
+/*-- 28.08.2002 16:32:19---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 SourceViewConfig::~SourceViewConfig()
 {
     m_pImplConfig->RemoveListener( this );
@@ -208,32 +223,44 @@ SourceViewConfig::~SourceViewConfig()
         DELETEZ( m_pImplConfig );
     }
 }
+/*-- 28.08.2002 16:32:19---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 const OUString&  SourceViewConfig::GetFontName() const
 {
     return m_pImplConfig->GetFontName();
 }
+/*-- 28.08.2002 16:32:20---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SourceViewConfig::SetFontName(const OUString& rName)
 {
     m_pImplConfig->SetFontName(rName);
 }
+/*-- 28.08.2002 16:32:20---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 sal_Int16 SourceViewConfig::GetFontHeight() const
 {
     return m_pImplConfig->GetFontHeight();
 }
+/*-- 28.08.2002 16:32:20---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SourceViewConfig::SetFontHeight(sal_Int16 nHeight)
 {
     m_pImplConfig->SetFontHeight(nHeight);
 }
+/*-- 28.08.2002 16:32:20---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 sal_Bool SourceViewConfig::IsShowProportionalFontsOnly() const
 {
     return m_pImplConfig->IsShowProportionalFontsOnly();
 }
+/*-- 28.08.2002 16:32:20---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SourceViewConfig::SetShowProportionalFontsOnly(sal_Bool bSet)
 {
     m_pImplConfig->SetShowProportionalFontsOnly(bSet);

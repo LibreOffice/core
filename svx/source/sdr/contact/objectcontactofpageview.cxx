@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/sdr/event/eventhandler.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <svx/sdrpaintwindow.hxx>
+#include <sdrpaintwindow.hxx>
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <svx/unoapi.hxx>
+#include <unoapi.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -64,7 +64,7 @@ namespace sdr
         }
 
         ObjectContactOfPageView::ObjectContactOfPageView(SdrPageWindow& rPageWindow)
-        :   ObjectContact(),
+        :	ObjectContact(),
             mrPageWindow(rPageWindow)
         {
             // init PreviewRenderer flag
@@ -197,7 +197,7 @@ namespace sdr
                     const Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
 
                     aViewRange = basegfx::B2DRange(
-                        aLogicClipRectangle.Left(), aLogicClipRectangle.Top(),
+                        aLogicClipRectangle.Left(), aLogicClipRectangle.Top(), 
                         aLogicClipRectangle.Right(), aLogicClipRectangle.Bottom());
                 }
             }
@@ -213,18 +213,18 @@ namespace sdr
                     // get logic clip range and create discrete one
                     const Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
                     basegfx::B2DRange aLogicClipRange(
-                        aLogicClipRectangle.Left(), aLogicClipRectangle.Top(),
+                        aLogicClipRectangle.Left(), aLogicClipRectangle.Top(), 
                         aLogicClipRectangle.Right(), aLogicClipRectangle.Bottom());
                     basegfx::B2DRange aDiscreteClipRange(aLogicClipRange);
                     aDiscreteClipRange.transform(rTargetOutDev.GetViewTransformation());
-
+                    
                     // align the discrete one to discrete boundaries (pixel bounds). Also
                     // expand X and Y max by one due to Rectangle definition source
                     aDiscreteClipRange.expand(basegfx::B2DTuple(
-                        floor(aDiscreteClipRange.getMinX()),
+                        floor(aDiscreteClipRange.getMinX()), 
                         floor(aDiscreteClipRange.getMinY())));
                     aDiscreteClipRange.expand(basegfx::B2DTuple(
-                        1.0 + ceil(aDiscreteClipRange.getMaxX()),
+                        1.0 + ceil(aDiscreteClipRange.getMaxX()), 
                         1.0 + ceil(aDiscreteClipRange.getMaxY())));
 
                     // intersect current ViewRange with ClipRange
@@ -237,14 +237,14 @@ namespace sdr
 
             // update local ViewInformation2D
             const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
-                basegfx::B2DHomMatrix(),
-                rTargetOutDev.GetViewTransformation(),
-                aViewRange,
+                basegfx::B2DHomMatrix(), 
+                rTargetOutDev.GetViewTransformation(), 
+                aViewRange, 
                 GetXDrawPageForSdrPage(GetSdrPage()),
-                fCurrentTime,
-                uno::Sequence<beans::PropertyValue>());
+                fCurrentTime, 
+                0);
             updateViewInformation2D(aNewViewInformation2D);
-
+            
             // get whole Primitive2DSequence; this will already make use of updated ViewInformation2D
             // and may use the MapMode from the Target OutDev in the DisplayInfo
             drawinglayer::primitive2d::Primitive2DSequence xPrimitiveSequence(rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo));
@@ -340,7 +340,7 @@ namespace sdr
                 const OutputDevice& rTargetOutDev = GetPageWindow().GetPaintWindow().GetTargetOutputDevice();
                 const Size aOutputSizePixel(rTargetOutDev.GetOutputSizePixel());
                 basegfx::B2DRange aLogicViewRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
-
+                
                 aLogicViewRange.transform(rTargetOutDev.GetInverseViewTransformation());
 
                 if(!aLogicViewRange.isEmpty() && !aLogicViewRange.overlaps(rRange))
@@ -381,7 +381,7 @@ namespace sdr
             SdrView& rView = GetPageWindow().GetPageView().GetView();
             return rView.IsSwapAsynchron();
         }
-
+            
         // check if buffering of MasterPages is allowed. Default is sal_False.
         bool ObjectContactOfPageView::IsMasterPageBufferingAllowed() const
         {
@@ -452,7 +452,7 @@ namespace sdr
         OutputDevice* ObjectContactOfPageView::TryToGetOutputDevice() const
         {
             SdrPreRenderDevice* pPreRenderDevice = mrPageWindow.GetPaintWindow().GetPreRenderDevice();
-
+            
             if(pPreRenderDevice)
             {
                 return &(pPreRenderDevice->GetPreRenderDevice());
@@ -467,7 +467,7 @@ namespace sdr
         void ObjectContactOfPageView::SetUNOControlsDesignMode( bool _bDesignMode ) const
         {
             const sal_uInt32 nCount(getViewObjectContactCount());
-
+            
             for(sal_uInt32 a(0); a < nCount; a++)
             {
                 const ViewObjectContact* pVOC = getViewObjectContact(a);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,19 +37,22 @@ namespace xls {
 
 // ============================================================================
 
-class CommentsFragment : public WorksheetFragmentBase
+class OoxCommentsFragment : public OoxWorksheetFragmentBase
 {
 public:
-    explicit            CommentsFragment(
+    explicit            OoxCommentsFragment(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
-    virtual void        onEndElement();
+    // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
+
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
     virtual void        onEndRecord();
+
+    // oox.core.FragmentHandler2 interface ------------------------------------
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
@@ -57,7 +60,7 @@ private:
     /** Imports comment data from the comment element. */
     void                importComment( const AttributeList& rAttribs );
     /** Imports comment data from the COMMENT record. */
-    void                importComment( SequenceInputStream& rStrm );
+    void                importComment( RecordInputStream& rStrm );
 
 private:
     CommentRef          mxComment;

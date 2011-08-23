@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+                                                                                                                             
 
 #ifndef SC_QPROFORM_HXX
 #define SC_QPROFORM_HXX
@@ -40,35 +40,35 @@ typedef OpCode DefTokenId;
 
 enum FUNC_TYPE
 {
-    FT_Return,
+    FT_Return,  
     FT_FuncFix0,
-    FT_FuncFix1,
-    FT_FuncFix2,
-    FT_FuncFix3,
-    FT_FuncFix4,
+    FT_FuncFix1,   
+    FT_FuncFix2,  
+    FT_FuncFix3,    
+    FT_FuncFix4,    
     FT_FuncFix5,
     FT_FuncFix6,
-    FT_FuncVar,
+    FT_FuncVar,            
     FT_DLL,
-    FT_Neg,
-    FT_Op,
-    FT_NotImpl,
-    FT_ConstFloat,
-    FT_Range,
+    FT_Neg,               
+    FT_Op,              
+    FT_NotImpl,        
+    FT_ConstFloat,  
+    FT_Range,   
     FT_Braces,
-    FT_ConstInt,
+    FT_ConstInt,    
     FT_ConstString,
-    FT_NOP,
-    FT_Cref
+    FT_NOP,                 
+    FT_Cref               
 };
-
+                                                                                                                  
 class QProToSc : public ConverterBase
 {
     private:
-    TokenId mnAddToken;
-    TokenId mnSubToken;
-    TokenId mn0Token;
-    SvStream& maIn;
+    TokenId mnAddToken;  
+    TokenId mnSubToken;  
+    TokenId mn0Token;  
+    SvStream& maIn; 
 
     public:
     static const size_t nBufSize = 256;
@@ -77,7 +77,7 @@ class QProToSc : public ConverterBase
     ConvErr Convert( const ScTokenArray*& pArray, sal_uInt16 nLen,
                                                                          const FORMULA_TYPE eFT = FT_CellFormula );
     void DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtString );
-    void ReadSRD( ScSingleRefData& rR, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 rRel );
+    void ReadSRD( ScSingleRefData& rR, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 rRel ); 
     void IncToken( TokenId &aParam );
     DefTokenId IndexToToken( sal_uInt16 nToken );
     FUNC_TYPE IndexToType( sal_uInt8 nToken );

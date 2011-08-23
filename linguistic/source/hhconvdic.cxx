@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,18 +47,17 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include "hhconvdic.hxx"
-#include "linguistic/misc.hxx"
+#include "misc.hxx"
 #include "defs.hxx"
 
 using namespace utl;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
-
-using ::rtl::OUString;
 
 #define SN_HH_CONV_DICTIONARY   "com.sun.star.linguistic2.HangulHanjaConversionDictionary"
 
@@ -82,19 +81,19 @@ sal_Int16 SAL_CALL checkScriptType(sal_Unicode c) throw (RuntimeException)
 
   if ( !U_SUCCESS(status) ) throw RuntimeException();
 
-  return scriptCode == USCRIPT_HANGUL ? SCRIPT_HANGUL :
+  return scriptCode == USCRIPT_HANGUL ? SCRIPT_HANGUL : 
             scriptCode == USCRIPT_HAN ? SCRIPT_HANJA : SCRIPT_OTHERS;
 }
 
 
 
-sal_Bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
+BOOL TextIsAllScriptType( const OUString &rTxt, INT16 nScriptType )
 {
-    sal_Bool bIsAll = sal_True;
-    for (sal_Int32 i = 0;  i < rTxt.getLength() && bIsAll;  ++i)
+    BOOL bIsAll = TRUE;
+    for (INT32 i = 0;  i < rTxt.getLength() && bIsAll;  ++i)
     {
         if (checkScriptType( rTxt.getStr()[i]) != nScriptType)
-            bIsAll = sal_False;
+            bIsAll = FALSE;
     }
     return bIsAll;
 }
@@ -103,7 +102,7 @@ sal_Bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
 ///////////////////////////////////////////////////////////////////////////
 
 HHConvDic::HHConvDic( const String &rName, const String &rMainURL ) :
-    ConvDic( rName, LANGUAGE_KOREAN, ConversionDictionaryType::HANGUL_HANJA, sal_True, rMainURL )
+    ConvDic( rName, LANGUAGE_KOREAN, ConversionDictionaryType::HANGUL_HANJA, TRUE, rMainURL )
 {
 }
 
@@ -113,13 +112,13 @@ HHConvDic::~HHConvDic()
 }
 
 
-void SAL_CALL HHConvDic::addEntry(
-        const OUString& aLeftText,
-        const OUString& aRightText )
+void SAL_CALL HHConvDic::addEntry( 
+        const OUString& aLeftText, 
+        const OUString& aRightText ) 
     throw (IllegalArgumentException, container::ElementExistException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-
+    
     if ((aLeftText.getLength() != aRightText.getLength()) ||
         !TextIsAllScriptType( aLeftText,  SCRIPT_HANGUL ) ||
         !TextIsAllScriptType( aRightText, SCRIPT_HANJA ))
@@ -128,7 +127,7 @@ void SAL_CALL HHConvDic::addEntry(
 }
 
 
-OUString SAL_CALL HHConvDic::getImplementationName(  )
+OUString SAL_CALL HHConvDic::getImplementationName(  ) 
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -136,19 +135,19 @@ OUString SAL_CALL HHConvDic::getImplementationName(  )
 }
 
 
-sal_Bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
+sal_Bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName ) 
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     sal_Bool bRes = sal_False;
-    if (rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_CONV_DICTIONARY)) ||
-        rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_HH_CONV_DICTIONARY)))
+    if (rServiceName.equalsAscii( SN_CONV_DICTIONARY )||
+        rServiceName.equalsAscii( SN_HH_CONV_DICTIONARY ))
         bRes = sal_True;
     return bRes;
 }
 
 
-uno::Sequence< OUString > SAL_CALL HHConvDic::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL HHConvDic::getSupportedServiceNames(  ) 
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -156,7 +155,7 @@ uno::Sequence< OUString > SAL_CALL HHConvDic::getSupportedServiceNames(  )
 }
 
 
-uno::Sequence< OUString > HHConvDic::getSupportedServiceNames_Static()
+uno::Sequence< OUString > HHConvDic::getSupportedServiceNames_Static() 
     throw()
 {
     uno::Sequence< OUString > aSNS( 2 );

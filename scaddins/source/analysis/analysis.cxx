@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,6 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
-#include <sal/macros.h>
 #include <string.h>
 
 #include <tools/resmgr.hxx>
@@ -40,16 +39,16 @@
 #include "analysis.hrc"
 #include "bessel.hxx"
 
-#define ADDIN_SERVICE               "com.sun.star.sheet.AddIn"
-#define MY_SERVICE                  "com.sun.star.sheet.addin.Analysis"
-#define MY_IMPLNAME                 "com.sun.star.sheet.addin.AnalysisImpl"
+#define ADDIN_SERVICE				"com.sun.star.sheet.AddIn"
+#define MY_SERVICE					"com.sun.star.sheet.addin.Analysis"
+#define MY_IMPLNAME					"com.sun.star.sheet.addin.AnalysisImpl"
 
 using namespace                 ::rtl;
 using namespace                 ::com::sun::star;
 
 //------------------------------------------------------------------
 //
-//  entry points for service registration / instantiation
+//	entry points for service registration / instantiation
 //
 //------------------------------------------------------------------
 
@@ -61,13 +60,44 @@ void SAL_CALL component_getImplementationEnvironment( const sal_Char** ppEnvType
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+
+sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, registry::XRegistryKey* pRegistryKey )
+{
+    if( pRegistryKey )
+    {
+        try
+        {
+            STRING							aImpl = STRFROMASCII( "/" );
+            aImpl += AnalysisAddIn::getImplementationName_Static();
+            aImpl += STRFROMASCII( "/UNO/SERVICES" );
+
+            REF( registry::XRegistryKey )	xNewKey(
+                reinterpret_cast< registry::XRegistryKey* >( pRegistryKey )->createKey( aImpl ) );
+
+            SEQ( STRING )					aSequ = AnalysisAddIn::getSupportedServiceNames_Static();
+            const STRING*					pArray = aSequ.getConstArray();
+
+            for( sal_Int32 i = 0 ; i < aSequ.getLength() ; i++ )
+                xNewKey->createKey( pArray[ i ] );
+
+            return sal_True;
+        }
+        catch( registry::InvalidRegistryException& )
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+    return sal_False;
+}
+
+
 void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
-    void*                                   pRet = 0;
+    void*									pRet = 0;
 
     if( pServiceManager && STRING::createFromAscii( pImplName ) == AnalysisAddIn::getImplementationName_Static() )
     {
-        REF( lang::XSingleServiceFactory )  xFactory( cppu::createOneInstanceFactory(
+        REF( lang::XSingleServiceFactory )	xFactory( cppu::createOneInstanceFactory(
                 reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                 AnalysisAddIn::getImplementationName_Static(),
                 AnalysisAddIn_CreateInstance,
@@ -84,14 +114,14 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceMa
 }
 
 
-}   // extern C
+}	// extern C
 
 
 
 
 //------------------------------------------------------------------------
 //
-//  "normal" service implementation
+//	"normal" service implementation
 //
 //------------------------------------------------------------------------
 
@@ -100,7 +130,7 @@ ResMgr& AnalysisAddIn::GetResMgr( void ) THROWDEF_RTE
 {
     if( !pResMgr )
     {
-        InitData();     // try to get resource manager
+        InitData();		// try to get resource manager
 
         if( !pResMgr )
             THROW_RTE;
@@ -120,8 +150,8 @@ class AnalysisResourcePublisher : public Resource
 {
 public:
                     AnalysisResourcePublisher( const AnalysisResId& rId ) : Resource( rId ) {}
-    sal_Bool            IsAvailableRes( const ResId& rId ) const { return Resource::IsAvailableRes( rId ); }
-    void            FreeResource() { Resource::FreeResource(); }
+    BOOL			IsAvailableRes( const ResId& rId ) const { return Resource::IsAvailableRes( rId ); }
+    void			FreeResource() { Resource::FreeResource(); }
 };
 
 
@@ -142,13 +172,13 @@ AnalysisFuncRes::AnalysisFuncRes( ResId& rRes, ResMgr& rResMgr, sal_uInt16 nInd,
 
 STRING AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) THROWDEF_RTE
 {
-    STRING                      aRet;
-    AnalysisResourcePublisher   aResPubl( AnalysisResId( RID_ANALYSIS_FUNCTION_DESCRIPTIONS, GetResMgr() ) );
-    AnalysisResId               aRes( nResId, GetResMgr() );
+    STRING						aRet;
+    AnalysisResourcePublisher	aResPubl( AnalysisResId( RID_ANALYSIS_FUNCTION_DESCRIPTIONS, GetResMgr() ) );
+    AnalysisResId				aRes( nResId, GetResMgr() );
     aRes.SetRT( RSC_RESOURCE );
     if( aResPubl.IsAvailableRes( aRes ) )
     {
-        AnalysisFuncRes         aSubRes( aRes, GetResMgr(), nStrIndex, aRet );
+        AnalysisFuncRes			aSubRes( aRes, GetResMgr(), nStrIndex, aRet );
     }
 
     aResPubl.FreeResource();
@@ -162,8 +192,9 @@ void AnalysisAddIn::InitData( void )
     if( pResMgr )
         delete pResMgr;
 
-    OString             aModName( "analysis" );
-    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), aFuncLoc );
+    OString				aModName( "analysis" );
+    pResMgr = ResMgr::CreateResMgr( ( const sal_Char* ) aModName,
+                                        aFuncLoc );
 
     if( pFD )
         delete pFD;
@@ -203,6 +234,9 @@ AnalysisAddIn::~AnalysisAddIn()
     if( pCDL )
         delete pCDL;
 
+//	if( pResMgr )			no delete, because _all_ resource managers are deleted _before_ this dtor is called
+//		delete pResMgr;
+
     if( pDefLocales )
         delete[] pDefLocales;
 }
@@ -223,7 +257,7 @@ sal_Int32 AnalysisAddIn::getDateMode(
 //-----------------------------------------------------------------------------
 
 
-#define MAXFACTDOUBLE   300
+#define	MAXFACTDOUBLE	300
 
 double AnalysisAddIn::FactDouble( sal_Int32 nNum ) THROWDEF_RTE_IAE
 {
@@ -234,17 +268,17 @@ double AnalysisAddIn::FactDouble( sal_Int32 nNum ) THROWDEF_RTE_IAE
     {
         pFactDoubles = new double[ MAXFACTDOUBLE + 1 ];
 
-        pFactDoubles[ 0 ] = 1.0;    // by default
+        pFactDoubles[ 0 ] = 1.0;	// by default
 
-        double      fOdd = 1.0;
-        double      fEven = 2.0;
+        double		fOdd = 1.0;
+        double		fEven = 2.0;
 
         pFactDoubles[ 1 ] = fOdd;
         pFactDoubles[ 2 ] = fEven;
 
-        sal_Bool    bOdd = sal_True;
+        sal_Bool	bOdd = sal_True;
 
-        for( sal_uInt16 nCnt = 3 ; nCnt <= MAXFACTDOUBLE ; nCnt++ )
+        for( sal_uInt16	nCnt = 3 ; nCnt <= MAXFACTDOUBLE ; nCnt++ )
         {
             if( bOdd )
             {
@@ -274,8 +308,8 @@ STRING AnalysisAddIn::getImplementationName_Static()
 
 SEQ( STRING ) AnalysisAddIn::getSupportedServiceNames_Static()
 {
-    SEQ( STRING )   aRet(2);
-    STRING*         pArray = aRet.getArray();
+    SEQ( STRING )	aRet(2);
+    STRING*			pArray = aRet.getArray();
     pArray[0] = STRFROMASCII( ADDIN_SERVICE );
     pArray[1] = STRFROMASCII( MY_SERVICE );
     return aRet;
@@ -325,7 +359,7 @@ void SAL_CALL AnalysisAddIn::setLocale( const lang::Locale& eLocale ) THROWDEF_R
 {
     aFuncLoc = eLocale;
 
-    InitData();     // change of locale invalidates resources!
+    InitData();		// change of locale invalidates resources!
 }
 
 lang::Locale SAL_CALL AnalysisAddIn::getLocale() THROWDEF_RTE
@@ -338,8 +372,8 @@ lang::Locale SAL_CALL AnalysisAddIn::getLocale() THROWDEF_RTE
 
 STRING SAL_CALL AnalysisAddIn::getProgrammaticFuntionName( const STRING& ) THROWDEF_RTE
 {
-    //  not used by calc
-    //  (but should be implemented for other uses of the AddIn service)
+    //	not used by calc
+    //	(but should be implemented for other uses of the AddIn service)
 
     return STRING();
 }
@@ -347,9 +381,9 @@ STRING SAL_CALL AnalysisAddIn::getProgrammaticFuntionName( const STRING& ) THROW
 
 STRING SAL_CALL AnalysisAddIn::getDisplayFunctionName( const STRING& aProgrammaticName ) THROWDEF_RTE
 {
-    STRING          aRet;
+    STRING			aRet;
 
-    const FuncData* p = pFD->Get( aProgrammaticName );
+    const FuncData*	p = pFD->Get( aProgrammaticName );
     if( p )
     {
         aRet = GetDisplFuncStr( p->GetUINameID() );
@@ -368,9 +402,9 @@ STRING SAL_CALL AnalysisAddIn::getDisplayFunctionName( const STRING& aProgrammat
 
 STRING SAL_CALL AnalysisAddIn::getFunctionDescription( const STRING& aProgrammaticName ) THROWDEF_RTE
 {
-    STRING          aRet;
+    STRING			aRet;
 
-    const FuncData* p = pFD->Get( aProgrammaticName );
+    const FuncData*	p = pFD->Get( aProgrammaticName );
     if( p )
         aRet = GetFuncDescrStr( p->GetDescrID(), 1 );
 
@@ -380,13 +414,13 @@ STRING SAL_CALL AnalysisAddIn::getFunctionDescription( const STRING& aProgrammat
 
 STRING SAL_CALL AnalysisAddIn::getDisplayArgumentName( const STRING& aName, sal_Int32 nArg ) THROWDEF_RTE
 {
-    STRING          aRet;
+    STRING			aRet;
 
-    const FuncData* p = pFD->Get( aName );
+    const FuncData*	p = pFD->Get( aName );
     if( p && nArg <= 0xFFFF )
     {
-        sal_uInt16  nStr = p->GetStrIndex( sal_uInt16( nArg ) );
-        if( nStr )
+        sal_uInt16	nStr = p->GetStrIndex( sal_uInt16( nArg ) );
+        if( nStr /*&& nStr < 4*/ )
             aRet = GetFuncDescrStr( p->GetDescrID(), nStr );
         else
             aRet = STRFROMANSI( "internal" );
@@ -398,13 +432,13 @@ STRING SAL_CALL AnalysisAddIn::getDisplayArgumentName( const STRING& aName, sal_
 
 STRING SAL_CALL AnalysisAddIn::getArgumentDescription( const STRING& aName, sal_Int32 nArg ) THROWDEF_RTE
 {
-    STRING          aRet;
+    STRING			aRet;
 
-    const FuncData* p = pFD->Get( aName );
+    const FuncData*	p = pFD->Get( aName );
     if( p && nArg <= 0xFFFF )
     {
-        sal_uInt16  nStr = p->GetStrIndex( sal_uInt16( nArg ) );
-        if( nStr )
+        sal_uInt16	nStr = p->GetStrIndex( sal_uInt16( nArg ) );
+        if( nStr /*&& nStr < 4*/ )
             aRet = GetFuncDescrStr( p->GetDescrID(), nStr + 1 );
         else
             aRet = STRFROMANSI( "for internal use only" );
@@ -414,28 +448,28 @@ STRING SAL_CALL AnalysisAddIn::getArgumentDescription( const STRING& aName, sal_
 }
 
 
-static const char*  pDefCatName = "Add-In";
+static const char*	pDefCatName = "Add-In";
 
 
 STRING SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const STRING& aName ) THROWDEF_RTE
 {
-    //  return non-translated strings
-//  return STRFROMASCII( "Add-In" );
-    const FuncData*     p = pFD->Get( aName );
-    STRING              aRet;
+    //	return non-translated strings
+//	return STRFROMASCII( "Add-In" );
+    const FuncData*		p = pFD->Get( aName );
+    STRING				aRet;
     if( p )
     {
-        const sal_Char* pStr;
+        const sal_Char*	pStr;
 
         switch( p->GetCategory() )
         {
-            case FDCat_DateTime:    pStr = "Date&Time";         break;
-            case FDCat_Finance:     pStr = "Financial";         break;
-            case FDCat_Inf:         pStr = "Information";       break;
-            case FDCat_Math:        pStr = "Mathematical";      break;
-            case FDCat_Tech:        pStr = "Technical";         break;
+            case FDCat_DateTime:	pStr = "Date&Time";			break;
+            case FDCat_Finance:		pStr = "Financial";			break;
+            case FDCat_Inf:			pStr = "Information";		break;
+            case FDCat_Math:		pStr = "Mathematical";		break;
+            case FDCat_Tech:		pStr = "Technical";			break;
             default:
-                                    pStr = pDefCatName;         break;
+                                    pStr = pDefCatName;			break;
         }
 
         aRet = STRFROMASCII( pStr );
@@ -449,23 +483,23 @@ STRING SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const STRING& aName 
 
 STRING SAL_CALL AnalysisAddIn::getDisplayCategoryName( const STRING& aProgrammaticFunctionName ) THROWDEF_RTE
 {
-    //  return translated strings, not used for predefined categories
-//  return STRFROMASCII( "Add-In" );
-    const FuncData*     p = pFD->Get( aProgrammaticFunctionName );
-    STRING              aRet;
+    //	return translated strings, not used for predefined categories
+//	return STRFROMASCII( "Add-In" );
+    const FuncData*		p = pFD->Get( aProgrammaticFunctionName );
+    STRING				aRet;
     if( p )
     {
-        const sal_Char* pStr;
+        const sal_Char*	pStr;
 
         switch( p->GetCategory() )
         {
-            case FDCat_DateTime:    pStr = "Date&Time";         break;
-            case FDCat_Finance:     pStr = "Financial";         break;
-            case FDCat_Inf:         pStr = "Information";       break;
-            case FDCat_Math:        pStr = "Mathematical";      break;
-            case FDCat_Tech:        pStr = "Technical";         break;
+            case FDCat_DateTime:	pStr = "Date&Time";			break;
+            case FDCat_Finance:		pStr = "Financial";			break;
+            case FDCat_Inf:			pStr = "Information";		break;
+            case FDCat_Math:		pStr = "Mathematical";		break;
+            case FDCat_Tech:		pStr = "Technical";			break;
             default:
-                                    pStr = pDefCatName;         break;
+                                    pStr = pDefCatName;			break;
         }
 
         aRet = STRFROMASCII( pStr );
@@ -477,9 +511,9 @@ STRING SAL_CALL AnalysisAddIn::getDisplayCategoryName( const STRING& aProgrammat
 }
 
 
-static const sal_Char*      pLang[] = { "de", "en" };
-static const sal_Char*      pCoun[] = { "DE", "US" };
-static const sal_uInt32     nNumOfLoc = SAL_N_ELEMENTS(pLang);
+static const sal_Char*		pLang[] = { "de", "en" };
+static const sal_Char*		pCoun[] = { "DE", "US" };
+static const sal_uInt32		nNumOfLoc = sizeof( pLang ) / sizeof( sal_Char* );
 
 
 void AnalysisAddIn::InitDefLocales( void )
@@ -508,17 +542,17 @@ inline const CSS::lang::Locale& AnalysisAddIn::GetLocale( sal_uInt32 nInd )
 
 SEQofLocName SAL_CALL AnalysisAddIn::getCompatibilityNames( const STRING& aProgrammaticName ) THROWDEF_RTE
 {
-    const FuncData*             p = pFD->Get( aProgrammaticName );
+    const FuncData*				p = pFD->Get( aProgrammaticName );
 
     if( !p )
         return SEQofLocName( 0 );
 
-    const StringList&           r = p->GetCompNameList();
-    sal_uInt32                  nCount = r.Count();
+    const StringList&			r = p->GetCompNameList();
+    sal_uInt32					nCount = r.Count();
 
-    SEQofLocName                aRet( nCount );
+    SEQofLocName				aRet( nCount );
 
-    CSS::sheet::LocalizedName*  pArray = aRet.getArray();
+    CSS::sheet::LocalizedName*	pArray = aRet.getArray();
 
     for( sal_uInt32 n = 0 ; n < nCount ; n++ )
     {
@@ -531,6 +565,13 @@ SEQofLocName SAL_CALL AnalysisAddIn::getCompatibilityNames( const STRING& aProgr
 
 // XAnalysis
 
+/*double SAL_CALL AnalysisAddIn::get_Test( constREFXPS&,
+    sal_Int32 nMode, double f1, double f2, double f3 ) THROWDEF_RTE
+{
+    return _Test( nMode, f1, f2, f3 );
+}*/
+
+
 /**
  * Workday
  */
@@ -541,13 +582,13 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( constREFXPS& xOptions,
     if( !nDays )
         return nDate;
 
-    sal_Int32                   nNullDate = GetNullDate( xOptions );
+    sal_Int32					nNullDate = GetNullDate( xOptions );
 
-    SortedIndividualInt32List   aSrtLst;
+    SortedIndividualInt32List	aSrtLst;
 
     aSrtLst.InsertHolidayList( aAnyConv, xOptions, aHDay, nNullDate, sal_False );
 
-    sal_Int32                   nActDate = nDate + nNullDate;
+    sal_Int32					nActDate = nDate + nNullDate;
 
     if( nDays > 0 )
     {
@@ -565,7 +606,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( constREFXPS& xOptions,
                     nDays--;
             }
             else
-                nActDate++;     // jump over weekend
+                nActDate++;		// jump over weekend
         }
     }
     else
@@ -584,7 +625,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( constREFXPS& xOptions,
                     nDays++;
             }
             else
-                nActDate--;     // jump over weekend
+                nActDate--;		// jump over weekend
         }
     }
 
@@ -617,11 +658,11 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWeeknum( constREFXPS& xOpt, sal_Int32 nDate
 {
     nDate += GetNullDate( xOpt );
 
-    sal_uInt16  nDay, nMonth, nYear;
+    sal_uInt16	nDay, nMonth, nYear;
     DaysToDate( nDate, nDay, nMonth, nYear );
 
-    sal_Int32   nFirstInYear = DateToDays( 1, 1, nYear );
-    sal_uInt16  nFirstDayInYear = GetDayOfWeek( nFirstInYear );
+    sal_Int32	nFirstInYear = DateToDays( 1, 1, nYear );
+    sal_uInt16	nFirstDayInYear = GetDayOfWeek( nFirstInYear );
 
     return ( nDate - nFirstInYear + ( ( nMode == 1 )? ( nFirstDayInYear + 1 ) % 7 : nFirstDayInYear ) ) / 7 + 1;
 }
@@ -629,12 +670,12 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWeeknum( constREFXPS& xOpt, sal_Int32 nDate
 
 sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( constREFXPS& xOpt, sal_Int32 nDate, sal_Int32 nMonths ) THROWDEF_RTE_IAE
 {
-    sal_Int32   nNullDate = GetNullDate( xOpt );
+    sal_Int32	nNullDate = GetNullDate( xOpt );
     nDate += nNullDate;
-    sal_uInt16  nDay, nMonth, nYear;
+    sal_uInt16	nDay, nMonth, nYear;
     DaysToDate( nDate, nDay, nMonth, nYear );
 
-    sal_Int32   nNewMonth = nMonth + nMonths;
+    sal_Int32	nNewMonth = nMonth + nMonths;
 
     if( nNewMonth > 12 )
     {
@@ -657,15 +698,15 @@ sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( constREFXPS& xOpt, sal_Int32 nDate
 sal_Int32 SAL_CALL AnalysisAddIn::getNetworkdays( constREFXPS& xOpt,
         sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& aHDay ) THROWDEF_RTE_IAE
 {
-    sal_Int32                   nNullDate = GetNullDate( xOpt );
+    sal_Int32					nNullDate = GetNullDate( xOpt );
 
-    SortedIndividualInt32List   aSrtLst;
+    SortedIndividualInt32List	aSrtLst;
 
     aSrtLst.InsertHolidayList( aAnyConv, xOpt, aHDay, nNullDate, sal_False );
 
-    sal_Int32                   nActDate = nStartDate + nNullDate;
-    sal_Int32                   nStopDate = nEndDate + nNullDate;
-    sal_Int32                   nCnt = 0;
+    sal_Int32					nActDate = nStartDate + nNullDate;
+    sal_Int32					nStopDate = nEndDate + nNullDate;
+    sal_Int32					nCnt = 0;
 
     if( nActDate <= nStopDate )
     {
@@ -741,7 +782,7 @@ AnalysisAddIn::getMultinomial( constREFXPS& xOpt, const SEQSEQ( sal_Int32 )& aVL
 
 double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, const SEQSEQ( double )& aCoeffList ) THROWDEF_RTE_IAE
 {
-    double                          fRet = 0.0;
+    double							fRet = 0.0;
 
     // #i32269# 0^0 is undefined, Excel returns #NUM! error
     if( fX == 0.0 && fN == 0 )
@@ -749,15 +790,16 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
 
     if( fX != 0.0 )
     {
-        sal_Int32       n1, n2;
-        sal_Int32       nE1 = aCoeffList.getLength();
-        sal_Int32       nE2;
+        sal_Int32		n1, n2;
+        sal_Int32		nE1 = aCoeffList.getLength();
+        sal_Int32		nE2;
+        //sal_Int32		nZ = 0;
 
         for( n1 = 0 ; n1 < nE1 ; n1++ )
         {
-            const SEQ( double )&    rList = aCoeffList[ n1 ];
+            const SEQ( double )&	rList = aCoeffList[ n1 ];
             nE2 = rList.getLength();
-            const double*           pList = rList.getConstArray();
+            const double*			pList = rList.getConstArray();
 
             for( n2 = 0 ; n2 < nE2 ; n2++ )
             {
@@ -827,8 +869,8 @@ double SAL_CALL AnalysisAddIn::getGcd( constREFXPS& xOpt, const SEQSEQ( double )
     if( aValList.Count() == 0 )
         return 0.0;
 
-    const double*   p = aValList.First();
-    double          f = *p;
+    const double*	p = aValList.First();
+    double			f = *p;
 
     p = aValList.Next();
 
@@ -852,8 +894,8 @@ double SAL_CALL AnalysisAddIn::getLcm( constREFXPS& xOpt, const SEQSEQ( double )
     if( aValList.Count() == 0 )
         return 0.0;
 
-    const double*   p = aValList.First();
-    double          f = *p;
+    const double*	p = aValList.First();
+    double			f = *p;
 
     if( f == 0.0 )
         return f;
@@ -862,7 +904,7 @@ double SAL_CALL AnalysisAddIn::getLcm( constREFXPS& xOpt, const SEQSEQ( double )
 
     while( p )
     {
-        double      fTmp = *p;
+        double		fTmp = *p;
         if( f == 0.0 )
             return f;
         else
@@ -903,6 +945,7 @@ double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROW
     if( nOrder < 0 || fNum <= 0.0 )
         THROW_IAE;
 
+//	return yn( nOrder, fNum );
     double fRet = sca::analysis::BesselY( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
@@ -1068,7 +1111,7 @@ double SAL_CALL AnalysisAddIn::getImaginary( const STRING& aNum ) THROWDEF_RTE_I
 
 STRING SAL_CALL AnalysisAddIn::getImpower( const STRING& aNum, double f ) THROWDEF_RTE_IAE
 {
-    Complex     z( aNum );
+    Complex		z( aNum );
 
     z.Power( f );
 
@@ -1085,7 +1128,7 @@ double SAL_CALL AnalysisAddIn::getImargument( const STRING& aNum ) THROWDEF_RTE_
 
 STRING SAL_CALL AnalysisAddIn::getImcos( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    Complex     z( aNum );
+    Complex		z( aNum );
 
     z.Cos();
 
@@ -1095,7 +1138,7 @@ STRING SAL_CALL AnalysisAddIn::getImcos( const STRING& aNum ) THROWDEF_RTE_IAE
 
 STRING SAL_CALL AnalysisAddIn::getImdiv( const STRING& aDivid, const STRING& aDivis ) THROWDEF_RTE_IAE
 {
-    Complex     z( aDivid );
+    Complex		z( aDivid );
 
     z.Div( Complex( aDivis ) );
 
@@ -1105,7 +1148,7 @@ STRING SAL_CALL AnalysisAddIn::getImdiv( const STRING& aDivid, const STRING& aDi
 
 STRING SAL_CALL AnalysisAddIn::getImexp( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    Complex     z( aNum );
+    Complex		z( aNum );
 
     z.Exp();
 
@@ -1115,7 +1158,7 @@ STRING SAL_CALL AnalysisAddIn::getImexp( const STRING& aNum ) THROWDEF_RTE_IAE
 
 STRING SAL_CALL AnalysisAddIn::getImconjugate( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    Complex     z( aNum );
+    Complex		z( aNum );
 
     z.Conjugate();
 
@@ -1125,7 +1168,7 @@ STRING SAL_CALL AnalysisAddIn::getImconjugate( const STRING& aNum ) THROWDEF_RTE
 
 STRING SAL_CALL AnalysisAddIn::getImln( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    Complex     z( aNum );
+    Complex		z( aNum );
 
     z.Ln();
 
@@ -1135,7 +1178,7 @@ STRING SAL_CALL AnalysisAddIn::getImln( const STRING& aNum ) THROWDEF_RTE_IAE
 
 STRING SAL_CALL AnalysisAddIn::getImlog10( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    Complex     z( aNum );
+    Complex		z( aNum );
 
     z.Log10();
 
@@ -1145,7 +1188,7 @@ STRING SAL_CALL AnalysisAddIn::getImlog10( const STRING& aNum ) THROWDEF_RTE_IAE
 
 STRING SAL_CALL AnalysisAddIn::getImlog2( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    Complex     z( aNum );
+    Complex		z( aNum );
 
     z.Log2();
 
@@ -1155,17 +1198,17 @@ STRING SAL_CALL AnalysisAddIn::getImlog2( const STRING& aNum ) THROWDEF_RTE_IAE
 
 STRING SAL_CALL AnalysisAddIn::getImproduct( constREFXPS&, const SEQSEQ( STRING )& aNum1, const SEQ( uno::Any )& aNL ) THROWDEF_RTE_IAE
 {
-    ComplexList     z_list;
+    ComplexList		z_list;
 
     z_list.Append( aNum1, AH_IgnoreEmpty );
     z_list.Append( aNL, AH_IgnoreEmpty );
 
-    const Complex*  p = z_list.First();
+    const Complex*	p = z_list.First();
 
     if( !p )
         return Complex( 0 ).GetString();
 
-    Complex         z( *p );
+    Complex			z( *p );
 
     for( p = z_list.Next() ; p ; p = z_list.Next() )
         z.Mult( *p );
@@ -1183,7 +1226,7 @@ double SAL_CALL AnalysisAddIn::getImreal( const STRING& aNum ) THROWDEF_RTE_IAE
 
 STRING SAL_CALL AnalysisAddIn::getImsin( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    Complex     z( aNum );
+    Complex		z( aNum );
 
     z.Sin();
 
@@ -1193,7 +1236,7 @@ STRING SAL_CALL AnalysisAddIn::getImsin( const STRING& aNum ) THROWDEF_RTE_IAE
 
 STRING SAL_CALL AnalysisAddIn::getImsub( const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE
 {
-    Complex     z( aNum1 );
+    Complex		z( aNum1 );
 
     z.Sub( Complex( aNum2 ) );
 
@@ -1203,17 +1246,17 @@ STRING SAL_CALL AnalysisAddIn::getImsub( const STRING& aNum1, const STRING& aNum
 
 STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const SEQSEQ( STRING )& aNum1, const SEQ( CSS::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE
 {
-    ComplexList     z_list;
+    ComplexList		z_list;
 
     z_list.Append( aNum1, AH_IgnoreEmpty );
     z_list.Append( aFollowingPars, AH_IgnoreEmpty );
 
-    const Complex*  p = z_list.First();
+    const Complex*	p = z_list.First();
 
     if( !p )
         return Complex( 0 ).GetString();
 
-    Complex         z( *p );
+    Complex			z( *p );
 
     for( p = z_list.Next() ; p ; p = z_list.Next() )
         z.Add( *p );
@@ -1224,8 +1267,9 @@ STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const SEQSEQ( STRING )& a
 
 STRING SAL_CALL AnalysisAddIn::getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    Complex     z( aNum );
+    Complex		z( aNum );
 
+//	z.Power( 0.5 );
     z.Sqrt();
 
     return z.GetString();
@@ -1234,7 +1278,7 @@ STRING SAL_CALL AnalysisAddIn::getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE
 
 STRING SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const ANY& rSuff ) THROWDEF_RTE_IAE
 {
-    sal_Bool    bi;
+    sal_Bool	bi;
 
     switch( rSuff.getValueTypeClass() )
     {
@@ -1243,7 +1287,7 @@ STRING SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const ANY& rSuf
             break;
         case uno::TypeClass_STRING:
             {
-            const STRING*   pSuff = ( const STRING* ) rSuff.getValue();
+            const STRING*	pSuff = ( const STRING* ) rSuff.getValue();
             bi = pSuff->compareToAscii( "i" ) == 0 || pSuff->getLength() == 0;
             if( !bi && pSuff->compareToAscii( "j" ) != 0 )
                 THROW_IAE;

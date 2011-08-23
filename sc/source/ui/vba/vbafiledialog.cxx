@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 
 
 ScVbaFileDialog::ScVbaFileDialog( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > &xContext, const css::uno::Reference< css::frame::XModel >& xModel )
-:   ScVbaFileDialog_BASE( xParent, xContext, xModel )
+:	ScVbaFileDialog_BASE( xParent, xContext, xModel )
 {
     m_pFileDialogSelectedItems = new VbaFileDialogSelectedItems(xParent, xContext, (com::sun::star::container::XIndexAccess *)&m_FileDialogSelectedObj);
 }
@@ -90,7 +90,7 @@ ScVbaFileDialog::Show( ) throw (::com::sun::star::uno::RuntimeException)
     {
         m_sSelectedItems.realloc(0);
 
-        const ::rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
+        const ::rtl::OUString sServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" );
 
         Reference< lang::XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
         // Set the type of File Picker Dialog: TemplateDescription::FILEOPEN_SIMPLE.
@@ -103,13 +103,13 @@ ScVbaFileDialog::Show( ) throw (::com::sun::star::uno::RuntimeException)
             xFilePicker->setMultiSelectionMode(sal_True);
             if ( xFilePicker->execute() )
             {
-                sal_Bool bUseXFilePicker2 = false;
+                sal_Bool bUseXFilePicker2 = sal_False;
                 Reference< lang::XServiceInfo > xServiceInfo( xFilePicker, UNO_QUERY );
                 if (xServiceInfo.is())
                 {
                     rtl::OUString sImplName = xServiceInfo->getImplementationName();
-                    if (sImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.fpicker.VistaFileDialog")) ||
-                        sImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.ui.dialogs.SalGtkFilePicker")))
+                    if (sImplName.equalsAscii("com.sun.star.comp.fpicker.VistaFileDialog") ||
+                        sImplName.equalsAscii("com.sun.star.ui.dialogs.SalGtkFilePicker"))
                     {
                         bUseXFilePicker2 = sal_True;
                     }

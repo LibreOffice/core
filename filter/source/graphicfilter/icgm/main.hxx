@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,17 +33,17 @@
 
 // ---------------------------------------------------------------
 
-#define CGM_LEVEL1                      0x0001  // VERSION 1 METAFILE
-#define CGM_LEVEL2                      0x0002
-#define CGM_LEVEL3                      0x0003
-#define CGM_GDSF_ONLY                   0x00F0
-#define CGM_UNKNOWN_LEVEL               0x00F1
-#define CGM_UNKNOWN_COMMAND             0x00F2
-#define CGM_DESCRIPTION                 0x00F3
+#define CGM_LEVEL1						0x0001	// VERSION 1 METAFILE
+#define CGM_LEVEL2						0x0002
+#define CGM_LEVEL3						0x0003
+#define CGM_GDSF_ONLY					0x00F0
+#define CGM_UNKNOWN_LEVEL				0x00F1
+#define CGM_UNKNOWN_COMMAND				0x00F2
+#define CGM_DESCRIPTION					0x00F3
 
-#define CGM_EXTENDED_PRIMITIVES_SET     0x0100  // INDICATES PRIMITIVES WHICH ARE AVAILABLE IN
+#define CGM_EXTENDED_PRIMITIVES_SET		0x0100	// INDICATES PRIMITIVES WHICH ARE AVAILABLE IN
                                                 // LEVEL 1 BUT ARE NOT DEFINED IN ISO 7942(GKS)
-#define CGM_DRAWING_PLUS_CONTROL_SET    0x0200  // INDICATES THAT THIS IS AN ADDITIONAL LEVEL 1
+#define CGM_DRAWING_PLUS_CONTROL_SET	0x0200	// INDICATES THAT THIS IS AN ADDITIONAL LEVEL 1
                                                 // ELEMENT
 #define ComOut( Level, Description ) if ( mpCommentOut ) ImplComment( Level, Description );
 
@@ -54,6 +54,7 @@
 
 #include <vcl/salbtype.hxx>
 #include <tools/stream.hxx>
+#include <tools/list.hxx>
 #include "bundles.hxx"
 #include "bitmap.hxx"
 #include "elements.hxx"

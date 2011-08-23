@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,18 +27,16 @@
  ************************************************************************/
 
 #include "oox/helper/progressbar.hxx"
-
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include "oox/helper/helper.hxx"
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::task::XStatusIndicator;
 
 namespace oox {
 
 // ============================================================================
-
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
 
 namespace {
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ void OCalcCatalog::refreshTables()
     Sequence< ::rtl::OUString > aTypes;
     OCalcConnection::ODocHolder aDocHodler(((OCalcConnection*)m_pConnection));
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),aTypes);
+        ::rtl::OUString::createFromAscii("%"),::rtl::OUString::createFromAscii("%"),aTypes);
 
     if(xResult.is())
     {
@@ -73,7 +73,7 @@ void OCalcCatalog::refreshTables()
 
     // this avoids that the document will be loaded a 2nd time when one table will be accessed.
     //if ( m_pTables && m_pTables->hasElements() )
-    //    m_pTables->getByIndex(0);
+    //    m_pTables->getByIndex(0); 
 }
 // -----------------------------------------------------------------------------
 

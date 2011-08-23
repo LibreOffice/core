@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@
 #include "rechead.hxx"
 #include "poolhelp.hxx"
 #include "docpool.hxx"
-#include "detfunc.hxx"      // for UpdateAllComments
+#include "detfunc.hxx"		// for UpdateAllComments
 #include "editutil.hxx"
 #include "postit.hxx"
 #include "charthelper.hxx"
@@ -129,8 +129,8 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
         }
     }
 
-    //  make sure the data references of charts are adapted
-    //  (this must be after InsertObject!)
+    //	#71726# make sure the data references of charts are adapted
+    //	(this must be after InsertObject!)
     ScChartHelper::AdjustRangesOfChartsOnDestinationPage( pSrcDoc, this, nSrcPos, nDestPos );
 }
 
@@ -139,35 +139,37 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
     if (pDocShell && !pShell)
         pShell = pDocShell;
 
+//	DBG_ASSERT(pShell,"InitDrawLayer ohne Shell");
+
     if (!pDrawLayer)
     {
         String aName;
-        if ( pShell && !pShell->IsLoading() )       // don't call GetTitle while loading
+        if ( pShell && !pShell->IsLoading() )		// #88438# don't call GetTitle while loading
             aName = pShell->GetTitle();
         pDrawLayer = new ScDrawLayer( this, aName );
         if (GetLinkManager())
             pDrawLayer->SetLinkManager( pLinkManager );
 
-        //  Drawing pages are accessed by table number, so they must also be present
-        //  for preceding table numbers, even if the tables aren't allocated
-        //  (important for clipboard documents).
+        //	Drawing pages are accessed by table number, so they must also be present
+        //	for preceding table numbers, even if the tables aren't allocated
+        //	(important for clipboard documents).
 
         SCTAB nDrawPages = 0;
         SCTAB nTab;
         for (nTab=0; nTab<=MAXTAB; nTab++)
             if (pTab[nTab])
-                nDrawPages = nTab + 1;          // needed number of pages
+                nDrawPages = nTab + 1;			// needed number of pages
 
         for (nTab=0; nTab<nDrawPages; nTab++)
         {
-            pDrawLayer->ScAddPage( nTab );      // always add page, with or without the table
+            pDrawLayer->ScAddPage( nTab );		// always add page, with or without the table
             if (pTab[nTab])
             {
                 String aTabName;
                 pTab[nTab]->GetName(aTabName);
                 pDrawLayer->ScRenamePage( nTab, aTabName );
 
-                pTab[nTab]->SetDrawPageSize(false,false);     // set the right size immediately
+                pTab[nTab]->SetDrawPageSize(false,false);     // #54782# set the right size immediately
             }
         }
 
@@ -177,7 +179,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         UpdateDrawDefaults();
         UpdateDrawLanguages();
         if (bImportingXML)
-            pDrawLayer->EnableAdjust(false);
+            pDrawLayer->EnableAdjust(FALSE);
 
         pDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
         pDrawLayer->SetCharCompressType( GetAsianCompression() );
@@ -203,7 +205,7 @@ void ScDocument::UpdateDrawDefaults()
     if ( pDrawLayer && bSetDrawDefaults )
     {
         SfxItemPool& rDrawPool = pDrawLayer->GetItemPool();
-        rDrawPool.SetPoolDefaultItem( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+        rDrawPool.SetPoolDefaultItem( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
     }
 }
 
@@ -213,6 +215,9 @@ void ScDocument::UpdateDrawPrinter()
     {
         // use the printer even if IsValid is false
         // Application::GetDefaultDevice causes trouble with changing MapModes
+
+//		OutputDevice* pRefDev = GetPrinter();
+//		pRefDev->SetMapMode( MAP_100TH_MM );
         pDrawLayer->SetRefDevice(GetRefDevice());
     }
 }
@@ -234,14 +239,14 @@ sal_Bool ScDocument::IsChart( const SdrObject* pObject )
         return ((SdrOle2Obj*)pObject)->IsChart();
     }
 
-    return false;
+    return sal_False;
 }
 
-IMPL_LINK_INLINE_START( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex )
+IMPL_LINK_INLINE_START( ScDocument, GetUserDefinedColor, USHORT *, pColorIndex )
 {
     return (long) &((GetColorTable()->GetColor(*pColorIndex))->GetColor());
 }
-IMPL_LINK_INLINE_END( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex )
+IMPL_LINK_INLINE_END( ScDocument, GetUserDefinedColor, USHORT *, pColorIndex )
 
 void ScDocument::DeleteDrawLayer()
 {
@@ -253,20 +258,20 @@ void ScDocument::DeleteColorTable()
     delete pColorTable;
 }
 
-sal_Bool ScDocument::DrawGetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const
+BOOL ScDocument::DrawGetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) const
 {
     return pDrawLayer->GetPrintArea( rRange, bSetHor, bSetVer );
 }
 
-void ScDocument::DrawMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
+void ScDocument::DrawMovePage( USHORT nOldPos, USHORT nNewPos )
 {
     pDrawLayer->ScMovePage(nOldPos,nNewPos);
 }
 
-void ScDocument::DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
+void ScDocument::DrawCopyPage( USHORT nOldPos, USHORT nNewPos )
 {
     // angelegt wird die Page schon im ScTable ctor
-    pDrawLayer->ScCopyPage( nOldPos, nNewPos, false );
+    pDrawLayer->ScCopyPage( nOldPos, nNewPos, FALSE );
 }
 
 void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -289,12 +294,12 @@ void ScDocument::DeleteObjectsInSelection( const ScMarkData& rMark )
     pDrawLayer->DeleteObjectsInSelection( rMark );
 }
 
-sal_Bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* pTabMark )
+BOOL ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* pTabMark )
 {
-    //  pTabMark is used only for selected tables. If pTabMark is 0, all tables of rRange are used.
+    //	pTabMark is used only for selected tables. If pTabMark is 0, all tables of rRange are used.
 
     if (!pDrawLayer)
-        return false;
+        return FALSE;
 
     SCTAB nStartTab = 0;
     SCTAB nEndTab = MAXTAB;
@@ -321,7 +326,7 @@ sal_Bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkDat
                 {
                     if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
                             aMMRect.IsInside( pObject->GetCurrentBoundRect() ) )
-                        return sal_True;
+                        return TRUE;
 
                     pObject = aIter.Next();
                 }
@@ -329,7 +334,7 @@ sal_Bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkDat
         }
     }
 
-    return false;
+    return FALSE;
 }
 
 
@@ -360,55 +365,55 @@ void ScDocument::StartAnimations( SCTAB nTab, Window* pWin )
 }
 
 
-sal_Bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect )
+BOOL ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect )
 {
-    //  Gibt es Objekte auf dem Hintergrund-Layer, die (teilweise) von rMMRect
-    //  betroffen sind?
-    //  (fuer Drawing-Optimierung, vor dem Hintergrund braucht dann nicht geloescht
-    //   zu werden)
+    //	Gibt es Objekte auf dem Hintergrund-Layer, die (teilweise) von rMMRect
+    //	betroffen sind?
+    //	(fuer Drawing-Optimierung, vor dem Hintergrund braucht dann nicht geloescht
+    //	 zu werden)
 
     if (!pDrawLayer)
-        return false;
+        return FALSE;
     SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page ?");
     if (!pPage)
-        return false;
+        return FALSE;
 
-    sal_Bool bFound = false;
+    BOOL bFound = FALSE;
 
     SdrObjListIter aIter( *pPage, IM_FLAT );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
         if ( pObject->GetLayer() == SC_LAYER_BACK && pObject->GetCurrentBoundRect().IsOver( rMMRect ) )
-            bFound = sal_True;
+            bFound = TRUE;
         pObject = aIter.Next();
     }
 
     return bFound;
 }
 
-sal_Bool ScDocument::HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect )
+BOOL ScDocument::HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect )
 {
-    //  Gibt es ueberhaupt Objekte, die (teilweise) von rMMRect
-    //  betroffen sind?
-    //  (um leere Seiten beim Drucken zu erkennen)
+    //	Gibt es ueberhaupt Objekte, die (teilweise) von rMMRect
+    //	betroffen sind?
+    //	(um leere Seiten beim Drucken zu erkennen)
 
     if (!pDrawLayer)
-        return false;
+        return FALSE;
     SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page ?");
     if (!pPage)
-        return false;
+        return FALSE;
 
-    sal_Bool bFound = false;
+    BOOL bFound = FALSE;
 
     SdrObjListIter aIter( *pPage, IM_FLAT );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
         if ( pObject->GetCurrentBoundRect().IsOver( rMMRect ) )
-            bFound = sal_True;
+            bFound = TRUE;
         pObject = aIter.Next();
     }
 
@@ -423,7 +428,7 @@ void ScDocument::EnsureGraphicNames()
 
 SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
 {
-    //  fuer Drag&Drop auf Zeichenobjekt
+    //	fuer Drag&Drop auf Zeichenobjekt
 
     SdrObject* pFound = NULL;
     if (pDrawLayer && pTab[nTab])
@@ -438,8 +443,8 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
             {
                 if ( pObject->GetCurrentBoundRect().IsInside(rPos) )
                 {
-                    //  Intern interessiert gar nicht
-                    //  Objekt vom Back-Layer nur, wenn kein Objekt von anderem Layer getroffen
+                    //	Intern interessiert gar nicht
+                    //	Objekt vom Back-Layer nur, wenn kein Objekt von anderem Layer getroffen
 
                     SdrLayerID nLayer = pObject->GetLayer();
                     if ( (nLayer != SC_LAYER_INTERN) && (nLayer != SC_LAYER_HIDDEN) )
@@ -451,7 +456,7 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
                         }
                     }
                 }
-                //  weitersuchen -> letztes (oberstes) getroffenes Objekt nehmen
+                //	weitersuchen -> letztes (oberstes) getroffenes Objekt nehmen
 
                 pObject = aIter.Next();
             }
@@ -460,24 +465,20 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
     return pFound;
 }
 
-sal_Bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, sal_Bool bLeftIsEmpty,
+BOOL ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
+                                SCCOL nEndCol, SCROW nEndRow, BOOL bLeftIsEmpty,
                                 ScRange* pLastRange, Rectangle* pLastMM ) const
 {
     if (!IsBlockEmpty( nTab, nStartCol, nStartRow, nEndCol, nEndRow ))
-        return false;
+        return FALSE;
 
-    if (HasAttrib(ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab), HASATTR_LINES))
-        // We want to print sheets with borders even if there is no cell content.
-        return false;
-
-    ScDocument* pThis = (ScDocument*)this;  //! GetMMRect / HasAnyDraw etc. const !!!
+    ScDocument* pThis = (ScDocument*)this;	//! GetMMRect / HasAnyDraw etc. const !!!
 
     Rectangle aMMRect;
     if ( pLastRange && pLastMM && nTab == pLastRange->aStart.Tab() &&
             nStartRow == pLastRange->aStart.Row() && nEndRow == pLastRange->aEnd.Row() )
     {
-        //  keep vertical part of aMMRect, only update horizontal position
+        //	keep vertical part of aMMRect, only update horizontal position
         aMMRect = *pLastMM;
 
         long nLeft = 0;
@@ -501,27 +502,27 @@ sal_Bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     }
 
     if ( pThis->HasAnyDraw( nTab, aMMRect ))
-        return false;
+        return FALSE;
 
     if ( nStartCol > 0 && !bLeftIsEmpty )
     {
-        //  aehnlich wie in ScPrintFunc::AdjustPrintArea
-        //! ExtendPrintArea erst ab Start-Spalte des Druckbereichs
+        //	aehnlich wie in ScPrintFunc::AdjustPrintArea
+        //!	ExtendPrintArea erst ab Start-Spalte des Druckbereichs
 
         SCCOL nExtendCol = nStartCol - 1;
         SCROW nTmpRow = nEndRow;
 
         pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab,
-                            false, sal_True );      // kein Refresh, incl. Attrs
+                            FALSE, TRUE );		// kein Refresh, incl. Attrs
 
         OutputDevice* pDev = pThis->GetPrinter();
-        pDev->SetMapMode( MAP_PIXEL );              // wichtig fuer GetNeededSize
+        pDev->SetMapMode( MAP_PIXEL );				// wichtig fuer GetNeededSize
         pThis->ExtendPrintArea( pDev, nTab, 0, nStartRow, nExtendCol, nEndRow );
         if ( nExtendCol >= nStartCol )
-            return false;
+            return FALSE;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 void ScDocument::Clear( sal_Bool bFromDestructor )
@@ -537,13 +538,15 @@ void ScDocument::Clear( sal_Bool bFromDestructor )
 
     if (pDrawLayer)
     {
+        // #116168#
+        //pDrawLayer->Clear();
         pDrawLayer->ClearModel( bFromDestructor );
     }
 }
 
-sal_Bool ScDocument::HasControl( SCTAB nTab, const Rectangle& rMMRect )
+BOOL ScDocument::HasControl( SCTAB nTab, const Rectangle& rMMRect )
 {
-    sal_Bool bFound = false;
+    BOOL bFound = FALSE;
 
     if (pDrawLayer)
     {
@@ -559,7 +562,7 @@ sal_Bool ScDocument::HasControl( SCTAB nTab, const Rectangle& rMMRect )
                 {
                     Rectangle aObjRect = pObject->GetLogicRect();
                     if ( aObjRect.IsOver( rMMRect ) )
-                        bFound = sal_True;
+                        bFound = TRUE;
                 }
 
                 pObject = aIter.Next();
@@ -587,10 +590,11 @@ void ScDocument::InvalidateControls( Window* pWin, SCTAB nTab, const Rectangle& 
                     Rectangle aObjRect = pObject->GetLogicRect();
                     if ( aObjRect.IsOver( rMMRect ) )
                     {
-                        //  Uno-Controls zeichnen sich immer komplett, ohne Ruecksicht
-                        //  auf ClippingRegions. Darum muss das ganze Objekt neu gepainted
-                        //  werden, damit die Selektion auf der Tabelle nicht uebermalt wird.
+                        //	Uno-Controls zeichnen sich immer komplett, ohne Ruecksicht
+                        //	auf ClippingRegions. Darum muss das ganze Objekt neu gepainted
+                        //	werden, damit die Selektion auf der Tabelle nicht uebermalt wird.
 
+                        //pWin->Invalidate( aObjRect.GetIntersection( rMMRect ) );
                         pWin->Invalidate( aObjRect );
                     }
                 }
@@ -601,12 +605,12 @@ void ScDocument::InvalidateControls( Window* pWin, SCTAB nTab, const Rectangle& 
     }
 }
 
-sal_Bool ScDocument::HasDetectiveObjects(SCTAB nTab) const
+BOOL ScDocument::HasDetectiveObjects(SCTAB nTab) const
 {
-    //  looks for detective objects, annotations don't count
-    //  (used to adjust scale so detective objects hit their cells better)
+    //	looks for detective objects, annotations don't count
+    //	(used to adjust scale so detective objects hit their cells better)
 
-    sal_Bool bFound = false;
+    BOOL bFound = FALSE;
 
     if (pDrawLayer)
     {
@@ -620,7 +624,7 @@ sal_Bool ScDocument::HasDetectiveObjects(SCTAB nTab) const
             {
                 // anything on the internal layer except captions (annotations)
                 if ( (pObject->GetLayer() == SC_LAYER_INTERN) && !ScDrawLayer::IsNoteCaption( pObject ) )
-                    bFound = sal_True;
+                    bFound = TRUE;
 
                 pObject = aIter.Next();
             }
@@ -632,40 +636,40 @@ sal_Bool ScDocument::HasDetectiveObjects(SCTAB nTab) const
 
 void ScDocument::UpdateFontCharSet()
 {
-    //  In alten Versionen (bis incl. 4.0 ohne SP) wurden beim Austausch zwischen
-    //  Systemen die CharSets in den Font-Attributen nicht angepasst.
-    //  Das muss fuer Dokumente bis incl SP2 nun nachgeholt werden:
-    //  Alles, was nicht SYMBOL ist, wird auf den System-CharSet umgesetzt.
-    //  Bei neuen Dokumenten (Version SC_FONTCHARSET) sollte der CharSet stimmen.
+    //	In alten Versionen (bis incl. 4.0 ohne SP) wurden beim Austausch zwischen
+    //	Systemen die CharSets in den Font-Attributen nicht angepasst.
+    //	Das muss fuer Dokumente bis incl SP2 nun nachgeholt werden:
+    //	Alles, was nicht SYMBOL ist, wird auf den System-CharSet umgesetzt.
+    //	Bei neuen Dokumenten (Version SC_FONTCHARSET) sollte der CharSet stimmen.
 
-    sal_Bool bUpdateOld = ( nSrcVer < SC_FONTCHARSET );
+    BOOL bUpdateOld = ( nSrcVer < SC_FONTCHARSET );
 
     CharSet eSysSet = gsl_getSystemTextEncoding();
     if ( eSrcSet != eSysSet || bUpdateOld )
     {
-        sal_uInt32 nCount,i;
+        USHORT nCount,i;
         SvxFontItem* pItem;
 
         ScDocumentPool* pPool = xPoolHelper->GetDocPool();
-        nCount = pPool->GetItemCount2(ATTR_FONT);
+        nCount = pPool->GetItemCount(ATTR_FONT);
         for (i=0; i<nCount; i++)
         {
-            pItem = (SvxFontItem*)pPool->GetItem2(ATTR_FONT, i);
+            pItem = (SvxFontItem*)pPool->GetItem(ATTR_FONT, i);
             if ( pItem && ( pItem->GetCharSet() == eSrcSet ||
                             ( bUpdateOld && pItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
-                pItem->SetCharSet(eSysSet);
+                pItem->GetCharSet() = eSysSet;
         }
 
         if ( pDrawLayer )
         {
             SfxItemPool& rDrawPool = pDrawLayer->GetItemPool();
-            nCount = rDrawPool.GetItemCount2(EE_CHAR_FONTINFO);
+            nCount = rDrawPool.GetItemCount(EE_CHAR_FONTINFO);
             for (i=0; i<nCount; i++)
             {
-                pItem = (SvxFontItem*)rDrawPool.GetItem2(EE_CHAR_FONTINFO, i);
+                pItem = (SvxFontItem*)rDrawPool.GetItem(EE_CHAR_FONTINFO, i);
                 if ( pItem && ( pItem->GetCharSet() == eSrcSet ||
                                 ( bUpdateOld && pItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
-                    pItem->SetCharSet( eSysSet );
+                    pItem->GetCharSet() = eSysSet;
             }
         }
     }
@@ -701,15 +705,15 @@ void ScDocument::SetImportingXML( bool bVal )
         for ( SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++ )
             if ( pTab[nTab]->IsLoadingRTL() )
             {
-                pTab[nTab]->SetLoadingRTL( false );
-                SetLayoutRTL( nTab, sal_True );             // includes mirroring; bImportingXML must be cleared first
+                pTab[nTab]->SetLoadingRTL( FALSE );
+                SetLayoutRTL( nTab, TRUE );             // includes mirroring; bImportingXML must be cleared first
             }
     }
 
     SetLoadingMedium(bVal);
 }
 
-void ScDocument::SetXMLFromWrapper( sal_Bool bVal )
+void ScDocument::SetXMLFromWrapper( BOOL bVal )
 {
     bXMLFromWrapper = bVal;
 }
@@ -728,12 +732,12 @@ void ScDocument::SetForbiddenCharacters( const rtl::Reference<SvxForbiddenCharac
         pDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
 }
 
-sal_Bool ScDocument::IsValidAsianCompression() const
+BOOL ScDocument::IsValidAsianCompression() const
 {
     return ( nAsianCompression != SC_ASIANCOMPRESSION_INVALID );
 }
 
-sal_uInt8 ScDocument::GetAsianCompression() const
+BYTE ScDocument::GetAsianCompression() const
 {
     if ( nAsianCompression == SC_ASIANCOMPRESSION_INVALID )
         return 0;
@@ -741,7 +745,7 @@ sal_uInt8 ScDocument::GetAsianCompression() const
         return nAsianCompression;
 }
 
-void ScDocument::SetAsianCompression(sal_uInt8 nNew)
+void ScDocument::SetAsianCompression(BYTE nNew)
 {
     nAsianCompression = nNew;
     if ( pEditEngine )
@@ -750,26 +754,26 @@ void ScDocument::SetAsianCompression(sal_uInt8 nNew)
         pDrawLayer->SetCharCompressType( nAsianCompression );
 }
 
-sal_Bool ScDocument::IsValidAsianKerning() const
+BOOL ScDocument::IsValidAsianKerning() const
 {
     return ( nAsianKerning != SC_ASIANKERNING_INVALID );
 }
 
-sal_Bool ScDocument::GetAsianKerning() const
+BOOL ScDocument::GetAsianKerning() const
 {
     if ( nAsianKerning == SC_ASIANKERNING_INVALID )
-        return false;
+        return FALSE;
     else
-        return (sal_Bool)nAsianKerning;
+        return (BOOL)nAsianKerning;
 }
 
-void ScDocument::SetAsianKerning(sal_Bool bNew)
+void ScDocument::SetAsianKerning(BOOL bNew)
 {
-    nAsianKerning = (sal_uInt8)bNew;
+    nAsianKerning = (BYTE)bNew;
     if ( pEditEngine )
-        pEditEngine->SetKernAsianPunctuation( (sal_Bool)nAsianKerning );
+        pEditEngine->SetKernAsianPunctuation( (BOOL)nAsianKerning );
     if ( pDrawLayer )
-        pDrawLayer->SetKernAsianPunctuation( (sal_Bool)nAsianKerning );
+        pDrawLayer->SetKernAsianPunctuation( (BOOL)nAsianKerning );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

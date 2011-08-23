@@ -37,7 +37,6 @@
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
@@ -47,7 +46,6 @@
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <comphelper/types.hxx>
 #include <ucbhelper/contentidentifier.hxx>
-#include <o3tl/compat_functional.hxx>
 
 
 using namespace ::com::sun::star::uno;
@@ -80,9 +78,9 @@ ODefinitionContainer_Impl::const_iterator ODefinitionContainer_Impl::find( TCont
     return ::std::find_if(
         m_aDefinitions.begin(),
         m_aDefinitions.end(),
-        ::o3tl::compose1(
+        ::std::compose1(
             ::std::bind2nd( ::std::equal_to< TContentPtr >(), _pDefinition ),
-            ::o3tl::select2nd< NamedDefinitions::value_type >()
+            ::std::select2nd< NamedDefinitions::value_type >()
         )
     );
 }
@@ -92,9 +90,9 @@ ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( TContentPtr
     return ::std::find_if(
         m_aDefinitions.begin(),
         m_aDefinitions.end(),
-        ::o3tl::compose1(
+        ::std::compose1(
             ::std::bind2nd( ::std::equal_to< TContentPtr >(), _pDefinition ),
-            ::o3tl::select2nd< NamedDefinitions::value_type >()
+            ::std::select2nd< NamedDefinitions::value_type >()
         )
     );
 }
@@ -105,7 +103,7 @@ ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( TContentPtr
 DBG_NAME(ODefinitionContainer)
 
 ODefinitionContainer::ODefinitionContainer(   const Reference< XMultiServiceFactory >& _xORB
-                                            , const Reference< XInterface >&    _xParentContainer
+                                            , const Reference< XInterface >&	_xParentContainer
                                             , const TContentPtr& _pImpl
                                             , bool _bCheckSlash
                                             )
@@ -120,7 +118,7 @@ ODefinitionContainer::ODefinitionContainer(   const Reference< XMultiServiceFact
 
     const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
     ODefinitionContainer_Impl::const_iterator aEnd = rDefinitions.end();
-    for (   ODefinitionContainer_Impl::const_iterator aDefinition = rDefinitions.begin();
+    for	(	ODefinitionContainer_Impl::const_iterator aDefinition = rDefinitions.begin();
             aDefinition != aEnd;
             ++aDefinition
         )
@@ -137,7 +135,7 @@ void SAL_CALL ODefinitionContainer::disposing()
 
     MutexGuard aGuard(m_aMutex);
 
-    // say goodbye to our listeners
+    // say our listeners goobye
     EventObject aEvt(*this);
     m_aApproveListeners.disposeAndClear(aEvt);
     m_aContainerListeners.disposeAndClear(aEvt);
@@ -146,7 +144,7 @@ void SAL_CALL ODefinitionContainer::disposing()
     Documents::iterator aIter = m_aDocumentMap.begin();
     Documents::iterator aEnd = m_aDocumentMap.end();
 
-    for (; aIter != aEnd; ++aIter)
+    for	(; aIter != aEnd; ++aIter)
     {
         Reference<XContent> xProp = aIter->second;
         if ( xProp.is() )
@@ -380,7 +378,7 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOu
     Documents::iterator aPos = m_aDocuments[_nIndex];
     Reference<XContent> xProp = aPos->second;
     if (!xProp.is())
-    {   // that's the first access to the object
+    {	// that's the first access to the object
         // -> create it
         xProp = createObject(aPos->first);
         aPos->second = Documents::mapped_type();
@@ -406,7 +404,7 @@ Reference< XContent > ODefinitionContainer::implGetByName(const ::rtl::OUString&
     Reference< XContent > xProp = aMapPos->second;
 
     if (_bReadIfNeccessary && !xProp.is())
-    {   // the object has never been accessed before, so we have to read it now
+    {	// the object has never been accessed before, so we have to read it now
         // (that's the expensive part)
 
         // create the object and insert it into the map
@@ -425,7 +423,7 @@ Sequence< ::rtl::OUString > SAL_CALL ODefinitionContainer::getElementNames(  ) t
     Sequence< ::rtl::OUString > aNames(m_aDocumentMap.size());
     ::rtl::OUString* pNames = aNames.getArray();
     Documents::iterator aEnd = m_aDocumentMap.end();
-    for (   Documents::iterator aNameIter = m_aDocumentMap.begin();
+    for	(	Documents::iterator aNameIter = m_aDocumentMap.begin();
             aNameIter != aEnd;
             ++pNames, ++aNameIter
         )
@@ -450,7 +448,7 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
     // it's one of our documents ....
     Documents::iterator aIter = m_aDocumentMap.begin();
     Documents::iterator aEnd = m_aDocumentMap.end();
-    for (;aIter != aEnd;++aIter )
+    for	(;aIter != aEnd;++aIter )
     {
         if ( xSource == aIter->second.get() )
         {
@@ -498,7 +496,7 @@ namespace
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "lcl_ensureName: caught an exception while obtaining the current name!" );
+            OSL_ENSURE( sal_False, "lcl_ensureName: caught an exception while obtaining the current name!" );
         }
 
         // set the new name
@@ -513,7 +511,7 @@ namespace
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "lcl_ensureName: caught an exception!" );
+            OSL_ENSURE( sal_False, "lcl_ensureName: caught an exception!" );
         }
         return false;
     }
@@ -532,11 +530,11 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
         ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( _rName );
         if ( aFind == rDefinitions.end() )
         {
-            // ensure that the new object has the proper name.
+            // ensure that the new object thas the proper name.
             // Somebody could create an object with name "foo", and insert it as "bar"
             // into a container. In this case, we need to ensure that the object name
             // is also "bar"
-            // #i44786#
+            // #i44786# / 2005-03-11 / frank.schoenheit@sun.com
             lcl_ensureName( _rxNewObject, _rName );
 
             ::rtl::Reference< OContentHelper > pContent = OContentHelper::getImplementation( _rxNewObject );
@@ -558,13 +556,13 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
     }
     catch(Exception&)
     {
-        OSL_FAIL("ODefinitionContainer::implAppend: caught something !");
+        DBG_ERROR("ODefinitionContainer::implAppend: caught something !");
     }
 }
 
 void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Reference< XContent >& _rxNewObject)
 {
-    OSL_ENSURE(checkExistence(_rName), "ODefinitionContainer::implReplace : invalid name !");
+    DBG_ASSERT(checkExistence(_rName), "ODefinitionContainer::implReplace : invalid name !");
 
     Documents::iterator aFind = m_aDocumentMap.find(_rName);
     removeObjectListener(aFind->second);

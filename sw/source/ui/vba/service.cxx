@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,14 +65,24 @@ extern sdecl::ServiceDecl const serviceDecl;
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
+    void SAL_CALL component_getImplementationEnvironment( 
         const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
     {
         OSL_TRACE("In component_getImplementationEnv");
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+    sal_Bool SAL_CALL component_writeInfo( 
+        lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
+    {
+        OSL_TRACE("In component_writeInfo");
+
+    // Component registration
+        return component_writeInfoHelper( pServiceManager, pRegistryKey, 
+        globals::serviceDecl, document::serviceDecl, wrapformat::serviceDecl, vbaeventshelper::serviceDecl ); 
+    }
+
+    void * SAL_CALL component_getFactory( 
         const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
     {

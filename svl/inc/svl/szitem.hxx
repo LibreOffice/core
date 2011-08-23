@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,13 +42,13 @@ DBG_NAMEEX(SfxSizeItem)
 class SfxSizeItem : public SfxPoolItem
 {
 private:
-    Size                     aVal;
+    Size					 aVal;
 
 public:
                              TYPEINFO();
                              SfxSizeItem();
-                             SfxSizeItem( sal_uInt16 nWhich, const Size& rVal );
-                             SfxSizeItem( sal_uInt16 nWhich, SvStream & );
+                             SfxSizeItem( USHORT nWhich, const Size& rVal );
+                             SfxSizeItem( USHORT nWhich, SvStream & );
                              SfxSizeItem( const SfxSizeItem& );
                              ~SfxSizeItem() { DBG_DTOR(SfxSizeItem, 0); }
 
@@ -58,18 +58,18 @@ public:
                                     XubString &rText,
                                     const IntlWrapper * = 0 ) const;
 
-    virtual int              operator==( const SfxPoolItem& ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
-                                          sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
-                                          sal_uInt8 nMemberId = 0 );
+    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual	bool             QueryValue( com::sun::star::uno::Any& rVal,
+                                          BYTE nMemberId = 0 ) const;
+    virtual	bool             PutValue( const com::sun::star::uno::Any& rVal,
+                                          BYTE nMemberId = 0 );
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nItemVersion) const;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual SfxPoolItem*	 Create(SvStream &, USHORT nItemVersion) const;
+    virtual SvStream&		 Store(SvStream &, USHORT nItemVersion) const;
 
-    const Size&             GetValue() const { return aVal; }
-    void                    SetValue( const Size& rNewVal ) {
+    const Size&				GetValue() const { return aVal; }
+    void					SetValue( const Size& rNewVal ) {
                                  DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
                                  aVal = rNewVal; }
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_USRFLD_HXX
-#define SW_USRFLD_HXX
+#ifndef _USRFLD_HXX
+#define _USRFLD_HXX
 
 #include "swdllapi.h"
 #include "fldbas.hxx"
@@ -41,48 +41,47 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
 {
-    sal_Bool    bValidValue : 1;
-    sal_Bool    bDeleted : 1;
-    double  nValue;
+    BOOL	bValidValue : 1;
+    BOOL	bDeleted : 1;
+    double 	nValue;
     String  aName;
     String  aContent;
-    sal_uInt16  nType;
+    USHORT  nType;
 
 public:
     SwUserFieldType( SwDoc* pDocPtr, const String& );
 
-    virtual const String&   GetName() const;
-    virtual SwFieldType*    Copy() const;
+    virtual const String&	GetName() const;
+    virtual SwFieldType*	Copy() const;
 
-    String                  Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng);
+    String					Expand(sal_uInt32 nFmt, USHORT nSubType, USHORT nLng);
 
-    String                  GetContent( sal_uInt32 nFmt = 0 );
-           void             SetContent( const String& rStr, sal_uInt32 nFmt = 0 );
+    String					GetContent( sal_uInt32 nFmt = 0 );
+           void				SetContent( const String& rStr, sal_uInt32 nFmt = 0 );
 
-    inline sal_Bool             IsValid() const;
-    inline void             ChgValid( sal_Bool bNew );
+    inline BOOL 			IsValid() const;
+    inline void 			ChgValid( BOOL bNew );
 
-           double           GetValue(SwCalc& rCalc);    // Member nValue neu berrechnen
-    inline double           GetValue() const;
-    inline void             SetValue(const double nVal);
+    virtual void 			Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
-    inline sal_uInt16           GetType() const;
-    inline void             SetType(sal_uInt16);
+           double 			GetValue(SwCalc& rCalc);	// Member nValue neu berrechnen
+    inline double			GetValue() const;
+    inline void				SetValue(const double nVal);
 
-    sal_Bool                    IsDeleted() const       { return bDeleted; }
-    void                    SetDeleted( sal_Bool b )    { bDeleted = b; }
+    inline USHORT			GetType() const;
+    inline void				SetType(USHORT);
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
+    BOOL					IsDeleted() const 		{ return bDeleted; }
+    void					SetDeleted( BOOL b )	{ bDeleted = b; }
 
-protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
 };
 
-inline sal_Bool SwUserFieldType::IsValid() const
+inline BOOL SwUserFieldType::IsValid() const
     { return bValidValue; }
 
-inline void SwUserFieldType::ChgValid( sal_Bool bNew )
+inline void SwUserFieldType::ChgValid( BOOL bNew )
     { bValidValue = bNew; }
 
 inline double SwUserFieldType::GetValue() const
@@ -91,10 +90,10 @@ inline double SwUserFieldType::GetValue() const
 inline void SwUserFieldType::SetValue(const double nVal)
     { nValue = nVal; }
 
-inline sal_uInt16 SwUserFieldType::GetType() const
+inline USHORT SwUserFieldType::GetType() const
     { return nType; }
 
-inline void SwUserFieldType::SetType(sal_uInt16 nSub)
+inline void SwUserFieldType::SetType(USHORT nSub)
 {
     nType = nSub;
     EnableFormat(!(nSub & nsSwGetSetExpType::GSE_STRING));
@@ -106,32 +105,31 @@ inline void SwUserFieldType::SetType(sal_uInt16 nSub)
 
 class SW_DLLPUBLIC SwUserField : public SwValueField
 {
-    sal_uInt16  nSubType;
-
-    virtual String          Expand() const;
-    virtual SwField*        Copy() const;
+    USHORT  nSubType;
 
 public:
-    SwUserField(SwUserFieldType*, sal_uInt16 nSub = 0, sal_uInt32 nFmt = 0);
+    SwUserField(SwUserFieldType*, USHORT nSub = 0, sal_uInt32 nFmt = 0);
 
-    virtual sal_uInt16          GetSubType() const;
-    virtual void            SetSubType(sal_uInt16 nSub);
+    virtual USHORT	 		GetSubType() const;
+    virtual void	 		SetSubType(USHORT nSub);
 
-    virtual double          GetValue() const;
-    virtual void            SetValue( const double& rVal );
+    virtual double			GetValue() const;
+    virtual void 			SetValue( const double& rVal );
 
-    virtual String          GetFieldName() const;
+    virtual String	 		Expand() const;
+    virtual SwField* 		Copy() const;
+    virtual	String	 		GetCntnt(BOOL bName = FALSE) const;
 
     // Name kann nicht geaendert werden
-    virtual const String&   GetPar1() const;
+    virtual const String& 	GetPar1() const;
 
     // Inhalt
-    virtual String          GetPar2() const;
-    virtual void            SetPar2(const String& rStr);
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
+    virtual String	 		GetPar2() const;
+    virtual void	 		SetPar2(const String& rStr);
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 };
 
-#endif // SW_USRFLD_HXX
+#endif // _USRFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

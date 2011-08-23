@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,12 +34,12 @@
 #include "sc.hrc"
 #include "drawview.hxx"
 
-// Create default drawing objects via keyboard
+// #98185# Create default drawing objects via keyboard
 #include <svx/svdopath.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 
-//  Pixelabstand zum Schliessen von Freihand-Zeichnungen
+//	Pixelabstand zum Schliessen von Freihand-Zeichnungen
 #ifndef CLOSE_PIXDIST
 #define CLOSE_PIXDIST 5
 #endif
@@ -74,12 +74,12 @@ FuConstPolygon::~FuConstPolygon()
 |*
 \************************************************************************/
 
-sal_Bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL __EXPORT FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     SdrViewEvent aVEvt;
     (void)pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
@@ -87,15 +87,15 @@ sal_Bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     {
         // Texteingabe hier nicht zulassen
         aVEvt.eEvent = SDREVENT_BEGDRAGOBJ;
-        pView->EnableExtendedMouseEventDispatcher(false);
+        pView->EnableExtendedMouseEventDispatcher(FALSE);
     }
     else
     {
-        pView->EnableExtendedMouseEventDispatcher(sal_True);
+        pView->EnableExtendedMouseEventDispatcher(TRUE);
     }
 
     if ( pView->MouseButtonDown(rMEvt, pWindow) )
-        bReturn = sal_True;
+        bReturn = TRUE;
 
     return bReturn;
 }
@@ -106,10 +106,10 @@ sal_Bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
+BOOL __EXPORT FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 {
     pView->MouseMove(rMEvt, pWindow);
-    sal_Bool bReturn = FuConstruct::MouseMove(rMEvt);
+    BOOL bReturn = FuConstruct::MouseMove(rMEvt);
     return bReturn;
 }
 
@@ -119,13 +119,13 @@ sal_Bool FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL __EXPORT FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = false;
-    sal_Bool bSimple = false;
+    BOOL bReturn = FALSE;
+    BOOL bSimple = FALSE;
 
     SdrViewEvent aVEvt;
     (void)pView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt);
@@ -134,11 +134,11 @@ sal_Bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (aVEvt.eEvent == SDREVENT_ENDCREATE)
     {
-        bReturn = sal_True;
-        bSimple = sal_True;         // Doppelklick nicht weiterreichen
+        bReturn = TRUE;
+        bSimple = TRUE;			// Doppelklick nicht weiterreichen
     }
 
-    sal_Bool bParent;
+    BOOL bParent;
     if (bSimple)
         bParent = FuConstruct::SimpleMouseButtonUp(rMEvt);
     else
@@ -151,14 +151,14 @@ sal_Bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
+BOOL __EXPORT FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
+    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
 
     return(bReturn);
 }
@@ -171,7 +171,7 @@ sal_Bool FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstPolygon::Activate()
 {
-    pView->EnableExtendedMouseEventDispatcher(sal_True);
+    pView->EnableExtendedMouseEventDispatcher(TRUE);
 
     SdrObjKind eKind;
 
@@ -222,7 +222,7 @@ void FuConstPolygon::Activate()
         break;
     }
 
-    pView->SetCurrentObj(sal::static_int_cast<sal_uInt16>(eKind));
+    pView->SetCurrentObj(sal::static_int_cast<UINT16>(eKind));
 
     pView->SetEditMode(SDREDITMODE_CREATE);
 
@@ -243,14 +243,14 @@ void FuConstPolygon::Deactivate()
 {
     pView->SetEditMode(SDREDITMODE_EDIT);
 
-    pView->EnableExtendedMouseEventDispatcher(false);
+    pView->EnableExtendedMouseEventDispatcher(FALSE);
 
     FuConstruct::Deactivate();
 
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// Create default drawing objects via keyboard
+// #98185# Create default drawing objects via keyboard
 SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_POLYGON:
@@ -273,9 +273,9 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                 case SID_DRAW_BEZIER_NOFILL:
                 {
                     basegfx::B2DPolygon aInnerPoly;
-
+                    
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
-
+                    
                     const basegfx::B2DPoint aCenterBottom(rRectangle.Center().X(), rRectangle.Bottom());
                     aInnerPoly.appendBezierSegment(
                         aCenterBottom,
@@ -301,12 +301,12 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                         basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()),
                         basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()),
                         basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
-
+                    
                     aInnerPoly.appendBezierSegment(
                         basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()),
                         basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()),
                         basegfx::B2DPoint(rRectangle.Right(), rRectangle.Top()));
-
+                    
                     aPoly.append(aInnerPoly);
                     break;
                 }
@@ -316,7 +316,7 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                     basegfx::B2DPolygon aInnerPoly;
                     const sal_Int32 nWdt(rRectangle.GetWidth());
                     const sal_Int32 nHgt(rRectangle.GetHeight());
-
+                    
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 30) / 100, rRectangle.Top() + (nHgt * 70) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top() + (nHgt * 15) / 100));
@@ -325,7 +325,7 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 80) / 100, rRectangle.Top() + (nHgt * 50) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 80) / 100, rRectangle.Top() + (nHgt * 75) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Bottom(), rRectangle.Right()));
-
+                    
                     if(SID_DRAW_POLYGON_NOFILL == nID)
                     {
                         aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));
@@ -344,7 +344,7 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
         }
         else
         {
-            OSL_FAIL("Object is NO path object");
+            DBG_ERROR("Object is NO path object");
         }
 
         pObj->SetLogicRect(rRectangle);

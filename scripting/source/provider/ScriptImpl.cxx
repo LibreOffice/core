@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,11 +47,15 @@ ScriptImpl::ScriptImpl(
     const Reference< runtime::XScriptInvocation > & runtimeMgr,
     const ::rtl::OUString& scriptURI )
 throw ( RuntimeException ) :
-        m_XScriptingContext( scriptingContext, UNO_SET_THROW ),
-        m_RunTimeManager( runtimeMgr, UNO_SET_THROW ),
+        m_XScriptingContext( scriptingContext ),
+        m_RunTimeManager( runtimeMgr ),
         m_ScriptURI( scriptURI )
 {
     OSL_TRACE( "<!constucting a ScriptImpl>\n" );
+    validateXRef( m_XScriptingContext,
+                  "ScriptImpl::ScriptImpl: No XScriptingContext\n" );
+    validateXRef( m_RunTimeManager,
+                  "ScriptImpl::ScriptImpl: No XScriptInvocation\n" );
 }
 
 //*************************************************************************

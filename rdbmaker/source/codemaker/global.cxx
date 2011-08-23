@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #include <osl/process.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
-#include    <osl/thread.h>
+#include 	<osl/thread.h>
 #include    <osl/file.hxx>
 
 #include <stdlib.h>
@@ -44,7 +44,7 @@
 #include <errno.h>
 #include <unistd.h>
 #endif
-#include    <codemaker/global.hxx>
+#include	<codemaker/global.hxx>
 
 #ifdef SAL_UNX
 #define SEPARATOR '/'
@@ -133,7 +133,7 @@ void FileStream::open(const OString& name, FileAccessMode mode)
     if ( name.getLength() > 0 )
     {
         m_name = name;
-        m_pFile = fopen(m_name.getStr(), checkAccessMode(mode));
+        m_pFile = fopen(m_name, checkAccessMode(mode));
     }
 }
 

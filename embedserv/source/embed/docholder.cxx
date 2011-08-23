@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@
 
 using namespace ::com::sun::star;
 
-extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
+extern ::rtl::OUString	getFilterNameFromGUID_Impl( GUID* );
 
 // add mutex locking ???
 
@@ -139,7 +139,7 @@ void DocumentHolder::LoadDocInFrame( sal_Bool bPluginMode )
             -1,
             aAny,
             beans::PropertyState_DIRECT_VALUE);
-
+        
         aAny <<= sal_False;
         aSeq[1] = beans::PropertyValue(
             rtl::OUString(
@@ -147,7 +147,7 @@ void DocumentHolder::LoadDocInFrame( sal_Bool bPluginMode )
             -1,
             aAny,
             beans::PropertyState_DIRECT_VALUE);
-
+        
         aAny <<= (sal_Bool) sal_True;
         aSeq[2] = beans::PropertyValue(
             rtl::OUString(
@@ -295,7 +295,7 @@ HRESULT DocumentHolder::InPlaceActivate(
         {   // determine XWindow and window handle of parent
             HWND                          hWndxWinParent(0);
             uno::Reference<awt::XWindow>  xWin;
-
+            
             static const ::rtl::OUString aToolkitServiceName(
                 RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.awt.Toolkit" ) );
             uno::Reference<awt::XSystemChildFactory> xToolkit(
@@ -306,7 +306,7 @@ HRESULT DocumentHolder::InPlaceActivate(
                 if( !m_pCHatchWin )
                     m_pCHatchWin = new winwrap::CHatchWin(
                         m_hInstance,this);
-
+                
                 if(m_pCHatchWin->Init(hWndSite,/*ID_HATCHWINDOW*/2000, NULL)) {
                     m_pCHatchWin->RectsSet(&rcPos,&rcClip); //set visible area
                     hWndxWinParent = m_pCHatchWin->Window();
@@ -317,7 +317,7 @@ HRESULT DocumentHolder::InPlaceActivate(
                     delete m_pCHatchWin, m_pCHatchWin = 0;
                     hWndxWinParent = hWndSite;
                 }
-
+                
                 aAny <<= sal_Int32(hWndxWinParent);
                 xWin = uno::Reference<awt::XWindow>(
                     xToolkit->createSystemChild(
@@ -326,7 +326,7 @@ HRESULT DocumentHolder::InPlaceActivate(
                         lang::SystemDependent::SYSTEM_WIN32),
                     uno::UNO_QUERY);
             }
-
+            
             if(xWin.is()) {
                 xWin->setPosSize(
                     m_pCHatchWin ? HATCHWIN_BORDERWIDTHDEFAULT : 0,
@@ -335,7 +335,7 @@ HRESULT DocumentHolder::InPlaceActivate(
                     rcPos.bottom - rcPos.top,
                     awt::PosSize::POSSIZE);
                 xWin->setVisible(sal_True);
-
+                
                 m_xEditWindow = xWin;
                 m_hWndxWinParent = hWndxWinParent;
             }
@@ -347,7 +347,7 @@ HRESULT DocumentHolder::InPlaceActivate(
                 SetParent(m_hWndxWinParent,hWndSite);
                 ShowWindow(m_hWndxWinParent,SW_SHOW);  //Make visible.
             }
-
+            
             if ( !m_xFrame.is() )
                 // initially set size to "empty", this guarantees that the final resize
                 // is always executed (will be done by "SetObjectRects" after getting internal border)
@@ -359,7 +359,7 @@ HRESULT DocumentHolder::InPlaceActivate(
                     awt::PosSize::POSSIZE);
             m_xEditWindow->setVisible(sal_True);
         }
-
+        
         if(m_xContainerWindow.is()) {
             if(m_hWndxWinCont) {
                 if(m_pIOleIPFrame) {
@@ -371,7 +371,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             }
             m_xContainerWindow->setVisible(true);
         }
-
+        
         if(m_xFrame.is())
             m_xFrame->activate();
         else {
@@ -381,10 +381,10 @@ HRESULT DocumentHolder::InPlaceActivate(
             m_xFrame = uno::Reference<frame::XFrame>(
                 m_xFactory->createInstance(aFrameServiceName),
                 uno::UNO_QUERY);
-
+            
             if(!m_xFrame.is())
                 return ERROR;
-
+            
             m_xFrame->initialize(m_xEditWindow);
 
             uno::Reference<frame::XDispatchProviderInterception>
@@ -396,16 +396,16 @@ HRESULT DocumentHolder::InPlaceActivate(
             if( xPS.is() )
             {
                 aAny = xPS->getPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")));
+                    rtl::OUString::createFromAscii("LayoutManager"));
                 aAny >>= m_xLayoutManager;
             }
-
+            
             if(m_xLayoutManager.is())
                 m_xLayoutManager->setDockingAreaAcceptor(this);
-
+            
             // load the model into the frame
             LoadDocInFrame( sal_True );
-
+            
             static const ::rtl::OUString aDesktopServiceName (
                 RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
             uno::Reference< frame::XFramesSupplier > xDesktop(
@@ -413,13 +413,13 @@ HRESULT DocumentHolder::InPlaceActivate(
                 uno::UNO_QUERY );
             if(xDesktop.is())
                 xDesktop->getFrames()->append(m_xFrame);
-
+            
             // determine the menuhandle to get menutitems.
             if(m_xLayoutManager.is()) {
                 uno::Reference< ::com::sun::star::ui::XUIElement > xUIEl(
                     m_xLayoutManager->getElement(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "private:resource/menubar/menubar"))));
+                        rtl::OUString::createFromAscii(
+                            "private:resource/menubar/menubar")));
                 OSL_ENSURE(xUIEl.is(),"no menubar");
                 uno::Reference<awt::XSystemDependentMenuPeer> xSDMP(
                     xUIEl->getRealInterface(),
@@ -435,14 +435,14 @@ HRESULT DocumentHolder::InPlaceActivate(
                             "private:resource/menubar/menubar" )));
             }
         }
-
+        
         // TODO/cd: Workaround for status indicator bug. It always makes the
         // document window visible, when someone tries to use the status
         // indicator. As we save our document when we get the deactivation
         // from OLE this conflict to hide floating windows.
         if(m_xLayoutManager.is())
             m_xLayoutManager->setVisible(true);
-
+        
         // get document border and resize rects according to border
         GetDocumentBorder( &m_aBorder );
         SetObjectRects( &rcPos, &rcClip );
@@ -457,7 +457,7 @@ HRESULT DocumentHolder::InPlaceActivate(
         // setTitle(m_aDocumentNamePart);
         if (fIncludeUI)
             hr=UIActivate();
-
+        
         m_pIOleIPSite->DiscardUndoState();
     }
     catch( uno::Exception& )
@@ -496,7 +496,17 @@ void DocumentHolder::InPlaceDeactivate(void)
         m_xLayoutManager->setVisible(false);
 
     if (NULL!=m_pIOleIPSite)
+    {
+        // The following workaround should let the object be stored in case of inplace editing
+//        CComPtr< IOleClientSite > pClientSite;
+//
+//        m_pIOleIPSite->QueryInterface(
+//		        IID_IOleClientSite, (void**)&pClientSite );
+//        if ( pClientSite )
+//            pClientSite->SaveObject();
+
         m_pIOleIPSite->OnInPlaceDeactivate();
+    }
 
     if(m_pIOleIPFrame) m_pIOleIPFrame->Release(); m_pIOleIPFrame = 0;
     if(m_pIOleIPUIWindow) m_pIOleIPUIWindow->Release(); m_pIOleIPUIWindow = 0;
@@ -776,7 +786,7 @@ void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc, s
     {
         // set the document mode to embedded
         uno::Sequence< beans::PropertyValue > aSeq(1);
-        aSeq[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SetEmbedded" ));
+        aSeq[0].Name = ::rtl::OUString::createFromAscii( "SetEmbedded" );
         aSeq[0].Value <<= sal_True;
         m_xDocument->attachResource(::rtl::OUString(),aSeq);
     }
@@ -871,7 +881,7 @@ uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
 uno::Reference< frame::XDispatchProviderInterceptor > DocumentHolder::CreateNewInterceptor()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
+    
     ClearInterceptorInternally();
 
     uno::Reference< frame::XDispatchProviderInterceptor > xInterceptor( m_pInterceptor = new Interceptor( m_xOleAccess, this, m_bLink ) );
@@ -919,11 +929,11 @@ void DocumentHolder::show()
             if ( xProps.is() )
             {
                 uno::Reference< frame::XLayoutManager > xLayoutManager;
-                xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )) ) >>= xLayoutManager;
+                xProps->getPropertyValue( rtl::OUString::createFromAscii( "LayoutManager" ) ) >>= xLayoutManager;
                 uno::Reference< beans::XPropertySet > xLMProps( xLayoutManager, uno::UNO_QUERY );
                 if ( xLMProps.is() )
                 {
-                    xLMProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MenuBarCloser" )),
+                    xLMProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MenuBarCloser" ),
                                                 uno::makeAny( uno::Reference< frame::XStatusListener >() ) );
                 }
             }
@@ -945,7 +955,7 @@ void DocumentHolder::show()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( "Can not show the frame!\n" );
+        OSL_ENSURE( sal_False, "Can not show the frame!\n" );
     }
 
 }
@@ -1152,13 +1162,69 @@ IDispatch* DocumentHolder::GetIDispatch()
     return m_pIDispatch;
 }
 
+#if 0
+HRESULT DocumentHolder::SetVisArea( const RECTL *pRect )
+{
+    if ( pRect && m_xDocument.is() )
+    {
+        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
+        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
+            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
+            {
+                // should allways be there
+                uno::Sequence< sal_Int32 > aRect(4);
+
+                aRect[0] = pRect->left;
+                aRect[1] = pRect->top;
+                aRect[2] = pRect->right;
+                aRect[3] = pRect->bottom;
+
+                aArgs[nInd].Value <<= aRect;
+
+                m_xDocument->attachResource( m_xDocument->getURL(), aArgs );
+                return S_OK;
+            }
+
+        OSL_ENSURE( sal_False, "WinExtent seems not to be implemented!\n" );
+    }
+
+    return E_FAIL;
+}
+
+HRESULT DocumentHolder::GetVisArea( RECTL *pRect )
+{
+    if ( pRect && m_xDocument.is() )
+    {
+        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
+        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
+            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
+            {
+                uno::Sequence< sal_Int32 > aRect;
+                if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
+                {
+                    pRect->left   = aRect[0];
+                    pRect->top    = aRect[1];
+                    pRect->right  = aRect[2];
+                    pRect->bottom = aRect[3];
+
+                    return S_OK;
+                }
+
+                break;
+            }
+    }
+
+    return E_FAIL;
+}
+#endif
+
 HRESULT DocumentHolder::GetDocumentBorder( RECT *pRect )
 {
     if ( pRect && m_xDocument.is() )
     {
         uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
         for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentBorder" ) ) )
+            if ( aArgs[nInd].Name.equalsAscii( "DocumentBorder" ) )
             {
                 uno::Sequence< sal_Int32 > aRect;
                 if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
@@ -1254,14 +1320,14 @@ HRESULT DocumentHolder::SetContRects(LPCRECT aRect)
         memset(&wi,0,sizeof(wi));
         if(m_pIOleIPFrame) {
             m_pIOleIPFrame->GetBorder((LPRECT)&wi);
-            m_xContainerWindow->setPosSize(
+            m_xContainerWindow->setPosSize( 
                 0,0,
                 wi.right - wi.left,
                 wi.bottom - wi.top,
                 awt::PosSize::POSSIZE);
         }
         else
-           m_xContainerWindow->setPosSize(
+           m_xContainerWindow->setPosSize( 
             0,0,
             aRect->right - aRect->left,
             aRect->bottom - aRect->top,
@@ -1449,7 +1515,7 @@ DocumentHolder::queryClosing(
         util::CloseVetoException
     )
 {
-    if ( !m_bLink
+    if ( !m_bLink 
       && ( m_xDocument.is() && m_xDocument == aSource.Source || m_xFrame.is() && m_xFrame == aSource.Source ) )
         throw util::CloseVetoException();
 }
@@ -1523,7 +1589,53 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& /*aEvent*/ )
     }
 }
 
-// Fix strange warnings about some
+
+
+//     if(m_pOLEInterface->GetGUID() == OID_WriterTextServer) {
+//         // edit group
+//         CopyToOLEMenu(m_nMenuHandle,1,hMenu,(WORD)mgw.width[0]);
+//         CopyToOLEMenu(m_nMenuHandle,2,hMenu,1+(WORD)mgw.width[0]);
+//         CopyToOLEMenu(m_nMenuHandle,3,hMenu,2+(WORD)mgw.width[0]);
+//         CopyToOLEMenu(m_nMenuHandle,4,hMenu,3+(WORD)mgw.width[0]);
+//         mgw.width[1]=4;
+
+//         // object group
+//         CopyToOLEMenu(
+//             m_nMenuHandle,5,
+//             hMenu,4+(WORD)mgw.width[0]+(WORD)mgw.width[2]);
+//         mgw.width[3]=1;
+
+//         // help group
+//         CopyToOLEMenu(
+//             m_nMenuHandle,7,
+//             hMenu,5+(WORD)mgw.width[0]+(WORD)mgw.width[2]+(WORD)mgw.width[4]);
+//         mgw.width[5]=1;
+//     }
+//     else if(m_pOLEInterface->GetGUID() == OID_CalcServer) {
+//         // edit group
+//         CopyToOLEMenu(m_nMenuHandle,1,hMenu,(WORD)mgw.width[0]);
+//         CopyToOLEMenu(m_nMenuHandle,2,hMenu,1+(WORD)mgw.width[0]);
+//         CopyToOLEMenu(m_nMenuHandle,3,hMenu,2+(WORD)mgw.width[0]);
+//         CopyToOLEMenu(m_nMenuHandle,4,hMenu,3+(WORD)mgw.width[0]);
+//         mgw.width[1]=4;
+
+//         // object group
+//         CopyToOLEMenu(
+//             m_nMenuHandle,5,
+//             hMenu,4+(WORD)mgw.width[0]+(WORD)mgw.width[2]);
+//         CopyToOLEMenu(
+//             m_nMenuHandle,6,
+//             hMenu,5+(WORD)mgw.width[0]+(WORD)mgw.width[2]);
+//         mgw.width[3]=2;
+
+//         // help group
+//         CopyToOLEMenu(
+//             m_nMenuHandle,8,
+//             hMenu,6+(WORD)mgw.width[0]+(WORD)mgw.width[2]+(WORD)mgw.width[4]);
+//         mgw.width[5]=1;
+//     }
+
+// Fix strange warnings about some 
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
 #if defined(_MSC_VER)

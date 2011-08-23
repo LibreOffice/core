@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,74 +24,74 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_beans_PropertyState_idl__
-#define __com_sun_star_beans_PropertyState_idl__
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module beans {
-
-//=============================================================================
-
+#ifndef __com_sun_star_beans_PropertyState_idl__ 
+#define __com_sun_star_beans_PropertyState_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module beans {  
+ 
+//============================================================================= 
+ 
 /** This enumeration lists the states that a property value can have.
-
+    
     <p>The state consists of two aspects: </p>
     <ol>
         <li>whether a value is available or void, </li>
         <li>whether the value is stored in the property set itself or is a
             default, or ambiguous.  </li>
     </ol>
-
-    @see XPropertyState
+    
+    @see XPropertyState 
     @see Property
  */
 published enum PropertyState
-{
-    //-------------------------------------------------------------------------
-
-    /** The value of the property is stored in the PropertySet itself.
-
+{ 
+    //------------------------------------------------------------------------- 
+     
+    /** The value of the property is stored in the PropertySet itself. 
+        
         <p>The property value must be available and of the specified type.
-        If the <member>PropertyAttribute</member> field in the struct
-        <type>Property</type> contains <const>PropertyAttribute::MAYBEVOID</const>,
+        If the <member>PropertyAttribute</member> field in the struct 
+        <type>Property</type> contains <const>PropertyAttribute::MAYBEVOID</const>, 
         then the value may be void. </p>
      */
-    DIRECT_VALUE,
-
-    //-------------------------------------------------------------------------
-
-    /** The value of the property is available from a master (e.g., template).
-
-        <p>The <member>PropertyAttribute</member> field in the struct
-        <type>Property</type> must contain the
+    DIRECT_VALUE, 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** The value of the property is available from a master (e.g., template). 
+        
+        <p>The <member>PropertyAttribute</member> field in the struct 
+        <type>Property</type> must contain the 
         <const>PropertyAttribute::MAYBEDEFAULT</const> flag. The property
-        value must be available and of the specified type. If the
-        <member>PropertyAttribute</member> field in the struct <type>Property</type>
-        contains <const>PropertyAttribute::MAYBEVOID</const>, then the
+        value must be available and of the specified type. If the 
+        <member>PropertyAttribute</member> field in the struct <type>Property</type> 
+        contains <const>PropertyAttribute::MAYBEVOID</const>, then the 
         value may be void. </p>
      */
-    DEFAULT_VALUE,
-
-    //-------------------------------------------------------------------------
-
+    DEFAULT_VALUE, 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** The value of the property is only a recommendation because there
-        are multiple values for this property (e.g., from a multi selection).
-
-        <p>The <member>PropertyAttribute</member> field in the struct
-        <type>Property</type> must contain the
-        <const>PropertyAttribute::MAYBEAMBIGUOUS</const> flag. The
+        are multiple values for this property (e.g., from a multi selection). 
+        
+        <p>The <member>PropertyAttribute</member> field in the struct 
+        <type>Property</type> must contain the 
+        <const>PropertyAttribute::MAYBEAMBIGUOUS</const> flag. The 
         property value must be available and of the specified type.
-        If the Attribute field in the struct Property contains
-        <const>PropertyAttribute::MAYBEVOID</const>, then the value
+        If the Attribute field in the struct Property contains 
+        <const>PropertyAttribute::MAYBEVOID</const>, then the value 
         may be void. </p>
      */
-    AMBIGUOUS_VALUE
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    AMBIGUOUS_VALUE 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

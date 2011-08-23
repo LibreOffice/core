@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,11 +30,8 @@
 #include "precompiled_editeng.hxx"
 
 #include <paralist.hxx>
-
-#include <editeng/outliner.hxx>  // only because of Paragraph, this must be changed!
+#include <editeng/outliner.hxx>		// nur wegen Paragraph, muss geaendert werden!
 #include <editeng/numdef.hxx>
-
-#include <osl/diagnose.h>
 
 DBG_NAME(Paragraph)
 
@@ -76,7 +73,7 @@ Paragraph::Paragraph( sal_Int16 nDDepth )
 
     nDepth = nDDepth;
     nFlags = 0;
-    bVisible = sal_True;
+    bVisible = TRUE;
 }
 
 Paragraph::Paragraph( const Paragraph& rPara )
@@ -94,7 +91,7 @@ Paragraph::Paragraph( const Paragraph& rPara )
 Paragraph::Paragraph( const ParagraphData& rData )
 : nFlags( 0 )
 , aBulSize( -1, -1)
-, bVisible( sal_True )
+, bVisible( TRUE )
 {
     DBG_CTOR( Paragraph, 0 );
 
@@ -122,129 +119,105 @@ void Paragraph::SetParaIsNumberingRestart( sal_Bool bParaIsNumberingRestart )
         mnNumberingStartValue = -1;
 }
 
-void ParagraphList::Clear( sal_Bool bDestroyParagraphs )
+void ParagraphList::Clear( BOOL bDestroyParagraphs )
 {
     if ( bDestroyParagraphs )
     {
-        std::vector<Paragraph*>::iterator iter;
-        for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
-            delete *iter;
+        for ( ULONG n = GetParagraphCount(); n; )
+        {
+            Paragraph* pPara = GetParagraph( --n );
+            delete pPara;
+        }
     }
-
-    maEntries.clear();
+    List::Clear();
 }
 
-void ParagraphList::Append( Paragraph* pPara)
+void ParagraphList::MoveParagraphs( ULONG nStart, ULONG nDest, ULONG _nCount )
 {
-    maEntries.push_back(pPara);
-}
-
-void ParagraphList::Insert( Paragraph* pPara, sal_uLong nAbsPos)
-{
-    OSL_ASSERT(nAbsPos != ULONG_MAX && nAbsPos <= maEntries.size());
-
-    maEntries.insert(maEntries.begin()+nAbsPos,pPara);
-}
-
-void ParagraphList::Remove( sal_uLong nPara )
-{
-    OSL_ASSERT(nPara < maEntries.size());
-
-    maEntries.erase(maEntries.begin() + nPara );
-}
-
-void ParagraphList::MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong _nCount )
-{
-    OSL_ASSERT(nStart < maEntries.size() && nDest < maEntries.size());
-
     if ( ( nDest < nStart ) || ( nDest >= ( nStart + _nCount ) ) )
     {
-        std::vector<Paragraph*> aParas;
-        std::vector<Paragraph*>::iterator iterBeg = maEntries.begin() + nStart;
-        std::vector<Paragraph*>::iterator iterEnd = iterBeg + _nCount;
-
-        std::copy(iterBeg,iterEnd,std::back_inserter(aParas));
-
-        maEntries.erase(iterBeg,iterEnd);
+        ULONG n;
+        ParagraphList aParas;
+        for ( n = 0; n < _nCount; n++ )
+        {
+            Paragraph* pPara = GetParagraph( nStart );
+            aParas.Insert( pPara, LIST_APPEND );
+            Remove( nStart );
+        }
 
         if ( nDest > nStart )
             nDest -= _nCount;
 
-        std::vector<Paragraph*>::iterator iterIns = maEntries.begin() + nDest;
-
-        std::copy(aParas.begin(),aParas.end(),std::inserter(maEntries,iterIns));
+        for ( n = 0; n < _nCount; n++ )
+        {
+            Paragraph* pPara = aParas.GetParagraph( n );
+            Insert( pPara, nDest++ );
+        }
     }
     else
     {
-        OSL_FAIL( "MoveParagraphs: Invalid Parameters" );
+        DBG_ERROR( "MoveParagraphs: Invalid Parameters" );
     }
 }
 
 Paragraph* ParagraphList::NextVisible( Paragraph* pPara ) const
 {
-    std::vector<Paragraph*>::const_iterator iter = std::find(maEntries.begin(),
-                                                             maEntries.end(),
-                                                             pPara);
-    for (; iter != maEntries.end(); ++iter)
-    {
-        if ((*iter)->IsVisible())
-            break;
-    }
+    ULONG n = GetAbsPos( pPara );
 
-    return iter != maEntries.end() ? *iter : NULL;
+    Paragraph* p = GetParagraph( ++n );
+    while ( p && !p->IsVisible() )
+        p = GetParagraph( ++n );
+
+    return p;
 }
 
 Paragraph* ParagraphList::PrevVisible( Paragraph* pPara ) const
 {
-    std::vector<Paragraph*>::const_reverse_iterator iter = std::find(maEntries.rbegin(),
-                                                                     maEntries.rend(),
-                                                                     pPara);
-    for (; iter != maEntries.rend(); ++iter)
-    {
-        if ((*iter)->IsVisible())
-            break;
-    }
+    ULONG n = GetAbsPos( pPara );
 
-    return iter != maEntries.rend() ? *iter : NULL;
+    Paragraph* p = n ? GetParagraph( --n ) : NULL;
+    while ( p && !p->IsVisible() )
+        p = n ? GetParagraph( --n ) : NULL;
+
+    return p;
 }
 
 Paragraph* ParagraphList::LastVisible() const
 {
-    std::vector<Paragraph*>::const_reverse_iterator iter;
-    for (iter = maEntries.rbegin(); iter != maEntries.rend(); ++iter)
-    {
-        if ((*iter)->IsVisible())
-            break;
-    }
+    ULONG n = GetParagraphCount();
 
-    return iter != maEntries.rend() ? *iter : NULL;
+    Paragraph* p = n ? GetParagraph( --n ) : NULL;
+    while ( p && !p->IsVisible() )
+        p = n ? GetParagraph( --n ) : NULL;
+
+    return p;
 }
 
-sal_Bool ParagraphList::HasChilds( Paragraph* pParagraph ) const
+BOOL ParagraphList::HasChilds( Paragraph* pParagraph ) const
 {
-    sal_uLong n = GetAbsPos( pParagraph );
+    ULONG n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
-    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) ) ? sal_True : sal_False;
+    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) ) ? TRUE : FALSE;
 }
 
-sal_Bool ParagraphList::HasHiddenChilds( Paragraph* pParagraph ) const
+BOOL ParagraphList::HasHiddenChilds( Paragraph* pParagraph ) const
 {
-    sal_uLong n = GetAbsPos( pParagraph );
+    ULONG n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
-    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && !pNext->IsVisible() ) ? sal_True : sal_False;
+    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && !pNext->IsVisible() ) ? TRUE : FALSE;
 }
 
-sal_Bool ParagraphList::HasVisibleChilds( Paragraph* pParagraph ) const
+BOOL ParagraphList::HasVisibleChilds( Paragraph* pParagraph ) const
 {
-    sal_uLong n = GetAbsPos( pParagraph );
+    ULONG n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
-    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && pNext->IsVisible() ) ? sal_True : sal_False;
+    return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && pNext->IsVisible() ) ? TRUE : FALSE;
 }
 
-sal_uLong ParagraphList::GetChildCount( Paragraph* pParent ) const
+ULONG ParagraphList::GetChildCount( Paragraph* pParent ) const
 {
-    sal_uLong nChildCount = 0;
-    sal_uLong n = GetAbsPos( pParent );
+    ULONG nChildCount = 0;
+    ULONG n = GetAbsPos( pParent );
     Paragraph* pPara = GetParagraph( ++n );
     while ( pPara && ( pPara->GetDepth() > pParent->GetDepth() ) )
     {
@@ -254,15 +227,15 @@ sal_uLong ParagraphList::GetChildCount( Paragraph* pParent ) const
     return nChildCount;
 }
 
-Paragraph* ParagraphList::GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const
+Paragraph* ParagraphList::GetParent( Paragraph* pParagraph /*, USHORT& rRelPos */ ) const
 {
     /* rRelPos = 0 */;
-    sal_uLong n = GetAbsPos( pParagraph );
+    ULONG n = GetAbsPos( pParagraph );
     Paragraph* pPrev = GetParagraph( --n );
     while ( pPrev && ( pPrev->GetDepth() >= pParagraph->GetDepth() ) )
     {
-//      if ( pPrev->GetDepth() == pParagraph->GetDepth() )
-//          rRelPos++;
+//		if ( pPrev->GetDepth() == pParagraph->GetDepth() )
+//			rRelPos++;
         pPrev = GetParagraph( --n );
     }
 
@@ -271,15 +244,15 @@ Paragraph* ParagraphList::GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelP
 
 void ParagraphList::Expand( Paragraph* pParent )
 {
-    sal_uLong nChildCount = GetChildCount( pParent );
-    sal_uLong nPos = GetAbsPos( pParent );
+    ULONG nChildCount = GetChildCount( pParent );
+    ULONG nPos = GetAbsPos( pParent );
 
-    for ( sal_uLong n = 1; n <= nChildCount; n++  )
+    for ( ULONG n = 1; n <= nChildCount; n++  )
     {
         Paragraph* pPara = GetParagraph( nPos+n );
         if ( !( pPara->IsVisible() ) )
         {
-            pPara->bVisible = sal_True;
+            pPara->bVisible = TRUE;
             aVisibleStateChangedHdl.Call( pPara );
         }
     }
@@ -287,46 +260,30 @@ void ParagraphList::Expand( Paragraph* pParent )
 
 void ParagraphList::Collapse( Paragraph* pParent )
 {
-    sal_uLong nChildCount = GetChildCount( pParent );
-    sal_uLong nPos = GetAbsPos( pParent );
+    ULONG nChildCount = GetChildCount( pParent );
+    ULONG nPos = GetAbsPos( pParent );
 
-    for ( sal_uLong n = 1; n <= nChildCount; n++  )
+    for ( ULONG n = 1; n <= nChildCount; n++  )
     {
         Paragraph* pPara = GetParagraph( nPos+n );
         if ( pPara->IsVisible() )
         {
-            pPara->bVisible = sal_False;
+            pPara->bVisible = FALSE;
             aVisibleStateChangedHdl.Call( pPara );
         }
     }
 }
 
-sal_uLong ParagraphList::GetAbsPos( Paragraph* pParent ) const
+ULONG ParagraphList::GetVisPos( Paragraph* pPara )
 {
-    sal_uLong pos = 0;
-    std::vector<Paragraph*>::const_iterator iter;
-    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++pos)
+    ULONG nVisPos = 0;
+    ULONG nPos = GetAbsPos( pPara );
+    for ( ULONG n = 0; n < nPos; n++ )
     {
-        if (*iter == pParent)
-            return pos;
+        Paragraph* _pPara = GetParagraph( n );
+        if ( _pPara->IsVisible() )
+            nVisPos++;
     }
-
-    return ~0;
-}
-
-sal_uLong ParagraphList::GetVisPos( Paragraph* pPara ) const
-{
-    sal_uLong nVisPos = 0;
-    std::vector<Paragraph*>::const_iterator iter;
-    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++nVisPos)
-    {
-        if (*iter == pPara)
-            break;
-
-        if ((*iter)->IsVisible())
-            ++nVisPos;
-    }
-
     return nVisPos;
 }
 

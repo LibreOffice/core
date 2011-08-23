@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,13 +61,12 @@ ModalDialog DLG_SAVE_AS
     };
     ComboBox ET_CATALOG
     {
-        HelpID = "dbaccess:ComboBox:DLG_SAVE_AS:ET_CATALOG";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 77 , 25 ) ;
         Size = MAP_APPFONT ( 89 , 12 ) ;
-        SVLook      = TRUE ;
-        TabStop     = TRUE ;
-        DropDown    = TRUE ;
+        SVLook		= TRUE ;
+        TabStop		= TRUE ;
+        DropDown	= TRUE ;
         AutoHScroll = TRUE ;
     };
     FixedText FT_SCHEMA
@@ -78,13 +77,12 @@ ModalDialog DLG_SAVE_AS
     };
     ComboBox ET_SCHEMA
     {
-        HelpID = "dbaccess:ComboBox:DLG_SAVE_AS:ET_SCHEMA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 77 , 42 ) ;
         Size = MAP_APPFONT ( 89 , 12 ) ;
-        SVLook      = TRUE ;
-        TabStop     = TRUE ;
-        DropDown    = TRUE ;
+        SVLook		= TRUE ;
+        TabStop		= TRUE ;
+        DropDown	= TRUE ;
         AutoHScroll = TRUE ;
     };
     FixedText FT_TITLE
@@ -94,7 +92,6 @@ ModalDialog DLG_SAVE_AS
     };
     Edit ET_TITLE
     {
-        HelpID = "dbaccess:Edit:DLG_SAVE_AS:ET_TITLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 77 , 59 ) ;
         Size = MAP_APPFONT ( 89 , 12 ) ;
@@ -141,3 +138,4 @@ ModalDialog DLG_SAVE_AS
         Text [ en-US ] = "Insert as";
     };
 };
+

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 #include <doc.hxx>
-#include <UndoManager.hxx>
 #include <hintids.hxx>
 
 #include <tools/shl.hxx>
@@ -76,52 +74,46 @@
 #include <txtrfmrk.hxx>
 #include <frmatr.hxx>
 #include <linkenum.hxx>
+#include <errhdl.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <swtable.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
-#include <UndoCore.hxx>
-#include <UndoInsert.hxx>
-#include <UndoSplitMove.hxx>
-#include <UndoTable.hxx>
-#include <pagedesc.hxx>         //DTor
+#include <swundo.hxx>			// fuer die UndoIds
+#include <undobj.hxx>
+#include <pagedesc.hxx>			//DTor
 #include <breakit.hxx>
 #include <ndole.hxx>
 #include <ndgrf.hxx>
-#include <rolbck.hxx>           // Undo-Attr
-#include <doctxm.hxx>           // fuer die Verzeichnisse
+#include <rolbck.hxx>			// Undo-Attr
+#include <doctxm.hxx>			// fuer die Verzeichnisse
 #include <grfatr.hxx>
-#include <poolfmt.hxx>          // PoolVorlagen-Id's
-#include <mvsave.hxx>           // fuer Server-Funktionalitaet
+#include <poolfmt.hxx>			// PoolVorlagen-Id's
+#include <mvsave.hxx>			// fuer Server-Funktionalitaet
 #include <SwGrammarMarkUp.hxx>
 #include <scriptinfo.hxx>
-#include <acorrect.hxx>         // Autokorrektur
-#include <mdiexp.hxx>           // Statusanzeige
+#include <acorrect.hxx>			// Autokorrektur
+#include <mdiexp.hxx>	   		// Statusanzeige
 #include <docstat.hxx>
 #include <docary.hxx>
 #include <redline.hxx>
 #include <fldupde.hxx>
 #include <swbaslnk.hxx>
 #include <printdata.hxx>
+#include <swprtopt.hxx>
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
-#include <statstr.hrc>          // StatLine-String
+#include <statstr.hrc>      	// StatLine-String
 #include <comcore.hrc>
 #include <SwUndoTOXChange.hxx>
 #include <SwUndoFmt.hxx>
 #include <unocrsr.hxx>
 #include <docsh.hxx>
-#include <viewopt.hxx>
 #include <docfld.hxx>           // _SetGetExpFld
 #include <docufld.hxx>          // SwPostItField
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <txtfrm.hxx>
-#include <attrhint.hxx>
-
-#include <wdocsh.hxx>           // SwWebDocShell
-#include <prtopt.hxx>           // SwPrintOptions
 
 #include <vector>
 #include <map>
@@ -130,12 +122,12 @@
 #include <osl/interlck.h>
 #include <vbahelper/vbaaccesshelper.hxx>
 
-#include "switerator.hxx"
-
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell
 */
+// --> OD 2005-08-29 #125370#
 #include <layouter.hxx>
+// <--
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -191,18 +183,21 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case TABLE_ROW_KEEP: return mbTableRowKeep;
         case IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION: return mbIgnoreTabsAndBlanksForLineCalculation;
         case DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE: return mbDoNotCaptureDrawObjsOnPage;
-        // #i68949#
+        // --> OD 2006-08-25 #i68949#
         case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME: return mbClipAsCharacterAnchoredWriterFlyFrames;
+        // <--
         case UNIX_FORCE_ZERO_EXT_LEADING: return mbUnixForceZeroExtLeading;
         case USE_OLD_PRINTER_METRICS: return mbOldPrinterMetrics;
         case TABS_RELATIVE_TO_INDENT : return mbTabRelativeToIndent;
         case PROTECT_FORM: return mbProtectForm;
-        // #i89181#
+        // --> OD 2008-06-05 #i89181#
         case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST: return mbTabAtLeftIndentForParagraphsInList;
-        case INVERT_BORDER_SPACING: return mbInvertBorderSpacing;
+        // <--
+    case INVERT_BORDER_SPACING: return mbInvertBorderSpacing;
         case COLLAPSE_EMPTY_CELL_PARA: return mbCollapseEmptyCellPara;
+         // COMPATIBILITY FLAGS END
 
-        case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the ViewShell has to be asked!
+        case BROWSE_MODE: return mbBrowseMode;
         case HTML_MODE: return mbHTMLMode;
         case GLOBAL_DOCUMENT: return mbIsGlobalDoc;
         case GLOBAL_DOCUMENT_SAVE_LINKS: return mbGlblDocSaveLinks;
@@ -210,9 +205,8 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case PURGE_OLE: return mbPurgeOLE;
         case KERN_ASIAN_PUNCTUATION: return mbKernAsianPunctuation;
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
-        case MATH_BASELINE_ALIGNMENT: return mbMathBaselineAlignment;
         default:
-            OSL_FAIL("Invalid setting id");
+            OSL_ENSURE(false, "Invalid setting id");
     }
     return false;
 }
@@ -249,15 +243,15 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
                 mbOldNumbering = value;
 
                 const SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
-                for( sal_uInt16 n = 0; n < rNmTbl.Count(); ++n )
-                    rNmTbl[n]->SetInvalidRule(sal_True);
+                for( USHORT n = 0; n < rNmTbl.Count(); ++n )
+                    rNmTbl[n]->SetInvalidRule(TRUE);
 
                 UpdateNumRule();
 
                 if (pOutlineRule)
                 {
                     pOutlineRule->Validate();
-                    // counting of phantoms depends on <IsOldNumbering()>
+                    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
                     pOutlineRule->SetCountPhantoms( !mbOldNumbering );
                 }
             }
@@ -300,7 +294,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             mbDoNotCaptureDrawObjsOnPage = value;
             break;
 
-        // #i68949#
+        // --> OD 2006-08-25 #i68949#
         case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME:
             mbClipAsCharacterAnchoredWriterFlyFrames = value;
             break;
@@ -319,7 +313,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         case TABS_RELATIVE_TO_INDENT:
             mbTabRelativeToIndent = value;
             break;
-        // #i89181#
+        // --> OD 2008-06-05 #i89181#
         case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
             mbTabAtLeftIndentForParagraphsInList = value;
             break;
@@ -333,8 +327,8 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             break;
          // COMPATIBILITY FLAGS END
 
-        case BROWSE_MODE: //can be used temporary (load/save) when no ViewShell is avaiable
-            mbLastBrowseMode = value;
+        case BROWSE_MODE:
+            mbBrowseMode = value;
             break;
 
         case HTML_MODE:
@@ -364,27 +358,25 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
             mbDoNotResetParaAttrsForNumFont = value;
             break;
-        case MATH_BASELINE_ALIGNMENT:
-            mbMathBaselineAlignment  = value;
-            break;
+
         default:
-            OSL_FAIL("Invalid setting id");
+            OSL_ENSURE(false, "Invalid setting id");
     }
 }
 
 const i18n::ForbiddenCharacters*
-    SwDoc::getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const
+    SwDoc::getForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ bool bLocaleData ) const
 {
     const i18n::ForbiddenCharacters* pRet = 0;
     if( xForbiddenCharsTable.is() )
-        pRet = xForbiddenCharsTable->GetForbiddenCharacters( nLang, sal_False );
+        pRet = xForbiddenCharsTable->GetForbiddenCharacters( nLang, FALSE );
     if( bLocaleData && !pRet && pBreakIt )
         pRet = &pBreakIt->GetForbidden( (LanguageType)nLang );
     return pRet;
 }
 
-void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
-                                   /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rFChars )
+void SwDoc::setForbiddenCharacters(/*[in]*/ USHORT nLang,
+                                   /*[in]*/ const i18n::ForbiddenCharacters& rFChars )
 {
     if( !xForbiddenCharsTable.is() )
     {
@@ -401,14 +393,12 @@ void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
             pDrawModel->ReformatAllTextObjects();
     }
 
-    SwRootFrm* pTmpRoot = GetCurrentLayout();
-    if( pTmpRoot && !mbInReading )
+    if( pLayout && !mbInReading )
     {
-        pTmpRoot->StartAllAction();
-        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
-        pTmpRoot->EndAllAction();
-    }//swmod 080310
+        pLayout->StartAllAction();
+        pLayout->InvalidateAllCntnt();
+        pLayout->EndAllAction();
+    }
     SetModified();
 }
 
@@ -467,19 +457,17 @@ void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
         eChrCmprType = n;
         if( pDrawModel )
         {
-            pDrawModel->SetCharCompressType( static_cast<sal_uInt16>(n) );
+            pDrawModel->SetCharCompressType( static_cast<UINT16>(n) );
             if( !mbInReading )
                 pDrawModel->ReformatAllTextObjects();
         }
 
-        SwRootFrm* pTmpRoot = GetCurrentLayout();
-        if( pTmpRoot && !mbInReading )
+        if( pLayout && !mbInReading )
         {
-            pTmpRoot->StartAllAction();
-            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-            std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
-            pTmpRoot->EndAllAction();
-        }//swmod 080310
+            pLayout->StartAllAction();
+            pLayout->InvalidateAllCntnt();
+            pLayout->EndAllAction();
+        }
         SetModified();
     }
 }
@@ -519,9 +507,10 @@ void SwDoc::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/
     }
 
     if ( bCallPrtDataChanged &&
-         // #i41075# Do not call PrtDataChanged() if we do not
+         // --> FME 2005-01-21 #i41075# Do not call PrtDataChanged() if we do not
          // use the printer for formatting:
          !get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
+        // <--
         PrtDataChanged();
 }
 
@@ -587,13 +576,14 @@ void SwDoc::setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewH
         }
         else
         {
-            // #i41075#
+            // --> FME 2005-01-21 #i41075#
             // We have to take care that a printer exists before calling
             // PrtDataChanged() in order to prevent that PrtDataChanged()
             // triggers this funny situation:
             // getReferenceDevice()->getPrinter()->CreatePrinter_()
             // ->setPrinter()-> PrtDataChanged()
             SfxPrinter* pPrinter = getPrinter( true );
+            // <--
             if( pDrawModel )
                 pDrawModel->SetRefDevice( pPrinter );
         }
@@ -612,8 +602,8 @@ const JobSetup* SwDoc::getJobsetup() const
 
 void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
 {
-    sal_Bool bCheckPageDescs = 0 == pPrt;
-    sal_Bool bDataChanged = sal_False;
+    BOOL bCheckPageDescs = 0 == pPrt;
+    BOOL bDataChanged = FALSE;
 
     if ( pPrt )
     {
@@ -622,7 +612,7 @@ void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
             if ( pPrt->GetJobSetup() != rJobSetup )
             {
                 pPrt->SetJobSetup( rJobSetup );
-                bDataChanged = sal_True;
+                bDataChanged = TRUE;
             }
         }
         else
@@ -644,30 +634,18 @@ void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
         else
         {
             pPrt = p;
-            bDataChanged = sal_True;
+            bDataChanged = TRUE;
         }
     }
     if ( bDataChanged && !get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
         PrtDataChanged();
 }
 
-const SwPrintData & SwDoc::getPrintData() const
+SwPrintData* SwDoc::getPrintData() const
 {
     if(!pPrtData)
-    {
-        SwDoc * pThis = const_cast< SwDoc * >(this);
-        pThis->pPrtData = new SwPrintData;
-
-        // SwPrintData should be initialized from the configuration,
-        // the respective config item is implememted by SwPrintOptions which
-        // is also derived from SwPrintData
-        const SwDocShell *pDocSh = GetDocShell();
-        DBG_ASSERT( pDocSh, "pDocSh is 0, can't determine if this is a WebDoc or not" );
-        bool bWeb = 0 != dynamic_cast< const SwWebDocShell * >(pDocSh);
-        SwPrintOptions aPrintOptions( bWeb );
-        *pThis->pPrtData = aPrintOptions;
-    }
-    return *pPrtData;
+        ((SwDoc*)this)->pPrtData = new SwPrintData;
+    return pPrtData;
 }
 
 void SwDoc::setPrintData(/*[in]*/ const SwPrintData& rPrtData )
@@ -700,31 +678,31 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
         return false;
 
     {
-        // BUG 26675:   DataChanged vorm loeschen verschicken, dann bekommt
-        //          man noch mit, welche Objecte sich im Bereich befinden.
-        //          Danach koennen sie vor/hinter der Position befinden.
+        // BUG 26675:	DataChanged vorm loeschen verschicken, dann bekommt
+        //			man noch mit, welche Objecte sich im Bereich befinden.
+        //			Danach koennen sie vor/hinter der Position befinden.
         SwDataChanged aTmp( this, rPos, 0 );
     }
 
     SwUndoSplitNode* pUndo = 0;
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if ( DoesUndo() )
     {
-        GetIDocumentUndoRedo().ClearRedo();
+        ClearRedo();
         // einfuegen vom Undo-Object, z.Z. nur beim TextNode
         if( pNode->IsTxtNode() )
         {
             pUndo = new SwUndoSplitNode( this, rPos, bChkTableStart );
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            AppendUndo(pUndo);
         }
     }
 
     //JP 28.01.97: Sonderfall fuer SplitNode am Tabellenanfang:
-    //              steht die am Doc/Fly/Footer/..-Anfang oder direkt
-    //              hinter einer Tabelle, dann fuege davor
-    //              einen Absatz ein
+    //				steht die am Doc/Fly/Footer/..-Anfang oder direkt
+    //				hinter einer Tabelle, dann fuege davor
+    //				einen Absatz ein
     if( bChkTableStart && !rPos.nContent.GetIndex() && pNode->IsTxtNode() )
     {
-        sal_uLong nPrevPos = rPos.nNode.GetIndex() - 1;
+        ULONG nPrevPos = rPos.nNode.GetIndex() - 1;
         const SwTableNode* pTblNd;
         const SwNode* pNd = GetNodes()[ nPrevPos ];
         if( pNd->IsStartNode() &&
@@ -747,8 +725,8 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
                 {
                     // Dann nur, wenn die Tabelle Umbrueche traegt!
                     const SwFrmFmt* pFrmFmt = pTblNd->GetTable().GetFrmFmt();
-                    if( SFX_ITEM_SET != pFrmFmt->GetItemState(RES_PAGEDESC, sal_False) &&
-                        SFX_ITEM_SET != pFrmFmt->GetItemState( RES_BREAK, sal_False ) )
+                    if( SFX_ITEM_SET != pFrmFmt->GetItemState(RES_PAGEDESC, FALSE) &&
+                        SFX_ITEM_SET != pFrmFmt->GetItemState( RES_BREAK, FALSE ) )
                         pNd = 0;
                 }
             }
@@ -769,13 +747,13 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
                         SwFrmFmt* pFrmFmt = pTblNd->GetTable().GetFrmFmt();
                         const SfxPoolItem *pItem;
                         if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_PAGEDESC,
-                            sal_False, &pItem ) )
+                            FALSE, &pItem ) )
                         {
                             pTxtNd->SetAttr( *pItem );
                             pFrmFmt->ResetFmtAttr( RES_PAGEDESC );
                         }
                         if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_BREAK,
-                            sal_False, &pItem ) )
+                            FALSE, &pItem ) )
                         {
                             pTxtNd->SetAttr( *pItem );
                             pFrmFmt->ResetFmtAttr( RES_BREAK );
@@ -801,7 +779,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     {
         // verschiebe noch alle Bookmarks/TOXMarks/FlyAtCnt
         if( aBkmkArr.Count() )
-            _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, sal_True );
+            _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, TRUE );
 
         if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))
         {
@@ -821,8 +799,10 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
 
 bool SwDoc::AppendTxtNode( SwPosition& rPos )
 {
-    // create new node before EndOfContent
-    SwTxtNode * pCurNode = rPos.nNode.GetNode().GetTxtNode();
+    /*
+     * Neuen Node vor EndOfContent erzeugen.
+     */
+    SwTxtNode *pCurNode = GetNodes()[ rPos.nNode ]->GetTxtNode();
     if( !pCurNode )
     {
         // dann kann ja einer angelegt werden!
@@ -836,9 +816,10 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
     rPos.nNode++;
     rPos.nContent.Assign( pCurNode, 0 );
 
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if( DoesUndo() )
     {
-        GetIDocumentUndoRedo().AppendUndo( new SwUndoInsert( rPos.nNode ) );
+        ClearRedo();
+        AppendUndo( new SwUndoInsert( rPos.nNode ));
     }
 
     if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))
@@ -853,20 +834,20 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
     }
 
     SetModified();
-    return sal_True;
+    return TRUE;
 }
 
 bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
         const enum InsertFlags nInsertMode )
 {
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if( DoesUndo() )
     {
-        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo not always called!
+        ClearRedo();
     }
 
     const SwPosition& rPos = *rRg.GetPoint();
 
-    if( pACEWord )                  // Aufnahme in die Autokorrektur
+    if( pACEWord )					// Aufnahme in die Autokorrektur
     {
         if( 1 == rStr.Len() && pACEWord->IsDeleted() )
         {
@@ -883,33 +864,47 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
 
     SwDataChanged aTmp( rRg, 0 );
 
-    if (!GetIDocumentUndoRedo().DoesUndo() ||
-        !GetIDocumentUndoRedo().DoesGroupUndo())
+    if( !DoesUndo() || !DoesGroupUndo() )
     {
         pNode->InsertText( rStr, rPos.nContent, nInsertMode );
 
-        if (GetIDocumentUndoRedo().DoesUndo())
+        if( DoesUndo() )
         {
             SwUndoInsert * const pUndo( new SwUndoInsert(
                 rPos.nNode, rPos.nContent.GetIndex(), rStr.Len(), nInsertMode));
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            AppendUndo(pUndo);
         }
     }
     else
-    {           // ist Undo und Gruppierung eingeschaltet, ist alles anders !
-        SwUndoInsert * pUndo = NULL;
+    {			// ist Undo und Gruppierung eingeschaltet, ist alles anders !
+        SwUndoInsert * pUndo = NULL; // #111827#
 
         // don't group the start if hints at the start should be expanded
         if (!(nInsertMode & IDocumentContentOperations::INS_FORCEHINTEXPAND))
+        // -> #111827#
         {
-            SwUndo *const pLastUndo = GetUndoManager().GetLastUndo();
-            SwUndoInsert *const pUndoInsert(
-                dynamic_cast<SwUndoInsert *>(pLastUndo) );
-            if (pUndoInsert && pUndoInsert->CanGrouping(rPos))
+            USHORT const nUndoSize = pUndos->Count();
+            if (0 != nUndoSize)
             {
-                pUndo = pUndoInsert;
+                SwUndo * const pLastUndo = (*pUndos)[ nUndoSize - 1 ];
+
+                switch (pLastUndo->GetId())
+                {
+                    case UNDO_INSERT:
+                    case UNDO_TYPING:
+                        if (static_cast<SwUndoInsert*>(pLastUndo)
+                                ->CanGrouping( rPos ))
+                        {
+                            pUndo = static_cast<SwUndoInsert*>(pLastUndo);
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
+        // <- #111827#
 
         CharClass const& rCC = GetAppCharClass();
         xub_StrLen nInsPos = rPos.nContent.GetIndex();
@@ -918,7 +913,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
         {
             pUndo = new SwUndoInsert( rPos.nNode, nInsPos, 0, nInsertMode,
                             !rCC.isLetterNumeric( rStr, 0 ) );
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
+            AppendUndo( pUndo );
         }
 
         pNode->InsertText( rStr, rPos.nContent, nInsertMode );
@@ -926,12 +921,12 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
         for( xub_StrLen i = 0; i < rStr.Len(); ++i )
         {
             nInsPos++;
-            // wenn CanGrouping() sal_True returnt, ist schon alles erledigt
+            // wenn CanGrouping() TRUE returnt, ist schon alles erledigt
             if( !pUndo->CanGrouping( rStr.GetChar( i ) ))
             {
                 pUndo = new SwUndoInsert( rPos.nNode, nInsPos, 1, nInsertMode,
                             !rCC.isLetterNumeric( rStr, i ) );
-                GetIDocumentUndoRedo().AppendUndo( pUndo );
+                AppendUndo( pUndo );
             }
         }
     }
@@ -1008,7 +1003,7 @@ SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
 {
     if( !pFrmFmt )
     {
-        sal_uInt16 nId = RES_POOLFRM_OLE;
+        USHORT nId = RES_POOLFRM_OLE;
         SvGlobalName aClassName( xObj->getClassID() );
         if (SotExchange::IsMath(aClassName))
             nId = RES_POOLFRM_FORMEL;
@@ -1044,19 +1039,19 @@ SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const String& rObjName,
 }
 
 /*************************************************************************
-|*                SwDoc::GetFldType()
-|*    Beschreibung: liefert den am Doc eingerichteten Feldtypen zurueck
+|*				  SwDoc::GetFldType()
+|*	  Beschreibung: liefert den am Doc eingerichteten Feldtypen zurueck
 *************************************************************************/
-SwFieldType *SwDoc::GetSysFldType( const sal_uInt16 eWhich ) const
+SwFieldType *SwDoc::GetSysFldType( const USHORT eWhich ) const
 {
-    for( sal_uInt16 i = 0; i < INIT_FLDTYPES; ++i )
+    for( USHORT i = 0; i < INIT_FLDTYPES; ++i )
         if( eWhich == (*pFldTypes)[i]->Which() )
             return (*pFldTypes)[i];
     return 0;
 }
 
 /*************************************************************************
- *             void SetDocStat( const SwDocStat& rStat );
+ *			   void SetDocStat( const SwDocStat& rStat );
  *************************************************************************/
 void SwDoc::SetDocStat( const SwDocStat& rStat )
 {
@@ -1073,20 +1068,20 @@ struct _PostItFld : public _SetGetExpFld
     _PostItFld( const SwNodeIndex& rNdIdx, const SwTxtFld* pFld,  const SwIndex* pIdx = 0 )
         : _SetGetExpFld( rNdIdx, pFld, pIdx ) {}
 
-    sal_uInt16 GetPageNo( const StringRangeEnumerator &rRangeEnum,
-            const std::set< sal_Int32 > &rPossiblePages,
-            sal_uInt16& rVirtPgNo, sal_uInt16& rLineNo );
-
+    USHORT GetPageNo( const StringRangeEnumerator &rRangeEnum,
+            const std::set< sal_Int32 > &rPossiblePages, 
+            USHORT& rVirtPgNo, USHORT& rLineNo );
+    
     SwPostItField* GetPostIt() const
-    {
+    { 
         return (SwPostItField*) GetFld()->GetFld().GetFld();
     }
 };
 
-sal_uInt16 _PostItFld::GetPageNo(
+USHORT _PostItFld::GetPageNo( 
     const StringRangeEnumerator &rRangeEnum,
     const std::set< sal_Int32 > &rPossiblePages,
-    /* out */ sal_uInt16& rVirtPgNo, /* out */ sal_uInt16& rLineNo )
+    /* out */ USHORT& rVirtPgNo, /* out */ USHORT& rLineNo )
 {
     //Problem: Wenn ein PostItFld in einem Node steht, der von mehr als
     //einer Layout-Instanz repraesentiert wird, steht die Frage im Raum,
@@ -1095,17 +1090,18 @@ sal_uInt16 _PostItFld::GetPageNo(
     //sondern die des ersten Auftretens des PostIts innerhalb des selektierten
     //Bereichs ermittelt werden.
     rVirtPgNo = 0;
-    sal_uInt16 nPos = GetCntnt();
-    SwIterator<SwTxtFrm,SwTxtNode> aIter( GetFld()->GetTxtNode() );
-    for( SwTxtFrm* pFrm = aIter.First(); pFrm;  pFrm = aIter.Next() )
+    USHORT nPos = GetCntnt();
+    SwClientIter aIter( (SwModify &)GetFld()->GetTxtNode() );
+    for( SwTxtFrm* pFrm = (SwTxtFrm*)aIter.First( TYPE( SwFrm ));
+            pFrm;  pFrm = (SwTxtFrm*)aIter.Next() )
     {
         if( pFrm->GetOfst() > nPos ||
             (pFrm->HasFollow() && pFrm->GetFollow()->GetOfst() <= nPos) )
             continue;
-        sal_uInt16 nPgNo = pFrm->GetPhyPageNum();
+        USHORT nPgNo = pFrm->GetPhyPageNum();
         if( rRangeEnum.hasValue( nPgNo, &rPossiblePages ))
         {
-            rLineNo = (sal_uInt16)(pFrm->GetLineCount( nPos ) +
+            rLineNo = (USHORT)(pFrm->GetLineCount( nPos ) +
                       pFrm->GetAllLines() - pFrm->GetThisLines());
             rVirtPgNo = pFrm->GetVirtPageNum();
             return nPgNo;
@@ -1114,8 +1110,8 @@ sal_uInt16 _PostItFld::GetPageNo(
     return 0;
 }
 
-bool lcl_GetPostIts(
-    IDocumentFieldsAccess* pIDFA,
+bool lcl_GetPostIts( 
+    IDocumentFieldsAccess* pIDFA, 
     _SetGetExpFlds * pSrtLst )
 {
     bool bHasPostIts = false;
@@ -1126,11 +1122,13 @@ bool lcl_GetPostIts(
     if( pFldType->GetDepends() )
     {
         // Modify-Object gefunden, trage alle Felder ins Array ein
-        SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
+        SwClientIter aIter( *pFldType );
+        SwClient* pLast;
         const SwTxtFld* pTxtFld;
-        for( SwFmtFld* pFld = aIter.First(); pFld;  pFld = aIter.Next() )
+
+        for( pLast = aIter.First( TYPE(SwFmtFld)); pLast; pLast = aIter.Next() )
         {
-            if( 0 != ( pTxtFld = pFld->GetTxtFld() ) &&
+            if( 0 != ( pTxtFld = ((SwFmtFld*)pLast)->GetTxtFld() ) &&
                 pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             {
                 bHasPostIts = true;
@@ -1149,14 +1147,14 @@ bool lcl_GetPostIts(
     return bHasPostIts;
 }
 
-static void lcl_FormatPostIt(
-    IDocumentContentOperations* pIDCO,
-    SwPaM& aPam,
+static void lcl_FormatPostIt( 
+    IDocumentContentOperations* pIDCO, 
+    SwPaM& aPam, 
     SwPostItField* pField,
     bool bNewPage, bool bIsFirstPostIt,
-    sal_uInt16 nPageNo, sal_uInt16 nLineNo )
+    USHORT nPageNo, USHORT nLineNo )
 {
-    static char const sTmp[] = " : ";
+    static char __READONLY_DATA sTmp[] = " : ";
 
     DBG_ASSERT( ViewShell::GetShellRes(), "missing ShellRes" );
 
@@ -1171,7 +1169,7 @@ static void lcl_FormatPostIt(
         pIDCO->SplitNode( *aPam.GetPoint(), false );
         pIDCO->SplitNode( *aPam.GetPoint(), false );
     }
-
+    
     String aStr( ViewShell::GetShellRes()->aPostItPage );
     aStr.AppendAscii(sTmp);
 
@@ -1188,13 +1186,13 @@ static void lcl_FormatPostIt(
     aStr.AppendAscii(sTmp);
     aStr += pField->GetPar1();
     aStr += ' ';
-    SvtSysLocale aSysLocale;
+    SvtSysLocale aSysLocale;    
     aStr += /*(LocaleDataWrapper&)*/aSysLocale.GetLocaleData().getDate( pField->GetDate() );
     pIDCO->InsertString( aPam, aStr );
 
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     aStr = pField->GetPar2();
-#if defined( WNT ) || defined( PM2 )
+#if defined( WIN ) || defined( WNT ) || defined( PM2 )
     // Bei Windows und Co alle CR rausschmeissen
     aStr.EraseAllChars( '\r' );
 #endif
@@ -1209,7 +1207,7 @@ static sal_Int32 lcl_GetPaperBin( const SwPageFrm *pStartFrm )
 
     const SwFrmFmt &rFmt = pStartFrm->GetPageDesc()->GetMaster();
     const SfxPoolItem *pItem = NULL;
-    SfxItemState eState = rFmt.GetItemState( RES_PAPER_BIN, sal_False, &pItem );
+    SfxItemState eState = rFmt.GetItemState( RES_PAPER_BIN, FALSE, &pItem );
     const SvxPaperBinItem *pPaperBinItem = dynamic_cast< const SvxPaperBinItem * >(pItem);
     if (eState > SFX_ITEM_DEFAULT && pPaperBinItem)
         nRes = pPaperBinItem->GetValue();
@@ -1218,12 +1216,15 @@ static sal_Int32 lcl_GetPaperBin( const SwPageFrm *pStartFrm )
 }
 
 void SwDoc::CalculatePagesForPrinting(
-    const SwRootFrm& rLayout,
-    /* out */ SwRenderData &rData,
+    /* out */ SwRenderData &rData, 
     const SwPrintUIOptions &rOptions,
     bool bIsPDFExport,
     sal_Int32 nDocPageCount )
 {
+    DBG_ASSERT( pLayout, "no layout present" );
+    if (!pLayout)
+        return;
+
     const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
     const bool bPrintSelection = nContent == 2;
 
@@ -1233,40 +1234,41 @@ void SwDoc::CalculatePagesForPrinting(
     bool bPrintRightPages   = bIsPDFExport ? true : rOptions.IsPrintRightPages();
     // #i103700# printing selections should not allow for automatic inserting empty pages
     bool bPrintEmptyPages   = bPrintSelection ? false : rOptions.IsPrintEmptyPages( bIsPDFExport );
-
+        
     Range aPages( 1, nDocPageCount );
-
+        
     MultiSelection aMulti( aPages );
     aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
     aMulti.Select( aPages );
 
-    const SwPageFrm *pStPage  = dynamic_cast<const SwPageFrm*>( rLayout.Lower() );
+    const SwPageFrm *pStPage  = (SwPageFrm*)pLayout->Lower();
     const SwFrm     *pEndPage = pStPage;
 
-    sal_uInt16 nFirstPageNo = 0;
-    sal_uInt16 nLastPageNo  = 0;
+    USHORT nFirstPageNo = 0;
+    USHORT nLastPageNo  = 0;
+    USHORT nPageNo      = 1;
 
-    for( sal_uInt16 i = 1; i <= (sal_uInt16)aPages.Max(); ++i )
+    for( USHORT i = 1; i <= (USHORT)aPages.Max(); ++i )
     {
-        if( i < (sal_uInt16)aPages.Min() )
+        if( i < (USHORT)aPages.Min() )
         {
             if( !pStPage->GetNext() )
                 break;
             pStPage = (SwPageFrm*)pStPage->GetNext();
             pEndPage= pStPage;
         }
-        else if( i == (sal_uInt16)aPages.Min() )
+        else if( i == (USHORT)aPages.Min() )
         {
             nFirstPageNo = i;
             nLastPageNo = nFirstPageNo;
-            if( !pStPage->GetNext() || (i == (sal_uInt16)aPages.Max()) )
+            if( !pStPage->GetNext() || (i == (USHORT)aPages.Max()) )
                 break;
             pEndPage = pStPage->GetNext();
         }
-        else if( i > (sal_uInt16)aPages.Min() )
+        else if( i > (USHORT)aPages.Min() )
         {
             nLastPageNo = i;
-            if( !pEndPage->GetNext() || (i == (sal_uInt16)aPages.Max()) )
+            if( !pEndPage->GetNext() || (i == (USHORT)aPages.Max()) )
                 break;
             pEndPage = pEndPage->GetNext();
         }
@@ -1279,7 +1281,7 @@ void SwDoc::CalculatePagesForPrinting(
 // geschaffen werden, alle Seiten von Seite x an zu deselektieren.
 // Z.B. durch SetTotalRange ....
 
-//              aMulti.Select( Range( nLastPageNo+1, SELECTION_MAX ), sal_False );
+//              aMulti.Select( Range( nLastPageNo+1, SELECTION_MAX ), FALSE );
         MultiSelection aTmpMulti( Range( 1, nLastPageNo ) );
         long nTmpIdx = aMulti.FirstSelected();
         static long nEndOfSelection = SFX_ENDOFSELECTION;
@@ -1291,7 +1293,7 @@ void SwDoc::CalculatePagesForPrinting(
         aMulti = aTmpMulti;
 // Ende des HACKs
 
-        sal_uInt16 nPageNo = nFirstPageNo;
+        nPageNo = nFirstPageNo;
 
         std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
         std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
@@ -1300,13 +1302,14 @@ void SwDoc::CalculatePagesForPrinting(
         rValidStartFrms.clear();
         while ( pStPage )
         {
-            const sal_Bool bRightPg = pStPage->OnRightPage();
+            const BOOL bRightPg = pStPage->OnRightPage();
             if ( aMulti.IsSelected( nPageNo ) &&
                 ( (bRightPg && bPrintRightPages) ||
                     (!bRightPg && bPrintLeftPages) ) )
             {
-                // Feature - Print empty pages
+                // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
                 if ( bPrintEmptyPages || pStPage->Frm().Height() )
+                // <--
                 {
                     rValidPages.insert( nPageNo );
                     rValidStartFrms[ nPageNo ] = pStPage;
@@ -1326,7 +1329,7 @@ void SwDoc::CalculatePagesForPrinting(
         }
     }
 
-
+    
     //
     // now that we have identified the valid pages for printing according
     // to the print settings we need to get the PageRange to use and
@@ -1336,10 +1339,10 @@ void SwDoc::CalculatePagesForPrinting(
 
     // get PageRange value to use
     OUString aPageRange;
-    // #i116085# - adjusting fix for i113919
+    // PL, OD #i116085# - adjusting fix for i113919
     if ( !bIsPDFExport )
     {
-        // PageContent :
+        // PageContent : 
         // 0 -> print all pages (default if aPageRange is empty)
         // 1 -> print range according to PageRange
         // 2 -> print selection
@@ -1350,9 +1353,9 @@ void SwDoc::CalculatePagesForPrinting(
             // note that printing selections is actually implemented by copying
             // the selection to a new temporary document and printing all of that one.
             // Thus for Writer "PrintContent" must never be 2.
-            // See SwXTextDocument::GetRenderDoc for evaluating if a selection is to be
+            // See SwXTextDocument::GetRenderDoc for evaluating if a selection is to be 
             // printed and for creating the temporary document.
-        }
+        }    
 
         // please note
     }
@@ -1367,22 +1370,22 @@ void SwDoc::CalculatePagesForPrinting(
 
     // get vector of pages to print according to PageRange and valid pages set from above
     // (result may be an empty vector, for example if the range string is not correct)
-    StringRangeEnumerator::getRangesFromString(
+    StringRangeEnumerator::getRangesFromString( 
             aPageRange, rData.GetPagesToPrint(),
             1, nDocPageCount, 0, &rData.GetValidPagesSet() );
 }
 
-void SwDoc::UpdatePagesForPrintingWithPostItData(
-    /* out */ SwRenderData &rData,
+void SwDoc::UpdatePagesForPrintingWithPostItData( 
+    /* out */ SwRenderData &rData, 
     const SwPrintUIOptions &rOptions,
-    bool /*bIsPDFExport*/,
+    bool /*bIsPDFExport*/, 
     sal_Int32 nDocPageCount )
 {
 
     sal_Int16 nPostItMode = (sal_Int16) rOptions.getIntValue( "PrintAnnotationMode", 0 );
     DBG_ASSERT(nPostItMode == POSTITS_NONE || rData.HasPostItData(),
             "print post-its without post-it data?" );
-    const sal_uInt16 nPostItCount = rData.HasPostItData() ? rData.m_pPostItFields->Count() : 0;
+    const USHORT nPostItCount = rData.HasPostItData() ? rData.m_pPostItFields->Count() : 0;
     if (nPostItMode != POSTITS_NONE && nPostItCount > 0)
     {
         SET_CURR_SHELL( rData.m_pPostItShell );
@@ -1396,23 +1399,23 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
 
         const StringRangeEnumerator aRangeEnum( rData.GetPageRange(), 1, nDocPageCount, 0 );
 
-        // For mode POSTITS_ENDPAGE:
+        // For mode POSTITS_ENDPAGE: 
         // maps a physical page number to the page number in post-it document that holds
         // the first post-it for that physical page . Needed to relate the correct start frames
         // from the post-it doc to the physical page of the document
         std::map< sal_Int32, sal_Int32 >  aPostItLastStartPageNum;
 
         // add all post-its on valid pages within the the page range to the
-        // temporary post-it document.
+        // temporary post-it document. 
         // Since the array of post-it fileds is sorted by page and line number we will
         // already get them in the correct order
-        sal_uInt16 nVirtPg = 0, nLineNo = 0, nLastPageNum = 0, nPhyPageNum = 0;
+        USHORT nVirtPg = 0, nLineNo = 0, nLastPageNum = 0, nPhyPageNum = 0;
         bool bIsFirstPostIt = true;
-        for (sal_uInt16 i = 0; i < nPostItCount; ++i)
+        for (USHORT i = 0; i < nPostItCount; ++i)
         {
             _PostItFld& rPostIt = (_PostItFld&)*(*rData.m_pPostItFields)[ i ];
             nLastPageNum = nPhyPageNum;
-            nPhyPageNum = rPostIt.GetPageNo(
+            nPhyPageNum = rPostIt.GetPageNo( 
                     aRangeEnum, rData.GetValidPagesSet(), nVirtPg, nLineNo );
             if (nPhyPageNum)
             {
@@ -1421,46 +1424,46 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 // post-it page needs to start on a new page
                 const bool bNewPage = nPostItMode == POSTITS_ENDPAGE &&
                         !bIsFirstPostIt && nPhyPageNum != nLastPageNum;
-
+                
                 lcl_FormatPostIt( rData.m_pPostItShell->GetDoc(), aPam,
                         rPostIt.GetPostIt(), bNewPage, bIsFirstPostIt, nVirtPg, nLineNo );
                 bIsFirstPostIt = false;
-
+                
                 if (nPostItMode == POSTITS_ENDPAGE)
                 {
                     // get the correct number of current pages for the post-it document
                     rData.m_pPostItShell->CalcLayout();
-                    const sal_Int32 nPages = rData.m_pPostItShell->GetPageCount();
+                    const sal_Int32 nPages = rData.m_pPostItDoc->GetPageCount();
                     aPostItLastStartPageNum[ nPhyPageNum ] = nPages;
-                }
+                }    
             }
         }
-
+        
         // format post-it doc to get correct number of pages
         rData.m_pPostItShell->CalcLayout();
-        const sal_Int32 nPostItDocPageCount = rData.m_pPostItShell->GetPageCount();
+        const sal_Int32 nPostItDocPageCount = rData.m_pPostItDoc->GetPageCount();
 
         if (nPostItMode == POSTITS_ONLY || nPostItMode == POSTITS_ENDDOC)
         {
-            // now add those post-it pages to the vector of pages to print
+            // now add those post-it pages to the vector of pages to print 
             // or replace them if only post-its should be printed
-
+            
             rData.GetPostItStartFrames().clear();
             if (nPostItMode == POSTITS_ENDDOC)
             {
                 // set all values up to number of pages to print currently known to NULL,
-                // meaning none of the pages currently in the vector is from the
+                // meaning none of the pages currently in the vector is from the 
                 // post-it document, they are the documents pages.
                 rData.GetPostItStartFrames().resize( rData.GetPagesToPrint().size() );
-            }
+            }    
             else if (nPostItMode == POSTITS_ONLY)
             {
                 // no document page to be printed
                 rData.GetPagesToPrint().clear();
             }
-
+            
             // now we just need to add the post-it pages to be printed to the end
-            // of the vector of pages to print and keep the GetValidStartFrames
+            // of the vector of pages to print and keep the GetValidStartFrames 
             // data conform with it
             sal_Int32 nPageNum = 0;
             const SwPageFrm * pPageFrm = (SwPageFrm*)rData.m_pPostItShell->GetLayout()->Lower();
@@ -1474,7 +1477,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
             }
             DBG_ASSERT( nPageNum == nPostItDocPageCount, "unexpected number of pages" );
-        }
+        }    
         else if (nPostItMode == POSTITS_ENDPAGE)
         {
             // the next step is to find all the start frames from the post-it
@@ -1492,10 +1495,10 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 aAllPostItStartFrames.push_back( pPageFrm );
                 pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
             }
-            DBG_ASSERT( sal_Int32(aAllPostItStartFrames.size()) == nPostItDocPageCount,
+            DBG_ASSERT( sal_Int32(aAllPostItStartFrames.size()) == nPostItDocPageCount, 
                     "unexpected number of frames; does not match number of pages" );
-
-            // get a map that holds all post-it frames to be printed for a
+            
+            // get a map that holds all post-it frames to be printed for a 
             // given physical page from the document
             sal_Int32 nLastStartPageNum = 0;
             std::map< sal_Int32, sal_Int32 >::const_iterator  aIt;
@@ -1510,7 +1513,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 for (sal_Int32 i = 0; i < nFrames; ++i)
                 {
                     const sal_Int32 nIdx = nFirstStartPageNum - 1 + i;   // -1 because lowest page num is 1
-                    DBG_ASSERT( 0 <= nIdx && nIdx < sal_Int32(aAllPostItStartFrames.size()),
+                    DBG_ASSERT( 0 <= nIdx && nIdx < sal_Int32(aAllPostItStartFrames.size()), 
                             "index out of range" );
                     aStartFrames.push_back( aAllPostItStartFrames[ nIdx ] );
                 }
@@ -1518,12 +1521,12 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 nLastStartPageNum = aIt->second;
             }
 
-
-            // ok, now that aPhysPageToPostItFrames can give the start frames for all
+            
+            // ok, now that aPhysPageToPostItFrames can give the start frames for all 
             // post-it pages to be printed we need to merge those at the correct
             // position into the GetPagesToPrint vector and build and maintain the
             // GetValidStartFrames vector as well.
-            // Since inserting a larger number of entries in the middle of a vector
+            // Since inserting a larger number of entries in the middle of a vector 
             // isn't that efficient we will create new vectors by copying the required data
             std::vector< sal_Int32 >            aTmpPagesToPrint;
             std::vector< const SwPageFrm * >    aTmpPostItStartFrames;
@@ -1534,7 +1537,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 const sal_Int32 nPhysPage = rData.GetPagesToPrint()[i];
                 aTmpPagesToPrint.push_back( nPhysPage );
                 aTmpPostItStartFrames.push_back( NULL );
-
+                
                 // add the post-it document pages to print, i.e those
                 // post-it pages that have the data for the above physical page
                 const std::vector< const SwPageFrm * > &rPostItFrames = aPhysPageToPostItFrames[ nPhysPage ];
@@ -1543,7 +1546,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 {
                     aTmpPagesToPrint.push_back( 0 );
                     aTmpPostItStartFrames.push_back( rPostItFrames[k] );
-                }
+                }    
             }
 
             // finally we need to assign those vectors to the resulting ones.
@@ -1551,13 +1554,12 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             // we won't need the temporary vectors anymore
             rData.GetPagesToPrint().swap( aTmpPagesToPrint );
             rData.GetPostItStartFrames().swap( aTmpPostItStartFrames );
-        }
-    }
+        }    
+    }    
 }
 
-void SwDoc::CalculatePagePairsForProspectPrinting(
-    const SwRootFrm& rLayout,
-    /* out */ SwRenderData &rData,
+void SwDoc::CalculatePagePairsForProspectPrinting( 
+    /* out */ SwRenderData &rData, 
     const SwPrintUIOptions &rOptions,
     sal_Int32 nDocPageCount )
 {
@@ -1565,13 +1567,13 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     std::set< sal_Int32 > &rValidPagesSet = rData.GetValidPagesSet();
     std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms = rData.GetValidStartFrames();
     std::vector< std::pair< sal_Int32, sal_Int32 > > &rPagePairs = rData.GetPagePairsForProspectPrinting();
-
+    
     rPagePairs.clear();
     rValidPagesSet.clear();
     rValidStartFrms.clear();
 
     rtl::OUString aPageRange = rOptions.getStringValue( "PageRange", rtl::OUString() );
-    // PageContent :
+    // PageContent : 
     // 0 -> print all pages (default if aPageRange is empty)
     // 1 -> print range according to PageRange
     // 2 -> print selection
@@ -1585,20 +1587,21 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     }
     StringRangeEnumerator aRange( aPageRange, 1, nDocPageCount, 0 );
 
-    if ( aRange.size() <= 0)
+    DBG_ASSERT( pLayout, "no layout present" );
+    if (!pLayout || aRange.size() <= 0)
         return;
 
-    const SwPageFrm *pStPage  = dynamic_cast<const SwPageFrm*>( rLayout.Lower() );
+    const SwPageFrm *pStPage  = (SwPageFrm*)pLayout->Lower();
     sal_Int32 i = 0;
     for ( i = 1; pStPage && i < nDocPageCount; ++i )
         pStPage = (SwPageFrm*)pStPage->GetNext();
     if ( !pStPage )          // dann wars das
         return;
 
-    // currently for prospect printing all pages are valid to be printed
+    // currently for prospect printing all pages are valid to be printed 
     // thus we add them all to the respective map and set for later use
     sal_Int32 nPageNum = 0;
-    const SwPageFrm *pPageFrm  = dynamic_cast<const SwPageFrm*>( rLayout.Lower() );
+    const SwPageFrm *pPageFrm = (SwPageFrm*)pLayout->Lower();
     while( pPageFrm && nPageNum < nDocPageCount )
     {
         DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
@@ -1619,11 +1622,11 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     bool bPrintProspectRTL = rOptions.getIntValue( "PrintProspectRTL",  0 ) ? true : false;
 
     // get pages for prospect printing according to the 'PageRange'
-    // (duplicates and any order allowed!)
+    // (duplicates and any order allowed!) 
     std::vector< sal_Int32 > aPagesToPrint;
-    StringRangeEnumerator::getRangesFromString(
+    StringRangeEnumerator::getRangesFromString( 
             aPageRange, aPagesToPrint, 1, nDocPageCount, 0 );
-
+    
     // now fill the vector for calculating the page pairs with the start frames
     // from the above obtained vector
     std::vector< const SwPageFrm * > aVec;
@@ -1635,7 +1638,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     }
 
     // just one page is special ...
-    if ( 1 == aVec.size() )
+    if ( 1 == aVec.size() )    
         aVec.insert( aVec.begin() + 1, 0 ); // insert a second empty page
     else
     {
@@ -1648,7 +1651,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 
     // dann sorge mal dafuer, das alle Seiten in der richtigen
     // Reihenfolge stehen:
-    sal_uInt16 nSPg = 0, nEPg = aVec.size(), nStep = 1;
+    USHORT nSPg = 0, nEPg = aVec.size(), nStep = 1;
     if ( 0 == (nEPg & 1 ))      // ungerade gibt es nicht!
         --nEPg;
 
@@ -1663,7 +1666,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // the number of 'virtual' pages to be printed
     sal_Int32 nCntPage = (( nEPg - nSPg ) / ( 2 * nStep )) + 1;
 
-    for ( sal_uInt16 nPrintCount = 0; nSPg < nEPg &&
+    for ( USHORT nPrintCount = 0; nSPg < nEPg &&
             nPrintCount < nCntPage; ++nPrintCount )
     {
         pStPage = aVec[ nSPg ];
@@ -1697,12 +1700,42 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     }
     DBG_ASSERT( size_t(nCntPage) == rPagePairs.size(), "size mismatch for number of page pairs" );
 
-    // luckily prospect printing does not make use of post-its so far,
+    // luckily prospect printing does not make use of post-its so far, 
     // thus we are done here.
 }
 
+sal_uInt16 SwDoc::GetPageCount() const
+{
+    return GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
+}
+
+const Size SwDoc::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
+{
+    Size aSize;
+    if ( GetRootFrm() && nPageNum )
+    {
+        const SwPageFrm* pPage = static_cast<const SwPageFrm*>
+                                 (GetRootFrm()->Lower());
+
+        while ( --nPageNum && pPage->GetNext() )
+        {        
+            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+        }
+
+        // switch to next page for an empty page, if empty pages are not skipped
+        // in order to get a sensible page size for an empty page - e.g. for printing.
+        if ( !bSkipEmptyPages && pPage->IsEmptyPage() && pPage->GetNext() )
+        {        
+            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+        }
+
+        aSize = pPage->Frm().SSize();
+    }
+    return aSize;
+}
+
 /*************************************************************************
- *            void UpdateDocStat( const SwDocStat& rStat );
+ *			  void UpdateDocStat( const SwDocStat& rStat );
  *************************************************************************/
 void SwDoc::UpdateDocStat( SwDocStat& rStat )
 {
@@ -1712,25 +1745,27 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         rStat.nPara = 0;        // Default ist auf 1 !!
         SwNode* pNd;
 
-        for( sal_uLong i = GetNodes().Count(); i; )
+        for( ULONG i = GetNodes().Count(); i; )
         {
             switch( ( pNd = GetNodes()[ --i ])->GetNodeType() )
             {
             case ND_TEXTNODE:
                 ((SwTxtNode*)pNd)->CountWords( rStat, 0, ((SwTxtNode*)pNd)->GetTxt().Len() );
                 break;
-            case ND_TABLENODE:      ++rStat.nTbl;   break;
-            case ND_GRFNODE:        ++rStat.nGrf;   break;
-            case ND_OLENODE:        ++rStat.nOLE;   break;
-            case ND_SECTIONNODE:    break;
+            case ND_TABLENODE:		++rStat.nTbl;	break;
+            case ND_GRFNODE:		++rStat.nGrf;	break;
+            case ND_OLENODE:		++rStat.nOLE;	break;
+            case ND_SECTIONNODE:	break;
             }
         }
 
         // #i93174#: notes contain paragraphs that are not nodes
         {
             SwFieldType * const pPostits( GetSysFldType(RES_POSTITFLD) );
-            SwIterator<SwFmtFld,SwFieldType> aIter( *pPostits );
-            for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
+            SwClientIter aIter(*pPostits);
+            SwFmtFld const * pFmtFld =
+                static_cast<SwFmtFld const*>(aIter.First( TYPE(SwFmtFld) ));
+            while (pFmtFld)
             {
                 if (pFmtFld->IsFldInDoc())
                 {
@@ -1738,14 +1773,15 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
                         static_cast<SwPostItField const*>(pFmtFld->GetFld()));
                     rStat.nAllPara += pField->GetNumberOfParagraphs();
                 }
+                pFmtFld = static_cast<SwFmtFld const*>(aIter.Next());
             }
         }
 
-        rStat.nPage     = GetCurrentLayout() ? GetCurrentLayout()->GetPageNum() : 0;    //swmod 080218
-        rStat.bModified = sal_False;
+        rStat.nPage 	= GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
+        rStat.bModified = FALSE;
         SetDocStat( rStat );
 
-        com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( rStat.nPage ? 8 : 7);
+        com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( rStat.nPage ? 7 : 6);
         sal_Int32 n=0;
         aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nTbl;
@@ -1764,8 +1800,6 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         aStat[n++].Value <<= (sal_Int32)rStat.nWord;
         aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nChar;
-        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NonWhitespaceCharacterCount"));
-        aStat[n++].Value <<= (sal_Int32)rStat.nCharExcludingSpaces;
 
         // For e.g. autotext documents there is no pSwgInfo (#i79945)
         SfxObjectShell * const pObjShell( GetDocShell() );
@@ -1803,10 +1837,10 @@ void SwDoc::DocInfoChgd( )
 const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
 {
     const SfxPoolItem* pItem;
-    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
-    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_REFMARK );
+    for( USHORT n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n ) ))
+        if( 0 == (pItem = GetAttrPool().GetItem( RES_TXTATR_REFMARK, n ) ))
             continue;
 
         const SwFmtRefMark* pFmtRef = (SwFmtRefMark*)pItem;
@@ -1819,16 +1853,16 @@ const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
 }
 
 // returne die RefMark per Index - fuer Uno
-const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
+const SwFmtRefMark* SwDoc::GetRefMark( USHORT nIndex ) const
 {
     const SfxPoolItem* pItem;
     const SwTxtRefMark* pTxtRef;
     const SwFmtRefMark* pRet = 0;
 
-    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
-    sal_uInt32 nCount = 0;
-    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
+    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_REFMARK );
+    USHORT nCount = 0;
+    for( USHORT n = 0; n < nMaxItems; ++n )
+        if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_REFMARK, n )) &&
             0 != (pTxtRef = ((SwFmtRefMark*)pItem)->GetTxtRefMark()) &&
             &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() )
         {
@@ -1844,17 +1878,17 @@ const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 
 // returne die Namen aller im Doc gesetzten Referenzen
 //JP 24.06.96: Ist der ArrayPointer 0 dann returne nur, ob im Doc. eine
-//              RefMark gesetzt ist
+//				RefMark gesetzt ist
 // OS 25.06.96: ab jetzt wird immer die Anzahl der Referenzen returnt
-sal_uInt16 SwDoc::GetRefMarks( SvStringsDtor* pNames ) const
+USHORT SwDoc::GetRefMarks( SvStringsDtor* pNames ) const
 {
     const SfxPoolItem* pItem;
     const SwTxtRefMark* pTxtRef;
 
-    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
-    sal_uInt32 nCount = 0;
-    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
+    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_REFMARK );
+    USHORT nCount = 0;
+    for( USHORT n = 0; n < nMaxItems; ++n )
+        if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_REFMARK, n )) &&
             0 != (pTxtRef = ((SwFmtRefMark*)pItem)->GetTxtRefMark()) &&
             &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() )
         {
@@ -1916,22 +1950,25 @@ bool SwDoc::IsModified() const
 
 void SwDoc::SetModified()
 {
+    // --> OD 2005-08-29 #125370#
     SwLayouter::ClearMovedFwdFrms( *this );
     SwLayouter::ClearObjsTmpConsiderWrapInfluence( *this );
     SwLayouter::ClearFrmsNotToWrap( *this );
-    // #i65250#
+    // <--
+    // --> OD 2006-05-10 #i65250#
     SwLayouter::ClearMoveBwdLayoutInfo( *this );
+    // <--
     // dem Link wird der Status returnt, wie die Flags waren und werden
-    //  Bit 0:  -> alter Zustand
-    //  Bit 1:  -> neuer Zustand
+    // 	Bit 0:	-> alter Zustand
+    //	Bit 1: 	-> neuer Zustand
     long nCall = mbModified ? 3 : 2;
-    mbModified = sal_True;
-    pDocStat->bModified = sal_True;
+    mbModified = TRUE;
+    pDocStat->bModified = TRUE;
     if( aOle2Link.IsSet() )
     {
-        mbInCallModified = sal_True;
+        mbInCallModified = TRUE;
         aOle2Link.Call( (void*)nCall );
-        mbInCallModified = sal_False;
+        mbInCallModified = FALSE;
     }
 
     if( pACEWord && !pACEWord->IsDeleted() )
@@ -1941,20 +1978,20 @@ void SwDoc::SetModified()
 void SwDoc::ResetModified()
 {
     // dem Link wird der Status returnt, wie die Flags waren und werden
-    //  Bit 0:  -> alter Zustand
-    //  Bit 1:  -> neuer Zustand
+    // 	Bit 0:	-> alter Zustand
+    //	Bit 1: 	-> neuer Zustand
     long nCall = mbModified ? 1 : 0;
-    mbModified = sal_False;
+    mbModified = FALSE;
     // If there is already a document statistic, we assume that
     // it is correct. In this case we reset the modified flag.
     if ( 0 != pDocStat->nChar )
-        pDocStat->bModified = sal_False;
-    GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
+        pDocStat->bModified = FALSE;
+    nUndoSavePos = nUndoPos;
     if( nCall && aOle2Link.IsSet() )
     {
-        mbInCallModified = sal_True;
+        mbInCallModified = TRUE;
         aOle2Link.Call( (void*)nCall );
-        mbInCallModified = sal_False;
+        mbInCallModified = FALSE;
     }
 }
 
@@ -1967,9 +2004,10 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
          || rPam.GetPoint()->nNode.GetIndex() == rPam.GetMark()->nNode.GetIndex() )
          && 0 != ( pGrfNd = rPam.GetPoint()->nNode.GetNode().GetGrfNode() ) )
     {
-        if (GetIDocumentUndoRedo().DoesUndo())
+        if( DoesUndo() )
         {
-            GetIDocumentUndoRedo().AppendUndo(new SwUndoReRead(rPam, *pGrfNd));
+            ClearRedo();
+            AppendUndo( new SwUndoReRead( rPam, *pGrfNd ) );
         }
 
         // Weil nicht bekannt ist, ob sich die Grafik spiegeln laesst,
@@ -1978,15 +2016,15 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
                                                 GetMirrorGrf().GetValue() )
             pGrfNd->SetAttr( SwMirrorGrf() );
 
-        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, pGrafObj, sal_True );
+        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, pGrafObj, TRUE );
         SetModified();
     }
 }
 
-sal_Bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
+BOOL lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
-    sal_Bool bOnlyWrong = *(sal_Bool*)pArgs;
+    BOOL bOnlyWrong = *(BOOL*)pArgs;
     if( pTxtNode )
     {
         if( bOnlyWrong )
@@ -2008,68 +2046,79 @@ sal_Bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
                 pTxtNode->GetGrammarCheck()->SetInvalid( 0, STRING_LEN );
         }
     }
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
+BOOL lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
-//  sal_Bool bOnlyWrong = *(sal_Bool*)pArgs;
+//	BOOL bOnlyWrong = *(BOOL*)pArgs;
     if( pTxtNode )
     {
         pTxtNode->SetSmartTagDirty( true );
         if( pTxtNode->GetSmartTags() )
         {
 //            if ( bOnlyWrong ) // only some smart tag types have been enabled or disabled
-//              pTxtNode->GetSmartTags()->SetInvalid( 0, STRING_LEN );
+//				pTxtNode->GetSmartTags()->SetInvalid( 0, STRING_LEN );
 //            else // smart tags all have been enabled or disabled
                 pTxtNode->SetSmartTags( NULL );
         }
     }
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************
- *      SwDoc::SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong )
+ * 		SwDoc::SpellItAgainSam( BOOL bInvalid, BOOL bOnlyWrong )
  *
  * stoesst das Spelling im Idle-Handler wieder an.
- * Wird bInvalid als sal_True uebergeben, so werden zusaetzlich die WrongListen
+ * Wird bInvalid als TRUE uebergeben, so werden zusaetzlich die WrongListen
  * an allen Nodes invalidiert und auf allen Seiten das SpellInvalid-Flag
  * gesetzt.
  * Mit bOnlyWrong kann man dann steuern, ob nur die Bereiche mit falschen
  * Woertern oder die kompletten Bereiche neu ueberprueft werden muessen.
  ************************************************************************/
-void SwDoc::SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong, sal_Bool bSmartTags )
+void SwDoc::SpellItAgainSam( BOOL bInvalid, BOOL bOnlyWrong, BOOL bSmartTags )
 {
-    std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080307
-    OSL_ENSURE( GetCurrentLayout(), "SpellAgain: Where's my RootFrm?" );
+    OSL_ENSURE( GetRootFrm(), "SpellAgain: Where's my RootFrm?" );
     if( bInvalid )
     {
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::AllInvalidateSmartTagsOrSpelling),bSmartTags));//swmod 080305
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::SetNeedGrammarCheck), true) );
+        SwPageFrm *pPage = (SwPageFrm*)GetRootFrm()->Lower();
+        while ( pPage )
+        {
+            if ( bSmartTags )
+                pPage->InvalidateSmartTags();
+
+            pPage->InvalidateSpelling();
+            pPage = (SwPageFrm*)pPage->GetNext();
+        }
+        GetRootFrm()->SetNeedGrammarCheck( true );
+
         if ( bSmartTags )
             GetNodes().ForEach( lcl_CheckSmartTagsAgain, &bOnlyWrong );
+
         GetNodes().ForEach( lcl_SpellAndGrammarAgain, &bOnlyWrong );
     }
 
-    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::SetIdleFlags));//swmod 080307
+    GetRootFrm()->SetIdleFlags();
 }
 
 void SwDoc::InvalidateAutoCompleteFlag()
 {
-    SwRootFrm* pTmpRoot = GetCurrentLayout();
-    if( pTmpRoot )
+    if( GetRootFrm() )
     {
-        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllInvalidateAutoCompleteWords));//swmod 080305
-        for( sal_uLong nNd = 1, nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )
+        SwPageFrm *pPage = (SwPageFrm*)GetRootFrm()->Lower();
+        while ( pPage )
+        {
+            pPage->InvalidateAutoCompleteWords();
+            pPage = (SwPageFrm*)pPage->GetNext();
+        }
+        for( ULONG nNd = 1, nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )
         {
             SwTxtNode* pTxtNode = GetNodes()[ nNd ]->GetTxtNode();
             if ( pTxtNode ) pTxtNode->SetAutoCompleteWordDirty( true );
         }
-
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::SetIdleFlags));//swmod 080228
-    }   //swmod 080219
+        GetRootFrm()->SetIdleFlags();
+    }
 }
 
 const SwFmtINetFmt* SwDoc::FindINetAttr( const String& rName ) const
@@ -2077,9 +2126,9 @@ const SwFmtINetFmt* SwDoc::FindINetAttr( const String& rName ) const
     const SwFmtINetFmt* pItem;
     const SwTxtINetFmt* pTxtAttr;
     const SwTxtNode* pTxtNd;
-    sal_uInt32 n, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
+    USHORT n, nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_INETFMT );
     for( n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = (SwFmtINetFmt*)GetAttrPool().GetItem2(
+        if( 0 != (pItem = (SwFmtINetFmt*)GetAttrPool().GetItem(
             RES_TXTATR_INETFMT, n ) ) &&
             pItem->GetName().Equals( rName ) &&
             0 != ( pTxtAttr = pItem->GetTxtINetFmt()) &&
@@ -2092,27 +2141,28 @@ const SwFmtINetFmt* SwDoc::FindINetAttr( const String& rName ) const
     return 0;
 }
 
-void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool bImpress )
+void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
 {
     const SwOutlineNodes& rOutNds = GetNodes().GetOutLineNds();
     if( pExtDoc && rOutNds.Count() )
     {
-        sal_uInt16 i;
+        USHORT i;
         ::StartProgress( STR_STATSTR_SUMMARY, 0, rOutNds.Count(), GetDocShell() );
         SwNodeIndex aEndOfDoc( pExtDoc->GetNodes().GetEndOfContent(), -1 );
         for( i = 0; i < rOutNds.Count(); ++i )
         {
             ::SetProgressState( i, GetDocShell() );
-            const sal_uLong nIndex = rOutNds[ i ]->GetIndex();
-
+            const ULONG nIndex = rOutNds[ i ]->GetIndex();
+            //BYTE nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetTxtColl()//#outline level,zhaojianwei
+                        // ->GetOutlineLevel();
             const int nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
             if( nLvl > nLevel )
                 continue;
-            sal_uInt16 nEndOfs = 1;
-            sal_uInt8 nWish = nPara;
-            sal_uLong nNextOutNd = i + 1 < rOutNds.Count() ?
+            USHORT nEndOfs = 1;
+            BYTE nWish = nPara;
+            ULONG nNextOutNd = i + 1 < rOutNds.Count() ?
                 rOutNds[ i + 1 ]->GetIndex() : GetNodes().Count();
-            sal_Bool bKeep = sal_False;
+            BOOL bKeep = FALSE;
             while( ( nWish || bKeep ) && nIndex + nEndOfs < nNextOutNd &&
                    GetNodes()[ nIndex + nEndOfs ]->IsTxtNode() )
             {
@@ -2134,8 +2184,8 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
         while( aIndx < aEndOfDoc )
         {
             SwNode *pNode;
-            sal_Bool bDelete = sal_False;
-            if( (pNode = &aIndx.GetNode())->IsTxtNode() )
+            BOOL bDelete = FALSE;
+            if(	(pNode = &aIndx.GetNode())->IsTxtNode() )
             {
                 SwTxtNode *pNd = (SwTxtNode*)pNode;
                 if( pNd->HasSwAttrSet() )
@@ -2143,8 +2193,8 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
                 if( bImpress )
                 {
                     SwTxtFmtColl* pMyColl = pNd->GetTxtColl();
-
-                    const sal_uInt16 nHeadLine = static_cast<sal_uInt16>(
+                    //USHORT nHeadLine = static_cast<USHORT>(pMyColl->GetOutlineLevel()==NO_NUMBERING ?//#outlinelevel,zhaojianwei
+                    const USHORT nHeadLine = static_cast<USHORT>(
                                 !pMyColl->IsAssignedToListLevelOfOutlineStyle() //<-end,zhaojianwei
                                 ? RES_POOLCOLL_HEADLINE2
                                 : RES_POOLCOLL_HEADLINE1 );
@@ -2154,7 +2204,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
                 if( !pNd->Len() &&
                     pNd->StartOfSectionIndex()+2 < pNd->EndOfSectionIndex() )
                 {
-                    bDelete = sal_True;
+                    bDelete = TRUE;
                     pExtDoc->GetNodes().Delete( aIndx );
                 }
             }
@@ -2167,22 +2217,23 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
 
 // loesche den nicht sichtbaren Content aus dem Document, wie z.B.:
 // versteckte Bereiche, versteckte Absaetze
-bool SwDoc::RemoveInvisibleContent()
+BOOL SwDoc::RemoveInvisibleContent()
 {
-    sal_Bool bRet = sal_False;
-    GetIDocumentUndoRedo().StartUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
+    BOOL bRet = FALSE;
+    StartUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
 
     {
         SwTxtNode* pTxtNd;
-        SwIterator<SwFmtFld,SwFieldType> aIter( *GetSysFldType( RES_HIDDENPARAFLD )  );
-        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
+        SwClientIter aIter( *GetSysFldType( RES_HIDDENPARAFLD ) );
+        for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+                pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
         {
             if( pFmtFld->GetTxtFld() &&
                 0 != ( pTxtNd = (SwTxtNode*)pFmtFld->GetTxtFld()->GetpTxtNode() ) &&
                 pTxtNd->GetpSwpHints() && pTxtNd->HasHiddenParaField() &&
                 &pTxtNd->GetNodes() == &GetNodes() )
             {
-                bRet = sal_True;
+                bRet = TRUE;
                 SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
 
                 // Remove hidden paragraph or delete contents:
@@ -2208,7 +2259,7 @@ bool SwDoc::RemoveInvisibleContent()
     //
     // Remove any hidden paragraph (hidden text attribute)
     //
-    for( sal_uLong n = GetNodes().Count(); n; )
+    for( ULONG n = GetNodes().Count(); n; )
     {
         SwTxtNode* pTxtNd = GetNodes()[ --n ]->GetTxtNode();
         if ( pTxtNd )
@@ -2217,8 +2268,8 @@ bool SwDoc::RemoveInvisibleContent()
             SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
             if ( pTxtNd->HasHiddenCharAttribute( true ) )
             {
-                bRemoved = sal_True;
-                bRet = sal_True;
+                bRemoved = TRUE;
+                bRet = TRUE;
 
                 // Remove hidden paragraph or delete contents:
                 // Delete contents if
@@ -2240,15 +2291,17 @@ bool SwDoc::RemoveInvisibleContent()
             }
             else if ( pTxtNd->HasHiddenCharAttribute( false ) )
             {
-                bRemoved = sal_True;
-                bRet = sal_True;
+                bRemoved = TRUE;
+                bRet = TRUE;
                 SwScriptInfo::DeleteHiddenRanges( *pTxtNd );
             }
 
+            // --> FME 2006-01-11 #120473#
             // Footnotes/Frames may have been removed, therefore we have
             // to reset n:
             if ( bRemoved )
                 n = aPam.GetPoint()->nNode.GetIndex();
+            // <--
         }
     }
 
@@ -2256,7 +2309,7 @@ bool SwDoc::RemoveInvisibleContent()
         // dann noch alle versteckten Bereiche loeschen/leeren
         SwSectionFmts aSectFmts;
         SwSectionFmts& rSectFmts = GetSections();
-        sal_uInt16 n;
+        USHORT n;
 
         for( n = rSectFmts.Count(); n; )
         {
@@ -2295,7 +2348,7 @@ bool SwDoc::RemoveInvisibleContent()
                 SwSectionNode* pSectNd = pSectFmt->GetSectionNode();
                 if( pSectNd )
                 {
-                    bRet = sal_True;
+                    bRet = TRUE;
                     SwPaM aPam( *pSectNd );
 
                     if( pSectNd->StartOfSectionNode()->StartOfSectionIndex() ==
@@ -2331,78 +2384,15 @@ bool SwDoc::RemoveInvisibleContent()
 
     if( bRet )
         SetModified();
-    GetIDocumentUndoRedo().EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
-    return bRet;
-}
-/*-- 25.08.2010 14:18:12---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-bool SwDoc::HasInvisibleContent() const
-{
-    sal_Bool bRet = sal_False;
-
-    SwClientIter aIter( *GetSysFldType( RES_HIDDENPARAFLD ) );
-    if( aIter.First( TYPE( SwFmtFld ) ) )
-        bRet = sal_True;
-
-    //
-    // Search for any hidden paragraph (hidden text attribute)
-    //
-    if( ! bRet )
-    {
-        for( sal_uLong n = GetNodes().Count(); !bRet && (n > 0); )
-        {
-            SwTxtNode* pTxtNd = GetNodes()[ --n ]->GetTxtNode();
-            if ( pTxtNd )
-            {
-                SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
-                if( pTxtNd->HasHiddenCharAttribute( true ) ||  ( pTxtNd->HasHiddenCharAttribute( false ) ) )
-                {
-                    bRet = sal_True;
-                }
-            }
-        }
-    }
-
-    if( ! bRet )
-    {
-        const SwSectionFmts& rSectFmts = GetSections();
-        sal_uInt16 n;
-
-        for( n = rSectFmts.Count(); !bRet && (n > 0); )
-        {
-            SwSectionFmt* pSectFmt = rSectFmts[ --n ];
-            // don't add sections in Undo/Redo
-            if( !pSectFmt->IsInNodesArr())
-                continue;
-            SwSection* pSect = pSectFmt->GetSection();
-            if( pSect->IsHidden() )
-                bRet = sal_True;
-        }
-    }
+    EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
     return bRet;
 }
 
-bool SwDoc::RestoreInvisibleContent()
+BOOL SwDoc::ConvertFieldsToText()
 {
-    bool bRet = false;
-    SwUndoId nLastUndoId(UNDO_EMPTY);
-    if (GetIDocumentUndoRedo().GetLastUndoInfo(0, & nLastUndoId)
-        && (UNDO_UI_DELETE_INVISIBLECNTNT == nLastUndoId))
-    {
-        GetIDocumentUndoRedo().Undo();
-        GetIDocumentUndoRedo().ClearRedo();
-        bRet = true;
-    }
-    return bRet;
-}
-
-
-sal_Bool SwDoc::ConvertFieldsToText()
-{
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     LockExpFlds();
-    GetIDocumentUndoRedo().StartUndo( UNDO_UI_REPLACE, NULL );
+    StartUndo( UNDO_UI_REPLACE, NULL );
 
     const SwFldTypes* pMyFldTypes = GetFldTypes();
     sal_uInt16 nCount = pMyFldTypes->Count();
@@ -2414,11 +2404,14 @@ sal_Bool SwDoc::ConvertFieldsToText()
         if ( RES_POSTITFLD == pCurType->Which() )
             continue;
 
-        SwIterator<SwFmtFld,SwFieldType> aIter( *pCurType );
+        SwClientIter aIter( *(SwFieldType*)pCurType );
+        const SwFmtFld* pCurFldFmt = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
         ::std::vector<const SwFmtFld*> aFieldFmts;
-        for( SwFmtFld* pCurFldFmt = aIter.First(); pCurFldFmt; pCurFldFmt = aIter.Next() )
+        while (pCurFldFmt)
+        {
             aFieldFmts.push_back(pCurFldFmt);
-
+            pCurFldFmt = (SwFmtFld*)aIter.Next();
+        }
         ::std::vector<const SwFmtFld*>::iterator aBegin = aFieldFmts.begin();
         ::std::vector<const SwFmtFld*>::iterator aEnd = aFieldFmts.end();
         while(aBegin != aEnd)
@@ -2427,17 +2420,17 @@ sal_Bool SwDoc::ConvertFieldsToText()
             // skip fields that are currently not in the document
             // e.g. fields in undo or redo array
 
-            sal_Bool bSkip = !pTxtFld ||
+            BOOL bSkip = !pTxtFld ||
                          !pTxtFld->GetpTxtNode()->GetNodes().IsDocNodes();
 
             if (!bSkip)
             {
-                sal_Bool bInHeaderFooter = IsInHeaderFooter(SwNodeIndex(*pTxtFld->GetpTxtNode()));
+                BOOL bInHeaderFooter = IsInHeaderFooter(SwNodeIndex(*pTxtFld->GetpTxtNode()));
                 const SwFmtFld& rFmtFld = pTxtFld->GetFld();
                 const SwField*  pField = rFmtFld.GetFld();
 
                 //#i55595# some fields have to be excluded in headers/footers
-                sal_uInt16 nWhich = pField->GetTyp()->Which();
+                USHORT nWhich = pField->GetTyp()->Which();
                 if(!bInHeaderFooter ||
                         (nWhich != RES_PAGENUMBERFLD &&
                         nWhich != RES_CHAPTERFLD &&
@@ -2447,7 +2440,7 @@ sal_Bool SwDoc::ConvertFieldsToText()
                         nWhich != RES_REFPAGEGETFLD&&
                         nWhich != RES_REFPAGESETFLD))
                 {
-                    String sText = pField->ExpandField(true);
+                    String sText = pField->GetCntnt();
                     //database fields should not convert their command into text
                     if( RES_DBFLD == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
                         sText.Erase();
@@ -2460,7 +2453,7 @@ sal_Bool SwDoc::ConvertFieldsToText()
                     SwPaM aPam2(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
                     aPam2.SetMark();
                     aPam2.Move();
-                    DeleteAndJoin(aPam2);//remove the field
+                    DeleteAndJoin(aPam2);//remove the field 
                 }
             }
             ++aBegin;
@@ -2469,7 +2462,7 @@ sal_Bool SwDoc::ConvertFieldsToText()
 
     if( bRet )
         SetModified();
-    GetIDocumentUndoRedo().EndUndo( UNDO_UI_REPLACE, NULL );
+    EndUndo( UNDO_UI_REPLACE, NULL );
     UnlockExpFlds();
     return bRet;
 
@@ -2506,17 +2499,26 @@ bool SwDoc::LinksUpdated() const
 }
 
 // embedded alle lokalen Links (Bereiche/Grafiken)
-::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
+bool SwDoc::EmbedAllLinks()
 {
-    for( sal_uInt16 n = 0; n < rLinks.Count(); ++n )
+    BOOL bRet = FALSE;
+    sfx2::LinkManager& rLnkMgr = GetLinkManager();
+    const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+    if( rLnks.Count() )
     {
-        ::sfx2::SvBaseLink* pLnk = &(*rLinks[ n ]);
-        if( pLnk &&
-            ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
-              OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
-            pLnk->ISA( SwBaseLink ) )
+        BOOL bDoesUndo = DoesUndo();
+        DoUndo( FALSE );
+
+        for( USHORT n = 0; n < rLnks.Count(); ++n )
         {
+            ::sfx2::SvBaseLink* pLnk = &(*rLnks[ n ]);
+            if( pLnk &&
+                ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
+                  OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
+                pLnk->ISA( SwBaseLink ) )
+            {
                 ::sfx2::SvBaseLinkRef xLink = pLnk;
+                USHORT nCount = rLnks.Count();
 
                 String sFName;
                 rLnkMgr.GetDisplayNames( xLink, 0, &sFName, 0, 0 );
@@ -2524,57 +2526,46 @@ bool SwDoc::LinksUpdated() const
                 INetURLObject aURL( sFName );
                 if( INET_PROT_FILE == aURL.GetProtocol() ||
                     INET_PROT_CID == aURL.GetProtocol() )
-                    return pLnk;
-        }
-    }
-    return 0;
-}
-bool SwDoc::EmbedAllLinks()
-{
-    sal_Bool bRet = sal_False;
-    sfx2::LinkManager& rLnkMgr = GetLinkManager();
-    const ::sfx2::SvBaseLinks& rLinks = rLnkMgr.GetLinks();
-    if( rLinks.Count() )
-    {
-        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+                {
+                    // dem Link sagen, das er aufgeloest wird!
+                    xLink->Closed();
 
-        ::sfx2::SvBaseLink* pLnk = 0;
-        while( 0 != (pLnk = lcl_FindNextRemovableLink( rLinks, rLnkMgr ) ) )
-        {
-            ::sfx2::SvBaseLinkRef xLink = pLnk;
-            // dem Link sagen, das er aufgeloest wird!
-            xLink->Closed();
+                    // falls einer vergessen hat sich auszutragen
+                    if( xLink.Is() )
+                        rLnkMgr.Remove( xLink );
 
-            // falls einer vergessen hat sich auszutragen
-            if( xLink.Is() )
-                rLnkMgr.Remove( xLink );
-
-            bRet = sal_True;
+                    if( nCount != rLnks.Count() + 1 )
+                        n = 0;		// wieder von vorne anfangen, es wurden
+                                    // mehrere Links entfernt
+                    bRet = TRUE;
+                }
+            }
         }
 
-        GetIDocumentUndoRedo().DelAllUndoObj();
+        DelAllUndoObj();
+        DoUndo( bDoesUndo );
         SetModified();
     }
     return bRet;
 }
 
-sal_Bool SwDoc::IsInsTblFormatNum() const
+BOOL SwDoc::IsInsTblFormatNum() const
 {
     return SW_MOD()->IsInsTblFormatNum(get(IDocumentSettingAccess::HTML_MODE));
 }
 
-sal_Bool SwDoc::IsInsTblChangeNumFormat() const
+BOOL SwDoc::IsInsTblChangeNumFormat() const
 {
     return SW_MOD()->IsInsTblChangeNumFormat(get(IDocumentSettingAccess::HTML_MODE));
 }
 
-sal_Bool SwDoc::IsInsTblAlignNum() const
+BOOL SwDoc::IsInsTblAlignNum() const
 {
     return SW_MOD()->IsInsTblAlignNum(get(IDocumentSettingAccess::HTML_MODE));
 }
 
 // setze das InsertDB als Tabelle Undo auf:
-void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, sal_Bool bIsTable )
+void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, BOOL bIsTable )
 {
     if( bIsTable )
     {
@@ -2583,26 +2574,26 @@ void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, sal_Bool bIsTable )
         {
             SwUndoCpyTbl* pUndo = new SwUndoCpyTbl;
             pUndo->SetTableSttIdx( pTblNd->GetIndex() );
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
+            AppendUndo( pUndo );
         }
     }
     else if( rPam.HasMark() )
     {
         SwUndoCpyDoc* pUndo = new SwUndoCpyDoc( rPam );
-        pUndo->SetInsertRange( rPam, sal_False );
-        GetIDocumentUndoRedo().AppendUndo( pUndo );
+        pUndo->SetInsertRange( rPam, FALSE );
+        AppendUndo( pUndo );
     }
 }
 
 void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 {
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if (DoesUndo())
     {
-        GetIDocumentUndoRedo().DelAllUndoObj();
+        DelAllUndoObj();
 
         SwUndo * pUndo = new SwUndoTOXChange(&rTOX, rNew);
 
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        AppendUndo(pUndo);
     }
 
     rTOX = rNew;
@@ -2614,14 +2605,15 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
     }
 }
 
+// #111827#
 String SwDoc::GetPaMDescr(const SwPaM & rPam) const
 {
     String aResult;
     bool bOK = false;
 
-    if (rPam.GetNode(sal_True) == rPam.GetNode(sal_False))
+    if (rPam.GetNode(TRUE) == rPam.GetNode(FALSE))
     {
-        SwTxtNode * pTxtNode = rPam.GetNode(sal_True)->GetTxtNode();
+        SwTxtNode * pTxtNode = rPam.GetNode(TRUE)->GetTxtNode();
 
         if (0 != pTxtNode)
         {
@@ -2638,9 +2630,9 @@ String SwDoc::GetPaMDescr(const SwPaM & rPam) const
             bOK = true;
         }
     }
-    else if (0 != rPam.GetNode(sal_True))
+    else if (0 != rPam.GetNode(TRUE))
     {
-        if (0 != rPam.GetNode(sal_False))
+        if (0 != rPam.GetNode(FALSE))
             aResult += String(SW_RES(STR_PARAGRAPHS));
 
         bOK = true;
@@ -2652,6 +2644,7 @@ String SwDoc::GetPaMDescr(const SwPaM & rPam) const
     return aResult;
 }
 
+// -> #111840#
 SwField * SwDoc::GetField(const SwPosition & rPos)
 {
     SwTxtFld * const pAttr = GetTxtFld(rPos);
@@ -2668,10 +2661,11 @@ SwTxtFld * SwDoc::GetTxtFld(const SwPosition & rPos)
                     rPos.nContent.GetIndex(), RES_TXTATR_FIELD) )
         : 0;
 }
+// <- #111840#
 
 bool SwDoc::ContainsHiddenChars() const
 {
-    for( sal_uLong n = GetNodes().Count(); n; )
+    for( ULONG n = GetNodes().Count(); n; )
     {
         SwNode* pNd = GetNodes()[ --n ];
         if ( ND_TEXTNODE == pNd->GetNodeType() &&
@@ -2682,7 +2676,7 @@ bool SwDoc::ContainsHiddenChars() const
     return false;
 }
 
-SwUnoCrsr* SwDoc::CreateUnoCrsr( const SwPosition& rPos, sal_Bool bTblCrsr )
+SwUnoCrsr* SwDoc::CreateUnoCrsr( const SwPosition& rPos, BOOL bTblCrsr )
 {
     SwUnoCrsr* pNew;
     if( bTblCrsr )
@@ -2696,11 +2690,24 @@ SwUnoCrsr* SwDoc::CreateUnoCrsr( const SwPosition& rPos, sal_Bool bTblCrsr )
 
 void SwDoc::ChkCondColls()
 {
-     for (sal_uInt16 n = 0; n < pTxtFmtCollTbl->Count(); n++)
+     for (USHORT n = 0; n < pTxtFmtCollTbl->Count(); n++)
      {
         SwTxtFmtColl *pColl = (*pTxtFmtCollTbl)[n];
+
         if (RES_CONDTXTFMTCOLL == pColl->Which())
-            pColl->CallSwClientNotify( SwAttrHint(RES_CONDTXTFMTCOLL) );
+        {
+            SwClientIter aIter(*pColl);
+
+            SwClient * pClient = aIter.First(TYPE(SwTxtNode));
+            while (pClient)
+            {
+                SwTxtNode * pTxtNode = static_cast<SwTxtNode *>(pClient);
+
+                pTxtNode->ChkCondColl();
+
+                pClient = aIter.Next();
+            }
+        }
      }
 }
 

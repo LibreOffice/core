@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 #include <tools/shl.hxx>
 #include <unotools/searchopt.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
@@ -41,30 +44,30 @@ using namespace com::sun::star::i18n;
 SvxJSearchOptionsPage::SvxJSearchOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_JSEARCH_OPTIONS ), rSet ),
 
-    aTreatAsEqual               ( this, CUI_RES( FL_TREAT_AS_EQUAL ) ),
-    aMatchCase                  ( this, CUI_RES( CB_MATCH_CASE ) ),
-    aMatchFullHalfWidth         ( this, CUI_RES( CB_MATCH_FULL_HALF_WIDTH ) ),
-    aMatchHiraganaKatakana      ( this, CUI_RES( CB_MATCH_HIRAGANA_KATAKANA ) ),
-    aMatchContractions          ( this, CUI_RES( CB_MATCH_CONTRACTIONS ) ),
-    aMatchMinusDashChoon        ( this, CUI_RES( CB_MATCH_MINUS_DASH_CHOON ) ),
-    aMatchRepeatCharMarks       ( this, CUI_RES( CB_MATCH_REPEAT_CHAR_MARKS ) ),
-    aMatchVariantFormKanji      ( this, CUI_RES( CB_MATCH_VARIANT_FORM_KANJI ) ),
-    aMatchOldKanaForms          ( this, CUI_RES( CB_MATCH_OLD_KANA_FORMS ) ),
-    aMatchDiziDuzu              ( this, CUI_RES( CB_MATCH_DIZI_DUZU ) ),
-    aMatchBavaHafa              ( this, CUI_RES( CB_MATCH_BAVA_HAFA ) ),
-    aMatchTsithichiDhizi        ( this, CUI_RES( CB_MATCH_TSITHICHI_DHIZI ) ),
-    aMatchHyuiyuByuvyu          ( this, CUI_RES( CB_MATCH_HYUFYU_BYUVYU ) ),
-    aMatchSesheZeje             ( this, CUI_RES( CB_MATCH_SESHE_ZEJE ) ),
-    aMatchIaiya                 ( this, CUI_RES( CB_MATCH_IAIYA ) ),
-    aMatchKiku                  ( this, CUI_RES( CB_MATCH_KIKU ) ),
+    aTreatAsEqual				( this, CUI_RES( FL_TREAT_AS_EQUAL ) ),
+    aMatchCase					( this, CUI_RES( CB_MATCH_CASE ) ),
+    aMatchFullHalfWidth			( this, CUI_RES( CB_MATCH_FULL_HALF_WIDTH ) ),
+    aMatchHiraganaKatakana		( this, CUI_RES( CB_MATCH_HIRAGANA_KATAKANA ) ),
+    aMatchContractions			( this, CUI_RES( CB_MATCH_CONTRACTIONS ) ),
+    aMatchMinusDashChoon		( this, CUI_RES( CB_MATCH_MINUS_DASH_CHOON ) ),
+    aMatchRepeatCharMarks		( this, CUI_RES( CB_MATCH_REPEAT_CHAR_MARKS ) ),
+    aMatchVariantFormKanji		( this, CUI_RES( CB_MATCH_VARIANT_FORM_KANJI ) ),
+    aMatchOldKanaForms			( this, CUI_RES( CB_MATCH_OLD_KANA_FORMS ) ),
+    aMatchDiziDuzu				( this, CUI_RES( CB_MATCH_DIZI_DUZU ) ),
+    aMatchBavaHafa				( this, CUI_RES( CB_MATCH_BAVA_HAFA ) ),
+    aMatchTsithichiDhizi		( this, CUI_RES( CB_MATCH_TSITHICHI_DHIZI ) ),
+    aMatchHyuiyuByuvyu			( this, CUI_RES( CB_MATCH_HYUFYU_BYUVYU ) ),
+    aMatchSesheZeje				( this, CUI_RES( CB_MATCH_SESHE_ZEJE ) ),
+    aMatchIaiya					( this, CUI_RES( CB_MATCH_IAIYA ) ),
+    aMatchKiku					( this, CUI_RES( CB_MATCH_KIKU ) ),
     aMatchProlongedSoundMark    ( this, CUI_RES( CB_MATCH_PROLONGED_SOUNDMARK ) ),
     aIgnore                     ( this, CUI_RES( FL_IGNORE ) ),
-    aIgnorePunctuation          ( this, CUI_RES( CB_IGNORE_PUNCTUATION ) ),
-    aIgnoreWhitespace           ( this, CUI_RES( CB_IGNORE_WHITESPACES ) ),
+    aIgnorePunctuation			( this, CUI_RES( CB_IGNORE_PUNCTUATION ) ),
+    aIgnoreWhitespace			( this, CUI_RES( CB_IGNORE_WHITESPACES ) ),
     aIgnoreMiddleDot            ( this, CUI_RES( CB_IGNORE_MIDDLE_DOT ) )
 {
     FreeResource();
-    bSaveOptions = sal_True;
+    bSaveOptions = TRUE;
     nTransliterationFlags = 0x00000000;
 }
 
@@ -80,9 +83,9 @@ SfxTabPage*  SvxJSearchOptionsPage::Create( Window* pParent, const SfxItemSet& r
 }
 
 
-void SvxJSearchOptionsPage::SetTransliterationFlags( sal_Int32 nSettings )
+void SvxJSearchOptionsPage::SetTransliterationFlags( INT32 nSettings )
 {
-    sal_Bool  bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
+    BOOL  bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
     aMatchCase               .Check( bVal );    //! treat as equal uppercase/lowercase
     bVal = 0 != (nSettings & TransliterationModules_IGNORE_WIDTH);
     aMatchFullHalfWidth      .Check( bVal );
@@ -113,21 +116,21 @@ void SvxJSearchOptionsPage::SetTransliterationFlags( sal_Int32 nSettings )
     bVal = 0 != (nSettings & TransliterationModules_ignoreKiKuFollowedBySa_ja_JP);
     aMatchKiku               .Check( bVal );
     bVal = 0 != (nSettings & TransliterationModules_ignoreSeparator_ja_JP);
-    aIgnorePunctuation       .Check( bVal );
+    aIgnorePunctuation		 .Check( bVal );
     bVal = 0 != (nSettings & TransliterationModules_ignoreSpace_ja_JP);
-    aIgnoreWhitespace        .Check( bVal );
+    aIgnoreWhitespace		 .Check( bVal );
     bVal = 0 != (nSettings & TransliterationModules_ignoreProlongedSoundMark_ja_JP);
     aMatchProlongedSoundMark.Check( bVal );
     bVal = 0 != (nSettings & TransliterationModules_ignoreMiddleDot_ja_JP);
-    aIgnoreMiddleDot         .Check( bVal );
+    aIgnoreMiddleDot		 .Check( bVal );
 
     nTransliterationFlags = nSettings;
 }
 
 
-sal_Int32 SvxJSearchOptionsPage::GetTransliterationFlags_Impl()
+INT32 SvxJSearchOptionsPage::GetTransliterationFlags_Impl()
 {
-    sal_Int32 nTmp = 0;
+    INT32 nTmp = 0;
     if (aMatchCase.IsChecked()) //! treat as equal uppercase/lowercase
         nTmp |= TransliterationModules_IGNORE_CASE;
     if (aMatchFullHalfWidth.IsChecked())
@@ -178,198 +181,198 @@ void SvxJSearchOptionsPage::Reset( const SfxItemSet& )
 
     // read settings from configuration
     aMatchCase               .Check(!aOpt.IsMatchCase() );  //! treat as equal uppercase/lowercase
-    aMatchFullHalfWidth      .Check( aOpt.IsMatchFullHalfWidthForms() );
-    aMatchHiraganaKatakana   .Check( aOpt.IsMatchHiraganaKatakana() );
-    aMatchContractions       .Check( aOpt.IsMatchContractions() );
-    aMatchMinusDashChoon     .Check( aOpt.IsMatchMinusDashChoon() );
-    aMatchRepeatCharMarks    .Check( aOpt.IsMatchRepeatCharMarks() );
-    aMatchVariantFormKanji   .Check( aOpt.IsMatchVariantFormKanji() );
-    aMatchOldKanaForms       .Check( aOpt.IsMatchOldKanaForms() );
-    aMatchDiziDuzu           .Check( aOpt.IsMatchDiziDuzu() );
-    aMatchBavaHafa           .Check( aOpt.IsMatchBavaHafa() );
-    aMatchTsithichiDhizi     .Check( aOpt.IsMatchTsithichiDhizi() );
-    aMatchHyuiyuByuvyu       .Check( aOpt.IsMatchHyuiyuByuvyu() );
-    aMatchSesheZeje          .Check( aOpt.IsMatchSesheZeje() );
-    aMatchIaiya              .Check( aOpt.IsMatchIaiya() );
-    aMatchKiku               .Check( aOpt.IsMatchKiku() );
-    aIgnorePunctuation       .Check( aOpt.IsIgnorePunctuation() );
-    aIgnoreWhitespace        .Check( aOpt.IsIgnoreWhitespace() );
+    aMatchFullHalfWidth		 .Check( aOpt.IsMatchFullHalfWidthForms() );
+    aMatchHiraganaKatakana	 .Check( aOpt.IsMatchHiraganaKatakana() );
+    aMatchContractions		 .Check( aOpt.IsMatchContractions() );
+    aMatchMinusDashChoon	 .Check( aOpt.IsMatchMinusDashChoon() );
+    aMatchRepeatCharMarks	 .Check( aOpt.IsMatchRepeatCharMarks() );
+    aMatchVariantFormKanji	 .Check( aOpt.IsMatchVariantFormKanji() );
+    aMatchOldKanaForms		 .Check( aOpt.IsMatchOldKanaForms() );
+    aMatchDiziDuzu			 .Check( aOpt.IsMatchDiziDuzu() );
+    aMatchBavaHafa			 .Check( aOpt.IsMatchBavaHafa() );
+    aMatchTsithichiDhizi	 .Check( aOpt.IsMatchTsithichiDhizi() );
+    aMatchHyuiyuByuvyu		 .Check( aOpt.IsMatchHyuiyuByuvyu() );
+    aMatchSesheZeje			 .Check( aOpt.IsMatchSesheZeje() );
+    aMatchIaiya				 .Check( aOpt.IsMatchIaiya() );
+    aMatchKiku				 .Check( aOpt.IsMatchKiku() );
+    aIgnorePunctuation		 .Check( aOpt.IsIgnorePunctuation() );
+    aIgnoreWhitespace		 .Check( aOpt.IsIgnoreWhitespace() );
     aMatchProlongedSoundMark .Check( aOpt.IsIgnoreProlongedSoundMark() );
-    aIgnoreMiddleDot         .Check( aOpt.IsIgnoreMiddleDot() );
+    aIgnoreMiddleDot		 .Check( aOpt.IsIgnoreMiddleDot() );
 
     nTransliterationFlags = GetTransliterationFlags_Impl();
     DBG_ASSERT( nTransliterationFlags == aOpt.GetTransliterationFlags(),
             "Transliteration settings different" );
 
-    aMatchCase               .SaveValue();
-    aMatchFullHalfWidth      .SaveValue();
-    aMatchHiraganaKatakana   .SaveValue();
-    aMatchContractions       .SaveValue();
-    aMatchMinusDashChoon     .SaveValue();
-    aMatchRepeatCharMarks    .SaveValue();
-    aMatchVariantFormKanji   .SaveValue();
-    aMatchOldKanaForms       .SaveValue();
-    aMatchDiziDuzu           .SaveValue();
-    aMatchBavaHafa           .SaveValue();
-    aMatchTsithichiDhizi     .SaveValue();
-    aMatchHyuiyuByuvyu       .SaveValue();
-    aMatchSesheZeje          .SaveValue();
-    aMatchIaiya              .SaveValue();
-    aMatchKiku               .SaveValue();
-    aIgnorePunctuation       .SaveValue();
-    aIgnoreWhitespace        .SaveValue();
+    aMatchCase				 .SaveValue();
+    aMatchFullHalfWidth		 .SaveValue();
+    aMatchHiraganaKatakana	 .SaveValue();
+    aMatchContractions		 .SaveValue();
+    aMatchMinusDashChoon	 .SaveValue();
+    aMatchRepeatCharMarks	 .SaveValue();
+    aMatchVariantFormKanji	 .SaveValue();
+    aMatchOldKanaForms		 .SaveValue();
+    aMatchDiziDuzu			 .SaveValue();
+    aMatchBavaHafa			 .SaveValue();
+    aMatchTsithichiDhizi	 .SaveValue();
+    aMatchHyuiyuByuvyu		 .SaveValue();
+    aMatchSesheZeje			 .SaveValue();
+    aMatchIaiya				 .SaveValue();
+    aMatchKiku				 .SaveValue();
+    aIgnorePunctuation		 .SaveValue();
+    aIgnoreWhitespace		 .SaveValue();
     aMatchProlongedSoundMark .SaveValue();
-    aIgnoreMiddleDot         .SaveValue();
+    aIgnoreMiddleDot		 .SaveValue();
 }
 
 
-sal_Bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
+BOOL SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
 {
-    sal_Bool bModified = sal_False;
+    BOOL bModified = FALSE;
 
-    sal_Int32 nOldVal = nTransliterationFlags;
+    INT32 nOldVal = nTransliterationFlags;
     nTransliterationFlags = GetTransliterationFlags_Impl();
     bModified = nOldVal != nTransliterationFlags;
 
     if (!IsSaveOptions())
         return bModified;
 
-    bModified = sal_False;
+    bModified = FALSE;
     SvtSearchOptions aOpt;
-    sal_Bool bNewVal, bChanged;
+    BOOL bNewVal, bChanged;
 
     bNewVal  = aMatchCase.IsChecked();  //! treat as equal uppercase/lowercase
     bChanged = bNewVal != aMatchCase.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchCase(!bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchFullHalfWidth.IsChecked();
     bChanged = bNewVal != aMatchFullHalfWidth.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchFullHalfWidthForms( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchHiraganaKatakana.IsChecked();
     bChanged = bNewVal != aMatchHiraganaKatakana.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchHiraganaKatakana( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchContractions.IsChecked();
     bChanged = bNewVal != aMatchContractions.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchContractions( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchMinusDashChoon.IsChecked();
     bChanged = bNewVal != aMatchMinusDashChoon.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchMinusDashChoon( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchRepeatCharMarks.IsChecked();
     bChanged = bNewVal != aMatchRepeatCharMarks.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchRepeatCharMarks( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchVariantFormKanji.IsChecked();
     bChanged = bNewVal != aMatchVariantFormKanji.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchVariantFormKanji( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchOldKanaForms.IsChecked();
     bChanged = bNewVal != aMatchOldKanaForms.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchOldKanaForms( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchDiziDuzu.IsChecked();
     bChanged = bNewVal != aMatchDiziDuzu.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchDiziDuzu( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchBavaHafa.IsChecked();
     bChanged = bNewVal != aMatchBavaHafa.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchBavaHafa( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchTsithichiDhizi.IsChecked();
     bChanged = bNewVal != aMatchTsithichiDhizi.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchTsithichiDhizi( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchHyuiyuByuvyu.IsChecked();
     bChanged = bNewVal != aMatchHyuiyuByuvyu.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchHyuiyuByuvyu( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchSesheZeje.IsChecked();
     bChanged = bNewVal != aMatchSesheZeje.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchSesheZeje( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchIaiya.IsChecked();
     bChanged = bNewVal != aMatchIaiya.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchIaiya( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchKiku.IsChecked();
     bChanged = bNewVal != aMatchKiku.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchKiku( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aIgnorePunctuation.IsChecked();
     bChanged = bNewVal != aIgnorePunctuation.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetIgnorePunctuation( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aIgnoreWhitespace.IsChecked();
     bChanged = bNewVal != aIgnoreWhitespace.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetIgnoreWhitespace( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aMatchProlongedSoundMark.IsChecked();
     bChanged = bNewVal != aMatchProlongedSoundMark.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetIgnoreProlongedSoundMark( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
     bNewVal  = aIgnoreMiddleDot.IsChecked();
     bChanged = bNewVal != aIgnoreMiddleDot.GetSavedValue();
     if (bChanged)
     {
         aOpt.SetIgnoreMiddleDot( bNewVal );
-        bModified = sal_True;
+        bModified = TRUE;
     }
 
     return bModified;

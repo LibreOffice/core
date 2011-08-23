@@ -57,11 +57,15 @@
  * @file
  * Master page object which was used to apply a layout to the pages.
  ************************************************************************/
-#include    "xfmasterpage.hxx"
-#include    "xfpagemaster.hxx"
-#include    "xfstylemanager.hxx"
-#include    "xffooter.hxx"
-#include    "xfheader.hxx"
+/*************************************************************************
+ * Change History
+ * 2004-12-23 create this file.
+ ************************************************************************/
+#include	"xfmasterpage.hxx"
+#include	"xfpagemaster.hxx"
+#include	"xfstylemanager.hxx"
+#include	"xffooter.hxx"
+#include	"xfheader.hxx"
 #include "../lwpglobalmgr.hxx"
 XFMasterPage::XFMasterPage()
 {
@@ -77,32 +81,32 @@ XFMasterPage::~XFMasterPage()
         delete m_pFooter;
 }
 
-void    XFMasterPage::SetHeader(XFHeader *pHeader)
+void	XFMasterPage::SetHeader(XFHeader *pHeader)
 {
     if( m_pHeader )
         delete m_pHeader;
     m_pHeader = pHeader;
 }
 
-void    XFMasterPage::SetFooter(XFFooter *pFooter)
+void	XFMasterPage::SetFooter(XFFooter *pFooter)
 {
     if( m_pFooter )
         delete m_pFooter;
     m_pFooter = pFooter;
 }
 
-enumXFStyle XFMasterPage::GetStyleFamily()
+enumXFStyle	XFMasterPage::GetStyleFamily()
 {
     return enumXFStyleMasterPage;
 }
 
 
-void    XFMasterPage::SetPageMaster(rtl::OUString pm)
+void	XFMasterPage::SetPageMaster(rtl::OUString pm)
 {
     m_strPageMaster = pm;
 }
 
-void    XFMasterPage::SetPageMaster(XFPageMaster *pPM)
+void	XFMasterPage::SetPageMaster(XFPageMaster *pPM)
 {
     if( pPM->GetStyleName().getLength() > 0 )
         m_strPageMaster = pPM->GetStyleName();
@@ -113,9 +117,9 @@ void    XFMasterPage::SetPageMaster(XFPageMaster *pPM)
     }
 }
 
-void    XFMasterPage::ToXml(IXFStream *pStrm)
+void	XFMasterPage::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList     *pAttrList = pStrm->GetAttrList();
+    IXFAttrList		*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("style:name"), m_strStyleName );

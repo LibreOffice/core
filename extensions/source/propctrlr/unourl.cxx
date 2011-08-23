@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "UnoURL::UnoURL: caught an exception!" );
+            OSL_ENSURE( sal_False, "UnoURL::UnoURL: caught an exception!" );
         }
     }
 

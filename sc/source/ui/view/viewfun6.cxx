@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
 #include "svl/zforlist.hxx"
-#include "svl/zformat.hxx"
 
 #include "viewfunc.hxx"
 #include "detfunc.hxx"
@@ -67,18 +66,18 @@ using ::std::vector;
 void ScViewFunc::DetectiveAddPred()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    sal_Bool bDone = pDocSh->GetDocFunc().
+    BOOL bDone = pDocSh->GetDocFunc().
                     DetectiveAddPred( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
 
-    RecalcPPT();    //! use broadcast in DocFunc instead?
+    RecalcPPT();	//! use broadcast in DocFunc instead?
 }
 
 void ScViewFunc::DetectiveDelPred()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    sal_Bool bDone = pDocSh->GetDocFunc().
+    BOOL bDone = pDocSh->GetDocFunc().
                     DetectiveDelPred( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
@@ -89,7 +88,7 @@ void ScViewFunc::DetectiveDelPred()
 void ScViewFunc::DetectiveAddSucc()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    sal_Bool bDone = pDocSh->GetDocFunc().
+    BOOL bDone = pDocSh->GetDocFunc().
                     DetectiveAddSucc( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
@@ -100,7 +99,7 @@ void ScViewFunc::DetectiveAddSucc()
 void ScViewFunc::DetectiveDelSucc()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    sal_Bool bDone = pDocSh->GetDocFunc().
+    BOOL bDone = pDocSh->GetDocFunc().
                     DetectiveDelSucc( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
@@ -111,7 +110,7 @@ void ScViewFunc::DetectiveDelSucc()
 void ScViewFunc::DetectiveAddError()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    sal_Bool bDone = pDocSh->GetDocFunc().
+    BOOL bDone = pDocSh->GetDocFunc().
                     DetectiveAddError( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
@@ -122,7 +121,7 @@ void ScViewFunc::DetectiveAddError()
 void ScViewFunc::DetectiveDelAll()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    sal_Bool bDone = pDocSh->GetDocFunc().
+    BOOL bDone = pDocSh->GetDocFunc().
                     DetectiveDelAll( GetViewData()->GetTabNo() );
     if (!bDone)
         Sound::Beep();
@@ -133,7 +132,7 @@ void ScViewFunc::DetectiveDelAll()
 void ScViewFunc::DetectiveMarkInvalid()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    sal_Bool bDone = pDocSh->GetDocFunc().
+    BOOL bDone = pDocSh->GetDocFunc().
                     DetectiveMarkInvalid( GetViewData()->GetTabNo() );
     if (!bDone)
         Sound::Beep();
@@ -144,7 +143,7 @@ void ScViewFunc::DetectiveMarkInvalid()
 void ScViewFunc::DetectiveRefresh()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    sal_Bool bDone = pDocSh->GetDocFunc().DetectiveRefresh();
+    BOOL bDone = pDocSh->GetDocFunc().DetectiveRefresh();
     if (!bDone)
         Sound::Beep();
 
@@ -156,7 +155,7 @@ static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, ScDocument
     String aAddrText;
     rRange.Format(aAddrText, SCR_ABS_3D, pDoc);
     SfxStringItem aPosItem(SID_CURRENTCELL, aAddrText);
-    SfxBoolItem aUnmarkItem(FN_PARAM_1, true);        // remove existing selection
+    SfxBoolItem aUnmarkItem(FN_PARAM_1, TRUE);        // remove existing selection
     pView->GetDispatcher().Execute(
         SID_CURRENTCELL, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
         &aPosItem, &aUnmarkItem, 0L);
@@ -168,32 +167,27 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
     ScDocShell* pDocSh = pView->GetDocShell();
 
     ScRangeList aRanges(rRanges);
-    ScRange* p = aRanges.front();
+    ScRange* p = aRanges.First();
     ScRangeList aRangesToMark;
     ScAddress aCurPos = pView->GetCurPos();
-    size_t ListSize = aRanges.size();
-    for ( size_t i = 0; i < ListSize; ++i )
+    for (; p; p = aRanges.Next())
     {
-        p = aRanges[i];
         // Collect only those ranges that are on the same sheet as the current
         // cursor.
+
         if (p->aStart.Tab() == aCurPos.Tab())
             aRangesToMark.Append(*p);
     }
 
-    if (aRangesToMark.empty())
+    if (!aRangesToMark.Count())
         return;
 
     // Jump to the first range of all precedent ranges.
-    p = aRangesToMark.front();
+    p = aRangesToMark.First();
     lcl_jumpToRange(*p, pView, pDocSh->GetDocument());
 
-    ListSize = aRangesToMark.size();
-    for ( size_t i = 0; i < ListSize; ++i )
-    {
-        p = aRangesToMark[i];
+    for (; p; p = aRangesToMark.Next())
         MarkRange(*p, false, true);
-    }
 }
 
 void ScViewFunc::DetectiveMarkPred()
@@ -209,14 +203,14 @@ void ScViewFunc::DetectiveMarkPred()
     else
         aRanges.Append(aCurPos);
 
-    vector<ScTokenRef> aRefTokens;
+    vector<ScSharedTokenRef> aRefTokens;
     pDocSh->GetDocFunc().DetectiveCollectAllPreds(aRanges, aRefTokens);
 
     if (aRefTokens.empty())
         // No precedents found.  Nothing to do.
         return;
 
-    ScTokenRef p = aRefTokens.front();
+    ScSharedTokenRef p = aRefTokens.front();
     if (ScRefTokenHelper::isExternalRef(p))
     {
         // This is external.  Open the external document if available, and
@@ -274,7 +268,7 @@ void ScViewFunc::DetectiveMarkSucc()
     else
         aRanges.Append(aCurPos);
 
-    vector<ScTokenRef> aRefTokens;
+    vector<ScSharedTokenRef> aRefTokens;
     pDocSh->GetDocFunc().DetectiveCollectAllSuccs(aRanges, aRefTokens);
 
     if (aRefTokens.empty())
@@ -292,7 +286,7 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     ScAddress aCurPos = pViewData->GetCurPos();
     ScDocShell* pDocSh = pViewData->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+    SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
     Date aActDate;
     double fDate = aActDate - *pFormatter->GetNullDate();
@@ -303,13 +297,7 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     fTime /= D_TIMEFACTOR;
     pUndoMgr->EnterListAction(rUndoStr, rUndoStr);
     pDocSh->GetDocFunc().PutCell(aCurPos, new ScValueCell(fDate+fTime), false);
-
-    // Set the new cell format only when it differs from the current cell
-    // format type.
-    sal_uInt32 nCurNumFormat = pDoc->GetNumberFormat(aCurPos);
-    const SvNumberformat* pEntry = pFormatter->GetEntry(nCurNumFormat);
-    if (!pEntry || !(pEntry->GetType() & nCellFmt))
-        SetNumberFormat(nCellFmt);
+    SetNumberFormat(nCellFmt);
     pUndoMgr->LeaveListAction();
 }
 
@@ -327,7 +315,7 @@ void ScViewFunc::ShowNote( bool bShow )
 
 void ScViewFunc::EditNote()
 {
-    //  zum Editieren einblenden und aktivieren
+    //	zum Editieren einblenden und aktivieren
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -363,7 +351,7 @@ void ScViewFunc::EditNote()
             GetViewData()->GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
             // jetzt den erzeugten FuText holen und in den EditModus setzen
             FuPoor* pPoor = GetDrawFuncPtr();
-            if ( pPoor && (pPoor->GetSlotID() == SID_DRAW_NOTEEDIT) )    // hat keine RTTI
+            if ( pPoor && (pPoor->GetSlotID() == SID_DRAW_NOTEEDIT) )	 //	hat keine RTTI
             {
                 ScrollToObject( pCaption );         // Objekt komplett sichtbar machen
                 static_cast< FuText* >( pPoor )->SetInEditMode( pCaption );

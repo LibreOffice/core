@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,39 +31,39 @@
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <svl/svarray.hxx>
-#include "xmloff/i18nmap.hxx"
+#include "i18nmap.hxx"
 
-using ::rtl::OUString;
+using namespace rtl;
 
 class SvI18NMapEntry_Impl
 {
-    sal_uInt16          nKind;
-    OUString        aName;
-    OUString        aNewName;
+    USHORT			nKind;
+    OUString		aName;
+    OUString		aNewName;
 
 public:
 
     const OUString& GetNewName() const { return aNewName; }
 
-    SvI18NMapEntry_Impl( sal_uInt16 nKnd, const OUString& rName,
+    SvI18NMapEntry_Impl( USHORT nKnd, const OUString& rName,
                          const OUString& rNewName ) :
         nKind( nKnd ),
         aName( rName ),
         aNewName( rNewName )
     {}
 
-    SvI18NMapEntry_Impl( sal_uInt16 nKnd, const OUString& rName ) :
+    SvI18NMapEntry_Impl( USHORT nKnd, const OUString& rName ) :
         nKind( nKnd ),
         aName( rName )
     {}
 
-    sal_Bool operator==( const SvI18NMapEntry_Impl& r ) const
+    BOOL operator==( const SvI18NMapEntry_Impl& r ) const
     {
         return nKind == r.nKind &&
                aName == r.aName;
     }
 
-    sal_Bool operator<( const SvI18NMapEntry_Impl& r ) const
+    BOOL operator<( const SvI18NMapEntry_Impl& r ) const
     {
         return nKind < r.nKind ||
                ( nKind == r.nKind &&
@@ -77,13 +77,13 @@ SV_IMPL_OP_PTRARR_SORT( SvI18NMap_Impl, SvI18NMapEntry_ImplPtr )
 
 // ---------------------------------------------------------------------
 
-SvI18NMapEntry_Impl *SvI18NMap::_Find( sal_uInt16 nKind,
+SvI18NMapEntry_Impl *SvI18NMap::_Find( USHORT nKind,
                                      const OUString& rName ) const
 {
     SvI18NMapEntry_Impl *pRet = 0;
     SvI18NMapEntry_Impl aTst( nKind, rName );
 
-    sal_uInt16 nPos;
+    USHORT nPos;
     if( pImpl->Seek_Entry( &aTst, &nPos ) )
     {
         pRet = (*pImpl)[nPos];
@@ -103,7 +103,7 @@ SvI18NMap::~SvI18NMap()
     delete pImpl;
 }
 
-void SvI18NMap::Add( sal_uInt16 nKind, const OUString& rName,
+void SvI18NMap::Add( USHORT nKind, const OUString& rName, 
                      const OUString& rNewName )
 {
     SvI18NMapEntry_Impl *pEntry = _Find( nKind, rName );
@@ -115,7 +115,7 @@ void SvI18NMap::Add( sal_uInt16 nKind, const OUString& rName,
     }
 }
 
-const OUString& SvI18NMap::Get( sal_uInt16 nKind, const OUString& rName ) const
+const OUString& SvI18NMap::Get( USHORT nKind, const OUString& rName ) const
 {
     SvI18NMapEntry_Impl *pEntry = _Find( nKind, rName );
     if( pEntry )

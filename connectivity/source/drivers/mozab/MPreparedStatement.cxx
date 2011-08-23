@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -387,7 +387,7 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
 // -----------------------------------------------------------------------------
 void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
 {
-    if( !_parameterIndex || _parameterIndex > m_nNumParams)
+    if(	!_parameterIndex || _parameterIndex > m_nNumParams)
         ::dbtools::throwInvalidIndexException(*this);
 }
 // -----------------------------------------------------------------------------
@@ -418,7 +418,7 @@ ORowSetValue& x)
 sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
     OSL_UNUSED( pParameter );
-    // Nr. of the new added Parameters
+    // Nr. des neu hinzuzufuegenden Parameters:
     sal_uInt32 nParameter = m_xParamColumns->get().size()+1;
 
     OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument ist kein Parameter");
@@ -430,7 +430,7 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
 
     ::rtl::OUString sParameterName;
 
-    // set up Parameter-Column:
+    // Parameter-Column aufsetzen:
     sal_Int32 eType = DataType::VARCHAR;
     sal_uInt32 nPrecision = 255;
     sal_Int32 nScale = 0;
@@ -438,9 +438,9 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
 
     if (_xCol.is())
     {
-        // Type, Precision, Scale ... utilize the selected Columns,
-        // then this Column will get the value assigned or with this
-        // Column will the value be compared.
+        // Typ, Precision, Scale ... der angegebenen Column verwenden,
+        // denn dieser Column wird der Wert zugewiesen bzw. mit dieser
+        // Column wird der Wert verglichen.
         eType = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
         nPrecision = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
         nScale = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
@@ -510,18 +510,18 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
 {
     OSL_ENSURE(pParseNode != NULL,"OResultSet: interner Fehler: ungueltiger ParseNode");
 
-    // Parameter Name-Row found?
+    // Parameter Name-Regel gefunden?
     if (SQL_ISRULE(pParseNode,parameter))
     {
         OSL_ENSURE(pParseNode->count() >= 1,"OResultSet: Parse Tree fehlerhaft");
         OSL_ENSURE(pParseNode->getChild(0)->getNodeType() == SQL_NODE_PUNCTUATION,"OResultSet: Parse Tree fehlerhaft");
 
         _rParaNodes.push_back(pParseNode);
-        // further search isn't necessary
+        // Weiterer Abstieg nicht erforderlich
         return;
     }
 
-    // Search on in Parse Tree
+    // Weiter absteigen im Parse Tree
     for (sal_uInt32 i = 0; i < pParseNode->count(); i++)
         scanParameter(pParseNode->getChild(i),_rParaNodes);
 }

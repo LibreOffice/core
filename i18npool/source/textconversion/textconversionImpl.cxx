@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,7 @@
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -78,8 +77,8 @@ TextConversionImpl::getConversionWithOffset( const OUString& aText, sal_Int32 nS
     return xTC->getConversionWithOffset(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions, offset);
 }
 
-sal_Bool SAL_CALL
-TextConversionImpl::interactiveConversion( const Locale& rLocale, sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions )
+sal_Bool SAL_CALL 
+TextConversionImpl::interactiveConversion( const Locale& rLocale, sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions ) 
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
     getLocaleSpecificTextConversion(rLocale);
@@ -98,20 +97,20 @@ TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale) throw
         aLocale = rLocale;
 
         Reference < XInterface > xI;
-
+        
         xI = xMSF->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.TextConversion_")) + aLocale.Language);
+            OUString::createFromAscii("com.sun.star.i18n.TextConversion_") + aLocale.Language);
 
         if ( ! xI.is() )
             xI = xMSF->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.TextConversion_")) + aLocale.Language +
-                OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + aLocale.Country);
+                OUString::createFromAscii("com.sun.star.i18n.TextConversion_") + aLocale.Language +
+                OUString::createFromAscii("_") + aLocale.Country);
         if ( ! xI.is() )
             xI = xMSF->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.TextConversion_")) + aLocale.Language +
-                OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + aLocale.Country +
-                OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + aLocale.Variant);
-
+                OUString::createFromAscii("com.sun.star.i18n.TextConversion_") + aLocale.Language +
+                OUString::createFromAscii("_") + aLocale.Country +
+                OUString::createFromAscii("_") + aLocale.Variant);
+        
         if (xI.is())
             xI->queryInterface( getCppuType((const Reference< XTextConversion>*)0) ) >>= xTC;
         else if (xTC.is())

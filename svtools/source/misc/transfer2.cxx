@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,9 @@
 #include <vcl/window.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
+
 #include "svl/urlbmk.hxx"
-#include <svtools/inetimg.hxx>
+#include "inetimg.hxx"
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>
 
@@ -338,8 +339,8 @@ sal_Int8 DropTargetHelper::ExecuteDrop( const ExecuteDropEvent& )
 
 sal_Bool DropTargetHelper::IsDropFormatSupported( SotFormatStringId nFormat )
 {
-    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool                        bRet = sal_False;
+    DataFlavorExVector::iterator	aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool						bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -357,8 +358,8 @@ sal_Bool DropTargetHelper::IsDropFormatSupported( SotFormatStringId nFormat )
 
 sal_Bool DropTargetHelper::IsDropFormatSupported( const DataFlavor& rFlavor )
 {
-    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool                        bRet = sal_False;
+    DataFlavorExVector::iterator	aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool						bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -432,10 +433,10 @@ void TransferDataContainer::AddSupportedFormats()
 sal_Bool TransferDataContainer::GetData( const
             ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    TDataCntnrEntryList::iterator   aIter( pImpl->aFmtList.begin() ),
+    TDataCntnrEntryList::iterator	aIter( pImpl->aFmtList.begin() ),
                                     aEnd( pImpl->aFmtList.end() );
     sal_Bool bFnd = sal_False;
-    sal_uLong nFmtId = SotExchange::GetFormat( rFlavor );
+    ULONG nFmtId = SotExchange::GetFormat( rFlavor );
 
     // test first the list
     for( ; aIter != aEnd; ++aIter )
@@ -501,8 +502,8 @@ void TransferDataContainer::CopyINetBookmark( const INetBookmark& rBkmk )
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyAnyData( sal_uLong nFormatId,
-                                        const sal_Char* pData, sal_uLong nLen )
+void TransferDataContainer::CopyAnyData( ULONG nFormatId,
+                                        const sal_Char* pData, ULONG nLen )
 {
     if( nLen )
     {
@@ -519,7 +520,7 @@ void TransferDataContainer::CopyAnyData( sal_uLong nFormatId,
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyByteString( sal_uLong nFormatId,
+void TransferDataContainer::CopyByteString( ULONG nFormatId,
                                             const ByteString& rStr )
 {
     CopyAnyData( nFormatId, rStr.GetBuffer(), rStr.Len() );
@@ -569,7 +570,7 @@ void TransferDataContainer::CopyGraphic( const Graphic& rGrf )
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyString( sal_uInt16 nFmt, const String& rStr )
+void TransferDataContainer::CopyString( USHORT nFmt, const String& rStr )
 {
     if( rStr.Len() )
     {
@@ -591,7 +592,7 @@ void TransferDataContainer::CopyString( const String& rStr )
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyAny( sal_uInt16 nFmt,
+void TransferDataContainer::CopyAny( USHORT nFmt,
                                     const ::com::sun::star::uno::Any& rAny )
 {
     TDataCntnrEntry_Impl aEntry;

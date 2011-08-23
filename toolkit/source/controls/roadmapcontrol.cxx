@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,17 +47,17 @@ namespace toolkit
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-//  ----------------------------------------------------
+//	----------------------------------------------------
 //  helper
-//  ----------------------------------------------------
+//	----------------------------------------------------
 
 static void lcl_throwIllegalArgumentException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
+{	// throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
     throw IllegalArgumentException();
 }
 
 static void lcl_throwIndexOutOfBoundsException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
+{	// throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
     throw IndexOutOfBoundsException();
 }
 
@@ -65,9 +65,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     // = UnoControlRoadmapModel
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoControlRoadmapModel::UnoControlRoadmapModel( const Reference< XMultiServiceFactory >& i_factory )
-        :UnoControlRoadmapModel_Base( i_factory )
-        ,maContainerListeners( *this )
+    UnoControlRoadmapModel::UnoControlRoadmapModel() : maContainerListeners( *this )
     {
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
         ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -144,7 +142,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
 
     // -------------------------------------------------------------------
-    ::com::sun::star::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+    ::com::sun::star::uno::Any	SAL_CALL UnoControlRoadmapModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
     {
         Any aRet = UnoControlRoadmapModel_Base::queryAggregation( rType );
         if ( !aRet.hasValue() )
@@ -159,7 +157,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         static UnoPropertyArrayHelper* pHelper = NULL;
         if ( !pHelper )
         {
-            Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
+            Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
             pHelper = new UnoPropertyArrayHelper( aIDs );
         }
         return *pHelper;
@@ -198,7 +196,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         if ( !xRoadmapItem.is() )
             lcl_throwIllegalArgumentException();
         Reference< XServiceInfo > xServiceInfo( xRoadmapItem, UNO_QUERY );
-        sal_Bool bIsRoadmapItem = xServiceInfo->supportsService( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.RoadmapItem")) );
+        sal_Bool bIsRoadmapItem = xServiceInfo->supportsService( ::rtl::OUString::createFromAscii( "com.sun.star.awt.RoadmapItem" ) );
         if ( !bIsRoadmapItem )
             lcl_throwIllegalArgumentException();
     }
@@ -206,18 +204,18 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     void UnoControlRoadmapModel::SetRMItemDefaultProperties( const sal_Int32 , Reference< XInterface > xRoadmapItem)
     {
-        Any aAny;
+        Any	aAny;
         Reference< XPropertySet > xPropertySet( xRoadmapItem, UNO_QUERY );
         Reference< XPropertySet > xProps( xRoadmapItem, UNO_QUERY );
         if ( xProps.is() )
         {
             sal_Int32 LocID = 0;
-            Any aValue = xPropertySet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ID")) );
+            Any aValue = xPropertySet->getPropertyValue( ::rtl::OUString::createFromAscii( "ID" ) );
             aValue >>= LocID;
             if (LocID < 0)              // index may not be smaller than zero
             {
                 aAny <<= GetUniqueID();
-                xPropertySet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ID")), aAny );
+                xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( "ID" ), aAny );
             }
         }
     }
@@ -235,12 +233,12 @@ static void lcl_throwIndexOutOfBoundsException( )
           Reference< XInterface > CurRoadmapItem;
           while ( bIncrement )
           {
-              bIncrement = sal_False;
-              for ( RoadmapItemHolderList::iterator i = maRoadmapItems.begin(); i < maRoadmapItems.end(); ++i )
+           bIncrement = sal_False;
+              for ( RoadmapItemHolderList::iterator i = maRoadmapItems.begin(); i < maRoadmapItems.end(); i++ )
               {
                 CurRoadmapItem = *i;
                 Reference< XPropertySet > xPropertySet( CurRoadmapItem, UNO_QUERY );
-                aAny = xPropertySet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ID")) );
+                aAny = xPropertySet->getPropertyValue( ::rtl::OUString::createFromAscii( "ID" ) );
                 aAny >>= n_CurItemID;
                 if (n_CurItemID == CurID)
                 {
@@ -298,7 +296,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
 
     void SAL_CALL UnoControlRoadmapModel::removeByIndex( sal_Int32 Index)
-                                                throw    (IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+                                                throw	 (IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     {
         if (( Index > (sal_Int32)maRoadmapItems.size()) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );
@@ -369,9 +367,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     // = UnoRoadmapControl
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoRoadmapControl::UnoRoadmapControl( const Reference< XMultiServiceFactory >& i_factory )
-        :UnoControlRoadmap_Base( i_factory )
-        ,maItemListeners( *this )
+    UnoRoadmapControl::UnoRoadmapControl(): maItemListeners( *this )
     {
     }
 
@@ -400,7 +396,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
     // -------------------------------------------------------------------
     ::rtl::OUString UnoRoadmapControl::GetComponentServiceName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Roadmap"));
+        return ::rtl::OUString::createFromAscii( "Roadmap" );
     }
 
 

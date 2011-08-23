@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,65 +28,54 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
 #include <string.h>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <svsys.h>
+#include <vcl/salinst.hxx>
+#include <vcl/salframe.hxx>
 
-#include <osl/file.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/process.h>
 
-#include "tools/debug.hxx"
-#include "tools/resary.hxx"
+#include <osl/process.h>
+#include <osl/file.hxx>
+#include <uno/current_context.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <tools/debug.hxx>
+#include <unotools/fontcfg.hxx>
+#include <vcl/configsettings.hxx>
+#include <vcl/svdata.hxx>
+#include <vcl/window.h>
+#include <vcl/svapp.hxx>
+#include <vcl/wrkwin.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/unohelp.hxx>
+#include <vcl/button.hxx> // for Button::GetStandardText
+#include <vcl/dockwin.hxx>  // for DockingManager
+#include <vcl/salimestatus.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/awt/XExtendedToolkit.hpp>
+#include <com/sun/star/java/JavaNotConfiguredException.hpp>
+#include <com/sun/star/java/JavaVMCreationFailureException.hpp>
+#include <com/sun/star/java/MissingJavaRuntimeException.hpp>
+#include <com/sun/star/java/JavaDisabledException.hpp>
 
-#include "vcl/salinst.hxx"
-#include "vcl/salframe.hxx"
-#include "vcl/configsettings.hxx"
-#include "vcl/svdata.hxx"
-#include "vcl/window.h"
-#include "vcl/svapp.hxx"
-#include "vcl/wrkwin.hxx"
-#include "vcl/msgbox.hxx"
-#include "vcl/unohelp.hxx"
-#include "vcl/button.hxx" // for Button::GetStandardText
-#include "vcl/dockwin.hxx"  // for DockingManager
-#include "vcl/salimestatus.hxx"
-#include "vcl/salsys.hxx"
-#include "vcl/svids.hrc"
-#include "vcl/xconnection.hxx"
-
-#include "unotools/fontcfg.hxx"
-
-#include "cppuhelper/implbase1.hxx"
-#include "uno/current_context.hxx"
-
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/awt/XExtendedToolkit.hpp"
-#include "com/sun/star/java/JavaNotConfiguredException.hpp"
-#include "com/sun/star/java/JavaVMCreationFailureException.hpp"
-#include "com/sun/star/java/MissingJavaRuntimeException.hpp"
-#include "com/sun/star/java/JavaDisabledException.hpp"
+#include <com/sun/star/lang/XComponent.hpp>
 
 #include <stdio.h>
-
-namespace {
-
-namespace css = com::sun::star;
-
-}
+#include <vcl/salsys.hxx>
+#include <vcl/svids.hrc>
+#include <rtl/instance.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
-using ::rtl::OUString;
+using namespace rtl;
 
 // =======================================================================
 
 namespace
 {
-    struct private_aImplSVData :
+    struct private_aImplSVData : 
         public rtl::Static<ImplSVData, private_aImplSVData> {};
 }
 
@@ -129,15 +118,12 @@ void ImplInitSVData()
     {
         rtl::OUString aArg;
         osl_getCommandArg( i, &aArg.pData );
-        if( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-enableautomation" ) ) )
+        if( aArg.equalsAscii( "-enableautomation" ) )
         {
             pImplSVData->mbIsTestTool = true;
             break;
         }
     }
-
-    // mark default layout border as unitialized
-    pImplSVData->maAppData.mnDefaultLayoutBorder = -1;
 }
 
 // -----------------------------------------------------------------------
@@ -173,13 +159,6 @@ void ImplDeInitSVData()
         delete pSVData->maAppData.mpMSFTempFileName;
         pSVData->maAppData.mpMSFTempFileName = NULL;
     }
-
-    if( pSVData->maCtrlData.mpFieldUnitStrings )
-        delete pSVData->maCtrlData.mpFieldUnitStrings, pSVData->maCtrlData.mpFieldUnitStrings = NULL;
-    if( pSVData->maCtrlData.mpCleanUnitStrings )
-        delete pSVData->maCtrlData.mpCleanUnitStrings, pSVData->maCtrlData.mpCleanUnitStrings = NULL;
-    if( pSVData->mpPaperNames )
-        delete pSVData->mpPaperNames, pSVData->mpPaperNames = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -199,7 +178,7 @@ Window* ImplGetDefaultWindow()
 
     // First test if we already have a default window.
     // Don't only place a single if..else inside solar mutex lockframe
-    // because then we might have to wait for the solar mutex what is not neccessary
+    // because then we might have to wait for the solar mutex what is not neccessary 
     // if we already have a default window.
 
     if ( !pSVData->mpDefaultWin )
@@ -232,7 +211,7 @@ ResMgr* ImplGetResMgr()
     {
         ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
         pSVData->mpResMgr = ResMgr::SearchCreateResMgr( VCL_CREATERESMGR_NAME( vcl ), aLocale );
-
+        
         static bool bMessageOnce = false;
         if( !pSVData->mpResMgr && ! bMessageOnce )
         {
@@ -253,54 +232,8 @@ ResId VclResId( sal_Int32 nId )
     ResMgr* pMgr = ImplGetResMgr();
     if( ! pMgr )
         throw std::bad_alloc();
-
+    
     return ResId( nId, *pMgr );
-}
-
-FieldUnitStringList* ImplGetFieldUnits()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData->maCtrlData.mpFieldUnitStrings )
-    {
-        ResMgr* pResMgr = ImplGetResMgr();
-        if( pResMgr )
-        {
-            ResStringArray aUnits( ResId (SV_FUNIT_STRINGS, *pResMgr) );
-            sal_uInt32 nUnits = aUnits.Count();
-            pSVData->maCtrlData.mpFieldUnitStrings = new FieldUnitStringList();
-            pSVData->maCtrlData.mpFieldUnitStrings->reserve( nUnits );
-            for( sal_uInt32 i = 0; i < nUnits; i++ )
-            {
-                std::pair< String, FieldUnit > aElement( aUnits.GetString(i), static_cast<FieldUnit>(aUnits.GetValue(i)) );
-                pSVData->maCtrlData.mpFieldUnitStrings->push_back( aElement );
-            }
-        }
-    }
-    return pSVData->maCtrlData.mpFieldUnitStrings;
-}
-
-FieldUnitStringList* ImplGetCleanedFieldUnits()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData->maCtrlData.mpCleanUnitStrings )
-    {
-        FieldUnitStringList* pUnits = ImplGetFieldUnits();
-        if( pUnits )
-        {
-            size_t nUnits = pUnits->size();
-            pSVData->maCtrlData.mpCleanUnitStrings = new FieldUnitStringList();
-            pSVData->maCtrlData.mpCleanUnitStrings->reserve( nUnits );
-            for( size_t i = 0; i < nUnits; i++ )
-            {
-                String aUnit( (*pUnits)[i].first );
-                aUnit.EraseAllChars( sal_Unicode( ' ' ) );
-                aUnit.ToLowerAscii();
-                std::pair< String, FieldUnit > aElement( aUnit, (*pUnits)[i].second );
-                pSVData->maCtrlData.mpCleanUnitStrings->push_back( aElement );
-            }
-        }
-    }
-    return pSVData->maCtrlData.mpCleanUnitStrings;
 }
 
 DockingManager* ImplGetDockingManager()
@@ -318,7 +251,7 @@ public:
     AccessBridgeCurrentContext(
         const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > &context ) :
         m_prevContext( context ) {}
-
+    
     // XCurrentContext
     virtual com::sun::star::uno::Any SAL_CALL getValueByName( const rtl::OUString& Name )
         throw (com::sun::star::uno::RuntimeException);
@@ -330,7 +263,7 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
     throw (com::sun::star::uno::RuntimeException)
 {
     com::sun::star::uno::Any ret;
-    if( Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "java-vm.interaction-handler" ) ) )
+    if( Name.equalsAscii( "java-vm.interaction-handler" ) )
     {
         // Currently, for accessbility no interaction handler shall be offered.
         // There may be introduced later on a handler using native toolkits
@@ -344,16 +277,16 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
 }
 
 
-bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
+bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 {
-    rCancelled = sal_False;
+    rCancelled = FALSE;
 
     bool bErrorMessage = true;
 
     // Note:
-    // if bAllowCancel is sal_True we were called from application startup
+    // if bAllowCancel is TRUE we were called from application startup
     //  where we will disable any Java errorboxes and show our own accessibility dialog if Java throws an exception
-    // if bAllowCancel is sal_False we were called from Tools->Options
+    // if bAllowCancel is FALSE we were called from Tools->Options
     //  where we will see Java errorboxes, se we do not show our dialogs in addition to Java's
 
     try
@@ -370,12 +303,12 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
         ImplSVData* pSVData = ImplGetSVData();
         if( ! pSVData->mxAccessBridge.is() )
         {
-            css::uno::Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
+            Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
 
             if( xFactory.is() )
             {
-                css::uno::Reference< XExtendedToolkit > xToolkit =
-                    css::uno::Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
+                Reference< XExtendedToolkit > xToolkit = 
+                    Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
 
                 Sequence< Any > arguments(1);
                 arguments[0] = makeAny(xToolkit);
@@ -384,30 +317,30 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 // for a disabled user. Use native message boxes which are accessible without java support.
                 // No need to do this when activated by Tools-Options dialog ..
                 if( bAllowCancel )
-                {
+                { 
                     // customize the java-not-available-interaction-handler entry within the
                     // current context when called at startup.
                     com::sun::star::uno::ContextLayer layer(
                         new AccessBridgeCurrentContext( com::sun::star::uno::getCurrentContext() ) );
 
                     pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessBridge")),
-                            arguments
+                            OUString::createFromAscii( "com.sun.star.accessibility.AccessBridge" ),
+                            arguments 
                         );
                 }
                 else
                 {
                     pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessBridge")),
-                            arguments
+                            OUString::createFromAscii( "com.sun.star.accessibility.AccessBridge" ),
+                            arguments 
                         );
                 }
-
+                    
                 if( !pSVData->mxAccessBridge.is() )
                     bSuccess = false;
             }
         }
-
+        
         return bSuccess;
     }
 
@@ -430,9 +363,9 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = sal_True;
+                rCancelled = TRUE;
         }
-
+        
         return false;
     }
 
@@ -455,9 +388,9 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = sal_True;
+                rCancelled = TRUE;
         }
-
+        
         return false;
     }
 
@@ -480,9 +413,9 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = sal_True;
+                rCancelled = TRUE;
         }
-
+        
         return false;
     }
 
@@ -505,9 +438,9 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = sal_True;
+                rCancelled = TRUE;
         }
-
+        
         return false;
     }
 
@@ -520,11 +453,11 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
             String aTitle;
             String aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, *pResMgr));
 
-            if( 0 == e.Message.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ClassNotFound")), 13) )
+            if( 0 == e.Message.compareTo(::rtl::OUString::createFromAscii("ClassNotFound"), 13) )
             {
                 aTitle = String(ResId(SV_ACCESSERROR_MISSING_BRIDGE, *pResMgr));
             }
-            else if( 0 == e.Message.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NoSuchMethod")), 12) )
+            else if( 0 == e.Message.compareTo(::rtl::OUString::createFromAscii("NoSuchMethod"), 12) )
             {
                 aTitle = String(ResId(SV_ACCESSERROR_WRONG_VERSION, *pResMgr));
             }
@@ -540,28 +473,28 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                     aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr));
 
                     int ret = ImplGetSalSystem()->ShowNativeMessageBox(
-                        aTitle,
-                        ReplaceJavaErrorMessages(aMessage),
+                        aTitle, 
+                        ReplaceJavaErrorMessages(aMessage), 
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
 
                     // Do not change the setting in case the user chooses to cancel
                     if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                        rCancelled = sal_True;
+                        rCancelled = TRUE;
                 }
                 else
                 {
                     // The user tried to activate accessibility support using Tools-Options dialog,
                     // so we don't offer to terminate here !
                     ImplGetSalSystem()->ShowNativeMessageBox(
-                        aTitle,
-                        ReplaceJavaErrorMessages(aMessage),
+                        aTitle, 
+                        ReplaceJavaErrorMessages(aMessage), 
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK,
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK);
                 }
             }
         }
-
+        
         return false;
     }
 

@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,8 @@
 #include <time.h>
 #endif
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
+using namespace rtl;
+
 /** print a UNI_CODE String. And also print some comments of the string.
 */
 inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = "" )
@@ -204,7 +203,7 @@ public:
 
         //test compareUuid
         if ( rtl_compareUuid( pNamedUUID , pNamedUUID2 ) > 0 )
-        {   CPPUNIT_ASSERT_MESSAGE( " compare uuids", rtl_compareUuid( pNamedUUID2 , pNamedUUID ) < 0);
+        {	CPPUNIT_ASSERT_MESSAGE( " compare uuids", rtl_compareUuid( pNamedUUID2 , pNamedUUID ) < 0);
         }
         else
             CPPUNIT_ASSERT_MESSAGE( " compare uuids", rtl_compareUuid( pNamedUUID2 , pNamedUUID ) > 0);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -250,7 +250,7 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartD
             Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
             for( sal_Int32 i=0; i<aAxes.getLength(); ++i )
                 lcl_addAxisTitle( aAxes[i], aTopLevelContainer, xModel );
-
+        
             // Diagram
             aTopLevelContainer.push_back( aDiaOID );
         }
@@ -340,7 +340,7 @@ void ImplObjectHierarchy::createAxesTree(
             AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex );
             if( nAxisIndex>0 && !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount, nDimensionIndex ) )
                 continue;
-
+            
             if( m_bOrderingForElementSelector )
             {
                 // axis
@@ -631,11 +631,13 @@ ObjectHierarchy::ObjectHierarchy(
 ObjectHierarchy::~ObjectHierarchy()
 {}
 
+// static
 ObjectHierarchy::tOID ObjectHierarchy::getRootNodeOID()
 {
     return ObjectIdentifier( C2U( "ROOT" ) );
 }
 
+// static
 bool ObjectHierarchy::isRootNode( const ObjectHierarchy::tOID& rOID )
 {
     return ( rOID == ObjectHierarchy::getRootNodeOID() );

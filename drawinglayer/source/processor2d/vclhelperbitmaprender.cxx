@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@
 namespace drawinglayer
 {
     void RenderBitmapPrimitive2D_GraphicManager(
-        OutputDevice& rOutDev,
-        const BitmapEx& rBitmapEx,
+        OutputDevice& rOutDev, 
+        const BitmapEx& rBitmapEx, 
         const basegfx::B2DHomMatrix& rTransform)
     {
         // prepare attributes
@@ -85,23 +85,20 @@ namespace drawinglayer
             aOutlineRange.transform(aSimpleObjectMatrix);
         }
 
-        // prepare dest coordinates
-        const Point aPoint(
-                basegfx::fround(aOutlineRange.getMinX()),
-                basegfx::fround(aOutlineRange.getMinY()));
-        const Size aSize(
-                basegfx::fround(aOutlineRange.getWidth()),
-                basegfx::fround(aOutlineRange.getHeight()));
+        // prepare dest coor
+        const Rectangle aDestRectPixel(
+            basegfx::fround(aOutlineRange.getMinX()), basegfx::fround(aOutlineRange.getMinY()),
+            basegfx::fround(aOutlineRange.getMaxX()), basegfx::fround(aOutlineRange.getMaxY()));
 
         // paint it using GraphicManager
         Graphic aGraphic(rBitmapEx);
         GraphicObject aGraphicObject(aGraphic);
-        aGraphicObject.Draw(&rOutDev, aPoint, aSize, &aAttributes);
+        aGraphicObject.Draw(&rOutDev, aDestRectPixel.TopLeft(), aDestRectPixel.GetSize(), &aAttributes);
     }
 
     void RenderBitmapPrimitive2D_BitmapEx(
-        OutputDevice& rOutDev,
-        const BitmapEx& rBitmapEx,
+        OutputDevice& rOutDev, 
+        const BitmapEx& rBitmapEx, 
         const basegfx::B2DHomMatrix& rTransform)
     {
         // only translate and scale, use vcl's DrawBitmapEx().
@@ -110,13 +107,9 @@ namespace drawinglayer
         // prepare dest coor. Necessary to expand since vcl's DrawBitmapEx draws one pix less
         basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
         aOutlineRange.transform(rTransform);
-        // prepare dest coordinates
-        const Point aPoint(
-                basegfx::fround(aOutlineRange.getMinX()),
-                basegfx::fround(aOutlineRange.getMinY()));
-        const Size aSize(
-                basegfx::fround(aOutlineRange.getWidth()),
-                basegfx::fround(aOutlineRange.getHeight()));
+        const Rectangle aDestRectPixel(
+            basegfx::fround(aOutlineRange.getMinX()), basegfx::fround(aOutlineRange.getMinY()),
+            basegfx::fround(aOutlineRange.getMaxX()), basegfx::fround(aOutlineRange.getMaxY()));
 
         // decompose matrix to check for shear, rotate and mirroring
         basegfx::B2DVector aScale, aTranslate;
@@ -142,22 +135,20 @@ namespace drawinglayer
         }
 
         // draw bitmap
-        rOutDev.DrawBitmapEx(aPoint, aSize, aContent);
+        rOutDev.DrawBitmapEx(aDestRectPixel.TopLeft(), aDestRectPixel.GetSize(), aContent);
     }
 
     void RenderBitmapPrimitive2D_self(
-        OutputDevice& rOutDev,
-        const BitmapEx& rBitmapEx,
+        OutputDevice& rOutDev, 
+        const BitmapEx& rBitmapEx, 
         const basegfx::B2DHomMatrix& rTransform)
     {
         // process self with free transformation (containing shear and rotate). Get dest rect in pixels.
         basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
         aOutlineRange.transform(rTransform);
         const Rectangle aDestRectLogic(
-            basegfx::fround(aOutlineRange.getMinX()),
-            basegfx::fround(aOutlineRange.getMinY()),
-            basegfx::fround(aOutlineRange.getMaxX()),
-            basegfx::fround(aOutlineRange.getMaxY()));
+            basegfx::fround(aOutlineRange.getMinX()), basegfx::fround(aOutlineRange.getMinY()),
+            basegfx::fround(aOutlineRange.getMaxX()), basegfx::fround(aOutlineRange.getMaxY()));
         const Rectangle aDestRectPixel(rOutDev.LogicToPixel(aDestRectLogic));
 
         // #i96708# check if Metafile is recorded
@@ -171,19 +162,18 @@ namespace drawinglayer
 
         if(!aCroppedRectPixel.IsEmpty())
         {
-            // as maximum for destination, orientate at aOutputRectPixel, but
+            // as maximum for destination, orientate at SourceSizePixel, but
             // take a rotation of 45 degrees (sqrt(2)) as maximum expansion into account
             const Size aSourceSizePixel(rBitmapEx.GetSizePixel());
             const double fMaximumArea(
-                (double)aOutputRectPixel.getWidth() *
-                (double)aOutputRectPixel.getHeight() *
+                (double)aSourceSizePixel.getWidth() * 
+                (double)aSourceSizePixel.getHeight() *
                 1.4142136); // 1.4142136 taken as sqrt(2.0)
 
             // test if discrete view size (pixel) maybe too big and limit it
             const double fArea(aCroppedRectPixel.getWidth() * aCroppedRectPixel.getHeight());
             const bool bNeedToReduce(fArea > fMaximumArea);
             double fReduceFactor(1.0);
-            const Size aDestSizePixel(aCroppedRectPixel.GetSize());
 
             if(bNeedToReduce)
             {
@@ -191,12 +181,12 @@ namespace drawinglayer
                 aCroppedRectPixel.setWidth(basegfx::fround(aCroppedRectPixel.getWidth() * fReduceFactor));
                 aCroppedRectPixel.setHeight(basegfx::fround(aCroppedRectPixel.getHeight() * fReduceFactor));
             }
-
+            
             // build transform from pixel in aDestination to pixel in rBitmapEx
             // from relative in aCroppedRectPixel to relative in aDestRectPixel
             // No need to take bNeedToReduce into account, TopLeft is unchanged
             basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
-                aCroppedRectPixel.Left() - aDestRectPixel.Left(),
+                aCroppedRectPixel.Left() - aDestRectPixel.Left(), 
                 aCroppedRectPixel.Top() - aDestRectPixel.Top()));
 
             // from relative in aDestRectPixel to absolute Logic. Here it
@@ -230,10 +220,15 @@ namespace drawinglayer
             if(bNeedToReduce)
             {
                 // paint in target size
+                const double fFactor(1.0 / fReduceFactor);
+                const Size aDestSizePixel(
+                    basegfx::fround(aCroppedRectPixel.getWidth() * fFactor),
+                    basegfx::fround(aCroppedRectPixel.getHeight() * fFactor));
+
                 if(bRecordToMetaFile)
                 {
                     rOutDev.DrawBitmapEx(
-                        rOutDev.PixelToLogic(aCroppedRectPixel.TopLeft()),
+                        rOutDev.PixelToLogic(aCroppedRectPixel.TopLeft()), 
                         rOutDev.PixelToLogic(aDestSizePixel),
                         aDestination);
                 }
@@ -241,9 +236,9 @@ namespace drawinglayer
                 {
                     const bool bWasEnabled(rOutDev.IsMapModeEnabled());
                     rOutDev.EnableMapMode(false);
-
+                    
                     rOutDev.DrawBitmapEx(
-                        aCroppedRectPixel.TopLeft(),
+                        aCroppedRectPixel.TopLeft(), 
                         aDestSizePixel,
                         aDestination);
 
@@ -255,7 +250,7 @@ namespace drawinglayer
                 if(bRecordToMetaFile)
                 {
                     rOutDev.DrawBitmapEx(
-                        rOutDev.PixelToLogic(aCroppedRectPixel.TopLeft()),
+                        rOutDev.PixelToLogic(aCroppedRectPixel.TopLeft()), 
                         aDestination);
                 }
                 else
@@ -264,7 +259,7 @@ namespace drawinglayer
                     rOutDev.EnableMapMode(false);
 
                     rOutDev.DrawBitmapEx(
-                        aCroppedRectPixel.TopLeft(),
+                        aCroppedRectPixel.TopLeft(), 
                         aDestination);
 
                     rOutDev.EnableMapMode(bWasEnabled);

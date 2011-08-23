@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,11 +53,11 @@ SvxSimpTblContainer::SvxSimpTblContainer( Window* pParent, const ResId& rResId):
 
 long SvxSimpTblContainer::PreNotify( NotifyEvent& rNEvt )
 {
-    long nResult = sal_True;
+    long nResult = TRUE;
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
-        sal_uInt16 nKey = aKeyCode.GetCode();
+        USHORT nKey = aKeyCode.GetCode();
         if ( nKey == KEY_TAB )
             GetParent()->Notify( rNEvt );
         else if ( m_pTable->IsFocusOnCellEnabled() && ( nKey == KEY_LEFT || nKey == KEY_RIGHT ) )
@@ -79,10 +79,10 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,WinBits nBits ):
         aPrivContainer(pParent,nBits|WB_DIALOGCONTROL),
         aHeaderBar(pParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP),
         nHeaderItemId(1),
-        bResizeFlag(sal_False),
-        bPaintFlag(sal_True)
+        bResizeFlag(FALSE),
+        bPaintFlag(TRUE)
 {
-    bSortDirection=sal_True;
+    bSortDirection=TRUE;
     nSortCol=0xFFFF;
     nOldPos=0;
 
@@ -110,11 +110,11 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
         aPrivContainer(pParent,rResId),
         aHeaderBar(pParent,WB_BUTTONSTYLE | WB_BORDER  | WB_TABSTOP),
         nHeaderItemId(1),
-        bResizeFlag(sal_True),
-        bPaintFlag(sal_True)
+        bResizeFlag(TRUE),
+        bPaintFlag(TRUE)
 {
 
-    bSortDirection=sal_True;
+    bSortDirection=TRUE;
     nOldPos=0;
     nSortCol=0xFFFF;
 
@@ -137,7 +137,7 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
 
     HbSize.Width()=theWinSize.Width();
     theWinSize.Height()-=HbSize.Height();
-    Point   thePos(0,0);
+    Point	thePos(0,0);
 
     aHeaderBar.SetPosPixel(thePos);
     aHeaderBar.SetSizePixel(HbSize);
@@ -151,6 +151,7 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
     InitHeaderBar( &aHeaderBar );
 
     aHeaderBar.Show();
+    SetWindowBits(WB_CLIPCHILDREN | WB_HSCROLL);
     SvHeaderTabListBox::Show();
 }
 
@@ -169,7 +170,7 @@ void SvxSimpleTable::UpdateViewSize()
 
     HbSize.Width()=theWinSize.Width();
     theWinSize.Height()-=HbSize.Height();
-    Point   thePos(0,0);
+    Point	thePos(0,0);
 
     aHeaderBar.SetPosPixel(thePos);
     aHeaderBar.SetSizePixel(HbSize);
@@ -197,18 +198,18 @@ void SvxSimpleTable::SetTabs()
 {
     SvHeaderTabListBox::SetTabs();
 
-    sal_uInt16 nPrivTabCount = TabCount();
+    USHORT nPrivTabCount = TabCount();
     if ( nPrivTabCount )
     {
         if ( nPrivTabCount > aHeaderBar.GetItemCount() )
             nPrivTabCount = aHeaderBar.GetItemCount();
 
-        sal_uInt16 i, nNewSize = static_cast< sal_uInt16 >( GetTab(0) ), nPos = 0;
+        USHORT i, nNewSize = static_cast< USHORT >( GetTab(0) ), nPos = 0;
         for ( i = 1; i < nPrivTabCount; ++i )
         {
-            nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
+            nNewSize = static_cast< USHORT >( GetTab(i) ) - nPos;
             aHeaderBar.SetItemSize( i, nNewSize );
-            nPos = (sal_uInt16)GetTab(i);
+            nPos = (USHORT)GetTab(i);
         }
 
         aHeaderBar.SetItemSize( i, HEADERBAR_FULLSIZE ); // because no tab for last entry
@@ -224,8 +225,9 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
 {
     SvHeaderTabListBox::Paint(rRect );
 
-    sal_uInt16 nPrivTabCount = TabCount();
-    sal_uInt16 nNewSize = ( nPrivTabCount > 0 ) ? (sal_uInt16)GetTab(0) : 0;
+    USHORT nPrivTabCount = TabCount();
+    USHORT nPos = 0;
+    USHORT nNewSize = ( nPrivTabCount > 0 ) ? (USHORT)GetTab(0) : 0;
 
     long nOffset=-GetXOffset();
     nOldPos=nOffset;
@@ -238,17 +240,16 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
         if(nPrivTabCount>aHeaderBar.GetItemCount())
                 nPrivTabCount=aHeaderBar.GetItemCount();
 
-        sal_uInt16 nPos = 0;
-        for(sal_uInt16 i=1;i<nPrivTabCount;i++)
+        for(USHORT i=1;i<nPrivTabCount;i++)
         {
-            nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
+            nNewSize = static_cast< USHORT >( GetTab(i) ) - nPos;
             aHeaderBar.SetItemSize( i, nNewSize );
-            nPos= static_cast< sal_uInt16 >( GetTab(i) );
+            nPos= static_cast< USHORT >( GetTab(i) );
         }
     }
-    bPaintFlag=sal_True;
+    bPaintFlag=TRUE;
 }
-void SvxSimpleTable::InsertHeaderEntry(const XubString& rText,sal_uInt16 nCol,
+void SvxSimpleTable::InsertHeaderEntry(const XubString& rText,USHORT nCol,
                                        HeaderBarItemBits nBits)
 {
     xub_StrLen nEnd = rText.Search( sal_Unicode( '\t' ) );
@@ -262,7 +263,7 @@ void SvxSimpleTable::InsertHeaderEntry(const XubString& rText,sal_uInt16 nCol,
 
         for( xub_StrLen i=0; i<nCount; i++ )
         {
-            String  aString=rText.GetToken(i, sal_Unicode( '\t' ) );
+            String	aString=rText.GetToken(i, sal_Unicode( '\t' ) );
             aHeaderBar.InsertItem(nHeaderItemId++, aString, 0, nBits, nCol);
         }
     }
@@ -289,7 +290,7 @@ void SvxSimpleTable::HideTable()
     aPrivContainer.Hide();
 }
 
-sal_Bool SvxSimpleTable::IsVisible() const
+BOOL SvxSimpleTable::IsVisible() const
 {
     return aPrivContainer.IsVisible();
 }
@@ -304,7 +305,7 @@ void SvxSimpleTable::DisableTable()
     aPrivContainer.Disable();
 }
 
-sal_Bool SvxSimpleTable::IsEnabled() const
+BOOL SvxSimpleTable::IsEnabled() const
 {
     return aPrivContainer.IsEnabled();
 }
@@ -358,12 +359,12 @@ void SvxSimpleTable::SetOutputSizePixel(const Size& rNewSize )
     UpdateViewSize();
 }
 
-sal_uInt16 SvxSimpleTable::GetSelectedCol()
+USHORT SvxSimpleTable::GetSelectedCol()
 {
     return (aHeaderBar.GetCurItemId()-1);
 }
 
-void SvxSimpleTable::SortByCol(sal_uInt16 nCol,sal_Bool bDir)
+void SvxSimpleTable::SortByCol(USHORT nCol,BOOL bDir)
 {
     bSortDirection=bDir;
     if(nSortCol!=0xFFFF)
@@ -392,7 +393,7 @@ void SvxSimpleTable::SortByCol(sal_uInt16 nCol,sal_Bool bDir)
 
 void SvxSimpleTable::HBarClick()
 {
-    sal_uInt16 nId=aHeaderBar.GetCurItemId();
+    USHORT nId=aHeaderBar.GetCurItemId();
 
     if (aHeaderBar.GetItemBits(nId) & HIB_CLICKABLE)
     {
@@ -440,23 +441,24 @@ void SvxSimpleTable::HBarDrag()
 void SvxSimpleTable::HBarEndDrag()
 {
     HideTracking();
-    sal_uInt16 nPrivTabCount=TabCount();
+    USHORT nPrivTabCount=TabCount();
+    USHORT nPos=0;
+    USHORT nNewSize=0;
 
     if(nPrivTabCount)
     {
         if(nPrivTabCount>aHeaderBar.GetItemCount())
                 nPrivTabCount=aHeaderBar.GetItemCount();
 
-        sal_uInt16 nPos=0;
-        sal_uInt16 nNewSize=0;
-        for(sal_uInt16 i=1;i<nPrivTabCount;i++)
+        //for(USHORT i=1;i<=nPrivTabCount;i++)
+        for(USHORT i=1;i<nPrivTabCount;i++)
         {
-            nNewSize = static_cast< sal_uInt16 >( aHeaderBar.GetItemSize(i) ) + nPos;
+            nNewSize = static_cast< USHORT >( aHeaderBar.GetItemSize(i) ) + nPos;
             SetTab( i, nNewSize, MAP_PIXEL );
             nPos = nNewSize;
         }
     }
-    bPaintFlag=sal_False;
+    bPaintFlag=FALSE;
     Invalidate();
     Update();
 }
@@ -518,14 +520,14 @@ IMPL_LINK( SvxSimpleTable, HeaderBarDblClick, HeaderBar*, pCtr)
     return 0;
 }
 
-SvLBoxItem* SvxSimpleTable::GetEntryAtPos( SvLBoxEntry* pEntry, sal_uInt16 nPos ) const
+SvLBoxItem* SvxSimpleTable::GetEntryAtPos( SvLBoxEntry* pEntry, USHORT nPos ) const
 {
     DBG_ASSERT(pEntry,"GetEntryText:Invalid Entry");
     SvLBoxItem* pItem = NULL;
 
     if( pEntry )
     {
-        sal_uInt16 nCount = pEntry->ItemCount();
+        USHORT nCount = pEntry->ItemCount();
 
         nPos++;
 
@@ -549,8 +551,8 @@ StringCompare SvxSimpleTable::ColCompare(SvLBoxEntry* pLeft,SvLBoxEntry* pRight)
 
     if(pLeftItem != NULL && pRightItem != NULL)
     {
-        sal_uInt16 nLeftKind=pLeftItem->IsA();
-        sal_uInt16 nRightKind=pRightItem->IsA();
+        USHORT nLeftKind=pLeftItem->IsA();
+        USHORT nRightKind=pRightItem->IsA();
 
         if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
             nLeftKind == SV_ITEM_ID_LBOXSTRING )

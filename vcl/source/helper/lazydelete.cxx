@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ void LazyDelete::flush()
 // specialized is_less function for Window
 template<> bool LazyDeletor<Window>::is_less( Window* left, Window* right )
 {
-    return (left != right && right->IsChild( left, sal_True )) ? true : false;
+    return (left != right && right->IsChild( left, TRUE )) ? true : false;
 }
 
 // specialized is_less function for Menu
@@ -99,7 +99,7 @@ void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )
     DBG_ASSERT( ! pSVData->mbDeInit, "DeleteOnDeinit added after DeiInitVCL !" );
     if( pSVData->mbDeInit )
         return;
-
+    
     if( pSVData->mpDeinitDeleteList == NULL )
         pSVData->mpDeinitDeleteList = new std::list< DeleteOnDeinitBase* >();
     pSVData->mpDeinitDeleteList->push_back( i_pContainer );
@@ -107,7 +107,7 @@ void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )
 
 void DeleteOnDeinitBase::ImplDeleteOnDeInit()
 {
-    ImplSVData* pSVData = ImplGetSVData();
+    ImplSVData* pSVData = ImplGetSVData();    
     if( pSVData->mpDeinitDeleteList )
     {
         for( std::list< vcl::DeleteOnDeinitBase* >::iterator it = pSVData->mpDeinitDeleteList->begin();

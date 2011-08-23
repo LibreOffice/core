@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -213,7 +213,7 @@ StgAvlNode* StgAvlNode::RotRL()
 
 // Remove a tree element. Return the removed element or NULL.
 
-StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, sal_Bool bPtrs )
+StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, BOOL bPtrs )
 {
     if( *p )
     {
@@ -280,21 +280,21 @@ void StgAvlNode::StgEnum( short& n )
 }
 
 // Add node to AVL tree.
-// Return sal_False if the element already exists.
+// Return FALSE if the element already exists.
 
-sal_Bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
+BOOL StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
 {
     StgAvlNode* pPivot, *pHeavy, *pNewRoot, *pParent, *pPrev;
     // special case - empty tree
     if( *pRoot == NULL )
     {
         *pRoot = pIns;
-        return sal_True;
+        return TRUE;
     }
     // find insertion point and return if already present
     short nRes = (*pRoot)->Locate( pIns, &pPivot, &pParent, &pPrev );
     if( !nRes )
-        return sal_False;
+        return FALSE;
     // add new node
     if( nRes < 0 )
         pPrev->pLeft = pIns;
@@ -324,52 +324,52 @@ sal_Bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
         else if( pPivot == pParent->pRight )
             pParent->pRight = pNewRoot;
     }
-    return sal_True;
+    return TRUE;
 }
 
-// Remove node from tree. Returns sal_True is found and removed.
+// Remove node from tree. Returns TRUE is found and removed.
 // Actually delete if bDel
 
-sal_Bool StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, sal_Bool bDel )
+BOOL StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, BOOL bDel )
 {
     // special case - empty tree
     if( *pRoot == NULL )
-        return sal_False;
+        return FALSE;
     // delete the element
-    pDel = Rem( pRoot, pDel, sal_False );
+    pDel = Rem( pRoot, pDel, FALSE );
     if( pDel )
     {
         if( bDel )
             delete pDel;
         // Rebalance the tree the hard way
         // OS 22.09.95: Auf MD's Wunsch auskommentiert wg. Absturz
-/*      StgAvlNode* pNew = NULL;
+/*		StgAvlNode* pNew = NULL;
         while( *pRoot )
         {
-            StgAvlNode* p = Rem( pRoot, *pRoot, sal_False );
+            StgAvlNode* p = Rem( pRoot, *pRoot, FALSE );
             Insert( &pNew, p );
         }
         *pRoot = pNew;*/
-        return sal_True;
+        return TRUE;
     }
     else
-        return sal_False;
+        return FALSE;
 }
 
-// Move node to a different tree. Returns sal_True is found and moved. This routine
+// Move node to a different tree. Returns TRUE is found and moved. This routine
 // may be called when the key has changed.
 
-sal_Bool StgAvlNode::Move
+BOOL StgAvlNode::Move
     ( StgAvlNode** pRoot1, StgAvlNode** pRoot2, StgAvlNode* pMove )
 {
     // special case - empty tree
     if( *pRoot1 == NULL )
-        return sal_False;
-    pMove = Rem( pRoot1, pMove, sal_False );
+        return FALSE;
+    pMove = Rem( pRoot1, pMove, FALSE );
     if( pMove )
         return Insert( pRoot2, pMove );
     else
-        return sal_False;
+        return FALSE;
 }
 
 ////////////////////////// class AvlIterator /////////////////////////
@@ -380,7 +380,6 @@ StgAvlIterator::StgAvlIterator( StgAvlNode* p )
 {
     pRoot = p;
     nCount = 0;
-    nCur = 0;
     if( p )
         p->StgEnum( nCount );
 }

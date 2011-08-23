@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <svx/svdoattr.hxx>
 #include <svx/xpool.hxx>
-#include "svx/svditext.hxx"
+#include "svditext.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdattr.hxx>
@@ -137,10 +137,10 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // syntactical sugar for ItemSet accesses
 
-void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+void __EXPORT SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     SfxSimpleHint *pSimple = PTR_CAST(SfxSimpleHint, &rHint);
-    sal_Bool bDataChg(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId());
+    BOOL bDataChg(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId());
 
     if(bDataChg)
     {
@@ -167,12 +167,12 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
     return nRetval;
 }
 
-sal_Bool SdrAttrObj::HasFill() const
+BOOL SdrAttrObj::HasFill() const
 {
     return bClosedObj && ((XFillStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE))).GetValue()!=XFILL_NONE;
 }
 
-sal_Bool SdrAttrObj::HasLine() const
+BOOL SdrAttrObj::HasLine() const
 {
     return ((XLineStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE))).GetValue()!=XLINE_NONE;
 }

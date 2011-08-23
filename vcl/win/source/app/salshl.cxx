@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <svsys.h>
+#include <tools/svwin.h>
 #include <saldata.hxx>
 #include <tools/debug.hxx>
 
@@ -44,15 +44,15 @@ extern "C"
 {
 
 #ifdef __MINGW32__
-sal_Bool WINAPI DllMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
+BOOL WINAPI DllMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
 #else
 #ifdef ICC
 int _CRT_init(void);
 #else
-BOOL WINAPI _CRT_INIT( HINSTANCE hInst, DWORD nReason, LPVOID pReserved );
+WIN_BOOL WINAPI _CRT_INIT( HINSTANCE hInst, DWORD nReason, LPVOID pReserved );
 #endif
 
-BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
+WIN_BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
 #endif
 {
     // Unsere DLL-Initialisierung
@@ -103,7 +103,7 @@ HBITMAP ImplLoadSalBitmap( int nId )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
+BOOL ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
 {
     DBG_ASSERT( aSalShlData.mhInst, "no DLL instance handle" );
 

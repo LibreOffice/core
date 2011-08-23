@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,18 +39,18 @@ class PivotCacheField;
 
 // ============================================================================
 
-class PivotCacheFieldContext : public WorkbookContextBase
+class OoxPivotCacheFieldContext : public OoxWorkbookContextBase
 {
 public:
-    explicit            PivotCacheFieldContext(
-                            WorkbookFragmentBase& rFragment,
+    explicit            OoxPivotCacheFieldContext(
+                            OoxWorkbookFragmentBase& rFragment,
                             PivotCacheField& rCacheField );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        onStartRecord( SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        onStartRecord( RecordInputStream& rStrm );
 
 private:
     PivotCacheField&    mrCacheField;
@@ -58,17 +58,17 @@ private:
 
 // ============================================================================
 
-class PivotCacheDefinitionFragment : public WorkbookFragmentBase
+class OoxPivotCacheDefinitionFragment : public OoxWorkbookFragmentBase
 {
 public:
-    explicit            PivotCacheDefinitionFragment(
+    explicit            OoxPivotCacheDefinitionFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
                             PivotCache& rPivotCache );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        finalizeImport();
 
@@ -78,23 +78,23 @@ private:
 
 // ============================================================================
 
-class PivotCacheRecordsFragment : public WorksheetFragmentBase
+class OoxPivotCacheRecordsFragment : public OoxWorksheetFragmentBase
 {
 public:
-    explicit            PivotCacheRecordsFragment(
+    explicit            OoxPivotCacheRecordsFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
                             const PivotCache& rPivotCache );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
 private:
     void                startCacheRecord();
-    void                importPCRecord( SequenceInputStream& rStrm );
-    void                importPCRecordItem( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    void                importPCRecord( RecordInputStream& rStrm );
+    void                importPCRecordItem( sal_Int32 nRecId, RecordInputStream& rStrm );
 
 private:
     const PivotCache&   mrPivotCache;
@@ -127,12 +127,12 @@ class BiffPivotCacheRecordsContext : public BiffWorksheetContextBase
 {
 public:
     explicit            BiffPivotCacheRecordsContext(
-                            const WorkbookHelper& rHelper,
+                            const BiffWorkbookFragmentBase& rFragment,
                             const PivotCache& rPivotCache );
 
     /** Reads the current record from stream and tries to insert a cell into
         the source data sheet. */
-    virtual void        importRecord( BiffInputStream& rStrm );
+    virtual void        importRecord();
 
 private:
     void                startNextRow();

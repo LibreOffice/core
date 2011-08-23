@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <svl/svarray.hxx>
 #include <tools/debug.hxx>
 
-#include "linguistic/misc.hxx"
+#include "misc.hxx"
 #include "lngopt.hxx"
 
 
@@ -65,23 +65,23 @@ class ConvDicList :
 
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
-
+    
     ConvDicNameContainer                   *pNameContainer;
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::container::XNameContainer >   xNameContainer;
 
     MyAppExitListener                      *pExitListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::
                 XTerminateListener >        xExitListener;
-
-    sal_Bool                                    bDisposing;
+    
+    BOOL                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     ConvDicList( const ConvDicList & );
     ConvDicList & operator = (const ConvDicList &);
 
     ConvDicNameContainer &  GetNameContainer();
-
+            
 public:
     ConvDicList();
     virtual ~ConvDicList();

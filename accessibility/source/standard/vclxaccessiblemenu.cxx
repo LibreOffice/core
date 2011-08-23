@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleMenu, VCLXAccessibleMenuItem, VC
 
 ::rtl::OUString VCLXAccessibleMenu::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleMenu") );
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleMenu" );
 }
 
 // -----------------------------------------------------------------------------
@@ -112,7 +112,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleMenu, VCLXAccessibleMenuItem, VC
 Sequence< ::rtl::OUString > VCLXAccessibleMenu::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleMenu") );
+    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleMenu" );
     return aNames;
 }
 
@@ -124,7 +124,7 @@ sal_Int32 VCLXAccessibleMenu::getAccessibleChildCount(  ) throw (RuntimeExceptio
 {
     OExternalLockGuard aGuard( this );
 
-    return GetChildCount();
+    return GetChildCount(); 
 }
 
 // -----------------------------------------------------------------------------
@@ -176,13 +176,13 @@ void VCLXAccessibleMenu::selectAccessibleChild( sal_Int32 nChildIndex ) throw (I
 // -----------------------------------------------------------------------------
 
 sal_Bool VCLXAccessibleMenu::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
-{
+{	
     OExternalLockGuard aGuard( this );
 
     if ( nChildIndex < 0 || nChildIndex >= GetChildCount() )
         throw IndexOutOfBoundsException();
 
-    return IsChildSelected( nChildIndex );
+    return IsChildSelected( nChildIndex );	
 }
 
 // -----------------------------------------------------------------------------
@@ -210,7 +210,7 @@ sal_Int32 VCLXAccessibleMenu::getSelectedAccessibleChildCount(  ) throw (Runtime
     sal_Int32 nRet = 0;
 
     for ( sal_Int32 i = 0, nCount = GetChildCount(); i < nCount; i++ )
-    {
+    {		
         if ( IsChildSelected( i ) )
             ++nRet;
     }
@@ -230,7 +230,7 @@ Reference< XAccessible > VCLXAccessibleMenu::getSelectedAccessibleChild( sal_Int
     Reference< XAccessible > xChild;
 
     for ( sal_Int32 i = 0, j = 0, nCount = GetChildCount(); i < nCount; i++ )
-    {
+    {		
         if ( IsChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
         {
             xChild = GetChild( i );

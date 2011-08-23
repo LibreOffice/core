@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 
-#define SECTION_OFFSET  3
+#define SECTION_OFFSET	3
 namespace rptui
 {
 using namespace ::com::sun::star;
@@ -64,7 +64,7 @@ using namespace ::comphelper;
 //==================================================================
 DBG_NAME( rpt_OReportWindow )
 //------------------------------------------------------------------------------
-OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
+OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView) 
 : Window(_pParent,WB_DIALOGCONTROL)
 ,m_aHRuler(this)
 ,m_pView(_pView)
@@ -78,7 +78,7 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 
     m_aViewsWindow.Show();
 
-    m_aHRuler.Show();
+    m_aHRuler.Show();	
     m_aHRuler.Activate();
     m_aHRuler.SetPagePos(0);
     m_aHRuler.SetBorders();
@@ -101,9 +101,9 @@ void OReportWindow::initialize()
     m_aViewsWindow.initialize();
 }
 //----------------------------------------------------------------------------
-void OReportWindow::SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType )
+void OReportWindow::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType )
 {
-    m_aViewsWindow.SetInsertObj( eObj,_sShapeType);
+    m_aViewsWindow.SetInsertObj( eObj,_sShapeType);	
 }
 
 //----------------------------------------------------------------------------
@@ -114,23 +114,24 @@ rtl::OUString OReportWindow::GetInsertObjString() const
 //------------------------------------------------------------------------------
 void OReportWindow::SetMode( DlgEdMode eNewMode )
 {
-    m_aViewsWindow.SetMode(eNewMode);
+    m_aViewsWindow.SetMode(eNewMode);		
 }
 //----------------------------------------------------------------------------
-void OReportWindow::removeSection(sal_uInt16 _nPosition)
+void OReportWindow::removeSection(USHORT _nPosition)
 {
     m_aViewsWindow.removeSection(_nPosition);
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
     m_aViewsWindow.Invalidate(INVALIDATE_TRANSPARENT);
+    //Resize();
 }
 //----------------------------------------------------------------------------
-void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry,sal_uInt16 _nPosition)
+void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry,USHORT _nPosition)
 {
     if ( !_xSection.is() )
         return;
-
-    m_aViewsWindow.addSection(_xSection,_sColorEntry,_nPosition);
-
+    
+    m_aViewsWindow.addSection(_xSection,_sColorEntry,_nPosition);	
+    
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
 }
 //------------------------------------------------------------------------------
@@ -142,7 +143,7 @@ void OReportWindow::toggleGrid(sal_Bool _bVisible)
 void OReportWindow::showRuler(sal_Bool _bShow)
 {
     m_aHRuler.Show(_bShow);
-
+    
     m_aViewsWindow.showRuler(_bShow);
 }
 //------------------------------------------------------------------------------
@@ -156,20 +157,20 @@ sal_Int32 OReportWindow::getMaxMarkerWidth(sal_Bool _bWithEnd) const
 }
 //------------------------------------------------------------------------------
 sal_Int32 OReportWindow::GetTotalWidth() const
-{
+{ 
     sal_Int32 nWidth = 0;
     if ( !m_aViewsWindow.empty() )
     {
         Fraction aStartWidth(long(REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH ));
         const Fraction aZoom(m_pView->getController().getZoomValue(),100);
-        aStartWidth *= aZoom;
+        aStartWidth *= aZoom; // m_aViewsWindow.GetMapMode().GetScaleX();;
         const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_pView->getController().getReportDefinition(),PROPERTY_PAPERSIZE).Width;
         Fraction aPaperWidth(nPaperWidth,1);
         aPaperWidth *= aZoom;
         const Size aPageSize = LogicToPixel(Size(aPaperWidth,0));
         nWidth = aPageSize.Width() + long(aStartWidth);
     }
-    return nWidth;
+    return nWidth; 
 }
 //------------------------------------------------------------------------------
 void OReportWindow::Resize()
@@ -199,12 +200,12 @@ void OReportWindow::Resize()
         m_aHRuler.SetNullOffset(nLeftMargin);
         m_aHRuler.SetMargin1(0);
         m_aHRuler.SetMargin2(aPageSize.Width() - nLeftMargin - nRightMargin);
-
+    
         aStartPoint.Y() += aPageSize.Height();
         nSectionsHeight -= aStartPoint.Y();
 
         aStartPoint.X() = aOffset.X();
-
+      
         m_aViewsWindow.SetPosSizePixel(aStartPoint,Size(aTotalOutputSize.Width(),nSectionsHeight));
     }
 }
@@ -226,7 +227,7 @@ void OReportWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings();
+        ImplInitSettings();		
         Invalidate();
     }
 }
@@ -247,10 +248,11 @@ void OReportWindow::ScrollChildren(const Point& _aThumbPos)
         m_aHRuler.Scroll(-(aOrg.X() + _aThumbPos.X()),0);
     }
 
+    /*const Point aPos(PixelToLogic(_aThumbPos));*/
     m_aViewsWindow.scrollChildren(_aThumbPos);
 }
 //----------------------------------------------------------------------------
-sal_uInt16 OReportWindow::getSectionCount() const
+USHORT OReportWindow::getSectionCount() const
 {
     return m_aViewsWindow.getSectionCount();
 }
@@ -260,43 +262,43 @@ void OReportWindow::notifySizeChanged()
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
 }
 //----------------------------------------------------------------------------
-sal_Bool OReportWindow::HasSelection() const
+BOOL OReportWindow::HasSelection() const
 {
     return m_aViewsWindow.HasSelection();
 }
 //----------------------------------------------------------------------------
 void OReportWindow::Delete()
 {
-
+    
     m_aViewsWindow.Delete();
 }
 //----------------------------------------------------------------------------
 void OReportWindow::Copy()
-{
-
+{	
+    
     m_aViewsWindow.Copy();
 }
 //----------------------------------------------------------------------------
 void OReportWindow::Paste()
 {
-
+    
     m_aViewsWindow.Paste();
 }
 //----------------------------------------------------------------------------
-sal_Bool OReportWindow::IsPasteAllowed() const
+BOOL OReportWindow::IsPasteAllowed() const
 {
     return m_aViewsWindow.IsPasteAllowed();
 }
 //-----------------------------------------------------------------------------
 void OReportWindow::SelectAll(const sal_uInt16 _nObjectType)
 {
-
+    
     m_aViewsWindow.SelectAll(_nObjectType);
 }
 //-----------------------------------------------------------------------------
 void OReportWindow::unmarkAllObjects(OSectionView* _pSectionView)
 {
-
+    
     m_aViewsWindow.unmarkAllObjects(_pSectionView);
 }
 //-----------------------------------------------------------------------------
@@ -319,13 +321,13 @@ void OReportWindow::setMarked(OSectionView* _pSectionView,sal_Bool _bMark)
 //------------------------------------------------------------------------
 void OReportWindow::setMarked(const uno::Reference< report::XSection>& _xSection,sal_Bool _bMark)
 {
-
+    
     m_aViewsWindow.setMarked(_xSection,_bMark);
 }
 //------------------------------------------------------------------------
 void OReportWindow::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _xShape,sal_Bool _bMark)
 {
-
+    
     m_aViewsWindow.setMarked(_xShape,_bMark);
 }
 //-----------------------------------------------------------------------------
@@ -339,37 +341,37 @@ void OReportWindow::setMarked(const uno::Sequence< uno::Reference< report::XRepo
     return  m_aViewsWindow.getSectionWindow(_xSection);
 }
 // -------------------------------------------------------------------------
-void OReportWindow::markSection(const sal_uInt16 _nPos)
+void OReportWindow::markSection(const sal_uInt16 _nPos) 
 {
-
+    
     m_aViewsWindow.markSection(_nPos);
 }
 // -----------------------------------------------------------------------------
 void OReportWindow::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const
 {
-
+    
     m_aViewsWindow.fillCollapsedSections(_rCollapsedPositions);
 }
 // -----------------------------------------------------------------------------
 void OReportWindow::collapseSections(const uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aCollpasedSections)
 {
-
+    
     m_aViewsWindow.collapseSections(_aCollpasedSections);
 }
 // -----------------------------------------------------------------------------
 void OReportWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlignAtSection, bool bBoundRects)
 {
-
+    
     m_aViewsWindow.alignMarkedObjects(_nControlModification, _bAlignAtSection, bBoundRects);
 }
 // -----------------------------------------------------------------------------
-void OReportWindow::setGridSnap(sal_Bool bOn)
+void OReportWindow::setGridSnap(BOOL bOn)
 {
-
+    
     m_aViewsWindow.setGridSnap(bOn);
 }
 // -----------------------------------------------------------------------------
-void OReportWindow::setDragStripes(sal_Bool bOn)
+void OReportWindow::setDragStripes(BOOL bOn)
 {
     m_aViewsWindow.setDragStripes(bOn);
 }
@@ -384,14 +386,15 @@ void OReportWindow::zoom(const Fraction& _aZoom)
     m_aHRuler.SetZoom(_aZoom);
     m_aHRuler.Invalidate();
 
+    //setZoomFactor(_aZoom,*this); // if this will be include the H - ruler has the wrong size
     m_aViewsWindow.zoom(_aZoom);
-
+    
     notifySizeChanged();
     const Point aNewThumbPos( m_pParent->getThumbPos() );
 
     ScrollChildren( aNewThumbPos );
     Resize();
-
+    
     Invalidate(INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
 }
 // -----------------------------------------------------------------------------
@@ -421,23 +424,23 @@ sal_uInt16 OReportWindow::getZoomFactor(SvxZoomType _eType) const
             break;
         case SVX_ZOOM_WHOLEPAGE:
             {
-                nZoom = (sal_uInt16)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
+                nZoom = (USHORT)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
                 MapMode aMap( MAP_100TH_MM );
                 const Size aHeight = m_aViewsWindow.LogicToPixel(m_aViewsWindow.PixelToLogic(Size(0,GetTotalHeight() + m_aHRuler.GetSizePixel().Height())),aMap);
-                nZoom = ::std::min(nZoom,(sal_uInt16)(long)Fraction(aSize.Height()*100,aHeight.Height()));
+                nZoom = ::std::min(nZoom,(USHORT)(long)Fraction(aSize.Height()*100,aHeight.Height()));
             }
             break;
         case SVX_ZOOM_PAGEWIDTH:
-            nZoom = (sal_uInt16)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
+            nZoom = (USHORT)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
             break;
         default:
             break;
     }
 
-    return nZoom;
+    return nZoom;    
 }
 //==================================================================
-}   //rptui
+}	//rptui
 //==================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,60 +52,60 @@ class ScViewData;
 class ScFilterOptionsMgr
 {
 public:
-            ScFilterOptionsMgr( Dialog*             ptrDlg,
-                                ScViewData*         ptrViewData,
-                                const ScQueryParam& refQueryData,
-                                MoreButton&         refBtnMore,
-                                CheckBox&           refBtnCase,
-                                CheckBox&           refBtnRegExp,
-                                CheckBox&           refBtnHeader,
-                                CheckBox&           refBtnUnique,
-                                CheckBox&           refBtnCopyResult,
-                                CheckBox&           refBtnDestPers,
-                                ListBox&            refLbCopyArea,
-                                Edit&               refEdCopyArea,
-                                formula::RefButton&     refRbCopyArea,
-                                FixedText&          refFtDbAreaLabel,
-                                FixedInfo&          refFtDbArea,
+            ScFilterOptionsMgr( Dialog*				ptrDlg,
+                                ScViewData*			ptrViewData,
+                                const ScQueryParam&	refQueryData,
+                                MoreButton&			refBtnMore,
+                                CheckBox&			refBtnCase,
+                                CheckBox&			refBtnRegExp,
+                                CheckBox&			refBtnHeader,
+                                CheckBox&			refBtnUnique,
+                                CheckBox&			refBtnCopyResult,
+                                CheckBox&			refBtnDestPers,
+                                ListBox&			refLbCopyArea,
+                                Edit&				refEdCopyArea,
+                                formula::RefButton&		refRbCopyArea,
+                                FixedText&			refFtDbAreaLabel,
+                                FixedInfo&			refFtDbArea,
                                 FixedLine&          refFlOptions,
-                                const String&       refStrNoName,
-                                const String&       refStrUndefined );
+                                const String&		refStrNoName,
+                                const String&		refStrUndefined );
             ~ScFilterOptionsMgr();
 
-    sal_Bool    VerifyPosStr ( const String& rPosStr ) const;
+    BOOL	VerifyPosStr ( const String& rPosStr ) const;
 
 private:
-    Dialog*         pDlg;
-    ScViewData*     pViewData;
-    ScDocument*     pDoc;
+    Dialog*			pDlg;
+    ScViewData*		pViewData;
+    ScDocument*		pDoc;
 
-    MoreButton&     rBtnMore;
-    CheckBox&       rBtnCase;
-    CheckBox&       rBtnRegExp;
-    CheckBox&       rBtnHeader;
-    CheckBox&       rBtnUnique;
-    CheckBox&       rBtnCopyResult;
-    CheckBox&       rBtnDestPers;
-    ListBox&        rLbCopyPos;
-    Edit&           rEdCopyPos;
-    formula::RefButton& rRbCopyPos;
-    FixedText&      rFtDbAreaLabel;
-    FixedInfo&      rFtDbArea;
+    MoreButton&		rBtnMore;
+    CheckBox&		rBtnCase;
+    CheckBox&		rBtnRegExp;
+    CheckBox&		rBtnHeader;
+    CheckBox&		rBtnUnique;
+    CheckBox&		rBtnCopyResult;
+    CheckBox&		rBtnDestPers;
+    ListBox&		rLbCopyPos;
+    Edit&			rEdCopyPos;
+    formula::RefButton&	rRbCopyPos;
+    FixedText&		rFtDbAreaLabel;
+    FixedInfo&		rFtDbArea;
     FixedLine&      rFlOptions;
 
-    const String&   rStrNoName;
-    const String&   rStrUndefined;
+    const String&	rStrNoName;
+    const String&	rStrUndefined;
 
-    const ScQueryParam& rQueryData;
+    const ScQueryParam&	rQueryData;
 
 #ifdef _FOPTMGR_CXX
 private:
     void Init();
 
     // Handler:
-    DECL_LINK( EdPosModifyHdl,      Edit* );
-    DECL_LINK( LbPosSelHdl,         ListBox* );
-    DECL_LINK( BtnCopyResultHdl,    CheckBox* );
+    DECL_LINK( EdPosModifyHdl,		Edit* );
+    DECL_LINK( LbPosSelHdl,			ListBox* );
+    DECL_LINK( BtnCopyResultHdl,	CheckBox* );
 #endif
 };
 

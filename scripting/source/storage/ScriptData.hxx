@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define _SCRIPTING_STORAGE_SCRIPTDATA_HXX_
 
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include <cppu/macros.hxx>
 #include <rtl/ustring.hxx>
@@ -42,11 +42,11 @@ namespace scripting_impl
 
 typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > str_pair;
 typedef ::std::vector< str_pair > props_vec;
-typedef ::boost::unordered_map< ::rtl::OUString, props_vec, ::rtl::OUStringHash,
+typedef ::std::hash_map< ::rtl::OUString, props_vec, ::rtl::OUStringHash,
     ::std::equal_to< ::rtl::OUString > > strpairvec_map;
-typedef ::boost::unordered_map< ::rtl::OUString, ::std::pair< ::rtl::OUString,
+typedef ::std::hash_map< ::rtl::OUString, ::std::pair< ::rtl::OUString,
     ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > strpair_map;
-typedef ::boost::unordered_map< ::rtl::OUString, ::std::pair< props_vec, strpairvec_map >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > filesets_map;
+typedef ::std::hash_map< ::rtl::OUString, ::std::pair< props_vec, strpairvec_map >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > filesets_map; 
 
 struct ScriptData
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ TYPEINIT0(VclSimpleEvent);
 TYPEINIT1(VclWindowEvent, VclSimpleEvent);
 TYPEINIT1(VclMenuEvent, VclSimpleEvent);
 
-VclAccessibleEvent::VclAccessibleEvent( sal_uLong n, const Reference<XAccessible>& rxAccessible ) :
+VclAccessibleEvent::VclAccessibleEvent( ULONG n, const Reference<XAccessible>& rxAccessible ) :
     VclSimpleEvent(n),
     mxAccessible(rxAccessible)
 {
@@ -58,11 +58,8 @@ Reference<XAccessible> VclAccessibleEvent::GetAccessible() const
 
 void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
 {
-    if ( m_aListeners.empty() )
-        return;
-
     // Copy the list, because this can be destroyed when calling a Link...
-    std::list<Link> aCopy( m_aListeners );
+    std::list<Link> aCopy( *this );
     std::list<Link>::iterator aIter( aCopy.begin() );
     if( pEvent->IsA( VclWindowEvent::StaticType() ) )
     {
@@ -84,35 +81,22 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
     }
 }
 
-sal_Bool VclEventListeners::Process( VclSimpleEvent* pEvent ) const
+BOOL VclEventListeners::Process( VclSimpleEvent* pEvent ) const
 {
-    if ( m_aListeners.empty() )
-        return sal_False;
-
-    sal_Bool bProcessed = sal_False;
+    BOOL bProcessed = FALSE;
     // Copy the list, because this can be destroyed when calling a Link...
-    std::list<Link> aCopy( m_aListeners );
+    std::list<Link> aCopy( *this );
     std::list<Link>::iterator aIter( aCopy.begin() );
     while ( aIter != aCopy.end() )
     {
         if( (*aIter).Call( pEvent ) != 0 )
         {
-            bProcessed = sal_True;
+            bProcessed = TRUE;
             break;
         }
         aIter++;
     }
     return bProcessed;
-}
-
-void VclEventListeners::addListener( const Link& rListener )
-{
-    m_aListeners.push_back( rListener );
-}
-
-void VclEventListeners::removeListener( const Link& rListener )
-{
-    m_aListeners.remove( rListener );
 }
 
 VclEventListeners2::VclEventListeners2()
@@ -122,7 +106,7 @@ VclEventListeners2::VclEventListeners2()
 VclEventListeners2::~VclEventListeners2()
 {
 }
-
+    
 void VclEventListeners2::addListener( const Link& i_rLink )
 {
     // ensure uniqueness
@@ -151,7 +135,7 @@ void VclEventListeners2::removeListener( const Link& i_rLink )
 void VclEventListeners2::callListeners( VclSimpleEvent* i_pEvent )
 {
     vcl::DeletionListener aDel( this );
-
+    
     m_aIterators.push_back(ListenerIt(m_aListeners.begin()));
     size_t nIndex = m_aIterators.size() - 1;
     while( ! aDel.isDeleted() && m_aIterators[ nIndex ].m_aIt != m_aListeners.end() )

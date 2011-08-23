@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
     {
         OSL_ASSERT(mrDocument.GetDocSh() != NULL);
     }
-
+    
     Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 }
@@ -120,12 +120,12 @@ void CurrentMasterPagesSelector::LateInit (void)
 
 void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
 {
-    sal_uInt16 nPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
+    USHORT nPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
     SdPage* pMasterPage;
     // Remember the names of the master pages that have been inserted to
     // avoid double insertion.
     ::std::set<String> aMasterPageNames;
-    for (sal_uInt16 nIndex=0; nIndex<nPageCount; nIndex++)
+    for (USHORT nIndex=0; nIndex<nPageCount; nIndex++)
     {
         pMasterPage = mrDocument.GetMasterSdPage (nIndex, PK_STANDARD);
         if (pMasterPage == NULL)
@@ -173,10 +173,10 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
 {
     // Iterate over all pages and for the selected ones put the name of
     // their master page into a set.
-    sal_uInt16 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
+    USHORT nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
     SdPage* pPage;
     ::std::set<String> aNames;
-    sal_uInt16 nIndex;
+    USHORT nIndex;
     bool bLoop (true);
     for (nIndex=0; nIndex<nPageCount && bLoop; nIndex++)
     {
@@ -204,7 +204,7 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
     }
 
     // Find the items for the master pages in the set.
-    sal_uInt16 nItemCount (mpPageSet->GetItemCount());
+    USHORT nItemCount (mpPageSet->GetItemCount());
     for (nIndex=1; nIndex<=nItemCount && bLoop; nIndex++)
     {
         String sName (mpPageSet->GetItemText (nIndex));
@@ -228,16 +228,16 @@ void CurrentMasterPagesSelector::Execute (SfxRequest& rRequest)
             // i.e. is not used.
             SdPage* pMasterPage = GetSelectedMasterPage();
             if (pMasterPage != NULL
-                && mrDocument.GetMasterPageUserCount(pMasterPage) == 0)
+                && mrDocument.GetMasterPageUserCount(pMasterPage) > 0)
             {
                 // Removing the precious flag so that the following call to
                 // RemoveUnnessesaryMasterPages() will remove this master page.
                 pMasterPage->SetPrecious(false);
-                mrDocument.RemoveUnnecessaryMasterPages(pMasterPage, sal_False, sal_True);
+                mrDocument.RemoveUnnecessaryMasterPages(pMasterPage, FALSE, TRUE);
             }
         }
         break;
-
+            
         default:
             MasterPagesSelector::Execute(rRequest);
             break;
@@ -306,7 +306,7 @@ IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
                 break;
         }
     }
-
+    
     return 0;
 }
 

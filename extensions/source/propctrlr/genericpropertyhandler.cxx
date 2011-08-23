@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,9 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 /** === end UNO includes === **/
 #include <tools/debug.hxx>
-#include <comphelper/extract.hxx>
+#include <cppuhelper/extract.hxx>
 
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
 
 //------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_GenericPropertyHandler()
@@ -121,7 +120,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EnumRepresentation::EnumRepresentation: caught an exception!" );
+            OSL_ENSURE( sal_False, "EnumRepresentation::EnumRepresentation: caught an exception!" );
         }
     }
 
@@ -136,7 +135,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EnumRepresentation::getDescriptions: caught an exception!" );
+            OSL_ENSURE( sal_False, "EnumRepresentation::getDescriptions: caught an exception!" );
         }
 
         return ::std::vector< ::rtl::OUString >( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength() );
@@ -153,7 +152,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EnumRepresentation::impl_getValues: caught an exception!" );
+            OSL_ENSURE( sal_False, "EnumRepresentation::impl_getValues: caught an exception!" );
         }
     }
 
@@ -172,7 +171,7 @@ namespace pcr
             _out_rValue = ::cppu::int2enum( aValues[ index ], m_aEnumType );
         else
         {
-            OSL_FAIL( "EnumRepresentation::getValueFromDescription: cannot convert!" );
+            DBG_ERROR( "EnumRepresentation::getValueFromDescription: cannot convert!" );
             _out_rValue.clear();
         }
     }
@@ -196,7 +195,7 @@ namespace pcr
             sDescription = aDescriptions[ index ];
         else
         {
-             OSL_FAIL( "EnumRepresentation::getDescriptionForValue: cannot convert!" );
+             DBG_ERROR( "EnumRepresentation::getDescriptionForValue: cannot convert!" );
         }
         return sDescription;
     }
@@ -282,7 +281,7 @@ namespace pcr
 
         impl_dispatch_throw( sURL );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL UrlClickHandler::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
@@ -336,14 +335,14 @@ namespace pcr
     {
         return getImplementationName_static();
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL GenericPropertyHandler::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
     {
         StlSyntaxSequence< ::rtl::OUString > aAllServices( getSupportedServiceNames() );
         return ::std::find( aAllServices.begin(), aAllServices.end(), ServiceName ) != aAllServices.end();
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL GenericPropertyHandler::getSupportedServiceNames(  ) throw (RuntimeException)
     {
@@ -355,7 +354,7 @@ namespace pcr
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.GenericPropertyHandler" ) );
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL GenericPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
@@ -363,7 +362,7 @@ namespace pcr
         aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.inspection.GenericPropertyHandler" ) );
         return aSupported;
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL GenericPropertyHandler::Create( const Reference< XComponentContext >& _rxContext )
     {
@@ -516,7 +515,7 @@ namespace pcr
             }
             catch( const UnknownPropertyException& )
             {
-                OSL_FAIL( "GenericPropertyHandler::addPropertyChangeListener:\nThe inspected component does not allow registering for all properties at once! This violates the interface contract!" );
+                OSL_ENSURE( false, "GenericPropertyHandler::addPropertyChangeListener:\nThe inspected component does not allow registering for all properties at once! This violates the interface contract!" );
             }
         }
     }
@@ -533,7 +532,7 @@ namespace pcr
             }
             catch( const UnknownPropertyException& )
             {
-                OSL_FAIL( "GenericPropertyHandler::removePropertyChangeListener:\nThe inspected component does not allow de-registering for all properties at once! This violates the interface contract!" );
+                OSL_ENSURE( false, "GenericPropertyHandler::removePropertyChangeListener:\nThe inspected component does not allow de-registering for all properties at once! This violates the interface contract!" );
             }
         }
         m_aPropertyListeners.removeInterface( _rxListener );
@@ -602,7 +601,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "GenericPropertyHandler::impl_ensurePropertyMap: caught an exception!" );
+                OSL_ENSURE( sal_False, "GenericPropertyHandler::impl_ensurePropertyMap: caught an exception!" );
             }
         }
     }
@@ -615,7 +614,7 @@ namespace pcr
 
         Sequence< Property > aReturn( m_aProperties.size() );
         ::std::transform( m_aProperties.begin(), m_aProperties.end(),
-            aReturn.getArray(), ::o3tl::select2nd< PropertyMap::value_type >() );
+            aReturn.getArray(), ::std::select2nd< PropertyMap::value_type >() );
         return aReturn;
     }
 
@@ -695,14 +694,14 @@ namespace pcr
     //--------------------------------------------------------------------
     InteractiveSelectionResult SAL_CALL GenericPropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& /*_rPropertyName*/, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
-        OSL_FAIL( "GenericPropertyHandler::onInteractivePropertySelection: I'm too dumb to know anything about property browse buttons!" );
+        DBG_ERROR( "GenericPropertyHandler::onInteractivePropertySelection: I'm too dumb to know anything about property browse buttons!" );
         return InteractiveSelectionResult_Cancelled;
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL GenericPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
-        OSL_FAIL( "GenericPropertyHandler::actuatingPropertyChanged: no no no, I did not register for any actuating properties!" );
+        DBG_ERROR( "GenericPropertyHandler::actuatingPropertyChanged: no no no, I did not register for any actuating properties!" );
     }
 
     //--------------------------------------------------------------------
@@ -718,7 +717,7 @@ namespace pcr
             // not disposeAndClear: the listeners are (virtually) listeners at our introspectee, not
             // at this handler instance
     }
-
+    
     //--------------------------------------------------------------------
     IMPLEMENT_FORWARD_XCOMPONENT( GenericPropertyHandler, GenericPropertyHandler_Base );
 

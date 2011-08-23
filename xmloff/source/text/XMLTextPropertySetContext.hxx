@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,9 +34,9 @@
 
 class XMLTextPropertySetContext : public SvXMLPropertySetContext
 {
-//  SvXMLImportContextRef xTabStop;
-//  SvXMLImportContextRef xBackground;
-//  SvXMLImportContextRef xDropCap;
+//	SvXMLImportContextRef xTabStop;
+//	SvXMLImportContextRef xBackground;
+//	SvXMLImportContextRef xDropCap;
     ::rtl::OUString& rDropCapTextStyleName;
 
 public:
@@ -52,7 +52,7 @@ public:
     virtual ~XMLTextPropertySetContext();
 
     using SvXMLPropertySetContext::CreateChildContext;
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                    ::std::vector< XMLPropertyState > &rProperties,
@@ -60,6 +60,6 @@ public:
 };
 
 
-#endif  //  _XMLOFF_XMLTEXTPROPERTYSETCONTEXT_HXX
+#endif	//  _XMLOFF_XMLTEXTPROPERTYSETCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

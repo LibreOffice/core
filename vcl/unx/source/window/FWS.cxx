@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -191,7 +191,7 @@ WMSupportsFWS (Display *display, int screen)
  *
  * newHandler() -
  *
- * Handle X errors (temporarily) to record the occurrence of BadWindow
+ * Handle X errors (temporarily) to record the occurance of BadWindow
  * errors without crashing.  Used to detect the FWS_COMM_WINDOW root window
  * property containing an old or obsolete window id.
  *

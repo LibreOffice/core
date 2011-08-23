@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ namespace comphelper
     //=====================================================================
     //= OAccessibleImplementationAccess
     //=====================================================================
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XUnoTunnel
-                                >   OAccImpl_Base;
+    typedef	::cppu::ImplHelper1	<	::com::sun::star::lang::XUnoTunnel
+                                >	OAccImpl_Base;
     struct OAccImpl_Impl;
 
     /** This is a helper class which allows accessing several aspects of the the implementation
@@ -76,7 +76,7 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OAccessibleImplementationAccess : public OAccImpl_Base
     {
     private:
-        OAccImpl_Impl*  m_pImpl;
+        OAccImpl_Impl*	m_pImpl;
 
     protected:
         /// retrieves the parent previously set via <method>setAccessibleParent</method>
@@ -87,14 +87,14 @@ namespace comphelper
         @return
             a bit mask, where a set bit 2^n means that the AccessibleStateType n has been set
         */
-        sal_Int64   implGetForeignControlledStates( ) const;
+        sal_Int64	implGetForeignControlledStates( ) const;
 
         /// sets the accessible parent component
-        virtual void    setAccessibleParent(
+        virtual	void	setAccessibleParent(
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxAccParent );
 
         /// sets or resets a bit of the foreign controlled states
-        virtual void    setStateBit( const sal_Int16 _nState, const sal_Bool _bSet );
+        virtual	void	setStateBit( const sal_Int16 _nState, const sal_Bool _bSet );
 
     protected:
         OAccessibleImplementationAccess( );
@@ -114,7 +114,7 @@ namespace comphelper
             is an invalid context (which means it is <NULL/>, or the implementation is not derived
             from <type>OAccessibleImplementationAccess</type>, or retrieving the implementation failed).
         */
-        static OAccessibleImplementationAccess* getImplementation(
+        static OAccessibleImplementationAccess* getImplementation( 
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxComponent
         );
 
@@ -129,7 +129,7 @@ namespace comphelper
             <TRUE/> in case of success, <FALSE/> otherwise. For error condition please look at
             <method>getImplementation</method>.
         */
-        static sal_Bool setAccessibleParent(
+        static sal_Bool	setAccessibleParent(
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxComponent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxNewParent
         );
@@ -146,19 +146,19 @@ namespace comphelper
             <TRUE/> in case of success, <FALSE/> otherwise. For error condition please look at
             <method>getImplementation</method>.
         */
-        static sal_Bool setForeignControlledState(
+        static sal_Bool	setForeignControlledState(
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxComponent,
             const sal_Int16 _nState,
-            const sal_Bool  _bSet
+            const sal_Bool	_bSet
         );
-
+            
 
     private:
         COMPHELPER_DLLPRIVATE static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
     };
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 

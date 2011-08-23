@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ class TranslateLayout : public Application
 {
     ByteString mGid1;
     ByteString mLanguage;
-    ByteString mLocalize;
+    ByteString mLocalize; 
     ByteString mOutput;
     ByteString mProject;
     ByteString mRoot;
@@ -114,7 +114,7 @@ static ByteString ConvertSystemPath( const ByteString& rPath )
 
 ByteString TranslateLayout::GetCommandLineParam( int i )
 {
-    return ByteString( OUSTRING_CSTR( Application::GetCommandLineParam( sal::static_int_cast< sal_uInt16 >( i ) ) ) );
+    return ByteString( OUSTRING_CSTR( Application::GetCommandLineParam( sal::static_int_cast< USHORT >( i ) ) ) );
 }
 
 ByteString TranslateLayout::GetOptionArgument( int const i )
@@ -166,9 +166,9 @@ void TranslateLayout::ParseCommandLine()
 static XMLAttribute*
 findAttribute( XMLAttributeList* lst, String const& name )
 {
-    for ( size_t i = 0; i < lst->size(); i++ )
-        if ( (*lst)[ i ]->Equals( name ) )
-            return (*lst)[ i ];
+    for ( ULONG i = 0; i < lst->Count(); i++ )
+        if ( lst->GetObject( i )->Equals( name ) )
+            return lst->GetObject( i );
     return 0;
 }
 
@@ -177,17 +177,7 @@ translateAttribute( XMLAttributeList* lst,
                     String const& name, String const& translation )
 {
     if ( XMLAttribute* a = findAttribute( lst, name ) )
-    {
-        for ( XMLAttributeList::iterator it = lst->begin(); it < lst->end(); ++it )
-        {
-            if ( *it == a )
-            {
-                delete *it;
-                *it = new XMLAttribute( name.Copy( 1 ), translation );
-                return *it;
-            }
-        }
-    }
+        return lst->Replace ( new XMLAttribute( name.Copy( 1 ), translation ), a );
     return 0;
 }
 
@@ -214,6 +204,7 @@ translateElement( XMLElement* element, ByteString const& lang,
             {
                 ByteString translation;
                 entry->GetText( translation, STRING_TYP_TEXT, lang, true );
+    //            ByteString original = removeContent( element );
                 if ( !translation.Len() )
                     translation = BSTRING( ( *i )->GetValue() );
                 delete translateAttribute( attributes, **i , STRING( translation ) );
@@ -249,23 +240,17 @@ static void make_directory( ByteString const& name )
 static void insertMarker( XMLParentNode *p, ByteString const& file )
 {
     if ( XMLChildNodeList* lst = p->GetChildList() )
-        if ( !lst->empty() )
+        if ( lst->Count() )
         {
-            size_t i = 1;
+            ULONG i = 1;
             // Skip newline, if possible.
-            if ( lst->size() > 2
-                 && (*lst)[ 2 ]->GetNodeType() == XML_NODE_TYPE_DEFAULT )
+            if ( lst->Count() > 1
+                 && lst->GetObject( 2 )->GetNodeType() == XML_NODE_TYPE_DEFAULT )
                 i++;
-            OUString marker = OUString(RTL_CONSTASCII_USTRINGPARAM("\n    NOTE: This file has been generated automagically by transex3/layout/tralay,\n          from source template: "))
+            OUString marker = OUString::createFromAscii( "\n    NOTE: This file has been generated automagically by transex3/layout/tralay,\n          from source template: " )
                 + STRING( file )
-                + OUString(RTL_CONSTASCII_USTRINGPARAM(".\n          Do not edit, changes will be lost.\n"));
-            if ( i < lst->size() ) {
-                XMLChildNodeList::iterator it = lst->begin();
-                ::std::advance( it, i );
-                lst->insert( it, new XMLComment( marker, 0 ) );
-            } else {
-                lst->push_back( new XMLComment( marker, 0 ) );
-            }
+                + OUString::createFromAscii( ".\n          Do not edit, changes will be lost.\n" );
+            lst->Insert( new XMLComment( marker, 0 ), i );
         }
 }
 
@@ -274,7 +259,7 @@ void TranslateLayout::MergeLanguage( ByteString const& language )
     ByteString xmlFile = mFiles.front();
 
     MergeDataFile mergeData( mLocalize, xmlFile,
-                             sal_False, RTL_TEXTENCODING_MS_1252 );
+                             FALSE, RTL_TEXTENCODING_MS_1252 );
 
     DirEntry aFile( xmlFile );
     SimpleXMLParser aParser;
@@ -284,7 +269,7 @@ void TranslateLayout::MergeLanguage( ByteString const& language )
         fprintf(stderr, "error: parsing: %s\n", xmlFile.GetBuffer() );
         return;
     }
-
+    
     layoutXml->Extract();
     insertMarker( layoutXml, xmlFile );
 
@@ -300,7 +285,7 @@ void TranslateLayout::MergeLanguage( ByteString const& language )
             if ( XMLElement* element = ( *languageMap )[ "en-US" ] )
                 translateElement( element, language, &resData, mergeData );
     }
-
+    
 #ifndef WNT
     ByteString outFile = "/dev/stdout";
 #else
@@ -376,14 +361,14 @@ void TranslateLayout::Main()
             aStr += OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US );
         }
         fprintf( stderr, "error: parsing: '%s'\n", aStr.getStr() );
-        OSL_FAIL( aStr.getStr() );
+        OSL_ENSURE( 0, aStr.getStr() );
     }
     catch ( uno::Exception& rExc )
     {
         OString aStr( OUStringToOString( rExc.Message,
                                          RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "error: UNO: '%s'\n", aStr.getStr() );
-        OSL_FAIL( aStr.getStr() );
+        OSL_ENSURE( 0, aStr.getStr() );
     }
 }
 

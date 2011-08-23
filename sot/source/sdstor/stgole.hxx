@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,18 +31,18 @@
 
 #include <string.h> // memset()
 
-#include "sot/stg.hxx"
+#include "stg.hxx"
 #include "stgelem.hxx"
 
 class StgInternalStream : public SvStream
 {
     BaseStorageStream* pStrm;
-    virtual sal_uLong GetData( void* pData, sal_uLong nSize );
-    virtual sal_uLong PutData( const void* pData, sal_uLong nSize );
-    virtual sal_uLong SeekPos( sal_uLong nPos );
+    virtual ULONG GetData( void* pData, ULONG nSize );
+    virtual ULONG PutData( const void* pData, ULONG nSize );
+    virtual ULONG SeekPos( ULONG nPos );
     virtual void  FlushData();
 public:
-    StgInternalStream( BaseStorage&, const String&, sal_Bool );
+    StgInternalStream( BaseStorage&, const String&, BOOL );
    ~StgInternalStream();
     void Commit();
 };
@@ -53,14 +53,14 @@ class StgCompObjStream : public StgInternalStream
 {
     ClsId  aClsId;
     String aUserName;
-    sal_uLong  nCbFormat;
+    ULONG  nCbFormat;
 public:
-    StgCompObjStream( BaseStorage&, sal_Bool );
+    StgCompObjStream( BaseStorage&, BOOL );
     ClsId&  GetClsId()    { return aClsId;    }
     String& GetUserName() { return aUserName; }
-    sal_uLong&  GetCbFormat() { return nCbFormat; }
-    sal_Bool    Load();
-    sal_Bool    Store();
+    ULONG&  GetCbFormat() { return nCbFormat; }
+    BOOL    Load();
+    BOOL    Store();
 };
 
 // standard stream "\1Ole"
@@ -69,10 +69,10 @@ class StgOleStream : public StgInternalStream
 {
     sal_uInt32 nFlags;
 public:
-    StgOleStream( BaseStorage&, sal_Bool );
+    StgOleStream( BaseStorage&, BOOL );
     sal_uInt32& GetFlags() { return nFlags; }
-    sal_Bool Load();
-    sal_Bool Store();
+    BOOL Load();
+    BOOL Store();
 };
 
 #endif

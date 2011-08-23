@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,10 +28,21 @@
 #ifndef __ooo_vba_word__XTables_idl__
 #define __ooo_vba_word__XTables_idl__
 
+#ifndef  __ooo_vba_HelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
+#endif
+
+#ifndef __ooo_vba_XCollection_idl__
 #include <ooo/vba/XCollection.idl>
+#endif
+
+#ifndef __ooo_vba_word_XTable_idl__
 #include <ooo/vba/word/XTable.idl>
+#endif
+
+#ifndef __com_sun_star_script_BasicErrorException_idl__
 #include <com/sun/star/script/BasicErrorException.idl>
+#endif
 
 module ooo { module vba { module word {
 

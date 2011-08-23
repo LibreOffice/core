@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,6 @@
 
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
-#include <osl/diagnose.h>
 
 //........................................................................
 namespace dbaui
@@ -74,7 +73,7 @@ namespace dbaui
         OCharsetDisplay::const_iterator aFind = m_aCharSets.findIanaName( _rIanaName );
         if (aFind == m_aCharSets.end())
         {
-            OSL_FAIL( "CharSetListBox::SelectEntryByIanaName: unknown charset falling back to system language!" );
+            DBG_ERROR( "CharSetListBox::SelectEntryByIanaName: unknown charset falling back to system language!" );
             aFind = m_aCharSets.findEncoding( RTL_TEXTENCODING_DONTKNOW );
         }
 
@@ -90,7 +89,7 @@ namespace dbaui
                 // in our settings, there was an encoding selected which is not valid for the current
                 // data source type
                 // This is worth at least an assertion.
-                OSL_FAIL( "CharSetListBox::SelectEntryByIanaName: invalid character set!" );
+                DBG_ERROR( "CharSetListBox::SelectEntryByIanaName: invalid character set!" );
                 sDisplayName = String();
             }
 
@@ -99,13 +98,13 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    bool CharSetListBox::StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId )
+    bool CharSetListBox::StoreSelectedCharSet( SfxItemSet& _rSet, const USHORT _nItemId )
     {
         bool bChangedSomething = false;
         if ( GetSelectEntryPos() != GetSavedValue() )
         {
             OCharsetDisplay::const_iterator aFind = m_aCharSets.findDisplayName( GetSelectEntry() );
-            OSL_ENSURE( aFind != m_aCharSets.end(), "CharSetListBox::StoreSelectedCharSet: could not translate the selected character set!" );
+            DBG_ASSERT( aFind != m_aCharSets.end(), "CharSetListBox::StoreSelectedCharSet: could not translate the selected character set!" );
             if ( aFind != m_aCharSets.end() )
             {
                 _rSet.Put( SfxStringItem( _nItemId, (*aFind).getIanaName() ) );

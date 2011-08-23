@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <hash_map>
+#include <hash_set>
 #include <list>
 #include <uno/mapping.hxx>
 #include <uno/dispatcher.h>
@@ -82,12 +82,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace cppu;
 using namespace osl;
+using namespace rtl;
 using namespace std;
-
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OString;
 
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
@@ -287,7 +283,7 @@ struct equaltoRef_Impl
         { return rName1 == rName2; }
 };
 
-typedef boost::unordered_set
+typedef hash_set
 <
     Reference<XInterface >,
     hashRef_Impl,
@@ -311,9 +307,9 @@ public:
     Any SAL_CALL nextElement()
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 private:
-    Mutex                               aMutex;
-    Sequence< Reference<XInterface > >  aFactories;
-    sal_Int32                           nIt;
+    Mutex								aMutex;
+    Sequence< Reference<XInterface > >	aFactories;
+    sal_Int32							nIt;
 };
 
 // XEnumeration
@@ -406,11 +402,11 @@ public:
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    Mutex                           aMutex;
-    HashSet_Ref                     aImplementationMap;
-    HashSet_Ref::iterator           aIt;
-    sal_Int32                       nNext;
-    Reference<XInterface >          xNext;
+    Mutex							aMutex;
+    HashSet_Ref						aImplementationMap;
+    HashSet_Ref::iterator			aIt;
+    sal_Int32						nNext;
+    Reference<XInterface >			xNext;
 };
 
 ImplementationEnumeration_Impl::~ImplementationEnumeration_Impl()
@@ -454,14 +450,14 @@ struct hashOWString_Impl
         { return rName.hashCode(); }
 };
 
-typedef boost::unordered_set
+typedef hash_set
 <
     OUString,
     hashOWString_Impl,
     equalOWString_Impl
 > HashSet_OWString;
 
-typedef boost::unordered_multimap
+typedef hash_multimap
 <
     OUString,
     Reference<XInterface >,
@@ -469,7 +465,7 @@ typedef boost::unordered_multimap
     equalOWString_Impl
 > HashMultimap_OWString_Interface;
 
-typedef boost::unordered_map
+typedef hash_map
 <
     OUString,
     Reference<XInterface >,
@@ -506,11 +502,11 @@ void OServiceManager_Listener::disposing(const EventObject & rEvt )
         }
         catch( const IllegalArgumentException & )
         {
-            OSL_FAIL( "IllegalArgumentException catched" );
+            OSL_ENSURE( sal_False, "IllegalArgumentException catched" );
         }
         catch( const NoSuchElementException & )
         {
-            OSL_FAIL( "NoSuchElementException catched" );
+            OSL_ENSURE( sal_False, "NoSuchElementException catched" );
         }
     }
 }
@@ -591,7 +587,7 @@ public:
     virtual void SAL_CALL remove( const Any & Element ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
     // XContentEnumerationAccess
-    //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
+    //Sequence< OUString >			getAvailableServiceNames() throw( (Exception) );
     virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw(::com::sun::star::uno::RuntimeException);
     virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(
         const OUString& aServiceName, Reference< XComponentContext > const & xContext )
@@ -641,13 +637,13 @@ protected:
     HashSet_Ref m_SetLoadedFactories;
 private:
 
-    Reference<XEventListener >      getFactoryListener();
+    Reference<XEventListener >		getFactoryListener();
 
 
-    HashMultimap_OWString_Interface m_ServiceMap;
-    HashSet_Ref                     m_ImplementationMap;
-    HashMap_OWString_Interface      m_ImplementationNameMap;
-    Reference<XEventListener >      xFactoryListener;
+    HashMultimap_OWString_Interface	m_ServiceMap;
+    HashSet_Ref						m_ImplementationMap;
+    HashMap_OWString_Interface		m_ImplementationNameMap;
+    Reference<XEventListener >		xFactoryListener;
     bool                            m_bInDisposing;
 };
 
@@ -757,7 +753,7 @@ public:
         { getRoot()->remove( Element ); }
 
     // XContentEnumerationAccess
-    //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
+    //Sequence< OUString >			getAvailableServiceNames() throw( (Exception) );
     virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw (RuntimeException)
         { return getRoot()->createContentEnumeration( aServiceName, m_xContext ); }
 
@@ -933,8 +929,8 @@ void OServiceManager::onUnloadingNotify()
     IT_MM it_end1= m_ServiceMap.end();
     list<IT_MM> listDeleteServiceMap;
     typedef list<IT_MM>::const_iterator CIT_DMM;
-    // find occurrences in m_ServiceMap
-    for(IT_MM it_i1= m_ServiceMap.begin(); it_i1 != it_end1; ++it_i1)
+    // find occurences in m_ServiceMap
+    for(IT_MM it_i1= m_ServiceMap.begin(); it_i1 != it_end1; it_i1++)
     {
         if( m_SetLoadedFactories.find( it_i1->second) != it_SetEnd)
         {
@@ -958,7 +954,7 @@ void OServiceManager::onUnloadingNotify()
     IT_M it_end3= m_ImplementationNameMap.end();
     list<IT_M> listDeleteImplementationNameMap;
     typedef list<IT_M>::const_iterator CIT_DM;
-    for( IT_M it_i3= m_ImplementationNameMap.begin();  it_i3 != it_end3; ++it_i3)
+    for( IT_M it_i3= m_ImplementationNameMap.begin();  it_i3 != it_end3; it_i3++)
     {
         if( m_SetLoadedFactories.find( it_i3->second) != it_SetEnd)
         {
@@ -982,7 +978,7 @@ void OServiceManager::onUnloadingNotify()
     IT_S it_end5= m_ImplementationMap.end();
     list<IT_S> listDeleteImplementationMap;
     typedef list<IT_S>::const_iterator CIT_DS;
-    for( IT_S it_i5= m_ImplementationMap.begin(); it_i5 != it_end5; ++it_i5)
+    for( IT_S it_i5= m_ImplementationMap.begin(); it_i5 != it_end5; it_i5++)
     {
         if( m_SetLoadedFactories.find( *it_i5) != it_SetEnd)
         {
@@ -1005,7 +1001,7 @@ void OServiceManager::onUnloadingNotify()
     IT_S it_end7= m_SetLoadedFactories.end();
 
     Reference<XEventListener> xlistener= getFactoryListener();
-    for( IT_S it_i7= m_SetLoadedFactories.begin(); it_i7 != it_end7; ++it_i7)
+    for( IT_S it_i7= m_SetLoadedFactories.begin(); it_i7 != it_end7; it_i7++)
     {
         Reference<XComponent> xcomp( *it_i7, UNO_QUERY);
         if( xcomp.is())
@@ -1046,7 +1042,7 @@ void OServiceManager::disposing()
         {
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### RuntimeException occurred upon disposing factory: %s", str.getStr() );
+            OSL_TRACE( "### RuntimeException occured upon disposing factory: %s", str.getStr() );
 #else
             (void) exc; // unused
 #endif
@@ -1198,7 +1194,7 @@ Sequence< OUString > OServiceManager::getUniqueAvailableServiceNames(
         aNameSet.insert( (*aSIt++).first );
 
     /* do not return the implementation names
-    HashMap_OWString_Interface      m_ImplementationNameMap;
+    HashMap_OWString_Interface		m_ImplementationNameMap;
     HashMap_OWString_Interface::iterator aIt = m_ImplementationNameMap.begin();
     while( aIt != m_ImplementationNameMap.end() )
         aNameSet.insert( (*aIt++).first );
@@ -1268,7 +1264,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
         {
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### DisposedException occurred: %s", str.getStr() );
+            OSL_TRACE( "### DisposedException occured: %s", str.getStr() );
 #else
             (void) exc; // unused
 #endif
@@ -1332,7 +1328,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
         {
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### DisposedException occurred: %s", str.getStr() );
+            OSL_TRACE( "### DisposedException occured: %s", str.getStr() );
 #else
             (void) exc; // unused
 #endif
@@ -1376,7 +1372,7 @@ void OServiceManager::initialize( Sequence< Any > const & )
     throw (Exception)
 {
     check_undisposed();
-    OSL_FAIL( "not impl!" );
+    OSL_ENSURE( 0, "not impl!" );
 }
 
 // XServiceInfo
@@ -1548,7 +1544,7 @@ void OServiceManager::insert( const Any & Element )
         OUString aImplName = xInfo->getImplementationName();
         if( aImplName.getLength() )
             m_ImplementationNameMap[ aImplName ] = xEle;
-
+        
         //put into the service map
         Sequence< OUString > aServiceNames = xInfo->getSupportedServiceNames();
         const OUString * pArray = aServiceNames.getConstArray();
@@ -1579,7 +1575,7 @@ void OServiceManager::remove( const Any & Element )
 {
     if (is_disposed())
         return;
-
+    
     Reference<XInterface > xEle;
     if (Element.getValueTypeClass() == TypeClass_INTERFACE)
     {
@@ -1683,7 +1679,7 @@ public:
     Sequence< OUString > SAL_CALL getAvailableServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
     // XContentEnumerationAccess
-    //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
+    //Sequence< OUString >			getAvailableServiceNames() throw( (Exception) );
     Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw(::com::sun::star::uno::RuntimeException);
     virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(
         const OUString& aServiceName, Reference< XComponentContext > const & xContext )
@@ -1703,17 +1699,17 @@ protected:
     Sequence< Reference< XInterface > > queryServiceFactories(
         const OUString& aServiceName, Reference< XComponentContext > const & xContext );
 private:
-    Reference<XRegistryKey >        getRootKey();
+    Reference<XRegistryKey >		getRootKey();
     Reference<XInterface > loadWithImplementationName(
         const OUString & rImplName, Reference< XComponentContext > const & xContext );
-    Sequence<OUString>          getFromServiceName(const OUString& serviceName);
+    Sequence<OUString>			getFromServiceName(const OUString& serviceName);
     Reference<XInterface > loadWithServiceName(
         const OUString & rImplName, Reference< XComponentContext > const & xContext );
-    void                        fillAllNamesFromRegistry( HashSet_OWString & );
+    void						fillAllNamesFromRegistry( HashSet_OWString & );
 
-    sal_Bool                    m_searchedRegistry;
-    Reference<XSimpleRegistry > m_xRegistry;    // readonly property Registry
-    Reference<XRegistryKey >    m_xRootKey;
+    sal_Bool					m_searchedRegistry;
+    Reference<XSimpleRegistry > m_xRegistry;	// readonly property Registry
+    Reference<XRegistryKey >	m_xRootKey;
 
 #if OSL_DEBUG_LEVEL > 0
     bool m_init;
@@ -1764,7 +1760,7 @@ Reference<XRegistryKey > ORegistryServiceManager::getRootKey()
     if( !m_xRootKey.is() )
     {
         MutexGuard aGuard( m_mutex );
-        //  DefaultRegistry suchen !!!!
+        //	DefaultRegistry suchen !!!!
         if( !m_xRegistry.is() && !m_searchedRegistry )
         {
             // merken, es wird nur einmal gesucht

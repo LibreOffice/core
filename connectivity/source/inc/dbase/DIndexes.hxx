@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace connectivity
 
         class ODbaseIndexes : public ODbaseIndexes_BASE
         {
-            ODbaseTable*    m_pTable;
+            ODbaseTable*	m_pTable;
         protected:
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
@@ -51,7 +51,7 @@ namespace connectivity
             virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
         public:
             ODbaseIndexes(ODbaseTable* _pTable, ::osl::Mutex& _rMutex,
-                const TStringVector &_rVector) : ODbaseIndexes_BASE(*_pTable,_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
+                const TStringVector &_rVector) : ODbaseIndexes_BASE(*_pTable,_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
                 , m_pTable(_pTable)
             {}
 

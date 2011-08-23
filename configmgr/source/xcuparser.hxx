@@ -35,7 +35,6 @@
 
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
-#include "xmlreader/xmlreader.hxx"
 
 #include "additions.hxx"
 #include "node.hxx"
@@ -45,8 +44,7 @@
 #include "type.hxx"
 #include "valueparser.hxx"
 #include "xmldata.hxx"
-
-namespace xmlreader { struct Span; }
+#include "xmlreader.hxx"
 
 namespace configmgr {
 
@@ -57,6 +55,7 @@ class Partial;
 class PropertyNode;
 class SetNode;
 struct Data;
+struct Span;
 
 class XcuParser: public Parser {
 public:
@@ -67,50 +66,49 @@ public:
 private:
     virtual ~XcuParser();
 
-    virtual xmlreader::XmlReader::Text getTextMode();
+    virtual XmlReader::Text getTextMode();
 
     virtual bool startElement(
-        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name);
+        XmlReader & reader, XmlReader::Namespace ns, Span const & name);
 
-    virtual void endElement(xmlreader::XmlReader const & reader);
+    virtual void endElement(XmlReader const & reader);
 
-    virtual void characters(xmlreader::Span const & span);
+    virtual void characters(Span const & span);
 
     enum Operation {
         OPERATION_MODIFY, OPERATION_REPLACE, OPERATION_FUSE, OPERATION_REMOVE };
 
-    static Operation parseOperation(xmlreader::Span const & text);
+    static Operation parseOperation(Span const & text);
 
-    void handleComponentData(xmlreader::XmlReader & reader);
+    void handleComponentData(XmlReader & reader);
 
-    void handleItem(xmlreader::XmlReader & reader);
+    void handleItem(XmlReader & reader);
 
-    void handlePropValue(xmlreader::XmlReader & reader, PropertyNode * prop);
+    void handlePropValue(XmlReader & reader, PropertyNode * prop);
 
     void handleLocpropValue(
-        xmlreader::XmlReader & reader, LocalizedPropertyNode * locprop);
+        XmlReader & reader, LocalizedPropertyNode * locprop);
 
-    void handleGroupProp(xmlreader::XmlReader & reader, GroupNode * group);
+    void handleGroupProp(XmlReader & reader, GroupNode * group);
 
     void handleUnknownGroupProp(
-        xmlreader::XmlReader const & reader, GroupNode * group,
-        rtl::OUString const & name, Type type, Operation operation,
-        bool finalized);
+        XmlReader const & reader, GroupNode * group, rtl::OUString const & name,
+        Type type, Operation operation, bool finalized);
 
     void handlePlainGroupProp(
-        xmlreader::XmlReader const & reader, GroupNode * group,
+        XmlReader const & reader, GroupNode * group,
         NodeMap::iterator const & propertyIndex, rtl::OUString const & name,
         Type type, Operation operation, bool finalized);
 
     void handleLocalizedGroupProp(
-        xmlreader::XmlReader const & reader, LocalizedPropertyNode * property,
+        XmlReader const & reader, LocalizedPropertyNode * property,
         rtl::OUString const & name, Type type, Operation operation,
         bool finalized);
 
     void handleGroupNode(
-        xmlreader::XmlReader & reader, rtl::Reference< Node > const & group);
+        XmlReader & reader, rtl::Reference< Node > const & group);
 
-    void handleSetNode(xmlreader::XmlReader & reader, SetNode * set);
+    void handleSetNode(XmlReader & reader, SetNode * set);
 
     void recordModification(bool addition);
 

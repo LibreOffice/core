@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include "xestyle.hxx"
 #include "xestring.hxx"
 
-using namespace ::oox;
+#include <oox/core/tokens.hxx>
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -135,9 +135,25 @@ void XclExpString::Assign( const String& rString, XclStrFlags nFlags, sal_uInt16
     Build( rString.GetBuffer(), rString.Len(), nFlags, nMaxLen );
 }
 
+void XclExpString::Assign(
+        const String& rString, const XclFormatRunVec& rFormats,
+        XclStrFlags nFlags, sal_uInt16 nMaxLen )
+{
+    Assign( rString, nFlags, nMaxLen );
+    SetFormats( rFormats );
+}
+
 void XclExpString::Assign( const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     Build( rString.getStr(), rString.getLength(), nFlags, nMaxLen );
+}
+
+void XclExpString::Assign(
+        const OUString& rString, const XclFormatRunVec& rFormats,
+        XclStrFlags nFlags, sal_uInt16 nMaxLen )
+{
+    Assign( rString, nFlags, nMaxLen );
+    SetFormats( rFormats );
 }
 
 void XclExpString::Assign( sal_Unicode cChar, XclStrFlags nFlags, sal_uInt16 nMaxLen )
@@ -442,7 +458,7 @@ static sal_uInt16 lcl_WriteRun( XclExpXmlStream& rStrm, const ScfUInt16Vec& rBuf
         XclXmlUtils::WriteFontData( rWorksheet, rFontData, XML_rFont );
         rWorksheet->endElement( XML_rPr );
     }
-    rWorksheet->startElement( XML_t,
+    rWorksheet->startElement( XML_t, 
             FSNS( XML_xml, XML_space ), "preserve",
             FSEND );
     rWorksheet->writeEscaped( XclXmlUtils::ToOUString( rBuffer, nStart, nLength ) );
@@ -470,11 +486,11 @@ void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const
         const XclExpFont* pFont = NULL;
         for ( ; aIt != aEnd; ++aIt )
         {
-            nStart = lcl_WriteRun( rStrm, GetUnicodeBuffer(),
+            nStart = lcl_WriteRun( rStrm, GetUnicodeBuffer(), 
                     nStart, aIt->mnChar-nStart, pFont );
             pFont = rFonts.GetFont( aIt->mnFontIdx );
         }
-        lcl_WriteRun( rStrm, GetUnicodeBuffer(),
+        lcl_WriteRun( rStrm, GetUnicodeBuffer(), 
                 nStart, GetUnicodeBuffer().size() - nStart, pFont );
     }
 }

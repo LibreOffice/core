@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@
 class ScImportAsciiDlg : public ModalDialog
 {
     SvStream*                   mpDatStream;
-    sal_uLong                       mnStreamPos;
-    sal_uLong*                      mpRowPosArray;
-    sal_uLong                       mnRowPosCount;
+    ULONG                       mnStreamPos;
+    ULONG*                      mpRowPosArray;
+    ULONG                       mnRowPosCount;
 
     String                      maPreviewLine[ CSV_PREVIEW_LINES ];
 
@@ -117,9 +117,9 @@ private:
     void                        SetupSeparatorCtrls();
 
 
-    bool                        GetLine( sal_uLong nLine, String &rText );
+    bool                        GetLine( ULONG nLine, String &rText );
     void                        UpdateVertical();
-    inline bool                 Seek( sal_uLong nPos ); // synced to and from mnStreamPos
+    inline bool                 Seek( ULONG nPos ); // synced to and from mnStreamPos
 
                                 DECL_LINK( CharSetHdl, SvxTextEncodingBox* );
                                 DECL_LINK( FirstRowHdl, NumericField* );
@@ -131,7 +131,7 @@ private:
 };
 
 
-inline bool ScImportAsciiDlg::Seek(sal_uLong nPos)
+inline bool ScImportAsciiDlg::Seek(ULONG nPos)
 {
     bool bSuccess = true;
     if (nPos != mnStreamPos && mpDatStream)

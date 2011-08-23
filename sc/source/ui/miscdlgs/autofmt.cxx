@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,12 +73,12 @@
 // ScAutoFmtPreview
 
 ScAutoFmtPreview::ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc ) :
-        Window          ( pParent, rRes ),
-        pCurData        ( NULL ),
-        aVD             ( *this ),
+        Window			( pParent, rRes ),
+        pCurData		( NULL ),
+        aVD 			( *this ),
         aScriptedText   ( aVD ),
         xBreakIter      ( pDoc->GetBreakIterator() ),
-        bFitWidth       ( false ),
+        bFitWidth		( FALSE ),
         mbRTL           ( false ),
         aPrvSize        ( GetSizePixel().Width() - 6, GetSizePixel().Height() - 30 ),
         mnLabelColWidth ( (aPrvSize.Width() - 4) / 4 - 12 ),
@@ -92,7 +92,7 @@ ScAutoFmtPreview::ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocume
         aStrMid         ( ScResId( STR_MID ) ),
         aStrSouth       ( ScResId( STR_SOUTH ) ),
         aStrSum         ( ScResId( STR_SUM ) ),
-        pNumFmt         ( new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), ScGlobal::eLnge ) )
+        pNumFmt			( new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), ScGlobal::eLnge ) )
 {
     Init();
 }
@@ -121,7 +121,7 @@ void lcl_SetFontProperties(
     rFont.SetItalic     ( (FontItalic)rPostureItem.GetValue() );
 }
 
-void ScAutoFmtPreview::MakeFonts( sal_uInt16 nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
+void ScAutoFmtPreview::MakeFonts( USHORT nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
 {
     if ( pCurData )
     {
@@ -162,7 +162,7 @@ rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Va
         SETONALLFONTS( SetShadow,       pShadowedItem->GetValue() )
         SETONALLFONTS( SetColor,        aColor )
         SETONALLFONTS( SetSize,         aFontSize )
-        SETONALLFONTS( SetTransparent,  sal_True )
+        SETONALLFONTS( SetTransparent,  TRUE )
 
 #undef SETONALLFONTS
     }
@@ -170,9 +170,9 @@ rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Va
 
 //------------------------------------------------------------------------
 
-sal_uInt16 ScAutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
+USHORT ScAutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 {
-    static const sal_uInt16 pnFmtMap[] =
+    static const USHORT pnFmtMap[] =
     {
         0,  1,  2,  1,  3,
         4,  5,  6,  5,  7,
@@ -205,23 +205,23 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
         // Ausgabe des Zelltextes:
         //------------------------
 
-        String  cellString;
-        sal_Bool    bNumFormat  = pCurData->GetIncludeValueFormat();
-        sal_uLong   nNum;
+        String	cellString;
+        BOOL	bNumFormat	= pCurData->GetIncludeValueFormat();
+        ULONG   nNum;
         double  nVal;
         Color*  pDummy = NULL;
-        sal_uInt16  nIndex = static_cast< sal_uInt16 >( maArray.GetCellIndex( nCol, nRow, mbRTL ) );
+        USHORT  nIndex = static_cast< USHORT >( maArray.GetCellIndex( nCol, nRow, mbRTL ) );
 
         switch( nIndex )
         {
-            case  1: cellString = aStrJan;          break;
-            case  2: cellString = aStrFeb;          break;
-            case  3: cellString = aStrMar;          break;
-            case  5: cellString = aStrNorth;        break;
-            case 10: cellString = aStrMid;          break;
-            case 15: cellString = aStrSouth;        break;
+            case  1: cellString = aStrJan;			break;
+            case  2: cellString = aStrFeb;			break;
+            case  3: cellString = aStrMar;			break;
+            case  5: cellString = aStrNorth;		break;
+            case 10: cellString = aStrMid;			break;
+            case 15: cellString = aStrSouth;		break;
             case  4:
-            case 20: cellString = aStrSum;          break;
+            case 20: cellString = aStrSum;			break;
 
             case  6:
             case  8:
@@ -249,7 +249,7 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
             mknum:
                 if( bNumFormat )
                 {
-                    ScNumFormatAbbrev& rNumFormat = (ScNumFormatAbbrev&)pCurData->GetNumFormat( (sal_uInt16) nNum );
+                    ScNumFormatAbbrev& rNumFormat = (ScNumFormatAbbrev&)pCurData->GetNumFormat( (USHORT) nNum );
                     nNum = rNumFormat.GetFormatIndex( *pNumFmt );
                 }
                 else
@@ -260,14 +260,14 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 
         if ( cellString.Len() > 0 )
         {
-            Size                aStrSize;
-            sal_uInt16              nFmtIndex       = GetFormatIndex( nCol, nRow );
+            Size				aStrSize;
+            USHORT              nFmtIndex       = GetFormatIndex( nCol, nRow );
             Rectangle           cellRect        = maArray.GetCellRect( nCol, nRow );
             Point               aPos            = cellRect.TopLeft();
-            sal_uInt16              nRightX         = 0;
-            sal_Bool                bJustify        = pCurData->GetIncludeJustify();
+            USHORT				nRightX 		= 0;
+            BOOL				bJustify		= pCurData->GetIncludeJustify();
             SvxHorJustifyItem    aHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
-            SvxCellHorJustify      eJustification;
+            SvxCellHorJustify	   eJustification;
 
             //-------------
             // Ausrichtung:
@@ -283,7 +283,7 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 
                 MakeFonts( nFmtIndex, aFont, aCJKFont, aCTLFont );
 
-                theMaxStrSize           = cellRect.GetSize();
+                theMaxStrSize			= cellRect.GetSize();
                 theMaxStrSize.Width()  -= FRAME_OFFSET;
                 theMaxStrSize.Height() -= FRAME_OFFSET;
 
@@ -318,21 +318,21 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                 aStrSize = aScriptedText.GetTextSize();
             }
 
-            nRightX  = (sal_uInt16)(  cellRect.GetWidth()
+            nRightX  = (USHORT)(  cellRect.GetWidth()
                                   - aStrSize.Width()
                                   - FRAME_OFFSET );
 
             //-----------------------------
             // vertikal (immer zentrieren):
             //-----------------------------
-            aPos.Y() += (mnRowHeight - (sal_uInt16)aStrSize.Height()) / 2;
+            aPos.Y() += (mnRowHeight - (USHORT)aStrSize.Height()) / 2;
 
             //-----------
             // horizontal
             //-----------
             if ( eJustification != SVX_HOR_JUSTIFY_STANDARD )
             {
-                sal_uInt16 nHorPos = (sal_uInt16)
+                USHORT nHorPos = (USHORT)
                                  ((cellRect.GetWidth()-aStrSize.Width())/2);
 
                 switch ( eJustification )
@@ -438,9 +438,9 @@ void ScAutoFmtPreview::Init()
     SetBorderStyle( WINDOW_BORDER_MONO );
     maArray.Initialize( 5, 5 );
     maArray.SetUseDiagDoubleClipping( false );
-    CalcCellArray( false );
+    CalcCellArray( FALSE );
     CalcLineMap();
-
+    
     TypeId aType(TYPE(ScDocShell));
     ScDocShell* pDocShell = (ScDocShell*)SfxObjectShell::GetFirst(&aType);
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
@@ -454,7 +454,7 @@ void ScAutoFmtPreview::Init()
 
 //------------------------------------------------------------------------
 
-void ScAutoFmtPreview::CalcCellArray( sal_Bool bFitWidthP )
+void ScAutoFmtPreview::CalcCellArray( BOOL bFitWidthP )
 {
     maArray.SetXOffset( 2 );
     maArray.SetAllColWidths( bFitWidthP ? mnDataColWidth2 : mnDataColWidth1 );
@@ -470,7 +470,7 @@ void ScAutoFmtPreview::CalcCellArray( sal_Bool bFitWidthP )
 
 //------------------------------------------------------------------------
 
-inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::SvxBorderLine* pBorder )
+inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const SvxBorderLine* pBorder )
 {
     rStyle.Set( pBorder, 1.0 / TWIPS_PER_POINT, 5 );
 }
@@ -529,6 +529,9 @@ void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
 {
     sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
+    //	#105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+        aVD.SetDrawMode( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
     Size aWndSize( GetSizePixel() );
     Font aFont( aVD.GetFont() );
@@ -536,7 +539,7 @@ void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
     Point aTmpPoint;
     Rectangle aRect( aTmpPoint, aWndSize );
 
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( TRUE );
     aVD.SetFont( aFont );
     aVD.SetLineColor();
     aVD.SetFillColor( aBackCol );
@@ -549,8 +552,8 @@ void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
     DrawRect( aRect );
 
     Point aPos( (aWndSize.Width() - aPrvSize.Width()) / 2, (aWndSize.Height() - aPrvSize.Height()) / 2 );
-    if (Application::GetSettings().GetLayoutRTL())
-       aPos.X() = -aPos.X();
+    if (Application::GetSettings().GetLayoutRTL()) 
+       aPos.X() = -aPos.X(); 
     DrawOutDev( aPos, aWndSize, Point(), aWndSize, aVD );
 
     aVD.SetDrawMode( nOldDrawMode );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,10 @@
 #include "fmundo.hxx"
 #include "fmpgeimp.hxx"
 #include "svx/dbtoolsclient.hxx"
-#include "svx/svditer.hxx"
+#include "svditer.hxx"
 #include "fmobj.hxx"
 #include "fmprop.hrc"
-#include "svx/fmresids.hrc"
+#include "fmresids.hrc"
 #include "svx/fmglob.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/fmmodel.hxx"
@@ -68,7 +68,6 @@
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
-#include <comphelper/componentcontext.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -91,9 +90,7 @@ typedef cppu::WeakImplHelper1< XScriptListener > ScriptEventListener_BASE;
 class ScriptEventListenerWrapper : public ScriptEventListener_BASE
 {
 public:
-    ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException )
-        :m_rModel( _rModel )
-        ,m_attemptedListenerCreation( false )
+    ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException ) : pModel(&_rModel) 
     {
 
     }
@@ -101,52 +98,78 @@ public:
     virtual void SAL_CALL disposing(const EventObject& ) throw( RuntimeException ){}
 
     // XScriptListener
-    virtual void SAL_CALL firing(const  ScriptEvent& evt) throw(RuntimeException)
+    virtual void SAL_CALL firing(const  ScriptEvent& evt) throw(RuntimeException)	
     {
-        attemptListenerCreation();
+        setModel();
         if ( m_vbaListener.is() )
         {
-            m_vbaListener->firing( evt );
+            m_vbaListener->firing( evt );	
         }
     }
 
     virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw( com::sun::star::reflection::InvocationTargetException, RuntimeException)
     {
-        attemptListenerCreation();
+        setModel();
         if ( m_vbaListener.is() )
         {
-            return m_vbaListener->approveFiring( evt );
+            return m_vbaListener->approveFiring( evt );	
         }
-        return Any();
+        return Any();	
     }
-
+    
 private:
-    void attemptListenerCreation()
+    void setModel()
     {
-        if ( m_attemptedListenerCreation )
-            return;
-        m_attemptedListenerCreation = true;
-
-        try
-        {
-            ::comphelper::ComponentContext const aContext( ::comphelper::getProcessServiceFactory() );
-            Reference< XScriptListener > const xScriptListener( aContext.createComponent( "ooo.vba.EventListener" ), UNO_QUERY_THROW );
-            Reference< XPropertySet > const xListenerProps( xScriptListener, UNO_QUERY_THROW );
-            // SfxObjectShellRef is good here since the model controls the lifetime of the shell
-            SfxObjectShellRef const xObjectShell = m_rModel.GetObjectShell();
-            ENSURE_OR_THROW( xObjectShell.Is(), "no object shell!" );
-            xListenerProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) ), makeAny( xObjectShell->GetModel() ) );
-
-            m_vbaListener = xScriptListener;
+        if ( !m_vbaListener.is() )
+                {
+            Reference < XPropertySet > xProps(
+            ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+            if ( xProps.is() )
+            {
+                Reference< XComponentContext > xCtx( xProps->getPropertyValue(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY );
+                if ( xCtx.is() )
+                {
+                    Reference< XMultiComponentFactory > xMFac( 
+                    xCtx->getServiceManager(), UNO_QUERY );
+                    SfxObjectShellRef xObjSh = pModel->GetObjectShell();
+                    Reference< XMultiServiceFactory > xDocFac;
+                    if ( xObjSh.Is() )
+                        xDocFac.set( xObjSh->GetModel(), UNO_QUERY );
+  
+                    if ( xMFac.is() )
+                    {
+                        m_vbaListener.set( xMFac->createInstanceWithContext( 
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 
+                                "ooo.vba.EventListener"  ) ), xCtx ), 
+                                    UNO_QUERY_THROW );
+                    }
+                }
+            }
         }
-        catch( Exception const & )
+        Reference< XPropertySet > xProps( m_vbaListener, UNO_QUERY );
+        if ( xProps.is() )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            try
+            {
+                SfxObjectShellRef xObjSh = pModel->GetObjectShell();
+                if ( xObjSh.Is() && m_vbaListener.is() )
+                {
+                    Any aVal;
+                    aVal <<= xObjSh->GetModel();
+                    xProps->setPropertyValue( 
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) ), 
+                        aVal );
+                }
+            }
+            catch( Exception& )
+            {
+                //swallow any errors
+            }
         }
     }
-    FmFormModel&                    m_rModel;
-    Reference< XScriptListener >    m_vbaListener;
-    bool                            m_attemptedListenerCreation;
+    FmFormModel* pModel;
+    Reference< XScriptListener > m_vbaListener;
 
 
 };
@@ -156,8 +179,8 @@ private:
 //------------------------------------------------------------------------------
 struct PropertyInfo
 {
-    sal_Bool    bIsTransientOrReadOnly  : 1;    // the property is transient or read-only, thus we need no undo action for it
-    sal_Bool    bIsValueProperty        : 1;    // the property is the special value property, thus it may be handled
+    BOOL	bIsTransientOrReadOnly	: 1;	// the property is transient or read-only, thus we need no undo action for it
+    BOOL	bIsValueProperty	    : 1;	// the property is the special value property, thus it may be handled
                                             // as if it's transient or persistent
 };
 
@@ -165,12 +188,12 @@ struct PropertySetInfo
 {
     DECLARE_STL_USTRINGACCESS_MAP(PropertyInfo, AllProperties);
 
-    AllProperties   aProps;                 // all properties of this set which we know so far
-    sal_Bool            bHasEmptyControlSource; // sal_True -> the set has a DataField property, and the current value is an empty string
+    AllProperties	aProps; 				// all properties of this set which we know so far
+    BOOL			bHasEmptyControlSource; // sal_True -> the set has a DataField property, and the current value is an empty string
                                             // sal_False -> the set has _no_ such property or it's value isn't empty
 };
 
-sal_Bool operator < (const Reference< XPropertySet >& lhs,
+BOOL operator < (const Reference< XPropertySet >& lhs,
                  const Reference< XPropertySet >& rhs)
 {
     return lhs.get() < rhs.get();
@@ -317,7 +340,7 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             {
                 SdrObject* pSdrObj = (SdrObject*)pSdrHint->GetObject();
                 Inserted( pSdrObj );
-            }   break;
+            }	break;
             case HINT_OBJREMOVED:
             {
                 SdrObject* pSdrObj = (SdrObject*)pSdrHint->GetObject();
@@ -451,7 +474,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
                 rPage.GetImpl().setUniqueName( xContent, xForm );
                 xNewParent->insertByIndex( nPos, makeAny( xContent ) );
 
-                Reference< XEventAttacherManager >  xManager( xNewParent, UNO_QUERY_THROW );
+                Reference< XEventAttacherManager >	xManager( xNewParent, UNO_QUERY_THROW );
                 xManager->registerScriptEvents( nPos, pObj->GetOriginalEvents() );
             }
             catch( const Exception& )
@@ -514,7 +537,7 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
             if (nPos >= 0)
             {
                 Sequence< ScriptEventDescriptor > aEvts;
-                Reference< XEventAttacherManager >  xManager(xForm, UNO_QUERY);
+                Reference< XEventAttacherManager >	xManager(xForm, UNO_QUERY);
                 if (xManager.is())
                     aEvts = xManager->getScriptEvents(nPos);
 
@@ -533,7 +556,7 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
     }
 }
 
-//  XEventListener
+//	XEventListener
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeException )
 {
@@ -587,7 +610,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                 }
                 catch(const Exception&)
                 {
-                    OSL_FAIL("FmXUndoEnvironment::propertyChange: could not adjust the value property!");
+                    OSL_ENSURE(sal_False, "FmXUndoEnvironment::propertyChange: could not adjust the value property!");
                 }
             }
         }
@@ -631,7 +654,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             DBG_ASSERT(aSetPos != pCache->end(), "FmXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
         }
         else
-        {   // is it the DataField property ?
+        {	// is it the DataField property ?
             if (evt.PropertyName.equals(FM_PROP_CONTROLSOURCE))
             {
                 aSetPos->second.bHasEmptyControlSource = !evt.NewValue.hasValue() || (::comphelper::getString(evt.NewValue).getLength() == 0);
@@ -643,11 +666,11 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         PropertySetInfo::AllProperties& rPropInfos = aSetPos->second.aProps;
         PropertySetInfo::AllPropertiesIterator aPropertyPos = rPropInfos.find(evt.PropertyName);
         if (aPropertyPos == rPropInfos.end())
-        {   // nothing 'til now ... have to change this ....
+        {	// nothing 'til now ... have to change this ....
             PropertyInfo aNewEntry;
 
             // the attributes
-            sal_Int32 nAttributes = xSet->getPropertySetInfo()->getPropertyByName(evt.PropertyName).Attributes;
+            INT32 nAttributes = xSet->getPropertySetInfo()->getPropertyByName(evt.PropertyName).Attributes;
             aNewEntry.bIsTransientOrReadOnly = ((nAttributes & PropertyAttribute::READONLY) != 0) || ((nAttributes & PropertyAttribute::TRANSIENT) != 0);
 
             // check if it is the special "DataFieldProperty"
@@ -916,7 +939,7 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FmXUndoEnvironment::switchListening: caught an exception!" );
+        OSL_ENSURE( sal_False, "FmXUndoEnvironment::switchListening: caught an exception!" );
     }
 }
 
@@ -951,7 +974,7 @@ void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObje
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FmXUndoEnvironment::switchListening: caught an exception!" );
+        OSL_ENSURE( sal_False, "FmXUndoEnvironment::switchListening: caught an exception!" );
     }
 }
 
@@ -989,7 +1012,7 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement
             if ( !::svxform::OStaticDataAccessTools().isEmbeddedInDatabase( _rxElement ) )
                 // (if there is a connection in the context of the component, setting
                 // a new connection would be vetoed, anyway)
-                // #i34196#
+                // #i34196# - 2004-09-21 - fs@openoffice.org
                 xFormProperties->setPropertyValue( FM_PROP_ACTIVE_CONNECTION, Any() );
     }
 
@@ -1030,7 +1053,7 @@ void FmUndoPropertyAction::Undo()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmUndoPropertyAction::Undo: caught an exception!" );
+            OSL_ENSURE( sal_False, "FmUndoPropertyAction::Undo: caught an exception!" );
         }
         rEnv.UnLock();
     }
@@ -1051,7 +1074,7 @@ void FmUndoPropertyAction::Redo()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmUndoPropertyAction::Redo: caught an exception!" );
+            OSL_ENSURE( sal_False, "FmUndoPropertyAction::Redo: caught an exception!" );
         }
         rEnv.UnLock();
     }
@@ -1062,7 +1085,7 @@ String FmUndoPropertyAction::GetComment() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoPropertyAction::GetComment" );
     String aStr(static_STR_UNDO_PROPERTY);
-
+    
     aStr.SearchAndReplace( '#', aPropertyName );
     return aStr;
 }
@@ -1094,7 +1117,7 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
         {
             if (m_nIndex >= 0)
             {
-                Reference< XEventAttacherManager >  xManager( xCont, UNO_QUERY );
+                Reference< XEventAttacherManager >	xManager( xCont, UNO_QUERY );
                 if ( xManager.is() )
                     m_aEvents = xManager->getScriptEvents(m_nIndex);
             }
@@ -1151,7 +1174,7 @@ void FmUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
         OSL_ENSURE( getElementPos( m_xContainer.get(), m_xElement ) == m_nIndex, "FmUndoContainerAction::implReInsert: insertion did not work!" );
 
         // register the events
-        Reference< XEventAttacherManager >  xManager( m_xContainer, UNO_QUERY );
+        Reference< XEventAttacherManager >	xManager( m_xContainer, UNO_QUERY );
         if ( xManager.is() )
             xManager->registerScriptEvents( m_nIndex, m_aEvents );
 
@@ -1180,7 +1203,7 @@ void FmUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
     OSL_ENSURE( xElement == m_xElement, "FmUndoContainerAction::implReRemove: cannot find the element which I'm responsible for!" );
     if ( xElement == m_xElement )
     {
-        Reference< XEventAttacherManager >  xManager( m_xContainer, UNO_QUERY );
+        Reference< XEventAttacherManager >	xManager( m_xContainer, UNO_QUERY );
         if ( xManager.is() )
             m_aEvents = xManager->getScriptEvents( m_nIndex );
         m_xContainer->removeByIndex( m_nIndex );
@@ -1213,7 +1236,7 @@ void FmUndoContainerAction::Undo()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmUndoContainerAction::Undo: caught an exception!" );
+            OSL_ENSURE( sal_False, "FmUndoContainerAction::Undo: caught an exception!" );
         }
         rEnv.UnLock();
     }
@@ -1242,7 +1265,7 @@ void FmUndoContainerAction::Redo()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmUndoContainerAction::Redo: caught an exception!" );
+            OSL_ENSURE( sal_False, "FmUndoContainerAction::Redo: caught an exception!" );
         }
         rEnv.UnLock();
     }
@@ -1313,7 +1336,7 @@ void FmUndoModelReplaceAction::Undo()
     }
     catch(Exception&)
     {
-        OSL_FAIL("FmUndoModelReplaceAction::Undo : could not replace the model !");
+        DBG_ERROR("FmUndoModelReplaceAction::Undo : could not replace the model !");
     }
 }
 

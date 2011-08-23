@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
@@ -58,9 +58,9 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
     fIterationEpsilon(0.001),
     nIterationCount(100),
     nYear2000(1930),
-    bIsIterationEnabled(false),
-    bCalcAsShown(false),
-    bIgnoreCase(false),
+    bIsIterationEnabled(sal_False),
+    bCalcAsShown(sal_False),
+    bIgnoreCase(sal_False),
     bLookUpLabels(sal_True),
     bMatchWholeCell(sal_True),
     bUseRegularExpressions(sal_True)
@@ -92,12 +92,12 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
             else if (IsXMLToken(aLocalName, XML_SEARCH_CRITERIA_MUST_APPLY_TO_WHOLE_CELL))
             {
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bMatchWholeCell = false;
+                    bMatchWholeCell = sal_False;
             }
             else if (IsXMLToken(aLocalName, XML_AUTOMATIC_FIND_LABELS))
             {
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bLookUpLabels = false;
+                    bLookUpLabels = sal_False;
             }
             else if (IsXMLToken(aLocalName, XML_NULL_YEAR))
             {
@@ -108,7 +108,7 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
             else if (IsXMLToken(aLocalName, XML_USE_REGULAR_EXPRESSIONS))
             {
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bUseRegularExpressions = false;
+                    bUseRegularExpressions = sal_False;
             }
         }
     }
@@ -118,7 +118,7 @@ ScXMLCalculationSettingsContext::~ScXMLCalculationSettingsContext()
 {
 }
 
-SvXMLImportContext *ScXMLCalculationSettingsContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLCalculationSettingsContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -157,17 +157,18 @@ void ScXMLCalculationSettingsContext::EndElement()
             xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NULLDATE)), uno::makeAny(aNullDate) );
             if (GetScImport().GetDocument())
             {
-                ScXMLImport::MutexGuard aGuard(GetScImport());
+                GetScImport().LockSolarMutex();
                 ScDocOptions aDocOptions (GetScImport().GetDocument()->GetDocOptions());
                 aDocOptions.SetYear2000(nYear2000);
                 GetScImport().GetDocument()->SetDocOptions(aDocOptions);
+                GetScImport().UnlockSolarMutex();
             }
         }
     }
 }
 
 ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -200,7 +201,7 @@ ScXMLNullDateContext::~ScXMLNullDateContext()
 {
 }
 
-SvXMLImportContext *ScXMLNullDateContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLNullDateContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
@@ -215,7 +216,7 @@ void ScXMLNullDateContext::EndElement()
 }
 
 ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -258,7 +259,7 @@ ScXMLIterationContext::~ScXMLIterationContext()
 {
 }
 
-SvXMLImportContext *ScXMLIterationContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLIterationContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )

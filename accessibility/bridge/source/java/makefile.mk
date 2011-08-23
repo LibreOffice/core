@@ -39,7 +39,7 @@ VERSIONOBJ=
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"=="WNT" && "$(SOLAR_JAVA)" != ""
+.IF "$(GUI)"=="WNT"
 
 SLOFILES= $(SLO)$/WindowsAccessBridgeAdapter.obj
 
@@ -54,17 +54,17 @@ DEF1EXPORTFILE=exports.dxp
 
 SHL1HEADER=$(OUT)$/inc$/WindowsAccessBridgeAdapter.h
 
-.ENDIF			# "$(GUI)"=="WNT" && "$(SOLAR_JAVA)" != ""
+.ENDIF			# "$(GUI)"=="WNT"
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
-.IF "$(GUI)"=="WNT" && "$(SOLAR_JAVA)" != ""
+.IF "$(GUI)"=="WNT"
 
 $(SLO)$/WindowsAccessBridgeAdapter.obj : $(SHL1HEADER)
 
 $(SHL1HEADER) :
     javah -classpath $(OUT)$/class -o $(SHL1HEADER) org.openoffice.accessibility.WindowsAccessBridgeAdapter
 
-.ENDIF			# "$(GUI)"=="WNT"  && "$(SOLAR_JAVA)" != ""
+.ENDIF			# "$(GUI)"=="WNT"

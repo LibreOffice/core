@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,58 +54,59 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
-#include "textuno.hxx"  // ScHeaderFooterContentObj
+#include "textuno.hxx"	// ScHeaderFooterContentObj
 
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-TYPEINIT1(ScMergeAttr,          SfxPoolItem);
+TYPEINIT1(ScMergeAttr,		 	SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(ScProtectionAttr,     SfxPoolItem);
-TYPEINIT1(ScRangeItem,          SfxPoolItem);
-TYPEINIT1(ScTableListItem,      SfxPoolItem);
-TYPEINIT1(ScPageHFItem,         SfxPoolItem);
+TYPEINIT1(ScRangeItem,		 	SfxPoolItem);
+TYPEINIT1(ScTableListItem,		SfxPoolItem);
+TYPEINIT1(ScPageHFItem, 	 	SfxPoolItem);
 TYPEINIT1(ScViewObjectModeItem, SfxEnumItem);
-TYPEINIT1(ScDoubleItem,         SfxPoolItem);
+TYPEINIT1(ScDoubleItem, 		SfxPoolItem);
 TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
 
 //------------------------------------------------------------------------
 
 //
-//      allgemeine Hilfsfunktionen
+//		allgemeine Hilfsfunktionen
 //
 
-sal_Bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther )
+BOOL ScHasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther )
 {
+//	  DBG_ASSERT( pThis || pOther, "LineAttr == 0" );
 
     if (!pThis)
-        return false;
+        return FALSE;
     if (!pOther)
-        return sal_True;
+        return TRUE;
 
-    sal_uInt16 nThisSize = pThis->GetOutWidth() + pThis->GetDistance() + pThis->GetInWidth();
-    sal_uInt16 nOtherSize = pOther->GetOutWidth() + pOther->GetDistance() + pOther->GetInWidth();
+    USHORT nThisSize = pThis->GetOutWidth() + pThis->GetDistance() + pThis->GetInWidth();
+    USHORT nOtherSize = pOther->GetOutWidth() + pOther->GetDistance() + pOther->GetInWidth();
 
     if (nThisSize > nOtherSize)
-        return sal_True;
+        return TRUE;
     else if (nThisSize < nOtherSize)
-        return false;
+        return FALSE;
     else
     {
         if ( pOther->GetInWidth() && !pThis->GetInWidth() )
-            return sal_True;
+            return TRUE;
         else if ( pThis->GetInWidth() && !pOther->GetInWidth() )
-            return false;
+            return FALSE;
         else
         {
-            return sal_True;            //! ???
+            return TRUE;			//! ???
         }
     }
 }
 
 
 //
-//      Item - Implementierungen
+//		Item - Implementierungen
 //
 
 //------------------------------------------------------------------------
@@ -170,10 +171,10 @@ SfxPoolItem* ScMergeAttr::Clone( SfxItemPool * ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, sal_uInt16 /* nVer */ ) const
+SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, USHORT /* nVer */ ) const
 {
-    sal_Int16   nCol;
-    sal_Int16   nRow;
+    INT16	nCol;
+    INT16	nRow;
     rStream >> nCol;
     rStream >> nRow;
     return new ScMergeAttr(static_cast<SCCOL>(nCol),static_cast<SCROW>(nRow));
@@ -190,7 +191,7 @@ ScMergeFlagAttr::ScMergeFlagAttr():
 
 //------------------------------------------------------------------------
 
-ScMergeFlagAttr::ScMergeFlagAttr(sal_Int16 nFlags):
+ScMergeFlagAttr::ScMergeFlagAttr(INT16 nFlags):
     SfxInt16Item(ATTR_MERGE_FLAG, nFlags)
 {
 }
@@ -205,17 +206,17 @@ ScMergeFlagAttr::~ScMergeFlagAttr()
 
 ScProtectionAttr::ScProtectionAttr():
     SfxPoolItem(ATTR_PROTECTION),
-    bProtection(sal_True),
-    bHideFormula(false),
-    bHideCell(false),
-    bHidePrint(false)
+    bProtection(TRUE),
+    bHideFormula(FALSE),
+    bHideCell(FALSE),
+    bHidePrint(FALSE)
 {
 }
 
 //------------------------------------------------------------------------
 
-ScProtectionAttr::ScProtectionAttr( sal_Bool bProtect, sal_Bool bHFormula,
-                                    sal_Bool bHCell, sal_Bool bHPrint):
+ScProtectionAttr::ScProtectionAttr( BOOL bProtect, BOOL bHFormula,
+                                    BOOL bHCell, BOOL bHPrint):
     SfxPoolItem(ATTR_PROTECTION),
     bProtection(bProtect),
     bHideFormula(bHFormula),
@@ -231,8 +232,8 @@ ScProtectionAttr::ScProtectionAttr(const ScProtectionAttr& rItem):
 {
     bProtection  = rItem.bProtection;
     bHideFormula = rItem.bHideFormula;
-    bHideCell    = rItem.bHideCell;
-    bHidePrint   = rItem.bHidePrint;
+    bHideCell	 = rItem.bHideCell;
+    bHidePrint	 = rItem.bHidePrint;
 }
 
 ScProtectionAttr::~ScProtectionAttr()
@@ -241,7 +242,7 @@ ScProtectionAttr::~ScProtectionAttr()
 
 //------------------------------------------------------------------------
 
-bool ScProtectionAttr::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool ScProtectionAttr::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId  )
@@ -265,14 +266,14 @@ bool ScProtectionAttr::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_4 :
             rVal <<= (sal_Bool ) bHidePrint; break;
         default:
-            OSL_FAIL("Wrong MemberID!");
+            DBG_ERROR("Wrong MemberID!");
             return false;
     }
 
     return true;
 }
 
-bool ScProtectionAttr::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     bool bRet = false;
     sal_Bool bVal = sal_Bool();
@@ -292,7 +293,7 @@ bool ScProtectionAttr::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
             else
             {
-                OSL_FAIL("exception - wrong argument");
+                DBG_ERROR("exception - wrong argument");
             }
             break;
         }
@@ -305,7 +306,7 @@ bool ScProtectionAttr::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_4 :
             bRet = (rVal >>= bVal); if (bRet) bHidePrint=bVal; break;
         default:
-            OSL_FAIL("Wrong MemberID!");
+            DBG_ERROR("Wrong MemberID!");
     }
 
     return bRet;
@@ -320,11 +321,11 @@ String ScProtectionAttr::GetValueText() const
     String aStrNo  ( ScGlobal::GetRscString(STR_NO) );
     sal_Unicode cDelim = ',';
 
-    aValue  = '(';
-    aValue += (bProtection  ? aStrYes : aStrNo);    aValue += cDelim;
-    aValue += (bHideFormula ? aStrYes : aStrNo);    aValue += cDelim;
-    aValue += (bHideCell    ? aStrYes : aStrNo);    aValue += cDelim;
-    aValue += (bHidePrint   ? aStrYes : aStrNo);
+    aValue	= '(';
+    aValue += (bProtection	? aStrYes : aStrNo);	aValue += cDelim;
+    aValue += (bHideFormula ? aStrYes : aStrNo);	aValue += cDelim;
+    aValue += (bHideCell	? aStrYes : aStrNo);	aValue += cDelim;
+    aValue += (bHidePrint	? aStrYes : aStrNo);
     aValue += ')';
 
     return aValue;
@@ -341,9 +342,9 @@ SfxItemPresentation ScProtectionAttr::GetPresentation
         const IntlWrapper* /* pIntl */
     ) const
 {
-    String aStrYes  ( ScGlobal::GetRscString(STR_YES) );
-    String aStrNo   ( ScGlobal::GetRscString(STR_NO) );
-    String aStrSep   = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
+    String aStrYes	( ScGlobal::GetRscString(STR_YES) );
+    String aStrNo	( ScGlobal::GetRscString(STR_NO) );
+    String aStrSep	 = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
     String aStrDelim = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
 
     switch ( ePres )
@@ -358,12 +359,12 @@ SfxItemPresentation ScProtectionAttr::GetPresentation
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText  = ScGlobal::GetRscString(STR_PROTECTION); rText += aStrSep;
-            rText += (bProtection ? aStrYes : aStrNo);       rText += aStrDelim;
-            rText += ScGlobal::GetRscString(STR_FORMULAS);   rText += aStrSep;
-            rText += (!bHideFormula ? aStrYes : aStrNo);     rText += aStrDelim;
-            rText += ScGlobal::GetRscString(STR_HIDE);       rText += aStrSep;
-            rText += (bHideCell ? aStrYes : aStrNo);         rText += aStrDelim;
-            rText += ScGlobal::GetRscString(STR_PRINT);      rText += aStrSep;
+            rText += (bProtection ? aStrYes : aStrNo);		 rText += aStrDelim;
+            rText += ScGlobal::GetRscString(STR_FORMULAS);	 rText += aStrSep;
+            rText += (!bHideFormula ? aStrYes : aStrNo);	 rText += aStrDelim;
+            rText += ScGlobal::GetRscString(STR_HIDE);		 rText += aStrSep;
+            rText += (bHideCell ? aStrYes : aStrNo);		 rText += aStrDelim;
+            rText += ScGlobal::GetRscString(STR_PRINT); 	 rText += aStrSep;
             rText += (!bHidePrint ? aStrYes : aStrNo);
             break;
 
@@ -395,12 +396,12 @@ SfxPoolItem* ScProtectionAttr::Clone( SfxItemPool * ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, sal_uInt16 /* n */ ) const
+SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, USHORT /* n */ ) const
 {
-    sal_Bool bProtect;
-    sal_Bool bHFormula;
-    sal_Bool bHCell;
-    sal_Bool bHPrint;
+    BOOL bProtect;
+    BOOL bHFormula;
+    BOOL bHCell;
+    BOOL bHPrint;
 
     rStream >> bProtect;
     rStream >> bHFormula;
@@ -412,38 +413,38 @@ SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, sal_uInt16 /* n */ ) c
 
 //------------------------------------------------------------------------
 
-sal_Bool ScProtectionAttr::SetProtection( sal_Bool bProtect)
+BOOL ScProtectionAttr::SetProtection( BOOL bProtect)
 {
     bProtection =  bProtect;
-    return sal_True;
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScProtectionAttr::SetHideFormula( sal_Bool bHFormula)
+BOOL ScProtectionAttr::SetHideFormula( BOOL bHFormula)
 {
     bHideFormula = bHFormula;
-    return sal_True;
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScProtectionAttr::SetHideCell( sal_Bool bHCell)
+BOOL ScProtectionAttr::SetHideCell( BOOL bHCell)
 {
     bHideCell = bHCell;
-    return sal_True;
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScProtectionAttr::SetHidePrint( sal_Bool bHPrint)
+BOOL ScProtectionAttr::SetHidePrint( BOOL bHPrint)
 {
     bHidePrint = bHPrint;
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
-//      ScRangeItem - Tabellenbereich
+//		ScRangeItem - Tabellenbereich
 // -----------------------------------------------------------------------
 
 int ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
@@ -467,7 +468,7 @@ SfxItemPresentation ScRangeItem::GetPresentation
         SfxItemPresentation ePres,
         SfxMapUnit          /* eCoreUnit */,
         SfxMapUnit          /* ePresUnit */,
-        String&             rText,
+        String& 			rText,
         const IntlWrapper* /* pIntl */
     ) const
 {
@@ -478,7 +479,7 @@ SfxItemPresentation ScRangeItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
         rText  = ScGlobal::GetRscString(STR_AREA);
         rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
-        /* !!! fall-through !!! */
+//		break;// Durchfallen !!!
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
@@ -499,18 +500,18 @@ SfxItemPresentation ScRangeItem::GetPresentation
 }
 
 // -----------------------------------------------------------------------
-//      ScTableListItem - Liste von Tabellen(-nummern)
+//		ScTableListItem - Liste von Tabellen(-nummern)
 // -----------------------------------------------------------------------
 
 ScTableListItem::ScTableListItem( const ScTableListItem& rCpy )
-    :   SfxPoolItem ( rCpy.Which() ),
-        nCount      ( rCpy.nCount )
+    :	SfxPoolItem ( rCpy.Which() ),
+        nCount		( rCpy.nCount )
 {
     if ( nCount > 0 )
     {
         pTabArr = new SCTAB [nCount];
 
-        for ( sal_uInt16 i=0; i<nCount; i++ )
+        for ( USHORT i=0; i<nCount; i++ )
             pTabArr[i] = rCpy.pTabArr[i];
     }
     else
@@ -534,7 +535,7 @@ ScTableListItem& ScTableListItem::operator=( const ScTableListItem& rCpy )
     if ( rCpy.nCount > 0 )
     {
         pTabArr = new SCTAB [rCpy.nCount];
-        for ( sal_uInt16 i=0; i<rCpy.nCount; i++ )
+        for ( USHORT i=0; i<rCpy.nCount; i++ )
             pTabArr[i] = rCpy.pTabArr[i];
     }
     else
@@ -551,12 +552,12 @@ int ScTableListItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    ScTableListItem&    rCmp   = (ScTableListItem&)rAttr;
-    sal_Bool                bEqual = (nCount == rCmp.nCount);
+    ScTableListItem&	rCmp   = (ScTableListItem&)rAttr;
+    BOOL				bEqual = (nCount == rCmp.nCount);
 
     if ( nCount > 0 )
     {
-        sal_uInt16  i=0;
+        USHORT	i=0;
 
         bEqual = ( pTabArr && rCmp.pTabArr );
 
@@ -581,9 +582,9 @@ SfxPoolItem* ScTableListItem::Clone( SfxItemPool* ) const
 SfxItemPresentation ScTableListItem::GetPresentation
     (
         SfxItemPresentation ePres,
-        SfxMapUnit          /* eCoreUnit */,
-        SfxMapUnit          /* ePresUnit */,
-        String&             rText,
+        SfxMapUnit			/* eCoreUnit */,
+        SfxMapUnit			/* ePresUnit */,
+        String& 			rText,
         const IntlWrapper* /* pIntl */
     ) const
 {
@@ -599,7 +600,7 @@ SfxItemPresentation ScTableListItem::GetPresentation
             {
             rText  = '(';
             if ( nCount>0 && pTabArr )
-                for ( sal_uInt16 i=0; i<nCount; i++ )
+                for ( USHORT i=0; i<nCount; i++ )
                 {
                     rText += String::CreateFromInt32( pTabArr[i] );
                     if ( i<(nCount-1) )
@@ -627,21 +628,21 @@ SfxItemPresentation ScTableListItem::GetPresentation
 //      ScPageHFItem - Daten der Kopf-/Fusszeilen
 // -----------------------------------------------------------------------
 
-ScPageHFItem::ScPageHFItem( sal_uInt16 nWhichP )
+ScPageHFItem::ScPageHFItem( USHORT nWhichP )
     :   SfxPoolItem ( nWhichP ),
-        pLeftArea   ( NULL ),
+        pLeftArea	( NULL ),
         pCenterArea ( NULL ),
-        pRightArea  ( NULL )
+        pRightArea	( NULL )
 {
 }
 
 //------------------------------------------------------------------------
 
 ScPageHFItem::ScPageHFItem( const ScPageHFItem& rItem )
-    :   SfxPoolItem ( rItem ),
-        pLeftArea   ( NULL ),
+    :	SfxPoolItem ( rItem ),
+        pLeftArea	( NULL ),
         pCenterArea ( NULL ),
-        pRightArea  ( NULL )
+        pRightArea	( NULL )
 {
     if ( rItem.pLeftArea )
         pLeftArea = rItem.pLeftArea->Clone();
@@ -662,7 +663,7 @@ ScPageHFItem::~ScPageHFItem()
 
 //------------------------------------------------------------------------
 
-bool ScPageHFItem::QueryValue( uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
+bool ScPageHFItem::QueryValue( uno::Any& rVal, BYTE /* nMemberId */ ) const
 {
     uno::Reference<sheet::XHeaderFooterContent> xContent =
         new ScHeaderFooterContentObj( pLeftArea, pCenterArea, pRightArea );
@@ -671,7 +672,7 @@ bool ScPageHFItem::QueryValue( uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
     return true;
 }
 
-bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
+bool ScPageHFItem::PutValue( const uno::Any& rVal, BYTE /* nMemberId */ )
 {
     bool bRet = false;
     uno::Reference<sheet::XHeaderFooterContent> xContent;
@@ -698,7 +699,7 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
                 if ( !pLeftArea || !pCenterArea || !pRightArea )
                 {
                     // keine Texte auf NULL stehen lassen
-                    ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), sal_True );
+                    ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), TRUE );
                     if (!pLeftArea)
                         pLeftArea = aEngine.CreateTextObject();
                     if (!pCenterArea)
@@ -714,7 +715,7 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
 
     if (!bRet)
     {
-        OSL_FAIL("exception - wrong argument");
+        DBG_ERROR("exception - wrong argument");
     }
 
     return true;
@@ -733,7 +734,7 @@ int ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
-    const ScPageHFItem& r = (const ScPageHFItem&)rItem;
+    const ScPageHFItem&	r = (const ScPageHFItem&)rItem;
 
     return    ScGlobal::EETextObjEqual(pLeftArea,   r.pLeftArea)
            && ScGlobal::EETextObjEqual(pCenterArea, r.pCenterArea)
@@ -758,11 +759,11 @@ void lcl_SetSpace( String& rStr, const ESelection& rSel )
     rStr.SetChar( rSel.nStartPos, ' ' );
 }
 
-sal_Bool lcl_ConvertFields(EditEngine& rEng, const String* pCommands)
+BOOL lcl_ConvertFields(EditEngine& rEng, const String* pCommands)
 {
-    sal_Bool bChange = false;
-    sal_uInt16 nParCnt = rEng.GetParagraphCount();
-    for (sal_uInt16 nPar = 0; nPar<nParCnt; nPar++)
+    BOOL bChange = FALSE;
+    USHORT nParCnt = rEng.GetParagraphCount();
+    for (USHORT nPar = 0; nPar<nParCnt; nPar++)
     {
         String aStr = rEng.GetText( nPar );
         xub_StrLen nPos;
@@ -771,49 +772,49 @@ sal_Bool lcl_ConvertFields(EditEngine& rEng, const String* pCommands)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[0].Len() );
             rEng.QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), aSel );
-            lcl_SetSpace(aStr, aSel ); bChange = sal_True;
+            lcl_SetSpace(aStr, aSel ); bChange = TRUE;
         }
         while ((nPos = aStr.Search(pCommands[1])) != STRING_NOTFOUND)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[1].Len() );
             rEng.QuickInsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), aSel );
-            lcl_SetSpace(aStr, aSel ); bChange = sal_True;
+            lcl_SetSpace(aStr, aSel ); bChange = TRUE;
         }
         while ((nPos = aStr.Search(pCommands[2])) != STRING_NOTFOUND)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[2].Len() );
             rEng.QuickInsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR), EE_FEATURE_FIELD), aSel );
-            lcl_SetSpace(aStr, aSel ); bChange = sal_True;
+            lcl_SetSpace(aStr, aSel ); bChange = TRUE;
         }
         while ((nPos = aStr.Search(pCommands[3])) != STRING_NOTFOUND)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[3].Len() );
             rEng.QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD ), aSel );
-            lcl_SetSpace(aStr, aSel ); bChange = sal_True;
+            lcl_SetSpace(aStr, aSel ); bChange = TRUE;
         }
         while ((nPos = aStr.Search(pCommands[4])) != STRING_NOTFOUND)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[4].Len() );
             rEng.QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), aSel );
-            lcl_SetSpace(aStr, aSel ); bChange = sal_True;
+            lcl_SetSpace(aStr, aSel ); bChange = TRUE;
         }
         while ((nPos = aStr.Search(pCommands[5])) != STRING_NOTFOUND)
         {
             ESelection aSel( nPar,nPos, nPar,nPos+pCommands[5].Len() );
             rEng.QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), aSel );
-            lcl_SetSpace(aStr, aSel ); bChange = sal_True;
+            lcl_SetSpace(aStr, aSel ); bChange = TRUE;
         }
     }
     return bChange;
 }
 
-#define SC_FIELD_COUNT  6
+#define SC_FIELD_COUNT	6
 
-SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
+SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, USHORT nVer ) const
 {
-    EditTextObject* pLeft   = EditTextObject::Create(rStream);
+    EditTextObject* pLeft	= EditTextObject::Create(rStream);
     EditTextObject* pCenter = EditTextObject::Create(rStream);
-    EditTextObject* pRight  = EditTextObject::Create(rStream);
+    EditTextObject* pRight	= EditTextObject::Create(rStream);
 
     DBG_ASSERT( pLeft && pCenter && pRight, "Error reading ScPageHFItem" );
 
@@ -821,11 +822,11 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
          pCenter == NULL || pCenter->GetParagraphCount() == 0 ||
          pRight == NULL  || pRight->GetParagraphCount() == 0 )
     {
-        //  If successfully loaded, each object contains at least one paragraph.
-        //  Excel import in 5.1 created broken TextObjects (#67442#) that are
-        //  corrected here to avoid saving wrong files again (#90487#).
+        //	If successfully loaded, each object contains at least one paragraph.
+        //	Excel import in 5.1 created broken TextObjects (#67442#) that are
+        //	corrected here to avoid saving wrong files again (#90487#).
 
-        ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), sal_True );
+        ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), TRUE );
         if ( pLeft == NULL || pLeft->GetParagraphCount() == 0 )
         {
             delete pLeft;
@@ -843,9 +844,9 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
         }
     }
 
-    if ( nVer < 1 )             // alte Feldbefehle umsetzen
+    if ( nVer < 1 )				// alte Feldbefehle umsetzen
     {
-        sal_uInt16 i;
+        USHORT i;
         const String& rDel = ScGlobal::GetRscString( STR_HFCMD_DELIMITER );
         String aCommands[SC_FIELD_COUNT];
         for (i=0; i<SC_FIELD_COUNT; i++)
@@ -859,7 +860,7 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
         for (i=0; i<SC_FIELD_COUNT; i++)
             aCommands[i] += rDel;
 
-        ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), sal_True );
+        ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), TRUE );
         aEngine.SetText(*pLeft);
         if (lcl_ConvertFields(aEngine,aCommands))
         {
@@ -880,11 +881,11 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
         }
     }
     else if ( nVer < 2 )
-    {   // nichts tun, SvxFileField nicht gegen SvxExtFileField austauschen
+    {	// nichts tun, SvxFileField nicht gegen SvxExtFileField austauschen
     }
 
     ScPageHFItem* pItem = new ScPageHFItem( Which() );
-    pItem->SetArea( pLeft,    SC_HF_LEFTAREA   );
+    pItem->SetArea( pLeft,	  SC_HF_LEFTAREA   );
     pItem->SetArea( pCenter, SC_HF_CENTERAREA );
     pItem->SetArea( pRight,  SC_HF_RIGHTAREA  );
 
@@ -920,27 +921,27 @@ void ScPageHFItem::SetArea( EditTextObject *pNew, int nArea )
 {
     switch ( nArea )
     {
-        case SC_HF_LEFTAREA:    delete pLeftArea;   pLeftArea   = pNew; break;
+        case SC_HF_LEFTAREA:	delete pLeftArea;	pLeftArea   = pNew; break;
         case SC_HF_CENTERAREA:  delete pCenterArea; pCenterArea = pNew; break;
-        case SC_HF_RIGHTAREA:   delete pRightArea;  pRightArea  = pNew; break;
+        case SC_HF_RIGHTAREA:	delete pRightArea;  pRightArea  = pNew; break;
         default:
-            OSL_FAIL( "New Area?" );
+            DBG_ERROR( "New Area?" );
     }
 }
 
 //-----------------------------------------------------------------------
-//  ScViewObjectModeItem - Darstellungsmodus von ViewObjekten
+//	ScViewObjectModeItem - Darstellungsmodus von ViewObjekten
 //-----------------------------------------------------------------------
 
-ScViewObjectModeItem::ScViewObjectModeItem( sal_uInt16 nWhichP )
+ScViewObjectModeItem::ScViewObjectModeItem( USHORT nWhichP )
     : SfxEnumItem( nWhichP, VOBJ_MODE_SHOW )
 {
 }
 
 //------------------------------------------------------------------------
 
-ScViewObjectModeItem::ScViewObjectModeItem( sal_uInt16 nWhichP, ScVObjMode eMode )
-    : SfxEnumItem( nWhichP, sal::static_int_cast<sal_uInt16>(eMode) )
+ScViewObjectModeItem::ScViewObjectModeItem( USHORT nWhichP, ScVObjMode eMode )
+    : SfxEnumItem( nWhichP, sal::static_int_cast<USHORT>(eMode) )
 {
 }
 
@@ -957,11 +958,11 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /* eCoreUnit */,
     SfxMapUnit          /* ePresUnit */,
-    String&             rText,
+    String&				rText,
     const IntlWrapper* /* pIntl */
-)   const
+)	const
 {
-    String  aDel = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(": "));
+    String	aDel = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(": "));
     rText.Erase();
 
     switch ( ePres )
@@ -988,7 +989,7 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
             ePres = SFX_ITEM_PRESENTATION_NAMELESS;//das geht immer!
             break;
         }
-        /* !!! fall-through !!! */
+//		break; // DURCHFALLEN!!!
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
         rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW+GetValue());
@@ -1005,7 +1006,7 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-String ScViewObjectModeItem::GetValueText( sal_uInt16 nVal ) const
+String ScViewObjectModeItem::GetValueText( USHORT nVal ) const
 {
     DBG_ASSERT( nVal <= VOBJ_MODE_HIDE, "enum overflow!" );
 
@@ -1014,7 +1015,7 @@ String ScViewObjectModeItem::GetValueText( sal_uInt16 nVal ) const
 
 //------------------------------------------------------------------------
 
-sal_uInt16 ScViewObjectModeItem::GetValueCount() const
+USHORT ScViewObjectModeItem::GetValueCount() const
 {
     return 2;
 }
@@ -1028,7 +1029,7 @@ SfxPoolItem* ScViewObjectModeItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-sal_uInt16 ScViewObjectModeItem::GetVersion( sal_uInt16 /* nFileVersion */ ) const
+USHORT ScViewObjectModeItem::GetVersion( USHORT /* nFileVersion */ ) const
 {
     return 1;
 }
@@ -1036,8 +1037,8 @@ sal_uInt16 ScViewObjectModeItem::GetVersion( sal_uInt16 /* nFileVersion */ ) con
 //------------------------------------------------------------------------
 
 SfxPoolItem* ScViewObjectModeItem::Create(
-                                    SvStream&   rStream,
-                                    sal_uInt16      nVersion ) const
+                                    SvStream&	rStream,
+                                    USHORT		nVersion ) const
 {
     if ( nVersion == 0 )
     {
@@ -1046,30 +1047,30 @@ SfxPoolItem* ScViewObjectModeItem::Create(
     }
     else
     {
-        sal_uInt16 nVal;
+        USHORT nVal;
         rStream >> nVal;
 
         //#i80528# adapt to new range eventually
-        if((sal_uInt16)VOBJ_MODE_HIDE < nVal) nVal = (sal_uInt16)VOBJ_MODE_SHOW;
+        if((USHORT)VOBJ_MODE_HIDE < nVal) nVal = (USHORT)VOBJ_MODE_SHOW;
 
         return new ScViewObjectModeItem( Which(), (ScVObjMode)nVal);
     }
 }
 
 // -----------------------------------------------------------------------
-//      double
+//		double
 // -----------------------------------------------------------------------
 
-ScDoubleItem::ScDoubleItem( sal_uInt16 nWhichP, double nVal )
+ScDoubleItem::ScDoubleItem( USHORT nWhichP, double nVal )
     :   SfxPoolItem ( nWhichP ),
-        nValue  ( nVal )
+        nValue	( nVal )
 {
 }
 
 //------------------------------------------------------------------------
 
 ScDoubleItem::ScDoubleItem( const ScDoubleItem& rItem )
-    :   SfxPoolItem ( rItem )
+    :	SfxPoolItem ( rItem )
 {
         nValue = rItem.nValue;
 }
@@ -1088,6 +1089,7 @@ int ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
     const ScDoubleItem& _rItem = (const ScDoubleItem&)rItem;
     return int(nValue == _rItem.nValue);
+        //int(nValue == ((const ScDoubleItem&)rItem).nValue);
 }
 
 //------------------------------------------------------------------------
@@ -1099,7 +1101,7 @@ SfxPoolItem* ScDoubleItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScDoubleItem::Create( SvStream& rStream, sal_uInt16 /* nVer */ ) const
+SfxPoolItem* ScDoubleItem::Create( SvStream& rStream, USHORT /* nVer */ ) const
 {
     double nTmp=0;
     rStream >> nTmp;
@@ -1200,7 +1202,7 @@ SfxItemPresentation ScPageScaleToItem::GetPresentation(
     return ePres;
 }
 
-bool ScPageScaleToItem::QueryValue( uno::Any& rAny, sal_uInt8 nMemberId ) const
+bool ScPageScaleToItem::QueryValue( uno::Any& rAny, BYTE nMemberId ) const
 {
     bool bRet = true;
     switch( nMemberId )
@@ -1214,9 +1216,9 @@ bool ScPageScaleToItem::QueryValue( uno::Any& rAny, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool ScPageScaleToItem::PutValue( const uno::Any& rAny, sal_uInt8 nMemberId )
+bool ScPageScaleToItem::PutValue( const uno::Any& rAny, BYTE nMemberId )
 {
-    sal_Bool bRet = false;
+    BOOL bRet = false;
     switch( nMemberId )
     {
         case SC_MID_PAGE_SCALETO_WIDTH:     bRet = rAny >>= mnWidth;    break;

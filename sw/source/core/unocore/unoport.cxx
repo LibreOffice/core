@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ using ::rtl::OUString;
 /******************************************************************
  * SwXTextPortion
  ******************************************************************/
-void SwXTextPortion::init(const SwUnoCrsr* pPortionCursor)
+static void init(SwXTextPortion & rPortion, const SwUnoCrsr* pPortionCursor)
 {
     SwUnoCrsr* pUnoCursor =
         pPortionCursor->GetDoc()->CreateUnoCrsr(*pPortionCursor->GetPoint());
@@ -71,7 +71,7 @@ void SwXTextPortion::init(const SwUnoCrsr* pPortionCursor)
         pUnoCursor->SetMark();
         *pUnoCursor->GetMark() = *pPortionCursor->GetMark();
     }
-    pUnoCursor->Add(this);
+    pUnoCursor->Add(& rPortion);
 }
 
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
@@ -93,7 +93,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
     , m_ePortionType(eType)
     , m_bIsCollapsed(false)
 {
-    init( pPortionCrsr);
+    init(*this, pPortionCrsr);
 }
 
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
@@ -112,7 +112,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
     , m_ePortionType(PORTION_FRAME)
     , m_bIsCollapsed(false)
 {
-    init( pPortionCrsr);
+    init(*this, pPortionCrsr);
 }
 
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
@@ -132,7 +132,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
     , m_ePortionType( bIsEnd ? PORTION_RUBY_END : PORTION_RUBY_START )
     , m_bIsCollapsed(false)
 {
-    init( pPortionCrsr);
+    init(*this, pPortionCrsr);
 
     if (!bIsEnd)
     {
@@ -291,7 +291,7 @@ void SwXTextPortion::GetPropertyValue(
 
                 OUString sRet;
                 if( pRet )
-                    sRet = rtl::OUString::createFromAscii( pRet );
+                    sRet = C2U( pRet );
                 rVal <<= sRet;
             }
             break;
@@ -340,7 +340,7 @@ void SwXTextPortion::GetPropertyValue(
             break;
             case FN_UNO_IS_START:
             {
-                sal_Bool bStart = sal_True, bPut = sal_True;
+                BOOL bStart = TRUE, bPut = TRUE;
                 switch (m_ePortionType)
                 {
                     case PORTION_REFMARK_START:
@@ -357,10 +357,10 @@ void SwXTextPortion::GetPropertyValue(
                     case PORTION_REDLINE_END:
                     case PORTION_RUBY_END:
                     case PORTION_FIELD_END:
-                        bStart = sal_False;
+                        bStart = FALSE;
                     break;
                     default:
-                        bPut = sal_False;
+                        bPut = FALSE;
                 }
                 if(bPut)
                     rVal.setValue(&bStart, ::getBooleanCppuType());
@@ -382,7 +382,7 @@ void SwXTextPortion::GetPropertyValue(
             break;
             default:
                 beans::PropertyState eTemp;
-                sal_Bool bDone = SwUnoCursorHelper::getCrsrPropertyValue(
+                BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue(
                                     rEntry, *pUnoCrsr, &(rVal), eTemp );
                 if(!bDone)
                 {
@@ -570,7 +570,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            OSL_FAIL( "unexpected exception catched" );
+            DBG_ERROR( "unexpected exception catched" );
             pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)
@@ -642,7 +642,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
             rPropertyNames,
             SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT );
     const beans::PropertyState* pPropertyStates = aPropertyStates.getConstArray();
-
+    
     std::vector< beans::GetDirectPropertyTolerantResult > aResultVector;
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
@@ -651,7 +651,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
         {
             aResult.Name = pProp[i];
             if(pPropertyStates[i] == beans::PropertyState_MAKE_FIXED_SIZE)     // property unknown?
-            {
+            {    
                 if( bDirectValuesOnly )
                     continue;
                 else
@@ -663,7 +663,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
                 aResult.State  = pPropertyStates[i];
 
                 aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
-                //#i104499# ruby portion attributes need special handling:
+                //#i104499# ruby portion attributes need special handling: 
                 if( pEntry->nWID == RES_TXTATR_CJK_RUBY &&
                     m_ePortionType == PORTION_RUBY_START )
                 {
@@ -682,7 +682,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            OSL_FAIL( "unexpected exception catched" );
+            DBG_ERROR( "unexpected exception catched" );
             aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)
@@ -967,7 +967,7 @@ throw( uno::RuntimeException )
     return aRet;
 }
 
-void SwXTextPortion::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXTextPortion::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if (!m_FrameDepend.GetRegisteredIn())

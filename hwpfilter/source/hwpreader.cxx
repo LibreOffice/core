@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ extern int getRepFamilyName(const char* , char *, double &ratio);
 #define rendEl(x)       rDocumentHandler->endElement(x)
 #define rchars(x)       rDocumentHandler->characters(x)
 #define padd(x,y,z)     pList->addAttribute(x,y,z)
-#define Double2Str(x)   OUString::valueOf((double)(x))
+#define Double2Str(x)	OUString::valueOf((double)(x))
 #define WTI(x)          ((double)(x) / 1800.)     // unit => inch
 #define WTMM(x)     ((double)(x) / 1800. * 25.4)  // unit => mm
 #define WTSM(x)     ((int)((x) / 1800. * 2540))   // unit ==> 1/100 mm
@@ -128,12 +128,12 @@ throw(SAXException, IOException, RuntimeException)
     Reference< XInputStream> rInputStream;
     for ( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
     {
-        if ( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
+        if ( aDescriptor[i].Name == OUString::createFromAscii( "InputStream" ) )
         {
             aDescriptor[i].Value >>= rInputStream;
             break;
         }
-        else if ( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
+        else if ( aDescriptor[i].Name == OUString::createFromAscii( "URL" ) )
         {
             OUString sURL;
             aDescriptor[i].Value >>= sURL;
@@ -363,6 +363,8 @@ void HwpReader::makeMeta()
         }
         sprintf(buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
 
+/* 2001?? 9?? 8?? ??????, 14?? 16?? */
+// 2001-09-07T11:16:47
         rstartEl( ascii("meta:creation-date"), rList );
         rchars( ascii(buf));
         rendEl( ascii("meta:creation-date") );
@@ -370,6 +372,7 @@ void HwpReader::makeMeta()
 
     if (hwpinfo->summary.keyword[0][0] || hwpinfo->summary.etc[0][0])
     {
+/* ???????? dc?? ????????. */
         rstartEl(ascii("meta:keywords"), rList);
         if (hwpinfo->summary.keyword[0][0])
         {
@@ -383,19 +386,19 @@ void HwpReader::makeMeta()
             rchars((hconv(hwpinfo->summary.keyword[1], gstr)));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.etc[0][0])
+        if (hwpinfo->summary.keyword[2][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
             rchars((hconv(hwpinfo->summary.etc[0], gstr)));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.etc[1][0])
+        if (hwpinfo->summary.etc[0][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
             rchars((hconv(hwpinfo->summary.etc[1], gstr)));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.etc[2][0])
+        if (hwpinfo->summary.etc[1][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
             rchars((hconv(hwpinfo->summary.etc[2], gstr)));
@@ -497,6 +500,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
         if( hdo->type == HWPDO_LINE || hdo->type == HWPDO_ARC || hdo->type == HWPDO_FREEFORM ||
             hdo->type == HWPDO_ADVANCED_ARC )
         {
+                                                  /* ???????? ???? */
             if( prop->line_tstyle && !ArrowShape[prop->line_tstyle].bMade  )
             {
                 ArrowShape[prop->line_tstyle].bMade = sal_True;
@@ -549,7 +553,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
 
         if( hdo->type != HWPDO_LINE )
         {
-            if( prop->flag >> 18  & 0x01 )
+            if( prop->flag >> 18  & 0x01 )        /* ?????? ???? ???? ???? */
             {
                 padd( ascii("draw:name"), sXML_CDATA, ascii(Int2Str(hdo->index, "fillimage%d", buf)));
                 if( !prop->pictype )
@@ -557,7 +561,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                     padd( ascii("xlink:href"), sXML_CDATA,
                         hconv(kstr2hstr( (uchar *)urltounix(prop->szPatternFile, buf), sbuf), gstr));
                 }
-                else
+                else                              /* ???????? image???? ?????? ???????? ????. */
                 {
                     EmPicture *emp = 0L;
                     if ( strlen( prop->szPatternFile ) > 3)
@@ -566,7 +570,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                     {
                         char filename[128];
                         char dirname[128];
-                        int fd;
+                        int fd, res;
 #ifdef _WIN32
                         GetTempPath(sizeof(dirname), dirname);
                         sprintf(filename, "%s%s",dirname, emp->name);
@@ -577,7 +581,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                         if( (fd = open( filename , O_CREAT | O_WRONLY , 0666)) >= 0 )
 #endif
                         {
-                            write( fd, emp->data, emp->size );
+                            res = write( fd, emp->data, emp->size );
                             close(fd);
                         }
 #ifdef _WIN32
@@ -2048,8 +2052,8 @@ void HwpReader::makeTableStyle(Table *tbl)
             }
         }
         if(cl->shade != 0)
-            padd(ascii("fo:background-color"), sXML_CDATA,
-                ascii(hcolor2str(sal::static_int_cast<uchar>(cl->color),
+            padd(ascii("fo:background-color"), sXML_CDATA, 
+                ascii(hcolor2str(sal::static_int_cast<uchar>(cl->color), 
                                 sal::static_int_cast<uchar>(cl->shade), buf)));
 
         rstartEl(ascii("style:properties"), rList);
@@ -2111,9 +2115,9 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             padd(ascii("svg:stroke-width"), sXML_CDATA,
                 Double2Str( WTMM(hdo->property.line_width)) + ascii("mm" ));
             color = hdo->property.line_color;
-            sprintf( buf, "#%02x%02x%02x",
-                    sal_uInt16(color & 0xff),
-                    sal_uInt16((color >> 8) & 0xff),
+            sprintf( buf, "#%02x%02x%02x", 
+                    sal_uInt16(color & 0xff), 
+                    sal_uInt16((color >> 8) & 0xff), 
                     sal_uInt16((color >>16) & 0xff) );
             padd(ascii("svg:stroke-color"), sXML_CDATA, ascii( buf) );
         }
@@ -2218,8 +2222,8 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                 if( color < 0xffffff )
                 {
                     sprintf( buf, "#%02x%02x%02x",
-                        sal_uInt16(color & 0xff),
-                        sal_uInt16((color >> 8) & 0xff),
+                        sal_uInt16(color & 0xff), 
+                        sal_uInt16((color >> 8) & 0xff), 
                         sal_uInt16((color >>16) & 0xff) );
                     padd(ascii("draw:fill-color"), sXML_CDATA, ascii( buf) );
                     padd(ascii("draw:fill-hatch-solid"), sXML_CDATA, ascii("true"));
@@ -2229,8 +2233,8 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             {
                 padd(ascii("draw:fill"), sXML_CDATA, ascii("solid"));
                 sprintf( buf, "#%02x%02x%02x",
-                    sal_uInt16(color & 0xff),
-                    sal_uInt16((color >> 8) & 0xff),
+                    sal_uInt16(color & 0xff), 
+                    sal_uInt16((color >> 8) & 0xff), 
                     sal_uInt16((color >>16) & 0xff) );
                 padd(ascii("draw:fill-color"), sXML_CDATA, ascii( buf) );
             }
@@ -2460,7 +2464,7 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
         }
         if(cell->shade != 0)
             padd(ascii("fo:background-color"), sXML_CDATA, ascii(hcolor2str(
-            sal::static_int_cast<uchar>(cell->color),
+            sal::static_int_cast<uchar>(cell->color), 
             sal::static_int_cast<uchar>(cell->shade), buf)));
     }
     rstartEl(ascii("style:properties"), rList);
@@ -2685,10 +2689,10 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
                       Double2Str(WTMM(fstyle->margin[1][3])) + ascii("mm"));
           }
         if(cell->shade != 0)
-            padd(ascii("fo:background-color"), sXML_CDATA,
+            padd(ascii("fo:background-color"), sXML_CDATA, 
             ascii(hcolor2str(
-                sal::static_int_cast<uchar>(cell->color),
-                sal::static_int_cast<uchar>(cell->shade),
+                sal::static_int_cast<uchar>(cell->color), 
+                sal::static_int_cast<uchar>(cell->shade), 
                 buf)));
     }
     else if( fstyle->boxtype == 'E' )
@@ -3204,25 +3208,25 @@ void HwpReader::makeFieldCode(FieldCode *hbox)
 /* ???????? */
     else if( hbox->type[0] == 3 && hbox->type[1] == 0 )
     {
-        if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("title"))))
+        if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("title")))
         {
             rstartEl( ascii("text:title"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:title") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("subject"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("subject")))
         {
             rstartEl( ascii("text:subject"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:subject") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("author"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("author")))
         {
             rstartEl( ascii("text:author-name"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:author-name") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("keywords"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("keywords")))
         {
             rstartEl( ascii("text:keywords"), rList );
             rchars(  hconv(hbox->str2, gstr) );
@@ -3232,61 +3236,61 @@ void HwpReader::makeFieldCode(FieldCode *hbox)
 /* ???????? */
     else if( hbox->type[0] == 3 && hbox->type[1] == 1 )
     {
-        if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("User"))))
+        if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("User")))
         {
             rstartEl( ascii("text:sender-lastname"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-lastname") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Company"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Company")))
         {
             rstartEl( ascii("text:sender-company"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-company") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Position"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Position")))
         {
             rstartEl( ascii("text:sender-title"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-title") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Division"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Division")))
         {
             rstartEl( ascii("text:sender-position"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-position") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Fax"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Fax")))
         {
             rstartEl( ascii("text:sender-fax"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-fax") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Pager"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Pager")))
         {
             rstartEl( ascii("text:phone-private"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:phone-private") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("E-mail"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("E-mail")))
         {
             rstartEl( ascii("text:sender-email"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-email") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Zipcode(office)"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Zipcode(office)")))
         {
             rstartEl( ascii("text:sender-postal-code"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-postal-code") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Phone(office)"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Phone(office)")))
         {
             rstartEl( ascii("text:sender-phone-work"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-phone-work") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Address(office)"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Address(office)")))
         {
             rstartEl( ascii("text:sender-street"), rList );
             rchars(  hconv(hbox->str2, gstr) );
@@ -3350,14 +3354,18 @@ void HwpReader::makeDateFormat(DateCode * hbox)
     rstartEl(ascii("number:date-style"), rList);
     pList->clear();
 
+    bool is_pm;
     bool add_zero = false;
     int zero_check = 0/*, i=0*/;
     hbox->format[DATE_SIZE -1] = 0;
 
     hchar *fmt = hbox->format[0] ? hbox->format : defaultform;
+//hstr2ksstr(fmt, buf);
 
     for( ; *fmt ; fmt++ )
     {
+        is_pm = (hbox->date[DateCode::HOUR] >= 12 );
+
         if( zero_check == 1 )
         {
             zero_check = 0;
@@ -3779,7 +3787,7 @@ void HwpReader::makeFormula(TxtBox * hbox)
         pPar = pPar->Next();
     }
     mybuf[l] = '\0';
-//   rchars(ascii(mybuf));
+//	 rchars(ascii(mybuf));
 //#ifndef UDK100
     Formula *form = new Formula(mybuf);
     form->setDocumentHandler(rDocumentHandler);
@@ -4058,7 +4066,7 @@ void HwpReader::makePicture(Picture * hbox)
 }
 
 
-#define DBL(x)  ((x) * (x))
+#define DBL(x)	((x) * (x))
 void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 {
     int x = hbox->pgx;
@@ -4585,7 +4593,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                             drawobj->property.pPara )
                         {
                             HWPPara *pPara = drawobj->property.pPara;
-                            //  parsePara(pPara);
+                            //	parsePara(pPara);
                             while(pPara)
                             {
                                 make_text_p1( pPara );

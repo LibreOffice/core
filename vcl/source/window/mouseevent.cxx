@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 MouseEvent::MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent )
 : maPos( rEvent.X, rEvent.Y )
 , mnMode( 0 )
-, mnClicks( static_cast< sal_uInt16 >( rEvent.ClickCount ) )
+, mnClicks( static_cast< USHORT >( rEvent.ClickCount ) )
 , mnCode( 0 )
 {
     if( rEvent.Modifiers )

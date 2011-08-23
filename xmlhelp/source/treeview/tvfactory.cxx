@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ TVFactory::queryInterface(
                                      SAL_STATIC_CAST( XServiceInfo*,  this ),
                                      SAL_STATIC_CAST( XTypeProvider*, this ),
                                      SAL_STATIC_CAST( XMultiServiceFactory*, this ) );
-
+    
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -135,7 +135,7 @@ TVFactory::getSupportedServiceNames( void )
 
 
 
-// XMultiServiceFactory
+// XMultiServiceFactory 
 
 Reference< XInterface > SAL_CALL
 TVFactory::createInstance(
@@ -147,11 +147,11 @@ TVFactory::createInstance(
     aAny <<= rtl::OUString();
     Sequence< Any > seq( 1 );
     seq[0] <<= PropertyValue(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "nodepath" )),
+        rtl::OUString::createFromAscii( "nodepath" ),
         -1,
         aAny,
         PropertyState_DIRECT_VALUE );
-
+    
     return createInstanceWithArguments( aServiceSpecifier,
                                         seq );
 }
@@ -171,25 +171,25 @@ TVFactory::createInstanceWithArguments(
         cppu::OWeakObject* p = new TVChildTarget( m_xMSF );
         m_xHDS = Reference< XInterface >( p );
     }
-
+    
     Reference< XInterface > ret = m_xHDS;
-
+    
     rtl::OUString hierview;
     for( int i = 0; i < Arguments.getLength(); ++i )
     {
         PropertyValue pV;
         if( ! ( Arguments[i] >>= pV ) )
             continue;
-
+        
         if( pV.Name.compareToAscii( "nodepath" ) )
             continue;
-
+        
         if( ! ( pV.Value >>= hierview ) )
             continue;
-
+        
         break;
     }
-
+    
     if( hierview.getLength() )
     {
         Reference< XHierarchicalNameAccess > xhieraccess( m_xHDS,UNO_QUERY );
@@ -208,7 +208,7 @@ TVFactory::getAvailableServiceNames( )
     throw( RuntimeException )
 {
     Sequence< rtl::OUString > seq( 1 );
-    seq[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.HierarchyDataReadAccess" ));
+    seq[0] = rtl::OUString::createFromAscii( "com.sun.star.ucb.HierarchyDataReadAccess" );
     return seq;
 }
 
@@ -220,7 +220,7 @@ TVFactory::getAvailableServiceNames( )
 rtl::OUString SAL_CALL
 TVFactory::getImplementationName_static()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.help.TreeViewImpl" ));
+    return rtl::OUString::createFromAscii( "com.sun.star.help.TreeViewImpl" );
 }
 
 
@@ -228,8 +228,8 @@ Sequence< rtl::OUString > SAL_CALL
 TVFactory::getSupportedServiceNames_static()
 {
     Sequence< rtl::OUString > seq( 2 );
-    seq[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.help.TreeView" ));
-    seq[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.HiearchyDataSource" ));
+    seq[0] = rtl::OUString::createFromAscii( "com.sun.star.help.TreeView" );
+    seq[1] = rtl::OUString::createFromAscii( "com.sun.star.ucb.HiearchyDataSource" );
     return seq;
 }
 
@@ -256,6 +256,49 @@ TVFactory::CreateInstance(
     return Reference< XInterface >::query( xP );
 }
 
+
+
+//=========================================================================
+static sal_Bool writeInfo( void * pRegistryKey,
+                           const rtl::OUString & rImplementationName,
+                              Sequence< rtl::OUString > const & rServiceNames )
+{
+    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
+    aKeyName += rImplementationName;
+    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+    
+    Reference< registry::XRegistryKey > xKey;
+    try
+    {
+        xKey = static_cast< registry::XRegistryKey * >(
+            pRegistryKey )->createKey( aKeyName );
+    }
+    catch ( registry::InvalidRegistryException const & )
+    {
+    }
+
+    if ( !xKey.is() )
+        return sal_False;
+
+    sal_Bool bSuccess = sal_True;
+
+    for ( sal_Int32 n = 0; n < rServiceNames.getLength(); ++n )
+    {
+        try
+        {
+            xKey->createKey( rServiceNames[ n ] );
+        }
+        catch ( registry::InvalidRegistryException const & )
+        {
+            bSuccess = sal_False;
+            break;
+        }
+    }
+    return bSuccess;
+}
+
+
+
 //=========================================================================
 extern "C" void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -265,6 +308,20 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+
+
+//=========================================================================
+extern "C" sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager, void * pRegistryKey )
+{
+    (void)pServiceManager;
+
+    return pRegistryKey && writeInfo( pRegistryKey,
+                                      TVFactory::getImplementationName_static(),
+                                      TVFactory::getSupportedServiceNames_static() );
+}
+
+
 //=========================================================================
 extern "C" void * SAL_CALL component_getFactory(
     const sal_Char * pImplName,void * pServiceManager,void * pRegistryKey )
@@ -272,29 +329,29 @@ extern "C" void * SAL_CALL component_getFactory(
     (void)pRegistryKey;
 
     void * pRet = 0;
-
+    
     Reference< XMultiServiceFactory > xSMgr(
         reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
-
+    
     Reference< XSingleServiceFactory > xFactory;
-
+    
     //////////////////////////////////////////////////////////////////////
     // File Content Provider.
     //////////////////////////////////////////////////////////////////////
-
+    
     if ( TVFactory::getImplementationName_static().compareToAscii( pImplName ) == 0 )
     {
         xFactory = TVFactory::createServiceFactory( xSMgr );
     }
 
     //////////////////////////////////////////////////////////////////////
-
+    
     if ( xFactory.is() )
     {
         xFactory->acquire();
         pRet = xFactory.get();
     }
-
+    
     return pRet;
 }
 

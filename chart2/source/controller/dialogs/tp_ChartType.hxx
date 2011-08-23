@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,8 +73,8 @@ public:
                 , bool bDoLiveUpdate, bool bHideDescription = false );
     virtual ~ChartTypeTabPage();
 
-    virtual void        initializePage();
-    virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason eReason );
+    virtual void		initializePage();
+    virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason eReason );
 
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartTypeTemplate > getCurrentTemplate() const;
@@ -84,7 +84,7 @@ protected:
     void showAllControls( ChartTypeDialogController& rTypeController );
     void fillAllControls( const ChartTypeParameter& rParameter, bool bAlsoResetSubTypeList=true );
     ChartTypeParameter getCurrentParamter() const;
-
+    
     virtual void stateChanged( ChangingResource* pResource );
 
     void commitToModel( const ChartTypeParameter& rParameter );

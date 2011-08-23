@@ -57,7 +57,11 @@
  * @file
  * Area style of Drawing object.
  ************************************************************************/
-#include    "xfdrawareastyle.hxx"
+/*************************************************************************
+ * Change History
+ * 2004-02-21 create this file.
+ ************************************************************************/
+#include	"xfdrawareastyle.hxx"
 
 XFDrawAreaStyle::XFDrawAreaStyle()
 {
@@ -67,14 +71,14 @@ XFDrawAreaStyle::XFDrawAreaStyle()
     m_fSpace = 0.18;
 }
 
-enumXFStyle XFDrawAreaStyle::GetStyleFamily()
+enumXFStyle	XFDrawAreaStyle::GetStyleFamily()
 {
     return enumXFStyleArea;
 }
 
-void    XFDrawAreaStyle::ToXml(IXFStream *pStrm)
+void	XFDrawAreaStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
 

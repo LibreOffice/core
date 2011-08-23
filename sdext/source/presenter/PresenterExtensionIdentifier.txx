@@ -34,7 +34,7 @@ namespace sdext { namespace presenter {
     makefile.mk with the actual, platform specific, extension identifier.
 */
 const ::rtl::OUString PresenterComponent::gsExtensionIdentifier(
-    RTL_CONSTASCII_USTRINGPARAM("com.sun.PresenterScreen-UPDATED_PLATFORM"));
+    ::rtl::OUString::createFromAscii("com.sun.PresenterScreen-UPDATED_PLATFORM"));
 
 } }
 

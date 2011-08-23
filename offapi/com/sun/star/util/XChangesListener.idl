@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,41 +24,41 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_XChangesListener_idl__
-#define __com_sun_star_util_XChangesListener_idl__
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_util_ChangesEvent_idl__
-#include <com/sun/star/util/ChangesEvent.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module util {
-
-//=============================================================================
-
+#ifndef __com_sun_star_util_XChangesListener_idl__ 
+#define __com_sun_star_util_XChangesListener_idl__ 
+ 
+#ifndef __com_sun_star_lang_XEventListener_idl__ 
+#include <com/sun/star/lang/XEventListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_util_ChangesEvent_idl__ 
+#include <com/sun/star/util/ChangesEvent.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module util {  
+ 
+//============================================================================= 
+ 
 /** receives events from batch change broadcaster objects.
 
-    @see ChangesEvent
-    @see XChangesNotifier
+    @see ChangesEvent 
+    @see XChangesNotifier 
     @see XChangesBatch
  */
 published interface XChangesListener: com::sun::star::lang::XEventListener
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
     /** is invoked when a batch of changes occurred.
      */
-    [oneway] void changesOccurred( [in] com::sun::star::util::ChangesEvent Event );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    [oneway] void changesOccurred( [in] com::sun::star::util::ChangesEvent Event ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

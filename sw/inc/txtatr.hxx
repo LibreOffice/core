@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,34 +32,29 @@
 #include <calbck.hxx>
 
 
-class SwTxtNode;    // fuer SwTxtFld
+class SwTxtNode;	// fuer SwTxtFld
 class SwCharFmt;
-
-namespace sw {
-    class MetaFieldManager;
-}
-
 
 // ATT_CHARFMT *********************************************
 
 class SwTxtCharFmt : public SwTxtAttrEnd
 {
     SwTxtNode * m_pTxtNode;
-    sal_uInt16 m_nSortNumber;
+    USHORT m_nSortNumber;
 
 public:
     SwTxtCharFmt( SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtCharFmt( );
 
-    // werden vom SwFmtCharFmt hierher weitergeleitet (no derivation from SwClient!)
-    void ModifyNotification( const SfxPoolItem*, const SfxPoolItem* );
-    bool GetInfo( SfxPoolItem& rInfo ) const;
+    // werden vom SwFmtCharFmt hierher weitergeleitet
+    virtual void Modify( SfxPoolItem*, SfxPoolItem* );    // SwClient
+    virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
     // get and set TxtNode pointer
     void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
 
-    void SetSortNumber( sal_uInt16 nSortNumber ) { m_nSortNumber = nSortNumber; }
-    sal_uInt16 GetSortNumber() const { return m_nSortNumber; }
+    void SetSortNumber( USHORT nSortNumber ) { m_nSortNumber = nSortNumber; }
+    USHORT GetSortNumber() const { return m_nSortNumber; }
 };
 
 
@@ -67,7 +62,7 @@ public:
 
 class SwTxtAttrNesting : public SwTxtAttrEnd
 {
-protected:
+public:
     SwTxtAttrNesting( SfxPoolItem & i_rAttr,
         const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
     virtual ~SwTxtAttrNesting();
@@ -76,20 +71,16 @@ protected:
 class SwTxtMeta : public SwTxtAttrNesting
 {
 private:
-    SwTxtMeta( SwFmtMeta & i_rAttr,
-        const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
+    SwTxtNode * m_pTxtNode;
 
 public:
-    static SwTxtMeta * CreateTxtMeta(
-        ::sw::MetaFieldManager & i_rTargetDocManager,
-        SwTxtNode *const i_pTargetTxtNode,
-        SwFmtMeta & i_rAttr,
-        xub_StrLen const i_nStart, xub_StrLen const i_nEnd,
-        bool const i_bIsCopy);
-
+    SwTxtMeta( SwFmtMeta & i_rAttr,
+        const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
     virtual ~SwTxtMeta();
 
     void ChgTxtNode(SwTxtNode * const pNode);
+    SwTxtNode * GetTxtNode() const { return m_pTxtNode; }
+
 };
 
 
@@ -98,16 +89,14 @@ public:
 class SW_DLLPUBLIC SwTxtRuby : public SwTxtAttrNesting, public SwClient
 {
     SwTxtNode* m_pTxtNode;
-protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     SwTxtRuby( SwFmtRuby& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtRuby();
     TYPEINFO();
 
-    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
-
-    SW_DLLPRIVATE void InitRuby(SwTxtNode & rNode);
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
     /// get and set TxtNode pointer
            const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }

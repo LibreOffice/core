@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,9 +81,9 @@ struct StorInternalData_Impl
     OChildDispListener_Impl* m_pSubElDispListener;
 
     WeakComponentList m_aOpenSubComponentsList;
-
+    
     ::rtl::Reference< OHierarchyHolder_Impl > m_rHierarchyHolder;
-
+    
     // the mutex reference MUST NOT be empty
     StorInternalData_Impl( const SotMutexHolderRef& rMutexRef, sal_Bool bRoot, sal_Int32 nStorageType, sal_Bool bReadOnlyWrap )
     : m_rSharedMutexRef( rMutexRef )
@@ -194,7 +194,7 @@ SotElement_Impl::~SotElement_Impl()
 
 //-----------------------------------------------
 // most of properties are holt by the storage but are not used
-OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
+OStorage_Impl::OStorage_Impl(	uno::Reference< io::XInputStream > xInputStream,
                                 sal_Int32 nMode,
                                 uno::Sequence< beans::PropertyValue > xProperties,
                                 uno::Reference< lang::XMultiServiceFactory > xFactory,
@@ -209,7 +209,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 , m_bListCreated( sal_False )
 , m_xFactory( xFactory )
 , m_xProperties( xProperties )
-, m_bHasCommonEncryptionData( sal_False )
+, m_bHasCommonPassword( sal_False )
 , m_pParent( NULL )
 , m_bControlMediaType( sal_False )
 , m_bMTFallbackUsed( sal_False )
@@ -228,13 +228,13 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
     if ( m_nStorageMode & embed::ElementModes::WRITE )
     {
         // check that the stream allows to write
-        OSL_FAIL( "No stream for writing is provided!\n" );
+        OSL_ENSURE( sal_False, "No stream for writing is provided!\n" );
     }
 }
 
 //-----------------------------------------------
 // most of properties are holt by the storage but are not used
-OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
+OStorage_Impl::OStorage_Impl(	uno::Reference< io::XStream > xStream,
                                 sal_Int32 nMode,
                                 uno::Sequence< beans::PropertyValue > xProperties,
                                 uno::Reference< lang::XMultiServiceFactory > xFactory,
@@ -249,7 +249,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 , m_bListCreated( sal_False )
 , m_xFactory( xFactory )
 , m_xProperties( xProperties )
-, m_bHasCommonEncryptionData( sal_False )
+, m_bHasCommonPassword( sal_False )
 , m_pParent( NULL )
 , m_bControlMediaType( sal_False )
 , m_bMTFallbackUsed( sal_False )
@@ -276,7 +276,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 }
 
 //-----------------------------------------------
-OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
+OStorage_Impl::OStorage_Impl(	OStorage_Impl* pParent,
                                 sal_Int32 nMode,
                                 uno::Reference< container::XNameContainer > xPackageFolder,
                                 uno::Reference< lang::XSingleServiceFactory > xPackage,
@@ -293,7 +293,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_xPackageFolder( xPackageFolder )
 , m_xPackage( xPackage )
 , m_xFactory( xFactory )
-, m_bHasCommonEncryptionData( sal_False )
+, m_bHasCommonPassword( sal_False )
 , m_pParent( pParent ) // can be empty in case of temporary readonly substorages and relation storage
 , m_bControlMediaType( sal_False )
 , m_bMTFallbackUsed( sal_False )
@@ -488,15 +488,15 @@ void OStorage_Impl::OpenOwnPackage()
             sal_Int32 nArgNum = 2;
             for ( sal_Int32 aInd = 0; aInd < m_xProperties.getLength(); aInd++ )
             {
-                if ( m_xProperties[aInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) )
-                  || m_xProperties[aInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ProgressHandler" ) ) )
+                if ( m_xProperties[aInd].Name.equalsAscii( "RepairPackage" )
+                  || m_xProperties[aInd].Name.equalsAscii( "ProgressHandler" ) )
                 {
                     beans::NamedValue aNamedValue( m_xProperties[aInd].Name,
                                                     m_xProperties[aInd].Value );
                     aArguments.realloc( ++nArgNum );
                     aArguments[nArgNum-1] <<= aNamedValue;
                 }
-                else if ( m_xProperties[aInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) )
+                else if ( m_xProperties[aInd].Name.equalsAscii( "Password" ) )
                 {
                     // TODO: implement password setting for documents
                     // the password entry must be removed after setting
@@ -603,7 +603,7 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
                                     xRelInfoStream,
                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels/.rels" ) ),
                                     m_xFactory );
-
+        
         m_nRelInfoStatus = RELINFO_READ;
     }
     else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
@@ -655,7 +655,7 @@ void OStorage_Impl::ReadContents()
 
             if ( !xNamed.is() )
             {
-                OSL_FAIL( "XNamed is not supported!\n" );
+                OSL_ENSURE( sal_False, "XNamed is not supported!\n" );
                 throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
             }
 
@@ -689,7 +689,7 @@ void OStorage_Impl::ReadContents()
             AddLog( aNoSuchElementException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "NoSuchElement" ) ) );
 
-            OSL_FAIL( "hasMoreElements() implementation has problems!\n" );
+            OSL_ENSURE( sal_False, "hasMoreElements() implementation has problems!\n" );
             break;
         }
     }
@@ -750,9 +750,10 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
         {
             try
             {
-                uno::Reference< embed::XEncryptionProtectedSource2 > xEncr( xDest, uno::UNO_QUERY );
+                ::rtl::OUString aCommonPass = GetCommonRootPass();
+                uno::Reference< embed::XEncryptionProtectedSource > xEncr( xDest, uno::UNO_QUERY );
                 if ( xEncr.is() )
-                    xEncr->setEncryptionData( GetCommonRootEncryptionData().getAsConstNamedValueList() );
+                    xEncr->setEncryptionPassword( aCommonPass );
             }
             catch( packages::NoEncryptionException& aNoEncryptionException )
             {
@@ -763,16 +764,16 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
     }
     else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
-
+        
         // TODO/LATER: currently the optimization is not active
         // uno::Reference< io::XInputStream > xRelInfoStream = GetRelInfoStreamForName( ::rtl::OUString() ); // own stream
         // if ( xRelInfoStream.is() )
         // {
-        //  // Relations info stream is a writeonly property, introduced only to optimyze copying
-        //  // Should be used carefuly since no check for stream consistency is done, and the stream must not stay locked
+        // 	// Relations info stream is a writeonly property, introduced only to optimyze copying
+        // 	// Should be used carefuly since no check for stream consistency is done, and the stream must not stay locked
         //
-        //  ::rtl::OUString aRelInfoString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelationsInfoStream" ) );
-        //  xPropSet->setPropertyValue( aRelInfoString, uno::makeAny( GetSeekableTempCopy( xRelInfoStream, m_xFactory ) ) );
+        // 	::rtl::OUString aRelInfoString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelationsInfoStream" ) );
+        // 	xPropSet->setPropertyValue( aRelInfoString, uno::makeAny( GetSeekableTempCopy( xRelInfoStream, m_xFactory ) ) );
         // }
 
         uno::Reference< embed::XRelationshipAccess > xRels( xDest, uno::UNO_QUERY );
@@ -856,7 +857,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 {
                     aStrProps.realloc( ++nNum );
                     aStrProps[nNum-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
-                    aStrProps[nNum-1].Value <<= (sal_Bool)( pElement->m_pStream->UsesCommonEncryption_Impl() );
+                    aStrProps[nNum-1].Value <<= (sal_Bool)( pElement->m_pStream->UsesCommonPass_Impl() );
                 }
                 else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
@@ -864,9 +865,9 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                     // uno::Reference< io::XInputStream > xInStream = GetRelInfoStreamForName( ::rtl::OUString() ); // own rels stream
                     // if ( xInStream.is() )
                     // {
-                    //  aStrProps.realloc( ++nNum );
-                    //  aStrProps[nNum-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelationsInfoStream" ) );
-                    //  aStrProps[nNum-1].Value <<= GetSeekableTempCopy( xInStream, m_xFactory );
+                    // 	aStrProps.realloc( ++nNum );
+                    // 	aStrProps[nNum-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelationsInfoStream" ) );
+                    // 	aStrProps[nNum-1].Value <<= GetSeekableTempCopy( xInStream, m_xFactory );
                     // }
 
                     uno::Reference< embed::XRelationshipAccess > xRels( xDest, uno::UNO_QUERY );
@@ -890,7 +891,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 {
                     // for now get just nonseekable access to the stream
                     // TODO/LATER: the raw stream can be used
-
+                    
                     xInputToInsert = pElement->m_pStream->m_xPackageStream->getDataStream();
                 }
 
@@ -911,18 +912,18 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
         }
         else if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         {
-            OSL_FAIL( "Encryption is only supported in package storage!\n" );
+            OSL_ENSURE( sal_False, "Encryption is only supported in package storage!\n" );
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         }
-        else if ( pElement->m_pStream->HasCachedEncryptionData()
+        else if ( pElement->m_pStream->HasCachedPassword()
              && ( pElement->m_pStream->IsModified() || pElement->m_pStream->HasWriteOwner_Impl() ) )
         {
-            ::comphelper::SequenceAsHashMap aCommonEncryptionData;
-            sal_Bool bHasCommonEncryptionData = sal_False;
+            ::rtl::OUString aCommonPass;
+            sal_Bool bHasCommonPass = sal_False;
             try
             {
-                aCommonEncryptionData = GetCommonRootEncryptionData();
-                bHasCommonEncryptionData = sal_True;
+                aCommonPass = GetCommonRootPass();
+                bHasCommonPass = sal_True;
             }
             catch( packages::NoEncryptionException& aNoEncryptionException )
             {
@@ -930,7 +931,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "No Encryption" ) ) );
             }
 
-            if ( bHasCommonEncryptionData && ::package::PackageEncryptionDatasEqual( pElement->m_pStream->GetCachedEncryptionData(), aCommonEncryptionData ) )
+            if ( bHasCommonPass && pElement->m_pStream->GetCachedPassword().equals( aCommonPass ) )
             {
                 // If the stream can be opened with the common storage password
                 // it must be stored with the common storage password as well
@@ -948,14 +949,13 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
             else
             {
                 // the stream is already opened for writing or was changed
-                uno::Reference< embed::XStorage2 > xDest2( xDest, uno::UNO_QUERY_THROW );
                 uno::Reference< io::XStream > xSubStr =
-                                            xDest2->openEncryptedStream( aName,
+                                            xDest->openEncryptedStreamElement( aName,
                                                 embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE,
-                                                pElement->m_pStream->GetCachedEncryptionData().getAsConstNamedValueList() );
+                                                pElement->m_pStream->GetCachedPassword() );
                 OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
 
-                pElement->m_pStream->CopyInternallyTo_Impl( xSubStr, pElement->m_pStream->GetCachedEncryptionData() );
+                pElement->m_pStream->CopyInternallyTo_Impl( xSubStr, pElement->m_pStream->GetCachedPassword() );
             }
         }
         else
@@ -1001,7 +1001,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > OStorage_Impl::GetAllRelatio
         return uno::Sequence< uno::Sequence< beans::StringPair > >();
 
     ReadRelInfoIfNecessary();
-
+        
     if ( m_nRelInfoStatus == RELINFO_READ
       || m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
         return m_aRelInfo;
@@ -1027,7 +1027,7 @@ void OStorage_Impl::CopyLastCommitTo( const uno::Reference< embed::XStorage >& x
                                 m_nStorageType);
 
     // TODO/LATER: could use direct copying
-    aTempRepresent.CopyToStorage( xNewStor, sal_False );
+    aTempRepresent.CopyToStorage( xNewStor, sal_False ); 
 }
 
 //-----------------------------------------------
@@ -1167,7 +1167,7 @@ void OStorage_Impl::Commit()
                 // the renamed elements are not in new temporary storage
                 if ( m_bCommited || m_bIsRoot )
                     xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
-
+                
                 (*pElementIter)->m_pStream->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
             }
             else if ( !m_bCommited && !m_bIsRoot )
@@ -1362,7 +1362,7 @@ void OStorage_Impl::Revert()
 }
 
 //-----------------------------------------------
-::comphelper::SequenceAsHashMap OStorage_Impl::GetCommonRootEncryptionData()
+::rtl::OUString OStorage_Impl::GetCommonRootPass()
     throw ( packages::NoEncryptionException )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
@@ -1372,17 +1372,17 @@ void OStorage_Impl::Revert()
 
     if ( m_bIsRoot )
     {
-        if ( !m_bHasCommonEncryptionData )
+        if ( !m_bHasCommonPassword )
             throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-        return m_aCommonEncryptionData;
+        return m_aCommonPassword;
     }
     else
     {
         if ( !m_pParent )
             throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-        return m_pParent->GetCommonRootEncryptionData();
+        return m_pParent->GetCommonRootPass();
     }
 }
 
@@ -1681,8 +1681,8 @@ void OStorage_Impl::ClearElement( SotElement_Impl* pElement )
 
 //-----------------------------------------------
 void OStorage_Impl::CloneStreamElement( const ::rtl::OUString& aStreamName,
-                                        sal_Bool bEncryptionDataProvided,
-                                        const ::comphelper::SequenceAsHashMap& aEncryptionData,
+                                        sal_Bool bPassProvided,
+                                        const ::rtl::OUString& aPass,
                                         uno::Reference< io::XStream >& xTargetStream )
         throw ( embed::InvalidStorageException,
                 lang::IllegalArgumentException,
@@ -1714,8 +1714,8 @@ void OStorage_Impl::CloneStreamElement( const ::rtl::OUString& aStreamName,
         // storage. The only problem is that some package streams can be accessed from outside
         // at the same time ( now solwed by wrappers that remember own position ).
 
-        if ( bEncryptionDataProvided )
-            pElement->m_pStream->GetCopyOfLastCommit( xTargetStream, aEncryptionData );
+        if ( bPassProvided )
+            pElement->m_pStream->GetCopyOfLastCommit( xTargetStream, aPass );
         else
             pElement->m_pStream->GetCopyOfLastCommit( xTargetStream );
     }
@@ -1733,7 +1733,7 @@ void OStorage_Impl::RemoveStreamRelInfo( const ::rtl::OUString& aOriginalName )
     {
         ::rtl::OUString aRelStreamName = aOriginalName;
         aRelStreamName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".rels" ) );
-
+        
         if ( m_xRelStorage->hasByName( aRelStreamName ) )
             m_xRelStorage->removeElement( aRelStreamName );
     }
@@ -1784,7 +1784,7 @@ void OStorage_Impl::CommitStreamRelInfo( SotElement_Impl* pStreamElement )
             // Create new rels storage, this is commit scenario so it must be possible
             CreateRelStorage();
         }
-
+    
         pStreamElement->m_pStream->CommitStreamRelInfo( m_xRelStorage, pStreamElement->m_aOriginalName, pStreamElement->m_aName );
     }
 }
@@ -1825,7 +1825,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
         if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-        if ( m_nRelInfoStatus == RELINFO_CHANGED
+        if ( m_nRelInfoStatus == RELINFO_CHANGED 
           || m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
           || m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
         {
@@ -1873,7 +1873,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
                 uno::Reference< io::XSeekable > xSeek( m_xNewRelInfoStream, uno::UNO_QUERY_THROW );
                 xSeek->seek( 0 );
                 ::comphelper::OStorageHelper::CopyInputToOutput( m_xNewRelInfoStream, xOutputStream );
-
+    
                 // set the mediatype
                 uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
                 xPropSet->setPropertyValue(
@@ -1922,7 +1922,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
 //=====================================================
 
 //-----------------------------------------------
-OStorage::OStorage( uno::Reference< io::XInputStream > xInputStream,
+OStorage::OStorage(	uno::Reference< io::XInputStream > xInputStream,
                     sal_Int32 nMode,
                     uno::Sequence< beans::PropertyValue > xProperties,
                     uno::Reference< lang::XMultiServiceFactory > xFactory,
@@ -1934,7 +1934,7 @@ OStorage::OStorage( uno::Reference< io::XInputStream > xInputStream,
 }
 
 //-----------------------------------------------
-OStorage::OStorage( uno::Reference< io::XStream > xStream,
+OStorage::OStorage(	uno::Reference< io::XStream > xStream,
                     sal_Int32 nMode,
                     uno::Sequence< beans::PropertyValue > xProperties,
                     uno::Reference< lang::XMultiServiceFactory > xFactory,
@@ -1946,7 +1946,7 @@ OStorage::OStorage( uno::Reference< io::XStream > xStream,
 }
 
 //-----------------------------------------------
-OStorage::OStorage( OStorage_Impl* pImpl, sal_Bool bReadOnlyWrap )
+OStorage::OStorage(	OStorage_Impl* pImpl, sal_Bool bReadOnlyWrap )
 : m_pImpl( pImpl )
 {
     // this call can be done only from OStorage_Impl implementation to create child storage
@@ -2046,7 +2046,7 @@ void SAL_CALL OStorage::InternalDispose( sal_Bool bNotifyImpl )
                         }
                     }
                 }
-
+    
                 m_pData->m_aOpenSubComponentsList.clear();
             }
         }
@@ -2235,7 +2235,7 @@ void OStorage::MakeLinkToSubComponent_Impl( const uno::Reference< lang::XCompone
 }
 
 //____________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -2246,26 +2246,18 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
 
     // common interfaces
     aReturn <<= ::cppu::queryInterface
-                (   rType
-                ,   static_cast<lang::XTypeProvider*> ( this )
-                ,   static_cast<embed::XStorage*> ( this )
-                ,   static_cast<embed::XStorage2*> ( this )
-                ,   static_cast<embed::XTransactedObject*> ( this )
-                ,   static_cast<embed::XTransactionBroadcaster*> ( this )
-                ,   static_cast<util::XModifiable*> ( this )
-                ,   static_cast<container::XNameAccess*> ( this )
-                ,   static_cast<container::XElementAccess*> ( this )
-                ,   static_cast<lang::XComponent*> ( this )
-                ,   static_cast<beans::XPropertySet*> ( this )
-                ,   static_cast<embed::XOptimizedStorage*> ( this ) );
-
-    if ( aReturn.hasValue() == sal_True )
-        return aReturn ;
-
-    aReturn <<= ::cppu::queryInterface
-                (   rType
-                ,   static_cast<embed::XHierarchicalStorageAccess*> ( this )
-                ,   static_cast<embed::XHierarchicalStorageAccess2*> ( this ) );
+                (	rType
+                ,	static_cast<lang::XTypeProvider*> ( this )
+                ,	static_cast<embed::XStorage*> ( this )
+                ,	static_cast<embed::XTransactedObject*> ( this )
+                ,	static_cast<embed::XTransactionBroadcaster*> ( this )
+                ,	static_cast<util::XModifiable*> ( this )
+                ,	static_cast<container::XNameAccess*> ( this )
+                ,	static_cast<container::XElementAccess*> ( this )
+                ,	static_cast<lang::XComponent*> ( this )
+                ,	static_cast<beans::XPropertySet*> ( this )
+                ,	static_cast<embed::XOptimizedStorage*> ( this )
+                ,	static_cast<embed::XHierarchicalStorageAccess*> ( this ) );
 
     if ( aReturn.hasValue() == sal_True )
         return aReturn ;
@@ -2275,23 +2267,22 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
         if ( m_pData->m_bIsRoot )
         {
             aReturn <<= ::cppu::queryInterface
-                        (   rType
-                        ,   static_cast<embed::XStorageRawAccess*> ( this )
-                        ,   static_cast<embed::XEncryptionProtectedSource*> ( this )
-                        ,   static_cast<embed::XEncryptionProtectedSource2*> ( this ) );
+                        (	rType
+                        ,	static_cast<embed::XStorageRawAccess*> ( this )
+                        ,	static_cast<embed::XEncryptionProtectedSource*> ( this ) );
         }
         else
         {
             aReturn <<= ::cppu::queryInterface
-                        (   rType
-                        ,   static_cast<embed::XStorageRawAccess*> ( this ) );
+                        (	rType
+                        ,	static_cast<embed::XStorageRawAccess*> ( this ) );
         }
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         aReturn <<= ::cppu::queryInterface
-                    (   rType
-                    ,   static_cast<embed::XRelationshipAccess*> ( this ) );
+                    (	rType
+                    ,	static_cast<embed::XRelationshipAccess*> ( this ) );
     }
 
     if ( aReturn.hasValue() == sal_True )
@@ -2313,7 +2304,7 @@ void SAL_CALL OStorage::release() throw()
 }
 
 //____________________________________________________________________________________________________
-//  XTypeProvider
+//	XTypeProvider
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -2331,50 +2322,47 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
                 if ( m_pData->m_bIsRoot )
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XStorage2 >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XStorageRawAccess >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource2 >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (	::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< embed::XStorageRawAccess >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< embed::XEncryptionProtectedSource >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
                 else
                 {
                     m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XStorage2 >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XStorageRawAccess >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
-                                    ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                    (	::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< embed::XStorageRawAccess >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
+                                    ,	::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
                 }
             }
             else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
             {
                 m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XRelationshipAccess >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                (	::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< embed::XRelationshipAccess >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
             }
             else
             {
                 m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
-                                (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                (	::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
             }
         }
     }
@@ -2393,7 +2381,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OStorage::getImplementationId()
 }
 
 //____________________________________________________________________________________________________
-//  XStorage
+//	XStorage
 //____________________________________________________________________________________________________
 
 
@@ -2567,7 +2555,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
 }
 
 //-----------------------------------------------
-uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
+uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement( 
     const ::rtl::OUString& aStreamName, sal_Int32 nOpenMode, const ::rtl::OUString& aPass )
         throw ( embed::InvalidStorageException,
                 lang::IllegalArgumentException,
@@ -2579,7 +2567,100 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
 {
     RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::openEncryptedStreamElement" );
 
-    return openEncryptedStream( aStreamName, nOpenMode, ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPass ) );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+    {
+        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+    }
+
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+        packages::NoEncryptionException();
+
+    if ( ( nOpenMode & embed::ElementModes::WRITE ) && m_pData->m_bReadOnlyWrap )
+        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // TODO: access denied
+
+    if ( !aPass.getLength() )
+        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 3 );
+
+    uno::Reference< io::XStream > xResult;
+    try
+    {
+        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamName, nOpenMode, sal_True );
+        OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
+
+        xResult = pElement->m_pStream->GetStream( nOpenMode, aPass, sal_False );
+        OSL_ENSURE( xResult.is(), "The method must throw exception instead of removing empty result!\n" );
+
+        if ( m_pData->m_bReadOnlyWrap )
+        {
+            // before the storage disposes the stream it must deregister itself as listener
+            uno::Reference< lang::XComponent > xStreamComponent( xResult, uno::UNO_QUERY );
+            if ( !xStreamComponent.is() )
+                throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+
+            MakeLinkToSubComponent_Impl( xStreamComponent );
+        }
+    }
+    catch( embed::InvalidStorageException& aInvalidStorageException )
+    {
+        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    {
+        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( packages::NoEncryptionException& aNoEncryptionException )
+    {
+        m_pImpl->AddLog( aNoEncryptionException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( packages::WrongPasswordException& aWrongPasswordException )
+    {
+        m_pImpl->AddLog( aWrongPasswordException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    {
+        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( io::IOException& aIOException )
+    {
+        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( uno::RuntimeException& aRuntimeException )
+    {
+        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( uno::Exception& aException )
+    {
+          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+
+          uno::Any aCaught( ::cppu::getCaughtException() );
+        throw embed::StorageWrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't open encrypted stream stream!" ) ),
+                                                 uno::Reference< io::XInputStream >(),
+                                                 aCaught );
+    }
+
+    aGuard.clear();
+
+    BroadcastModifiedIfNecessary();
+
+    return xResult;
 }
 
 //-----------------------------------------------
@@ -2655,7 +2736,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
                 // virtual, that means that it is just enough to change the flag to let it be writable
                 // and since there is no AntiImpl nobody should be notified about it
                 pElement->m_pStorage->m_nStorageMode = nStorageMode | embed::ElementModes::READ;
-
+    
                 if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) )
                 {
                     for ( SotElementList_Impl::iterator pElementIter = pElement->m_pStorage->m_aChildrenList.begin();
@@ -2663,7 +2744,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
                        {
                         SotElement_Impl* pElementToDel = (*pElementIter);
                         pElementIter++;
-
+    
                         m_pImpl->RemoveElement( pElementToDel );
                        }
                 }
@@ -2684,12 +2765,12 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
         {
             // Before this call is done the object must be refcounted already
             pElement->m_pStorage->SetReadOnlyWrap( *pResultStorage );
-
+    
             // before the storage disposes the stream it must deregister itself as listener
             uno::Reference< lang::XComponent > xStorageComponent( xResult, uno::UNO_QUERY );
             if ( !xStorageComponent.is() )
                 throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-
+    
             MakeLinkToSubComponent_Impl( xStorageComponent );
         }
     }
@@ -2766,7 +2847,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const ::rtl
     try
     {
         uno::Reference< io::XStream > xResult;
-        m_pImpl->CloneStreamElement( aStreamName, sal_False, ::comphelper::SequenceAsHashMap(), xResult );
+        m_pImpl->CloneStreamElement( aStreamName, sal_False, ::rtl::OUString(), xResult );
         if ( !xResult.is() )
             throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         return xResult;
@@ -2833,7 +2914,80 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStreamElement(
 {
     RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::cloneEncryptedStreamElement" );
 
-    return cloneEncryptedStream( aStreamName, ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPass ) );
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+    {
+        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+    }
+
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+        packages::NoEncryptionException();
+
+    if ( !aPass.getLength() )
+        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 2 );
+
+    try
+    {
+        uno::Reference< io::XStream > xResult;
+        m_pImpl->CloneStreamElement( aStreamName, sal_True, aPass, xResult );
+        if ( !xResult.is() )
+            throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        return xResult;
+    }
+    catch( embed::InvalidStorageException& aInvalidStorageException )
+    {
+        m_pImpl->AddLog( aInvalidStorageException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( lang::IllegalArgumentException& aIllegalArgumentException )
+    {
+        m_pImpl->AddLog( aIllegalArgumentException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( packages::NoEncryptionException& aNoEncryptionException )
+    {
+        m_pImpl->AddLog( aNoEncryptionException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( packages::WrongPasswordException& aWrongPasswordException )
+    {
+        m_pImpl->AddLog( aWrongPasswordException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( io::IOException& aIOException )
+    {
+        m_pImpl->AddLog( aIOException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
+    {
+        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( uno::RuntimeException& aRuntimeException )
+    {
+        m_pImpl->AddLog( aRuntimeException.Message );
+        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        throw;
+    }
+    catch( uno::Exception& aException )
+    {
+          m_pImpl->AddLog( aException.Message );
+          m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+
+          uno::Any aCaught( ::cppu::getCaughtException() );
+        throw embed::StorageWrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't clone encrypted stream!" ) ),
+                                                 uno::Reference< io::XInputStream >(),
+                                                 aCaught );
+    }
 }
 
 //-----------------------------------------------
@@ -2953,7 +3107,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
         {
             // the existence of m_pAntiImpl of the child is not interesting,
             // the copy will be created internally
-
+    
             pElement->m_pStorage->CopyLastCommitTo( xTargetStorage );
         }
         else
@@ -3024,7 +3178,7 @@ sal_Bool SAL_CALL OStorage::isStreamElement( const ::rtl::OUString& aElementName
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 ); // unacceptable name
 
     SotElement_Impl* pElement = NULL;
-
+    
     try
     {
         pElement = m_pImpl->FindElement( aElementName );
@@ -3093,7 +3247,7 @@ sal_Bool SAL_CALL OStorage::isStorageElement( const ::rtl::OUString& aElementNam
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
 
     SotElement_Impl* pElement = NULL;
-
+    
     try
     {
         pElement = m_pImpl->FindElement( aElementName );
@@ -3338,7 +3492,7 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
 }
 
 //-----------------------------------------------
-void SAL_CALL OStorage::copyElementTo(  const ::rtl::OUString& aElementName,
+void SAL_CALL OStorage::copyElementTo(	const ::rtl::OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const ::rtl::OUString& aNewName )
         throw ( embed::InvalidStorageException,
@@ -3363,7 +3517,7 @@ void SAL_CALL OStorage::copyElementTo(  const ::rtl::OUString& aElementName,
       || !aNewName.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aNewName, sal_False ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    if ( !xDest.is() )
+    if ( !xDest.is() ) 
         // || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 2 );
 
@@ -3443,7 +3597,7 @@ void SAL_CALL OStorage::copyElementTo(  const ::rtl::OUString& aElementName,
 
 
 //-----------------------------------------------
-void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
+void SAL_CALL OStorage::moveElementTo(	const ::rtl::OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const ::rtl::OUString& aNewName )
         throw ( embed::InvalidStorageException,
@@ -3493,7 +3647,7 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
             throw container::ElementExistException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         m_pImpl->CopyStorageElement( pElement, xDest, aNewName, sal_False );
-
+    
         m_pImpl->RemoveElement( pElement );
 
         m_pImpl->m_bIsModified = sal_True;
@@ -3558,211 +3712,7 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
 }
 
 //____________________________________________________________________________________________________
-//  XStorage2
-//____________________________________________________________________________________________________
-
-//-----------------------------------------------
-uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
-    const ::rtl::OUString& aStreamName, sal_Int32 nOpenMode, const uno::Sequence< beans::NamedValue >& aEncryptionData )
-        throw ( embed::InvalidStorageException,
-                lang::IllegalArgumentException,
-                packages::NoEncryptionException,
-                packages::WrongPasswordException,
-                io::IOException,
-                embed::StorageWrappedTargetException,
-                uno::RuntimeException )
-{
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::openEncryptedStream" );
-
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
-
-    if ( !m_pImpl )
-    {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
-        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-    }
-
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
-        packages::NoEncryptionException();
-
-    if ( ( nOpenMode & embed::ElementModes::WRITE ) && m_pData->m_bReadOnlyWrap )
-        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // TODO: access denied
-
-    if ( !aEncryptionData.getLength() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 3 );
-
-    uno::Reference< io::XStream > xResult;
-    try
-    {
-        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamName, nOpenMode, sal_True );
-        OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
-
-        xResult = pElement->m_pStream->GetStream( nOpenMode, aEncryptionData, sal_False );
-        OSL_ENSURE( xResult.is(), "The method must throw exception instead of removing empty result!\n" );
-
-        if ( m_pData->m_bReadOnlyWrap )
-        {
-            // before the storage disposes the stream it must deregister itself as listener
-            uno::Reference< lang::XComponent > xStreamComponent( xResult, uno::UNO_QUERY );
-            if ( !xStreamComponent.is() )
-                throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-
-            MakeLinkToSubComponent_Impl( xStreamComponent );
-        }
-    }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
-    {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
-    {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( packages::NoEncryptionException& aNoEncryptionException )
-    {
-        m_pImpl->AddLog( aNoEncryptionException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( packages::WrongPasswordException& aWrongPasswordException )
-    {
-        m_pImpl->AddLog( aWrongPasswordException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
-    {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( io::IOException& aIOException )
-    {
-        m_pImpl->AddLog( aIOException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( uno::RuntimeException& aRuntimeException )
-    {
-        m_pImpl->AddLog( aRuntimeException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( uno::Exception& aException )
-    {
-          m_pImpl->AddLog( aException.Message );
-          m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-
-          uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't open encrypted stream stream!" ) ),
-                                                 uno::Reference< io::XInputStream >(),
-                                                 aCaught );
-    }
-
-    aGuard.clear();
-
-    BroadcastModifiedIfNecessary();
-
-    return xResult;
-}
-
-//-----------------------------------------------
-uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
-    const ::rtl::OUString& aStreamName,
-    const uno::Sequence< beans::NamedValue >& aEncryptionData )
-        throw ( embed::InvalidStorageException,
-                lang::IllegalArgumentException,
-                packages::NoEncryptionException,
-                packages::WrongPasswordException,
-                io::IOException,
-                embed::StorageWrappedTargetException,
-                uno::RuntimeException )
-{
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::cloneEncryptedStream" );
-
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
-
-    if ( !m_pImpl )
-    {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
-        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-    }
-
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
-        packages::NoEncryptionException();
-
-    if ( !aEncryptionData.getLength() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 2 );
-
-    try
-    {
-        uno::Reference< io::XStream > xResult;
-        m_pImpl->CloneStreamElement( aStreamName, sal_True, aEncryptionData, xResult );
-        if ( !xResult.is() )
-            throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-        return xResult;
-    }
-    catch( embed::InvalidStorageException& aInvalidStorageException )
-    {
-        m_pImpl->AddLog( aInvalidStorageException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( lang::IllegalArgumentException& aIllegalArgumentException )
-    {
-        m_pImpl->AddLog( aIllegalArgumentException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( packages::NoEncryptionException& aNoEncryptionException )
-    {
-        m_pImpl->AddLog( aNoEncryptionException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( packages::WrongPasswordException& aWrongPasswordException )
-    {
-        m_pImpl->AddLog( aWrongPasswordException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( io::IOException& aIOException )
-    {
-        m_pImpl->AddLog( aIOException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( embed::StorageWrappedTargetException& aStorageWrappedTargetException )
-    {
-        m_pImpl->AddLog( aStorageWrappedTargetException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( uno::RuntimeException& aRuntimeException )
-    {
-        m_pImpl->AddLog( aRuntimeException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-        throw;
-    }
-    catch( uno::Exception& aException )
-    {
-          m_pImpl->AddLog( aException.Message );
-          m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-
-          uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't clone encrypted stream!" ) ),
-                                                 uno::Reference< io::XInputStream >(),
-                                                 aCaught );
-    }
-}
-
-
-//____________________________________________________________________________________________________
-//  XStorageRawAccess
+//	XStorageRawAccess
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -3809,8 +3759,8 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
         if ( !xRawInStream.is() )
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-        uno::Reference < io::XOutputStream > xTempOut(
-                            m_pImpl->GetServiceFactory()->createInstance (
+        uno::Reference < io::XOutputStream > xTempOut( 
+                            m_pImpl->GetServiceFactory()->createInstance ( 
                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) ) ),
                             uno::UNO_QUERY );
         xTempIn = uno::Reference < io::XInputStream >( xTempOut, uno::UNO_QUERY );
@@ -3907,7 +3857,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
         SotElement_Impl* pElement = m_pImpl->FindElement( sStreamName );
         if ( !pElement )
             throw container::NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-
+    
         if ( !pElement->m_pStream )
         {
             m_pImpl->OpenSubStream( pElement );
@@ -3922,8 +3872,8 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
         if ( !xRawInStream.is() )
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-        uno::Reference < io::XOutputStream > xTempOut(
-                            m_pImpl->GetServiceFactory()->createInstance (
+        uno::Reference < io::XOutputStream > xTempOut( 
+                            m_pImpl->GetServiceFactory()->createInstance ( 
                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) ) ),
                             uno::UNO_QUERY );
         xTempIn = uno::Reference < io::XInputStream >( xTempOut, uno::UNO_QUERY );
@@ -4090,7 +4040,7 @@ void SAL_CALL OStorage::insertRawEncrStreamElement( const ::rtl::OUString& aStre
 }
 
 //____________________________________________________________________________________________________
-//  XTransactedObject
+//	XTransactedObject
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -4233,7 +4183,7 @@ void SAL_CALL OStorage::revert()
 }
 
 //____________________________________________________________________________________________________
-//  XTransactionBroadcaster
+//	XTransactionBroadcaster
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -4269,10 +4219,10 @@ void SAL_CALL OStorage::removeTransactionListener( const uno::Reference< embed::
 }
 
 //____________________________________________________________________________________________________
-//  XModifiable
+//	XModifiable
 //  TODO: if there will be no demand on this interface it will be removed from implementation,
-//        I do not want to remove it now since it is still possible that it will be inserted
-//        to the service back.
+//		  I do not want to remove it now since it is still possible that it will be inserted
+//		  to the service back.
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -4354,7 +4304,7 @@ void SAL_CALL OStorage::removeModifyListener(
 }
 
 //____________________________________________________________________________________________________
-//  XNameAccess
+//	XNameAccess
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -4568,7 +4518,7 @@ sal_Bool SAL_CALL OStorage::hasElements()
 
 
 //____________________________________________________________________________________________________
-//  XComponent
+//	XComponent
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -4641,7 +4591,7 @@ void SAL_CALL OStorage::removeEventListener(
 }
 
 //____________________________________________________________________________________________________
-//  XEncryptionProtectedSource
+//	XEncryptionProtectedSource
 //____________________________________________________________________________________________________
 
 void SAL_CALL OStorage::setEncryptionPassword( const ::rtl::OUString& aPass )
@@ -4649,7 +4599,64 @@ void SAL_CALL OStorage::setEncryptionPassword( const ::rtl::OUString& aPass )
             io::IOException )
 {
     RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::setEncryptionPassword" );
-    setEncryptionData( ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPass ) );
+
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+    {
+        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+    }
+
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // the interface must be visible only for package storage
+
+    OSL_ENSURE( m_pData->m_bIsRoot, "setEncryptionPassword() method is not available for nonroot storages!\n" );
+
+    if ( m_pData->m_bIsRoot )
+    {
+        try {
+            m_pImpl->ReadContents(); 
+        }
+        catch ( uno::RuntimeException& aRuntimeException )
+        {
+            m_pImpl->AddLog( aRuntimeException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+            throw;
+        }
+        catch ( uno::Exception& aException )
+        {
+            m_pImpl->AddLog( aException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+
+            uno::Any aCaught( ::cppu::getCaughtException() );
+            throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can not open package!\n" ) ),
+                                                uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
+                                                                                    uno::UNO_QUERY ),
+                                                aCaught );
+        }
+        
+        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY );
+        if ( !xPackPropSet.is() )
+            throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+
+        try
+        {
+            xPackPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionKey" ) ),
+                                            uno::makeAny( ::package::MakeKeyFromPass( aPass, sal_True ) ) );
+
+            m_pImpl->m_bHasCommonPassword = sal_True;
+            m_pImpl->m_aCommonPassword = aPass;
+        }
+        catch( uno::Exception& aException )
+        {
+            m_pImpl->AddLog( aException.Message );
+            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+
+            OSL_ENSURE( sal_False, "The call must not fail, it is pretty simple!" );
+            throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        }
+    }
 }
 
 //-----------------------------------------------
@@ -4671,6 +4678,7 @@ void SAL_CALL OStorage::removeEncryption()
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // the interface must be visible only for package storage
 
     OSL_ENSURE( m_pData->m_bIsRoot, "removeEncryption() method is not available for nonroot storages!\n" );
+
     if ( m_pData->m_bIsRoot )
     {
         try {
@@ -4706,95 +4714,22 @@ void SAL_CALL OStorage::removeEncryption()
             xPackPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionKey" ) ),
                                             uno::makeAny( uno::Sequence< sal_Int8 >() ) );
 
-            m_pImpl->m_bHasCommonEncryptionData = sal_False;
-            m_pImpl->m_aCommonEncryptionData.clear();
+            m_pImpl->m_bHasCommonPassword = sal_False;
+            m_pImpl->m_aCommonPassword = ::rtl::OUString();
         }
         catch( uno::Exception& aException )
         {
             m_pImpl->AddLog( aException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
-            OSL_FAIL( "The call must not fail, it is pretty simple!" );
+            OSL_ENSURE( sal_False, "The call must not fail, it is pretty simple!" );
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         }
     }
 }
 
 //____________________________________________________________________________________________________
-//  XEncryptionProtectedSource2
-//____________________________________________________________________________________________________
-
-void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValue >& aEncryptionData )
-    throw ( io::IOException,
-            uno::RuntimeException )
-{
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::setEncryptionData" );
-
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
-
-    if ( !m_pImpl )
-    {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
-        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-    }
-
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
-        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // the interface must be visible only for package storage
-
-    if ( !aEncryptionData.getLength() )
-        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected empty encryption data!") ), uno::Reference< uno::XInterface >() );
-
-    OSL_ENSURE( m_pData->m_bIsRoot, "setEncryptionData() method is not available for nonroot storages!\n" );
-    if ( m_pData->m_bIsRoot )
-    {
-        try {
-            m_pImpl->ReadContents();
-        }
-        catch ( uno::RuntimeException& aRuntimeException )
-        {
-            m_pImpl->AddLog( aRuntimeException.Message );
-            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-            throw;
-        }
-        catch ( uno::Exception& aException )
-        {
-            m_pImpl->AddLog( aException.Message );
-            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-
-            uno::Any aCaught( ::cppu::getCaughtException() );
-            throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can not open package!\n" ) ),
-                                                uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                    uno::UNO_QUERY ),
-                                                aCaught );
-        }
-
-        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY );
-        if ( !xPackPropSet.is() )
-            throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-
-        try
-        {
-            ::comphelper::SequenceAsHashMap aEncryptionMap( aEncryptionData );
-            xPackPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionKey" ) ),
-                                            uno::makeAny( aEncryptionMap.getUnpackedValueOrDefault( PACKAGE_ENCRYPTIONDATA_SHA1UTF8, uno::Sequence< sal_Int8 >() ) ) );
-
-            m_pImpl->m_bHasCommonEncryptionData = sal_True;
-            m_pImpl->m_aCommonEncryptionData = aEncryptionMap;
-        }
-        catch( uno::Exception& aException )
-        {
-            m_pImpl->AddLog( aException.Message );
-            m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-
-            throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-        }
-    }
-
-}
-
-
-//____________________________________________________________________________________________________
-//  XPropertySet
+//	XPropertySet
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -4844,19 +4779,19 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
         throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+        if ( aPropertyName.equalsAscii( "MediaType" ) )
         {
             aValue >>= m_pImpl->m_aMediaType;
             m_pImpl->m_bControlMediaType = sal_True;
-
+    
             m_pImpl->m_bBroadcastModified = sal_True;
             m_pImpl->m_bIsModified = sal_True;
         }
-        else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Version" ) ) )
+        else if ( aPropertyName.equalsAscii( "Version" ) )
         {
             aValue >>= m_pImpl->m_aVersion;
             m_pImpl->m_bControlVersion = sal_True;
-
+    
             // this property can be set even for readonly storage
             if ( !m_pData->m_bReadOnlyWrap )
             {
@@ -4864,20 +4799,20 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 m_pImpl->m_bIsModified = sal_True;
             }
         }
-        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HasEncryptedEntries" ) )
-                                    || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HasNonEncryptedEntries" ) )
-                                    || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsInconsistent" ) )
-                                    || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) )
-                                    || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) ) ) )
-           || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsRoot" ) )
-           || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaTypeFallbackUsed" ) ) )
+        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
+                                    || aPropertyName.equalsAscii( "HasNonEncryptedEntries" )
+                                    || aPropertyName.equalsAscii( "IsInconsistent" )
+                                    || aPropertyName.equalsAscii( "URL" )
+                                    || aPropertyName.equalsAscii( "RepairPackage" ) ) )
+           || aPropertyName.equalsAscii( "IsRoot" )
+           || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" ) )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         else
             throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
-        if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfoStream" ) ) )
+        if ( aPropertyName.equalsAscii( "RelationsInfoStream" ) )
         {
             uno::Reference< io::XInputStream > xInRelStream;
             if ( ( aValue >>= xInRelStream ) && xInRelStream.is() )
@@ -4900,7 +4835,7 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             else
                 throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
         }
-        else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfo" ) ) )
+        else if ( aPropertyName.equalsAscii( "RelationsInfo" ) )
         {
             if ( aValue >>= m_pImpl->m_aRelInfo )
             {
@@ -4912,9 +4847,9 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             else
                 throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
         }
-        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) )
-                                    || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) ) ) )
-           || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsRoot" ) ) )
+        else if ( ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "URL" )
+                                    || aPropertyName.equalsAscii( "RepairPackage" ) ) )
+           || aPropertyName.equalsAscii( "IsRoot" ) )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         else
             throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -4943,9 +4878,9 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
     }
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
-      && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) )
-        || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaTypeFallbackUsed" ) )
-        || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Version" ) ) ) )
+      && ( aPropertyName.equalsAscii( "MediaType" )
+        || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" )
+        || aPropertyName.equalsAscii( "Version" ) ) )
     {
         try
         {
@@ -4969,25 +4904,25 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
                                         aCaught );
         }
 
-        if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+        if ( aPropertyName.equalsAscii( "MediaType" ) )
             return uno::makeAny( m_pImpl->m_aMediaType );
-        else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Version" ) ) )
+        else if ( aPropertyName.equalsAscii( "Version" ) )
             return uno::makeAny( m_pImpl->m_aVersion );
         else
             return uno::makeAny( m_pImpl->m_bMTFallbackUsed );
     }
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsRoot" ) ) )
+    else if ( aPropertyName.equalsAscii( "IsRoot" ) )
     {
         return uno::makeAny( m_pData->m_bIsRoot );
     }
-    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OpenMode" ) ) )
+    else if ( aPropertyName.equalsAscii( "OpenMode" ) )
     {
         return uno::makeAny( m_pImpl->m_nStorageMode );
     }
     else if ( m_pData->m_bIsRoot )
     {
-        if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) )
-          || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) ) )
+        if ( aPropertyName.equalsAscii( "URL" )
+          || aPropertyName.equalsAscii( "RepairPackage" ) )
         {
             for ( sal_Int32 aInd = 0; aInd < m_pImpl->m_xProperties.getLength(); aInd++ )
             {
@@ -4995,15 +4930,15 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
                     return m_pImpl->m_xProperties[aInd].Value;
             }
 
-            if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
+            if ( aPropertyName.equalsAscii( "URL" ) )
                 return uno::makeAny( ::rtl::OUString() );
 
             return uno::makeAny( sal_False ); // RepairPackage
         }
         else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
-          && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HasEncryptedEntries" ) )
-            || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HasNonEncryptedEntries" ) )
-            || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsInconsistent" ) ) ) )
+          && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
+            || aPropertyName.equalsAscii( "HasNonEncryptedEntries" )
+            || aPropertyName.equalsAscii( "IsInconsistent" ) ) ) 
         {
             try {
                 m_pImpl->ReadContents();
@@ -5117,7 +5052,7 @@ void SAL_CALL OStorage::removeVetoableChangeListener(
 }
 
 //____________________________________________________________________________________________________
-//  XRelationshipAccess
+//	XRelationshipAccess
 //____________________________________________________________________________________________________
 
 // TODO/LATER: the storage and stream implementations of this interface are very similar, they could use a helper class
@@ -5229,7 +5164,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  cons
                     return aSeq[nInd1];
                 break;
             }
-
+    
     throw container::NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
@@ -5435,7 +5370,7 @@ void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence
 
                                 nIndSourceSame = nIndSource1;
                             }
-
+                            
                             break;
                         }
                     }
@@ -5500,7 +5435,7 @@ void SAL_CALL OStorage::clearRelationships()
 }
 
 //____________________________________________________________________________________________________
-//  XOptimizedStorage
+//	XOptimizedStorage
 //____________________________________________________________________________________________________
 //-----------------------------------------------
 void SAL_CALL OStorage::insertRawNonEncrStreamElementDirect(
@@ -5610,7 +5545,7 @@ void SAL_CALL OStorage::insertStreamElementDirect(
                                                  aCaught );
     }
 }
-
+                
 //-----------------------------------------------
 void SAL_CALL OStorage::copyElementDirectlyTo(
             const ::rtl::OUString& aElementName,
@@ -5740,7 +5675,7 @@ void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStrea
 
     if ( !m_pImpl->m_pSwitchStream )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-
+    
     try
     {
         m_pImpl->m_pSwitchStream->CopyAndSwitchPersistenceTo( xStream );
@@ -5812,12 +5747,12 @@ void SAL_CALL OStorage::attachToURL( const ::rtl::OUString& sURL,
 
     if ( !m_pImpl->m_pSwitchStream )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-
-    uno::Reference < ucb::XSimpleFileAccess > xAccess(
-            m_pImpl->m_xFactory->createInstance (
+    
+    uno::Reference < ucb::XSimpleFileAccess > xAccess( 
+            m_pImpl->m_xFactory->createInstance ( 
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ),
             uno::UNO_QUERY_THROW );
-
+    
     try
     {
         if ( bReadOnly )
@@ -5908,7 +5843,7 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const ::rtl::OUString& aEle
             throw container::NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         // TODO/LATER: Currently it is only implemented for MediaType property of substorages, might be changed in future
-        if ( !pElement->m_bIsStorage || m_pData->m_nStorageType != embed::StorageFormats::PACKAGE || !aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+        if ( !pElement->m_bIsStorage || m_pData->m_nStorageType != embed::StorageFormats::PACKAGE || !aPropertyName.equalsAscii( "MediaType" ) )
             throw beans::PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         if ( !pElement->m_pStorage )
@@ -6010,7 +5945,7 @@ void SAL_CALL OStorage::copyStreamElementData( const ::rtl::OUString& aStreamNam
     try
     {
         uno::Reference< io::XStream > xNonconstRef = xTargetStream;
-        m_pImpl->CloneStreamElement( aStreamName, sal_False, ::comphelper::SequenceAsHashMap(), xNonconstRef );
+        m_pImpl->CloneStreamElement( aStreamName, sal_False, ::rtl::OUString(), xNonconstRef );
 
         OSL_ENSURE( xNonconstRef == xTargetStream, "The provided stream reference seems not be filled in correctly!\n" );
         if ( xNonconstRef != xTargetStream )
@@ -6071,7 +6006,7 @@ void SAL_CALL OStorage::copyStreamElementData( const ::rtl::OUString& aStreamNam
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
-uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamElementByHierarchicalName( const ::rtl::OUString& aStreamPath, ::sal_Int32 nOpenMode )
+uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamElementByHierarchicalName( const ::rtl::OUString& aStreamPath, ::sal_Int32 nOpenMode ) 
         throw ( embed::InvalidStorageException,
                 lang::IllegalArgumentException,
                 packages::WrongPasswordException,
@@ -6130,7 +6065,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamEle
 }
 
 //-----------------------------------------------
-uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncryptedStreamElementByHierarchicalName( const ::rtl::OUString& aStreamPath, ::sal_Int32 nOpenMode, const ::rtl::OUString& sPassword )
+uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncryptedStreamElementByHierarchicalName( const ::rtl::OUString& aStreamPath, ::sal_Int32 nOpenMode, const ::rtl::OUString& sPassword ) 
         throw ( embed::InvalidStorageException,
                 lang::IllegalArgumentException,
                 packages::NoEncryptionException,
@@ -6139,11 +6074,65 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    return openEncryptedStreamByHierarchicalName( aStreamPath, nOpenMode, ::comphelper::OStorageHelper::CreatePackageEncryptionData( sPassword ) );
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+    {
+        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+    }
+
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+        throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+
+    if ( !aStreamPath.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamPath, sal_True ) )
+        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
+
+    if ( !sPassword.getLength() )
+        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 3 );
+
+    if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE )
+      && ( nOpenMode & embed::ElementModes::WRITE ) )
+        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // Access denied
+
+    OStringList_Impl aListPath = OHierarchyHolder_Impl::GetListPathFromString( aStreamPath );
+    OSL_ENSURE( aListPath.size(), "The result list must not be empty!" );
+
+    uno::Reference< embed::XExtendedStorageStream > xResult;
+    if ( aListPath.size() == 1 )
+    {
+        // that must be a direct request for a stream
+        // the transacted version of the stream should be opened
+
+        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamPath, nOpenMode, sal_True );
+        OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
+
+        xResult = uno::Reference< embed::XExtendedStorageStream >(
+                        pElement->m_pStream->GetStream( nOpenMode, sPassword, sal_True ),
+                        uno::UNO_QUERY_THROW );
+    }
+    else
+    {
+        // there are still storages in between
+        if ( !m_pData->m_rHierarchyHolder.is() )
+            m_pData->m_rHierarchyHolder = new OHierarchyHolder_Impl(
+                uno::Reference< embed::XStorage >( static_cast< embed::XStorage* >( this ) ) );
+
+        xResult = m_pData->m_rHierarchyHolder->GetStreamHierarchically(
+                                                ( m_pImpl->m_nStorageMode & embed::ElementModes::READWRITE ),
+                                                aListPath,
+                                                nOpenMode,
+                                                sPassword );
+    }
+
+    if ( !xResult.is() )
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+
+    return xResult;
 }
 
 //-----------------------------------------------
-void SAL_CALL OStorage::removeStreamElementByHierarchicalName( const ::rtl::OUString& aStreamPath )
+void SAL_CALL OStorage::removeStreamElementByHierarchicalName( const ::rtl::OUString& aStreamPath ) 
         throw ( embed::InvalidStorageException,
                 lang::IllegalArgumentException,
                 container::NoSuchElementException,
@@ -6174,76 +6163,5 @@ void SAL_CALL OStorage::removeStreamElementByHierarchicalName( const ::rtl::OUSt
 
     m_pData->m_rHierarchyHolder->RemoveStreamHierarchically( aListPath );
 }
-
-//____________________________________________________________________________________________________
-// XHierarchicalStorageAccess2
-//____________________________________________________________________________________________________
-
-uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncryptedStreamByHierarchicalName( const ::rtl::OUString& aStreamPath, ::sal_Int32 nOpenMode, const uno::Sequence< beans::NamedValue >& aEncryptionData )
-        throw ( embed::InvalidStorageException,
-                lang::IllegalArgumentException,
-                packages::NoEncryptionException,
-                packages::WrongPasswordException,
-                io::IOException,
-                embed::StorageWrappedTargetException,
-                uno::RuntimeException )
-{
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
-
-    if ( !m_pImpl )
-    {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
-        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-    }
-
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
-        throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-
-    if ( !aStreamPath.getLength() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamPath, sal_True ) )
-        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected entry name syntax." ) ), uno::Reference< uno::XInterface >(), 1 );
-
-    if ( !aEncryptionData.getLength() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 3 );
-
-    if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE )
-      && ( nOpenMode & embed::ElementModes::WRITE ) )
-        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // Access denied
-
-    OStringList_Impl aListPath = OHierarchyHolder_Impl::GetListPathFromString( aStreamPath );
-    OSL_ENSURE( aListPath.size(), "The result list must not be empty!" );
-
-    uno::Reference< embed::XExtendedStorageStream > xResult;
-    if ( aListPath.size() == 1 )
-    {
-        // that must be a direct request for a stream
-        // the transacted version of the stream should be opened
-
-        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamPath, nOpenMode, sal_True );
-        OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
-
-        xResult = uno::Reference< embed::XExtendedStorageStream >(
-                        pElement->m_pStream->GetStream( nOpenMode, aEncryptionData, sal_True ),
-                        uno::UNO_QUERY_THROW );
-    }
-    else
-    {
-        // there are still storages in between
-        if ( !m_pData->m_rHierarchyHolder.is() )
-            m_pData->m_rHierarchyHolder = new OHierarchyHolder_Impl(
-                uno::Reference< embed::XStorage >( static_cast< embed::XStorage* >( this ) ) );
-
-        xResult = m_pData->m_rHierarchyHolder->GetStreamHierarchically(
-                                                ( m_pImpl->m_nStorageMode & embed::ElementModes::READWRITE ),
-                                                aListPath,
-                                                nOpenMode,
-                                                aEncryptionData );
-    }
-
-    if ( !xResult.is() )
-        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-
-    return xResult;
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

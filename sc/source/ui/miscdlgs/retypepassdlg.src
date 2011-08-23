@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,9 +27,9 @@
 
 #include "retypepassdlg.hrc"
 
+
 ModalDialog RID_SCDLG_RETYPEPASS
 {
-    HelpID = "sc:ModalDialog:RID_SCDLG_RETYPEPASS";
     Text [ en-US ] = "Re-type Password" ;
     Size = MAP_APPFONT ( 260 , 165 ) ;
     Moveable = TRUE ;
@@ -82,7 +82,6 @@ ModalDialog RID_SCDLG_RETYPEPASS
 
     PushButton BTN_RETYPE_DOC
     {
-        HelpID = "sc:PushButton:RID_SCDLG_RETYPEPASS:BTN_RETYPE_DOC";
         Pos = MAP_APPFONT ( 158, 59 );
         Size = MAP_APPFONT ( 30, 14 );
 
@@ -115,7 +114,6 @@ ModalDialog RID_SCDLG_RETYPEPASS
 
     PushButton BTN_RETYPE_SHEET1
     {
-        HelpID = "sc:PushButton:RID_SCDLG_RETYPEPASS:BTN_RETYPE_SHEET1";
         Pos = MAP_APPFONT ( 158, 94 );
         Size = MAP_APPFONT ( 30, 14 );
 
@@ -140,7 +138,6 @@ ModalDialog RID_SCDLG_RETYPEPASS
 
     PushButton BTN_RETYPE_SHEET2
     {
-        HelpID = "sc:PushButton:RID_SCDLG_RETYPEPASS:BTN_RETYPE_SHEET2";
         Pos = MAP_APPFONT ( 158, 110 );
         Size = MAP_APPFONT ( 30, 14 );
 
@@ -165,7 +162,6 @@ ModalDialog RID_SCDLG_RETYPEPASS
 
     PushButton BTN_RETYPE_SHEET3
     {
-        HelpID = "sc:PushButton:RID_SCDLG_RETYPEPASS:BTN_RETYPE_SHEET3";
         Pos = MAP_APPFONT ( 158, 126 );
         Size = MAP_APPFONT ( 30, 14 );
 
@@ -190,7 +186,6 @@ ModalDialog RID_SCDLG_RETYPEPASS
 
     PushButton BTN_RETYPE_SHEET4
     {
-        HelpID = "sc:PushButton:RID_SCDLG_RETYPEPASS:BTN_RETYPE_SHEET4";
         Pos = MAP_APPFONT ( 158, 142 );
         Size = MAP_APPFONT ( 30, 14 );
 
@@ -234,7 +229,6 @@ ModalDialog RID_SCDLG_RETYPEPASS
 
 ModalDialog RID_SCDLG_RETYPEPASS_INPUT
 {
-    HelpID = "sc:ModalDialog:RID_SCDLG_RETYPEPASS_INPUT";
     Text [ en-US ] = "Re-type Password" ;
     Size = MAP_APPFONT ( 230 , 110 ) ;
     Moveable = TRUE ;
@@ -261,7 +255,6 @@ ModalDialog RID_SCDLG_RETYPEPASS_INPUT
 
     RadioButton BTN_RETYPE_PASSWORD
     {
-        HelpID = "sc:RadioButton:RID_SCDLG_RETYPEPASS_INPUT:BTN_RETYPE_PASSWORD";
         Pos = MAP_APPFONT ( 11, 10 );
         Size = MAP_APPFONT ( 150, 10 );
 
@@ -278,7 +271,6 @@ ModalDialog RID_SCDLG_RETYPEPASS_INPUT
 
     Edit ED_PASSWORD1
     {
-        HelpID = "sc:Edit:RID_SCDLG_RETYPEPASS_INPUT:ED_PASSWORD1";
         Border = TRUE;
         PassWord = TRUE;
         Pos = MAP_APPFONT ( 65, 29 );
@@ -295,7 +287,6 @@ ModalDialog RID_SCDLG_RETYPEPASS_INPUT
 
     Edit ED_PASSWORD2
     {
-        HelpID = "sc:Edit:RID_SCDLG_RETYPEPASS_INPUT:ED_PASSWORD2";
         Border = TRUE;
         PassWord = TRUE;
         Pos = MAP_APPFONT ( 65, 44 );
@@ -304,7 +295,6 @@ ModalDialog RID_SCDLG_RETYPEPASS_INPUT
 
     CheckBox BTN_MATCH_OLD_PASSWORD
     {
-        HelpID = "sc:CheckBox:RID_SCDLG_RETYPEPASS_INPUT:BTN_MATCH_OLD_PASSWORD";
         Pos = MAP_APPFONT ( 20, 65 );
         Size = MAP_APPFONT ( 150, 10 );
 
@@ -313,10 +303,11 @@ ModalDialog RID_SCDLG_RETYPEPASS_INPUT
 
     RadioButton BTN_REMOVE_PASSWORD
     {
-        HelpID = "sc:RadioButton:RID_SCDLG_RETYPEPASS_INPUT:BTN_REMOVE_PASSWORD";
         Pos = MAP_APPFONT ( 11, 90 );
         Size = MAP_APPFONT ( 150, 10 );
 
         Text [ en-US ] = "Remove password from this protected item." ;
     };
 };
+
+

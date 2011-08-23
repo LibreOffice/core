@@ -74,7 +74,7 @@ raptor_CC+=-shared-libgcc
 .ENDIF
 raptor_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-raptor_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
+raptor_LIBS+=-lstdc++_s
 .ENDIF
 
 CONFIGURE_DIR=
@@ -93,7 +93,7 @@ BUILD_DIR=$(CONFIGURE_DIR)$/src
 .ELSE # "WNT"
 
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec -Wl,-z,noexecstack
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
@@ -135,6 +135,8 @@ CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
+#INSTALL_ACTION=$(GNUMAKE) install
+#INSTALL_FLAGS+=DESTDIR=$(PWD)$/$(P_INSTALL_TARGET_DIR)
 .ENDIF
 
 

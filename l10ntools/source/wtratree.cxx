@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,25 +49,25 @@
 #include "wtranode.hxx"
 
 
-const BRANCH_T  BR_END          = 0;
-const BRANCH_T  BR_NONALPHA     = 1;
-const BRANCH_T  BR_HOTKEY       = 2;
-const BRANCH_T  BR_BACKSLASH    = 3;
-const BRANCH_T  BR_ALPHABASE    = 4;    /// @ATTENTION  All branches not valid for words must be smaller than this value!
-const BRANCH_T  BR_AE           = 30;
-const BRANCH_T  BR_OE           = 31;
-const BRANCH_T  BR_UE           = 32;
-const BRANCH_T  BR_SZ           = 33;
-const BRANCH_T  BR_MAX          = 34;   /// @ATTENTION  Must be updated always!
+const BRANCH_T	BR_END			= 0;
+const BRANCH_T	BR_NONALPHA     = 1;
+const BRANCH_T	BR_HOTKEY       = 2;
+const BRANCH_T	BR_BACKSLASH    = 3;
+const BRANCH_T	BR_ALPHABASE    = 4;   	/// @ATTENTION  All branches not valid for words must be smaller than this value!
+const BRANCH_T	BR_AE           = 30;
+const BRANCH_T	BR_OE           = 31;
+const BRANCH_T	BR_UE           = 32;
+const BRANCH_T	BR_SZ           = 33;
+const BRANCH_T	BR_MAX          = 34;	/// @ATTENTION  Must be updated always!
 
-const BRANCH_T  BR_START        = 0;
+const BRANCH_T	BR_START 		= 0;
 
 
 
 
 
 WordTransTree::WordTransTree(CharSet  i_nWorkingCharSet)
-    :   sInput(0),
+    :	sInput(0),
         nInputLength(0),
         pInputEnd(0),
         sOutput(0),
@@ -86,7 +86,7 @@ WordTransTree::WordTransTree(CharSet  i_nWorkingCharSet)
         cCurHotkeySign(u_char('~'))
 {
     // Initialize parsing tree:
-    pUnknownAlpha = new WTT_Node(BR_ALPHABASE,0,0); // This will be deleted as part of the parsing tree.
+    pUnknownAlpha = new WTT_Node(BR_ALPHABASE,0,0);	// This will be deleted as part of the parsing tree.
     for ( UINT8 i = BR_ALPHABASE; i < C_NR_OF_BRANCHES; i++)
     {
         pUnknownAlpha->SetBranch(i,pUnknownAlpha);
@@ -163,8 +163,8 @@ WordTransTree::~WordTransTree()
 }
 
 void
-WordTransTree::AddWordPair( const ByteString &      i_sOldString,
-                            const ByteString &      i_sReplaceString )
+WordTransTree::AddWordPair(	const ByteString &		i_sOldString,
+                            const ByteString &		i_sReplaceString )
 {
     if (i_sOldString.Len() == 0)
         return;
@@ -185,14 +185,14 @@ WordTransTree::AddWordPair( const ByteString &      i_sOldString,
             pCurParseNode->SetBranch(cBranch,pBranch);
         }
         pCurParseNode = pBranch;
-    }   // end for
+    }	// end for
     pCurParseNode->SetAsTokenToReplace(i_sReplaceString);
 }
 
 void
-WordTransTree::InitTransformation( const char * i_sInput,
-                                   UINT32       i_nInputLength,
-                                   UINT32       i_nOutputMaxLength )
+WordTransTree::InitTransformation( const char *	i_sInput,
+                                   UINT32		i_nInputLength,
+                                   UINT32		i_nOutputMaxLength )
 {
     sInput = (const u_char *)i_sInput;
     nInputLength = i_nInputLength;
@@ -211,7 +211,7 @@ WordTransTree::InitTransformation( const char * i_sInput,
     pOutputPosition = sOutput;
 }
 
-/** pInputCurTokenStart and CurParseNode are updated just when
+/**	pInputCurTokenStart and CurParseNode are updated just when
     starting this function. After its end they must not be changed
     till this functon is called again.
     Outside this function pInputPositon and pOutputPosition are both
@@ -245,21 +245,21 @@ WordTransTree::TransformNextToken()
                 // Logic of the following. There are 9 possible cases -
                 // A = alphabetic letter, NA = non alphabetic, TB = token begin,
                 // Eot = end of text:
-                //   1. A~A          set hotkey to following letter, continue
-                //   2. A~NA         token end
-                //   3. A~Eot        token end
-                //   4. NA~A         token end
-                //   5. NA~NA        continue
-                //   6. A~Eof        continue
-                //   7. TB~A         set hotkey to following letter, continue
-                //   8. TB~NA        continue
-                //   9. TB~Eot       continue
+                //	 1.	A~A          set hotkey to following letter, continue
+                //	 2.	A~NA         token end
+                //	 3.	A~Eot        token end
+                //	 4.	NA~A         token end
+                //	 5.	NA~NA        continue
+                //	 6.	A~Eof        continue
+                //	 7.	TB~A         set hotkey to following letter, continue
+                //	 8.	TB~NA        continue
+                //	 9.	TB~Eot       continue
 
                 // bNext and Prev are true, if there are alphabetic letters:
-                sal_Bool bNext =  pInputPosition + 1 != pInputEnd
+                BOOL bNext =  pInputPosition + 1 != pInputEnd
                                     ?   CalculateBranch(pInputPosition[1]) >= BR_ALPHABASE
-                                    :   sal_False;
-                sal_Bool bPrev = pCurParseNode->Value() >= BR_ALPHABASE;
+                                    : 	FALSE;
+                BOOL bPrev = pCurParseNode->Value() >= BR_ALPHABASE;
 
                 if ( bNext && (bPrev || pCurParseNode == dpParsingTreeTop) )
                 {   // case 1. and 7.
@@ -272,7 +272,7 @@ WordTransTree::TransformNextToken()
                 }
 
                 // Case 2.,3.,4. :
-                //  so this should be handled as an end of a token.
+                // 	so this should be handled as an end of a token.
             }
             if (pCurParseNode->TokenType() == WTT_Node::token_to_keep)
             {
@@ -283,9 +283,9 @@ WordTransTree::TransformNextToken()
             {
                 Handle_TokenToTransform();
                 return eCurResult;
-            }   // endif (pCurParseNode->TokenType() == WTT_Node::token_to_keep)
-        }   // endif (pBranch == 0) else
-    }   // end for
+            }	// endif (pCurParseNode->TokenType() == WTT_Node::token_to_keep)
+        } 	// endif (pBranch == 0) else
+    }	// end for
 
     // If here, the text end is reached
     if (pCurParseNode->TokenType() == WTT_Node::token_to_keep)
@@ -309,7 +309,7 @@ WordTransTree::CurReplacingString() const
 void
 WordTransTree::Handle_Hotkey()
 {
-    if (cCurHotkey == 0)    // Avoid to replace the first found hotkey by
+    if (cCurHotkey == 0) 	// Avoid to replace the first found hotkey by
                             //   a later one - though this shouldn't happen anyway.
     {
         cCurHotkey = (pInputPosition+1) != pInputEnd ? pInputPosition[1] : 0;
@@ -331,13 +331,13 @@ WordTransTree::Handle_TokenToKeep()
 void
 WordTransTree::Handle_TokenToTransform()
 {
-    sal_Bool bHaveHotkey = CalculateBranch(cCurHotkey) >= BR_ALPHABASE;
+    BOOL bHaveHotkey = CalculateBranch(cCurHotkey) >= BR_ALPHABASE;
     const ByteString & rReplace = pCurParseNode->ReplaceString();
 
     // Find position of hotkey in replace-string:
-    sal_uInt16 nHotkeyPos = bHaveHotkey
-                            ?   rReplace.Search(char(cCurHotkey))
-                            :   STRING_NOTFOUND;
+    USHORT nHotkeyPos = bHaveHotkey
+                            ?	rReplace.Search(char(cCurHotkey))
+                            :	STRING_NOTFOUND;
     if (nHotkeyPos == STRING_NOTFOUND && bHaveHotkey)
     {
         if (cCurHotkey < 128)
@@ -347,7 +347,7 @@ WordTransTree::Handle_TokenToTransform()
             else
                 nHotkeyPos = rReplace.Search(tolower(char(cCurHotkey)));
         }
-        else    // cCurHotkey >= 128
+        else	// cCurHotkey >= 128
         {
             if (cCurHotkey == c_ae)
                 nHotkeyPos = rReplace.Search(char(c_AE));
@@ -361,14 +361,14 @@ WordTransTree::Handle_TokenToTransform()
                 nHotkeyPos = rReplace.Search(char(c_oe));
             else if (cCurHotkey == c_UE)
                 nHotkeyPos = rReplace.Search(char(c_ue));
-        }   // endif (cCurHotkey < 128) else
+        }	// endif (cCurHotkey < 128) else
 
         if (nHotkeyPos == STRING_NOTFOUND)
         {
             eCurResult = HOTKEY_LOST;
-            bHaveHotkey = sal_False;
+            bHaveHotkey = FALSE;
         }
-    }   // endif (nHotkeyPos == STRING_NOT_FOUND && bHaveHotkey)
+    } 	// endif (nHotkeyPos == STRING_NOT_FOUND && bHaveHotkey)
 
 
     UINT32 nOutputTokenLength = rReplace.Len() + (bHaveHotkey ? 1 : 0);
@@ -392,15 +392,15 @@ WordTransTree::Handle_TokenToTransform()
 
     // Convert first letter into upper if necessary:
     u_char cInStart = CalculateBranch(*pInputCurTokenStart) == BR_HOTKEY
-                            ?   pInputCurTokenStart[1]
-                            :   pInputCurTokenStart[0] ;
+                            ? 	pInputCurTokenStart[1]
+                            :	pInputCurTokenStart[0] ;
     u_char * pOutStart = nHotkeyPos == 0
-                            ?   pOutputPosition + 1
-                            :   pOutputPosition ;
+                            ? 	pOutputPosition + 1
+                            :	pOutputPosition ;
     if (isupper(cInStart) || cInStart > 127)
     {   // Possibly cInStart is upper character:
         if (isupper(cInStart) || cInStart == c_AE || cInStart == c_OE || cInStart == c_UE)
-        {   // Surely cInStart is upper character:
+        {	// Surely cInStart is upper character:
             u_char cOutStart = *pOutStart;
             if (cOutStart < 128)
                 *pOutStart = toupper(cOutStart);
@@ -411,7 +411,7 @@ WordTransTree::Handle_TokenToTransform()
             else if (cOutStart == c_ue)
                 *pOutStart = c_UE;
         }
-    }   // endif (isupper(cInStart) || cInStart > 127)
+    }  	// endif (isupper(cInStart) || cInStart > 127)
 
     pOutputPosition += nOutputTokenLength;
     *pOutputPosition = '\0';

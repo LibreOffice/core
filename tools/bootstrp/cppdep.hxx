@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,35 +26,35 @@
  *
  ************************************************************************/
 
+#include <tools/list.hxx>
 #include <tools/string.hxx>
-#include <vector>
 #define PATH_SEP ":"
-#define DIR_SEP "/"
+#define DIR_SEP	"/"
 
-typedef ::std::vector< ByteString* > ByteStringList;
+DECLARE_LIST( ByteStringList, ByteString * )
 
 class CppDep
 {
-    ByteString          aSourceFile;
-    ByteStringList      *pSearchPath;
+    ByteString			aSourceFile;
+    ByteStringList		*pSearchPath;
 
 protected:
-    ByteStringList      *pFileList;
-    ByteStringList      *pSources;
+    ByteStringList		*pFileList;
+    ByteStringList		*pSources;
 
-    sal_Bool            Search( ByteString aFileName );
-    ByteString      Exists( ByteString aFileName );
+    BOOL			Search( ByteString aFileName );
+    ByteString		Exists( ByteString aFileName );
 
-    ByteString      IsIncludeStatement( ByteString aLine );
+    ByteString		IsIncludeStatement( ByteString aLine );
 public:
                     CppDep( ByteString aFileName );
                     CppDep();
                     virtual ~CppDep();
-    virtual void    Execute();
+    virtual void	Execute();
 
-    ByteStringList*     GetDepList(){return pFileList;}
-    sal_Bool            AddSearchPath( const char* aPath );
-    sal_Bool            AddSource( const char * aSource );
+    ByteStringList*		GetDepList(){return pFileList;}
+    BOOL			AddSearchPath( const char* aPath );
+    BOOL			AddSource( const char * aSource );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

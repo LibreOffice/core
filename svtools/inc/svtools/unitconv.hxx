@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: dlgutil.hxx,v $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,27 +44,27 @@ typedef long (*FUNC_CONVERT)(long);
 
 // Functions -------------------------------------------------------------
 
-SVT_DLLPUBLIC void      SetFieldUnit( MetricField& rCtrl, FieldUnit eUnit, sal_Bool bAll = sal_False );
-SVT_DLLPUBLIC void      SetFieldUnit( MetricBox& rCtrl, FieldUnit eUnit, sal_Bool bAll = sal_False );
+SVT_DLLPUBLIC void 		SetFieldUnit( MetricField& rCtrl, FieldUnit eUnit, BOOL bAll = FALSE );
+SVT_DLLPUBLIC void 		SetFieldUnit( MetricBox& rCtrl, FieldUnit eUnit, BOOL bAll = FALSE );
 
-SVT_DLLPUBLIC long      CalcToUnit( float nIn, SfxMapUnit eUnit );
-SVT_DLLPUBLIC long      CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFaktor );
+SVT_DLLPUBLIC long 		CalcToUnit( float nIn, SfxMapUnit eUnit );
+SVT_DLLPUBLIC long 		CalcToPoint( long nIn, SfxMapUnit eUnit, USHORT nFaktor );
 
-SVT_DLLPUBLIC long      ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit eCtrl );
-SVT_DLLPUBLIC long      ControlToItem( long nIn, SfxFieldUnit eCtrl, SfxMapUnit eItem );
+SVT_DLLPUBLIC long		ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit eCtrl );
+SVT_DLLPUBLIC long		ControlToItem( long nIn, SfxFieldUnit eCtrl, SfxMapUnit eItem );
 
-SVT_DLLPUBLIC FieldUnit MapToFieldUnit( const SfxMapUnit eUnit );
-SVT_DLLPUBLIC MapUnit   FieldToMapUnit( const SfxFieldUnit eUnit );
+SVT_DLLPUBLIC FieldUnit	MapToFieldUnit( const SfxMapUnit eUnit );
+SVT_DLLPUBLIC MapUnit	FieldToMapUnit( const SfxFieldUnit eUnit );
 
-SVT_DLLPUBLIC long      ConvertValueToMap( long nVal, SfxMapUnit eUnit );
-SVT_DLLPUBLIC long      ConvertValueToUnit( long nVal, SfxMapUnit eUnit );
+SVT_DLLPUBLIC long		ConvertValueToMap( long nVal, SfxMapUnit eUnit );
+SVT_DLLPUBLIC long		ConvertValueToUnit( long nVal, SfxMapUnit eUnit );
 
-SVT_DLLPUBLIC void      SetMetricValue( MetricField& rField, long lCoreValue, SfxMapUnit eUnit );
-SVT_DLLPUBLIC long      GetCoreValue( const MetricField& rField, SfxMapUnit eUnit );
+SVT_DLLPUBLIC void 		SetMetricValue( MetricField& rField, long lCoreValue, SfxMapUnit eUnit );
+SVT_DLLPUBLIC long 		GetCoreValue( const MetricField& rField, SfxMapUnit eUnit );
 
-SVT_DLLPUBLIC long  PointToTwips( long nIn );
+SVT_DLLPUBLIC long 	PointToTwips( long nIn );
 
-SVT_DLLPUBLIC long  TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew );
+SVT_DLLPUBLIC long 	TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew );
 
 #endif
 

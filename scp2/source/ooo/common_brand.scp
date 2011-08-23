@@ -62,6 +62,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Unopkgcom,
              gid_Brand_File_Bin_Unopkgexe,
              gid_Brand_File_Bin_Unopkg,
+             gid_Brand_File_Bin_Msvcr71,
              gid_Brand_File_Bin_Libxml2,
              gid_Brand_File_Bmp_Shell,
              gid_Brand_File_Bmp_IntroAbout,
@@ -86,7 +87,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Msvcm80crt_Manifest,
              gid_Brand_File_Lib_Npsoplugin,
              gid_Brand_File_Lib_Subscrib_C05,
-             gid_Brand_File_ServicesRdb,
              gid_Brand_File_Share_Registry_Brand_Xcd,
              gid_Brand_File_Share_Registry_O5oo_Xcd,
              gid_Brand_File_Script_Unopkg,
@@ -514,15 +514,13 @@ File gid_Brand_File_Bin_Soffice_Bin
     Name = "soffice.bin";
 End
 
-#if defined UNX && ! defined MACOSX
-
+#if defined ENABLE_UNIX_QUICKSTARTER
 File gid_File_Bin_QStart_Bin
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED, PATCH);
     Name = "oosplash.bin";
 End
-
 #endif
 
 // use this for high detail file open dialog >= 5.1 windows
@@ -611,6 +609,15 @@ File gid_Brand_File_Bin_Unopkg
     Styles = (PACKED);
     Name = "unopkg.bin";
 End
+
+#ifdef WNT
+File gid_Brand_File_Bin_Msvcr71
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = SCP2_URE_DL_NORMAL("msvcr71" SCP2_STDLP_DEBUG);
+    Styles = (PACKED);
+End
+#endif
 
 // Due to Windows DLL search order, OOo executables might pick up a libxml2 DLL
 // from a Windows system directory instead of the one from the URE; to avoid
@@ -800,7 +807,7 @@ File gid_Brand_File_Lib_Msvcr80
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-#ifndef _DEBUG_RUNTIME
+#ifndef _STLP_DEBUG
     Name = "msvcr80.dll";
 #else
     Name = "msvcr80d.dll";
@@ -843,7 +850,7 @@ File gid_Brand_File_Lib_Msvcp80
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-#ifndef _DEBUG_RUNTIME
+#ifndef _STLP_DEBUG
     Name = "msvcp80.dll";
 #else
     Name = "msvcp80d.dll";
@@ -860,7 +867,7 @@ File gid_Brand_File_Lib_Msvcm80
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-#ifndef _DEBUG_RUNTIME
+#ifndef _STLP_DEBUG
     Name = "msvcm80.dll";
 #else
     Name = "msvcm80d.dll";
@@ -877,7 +884,7 @@ File gid_Brand_File_Msvcm80crt_Manifest
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-#ifndef _DEBUG_RUNTIME
+#ifndef _STLP_DEBUG
     Name = "Microsoft.VC80.CRT.manifest";
 #else
     Name = "Microsoft.VC80.DebugCRT.manifest";
@@ -1197,24 +1204,6 @@ ProfileItem gid_Brand_Profileitem_Version_Useragent
     Value = "<PRODUCT> (${buildid}; ${_OS}; ${_ARCH}; BundledLanguages=${AllLanguages})";
 End
 
-ProfileItem gid_Brand_Profileitem_Version_Vendor
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 16;
-    Key = "Vendor";
-    Value = "<vendor>";
-End
-
-ProfileItem gid_Brand_Profileitem_Version_BuildVersion
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 17;
-    Key = "BuildVersion";
-    Value = "<buildversion>";
-End
-
 ProfileItem gid_Brand_Profileitem_Version_Ooobaseversion
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1269,14 +1258,6 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_User
     Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":BUNDLED_EXTENSIONS_USER}";
 End
 
-ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_Prereg
-    ModuleID = gid_Module_Root_Brand;
-    ProfileID = gid_Brand_Profile_Fundamental_Ini;
-    Section = "Bootstrap";
-    Key = "BUNDLED_EXTENSIONS_PREREG";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":BUNDLED_EXTENSIONS_PREREG}";
-End
-
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Packages_Cache
     ModuleID = gid_Module_Root_Brand;
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
@@ -1322,7 +1303,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Services
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_SERVICES";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_SERVICES} $ORIGIN/services.rdb";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_SERVICES}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Java_Types
@@ -1508,7 +1489,7 @@ End
 #endif
 
 //TODO: This actually belongs into a module of its own:
-#if !defined DISABLE_PYUNO && !defined SYSTEM_PYTHON
+#if !defined SYSTEM_PYTHON
 File gid_Brand_File_Bin_Python
     BIN_FILE_BODY;
     Name = EXENAME(pyuno/python);

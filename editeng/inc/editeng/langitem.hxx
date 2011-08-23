@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ namespace rtl
 
 // class SvxLanguageItem -------------------------------------------------
 
-/*  [Description]
+/*	[Beschreibung]
 
-    This item describes a Language.
+    Dieses Item beschreibt eine Sprache.
 */
 
 class EDITENG_DLLPUBLIC SvxLanguageItem : public SfxEnumItem
@@ -53,18 +53,18 @@ public:
     TYPEINFO();
 
     SvxLanguageItem( const LanguageType eLang /*= LANGUAGE_GERMAN*/,
-                     const sal_uInt16 nId  );
+                     const USHORT nId  );
 
-    // "pure virtual Methods" from SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
-    virtual sal_uInt16          GetValueCount() const;
+    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
+    virtual SvStream&		Store(SvStream &, USHORT nItemVersion) const;
+    virtual USHORT          GetValueCount() const;
 
     inline SvxLanguageItem& operator=(const SvxLanguageItem& rLang)
         {
@@ -73,12 +73,12 @@ public:
         }
 
     // enum cast
-    LanguageType            GetLanguage() const
+    LanguageType 			GetLanguage() const
                                 { return (LanguageType)GetValue(); }
-    void                    SetLanguage( const LanguageType eLang )
-                                { SetValue( (sal_uInt16)eLang ); }
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    void 					SetLanguage( const LanguageType eLang )
+                                { SetValue( (USHORT)eLang ); }
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 #endif

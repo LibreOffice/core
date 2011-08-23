@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@ struct IdContainer
     void *               pCurrentContext;
     uno_ExtEnvironment * pCurrentContextEnv;
     //
-    sal_Bool            bInit;
-    sal_Sequence *      pLocalThreadId;
-    sal_Int32           nRefCountOfCurrentId;
-    sal_Sequence *      pCurrentId;
+    sal_Bool			bInit;
+    sal_Sequence *		pLocalThreadId;
+    sal_Int32			nRefCountOfCurrentId;
+    sal_Sequence *		pCurrentId;
 };
 
 IdContainer * getIdContainer() SAL_THROW( () );

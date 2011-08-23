@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,13 +33,13 @@
 #include <editeng/unoedsrc.hxx>
 #include "svx/svxdllapi.h"
 
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace uno {
         class XInterface;
-    }
+    } 
     namespace accessibility {
         struct TextSegment;
-    }
+    } 
 } } }
 
 class SvxTextForwarder;
@@ -64,39 +64,37 @@ public:
 
     virtual ~SvxTextEditSource();
 
-    virtual SvxEditSource*          Clone() const;
-    virtual SvxTextForwarder*       GetTextForwarder();
-     virtual SvxViewForwarder*      GetViewForwarder();
-     virtual SvxEditViewForwarder*  GetEditViewForwarder( sal_Bool bCreate = sal_False );
-    virtual void                    UpdateData();
+    virtual SvxEditSource*			Clone() const;
+    virtual SvxTextForwarder*		GetTextForwarder();
+     virtual SvxViewForwarder*		GetViewForwarder();
+     virtual SvxEditViewForwarder*	GetEditViewForwarder( sal_Bool bCreate = sal_False );
+    virtual void					UpdateData();
 
     virtual void addRange( SvxUnoTextRangeBase* pNewRange );
     virtual void removeRange( SvxUnoTextRangeBase* pOldRange );
     virtual const SvxUnoTextRangeBaseList& getRanges() const;
 
-    virtual SfxBroadcaster&         GetBroadcaster() const;
+    virtual SfxBroadcaster&			GetBroadcaster() const;
 
     SdrObject* GetSdrObject() const;
 
     void lock();
     void unlock();
 
-//  static sal_Bool hasLevels( const SdrObject* pObject );
+//	static sal_Bool hasLevels( const SdrObject* pObject );
 
     // the SvxViewForwarder interface
-    virtual sal_Bool        IsValid() const;
-    virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point&, const MapMode& ) const;
-    virtual Point       PixelToLogic( const Point&, const MapMode& ) const;
+    virtual BOOL		IsValid() const;
+    virtual Rectangle	GetVisArea() const;
+    virtual Point		LogicToPixel( const Point&, const MapMode& ) const;
+    virtual Point		PixelToLogic( const Point&, const MapMode& ) const;
 
     void ChangeModel( SdrModel* pNewModel );
-
-    void UpdateOutliner();
 
 private:
     SVX_DLLPRIVATE SvxTextEditSource( SvxTextEditSourceImpl* pImpl );
 
-    SvxTextEditSourceImpl*  mpImpl;
+    SvxTextEditSourceImpl*	mpImpl;
 };
 
 #endif

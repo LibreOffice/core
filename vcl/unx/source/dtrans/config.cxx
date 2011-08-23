@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class DtransX11ConfigItem : public ::utl::ConfigItem
     sal_Int32           m_nSelectionTimeout;
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rPropertyNames );
-    virtual void Commit();
+    virtual void Commit();    
 public:
     DtransX11ConfigItem();
     virtual ~DtransX11ConfigItem();
@@ -57,9 +57,8 @@ public:
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace rtl;
 using namespace x11;
-
-using ::rtl::OUString;
 
 sal_Int32 SelectionManager::getSelectionTimeout()
 {
@@ -68,7 +67,7 @@ sal_Int32 SelectionManager::getSelectionTimeout()
         DtransX11ConfigItem aCfg;
         m_nSelectionTimeout = aCfg.getSelectionTimeout();
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "initialized selection timeout to %" SAL_PRIdINT32 " seconds\n", m_nSelectionTimeout );
+        fprintf( stderr, "initialized selection timeout to %ld seconds\n", m_nSelectionTimeout );
 #endif
     }
     return m_nSelectionTimeout;
@@ -89,7 +88,7 @@ DtransX11ConfigItem::DtransX11ConfigItem() :
         aKeys.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SELECTION_PROPERTY ) );
         Sequence< Any > aValues = GetProperties( aKeys );
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "found %" SAL_PRIdINT32 " properties for %s\n", aValues.getLength(), SELECTION_PROPERTY );
+        fprintf( stderr, "found %ld properties for %s\n", aValues.getLength(), SELECTION_PROPERTY );
 #endif
         Any* pValue = aValues.getArray();
         for( int i = 0; i < aValues.getLength(); i++, pValue++ )

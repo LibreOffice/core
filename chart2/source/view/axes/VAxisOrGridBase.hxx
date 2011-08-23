@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,9 @@
 
 #include "PlotterBase.hxx"
 #include "ThreeDHelper.hxx"
-#include "chartview/ExplicitScaleValues.hxx"
 
+#include <com/sun/star/chart2/ExplicitIncrementData.hpp>
+#include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -46,7 +47,7 @@ namespace chart
 /**
 */
 class ShapeFactory;
-class TickFactory;
+class TickmarkHelper;
 
 class VAxisOrGridBase : public PlotterBase
 {
@@ -55,22 +56,22 @@ public:
     virtual ~VAxisOrGridBase();
 
     virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
-    virtual void setExplicitScaleAndIncrement(
-            const ExplicitScaleData& rScale
-          , const ExplicitIncrementData& rIncrement )
+    virtual void SAL_CALL setExplicitScaleAndIncrement(
+            const ::com::sun::star::chart2::ExplicitScaleData& rScale
+          , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement )
                 throw (::com::sun::star::uno::RuntimeException);
     void set3DWallPositions( CuboidPlanePosition eLeftWallPos, CuboidPlanePosition eBackWallPos, CuboidPlanePosition eBottomPos );
 
-    virtual TickFactory* createTickFactory();
+    virtual TickmarkHelper* createTickmarkHelper();
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 protected: //member
-    ExplicitScaleData       m_aScale;
-    ExplicitIncrementData   m_aIncrement;
-    sal_Int32               m_nDimensionIndex;
+    ::com::sun::star::chart2::ExplicitScaleData     m_aScale;
+    ::com::sun::star::chart2::ExplicitIncrementData m_aIncrement;
+    sal_Int32                                       m_nDimensionIndex;
 
-    ::basegfx::B3DHomMatrix m_aMatrixScreenToScene;
+    ::basegfx::B3DHomMatrix                         m_aMatrixScreenToScene;
 
     CuboidPlanePosition m_eLeftWallPos;
     CuboidPlanePosition m_eBackWallPos;

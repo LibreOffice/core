@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 // header for class ByteString
 #include <tools/string.hxx>
 #include <comphelper/processfactory.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -81,7 +81,7 @@ Reference< uno::XComponentContext > lcl_getComponentContext()
     {
         Reference< beans::XPropertySet > xFactProp( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
         if( xFactProp.is())
-            xFactProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+            xFactProp->getPropertyValue(OUString::createFromAscii("DefaultContext")) >>= xContext;
     }
     catch( uno::Exception& )
     {}
@@ -144,9 +144,12 @@ SchXMLImportHelper::SchXMLImportHelper() :
         mpChartElemTokenMap( 0 ),
         mpPlotAreaElemTokenMap( 0 ),
         mpSeriesElemTokenMap( 0 ),
+        mpAxisElemTokenMap( 0 ),
 
         mpChartAttrTokenMap( 0 ),
         mpPlotAreaAttrTokenMap( 0 ),
+        mpAxisAttrTokenMap( 0 ),
+        mpLegendAttrTokenMap( 0 ),
         mpAutoStyleAttrTokenMap( 0 ),
         mpCellAttrTokenMap( 0 ),
         mpSeriesAttrTokenMap( 0 ),
@@ -167,11 +170,17 @@ SchXMLImportHelper::~SchXMLImportHelper()
         delete mpPlotAreaElemTokenMap;
     if( mpSeriesElemTokenMap )
         delete mpSeriesElemTokenMap;
+    if( mpAxisElemTokenMap )
+        delete mpAxisElemTokenMap;
 
     if( mpChartAttrTokenMap )
         delete mpChartAttrTokenMap;
     if( mpPlotAreaAttrTokenMap )
         delete mpPlotAreaAttrTokenMap;
+    if( mpAxisAttrTokenMap )
+        delete mpAxisAttrTokenMap;
+    if( mpLegendAttrTokenMap )
+        delete mpLegendAttrTokenMap;
     if( mpAutoStyleAttrTokenMap )
         delete mpAutoStyleAttrTokenMap;
     if( mpCellAttrTokenMap )
@@ -196,7 +205,7 @@ SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
     }
     else
     {
-        OSL_FAIL( "No valid XChartDocument given as XModel" );
+        DBG_ERROR( "No valid XChartDocument given as XModel" );
         pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
     }
 
@@ -211,12 +220,12 @@ const SvXMLTokenMap& SchXMLImportHelper::GetDocElemTokenMap()
 {
     if( ! mpChartDocElemTokenMap )
     {
-        static SvXMLTokenMapEntry aDocElemTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
         {
-            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
-            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES  },
-            { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META    },
-            { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY    },
+            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,	XML_TOK_DOC_AUTOSTYLES	},
+            { XML_NAMESPACE_OFFICE, XML_STYLES,			    XML_TOK_DOC_STYLES	},
+            { XML_NAMESPACE_OFFICE, XML_META, 				XML_TOK_DOC_META	},
+            { XML_NAMESPACE_OFFICE, XML_BODY, 				XML_TOK_DOC_BODY	},
             XML_TOKEN_MAP_END
         };
 
@@ -230,14 +239,14 @@ const SvXMLTokenMap& SchXMLImportHelper::GetTableElemTokenMap()
 {
     if( ! mpTableElemTokenMap )
     {
-        static SvXMLTokenMapEntry aTableElemTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aTableElemTokenMap[] =
     {
-        { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_COLUMNS,   XML_TOK_TABLE_HEADER_COLS   },
-        { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMNS,          XML_TOK_TABLE_COLUMNS       },
-        { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN,           XML_TOK_TABLE_COLUMN        },
-        { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_ROWS,      XML_TOK_TABLE_HEADER_ROWS   },
-        { XML_NAMESPACE_TABLE,  XML_TABLE_ROWS,             XML_TOK_TABLE_ROWS          },
-        { XML_NAMESPACE_TABLE,  XML_TABLE_ROW,              XML_TOK_TABLE_ROW           },
+        { XML_NAMESPACE_TABLE,	XML_TABLE_HEADER_COLUMNS,	XML_TOK_TABLE_HEADER_COLS	},
+        { XML_NAMESPACE_TABLE,	XML_TABLE_COLUMNS,			XML_TOK_TABLE_COLUMNS		},
+        { XML_NAMESPACE_TABLE,	XML_TABLE_COLUMN,			XML_TOK_TABLE_COLUMN		},
+        { XML_NAMESPACE_TABLE,	XML_TABLE_HEADER_ROWS,		XML_TOK_TABLE_HEADER_ROWS	},
+        { XML_NAMESPACE_TABLE,	XML_TABLE_ROWS,			    XML_TOK_TABLE_ROWS 			},
+        { XML_NAMESPACE_TABLE,	XML_TABLE_ROW,				XML_TOK_TABLE_ROW 			},
         XML_TOKEN_MAP_END
     };
 
@@ -251,13 +260,13 @@ const SvXMLTokenMap& SchXMLImportHelper::GetChartElemTokenMap()
 {
     if( ! mpChartElemTokenMap )
     {
-        static SvXMLTokenMapEntry aChartElemTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aChartElemTokenMap[] =
         {
-            { XML_NAMESPACE_CHART,  XML_PLOT_AREA,              XML_TOK_CHART_PLOT_AREA     },
-            { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_CHART_TITLE         },
-            { XML_NAMESPACE_CHART,  XML_SUBTITLE,               XML_TOK_CHART_SUBTITLE      },
-            { XML_NAMESPACE_CHART,  XML_LEGEND,             XML_TOK_CHART_LEGEND        },
-            { XML_NAMESPACE_TABLE,  XML_TABLE,                  XML_TOK_CHART_TABLE         },
+            { XML_NAMESPACE_CHART,	XML_PLOT_AREA,				XML_TOK_CHART_PLOT_AREA		},
+            { XML_NAMESPACE_CHART,	XML_TITLE,					XML_TOK_CHART_TITLE			},
+            { XML_NAMESPACE_CHART,	XML_SUBTITLE,				XML_TOK_CHART_SUBTITLE		},
+            { XML_NAMESPACE_CHART,	XML_LEGEND,				XML_TOK_CHART_LEGEND		},
+            { XML_NAMESPACE_TABLE,	XML_TABLE,					XML_TOK_CHART_TABLE			},
             XML_TOKEN_MAP_END
         };
 
@@ -271,15 +280,15 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaElemTokenMap()
 {
     if( ! mpPlotAreaElemTokenMap )
     {
-        static SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
 {
-    { XML_NAMESPACE_CHART_EXT,  XML_COORDINATE_REGION,      XML_TOK_PA_COORDINATE_REGION_EXT },
-    { XML_NAMESPACE_CHART,  XML_COORDINATE_REGION,      XML_TOK_PA_COORDINATE_REGION },
-    { XML_NAMESPACE_CHART,  XML_AXIS,                   XML_TOK_PA_AXIS             },
-    { XML_NAMESPACE_CHART,  XML_SERIES,                 XML_TOK_PA_SERIES           },
-    { XML_NAMESPACE_CHART,  XML_WALL,                   XML_TOK_PA_WALL             },
-    { XML_NAMESPACE_CHART,  XML_FLOOR,                  XML_TOK_PA_FLOOR            },
-    { XML_NAMESPACE_DR3D,   XML_LIGHT,                  XML_TOK_PA_LIGHT_SOURCE     },
+    { XML_NAMESPACE_CHART_EXT,	XML_COORDINATE_REGION,		XML_TOK_PA_COORDINATE_REGION_EXT },
+    { XML_NAMESPACE_CHART,	XML_COORDINATE_REGION,		XML_TOK_PA_COORDINATE_REGION },
+    { XML_NAMESPACE_CHART,	XML_AXIS,					XML_TOK_PA_AXIS				},
+    { XML_NAMESPACE_CHART,	XML_SERIES,				    XML_TOK_PA_SERIES			},
+    { XML_NAMESPACE_CHART,	XML_WALL,					XML_TOK_PA_WALL				},
+    { XML_NAMESPACE_CHART,	XML_FLOOR,					XML_TOK_PA_FLOOR			},
+    { XML_NAMESPACE_DR3D,	XML_LIGHT,					XML_TOK_PA_LIGHT_SOURCE		},
     { XML_NAMESPACE_CHART,  XML_STOCK_GAIN_MARKER,      XML_TOK_PA_STOCK_GAIN       },
     { XML_NAMESPACE_CHART,  XML_STOCK_LOSS_MARKER,      XML_TOK_PA_STOCK_LOSS       },
     { XML_NAMESPACE_CHART,  XML_STOCK_RANGE_LINE,       XML_TOK_PA_STOCK_RANGE      },
@@ -296,13 +305,13 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesElemTokenMap()
 {
     if( ! mpSeriesElemTokenMap )
     {
-        static SvXMLTokenMapEntry aSeriesElemTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aSeriesElemTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,  XML_DATA_POINT,       XML_TOK_SERIES_DATA_POINT       },
-    { XML_NAMESPACE_CHART,  XML_DOMAIN,           XML_TOK_SERIES_DOMAIN           },
-    { XML_NAMESPACE_CHART,  XML_MEAN_VALUE,       XML_TOK_SERIES_MEAN_VALUE_LINE  },
-    { XML_NAMESPACE_CHART,  XML_REGRESSION_CURVE, XML_TOK_SERIES_REGRESSION_CURVE },
-    { XML_NAMESPACE_CHART,  XML_ERROR_INDICATOR,  XML_TOK_SERIES_ERROR_INDICATOR  },
+    { XML_NAMESPACE_CHART,	XML_DATA_POINT,	      XML_TOK_SERIES_DATA_POINT       },
+    { XML_NAMESPACE_CHART,	XML_DOMAIN,		      XML_TOK_SERIES_DOMAIN	          },
+    { XML_NAMESPACE_CHART,	XML_MEAN_VALUE,       XML_TOK_SERIES_MEAN_VALUE_LINE  },
+    { XML_NAMESPACE_CHART,	XML_REGRESSION_CURVE, XML_TOK_SERIES_REGRESSION_CURVE },
+    { XML_NAMESPACE_CHART,	XML_ERROR_INDICATOR,  XML_TOK_SERIES_ERROR_INDICATOR  },
     XML_TOKEN_MAP_END
 };
 
@@ -312,19 +321,37 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesElemTokenMap()
     return *mpSeriesElemTokenMap;
 }
 
+const SvXMLTokenMap& SchXMLImportHelper::GetAxisElemTokenMap()
+{
+    if( ! mpAxisElemTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aAxisElemTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,	XML_TITLE,				    XML_TOK_AXIS_TITLE		},
+    { XML_NAMESPACE_CHART,	XML_CATEGORIES,			    XML_TOK_AXIS_CATEGORIES	},
+    { XML_NAMESPACE_CHART,	XML_GRID,				    XML_TOK_AXIS_GRID		},
+    XML_TOKEN_MAP_END
+};
+
+        mpAxisElemTokenMap = new SvXMLTokenMap( aAxisElemTokenMap );
+    } // if( ! mpAxisElemTokenMap )
+
+    return *mpAxisElemTokenMap;
+}
+
 // ----------------------------------------
 
 const SvXMLTokenMap& SchXMLImportHelper::GetChartAttrTokenMap()
 {
     if( ! mpChartAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aChartAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aChartAttrTokenMap[] =
 {
     { XML_NAMESPACE_XLINK,  XML_HREF,                   XML_TOK_CHART_HREF          },
-    { XML_NAMESPACE_CHART,  XML_CLASS,                  XML_TOK_CHART_CLASS         },
-    { XML_NAMESPACE_SVG,    XML_WIDTH,                  XML_TOK_CHART_WIDTH         },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_CHART_HEIGHT        },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_CHART_STYLE_NAME    },
+    { XML_NAMESPACE_CHART,	XML_CLASS,					XML_TOK_CHART_CLASS			},
+    { XML_NAMESPACE_SVG,	XML_WIDTH,					XML_TOK_CHART_WIDTH			},
+    { XML_NAMESPACE_SVG,	XML_HEIGHT,				    XML_TOK_CHART_HEIGHT		},
+    { XML_NAMESPACE_CHART,	XML_STYLE_NAME,			    XML_TOK_CHART_STYLE_NAME	},
     { XML_NAMESPACE_CHART,  XML_COLUMN_MAPPING,         XML_TOK_CHART_COL_MAPPING   },
     { XML_NAMESPACE_CHART,  XML_ROW_MAPPING,            XML_TOK_CHART_ROW_MAPPING   },
     XML_TOKEN_MAP_END
@@ -340,7 +367,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaAttrTokenMap()
 {
     if( ! mpPlotAreaAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aPlotAreaAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aPlotAreaAttrTokenMap[] =
 {
     { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_PA_X                 },
     { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_PA_Y                 },
@@ -369,14 +396,51 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaAttrTokenMap()
     return *mpPlotAreaAttrTokenMap;
 }
 
+const SvXMLTokenMap& SchXMLImportHelper::GetAxisAttrTokenMap()
+{
+    if( ! mpAxisAttrTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aAxisAttrTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,	XML_DIMENSION,				XML_TOK_AXIS_DIMENSION		},
+    { XML_NAMESPACE_CHART,	XML_NAME,					XML_TOK_AXIS_NAME			},
+    { XML_NAMESPACE_CHART,	XML_STYLE_NAME,		    	XML_TOK_AXIS_STYLE_NAME		},
+    XML_TOKEN_MAP_END
+};
+
+        mpAxisAttrTokenMap = new SvXMLTokenMap( aAxisAttrTokenMap );
+    } // if( ! mpAxisAttrTokenMap )
+
+    return *mpAxisAttrTokenMap;
+}
+
+const SvXMLTokenMap& SchXMLImportHelper::GetLegendAttrTokenMap()
+{
+    if( ! mpLegendAttrTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aLegendAttrTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,	XML_LEGEND_POSITION,		XML_TOK_LEGEND_POSITION		},
+    { XML_NAMESPACE_SVG,	XML_X,						XML_TOK_LEGEND_X			},
+    { XML_NAMESPACE_SVG,	XML_Y,						XML_TOK_LEGEND_Y			},
+    { XML_NAMESPACE_CHART,	XML_STYLE_NAME,			    XML_TOK_LEGEND_STYLE_NAME	},
+    XML_TOKEN_MAP_END
+};
+
+        mpLegendAttrTokenMap = new SvXMLTokenMap( aLegendAttrTokenMap );
+    } // if( ! mpLegendAttrTokenMap )
+
+    return *mpLegendAttrTokenMap;
+}
+
 const SvXMLTokenMap& SchXMLImportHelper::GetAutoStyleAttrTokenMap()
 {
     if( ! mpAutoStyleAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aAutoStyleAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aAutoStyleAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  XML_FAMILY,                 XML_TOK_AS_FAMILY           },
-    { XML_NAMESPACE_STYLE,  XML_NAME,                   XML_TOK_AS_NAME             },
+    { XML_NAMESPACE_STYLE,	XML_FAMILY,				    XML_TOK_AS_FAMILY			},
+    { XML_NAMESPACE_STYLE,	XML_NAME,					XML_TOK_AS_NAME				},
     XML_TOKEN_MAP_END
 };
 
@@ -390,10 +454,10 @@ const SvXMLTokenMap& SchXMLImportHelper::GetCellAttrTokenMap()
 {
     if( ! mpCellAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aCellAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aCellAttrTokenMap[] =
 {
-    { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE,             XML_TOK_CELL_VAL_TYPE       },
-    { XML_NAMESPACE_OFFICE, XML_VALUE,                  XML_TOK_CELL_VALUE          },
+    { XML_NAMESPACE_OFFICE,	XML_VALUE_TYPE,			    XML_TOK_CELL_VAL_TYPE		},
+    { XML_NAMESPACE_OFFICE,	XML_VALUE,					XML_TOK_CELL_VALUE			},
     XML_TOKEN_MAP_END
 };
 
@@ -407,13 +471,13 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesAttrTokenMap()
 {
     if( ! mpSeriesAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aSeriesAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aSeriesAttrTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,  XML_VALUES_CELL_RANGE_ADDRESS,  XML_TOK_SERIES_CELL_RANGE    },
-    { XML_NAMESPACE_CHART,  XML_LABEL_CELL_ADDRESS,         XML_TOK_SERIES_LABEL_ADDRESS },
-    { XML_NAMESPACE_CHART,  XML_ATTACHED_AXIS,              XML_TOK_SERIES_ATTACHED_AXIS },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,                 XML_TOK_SERIES_STYLE_NAME    },
-    { XML_NAMESPACE_CHART,  XML_CLASS,                      XML_TOK_SERIES_CHART_CLASS   },
+    { XML_NAMESPACE_CHART,	XML_VALUES_CELL_RANGE_ADDRESS,	XML_TOK_SERIES_CELL_RANGE	 },
+    { XML_NAMESPACE_CHART,	XML_LABEL_CELL_ADDRESS,         XML_TOK_SERIES_LABEL_ADDRESS },
+    { XML_NAMESPACE_CHART,	XML_ATTACHED_AXIS,				XML_TOK_SERIES_ATTACHED_AXIS },
+    { XML_NAMESPACE_CHART,	XML_STYLE_NAME, 				XML_TOK_SERIES_STYLE_NAME	 },
+    { XML_NAMESPACE_CHART,	XML_CLASS, 					    XML_TOK_SERIES_CHART_CLASS	 },
     XML_TOKEN_MAP_END
 };
 
@@ -427,7 +491,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetRegEquationAttrTokenMap()
 {
     if( ! mpRegEquationAttrTokenMap )
     {
-        static SvXMLTokenMapEntry aRegressionEquationAttrTokenMap[] =
+        static __FAR_DATA SvXMLTokenMapEntry aRegressionEquationAttrTokenMap[] =
 {
     { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_REGEQ_STYLE_NAME         },
     { XML_NAMESPACE_CHART,  XML_DISPLAY_EQUATION,       XML_TOK_REGEQ_DISPLAY_EQUATION   },
@@ -457,7 +521,7 @@ void SchXMLImportHelper::DeleteDataSeries(
             xDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
         Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
-
+        
         sal_Int32 nCooSysIndex = 0;
         for( nCooSysIndex=0; nCooSysIndex<aCooSysSeq.getLength(); nCooSysIndex++ )
         {
@@ -485,7 +549,7 @@ void SchXMLImportHelper::DeleteDataSeries(
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( OUStringToOString(
+        OSL_ENSURE( false, OUStringToOString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -557,7 +621,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
                 {
                     xResult.set(
                         xContext->getServiceManager()->createInstanceWithContext(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DataSeries" )),
+                            OUString::createFromAscii("com.sun.star.chart2.DataSeries"),
                             xContext ), uno::UNO_QUERY_THROW );
                 }
                 if( xResult.is() )
@@ -568,7 +632,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( OUStringToOString(
+        OSL_ENSURE( false, OUStringToOString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -581,7 +645,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
 Reference< chart2::data::XLabeledDataSequence > SchXMLImportHelper::GetNewLabeledDataSequence()
 {
     // @todo: remove this asap
-    OSL_FAIL( "Do not call this method" );
+    OSL_ENSURE( false, "Do not call this method" );
     Reference< chart2::data::XLabeledDataSequence >  xResult;
     // DO NOT USED -- DEPRECATED. Use SchXMLTools::GetNewLabeledDataSequence() instead
     return xResult;
@@ -607,7 +671,7 @@ SchXMLImport::SchXMLImport(
     Reference< frame::XModel > xModel,
     Reference< document::XGraphicObjectResolver >& rGrfContainer,
     sal_Bool /*bLoadDoc*/, sal_Bool bShowProgress )
-:   SvXMLImport( xServiceFactory, xModel, rGrfContainer )
+:	SvXMLImport( xServiceFactory, xModel, rGrfContainer )
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
@@ -634,7 +698,7 @@ SchXMLImport::SchXMLImport(
     if( mxStatusIndicator.is())
     {
         const OUString aText( RTL_CONSTASCII_USTRINGPARAM( "XML Import" ));
-        mxStatusIndicator->start( aText, 100 );     // use percentage as values
+        mxStatusIndicator->start( aText, 100 );		// use percentage as values
     }
 }
 
@@ -654,7 +718,7 @@ SchXMLImport::~SchXMLImport() throw ()
 
 // create the main context (subcontexts are created
 // by the one created here)
-SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUString& rLocalName,
+SvXMLImportContext *SchXMLImport::CreateContext( USHORT nPrefix, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = 0;
@@ -676,8 +740,8 @@ SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUStr
         if (xDPS.is()) {
             uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
                 mxServiceFactory->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.xml.dom.SAXDocumentBuilder"))),
+                    ::rtl::OUString::createFromAscii(
+                        "com.sun.star.xml.dom.SAXDocumentBuilder")),
                     uno::UNO_QUERY_THROW);
             pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
                 ? new SvXMLMetaDocumentContext(*this,
@@ -780,7 +844,7 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
 #ifdef DBG_UTIL
         String aStr( rEx.Message );
         ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-        OSL_TRACE( "SchXMLChartContext::StartElement(): Exception caught: %s", aBStr.GetBuffer());
+        DBG_ERROR1( "SchXMLChartContext::StartElement(): Exception caught: %s", aBStr.GetBuffer());
 #else
         (void)rEx; // avoid warning for pro build
 #endif
@@ -806,6 +870,7 @@ OUString SAL_CALL SchXMLImport_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
+    // return (cppu::OWeakObject*)new SchXMLImport();
     return (cppu::OWeakObject*)new SchXMLImport(rSMgr);
 }
 
@@ -828,6 +893,7 @@ OUString SAL_CALL SchXMLImport_Styles_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
+    // return (cppu::OWeakObject*)new SchXMLImport( IMPORT_STYLES );
     return (cppu::OWeakObject*)new SchXMLImport( rSMgr, IMPORT_STYLES );
 }
 
@@ -848,6 +914,7 @@ OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
+    // return (cppu::OWeakObject*)new SchXMLImport( IMPORT_CONTENT | IMPORT_AUTOSTYLES | IMPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SchXMLImport( rSMgr, IMPORT_CONTENT | IMPORT_AUTOSTYLES | IMPORT_FONTDECLS );
 }
 
@@ -868,6 +935,7 @@ OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
+    // return (cppu::OWeakObject*)new SchXMLImport( IMPORT_META );
     return (cppu::OWeakObject*)new SchXMLImport( rSMgr, IMPORT_META );
 }
 
@@ -888,7 +956,7 @@ OUString SAL_CALL SchXMLImport::getImplementationName() throw( uno::RuntimeExcep
         case IMPORT_SETTINGS:
         // there is no settings component in chart
         default:
-            return OUString(RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport" ));
+            return OUString::createFromAscii( "SchXMLImport" );
     }
 }
 

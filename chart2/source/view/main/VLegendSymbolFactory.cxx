@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,6 +38,9 @@
 
 // header for define DBG_ASSERT
 #include <tools/debug.hxx>
+
+// uncomment to disable line dashes at the border of boxes
+// #define DISABLE_DASHES_AT_BORDER
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -102,17 +105,18 @@ void lcl_setPropetiesToShape(
 namespace chart
 {
 
+// static
 Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
-    const awt::Size& rEntryKeyAspectRatio,
     const Reference< drawing::XShapes > xSymbolContainer,
-    LegendSymbolStyle eStyle,
+    chart2::LegendSymbolStyle eStyle,
     const Reference< lang::XMultiServiceFactory > & xShapeFactory,
     const Reference< beans::XPropertySet > & xLegendEntryProperties,
     tPropertyType ePropertyType, const uno::Any& rExplicitSymbol )
 {
     Reference< drawing::XShape > xResult;
 
-    if( ! (xSymbolContainer.is() && xShapeFactory.is()))
+    if( ! (xSymbolContainer.is() &&
+           xShapeFactory.is()))
         return xResult;
 
     xResult.set( xShapeFactory->createInstance(
@@ -122,92 +126,247 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     if( ! xResultGroup.is())
         return xResult;
 
+    // aspect ratio of symbols is always 3:2
+    awt::Size aBoundSize( 3000, 2000 );
+    bool bUseBox = false;
+
     // add an invisible square box to maintain aspect ratio
-    Reference< drawing::XShape > xBound( ShapeFactory(xShapeFactory).createInvisibleRectangle(
-                xResultGroup, rEntryKeyAspectRatio  ));
+    switch( eStyle )
+    {
+        case chart2::LegendSymbolStyle_BOX:
+        case chart2::LegendSymbolStyle_HORIZONTAL_LINE:
+        case chart2::LegendSymbolStyle_VERTICAL_LINE:
+        case chart2::LegendSymbolStyle_DIAGONAL_LINE:
+        case chart2::LegendSymbolStyle_LINE_WITH_BOX:
+        case chart2::LegendSymbolStyle_LINE_WITH_SYMBOL:
+        case chart2::LegendSymbolStyle_CIRCLE:
+        {
+            Reference< drawing::XShape > xBound( ShapeFactory(xShapeFactory).createInvisibleRectangle(
+                xResultGroup, aBoundSize  ));
+            break;
+        }
+
+        case chart2::LegendSymbolStyle_BAR:
+        case chart2::LegendSymbolStyle_RECTANGLE:
+        case chart2::LegendSymbolStyle_STRETCHED_RECTANGLE:
+        case chart2::LegendSymbolStyle_USER_DEFINED:
+        default:
+            break;
+    }
 
     // create symbol
-    try
+    switch( eStyle )
     {
-        if( eStyle == LegendSymbolStyle_LINE )
+        case chart2::LegendSymbolStyle_BOX:
+        case chart2::LegendSymbolStyle_BAR:
+        case chart2::LegendSymbolStyle_RECTANGLE:
+        case chart2::LegendSymbolStyle_STRETCHED_RECTANGLE:
+        case chart2::LegendSymbolStyle_CIRCLE:
         {
-            Reference< drawing::XShape > xLine( xShapeFactory->createInstance(
-                    C2U( "com.sun.star.drawing.LineShape" )), uno::UNO_QUERY );
-            if( xLine.is())
+            try
             {
-                xResultGroup->add( xLine );
-                xLine->setSize(  awt::Size( rEntryKeyAspectRatio.Width, 0 ));
-                xLine->setPosition( awt::Point( 0, rEntryKeyAspectRatio.Height/2 ));
+                Reference< drawing::XShape > xShape;
 
-                lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType );
-            }
+                if( eStyle == chart2::LegendSymbolStyle_CIRCLE )
+                    xShape.set( xShapeFactory->createInstance(
+                                    C2U( "com.sun.star.drawing.EllipseShape" )), uno::UNO_QUERY );
+                else
+                    xShape.set( xShapeFactory->createInstance(
+                                    C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
 
-            Reference< drawing::XShape > xSymbol;
-            const sal_Int32 nSize = std::min(rEntryKeyAspectRatio.Width,rEntryKeyAspectRatio.Height);
-            chart2::Symbol aSymbol;
-            if( rExplicitSymbol >>= aSymbol )
-            {
-                drawing::Direction3D aSymbolSize( nSize, nSize, 0 );
-                drawing::Position3D aPos( rEntryKeyAspectRatio.Width/2, rEntryKeyAspectRatio.Height/2, 0 );
-                ShapeFactory aFactory( xShapeFactory );
-                if( aSymbol.Style == chart2::SymbolStyle_STANDARD )
+                if( xShape.is())
                 {
-                    // take series color as fill color
-                    xLegendEntryProperties->getPropertyValue( C2U("Color")) >>= aSymbol.FillColor;
-                    // border of symbols always same as fill color
-                    aSymbol.BorderColor = aSymbol.FillColor;
+                    xResultGroup->add( xShape );
+                    if( eStyle == chart2::LegendSymbolStyle_BOX ||
+                        eStyle == chart2::LegendSymbolStyle_CIRCLE )
+                    {
+                        xShape->setSize( awt::Size( 2000, 2000 ));
+                        xShape->setPosition( awt::Point( 500, 0 ));
+                    }
+                    else
+                    {
+                        xShape->setSize( aBoundSize );
+                    }
+                }
 
-                    xSymbol.set( aFactory.createSymbol2D(
-                                     xResultGroup,
-                                     aPos,
-                                     aSymbolSize,
-                                     aSymbol.StandardSymbol,
-                                     aSymbol.BorderColor,
-                                     aSymbol.FillColor ));
-                }
-                else if( aSymbol.Style == chart2::SymbolStyle_GRAPHIC )
-                {
-                    xSymbol.set( aFactory.createGraphic2D(
-                                     xResultGroup,
-                                     aPos,
-                                     aSymbolSize,
-                                     aSymbol.Graphic ));
-                }
-                else if( aSymbol.Style == chart2::SymbolStyle_AUTO )
-                {
-                    OSL_TRACE("the given parameter is not allowed to contain an automatic symbol style");
-                }
-            }
-        }
-        else if( eStyle == LegendSymbolStyle_CIRCLE )
-        {
-            Reference< drawing::XShape > xShape( xShapeFactory->createInstance(
-                C2U( "com.sun.star.drawing.EllipseShape" )), uno::UNO_QUERY );
-            if( xShape.is() )
-            {
-                xResultGroup->add( xShape );
-                sal_Int32 nSize = std::min( rEntryKeyAspectRatio.Width, rEntryKeyAspectRatio.Height );
-                xShape->setSize( awt::Size( nSize, nSize ) );
-                xShape->setPosition( awt::Point( rEntryKeyAspectRatio.Width/2-nSize/2, rEntryKeyAspectRatio.Height/2-nSize/2 ) );
                 lcl_setPropetiesToShape( xLegendEntryProperties, xShape, ePropertyType ); // PROP_TYPE_FILLED_SERIES );
+
+#ifdef DISABLE_DASHES_AT_BORDER
+                // don't allow dashed border style
+                Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+                if( xShapeProp.is())
+                {
+                    drawing::LineStyle aLineStyle;
+                    if( ( xShapeProp->getPropertyValue( C2U("LineStyle")) >>= aLineStyle ) &&
+                        aLineStyle == drawing::LineStyle_DASH )
+                    {
+                        aLineStyle = drawing::LineStyle_SOLID;
+                        xShapeProp->setPropertyValue( C2U("LineStyle"), uno::makeAny( aLineStyle ));
+                    }
+                }
+#endif
             }
-        }
-        else // eStyle == LegendSymbolStyle_BOX
-        {
-            Reference< drawing::XShape > xShape( xShapeFactory->createInstance(
-                C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
-            if( xShape.is() )
+            catch( uno::Exception & ex )
             {
-                xResultGroup->add( xShape );
-                xShape->setSize( rEntryKeyAspectRatio );
-                xShape->setPosition( awt::Point( 0, 0 ) );
-                lcl_setPropetiesToShape( xLegendEntryProperties, xShape, ePropertyType ); // PROP_TYPE_FILLED_SERIES );
+                ASSERT_EXCEPTION( ex );
             }
+            break;
         }
-    }
-    catch( uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
+
+        case chart2::LegendSymbolStyle_HORIZONTAL_LINE:
+        {
+            try
+            {
+                Reference< drawing::XShape > xLine(
+                    xShapeFactory->createInstance(
+                        C2U( "com.sun.star.drawing.LineShape" )), uno::UNO_QUERY );
+                if( xLine.is())
+                {
+                    xResultGroup->add( xLine );
+                    xLine->setSize(  awt::Size( 3000, 0 ));
+                    xLine->setPosition( awt::Point( 0, 1000 ));
+
+                    lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType ); // PROP_TYPE_LINE_SERIES );
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+            break;
+        }
+
+        case chart2::LegendSymbolStyle_VERTICAL_LINE:
+        {
+            try
+            {
+                Reference< drawing::XShape > xLine(
+                    xShapeFactory->createInstance(
+                        C2U( "com.sun.star.drawing.LineShape" )), uno::UNO_QUERY );
+                if( xLine.is())
+                {
+                    xResultGroup->add( xLine );
+                    xLine->setSize(  awt::Size( 0, 2000 ));
+                    xLine->setPosition( awt::Point( 1500, 0 ));
+                    
+                    lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType ); // PROP_TYPE_LINE_SERIES );
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+            break;
+        }
+
+        case chart2::LegendSymbolStyle_DIAGONAL_LINE:
+        {
+            try
+            {
+                Reference< drawing::XShape > xLine(
+                    xShapeFactory->createInstance(
+                        C2U( "com.sun.star.drawing.LineShape" )), uno::UNO_QUERY );
+                if( xLine.is())
+                {
+                    xResultGroup->add( xLine );
+                    xLine->setSize(  awt::Size( 2000, 2000 ));
+                    xLine->setPosition( awt::Point( 500, 0 ));
+
+                    lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType ); // PROP_TYPE_LINE_SERIES );
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+            break;
+        }
+
+        case chart2::LegendSymbolStyle_LINE_WITH_BOX:
+            bUseBox = true;
+            // fall-through intended
+        case chart2::LegendSymbolStyle_LINE_WITH_SYMBOL:
+            try
+            {
+                Reference< drawing::XShape > xLine(
+                    xShapeFactory->createInstance(
+                        C2U( "com.sun.star.drawing.LineShape" )), uno::UNO_QUERY );
+                if( xLine.is())
+                {
+                    xResultGroup->add( xLine );
+                    xLine->setSize(  awt::Size( 3000, 0 ));
+                    xLine->setPosition( awt::Point( 0, 1000 ));
+
+                    lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType );
+                }
+
+                Reference< drawing::XShape > xSymbol;
+                const sal_Int32 nSize = 1500;
+                if( bUseBox )
+                {
+                    xSymbol.set( xShapeFactory->createInstance(
+                                     C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
+                    xResultGroup->add( xSymbol );
+
+                    if( xSymbol.is())
+                    {
+                        xSymbol->setSize( awt::Size( nSize, nSize ));
+                        xSymbol->setPosition( awt::Point( 1500 - nSize/2, 1000 - nSize/2 ));
+
+                        lcl_setPropetiesToShape( xLegendEntryProperties, xSymbol, ePropertyType );
+                    }
+                }
+                else
+                {
+                    chart2::Symbol aSymbol;
+
+                    if( rExplicitSymbol >>= aSymbol )
+                    {
+                        drawing::Direction3D aSymbolSize( nSize, nSize, 0 );
+                        drawing::Position3D aPos( 1500, 1000, 0 );
+                        ShapeFactory aFactory( xShapeFactory );
+                        if( aSymbol.Style == chart2::SymbolStyle_STANDARD )
+                        {
+                            // take series color as fill color
+                            xLegendEntryProperties->getPropertyValue( C2U("Color")) >>= aSymbol.FillColor;
+                            // border of symbols always same as fill color
+                            aSymbol.BorderColor = aSymbol.FillColor;
+
+                            xSymbol.set( aFactory.createSymbol2D(
+                                             xResultGroup,
+                                             aPos,
+                                             aSymbolSize,
+                                             aSymbol.StandardSymbol,
+                                             aSymbol.BorderColor,
+                                             aSymbol.FillColor ));
+                        }
+                        else if( aSymbol.Style == chart2::SymbolStyle_GRAPHIC )
+                        {
+                            xSymbol.set( aFactory.createGraphic2D(
+                                             xResultGroup,
+                                             aPos,
+                                             aSymbolSize,
+                                             aSymbol.Graphic ));
+                        }
+                        else if( aSymbol.Style == chart2::SymbolStyle_AUTO )
+                        {
+                            DBG_ERROR("the given parameter is not allowed to contain an automatic symbol style");
+                        }
+                    }
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+            break;
+
+        case chart2::LegendSymbolStyle_USER_DEFINED:
+            break;
+
+        default:
+            // just to remove warning (there is an auto-generated extra label)
+            break;
     }
 
     return xResult;

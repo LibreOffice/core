@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,27 +59,27 @@ private:
     friend class CertificateViewerDetailsTP;
     friend class CertificateViewerCertPathTP;
 
-    TabControl          maTabCtrl;
-    OKButton            maOkBtn;
-    HelpButton          maHelpBtn;
+    TabControl			maTabCtrl;
+    OKButton			maOkBtn;
+    HelpButton			maHelpBtn;
 
-    sal_Bool                mbCheckForPrivateKey;
+    BOOL				mbCheckForPrivateKey;
 
     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
     cssu::Reference< dcss::security::XCertificate > mxCert;
 public:
-        CertificateViewer( Window* pParent, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const cssu::Reference< dcss::security::XCertificate >& rXCert, sal_Bool bCheckForPrivateKey );
-    virtual             ~CertificateViewer();
+        CertificateViewer( Window* pParent, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const cssu::Reference< dcss::security::XCertificate >& rXCert, BOOL bCheckForPrivateKey );
+    virtual				~CertificateViewer();
 };
 
 
 class CertificateViewerTP : public TabPage
 {
 protected:
-    CertificateViewer*  mpDlg;
+    CertificateViewer*	mpDlg;
 public:
     CertificateViewerTP( Window* _pParent, const ResId& _rResId, CertificateViewer* _pDlg );
-    inline void         SetTabDlg( CertificateViewer* pTabDlg );
+    inline void			SetTabDlg( CertificateViewer* pTabDlg );
 };
 
 inline void CertificateViewerTP::SetTabDlg( CertificateViewer* _pTabDlg )
@@ -91,54 +91,54 @@ inline void CertificateViewerTP::SetTabDlg( CertificateViewer* _pTabDlg )
 class CertificateViewerGeneralTP : public CertificateViewerTP
 {
 private:
-    Window              maFrameWin;
-    FixedImage          maCertImg;
-    FixedInfo           maCertInfoFI;
-    FixedLine           maSep1FL;
-    FixedInfo           maHintNotTrustedFI;
-    FixedLine           maSep2FL;
-    FixedInfo           maIssuedToLabelFI;
-    FixedInfo           maIssuedToFI;
-    FixedInfo           maIssuedByLabelFI;
-    FixedInfo           maIssuedByFI;
+    Window				maFrameWin;
+    FixedImage			maCertImg;
+    FixedInfo			maCertInfoFI;
+    FixedLine			maSep1FL;
+    FixedInfo			maHintNotTrustedFI;
+    FixedLine			maSep2FL;
+    FixedInfo			maIssuedToLabelFI;
+    FixedInfo			maIssuedToFI;
+    FixedInfo			maIssuedByLabelFI;
+    FixedInfo			maIssuedByFI;
     FixedInfo           maValidDateFI;
-    FixedImage          maKeyImg;
-    FixedInfo           maHintCorrespPrivKeyFI;
+    FixedImage			maKeyImg;
+    FixedInfo			maHintCorrespPrivKeyFI;
 public:
                         CertificateViewerGeneralTP( Window* pParent, CertificateViewer* _pDlg );
 
-    virtual void        ActivatePage();
+    virtual void		ActivatePage();
 };
 
 
 class CertificateViewerDetailsTP : public CertificateViewerTP
 {
 private:
-    SvxSimpleTable      maElementsLB;   // #i48648 now SvHeaderTabListBox
-    MultiLineEdit       maElementML;
-    Font                maStdFont;
-    Font                maFixedWidthFont;
+    SvxSimpleTable      maElementsLB;   // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    MultiLineEdit		maElementML;
+    Font				maStdFont;
+    Font				maFixedWidthFont;
 
-    DECL_LINK(          ElementSelectHdl, void* );
-    void                Clear( void );
-    void                InsertElement( const String& _rField, const String& _rValue,
+    DECL_LINK(			ElementSelectHdl, void* );
+    void				Clear( void );
+    void				InsertElement( const String& _rField, const String& _rValue,
                                         const String& _rDetails, bool _bFixedWidthFont = false );
 public:
                         CertificateViewerDetailsTP( Window* pParent, CertificateViewer* _pDlg );
-    virtual             ~CertificateViewerDetailsTP();
+    virtual				~CertificateViewerDetailsTP();
 
-    virtual void        ActivatePage();
+    virtual void		ActivatePage();
 };
 
 
 class CertificateViewerCertPathTP : public CertificateViewerTP
 {
 private:
-    FixedText           maCertPathFT;
-    SvTreeListBox       maCertPathLB;
+    FixedText			maCertPathFT;
+    SvTreeListBox		maCertPathLB;
     PushButton          maViewCertPB;
-    FixedText           maCertStatusFT;
-    MultiLineEdit       maCertStatusML;
+    FixedText			maCertStatusFT;
+    MultiLineEdit		maCertStatusML;
 
     CertificateViewer*  mpParent;
     bool                mbFirstActivateDone;
@@ -147,18 +147,18 @@ private:
     String              msCertOK;
     String              msCertNotValidated;
 
-    DECL_LINK(          ViewCertHdl, void* );
-    DECL_LINK(          CertSelectHdl, void* );
-    void                Clear( void );
-    SvLBoxEntry*        InsertCert( SvLBoxEntry* _pParent, const String& _rName,
+    DECL_LINK(			ViewCertHdl, void* );
+    DECL_LINK(			CertSelectHdl, void* );
+    void				Clear( void );
+    SvLBoxEntry*		InsertCert( SvLBoxEntry* _pParent, const String& _rName,
                                     cssu::Reference< dcss::security::XCertificate > rxCert,
                                     bool bValid);
 
 public:
                         CertificateViewerCertPathTP( Window* pParent, CertificateViewer* _pDlg );
-    virtual             ~CertificateViewerCertPathTP();
+    virtual				~CertificateViewerCertPathTP();
 
-    virtual void        ActivatePage();
+    virtual void		ActivatePage();
 };
 
 

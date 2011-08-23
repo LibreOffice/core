@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::configuration;
 
-#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
+#define C2U(cChar) OUString::createFromAscii(cChar)
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 
 #ifdef DBG_UTIL
@@ -69,7 +69,7 @@ inline void lcl_CFG_DBG_EXCEPTION(const sal_Char* cText, const Exception& rEx)
 {
     OString sMsg(cText);
     sMsg += OString(rEx.Message.getStr(), rEx.Message.getLength(), RTL_TEXTENCODING_ASCII_US);
-    OSL_FAIL(sMsg.getStr());
+    OSL_ENSURE(sal_False, sMsg.getStr());
 }
 #define CATCH_INFO(a) \
 catch(Exception& rEx)   \
@@ -95,8 +95,8 @@ namespace utl{
     >
     {
         public:
-            ConfigItem*                 pParent;
-            const Sequence< OUString >  aPropertyNames;
+            ConfigItem* 				pParent;
+            const Sequence< OUString > 	aPropertyNames;
             ConfigChangeListener_Impl(ConfigItem& rItem, const Sequence< OUString >& rNames);
             ~ConfigChangeListener_Impl();
 
@@ -106,15 +106,17 @@ namespace utl{
         //XEventListener
         virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException);
     };
+/* -----------------------------12.02.01 11:38--------------------------------
 
+ ---------------------------------------------------------------------------*/
 struct ConfigItem_Impl
 {
-    utl::ConfigManager*         pManager;
-       sal_Int16                    nMode;
-    sal_Bool                    bIsModified;
+    utl::ConfigManager* 		pManager;
+       sal_Int16 					nMode;
+    sal_Bool					bIsModified;
     sal_Bool                    bEnableInternalNotification;
 
-    sal_Int16                   nInValueChange;
+    sal_Int16					nInValueChange;
     ConfigItem_Impl() :
         pManager(0),
         nMode(0),
@@ -124,7 +126,9 @@ struct ConfigItem_Impl
     {}
 };
 }
+/* -----------------------------04.12.00 10:25--------------------------------
 
+ ---------------------------------------------------------------------------*/
 class ValueCounter_Impl
 {
     sal_Int16& rCnt;
@@ -138,7 +142,9 @@ public:
                 rCnt--;
             }
 };
+/* -----------------------------03.12.02 -------------------------------------
 
+ ---------------------------------------------------------------------------*/
 namespace
 {
     // helper to achieve exception - safe handling of an Item under construction
@@ -160,18 +166,24 @@ namespace
         void keep() { m_pItem = 0; }
     };
 }
+/* -----------------------------29.08.00 16:34--------------------------------
 
+ ---------------------------------------------------------------------------*/
 ConfigChangeListener_Impl::ConfigChangeListener_Impl(
              ConfigItem& rItem, const Sequence< OUString >& rNames) :
     pParent(&rItem),
     aPropertyNames(rNames)
 {
 }
+/* -----------------------------29.08.00 16:34--------------------------------
 
+ ---------------------------------------------------------------------------*/
 ConfigChangeListener_Impl::~ConfigChangeListener_Impl()
 {
 }
+/* -----------------------------29.08.00 16:34--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool lcl_Find(
         const rtl::OUString& rTemp,
         const OUString* pCheckPropertyNames,
@@ -189,7 +201,7 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
 {
     const ElementChange* pElementChanges = rEvent.Changes.getConstArray();
 
-    Sequence<OUString>  aChangedNames(rEvent.Changes.getLength());
+    Sequence<OUString>	aChangedNames(rEvent.Changes.getLength());
     OUString* pNames = aChangedNames.getArray();
 
     const OUString* pCheckPropertyNames = aPropertyNames.getConstArray();
@@ -213,12 +225,16 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
     }
 }
 
+/* -----------------------------29.08.00 16:34--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void ConfigChangeListener_Impl::disposing( const EventObject& /*rSource*/ ) throw(RuntimeException)
 {
     pParent->RemoveChangesListener();
 }
+/* -----------------------------29.08.00 12:50--------------------------------
 
+ ---------------------------------------------------------------------------*/
 ConfigItem::ConfigItem(const OUString rSubTree, sal_Int16 nSetMode ) :
     sSubTree(rSubTree),
     pImpl(new ConfigItem_Impl)
@@ -236,8 +252,10 @@ ConfigItem::ConfigItem(const OUString rSubTree, sal_Int16 nSetMode ) :
     aNewImpl.keep();
     pImpl->nMode &= ~CONFIG_MODE_PROPAGATE_ERRORS;
 }
+/* -----------------------------17.11.00 13:53--------------------------------
 
-ConfigItem::ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree) :
+ ---------------------------------------------------------------------------*/
+ConfigItem::ConfigItem(utl::ConfigManager& 	rManager, const rtl::OUString rSubTree) :
     sSubTree(rSubTree),
     pImpl(new ConfigItem_Impl)
 {
@@ -245,12 +263,16 @@ ConfigItem::ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTr
     pImpl->nMode = CONFIG_MODE_IMMEDIATE_UPDATE; // does not allow exceptions
     m_xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
 }
-
+//---------------------------------------------------------------------
+//--- 02.08.2002 16:33:23 -----------------------------------------------
 sal_Bool ConfigItem::IsValidConfigMgr() const
 {
     return ( pImpl->pManager && pImpl->pManager->GetConfigurationProvider().is() );
 }
 
+/* -----------------------------29.08.00 12:52--------------------------------
+
+ ---------------------------------------------------------------------------*/
 ConfigItem::~ConfigItem()
 {
     if(pImpl->pManager)
@@ -260,8 +282,10 @@ ConfigItem::~ConfigItem()
     }
     delete pImpl;
 }
+/* -----------------------------29.08.00 12:52--------------------------------
 
-void    ConfigItem::ReleaseConfigMgr()
+ ---------------------------------------------------------------------------*/
+void	ConfigItem::ReleaseConfigMgr()
 {
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
@@ -277,7 +301,9 @@ void    ConfigItem::ReleaseConfigMgr()
     OSL_ENSURE(pImpl->pManager, "ConfigManager already released");
     pImpl->pManager = 0;
 }
+/* -----------------------------29.08.00 12:52--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames )
 {
     // the call is forwarded to the virtual Notify() method
@@ -287,6 +313,9 @@ void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPro
         Notify(rPropertyNames);
 }
 
+/* -----------------------------12.12.00 17:09--------------------------------
+
+ ---------------------------------------------------------------------------*/
 sal_Bool lcl_IsLocalProperty(const OUString& rSubTree, const OUString& rProperty)
 {
     static const sal_Char* aLocalProperties[] =
@@ -309,31 +338,33 @@ sal_Bool lcl_IsLocalProperty(const OUString& rSubTree, const OUString& rProperty
 
     return sal_False;
 }
+/* -----------------------------10.04.01 15:00--------------------------------
 
-void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   lInNames    ,
-                                                const   Sequence< Any >&        lInValues   ,
-                                                        Sequence< Any >&        lOutValues  )
+ ---------------------------------------------------------------------------*/
+void ConfigItem::impl_packLocalizedProperties(	const	Sequence< OUString >&	lInNames	,
+                                                const	Sequence< Any >&		lInValues	,
+                                                        Sequence< Any >&		lOutValues	)
 {
     // Safe impossible cases.
     // This method should be called for special ConfigItem-mode only!
     OSL_ENSURE( ((pImpl->nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_packLocalizedProperties()\nWrong call of this method detected!\n" );
 
-    sal_Int32                   nSourceCounter      ;   // used to step during input lists
-    sal_Int32                   nSourceSize         ;   // marks end of loop over input lists
-    sal_Int32                   nDestinationCounter ;   // actual position in output lists
-    sal_Int32                   nPropertyCounter    ;   // counter of inner loop for Sequence< PropertyValue >
-    sal_Int32                   nPropertiesSize     ;   // marks end of inner loop
-    Sequence< OUString >        lPropertyNames      ;   // list of all locales for localized entry
-    Sequence< PropertyValue >   lProperties         ;   // localized values of an configuration entry packed for return
-    Reference< XInterface >     xLocalizedNode      ;   // if cfg entry is localized ... lInValues contains an XInterface!
+    sal_Int32					nSourceCounter		;	// used to step during input lists
+    sal_Int32					nSourceSize			;	// marks end of loop over input lists
+    sal_Int32					nDestinationCounter	;	// actual position in output lists
+    sal_Int32					nPropertyCounter	;	// counter of inner loop for Sequence< PropertyValue >
+    sal_Int32					nPropertiesSize		;	// marks end of inner loop
+    Sequence< OUString >		lPropertyNames		;	// list of all locales for localized entry
+    Sequence< PropertyValue >	lProperties			;	// localized values of an configuration entry packed for return
+    Reference< XInterface >		xLocalizedNode		;	// if cfg entry is localized ... lInValues contains an XInterface!
 
     // Optimise follow algorithm ... A LITTLE BIT :-)
     // There exist two different possibilities:
-    //  i ) There exist no localized entries ...                        =>  size of lOutValues will be the same like lInNames/lInValues!
-    //  ii) There exist some (mostly one or two) localized entries ...  =>  size of lOutValues will be the same like lInNames/lInValues!
-    //  ... Why? If a localized value exist - the any is filled with an XInterface object (is a SetNode-service).
-    //      We read all his child nodes and pack it into Sequence< PropertyValue >.
-    //      The result list we pack into the return any. We never change size of lists!
+    //	i )	There exist no localized entries ...						=>	size of lOutValues will be the same like lInNames/lInValues!
+    //	ii)	There exist some (mostly one or two) localized entries ...	=>	size of lOutValues will be the same like lInNames/lInValues!
+    //	... Why? If a localized value exist - the any is filled with an XInterface object (is a SetNode-service).
+    //		We read all his child nodes and pack it into Sequence< PropertyValue >.
+    //		The result list we pack into the return any. We never change size of lists!
     nSourceSize = lInNames.getLength();
     lOutValues.realloc( nSourceSize );
 
@@ -353,9 +384,9 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
             Reference< XNameContainer > xSetAccess( xLocalizedNode, UNO_QUERY );
             if( xSetAccess.is() == sal_True )
             {
-                lPropertyNames  =   xSetAccess->getElementNames()   ;
-                nPropertiesSize =   lPropertyNames.getLength()      ;
-                lProperties.realloc( nPropertiesSize )              ;
+                lPropertyNames	=	xSetAccess->getElementNames()	;
+                nPropertiesSize	=	lPropertyNames.getLength()		;
+                lProperties.realloc( nPropertiesSize )				;
 
                 for( nPropertyCounter=0; nPropertyCounter<nPropertiesSize; ++nPropertyCounter )
                 {
@@ -364,10 +395,10 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
                     OUString sPropName   = lInNames[nSourceCounter];
                     OUString sLocaleName = lPropertyNames[nPropertyCounter];
                     #endif
-                    lProperties[nPropertyCounter].Name  =   lPropertyNames[nPropertyCounter]                            ;
+                    lProperties[nPropertyCounter].Name	=	lPropertyNames[nPropertyCounter]							;
                     OUString sLocaleValue;
-                    xSetAccess->getByName( lPropertyNames[nPropertyCounter] ) >>= sLocaleValue  ;
-                    lProperties[nPropertyCounter].Value <<= sLocaleValue;
+                    xSetAccess->getByName( lPropertyNames[nPropertyCounter] ) >>= sLocaleValue	;
+                    lProperties[nPropertyCounter].Value	<<=	sLocaleValue;
                 }
 
                 lOutValues[nDestinationCounter] <<= lProperties;
@@ -381,36 +412,38 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
         ++nDestinationCounter;
     }
 }
+/* -----------------------------10.04.01 15:00--------------------------------
 
-void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >&   lInNames    ,
-                                                    const   Sequence< Any >&        lInValues   ,
-                                                            Sequence< OUString >&   lOutNames   ,
-                                                            Sequence< Any >&        lOutValues  )
+ ---------------------------------------------------------------------------*/
+void ConfigItem::impl_unpackLocalizedProperties(	const	Sequence< OUString >&	lInNames	,
+                                                    const	Sequence< Any >&		lInValues	,
+                                                            Sequence< OUString >&	lOutNames	,
+                                                            Sequence< Any >&		lOutValues	)
 {
     // Safe impossible cases.
     // This method should be called for special ConfigItem-mode only!
     OSL_ENSURE( ((pImpl->nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_unpackLocalizedProperties()\nWrong call of this method detected!\n" );
 
-    sal_Int32                   nSourceCounter      ;   // used to step during input lists
-    sal_Int32                   nSourceSize         ;   // marks end of loop over input lists
-    sal_Int32                   nDestinationCounter ;   // actual position in output lists
-    sal_Int32                   nPropertyCounter    ;   // counter of inner loop for Sequence< PropertyValue >
-    sal_Int32                   nPropertiesSize     ;   // marks end of inner loop
-    OUString                    sNodeName           ;   // base name of node ( e.g. "UIName/" ) ... expand to locale ( e.g. "UIName/de" )
-    Sequence< PropertyValue >   lProperties         ;   // localized values of an configuration entry getted from lInValues-Any
+    sal_Int32					nSourceCounter		;	// used to step during input lists
+    sal_Int32					nSourceSize			;	// marks end of loop over input lists
+    sal_Int32					nDestinationCounter	;	// actual position in output lists
+    sal_Int32					nPropertyCounter	;	// counter of inner loop for Sequence< PropertyValue >
+    sal_Int32					nPropertiesSize		;	// marks end of inner loop
+    OUString					sNodeName			;	// base name of node ( e.g. "UIName/" ) ... expand to locale ( e.g. "UIName/de" )
+    Sequence< PropertyValue >	lProperties			;	// localized values of an configuration entry getted from lInValues-Any
 
     // Optimise follow algorithm ... A LITTLE BIT :-)
     // There exist two different possibilities:
-    //  i ) There exist no localized entries ...                        =>  size of lOutNames/lOutValues will be the same like lInNames/lInValues!
-    //  ii) There exist some (mostly one or two) localized entries ...  =>  size of lOutNames/lOutValues will be some bytes greater then lInNames/lInValues.
-    //  =>  I think we should make it fast for i). ii) is a special case and mustn't be SOOOO... fast.
-    //      We should reserve same space for output list like input ones first.
-    //      Follow algorithm looks for these borders and change it for ii) only!
-    //      It will be faster then a "realloc()" call in every loop ...
+    //	i )	There exist no localized entries ...						=>	size of lOutNames/lOutValues will be the same like lInNames/lInValues!
+    //	ii)	There exist some (mostly one or two) localized entries ...	=>	size of lOutNames/lOutValues will be some bytes greater then lInNames/lInValues.
+    //	=>	I think we should make it fast for i). ii) is a special case and mustn't be SOOOO... fast.
+    //		We should reserve same space for output list like input ones first.
+    //		Follow algorithm looks for these borders and change it for ii) only!
+    //		It will be faster then a "realloc()" call in every loop ...
     nSourceSize = lInNames.getLength();
 
-    lOutNames.realloc   ( nSourceSize );
-    lOutValues.realloc  ( nSourceSize );
+    lOutNames.realloc	( nSourceSize );
+    lOutValues.realloc	( nSourceSize );
 
     // Algorithm:
     // Copy all names and values from const to return lists.
@@ -423,21 +456,21 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
         // If item a special localized one ... split it and insert his parts to output lists ...
         if( lInValues[nSourceCounter].getValueType() == ::getCppuType( (const Sequence< PropertyValue >*)NULL ) )
         {
-            lInValues[nSourceCounter]   >>= lProperties             ;
-            sNodeName               =   lInNames[nSourceCounter]    ;
-            sNodeName               +=  C2U("/")                    ;
-            nPropertiesSize         =   lProperties.getLength()     ;
+            lInValues[nSourceCounter]	>>=	lProperties				;
+            sNodeName				=	lInNames[nSourceCounter] 	;
+            sNodeName				+=	C2U("/")					;
+            nPropertiesSize			=	lProperties.getLength()		;
 
             if( (nDestinationCounter+nPropertiesSize) > lOutNames.getLength() )
             {
-                lOutNames.realloc   ( nDestinationCounter+nPropertiesSize );
-                lOutValues.realloc  ( nDestinationCounter+nPropertiesSize );
+                lOutNames.realloc	( nDestinationCounter+nPropertiesSize );
+                lOutValues.realloc	( nDestinationCounter+nPropertiesSize );
             }
 
             for( nPropertyCounter=0; nPropertyCounter<nPropertiesSize; ++nPropertyCounter )
             {
-                 lOutNames [nDestinationCounter] = sNodeName + lProperties[nPropertyCounter].Name   ;
-                lOutValues[nDestinationCounter] = lProperties[nPropertyCounter].Value               ;
+                 lOutNames [nDestinationCounter] = sNodeName + lProperties[nPropertyCounter].Name	;
+                lOutValues[nDestinationCounter] = lProperties[nPropertyCounter].Value				;
                 ++nDestinationCounter;
             }
         }
@@ -446,8 +479,8 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
         {
             if( (nDestinationCounter+1) > lOutNames.getLength() )
             {
-                lOutNames.realloc   ( nDestinationCounter+1 );
-                lOutValues.realloc  ( nDestinationCounter+1 );
+                lOutNames.realloc	( nDestinationCounter+1 );
+                lOutValues.realloc	( nDestinationCounter+1 );
             }
 
             lOutNames [nDestinationCounter] = lInNames [nSourceCounter];
@@ -456,7 +489,9 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
         }
     }
 }
+/* -----------------------------03.02.2003 14:44------------------------------
 
+ ---------------------------------------------------------------------------*/
 Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Sequence< rtl::OUString >& rNames)
 {
     sal_Int32 i;
@@ -482,7 +517,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
         {
             if(pImpl->pManager->IsLocalConfigProvider() && lcl_IsLocalProperty(sSubTree, rNames[i]))
             {
-                OSL_FAIL("ConfigItem::IsReadonly()\nlocal mode seams to be used!?\n");
+                OSL_ENSURE(sal_False, "ConfigItem::IsReadonly()\nlocal mode seams to be used!?\n");
                 continue;
             }
 
@@ -493,7 +528,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
             ::utl::splitLastFromConfigurationPath(sName,sPath,sProperty);
             if (!sPath.getLength() && !sProperty.getLength())
             {
-                OSL_FAIL("ConfigItem::IsReadonly()\nsplitt failed\n");
+                OSL_ENSURE(sal_False, "ConfigItem::IsReadonly()\nsplitt failed\n");
                 continue;
             }
 
@@ -505,7 +540,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
                 Any aNode = xHierarchyAccess->getByHierarchicalName(sPath);
                 if (!(aNode >>= xNode) || !xNode.is())
                 {
-                    OSL_FAIL("ConfigItem::IsReadonly()\nno set available\n");
+                    OSL_ENSURE(sal_False, "ConfigItem::IsReadonly()\nno set available\n");
                     continue;
                 }
             }
@@ -528,7 +563,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
 
             if (!xInfo.is())
             {
-                OSL_FAIL("ConfigItem::IsReadonly()\nno prop info available\n");
+                OSL_ENSURE(sal_False, "ConfigItem::IsReadonly()\nno prop info available\n");
                 continue;
             }
 
@@ -541,6 +576,9 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
     return lStates;
 }
 
+/* -----------------------------29.08.00 15:10--------------------------------
+
+ ---------------------------------------------------------------------------*/
 Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
 {
     Sequence< Any > aRet(rNames.getLength());
@@ -581,7 +619,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
                 sMsg += OString(pNames[i].getStr(),
                     pNames[i].getLength(),
                      RTL_TEXTENCODING_ASCII_US);
-                OSL_FAIL(sMsg.getStr());
+                OSL_ENSURE(sal_False, sMsg.getStr());
 #else
                 (void) rEx; // avoid warning
 #endif
@@ -598,7 +636,9 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
     }
     return aRet;
 }
+/* -----------------------------29.08.00 17:28--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                                                 const Sequence< Any>& rValues)
 {
@@ -608,11 +648,11 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
     sal_Bool bRet = xHierarchyAccess.is() && xTopNodeReplace.is();
     if(bRet)
     {
-        Sequence< OUString >    lNames          ;
-        Sequence< Any >         lValues         ;
-        const OUString*         pNames  = NULL  ;
-        const Any*              pValues = NULL  ;
-        sal_Int32               nNameCount      ;
+        Sequence< OUString >	lNames			;
+        Sequence< Any >			lValues			;
+        const OUString*			pNames	= NULL	;
+        const Any*				pValues	= NULL	;
+        sal_Int32				nNameCount		;
         if(( pImpl->nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES )
         {
             // If ConfigItem works in "ALL_LOCALES"-mode ... we must support a Sequence< PropertyValue >
@@ -620,17 +660,17 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
             // How we can do that?
             // We must split all PropertyValues to "Sequence< OUString >" AND "Sequence< Any >"!
             impl_unpackLocalizedProperties( rNames, rValues, lNames, lValues );
-            pNames      = lNames.getConstArray  ();
-            pValues     = lValues.getConstArray ();
-            nNameCount  = lNames.getLength      ();
+            pNames		= lNames.getConstArray	();
+            pValues		= lValues.getConstArray	();
+            nNameCount	= lNames.getLength		();
         }
         else
         {
             // This is the normal mode ...
             // Use given input lists directly.
-            pNames      = rNames.getConstArray  ();
-            pValues     = rValues.getConstArray ();
-            nNameCount  = rNames.getLength      ();
+            pNames		= rNames.getConstArray	();
+            pValues		= rValues.getConstArray	();
+            nNameCount	= rNames.getLength		();
         }
         for(int i = 0; i < nNameCount; i++)
         {
@@ -682,13 +722,17 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
 
     return bRet;
 }
+/* -----------------------------08.12.05 15:27--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void ConfigItem::DisableNotification()
 {
     OSL_ENSURE( xChangeLstnr.is(), "ConfigItem::DisableNotification: notifications not enabled currently!" );
     RemoveChangesListener();
 }
+/* -----------------------------29.08.00 16:19--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
                 sal_Bool bEnableInternalNotification )
 
@@ -716,7 +760,9 @@ sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
     }
     return bRet;
 }
+/* -----------------------------29.08.00 16:47--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void ConfigItem::RemoveChangesListener()
 {
     Reference<XChangesNotifier> xChgNot(m_xHierarchyAccess, UNO_QUERY);
@@ -732,7 +778,9 @@ void ConfigItem::RemoveChangesListener()
         }
     }
 }
+/* -----------------------------10.07.00      --------------------------------
 
+ ---------------------------------------------------------------------------*/
 void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFormat _eFormat, Reference<XInterface> const& _xParentNode)
 {
     switch (_eFormat)
@@ -756,7 +804,7 @@ void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFormat _eF
                 break;
             }
         }
-        OSL_FAIL("Cannot create absolute pathes: missing interface");
+        OSL_ENSURE(false, "Cannot create absolute pathes: missing interface");
         // make local pathes instaed
 
     case CONFIG_NAME_LOCAL_PATH:
@@ -807,14 +855,18 @@ void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFormat _eF
 
     }
 }
+/* -----------------------------10.07.00      --------------------------------
 
+ ---------------------------------------------------------------------------*/
 Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
 {
     ConfigNameFormat const eDefaultFormat = CONFIG_NAME_LOCAL_NAME; // CONFIG_NAME_DEFAULT;
 
     return GetNodeNames(rNode, eDefaultFormat);
 }
+/* -----------------------------15.09.00 12:06--------------------------------
 
+ ---------------------------------------------------------------------------*/
 Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode, ConfigNameFormat eFormat)
 {
     Sequence< OUString > aRet;
@@ -842,7 +894,9 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode, ConfigNameF
     }
     return aRet;
 }
+/* -----------------------------15.09.00 15:52--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);
@@ -880,7 +934,9 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
     }
     return bRet;
 }
+/* -----------------------------24.11.00 10:58--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString >& rElements)
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);
@@ -952,8 +1008,9 @@ Sequence< OUString > lcl_extractSetPropertyNames( const Sequence< PropertyValue 
 
     return aSubNodeNames;
 }
-
-// Add or change properties
+/* -----------------------------15.09.00 15:52--------------------------------
+    add or change properties
+ ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::SetSetProperties(
     const OUString& rNode, Sequence< PropertyValue > rValues)
 {
@@ -1052,7 +1109,9 @@ sal_Bool ConfigItem::SetSetProperties(
     }
     return bRet;
 }
+/* -----------------------------15.09.00 15:52--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::ReplaceSetProperties(
     const OUString& rNode, Sequence< PropertyValue > rValues)
 {
@@ -1136,7 +1195,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                         xCont->insertByName(pSubNodeNames[j], aVal);
                     }
                 }
-                try { xBatch->commitChanges(); }
+                try	{ xBatch->commitChanges(); }
                 CATCH_INFO("Exception from commitChanges(): ")
 
                 const PropertyValue* pProperties = rValues.getConstArray();
@@ -1189,7 +1248,9 @@ sal_Bool ConfigItem::ReplaceSetProperties(
     }
     return bRet;
 }
+/* -----------------------------07.05.01 12:15--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::getUniqueSetElementName( const ::rtl::OUString& _rSetNode, ::rtl::OUString& _rName)
 {
     ::rtl::OUString sNewElementName;
@@ -1228,7 +1289,9 @@ sal_Bool ConfigItem::getUniqueSetElementName( const ::rtl::OUString& _rSetNode, 
     }
     return bRet;
 }
+/* -----------------------------23.01.01 12:49--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::AddNode(const rtl::OUString& rNode, const rtl::OUString& rNewNode)
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);
@@ -1291,32 +1354,44 @@ sal_Bool ConfigItem::AddNode(const rtl::OUString& rNode, const rtl::OUString& rN
     }
     return bRet;
 }
+/* -----------------------------12.02.01 11:38--------------------------------
 
-sal_Int16   ConfigItem::GetMode() const
+ ---------------------------------------------------------------------------*/
+sal_Int16 	ConfigItem::GetMode() const
 {
     return pImpl->nMode;
 }
+/* -----------------------------12.02.01 13:31--------------------------------
 
-void    ConfigItem::SetModified()
+ ---------------------------------------------------------------------------*/
+void 	ConfigItem::SetModified()
 {
     pImpl->bIsModified = sal_True;
 }
+/* -----------------------------05.05.01 14:07--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void    ConfigItem::ClearModified()
 {
     pImpl->bIsModified = sal_False;
 }
+/* -----------------------------12.02.01 13:31--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::IsModified() const
 {
     return pImpl->bIsModified;
 }
+/* -----------------------------12.02.01 13:33--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::IsInValueChange() const
 {
     return pImpl->nInValueChange > 0;
 }
+/* -----------------------------21.06.01 12:26--------------------------------
 
+ ---------------------------------------------------------------------------*/
 Reference< XHierarchicalNameAccess> ConfigItem::GetTree()
 {
     Reference< XHierarchicalNameAccess> xRet;
@@ -1324,15 +1399,20 @@ Reference< XHierarchicalNameAccess> ConfigItem::GetTree()
         xRet = pImpl->pManager->AcquireTree(*this);
     else
         xRet = m_xHierarchyAccess;
+    OSL_ENSURE(xRet.is(), "AcquireTree failed");
     return xRet;
 }
+/* -----------------------------22.06.01 08:42--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void ConfigItem::LockTree()
 {
     OSL_ENSURE(0 != (pImpl->nMode&CONFIG_MODE_RELEASE_TREE), "call LockTree in CONFIG_MODE_RELEASE_TREE mode, only");
     m_xHierarchyAccess = GetTree();
 }
+/* -----------------------------22.06.01 08:42--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void ConfigItem::UnlockTree()
 {
     OSL_ENSURE(0 != (pImpl->nMode&CONFIG_MODE_RELEASE_TREE), "call UnlockTree in CONFIG_MODE_RELEASE_TREE mode, only");

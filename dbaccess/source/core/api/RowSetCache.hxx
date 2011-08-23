@@ -70,44 +70,45 @@ namespace dbaccess
         friend class ORowSetClone;
         friend class ORowSetCacheIterator;
 
-        typedef ::std::vector< TORowSetOldRowHelperRef >    TOldRowSetRows;
+        typedef ::std::vector< TORowSetOldRowHelperRef >	TOldRowSetRows;
 
         ::std::map<sal_Int32,sal_Int32> m_aKeyColumns;
         //the set can be static, bookmarkable or keyset
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>       m_xSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>		m_xSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >	m_xMetaData; // must be before m_aInsertRow
         ::comphelper::ComponentContext                                                  m_aContext;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xCacheSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>					m_xCacheSet;
 
-        OCacheSet*                      m_pCacheSet;            // is a bookmarkable, keyset or static resultset
-        ORowSetMatrix*                  m_pMatrix;              // represent the table struct
-        ORowSetMatrix::iterator         m_aMatrixIter;          // represent a row of the table
-        ORowSetMatrix::iterator         m_aMatrixEnd;           // present the row behind the last row of the table
-        ORowSetCacheMap                 m_aCacheIterators;
-        TOldRowSetRows                  m_aOldRows;
+        OCacheSet*						m_pCacheSet;			// is a bookmarkable, keyset or static resultset
+        ORowSetMatrix*					m_pMatrix;				// represent the table struct
+        ORowSetMatrix::iterator			m_aMatrixIter;			// represent a row of the table
+        ORowSetMatrix::iterator			m_aMatrixEnd;			// present the row behind the last row of the table
+        ORowSetCacheMap					m_aCacheIterators;
+        TOldRowSetRows					m_aOldRows;
 
-        ORowSetMatrix*                  m_pInsertMatrix;        // represent the rows which should be inserted normally this is only one
-        ORowSetMatrix::iterator         m_aInsertRow;           // represent a insert row
+        ORowSetMatrix*					m_pInsertMatrix;		// represent the rows which should be inserted normally this is only one
+        ORowSetMatrix::iterator			m_aInsertRow;			// represent a insert row
 
-        sal_Int32                       m_nLastColumnIndex;     // the last column ask for, used for wasNull()
+        //	ORowSetRow						m_aInsertRow;			// present the row that should be inserted
+        sal_Int32						m_nLastColumnIndex;		// the last column ask for, used for wasNull()
 
-        connectivity::OSQLTable         m_aUpdateTable;         // used for updates/deletes and inserts
+        connectivity::OSQLTable			m_aUpdateTable;			// used for updates/deletes and inserts
 
-        sal_Int32                   m_nFetchSize;
-        sal_Int32                   m_nRowCount;
-        sal_Int32                   m_nPrivileges;
-        sal_Int32                   m_nPosition;                // 0 means beforefirst
+        sal_Int32					m_nFetchSize;
+        sal_Int32					m_nRowCount;
+        sal_Int32					m_nPrivileges;
+        sal_Int32					m_nPosition;				// 0 means beforefirst
 
-        sal_Int32                   m_nStartPos;                // start pos of the window zero based
-        sal_Int32                   m_nEndPos;                  // end   pos of the window zero based
+        sal_Int32					m_nStartPos;				// start pos of the window zero based
+        sal_Int32					m_nEndPos;					// end   pos of the window zero based
 
-        sal_Bool                    m_bRowCountFinal ;
-        sal_Bool                    m_bBeforeFirst ;
-        sal_Bool                    m_bAfterLast ;
-        sal_Bool                    m_bUpdated ;
-        sal_Bool&                   m_bModified ;           // points to the rowset member m_bModified
-        sal_Bool&                   m_bNew ;                // points to the rowset member m_bNew
+        sal_Bool					m_bRowCountFinal ;
+        sal_Bool					m_bBeforeFirst ;
+        sal_Bool					m_bAfterLast ;
+        sal_Bool					m_bUpdated ;
+        sal_Bool&					m_bModified ;			// points to the rowset member m_bModified
+        sal_Bool&					m_bNew ;				// points to the rowset member m_bNew
 
         sal_Bool fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix::iterator& _aEnd,sal_Int32& _nPos,sal_Bool _bCheck);
         sal_Bool reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 nNewEndPos);
@@ -131,7 +132,7 @@ namespace dbaccess
         // checks and set the flags isAfterLast isLast and position when afterlast is true
         void checkPositionFlags();
         void checkUpdateConditions(sal_Int32 columnIndex);
-        sal_Bool checkJoin( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+        sal_Bool checkJoin(	const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                             const ::rtl::OUString& _sUpdateTableName);
         sal_Bool checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
@@ -139,8 +140,8 @@ namespace dbaccess
                             ,const ::rtl::OUString& _sUpdateTableName);
 
         // clears the insert row
-        void                    clearInsertRow();
-        ORowSetMatrix::iterator calcPosition() const;
+        void					clearInsertRow();
+        ORowSetMatrix::iterator	calcPosition() const;
 
     protected:
         ORowSetMatrix::iterator& getEnd() { return m_aMatrixEnd;}
@@ -151,11 +152,10 @@ namespace dbaccess
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xAnalyzer,
                      const ::comphelper::ComponentContext& _rContext,
                      const ::rtl::OUString& _rUpdateTableName,
-                     sal_Bool&  _bModified,
-                     sal_Bool&  _bNew,
+                     sal_Bool&	_bModified,
+                     sal_Bool&	_bNew,
                      const ORowSetValueVector& _aParameterValueForCache,
-                     const ::rtl::OUString& i_sRowSetFilter,
-                     sal_Int32 i_nMaxRows);
+                     const ::rtl::OUString& i_sRowSetFilter);
         ~ORowSetCache();
 
 
@@ -164,7 +164,7 @@ namespace dbaccess
         ORowSetCacheIterator createIterator(ORowSetBase* _pRowSet);
         void deleteIterator(const ORowSetBase* _pRowSet);
         // sets the size of the matrix
-        void setFetchSize(sal_Int32 _nSize);
+        void setMaxRowSize(sal_Int32 _nSize);
 
         TORowSetOldRowHelperRef registerOldRow();
         void deregisterOldRow(const TORowSetOldRowHelperRef& _rRow);

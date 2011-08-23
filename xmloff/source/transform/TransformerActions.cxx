@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ XMLTransformerActions::XMLTransformerActions( XMLTransformerActionInit *pInit )
     if( pInit )
     {
         XMLTransformerActions::key_type aKey;
-        XMLTransformerActions::mapped_type aData;
+        XMLTransformerActions::data_type aData;
         while( pInit->m_nActionType != XML_TACTION_EOT )
         {
             aKey.m_nPrefix = pInit->m_nPrefix;
@@ -71,7 +71,7 @@ void XMLTransformerActions::Add( XMLTransformerActionInit *pInit )
     if( pInit )
     {
         XMLTransformerActions::key_type aKey;
-        XMLTransformerActions::mapped_type aData;
+        XMLTransformerActions::data_type aData;
         while( pInit->m_nActionType != XML_TACTION_EOT )
         {
             aKey.m_nPrefix = pInit->m_nPrefix;

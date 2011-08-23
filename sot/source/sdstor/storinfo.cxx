@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sot.hxx"
 
-#include <sot/stg.hxx>
-#include <sot/storinfo.hxx>
+#include <stg.hxx>
+#include <storinfo.hxx>
 #include <sot/exchange.hxx>
 
 
@@ -40,7 +40,7 @@ PRV_SV_IMPL_OWNER_LIST(SvStorageInfoList,SvStorageInfo)
 
 const SvStorageInfo * SvStorageInfoList::Get( const String & rEleName )
 {
-    for( sal_uLong i = 0; i < Count(); i++ )
+    for( ULONG i = 0; i < Count(); i++ )
     {
         const SvStorageInfo & rType = GetObject( i );
         if( rType.GetName() == rEleName )
@@ -51,10 +51,10 @@ const SvStorageInfo * SvStorageInfoList::Get( const String & rEleName )
 
 /************** class SvStorageInfo **************************************
 *************************************************************************/
-sal_uLong ReadClipboardFormat( SvStream & rStm )
+ULONG ReadClipboardFormat( SvStream & rStm )
 {
     sal_uInt32 nFormat = 0;
-    sal_Int32 nLen = 0;
+    INT32 nLen = 0;
     rStm >> nLen;
     if( rStm.IsEof() )
         rStm.SetError( SVSTREAM_GENERALERROR );
@@ -62,7 +62,7 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
     {
         // get a string name
         sal_Char * p = new sal_Char[ nLen ];
-        if( rStm.Read( p, nLen ) == (sal_uLong) nLen )
+        if( rStm.Read( p, nLen ) == (ULONG) nLen )
         {
             nFormat = SotExchange::RegisterFormatName( String::CreateFromAscii( p, short(nLen-1) ) );
         }
@@ -89,7 +89,7 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
     return nFormat;
 }
 
-void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
+void WriteClipboardFormat( SvStream & rStm, ULONG nFormat )
 {
     // determine the clipboard format string
     String aCbFmt;
@@ -98,15 +98,15 @@ void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
     if( aCbFmt.Len() )
     {
         ByteString aAsciiCbFmt( aCbFmt, RTL_TEXTENCODING_ASCII_US );
-        rStm << (sal_Int32) (aAsciiCbFmt.Len() + 1);
+        rStm << (INT32) (aAsciiCbFmt.Len() + 1);
         rStm << (const char *)aAsciiCbFmt.GetBuffer();
-        rStm << (sal_uInt8) 0;
+        rStm << (UINT8) 0;
     }
     else if( nFormat )
-        rStm << (sal_Int32) -1         // for Windows
-             << (sal_Int32) nFormat;
+        rStm << (INT32) -1         // for Windows
+             << (INT32) nFormat;
     else
-        rStm << (sal_Int32) 0;         // no clipboard format
+        rStm << (INT32) 0;         // no clipboard format
 }
 
 

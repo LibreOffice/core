@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,6 +27,8 @@
  ************************************************************************/
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #define _COMPHELPER_STLTYPES_HXX_
+
+#if !defined(__SGI_STL_VECTOR_H) || !defined(__SGI_STL_MAP_H) || !defined(__SGI_STL_MULTIMAP_H)
 
 #include <vector>
 #include <map>
@@ -156,9 +158,9 @@ public:
 */
 template < class IAFCE >
 struct OInterfaceCompare
-    :public ::std::binary_function  <   ::com::sun::star::uno::Reference< IAFCE >
-                                    ,   ::com::sun::star::uno::Reference< IAFCE >
-                                    ,   bool
+    :public ::std::binary_function	<	::com::sun::star::uno::Reference< IAFCE >
+                                    ,	::com::sun::star::uno::Reference< IAFCE >
+                                    ,	bool
                                     >
 {
     bool operator() (const ::com::sun::star::uno::Reference< IAFCE >& lhs, const ::com::sun::star::uno::Reference< IAFCE >& rhs) const
@@ -172,7 +174,7 @@ struct OInterfaceCompare
 };
 
 template <class _Tp, class _Arg>
-class mem_fun1_t : public ::std::binary_function<_Tp*,_Arg,void>
+class mem_fun1_t : public ::std::binary_function<_Tp*,_Arg,void> 
 {
     typedef void (_Tp::*_fun_type)(_Arg);
 public:
@@ -184,8 +186,8 @@ private:
 
 template <class _Tp, class _Arg>
 inline mem_fun1_t<_Tp,_Arg> mem_fun(void (_Tp::*__f)(_Arg))
-{
-    return mem_fun1_t<_Tp,_Arg>(__f);
+{ 
+    return mem_fun1_t<_Tp,_Arg>(__f); 
 }
 
 //.........................................................................
@@ -274,6 +276,8 @@ OutputIter intersperse(
 #define DECLARE_STL_SET(valuetype, comparefct, classname)               \
     typedef ::std::set< valuetype, comparefct > classname;  \
     DECLARE_STL_ITERATORS(classname)                        \
+
+#endif
 
 #endif  // _COMPHELPER_STLTYPES_HXX_
 

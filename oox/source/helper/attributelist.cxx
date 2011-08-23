@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,21 +27,17 @@
  ************************************************************************/
 
 #include "oox/helper/attributelist.hxx"
-
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
-#include "oox/token/tokenmap.hxx"
-
-namespace oox {
-
-// ============================================================================
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::xml::sax;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::util::DateTime;
+using ::com::sun::star::xml::sax::XFastAttributeList;
+
+namespace oox {
 
 // ============================================================================
 
@@ -78,11 +74,6 @@ sal_Unicode lclGetXChar( const sal_Unicode*& rpcStr, const sal_Unicode* pcEnd )
 } // namespace
 
 // ----------------------------------------------------------------------------
-
-sal_Int32 AttributeConversion::decodeToken( const OUString& rValue )
-{
-    return StaticTokenMap::get().getTokenFromUnicode( rValue );
-}
 
 OUString AttributeConversion::decodeXString( const OUString& rValue )
 {

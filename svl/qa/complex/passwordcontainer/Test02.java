@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,28 +36,29 @@ import com.sun.star.task.UserRecord;
 
 import com.sun.star.uno.UnoRuntime;
 
+import share.LogWriter;
 
 public class Test02 implements PasswordContainerTest {
     XMultiServiceFactory m_xMSF = null;
     XPasswordContainer m_xPasswordContainer = null;
     TestHelper m_aTestHelper = null;
-
-    public Test02 ( XMultiServiceFactory xMSF )
+    
+    public Test02 ( XMultiServiceFactory xMSF, LogWriter aLogWriter )
     {
         m_xMSF = xMSF;
-        m_aTestHelper = new TestHelper ( "Test02: ");
+        m_aTestHelper = new TestHelper (aLogWriter, "Test02: ");
     }
-
+    
     public boolean test() {
         final String sURL = "http://www.openoffice.org";
         final String sUserPre = "OOoUser";
         final String sPwdPre = "Password";
-        final int iUserNum1 = 10;
+        final int iUserNum1 = 10;   
         final int iUserNum2 = 5;
-
+                
         UserRecord aInputUserList1[] = new UserRecord[iUserNum1];
         for(int i = 0; i < iUserNum1; i++) {
-            String sTemp[] = {sPwdPre + "_1_" + i};     // currently one password for one user
+            String sTemp[] = {sPwdPre + "_1_" + i};     // currently one password for one user 
             aInputUserList1[i] = new UserRecord(sUserPre + "_1_" + i, sTemp);
         }
         UserRecord aInputUserList2[] = new UserRecord[iUserNum2];
@@ -65,31 +66,31 @@ public class Test02 implements PasswordContainerTest {
             String sTemp[] = {sPwdPre + "_2_" + i};
             aInputUserList2[i] = new UserRecord(sUserPre + "_2_" + i, sTemp);
         }
-
+        
         try {
             Object oPasswordContainer = m_xMSF.createInstance("com.sun.star.task.PasswordContainer");
-            XPasswordContainer xContainer = UnoRuntime.queryInterface(XPasswordContainer.class, oPasswordContainer);
+            XPasswordContainer xContainer = (XPasswordContainer)UnoRuntime.queryInterface(XPasswordContainer.class, oPasswordContainer);
             Object oHandler = m_xMSF.createInstance("com.sun.star.task.InteractionHandler");
-            XInteractionHandler xHandler = UnoRuntime.queryInterface(XInteractionHandler.class, oHandler);
+            XInteractionHandler xHandler = (XInteractionHandler)UnoRuntime.queryInterface(XInteractionHandler.class, oHandler);
             MasterPasswdHandler aMHandler = new MasterPasswdHandler(xHandler);
-            XMasterPasswordHandling xMHandling = UnoRuntime.queryInterface(XMasterPasswordHandling.class, oPasswordContainer);
-
-            // allow the storing of the passwords
+            XMasterPasswordHandling xMHandling = (XMasterPasswordHandling)UnoRuntime.queryInterface(XMasterPasswordHandling.class, oPasswordContainer);
+            
+            // allow the storing of the passwords 
             xMHandling.allowPersistentStoring(true);
-
-            // add a set of users and passwords for the same URL persistently
+            
+            // add a set of users and passwords for the same URL persistently 
             for(int i = 0; i < iUserNum1; ++i) {
                 xContainer.addPersistent(sURL, aInputUserList1[i].UserName, aInputUserList1[i].Passwords, aMHandler);
             }
             for(int i = 0; i < iUserNum2; ++i) {
                 xContainer.addPersistent(sURL, aInputUserList2[i].UserName, aInputUserList2[i].Passwords, aMHandler);
             }
-
+            
             // remove some of the passwords
             for(int i = 0; i < iUserNum1; ++i) {
                 xContainer.remove(sURL, aInputUserList1[i].UserName);
             }
-
+            
             // get the result with find() and check it with the expected one
             UrlRecord aRecord = xContainer.find(sURL, aMHandler);
             if(!aRecord.Url.equals(sURL)) {
@@ -100,7 +101,7 @@ public class Test02 implements PasswordContainerTest {
                 m_aTestHelper.Error("User list is not the expected");
                 return false;
             }
-
+            
             // get the result with getAllPersistent() and check
             UrlRecord aRecords[] = xContainer.getAllPersistent(aMHandler);
             if(!aRecords[0].Url.equals(sURL)) {
@@ -111,16 +112,16 @@ public class Test02 implements PasswordContainerTest {
                 m_aTestHelper.Error("User list is not the expected");
                 return false;
             }
-
-            // remove all the persistent passwords
+            
+            // remove all the persistent passwords 
             xContainer.removeAllPersistent();
-
-            // remove the runtime passwords
+            
+            // remove the runtime passwords 
             for(int i = 0; i < aRecords[0].UserList.length; ++i) {
                 xContainer.remove(sURL, aRecords[0].UserList[i].UserName);
             }
-
-            // disallow the storing of the passwords
+            
+            // disallow the storing of the passwords 
             xMHandling.allowPersistentStoring(false);
         } catch(Exception e) {
             m_aTestHelper.Error("Exception: " + e);

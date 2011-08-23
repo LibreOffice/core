@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,17 @@
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
 
+#if defined( WIN ) && defined( MSC )
+#pragma code_seg( "SVTOOLS_FILTER4", "SVTOOLS_CODE" )
+#endif
+
 /*************************************************************************
 |*
 |*    operator>>( SvStream&, SgfHeader& )
+|*
+|*    Beschreibung
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead)
@@ -67,17 +75,25 @@ SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead)
 |*
 |*    SgfHeader::ChkMagic()
 |*
+|*    Beschreibung
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
+|*
 *************************************************************************/
-sal_Bool SgfHeader::ChkMagic()
+BOOL SgfHeader::ChkMagic()
 { return Magic=='J'*256+'J'; }
 
-sal_uInt32 SgfHeader::GetOffset()
-{ return sal_uInt32(OfsLo)+0x00010000*sal_uInt32(OfsHi); }
+UINT32 SgfHeader::GetOffset()
+{ return UINT32(OfsLo)+0x00010000*UINT32(OfsHi); }
 
 
 /*************************************************************************
 |*
 |*    operator>>( SvStream&, SgfEntry& )
+|*
+|*    Beschreibung
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 SvStream& operator>>(SvStream& rIStream, SgfEntry& rEntr)
@@ -94,13 +110,17 @@ SvStream& operator>>(SvStream& rIStream, SgfEntry& rEntr)
     return rIStream;
 }
 
-sal_uInt32 SgfEntry::GetOffset()
-{ return sal_uInt32(OfsLo)+0x00010000*sal_uInt32(OfsHi); }
+UINT32 SgfEntry::GetOffset()
+{ return UINT32(OfsLo)+0x00010000*UINT32(OfsHi); }
 
 
 /*************************************************************************
 |*
 |*    operator>>( SvStream&, SgfVector& )
+|*
+|*    Beschreibung
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 SvStream& operator>>(SvStream& rIStream, SgfVector& rVect)
@@ -120,6 +140,10 @@ SvStream& operator>>(SvStream& rIStream, SgfVector& rVect)
 /*************************************************************************
 |*
 |*    operator<<( SvStream&, BmpFileHeader& )
+|*
+|*    Beschreibung
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 SvStream& operator<<(SvStream& rOStream, BmpFileHeader& rHead)
@@ -146,26 +170,30 @@ SvStream& operator<<(SvStream& rOStream, BmpFileHeader& rHead)
     return rOStream;
 }
 
-void BmpFileHeader::SetSize(sal_uInt32 Size)
+void BmpFileHeader::SetSize(UINT32 Size)
 {
-    SizeLo=sal_uInt16(Size & 0x0000FFFF);
-    SizeHi=sal_uInt16((Size & 0xFFFF0000)>>16);
+    SizeLo=UINT16(Size & 0x0000FFFF);
+    SizeHi=UINT16((Size & 0xFFFF0000)>>16);
 }
 
-void BmpFileHeader::SetOfs(sal_uInt32 Ofs)
+void BmpFileHeader::SetOfs(UINT32 Ofs)
 {
-    OfsLo=sal_uInt16(Ofs & 0x0000FFFF);
-    OfsHi=sal_uInt16((Ofs & 0xFFFF0000)>>16);
+    OfsLo=UINT16(Ofs & 0x0000FFFF);
+    OfsHi=UINT16((Ofs & 0xFFFF0000)>>16);
 }
 
-sal_uInt32 BmpFileHeader::GetOfs()
+UINT32 BmpFileHeader::GetOfs()
 {
-    return sal_uInt32(OfsLo)+0x00010000*sal_uInt32(OfsHi);
+    return UINT32(OfsLo)+0x00010000*UINT32(OfsHi);
 }
 
 /*************************************************************************
 |*
 |*    operator<<( SvStream&, BmpInfoHeader& )
+|*
+|*    Beschreibung
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 SvStream& operator<<(SvStream& rOStream, BmpInfoHeader& rInfo)
@@ -205,6 +233,10 @@ SvStream& operator<<(SvStream& rOStream, BmpInfoHeader& rInfo)
 |*
 |*    operator<<( SvStream&, RGBQuad& )
 |*
+|*    Beschreibung
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
+|*
 *************************************************************************/
 SvStream& operator<<(SvStream& rOStream, const RGBQuad& rQuad)
 {
@@ -220,14 +252,14 @@ SvStream& operator<<(SvStream& rOStream, const RGBQuad& rQuad)
 class PcxExpand
 {
 private:
-    sal_uInt16 Count;
-    sal_uInt8   Data;
+    USHORT Count;
+    BYTE   Data;
 public:
                   PcxExpand() { Count=0; }
-    sal_uInt8 GetByte(SvStream& rInp);
+    BYTE GetByte(SvStream& rInp);
 };
 
-sal_uInt8 PcxExpand::GetByte(SvStream& rInp)
+BYTE PcxExpand::GetByte(SvStream& rInp)
 {
     if (Count>0) {
         Count--;
@@ -250,22 +282,26 @@ sal_uInt8 PcxExpand::GetByte(SvStream& rInp)
 |*
 |*    SgfFilterBmp()
 |*
+|*    Beschreibung
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
+|*
 *************************************************************************/
-sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
+BOOL SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
 {
     BmpFileHeader  aBmpHead;
     BmpInfoHeader  aBmpInfo;
-    sal_uInt16 nWdtInp=(rHead.Xsize+7)/8;  // Breite der Input-Bitmap in Bytes
-    sal_uInt16         nWdtOut;            // Breite der Output-Bitmap in Bytes
-    sal_uInt16         nColors;            // Anzahl der Farben     (1,16,256)
-    sal_uInt16         nColBits;           // Anzahl der Bits/Pixel (2, 4,  8)
-    sal_uInt16         i,j,k;              // Spaltenzaehler, Zeilenzaehler, Planezaehler
-    sal_uInt16         a,b;                // Hilfsvariable
-    sal_uInt8           pl1 = 0;            // Masken fuer die Planes
-    sal_uInt8*          pBuf=NULL;          // Buffer fuer eine Pixelzeile
+    USHORT nWdtInp=(rHead.Xsize+7)/8;  // Breite der Input-Bitmap in Bytes
+    USHORT         nWdtOut;            // Breite der Output-Bitmap in Bytes
+    USHORT         nColors;            // Anzahl der Farben     (1,16,256)
+    USHORT         nColBits;           // Anzahl der Bits/Pixel (2, 4,  8)
+    USHORT         i,j,k;              // Spaltenzaehler, Zeilenzaehler, Planezaehler
+    USHORT         a,b;                // Hilfsvariable
+    BYTE           pl1 = 0,pl2= 0;     // Masken fuer die Planes
+    BYTE*          pBuf=NULL;          // Buffer fuer eine Pixelzeile
     PcxExpand      aPcx;
-    sal_uLong          nOfs;
-    sal_uInt8           cRGB[4];
+    ULONG          nOfs;
+    BYTE           cRGB[4];
 
     if (rHead.Planes<=1) nColBits=1; else nColBits=4; if (rHead.Typ==4) nColBits=8;
     nColors=1<<nColBits;
@@ -286,8 +322,8 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
     aBmpInfo.yDpmm=0;
     aBmpInfo.ColUsed=0;
     aBmpInfo.ColMust=0;
-    pBuf=new sal_uInt8[nWdtOut];
-    if (!pBuf) return sal_False;       // Fehler: kein Speichel da
+    pBuf=new BYTE[nWdtOut];
+    if (!pBuf) return FALSE;       // Fehler: kein Speichel da
     rOut<<aBmpHead<<aBmpInfo;
     memset(pBuf,0,nWdtOut);        // Buffer mit Nullen fuellen
 
@@ -304,12 +340,10 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
                 pBuf[i]=aPcx.GetByte(rInp);
             }
             for(i=nWdtInp;i<nWdtOut;i++) pBuf[i]=0;     // noch bis zu 3 Bytes
-            rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // rueckwaerts schreiben!
+            rOut.Seek(nOfs+((ULONG)rHead.Ysize-j-1L)*(ULONG)nWdtOut); // rueckwaerts schreiben!
             rOut.Write((char*)pBuf,nWdtOut);
         }
     } else if (nColors==16) {
-        sal_uInt8 pl2= 0;     // Masken fuer die Planes
-
         rOut<<RGBQuad(0x00,0x00,0x00); // Schwarz
         rOut<<RGBQuad(0x24,0x24,0x24); // Grau 80%
         rOut<<RGBQuad(0x49,0x49,0x49); // Grau 60%
@@ -352,7 +386,7 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
                 }
             }
             for(i=nWdtInp*4;i<nWdtOut;i++) pBuf[i]=0;            // noch bis zu 3 Bytes
-            rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // rueckwaerts schreiben!
+            rOut.Seek(nOfs+((ULONG)rHead.Ysize-j-1L)*(ULONG)nWdtOut); // rueckwaerts schreiben!
             rOut.Write((char*)pBuf,nWdtOut);
         }
     } else if (nColors==256) {
@@ -372,12 +406,12 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
             for(i=0;i<rHead.Xsize;i++)
                 pBuf[i]=aPcx.GetByte(rInp);
             for(i=rHead.Xsize;i<nWdtOut;i++) pBuf[i]=0;          // noch bis zu 3 Bytes
-            rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // rueckwaerts schreiben!
+            rOut.Seek(nOfs+((ULONG)rHead.Ysize-j-1L)*(ULONG)nWdtOut); // rueckwaerts schreiben!
             rOut.Write((char*)pBuf,nWdtOut);
         }
     }
     delete[] pBuf;
-    return sal_True;
+    return TRUE;
 }
 
 
@@ -385,15 +419,19 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
 |*
 |*    SgfBMapFilter()
 |*
+|*    Beschreibung
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
+|*
 *************************************************************************/
-sal_Bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
+BOOL SgfBMapFilter(SvStream& rInp, SvStream& rOut)
 {
-    sal_uLong     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
+    ULONG     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
     SgfHeader aHead;
     SgfEntry  aEntr;
-    sal_uLong     nNext;
-    sal_Bool      bRdFlag=sal_False;         // Grafikentry gelesen ?
-    sal_Bool      bRet=sal_False;            // Returncode
+    ULONG     nNext;
+    BOOL      bRdFlag=FALSE;         // Grafikentry gelesen ?
+    BOOL      bRet=FALSE;            // Returncode
 
     nFileStart=rInp.Tell();
     rInp>>aHead;
@@ -405,7 +443,7 @@ sal_Bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
             rInp>>aEntr;
             nNext=aEntr.GetOffset();
             if (aEntr.Typ==aHead.Typ) {
-                bRdFlag=sal_True;
+                bRdFlag=TRUE;
                 switch(aEntr.Typ) {
                     case SgfBitImag0:
                     case SgfBitImag1:
@@ -415,7 +453,7 @@ sal_Bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
             }
         } // while(nNext)
     }
-    if (rInp.GetError()) bRet=sal_False;
+    if (rInp.GetError()) bRet=FALSE;
     return(bRet);
 }
 
@@ -431,15 +469,15 @@ long SgfVectXmul=0;
 long SgfVectYmul=0;
 long SgfVectXdiv=0;
 long SgfVectYdiv=0;
-sal_Bool SgfVectScal=sal_False;
+BOOL SgfVectScal=FALSE;
 
 ////////////////////////////////////////////////////////////
 // Hpgl2SvFarbe ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-Color Hpgl2SvFarbe( sal_uInt8 nFarb )
+Color Hpgl2SvFarbe( BYTE nFarb )
 {
-    sal_uLong nColor = COL_BLACK;
+    ULONG nColor = COL_BLACK;
 
     switch (nFarb & 0x07) {
         case 0:  nColor=COL_WHITE;        break;
@@ -459,21 +497,25 @@ Color Hpgl2SvFarbe( sal_uInt8 nFarb )
 |*
 |*    SgfFilterVect()
 |*
+|*    Beschreibung
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
+|*
 *************************************************************************/
-sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMtf)
+BOOL SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMtf)
 {
     VirtualDevice aOutDev;
     SgfVector aVect;
-    sal_uInt8      nFarb;
-    sal_uInt8      nFrb0=7;
-    sal_uInt8      nLTyp;
-    sal_uInt8      nOTyp;
-    sal_Bool      bEoDt=sal_False;
-    sal_Bool      bPDwn=sal_False;
+    BYTE      nFarb;
+    BYTE      nFrb0=7;
+    BYTE      nLTyp;
+    BYTE      nOTyp;
+    BOOL      bEoDt=FALSE;
+    BOOL      bPDwn=FALSE;
     Point     aP0(0,0);
     Point     aP1(0,0);
     String    Msg;
-    sal_uInt16    RecNr=0;
+    USHORT    RecNr=0;
 
     rMtf.Record(&aOutDev);
     aOutDev.SetLineColor(Color(COL_BLACK));
@@ -481,9 +523,9 @@ sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile&
 
     while (!bEoDt && !rInp.GetError()) {
         rInp>>aVect; RecNr++;
-        nFarb=(sal_uInt8) (aVect.Flag & 0x000F);
-        nLTyp=(sal_uInt8)((aVect.Flag & 0x00F0) >>4);
-        nOTyp=(sal_uInt8)((aVect.Flag & 0x0F00) >>8);
+        nFarb=(BYTE) (aVect.Flag & 0x000F);
+        nLTyp=(BYTE)((aVect.Flag & 0x00F0) >>4);
+        nOTyp=(BYTE)((aVect.Flag & 0x0F00) >>8);
         bEoDt=(aVect.Flag & 0x4000) !=0;
         bPDwn=(aVect.Flag & 0x8000) !=0;
 
@@ -524,7 +566,7 @@ sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile&
                   Fraction( 1, 4 ), Fraction( 1, 4 ) );
     rMtf.SetPrefMapMode( aMap );
     rMtf.SetPrefSize( Size( (short)rHead.Xsize, (short)rHead.Ysize ) );
-    return sal_True;
+    return TRUE;
 }
 
 
@@ -532,15 +574,19 @@ sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile&
 |*
 |*    SgfVectFilter()
 |*
+|*    Beschreibung
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
+|*
 *************************************************************************/
-sal_Bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
+BOOL SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
 {
-    sal_uLong     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
+    ULONG     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
     SgfHeader aHead;
     SgfEntry  aEntr;
-    sal_uLong     nNext;
-    sal_Bool      bRdFlag=sal_False;         // Grafikentry gelesen ?
-    sal_Bool      bRet=sal_False;            // Returncode
+    ULONG     nNext;
+    BOOL      bRdFlag=FALSE;         // Grafikentry gelesen ?
+    BOOL      bRet=FALSE;            // Returncode
 
     nFileStart=rInp.Tell();
     rInp>>aHead;
@@ -555,7 +601,7 @@ sal_Bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
             }
         } // while(nNext)
         if (bRdFlag) {
-            if (!rInp.GetError()) bRet=sal_True;  // Scheinbar Ok
+            if (!rInp.GetError()) bRet=TRUE;  // Scheinbar Ok
         }
     }
     return(bRet);
@@ -566,10 +612,14 @@ sal_Bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
 |*
 |*    SgfFilterPScr()
 |*
+|*    Beschreibung
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
+|*
 *************************************************************************/
-sal_Bool SgfFilterPScr(SvStream&, SgfHeader&, SgfEntry&)
+BOOL SgfFilterPScr(SvStream&, SgfHeader&, SgfEntry&)
 {
-    return sal_False;  // PostSrcipt wird noch nicht unterstuetzt !
+    return FALSE;  // PostSrcipt wird noch nicht unterstuetzt !
 }
 
 
@@ -578,9 +628,11 @@ sal_Bool SgfFilterPScr(SvStream&, SgfHeader&, SgfEntry&)
 |*    CheckSgfTyp()
 |*
 |*    Beschreibung      Feststellen, um was fuer ein SGF/SGV es sich handelt.
+|*    Ersterstellung    JOE 23.06.93
+|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
-sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion)
+BYTE CheckSgfTyp(SvStream& rInp, USHORT& nVersion)
 {
 #if OSL_DEBUG_LEVEL > 1 // Recordgroessen checken. Neuer Compiler hat vielleichte anderes Allignment!
     if (sizeof(SgfHeader)!=SgfHeaderSize ||
@@ -591,7 +643,7 @@ sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion)
         sizeof(RGBQuad  )!=RGBQuadSize   )  return SGF_DONTKNOW;
 #endif
 
-    sal_uLong     nPos;
+    ULONG     nPos;
     SgfHeader aHead;
     nVersion=0;
     nPos=rInp.Tell();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,16 +42,16 @@ class SVT_DLLPUBLIC SfxErrorContext : private ErrorContext
 {
 public:
     SfxErrorContext(
-            sal_uInt16 nCtxIdP, Window *pWin=0,
-            sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
+            USHORT nCtxIdP, Window *pWin=0,
+            USHORT nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
     SfxErrorContext(
-            sal_uInt16 nCtxIdP, const String &aArg1, Window *pWin=0,
-            sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
-    virtual sal_Bool GetString(sal_uLong nErrId, String &rStr);
+            USHORT nCtxIdP, const String &aArg1, Window *pWin=0,
+            USHORT nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
+    virtual BOOL GetString(ULONG nErrId, String &rStr);
 
 private:
-    sal_uInt16 nCtxId;
-    sal_uInt16 nResId;
+    USHORT nCtxId;
+    USHORT nResId;
     ResMgr *pMgr;
     String aArg1;
 };
@@ -59,24 +59,24 @@ private:
 class SVT_DLLPUBLIC SfxErrorHandler : private ErrorHandler
 {
 public:
-    SfxErrorHandler(sal_uInt16 nId, sal_uLong lStart, sal_uLong lEnd, ResMgr *pMgr=0);
+    SfxErrorHandler(USHORT nId, ULONG lStart, ULONG lEnd, ResMgr *pMgr=0);
     ~SfxErrorHandler();
 
 protected:
-    virtual sal_Bool     GetErrorString(sal_uLong lErrId, String &, sal_uInt16&) const;
-    virtual sal_Bool     GetMessageString(sal_uLong lErrId, String &, sal_uInt16&) const;
+    virtual BOOL     GetErrorString(ULONG lErrId, String &, USHORT&) const;
+    virtual BOOL     GetMessageString(ULONG lErrId, String &, USHORT&) const;
 
 private:
 
-    sal_uLong            lStart;
-    sal_uLong            lEnd;
-    sal_uInt16           nId;
+    ULONG            lStart;
+    ULONG            lEnd;
+    USHORT           nId;
     ResMgr          *pMgr;
     ResMgr          *pFreeMgr;
 
-    SVT_DLLPRIVATE sal_Bool             GetClassString(sal_uLong lErrId, String &) const;
-    virtual sal_Bool     CreateString(
-                         const ErrorInfo *, String &, sal_uInt16 &) const;
+    SVT_DLLPRIVATE BOOL             GetClassString(ULONG lErrId, String &) const;
+    virtual BOOL     CreateString(
+                         const ErrorInfo *, String &, USHORT &) const;
 };
 
 #endif

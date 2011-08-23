@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ class SvxMacroItem;
 
 enum DlgEventType
 {
-    MACASSGN_AUTOTEXT,
+    MACASSGN_TEXTBAUST,
     MACASSGN_GRAPHIC,
     MACASSGN_OLE,
     MACASSGN_FRMURL,
@@ -47,7 +47,7 @@ class SwMacroAssignDlg
 {
 public:
     static SfxEventNamesItem AddEvents( DlgEventType eType );
-    static sal_Bool INetFmtDlg( Window* pParent, SwWrtShell& rSh,
+    static BOOL INetFmtDlg( Window* pParent, SwWrtShell& rSh,
                             SvxMacroItem*& rpINetItem );
 };
 

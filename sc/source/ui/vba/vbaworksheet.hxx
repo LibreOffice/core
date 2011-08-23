@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,23 +64,22 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     css::uno::Reference< ov::excel::XChartObjects > mxCharts;
     css::uno::Reference< ov::excel::XHyperlinks > mxHlinks;
     ::rtl::Reference< ScVbaSheetObjectsBase > mxButtons;
-    bool mbVeryHidden;
 
     css::uno::Reference< ov::excel::XWorksheet > getSheetAtOffset(SCTAB offset) throw (css::uno::RuntimeException);
     css::uno::Reference< ov::excel::XRange > getSheetRange() throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::container::XNameAccess > getFormControls();
     css::uno::Any getControlShape( const rtl::OUString& sName );
-
+    
     css::uno::Reference< css::beans::XPropertySet > getFirstDBRangeProperties() throw (css::uno::RuntimeException);
-
+    
 protected:
 
     ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext );
 public:
     ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::sheet::XSpreadsheet >& xSheet,
+        const css::uno::Reference< css::sheet::XSpreadsheet >& xSheet, 
         const css::uno::Reference< css::frame::XModel >& xModel )throw (css::uno::RuntimeException)  ;
     ScVbaWorksheet( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext ) throw ( css::lang::IllegalArgumentException );
 
@@ -90,7 +89,6 @@ public:
     { return mxModel; }
     virtual css::uno::Reference< css::sheet::XSpreadsheet > getSheet()
     { return mxSheet; }
-    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
     // Attributes
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
@@ -119,7 +117,7 @@ public:
 
     // Methods
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Select(const css::uno::Any& aReplace) throw (css::uno::RuntimeException); // add the input parameter to support expand selection
+    virtual void SAL_CALL Select(const css::uno::Any& aReplace) throw (css::uno::RuntimeException); //liuchen 2009-9-2, add the input parameter to support expand selection
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Move( const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException) ;
      virtual void SAL_CALL Copy( const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException);
@@ -135,7 +133,7 @@ public:
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Rows(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Columns(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
 
-    virtual css::uno::Any SAL_CALL Evaluate( const ::rtl::OUString& Name ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Evaluate( const ::rtl::OUString& Name ) throw (css::uno::RuntimeException); 
     virtual css::uno::Any SAL_CALL PivotTables( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Comments( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Hyperlinks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
@@ -155,7 +153,7 @@ public:
     virtual css::uno::Any SAL_CALL Spinners( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL setEnableCalculation( ::sal_Bool EnableCalculation ) throw ( css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL getEnableCalculation(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getEnableCalculation(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException); 
     virtual void SAL_CALL ShowDataForm(  ) throw (css::uno::RuntimeException);
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw (css::uno::RuntimeException);
@@ -171,9 +169,7 @@ public:
     virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, const css::uno::Any& IgnorePrintAreas ) throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
-    // XUnoTunnel
-    virtual ::sal_Int64 getSomething(const css::uno::Sequence<sal_Int8 >& rId ) throw(css::uno::RuntimeException);
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();	
 };
 
 #endif /* SC_VBA_WORKSHEET_HXX */

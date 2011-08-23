@@ -1,7 +1,7 @@
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,9 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.lib.uno.adapter.*;
 
 /** This outer class provides an inner class to implement the service
- * description and a method to instantiate the
- * component on demand (__getServiceFactory()).
+ * description, a method to instantiate the
+ * component on demand (__getServiceFactory()), and a method to give
+ * information about the component (__writeRegistryServiceInfo()).
  */
 public class XSLTValidate {
 
@@ -73,11 +74,11 @@ public class XSLTValidate {
         XTypeProvider {
 
         private com.sun.star.xml.sax.XErrorHandler xErrorHandler;
-
+        
         /** The component will be registered under this name.
          */
         static private final String __serviceName = "com.sun.star.documentconversion.XSLTValidate";
-
+        
         public _XSLTValidate() {
             xErrorHandler = null;
         }
@@ -94,17 +95,17 @@ public class XSLTValidate {
                 new Type( XServiceInfo.class ) };
             }
             catch( Exception exception ) {
-
+        
             }
 
             return( typeReturn );
         }
 
 
-    public boolean importer(com.sun.star.beans.PropertyValue[] aSourceData,
-                com.sun.star.xml.sax.XDocumentHandler xDocHandler,
-                java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException,com.sun.star.lang.IllegalArgumentException {
-
+    public boolean importer(com.sun.star.beans.PropertyValue[] aSourceData, 
+                com.sun.star.xml.sax.XDocumentHandler xDocHandler, 
+                java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException,com.sun.star.lang.IllegalArgumentException { 
+    
         com.sun.star.io.XInputStream xis=null;
         com.sun.star.beans.PropertyValue[] pValue = aSourceData;
         for  (int  i = 0 ; i < pValue.length; i++)
@@ -132,7 +133,7 @@ public class XSLTValidate {
     }
 
      public void convert (com.sun.star.io.XInputStream xml) throws com.sun.star.uno.RuntimeException {
-         XInputStreamToInputStreamAdapter xis =new XInputStreamToInputStreamAdapter(xml);
+         XInputStreamToInputStreamAdapter xis =new XInputStreamToInputStreamAdapter(xml);	 
          parseErrors =new Vector();
            //String defaultTimeOut = System.getProperty("sun.net.client.defaultConnectTimeout");
            System.getProperties().setProperty("sun.net.client.defaultConnectTimeout", "10000");
@@ -155,7 +156,7 @@ public class XSLTValidate {
         catch (Exception e){
            //System.out.println("\nException "+ e);
            throw new com.sun.star.uno.RuntimeException(e.getLocalizedMessage());
-        }
+        } 
      }
 
     public com.sun.star.uno.Any JavaSAXParseEceptionToUno( SAXParseException e )
@@ -187,9 +188,9 @@ public class XSLTValidate {
 
     //  Warning Event Handler
     public void warning (SAXParseException e)
-            throws SAXException
+            throws SAXException 
     {
-//      System.out.println("\n_XSLTValidate::warning " + e.toString() );
+//		System.out.println("\n_XSLTValidate::warning " + e.toString() );
 
         if( xErrorHandler != null )
         {
@@ -214,12 +215,12 @@ public class XSLTValidate {
             }
         }
     }
-
+    
     //  Error Event Handler
     public void error (SAXParseException e)
-        throws SAXException
+        throws SAXException 
     {
-//      System.out.println("\n_XSLTValidate::error " + e.toString() );
+//		System.out.println("\n_XSLTValidate::error " + e.toString() );
 
         if( xErrorHandler != null )
         {
@@ -247,7 +248,7 @@ public class XSLTValidate {
     //  Fatal Error Event Handler
     public void fatalError (SAXParseException e)
     throws SAXException {
-//      System.out.println("\n_XSLTValidate::fatalError " + e.toString() );
+//		System.out.println("\n_XSLTValidate::fatalError " + e.toString() );
 
         if( xErrorHandler != null )
         {
@@ -271,7 +272,7 @@ public class XSLTValidate {
             }
         }
     }
-
+    
         // Implement methods from interface XTypeProvider
         public byte[] getImplementationId() {
             byte[] byteReturn = {};
@@ -285,16 +286,16 @@ public class XSLTValidate {
         public String getServiceName() {
             return( __serviceName );
         }
-
+    
         // Implement methods from interface XServiceInfo
         public boolean supportsService(String stringServiceName) {
             return( stringServiceName.equals( __serviceName ) );
         }
-
+    
         public String getImplementationName() {
             return( _XSLTValidate.class.getName() );
         }
-
+    
         public String[] getSupportedServiceNames() {
             String[] stringSupportedServiceNames = { __serviceName };
             return( stringSupportedServiceNames );
@@ -326,7 +327,21 @@ public class XSLTValidate {
             multiFactory,
             regKey);
         }
-
+        
         return xSingleServiceFactory;
+    }
+    
+    /**
+     * Writes the service information into the given registry key.
+     * This method is called by the <code>JavaLoader</code>
+     * <p>
+     * @return  returns true if the operation succeeded
+     * @param   regKey       the registryKey
+     * @see                  com.sun.star.comp.loader.JavaLoader
+     */
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
+
+        return FactoryHelper.writeRegistryServiceInfo(_XSLTValidate.class.getName(),
+        _XSLTValidate.__serviceName, regKey);
     }
 }

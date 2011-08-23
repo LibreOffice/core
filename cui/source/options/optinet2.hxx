@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@ class SfxFilter;
 class SvtInetOptions;
 
 #ifndef SV_NODIALOG
-#define PROXY_CONTROLS  23
-#define CACHE_CONTROLS  20
-#define INET_SEARCH     19
+#define PROXY_CONTROLS 	23
+#define CACHE_CONTROLS 	20
+#define INET_SEARCH 	19
 
 #if defined(OS2)
 #define TYPE_CONTROLS  20
@@ -71,14 +71,14 @@ namespace uno = ::com::sun::star::uno;
 class SvxNoSpaceEdit : public Edit
 {
 private:
-    sal_Bool            bOnlyNumeric;
+    BOOL			bOnlyNumeric;
 
 public:
-    SvxNoSpaceEdit(Window* pParent, ResId rResId, sal_Bool bNum = sal_False ) :
+    SvxNoSpaceEdit(Window* pParent, ResId rResId, BOOL bNum = FALSE ) :
         Edit( pParent, rResId ), bOnlyNumeric( bNum ) {}
 
-    virtual void    KeyInput( const KeyEvent& rKEvent );
-    virtual void    Modify();
+    virtual void	KeyInput( const KeyEvent& rKEvent );
+    virtual void	Modify();
 };
 
 typedef SfxFilter* SfxFilterPtr;
@@ -91,28 +91,28 @@ class SvxProxyTabPage : public SfxTabPage
 private:
     FixedLine       aOptionGB;
 
-    FixedText       aProxyModeFT;
-    ListBox         aProxyModeLB;
+    FixedText 		aProxyModeFT;
+    ListBox			aProxyModeLB;
 
-    FixedText       aHttpProxyFT;
-    SvxNoSpaceEdit  aHttpProxyED;
-    FixedText       aHttpPortFT;
-    SvxNoSpaceEdit  aHttpPortED;
+    FixedText		aHttpProxyFT;
+    SvxNoSpaceEdit	aHttpProxyED;
+    FixedText		aHttpPortFT;
+    SvxNoSpaceEdit 	aHttpPortED;
 
-    FixedText       aHttpsProxyFT;
-    SvxNoSpaceEdit  aHttpsProxyED;
-    FixedText       aHttpsPortFT;
-    SvxNoSpaceEdit  aHttpsPortED;
+    FixedText		aHttpsProxyFT;
+    SvxNoSpaceEdit	aHttpsProxyED;
+    FixedText		aHttpsPortFT;
+    SvxNoSpaceEdit 	aHttpsPortED;
 
 
-    FixedText       aFtpProxyFT;
-    SvxNoSpaceEdit  aFtpProxyED;
-    FixedText       aFtpPortFT;
-    SvxNoSpaceEdit  aFtpPortED;
+    FixedText		aFtpProxyFT;
+    SvxNoSpaceEdit	aFtpProxyED;
+    FixedText		aFtpPortFT;
+    SvxNoSpaceEdit 	aFtpPortED;
 
-    FixedText       aNoProxyForFT;
-    Edit            aNoProxyForED;
-    FixedText       aNoProxyDescFT;
+    FixedText		aNoProxyForFT;
+    Edit			aNoProxyForED;
+    FixedText		aNoProxyDescFT;
 
     String          sFromBrowser;
 
@@ -129,7 +129,7 @@ private:
 
 #ifdef _SVX_OPTINET2_CXX
     void ArrangeControls_Impl();
-    void EnableControls_Impl(sal_Bool bEnable);
+    void EnableControls_Impl(BOOL bEnable);
     void ReadConfigData_Impl();
     void ReadConfigDefaults_Impl();
     void RestoreConfigDefaults_Impl();
@@ -142,9 +142,9 @@ private:
     virtual ~SvxProxyTabPage();
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
 // class SvxSearchTabPage ------------------------------------------------
@@ -156,31 +156,31 @@ class SvxSearchTabPage : public SfxTabPage
 
 private:
     FixedLine       aSearchGB;
-    ListBox         aSearchLB;
-    FixedText       aSearchNameFT;
-    SvxNoSpaceEdit  aSearchNameED;
+    ListBox			aSearchLB;
+    FixedText		aSearchNameFT;
+    SvxNoSpaceEdit	aSearchNameED;
 
-    FixedText       aSearchFT;
-    RadioButton     aAndRB;
-    RadioButton     aOrRB;
-    RadioButton     aExactRB;
+    FixedText		aSearchFT;
+    RadioButton		aAndRB;
+    RadioButton		aOrRB;
+    RadioButton		aExactRB;
 
-    FixedText       aURLFT;
-    SvxNoSpaceEdit  aURLED;
+    FixedText		aURLFT;
+    SvxNoSpaceEdit	aURLED;
 
-    FixedText       aPostFixFT;
-    SvxNoSpaceEdit  aPostFixED;
-    FixedText       aSeparatorFT;
-    SvxNoSpaceEdit  aSeparatorED;
-    FixedText       aCaseFT;
-    ListBox         aCaseED;
+    FixedText		aPostFixFT;
+    SvxNoSpaceEdit	aPostFixED;
+    FixedText		aSeparatorFT;
+    SvxNoSpaceEdit	aSeparatorED;
+    FixedText		aCaseFT;
+    ListBox	 		aCaseED;
 
-    PushButton      aNewPB;
-    PushButton      aAddPB;
-    PushButton      aChangePB;
-    PushButton      aDeletePB;
+    PushButton		aNewPB;
+    PushButton		aAddPB;
+    PushButton		aChangePB;
+    PushButton		aDeletePB;
 
-    String          sLastSelectedEntry;
+    String 			sLastSelectedEntry;
     String          sModifyMsg;
 
     SvxSearchConfig     aSearchConfig;
@@ -200,15 +200,15 @@ private:
 
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
-    sal_Bool                ConfirmLeave( const String& rStringSelection );
+    BOOL				ConfirmLeave( const String& rStringSelection );   //add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
 
     SvxSearchTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxSearchTabPage();
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
 // #98647# class SvxScriptExecListBox ------------------------------------
@@ -262,46 +262,50 @@ private:
     DECL_LINK(          MasterPasswordCBHdl, void* );
     DECL_LINK(          ShowPasswordsHdl, PushButton* );
     DECL_LINK(          MacroSecPBHdl, void* );
-
+    
     void                InitControls();
 
                 SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet );
-    virtual     ~SvxSecurityTabPage();
+    virtual 	~SvxSecurityTabPage();
 
 protected:
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
+//added by jmeng begin
 class MozPluginTabPage : public SfxTabPage
 {
     FixedLine       aMSWordGB;
-    CheckBox        aWBasicCodeCB;
+    CheckBox		aWBasicCodeCB;
 
-    sal_Bool isInstalled(void);
-    sal_Bool installPlugin(void);
-    sal_Bool uninstallPlugin(void);
+    BOOL isInstalled(void);
+    BOOL installPlugin(void);
+    BOOL uninstallPlugin(void);
 
     MozPluginTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~MozPluginTabPage();
 
 public:
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
 };
-
+//added by jmeng end
 #endif
 
+/* -----------------------------20.06.01 16:32--------------------------------
+
+ ---------------------------------------------------------------------------*/
 #ifdef WNT
 #else
 #define HELPER_PAGE_COMPLETE
@@ -326,10 +330,10 @@ public:
     SvxEMailTabPage( Window* pParent, const SfxItemSet& rSet );
     ~SvxEMailTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
 #endif // #ifndef _SVX_OPTINET_HXX

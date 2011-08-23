@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,25 +39,26 @@ class SwErgoSumPortion;
 class SwExpandPortion;
 class SwMultiPortion;
 class SwFtnPortion;
+class SvLongs;
 
 /*************************************************************************
- *                      class SwTxtFormatter
+ *						class SwTxtFormatter
  *************************************************************************/
 
 class SwTxtFormatter : public SwTxtPainter
 {
     const SwFmtDrop *pDropFmt;
-    SwMultiPortion* pMulti; // during formatting a multi-portion
-    sal_uInt8 nCntEndHyph;  // zaehlt aufeinanderfolgende Hyphens am Zeilenende
-    sal_uInt8 nCntMidHyph;  // zaehlt aufeinanderfolgende Hyphens vor Flies
+    SwMultiPortion* pMulti;	// during formatting a multi-portion
+    sal_uInt8 nCntEndHyph;	// zaehlt aufeinanderfolgende Hyphens am Zeilenende
+    sal_uInt8 nCntMidHyph;	// zaehlt aufeinanderfolgende Hyphens vor Flies
     xub_StrLen nLeftScanIdx; // for increasing performance during
-    xub_StrLen nRightScanIdx;     // scanning for portion ends
+    xub_StrLen nRightScanIdx;	  // scanning for portion ends
     sal_Bool bOnceMore : 1; // noch 'ne Runde?
     sal_Bool bFlyInCntBase : 1; // Base-Referenz der zeichengeb. Rahmen setzen
     sal_Bool bChanges : 1; // Flag, fuer die Berechnung des Repaint-Rechtecks
     sal_Bool bTruncLines : 1; // Flag, Repaint-Rechtecks ggf. erweitern
     sal_Bool bUnclipped : 1; // Flag, ob Repaint groesser als feste Zeilenhoehe
-    sal_uInt16 m_nHintEndIndex; // HACK for TryNewNoLengthPortion
+    USHORT m_nHintEndIndex; // HACK for TryNewNoLengthPortion
     SwLinePortion *NewPortion( SwTxtFormatInfo &rInf );
     SwTxtPortion  *NewTxtPortion( SwTxtFormatInfo &rInf );
     SwLinePortion *NewExtraPortion( SwTxtFormatInfo &rInf );
@@ -77,7 +78,7 @@ class SwTxtFormatter : public SwTxtPainter
 
     // Das Herzstueck der Formatierung
     void BuildPortions( SwTxtFormatInfo &rInf );
-    sal_Bool BuildMultiPortion( SwTxtFormatInfo &rInf, SwMultiPortion& rMulti );
+    BOOL BuildMultiPortion( SwTxtFormatInfo &rInf, SwMultiPortion& rMulti );
 
     // Berechnung des emulierten rechten Rands
     void CalcFlyWidth( SwTxtFormatInfo &rInf );
@@ -99,6 +100,9 @@ class SwTxtFormatter : public SwTxtPainter
 
     // determines, if a optimized repaint rectange is allowed
     sal_Bool AllowRepaintOpt() const;
+
+    // calculates and sets the optimized repaint offset
+    long CalcOptRepaint( xub_StrLen nOldLineEnd, const SvLongs* pFlyStart );
 
     // wird von FormatLine gerufen.
     void FormatReset( SwTxtFormatInfo &rInf );
@@ -180,19 +184,19 @@ public:
     inline SwMultiPortion *GetMulti() const { return pMulti; }
 
     inline sal_Bool IsOnceMore() const { return bOnceMore; }
-    inline void       SetOnceMore( sal_Bool bNew ) { bOnceMore = bNew; }
+    inline void		  SetOnceMore( sal_Bool bNew ) { bOnceMore = bNew; }
 
     inline sal_Bool HasChanges() const { return bChanges; }
-    inline void       SetChanges()       { bChanges = sal_True; }
+    inline void		  SetChanges()		 { bChanges = sal_True; }
 
     inline sal_Bool HasTruncLines() const { return bTruncLines; }
-    inline void       SetTruncLines( sal_Bool bNew ) { bTruncLines = bNew; }
+    inline void		  SetTruncLines( sal_Bool bNew ) { bTruncLines = bNew; }
 
     inline sal_Bool IsUnclipped() const { return bUnclipped; }
-    inline void       SetUnclipped( sal_Bool bNew ) { bUnclipped = bNew; }
+    inline void		  SetUnclipped( sal_Bool bNew ) { bUnclipped = bNew; }
 
     inline sal_Bool IsFlyInCntBase() const { return bFlyInCntBase; }
-    inline void  SetFlyInCntBase( sal_Bool bNew = sal_True ){ bFlyInCntBase = bNew; }
+    inline void	 SetFlyInCntBase( sal_Bool bNew = sal_True ){ bFlyInCntBase = bNew; }
 
     inline SwTxtFormatInfo &GetInfo()
         { return (SwTxtFormatInfo&)SwTxtIter::GetInfo(); }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,10 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
+#ifndef __SGI_STL_LIST
 #include <list>
+#endif
 #include <com/sun/star/util/XAtomServer.hpp>
 
 #define INVALID_ATOM 0
@@ -50,8 +52,8 @@ namespace utl {
     class AtomProvider
     {
         int                                     m_nAtoms;
-        ::boost::unordered_map< int, ::rtl::OUString, ::boost::hash< int > > m_aStringMap;
-        ::boost::unordered_map< ::rtl::OUString, int, ::rtl::OUStringHash >    m_aAtomMap;
+        ::std::hash_map< int, ::rtl::OUString, ::std::hash< int > > m_aStringMap;
+        ::std::hash_map< ::rtl::OUString, int, ::rtl::OUStringHash >    m_aAtomMap;
     public:
         AtomProvider();
         ~AtomProvider();
@@ -72,7 +74,7 @@ namespace utl {
 
     class UNOTOOLS_DLLPUBLIC MultiAtomProvider
     {
-        ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > > m_aAtomLists;
+        ::std::hash_map< int, AtomProvider*, ::std::hash< int > > m_aAtomLists;
     public:
         MultiAtomProvider();
         ~MultiAtomProvider();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ InsertAxisOrGridDialogData::InsertAxisOrGridDialogData()
 //==============================
 
 SchAxisDlg::SchAxisDlg( Window* pWindow
-                       , const InsertAxisOrGridDialogData& rInput, sal_Bool bAxisDlg )
+                       , const InsertAxisOrGridDialogData& rInput, BOOL bAxisDlg )
                        :
         ModalDialog( pWindow, SchResId( DLG_AXIS_OR_GRID )),
 
@@ -89,7 +89,7 @@ SchAxisDlg::SchAxisDlg( Window* pWindow
     FreeResource();
     if(!bAxisDlg)
     {
-        SetHelpId( HID_INSERT_GRIDS );
+        SetHelpId( SID_INSERT_GRIDS );
         SetText( ObjectNameProvider::getName(OBJECTTYPE_GRID,true) );
 
         aCbPrimaryX.SetHelpId( HID_SCH_CB_XGRID );
@@ -111,8 +111,9 @@ SchAxisDlg::SchAxisDlg( Window* pWindow
         //todo: remove if secondary z axis are possible somewhere
         {
             aCbSecondaryZ.Hide();
-
+            
             Size aSize( GetSizePixel() );
+            //aSize.Height() -= aCbSecondaryZ.GetSizePixel().Height();
             aSize.Height() -= ( aCbSecondaryZ.GetPosPixel().Y() - aCbSecondaryY.GetPosPixel().Y() );
             SetSizePixel(aSize);
         }

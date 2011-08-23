@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,31 +78,31 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
     // names of transliteration relevant properties
     static const char* aTranslitNames[] =
     {
-        "IsMatchCase",                          //  0
-        "Japanese/IsMatchFullHalfWidthForms",   //  1
-        "Japanese/IsMatchHiraganaKatakana",     //  2
-        "Japanese/IsMatchContractions",         //  3
-        "Japanese/IsMatchMinusDashCho-on",      //  4
-        "Japanese/IsMatchRepeatCharMarks",      //  5
-        "Japanese/IsMatchVariantFormKanji",     //  6
-        "Japanese/IsMatchOldKanaForms",         //  7
-        "Japanese/IsMatch_DiZi_DuZu",           //  8
-        "Japanese/IsMatch_BaVa_HaFa",           //  9
-        "Japanese/IsMatch_TsiThiChi_DhiZi",     // 10
-        "Japanese/IsMatch_HyuIyu_ByuVyu",       // 11
-        "Japanese/IsMatch_SeShe_ZeJe",          // 12
-        "Japanese/IsMatch_IaIya",               // 13
-        "Japanese/IsMatch_KiKu",                // 14
-        "Japanese/IsIgnorePunctuation",         // 15
-        "Japanese/IsIgnoreWhitespace",          // 16
-        "Japanese/IsIgnoreProlongedSoundMark",  // 17
-        "Japanese/IsIgnoreMiddleDot"            // 18
+        "IsMatchCase",							//  0
+        "Japanese/IsMatchFullHalfWidthForms",	//  1
+        "Japanese/IsMatchHiraganaKatakana",		//  2
+        "Japanese/IsMatchContractions",			//  3
+        "Japanese/IsMatchMinusDashCho-on",		//  4
+        "Japanese/IsMatchRepeatCharMarks",		//  5
+        "Japanese/IsMatchVariantFormKanji",		//  6
+        "Japanese/IsMatchOldKanaForms",			//  7
+        "Japanese/IsMatch_DiZi_DuZu",			//  8
+        "Japanese/IsMatch_BaVa_HaFa",			//  9
+        "Japanese/IsMatch_TsiThiChi_DhiZi",		// 10
+        "Japanese/IsMatch_HyuIyu_ByuVyu",		// 11
+        "Japanese/IsMatch_SeShe_ZeJe",			// 12
+        "Japanese/IsMatch_IaIya",				// 13
+        "Japanese/IsMatch_KiKu",				// 14
+        "Japanese/IsIgnorePunctuation",			// 15
+        "Japanese/IsIgnoreWhitespace",			// 16
+        "Japanese/IsIgnoreProlongedSoundMark",	// 17
+        "Japanese/IsIgnoreMiddleDot"			// 18
     };
 
     const int nCount = SAL_N_ELEMENTS( aTranslitNames );
     Sequence< ::rtl::OUString > aNames( nCount );
     ::rtl::OUString* pNames = aNames.getArray();
-    for (sal_Int32 i = 0;  i < nCount;  ++i)
+    for (INT32 i = 0;  i < nCount;  ++i)
         pNames[i] = ::rtl::OUString::createFromAscii( aTranslitNames[i] );
 
     return aNames;
@@ -112,7 +112,7 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
 SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
-    ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFG_ROOT_NODE )) ),
+    ConfigItem( ::rtl::OUString::createFromAscii( CFG_ROOT_NODE ) ),
 
     aSearchOpt      (   SearchAlgorithms_ABSOLUTE,
                         SearchFlags::LEV_RELAXED,
@@ -121,25 +121,25 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
                           Locale(),
                           2, 2, 2,
                           TransliterationModules_IGNORE_CASE ),
-    eFamily         ( SFX_STYLE_FAMILY_PARA ),
-    nCommand        ( 0 ),
-    nCellType       ( SVX_SEARCHIN_FORMULA ),
-    nAppFlag        ( SVX_SEARCHAPP_WRITER ),
-    bRowDirection   ( sal_True ),
-    bAllTables      ( sal_False ),
+    eFamily			( SFX_STYLE_FAMILY_PARA ),
+    nCommand		( 0 ),
+    nCellType		( SVX_SEARCHIN_FORMULA ),
+    nAppFlag		( SVX_SEARCHAPP_WRITER ),
+    bRowDirection	( sal_True ),
+    bAllTables		( sal_False ),
     bSearchFiltered   ( sal_False ),
-    bNotes          ( sal_False),
-    bBackward       ( sal_False ),
-    bPattern        ( sal_False ),
-    bContent        ( sal_False ),
-    bAsianOptions   ( sal_False )
+    bNotes			( sal_False),
+    bBackward		( sal_False ),
+    bPattern		( sal_False ),
+    bContent		( sal_False ),
+    bAsianOptions	( FALSE )
 {
     EnableNotification( lcl_GetNotifyNames() );
 
     SvtSearchOptions aOpt;
 
-    bBackward       = aOpt.IsBackwards();
-    bAsianOptions   = aOpt.IsUseAsianOptions();
+    bBackward 		= aOpt.IsBackwards();
+    bAsianOptions	= aOpt.IsUseAsianOptions();
     bNotes = aOpt.IsNotes();
 
     if (aOpt.IsUseRegularExpression())
@@ -149,7 +149,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     if (aOpt.IsWholeWordsOnly())
         aSearchOpt.searchFlag |= SearchFlags::NORM_WORD_ONLY;
 
-    sal_Int32 &rFlags = aSearchOpt.transliterateFlags;
+    INT32 &rFlags = aSearchOpt.transliterateFlags;
 
     if (!aOpt.IsMatchCase())
         rFlags |= TransliterationModules_IGNORE_CASE;
@@ -199,22 +199,22 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
 SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 
-    SfxPoolItem ( rItem ),
-    ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFG_ROOT_NODE )) ),
+    SfxPoolItem	( rItem ),
+    ConfigItem( ::rtl::OUString::createFromAscii( CFG_ROOT_NODE ) ),
 
-    aSearchOpt      ( rItem.aSearchOpt ),
-    eFamily         ( rItem.eFamily ),
-    nCommand        ( rItem.nCommand ),
-    nCellType       ( rItem.nCellType ),
-    nAppFlag        ( rItem.nAppFlag ),
-    bRowDirection   ( rItem.bRowDirection ),
-    bAllTables      ( rItem.bAllTables ),
+    aSearchOpt		( rItem.aSearchOpt ),
+    eFamily			( rItem.eFamily ),
+    nCommand		( rItem.nCommand ),
+    nCellType		( rItem.nCellType ),
+    nAppFlag		( rItem.nAppFlag ),
+    bRowDirection	( rItem.bRowDirection ),
+    bAllTables		( rItem.bAllTables ),
     bSearchFiltered   ( rItem.bSearchFiltered ),
-    bNotes          ( rItem.bNotes),
-    bBackward       ( rItem.bBackward ),
-    bPattern        ( rItem.bPattern ),
-    bContent        ( rItem.bContent ),
-    bAsianOptions   ( rItem.bAsianOptions )
+    bNotes			( rItem.bNotes),
+    bBackward		( rItem.bBackward ),
+    bPattern		( rItem.bPattern ),
+    bContent		( rItem.bContent ),
+    bAsianOptions	( rItem.bAsianOptions )
 {
     EnableNotification( lcl_GetNotifyNames() );
 }
@@ -234,17 +234,17 @@ SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 // -----------------------------------------------------------------------
 
 //! used below
-static sal_Bool operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
+static BOOL operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
 {
-    return rItem1.algorithmType         == rItem2.algorithmType &&
-           rItem1.searchFlag            == rItem2.searchFlag    &&
-           rItem1.searchString          == rItem2.searchString  &&
-           rItem1.replaceString         == rItem2.replaceString &&
-           //rItem1.Locale              == rItem2.Locale        &&
-           rItem1.changedChars          == rItem2.changedChars  &&
-           rItem1.deletedChars          == rItem2.deletedChars  &&
-           rItem1.insertedChars         == rItem2.insertedChars &&
-           rItem1.transliterateFlags    == rItem2.transliterateFlags;
+    return rItem1.algorithmType 		== rItem2.algorithmType	&&
+           rItem1.searchFlag 			== rItem2.searchFlag	&&
+           rItem1.searchString 			== rItem2.searchString	&&
+           rItem1.replaceString 		== rItem2.replaceString	&&
+           //rItem1.Locale 				== rItem2.Locale		&&
+           rItem1.changedChars 			== rItem2.changedChars	&&
+           rItem1.deletedChars 			== rItem2.deletedChars	&&
+           rItem1.insertedChars 		== rItem2.insertedChars	&&
+           rItem1.transliterateFlags	== rItem2.transliterateFlags;
 }
 
 
@@ -252,19 +252,19 @@ int SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
     const SvxSearchItem &rSItem = (SvxSearchItem &) rItem;
-    return ( nCommand       == rSItem.nCommand )        &&
-           ( bBackward      == rSItem.bBackward )       &&
-           ( bPattern       == rSItem.bPattern )        &&
-           ( bContent       == rSItem.bContent )        &&
-           ( eFamily        == rSItem.eFamily )         &&
-           ( bRowDirection  == rSItem.bRowDirection )   &&
-           ( bAllTables     == rSItem.bAllTables )      &&
+    return ( nCommand 		== rSItem.nCommand )		&&
+           ( bBackward 		== rSItem.bBackward )		&&
+           ( bPattern 		== rSItem.bPattern )		&&
+           ( bContent 		== rSItem.bContent )		&&
+           ( eFamily 		== rSItem.eFamily )			&&
+           ( bRowDirection 	== rSItem.bRowDirection )	&&
+           ( bAllTables 	== rSItem.bAllTables )		&&
            ( bSearchFiltered  == rSItem.bSearchFiltered )   &&
-           ( nCellType      == rSItem.nCellType )       &&
-           ( nAppFlag       == rSItem.nAppFlag )        &&
-           ( bAsianOptions  == rSItem.bAsianOptions )   &&
-           ( aSearchOpt     == rSItem.aSearchOpt )      &&
-           ( bNotes         == rSItem.bNotes );
+           ( nCellType 		== rSItem.nCellType )		&&
+           ( nAppFlag 		== rSItem.nAppFlag )		&&
+           ( bAsianOptions	== rSItem.bAsianOptions )	&&
+           ( aSearchOpt     == rSItem.aSearchOpt )		&&
+           ( bNotes			== rSItem.bNotes );
 }
 
 
@@ -273,11 +273,11 @@ int SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 SfxItemPresentation SvxSearchItem::GetPresentation
 (
     SfxItemPresentation ,
-    SfxMapUnit          ,
-    SfxMapUnit          ,
-    XubString&          ,
+    SfxMapUnit			,
+    SfxMapUnit			,
+    XubString& 			,
     const IntlWrapper *
-)   const
+)	const
 {
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -431,7 +431,7 @@ void SvxSearchItem::SetTransliterationFlags( sal_Int32 nFlags )
     aSearchOpt.transliterateFlags = nFlags;
 }
 
-bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -523,7 +523,7 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
 
 // -----------------------------------------------------------------------
 
-bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = false;
@@ -538,12 +538,12 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
                 sal_Int16 nConvertedCount( 0 );
                 for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
                 {
-                    if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_OPTIONS ) ) )
+                    if ( aSeq[i].Name.equalsAscii( SRCH_PARA_OPTIONS ) )
                     {
                         if ( ( aSeq[i].Value >>= aSearchOpt ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_FAMILY ) ) )
+                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_FAMILY ) )
                     {
                         sal_uInt16 nTemp( 0 );
                         if ( ( aSeq[i].Value >>= nTemp ) == sal_True )
@@ -552,52 +552,52 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
                             ++nConvertedCount;
                         }
                     }
-                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_COMMAND ) ) )
+                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_COMMAND ) )
                     {
                         if ( ( aSeq[i].Value >>= nCommand ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_CELLTYPE ) ) )
+                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_CELLTYPE ) )
                     {
                         if ( ( aSeq[i].Value >>= nCellType ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_APPFLAG ) ) )
+                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_APPFLAG ) )
                     {
                         if ( ( aSeq[i].Value >>= nAppFlag ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_ROWDIR ) ) )
+                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_ROWDIR ) )
                     {
                         if ( ( aSeq[i].Value >>= bRowDirection ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_ALLTABLES ) ) )
+                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_ALLTABLES ) )
                     {
                         if ( ( aSeq[i].Value >>= bAllTables ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_SEARCHFILTERED ) ) )
+                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_SEARCHFILTERED ) )
                     {
                         if ( ( aSeq[i].Value >>= bSearchFiltered ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_BACKWARD ) ) )
+                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_BACKWARD ) )
                     {
                         if ( ( aSeq[i].Value >>= bBackward ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_PATTERN ) ) )
+                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_PATTERN ) )
                     {
                         if ( ( aSeq[i].Value >>= bPattern ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_CONTENT ) ) )
+                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_CONTENT ) )
                     {
                         if ( ( aSeq[i].Value >>= bContent ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_ASIANOPT ) ) )
+                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_ASIANOPT ) )
                     {
                         if ( ( aSeq[i].Value >>= bAsianOptions ) == sal_True )
                             ++nConvertedCount;
@@ -661,7 +661,7 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
             break;
         }
         default:
-            OSL_FAIL( "Unknown MemberId" );
+            DBG_ERROR( "Unknown MemberId" );
     }
 
     return bRet;

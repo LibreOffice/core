@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ SfxTabPage* PolarOptionsTabPage::Create( Window* pWindow,const SfxItemSet& rOutA
     return new PolarOptionsTabPage( pWindow, rOutAttrs );
 }
 
-sal_Bool PolarOptionsTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+BOOL PolarOptionsTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     if( m_aAngleDial.IsVisible() )
     {
@@ -80,43 +80,45 @@ sal_Bool PolarOptionsTabPage::FillItemSet( SfxItemSet& rOutAttrs )
     if (m_aCB_IncludeHiddenCells.IsVisible())
         rOutAttrs.Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_aCB_IncludeHiddenCells.IsChecked()));
 
-    return sal_True;
+    return TRUE;
 }
 
 void PolarOptionsTabPage::Reset(const SfxItemSet& rInAttrs)
 {
     const SfxPoolItem *pPoolItem = NULL;
 
-    if (rInAttrs.GetItemState(SCHATTR_STARTING_ANGLE, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    long nTmp;
+    if (rInAttrs.GetItemState(SCHATTR_STARTING_ANGLE, TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
-        long nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
+        nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
+
         m_aAngleDial.SetRotation( nTmp*100 );
     }
     else
     {
-        m_aFL_StartingAngle.Show(sal_False);
-        m_aAngleDial.Show(sal_False);
-        m_aNF_StartingAngle.Show(sal_False);
-        m_aFT_Degrees.Show(sal_False);
+        m_aFL_StartingAngle.Show(FALSE);
+        m_aAngleDial.Show(FALSE);
+        m_aNF_StartingAngle.Show(FALSE);
+        m_aFT_Degrees.Show(FALSE);
     }
-    if (rInAttrs.GetItemState(SCHATTR_CLOCKWISE, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_CLOCKWISE, TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
-        sal_Bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        BOOL bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_aCB_Clockwise.Check(bCheck);
     }
     else
     {
-        m_aCB_Clockwise.Show(sal_False);
+        m_aCB_Clockwise.Show(FALSE);
     }
-    if (rInAttrs.GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
         m_aCB_IncludeHiddenCells.Check(bVal);
     }
     else
     {
-        m_aCB_IncludeHiddenCells.Show(sal_False);
-        m_aFL_PlotOptions.Show(sal_False);
+        m_aCB_IncludeHiddenCells.Show(FALSE);
+        m_aFL_PlotOptions.Show(FALSE);
     }
 }
 

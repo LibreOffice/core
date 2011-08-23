@@ -28,6 +28,8 @@
 PRJ=..$/..
 PRJNAME=writerfilter
 TARGET=resourcemodel
+#LIBTARGET=NO
+#USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -35,7 +37,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/inc$/writerfilter.mk
 
+#CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
+#CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
 CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION
+
 
 # --- Files --------------------------------------------------------
 
@@ -44,17 +49,14 @@ NOOPTFILES= \
     $(SLO)$/qnametostr.obj
 
 SLOFILES= \
-    $(SLO)$/Fraction.obj \
-    $(SLO)$/LoggedResources.obj \
-    $(SLO)$/Protocol.obj \
-    $(SLO)$/ResourceModelHelper.obj \
-    $(SLO)$/TagLogger.obj \
-    $(SLO)$/WW8Analyzer.obj \
-    $(SLO)$/XPathLogger.obj \
     $(SLO)$/qnametostr.obj \
-    $(SLO)$/resourcemodel.obj \
     $(SLO)$/sprmcodetostr.obj \
+    $(SLO)$/resourcemodel.obj \
     $(SLO)$/util.obj \
+    $(SLO)$/TagLogger.obj \
+    $(SLO)$/ResourceModelHelper.obj \
+    $(SLO)$/WW8Analyzer.obj \
+    $(SLO)$/Protocol.obj
 
 SHL1TARGET=$(TARGET)
 
@@ -72,10 +74,6 @@ SHL1STDLIBS=$(SALLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB) \
     $(COMPHELPERLIB)
-
-# .IF "$(DBG_LEVEL)">="2"
-SHL1STDLIBS+= $(LIBXML2LIB)
-# .ENDIF
 
 SHL1IMPLIB=i$(SHL1TARGET)
 SHL1USE_EXPORTS=name

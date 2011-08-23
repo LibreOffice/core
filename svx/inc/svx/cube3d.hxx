@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,12 +54,12 @@ class SVX_DLLPUBLIC E3dCubeObj : public E3dCompoundObject
 {
 private:
     // Parameter
-    basegfx::B3DPoint                   aCubePos;
-    basegfx::B3DVector                  aCubeSize;
-    sal_uInt16                              nSideFlags;
+    basegfx::B3DPoint					aCubePos;
+    basegfx::B3DVector					aCubeSize;
+    UINT16								nSideFlags;
 
     // BOOLeans
-    unsigned                            bPosIsCenter : 1;
+    unsigned							bPosIsCenter : 1;
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
@@ -70,10 +70,10 @@ public:
     E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, const basegfx::B3DVector& r3DSize);
     E3dCubeObj();
 
-    virtual sal_uInt16 GetObjIdentifier() const;
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual UINT16 GetObjIdentifier() const;
+    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
-    virtual E3dCubeObj* Clone() const;
+    virtual void operator=(const SdrObject&);
 
     // Set local parameters with geometry recreation
     void SetCubePos(const basegfx::B3DPoint& rNew);
@@ -82,17 +82,17 @@ public:
     void SetCubeSize(const basegfx::B3DVector& rNew);
     const basegfx::B3DVector& GetCubeSize() { return aCubeSize; }
 
-    void SetPosIsCenter(sal_Bool bNew);
-    sal_Bool GetPosIsCenter() { return (sal_Bool)bPosIsCenter; }
+    void SetPosIsCenter(BOOL bNew);
+    BOOL GetPosIsCenter() { return (BOOL)bPosIsCenter; }
 
-    void SetSideFlags(sal_uInt16 nNew);
-    sal_uInt16 GetSideFlags() { return nSideFlags; }
+    void SetSideFlags(UINT16 nNew);
+    UINT16 GetSideFlags() { return nSideFlags; }
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 };
 
-#endif          // _E3D_CUBE3D_HXX
+#endif			// _E3D_CUBE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,12 +30,10 @@
 
 #if OOX_INCLUDE_DUMPER
 
+using ::rtl::OUString;
+
 namespace oox {
 namespace dump {
-
-// ============================================================================
-
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -244,13 +242,13 @@ void DffStreamObject::dumpDffOpt()
             {
                 const ItemFormat& rItemFmt = aIt->second;
                 aName = rItemFmt.maItemName;
-                if( rItemFmt.maListName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "binary" ) ) )
+                if( rItemFmt.maListName.equalsAscii( "binary" ) )
                     eType = PROPTYPE_BINARY;
-                else if( rItemFmt.maListName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "string" ) ) )
+                else if( rItemFmt.maListName.equalsAscii( "string" ) )
                     eType = PROPTYPE_STRING;
-                else if( rItemFmt.maListName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "blip" ) ) )
+                else if( rItemFmt.maListName.equalsAscii( "blip" ) )
                     eType = PROPTYPE_BLIP;
-                else if( rItemFmt.maListName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "colorarray" ) ) )
+                else if( rItemFmt.maListName.equalsAscii( "colorarray" ) )
                     eType = PROPTYPE_COLORARRAY;
             }
             aPropInfos.push_back( PropInfo( aName( "property-data" ), eType, nBaseId, nValue ) );

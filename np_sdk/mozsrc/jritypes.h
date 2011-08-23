@@ -14,7 +14,7 @@
  *
  * The Original Code is mozilla.org code.
  *
- * The Initial Developer of the Original Code is
+ * The Initial Developer of the Original Code is 
  * Netscape Communications Corporation.
  * Portions created by the Initial Developer are Copyright (C) 1998
  * the Initial Developer. All Rights Reserved.
@@ -22,7 +22,7 @@
  * Contributor(s):
  *
  * Alternatively, the contents of this file may be used under the terms of
- * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * either the GNU General Public License Version 2 or later (the "GPL"), or 
  * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
  * in which case the provisions of the GPL or the LGPL are applicable instead
  * of those above. If you wish to allow use of your version of this file only
@@ -57,42 +57,42 @@ extern "C" {
 
 struct JRIEnvInterface;
 
-typedef void*       JRIRef;
-typedef void*       JRIGlobalRef;
+typedef void*		JRIRef;
+typedef void*		JRIGlobalRef;
 
-typedef jint        JRIFieldID;
-typedef jint        JRIMethodID;
+typedef jint		JRIFieldID;
+typedef jint		JRIMethodID;
 
 /* synonyms: */
-typedef JRIGlobalRef    jglobal;
+typedef JRIGlobalRef	jglobal;
 
 typedef union JRIValue {
-    jbool           z;
-    jbyte           b;
-    jchar           c;
-    jshort          s;
-    jint            i;
-    jlong           l;
-    jfloat          f;
-    jdouble         d;
-    jref            r;
+    jbool			z;
+    jbyte			b;
+    jchar			c;
+    jshort			s;
+    jint			i;
+    jlong			l;
+    jfloat			f;
+    jdouble			d;
+    jref			r;
 } JRIValue;
 
 typedef enum JRIBoolean {
-    JRIFalse        = 0,
-    JRITrue         = 1
+    JRIFalse		= 0,
+    JRITrue			= 1
 } JRIBoolean;
 
 typedef enum JRIConstant {
-    JRIUninitialized    = -1
+    JRIUninitialized	= -1
 } JRIConstant;
 
 /* convenience types (these must be distinct struct types for c++ overloading): */
 
-typedef struct jstringArrayStruct*      jstringArray;
-typedef struct jarrayArrayStruct*       jarrayArray;
+typedef struct jstringArrayStruct*		jstringArray;
+typedef struct jarrayArrayStruct*		jarrayArray;
 
-#define JRIConstructorMethodName    "<init>"
+#define JRIConstructorMethodName	"<init>"
 
 /*******************************************************************************
  * Signature Construction Macros
@@ -103,29 +103,29 @@ typedef struct jarrayArrayStruct*       jarrayArray;
 ** are a little easier to remember than the single character they correspond to.
 ** For example, to specify the signature of the method:
 **
-**  public int read(byte b[], int off, int len);
+**	public int read(byte b[], int off, int len);
 **
 ** you could write something like this in C:
 **
-**  char* readSig = JRISigMethod(JRISigArray(JRISigByte)
-**                               JRISigInt
-**                               JRISigInt) JRISigInt;
+**	char* readSig = JRISigMethod(JRISigArray(JRISigByte)
+**								 JRISigInt
+**								 JRISigInt) JRISigInt;
 **
 ** Of course, don't put commas between the types.
 */
-#define JRISigArray(T)      "[" T
-#define JRISigByte          "B"
-#define JRISigChar          "C"
-#define JRISigClass(name)   "L" name ";"
-#define JRISigFloat         "F"
-#define JRISigDouble        "D"
-#define JRISigMethod(args)  "(" args ")"
-#define JRISigNoArgs        ""
-#define JRISigInt           "I"
-#define JRISigLong          "J"
-#define JRISigShort         "S"
-#define JRISigVoid          "V"
-#define JRISigBoolean       "Z"
+#define JRISigArray(T)		"[" T
+#define JRISigByte			"B"
+#define JRISigChar			"C"
+#define JRISigClass(name)	"L" name ";"
+#define JRISigFloat			"F"
+#define JRISigDouble		"D"
+#define JRISigMethod(args)	"(" args ")"
+#define JRISigNoArgs		""
+#define JRISigInt			"I"
+#define JRISigLong			"J"
+#define JRISigShort			"S"
+#define JRISigVoid			"V"
+#define JRISigBoolean		"Z"
 
 /*******************************************************************************
  * Environments
@@ -146,53 +146,53 @@ JRI_GetCurrentEnv(void);
 ** passing them to a native method.
 */
 
-#define JRI_NewByteArray(env, length, initialValues)    \
+#define JRI_NewByteArray(env, length, initialValues)	\
     JRI_NewScalarArray(env, length, JRISigByte, (jbyte*)(initialValues))
-#define JRI_GetByteArrayLength(env, array)  \
+#define JRI_GetByteArrayLength(env, array)	\
     JRI_GetScalarArrayLength(env, array)
-#define JRI_GetByteArrayElements(env, array)    \
+#define JRI_GetByteArrayElements(env, array)	\
     JRI_GetScalarArrayElements(env, array)
 
-#define JRI_NewCharArray(env, length, initialValues)    \
+#define JRI_NewCharArray(env, length, initialValues)	\
     JRI_NewScalarArray(env, ((length) * sizeof(jchar)), JRISigChar, (jbyte*)(initialValues))
-#define JRI_GetCharArrayLength(env, array)  \
+#define JRI_GetCharArrayLength(env, array)	\
     JRI_GetScalarArrayLength(env, array)
-#define JRI_GetCharArrayElements(env, array)           \
+#define JRI_GetCharArrayElements(env, array)		   \
     ((jchar*)JRI_GetScalarArrayElements(env, array))
 
-#define JRI_NewShortArray(env, length, initialValues)   \
+#define JRI_NewShortArray(env, length, initialValues)	\
     JRI_NewScalarArray(env, ((length) * sizeof(jshort)), JRISigShort, (jbyte*)(initialValues))
-#define JRI_GetShortArrayLength(env, array) \
+#define JRI_GetShortArrayLength(env, array)	\
     JRI_GetScalarArrayLength(env, array)
-#define JRI_GetShortArrayElements(env, array)          \
+#define JRI_GetShortArrayElements(env, array)		   \
     ((jshort*)JRI_GetScalarArrayElements(env, array))
 
-#define JRI_NewIntArray(env, length, initialValues) \
+#define JRI_NewIntArray(env, length, initialValues)	\
     JRI_NewScalarArray(env, ((length) * sizeof(jint)), JRISigInt, (jbyte*)(initialValues))
-#define JRI_GetIntArrayLength(env, array)   \
+#define JRI_GetIntArrayLength(env, array)	\
     JRI_GetScalarArrayLength(env, array)
-#define JRI_GetIntArrayElements(env, array)        \
+#define JRI_GetIntArrayElements(env, array)		   \
     ((jint*)JRI_GetScalarArrayElements(env, array))
 
-#define JRI_NewLongArray(env, length, initialValues)    \
+#define JRI_NewLongArray(env, length, initialValues)	\
     JRI_NewScalarArray(env, ((length) * sizeof(jlong)), JRISigLong, (jbyte*)(initialValues))
-#define JRI_GetLongArrayLength(env, array)  \
+#define JRI_GetLongArrayLength(env, array)	\
     JRI_GetScalarArrayLength(env, array)
-#define JRI_GetLongArrayElements(env, array)           \
+#define JRI_GetLongArrayElements(env, array)		   \
     ((jlong*)JRI_GetScalarArrayElements(env, array))
 
-#define JRI_NewFloatArray(env, length, initialValues)   \
+#define JRI_NewFloatArray(env, length, initialValues)	\
     JRI_NewScalarArray(env, ((length) * sizeof(jfloat)), JRISigFloat, (jbyte*)(initialValues))
-#define JRI_GetFloatArrayLength(env, array) \
+#define JRI_GetFloatArrayLength(env, array)	\
     JRI_GetScalarArrayLength(env, array)
-#define JRI_GetFloatArrayElements(env, array)          \
+#define JRI_GetFloatArrayElements(env, array)		   \
     ((jfloat*)JRI_GetScalarArrayElements(env, array))
 
-#define JRI_NewDoubleArray(env, length, initialValues)  \
+#define JRI_NewDoubleArray(env, length, initialValues)	\
     JRI_NewScalarArray(env, ((length) * sizeof(jdouble)), JRISigDouble, (jbyte*)(initialValues))
-#define JRI_GetDoubleArrayLength(env, array)    \
+#define JRI_GetDoubleArrayLength(env, array)	\
     JRI_GetScalarArrayLength(env, array)
-#define JRI_GetDoubleArrayElements(env, array)         \
+#define JRI_GetDoubleArrayElements(env, array)		   \
     ((jdouble*)JRI_GetScalarArrayElements(env, array))
 
 /******************************************************************************/
@@ -212,7 +212,7 @@ typedef union JRI_JDK_stack_item {
     unsigned char *addr;
 #ifdef IS_64
     double         d;
-    long           l;       /* == 64bits! */
+    long           l;		/* == 64bits! */
 #endif
 } JRI_JDK_stack_item;
 

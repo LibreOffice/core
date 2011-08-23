@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@ namespace connectivity
     //**************************************************************
     class java_lang_Exception : public java_lang_Throwable{
     protected:
-    // statis Data for the class
+    // statische Daten fuer die Klasse
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
         virtual ~java_lang_Exception();
-        // a Constructor, that is needed for when Returning the Object is needed:
+        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_lang_Exception( JNIEnv * pEnv, jobject myObj ) : java_lang_Throwable( pEnv, myObj ){}
 
     };

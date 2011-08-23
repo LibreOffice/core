@@ -1,10 +1,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: retypepassdlg.src,v $
+ * $Revision: 1.1.2.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +32,6 @@
 
 ModalDialog RID_SCDLG_TEXT_IMPORT_OPTIONS
 {
-    HelpID = "sc:ModalDialog:RID_SCDLG_TEXT_IMPORT_OPTIONS";
     Text [ en-US ] = "Import Options" ;
     Size = MAP_APPFONT ( 230 , 101 ) ;
     Moveable = TRUE ;
@@ -60,32 +62,29 @@ ModalDialog RID_SCDLG_TEXT_IMPORT_OPTIONS
         Pos = MAP_APPFONT( 6, 3 ) ;
         Size = MAP_APPFONT( 165, 14 ) ;
 
-        Text [ en-US ] = "Select the language to use for import" ;
+        Text [ en-US ] = "Select the language to use for import" ; 
     };
 
     RadioButton RB_AUTOMATIC
     {
-        HelpID = "sc:RadioButton:RID_SCDLG_TEXT_IMPORT_OPTIONS:RB_AUTOMATIC";
         Pos = MAP_APPFONT( 12, 20 ) ;
         Size = MAP_APPFONT( 159, 10 ) ;
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Automatic" ;
+        Text [ en-US ] = "Automatic" ; 
     };
 
     RadioButton RB_CUSTOM
     {
-        HelpID = "sc:RadioButton:RID_SCDLG_TEXT_IMPORT_OPTIONS:RB_CUSTOM";
         Pos = MAP_APPFONT( 12, 34 ) ;
         Size = MAP_APPFONT( 159, 10 ) ;
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Custom" ;
+        Text [ en-US ] = "Custom" ; 
     };
 
     ListBox LB_CUSTOM_LANG
     {
-        HelpID = "sc:ListBox:RID_SCDLG_TEXT_IMPORT_OPTIONS:LB_CUSTOM_LANG";
         Pos = MAP_APPFONT( 20, 50 ) ;
         Size = MAP_APPFONT( 140, 120 ) ;
         TabStop = TRUE ;
@@ -102,10 +101,10 @@ ModalDialog RID_SCDLG_TEXT_IMPORT_OPTIONS
 
     CheckBox BTN_CONVERT_DATE
     {
-        HelpID = "sc:CheckBox:RID_SCDLG_TEXT_IMPORT_OPTIONS:BTN_CONVERT_DATE";
         Pos = MAP_APPFONT( 12, 86 );
         Size = MAP_APPFONT( 159, 10 );
         TabStop = TRUE ;
         Text [ en-US ] = "Detect special numbers (such as dates)." ;
     };
 };
+

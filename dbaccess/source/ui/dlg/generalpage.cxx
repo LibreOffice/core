@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,6 @@
 #include "UITools.hxx"
 #include <comphelper/processfactory.hxx>
 #include <unotools/confignode.hxx>
-#include <osl/diagnose.h>
 
 //.........................................................................
 namespace dbaui
@@ -78,14 +77,14 @@ namespace dbaui
         ,m_aFT_DocListLabel             (this, ModuleRes(FT_DOCLISTLABEL))
         ,m_pLB_DocumentList             ( new OpenDocumentListBox( this, "com.sun.star.sdb.OfficeDatabaseDocument", ModuleRes( LB_DOCUMENTLIST ) ) )
         ,m_aPB_OpenDocument             (this, "com.sun.star.sdb.OfficeDatabaseDocument", ModuleRes(PB_OPENDOCUMENT))
-        ,m_aTypePreLabel                (this, ModuleRes(FT_DATASOURCETYPE_PRE))
-        ,m_aDatasourceTypeLabel         (this, ModuleRes(FT_DATATYPE))
-        ,m_pDatasourceType              ( new ListBox(this, ModuleRes(LB_DATATYPE)))
+        ,m_aTypePreLabel		        (this, ModuleRes(FT_DATASOURCETYPE_PRE))
+        ,m_aDatasourceTypeLabel	        (this, ModuleRes(FT_DATATYPE))
+        ,m_pDatasourceType		        ( new ListBox(this, ModuleRes(LB_DATATYPE)))
         ,m_aFTDataSourceAppendix        (this, ModuleRes(FT_DATATYPEAPPENDIX))
-        ,m_aTypePostLabel               (this, ModuleRes(FT_DATASOURCETYPE_POST))
-        ,m_aSpecialMessage              (this, ModuleRes(FT_SPECIAL_MESSAGE))
+        ,m_aTypePostLabel		        (this, ModuleRes(FT_DATASOURCETYPE_POST))
+        ,m_aSpecialMessage		        (this, ModuleRes(FT_SPECIAL_MESSAGE))
         ,m_DBWizardMode                 (_bDBWizardMode)
-        ,m_sMySQLEntry                  (ModuleRes(STR_MYSQLENTRY))
+        ,m_sMySQLEntry					(ModuleRes(STR_MYSQLENTRY))
         ,m_eOriginalCreationMode        (eCreateNew)
         ,m_pCollection                  (NULL)
         ,m_eNotSupportedKnownType       ( ::dbaccess::DST_UNKNOWN)
@@ -101,12 +100,12 @@ namespace dbaui
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rItems.GetItem(DSID_TYPECOLLECTION));
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
-        OSL_ENSURE(m_pCollection, "OGeneralPage::OGeneralPage : really need a DSN type collection !");
+        DBG_ASSERT(m_pCollection, "OGeneralPage::OGeneralPage : really need a DSN type collection !");
 
         // If no driver for embedded DBs is installed, and no dBase driver, then hide the "Create new database" option
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
-            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:")) );
+            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString::createFromAscii( "sdbc:dbase:" ) );
         bool bHideCreateNew = ( nCreateNewDBIndex == -1 );
 
         // also, if our application policies tell us to hide the option, do it
@@ -191,16 +190,16 @@ namespace dbaui
                 DisplayedTypes aDisplayedTypes;
 
                 ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
-                for (   ::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
+                for (	::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
                         aTypeLoop != aEnd;
                         ++aTypeLoop
                     )
                 {
                     const ::rtl::OUString sURLPrefix = aTypeLoop.getURLPrefix();
                     if ( sURLPrefix.getLength() )
-                    {
+                    {    				
                         String sDisplayName = aTypeLoop.getDisplayName();
-                        if (   m_pDatasourceType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND
+                        if (   m_pDatasourceType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND 
                             && approveDataSourceType( sURLPrefix, sDisplayName ) )
                         {
                             aDisplayedTypes.push_back( DisplayedTypes::value_type( sURLPrefix, sDisplayName ) );
@@ -214,7 +213,7 @@ namespace dbaui
                         ++loop
                     )
                     insertDatasourceTypeEntryData( loop->eType, loop->sDisplayName );
-            }
+            } // if ( m_pCollection )
         }
     }
 
@@ -361,8 +360,8 @@ namespace dbaui
             // collect some items and some values
             SFX_ITEMSET_GET(_rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True);
             SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
-            OSL_ENSURE(pUrlItem, "OGeneralPage::implInitControls : missing the type attribute !");
-            OSL_ENSURE(pNameItem, "OGeneralPage::implInitControls : missing the type attribute !");
+            DBG_ASSERT(pUrlItem, "OGeneralPage::implInitControls : missing the type attribute !");
+            DBG_ASSERT(pNameItem, "OGeneralPage::implInitControls : missing the type attribute !");
             sName = pNameItem->GetValue();
             sConnectURL = pUrlItem->GetValue();
         }
@@ -384,9 +383,9 @@ namespace dbaui
         if  (   approveDataSourceType( m_eCurrentSelection, sDisplayName )
             &&  ( LISTBOX_ENTRY_NOTFOUND == m_pDatasourceType->GetEntryPos( sDisplayName ) )
             )
-        {   // this indicates it's really a type which is known in general, but not supported on the current platform
+        {	// this indicates it's really a type which is known in general, but not supported on the current platform
             // show a message saying so
-            //  eSpecialMessage = smUnsupportedType;
+            //	eSpecialMessage = smUnsupportedType;
             insertDatasourceTypeEntryData(m_eCurrentSelection, sDisplayName);
             // remember this type so we can show the special message again if the user selects this
             // type again (without changing the data source)
@@ -480,7 +479,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    SfxTabPage* OGeneralPage::Create(Window* _pParent, const SfxItemSet& _rAttrSet, sal_Bool _bWizardMode)
+    SfxTabPage*	OGeneralPage::Create(Window* _pParent, const SfxItemSet& _rAttrSet, sal_Bool _bWizardMode)
     {
            return ( new OGeneralPage( _pParent, _rAttrSet, _bWizardMode ) );
     }
@@ -505,7 +504,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    sal_Bool OGeneralPage::FillItemSet(SfxItemSet& _rCoreAttrs)
+    BOOL OGeneralPage::FillItemSet(SfxItemSet& _rCoreAttrs)
     {
         sal_Bool bChangedSomething = sal_False;
 
@@ -530,7 +529,7 @@ namespace dbaui
 
         if ( bCommitTypeSelection )
         {
-            sal_uInt16 nEntry = m_pDatasourceType->GetSelectEntryPos();
+            USHORT nEntry = m_pDatasourceType->GetSelectEntryPos();
             ::rtl::OUString sURLPrefix = m_aURLPrefixes[nEntry];
             if (m_DBWizardMode)
             {
@@ -608,6 +607,7 @@ namespace dbaui
         const SfxFilter* pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {
+//			aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
             aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
         if ( aFileDlg.Execute() == ERRCODE_NONE )
@@ -632,7 +632,7 @@ namespace dbaui
     }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

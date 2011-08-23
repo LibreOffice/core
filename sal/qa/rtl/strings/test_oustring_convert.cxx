@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include "testshl/simpleheader.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
@@ -50,7 +49,7 @@ private:
 
 } }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::Convert);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test::oustring::Convert, "alltest");
 
 namespace {
 
@@ -162,12 +161,13 @@ void test::oustring::Convert::convertToString()
                   | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR,
               0,
               "" },
-            { { 0x3001,  0xB800 },
-              2,
+            // the next also tests that a short source produces a long target:
+            { { 0xB800 },
+              1,
               RTL_TEXTENCODING_ISO_2022_JP,
               OUSTRING_TO_OSTRING_CVTFLAGS,
-              "\x1b\x24\x42\x21\x22\x1b\x28\x42\x3f",
-              "\x1b\x24\x42\x21\x22\x1b\x28\x42\x3f" },
+              "\x1B(B?",
+              "\x1B(B?" },
             { { 0x0041,0x0100,0x0042 },
               3,
               RTL_TEXTENCODING_ISO_8859_1,

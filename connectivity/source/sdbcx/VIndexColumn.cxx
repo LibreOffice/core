@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,17 +39,17 @@ using namespace ::com::sun::star::uno;
 ::rtl::OUString SAL_CALL OIndexColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.VIndexColumnDescription"));
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.VIndex"));
+        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndexColumnDescription");
+    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndex");
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OIndexColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.IndexDescription"));
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.IndexDescription");
     else
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Index"));
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Index");
 
     return aSupported;
 }
@@ -65,24 +65,24 @@ sal_Bool SAL_CALL OIndexColumn::supportsService( const ::rtl::OUString& _rServic
     return pSupported != pEnd;
 }
 // -----------------------------------------------------------------------------
-OIndexColumn::OIndexColumn(sal_Bool _bCase) : OColumn(_bCase),  m_IsAscending(sal_True)
+OIndexColumn::OIndexColumn(sal_Bool _bCase) : OColumn(_bCase),	m_IsAscending(sal_True)
 {
     construct();
 }
 
 // -------------------------------------------------------------------------
-OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
-                            const ::rtl::OUString&  _Name,
-                            const ::rtl::OUString&  _TypeName,
-                            const ::rtl::OUString&  _DefaultValue,
-                            sal_Int32               _IsNullable,
-                            sal_Int32               _Precision,
-                            sal_Int32               _Scale,
-                            sal_Int32               _Type,
-                            sal_Bool                _IsAutoIncrement,
-                            sal_Bool                _IsRowVersion,
-                            sal_Bool                _IsCurrency,
-                            sal_Bool                _bCase
+OIndexColumn::OIndexColumn(	sal_Bool _IsAscending,
+                            const ::rtl::OUString&	_Name,
+                            const ::rtl::OUString&	_TypeName,
+                            const ::rtl::OUString&	_DefaultValue,
+                            sal_Int32				_IsNullable,
+                            sal_Int32				_Precision,
+                            sal_Int32				_Scale,
+                            sal_Int32				_Type,
+                            sal_Bool				_IsAutoIncrement,
+                            sal_Bool				_IsRowVersion,
+                            sal_Bool				_IsCurrency,
+                            sal_Bool				_bCase
                         ) : OColumn(_Name,
                             _TypeName,
                             _DefaultValue,
@@ -95,7 +95,7 @@ OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
                             _IsRowVersion,
                             _IsCurrency,
                             _bCase)
-                        ,   m_IsAscending(_IsAscending)
+                        ,	m_IsAscending(_IsAscending)
 {
     construct();
 }
@@ -113,7 +113,7 @@ OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
 void OIndexColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING), PROPERTY_ID_ISASCENDING,    nAttrib,&m_IsAscending, ::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING),	PROPERTY_ID_ISASCENDING,	nAttrib,&m_IsAscending,	::getBooleanCppuType());
 }
 // -----------------------------------------------------------------------------
 

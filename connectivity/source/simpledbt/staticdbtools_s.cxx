@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_connectivity.hxx"
 #include <connectivity/virtualdbtools.hxx>
 #include "staticdbtools_s.hxx"
-#include "connectivity/dbconversion.hxx"
+#include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 
@@ -62,23 +62,23 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    double ODataAccessStaticTools::getValue(const Reference< XColumn>& _rxVariant, const Date& rNullDate ) const
+    double ODataAccessStaticTools::getValue(const Reference< XColumn>& _rxVariant, const Date& rNullDate, sal_Int16 nKeyType) const
     {
-        return ::dbtools::DBTypeConversion::getValue( _rxVariant, rNullDate );
+        return ::dbtools::DBTypeConversion::getValue(_rxVariant, rNullDate, nKeyType);
     }
 
     //----------------------------------------------------------------
-    ::rtl::OUString ODataAccessStaticTools::getFormattedValue(const Reference< XColumn >& _rxColumn, const Reference< XNumberFormatter >& _rxFormatter,
+    ::rtl::OUString ODataAccessStaticTools::getValue(const Reference< XColumn >& _rxColumn, const Reference< XNumberFormatter >& _rxFormatter,
         const Date& _rNullDate, sal_Int32 _nKey, sal_Int16 _nKeyType) const
     {
-        return ::dbtools::DBTypeConversion::getFormattedValue(_rxColumn, _rxFormatter, _rNullDate, _nKey, _nKeyType);
+        return ::dbtools::DBTypeConversion::getValue(_rxColumn, _rxFormatter, _rNullDate, _nKey, _nKeyType);
     }
 
     //----------------------------------------------------------------
-    ::rtl::OUString ODataAccessStaticTools::getFormattedValue( const Reference< XPropertySet>& _rxColumn, const Reference< XNumberFormatter>& _rxFormatter,
+    ::rtl::OUString ODataAccessStaticTools::getValue( const Reference< XPropertySet>& _rxColumn, const Reference< XNumberFormatter>& _rxFormatter,
         const Locale& _rLocale, const Date& _rNullDate ) const
     {
-        return ::dbtools::DBTypeConversion::getFormattedValue( _rxColumn, _rxFormatter, _rLocale, _rNullDate );
+        return ::dbtools::DBTypeConversion::getValue( _rxColumn, _rxFormatter, _rLocale, _rNullDate );
     }
 
     //----------------------------------------------------------------
@@ -109,7 +109,7 @@ namespace connectivity
 
     // ------------------------------------------------
     Reference< XConnection> ODataAccessStaticTools::getRowSetConnection(
-                const Reference< XRowSet>& _rxRowSet)
+                const Reference< XRowSet>& _rxRowSet) 
                 const SAL_THROW ( (RuntimeException) )
     {
         return ::dbtools::getConnection(_rxRowSet);
@@ -208,7 +208,7 @@ namespace connectivity
     }
 
 //........................................................................
-}   // namespace connectivity
+}	// namespace connectivity
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

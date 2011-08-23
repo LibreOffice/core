@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,8 +28,13 @@
 #ifndef __com_sun_star_sheet_TableFilterField_idl__
 #define __com_sun_star_sheet_TableFilterField_idl__
 
+#ifndef __com_sun_star_sheet_FilterConnection_idl__
 #include <com/sun/star/sheet/FilterConnection.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_FilterOperator_idl__
 #include <com/sun/star/sheet/FilterOperator.idl>
+#endif
 
 //=============================================================================
 
@@ -39,7 +44,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** describes a single condition in a filter descriptor.
 
-    @see SheetFilterDescriptor
+    @see com::sun::star::sheet::SheetFilterDescriptor
  */
 published struct TableFilterField
 {
@@ -47,7 +52,7 @@ published struct TableFilterField
 
     /** specifies how the condition is connected to the previous condition.
      */
-    FilterConnection Connection;
+    com::sun::star::sheet::FilterConnection Connection;
 
     //-------------------------------------------------------------------------
 
@@ -59,7 +64,7 @@ published struct TableFilterField
 
     /** specifies the type of the condition.
      */
-    FilterOperator Operator;
+    com::sun::star::sheet::FilterOperator Operator;
 
     //-------------------------------------------------------------------------
 

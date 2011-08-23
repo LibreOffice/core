@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,17 +30,17 @@
 #define __FRAMEWORK_UIELEMENT_STATUSBAR_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <uielement/statusbarmanager.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #include <vcl/status.hxx>
@@ -57,7 +57,7 @@ class FrameworkStatusBar : public StatusBar
         virtual ~FrameworkStatusBar();
 
         void         SetStatusBarManager( StatusBarManager* pStatusBarManager );
-
+        
         virtual void StateChanged( StateChangedType nType );
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
         virtual void UserDraw(const UserDrawEvent& rUDEvt);
@@ -67,8 +67,8 @@ class FrameworkStatusBar : public StatusBar
         virtual void MouseButtonUp( const MouseEvent& rMEvt );
 
     private:
-        StatusBarManager*       m_pMgr;
-        sal_Bool                m_bShow : 1,
+        StatusBarManager*	    m_pMgr;
+        sal_Bool				m_bShow : 1,
                                 m_bLock : 1;
 };
 

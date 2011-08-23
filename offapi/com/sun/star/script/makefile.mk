@@ -51,8 +51,7 @@ IDLFILES=\
 	XLibraryQueryExecutable.idl \
     ModuleSizeExceededRequest.idl\
     ModuleInfo.idl\
-    ModuleType.idl\
-    NativeObjectWrapper.idl
+    ModuleType.idl
 
 # ------------------------------------------------------------------
 

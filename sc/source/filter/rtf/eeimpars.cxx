@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,8 +85,8 @@ ScEEImport::ScEEImport( ScDocument* pDocP, const ScRange& rRange ) :
     const ScPatternAttr* pPattern = mpDoc->GetPattern(
         maRange.aStart.Col(), maRange.aStart.Row(), maRange.aStart.Tab() );
     mpEngine = new ScTabEditEngine( *pPattern, mpDoc->GetEditPool() );
-    mpEngine->SetUpdateMode( false );
-    mpEngine->EnableUndo( false );
+    mpEngine->SetUpdateMode( FALSE );
+    mpEngine->EnableUndo( FALSE );
 }
 
 
@@ -99,9 +99,9 @@ ScEEImport::~ScEEImport()
 }
 
 
-sal_uLong ScEEImport::Read( SvStream& rStream, const String& rBaseURL )
+ULONG ScEEImport::Read( SvStream& rStream, const String& rBaseURL )
 {
-    sal_uLong nErr = mpParser->Read( rStream, rBaseURL );
+    ULONG nErr = mpParser->Read( rStream, rBaseURL );
 
     SCCOL nEndCol;
     SCROW nEndRow;
@@ -128,11 +128,11 @@ sal_uLong ScEEImport::Read( SvStream& rStream, const String& rBaseURL )
 }
 
 
-void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
+void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
     ScProgress* pProgress = new ScProgress( mpDoc->GetDocumentShell(),
-        ScGlobal::GetRscString( STR_LOAD_DOC ), mpParser->ListSize() );
-    sal_uLong nProgress = 0;
+        ScGlobal::GetRscString( STR_LOAD_DOC ), mpParser->Count() );
+    ULONG nProgress = 0;
 
     SCCOL nStartCol, nEndCol;
         SCROW nStartRow, nEndRow;
@@ -147,7 +147,7 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
     nOverlapRowMax = 0;
     nMergeColAdd = 0;
     nLastMergedRow = SCROW_MAX;
-    sal_Bool bHasGraphics = false;
+    BOOL bHasGraphics = FALSE;
     ScEEParseEntry* pE;
     if (!pFormatter)
         pFormatter = mpDoc->GetFormatTable();
@@ -160,9 +160,8 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
     }
     ScDocumentPool* pDocPool = mpDoc->GetPool();
     ScRangeName* pRangeNames = mpDoc->GetRangeName();
-    for ( size_t i = 0, nListSize = mpParser->ListSize(); i < nListSize; ++i )
+    for ( pE = mpParser->First(); pE; pE = mpParser->Next() )
     {
-        pE = mpParser->ListEntry( i );
         SCROW nRow = nStartRow + pE->nRow;
         if ( nRow != nLastMergedRow )
             nMergeColAdd = 0;
@@ -193,28 +192,28 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
                 aSet.ClearItem( EE_PARA_JUST );
 
             // Testen, ob einfacher String ohne gemischte Attribute
-            sal_Bool bSimple = ( pE->aSel.nStartPara == pE->aSel.nEndPara );
-            for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END && bSimple; nId++)
+            BOOL bSimple = ( pE->aSel.nStartPara == pE->aSel.nEndPara );
+            for (USHORT nId = EE_CHAR_START; nId <= EE_CHAR_END && bSimple; nId++)
             {
                 const SfxPoolItem* pItem = 0;
-                SfxItemState eState = aSet.GetItemState( nId, sal_True, &pItem );
+                SfxItemState eState = aSet.GetItemState( nId, TRUE, &pItem );
                 if (eState == SFX_ITEM_DONTCARE)
-                    bSimple = false;
+                    bSimple = FALSE;
                 else if (eState == SFX_ITEM_SET)
                 {
-                    if ( nId == EE_CHAR_ESCAPEMENT )        // Hoch-/Tiefstellen immer ueber EE
+                    if ( nId == EE_CHAR_ESCAPEMENT )		// Hoch-/Tiefstellen immer ueber EE
                     {
                         if ( (SvxEscapement)((const SvxEscapementItem*)pItem)->GetEnumValue()
                                 != SVX_ESCAPEMENT_OFF )
-                            bSimple = false;
+                            bSimple = FALSE;
                     }
                 }
             }
             if ( bSimple )
-            {   //  Feldbefehle enthalten?
-                SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
+            {	//	Feldbefehle enthalten?
+                SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, FALSE );
                 if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
-                    bSimple = false;
+                    bSimple = FALSE;
             }
 
             // HTML
@@ -223,7 +222,7 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
             sal_uInt32 nNumForm = 0;
             LanguageType eNumLang = LANGUAGE_NONE;
             if ( pE->pNumStr )
-            {   // SDNUM muss sein wenn SDVAL
+            {	// SDNUM muss sein wenn SDVAL
                 aNumStr = *pE->pNumStr;
                 if ( pE->pValStr )
                     aValStr = *pE->pValStr;
@@ -244,64 +243,64 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
             if ( rESet.Count() )
             {
                 const SfxPoolItem* pItem;
-                if ( rESet.GetItemState( ATTR_BACKGROUND, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_BACKGROUND, FALSE, &pItem) == SFX_ITEM_SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_BORDER, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_BORDER, FALSE, &pItem) == SFX_ITEM_SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_SHADOW, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_SHADOW, FALSE, &pItem) == SFX_ITEM_SET )
                     rSet.Put( *pItem );
                 // HTML
-                if ( rESet.GetItemState( ATTR_HOR_JUSTIFY, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_HOR_JUSTIFY, FALSE, &pItem) == SFX_ITEM_SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_VER_JUSTIFY, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_VER_JUSTIFY, FALSE, &pItem) == SFX_ITEM_SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_LINEBREAK, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_LINEBREAK, FALSE, &pItem) == SFX_ITEM_SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_FONT_COLOR, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_FONT_COLOR, FALSE, &pItem) == SFX_ITEM_SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_FONT_UNDERLINE, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_FONT_UNDERLINE, FALSE, &pItem) == SFX_ITEM_SET )
                     rSet.Put( *pItem );
                 // HTML LATIN/CJK/CTL script type dependent
                 const SfxPoolItem* pFont;
-                if ( rESet.GetItemState( ATTR_FONT, false, &pFont) != SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_FONT, FALSE, &pFont) != SFX_ITEM_SET )
                     pFont = 0;
                 const SfxPoolItem* pHeight;
-                if ( rESet.GetItemState( ATTR_FONT_HEIGHT, false, &pHeight) != SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_FONT_HEIGHT, FALSE, &pHeight) != SFX_ITEM_SET )
                     pHeight = 0;
                 const SfxPoolItem* pWeight;
-                if ( rESet.GetItemState( ATTR_FONT_WEIGHT, false, &pWeight) != SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_FONT_WEIGHT, FALSE, &pWeight) != SFX_ITEM_SET )
                     pWeight = 0;
                 const SfxPoolItem* pPosture;
-                if ( rESet.GetItemState( ATTR_FONT_POSTURE, false, &pPosture) != SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_FONT_POSTURE, FALSE, &pPosture) != SFX_ITEM_SET )
                     pPosture = 0;
                 if ( pFont || pHeight || pWeight || pPosture )
                 {
                     String aStr( mpEngine->GetText( pE->aSel ) );
-                    sal_uInt8 nScriptType = mpDoc->GetStringScriptType( aStr );
-                    const sal_uInt8 nScripts[3] = { SCRIPTTYPE_LATIN,
+                    BYTE nScriptType = mpDoc->GetStringScriptType( aStr );
+                    const BYTE nScripts[3] = { SCRIPTTYPE_LATIN,
                         SCRIPTTYPE_ASIAN, SCRIPTTYPE_COMPLEX };
-                    for ( sal_uInt8 j=0; j<3; ++j )
+                    for ( BYTE i=0; i<3; ++i )
                     {
-                        if ( nScriptType & nScripts[j] )
+                        if ( nScriptType & nScripts[i] )
                         {
                             if ( pFont )
                                 rSet.Put( *pFont, ScGlobal::GetScriptedWhichID(
-                                            nScripts[j], ATTR_FONT ));
+                                            nScripts[i], ATTR_FONT ));
                             if ( pHeight )
                                 rSet.Put( *pHeight, ScGlobal::GetScriptedWhichID(
-                                            nScripts[j], ATTR_FONT_HEIGHT ));
+                                            nScripts[i], ATTR_FONT_HEIGHT ));
                             if ( pWeight )
                                 rSet.Put( *pWeight, ScGlobal::GetScriptedWhichID(
-                                            nScripts[j], ATTR_FONT_WEIGHT ));
+                                            nScripts[i], ATTR_FONT_WEIGHT ));
                             if ( pPosture )
                                 rSet.Put( *pPosture, ScGlobal::GetScriptedWhichID(
-                                            nScripts[j], ATTR_FONT_POSTURE ));
+                                            nScripts[i], ATTR_FONT_POSTURE ));
                         }
                     }
                 }
             }
             if ( pE->nColOverlap > 1 || pE->nRowOverlap > 1 )
-            {   // merged cells, mit SfxItemSet Put schneller als mit
+            {	// merged cells, mit SfxItemSet Put schneller als mit
                 // nachtraeglichem ScDocument DoMerge
                 ScMergeAttr aMerge( pE->nColOverlap, pE->nRowOverlap );
                 rSet.Put( aMerge );
@@ -327,7 +326,7 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
             const ScStyleSheet* pStyleSheet =
                 mpDoc->GetPattern( nCol, nRow, nTab )->GetStyleSheet();
             aAttr.SetStyleSheet( (ScStyleSheet*)pStyleSheet );
-            mpDoc->SetPattern( nCol, nRow, nTab, aAttr, sal_True );
+            mpDoc->SetPattern( nCol, nRow, nTab, aAttr, TRUE );
 
             // Daten eintragen
             if (bSimple)
@@ -379,8 +378,8 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
                         pFormatter->ChangeIntl( LANGUAGE_SYSTEM);
                     }
 
-                    //  #105460#, #i4180# String cells can't contain tabs or linebreaks
-                    //  -> replace with spaces
+                    //	#105460#, #i4180# String cells can't contain tabs or linebreaks
+                    //	-> replace with spaces
                     aStr.SearchAndReplaceAll( (sal_Unicode)'\t', (sal_Unicode)' ' );
                     aStr.SearchAndReplaceAll( (sal_Unicode)'\n', (sal_Unicode)' ' );
 
@@ -400,15 +399,16 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
                     mpDoc, mpEngine->GetEditTextObjectPool() ) );
                 delete pObject;
             }
-            if ( pE->maImageList.size() )
+            if ( pE->pImageList )
                 bHasGraphics |= GraphicSize( nCol, nRow, nTab, pE );
             if ( pE->pName )
-            {   // Anchor Name => RangeName
-                if (!pRangeNames->findByName(*pE->pName))
+            {	// Anchor Name => RangeName
+                USHORT nIndex;
+                if ( !pRangeNames->SearchName( *pE->pName, nIndex ) )
                 {
                     ScRangeData* pData = new ScRangeData( mpDoc, *pE->pName,
                         ScAddress( nCol, nRow, nTab ) );
-                    pRangeNames->insert( pData );
+                    pRangeNames->Insert( pData );
                 }
             }
         }
@@ -424,39 +424,37 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
             pProgress->SetState( nProgress, nEndCol - nStartCol + 1 );
             for ( SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++ )
             {
-                sal_uInt16 nWidth = (sal_uInt16)(sal_uLong) pColWidths->Get( nCol );
+                USHORT nWidth = (USHORT)(ULONG) pColWidths->Get( nCol );
                 if ( nWidth )
                     mpDoc->SetColWidth( nCol, nTab, nWidth );
                 pProgress->SetState( ++nProgress );
             }
         }
-        DELETEZ( pProgress );   // SetOptimalHeight hat seinen eigenen ProgressBar
+        DELETEZ( pProgress );	// SetOptimalHeight hat seinen eigenen ProgressBar
         // Zeilenhoehen anpassen, Basis 100% Zoom
         Fraction aZoom( 1, 1 );
         double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom
-            / nOutputFactor;        // Faktor ist Drucker zu Bildschirm
+            / nOutputFactor;		// Faktor ist Drucker zu Bildschirm
         double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
         VirtualDevice aVirtDev;
         mpDoc->SetOptimalHeight( 0, nEndRow, 0,
-            static_cast< sal_uInt16 >( ScGlobal::nLastRowHeightExtra ), &aVirtDev,
-            nPPTX, nPPTY, aZoom, aZoom, false );
+            static_cast< USHORT >( ScGlobal::nLastRowHeightExtra ), &aVirtDev,
+            nPPTX, nPPTY, aZoom, aZoom, FALSE );
         if ( mpRowHeights->Count() )
         {
             for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow++ )
             {
-                sal_uInt16 nHeight = (sal_uInt16)(sal_uLong) mpRowHeights->Get( nRow );
+                USHORT nHeight = (USHORT)(ULONG) mpRowHeights->Get( nRow );
                 if ( nHeight > mpDoc->GetRowHeight( nRow, nTab ) )
                     mpDoc->SetRowHeight( nRow, nTab, nHeight );
             }
         }
     }
     if ( bHasGraphics )
-    {
-        // Grafiken einfuegen
-        for ( size_t i = 0, nListSize = mpParser->ListSize(); i < nListSize; ++i )
+    {	// Grafiken einfuegen
+        for ( pE = mpParser->First(); pE; pE = mpParser->Next() )
         {
-            pE = mpParser->ListEntry( i );
-            if ( !pE->maImageList.empty() )
+            if ( pE->pImageList )
             {
                 SCCOL nCol = pE->nCol;
                 SCROW nRow = pE->nRow;
@@ -470,20 +468,21 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
 }
 
 
-sal_Bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseEntry* pE )
+BOOL ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/,
+        ScEEParseEntry* pE )
 {
-    if ( !pE->maImageList.size() )
-        return false;
-    sal_Bool bHasGraphics = false;
+    ScHTMLImageList* pIL = pE->pImageList;
+    if ( !pIL || !pIL->Count() )
+        return FALSE;
+    BOOL bHasGraphics = FALSE;
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
     long nWidth, nHeight;
     nWidth = nHeight = 0;
     sal_Char nDir = nHorizontal;
-    for ( sal_uInt32 i = 0; i < pE->maImageList.size() ; ++i )
+    for ( ScHTMLImage* pI = pIL->First(); pI; pI = pIL->Next() )
     {
-        ScHTMLImage* pI = &pE->maImageList[ i ];
         if ( pI->pGraphic )
-            bHasGraphics = sal_True;
+            bHasGraphics = TRUE;
         Size aSizePix = pI->aSize;
         aSizePix.Width() += 2 * pI->aSpace.X();
         aSizePix.Height() += 2 * pI->aSpace.Y();
@@ -508,7 +507,7 @@ sal_Bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEPa
         nColWidths += (long) pColWidths->Get( nC );
     }
     if ( nWidth > nColWidths )
-    {   // Differenz nur in der ersten Spalte eintragen
+    {	// Differenz nur in der ersten Spalte eintragen
         if ( nThisWidth )
             pColWidths->Replace( nCol, (void*)(nWidth - nColWidths + nThisWidth) );
         else
@@ -518,7 +517,7 @@ sal_Bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEPa
     SCROW nRowSpan = pE->nRowOverlap;
     nHeight /= nRowSpan;
     if ( nHeight == 0 )
-        nHeight = 1;        // fuer eindeutigen Vergleich
+        nHeight = 1;		// fuer eindeutigen Vergleich
     for ( SCROW nR = nRow; nR < nRow + nRowSpan; nR++ )
     {
         long nRowHeight = (long) mpRowHeights->Get( nR );
@@ -537,7 +536,8 @@ sal_Bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEPa
 void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
         ScEEParseEntry* pE )
 {
-    if ( !pE->maImageList.size() )
+    ScHTMLImageList* pIL = pE->pImageList;
+    if ( !pIL || !pIL->Count() )
         return ;
     ScDrawLayer* pModel = mpDoc->GetDrawLayer();
     if (!pModel)
@@ -556,17 +556,16 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
     Point aSpace;
     Size aLogicSize;
     sal_Char nDir = nHorizontal;
-    for ( sal_uInt32 i = 0; i < pE->maImageList.size(); ++i )
+    for ( ScHTMLImage* pI = pIL->First(); pI; pI = pIL->Next() )
     {
-        ScHTMLImage* pI = &pE->maImageList[ i ];
         if ( nDir & nHorizontal )
-        {   // horizontal
+        {	// horizontal
             aInsertPos.X() += aLogicSize.Width();
             aInsertPos.X() += aSpace.X();
             aInsertPos.Y() = aCellInsertPos.Y();
         }
         else
-        {   // vertikal
+        {	// vertikal
             aInsertPos.X() = aCellInsertPos.X();
             aInsertPos.Y() += aLogicSize.Height();
             aInsertPos.Y() += aSpace.Y();
@@ -577,24 +576,24 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         Size aSizePix = pI->aSize;
         aLogicSize = pDefaultDev->PixelToLogic( aSizePix, MapMode( MAP_100TH_MM ) );
-        //  Groesse begrenzen
+        //	Groesse begrenzen
         ::ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
 
         if ( pI->pGraphic )
         {
             Rectangle aRect ( aInsertPos, aLogicSize );
             SdrGrafObj* pObj = new SdrGrafObj( *pI->pGraphic, aRect );
-            // calling SetGraphicLink here doesn't work
+            // #118522# calling SetGraphicLink here doesn't work
             pObj->SetName( pI->aURL );
 
             pPage->InsertObject( pObj );
 
-            // SetGraphicLink has to be used after inserting the object,
+            // #118522# SetGraphicLink has to be used after inserting the object,
             // otherwise an empty graphic is swapped in and the contact stuff crashes.
             // See #i37444#.
             pObj->SetGraphicLink( pI->aURL, pI->aFilterName );
 
-            pObj->SetLogicRect( aRect );        // erst nach InsertObject !!!
+            pObj->SetLogicRect( aRect );		// erst nach InsertObject !!!
         }
         nDir = pI->nDir;
     }
@@ -605,6 +604,7 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
         pEdit( pEditP ),
         pPool( EditEngine::CreatePool() ),
         pDocPool( new ScDocumentPool ),
+        pList( new ScEEParseList ),
         pColWidths( new Table ),
         nLastToken(0),
         nColCnt(0),
@@ -623,7 +623,9 @@ ScEEParser::~ScEEParser()
 {
     delete pActEntry;
     delete pColWidths;
-    if ( !maList.empty() ) maList.clear();
+    for ( ScEEParseEntry* pE = pList->First(); pE; pE = pList->Next() )
+        delete pE;
+    delete pList;
 
     // Pool erst loeschen nachdem die Listen geloescht wurden
     pPool->SetSecondaryPool( NULL );
@@ -633,7 +635,7 @@ ScEEParser::~ScEEParser()
 
 
 void ScEEParser::NewActEntry( ScEEParseEntry* pE )
-{   // neuer freifliegender pActEntry
+{	// neuer freifliegender pActEntry
     pActEntry = new ScEEParseEntry( pPool );
     pActEntry->aSel.nStartPara = (pE ? pE->aSel.nEndPara + 1 : 0);
     pActEntry->aSel.nStartPos = 0;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace sd {
 #define ATTR_MIXED      1       // Attribut uneindeutig (bei Mehrfachselektion)
 #define ATTR_SET        2       // Attribut eindeutig
 
-#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
+#define ITEMVALUE(ItemSet,Id,Cast)	((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 /*************************************************************************
 |*
@@ -80,13 +80,13 @@ void DrawViewShell::ExecEffectWin( SfxRequest& rReq )
 {
     CheckLineTo (rReq);
 
-    sal_uInt16 nSId = rReq.GetSlot();
+    USHORT nSId = rReq.GetSlot();
 
     switch( nSId )
     {
         case SID_3D_INIT:
         {
-            sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
+            USHORT nId = Svx3DChildWindow::GetChildWindowId();
             SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
             if( pWindow )
             {
@@ -119,7 +119,7 @@ void DrawViewShell::ExecEffectWin( SfxRequest& rReq )
 \************************************************************************/
 void DrawViewShell::Update3DWindow()
 {
-    sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
+    USHORT nId = Svx3DChildWindow::GetChildWindowId();
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
     if( pWindow )
     {
@@ -136,7 +136,7 @@ void DrawViewShell::Update3DWindow()
 
 void DrawViewShell::AssignFrom3DWindow()
 {
-    sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
+    USHORT nId = Svx3DChildWindow::GetChildWindowId();
     SfxChildWindow* pWin = GetViewFrame()->GetChildWindow( nId );
     if( pWin )
     {
@@ -146,7 +146,7 @@ void DrawViewShell::AssignFrom3DWindow()
             if(!GetView()->IsPresObjSelected())
             {
                 SfxItemSet aSet( GetDoc()->GetPool(),
-                    SDRATTR_START,  SDRATTR_END,
+                    SDRATTR_START,	SDRATTR_END,
                     0, 0);
                 p3DWin->GetAttr( aSet );
 
@@ -157,13 +157,13 @@ void DrawViewShell::AssignFrom3DWindow()
                 {
                     // Nur TextAttribute zuweisen
                     SfxItemSet aTextSet( GetDoc()->GetPool(),
-                        EE_ITEMS_START, EE_ITEMS_END, 0 );
-                    aTextSet.Put( aSet, sal_False );
+                        EE_ITEMS_START,	EE_ITEMS_END, 0 );
+                    aTextSet.Put( aSet, FALSE );
                     GetView()->SetAttributes( aTextSet );
 
                     // Text in 3D umwandeln
-                    sal_uInt16 nSId = SID_CONVERT_TO_3D;
-                    SfxBoolItem aItem( nSId, sal_True );
+                    USHORT nSId = SID_CONVERT_TO_3D;
+                    SfxBoolItem aItem( nSId, TRUE );
                     GetViewFrame()->GetDispatcher()->Execute(
                         nSId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 

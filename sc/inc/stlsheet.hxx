@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 
 //------------------------------------------------------------------------
 
-#define SCSTYLEBIT_STANDARD     0x0001
+#define SCSTYLEBIT_STANDARD		0x0001
 
 //------------------------------------------------------------------------
 
@@ -60,17 +60,17 @@ public:
 
                         ScStyleSheet( const ScStyleSheet& rStyle );
 
-    virtual sal_Bool        SetParent        ( const String& rParentName );
-    virtual SfxItemSet& GetItemSet       ();
-    virtual sal_Bool        IsUsed           () const;
-    virtual sal_Bool        HasFollowSupport () const;
-    virtual sal_Bool        HasParentSupport () const;
+    virtual BOOL		SetParent 		 ( const String& rParentName );
+    virtual SfxItemSet& GetItemSet		 ();
+    virtual BOOL		IsUsed			 () const;
+    virtual BOOL		HasFollowSupport () const;
+    virtual BOOL		HasParentSupport () const;
 
     virtual const String& GetName() const;
     virtual const String& GetParent() const;
     virtual const String& GetFollow() const;
 
-    virtual sal_Bool SetName( const String& );
+    virtual BOOL SetName( const String& );
 
             void                SetUsage( ScStyleSheet::Usage eUse ) const
                                     { eUsage = eUse; }
@@ -78,16 +78,16 @@ public:
                                     { return eUsage; }
 
 protected:
-    virtual             ~ScStyleSheet();
+    virtual 			~ScStyleSheet();
 
-                ScStyleSheet( const String&     rName,
-                              ScStyleSheetPool& rPool,
-                              SfxStyleFamily    eFamily,
-                              sal_uInt16            nMask );
+                ScStyleSheet( const String&		rName,
+                              ScStyleSheetPool&	rPool,
+                              SfxStyleFamily	eFamily,
+                              USHORT			nMask );
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
-#endif     // SC_STLSHEET_HXX
+#endif	   // SC_STLSHEET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

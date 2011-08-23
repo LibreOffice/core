@@ -57,11 +57,15 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-#ifndef     _LWPSHADOW_HXX
-#define     _LWPSHADOW_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-13	Created
+ ************************************************************************/
+#ifndef		_LWPSHADOW_HXX
+#define		_LWPSHADOW_HXX
 
-#include    "lwpcolor.hxx"
-#include    "lwptools.hxx"
+#include	"lwpcolor.hxx"
+#include	"lwptools.hxx"
 
 class LwpShadow
 {
@@ -76,9 +80,9 @@ public:
         pStrm->SkipExtra();
     }
 
-    double  GetOffsetX();
+    double	GetOffsetX();
 
-    double  GetOffsetY();
+    double	GetOffsetY();
 
     LwpColor GetColor();
 
@@ -87,18 +91,18 @@ public:
     //end add
 
 private:
-    LwpColor        m_aColor;
-    sal_Int32       m_nDirX;
-    sal_Int32       m_nDirY;
+    LwpColor		m_aColor;
+    sal_Int32		m_nDirX;
+    sal_Int32		m_nDirY;
 };
 
-inline double   LwpShadow::GetOffsetX()
+inline double	LwpShadow::GetOffsetX()
 {
-    //  return 0.102;
+    //	return 0.102;
     return LwpTools::ConvertFromUnitsToMetric(m_nDirX);
 }
 
-inline double   LwpShadow::GetOffsetY()
+inline double	LwpShadow::GetOffsetY()
 {
     return LwpTools::ConvertFromUnitsToMetric(m_nDirY);
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,6 @@
 #pragma warning(pop)
 #endif
 #include <sal/config.h>
-#include <sal/macros.h>
 #include <osl/thread.h>
 #include "securityenvironment_mscryptimpl.hxx"
 
@@ -55,10 +54,12 @@
 #include "xmlsec/keysmngr.h"
 #include "xmlsec/mscrypto/akmngr.h"
 
+//CP : added by CP
 #include <rtl/locale.h>
-#include <osl/nlsupport.h>
+#include <osl/nlsupport.h> 
 #include <osl/process.h>
 
+//CP : end
 #include <rtl/memory.h>
 
 #include "../diagnose.hxx"
@@ -113,10 +114,11 @@ CertErrorToString arErrStrings[] =
 
 void traceTrustStatus(DWORD err)
 {
+    int numErrors = sizeof(arErrStrings) / sizeof(CertErrorToString);
     xmlsec_trace("The certificate error status is: ");
     if (err == 0)
         xmlsec_trace("%s", arErrStrings[0].name);
-    for (int i = 1; i < SAL_N_ELEMENTS(arErrStrings); i++)
+    for (int i = 1; i < numErrors; i++)
     {
         if (arErrStrings[i].error & err)
             xmlsec_trace("%s", arErrStrings[i].name);
@@ -152,24 +154,24 @@ SecurityEnvironment_MSCryptImpl :: ~SecurityEnvironment_MSCryptImpl() {
     if( !m_tSymKeyList.empty()  ) {
         std::list< HCRYPTKEY >::iterator symKeyIt ;
 
-        for( symKeyIt = m_tSymKeyList.begin() ; symKeyIt != m_tSymKeyList.end() ; ++symKeyIt )
+        for( symKeyIt = m_tSymKeyList.begin() ; symKeyIt != m_tSymKeyList.end() ; symKeyIt ++ )
             CryptDestroyKey( *symKeyIt ) ;
     }
 
     if( !m_tPubKeyList.empty()  ) {
         std::list< HCRYPTKEY >::iterator pubKeyIt ;
 
-        for( pubKeyIt = m_tPubKeyList.begin() ; pubKeyIt != m_tPubKeyList.end() ; ++pubKeyIt )
+        for( pubKeyIt = m_tPubKeyList.begin() ; pubKeyIt != m_tPubKeyList.end() ; pubKeyIt ++ )
             CryptDestroyKey( *pubKeyIt ) ;
     }
 
     if( !m_tPriKeyList.empty()  ) {
         std::list< HCRYPTKEY >::iterator priKeyIt ;
 
-        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; ++priKeyIt )
+        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; priKeyIt ++ )
             CryptDestroyKey( *priKeyIt ) ;
     }
-
+    
 }
 
 /* XInitialization */
@@ -202,12 +204,12 @@ Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl :: getSupportedSer
 Sequence< OUString > SecurityEnvironment_MSCryptImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.SecurityEnvironment")) ;
+    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.SecurityEnvironment" ) ;
     return seqServiceNames ;
 }
 
 OUString SecurityEnvironment_MSCryptImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl")) ;
+    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl" ) ;
 }
 
 //Helper for registry
@@ -220,10 +222,10 @@ Reference< XSingleServiceFactory > SecurityEnvironment_MSCryptImpl :: impl_creat
 }
 
 /* XUnoTunnel */
-sal_Int64 SAL_CALL SecurityEnvironment_MSCryptImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier )
+sal_Int64 SAL_CALL SecurityEnvironment_MSCryptImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier ) 
     throw( RuntimeException )
 {
-    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
+    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) { 
         return ( sal_Int64 )this ;
     }
     return 0 ;
@@ -264,6 +266,12 @@ void SecurityEnvironment_MSCryptImpl :: setCryptoProvider( HCRYPTPROV aProv ) th
     }
 
     if( aProv != NULL ) {
+        /*- Replaced by direct adopt for WINNT support ----
+        if( !CryptContextAddRef( aProv, NULL, NULL ) )
+            throw Exception() ;
+        else
+            m_hProv = aProv ;
+        ----*/
         m_hProv = aProv ;
     }
 }
@@ -309,17 +317,21 @@ void SecurityEnvironment_MSCryptImpl :: setCertDb( HCERTSTORE aCertDb ) throw( E
 }
 
 void SecurityEnvironment_MSCryptImpl :: adoptSymKey( HCRYPTKEY aSymKey ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY   symkey ;
+    HCRYPTKEY	symkey ;
     std::list< HCRYPTKEY >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
         //First try to find the key in the list
-        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
+        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; keyIt ++ ) {
             if( *keyIt == aSymKey )
                 return ;
         }
 
         //If we do not find the key in the list, add a new node
+        /*- Replaced with directly adopt for WINNT 4.0 support ----
+        if( !CryptDuplicateKey( aSymKey, NULL, 0, &symkey ) )
+            throw RuntimeException() ;
+        ----*/
         symkey = aSymKey ;
 
         try {
@@ -335,7 +347,7 @@ void SecurityEnvironment_MSCryptImpl :: rejectSymKey( HCRYPTKEY aSymKey ) throw(
     std::list< HCRYPTKEY >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
-        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
+        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; keyIt ++ ) {
             if( *keyIt == aSymKey ) {
                 symkey = *keyIt ;
                 CryptDestroyKey( symkey ) ;
@@ -352,7 +364,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getSymKey( unsigned int position ) 
     unsigned int pos ;
 
     symkey = NULL ;
-    for( pos = 0, keyIt = m_tSymKeyList.begin() ; pos < position && keyIt != m_tSymKeyList.end() ; ++pos , ++keyIt ) ;
+    for( pos = 0, keyIt = m_tSymKeyList.begin() ; pos < position && keyIt != m_tSymKeyList.end() ; pos ++ , keyIt ++ ) ;
 
     if( pos == position && keyIt != m_tSymKeyList.end() )
         symkey = *keyIt ;
@@ -361,17 +373,21 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getSymKey( unsigned int position ) 
 }
 
 void SecurityEnvironment_MSCryptImpl :: adoptPubKey( HCRYPTKEY aPubKey ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY   pubkey ;
+    HCRYPTKEY	pubkey ;
     std::list< HCRYPTKEY >::iterator keyIt ;
 
     if( aPubKey != NULL ) {
         //First try to find the key in the list
-        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
+        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; keyIt ++ ) {
             if( *keyIt == aPubKey )
                 return ;
         }
 
         //If we do not find the key in the list, add a new node
+        /*- Replaced with directly adopt for WINNT 4.0 support ----
+        if( !CryptDuplicateKey( aPubKey, NULL, 0, &pubkey ) )
+            throw RuntimeException() ;
+        ----*/
         pubkey = aPubKey ;
 
         try {
@@ -387,7 +403,7 @@ void SecurityEnvironment_MSCryptImpl :: rejectPubKey( HCRYPTKEY aPubKey ) throw(
     std::list< HCRYPTKEY >::iterator keyIt ;
 
     if( aPubKey != NULL ) {
-        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
+        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; keyIt ++ ) {
             if( *keyIt == aPubKey ) {
                 pubkey = *keyIt ;
                 CryptDestroyKey( pubkey ) ;
@@ -404,7 +420,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPubKey( unsigned int position ) 
     unsigned int pos ;
 
     pubkey = NULL ;
-    for( pos = 0, keyIt = m_tPubKeyList.begin() ; pos < position && keyIt != m_tPubKeyList.end() ; ++pos , ++keyIt ) ;
+    for( pos = 0, keyIt = m_tPubKeyList.begin() ; pos < position && keyIt != m_tPubKeyList.end() ; pos ++ , keyIt ++ ) ;
 
     if( pos == position && keyIt != m_tPubKeyList.end() )
         pubkey = *keyIt ;
@@ -413,17 +429,21 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPubKey( unsigned int position ) 
 }
 
 void SecurityEnvironment_MSCryptImpl :: adoptPriKey( HCRYPTKEY aPriKey ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY   prikey ;
+    HCRYPTKEY	prikey ;
     std::list< HCRYPTKEY >::iterator keyIt ;
 
     if( aPriKey != NULL ) {
         //First try to find the key in the list
-        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
+        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; keyIt ++ ) {
             if( *keyIt == aPriKey )
                 return ;
         }
 
         //If we do not find the key in the list, add a new node
+        /*- Replaced with directly adopt for WINNT 4.0 support ----
+        if( !CryptDuplicateKey( aPriKey, NULL, 0, &prikey ) )
+            throw RuntimeException() ;
+        ----*/
         prikey = aPriKey ;
 
         try {
@@ -435,11 +455,11 @@ void SecurityEnvironment_MSCryptImpl :: adoptPriKey( HCRYPTKEY aPriKey ) throw( 
 }
 
 void SecurityEnvironment_MSCryptImpl :: rejectPriKey( HCRYPTKEY aPriKey ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY   prikey ;
+    HCRYPTKEY	prikey ;
     std::list< HCRYPTKEY >::iterator keyIt ;
 
     if( aPriKey != NULL ) {
-        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
+        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; keyIt ++ ) {
             if( *keyIt == aPriKey ) {
                 prikey = *keyIt ;
                 CryptDestroyKey( prikey ) ;
@@ -456,7 +476,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPriKey( unsigned int position ) 
     unsigned int pos ;
 
     prikey = NULL ;
-    for( pos = 0, keyIt = m_tPriKeyList.begin() ; pos < position && keyIt != m_tPriKeyList.end() ; ++pos , ++keyIt ) ;
+    for( pos = 0, keyIt = m_tPriKeyList.begin() ; pos < position && keyIt != m_tPriKeyList.end() ; pos ++ , keyIt ++ ) ;
 
     if( pos == position && keyIt != m_tPriKeyList.end() )
         prikey = *keyIt ;
@@ -465,7 +485,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPriKey( unsigned int position ) 
 }
 
 //Methods from XSecurityEnvironment
-Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPersonalCertificates() throw( SecurityException , RuntimeException )
+Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPersonalCertificates() throw( SecurityException , RuntimeException ) 
 {
     sal_Int32 length ;
     X509Certificate_MSCryptImpl* xcert ;
@@ -495,12 +515,21 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
         DWORD      dwKeySpec;
         HCRYPTPROV hCryptProv;
 
+        /*
+        hSystemKeyStore = CertOpenStore(
+                CERT_STORE_PROV_SYSTEM ,
+                0 ,
+                NULL ,
+                CERT_SYSTEM_STORE_CURRENT_USER | CERT_STORE_READONLY_FLAG | CERT_STORE_OPEN_EXISTING_FLAG ,
+                L"MY"
+            ) ;
+        */
         hSystemKeyStore = CertOpenSystemStore( 0, "MY" ) ;
         if( hSystemKeyStore != NULL ) {
             pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext );
             while (pCertContext)
             {
-                // for checking whether the certificate is a personal certificate or not.
+                // Add By CP for checking whether the certificate is a personal certificate or not.
                 if(!(CryptAcquireCertificatePrivateKey(pCertContext,
                         CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
                         NULL,
@@ -508,12 +537,13 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
                         &dwKeySpec,
                         NULL)))
                 {
-                    // Not Privatekey found. SKIP this one.
+                    // Not Privatekey found. SKIP this one; By CP
                     pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext );
                     continue;
                 }
                 // then TODO : Check the personal cert is valid or not.
 
+                // end CP
                 xcert = MswcryCertContextToXCert( pCertContext ) ;
                 if( xcert != NULL )
                     certsList.push_back( xcert ) ;
@@ -530,7 +560,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
         std::list< X509Certificate_MSCryptImpl* >::iterator xcertIt ;
         Sequence< Reference< XCertificate > > certSeq( length ) ;
 
-        for( i = 0, xcertIt = certsList.begin(); xcertIt != certsList.end(); ++xcertIt, ++i ) {
+        for( i = 0, xcertIt = certsList.begin(); xcertIt != certsList.end(); xcertIt ++, i++ ) {
             certSeq[i] = *xcertIt ;
         }
 
@@ -543,18 +573,20 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
 
 Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException ) {
     unsigned int i ;
-    LPSTR   pszName ;
+//	sal_Int8 found = 0 ;
+    LPSTR	pszName ;
     X509Certificate_MSCryptImpl *xcert = NULL ;
     PCCERT_CONTEXT pCertContext = NULL ;
     HCERTSTORE hCertStore = NULL ;
     CRYPT_INTEGER_BLOB cryptSerialNumber ;
     CERT_INFO certInfo ;
 
-    // for correct encoding
+    // By CP , for correct encoding
     sal_uInt16 encoding ;
     rtl_Locale *pLocale = NULL ;
     osl_getProcessLocale( &pLocale ) ;
     encoding = osl_getTextEncodingFromLocale( pLocale ) ;
+    // CP end
 
     //Create cert info from issue and serial
     rtl::OString oissuer = rtl::OUStringToOString( issuerName , encoding ) ;
@@ -589,8 +621,8 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
 
     //Get the SerialNumber
     cryptSerialNumber.cbData = serialNumber.getLength() ;
-    cryptSerialNumber.pbData = ( BYTE* )malloc( cryptSerialNumber.cbData);
-    if (!cryptSerialNumber.pbData)
+    cryptSerialNumber.pbData = ( BYTE* )malloc( cryptSerialNumber.cbData); 
+    if (!cryptSerialNumber.pbData) 
     {
         free( certInfo.Issuer.pbData ) ;
         throw RuntimeException() ;
@@ -600,7 +632,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
 
     certInfo.SerialNumber.cbData = cryptSerialNumber.cbData ;
     certInfo.SerialNumber.pbData = cryptSerialNumber.pbData ;
-
+        
     // Get the Cert from all store.
     for( i = 0 ; i < 6 ; i ++ )
     {
@@ -635,11 +667,11 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
             continue;
         }
 
-/*******************************************************************************
- * This code reserved for remind us there are another way to find one cert by
- * IssuerName&serialnumber. You can use the code to replaced the function
+/******************************************************************************* 
+ * This code reserved for remind us there are another way to find one cert by 
+ * IssuerName&serialnumber. You can use the code to replaced the function 
  * CertFindCertificateInStore IF and ONLY IF you must find one special cert in
- * certStore but can not be found by CertFindCertificateInStore , then , you
+ * certStore but can not be found by CertFindCertificateInStore , then , you 
  * should also change the same part in libxmlsec/.../src/mscrypto/x509vfy.c#875.
  * By Chandler Peng(chandler.peng@sun.com)
  *****/
@@ -647,7 +679,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
         pCertContext = NULL ;
         found = 0;
         do{
-            //  1. enum the certs has same string in the issuer string.
+            //	1. enum the certs has same string in the issuer string.
             pCertContext = CertEnumCertificatesInStore( hCertStore , pCertContext ) ;
             if( pCertContext != NULL )
             {
@@ -661,7 +693,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
                     CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
                     NULL, 0
                 ) ;
-
+                
                 if( cbIssuer == 0 ) continue ; // discard this cert;
 
                 issuer = (char *)malloc( cbIssuer ) ;
@@ -687,7 +719,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
                     continue ;// discard this cert;
                 }
 
-                if(strncmp(pszName , issuer , cbIssuer) != 0)
+                if(strncmp(pszName , issuer , cbIssuer) != 0) 
                 {
                     free( issuer ) ;
                     continue ;// discard this cert;
@@ -706,7 +738,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
             }
 
         }while(pCertContext);
-
+        
         if(i != 0 && i != 1) CertCloseStore( hCertStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
         if( found != 0 ) break; // Found the certificate.
 ********************************************************************************/
@@ -719,7 +751,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
             &certInfo,
             NULL
         ) ;
-
+    
         if(i != 0 && i != 1) CertCloseStore( hCertStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
         if( pCertContext != NULL ) break ; // Found the certificate.
 
@@ -748,9 +780,9 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildC
     PCCERT_CONTEXT pCertContext ;
     const X509Certificate_MSCryptImpl* xcert ;
 
-    CERT_ENHKEY_USAGE   enhKeyUsage ;
-    CERT_USAGE_MATCH    certUsage ;
-    CERT_CHAIN_PARA     chainPara ;
+    CERT_ENHKEY_USAGE	enhKeyUsage ;
+    CERT_USAGE_MATCH	certUsage ;
+    CERT_CHAIN_PARA		chainPara ;
 
     enhKeyUsage.cUsageIdentifier = 0 ;
     enhKeyUsage.rgpszUsageIdentifier = NULL ;
@@ -825,7 +857,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildC
             &pChainContext);
         if (!bChain)
             pChainContext = NULL;
-
+        
         //Close the additional store
        CertCloseStore(hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG);
     }
@@ -862,7 +894,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildC
     if (pChainContext)
         CertFreeCertificateChain(pChainContext);
 
-    return Sequence< Reference < XCertificate > >();
+    return NULL ;
 }
 
 Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: createCertificateFromRaw( const Sequence< sal_Int8 >& rawCertificate ) throw( SecurityException , RuntimeException ) {
@@ -932,16 +964,16 @@ HCERTSTORE getCertStoreForIntermediatCerts(
 //explicitly that all validation steps are carried out even if one or several
 //errors occur. See also
 //http://wiki.services.openoffice.org/wiki/Certificate_Path_Validation#Validation_status
-sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
+sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( 
     const Reference< ::com::sun::star::security::XCertificate >& aCert,
-    const Sequence< Reference< ::com::sun::star::security::XCertificate > >& seqCerts)
-    throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException )
+    const Sequence< Reference< ::com::sun::star::security::XCertificate > >& seqCerts) 
+    throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) 
 {
     sal_Int32 validity = 0;
     PCCERT_CHAIN_CONTEXT pChainContext = NULL;
     PCCERT_CONTEXT pCertContext = NULL;
     const X509Certificate_MSCryptImpl* xcert = NULL;
-
+    
     Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY ) ;
     if( !xCertTunnel.is() ) {
         throw RuntimeException() ;
@@ -955,14 +987,14 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
     if( xcert == NULL ) {
         throw RuntimeException() ;
     }
-
+    
     pCertContext = xcert->getMswcryCert() ;
 
-    CERT_ENHKEY_USAGE   enhKeyUsage ;
-    CERT_USAGE_MATCH    certUsage ;
-    CERT_CHAIN_PARA     chainPara ;
+    CERT_ENHKEY_USAGE	enhKeyUsage ;
+    CERT_USAGE_MATCH	certUsage ;
+    CERT_CHAIN_PARA		chainPara ;
     rtl_zeroMemory(&chainPara, sizeof(CERT_CHAIN_PARA));
-
+    
     //Prepare parameter for CertGetCertificateChain
     enhKeyUsage.cUsageIdentifier = 0 ;
     enhKeyUsage.rgpszUsageIdentifier = NULL ;
@@ -980,7 +1012,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
         hIntermediateCertsStore =
             getCertStoreForIntermediatCerts(seqCerts);
 
-        //Merge m_hCertStore and m_hKeyStore and the store of the intermediate
+        //Merge m_hCertStore and m_hKeyStore and the store of the intermediate 
         //certificates into one store.
         hCollectionStore = CertOpenStore(
             CERT_STORE_PROV_COLLECTION ,
@@ -1006,9 +1038,9 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
                 hIntermediateCertsStore,
                 CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG,
                 0);
-
+                
         }
-
+        
         //CertGetCertificateChain searches by default in MY, CA, ROOT and TRUST
         //We do not check revocation of the root. In most cases there are none.
         //Then we would get CERT_TRUST_REVOCATION_STATUS_UNKNOWN
@@ -1019,7 +1051,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
             NULL , //use current system time
             hCollectionStore,
             &chainPara ,
-            CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT,
+            CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT, 
             NULL ,
             &pChainContext);
 
@@ -1134,9 +1166,9 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: getCertificateCharacters( const ::c
 
     //Secondly, make sentence whether or not the cert has a private key.
     {
-        BOOL    fCallerFreeProv ;
-        DWORD   dwKeySpec ;
-        HCRYPTPROV  hProv ;
+        BOOL	fCallerFreeProv ;
+        DWORD	dwKeySpec ;
+        HCRYPTPROV	hProv ;
         if( CryptAcquireCertificatePrivateKey( pCertContext ,
                    0 ,
                    NULL ,
@@ -1181,7 +1213,7 @@ X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert )
 
 ::rtl::OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Microsoft Crypto API"));
+    return rtl::OUString::createFromAscii("Microsoft Crypto API");
 }
 
 /* Native methods */

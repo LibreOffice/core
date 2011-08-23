@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,18 +67,17 @@ class ContentProperties
 {
 public:
     ContentProperties()
-    : m_eType( STREAM )
     {}
 
     ContentProperties( const ContentType & rType, const rtl::OUString & rTitle )
     : m_eType( rType ),
       m_aContentType( rType == STREAM
-        ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( TDOC_STREAM_CONTENT_TYPE ))
+        ? rtl::OUString::createFromAscii( TDOC_STREAM_CONTENT_TYPE )
         : rType == FOLDER
-            ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( TDOC_FOLDER_CONTENT_TYPE ))
+            ? rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE )
             : rType == DOCUMENT
-                ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( TDOC_DOCUMENT_CONTENT_TYPE ))
-                : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( TDOC_ROOT_CONTENT_TYPE )) ),
+                ? rtl::OUString::createFromAscii( TDOC_DOCUMENT_CONTENT_TYPE )
+                : rtl::OUString::createFromAscii( TDOC_ROOT_CONTENT_TYPE ) ),
       m_aTitle( rTitle )
     {}
 
@@ -172,7 +171,7 @@ private:
 
     sal_Bool exchangeIdentity(
                 const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::ucb::XContentIdentifier >& xNewId );
+                        ::com::sun::star::ucb::XContentIdentifier >& xNewId	);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Sequence<

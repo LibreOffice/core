@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: interpr4.cxx,v $
+ * $Revision: 1.57.92.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +43,7 @@ using ::std::vector;
 ScQueryParamBase::ScQueryParamBase()
 {
     Resize( MAXQUERY );
-    for (sal_uInt16 i=0; i<MAXQUERY; i++)
+    for (USHORT i=0; i<MAXQUERY; i++)
         maEntries[i].Clear();
 }
 
@@ -53,11 +56,6 @@ ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
 
 ScQueryParamBase::~ScQueryParamBase()
 {
-}
-
-bool ScQueryParamBase::IsValidFieldIndex() const
-{
-    return true;
 }
 
 SCSIZE ScQueryParamBase::GetEntryCount() const
@@ -111,7 +109,7 @@ void ScQueryParamBase::FillInExcelSyntax(String& aCellStr, SCSIZE nIndex)
 
         ScQueryEntry& rEntry = GetEntry(nIndex);
 
-        rEntry.bDoQuery = sal_True;
+        rEntry.bDoQuery = TRUE;
         // Operatoren herausfiltern
         if (aCellStr.GetChar(0) == '<')
         {
@@ -172,7 +170,7 @@ ScQueryParamTable::~ScQueryParamTable()
 
 // ============================================================================
 
-ScQueryParam::ScQueryParam() :
+ScQueryParam::ScQueryParam() : 
     ScQueryParamBase(),
     ScQueryParamTable(),
     bDestPers(true),
@@ -188,7 +186,8 @@ ScQueryParam::ScQueryParam() :
 ScQueryParam::ScQueryParam( const ScQueryParam& r ) :
     ScQueryParamBase(r),
     ScQueryParamTable(r),
-    bDestPers(r.bDestPers), nDestTab(r.nDestTab), nDestCol(r.nDestCol), nDestRow(r.nDestRow)
+    bDestPers(r.bDestPers), nDestTab(r.nDestTab), nDestCol(r.nDestCol), nDestRow(r.nDestRow),
+    nDynamicEndRow(r.nDynamicEndRow), bUseDynamicRange(r.bUseDynamicRange)
 {
 }
 
@@ -198,10 +197,12 @@ ScQueryParam::ScQueryParam( const ScDBQueryParamInternal& r ) :
     bDestPers(true),
     nDestTab(0),
     nDestCol(0),
-    nDestRow(0)
+    nDestRow(0),
+    nDynamicEndRow(0),
+    bUseDynamicRange(false)
 {
 }
-
+    
 
 //------------------------------------------------------------------------
 
@@ -216,11 +217,11 @@ void ScQueryParam::Clear()
     nCol1=nCol2 = 0;
     nRow1=nRow2 = 0;
     nTab = SCTAB_MAX;
-    bHasHeader = bCaseSens = bRegExp = bMixedComparison = false;
-    bInplace = bByRow = bDuplicate = sal_True;
+    bHasHeader = bCaseSens = bRegExp = bMixedComparison = FALSE;
+    bInplace = bByRow = bDuplicate = TRUE;
 
     Resize( MAXQUERY );
-    for (sal_uInt16 i=0; i<MAXQUERY; i++)
+    for (USHORT i=0; i<MAXQUERY; i++)
         maEntries[i].Clear();
 
     ClearDestParams();
@@ -232,6 +233,8 @@ void ScQueryParam::ClearDestParams()
     nDestTab = 0;
     nDestCol = 0;
     nDestRow = 0;
+    nDynamicEndRow = 0;
+    bUseDynamicRange = false;
 }
 
 //------------------------------------------------------------------------
@@ -254,6 +257,8 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
     bDuplicate  = r.bDuplicate;
     bByRow      = r.bByRow;
     bDestPers   = r.bDestPers;
+    nDynamicEndRow = r.nDynamicEndRow;
+    bUseDynamicRange = r.bUseDynamicRange;
 
     maEntries = r.maEntries;
 
@@ -262,9 +267,9 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
 
 //------------------------------------------------------------------------
 
-sal_Bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
+BOOL ScQueryParam::operator==( const ScQueryParam& rOther ) const
 {
-    sal_Bool bEqual = false;
+    BOOL bEqual = FALSE;
 
     // Anzahl der Queries gleich?
     SCSIZE nUsed      = 0;
@@ -292,9 +297,11 @@ sal_Bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
         && (bDestPers   == rOther.bDestPers)
         && (nDestTab    == rOther.nDestTab)
         && (nDestCol    == rOther.nDestCol)
-        && (nDestRow    == rOther.nDestRow) )
+        && (nDestRow    == rOther.nDestRow)
+        && (nDynamicEndRow == rOther.nDynamicEndRow)
+        && (bUseDynamicRange == rOther.bUseDynamicRange) )
     {
-        bEqual = sal_True;
+        bEqual = TRUE;
         for ( SCSIZE i=0; i<nUsed && bEqual; i++ )
             bEqual = maEntries[i] == rOther.maEntries[i];
     }
@@ -316,15 +323,16 @@ void ScQueryParam::MoveToDest()
         nCol2 = sal::static_int_cast<SCCOL>( nCol2 + nDifX );
         nRow2 = sal::static_int_cast<SCROW>( nRow2 + nDifY );
         nTab  = sal::static_int_cast<SCTAB>( nTab  + nDifZ );
+        nDynamicEndRow = sal::static_int_cast<SCROW>( nDynamicEndRow + nDifY );
         size_t n = maEntries.size();
         for (size_t i=0; i<n; i++)
             maEntries[i].nField += nDifX;
 
-        bInplace = sal_True;
+        bInplace = TRUE;
     }
     else
     {
-        OSL_FAIL("MoveToDest, bInplace == TRUE");
+        DBG_ERROR("MoveToDest, bInplace == TRUE");
     }
 }
 
@@ -359,23 +367,11 @@ ScDBQueryParamInternal::~ScDBQueryParamInternal()
 {
 }
 
-bool ScDBQueryParamInternal::IsValidFieldIndex() const
-{
-    return nCol1 <= mnField && mnField <= nCol2;
-}
-
 // ============================================================================
 
 ScDBQueryParamMatrix::ScDBQueryParamMatrix() :
     ScDBQueryParamBase(ScDBQueryParamBase::MATRIX)
 {
-}
-
-bool ScDBQueryParamMatrix::IsValidFieldIndex() const
-{
-    SCSIZE nC, nR;
-    mpMatrix->GetDimensions(nC, nR);
-    return 0 <= mnField && mnField <= static_cast<SCCOL>(nC);
 }
 
 ScDBQueryParamMatrix::~ScDBQueryParamMatrix()

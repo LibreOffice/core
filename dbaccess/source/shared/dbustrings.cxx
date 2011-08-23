@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ namespace dbaui
     //============================================================
     //= service names
     //============================================================
-    IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_DIRECTSQLDIALOG,       "org.openoffice.comp.dbu.DirectSqlDialog");
+    IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_DIRECTSQLDIALOG,		"org.openoffice.comp.dbu.DirectSqlDialog");
 
     //============================================================
     //= other
     //============================================================
-    IMPLEMENT_CONSTASCII_USTRING(FRAME_NAME_QUERY_PREVIEW,          "QueryPreview");
-    IMPLEMENT_CONSTASCII_USTRING(SERVICE_CONTROLDEFAULT,            "com.sun.star.comp.dbu.OColumnControl");
+    IMPLEMENT_CONSTASCII_USTRING(FRAME_NAME_QUERY_PREVIEW,	        "QueryPreview");
+    IMPLEMENT_CONSTASCII_USTRING(SERVICE_CONTROLDEFAULT,			"com.sun.star.comp.dbu.OColumnControl");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_QUERYDESIGNVIEW,          "QueryDesignView");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_GRAPHICAL_DESIGN,         "GraphicalDesign");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_HELP_URL,                 "HelpURL");
@@ -64,8 +64,8 @@ namespace dbaui
     //============================================================
     //= properties
     //============================================================
-    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TRISTATE,         "TriState");
-    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLEOUTERJOIN,  "EnableOuterJoinEscape");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TRISTATE,			"TriState");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLEOUTERJOIN,	"EnableOuterJoinEscape");
 
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TABSTOP, "TabStop");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DEFAULTCONTROL, "DefaultControl");

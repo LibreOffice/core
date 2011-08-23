@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,8 @@
 
 #include <tools/link.hxx>
 
+#include "errhdl.hxx"		// hier kommt auch swtypes rein, was ich brauche
+
 // ----------------------------------------------------------------------------
 
 extern void SW_NEW_HDL();
@@ -38,25 +40,25 @@ class SwNewHdl
 {
         friend void SW_NEW_HDL();
 private:
-        char*           pWarnMem;
-        char*           pExceptMem;
-        Link            aWarnLnk;
-        Link            aErrLnk;
+        char*			pWarnMem;
+        char*			pExceptMem;
+        Link 			aWarnLnk;
+        Link			aErrLnk;
 public:
-        void    SetWarnLnk( const Link &rLink );
-        void    SetErrLnk( const Link &rLink );
+        void	SetWarnLnk( const Link &rLink );
+        void	SetErrLnk( const Link &rLink );
 
-        sal_Bool    TryWarnMem();
+        BOOL	TryWarnMem();
 
-        sal_Bool    Flush_WarnMem();
-        sal_Bool    Flush_ExceptMem();
+        BOOL 	Flush_WarnMem();
+        BOOL 	Flush_ExceptMem();
 
         SwNewHdl();
         ~SwNewHdl();
 };
 
 /******************************************************************************
- *  INLINE
+ *	INLINE
  ******************************************************************************/
 inline void SwNewHdl::SetWarnLnk( const Link &rLink )
 {

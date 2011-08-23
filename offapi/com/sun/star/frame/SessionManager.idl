@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
         <ul>
         <li>The application may request to interact with the user (e.g. to ask
         where to save documents). This request is necessary because at any one
-        time only one application can interact with the user. The session manager
+        time only one application can iteract with the user. The session manager
         coordinates these requests and grants every application in need of user
         interaction a timeslot in which it may interact with the user</li>
         <li>try to cancel the whole shutdown; the session manager may or may
@@ -76,9 +76,9 @@ service SessionManager
         the session manager's signals as well as requests to the session manager.
     */
     interface XSessionManagerClient;
-
+    
 };
-
+ 
 }; }; }; };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 #ifndef _CONNECTIVITY_JAVA_LANG_CLASS_HXX_
-#define _CONNECTIVITY_JAVA_LANG_CLASS_HXX_
+#define	_CONNECTIVITY_JAVA_LANG_CLASS_HXX_
 //**************************************************************
 //************ Class: java.lang.Class
 //**************************************************************
@@ -37,18 +37,18 @@ namespace connectivity
     class java_lang_Class : public java_lang_Object
     {
     protected:
-    // static Data for the Class
+    // statische Daten fuer die Klasse
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
         virtual ~java_lang_Class();
-        // a Constructor, that is needed for when Returning the Object is needed:
+        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_lang_Class( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
         static java_lang_Class * forName( const ::rtl::OUString &_par0 );
         // return the jre object
         jobject newInstanceObject();
-
+        
     };
 }
 

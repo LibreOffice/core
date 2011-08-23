@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,6 +31,7 @@
 #include "java/sql/JStatement.hxx"
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
+//	#include <com/sun/star/sdbc/XClearParameters.hpp>
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -41,7 +42,7 @@ namespace connectivity
     //************ Class: java.sql.PreparedStatement
     //**************************************************************
 
-    class java_sql_PreparedStatement :  public  OStatement_BASE2,
+    class java_sql_PreparedStatement :	public	OStatement_BASE2,
                                         public  ::com::sun::star::sdbc::XPreparedStatement,
                                         public  ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                         public  ::com::sun::star::sdbc::XParameters,
@@ -57,7 +58,7 @@ namespace connectivity
     public:
         DECLARE_SERVICE_INFO();
         virtual jclass getMyClass() const;
-
+        
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_Connection& _rCon,const ::rtl::OUString& sql );
 

@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: precompiled_svx.hxx,v $
+ * $Revision: 1.5 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -669,7 +672,7 @@
 #include "rtl/logfile.hxx"
 #include "rtl/math.hxx"
 #include "rtl/memory.h"
-#include "rtl/ref.hxx"
+#include "rlt/ref.hxx"
 #include "rtl/tencinfo.h"
 #include "rtl/textenc.h"
 #include "rtl/ustrbuf.hxx"
@@ -686,7 +689,7 @@
 #include "sot/formats.hxx"
 #include <map>
 #include <set>
-#include <list>
+#include <slist>
 #include <vector>
 #include "svtools/FilterConfigItem.hxx"
 #include "svtools/accessibilityoptions.hxx"
@@ -694,6 +697,7 @@
 #include "svtools/apearcfg.hxx"
 #include "svl/brdcst.hxx"
 #include "unotools/cacheoptions.hxx"
+#include "svl/cancel.hxx"
 #include "svl/cjkoptions.hxx"
 #include "unotools/cmdoptions.hxx"
 #include "svl/cntwall.hxx"
@@ -738,6 +742,7 @@
 #include "svtools/parhtml.hxx"
 #include "svtools/parrtf.hxx"
 #include "unotools/pathoptions.hxx"
+#include "svl/pickerhelper.hxx"
 #include "svl/poolitem.hxx"
 #include "unotools/printwarningoptions.hxx"
 #include "svl/ptitem.hxx"
@@ -795,6 +800,7 @@
 #include "tools/inetdef.hxx"
 #include "tools/line.hxx"
 #include "tools/link.hxx"
+#include "tools/list.hxx"
 #include "tools/multisel.hxx"
 #include "tools/poly.hxx"
 #include "tools/rc.h"
@@ -852,7 +858,7 @@
 #include "vcl/cursor.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/dndhelp.hxx"
-#include "tools/fldunit.hxx"
+#include "vcl/fldunit.hxx"
 #include "vcl/fntstyle.hxx"
 #include "unotools/fontcvt.hxx"
 #include "vcl/gdimtf.hxx"
@@ -871,7 +877,7 @@
 #include "vcl/unohelp.hxx"
 #include "vcl/unohelp2.hxx"
 #include "vcl/wall.hxx"
-#include "tools/wintypes.hxx"
+#include "vcl/wintypes.hxx"
 #include "xmloff/DashStyle.hxx"
 #include "xmloff/GradientStyle.hxx"
 #include "xmloff/HatchStyle.hxx"

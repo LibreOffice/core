@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,11 +37,12 @@
 class SwFlyFrmFmt;
 class IntlWrapper;
 
-// Connection (text flow) between two FlyFrms.
+//Verbindung (Textfluss) zwischen zwei FlyFrms
+
 class SW_DLLPUBLIC SwFmtChain: public SfxPoolItem
 {
-    SwClient aPrev, // Previous SwFlyFrmFmt (if existent).
-             aNext; // Next SwFlyFrmFmt (if existent).
+    SwClient aPrev,	//Vorgaenger (SwFlyFrmFmt), wenn es diesen gibt.
+             aNext; //Nachfolger (SwFlyFrmFmt), wenn es diesen gibt.
 
 
 public:
@@ -50,16 +51,16 @@ public:
 
     inline SwFmtChain &operator=( const SwFmtChain& );
 
-    // "Pure virtual methods" of SfxPoolItem.
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual	bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
 
     SwFlyFrmFmt* GetPrev() const { return (SwFlyFrmFmt*)aPrev.GetRegisteredIn(); }
     SwFlyFrmFmt* GetNext() const { return (SwFlyFrmFmt*)aNext.GetRegisteredIn(); }
@@ -77,10 +78,10 @@ SwFmtChain &SwFmtChain::operator=( const SwFmtChain &rCpy )
 }
 
 
-inline const SwFmtChain &SwAttrSet::GetChain(sal_Bool bInP) const
+inline const SwFmtChain &SwAttrSet::GetChain(BOOL bInP) const
     { return (const SwFmtChain&)Get( RES_CHAIN,bInP); }
 
-inline const SwFmtChain &SwFmt::GetChain(sal_Bool bInP) const
+inline const SwFmtChain &SwFmt::GetChain(BOOL bInP) const
     { return aSet.GetChain(bInP); }
 
 #endif

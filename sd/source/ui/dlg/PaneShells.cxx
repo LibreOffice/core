@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ TYPEINIT1(LeftImpressPaneShell, SfxShell);
 LeftImpressPaneShell::LeftImpressPaneShell (void)
     : SfxShell()
 {
-    SetName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LeftImpressPane")));
+    SetName(rtl::OUString::createFromAscii("LeftImpressPane"));
 }
 
 
@@ -97,7 +97,7 @@ TYPEINIT1(LeftDrawPaneShell, SfxShell);
 LeftDrawPaneShell::LeftDrawPaneShell (void)
     : SfxShell()
 {
-    SetName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LeftDrawPane")));
+    SetName(rtl::OUString::createFromAscii("LeftDrawPane"));
 }
 
 
@@ -130,7 +130,7 @@ TYPEINIT1( ToolPanelPaneShell, SfxShell );
 ToolPanelPaneShell::ToolPanelPaneShell()
     :SfxShell()
 {
-    SetName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ToolPanel" )) );
+    SetName( ::rtl::OUString::createFromAscii( "ToolPanel" ) );
 }
 
 ToolPanelPaneShell::~ToolPanelPaneShell(void)

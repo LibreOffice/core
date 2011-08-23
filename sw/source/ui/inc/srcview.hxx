@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,23 +41,23 @@ class SfxMedium;
 
 class SwSrcView: public SfxViewShell
 {
-    SwSrcEditWindow     aEditWin;
+    SwSrcEditWindow 	aEditWin;
 
-    SvxSearchItem*      pSearchItem;
+    SvxSearchItem*		pSearchItem;
 
-    sal_Bool                bSourceSaved    :1;
+    BOOL				bSourceSaved	:1;
     rtl_TextEncoding    eLoadEncoding;
     void                Init();
 
     // fuer Readonly-Umschaltung
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 
 protected:
-    sal_uInt16              StartSearchAndReplace(const SvxSearchItem& rItem,
-                                                        sal_Bool bFromStart,
-                                                        sal_Bool bApi,
-                                                        sal_Bool bRecursive = sal_False);
+    USHORT 				StartSearchAndReplace(const SvxSearchItem& rItem,
+                                                        BOOL bFromStart,
+                                                        BOOL bApi,
+                                                        BOOL bRecursive = FALSE);
 
 
 public:
@@ -71,30 +71,30 @@ public:
 
     ~SwSrcView();
 
-    SwDocShell*         GetDocShell();
+    SwDocShell*			GetDocShell();
     SwSrcEditWindow&    GetEditWin() {return aEditWin;}
-    void                SaveContent(const String& rTmpFile);
-    void                SaveContentTo(SfxMedium& rMed);
+    void				SaveContent(const String& rTmpFile);
+    void				SaveContentTo(SfxMedium& rMed);
 
-    sal_Bool                IsModified() {return aEditWin.IsModified();}
+    BOOL				IsModified() {return aEditWin.IsModified();}
 
 
 
-    void            Execute(SfxRequest&);
-    void            GetState(SfxItemSet&);
+    void			Execute(SfxRequest&);
+    void			GetState(SfxItemSet&);
 
-    SvxSearchItem*  GetSearchItem();
-    void            SetSearchItem( const SvxSearchItem& rItem );
+    SvxSearchItem* 	GetSearchItem();
+    void 			SetSearchItem( const SvxSearchItem& rItem );
 
-    void            Load(SwDocShell* pDocShell);
+    void			Load(SwDocShell* pDocShell);
 
-    virtual sal_uInt16  SetPrinter( SfxPrinter* pNew, sal_uInt16 nDiff = SFX_PRINTER_ALL, bool bIsAPI=false );
-    virtual         SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
-
+    virtual USHORT  SetPrinter( SfxPrinter* pNew, USHORT nDiff = SFX_PRINTER_ALL, bool bIsAPI=false );
+    virtual         SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
+    
     sal_Int32       PrintSource( OutputDevice *pOutDev, sal_Int32 nPage, bool bCalcNumPagesOnly );
 
-    void            SourceSaved() {bSourceSaved = sal_True;}
-    sal_Bool            HasSourceSaved() const {return bSourceSaved;}
+    void			SourceSaved() {bSourceSaved = TRUE;}
+    BOOL			HasSourceSaved() const {return bSourceSaved;}
 
 };
 

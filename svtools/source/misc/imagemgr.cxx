@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 // includes --------------------------------------------------------------
 
-#include <svtools/imagemgr.hxx>
+#include "imagemgr.hxx"
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
@@ -50,166 +50,168 @@
 #include <tools/rcid.h>
 #include <rtl/logfile.hxx>
 #include <unotools/configmgr.hxx>
+
 #include <svtools/svtools.hrc>
-#include <svtools/imagemgr.hrc>
+#include "imagemgr.hrc"
 #include <svtools/svtdata.hxx>
 #include <osl/mutex.hxx>
 
 // globals *******************************************************************
 
-#define NO_INDEX        ((sal_uInt16)0xFFFF)
-#define CONTENT_HELPER  ::utl::UCBContentHelper
-#define ASCII_STRING(s) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
+#define NO_INDEX    	((USHORT)0xFFFF)
+#define CONTENT_HELPER	::utl::UCBContentHelper
+#define ASCII_STRING(s)	::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 
 struct SvtExtensionResIdMapping_Impl
 {
     const char*   _pExt;
-    sal_Bool    _bExt;
-    sal_uInt16  _nStrId;
-    sal_uInt16  _nImgId;
+    BOOL    _bExt;
+    USHORT  _nStrId;
+    USHORT  _nImgId;
 };
 
-static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
+static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
 {
-    { "awk",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "bas",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "bat",   sal_True,  STR_DESCRIPTION_BATCHFILE,             0 },
-    { "bmk",   sal_False, STR_DESCRIPTION_BOOKMARKFILE,          0 },
-    { "bmp",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_BITMAP },
-    { "c",     sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "cfg",   sal_False, STR_DESCRIPTION_CFGFILE,               0 },
-    { "cmd",   sal_True,  STR_DESCRIPTION_BATCHFILE,             0 },
-    { "cob",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "com",   sal_True,  STR_DESCRIPTION_APPLICATION,           0 },
-    { "cxx",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "dbf",   sal_True,  STR_DESCRIPTION_DATABASE_TABLE,        IMG_TABLE },
-    { "def",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "dll",   sal_True,  STR_DESCRIPTION_SYSFILE,               0 },
-    { "doc",   sal_False, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
-    { "dot",   sal_False, STR_DESCRIPTION_WORD_DOC,              IMG_WRITERTEMPLATE },
-    { "docx",  sal_False, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
-    { "dxf",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_DXF },
-    { "exe",   sal_True,  STR_DESCRIPTION_APPLICATION,           0 },
-    { "gif",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_GIF },
-    { "h",     sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "hlp",   sal_False, STR_DESCRIPTION_HELP_DOC,              0 },
-    { "hrc",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "htm",   sal_False, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
-    { "html",  sal_False, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
-    { "asp",   sal_False, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
-    { "hxx",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "ini",   sal_False, STR_DESCRIPTION_CFGFILE,               0 },
-    { "java",  sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "jpeg",  sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
-    { "jpg",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
-    { "lha",   sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "awk",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "bas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "bat",   TRUE,  STR_DESCRIPTION_BATCHFILE,             0 },
+    { "bmk",   FALSE, STR_DESCRIPTION_BOOKMARKFILE,          0 },
+    { "bmp",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_BITMAP },
+    { "c",     TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "cfg",   FALSE, STR_DESCRIPTION_CFGFILE,               0 },
+    { "cmd",   TRUE,  STR_DESCRIPTION_BATCHFILE,             0 },
+    { "cob",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "com",   TRUE,  STR_DESCRIPTION_APPLICATION,           0 },
+    { "cxx",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "dbf",   TRUE,  STR_DESCRIPTION_DATABASE_TABLE,        IMG_TABLE },
+    { "def",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "dll",   TRUE,  STR_DESCRIPTION_SYSFILE,               0 },
+    { "doc",   FALSE, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
+    { "dot",   FALSE, STR_DESCRIPTION_WORD_DOC,              IMG_WRITERTEMPLATE },
+    { "docx",  FALSE, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
+    { "dxf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_DXF },
+    { "exe",   TRUE,  STR_DESCRIPTION_APPLICATION,           0 },
+    { "gif",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_GIF },
+    { "h",     TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "hlp",   FALSE, STR_DESCRIPTION_HELP_DOC,              0 },
+    { "hrc",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "htm",   FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
+    { "html",  FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
+    { "asp",   FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
+    { "hxx",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "ini",   FALSE, STR_DESCRIPTION_CFGFILE,               0 },
+    { "java",  TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "jpeg",  TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
+    { "jpg",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
+    { "lha",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
 #ifdef WNT
-    { "lnk",   sal_False, 0,                                     0 },
+    { "lnk",   FALSE, 0,                                     0 },
 #endif
-    { "log",   sal_True,  STR_DESCRIPTION_LOGFILE,               0 },
-    { "lst",   sal_True,  STR_DESCRIPTION_LOGFILE,               0 },
-    { "met",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_MET },
-    { "mml",   sal_False, STR_DESCRIPTION_MATHML_DOC,            IMG_MATH },
-    { "mod",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "odb",   sal_False, STR_DESCRIPTION_OO_DATABASE_DOC,       IMG_OO_DATABASE_DOC },
-    { "odg",   sal_False, STR_DESCRIPTION_OO_DRAW_DOC,           IMG_OO_DRAW_DOC },
-    { "odf",   sal_False, STR_DESCRIPTION_OO_MATH_DOC,           IMG_OO_MATH_DOC },
-    { "odm",   sal_False, STR_DESCRIPTION_OO_GLOBAL_DOC,         IMG_OO_GLOBAL_DOC },
-    { "odp",   sal_False, STR_DESCRIPTION_OO_IMPRESS_DOC,        IMG_OO_IMPRESS_DOC },
-    { "ods",   sal_False, STR_DESCRIPTION_OO_CALC_DOC,           IMG_OO_CALC_DOC },
-    { "odt",   sal_False, STR_DESCRIPTION_OO_WRITER_DOC,         IMG_OO_WRITER_DOC },
-    { "otg",   sal_False, STR_DESCRIPTION_OO_DRAW_TEMPLATE,      IMG_OO_DRAW_TEMPLATE },
-    { "otp",   sal_False, STR_DESCRIPTION_OO_IMPRESS_TEMPLATE,   IMG_OO_IMPRESS_TEMPLATE },
-    { "ots",   sal_False, STR_DESCRIPTION_OO_CALC_TEMPLATE,      IMG_OO_CALC_TEMPLATE },
-    { "ott",   sal_False, STR_DESCRIPTION_OO_WRITER_TEMPLATE,    IMG_OO_WRITER_TEMPLATE },
-    { "pas",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "pcd",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD },
-    { "pct",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCT },
-    { "pcx",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCX },
-    { "pl",    sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "png",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PNG },
-    { "rar",   sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "rtf",   sal_False, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
-    { "sbl",   sal_False, 0,                                     0 },
-    { "sch",   sal_False, 0,                                     0 },
-    { "sda",   sal_False, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW },
-    { "sdb",   sal_False, STR_DESCRIPTION_SDATABASE_DOC,         IMG_DATABASE },
-    { "sdc",   sal_False, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC },
-    { "sdd",   sal_False, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS },
-    { "sdp",   sal_False, STR_DESCRIPTION_SIMPRESS_DOC,          0 },
-    { "sds",   sal_False, STR_DESCRIPTION_SCHART_DOC,            0 },
-    { "sdw",   sal_False, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER },
-    { "sga",   sal_False, 0,                                     0 },
-    { "sgf",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGF },
-    { "sgl",   sal_False, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC },
-    { "sgv",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGV },
-    { "shtml", sal_False, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
-    { "sim",   sal_False, STR_DESCRIPTION_SIMAGE_DOC,            IMG_SIM },
-    { "smf",   sal_False, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH },
-    { "src",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "svh",   sal_False, STR_DESCRIPTION_HELP_DOC,              0 },
-    { "svm",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SVM },
-    { "stc",   sal_False, STR_DESCRIPTION_CALC_TEMPLATE,         IMG_CALCTEMPLATE },
-    { "std",   sal_False, STR_DESCRIPTION_DRAW_TEMPLATE,         IMG_DRAWTEMPLATE },
-    { "sti",   sal_False, STR_DESCRIPTION_IMPRESS_TEMPLATE,      IMG_IMPRESSTEMPLATE },
-    { "stw",   sal_False, STR_DESCRIPTION_WRITER_TEMPLATE,       IMG_WRITERTEMPLATE },
-    { "sxc",   sal_False, STR_DESCRIPTION_SXCALC_DOC,            IMG_CALC },
-    { "sxd",   sal_False, STR_DESCRIPTION_SXDRAW_DOC,            IMG_DRAW },
-    { "sxg",   sal_False, STR_DESCRIPTION_SXGLOBAL_DOC,          IMG_GLOBAL_DOC },
-    { "sxi",   sal_False, STR_DESCRIPTION_SXIMPRESS_DOC,         IMG_IMPRESS },
-    { "sxm",   sal_False, STR_DESCRIPTION_SXMATH_DOC,            IMG_MATH },
-    { "sxs",   sal_False, STR_DESCRIPTION_SXCHART_DOC,           0 },
-    { "sxw",   sal_False, STR_DESCRIPTION_SXWRITER_DOC,          IMG_WRITER },
-    { "sys",   sal_True,  STR_DESCRIPTION_SYSFILE,               0 },
-    { "tif",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
-    { "tiff",  sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
-    { "txt",   sal_False, STR_DESCRIPTION_TEXTFILE,              IMG_TEXTFILE },
-    { "url",   sal_False, STR_DESCRIPTION_LINK,                  0 },
-    { "vor",   sal_False, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_WRITERTEMPLATE },
-    { "vxd",   sal_True,  STR_DESCRIPTION_SYSFILE,               0 },
-    { "wmf",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_WMF },
-    { "xls",   sal_False, STR_DESCRIPTION_EXCEL_DOC,             IMG_CALC },
-    { "xlt",   sal_False, STR_DESCRIPTION_EXCEL_TEMPLATE_DOC,    IMG_CALCTEMPLATE },
-    { "xlsx",  sal_False, STR_DESCRIPTION_EXCEL_DOC,             IMG_CALC },
-    { "uu",    sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "uue",   sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "z",     sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "zip",   sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "zoo",   sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "gz",    sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "ppt",   sal_False, STR_DESCRIPTION_POWERPOINT,            IMG_IMPRESS },
-    { "pot",   sal_False, STR_DESCRIPTION_POWERPOINT_TEMPLATE,   IMG_IMPRESSTEMPLATE },
-    { "pps",   sal_False, STR_DESCRIPTION_POWERPOINT_SHOW,       IMG_IMPRESS },
-    { "pptx",  sal_False, STR_DESCRIPTION_POWERPOINT,            IMG_IMPRESS },
-    { "oxt",   sal_False, STR_DESCRIPTION_EXTENSION,             IMG_EXTENSION },
-    { 0, sal_False, 0, 0 }
+    { "log",   TRUE,  STR_DESCRIPTION_LOGFILE,               0 },
+    { "lst",   TRUE,  STR_DESCRIPTION_LOGFILE,               0 },
+    { "met",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_MET },
+    { "mml",   FALSE, STR_DESCRIPTION_MATHML_DOC,            IMG_MATH },
+    { "mod",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "odb",   FALSE, STR_DESCRIPTION_OO_DATABASE_DOC,       IMG_OO_DATABASE_DOC },
+    { "odg",   FALSE, STR_DESCRIPTION_OO_DRAW_DOC,           IMG_OO_DRAW_DOC },
+    { "odf",   FALSE, STR_DESCRIPTION_OO_MATH_DOC,           IMG_OO_MATH_DOC },
+    { "odm",   FALSE, STR_DESCRIPTION_OO_GLOBAL_DOC,         IMG_OO_GLOBAL_DOC },
+    { "odp",   FALSE, STR_DESCRIPTION_OO_IMPRESS_DOC,        IMG_OO_IMPRESS_DOC },
+    { "ods",   FALSE, STR_DESCRIPTION_OO_CALC_DOC,           IMG_OO_CALC_DOC },
+    { "odt",   FALSE, STR_DESCRIPTION_OO_WRITER_DOC,         IMG_OO_WRITER_DOC },
+    { "otg",   FALSE, STR_DESCRIPTION_OO_DRAW_TEMPLATE,      IMG_OO_DRAW_TEMPLATE },
+    { "otp",   FALSE, STR_DESCRIPTION_OO_IMPRESS_TEMPLATE,   IMG_OO_IMPRESS_TEMPLATE },
+    { "ots",   FALSE, STR_DESCRIPTION_OO_CALC_TEMPLATE,      IMG_OO_CALC_TEMPLATE },
+    { "ott",   FALSE, STR_DESCRIPTION_OO_WRITER_TEMPLATE,    IMG_OO_WRITER_TEMPLATE },
+    { "pas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "pcd",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD },
+    { "pct",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCT },
+    { "pcx",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCX },
+    { "pl",    TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "png",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PNG },
+    { "rar",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "rtf",   FALSE, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
+    { "sbl",   FALSE, 0,                                     0 },
+    { "sch",   FALSE, 0,                                     0 },
+    { "sda",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW },
+    { "sdb",   FALSE, STR_DESCRIPTION_SDATABASE_DOC,         IMG_DATABASE },
+    { "sdc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC },
+    { "sdd",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS },
+    { "sdp",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          0 },
+    { "sds",   FALSE, STR_DESCRIPTION_SCHART_DOC,            0 },
+    { "sdw",   FALSE, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER },
+    { "sga",   FALSE, 0,                                     0 },
+    { "sgf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGF },
+    { "sgl",   FALSE, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC },
+    { "sgv",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGV },
+    { "shtml", FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
+    { "sim",   FALSE, STR_DESCRIPTION_SIMAGE_DOC,            IMG_SIM },
+    { "smf",   FALSE, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH },
+    { "src",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "svh",   FALSE, STR_DESCRIPTION_HELP_DOC,              0 },
+    { "svm",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SVM },
+    { "stc",   FALSE, STR_DESCRIPTION_CALC_TEMPLATE,         IMG_CALCTEMPLATE },
+    { "std",   FALSE, STR_DESCRIPTION_DRAW_TEMPLATE,         IMG_DRAWTEMPLATE },
+    { "sti",   FALSE, STR_DESCRIPTION_IMPRESS_TEMPLATE,      IMG_IMPRESSTEMPLATE },
+    { "stw",   FALSE, STR_DESCRIPTION_WRITER_TEMPLATE,       IMG_WRITERTEMPLATE },
+    { "sxc",   FALSE, STR_DESCRIPTION_SXCALC_DOC,            IMG_CALC },
+    { "sxd",   FALSE, STR_DESCRIPTION_SXDRAW_DOC,            IMG_DRAW },
+    { "sxg",   FALSE, STR_DESCRIPTION_SXGLOBAL_DOC,          IMG_GLOBAL_DOC },
+    { "sxi",   FALSE, STR_DESCRIPTION_SXIMPRESS_DOC,         IMG_IMPRESS },
+    { "sxm",   FALSE, STR_DESCRIPTION_SXMATH_DOC,            IMG_MATH },
+    { "sxs",   FALSE, STR_DESCRIPTION_SXCHART_DOC,           0 },
+    { "sxw",   FALSE, STR_DESCRIPTION_SXWRITER_DOC,          IMG_WRITER },
+    { "sys",   TRUE,  STR_DESCRIPTION_SYSFILE,               0 },
+    { "tif",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
+    { "tiff",  TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
+    { "txt",   FALSE, STR_DESCRIPTION_TEXTFILE,              IMG_TEXTFILE },
+    { "url",   FALSE, STR_DESCRIPTION_LINK,                  0 },
+    { "vor",   FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_WRITERTEMPLATE },
+    { "vxd",   TRUE,  STR_DESCRIPTION_SYSFILE,               0 },
+    { "wmf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_WMF },
+    { "xls",   FALSE, STR_DESCRIPTION_EXCEL_DOC,             IMG_CALC },
+    { "xlt",   FALSE, STR_DESCRIPTION_EXCEL_TEMPLATE_DOC,    IMG_CALCTEMPLATE },
+    { "xlsx",  FALSE, STR_DESCRIPTION_EXCEL_DOC,             IMG_CALC },
+    { "uu",    TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "uue",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "z",     TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "zip",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "zoo",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "gz",    TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "ppt",   FALSE, STR_DESCRIPTION_POWERPOINT,            IMG_IMPRESS },
+    { "pot",   FALSE, STR_DESCRIPTION_POWERPOINT_TEMPLATE,   IMG_IMPRESSTEMPLATE },
+    { "pps",   FALSE, STR_DESCRIPTION_POWERPOINT_SHOW,       IMG_IMPRESS },
+    { "pptx",  FALSE, STR_DESCRIPTION_POWERPOINT,            IMG_IMPRESS },
+    { "oxt",   FALSE, STR_DESCRIPTION_EXTENSION,             IMG_EXTENSION },
+    { 0, FALSE, 0, 0 }
 };
 
 #ifdef OS2
     SvtExtensionResIdMapping_Impl Mappings[] =
     {
-    {"StarWriter 4.0",         sal_False,STR_DESCRIPTION_SWRITER_DOC, IMG_WRITER},
-    {"StarWriter 3.0",         sal_False,STR_DESCRIPTION_SWRITER_DOC, IMG_WRITER},
-    {"StarCalc 4.0",           sal_False,STR_DESCRIPTION_SCALC_DOC,   IMG_CALC},
-    {"StarCalc 3.0",           sal_False,STR_DESCRIPTION_SCALC_DOC,   IMG_CALC},
-    {"StarImpress 4.0",        sal_False,STR_DESCRIPTION_SIMPRESS_DOC,IMG_IMPRESS},
-    {"StarDraw 4.0",           sal_False,STR_DESCRIPTION_SDRAW_DOC,   IMG_DRAW},
-    {"StarDraw 3.0",           sal_False,STR_DESCRIPTION_SDRAW_DOC,   IMG_DRAW},
-    {"StarChart 3.0",          sal_False,STR_DESCRIPTION_SCHART_DOC,  IMG_CHART},
-    {"StarChart 4.0",          sal_False,STR_DESCRIPTION_SCHART_DOC,  IMG_CHART},
-    {"Bitmap",                 sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_BITMAP},
-    {"AutoCAD",                sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
-    {"Gif-File",               sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_GIF},
-    {"JPEG-File",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_JPG},
-    {"Metafile ",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
-    {"Photo-CD ",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCD},
-    {"Mac Pict",               sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCT},
-    {"PCX-File ",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCX},
-    {"PNG-File",               sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
-    {"SV-Metafile",            sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
-    {"TIFF-File",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_TIFF},
-    {"MS-Metafile",            sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_WMF},
-    {"XBM-File",               sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_BITMAP},
+    {"StarWriter 4.0",         FALSE,STR_DESCRIPTION_SWRITER_DOC, IMG_WRITER},
+    {"StarWriter 3.0",         FALSE,STR_DESCRIPTION_SWRITER_DOC, IMG_WRITER},
+    {"StarCalc 4.0",           FALSE,STR_DESCRIPTION_SCALC_DOC,   IMG_CALC},
+    {"StarCalc 3.0",           FALSE,STR_DESCRIPTION_SCALC_DOC,   IMG_CALC},
+    {"StarImpress 4.0",        FALSE,STR_DESCRIPTION_SIMPRESS_DOC,IMG_IMPRESS},
+    {"StarDraw 4.0",           FALSE,STR_DESCRIPTION_SDRAW_DOC,   IMG_DRAW},
+    {"StarDraw 3.0",           FALSE,STR_DESCRIPTION_SDRAW_DOC,   IMG_DRAW},
+    {"StarChart 3.0",          FALSE,STR_DESCRIPTION_SCHART_DOC,  IMG_CHART},
+    {"StarChart 4.0",          FALSE,STR_DESCRIPTION_SCHART_DOC,  IMG_CHART},
+    {"Bitmap",                 FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_BITMAP},
+    {"AutoCAD",                FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
+    {"Gif-File",               FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_GIF},
+    {"JPEG-File",              FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_JPG},
+    {"Metafile ",              FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
+    {"Photo-CD ",              FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCD},
+    {"Mac Pict",               FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCT},
+    {"PCX-File ",              FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCX},
+    {"PNG-File",               FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
+    {"SV-Metafile",            FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
+    {"TIFF-File",              FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_TIFF},
+    {"MS-Metafile",            FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_WMF},
+    {"XBM-File",               FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_BITMAP},
+    {"UniformResourceLocator", FALSE,STR_DESCRIPTION_LINK,        IMG_URL},
     {NULL, 0}
     };
 #endif
@@ -222,7 +224,7 @@ struct SvtFactory2ExtensionMapping_Impl
 
 // mapping from "private:factory" url to extension
 
-static SvtFactory2ExtensionMapping_Impl const Fac2ExtMap_Impl[] =
+static SvtFactory2ExtensionMapping_Impl __READONLY_DATA Fac2ExtMap_Impl[] =
 {
     { "swriter",                "odt" },
     { "swriter/web",            "html" },
@@ -245,7 +247,7 @@ static String GetImageExtensionByFactory_Impl( const String& rURL )
 
     if ( aPath.Len() )
     {
-        sal_uInt16 nIndex = 0;
+        USHORT nIndex = 0;
         while ( Fac2ExtMap_Impl[ nIndex ]._pFactory )
         {
             if ( aPath.EqualsAscii( Fac2ExtMap_Impl[ nIndex ]._pFactory ) )
@@ -303,12 +305,12 @@ static String GetImageExtensionByFactory_Impl( const String& rURL )
     return aExtension;
 }
 
-static sal_uInt16 GetIndexOfExtension_Impl( const String& rExtension )
+static USHORT GetIndexOfExtension_Impl( const String& rExtension )
 {
-    sal_uInt16 nRet = NO_INDEX;
+    USHORT nRet = NO_INDEX;
     if ( rExtension.Len() )
     {
-        sal_uInt16 nIndex = 0;
+        USHORT nIndex = 0;
         String aExt = rExtension;
         aExt.ToLowerAscii();
         while ( ExtensionMap_Impl[ nIndex ]._pExt )
@@ -325,12 +327,12 @@ static sal_uInt16 GetIndexOfExtension_Impl( const String& rExtension )
     return nRet;
 }
 
-static sal_uInt16 GetImageId_Impl( const String& rExtension )
+static USHORT GetImageId_Impl( const String& rExtension )
 {
-    sal_uInt16 nImage = IMG_FILE;
+    USHORT nImage = IMG_FILE;
     if ( rExtension.Len()  != NO_INDEX )
     {
-        sal_uInt16 nIndex = GetIndexOfExtension_Impl( rExtension );
+        USHORT nIndex = GetIndexOfExtension_Impl( rExtension );
         if ( nIndex != NO_INDEX )
         {
             nImage = ExtensionMap_Impl[ nIndex ]._nImgId;
@@ -366,9 +368,9 @@ static sal_Bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtool
     return bRet;
 }
 
-static sal_uInt16 GetFolderImageId_Impl( const String& rURL )
+static USHORT GetFolderImageId_Impl( const String& rURL )
 {
-    sal_uInt16 nRet = IMG_FOLDER;
+    USHORT nRet = IMG_FOLDER;
     ::svtools::VolumeInfo aVolumeInfo;
     try
     {
@@ -396,18 +398,18 @@ static sal_uInt16 GetFolderImageId_Impl( const String& rURL )
     return nRet;
 }
 
-static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
+static USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "hb93813", "SvFileInformationManager::GetImageId_Impl()" );
 
     String aExt, sURL = rObject.GetMainURL( INetURLObject::NO_DECODE );
-    sal_uInt16 nImage = IMG_FILE;
+    USHORT nImage = IMG_FILE;
 
     if ( rObject.GetProtocol() == INET_PROT_PRIVATE )
     {
         String aURLPath = sURL.Copy( URL_PREFIX_PRIV_SOFFICE_LEN );
         String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
-        if ( aType == String( RTL_CONSTASCII_USTRINGPARAM("factory") ) )
+        if ( aType == String( RTL_CONSTASCII_STRINGPARAM("factory") ) )
         {
             // detect an image id for our "private:factory" urls
             aExt = GetImageExtensionByFactory_Impl( sURL );
@@ -415,8 +417,8 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetec
                 nImage = GetImageId_Impl( aExt );
             return nImage;
         }
-        else if ( aType == String( RTL_CONSTASCII_USTRINGPARAM("image") ) )
-            nImage = (sal_uInt16)aURLPath.GetToken( 1, INET_PATH_TOKEN ).ToInt32();
+        else if ( aType == String( RTL_CONSTASCII_STRINGPARAM("image") ) )
+            nImage = (USHORT)aURLPath.GetToken( 1, INET_PATH_TOKEN ).ToInt32();
     }
     else
     {
@@ -424,7 +426,7 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetec
         if ( aExt.EqualsAscii( "vor" ) )
         {
             SotStorageRef aStorage = new SotStorage( sURL, STREAM_STD_READ );
-            sal_uInt16 nId = IMG_WRITERTEMPLATE;
+            USHORT nId = IMG_WRITERTEMPLATE;
             if ( !aStorage->GetError() )
             {
                 SvGlobalName aGlobalName = aStorage->GetClassName();
@@ -453,13 +455,13 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetec
     return nImage;
 }
 
-static sal_uInt16 GetDescriptionId_Impl( const String& rExtension, sal_Bool& rbShowExt )
+static USHORT GetDescriptionId_Impl( const String& rExtension, sal_Bool& rbShowExt )
 {
-    sal_uInt16 nId = 0;
+    USHORT nId = 0;
 
     if ( rExtension.Len()  != NO_INDEX )
     {
-        sal_uInt16 nIndex = GetIndexOfExtension_Impl( rExtension );
+        USHORT nIndex = GetIndexOfExtension_Impl( rExtension );
         if ( nIndex != NO_INDEX )
         {
             nId = ExtensionMap_Impl[ nIndex ]._nStrId;
@@ -472,7 +474,7 @@ static sal_uInt16 GetDescriptionId_Impl( const String& rExtension, sal_Bool& rbS
 
 static String GetDescriptionByFactory_Impl( const String& rFactory )
 {
-    sal_uInt16 nResId = 0;
+    USHORT nResId = 0;
     if ( rFactory.EqualsIgnoreCaseAscii( "swriter", 0, 7 ) )
         nResId = STR_DESCRIPTION_FACTORY_WRITER;
     else if ( rFactory.EqualsIgnoreCaseAscii( "scalc", 0, 5 ) )
@@ -499,9 +501,9 @@ static String GetDescriptionByFactory_Impl( const String& rFactory )
     return aRet;
 }
 
-static sal_uInt16 GetFolderDescriptionId_Impl( const String& rURL )
+static USHORT GetFolderDescriptionId_Impl( const String& rURL )
 {
-    sal_uInt16 nRet = STR_DESCRIPTION_FOLDER;
+    USHORT nRet = STR_DESCRIPTION_FOLDER;
     svtools::VolumeInfo aVolumeInfo;
     try
     {
@@ -529,9 +531,119 @@ static sal_uInt16 GetFolderDescriptionId_Impl( const String& rURL )
     return nRet;
 }
 
-static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
+static ResMgr* GetIsoResMgr_Impl()
 {
-    if ( !bBig && IMG_FOLDER == nImageId )
+    static ResMgr* pIsoResMgr = NULL;
+
+    if ( !pIsoResMgr )
+    {
+        ByteString aResMgrName( "iso" );
+        pIsoResMgr = ResMgr::CreateResMgr(
+            aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+        if ( !pIsoResMgr )
+        {
+            // no "iso" resource -> search for "ooo" resource
+            aResMgrName = ByteString( "ooo" );
+            pIsoResMgr = ResMgr::CreateResMgr(
+                aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+        }
+    }
+
+    return pIsoResMgr;
+}
+
+static ImageList* CreateImageList_Impl( USHORT nResId )
+{
+    ImageList* pList = NULL;
+    ResMgr* pResMgr = GetIsoResMgr_Impl();
+    DBG_ASSERT( pResMgr, "SvFileInformationManager::CreateImageList_Impl(): no resmgr" );
+    ResId aResId( nResId, *pResMgr );
+    aResId.SetRT( RSC_IMAGELIST );
+    if ( pResMgr->IsAvailable( aResId ) )
+        pList = new ImageList( aResId );
+    else
+        pList = new ImageList();
+    return pList;
+}
+
+static Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
+{
+    ImageList* pList = NULL;
+
+    static ImageList* _pSmallOfficeImgList = NULL;
+    static ImageList* _pBigOfficeImgList = NULL;
+    static ImageList* _pSmallHCOfficeImgList = NULL;
+    static ImageList* _pBigHCOfficeImgList = NULL;
+    static ULONG nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
+
+    // If the style has been changed, throw away our cache of the older images
+    if ( nStyle != Application::GetSettings().GetStyleSettings().GetSymbolsStyle() )
+    {
+        delete _pSmallOfficeImgList, _pSmallOfficeImgList = NULL;
+        delete _pBigOfficeImgList, _pBigOfficeImgList = NULL;
+        delete _pSmallHCOfficeImgList, _pSmallHCOfficeImgList = NULL;
+        delete _pBigHCOfficeImgList, _pBigHCOfficeImgList = NULL;
+        nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
+    }
+
+    // #i21242# MT: For B&W we need the HC Image and must transform.
+    // bHiContrast is TRUE for all dark backgrounds, but we need HC Images for HC White also,
+    // so we can't rely on bHighContrast.
+    BOOL bBlackAndWhite = Application::GetSettings().GetStyleSettings().IsHighContrastBlackAndWhite();
+    if ( bBlackAndWhite )
+        bHighContrast = TRUE;
+
+
+    if ( bBig )
+    {
+        if ( bHighContrast )
+        {
+            if ( !_pBigHCOfficeImgList )
+                _pBigHCOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST );
+            pList = _pBigHCOfficeImgList;
+        }
+        else
+        {
+            if ( !_pBigOfficeImgList )
+                _pBigOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_BIG );
+            pList = _pBigOfficeImgList;
+        }
+    }
+    else
+    {
+        if ( bHighContrast )
+        {
+            if ( !_pSmallHCOfficeImgList )
+                _pSmallHCOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST );
+            pList = _pSmallHCOfficeImgList;
+        }
+        else
+        {
+            if ( !_pSmallOfficeImgList )
+                _pSmallOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_SMALL );
+            pList = _pSmallOfficeImgList;
+        }
+    }
+
+    Image aImage = pList->GetImage( nImageId );
+
+    if ( bBlackAndWhite )
+    {
+        // First invert the Image, because it's designed for black background, structures are bright
+        aImage.Invert();
+        // Now make monochrome...
+        ImageColorTransform eTrans = IMAGECOLORTRANSFORM_MONOCHROME_WHITE;
+        if ( Application::GetSettings().GetStyleSettings().GetFaceColor().GetColor() == COL_WHITE )
+            eTrans = IMAGECOLORTRANSFORM_MONOCHROME_BLACK;
+        aImage = aImage.GetColorTransformedImage( eTrans );
+    }
+
+    return aImage;
+}
+
+static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
+{
+    if ( !bBig && IMG_FOLDER == nImageId && !bHighContrast )
         // return our new small folder image (256 colors)
         return Image( SvtResId( IMG_SVT_FOLDER ) );
 
@@ -539,34 +651,73 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
 
     static ImageList* _pSmallImageList = NULL;
     static ImageList* _pBigImageList = NULL;
-    static sal_uLong nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
+    static ImageList* _pSmallHCImageList = NULL;
+    static ImageList* _pBigHCImageList = NULL;
+    static ULONG nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
 
     // If the style has been changed, throw away our cache of the older images
     if ( nStyle != Application::GetSettings().GetStyleSettings().GetSymbolsStyle() )
     {
         delete _pSmallImageList, _pSmallImageList = NULL;
         delete _pBigImageList, _pBigImageList = NULL;
+        delete _pSmallHCImageList, _pSmallHCImageList = NULL;
+        delete _pBigHCImageList, _pBigHCImageList = NULL;
         nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
     }
 
     if ( bBig )
     {
-        if ( !_pBigImageList )
-            _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
-        pList = _pBigImageList;
+        if ( bHighContrast )
+        {
+            if ( !_pBigHCImageList )
+                _pBigHCImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST ) );
+            pList = _pBigHCImageList;
+        }
+        else
+        {
+            if ( !_pBigImageList )
+                _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
+            pList = _pBigImageList;
+        }
     }
     else
     {
-        if ( !_pSmallImageList )
-            _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
-        pList = _pSmallImageList;
+        if ( bHighContrast )
+        {
+            if ( !_pSmallHCImageList )
+                _pSmallHCImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST ) );
+            pList = _pSmallHCImageList;
+        }
+        else
+        {
+            if ( !_pSmallImageList )
+                _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
+            pList = _pSmallImageList;
+        }
     }
 
     if ( pList->HasImageAtPos( nImageId ) )
         return pList->GetImage( nImageId );
     else
-        return Image();
-//      return GetOfficeImageFromList_Impl( nImageId, bBig );
+        return GetOfficeImageFromList_Impl( nImageId, bBig, bHighContrast );
+}
+
+//****************************************************************************
+
+void ReplaceStarOfficeVar( String& _rDescription )
+{
+    static String sVariable( RTL_CONSTASCII_STRINGPARAM( "%STAROFFICE" ) );
+    static String sProductName;
+    if ( sProductName.Len() == 0 )
+    {
+        ::rtl::OUString sTemp;
+        ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME ) >>= sTemp;
+        if ( sTemp.equalsAscii( "StarSuite" ) == sal_False )
+            sProductName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarOffice" ) );
+        else
+            sProductName = String( sTemp );
+    }
+    _rDescription.SearchAndReplace( sVariable, sProductName );
 }
 
 String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
@@ -575,7 +726,7 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
 
     String sDescription;
     String sExtension( rObject.getExtension() ), sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
-    sal_uInt16 nResId = 0;
+    USHORT nResId = 0;
     sal_Bool bShowExt = sal_False, bDetected = sal_False, bOnlyFile = sal_False;
     sal_Bool bFolder = bDetectFolder ? CONTENT_HELPER::IsFolder( sURL ) : sal_False;
     if ( !bFolder )
@@ -586,7 +737,7 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
             {
                 String aURLPath = sURL.Copy( URL_PREFIX_PRIV_SOFFICE_LEN );
                 String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
-                if ( aType == String( RTL_CONSTASCII_USTRINGPARAM("factory") ) )
+                if ( aType == String( RTL_CONSTASCII_STRINGPARAM("factory") ) )
                 {
                     sDescription = GetDescriptionByFactory_Impl( aURLPath.Copy( aURLPath.Search( INET_PATH_TOKEN ) + 1 ) );
                     bDetected = sal_True;
@@ -630,42 +781,63 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
 
     if ( bShowExt )
     {
-        sDescription += String( RTL_CONSTASCII_USTRINGPARAM(" (") );
+        sDescription += String( RTL_CONSTASCII_STRINGPARAM(" (") );
         sDescription += sExtension;
         sDescription += ')';
     }
 
+    ReplaceStarOfficeVar( sDescription );
     return sDescription;
 }
 
 Image SvFileInformationManager::GetImage( const INetURLObject& rObject, sal_Bool bBig )
 {
-    sal_uInt16 nImage = GetImageId_Impl( rObject, sal_True );
-    DBG_ASSERT( nImage, "invalid ImageId" );
-    return GetImageFromList_Impl( nImage, bBig );
+    return GetImage( rObject, bBig, FALSE );
 }
 
 Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, sal_Bool bBig )
 {
-    sal_Int16 nImage = GetImageId_Impl( rObject, sal_False );
-    DBG_ASSERT( nImage, "invalid ImageId" );
-    return GetImageFromList_Impl( nImage, bBig );
+    return GetFileImage( rObject, bBig, FALSE );
 }
 
 Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, sal_Bool bBig )
 {
-    sal_uInt16 nImage = GetImageId_Impl( rObject, sal_True );
+    return GetImageNoDefault( rObject, bBig, FALSE );
+}
+
+Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig )
+{
+    return GetFolderImage( rInfo, bBig, FALSE );
+}
+
+Image SvFileInformationManager::GetImage( const INetURLObject& rObject, sal_Bool bBig, sal_Bool bHighContrast )
+{
+    USHORT nImage = GetImageId_Impl( rObject, sal_True );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
+}
+
+Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, sal_Bool bBig, sal_Bool bHighContrast )
+{
+    USHORT nImage = GetImageId_Impl( rObject, sal_False );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
+}
+
+Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, sal_Bool bBig, sal_Bool bHighContrast )
+{
+    USHORT nImage = GetImageId_Impl( rObject, sal_True );
     DBG_ASSERT( nImage, "invalid ImageId" );
 
     if ( nImage == IMG_FILE )
         return Image();
 
-    return GetImageFromList_Impl( nImage, bBig );
+    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
 }
 
-Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig )
+Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig, sal_Bool bHighContrast )
 {
-    sal_uInt16 nImage = IMG_FOLDER;
+    USHORT nImage = IMG_FOLDER;
     DBG_ASSERT( nImage, "invalid ImageId" );
 
     if ( rInfo.m_bIsRemote )
@@ -677,7 +849,7 @@ Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo
     else if ( rInfo.m_bIsVolume )
         nImage = IMG_FIXEDDEV;
 
-    return GetImageFromList_Impl( nImage, bBig );
+    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
 }
 
 String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
@@ -692,7 +864,7 @@ String SvFileInformationManager::GetFileDescription( const INetURLObject& rObjec
 
 String SvFileInformationManager::GetFolderDescription( const svtools::VolumeInfo& rInfo )
 {
-    sal_uInt16 nResId = STR_DESCRIPTION_FOLDER;
+    USHORT nResId = STR_DESCRIPTION_FOLDER;
     if ( rInfo.m_bIsRemote )
         nResId = STR_DESCRIPTION_REMOTE_VOLUME;
     else if ( rInfo.m_bIsFloppy )

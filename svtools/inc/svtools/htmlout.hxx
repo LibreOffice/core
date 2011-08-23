@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ struct HTMLOutEvent
 {
     const sal_Char *pBasicName;
     const sal_Char *pJavaName;
-    sal_uInt16 nEvent;
+    USHORT nEvent;
 };
 
 struct SVT_DLLPUBLIC HTMLOutContext
@@ -61,10 +61,10 @@ struct SVT_DLLPUBLIC HTMLOutContext
 
 struct HTMLOutFuncs
 {
-#if defined(UNX)
-    static const sal_Char sNewLine;     // nur \012 oder \015
+#if defined(MAC) || defined(UNX)
+    static const sal_Char sNewLine;		// nur \012 oder \015
 #else
-    static const sal_Char sNewLine[];   // \015\012
+    static const sal_Char __FAR_DATA sNewLine[];	// \015\012
 #endif
 
     SVT_DLLPUBLIC static void ConvertStringToHTML( const String& sSrc, ByteString& rDest,
@@ -72,21 +72,21 @@ struct HTMLOutFuncs
                         String *pNonConvertableChars = 0);
 
     SVT_DLLPUBLIC static SvStream& Out_AsciiTag( SvStream&, const sal_Char* pStr,
-                                   sal_Bool bOn = sal_True,
+                                   BOOL bOn = TRUE,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252);
     SVT_DLLPUBLIC static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
-                        HTMLOutContext& rContext,
+                        HTMLOutContext& rContext, 
                         String *pNonConvertableChars = 0 );
     SVT_DLLPUBLIC static SvStream& Out_String( SvStream&, const String&,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                         String *pNonConvertableChars = 0 );
-    SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, sal_uLong nHex, sal_uInt8 nLen,
+    SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, ULONG nHex, BYTE nLen,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252 );
     SVT_DLLPUBLIC static SvStream& Out_Color( SvStream&, const Color&,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252 );
     SVT_DLLPUBLIC static SvStream& Out_ImageMap( SvStream&, const String&, const ImageMap&, const String&,
                                    const HTMLOutEvent *pEventTable,
-                                   sal_Bool bOutStarBasic,
+                                   BOOL bOutStarBasic,
                                    const sal_Char *pDelim = 0,
                                    const sal_Char *pIndentArea = 0,
                                    const sal_Char *pIndentMap = 0,
@@ -108,18 +108,18 @@ struct HTMLOutFuncs
     // der 3. Parameter ist ein Array von HTMLOutEvents, das mit einem
     // nur aus 0 bestehen Eintrag terminiert ist.
     SVT_DLLPUBLIC static SvStream& Out_Events( SvStream&, const SvxMacroTableDtor&,
-                                 const HTMLOutEvent*, sal_Bool bOutStarBasic,
+                                 const HTMLOutEvent*, BOOL bOutStarBasic,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                         String *pNonConvertableChars = 0 );
 
     // <TD SDVAL="..." SDNUM="...">
-    SVT_DLLPUBLIC static ByteString&    CreateTableDataOptionsValNum( ByteString& aStrTD,
-                sal_Bool bValue, double fVal, sal_uLong nFormat,
+    SVT_DLLPUBLIC static ByteString&	CreateTableDataOptionsValNum( ByteString& aStrTD,
+                BOOL bValue, double fVal, ULONG nFormat,
                 SvNumberFormatter& rFormatter,
                 rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                 String *pNonConvertableChars = 0 );
 
-    SVT_DLLPUBLIC static sal_Bool PrivateURLToInternalImg( String& rURL );
+    SVT_DLLPUBLIC static BOOL PrivateURLToInternalImg( String& rURL );
 };
 
 #endif

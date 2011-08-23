@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,12 @@
 
 extern "C"
 {
+    #define INT32 JPEG_INT32
     #include "stdio.h"
     #include "jpeg.h"
     #include "jpeglib.h"
     #include "jerror.h"
+    #undef INT32
 }
 
 #define _JPEGPRIVATE
@@ -90,7 +92,7 @@ extern "C" long JPEGCallback( void* pCallbackData, long nPercent )
 
 #define BUF_SIZE  4096
 
-typedef struct
+typedef struct 
 {
   struct jpeg_destination_mgr pub;  /* public fields */
 
@@ -124,7 +126,7 @@ extern "C" int empty_output_buffer (j_compress_ptr cinfo)
   dest->pub.next_output_byte = dest->buffer;
   dest->pub.free_in_buffer = BUF_SIZE;
 
-  return sal_True;
+  return TRUE;
 }
 
 extern "C" void term_destination (j_compress_ptr cinfo)
@@ -188,7 +190,7 @@ extern "C" void init_source (j_decompress_ptr cinfo)
    * but we don't clear the input buffer.
    * This is correct behavior for reading a series of images from one source.
    */
-  src->start_of_file = sal_True;
+  src->start_of_file = TRUE;
 }
 
 long StreamRead( SvStream* pSvStm, void* pBuffer, long nBufferSize )
@@ -237,9 +239,9 @@ extern "C" int fill_input_buffer (j_decompress_ptr cinfo)
 
   src->pub.next_input_byte = src->buffer;
   src->pub.bytes_in_buffer = nbytes;
-  src->start_of_file = sal_False;
+  src->start_of_file = FALSE;
 
-  return sal_True;
+  return TRUE;
 }
 
 extern "C" void skip_input_data (j_decompress_ptr cinfo, long num_bytes)
@@ -254,7 +256,7 @@ extern "C" void skip_input_data (j_decompress_ptr cinfo, long num_bytes)
     while (num_bytes > (long) src->pub.bytes_in_buffer) {
       num_bytes -= (long) src->pub.bytes_in_buffer;
       (void) fill_input_buffer(cinfo);
-      /* note we assume that fill_input_buffer will never return sal_False,
+      /* note we assume that fill_input_buffer will never return FALSE,
        * so suspension need not be handled.
        */
     }
@@ -306,12 +308,12 @@ extern "C" void jpeg_svstream_src (j_decompress_ptr cinfo, void * in)
 // --------------
 
 JPEGReader::JPEGReader( SvStream& rStm, void* /*pCallData*/, sal_Bool bSetLS ) :
-        rIStm           ( rStm ),
-        pAcc            ( NULL ),
-        pAcc1           ( NULL ),
-        pBuffer         ( NULL ),
-        nLastPos        ( rStm.Tell() ),
-        nLastLines      ( 0 ),
+        rIStm			( rStm ),
+        pAcc			( NULL ),
+        pAcc1			( NULL ),
+        pBuffer			( NULL ),
+        nLastPos		( rStm.Tell() ),
+        nLastLines		( 0 ),
         bSetLogSize     ( bSetLS )
 {
     maUpperName = String::CreateFromAscii( "SVIJPEG", 7 );
@@ -349,9 +351,9 @@ void* JPEGReader::CreateBitmap( void* pParam )
     {
         BitmapPalette aGrayPal( 256 );
 
-        for( sal_uInt16 n = 0; n < 256; n++ )
+        for( USHORT n = 0; n < 256; n++ )
         {
-            const sal_uInt8 cGray = (sal_uInt8) n;
+            const BYTE cGray = (BYTE) n;
             aGrayPal[ n ] = BitmapColor( cGray, cGray, cGray );
         }
 
@@ -359,33 +361,33 @@ void* JPEGReader::CreateBitmap( void* pParam )
     }
     else
         aBmp = Bitmap( aSize, 24 );
-
+   
     if ( bSetLogSize )
     {
         unsigned long nUnit = ((JPEGCreateBitmapParam*)pParam)->density_unit;
-
-        if( ( ( 1 == nUnit ) || ( 2 == nUnit ) ) &&
-            ( (JPEGCreateBitmapParam*) pParam )->X_density &&
+        
+        if( ( ( 1 == nUnit ) || ( 2 == nUnit ) ) && 
+            ( (JPEGCreateBitmapParam*) pParam )->X_density && 
             ( (JPEGCreateBitmapParam*) pParam )->Y_density )
         {
             Point       aEmptyPoint;
-            Fraction    aFractX( 1, ((JPEGCreateBitmapParam*)pParam)->X_density );
-            Fraction    aFractY( 1, ((JPEGCreateBitmapParam*)pParam)->Y_density );
-            MapMode     aMapMode( nUnit == 1 ? MAP_INCH : MAP_CM, aEmptyPoint, aFractX, aFractY );
-            Size        aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MAP_100TH_MM );
+            Fraction	aFractX( 1, ((JPEGCreateBitmapParam*)pParam)->X_density );
+            Fraction	aFractY( 1, ((JPEGCreateBitmapParam*)pParam)->Y_density );
+            MapMode		aMapMode( nUnit == 1 ? MAP_INCH : MAP_CM, aEmptyPoint, aFractX, aFractY );
+            Size		aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MAP_100TH_MM );
 
             aBmp.SetPrefSize( aPrefSize );
             aBmp.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
         }
     }
-
+    
     pAcc = aBmp.AcquireWriteAccess();
 
     if( pAcc )
     {
         long nAlignedWidth;
 
-        const sal_uLong nFormat = pAcc->GetScanlineFormat();
+        const ULONG nFormat = pAcc->GetScanlineFormat();
 
         if(
             ( bGray && ( BMP_FORMAT_8BIT_PAL == nFormat ) ) ||
@@ -399,7 +401,7 @@ void* JPEGReader::CreateBitmap( void* pParam )
         else
         {
             nAlignedWidth = AlignedWidth4Bytes( aSize.Width() * ( bGray ? 8 : 24 ) );
-            ((JPEGCreateBitmapParam*)pParam)->bTopDown = sal_True;
+            ((JPEGCreateBitmapParam*)pParam)->bTopDown = TRUE;
             pBmpBuf = pBuffer = rtl_allocateMemory( nAlignedWidth * aSize.Height() );
         }
         ((JPEGCreateBitmapParam*)pParam)->nAlignedWidth = nAlignedWidth;
@@ -414,19 +416,19 @@ void JPEGReader::FillBitmap()
 {
     if( pBuffer && pAcc )
     {
-        HPBYTE      pTmp;
-        BitmapColor aColor;
-        long        nAlignedWidth;
-        long        nWidth = pAcc->Width();
-        long        nHeight = pAcc->Height();
+        HPBYTE		pTmp;
+        BitmapColor	aColor;
+        long		nAlignedWidth;
+        long		nWidth = pAcc->Width();
+        long		nHeight = pAcc->Height();
 
         if( pAcc->GetBitCount() == 8 )
         {
             BitmapColor* pCols = new BitmapColor[ 256 ];
 
-            for( sal_uInt16 n = 0; n < 256; n++ )
+            for( USHORT n = 0; n < 256; n++ )
             {
-                const sal_uInt8 cGray = (sal_uInt8) n;
+                const BYTE cGray = (BYTE) n;
                 pCols[ n ] = pAcc->GetBestMatchingColor( BitmapColor( cGray, cGray, cGray ) );
             }
 
@@ -434,7 +436,7 @@ void JPEGReader::FillBitmap()
 
             for( long nY = 0L; nY < nHeight; nY++ )
             {
-                pTmp = (sal_uInt8*) pBuffer + nY * nAlignedWidth;
+                pTmp = (BYTE*) pBuffer + nY * nAlignedWidth;
 
                 for( long nX = 0L; nX < nWidth; nX++ )
                     pAcc->SetPixel( nY, nX, pCols[ *pTmp++ ] );
@@ -448,7 +450,7 @@ void JPEGReader::FillBitmap()
 
             for( long nY = 0L; nY < nHeight; nY++ )
             {
-                pTmp = (sal_uInt8*) pBuffer + nY * nAlignedWidth;
+                pTmp = (BYTE*) pBuffer + nY * nAlignedWidth;
 
                 for( long nX = 0L; nX < nWidth; nX++ )
                 {
@@ -466,8 +468,8 @@ void JPEGReader::FillBitmap()
 
 Graphic JPEGReader::CreateIntermediateGraphic( const Bitmap& rBitmap, long nLines )
 {
-    Graphic     aGraphic;
-    const Size  aSizePix( rBitmap.GetSizePixel() );
+    Graphic		aGraphic;
+    const Size	aSizePix( rBitmap.GetSizePixel() );
 
     if( !nLastLines )
     {
@@ -511,11 +513,11 @@ Graphic JPEGReader::CreateIntermediateGraphic( const Bitmap& rBitmap, long nLine
 
 ReadState JPEGReader::Read( Graphic& rGraphic )
 {
-    long        nEndPos;
-    long        nLines;
-    ReadState   eReadState;
-    sal_Bool        bRet = sal_False;
-    sal_uInt8       cDummy;
+    long		nEndPos;
+    long		nLines;
+    ReadState	eReadState;
+    BOOL		bRet = FALSE;
+    BYTE		cDummy;
 
 #if 1 // TODO: is it possible to get rid of this seek to the end?
     // check if the stream's end is already available
@@ -561,10 +563,10 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
         else
             rGraphic = aBmp;
 
-        bRet = sal_True;
+        bRet = TRUE;
     }
     else if( rIStm.GetError() == ERRCODE_IO_PENDING )
-        bRet = sal_True;
+        bRet = TRUE;
 
     // Status setzen ( Pending hat immer Vorrang )
     if( rIStm.GetError() == ERRCODE_IO_PENDING )
@@ -590,9 +592,9 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
 // --------------
 
 JPEGWriter::JPEGWriter( SvStream& rStm, const uno::Sequence< beans::PropertyValue >* pFilterData, bool* pExportWasGrey ) :
-        rOStm       ( rStm ),
-        pAcc        ( NULL ),
-        pBuffer     ( NULL ),
+        rOStm		( rStm ),
+        pAcc		( NULL ),
+        pBuffer		( NULL ),
         pExpWasGrey ( pExportWasGrey )
 {
     FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
@@ -627,14 +629,14 @@ void* JPEGWriter::GetScanline( long nY )
         else if( pBuffer )
         {
             BitmapColor aColor;
-            long        nWidth = pAcc->Width();
-            sal_uInt8*      pTmp = pBuffer;
+            long		nWidth = pAcc->Width();
+            BYTE*		pTmp = pBuffer;
 
             if( pAcc->HasPalette() )
             {
                 for( long nX = 0L; nX < nWidth; nX++ )
                 {
-                    aColor = pAcc->GetPaletteColor( (sal_uInt8) pAcc->GetPixel( nY, nX ) );
+                    aColor = pAcc->GetPaletteColor( (BYTE) pAcc->GetPixel( nY, nX ) );
                     *pTmp++ = aColor.GetRed();
                     if ( bGreys )
                         continue;
@@ -664,9 +666,9 @@ void* JPEGWriter::GetScanline( long nY )
 
 // ------------------------------------------------------------------------
 
-sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
+BOOL JPEGWriter::Write( const Graphic& rGraphic )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     if ( xStatusIndicator.is() )
     {
@@ -684,8 +686,8 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
 
     pAcc = aGraphicBmp.AcquireReadAccess();
 
-    if ( !bGreys )  // bitmap was not explicitely converted into greyscale,
-    {               // check if source is greyscale only
+    if ( !bGreys )	// bitmap was not explicitely converted into greyscale,
+    {				// check if source is greyscale only
 
         sal_Bool bIsGrey = sal_True;
 
@@ -695,7 +697,7 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
             BitmapColor aColor;
             for( long nX = 0L; bIsGrey && ( nX < nWidth ); nX++ )
             {
-                aColor = pAcc->HasPalette() ? pAcc->GetPaletteColor( (sal_uInt8) pAcc->GetPixel( nY, nX ) )
+                aColor = pAcc->HasPalette() ? pAcc->GetPaletteColor( (BYTE) pAcc->GetPixel( nY, nX ) )
                                             : pAcc->GetPixel( nY, nX );
                 bIsGrey = ( aColor.GetRed() == aColor.GetGreen() ) && ( aColor.GetRed() == aColor.GetBlue() );
             }
@@ -703,7 +705,7 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
         if ( bIsGrey )
             bGreys = sal_True;
     }
-
+    
     if( pExpWasGrey )
         *pExpWasGrey = bGreys;
 
@@ -712,11 +714,11 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
         bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB );
 
         if( !bNative )
-            pBuffer = new sal_uInt8[ AlignedWidth4Bytes( bGreys ? pAcc->Width() * 8L : pAcc->Width() * 24L ) ];
+            pBuffer = new BYTE[ AlignedWidth4Bytes( bGreys ? pAcc->Width() * 8L : pAcc->Width() * 24L ) ];
 
         JPEGCallbackStruct aCallbackData;
         aCallbackData.xStatusIndicator = xStatusIndicator;
-        bRet = (sal_Bool) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), bGreys, nQuality, &aCallbackData );
+        bRet = (BOOL) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), bGreys, nQuality, &aCallbackData );
 
         delete[] pBuffer;
         pBuffer = NULL;
@@ -734,11 +736,11 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
 // - ImportJPEG -
 // --------------
 
-sal_Bool ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags )
+BOOL ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags )
 {
-    JPEGReader* pJPEGReader = (JPEGReader*) rGraphic.GetContext();
-    ReadState   eReadState;
-    sal_Bool        bRet = sal_True;
+    JPEGReader*	pJPEGReader = (JPEGReader*) rGraphic.GetContext();
+    ReadState	eReadState;
+    BOOL		bRet = TRUE;
 
     if( !pJPEGReader )
         pJPEGReader = new JPEGReader( rStm, pCallerData, ( nImportFlags & GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG ) != 0 );
@@ -753,7 +755,7 @@ sal_Bool ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData, sal_I
 
     if( eReadState == JPEGREAD_ERROR )
     {
-        bRet = sal_False;
+        bRet = FALSE;
         delete pJPEGReader;
     }
     else if( eReadState == JPEGREAD_OK )
@@ -768,7 +770,7 @@ sal_Bool ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData, sal_I
 //  - ExportJPEG -
 //  --------------
 
-sal_Bool ExportJPEG( SvStream& rOStm, const Graphic& rGraphic,
+BOOL ExportJPEG( SvStream& rOStm, const Graphic& rGraphic,
                  const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
                  bool* pExportWasGrey
                 )

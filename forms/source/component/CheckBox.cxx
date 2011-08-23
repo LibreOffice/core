@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ InterfaceRef SAL_CALL OCheckBoxControl_CreateInstance(const Reference<XMultiServ
 }
 
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+StringSequence SAL_CALL	OCheckBoxControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -119,7 +119,7 @@ IMPLEMENT_DEFAULT_CLONING( OCheckBoxModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+StringSequence SAL_CALL	OCheckBoxModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
     StringSequence aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
@@ -145,14 +145,14 @@ StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::
 void OCheckBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 1, OReferenceValueComponent )
-        DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
+        DECL_PROP1(TABINDEX,		sal_Int16,			BOUND);
     END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OCheckBoxModel::getServiceName() throw(RuntimeException)
 {
-    return FRM_COMPONENT_CHECKBOX;  // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_CHECKBOX;	// old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -200,7 +200,7 @@ void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& 
             readCommonProperties(_rxInStream);
             break;
         default:
-            OSL_FAIL("OCheckBoxModel::read : unknown version !");
+            DBG_ERROR("OCheckBoxModel::read : unknown version !");
             defaultCommonProperties();
             break;
     }
@@ -257,12 +257,12 @@ sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                     m_xColumnUpdate->updateBoolean( sal_False );
                     break;
                 default:
-                    OSL_FAIL("OCheckBoxModel::commitControlValueToDbColumn: invalid value !");
+                    DBG_ERROR("OCheckBoxModel::commitControlValueToDbColumn: invalid value !");
             }
         }
         catch(Exception&)
         {
-            OSL_FAIL("OCheckBoxModel::commitControlValueToDbColumn: could not commit !");
+            DBG_ERROR("OCheckBoxModel::commitControlValueToDbColumn: could not commit !");
         }
     }
     return sal_True;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ published service CellRange
     service com::sun::star::style::ParagraphProperties;
 
     [optional] service com::sun::star::style::ParagraphPropertiesAsian;
-
+        
     [optional] service com::sun::star::style::ParagraphPropertiesComplex;
 
     interface com::sun::star::table::XCellRange;
@@ -115,7 +115,7 @@ published service CellRange
 
     //-----------------------------------------------------------------------------
 
-    /** determines the location of the background graphic.
+    /** determins the location of the background graphic.
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
@@ -127,20 +127,20 @@ published service CellRange
 
     //-----------------------------------------------------------------------------
 
-    /** determines if the background color is transparent.
+    /** determins if the background color is transparent.
      */
     [property] boolean BackTransparent;
 
     //-----------------------------------------------------------------------------
 
-    /** determines if the first column of the table should be treated as
+    /** determins if the first column of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartColumnAsLabel;
 
     //-----------------------------------------------------------------------------
 
-    /** determines if the first row of the table should be treated as
+    /** determins if the first row of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartRowAsLabel;

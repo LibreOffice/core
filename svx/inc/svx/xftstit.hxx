@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ public:
                             XFormTextStartItem(long nStart = 0);
                             XFormTextStartItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
 };
 
 #endif

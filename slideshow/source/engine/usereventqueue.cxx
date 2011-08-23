@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ bool fireSingleEvent( ContainerT & rQueue, EventQueue & rEventQueue )
     {
         EventSharedPtr const pEvent(rQueue.front());
         rQueue.pop();
-
+        
         // skip all inactive events (as the purpose of
         // nextEventFromQueue() is to activate the next
         // event, and events which return false on
@@ -118,25 +118,25 @@ bool fireAllEvents( ContainerT & rQueue, EventQueue & rEventQueue )
 class EventContainer
 {
 public:
-    EventContainer() :
-        maEvents()
+    EventContainer() : 
+        maEvents() 
     {}
-
+    
     void clearContainer()
     {
         maEvents = ImpEventQueue();
     }
-
+    
     void addEvent( const EventSharedPtr& rEvent )
     {
         maEvents.push( rEvent );
     }
-
+    
     bool isEmpty()
     {
         return maEvents.empty();
     }
-
+    
 protected:
     ImpEventQueue maEvents;
 };
@@ -149,17 +149,17 @@ class PlainEventHandler : public EventHandler,
 public:
     PlainEventHandler( EventQueue & rEventQueue )
         : EventContainer(), mrEventQueue(rEventQueue) {}
-
+    
     virtual void dispose()
     {
         clearContainer();
     }
-
+    
     virtual bool handleEvent()
     {
         return fireAllEvents( maEvents, mrEventQueue );
     }
-
+    
 private:
     EventQueue & mrEventQueue;
 };
@@ -169,41 +169,41 @@ class AllAnimationEventHandler : public AnimationEventHandler
 public:
     AllAnimationEventHandler( EventQueue& rEventQueue ) :
         mrEventQueue( rEventQueue ),
-        maAnimationEventMap()
+        maAnimationEventMap() 
     {}
-
+    
     virtual void dispose()
     {
         maAnimationEventMap.clear();
     }
-
+    
     virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
     {
         ENSURE_OR_RETURN_FALSE(
             rNode,
             "AllAnimationEventHandler::handleAnimationEvent(): Invalid node" );
-
+        
         bool bRet( false );
-
+        
         ImpAnimationEventMap::iterator aIter;
-        if( (aIter=maAnimationEventMap.find(
+        if( (aIter=maAnimationEventMap.find( 
                  rNode->getXAnimationNode() )) != maAnimationEventMap.end() )
         {
             ImpEventVector& rVec( aIter->second );
-
+            
             bRet = !rVec.empty();
-
+            
             // registered node found -> fire all events in the vector
             std::for_each( rVec.begin(), rVec.end(),
                            boost::bind( &EventQueue::addEvent,
                                         boost::ref( mrEventQueue ), _1 ) );
-
+            
             rVec.clear();
         }
-
+        
         return bRet;
     }
-
+    
     void addEvent( const EventSharedPtr&                                rEvent,
                    const uno::Reference< animations::XAnimationNode >&  xNode )
     {
@@ -216,11 +216,11 @@ public:
                 ImpAnimationEventMap::value_type( xNode,
                                                   ImpEventVector() ) ).first;
         }
-
+        
         // add new event to queue
         aIter->second.push_back( rEvent );
     }
-
+    
     bool isEmpty()
     {
         // find at least one animation with a non-empty vector
@@ -230,13 +230,13 @@ public:
         {
             if( !aCurr->second.empty() )
                 return false; // at least one non-empty entry found
-
+            
             ++aCurr;
         }
-
+        
         return true; // not a single non-empty entry found
     }
-
+    
 private:
     EventQueue&             mrEventQueue;
     ImpAnimationEventMap    maAnimationEventMap;
@@ -250,14 +250,14 @@ public:
     ClickEventHandler( EventQueue& rEventQueue ) :
         EventContainer(),
         mrEventQueue( rEventQueue ),
-        mbAdvanceOnClick( true )
+        mbAdvanceOnClick( true ) 
     {}
-
+    
     void setAdvanceOnClick( bool bAdvanceOnClick )
     {
         mbAdvanceOnClick = bAdvanceOnClick;
     }
-
+    
 private:
     virtual void dispose()
     {
@@ -269,13 +269,13 @@ private:
     {
         return handleEvent_impl();
     }
-
+    
     // triggered by mouse release:
     virtual bool handleMouseReleased( const awt::MouseEvent& evt )
     {
         if(evt.Buttons != awt::MouseButton::LEFT)
             return false;
-
+        
         if( mbAdvanceOnClick ) {
             // fire next event
             return handleEvent_impl();
@@ -284,14 +284,14 @@ private:
             return false; // advance-on-click disabled
         }
     }
-
+    
     // triggered by both:
     virtual bool handleEvent_impl()
     {
         // fire next event:
         return fireSingleEvent( maEvents, mrEventQueue );
     }
-
+    
 private:
     EventQueue& mrEventQueue;
     bool        mbAdvanceOnClick;
@@ -315,7 +315,7 @@ public:
 
     ///  Skip the current effect but do not triggere the next effect.
     void skipEffect (void) { handleEvent_impl(false); }
-
+    
 private:
     virtual bool handleEvent_impl()
     {
@@ -326,7 +326,7 @@ private:
     {
         // fire all events, so animation nodes can register their
         // next effect listeners:
-        if(fireAllEvents( maEvents, mrEventQueue ))
+        if(fireAllEvents( maEvents, mrEventQueue )) 
         {
             if (mbSkipTriggersNextEffect && bNotifyNextEffect)
             {
@@ -346,7 +346,7 @@ private:
         }
         return false;
     }
-
+    
 private:
     EventQueue & mrEventQueue;
     EventMultiplexer & mrEventMultiplexer;
@@ -359,28 +359,28 @@ class RewindEffectEventHandler : public MouseEventHandler_,
 public:
     RewindEffectEventHandler( EventQueue & rEventQueue )
         : EventContainer(), mrEventQueue(rEventQueue) {}
-
+    
 private:
     virtual void dispose()
     {
         clearContainer();
     }
-
+    
     virtual bool handleMouseReleased( awt::MouseEvent const& evt )
     {
         if(evt.Buttons != awt::MouseButton::RIGHT)
             return false;
-
+        
         return fireAllEvents( maEvents, mrEventQueue );
     }
-
+    
 private:
     EventQueue & mrEventQueue;
 };
 
 /** Base class to share some common code between
     ShapeClickEventHandler and MouseMoveHandler
-
+    
     @derive override necessary MouseEventHandler interface methods,
     call sendEvent() method to actually process the event.
 */
@@ -389,16 +389,16 @@ class MouseHandlerBase : public MouseEventHandler_
 public:
     MouseHandlerBase( EventQueue& rEventQueue ) :
         mrEventQueue( rEventQueue ),
-        maShapeEventMap()
+        maShapeEventMap() 
     {}
-
+    
     virtual void dispose()
     {
-        // TODO(Q1): Check whether plain vector with swap idiom is
+        // TODO(Q1): Check whether plain vector with swap idiom is 
         // okay here
         maShapeEventMap = ImpShapeEventMap();
     }
-
+    
     void addEvent( const EventSharedPtr& rEvent,
                    const ShapeSharedPtr& rShape )
     {
@@ -410,11 +410,11 @@ public:
                 ImpShapeEventMap::value_type( rShape,
                                               ImpEventQueue() ) ).first;
         }
-
+        
         // add new event to queue
         aIter->second.push( rEvent );
     }
-
+    
     bool isEmpty()
     {
         // find at least one shape with a non-empty queue
@@ -424,20 +424,20 @@ public:
         {
             if( !aCurrShape->second.empty() )
                 return false; // at least one non-empty entry found
-
+            
             ++aCurrShape;
         }
-
+        
         return true; // not a single non-empty entry found
     }
-
+    
 protected:
     bool hitTest( const awt::MouseEvent&                e,
                   ImpShapeEventMap::reverse_iterator&   o_rHitShape )
     {
         // find hit shape in map
         const basegfx::B2DPoint aPosition( e.X, e.Y );
-
+        
         // find matching shape (scan reversely, to coarsely match
         // paint order)
         ImpShapeEventMap::reverse_iterator       aCurrShape(maShapeEventMap.rbegin());
@@ -455,19 +455,19 @@ protected:
                 o_rHitShape = aCurrShape;
                 return true;
             }
-
+            
             ++aCurrShape;
         }
-
+        
         return false; // nothing hit
     }
-
+    
     bool sendEvent( ImpShapeEventMap::reverse_iterator& io_rHitShape )
     {
         // take next event from queue
         const bool bRet( fireSingleEvent( io_rHitShape->second,
                                           mrEventQueue ) );
-
+        
         // clear shape entry, if its queue is
         // empty. This is important, since the shapes
         // are held by shared ptr, and might otherwise
@@ -483,20 +483,20 @@ protected:
             // orthogonality, eh?)
             maShapeEventMap.erase( io_rHitShape->first );
         }
-
+        
         return bRet;
     }
-
+    
     bool processEvent( const awt::MouseEvent& e )
     {
         ImpShapeEventMap::reverse_iterator aCurrShape;
-
+        
         if( hitTest( e, aCurrShape ) )
             return sendEvent( aCurrShape );
-
+        
         return false; // did not handle the event
     }
-
+    
 private:
     EventQueue&         mrEventQueue;
     ImpShapeEventMap    maShapeEventMap;
@@ -508,20 +508,20 @@ public:
     ShapeClickEventHandler( CursorManager& rCursorManager,
                             EventQueue&    rEventQueue ) :
         MouseHandlerBase( rEventQueue ),
-        mrCursorManager( rCursorManager )
+        mrCursorManager( rCursorManager ) 
     {}
-
+    
     virtual bool handleMouseReleased( const awt::MouseEvent& e )
     {
         if(e.Buttons != awt::MouseButton::LEFT)
             return false;
         return processEvent( e );
     }
-
+    
     virtual bool handleMouseMoved( const awt::MouseEvent& e )
     {
         // TODO(P2): Maybe buffer last shape touched
-
+        
         // if we have a shape click event, and the mouse
         // hovers over this shape, change cursor to hand
         ImpShapeEventMap::reverse_iterator aDummy;
@@ -531,7 +531,7 @@ public:
         return false; // we don't /eat/ this event. Lower prio
         // handler should see it, too.
     }
-
+    
 private:
     CursorManager& mrCursorManager;
 };
@@ -542,12 +542,12 @@ public:
     MouseEnterHandler( EventQueue& rEventQueue )
         : MouseHandlerBase( rEventQueue ),
           mpLastShape() {}
-
+    
     virtual bool handleMouseMoved( const awt::MouseEvent& e )
     {
         // TODO(P2): Maybe buffer last shape touched, and
         // check against that _first_
-
+        
         ImpShapeEventMap::reverse_iterator aCurr;
         if( hitTest( e, aCurr ) )
         {
@@ -565,11 +565,11 @@ public:
             // don't hit no shape - thus, last shape is NULL
             mpLastShape.reset();
         }
-
+        
         return false; // we don't /eat/ this event. Lower prio
         // handler should see it, too.
     }
-
+    
 private:
     ShapeSharedPtr mpLastShape;
 };
@@ -580,12 +580,12 @@ public:
     MouseLeaveHandler( EventQueue& rEventQueue )
         : MouseHandlerBase( rEventQueue ),
           maLastIter() {}
-
+    
     virtual bool handleMouseMoved( const awt::MouseEvent& e )
     {
         // TODO(P2): Maybe buffer last shape touched, and
         // check against that _first_
-
+        
         ImpShapeEventMap::reverse_iterator aCurr;
         if( hitTest( e, aCurr ) )
         {
@@ -600,21 +600,21 @@ public:
                 // event
                 sendEvent( maLastIter );
             }
-
+            
             // in any case, when we hit this else-branch: no
             // shape hit, thus have to clear maLastIter
             maLastIter = ImpShapeEventMap::reverse_iterator();
         }
-
+        
         return false; // we don't /eat/ this event. Lower prio
         // handler should see it, too.
     }
-
+    
 private:
     ImpShapeEventMap::reverse_iterator maLastIter;
 };
 
-template< typename Handler, typename Functor >
+template< typename Handler, typename Functor > 
 void UserEventQueue::registerEvent(
     boost::shared_ptr< Handler >& rHandler,
     const EventSharedPtr&         rEvent,
@@ -622,18 +622,18 @@ void UserEventQueue::registerEvent(
 {
     ENSURE_OR_THROW( rEvent,
                       "UserEventQueue::registerEvent(): Invalid event" );
-
+    
     if( !rHandler ) {
         // create handler
-        rHandler.reset( new Handler( mrEventQueue ) );
+        rHandler.reset( new Handler( mrEventQueue ) );        
         // register handler on EventMultiplexer
         rRegistrationFunctor( rHandler );
     }
-
+    
     rHandler->addEvent( rEvent );
 }
 
-template< typename Handler, typename Arg, typename Functor >
+template< typename Handler, typename Arg, typename Functor > 
 void UserEventQueue::registerEvent(
     boost::shared_ptr< Handler >& rHandler,
     const EventSharedPtr&         rEvent,
@@ -642,15 +642,15 @@ void UserEventQueue::registerEvent(
 {
     ENSURE_OR_THROW( rEvent,
                       "UserEventQueue::registerEvent(): Invalid event" );
-
+    
     if( !rHandler ) {
         // create handler
         rHandler.reset( new Handler( mrEventQueue ) );
-
+        
         // register handler on EventMultiplexer
         rRegistrationFunctor( rHandler );
     }
-
+    
     rHandler->addEvent( rEvent, rArg );
 }
 
@@ -674,7 +674,7 @@ UserEventQueue::UserEventQueue( EventMultiplexer&   rMultiplexer,
       mpRewindEffectEventHandler(),
       mpDoubleClickEventHandler(),
       mpMouseEnterHandler(),
-      mpMouseLeaveHandler(),
+      mpMouseLeaveHandler(),      
       mbAdvanceOnClick( true )
 {
 }
@@ -683,26 +683,26 @@ UserEventQueue::~UserEventQueue()
 {
     try
     {
-        // unregister all handlers
+        // unregister all handlers  
         clear();
     }
     catch (uno::Exception &) {
-        OSL_FAIL( rtl::OUStringToOString(
+        OSL_ENSURE( false, rtl::OUStringToOString(
                         comphelper::anyToString(
                             cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
-
+        
 bool UserEventQueue::isEmpty() const
 {
-    // TODO(T2): This is not thread safe, the handlers are all
-    // only separately synchronized. This poses the danger of
+    // TODO(T2): This is not thread safe, the handlers are all 
+    // only separately synchronized. This poses the danger of 
     // generating false empty status on XSlideShow::update(), such
     // that the last events of a slide are not triggered.
-
+    
     // we're empty iff all handler queues are empty
-    return
+    return 
         (mpStartEventHandler ? mpStartEventHandler->isEmpty() : true) &&
         (mpEndEventHandler ? mpEndEventHandler->isEmpty() : true) &&
         (mpAnimationStartEventHandler ? mpAnimationStartEventHandler->isEmpty() : true) &&
@@ -783,7 +783,7 @@ void UserEventQueue::clear()
 void UserEventQueue::setAdvanceOnClick( bool bAdvanceOnClick )
 {
     mbAdvanceOnClick = bAdvanceOnClick;
-
+    
     // forward to handler, if existing. Otherwise, the handler
     // creation will do the forwarding.
     if( mpClickEventHandler )
@@ -793,7 +793,7 @@ void UserEventQueue::setAdvanceOnClick( bool bAdvanceOnClick )
 
 void UserEventQueue::registerSlideStartEvent( const EventSharedPtr& rEvent )
 {
-    registerEvent( mpStartEventHandler,
+    registerEvent( mpStartEventHandler, 
                    rEvent,
                    boost::bind( &EventMultiplexer::addSlideStartHandler,
                                 boost::ref( mrMultiplexer ), _1 ) );
@@ -801,7 +801,7 @@ void UserEventQueue::registerSlideStartEvent( const EventSharedPtr& rEvent )
 
 void UserEventQueue::registerSlideEndEvent( const EventSharedPtr& rEvent )
 {
-    registerEvent( mpEndEventHandler,
+    registerEvent( mpEndEventHandler, 
                    rEvent,
                    boost::bind( &EventMultiplexer::addSlideEndHandler,
                                 boost::ref( mrMultiplexer ), _1 ) );
@@ -811,7 +811,7 @@ void UserEventQueue::registerAnimationStartEvent(
     const EventSharedPtr&                                 rEvent,
     const uno::Reference< animations::XAnimationNode>&    xNode )
 {
-    registerEvent( mpAnimationStartEventHandler,
+    registerEvent( mpAnimationStartEventHandler, 
                    rEvent,
                    xNode,
                    boost::bind( &EventMultiplexer::addAnimationStartHandler,
@@ -822,7 +822,7 @@ void UserEventQueue::registerAnimationEndEvent(
     const EventSharedPtr&                               rEvent,
     const uno::Reference<animations::XAnimationNode>&   xNode )
 {
-    registerEvent( mpAnimationEndEventHandler,
+    registerEvent( mpAnimationEndEventHandler, 
                    rEvent,
                    xNode,
                    boost::bind( &EventMultiplexer::addAnimationEndHandler,
@@ -833,7 +833,7 @@ void UserEventQueue::registerAudioStoppedEvent(
     const EventSharedPtr&                               rEvent,
     const uno::Reference<animations::XAnimationNode>&   xNode )
 {
-    registerEvent( mpAudioStoppedEventHandler,
+    registerEvent( mpAudioStoppedEventHandler, 
                    rEvent,
                    xNode,
                    boost::bind( &EventMultiplexer::addAudioStoppedHandler,
@@ -846,19 +846,19 @@ void UserEventQueue::registerShapeClickEvent( const EventSharedPtr& rEvent,
     ENSURE_OR_THROW(
         rEvent,
         "UserEventQueue::registerShapeClickEvent(): Invalid event" );
-
+    
     if( !mpShapeClickEventHandler )
     {
         // create handler
         mpShapeClickEventHandler.reset(
             new ShapeClickEventHandler(mrCursorManager,
                                        mrEventQueue) );
-
+        
         // register handler on EventMultiplexer
         mrMultiplexer.addClickHandler( mpShapeClickEventHandler, 1.0 );
         mrMultiplexer.addMouseMoveHandler( mpShapeClickEventHandler, 1.0 );
     }
-
+    
     mpShapeClickEventHandler->addEvent( rEvent, rShape );
 }
 
@@ -872,20 +872,20 @@ public:
         : mrMultiplexer( rMultiplexer ),
           mnPrio(nPrio),
           mbAdvanceOnClick( bAdvanceOnClick ) {}
-
+    
     void operator()( const boost::shared_ptr<ClickEventHandler>& rHandler )const
     {
         // register the handler on _two_ sources: we want the
         // nextEffect events, e.g. space bar, to trigger clicks, as well!
         mrMultiplexer.addClickHandler( rHandler, mnPrio );
         mrMultiplexer.addNextEffectHandler( rHandler, mnPrio );
-
+        
         // forward advance-on-click state to newly
         // generated handler (that's the only reason why
         // we're called here)
         rHandler->setAdvanceOnClick( mbAdvanceOnClick );
     }
-
+    
 private:
     EventMultiplexer&   mrMultiplexer;
     double const        mnPrio;
@@ -900,7 +900,7 @@ void UserEventQueue::registerNextEffectEvent( const EventSharedPtr& rEvent )
     //       skip effect (skipping the currently running one)
     //       rewind effect (rewinding back running one and waiting (again)
     //                      to be started)
-    registerEvent( mpClickEventHandler,
+    registerEvent( mpClickEventHandler, 
                    rEvent,
                    ClickEventRegistrationFunctor( mrMultiplexer,
                                                   0.0 /* default prio */,
@@ -911,7 +911,7 @@ void UserEventQueue::registerSkipEffectEvent(
     EventSharedPtr const & pEvent,
     const bool bSkipTriggersNextEffect)
 {
-    if(!mpSkipEffectEventHandler)
+    if(!mpSkipEffectEventHandler) 
     {
         mpSkipEffectEventHandler.reset(
             new SkipEffectEventHandler( mrEventQueue, mrMultiplexer ) );
@@ -946,27 +946,27 @@ void UserEventQueue::registerShapeDoubleClickEvent(
     ENSURE_OR_THROW(
         rEvent,
         "UserEventQueue::registerShapeDoubleClickEvent(): Invalid event" );
-
+    
     if( !mpShapeDoubleClickEventHandler )
     {
         // create handler
         mpShapeDoubleClickEventHandler.reset(
             new ShapeClickEventHandler(mrCursorManager,
                                        mrEventQueue) );
-
+        
         // register handler on EventMultiplexer
         mrMultiplexer.addDoubleClickHandler( mpShapeDoubleClickEventHandler,
                                              1.0 );
         mrMultiplexer.addMouseMoveHandler( mpShapeDoubleClickEventHandler,
                                            1.0 );
     }
-
+    
     mpShapeDoubleClickEventHandler->addEvent( rEvent, rShape );
 }
 
 void UserEventQueue::registerDoubleClickEvent( const EventSharedPtr& rEvent )
 {
-    registerEvent( mpDoubleClickEventHandler,
+    registerEvent( mpDoubleClickEventHandler, 
                    rEvent,
                    boost::bind( &EventMultiplexer::addDoubleClickHandler,
                                 boost::ref( mrMultiplexer ), _1,
@@ -976,7 +976,7 @@ void UserEventQueue::registerDoubleClickEvent( const EventSharedPtr& rEvent )
 void UserEventQueue::registerMouseEnterEvent( const EventSharedPtr& rEvent,
                                               const ShapeSharedPtr& rShape )
 {
-    registerEvent( mpMouseEnterHandler,
+    registerEvent( mpMouseEnterHandler, 
                    rEvent,
                    rShape,
                    boost::bind( &EventMultiplexer::addMouseMoveHandler,
@@ -987,7 +987,7 @@ void UserEventQueue::registerMouseEnterEvent( const EventSharedPtr& rEvent,
 void UserEventQueue::registerMouseLeaveEvent( const EventSharedPtr& rEvent,
                                               const ShapeSharedPtr& rShape )
 {
-    registerEvent( mpMouseLeaveHandler,
+    registerEvent( mpMouseLeaveHandler, 
                    rEvent,
                    rShape,
                    boost::bind( &EventMultiplexer::addMouseMoveHandler,

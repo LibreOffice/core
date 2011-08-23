@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -253,7 +253,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
         DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values-x") ) );
     if( xXValues.is() )
         aResultVector.push_back( xXValues );
-
+    
     //add all other sequences now without x-values
     for( sal_Int32 nN=0; nN<aDataSeqences.getLength(); nN++ )
     {
@@ -371,7 +371,9 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
 {
     bool bHasDataRowSource = false;
     bool bHasFirstCellAsLabel = false;
+//     bool bHasHasCategories = false;
     bool bHasCellRangeRepresentation = false;
+//     bool bHasSequenceMapping = false;
 
     uno::Reference< data::XDataProvider > xDataProvider( xChartDocument->getDataProvider() );
     if( !xDataProvider.is() )
@@ -397,12 +399,24 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
                 bHasFirstCellAsLabel =
                     (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(::getBooleanCppuType()));
             }
+//             else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HasCategories" ) ))
+//             {
+//                 bHasHasCategories =
+//                     (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(::getBooleanCppuType()));
+//             }
             else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CellRangeRepresentation" ) ))
             {
                 ::rtl::OUString aRange;
                 bHasCellRangeRepresentation =
                     (aProperty.Value.hasValue() && (aProperty.Value >>= aRange) && aRange.getLength() > 0);
             }
+//         else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SequenceMapping" ) ))
+//         {
+//             bHasSequenceMapping =
+//                 (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(
+//                     ::getCppuType( reinterpret_cast<
+//                                    const uno::Sequence< sal_Int32 > * >(0))));
+//         }
         }
     }
     catch( const uno::Exception & ex )
@@ -448,8 +462,25 @@ void DataSourceHelper::setRangeSegmentation(
     if( !xDataSource.is() )
         return;
 
+    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
+        DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateFactory );
+
+    rtl::OUString aServiceName( aTemplateAndService.second );
+    uno::Reference< chart2::XChartTypeTemplate > xTemplate = aTemplateAndService.first;
+
+    if( !xTemplate.is() )
+    {
+        if( aServiceName.getLength() == 0 )
+            aServiceName = C2U("com.sun.star.chart2.template.Column");
+        xTemplate.set( xTemplateFactory->createInstance( aServiceName ), uno::UNO_QUERY );
+    }
+    if( !xTemplate.is() )
+        return;
+
+    // /-- locked controllers
     ControllerLockGuard aCtrlLockGuard( xChartModel );
-    xDiagram->setDiagramData( xDataSource, aArguments );
+    xTemplate->changeDiagramData( xDiagram, xDataSource, aArguments );
+    // \-- locked controllers
 }
 
 Sequence< OUString > DataSourceHelper::getRangesFromLabeledDataSequence(

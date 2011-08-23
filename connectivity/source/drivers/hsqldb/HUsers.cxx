@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,6 +44,7 @@ using namespace connectivity;
 using namespace connectivity::hsqldb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -53,7 +54,7 @@ OUsers::OUsers( ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-                connectivity::sdbcx::IRefreshableUsers* _pParent)
+                connectivity::sdbcx::IRefreshableUsers* _pParent) 
     : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
     ,m_xConnection(_xConnection)
     ,m_pParent(_pParent)
@@ -80,18 +81,18 @@ Reference< XPropertySet > OUsers::createDescriptor()
 // XAppend
 sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "GRANT USAGE ON * TO " ));
-    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("GRANT USAGE ON * TO ");
+    ::rtl::OUString aQuote	= m_xConnection->getMetaData()->getIdentifierQuoteString(  );
     ::rtl::OUString sUserName( _rForName );
     aSql += ::dbtools::quoteName(aQuote,sUserName)
-                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" @\"%\" "));
+                + ::rtl::OUString::createFromAscii(" @\"%\" ");
     ::rtl::OUString sPassword;
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPassword;
     if ( sPassword.getLength() )
     {
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IDENTIFIED BY '"));
+        aSql += ::rtl::OUString::createFromAscii(" IDENTIFIED BY '");
         aSql += sPassword;
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+        aSql += ::rtl::OUString::createFromAscii("'");
     }
 
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );
@@ -106,8 +107,8 @@ sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const 
 void OUsers::dropObject(sal_Int32 /*nPos*/,const ::rtl::OUString _sElementName)
 {
     {
-        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "REVOKE ALL ON * FROM " ));
-        ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("REVOKE ALL ON * FROM ");
+        ::rtl::OUString aQuote	= m_xConnection->getMetaData()->getIdentifierQuoteString(  );
         aSql += ::dbtools::quoteName(aQuote,_sElementName);
 
         Reference< XStatement > xStmt = m_xConnection->createStatement(  );

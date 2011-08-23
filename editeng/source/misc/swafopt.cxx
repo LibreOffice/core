@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,10 @@
 
 #include <editeng/swafopt.hxx>
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
 SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     : aBulletFont( String::CreateFromAscii(
                         RTL_CONSTASCII_STRINGPARAM( "StarSymbol" )),
@@ -53,14 +57,14 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bAFmtDelSpacesBetweenLines =
     bAFmtByInpDelSpacesAtSttEnd =
     bAFmtByInpDelSpacesBetweenLines =
-    bDummy = sal_True;
+    bDummy = TRUE;
 
     bReplaceStyles =
     bDelEmptyNode =
     bWithRedlining =
     bAutoCmpltEndless =
     bAutoCmpltAppendBlanc =
-    bAutoCmpltShowAsTip = sal_False;
+    bAutoCmpltShowAsTip = FALSE; 
 
     bSetBorder =
     bCreateTable =
@@ -69,19 +73,19 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bRightMargin =
     bAutoCompleteWords =
     bAutoCmpltCollectWords =
-    bAutoCmpltKeepList = sal_True;
+    bAutoCmpltKeepList = TRUE;
 
     bDummy6 = bDummy7 = bDummy8 =
-         sal_False;
+         FALSE;
 
-    nRightMargin = 50;      // dflt. 50 %
+    nRightMargin = 50;		// dflt. 50 %
     nAutoCmpltExpandKey = KEY_RETURN;
 
     aBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
     aBulletFont.SetFamily( FAMILY_DONTKNOW );
     aBulletFont.SetPitch( PITCH_DONTKNOW );
     aBulletFont.SetWeight( WEIGHT_DONTKNOW );
-    aBulletFont.SetTransparent( sal_True );
+    aBulletFont.SetTransparent( TRUE );
 
     cBullet = 0x2022;
     cByInputBullet = cBullet;

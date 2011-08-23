@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,21 +45,21 @@ class SwView;
 class SvxMacroItem;
 
 /*--------------------------------------------------------------------
-   Beschreibung:    Der Tabdialog Traeger der TabPages
+   Beschreibung:	Der Tabdialog Traeger der TabPages
  --------------------------------------------------------------------*/
 
 class SwCharDlg: public SfxTabDialog
 {
     SwView&   rView;
-    sal_Bool      bIsDrwTxtMode;
+    BOOL      bIsDrwTxtMode;
 
 public:
     SwCharDlg(Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
-              const String* pFmtStr = 0, sal_Bool bIsDrwTxtDlg = sal_False);
+              const String* pFmtStr = 0, BOOL bIsDrwTxtDlg = FALSE);
 
     ~SwCharDlg();
 
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
 };
 
 /*-----------------14.08.96 11.03-------------------
@@ -70,24 +70,24 @@ class SwCharURLPage : public SfxTabPage
 {
     FixedLine           aURLFL;
 
-    FixedText           aURLFT;
+    FixedText			aURLFT;
     Edit                aURLED;
-    FixedText           aTextFT;
+    FixedText			aTextFT;
     Edit                aTextED;
-    FixedText           aNameFT;
+    FixedText			aNameFT;
     Edit                aNameED;
-    FixedText           aTargetFrmFT;
-    ComboBox            aTargetFrmLB;
-    PushButton          aURLPB;
-    PushButton          aEventPB;
+    FixedText			aTargetFrmFT;
+    ComboBox 			aTargetFrmLB;
+    PushButton			aURLPB;
+    PushButton			aEventPB;
     FixedLine           aStyleFL;
-    FixedText           aVisitedFT;
+    FixedText			aVisitedFT;
     ListBox             aVisitedLB;
     FixedText           aNotVisitedFT;
     ListBox             aNotVisitedLB;
 
-    SvxMacroItem*       pINetItem;
-    sal_Bool                bModified;
+    SvxMacroItem*		pINetItem;
+    BOOL 				bModified;
 
     DECL_LINK( InsertFileHdl, PushButton * );
     DECL_LINK( EventHdl, PushButton * );
@@ -100,7 +100,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 

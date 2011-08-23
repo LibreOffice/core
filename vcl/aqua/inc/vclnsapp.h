@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ class AquaSalFrame;
 -(void)sendEvent:(NSEvent*)pEvent;
 -(void)sendSuperEvent:(NSEvent*)pEvent;
 -(NSMenu*)applicationDockMenu:(NSApplication *)sender;
--(BOOL)application: (NSApplication*) app openFile: (NSString*)file;
+-(MacOSBOOL)application: (NSApplication*) app openFile: (NSString*)file;
 -(void)application: (NSApplication*) app openFiles: (NSArray*)files;
--(BOOL)application: (NSApplication*) app printFile: (NSString*)file;
--(NSApplicationPrintReply)application: (NSApplication *) app printFiles:(NSArray *)files withSettings: (NSDictionary *)printSettings showPrintPanels:(BOOL)bShowPrintPanels;
+-(MacOSBOOL)application: (NSApplication*) app printFile: (NSString*)file;
+-(NSApplicationPrintReply)application: (NSApplication *) app printFiles:(NSArray *)files withSettings: (NSDictionary *)printSettings showPrintPanels:(MacOSBOOL)bShowPrintPanels;
 -(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app;
 -(void)systemColorsChanged: (NSNotification*) pNotification;
 -(void)screenParametersChanged: (NSNotification*) pNotification;
@@ -62,7 +62,7 @@ class AquaSalFrame;
 -(void)addDockMenuItem: (NSMenuItem*)pNewItem;
 -(void)applicationWillBecomeActive: (NSNotification *)pNotification;
 -(void)applicationWillResignActive: (NSNotification *)pNotification;
--(BOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (BOOL)bWinVisible;
+-(MacOSBOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (MacOSBOOL)bWinVisible;
 -(void)setDockIconClickHandler: (NSObject*)pHandler;
 -(void)cycleFrameForward: (AquaSalFrame*)pCurFrame;
 -(void)cycleFrameBackward: (AquaSalFrame*)pCurFrame;

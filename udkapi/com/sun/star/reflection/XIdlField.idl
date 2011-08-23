@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,50 +24,60 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_reflection_XIdlField_idl__
-#define __com_sun_star_reflection_XIdlField_idl__
-
-#include <com/sun/star/reflection/XIdlMember.idl>
-
-#include <com/sun/star/reflection/XIdlClass.idl>
-
-#include <com/sun/star/reflection/FieldAccessMode.idl>
-
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
-#include <com/sun/star/lang/IllegalAccessException.idl>
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module reflection {
-
-//=============================================================================
-
+#ifndef __com_sun_star_reflection_XIdlField_idl__ 
+#define __com_sun_star_reflection_XIdlField_idl__ 
+ 
+#ifndef __com_sun_star_reflection_XIdlMember_idl__ 
+#include <com/sun/star/reflection/XIdlMember.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_reflection_XIdlClass_idl__ 
+#include <com/sun/star/reflection/XIdlClass.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_reflection_FieldAccessMode_idl__ 
+#include <com/sun/star/reflection/FieldAccessMode.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
+#include <com/sun/star/lang/IllegalArgumentException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_IllegalAccessException_idl__ 
+#include <com/sun/star/lang/IllegalAccessException.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module reflection {  
+ 
+//============================================================================= 
+ 
 /** Deprecated.  Use <type scope="com::sun::star::reflection">XIdlField2</type>
     instead.
-
+    
     @deprecated
 */
 published interface XIdlField: com::sun::star::reflection::XIdlMember
-{
-    com::sun::star::reflection::XIdlClass getType();
-    com::sun::star::reflection::FieldAccessMode getAccessMode();
+{ 
+    com::sun::star::reflection::XIdlClass getType(); 
+    com::sun::star::reflection::FieldAccessMode getAccessMode(); 
     any get(
-        [in] any obj )
-        raises( com::sun::star::lang::IllegalArgumentException );
+        [in] any obj ) 
+        raises( com::sun::star::lang::IllegalArgumentException ); 
     void set(
-        [in] any obj,
-        [in] any value )
-        raises( com::sun::star::lang::IllegalArgumentException,
+        [in] any obj, 
+        [in] any value ) 
+        raises( com::sun::star::lang::IllegalArgumentException, 
                 com::sun::star::lang::IllegalAccessException );
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
 {
     FreeResource();
 
-    aCbStacked.EnableTriState( sal_False );
+    aCbStacked.EnableTriState( FALSE );
     aOrientHlp.AddDependentWindow( aFtRotate, STATE_CHECK );
 
     if( !bWithRotation )
@@ -89,9 +89,9 @@ SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(Window* pParent,
     return new SchAlignmentTabPage(pParent, rInAttrs, false);
 }
 
-sal_Bool SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+BOOL SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    //Since 04/1998 text can be rotated by an arbitrary angle: SCHATTR_TEXT_DEGREES
+    //Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
     bool bStacked = aOrientHlp.GetStackedState() == STATE_CHECK;
     rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
 
@@ -101,7 +101,7 @@ sal_Bool SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     SvxFrameDirection aDirection( aLbTextDirection.GetSelectEntryValue() );
     rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, aDirection ) );
 
-    return sal_True;
+    return TRUE;
 }
 
 void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
@@ -116,7 +116,7 @@ void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
     aOrientHlp.SetStackedState( bStacked ? STATE_CHECK : STATE_NOCHECK );
 
 
-    if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, sal_True, &pItem) == SFX_ITEM_SET)
+    if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, TRUE, &pItem) == SFX_ITEM_SET)
         aLbTextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pItem)->GetValue()) );
 }
 

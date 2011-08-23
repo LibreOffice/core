@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: uno2cpp.cxx,v $
+ * $Revision: 1.9 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -312,7 +315,7 @@ static void cpp_call(
                         pAdjustedThisPtr, aVtableSlot.index,
                         pCppReturn, pReturnTypeDescr->eTypeClass,
                         pStackStart, (pStack - pStackStart), pFPR, nFPR );
-                // NO exception occurred...
+                // NO exception occured...
                 *ppUnoExc = 0;
 
                 // reconvert temporary params

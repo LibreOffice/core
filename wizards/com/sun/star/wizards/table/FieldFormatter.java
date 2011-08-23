@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,6 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
@@ -80,7 +79,7 @@ public class FieldFormatter implements XItemListener
         CurUnoDialog.insertLabel("lblFieldNames",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
@@ -92,11 +91,11 @@ public class FieldFormatter implements XItemListener
             xlstFieldNames = CurUnoDialog.insertListBox("lstfieldnames", 3, null, this,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                     },
                     new Object[]
                     {
-                        new Integer(133), "HID:WIZARDS_HID_DLGTABLE_LB_SELFIELDNAMES", new Integer(92), new Integer(37), IFieldFormatStep, new Short(curtabindex++), new Integer(62)
+                        new Integer(133), "HID:41220", new Integer(92), new Integer(37), IFieldFormatStep, new Short(curtabindex++), new Integer(62)
                     });
         }
         catch (Exception e)
@@ -110,21 +109,21 @@ public class FieldFormatter implements XItemListener
         btnShiftUp = CurUnoDialog.insertButton("btnShiftUp", "shiftFieldNameUp", this,
                 new String[]
                 {
-                    PropertyNames.PROPERTY_ENABLED, "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Enabled", "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, oFontDesc, new Integer(14), "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDUP", String.valueOf((char) 8743), new Integer(158), new Integer(139), IFieldFormatStep, new Short(curtabindex++), new Integer(14)
+                    Boolean.FALSE, oFontDesc, new Integer(14), "HID:41221", String.valueOf((char) 8743), new Integer(158), new Integer(139), IFieldFormatStep, new Short(curtabindex++), new Integer(14)
                 });
 
         btnShiftDown = CurUnoDialog.insertButton("btnShiftDown", "shiftFieldNameDown", this,
                 new String[]
                 {
-                    PropertyNames.PROPERTY_ENABLED, "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Enabled", "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, oFontDesc, new Integer(14), "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDDOWN", String.valueOf((char) 8744), new Integer(158), new Integer(156), IFieldFormatStep, new Short(curtabindex++), new Integer(14)
+                    Boolean.FALSE, oFontDesc, new Integer(14), "HID:41222", String.valueOf((char) 8744), new Integer(158), new Integer(156), IFieldFormatStep, new Short(curtabindex++), new Integer(14)
                 });
         oFontDesc = new FontDescriptor();
         oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
@@ -132,27 +131,27 @@ public class FieldFormatter implements XItemListener
         btnminus = CurUnoDialog.insertButton("btnminus", "removeFieldName", this,
                 new String[]
                 {
-                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
-                    oFontDesc, new Integer(14), "HID:WIZARDS_HID_DLGTABLE_CMDMINUS", "-", new Integer(118), new Integer(175), IFieldFormatStep, new Short(curtabindex++), new Integer(14)
+                    oFontDesc, new Integer(14), "HID:41223", "-", new Integer(118), new Integer(175), IFieldFormatStep, new Short(curtabindex++), new Integer(14)
                 });
 
         btnplus = CurUnoDialog.insertButton("btnplus", "addFieldName", this,
                 new String[]
                 {
-                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
-                    oFontDesc, new Integer(14), "HID:WIZARDS_HID_DLGTABLE_CMDPLUS", "+", new Integer(137), new Integer(175), IFieldFormatStep, new Short(curtabindex++), new Integer(14)
+                    oFontDesc, new Integer(14), "HID:41224", "+", new Integer(137), new Integer(175), IFieldFormatStep, new Short(curtabindex++), new Integer(14)
                 });
 
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "ColDescriptorHeader",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
@@ -163,7 +162,7 @@ public class FieldFormatter implements XItemListener
         CurUnoDialog.insertLabel("lblFieldName",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
@@ -173,11 +172,11 @@ public class FieldFormatter implements XItemListener
         txtfieldname = CurUnoDialog.insertTextField("txtfieldname", MODIFYFIELDNAME, this,
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Text", PropertyNames.PROPERTY_WIDTH
+                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_COLNAME", new Integer(274), new Integer(37), IFieldFormatStep, new Short(curtabindex++), "", new Integer(50)
+                    UIConsts.INTEGER_12, "HID:41225", new Integer(274), new Integer(37), IFieldFormatStep, new Short(curtabindex++), "", new Integer(50)
                 });
         txtfieldname.addTextListener(CurUnoDialog);
         CurUnoDialog.getPeerConfiguration().setAccessibleName(btnplus, sbtnplushelptext);
@@ -191,22 +190,22 @@ public class FieldFormatter implements XItemListener
             oColumnDescriptorModel = CurUnoDialog.insertControlModel("com.sun.star.sdb.ColumnDescriptorControlModel", "oColumnDescriptor",
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH, "EditWidth"
-                    }, // PropertyNames.PROPERTY_HELPURL
+                        "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "EditWidth"
+                    }, // "HelpURL"
                     new Object[]
                     {
                         new Integer(85), new Integer(158), new Integer(49), IFieldFormatStep, new Short(curtabindex++), new Integer(166), new Integer(50)
-                    });  //, "HID:WIZARDS_HID_DLGTABLE_COLMODIFIER"
+                    });  //, "HID:41226"
             curTableDescriptor = _curTableDescriptor;
             Helper.setUnoPropertyValue(oColumnDescriptorModel, "ActiveConnection", _curTableDescriptor.DBConnection);
             txtfieldname.setMaxTextLen((short) this.curTableDescriptor.getMaxColumnNameLength());
         }
         else
         {
-            int nStep = ((Integer) Helper.getUnoPropertyValue(oColumnDescriptorModel, PropertyNames.PROPERTY_STEP)).intValue();
+            int nStep = ((Integer) Helper.getUnoPropertyValue(oColumnDescriptorModel, "Step")).intValue();
             if (nStep > IFieldFormatStep.intValue())
             {
-                Helper.setUnoPropertyValue(oColumnDescriptorModel, PropertyNames.PROPERTY_STEP, IFieldFormatStep);
+                Helper.setUnoPropertyValue(oColumnDescriptorModel, "Step", IFieldFormatStep);
                 CurUnoDialog.repaintDialogStep();
             }
         }
@@ -233,9 +232,9 @@ public class FieldFormatter implements XItemListener
             benableShiftUpButton = (iselpos != 0);
             benableShiftDownButton = (iselpos != ilistcount - 1);
         }
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftUp), PropertyNames.PROPERTY_ENABLED, new Boolean(benableShiftUpButton));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftDown), PropertyNames.PROPERTY_ENABLED, new Boolean(benableShiftDownButton));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, new Boolean(blistispopulated));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftUp), "Enabled", new Boolean(benableShiftUpButton));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftDown), "Enabled", new Boolean(benableShiftDownButton));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), "Enabled", new Boolean(blistispopulated));
         CurUnoDialog.setcompleted(TableWizard.SOFIELDSFORMATPAGE, blistispopulated);
     }
 
@@ -298,10 +297,10 @@ public class FieldFormatter implements XItemListener
         else
         {
             Helper.setUnoPropertyValue(UnoDialog.getModel(txtfieldname), "Text", "");
-            Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), "Enabled", new Boolean(benable));
             CurUnoDialog.setcompleted(TableWizard.SOFIELDSFORMATPAGE, benable);
         }
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), "Enabled", new Boolean(benable));
         CurUnoDialog.setControlVisible("oColumnDescriptor", benable);
         CurUnoDialog.repaintDialogStep();
     }
@@ -315,7 +314,7 @@ public class FieldFormatter implements XItemListener
             if (curTableDescriptor.modifyColumnName(oldfieldname, newfieldname))
             {
                 Object oColumn = Helper.getUnoPropertyValue(oColumnDescriptorModel, "Column");
-                Helper.setUnoPropertyValue(oColumn, PropertyNames.PROPERTY_NAME, newfieldname);
+                Helper.setUnoPropertyValue(oColumn, "Name", newfieldname);
                 FieldDescription curfielddescription = (FieldDescription) CurUnoDialog.fielditems.get(oldfieldname);
                 CurUnoDialog.fielditems.remove(oldfieldname);
                 curfielddescription.setName(newfieldname);

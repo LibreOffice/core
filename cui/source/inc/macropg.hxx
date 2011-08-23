@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,17 +39,17 @@
 #include <vcl/lstbox.hxx>
 #include <rtl/ustring.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <vector>
 
-typedef ::boost::unordered_map< ::rtl::OUString, ::std::pair< ::rtl::OUString, ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventsHash;
+typedef ::std::hash_map< ::rtl::OUString, ::std::pair< ::rtl::OUString, ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventsHash;
 
 struct EventDisplayName
 {
     const sal_Char* pAsciiEventName;
-    sal_uInt16          nEventResourceID;
+    USHORT          nEventResourceID;
     EventDisplayName() : pAsciiEventName( NULL ), nEventResourceID(0) { }
-    EventDisplayName( const sal_Char* _pAsciiName, const sal_uInt16 _nResId )
+    EventDisplayName( const sal_Char* _pAsciiName, const USHORT _nResId )
         : pAsciiEventName( _pAsciiName )
         , nEventResourceID( _nResId )
     {
@@ -78,7 +78,7 @@ class _SvxMacroTabPage : public SfxTabPage
 
 #endif
 protected:
-    _SvxMacroTabPage_Impl*      mpImpl;
+    _SvxMacroTabPage_Impl*		mpImpl;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xAppEvents;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xDocEvents;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > m_xModifiable;
@@ -89,24 +89,24 @@ protected:
 
                                 _SvxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
 
-    void                        EnableButtons();
-    ::com::sun::star::uno::Any  GetPropsByName( const ::rtl::OUString& eventName, EventsHash& eventsHash );
+    void						EnableButtons( const String& rLanguage );
+    ::com::sun::star::uno::Any 	GetPropsByName( const ::rtl::OUString& eventName, EventsHash& eventsHash );
     ::std::pair< ::rtl::OUString, ::rtl::OUString > GetPairFromAny( ::com::sun::star::uno::Any aAny );
 
 public:
 
-    virtual                     ~_SvxMacroTabPage();
+    virtual						~_SvxMacroTabPage();
     void                        InitResources();
 
-    void                        InitAndSetHandler( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xAppEvents, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xDocEvents, ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > xModifiable );
-    virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
-
+    void						InitAndSetHandler( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xAppEvents, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xDocEvents, ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > xModifiable );
+    virtual	BOOL				FillItemSet( SfxItemSet& rSet );
+    
     using SfxTabPage::Reset;
-    virtual void                Reset();
+    virtual	void				Reset();
 
-    void                        DisplayAppEvents( bool appEvents);
-    void                        SetReadOnly( sal_Bool bSet );
-    sal_Bool                        IsReadOnly() const;
+    void						DisplayAppEvents( bool appEvents);
+    void						SetReadOnly( BOOL bSet );
+    BOOL						IsReadOnly() const;
 };
 
 class SvxMacroTabPage : public _SvxMacroTabPage
@@ -124,29 +124,33 @@ public:
 
 // class SvxMacroAssignDlg --------------------------------------------------
 
-typedef sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
+typedef USHORT*	(*GetTabPageRanges)(); // liefert internationale Which-Werte
 
 class SvxMacroAssignSingleTabDialog : public SfxModalDialog
 {
 public:
-    SvxMacroAssignSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, sal_uInt16 nUniqueId );
+    SvxMacroAssignSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, USHORT nUniqueId );
 
     virtual             ~SvxMacroAssignSingleTabDialog();
 
-    void                SetTabPage( SfxTabPage* pTabPage );
+    void				SetTabPage( SfxTabPage* pTabPage );
+    // SfxTabPage*			GetTabPage() const { return pPage; }
+
+    // OKButton*			GetOKButton() const { return pOKBtn; }
+    // CancelButton*		GetCancelButton() const { return pCancelBtn; }
 
 private:
     SfxViewFrame*       pFrame;
 
-    FixedLine*          pFixedLine;
+    FixedLine*			pFixedLine;
 
-    OKButton*           pOKBtn;
-    CancelButton*       pCancelBtn;
-    HelpButton*         pHelpBtn;
+    OKButton*			pOKBtn;
+    CancelButton*		pCancelBtn;
+    HelpButton*			pHelpBtn;
 
-    SfxTabPage*         pPage;
-    const SfxItemSet*   pOptions;
-    SfxItemSet*         pOutSet;
+    SfxTabPage*			pPage;
+    const SfxItemSet*	pOptions;
+    SfxItemSet*			pOutSet;
 
 #if _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( OKHdl_Impl, Button * );
@@ -164,7 +168,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >& xNameReplace,
         sal_uInt16 nSelectedIndex
     );
-    virtual ~SvxMacroAssignDlg();
+    virtual	~SvxMacroAssignDlg();
 };
 
 #endif

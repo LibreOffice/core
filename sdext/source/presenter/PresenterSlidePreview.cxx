@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,8 +79,8 @@ PresenterSlidePreview::PresenterSlidePreview (
         || ! rpPresenterController.is())
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterSlidePreview can not be constructed due to empty argument")),
+            OUString::createFromAscii(
+                "PresenterSlidePreview can not be constructed due to empty argument"),
             static_cast<XWeak*>(this));
     }
 
@@ -95,10 +95,10 @@ PresenterSlidePreview::PresenterSlidePreview (
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY);
         if (xPeer.is())
             xPeer->setBackground(util::Color(0xff000000));
-
+        
         mxWindow->setVisible(sal_True);
     }
-
+    
     if (mpPresenterController.get() != NULL)
         mnSlideAspectRatio = mpPresenterController->GetSlideAspectRatio();
 
@@ -106,7 +106,7 @@ PresenterSlidePreview::PresenterSlidePreview (
     if (xFactory.is())
         mxPreviewRenderer = Reference<drawing::XSlideRenderer>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SlideRenderer")),
+                OUString::createFromAscii("com.sun.star.drawing.SlideRenderer"),
                 rxContext),
             UNO_QUERY);
 
@@ -278,9 +278,9 @@ void PresenterSlidePreview::SetSlide (const Reference<drawing::XDrawPage>& rxPag
         try
         {
             xPropertySet->getPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))) >>= aSlideSize.Width;
+                OUString::createFromAscii("Width")) >>= aSlideSize.Width;
             xPropertySet->getPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))) >>= aSlideSize.Height;
+                OUString::createFromAscii("Height")) >>= aSlideSize.Height;
         }
         catch (beans::UnknownPropertyException&)
         {
@@ -393,7 +393,7 @@ void PresenterSlidePreview::Resize (void)
     {
         const awt::Rectangle aWindowBox (mxWindow->getPosSize());
         const awt::Size aNewPreviewSize (mxPreviewRenderer->calculatePreviewSize(
-            mnSlideAspectRatio,
+            mnSlideAspectRatio, 
                 awt::Size(aWindowBox.Width, aWindowBox.Height)));
         const geometry::IntegerSize2D aPreviewSize (mxPreview->getSize());
         if (aNewPreviewSize.Width==aPreviewSize.Width

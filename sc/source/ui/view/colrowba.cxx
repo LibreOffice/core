@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ ScColBar::~ScColBar()
 {
 }
 
-inline sal_Bool ScColBar::UseNumericHeader() const
+inline BOOL ScColBar::UseNumericHeader() const
 {
     return pViewData->GetDocument()->GetAddressConvention() == formula::FormulaGrammar::CONV_XL_R1C1;
 }
@@ -95,14 +95,15 @@ SCCOLROW ScColBar::GetPos()
     return pViewData->GetPosX(eWhich);
 }
 
-sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo )
+USHORT ScColBar::GetEntrySize( SCCOLROW nEntryNo )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    if (pDoc->ColHidden(static_cast<SCCOL>(nEntryNo), nTab))
+    SCCOL nLastCol = -1;
+    if (pDoc->ColHidden(static_cast<SCCOL>(nEntryNo), nTab, nLastCol))
         return 0;
     else
-        return (sal_uInt16) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), pViewData->GetPPTX() );
+        return (USHORT) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), pViewData->GetPPTX() );
 }
 
 String ScColBar::GetEntryText( SCCOLROW nEntryNo )
@@ -112,11 +113,11 @@ String ScColBar::GetEntryText( SCCOLROW nEntryNo )
         : ScColToAlpha( static_cast<SCCOL>(nEntryNo) );
 }
 
-void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
+void ScColBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
 {
-    sal_uInt16 nSizeTwips;
+    USHORT nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
-    if (nNewSize>0 && nNewSize<10) nNewSize=10;             // (Pixel)
+    if (nNewSize>0 && nNewSize<10) nNewSize=10;				// (Pixel)
 
     if ( nNewSize == HDR_SIZE_OPTIMUM )
     {
@@ -124,9 +125,10 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         eMode = SC_SIZE_OPTIMAL;
     }
     else
-        nSizeTwips = (sal_uInt16) ( nNewSize / pViewData->GetPPTX() );
+        nSizeTwips = (USHORT) ( nNewSize / pViewData->GetPPTX() );
 
     ScMarkData& rMark = pViewData->GetMarkData();
+//	SCTAB nTab = pViewData->GetTabNo();
 
     SCCOLROW* pRanges = new SCCOLROW[MAXCOL+1];
     SCCOL nRangeCnt = 0;
@@ -160,7 +162,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         nRangeCnt = 1;
     }
 
-    pViewData->GetView()->SetWidthOrHeight( sal_True, nRangeCnt, pRanges, eMode, nSizeTwips );
+    pViewData->GetView()->SetWidthOrHeight( TRUE, nRangeCnt, pRanges, eMode, nSizeTwips );
     delete[] pRanges;
 }
 
@@ -169,10 +171,10 @@ void ScColBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
     SCCOLROW nRange[2];
     nRange[0] = nStart;
     nRange[1] = nEnd;
-    pViewData->GetView()->SetWidthOrHeight( sal_True, 1, nRange, SC_SIZE_DIRECT, 0 );
+    pViewData->GetView()->SetWidthOrHeight( TRUE, 1, nRange, SC_SIZE_DIRECT, 0 );
 }
 
-void ScColBar::SetMarking( sal_Bool bSet )
+void ScColBar::SetMarking( BOOL bSet )
 {
     pViewData->GetMarkData().SetMarking( bSet );
     if (!bSet)
@@ -185,35 +187,35 @@ void ScColBar::SelectWindow()
 {
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
-    pViewSh->SetActive();           // Appear und SetViewFrame
+    pViewSh->SetActive();			// Appear und SetViewFrame
     pViewSh->DrawDeselectAll();
 
     ScSplitPos eActive = pViewData->GetActivePart();
     if (eWhich==SC_SPLIT_LEFT)
     {
-        if (eActive==SC_SPLIT_TOPRIGHT)     eActive=SC_SPLIT_TOPLEFT;
-        if (eActive==SC_SPLIT_BOTTOMRIGHT)  eActive=SC_SPLIT_BOTTOMLEFT;
+        if (eActive==SC_SPLIT_TOPRIGHT)		eActive=SC_SPLIT_TOPLEFT;
+        if (eActive==SC_SPLIT_BOTTOMRIGHT)	eActive=SC_SPLIT_BOTTOMLEFT;
     }
     else
     {
-        if (eActive==SC_SPLIT_TOPLEFT)      eActive=SC_SPLIT_TOPRIGHT;
-        if (eActive==SC_SPLIT_BOTTOMLEFT)   eActive=SC_SPLIT_BOTTOMRIGHT;
+        if (eActive==SC_SPLIT_TOPLEFT)		eActive=SC_SPLIT_TOPRIGHT;
+        if (eActive==SC_SPLIT_BOTTOMLEFT)	eActive=SC_SPLIT_BOTTOMRIGHT;
     }
     pViewSh->ActivatePart( eActive );
 
-    pFuncSet->SetColumn( sal_True );
+    pFuncSet->SetColumn( TRUE );
     pFuncSet->SetWhich( eActive );
 
     pViewSh->ActiveGrabFocus();
 }
 
-sal_Bool ScColBar::IsDisabled()
+BOOL ScColBar::IsDisabled()
 {
     ScModule* pScMod = SC_MOD();
     return pScMod->IsFormulaMode() || pScMod->IsModalMode();
 }
 
-sal_Bool ScColBar::ResizeAllowed()
+BOOL ScColBar::ResizeAllowed()
 {
     return !pViewData->HasEditView( pViewData->GetActivePart() );
 }
@@ -233,7 +235,7 @@ String ScColBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_WIDTH) );
 }
 
-sal_Bool ScColBar::IsLayoutRTL()        // overloaded only for columns
+BOOL ScColBar::IsLayoutRTL()		// overloaded only for columns
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }
@@ -260,15 +262,15 @@ SCCOLROW ScRowBar::GetPos()
     return pViewData->GetPosY(eWhich);
 }
 
-sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo )
+USHORT ScRowBar::GetEntrySize( SCCOLROW nEntryNo )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     SCROW nLastRow = -1;
-    if (pDoc->RowHidden(nEntryNo, nTab, NULL, &nLastRow))
+    if (pDoc->RowHidden(nEntryNo, nTab, nLastRow))
         return 0;
     else
-        return (sal_uInt16) ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,
+        return (USHORT) ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,
                     nTab ), pViewData->GetPPTY() );
 }
 
@@ -277,11 +279,11 @@ String ScRowBar::GetEntryText( SCCOLROW nEntryNo )
     return String::CreateFromInt32( nEntryNo + 1 );
 }
 
-void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
+void ScRowBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
 {
-    sal_uInt16 nSizeTwips;
+    USHORT nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
-    if (nNewSize>0 && nNewSize<10) nNewSize=10;             // (Pixel)
+    if (nNewSize>0 && nNewSize<10) nNewSize=10;				// (Pixel)
 
     if ( nNewSize == HDR_SIZE_OPTIMUM )
     {
@@ -289,9 +291,10 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         eMode = SC_SIZE_OPTIMAL;
     }
     else
-        nSizeTwips = (sal_uInt16) ( nNewSize / pViewData->GetPPTY() );
+        nSizeTwips = (USHORT) ( nNewSize / pViewData->GetPPTY() );
 
     ScMarkData& rMark = pViewData->GetMarkData();
+//	SCTAB nTab = pViewData->GetTabNo();
 
     SCCOLROW* pRanges = new SCCOLROW[MAXROW+1];
     SCROW nRangeCnt = 0;
@@ -325,7 +328,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         nRangeCnt = 1;
     }
 
-    pViewData->GetView()->SetWidthOrHeight( false, nRangeCnt, pRanges, eMode, nSizeTwips );
+    pViewData->GetView()->SetWidthOrHeight( FALSE, nRangeCnt, pRanges, eMode, nSizeTwips );
     delete[] pRanges;
 }
 
@@ -334,10 +337,10 @@ void ScRowBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
     SCCOLROW nRange[2];
     nRange[0] = nStart;
     nRange[1] = nEnd;
-    pViewData->GetView()->SetWidthOrHeight( false, 1, nRange, SC_SIZE_DIRECT, 0 );
+    pViewData->GetView()->SetWidthOrHeight( FALSE, 1, nRange, SC_SIZE_DIRECT, 0 );
 }
 
-void ScRowBar::SetMarking( sal_Bool bSet )
+void ScRowBar::SetMarking( BOOL bSet )
 {
     pViewData->GetMarkData().SetMarking( bSet );
     if (!bSet)
@@ -350,35 +353,35 @@ void ScRowBar::SelectWindow()
 {
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
-    pViewSh->SetActive();           // Appear und SetViewFrame
+    pViewSh->SetActive();			// Appear und SetViewFrame
     pViewSh->DrawDeselectAll();
 
     ScSplitPos eActive = pViewData->GetActivePart();
     if (eWhich==SC_SPLIT_TOP)
     {
-        if (eActive==SC_SPLIT_BOTTOMLEFT)   eActive=SC_SPLIT_TOPLEFT;
-        if (eActive==SC_SPLIT_BOTTOMRIGHT)  eActive=SC_SPLIT_TOPRIGHT;
+        if (eActive==SC_SPLIT_BOTTOMLEFT)	eActive=SC_SPLIT_TOPLEFT;
+        if (eActive==SC_SPLIT_BOTTOMRIGHT)	eActive=SC_SPLIT_TOPRIGHT;
     }
     else
     {
-        if (eActive==SC_SPLIT_TOPLEFT)      eActive=SC_SPLIT_BOTTOMLEFT;
-        if (eActive==SC_SPLIT_TOPRIGHT)     eActive=SC_SPLIT_BOTTOMRIGHT;
+        if (eActive==SC_SPLIT_TOPLEFT)		eActive=SC_SPLIT_BOTTOMLEFT;
+        if (eActive==SC_SPLIT_TOPRIGHT)		eActive=SC_SPLIT_BOTTOMRIGHT;
     }
     pViewSh->ActivatePart( eActive );
 
-    pFuncSet->SetColumn( false );
+    pFuncSet->SetColumn( FALSE );
     pFuncSet->SetWhich( eActive );
 
     pViewSh->ActiveGrabFocus();
 }
 
-sal_Bool ScRowBar::IsDisabled()
+BOOL ScRowBar::IsDisabled()
 {
     ScModule* pScMod = SC_MOD();
     return pScMod->IsFormulaMode() || pScMod->IsModalMode();
 }
 
-sal_Bool ScRowBar::ResizeAllowed()
+BOOL ScRowBar::ResizeAllowed()
 {
     return !pViewData->HasEditView( pViewData->GetActivePart() );
 }
@@ -398,7 +401,7 @@ String ScRowBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_HEIGHT) );
 }
 
-//  GetHiddenCount ist nur fuer Zeilen ueberladen
+//	GetHiddenCount ist nur fuer Zeilen ueberladen
 
 SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo )
 {
@@ -407,7 +410,7 @@ SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo )
     return pDoc->GetHiddenRowCount( nEntryNo, nTab );
 }
 
-sal_Bool ScRowBar::IsMirrored()         // overloaded only for rows
+BOOL ScRowBar::IsMirrored()			// overloaded only for rows
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }

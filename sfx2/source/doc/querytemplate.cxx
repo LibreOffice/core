@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 #include "precompiled_sfx2.hxx"
 
 #include "querytemplate.hxx"
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include "doc.hrc"
-#include "helpid.hrc"
+
 #include <vcl/svapp.hxx>
 
 namespace sfx2
@@ -42,7 +42,7 @@ QueryTemplateBox::QueryTemplateBox( Window* pParent, const String& rMessage ) :
     MessBox ( pParent, 0, Application::GetDisplayName(), rMessage )
 {
     SetImage( QueryBox::GetStandardImage() );
-    SetHelpId( HID_QUERY_LOAD_TEMPLATE );
+    SetHelpId( MSG_QUERY_LOAD_TEMPLATE );
 
     AddButton( String( SfxResId( STR_QRYTEMPL_UPDATE_BTN ) ), RET_YES,
             BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );

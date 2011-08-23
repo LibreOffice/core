@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,6 @@
 
 #include <functional>
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
 
 //........................................................................
 namespace pcr
@@ -93,7 +92,7 @@ namespace pcr
 
         m_xDocument = m_xDocument.query( _rxContextDocument );
         OSL_ENSURE( m_xDocument.is(), "EFormsHelper::EFormsHelper: invalid document!" );
-
+            
     }
 
     //--------------------------------------------------------------------
@@ -109,7 +108,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::isEForm: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::isEForm: caught an exception!" );
         }
         return false;
     }
@@ -202,7 +201,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::canBindToDataType: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::canBindToDataType: caught an exception!" );
         }
 
         return bCan;
@@ -219,7 +218,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::isListEntrySink: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::isListEntrySink: caught an exception!" );
         }
         return bIs;
     }
@@ -328,7 +327,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "EFormsHelper::getFormModelNames: caught an exception!" );
+                OSL_ENSURE( sal_False, "EFormsHelper::getFormModelNames: caught an exception!" );
             }
         }
     }
@@ -354,7 +353,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getBindingNames: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::getBindingNames: caught an exception!" );
         }
     }
 
@@ -371,7 +370,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getFormModelByName: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::getFormModelByName: caught an exception!" );
         }
         return xReturn;
     }
@@ -390,7 +389,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getCurrentFormModel: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::getCurrentFormModel: caught an exception!" );
         }
         return xModel;
     }
@@ -407,7 +406,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getCurrentFormModel: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::getCurrentFormModel: caught an exception!" );
         }
         return sModelName;
     }
@@ -424,7 +423,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getCurrentBinding: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::getCurrentBinding: caught an exception!" );
         }
 
         return xBinding;
@@ -442,7 +441,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getCurrentBindingName: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::getCurrentBindingName: caught an exception!" );
         }
         return sBindingName;
     }
@@ -460,7 +459,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getCurrentListSourceBinding: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::getCurrentListSourceBinding: caught an exception!" );
         }
         return xReturn;
     }
@@ -477,7 +476,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::setListSourceBinding: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::setListSourceBinding: caught an exception!" );
         }
     }
 
@@ -503,7 +502,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::setBinding: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::setBinding: caught an exception!" );
         }
     }
 
@@ -637,7 +636,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getModelElementUIName: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::getModelElementUIName: caught an exception!" );
         }
 
         return sUIName;
@@ -712,11 +711,11 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::getAllElementUINames: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::getAllElementUINames: caught an exception!" );
         }
 
         _rElementNames.resize( rMapUINameToElement.size() );
-        ::std::transform( rMapUINameToElement.begin(), rMapUINameToElement.end(), _rElementNames.begin(), ::o3tl::select1st< MapStringToPropertySet::value_type >() );
+        ::std::transform( rMapUINameToElement.begin(), rMapUINameToElement.end(), _rElementNames.begin(), ::std::select1st< MapStringToPropertySet::value_type >() );
     }
 
     //--------------------------------------------------------------------
@@ -741,7 +740,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::firePropertyChange: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::firePropertyChange: caught an exception!" );
         }
     }
 
@@ -778,7 +777,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EFormsHelper::firePropertyChanges: caught an exception!" );
+            OSL_ENSURE( sal_False, "EFormsHelper::firePropertyChanges: caught an exception!" );
         }
     }
 

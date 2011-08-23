@@ -68,6 +68,7 @@ SHL1STDLIBS=\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPUNITLIB)		\
+        $(TESTSHL2LIB)           \
     $(ZLIB3RDLIB)	    \
     $(CPPULIB)			\
     $(SALLIB)
@@ -101,6 +102,7 @@ APP1STDLIBS=\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPUNITLIB)		\
+        $(TESTSHL2LIB)           \
     $(ZLIB3RDLIB)	    \
     $(CPPULIB)			\
     $(SALLIB)
@@ -129,6 +131,7 @@ APP2STDLIBS=\
       $(COMPHELPERLIB)	\
       $(CPPUHELPERLIB)	\
       $(CPPUNITLIB)		\
+        $(TESTSHL2LIB)           \
       $(ZLIB3RDLIB)	    \
       $(CPPULIB)			\
       $(SALLIB)
@@ -159,3 +162,5 @@ APP2STDLIBS=\
           @echo ----------------------------------------------------------
           testshl2 -forward $(BIN)$/ $(SHL1TARGETN)
            $(TOUCH) $@
+
+#ALLTAR : $(MISC)$/pdfi_unittest_succeeded

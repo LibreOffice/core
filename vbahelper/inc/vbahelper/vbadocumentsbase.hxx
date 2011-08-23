@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,10 +58,10 @@ public:
     // VbaDocumentsBase_BASE
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) = 0;
 
-protected:
-    css::uno::Any createDocument() throw (css::uno::RuntimeException);
-    void closeDocuments() throw (css::uno::RuntimeException);
-    css::uno::Any openDocument( const ::rtl::OUString& Filename, const css::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps ) throw (css::uno::RuntimeException);
+    // XDocumentsBase
+    virtual css::uno::Any SAL_CALL Add() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Close(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Open( const ::rtl::OUString& Filename, const css::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps ) throw (css::uno::RuntimeException);
 };
 
 #endif /* SC_VBA_WORKBOOKS_HXX */

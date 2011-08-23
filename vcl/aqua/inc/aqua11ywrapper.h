@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,16 +63,16 @@ struct ReferenceWrapper
     ReferenceWrapper * mpReferenceWrapper;
     NSString * mpDefaultFontname;
     float mDefaultFontsize;
-    BOOL mActsAsRadioGroup;
-    BOOL mIsTableCell;
+    MacOSBOOL mActsAsRadioGroup;
+    MacOSBOOL mIsTableCell;
 }
 // NSAccessibility Protocol
 -(id)accessibilityAttributeValue:(NSString *)attribute;
--(BOOL)accessibilityIsIgnored;
+-(MacOSBOOL)accessibilityIsIgnored;
 -(NSArray *)accessibilityAttributeNames;
--(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute;
+-(MacOSBOOL)accessibilityIsAttributeSettable:(NSString *)attribute;
 -(NSArray *)accessibilityParameterizedAttributeNames;
--(BOOL)accessibilitySetOverrideValue:(id)value forAttribute:(NSString *)attribute;
+-(MacOSBOOL)accessibilitySetOverrideValue:(id)value forAttribute:(NSString *)attribute;
 -(void)accessibilitySetValue:(id)value forAttribute:(NSString *)attribute;
 -(id)accessibilityAttributeValue:(NSString *)attribute forParameter:(id)parameter;
 -(id)accessibilityFocusedUIElement;
@@ -93,8 +93,8 @@ struct ReferenceWrapper
 -(id)orientationAttribute;
 -(id)windowAttribute;
 // Wrapper-specific
--(void)setActsAsRadioGroup:(BOOL)actsAsRadioGroup;
--(BOOL)actsAsRadioGroup;
+-(void)setActsAsRadioGroup:(MacOSBOOL)actsAsRadioGroup;
+-(MacOSBOOL)actsAsRadioGroup;
 -(NSView *)viewElementForParent;
 -(id)initWithAccessibleContext: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) anAccessibleContext;
 -(void) setDefaults: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) rxAccessibleContext;
@@ -103,7 +103,7 @@ struct ReferenceWrapper
 -(NSString *)defaultFontname;
 -(void)setDefaultFontsize:(float)fontsize;
 -(float)defaultFontsize;
-+(void)setPopupMenuOpen:(BOOL)popupMenuOpen;
++(void)setPopupMenuOpen:(MacOSBOOL)popupMenuOpen;
 -(::com::sun::star::accessibility::XAccessibleAction *)accessibleAction;
 -(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext;
 -(::com::sun::star::accessibility::XAccessibleComponent *)accessibleComponent;

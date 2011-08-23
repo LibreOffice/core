@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,27 +24,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_tree_TreeControlModel_idl__
-#define __com_sun_star_awt_tree_TreeControlModel_idl__
-
-#ifndef __com_sun_star_awt_tree_XTreeDataModel_idl__
+#ifndef __com_sun_star_awt_tree_TreeControlModel_idl__ 
+#define __com_sun_star_awt_tree_TreeControlModel_idl__ 
+ 
+#ifndef __com_sun_star_awt_tree_XTreeDataModel_idl__ 
 #include <com/sun/star/awt/tree/XTreeDataModel.idl>
 #endif
 
-#ifndef __com_sun_star_awt_UnoControlModel_idl__
+#ifndef __com_sun_star_awt_UnoControlModel_idl__ 
 #include <com/sun/star/awt/UnoControlModel.idl>
 #endif
 
-#ifndef __com_sun_star_view_SelectionType_idl__
+#ifndef __com_sun_star_view_SelectionType_idl__ 
 #include <com/sun/star/view/SelectionType.idl>
 #endif
 
-//=============================================================================
-
+//============================================================================= 
+ 
 module com {  module sun {  module star {  module awt { module tree {
 
-//=============================================================================
-
+//============================================================================= 
+ 
 /** specifies the standard model of a <type>TreeControl</type>.
  */
 service TreeControlModel
@@ -57,7 +57,7 @@ service TreeControlModel
     */
     [property] ::com::sun::star::view::SelectionType SelectionType;
 
-    /** Specifies the <type>XTreeDataModel</type> that is providing the hierarchical data.
+    /**	Specifies the <type>XTreeDataModel</type> that is providing the hierarchical data.
 
         <p>You can implement your own instance of <type>XTreeDataModel</type> or use
         the <type>MutableTreeDataModel</type>.
@@ -73,7 +73,7 @@ service TreeControlModel
     [property] boolean RootDisplayed;
 
     /** Specifies whether the node handles should be displayed.
-        <p>The handles are doted lines that visualize the tree like hierarchy<p>
+        <p>The handles are doted lines that visualize the tree like hirarchie<p>
         <p>The default value is <TRUE/></p>
     */
     [property] boolean ShowsHandles;
@@ -98,17 +98,17 @@ service TreeControlModel
     */
     [property] boolean Editable;
 
-    /** Specifies what happens when editing is interrupted by selecting another node in the tree,
+    /**	Specifies what happens when editing is interrupted by selecting another node in the tree,
         a change in the tree's data, or by some other means.
         <p>Setting this property to <TRUE/> causes the changes to be automatically saved when editing
         is interrupted. <FALSE/> means that editing is canceled and changes are lost
         <p>The default value is <FALSE/></p>
     */
     [property] boolean InvokesStopNodeEditing;
-};
-
-//=============================================================================
-
+}; 
+ 
+//============================================================================= 
+ 
 }; }; }; }; };
-
-#endif
+ 
+#endif 

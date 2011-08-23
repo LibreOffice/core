@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include <list>
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include "tools/string.hxx"
 #include "tools/stream.hxx"
@@ -63,25 +63,25 @@ class PPDKey
 {
     friend class PPDParser;
 
-    typedef ::boost::unordered_map< ::rtl::OUString, PPDValue, ::rtl::OUStringHash > hash_type;
+    typedef ::std::hash_map< ::rtl::OUString, PPDValue, ::rtl::OUStringHash > hash_type;
     typedef ::std::vector< PPDValue* > value_type;
 
-    String              m_aKey;
-    hash_type           m_aValues;
-    value_type          m_aOrderedValues;
-    const PPDValue*     m_pDefaultValue;
-    bool                m_bQueryValue;
-    PPDValue            m_aQueryValue;
+    String          	m_aKey;
+    hash_type			m_aValues;
+    value_type			m_aOrderedValues;
+    const PPDValue*		m_pDefaultValue;
+    bool            	m_bQueryValue;
+    PPDValue        	m_aQueryValue;
 
 public:
     enum UIType { PickOne, PickMany, Boolean };
     enum SetupType { ExitServer, Prolog, DocumentSetup, PageSetup, JCLSetup, AnySetup };
 private:
 
-    bool                m_bUIOption;
-    UIType              m_eUIType;
-    int                 m_nOrderDependency;
-    SetupType           m_eSetupType;
+    bool				m_bUIOption;
+    UIType				m_eUIType;
+    int					m_nOrderDependency;
+    SetupType			m_eSetupType;
 
     void eraseValue( const String& rOption );
 public:
@@ -125,9 +125,8 @@ class PPDParser
 {
     friend class PPDContext;
     friend class CUPSManager;
-    friend class PPDCache;
 
-    typedef ::boost::unordered_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash > hash_type;
+    typedef ::std::hash_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash > hash_type;
     typedef ::std::vector< PPDKey* > value_type;
 
     void insertKey( const String& rKey, PPDKey* pKey );
@@ -142,42 +141,47 @@ public:
         PPDConstraint() : m_pKey1( NULL ), m_pOption1( NULL ), m_pKey2( NULL ), m_pOption2( NULL ) {}
     };
 private:
-    hash_type                                   m_aKeys;
-    value_type                                  m_aOrderedKeys;
-    ::std::list< PPDConstraint >                m_aConstraints;
+
+    static ::std::list< PPDParser* >           aAllParsers;
+    static ::std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >*
+                                                pAllPPDFiles;
+
+    hash_type									m_aKeys;
+    value_type									m_aOrderedKeys;
+    ::std::list< PPDConstraint >				m_aConstraints;
 
     // some identifying fields
-    String                                      m_aPrinterName;
-    String                                      m_aNickName;
+    String                          			m_aPrinterName;
+    String                          			m_aNickName;
     // the full path of the PPD file
-    String                                      m_aFile;
+    String                          			m_aFile;
     // some basic attributes
-    bool                                        m_bColorDevice;
-    bool                                        m_bType42Capable;
-    sal_uLong                                       m_nLanguageLevel;
+    bool                            			m_bColorDevice;
+    bool                            			m_bType42Capable;
+    ULONG                           			m_nLanguageLevel;
     rtl_TextEncoding                            m_aFileEncoding;
 
 
     // shortcuts to important keys and their default values
     // imageable area
-    const PPDValue*                             m_pDefaultImageableArea;
-    const PPDKey*                               m_pImageableAreas;
+    const PPDValue*                     		m_pDefaultImageableArea;
+    const PPDKey*                       		m_pImageableAreas;
     // paper dimensions
-    const PPDValue*                             m_pDefaultPaperDimension;
-    const PPDKey*                               m_pPaperDimensions;
+    const PPDValue*                     		m_pDefaultPaperDimension;
+    const PPDKey*                       		m_pPaperDimensions;
     // paper trays
-    const PPDValue*                             m_pDefaultInputSlot;
-    const PPDKey*                               m_pInputSlots;
+    const PPDValue*                     		m_pDefaultInputSlot;
+    const PPDKey*                       		m_pInputSlots;
     // resolutions
-    const PPDValue*                             m_pDefaultResolution;
-    const PPDKey*                               m_pResolutions;
+    const PPDValue*                     		m_pDefaultResolution;
+    const PPDKey*                       		m_pResolutions;
     // duplex commands
-    const PPDValue*                             m_pDefaultDuplexType;
-    const PPDKey*                               m_pDuplexTypes;
+    const PPDValue*                     		m_pDefaultDuplexType;
+    const PPDKey*                       		m_pDuplexTypes;
 
     // fonts
-    const PPDKey*                               m_pFontList;
-
+    const PPDKey*                       		m_pFontList;
+    
     // translations
     PPDTranslator*                              m_pTranslator;
 
@@ -188,7 +192,7 @@ private:
     void parseOpenUI( const ByteString& rLine );
     void parseConstraint( const ByteString& rLine );
     void parse( std::list< ByteString >& rLines );
-
+    
     String handleTranslation( const ByteString& i_rString, bool i_bIsGlobalized );
 
     static void scanPPDDir( const String& rDir );
@@ -216,7 +220,7 @@ public:
 
     bool            isColorDevice() const { return m_bColorDevice; }
     bool            isType42Capable() const { return m_bType42Capable; }
-    sal_uLong           getLanguageLevel() const { return m_nLanguageLevel; }
+    ULONG           getLanguageLevel() const { return m_nLanguageLevel; }
 
     String          getDefaultPaperDimension() const;
     void            getDefaultPaperDimension( int& rWidth, int& rHeight ) const
@@ -233,15 +237,15 @@ public:
 
     // match the best paper for width and height
     String          matchPaper( int nWidth, int nHeight ) const;
-
+    
     bool getMargins( const String& rPaperName,
                      int &rLeft, int& rRight,
                      int &rUpper, int& rLower ) const;
     // values in pt
     // returns true if paper found
-
+    
     // values int pt
-
+    
     String          getDefaultInputSlot() const;
     int             getInputSlots() const
     { return m_pInputSlots ? m_pInputSlots->countValues() : 0; }
@@ -273,8 +277,8 @@ public:
                                        String& rEncoding,
                                        String& rCharset ) const;
     String          getFont( int ) const;
-
-
+    
+    
     rtl::OUString   translateKey( const rtl::OUString& i_rKey,
                                   const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const;
     rtl::OUString   translateOption( const rtl::OUString& i_rKey,
@@ -295,7 +299,7 @@ public:
 
 class PPDContext
 {
-    typedef ::boost::unordered_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
+    typedef ::std::hash_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
     hash_type m_aCurrentValues;
     const PPDParser*                                    m_pParser;
 
@@ -324,8 +328,8 @@ public:
     void getUnconstrainedValues( const PPDKey*, ::std::list< const PPDValue* >& rValues );
 
     // for printer setup
-    void*   getStreamableBuffer( sal_uLong& rBytes ) const;
-    void    rebuildFromStreamBuffer( void* pBuffer, sal_uLong nBytes );
+    void*   getStreamableBuffer( ULONG& rBytes ) const;
+    void    rebuildFromStreamBuffer( void* pBuffer, ULONG nBytes );
 
     // convenience
     int getRenderResolution() const;

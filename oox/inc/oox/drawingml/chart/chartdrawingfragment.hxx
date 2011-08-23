@@ -102,8 +102,7 @@ public:
     virtual             ~ChartDrawingFragment();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
-    virtual void        onEndElement();
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >

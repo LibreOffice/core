@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,47 +44,48 @@ class SVX_DLLPUBLIC SvxCheckListBox : public SvTreeListBox
     using Window::GetText;
 
 private:
-    SvLBoxButtonData*   pCheckButton;
+    SvLBoxButtonData* 	pCheckButton;
 
 #ifdef _SVX_CHECKLBX_CXX
-    SVX_DLLPRIVATE void             Init_Impl();
+    SVX_DLLPRIVATE void				Init_Impl();
 #endif
 
     using SvTreeListBox::InsertEntry;
     // Avoid ambiguity with new InsertEntry:
-    virtual SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
-                                         sal_Bool bChildsOnDemand,
-                                         sal_uIntPtr nPos, void* pUserData,
+    virtual SvLBoxEntry*	InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
+                                         BOOL bChildsOnDemand,
+                                         ULONG nPos, void* pUserData,
                                          SvLBoxButtonKind eButtonKind );
 
 public:
     SvxCheckListBox( Window* pParent, WinBits nWinStyle = 0 );
     SvxCheckListBox( Window* pParent, const ResId& rResId );
     SvxCheckListBox( Window* pParent, const ResId& rResId,
-                     const Image& rNormalStaticImage );
+                     const Image& rNormalStaticImage,
+                     const Image& rHighContrastStaticImage );
     ~SvxCheckListBox();
 
-    void            InsertEntry         ( const String& rStr,
-                                          sal_uInt16 nPos = LISTBOX_APPEND,
+    void			InsertEntry			( const String& rStr,
+                                          USHORT nPos = LISTBOX_APPEND,
                                           void* pUserData = NULL,
                                           SvLBoxButtonKind eButtonKind =
                                               SvLBoxButtonKind_enabledCheckbox );
-    void            RemoveEntry         ( sal_uInt16 nPos );
+    void			RemoveEntry			( USHORT nPos );
 
-    void            SelectEntryPos      ( sal_uInt16 nPos, sal_Bool bSelect = sal_True );
-    sal_uInt16          GetSelectEntryPos   () const;
+    void			SelectEntryPos		( USHORT nPos, BOOL bSelect = TRUE );
+    USHORT			GetSelectEntryPos	() const;
 
-    String          GetText             ( sal_uInt16 nPos ) const;
-    sal_uInt16          GetCheckedEntryCount() const;
-    void            CheckEntryPos       ( sal_uInt16 nPos, sal_Bool bCheck = sal_True );
-    sal_Bool            IsChecked           ( sal_uInt16 nPos ) const;
-    void            ToggleCheckButton   ( SvLBoxEntry* pEntry );
+    String			GetText				( USHORT nPos ) const;
+    USHORT			GetCheckedEntryCount() const;
+    void			CheckEntryPos		( USHORT nPos, BOOL bCheck = TRUE );
+    BOOL			IsChecked			( USHORT nPos ) const;
+    void			ToggleCheckButton	( SvLBoxEntry* pEntry );
 
-    void*           SetEntryData        ( sal_uInt16 nPos, void* pNewData );
-    void*           GetEntryData        ( sal_uInt16 nPos ) const;
+    void*			SetEntryData		( USHORT nPos, void* pNewData );
+    void*			GetEntryData		( USHORT nPos ) const;
 
-    virtual void    MouseButtonDown     ( const MouseEvent& rMEvt );
-    virtual void    KeyInput            ( const KeyEvent& rKEvt );
+    virtual void 	MouseButtonDown		( const MouseEvent& rMEvt );
+    virtual void	KeyInput			( const KeyEvent& rKEvt );
 };
 
 

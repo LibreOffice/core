@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,6 +59,7 @@ void lcl_overwriteOrAppendValues(
 
 } // anonymous namespace
 
+//static
 void PropertyMapper::setMappedProperties(
           const uno::Reference< beans::XPropertySet >& xTarget
         , const uno::Reference< beans::XPropertySet >& xSource
@@ -173,15 +174,42 @@ uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropVal
         , bLimitedHeight ? C2U("TextMaximumFrameHeight") : C2U("TextMaximumFrameWidth") );
 }
 
+/*
+//set some properties from service style::CharacterProperties:
+//-------- tabpage: Characters -----------
+//FontType eg. Albany               UNO_NAME_EDIT_CHAR_FONTNAME == UNO_NAME_EDIT_CHAR_FONTSTYLENAME    //UNO_NAME_CHAR_FONT
+//FontStyle eg. italic              UNO_NAME_EDIT_CHAR_POSTURE    UNO_NAME_CHAR_POSTURE awt::FontSlant NONE OBLIQUE ITALIC DONTKNOW REVERSE_OBLIQUE REVERSE_ITALIC
+//Fontsize (Pointsize eg. 12)       UNO_NAME_EDIT_CHAR_HEIGHT == UNO_NAME_CHAR_HEIGHT
+        //? UNO_NAME_EDIT_CHAR_WEIGHT == UNO_NAME_CHAR_WEIGHT
+//Language                          UNO_NAME_EDIT_CHAR_LOCALE lang::Locale
+
+//-------- tabpage: Font Effect -----------
+//Underline                         UNO_NAME_CHAR_UNDERLINE sal_Int16 awt::FontUnderline_NONE _SINGLE _DOUBLE _DOTTED _DONTKNOW _DASH ...
+//Underline-color                   ??? 'CharUnderlineColor' + CharUnderlineHasColor
+//Strikeout eg. double              "CharStrikeout" sal_Int16 awt::FontStrikeout_NONE _SINGLE _DOUBLE ...
+//Strikeout by word yes/no          "CharWordMode" bool
+//Fontcolor                         UNO_NAME_EDIT_CHAR_COLOR sal_Int32      UNO_NAME_CHAR_COLOR
+//ReliefType without/graved/emboss  "CharRelief" sal_Int16 text::FontRelief_NONE FontRelief_EMBOSSED FontRelief_ENGRAVED
+//Outline                           "CharContoured" bool
+//Shadows                           UNO_NAME_CHAR_SHADOWED bool
+*/
+
+//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties()
 {
     //shape property -- chart model object property
     static tMakePropertyNameMap m_aShapePropertyMapForCharacterProperties =
         tMakePropertyNameMap
+//      ( C2U( "CharBackColor" ),           C2U("TextBackgroundColor") )
+//      ( C2U( "CharCaseMap" ),             C2U("CaseMapping") )
         ( C2U( "CharColor" ),               C2U("CharColor") )
         ( C2U( "CharContoured" ),           C2U("CharContoured") )
+/////// ( C2U( "CharCrossedOut" ),          C2U("CharCrossedOut") ) //setting this explicitly somehow conflicts with CharStrikeout
         ( C2U( "CharEmphasis" ),            C2U("CharEmphasis") )//the service style::CharacterProperties  describes a property called 'CharEmphasize' wich is nowhere implemented
-
+//        ( C2U( "CharEscapement" ),          C2U("CharEscapement") ) //#i98344# @future: add these to properties again, if the user interface offers the possibility to change them; then make sure that older wrong files are corrected on import
+//        ( C2U( "CharEscapementHeight" ),    C2U("CharEscapementHeight") ) //#i98344# @future: add these to properties again, if the user interface offers the possibility to change them; then make sure that older wrong files are corrected on import
+//      ( C2U( "CharFlash" ),               C2U("Flashing") )
+        
         ( C2U( "CharFontFamily" ),          C2U("CharFontFamily") )
         ( C2U( "CharFontFamilyAsian" ),     C2U("CharFontFamilyAsian") )
         ( C2U( "CharFontFamilyComplex" ),   C2U("CharFontFamilyComplex") )
@@ -197,7 +225,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
         ( C2U( "CharFontStyleName" ),       C2U("CharFontStyleName") )
         ( C2U( "CharFontStyleNameAsian" ),  C2U("CharFontStyleNameAsian") )
         ( C2U( "CharFontStyleNameComplex" ),C2U("CharFontStyleNameComplex") )
-
+        
         ( C2U( "CharHeight" ),              C2U("CharHeight") )
         ( C2U( "CharHeightAsian" ),         C2U("CharHeightAsian") )
         ( C2U( "CharHeightComplex" ),       C2U("CharHeightComplex") )
@@ -205,30 +233,35 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
         ( C2U( "CharLocale" ),              C2U("CharLocale") )
         ( C2U( "CharLocaleAsian" ),         C2U("CharLocaleAsian") )
         ( C2U( "CharLocaleComplex" ),       C2U("CharLocaleComplex") )
+//      ( C2U( "CharNoHyphenation" ),       C2U("InhibitHyphenation") )
         ( C2U( "CharPosture" ),             C2U("CharPosture") )
         ( C2U( "CharPostureAsian" ),        C2U("CharPostureAsian") )
         ( C2U( "CharPostureComplex" ),      C2U("CharPostureComplex") )
         ( C2U( "CharRelief" ),              C2U("CharRelief") )
+//      ( C2U( "CharRotation" ),            C2U("Rotation") ) --> additional feature ...
+//      ( C2U( "CharScaleWidth" ),          C2U("CharScaleWidth") )
         ( C2U( "CharShadowed" ),            C2U("CharShadowed") )
         ( C2U( "CharStrikeout" ),           C2U("CharStrikeout") )
         ( C2U( "CharUnderline" ),           C2U("CharUnderline") )
         ( C2U( "CharUnderlineColor" ),      C2U("CharUnderlineColor") )
         ( C2U( "CharUnderlineHasColor" ),   C2U("CharUnderlineHasColor") )
-        ( C2U( "CharOverline" ),            C2U("CharOverline") )
-        ( C2U( "CharOverlineColor" ),       C2U("CharOverlineColor") )
-        ( C2U( "CharOverlineHasColor" ),    C2U("CharOverlineHasColor") )
         ( C2U( "CharWeight" ),              C2U("CharWeight") )
         ( C2U( "CharWeightAsian" ),         C2U("CharWeightAsian") )
         ( C2U( "CharWeightComplex" ),       C2U("CharWeightComplex") )
         ( C2U( "CharWordMode" ),            C2U("CharWordMode") )
 
         ( C2U( "WritingMode" ),             C2U("WritingMode") )
-
+        
+//      ( C2U( "RubyText" ),                C2U("RubyText") )
+//      ( C2U( "RubyAdjust" ),              C2U("RubyAdjust") )
+//      ( C2U( "RubyCharStyleName" ),       C2U("RubyStyleName") )
+//      ( C2U( "RubyIsAbove" ),             C2U("RubyIsAbove") )
         ( C2U( "ParaIsCharacterDistance" ), C2U("ParaIsCharacterDistance") )
         ;
     return m_aShapePropertyMapForCharacterProperties;
 }
 
+//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProperties()
 {
     //shape property -- chart model object property
@@ -245,6 +278,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProper
     return m_aShapePropertyMapForParagraphProperties;
 }
 
+//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties()
 {
     //shape property -- chart model object property
@@ -273,6 +307,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties(
     return m_aShapePropertyMapForFillProperties;
 }
 
+//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties()
 {
     //shape property -- chart model object property
@@ -288,6 +323,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties(
     return m_aShapePropertyMapForLineProperties;
 }
 
+//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillAndLineProperties()
 {
     static tMakePropertyNameMap m_aShapePropertyMapForFillAndLineProperties =
@@ -299,17 +335,30 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillAndLineProp
     return m_aShapePropertyMapForFillAndLineProperties;
 }
 
+//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextShapeProperties()
 {
     static tMakePropertyNameMap m_aShapePropertyMapForTextShapeProperties =
         tMakePropertyNameMap
         ( PropertyMapper::getPropertyNameMapForCharacterProperties() )
         ( PropertyMapper::getPropertyNameMapForFillProperties() )
-        ( PropertyMapper::getPropertyNameMapForLineProperties() );
+        ( PropertyMapper::getPropertyNameMapForLineProperties() )
+//         ( PropertyMapper::getPropertyNameMapForParagraphProperties() )
+        // some text properties
+//         ( C2U( "TextHorizontalAdjust" ),   C2U( "TextHorizontalAdjust" ) )
+//         ( C2U( "TextVerticalAdjust" ),     C2U( "TextVerticalAdjust" ) )
+//         ( C2U( "TextAutoGrowHeight" ),     C2U( "TextAutoGrowHeight" ) )
+//         ( C2U( "TextAutoGrowWidth" ),      C2U( "TextAutoGrowWidth" ) )
+//         ( C2U( "TextLeftDistance" ),       C2U( "TextLeftDistance" ) )
+//         ( C2U( "TextRightDistance" ),      C2U( "TextRightDistance" ) )
+//         ( C2U( "TextUpperDistance" ),      C2U( "TextUpperDistance" ) )
+//         ( C2U( "TextLowerDistance" ),      C2U( "TextLowerDistance" ) )
+        ;
 
     return m_aShapePropertyMapForTextShapeProperties;
 }
 
+//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesProperties()
 {
     //shape property -- chart model object property
@@ -317,6 +366,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPrope
         tMakePropertyNameMap
         ( C2U( "LineColor" ),           C2U("Color") )
         ( C2U( "LineDashName" ),        C2U("LineDashName") )
+//      ( C2U( "LineJoint" ),           C2U("LineJoint") )
         ( C2U( "LineStyle" ),           C2U("LineStyle") )
         ( C2U( "LineTransparence" ),    C2U("Transparency") )
         ( C2U( "LineWidth" ),           C2U("LineWidth") )
@@ -325,6 +375,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPrope
     return m_aShapePropertyMapForLineSeriesProperties;
 }
 
+//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesProperties()
 {
     //shape property -- chart model object property
@@ -352,6 +403,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPro
         //line properties
         ( C2U( "LineColor" ),           C2U("BorderColor") )
         ( C2U( "LineDashName" ),        C2U("BorderDashName") )
+//      ( C2U( "LineJoint" ),           C2U("LineJoint") )
         ( C2U( "LineStyle" ),           C2U("BorderStyle") )
         ( C2U( "LineTransparence" ),    C2U("BorderTransparency") )
         ( C2U( "LineWidth" ),           C2U("BorderWidth") )
@@ -359,6 +411,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPro
     return m_aShapePropertyMapForFilledSeriesProperties;
 }
 
+// static
 void PropertyMapper::setMultiProperties(
                   const tNameSequence& rNames
                 , const tAnySequence&  rValues
@@ -390,7 +443,7 @@ void PropertyMapper::setMultiProperties(
         {
             aPropName = rNames[nN];
             aValue = rValues[nN];
-
+            
             try
             {
                 xTarget->setPropertyValue( aPropName, aValue );
@@ -424,6 +477,7 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
     aValueMap.insert( tPropertyNameValueMap::value_type( C2U("LineStyle"), uno::makeAny(drawing::LineStyle_NONE) ) ); // drawing::LineStyle
     aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextHorizontalAdjust"), uno::makeAny(drawing::TextHorizontalAdjust_CENTER) ) ); // drawing::TextHorizontalAdjust - needs to be overwritten
     aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextVerticalAdjust"), uno::makeAny(drawing::TextVerticalAdjust_CENTER) ) ); //drawing::TextVerticalAdjust - needs to be overwritten
+    //aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextWritingMode"), uno::makeAny(eWritingMode) ) ); //text::WritingMode
     aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextAutoGrowHeight"), uno::makeAny(sal_True) ) ); // sal_Bool
     aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextAutoGrowWidth"), uno::makeAny(sal_True) ) ); // sal_Bool
     if( bName )
@@ -437,6 +491,15 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
             aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextMaximumFrameWidth"), uno::makeAny(nLimitedSpace) ) ); //sal_Int32
         aValueMap.insert( tPropertyNameValueMap::value_type( C2U("ParaIsHyphenation"), uno::makeAny(sal_True) ) );
     }
+
+    /*
+    //@todo ?: add paragraph properties:
+    //(uno::makeAny(eParaAdjust)) //ParaAdjust - style::ParagraphAdjust
+    //(uno::makeAny( (sal_Bool)rAxisLabelProperties.bLineBreakAllowed )) //ParaIsHyphenation - sal_Bool
+    style::ParagraphAdjust eParaAdjust( style::ParagraphAdjust_LEFT );
+    if( eHorizontalAdjust == drawing::TextHorizontalAdjust_RIGHT )
+        eParaAdjust = style::ParagraphAdjust_RIGHT;
+    */
 
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -466,7 +466,7 @@ public:
     explicit            XclNumFmtBuffer( const XclRoot& rRoot );
 
     /** Returns the core index of the current standard number format. */
-    inline sal_uLong        GetStdScNumFmt() const { return mnStdScNumFmt; }
+    inline ULONG        GetStdScNumFmt() const { return mnStdScNumFmt; }
 
 protected:
     typedef ::std::map< sal_uInt16, XclNumFmt > XclNumFmtMap;
@@ -486,7 +486,7 @@ private:
 
     XclNumFmtMap        maFmtMap;       /// Map containing all default and user-defined formats.
     LanguageType        meSysLang;      /// Current system language.
-    sal_uLong               mnStdScNumFmt;  /// Calc format key for standard number format.
+    ULONG               mnStdScNumFmt;  /// Calc format key for standard number format.
 };
 
 // Cell formatting data (XF) ==================================================

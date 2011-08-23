@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,20 +31,19 @@
 #include "viewcontext.hxx"
 #include "sdxmlimp_impl.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/VisAreaContext.hxx"
+#include "VisAreaContext.hxx"
 
 using namespace com::sun::star;
+using namespace rtl;
 using ::xmloff::token::IsXMLToken;
 
 using ::xmloff::token::XML_EMBEDDED_VISIBLE_AREA;
 
-using ::rtl::OUString;
-
 //------------------------------------------------------------------
 
-SdXMLViewSettingsContext::SdXMLViewSettingsContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference<xml::sax::XAttributeList>& ) :
+SdXMLViewSettingsContext::SdXMLViewSettingsContext( SdXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const uno::Reference<xml::sax::XAttributeList>& ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
 }
@@ -53,7 +52,7 @@ SdXMLViewSettingsContext::~SdXMLViewSettingsContext()
 {
 }
 
-SvXMLImportContext *SdXMLViewSettingsContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *SdXMLViewSettingsContext::CreateChildContext( USHORT nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )

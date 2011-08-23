@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ DBG_NAME( AccessibleGridControlTable )
 
 AccessibleGridControlTable::AccessibleGridControlTable(
         const Reference< XAccessible >& rxParent,
-        IAccessibleTable& rTable,
+        IAccessibleTable& rTable, 
         AccessibleTableControlObjType _eType) :
     AccessibleGridControlTableBase( rxParent, rTable, _eType )
 {
@@ -246,7 +246,8 @@ void SAL_CALL AccessibleGridControlTable::selectAccessibleChild( sal_Int32 nChil
     ensureIsValidIndex( nChildIndex );
     sal_Int32 nColumns = m_aTable.GetColumnCount();
     sal_Int32 nRow = (nChildIndex / nColumns);
-    m_aTable.SelectRow( nRow, sal_True );
+    std::vector< sal_Int32 > selectedRows = m_aTable.GetSelectedRows();
+    selectedRows.push_back(nRow);
 }
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleChildSelected( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
@@ -265,7 +266,8 @@ void SAL_CALL AccessibleGridControlTable::clearAccessibleSelection()
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
-    m_aTable.SelectAllRows( false );
+    for(unsigned int i=0;i<m_aTable.GetSelectedRows().size();i++)
+        m_aTable.RemoveSelectedRow((sal_Int32)i);
 }
 void SAL_CALL AccessibleGridControlTable::selectAllAccessibleChildren()
     throw ( uno::RuntimeException )
@@ -362,7 +364,7 @@ Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
         }
         catch( lang::IndexOutOfBoundsException& )
         {
-            OSL_FAIL( "implGetHeaderBar - wrong child index" );
+            DBG_ERROR( "implGetHeaderBar - wrong child index" );
         }
         // RuntimeException goes to caller
     }

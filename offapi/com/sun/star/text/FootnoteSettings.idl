@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ published service FootnoteSettings
     /** contains the name of the character style that is used
         for footnote/endnote anchor in the text.
 
-        @since OOo 2.0
+        @since OOo 2.0.0
      */
     [optional, property] string AnchorCharStyleName;
 

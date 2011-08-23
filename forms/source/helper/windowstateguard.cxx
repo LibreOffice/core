@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ namespace frm
             @precond
                 our mutex is locked
         */
-        void    impl_ensureEnabledState_nothrow_nolck();
+        void    impl_ensureEnabledState_nothrow() const;
     };
 
     //--------------------------------------------------------------------
@@ -130,24 +130,16 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void WindowStateGuard_Impl::impl_ensureEnabledState_nothrow_nolck()
+    void WindowStateGuard_Impl::impl_ensureEnabledState_nothrow() const
     {
         try
         {
-            Reference< XWindow2 > xWindow;
-            sal_Bool bEnabled = sal_False;
+            sal_Bool bEnabled = m_xWindow->isEnabled();
             sal_Bool bShouldBeEnabled = sal_False;
-            {
-                ::osl::MutexGuard aGuard( m_aMutex );
-                if ( !m_xWindow.is() || !m_xModelProps.is() )
-                    return;
-                xWindow = m_xWindow;
-                bEnabled = xWindow->isEnabled();
-                OSL_VERIFY( m_xModelProps->getPropertyValue( PROPERTY_ENABLED ) >>= bShouldBeEnabled );
-            }
+            OSL_VERIFY( m_xModelProps->getPropertyValue( PROPERTY_ENABLED ) >>= bShouldBeEnabled );
 
-            if ( !bShouldBeEnabled && bEnabled && xWindow.is() )
-                xWindow->setEnable( sal_False );
+            if ( !bShouldBeEnabled && bEnabled )
+                m_xWindow->setEnable( sal_False );
         }
         catch( const Exception& )
         {
@@ -158,33 +150,35 @@ namespace frm
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowEnabled( const EventObject& /*e*/ ) throw (RuntimeException)
     {
-        impl_ensureEnabledState_nothrow_nolck();
+        ::osl::MutexGuard aGuard( m_aMutex );
+        impl_ensureEnabledState_nothrow();
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowDisabled( const EventObject& /*e*/ ) throw (RuntimeException)
     {
-        impl_ensureEnabledState_nothrow_nolck();
+        ::osl::MutexGuard aGuard( m_aMutex );
+        impl_ensureEnabledState_nothrow();
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowResized( const WindowEvent& /*e*/ ) throw (RuntimeException)
     {
         // not interested in
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowMoved( const WindowEvent& /*e*/ ) throw (RuntimeException)
     {
         // not interested in
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowShown( const EventObject& /*e*/ ) throw (RuntimeException)
     {
         // not interested in
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL WindowStateGuard_Impl::windowHidden( const EventObject& /*e*/ ) throw (RuntimeException)
     {

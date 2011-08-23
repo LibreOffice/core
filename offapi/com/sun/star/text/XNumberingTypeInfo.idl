@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,24 +38,24 @@ module com { module sun { module star { module text {
      correspond to an identifier.</p>
     @see <type scope="com::sun::star::text">NumberingRules</type>
     @see <type scope="com::sun::star::style">NumberingType</type>
-    @version    1.0
-    @author     <a href="mailto:oliver.specht@germany.sun.com">Oliver Specht</a>
+    @version	1.0
+    @author		<a href="mailto:oliver.specht@germany.sun.com">Oliver Specht</a>
 */
 published interface XNumberingTypeInfo : com::sun::star::uno::XInterface
 {
-    /** returns the numbering type values that are supported by the component.
+    /**	returns the numbering type values that are supported by the component.
         @see
     */
     sequence<short> getSupportedNumberingTypes();
     /** returns the corresponding numbering type to an identifier.
     */
-    short   getNumberingType([in]string NumberingIdentifier);
-    /** determines whether an identifier is supported.
+    short	getNumberingType([in]string NumberingIdentifier);
+    /** determins whether an identifier is supported.
     */
-    boolean hasNumberingType([in]string NumberingIdentifier);
-    /** returns the corresponding identifier to a numbering type.
+    boolean	hasNumberingType([in]string NumberingIdentifier);
+    /** returns the corresponding identifiert to a numbering type.
     */
-    string  getNumberingIdentifier([in]short NumberingType);
+    string	getNumberingIdentifier([in]short NumberingType);
 };
 };};};};
 

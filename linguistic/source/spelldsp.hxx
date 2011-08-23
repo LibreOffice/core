@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,10 @@
 #define _LINGUISTIC_SPELLDSP_HXX_
 
 #include "lngopt.hxx"
-#include "linguistic/misc.hxx"
+#include "misc.hxx"
 #include "iprcache.hxx"
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase7.hxx>
@@ -69,11 +69,11 @@ class SpellCheckerDispatcher :
     LinguOptions            aOpt;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >                     xPropSet;
+        ::com::sun::star::beans::XPropertySet >						xPropSet;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList >  xDicList;
+        ::com::sun::star::linguistic2::XSearchableDictionaryList >	xDicList;
 
-    LngSvcMgr                   &rMgr;
+    LngSvcMgr		   			&rMgr;
     linguistic::SpellCache      *pCache; // Spell Cache (holds known words)
 
     // disallow copy-constructor and assignment-operator for now
@@ -89,18 +89,18 @@ class SpellCheckerDispatcher :
         ::com::sun::star::linguistic2::XSearchableDictionaryList >
             GetDicList();
 
-    void    ClearSvcList();
+    void	ClearSvcList();
 
-    sal_Bool    isValid_Impl(const ::rtl::OUString& aWord, LanguageType nLanguage,
+    BOOL    isValid_Impl(const ::rtl::OUString& aWord, LanguageType nLanguage,
                     const ::com::sun::star::beans::PropertyValues& aProperties,
-                    sal_Bool bCheckDics)
+                    BOOL bCheckDics)
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives >
             spell_Impl(const ::rtl::OUString& aWord, LanguageType nLanguage,
                     const ::com::sun::star::beans::PropertyValues& aProperties,
-                    sal_Bool bCheckDics)
+                    BOOL bCheckDics)
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
 public:
@@ -115,7 +115,7 @@ public:
     virtual sal_Bool SAL_CALL isValid( const ::rtl::OUString& aWord, const ::com::sun::star::lang::Locale& aLocale, const ::com::sun::star::beans::PropertyValues& aProperties ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > SAL_CALL spell( const ::rtl::OUString& aWord, const ::com::sun::star::lang::Locale& aLocale, const ::com::sun::star::beans::PropertyValues& aProperties ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    // XSupportedLanguages
+    // XSupportedLanguages 
     virtual ::com::sun::star::uno::Sequence< ::sal_Int16 > SAL_CALL getLanguages(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL hasLanguage( ::sal_Int16 nLanguage ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -144,7 +144,7 @@ inline ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >
         SpellCheckerDispatcher::GetPropSet()
 {
-    return xPropSet.is() ?
+    return xPropSet.is() ? 
         xPropSet : xPropSet = linguistic::GetLinguProperties();
 }
 
@@ -153,7 +153,7 @@ inline ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XSearchableDictionaryList >
         SpellCheckerDispatcher::GetDicList()
 {
-    return xDicList.is() ?
+    return xDicList.is() ? 
         xDicList : xDicList = linguistic::GetSearchableDictionaryList();
 }
 

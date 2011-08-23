@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005           Created
+ Mar 2005		 	Created
  ************************************************************************/
 #ifndef _LWPCELLLAYOUT_HXX
 #define _LWPCELLLAYOUT_HXX
@@ -94,10 +94,10 @@ public:
     virtual ~LwpCellLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_CELL_LAYOUT;}
     virtual XFCell* ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol);
-    sal_uInt16 GetRowID(){return crowid;}
-    sal_uInt8 GetColID(){return ccolid;}
+    sal_uInt16 GetRowID(){return crowid;};
+    sal_uInt8 GetColID(){return ccolid;};
     void RegisterStyle();
-    LwpObjectID * GetNumericsObject() {return &cLayNumerics;}
+    LwpObjectID * GetNumericsObject() {return &cLayNumerics;};
     LwpObjectID * GetPreviousCellStory();
     virtual LwpPara* GetLastParaOfPreviousStory();
     LwpTableLayout * GetTableLayout();
@@ -107,7 +107,7 @@ public:
     OUString GetNumfmtName(){return m_NumfmtName;}
 protected:
     void Read();
-//  LwpTableLayout * GetTableLayout();
+//	LwpTableLayout * GetTableLayout();
     LwpTable * GetTable();
     void ApplyPadding(XFCellStyle* pCellStyle);
     void ApplyBorders(XFCellStyle* pCellStyle);
@@ -127,7 +127,7 @@ protected:
     virtual sal_uInt16 GetBelowRowID(sal_uInt16 nRow){return nRow + 1; };
 
     sal_uInt16 crowid;
-    sal_uInt8   ccolid;
+    sal_uInt8	ccolid;
     LwpObjectID cLayNumerics;
     LwpObjectID cLayDiagonalLine;
 
@@ -141,7 +141,7 @@ protected:
     LeaderDotType cType;
     OUString m_CellStyleNames[enumCellBorderTopLimit];
 
-    OUString m_NumfmtName;//Add to support number color
+    OUString m_NumfmtName;//Add by , to support number color,2005/11/30
 private:
     LwpCellList* GetCellList(LwpFoundry* pFoundry, LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt8 nCol);
 };
@@ -158,7 +158,7 @@ public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_HIDDEN_CELL_LAYOUT;}
     virtual void Parse(IXFStream* pOutputStream);
     virtual XFCell* ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol);
-    void RegisterStyle(){}
+    void RegisterStyle(){};
     virtual void SetCellMap(void);
 protected:
     void Read();
@@ -186,11 +186,11 @@ protected:
     void Read();
     virtual sal_uInt16 GetBelowRowID(sal_uInt16 nRow){return nRow + m_nRealrowspan; };
     virtual LwpCellBorderType GetCellBorderType(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout);
-    sal_uInt16  cnumrows;
-    sal_uInt8       cnumcols;
-//  sal_Bool m_bSplitFlag;
-    sal_uInt16  m_nRealrowspan;
-    sal_uInt8   m_nRealcolspan;
+    sal_uInt16	cnumrows;
+    sal_uInt8		cnumcols;
+//	sal_Bool m_bSplitFlag;
+    sal_uInt16	m_nRealrowspan;
+    sal_uInt8	m_nRealcolspan;
 };
 /**
  * @brief

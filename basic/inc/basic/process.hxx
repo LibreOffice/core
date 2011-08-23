@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,22 +46,22 @@ class Process
     rtl_uString               **m_pEnvList;
     rtl::OUString               m_aProcessName;
     oslProcess                  m_pProcess;
-    sal_Bool ImplIsRunning();
+    BOOL ImplIsRunning();
     long ImplGetExitCode();
-    sal_Bool bWasGPF;
-    sal_Bool bHasBeenStarted;
+    BOOL bWasGPF;
+    BOOL bHasBeenStarted;
 
 public:
     Process();
     ~Process();
     // Methoden
     void SetImage( const String &aAppPath, const String &aAppParams, const Environment *pEnv = NULL );
-    sal_Bool Start();
-    sal_uIntPtr GetExitCode();
-    sal_Bool IsRunning();
-    sal_Bool WasGPF();
+    BOOL Start();
+    ULONG GetExitCode();
+    BOOL IsRunning();
+    BOOL WasGPF();
 
-    sal_Bool Terminate();
+    BOOL Terminate();
 };
 
 #endif

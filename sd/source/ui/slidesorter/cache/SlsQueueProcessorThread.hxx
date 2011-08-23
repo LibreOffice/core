@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,17 +41,17 @@ class SlideSorterView;
 namespace sd { namespace slidesorter { namespace cache {
 
 
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
+template <class Queue, 
+          class RequestData, 
+          class BitmapCache, 
           class BitmapFactory>
-class QueueProcessorThread
+class QueueProcessorThread 
     : public ::osl::Thread
 {
 public:
     QueueProcessorThread (
-        view::SlideSorterView& rView,
-        Queue& rQueue,
+        view::SlideSorterView& rView, 
+        Queue& rQueue, 
         BitmapCache& rCache);
     ~QueueProcessorThread (void);
 
@@ -81,19 +81,19 @@ public:
     void SAL_CALL Terminate (void);
 
 protected:
-    /** This virutal method is called (among others?) from the
+    /**	This virutal method is called (among others?) from the
         inherited create method and acts as the main function of this
         thread.
     */
     virtual void SAL_CALL run (void);
 
-    /** Called after the thread is terminated via the terminate
+    /**	Called after the thread is terminated via the terminate
         method.  Used to kill the thread by calling delete on this.
-    */
+    */	
     virtual void SAL_CALL onTerminated (void);
 
 private:
-    /** Flag that indicates wether the onTerminated method has been already
+    /**	Flag that indicates wether the onTerminated method has been already
         called.  If so then a subsequent call to detach deletes the thread.
     */
     volatile bool mbIsTerminated;
@@ -129,6 +129,7 @@ template <class Queue, class Request, class Cache, class Factory>
           mrQueue (rQueue),
           mrCache (rCache)
 {
+    OSL_TRACE("QueueProcessorThread::constructor %p", this);
     create();
 }
 
@@ -139,6 +140,7 @@ template <class Queue, class Request, class Cache, class Factory>
     QueueProcessorThread<Queue, Request, Cache, Factory>
     ::~QueueProcessorThread (void)
 {
+    OSL_TRACE("QueueProcessorThread::destructor %p", this);
 }
 
 
@@ -147,12 +149,16 @@ template <class Queue, class Request, class Cache, class Factory>
 template <class Queue, class Request, class Cache, class Factory>
 void SAL_CALL QueueProcessorThread<Queue, Request, Cache, Factory>::run (void)
 {
+    OSL_TRACE("QueueProcessorThread::run(): running thread %p", this);
     while ( ! mbIsTerminated)
     {
+        OSL_TRACE("QueueProcessorThread::run(): still running thread %p: %d", this, mbIsTerminated?1:0);
         if  (mrQueue.IsEmpty())
         {
             // Sleep while the queue is empty.
+            OSL_TRACE("QueueProcessorThread::run(): suspending thread %p", this);
             suspend();
+            OSL_TRACE("QueueProcessorThread::run(): running again thread %p", this);
         }
 
         else if (GetpApp()->AnyInput())
@@ -163,15 +169,19 @@ void SAL_CALL QueueProcessorThread<Queue, Request, Cache, Factory>::run (void)
             TimeValue aTimeToWait;
             aTimeToWait.Seconds = 0;
             aTimeToWait.Nanosec = 50*1000*1000;
+            OSL_TRACE("QueueProcessorThread::run(): input pending: waiting %d nanoseconds", 
+                aTimeToWait.Nanosec);
             wait (aTimeToWait);
         }
 
         else
         {
+            OSL_TRACE ("QueueProcessorThread::run(): Processing Query");
             ProcessQueueEntry();
             yield ();
         }
     }
+    OSL_TRACE("QueueProcessorThread::run(): exiting run %p", this);
 }
 
 
@@ -184,9 +194,10 @@ void QueueProcessorThread<Queue, Request, Cache, Factory>
     Request* pRequest = NULL;
     int nPriorityClass;
     bool bRequestIsValid = false;
-
+    
     do
     {
+        OSL_TRACE ("QueueProcessorThread::ProcessQueueEntry(): testing for mbIsTerminated %p", this);
         {
             ::osl::MutexGuard aGuard (maMutex);
             if (mbIsTerminated)
@@ -194,6 +205,7 @@ void QueueProcessorThread<Queue, Request, Cache, Factory>
             if (mrQueue.IsEmpty())
                 break;
         }
+        OSL_TRACE ("QueueProcessorThread::ProcessQueueEntry():acquiring mutex for bitmap creation %p", this);
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard (maMutex);
         if (mbIsTerminated)
@@ -202,12 +214,18 @@ void QueueProcessorThread<Queue, Request, Cache, Factory>
         if (mrQueue.IsEmpty())
             break;
 
+        OSL_TRACE ("QueueProcessorThread::ProcessQueueEntry():    have mutexes %p", this);
+        
         // Get the requeuest with the highest priority from the queue.
         nPriorityClass = mrQueue.GetFrontPriorityClass();
         pRequest = &mrQueue.GetFront();
         mrQueue.PopFront();
         bRequestIsValid = true;
 
+
+        OSL_TRACE ("QueueProcessorThread::ProcessQueueEntry():using request %p for creating bitmap", pRequest);
+        OSL_TRACE ("QueueProcessorThread::ProcessQueueEntry():processing request for page %d with priority class ", 
+            pRequest->GetPage()->GetPageNum(), nPriorityClass);
         try
         {
             // Create a new preview bitmap and store it in the cache.
@@ -235,42 +253,45 @@ void QueueProcessorThread<Queue, Request, Cache, Factory>
 
 
 
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
+template <class Queue, 
+          class RequestData, 
+          class BitmapCache, 
           class BitmapFactory>
 void QueueProcessorThread<
     Queue, RequestData, BitmapCache, BitmapFactory
     >::Start (void)
 {
+    OSL_TRACE ("QueueProcessorThread::Start %p", this);
     resume ();
 }
 
 
 
 
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
+template <class Queue, 
+          class RequestData, 
+          class BitmapCache, 
           class BitmapFactory>
 void QueueProcessorThread<
     Queue, RequestData, BitmapCache, BitmapFactory
     >::Stop (void)
 {
+    OSL_TRACE ("QueueProcessorThread::Stop %p", this);
     suspend();
 }
 
 
 
 
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
+template <class Queue, 
+          class RequestData, 
+          class BitmapCache, 
           class BitmapFactory>
 void QueueProcessorThread<
     Queue, RequestData, BitmapCache, BitmapFactory
     >::RemoveRequest (RequestData& rRequest)
 {
+    OSL_TRACE ("QueueProcessorThread::RemoveRequest %p", this);
     // Do nothing else then wait for the mutex to be released.
     ::osl::MutexGuard aGuard (mrQueue.GetMutex());
 }
@@ -278,18 +299,20 @@ void QueueProcessorThread<
 
 
 
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
+template <class Queue, 
+          class RequestData, 
+          class BitmapCache, 
           class BitmapFactory>
 void QueueProcessorThread<
     Queue, RequestData, BitmapCache, BitmapFactory
     >::Terminate (void)
 {
     //    SolarMutexGuard aSolarGuard;
+    OSL_TRACE("QueueProcessorThread::Terminate(): terminating thread %p", this);
     ::osl::Thread::terminate ();
     {
         ::osl::MutexGuard aGuard (maMutex);
+        OSL_TRACE("QueueProcessorThread::Terminate(): starting to join %p, %d", this, mbIsTerminated?1:0);
         mbIsTerminated = true;
     }
     Start();
@@ -300,9 +323,9 @@ void QueueProcessorThread<
 
 /** This callback method is called when the run() method terminates.
 */
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
+template <class Queue, 
+          class RequestData, 
+          class BitmapCache, 
           class BitmapFactory>
 void SAL_CALL QueueProcessorThread<
     Queue, RequestData, BitmapCache, BitmapFactory
@@ -310,6 +333,29 @@ void SAL_CALL QueueProcessorThread<
 {
     ::osl::MutexGuard aGuard (maMutex);
     mbCanBeJoined = true;
+    /*
+    OSL_TRACE("QueueProcessorThread::Terminate():join %p, %d", this, mbIsTerminated?1:0);
+    while (true)
+    {
+        {
+            ::osl::MutexGuard aGuard (maMutex);
+            if (mbCanBeJoined)
+                break;
+        }
+        Start();
+        TimeValue aTimeToWait;
+        aTimeToWait.Seconds = 0;
+        aTimeToWait.Nanosec = 50*1000*1000;
+        OSL_TRACE("QueueProcessorThread::Terminate(): waiting for join");
+        wait (aTimeToWait);
+    }
+    if (mbCanBeJoined)
+        join();
+    else
+        OSL_TRACE("Can not join");
+    OSL_TRACE("QueueProcessorThread::Terminate():terminated thread %p :%d",
+    this, mbIsTerminated?1:0);
+    */
 }
 
 

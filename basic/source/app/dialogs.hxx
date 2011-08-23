@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <tools/config.hxx>
+#include <tools/list.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <vector>
 
 class SbxVariable;
 
@@ -57,30 +57,31 @@ public:
 };
 
 class FindDialog : public ModalDialog {
-    FixedText       aFT1;
+    FixedText		aFT1;
     Edit            aFind;
-    OKButton        aOk;
+    OKButton 		aOk;
     CancelButton    aCancel;
-    String*         pFind;
+    String*		    pFind;
     DECL_LINK( ButtonClick, Button * );
 public:
     FindDialog (Window*, const ResId&, String&);
 };
 
 class ReplaceDialog : public ModalDialog {
-    FixedText       aFT1;
-    FixedText       aFT2;
+    FixedText		aFT1;
+    FixedText		aFT2;
     Edit            aFind;
     Edit            aReplace;
-    OKButton        aOk;
+    OKButton 		aOk;
     CancelButton    aCancel;
-    String*         pFind;
-    String*         pReplace;
+    String*		    pFind;
+    String*		    pReplace;
     DECL_LINK( ButtonClick, Button * );
 public:
     ReplaceDialog (Window*, const ResId&, String&, String&);
 };
 
+////////////////////////////////////////////////////////////////////
 
 class ConfEdit : public PushButton
 {
@@ -92,8 +93,8 @@ protected:
     void Init( Config &aConf );
 
 public:
-    ConfEdit( Window* pParent, sal_uInt16 nResText, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, Config &aConf );
-    ConfEdit( Window* pParent, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, Config &aConf );
+    ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf );
+    ConfEdit( Window* pParent, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf );
     void Save( Config &aConf );
     void Reload( Config &aConf );
     void Click();
@@ -109,7 +110,7 @@ protected:
     ConfEdit& rBase;
     DECL_LINK( ToggleHdl, CheckBox* );
 public:
-    OptConfEdit( Window* pParent, sal_uInt16 nResCheck, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, ConfEdit& rBaseEdit, Config& aConf );
+    OptConfEdit( Window* pParent, USHORT nResCheck, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, ConfEdit& rBaseEdit, Config& aConf );
     void Reload( Config &aConf );
     DECL_LINK( BaseModifyHdl, Edit* );
 };
@@ -118,7 +119,7 @@ public:
 class OptionsDialog : public TabDialog
 {
 private:
-    TabControl      aTabCtrl;
+    TabControl		aTabCtrl;
 
     OKButton aOK;
     CancelButton aCancel;
@@ -129,7 +130,7 @@ private:
 public:
     OptionsDialog( Window* pParent, const ResId& );
     ~OptionsDialog();
-    virtual sal_Bool    Close();
+    virtual BOOL	Close();
 
 
     DECL_LINK( ActivatePageHdl, TabControl * );
@@ -238,11 +239,12 @@ public:
     void Save( Config &aConfig );
 };
 
-typedef ::std::vector< String* > StringList;
-#define C_KEY_ALLE          CByteString("All")
-#define C_KEY_AKTUELL       CByteString("Current")
-#define C_KEY_TYPE          CByteString("Type")
-#define C_KEY_DELETE        CByteString("Deleted Groups")
+
+DECLARE_LIST( StringList, String * )
+#define C_KEY_ALLE			CByteString("All")
+#define C_KEY_AKTUELL		CByteString("Current")
+#define C_KEY_TYPE			CByteString("Type")
+#define C_KEY_DELETE		CByteString("Deleted Groups")
 
 class GenericOptions : public TabPage
 {
@@ -260,7 +262,7 @@ class GenericOptions : public TabPage
     PushButton aPbDelValue;
 
     int nMoveButtons;
-    sal_Bool bShowSelectPath;
+    BOOL bShowSelectPath;
     AutoTimer aMoveTimer;
     DECL_LINK( MoveButtons, AutoTimer* );
 
@@ -271,7 +273,7 @@ class GenericOptions : public TabPage
     StringList* GetAllGroups();
     void LoadData();
 
-    void ShowSelectPath( const String& rType );
+    void ShowSelectPath( const String aType );
 
     DECL_LINK( LoadGroup, ComboBox* );
     DECL_LINK( DelGroup, Button* );
@@ -308,7 +310,7 @@ protected:
     DockingWindow* pSlots;
     SplitWindow *pSplit;
 
-    sal_uIntPtr nDisplayMode;
+    ULONG nDisplayMode;
 
     DECL_LINK( Select, void* );
     DECL_LINK( SelectAll, PushButton* );
@@ -346,6 +348,9 @@ protected:
     SbxVariable *pVar;
 
     DECL_LINK( OKClick, Button * );
+
+//	BOOL bCompare = FALSE;
+//	String aCompareString;
 
 public:
     VarEditDialog( Window * pParent, SbxVariable *pPVar );

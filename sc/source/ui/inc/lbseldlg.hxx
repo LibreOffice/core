@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,19 +44,19 @@ class ScSelEntryDlg : public ModalDialog
 {
 private:
     FixedLine       aFlLbTitle;
-    ListBox         aLb;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    ListBox			aLb;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
     DECL_LINK( DblClkHdl, void * );
 
 public:
-            ScSelEntryDlg(      Window* pParent,
-                                sal_uInt16  nResId,
+            ScSelEntryDlg(		Window* pParent,
+                                USHORT	nResId,
                           const String& aTitle,
                           const String& aLbTitle,
-                                List&   aEntryList );
+                                List& 	aEntryList );
             ~ScSelEntryDlg();
 
     String GetSelectEntry() const;

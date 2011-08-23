@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,10 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
+#include "tokens.hxx"
+#include "properties.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "headerfootercontext.hxx"
 #include "oox/ppt/backgroundproperties.hxx"
@@ -63,7 +66,7 @@ SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUStri
 , mpSlidePersistPtr( pPersistPtr )
 , meShapeLocation( eShapeLocation )
 {
-    OUString aVMLDrawingFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "vmlDrawing" ) );
+    OUString aVMLDrawingFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "vmlDrawing" ) );
     if( aVMLDrawingFragmentPath.getLength() > 0 )
         getFilter().importFragment( new oox::vml::DrawingFragment(
             getFilter(), aVMLDrawingFragmentPath, *pPersistPtr->getDrawing() ) );
@@ -82,9 +85,9 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
 
     switch( aElementToken )
     {
-    case PPT_TOKEN( sldMaster ):        // CT_SlideMaster
-    case PPT_TOKEN( handoutMaster ):    // CT_HandoutMaster
-    case PPT_TOKEN( sld ):              // CT_CommonSlideData
+    case NMSP_PPT|XML_sldMaster:		// CT_SlideMaster
+    case NMSP_PPT|XML_handoutMaster:	// CT_HandoutMaster
+    case NMSP_PPT|XML_sld:				// CT_CommonSlideData
     {
         AttributeList attribs( xAttribs );
 
@@ -97,14 +100,14 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
 
         break;
     }
-    case PPT_TOKEN( notes ):            // CT_NotesSlide
-    case PPT_TOKEN( notesMaster ):      // CT_NotesMaster
+    case NMSP_PPT|XML_notes:			// CT_NotesSlide
+    case NMSP_PPT|XML_notesMaster:		// CT_NotesMaster
         break;
-    case PPT_TOKEN( cSld ):             // CT_CommonSlideData
+    case NMSP_PPT|XML_cSld:				// CT_CommonSlideData
         maSlideName = xAttribs->getOptionalValue(XML_name);
         break;
 
-    case PPT_TOKEN( spTree ):           // CT_GroupShape
+    case NMSP_PPT|XML_spTree:			// CT_GroupShape
         {
             xRet.set( new PPTShapeGroupContext(
                 *this, mpSlidePersistPtr, meShapeLocation, mpSlidePersistPtr->getShapes(),
@@ -112,10 +115,10 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
         }
         break;
 
-    case PPT_TOKEN( controls ):
+    case NMSP_PPT|XML_controls:
         xRet = getFastContextHandler();
         break;
-    case PPT_TOKEN( control ):
+    case NMSP_PPT|XML_control:
         {
             ::oox::vml::ControlInfo aInfo;
             aInfo.setShapeId( aAttribs.getInteger( XML_spid, 0 ) );
@@ -125,49 +128,42 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
         }
         return xRet;
 
-    case PPT_TOKEN( timing ): // CT_SlideTiming
+    case NMSP_PPT|XML_timing: // CT_SlideTiming
         xRet.set( new SlideTimingContext( *this, mpSlidePersistPtr->getTimeNodeList() ) );
         break;
-    case PPT_TOKEN( transition ): // CT_SlideTransition
+    case NMSP_PPT|XML_transition: // CT_SlideTransition
         xRet.set( new SlideTransitionContext( *this, xAttribs, maSlideProperties ) );
         break;
-    case PPT_TOKEN( hf ):
+    case NMSP_PPT|XML_hf:
         xRet.set( new HeaderFooterContext( *this, xAttribs, mpSlidePersistPtr->getHeaderFooter() ) );
         break;
 
     // BackgroundGroup
-    case PPT_TOKEN( bgPr ):             // CT_BackgroundProperties
+    case NMSP_PPT|XML_bgPr:				// CT_BackgroundProperties
         {
             FillPropertiesPtr pFillPropertiesPtr( new FillProperties );
             xRet.set( new BackgroundPropertiesContext( *this, *pFillPropertiesPtr ) );
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
         }
         break;
-
-    case PPT_TOKEN( bgRef ):            // a:CT_StyleMatrixReference
-        {
-            FillPropertiesPtr pFillPropertiesPtr( new FillProperties(
-                *mpSlidePersistPtr->getTheme()->getFillStyle( xAttribs->getOptionalValue( XML_idx ).toInt32() ) ) );
-            xRet.set( new ColorContext( *this, mpSlidePersistPtr->getBackgroundColorRef() ) );
-            mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
-        }
+    case NMSP_PPT|XML_bgRef:			// a:CT_StyleMatrixReference
         break;
 
-    case PPT_TOKEN( clrMap ):           // CT_ColorMapping
+    case NMSP_PPT|XML_clrMap:			// CT_ColorMapping
         {
             oox::drawingml::ClrMapPtr pClrMapPtr( new oox::drawingml::ClrMap() );
             xRet.set( new oox::drawingml::clrMapContext( *this, xAttribs, *pClrMapPtr ) );
             mpSlidePersistPtr->setClrMap( pClrMapPtr );
         }
         break;
-    case PPT_TOKEN( clrMapOvr ):        // CT_ColorMappingOverride
-    case PPT_TOKEN( sldLayoutIdLst ):   // CT_SlideLayoutIdList
+    case NMSP_PPT|XML_clrMapOvr:		// CT_ColorMappingOverride
+    case NMSP_PPT|XML_sldLayoutIdLst:	// CT_SlideLayoutIdList
         break;
-    case PPT_TOKEN( txStyles ):         // CT_SlideMasterTextStyles
+    case NMSP_PPT|XML_txStyles:			// CT_SlideMasterTextStyles
         xRet.set( new SlideMasterTextStylesContext( *this, mpSlidePersistPtr ) );
         break;
-    case PPT_TOKEN( custDataLst ):      // CT_CustomerDataList
-    case PPT_TOKEN( tagLst ):           // CT_TagList
+    case NMSP_PPT|XML_custDataLst:		// CT_CustomerDataList
+    case NMSP_PPT|XML_tagLst:			// CT_TagList
         break;
     }
 
@@ -193,7 +189,8 @@ void SAL_CALL SlideFragmentHandler::endDocument(  ) throw (::com::sun::star::xml
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( (rtl::OString("oox::ppt::SlideFragmentHandler::EndElement(), "
+        OSL_ENSURE( false,
+            (rtl::OString("oox::ppt::SlideFragmentHandler::EndElement(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),

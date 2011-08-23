@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
 
         uno::Reference< awt::XRequestCallback > xRequestCallback(
             xFactory->createInstanceWithContext(
-                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AsyncCallback" )),
+                 ::rtl::OUString::createFromAscii("com.sun.star.awt.AsyncCallback"),
                  m_xContext ),
              uno::UNO_QUERY_THROW );
 
@@ -145,7 +145,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
                 xFactory->createInstanceWithContext(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ), m_xContext ),
                 uno::UNO_QUERY_THROW );
-
+            
             // Turn Quickstarter veto off
             uno::Reference< beans::XPropertySet > xPropertySet( xDesktop, uno::UNO_QUERY_THROW );
             ::rtl::OUString aVetoPropName( RTL_CONSTASCII_USTRINGPARAM( "SuspendQuickstartVeto" ) );

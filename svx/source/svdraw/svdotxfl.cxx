@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdfield.hxx>
 
-static sal_Bool bInit = sal_False;
+static BOOL bInit = FALSE;
 
 // Do not remove this, it is still used in src536a!
 void SdrRegisterFieldClasses()
@@ -45,16 +45,16 @@ void SdrRegisterFieldClasses()
         SvxFieldItem::GetClassManager().SV_CLASS_REGISTER(SvxHeaderField);
         SvxFieldItem::GetClassManager().SV_CLASS_REGISTER(SvxFooterField);
         SvxFieldItem::GetClassManager().SV_CLASS_REGISTER(SvxDateTimeField);
-        bInit = sal_True;
+        bInit = TRUE;
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////// */
 
-bool SdrTextObj::CalcFieldValue(const SvxFieldItem& /*rField*/, sal_uInt16 /*nPara*/, sal_uInt16 /*nPos*/,
-    bool /*bEdit*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/, XubString& /*rRet*/) const
+bool SdrTextObj::CalcFieldValue(const SvxFieldItem& /*rField*/, USHORT /*nPara*/, USHORT /*nPos*/,
+    bool /*bEdit*/,	Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/, XubString& /*rRet*/) const
 {
-    return sal_False;
+    return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

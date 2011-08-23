@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ class VCL_DLLPUBLIC MoreButton : public PushButton
 {
 private:
     ImplMoreButtonData* mpMBData;
-    sal_uLong               mnDelta;
+    ULONG               mnDelta;
     MapUnit             meUnit;
-    sal_Bool                mbState;
+    BOOL                mbState;
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE      MoreButton( const MoreButton & );
@@ -56,7 +56,7 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );
+    SAL_DLLPRIVATE void	ImplLoadRes( const ResId& rResId );
 
 public:
                         MoreButton( Window* pParent, WinBits nStyle = 0 );
@@ -68,15 +68,15 @@ public:
     void                AddWindow( Window* pWindow );
     void                RemoveWindow( Window* pWindow );
 
-    void                SetDelta( sal_uLong nNewDelta ) { mnDelta = nNewDelta; }
-    sal_uLong               GetDelta() const { return mnDelta; }
+    void                SetDelta( ULONG nNewDelta ) { mnDelta = nNewDelta; }
+    ULONG               GetDelta() const { return mnDelta; }
 
     void                SetMapUnit( MapUnit eNewUnit = MAP_PIXEL ) { meUnit = eNewUnit; }
     MapUnit             GetMapUnit() const { return meUnit; }
 
     using PushButton::SetState;
-    void                SetState( sal_Bool bNewState = sal_True );
-    sal_Bool                GetState() const { return mbState; }
+    void                SetState( BOOL bNewState = TRUE );
+    BOOL                GetState() const { return mbState; }
 
     void                SetText( const XubString& rNewText );
     XubString           GetText() const;
@@ -87,7 +87,7 @@ public:
     XubString           GetLessText() const;
 };
 
-inline void MoreButton::SetState( sal_Bool bNewState )
+inline void MoreButton::SetState( BOOL bNewState )
 {
     if ( mbState != bNewState )
         Click();

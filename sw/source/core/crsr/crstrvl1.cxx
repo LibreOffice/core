@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,72 +34,72 @@
 #include <viscrs.hxx>
 #include <callnk.hxx>
 
-sal_Bool SwCrsrShell::IsStartWord( sal_Int16 nWordType ) const
+BOOL SwCrsrShell::IsStartWord( sal_Int16 nWordType ) const
 {
     return pCurCrsr->IsStartWord( nWordType );
 }
 
-sal_Bool SwCrsrShell::IsEndWord( sal_Int16 nWordType ) const
+BOOL SwCrsrShell::IsEndWord( sal_Int16 nWordType ) const
 {
     return pCurCrsr->IsEndWord( nWordType );
 }
 
-sal_Bool SwCrsrShell::IsInWord( sal_Int16 nWordType ) const
+BOOL SwCrsrShell::IsInWord( sal_Int16 nWordType ) const
 {
     return pCurCrsr->IsInWord( nWordType );
 }
 
-sal_Bool SwCrsrShell::IsStartSentence() const
+BOOL SwCrsrShell::IsStartSentence() const
 {
     return pCurCrsr->IsStartEndSentence( false );
 }
 
-sal_Bool SwCrsrShell::IsEndSentence() const
+BOOL SwCrsrShell::IsEndSentence() const
 {
     return pCurCrsr->IsStartEndSentence( true );
 }
 
 
-sal_Bool SwCrsrShell::GoStartWord()
+BOOL SwCrsrShell::GoStartWord()
 {
     return CallCrsrFN( &SwCursor::GoStartWord );
 }
-sal_Bool SwCrsrShell::GoEndWord()
+BOOL SwCrsrShell::GoEndWord()
 {
     return CallCrsrFN( &SwCursor::GoEndWord );
 }
-sal_Bool SwCrsrShell::GoNextWord()
+BOOL SwCrsrShell::GoNextWord()
 {
     return CallCrsrFN( &SwCursor::GoNextWord );
 }
-sal_Bool SwCrsrShell::GoPrevWord()
+BOOL SwCrsrShell::GoPrevWord()
 {
     return CallCrsrFN( &SwCursor::GoPrevWord );
 }
-sal_Bool SwCrsrShell::GoNextSentence()
+BOOL SwCrsrShell::GoNextSentence()
 {
     return CallCrsrFN( &SwCursor::GoNextSentence );
 }
-sal_Bool SwCrsrShell::GoEndSentence()
+BOOL SwCrsrShell::GoEndSentence()
 {
     return CallCrsrFN( &SwCursor::GoEndSentence );
 }
 
-sal_Bool SwCrsrShell::GoPrevSentence()
+BOOL SwCrsrShell::GoPrevSentence()
 {
     return CallCrsrFN( &SwCursor::GoPrevSentence );
 }
-sal_Bool SwCrsrShell::GoStartSentence()
+BOOL SwCrsrShell::GoStartSentence()
 {
     return CallCrsrFN( &SwCursor::GoStartSentence );
 }
 
-sal_Bool SwCrsrShell::SelectWord( const Point* pPt )
+BOOL SwCrsrShell::SelectWord( const Point* pPt )
 {
-    return pCurCrsr->SelectWord( this, pPt );
+    return pCurCrsr->SelectWord( pPt );
 }
 
-sal_Bool SwCrsrShell::ExpandToSentenceBorders()
+BOOL SwCrsrShell::ExpandToSentenceBorders()
 {
     return pCurCrsr->ExpandToSentenceBorders();
 }

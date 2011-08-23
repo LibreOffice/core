@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,11 +57,11 @@ protected:
 
     String          maUpperName;
     ReaderData*     mpReaderData;
-    sal_Bool            mbIsReading;
+    BOOL            mbIsReading;
 
                     GraphicReader() :
                         mpReaderData( NULL ),
-                        mbIsReading( sal_False ) {}
+                        mbIsReading( FALSE ) {}
 
 public:
 
@@ -69,11 +69,11 @@ public:
 
     const String&   GetUpperFilterName() const { return maUpperName; }
     ReaderData*     GetReaderData() const { return mpReaderData; }
-    sal_Bool            IsReading() const { return mbIsReading; }
+    BOOL            IsReading() const { return mbIsReading; }
 
     // TODO: when incompatible changes are possible again
     // the preview size hint should be redone
-    sal_Bool            IsPreviewModeEnabled() const;
+    BOOL            IsPreviewModeEnabled() const;
     void            DisablePreviewMode();
     void            SetPreviewSize( const Size& );
     Size            GetPreviewSize() const;

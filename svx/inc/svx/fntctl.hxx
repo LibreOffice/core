@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,17 +44,17 @@ class SfxBindings;
 class SVX_DLLPUBLIC SvxFontMenuControl : public SfxMenuControl, public SfxListener
 {
 private:
-    FontNameMenu*   pMenu;
-    Menu&           rParent;
+    FontNameMenu*	pMenu;
+    Menu&			rParent;
 
-    SVX_DLLPRIVATE void         FillMenu();
+    SVX_DLLPRIVATE void			FillMenu();
     DECL_LINK( MenuSelect, FontNameMenu * );
-    SVX_DLLPRIVATE virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    SVX_DLLPRIVATE virtual void	StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
-    SVX_DLLPRIVATE virtual void     Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    SVX_DLLPRIVATE virtual void 	Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 public:
-    SvxFontMenuControl( sal_uInt16 nId, Menu&, SfxBindings& );
+    SvxFontMenuControl( USHORT nId, Menu&, SfxBindings& );
     ~SvxFontMenuControl();
 
     virtual PopupMenu*  GetPopup() const;

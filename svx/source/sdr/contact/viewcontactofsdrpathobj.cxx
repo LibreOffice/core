@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace sdr
     namespace contact
     {
         ViewContactOfSdrPathObj::ViewContactOfSdrPathObj(SdrPathObj& rPathObj)
-        :   ViewContactOfTextObj(rPathObj)
+        :	ViewContactOfTextObj(rPathObj)
         {
         }
 
@@ -56,7 +56,7 @@ namespace sdr
             const SfxItemSet& rItemSet = GetPathObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
-                    rItemSet,
+                    rItemSet, 
                     GetPathObj().getText(0)));
             basegfx::B2DPolyPolygon aUnitPolyPolygon(GetPathObj().GetPathPoly());
             sal_uInt32 nPolyCount(aUnitPolyPolygon.count());
@@ -69,12 +69,12 @@ namespace sdr
 
             if(!nPointCount)
             {
-                OSL_FAIL("PolyPolygon object without geometry detected, this should not be created (!)");
+                OSL_ENSURE(false, "PolyPolygon object without geometry detected, this should not be created (!)");
                 basegfx::B2DPolygon aFallbackLine;
                 aFallbackLine.append(basegfx::B2DPoint(0.0, 0.0));
                 aFallbackLine.append(basegfx::B2DPoint(1000.0, 1000.0));
                 aUnitPolyPolygon = basegfx::B2DPolyPolygon(aFallbackLine);
-
+                
                 nPolyCount = 1;
             }
 
@@ -82,7 +82,7 @@ namespace sdr
             basegfx::B2DHomMatrix aObjectMatrix;
             const bool bIsLine(
                 !aUnitPolyPolygon.areControlPointsUsed()
-                && 1 == nPolyCount
+                && 1 == nPolyCount 
                 && 2 == aUnitPolyPolygon.getB2DPolygon(0).count());
 
             if(bIsLine)
@@ -129,12 +129,12 @@ namespace sdr
                 aUnitPolyPolygon.transform(aInverse);
             }
 
-            // create primitive. Always create primitives to allow the decomposition of
+            // create primitive. Always create primitives to allow the decomposition of 
             // SdrPathPrimitive2D to create needed invisible elements for HitTest and/or BoundRect
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrPathPrimitive2D(
-                    aObjectMatrix,
-                    aAttribute,
+                    aObjectMatrix, 
+                    aAttribute, 
                     aUnitPolyPolygon));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);

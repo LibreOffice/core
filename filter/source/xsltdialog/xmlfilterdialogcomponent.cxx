@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,6 +53,7 @@
 
 #include "xmlfiltersettingsdialog.hxx"
 
+//using namespace ::comphelper;
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::osl;
@@ -70,7 +71,7 @@ protected:
 };
 
 
-class XMLFilterDialogComponent :    public XMLFilterDialogComponentBase,
+class XMLFilterDialogComponent :	public XMLFilterDialogComponentBase,
                                     public OComponentHelper,
                                     public ::com::sun::star::ui::dialogs::XExecutableDialog,
                                     public XServiceInfo,
@@ -114,7 +115,7 @@ protected:
     virtual void SAL_CALL disposing();
 
 private:
-    com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxParent;  /// parent window
+    com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxParent;	/// parent window
     com::sun::star::uno::Reference< XMultiServiceFactory > mxMSF;
 
     static ResMgr* mpResMgr;
@@ -130,7 +131,7 @@ XMLFilterDialogComponent::XMLFilterDialogComponent( const com::sun::star::uno::R
     mxMSF( rxMSF ),
     mpDialog( NULL )
 {
-    Reference< XDesktop > xDesktop( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
+    Reference< XDesktop > xDesktop( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
     if( xDesktop.is() )
     {
         Reference< XTerminateListener > xListener( this );
@@ -403,13 +404,43 @@ void SAL_CALL component_getImplementationEnvironment(
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
+//==================================================================================================
 
+void singlecomponent_writeInfo( Reference< XRegistryKey >& xNewKey, const Sequence< OUString > & rSNL )
+{
+    const OUString * pArray = rSNL.getConstArray();
+    for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+        xNewKey->createKey( pArray[nPos] );
+}
+
+sal_Bool SAL_CALL component_writeInfo(
+    void * /* pServiceManager */, void * pRegistryKey )
+{
+    if (pRegistryKey)
+    {
+        try
+        {
+            Reference< XRegistryKey > xNewKey(
+                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( XMLFilterDialogComponent_getImplementationName() ) ); 
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+            
+            singlecomponent_writeInfo( xNewKey, XMLFilterDialogComponent_getSupportedServiceNames() );
+
+            return sal_True;
+        }
+        catch (InvalidRegistryException &)
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+    return sal_False;
+}
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = 0;
-
+    
     if( pServiceManager )
     {
         Reference< XSingleServiceFactory > xFactory;
@@ -421,7 +452,7 @@ void * SAL_CALL component_getFactory(
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 XMLFilterDialogComponent_createInstance, XMLFilterDialogComponent_getSupportedServiceNames() );
-
+            
         }
 
         if (xFactory.is())

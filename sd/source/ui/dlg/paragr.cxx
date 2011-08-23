@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,16 +56,16 @@ public:
     SdParagraphNumTabPage(Window* pParent, const SfxItemSet& rSet );
     ~SdParagraphNumTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*      GetRanges();
+    static SfxTabPage*	Create(	Window* pParent, const SfxItemSet& rSet );
+    static USHORT*		GetRanges();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual BOOL		FillItemSet( SfxItemSet& rSet );
+    virtual void		Reset( const SfxItemSet& rSet );
 
 private:
-    TriStateBox     maNewStartCB;
+    TriStateBox		maNewStartCB;
     TriStateBox     maNewStartNumberCB;
-    NumericField    maNewStartNF;
+    NumericField	maNewStartNF;
     bool            mbModified;
 
     DECL_LINK( ImplNewStartHdl, CheckBox* );
@@ -93,9 +93,9 @@ SfxTabPage* SdParagraphNumTabPage::Create(Window *pParent, const SfxItemSet & rA
     return new SdParagraphNumTabPage( pParent, rAttrSet );
 }
 
-sal_uInt16* SdParagraphNumTabPage::GetRanges()
+USHORT* SdParagraphNumTabPage::GetRanges()
 {
-    static sal_uInt16 aRange[] =
+    static USHORT __FAR_DATA aRange[] =
     {
         ATTR_PARANUMBERING_START, ATTR_PARANUMBERING_END,
         0
@@ -104,15 +104,15 @@ sal_uInt16* SdParagraphNumTabPage::GetRanges()
     return aRange;
 }
 
-sal_Bool SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if(maNewStartCB.GetState() != maNewStartCB.GetSavedValue() ||
         maNewStartNumberCB.GetState() != maNewStartNumberCB.GetSavedValue()||
         maNewStartNF.GetText() != maNewStartNF.GetSavedValue())
     {
         mbModified = true;
-        sal_Bool bNewStartChecked = STATE_CHECK == maNewStartCB.GetState();
-        sal_Bool bNumberNewStartChecked = STATE_CHECK == maNewStartNumberCB.GetState();
+        BOOL bNewStartChecked = STATE_CHECK == maNewStartCB.GetState();
+        BOOL bNumberNewStartChecked = STATE_CHECK == maNewStartNumberCB.GetState();
         rSet.Put(SfxBoolItem(ATTR_NUMBER_NEWSTART, bNewStartChecked));
 
         const sal_Int16 nStartAt = (sal_Int16)maNewStartNF.GetValue();
@@ -129,7 +129,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     {
         const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(ATTR_NUMBER_NEWSTART);
         maNewStartCB.SetState( rStart.GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        maNewStartCB.EnableTriState(sal_False);
+        maNewStartCB.EnableTriState(FALSE);
     }
     else
     {
@@ -147,7 +147,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
             nNewStart = 1;
 
         maNewStartNF.SetValue(nNewStart);
-        maNewStartNumberCB.EnableTriState(sal_False);
+        maNewStartNumberCB.EnableTriState(FALSE);
     }
     else
     {
@@ -156,12 +156,12 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     ImplNewStartHdl(&maNewStartCB);
     maNewStartNF.SaveValue();
     maNewStartNumberCB.SaveValue();
-    mbModified = sal_False;
+    mbModified = FALSE;
 }
 
 IMPL_LINK( SdParagraphNumTabPage, ImplNewStartHdl, CheckBox*, EMPTYARG )
 {
-    sal_Bool bEnable = maNewStartCB.IsChecked();
+    BOOL bEnable = maNewStartCB.IsChecked();
     maNewStartNumberCB.Enable(bEnable);
     maNewStartNF.Enable(bEnable && maNewStartNumberCB.IsChecked());
     return 0;
@@ -183,7 +183,7 @@ SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr )
 
     AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
 
-    static const sal_Bool bShowParaNumbering = ( getenv( "SD_SHOW_NUMBERING_PAGE" ) != NULL );
+    static const BOOL bShowParaNumbering = ( getenv( "SD_SHOW_NUMBERING_PAGE" ) != NULL );
     if( bShowParaNumbering )
         AddTabPage( RID_TABPAGE_PARA_NUMBERING, SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges );
     else

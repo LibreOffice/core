@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ ShapeFontDialog::~ShapeFontDialog()
 {
 }
 
-void ShapeFontDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
+void ShapeFontDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
 {
     SfxAllItemSet aSet( *( GetInputSetImpl()->GetPool() ) );
     switch ( nId )

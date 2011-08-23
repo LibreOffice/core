@@ -46,7 +46,6 @@ IDLFILES=\
     CharacterPropertiesComplex.idl\
     CharacterStyle.idl\
     DropCapFormat.idl\
-    FootnoteLineStyle.idl\
     GraphicLocation.idl\
     HorizontalAlignment.idl\
     LineNumberPosition.idl\

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#include <svl/urihelper.hxx>
+#include <urihelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"

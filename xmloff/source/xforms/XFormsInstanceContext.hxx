@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,8 +63,8 @@ class XFormsInstanceContext : public TokenContext
 
 public:
 
-    XFormsInstanceContext( SvXMLImport& rImport,
-                           sal_uInt16 nPrfx,
+    XFormsInstanceContext( SvXMLImport& rImport, 
+                           USHORT nPrfx,
                            const ::rtl::OUString& rLName,
                            com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xModel );
     virtual ~XFormsInstanceContext();
@@ -77,8 +77,8 @@ public:
     // TokenContext mechanism.
     //
 
-    virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix,
+    virtual SvXMLImportContext* CreateChildContext( 
+        USHORT nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -86,11 +86,11 @@ public:
 
 protected:
 
-    virtual void HandleAttribute(
-        sal_uInt16 nToken,
+    virtual void HandleAttribute( 
+        sal_uInt16 nToken, 
         const rtl::OUString& rValue );
 
-    virtual SvXMLImportContext* HandleChild(
+    virtual SvXMLImportContext* HandleChild( 
         sal_uInt16 nToken,
         sal_uInt16 nNamespace,
         const rtl::OUString& rLocalName,

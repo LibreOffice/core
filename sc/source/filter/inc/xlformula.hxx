@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,6 @@
 #include <formula/opcode.hxx>
 #include "address.hxx"
 #include "ftools.hxx"
-#include <boost/shared_ptr.hpp>
 
 // Constants ==================================================================
 
@@ -113,8 +112,8 @@ const sal_uInt8 EXC_TOKID_AREAERR3D         = 0x1D;     /// Deleted 3D area refe
 
 const sal_uInt16 EXC_TOK_STR_MAXLEN         = 255;      /// Maximum string length of a tStr token.
 
-const sal_uInt8 EXC_TOK_BOOL_FALSE          = 0;        /// sal_False value of a tBool token.
-const sal_uInt8 EXC_TOK_BOOL_TRUE           = 1;        /// sal_True value of a tBool token.
+const sal_uInt8 EXC_TOK_BOOL_FALSE          = 0;        /// FALSE value of a tBool token.
+const sal_uInt8 EXC_TOK_BOOL_TRUE           = 1;        /// TRUE value of a tBool token.
 
 const sal_uInt8 EXC_TOK_ATTR_VOLATILE       = 0x01;     /// Volatile function.
 const sal_uInt8 EXC_TOK_ATTR_IF             = 0x02;     /// Start of true condition in IF function.
@@ -410,7 +409,7 @@ private:
     bool                mbVolatile;     /// True = Formula contains volatile function.
 };
 
-typedef boost::shared_ptr< XclTokenArray > XclTokenArrayRef;
+typedef ScfRef< XclTokenArray > XclTokenArrayRef;
 
 /** Calls the Read() function at the passed token array. */
 XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArray& rTokArr );

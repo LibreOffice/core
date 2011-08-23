@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,6 +115,7 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
                     if ( (cLead >= pEUDCTab->mnLeadStart) &&
                          (cLead <= pEUDCTab->mnLeadEnd) )
                     {
+                        sal_uInt16 nTrailCount = 0;
                         if ( (cTrail >= pEUDCTab->mnTrail1Start) &&
                              (cTrail <= pEUDCTab->mnTrail1End) )
                         {
@@ -125,7 +126,7 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
                         }
                         else
                         {
-                            sal_uInt16 nTrailCount = pEUDCTab->mnTrail1End-pEUDCTab->mnTrail1Start+1;
+                            nTrailCount = pEUDCTab->mnTrail1End-pEUDCTab->mnTrail1Start+1;
                             if ( (pEUDCTab->mnTrailCount >= 2) &&
                                  (cTrail >= pEUDCTab->mnTrail2Start) &&
                                  (cTrail <= pEUDCTab->mnTrail2End) )

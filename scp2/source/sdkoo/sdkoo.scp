@@ -39,6 +39,11 @@ Installation gid_Installation_Sdk
 #endif
 End
 
+DataCarrier gid_Datacarrier
+    Name = "%PRODUCTNAME %PRODUCTVERSION";
+    DiskNo = 1;
+End
+
 #ifndef MACOSX
 
 #ifdef WNT
@@ -99,7 +104,7 @@ Directory gid_Dir_Share_Readme_Sdk
 End
 
 
-Module gid_Module_Root_SDK
+Module gid_Module_Root
     Name = "sdkoo";
     Description = "sdkoo";
     PackageInfo = "packinfo_sdkoo.txt";

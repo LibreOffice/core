@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #ifndef _FRAMEWORK_SCRIPT_SCRIPTSECURITYMANAGER_HXX_
 #define _FRAMEWORK_SCRIPT_SCRIPTSECURITYMANAGER_HXX_
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -50,15 +50,15 @@ struct StoragePerm {
     sal_Bool execPermission;
 };
 
-typedef ::boost::unordered_map< ::rtl::OUString, StoragePerm, ::rtl::OUStringHash,
+typedef ::std::hash_map< ::rtl::OUString, StoragePerm, ::rtl::OUStringHash,
     ::std::equal_to< ::rtl::OUString > > Permission_Hash;
 /**
  * Class responsible for managing the ScriptSecurity.
  */
-class ScriptSecurityManager
+class ScriptSecurityManager 
 {
 public:
-    explicit ScriptSecurityManager(
+    explicit ScriptSecurityManager( 
         const css::uno::Reference< css::uno::XComponentContext > & xContext )
         throw ( css::uno::RuntimeException );
     ~ScriptSecurityManager();
@@ -66,18 +66,18 @@ public:
         throw ( css::uno::RuntimeException );
 /**
  * checks to see if the requested permission can be granted
- * checks to see whether the requested ScriptPeremission is allowed.
+ * checks to see whether the requested ScriptPeremission is allowed. 
  */
-    void checkPermission( const rtl::OUString & scriptStorageURL,
-        const rtl::OUString & permissionRequest )
+    void checkPermission( const rtl::OUString & scriptStorageURL, 
+        const rtl::OUString & permissionRequest ) 
         throw ( css::uno::RuntimeException, css::lang::IllegalArgumentException,
             css::security::AccessControlException );
     void removePermissionSettings ( ::rtl::OUString & scriptStorageURL );
 private:
     void readConfiguration() throw (css::uno::RuntimeException);
 
-    short executeDialog ( const rtl::OUString & path )
-        throw (css::uno::RuntimeException);
+    short executeDialog ( const rtl::OUString & path ) 
+        throw (css::uno::RuntimeException);        
     short executeStandardDialog()
         throw ( css::uno::RuntimeException );
     short executePathDialog(const rtl::OUString & path)
@@ -93,7 +93,7 @@ private:
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvFactory;
     css::uno::Sequence< rtl::OUString > m_secureURL;
     Permission_Hash m_permissionSettings;
-
+    
 };
 } // scripting_securitymgr
 

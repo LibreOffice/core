@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ sal_Bool ScMyShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress 
         ScUnoConversion::FillApiAddress( rCellAddress, aShapeList.begin()->aAddress );
         return (nTable == rCellAddress.Sheet);
     }
-    return false;
+    return sal_False;
 }
 
 void ScMyShapesContainer::SetCellData( ScMyCell& rMyCell )
@@ -172,7 +172,7 @@ sal_Bool ScMyNoteShapesContainer::GetFirstAddress( table::CellAddress& rCellAddr
         ScUnoConversion::FillApiAddress( rCellAddress, aNoteShapeList.begin()->aPos );
         return (nTable == rCellAddress.Sheet);
     }
-    return false;
+    return sal_False;
 }
 
 void ScMyNoteShapesContainer::SetCellData( ScMyCell& rMyCell )
@@ -235,7 +235,7 @@ void ScMyMergedRangesContainer::AddRange(const table::CellRangeAddress aMergedRa
     aRange.nRows = nEndRow - nStartRow + 1;
     aRangeList.push_back( aRange );
 
-    aRange.bIsFirst = false;
+    aRange.bIsFirst = sal_False;
     aRange.nRows = 0;
     for( sal_Int32 nRow = nStartRow + 1; nRow <= nEndRow; ++nRow )
     {
@@ -252,12 +252,12 @@ sal_Bool ScMyMergedRangesContainer::GetFirstAddress( table::CellAddress& rCellAd
         ScUnoConversion::FillApiStartAddress( rCellAddress, aRangeList.begin()->aCellRange );
         return (nTable == rCellAddress.Sheet);
     }
-    return false;
+    return sal_False;
 }
 
 void ScMyMergedRangesContainer::SetCellData( ScMyCell& rMyCell )
 {
-    rMyCell.bIsMergedBase = rMyCell.bIsCovered = false;
+    rMyCell.bIsMergedBase = rMyCell.bIsCovered = sal_False;
     ScMyMergedRangeList::iterator aItr(aRangeList.begin());
     if( aItr != aRangeList.end() )
     {
@@ -273,7 +273,7 @@ void ScMyMergedRangesContainer::SetCellData( ScMyCell& rMyCell )
             if( aItr->aCellRange.StartColumn < aItr->aCellRange.EndColumn )
             {
                 ++(aItr->aCellRange.StartColumn);
-                aItr->bIsFirst = false;
+                aItr->bIsFirst = sal_False;
             }
             else
                 aRangeList.erase(aItr);
@@ -297,7 +297,7 @@ void ScMyMergedRangesContainer::Sort()
 
 sal_Bool ScMyAreaLink::Compare( const ScMyAreaLink& rAreaLink ) const
 {
-    return  (GetRowCount() == rAreaLink.GetRowCount()) &&
+    return	(GetRowCount() == rAreaLink.GetRowCount()) &&
             (sFilter == rAreaLink.sFilter) &&
             (sFilterOptions == rAreaLink.sFilterOptions) &&
             (sURL == rAreaLink.sURL) &&
@@ -331,12 +331,12 @@ sal_Bool ScMyAreaLinksContainer::GetFirstAddress( table::CellAddress& rCellAddre
         ScUnoConversion::FillApiStartAddress( rCellAddress, aAreaLinkList.begin()->aDestRange );
         return (nTable == rCellAddress.Sheet);
     }
-    return false;
+    return sal_False;
 }
 
 void ScMyAreaLinksContainer::SetCellData( ScMyCell& rMyCell )
 {
-    rMyCell.bHasAreaLink = false;
+    rMyCell.bHasAreaLink = sal_False;
     ScMyAreaLinkList::iterator aItr(aAreaLinkList.begin());
     if( aItr != aAreaLinkList.end() )
     {
@@ -353,11 +353,11 @@ void ScMyAreaLinksContainer::SetCellData( ScMyCell& rMyCell )
                 ScUnoConversion::FillApiStartAddress( aAddress, aItr->aDestRange );
                 if (aAddress == rMyCell.aCellAddress)
                 {
-                    OSL_FAIL("more than one linked range on one cell");
+                    DBG_ERROR("more than one linked range on one cell");
                     aItr = aAreaLinkList.erase( aItr );
                 }
                 else
-                    bFound = false;
+                    bFound = sal_False;
             }
         }
     }
@@ -421,12 +421,12 @@ sal_Bool ScMyEmptyDatabaseRangesContainer::GetFirstAddress( table::CellAddress& 
         ScUnoConversion::FillApiStartAddress( rCellAddress, *(aDatabaseList.begin()) );
         return (nTable == rCellAddress.Sheet);
     }
-    return false;
+    return sal_False;
 }
 
 void ScMyEmptyDatabaseRangesContainer::SetCellData( ScMyCell& rMyCell )
 {
-    rMyCell.bHasEmptyDatabase = false;
+    rMyCell.bHasEmptyDatabase = sal_False;
     ScMyEmptyDatabaseRangeList::iterator aItr(aDatabaseList.begin());
     if( aItr != aDatabaseList.end() )
     {
@@ -515,7 +515,7 @@ sal_Bool ScMyDetectiveObjContainer::GetFirstAddress( table::CellAddress& rCellAd
         rCellAddress = aDetectiveObjList.begin()->aPosition;
         return (nTable == rCellAddress.Sheet);
     }
-    return false;
+    return sal_False;
 }
 
 void ScMyDetectiveObjContainer::SetCellData( ScMyCell& rMyCell )
@@ -581,7 +581,7 @@ sal_Bool ScMyDetectiveOpContainer::GetFirstAddress( table::CellAddress& rCellAdd
         rCellAddress = aDetectiveOpList.begin()->aPosition;
         return (nTable == rCellAddress.Sheet);
     }
-    return false;
+    return sal_False;
 }
 
 void ScMyDetectiveOpContainer::SetCellData( ScMyCell& rMyCell )
@@ -614,25 +614,24 @@ void ScMyDetectiveOpContainer::Sort()
 ScMyCell::ScMyCell() :
     aShapeList(),
     aDetectiveObjVec(),
-    fValue(0.0),
     nValidationIndex(-1),
     pBaseCell(NULL),
-    bIsAutoStyle( false ),
-    bHasShape( false ),
-    bIsMergedBase( false ),
-    bIsCovered( false ),
-    bHasAreaLink( false ),
-    bHasEmptyDatabase( false ),
-    bHasDetectiveObj( false ),
-    bHasDetectiveOp( false ),
-    bIsEditCell( false ),
-    bKnowWhetherIsEditCell( false ),
-    bHasStringValue( false ),
-    bHasDoubleValue( false ),
-    bHasXText( false ),
-    bIsMatrixBase( false ),
-    bIsMatrixCovered( false ),
-    bHasAnnotation( false )
+    bIsAutoStyle( sal_False ),
+    bHasShape( sal_False ),
+    bIsMergedBase( sal_False ),
+    bIsCovered( sal_False ),
+    bHasAreaLink( sal_False ),
+    bHasEmptyDatabase( sal_False ),
+    bHasDetectiveObj( sal_False ),
+    bHasDetectiveOp( sal_False ),
+    bIsEditCell( sal_False ),
+    bKnowWhetherIsEditCell( sal_False ),
+    bHasStringValue( sal_False ),
+    bHasDoubleValue( sal_False ),
+    bHasXText( sal_False ),
+    bIsMatrixBase( sal_False ),
+    bIsMatrixCovered( sal_False ),
+    bHasAnnotation( sal_False )
 {
 }
 
@@ -676,7 +675,7 @@ void ScMyNotEmptyCellsIterator::Clear()
         delete pCellItr;
     if (!aAnnotations.empty())
     {
-        OSL_FAIL("not all Annotations saved");
+        DBG_ERROR("not all Annotations saved");
         aAnnotations.clear();
     }
     pCellItr = NULL;
@@ -702,21 +701,21 @@ void ScMyNotEmptyCellsIterator::UpdateAddress( table::CellAddress& rAddress )
 void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, table::CellAddress& rAddress )
 {
     rMyCell.aCellAddress = rAddress;
-    rMyCell.bHasStringValue = false;
-    rMyCell.bHasDoubleValue = false;
-    rMyCell.bHasXText = false;
-    rMyCell.bKnowWhetherIsEditCell = false;
-    rMyCell.bIsEditCell = false;
+    rMyCell.bHasStringValue = sal_False;
+    rMyCell.bHasDoubleValue = sal_False;
+    rMyCell.bHasXText = sal_False;
+    rMyCell.bKnowWhetherIsEditCell = sal_False;
+    rMyCell.bIsEditCell = sal_False;
     if( (nCellCol == rAddress.Column) && (nCellRow == rAddress.Row) )
         pCellItr->GetNext( nCellCol, nCellRow );
 }
 
 void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
 {
-    rMyCell.bIsMatrixCovered = false;
-    rMyCell.bIsMatrixBase = false;
+    rMyCell.bIsMatrixCovered = sal_False;
+    rMyCell.bIsMatrixBase = sal_False;
 
-    sal_Bool bIsMatrixBase(false);
+    sal_Bool bIsMatrixBase(sal_False);
 
     ScAddress aScAddress;
     ScUnoConversion::FillScAddress( aScAddress, rMyCell.aCellAddress );
@@ -734,7 +733,7 @@ void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
             rMyCell.nType = table::CellContentType_FORMULA;
             break;
         default:
-            rMyCell.nType = table::CellContentType_EMPTY;
+            rMyCell.nType = table::CellContentType_EMPTY; 
     }
 
     if (rMyCell.nType == table::CellContentType_FORMULA)
@@ -747,7 +746,7 @@ void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
 
 void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
 {
-    aCell.bHasAnnotation = false;
+    aCell.bHasAnnotation = sal_False;
     if (!aAnnotations.empty())
     {
         ScMyExportAnnotationList::iterator aItr(aAnnotations.begin());
@@ -768,7 +767,7 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
 
     // test - bypass the API
     // if (xCellRange.is())
-    //  aCell.xCell.set(xCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row));
+    // 	aCell.xCell.set(xCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row));
 }
 
 void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
@@ -818,7 +817,7 @@ void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
 {
     // Skip entries for a sheet that is copied instead of saving normally.
     // Cells (including aAnnotations) are handled separately in SetCurrentTable.
-
+    
     if( pShapes )
         pShapes->SkipTable(nSkip);
     if( pNoteShapes )
@@ -837,7 +836,7 @@ void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
 
 sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles)
 {
-    table::CellAddress  aAddress( nCurrentTable, MAXCOL + 1, MAXROW + 1 );
+    table::CellAddress	aAddress( nCurrentTable, MAXCOL + 1, MAXROW + 1 );
 
     UpdateAddress( aAddress );
     if( pShapes )

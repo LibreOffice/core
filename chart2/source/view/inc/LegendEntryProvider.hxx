@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,58 +28,20 @@
 #ifndef CHART2_VIEW_LEGENDENTRYPROVIDER_HXX
 #define CHART2_VIEW_LEGENDENTRYPROVIDER_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/chart/ChartLegendExpansion.hpp>
-#include <com/sun/star/chart2/XFormattedString.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/chart2/LegendExpansion.hpp>
 
-#include <vector>
+#include <com/sun/star/chart2/ViewLegendEntry.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace chart
 {
 
-enum LegendSymbolStyle
-{
-    /** A square box with border.
-     */
-    LegendSymbolStyle_BOX,
-
-    /** A line like with a symbol.
-     */
-    LegendSymbolStyle_LINE,
-
-    /** A bordered circle which has the same bounding-box as the
-        <member>BOX</member>.
-     */
-    LegendSymbolStyle_CIRCLE
-};
-
-struct ViewLegendEntry
-{
-    /** The legend symbol that represents a data series or other
-        information contained in the legend
-     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape > aSymbol;
-
-    /** The descriptive text for a legend entry.
-     */
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XFormattedString > >  aLabel;
-};
-
 class LegendEntryProvider
 {
 public:
-    virtual ::com::sun::star::awt::Size getPreferredLegendKeyAspectRatio()=0;
-
-    virtual std::vector< ViewLegendEntry > createLegendEntries(
-            const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
-            ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion,
+    virtual ::com::sun::star::uno::Sequence<
+        ::com::sun::star::chart2::ViewLegendEntry > SAL_CALL createLegendEntries(
+            ::com::sun::star::chart2::LegendExpansion eLegendExpansion,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xTextProperties,
             const ::com::sun::star::uno::Reference<
@@ -88,7 +50,10 @@ public:
                 ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext >& xContext
-                ) = 0;
+                )
+        throw (::com::sun::star::uno::RuntimeException) = 0;
+
+private:
 };
 
 } //  namespace chart

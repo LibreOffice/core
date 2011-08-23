@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ namespace svx
 class FindTextFieldControl : public ComboBox
 {
 public:
-    FindTextFieldControl( Window* pParent, WinBits nStyle,
-        css::uno::Reference< css::frame::XFrame >& xFrame,
+    FindTextFieldControl( Window* pParent, WinBits nStyle, 
+        css::uno::Reference< css::frame::XFrame >& xFrame, 
         css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
     virtual ~FindTextFieldControl();
 
@@ -96,7 +96,7 @@ private:
 
 };
 
-class FindTextToolbarController : public svt::ToolboxController,
+class FindTextToolbarController : public svt::ToolboxController, 
                                   public css::lang::XServiceInfo
 {
 public:
@@ -129,7 +129,7 @@ public:
 
     // XToolbarController
     virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw ( css::uno::RuntimeException);
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException );
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException ); 
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException );
@@ -140,12 +140,12 @@ private:
 
     FindTextFieldControl* m_pFindTextFieldControl;
 
-    sal_uInt16 m_nDownSearchId; // item position of findbar
-    sal_uInt16 m_nUpSearchId;   // item position of findbar
+    USHORT m_nDownSearchId; // item position of findbar
+    USHORT m_nUpSearchId;   // item position of findbar
 
 };
 
-class DownSearchToolboxController : public svt::ToolboxController,
+class DownSearchToolboxController : public svt::ToolboxController, 
                                     public css::lang::XServiceInfo
 {
 public:
@@ -184,7 +184,7 @@ public:
 
 };
 
-class UpSearchToolboxController : public svt::ToolboxController,
+class UpSearchToolboxController : public svt::ToolboxController, 
                                   public css::lang::XServiceInfo
 {
 public:
@@ -204,7 +204,7 @@ public:
 
     static ::rtl::OUString getImplementationName_Static() throw()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svx.UpSearchToolboxController" ));
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svx.UpSearchToolboxController" ));	
     }
 
     static css::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
@@ -225,9 +225,9 @@ public:
 
 // protocol handler for "vnd.sun.star.findbar:*" URLs
 // The dispatch object will be used for shortcut commands for findbar
-class FindbarDispatcher : public css::lang::XServiceInfo,
-                          public css::lang::XInitialization,
-                          public css::frame::XDispatchProvider,
+class FindbarDispatcher : public css::lang::XServiceInfo, 
+                          public css::lang::XInitialization, 
+                          public css::frame::XDispatchProvider, 
                           public css::frame::XDispatch,
                           public ::cppu::OWeakObject
 {

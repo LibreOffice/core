@@ -2,10 +2,14 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: sdrallattribute.cxx,v $
+ *
+ * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,27 +41,27 @@ namespace drawinglayer
     namespace attribute
     {
         SdrLineFillShadowTextAttribute::SdrLineFillShadowTextAttribute(
-            const SdrLineAttribute& rLine,
-            const SdrFillAttribute& rFill,
-            const SdrLineStartEndAttribute& rLineStartEnd,
-            const SdrShadowAttribute& rShadow,
-            const FillGradientAttribute& rFillFloatTransGradient,
+            const SdrLineAttribute& rLine, 
+            const SdrFillAttribute& rFill, 
+            const SdrLineStartEndAttribute& rLineStartEnd, 
+            const SdrShadowAttribute& rShadow, 
+            const FillGradientAttribute& rFillFloatTransGradient, 
             const SdrTextAttribute& rTextAttribute)
-        :   SdrLineShadowTextAttribute(rLine, rLineStartEnd, rShadow, rTextAttribute),
+        :	SdrLineShadowTextAttribute(rLine, rLineStartEnd, rShadow, rTextAttribute),
             maFill(rFill),
             maFillFloatTransGradient(rFillFloatTransGradient)
         {
         }
-
+        
         SdrLineFillShadowTextAttribute::SdrLineFillShadowTextAttribute()
-        :   SdrLineShadowTextAttribute(),
+        :	SdrLineShadowTextAttribute(),
             maFill(),
             maFillFloatTransGradient()
         {
         }
 
         SdrLineFillShadowTextAttribute::SdrLineFillShadowTextAttribute(const SdrLineFillShadowTextAttribute& rCandidate)
-        :   SdrLineShadowTextAttribute(rCandidate),
+        :	SdrLineShadowTextAttribute(rCandidate),
             maFill(rCandidate.getFill()),
             maFillFloatTransGradient(rCandidate.getFillFloatTransGradient())
         {

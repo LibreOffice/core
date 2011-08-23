@@ -61,7 +61,7 @@ sub MakeRectangle
 end sub
 
 '-------------------------------------------------------------------------------
-testcase MakeCircle
+sub MakeCircle
 
     printlog "Create Circle"
     if gApplication = "WRITER" then
@@ -81,10 +81,10 @@ testcase MakeCircle
     gMouseUp (30,30)
     sleep 1
 
-endcase
+end sub
 
 '-------------------------------------------------------------------------------
-testcase Make3dObject
+sub Make3dObject
 
     printlog "Create 3dObject"
     if (Ucase(gApplication) = "CALC") then
@@ -158,10 +158,10 @@ testcase Make3dObject
         endif
     end if
 
-endcase
+end sub
 
 '-------------------------------------------------------------------------------
-testcase MakeCurveObject
+sub MakeCurveObject
 
     if (Ucase(gApplication) = "WRITER") then
         warnlog "Cant make circle in this application"
@@ -195,10 +195,10 @@ testcase MakeCurveObject
     hMenuItemUnCheck (7)
     sleep 1
 
-endcase
+end sub
 
 '-------------------------------------------------------------------------------
-testcase MakeLineObject
+sub MakeLineObject
 
     if gApplication = "WRITER" then
         warnlog "Currently no support for line-object in this application"
@@ -224,10 +224,10 @@ testcase MakeLineObject
     Kontext "Arrowshapes"
     Arrowshapes.Close
 
-endcase
+end sub
 
 '-------------------------------------------------------------------------------
-testcase MakeConnectorObject
+sub MakeConnectorObject
 
     if gApplication = "WRITER" then
         warnlog "Cant make connector in this application"
@@ -268,7 +268,7 @@ testcase MakeConnectorObject
         gMouseUp (30,37)
     end if
 
-endcase
+end sub
 
 '-------------------------------------------------------------------------------
 sub MakeFormattedTextLine

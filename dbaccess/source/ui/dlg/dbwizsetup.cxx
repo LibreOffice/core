@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 #include <connectivity/DriversConfig.hxx>
 
 #include <memory>
@@ -121,8 +120,8 @@ using namespace ::com::sun::star::document;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-#define START_PAGE      0
-#define CONNECTION_PAGE 1
+#define START_PAGE		0
+#define CONNECTION_PAGE	1
 
 OFinalDBPageSetup*          pFinalPage;
 
@@ -172,7 +171,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     if (pCollectionItem)
         m_pCollection = pCollectionItem->getCollection();
 
-    OSL_ENSURE(m_pCollection, "ODbTypeWizDialogSetup::ODbTypeWizDialogSetup : really need a DSN type collection !");
+    DBG_ASSERT(m_pCollection, "ODbTypeWizDialogSetup::ODbTypeWizDialogSetup : really need a DSN type collection !");
 
     FreeResource();
 
@@ -182,6 +181,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     m_pOutSet = new SfxItemSet( *_pItems->GetPool(), _pItems->GetRanges() );
 
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
+//	eType = m_pImpl->getDatasourceType(*m_pOutSet);
 
     SetPageSizePixel(LogicToPixel(::Size(WIZARD_PAGE_X, WIZARD_PAGE_Y), MAP_APPFONT));
     ShowButtonFixedLine(sal_True);
@@ -229,7 +229,7 @@ void ODbTypeWizDialogSetup::declareAuthDepPath( const ::rtl::OUString& _sURL, Pa
     {
         if ( bHasAuthentication || ( *aIter != PAGE_DBSETUPWIZARD_AUTHENTIFICATION ) )
             aPath.push_back( *aIter );
-    }
+    } // for(;aIter != aEnd;++aIter)
 
     // call base method
     ::svt::RoadmapWizard::declarePath( _nPathId, aPath );
@@ -359,7 +359,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     {
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
-            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:")) );
+            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString::createFromAscii( "sdbc:dbase:" ) );
         OSL_ENSURE( nCreateNewDBIndex != -1, "ODbTypeWizDialogSetup::activateDatabasePath: the GeneralPage should have prevented this!" );
         activatePath( static_cast< PathId >( nCreateNewDBIndex + 1 ), sal_True );
 
@@ -388,7 +388,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     }
     break;
     default:
-        OSL_FAIL( "ODbTypeWizDialogSetup::activateDatabasePath: unknown creation mode!" );
+        DBG_ERROR( "ODbTypeWizDialogSetup::activateDatabasePath: unknown creation mode!" );
     }
 
     enableButtons( WZB_NEXT, m_pGeneralPage->GetDatabaseCreationMode() != OGeneralPage::eOpenExisting );
@@ -430,7 +430,7 @@ void ODbTypeWizDialogSetup::resetPages(const Reference< XPropertySet >& _rxDatas
     // are set. Select another data source of the same type, where the indirect props are not set (yet). Then,
     // the indirect property values of the first ds are shown in the second ds ...)
     const ODbDataSourceAdministrationHelper::MapInt2String& rMap = m_pImpl->getIndirectProperties();
-    for (   ODbDataSourceAdministrationHelper::ConstMapInt2StringIterator aIndirect = rMap.begin();
+    for	(	ODbDataSourceAdministrationHelper::ConstMapInt2StringIterator aIndirect = rMap.begin();
             aIndirect != rMap.end();
             ++aIndirect
         )
@@ -490,7 +490,7 @@ Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
 
 
 // -----------------------------------------------------------------------------
-::rtl::OUString ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
+::rtl::OUString	ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
 {
     ::rtl::OUString sRet = m_pImpl->getDatasourceType(_rSet);
     if (m_pMySQLIntroPage != NULL && m_pMySQLIntroPage->IsVisible() )
@@ -576,11 +576,11 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
             pPage = OConnectionTabPageSetup::CreateAdabasTabPage( this, *m_pOutSet);
             break;
 
-        case PAGE_DBSETUPWIZARD_LDAP    :
+        case PAGE_DBSETUPWIZARD_LDAP	:
             pPage = OLDAPConnectionPageSetup::CreateLDAPTabPage(this,*m_pOutSet);
             break;
 
-        case PAGE_DBSETUPWIZARD_SPREADSHEET:    /// first user defined driver
+        case PAGE_DBSETUPWIZARD_SPREADSHEET:	/// first user defined driver
             pPage = OSpreadSheetConnectionPageSetup::CreateSpreadSheetTabPage(this,*m_pOutSet);
             break;
 
@@ -655,7 +655,7 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLInt
         case  OMySQLIntroPageSetup::VIA_NATIVE:
             sURLPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:mysqlc:"));
             break;
-    }
+    } // switch( _pMySQLIntroPageSetup->getMySQLMode() )
     activatePath( static_cast<PathId>(m_pCollection->getIndexOf(sURLPrefix) + 1), sal_True);
     return sal_True;
 }
@@ -726,7 +726,7 @@ sal_Bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
 // -----------------------------------------------------------------------------
 void ODbTypeWizDialogSetup::setTitle(const ::rtl::OUString& /*_sTitle*/)
 {
-    OSL_FAIL( "ODbTypeWizDialogSetup::setTitle: not implemented!" );
+    DBG_ERROR( "ODbTypeWizDialogSetup::setTitle: not implemented!" );
         // why?
 }
 
@@ -860,13 +860,15 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
         else if ( m_pCollection->isFileSystemBased(eType) )
         {
-            Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))), UNO_QUERY);
+            Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
             INetURLObject aDBPathURL(m_sWorkPath);
             aDBPathURL.Append(m_aDocURL.getBase());
             createUniqueFolderName(&aDBPathURL);
             ::rtl::OUString sPrefix = eType;
             sUrl = aDBPathURL.GetMainURL( INetURLObject::NO_DECODE);
             xSimpleFileAccess->createFolder(sUrl);
+            //OFileNotation aFileNotation(sUrl);
+            //sUrl = aFileNotation.get(OFileNotation::N_SYSTEM);
              sUrl = sPrefix.concat(sUrl);
         }
         m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, sUrl));
@@ -927,7 +929,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::createUniqueFolderName(INetURLObject* pURL)
     {
-        Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))), UNO_QUERY);
+        Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
         :: rtl::OUString sLastSegmentName = pURL->getName();
         sal_Bool bFolderExists = sal_True;
         sal_Int32 i = 1;
@@ -945,7 +947,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     String ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
     {
-        Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))), UNO_QUERY);
+        Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
         :: rtl::OUString sFilename = _rURL.getName();
         ::rtl::OUString BaseName = _rURL.getBase();
         ::rtl::OUString sExtension = _rURL.getExtension();
@@ -1133,7 +1135,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

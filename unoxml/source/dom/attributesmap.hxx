@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,18 +26,19 @@
  *
  ************************************************************************/
 
-#ifndef DOM_ATTRIBUTESMAP_HXX
-#define DOM_ATTRIBUTESMAP_HXX
+#ifndef _ATTRIBUTESMAP_HXX
+#define _ATTRIBUTESMAP_HXX
 
+#include <map>
 #include <sal/types.h>
-#include <rtl/ref.hxx>
-
+#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
-
-#include <cppuhelper/implbase1.hxx>
-
+#include "node.hxx"
+#include "element.hxx"
+#include "attr.hxx"
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -45,18 +46,12 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CElement;
-
-    class CAttributesMap
-        : public cppu::WeakImplHelper1< XNamedNodeMap >
+    class CAttributesMap : public cppu::WeakImplHelper1< XNamedNodeMap >
     {
     private:
-        ::rtl::Reference<CElement> const m_pElement;
-        ::osl::Mutex & m_rMutex;
-
+        const CElement* m_pElement;
     public:
-        CAttributesMap(::rtl::Reference<CElement> const& pElement,
-                ::osl::Mutex & rMutex);
+        CAttributesMap(const CElement* aDocType);
 
         /**
         The number of nodes in this map.
@@ -64,51 +59,39 @@ namespace DOM
         virtual sal_Int32 SAL_CALL getLength() throw (RuntimeException);
 
         /**
-        Retrieves a node specified by local name
+        Retrieves a node specified by local name     	
         */
-        virtual Reference< XNode > SAL_CALL getNamedItem(OUString const& name)
-            throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL getNamedItem(const OUString& name) throw (RuntimeException);
 
         /**
         Retrieves a node specified by local name and namespace URI.
         */
-        virtual Reference< XNode > SAL_CALL getNamedItemNS(
-                OUString const& namespaceURI, OUString const& localName)
-            throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL getNamedItemNS(const OUString& namespaceURI, const OUString& localName) throw (RuntimeException);
 
         /**
         Returns the indexth item in the map.
         */
-        virtual Reference< XNode > SAL_CALL item(sal_Int32 index)
-            throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL item(sal_Int32 index) throw (RuntimeException);
 
         /**
         Removes a node specified by name.
         */
-        virtual Reference< XNode > SAL_CALL
-            removeNamedItem(OUString const& name)
-            throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL removeNamedItem(const OUString& name) throw (RuntimeException);
 
         /**
         // Removes a node specified by local name and namespace URI.
         */
-        virtual Reference< XNode > SAL_CALL removeNamedItemNS(
-                OUString const& namespaceURI, OUString const& localName)
-            throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL removeNamedItemNS(const OUString& namespaceURI, const OUString& localName) throw (RuntimeException);
 
         /**
         // Adds a node using its nodeName attribute.
         */
-        virtual Reference< XNode > SAL_CALL
-            setNamedItem(Reference< XNode > const& arg)
-            throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL setNamedItem(const Reference< XNode >& arg) throw (RuntimeException);
 
         /**
         Adds a node using its namespaceURI and localName.
         */
-        virtual Reference< XNode > SAL_CALL
-            setNamedItemNS(Reference< XNode > const& arg)
-            throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL setNamedItemNS(const Reference< XNode >& arg) throw (RuntimeException);
     };
 }
 

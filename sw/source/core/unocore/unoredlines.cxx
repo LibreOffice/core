@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <redline.hxx>
-#include <switerator.hxx>
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -76,7 +76,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     if(rRedTbl.Count() > nIndex && nIndex >= 0)
     {
-        uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject((sal_uInt16)nIndex), *GetDoc() );
+        uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject((USHORT)nIndex), *GetDoc() );
         aRet <<= xRet;
     }
     else
@@ -112,30 +112,30 @@ OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
     return C2U("SwXRedlines");
 }
 
-sal_Bool SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
+BOOL SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
     throw( uno::RuntimeException )
 {
-    OSL_FAIL("not implemented");
-    return sal_False;
+    DBG_ERROR("not implemented");
+    return FALSE;
 }
 
 uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
     throw( uno::RuntimeException )
 {
-    OSL_FAIL("not implemented");
+    DBG_ERROR("not implemented");
     return uno::Sequence< OUString >();
 }
 
-beans::XPropertySet*    SwXRedlines::GetObject( SwRedline& rRedline, SwDoc& rDoc )
+beans::XPropertySet* 	SwXRedlines::GetObject( SwRedline& rRedline, SwDoc& rDoc )
 {
     SwPageDesc* pStdDesc = rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD);
-    SwIterator<SwXRedline,SwPageDesc> aIter(*pStdDesc);
-    SwXRedline* pxRedline = aIter.First();
+    SwClientIter aIter(*pStdDesc);
+    SwXRedline* pxRedline = (SwXRedline*)aIter.First( TYPE( SwXRedline ));
     while(pxRedline)
     {
         if(pxRedline->GetRedline() == &rRedline)
             break;
-        pxRedline = aIter.Next();
+        pxRedline = (SwXRedline*)aIter.Next();
     }
     if( !pxRedline )
         pxRedline = new SwXRedline(rRedline, rDoc);
@@ -153,7 +153,7 @@ SwXRedlineEnumeration::~SwXRedlineEnumeration()
 {
 }
 
-sal_Bool SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
+BOOL SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
 {
     if(!pDoc)
         throw uno::RuntimeException();
@@ -179,9 +179,9 @@ rtl::OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::Run
     return C2U("SwXRedlineEnumeration");
 }
 
-sal_Bool SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )
+BOOL SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )
 {
-    return sal_False;
+    return FALSE;
 }
 
 uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -189,7 +189,7 @@ uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames(void) 
     return uno::Sequence< OUString >();
 }
 
-void SwXRedlineEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXRedlineEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())

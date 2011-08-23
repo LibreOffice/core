@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@
 
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
+#include "errhdl.hxx"
 #include "swtypes.hxx"
 #include "txttypes.hxx"
 
@@ -41,7 +42,7 @@
 /*************************************************************************
  * SwWrongList::SwWrongList()
  *************************************************************************/
-SwWrongList::SwWrongList( WrongListType eType ) :
+SwWrongList::SwWrongList( WrongListType eType ) : 
     meType       (eType),
     nBeginInvalid(STRING_LEN),  // everything correct... (the invalid area starts beyond the string)
     nEndInvalid  (STRING_LEN)
@@ -132,7 +133,7 @@ sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
     if( nEnd == rChk )
     {
         ++nPos;
-        if( nPos == Count() )
+        if( nPos == Count()	)
             return sal_False;
         else
         {
@@ -186,7 +187,7 @@ xub_StrLen SwWrongList::NextWrong( xub_StrLen nChk ) const
 
 MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
 {
-    MSHORT nOben = Count(), nUnten = 0;
+    MSHORT nOben = Count(), nMitte = 0, nUnten = 0;
 
     if( nOben > 0 )
     {
@@ -211,7 +212,6 @@ MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
         }
 
         --nOben;
-        MSHORT nMitte = 0;
         while( nUnten <= nOben )
         {
             nMitte = nUnten + ( nOben - nUnten ) / 2;
@@ -259,7 +259,7 @@ void SwWrongList::_Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
 }
 
 void SwWrongList::SetInvalid( xub_StrLen nBegin, xub_StrLen nEnd )
-{
+{ 
     nBeginInvalid = nBegin;
     nEndInvalid = nEnd;
 }
@@ -403,7 +403,7 @@ void SwWrongList::Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
 {
     if (STRING_LEN == GetBeginInv())
         SetInvalid( nBegin, nEnd );
-    else
+    else 
         _Invalidate( nBegin, nEnd );
 }
 
@@ -471,7 +471,7 @@ void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
     }
     if( pNext )
     {
-        sal_uInt16 nCnt = Count();
+        USHORT nCnt = Count();
         pNext->Move( 0, nInsertPos );
         Insert(nCnt, pNext->maList.begin(), pNext->maList.end());
 
@@ -499,7 +499,7 @@ void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
 }
 
 
-void SwWrongList::InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, sal_uInt16 nWhere, SwWrongList* pSubList )
+void SwWrongList::InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT nWhere, SwWrongList* pSubList )
 {
     if (pSubList)
     {
@@ -515,7 +515,7 @@ void SwWrongList::InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, sal_uIn
 
 
 // New functions: Necessary because SwWrongList has been changed to use std::vector
-void SwWrongList::Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos)
+void SwWrongList::Insert(USHORT nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos)
 {
     std::vector<SwWrongArea>::iterator i = maList.begin();
     if ( nWhere >= maList.size() )
@@ -533,14 +533,14 @@ void SwWrongList::Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator s
     }
 }
 
-void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
+void SwWrongList::Remove(USHORT nIdx, USHORT nLen )
 {
     if ( nIdx >= maList.size() ) return;
     std::vector<SwWrongArea>::iterator i1 = maList.begin();
     i1 += nIdx;
 
     std::vector<SwWrongArea>::iterator i2 = i1;
-    if ( nIdx + nLen >= static_cast<sal_uInt16>(maList.size()) )
+    if ( nIdx + nLen >= static_cast<USHORT>(maList.size()) )
         i2 = maList.end(); // robust
     else
         i2 += nLen;
@@ -566,8 +566,8 @@ void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
 }
 
 void SwWrongList::RemoveEntry( xub_StrLen nBegin, xub_StrLen nEnd ) {
-    sal_uInt16 nDelPos = 0;
-    sal_uInt16 nDel = 0;
+    USHORT nDelPos = 0;
+    USHORT nDel = 0;
     std::vector<SwWrongArea>::iterator aIter = maList.begin();
     while( aIter != maList.end() && (*aIter).mnPos < nBegin )
     {

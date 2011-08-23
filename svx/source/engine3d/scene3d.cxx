@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
-#include "svx/svditer.hxx"
+#include "svdstr.hrc"
+#include "svdglob.hxx"
+#include "svditer.hxx"
 
 #if defined( UNX ) || defined( ICC )
 #include <stdlib.h>
 #endif
-#include "svx/globl3d.hxx"
+#include "globl3d.hxx"
 #include <svx/svdpage.hxx>
 #include <svl/style.hxx>
 #include <svx/scene3d.hxx>
@@ -59,18 +59,18 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
-#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
+#define ITEMVALUE(ItemSet,Id,Cast)	((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 //////////////////////////////////////////////////////////////////////////////
 // #110988#
 
 class ImpRemap3DDepth
 {
-    sal_uInt32                  mnOrdNum;
-    double                      mfMinimalDepth;
+    sal_uInt32					mnOrdNum;
+    double						mfMinimalDepth;
 
     // bitfield
-    unsigned                    mbIsScene : 1;
+    unsigned					mbIsScene : 1;
 
 public:
     ImpRemap3DDepth(sal_uInt32 nOrdNum, double fMinimalDepth);
@@ -85,15 +85,14 @@ public:
 };
 
 ImpRemap3DDepth::ImpRemap3DDepth(sal_uInt32 nOrdNum, double fMinimalDepth)
-:   mnOrdNum(nOrdNum),
+:	mnOrdNum(nOrdNum),
     mfMinimalDepth(fMinimalDepth),
     mbIsScene(sal_False)
 {
 }
 
 ImpRemap3DDepth::ImpRemap3DDepth(sal_uInt32 nOrdNum)
-:   mnOrdNum(nOrdNum),
-    mfMinimalDepth(0.0),
+:	mnOrdNum(nOrdNum),
     mbIsScene(sal_True)
 {
 }
@@ -129,7 +128,7 @@ typedef ::std::vector< ImpRemap3DDepth > ImpRemap3DDepthVector;
 
 class Imp3DDepthRemapper
 {
-    ImpRemap3DDepthVector       maVector;
+    ImpRemap3DDepthVector		maVector;
 
 public:
     Imp3DDepthRemapper(E3dScene& rScene);
@@ -212,7 +211,7 @@ TYPEINIT1(E3dScene, E3dObject);
 \************************************************************************/
 
 E3dScene::E3dScene()
-:   E3dObject(),
+:	E3dObject(),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
     mp3DDepthRemapper(0L),
     bDrawOnlySelected(false)
@@ -223,7 +222,7 @@ E3dScene::E3dScene()
 }
 
 E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
-:   E3dObject(),
+:	E3dObject(),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
     mp3DDepthRemapper(0L),
     bDrawOnlySelected(false)
@@ -236,15 +235,15 @@ void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& /*rDefault*/)
 {
     // Fuer OS/2 die FP-Exceptions abschalten
 #if defined(OS2)
-#define SC_FPEXCEPTIONS_ON()    _control87( MCW_EM, 0 )
-#define SC_FPEXCEPTIONS_OFF()   _control87( MCW_EM, MCW_EM )
+#define SC_FPEXCEPTIONS_ON()	_control87( MCW_EM, 0 )
+#define SC_FPEXCEPTIONS_OFF()	_control87( MCW_EM, MCW_EM )
     SC_FPEXCEPTIONS_OFF();
 #endif
 
     // Fuer WIN95/NT die FP-Exceptions abschalten
-#if defined(WNT)
-#define SC_FPEXCEPTIONS_ON()    _control87( _MCW_EM, 0 )
-#define SC_FPEXCEPTIONS_OFF()   _control87( _MCW_EM, _MCW_EM )
+#if defined(WNT) || defined(WIN)
+#define SC_FPEXCEPTIONS_ON()	_control87( _MCW_EM, 0 )
+#define SC_FPEXCEPTIONS_OFF()	_control87( _MCW_EM, _MCW_EM )
     SC_FPEXCEPTIONS_OFF();
 #endif
 
@@ -287,10 +286,10 @@ basegfx::B2DPolyPolygon E3dScene::TakeXorPoly() const
     const drawinglayer::geometry::ViewInformation3D aViewInfo3D(rVCScene.getViewInformation3D());
     const basegfx::B3DPolyPolygon aCubePolyPolygon(CreateWireframe());
 
-    basegfx::B2DPolyPolygon aRetval(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aCubePolyPolygon,
+    basegfx::B2DPolyPolygon aRetval(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aCubePolyPolygon, 
         aViewInfo3D.getObjectToView()));
     aRetval.transform(rVCScene.getObjectTransformation());
-
+    
     return aRetval;
 }
 
@@ -331,7 +330,7 @@ sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
 |*
 \************************************************************************/
 
-sal_uInt16 E3dScene::GetObjIdentifier() const
+UINT16 E3dScene::GetObjIdentifier() const
 {
     return E3D_SCENE_ID;
 }
@@ -342,7 +341,7 @@ void E3dScene::SetBoundRectDirty()
 
     if(pScene == this)
     {
-        // avoid resetting aOutRect which in case of a 3D scene used as 2d object
+        // avoid resetting aOutRect which in case of a 3D scene used as 2d object 
         // is model data,not re-creatable view data
     }
     else
@@ -529,25 +528,18 @@ void E3dScene::removeAllNonSelectedObjects()
     }
 }
 
-E3dScene* E3dScene::Clone() const
-{
-    return CloneHelper< E3dScene >();
-}
-
 /*************************************************************************
 |*
 |* Zuweisungsoperator
 |*
 \************************************************************************/
 
-E3dScene& E3dScene::operator=(const E3dScene& rObj)
+void E3dScene::operator=(const SdrObject& rObj)
 {
-    if( this == &rObj )
-        return *this;
     E3dObject::operator=(rObj);
 
     const E3dScene& r3DObj = (const E3dScene&) rObj;
-    aCamera          = r3DObj.aCamera;
+    aCamera			 = r3DObj.aCamera;
 
     // neu ab 377:
     aCameraSet = r3DObj.aCameraSet;
@@ -573,7 +565,6 @@ E3dScene& E3dScene::operator=(const E3dScene& rObj)
     // ActionChanged at the VC which will for this class
     // flush that cached data and initalize it's valid reconstruction
     GetViewContact().ActionChanged();
-    return *this;
 }
 
 /*************************************************************************
@@ -761,7 +752,7 @@ void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     // Also derzeit sind die Klebepunkte relativ zum aOutRect der Szene definiert. Vor dem Drehen
     // werden die Klebepunkte relativ zur Seite definiert. Sie nehmen an der Drehung der Szene noch nicht Teil
     // dafuer gibt es den
-    SetGlueReallyAbsolute(sal_True);
+    SetGlueReallyAbsolute(TRUE);
 
     // So dass war die Szene, ab jetzt kommen die Objekte in der Szene
     // 3D-Objekte gibt es nur ein einziges das kann zwar mehrere Flaechen haben aber die Flaechen
@@ -780,7 +771,7 @@ void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     SetRectsDirty();    // Veranlasst eine Neuberechnung aller BoundRects
     NbcRotateGluePoints(rRef,nWink,sn,cs);  // Rotiert die Klebepunkte (die haben noch Koordinaten relativ
                                             // zum Urpsung des Blattes
-    SetGlueReallyAbsolute(sal_False);  // ab jetzt sind sie wieder relativ zum BoundRect (also dem aOutRect definiert)
+    SetGlueReallyAbsolute(FALSE);  // ab jetzt sind sie wieder relativ zum BoundRect (also dem aOutRect definiert)
     SetRectsDirty();
 }
 
@@ -815,7 +806,7 @@ void E3dScene::RecalcSnapRect()
 |*
 \************************************************************************/
 
-sal_Bool E3dScene::IsBreakObjPossible()
+BOOL E3dScene::IsBreakObjPossible()
 {
     // Szene ist aufzubrechen, wenn alle Mitglieder aufzubrechen sind
     SdrObjListIter a3DIterator(maSubList, IM_DEEPWITHGROUPS);
@@ -825,10 +816,10 @@ sal_Bool E3dScene::IsBreakObjPossible()
         E3dObject* pObj = (E3dObject*) a3DIterator.Next();
         DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
         if(!pObj->IsBreakObjPossible())
-            return sal_False;
+            return FALSE;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 basegfx::B3DVector E3dScene::GetShadowPlaneDirection() const
@@ -841,7 +832,7 @@ basegfx::B3DVector E3dScene::GetShadowPlaneDirection() const
 
 void E3dScene::SetShadowPlaneDirection(const basegfx::B3DVector& rVec)
 {
-    sal_uInt16 nSceneShadowSlant = (sal_uInt16)((atan2(rVec.getY(), rVec.getZ()) / F_PI180) + 0.5);
+    UINT16 nSceneShadowSlant = (UINT16)((atan2(rVec.getY(), rVec.getZ()) / F_PI180) + 0.5);
     GetProperties().SetObjectItemDirect(Svx3DShadowSlantItem(nSceneShadowSlant));
 }
 
@@ -857,7 +848,7 @@ bool E3dScene::BegCreate(SdrDragStat& rStat)
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
     NbcSetSnapRect(aRect1);
-    return sal_True;
+    return TRUE;
 }
 
 bool E3dScene::MovCreate(SdrDragStat& rStat)
@@ -868,8 +859,8 @@ bool E3dScene::MovCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     NbcSetSnapRect(aRect1);
     SetBoundRectDirty();
-    bSnapRectDirty=sal_True;
-    return sal_True;
+    bSnapRectDirty=TRUE;
+    return TRUE;
 }
 
 bool E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
@@ -884,7 +875,7 @@ bool E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 bool E3dScene::BckCreate(SdrDragStat& /*rStat*/)
 {
-    return sal_False;
+    return FALSE;
 }
 
 void E3dScene::BrkCreate(SdrDragStat& /*rStat*/)

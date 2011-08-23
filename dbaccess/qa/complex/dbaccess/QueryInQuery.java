@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,17 +37,28 @@ import connectivity.tools.RowSet;
 import com.sun.star.sdbc.XStatement;
 import com.sun.star.sdbc.XResultSet;
 
-// ---------- junit imports -----------------
-import org.junit.Test;
-import static org.junit.Assert.*;
-// ------------------------------------------
-
 public class QueryInQuery extends CRMBasedTestCase
 {
     private static final String QUERY_PRODUCTS = "query products";
+    // --------------------------------------------------------------------------------------------------------
+    public String[] getTestMethodNames()
+    {
+        return new String[] {
+            "executeSimpleSelect",
+            "executeAliasedSelect",
+            "checkNameCollisions",
+            "checkCyclicReferences",
+            "checkStatementQiQSupport"
+        };
+    }
 
     // --------------------------------------------------------------------------------------------------------
-    @Override
+    public String getTestObjectName()
+    {
+        return "QueryInQuery";
+    }
+
+    // --------------------------------------------------------------------------------------------------------
     protected void createTestCase()
     {
         try
@@ -58,7 +69,7 @@ public class QueryInQuery extends CRMBasedTestCase
         catch ( Exception e )
         {
             e.printStackTrace( System.err );
-            fail( "caught an exception (" + e.getMessage() + ") while creating the test case" );
+            assure( "caught an exception (" + e.getMessage() + ") while creating the test case", false );
         }
     }
 
@@ -73,17 +84,17 @@ public class QueryInQuery extends CRMBasedTestCase
 
         outerRowSet.last();
         innerRowSet.last();
-        assertTrue( "wrong record counts", outerRowSet.getRow() == innerRowSet.getRow() );
+        assure( "wrong record counts", outerRowSet.getRow() == innerRowSet.getRow() );
 
         outerRowSet.beforeFirst();
         innerRowSet.beforeFirst();
-        assertTrue( "wrong column counts", outerRowSet.getColumnCount() == innerRowSet.getColumnCount() );
+        assure( "wrong column counts", outerRowSet.getColumnCount() == innerRowSet.getColumnCount() );
 
         while ( outerRowSet.next() && innerRowSet.next() )
         {
             for ( int i=1; i <= outerRowSet.getColumnCount(); ++i )
             {
-                assertTrue( "content of column " + i + " of row " + outerRowSet.getRow() + " not identical",
+                assure( "content of column " + i + " of row " + outerRowSet.getRow() + " not identical",
                     innerRowSet.getString(i).equals( outerRowSet.getString(i) ) );
             }
         }
@@ -92,7 +103,6 @@ public class QueryInQuery extends CRMBasedTestCase
     // --------------------------------------------------------------------------------------------------------
     /** executes a SQL statement simply selecting all columns from a query
      */
-    @Test
     public void executeSimpleSelect() throws SQLException
     {
         verifyEqualRowSetContent(
@@ -103,7 +113,6 @@ public class QueryInQuery extends CRMBasedTestCase
     // --------------------------------------------------------------------------------------------------------
     /** verifies that aliases for inner queries work as expected
      */
-    @Test
     public void executeAliasedSelect() throws SQLException
     {
         verifyEqualRowSetContent(
@@ -117,7 +126,6 @@ public class QueryInQuery extends CRMBasedTestCase
     // --------------------------------------------------------------------------------------------------------
     /** verifies that aliases for inner queries work as expected
      */
-    @Test
     public void checkNameCollisions()
     {
         // create a query with a name which is used by a table
@@ -129,7 +137,7 @@ public class QueryInQuery extends CRMBasedTestCase
         catch ( WrappedTargetException e ) { caughtExpected = true; }
         catch ( IllegalArgumentException e ) {}
         catch ( ElementExistException e ) { caughtExpected = true; }
-        assertTrue( "creating queries with the name of an existing table should not be possible",
+        assure( "creating queries with the name of an existing table should not be possible",
             caughtExpected );
 
         // create a table with a name which is used by a query
@@ -145,12 +153,11 @@ public class QueryInQuery extends CRMBasedTestCase
         }
         catch ( SQLException e ) { caughtExpected = true; }
         catch ( ElementExistException ex ) { }
-        assertTrue( "creating tables with the name of an existing query should not be possible",
+        assure( "creating tables with the name of an existing query should not be possible",
             caughtExpected );
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Test
     public void checkCyclicReferences() throws ElementExistException, WrappedTargetException, IllegalArgumentException
     {
         // some queries which create a cycle in the sub query tree
@@ -165,22 +172,21 @@ public class QueryInQuery extends CRMBasedTestCase
         try { rowSet.execute(); }
         catch ( SQLException e ) { caughtExpected = ( e.ErrorCode == -com.sun.star.sdb.ErrorCondition.PARSER_CYCLIC_SUB_QUERIES ); }
 
-        assertTrue( "executing a query with cyclic nested sub queries should fail!", caughtExpected );
+        assure( "executing a query with cyclic nested sub queries should fail!", caughtExpected );
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Test
     public void checkStatementQiQSupport()
     {
         try
         {
             final XStatement statement = m_database.getConnection().createStatement();
             final XResultSet resultSet = statement.executeQuery( "SELECT * FROM \"query products\"" );
-            assertTrue( "Result Set is null", resultSet != null );
+            assure( "Result Set is null", resultSet != null );
         }
         catch( SQLException e )
         {
-            fail( "SDB level statements do not allow for queries in queries" );
+            assure( "SDB level statements do not allow for queries in queries", false );
         }
     }
 }

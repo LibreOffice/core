@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #ifndef NUMTYPE
 
-#define NUMTYPE sal_uInt16
+#define NUMTYPE	USHORT
 #define SfxXRangeItem SfxRangeItem
 #define SfxXRangesItem SfxUShortRangesItem
 #include <svl/rngitem.hxx>
@@ -39,7 +39,7 @@
 #undef SfxXRangesItem
 
 #ifndef _SFXITEMS_HXX
-#define NUMTYPE sal_uLong
+#define NUMTYPE	ULONG
 #define SfxXRangeItem SfxULongRangeItem
 #define SfxXRangesItem SfxULongRangesItem
 #include <svl/rngitem.hxx>
@@ -61,28 +61,28 @@ class SvStream;
 class SVL_DLLPUBLIC SfxXRangeItem : public SfxPoolItem
 {
 private:
-    NUMTYPE                     nFrom;
-    NUMTYPE                     nTo;
+    NUMTYPE 					nFrom;
+    NUMTYPE 					nTo;
 public:
                                 TYPEINFO();
                                 SfxXRangeItem();
-                                SfxXRangeItem( sal_uInt16 nWID, NUMTYPE nFrom, NUMTYPE nTo );
-                                SfxXRangeItem( sal_uInt16 nWID, SvStream &rStream );
+                                SfxXRangeItem( USHORT nWID, NUMTYPE nFrom, NUMTYPE nTo );
+                                SfxXRangeItem( USHORT nWID, SvStream &rStream );
                                 SfxXRangeItem( const SfxXRangeItem& rItem );
-    virtual int                 operator==( const SfxPoolItem& ) const;
+    virtual int 				operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     XubString &rText,
                                     const IntlWrapper * = 0 ) const;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    inline NUMTYPE&             From() { return nFrom; }
-    inline NUMTYPE              From() const { return nFrom; }
-    inline NUMTYPE&             To() { return nTo; }
-    inline NUMTYPE              To() const { return nTo; }
-    inline sal_Bool                 HasRange() const { return nTo>nFrom; }
-    virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVersion ) const;
-    virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*    	Clone( SfxItemPool *pPool = 0 ) const;
+    inline NUMTYPE&				From() { return nFrom; }
+    inline NUMTYPE				From() const { return nFrom; }
+    inline NUMTYPE&				To() { return nTo; }
+    inline NUMTYPE				To() const { return nTo; }
+    inline BOOL					HasRange() const { return nTo>nFrom; }
+    virtual SfxPoolItem*		Create( SvStream &, USHORT nVersion ) const;
+    virtual SvStream&			Store( SvStream &, USHORT nItemVersion ) const;
 };
 
 // -----------------------------------------------------------------------
@@ -90,25 +90,25 @@ public:
 class SVL_DLLPUBLIC SfxXRangesItem : public SfxPoolItem
 {
 private:
-    NUMTYPE*                    _pRanges;
+    NUMTYPE*					_pRanges;
 
 public:
                                 TYPEINFO();
                                 SfxXRangesItem();
-                                SfxXRangesItem( sal_uInt16 nWID, const NUMTYPE *pRanges );
-                                SfxXRangesItem( sal_uInt16 nWID, SvStream &rStream );
+                                SfxXRangesItem( USHORT nWID, const NUMTYPE *pRanges );
+                                SfxXRangesItem( USHORT nWID, SvStream &rStream );
                                 SfxXRangesItem( const SfxXRangesItem& rItem );
-    virtual                     ~SfxXRangesItem();
-    virtual int                 operator==( const SfxPoolItem& ) const;
+    virtual 					~SfxXRangesItem();
+    virtual int 				operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     XubString &rText,
                                     const IntlWrapper * = 0 ) const;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    inline const NUMTYPE*       GetRanges() const { return _pRanges; }
-    virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVersion ) const;
-    virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*    	Clone( SfxItemPool *pPool = 0 ) const;
+    inline const NUMTYPE*		GetRanges() const { return _pRanges; }
+    virtual SfxPoolItem*		Create( SvStream &, USHORT nVersion ) const;
+    virtual SvStream&			Store( SvStream &, USHORT nItemVersion ) const;
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ SwUndoFlyStrAttr::~SwUndoFlyStrAttr()
 {
 }
 
-void SwUndoFlyStrAttr::UndoImpl(::sw::UndoRedoContext &)
+void SwUndoFlyStrAttr::Undo( SwUndoIter& )
 {
     switch ( GetId() )
     {
@@ -70,7 +70,7 @@ void SwUndoFlyStrAttr::UndoImpl(::sw::UndoRedoContext &)
     }
 }
 
-void SwUndoFlyStrAttr::RedoImpl(::sw::UndoRedoContext &)
+void SwUndoFlyStrAttr::Redo( SwUndoIter& )
 {
     switch ( GetId() )
     {
@@ -88,6 +88,11 @@ void SwUndoFlyStrAttr::RedoImpl(::sw::UndoRedoContext &)
         {
         }
     }
+}
+
+void SwUndoFlyStrAttr::Repeat( SwUndoIter& )
+{
+    // no repeat
 }
 
 SwRewriter SwUndoFlyStrAttr::GetRewriter() const

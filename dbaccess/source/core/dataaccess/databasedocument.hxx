@@ -146,7 +146,7 @@ private:
 //============================================================
 //= ODatabaseDocument
 //============================================================
-typedef ::comphelper::PartialWeakComponentImplHelper17 <   ::com::sun::star::frame::XModel2
+typedef ::comphelper::WeakComponentImplHelper17 <   ::com::sun::star::frame::XModel2
                                                 ,   ::com::sun::star::util::XModifiable
                                                 ,   ::com::sun::star::frame::XStorable
                                                 ,   ::com::sun::star::document::XEventBroadcaster
@@ -166,11 +166,11 @@ typedef ::comphelper::PartialWeakComponentImplHelper17 <   ::com::sun::star::fra
                                                 >   ODatabaseDocument_OfficeDocument;
 
 typedef ::cppu::ImplHelper3<    ::com::sun::star::frame::XTitle
-                            ,   ::com::sun::star::frame::XTitleChangeBroadcaster
-                            ,   ::com::sun::star::frame::XUntitledNumbers
+                            ,	::com::sun::star::frame::XTitleChangeBroadcaster
+                            ,	::com::sun::star::frame::XUntitledNumbers
                             >   ODatabaseDocument_Title;
 
-class ODatabaseDocument :public ModelDependentComponent             // ModelDependentComponent must be first!
+class ODatabaseDocument	:public ModelDependentComponent             // ModelDependentComponent must be first!
                         ,public ODatabaseDocument_OfficeDocument
                         ,public ODatabaseDocument_Title
 {
@@ -182,11 +182,11 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     };
 
     DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::frame::XUntitledNumbers >,TNumberedController);
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>            m_xUIConfigurationManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>			m_xUIConfigurationManager;
 
-    ::cppu::OInterfaceContainerHelper                                                           m_aModifyListeners;
-    ::cppu::OInterfaceContainerHelper                                                           m_aCloseListener;
-    ::cppu::OInterfaceContainerHelper                                                           m_aStorageListeners;
+    ::cppu::OInterfaceContainerHelper					                                        m_aModifyListeners;
+    ::cppu::OInterfaceContainerHelper					                                        m_aCloseListener;
+    ::cppu::OInterfaceContainerHelper					                                        m_aStorageListeners;
 
     DocumentEvents*                                                                             m_pEventContainer;
     ::rtl::Reference< DocumentEventExecutor >                                                   m_pEventExecutor;
@@ -196,8 +196,8 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     Controllers                                                                                 m_aControllers;
     ViewMonitor                                                                                 m_aViewMonitor;
 
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >            m_xForms;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >            m_xReports;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >	        m_xForms;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >	        m_xReports;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::script::provider::XScriptProvider > m_xScriptProvider;
 
     /** @short  such module manager is used to classify new opened documents. */
@@ -249,8 +249,8 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     /// write a single XML stream into the package
     void WriteThroughComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > & xComponent,  /// the component we export
-        const sal_Char* pStreamName,                                                                /// the stream name
-        const sal_Char* pServiceName,                                                               /// service name of the component
+        const sal_Char* pStreamName,		                                                        /// the stream name
+        const sal_Char* pServiceName,		                                                        /// service name of the component
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> & rArguments,            /// the argument (XInitialization)
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> & rMediaDesc,/// output descriptor
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo
@@ -268,11 +268,11 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     ) const;
 
     /** writes the content and settings
-        @param  sURL
+        @param	sURL
             The URL
-        @param  lArguments
+        @param	lArguments
             The media descriptor
-        @param  _xStorageToSaveTo
+        @param	_xStorageToSaveTo
             The storage which should be used for saving
     */
     void impl_writeStorage_throw(
@@ -292,7 +292,7 @@ private:
     // Do NOT create those documents directly, always use ODatabaseModelImpl::getModel. Reason is that
     // ODatabaseDocument requires clear ownership, and in turn lifetime synchronisation with the ModelImpl.
     // If you create a ODatabaseDocument directly, you might easily create a leak.
-    // #i50905#
+    // #i50905# / 2005-06-20 / frank.schonheit@sun.com
 
 protected:
     virtual void SAL_CALL disposing();
@@ -318,7 +318,7 @@ public:
         SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
     // XInterface
-    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any	SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw ();
     virtual void SAL_CALL release(  ) throw ();
 
@@ -703,7 +703,7 @@ private:
     const ODatabaseDocument& m_document;
 };
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 #endif // _DBA_COREDATAACCESS_DATABASEDOCUMENT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -5,7 +5,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -79,33 +79,33 @@ while (<>) {
         print STDOUT "Can't open input file $ARGV: $!\n";
         exit 1;
     }
-
+    
     $srcfile = substr($ARGV, rindex($ARGV, "/") + 1);
-
+    
     unless (open OUTFILE,"> $destdir/$prefix$srcfile") {
         print STDOUT "Can't open output file $destdir/$prefix$srcfile: $!\n";
         exit 1;
     }
-
+    
     while (<INFILE>) {
         # remove possible Windows line-ends
         chomp;
-
-        # patch all occurrences of openoffice in ICON line with
+        
+        # patch all occurances of openoffice in ICON line with
         # $prefix
         s/Icon=/Icon=$iconprefix/;
 
-        # patch all occurrences of openoffice in icon_filename
+        # patch all occurances of openoffice in icon_filename
         # line with $prefix
         s/icon_filename=/icon_filename=$iconprefix/;
 
-        # patch all occurrences of openoffice in EXEC line with
+        # patch all occurances of openoffice in EXEC line with
         # $productfilename
         if ( /Exec/ ) {
             s/openoffice/$productfilename/;
         }
-
-        # if $productfilename != "openoffice, add it to the list
+        
+        # if $productfilename != "openoffice, add it to the list 
         # of applications.
         if ( /user_level=$/ ) {
             $_ = $_ . $productfilename;
@@ -114,7 +114,7 @@ while (<>) {
             s/user_level=/user_level=$productfilename,/
         }
 
-        # append special category if specified
+        # append special category if specified        
         if ( /Categories/ ) {
             if ( length($category) > 0 ) {
                 $_ = "$_$category;";
@@ -126,10 +126,10 @@ while (<>) {
 
         # replace %PRODUCTNAME placeholders
         s/%PRODUCTNAME/$productname/g;
-
+        
         print OUTFILE "$_\n";
     }
-
+    
     close(OUTFILE);
     close(INFILE);
 }

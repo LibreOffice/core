@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module chart {
     Shapes added by a user via the clipboard are not treated as chart
     elements.
 
-    <p>The list of objects that implement this service is
+    <p>The list of objects that implement this service is 
     <type scope="::com::sun::star::chart">ChartTitle</type>,
     <type scope="::com::sun::star::chart">ChartLegend</type>,
     <type scope="::com::sun::star::chart">Diagram</type>,
@@ -63,7 +63,7 @@ module com {  module sun {  module star {  module chart {
 */
 published service AccessibleChartElement
 {
-    /** Base interface for being accessible.  It gives access to the
+    /** Base interface for being accessible.  It gives access to the 
         <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
         interface.
     */
@@ -97,14 +97,14 @@ published service AccessibleChartElement
              contain children, all other objects in a chart do not, i.e., are
              leaves in the document representation tree.</dd>
          <dt>Parent</dt>
-             <dd>Because the <code>setParent</code> method from the JAVA has
+             <dd>Because the <code>setParent</code> method from the JAA has
              been removed, the reference to the parent has to be provided in an
              implementation specific way.</dd>
          <dt>Relations</dt>
              <dd>They are not used at the moment.</dd>
-
+ 
          <dt>States</dt>
-             <dd>The states supported by this service are:
+             <dd>The states supported by this service are: 
              <ul>
 
               <li><const scope="::com::sun::star::accessibility">AccessibleStateType::DEFUNC</const>
@@ -157,8 +157,8 @@ published service AccessibleChartElement
         position in one or the other coordinate system).</p>
 
         <p>Focus handling depends on support of the
-        <type scope="::com::sun::star::accessibility">XAccessibleText</type> and
-        <type scope="::com::sun::star::accessibility">XAccessibleEditableText</type>
+        <type scope="::com::sun::star::accessibility">XAccessibleText</type> and 
+        <type scope="::com::sun::star::accessibility">XAccessibleEditableText</type> 
         interfaces.</p>
 
         <p>Key bindings are not supported at the moment</p>
@@ -166,11 +166,11 @@ published service AccessibleChartElement
     interface ::com::sun::star::accessibility::XAccessibleComponent;
 
     /** Give extended access to the graphical representation of a chart element.
-
+        
         <p>This interface is used primarily to provide the predominant
         foreground and background colors and&mdash;if applicable, i.e. the
-        <type scope="::com::sun::star::accessibility">XAccessibleText</type>
-        interface is supported&mdash;information about the font used to display
+        <type scope="::com::sun::star::accessibility">XAccessibleText</type> 
+        interface is supported&mdash;information about the font used to display 
         text.</p>
 
         <p>The foreground and background colors may in some cases be directly

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,6 +39,8 @@
 #include "com/sun/star/bridge/XBridge.hpp"
 #include "com/sun/star/bridge/XBridgeFactory.hpp"
 #include "com/sun/star/bridge/XInstanceProvider.hpp"
+#include "com/sun/star/bridge/XProtocolProperties.hdl"
+#include "com/sun/star/bridge/XProtocolProperties.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 #include "com/sun/star/connection/ConnectionSetupException.hpp"
 #include "com/sun/star/connection/NoConnectException.hpp"
@@ -48,6 +50,8 @@
 #include "com/sun/star/frame/XComponentLoader.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/io/XOutputStream.hpp"
+#include "com/sun/star/lang/DisposedException.hdl"
+#include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/lang/XComponent.hpp"

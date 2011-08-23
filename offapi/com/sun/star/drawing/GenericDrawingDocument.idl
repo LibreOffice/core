@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -219,7 +219,7 @@ service GenericDrawingDocument
 
     //-------------------------------------------------------------------------
 
-    /** if this document is an OLE client, this is the current visible area
+    /** if this document is an ole client, this is the current visible area
         in 100th mm
     */
     [property] com::sun::star::awt::Rectangle VisibleArea;

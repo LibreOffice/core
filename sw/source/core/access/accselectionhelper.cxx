@@ -85,7 +85,7 @@ void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
     Reference < XAccessibleSelection >xSelThis( xThis, UNO_QUERY );
     lang::IndexOutOfBoundsException aExcept(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("index out of bounds") ),
-                xSelThis );                                     \
+                xSelThis );										\
     throw aExcept;
 }
 
@@ -107,14 +107,19 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
 
     // we can only select fly frames, so we ignore (should: return
     // false) all other attempts at child selection
+    sal_Bool bRet = sal_False;
     SwFEShell* pFEShell = GetFEShell();
     if( pFEShell != NULL )
     {
         const SdrObject *pObj = aChild.GetDrawObject();
         if( pObj )
-            rContext.Select( const_cast< SdrObject *>( pObj ), 0==aChild.GetSwFrm());
+        {
+            bRet = rContext.Select( const_cast< SdrObject *>( pObj ), 0==aChild.GetSwFrm());
+        }
     }
     // no frame shell, or no frame, or no fly frame -> can't select
+
+    // return bRet;
 }
 
 sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
@@ -317,7 +322,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     return xChild;
 }
 
-// index has to be treated as global child index.
+// --> OD 2004-11-16 #111714# - index has to be treated as global child index.
 void SwAccessibleSelectionHelper::deselectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,

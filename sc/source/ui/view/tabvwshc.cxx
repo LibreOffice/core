@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,38 +72,36 @@
 
 //------------------------------------------------------------------
 
-void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
+void ScTabViewShell::SetCurRefDlgId( USHORT nNew )
 {
-    //  CurRefDlgId is stored in ScModule to find if a ref dialog is open,
-    //  and in the view to identify the view that has opened the dialog
+    //	CurRefDlgId is stored in ScModule to find if a ref dialog is open,
+    //	and in the view to identify the view that has opened the dialog
     nCurRefDlgId = nNew;
 }
 
 SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                         SfxBindings* pB, SfxChildWindow* pCW, SfxChildWinInfo* pInfo,
-                        Window* pParent, sal_uInt16 nSlotId )
+                        Window* pParent, USHORT nSlotId )
 {
-    //  Dialog nur aufmachen, wenn ueber ScModule::SetRefDialog gerufen, damit
-    //  z.B. nach einem Absturz offene Ref-Dialoge nicht wiederkommen (#42341#).
+    //	Dialog nur aufmachen, wenn ueber ScModule::SetRefDialog gerufen, damit
+    //	z.B. nach einem Absturz offene Ref-Dialoge nicht wiederkommen (#42341#).
 
     if ( SC_MOD()->GetCurRefDlgId() != nSlotId )
         return NULL;
 
     if ( nCurRefDlgId != nSlotId )
     {
-        //  the dialog has been opened in a different view
-        //  -> lock the dispatcher for this view (modal mode)
+        //	the dialog has been opened in a different view
+        //	-> lock the dispatcher for this view (modal mode)
 
-        GetViewData()->GetDispatcher().Lock( sal_True );    // lock is reset when closing dialog
+        GetViewData()->GetDispatcher().Lock( TRUE );	// lock is reset when closing dialog
         return NULL;
     }
 
     SfxModelessDialog* pResult = 0;
 
     if(pCW)
-        pCW->SetHideNotDelete(sal_True);
-
-    ScDocument* pDoc = GetViewData()->GetDocument();
+        pCW->SetHideNotDelete(TRUE);
 
     switch( nSlotId )
     {
@@ -127,17 +125,17 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                 SCITEM_CONSOLIDATEDATA );
 
             const ScConsolidateParam* pDlgData =
-                            pDoc->GetConsolidateDlgData();
+                            GetViewData()->GetDocument()->GetConsolidateDlgData();
 
             if ( !pDlgData )
             {
-                ScConsolidateParam  aConsParam;
+                ScConsolidateParam	aConsParam;
                 SCCOL nStartCol, nEndCol;
                 SCROW nStartRow, nEndRow;
                 SCTAB nStartTab, nEndTab;
 
                 GetViewData()->GetSimpleArea( nStartCol, nStartRow, nStartTab,
-                                              nEndCol,   nEndRow,   nEndTab );
+                                              nEndCol,	 nEndRow,	nEndTab );
 
                 PutInOrder( nStartCol, nEndCol );
                 PutInOrder( nStartRow, nEndRow );
@@ -160,11 +158,11 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case SID_DEFINE_DBNAME:
         {
-            //  wenn auf einem bestehenden Bereich aufgerufen, den markieren
-            GetDBData( sal_True, SC_DB_OLD );
+            //	wenn auf einem bestehenden Bereich aufgerufen, den markieren
+            GetDBData( TRUE, SC_DB_OLD );
             const ScMarkData& rMark = GetViewData()->GetMarkData();
             if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
-                MarkDataArea( false );
+                MarkDataArea( FALSE );
 
             pResult = new ScDbNameDlg( pB, pCW, pParent, GetViewData() );
         }
@@ -172,18 +170,14 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case SID_SPECIAL_FILTER:
         {
-            ScQueryParam    aQueryParam;
-            SfxItemSet      aArgSet( GetPool(),
+            ScQueryParam	aQueryParam;
+            SfxItemSet		aArgSet( GetPool(),
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
-            pDBData->ExtendDataArea(pDoc);
+            ScDBData* pDBData = GetDBData(true, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, true, true);
             pDBData->GetQueryParam( aQueryParam );
-
-            ScRange aArea;
-            pDBData->GetArea(aArea);
-            MarkRange(aArea, false);
+            aQueryParam.bUseDynamicRange = true;
 
             ScQueryItem aItem( SCITEM_QUERYDATA, GetViewData(), &aQueryParam );
             ScRange aAdvSource;
@@ -202,18 +196,14 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_FILTER:
         {
 
-            ScQueryParam    aQueryParam;
-            SfxItemSet      aArgSet( GetPool(),
+            ScQueryParam	aQueryParam;
+            SfxItemSet		aArgSet( GetPool(),
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
-            pDBData->ExtendDataArea(pDoc);
+            ScDBData* pDBData = GetDBData(true, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, true, true);
             pDBData->GetQueryParam( aQueryParam );
-
-            ScRange aArea;
-            pDBData->GetArea(aArea);
-            MarkRange(aArea, false);
+            aQueryParam.bUseDynamicRange = true;
 
             aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA,
                                       GetViewData(),
@@ -228,11 +218,11 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case SID_OPENDLG_TABOP:
         {
-            ScViewData*  pViewData  = GetViewData();
-            ScRefAddress  aCurPos   ( pViewData->GetCurX(),
+            ScViewData*  pViewData	= GetViewData();
+            ScRefAddress  aCurPos	( pViewData->GetCurX(),
                                       pViewData->GetCurY(),
                                       pViewData->GetTabNo(),
-                                      false, false, false );
+                                      FALSE, FALSE, FALSE );
 
             pResult = new ScTabOpDlg( pB, pCW, pParent, pViewData->GetDocument(), aCurPos );
         }
@@ -240,7 +230,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case SID_OPENDLG_SOLVE:
         {
-            ScViewData*  pViewData  = GetViewData();
+            ScViewData*  pViewData	= GetViewData();
             ScAddress aCurPos(  pViewData->GetCurX(),
                                 pViewData->GetCurY(),
                                 pViewData->GetTabNo());
@@ -258,13 +248,13 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case SID_OPENDLG_PIVOTTABLE:
         {
-            //  all settings must be in pDialogDPObject
+            //	all settings must be in pDialogDPObject
 
             if( pDialogDPObject )
             {
                 // Check for an existing datapilot output.
                 ScViewData* pViewData = GetViewData();
-                ScDPObject* pObj = pDoc->GetDPAtCursor(
+                ScDPObject* pObj = GetViewData()->GetDocument()->GetDPAtCursor(
                     pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
 
                 GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
@@ -283,6 +273,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             ScViewData* pViewData = GetViewData();
 
+            ScDocument* pDoc = pViewData->GetDocument();
             const ScConditionalFormat* pForm = pDoc->GetCondFormat(
                 pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
 
@@ -295,7 +286,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case SID_OPENDLG_FUNCTION:
         {
-            //  Dialog schaut selber, was in der Zelle steht
+            //	Dialog schaut selber, was in der Zelle steht
 
             pResult = new ScFormulaDlg( pB, pCW, pParent, GetViewData(),ScGlobal::GetStarCalcFunctionMgr() );
         }
@@ -303,7 +294,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case FID_CHG_SHOW:
         {
-            //  Dialog schaut selber, was in der Zelle steht
+            //	Dialog schaut selber, was in der Zelle steht
 
             pResult = new ScHighlightChgDlg( pB, pCW, pParent, GetViewData() );
         }
@@ -311,7 +302,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case WID_SIMPLE_REF:
         {
-            //  Dialog schaut selber, was in der Zelle steht
+            //	Dialog schaut selber, was in der Zelle steht
 
             ScViewData* pViewData = GetViewData();
             pViewData->SetRefTabNo( pViewData->GetTabNo() );
@@ -321,15 +312,15 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
 
         default:
-        OSL_FAIL( "ScTabViewShell::CreateRefDialog: unbekannte ID" );
+        DBG_ERROR( "ScTabViewShell::CreateRefDialog: unbekannte ID" );
         break;
     }
 
     if (pResult)
     {
-        //  Die Dialoge gehen immer mit eingeklapptem Zusaetze-Button auf,
-        //  darum muss die Groesse ueber das Initialize gerettet werden
-        //  (oder den Zusaetze-Status mit speichern !!!)
+        //	Die Dialoge gehen immer mit eingeklapptem Zusaetze-Button auf,
+        //	darum muss die Groesse ueber das Initialize gerettet werden
+        //	(oder den Zusaetze-Status mit speichern !!!)
 
         Size aSize = pResult->GetSizePixel();
         pResult->Initialize( pInfo );

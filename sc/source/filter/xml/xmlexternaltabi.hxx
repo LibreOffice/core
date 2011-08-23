@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ struct ScXMLExternalTabData;
 class ScXMLExternalRefTabSourceContext : public SvXMLImportContext
 {
 public:
-    ScXMLExternalRefTabSourceContext( ScXMLImport& rImport, sal_uInt16 nPrefix,
+    ScXMLExternalRefTabSourceContext( ScXMLImport& rImport, USHORT nPrefix,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -46,7 +46,7 @@ public:
 
     virtual ~ScXMLExternalRefTabSourceContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -67,7 +67,7 @@ private:
 class ScXMLExternalRefRowsContext : public SvXMLImportContext
 {
 public:
-    ScXMLExternalRefRowsContext( ScXMLImport& rImport, sal_uInt16 nPrefix,
+    ScXMLExternalRefRowsContext( ScXMLImport& rImport, USHORT nPrefix,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -75,7 +75,7 @@ public:
 
     virtual ~ScXMLExternalRefRowsContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -91,7 +91,7 @@ private:
 class ScXMLExternalRefRowContext : public SvXMLImportContext
 {
 public:
-    ScXMLExternalRefRowContext( ScXMLImport& rImport, sal_uInt16 nPrefix,
+    ScXMLExternalRefRowContext( ScXMLImport& rImport, USHORT nPrefix,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -99,7 +99,7 @@ public:
 
     virtual ~ScXMLExternalRefRowContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -116,7 +116,7 @@ private:
 class ScXMLExternalRefCellContext : public SvXMLImportContext
 {
 public:
-    ScXMLExternalRefCellContext( ScXMLImport& rImport, sal_uInt16 nPrefix,
+    ScXMLExternalRefCellContext( ScXMLImport& rImport, USHORT nPrefix,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -124,7 +124,7 @@ public:
 
     virtual ~ScXMLExternalRefCellContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -150,7 +150,7 @@ private:
 class ScXMLExternalRefCellTextContext : public SvXMLImportContext
 {
 public:
-    ScXMLExternalRefCellTextContext( ScXMLImport& rImport, sal_uInt16 nPrefix,
+    ScXMLExternalRefCellTextContext( ScXMLImport& rImport, USHORT nPrefix,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -158,7 +158,7 @@ public:
 
     virtual ~ScXMLExternalRefCellTextContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,20 +33,23 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/factory.hxx>	// helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <i18npool/mslangid.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <tools/debug.hxx>
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
 
 #include <hyphen.h>
+
 #include <hyphenimp.hxx>
 
 #include <linguistic/hyphdta.hxx>
 #include <rtl/ustring.hxx>
+
 #include <rtl/ustrbuf.hxx>
-#include <rtl/textenc.h>
 
 #include <linguistic/lngprops.hxx>
 #include <unotools/pathoptions.hxx>
@@ -64,14 +67,13 @@
 
 using namespace utl;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
-
-using ::rtl::OUString;
 
 // values asigned to capitalization types
 #define CAPTYPE_UNKNOWN 0
@@ -81,18 +83,21 @@ using ::rtl::OUString;
 #define CAPTYPE_MIXED   4
 
 // min, max
+
+//#define Min(a,b) (a < b ? a : b)
 #define Max(a,b) (a > b ? a : b)
 
 ///////////////////////////////////////////////////////////////////////////
 
 
 Hyphenator::Hyphenator() :
-    aEvtListeners   ( GetLinguMutex() )
+    aEvtListeners	( GetLinguMutex() )
 {
-    bDisposing = sal_False;
+    bDisposing = FALSE;
     pPropHelper = NULL;
-    aDicts = NULL;
-    numdict = 0;
+        aDicts = NULL;
+        numdict = 0;
+
 }
 
 
@@ -101,29 +106,28 @@ Hyphenator::~Hyphenator()
     if (pPropHelper)
         pPropHelper->RemoveAsPropListener();
 
-    if ((numdict) && (aDicts))
-    {
-        for (int i=0; i < numdict; i++)
-        {
+        if ((numdict) && (aDicts)) {
+      for (int i=0; i < numdict; i++) {
             if (aDicts[i].apCC) delete aDicts[i].apCC;
             aDicts[i].apCC = NULL;
-        }
+      }
     }
-    if (aDicts) delete[] aDicts;
+        if (aDicts) delete[] aDicts;
     aDicts = NULL;
-    numdict = 0;
+        numdict = 0;
 }
 
 
 PropertyHelper_Hyphen & Hyphenator::GetPropHelper_Impl()
 {
+
     if (!pPropHelper)
     {
-        Reference< XPropertySet >   xPropSet( GetLinguProperties(), UNO_QUERY );
+        Reference< XPropertySet	>	xPropSet( GetLinguProperties(), UNO_QUERY );
 
-        pPropHelper = new PropertyHelper_Hyphen ((XHyphenator *) this, xPropSet );
+        pPropHelper	= new PropertyHelper_Hyphen ((XHyphenator *) this, xPropSet );
         xPropHelper = pPropHelper;
-        pPropHelper->AddAsPropListener();   //! after a reference is established
+        pPropHelper->AddAsPropListener();	//! after a reference is established
     }
     return *pPropHelper;
 
@@ -133,7 +137,7 @@ PropertyHelper_Hyphen & Hyphenator::GetPropHelper_Impl()
 Sequence< Locale > SAL_CALL Hyphenator::getLocales()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     // this routine should return the locales supported by the installed
     // dictionaries.
@@ -206,7 +210,12 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
 
             // add dictionary information
             aDicts = new HDInfo[numdict];
-
+/*
+            aTEncs  = new rtl_TextEncoding [numdict];
+            aTLocs  = new Locale [numdict];
+            aTNames = new OUString [numdict];
+            aCharSetInfo = new CharClass* [numdict];
+*/
             k = 0;
             for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
             {
@@ -222,7 +231,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                     for (sal_Int32 i = 0;  i < nLocales;  ++i)
                     {
                         aDicts[k].aPtr = NULL;
-                        aDicts[k].eEnc = RTL_TEXTENCODING_DONTKNOW;
+                        aDicts[k].aEnc = 0;
                         aDicts[k].aLoc = MsLangId::convertLanguageToLocale(
                                         MsLangId::convertIsoStringToLanguage( aDictIt->aLocaleNames[i] ));
                         aDicts[k].apCC = new CharClass( aDicts[k].aLoc );
@@ -257,19 +266,19 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
 sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    BOOL bRes = FALSE;
     if (!aSuppLocales.getLength())
         getLocales();
 
     const Locale *pLocale = aSuppLocales.getConstArray();
-    sal_Int32 nLen = aSuppLocales.getLength();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
+    INT32 nLen = aSuppLocales.getLength();
+    for (INT32 i = 0;  i < nLen;  ++i)
     {
         if (rLocale == pLocale[i])
         {
-            bRes = sal_True;
+            bRes = TRUE;
             break;
         }
     }
@@ -277,268 +286,240 @@ sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
 }
 
 
-Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const ::rtl::OUString& aWord,
-       const ::com::sun::star::lang::Locale& aLocale,
-       sal_Int16 nMaxLeading,
-       const ::com::sun::star::beans::PropertyValues& aProperties )
-       throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException)
+Reference< XHyphenatedWord > SAL_CALL
+Hyphenator::hyphenate( const ::rtl::OUString& aWord,
+               const ::com::sun::star::lang::Locale& aLocale,
+               sal_Int16 nMaxLeading,
+               const ::com::sun::star::beans::PropertyValues& aProperties )
+               throw (com::sun::star::uno::RuntimeException,
+               com::sun::star::lang::IllegalArgumentException)
 {
     int nHyphenationPos = -1;
-    int nHyphenationPosAlt = -1;
-    int nHyphenationPosAltHyph = -1;
+        int nHyphenationPosAlt = -1;
+        int nHyphenationPosAltHyph = -1;
     int wordlen;
     char *hyphens;
-    char *lcword;
-    int k = 0;
+        char *lcword;
+        int k = 0;
 
-    PropertyHelper_Hyphen & rHelper = GetPropHelper();
-    rHelper.SetTmpPropVals(aProperties);
+        PropertyHelper_Hyphen & rHelper = GetPropHelper();
+        rHelper.SetTmpPropVals(aProperties);
     sal_Int16 minTrail = rHelper.GetMinTrailing();
     sal_Int16 minLead = rHelper.GetMinLeading();
     sal_Int16 minLen = rHelper.GetMinWordLength();
 
     HyphenDict *dict = NULL;
-    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
-    CharClass * pCC = NULL;
+        rtl_TextEncoding aEnc = 0;
+        CharClass * pCC = NULL;
 
     Reference< XHyphenatedWord > xRes;
 
-    k = -1;
-    for (int j = 0; j < numdict; j++)
-    {
-        if (aLocale == aDicts[j].aLoc)
-            k = j;
-    }
+        k = -1;
+        for (int j = 0; j < numdict; j++)
+          if (aLocale == aDicts[j].aLoc) k = j;
 
-    // if we have a hyphenation dictionary matching this locale
-    if (k != -1)
-    {
+
+        // if we have a hyphenation dictionary matching this locale
+        if (k != -1) {
+
         // if this dictinary has not been loaded yet do that
-        if (!aDicts[k].aPtr)
-        {
-            OUString DictFN = aDicts[k].aName + A2OU(".dic");
-            OUString dictpath;
+        if (!aDicts[k].aPtr) {
 
-            osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
-            OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
+           OUString DictFN = aDicts[k].aName + A2OU(".dic");
+           OUString dictpath;
+
+           osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
+           OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 
 #if defined(WNT)
-            // workaround for Windows specifc problem that the
-            // path length in calls to 'fopen' is limted to somewhat
-            // about 120+ characters which will usually be exceed when
-            // using dictionaries as extensions.
-            sTmp = Win_GetShortPathName( dictpath );
+        // workaround for Windows specifc problem that the
+        // path length in calls to 'fopen' is limted to somewhat
+        // about 120+ characters which will usually be exceed when
+        // using dictionaries as extensions.
+        sTmp = Win_GetShortPathName( dictpath );
 #endif
 
-            if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
-            {
-               fprintf(stderr, "Couldn't find file %s\n", OU2ENC(dictpath, osl_getThreadTextEncoding()) );
-               return NULL;
-            }
-            aDicts[k].aPtr = dict;
-            aDicts[k].eEnc = getTextEncodingFromCharset(dict->cset);
+          if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
+          {
+             fprintf(stderr, "Couldn't find file %s\n", OU2ENC(dictpath, osl_getThreadTextEncoding()) );
+             return NULL;
+          }
+           aDicts[k].aPtr = dict;
+               aDicts[k].aEnc = rtl_getTextEncodingFromUnixCharset(dict->cset);
+               if (aDicts[k].aEnc == RTL_TEXTENCODING_DONTKNOW) {
+                  if (strcmp("ISCII-DEVANAGARI", dict->cset) == 0) {
+                     aDicts[k].aEnc = RTL_TEXTENCODING_ISCII_DEVANAGARI;
+                  } else if (strcmp("UTF-8", dict->cset) == 0) {
+                     aDicts[k].aEnc = RTL_TEXTENCODING_UTF8;
+                  }
+               }
         }
 
-        // other wise hyphenate the word with that dictionary
-        dict = aDicts[k].aPtr;
-        eEnc = aDicts[k].eEnc;
-        pCC =  aDicts[k].apCC;
+            // other wise hyphenate the word with that dictionary
+            dict = aDicts[k].aPtr;
+            aEnc = aDicts[k].aEnc;
+            pCC =  aDicts[k].apCC;
 
-        // we don't want to work with a default text encoding since following incorrect
-        // results may occur only for specific text and thus may be hard to notice.
-        // Thus better always make a clean exit here if the text encoding is in question.
-        // Hopefully something not working at all will raise proper attention quickly. ;-)
-        DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
-        if (eEnc == RTL_TEXTENCODING_DONTKNOW)
-            return NULL;
+            sal_uInt16 ct = CAPTYPE_UNKNOWN;
+            ct = capitalType(aWord, pCC);
 
-        sal_uInt16 ct = CAPTYPE_UNKNOWN;
-        ct = capitalType(aWord, pCC);
-
-        // first convert any smart quotes or apostrophes to normal ones
+            // first convert any smart quotes or apostrophes to normal ones
         OUStringBuffer rBuf(aWord);
-        sal_Int32 nc = rBuf.getLength();
-        sal_Unicode ch;
-        for (sal_Int32 ix=0; ix < nc; ix++)
-        {
+            sal_Int32 nc = rBuf.getLength();
+            sal_Unicode ch;
+        for (sal_Int32 ix=0; ix < nc; ix++) {
             ch = rBuf.charAt(ix);
-            if ((ch == 0x201C) || (ch == 0x201D))
-                rBuf.setCharAt(ix,(sal_Unicode)0x0022);
-            if ((ch == 0x2018) || (ch == 0x2019))
-                rBuf.setCharAt(ix,(sal_Unicode)0x0027);
-        }
-        OUString nWord(rBuf.makeStringAndClear());
+                if ((ch == 0x201C) || (ch == 0x201D)) rBuf.setCharAt(ix,(sal_Unicode)0x0022);
+                if ((ch == 0x2018) || (ch == 0x2019)) rBuf.setCharAt(ix,(sal_Unicode)0x0027);
+            }
+            OUString nWord(rBuf.makeStringAndClear());
 
-        // now convert word to all lowercase for pattern recognition
-        OUString nTerm(makeLowerCase(nWord, pCC));
+            // now convert word to all lowercase for pattern recognition
+            OUString nTerm(makeLowerCase(nWord, pCC));
 
-        // now convert word to needed encoding
-        OString encWord(OU2ENC(nTerm,eEnc));
+            // now convert word to needed encoding
+            OString encWord(OU2ENC(nTerm,aEnc));
 
         wordlen = encWord.getLength();
-        lcword = new char[wordlen + 1];
+            lcword = new char[wordlen + 1];
         hyphens = new char[wordlen + 5];
 
-        char ** rep = NULL; // replacements of discretionary hyphenation
-        int * pos = NULL; // array of [hyphenation point] minus [deletion position]
-        int * cut = NULL; // length of deletions in original word
+            char ** rep = NULL; // replacements of discretionary hyphenation
+            int * pos = NULL; // array of [hyphenation point] minus [deletion position]
+            int * cut = NULL; // length of deletions in original word
 
-        // copy converted word into simple char buffer
-        strcpy(lcword,encWord.getStr());
+            // copy converted word into simple char buffer
+            strcpy(lcword,encWord.getStr());
 
-        // now strip off any ending periods
-        int n = wordlen-1;
-        while((n >=0) && (lcword[n] == '.'))
-            n--;
-        n++;
-        if (n > 0)
-        {
-            const bool bFailed = 0 != hnj_hyphen_hyphenate3( dict, lcword, n, hyphens, NULL,
-                    &rep, &pos, &cut, minLead, minTrail,
-                    Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead  - Max(dict->lhmin, 2))),
-                    Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2))) );
-            if (bFailed)
-            {
-                //whoops something did not work
-                delete[] hyphens;
-                delete[] lcword;
-                if (rep)
-                {
-                    for(int j = 0; j < n; j++)
-                    {
+            // now strip off any ending periods
+            int n = wordlen-1;
+        while((n >=0) && (lcword[n] == '.')) n--;
+            n++;
+            if (n > 0) {
+           if (hnj_hyphen_hyphenate3(dict, lcword, n, hyphens, NULL, &rep, &pos, &cut,
+            minLead, minTrail, Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead - Max(dict->lhmin, 2))),
+            Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2)))))
+           {
+              //whoops something did not work
+              delete[] hyphens;
+                  delete[] lcword;
+                  if (rep) {
+                    for(int j = 0; j < n; j++) {
                         if (rep[j]) free(rep[j]);
                     }
                     free(rep);
-                }
-                if (pos) free(pos);
-                if (cut) free(cut);
-                return NULL;
+                  }
+                  if (pos) free(pos);
+                  if (cut) free(cut);
+              return NULL;
+           }
             }
-        }
 
-        // now backfill hyphens[] for any removed trailing periods
-        for (int c = n; c < wordlen; c++) hyphens[c] = '0';
-        hyphens[wordlen] = '\0';
+            // now backfill hyphens[] for any removed trailing periods
+            for (int c = n; c < wordlen; c++) hyphens[c] = '0';
+            hyphens[wordlen] = '\0';
 
-        sal_Int32 Leading =  GetPosInWordToCheck( aWord, nMaxLeading );
+        INT32 Leading =  GetPosInWordToCheck( aWord, nMaxLeading );
 
-        for (sal_Int32 i = 0; i < n; i++)
+        for (INT32 i = 0; i < n; i++)
         {
-            int leftrep = 0;
-            sal_Bool hit = (n >= minLen);
-            if (!rep || !rep[i] || (i >= n))
-            {
-                hit = hit && (hyphens[i]&1) && (i < Leading);
-                hit = hit && (i >= (minLead-1) );
-                hit = hit && ((n - i - 1) >= minTrail);
-            }
-            else
-            {
-                // calculate change character length before hyphenation point signed with '='
-                for (char * c = rep[i]; *c && (*c != '='); c++)
-                {
-                    if (eEnc == RTL_TEXTENCODING_UTF8)
-                    {
-                        if (((unsigned char) *c) >> 6 != 2)
-                            leftrep++;
+                int leftrep = 0;
+                BOOL hit = (n >= minLen);
+                if (!rep || !rep[i] || (i >= n)) {
+                    hit = hit && (hyphens[i]&1) && (i < Leading);
+                    hit = hit && (i >= (minLead-1) );
+                    hit = hit && ((n - i - 1) >= minTrail);
+                } else {
+                    // calculate change character length before hyphenation point signed with '='
+                    for (char * c = rep[i]; *c && (*c != '='); c++) {
+                        if (aEnc == RTL_TEXTENCODING_UTF8) {
+                            if (((unsigned char) *c) >> 6 != 2) leftrep++;
+                        } else leftrep++;
                     }
-                    else
-                        leftrep++;
+                    hit = hit && (hyphens[i]&1) && ((i + leftrep - pos[i]) < Leading);
+                    hit = hit && ((i + leftrep - pos[i]) >= (minLead-1) );
+                    hit = hit && ((n - i - 1 + sal::static_int_cast< sal_sSize >(strlen(rep[i])) - leftrep - 1) >= minTrail);
                 }
-                hit = hit && (hyphens[i]&1) && ((i + leftrep - pos[i]) < Leading);
-                hit = hit && ((i + leftrep - pos[i]) >= (minLead-1) );
-                hit = hit && ((n - i - 1 + sal::static_int_cast< sal_sSize >(strlen(rep[i])) - leftrep - 1) >= minTrail);
-            }
-            if (hit)
-            {
-                nHyphenationPos = i;
-                if (rep && (i < n) && rep[i])
-                {
-                    nHyphenationPosAlt = i - pos[i];
-                    nHyphenationPosAltHyph = i + leftrep - pos[i];
+            if (hit) {
+            nHyphenationPos = i;
+                    if (rep && (i < n) && rep[i]) {
+                        nHyphenationPosAlt = i - pos[i];
+                        nHyphenationPosAltHyph = i + leftrep - pos[i];
+                    }
                 }
-            }
-        }
+         }
 
-        if (nHyphenationPos  == -1)
-        {
-            xRes = NULL;
-        }
-        else
-        {
-            if (rep && rep[nHyphenationPos])
-            {
-                // remove equal sign
-                char * s = rep[nHyphenationPos];
-                int eq = 0;
-                for (; *s; s++)
-                {
-                    if (*s == '=') eq = 1;
-                    if (eq) *s = *(s + 1);
-                }
-                OUString repHyphlow(rep[nHyphenationPos], strlen(rep[nHyphenationPos]), eEnc);
-                OUString repHyph;
-                switch (ct)
-                {
-                    case CAPTYPE_ALLCAP:
-                    {
-                        repHyph = makeUpperCase(repHyphlow, pCC);
-                        break;
+         if (nHyphenationPos  == -1) {
+             xRes = NULL;
+             } else {
+                if (rep && rep[nHyphenationPos]) {
+                    // remove equal sign
+                    char * s = rep[nHyphenationPos];
+                    int eq = 0;
+                    for (; *s; s++) {
+                        if (*s == '=') eq = 1;
+                        if (eq) *s = *(s + 1);
                     }
-                    case CAPTYPE_INITCAP:
-                    {
-                        if (nHyphenationPosAlt == 0)
-                            repHyph = makeInitCap(repHyphlow, pCC);
-                        else
-                             repHyph = repHyphlow;
-                        break;
-                    }
-                    default:
-                    {
-                        repHyph = repHyphlow;
-                        break;
-                    }
-                }
+                    OUString repHyphlow(rep[nHyphenationPos], strlen(rep[nHyphenationPos]), aEnc);
+                    OUString repHyph;
+                    switch (ct) {
+                       case CAPTYPE_ALLCAP:
+                     {
+                               repHyph = makeUpperCase(repHyphlow, pCC);
+                               break;
+                             }
+                       case CAPTYPE_INITCAP:
+                     {
+                               if (nHyphenationPosAlt == 0) {
+                                    repHyph = makeInitCap(repHyphlow, pCC);
+                               } else {
+                                    repHyph = repHyphlow;
+                               }
+                               break;
+                             }
+                           default:
+                     {
+                               repHyph = repHyphlow;
+                               break;
+                             }
+            }
 
-                // handle shortening
-                sal_Int16 nPos = (sal_Int16) ((nHyphenationPosAltHyph < nHyphenationPos) ?
-                nHyphenationPosAltHyph : nHyphenationPos);
-                // dicretionary hyphenation
+                    // handle shortening
+                    INT16 nPos = (INT16) ((nHyphenationPosAltHyph < nHyphenationPos) ?
+                        nHyphenationPosAltHyph : nHyphenationPos);
+                    // dicretionary hyphenation
                 xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ), nPos,
-                    aWord.replaceAt(nHyphenationPosAlt + 1, cut[nHyphenationPos], repHyph),
-                    (sal_Int16) nHyphenationPosAltHyph);
-            }
-            else
-            {
+                aWord.replaceAt(nHyphenationPosAlt + 1, cut[nHyphenationPos], repHyph),
+                        (INT16) nHyphenationPosAltHyph);
+                } else {
                 xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ),
-                    (sal_Int16)nHyphenationPos, aWord, (sal_Int16) nHyphenationPos);
-            }
+                        (INT16)nHyphenationPos, aWord, (INT16) nHyphenationPos);
+                }
         }
 
-        delete[] lcword;
+            delete[] lcword;
         delete[] hyphens;
-        if (rep)
-        {
-            for(int j = 0; j < n; j++)
-            {
-                if (rep[j]) free(rep[j]);
+            if (rep) {
+                for(int j = 0; j < n; j++) {
+                    if (rep[j]) free(rep[j]);
+                }
+                free(rep);
             }
-            free(rep);
-        }
-        if (pos) free(pos);
-        if (cut) free(cut);
+            if (pos) free(pos);
+            if (cut) free(cut);
         return xRes;
     }
-    return NULL;
+        return NULL;
 }
 
 
-Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
-        const ::rtl::OUString& /*aWord*/,
-        const ::com::sun::star::lang::Locale& /*aLocale*/,
-        sal_Int16 /*nIndex*/,
-        const ::com::sun::star::beans::PropertyValues& /*aProperties*/ )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+Reference < XHyphenatedWord > SAL_CALL
+    Hyphenator::queryAlternativeSpelling( const ::rtl::OUString& /*aWord*/,
+                  const ::com::sun::star::lang::Locale& /*aLocale*/,
+                  sal_Int16 /*nIndex*/,
+                  const ::com::sun::star::beans::PropertyValues& /*aProperties*/ )
+        throw(::com::sun::star::lang::IllegalArgumentException,
+              ::com::sun::star::uno::RuntimeException)
 {
   /* alternative spelling isn't supported by tex dictionaries */
   /* XXX: OOo's extended libhjn algorithm can support alternative spellings with extended TeX dic. */
@@ -546,263 +527,256 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
   return NULL;
 }
 
-Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const ::rtl::OUString& aWord,
-        const ::com::sun::star::lang::Locale& aLocale,
-        const ::com::sun::star::beans::PropertyValues& aProperties )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+Reference< XPossibleHyphens > SAL_CALL
+    Hyphenator::createPossibleHyphens( const ::rtl::OUString& aWord,
+                   const ::com::sun::star::lang::Locale& aLocale,
+                   const ::com::sun::star::beans::PropertyValues& aProperties )
+        throw(::com::sun::star::lang::IllegalArgumentException,
+              ::com::sun::star::uno::RuntimeException)
+
 {
-    int wordlen;
-    char *hyphens;
-    char *lcword;
-    int k;
+  int wordlen;
+  char *hyphens;
+  char *lcword;
+  int k;
 
-    PropertyHelper_Hyphen & rHelper = GetPropHelper();
-    rHelper.SetTmpPropVals(aProperties);
-    sal_Int16 minTrail = rHelper.GetMinTrailing();
-    sal_Int16 minLead = rHelper.GetMinLeading();
+  PropertyHelper_Hyphen & rHelper = GetPropHelper();
+  rHelper.SetTmpPropVals(aProperties);
+  sal_Int16 minTrail = rHelper.GetMinTrailing();
+  sal_Int16 minLead = rHelper.GetMinLeading();
 
-    HyphenDict *dict = NULL;
-    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
-    CharClass* pCC = NULL;
+  HyphenDict *dict = NULL;
+  rtl_TextEncoding aEnc = 0;
+  CharClass* pCC = NULL;
 
-    Reference< XPossibleHyphens > xRes;
+  Reference< XPossibleHyphens > xRes;
 
-    k = -1;
-    for (int j = 0; j < numdict; j++)
-    {
-        if (aLocale == aDicts[j].aLoc) k = j;
-    }
+  k = -1;
+  for (int j = 0; j < numdict; j++)
+     if (aLocale == aDicts[j].aLoc) k = j;
 
-    // if we have a hyphenation dictionary matching this locale
-    if (k != -1)
-    {
-        // if this dictioanry has not been loaded yet do that
-        if (!aDicts[k].aPtr)
-        {
-            OUString DictFN = aDicts[k].aName + A2OU(".dic");
-            OUString dictpath;
 
-            osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
-            OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
+  // if we have a hyphenation dictionary matching this locale
+  if (k != -1) {
+
+      // if this dictioanry has not been loaded yet do that
+      if (!aDicts[k].aPtr) {
+
+         OUString DictFN = aDicts[k].aName + A2OU(".dic");
+         OUString dictpath;
+
+         osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
+         OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 
 #if defined(WNT)
-            // workaround for Windows specifc problem that the
-            // path length in calls to 'fopen' is limted to somewhat
-            // about 120+ characters which will usually be exceed when
-            // using dictionaries as extensions.
-            sTmp = Win_GetShortPathName( dictpath );
+        // workaround for Windows specifc problem that the
+        // path length in calls to 'fopen' is limted to somewhat
+        // about 120+ characters which will usually be exceed when
+        // using dictionaries as extensions.
+        sTmp = Win_GetShortPathName( dictpath );
 #endif
 
-            if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
-            {
-               fprintf(stderr, "Couldn't find file %s and %s\n", sTmp.getStr(), OU2ENC(dictpath, osl_getThreadTextEncoding()) );
-               return NULL;
+        if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
+        {
+           fprintf(stderr, "Couldn't find file %s and %s\n", sTmp.getStr(), OU2ENC(dictpath, osl_getThreadTextEncoding()) );
+           return NULL;
+        }
+        aDicts[k].aPtr = dict;
+         aDicts[k].aEnc = rtl_getTextEncodingFromUnixCharset(dict->cset);
+         if (aDicts[k].aEnc == RTL_TEXTENCODING_DONTKNOW) {
+            if (strcmp("ISCII-DEVANAGARI", dict->cset) == 0) {
+               aDicts[k].aEnc = RTL_TEXTENCODING_ISCII_DEVANAGARI;
+            } else if (strcmp("UTF-8", dict->cset) == 0) {
+               aDicts[k].aEnc = RTL_TEXTENCODING_UTF8;
             }
-            aDicts[k].aPtr = dict;
-            aDicts[k].eEnc = getTextEncodingFromCharset(dict->cset);
-        }
+         }
+      }
 
-        // other wise hyphenate the word with that dictionary
-        dict = aDicts[k].aPtr;
-        eEnc = aDicts[k].eEnc;
-        pCC  = aDicts[k].apCC;
+      // other wise hyphenate the word with that dictionary
+      dict = aDicts[k].aPtr;
+      aEnc = aDicts[k].aEnc;
+      pCC  = aDicts[k].apCC;
 
-        // we don't want to work with a default text encoding since following incorrect
-        // results may occur only for specific text and thus may be hard to notice.
-        // Thus better always make a clean exit here if the text encoding is in question.
-        // Hopefully something not working at all will raise proper attention quickly. ;-)
-        DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
-        if (eEnc == RTL_TEXTENCODING_DONTKNOW)
-            return NULL;
+      // first handle smart quotes both single and double
+      OUStringBuffer rBuf(aWord);
+      sal_Int32 nc = rBuf.getLength();
+      sal_Unicode ch;
+      for (sal_Int32 ix=0; ix < nc; ix++) {
+      ch = rBuf.charAt(ix);
+          if ((ch == 0x201C) || (ch == 0x201D)) rBuf.setCharAt(ix,(sal_Unicode)0x0022);
+          if ((ch == 0x2018) || (ch == 0x2019)) rBuf.setCharAt(ix,(sal_Unicode)0x0027);
+      }
+      OUString nWord(rBuf.makeStringAndClear());
 
-        // first handle smart quotes both single and double
-        OUStringBuffer rBuf(aWord);
-        sal_Int32 nc = rBuf.getLength();
-        sal_Unicode ch;
-        for (sal_Int32 ix=0; ix < nc; ix++)
-        {
-            ch = rBuf.charAt(ix);
-            if ((ch == 0x201C) || (ch == 0x201D))
-                rBuf.setCharAt(ix,(sal_Unicode)0x0022);
-            if ((ch == 0x2018) || (ch == 0x2019))
-                rBuf.setCharAt(ix,(sal_Unicode)0x0027);
-        }
-        OUString nWord(rBuf.makeStringAndClear());
+      // now convert word to all lowercase for pattern recognition
+      OUString nTerm(makeLowerCase(nWord, pCC));
 
-        // now convert word to all lowercase for pattern recognition
-        OUString nTerm(makeLowerCase(nWord, pCC));
+      // now convert word to needed encoding
+      OString encWord(OU2ENC(nTerm,aEnc));
 
-        // now convert word to needed encoding
-        OString encWord(OU2ENC(nTerm,eEnc));
+      wordlen = encWord.getLength();
+      lcword = new char[wordlen+1];
+      hyphens = new char[wordlen+5];
+      char ** rep = NULL; // replacements of discretionary hyphenation
+      int * pos = NULL; // array of [hyphenation point] minus [deletion position] 
+      int * cut = NULL; // length of deletions in original word
 
-        wordlen = encWord.getLength();
-        lcword = new char[wordlen+1];
-        hyphens = new char[wordlen+5];
-        char ** rep = NULL; // replacements of discretionary hyphenation
-        int * pos = NULL; // array of [hyphenation point] minus [deletion position]
-        int * cut = NULL; // length of deletions in original word
+      // copy converted word into simple char buffer
+      strcpy(lcword,encWord.getStr());
 
-        // copy converted word into simple char buffer
-        strcpy(lcword,encWord.getStr());
+      // first remove any trailing periods
+      int n = wordlen-1;
+      while((n >=0) && (lcword[n] == '.')) n--;
+      n++;
+      // fprintf(stderr,"hyphenate... %s\n",lcword); fflush(stderr);
+      if (n > 0) {
+         if (hnj_hyphen_hyphenate3(dict, lcword, n, hyphens, NULL, &rep, &pos, &cut,
+            minLead, minTrail, Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead - Max(dict->lhmin, 2))),
+            Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2)))))
+         {
+             delete[] hyphens;
+             delete[] lcword;
 
-        // first remove any trailing periods
-        int n = wordlen-1;
-        while((n >=0) && (lcword[n] == '.'))
-            n--;
-        n++;
-        if (n > 0)
-        {
-            const bool bFailed = 0 != hnj_hyphen_hyphenate3(dict, lcword, n, hyphens, NULL,
-                    &rep, &pos, &cut, minLead, minTrail,
-                    Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead - Max(dict->lhmin, 2))),
-                    Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2))) );
-            if (bFailed)
-            {
-                delete[] hyphens;
-                delete[] lcword;
+             if (rep) {
+                 for(int j = 0; j < n; j++) {
+                     if (rep[j]) free(rep[j]);
+                 }
+                 free(rep);
+             }
+             if (pos) free(pos);
+             if (cut) free(cut);
 
-                if (rep)
-                {
-                    for(int j = 0; j < n; j++)
-                    {
-                        if (rep[j]) free(rep[j]);
-                    }
-                    free(rep);
-                }
-                if (pos) free(pos);
-                if (cut) free(cut);
+             return NULL;
+         }
+      }
+      // now backfill hyphens[] for any removed periods
+      for (int c = n; c < wordlen; c++) hyphens[c] = '0';
+      hyphens[wordlen] = '\0';
+      // fprintf(stderr,"... %s\n",hyphens); fflush(stderr);
 
-                return NULL;
-            }
-        }
-        // now backfill hyphens[] for any removed periods
-        for (int c = n; c < wordlen; c++)
-            hyphens[c] = '0';
-        hyphens[wordlen] = '\0';
+      INT16 nHyphCount = 0;
+      INT16 i;
 
-        sal_Int16 nHyphCount = 0;
-        sal_Int16 i;
+      for ( i = 0; i < encWord.getLength(); i++)
+        if (hyphens[i]&1 && (!rep || !rep[i]))
+          nHyphCount++;
 
-        for ( i = 0; i < encWord.getLength(); i++)
-        {
-            if (hyphens[i]&1 && (!rep || !rep[i]))
-                nHyphCount++;
-        }
+      Sequence< INT16 > aHyphPos(nHyphCount);
+      INT16 *pPos = aHyphPos.getArray();
+      OUStringBuffer hyphenatedWordBuffer;
+      OUString hyphenatedWord;
+      nHyphCount = 0;
 
-        Sequence< sal_Int16 > aHyphPos(nHyphCount);
-        sal_Int16 *pPos = aHyphPos.getArray();
-        OUStringBuffer hyphenatedWordBuffer;
-        OUString hyphenatedWord;
-        nHyphCount = 0;
+      for (i = 0; i < nWord.getLength(); i++) {
+          hyphenatedWordBuffer.append(aWord[i]);
+          // hyphenation position (not alternative)
+          if (hyphens[i]&1 && (!rep || !rep[i])) {
+              pPos[nHyphCount] = i;
+              hyphenatedWordBuffer.append(sal_Unicode('='));
+              nHyphCount++;
+          }
+      }
 
-        for (i = 0; i < nWord.getLength(); i++)
-        {
-            hyphenatedWordBuffer.append(aWord[i]);
-            // hyphenation position (not alternative)
-            if (hyphens[i]&1 && (!rep || !rep[i]))
-            {
-                pPos[nHyphCount] = i;
-                hyphenatedWordBuffer.append(sal_Unicode('='));
-                nHyphCount++;
-            }
-        }
+      hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
+      //fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
+      //fflush(stderr);
 
-        hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
+      xRes = new PossibleHyphens( aWord, LocaleToLanguage( aLocale ),
+                hyphenatedWord, aHyphPos );
 
-        xRes = new PossibleHyphens( aWord, LocaleToLanguage( aLocale ),
-                  hyphenatedWord, aHyphPos );
+      delete[] hyphens;
+      delete[] lcword;
 
-        delete[] hyphens;
-        delete[] lcword;
+      if (rep) {
+          for(int j = 0; j < n; j++) {
+              if (rep[j]) free(rep[j]);
+          }
+          free(rep);
+      }
+      if (pos) free(pos);
+      if (cut) free(cut);
 
-        if (rep)
-        {
-            for(int j = 0; j < n; j++)
-            {
-                if (rep[j]) free(rep[j]);
-            }
-            free(rep);
-        }
-        if (pos) free(pos);
-        if (cut) free(cut);
+      return xRes;
+  }
 
-        return xRes;
-    }
+  return NULL;
 
-    return NULL;
 }
 
 sal_uInt16 SAL_CALL Hyphenator::capitalType(const OUString& aTerm, CharClass * pCC)
 {
-    sal_Int32 tlen = aTerm.getLength();
-    if ((pCC) && (tlen))
-    {
-        String aStr(aTerm);
-        sal_Int32 nc = 0;
-        for (xub_StrLen tindex = 0; tindex < tlen;  tindex++)
-        {
-            if (pCC->getCharacterType(aStr,tindex) & ::com::sun::star::i18n::KCharacterType::UPPER)
-                nc++;
-        }
+        sal_Int32 tlen = aTerm.getLength();
+        if ((pCC) && (tlen)) {
+              String aStr(aTerm);
+              sal_Int32 nc = 0;
+              for (xub_StrLen tindex = 0; tindex < tlen;  tindex++) {
+               if (pCC->getCharacterType(aStr,tindex) &
+                       ::com::sun::star::i18n::KCharacterType::UPPER) nc++;
+          }
 
-        if (nc == 0)
-            return (sal_uInt16) CAPTYPE_NOCAP;
-        if (nc == tlen)
-            return (sal_uInt16) CAPTYPE_ALLCAP;
-        if ((nc == 1) && (pCC->getCharacterType(aStr,0) & ::com::sun::star::i18n::KCharacterType::UPPER))
-            return (sal_uInt16) CAPTYPE_INITCAP;
+              if (nc == 0) return (sal_uInt16) CAPTYPE_NOCAP;
 
-        return (sal_uInt16) CAPTYPE_MIXED;
+              if (nc == tlen) return (sal_uInt16) CAPTYPE_ALLCAP;
+
+              if ((nc == 1) && (pCC->getCharacterType(aStr,0) &
+                      ::com::sun::star::i18n::KCharacterType::UPPER))
+                   return (sal_uInt16) CAPTYPE_INITCAP;
+
+              return (sal_uInt16) CAPTYPE_MIXED;
     }
-    return (sal_uInt16) CAPTYPE_UNKNOWN;
+        return (sal_uInt16) CAPTYPE_UNKNOWN;
 }
 
 OUString SAL_CALL Hyphenator::makeLowerCase(const OUString& aTerm, CharClass * pCC)
 {
-    if (pCC)
-        return pCC->toLower_rtl(aTerm, 0, aTerm.getLength());
-    return aTerm;
+        if (pCC)
+      return pCC->toLower_rtl(aTerm, 0, aTerm.getLength());
+        return aTerm;
 }
 
 OUString SAL_CALL Hyphenator::makeUpperCase(const OUString& aTerm, CharClass * pCC)
 {
-    if (pCC)
-        return pCC->toUpper_rtl(aTerm, 0, aTerm.getLength());
-    return aTerm;
+        if (pCC)
+              return pCC->toUpper_rtl(aTerm, 0, aTerm.getLength());
+        return aTerm;
 }
 
 
 OUString SAL_CALL Hyphenator::makeInitCap(const OUString& aTerm, CharClass * pCC)
 {
-    sal_Int32 tlen = aTerm.getLength();
-    if ((pCC) && (tlen))
-    {
-        OUString bTemp = aTerm.copy(0,1);
-        if (tlen > 1)
-            return ( pCC->toUpper_rtl(bTemp, 0, 1) + pCC->toLower_rtl(aTerm,1,(tlen-1)) );
+        sal_Int32 tlen = aTerm.getLength();
+        if ((pCC) && (tlen)) {
+              OUString bTemp = aTerm.copy(0,1);
+              if (tlen > 1)
+                   return ( pCC->toUpper_rtl(bTemp, 0, 1)
+                             + pCC->toLower_rtl(aTerm,1,(tlen-1)) );
 
-        return pCC->toUpper_rtl(bTemp, 0, 1);
+          return pCC->toUpper_rtl(bTemp, 0, 1);
     }
-    return aTerm;
+        return aTerm;
 }
 
 
+
+
 Reference< XInterface > SAL_CALL Hyphenator_CreateInstance(
-        const Reference< XMultiServiceFactory > & /*rSMgr*/ )
+            const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
 {
+
     Reference< XInterface > xService = (cppu::OWeakObject*) new Hyphenator;
     return xService;
 }
 
 
-sal_Bool SAL_CALL Hyphenator::addLinguServiceEventListener(
-        const Reference< XLinguServiceEventListener >& rxLstnr )
+sal_Bool SAL_CALL
+    Hyphenator::addLinguServiceEventListener(
+            const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    BOOL bRes = FALSE;
     if (!bDisposing && rxLstnr.is())
     {
         bRes = GetPropHelper().addLinguServiceEventListener( rxLstnr );
@@ -811,13 +785,14 @@ sal_Bool SAL_CALL Hyphenator::addLinguServiceEventListener(
 }
 
 
-sal_Bool SAL_CALL Hyphenator::removeLinguServiceEventListener(
-        const Reference< XLinguServiceEventListener >& rxLstnr )
+sal_Bool SAL_CALL
+    Hyphenator::removeLinguServiceEventListener(
+            const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
-    sal_Bool bRes = sal_False;
+    BOOL bRes = FALSE;
     if (!bDisposing && rxLstnr.is())
     {
         DBG_ASSERT( xPropHelper.is(), "xPropHelper non existent" );
@@ -827,25 +802,27 @@ sal_Bool SAL_CALL Hyphenator::removeLinguServiceEventListener(
 }
 
 
-OUString SAL_CALL Hyphenator::getServiceDisplayName( const Locale& /*rLocale*/ )
+OUString SAL_CALL
+    Hyphenator::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return A2OU( "Libhyphen Hyphenator" );
 }
 
 
-void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
+void SAL_CALL
+    Hyphenator::initialize( const Sequence< Any >& rArguments )
         throw(Exception, RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (!pPropHelper)
     {
-        sal_Int32 nLen = rArguments.getLength();
+        INT32 nLen = rArguments.getLength();
         if (2 == nLen)
         {
-            Reference< XPropertySet >   xPropSet;
+            Reference< XPropertySet	>	xPropSet;
             rArguments.getConstArray()[0] >>= xPropSet;
             //rArguments.getConstArray()[1] >>= xDicList;
 
@@ -855,43 +832,47 @@ void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
             //! when the object is not longer used.
             pPropHelper = new PropertyHelper_Hyphen( (XHyphenator *) this, xPropSet );
             xPropHelper = pPropHelper;
-            pPropHelper->AddAsPropListener();   //! after a reference is established
+            pPropHelper->AddAsPropListener();	//! after a reference is established
         }
         else {
-            OSL_FAIL( "wrong number of arguments in sequence" );
+            DBG_ERROR( "wrong number of arguments in sequence" );
         }
+
     }
 }
 
 
-void SAL_CALL Hyphenator::dispose()
+void SAL_CALL
+    Hyphenator::dispose()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (!bDisposing)
     {
-        bDisposing = sal_True;
-        EventObject aEvtObj( (XHyphenator *) this );
+        bDisposing = TRUE;
+        EventObject	aEvtObj( (XHyphenator *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
 }
 
 
-void SAL_CALL Hyphenator::addEventListener( const Reference< XEventListener >& rxListener )
+void SAL_CALL
+    Hyphenator::addEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (!bDisposing && rxListener.is())
         aEvtListeners.addInterface( rxListener );
 }
 
 
-void SAL_CALL Hyphenator::removeEventListener( const Reference< XEventListener >& rxListener )
+void SAL_CALL
+    Hyphenator::removeEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (!bDisposing && rxListener.is())
         aEvtListeners.removeInterface( rxListener );
@@ -905,7 +886,7 @@ void SAL_CALL Hyphenator::removeEventListener( const Reference< XEventListener >
 OUString SAL_CALL Hyphenator::getImplementationName()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     return getImplementationName_Static();
 }
@@ -914,21 +895,21 @@ OUString SAL_CALL Hyphenator::getImplementationName()
 sal_Bool SAL_CALL Hyphenator::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
+    for( INT32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+            return TRUE;
+    return FALSE;
 }
 
 
 Sequence< OUString > SAL_CALL Hyphenator::getSupportedServiceNames()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     return getSupportedServiceNames_Static();
 }
@@ -937,12 +918,38 @@ Sequence< OUString > SAL_CALL Hyphenator::getSupportedServiceNames()
 Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
         throw()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
+    Sequence< OUString > aSNS( 1 );	// auch mehr als 1 Service moeglich
     aSNS.getArray()[0] = A2OU( SN_HYPHENATOR );
     return aSNS;
 }
+
+
+sal_Bool SAL_CALL Hyphenator_writeInfo(
+            void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
+{
+
+    try
+    {
+        String aImpl( '/' );
+        aImpl += Hyphenator::getImplementationName_Static().getStr();
+        aImpl.AppendAscii( "/UNO/SERVICES" );
+        Reference< registry::XRegistryKey > xNewKey =
+                pRegistryKey->createKey( aImpl );
+        Sequence< OUString > aServices =
+                Hyphenator::getSupportedServiceNames_Static();
+        for( INT32 i = 0; i < aServices.getLength(); i++ )
+            xNewKey->createKey( aServices.getConstArray()[i] );
+
+        return sal_True;
+    }
+    catch(Exception &)
+    {
+        return sal_False;
+    }
+}
+
 
 void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )

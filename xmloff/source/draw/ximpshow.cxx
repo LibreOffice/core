@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/extract.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "ximpshow.hxx"
@@ -75,7 +75,7 @@ public:
     SdXMLImport& mrImport;
 
     ShowsImpImpl( SdXMLImport& rImport )
-    :   mrImport( rImport )
+    :	mrImport( rImport )
     {}
 };
 
@@ -84,7 +84,7 @@ public:
 TYPEINIT1( SdXMLShowsContext, SvXMLImportContext );
 
 SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+:	SvXMLImportContext(rImport, nPrfx, rLocalName)
 {
     mpImpl = new ShowsImpImpl( rImport );
 
@@ -211,7 +211,7 @@ SdXMLShowsContext::~SdXMLShowsContext()
     delete mpImpl;
 }
 
-SvXMLImportContext * SdXMLShowsContext::CreateChildContext( sal_uInt16 p_nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
+SvXMLImportContext * SdXMLShowsContext::CreateChildContext( USHORT p_nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
 {
     if( mpImpl && p_nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SHOW ) )
     {

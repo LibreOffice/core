@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -185,7 +185,7 @@ namespace sfx2
     {
         Reference < XInterface > xHoldAlive( m_pData->m_rControllerImpl );
 
-        sal_uInt16 nType = _rEvent.GetType();
+        USHORT nType = _rEvent.GetType();
         bool bHandled = false;
 
         switch ( nType )
@@ -218,7 +218,7 @@ namespace sfx2
                             aIterator.remove();
                     }
                     catch( const RuntimeException& )
-                    {
+                    {    
                         throw;
                     }
                     catch( const Exception& )
@@ -256,7 +256,7 @@ namespace sfx2
                             aIterator.remove();
                     }
                     catch( const RuntimeException& )
-                    {
+                    {    
                         throw;
                     }
                     catch( const Exception& )
@@ -267,7 +267,7 @@ namespace sfx2
             break;
 
             default:
-                OSL_FAIL( "UserInputInterception::handleNotifyEvent: illegal event type!" );
+                OSL_ENSURE( false, "UserInputInterception::handleNotifyEvent: illegal event type!" );
                 break;
         }
 

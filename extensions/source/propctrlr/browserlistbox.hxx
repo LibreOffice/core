@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 
 #include <set>
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <boost/shared_ptr.hpp>
 
 //............................................................................
@@ -76,7 +76,7 @@ namespace pcr
         {
         }
     };
-    typedef ::boost::unordered_map< ::rtl::OUString, ListBoxLine, ::rtl::OUStringHash >    ListBoxLines;
+    typedef ::std::hash_map< ::rtl::OUString, ListBoxLine, ::rtl::OUStringHash >    ListBoxLines;
     typedef ::std::vector< ListBoxLines::iterator >                                 OrderedListBoxLines;
 
     //========================================================================
@@ -172,7 +172,7 @@ namespace pcr
 
         sal_Bool    IsModified( ) const;
         void        CommitModified( );
-
+                
     protected:
         // IControlContext
         virtual void SAL_CALL focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& Control ) throw (::com::sun::star::uno::RuntimeException);

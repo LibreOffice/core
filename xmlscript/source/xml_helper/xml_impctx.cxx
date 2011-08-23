@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include <memory>
 
@@ -71,8 +71,8 @@ OUString getImplementationName_DocumentHandlerImpl()
                          "com.sun.star.comp.xml.input.SaxDocumentHandler") );
 }
 
-typedef ::boost::unordered_map< OUString, sal_Int32, OUStringHash > t_OUString2LongMap;
-typedef ::boost::unordered_map< sal_Int32, OUString > t_Long2OUStringMap;
+typedef ::std::hash_map< OUString, sal_Int32, OUStringHash > t_OUString2LongMap;
+typedef ::std::hash_map< sal_Int32, OUString > t_Long2OUStringMap;
 
 struct PrefixEntry
 {
@@ -82,7 +82,7 @@ struct PrefixEntry
         { m_Uids.reserve( 4 ); }
 };
 
-typedef ::boost::unordered_map<
+typedef ::std::hash_map<
     OUString, PrefixEntry *, OUStringHash > t_OUString2PrefixMap;
 
 struct ElementEntry
@@ -118,10 +118,10 @@ class DocumentHandlerImpl :
     friend class ExtendedAttributes;
 
     Reference< xml::input::XRoot > m_xRoot;
-
+    
     t_OUString2LongMap m_URI2Uid;
     sal_Int32 m_uid_count;
-
+    
     OUString m_sXMLNS_PREFIX_UNKNOWN;
     OUString m_sXMLNS;
 
@@ -138,17 +138,17 @@ class DocumentHandlerImpl :
     Mutex * m_pMutex;
 
     inline Reference< xml::input::XElement > getCurrentElement() const;
-
+    
     inline sal_Int32 getUidByURI( OUString const & rURI );
     inline sal_Int32 getUidByPrefix( OUString const & rPrefix );
-
+    
     inline void pushPrefix(
         OUString const & rPrefix, OUString const & rURI );
     inline void popPrefix( OUString const & rPrefix );
-
+    
     inline void getElementName(
         OUString const & rQName, sal_Int32 * pUid, OUString * pLocalName );
-
+    
 public:
     DocumentHandlerImpl(
         Reference< xml::input::XRoot > const & xRoot,
@@ -163,12 +163,12 @@ public:
         throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (RuntimeException);
-
+    
     // XInitialization
     virtual void SAL_CALL initialize(
         Sequence< Any > const & arguments )
         throw (Exception);
-
+    
     // XDocumentHandler
     virtual void SAL_CALL startDocument()
         throw (xml::sax::SAXException, RuntimeException);
@@ -219,7 +219,7 @@ DocumentHandlerImpl::DocumentHandlerImpl(
       m_pMutex( 0 )
 {
     m_elements.reserve( 10 );
-
+    
     if (! bSingleThreadedUse)
         m_pMutex = new Mutex();
 }
@@ -374,7 +374,7 @@ public:
         Reference< xml::sax::XAttributeList > const & xAttributeList,
         DocumentHandlerImpl * pHandler );
     virtual ~ExtendedAttributes() throw ();
-
+    
     // XAttributes
     virtual sal_Int32 SAL_CALL getLength()
         throw (RuntimeException);
@@ -554,7 +554,7 @@ void DocumentHandlerImpl::startElement(
     sal_Int32 nUid;
     OUString aLocalName;
     ::std::auto_ptr< ElementEntry > elementEntry( new ElementEntry );
-
+    
     { // guard start:
     MGuard aGuard( m_pMutex );
     // currently skipping elements and waiting for end tags?
@@ -569,15 +569,15 @@ void DocumentHandlerImpl::startElement(
 #endif
         return;
     }
-
+    
     sal_Int16 nAttribs = xAttribs->getLength();
-
+    
     // save all namespace ids
     sal_Int32 * pUids = new sal_Int32[ nAttribs ];
     OUString * pPrefixes = new OUString[ nAttribs ];
     OUString * pLocalNames = new OUString[ nAttribs ];
     OUString * pQNames = new OUString[ nAttribs ];
-
+    
     // first recognize all xmlns attributes
     sal_Int16 nPos;
     for ( nPos = 0; nPos < nAttribs; ++nPos )
@@ -625,7 +625,7 @@ void DocumentHandlerImpl::startElement(
                 rQAttributeName.compareToAscii(
                     RTL_CONSTASCII_STRINGPARAM("xmlns:") ) != 0,
                 "### unexpected xmlns!" );
-
+            
             // collect attribute's uid and current prefix
             sal_Int32 nColonPos = rQAttributeName.indexOf( (sal_Unicode) ':' );
             if (nColonPos >= 0)
@@ -647,14 +647,14 @@ void DocumentHandlerImpl::startElement(
         new ExtendedAttributes(
             nAttribs, pUids, pPrefixes, pLocalNames, pQNames,
             xAttribs, this ) );
-
+    
     getElementName( rQElementName, &nUid, &aLocalName );
-
+    
     // create new child context and append to list
     if (! m_elements.empty())
         xCurrentElement = m_elements.back()->m_xElement;
     } // :guard end
-
+    
     if (xCurrentElement.is())
     {
         elementEntry->m_xElement =
@@ -665,7 +665,7 @@ void DocumentHandlerImpl::startElement(
         elementEntry->m_xElement =
             m_xRoot->startRootElement( nUid, aLocalName, xAttributes );
     }
-
+    
     {
     MGuard aGuard( m_pMutex );
     if (elementEntry->m_xElement.is())

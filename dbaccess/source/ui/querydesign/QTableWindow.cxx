@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "QTableWindow.hxx"
 #include "QueryTableView.hxx"
 #include "dbustrings.hrc"
-#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include "dbaccess_helpid.hrc"
 #include "QueryDesignView.hxx"
 #include "browserids.hxx"
@@ -120,13 +120,14 @@ sal_Bool OQueryTableWindow::Init()
     sAliasName = String(sAliasName).EraseAllChars('"');
     SetAliasName(sAliasName);
         // SetAliasName reicht das als WinName weiter, dadurch benutzt es die Basisklasse
-    // reset the title
+    // reset the titel
     m_aTitle.SetText( pWinData->GetWinName() );
     m_aTitle.Show();
 
+    //	sal_Bool bSuccess(sal_True);
     if (!bSuccess)
-    {   // es soll nur ein Dummy-Window aufgemacht werden ...
-        OSL_ENSURE(GetAliasName().getLength(), "OQueryTableWindow::Init : kein Alias- UND kein Tabellenname geht nicht !");
+    {	// es soll nur ein Dummy-Window aufgemacht werden ...
+        DBG_ASSERT(GetAliasName().getLength(), "OQueryTableWindow::Init : kein Alias- UND kein Tabellenname geht nicht !");
             // .. aber das braucht wenigstens einen Alias
 
         // ::com::sun::star::form::ListBox anlegen
@@ -163,14 +164,14 @@ void OQueryTableWindow::deleteUserData(void*& _pUserData)
 //------------------------------------------------------------------------------
 void OQueryTableWindow::OnEntryDoubleClicked(SvLBoxEntry* pEntry)
 {
-    OSL_ENSURE(pEntry != NULL, "OQueryTableWindow::OnEntryDoubleClicked : pEntry darf nicht NULL sein !");
+    DBG_ASSERT(pEntry != NULL, "OQueryTableWindow::OnEntryDoubleClicked : pEntry darf nicht NULL sein !");
         // man koennte das auch abfragen und dann ein return hinsetzen, aber so weist es vielleicht auf Fehler bei Aufrufer hin
 
     if (getTableView()->getDesignView()->getController().isReadOnly())
         return;
 
     OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
-    OSL_ENSURE(pInf != NULL, "OQueryTableWindow::OnEntryDoubleClicked : Feld hat keine FieldInfo !");
+    DBG_ASSERT(pInf != NULL, "OQueryTableWindow::OnEntryDoubleClicked : Feld hat keine FieldInfo !");
 
     // eine DragInfo aufbauen
     OTableFieldDescRef aInfo = new OTableFieldDesc(GetTableName(),m_pListBox->GetEntryText(pEntry));
@@ -186,7 +187,7 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvLBoxEntry* pEntry)
 //------------------------------------------------------------------------------
 sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDescRef& rInfo)
 {
-    OSL_ENSURE(m_pListBox != NULL, "OQueryTableWindow::ExistsField : habe keine ::com::sun::star::form::ListBox !");
+    DBG_ASSERT(m_pListBox != NULL, "OQueryTableWindow::ExistsField : habe keine ::com::sun::star::form::ListBox !");
     OSL_ENSURE(rInfo.is(),"OQueryTableWindow::ExistsField: invlid argument for OTableFieldDescRef!");
     Reference< XConnection> xConnection = getTableView()->getDesignView()->getController().getConnection();
     sal_Bool bExists = sal_False;
@@ -203,7 +204,7 @@ sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTa
                 if (bCase(strFieldName,::rtl::OUString(m_pListBox->GetEntryText(pEntry))))
                 {
                     OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
-                    OSL_ENSURE(pInf != NULL, "OQueryTableWindow::ExistsField : Feld hat keine FieldInfo !");
+                    DBG_ASSERT(pInf != NULL, "OQueryTableWindow::ExistsField : Feld hat keine FieldInfo !");
 
                     rInfo->SetTabWindow(this);
                     rInfo->SetField(strFieldName);
@@ -237,5 +238,7 @@ void OQueryTableWindow::KeyInput( const KeyEvent& rEvt )
     OTableWindow::KeyInput( rEvt );
 }
 // -----------------------------------------------------------------------------
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

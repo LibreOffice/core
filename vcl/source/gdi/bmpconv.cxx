@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "vcl/bitmap.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/salctype.hxx"
+#include <vcl/bitmap.hxx>
+#include <vcl/impbmpconv.hxx>
+#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include "tools/stream.hxx"
-#include "com/sun/star/script/XInvocation.hpp"
-#include "com/sun/star/awt/XBitmap.hpp"
-#include "cppuhelper/compbase1.hxx"
+#include <tools/stream.hxx>
+#include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <cppuhelper/compbase1.hxx>
 
 
 using namespace com::sun::star::uno;
@@ -44,20 +44,19 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::awt;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 namespace vcl {
 
 class BmpTransporter :
         public cppu::WeakImplHelper1< com::sun::star::awt::XBitmap >
 {
-    Sequence<sal_Int8>          m_aBM;
-    com::sun::star::awt::Size   m_aSize;
+    Sequence<sal_Int8>			m_aBM;
+    com::sun::star::awt::Size	m_aSize;
 public:
     BmpTransporter( const Bitmap& rBM );
     virtual  ~BmpTransporter();
-
+    
     virtual com::sun::star::awt::Size SAL_CALL getSize() throw();
     virtual Sequence< sal_Int8 > SAL_CALL getDIB() throw();
     virtual Sequence< sal_Int8 > SAL_CALL getMaskDIB() throw();
@@ -69,7 +68,7 @@ class BmpConverter :
 public:
     BmpConverter();
     virtual ~BmpConverter();
-
+    
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() throw();
     virtual void SAL_CALL setValue( const OUString& rProperty, const Any& rValue )
         throw( UnknownPropertyException );
@@ -77,7 +76,7 @@ public:
         throw( UnknownPropertyException );
     virtual sal_Bool SAL_CALL hasMethod( const OUString& rName ) throw();
     virtual sal_Bool SAL_CALL hasProperty( const OUString& rProp ) throw();
-
+    
     virtual Any SAL_CALL invoke( const OUString& rFunction,
                                  const Sequence< Any >& rParams,
                                  Sequence< sal_Int16 >& rOutParamIndex,
@@ -120,7 +119,7 @@ Any SAL_CALL BmpConverter::getValue( const OUString& ) throw( UnknownPropertyExc
 
 sal_Bool SAL_CALL BmpConverter::hasMethod( const OUString& rName ) throw()
 {
-    return rName.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM("convert-bitmap-depth")) );
+    return rName.equalsIgnoreAsciiCase( OUString::createFromAscii( "convert-bitmap-depth" ) );
 }
 
 sal_Bool SAL_CALL BmpConverter::hasProperty( const OUString& ) throw()
@@ -137,7 +136,7 @@ Any SAL_CALL BmpConverter::invoke(
 {
     Any aRet;
 
-    if( rFunction.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM("convert-bitmap-depth")) ) )
+    if( rFunction.equalsIgnoreAsciiCase( OUString::createFromAscii( "convert-bitmap-depth" ) ) )
     {
         Reference< XBitmap > xBM;
         sal_uInt16 nTargetDepth = 0;
@@ -155,7 +154,7 @@ Any SAL_CALL BmpConverter::invoke(
 
         SvMemoryStream aStream( aDIB.getArray(), aDIB.getLength(), STREAM_READ | STREAM_WRITE );
         Bitmap aBM;
-        aBM.Read( aStream, sal_True );
+        aBM.Read( aStream, TRUE );
         if( nTargetDepth < 4 )
             nTargetDepth = 1;
         else if( nTargetDepth < 8 )
@@ -170,10 +169,10 @@ Any SAL_CALL BmpConverter::invoke(
         {
             switch( nTargetDepth )
             {
-                case 1:     aBM.Convert( BMP_CONVERSION_1BIT_THRESHOLD );break;
-                case 4:     aBM.ReduceColors( BMP_CONVERSION_4BIT_COLORS );break;
-                case 8:     aBM.ReduceColors( BMP_CONVERSION_8BIT_COLORS );break;
-                case 24:    aBM.Convert( BMP_CONVERSION_24BIT );break;
+                case 1:		aBM.Convert( BMP_CONVERSION_1BIT_THRESHOLD );break;
+                case 4:		aBM.ReduceColors( BMP_CONVERSION_4BIT_COLORS );break;
+                case 8:		aBM.ReduceColors( BMP_CONVERSION_8BIT_COLORS );break;
+                case 24:	aBM.Convert( BMP_CONVERSION_24BIT );break;
             }
         }
         xBM = new BmpTransporter( aBM );
@@ -190,7 +189,7 @@ BmpTransporter::BmpTransporter( const Bitmap& rBM )
     m_aSize.Width = rBM.GetSizePixel().Width();
     m_aSize.Height = rBM.GetSizePixel().Height();
     SvMemoryStream aStream;
-    rBM.Write( aStream, sal_False, sal_True );
+    rBM.Write( aStream, FALSE, TRUE );
     m_aBM = Sequence<sal_Int8>(static_cast<const sal_Int8*>(aStream.GetData()),
                 aStream.GetEndOfData());
 }

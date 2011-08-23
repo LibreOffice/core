@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svx/svdstr.hrc"
-#include "svx/svdglob.hxx"
+#include "svdstr.hrc"
+#include "svdglob.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include "svx/globl3d.hxx"
+#include "globl3d.hxx"
 #include <svx/sphere3d.hxx>
 
 #include <svx/svxids.hrc>
@@ -70,7 +70,7 @@ TYPEINIT1(E3dSphereObj, E3dCompoundObject);
 \************************************************************************/
 
 E3dSphereObj::E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoint& rCenter, const basegfx::B3DVector& r3DSize)
-:   E3dCompoundObject(rDefault)
+:	E3dCompoundObject(rDefault)
 {
     // Defaults setzen
     SetDefaultAttributes(rDefault);
@@ -81,7 +81,7 @@ E3dSphereObj::E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoi
 }
 
 E3dSphereObj::E3dSphereObj()
-:   E3dCompoundObject()
+:	E3dCompoundObject()
 {
     // Defaults setzen
     E3dDefaultAttributes aDefault;
@@ -118,7 +118,7 @@ void E3dSphereObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-sal_uInt16 E3dSphereObj::GetObjIdentifier() const
+UINT16 E3dSphereObj::GetObjIdentifier() const
 {
     return E3D_SPHEREOBJ_ID;
 }
@@ -129,7 +129,7 @@ sal_uInt16 E3dSphereObj::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-SdrObject *E3dSphereObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
+SdrObject *E3dSphereObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
 {
     return NULL;
 }
@@ -151,9 +151,22 @@ void E3dSphereObj::ReSegment(sal_uInt32 nHSegs, sal_uInt32 nVSegs)
     }
 }
 
-E3dSphereObj* E3dSphereObj::Clone() const
+/*************************************************************************
+|*
+|* Zuweisungsoperator
+|*
+\************************************************************************/
+
+void E3dSphereObj::operator=(const SdrObject& rObj)
 {
-    return CloneHelper< E3dSphereObj >();
+    // erstmal alle Childs kopieren
+    E3dCompoundObject::operator=(rObj);
+
+    // weitere Parameter kopieren
+    const E3dSphereObj& r3DObj = (const E3dSphereObj&) rObj;
+
+    aCenter       = r3DObj.aCenter;
+    aSize         = r3DObj.aSize;
 }
 
 /*************************************************************************

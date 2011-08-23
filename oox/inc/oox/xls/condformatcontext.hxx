@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,18 +37,20 @@ namespace xls {
 
 // ============================================================================
 
-class CondFormatContext : public WorksheetContextBase
+class OoxCondFormatContext : public OoxWorksheetContextBase
 {
 public:
-    explicit            CondFormatContext( WorksheetFragmentBase& rFragment );
+    explicit            OoxCondFormatContext( OoxWorksheetFragmentBase& rFragment );
 
 protected:
+    // oox.core.ContextHandler2Helper interface -------------------------------
+
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        onStartRecord( SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        onStartRecord( RecordInputStream& rStrm );
 
 private:
     CondFormatRef       mxCondFmt;

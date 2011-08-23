@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,6 @@
 
 #include <FFDataHandler.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include "FieldTypes.hxx"
 
@@ -49,8 +48,7 @@ public:
     ~FormControlHelper();
 
     bool insertControl(uno::Reference<text::XTextRange> xTextRange);
-    bool processField(uno::Reference<text::XFormField> xFormField);
-    bool hasFFDataHandler() const { return (m_pFFData != NULL); }
+
 private:
     FFDataHandler::Pointer_t m_pFFData;
     struct FormControlHelper_Impl;
@@ -58,8 +56,6 @@ private:
     ImplPointer_t m_pImpl;
 
     bool createCheckbox(uno::Reference<text::XTextRange> xTextRange,
-                        const ::rtl::OUString & rControlName);
-    bool createDropdown(uno::Reference<text::XTextRange> xTextRange,
                         const ::rtl::OUString & rControlName);
 };
 

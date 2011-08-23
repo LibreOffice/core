@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,10 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <rtl/ustring.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
+#ifndef __SGI_STL_MAP
 #include <map>
+#endif
 #include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -49,11 +51,11 @@ class NameSpaceEntry : public cppu::OWeakObject
 {
 public:
     // sName refers to the full namespace name
-    ::rtl::OUString     sName;
+    ::rtl::OUString 	sName;
     // sPrefix is the prefix used to declare a given item to be from a given namespace
-    ::rtl::OUString     sPrefix;
+    ::rtl::OUString 	sPrefix;
     // nKey is the unique identifier of a namespace
-    sal_uInt16          nKey;
+    sal_uInt16			nKey;
 };
 
 struct OUStringEqFunc
@@ -91,18 +93,18 @@ struct QNamePairEq
     }
 };
 
-typedef ::boost::unordered_map < QNamePair, ::rtl::OUString, QNamePairHash, QNamePairEq > QNameCache;
-typedef ::boost::unordered_map < ::rtl::OUString, ::rtl::Reference <NameSpaceEntry >, rtl::OUStringHash, OUStringEqFunc > NameSpaceHash;
+typedef ::std::hash_map < QNamePair, ::rtl::OUString, QNamePairHash, QNamePairEq > QNameCache;
+typedef ::std::hash_map < ::rtl::OUString, ::rtl::Reference <NameSpaceEntry >, rtl::OUStringHash, OUStringEqFunc > NameSpaceHash;
 typedef ::std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry >, uInt32lt > NameSpaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
 {
-    const ::rtl::OUString       sXMLNS;
-    const ::rtl::OUString       sEmpty;
+    const ::rtl::OUString		sXMLNS;
+    const ::rtl::OUString		sEmpty;
 
-    NameSpaceHash               aNameHash, aNameCache;
-    NameSpaceMap                aNameMap;
-    QNameCache                  aQNameCache;
+    NameSpaceHash 				aNameHash, aNameCache;
+    NameSpaceMap				aNameMap;
+    QNameCache					aQNameCache;
     SAL_DLLPRIVATE sal_uInt16 _Add( const rtl::OUString& rPrefix, const rtl::OUString &rName, sal_uInt16 nKey );
 
 public:
@@ -127,7 +129,7 @@ public:
     sal_uInt16 GetKeyByPrefix( const ::rtl::OUString& rPrefix ) const;
     const ::rtl::OUString& GetPrefixByKey( sal_uInt16 nKey ) const;
 
-    ::rtl::OUString GetQNameByKey( sal_uInt16 nKey,
+    ::rtl::OUString GetQNameByKey( sal_uInt16 nKey, 
                            const ::rtl::OUString& rLocalName,
                            sal_Bool bCache = sal_True) const;
 
@@ -181,6 +183,6 @@ public:
                              sal_uInt16 nIdxGuess = USHRT_MAX ) const;
 };
 
-#endif  //  _XMLOFF_NMSPMAP_HXX
+#endif	//  _XMLOFF_NMSPMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ namespace dbp
 
         // if we do not need the data source selection page ...
         if (!needDatasourceSelection())
-        {   // ... skip it!
+        {	// ... skip it!
             skip(1);
             m_bHadDataSelection = sal_False;
         }
@@ -187,12 +187,12 @@ namespace dbp
             }
 
             // ListSourceType: SQL
-            getContext().xObjectModel->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ListSourceType")), makeAny((sal_Int32)ListSourceType_SQL));
+            getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("ListSourceType"), makeAny((sal_Int32)ListSourceType_SQL));
 
             if (isListBox())
             {
                 // BoundColumn: 1
-                getContext().xObjectModel->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BoundColumn")), makeAny((sal_Int16)1));
+                getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("BoundColumn"), makeAny((sal_Int16)1));
 
                 // build the statement to set as list source
                 String sStatement;
@@ -204,7 +204,7 @@ namespace dbp
                 sStatement += getSettings().sListContentTable;
                 Sequence< ::rtl::OUString > aListSource(1);
                 aListSource[0] = sStatement;
-                getContext().xObjectModel->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ListSource")), makeAny(aListSource));
+                getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("ListSource"), makeAny(aListSource));
             }
             else
             {
@@ -214,15 +214,15 @@ namespace dbp
                 sStatement += getSettings().sListContentField;
                 sStatement.AppendAscii(" FROM ");
                 sStatement += getSettings().sListContentTable;
-                getContext().xObjectModel->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ListSource")), makeAny(::rtl::OUString(sStatement)));
+                getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("ListSource"), makeAny(::rtl::OUString(sStatement)));
             }
 
             // the bound field
-            getContext().xObjectModel->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataField")), makeAny(::rtl::OUString(getSettings().sLinkedFormField)));
+            getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("DataField"), makeAny(::rtl::OUString(getSettings().sLinkedFormField)));
         }
         catch(Exception&)
         {
-            OSL_FAIL("OListComboWizard::implApplySettings: could not set the property values for the listbox!");
+            DBG_ERROR("OListComboWizard::implApplySettings: could not set the property values for the listbox!");
         }
     }
 
@@ -293,9 +293,9 @@ namespace dbp
     //---------------------------------------------------------------------
     OContentTableSelection::OContentTableSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_TABLE))
-        ,m_aFrame               (this, ModuleRes(FL_FRAME))
-        ,m_aSelectTableLabel    (this, ModuleRes(FT_SELECTTABLE_LABEL))
-        ,m_aSelectTable         (this, ModuleRes(LB_SELECTTABLE))
+        ,m_aFrame				(this, ModuleRes(FL_FRAME))
+        ,m_aSelectTableLabel	(this, ModuleRes(FT_SELECTTABLE_LABEL))
+        ,m_aSelectTable			(this, ModuleRes(LB_SELECTTABLE))
     {
         FreeResource();
 
@@ -353,7 +353,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            OSL_FAIL("OContentTableSelection::initializePage: could not retrieve the table names!");
+            DBG_ERROR("OContentTableSelection::initializePage: could not retrieve the table names!");
         }
 
         m_aSelectTable.SelectEntry(getSettings().sListContentTable);
@@ -380,12 +380,12 @@ namespace dbp
     //---------------------------------------------------------------------
     OContentFieldSelection::OContentFieldSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_FIELD))
-        ,m_aFrame               (this, ModuleRes(FL_FRAME))
-        ,m_aTableFields         (this, ModuleRes(FT_TABLEFIELDS))
-        ,m_aSelectTableField    (this, ModuleRes(LB_SELECTFIELD))
-        ,m_aDisplayedFieldLabel (this, ModuleRes(FT_DISPLAYEDFIELD))
-        ,m_aDisplayedField      (this, ModuleRes(ET_DISPLAYEDFIELD))
-        ,m_aInfo                (this, ModuleRes(FT_CONTENTFIELD_INFO))
+        ,m_aFrame				(this, ModuleRes(FL_FRAME))
+        ,m_aTableFields			(this, ModuleRes(FT_TABLEFIELDS))
+        ,m_aSelectTableField	(this, ModuleRes(LB_SELECTFIELD))
+        ,m_aDisplayedFieldLabel	(this, ModuleRes(FT_DISPLAYEDFIELD))
+        ,m_aDisplayedField		(this, ModuleRes(ET_DISPLAYEDFIELD))
+        ,m_aInfo				(this, ModuleRes(FT_CONTENTFIELD_INFO))
     {
         m_aInfo.SetText(String(ModuleRes( isListBox() ? STR_FIELDINFO_LISTBOX : STR_FIELDINFO_COMBOBOX)));
         FreeResource();
@@ -454,12 +454,12 @@ namespace dbp
     //---------------------------------------------------------------------
     OLinkFieldsPage::OLinkFieldsPage( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_FIELDLINK))
-        ,m_aDescription         (this, ModuleRes(FT_FIELDLINK_DESC))
-        ,m_aFrame               (this, ModuleRes(FL_FRAME))
-        ,m_aValueListFieldLabel (this, ModuleRes(FT_VALUELISTFIELD))
-        ,m_aValueListField      (this, ModuleRes(CMB_VALUELISTFIELD))
-        ,m_aTableFieldLabel     (this, ModuleRes(FT_TABLEFIELD))
-        ,m_aTableField          (this, ModuleRes(CMB_TABLEFIELD))
+        ,m_aDescription			(this, ModuleRes(FT_FIELDLINK_DESC))
+        ,m_aFrame				(this, ModuleRes(FL_FRAME))
+        ,m_aValueListFieldLabel	(this, ModuleRes(FT_VALUELISTFIELD))
+        ,m_aValueListField		(this, ModuleRes(CMB_VALUELISTFIELD))
+        ,m_aTableFieldLabel		(this, ModuleRes(FT_TABLEFIELD))
+        ,m_aTableField			(this, ModuleRes(CMB_TABLEFIELD))
     {
         FreeResource();
 
@@ -558,7 +558,7 @@ namespace dbp
     }
 
 //.........................................................................
-}   // namespace dbp
+}	// namespace dbp
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

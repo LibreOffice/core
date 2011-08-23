@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,12 +76,12 @@ FuConstCustomShape::~FuConstCustomShape()
 |*
 \************************************************************************/
 
-sal_Bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL __EXPORT FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -92,14 +92,18 @@ sal_Bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
         if ( pObj )
         {
             SetAttributes( pObj );
-            sal_Bool bForceNoFillStyle = false;
+            sal_Bool bForceFillStyle = sal_True;
+            sal_Bool bForceNoFillStyle = sal_False;
             if ( ((SdrObjCustomShape*)pObj)->UseNoFillStyle() )
+            {
+                bForceFillStyle = sal_False;
                 bForceNoFillStyle = sal_True;
+            }
             if ( bForceNoFillStyle )
                 pObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
         }
 
-        bReturn = sal_True;
+        bReturn = TRUE;
     }
     return bReturn;
 }
@@ -110,7 +114,7 @@ sal_Bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
+BOOL __EXPORT FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -121,18 +125,18 @@ sal_Bool FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL __EXPORT FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = false;
+    BOOL bReturn = FALSE;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj(SDRCREATE_FORCEEND);
-        bReturn = sal_True;
+        bReturn = TRUE;
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
@@ -141,14 +145,14 @@ sal_Bool FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuConstCustomShape::KeyInput(const KeyEvent& rKEvt)
+BOOL __EXPORT FuConstCustomShape::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
+    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -190,7 +194,7 @@ void FuConstCustomShape::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// Create default drawing objects via keyboard
+// #98185# Create default drawing objects via keyboard
 SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
@@ -215,7 +219,7 @@ SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, c
 
 void FuConstCustomShape::SetAttributes( SdrObject* pObj )
 {
-    sal_Bool bAttributesAppliedFromGallery = false;
+    sal_Bool bAttributesAppliedFromGallery = sal_False;
 
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
     {
@@ -236,7 +240,7 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
                         if( pSourceObj )
                         {
                             const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                            SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
+                            SfxItemSet aDest( pObj->GetModel()->GetItemPool(), 				// ranges from SdrAttrObj
                             SDRATTR_START, SDRATTR_SHADOW_LAST,
                             SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                             SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
@@ -271,7 +275,7 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
         pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, 0 ) );
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-        pObj->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
+        pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
         ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &aCustomShape );
     }
 }

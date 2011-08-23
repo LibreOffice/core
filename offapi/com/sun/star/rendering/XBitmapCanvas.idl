@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,12 @@
 #ifndef __com_sun_star_rendering_XBitmapCanvas_idl__
 #define __com_sun_star_rendering_XBitmapCanvas_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_geometry_RealRectangle2D_idl__
 #include <com/sun/star/geometry/RealRectangle2D.idl>
 #endif
@@ -59,7 +59,7 @@ module com { module sun { module star { module rendering {
     bitmapped canvases, where additional methods for accessing and
     moving of bitmap content are provided.<p>
 
-    @since OOo 2.0
+    @since OOo 2.0.0
  */
 interface XBitmapCanvas : XCanvas
 {
@@ -74,7 +74,7 @@ interface XBitmapCanvas : XCanvas
         operation. The device color for both source and destination
         render state is ignored, the compositing mode only for the
         source render state.<p>
-
+        
         @param sourceCanvas
         Canvas from which to copy the bitmap data. Can be identical to
         the canvas this method is called on, but must be valid.
@@ -120,12 +120,12 @@ interface XBitmapCanvas : XCanvas
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the parameters are not within the specified range.
-     */
-    void copyRect( [in] XBitmapCanvas sourceCanvas,
+     */	
+    void copyRect( [in] XBitmapCanvas sourceCanvas, 
                    [in] ::com::sun::star::geometry::RealRectangle2D sourceRect, [in] ViewState sourceViewState, [in] RenderState sourceRenderState,
                    [in] ::com::sun::star::geometry::RealRectangle2D destRect, [in] ViewState destViewState, [in] RenderState destRenderState )
         raises (com::sun::star::lang::IllegalArgumentException,
-                VolatileContentDestroyedException);
+                VolatileContentDestroyedException);  
 
 };
 

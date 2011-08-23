@@ -41,6 +41,7 @@ stoponerror=tr
 .ENDIF
 
 # --- Settings -----------------------------------------------------
+#.INCLUDE :		$(PRJ)$/util$/makefile.pmk
 
 .INCLUDE :  settings.mk
 
@@ -53,7 +54,8 @@ CFLAGS+=-D_WIN32_DCOM -EHsc -Ob0
 OBJFILES=   	$(OBJ)$/test_wincb.obj
 APP1TARGET=		$(TARGET)
 APP1OBJS=		$(OBJ)$/test_wincb.obj
-
+                
+                
 APP1STDLIBS=	$(SALLIB) \
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
@@ -63,6 +65,7 @@ APP1STDLIBS=	$(SALLIB) \
                 $(COMDLG32LIB)
 
 APP1LIBS= $(SLB)$/dtutils.lib
+          
 
 APP1NOSAL=  TRUE
 
@@ -83,9 +86,11 @@ APP1STDLIBS=	$(SALLIB)\
                 $(OLEAUT32LIB)
 
 APP1LIBS= 
+
 APP1NOSAL=  TRUE
 
 .ENDIF
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :		target.mk
+#.INCLUDE :		$(PRJ)$/util$/target.pmk

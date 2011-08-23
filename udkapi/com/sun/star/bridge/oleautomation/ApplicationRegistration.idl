@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,25 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_bridge_oleautomation_ApplicationRegistration_idl__
-#define __com_sun_star_bridge_oleautomation_ApplicationRegistration_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module bridge { module oleautomation {
-
-//=============================================================================
-
+#ifndef __com_sun_star_bridge_oleautomation_ApplicationRegistration_idl__ 
+#define __com_sun_star_bridge_oleautomation_ApplicationRegistration_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module bridge { module oleautomation {  
+ 
+//============================================================================= 
+ 
 /** registers UNO objects as COM objects.
     <p>
     That is, COM class factories are registered with COM at runtime. The required
     EXE server is the application which deploys this service. In order to access
-    the factories by COM API functions, there need to be proper registry entries.
+    the	factories by COM API functions, there need to be proper registry entries.
     This service does not provide for writing those entries.
     </p>
     <p>
@@ -63,17 +65,17 @@ module com {  module sun {  module star {  module bridge { module oleautomation 
     </p>
  */
 service ApplicationRegistration
-{
+{ 
 
-    interface com::sun::star::uno::XInterface;
-
-};
-
-//=============================================================================
-
+    interface com::sun::star::uno::XInterface; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
 }; }; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

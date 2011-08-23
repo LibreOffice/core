@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ class LayoutMenu
     : public ValueSet,
       public TreeNode,
       public SfxShell,
-      public DragSourceHelper,
+      public DragSourceHelper, 
       public DropTargetHelper
 {
 public:
@@ -215,7 +215,7 @@ private:
             Layout of the page to insert or to assign.
     */
     SfxRequest CreateRequest (
-        sal_uInt16 nSlotId,
+        USHORT nSlotId,
         AutoLayout aLayout);
 
     /** Select the layout that is used by the current page.

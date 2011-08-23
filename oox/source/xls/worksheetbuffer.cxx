@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,32 +27,34 @@
  ************************************************************************/
 
 #include "oox/xls/worksheetbuffer.hxx"
-
+#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <rtl/ustrbuf.hxx>
-#include "oox/core/filterbase.hxx"
+#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/helper/recordinputstream.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/excelhandlers.hxx"
 
-namespace oox {
-namespace xls {
-
-// ============================================================================
-
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::uno;
-
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::container::XIndexAccess;
+using ::com::sun::star::container::XNameAccess;
+using ::com::sun::star::container::XNamed;
+using ::com::sun::star::sheet::XSpreadsheetDocument;
+using ::com::sun::star::sheet::XSpreadsheets;
+
+namespace oox {
+namespace xls {
 
 // ============================================================================
 
@@ -96,7 +98,7 @@ void WorksheetBuffer::importSheet( const AttributeList& rAttribs )
     insertSheet( aModel );
 }
 
-void WorksheetBuffer::importSheet( SequenceInputStream& rStrm )
+void WorksheetBuffer::importSheet( RecordInputStream& rStrm )
 {
     sal_Int32 nState;
     SheetInfoModel aModel;
@@ -238,7 +240,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
     }
     catch( Exception& )
     {
-        OSL_FAIL( "WorksheetBuffer::createSheet - cannot insert or rename worksheet" );
+        OSL_ENSURE( false, "WorksheetBuffer::createSheet - cannot insert or rename worksheet" );
     }
     return IndexNamePair( -1, OUString() );
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,7 @@
 #include <list>
 
 
-#ifndef A2OU
-#  define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
-#endif
+#define A2OU(x) ::rtl::OUString::createFromAscii( x )
 
 #define OU2A(rtlOUString) \
     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), \
@@ -72,7 +70,7 @@ struct lt_rtl_OUString
     }
 };
 
-inline sal_Bool operator == ( const ::com::sun::star::lang::Locale &rL1, const ::com::sun::star::lang::Locale &rL2 )
+inline BOOL operator == ( const ::com::sun::star::lang::Locale &rL1, const ::com::sun::star::lang::Locale &rL2 )
 {
     return  rL1.Language ==  rL2.Language   &&
             rL1.Country  ==  rL2.Country    &&
@@ -90,7 +88,7 @@ String GetDirectoryPathFromFileURL( const String &rFileURL );
 // to be use to get a short path name under Windows that still can be used with
 // the 'fopen' call. This is necessary since under Windows there seems to be
 // a restriction of only about 110-130 characters length to a path name in order
-// for it to work with 'fopen'. And that length is usually easily exceeded
+// for it to work with 'fopen'. And that length is usually easily exceeded 
 // when using extensions...
 rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName );
 #endif
@@ -103,14 +101,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char * pDicT
 void MergeNewStyleDicsAndOldStyleDics( std::list< SvtLinguConfigDictionaryEntry > &rNewStyleDics, const std::vector< SvtLinguConfigDictionaryEntry > &rOldStyleDics );
 
 ///////////////////////////////////////////////////////////////////////////
-
-
-//Find an encoding from a charset string, using
-//rtl_getTextEncodingFromMimeCharset and falling back to
-//rtl_getTextEncodingFromUnixCharset with the addition of
-//ISCII-DEVANAGARI. On failure will return final fallback of
-//RTL_TEXTENCODING_ISO_8859_1
-rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset);
 
 #endif
 

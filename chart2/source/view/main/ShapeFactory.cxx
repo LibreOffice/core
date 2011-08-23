@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,6 +79,7 @@ namespace chart
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
+//static
 void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
                                , const rtl::OUString& rName )
 {
@@ -102,6 +103,7 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
 
 //-----------------------------------------------------------------------------
 
+//static
 rtl::OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape >& xShape )
 {
     rtl::OUString aRet;
@@ -185,10 +187,11 @@ uno::Any createPolyPolygon_Cube(
     //fWidthH stands for Half Width
     const double fWidthH = rSize.DirectionX >=0.0?  rSize.DirectionX/2.0  : -rSize.DirectionX/2.0;
     const double fHeight = rSize.DirectionY;
+//     const double fDepth  = rSize.DirectionZ >=0.0?  rSize.DirectionZ      : -rSize.DirectionZ ;
 
     const double fHeightSign = fHeight >= 0.0 ? 1.0 : -1.0;
 
-    const double fOffset = (fWidthH * fRoundedEdge) * 1.05; // increase by 5% for safety
+    const double fOffset = (fWidthH * fRoundedEdge) * 1.05;	// increase by 5% for safety
     const bool bRoundEdges = fRoundedEdge && fOffset < fWidthH && 2.0 * fOffset < fHeightSign*fHeight;
     const sal_Int32 nPointCount = bRoundEdges ? 13 : 5;
 
@@ -213,6 +216,7 @@ uno::Any createPolyPolygon_Cube(
 
     for(sal_Int32 nN = nPointCount; nN--;)
         *pInnerSequenceZ++ = 0.0;
+        //*pInnerSequenceZ++ = -fDepth/2.0;
 
     if(nPointCount == 5)
     {
@@ -626,7 +630,7 @@ uno::Reference<drawing::XShape>
 
     bool bInvertPolygon = false;
     bool bInvertNormals = false;
-
+    
     if(bRotateZ)
     {
         //bars
@@ -673,7 +677,7 @@ uno::Reference<drawing::XShape>
         aStripe3 = Stripe( aBottomP3, aTopP3, aTopP4, aBottomP4 );
         aStripe4 = Stripe( aBottomP4, aTopP4, aTopP1, aBottomP1 );
     }
-
+    
     Stripe aNormalsStripe1( aNormalsTopP1, aNormalsBottomP1, aNormalsBottomP2, aNormalsTopP2 );
     Stripe aNormalsStripe2( aNormalsTopP2, aNormalsBottomP2, aNormalsBottomP3, aNormalsTopP3 );
     Stripe aNormalsStripe3( aNormalsTopP3, aNormalsBottomP3, aNormalsBottomP4, aNormalsTopP4 );
@@ -686,12 +690,12 @@ uno::Reference<drawing::XShape>
         aNormalsStripe3 = Stripe( aNormalsTopP4, aNormalsBottomP4, aNormalsBottomP3, aNormalsTopP3 );
         aNormalsStripe4 = Stripe( aNormalsTopP1, aNormalsBottomP1, aNormalsBottomP4, aNormalsTopP4 );
     }
-
+    
     aStripe1.SetManualNormal( aNormalsStripe1.getNormal() );
     aStripe2.SetManualNormal( aNormalsStripe2.getNormal() );
     aStripe3.SetManualNormal( aNormalsStripe3.getNormal() );
     aStripe4.SetManualNormal( aNormalsStripe4.getNormal() );
-
+    
     const bool bFlatNormals = false;
     ShapeFactory::createStripe( xGroup, aStripe1, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
     ShapeFactory::createStripe( xGroup, aStripe2, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
@@ -726,7 +730,7 @@ uno::Reference<drawing::XShape>
             m_xShapeFactory->createInstance( C2U(
             "com.sun.star.drawing.Shape3DLatheObject") ), uno::UNO_QUERY );
     xTarget->add(xShape);
-
+   
     double fWidth      = rSize.DirectionX/2.0; //The depth will be corrrected within Matrix
     double fRadius     = fWidth; //!!!!!!!! problem in drawing layer: rotation object calculates wrong needed size -> wrong camera (it's a problem with bounding boxes)
     double fHeight     = rSize.DirectionY;
@@ -950,6 +954,26 @@ drawing::PolyPolygonBezierCoords getRingBezierCoords(
         fStartAngleRadian, fWidthAngleRadian, fUnitCircleInnerRadius, aTransformationFromUnitCircle, fAngleSubdivisionRadian );
     appendAndCloseBezierCoords( aReturn, aInnerArc, sal_True );
 
+    //fill rMarkHandlePoints
+    /*
+    {
+        rMarkHandlePoints.realloc(1);
+        rMarkHandlePoints[0].realloc(6);
+        sal_Int32 nHandleCount=0;
+        sal_Int32 nOuterArcCount = aOuterArc.Coordinates[0].getLength();
+        if(nOuterArcCount>0)
+            rMarkHandlePoints[0][nHandleCount++]=aOuterArc.Coordinates[0][0];
+        if(nOuterArcCount>1)
+            rMarkHandlePoints[0][nHandleCount++]=aOuterArc.Coordinates[0][nOuterArcCount-1];
+        sal_Int32 nInnerArcCount = aInnerArc.Coordinates[0].getLength();
+        if(nInnerArcCount>0)
+            rMarkHandlePoints[0][nHandleCount++]=aInnerArc.Coordinates[0][0];
+        if(nInnerArcCount>1)
+            rMarkHandlePoints[0][nHandleCount++]=aInnerArc.Coordinates[0][nInnerArcCount-1];
+        rMarkHandlePoints[0].realloc(nHandleCount);
+    }
+    */
+
     return aReturn;
 }
 
@@ -995,6 +1019,19 @@ uno::Reference< drawing::XShape >
                 , aTransformationFromUnitCircle, fAngleSubdivisionRadian );
 
             xProp->setPropertyValue( C2U( "PolyPolygonBezier" ), uno::makeAny( aCoords ) );
+
+            //add shape for markhandles
+            /*
+            drawing::PointSequenceSequence aMarkHandlePoints(1); to be filled within getRingBezierCoords
+            if( xGroup.is() )
+            {
+                VLineProperties aHandleLineProperties;
+                aHandleLineProperties.LineStyle    = uno::makeAny( drawing::LineStyle_NONE );
+                uno::Reference< drawing::XShape > xHandleShape =
+                    this->createLine2D( xGroup, aMarkHandlePoints, &aHandleLineProperties );
+                this->setShapeName( xHandleShape, C2U("HandlesOnly") );
+            }
+            */
         }
         catch( uno::Exception& e )
         {
@@ -1458,7 +1495,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             break;
         }
     }
-
+    //return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
     return aPP;
 }
 
@@ -1609,7 +1646,7 @@ uno::Reference< drawing::XShapes >
 
         xTarget->add(xShape);
 
-        //it is necessary to set the transform matrix to initialize the scene properly
+        //it is necessary to set the transform matrix to initialize the scene properly (bug #106316#)
         //otherwise all objects which are placed into this Group will not be visible
         //the following should be unnecessary after a the bug is fixed
         {
@@ -1769,7 +1806,11 @@ uno::Reference< drawing::XShape >
     //create shape
     uno::Reference< drawing::XShape > xShape(
         m_xShapeFactory->createInstance( C2U(
+            //"com.sun.star.drawing.LineShape") ), uno::UNO_QUERY );
             "com.sun.star.drawing.PolyLineShape") ), uno::UNO_QUERY );
+            //"com.sun.star.drawing.PolyLinePathShape") ), uno::UNO_QUERY );
+            //"com.sun.star.drawing.PolyPolygonPathShape") ), uno::UNO_QUERY );
+            //"com.sun.star.drawing.PolyPolygonShape") ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     //set properties
@@ -1919,6 +1960,7 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
+//static
 rtl::OUString ShapeFactory::getStackedString( const rtl::OUString& rString, bool bStacked )
 {
     sal_Int32 nLen = rString.getLength();
@@ -1939,6 +1981,7 @@ rtl::OUString ShapeFactory::getStackedString( const rtl::OUString& rString, bool
     return aStackStr.makeStringAndClear();
 }
 
+//static
 bool ShapeFactory::hasPolygonAnyLines( drawing::PolyPolygonShape3D& rPoly)
 {
     // #i67757# check all contained polygons, if at least one polygon contains 2 or more points, return true
@@ -1948,6 +1991,7 @@ bool ShapeFactory::hasPolygonAnyLines( drawing::PolyPolygonShape3D& rPoly)
     return false;
 }
 
+//static
 bool ShapeFactory::isPolygonEmptyOrSinglePoint( drawing::PolyPolygonShape3D& rPoly)
 {
     // true, if empty polypolygon or one polygon with one point
@@ -1955,6 +1999,7 @@ bool ShapeFactory::isPolygonEmptyOrSinglePoint( drawing::PolyPolygonShape3D& rPo
         ((rPoly.SequenceX.getLength() == 1) && (rPoly.SequenceX[0].getLength() <= 1));
 }
 
+//static
 void ShapeFactory::closePolygon( drawing::PolyPolygonShape3D& rPoly)
 {
     DBG_ASSERT( rPoly.SequenceX.getLength() <= 1, "ShapeFactory::closePolygon - single polygon expected" );
@@ -1965,6 +2010,7 @@ void ShapeFactory::closePolygon( drawing::PolyPolygonShape3D& rPoly)
     AddPointToPoly( rPoly, aFirst );
 }
 
+//static
 awt::Size ShapeFactory::calculateNewSizeRespectingAspectRatio(
          const awt::Size& rTargetSize
          , const awt::Size& rSourceSizeWithCorrectAspectRatio )
@@ -1980,6 +2026,7 @@ awt::Size ShapeFactory::calculateNewSizeRespectingAspectRatio(
     return aNewSize;
 }
 
+//static
 awt::Point ShapeFactory::calculateTopLeftPositionToCenterObject(
            const awt::Point& rTargetAreaPosition
          , const awt::Size& rTargetAreaSize
@@ -1991,6 +2038,7 @@ awt::Point ShapeFactory::calculateTopLeftPositionToCenterObject(
     return aNewPosition;
 }
 
+//static
 ::basegfx::B2IRectangle ShapeFactory::getRectangleOfShape(
         const uno::Reference< drawing::XShape >& xShape )
 {
@@ -2006,6 +2054,7 @@ awt::Point ShapeFactory::calculateTopLeftPositionToCenterObject(
 
 }
 
+//static
 awt::Size ShapeFactory::getSizeAfterRotation(
          const uno::Reference< drawing::XShape >& xShape, double fRotationAngleDegree )
 {

@@ -37,25 +37,25 @@ TARGET=browser
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=\
-            $(SLO)$/AsyncronousLink.obj		\
-            $(SLO)$/brwctrlr.obj		\
-            $(SLO)$/brwview.obj			\
-            $(SLO)$/dataview.obj		\
-            $(SLO)$/dbexchange.obj		\
-            $(SLO)$/dbloader.obj		\
-            $(SLO)$/dbtreemodel.obj		\
-            $(SLO)$/dbtreeview.obj		\
-            $(SLO)$/dsEntriesNoExp.obj		\
-            $(SLO)$/dsbrowserDnD.obj		\
+            $(SLO)$/genericcontroller.obj		\
+            $(SLO)$/dsbrowserDnD.obj			\
+            $(SLO)$/dataview.obj				\
+            $(SLO)$/dbexchange.obj				\
+            $(SLO)$/dbloader.obj				\
+            $(SLO)$/sbagrid.obj					\
+            $(SLO)$/formadapter.obj				\
+            $(SLO)$/brwview.obj					\
+            $(SLO)$/brwctrlr.obj				\
+            $(SLO)$/unodatbr.obj				\
+            $(SLO)$/sbamultiplex.obj			\
             $(SLO)$/exsrcbrw.obj                \
-            $(SLO)$/formadapter.obj		\
-            $(SLO)$/genericcontroller.obj	\
-            $(SLO)$/sbagrid.obj			\
-            $(SLO)$/sbamultiplex.obj		\
-            $(SLO)$/unodatbr.obj
+            $(SLO)$/dbtreemodel.obj				\
+            $(SLO)$/dsEntriesNoExp.obj			\
+            $(SLO)$/dbtreeview.obj
 
 SLOFILES =\
-            $(EXCEPTIONSFILES)
+            $(EXCEPTIONSFILES)\
+            $(SLO)$/AsyncronousLink.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  sbabrw.src	\

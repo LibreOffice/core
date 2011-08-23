@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,25 +159,25 @@ public class _XDocumentInsertable extends MultiMethodTest {
             }
 
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occurred while testing "+
+            log.println("Exception occured while testing "+
                 "insertDocumentFromURL()");
             ex.printStackTrace(log);
             result = false ;
         } catch (com.sun.star.io.IOException ex) {
-            log.println("Exception occurred while testing "+
+            log.println("Exception occured while testing "+
                 "insertDocumentFromURL()");
             ex.printStackTrace(log);
             result = false ;
         }
-
+        
         try {
             PropertyValue [] szEmptyArgs = new PropertyValue [0];
             String docURL = "file:///c:/ThisIsAnInvaldURL";
             log.println("Inserting document from URL '" + docURL + "'");
             oObj.insertDocumentFromURL(docURL, szEmptyArgs);
-
+            
             result=false;
-
+            
         } catch (IOException ex) {
             log.println("expected exception was thrown -> ok");
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
@@ -187,12 +187,12 @@ public class _XDocumentInsertable extends MultiMethodTest {
 
         tRes.tested("insertDocumentFromURL()", result);
     }
-
+    
     /**
     * Forces environment recreation.
     */
     protected void after() {
         disposeEnvironment();
-    }
+    }        
 }  // finish class _XDocumentInsertable
 

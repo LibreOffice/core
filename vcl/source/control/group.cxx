@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
 
 // =======================================================================
 
-#define GROUP_BORDER            12
-#define GROUP_TEXT_BORDER       2
+#define GROUP_BORDER			12
+#define GROUP_TEXT_BORDER		2
 
-#define GROUP_VIEW_STYLE        (WB_3DLOOK | WB_NOLABEL)
+#define GROUP_VIEW_STYLE		(WB_3DLOOK | WB_NOLABEL)
 
 // =======================================================================
 
@@ -49,8 +49,8 @@ void GroupBox::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
-    SetMouseTransparent( sal_True );
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    SetMouseTransparent( TRUE );
+    ImplInitSettings( TRUE, TRUE, TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -77,8 +77,8 @@ const Color& GroupBox::GetCanonicalTextColor( const StyleSettings& _rStyle ) con
 
 // -----------------------------------------------------------------------
 
-void GroupBox::ImplInitSettings( sal_Bool bFont,
-                                 sal_Bool bForeground, sal_Bool bBackground )
+void GroupBox::ImplInitSettings( BOOL bFont,
+                                 BOOL bForeground, BOOL bBackground )
 {
     Control::ImplInitSettings( bFont, bForeground );
 
@@ -89,16 +89,16 @@ void GroupBox::ImplInitSettings( sal_Bool bFont,
               !(pParent->GetStyle() & WB_CLIPCHILDREN) ) &&
              !IsControlBackground() )
         {
-            EnableChildTransparentMode( sal_True );
+            EnableChildTransparentMode( TRUE );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-            SetPaintTransparent( sal_True );
+            SetPaintTransparent( TRUE );
             SetBackground();
         }
         else
         {
-            EnableChildTransparentMode( sal_False );
+            EnableChildTransparentMode( FALSE );
             SetParentClipMode( 0 );
-            SetPaintTransparent( sal_False );
+            SetPaintTransparent( FALSE );
 
             if ( IsControlBackground() )
                 SetBackground( GetControlBackground() );
@@ -132,16 +132,15 @@ GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+void GroupBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
 {
-        OSL_TRACE("GroupBox::ImplDraw Y %d, X %d", rPos.Y(), rPos.X() );
-    long                    nTop;
-    long                    nTextOff;
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    XubString               aText( GetText() );
-    Rectangle               aRect( rPos, rSize );
-    sal_uInt16                  nTextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_MNEMONIC;
+    long					nTop;
+    long					nTextOff;
+    const StyleSettings&	rStyleSettings = GetSettings().GetStyleSettings();
+    XubString				aText( GetText() );
+    Rectangle				aRect( rPos, rSize );
+    USHORT					nTextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_MNEMONIC;
 
     if ( GetStyle() & WB_NOLABEL )
         nTextStyle &= ~TEXT_DRAW_MNEMONIC;
@@ -186,7 +185,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
             pDev->SetLineColor( Color( COL_BLACK ) );
         else
             pDev->SetLineColor( rStyleSettings.GetShadowColor() );
-
+        
         if ( !aText.Len() )
             pDev->DrawLine( Point( rPos.X(), nTop ), Point( rPos.X()+rSize.Width()-2, nTop ) );
         else
@@ -228,7 +227,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 void GroupBox::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<GroupBox*>(this)->   ImplDraw( const_cast<GroupBox*>(this), 0, Point(), GetOutputSizePixel(), true );
+    const_cast<GroupBox*>(this)->	ImplDraw( const_cast<GroupBox*>(this), 0, Point(), GetOutputSizePixel(), true );
 }
 
 // -----------------------------------------------------------------------
@@ -241,11 +240,11 @@ void GroupBox::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                     sal_uLong nFlags )
+                     ULONG nFlags )
 {
-    Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
-    Font        aFont = GetDrawPixelFont( pDev );
+    Point		aPos  = pDev->LogicToPixel( rPos );
+    Size		aSize = pDev->LogicToPixel( rSize );
+    Font		aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -288,20 +287,20 @@ void GroupBox::StateChanged( StateChangedType nType )
              (GetStyle() & GROUP_VIEW_STYLE) )
             Invalidate();
     }
-    else if ( (nType == STATE_CHANGE_ZOOM)  ||
+    else if ( (nType == STATE_CHANGE_ZOOM)	||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( TRUE, FALSE, FALSE );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( FALSE, TRUE, FALSE );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
     }
 }
@@ -317,7 +316,7 @@ void GroupBox::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( TRUE, TRUE, TRUE );
         Invalidate();
     }
 }

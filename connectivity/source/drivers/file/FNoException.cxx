@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ OPredicateInterpreter::~OPredicateInterpreter()
         delete m_aStack.top();
         m_aStack.pop();
     }
-    //  m_aStack.clear();
+    //	m_aStack.clear();
 }
 // -----------------------------------------------------------------------------
 void OPredicateCompiler::Clean()
@@ -75,7 +75,7 @@ void OSQLAnalyzer::clean()
 // -----------------------------------------------------------------------------
 void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
 {
-    OCodeList& rCodeList    = m_aCompiler->m_aCodeList;
+    OCodeList& rCodeList	= m_aCompiler->m_aCodeList;
     for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end();++aIter)
     {
         OOperandParam* pParam = PTR_CAST(OOperandParam,(*aIter));
@@ -89,28 +89,28 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::scanParameter" );
     DBG_ASSERT(pParseNode != NULL,"OResultSet: interner Fehler: ungueltiger ParseNode");
 
-    // found parameter Name-Rule?
+    // Parameter Name-Regel gefunden?
     if (SQL_ISRULE(pParseNode,parameter))
     {
         DBG_ASSERT(pParseNode->count() >= 1,"OResultSet: Parse Tree fehlerhaft");
         DBG_ASSERT(pParseNode->getChild(0)->getNodeType() == SQL_NODE_PUNCTUATION,"OResultSet: Parse Tree fehlerhaft");
 
         _rParaNodes.push_back(pParseNode);
-        // Further descend not nessesary
+        // Weiterer Abstieg nicht erforderlich
         return;
     }
 
-    // Further descend in Parse Tree
-    for (sal_uInt32 i = 0; i < pParseNode->count(); i++)
+    // Weiter absteigen im Parse Tree
+    for (UINT32 i = 0; i < pParseNode->count(); i++)
         scanParameter(pParseNode->getChild(i),_rParaNodes);
 }
 // -----------------------------------------------------------------------------
 OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow& _rRow)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::GetOrderbyKeyValue" );
-    sal_uInt32 nBookmarkValue = Abs((sal_Int32)(_rRow->get())[0]->getValue());
+    UINT32 nBookmarkValue = Abs((sal_Int32)(_rRow->get())[0]->getValue());
 
-    OKeyValue* pKeyValue = OKeyValue::createKeyValue((sal_uInt32)nBookmarkValue);
+    OKeyValue* pKeyValue = OKeyValue::createKeyValue((UINT32)nBookmarkValue);
 
     ::std::vector<sal_Int32>::iterator aIter = m_aOrderbyColumnNumber.begin();
     for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)
@@ -122,5 +122,12 @@ OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow& _rRow)
     return pKeyValue;
 }
 // -----------------------------------------------------------------------------
+
+
+
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

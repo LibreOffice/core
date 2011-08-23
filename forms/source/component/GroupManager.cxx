@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@ public:
     {
         return
             reinterpret_cast<sal_Int64>(lhs.m_xComponent.get())
-        <   reinterpret_cast<sal_Int64>(rhs.m_xComponent.get());
+        <	reinterpret_cast<sal_Int64>(rhs.m_xComponent.get());
     }
 };
 
@@ -121,11 +121,11 @@ OGroupComp::OGroupComp(const OGroupComp& _rSource)
 
 //------------------------------------------------------------------
 OGroupComp::OGroupComp(const Reference<XPropertySet>& rxSet, sal_Int32 nInsertPos )
-    : m_aName( OGroupManager::GetGroupName( rxSet ) )
-    , m_xComponent( rxSet )
-    , m_xControlModel(rxSet,UNO_QUERY)
-    , m_nPos( nInsertPos )
-    , m_nTabIndex(0)
+    :m_xComponent( rxSet )
+    ,m_xControlModel(rxSet,UNO_QUERY)
+    ,m_nPos( nInsertPos )
+    ,m_nTabIndex(0)
+    ,m_aName( OGroupManager::GetGroupName( rxSet ) )
 {
     if (m_xComponent.is())
     {
@@ -226,12 +226,12 @@ void OGroup::RemoveComponent( const Reference<XPropertySet>& rxElement )
         }
         else
         {
-            OSL_FAIL( "OGroup::RemoveComponent: Component nicht in Gruppe" );
+            DBG_ERROR( "OGroup::RemoveComponent: Component nicht in Gruppe" );
         }
     }
     else
     {
-        OSL_FAIL( "OGroup::RemoveComponent: Component nicht in Gruppe" );
+        DBG_ERROR( "OGroup::RemoveComponent: Component nicht in Gruppe" );
     }
 }
 
@@ -269,7 +269,7 @@ Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 DBG_NAME(OGroupManager);
 //------------------------------------------------------------------
 OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
-    :m_pCompGroup( new OGroup( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllComponentGroup") ) ) )
+    :m_pCompGroup( new OGroup( ::rtl::OUString::createFromAscii( "AllComponentGroup" ) ) )
     ,m_xContainer(_rxContainer)
 {
     DBG_CTOR(OGroupManager,NULL);
@@ -350,7 +350,7 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) thro
     Reference<XPropertySet>  xSet(evt.Source, UNO_QUERY);
 
     // Component aus Gruppe entfernen
-    ::rtl::OUString     sGroupName;
+    ::rtl::OUString		sGroupName;
     if (hasProperty( PROPERTY_GROUP_NAME, xSet ))
         xSet->getPropertyValue( PROPERTY_GROUP_NAME ) >>= sGroupName;
     if (evt.PropertyName == PROPERTY_NAME) {
@@ -425,9 +425,9 @@ sal_Int32 OGroupManager::getGroupCount()
 void OGroupManager::getGroup(sal_Int32 nGroup, Sequence< Reference<XControlModel> >& _rGroup, ::rtl::OUString& _rName)
 {
     OSL_ENSURE(nGroup >= 0 && (size_t)nGroup < m_aActiveGroupMap.size(),"OGroupManager::getGroup: Invalid group index!");
-    OGroupArr::iterator aGroupPos   = m_aActiveGroupMap[nGroup];
-    _rName                          = aGroupPos->second.GetGroupName();
-    _rGroup                         = aGroupPos->second.GetControlModels();
+    OGroupArr::iterator aGroupPos	= m_aActiveGroupMap[nGroup];
+    _rName							= aGroupPos->second.GetGroupName();
+    _rGroup							= aGroupPos->second.GetControlModels();
 }
 
 //------------------------------------------------------------------
@@ -506,7 +506,7 @@ void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
         return;
 
     // Component aus Gruppe entfernen
-    ::rtl::OUString     sGroupName( GetGroupName( xSet ) );
+    ::rtl::OUString		sGroupName( GetGroupName( xSet ) );
 
     removeFromGroupMap(sGroupName,xSet);
 }
@@ -527,7 +527,7 @@ void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

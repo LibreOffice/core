@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,23 +27,17 @@
  ************************************************************************/
 
 #include "oox/vml/vmlshapecontext.hxx"
-
-#include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
-#include "oox/vml/vmltextboxcontext.hxx"
 
-namespace oox {
-namespace vml {
-
-// ============================================================================
-
-using namespace ::com::sun::star::awt;
-
+using ::rtl::OUString;
+using ::com::sun::star::awt::Point;
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
-using ::rtl::OUString;
+
+namespace oox {
+namespace vml {
 
 // ============================================================================
 
@@ -107,101 +101,39 @@ OptValue< DoublePair > lclDecodePercentPair( const AttributeList& rAttribs, sal_
 bool lclDecodeVmlxBool( const OUString& rValue, bool bDefaultForEmpty )
 {
     if( rValue.getLength() == 0 ) return bDefaultForEmpty;
-    sal_Int32 nToken = AttributeConversion::decodeToken( rValue );
     // anything else than 't' or 'True' is considered to be false, as specified
-    return (nToken == XML_t) || (nToken == XML_True);
+    return ((rValue.getLength() == 1) && (rValue[ 0 ] == 't')) || (rValue == CREATE_OUSTRING( "True" ));
 }
 
 } // namespace
 
 // ============================================================================
 
-ShapeLayoutContext::ShapeLayoutContext( ContextHandler2Helper& rParent, Drawing& rDrawing ) :
-    ContextHandler2( rParent ),
-    mrDrawing( rDrawing )
-{
-}
-
-
-ContextHandlerRef ShapeLayoutContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
-{
-    switch( nElement )
-    {
-        case O_TOKEN( idmap ):
-        {
-            OUString aBlockIds = rAttribs.getString( XML_data, OUString() );
-            sal_Int32 nIndex = 0;
-            while( nIndex >= 0 )
-            {
-                OUString aToken = aBlockIds.getToken( 0, ' ', nIndex ).trim();
-                if( aToken.getLength() > 0 )
-                    mrDrawing.registerBlockId( aToken.toInt32() );
-            }
-        }
-        break;
-    }
-    return 0;
-}
-
-// ============================================================================
-
-ClientDataContext::ClientDataContext( ContextHandler2Helper& rParent,
-        ClientData& rClientData, const AttributeList& rAttribs ) :
+ShapeClientDataContext::ShapeClientDataContext( ContextHandler2Helper& rParent,
+        const AttributeList& rAttribs, ShapeClientData& rClientData ) :
     ContextHandler2( rParent ),
     mrClientData( rClientData )
 {
     mrClientData.mnObjType = rAttribs.getToken( XML_ObjectType, XML_TOKEN_INVALID );
 }
 
-ContextHandlerRef ClientDataContext::onCreateContext( sal_Int32 /*nElement*/, const AttributeList& /*rAttribs*/ )
+ContextHandlerRef ShapeClientDataContext::onCreateContext( sal_Int32 /*nElement*/, const AttributeList& /*rAttribs*/ )
 {
-    if( isRootElement() )
-    {
-        maElementText = OUString();
-        return this;
-    }
-    return 0;
+    return isRootElement() ? this : 0;
 }
 
-void ClientDataContext::onCharacters( const OUString& rChars )
-{
-    /*  Empty but existing elements have special meaning, e.g. 'true'. Collect
-        existing text and convert it in onEndElement(). */
-    maElementText = rChars;
-}
-
-void ClientDataContext::onEndElement()
+void ShapeClientDataContext::onEndElement( const OUString& rChars )
 {
     switch( getCurrentElement() )
     {
-        case VMLX_TOKEN( Anchor ):      mrClientData.maAnchor = maElementText;                                          break;
-        case VMLX_TOKEN( FmlaMacro ):   mrClientData.maFmlaMacro = maElementText;                                       break;
-        case VMLX_TOKEN( FmlaPict ):    mrClientData.maFmlaPict = maElementText;                                        break;
-        case VMLX_TOKEN( FmlaLink ):    mrClientData.maFmlaLink = maElementText;                                        break;
-        case VMLX_TOKEN( FmlaRange ):   mrClientData.maFmlaRange = maElementText;                                       break;
-        case VMLX_TOKEN( FmlaGroup ):   mrClientData.maFmlaGroup = maElementText;                                       break;
-        case VMLX_TOKEN( TextHAlign ):  mrClientData.mnTextHAlign = AttributeConversion::decodeToken( maElementText );  break;
-        case VMLX_TOKEN( TextVAlign ):  mrClientData.mnTextVAlign = AttributeConversion::decodeToken( maElementText );  break;
-        case VMLX_TOKEN( Column ):      mrClientData.mnCol = maElementText.toInt32();                                   break;
-        case VMLX_TOKEN( Row ):         mrClientData.mnRow = maElementText.toInt32();                                   break;
-        case VMLX_TOKEN( Checked ):     mrClientData.mnChecked = maElementText.toInt32();                               break;
-        case VMLX_TOKEN( DropStyle ):   mrClientData.mnDropStyle = AttributeConversion::decodeToken( maElementText );   break;
-        case VMLX_TOKEN( DropLines ):   mrClientData.mnDropLines = maElementText.toInt32();                             break;
-        case VMLX_TOKEN( Val ):         mrClientData.mnVal = maElementText.toInt32();                                   break;
-        case VMLX_TOKEN( Min ):         mrClientData.mnMin = maElementText.toInt32();                                   break;
-        case VMLX_TOKEN( Max ):         mrClientData.mnMax = maElementText.toInt32();                                   break;
-        case VMLX_TOKEN( Inc ):         mrClientData.mnInc = maElementText.toInt32();                                   break;
-        case VMLX_TOKEN( Page ):        mrClientData.mnPage = maElementText.toInt32();                                  break;
-        case VMLX_TOKEN( SelType ):     mrClientData.mnSelType = AttributeConversion::decodeToken( maElementText );     break;
-        case VMLX_TOKEN( VTEdit ):      mrClientData.mnVTEdit = maElementText.toInt32();                                break;
-        case VMLX_TOKEN( PrintObject ): mrClientData.mbPrintObject = lclDecodeVmlxBool( maElementText, true );          break;
-        case VMLX_TOKEN( Visible ):     mrClientData.mbVisible = lclDecodeVmlxBool( maElementText, true );              break;
-        case VMLX_TOKEN( DDE ):         mrClientData.mbDde = lclDecodeVmlxBool( maElementText, true );                  break;
-        case VMLX_TOKEN( NoThreeD ):    mrClientData.mbNo3D = lclDecodeVmlxBool( maElementText, true );                 break;
-        case VMLX_TOKEN( NoThreeD2 ):   mrClientData.mbNo3D2 = lclDecodeVmlxBool( maElementText, true );                break;
-        case VMLX_TOKEN( MultiLine ):   mrClientData.mbMultiLine = lclDecodeVmlxBool( maElementText, true );            break;
-        case VMLX_TOKEN( VScroll ):     mrClientData.mbVScroll = lclDecodeVmlxBool( maElementText, true );              break;
-        case VMLX_TOKEN( SecretEdit ):  mrClientData.mbSecretEdit = lclDecodeVmlxBool( maElementText, true );           break;
+        case VMLX_TOKEN( Anchor ):      mrClientData.maAnchor = rChars;                                 break;
+        case VMLX_TOKEN( FmlaPict ):    mrClientData.maPictureLink = rChars;                            break;
+        case VMLX_TOKEN( FmlaLink ):    mrClientData.maLinkedCell = rChars;                             break;
+        case VMLX_TOKEN( FmlaRange ):   mrClientData.maSourceRange = rChars;                            break;
+        case VMLX_TOKEN( Column ):      mrClientData.mnCol = rChars.toInt32();                          break;
+        case VMLX_TOKEN( Row ):         mrClientData.mnRow = rChars.toInt32();                          break;
+        case VMLX_TOKEN( PrintObject ): mrClientData.mbPrintObject = lclDecodeVmlxBool( rChars, true ); break;
+        case VMLX_TOKEN( Visible ):     mrClientData.mbVisible = true;                                  break;
     }
 }
 
@@ -213,27 +145,24 @@ ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
 }
 
 /*static*/ ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper& rParent,
-        ShapeContainer& rShapes, sal_Int32 nElement, const AttributeList& rAttribs )
+        sal_Int32 nElement, const AttributeList& rAttribs, ShapeContainer& rShapes )
 {
     switch( nElement )
     {
-        case O_TOKEN( shapelayout ):
-            return new ShapeLayoutContext( rParent, rShapes.getDrawing() );
-
         case VML_TOKEN( shapetype ):
-            return new ShapeTypeContext( rParent, rShapes.createShapeType(), rAttribs );
+            return new ShapeTypeContext( rParent, rAttribs, rShapes.createShapeType() );
         case VML_TOKEN( group ):
-            return new GroupShapeContext( rParent, rShapes.createShape< GroupShape >(), rAttribs );
+            return new GroupShapeContext( rParent, rAttribs, rShapes.createShape< GroupShape >() );
         case VML_TOKEN( shape ):
-            return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
+            return new ShapeContext( rParent, rAttribs, rShapes.createShape< ComplexShape >() );
         case VML_TOKEN( rect ):
             return new RectangleShapeContext( rParent, rAttribs, rShapes.createShape< RectangleShape >() );
         case VML_TOKEN( roundrect ):
-            return new ShapeContext( rParent, rShapes.createShape< RectangleShape >(), rAttribs );
+            return new ShapeContext( rParent, rAttribs, rShapes.createShape< RectangleShape >() );
         case VML_TOKEN( oval ):
-            return new ShapeContext( rParent, rShapes.createShape< EllipseShape >(), rAttribs );
+            return new ShapeContext( rParent, rAttribs, rShapes.createShape< EllipseShape >() );
         case VML_TOKEN( polyline ):
-            return new ShapeContext( rParent, rShapes.createShape< PolyLineShape >(), rAttribs );
+            return new ShapeContext( rParent, rAttribs, rShapes.createShape< PolyLineShape >() );
 
         // TODO:
         case VML_TOKEN( arc ):
@@ -241,14 +170,14 @@ ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
         case VML_TOKEN( line ):
         case VML_TOKEN( diagram ):
         case VML_TOKEN( image ):
-            return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
+            return new ShapeContext( rParent, rAttribs, rShapes.createShape< ComplexShape >() );
     }
     return 0;
 }
 
 // ============================================================================
 
-ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& rShapeType, const AttributeList& rAttribs ) :
+ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, ShapeType& rShapeType ) :
     ShapeContextBase( rParent ),
     mrTypeModel( rShapeType.getTypeModel() )
 {
@@ -258,7 +187,7 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& r
     OSL_ENSURE( mrTypeModel.maShapeId.getLength() > 0, "ShapeTypeContext::ShapeTypeContext - missing shape identifier" );
     // if the o:spid attribute exists, the id attribute contains the user-defined shape name
     if( bHasOspid )
-        mrTypeModel.maShapeName = rAttribs.getXString( XML_id, OUString() );
+        mrTypeModel.maName = rAttribs.getXString( XML_id, OUString() );
     // builtin shape type identifier
     mrTypeModel.moShapeType = rAttribs.getInteger( O_TOKEN( spt ) );
 
@@ -312,10 +241,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.maFillModel.moRotate = lclDecodeBool( rAttribs, XML_rotate );
         break;
         case VML_TOKEN( imagedata ):
-            // shapes in docx use r:id for the relationship id
-            // in xlsx it they use o:relid
-            bool bHasORelId = rAttribs.hasAttribute( O_TOKEN( relid ) );
-            mrTypeModel.moGraphicPath = decodeFragmentPath( rAttribs, bHasORelId ? O_TOKEN( relid ) : R_TOKEN( id ) );
+            mrTypeModel.moGraphicPath = decodeFragmentPath( rAttribs, R_TOKEN( id ) );
             mrTypeModel.moGraphicTitle = rAttribs.getString( O_TOKEN( title ) );
         break;
     }
@@ -339,21 +265,21 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
         OUString aName, aValue;
         if( ConversionHelper::separatePair( aName, aValue, rStyle.getToken( 0, ';', nIndex ), ':' ) )
         {
-                 if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "position" ) ) )      mrTypeModel.maPosition = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "left" ) ) )          mrTypeModel.maLeft = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "top" ) ) )           mrTypeModel.maTop = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "width" ) ) )         mrTypeModel.maWidth = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "height" ) ) )        mrTypeModel.maHeight = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "margin-left" ) ) )   mrTypeModel.maMarginLeft = aValue;
-            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "margin-top" ) ) )    mrTypeModel.maMarginTop = aValue;
+                 if( aName.equalsAscii( "position" ) )      mrTypeModel.maPosition = aValue;
+            else if( aName.equalsAscii( "left" ) )          mrTypeModel.maLeft = aValue;
+            else if( aName.equalsAscii( "top" ) )           mrTypeModel.maTop = aValue;
+            else if( aName.equalsAscii( "width" ) )         mrTypeModel.maWidth = aValue;
+            else if( aName.equalsAscii( "height" ) )        mrTypeModel.maHeight = aValue;
+            else if( aName.equalsAscii( "margin-left" ) )   mrTypeModel.maMarginLeft = aValue;
+            else if( aName.equalsAscii( "margin-top" ) )    mrTypeModel.maMarginTop = aValue;
         }
     }
 }
 
 // ============================================================================
 
-ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapeBase& rShape, const AttributeList& rAttribs ) :
-    ShapeTypeContext( rParent, rShape, rAttribs ),
+ShapeContext::ShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, ShapeBase& rShape ) :
+    ShapeTypeContext( rParent, rAttribs, rShape ),
     mrShape( rShape ),
     mrShapeModel( rShape.getShapeModel() )
 {
@@ -366,18 +292,13 @@ ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapeBase& rShape, c
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     // Custom shape in Writer with a textbox are transformed into a frame
-    if ( nElement == ( NMSP_vml + XML_textbox ) )
+    if ( nElement == ( NMSP_VML + XML_textbox ) )
         dynamic_cast<SimpleShape&>( mrShape ).setService(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")) );
+            OUString::createFromAscii( "com.sun.star.text.TextFrame" ) );
 
     // Excel specific shape client data
-    if( isRootElement() ) switch( nElement )
-    {
-        case VML_TOKEN( textbox ):
-            return new TextBoxContext( *this, mrShapeModel.createTextBox(), rAttribs );
-        case VMLX_TOKEN( ClientData ):
-            return new ClientDataContext( *this, mrShapeModel.createClientData(), rAttribs );
-    }
+    if( isRootElement() && (nElement == VMLX_TOKEN( ClientData )) )
+        return new ShapeClientDataContext( *this, rAttribs, mrShapeModel.createClientData() );
     // handle remaining stuff in base class
     return ShapeTypeContext::onCreateContext( nElement, rAttribs );
 }
@@ -396,8 +317,8 @@ void ShapeContext::setPoints( const OUString& rPoints )
 
 // ============================================================================
 
-GroupShapeContext::GroupShapeContext( ContextHandler2Helper& rParent, GroupShape& rShape, const AttributeList& rAttribs ) :
-    ShapeContext( rParent, rShape, rAttribs ),
+GroupShapeContext::GroupShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, GroupShape& rShape ) :
+    ShapeContext( rParent, rAttribs, rShape ),
     mrShapes( rShape.getChildren() )
 {
 }
@@ -405,7 +326,7 @@ GroupShapeContext::GroupShapeContext( ContextHandler2Helper& rParent, GroupShape
 ContextHandlerRef GroupShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     // try to create a context of an embedded shape
-    ContextHandlerRef xContext = createShapeContext( *this, mrShapes, nElement, rAttribs );
+    ContextHandlerRef xContext = createShapeContext( *this, nElement, rAttribs, mrShapes );
     // handle remaining stuff of this shape in base class
     return xContext.get() ? xContext : ShapeContext::onCreateContext( nElement, rAttribs );
 }
@@ -413,15 +334,15 @@ ContextHandlerRef GroupShapeContext::onCreateContext( sal_Int32 nElement, const 
 // ============================================================================
 
 RectangleShapeContext::RectangleShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, RectangleShape& rShape ) :
-    ShapeContext( rParent, rShape, rAttribs )
+    ShapeContext( rParent, rAttribs, rShape )
 {
 }
 
 ContextHandlerRef RectangleShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if ( nElement == ( NMSP_vml + XML_textbox ) )
+    if ( nElement == ( NMSP_VML + XML_textbox ) )
         dynamic_cast< SimpleShape &>( mrShape ).setService(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")) );
+            OUString::createFromAscii( "com.sun.star.text.TextFrame" ) );
 
     // The parent class's context is fine
     return ShapeContext::onCreateContext( nElement, rAttribs );

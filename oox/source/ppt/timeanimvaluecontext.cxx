@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,11 @@
 
 #include "timeanimvaluecontext.hxx"
 
+#include "oox/core/namespaces.hxx"
 #include "animvariantcontext.hxx"
+
+#include "tokens.hxx"
+
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -54,7 +58,7 @@ namespace oox { namespace ppt {
     void SAL_CALL TimeAnimValueListContext::endFastElement( sal_Int32 aElement )
         throw ( SAXException, RuntimeException)
     {
-        if( aElement == PPT_TOKEN( tav ) )
+        if( aElement == ( NMSP_PPT|XML_tav ) )
         {
             mbInValue = false;
         }
@@ -69,7 +73,7 @@ namespace oox { namespace ppt {
 
         switch ( aElementToken )
         {
-        case PPT_TOKEN( tav ):
+        case NMSP_PPT|XML_tav:
         {
             mbInValue = true;
             TimeAnimationValue val;
@@ -78,7 +82,7 @@ namespace oox { namespace ppt {
             maTavList.push_back( val );
             break;
         }
-        case PPT_TOKEN( val ):
+        case NMSP_PPT|XML_val:
             if( mbInValue )
             {
                 // CT_TLAnimVariant

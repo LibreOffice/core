@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,9 +72,9 @@ using namespace ::com::sun::star::uno;
 
 namespace sd {
 
-#define POOL_BUFFER_SIZE        (sal_uInt16)32768
-#define BASIC_BUFFER_SIZE       (sal_uInt16)8192
-#define DOCUMENT_BUFFER_SIZE    (sal_uInt16)32768
+#define POOL_BUFFER_SIZE		(USHORT)32768
+#define BASIC_BUFFER_SIZE		(USHORT)8192
+#define DOCUMENT_BUFFER_SIZE	(USHORT)32768
 
 /*************************************************************************
 |*
@@ -123,7 +123,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             if( dynamic_cast< FuSearch* >(mxDocShellFunction.get()) )
             {
-                // End Search&Replace in all docshells
+                // Suchen&Ersetzen in allen DocShells beenden
                 SfxObjectShell* pFirstShell = SfxObjectShell::GetFirst();
                 SfxObjectShell* pShell = pFirstShell;
 
@@ -184,13 +184,14 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_CLOSEDOC:
         {
+//            SfxObjectShell::DoClose();
             ExecuteSlot(rReq, SfxObjectShell::GetStaticInterface());
         }
         break;
 
         case SID_GET_COLORTABLE:
         {
-            //  passende ColorTable ist per PutItem gesetzt worden
+            //	passende ColorTable ist per PutItem gesetzt worden
             SvxColorTableItem* pColItem = (SvxColorTableItem*) GetItem( SID_COLOR_TABLE );
             XColorTable* pTable = pColItem->GetColorTable();
             rReq.SetReturnValue( OfaPtrItem( SID_GET_COLORTABLE, pTable ) );
@@ -199,7 +200,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_VERSION:
         {
-            const sal_uLong nOldSwapMode = mpDoc->GetSwapGraphicsMode();
+            const ULONG nOldSwapMode = mpDoc->GetSwapGraphicsMode();
 
             mpDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
             ExecuteSlot( rReq, SfxObjectShell::GetStaticInterface() );

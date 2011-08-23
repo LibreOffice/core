@@ -57,12 +57,16 @@
  * @file
  * Style for all draw object.
  ************************************************************************/
-#ifndef     _XFDRAWSTYLE_HXX
-#define     _XFDRAWSTYLE_HXX
+/*************************************************************************
+ * Change History
+ * 2004-2-21 create this file.
+ ************************************************************************/
+#ifndef		_XFDRAWSTYLE_HXX
+#define		_XFDRAWSTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
-#include    <cassert>
+#include	"xfstyle.hxx"
+#include	"xfcolor.hxx"
+#include	<cassert>
 
 class XFDrawLineStyle;
 class XFDrawAreaStyle;
@@ -84,56 +88,56 @@ public:
 
 public:
     /**
-     * @descr   Set drawing wrap type.
+     * @descr	Set drawing wrap type.
      */
-    void    SetWrapType(enumXFWrap wrap, sal_Int32 nParagraphs = 0);
+    void	SetWrapType(enumXFWrap wrap, sal_Int32 nParagraphs = 0);
 
     /**
-     * @descr   Set drawing object border line.
+     * @descr	Set drawing object border line.
      */
-    void    SetLineStyle(double width, XFColor color = XFColor(0,0,0), sal_Int32 transparency = 0);
+    void	SetLineStyle(double width, XFColor color = XFColor(0,0,0), sal_Int32 transparency = 0);
 
     /**
-     * @descr   Set drawing obejct dash border style.
+     * @descr	Set drawing obejct dash border style.
      */
-    void    SetLineDashStyle(enumXFLineStyle style, int num1, int num2, double len1, double len2, double space );
+    void	SetLineDashStyle(enumXFLineStyle style, int num1, int num2, double len1, double len2, double space );
 
     /**
-     * @descr   Set drawing object area fill color.
+     * @descr	Set drawing object area fill color.
      */
-    void    SetAreaColor(XFColor& color);
+    void	SetAreaColor(XFColor& color);
 
     /**
-     * @descr   Set drawing obejct area grid style.
+     * @descr	Set drawing obejct area grid style.
      */
-    void    SetAreaLineStyle(enumXFAreaLineStyle style, sal_Int32 angle = 0, double space = 0.102, XFColor lineColor = XFColor(0,0,0));
+    void	SetAreaLineStyle(enumXFAreaLineStyle style, sal_Int32 angle = 0, double space = 0.102, XFColor lineColor = XFColor(0,0,0));
 
     /**
-     * @descr   Set drawing object arrow start style,only lines can have arrows.
+     * @descr	Set drawing object arrow start style,only lines can have arrows.
      */
-    void    SetArrowStart(rtl::OUString start, double size=0.3, sal_Bool center = sal_False);
+    void	SetArrowStart(rtl::OUString start, double size=0.3, sal_Bool center = sal_False);
 
     /**
-     * @descr   Set drawing obejct arrow end style,only lines can have arrows.
+     * @descr	Set drawing obejct arrow end style,only lines can have arrows.
      */
-    void    SetArrowEnd(rtl::OUString end, double size=0.3, sal_Bool center = sal_False);
+    void	SetArrowEnd(rtl::OUString end, double size=0.3, sal_Bool center = sal_False);
 
     void SetFontWorkStyle(sal_Int8 nForm, enumXFFWStyle eStyle, enumXFFWAdjust eAdjust);
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle	GetStyleFamily();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
     XFFontWorkStyle* m_pFontWorkStyle;
-    enumXFWrap  m_eWrap;
-    sal_Int32   m_nWrapLines;
-    XFDrawLineStyle *m_pLineStyle;
-    XFDrawAreaStyle *m_pAreaStyle;
-    rtl::OUString   m_strArrowStart;
-    rtl::OUString   m_strArrowEnd;
-    double  m_fArrowStartSize;
-    double  m_fArrowEndSize;
+    enumXFWrap	m_eWrap;
+    sal_Int32	m_nWrapLines;
+    XFDrawLineStyle	*m_pLineStyle;
+    XFDrawAreaStyle	*m_pAreaStyle;
+    rtl::OUString	m_strArrowStart;
+    rtl::OUString	m_strArrowEnd;
+    double	m_fArrowStartSize;
+    double	m_fArrowEndSize;
     sal_Bool m_bArrowStartCenter;
     sal_Bool m_bArrowEndCenter;
 };

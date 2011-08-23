@@ -57,14 +57,18 @@
  * @file
  * Table cell style. Number format, string value, and so on...
  ************************************************************************/
-#ifndef     _XFCELLSTYLE_HXX
-#define     _XFCELLSTYLE_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-28 create this file.
+ ************************************************************************/
+#ifndef		_XFCELLSTYLE_HXX
+#define		_XFCELLSTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
-#include    "xfmargins.hxx"
-#include    "xfpadding.hxx"
-#include    "xfshadow.hxx"
+#include	"xfstyle.hxx"
+#include	"xfcolor.hxx"
+#include	"xfmargins.hxx"
+#include	"xfpadding.hxx"
+#include	"xfshadow.hxx"
 
 class XFBorders;
 class XFFont;
@@ -73,7 +77,7 @@ class XFMargins;
 class XFBGImage;
 
 /**
- * @descr   Style obejct for cell.
+ * @descr	Style obejct for cell.
  */
 class XFCellStyle : public XFStyle
 {
@@ -84,81 +88,81 @@ public:
 
 public:
     /**
-     * @descr   Set cell data format style name.
+     * @descr	Set cell data format style name.
      */
-    void    SetDataStyle(rtl::OUString style);
+    void	SetDataStyle(rtl::OUString style);
 
     /**
-     * @descr:  Parant paragraph style.
+     * @descr:	Parant paragraph style.
      */
-    void    SetParentStyle(rtl::OUString parent);
+    void	SetParentStyle(rtl::OUString parent);
 
     /**
-     * @descr:  set the paragraph defaut font.
-     * @param:  font font obejct to be setted.Font object are deleted by font-factory,so
-     *          dont't delete it in the destructure function of para style.
+     * @descr:	set the paragraph defaut font.
+     * @param:	font font obejct to be setted.Font object are deleted by font-factory,so
+     *			dont't delete it in the destructure function of para style.
      */
-    void    SetFont(XFFont *font);
+    void	SetFont(XFFont *font);
 
     /**
-     * @descr:  Set the indent of the paragraph.This is the indent for
+     * @descr:	Set the indent of the paragraph.This is the indent for
                 the first line.
-     * @param:  indent value of the first-line indent.
+     * @param:	indent value of the first-line indent.
      */
-    void    SetIndent(double indent );
+    void	SetIndent(double indent );
 
     /**
-     * @descr:  Set the pading of the paragraph.This is the distance
+     * @descr:	Set the pading of the paragraph.This is the distance
                 between the border and the top of the text.
-     * @param:  indent value of the padding.
+     * @param:	indent value of the padding.
      */
-    void    SetPadding(double left, double right = -1, double top = -1, double bottom = -1);
+    void	SetPadding(double left, double right = -1, double top = -1, double bottom = -1);
 
     /**
-     * @descr:  Set the Margins of the paragraph.
-     * @param:  -1:     don't change.
-                other:  set value.
+     * @descr:	Set the Margins of the paragraph.
+     * @param:	-1:		don't change.
+                other:	set value.
      */
-    void    SetMargins(double left, double right=-1,double top=-1, double bottom=-1);
+    void	SetMargins(double left, double right=-1,double top=-1, double bottom=-1);
 
     /**
-     * @descr:  Set alignment property of the cell.
-     * @param:  eAlign alignment type,left,right,center or justify.
+     * @descr:	Set alignment property of the cell.
+     * @param:	eAlign alignment type,left,right,center or justify.
      */
-    void    SetAlignType(enumXFAlignType hori=enumXFAlignNone, enumXFAlignType vert = enumXFAlignBottom);
+    void	SetAlignType(enumXFAlignType hori=enumXFAlignNone, enumXFAlignType vert = enumXFAlignBottom);
 
     /**
-     * @descr:  Set the shadow of the paragraph.there is 4 postions, you
+     * @descr:	Set the shadow of the paragraph.there is 4 postions, you
                 can find it in the definition of enumShadowPos.
-     * @param:  pos
-     * @param:  offset the distance between the paragraph border and the shadow.
-     * @param:  color color to fill the shadow.
+     * @param:	pos
+     * @param:	offset the distance between the paragraph border and the shadow.
+     * @param:	color color to fill the shadow.
      */
-    void    SetShadow(enumXFShadowPos pos, double offset, XFColor& color);
+    void	SetShadow(enumXFShadowPos pos, double offset, XFColor& color);
 
     /**
-     * @descr:  The borders is complex,so you have to create one before use.
+     * @descr:	The borders is complex,so you have to create one before use.
                 Very few paragraphs will readly have borders property,this way
                 we can save much memory.
-     * @param:  pBorders borders of the paragraph,please reference the XFBorders.
+     * @param:	pBorders borders of the paragraph,please reference the XFBorders.
      */
-    void    SetBorders(XFBorders *pBorders);
+    void	SetBorders(XFBorders *pBorders);
 
     /**
-     * @descr:  Set background color of the cell.
-     * @param:  color value of the back color.
+     * @descr:	Set background color of the cell.
+     * @param:	color value of the back color.
      */
-    void    SetBackColor(XFColor& color);
+    void	SetBackColor(XFColor& color);
 
     /**
-     * descr:   set cell background image.
+     * descr:	set cell background image.
      */
-    void    SetBackImage(XFBGImage *pImage);
+    void	SetBackImage(XFBGImage *pImage);
 
     /**
-     * @descr   Set cell value to warp if it's content is too long to be placed in an single cell.
+     * @descr	Set cell value to warp if it's content is too long to be placed in an single cell.
      */
-    void    SetWrapText(sal_Bool wrap);
+    void	SetWrapText(sal_Bool wrap);
 
     virtual enumXFStyle GetStyleFamily();
 
@@ -167,23 +171,23 @@ public:
     virtual void ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString   m_strDataStyle;
-    rtl::OUString   m_strParentStyleName;
-    enumXFAlignType m_eHoriAlign;
-    enumXFAlignType m_eVertAlign;
+    rtl::OUString	m_strDataStyle;
+    rtl::OUString	m_strParentStyleName;
+    enumXFAlignType	m_eHoriAlign;
+    enumXFAlignType	m_eVertAlign;
 
-    double      m_fTextIndent;
-    XFColor     m_aBackColor;
-    XFBGImage   *m_pBackImage;
-    XFMargins   m_aMargin;
-    XFPadding   m_aPadding;
-    XFFont      *m_pFont;
-    XFShadow    m_aShadow;
-    XFBorders   *m_pBorders;
-    sal_Bool    m_bWrapText;
+    double		m_fTextIndent;
+    XFColor		m_aBackColor;
+    XFBGImage	*m_pBackImage;
+    XFMargins	m_aMargin;
+    XFPadding	m_aPadding;
+    XFFont		*m_pFont;
+    XFShadow	m_aShadow;
+    XFBorders	*m_pBorders;
+    sal_Bool	m_bWrapText;
 };
 
-inline void XFCellStyle::SetAlignType(enumXFAlignType hori, enumXFAlignType vert)
+inline void	XFCellStyle::SetAlignType(enumXFAlignType hori, enumXFAlignType vert)
 {
     m_eHoriAlign = hori;
     m_eVertAlign = vert;

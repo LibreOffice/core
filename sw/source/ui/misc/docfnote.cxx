@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,7 @@
 
 
 #include <svl/style.hxx>
+#include <errhdl.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
@@ -69,7 +70,7 @@ SwFootNoteOptionDlg::SwFootNoteOptionDlg( Window *pParent, SwWrtShell &rS ) :
     AddTabPage( TP_ENDNOTEOPTION,  SwEndNoteOptionPage::Create, 0 );
 }
 
-void SwFootNoteOptionDlg::PageCreated( sal_uInt16 /*nId*/, SfxTabPage &rPage )
+void SwFootNoteOptionDlg::PageCreated( USHORT /*nId*/, SfxTabPage &rPage )
 {
     ((SwEndNoteOptionPage&)rPage).SetShell( rSh );
 }
@@ -95,11 +96,9 @@ IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
 //----------------------------------------------------------------------
 
 
-SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, sal_Bool bEN,
+SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, BOOL bEN,
                                           const SfxItemSet &rSet ) :
     SfxTabPage( pParent, SW_RES(bEN ? TP_ENDNOTEOPTION : TP_FOOTNOTEOPTION), rSet ),
-    aNumFL         (this, SW_RES( FL_NUM        )),
-
     aNumTypeFT      (this, SW_RES( FT_NUMTYPE    )),
     aNumViewBox     (this, SW_RES( LB_NUMVIEW   ), INSERT_NUM_EXTENDED_TYPES),
     aOffsetLbl      (this, SW_RES( FT_OFFSET    )),
@@ -113,30 +112,31 @@ SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, sal_Bool bEN,
     aPosFT          (this, SW_RES( FT_POS    )),
     aPosPageBox     (this, SW_RES( RB_POS_PAGE   )),
     aPosChapterBox  (this, SW_RES( RB_POS_CHAPTER)),
+    aNumFL         (this, SW_RES( FL_NUM        )),
 
-    aTemplFL       (this, SW_RES( FL_TEMPL      )),
     aParaTemplLbl   (this, SW_RES( FT_PARA_TEMPL)),
     aParaTemplBox   (this, SW_RES( LB_PARA_TEMPL)),
     aPageTemplLbl   (this, SW_RES( FT_PAGE_TEMPL)),
     aPageTemplBox   (this, SW_RES( LB_PAGE_TEMPL)),
+    aTemplFL       (this, SW_RES( FL_TEMPL      )),
 
-    aCharTemplFL(          this, SW_RES(FL_CHAR_TEMPL)),
     aFtnCharAnchorTemplLbl( this, SW_RES( FT_ANCHR_CHARFMT)),
     aFtnCharAnchorTemplBox( this, SW_RES( LB_ANCHR_CHARFMT)),
     aFtnCharTextTemplLbl(   this, SW_RES( FT_TEXT_CHARFMT)),
     aFtnCharTextTemplBox(   this, SW_RES( LB_TEXT_CHARFMT)),
+    aCharTemplFL(          this, SW_RES(FL_CHAR_TEMPL)),
 
-    aContFL        (this, SW_RES( FL_CONT       )),
     aContLbl        (this, SW_RES( FT_CONT      )),
     aContEdit       (this, SW_RES( ED_CONT      )),
     aContFromLbl    (this, SW_RES( FT_CONT_FROM )),
     aContFromEdit   (this, SW_RES( ED_CONT_FROM )),
+    aContFL        (this, SW_RES( FL_CONT       )),
 
     aNumDoc(aNumCountBox.GetEntry(FTNNUM_DOC)),
     aNumPage(aNumCountBox.GetEntry(FTNNUM_PAGE)),
     aNumChapter(aNumCountBox.GetEntry(FTNNUM_CHAPTER)),
     pSh( 0 ),
-    bPosDoc(sal_False),
+    bPosDoc(FALSE),
     bEndNote( bEN )
 {
     FreeResource();
@@ -145,8 +145,6 @@ SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, sal_Bool bEN,
     aPosChapterBox.SetClickHdl(LINK(this, SwEndNoteOptionPage, PosChapterHdl));
     aNumCountBox.SetSelectHdl(LINK(this, SwEndNoteOptionPage, NumCountHdl));
 
-    aPosPageBox.SetAccessibleRelationMemberOf(&aPosFT);
-    aPosChapterBox.SetAccessibleRelationMemberOf(&aPosFT);
 }
 
 void SwEndNoteOptionPage::Reset( const SfxItemSet& )
@@ -154,14 +152,14 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     SwEndNoteInfo *pInf = bEndNote ? new SwEndNoteInfo( pSh->GetEndNoteInfo() )
                                    : new SwFtnInfo( pSh->GetFtnInfo() );
     SfxObjectShell * pDocSh = SfxObjectShell::Current();
-    sal_uInt16 i;
+    USHORT i;
 
     if(PTR_CAST(SwWebDocShell, pDocSh))
     {
-        aParaTemplLbl   .Hide();
-        aParaTemplBox   .Hide();
-        aPageTemplLbl   .Hide();
-        aPageTemplBox   .Hide();
+        aParaTemplLbl	.Hide();
+        aParaTemplBox	.Hide();
+        aPageTemplLbl	.Hide();
+        aPageTemplBox	.Hide();
         aFtnCharTextTemplLbl.Hide();
         aFtnCharTextTemplBox.Hide();
         aFtnCharAnchorTemplLbl.Hide();
@@ -179,7 +177,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         aContFromLbl.Hide();
         aContFromEdit.Hide();
         aContFL.Hide();
-        bPosDoc = sal_True;
+        bPosDoc = TRUE;
     }
     else
     {
@@ -188,15 +186,15 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         if ( rInf.ePos == FTNPOS_PAGE )
         {
             aPosPageBox.Check();
-            aPageTemplLbl.Enable(sal_False);
-            aPageTemplBox.Enable(sal_False);
+            aPageTemplLbl.Enable(FALSE);
+            aPageTemplBox.Enable(FALSE);
         }
-        else
+        else // if ( rInf.ePos == FTNPOS_CHAPTER )
         {
             aPosChapterBox.Check();
             aNumCountBox.RemoveEntry(aNumPage);
             aNumCountBox.RemoveEntry(aNumChapter);
-            bPosDoc = sal_True;
+            bPosDoc = TRUE;
         }
             // Verweistexte
         aContEdit.SetText(rInf.aQuoVadis);
@@ -241,11 +239,11 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
     SwTxtFmtColl* pColl = pInf->GetFtnTxtColl();
     if( !pColl )
-        aParaTemplBox.SelectEntry( sStr );      // Default
+        aParaTemplBox.SelectEntry( sStr );		// Default
     else
     {
         OSL_ENSURE(!pColl->IsDefault(), "default style for footnotes is wrong");
-        const sal_uInt16 nPos = aParaTemplBox.GetEntryPos(pColl->GetName());
+        const USHORT nPos = aParaTemplBox.GetEntryPos(pColl->GetName());
         if( LISTBOX_ENTRY_NOTFOUND != nPos )
             aParaTemplBox.SelectEntryPos( nPos );
         else
@@ -256,10 +254,10 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     }
 
         // Seite
-    for( i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i )
+    for( i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_LANDSCAPE; ++i )
         aPageTemplBox.InsertEntry(SwStyleNameMapper::GetUIName( i, aEmptyStr ));
 
-    sal_uInt16 nCount = pSh->GetPageDescCnt();
+    USHORT nCount = pSh->GetPageDescCnt();
     for(i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = pSh->GetPageDesc(i);
@@ -277,11 +275,11 @@ SwEndNoteOptionPage::~SwEndNoteOptionPage()
 
 SfxTabPage *SwEndNoteOptionPage::Create( Window *pParent, const SfxItemSet &rSet )
 {
-    return new SwEndNoteOptionPage( pParent, sal_True, rSet );
+    return new SwEndNoteOptionPage( pParent, TRUE, rSet );
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Unterschiedliche Arten der Numerierung; da die Listbox
+ Beschreibung:	Unterschiedliche Arten der Numerierung; da die Listbox
                 unterschiedlich viele Eintraege hat, hier Funktionen
                 fuer das Setzen und Erfragen der gemeinten Art
                 der Numerierung.
@@ -302,7 +300,7 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
         break;
 #if OSL_DEBUG_LEVEL > 1
         default:
-            OSL_FAIL("Which numbering type?");
+            OSL_ENSURE(false, "Which numbering type?");
 #endif
     }
     aNumCountBox.SelectEntry(sSelect);
@@ -313,10 +311,13 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
 
 int SwEndNoteOptionPage::GetNumbering() const
 {
-    const sal_uInt16 nPos = aNumCountBox.GetSelectEntryPos();
+    const USHORT nPos = aNumCountBox.GetSelectEntryPos();
     return (int) bPosDoc? nPos + 1: nPos;
 }
 
+/*-----------------09.02.98 11:17-------------------
+
+--------------------------------------------------*/
 void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 {
     pSh = &rShell;
@@ -331,7 +332,7 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler hinter dem Button fuer Sammeln der Fussnote
+ Beschreibung:	Handler hinter dem Button fuer Sammeln der Fussnote
                 auf der Seite.
                 In diesem Fall koennen alle Numerierungsarten verwendet
                 werden.
@@ -341,25 +342,30 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 IMPL_LINK( SwEndNoteOptionPage, PosPageHdl, Button *, EMPTYARG )
 {
     const SwFtnNum eNum = (const SwFtnNum)GetNumbering();
-    bPosDoc = sal_False;
+    bPosDoc = FALSE;
     if(LISTBOX_ENTRY_NOTFOUND == aNumCountBox.GetEntryPos(aNumPage))
     {
         aNumCountBox.InsertEntry(aNumPage, FTNNUM_PAGE);
         aNumCountBox.InsertEntry(aNumChapter, FTNNUM_CHAPTER);
         SelectNumbering(eNum);
     }
-    aPageTemplLbl.Enable(sal_False);
-    aPageTemplBox.Enable(sal_False);
+    aPageTemplLbl.Enable(FALSE);
+    aPageTemplBox.Enable(FALSE);
 
     return 0;
 }
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
 IMPL_LINK( SwEndNoteOptionPage, NumCountHdl, ListBox*, EMPTYARG )
 {
-    sal_Bool bEnable = sal_True;
+    BOOL bEnable = TRUE;
     if( aNumCountBox.GetEntryCount() - 1 != aNumCountBox.GetSelectEntryPos() )
     {
-        bEnable = sal_False;
+        bEnable = FALSE;
         aOffsetFld.SetValue(1);
     }
     aOffsetLbl.Enable(bEnable);
@@ -368,7 +374,7 @@ IMPL_LINK( SwEndNoteOptionPage, NumCountHdl, ListBox*, EMPTYARG )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler hinter dem Button fuer Sammeln der Fussnote
+ Beschreibung:	Handler hinter dem Button fuer Sammeln der Fussnote
                 am Kapitel oder Dokumentende.
                 In diesem Fall kann keine seitenweise Numerierung verwendet
                 werden.
@@ -380,7 +386,7 @@ IMPL_LINK_INLINE_START( SwEndNoteOptionPage, PosChapterHdl, Button *, EMPTYARG )
     if ( !bPosDoc )
         SelectNumbering(FTNNUM_DOC);
 
-    bPosDoc = sal_True;
+    bPosDoc = TRUE;
     aNumCountBox.RemoveEntry(aNumPage);
     aNumCountBox.RemoveEntry(aNumChapter);
     aPageTemplLbl.Enable();
@@ -392,8 +398,8 @@ IMPL_LINK_INLINE_END( SwEndNoteOptionPage, PosChapterHdl, Button *, EMPTYARG )
 SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const String& rCharFmtName )
 {
     SwCharFmt* pFmt = 0;
-    sal_uInt16 nChCount = pSh->GetCharFmtCount();
-    for(sal_uInt16 i = 0; i< nChCount; i++)
+    USHORT nChCount = pSh->GetCharFmtCount();
+    for(USHORT i = 0; i< nChCount; i++)
     {
         SwCharFmt& rChFmt = pSh->GetCharFmt(i);
         if(rChFmt.GetName() == rCharFmtName )
@@ -414,11 +420,11 @@ SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const String& rCharFmtName )
     return pFmt;
 }
 
-sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
+BOOL SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
 {
     SwEndNoteInfo *pInf = bEndNote ? new SwEndNoteInfo() : new SwFtnInfo();
 
-    pInf->nFtnOffset = static_cast< sal_uInt16 >(aOffsetFld.GetValue() -1);
+    pInf->nFtnOffset = static_cast< USHORT >(aOffsetFld.GetValue() -1);
     pInf->aFmt.SetNumberingType(aNumViewBox.GetSelectedNumberingType() );
     pInf->SetPrefix(aPrefixED.GetText());
     pInf->SetSuffix(aSuffixED.GetText());
@@ -429,7 +435,7 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
                         aFtnCharAnchorTemplBox.GetSelectEntry() ) );
 
     // Absatzvorlage
-    sal_uInt16 nPos = aParaTemplBox.GetSelectEntryPos();
+    USHORT nPos = aParaTemplBox.GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         const String aFmtName( aParaTemplBox.GetSelectEntry() );
@@ -440,7 +446,7 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
 
     // Seitenvorlage
     pInf->ChgPageDesc( pSh->FindPageDescByName(
-                                aPageTemplBox.GetSelectEntry(), sal_True ) );
+                                aPageTemplBox.GetSelectEntry(), TRUE ) );
 
     if ( bEndNote )
     {
@@ -458,11 +464,11 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
             pSh->SetFtnInfo( *pI );
     }
     delete pInf;
-    return sal_True;
+    return TRUE;
 }
 
 SwFootNoteOptionPage::SwFootNoteOptionPage( Window *pParent, const SfxItemSet &rSet ) :
-    SwEndNoteOptionPage( pParent, sal_False, rSet )
+    SwEndNoteOptionPage( pParent, FALSE, rSet )
 {
 }
 

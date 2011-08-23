@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,20 +50,20 @@ void SdrDragStat::Reset()
 {
     pView=NULL;
     pPageView=NULL;
-    bShown=sal_False;
+    bShown=FALSE;
     nMinMov=1;
-    bMinMoved=sal_False;
-    bHorFixed=sal_False;
-    bVerFixed=sal_False;
-    bWantNoSnap=sal_False;
+    bMinMoved=FALSE;
+    bHorFixed=FALSE;
+    bVerFixed=FALSE;
+    bWantNoSnap=FALSE;
     pHdl=NULL;
-    bOrtho4=sal_False;
-    bOrtho8=sal_False;
+    bOrtho4=FALSE;
+    bOrtho8=FALSE;
     pDragMethod=NULL;
-    bEndDragChangesAttributes=sal_False;
-    bEndDragChangesGeoAndAttributes=sal_False;
-    bMouseIsUp=sal_False;
-    Clear(sal_True);
+    bEndDragChangesAttributes=FALSE;
+    bEndDragChangesGeoAndAttributes=FALSE;
+    bMouseIsUp=FALSE;
+    Clear(TRUE);
     aActionRect=Rectangle();
 }
 
@@ -115,7 +115,7 @@ bool SdrDragStat::CheckMinMoved(const Point& rPnt)
         long dx=rPnt.X()-GetPrev().X(); if (dx<0) dx=-dx;
         long dy=rPnt.Y()-GetPrev().Y(); if (dy<0) dy=-dy;
         if (dx>=long(nMinMov) || dy>=long(nMinMov))
-            bMinMoved=sal_True;
+            bMinMoved=TRUE;
     }
     return bMinMoved;
 }

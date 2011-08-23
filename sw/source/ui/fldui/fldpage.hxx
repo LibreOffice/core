@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,62 +41,62 @@ class SwFldPage : public SfxTabPage
     SwFldMgr            m_aMgr;
     SwField             *m_pCurFld;
     SwWrtShell*         m_pWrtShell;
-    sal_uInt16              m_nPageId;
-    sal_uInt16              m_nTypeSel;
-    sal_uInt16              m_nSelectionSel;
-    sal_Bool                m_bFldEdit;
-    sal_Bool                m_bInsert;
-    sal_Bool                m_bFldDlgHtmlMode;
-    sal_Bool                m_bRefresh;
-    sal_Bool                m_bFirstHTMLInit;
+    USHORT              m_nPageId;
+    USHORT              m_nTypeSel;
+    USHORT              m_nSelectionSel;
+    BOOL                m_bFldEdit;
+    BOOL                m_bInsert;
+    BOOL                m_bFldDlgHtmlMode;
+    BOOL                m_bRefresh;
+    BOOL                m_bFirstHTMLInit;
 
 protected:
 
-    sal_uInt16              GetTypeSel() const          { return m_nTypeSel;}
-    void                SetTypeSel(sal_uInt16 nSet)     { m_nTypeSel = nSet;}
-    sal_uInt16              GetSelectionSel() const     { return m_nSelectionSel;}
-    void                SetSelectionSel(sal_uInt16 nSet){ m_nSelectionSel = nSet;}
-    sal_Bool                IsFldDlgHtmlMode() const    { return m_bFldDlgHtmlMode;}
-    sal_Bool                IsRefresh() const           { return m_bRefresh;}
+    USHORT              GetTypeSel() const          { return m_nTypeSel;}
+    void                SetTypeSel(USHORT nSet)     { m_nTypeSel = nSet;}
+    USHORT              GetSelectionSel() const     { return m_nSelectionSel;}
+    void                SetSelectionSel(USHORT nSet){ m_nSelectionSel = nSet;}
+    BOOL                IsFldDlgHtmlMode() const    { return m_bFldDlgHtmlMode;}
+    BOOL                IsRefresh() const           { return m_bRefresh;}
     SwField*            GetCurField()               { return m_pCurFld;}
     SwWrtShell*         GetWrtShell() { return m_pWrtShell;}
 
     DECL_LINK( InsertHdl, Button *pBtn = 0 );
     DECL_LINK( NumFormatHdl, ListBox *pBtn = 0 );
 
-    void                Init();
-    void                SavePos( const ListBox* pLst1,
+    void				Init();
+    void				SavePos( const ListBox* pLst1,
                                  const ListBox* pLst2 = 0,
                                  const ListBox* pLst3 = 0);
-    void                RestorePos( ListBox* pLst1, ListBox* pLst2 = 0,
+    void				RestorePos( ListBox* pLst1, ListBox* pLst2 = 0,
                                     ListBox* pLst3 = 0 );
-    void                EnableInsert(sal_Bool bEnable = sal_True);
-    inline sal_Bool         IsFldEdit() const   { return m_bFldEdit; }
+    void				EnableInsert(BOOL bEnable = TRUE);
+    inline BOOL         IsFldEdit() const   { return m_bFldEdit; }
 
-    // insert field
-    sal_Bool                InsertFld(  sal_uInt16 nTypeId,
-                                    sal_uInt16 nSubType,
+    // Feld einfuegen
+    BOOL 				InsertFld( 	USHORT nTypeId,
+                                    USHORT nSubType,
                                     const String& rPar1,
                                     const String& rPar2,
-                                    sal_uLong nFormatId,
+                                    ULONG nFormatId,
                                     sal_Unicode cDelim = ' ',
-                                    sal_Bool bIsAutomaticLanguage = sal_True);
+                                    BOOL bIsAutomaticLanguage = TRUE);
 
     using SfxTabPage::ActivatePage;
 
 public:
-                        SwFldPage(  Window *pParent,
+                        SwFldPage(	Window *pParent,
                                     const ResId &rId,
                                     const SfxItemSet &rAttrSet );
 
                         virtual ~SwFldPage();
 
-    virtual void        ActivatePage();
+    virtual void		ActivatePage();
 
     inline SwFldMgr&    GetFldMgr()         { return m_aMgr; }
     void                SetWrtShell( SwWrtShell* m_pWrtShell );
-    void                EditNewField( sal_Bool bOnlyActivate = sal_False );
-    virtual sal_uInt16      GetGroup() = 0;
+    void				EditNewField( BOOL bOnlyActivate = FALSE );
+    virtual USHORT		GetGroup() = 0;
 };
 
 

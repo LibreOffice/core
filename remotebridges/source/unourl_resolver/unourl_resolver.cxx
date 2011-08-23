@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,6 +45,7 @@
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 
 using namespace cppu;
+using namespace rtl;
 using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -52,10 +53,8 @@ using namespace com::sun::star::connection;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::registry;
 
-using ::rtl::OUString;
-
-#define SERVICENAME     "com.sun.star.bridge.UnoUrlResolver"
-#define IMPLNAME        "com.sun.star.comp.bridge.UnoUrlResolver"
+#define SERVICENAME		"com.sun.star.bridge.UnoUrlResolver"
+#define IMPLNAME		"com.sun.star.comp.bridge.UnoUrlResolver"
 
 namespace unourl_resolver
 {
@@ -92,17 +91,17 @@ OUString resolver_getImplementationName()
     }
     return *pImplName;
 }
-
+    
 //==================================================================================================
 class ResolverImpl : public WeakImplHelper2< XServiceInfo, XUnoUrlResolver >
 {
     Reference< XMultiComponentFactory > _xSMgr;
     Reference< XComponentContext > _xCtx;
-
+    
 public:
     ResolverImpl( const Reference< XComponentContext > & xSMgr );
     virtual ~ResolverImpl();
-
+    
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw(::com::sun::star::uno::RuntimeException);
@@ -180,10 +179,10 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector") ),
             _xCtx ),
         UNO_QUERY );
-
+    
     if (! xConnector.is())
         throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("no connector!" ) ), Reference< XInterface >() );
-
+    
     Reference< XConnection > xConnection( xConnector->connect( aConnectDescr ) );
 
     // As soon as singletons are ready, switch to singleton !
@@ -192,17 +191,17 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory") ),
             _xCtx ),
         UNO_QUERY );
-
+    
     if (! xBridgeFactory.is())
         throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("no bridge factory!" ) ), Reference< XInterface >() );
-
+    
     // bridge
     Reference< XBridge > xBridge( xBridgeFactory->createBridge(
         OUString(), aProtocolDescr,
         xConnection, Reference< XInstanceProvider >() ) );
-
+    
     Reference< XInterface > xRet( xBridge->getInstance( aInstanceName ) );
-
+    
     return xRet;
 }
 
@@ -239,6 +238,12 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+//==================================================================================================
+sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager, void * pRegistryKey )
+{
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

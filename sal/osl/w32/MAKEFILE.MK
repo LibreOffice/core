@@ -29,7 +29,6 @@ PRJ=..$/..
 
 PRJNAME=sal
 TARGET=cpposl
-ENABLE_EXCEPTIONS=TRUE
 USE_LDUMP2=TRUE
 
 PROJECTPCH4DLL=TRUE
@@ -71,6 +70,7 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/profile.obj  \
             $(SLO)$/time.obj     \
             $(SLO)$/signal.obj   \
+            $(SLO)$/pipeimpl.obj \
             $(SLO)$/pipe.obj     \
             $(SLO)$/util.obj     \
             $(SLO)$/file.obj\
@@ -84,6 +84,7 @@ SLOFILES=   $(SLO)$/conditn.obj  \
 
 OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/diagnose.obj \
+            $(OBJ)$/libutil.obj  \
             $(OBJ)$/semaphor.obj \
             $(OBJ)$/socket.obj   \
             $(OBJ)$/interlck.obj \
@@ -96,6 +97,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/profile.obj  \
             $(OBJ)$/time.obj     \
             $(OBJ)$/signal.obj   \
+            $(OBJ)$/pipeimpl.obj \
             $(OBJ)$/pipe.obj     \
             $(OBJ)$/util.obj     \
             $(OBJ)$/file.obj\
@@ -112,3 +114,5 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+

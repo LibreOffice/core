@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: rectcliptools.hxx,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,7 +78,7 @@ namespace basegfx
 
             /// unshare this poly-range with all internally shared instances
             void makeUnique();
-
+            
             /// Set clip to 'null' - nothing is visible
             void makeNull();
             /// returns true when clip is 'null' - nothing is visible

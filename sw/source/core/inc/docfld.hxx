@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef _DOCFLD_HXX
 #define _DOCFLD_HXX
 
-#include <calc.hxx>         // fuer SwHash
+#include <calc.hxx>			// fuer SwHash
 
 class SwTxtFld;
 class SwIndex;
@@ -48,7 +48,7 @@ struct SwPosition;
 // Update an den Expression Feldern
 class _SetGetExpFld
 {
-    sal_uLong nNode;
+    ULONG nNode;
     xub_StrLen nCntnt;
     union {
         const SwTxtFld* pTxtFld;
@@ -85,11 +85,11 @@ public:
 
     _SetGetExpFld( const SwFlyFrmFmt& rFlyFmt, const SwPosition* pPos = 0 );
 
-    sal_Bool operator==( const _SetGetExpFld& rFld ) const
-    {   return nNode == rFld.nNode && nCntnt == rFld.nCntnt &&
+    BOOL operator==( const _SetGetExpFld& rFld ) const
+    {	return nNode == rFld.nNode && nCntnt == rFld.nCntnt &&
                 ( !CNTNT.pTxtFld || !rFld.CNTNT.pTxtFld ||
                     CNTNT.pTxtFld == rFld.CNTNT.pTxtFld ); }
-    sal_Bool operator<( const _SetGetExpFld& rFld ) const;
+    BOOL operator<( const _SetGetExpFld& rFld ) const;
 
     const SwTxtFld* GetFld() const
         { return TEXTFIELD == eSetGetExpFldType ? CNTNT.pTxtFld : 0; }
@@ -104,7 +104,7 @@ public:
     const SwFlyFrmFmt* GetFlyFmt() const
         { return FLYFRAME == eSetGetExpFldType ? CNTNT.pFlyFmt : 0; }
 
-    sal_uLong GetNode() const { return nNode; }
+    ULONG GetNode() const { return nNode; }
     xub_StrLen GetCntnt() const { return nCntnt; }
     const void* GetPointer() const { return CNTNT.pTxtFld; }
 
@@ -139,33 +139,33 @@ struct SwCalcFldType : public SwHash
 
 // Suche nach dem String, der unter dem Namen in der HashTabelle abgelegt
 // wurde
-void LookString( SwHash** ppTbl, sal_uInt16 nSize, const String& rName,
-                    String& rRet, sal_uInt16* pPos = 0 );
+void LookString( SwHash** ppTbl, USHORT nSize, const String& rName,
+                    String& rRet, USHORT* pPos = 0 );
 
 
 // --------
 
-const int GETFLD_ALL        = 3;        // veroderte Flags !!
-const int GETFLD_CALC       = 1;
-const int GETFLD_EXPAND     = 2;
+const int GETFLD_ALL		= 3;		// veroderte Flags !!
+const int GETFLD_CALC		= 1;
+const int GETFLD_EXPAND		= 2;
 
 class SwDocUpdtFld
 {
-    _SetGetExpFlds* pFldSortLst;    // akt. Field-Liste zum Calculieren
+    _SetGetExpFlds* pFldSortLst;	// akt. Field-Liste zum Calculieren
     SwCalcFldType*  aFldTypeTable[ TBLSZ ];
 
 // noch eine weitere Optimierung - wird z.Z. nicht angesprochen!
-    long nFldUpdtPos;               // ab dieser Position mit Update starten
-    SwCntntNode* pCNode;            // der TxtNode zur UpdatePos.
+    long nFldUpdtPos;				// ab dieser Position mit Update starten
+    SwCntntNode* pCNode;			// der TxtNode zur UpdatePos.
 
-    sal_uLong nNodes;                   // sollte die NodesAnzahl unterschiedlich sein
-    sal_uInt8 nFldLstGetMode;
+    ULONG nNodes;					// sollte die NodesAnzahl unterschiedlich sein
+    BYTE nFldLstGetMode;
 
-    sal_Bool bInUpdateFlds : 1;         // zur Zeit laeuft ein UpdateFlds,
-    sal_Bool bFldsDirty : 1;            // irgendwelche Felder sind ungueltig
+    BOOL bInUpdateFlds : 1;			// zur Zeit laeuft ein UpdateFlds,
+    BOOL bFldsDirty : 1;			// irgendwelche Felder sind ungueltig
 
     void _MakeFldList( SwDoc& pDoc, int eGetMode );
-    void GetBodyNode( const SwTxtFld& , sal_uInt16 nFldWhich );
+    void GetBodyNode( const SwTxtFld& , USHORT nFldWhich );
     void GetBodyNode( const SwSectionNode&);
 public:
     SwDocUpdtFld();
@@ -175,21 +175,21 @@ public:
 
     void MakeFldList( SwDoc& rDoc, int bAll, int eGetMode );
 
-    void InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld );
+    void InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld );
 
     void InsertFldType( const SwFieldType& rType );
     void RemoveFldType( const SwFieldType& rType );
 
-    sal_Bool IsInUpdateFlds() const         { return bInUpdateFlds; }
-    void SetInUpdateFlds( sal_Bool b )      { bInUpdateFlds = b; }
+    BOOL IsInUpdateFlds() const			{ return bInUpdateFlds; }
+    void SetInUpdateFlds( BOOL b ) 		{ bInUpdateFlds = b; }
 
-    sal_Bool IsFieldsDirty() const          { return bFldsDirty; }
-    void SetFieldsDirty( sal_Bool b )       { bFldsDirty = b; }
+    BOOL IsFieldsDirty() const			{ return bFldsDirty; }
+    void SetFieldsDirty( BOOL b ) 		{ bFldsDirty = b; }
 
-    SwHash**    GetFldTypeTable() const { return (SwHash**)aFldTypeTable; }
+    SwHash**	GetFldTypeTable() const { return (SwHash**)aFldTypeTable; }
 };
 
 
-#endif  // _DOCFLD_HXX
+#endif	// _DOCFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

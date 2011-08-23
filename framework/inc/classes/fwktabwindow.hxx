@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ class FwkTabControl : public TabControl
 public:
     FwkTabControl( Window* pParent, const ResId& rResId );
 
-    void    BroadcastEvent( sal_uLong nEvent );
+    void    BroadcastEvent( ULONG nEvent );
 };
 
 class FwkTabPage : public TabPage
@@ -81,7 +81,7 @@ public:
 
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
-    virtual void    Resize();
+    virtual void	Resize();
 };
 
 struct TabEntry

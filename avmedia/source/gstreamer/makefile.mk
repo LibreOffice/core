@@ -62,7 +62,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/gstuno.obj      \
 
 SHL1TARGET=$(TARGET)
-SHL1STDLIBS= $(CPPULIB) $(SALLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(PKGCONFIG_LIBS) $(TOOLSLIB) $(VCLLIB)
+SHL1STDLIBS= $(CPPULIB) $(SALLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(PKGCONFIG_LIBS) $(TOOLSLIB)
 SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
@@ -70,19 +70,8 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
-.ENDIF # UNX / WNT
-.ENDIF # ENABLE_GSTREAMER
+.ENDIF
+
+.ENDIF
 
 .INCLUDE :  	target.mk
-
-.IF "$(ENABLE_GSTREAMER)" == "TRUE"
-.IF "$(GUI)" == "UNX" || "$(GUI)" == "WNT"
-
-ALLTAR : $(MISC)/avmediagstreamer.component
-$(MISC)/avmediagstreamer.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt avmediagstreamer.component
-    $(XSLTPROC) --nonet \
-	--stringparam uri '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' \
-	-o $@ $(SOLARENV)/bin/createcomponent.xslt avmediagstreamer.component
-
-.ENDIF # UNX / WNT
-.ENDIF # ENABLE_GSTREAMER

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,10 +57,10 @@ class ImplMachineData
                                     ImplMachineData( const ImplMachineData& rData );
 
 private:
-    sal_uLong                           mnRefCount;
-    sal_uLong                           mnOptions;
-    sal_uLong                           mnScreenOptions;
-    sal_uLong                           mnPrintOptions;
+    ULONG                           mnRefCount;
+    ULONG                           mnOptions;
+    ULONG                           mnScreenOptions;
+    ULONG                           mnPrintOptions;
     long                            mnScreenRasterFontDeviation;
 };
 
@@ -80,17 +80,17 @@ public:
                                     MachineSettings( const MachineSettings& rSet );
                                     ~MachineSettings();
 
-    void                            SetOptions( sal_uLong nOptions )
+    void                            SetOptions( ULONG nOptions )
                                         { CopyData(); mpData->mnOptions = nOptions; }
-    sal_uLong                           GetOptions() const
+    ULONG                           GetOptions() const
                                         { return mpData->mnOptions; }
-    void                            SetScreenOptions( sal_uLong nOptions )
+    void                            SetScreenOptions( ULONG nOptions )
                                         { CopyData(); mpData->mnScreenOptions = nOptions; }
-    sal_uLong                           GetScreenOptions() const
+    ULONG                           GetScreenOptions() const
                                         { return mpData->mnScreenOptions; }
-    void                            SetPrintOptions( sal_uLong nOptions )
+    void                            SetPrintOptions( ULONG nOptions )
                                         { CopyData(); mpData->mnPrintOptions = nOptions; }
-    sal_uLong                           GetPrintOptions() const
+    ULONG                           GetPrintOptions() const
                                         { return mpData->mnPrintOptions; }
 
     void                            SetScreenRasterFontDeviation( long nDeviation )
@@ -100,8 +100,8 @@ public:
 
     const MachineSettings&          operator =( const MachineSettings& rSet );
 
-    sal_Bool                            operator ==( const MachineSettings& rSet ) const;
-    sal_Bool                            operator !=( const MachineSettings& rSet ) const
+    BOOL                            operator ==( const MachineSettings& rSet ) const;
+    BOOL                            operator !=( const MachineSettings& rSet ) const
                                         { return !(*this == rSet); }
 };
 
@@ -117,49 +117,49 @@ class ImplMouseData
                                     ImplMouseData( const ImplMouseData& rData );
 
 private:
-    sal_uLong                           mnRefCount;
-    sal_uLong                           mnOptions;
-    sal_uLong                           mnDoubleClkTime;
+    ULONG                           mnRefCount;
+    ULONG                           mnOptions;
+    ULONG                           mnDoubleClkTime;
     long                            mnDoubleClkWidth;
     long                            mnDoubleClkHeight;
     long                            mnStartDragWidth;
     long                            mnStartDragHeight;
-    sal_uInt16                          mnStartDragCode;
-    sal_uInt16                          mnDragMoveCode;
-    sal_uInt16                          mnDragCopyCode;
-    sal_uInt16                          mnDragLinkCode;
-    sal_uInt16                          mnContextMenuCode;
-    sal_uInt16                          mnContextMenuClicks;
-    sal_Bool                            mbContextMenuDown;
-    sal_uLong                           mnScrollRepeat;
-    sal_uLong                           mnButtonStartRepeat;
-    sal_uLong                           mnButtonRepeat;
-    sal_uLong                           mnActionDelay;
-    sal_uLong                           mnMenuDelay;
-    sal_uLong                           mnFollow;
-    sal_uInt16                          mnMiddleButtonAction;
-    sal_uInt16                          mnWheelBehavior;
-    sal_Bool                            mbAlign1;
+    USHORT                          mnStartDragCode;
+    USHORT                          mnDragMoveCode;
+    USHORT                          mnDragCopyCode;
+    USHORT                          mnDragLinkCode;
+    USHORT                          mnContextMenuCode;
+    USHORT                          mnContextMenuClicks;
+    BOOL                            mbContextMenuDown;
+    ULONG                           mnScrollRepeat;
+    ULONG                           mnButtonStartRepeat;
+    ULONG                           mnButtonRepeat;
+    ULONG                           mnActionDelay;
+    ULONG                           mnMenuDelay;
+    ULONG                           mnFollow;
+    USHORT                          mnMiddleButtonAction;
+    USHORT                          mnWheelBehavior;
+    BOOL                            mbAlign1;
 };
 
 // -----------------
 // - MouseSettings -
 // -----------------
 
-#define MOUSE_OPTION_AUTOFOCUS      ((sal_uLong)0x00000001)
-#define MOUSE_OPTION_AUTOCENTERPOS  ((sal_uLong)0x00000002)
-#define MOUSE_OPTION_AUTODEFBTNPOS  ((sal_uLong)0x00000004)
+#define MOUSE_OPTION_AUTOFOCUS      ((ULONG)0x00000001)
+#define MOUSE_OPTION_AUTOCENTERPOS  ((ULONG)0x00000002)
+#define MOUSE_OPTION_AUTODEFBTNPOS  ((ULONG)0x00000004)
 
-#define MOUSE_FOLLOW_MENU           ((sal_uLong)0x00000001)
-#define MOUSE_FOLLOW_DDLIST         ((sal_uLong)0x00000002)
+#define MOUSE_FOLLOW_MENU           ((ULONG)0x00000001)
+#define MOUSE_FOLLOW_DDLIST         ((ULONG)0x00000002)
 
-#define MOUSE_MIDDLE_NOTHING        ((sal_uInt16)0)
-#define MOUSE_MIDDLE_AUTOSCROLL     ((sal_uInt16)1)
-#define MOUSE_MIDDLE_PASTESELECTION ((sal_uInt16)2)
+#define MOUSE_MIDDLE_NOTHING        ((USHORT)0)
+#define MOUSE_MIDDLE_AUTOSCROLL     ((USHORT)1)
+#define MOUSE_MIDDLE_PASTESELECTION ((USHORT)2)
 
-#define MOUSE_WHEEL_DISABLE         ((sal_uInt16)0)
-#define MOUSE_WHEEL_FOCUS_ONLY      ((sal_uInt16)1)
-#define MOUSE_WHEEL_ALWAYS          ((sal_uInt16)2)
+#define MOUSE_WHEEL_DISABLE         ((USHORT)0)
+#define MOUSE_WHEEL_FOCUS_ONLY      ((USHORT)1)
+#define MOUSE_WHEEL_ALWAYS          ((USHORT)2)
 
 class VCL_DLLPUBLIC MouseSettings
 {
@@ -173,14 +173,14 @@ public:
                                     MouseSettings( const MouseSettings& rSet );
                                     ~MouseSettings();
 
-    void                            SetOptions( sal_uLong nOptions )
+    void                            SetOptions( ULONG nOptions )
                                         { CopyData(); mpData->mnOptions = nOptions; }
-    sal_uLong                           GetOptions() const
+    ULONG                           GetOptions() const
                                         { return mpData->mnOptions; }
 
-    void                            SetDoubleClickTime( sal_uLong nDoubleClkTime )
+    void                            SetDoubleClickTime( ULONG nDoubleClkTime )
                                         { CopyData(); mpData->mnDoubleClkTime = nDoubleClkTime; }
-    sal_uLong                           GetDoubleClickTime() const
+    ULONG                           GetDoubleClickTime() const
                                         { return mpData->mnDoubleClkTime; }
     void                            SetDoubleClickWidth( long nDoubleClkWidth )
                                         { CopyData(); mpData->mnDoubleClkWidth = nDoubleClkWidth; }
@@ -199,76 +199,76 @@ public:
                                         { CopyData(); mpData->mnStartDragHeight = nDragHeight; }
     long                            GetStartDragHeight() const
                                         { return mpData->mnStartDragHeight; }
-    void                            SetStartDragCode( sal_uInt16 nCode )
+    void                            SetStartDragCode( USHORT nCode )
                                         { CopyData(); mpData->mnStartDragCode = nCode; }
-    sal_uInt16                          GetStartDragCode() const
+    USHORT                          GetStartDragCode() const
                                         { return mpData->mnStartDragCode; }
-    void                            SetDragMoveCode( sal_uInt16 nCode )
+    void                            SetDragMoveCode( USHORT nCode )
                                         { CopyData(); mpData->mnDragMoveCode = nCode; }
-    sal_uInt16                          GetDragMoveCode() const
+    USHORT                          GetDragMoveCode() const
                                         { return mpData->mnDragMoveCode; }
-    void                            SetDragCopyCode( sal_uInt16 nCode )
+    void                            SetDragCopyCode( USHORT nCode )
                                         { CopyData(); mpData->mnDragCopyCode = nCode; }
-    sal_uInt16                          GetDragCopyCode() const
+    USHORT                          GetDragCopyCode() const
                                         { return mpData->mnDragCopyCode; }
-    void                            SetDragLinkCode( sal_uInt16 nCode )
+    void                            SetDragLinkCode( USHORT nCode )
                                         { CopyData(); mpData->mnDragLinkCode = nCode; }
-    sal_uInt16                          GetDragLinkCode() const
+    USHORT                          GetDragLinkCode() const
                                         { return mpData->mnDragLinkCode; }
 
-    void                            SetContextMenuCode( sal_uInt16 nCode )
+    void                            SetContextMenuCode( USHORT nCode )
                                         { CopyData(); mpData->mnContextMenuCode = nCode; }
-    sal_uInt16                          GetContextMenuCode() const
+    USHORT                          GetContextMenuCode() const
                                         { return mpData->mnContextMenuCode; }
-    void                            SetContextMenuClicks( sal_uInt16 nClicks )
+    void                            SetContextMenuClicks( USHORT nClicks )
                                         { CopyData(); mpData->mnContextMenuClicks = nClicks; }
-    sal_uInt16                          GetContextMenuClicks() const
+    USHORT                          GetContextMenuClicks() const
                                         { return mpData->mnContextMenuClicks; }
-    void                            SetContextMenuDown( sal_Bool bDown )
+    void                            SetContextMenuDown( BOOL bDown )
                                         { CopyData(); mpData->mbContextMenuDown = bDown; }
-    sal_Bool                            GetContextMenuDown() const
+    BOOL                            GetContextMenuDown() const
                                         { return mpData->mbContextMenuDown; }
 
-    void                            SetScrollRepeat( sal_uLong nRepeat )
+    void                            SetScrollRepeat( ULONG nRepeat )
                                         { CopyData(); mpData->mnScrollRepeat = nRepeat; }
-    sal_uLong                           GetScrollRepeat() const
+    ULONG                           GetScrollRepeat() const
                                         { return mpData->mnScrollRepeat; }
-    void                            SetButtonStartRepeat( sal_uLong nRepeat )
+    void                            SetButtonStartRepeat( ULONG nRepeat )
                                         { CopyData(); mpData->mnButtonStartRepeat = nRepeat; }
-    sal_uLong                           GetButtonStartRepeat() const
+    ULONG                           GetButtonStartRepeat() const
                                         { return mpData->mnButtonStartRepeat; }
-    void                            SetButtonRepeat( sal_uLong nRepeat )
+    void                            SetButtonRepeat( ULONG nRepeat )
                                         { CopyData(); mpData->mnButtonRepeat = nRepeat; }
-    sal_uLong                           GetButtonRepeat() const
+    ULONG                           GetButtonRepeat() const
                                         { return mpData->mnButtonRepeat; }
-    void                            SetActionDelay( sal_uLong nDelay )
+    void                            SetActionDelay( ULONG nDelay )
                                         { CopyData(); mpData->mnActionDelay = nDelay; }
-    sal_uLong                           GetActionDelay() const
+    ULONG                           GetActionDelay() const
                                         { return mpData->mnActionDelay; }
-    void                            SetMenuDelay( sal_uLong nDelay )
+    void                            SetMenuDelay( ULONG nDelay )
                                         { CopyData(); mpData->mnMenuDelay = nDelay; }
-    sal_uLong                           GetMenuDelay() const
+    ULONG                           GetMenuDelay() const
                                         { return mpData->mnMenuDelay; }
 
-    void                            SetFollow( sal_uLong nFollow )
+    void                            SetFollow( ULONG nFollow )
                                         { CopyData(); mpData->mnFollow = nFollow; }
-    sal_uLong                           GetFollow() const
+    ULONG                           GetFollow() const
                                         { return mpData->mnFollow; }
 
-    void                            SetMiddleButtonAction( sal_uInt16 nAction )
+    void                            SetMiddleButtonAction( USHORT nAction )
                                         { CopyData(); mpData->mnMiddleButtonAction = nAction; }
-    sal_uInt16                          GetMiddleButtonAction() const
+    USHORT                          GetMiddleButtonAction() const
                                         { return mpData->mnMiddleButtonAction; }
 
-    void                            SetWheelBehavior( sal_uInt16 nBehavior )
+    void                            SetWheelBehavior( USHORT nBehavior )
                                         { CopyData(); mpData->mnWheelBehavior = nBehavior; }
-    sal_uInt16                          GetWheelBehavior() const
+    USHORT                          GetWheelBehavior() const
                                         { return mpData->mnWheelBehavior; }
 
     const MouseSettings&            operator =( const MouseSettings& rSet );
 
-    sal_Bool                            operator ==( const MouseSettings& rSet ) const;
-    sal_Bool                            operator !=( const MouseSettings& rSet ) const
+    BOOL                            operator ==( const MouseSettings& rSet ) const;
+    BOOL                            operator !=( const MouseSettings& rSet ) const
                                         { return !(*this == rSet); }
 };
 
@@ -284,16 +284,16 @@ class ImplKeyboardData
                                     ImplKeyboardData( const ImplKeyboardData& rData );
 
 private:
-    sal_uLong                           mnRefCount;
+    ULONG                           mnRefCount;
     Accelerator                     maStandardAccel;
-    sal_uLong                           mnOptions;
+    ULONG                           mnOptions;
 };
 
 // --------------------
 // - KeyboardSettings -
 // --------------------
 
-#define KEYBOARD_OPTION_QUICKCURSOR ((sal_uLong)0x00000001)
+#define KEYBOARD_OPTION_QUICKCURSOR ((ULONG)0x00000001)
 
 class VCL_DLLPUBLIC KeyboardSettings
 {
@@ -312,15 +312,15 @@ public:
     const Accelerator&              GetStandardAccel() const
                                         { return mpData->maStandardAccel; }
 
-    void                            SetOptions( sal_uLong nOptions )
+    void                            SetOptions( ULONG nOptions )
                                         { CopyData(); mpData->mnOptions = nOptions; }
-    sal_uLong                           GetOptions() const
+    ULONG                           GetOptions() const
                                         { return mpData->mnOptions; }
 
     const KeyboardSettings&         operator =( const KeyboardSettings& rSet );
 
-    sal_Bool                            operator ==( const KeyboardSettings& rSet ) const;
-    sal_Bool                            operator !=( const KeyboardSettings& rSet ) const
+    BOOL                            operator ==( const KeyboardSettings& rSet ) const;
+    BOOL                            operator !=( const KeyboardSettings& rSet ) const
                                         { return !(*this == rSet); }
 };
 
@@ -337,9 +337,9 @@ class ImplStyleData
     void                            SetStandardStyles();
 
 private:
-    sal_uLong                           mnRefCount;
+    ULONG                           mnRefCount;
 
-    void*                           mpStyleData_NotUsedYet;
+    void*							mpStyleData_NotUsedYet;
 
     Color                           maActiveBorderColor;
     Color                           maActiveColor;
@@ -413,27 +413,31 @@ private:
     long                            mnIconHorzSpace;
     long                            mnIconVertSpace;
     long                            mnAntialiasedMin;
-    sal_uLong                           mnCursorBlinkTime;
-    sal_uLong                           mnDragFullOptions;
-    sal_uLong                           mnAnimationOptions;
-    sal_uLong                           mnSelectionOptions;
-    sal_uLong                           mnLogoDisplayTime;
-    sal_uLong                           mnDisplayOptions;
-    sal_uLong                           mnToolbarIconSize;
-    sal_uLong                           mnUseFlatMenues;
-    sal_uLong                           mnOptions;
-    sal_uInt16                          mnScreenZoom;
-    sal_uInt16                          mnScreenFontZoom;
-    sal_uInt16                          mnHighContrast;
-    sal_uInt16                          mnUseSystemUIFonts;
-    sal_uInt16                          mnAutoMnemonic;
-    sal_uInt16                          mnUseImagesInMenus;
-    sal_uLong                           mnUseFlatBorders;
-    sal_Bool                            mbPreferredUseImagesInMenus;
+    ULONG                           mnCursorBlinkTime;
+    ULONG                           mnDragFullOptions;
+    ULONG                           mnAnimationOptions;
+    ULONG                           mnSelectionOptions;
+    ULONG                           mnLogoDisplayTime;
+    ULONG                           mnDisplayOptions;
+    ULONG                           mnToolbarIconSize;
+    ULONG                           mnUseFlatMenues;
+    ULONG                           mnOptions;
+    USHORT                          mnScreenZoom;
+    USHORT                          mnScreenFontZoom;
+    USHORT                          mnRadioButtonStyle;
+    USHORT                          mnCheckBoxStyle;
+    USHORT                          mnPushButtonStyle;
+    USHORT                          mnTabControlStyle;
+    USHORT                          mnHighContrast;
+    USHORT                          mnUseSystemUIFonts;
+    USHORT                          mnAutoMnemonic;
+    USHORT                          mnUseImagesInMenus;
+    BOOL                            mbPreferredUseImagesInMenus;
+    ULONG                           mnUseFlatBorders;
     long                            mnMinThumbSize;
-    sal_uLong                           mnSymbolsStyle;
-    sal_uLong                           mnPreferredSymbolsStyle;
-    sal_uInt16                          mnSkipDisabledInMenus;
+    ULONG                           mnSymbolsStyle;
+    ULONG                           mnPreferredSymbolsStyle;
+    USHORT                          mnSkipDisabledInMenus;
     Wallpaper                       maWorkspaceGradient;
     const void*                     mpFontOptions;
 };
@@ -445,65 +449,90 @@ private:
 // - StyleSettings -
 // -----------------
 
-#define STYLE_OPTION_MONO           ((sal_uLong)0x00000001)
-#define STYLE_OPTION_COLOR          ((sal_uLong)0x00000002)
-#define STYLE_OPTION_FLAT           ((sal_uLong)0x00000004)
-#define STYLE_OPTION_GREAT          ((sal_uLong)0x00000008)
-#define STYLE_OPTION_HIGHLIGHT      ((sal_uLong)0x00000010)
-#define STYLE_OPTION_ADVANCEDUSER   ((sal_uLong)0x00000020)
-#define STYLE_OPTION_SCROLLARROW    ((sal_uLong)0x00000040)
-#define STYLE_OPTION_SPINARROW      ((sal_uLong)0x00000080)
-#define STYLE_OPTION_SPINUPDOWN     ((sal_uLong)0x00000100)
-#define STYLE_OPTION_NOMNEMONICS    ((sal_uLong)0x00000200)
-#define STYLE_OPTION_HIDEDISABLED   ((sal_uLong)0x00100000)
+#define STYLE_OPTION_MONO           ((ULONG)0x00000001)
+#define STYLE_OPTION_COLOR          ((ULONG)0x00000002)
+#define STYLE_OPTION_FLAT           ((ULONG)0x00000004)
+#define STYLE_OPTION_GREAT          ((ULONG)0x00000008)
+#define STYLE_OPTION_HIGHLIGHT      ((ULONG)0x00000010)
+#define STYLE_OPTION_ADVANCEDUSER   ((ULONG)0x00000020)
+#define STYLE_OPTION_SCROLLARROW    ((ULONG)0x00000040)
+#define STYLE_OPTION_SPINARROW      ((ULONG)0x00000080)
+#define STYLE_OPTION_SPINUPDOWN     ((ULONG)0x00000100)
+#define STYLE_OPTION_NOMNEMONICS    ((ULONG)0x00000200)
+#define STYLE_OPTION_WINSTYLE       ((ULONG)0x00010000)
+#define STYLE_OPTION_OS2STYLE       ((ULONG)0x00020000)
+#define STYLE_OPTION_MACSTYLE       ((ULONG)0x00040000)
+#define STYLE_OPTION_UNIXSTYLE      ((ULONG)0x00080000)
+#define STYLE_OPTION_SYSTEMSTYLE    ((ULONG)0x000F0000)
+#define STYLE_OPTION_HIDEDISABLED   ((ULONG)0x00100000)
 
-#define DRAGFULL_OPTION_WINDOWMOVE  ((sal_uLong)0x00000001)
-#define DRAGFULL_OPTION_WINDOWSIZE  ((sal_uLong)0x00000002)
-#define DRAGFULL_OPTION_OBJECTMOVE  ((sal_uLong)0x00000004)
-#define DRAGFULL_OPTION_OBJECTSIZE  ((sal_uLong)0x00000008)
-#define DRAGFULL_OPTION_DOCKING     ((sal_uLong)0x00000010)
-#define DRAGFULL_OPTION_SPLIT       ((sal_uLong)0x00000020)
-#define DRAGFULL_OPTION_SCROLL      ((sal_uLong)0x00000040)
+#define DRAGFULL_OPTION_WINDOWMOVE  ((ULONG)0x00000001)
+#define DRAGFULL_OPTION_WINDOWSIZE  ((ULONG)0x00000002)
+#define DRAGFULL_OPTION_OBJECTMOVE  ((ULONG)0x00000004)
+#define DRAGFULL_OPTION_OBJECTSIZE  ((ULONG)0x00000008)
+#define DRAGFULL_OPTION_DOCKING     ((ULONG)0x00000010)
+#define DRAGFULL_OPTION_SPLIT       ((ULONG)0x00000020)
+#define DRAGFULL_OPTION_SCROLL      ((ULONG)0x00000040)
 
-#define LOGO_DISPLAYTIME_NOLOGO     ((sal_uLong)0)
-#define LOGO_DISPLAYTIME_STARTTIME  ((sal_uLong)0xFFFFFFFF)
+#define LOGO_DISPLAYTIME_NOLOGO     ((ULONG)0)
+#define LOGO_DISPLAYTIME_STARTTIME  ((ULONG)0xFFFFFFFF)
 
-#define ANIMATION_OPTION_MINIMIZE   ((sal_uLong)0x00000001)
-#define ANIMATION_OPTION_POPUP      ((sal_uLong)0x00000002)
-#define ANIMATION_OPTION_DIALOG     ((sal_uLong)0x00000004)
-#define ANIMATION_OPTION_TREE       ((sal_uLong)0x00000008)
-#define ANIMATION_OPTION_SCROLL     ((sal_uLong)0x00000010)
+#define ANIMATION_OPTION_MINIMIZE   ((ULONG)0x00000001)
+#define ANIMATION_OPTION_POPUP      ((ULONG)0x00000002)
+#define ANIMATION_OPTION_DIALOG     ((ULONG)0x00000004)
+#define ANIMATION_OPTION_TREE       ((ULONG)0x00000008)
+#define ANIMATION_OPTION_SCROLL     ((ULONG)0x00000010)
 
-#define SELECTION_OPTION_WORD       ((sal_uLong)0x00000001)
-#define SELECTION_OPTION_FOCUS      ((sal_uLong)0x00000002)
-#define SELECTION_OPTION_INVERT     ((sal_uLong)0x00000004)
-#define SELECTION_OPTION_SHOWFIRST  ((sal_uLong)0x00000008)
+#define SELECTION_OPTION_WORD       ((ULONG)0x00000001)
+#define SELECTION_OPTION_FOCUS      ((ULONG)0x00000002)
+#define SELECTION_OPTION_INVERT     ((ULONG)0x00000004)
+#define SELECTION_OPTION_SHOWFIRST  ((ULONG)0x00000008)
 
-#define DISPLAY_OPTION_AA_DISABLE   ((sal_uLong)0x00000001)
+#define DISPLAY_OPTION_AA_DISABLE   ((ULONG)0x00000001)
 
-#define STYLE_RADIOBUTTON_MONO      ((sal_uInt16)0x0001) // legacy
-#define STYLE_CHECKBOX_MONO         ((sal_uInt16)0x0001) // legacy
+#define STYLE_RADIOBUTTON_WIN       ((USHORT)0x0001)
+#define STYLE_RADIOBUTTON_OS2       ((USHORT)0x0002)
+#define STYLE_RADIOBUTTON_MAC       ((USHORT)0x0003)
+#define STYLE_RADIOBUTTON_UNIX      ((USHORT)0x0004)
+#define STYLE_RADIOBUTTON_MONO      ((USHORT)0x0005)
+#define STYLE_RADIOBUTTON_STYLE     ((USHORT)0x000F)
 
-#define STYLE_TOOLBAR_ICONSIZE_UNKNOWN      ((sal_uLong)0)
-#define STYLE_TOOLBAR_ICONSIZE_SMALL        ((sal_uLong)1)
-#define STYLE_TOOLBAR_ICONSIZE_LARGE        ((sal_uLong)2)
+#define STYLE_CHECKBOX_WIN          ((USHORT)0x0001)
+#define STYLE_CHECKBOX_OS2          ((USHORT)0x0002)
+#define STYLE_CHECKBOX_MAC          ((USHORT)0x0003)
+#define STYLE_CHECKBOX_UNIX         ((USHORT)0x0004)
+#define STYLE_CHECKBOX_MONO         ((USHORT)0x0005)
+#define STYLE_CHECKBOX_STYLE        ((USHORT)0x000F)
 
-#define STYLE_SYMBOLS_AUTO          ((sal_uLong)0)
-#define STYLE_SYMBOLS_DEFAULT       ((sal_uLong)1)
-#define STYLE_SYMBOLS_HICONTRAST    ((sal_uLong)2)
-#define STYLE_SYMBOLS_INDUSTRIAL    ((sal_uLong)3)
-#define STYLE_SYMBOLS_CRYSTAL       ((sal_uLong)4)
-#define STYLE_SYMBOLS_TANGO         ((sal_uLong)5)
-#define STYLE_SYMBOLS_OXYGEN        ((sal_uLong)6)
-#define STYLE_SYMBOLS_CLASSIC       ((sal_uLong)7)
-#define STYLE_SYMBOLS_HUMAN     ((sal_uLong)8)
-#define STYLE_SYMBOLS_THEMES_MAX    ((sal_uLong)9)
+#define STYLE_PUSHBUTTON_WIN        ((USHORT)0x0001)
+#define STYLE_PUSHBUTTON_OS2        ((USHORT)0x0002)
+#define STYLE_PUSHBUTTON_MAC        ((USHORT)0x0003)
+#define STYLE_PUSHBUTTON_UNIX       ((USHORT)0x0004)
+#define STYLE_PUSHBUTTON_STYLE      ((USHORT)0x000F)
 
-#define STYLE_MENUIMAGES_OFF  ((sal_uInt16)0)
-#define STYLE_MENUIMAGES_ON   ((sal_uInt16)1)
-#define STYLE_MENUIMAGES_AUTO ((sal_uInt16)2)
+#define STYLE_TABCONTROL_SINGLELINE ((USHORT)0x0001)
+#define STYLE_TABCONTROL_COLOR      ((USHORT)0x0002)
 
-#define STYLE_CURSOR_NOBLINKTIME    ((sal_uLong)0xFFFFFFFF)
+#define STYLE_TOOLBAR_ICONSIZE_UNKNOWN		((ULONG)0)
+#define STYLE_TOOLBAR_ICONSIZE_SMALL		((ULONG)1)
+#define STYLE_TOOLBAR_ICONSIZE_LARGE		((ULONG)2)
+
+#define STYLE_SYMBOLS_AUTO			((ULONG)0)
+#define STYLE_SYMBOLS_DEFAULT		((ULONG)1)
+#define STYLE_SYMBOLS_HICONTRAST	((ULONG)2)
+#define STYLE_SYMBOLS_INDUSTRIAL	((ULONG)3)
+#define STYLE_SYMBOLS_CRYSTAL		((ULONG)4)
+#define STYLE_SYMBOLS_TANGO         ((ULONG)5)
+#define STYLE_SYMBOLS_OXYGEN        ((ULONG)6)
+#define STYLE_SYMBOLS_CLASSIC		((ULONG)7)
+#define STYLE_SYMBOLS_HUMAN		((ULONG)8)
+#define STYLE_SYMBOLS_THEMES_MAX	((ULONG)9)
+
+#define STYLE_MENUIMAGES_OFF  ((USHORT)0)
+#define STYLE_MENUIMAGES_ON   ((USHORT)1)
+#define STYLE_MENUIMAGES_AUTO ((USHORT)2)
+
+#define STYLE_CURSOR_NOBLINKTIME    ((ULONG)0xFFFFFFFF)
 
 class VCL_DLLPUBLIC StyleSettings
 {
@@ -707,34 +736,34 @@ public:
     const Color&                    GetInactiveTabColor() const
                                         { return mpData->maInactiveTabColor; }
 
-    void                            SetHighContrastMode( sal_Bool bHighContrast )
+    void							SetHighContrastMode( BOOL bHighContrast )
                                         { CopyData(); mpData->mnHighContrast = bHighContrast; }
-    sal_Bool                            GetHighContrastMode() const
-                                        { return (sal_Bool) mpData->mnHighContrast; }
-    sal_Bool                            IsHighContrastBlackAndWhite() const;
-    void                            SetUseSystemUIFonts( sal_Bool bUseSystemUIFonts )
+    BOOL							GetHighContrastMode() const
+                                        { return (BOOL) mpData->mnHighContrast; }
+    BOOL							IsHighContrastBlackAndWhite() const;
+    void							SetUseSystemUIFonts( BOOL bUseSystemUIFonts )
                                         { CopyData(); mpData->mnUseSystemUIFonts = bUseSystemUIFonts; }
-    sal_Bool                            GetUseSystemUIFonts() const
-                                        { return (sal_Bool) mpData->mnUseSystemUIFonts; }
-    void                            SetUseFlatBorders( sal_Bool bUseFlatBorders )
+    BOOL							GetUseSystemUIFonts() const
+                                        { return (BOOL) mpData->mnUseSystemUIFonts; }
+    void							SetUseFlatBorders( BOOL bUseFlatBorders )
                                         { CopyData(); mpData->mnUseFlatBorders = bUseFlatBorders; }
-    sal_Bool                            GetUseFlatBorders() const
-                                        { return (sal_Bool) mpData->mnUseFlatBorders; }
-    void                            SetUseFlatMenues( sal_Bool bUseFlatMenues )
+    BOOL							GetUseFlatBorders() const
+                                        { return (BOOL) mpData->mnUseFlatBorders; }
+    void							SetUseFlatMenues( BOOL bUseFlatMenues )
                                         { CopyData(); mpData->mnUseFlatMenues = bUseFlatMenues; }
-    sal_Bool                            GetUseFlatMenues() const
-                                        { return (sal_Bool) mpData->mnUseFlatMenues; }
-    void                            SetUseImagesInMenus( sal_Bool bUseImagesInMenus )
+    BOOL							GetUseFlatMenues() const
+                                        { return (BOOL) mpData->mnUseFlatMenues; }
+    void							SetUseImagesInMenus( BOOL bUseImagesInMenus )
                                         { CopyData(); mpData->mnUseImagesInMenus = bUseImagesInMenus; }
-    sal_Bool                            GetUseImagesInMenus() const;
-    void                                                       SetPreferredUseImagesInMenus( sal_Bool bPreferredUseImagesInMenus )
+    BOOL							GetUseImagesInMenus() const;
+    void                                                       SetPreferredUseImagesInMenus( BOOL bPreferredUseImagesInMenus )
                                         { CopyData(); mpData->mbPreferredUseImagesInMenus = bPreferredUseImagesInMenus; }
-    sal_Bool                                                   GetPreferredUseImagesInMenus() const
+    BOOL                                                       GetPreferredUseImagesInMenus() const
                                         { return mpData->mbPreferredUseImagesInMenus; }
-    void                                                       SetSkipDisabledInMenus( sal_Bool bSkipDisabledInMenus )
+    void							SetSkipDisabledInMenus( BOOL bSkipDisabledInMenus )
                                         { CopyData(); mpData->mnSkipDisabledInMenus = bSkipDisabledInMenus; }
-    sal_Bool                            GetSkipDisabledInMenus() const
-                                        { return (sal_Bool) mpData->mnSkipDisabledInMenus; }
+    BOOL							GetSkipDisabledInMenus() const
+                                        { return (BOOL) mpData->mnSkipDisabledInMenus; }
 
     void                            SetCairoFontOptions( const void *pOptions )
                                         { CopyData(); mpData->mpFontOptions = pOptions;  }
@@ -794,6 +823,23 @@ public:
     const Font&                     GetIconFont() const
                                         { return mpData->maIconFont; }
 
+    void                            SetRadioButtonStyle( USHORT nStyle )
+                                        { CopyData(); mpData->mnRadioButtonStyle = nStyle; }
+    USHORT                          GetRadioButtonStyle() const
+                                        { return mpData->mnRadioButtonStyle; }
+    void                            SetCheckBoxStyle( USHORT nStyle )
+                                        { CopyData(); mpData->mnCheckBoxStyle = nStyle; }
+    USHORT                          GetCheckBoxStyle() const
+                                        { return mpData->mnCheckBoxStyle; }
+    void                            SetPushButtonStyle( USHORT nStyle )
+                                        { CopyData(); mpData->mnPushButtonStyle = nStyle; }
+    USHORT                          GetPushButtonStyle() const
+                                        { return mpData->mnPushButtonStyle; }
+    void                            SetTabControlStyle( USHORT nStyle )
+                                        { CopyData(); mpData->mnTabControlStyle = nStyle; }
+    USHORT                          GetTabControlStyle() const
+                                        { return mpData->mnTabControlStyle; }
+
     void                            SetBorderSize( long nSize )
                                         { CopyData(); mpData->mnBorderSize = nSize; }
     long                            GetBorderSize() const
@@ -847,104 +893,108 @@ public:
     void                            SetCursorBlinkTime( long nBlinkTime )
                                         { CopyData(); mpData->mnCursorBlinkTime = nBlinkTime; }
     long                            GetCursorBlinkTime() const
-                                        { return (long) mpData->mnCursorBlinkTime; }
+                                        { return mpData->mnCursorBlinkTime; }
 
-    void                            SetScreenZoom( sal_uInt16 nPercent )
+    void                            SetScreenZoom( USHORT nPercent )
                                         { CopyData(); mpData->mnScreenZoom = nPercent; }
-    sal_uInt16                          GetScreenZoom() const
+    USHORT                          GetScreenZoom() const
                                         { return mpData->mnScreenZoom; }
-    void                            SetScreenFontZoom( sal_uInt16 nPercent )
+    void                            SetScreenFontZoom( USHORT nPercent )
                                         { CopyData(); mpData->mnScreenFontZoom = nPercent; }
-    sal_uInt16                          GetScreenFontZoom() const
+    USHORT                          GetScreenFontZoom() const
                                         { return mpData->mnScreenFontZoom; }
 
-    void                            SetLogoDisplayTime( sal_uLong nDisplayTime )
+    void                            SetLogoDisplayTime( ULONG nDisplayTime )
                                         { CopyData(); mpData->mnLogoDisplayTime = nDisplayTime; }
-    sal_uLong                           GetLogoDisplayTime() const
+    ULONG                           GetLogoDisplayTime() const
                                         { return mpData->mnLogoDisplayTime; }
 
-    void                            SetDragFullOptions( sal_uLong nOptions )
+    void                            SetDragFullOptions( ULONG nOptions )
                                         { CopyData(); mpData->mnDragFullOptions = nOptions; }
-    sal_uLong                           GetDragFullOptions() const
+    ULONG                           GetDragFullOptions() const
                                         { return mpData->mnDragFullOptions; }
 
-    void                            SetAnimationOptions( sal_uLong nOptions )
+    void                            SetAnimationOptions( ULONG nOptions )
                                         { CopyData(); mpData->mnAnimationOptions = nOptions; }
-    sal_uLong                           GetAnimationOptions() const
+    ULONG                           GetAnimationOptions() const
                                         { return mpData->mnAnimationOptions; }
 
-    void                            SetSelectionOptions( sal_uLong nOptions )
+    void                            SetSelectionOptions( ULONG nOptions )
                                         { CopyData(); mpData->mnSelectionOptions = nOptions; }
-    sal_uLong                           GetSelectionOptions() const
+    ULONG                           GetSelectionOptions() const
                                         { return mpData->mnSelectionOptions; }
 
-    void                            SetDisplayOptions( sal_uLong nOptions )
+    void                            SetDisplayOptions( ULONG nOptions )
                                         { CopyData(); mpData->mnDisplayOptions = nOptions; }
-    sal_uLong                           GetDisplayOptions() const
+    ULONG                           GetDisplayOptions() const
                                         { return mpData->mnDisplayOptions; }
     void                            SetAntialiasingMinPixelHeight( long nMinPixel )
                                         { CopyData(); mpData->mnAntialiasedMin = nMinPixel; }
-    sal_uLong                           GetAntialiasingMinPixelHeight() const
+    ULONG                           GetAntialiasingMinPixelHeight() const
                                         { return mpData->mnAntialiasedMin; }
 
-    void                            SetOptions( sal_uLong nOptions )
+    void                            SetOptions( ULONG nOptions )
                                         { CopyData(); mpData->mnOptions = nOptions; }
-    sal_uLong                           GetOptions() const
+    ULONG                           GetOptions() const
                                         { return mpData->mnOptions; }
-    void                            SetAutoMnemonic( sal_Bool bAutoMnemonic )
-                                        { CopyData(); mpData->mnAutoMnemonic = (sal_uInt16)bAutoMnemonic; }
-    sal_Bool                            GetAutoMnemonic() const
-                                        { return mpData->mnAutoMnemonic ? sal_True : sal_False; }
+    void							SetAutoMnemonic( BOOL bAutoMnemonic )
+                                        { CopyData(); mpData->mnAutoMnemonic = (USHORT)bAutoMnemonic; }
+    BOOL							GetAutoMnemonic() const
+                                        { return mpData->mnAutoMnemonic ? TRUE : FALSE; }
 
     void                            SetFontColor( const Color& rColor )
                                         { CopyData(); mpData->maFontColor = rColor; }
     const Color&                    GetFontColor() const
                                         { return mpData->maFontColor; }
 
-    void                            SetToolbarIconSize( sal_uLong nSize )
+    void							SetToolbarIconSize( ULONG nSize )
                                         { CopyData(); mpData->mnToolbarIconSize = nSize; }
-    sal_uLong                           GetToolbarIconSize() const
+    ULONG							GetToolbarIconSize() const
                                         { return mpData->mnToolbarIconSize; }
 
-    void                            SetSymbolsStyle( sal_uLong nStyle )
+    void							SetSymbolsStyle( ULONG nStyle )
                                         { CopyData(); mpData->mnSymbolsStyle = nStyle; }
-    sal_uLong                           GetSymbolsStyle() const
+    ULONG							GetSymbolsStyle() const
                                         { return mpData->mnSymbolsStyle; }
 
-    void                            SetPreferredSymbolsStyle( sal_uLong nStyle )
+    void							SetPreferredSymbolsStyle( ULONG nStyle )
                                         { CopyData(); mpData->mnPreferredSymbolsStyle = nStyle; }
-    void                            SetPreferredSymbolsStyleName( const ::rtl::OUString &rName );
-    sal_uLong                           GetPreferredSymbolsStyle() const
+    void							SetPreferredSymbolsStyleName( const ::rtl::OUString &rName );
+    ULONG							GetPreferredSymbolsStyle() const
                                         { return mpData->mnPreferredSymbolsStyle; }
-    // check whether the symbols style is supported (icons are installed)
-    bool                            CheckSymbolStyle( sal_uLong nStyle ) const;
-    sal_uLong                           GetAutoSymbolsStyle() const;
+    // check whether the symbols style is supported (icons are installed)									
+    bool							CheckSymbolStyle( ULONG nStyle ) const;
+    ULONG                           GetAutoSymbolsStyle() const;
 
-    sal_uLong                           GetCurrentSymbolsStyle() const;
+    ULONG							GetCurrentSymbolsStyle() const;
 
-    void                            SetSymbolsStyleName( const ::rtl::OUString &rName )
+    void							SetSymbolsStyleName( const ::rtl::OUString &rName )
                                         { return SetSymbolsStyle( ImplNameToSymbolsStyle( rName ) ); }
-    ::rtl::OUString                 GetSymbolsStyleName() const
+    ::rtl::OUString					GetSymbolsStyleName() const
                                         { return ImplSymbolsStyleToName( GetSymbolsStyle() ); }
-    ::rtl::OUString                 GetCurrentSymbolsStyleName() const
+    ::rtl::OUString					GetCurrentSymbolsStyleName() const
                                         { return ImplSymbolsStyleToName( GetCurrentSymbolsStyle() ); }
-
+                                        
     const Wallpaper&                GetWorkspaceGradient() const
                                         { return mpData->maWorkspaceGradient; }
     void                            SetWorkspaceGradient( const Wallpaper& rWall )
                                         { CopyData(); mpData->maWorkspaceGradient = rWall; }
 
     void                            SetStandardStyles();
+    void                            SetStandardWinStyles();
+    void                            SetStandardOS2Styles();
+    void                            SetStandardMacStyles();
+    void                            SetStandardUnixStyles();
 
     const StyleSettings&            operator =( const StyleSettings& rSet );
 
-    sal_Bool                            operator ==( const StyleSettings& rSet ) const;
-    sal_Bool                            operator !=( const StyleSettings& rSet ) const
+    BOOL                            operator ==( const StyleSettings& rSet ) const;
+    BOOL                            operator !=( const StyleSettings& rSet ) const
                                         { return !(*this == rSet); }
 
 protected:
-    ::rtl::OUString                 ImplSymbolsStyleToName( sal_uLong nStyle ) const;
-    sal_uLong                           ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const;
+    ::rtl::OUString					ImplSymbolsStyleToName( ULONG nStyle ) const;
+    ULONG							ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const;
 };
 
 // ----------------
@@ -959,10 +1009,10 @@ class ImplMiscData
                                     ImplMiscData( const ImplMiscData& rData );
 
 private:
-    sal_uLong                           mnRefCount;
-    sal_uInt16                          mnEnableATT;
-    sal_Bool                            mbEnableLocalizedDecimalSep;
-    sal_uInt16                          mnDisablePrinting;
+    ULONG                           mnRefCount;
+    USHORT                          mnEnableATT;
+    BOOL                            mbEnableLocalizedDecimalSep;
+    USHORT                          mnDisablePrinting;
 };
 
 // ----------------
@@ -981,16 +1031,16 @@ public:
                                     MiscSettings( const MiscSettings& rSet );
                                     ~MiscSettings();
 
-    void                            SetEnableATToolSupport( sal_Bool bEnable );
-    sal_Bool                            GetEnableATToolSupport() const;
-    void                            SetDisablePrinting( sal_Bool bEnable );
-    sal_Bool                            GetDisablePrinting() const;
-    void                            SetEnableLocalizedDecimalSep( sal_Bool bEnable );
-    sal_Bool                            GetEnableLocalizedDecimalSep() const;
+    void							SetEnableATToolSupport( BOOL bEnable );
+    BOOL							GetEnableATToolSupport() const;
+    void							SetDisablePrinting( BOOL bEnable );
+    BOOL							GetDisablePrinting() const;
+    void							SetEnableLocalizedDecimalSep( BOOL bEnable );
+    BOOL							GetEnableLocalizedDecimalSep() const;
     const MiscSettings&             operator =( const MiscSettings& rSet );
 
-    sal_Bool                            operator ==( const MiscSettings& rSet ) const;
-    sal_Bool                            operator !=( const MiscSettings& rSet ) const
+    BOOL                            operator ==( const MiscSettings& rSet ) const;
+    BOOL                            operator !=( const MiscSettings& rSet ) const
                                         { return !(*this == rSet); }
 };
 
@@ -1006,8 +1056,8 @@ class ImplNotificationData
                                     ImplNotificationData( const ImplNotificationData& rData );
 
 private:
-    sal_uLong                           mnRefCount;
-    sal_uLong                           mnOptions;
+    ULONG                           mnRefCount;
+    ULONG                           mnOptions;
 };
 
 // ------------------------
@@ -1026,15 +1076,15 @@ public:
                                     NotificationSettings( const NotificationSettings& rSet );
                                     ~NotificationSettings();
 
-    void                            SetOptions( sal_uLong nOptions )
+    void                            SetOptions( ULONG nOptions )
                                         { CopyData(); mpData->mnOptions = nOptions; }
-    sal_uLong                           GetOptions() const
+    ULONG                           GetOptions() const
                                         { return mpData->mnOptions; }
 
     const NotificationSettings&     operator =( const NotificationSettings& rSet );
 
-    sal_Bool                            operator ==( const NotificationSettings& rSet ) const;
-    sal_Bool                            operator !=( const NotificationSettings& rSet ) const
+    BOOL                            operator ==( const NotificationSettings& rSet ) const;
+    BOOL                            operator !=( const NotificationSettings& rSet ) const
                                         { return !(*this == rSet); }
 };
 
@@ -1050,19 +1100,19 @@ class ImplHelpData
                                     ImplHelpData( const ImplHelpData& rData );
 
 private:
-    sal_uLong                           mnRefCount;
-    sal_uLong                           mnOptions;
-    sal_uLong                           mnTipDelay;
-    sal_uLong                           mnTipTimeout;
-    sal_uLong                           mnBalloonDelay;
+    ULONG                           mnRefCount;
+    ULONG                           mnOptions;
+    ULONG                           mnTipDelay;
+    ULONG                           mnTipTimeout;
+    ULONG                           mnBalloonDelay;
 };
 
 // ----------------
 // - HelpSettings -
 // ----------------
 
-#define HELP_OPTION_QUICK           ((sal_uLong)0x00000001)
-#define HELP_OPTION_ACTIVE          ((sal_uLong)0x00000002)
+#define HELP_OPTION_QUICK           ((ULONG)0x00000001)
+#define HELP_OPTION_ACTIVE          ((ULONG)0x00000002)
 
 class VCL_DLLPUBLIC HelpSettings
 {
@@ -1076,27 +1126,27 @@ public:
                                     HelpSettings( const HelpSettings& rSet );
                                     ~HelpSettings();
 
-    void                            SetOptions( sal_uLong nOptions )
+    void                            SetOptions( ULONG nOptions )
                                         { CopyData(); mpData->mnOptions = nOptions; }
-    sal_uLong                           GetOptions() const
+    ULONG                           GetOptions() const
                                         { return mpData->mnOptions; }
-    void                            SetTipDelay( sal_uLong nTipDelay )
+    void                            SetTipDelay( ULONG nTipDelay )
                                         { CopyData(); mpData->mnTipDelay = nTipDelay; }
-    sal_uLong                           GetTipDelay() const
+    ULONG                           GetTipDelay() const
                                         { return mpData->mnTipDelay; }
-    void                            SetTipTimeout( sal_uLong nTipTimeout )
+    void                            SetTipTimeout( ULONG nTipTimeout )
                                         { CopyData(); mpData->mnTipTimeout = nTipTimeout; }
-    sal_uLong                           GetTipTimeout() const
+    ULONG                           GetTipTimeout() const
                                         { return mpData->mnTipTimeout; }
-    void                            SetBalloonDelay( sal_uLong nBalloonDelay )
+    void                            SetBalloonDelay( ULONG nBalloonDelay )
                                         { CopyData(); mpData->mnBalloonDelay = nBalloonDelay; }
-    sal_uLong                           GetBalloonDelay() const
+    ULONG                           GetBalloonDelay() const
                                         { return mpData->mnBalloonDelay; }
 
     const HelpSettings&             operator =( const HelpSettings& rSet );
 
-    sal_Bool                            operator ==( const HelpSettings& rSet ) const;
-    sal_Bool                            operator !=( const HelpSettings& rSet ) const
+    BOOL                            operator ==( const HelpSettings& rSet ) const;
+    BOOL                            operator !=( const HelpSettings& rSet ) const
                                         { return !(*this == rSet); }
 };
 
@@ -1106,14 +1156,14 @@ public:
 class LocaleConfigurationListener;
 class ImplAllSettingsData
 {
-    friend class    AllSettings;
+    friend class	AllSettings;
 
                     ImplAllSettingsData();
                     ImplAllSettingsData( const ImplAllSettingsData& rData );
                     ~ImplAllSettingsData();
 
 private:
-    sal_uLong                                   mnRefCount;
+    ULONG                                   mnRefCount;
     MachineSettings                         maMachineSettings;
     MouseSettings                           maMouseSettings;
     KeyboardSettings                        maKeyboardSettings;
@@ -1122,41 +1172,43 @@ private:
     NotificationSettings                    maNotificationSettings;
     HelpSettings                            maHelpSettings;
     ::com::sun::star::lang::Locale          maLocale;
-    sal_uLong                                   mnSystemUpdate;
-    sal_uLong                                   mnWindowUpdate;
+    ULONG                                   mnSystemUpdate;
+    ULONG                                   mnWindowUpdate;
     ::com::sun::star::lang::Locale          maUILocale;
     LanguageType                            meLanguage;
     LanguageType                            meUILanguage;
     LocaleDataWrapper*                      mpLocaleDataWrapper;
     LocaleDataWrapper*                      mpUILocaleDataWrapper;
+    CollatorWrapper*                        mpCollatorWrapper;
+    CollatorWrapper*                        mpUICollatorWrapper;
     vcl::I18nHelper*                        mpI18nHelper;
     vcl::I18nHelper*                        mpUII18nHelper;
-    LocaleConfigurationListener*            mpLocaleCfgListener;
-    SvtSysLocale                            maSysLocale;
+    LocaleConfigurationListener*			mpLocaleCfgListener;
+    SvtSysLocale							maSysLocale;
 };
 
 // ---------------
 // - AllSettings -
 // ---------------
 
-#define SETTINGS_MACHINE            ((sal_uLong)0x00000001)
-#define SETTINGS_MOUSE              ((sal_uLong)0x00000002)
-#define SETTINGS_KEYBOARD           ((sal_uLong)0x00000004)
-#define SETTINGS_STYLE              ((sal_uLong)0x00000008)
-#define SETTINGS_MISC               ((sal_uLong)0x00000010)
-#define SETTINGS_SOUND              ((sal_uLong)0x00000020)
-#define SETTINGS_NOTIFICATION       ((sal_uLong)0x00000040)
-#define SETTINGS_HELP               ((sal_uLong)0x00000080)
-#define SETTINGS_INTERNATIONAL      ((sal_uLong)0x00000100) /* was for class International, has no effect anymore */
-#define SETTINGS_LOCALE             ((sal_uLong)0x00000200)
-#define SETTINGS_UILOCALE           ((sal_uLong)0x00000400)
+#define SETTINGS_MACHINE            ((ULONG)0x00000001)
+#define SETTINGS_MOUSE              ((ULONG)0x00000002)
+#define SETTINGS_KEYBOARD           ((ULONG)0x00000004)
+#define SETTINGS_STYLE              ((ULONG)0x00000008)
+#define SETTINGS_MISC               ((ULONG)0x00000010)
+#define SETTINGS_SOUND              ((ULONG)0x00000020)
+#define SETTINGS_NOTIFICATION       ((ULONG)0x00000040)
+#define SETTINGS_HELP               ((ULONG)0x00000080)
+#define SETTINGS_INTERNATIONAL      ((ULONG)0x00000100) /* was for class International, has no effect anymore */
+#define SETTINGS_LOCALE             ((ULONG)0x00000200)
+#define SETTINGS_UILOCALE           ((ULONG)0x00000400)
 #define SETTINGS_ALLSETTINGS        (SETTINGS_MACHINE |\
                                      SETTINGS_MOUSE | SETTINGS_KEYBOARD |\
                                      SETTINGS_STYLE | SETTINGS_MISC |\
                                      SETTINGS_SOUND | SETTINGS_NOTIFICATION |\
                                      SETTINGS_HELP |\
                                      SETTINGS_LOCALE | SETTINGS_UILOCALE )
-#define SETTINGS_IN_UPDATE_SETTINGS ((sal_uLong)0x00000800)   // this flag indicates that the data changed event was created
+#define SETTINGS_IN_UPDATE_SETTINGS ((ULONG)0x00000800)	  // this flag indicates that the data changed event was created
                                                           // in Windows::UpdateSettings probably because of a global
                                                           // settings changed
 
@@ -1215,7 +1267,7 @@ public:
     LanguageType                            GetLanguage() const;
     void                                    SetUILanguage( LanguageType eLang );
     LanguageType                            GetUILanguage() const;
-    sal_Bool                                    GetLayoutRTL() const;   // returns sal_True if UI language requires right-to-left UI
+    BOOL                                    GetLayoutRTL() const;   // returns TRUE if UI language requires right-to-left UI
     const LocaleDataWrapper&                GetLocaleDataWrapper() const;
     const LocaleDataWrapper&                GetUILocaleDataWrapper() const;
     const vcl::I18nHelper&                  GetLocaleI18nHelper() const;
@@ -1232,25 +1284,25 @@ public:
                                                            const String& rStr2, xub_StrLen nPos2, xub_StrLen nCount2 ) const;
 */
 
-    void                                    SetSystemUpdate( sal_uLong nUpdate )
+    void                                    SetSystemUpdate( ULONG nUpdate )
                                                 { CopyData(); mpData->mnSystemUpdate = nUpdate; }
-    sal_uLong                                   GetSystemUpdate() const
+    ULONG                                   GetSystemUpdate() const
                                                 { return mpData->mnSystemUpdate; }
-    void                                    SetWindowUpdate( sal_uLong nUpdate )
+    void                                    SetWindowUpdate( ULONG nUpdate )
                                                 { CopyData(); mpData->mnWindowUpdate = nUpdate; }
-    sal_uLong                                   GetWindowUpdate() const
+    ULONG                                   GetWindowUpdate() const
                                                 { return mpData->mnWindowUpdate; }
 
-    sal_uLong                                   Update( sal_uLong nFlags, const AllSettings& rSettings );
-    sal_uLong                                   GetChangeFlags( const AllSettings& rSettings ) const;
+    ULONG                                   Update( ULONG nFlags, const AllSettings& rSettings );
+    ULONG                                   GetChangeFlags( const AllSettings& rSettings ) const;
 
     const AllSettings&                      operator =( const AllSettings& rSet );
 
-    sal_Bool                                    operator ==( const AllSettings& rSet ) const;
-    sal_Bool                                    operator !=( const AllSettings& rSet ) const
+    BOOL                                    operator ==( const AllSettings& rSet ) const;
+    BOOL                                    operator !=( const AllSettings& rSet ) const
                                                 { return !(*this == rSet); }
-    static void                             LocaleSettingsChanged( sal_uInt32 nHint );
-    SvtSysLocale&                           GetSysLocale() { return mpData->maSysLocale; }
+    static void								LocaleSettingsChanged( sal_uInt32 nHint );
+    SvtSysLocale&							GetSysLocale() { return mpData->maSysLocale; }
 };
 
 #endif // _SV_SETTINGS_HXX

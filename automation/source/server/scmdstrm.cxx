@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ SCmdStream::SCmdStream(SvStream *pIn)
 {
     pSammel = pIn;
     pCommStream = new SvCommStream( pSammel );
-//  SetCommStream( pCommStream );
+//	SetCommStream( pCommStream );
 }
 
 SCmdStream::~SCmdStream()
@@ -57,7 +57,7 @@ void SCmdStream::Read (String* &pString)
     if ( !pString )
         pString = new String();
     comm_UniChar* pStr;
-    sal_uInt16 nLenInChars;
+    USHORT nLenInChars;
     CmdBaseStream::Read( pStr, nLenInChars );
 
     *pString = String( pStr, nLenInChars );
@@ -67,7 +67,7 @@ void SCmdStream::Read (String* &pString)
 void SCmdStream::Read (String &aString)
 {
     comm_UniChar* pStr;
-    sal_uInt16 nLenInChars;
+    USHORT nLenInChars;
     CmdBaseStream::Read( pStr, nLenInChars );
 
     aString = String( pStr, nLenInChars );
@@ -76,8 +76,8 @@ void SCmdStream::Read (String &aString)
 
 void SCmdStream::Read ( SfxPoolItem *&pItem )
 {
-    sal_uInt16 nType;
-    sal_uInt16 nId;
+    USHORT nType;
+    USHORT nId;
     Read(nId);
 #if OSL_DEBUG_LEVEL > 1
         StatementList::m_pDbgWin->AddText( "Parameter: " );
@@ -133,7 +133,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
             }
             break;
         default:
-            OSL_TRACE( "Ungültiger Typ im Stream:%hu", nType );
+            DBG_ERROR1( "Ungültiger Typ im Stream:%hu", nType );
 #if OSL_DEBUG_LEVEL > 1
             StatementList::m_pDbgWin->AddText( "Ungültiger Typ !!!! " );
 #endif
@@ -146,7 +146,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
 
 void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
 {
-    sal_uInt16 nType;
+    USHORT nType;
     String aId;
     Read(aId);
     rItem.Name = rtl::OUString( aId );
@@ -203,7 +203,7 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
             }
             break;
         default:
-            OSL_TRACE( "Ungültiger Typ im Stream:%hu", nType );
+            DBG_ERROR1( "Ungültiger Typ im Stream:%hu", nType );
 #if OSL_DEBUG_LEVEL > 1
             StatementList::m_pDbgWin->AddText( "Ungültiger Typ !!!! " );
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 
 class SdPage;
 class SvxRuler;
-class SdrOle2Obj;       // fuer die, die Teile von SVDRAW rausdefiniert haben
+class SdrOle2Obj;		// fuer die, die Teile von SVDRAW rausdefiniert haben
 class ScrollBarBox;
 class SdDrawDocument;
 class ScrollBar;
@@ -110,33 +110,33 @@ public:
         ST_DRAW,         // The Draw application.
         ST_IMPRESS,      // Main view of the Impress application.
         ST_NOTES,
-        ST_HANDOUT,
-        ST_OUTLINE,
+        ST_HANDOUT, 
+        ST_OUTLINE, 
         ST_SLIDE_SORTER,
         ST_PRESENTATION,
         ST_TASK_PANE
     };
     static const int MAX_HSPLIT_CNT = 1;
     static const int MAX_VSPLIT_CNT = 1;
-    static const int MIN_SCROLLBAR_SIZE = 50;
+    static const int MIN_SCROLLBAR_SIZE	= 50;
 
-    static const sal_uLong OUTPUT_DRAWMODE_COLOR = DRAWMODE_DEFAULT;
-    static const sal_uLong OUTPUT_DRAWMODE_GRAYSCALE
-        = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL
-        | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP
+    static const ULONG OUTPUT_DRAWMODE_COLOR = DRAWMODE_DEFAULT;
+    static const ULONG OUTPUT_DRAWMODE_GRAYSCALE 
+        = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL 
+        | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP 
         | DRAWMODE_GRAYGRADIENT;
-    static const int  OUTPUT_DRAWMODE_BLACKWHITE
-        = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT
-        | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP
+    static const int  OUTPUT_DRAWMODE_BLACKWHITE 
+        = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT 
+        | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP 
         | DRAWMODE_WHITEGRADIENT;
-    static const int OUTPUT_DRAWMODE_CONTRAST
-        = DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL
+    static const int OUTPUT_DRAWMODE_CONTRAST 
+        = DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL 
         | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT;
 
     TYPEINFO();
 
     ViewShell (
-        SfxViewFrame *pFrame,
+        SfxViewFrame *pFrame, 
         ::Window* pParentWindow,
         ViewShellBase& rViewShellBase,
         bool bAllowCenter = true);
@@ -200,45 +200,45 @@ public:
     // Mouse- & Key-Events
     virtual void PrePaint();
     virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void Command(const CommandEvent& rCEvt, ::sd::Window* pWin);
-    virtual sal_Bool RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
+    virtual BOOL RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
     virtual long Notify( NotifyEvent& rNEvt, ::sd::Window* pWin );
 
-    virtual bool HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
+    BOOL HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
 
     virtual void Draw(OutputDevice &rDev, const Region &rReg);
 
     virtual void SetUIUnit(FieldUnit eUnit);
-    virtual void SetDefTabHRuler( sal_uInt16 nDefTab );
+    virtual void SetDefTabHRuler( UINT16 nDefTab );
 
-    sal_Bool HasRuler (void);
-    void SetRuler(sal_Bool bRuler);
+    BOOL HasRuler (void);
+    void SetRuler(BOOL bRuler);
 
     /** Set internal values of all scroll bars that determine thumb size and
         position.  The external values like size and position of the scroll
         bar controls are not modified.
     */
     virtual void UpdateScrollBars (void);
-    void    Scroll(long nX, long nY);
-    void    ScrollLines(long nX, long nY);
-    virtual void    SetZoom(long nZoom);
-    virtual void    SetZoomRect(const Rectangle& rZoomRect);
-    void    InitWindows(const Point& rViewOrigin, const Size& rViewSize,
-                        const Point& rWinPos, sal_Bool bUpdate = sal_False);
-    void    InvalidateWindows();
+    void	Scroll(long nX, long nY);
+    void	ScrollLines(long nX, long nY);
+    virtual void	SetZoom(long nZoom);
+    virtual void	SetZoomRect(const Rectangle& rZoomRect);
+    void	InitWindows(const Point& rViewOrigin, const Size& rViewSize,
+                        const Point& rWinPos, BOOL bUpdate = FALSE);
+    void	InvalidateWindows();
     /** This method is still used by the OutlineViewShell to update the
         model according to the content of the outline view.  This in turn
         updates the previews in the slide sorter.
     */
-     virtual void UpdatePreview (SdPage* pPage, sal_Bool bInit = sal_False);
+     virtual void UpdatePreview (SdPage* pPage, BOOL bInit = FALSE);
 
     void    DrawMarkRect(const Rectangle& rRect) const;
 
-    void    ExecReq( SfxRequest &rReq );
+    void	ExecReq( SfxRequest &rReq );
 
     ZoomList* GetZoomList (void);
 
@@ -254,15 +254,15 @@ public:
     virtual void  WriteUserData(String& rString);
     virtual void  ReadUserData(const String& rString);
 
-    virtual sal_Bool  ActivateObject(SdrOle2Obj* pObj, long nVerb);
+    virtual BOOL  ActivateObject(SdrOle2Obj* pObj, long nVerb);
 
     /** @returns
             current or selected page or 0. This method
             will fail in master page mode.
-
+            
         @deprecated, please use getCurrentPage();
     */
-    virtual SdPage* GetActualPage() = 0;
+    virtual SdPage*	GetActualPage() = 0;
 
     /** @returns
             current or selected page or 0.
@@ -272,35 +272,35 @@ public:
     FunctionReference GetOldFunction() const { return mxOldFunction; }
     bool HasOldFunction() const { return mxOldFunction.is(); }
     FunctionReference GetCurrentFunction() const { return mxCurrentFunction; }
-    bool HasCurrentFunction( sal_uInt16 nSID ) { return mxCurrentFunction.is() && (mxCurrentFunction->GetSlotID() == nSID ); }
+    bool HasCurrentFunction( USHORT nSID ) { return mxCurrentFunction.is() && (mxCurrentFunction->GetSlotID() == nSID ); }
     bool HasCurrentFunction() { return mxCurrentFunction.is(); }
 
     void SetCurrentFunction(const FunctionReference& xFunction);
     void SetOldFunction(const FunctionReference& xFunction);
     void DeactivateCurrentFunction( bool bPermanent = false );
 
-    void    SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
+    void	SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                             long nLeft, long nRight, long nUpper, long nLower,
-                            sal_Bool bScaleAll, Orientation eOrient, sal_uInt16 nPaperBin,
-                            sal_Bool bBackgroundFullSize );
+                            BOOL bScaleAll, Orientation eOrient, USHORT nPaperBin,
+                            BOOL bBackgroundFullSize );
 
-    void    SetStartShowWithDialog( sal_Bool bIn = sal_True ) { mbStartShowWithDialog = bIn; }
-    sal_Bool    IsStartShowWithDialog() const { return mbStartShowWithDialog; }
+    void	SetStartShowWithDialog( BOOL bIn = TRUE ) { mbStartShowWithDialog = bIn; }
+    BOOL	IsStartShowWithDialog() const { return mbStartShowWithDialog; }
 
-    sal_uInt16 GetPrintedHandoutPageNum (void) const { return mnPrintedHandoutPageNum; }
-    void SetPrintedHandoutPageNum (sal_uInt16 nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
+    USHORT GetPrintedHandoutPageNum (void) const { return mnPrintedHandoutPageNum; }
+    void SetPrintedHandoutPageNum (USHORT nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
 
-    sal_uInt16 GetPrintedHandoutPageCount(void) const { return mnPrintedHandoutPageCount; }
-    void SetPrintedHandoutPageCount (sal_uInt16 nPageCount) {mnPrintedHandoutPageCount=nPageCount; }
+    USHORT GetPrintedHandoutPageCount(void) const { return mnPrintedHandoutPageCount; }
+    void SetPrintedHandoutPageCount (USHORT nPageCount) {mnPrintedHandoutPageCount=nPageCount; }
 
-    virtual sal_uInt16 PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
+    virtual USHORT PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
 
     void GetMenuState(SfxItemSet& rSet);
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                 ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer );
+                                 ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer );
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                  ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer );
+                                  ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer );
 
     virtual void WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
@@ -370,7 +370,7 @@ public:
             The new size in pixel.
     */
     // This is to be replaced by Resize.
-    //  virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
+    //	virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
 
     /** Set position and size of the GUI elements that are controllerd by
         the view shell like rulers and scroll bars as well as the actual
@@ -379,8 +379,8 @@ public:
     */
     virtual void ArrangeGUIElements (void);
 
-    //  virtual void OuterResizePixel(const Point &rPos, const Size &rSize);
-    //  virtual void InnerResizePixel(const Point &rPos, const Size &rSize);
+    //	virtual void OuterResizePixel(const Point &rPos, const Size &rSize);
+    //	virtual void InnerResizePixel(const Point &rPos, const Size &rSize);
 
     ViewShellBase& GetViewShellBase (void) const;
 
@@ -408,8 +408,8 @@ public:
 
     /** This method is more or less an alias to Deactivate().  It is called
         before an object of this class is taken from the stack of view
-        shells.
-
+        shells. 
+        
         <p>When this method is not called before a view shell is taken from
         a stack then the Deactivate() call from the SFX as a response to
         RemoveSubShell() comes to late when the view shell is not on the
@@ -429,7 +429,7 @@ public:
         As a result the border is adapted.
     */
     virtual void ShowUIControls (bool bVisible = true);
-    sal_Bool IsPageFlipMode(void) const;
+    BOOL IsPageFlipMode(void) const;
 
     /** Set the given window as new parent window.  This is not possible for
         all views, so the return value tells the caller if the relocation
@@ -439,30 +439,6 @@ public:
 
     void AdaptDefaultsForChart(
         const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > & xEmbObj );
-
-    /** Depending on the given request create a new page or duplicate an
-        existing one.  A new page is created behind the given slide.
-        @param rRequest
-            The request as passed to an Execute() method.  Its arguments are
-            evaluated.  Its slot id determines whether to create or
-            duplicate a slide.
-        @param pPage
-            This page is either duplicated or becomes the predecessor of the
-            new slide.  If NULL a duplication request is ignored.  A new
-            slide is inserted as first slide.
-        @param nInsertPosition
-            When -1 (the default) then insert after pPage.  Otherwise insert
-            before the given index (of a standard page).
-        @return
-            The new slide is returned.  If for some reason a new page can
-            not be created then NULL is returned.
-    */
-    virtual SdPage* CreateOrDuplicatePage (
-        SfxRequest& rRequest,
-        PageKind ePageKind,
-        SdPage* pPage,
-        const sal_Int32 nInsertPosition = -1);
-
 
     class Implementation;
 
@@ -498,24 +474,24 @@ protected:
     /// The active window.
     ::sd::Window* mpActiveWindow;
     ::sd::View* mpView;
-    FrameView*  mpFrameView;
+    FrameView*	mpFrameView;
 
-    FunctionReference   mxCurrentFunction;
-    FunctionReference   mxOldFunction;
-    ZoomList*   mpZoomList;
+    FunctionReference	mxCurrentFunction;
+    FunctionReference	mxOldFunction;
+    ZoomList*	mpZoomList;
 
-    Point       maViewPos;
-    Size        maViewSize;
-    Size        maScrBarWH;
+    Point		maViewPos;
+    Size		maViewSize;
+    Size		maScrBarWH;
 
-    sal_Bool        mbCenterAllowed;          // wird an Fenster weitergegeben
+    BOOL		mbCenterAllowed; 		  // wird an Fenster weitergegeben
 
-    sal_Bool        mbStartShowWithDialog;  // Praesentation wurde ueber Dialog gestartet
-    sal_uInt16      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
-    sal_uInt16      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
+    BOOL		mbStartShowWithDialog;	// Praesentation wurde ueber Dialog gestartet
+    USHORT		mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
+    USHORT      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
 
-    //af    sal_Bool        bPrintDirectSelected;       // Print only selected objects in direct print
-    //afString      sPageRange;                 // pagerange if selected objects in direct print
+    //af	BOOL		bPrintDirectSelected;		// Print only selected objects in direct print
+    //afString		sPageRange;					// pagerange if selected objects in direct print
 
     /** Area covered by all windows, i.e. the area of the parent window
         without the controls at the borders like rulers, scroll bars, tab
@@ -532,12 +508,12 @@ protected:
 
     ::std::auto_ptr<Implementation> mpImpl;
 
-    // Support methods for centralized UNDO/REDO
-    virtual ::svl::IUndoManager* ImpGetUndoManager (void) const;
+    // #96090# Support methods for centralized UNDO/REDO
+    virtual SfxUndoManager* ImpGetUndoManager (void) const;
     void ImpGetUndoStrings(SfxItemSet &rSet) const;
     void ImpGetRedoStrings(SfxItemSet &rSet) const;
-    void ImpSidUndo(sal_Bool bDrawViewShell, SfxRequest& rReq);
-    void ImpSidRedo(sal_Bool bDrawViewShell, SfxRequest& rReq);
+    void ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq);
+    void ImpSidRedo(BOOL bDrawViewShell, SfxRequest& rReq);
 
     DECL_LINK( HScrollHdl, ScrollBar * );
     DECL_LINK( VScrollHdl, ScrollBar * );
@@ -547,7 +523,7 @@ protected:
     virtual long VirtVScrollHdl(ScrollBar* pVScroll);
 
     // virtuelle Funktionen fuer Lineal-Handling
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, sal_Bool bIsFirst);
+    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, BOOL bIsFirst);
     virtual SvxRuler* CreateVRuler(::sd::Window* pWin);
     virtual void UpdateHRuler();
     virtual void UpdateVRuler();
@@ -556,11 +532,30 @@ protected:
     // abgeleiteter Klassen (z.B. ein TabBar) zurueckgeben
     virtual long GetHCtrlWidth();
 
-    virtual void Activate(sal_Bool IsMDIActivate);
-    virtual void Deactivate(sal_Bool IsMDIActivate);
+    virtual void Activate(BOOL IsMDIActivate);
+    virtual void Deactivate(BOOL IsMDIActivate);
 
     virtual void SetZoomFactor( const Fraction &rZoomX,
                                 const Fraction &rZoomY );
+
+    /** Depending on the given request create a new page or duplicate an
+        existing one.  A new page is created behind the given slide.
+        @param rRequest
+            The request as passed to an Execute() method.  Its arguments are
+            evaluated.  Its slot id determines whether to create or
+            duplicate a slide.
+        @param pPage
+            This page is either duplicated or becomes the predecessor of the
+            new slide.  If NULL a duplication request is ignored.  A new
+            slide is inserted as first slide.
+        @return
+            The new slide is returned.  If for some reason a new page can
+            not be created then NULL is returned.
+    */
+    virtual SdPage* CreateOrDuplicatePage (
+        SfxRequest& rRequest,
+        PageKind ePageKind,
+        SdPage* pPage);
 
 private:
     ::Window* mpParentWindow;
@@ -590,12 +585,12 @@ private:
     return mpParentWindow;
 }
 
-::sd::View* ViewShell::GetView (void) const
+::sd::View* ViewShell::GetView (void) const 
 {
-    return mpView;
+    return mpView; 
 }
 
-SdrView* ViewShell::GetDrawView (void) const
+SdrView* ViewShell::GetDrawView (void) const 
 {
     return static_cast<SdrView*>(mpView);
 }

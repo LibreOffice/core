@@ -58,10 +58,10 @@ using namespace ::comphelper;
 using namespace ::osl;
 using namespace dbaccess;
 
-#define HAS_DESCRIPTION             0x00000001
-#define HAS_DEFAULTVALUE            0x00000002
-#define HAS_ROWVERSION              0x00000004
-#define HAS_AUTOINCREMENT_CREATION  0x00000008
+#define HAS_DESCRIPTION		        0x00000001
+#define HAS_DEFAULTVALUE	        0x00000002
+#define HAS_ROWVERSION		        0x00000004
+#define HAS_AUTOINCREMENT_CREATION	0x00000008
 
 //============================================================
 //= OTableColumnDescriptor
@@ -469,14 +469,17 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     if ( nId & HAS_AUTOINCREMENT_CREATION )
         ++nHaveOptionally;
 
-    BEGIN_PROPERTY_SEQUENCE( nHaveAlways + nHaveOptionally )
+    const sal_Int32 nPropertyCount( nHaveAlways + nHaveOptionally );
+    Sequence< Property > aTableDescProperties( nPropertyCount );
+    Property* pDesc = aTableDescProperties.getArray();
+    sal_Int32 nPos = 0;
 
     DECL_PROP0_BOOL( ISAUTOINCREMENT                );
     DECL_PROP0_BOOL( ISCURRENCY                     );
     DECL_PROP0( ISNULLABLE,         sal_Int32       );
-    DECL_PROP0( PRECISION,          sal_Int32       );
-    DECL_PROP0( SCALE,              sal_Int32       );
-    DECL_PROP0( TYPE,               sal_Int32       );
+    DECL_PROP0( PRECISION,          sal_Int32		);
+    DECL_PROP0( SCALE,              sal_Int32		);
+    DECL_PROP0( TYPE,               sal_Int32		);
     DECL_PROP0( TYPENAME,           ::rtl::OUString );
 
     if ( nId & HAS_AUTOINCREMENT_CREATION )
@@ -496,12 +499,12 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
         DECL_PROP0_BOOL( ISROWVERSION );
     }
 
-    END_PROPERTY_SEQUENCE()
+    OSL_ENSURE( nPos == nPropertyCount, "OTableColumnDescriptorWrapper::createArrayHelper: something went wrong!" );
 
     if ( !m_bIsDescriptor )
     {
-        for (   Property* prop = aDescriptor.getArray();
-                prop != aDescriptor.getArray() + aDescriptor.getLength();
+        for (   Property* prop = aTableDescProperties.getArray();
+                prop != aTableDescProperties.getArray() + aTableDescProperties.getLength();
                 ++prop
             )
         {
@@ -513,7 +516,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     Sequence< Property > aBaseProperties;
     describeProperties( aBaseProperties );
 
-    Sequence< Property > aAllProperties( ::comphelper::concatSequences( aDescriptor, aBaseProperties ) );
+    Sequence< Property > aAllProperties( ::comphelper::concatSequences( aTableDescProperties, aBaseProperties ) );
     return new ::cppu::OPropertyArrayHelper( aAllProperties, sal_False );
 }
 

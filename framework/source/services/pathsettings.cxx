@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,6 @@
 #include <threadhelp/writeguard.hxx>
 #include <services.h>
 
-#include "helper/mischelper.hxx"
-
 // ______________________________________________
 // interface includes
 #include <com/sun/star/beans/Property.hpp>
@@ -60,10 +58,8 @@
 #include <comphelper/configurationhelper.hxx>
 #include <unotools/configpathes.hxx>
 
-#include <fwkdllapi.h>
-
 // ______________________________________________
-//  non exported const
+//	non exported const
 
 #define CFG_READONLY_DEFAULT    sal_False
 
@@ -94,7 +90,7 @@ sal_Int32 impl_getPropGroup(sal_Int32 nID)
 }
 
 // ______________________________________________
-//  namespace
+//	namespace
 
 namespace framework
 {
@@ -102,24 +98,24 @@ namespace framework
 //-----------------------------------------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XINTERFACE_7                     (   PathSettings                                             ,
+DEFINE_XINTERFACE_7						(   PathSettings                                             ,
                                             OWeakObject                                              ,
                                             DIRECT_INTERFACE ( css::lang::XTypeProvider              ),
                                             DIRECT_INTERFACE ( css::lang::XServiceInfo               ),
                                             DERIVED_INTERFACE( css::lang::XEventListener, css::util::XChangesListener),
                                             DIRECT_INTERFACE ( css::util::XChangesListener           ),
-                                            DIRECT_INTERFACE ( css::beans::XPropertySet              ),
-                                            DIRECT_INTERFACE ( css::beans::XFastPropertySet          ),
-                                            DIRECT_INTERFACE ( css::beans::XMultiPropertySet        )
+                                            DIRECT_INTERFACE ( css::beans::XPropertySet				 ),
+                                            DIRECT_INTERFACE ( css::beans::XFastPropertySet			 ),
+                                            DIRECT_INTERFACE ( css::beans::XMultiPropertySet		)
                                         )
 
-DEFINE_XTYPEPROVIDER_7                  (   PathSettings                                            ,
+DEFINE_XTYPEPROVIDER_7					(   PathSettings                                            ,
                                             css::lang::XTypeProvider                                ,
                                             css::lang::XServiceInfo                                 ,
                                             css::lang::XEventListener                               ,
                                             css::util::XChangesListener                             ,
-                                            css::beans::XPropertySet                                ,
-                                            css::beans::XFastPropertySet                            ,
+                                            css::beans::XPropertySet								,
+                                            css::beans::XFastPropertySet							,
                                             css::beans::XMultiPropertySet
                                         )
 
@@ -144,7 +140,7 @@ DEFINE_INIT_SERVICE                     (   PathSettings,
 
 //-----------------------------------------------------------------------------
 PathSettings::PathSettings( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
-    //  Init baseclasses first
+    //	Init baseclasses first
     //  Attention: Don't change order of initialization!
     //      ThreadHelpBase is a struct with a lock as member. We can't use a lock as direct member!
     //      We must garant right initialization and a valid value of this to initialize other baseclasses!
@@ -163,9 +159,6 @@ PathSettings::PathSettings( const css::uno::Reference< css::lang::XMultiServiceF
 //-----------------------------------------------------------------------------
 PathSettings::~PathSettings()
 {
-    css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfgNew, css::uno::UNO_QUERY);
-    if (xBroadcaster.is())
-        xBroadcaster->removeChangesListener(m_xCfgNewListener);
     if (m_pPropHelp)
        delete m_pPropHelp;
 }
@@ -175,6 +168,10 @@ void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEven
     throw (css::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::changesOccurred" );
+    /*
+    if (m_bIgnoreEvents)
+        return;
+    */
 
     sal_Int32 c                 = aEvent.Changes.getLength();
     sal_Int32 i                 = 0;
@@ -208,12 +205,14 @@ void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
     throw(css::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::disposing" );
+    // SAFE ->
     WriteGuard aWriteLock(m_aLock);
 
     if (aSource.Source == m_xCfgNew)
         m_xCfgNew.clear();
 
     aWriteLock.unlock();
+    // <- SAFE
 }
 
 //-----------------------------------------------------------------------------
@@ -247,24 +246,21 @@ void PathSettings::impl_readAll()
 OUStringList PathSettings::impl_readOldFormat(const ::rtl::OUString& sPath)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::impl_readOldFormat" );
-    css::uno::Reference< css::container::XNameAccess > xCfg( fa_getCfgOld() );
-    OUStringList aPathVal;
+    css::uno::Reference< css::container::XNameAccess > xCfg = fa_getCfgOld();
+    css::uno::Any                                      aVal = xCfg->getByName(sPath);
 
-    if( xCfg->hasByName(sPath) )
+    ::rtl::OUString                       sStringVal;
+    css::uno::Sequence< ::rtl::OUString > lStringListVal;
+    OUStringList                          aPathVal;
+
+    if (aVal >>= sStringVal)
     {
-        css::uno::Any aVal( xCfg->getByName(sPath) );
-
-        ::rtl::OUString                       sStringVal;
-        css::uno::Sequence< ::rtl::OUString > lStringListVal;
-
-        if (aVal >>= sStringVal)
-        {
-            aPathVal.push_back(sStringVal);
-        }
-        else if (aVal >>= lStringListVal)
-        {
-            aPathVal << lStringListVal;
-        }
+        aPathVal.push_back(sStringVal);
+    }
+    else
+    if (aVal >>= lStringListVal)
+    {
+        aPathVal << lStringListVal;
     }
 
     return aPathVal;
@@ -298,7 +294,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
 
     // read state props
     xPath->getByName(CFGPROP_ISSINGLEPATH) >>= aPathVal.bIsSinglePath;
-
+    
     // analyze finalized/mandatory states
     aPathVal.bIsReadonly = sal_False;
     css::uno::Reference< css::beans::XProperty > xInfo(xPath, css::uno::UNO_QUERY);
@@ -306,7 +302,8 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
     {
         css::beans::Property aInfo = xInfo->getAsProperty();
         sal_Bool bFinalized = ((aInfo.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
-
+        //sal_Bool bMandatory = ((aInfo.Attributes & css::beans::PropertyAttribute::REMOVEABLE) != css::beans::PropertyAttribute::REMOVEABLE);
+    
         // Note: Till we support finalized / mandatory on our API more in detail we handle
         // all states simple as READONLY ! But because all realy needed pathes are "mandatory" by default
         // we have to handle "finalized" as the real "readonly" indicator .
@@ -666,7 +663,7 @@ void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
 ::rtl::OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath) const
 {
     OUStringList::const_iterator pIt;
-    OUStringList                 lTemp;
+    OUStringList				 lTemp;
     lTemp.reserve(rPath.lInternalPaths.size() + rPath.lUserPaths.size() + 1);
 
     for (  pIt  = rPath.lInternalPaths.begin();
@@ -943,6 +940,17 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
 
     // TODO check if path has at least one path value set
     // At least it depends from the feature using this path, if an empty path list is allowed.
+    /*
+    if (impl_isPathEmpty(aChangePath))
+    {
+        ::rtl::OUStringBuffer sMsg(256);
+        sMsg.appendAscii("The path '"    );
+        sMsg.append     (aChangePath.sPathName);
+        sMsg.appendAscii("' is empty now ... Not a real good idea.");
+        throw css::uno::Exception(sMsg.makeStringAndClear(),
+                                  static_cast< ::cppu::OWeakObject* >(this));
+    }
+    */
 
     // first we should try to store the changed (copied!) path ...
     // In case an error occure on saving time an exception is thrown ...
@@ -971,13 +979,6 @@ sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
 //-----------------------------------------------------------------------------
 sal_Bool PathSettings::impl_isValidPath(const ::rtl::OUString& sPath) const
 {
-    // allow empty path to reset a path.
-// idea by LLA to support empty pathes
-//    if (sPath.getLength() == 0)
-//    {
-//        return sal_True;
-//    }
-
     return (! INetURLObject(sPath).HasError());
 }
 
@@ -1168,11 +1169,10 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
         // SAFE ->
         WriteGuard aWriteLock(m_aLock);
         m_xCfgNew = xCfg;
-        m_xCfgNewListener = new WeakChangesListener(this);
         aWriteLock.unlock();
 
         css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(xCfg, css::uno::UNO_QUERY_THROW);
-        xBroadcaster->addChangesListener(m_xCfgNewListener);
+        xBroadcaster->addChangesListener(static_cast< css::util::XChangesListener* >(this));
     }
 
     return xCfg;

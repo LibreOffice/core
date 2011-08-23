@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include "PropType.hxx"
 #include "DeepTContext.hxx"
 #include "ProcAttrTContext.hxx"
@@ -57,12 +57,12 @@ using namespace ::com::sun::star::xml::sax;
 static sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
 {
     PROP_OASIS_GRAPHIC_ATTR_ACTIONS,
-    PROP_OASIS_DRAWING_PAGE_ATTR_ACTIONS,               // DRAWING_PAGE
+    PROP_OASIS_DRAWING_PAGE_ATTR_ACTIONS,				// DRAWING_PAGE
     PROP_OASIS_PAGE_LAYOUT_ATTR_ACTIONS,
     PROP_OASIS_HEADER_FOOTER_ATTR_ACTIONS,
     PROP_OASIS_TEXT_ATTR_ACTIONS,
     PROP_OASIS_PARAGRAPH_ATTR_ACTIONS,
-    MAX_OASIS_PROP_ACTIONS,             // RUBY
+    MAX_OASIS_PROP_ACTIONS,				// RUBY
     PROP_OASIS_SECTION_ATTR_ACTIONS,
     PROP_OASIS_TABLE_ATTR_ACTIONS,
     PROP_OASIS_TABLE_COLUMN_ATTR_ACTIONS,
@@ -86,7 +86,7 @@ class XMLPropertiesTContext_Impl : public XMLPersElemContentTContext
 public:
 
     void SetQNameAndPropType( const ::rtl::OUString& rQName,
-                                 XMLPropType ePropType  )
+                                 XMLPropType ePropType	)
     {
         m_ePropType = ePropType;
         XMLTransformerContext::SetQName( rQName );
@@ -495,7 +495,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                 case XML_ATACTION_DRAW_MIRROR_OASIS: // renames style:mirror to draw:mirror and adapts values
                     {
                         // keep original for writer graphic objects
-                        // Adapts attribute values (#i49139#)
+                        // --> OD 2005-05-12 #i49139# - adapts attribute values,
                         OUString aNewAttrValue;
                         SvXMLTokenEnumerator aTokenEnum( rAttrValue );
                         OUString aToken;
@@ -503,7 +503,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         {
                             if ( aNewAttrValue.getLength() > 0 )
                             {
-                                aNewAttrValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
+                                aNewAttrValue += rtl::OUString::createFromAscii( " " );
                             }
 
                             if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_EVEN ) )
@@ -529,7 +529,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                                     GetXMLToken( XML_MIRROR )), aAttrValue );
                     }
                     break;
-                case XML_ATACTION_GAMMA_OASIS:       // converts percentage value to double
+                case XML_ATACTION_GAMMA_OASIS:		 // converts percentage value to double
                     {
                         sal_Int32 nValue;
                         SvXMLUnitConverter::convertPercent( nValue, rAttrValue );
@@ -707,7 +707,7 @@ OUString XMLPropertiesTContext_Impl::MergeUnderline(
             eUnderline = XML_BOLD_WAVE;
             break;
         default:
-            OSL_FAIL( "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
+            OSL_ENSURE( false, "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
             break;
         }
     }
@@ -722,7 +722,7 @@ OUString XMLPropertiesTContext_Impl::MergeUnderline(
             eUnderline = XML_NONE;
             break;
         default:
-            OSL_FAIL( "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
+            OSL_ENSURE( false, "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
             break;
         }
     }

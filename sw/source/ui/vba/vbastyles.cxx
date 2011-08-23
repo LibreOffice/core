@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,6 +166,18 @@ static const MSOStyleNameTable aMSOStyleNameTable[] =
     { 0, 0, 0 }
 };
 
+#ifdef FUTURE // seems this isn't used
+static uno::Sequence< rtl::OUString > getStyleTypes()
+{
+    uno::Sequence< rtl::OUString > aRet(3);
+    rtl::OUString* pArray = aRet.getArray();
+    pArray[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles") );
+    pArray[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CharacterStyles") );
+    pArray[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NumberingStyles") );
+    return aRet;
+}
+#endif
+
 typedef ::cppu::WeakImplHelper1< container::XEnumeration > StyleEnumeration_BASE;
 typedef ::cppu::WeakImplHelper3< container::XNameAccess, container::XIndexAccess, container::XEnumerationAccess > StyleCollectionHelper_BASE;
 
@@ -186,7 +198,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  style::XStyle::static_type(0); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0; }
-    // XNameAcess
+    // XNameAcess 
     virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName(aName) )
@@ -238,15 +250,15 @@ public:
 
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
-    {
+    { 
         uno::Reference< container::XIndexAccess > xIndexAccess( mxParaStyles, uno::UNO_QUERY_THROW );
         return xIndexAccess->getCount();
-    }
+    }	
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
-
+    
         uno::Reference< container::XIndexAccess > xIndexAccess( mxParaStyles, uno::UNO_QUERY_THROW );
         return xIndexAccess->getByIndex( Index );
     }
@@ -281,20 +293,20 @@ SwVbaStyles::SwVbaStyles( const uno::Reference< XHelperInterface >& xParent, con
     mxMSF.set( mxModel, uno::UNO_QUERY_THROW );
 }
 
-uno::Any
+uno::Any 
 SwVbaStyles::createCollectionObject(const uno::Any& aObject)
 {
     uno::Reference< beans::XPropertySet > xStyleProp( aObject, uno::UNO_QUERY_THROW );
     return uno::makeAny( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProp ) ) );
 }
 
-uno::Type SAL_CALL
+uno::Type SAL_CALL 
 SwVbaStyles::getElementType() throw (uno::RuntimeException)
 {
     return word::XStyle::static_type(0);
 }
 
-uno::Reference< container::XEnumeration > SAL_CALL
+uno::Reference< container::XEnumeration > SAL_CALL 
 SwVbaStyles::createEnumeration() throw (uno::RuntimeException)
 {
     return new StylesEnumWrapper( this );
@@ -314,6 +326,7 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
                 rtl::OUString aStyleName = rtl::OUString::createFromAscii( pTable->pOOoStyleName );
                 if( aStyleName.getLength() > 0 )
                 {
+                    //rtl::OUString aStyleType = SwVbaStyle::getOOoStyleTypeFromMSWord( pTable->wdStyleType );
                     rtl::OUString aStyleType;
                     switch( pTable->wdStyleType )
                     {

@@ -57,7 +57,11 @@
  * @file
  * Draw path object.
  ************************************************************************/
-#include    "xfdrawpath.hxx"
+/*************************************************************************
+ * Change History
+ * 2004-2-18 create this file.
+ ************************************************************************/
+#include	"xfdrawpath.hxx"
 
 XFSvgPathEntry::XFSvgPathEntry()
 {
@@ -74,7 +78,7 @@ rtl::OUString XFSvgPathEntry::ToString()
     rtl::OUString str = m_strCommand;
     std::vector<XFPoint>::iterator it;
 
-    for( it = m_aPoints.begin(); it != m_aPoints.end(); ++it )
+    for( it = m_aPoints.begin(); it != m_aPoints.end(); it++ )
     {
         XFPoint aPt= *it;
         str += DoubleToOUString(aPt.GetX()*1000) + A2OUSTR(" ") + DoubleToOUString(aPt.GetY()*1000) + A2OUSTR(" ");
@@ -86,9 +90,9 @@ XFDrawPath::XFDrawPath()
 {
 }
 
-void    XFDrawPath::MoveTo(XFPoint pt, sal_Bool absPosition)
+void	XFDrawPath::MoveTo(XFPoint pt, sal_Bool absPosition)
 {
-    XFSvgPathEntry  entry;
+    XFSvgPathEntry	entry;
 
     if( absPosition )
         entry.SetCommand(A2OUSTR("M"));
@@ -98,9 +102,9 @@ void    XFDrawPath::MoveTo(XFPoint pt, sal_Bool absPosition)
     m_aPaths.push_back(entry);
 }
 
-void    XFDrawPath::LineTo(XFPoint pt, sal_Bool absPosition)
+void	XFDrawPath::LineTo(XFPoint pt, sal_Bool absPosition)
 {
-    XFSvgPathEntry  entry;
+    XFSvgPathEntry	entry;
 
     if( absPosition )
         entry.SetCommand(A2OUSTR("L"));
@@ -110,9 +114,9 @@ void    XFDrawPath::LineTo(XFPoint pt, sal_Bool absPosition)
     m_aPaths.push_back(entry);
 }
 
-void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, sal_Bool absPosition)
+void	XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, sal_Bool absPosition)
 {
-    XFSvgPathEntry  entry;
+    XFSvgPathEntry	entry;
 
     if( absPosition )
         entry.SetCommand(A2OUSTR("C"));
@@ -125,9 +129,9 @@ void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, sal_Bool
     m_aPaths.push_back(entry);
 }
 
-void    XFDrawPath::SmoothCurveTo(XFPoint dest, XFPoint ctrl, sal_Bool absPosition)
+void	XFDrawPath::SmoothCurveTo(XFPoint dest, XFPoint ctrl, sal_Bool absPosition)
 {
-    XFSvgPathEntry  entry;
+    XFSvgPathEntry	entry;
 
     if( absPosition )
         entry.SetCommand(A2OUSTR("C"));
@@ -139,9 +143,9 @@ void    XFDrawPath::SmoothCurveTo(XFPoint dest, XFPoint ctrl, sal_Bool absPositi
     m_aPaths.push_back(entry);
 }
 
-void    XFDrawPath::ClosePath(sal_Bool absPosition)
+void	XFDrawPath::ClosePath(sal_Bool absPosition)
 {
-    XFSvgPathEntry  entry;
+    XFSvgPathEntry	entry;
 
     if( absPosition )
         entry.SetCommand(A2OUSTR("Z"));
@@ -151,13 +155,13 @@ void    XFDrawPath::ClosePath(sal_Bool absPosition)
     m_aPaths.push_back(entry);
 }
 
-void    XFDrawPath::ToXml(IXFStream *pStrm)
+void	XFDrawPath::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     //view-box:
-    XFRect  rect = m_aRect;
+    XFRect	rect = m_aRect;
 
     rtl::OUString strViewBox = A2OUSTR("0 0 ");
     strViewBox += DoubleToOUString(rect.GetWidth()*1000) + A2OUSTR(" ");
@@ -165,11 +169,11 @@ void    XFDrawPath::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( A2OUSTR("svg:viewBox"), strViewBox);
 
     //points
-    rtl::OUString   strPath;
+    rtl::OUString	strPath;
     std::vector<XFSvgPathEntry>::iterator it;
-    for( it = m_aPaths.begin(); it != m_aPaths.end(); ++it )
+    for( it = m_aPaths.begin(); it != m_aPaths.end(); it++ )
     {
-        XFSvgPathEntry  aSvg = *it;
+        XFSvgPathEntry	aSvg = *it;
         strPath += aSvg.ToString();
     }
     strPath = strPath.trim();
@@ -184,14 +188,14 @@ void    XFDrawPath::ToXml(IXFStream *pStrm)
 }
 
 
-XFRect  XFDrawPath::CalcViewBox()
+XFRect	XFDrawPath::CalcViewBox()
 {
-    double  x1 = 65536;
-    double  y1 = 65536;
-    double  x2 = -1;    //not quite safe.()
-    double  y2 = -1;
-    XFSvgPathEntry  aPath;
-    XFPoint aPoint;
+    double	x1 = 65536;
+    double	y1 = 65536;
+    double	x2 = -1;	//not quite safe.()
+    double	y2 = -1;
+    XFSvgPathEntry	aPath;
+    XFPoint	aPoint;
     std::vector<XFSvgPathEntry>::iterator itPath = m_aPaths.begin();
     std::vector<XFPoint> points;
     std::vector<XFPoint>::iterator itPoint;
@@ -199,7 +203,7 @@ XFRect  XFDrawPath::CalcViewBox()
         aPath = *itPath;
         points = aPath.m_aPoints;
 
-        for( itPoint = points.begin(); itPoint != points.end(); ++itPoint )
+        for( itPoint = points.begin(); itPoint != points.end(); itPoint++ )
         {
             aPoint = *itPoint;
             if( x1>aPoint.GetX() )
@@ -212,7 +216,7 @@ XFRect  XFDrawPath::CalcViewBox()
             if( y2<aPoint.GetY() )
                 y2 = aPoint.GetY();
         }
-        ++itPath;
+        itPath++;
     }while(itPath!=m_aPaths.end());
 
     return XFRect(x1,y1,x2-x1,y2-y1);

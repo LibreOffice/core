@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
+#include <vcl/button.hxx>
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>
 
@@ -39,25 +40,25 @@
 
 class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public ModalDialog
 {
-    FixedText       aCount;
-    NumericField    aCountEdit;
+    FixedText 		aCount;
+    NumericField 	aCountEdit;
     FixedLine        aInsFL;
 
-    RadioButton     aBeforeBtn;
-    RadioButton     aAfterBtn;
+    RadioButton 	aBeforeBtn;
+    RadioButton 	aAfterBtn;
     FixedLine        aPosFL;
 
-    String          aRow;
-    String          aCol;
+    String 			aRow;
+    String 			aCol;
 
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    OKButton 		aOKBtn;
+    CancelButton 	aCancelBtn;
+    HelpButton 		aHelpBtn;
 
     bool            bColumn;
 
 public:
-    SvxInsRowColDlg( Window* pParent, bool bCol, const rtl::OString& sHelpId );
+    SvxInsRowColDlg( Window* pParent, bool bCol, ULONG nHelpId );
 
     virtual short Execute(void);
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ using rtl::OUString;
 using namespace com::sun::star::uno;
 
 /*--------------------------------------------------------------------
-     Description: Ctor
+     Beschreibung: Ctor
  --------------------------------------------------------------------*/
 
 const Sequence<OUString>& SwDBConfig::GetPropertyNames()

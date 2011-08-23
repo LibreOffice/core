@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,21 +37,22 @@
 
 namespace dbaui
 {
+#define MAX_CONN_COUNT 2
     //==================================================================
-    // ConnData     ---------->*    ConnLineData
-    //    ^1                            ^1
-    //    |                             |
-    //  Conn        ---------->*    ConnLine
+    // ConnData		---------->*	ConnLineData
+    //    ^1							^1
+    //    |								|
+    //	Conn		---------->*	ConnLine
     //==================================================================
 
-
+    
     //==================================================================
     /*
-        the class OTableConnectionData contains all connection data which exists between    two windows
+        the class OTableConnectionData contains all connection data which exists between	two windows
     **/
     class OTableConnectionData
     {
-
+        
     protected:
         TTableWindowData::value_type m_pReferencingTable;
         TTableWindowData::value_type m_pReferencedTable;
@@ -59,7 +60,7 @@ namespace dbaui
 
         OConnectionLineDataVec m_vConnLineData;
 
-        void    Init();
+        void	Init();
 
         virtual OConnectionLineDataRef CreateLineDataObj();
         virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );
@@ -78,14 +79,14 @@ namespace dbaui
         virtual OTableConnectionData* NewInstance() const;
             // (von OTableConnectionData abgeleitete Klasse muessen entsprechend eine Instanz ihrer Klasse liefern)
 
-        sal_Bool SetConnLine( sal_uInt16 nIndex, const String& rSourceFieldName, const String& rDestFieldName );
-        sal_Bool AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
-        void ResetConnLines( sal_Bool bUseDefaults = sal_True );
+        BOOL SetConnLine( USHORT nIndex, const String& rSourceFieldName, const String& rDestFieldName );
+        BOOL AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
+        void ResetConnLines( BOOL bUseDefaults = TRUE );
 
         /** normalizeLines moves the empty lines to the back
         */
         void normalizeLines();
-            // loescht die Liste der ConnLines, bei bUseDefaults == sal_True werden danach MAX_CONN_COUNT neue Dummy-Linien eingefuegt
+            // loescht die Liste der ConnLines, bei bUseDefaults == TRUE werden danach MAX_CONN_COUNT neue Dummy-Linien eingefuegt
 
         OConnectionLineDataVec* GetConnLineDataList(){ return &m_vConnLineData; }
 
@@ -102,7 +103,7 @@ namespace dbaui
 
             @return true if successful
         */
-        virtual sal_Bool Update(){ return sal_True; }
+        virtual BOOL Update(){ return TRUE; }
     };
 
     typedef ::std::vector< ::boost::shared_ptr<OTableConnectionData> >  TTableConnectionData;

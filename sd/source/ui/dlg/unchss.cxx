@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 
     // Layoutnamen und Separator loeschen
     String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ) );
-    sal_uInt16 nPos = aName.Search(aSep);
+    USHORT nPos = aName.Search(aSep);
     if( nPos != STRING_NOTFOUND )
         aName.Erase(0, nPos + aSep.Len());
 

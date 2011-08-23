@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,18 +56,19 @@ ScDatabaseDocUtil::StrData::StrData() :
 
 // ----------------------------------------------------------------------------
 
+// static
 void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const uno::Reference<sdbc::XRow>& xRow, long nRowPos,
-                                long nType, sal_Bool bCurrency, StrData* pStrData )
+                                long nType, BOOL bCurrency, StrData* pStrData )
 {
     String aString;
     double nVal = 0.0;
-    sal_Bool bValue = false;
-    sal_Bool bEmptyFlag = false;
-    sal_Bool bError = false;
-    sal_uLong nFormatIndex = 0;
+    BOOL bValue = FALSE;
+    BOOL bEmptyFlag = FALSE;
+    BOOL bError = FALSE;
+    ULONG nFormatIndex = 0;
 
-    //! wasNull calls only if null value was found?
+    //!	wasNull calls only if null value was found?
 
     try
     {
@@ -75,12 +76,12 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
         {
             case sdbc::DataType::BIT:
             case sdbc::DataType::BOOLEAN:
-                //! use language from doc (here, date/time and currency)?
+                //!	use language from doc (here, date/time and currency)?
                 nFormatIndex = pDoc->GetFormatTable()->GetStandardFormat(
                                     NUMBERFORMAT_LOGICAL, ScGlobal::eLnge );
                 nVal = (xRow->getBoolean(nRowPos) ? 1 : 0);
                 bEmptyFlag = ( nVal == 0.0 ) && xRow->wasNull();
-                bValue = sal_True;
+                bValue = TRUE;
                 break;
 
             case sdbc::DataType::TINYINT:
@@ -92,10 +93,10 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
             case sdbc::DataType::DOUBLE:
             case sdbc::DataType::NUMERIC:
             case sdbc::DataType::DECIMAL:
-                //! do the conversion here?
+                //!	do the conversion here?
                 nVal = xRow->getDouble(nRowPos);
                 bEmptyFlag = ( nVal == 0.0 ) && xRow->wasNull();
-                bValue = sal_True;
+                bValue = TRUE;
                 break;
 
             case sdbc::DataType::CHAR:
@@ -115,7 +116,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                     nVal = Date( aDate.Day, aDate.Month, aDate.Year ) -
                                                 *pFormTable->GetNullDate();
                     bEmptyFlag = xRow->wasNull();
-                    bValue = sal_True;
+                    bValue = TRUE;
                 }
                 break;
 
@@ -129,7 +130,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                     nVal = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
                              aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
                     bEmptyFlag = xRow->wasNull();
-                    bValue = sal_True;
+                    bValue = TRUE;
                 }
                 break;
 
@@ -145,24 +146,24 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                            ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
                              aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
                     bEmptyFlag = xRow->wasNull();
-                    bValue = sal_True;
+                    bValue = TRUE;
                 }
                 break;
 
             case sdbc::DataType::SQLNULL:
-                bEmptyFlag = sal_True;
+                bEmptyFlag = TRUE;
                 break;
 
             case sdbc::DataType::BINARY:
             case sdbc::DataType::VARBINARY:
             case sdbc::DataType::LONGVARBINARY:
             default:
-                bError = sal_True;      // unknown type
+                bError = TRUE;		// unknown type
         }
     }
     catch ( uno::Exception& )
     {
-        bError = sal_True;
+        bError = TRUE;
     }
 
     if ( bValue && bCurrency )

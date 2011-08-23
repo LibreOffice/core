@@ -1,36 +1,23 @@
 #*************************************************************************
-#
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
-#
-# OpenOffice.org - a multi-platform office productivity suite
-#
-# This file is part of OpenOffice.org.
-#
-# OpenOffice.org is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License version 3
-# only, as published by the Free Software Foundation.
-#
-# OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License version 3 for more details
-# (a copy is included in the LICENSE file that accompanied this code).
-#
-# You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
-# <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
-#
+#*
+#*    $Workfile:        dbgxtor.awk
+#*
+#*    Ersterstellung    JP  05.10.95
+#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 17:14:27 $
+#*    $Revision: 1.1.1.1 $
+#*
+#*    $Logfile:   T:/sw/inc/poolfmt.awv  $
+#*
+#*    Copyright (c) 1990-1996, STAR DIVISION
+#*
 #*************************************************************************
 
 #
-# This awk-script generates a cxx-file, that dumps all PoolIDs of the template.
-# It is needed for HelpPI.
-# Usage:  awk -f poolid.awk poolfmt.hxx > poolid.cxx
-#         cl poolid.cxx
-#         poolid.exe > ???.hrc
+# Dieses awk-script generiert ein cxx-file, das alle PoolIds der Vorlage dumpt.
+# wird fuer den HelpPI gebraucht.
+# Aufruf:  awk -f poolid.awk poolfmt.hxx > poolid.cxx
+#          cl poolid.cxx
+#          poolid.exe > ???.hrc
 #
 
 function Header() {

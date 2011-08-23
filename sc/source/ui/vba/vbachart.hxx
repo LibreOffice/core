@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 typedef InheritedHelperInterfaceImpl1<ov::excel::XChart > ChartImpl_BASE;
 
 class ScVbaChart : public ChartImpl_BASE
-{
+{		
 friend class ScVbaAxis;
 
     css::uno::Reference< css::chart::XChartDocument > mxChartDocument;
@@ -67,15 +67,25 @@ friend class ScVbaAxis;
     sal_Int32 getSolidType(sal_Int32 _nDeep, sal_Int32 _nVertiStacked, sal_Int32 _nVerti100PercentStacked, sal_Int32 _nVertiUnStacked, sal_Int32 _nHoriStacked, sal_Int32 _nHori100PercentStacked, sal_Int32 _nHoriUnStacked) throw ( css::script::BasicErrorException );
     sal_Int32 getStockUpDownValue(sal_Int32 _nUpDown, sal_Int32 _nNotUpDown) throw (css::script::BasicErrorException);
     bool hasMarkers() throw ( css::script::BasicErrorException );
-    sal_Int32 getMarkerType(sal_Int32 _nWithMarkers, sal_Int32 _nWithoutMarkers) throw ( css::script::BasicErrorException );
+    sal_Int32 getMarkerType(sal_Int32 _nWithMarkers, sal_Int32 _nWithoutMarkers) throw ( css::script::BasicErrorException ); 
     void assignDiagramAttributes();
+    void setDefaultSeriesDescriptionLabels(){}
 public:
     ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart );
 
     // Non-interface
-    css::uno::Reference< css::beans::XPropertySet > xDiagramPropertySet() const { return mxDiagramPropertySet; }
+    css::uno::Reference< css::beans::XPropertySet > xDiagramPropertySet() { return mxDiagramPropertySet; }
     bool isSeriesIndexValid(sal_Int32 _seriesindex) throw( css::script::BasicErrorException );
     bool areIndicesValid(sal_Int32 _seriesindex, sal_Int32 _valindex) throw ( css::script::BasicErrorException );
+    void setSeriesName(sal_Int32 _index, rtl::OUString _sname) throw ( css::script::BasicErrorException );
+    sal_Int32 getSeriesIndex(rtl::OUString _sseriesname) throw ( css::script::BasicErrorException );
+    sal_Int32 getSeriesCount() throw ( css::script::BasicErrorException );
+    rtl::OUString getSeriesName(sal_Int32 _index) throw ( css::script::BasicErrorException );
+    double getValue(sal_Int32 _seriesIndex, sal_Int32 _valindex) throw ( css::script::BasicErrorException );
+    sal_Int32 getValuesCount(sal_Int32 _seriesIndex) throw ( css::script::BasicErrorException );
+    css::uno::Reference< ov::excel::XDataLabels > DataLabels( const css::uno::Reference< ov::excel::XSeries > _oSeries ) throw ( css::script::BasicErrorException );
+    bool getHasDataCaption( const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet )throw ( css::script::BasicErrorException );
+    void setHasDataCaption( const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, bool _bHasDataLabels )throw ( css::script::BasicErrorException );
     bool is3D() throw ( css::uno::RuntimeException );
     css::uno::Reference< css::beans::XPropertySet > getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) throw ( css::script::BasicErrorException );
     // Methods
@@ -83,7 +93,7 @@ public:
     virtual css::uno::Any SAL_CALL SeriesCollection(const css::uno::Any&) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getChartType() throw ( css::uno::RuntimeException, css::script::BasicErrorException);
     virtual void SAL_CALL setChartType( ::sal_Int32 _charttype ) throw ( css::uno::RuntimeException, css::script::BasicErrorException);
-    virtual void SAL_CALL Activate(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual void SAL_CALL Activate(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException); 
     virtual void SAL_CALL setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange >& range, const css::uno::Any& PlotBy ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL Location(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getLocation(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);

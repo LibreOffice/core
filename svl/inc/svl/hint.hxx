@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,26 +45,26 @@ public:
         class Visibility Name: public SfxHint \
         { \
             Type* pObj; \
-            sal_Bool  bIsOwner; \
+            BOOL  bIsOwner; \
         \
         public: \
             TYPEINFO(); \
-            Name( Type* Object, sal_Bool bOwnedByHint = sal_False ); \
+            Name( Type* Object, BOOL bOwnedByHint = FALSE ); \
             ~Name(); \
         \
             Type* GetObject() const { return pObj; } \
-            sal_Bool  IsOwner() const { return bIsOwner; } \
+            BOOL  IsOwner() const { return bIsOwner; } \
         }
 
 #define IMPL_PTRHINT_AUTODELETE(Name, Type) \
-        TYPEINIT1(Name, SfxHint);   \
-        Name::Name( Type* pObject, sal_Bool bOwnedByHint ) \
+        TYPEINIT1(Name, SfxHint);	\
+        Name::Name( Type* pObject, BOOL bOwnedByHint ) \
             { pObj = pObject; bIsOwner = bOwnedByHint; } \
         Name::~Name() { if ( bIsOwner ) delete pObj; }
 
 #define IMPL_PTRHINT(Name, Type) \
-        TYPEINIT1(Name, SfxHint);   \
-        Name::Name( Type* pObject, sal_Bool bOwnedByHint ) \
+        TYPEINIT1(Name, SfxHint);	\
+        Name::Name( Type* pObject, BOOL bOwnedByHint ) \
             { pObj = pObject; bIsOwner = bOwnedByHint; } \
         Name::~Name() {}
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,8 +95,8 @@ _Entry OtherCtrlIdToResIdTable[] = {
 };
 
 
-const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
-const sal_Int32 OTHER_SIZE_TABLE = SAL_N_ELEMENTS( OtherCtrlIdToResIdTable );
+const sal_Int32 SIZE_TABLE = sizeof( CtrlIdToResIdTable ) / sizeof( _Entry );
+const sal_Int32 OTHER_SIZE_TABLE = sizeof( OtherCtrlIdToResIdTable ) / sizeof( _Entry );
 
 //------------------------------------------------------------
 //

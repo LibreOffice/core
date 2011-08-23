@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,13 +140,13 @@ void ImageContainer::writeBase64EncodedStream( ImageId nId, EmitContext& rContex
         std::find_if(pAry,pAry+nLen,
                      boost::bind(comphelper::TPropertyValueEqualFunctor(),
                                  _1,
-                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputSequence")))));
+                                 rtl::OUString::createFromAscii("InputSequence"))));
     OSL_ENSURE( pValue != pAry+nLen,
                 "InputSequence not found" );
 
     uno::Sequence<sal_Int8> aData;
     if( !(pValue->Value >>= aData) )
-        OSL_FAIL("Wrong data type");
+        OSL_ENSURE(false,"Wrong data type");
 
     rContext.rEmitter.write( encodeBase64( aData.getConstArray(), aData.getLength() ));
 }

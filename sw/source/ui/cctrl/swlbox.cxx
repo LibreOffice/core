@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,15 +42,15 @@ SV_IMPL_PTRARR(SwEntryLst, SwBoxEntry*)
 
 //     Description: ListboxElement
 SwBoxEntry::SwBoxEntry() :
-    bModified(sal_False),
-    bNew(sal_False),
+    bModified(FALSE),
+    bNew(FALSE),
     nId(LISTBOX_APPEND)
 {
 }
 
-SwBoxEntry::SwBoxEntry(const String& aNam, sal_uInt16 nIdx) :
-    bModified(sal_False),
-    bNew(sal_False),
+SwBoxEntry::SwBoxEntry(const String& aNam, USHORT nIdx) :
+    bModified(FALSE),
+    bNew(FALSE),
     aName(aNam),
     nId(nIdx)
 {
@@ -64,13 +64,13 @@ SwBoxEntry::SwBoxEntry(const SwBoxEntry& rOld) :
 {
 }
 
-SwComboBox::SwComboBox(Window* pParent, const ResId& rId, sal_uInt16 nStyleBits ):
+SwComboBox::SwComboBox(Window* pParent, const ResId& rId, USHORT nStyleBits ):
     ComboBox(pParent, rId),
     nStyle(nStyleBits)
 {
-    // create administration for the resource's Stringlist
-    sal_uInt16 nSize = GetEntryCount();
-    for( sal_uInt16 i=0; i < nSize; ++i )
+    // Verwaltung fuer die Stringlist aus der Resource aufbauen
+    USHORT nSize = GetEntryCount();
+    for( USHORT i=0; i < nSize; ++i )
     {
         const SwBoxEntry* pTmp = new SwBoxEntry(ComboBox::GetEntry(i), i);
         aEntryLst.Insert(pTmp, aEntryLst.Count() );
@@ -87,7 +87,7 @@ void SwComboBox::InsertEntry(const SwBoxEntry& rEntry)
     InsertSorted(new SwBoxEntry(rEntry));
 }
 
-void SwComboBox::RemoveEntry(sal_uInt16 nPos)
+void SwComboBox::RemoveEntry(USHORT nPos)
 {
     if(nPos >= aEntryLst.Count())
         return;
@@ -105,12 +105,12 @@ void SwComboBox::RemoveEntry(sal_uInt16 nPos)
     aDelEntryLst.C40_INSERT(SwBoxEntry, pEntry, aDelEntryLst.Count());
 }
 
-sal_uInt16 SwComboBox::GetEntryPos(const SwBoxEntry& rEntry) const
+USHORT SwComboBox::GetEntryPos(const SwBoxEntry& rEntry) const
 {
     return ComboBox::GetEntryPos(rEntry.aName);
 }
 
-const SwBoxEntry& SwComboBox::GetEntry(sal_uInt16 nPos) const
+const SwBoxEntry& SwComboBox::GetEntry(USHORT nPos) const
 {
     if(nPos < aEntryLst.Count())
         return *aEntryLst[nPos];
@@ -118,12 +118,12 @@ const SwBoxEntry& SwComboBox::GetEntry(sal_uInt16 nPos) const
     return aDefault;
 }
 
-sal_uInt16 SwComboBox::GetRemovedCount() const
+USHORT SwComboBox::GetRemovedCount() const
 {
     return aDelEntryLst.Count();
 }
 
-const SwBoxEntry& SwComboBox::GetRemovedEntry(sal_uInt16 nPos) const
+const SwBoxEntry& SwComboBox::GetRemovedEntry(USHORT nPos) const
 {
     if(nPos < aDelEntryLst.Count())
         return *aDelEntryLst[nPos];
@@ -134,13 +134,13 @@ const SwBoxEntry& SwComboBox::GetRemovedEntry(sal_uInt16 nPos) const
 void SwComboBox::InsertSorted(SwBoxEntry* pEntry)
 {
     ComboBox::InsertEntry(pEntry->aName);
-    sal_uInt16 nPos = ComboBox::GetEntryPos(pEntry->aName);
+    USHORT nPos = ComboBox::GetEntryPos(pEntry->aName);
     aEntryLst.C40_INSERT(SwBoxEntry, pEntry, nPos);
 }
 
 void SwComboBox::KeyInput( const KeyEvent& rKEvt )
 {
-    sal_uInt16 nChar = rKEvt.GetCharCode();
+    USHORT nChar = rKEvt.GetCharCode();
 
     if(nStyle & CBS_FILENAME)
     {

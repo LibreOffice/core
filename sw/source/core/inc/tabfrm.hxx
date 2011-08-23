@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_TABFRM_HXX
-#define SW_TABFRM_HXX
+#ifndef _TABFRM_HXX
+#define _TABFRM_HXX
 
 #include <tools/mempool.hxx>
 #include "layfrm.hxx"
@@ -44,45 +44,45 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 
     //Fuert Spezialbehandlung fuer _Get[Next|Prev]Leaf() durch.
     using SwFrm::GetLeaf;
-    SwLayoutFrm *GetLeaf( MakePageType eMakePage, sal_Bool bFwd );
+    SwLayoutFrm *GetLeaf( MakePageType eMakePage, BOOL bFwd );
 
     SwTable* pTable;
 
-    sal_Bool bComplete          :1; //Eintrage als Repaint ohne das CompletePaint
+    BOOL bComplete	  		:1;	//Eintrage als Repaint ohne das CompletePaint
                                 //der Basisklasse gesetzt werden muss. Damit
                                 //sollen unertraegliche Tabellen-Repaints
                                 //vermieden werden.
-    sal_Bool bCalcLowers        :1; //Im MakeAll auf jedenfall auch fuer Stabilitaet
+    BOOL bCalcLowers  		:1;	//Im MakeAll auf jedenfall auch fuer Stabilitaet
                                 //des Inhaltes sorgen.
-    sal_Bool bLowersFormatted   :1;//Kommunikation zwischen MakeAll und Layact
-    sal_Bool bLockBackMove      :1; //BackMove-Test hat der Master erledigt.
-    sal_Bool bResizeHTMLTable   :1; //Resize des HTMLTableLayout rufen im MakeAll
+    BOOL bLowersFormatted	:1;//Kommunikation zwischen MakeAll und Layact
+    BOOL bLockBackMove		:1;	//BackMove-Test hat der Master erledigt.
+    BOOL bResizeHTMLTable	:1;	//Resize des HTMLTableLayout rufen im MakeAll
                                 //Zur Optimierung, damit dies nicht im
                                 //CntntFrm::Grow gerufen werden muss, denn dann
                                 //wird es ggf. fuer jede Zelle gerufen #47483#
-    sal_Bool bONECalcLowers     :1; //Primaer fuer die StarONE-SS. Beim MakeAll werden
+    BOOL bONECalcLowers		:1;	//Primaer fuer die StarONE-SS. Beim MakeAll werden
                                 //die Cntnts auf jedenfall per Calc() formatiert.
                                 //es finden keine zusaetzlichen Invalidierungen
                                 //statt und dieser Weg kann auch kaum garantien
                                 //geben.
 
-    sal_Bool bHasFollowFlowLine :1; // Means that the first line in the follow
+    BOOL bHasFollowFlowLine :1; // Means that the first line in the follow
                                 // is indented to contain content from a broken
                                 // cell
-    sal_Bool bIsRebuildLastLine :1; // Means that currently the last line of the
+    BOOL bIsRebuildLastLine :1; // Means that currently the last line of the
                                 // TabFrame is rebuilded. In this case we
                                 // do not want any notification to the master
                                 // table
-    sal_Bool bRestrictTableGrowth :1;       // Usually, the table may grow infinite,
+    BOOL bRestrictTableGrowth :1;       // Usually, the table may grow infinite,
                                         // because the table can be split in
                                         // SwTabFrm::MakeAll. In MakeAll, this
                                         // flag is set to indicate that the table
                                         // may only grow inside its upper. This
                                         // is necessary, in order to let the text
                                         // flow into the FollowFlowLine
-    sal_Bool bRemoveFollowFlowLinePending :1;
+    BOOL bRemoveFollowFlowLinePending :1;
     // --> OD 2004-10-04 #i26945#
-    sal_Bool bConsiderObjsForMinCellHeight :1; // Usually, the floating screen objects
+    BOOL bConsiderObjsForMinCellHeight :1; // Usually, the floating screen objects
                                            // are considered on the calculation
                                            // for the minimal cell height.
                                            // For splitting table rows algorithm
@@ -92,10 +92,10 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
                                            // last table row.
     // <--
     // --> OD 2004-10-15 #i26945#
-    sal_Bool bObjsDoesFit :1; // For splitting table rows algorithm, this boolean
+    BOOL bObjsDoesFit :1; // For splitting table rows algorithm, this boolean
                           // indicates, if the floating screen objects fits
     // <--
-    sal_Bool bDummy4 :1;
+    BOOL bDummy4 :1;
 
     //Split() spaltet den Frm an der angegebenen Stelle, es wird ein
     //Follow erzeugt und aufgebaut und direkt hinter this gepastet.
@@ -103,37 +103,35 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     bool Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep );
     bool Join();
 
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
+    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
-    virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool bHead, sal_Bool &rReformat );
+    virtual BOOL ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReformat );
 
 protected:
     virtual void MakeAll();
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
         //Aendert nur die Framesize, nicht die PrtArea-SSize
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 public:
-    SwTabFrm( SwTable &, SwFrm* );  //Immer nach dem erzeugen _und_ pasten das
+    SwTabFrm( SwTable & );	//Immer nach dem erzeugen _und_ pasten das
                             //Regist Flys rufen!
-    SwTabFrm( SwTabFrm & ); //_Nur_ zum erzeugen von Follows
+    SwTabFrm( SwTabFrm & );	//_Nur_ zum erzeugen von Follows
     ~SwTabFrm();
 
-    void JoinAndDelFollows();   //Fuer DelFrms des TableNodes!
+    void JoinAndDelFollows();	//Fuer DelFrms des TableNodes!
 
     //Ruft das RegistFlys der Zeilen.
     void RegistFlys();
 
     inline const SwTabFrm *GetFollow() const;
-    inline       SwTabFrm *GetFollow();
+    inline		 SwTabFrm *GetFollow();
     SwTabFrm* FindMaster( bool bFirstMaster = false ) const;
 
-    virtual sal_Bool GetInfo( SfxPoolItem &rHnt ) const;
-    virtual void Paint( SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const;
-    virtual void  CheckDirection( sal_Bool bVert );
+    virtual	void Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual BOOL GetInfo( SfxPoolItem &rHnt ) const;
+    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void  CheckDirection( BOOL bVert );
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
@@ -145,50 +143,50 @@ public:
     inline const SwCntntFrm *FindLastCntnt() const;
 
     const SwTable *GetTable() const { return pTable; }
-          SwTable *GetTable()       { return pTable; }
+          SwTable *GetTable() 		{ return pTable; }
 
-    sal_Bool IsComplete()  { return bComplete; }
-    void SetComplete() { bComplete = sal_True; }
-    void ResetComplete() { bComplete = sal_False; }
+    BOOL IsComplete()  { return bComplete; }
+    void SetComplete() { bComplete = TRUE; }
+    void ResetComplete() { bComplete = FALSE; }
 
-    sal_Bool IsLowersFormatted() const      { return bLowersFormatted; }
-    void SetLowersFormatted( sal_Bool b )   { bLowersFormatted = b;    }
+    BOOL IsLowersFormatted() const 		{ return bLowersFormatted; }
+    void SetLowersFormatted( BOOL b )	{ bLowersFormatted = b;    }
 
-    void SetCalcLowers()        { bCalcLowers = sal_True;      } //Sparsam einsetzen!
-    void SetResizeHTMLTable()   { bResizeHTMLTable = sal_True; } //dito
-    void SetONECalcLowers()     { bONECalcLowers = sal_True;   }
+    void SetCalcLowers()		{ bCalcLowers = TRUE; 	   } //Sparsam einsetzen!
+    void SetResizeHTMLTable()   { bResizeHTMLTable = TRUE; } //dito
+    void SetONECalcLowers()		{ bONECalcLowers = TRUE;   }
 
     //
     // Start: New stuff for breaking table rows
     //
-    sal_Bool HasFollowFlowLine() const { return bHasFollowFlowLine; }
-    void SetFollowFlowLine( sal_Bool bNew ) { bHasFollowFlowLine = bNew; }
+    BOOL HasFollowFlowLine() const { return bHasFollowFlowLine; }
+    void SetFollowFlowLine( BOOL bNew ) { bHasFollowFlowLine = bNew; }
 
-    sal_Bool IsRebuildLastLine() const { return bIsRebuildLastLine; }
-    void SetRebuildLastLine( sal_Bool bNew ) { bIsRebuildLastLine = bNew; }
+    BOOL IsRebuildLastLine() const { return bIsRebuildLastLine; }
+    void SetRebuildLastLine( BOOL bNew ) { bIsRebuildLastLine = bNew; }
 
-    sal_Bool IsRestrictTableGrowth() const { return bRestrictTableGrowth; }
-    void SetRestrictTableGrowth( sal_Bool bNew ) { bRestrictTableGrowth = bNew; }
+    BOOL IsRestrictTableGrowth() const { return bRestrictTableGrowth; }
+    void SetRestrictTableGrowth( BOOL bNew ) { bRestrictTableGrowth = bNew; }
 
-    sal_Bool IsRemoveFollowFlowLinePending() const { return bRemoveFollowFlowLinePending; }
-    void SetRemoveFollowFlowLinePending( sal_Bool bNew ) { bRemoveFollowFlowLinePending = bNew; }
+    BOOL IsRemoveFollowFlowLinePending() const { return bRemoveFollowFlowLinePending; }
+    void SetRemoveFollowFlowLinePending( BOOL bNew ) { bRemoveFollowFlowLinePending = bNew; }
 
     // --> OD 2004-10-04 #i26945#
-    sal_Bool IsConsiderObjsForMinCellHeight() const
+    BOOL IsConsiderObjsForMinCellHeight() const
     {
         return bConsiderObjsForMinCellHeight;
     }
-    void SetConsiderObjsForMinCellHeight( sal_Bool _bNewConsiderObjsForMinCellHeight )
+    void SetConsiderObjsForMinCellHeight( BOOL _bNewConsiderObjsForMinCellHeight )
     {
         bConsiderObjsForMinCellHeight = _bNewConsiderObjsForMinCellHeight;
     }
     // <--
     // --> OD 2004-10-04 #i26945#
-    sal_Bool DoesObjsFit() const
+    BOOL DoesObjsFit() const
     {
         return bObjsDoesFit;
     }
-    void SetDoesObjsFit( sal_Bool _bNewObjsDoesFit )
+    void SetDoesObjsFit( BOOL _bNewObjsDoesFit )
     {
         bObjsDoesFit = _bNewObjsDoesFit;
     }
@@ -199,7 +197,7 @@ public:
     // End: New stuff for breaking table rows
     //
 
-    sal_Bool CalcFlyOffsets( SwTwips& rUpper, long& rLeftOffset,
+    BOOL CalcFlyOffsets( SwTwips& rUpper, long& rLeftOffset,
                          long& rRightOffset ) const;
 
     SwTwips CalcHeightOfFirstContentLine() const;
@@ -213,7 +211,7 @@ public:
     bool IsCollapsingBorders() const;
 
     // used for collapsing border lines:
-    sal_uInt16 GetBottomLineSize() const;
+    USHORT GetBottomLineSize() const;
     // <-- collapsing
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTabFrm)
@@ -233,6 +231,6 @@ inline SwTabFrm *SwTabFrm::GetFollow()
     return (SwTabFrm*)SwFlowFrm::GetFollow();
 }
 
-#endif  // SW_TABFRM_HXX
+#endif	//_TABFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ XMLKerningPropHdl::~XMLKerningPropHdl()
 }
 
 sal_Bool XMLKerningPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{
+{ 
     sal_Bool bRet = sal_True;
     sal_Int32 nKerning = 0;
 
@@ -64,11 +64,11 @@ sal_Bool XMLKerningPropHdl::importXML( const OUString& rStrImpValue, Any& rValue
 
     rValue <<= (sal_Int16)nKerning;
 
-    return bRet;
+    return bRet; 
 }
 
 sal_Bool XMLKerningPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{
+{ 
     sal_Bool bRet = sal_False;
     sal_Int16 nValue = sal_Int16();
 

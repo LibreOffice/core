@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ public:
 
     /** This is an information to the cache manager that the size of preview
         bitmaps in the specified cache has changed.
-
+        
     */
     ::boost::shared_ptr<Cache> ChangeSize (
         const ::boost::shared_ptr<Cache>& rpCache,
@@ -104,26 +104,15 @@ public:
         marked as out-of-date and will be re-created when they are requested
         the next time.
     */
-    bool InvalidatePreviewBitmap (
+    void InvalidatePreviewBitmap (
         DocumentKey pDocument,
         const SdrPage* pPage);
-
-    /** Invalidate the preview bitmaps for all slides that belong to the
-        specified document.  This is necessary after model changes that
-        affect e.g. page number fiels.
-    */
-    void InvalidateAllPreviewBitmaps (DocumentKey pDocument);
 
     /** Invalidate all the caches that are currently in use and destroy
         those that are not.  This is used for example when the high contrast
         mode is turned on or off.
     */
     void InvalidateAllCaches (void);
-
-    /** Call this method when a page has been deleted and its preview
-        is not needed anymore.
-    */
-    void ReleasePreviewBitmap (const SdrPage* pPage);
 
 private:
     /** Singleton instance of the cache manager.  Note that this is a weak
@@ -146,7 +135,7 @@ private:
         slide sorter.
     */
     const sal_uInt32 mnMaximalRecentlyCacheCount;
-
+    
     PageCacheManager (void);
     ~PageCacheManager (void);
 

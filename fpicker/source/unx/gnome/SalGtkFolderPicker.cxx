@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,19 +38,26 @@
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <cppuhelper/interfacecontainer.h>
 #include <osl/diagnose.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <FPServiceInfo.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/svapp.hxx>
 #include "SalGtkFolderPicker.hxx"
-#include "resourceprovider.hxx"
 
-#include <string.h>
+#include <tools/urlobj.hxx>
+
+#include <iostream>
+#include "resourceprovider.hxx"
+#include <tools/rc.hxx>
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -72,8 +79,8 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FolderPicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(2);
-        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFolderPicker" ));
-        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.GtkFolderPicker" ));
+        aRet[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFolderPicker" );
+        aRet[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.GtkFolderPicker" );
         return aRet;
     }
 }
@@ -95,8 +102,8 @@ SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference<lang::XMultiService
         GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, (char *)NULL );
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
-    gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), sal_False );
-    gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), sal_False );
+    gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), FALSE );
+    gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), FALSE );
 }
 
 // -------------------------------------------------
@@ -175,12 +182,9 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
     sal_Int16 retVal = 0;
 
     uno::Reference< awt::XExtendedToolkit > xToolkit(
-        m_xServiceMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ), uno::UNO_QUERY);
+        m_xServiceMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.awt.Toolkit") ), uno::UNO_QUERY);
 
-    uno::Reference< frame::XDesktop > xDesktop(
-        m_xServiceMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), uno::UNO_QUERY);
-
-    RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
+    RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit);
     uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
     gint nStatus = pRunDialog->run();
     switch( nStatus )
@@ -207,24 +211,24 @@ void SAL_CALL SalGtkFolderPicker::cancel() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
 
-    // TODO m_pImpl->cancel();
+    // TODO m_pImpl->cancel();  
 }
 
 // -------------------------------------------------
 // XServiceInfo
 // -------------------------------------------------
 
-rtl::OUString SAL_CALL SalGtkFolderPicker::getImplementationName()
+rtl::OUString SAL_CALL SalGtkFolderPicker::getImplementationName() 
     throw( uno::RuntimeException )
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_IMPL_NAME ));
+    return rtl::OUString::createFromAscii( FOLDER_PICKER_IMPL_NAME );
 }
 
 // -------------------------------------------------
-//  XServiceInfo
+//	XServiceInfo
 // -------------------------------------------------
 
-sal_Bool SAL_CALL SalGtkFolderPicker::supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL SalGtkFolderPicker::supportsService( const rtl::OUString& ServiceName ) 
     throw( uno::RuntimeException )
 {
     uno::Sequence <rtl::OUString> SupportedServicesNames = FolderPicker_getSupportedServiceNames();
@@ -237,10 +241,10 @@ sal_Bool SAL_CALL SalGtkFolderPicker::supportsService( const rtl::OUString& Serv
 }
 
 // -------------------------------------------------
-//  XServiceInfo
+//	XServiceInfo
 // -------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL SalGtkFolderPicker::getSupportedServiceNames()
+uno::Sequence<rtl::OUString> SAL_CALL SalGtkFolderPicker::getSupportedServiceNames() 
     throw( uno::RuntimeException )
 {
     return FolderPicker_getSupportedServiceNames();

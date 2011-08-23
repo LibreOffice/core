@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ SdInsertPasteDlg::SdInsertPasteDlg( Window* pWindow ) :
     aBtnHelp( this, SdResId( BTN_HELP ) )
 {
     FreeResource();
-    aRbAfter.Check( sal_True );
+    aRbAfter.Check( TRUE );
 }
 
 // -----------------------------------------------------------------------------
@@ -61,7 +61,7 @@ SdInsertPasteDlg::~SdInsertPasteDlg()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SdInsertPasteDlg::IsInsertBefore() const
+BOOL SdInsertPasteDlg::IsInsertBefore() const
 {
     return( aRbBefore.IsChecked() );
 }

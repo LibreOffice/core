@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: PropertyMap.hxx,v $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +33,7 @@
 #include <resourcemodel/TagLogger.hxx>
 #include "PropertyMapHelper.hxx"
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
 namespace writerfilter
 {
 namespace dmapper
@@ -38,87 +41,92 @@ namespace dmapper
 
 using namespace ::com::sun::star;
 
-void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t pLogger, const uno::Any & rTableColumnSeparators)
+XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(const uno::Any & rTableColumnSeparators)
 {
     uno::Sequence<text::TableColumnSeparator> aSeq;
     rTableColumnSeparators >>= aSeq;
-
-    pLogger->startElement("property.TableColumnSeparators");
-
+    
+    XMLTag::Pointer_t pResult(new XMLTag("property.TableColumnSeparators"));
+    
     sal_uInt32 nLength = aSeq.getLength();
     for (sal_uInt32 n = 0; n < nLength; ++n)
     {
-        pLogger->startElement("separator");
-
-        pLogger->attribute("position", aSeq[n].Position);
-        pLogger->attribute("visible", aSeq[n].IsVisible);
-
-        pLogger->endElement();
+        XMLTag::Pointer_t pTagSeparator(new XMLTag("separator"));
+        
+        pTagSeparator->addAttr("position", aSeq[n].Position);
+        pTagSeparator->addAttr("visible", aSeq[n].IsVisible);
+        
+        pResult->addTag(pTagSeparator);
     }
-
-    pLogger->endElement();
+    
+    return pResult;
 }
-
-void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger, beans::PropertyValues & rValues)
+    
+XMLTag::Pointer_t lcl_PropertyValuesToTag(beans::PropertyValues & rValues)
 {
-    pLogger->startElement("propertyValues");
-
+    XMLTag::Pointer_t pResult(new XMLTag("propertyValues"));
+    
     beans::PropertyValue * pValues = rValues.getArray();
-
+    
     for (sal_Int32 n = 0; n < rValues.getLength(); ++n)
     {
-        pLogger->startElement("propertyValue");
-
-        pLogger->attribute("name", pValues[n].Name);
-
-        try
+        XMLTag::Pointer_t pTag(new XMLTag("propertyValue"));
+        
+        pTag->addAttr("name", pValues[n].Name);
+        
+        try 
         {
             sal_Int32 aInt = 0;
             pValues[n].Value >>= aInt;
-            pLogger->attribute("value", aInt);
+            pTag->addAttr("value", aInt);
         }
         catch (...)
         {
         }
-
-        if (pValues[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TableColumnSeparators")))
+        
+        if (pValues[n].Name.equalsAscii("TableColumnSeparators"))
         {
-            lcl_DumpTableColumnSeparators(pLogger, pValues[n].Value);
+            pTag->addTag(lcl_TableColumnSeparatorsToTag(pValues[n].Value));
         }
-
-        pLogger->endElement();
+        
+        pResult->addTag(pTag);                               
     }
-    pLogger->endElement();
-}
+    
+    return pResult;
+}   
 
-void lcl_DumpPropertyValueSeq(const TagLogger::Pointer_t pLogger, PropertyValueSeq_t & rPropValSeq)
+XMLTag::Pointer_t lcl_PropertyValueSeqToTag(PropertyValueSeq_t & rPropValSeq)
 {
-    pLogger->startElement("PropertyValueSeq");
-
+    XMLTag::Pointer_t pResult(new XMLTag("PropertyValueSeq"));
+    
     beans::PropertyValues * pValues = rPropValSeq.getArray();
-
+    
     for (sal_Int32 n = 0; n < rPropValSeq.getLength(); ++n)
     {
-        lcl_DumpPropertyValues(pLogger, pValues[n]);
+        XMLTag::Pointer_t pTag(lcl_PropertyValuesToTag(pValues[n]));
+        
+        pResult->addTag(pTag);
     }
-
-    pLogger->endElement();
+    
+    return pResult;
 }
-
-void lcl_DumpPropertyValueSeqSeq(const TagLogger::Pointer_t pLogger, PropertyValueSeqSeq_t rPropValSeqSeq)
+    
+XMLTag::Pointer_t lcl_PropertyValueSeqSeqToTag(PropertyValueSeqSeq_t rPropValSeqSeq)
 {
-    pLogger->startElement("PropertyValueSeq");
-
+    XMLTag::Pointer_t pResult(new XMLTag("PropertyValueSeq"));
+    
     PropertyValueSeq_t * pValues = rPropValSeqSeq.getArray();
-
+    
     for (sal_Int32 n = 0; n < rPropValSeqSeq.getLength(); ++n)
     {
-        lcl_DumpPropertyValueSeq(pLogger, pValues[n]);
+        XMLTag::Pointer_t pTag(lcl_PropertyValueSeqToTag(pValues[n]));
+        
+        pResult->addTag(pTag);
     }
-
-    pLogger->endElement();
+    
+    return pResult;
 }
-
+    
 }
 }
 #endif // DEBUG

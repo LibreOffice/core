@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,30 +47,34 @@
  {
  public:
 
-    /** Return "Auto-Collection with ID.
-        Create, if it does not yet exist.
-        If string pointer is defined request only description
-        of attributes, do not create style sheet!
+    /** Gebe die "Auto-Collection" mit der Id zurueck. Existiert
+        sie noch nicht, dann erzuege sie
+        Ist der String-Pointer definiert, dann erfrage nur die
+        Beschreibung der Attribute, !! es legt keine Vorlage an !!
     */
     virtual SwTxtFmtColl* GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) = 0;
 
-    /** Return required automatic format base class.
+    /** return das geforderte automatische  Format - Basis-Klasse !
     */
     virtual SwFmt* GetFmtFromPool( sal_uInt16 nId ) = 0;
 
-    /** Return required automatic format.
+    /** returne das geforderte automatische Format
      */
     virtual SwFrmFmt* GetFrmFmtFromPool( sal_uInt16 nId ) = 0;
 
+    /**
+     */
     virtual SwCharFmt* GetCharFmtFromPool( sal_uInt16 nId ) = 0;
 
-    /** Return required automatic page style.
+    /** returne die geforderte automatische Seiten-Vorlage
      */
     virtual SwPageDesc* GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) = 0;
 
+    /**
+     */
     virtual SwNumRule* GetNumRuleFromPool( sal_uInt16 nId ) = 0;
 
-    /** Check whether this "auto-collection" is used in document.
+    /** pruefe, ob diese "Auto-Collection" in Dokument schon/noch benutzt wird
      */
     virtual bool IsPoolTxtCollUsed( sal_uInt16 nId ) const = 0;
     virtual bool IsPoolFmtUsed( sal_uInt16 nId ) const = 0;

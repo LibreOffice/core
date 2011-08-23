@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,24 +49,24 @@ class TextEditImp : public Window, public SfxListener
 using Window::Notify;
 
 protected:
-    void            DoSyntaxHighlight( sal_uIntPtr nPara );
+    void			DoSyntaxHighlight( ULONG nPara );
 
 
 private:
     AppEdit *pAppEdit;
     Link ModifyHdl;
 
-    Timer           aSyntaxIdleTimer;
-    Timer           aImplSyntaxIdleTimer;
+    Timer			aSyntaxIdleTimer;
+    Timer			aImplSyntaxIdleTimer;
     DECL_LINK( SyntaxTimerHdl, Timer * );
-    Table           aSyntaxLineTable;
+    Table			aSyntaxLineTable;
 
     void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    void            ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff );
-    sal_Bool            bHighlightning;
-    sal_Bool            bDoSyntaxHighlight;
-    sal_Bool            bDelayHighlight;
+    void			ImpDoHighlight( const String& rSource, ULONG nLineOff );
+    BOOL			bHighlightning;
+    BOOL			bDoSyntaxHighlight;
+    BOOL			bDelayHighlight;
 
 
     SbxBase* GetSbxAtMousePos( String &aWord );
@@ -75,12 +75,12 @@ private:
     DECL_LINK( ShowVarContents, void* );
     Point aTipPos;
     String aTipWord;
-    sal_uIntPtr nTipId;
+    ULONG nTipId;
 
     Timer HideTipTimer;
     Timer ShowTipTimer;
 
-    sal_Bool bViewMoved;
+    BOOL bViewMoved;
 
 public:
     TextEditImp( AppEdit *pParent, const WinBits& aBits );
@@ -90,20 +90,23 @@ public:
     TextView *pTextView;
 
     void SetFont( const Font& rNewFont );
-    sal_Bool IsModified();
+    BOOL IsModified();
     void SetModifyHdl( Link l ){ ModifyHdl = l; }
 
-    void                KeyInput( const KeyEvent& rKeyEvent );
-    void                Paint( const Rectangle& rRect );
-    void                MouseButtonUp( const MouseEvent& rMouseEvent );
-    void                MouseButtonDown( const MouseEvent& rMouseEvent );
-    void                Command( const CommandEvent& rCEvt );
+    void				KeyInput( const KeyEvent& rKeyEvent );
+    void				Paint( const Rectangle& rRect );
+    void				MouseButtonUp( const MouseEvent& rMouseEvent );
+    void				MouseButtonDown( const MouseEvent& rMouseEvent );
+//	void				MouseMove( const MouseEvent& rMouseEvent );
+    void				Command( const CommandEvent& rCEvt );
+    //BOOL				Drop( const DropEvent& rEvt );
+    //BOOL				QueryDrop( DropEvent& rEvt );
 
-    sal_Bool                ViewMoved();
+    BOOL				ViewMoved();
 
     void DoDelayedSyntaxHighlight( xub_StrLen nPara );
     void InvalidateSyntaxHighlight();
-    void SyntaxHighlight( sal_Bool bNew );
+    void SyntaxHighlight( BOOL bNew );
     void BuildKontextMenu( PopupMenu *&pMenu );
 };
 
@@ -112,24 +115,24 @@ public:
 DBG_NAMEEX(TextEdit)
 class TextEdit : public DataEdit {
 
-    BreakpointWindow    *pBreakpointWindow;
-    sal_Bool bFileWasUTF8;
-    sal_Bool bSaveAsUTF8;
+    BreakpointWindow	*pBreakpointWindow;
+    BOOL bFileWasUTF8;
+    BOOL bSaveAsUTF8;
 
 public:
     TextEdit( AppEdit*, const WinBits& );
     ~TextEdit();
-    void Highlight( sal_uIntPtr nLine, xub_StrLen nCol1, xub_StrLen nCol2 );
+    void Highlight( ULONG nLine, xub_StrLen nCol1, xub_StrLen nCol2 );
     TextEditImp& GetTextEditImp() { return aEdit; }
 
-    void                SetBreakpointWindow( BreakpointWindow *pBPWindow ){ pBreakpointWindow = pBPWindow; }
-    BreakpointWindow    *GetBreakpointWindow(){ return pBreakpointWindow; }
+    void				SetBreakpointWindow( BreakpointWindow *pBPWindow ){ pBreakpointWindow = pBPWindow; }
+    BreakpointWindow	*GetBreakpointWindow(){ return pBreakpointWindow; }
 
     DATA_FUNC_DEF( aEdit, TextEditImp )
 
     virtual void BuildKontextMenu( PopupMenu *&pMenu );
 
-    void SaveAsUTF8( sal_Bool bUTF8 ) { bSaveAsUTF8 = bUTF8; }
+    void SaveAsUTF8( BOOL bUTF8 ) { bSaveAsUTF8 = bUTF8; }
 };
 
 #endif

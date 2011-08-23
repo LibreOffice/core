@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@
 
 class SW_DLLPUBLIC SwTblBoxNumFormat : public SfxUInt32Item
 {
-    sal_Bool bAuto;     // automatically given flag
+    BOOL bAuto;		// automatisch vergebenes Flag
 public:
-    SwTblBoxNumFormat( sal_uInt32 nFormat = NUMBERFORMAT_TEXT,
-                        sal_Bool bAuto = sal_False );
+    SwTblBoxNumFormat( UINT32 nFormat = NUMBERFORMAT_TEXT,
+                        BOOL bAuto = FALSE );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
 
     inline SwTblBoxNumFormat& operator=( const SwTblBoxNumFormat& rAttr )
     {
@@ -53,33 +53,37 @@ public:
         return *this;
     }
 
-    sal_Bool GetAutoFlag() const                    { return bAuto; }
-    void SetAutoFlag( sal_Bool bFlag = sal_True )       { bAuto = bFlag; }
+    BOOL GetAutoFlag() const 					{ return bAuto; }
+    void SetAutoFlag( BOOL bFlag = TRUE )		{ bAuto = bFlag; }
 };
 
 class SwTblBoxFormula : public SfxPoolItem, public SwTableFormula
 {
-    SwModify* pDefinedIn;   // Modify object where the formula is located
-                            // can only be TableBoxFormat
+    SwModify* pDefinedIn;	// Modify-Object, in dem die Formel steht
+                            // kann nur TablenBoxFormat sein
 
 public:
     SwTblBoxFormula( const String& rFormula );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
 
+    // erfrage und setze den Modify-Pointer
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     inline void ChgDefinedIn( const SwModify* pNew )
                                             { pDefinedIn = (SwModify*)pNew; }
-    //  BoxAttribut -> BoxStartNode
+    // suche den Node, in dem die Formel steht:
+    //	BoxAttribut	-> BoxStartNode
     virtual const SwNode* GetNodeOfFormula() const;
 
           SwTableBox* GetTableBox();
     const SwTableBox* GetTableBox() const
         { return ((SwTblBoxFormula*)this)->GetTableBox(); }
 
+    // Status aendern
     void ChangeState( const SfxPoolItem* pItem );
+    // berechne die Formel
     void Calc( SwTblCalcPara& rCalcPara, double& rValue );
 };
 
@@ -90,9 +94,9 @@ public:
     SwTblBoxValue();
     SwTblBoxValue( const double aVal );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
 
     inline SwTblBoxValue& operator=( const SwTblBoxValue& rCmp )
     {
@@ -100,27 +104,27 @@ public:
         return *this;
     }
 
-    double GetValue() const                     { return nValue; }
+    double GetValue() const 					{ return nValue; }
 };
 
 
 
 //***************************************************************************
 
-inline const SwTblBoxNumFormat      &SwAttrSet::GetTblBoxNumFmt(sal_Bool bInP) const
+inline const SwTblBoxNumFormat      &SwAttrSet::GetTblBoxNumFmt(BOOL bInP) const
     {   return (const SwTblBoxNumFormat&)Get( RES_BOXATR_FORMAT,bInP); }
-inline const SwTblBoxFormula        &SwAttrSet::GetTblBoxFormula(sal_Bool bInP) const
+inline const SwTblBoxFormula		&SwAttrSet::GetTblBoxFormula(BOOL bInP) const
     {   return (const SwTblBoxFormula&)Get( RES_BOXATR_FORMULA,bInP); }
-inline const SwTblBoxValue          &SwAttrSet::GetTblBoxValue(sal_Bool bInP) const
+inline const SwTblBoxValue			&SwAttrSet::GetTblBoxValue(BOOL bInP) const
     {   return (const SwTblBoxValue&)Get( RES_BOXATR_VALUE, bInP); }
 
 //***************************************************************************
 
-inline const SwTblBoxNumFormat      &SwFmt::GetTblBoxNumFmt(sal_Bool bInP) const
+inline const SwTblBoxNumFormat		&SwFmt::GetTblBoxNumFmt(BOOL bInP) const
     {   return aSet.GetTblBoxNumFmt(bInP); }
-inline const SwTblBoxFormula        &SwFmt::GetTblBoxFormula(sal_Bool bInP) const
+inline const SwTblBoxFormula		&SwFmt::GetTblBoxFormula(BOOL bInP) const
     {   return aSet.GetTblBoxFormula(bInP); }
-inline const SwTblBoxValue          &SwFmt::GetTblBoxValue(sal_Bool bInP) const
+inline const SwTblBoxValue			&SwFmt::GetTblBoxValue(BOOL bInP) const
     {   return aSet.GetTblBoxValue(bInP); }
 
 #endif

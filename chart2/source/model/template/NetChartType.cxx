@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ Reference< XCoordinateSystem > SAL_CALL
         aScaleData.AxisType = AxisType::REALNUMBER;
         xAxis->setScaleData( aScaleData );
     }
-
+    
     return xResult;
 }
 
@@ -109,51 +109,31 @@ uno::Any NetChartType_Base::GetDefaultValue( sal_Int32 /*nHandle*/ ) const
     return uno::Any();
 }
 
-namespace
-{
-
-struct StaticNetChartTypeInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        // using assignment for broken gcc 3.3
-        static ::cppu::OPropertyArrayHelper aPropHelper = ::cppu::OPropertyArrayHelper(
-            Sequence< beans::Property >() );
-        return &aPropHelper;
-    }
-};
-
-struct StaticNetChartTypeInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticNetChartTypeInfoHelper_Initializer >
-{
-};
-
-struct StaticNetChartTypeInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticNetChartTypeInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticNetChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticNetChartTypeInfo_Initializer >
-{
-};
-
-}
-
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL NetChartType_Base::getInfoHelper()
 {
-    return *StaticNetChartTypeInfoHelper::get();
+    uno::Sequence< beans::Property > aProps;
+    static ::cppu::OPropertyArrayHelper aArrayHelper(aProps);
+    return aArrayHelper;
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL NetChartType_Base::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+    NetChartType_Base::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticNetChartTypeInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
 
 //-----------------------------------------------------------------------------

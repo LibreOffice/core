@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <doc.hxx>
 #include <editsh.hxx>
+#include <errhdl.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
@@ -46,7 +47,7 @@
 using rtl::OUString;
 using namespace ::com::sun::star;
 
-#define DDE_TXT_ENCODING    gsl_getSystemTextEncoding()
+#define DDE_TXT_ENCODING 	gsl_getSystemTextEncoding()
 
 /*--------------------------------------------------------------------
     Beschreibung: Globale Variablen
@@ -56,7 +57,7 @@ class SwIntrnlRefLink : public SwBaseLink
 {
     SwDDEFieldType& rFldType;
 public:
-    SwIntrnlRefLink( SwDDEFieldType& rType, sal_uInt16 nUpdateType, sal_uInt16 nFmt )
+    SwIntrnlRefLink( SwDDEFieldType& rType, USHORT nUpdateType, USHORT nFmt )
         : SwBaseLink( nUpdateType, nFmt ),
         rFldType( rType )
     {}
@@ -66,7 +67,7 @@ public:
                                 const uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
-    virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
+    virtual BOOL IsInRange( ULONG nSttNd, ULONG nEndNd, xub_StrLen nStt = 0,
                             xub_StrLen nEnd = STRING_NOTFOUND ) const;
 };
 
@@ -82,7 +83,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
             uno::Sequence< sal_Int8 > aSeq;
             rValue >>= aSeq;
             String sStr( (sal_Char*)aSeq.getConstArray(), static_cast<xub_StrLen>(aSeq.getLength()),
-                               DDE_TXT_ENCODING  );
+                               DDE_TXT_ENCODING	 );
 
             // CR-LF am Ende entfernen, ist ueberfluessig!
             xub_StrLen n = sStr.Len();
@@ -93,7 +94,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
             if( n && 0x0d == sStr.GetChar( n-1 ) )
                 --n;
 
-            sal_Bool bDel = n != sStr.Len();
+            BOOL bDel = n != sStr.Len();
             if( bDel )
                 sStr.Erase( n );
 
@@ -119,12 +120,12 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
         // dann suchen wir uns mal alle Felder. Wird kein gueltiges
         // gefunden, dann Disconnecten wir uns!
         SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-        int bCallModify = sal_False;
+        int bCallModify = FALSE;
         rFldType.LockModify();
 
-        SwClientIter aIter( rFldType );     // TODO
+        SwClientIter aIter( rFldType );
         SwClient * pLast = aIter.GoStart();
-        if( pLast )     // konnte zum Anfang gesprungen werden ??
+        if( pLast ) 	// konnte zum Anfang gesprungen werden ??
             do {
                 // eine DDE-Tabelle oder ein DDE-FeldAttribut im Text
                 if( !pLast->IsA( TYPE( SwFmtFld ) ) ||
@@ -137,8 +138,8 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
                         else if( pSh )
                             pSh->StartAction();
                     }
-                    pLast->ModifyNotification( 0, &aUpdateDDE );
-                    bCallModify = sal_True;
+                    pLast->Modify( 0, &aUpdateDDE );
+                    bCallModify = TRUE;
                 }
             } while( 0 != ( pLast = aIter++ ));
 
@@ -184,9 +185,9 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 {
     // hier sollte irgend ein Anchor aus dem normalen Nodes-Array reichen
     const SwNode* pNd = 0;
-    SwClientIter aIter( rFldType );     // TODO
+    SwClientIter aIter( rFldType );
     SwClient * pLast = aIter.GoStart();
-    if( pLast )     // konnte zum Anfang gesprungen werden ??
+    if( pLast ) 	// konnte zum Anfang gesprungen werden ??
         do {
             // eine DDE-Tabelle oder ein DDE-FeldAttribut im Text
             if( !pLast->IsA( TYPE( SwFmtFld ) ))
@@ -206,14 +207,14 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
     return pNd;
 }
 
-sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
+BOOL SwIntrnlRefLink::IsInRange( ULONG nSttNd, ULONG nEndNd,
                                 xub_StrLen nStt, xub_StrLen nEnd ) const
 {
     // hier sollte irgend ein Anchor aus dem normalen Nodes-Array reichen
     SwNodes* pNds = &rFldType.GetDoc()->GetNodes();
-    SwClientIter aIter( rFldType );         // TODO
+    SwClientIter aIter( rFldType );
     SwClient * pLast = aIter.GoStart();
-    if( pLast )     // konnte zum Anfang gesprungen werden ??
+    if( pLast ) 	// konnte zum Anfang gesprungen werden ??
         do {
             // eine DDE-Tabelle oder ein DDE-FeldAttribut im Text
             if( !pLast->IsA( TYPE( SwFmtFld ) ))
@@ -225,7 +226,7 @@ sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                 if( pTblNd->GetNodes().IsDocNodes() &&
                     nSttNd < pTblNd->EndOfSectionIndex() &&
                     nEndNd > pTblNd->GetIndex() )
-                    return sal_True;
+                    return TRUE;
             }
             else if( ((SwFmtFld*)pLast)->GetTxtFld() )
             {
@@ -233,24 +234,24 @@ sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                 const SwTxtNode* pNd = pTFld->GetpTxtNode();
                 if( pNd && pNds == &pNd->GetNodes() )
                 {
-                    sal_uLong nNdPos = pNd->GetIndex();
+                    ULONG nNdPos = pNd->GetIndex();
                     if( nSttNd <= nNdPos && nNdPos <= nEndNd &&
                         ( nNdPos != nSttNd || *pTFld->GetStart() >= nStt ) &&
                         ( nNdPos != nEndNd || *pTFld->GetStart() < nEnd ))
-                        return sal_True;
+                        return TRUE;
                 }
             }
         } while( 0 != ( pLast = aIter++ ));
 
-    return sal_False;
+    return FALSE;
 }
 
 SwDDEFieldType::SwDDEFieldType(const String& rName,
-                                const String& rCmd, sal_uInt16 nUpdateType )
+                                const String& rCmd, USHORT nUpdateType )
     : SwFieldType( RES_DDEFLD ),
     aName( rName ), pDoc( 0 ), nRefCnt( 0 )
 {
-    bCRLFFlag = bDeleted = sal_False;
+    bCRLFFlag = bDeleted = FALSE;
     refLink = new SwIntrnlRefLink( *this, nUpdateType, FORMAT_STRING );
     SetCmd( rCmd );
 }
@@ -317,7 +318,7 @@ void SwDDEFieldType::_RefCntChgd()
     {
         refLink->SetVisible( pDoc->IsVisibleLinks() );
         pDoc->GetLinkManager().InsertDDELink( refLink );
-        if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
+        if( pDoc->GetRootFrm() )
             UpdateNow();
     }
     else
@@ -326,10 +327,12 @@ void SwDDEFieldType::_RefCntChgd()
         pDoc->GetLinkManager().Remove( refLink );
     }
 }
+/* -----------------------------28.08.00 16:23--------------------------------
 
-bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
+ ---------------------------------------------------------------------------*/
+bool SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
 {
-    sal_uInt8 nPart = 0;
+    BYTE nPart = 0;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR2:      nPart = 3; break;
@@ -337,7 +340,7 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
     case FIELD_PROP_SUBTYPE:   nPart = 1; break;
     case FIELD_PROP_BOOL1:
         {
-            sal_Bool bSet = GetType() == sfx2::LINKUPDATE_ALWAYS ? sal_True : sal_False;
+            sal_Bool bSet = GetType() == sfx2::LINKUPDATE_ALWAYS ? TRUE : FALSE;
             rVal.setValue(&bSet, ::getBooleanCppuType());
         }
         break;
@@ -345,23 +348,25 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         rVal <<= ::rtl::OUString(aExpansion);
     break;
     default:
-        OSL_FAIL("illegal property");
+        DBG_ERROR("illegal property");
     }
     if( nPart )
         rVal <<= OUString(GetCmd().GetToken(nPart-1, sfx2::cTokenSeperator));
     return true;
 }
+/* -----------------------------28.08.00 16:23--------------------------------
 
-bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
+ ---------------------------------------------------------------------------*/
+bool SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
 {
-    sal_uInt8 nPart = 0;
+    BYTE nPart = 0;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR2:      nPart = 3; break;
     case FIELD_PROP_PAR4:      nPart = 2; break;
     case FIELD_PROP_SUBTYPE:   nPart = 1; break;
     case FIELD_PROP_BOOL1:
-        SetType( static_cast<sal_uInt16>(*(sal_Bool*)rVal.getValue() ?
+        SetType( static_cast<USHORT>(*(sal_Bool*)rVal.getValue() ?
                                      sfx2::LINKUPDATE_ALWAYS :
                                      sfx2::LINKUPDATE_ONCALL ) );
         break;
@@ -373,7 +378,7 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     }
     break;
     default:
-        OSL_FAIL("illegal property");
+        DBG_ERROR("illegal property");
     }
     if( nPart )
     {
@@ -385,7 +390,9 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     }
     return true;
 }
+/* ---------------------------------------------------------------------------
 
+ ---------------------------------------------------------------------------*/
 SwDDEField::SwDDEField( SwDDEFieldType* pInitType )
     : SwField(pInitType)
 {
@@ -393,8 +400,8 @@ SwDDEField::SwDDEField( SwDDEFieldType* pInitType )
 
 SwDDEField::~SwDDEField()
 {
-    if( GetTyp()->IsLastDepend() )
-        ((SwDDEFieldType*)GetTyp())->Disconnect();
+    if( GetTyp()->IsLastDepend() )  					// der Letzte mach das
+        ((SwDDEFieldType*)GetTyp())->Disconnect();		// Licht aus
 }
 
 String SwDDEField::Expand() const

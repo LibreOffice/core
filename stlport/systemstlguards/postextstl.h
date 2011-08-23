@@ -35,3 +35,4 @@
 #   undef _STLP_CONFIG_H
 #   include <stddef.h>
 #endif
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

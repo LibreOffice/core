@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,25 +32,25 @@
 
 #include <pam.hxx>              // fuer SwPam
 #include <doc.hxx>
-#include <ndtxt.hxx>            // class SwTxtNode
-#include <fltini.hxx>           // Ww1Reader
+#include <ndtxt.hxx>			// class SwTxtNode
+#include <fltini.hxx>			// Ww1Reader
 #include <w1par.hxx>
 #include <swfltopt.hxx>
-#include <mdiexp.hxx>           // StatLine...()
-#include <swerror.h>            // ERR_WW1_...
+#include <mdiexp.hxx>			// StatLine...()
+#include <swerror.h>			// ERR_WW1_...
 #include <statstr.hrc>          // ResId fuer Statusleiste
 
 //----------------------------------------
 //    Initialisieren der Feld-FilterFlags
 //----------------------------------------
 
-static sal_uLong WW1_Read_FieldIniFlags()
+static ULONG WW1_Read_FieldIniFlags()
 {
-//  sal_uInt16 i;
+//	USHORT i;
     static const sal_Char* aNames[ 1 ] = { "WinWord/WW1F" };
     sal_uInt32 aVal[ 1 ];
     SwFilterOptions aOpt( 1, aNames, aVal );
-    sal_uLong nFieldFlags = aVal[ 0 ];
+    ULONG nFieldFlags = aVal[ 0 ];
 
     if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) )
     {
@@ -70,17 +70,17 @@ static sal_uLong WW1_Read_FieldIniFlags()
 // Diese werden dann einfach per Pipe 'uebertragen'.
 //
 
-sal_uLong WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const String& /*cName*/)
+ULONG WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const String& /*cName*/)
 {
-    sal_uLong nRet = ERR_SWG_READ_ERROR;
+    ULONG nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE(pStrm!=NULL, "W1-Read ohne Stream");
     if (pStrm != NULL)
     {
-        sal_Bool bNew = !bInsertMode;           // Neues Doc ( kein Einfuegen )
+        BOOL bNew = !bInsertMode;			// Neues Doc ( kein Einfuegen )
 
         // erstmal eine shell konstruieren: die ist schnittstelle
         // zum writer-dokument
-        sal_uLong nFieldFlags = WW1_Read_FieldIniFlags();
+        ULONG nFieldFlags = WW1_Read_FieldIniFlags();
         Ww1Shell* pRdr = new Ww1Shell( rDoc, rPam, rBaseURL, bNew, nFieldFlags );
         if( pRdr )
         {
@@ -109,7 +109,7 @@ sal_uLong WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, cons
                         // das nicht unterstuetzt. Stattdessen temporaer
                         // nur eine Warnung, bis die entsprechende
                         // Meldung und Behandlung weiter oben eingebaut ist.
-//                      nRet = WARN_WW6_FASTSAVE_ERR;
+//						nRet = WARN_WW6_FASTSAVE_ERR;
                         // Zum Einchecken mit neuem String:
                         nRet = ERR_WW6_FASTSAVE_ERR;
                 }
@@ -130,7 +130,7 @@ sal_uLong WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, cons
 // in einen Stream werden alle Informationen, die aus der Datei
 // gelesen werden, in die shell ge'piped'.
 //
-Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const String& rBaseURL, sal_Bool bNew, sal_uLong nFieldFlags)
+Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const String& rBaseURL, BOOL bNew, ULONG nFieldFlags)
     : SwFltShell(&rD, rPam, rBaseURL, bNew, nFieldFlags)
 {
 }

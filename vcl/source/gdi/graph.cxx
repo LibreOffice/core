@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,11 +60,11 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
                              Font* pFont, const Bitmap* pBitmap, const BitmapEx* pBitmapEx,
                              const Point& rDestPt, const Size& rDestSize )
 {
-    sal_uInt16      nPixel = (sal_uInt16) pOutDev->PixelToLogic( Size( 1, 1 ) ).Width();
-    sal_uInt16      nPixelWidth = nPixel;
+    USHORT      nPixel = (USHORT) pOutDev->PixelToLogic( Size( 1, 1 ) ).Width();
+    USHORT      nPixelWidth = nPixel;
     Point       aPoint( rDestPt.X() + nPixelWidth, rDestPt.Y() + nPixelWidth );
     Size        aSize( rDestSize.Width() - ( nPixelWidth << 1 ), rDestSize.Height() - ( nPixelWidth << 1 ) );
-    sal_Bool        bFilled = ( pBitmap != NULL || pBitmapEx != NULL || pFont != NULL );
+    BOOL        bFilled = ( pBitmap != NULL || pBitmapEx != NULL || pFont != NULL );
     Rectangle   aBorderRect( aPoint, aSize );
 
     pOutDev->Push();
@@ -139,8 +139,8 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
 
                 if ( nTextWidth <= nWidth || aSz.Height() <= nThreshold )
                 {
-                    sal_uInt16 nStart = 0;
-                    sal_uInt16 nLen = 0;
+                    USHORT nStart = 0;
+                    USHORT nLen = 0;
 
                     while( nStart < pText->Len() && pText->GetChar( nStart ) == ' ' )
                         nStart++;
@@ -148,7 +148,7 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
                         nLen++;
                     while( nStart < pText->Len() && nLines-- )
                     {
-                        sal_uInt16 nNext = nLen;
+                        USHORT nNext = nLen;
                         do
                         {
                             while ( nStart+nNext < pText->Len() && pText->GetChar( nStart+nNext ) == ' ' )
@@ -162,14 +162,14 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
                         }
                         while ( nStart+nNext < pText->Len() );
 
-                        sal_uInt16 n = nLen;
+                        USHORT n = nLen;
                         nTextWidth = pOutDev->GetTextWidth( *pText, nStart, n );
                         while( nTextWidth > aSize.Width() )
                             nTextWidth = pOutDev->GetTextWidth( *pText, nStart, --n );
                         pOutDev->DrawText( aPoint, *pText, nStart, n );
 
                         aPoint.Y() += nTextHeight;
-                        nStart      = sal::static_int_cast<sal_uInt16>(nStart + nLen);
+                        nStart      = sal::static_int_cast<USHORT>(nStart + nLen);
                         nLen        = nNext-nLen;
                         while( nStart < pText->Len() && pText->GetChar( nStart ) == ' ' )
                         {
@@ -261,9 +261,9 @@ Graphic::Graphic( const GDIMetaFile& rMtf )
 
 Graphic::Graphic( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic )
 {
-    uno::Reference< lang::XUnoTunnel >      xTunnel( rxGraphic, uno::UNO_QUERY );
-    uno::Reference< lang::XTypeProvider >   xProv( rxGraphic, uno::UNO_QUERY );
-    const ::Graphic*                        pGraphic = ( ( xTunnel.is() && xProv.is() ) ?
+    uno::Reference< lang::XUnoTunnel >		xTunnel( rxGraphic, uno::UNO_QUERY );
+    uno::Reference< lang::XTypeProvider	>	xProv( rxGraphic, uno::UNO_QUERY );
+    const ::Graphic* 						pGraphic = ( ( xTunnel.is() && xProv.is() ) ?
                                                          reinterpret_cast< ::Graphic* >( xTunnel->getSomething( xProv->getImplementationId() ) ) :
                                                           NULL );
 
@@ -335,21 +335,21 @@ Graphic& Graphic::operator=( const Graphic& rGraphic )
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::operator==( const Graphic& rGraphic ) const
+BOOL Graphic::operator==( const Graphic& rGraphic ) const
 {
     return( *mpImpGraphic == *rGraphic.mpImpGraphic );
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::operator!=( const Graphic& rGraphic ) const
+BOOL Graphic::operator!=( const Graphic& rGraphic ) const
 {
     return( *mpImpGraphic != *rGraphic.mpImpGraphic );
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::operator!() const
+BOOL Graphic::operator!() const
 {
     return( GRAPHIC_NONE == mpImpGraphic->ImplGetType() );
 }
@@ -400,28 +400,28 @@ void Graphic::SetDefaultType()
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::IsSupportedGraphic() const
+BOOL Graphic::IsSupportedGraphic() const
 {
     return mpImpGraphic->ImplIsSupportedGraphic();
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::IsTransparent() const
+BOOL Graphic::IsTransparent() const
 {
     return mpImpGraphic->ImplIsTransparent();
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::IsAlpha() const
+BOOL Graphic::IsAlpha() const
 {
     return mpImpGraphic->ImplIsAlpha();
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::IsAnimated() const
+BOOL Graphic::IsAnimated() const
 {
     return mpImpGraphic->ImplIsAnimated();
 }
@@ -472,8 +472,8 @@ uno::Reference< graphic::XGraphic > Graphic::GetXGraphic() const
 
             if( xProv.is() )
             {
-                uno::Sequence< beans::PropertyValue >   aLoadProps( 1 );
-                ::rtl::OUString                         aURL( RTL_CONSTASCII_USTRINGPARAM( "private:memorygraphic/" ) );
+                uno::Sequence< beans::PropertyValue > 	aLoadProps( 1 );
+                ::rtl::OUString							aURL( RTL_CONSTASCII_USTRINGPARAM( "private:memorygraphic/" ) );
 
                 aLoadProps[ 0 ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
                 aLoadProps[ 0 ].Value <<= ( aURL += ::rtl::OUString::valueOf( reinterpret_cast< sal_Int64 >( this ) ) );
@@ -532,7 +532,7 @@ Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
 
 // ------------------------------------------------------------------
 
-sal_uLong Graphic::GetSizeBytes() const
+ULONG Graphic::GetSizeBytes() const
 {
     return mpImpGraphic->ImplGetSizeBytes();
 }
@@ -616,7 +616,7 @@ Link Graphic::GetAnimationNotifyHdl() const
 
 // ------------------------------------------------------------------------
 
-sal_uLong Graphic::GetAnimationLoopCount() const
+ULONG Graphic::GetAnimationLoopCount() const
 {
     return mpImpGraphic->ImplGetAnimationLoopCount();
 }
@@ -651,20 +651,20 @@ void Graphic::SetContext( GraphicReader* pReader )
 
 // ------------------------------------------------------------------------
 
-sal_uInt16 Graphic::GetGraphicsCompressMode( SvStream& rIStm )
+USHORT Graphic::GetGraphicsCompressMode( SvStream& rIStm )
 {
-    const sal_uLong     nPos = rIStm.Tell();
-    const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
-    sal_uInt32          nTmp32;
-    sal_uInt16          nTmp16;
-    sal_uInt16          nCompressMode = COMPRESSMODE_NONE;
+    const ULONG     nPos = rIStm.Tell();
+    const USHORT    nOldFormat = rIStm.GetNumberFormatInt();
+    UINT32          nTmp32;
+    UINT16          nTmp16;
+    USHORT          nCompressMode = COMPRESSMODE_NONE;
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     rIStm >> nTmp32;
 
     // is it a swapped graphic with a bitmap?
-    rIStm.SeekRel( (nTmp32 == (sal_uInt32) GRAPHIC_BITMAP ) ? 40 : -4 );
+    rIStm.SeekRel( (nTmp32 == (UINT32) GRAPHIC_BITMAP ) ? 40 : -4 );
 
     // try to read bitmap id
     rIStm >> nTmp16;
@@ -689,7 +689,7 @@ sal_uInt16 Graphic::GetGraphicsCompressMode( SvStream& rIStm )
 
 // ------------------------------------------------------------------------
 
-void Graphic::SetDocFileName( const String& rName, sal_uLong nFilePos )
+void Graphic::SetDocFileName( const String& rName, ULONG nFilePos )
 {
     mpImpGraphic->ImplSetDocFileName( rName, nFilePos );
 }
@@ -703,14 +703,14 @@ const String& Graphic::GetDocFileName() const
 
 // ------------------------------------------------------------------------
 
-sal_uLong Graphic::GetDocFilePos() const
+ULONG Graphic::GetDocFilePos() const
 {
     return mpImpGraphic->ImplGetDocFilePos();
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::ReadEmbedded( SvStream& rIStream, sal_Bool bSwap )
+BOOL Graphic::ReadEmbedded( SvStream& rIStream, BOOL bSwap )
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplReadEmbedded( rIStream, bSwap );
@@ -718,7 +718,7 @@ sal_Bool Graphic::ReadEmbedded( SvStream& rIStream, sal_Bool bSwap )
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::WriteEmbedded( SvStream& rOStream )
+BOOL Graphic::WriteEmbedded( SvStream& rOStream )
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplWriteEmbedded( rOStream );
@@ -726,7 +726,7 @@ sal_Bool Graphic::WriteEmbedded( SvStream& rOStream )
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::SwapOut()
+BOOL Graphic::SwapOut()
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplSwapOut();
@@ -734,7 +734,7 @@ sal_Bool Graphic::SwapOut()
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::SwapOut( SvStream* pOStream )
+BOOL Graphic::SwapOut( SvStream* pOStream )
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplSwapOut( pOStream );
@@ -742,7 +742,7 @@ sal_Bool Graphic::SwapOut( SvStream* pOStream )
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::SwapIn()
+BOOL Graphic::SwapIn()
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplSwapIn();
@@ -750,7 +750,7 @@ sal_Bool Graphic::SwapIn()
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::SwapIn( SvStream* pStrm )
+BOOL Graphic::SwapIn( SvStream* pStrm )
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplSwapIn( pStrm );
@@ -758,7 +758,7 @@ sal_Bool Graphic::SwapIn( SvStream* pStrm )
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::IsSwapOut() const
+BOOL Graphic::IsSwapOut() const
 {
     return mpImpGraphic->ImplIsSwapOut();
 }
@@ -780,21 +780,21 @@ GfxLink Graphic::GetLink() const
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::IsLink() const
+BOOL Graphic::IsLink() const
 {
     return mpImpGraphic->ImplIsLink();
 }
 
 // ------------------------------------------------------------------------
 
-sal_uLong Graphic::GetChecksum() const
+ULONG Graphic::GetChecksum() const
 {
     return mpImpGraphic->ImplGetChecksum();
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::ExportNative( SvStream& rOStream ) const
+BOOL Graphic::ExportNative( SvStream& rOStream ) const
 {
     return mpImpGraphic->ImplExportNative( rOStream );
 }

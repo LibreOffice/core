@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,9 +70,9 @@
 
 using namespace ::com::sun::star;
 
-//  ----------------------------------------------------
-//  class VCLUnoHelper
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLUnoHelper
+//	----------------------------------------------------
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> VCLUnoHelper::CreateToolkit()
 {
@@ -214,11 +214,10 @@ Polygon VCLUnoHelper::CreatePolygon( const ::com::sun::star::uno::Sequence< sal_
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer> VCLUnoHelper::CreateControlContainer( Window* pWindow )
 {
-    const uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    UnoControlContainer* pContainer = new UnoControlContainer( xFactory, pWindow->GetComponentInterface( sal_True ) );
+    UnoControlContainer* pContainer = new UnoControlContainer( pWindow->GetComponentInterface( sal_True ) );
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > x = pContainer;
 
-    UnoControlModel* pContainerModel = new UnoControlContainerModel( xFactory );
+    UnoControlModel* pContainerModel = new UnoControlContainerModel;
     pContainer->setModel( (::com::sun::star::awt::XControlModel*)pContainerModel );
 
     return x;
@@ -247,7 +246,7 @@ float VCLUnoHelper::ConvertFontWidth( FontWidth eWidth )
     else if( eWidth == WIDTH_ULTRA_EXPANDED )
         return ::com::sun::star::awt::FontWidth::ULTRAEXPANDED;
 
-    OSL_FAIL( "Unknown FontWidth" );
+    DBG_ERROR( "Unknown FontWidth" );
     return ::com::sun::star::awt::FontWidth::DONTKNOW;
 }
 
@@ -274,7 +273,7 @@ FontWidth VCLUnoHelper::ConvertFontWidth( float f )
     else if( f <= ::com::sun::star::awt::FontWidth::ULTRAEXPANDED )
         return WIDTH_ULTRA_EXPANDED;
 
-    OSL_FAIL( "Unknown FontWidth" );
+    DBG_ERROR( "Unknown FontWidth" );
     return WIDTH_DONTKNOW;
 }
 
@@ -301,7 +300,7 @@ float VCLUnoHelper::ConvertFontWeight( FontWeight eWeight )
     else if( eWeight == WEIGHT_BLACK )
         return ::com::sun::star::awt::FontWeight::BLACK;
 
-    OSL_FAIL( "Unknown FontWeigth" );
+    DBG_ERROR( "Unknown FontWeigth" );
     return ::com::sun::star::awt::FontWeight::DONTKNOW;
 }
 
@@ -328,7 +327,7 @@ FontWeight VCLUnoHelper::ConvertFontWeight( float f )
     else if( f <= ::com::sun::star::awt::FontWeight::BLACK )
         return WEIGHT_BLACK;
 
-    OSL_FAIL( "Unknown FontWeigth" );
+    DBG_ERROR( "Unknown FontWeigth" );
     return WEIGHT_DONTKNOW;
 }
 
@@ -351,7 +350,7 @@ FontWeight VCLUnoHelper::ConvertFontWeight( float f )
     aFD.Orientation = rFont.GetOrientation();
     aFD.Kerning = rFont.IsKerning();
     aFD.WordLineMode = rFont.IsWordLineMode();
-    aFD.Type = 0;   // ??? => Nur an Metric...
+    aFD.Type = 0;	// ??? => Nur an Metric...
     return aFD;
 }
 
@@ -444,7 +443,7 @@ MapUnit VCLUnoHelper::UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit )
             return MAP_PIXEL;
     }
 
-    OSL_FAIL( "Unexpected UNO map mode is provided!\n" );
+    OSL_ENSURE( sal_False, "Unexpected UNO map mode is provided!\n" );
     return MAP_LASTENUMDUMMY;
 }
 
@@ -477,7 +476,7 @@ sal_Int32 VCLUnoHelper::VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit )
         default: ; // avoid compiler warning
     }
 
-    OSL_FAIL( "Unexpected VCL map mode is provided!\n" );
+    OSL_ENSURE( sal_False, "Unexpected VCL map mode is provided!\n" );
     return -1;
 }
 
@@ -537,7 +536,7 @@ namespace
         }
         if ( eDirection == FieldUnitToMeasurementUnit )
             return -1;
-
+        
         _rFieldToUNOValueFactor = 1;
         return (sal_Int16)FUNIT_NONE;
     }
@@ -640,7 +639,7 @@ MapUnit /* MapModeUnit */ VCLUnoHelper::ConvertToMapModeUnit(sal_Int16 /* com.su
 */
 
     default:
-        throw ::com::sun::star::lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unsupported measure unit.")), NULL, 1 );
+        throw ::com::sun::star::lang::IllegalArgumentException(::rtl::OUString::createFromAscii("Unsupported measure unit."), NULL, 1 );
     }
     return eMode;
 }
@@ -710,7 +709,7 @@ sal_Int16 /* com.sun.star.util.MeasureUnit.* */ VCLUnoHelper::ConvertToMeasureme
         break;
 */
     default:
-        throw ::com::sun::star::lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unsupported MapMode unit.")), NULL, 1 );
+        throw ::com::sun::star::lang::IllegalArgumentException(::rtl::OUString::createFromAscii("Unsupported MapMode unit."), NULL, 1 );
     }
     return nMeasureUnit;
 }

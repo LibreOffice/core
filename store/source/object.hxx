@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _STORE_OBJECT_HXX_
-#define _STORE_OBJECT_HXX_
+#define _STORE_OBJECT_HXX_ "$Revision: 1.1.2.1 $"
 
 #include "sal/types.h"
 

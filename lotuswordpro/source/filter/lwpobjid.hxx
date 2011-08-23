@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPOBJECTID_HXX
@@ -72,7 +72,7 @@
 class LwpObject;
 
 /**
- * @brief   object id class
+ * @brief	object id class
 */
 class LwpObjectID
 {
@@ -93,7 +93,7 @@ public:
 
     sal_uInt32 DiskSize() const;
     sal_uInt32 DiskSizeIndexed() const;
-    sal_Bool IsNull() const;
+    BOOL IsNull() const;
     sal_Bool IsCompressed();
 
     sal_uInt32 GetLow() const ;
@@ -101,24 +101,24 @@ public:
     void SetLow(sal_uInt32 nl);
     void SetHigh(sal_uInt16 nh);
 
-    sal_Bool operator == (const LwpObjectID &Other) const;
-    sal_Bool operator != (const LwpObjectID &Other) const;
+    BOOL operator == (const LwpObjectID &Other) const;
+    BOOL operator != (const LwpObjectID &Other) const;
     sal_Char* GetBuffer(sal_Char* buf);
     LwpObject* obj(VO_TYPE tag=VO_INVALID) const;
     size_t HashCode() const;
 };
 
-inline sal_Bool LwpObjectID::IsNull() const
+inline BOOL LwpObjectID::IsNull() const
 {
     return (m_nLow == 0) && (m_nHigh == 0);
 }
 
-inline sal_Bool LwpObjectID::operator == (const LwpObjectID &Other) const
+inline BOOL LwpObjectID::operator == (const LwpObjectID &Other) const
 {
     return (m_nHigh == Other.m_nHigh) && (m_nLow == Other.m_nLow);
 }
 
-inline sal_Bool LwpObjectID::operator != (const LwpObjectID &Other) const
+inline BOOL LwpObjectID::operator != (const LwpObjectID &Other) const
 {
     return (m_nHigh != Other.m_nHigh) || (m_nLow != Other.m_nLow);
 }

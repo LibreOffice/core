@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,7 @@
     #include <sal/types.h>
 #endif
 
+//     #include <rtl/tres.h>
 #include <testshl/tresstatewrapper.hxx>
 
 #ifndef _RTL_STRING_HXX_
@@ -54,7 +55,8 @@
 #ifndef _RTL_USTRBUF_HXX
         #include <rtl/ustrbuf.hxx>
 #endif
-
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
 #ifndef _OSL_THREAD_H_
     #include <osl/thread.h>
 #endif
@@ -68,9 +70,7 @@
 #endif
 
 #include "stdio.h"
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
+using namespace rtl;
 
 //------------------------------------------------------------------------
 // test classes
@@ -102,13 +102,13 @@ static sal_Bool test_rtl_OUStringBuffer_ctor_001( hTestResult hRtlTestResult )
 
     ::rtl::OUStringBuffer aUStrBuf;
 
-    bool b1 =
+    bool b1 = 
         aUStrBuf.getLength() == 0 &&
         ! *(aUStrBuf.getStr()) && aUStrBuf.getCapacity() == 16;
 
-    ::rtl::OUStringBuffer aUStrBuf2(0);
+    ::rtl::OUStringBuffer aUStrBuf2(0); 
 
-    bool b2 =
+    bool b2 = 
         aUStrBuf2.getLength() == 0 &&
         ! *(aUStrBuf2.getStr()) && aUStrBuf2.getCapacity() == /* LLA: !!! */ 0;
 
@@ -151,22 +151,30 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_ctor_003(
                                                hTestResult hRtlTestResult )
 {
     ::rtl::OUStringBuffer aUStrBuf1(kTestStr2Len);
-    ::rtl::OUStringBuffer aUStrBuf2(0);
+#ifdef WITH_CORE 
+    ::rtl::OUStringBuffer aUStrBuf2(kSInt32Max);     //will core dump
+#else
+    ::rtl::OUStringBuffer aUStrBuf2(0); 
+#endif 
     ::rtl::OUStringBuffer aUStrBuf3(kNonSInt32Max);
 
-
-    bool b1 =
+      
+    bool b1 = 
         aUStrBuf1.getLength() == 0 &&
         ! *(aUStrBuf1.getStr()) && aUStrBuf1.getCapacity() == kTestStr2Len ;
-
-    bool b2 =
+    
+    bool b2 = 
+#ifdef WITH_CORE          
+        aUStrBuf2.getLength() == 0 &&
+        ! *(aUStrBuf2.getStr()) && aUStrBuf2.getCapacity() == kSInt32Max ;
+#else 
         aUStrBuf2.getLength() == 0 &&
             ! *(aUStrBuf2.getStr()) && aUStrBuf2.getCapacity() == /* LLA: ??? 16 */ 0;
-
-    bool b3 =
+#endif
+    bool b3 = 
         aUStrBuf3.getLength() == 0 &&
         ! *(aUStrBuf3.getStr()) && aUStrBuf3.getCapacity() == kNonSInt32Max;
-
+    
     return
         (
             c_rtl_tres_state
@@ -177,7 +185,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_ctor_003(
                 "ctor_003( will core dump,because the kSInt32Max )"
                 )
             );
-
+    
 }
 
 //------------------------------------------------------------------------
@@ -224,18 +232,18 @@ static sal_Bool SAL_CALL test_rtl_OUStringBuffer_ctor_005(
     );
 }
 
-extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_ctors(
+extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_ctors( 
                                               hTestResult hRtlTestResult )
 {
     c_rtl_tres_state_start( hRtlTestResult, "ctors");
-    sal_Bool DCState = test_ini_uString();
+    sal_Bool DCState = test_ini_uString();      
     (void)DCState;
     sal_Bool bTSState = test_rtl_OUStringBuffer_ctor_001( hRtlTestResult );
     bTSState &= test_rtl_OUStringBuffer_ctor_002( hRtlTestResult);
     bTSState &= test_rtl_OUStringBuffer_ctor_003( hRtlTestResult);
     bTSState &= test_rtl_OUStringBuffer_ctor_004( hRtlTestResult);
     bTSState &= test_rtl_OUStringBuffer_ctor_005( hRtlTestResult);
-
+      
     c_rtl_tres_state_end( hRtlTestResult, "ctors");
 //    return( bTSState );
 }
@@ -252,13 +260,13 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_makeStringAndCle
 
     typedef struct TestCase
     {
-    sal_Char*       comments;
+    sal_Char*		comments;
     OUString*               expVal;
         OUStringBuffer*         input1;
 
-    ~TestCase()     { delete input1;}
+    ~TestCase()		{ delete input1;}
     } TestCase;
-
+        
     OUString arrOUS[6]={
         OUString( aUStr1 ),
         OUString( aUStr14 ),
@@ -272,7 +280,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_makeStringAndCle
 
     TestCase arrTestCase[]={
 
-    {"two empty strings(def. constructor)", new OUString(),
+    {"two empty strings(def. constructor)", new OUString(), 
                 new OUStringBuffer()},
     {"two empty strings(with a argu)", new OUString(),
         new OUStringBuffer(26)},
@@ -284,7 +292,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_makeStringAndCle
             new OUStringBuffer(arrOUS[2])},
     {"string with a character", new OUString(arrOUS[3]),
             new OUStringBuffer(arrOUS[3])},
-    {"string with special characters", new OUString(arrOUS[4]),
+    {"string with special characters", new OUString(arrOUS[4]), 
                 new OUStringBuffer(arrOUS[4])},
     {"string only with (\0)", new OUString(arrOUS[5]),
                 new OUStringBuffer(arrOUS[5])}
@@ -296,7 +304,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_makeStringAndCle
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         sal_Bool lastRes =
-                ( arrTestCase[i].input1->makeStringAndClear() ==
+                ( arrTestCase[i].input1->makeStringAndClear() ==  
                                               *( arrTestCase[i].expVal ));
         lastRes = lastRes && ( arrTestCase[i].input1->getCapacity() == 0 );
         lastRes = lastRes && ( *(arrTestCase[i].input1->getStr()) == '\0' );
@@ -340,25 +348,25 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getLength(
 
     typedef struct TestCase
     {
-    sal_Char*       comments;
-    sal_Int32       expVal;
+    sal_Char*		comments;
+    sal_Int32 		expVal;
         OUStringBuffer*         input;
         ~TestCase()             { delete input;}
     } TestCase;
 
     TestCase arrTestCase[]={
 
-    {"length of ascii string", kTestStr1Len,
+    {"length of ascii string", kTestStr1Len, 
             new OUStringBuffer(arrOUS[0]) },
-        {"length of ascci string of size 1", 1,
+        {"length of ascci string of size 1", 1, 
                 new OUStringBuffer(arrOUS[1])},
         {"length of empty string", 0,
                         new OUStringBuffer(arrOUS[2])},
-    {"length of empty string (empty ascii string arg)",0,
+    {"length of empty string (empty ascii string arg)",0, 
             new OUStringBuffer(arrOUS[3])},
-    {"length of empty string (string arg = '\\0')", 0,
+    {"length of empty string (string arg = '\\0')", 0, 
             new OUStringBuffer(arrOUS[4])},
-        {"length(>16) of ascii string", kTestStr2Len,
+        {"length(>16) of ascii string", kTestStr2Len, 
             new OUStringBuffer(arrOUS[5]) },
         {"length of empty string (default constructor)", 0,
                         new OUStringBuffer()},
@@ -413,28 +421,32 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getCapacity(
 
     typedef struct TestCase
     {
-    sal_Char*       comments;
-    sal_Int32       expVal;
+    sal_Char*		comments;
+    sal_Int32 		expVal;
         OUStringBuffer*         input;
         ~TestCase()             { delete input;}
     } TestCase;
 
     TestCase arrTestCase[]={
 
-    {"capacity of ascii string", kTestStr1Len+16,
+    {"capacity of ascii string", kTestStr1Len+16, 
             new OUStringBuffer(arrOUS[0]) },
-        {"capacity of ascci string of size 1", 1+16,
+        {"capacity of ascci string of size 1", 1+16, 
                 new OUStringBuffer(arrOUS[1]) },
         {"capacity of empty string", 0+16,
                         new OUStringBuffer(arrOUS[2]) },
-    {"capacity of empty string (empty ascii string arg)",0+16,
+    {"capacity of empty string (empty ascii string arg)",0+16, 
             new OUStringBuffer(arrOUS[3]) },
-    {"capacity of empty string (string arg = '\\0')", 0+16,
+    {"capacity of empty string (string arg = '\\0')", 0+16, 
             new OUStringBuffer(arrOUS[4]) },
-        {"capacity(>16) of ascii string", kTestStr2Len+16,
+        {"capacity(>16) of ascii string", kTestStr2Len+16, 
             new OUStringBuffer(arrOUS[5]) },
         {"capacity of empty string (default constructor)", 16,
                         new OUStringBuffer() },
+#ifdef WITH_CORE
+        {"capacity of empty string (with capacity 2147483647)(code will core dump)", kSInt32Max,
+                        new OUStringBuffer(kSInt32Max) },// will core dump 
+#endif
         {"capacity of empty string (with capacity -2147483648)", kNonSInt32Max,
                         new OUStringBuffer(kNonSInt32Max) },
         {"capacity of empty string (with capacity 16)", 16,
@@ -481,8 +493,8 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_ensureCapacity(
 
     typedef struct TestCase
     {
-    sal_Char*       comments;
-    sal_Int32       expVal;
+    sal_Char*		comments;
+    sal_Int32 		expVal;
         OUStringBuffer*         input1;
         sal_Int32               input2;
         ~TestCase()             { delete input1;}
@@ -490,15 +502,15 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_ensureCapacity(
 
     TestCase arrTestCase[]={
 
-    {"capacity equal to 16, minimum is 5 ", 16,
+    {"capacity equal to 16, minimum is 5 ", 16, 
             new OUStringBuffer(), 5 },
-        {"capacity equal to 16, minimum is -5", 16,
+        {"capacity equal to 16, minimum is -5", 16, 
                 new OUStringBuffer(), -5},
         {"capacity equal to 16, minimum is 0", 16,
                         new OUStringBuffer(), 0},
-    {"capacity equal to 16, minimum is 20", 20, //the testcase is based on comments
+    {"capacity equal to 16, minimum is 20", 20, //the testcase is based on comments 
             new OUStringBuffer(), 20},
-    {"capacity equal to 16, minimum is 50", 50,
+    {"capacity equal to 16, minimum is 50", 50, 
             new OUStringBuffer(), 50},
         {"capacity equal to 6, minimum is 20", 20,
             new OUStringBuffer(6), 20 },
@@ -506,18 +518,34 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_ensureCapacity(
                         new OUStringBuffer(6), 2},
         {"capacity equal to 6, minimum is -6", 6,
                         new OUStringBuffer(6), -6},
-        {"capacity equal to 6, minimum is -6", 10, //the testcase is based on comments
+        {"capacity equal to 6, minimum is -6", 10, //the testcase is based on comments 
                         new OUStringBuffer(6), 10},
         {"capacity equal to 0, minimum is 6", 6,
                         new OUStringBuffer(0), 6},
-        {"capacity equal to 0, minimum is 1", 2, //the testcase is based on comments
+        {"capacity equal to 0, minimum is 1", 2, //the testcase is based on comments 
                         new OUStringBuffer(0), 1},
     /*
       {"capacity equal to 0, minimum is -1", 0,
                         new OUStringBuffer(0), -1},
     */
+#ifdef WITH_CORE
+        {"capacity equal to 2147483647, minimum is 65535", kSInt32Max,//will core dump
+                        new OUStringBuffer(kSInt32Max), 65535},
+        {"capacity equal to 2147483647, minimum is 2147483647", kSInt32Max,//will core dump
+                        new OUStringBuffer(kSInt32Max), kSInt32Max},
+        {"capacity equal to 2147483647, minimum is -1", kSInt32Max,//will core dump
+                        new OUStringBuffer(kSInt32Max), -1},
+        {"capacity equal to 2147483647, minimum is 0", kSInt32Max,//will core dump
+                        new OUStringBuffer(kSInt32Max), 0},
+        {"capacity equal to 2147483647, minimum is -2147483648", kSInt32Max,//will core dump
+                        new OUStringBuffer(kSInt32Max), kNonSInt32Max},
+#endif
         {"capacity equal to -2147483648, minimum is 65535", 65535,
                         new OUStringBuffer(kNonSInt32Max), 65535},
+#ifdef WITH_CORE
+        {"capacity equal to -2147483648, minimum is 2147483647", 2147483647,//will core dump
+                        new OUStringBuffer(kNonSInt32Max), 2147483647},
+#endif
         {"capacity equal to -2147483648, minimum is -1", 2,
                         new OUStringBuffer(kNonSInt32Max), -1},
         {"capacity equal to -2147483648, minimum is 0", 2,
@@ -573,10 +601,10 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setLength(
 
     typedef struct TestCase
     {
-    sal_Char*       comments;
-    sal_Int32       expVal1;
+    sal_Char*		comments;
+    sal_Int32 		expVal1;
         OUString*               expVal2;
-    sal_Int32       expVal3;
+    sal_Int32 		expVal3;
         OUStringBuffer*         input1;
         sal_Int32               input2;
         ~TestCase()             { delete input1; delete expVal2;}
@@ -653,7 +681,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setLength(
         {"newLength equal to 0",
                 0, new OUString(), 48,
                 new OUStringBuffer(arrOUS[5]), 0}
-
+        
     };
 
 
@@ -663,7 +691,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setLength(
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
     arrTestCase[i].input1->setLength(arrTestCase[i].input2);
-        sal_Bool lastRes =
+        sal_Bool lastRes = 
             ( arrTestCase[i].input1->getStr() == *(arrTestCase[i].expVal2) &&
               arrTestCase[i].input1->getLength() == arrTestCase[i].expVal1 &&
               arrTestCase[i].input1->getCapacity() == arrTestCase[i].expVal3 );
@@ -699,8 +727,8 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_charAt(
 
     typedef struct TestCase
     {
-        sal_Char*       comments;
-        sal_Unicode         expVal;
+        sal_Char*		comments;
+        sal_Unicode 		expVal;
         OUStringBuffer*         input1;
         sal_Int32               input2;
         ~TestCase()             { delete input1;}
@@ -730,7 +758,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_charAt(
         {"invalid character of OUStringBuffer()",
                 0, new OUStringBuffer(arrOUS[3]), -2}
 */
-
+        
     };
 
 
@@ -739,8 +767,8 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_charAt(
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
-        sal_Bool lastRes =
-            ( arrTestCase[i].input1->charAt(arrTestCase[i].input2) ==
+        sal_Bool lastRes = 
+            ( arrTestCase[i].input1->charAt(arrTestCase[i].input2) == 
               arrTestCase[i].expVal );
         // LLA: last case removed, due to the fact of complexity of the test code :-(
         // LLA: if(i<=7)
@@ -751,7 +779,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_charAt(
                 lastRes,
                 arrTestCase[i].comments,
                 createName( pMeth, "charAt", i )
-
+                
                 );
         // LLA: }
         // LLA: else
@@ -762,7 +790,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_charAt(
         // LLA:         sal_True,
         // LLA:         arrTestCase[i].comments,
         // LLA:         createName( pMeth, "charAt", i )
-        // LLA:
+        // LLA: 
         // LLA:     );
         // LLA: }
     res &= lastRes;
@@ -787,14 +815,14 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_csuc(
     //sal_Int32 cmpLen = 0;
         OUString tempString(aUStr1);
 
-    rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,
+    rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,                                
         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
     OSL_ASSERT(tmpUstring != NULL);
 
 
     typedef struct TestCase
         {
-            sal_Char*                  comments;
+            sal_Char*		           comments;
             const sal_Unicode*             expVal;
             sal_Int32                      cmpLen;
             OUStringBuffer*                input1;
@@ -803,7 +831,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_csuc(
 
     TestCase arrTestCase[] =
     {
-          {"test normal ustring",(*tmpUstring).buffer,kTestStr1Len,
+          {"test normal ustring",(*tmpUstring).buffer,kTestStr1Len, 
                       new OUStringBuffer(tempString)},
         {"test empty ustring",&tmpUC, 1, new OUStringBuffer()}
     };
@@ -842,23 +870,23 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getStr(
     //sal_Int32 cmpLen = 0;
         OUString tempString(aUStr1);
 
-    rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,
+    rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,                                
         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
     OSL_ASSERT(tmpUstring != NULL);
 
 
     typedef struct TestCase
     {
-        sal_Char*           comments;
-        const sal_Unicode*      expVal;
-        sal_Int32           cmpLen;
+        sal_Char*			comments;
+        const sal_Unicode*		expVal;
+        sal_Int32			cmpLen;
         OUStringBuffer*                 input1;
         ~TestCase()                     {  delete input1;}
     } TestCase;
 
     TestCase arrTestCase[] =
     {
-          {"test normal ustring",(*tmpUstring).buffer,kTestStr1Len,
+          {"test normal ustring",(*tmpUstring).buffer,kTestStr1Len, 
                       new OUStringBuffer(tempString)},
         {"test empty ustring",&tmpUC, 1, new OUStringBuffer()}
     };
@@ -895,10 +923,10 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setCharAt(
                         OUString( aUStr27),
                         OUString( aUStr28),
                         OUString( )};
-
+    
     typedef struct TestCase
     {
-    sal_Char*       comments;
+    sal_Char*		comments;
     OUString*               expVal;
         OUStringBuffer*         input1;
         sal_Int32               input2;
@@ -909,13 +937,13 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setCharAt(
     TestCase arrTestCase[]={
 
     {"set the first character of OUStringBuffer(aUStr1) with s",
-                new OUString(aUStr31),
+                new OUString(aUStr31), 
                 new OUStringBuffer(arrOUS[0]), 0, 115 },
     {"set the middle character of OUStringBuffer(aUStr1) with m",
                 new OUString(aUStr3),
                 new OUStringBuffer(arrOUS[0]), 4, 109 },
         {"set the last character of OUStringBuffer(aUStr1) with ' '",
-                new OUString(aUStr32),
+                new OUString(aUStr32), 
                 new OUStringBuffer(arrOUS[0]), 15, 32 },
     {"set the only character of OUStringBuffer(aUStr27) with ' '",
                 new OUString(aUStr33),
@@ -923,6 +951,23 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setCharAt(
     {"set the only of OUStringBuffer(aUStr28) with special character",
                 new OUString(aUStr34),
                 new OUStringBuffer(arrOUS[2]), 1, 5},
+/*
+        {"set the only of OUStringBuffer(aUStr28) with special character",
+                new OUString(aUStr35),
+                new OUStringBuffer(arrOUS[2]), 1, -5}
+*/
+#ifdef WITH_CORE
+    ,{"invalid character of OUStringBuffer()",
+                0,
+                new OUStringBuffer(arrOUS[3]), 0, 5},
+        {"invalid character of OUStringBuffer()",
+                0,
+                new OUStringBuffer(arrOUS[3]), -2, 5},
+        {"invalid character of OUStringBuffer()",
+                0,
+                new OUStringBuffer(arrOUS[3]), 3, 5}
+#endif        
+
     };
 
 
@@ -931,8 +976,8 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setCharAt(
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
-        sal_Bool lastRes =
-            ( (arrTestCase[i].input1->setCharAt(arrTestCase[i].input2,
+        sal_Bool lastRes = 
+            ( (arrTestCase[i].input1->setCharAt(arrTestCase[i].input2, 
                 arrTestCase[i].input3)).getStr() == *(arrTestCase[i].expVal) );
         if(i<=4)
         {
@@ -981,7 +1026,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_001(
 
     typedef struct TestCase
     {
-    sal_Char*       comments;
+    sal_Char*		comments;
     OUString*               expVal;
         OUStringBuffer*         input1;
         OUString*               input2;
@@ -992,13 +1037,13 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_001(
     TestCase arrTestCase[]={
 
     {"Appends the string(length less than 16) to the string buffer arrOUS[0]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[0]), new OUString(aUStr8) },
     {"Appends the string(length more than 16) to the string buffer arrOUS[0]",
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[0]), new OUString(aUStr36) },
         {"Appends the string(length equal to 16) to the string buffer arrOUS[0]",
-                new OUString(aUStr37),
+                new OUString(aUStr37), 
                 new OUStringBuffer(arrOUS[0]), new OUString(aUStr23) },
     {"Appends the string(length equal to 0) to the string buffer arrOUS[0]",
                 new OUString(aUStr7),
@@ -1010,7 +1055,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_001(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[1]), new OUString(aUStr2)},
     {"Appends the string(length equal to 16) to the string buffer arrOUS[1]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[1]), new OUString(aUStr1) },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[1]",
                 new OUString(),
@@ -1022,7 +1067,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_001(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[2]), new OUString(aUStr2)},
     {"Appends the string(length equal to 16) to the string buffer arrOUS[2]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[2]), new OUString(aUStr1) },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[2]",
                 new OUString(),
@@ -1034,7 +1079,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_001(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[3]), new OUString(aUStr2)},
     {"Appends the string(length equal to 16) to the string buffer arrOUS[3]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[3]), new OUString(aUStr1) },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[3]",
                 new OUString(),
@@ -1046,11 +1091,16 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_001(
                 new OUString(aUStr39),
                 new OUStringBuffer(arrOUS[4]), new OUString(aUStr17)},
     {"Appends the string(length equal to 16) to the string buffer arrOUS[4]",
-                new OUString(aUStr40),
+                new OUString(aUStr40), 
                 new OUStringBuffer(arrOUS[4]), new OUString(aUStr31) },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[4]",
                 new OUString(aUStr28),
                 new OUStringBuffer(arrOUS[4]), new OUString()}
+#ifdef WITH_CORE
+        ,{"Appends the string(length equal to 0) to the string buffer(with INT_MAX) ",
+                new OUString(),
+                new OUStringBuffer(kSInt32Max), new OUString()}
+#endif
     };
 
 
@@ -1060,8 +1110,8 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_001(
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         arrTestCase[i].input1->append( *(arrTestCase[i].input2) );
-        sal_Bool lastRes =
-            ( arrTestCase[i].input1->getStr()== *(arrTestCase[i].expVal) &&
+        sal_Bool lastRes = 
+            ( arrTestCase[i].input1->getStr()== *(arrTestCase[i].expVal) && 
               arrTestCase[i].input1->getLength() == arrTestCase[i].expVal->getLength()  );
 
         c_rtl_tres_state
@@ -1098,7 +1148,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_002(
 
     typedef struct TestCase
     {
-    sal_Char*       comments;
+    sal_Char*		comments;
     OUString*               expVal;
         OUStringBuffer*         input1;
         sal_Unicode*            input2;
@@ -1109,13 +1159,13 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_002(
     TestCase arrTestCase[]={
 
     {"Appends the string(length less than 16) to the string buffer arrOUS[0]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[0]), aUStr8 },
     {"Appends the string(length more than 16) to the string buffer arrOUS[0]",
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[0]), aUStr36 },
         {"Appends the string(length equal to 16) to the string buffer arrOUS[0]",
-                new OUString(aUStr37),
+                new OUString(aUStr37), 
                 new OUStringBuffer(arrOUS[0]), aUStr23 },
     {"Appends the string(length equal to 0) to the string buffer arrOUS[0]",
                 new OUString(aUStr7),
@@ -1127,7 +1177,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_002(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[1]), aUStr2 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[1]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[1]), aUStr1 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[1]",
                 new OUString(),
@@ -1139,7 +1189,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_002(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[2]), aUStr2 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[2]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[2]), aUStr1 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[2]",
                 new OUString(),
@@ -1151,7 +1201,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_002(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[3]), aUStr2 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[3]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[3]), aUStr1 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[3]",
                 new OUString(),
@@ -1163,11 +1213,16 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_002(
                 new OUString(aUStr39),
                 new OUStringBuffer(arrOUS[4]), aUStr17 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[4]",
-                new OUString(aUStr40),
+                new OUString(aUStr40), 
                 new OUStringBuffer(arrOUS[4]), aUStr31 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[4]",
                 new OUString(aUStr28),
                 new OUStringBuffer(arrOUS[4]), aUStr25 }
+#ifdef WITH_CORE
+        ,{"Appends the string(length equal to 0) to the string buffer(with INT_MAX) ",
+                new OUString(),
+                new OUStringBuffer(kSInt32Max), aUStr25 }
+#endif
     };
 
 
@@ -1177,8 +1232,8 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_002(
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         arrTestCase[i].input1->append( arrTestCase[i].input2 );
-        sal_Bool lastRes =
-            ( arrTestCase[i].input1->getStr()== *(arrTestCase[i].expVal) &&
+        sal_Bool lastRes = 
+            ( arrTestCase[i].input1->getStr()== *(arrTestCase[i].expVal) && 
               arrTestCase[i].input1->getLength() == arrTestCase[i].expVal->getLength()  );
 
         c_rtl_tres_state
@@ -1215,7 +1270,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_003(
 
     typedef struct TestCase
     {
-    sal_Char*       comments;
+    sal_Char*		comments;
     OUString*               expVal;
         OUStringBuffer*         input1;
         sal_Unicode*            input2;
@@ -1227,13 +1282,13 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_003(
     TestCase arrTestCase[]={
 
     {"Appends the string(length less than 16) to the string buffer arrOUS[0]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[0]), aUStr36, 12 },
     {"Appends the string(length more than 16) to the string buffer arrOUS[0]",
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[0]), aUStr36, 28 },
         {"Appends the string(length equal to 16) to the string buffer arrOUS[0]",
-                new OUString(aUStr37),
+                new OUString(aUStr37), 
                 new OUStringBuffer(arrOUS[0]), aUStr23, 16 },
     {"Appends the string(length equal to 0) to the string buffer arrOUS[0]",
                 new OUString(aUStr7),
@@ -1250,7 +1305,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_003(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[1]), aUStr2, 32 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[1]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[1]), aUStr2, 16 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[1]",
                 new OUString(),
@@ -1267,7 +1322,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_003(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[2]), aUStr2, 32 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[2]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[2]), aUStr2, 16 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[2]",
                 new OUString(),
@@ -1284,7 +1339,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_003(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[3]), aUStr2, 32 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[3]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[3]), aUStr2, 16 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[3]",
                 new OUString(),
@@ -1301,11 +1356,21 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_003(
                 new OUString(aUStr39),
                 new OUStringBuffer(arrOUS[4]), aUStr17, 22 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[4]",
-                new OUString(aUStr40),
+                new OUString(aUStr40), 
                 new OUStringBuffer(arrOUS[4]), aUStr31, 16 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[4]",
                 new OUString(aUStr28),
                 new OUStringBuffer(arrOUS[4]), aUStr2, 0 },
+    /* LLA: input3 must null < 0
+      {"Appends the string(length less than 0) to the string buffer arrOUS[4]",
+                new OUString(aUStr42),
+                new OUStringBuffer(arrOUS[4]), aUStr2, -1 }
+    */
+#ifdef WITH_CORE
+        ,{"Appends the string(length equal to 0) to the string buffer(with INT_MAX) ",
+                new OUString(),
+                new OUStringBuffer(kSInt32Max), aUStr25 }
+#endif
     };
 
 
@@ -1314,10 +1379,10 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_003(
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
-        arrTestCase[i].input1->append(
+        arrTestCase[i].input1->append( 
                     arrTestCase[i].input2, arrTestCase[i].input3);
-        sal_Bool lastRes =
-            ( arrTestCase[i].input1->getStr()== *(arrTestCase[i].expVal) &&
+        sal_Bool lastRes = 
+            ( arrTestCase[i].input1->getStr()== *(arrTestCase[i].expVal) && 
               arrTestCase[i].input1->getLength() == arrTestCase[i].expVal->getLength()  );
 
         c_rtl_tres_state
@@ -1354,7 +1419,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_004(
 
     typedef struct TestCase
     {
-    sal_Char*       comments;
+    sal_Char*		comments;
     OUString*               expVal;
         OUStringBuffer*         input1;
         sal_Bool                input2;
@@ -1365,7 +1430,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_004(
     TestCase arrTestCase[]={
 
     {"Appends the sal_Bool(sal_True) to the string buffer arrOUS[0]",
-                new OUString(aUStr45),
+                new OUString(aUStr45), 
                 new OUStringBuffer(arrOUS[0]), sal_True },
     {"Appends the sal_Bool(sal_False) to the string buffer arrOUS[0]",
                 new OUString(aUStr46),
@@ -1394,6 +1459,14 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_004(
         {"Appends the sal_Bool(sal_False) to the string buffer arrOUS[4]",
                 new OUString(aUStr50),
                 new OUStringBuffer(arrOUS[4]), sal_False }
+#ifdef WITH_CORE
+        ,{"Appends the sal_Bool(sal_True) to the string buffer(with INT_MAX) ",
+                new OUString(aUStr47),
+                new OUStringBuffer(kSInt32Max), sal_True },
+        {"Appends the sal_Bool(sal_False) to the string buffer(with INT_MAX) ",
+                new OUString(aUStr48),
+                new OUStringBuffer(kSInt32Max), sal_False }
+#endif
     };
 
 
@@ -1402,10 +1475,10 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_004(
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
-        arrTestCase[i].input1->append(
+        arrTestCase[i].input1->append( 
                     arrTestCase[i].input2 );
-        sal_Bool lastRes =
-            ( arrTestCase[i].input1->getStr()== *(arrTestCase[i].expVal) &&
+        sal_Bool lastRes = 
+            ( arrTestCase[i].input1->getStr()== *(arrTestCase[i].expVal) && 
               arrTestCase[i].input1->getLength() == arrTestCase[i].expVal->getLength()  );
 
         c_rtl_tres_state
@@ -1423,7 +1496,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_004(
     return ( res );
 }
 
-extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_appends(
+extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_appends( 
                                               hTestResult hRtlTestResult )
 {
     c_rtl_tres_state_start( hRtlTestResult, "appends");
@@ -1431,7 +1504,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_appends(
     bTSState &= test_rtl_OUStringBuffer_append_002( hRtlTestResult);
     bTSState &= test_rtl_OUStringBuffer_append_003( hRtlTestResult);
     bTSState &= test_rtl_OUStringBuffer_append_004( hRtlTestResult);
-
+      
     c_rtl_tres_state_end( hRtlTestResult, "appends");
 //    return( bTSState );
 }
@@ -1455,7 +1528,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_001(
 
     typedef struct TestCase
     {
-    sal_Char*       comments;
+    sal_Char*		comments;
     OUString*               expVal;
         OUStringBuffer*         input1;
         const sal_Char*         input2;
@@ -1466,13 +1539,13 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_001(
     TestCase arrTestCase[]={
 
         {"Appends the string(length less than 16) to the string buffer arrOUS[0]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[0]), kTestStr8 },
     {"Appends the string(length more than 16) to the string buffer arrOUS[0]",
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[0]), kTestStr36 },
         {"Appends the string(length equal to 16) to the string buffer arrOUS[0]",
-                new OUString(aUStr37),
+                new OUString(aUStr37), 
                 new OUStringBuffer(arrOUS[0]), kTestStr23 },
     {"Appends the string(length equal to 0) to the string buffer arrOUS[0]",
                 new OUString(aUStr7),
@@ -1484,7 +1557,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_001(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[1]), kTestStr2 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[1]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[1]), kTestStr1 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[1]",
                 new OUString(),
@@ -1496,7 +1569,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_001(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[2]), kTestStr2 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[2]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[2]), kTestStr1 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[2]",
                 new OUString(),
@@ -1508,7 +1581,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_001(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[3]), kTestStr2 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[3]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[3]), kTestStr1 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[3]",
                 new OUString(),
@@ -1520,11 +1593,20 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_001(
                 new OUString(aUStr39),
                 new OUStringBuffer(arrOUS[4]), kTestStr17 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[4]",
-                new OUString(aUStr40),
+                new OUString(aUStr40), 
                 new OUStringBuffer(arrOUS[4]), kTestStr31 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[4]",
                 new OUString(aUStr28),
                 new OUStringBuffer(arrOUS[4]), kTestStr25 }
+        /*{"Appends the string(with special characters) to the string buffer arrOUS[4]",
+                new OUString(aUStr43),
+                new OUStringBuffer(arrOUS[4]), kTestStr44 }*/
+#ifdef WITH_CORE
+        ,{"Appends the string(length equal to 0) to the string buffer(with INT_MAX) ",
+                new OUString(),
+                new OUStringBuffer(kSInt32Max), kTestStr25 }
+#endif
+       
     };
 
 
@@ -1534,8 +1616,8 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_001(
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         arrTestCase[i].input1->appendAscii( arrTestCase[i].input2 );
-        sal_Bool lastRes =
-            ( arrTestCase[i].input1->getStr()== *(arrTestCase[i].expVal) &&
+        sal_Bool lastRes = 
+            ( arrTestCase[i].input1->getStr()== *(arrTestCase[i].expVal) && 
               arrTestCase[i].input1->getLength() == arrTestCase[i].expVal->getLength()  );
 
             c_rtl_tres_state
@@ -1545,7 +1627,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_001(
                 arrTestCase[i].comments,
                 createName( pMeth, "appendAscii_001", i )
             );
-
+        
         res &= lastRes;
     }
     return ( res );
@@ -1570,7 +1652,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_002(
 
     typedef struct TestCase
     {
-    sal_Char*       comments;
+    sal_Char*		comments;
     OUString*               expVal;
         OUStringBuffer*         input1;
         const sal_Char*         input2;
@@ -1582,13 +1664,13 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_002(
     TestCase arrTestCase[]={
 
     {"Appends the string(length less than 16) to the string buffer arrOUS[0]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[0]), kTestStr36, 12 },
     {"Appends the string(length more than 16) to the string buffer arrOUS[0]",
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[0]), kTestStr36, 28 },
         {"Appends the string(length equal to 16) to the string buffer arrOUS[0]",
-                new OUString(aUStr37),
+                new OUString(aUStr37), 
                 new OUStringBuffer(arrOUS[0]), kTestStr23, 16 },
     {"Appends the string(length equal to 0) to the string buffer arrOUS[0]",
                 new OUString(aUStr7),
@@ -1605,7 +1687,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_002(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[1]), kTestStr2, 32 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[1]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[1]), kTestStr2, 16 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[1]",
                 new OUString(),
@@ -1622,7 +1704,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_002(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[2]), kTestStr2, 32 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[2]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[2]), kTestStr2, 16 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[2]",
                 new OUString(),
@@ -1639,7 +1721,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_002(
                 new OUString(aUStr2),
                 new OUStringBuffer(arrOUS[3]), kTestStr2, 32 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[3]",
-                new OUString(aUStr1),
+                new OUString(aUStr1), 
                 new OUStringBuffer(arrOUS[3]), kTestStr2, 16 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[3]",
                 new OUString(),
@@ -1656,11 +1738,21 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_002(
                 new OUString(aUStr39),
                 new OUStringBuffer(arrOUS[4]), kTestStr17, 22 },
     {"Appends the string(length equal to 16) to the string buffer arrOUS[4]",
-                new OUString(aUStr40),
+                new OUString(aUStr40), 
                 new OUStringBuffer(arrOUS[4]), kTestStr31, 16 },
         {"Appends the string(length equal to 0) to the string buffer arrOUS[4]",
                 new OUString(aUStr28),
                 new OUStringBuffer(arrOUS[4]), kTestStr2, 0 },
+    /* LLA: input3 must null < 0
+        {"Appends the string(length less than 0) to the string buffer arrOUS[4]",
+                new OUString(aUStr42),
+                new OUStringBuffer(arrOUS[4]), kTestStr2, -1 }
+    */
+#ifdef WITH_CORE
+        ,{"Appends the string(length equal to 0) to the string buffer(with INT_MAX) ",
+                new OUString(),
+                new OUStringBuffer(kSInt32Max), kTestStr25 }
+#endif
     };
 
 
@@ -1669,10 +1761,10 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_002(
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
-        arrTestCase[i].input1->appendAscii(
+        arrTestCase[i].input1->appendAscii( 
                     arrTestCase[i].input2, arrTestCase[i].input3);
-        sal_Bool lastRes =
-            ( arrTestCase[i].input1->getStr()== *(arrTestCase[i].expVal) &&
+        sal_Bool lastRes = 
+            ( arrTestCase[i].input1->getStr()== *(arrTestCase[i].expVal) && 
               arrTestCase[i].input1->getLength() == arrTestCase[i].expVal->getLength()  );
 
         c_rtl_tres_state
@@ -1688,13 +1780,13 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_002(
     }
     return ( res );
 }
-extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_appendAsciis(
+extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_appendAsciis( 
                                               hTestResult hRtlTestResult )
 {
     c_rtl_tres_state_start( hRtlTestResult, "appendAsciis");
     sal_Bool bTSState = test_rtl_OUStringBuffer_appendAscii_001( hRtlTestResult );
     bTSState &= test_rtl_OUStringBuffer_appendAscii_002( hRtlTestResult);
-
+      
     c_rtl_tres_state_end( hRtlTestResult, "appendAsciis");
 //    return( bTSState );
 }

@@ -104,7 +104,8 @@ testcase tTextGridDialog_2
     Call hNewDocument
 
     '/// open a test file , and check No Grid checkbox
-    Call hFileOpenLocally( gTesttoolPath + SOURCE_PATH + testFile )
+    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
+    sMakeReadOnlyDocumentEditable
 
     hUseAsyncSlot( "FormatPageWriter" )
     Kontext
@@ -150,7 +151,8 @@ testcase tTextGridDialog_3
 
     '/// open a test file and check Grid(lines onle) checkbox ,
     '/// + set 10 line/page
-    Call hFileOpenLocally( gTesttoolPath + SOURCE_PATH + testFile )
+    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
+    sMakeReadOnlyDocumentEditable
     hUseAsyncSlot( "FormatPageWriter" )
     Kontext
     if active.exists(5) then
@@ -196,7 +198,8 @@ testcase tTextGridDialog_4
 
     '/// open a test file and check Grid(lines and characters) checkbox
     '/// + set 10 line/page and 9 characters/line
-    Call hFileOpenLocally( gTesttoolPath + SOURCE_PATH + testFile )
+    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
+    sMakeReadOnlyDocumentEditable
     hUseAsyncSlot( "FormatPageWriter" )
     Kontext
     if active.exists(5) then
@@ -364,7 +367,8 @@ testcase tFontSizeChanges_1
     sLinesPerPage  = "2"
     sCharsPerLine  = "9"
 
-    Call hFileOpenLocally( gTesttoolPath + SOURCE_PATH + testFile )
+    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
+    sMakeReadOnlyDocumentEditable
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<Shift Right>"
 
@@ -429,7 +433,10 @@ testcase tRubyText_1
     Call hNewDocument
 
     printlog( "Open test file" )
-    hFileOpenLocally( gTesttoolPath + SOURCE_PATH + TEST_FILE )
+    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + TEST_FILE )
+
+    printlog( "Remove write protection of document (if set)" )
+    Call sMakeReadOnlyDocumentEditable()
 
     Kontext "DocumentWriter"
     printlog( "Mark character to the right of current cursor position" )
@@ -479,7 +486,9 @@ testcase tIndentsTest_1
     Call hNewDocument
 
     '/// open a test file , and press TAB in second line
-    hFileOpenLocally( gTesttoolPath + SOURCE_PATH + TEST_FILE )
+    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + TEST_FILE )
+
+    sMakeReadOnlyDocumentEditable
 
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<Down>"

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
     sal_uInt16 nStyle;
     bool bEndOfSheet = false;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
     fprintf( stderr, "Read sheet (%d)\n", nTab );
 #endif
 
@@ -69,7 +69,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 readString( aLabel, getLength() - 7 );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->PutCell( nCol, nRow, nTab, ScBaseCell::CreateTextCell( aLabel, pDoc ), (sal_Bool) sal_True );
+                pDoc->PutCell( nCol, nRow, nTab, ScBaseCell::CreateTextCell( aLabel, pDoc ), (BOOL) TRUE );
                 }
                 break;
 
@@ -89,7 +89,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 ScValueCell* pInteger = new ScValueCell( ( double ) nValue );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->PutCell(nCol ,nRow, nTab ,pInteger,(sal_Bool) sal_True);
+                pDoc->PutCell(nCol ,nRow, nTab ,pInteger,(BOOL) TRUE);
                 }
                 break;
 
@@ -99,7 +99,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 ScValueCell* pFloat = new ScValueCell( nValue );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->PutCell( nCol, nRow, nTab, pFloat, (sal_Bool) sal_True );
+                pDoc->PutCell( nCol, nRow, nTab, pFloat, (BOOL) TRUE );
                 }
                 break;
 
@@ -118,7 +118,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                     nStyle = nStyle >> 3;
                     pFormula->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
                     pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                    pDoc->PutCell( nCol, nRow, nTab, pFormula, ( sal_Bool ) sal_True );
+                    pDoc->PutCell( nCol, nRow, nTab, pFormula, ( BOOL ) TRUE );
                 }
                 }
                 break;
@@ -146,7 +146,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
     sal_uInt16 nVersion;
     sal_uInt16 i = 1, j = 1;
     SCTAB nTab = 0;
-    SetEof( false );
+    SetEof( FALSE );
 
     if( !recordsLeft() )
         return eERR_OPEN;
@@ -169,7 +169,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
                         String aName;
                         aName.Append( sal_Unicode( 'A' + nTab ) );
                         if (!nTab)
-                            pDoc->RenameTab( nTab, aName, false, false);
+                            pDoc->RenameTab( nTab, aName, FALSE, FALSE);
                         else
                             pDoc->InsertTab( nTab, aName );
                     }
@@ -179,7 +179,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
                 break;
 
             case 0x0001: // End of file
-                SetEof( sal_True );
+                SetEof( TRUE );
                 break;
 
             case 0x00ce:{ // Attribute cell

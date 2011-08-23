@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ void fill_testdata(Sequence<OUString>& seq)
 }
 
 void print_oustring(const OUString& ustr)
-{ cout << OUStringToOString(ustr, RTL_TEXTENCODING_ASCII_US).getStr() << endl; }
+{ cout << OUStringToOString(ustr, RTL_TEXTENCODING_ASCII_US).getStr() << endl; } 
 
 void print_sequence(const Sequence<OUString>& seq)
 {
@@ -96,11 +96,11 @@ void classic_loops()
     StlUnoSequence<OUString>::iterator stl_s_it;
 
     cout << "for iteration" << endl;
-    for(stl_s_it = stl_begin(s); stl_s_it != stl_end(s); ++stl_s_it)
+    for(stl_s_it = stl_begin(s); stl_s_it != stl_end(s); stl_s_it++)
         cout << OUStringToOString(*stl_s_it, RTL_TEXTENCODING_ASCII_US).getStr() << endl;
 
     cout << "reverse for iteration" << endl;
-    for(stl_s_it = stl_end(s); stl_s_it != stl_begin(s); --stl_s_it)
+    for(stl_s_it = stl_end(s); stl_s_it != stl_begin(s); stl_s_it--)
         cout << OUStringToOString(*(stl_s_it-1), RTL_TEXTENCODING_ASCII_US).getStr() << endl;
 
     cout << "skipping for iteration" << endl;
@@ -135,7 +135,7 @@ void stl_conversions()
     // convert to stl::vector, modify in vector, copy back, print
     cout << "vector conversion" << endl;
     vector<OUString> vec(stl_s.begin(), stl_s.end());
-    vec[2] = OUString( RTL_CONSTASCII_USTRINGPARAM( "changed in vector" ));
+    vec[2] = OUString::createFromAscii("changed in vector");
     copy(vec.begin(), vec.end(), stl_s.begin());
     print_sequence(s);
 
@@ -143,7 +143,7 @@ void stl_conversions()
     cout << "list conversion" << endl;
     list<OUString> l(stl_s.begin(), stl_s.end());
     l.pop_back();
-    l.push_back(OUString( RTL_CONSTASCII_USTRINGPARAM( "changed in list" )));
+    l.push_back(OUString::createFromAscii("changed in list"));
     copy(l.begin(), l.end(), stl_s.begin());
     print_sequence(s);
 }
@@ -159,7 +159,7 @@ void stl_inserting()
     StlUnoSequence<OUString> stl_result = StlUnoSequence<OUString>::createInstance(result);
     fill_testdata(s1);
     fill_testdata(s2);
-
+    
     list<OUString> temp(stl_s1.begin(), stl_s1.end());
     copy(stl_s2.begin()+5, stl_s2.end(), insert_iterator<list<OUString> >(temp, ++temp.begin()));
     copy(temp.begin(), temp.end(), stl_result.begin());
@@ -174,7 +174,7 @@ void stl_compare()
     StlUnoSequence<OUString> stl_s2 = StlUnoSequence<OUString>::createInstance(s2);
     if (stl_s1 == stl_s2)
         cout << "sequences are equal." << endl;
-    s2[9] = OUString( RTL_CONSTASCII_USTRINGPARAM( "ZZZZZ" ));
+    s2[9] = OUString::createFromAscii("ZZZZZ");
     if(stl_s1 < stl_s2)
         cout << "first sequence is smaller." << endl;
 }
@@ -182,7 +182,7 @@ void stl_compare()
 void stl_const_sequence()
 {
     const Sequence<OUString> s(10);
-    for(StlUnoSequence<OUString>::const_iterator stl_s_it = stl_begin(s); stl_s_it != stl_end(s); ++stl_s_it)
+    for(StlUnoSequence<OUString>::const_iterator stl_s_it = stl_begin(s); stl_s_it != stl_end(s); stl_s_it++)
         cout << OUStringToOString(*stl_s_it, RTL_TEXTENCODING_ASCII_US).getStr() << endl;
 }
 
@@ -203,17 +203,17 @@ int main()
     stl_algos();
 
     cout << "--- SOME STL CONVERSIONS" << endl;
-    stl_conversions();
+    stl_conversions();  
 
     cout << "--- INSERTING IN SEQUENCE" << endl;
     stl_inserting();
-
+    
     cout << "--- COMPARING" << endl;
     stl_compare();
-
+    
     cout << "--- CONST SEQUENCE" << endl;
     stl_const_sequence();
-
+    
     cout << "--- HELPERS IN STL-STYLE" << endl;
     stl_helpers();
 }

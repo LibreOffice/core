@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svl/svstdarr.hxx>
+#include <svl/svstdarr.hxx>		
 
 #include <vcl/timer.hxx>
 #include <svtools/svtabbx.hxx>
@@ -51,6 +51,7 @@ class SfxSlotPool;
 class SfxStringItem;
 class SfxFontItem;
 class SfxMacroInfoItem;
+class SfxMacroInfo;
 struct SfxStyleInfo_Impl;
 struct SfxStylesInfo_Impl;
 
@@ -95,27 +96,29 @@ struct SfxStylesInfo_Impl
         static ::rtl::OUString generateCommand(const ::rtl::OUString& sFamily, const ::rtl::OUString& sStyle);
 };
 
-#define SFX_CFGGROUP_FUNCTION           1
-#define SFX_CFGFUNCTION_SLOT            2
-#define SFX_CFGGROUP_SCRIPTCONTAINER    3
-#define SFX_CFGFUNCTION_SCRIPT          4
-#define SFX_CFGGROUP_STYLES             5
+#define SFX_CFGGROUP_FUNCTION 1
+#define SFX_CFGGROUP_BASICMGR 2
+#define SFX_CFGGROUP_DOCBASICMGR 3
+#define SFX_CFGGROUP_BASICLIB 4
+#define SFX_CFGGROUP_BASICMOD 5
+#define SFX_CFGFUNCTION_MACRO 6
+#define SFX_CFGFUNCTION_SLOT  7
+#define SFX_CFGGROUP_SCRIPTCONTAINER  8
+#define SFX_CFGFUNCTION_SCRIPT 9
+#define SFX_CFGGROUP_STYLES  10
+#define SFX_CFGGROUP_SPECIALCHARACTERS  11
 
 struct SfxGroupInfo_Impl
 {
-    sal_uInt16  nKind;
-    sal_uInt16  nUniqueID;
-    void*       pObject;
-    sal_Bool        bWasOpened;
+    USHORT 		nKind;
+    USHORT 		nOrd;
+    void*		pObject;
+    BOOL		bWasOpened;
     String      sCommand;
     String      sLabel;
 
-                SfxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, void* pObj = 0 ) :
-                    nKind( n ), nUniqueID( nr ), pObject( pObj ), bWasOpened(sal_False) {}
-};
-
-struct CuiMacroInfo
-{
+                SfxGroupInfo_Impl( USHORT n, USHORT nr, void* pObj = 0 ) :
+                    nKind( n ), nOrd( nr ), pObject( pObj ), bWasOpened(FALSE) {}
 };
 
 typedef SfxGroupInfo_Impl* SfxGroupInfoPtr;
@@ -137,11 +140,15 @@ public:
                   ~SfxConfigFunctionListBox_Impl();
 
     void          ClearAll();
-    using Window::GetHelpText;
+    SvLBoxEntry*  GetEntry_Impl( USHORT nId );
+    SvLBoxEntry*  GetEntry_Impl( const String& );
+    USHORT        GetId( SvLBoxEntry *pEntry );
+    using Window::GetHelpText;  
     String        GetHelpText( SvLBoxEntry *pEntry );
+    USHORT        GetCurId() { return GetId( FirstSelected() ); }
     String        GetCurCommand();
     String        GetCurLabel();
-    String        GetSelectedScriptURI();
+    SfxMacroInfo* GetMacroInfo();
     void          FunctionSelected();
     void          SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
@@ -149,10 +156,13 @@ public:
 struct SvxConfigGroupBoxResource_Impl;
 class SfxConfigGroupListBox_Impl : public SvTreeListBox
 {
-    SvxConfigGroupBoxResource_Impl* pImp;
+    SvxConfigGroupBoxResource_Impl*	pImp;
+    //SfxSlotPool*                    pSlotPool;
     SfxConfigFunctionListBox_Impl*  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
-    sal_uLong                       nMode;
+    ULONG                           nMode;
+    BOOL                            bShowSF; // show Scripting Framework scripts
+    BOOL                            bShowBasic; // show Basic scripts
 
     ::rtl::OUString m_sModuleLongName;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
@@ -161,17 +171,10 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     css::uno::Reference< css::container::XNameAccess > m_xModuleCategoryInfo;
     css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
 
-    Image GetImage(
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node,
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx,
-        bool bIsRootNode
-    );
+    Image GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx,
-        ::rtl::OUString& docName
-    );
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
+    ::rtl::OUString parseLocationName( const ::rtl::OUString& location );
 
     void InitModule();
     void InitBasic();
@@ -184,12 +187,12 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
 protected:
     virtual void        RequestingChilds( SvLBoxEntry *pEntry);
     using SvListView::Expand;
-    virtual sal_Bool        Expand( SvLBoxEntry* pParent );
+    virtual BOOL        Expand( SvLBoxEntry* pParent );
 
 public:
     SfxConfigGroupListBox_Impl ( Window* pParent,
-                                 const ResId&,
-                                 sal_uLong nConfigMode = 0 );
+                                 const ResId&, 
+                                 ULONG nConfigMode = 0 );
     ~SfxConfigGroupListBox_Impl();
     void                ClearAll();
 
@@ -198,11 +201,14 @@ public:
                              const ::rtl::OUString&                                        sModuleLongName);
     void                SetFunctionListBox( SfxConfigFunctionListBox_Impl *pBox )
                         { pFunctionListBox = pBox; }
-    void                Open( SvLBoxEntry*, sal_Bool );
+    void                Open( SvLBoxEntry*, BOOL );
     void                GroupSelected();
     void                SelectMacro( const SfxMacroInfoItem* );
+    void                AddAndSelect( const SfxStringItem*, const SfxStringItem* );
     void                SelectMacro( const String&, const String& );
     String              GetGroup();
+    BasicManager*       GetBasicManager( const SvLBoxEntry& _rEntry );
+    void                SetScriptType( const String& rScriptType );
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 

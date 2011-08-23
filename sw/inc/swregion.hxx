@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,25 +36,25 @@ SV_DECL_VARARR( SwRects, SwRect, 20, 8 )
 
 class SwRegionRects : public SwRects
 {
-    SwRect aOrigin; // die Kopie des StartRects
+    SwRect aOrigin;	// die Kopie des StartRects
 
-    inline void InsertRect( const SwRect &rRect, const sal_uInt16 nPos, sal_Bool &rDel);
+    inline void InsertRect( const SwRect &rRect, const USHORT nPos, BOOL &rDel);
 
 public:
-    SwRegionRects( const SwRect& rStartRect, sal_uInt16 nInit = 20,
-                                             sal_uInt16 nGrow = 8 );
+    SwRegionRects( const SwRect& rStartRect, USHORT nInit = 20,
+                                             USHORT nGrow = 8 );
     // Zum Ausstanzen aus aOrigin.
     void operator-=( const SwRect& rRect );
 
     // Aus Loechern werden Flaechen, aus Flaechen werden Loecher.
     void Invert();
     // Benachbarte Rechtecke zusammenfassen.
-    void Compress( sal_Bool bFuzzy = sal_True );
+    void Compress( BOOL bFuzzy = TRUE );
 
     inline const SwRect &GetOrigin() const { return aOrigin; }
     inline void ChangeOrigin( const SwRect &rRect ) { aOrigin = rRect; }
 };
 
-#endif  //_SWREGION_HXX
+#endif	//_SWREGION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

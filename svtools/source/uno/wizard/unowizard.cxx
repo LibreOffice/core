@@ -43,7 +43,6 @@
 #include <rtl/strbuf.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/urlobj.hxx>
 
 //......................................................................................................................
 namespace svt { namespace uno
@@ -92,7 +91,7 @@ namespace svt { namespace uno
             case WizardButton::CANCEL:      return WZB_CANCEL;
             case WizardButton::HELP:        return WZB_HELP;
             }
-            OSL_FAIL( "lcl_convertWizardButtonToWZB: invalid WizardButton constant!" );
+            OSL_ENSURE( false, "lcl_convertWizardButtonToWZB: invalid WizardButton constant!" );
             return WZB_NONE;
         }
     }
@@ -208,32 +207,11 @@ namespace svt { namespace uno
         m_bInitialized = true;
     }
 
-    static rtl::OString lcl_getHelpId( const ::rtl::OUString& _rHelpURL )
-    {
-        INetURLObject aHID( _rHelpURL );
-        if ( aHID.GetProtocol() == INET_PROT_HID )
-            return rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
-        else
-            return rtl::OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
-    }
-
-    //------------------------------------------------------------------------
-    static ::rtl::OUString lcl_getHelpURL( const rtl::OString& sHelpId )
-    {
-        ::rtl::OUStringBuffer aBuffer;
-        ::rtl::OUString aTmp( sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8 );
-        INetURLObject aHID( aTmp );
-        if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
-            aBuffer.appendAscii( INET_HID_SCHEME );
-        aBuffer.append( aTmp.getStr() );
-        return aBuffer.makeStringAndClear();
-    }
-
     //--------------------------------------------------------------------
-    Dialog* Wizard::createDialog( Window* i_pParent )
+    Dialog*	Wizard::createDialog( Window* i_pParent )
     {
         WizardShell* pDialog( new WizardShell( i_pParent, this, m_xController, m_aWizardSteps ) );
-        pDialog->SetHelpId(  lcl_getHelpId( m_sHelpURL ) );
+        pDialog->SetSmartHelpId( SmartId( m_sHelpURL ) );
         pDialog->setTitleBase( m_sTitle );
         return pDialog;
     }
@@ -242,7 +220,7 @@ namespace svt { namespace uno
     void Wizard::destroyDialog()
     {
         if ( m_pDialog )
-            m_sHelpURL = lcl_getHelpURL( m_pDialog->GetHelpId() );
+            m_sHelpURL = m_pDialog->GetSmartHelpId().GetStr();
 
         Wizard_Base::destroyDialog();
     }
@@ -252,7 +230,7 @@ namespace svt { namespace uno
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.uno.Wizard" ) );
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL Wizard::getSupportedServiceNames_static() throw(RuntimeException)
     {
@@ -266,7 +244,7 @@ namespace svt { namespace uno
     {
         return getImplementationName_static();
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL Wizard::getSupportedServiceNames() throw(RuntimeException)
     {
@@ -302,7 +280,8 @@ namespace svt { namespace uno
         if ( !m_pDialog )
             return m_sHelpURL;
 
-        return lcl_getHelpURL( m_pDialog->GetHelpId() );
+        const SmartId aSmartId( m_pDialog->GetSmartHelpId() );
+        return aSmartId.GetStr();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -314,7 +293,7 @@ namespace svt { namespace uno
         if ( !m_pDialog )
             m_sHelpURL = i_HelpURL;
         else
-            m_pDialog->SetHelpId( lcl_getHelpId( i_HelpURL ) );
+            m_pDialog->SetSmartHelpId( SmartId( i_HelpURL ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -338,7 +317,7 @@ namespace svt { namespace uno
 
         pWizardImpl->enableButtons( lcl_convertWizardButtonToWZB( i_WizardButton ), i_Enable );
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL Wizard::setDefaultButton( ::sal_Int16 i_WizardButton ) throw (RuntimeException)
     {
@@ -350,7 +329,7 @@ namespace svt { namespace uno
 
         pWizardImpl->defaultButton( lcl_convertWizardButtonToWZB( i_WizardButton ) );
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     sal_Bool SAL_CALL Wizard::travelNext(  ) throw (RuntimeException)
     {
@@ -362,7 +341,7 @@ namespace svt { namespace uno
 
         return pWizardImpl->travelNext();
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     sal_Bool SAL_CALL Wizard::travelPrevious(  ) throw (RuntimeException)
     {
@@ -374,7 +353,7 @@ namespace svt { namespace uno
 
         return pWizardImpl->travelPrevious();
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL Wizard::enablePage( ::sal_Int16 i_PageID, ::sal_Bool i_Enable ) throw (NoSuchElementException, InvalidStateException, RuntimeException)
     {
@@ -416,7 +395,7 @@ namespace svt { namespace uno
 
         return pWizardImpl->advanceTo( i_PageId );
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL Wizard::goBackTo( ::sal_Int16 i_PageId ) throw (RuntimeException)
     {
@@ -428,7 +407,7 @@ namespace svt { namespace uno
 
         return pWizardImpl->goBackTo( i_PageId );
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     Reference< XWizardPage > SAL_CALL Wizard::getCurrentPage(  ) throw (RuntimeException)
     {
@@ -462,7 +441,7 @@ namespace svt { namespace uno
         // simply disambiguate
         Wizard_Base::OGenericUnoDialog::setTitle( i_Title );
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int16 SAL_CALL Wizard::execute(  ) throw (RuntimeException)
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,11 @@
 /****************** B i N o d e ******************************************/
 /*************************************************************************
 |*
-|*    BiNode::BiNode()
+|*	  BiNode::BiNode()
+|*
+|*	  Beschreibung		NAME.DOC
+|*	  Ersterstellung	MM 07.02.91
+|*	  Letzte Aenderung	MM 07.02.91
 |*
 *************************************************************************/
 BiNode::BiNode(){
@@ -53,7 +57,11 @@ BiNode::BiNode(){
 
 /*************************************************************************
 |*
-|*    BiNode::~BiNode()
+|*	  BiNode::~BiNode()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 07.02.91
+|*	  Letzte Aenderung	MM 07.02.91
 |*
 *************************************************************************/
 BiNode::~BiNode(){
@@ -61,7 +69,11 @@ BiNode::~BiNode(){
 
 /*************************************************************************
 |*
-|*    BiNode::EnumNodes()
+|*	  BiNode::EnumNodes()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 07.02.91
+|*	  Letzte Aenderung	MM 07.02.91
 |*
 *************************************************************************/
 void BiNode::EnumNodes( Link aLink ) const{
@@ -74,7 +86,11 @@ void BiNode::EnumNodes( Link aLink ) const{
 
 /*************************************************************************
 |*
-|*    BiNode::ChangeDLListBTree()
+|*	  BiNode::ChangeDLListBTree()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 11.01.91
+|*	  Letzte Aenderung	MM 11.01.91
 |*
 *************************************************************************/
 BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
@@ -96,7 +112,7 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
         else
             pList = (BiNode *)0;
 
-        if( NULL != (pTmp = pMiddle->Left()) )  // rechten Zeiger auf Null
+        if( NULL != (pTmp = pMiddle->Left()) )	// rechten Zeiger auf Null
             pTmp->pRight = (BiNode *)0;
 
         // linken Zeiger auf Null
@@ -113,12 +129,16 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
 
 /*************************************************************************
 |*
-|*    BiNode::ChangeBTreeDLList()
+|*	  BiNode::ChangeBTreeDLList()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 11.01.91
+|*	  Letzte Aenderung	MM 11.01.91
 |*
 *************************************************************************/
 BiNode * BiNode::ChangeBTreeDLList(){
     BiNode * pList;
-    BiNode * pLL_RN;    // linke Liste rechter Knoten
+    BiNode * pLL_RN;	// linke Liste rechter Knoten
 
     if( Right() ){
         pList = Right()->ChangeBTreeDLList();
@@ -139,7 +159,11 @@ BiNode * BiNode::ChangeBTreeDLList(){
 /****************** N a m e N o d e **************************************/
 /*************************************************************************
 |*
-|*    NameNode::Remove()
+|*	  NameNode::Remove()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 10.07.91
+|*	  Letzte Aenderung	MM 10.07.91
 |*
 *************************************************************************/
 NameNode * NameNode::Remove( NameNode * pRemove ){
@@ -178,7 +202,11 @@ NameNode * NameNode::Remove( NameNode * pRemove ){
 
 /*************************************************************************
 |*
-|*    NameNode::Compare
+|*	  NameNode::Compare
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 10.07.91
+|*	  Letzte Aenderung	MM 13.07.91
 |*
 *************************************************************************/
 COMPARE NameNode::Compare( const NameNode * pCompare ) const{
@@ -201,7 +229,11 @@ COMPARE NameNode::Compare( const void * pCompare ) const{
 
 /*************************************************************************
 |*
-|*    NameNode::SearchParent
+|*	  NameNode::SearchParent
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 10.07.91
+|*	  Letzte Aenderung	MM 10.07.91
 |*
 *************************************************************************/
 NameNode* NameNode::SearchParent( const NameNode * pSearch ) const{
@@ -229,7 +261,11 @@ NameNode* NameNode::SearchParent( const NameNode * pSearch ) const{
 
 /*************************************************************************
 |*
-|*    NameNode::Search
+|*	  NameNode::Search
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 21.03.90
+|*	  Letzte Aenderung	MM 27.06.90
 |*
 *************************************************************************/
 NameNode* NameNode::Search( const NameNode * pSearch ) const{
@@ -274,21 +310,25 @@ NameNode* NameNode::Search( const void * pSearch ) const{
 
 /*************************************************************************
 |*
-|*    NameNode::Insert()
+|*	  NameNode::Insert()
+|*
+|*	  Beschreibung		NAME.DOC
+|*	  Ersterstellung	MM 11.01.91
+|*	  Letzte Aenderung	MM 11.01.91
 |*
 *************************************************************************/
-sal_Bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
+BOOL NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
 // Ein Knoten wird in den Baum eingefuegt
-// Gibt es einen Knoten mit dem gleichen Namen, dann return sal_False
-// sonst return sal_True. Der Knoten wird auf jeden Fall eingefuegt.
+// Gibt es einen Knoten mit dem gleichen Namen, dann return FALSE
+// sonst return TRUE. Der Knoten wird auf jeden Fall eingefuegt.
 
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
     int nCmp = Compare( pTN );
 
     *pnDepth += 1;
     if( nCmp == GREATER ){
         if( Left() )
-            bRet =  ((NameNode *)Left())->Insert( pTN, pnDepth );
+            bRet =	((NameNode *)Left())->Insert( pTN, pnDepth );
         else
             pLeft = pTN;
     }
@@ -298,22 +338,26 @@ sal_Bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
         else
             pRight = pTN;
         if( nCmp == EQUAL )
-            bRet = sal_False;
+            bRet = FALSE;
     };
     return( bRet );
 }
 
 /*************************************************************************
 |*
-|*    NameNode::Insert()
+|*	  NameNode::Insert()
+|*
+|*	  Beschreibung		NAME.DOC
+|*	  Ersterstellung	MM 21.03.90
+|*	  Letzte Aenderung	MM 11.01.91
 |*
 *************************************************************************/
-sal_Bool NameNode::Insert( NameNode * pTN ){
+BOOL NameNode::Insert( NameNode * pTN ){
 // insert a node in the tree.
-// if the node with the same name is in, return sal_False and no insert.
+// if the node with the same name is in, return FALSE and no insert.
 // if not return true.
-    sal_uInt32  nDepth = 0;
-    sal_Bool        bRet;
+    sal_uInt32	nDepth = 0;
+    BOOL		bRet;
 
     bRet = Insert( pTN, &nDepth );
     if( bRet ){
@@ -330,7 +374,11 @@ sal_Bool NameNode::Insert( NameNode * pTN ){
 
 /*************************************************************************
 |*
-|*    NameNode::OrderTree()
+|*	  NameNode::OrderTree()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 23.09.91
+|*	  Letzte Aenderung	MM 23.09.91
 |*
 *************************************************************************/
 void NameNode::OrderTree(){
@@ -357,18 +405,22 @@ void NameNode::SubOrderTree( NameNode * pOrderNode ){
 
 /*************************************************************************
 |*
-|*    NameNode::IdOrderTree()
+|*	  NameNode::IdOrderTree()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 15.11.91
+|*	  Letzte Aenderung	MM 15.11.91
 |*
 *************************************************************************/
 class OrderCtrl {
-    sal_Bool       bOrder;
+    BOOL	   bOrder;
     NameNode * pName;
     DECL_LINK( CallBackFunc, NameNode * );
 public:
-            OrderCtrl() { bOrder = sal_False; pName = NULL; }
-    sal_Bool    IsOrder( const NameNode * pRoot )
+            OrderCtrl() { bOrder = FALSE; pName = NULL; }
+    BOOL	IsOrder( const NameNode * pRoot )
     {
-            bOrder = sal_True;
+            bOrder = TRUE;
             pName  = NULL;
             pRoot->EnumNodes( LINK( this, OrderCtrl, CallBackFunc ) );
             return bOrder;
@@ -377,13 +429,13 @@ public:
 IMPL_LINK_INLINE_START( OrderCtrl, CallBackFunc, NameNode *, pNext )
 {
     if( pName && pName->Compare( pNext ) != LESS )
-        bOrder = sal_False;
+        bOrder = FALSE;
     pName = pNext;
     return 0;
 }
 IMPL_LINK_INLINE_END( OrderCtrl, CallBackFunc, NameNode *, pNext )
 
-sal_Bool NameNode::IsOrderTree() const{
+BOOL NameNode::IsOrderTree() const{
     OrderCtrl aOrder;
 
     return aOrder.IsOrder( this );
@@ -392,7 +444,11 @@ sal_Bool NameNode::IsOrderTree() const{
 /****************** I d N o d e ******************************************/
 /*************************************************************************
 |*
-|*    IdNode::Search()
+|*	  IdNode::Search()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 06.11.91
+|*	  Letzte Aenderung	MM 06.11.91
 |*
 *************************************************************************/
 IdNode * IdNode::Search( sal_uInt32 nTypeName ) const{
@@ -401,7 +457,11 @@ IdNode * IdNode::Search( sal_uInt32 nTypeName ) const{
 
 /*************************************************************************
 |*
-|*    IdNode::Compare()
+|*	  IdNode::Compare()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 06.11.91
+|*	  Letzte Aenderung	MM 06.11.91
 |*
 *************************************************************************/
 COMPARE IdNode::Compare( const NameNode * pSearch ) const
@@ -427,7 +487,11 @@ COMPARE IdNode::Compare( const void * pSearch ) const{
 
 /*************************************************************************
 |*
-|*    IdNode::GetId()
+|*	  IdNode::GetId()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 23.09.91
+|*	  Letzte Aenderung	MM 23.09.91
 |*
 *************************************************************************/
 sal_uInt32 IdNode::GetId() const
@@ -437,7 +501,11 @@ sal_uInt32 IdNode::GetId() const
 
 /*************************************************************************
 |*
-|*    StringNode::Search()
+|*	  StringNode::Search()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 06.11.91
+|*	  Letzte Aenderung	MM 06.11.91
 |*
 *************************************************************************/
 StringNode * StringNode::Search( const char * pSearch ) const{
@@ -446,7 +514,11 @@ StringNode * StringNode::Search( const char * pSearch ) const{
 
 /*************************************************************************
 |*
-|*    StringNode::Compare()
+|*	  StringNode::Compare()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 06.11.91
+|*	  Letzte Aenderung	MM 06.11.91
 |*
 *************************************************************************/
 COMPARE StringNode::Compare( const NameNode * pSearch ) const

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -187,7 +187,7 @@ void ScSheetSaveData::UseSaveEntries()
 void ScSheetSaveData::StoreInitialNamespaces( const SvXMLNamespaceMap& rNamespaces )
 {
     // the initial namespaces are just removed from the list of loaded namespaces,
-    // so only a boost::unordered_map of the prefixes is needed.
+    // so only a hash_set of the prefixes is needed.
 
     const NameSpaceHash& rNameHash = rNamespaces.GetAllEntries();
     NameSpaceHash::const_iterator aIter = rNameHash.begin(), aEnd = rNameHash.end();

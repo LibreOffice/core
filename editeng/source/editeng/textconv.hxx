@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@ class EditView;
 class ImpEditEngine;
 class ContentNode;
 
-class TextConvWrapper : public editeng::HangulHanjaConversion
+class TextConvWrapper : public editeng::HangulHanjaConversion 
 {
     rtl::OUString   aConvText;      // convertible text part found last time
     LanguageType    nConvTextLang;  // language of aConvText
-    sal_uInt16          nLastPos;       // starting position of the last found text portion (word)
-    sal_uInt16          nUnitOffset;    // offset of current unit in the current text portion (word)
+    USHORT          nLastPos;       // starting position of the last found text portion (word)
+    USHORT          nUnitOffset;    // offset of current unit in the current text portion (word)
 
     ESelection      aConvSel;       // selection to be converted if
                                     // 'HasRange' is true, other conversion
@@ -70,10 +70,10 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
     void        ConvEnd_impl();                          // former SpellEnd
     sal_Bool    ConvContinue_impl();                     // former SpellContinue
 
-    void        SelectNewUnit_impl( const sal_Int32 nUnitStart,
+    void        SelectNewUnit_impl( const sal_Int32 nUnitStart, 
                                     const sal_Int32 nUnitEnd );
 
-    void        ChangeText( const String &rNewText,
+    void        ChangeText( const String &rNewText, 
                             const ::rtl::OUString& rOrigText,
                             const ::com::sun::star::uno::Sequence< sal_Int32 > *pOffsets,
                             ESelection *pESelection );
@@ -84,24 +84,24 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
     TextConvWrapper & operator= (const TextConvWrapper &);
 
 protected:
-    virtual void    GetNextPortion( ::rtl::OUString& /* [out] */ rNextPortion,
-                        LanguageType& /* [out] */ rLangOfPortion,
+    virtual void    GetNextPortion( ::rtl::OUString& /* [out] */ rNextPortion, 
+                        LanguageType& /* [out] */ rLangOfPortion, 
                         sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText );
-    virtual void    HandleNewUnit( const sal_Int32 nUnitStart,
+    virtual void    HandleNewUnit( const sal_Int32 nUnitStart, 
                                    const sal_Int32 nUnitEnd );
     virtual void    ReplaceUnit(
                         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
                         const ::rtl::OUString& rOrigText,
-                        const ::rtl::OUString& rReplaceWith,
+                        const ::rtl::OUString& rReplaceWith, 
                         const ::com::sun::star::uno::Sequence< sal_Int32 > &rOffsets,
-                        ReplacementAction eAction,
+                        ReplacementAction eAction, 
                         LanguageType *pNewUnitLanguage );
-
+   
     virtual sal_Bool    HasRubySupport() const;
 
     void SetLanguageAndFont( const ESelection &rESel,
-                            LanguageType nLang, sal_uInt16 nLangWhichId,
-                            const Font *pFont,  sal_uInt16 nFontWhichId );
+                            LanguageType nLang, USHORT nLangWhichId,
+                            const Font *pFont,  USHORT nFontWhichId );
 
 
 public:
@@ -110,9 +110,9 @@ public:
             const ::com::sun::star::lang::Locale& rSourceLocale,
             const ::com::sun::star::lang::Locale& rTargetLocale,
             const Font* pTargetFont,
-            sal_Int32 nOptions,
+            INT32 nOptions,
             sal_Bool bIsInteractive,
-            sal_Bool bIsStart, EditView* pView );
+            BOOL bIsStart, EditView* pView );
 
     virtual ~TextConvWrapper();
 

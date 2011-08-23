@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,15 +31,21 @@
 
 ////////////////////////////////////////////////////////////////////////////
 ////
-////                  Windows ONLY
+////                  Windows ONLY 
 ////
 ////////////////////////////////////////////////////////////////////////////
 
 
+#include <tools/prewin.h>
+#include "winreg.h"
+#include <tools/postwin.h>
+// as we define it ourselves further down the line we remove it here
+#ifdef IS_ERROR
+//    #undef IS_ERROR
+#endif
+
 #include "registry_win.hxx"
 #include <osl/thread.h>
-#include <sal/macros.h>
-#include <windows.h>
 
 
 String ReadRegistry( String aKey, String aValueName )
@@ -64,8 +70,8 @@ String ReadRegistry( String aKey, String aValueName )
                 &hRegKey ) == ERROR_SUCCESS )
     {
         LONG lRet;
-        sal_Unicode PathW[_MAX_PATH ];
-        DWORD lSize = SAL_N_ELEMENTS(PathW);
+        sal_Unicode	PathW[_MAX_PATH];
+        DWORD lSize = sizeof(PathW) / sizeof( sal_Unicode );
         DWORD Type = REG_SZ;
 
         lRet = RegQueryValueExW(hRegKey, reinterpret_cast<LPCWSTR>(aValueName.GetBuffer()), NULL, &Type, (LPBYTE)PathW, &lSize);

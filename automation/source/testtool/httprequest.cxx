@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ HttpRequest::~HttpRequest()
     pStream = NULL;
 }
 
-void HttpRequest::SetRequest( ByteString aHost, ByteString aPath, sal_uInt16 nPort )
+void HttpRequest::SetRequest( ByteString aHost, ByteString aPath, USHORT nPort )
 {
     nStatus = HTTP_REQUEST_SET;
     Init();
@@ -65,7 +65,7 @@ void HttpRequest::SetRequest( ByteString aHost, ByteString aPath, sal_uInt16 nPo
     nRequestPort = nPort;
 }
 
-void HttpRequest::SetProxy( ByteString aHost, sal_uInt16 nPort )
+void HttpRequest::SetProxy( ByteString aHost, USHORT nPort )
 {
     nStatus = HTTP_REQUEST_SET;
     Init();
@@ -73,7 +73,7 @@ void HttpRequest::SetProxy( ByteString aHost, sal_uInt16 nPort )
     nProxyPort = nPort;
 }
 
-sal_Bool HttpRequest::Execute()
+BOOL HttpRequest::Execute()
 {
     nStatus = HTTP_REQUEST_PENDING;
     Init();
@@ -91,19 +91,19 @@ sal_Bool HttpRequest::Execute()
     }
 
     TimeValue aTV;
-    aTV.Seconds = 10;       // Warte 10 Sekunden
+    aTV.Seconds = 10;		// Warte 10 Sekunden
     aTV.Nanosec = 0;
 
     pOutSocket = new osl::ConnectorSocket();
     if ( pOutSocket->connect( aConnectAddr, &aTV ) == osl_Socket_Ok )
     {
-//      pOutSocket->setTcpNoDelay( 1 );
+//		pOutSocket->setTcpNoDelay( 1 );
     }
     else
     {
         delete pOutSocket;
         nStatus = HTTP_REQUEST_ERROR;
-        return sal_False;
+        return FALSE;
     }
 
 
@@ -128,7 +128,7 @@ sal_Bool HttpRequest::Execute()
 
         SendString( pOutSocket, "Connection: Keep-Alive\n" );
     }
-
+        
     SendString( pOutSocket, "User-Agent: Mozilla/4.7 [de] (Linux; I)" );
     SendString( pOutSocket, "Host: " );
     SendString( pOutSocket, aRequestHost );
@@ -140,9 +140,9 @@ sal_Bool HttpRequest::Execute()
 #define BUFFRE_SIZE 0x10000    // 64K Buffer
     char* pBuffer = new char[ BUFFRE_SIZE ];
 
-    sal_Bool bWasError = ( nStatus != HTTP_REQUEST_PENDING );
+    BOOL bWasError = ( nStatus != HTTP_REQUEST_PENDING );
 
-    sal_uLong nDataRead;
+    ULONG nDataRead;
     pStream = new SvMemoryStream( 0x10000, 0x10000 );
     while ( !bWasError )
     {
@@ -156,18 +156,18 @@ sal_Bool HttpRequest::Execute()
     pOutSocket->close();
 
     pStream->Seek( 0 );
-
+    
     ByteString aLine;
-    sal_Bool bInsideHeader = sal_True;
+    BOOL bInsideHeader = TRUE;
     while ( bInsideHeader )
     {
         pStream->ReadLine( aLine );
         if ( !aLine.Len() )
-            bInsideHeader = sal_False;
+            bInsideHeader = FALSE;
         else
         {
             if ( IsItem( "HTTP/", aLine ) )
-                nResultId = (sal_uInt16)aLine.GetToken( 1, ' ' ).ToInt32();
+                nResultId = (USHORT)aLine.GetToken( 1, ' ' ).ToInt32();
             if ( IsItem( "Content-Type:", aLine ) )
             {
                 aContentType = aLine.Copy( 13 );
@@ -181,12 +181,12 @@ sal_Bool HttpRequest::Execute()
     if ( nStatus == HTTP_REQUEST_PENDING )
     {
         nStatus = HTTP_REQUEST_DONE;
-        return sal_True;
+        return TRUE;
     }
     else
     {
         nStatus = HTTP_REQUEST_ERROR;
-        return sal_False;
+        return FALSE;
     }
 }
 /*
@@ -207,7 +207,7 @@ void HttpRequest::SendString( osl::StreamSocket* pSocket , ByteString aText )
         pSocket->write( aText.GetBuffer(), aText.Len() );
 }
 
-sal_Bool HttpRequest::IsItem( ByteString aItem, ByteString aLine )
+BOOL HttpRequest::IsItem( ByteString aItem, ByteString aLine )
 {
     return aItem.Match( aLine ) == STRING_MATCH;
 }
@@ -231,7 +231,7 @@ SvMemoryStream* HttpRequest::GetBody()
     return pStream;
 }
 
-sal_uInt16 HttpRequest::GetStatus()
+USHORT HttpRequest::GetStatus()
 {
     return nStatus;
 }

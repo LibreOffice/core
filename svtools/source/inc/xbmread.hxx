@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,30 +57,30 @@ enum ReadState
 
 class XBMReader : public GraphicReader
 {
-    SvStream&           rIStm;
-    Bitmap              aBmp1;
-    BitmapWriteAccess*  pAcc1;
-    short*              pHexTable;
-    BitmapColor         aWhite;
-    BitmapColor         aBlack;
-    long                nLastPos;
-    long                nWidth;
-    long                nHeight;
-    sal_Bool                bStatus;
+    SvStream&			rIStm;
+    Bitmap				aBmp1;
+    BitmapWriteAccess*	pAcc1;
+    short*				pHexTable;
+    BitmapColor			aWhite;
+    BitmapColor			aBlack;
+    long				nLastPos;
+    long				nWidth;
+    long				nHeight;
+    BOOL				bStatus;
 
-    void                InitTable();
-    ByteString          FindTokenLine( SvStream* pInStm, const char* pTok1,
+    void				InitTable();
+    ByteString			FindTokenLine( SvStream* pInStm, const char* pTok1,
                                        const char* pTok2 = NULL, const char* pTok3 = NULL );
-    long                ParseDefine( const sal_Char* pDefine );
-    sal_Bool                ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFormat eFormat );
+    long				ParseDefine( const sal_Char* pDefine );
+    BOOL				ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFormat eFormat );
 
 
 public:
 
                         XBMReader( SvStream& rStm );
-    virtual             ~XBMReader();
+    virtual				~XBMReader();
 
-    ReadState           ReadXBM( Graphic& rGraphic );
+    ReadState			ReadXBM( Graphic& rGraphic );
 };
 
 #endif // _XBMPRIVATE
@@ -89,7 +89,7 @@ public:
 // - ImportXBM -
 // -------------
 
-sal_Bool ImportXBM( SvStream& rStream, Graphic& rGraphic );
+BOOL ImportXBM( SvStream& rStream, Graphic& rGraphic );
 
 #endif // _XBMREAD_HXX
 

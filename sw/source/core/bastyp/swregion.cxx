@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,33 +41,38 @@
 SV_IMPL_VARARR( SwRects, SwRect );
 
 /*************************************************************************
-|*  SwRegionRects::SwRegionRects()
+|*
+|*	SwRegionRects::SwRegionRects()
+|*
+|*	Ersterstellung		MA 28. Oct. 92
+|*	Letzte Aenderung	MA 01. Feb. 93
+|*
 |*************************************************************************/
 
-SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit,
-                                                        sal_uInt16 nGrow ) :
-    SwRects( (sal_uInt8)nInit, (sal_uInt8)nGrow ),
+SwRegionRects::SwRegionRects( const SwRect &rStartRect, USHORT nInit,
+                                                        USHORT nGrow ) :
+    SwRects( (BYTE)nInit, (BYTE)nGrow ),
     aOrigin( rStartRect )
 {
     Insert( aOrigin, 0 );
 }
 
 /*************************************************************************
- *                      inline InsertRect()
+ *						inline InsertRect()
  *
  * InsertRect() wird nur von operator-=() gerufen.
- * Wenn bDel == sal_True ist, dann wird das Rect an der Position nPos mit
+ * Wenn bDel == TRUE ist, dann wird das Rect an der Position nPos mit
  * rRect ueberschrieben, ansonsten wird rRect hinten angehaengt.
  *************************************************************************/
 
-inline void SwRegionRects::InsertRect( const SwRect &rRect, const sal_uInt16 nPos,
-                                       sal_Bool &rDel )
+inline void SwRegionRects::InsertRect( const SwRect &rRect, const USHORT nPos,
+                                       BOOL &rDel )
 {
     if( rDel )
     {
         pData = (SwRect*)pData; // looks weird but seems to help gcc ->i78417
         *(pData+nPos) = rRect;
-        rDel = sal_False;
+        rDel = FALSE;
     }
     else
         Insert( rRect, Count() );
@@ -75,20 +80,22 @@ inline void SwRegionRects::InsertRect( const SwRect &rRect, const sal_uInt16 nPo
 
 /*************************************************************************
 |*
-|*  SwRegionRects::operator-=()
+|*	SwRegionRects::operator-=()
 |*
-|*  Beschreibung        Alle Ueberschneidungen der Rechtecke, die sich
-|*      gerade im Array befinden, mit dem uebergebenen Rechteck werden
-|*      entfernt.
-|*      Dazu muessen die vorhandenen Rechtecke entweder aufgeteilt oder
-|*      geloescht werden.
+|*	Beschreibung		Alle Ueberschneidungen der Rechtecke, die sich
+|*		gerade im Array befinden, mit dem uebergebenen Rechteck werden
+|*		entfernt.
+|*		Dazu muessen die vorhandenen Rechtecke entweder aufgeteilt oder
+|*		geloescht werden.
+|*	Ersterstellung		MA 28. Oct. 92
+|*	Letzte Aenderung	MA 09. Sep. 93
 |*
 |*************************************************************************/
 
 void SwRegionRects::operator-=( const SwRect &rRect )
 {
-    sal_uInt16 nMax = Count();
-    for ( sal_uInt16 i = 0; i < nMax; ++i )
+    USHORT nMax = Count();
+    for ( USHORT i = 0; i < nMax; ++i )
     {
         if ( rRect.IsOver( *(pData+i) ) )
         {
@@ -98,7 +105,7 @@ void SwRegionRects::operator-=( const SwRect &rRect )
 
             // Das erste Rect, das wir inserten wollen, nimmt die
             // Stelle von i ein. So ersparen wir uns das Delete().
-            sal_Bool bDel = sal_True;
+            BOOL bDel = TRUE;
 
             //Jetzt aufteilen das Teil: Es sollen diejenigen Rechtecke
             //zurueckbleiben, die im alten aber nicht im neuen liegen.
@@ -134,8 +141,8 @@ void SwRegionRects::operator-=( const SwRect &rRect )
             if( bDel )
             {
                 Remove( i );
-                --i;              //Damit wir keinen uebergehen.
-                --nMax;           //Damit wir keinen zuviel verarbeiten.
+                --i;			  //Damit wir keinen uebergehen.
+                --nMax; 		  //Damit wir keinen zuviel verarbeiten.
             }
         }
     }
@@ -143,7 +150,7 @@ void SwRegionRects::operator-=( const SwRect &rRect )
 }
 
 /*************************************************************************
- *                      SwRegionRects::Invert()
+ *						SwRegionRects::Invert()
  *
  * Bezugspunkt ist aOrigin, das Original-SRectangle.
  * Aus Loechern werden Flaechen, aus Flaechen werden Loecher.
@@ -167,10 +174,10 @@ void SwRegionRects::Invert()
 
     SwRegionRects aInvRegion( aOrigin, Count()*2+2 );
     const SwRect *pDat = GetData();
-    for( sal_uInt16 i = 0; i < Count(); ++pDat, ++i )
+    for( USHORT i = 0; i < Count(); ++pDat, ++i )
         aInvRegion -= *pDat;
 
-    sal_uInt16 nCpy = Count(), nDel = 0;
+    USHORT nCpy = Count(), nDel = 0;
     if( aInvRegion.Count() < Count() )
     {
         nDel = Count() - aInvRegion.Count();
@@ -186,9 +193,11 @@ void SwRegionRects::Invert()
 }
 /*************************************************************************
 |*
-|*  SwRegionRects::Compress()
+|*	SwRegionRects::Compress()
 |*
-|*  Beschreibung        Zusammenfassen von benachbarten Rechtecken.
+|*	Beschreibung		Zusammenfassen von benachbarten Rechtecken.
+|*	Ersterstellung		MA 16. Apr. 93
+|*	Letzte Aenderung	MA 21. Apr. 93
 |*
 |*************************************************************************/
 inline SwTwips CalcArea( const SwRect &rRect )
@@ -197,7 +206,7 @@ inline SwTwips CalcArea( const SwRect &rRect )
 }
 
 
-void SwRegionRects::Compress( sal_Bool bFuzzy )
+void SwRegionRects::Compress( BOOL bFuzzy )
 {
     for ( int i = 0; i < Count(); ++i )
     {
@@ -207,13 +216,13 @@ void SwRegionRects::Compress( sal_Bool bFuzzy )
             //uberfluessig.
             if ( (*(pData + i)).IsInside( *(pData + j) ) )
             {
-                Remove( static_cast<sal_uInt16>(j), 1 );
+                Remove( static_cast<USHORT>(j), 1 );
                 --j;
             }
             else if ( (*(pData + j)).IsInside( *(pData + i) ) )
             {
                 *(pData + i) = *(pData + j);
-                Remove( static_cast<sal_uInt16>(j), 1 );
+                Remove( static_cast<USHORT>(j), 1 );
                 i = -1;
                 break;
             }
@@ -226,7 +235,7 @@ void SwRegionRects::Compress( sal_Bool bFuzzy )
                 //moeglichst wenig einzelne Paints zu haben darf die Flaeche
                 //der Union ruhig ein bischen groesser sein
                 //( 9622 * 141.5 = 1361513 ~= ein virtel Zentimeter ueber die
-                //                            Breite einer DINA4 Seite)
+                //						      Breite einer DINA4 Seite)
                 const long nFuzzy = bFuzzy ? 1361513 : 0;
                 SwRect aUnion( *(pData + i) );aUnion.Union( *(pData + j) );
                 SwRect aInter( *(pData + i) );aInter.Intersection( *(pData + j));
@@ -235,7 +244,7 @@ void SwRegionRects::Compress( sal_Bool bFuzzy )
                      (::CalcArea( aUnion ) - CalcArea( aInter )) )
                 {
                     *(pData + i) = aUnion;
-                    Remove( static_cast<sal_uInt16>(j), 1 );
+                    Remove( static_cast<USHORT>(j), 1 );
                     i = -1;
                     break;
                 }

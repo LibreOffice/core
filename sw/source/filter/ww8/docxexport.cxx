@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,14 +28,13 @@
 
 #include "docxexport.hxx"
 #include "docxexportfilter.hxx"
-#include "docxattributeoutput.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <oox/token/tokens.hxx>
+#include <oox/core/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/vmlexport.hxx>
 #include <oox/export/chartexport.hxx>
@@ -67,7 +66,6 @@
 using namespace sax_fastparser;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
-using namespace ::oox;
 
 using oox::vml::VMLExport;
 
@@ -88,7 +86,7 @@ MSWordSections& DocxExport::Sections() const
     return *m_pSections;
 }
 
-bool DocxExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich )
+bool DocxExport::CollapseScriptsforWordOk( USHORT nScript, USHORT nWhich )
 {
     // TODO FIXME is this actually true for docx? - this is ~copied from WW8
     if ( nScript == i18n::ScriptType::ASIAN )
@@ -134,11 +132,11 @@ void DocxExport::AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xu
               it < end; ++it )
         {
             IMark* pMark = (*it);
-
+            
             xub_StrLen nStart = pMark->GetMarkStart().nContent.GetIndex();
             xub_StrLen nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
-            if ( nStart == nAktPos )
+            if ( nStart == nAktPos ) 
                 aStarts.push_back( pMark->GetName() );
 
             if ( nEnd == nAktPos )
@@ -192,8 +190,8 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
     return bRet;
 }
 
-void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
-        const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 /*nBreakCode*/ )
+void DocxExport::WriteHeadersFooters( BYTE nHeadFootFlags,
+        const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, BYTE /*nBreakCode*/ )
 {
     // headers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN )
@@ -215,24 +213,24 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_FIRST )
         WriteHeaderFooter( rFirstPageFmt, false, "first" );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     fprintf( stderr, "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n" );
 #endif
 }
 
-void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const String& rFldCmd, sal_uInt8 nMode )
+void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const String& rFldCmd, BYTE nMode )
 {
     m_pAttrOutput->WriteField_Impl( pFld, eFldType, rFldCmd, nMode );
 }
 
-void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
+void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
 {
-    m_pAttrOutput->WriteFormData_Impl( rFieldmark );
+    OSL_TRACE( "TODO DocxExport::WriteFormData()\n" );
 }
 
 void DocxExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
 {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     fprintf( stderr, "TODO DocxExport::WriteHyperlinkData()\n" );
 #endif
 }
@@ -245,41 +243,41 @@ void DocxExport::DoComboBox(const rtl::OUString& rName,
 {
     m_pDocumentFS->startElementNS( XML_w, XML_ffData, FSEND );
 
-    m_pDocumentFS->singleElementNS( XML_w, XML_name,
+    m_pDocumentFS->singleElementNS( XML_w, XML_name, 
             FSNS( XML_w, XML_val ), OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 
     m_pDocumentFS->singleElementNS( XML_w, XML_enabled, FSEND );
 
     if ( rHelp.getLength( ) > 0 )
-        m_pDocumentFS->singleElementNS( XML_w, XML_helpText,
+        m_pDocumentFS->singleElementNS( XML_w, XML_helpText, 
             FSNS( XML_w, XML_val ), OUStringToOString( rHelp, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
-
+    
     if ( rToolTip.getLength( ) > 0 )
-        m_pDocumentFS->singleElementNS( XML_w, XML_statusText,
+        m_pDocumentFS->singleElementNS( XML_w, XML_statusText, 
             FSNS( XML_w, XML_val ), OUStringToOString( rToolTip, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 
     m_pDocumentFS->startElementNS( XML_w, XML_ddList, FSEND );
-
+  
     // Output the 0-based index of the selected value
     sal_uInt32 nListItems = rListItems.getLength();
     sal_Int32 nId = 0;
     sal_uInt32 nI = 0;
     while ( ( nI < nListItems ) && ( nId == 0 ) )
     {
-        if ( rListItems[nI] == rSelected )
+        if ( rListItems[nI] == rSelected ) 
             nId = nI;
         nI++;
     }
 
-    m_pDocumentFS->singleElementNS( XML_w, XML_result,
+    m_pDocumentFS->singleElementNS( XML_w, XML_result, 
             FSNS( XML_w, XML_val ), rtl::OString::valueOf( nId ).getStr( ),
             FSEND );
 
     // Loop over the entries
-
+    
     for (sal_uInt32 i = 0; i < nListItems; i++)
     {
         m_pDocumentFS->singleElementNS( XML_w, XML_listEntry,
@@ -334,7 +332,7 @@ void DocxExport::ExportDocument_Impl()
     WriteMainText();
 
     WriteFootnotesEndnotes();
-
+    
     WriteNumbering();
 
     WriteFonts();
@@ -349,7 +347,7 @@ void DocxExport::OutputPageSectionBreaks( const SwTxtNode& )
 }
 
 
-void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum )
+void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum )
 {
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
     m_pSections->AppendSection( pPageDesc, pFmt, nLnNum );
@@ -379,14 +377,14 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
             if( !pParentFmt )
                 pParentFmt = (SwSectionFmt*)0xFFFFFFFF;
 
-            sal_uLong nRstLnNum;
+            ULONG nRstLnNum;
             if( rNd.IsCntntNode() )
                 nRstLnNum = const_cast< SwCntntNode* >( rNd.GetCntntNode() )->GetSwAttrSet().GetLineNumber().GetStartValue();
             else
                 nRstLnNum = 0;
 
             AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo( ) );
-            m_pSections->AppendSection( pAktPageDesc, pParentFmt, nRstLnNum );
+            m_pSections->AppendSection( pAktPageDesc, pParentFmt, nRstLnNum ); 
         }
     }
 }
@@ -411,9 +409,9 @@ void DocxExport::OutputLinkedOLE( const OUString& )
     // Nothing to implement here: WW8 only
 }
 
-sal_uLong DocxExport::ReplaceCr( sal_uInt8 )
+ULONG DocxExport::ReplaceCr( BYTE )
 {
-    // Completely unused for Docx export... only here for code sharing
+    // Completely unused for Docx export... only here for code sharing 
     // purpose with binary export
     return 0;
 }
@@ -427,7 +425,7 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
 
     const SwSectionFmt* pFmt = GetSectionFormat( rNd );
-    const sal_uLong nLnNm = GetSectionLineNo( pSet, rNd );
+    const ULONG nLnNm = GetSectionLineNo( pSet, rNd );
 
     OSL_ENSURE( pNewPgDescFmt || pNewPgDesc, "Neither page desc format nor page desc provided." );
 
@@ -551,7 +549,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" ),
                 aName );
-
+        
         pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml" ) );
 
@@ -564,7 +562,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" ),
                 aName );
-
+        
         pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml" ) );
 
@@ -627,14 +625,14 @@ void DocxExport::WriteFonts()
 }
 
 
-void DocxExport::WriteProperties( )
+void DocxExport::WriteProperties( ) 
 {
     // Write the core properties
     SwDocShell* pDocShell( pDoc->GetDocShell( ) );
     uno::Reference<document::XDocumentProperties> xDocProps;
     if ( pDocShell )
     {
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS( 
                pDocShell->GetModel( ), uno::UNO_QUERY );
         xDocProps = xDPS->getDocumentProperties();
     }
@@ -654,7 +652,7 @@ void DocxExport::WriteMainText()
 
     // body
     m_pDocumentFS->startElementNS( XML_w, XML_body, FSEND );
-
+    
     pCurPam->GetPoint()->nNode = pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
 
     // the text
@@ -680,13 +678,6 @@ XFastAttributeListRef DocxExport::MainXmlNamespaces( FSHelperPtr serializer )
     pAttr->add( FSNS( XML_xmlns, XML_w10 ), "urn:schemas-microsoft-com:office:word" );
     pAttr->add( FSNS( XML_xmlns, XML_wp ), "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" );
     return XFastAttributeListRef( pAttr );
-}
-
-bool DocxExport::ignoreAttributeForStyles( sal_uInt16 nWhich ) const
-{
-    if( nWhich == RES_TEXTGRID )
-        return true; // w:docGrid is written only to document.xml, not to styles.xml
-    return MSWordExportBase::ignoreAttributeForStyles( nWhich );
 }
 
 DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam )

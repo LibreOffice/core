@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include <fchrfmt.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
-#include "ndtxt.hxx"    // for GetXXXFmt
+#include "ndtxt.hxx"    // Fuer GetXXXFmt
 #include "hints.hxx"
 
 /*************************************
@@ -49,13 +49,13 @@
 // OPT: inline
 
 
-sal_uInt16 SwEditShell::GetCharFmtCount() const
+USHORT SwEditShell::GetCharFmtCount() const
 {
     return GetDoc()->GetCharFmts()->Count();
 }
 
 
-SwCharFmt& SwEditShell::GetCharFmt(sal_uInt16 nFmt) const
+SwCharFmt& SwEditShell::GetCharFmt(USHORT nFmt) const
 {
     return *((*(GetDoc()->GetCharFmts()))[nFmt]);
 }
@@ -68,14 +68,14 @@ SwCharFmt* SwEditShell::GetCurCharFmt() const
                                                 RES_TXTATR_CHARFMT );
     const SfxPoolItem* pItem;
     if( GetCurAttr( aSet ) && SFX_ITEM_SET ==
-        aSet.GetItemState( RES_TXTATR_CHARFMT, sal_False, &pItem ) )
+        aSet.GetItemState( RES_TXTATR_CHARFMT, FALSE, &pItem ) )
         pFmt = ((SwFmtCharFmt*)pItem)->GetCharFmt();
 
     return pFmt;
 }
 
 
-void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
+void SwEditShell::FillByEx(SwCharFmt* pCharFmt, BOOL bReset)
 {
     if ( bReset )
     {
@@ -93,7 +93,7 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
         {
             const SwPosition* pPtPos = pPam->GetPoint();
             const SwPosition* pMkPos = pPam->GetMark();
-            if( pPtPos->nNode == pMkPos->nNode )        // in the same node?
+            if( pPtPos->nNode == pMkPos->nNode )		// im selben Node ?
             {
                 nStt = pPtPos->nContent.GetIndex();
                 if( nStt < pMkPos->nContent.GetIndex() )
@@ -129,12 +129,12 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
 }
 
 // Frm
-sal_uInt16 SwEditShell::GetTblFrmFmtCount(sal_Bool bUsed) const
+USHORT SwEditShell::GetTblFrmFmtCount(BOOL bUsed) const
 {
     return GetDoc()->GetTblFrmFmtCount(bUsed);
 }
 
-SwFrmFmt& SwEditShell::GetTblFrmFmt(sal_uInt16 nFmt, sal_Bool bUsed ) const
+SwFrmFmt& SwEditShell::GetTblFrmFmt(USHORT nFmt, BOOL bUsed ) const
 {
     return GetDoc()->GetTblFrmFmt(nFmt, bUsed );
 }
@@ -155,34 +155,34 @@ SwCharFmt* SwEditShell::MakeCharFmt( const String& rName,
 }
 
 //----------------------------------
-// inlines in product
+// inlines im Product
 
 
-SwTxtFmtColl* SwEditShell::GetTxtCollFromPool( sal_uInt16 nId )
+SwTxtFmtColl* SwEditShell::GetTxtCollFromPool( USHORT nId )
 {
     return GetDoc()->GetTxtCollFromPool( nId );
 }
 
 
-    // return the demanded automatic format - base-class !
-SwFmt* SwEditShell::GetFmtFromPool( sal_uInt16 nId )
+    // return das geforderte automatische  Format - Basis-Klasse !
+SwFmt* SwEditShell::GetFmtFromPool( USHORT nId )
 {
     return GetDoc()->GetFmtFromPool( nId );
 }
 
 
-SwPageDesc* SwEditShell::GetPageDescFromPool( sal_uInt16 nId )
+SwPageDesc* SwEditShell::GetPageDescFromPool( USHORT nId )
 {
     return GetDoc()->GetPageDescFromPool( nId );
 }
 
 
-sal_Bool SwEditShell::IsUsed( const SwModify& rModify ) const
+BOOL SwEditShell::IsUsed( const SwModify& rModify ) const
 {
     return pDoc->IsUsed( rModify );
 }
 
-const SwFlyFrmFmt* SwEditShell::FindFlyByName( const String& rName, sal_uInt8 nNdTyp ) const
+const SwFlyFrmFmt* SwEditShell::FindFlyByName( const String& rName, BYTE nNdTyp ) const
 {
     return pDoc->FindFlyByName(rName, nNdTyp);
 }

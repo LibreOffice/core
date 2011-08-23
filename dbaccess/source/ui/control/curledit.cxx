@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 
 #include "curledit.hxx"
 #include <vcl/svapp.hxx>
-#include <osl/diagnose.h>
 
 //.........................................................................
 namespace dbaui
@@ -41,7 +40,7 @@ namespace dbaui
 //=========================================================================
 //= OConnectionURLEdit
 //=========================================================================
-OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,sal_Bool _bShowPrefix)
+OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,BOOL _bShowPrefix)
     :Edit(_pParent, _rResId)
     ,m_pTypeCollection(NULL)
     ,m_pForcedPrefix(NULL)
@@ -58,13 +57,13 @@ OConnectionURLEdit::~OConnectionURLEdit()
     Edit* pSubEdit = GetSubEdit();
     SetSubEdit(NULL);
     delete pSubEdit;
-    delete m_pForcedPrefix;
+    delete m_pForcedPrefix;	
 }
 
 //-------------------------------------------------------------------------
 void OConnectionURLEdit::SetTextNoPrefix(const String& _rText)
 {
-    OSL_ENSURE(GetSubEdit(), "OConnectionURLEdit::SetTextNoPrefix: have no current type, not changing the text!");
+    DBG_ASSERT(GetSubEdit(), "OConnectionURLEdit::SetTextNoPrefix: have no current type, not changing the text!");
     if (GetSubEdit())
         GetSubEdit()->SetText(_rText);
 }
@@ -129,7 +128,7 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& /*_rNewSe
     GetSubEdit()->Show();
 
     // do the real SetTex
-//  Edit::SetText(bIsEmpty ? _rStr : m_pTypeCollection->cutPrefix(_rStr), _rNewSelection);
+//	Edit::SetText(bIsEmpty ? _rStr : m_pTypeCollection->cutPrefix(_rStr), _rNewSelection);
     String sNewText( _rStr );
     if ( !bIsEmpty )
         sNewText  = m_pTypeCollection->cutPrefix( _rStr );
@@ -144,14 +143,14 @@ String OConnectionURLEdit::GetText() const
     return Edit::GetText();
 }
 // -----------------------------------------------------------------------------
-void OConnectionURLEdit::ShowPrefix(sal_Bool _bShowPrefix)
+void OConnectionURLEdit::ShowPrefix(BOOL _bShowPrefix)
 {
     m_bShowPrefix = _bShowPrefix;
     if ( m_pForcedPrefix )
         m_pForcedPrefix->Show(m_bShowPrefix);
 }
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

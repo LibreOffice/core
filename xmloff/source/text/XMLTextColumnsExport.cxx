@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 
 
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "XMLTextColumnsExport.hxx"
@@ -61,8 +61,7 @@ XMLTextColumnsExport::XMLTextColumnsExport( SvXMLExport& rExp ) :
     sSeparatorLineRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineRelativeHeight")),
     sSeparatorLineVerticalAlignment(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineVerticalAlignment")),
     sIsAutomatic(RTL_CONSTASCII_USTRINGPARAM("IsAutomatic")),
-    sAutomaticDistance(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance")),
-    sSeparatorLineStyle(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineStyle"))
+    sAutomaticDistance(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance"))
 {
 }
 
@@ -91,9 +90,9 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             sal_Int32 nDistance = 0;
             aAny >>= nDistance;
             OUStringBuffer aBuffer;
-            GetExport().GetMM100UnitConverter().convertMeasure(
+            GetExport().GetMM100UnitConverter().convertMeasure( 
                 aBuffer, nDistance );
-            GetExport().AddAttribute( XML_NAMESPACE_FO,
+            GetExport().AddAttribute( XML_NAMESPACE_FO, 
                                       XML_COLUMN_GAP,
                                       aBuffer.makeStringAndClear() );
         }
@@ -134,33 +133,15 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_HEIGHT,
                                       sValue.makeStringAndClear() );
 
-            // style::style
-            aAny = xPropSet->getPropertyValue( sSeparatorLineStyle );
-            sal_Int8 nStyle = 0;
-            aAny >>= nStyle;
-
-            enum XMLTokenEnum eStr = XML_TOKEN_INVALID;
-            switch ( nStyle )
-            {
-                case 0:  eStr = XML_NONE; break;
-                case 1:  eStr = XML_SOLID; break;
-                case 2:  eStr = XML_DOTTED; break;
-                case 3:  eStr = XML_DASHED; break;
-                default:
-                         break;
-            }
-            if ( eStr != XML_TOKEN_INVALID )
-                GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_STYLE, eStr );
-
             // style:vertical-align
             aAny = xPropSet->getPropertyValue( sSeparatorLineVerticalAlignment );
             VerticalAlignment eVertAlign;
             aAny >>= eVertAlign;
 
-            eStr = XML_TOKEN_INVALID;
+            enum XMLTokenEnum eStr = XML_TOKEN_INVALID;
             switch( eVertAlign )
             {
-//          case VerticalAlignment_TOP: eStr = XML_TOP;
+//			case VerticalAlignment_TOP: eStr = XML_TOP;
             case VerticalAlignment_MIDDLE: eStr = XML_MIDDLE; break;
             case VerticalAlignment_BOTTOM: eStr = XML_BOTTOM; break;
             default:
@@ -177,7 +158,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                                       sal_True, sal_True );
         }
     }
-
+    
     while( nCount-- )
     {
         // style:rel-width

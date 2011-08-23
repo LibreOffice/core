@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,7 +148,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     css::uno::Sequence< css::beans::PropertyValue > aArguments( lArguments );
     sal_Int32 nLength = lArguments.getLength();
     aArguments.realloc( nLength + 1 );
-    aArguments[ nLength ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SynchronMode"));
+    aArguments[ nLength ].Name = ::rtl::OUString::createFromAscii("SynchronMode");
     aArguments[ nLength ].Value <<= (sal_Bool) sal_True;
 
     css::uno::Any aResult;
@@ -168,6 +168,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
         // dispatch it and wait for a notification
         // TODO/MBA: waiting in main thread?!
         xNotifyDispatch->dispatchWithNotification(aURL, aArguments, xListener);
+        //m_aBlock.wait();
         aResult = m_aResult;
     }
     else

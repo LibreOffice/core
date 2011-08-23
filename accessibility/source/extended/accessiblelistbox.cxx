@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     SvTreeListBox* AccessibleListBox::getListBox() const
     {
-        return  static_cast< SvTreeListBox* >( const_cast<AccessibleListBox*>(this)->GetWindow() );
+        return	static_cast< SvTreeListBox* >( const_cast<AccessibleListBox*>(this)->GetWindow() );
     }
     // -----------------------------------------------------------------------------
     void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
@@ -307,7 +307,7 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry, sal_True );
+        getListBox()->Select( pEntry, TRUE );
     }
     // -----------------------------------------------------------------------------
     sal_Bool SAL_CALL AccessibleListBox::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
@@ -335,7 +335,7 @@ namespace accessibility
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( i );
             if ( getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry, sal_False );
+                getListBox()->Select( pEntry, FALSE );
         }
     }
     // -----------------------------------------------------------------------------
@@ -351,7 +351,7 @@ namespace accessibility
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( i );
             if ( !getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry, sal_True );
+                getListBox()->Select( pEntry, TRUE );
         }
     }
     // -----------------------------------------------------------------------------
@@ -411,7 +411,7 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry, sal_False );
+        getListBox()->Select( pEntry, FALSE );
     }
     // -----------------------------------------------------------------------------
     void AccessibleListBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )

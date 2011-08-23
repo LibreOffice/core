@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "svx/xmlexchg.hxx"
+#include "xmlexchg.hxx"
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
 #include <tools/debug.hxx>
@@ -88,7 +88,7 @@ namespace svx
 
 
 //........................................................................
-}   // namespace svx
+}	// namespace svx
 //........................................................................
 
 

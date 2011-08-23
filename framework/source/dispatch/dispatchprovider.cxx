@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <stdio.h>
@@ -53,7 +53,7 @@
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/uno/Exception.hpp>
@@ -62,7 +62,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <osl/diagnose.h>
 #include <rtl/string.h>
@@ -70,25 +70,25 @@
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  non exported const
+//	non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
+//	XInterface, XTypeProvider
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_2( DispatchProvider                               ,
                      OWeakObject                                    ,
@@ -121,7 +121,7 @@ DEFINE_XTYPEPROVIDER_2( DispatchProvider             ,
 */
 DispatchProvider::DispatchProvider( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory  ,
                                     const css::uno::Reference< css::frame::XFrame >&              xFrame    )
-        //  Init baseclasses first
+        //	Init baseclasses first
         : ThreadHelpBase( &Application::GetSolarMutex() )
         , OWeakObject   (                               )
         // Init member
@@ -182,7 +182,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
         xDispatcher = implts_queryDesktopDispatch(xOwner, aURL, sTargetFrameName, nSearchFlags);
     else
         xDispatcher = implts_queryFrameDispatch(xOwner, aURL, sTargetFrameName, nSearchFlags);
-
+    
     return xDispatcher;
 }
 
@@ -226,7 +226,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
 
 ::sal_Bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
 {
-    return (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_UNO_SHOWSTARTMODULE)));
+    return (aURL.Complete.equals(CMD_UNO_SHOWSTARTMODULE));
 }
 
 //_________________________________________________________________________________________________________________
@@ -284,7 +284,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     {
         if (implts_isLoadableContent(aURL))
             xDispatcher = implts_getOrCreateDispatchHelper( E_DEFAULTDISPATCHER, xDesktop );
-
+        
         if (lcl_isStartModuleDispatch(aURL))
             xDispatcher = implts_getOrCreateDispatchHelper( E_STARTMODULEDISPATCHER, xDesktop );
     }
@@ -455,7 +455,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         else
         {
             css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
-            // Normaly if isTop() returned sal_False ... the parent frame MUST(!) exist ...
+            // Normaly if isTop() returned FALSE ... the parent frame MUST(!) exist ...
             // But it seams to be better to check that here to prevent us against an access violation.
             if (xParent.is())
                 xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_TOP, 0);
@@ -477,13 +477,13 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     {
         // There exist a hard coded interception for special URLs.
         if (
-            (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CloseDoc"))) ||
-            (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CloseWin")))
+            (aURL.Complete.equalsAscii(".uno:CloseDoc"  )) ||
+            (aURL.Complete.equalsAscii(".uno:CloseWin"  ))
            )
         {
             css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
             // In case the frame is not a top one, is not based on system window and has a parent,
-            // the parent frame should to be queried for the correct dispatcher.
+            // the parent frame should to be queried for the correct dispatcher. 
             // See i93473
             if (
                 !WindowHelper::isTopWindow(xFrame->getContainerWindow()) &&
@@ -494,7 +494,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
             else
                 xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
         }
-        else if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CloseFrame")))
+        else if (aURL.Complete.equalsAscii(".uno:CloseFrame"))
             xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
 
         if ( ! xDispatcher.is())
@@ -760,7 +760,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
-
+            
         case E_STARTMODULEDISPATCHER :
                 {
                     StartModuleDispatcher* pDispatcher = new StartModuleDispatcher( xFactory, xOwner, sTarget );

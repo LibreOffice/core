@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,160 +35,168 @@
 #include <cstdarg>
 #include <limits.h>
 #include <tools/debug.hxx>
+#include <tools/list.hxx>
 
 #include "comdep.hxx"
 #include <tools/fsys.hxx>
 
+
 DBG_NAME( Dir )
 
-#define APPEND (sal_uInt16) 65535
+DECLARE_LIST( DirEntryList, DirEntry* )
+DECLARE_LIST( FSysSortList, FSysSort* )
+DECLARE_LIST( FileStatList, FileStat* )
+
+#define APPEND (USHORT) 65535
 
 /*************************************************************************
 |*
 |*    Dir::InsertPointReached()
 |*
 |*    Beschreibung      stellt fest, ob eingefuegt werden musz
+|*    Ersterstellung    MA 05.11.91
+|*    Letzte Aenderung  MI 05.02.92
 |*
 *************************************************************************/
 
-sal_Bool Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
+BOOL Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
                                  const FileStat& rNewStat,
-                                 size_t nCurPos, size_t nSortIndex ) const
+                                 ULONG nCurPos, ULONG nSortIndex ) const
 {
 #define VALUE( nKindFlags ) \
     ( ( FSYS_KIND_FILE | FSYS_KIND_DIR | FSYS_KIND_DEV | \
         FSYS_KIND_CHAR | FSYS_KIND_BLOCK ) & nKindFlags )
 
     // einfache Dinge erfordern einfache Loesungen
-    if ( pLst->empty() )
-        return sal_True;
+    if ( !pLst->Count() )
+        return TRUE;
 
-    FSysSort  nSort      = (*pSortLst)[ nSortIndex ];
+    FSysSort  nSort      = *( pSortLst->GetObject( nSortIndex ) );
     FileStat *pOldStat   = NULL;
-    DirEntry *pCurLstObj = (*pLst)[ nCurPos ];
+    DirEntry *pCurLstObj = pLst->GetObject( nCurPos );
     if ( pStatLst )
-        pOldStat = (*pStatLst)[ nCurPos ];
+        pOldStat = pStatLst->GetObject( nCurPos );
 
     switch( nSort )
     {
         case  FSYS_SORT_NAME:
         case (FSYS_SORT_NAME | FSYS_SORT_ASCENDING):
             if ( pCurLstObj->aName > rNewEntry.aName )
-                return sal_True;
+                return TRUE;
             if ( !(pCurLstObj->aName == rNewEntry.aName) )
-                return sal_False;
+                return FALSE;
             break;
         case (FSYS_SORT_NAME | FSYS_SORT_DESCENDING):
             if ( pCurLstObj->aName < rNewEntry.aName )
-                return sal_True;
+                return TRUE;
             if ( !(pCurLstObj->aName == rNewEntry.aName) )
-                return sal_False;
+                return FALSE;
             break;
 
         case  FSYS_SORT_EXT:
         case (FSYS_SORT_EXT | FSYS_SORT_ASCENDING):
         {
             if ( pCurLstObj->GetExtension() > rNewEntry.GetExtension() )
-                return sal_True;
+                return TRUE;
             if ( !(pCurLstObj->GetExtension() == rNewEntry.GetExtension()) )
-                return sal_False;
+                return FALSE;
             break;
         }
         case (FSYS_SORT_EXT | FSYS_SORT_DESCENDING):
         {
             if ( pCurLstObj->GetExtension() < rNewEntry.GetExtension() )
-                return sal_True;
+                return TRUE;
             if ( !(pCurLstObj->GetExtension() == rNewEntry.GetExtension()) )
-                return sal_False;
+                return FALSE;
             break;
         }
 
         case  FSYS_SORT_KIND:
         case (FSYS_SORT_KIND | FSYS_SORT_ASCENDING ):
             if ( VALUE(pOldStat->nKindFlags) > VALUE(rNewStat.nKindFlags) )
-                return sal_True;
+                return TRUE;
             if ( !(VALUE(pOldStat->nKindFlags) == VALUE(rNewStat.nKindFlags)) )
-                return sal_False;
+                return FALSE;
             break;
         case (FSYS_SORT_KIND | FSYS_SORT_DESCENDING):
             if ( VALUE(pOldStat->nKindFlags) < VALUE(rNewStat.nKindFlags) )
-                return sal_True;
+                return TRUE;
             if ( !(VALUE(pOldStat->nKindFlags) == VALUE(rNewStat.nKindFlags)) )
-                return sal_False;
+                return FALSE;
             break;
 
         case  FSYS_SORT_SIZE:
         case (FSYS_SORT_SIZE | FSYS_SORT_ASCENDING):
             if ( pOldStat->nSize > rNewStat.nSize )
-                return sal_True;
+                return TRUE;
             if ( !(pOldStat->nSize == rNewStat.nSize) )
-                return sal_False;
+                return FALSE;
             break;
         case (FSYS_SORT_SIZE | FSYS_SORT_DESCENDING):
             if ( pOldStat->nSize < rNewStat.nSize )
-                return sal_True;
+                return TRUE;
             if ( !(pOldStat->nSize == rNewStat.nSize) )
-                return sal_False;
+                return FALSE;
             break;
 
         case  FSYS_SORT_MODIFYED:
         case (FSYS_SORT_MODIFYED | FSYS_SORT_ASCENDING):
             if ( (pOldStat->aDateModified >= rNewStat.aDateModified) &&
                  (pOldStat->aTimeModified >  rNewStat.aTimeModified) )
-                 return sal_True;
+                 return TRUE;
             if ( !((pOldStat->aDateModified == rNewStat.aDateModified) &&
                    (pOldStat->aTimeModified == rNewStat.aTimeModified)) )
-                return sal_False;
+                return FALSE;
             break;
         case (FSYS_SORT_MODIFYED | FSYS_SORT_DESCENDING):
             if ( (pOldStat->aDateModified <= rNewStat.aDateModified) &&
                  (pOldStat->aTimeModified <  rNewStat.aTimeModified) )
-                 return sal_True;
+                 return TRUE;
             if ( !((pOldStat->aDateModified == rNewStat.aDateModified) &&
                    (pOldStat->aTimeModified == rNewStat.aTimeModified)) )
-                return sal_False;
+                return FALSE;
             break;
 
         case  FSYS_SORT_CREATED:
         case (FSYS_SORT_CREATED | FSYS_SORT_ASCENDING):
             if ( (pOldStat->aDateCreated >= rNewStat.aDateCreated) &&
                  (pOldStat->aTimeCreated >  rNewStat.aTimeCreated) )
-                 return sal_True;
+                 return TRUE;
             if ( !((pOldStat->aDateCreated == rNewStat.aDateCreated) &&
                    (pOldStat->aTimeCreated == rNewStat.aTimeCreated)) )
-                return sal_False;
+                return FALSE;
             break;
         case (FSYS_SORT_CREATED | FSYS_SORT_DESCENDING):
             if ( (pOldStat->aDateCreated <= rNewStat.aDateCreated) &&
                  (pOldStat->aTimeCreated <  rNewStat.aTimeCreated) )
-                 return sal_True;
+                 return TRUE;
             if ( !((pOldStat->aDateCreated == rNewStat.aDateCreated) &&
                    (pOldStat->aTimeCreated == rNewStat.aTimeCreated)) )
-                return sal_False;
+                return FALSE;
             break;
 
         case  FSYS_SORT_ACCESSED:
         case (FSYS_SORT_ACCESSED | FSYS_SORT_ASCENDING):
             if ( (pOldStat->aDateAccessed >= rNewStat.aDateAccessed) &&
                  (pOldStat->aTimeAccessed >  rNewStat.aTimeAccessed) )
-                 return sal_True;
+                 return TRUE;
             if ( !((pOldStat->aDateAccessed == rNewStat.aDateAccessed) &&
                    (pOldStat->aTimeAccessed == rNewStat.aTimeAccessed)) )
-                return sal_False;
+                return FALSE;
             break;
         case (FSYS_SORT_ACCESSED | FSYS_SORT_DESCENDING):
             if ( (pOldStat->aDateAccessed <= rNewStat.aDateAccessed) &&
                  (pOldStat->aTimeAccessed <  rNewStat.aTimeAccessed) )
-                 return sal_True;
+                 return TRUE;
             if ( !((pOldStat->aDateAccessed == rNewStat.aDateAccessed) &&
                    (pOldStat->aTimeAccessed == rNewStat.aTimeAccessed)) )
-                return sal_False;
+                return FALSE;
             break;
         default: /* Kann nicht sein */;
     }
 
-    if ( nSortIndex == ( pSortLst->size() - 1 ) )
-        return sal_True;
+    if ( nSortIndex == ( pSortLst->Count() - 1 ) )
+        return TRUE;
     else
         //Rekursion
         return ImpInsertPointReached( rNewEntry, rNewStat,
@@ -201,6 +209,8 @@ sal_Bool Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
 |*    Dir::ImpSortedInsert()
 |*
 |*    Beschreibung      fuegt sortiert ein
+|*    Ersterstellung    MA 05.11.91
+|*    Letzte Aenderung  MA 03.12.91
 |*
 *************************************************************************/
 
@@ -208,29 +218,25 @@ void Dir::ImpSortedInsert( const DirEntry *pNewEntry, const FileStat *pNewStat )
 {
     //Sonderfall, keine Sortierung gewuenscht.
     if ( !pSortLst ) {
-        pLst->push_back( (DirEntry*)pNewEntry );
+        pLst->Insert( (DirEntry*)pNewEntry, APPEND );
         return;
     }
 
-    for ( size_t i = 0, n = pLst->size(); i < n; ++i )
-    {
-        if ( ImpInsertPointReached( *pNewEntry, *pNewStat, i, 0  ) )
+    pLst->First();
+    do {
+        if ( ImpInsertPointReached( *pNewEntry, *pNewStat, pLst->GetCurPos(),
+                                    (ULONG)0  ) )
         {
-            if ( pStatLst ) {
-                FileStatList::iterator it = pStatLst->begin();
-                ::std::advance( it, i );
-                pStatLst->insert( it, (FileStat*)pNewStat );
-            }
-            DirEntryList::iterator it = pLst->begin();
-            ::std::advance( it, i );
-            pLst->insert( it, (DirEntry*)pNewEntry );
+            if ( pStatLst )
+                pStatLst->Insert( (FileStat*)pNewStat, pLst->GetCurPos() );
+            pLst->Insert( (DirEntry*)pNewEntry );
             return;
         }
-    }
+    } while( pLst->Next() );
 
     if ( pStatLst )
-        pStatLst->push_back( (FileStat*)pNewStat );
-    pLst->push_back( (DirEntry*)pNewEntry );
+        pStatLst->Insert( (FileStat*)pNewStat, APPEND );
+    pLst->Insert( (DirEntry*)pNewEntry, APPEND );
 }
 
 /*************************************************************************
@@ -238,6 +244,8 @@ void Dir::ImpSortedInsert( const DirEntry *pNewEntry, const FileStat *pNewStat )
 |*    Dir::Construct()
 |*
 |*    Beschreibung      gemeinsame Implementation der Ctoren
+|*    Ersterstellung    MI 02.06.93
+|*    Letzte Aenderung  MI 02.06.93
 |*
 *************************************************************************/
 
@@ -250,7 +258,7 @@ void Dir::Construct( DirEntryKind nKindFlags )
     ByteString aTempName( GetName(), osl_getThreadTextEncoding() );
     if ( aTempName.Search( "*" ) != STRING_NOTFOUND ||
          aTempName.Search( "?" ) != STRING_NOTFOUND )
-#if defined( WNT )
+#if defined( WNT ) && !defined( WTC )
     {
         ByteString aTStr(CutName(), osl_getThreadTextEncoding());
         char* pBuffer = new char[aTStr.Len()+1];
@@ -270,9 +278,13 @@ void Dir::Construct( DirEntryKind nKindFlags )
 |*
 |*    Dir::Update()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 16.05.91
+|*    Letzte Aenderung  MI 19.09.96
+|*
 *************************************************************************/
 
-sal_Bool Dir::Update()
+BOOL Dir::Update()
 {
     Reset();
     return Scan( USHRT_MAX ) > 0;
@@ -281,6 +293,10 @@ sal_Bool Dir::Update()
 /*************************************************************************
 |*
 |*    Dir::Reset()
+|*
+|*    Beschreibung
+|*    Ersterstellung    MI 22.10.96
+|*    Letzte Aenderung  MI 22.10.96
 |*
 *************************************************************************/
 
@@ -293,38 +309,44 @@ void Dir::Reset()
     // alle DirEntries aus der Liste entfernen und deren Speicher freigeben
     if ( pLst )
     {
-        for ( size_t i = 0, n = pLst->size(); i < n; ++i ) {
-            delete (*pLst)[ i ];
+        DirEntry* pEntry = pLst->First();
+        while (pEntry)
+        {
+            DirEntry* pNext = pLst->Next();
+            delete pEntry;
+            pEntry = pNext;
         }
-        pLst->clear();
+        pLst->Clear();
     }
     else
         pLst = new DirEntryList();
 
-    //  Alte File-Stat's Loeschen
+    //	Alte File-Stat's Loeschen
     if ( pStatLst )
     {
-        for ( size_t i = 0, n = pStatLst->size(); i < n; ++i ) {
-            delete (*pStatLst)[ i ];
+        //Erstmal die alten Loeschen
+        FileStat* pEntry = pStatLst->First();
+        while (pEntry)
+        {
+            FileStat*  pNext = pStatLst->Next();
+            delete pEntry;
+            pEntry = pNext;
         }
-        pStatLst->clear();
+        pStatLst->Clear();
         delete pStatLst;
-        pStatLst = NULL;
     }
 
     // Verlangen die Sortierkriterien FileStat's?
     if ( pSortLst )
     {
-        for ( size_t i = 0, n = pSortLst->size(); i < n; ++i ) {
-            if ( (*pSortLst)[ i ]
-               & ( FSYS_SORT_KIND     | FSYS_SORT_SIZE     | FSYS_SORT_CREATED
-                 | FSYS_SORT_MODIFYED | FSYS_SORT_ACCESSED
-                 )
-            ) {
+        pSortLst->First();
+        do
+        {
+            if ( *( pSortLst->GetCurObject() ) &
+                    ( FSYS_SORT_KIND | FSYS_SORT_SIZE |
+                    FSYS_SORT_CREATED | FSYS_SORT_MODIFYED | FSYS_SORT_ACCESSED ) )
                 pStatLst = new FileStatList();
-                break;
-            }
-        }
+        } while ( !pStatLst && pSortLst->Next() );
     }
 
 #ifndef BOOTSTRAP
@@ -348,22 +370,26 @@ void Dir::Reset()
 |*
 |*    Dir::Scan()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 18.09.96
+|*    Letzte Aenderung  MI 19.09.96
+|*
 *************************************************************************/
 
-sal_uInt16 Dir::Scan( sal_uInt16 nCount )
+USHORT Dir::Scan( USHORT nCount )
 {
 
-    sal_uInt16 nRead = 0; // Anzahl in dieser Runde gelesener Eintr"age
+    USHORT nRead = 0; // Anzahl in dieser Runde gelesener Eintr"age
     FSysFailOnErrorImpl();
 
     // noch nicht fertig gewesen
     if ( pReader )
     {
         // frischer Reader?
-        if ( pLst->empty() )
+        if ( !pLst->Count() )
         {
             // dann ggf. Laufwerke scannen
-            pReader->bInUse = sal_True;
+            pReader->bInUse = TRUE;
             nRead = pReader->Init();
         }
 
@@ -383,6 +409,10 @@ sal_uInt16 Dir::Scan( sal_uInt16 nCount )
 /*************************************************************************
 |*
 |*    Dir::Dir()
+|*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 16.05.91
+|*    Letzte Aenderung  MI 04.03.92
 |*
 *************************************************************************/
 
@@ -405,6 +435,10 @@ Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags, FSysSort nSort, ..
 |*
 |*    Dir::Dir()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 02.06.93
+|*    Letzte Aenderung  MI 02.06.93
+|*
 *************************************************************************/
 
 Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags ):
@@ -420,6 +454,10 @@ Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags ):
 /*************************************************************************
 |*
 |*    Dir::Dir()
+|*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 16.05.91
+|*    Letzte Aenderung  MA 04.11.91
 |*
 *************************************************************************/
 
@@ -439,6 +477,10 @@ Dir::Dir():
 |*
 |*    Dir::~Dir()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 16.05.91
+|*    Letzte Aenderung  MA 04.11.91
+|*
 *************************************************************************/
 
 Dir::~Dir()
@@ -448,27 +490,44 @@ Dir::~Dir()
     // alle DirEntries aus der Liste entfernen und deren Speicher freigeben
     if ( pLst )
     {
-        for ( size_t i = 0, n = pLst->size(); i < n; ++i ) {
-            delete (*pLst)[ i ];
+        DirEntry* pEntry = pLst->First();
+        while (pEntry)
+        {
+            DirEntry* pNext = pLst->Next();
+            delete pEntry;
+            pEntry = pNext;
         }
-        pLst->clear();
+        pLst->Clear();
+
         delete pLst;
     }
 
     // alle Sorts aus der Liste entfernen und deren Speicher freigeben
     if ( pSortLst )
     {
-        pSortLst->clear();
+        FSysSort* pEntry = pSortLst->First();
+        while (pEntry)
+        {
+            FSysSort*  pNext = pSortLst->Next();
+            delete pEntry;
+            pEntry = pNext;
+        }
+        pSortLst->Clear();
+
         delete pSortLst;
     }
 
     // alle FileStat's aus der Liste entfernen und deren Speicher freigeben
     if ( pStatLst )
     {
-        for ( size_t i = 0, n = pStatLst->size(); i < n; ++i ) {
-            delete (*pStatLst)[ i ];
+        FileStat* pEntry = pStatLst->First();
+        while (pEntry)
+        {
+            FileStat*  pNext = pStatLst->Next();
+            delete pEntry;
+            pEntry = pNext;
         }
-        pStatLst->clear();
+        pStatLst->Clear();
         delete pStatLst;
     }
 
@@ -480,23 +539,27 @@ Dir::~Dir()
 |*
 |*    Dir::ImpSetSort()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MA 04.11.91
+|*    Letzte Aenderung  MI 05.02.92
+|*
 *************************************************************************/
 
 FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
 {
-    sal_Bool             bLast;
-    FSysSort        aSort;
+    BOOL             bLast;
+    FSysSort        *pSort;
     FSysSortList    *pNewSortLst = new FSysSortList;
 
-    aSort = nFirstSort;
+    *( pSort = new FSysSort ) = nFirstSort;
     do
     {
         // letztes Kriterium?
-        bLast = FSYS_SORT_END == (aSort & FSYS_SORT_END);
-        aSort &= ~FSYS_SORT_END;
+        bLast = FSYS_SORT_END == (*pSort & FSYS_SORT_END);
+        *pSort &= ~FSYS_SORT_END;
 
-        FSysSort nSort = aSort & ~(sal_uInt16)FSYS_SORT_ASCENDING
-                               & ~(sal_uInt16)FSYS_SORT_DESCENDING;
+        FSysSort nSort = *pSort & ~(USHORT)FSYS_SORT_ASCENDING
+                              &  ~(USHORT)FSYS_SORT_DESCENDING;
 
         // g"utliges Sortierkriterium?
         if ( ( nSort ==  FSYS_SORT_NAME ) ||
@@ -507,34 +570,49 @@ FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
              ( nSort ==  FSYS_SORT_ACCESSED ) ||
              ( nSort ==  FSYS_SORT_KIND ) )
         {
-            pNewSortLst->push_back( aSort );
-            aSort = va_arg( pArgs, FSysSort );
+            pNewSortLst->Insert( pSort, APPEND );
+            *(pSort = new FSysSort) = va_arg( pArgs, FSysSort );
         }
         else
         {   // ungueltiger Sort oder FSYS_SORT_NONE
-            pNewSortLst->clear();
-            delete pNewSortLst;
-            if ( aSort ==  FSYS_SORT_NONE )
+            FSysSort* pEntry = pNewSortLst->First();
+            while (pEntry)
             {
-                if ( pSortLst ) {
+                FSysSort* pNext = pNewSortLst->Next();
+                delete pEntry;
+                pEntry = pNext;
+            }
+            pNewSortLst->Clear();
+            delete pNewSortLst;
+            if ( *pSort ==  FSYS_SORT_NONE )
+            {
+                delete pSort;
+                if ( pSortLst )
                     delete pSortLst;
-                    pSortLst = NULL;
-                }
                 return FSYS_ERR_OK;
             }
             else
             {
+                delete pSort;
                 return FSYS_ERR_NOTSUPPORTED;
             }
         }
     } while ( !bLast );
 
     va_end( pArgs );
+    delete pSort;			// JP:6.3.00 - delete the initial pointer
 
     //Enfernen der alten Sort-Elemente
     if ( pSortLst )
     {
-        pSortLst->clear();
+        FSysSort* pEntry = pSortLst->First();
+        while (pEntry)
+        {
+            FSysSort* pNext = pSortLst->Next();
+            delete pEntry;
+            pEntry = pNext;
+        }
+        pSortLst->Clear();
         delete pSortLst;
     }
     pSortLst = pNewSortLst;
@@ -545,17 +623,17 @@ FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
     //ist der Aufruf von Update() die einfachste Moeglichkeit
     if ( !pStatLst && pSortLst )
     {
-        for ( size_t i = 0, n = pSortLst->size(); i < n && !pStatLst; ++i )
+        pSortLst->First();
+        do
         {
-            if ( (*pSortLst)[ i ]
-               & ( FSYS_SORT_CREATED | FSYS_SORT_MODIFYED | FSYS_SORT_SIZE
-                 | FSYS_SORT_ACCESSED | FSYS_SORT_KIND
-                 )
-            ) {
+            if ( *(pSortLst->GetCurObject()) &
+                  ( FSYS_SORT_CREATED | FSYS_SORT_MODIFYED | FSYS_SORT_SIZE |
+                    FSYS_SORT_ACCESSED | FSYS_SORT_KIND ) )
+            {
                 Update();
                 return FSYS_ERR_OK;
             }
-        }
+        } while ( !pStatLst && pSortLst->Next() );
     }
 
     if ( pLst ) { //Keine DirEntry's, kein Sort.
@@ -567,16 +645,17 @@ FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
             pOldStatLst = pStatLst;
             pStatLst = new FileStatList(); //neue StatListe (zu Sortieren)
         }
-
-        for ( size_t i = 0, n = pOldLst->size(); i < n; ++i )
+        pOldLst->First();
+        do
         {
             //Sortiertes Einfuegen der Elemente aus den gemerkten Listen
             //in die 'richtigen' Listen
             if ( pOldStatLst )
-                ImpSortedInsert( (*pOldLst)[ i ], (*pOldStatLst)[ i ] );
+                ImpSortedInsert( pOldLst->GetCurObject(),
+                                 pOldStatLst->GetObject( pOldLst->GetCurPos() ) );
             else
-                ImpSortedInsert( (*pOldLst)[ i ], NULL );
-        }
+                ImpSortedInsert( pOldLst->GetCurObject(), NULL );
+        } while( pOldLst->Next() );
 
         delete pOldLst;
         if ( pOldStatLst )
@@ -588,6 +667,10 @@ FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
 /*************************************************************************
 |*
 |*    Dir::SetSort()
+|*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MA 04.11.91
+|*    Letzte Aenderung  MI 05.02.92
 |*
 *************************************************************************/
 
@@ -602,19 +685,27 @@ FSysError Dir::SetSort( FSysSort nSort, ... )
 |*
 |*    Dir::operator[]()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 16.05.91
+|*    Letzte Aenderung  MI 16.05.91
+|*
 *************************************************************************/
 
-DirEntry& Dir::operator[] ( size_t nIndex ) const
+DirEntry& Dir::operator[] ( USHORT nIndex ) const
 {
     DBG_ASSERT( nIndex < Count(), "Dir::operator[] : nIndex > Count()" );
 
-    DirEntry *pEntry = (*pLst)[ nIndex ];
+    DirEntry *pEntry = pLst->GetObject( nIndex );
     return *pEntry;
 }
 
 /*************************************************************************
 |*
 |*    Dir::operator+= ()
+|*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 16.05.91
+|*    Letzte Aenderung  MI 16.05.91
 |*
 *************************************************************************/
 
@@ -630,25 +721,23 @@ Dir& Dir::operator+=( const Dir& rDir )
         pLst = new DirEntryList();
 
     //Verlangen die Sortierkriterien FileStat's?
-    sal_Bool bStat = sal_False;
+    BOOL bStat = FALSE;
     if ( pSortLst ) {
-        for ( size_t i = 0, n = pSortLst->size(); i < n && !bStat; ++i ) {
-            if ( (*pSortLst)[ i ]
-               & ( FSYS_SORT_CREATED  | FSYS_SORT_MODIFYED | FSYS_SORT_SIZE
-                 | FSYS_SORT_ACCESSED | FSYS_SORT_KIND
-                 )
-            ) {
-                bStat = sal_True;
-            }
-        }
+        pSortLst->First();
+        do {
+            if ( *(pSortLst->GetCurObject()) &
+                  ( FSYS_SORT_CREATED | FSYS_SORT_MODIFYED | FSYS_SORT_SIZE |
+                    FSYS_SORT_ACCESSED | FSYS_SORT_KIND ) )
+                bStat = TRUE;
+        } while ( !bStat && pSortLst->Next() );
     }
-    FileStat* stat = NULL;
-    for ( size_t nNr = 0; nNr < rDir.Count(); nNr++ )
+    FileStat * stat = NULL;
+    for ( USHORT nNr = 0; nNr < rDir.Count(); nNr++ )
     {
         if ( bStat )
         {
             if ( rDir.pStatLst )
-                stat = new FileStat( *(*rDir.pStatLst)[ nNr ] );
+                stat = new FileStat( *rDir.pStatLst->GetObject(nNr) );
             else
                 stat = new FileStat( rDir[nNr] );
         }
@@ -661,16 +750,20 @@ Dir& Dir::operator+=( const Dir& rDir )
 |*
 |*    Dir::Count()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 16.05.91
+|*    Letzte Aenderung  MI 18.09.96
+|*
 *************************************************************************/
 
 
-size_t Dir::Count( sal_Bool bUpdated ) const
+USHORT Dir::Count( BOOL bUpdated ) const
 {
     // ggf. erst den Rest lesen
     if ( bUpdated && pReader )
         ((Dir*)this)->Scan( USHRT_MAX );
 
-    return pLst == NULL ? 0 : pLst->size();
+    return pLst == NULL ? 0 : (USHORT) pLst->Count();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

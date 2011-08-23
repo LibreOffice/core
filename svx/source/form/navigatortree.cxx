@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,12 +33,12 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/svdpagv.hxx>
-#include "svx/svditer.hxx"
+#include "svditer.hxx"
 
 #include "fmhelp.hrc"
 #include "fmexpl.hrc"
 #include "fmexpl.hxx"
-#include "svx/fmresids.hrc"
+#include "fmresids.hrc"
 #include "fmshimp.hxx"
 #include "fmservs.hxx"
 #include "fmundo.hxx"
@@ -58,7 +58,7 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <svx/sdrpaintwindow.hxx>
+#include <sdrpaintwindow.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
@@ -98,7 +98,7 @@ namespace svxform
     typedef MapModelToShape::value_type ModelShapePair;
 
     //------------------------------------------------------------------------
-    void    collectShapeModelMapping( SdrPage* _pPage, MapModelToShape& _rMapping )
+    void	collectShapeModelMapping( SdrPage* _pPage, MapModelToShape& _rMapping )
     {
         OSL_ENSURE( _pPage, "collectShapeModelMapping: invalid arg!" );
 
@@ -139,7 +139,7 @@ namespace svxform
 
         MapModelToShape::const_iterator aPos = _rModelMap.find( _pEntry->GetElement() );
         if ( _rModelMap.end() != aPos )
-        {   // there is a shape for this model ....
+        {	// there is a shape for this model ....
             bIsMarked = _pView->IsObjMarked( aPos->second );
             if ( !bIsMarked )
             {
@@ -153,7 +153,7 @@ namespace svxform
                     SdrMark* pMark = _pView->GetMarkedObjectList().GetMark( i );
                     SdrObject* pObj = pMark ? pMark->GetMarkedSdrObj() : NULL;
                     if ( pObj && pObj->IsGroupObject() )
-                    {   // the i-th marked shape is a group shape
+                    {	// the i-th marked shape is a group shape
                         SdrObjListIter aIter( *pObj );
                         while ( aIter.IsMore() )
                         {
@@ -204,17 +204,24 @@ namespace svxform
         SetHelpId( HID_FORM_NAVIGATOR );
 
         m_aNavigatorImages = ImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+        m_aNavigatorImagesHC = ImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
 
         SetNodeBitmaps(
             m_aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-            m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
+            m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+            BMP_COLOR_NORMAL
+        );
+        SetNodeBitmaps(
+            m_aNavigatorImagesHC.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+            m_aNavigatorImagesHC.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+            BMP_COLOR_HIGHCONTRAST
         );
 
         SetDragDropMode(0xFFFF);
         EnableInplaceEditing( sal_True );
         SetSelectionMode(MULTIPLE_SELECTION);
 
-        m_pNavModel = new NavigatorTreeModel( m_aNavigatorImages );
+        m_pNavModel = new NavigatorTreeModel( m_aNavigatorImages, m_aNavigatorImagesHC );
         Clear();
 
         StartListening( *m_pNavModel );
@@ -455,7 +462,7 @@ namespace svxform
                     aContextMenu.EnableItem( SID_FM_TAB_DIALOG, bSingleSelection && m_nFormsSelected );
 
                     // in XML forms, we don't allow for the properties of a form
-                    // #i36484#
+                    // #i36484# / 2004-11-04 /- fs@openoffice.org
                     if ( pFormShell->GetImpl()->isEnhancedForm() && !m_nControlsSelected )
                         aContextMenu.RemoveItem( aContextMenu.GetItemPos( SID_FM_SHOW_PROPERTY_BROWSER ) );
 
@@ -661,8 +668,11 @@ namespace svxform
             SvLBoxEntry* pEntry = FindEntry( pData );
             if (pEntry)
             {   // das Image neu setzen
-                SetCollapsedEntryBmp( pEntry, pData->GetNormalImage() );
-                SetExpandedEntryBmp( pEntry, pData->GetNormalImage() );
+                SetCollapsedEntryBmp( pEntry, pData->GetNormalImage(), BMP_COLOR_NORMAL );
+                SetExpandedEntryBmp( pEntry, pData->GetNormalImage(), BMP_COLOR_NORMAL );
+
+                SetCollapsedEntryBmp( pEntry, pData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
+                SetExpandedEntryBmp( pEntry, pData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
             }
         }
 
@@ -682,6 +692,13 @@ namespace svxform
             Image aRootImage( m_aNavigatorImages.GetImage( RID_SVXIMG_FORMS ) );
             m_pRootEntry = InsertEntry( SVX_RES(RID_STR_FORMS), aRootImage, aRootImage,
                 NULL, sal_False, 0, NULL );
+
+            if ( m_pRootEntry )
+            {
+                Image aHCRootImage( m_aNavigatorImagesHC.GetImage( RID_SVXIMG_FORMS ) );
+                SetExpandedEntryBmp( m_pRootEntry, aHCRootImage, BMP_COLOR_HIGHCONTRAST );
+                SetCollapsedEntryBmp( m_pRootEntry, aHCRootImage, BMP_COLOR_HIGHCONTRAST );
+            }
         }
         else if (!m_bMarkingObjects && rHint.ISA(FmNavRequestSelectHint))
         {   // wenn m_bMarkingObjects sal_True ist, markiere ich gerade selber Objekte, und da der ganze Mechanismus dahinter synchron ist,
@@ -698,7 +715,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    SvLBoxEntry* NavigatorTree::Insert( FmEntryData* pEntryData, sal_uIntPtr nRelPos )
+    SvLBoxEntry* NavigatorTree::Insert( FmEntryData* pEntryData, ULONG nRelPos )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::Insert" );
         //////////////////////////////////////////////////////////////////////
@@ -716,6 +733,12 @@ namespace svxform
                 pEntryData->GetNormalImage(), pEntryData->GetNormalImage(),
                 pParentEntry, sal_False, nRelPos, pEntryData );
 
+        if ( pNewEntry )
+        {
+            SetExpandedEntryBmp( pNewEntry, pEntryData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
+            SetCollapsedEntryBmp( pNewEntry, pEntryData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
+        }
+
         //////////////////////////////////////////////////////////////////////
         // Wenn Root-Eintrag Root expandieren
         if( !pParentEntry )
@@ -724,11 +747,11 @@ namespace svxform
         //////////////////////////////////////////////////////////////////////
         // Childs einfuegen
         FmEntryDataList* pChildList = pEntryData->GetChildList();
-        size_t nChildCount = pChildList->size();
+        sal_uInt32 nChildCount = pChildList->Count();
         FmEntryData* pChildData;
-        for( size_t i = 0; i < nChildCount; i++ )
+        for( sal_uInt32 i=0; i<nChildCount; i++ )
         {
-            pChildData = pChildList->at( i );
+            pChildData = pChildList->GetObject(i);
             Insert( pChildData, LIST_APPEND );
         }
 
@@ -760,7 +783,7 @@ namespace svxform
 
         // beim eigentlichen Entfernen kann die Selection geaendert werden, da ich aber das SelectionHandling abgeschaltet
         // habe, muss ich mich hinterher darum kuemmern
-        sal_uIntPtr nExpectedSelectionCount = GetSelectionCount();
+        ULONG nExpectedSelectionCount = GetSelectionCount();
 
         if( pEntry )
             GetModel()->Remove( pEntry );
@@ -829,7 +852,7 @@ namespace svxform
         sal_Bool bSelfSource = _bDnD ? m_aControlExchange.isDragSource() : m_aControlExchange.isClipboardOwner();
 
         if ( bHasHiddenControlsFormat )
-        {   // bHasHiddenControlsFormat means that only hidden controls are part of the data
+        {	// bHasHiddenControlsFormat means that only hidden controls are part of the data
 
             // hidden controls can be copied to a form only
             if ( !_pTargetEntry || ( _pTargetEntry == m_pRootEntry ) || !IsFormEntry( _pTargetEntry ) )
@@ -838,7 +861,7 @@ namespace svxform
             return bSelfSource ? ( DND_ACTION_COPYMOVE & _nAction ) : DND_ACTION_COPY;
         }
 
-        if  ( !bSelfSource )
+        if	( !bSelfSource )
         {
             // DnD or CnP crossing navigator boundaries
             // The main problem here is that the current API does not allow us to sneak into the content which
@@ -1043,7 +1066,7 @@ namespace svxform
 #endif
 
         if ( DND_ACTION_COPY == _nAction )
-        {   // bHasHiddenControlsFormat means that only hidden controls are part of the data
+        {	// bHasHiddenControlsFormat means that only hidden controls are part of the data
             DBG_ASSERT( bHasHiddenControlsFormat, "NavigatorTree::implExecuteDataTransfer: copy allowed for hidden controls only!" );
             DBG_ASSERT( _pTargetEntry && ( _pTargetEntry != m_pRootEntry ) && IsFormEntry( _pTargetEntry ),
                 "NavigatorTree::implExecuteDataTransfer: should not be here!" );
@@ -1171,9 +1194,9 @@ namespace svxform
 
             // beim Vater austragen
             if (pCurrentParentUserData)
-                pCurrentParentUserData->GetChildList()->remove( pCurrentUserData );
+                pCurrentParentUserData->GetChildList()->Remove(pCurrentUserData);
             else
-                GetNavModel()->GetRootList()->remove( pCurrentUserData );
+                GetNavModel()->GetRootList()->Remove(pCurrentUserData);
 
             // aus dem Container entfernen
             sal_Int32 nIndex = getElementPos(Reference< XIndexAccess > (xContainer, UNO_QUERY), xCurrentChild);
@@ -1243,9 +1266,9 @@ namespace svxform
 
             // dann dem Parent das neue Child
             if (pTargetData)
-                pTargetData->GetChildList()->insert( pCurrentUserData, nIndex );
+                pTargetData->GetChildList()->Insert(pCurrentUserData, nIndex);
             else
-                GetNavModel()->GetRootList()->insert( pCurrentUserData, nIndex );
+                GetNavModel()->GetRootList()->Insert(pCurrentUserData, nIndex);
 
             // dann bei mir selber bekanntgeben und neu selektieren
             SvLBoxEntry* pNew = Insert( pCurrentUserData, nIndex );
@@ -1308,7 +1331,7 @@ namespace svxform
             else
             {
                 // the clipboard content
-                Reference< XClipboard > xClipboard( GetClipboard() );
+                Reference< XClipboard >	xClipboard( GetClipboard() );
                 Reference< XTransferable > xTransferable;
                 if ( xClipboard.is() )
                     xTransferable = xClipboard->getContents();
@@ -1319,7 +1342,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "NavigatorTree::doPaste: caught an exception!" );
+            DBG_ERROR( "NavigatorTree::doPaste: caught an exception!" );
         }
     }
 
@@ -1441,7 +1464,7 @@ namespace svxform
         if (!xNewForm.is())
             return;
 
-        FmFormData* pNewFormData = new FmFormData( xNewForm, m_aNavigatorImages, pParentFormData );
+        FmFormData* pNewFormData = new FmFormData( xNewForm, m_aNavigatorImages, m_aNavigatorImagesHC, pParentFormData );
 
         //////////////////////////////////////////////////////////////////////
         // Namen setzen
@@ -1459,7 +1482,7 @@ namespace svxform
         }
         catch ( const Exception& )
         {
-            OSL_FAIL("NavigatorTree::NewForm : could not set esssential properties !");
+            DBG_ERROR("NavigatorTree::NewForm : could not set esssential properties !");
         }
 
 
@@ -1506,7 +1529,7 @@ namespace svxform
         if (!xNewComponent.is())
             return NULL;
 
-        FmControlData* pNewFormControlData = new FmControlData( xNewComponent, m_aNavigatorImages, pParentFormData );
+        FmControlData* pNewFormControlData = new FmControlData( xNewComponent, m_aNavigatorImages, m_aNavigatorImagesHC, pParentFormData );
 
         //////////////////////////////////////////////////////////////////////
         // Namen setzen
@@ -1560,7 +1583,7 @@ namespace svxform
             aNewName = aBaseName;
             if( i>0 )
             {
-                aNewName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+                aNewName += ::rtl::OUString::createFromAscii(" ");
                 aNewName += ::rtl::OUString::valueOf(i).getStr();
             }
 
@@ -1738,7 +1761,7 @@ namespace svxform
                     // erstmal die PropertySet-Interfaces der Forms einsammeln
                     for ( sal_Int32 i = 0; i < m_nFormsSelected; ++i )
                     {
-                        FmFormData* pFormData = (FmFormData*)m_arrCurrentSelection.GetObject((sal_uInt16)i)->GetUserData();
+                        FmFormData* pFormData = (FmFormData*)m_arrCurrentSelection.GetObject((USHORT)i)->GetUserData();
                         aSelection.insert( pFormData->GetPropertySet().get() );
                     }
                 }
@@ -1748,7 +1771,7 @@ namespace svxform
                     {   // ein MultiSet fuer die Properties der hidden controls
                         for ( sal_Int32 i = 0; i < m_nHiddenControls; ++i )
                         {
-                            FmEntryData* pEntryData = (FmEntryData*)m_arrCurrentSelection.GetObject((sal_uInt16)i)->GetUserData();
+                            FmEntryData* pEntryData = (FmEntryData*)m_arrCurrentSelection.GetObject((USHORT)i)->GetUserData();
                             aSelection.insert( pEntryData->GetPropertySet().get() );
                         }
                     }
@@ -1780,7 +1803,7 @@ namespace svxform
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::DeleteSelection" );
         // die Root darf ich natuerlich nicht mitloeschen
         sal_Bool bRootSelected = IsSelected(m_pRootEntry);
-        sal_uIntPtr nSelectedEntries = GetSelectionCount();
+        ULONG nSelectedEntries = GetSelectionCount();
         if (bRootSelected && (nSelectedEntries > 1))     // die Root plus andere Elemente ?
             Select(m_pRootEntry, sal_False);                // ja -> die Root raus
 
@@ -1804,9 +1827,9 @@ namespace svxform
         CollectSelectionData( SDI_NORMALIZED );
 
         // see below for why we need this mapping from models to shapes
-        FmFormView*     pFormView       = pFormShell->GetFormView();
-        SdrPageView*    pPageView       = pFormView ? pFormView->GetSdrPageView() : NULL;
-        SdrPage*        pPage           = pPageView ? pPageView->GetPage() : NULL;
+        FmFormView*		pFormView		= pFormShell->GetFormView();
+        SdrPageView*	pPageView		= pFormView ? pFormView->GetSdrPageView() : NULL;
+        SdrPage*		pPage			= pPageView ? pPageView->GetPage() : NULL;
         DBG_ASSERT( pPage, "NavigatorTree::DeleteSelection: invalid form page!" );
 
         MapModelToShape aModelShapes;
@@ -1821,7 +1844,7 @@ namespace svxform
         // then go on to the strucure. This means I have to delete the forms *after* the normal controls, so
         // that during UNDO, they're restored in the proper order.
         pFormShell->GetImpl()->EnableTrackProperties(sal_False);
-        sal_uInt16 i;
+        USHORT i;
         for (i = m_arrCurrentSelection.Count(); i>0; --i)
         {
             FmEntryData* pCurrent = (FmEntryData*)(m_arrCurrentSelection.GetObject(i - 1)->GetUserData());
@@ -1865,7 +1888,7 @@ namespace svxform
         // start UNDO at this point. Unfortunately, this results in 2 UNDO actions, since DeleteMarked is
         // creating an own one. However, if we'd move it before DeleteMarked, Writer does not really like
         // this ... :(
-        // #i31038#
+        // 2004-07-05 - #i31038# - fs@openoffice.org
         {
             // ---------------
             // initialize UNDO
@@ -1895,7 +1918,7 @@ namespace svxform
             // if the entry still has children, we skipped deletion of one of those children.
             // This may for instance be because the shape is in a hidden layer, where we're unable
             // to remove it
-            if ( pCurrent->GetChildList()->size() )
+            if ( pCurrent->GetChildList()->Count() )
                 continue;
 
             // noch ein kleines Problem, bevor ich das ganz loesche : wenn es eine Form ist und die Shell diese als CurrentObject
@@ -2081,7 +2104,7 @@ namespace svxform
 
         for (sal_uInt32 i=0; i<m_arrCurrentSelection.Count(); ++i)
         {
-            SvLBoxEntry* pSelectionLoop = m_arrCurrentSelection.GetObject((sal_uInt16)i);
+            SvLBoxEntry* pSelectionLoop = m_arrCurrentSelection.GetObject((USHORT)i);
             // Bei Formselektion alle Controls dieser Form markieren
             if (IsFormEntry(pSelectionLoop) && (pSelectionLoop != m_pRootEntry))
                 MarkViewObj((FmFormData*)pSelectionLoop->GetUserData(), sal_True, sal_False);
@@ -2173,9 +2196,9 @@ namespace svxform
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::MarkViewObjects" );
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
-        if( !pFormShell )
+        if( !pFormShell ) 
             return;
-
+        
         // first collect all sdrobjects
         ::std::set< Reference< XFormComponent > > aObjects;
         CollectObjects(pFormData,bDeep,aObjects);
@@ -2200,7 +2223,7 @@ namespace svxform
             {
                 // unfortunately, the writer doesn't like marking an already-marked object, again, so reset the mark first
                 pFormView->MarkObj( pSdrObject, pPageView, !bMark, sal_False );
-            }
+            }            
         } // while ( aIter.IsMore() )
         if ( bMark )
         {
@@ -2224,14 +2247,14 @@ namespace svxform
         FmEntryDataList* pChildList = pFormData->GetChildList();
         FmEntryData* pEntryData;
         FmControlData* pControlData;
-        for( size_t i = 0; i < pChildList->size(); ++i )
+        for( sal_uInt32 i=0; i < pChildList->Count(); ++i )
         {
-            pEntryData = pChildList->at( i );
+            pEntryData = pChildList->GetObject(i);
             if( pEntryData->ISA(FmControlData) )
             {
                 pControlData = (FmControlData*)pEntryData;
                 _rObjects.insert(pControlData->GetFormComponent());
-            } // if( pEntryData->ISA(FmControlData) )
+            } // if( pEntryData->ISA(FmControlData) ) 
             else if (bDeep && (pEntryData->ISA(FmFormData)))
                 CollectObjects((FmFormData*)pEntryData,bDeep,_rObjects);
         } // for( sal_uInt32 i=0; i<pChildList->Count(); i++ )
@@ -2240,10 +2263,10 @@ namespace svxform
     void NavigatorTree::MarkViewObj( FmControlData* pControlData, sal_Bool bMarkHandles, sal_Bool bMark)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::MarkViewObj" );
-        if( !pControlData )
+        if( !pControlData ) 
             return;
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
-        if( !pFormShell )
+        if( !pFormShell ) 
             return;
 
         //////////////////////////////////////////////////////////////////////
@@ -2275,7 +2298,7 @@ namespace svxform
                 continue;
 
             bPaint = true;
-
+            
         } // while ( aIter.IsMore() )
         if ( bPaint )
         {
@@ -2294,7 +2317,7 @@ namespace svxform
     }
 
 //............................................................................
-}   // namespace svxform
+}	// namespace svxform
 //............................................................................
 
 

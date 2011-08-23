@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,25 +42,25 @@ class SwWrtShell;
 
 class SwBreakDlg: public SvxStandardDialog
 {
-    SwWrtShell     &rSh;
+    SwWrtShell	   &rSh;
+    RadioButton		aLineBtn;
+    RadioButton		aColumnBtn;
+    RadioButton		aPageBtn;
+    FixedText		aPageCollText;
+    ListBox			aPageCollBox;
+    CheckBox		aPageNumBox;
+    NumericField	aPageNumEdit;
     FixedLine       aBreakFL;
-    RadioButton     aLineBtn;
-    RadioButton     aColumnBtn;
-    RadioButton     aPageBtn;
-    FixedText       aPageCollText;
-    ListBox         aPageCollBox;
-    CheckBox        aPageNumBox;
-    NumericField    aPageNumEdit;
 
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    OKButton		aOkBtn;
+    CancelButton	aCancelBtn;
+    HelpButton		aHelpBtn;
 
     String          aTemplate;
-    sal_uInt16          nKind;
-    sal_uInt16          nPgNum;
+    USHORT          nKind;
+    USHORT          nPgNum;
 
-    sal_Bool            bHtmlMode;
+    BOOL 			bHtmlMode;
 
     DECL_LINK( ClickHdl, void * );
     DECL_LINK( PageNumHdl, CheckBox * );
@@ -77,8 +77,8 @@ public:
     ~SwBreakDlg();
 
     String  GetTemplateName() { return aTemplate; }
-    sal_uInt16  GetKind() { return nKind; }
-    sal_uInt16  GetPageNumber() { return nPgNum; }
+    USHORT  GetKind() { return nKind; }
+    USHORT  GetPageNumber() { return nPgNum; }
 };
 
 #endif

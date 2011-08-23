@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ module com {  module sun {  module star {  module smarttags {
 
 /** provides access to smart tag actions.
 
-    @since OOo 2.3
+    @since OOo 2.3.0
  */
 
 interface XSmartTagAction: com::sun::star::lang::XInitialization
@@ -144,7 +144,7 @@ interface XSmartTagAction: com::sun::star::lang::XInitialization
 
 
     //-------------------------------------------------------------------------
-    /** obtains the number of actions provided for a specify smart tag
+    /** obtains the number of actions provided for a specifiy smart tag
         type.
 
         @param aSmartTagName
@@ -234,7 +234,7 @@ interface XSmartTagAction: com::sun::star::lang::XInitialization
 
 
     //-------------------------------------------------------------------------
-    /** obtains a language independent name of an action.
+    /** obtains a language independant name of an action.
 
         @param nActionID
                 The identifier of the requested action.
@@ -243,7 +243,7 @@ interface XSmartTagAction: com::sun::star::lang::XInitialization
                 The current controller of the document.
 
         @return
-                the language independent name of the specified action.
+                the language independant name of the specified action.
 
         @throws com::sun::star::lang::IllegalArgumentException
                 if the ActionID is not recognized.

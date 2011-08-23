@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,24 +35,24 @@ class ScXMLImport;
 
 class ScXMLTableColContext : public SvXMLImportContext
 {
-    sal_Int32               nColCount;
-    rtl::OUString           sStyleName;
-    rtl::OUString           sVisibility;
-    rtl::OUString           sCellStyleName;
+    sal_Int32				nColCount;
+    rtl::OUString			sStyleName;
+    rtl::OUString			sVisibility;
+    rtl::OUString			sCellStyleName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLTableColContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLTableColContext( ScXMLImport& rImport, USHORT nPrfx,
                        const ::rtl::OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual ~ScXMLTableColContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -62,20 +62,20 @@ public:
 
 class ScXMLTableColsContext : public SvXMLImportContext
 {
-    sal_Int32   nHeaderStartCol;
-    sal_Int32   nHeaderEndCol;
-    sal_Int32   nGroupStartCol;
-    sal_Int32   nGroupEndCol;
-    sal_Bool    bHeader;
-    sal_Bool    bGroup;
-    sal_Bool    bGroupDisplay;
+    sal_Int32	nHeaderStartCol;
+    sal_Int32	nHeaderEndCol;
+    sal_Int32	nGroupStartCol;
+    sal_Int32	nGroupEndCol;
+    sal_Bool	bHeader;
+    sal_Bool	bGroup;
+    sal_Bool	bGroupDisplay;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLTableColsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLTableColsContext( ScXMLImport& rImport, USHORT nPrfx,
                        const ::rtl::OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -83,7 +83,7 @@ public:
 
     virtual ~ScXMLTableColsContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

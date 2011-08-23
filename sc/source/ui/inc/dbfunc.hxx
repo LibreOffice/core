@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,6 @@ class ScDPObject;
 class ScDPSaveData;
 class ScStrCollection;
 struct ScDPNumGroupInfo;
-struct ScSubTotalParam;
 
 // ---------------------------------------------------------------------------
 
@@ -54,43 +53,45 @@ private:
 
 public:
                     ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
-    virtual         ~ScDBFunc();
+    virtual			~ScDBFunc();
 
-                    //  nur UISort wiederholt bei Bedarf die Teilergebnisse
+                    //	nur UISort wiederholt bei Bedarf die Teilergebnisse
 
-    void            UISort( const ScSortParam& rSortParam,
-                          sal_Bool bRecord = sal_True );
+    void			UISort( const ScSortParam& rSortParam,
+                          BOOL bRecord = TRUE );
 
-    void            Sort( const ScSortParam& rSortParam,
-                          sal_Bool bRecord = sal_True, sal_Bool bPaint = sal_True );
-    SC_DLLPUBLIC void           Query( const ScQueryParam& rQueryParam,
-                           const ScRange* pAdvSource, sal_Bool bRecord );
-    void            DoSubTotals( const ScSubTotalParam& rParam, sal_Bool bRecord = sal_True,
+    void			Sort( const ScSortParam& rSortParam,
+                          BOOL bRecord = TRUE, BOOL bPaint = TRUE );
+    SC_DLLPUBLIC void			Query( const ScQueryParam& rQueryParam,
+                           const ScRange* pAdvSource, BOOL bRecord );
+    void			DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord = TRUE,
                             const ScSortParam* pForceNewSort = NULL );
 
-    void            ToggleAutoFilter();
-    void            HideAutoFilter();
+    void			ToggleAutoFilter();
+    void			HideAutoFilter();
 
-    void            RepeatDB( sal_Bool bRecord = sal_True );
+    void			RepeatDB( BOOL bRecord = TRUE );
 
-    sal_Bool            ImportData( const ScImportParam& rParam, sal_Bool bRecord = sal_True );
+    BOOL			ImportData( const ScImportParam& rParam, BOOL bRecord = TRUE );
 
-    void            GotoDBArea( const String& rDBName );
+    void			GotoDBArea( const String& rDBName );
 
                     // DB-Bereich vom Cursor
-    ScDBData*       GetDBData( bool bMarkArea = true, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP);
-    ScDBData*       GetAnonymousDBData();
+    ScDBData* 		GetDBData( BOOL bMarkArea = TRUE, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP, bool bShrinkToData = false, bool bExpandRows = false );
 
-    void            NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList );
+    void			NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList );
 
-    void            Consolidate( const ScConsolidateParam& rParam, sal_Bool bRecord = sal_True );
+    void			Consolidate( const ScConsolidateParam& rParam, BOOL bRecord = TRUE );
 
-    bool            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, sal_Bool bNewTable,
-                                    const ScDPObject& rSource, sal_Bool bApi = false );
-    void            DeletePivotTable();
-    void            RecalcPivotTable();
-    sal_Bool            HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts );
-    sal_Bool            HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo );
+    bool            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
+                                    const ScDPObject& rSource, BOOL bApi = FALSE );
+    void			DeletePivotTable();
+    // Wang Xu Ming -- 2009-6-17
+    // DataPilot Migration
+    ULONG   RecalcPivotTable();
+    // End Comments
+    BOOL            HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts );
+    BOOL            HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo );
     void            GroupDataPilot();
     void            DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nParts );
     void            NumGroupDataPilot( const ScDPNumGroupInfo& rInfo );
@@ -98,35 +99,35 @@ public:
     void            DataPilotInput( const ScAddress& rPos, const String& rString );
 
     bool            DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId = NULL );
-    sal_Bool            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
+    BOOL            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
 
-    sal_Bool            HasSelectionForDrillDown( sal_uInt16& rOrientation );
-    void            SetDataPilotDetails( sal_Bool bShow, const String* pNewDimensionName = NULL );
+    BOOL            HasSelectionForDrillDown( USHORT& rOrientation );
+    void            SetDataPilotDetails( BOOL bShow, const String* pNewDimensionName = NULL );
 
     void            ShowDataPilotSourceData( ScDPObject& rDPObj,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters );
 
-    void            MakeOutline( sal_Bool bColumns, sal_Bool bRecord = sal_True );
-    void            RemoveOutline( sal_Bool bColumns, sal_Bool bRecord = sal_True );
-    void            RemoveAllOutlines( sal_Bool bRecord = sal_True );
-    void            TestRemoveOutline( sal_Bool& rCol, sal_Bool& rRow );
+    void			MakeOutline( BOOL bColumns, BOOL bRecord = TRUE );
+    void			RemoveOutline( BOOL bColumns, BOOL bRecord = TRUE );
+    void			RemoveAllOutlines( BOOL bRecord = TRUE );
+    void			TestRemoveOutline( BOOL& rCol, BOOL& rRow );
 
-    void            AutoOutline( sal_Bool bRecord = sal_True );
+    void			AutoOutline( BOOL bRecord = TRUE );
 
-    void            SelectLevel( sal_Bool bColumns, sal_uInt16 nLevel,
-                                    sal_Bool bRecord = sal_True, sal_Bool bPaint = sal_True );
-    void            ShowOutline( sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
-                                    sal_Bool bRecord = sal_True, sal_Bool bPaint = sal_True );
-    void            HideOutline( sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
-                                    sal_Bool bRecord = sal_True, sal_Bool bPaint = sal_True );
+    void			SelectLevel( BOOL bColumns, USHORT nLevel,
+                                    BOOL bRecord = TRUE, BOOL bPaint = TRUE );
+    void			ShowOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry,
+                                    BOOL bRecord = TRUE, BOOL bPaint = TRUE );
+    void			HideOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry,
+                                    BOOL bRecord = TRUE, BOOL bPaint = TRUE );
 
-    void            ShowMarkedOutlines( sal_Bool bRecord = sal_True );
-    void            HideMarkedOutlines( sal_Bool bRecord = sal_True );
-    sal_Bool            OutlinePossible(sal_Bool bHide);
+    void			ShowMarkedOutlines( BOOL bRecord = TRUE );
+    void			HideMarkedOutlines( BOOL bRecord = TRUE );
+    BOOL			OutlinePossible(BOOL bHide);
 
-    void            UpdateCharts(sal_Bool bAllCharts = false);      // Default: am Cursor
+    void			UpdateCharts(BOOL bAllCharts = FALSE);		// Default: am Cursor
 
-    static sal_uInt16   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool bAllCharts );
+    static USHORT   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL bAllCharts );
 };
 
 

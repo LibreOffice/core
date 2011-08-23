@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,18 +41,18 @@ class PivotTableFilter;
 
 // ============================================================================
 
-class PivotTableFieldContext : public WorksheetContextBase
+class OoxPivotTableFieldContext : public OoxWorksheetContextBase
 {
 public:
-    explicit            PivotTableFieldContext(
-                            WorksheetFragmentBase& rFragment,
+    explicit            OoxPivotTableFieldContext(
+                            OoxWorksheetFragmentBase& rFragment,
                             PivotTableField& rTableField );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        onStartRecord( SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        onStartRecord( RecordInputStream& rStrm );
 
 private:
     PivotTableField&    mrTableField;
@@ -60,18 +60,18 @@ private:
 
 // ============================================================================
 
-class PivotTableFilterContext : public WorksheetContextBase
+class OoxPivotTableFilterContext : public OoxWorksheetContextBase
 {
 public:
-    explicit            PivotTableFilterContext(
-                            WorksheetFragmentBase& rFragment,
+    explicit            OoxPivotTableFilterContext(
+                            OoxWorksheetFragmentBase& rFragment,
                             PivotTableFilter& rTableFilter );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        onStartRecord( SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        onStartRecord( RecordInputStream& rStrm );
 
 private:
     PivotTableFilter&   mrTableFilter;
@@ -79,16 +79,16 @@ private:
 
 // ============================================================================
 
-class PivotTableFragment : public WorksheetFragmentBase
+class OoxPivotTableFragment : public OoxWorksheetFragmentBase
 {
 public:
-    explicit            PivotTableFragment(
+    explicit            OoxPivotTableFragment(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
 private:
@@ -101,10 +101,10 @@ private:
 class BiffPivotTableContext : public BiffWorksheetContextBase
 {
 public:
-    explicit            BiffPivotTableContext( const WorksheetHelper& rHelper );
+    explicit            BiffPivotTableContext( const BiffWorksheetFragmentBase& rFragment, PivotTable& rPivotTable );
 
     /** Imports all records related to the current pivot table. */
-    virtual void        importRecord( BiffInputStream& rStrm );
+    virtual void        importRecord();
 
 private:
     PivotTable&         mrPivotTable;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,27 +63,27 @@ DBG_NAME(ORelationDialog)
 //========================================================================
 ORelationDialog::ORelationDialog( OJoinTableView* pParent,
                                  const TTableConnectionData::value_type& pConnectionData,
-                                 sal_Bool bAllowTableSelect )
+                                 BOOL bAllowTableSelect )
     :ModalDialog( pParent, ModuleRes(DLG_REL_PROPERTIES) )
     ,m_pTableMap(pParent->GetTabWinMap())
 
     ,aFL_CascUpd(           this, ModuleRes(FL_CASC_UPD) )
-    ,aRB_NoCascUpd(         this, ModuleRes(RB_NO_CASC_UPD) )
-    ,aRB_CascUpd(           this, ModuleRes(RB_CASC_UPD) )
-    ,aRB_CascUpdNull(       this, ModuleRes(RB_CASC_UPD_NULL) )
-    ,aRB_CascUpdDefault(    this, ModuleRes(RB_CASC_UPD_DEFAULT) )
+    ,aRB_NoCascUpd(			this, ModuleRes(RB_NO_CASC_UPD) )
+    ,aRB_CascUpd(			this, ModuleRes(RB_CASC_UPD) )
+    ,aRB_CascUpdNull(		this, ModuleRes(RB_CASC_UPD_NULL) )
+    ,aRB_CascUpdDefault(	this, ModuleRes(RB_CASC_UPD_DEFAULT) )
     ,aFL_CascDel(           this, ModuleRes(FL_CASC_DEL) )
-    ,aRB_NoCascDel(         this, ModuleRes(RB_NO_CASC_DEL) )
-    ,aRB_CascDel(           this, ModuleRes(RB_CASC_DEL) )
-    ,aRB_CascDelNull(       this, ModuleRes(RB_CASC_DEL_NULL) )
-    ,aRB_CascDelDefault(    this, ModuleRes(RB_CASC_DEL_DEFAULT) )
+    ,aRB_NoCascDel(			this, ModuleRes(RB_NO_CASC_DEL) )
+    ,aRB_CascDel(			this, ModuleRes(RB_CASC_DEL) )
+    ,aRB_CascDelNull(		this, ModuleRes(RB_CASC_DEL_NULL) )
+    ,aRB_CascDelDefault(	this, ModuleRes(RB_CASC_DEL_DEFAULT) )
 
     ,aPB_OK( this, ModuleRes( PB_OK ) )
     ,aPB_CANCEL( this, ModuleRes( PB_CANCEL ) )
     ,aPB_HELP( this, ModuleRes( PB_HELP ) )
 
     ,m_pOrigConnData( pConnectionData )
-    ,m_bTriedOneUpdate(sal_False)
+    ,m_bTriedOneUpdate(FALSE)
 {
     DBG_CTOR(ORelationDialog,NULL);
 
@@ -121,18 +121,18 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
     {
     case KeyRule::NO_ACTION:
     case KeyRule::RESTRICT:
-        aRB_NoCascUpd.Check( sal_True );
+        aRB_NoCascUpd.Check( TRUE );
         break;
 
     case KeyRule::CASCADE:
-        aRB_CascUpd.Check( sal_True );
+        aRB_CascUpd.Check( TRUE );
         break;
 
     case KeyRule::SET_NULL:
-        aRB_CascUpdNull.Check( sal_True );
+        aRB_CascUpdNull.Check( TRUE );
         break;
     case KeyRule::SET_DEFAULT:
-        aRB_CascUpdDefault.Check( sal_True );
+        aRB_CascUpdDefault.Check( TRUE );
         break;
     }
 
@@ -141,18 +141,18 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
     {
     case KeyRule::NO_ACTION:
     case KeyRule::RESTRICT:
-        aRB_NoCascDel.Check( sal_True );
+        aRB_NoCascDel.Check( TRUE );
         break;
 
     case KeyRule::CASCADE:
-        aRB_CascDel.Check( sal_True );
+        aRB_CascDel.Check( TRUE );
         break;
 
     case KeyRule::SET_NULL:
-        aRB_CascDelNull.Check( sal_True );
+        aRB_CascDelNull.Check( TRUE );
         break;
     case KeyRule::SET_DEFAULT:
-        aRB_CascDelDefault.Check( sal_True );
+        aRB_CascDelDefault.Check( TRUE );
         break;
     }
 }
@@ -171,7 +171,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
 {
     //////////////////////////////////////////////////////////////////////
     // RadioButtons auslesen
-    sal_uInt16 nAttrib = 0;
+    UINT16 nAttrib = 0;
 
     // Delete Rules
     if( aRB_NoCascDel.IsChecked() )
@@ -200,7 +200,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
 
     m_pTableControl->SaveModified();
 
-    //// wenn die ComboBoxen fuer die Tabellenauswahl enabled sind (Constructor mit bAllowTableSelect==sal_True), dann muss ich in die
+    //// wenn die ComboBoxen fuer die Tabellenauswahl enabled sind (Constructor mit bAllowTableSelect==TRUE), dann muss ich in die
     //// Connection auch die Tabellennamen stecken
     //m_pConnData->SetSourceWinName(m_pTableControl->getSourceWinName());
     //m_pConnData->SetDestWinName(m_pTableControl->getDestWinName());
@@ -218,7 +218,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     }
     catch( const SQLException& )
     {
-        ::dbaui::showError( SQLExceptionInfo( ::cppu::getCaughtException() ),
+        ::dbaui::showError(	SQLExceptionInfo( ::cppu::getCaughtException() ),
                             this,
                             static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController().getORB());
     }
@@ -227,7 +227,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    m_bTriedOneUpdate = sal_True;
+    m_bTriedOneUpdate = TRUE;
     // this means that the original connection may be lost (if m_pConnData was not a newly created but an
     // existent conn to be modified), which we reflect by returning RET_NO (see ::Execute)
 

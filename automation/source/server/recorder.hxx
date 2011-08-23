@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,7 @@
 
 #include <tools/string.hxx>
 #include <tools/link.hxx>
+#include <vcl/smartid.hxx>
 #include <vcl/timer.hxx>
 
 class ToolBox;
@@ -38,7 +39,7 @@ class MacroRecorder
 {
 private:
     Window* GetParentWithID( Window* pThis );
-    rtl::OString GetParentID( Window* pThis );
+    SmartId GetParentID( Window* pThis );
 
     Link aEventListenerHdl;
     DECL_LINK( EventListener, VclSimpleEvent* );
@@ -51,35 +52,35 @@ private:
 
     // record keys
     String aKeyString;
-    rtl::OString aKeyUniqueID;     // has to be remembered seperately since Window might be gone when needed
+    SmartId aKeyUniqueID;     // has to be remembered seperately since Window might be gone when needed
     Window* pKeyWin;
-    sal_Bool bKeyFollowFocus;
+    BOOL bKeyFollowFocus;
 
     AutoTimer aHookRefresh;
     void AddEventHooks();
     void RemoveEventHooks();
     DECL_LINK( HookRefreshHdl, void* );
 
-    void LogVCL( rtl::OString aParentID, sal_uInt16 nVCLWindowType, rtl::OString aID, String aMethod, sal_uInt16 aParam );
-    void LogVCL( rtl::OString aParentID, sal_uInt16 nVCLWindowType, rtl::OString aID, String aMethod );
+    void LogVCL( SmartId aParentID, USHORT nVCLWindowType, SmartId aID, String aMethod, USHORT aParam );
+    void LogVCL( SmartId aParentID, USHORT nVCLWindowType, SmartId aID, String aMethod );
 
     static MacroRecorder *pMacroRecorder;
 
     MacroRecorder();
     ~MacroRecorder();
-    void CheckDelete();
+    void CheckDelete(); 
 
     // Actions to perform
-    sal_Bool m_bRecord;
-    sal_Bool m_bLog;
+    BOOL m_bRecord;
+    BOOL m_bLog;
 
 public:
 
-    void SetActionRecord( sal_Bool bRecord = sal_True ) { m_bRecord = bRecord; CheckDelete(); };
-    void SetActionLog( sal_Bool bLog = sal_True ) { m_bLog = bLog; CheckDelete(); };
+    void SetActionRecord( BOOL bRecord = TRUE ) { m_bRecord = bRecord; CheckDelete(); };
+    void SetActionLog( BOOL bLog = TRUE ) { m_bLog = bLog; CheckDelete(); };
 
     static MacroRecorder* GetMacroRecorder();
-    static sal_Bool HasMacroRecorder();
+    static BOOL HasMacroRecorder();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

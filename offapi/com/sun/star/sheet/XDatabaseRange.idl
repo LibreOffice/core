@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
 
     /** returns the sort descriptor stored with the database range.
 
-        @see SheetSortDescriptor2
+        @see com::sun::star::sheet::SheetSortDescriptor2
      */
     sequence< com::sun::star::beans::PropertyValue > getSortDescriptor();
 
@@ -88,10 +88,8 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
         <p>If the filter descriptor is modified, the new filtering is
         carried out when <member>XDatabaseRange::refresh()</member> is
         called.</p>
-
-        @see SheetFilterDescriptor
      */
-    XSheetFilterDescriptor getFilterDescriptor();
+    com::sun::star::sheet::XSheetFilterDescriptor getFilterDescriptor();
 
     //-------------------------------------------------------------------------
 
@@ -100,17 +98,15 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
         <p>If the subtotal descriptor is modified, the new subtotals are
         inserted when <member>XDatabaseRange::refresh()</member> is
         called.</p>
-
-        @see SubTotalDescriptor
      */
-    XSubTotalDescriptor getSubTotalDescriptor();
+    com::sun::star::sheet::XSubTotalDescriptor getSubTotalDescriptor();
 
     //-------------------------------------------------------------------------
 
     /** returns the database import descriptor stored with this database
         range.
 
-        @see DatabaseImportDescriptor
+        @see com::sun::star::sheet::DatabaseImportDescriptor
      */
     sequence< com::sun::star::beans::PropertyValue > getImportDescriptor();
 

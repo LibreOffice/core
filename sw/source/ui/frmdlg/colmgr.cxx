@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,35 +39,35 @@
 #include "colmgr.hxx"
 
 
-// private methods
+// PRIVATE METHODES ------------------------------------------------------
 /*------------------------------------------------------------------------
- Description:   set column width to current width
+ Beschreibung:	Spaltenbreite auf aktuelle Breite einstellen
 ------------------------------------------------------------------------*/
-void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth)
+void FitToActualSize(SwFmtCol& rCol, USHORT nWidth)
 {
-    const sal_uInt16 nCount = rCol.GetColumns().Count();
-    for(sal_uInt16 i = 0; i < nCount; ++i)
+    const USHORT nCount = rCol.GetColumns().Count();
+    for(USHORT i = 0; i < nCount; ++i)
     {
-        const sal_uInt16 nTmp = rCol.CalcColWidth(i, nWidth);
+        const USHORT nTmp = rCol.CalcColWidth(i, nWidth);
         rCol.GetColumns()[i]->SetWishWidth(nTmp);
     }
     rCol.SetWishWidth(nWidth);
 }
 
-// public methods
+// PUBLIC METHODES -------------------------------------------------------
 /*------------------------------------------------------------------------
- Description:   set column quantity and Gutterwidth
+ Beschreibung:	Setzen Spaltenanzahl und Gutterwidth
 ------------------------------------------------------------------------*/
-void SwColMgr::SetCount(sal_uInt16 nCount, sal_uInt16  nGutterWidth)
+void SwColMgr::SetCount(USHORT nCount, USHORT  nGutterWidth)
 {
     aFmtCol.Init(nCount, nGutterWidth, nWidth);
     aFmtCol.SetWishWidth(nWidth);
     aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
 }
 
-sal_uInt16 SwColMgr::GetGutterWidth( sal_uInt16 nPos ) const
+USHORT SwColMgr::GetGutterWidth( USHORT nPos ) const
 {
-    sal_uInt16 nRet;
+    USHORT nRet;
     if(nPos == USHRT_MAX )
         nRet = GetCount() > 1 ? aFmtCol.GetGutterWidth() : DEF_GUTTER_WIDTH;
     else
@@ -79,7 +79,7 @@ sal_uInt16 SwColMgr::GetGutterWidth( sal_uInt16 nPos ) const
     return nRet;
 }
 
-void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
+void SwColMgr::SetGutterWidth(USHORT nGutterWidth, USHORT nPos )
 {
     if(nPos == USHRT_MAX)
         aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
@@ -87,14 +87,14 @@ void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
     {
         OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
         SwColumns& rCols = aFmtCol.GetColumns();
-        sal_uInt16 nGutterWidth2 = nGutterWidth / 2;
+        USHORT nGutterWidth2 = nGutterWidth / 2;
         rCols.GetObject(nPos)->SetRight(nGutterWidth2);
         rCols.GetObject(nPos + 1)->SetLeft(nGutterWidth2);
     }
 }
 
 /*------------------------------------------------------------------------
- Description:   height seperation line
+ Beschreibung:	Hoehe Trennlinie
 ------------------------------------------------------------------------*/
 short SwColMgr::GetLineHeightPercent() const
 {
@@ -104,19 +104,19 @@ short SwColMgr::GetLineHeightPercent() const
 void SwColMgr::SetLineHeightPercent(short nPercent)
 {
     OSL_ENSURE(nPercent <= 100, "line height may only be 100 \%");
-    aFmtCol.SetLineHeight((sal_uInt8)nPercent);
+    aFmtCol.SetLineHeight((BYTE)nPercent);
 }
 
 /*------------------------------------------------------------------------
- Description:   column width
+ Beschreibung:	Spaltenbreite
 ------------------------------------------------------------------------*/
-sal_uInt16 SwColMgr::GetColWidth(sal_uInt16 nIdx) const
+USHORT SwColMgr::GetColWidth(USHORT nIdx) const
 {
     OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
     return aFmtCol.CalcPrtColWidth(nIdx, nWidth);
 }
 
-void SwColMgr::SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWd)
+void SwColMgr::SetColWidth(USHORT nIdx, USHORT nWd)
 {
     OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
     aFmtCol.GetColumns()[nIdx]->SetWishWidth(nWd);
@@ -124,42 +124,35 @@ void SwColMgr::SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWd)
 }
 
 /*--------------------------------------------------------------------
-    Description:    newly set size
+    Beschreibung: 	Groesse neu setzen
  --------------------------------------------------------------------*/
-void SwColMgr::SetActualWidth(sal_uInt16 nW)
+void SwColMgr::SetActualWidth(USHORT nW)
 {
     nWidth = nW;
     ::FitToActualSize(aFmtCol, nW);
 }
 
 /*--------------------------------------------------------------------
-    Description: ctor
+    Beschreibung: ctor
  --------------------------------------------------------------------*/
-SwColMgr::SwColMgr(const SfxItemSet& rSet, sal_uInt16 nActWidth) :
+SwColMgr::SwColMgr(const SfxItemSet& rSet, USHORT nActWidth) :
     aFmtCol((const SwFmtCol&)rSet.Get(RES_COL)),
     nWidth(nActWidth)
 {
     if(nWidth == USHRT_MAX)
     {
-        nWidth = (sal_uInt16)((const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE)).GetWidth();
+        nWidth = (USHORT)((const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE)).GetWidth();
         if (nWidth < MINLAY)
             nWidth = USHRT_MAX;
         const SvxLRSpaceItem &rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
-        nWidth = nWidth - (sal_uInt16)rLR.GetLeft();
-        nWidth = nWidth - (sal_uInt16)rLR.GetRight();
+        nWidth = nWidth - (USHORT)rLR.GetLeft();
+        nWidth = nWidth - (USHORT)rLR.GetRight();
     }
     ::FitToActualSize(aFmtCol, nWidth);
 }
 
 SwColMgr::~SwColMgr()
 {
-}
-
-void SwColMgr::SetLineWidthAndColor(::editeng::SvxBorderStyle eStyle, sal_uLong nLWidth, const Color& rCol)
-{
-    aFmtCol.SetLineStyle(eStyle);
-    aFmtCol.SetLineWidth(nLWidth);
-    aFmtCol.SetLineColor(rCol);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

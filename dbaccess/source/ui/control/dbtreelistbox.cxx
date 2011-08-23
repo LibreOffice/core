@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::view;
 
 DBG_NAME(DBTreeListBox)
-#define SPACEBETWEENENTRIES     4
+#define SPACEBETWEENENTRIES		4
 //========================================================================
 // class DBTreeListBox
 //========================================================================
@@ -92,12 +92,12 @@ DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFac
     ,m_xORB(_rxORB)
 {
     DBG_CTOR(DBTreeListBox,NULL);
-    init();
+    init();	
 }
 // -----------------------------------------------------------------------------
 void DBTreeListBox::init()
 {
-    sal_uInt16 nSize = SPACEBETWEENENTRIES;
+    USHORT nSize = SPACEBETWEENENTRIES;
     SetSpaceBetweenEntries(nSize);
 
     m_aTimer.SetTimeout(900);
@@ -109,8 +109,6 @@ void DBTreeListBox::init()
     SetNodeDefaultImages( );
 
     EnableContextMenuHandling();
-
-    SetStyle( GetStyle() | WB_QUICK_SEARCH );
 }
 //------------------------------------------------------------------------
 DBTreeListBox::~DBTreeListBox()
@@ -121,13 +119,13 @@ DBTreeListBox::~DBTreeListBox()
 //------------------------------------------------------------------------
 SvLBoxEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvLBoxEntry* pStart, const IEntryFilter* _pFilter ) const
 {
-    SvLBoxTreeList* myModel = GetModel();
+    SvLBoxTreeList*	myModel = GetModel();
     SvTreeEntryList* pChilds = myModel->GetChildList(pStart);
     SvLBoxEntry* pEntry = NULL;
     if ( pChilds )
     {
-        sal_uLong nCount = pChilds->Count();
-        for (sal_uLong i=0; i < nCount; ++i)
+        ULONG nCount = pChilds->Count();
+        for (ULONG i=0; i < nCount; ++i)
         {
             pEntry = static_cast<SvLBoxEntry*>(pChilds->GetObject(i));
             SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
@@ -157,7 +155,7 @@ void DBTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
     {
         if (!m_aPreExpandHandler.Call(pParent))
         {
-            // an error occurred. The method calling us will reset the entry flags, so it can't be expanded again.
+            // an error occured. The method calling us will reset the entry flags, so it can't be expanded again.
             // But we want that the user may do a second try (i.e. because he misstypes a password in this try), so
             // we have to reset these flags controlling the expand ability
             PostUserEvent(LINK(this, DBTreeListBox, OnResetEntry), pParent);
@@ -351,7 +349,7 @@ void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
-    sal_uInt16      nCode = rKEvt.GetKeyCode().GetCode();
+    USHORT		nCode = rKEvt.GetKeyCode().GetCode();
     sal_Bool bHandled = sal_False;
 
     if(eFunc != KEYFUNC_DONTKNOW)
@@ -405,18 +403,20 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         // is used by the document will raise a similar bug once somebody discovers it.
         // If this is the case, we should discuss a real solution with the framework (SFX) and the
         // applications.
+        //
+        // 2002-12-02 - 105831 - fs@openoffice.org
     }
 
-    if ( !bHandled )
+    if ( !bHandled ) 
         SvTreeListBox::KeyInput(rKEvt);
 }
 // -----------------------------------------------------------------------------
-sal_Bool DBTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& /*_aSelection*/)
+BOOL DBTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& /*_aSelection*/)
 {
     return m_aEditingHandler.Call(pEntry) != 0;
 }
 // -----------------------------------------------------------------------------
-sal_Bool DBTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
+BOOL DBTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
 {
     DBTreeEditedEntry aEntry;
     aEntry.pEntry = pEntry;
@@ -427,12 +427,12 @@ sal_Bool DBTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewT
         m_aSelectedEntries.erase( pEntry );
     }
     SetEntryText(pEntry,aEntry.aNewText);
-
-    return sal_False;  // we never want that the base change our text
+    
+    return FALSE;  // we never want that the base change our text
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool DBTreeListBox::DoubleClickHdl()
+BOOL DBTreeListBox::DoubleClickHdl()
 {
     long nResult = aDoubleClickHdl.Call( this );
     // continue default processing if the DoubleClickHandler didn't handle it
@@ -469,12 +469,12 @@ namespace
         if ( !_pPopup )
             return;
 
-        sal_uInt16 nCount = _pPopup->GetItemCount();
-        for (sal_uInt16 i=0; i < nCount; ++i)
+        USHORT nCount = _pPopup->GetItemCount();
+        for (USHORT i=0; i < nCount; ++i)
         {
             if ( _pPopup->GetItemType(i) != MENUITEM_SEPARATOR )
             {
-                sal_uInt16 nId = _pPopup->GetItemId(i);
+                USHORT nId = _pPopup->GetItemId(i);
                 PopupMenu* pSubPopUp = _pPopup->GetPopupMenu(nId);
                 if ( pSubPopUp )
                 {
@@ -501,23 +501,23 @@ namespace
 {
     void lcl_adjustMenuItemIDs( Menu& _rMenu, IController& _rCommandController )
     {
-        sal_uInt16 nCount = _rMenu.GetItemCount();
-        for ( sal_uInt16 pos = 0; pos < nCount; ++pos )
+        USHORT nCount = _rMenu.GetItemCount();
+        for ( USHORT pos = 0; pos < nCount; ++pos )
         {
             // do not adjust separators
             if ( _rMenu.GetItemType( pos ) == MENUITEM_SEPARATOR )
                 continue;
 
-            sal_uInt16 nId = _rMenu.GetItemId(pos);
+            USHORT nId = _rMenu.GetItemId(pos);
             String aCommand = _rMenu.GetItemCommand( nId );
             PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
             if ( pPopup )
             {
                 lcl_adjustMenuItemIDs( *pPopup, _rCommandController );
                 continue;
-            }
+            } // if ( pPopup )
 
-            const sal_uInt16 nCommandId = _rCommandController.registerCommandURL( aCommand );
+            const USHORT nCommandId = _rCommandController.registerCommandURL( aCommand );
             _rMenu.InsertItem( nCommandId, _rMenu.GetItemText( nId ), _rMenu.GetItemImage( nId ),
                 _rMenu.GetItemBits( nId ), pos );
 
@@ -533,28 +533,30 @@ namespace
     }
     void lcl_insertMenuItemImages( Menu& _rMenu, IController& _rCommandController )
     {
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        const BOOL bHiContrast = rSettings.GetHighContrastMode();
         uno::Reference< frame::XController > xController = _rCommandController.getXController();
         uno::Reference< frame::XFrame> xFrame;
         if ( xController.is() )
             xFrame = xController->getFrame();
-        sal_uInt16 nCount = _rMenu.GetItemCount();
-        for ( sal_uInt16 pos = 0; pos < nCount; ++pos )
+        USHORT nCount = _rMenu.GetItemCount();
+        for ( USHORT pos = 0; pos < nCount; ++pos )
         {
             // do not adjust separators
             if ( _rMenu.GetItemType( pos ) == MENUITEM_SEPARATOR )
                 continue;
 
-            sal_uInt16 nId = _rMenu.GetItemId(pos);
+            USHORT nId = _rMenu.GetItemId(pos);
             String aCommand = _rMenu.GetItemCommand( nId );
             PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
             if ( pPopup )
             {
                 lcl_insertMenuItemImages( *pPopup, _rCommandController );
                 continue;
-            }
+            } // if ( pPopup )
 
             if ( xFrame.is() )
-                _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,sal_False));
+                _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,FALSE,bHiContrast));
         }
     }
     // =========================================================================
@@ -590,24 +592,24 @@ namespace
         throw IllegalArgumentException();
         // API bug: this should be a NoSupportException
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL SelectionSupplier::getSelection(  ) throw (RuntimeException)
     {
         return m_aSelection;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SelectionSupplier::addSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
     {
-        OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
+        OSL_ENSURE( false, "SelectionSupplier::removeSelectionChangeListener: no support!" );
         // API bug: this should be a NoSupportException
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SelectionSupplier::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
     {
-        OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
+        OSL_ENSURE( false, "SelectionSupplier::removeSelectionChangeListener: no support!" );
         // API bug: this should be a NoSupportException
     }
 }
@@ -667,7 +669,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
                     break;
 
                 default:
-                    OSL_FAIL( "DBTreeListBox::CreateContextMenu: unexpected return value of the interceptor call!" );
+                    DBG_ERROR( "DBTreeListBox::CreateContextMenu: unexpected return value of the interceptor call!" );
 
                 case ContextMenuInterceptorAction_IGNORED:
                     break;
@@ -692,13 +694,13 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
         // the interceptors only know command URLs, but our menus primarily work
         // with IDs -> we need to translate the commands to IDs
         lcl_adjustMenuItemIDs( *pModifiedMenu, m_pContextMenuProvider->getCommandController() );
-    }
+    } // if ( bModifiedMenu )
 
     return pContextMenu.release();
 }
 
 // -----------------------------------------------------------------------------
-void DBTreeListBox::ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
+void DBTreeListBox::ExcecuteContextMenuAction( USHORT _nSelectedPopupEntry )
 {
     if ( m_pContextMenuProvider && _nSelectedPopupEntry )
         m_pContextMenuProvider->getCommandController().executeChecked( _nSelectedPopupEntry, Sequence< PropertyValue >() );
@@ -709,7 +711,7 @@ IMPL_LINK(DBTreeListBox, OnTimeOut, void*, /*EMPTY_ARG*/)
 {
     implStopSelectionTimer();
 
-    m_aSelChangeHdl.Call( NULL );
+    m_aSelChangeHdl.Call( NULL );	
     return 0L;
 }
 // -----------------------------------------------------------------------------
@@ -719,7 +721,7 @@ void DBTreeListBox::StateChanged( StateChangedType nStateChange )
         implStopSelectionTimer();
 }
 // .........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 // .........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

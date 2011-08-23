@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,13 @@
 #pragma warning (push,1)
 #pragma warning (disable:4005)
 
+#include <tools/prewin.h>
+
+#include <windows.h>
 #include <tchar.h>
+#include <winbase.h>
+
+#include <tools/postwin.h>
 
 #pragma pack( push, 8 )
 #include <npsdk/npapi.h>
@@ -52,7 +58,7 @@
 class PluginComm_Impl :
     public PluginComm,
     public ::vcl::SolarThreadExecutor
-
+    
 {
     enum CallType {
         eNPP_Destroy,
@@ -73,45 +79,45 @@ class PluginComm_Impl :
         eNP_Initialize
     };
 
-    void*               m_aArgs[ 8 ];
-    CallType            m_eCall;
-
-    virtual long        doIt();
+    void*				m_aArgs[ 8 ];
+    CallType			m_eCall;
+    
+    virtual long		doIt();
 public:
                         PluginComm_Impl( const rtl::OUString& rMIME, const rtl::OUString& rName, HWND hWnd );
-    virtual             ~PluginComm_Impl();
-
+    virtual				~PluginComm_Impl();
+    
 public:
     using PluginComm::NPP_Destroy;
-    virtual NPError     NPP_Destroy( NPP instance, NPSavedData** save );
-    virtual NPError     NPP_DestroyStream( NPP instance, NPStream* stream, NPError reason );
-    virtual void *      NPP_GetJavaClass();
-    virtual NPError     NPP_Initialize();
-    virtual NPError     NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode, int16 argc,
+    virtual NPError		NPP_Destroy( NPP instance, NPSavedData** save );
+    virtual NPError		NPP_DestroyStream( NPP instance, NPStream* stream, NPError reason );
+    virtual void *		NPP_GetJavaClass();
+    virtual NPError		NPP_Initialize();
+    virtual NPError		NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode, int16 argc,
                                  char* argn[], char* argv[], NPSavedData *saved );
-    virtual NPError     NPP_NewStream( NPP instance, NPMIMEType type, NPStream* stream,
+    virtual NPError		NPP_NewStream( NPP instance, NPMIMEType type, NPStream* stream,
                                        NPBool seekable, uint16* stype );
-    virtual void        NPP_Print( NPP instance, NPPrint* platformPrint );
-
+    virtual void		NPP_Print( NPP instance, NPPrint* platformPrint );
+    
     using PluginComm::NPP_SetWindow;
-    virtual NPError     NPP_SetWindow( NPP instance, NPWindow* window );
-    virtual void        NPP_Shutdown();
-    virtual void        NPP_StreamAsFile( NPP instance, NPStream* stream, const char* fname );
-    virtual void        NPP_URLNotify( NPP instance, const char* url,
+    virtual NPError		NPP_SetWindow( NPP instance, NPWindow* window );
+    virtual void		NPP_Shutdown();
+    virtual void		NPP_StreamAsFile( NPP instance, NPStream* stream, const char* fname );
+    virtual void		NPP_URLNotify( NPP instance, const char* url,
                                        NPReason reason, void* notifyData );
-    virtual int32       NPP_Write( NPP instance, NPStream* stream, int32 offset,
+    virtual int32		NPP_Write( NPP instance, NPStream* stream, int32 offset,
                                    int32 len, void* buffer );
-    virtual int32       NPP_WriteReady( NPP instance, NPStream* stream );
-    virtual NPError     NPP_GetValue( NPP instance, NPPVariable variable, void *ret_alue );
-    virtual NPError     NPP_SetValue( NPP instance, NPNVariable variable, void *ret_alue );
-
+    virtual int32		NPP_WriteReady( NPP instance, NPStream* stream );
+    virtual NPError		NPP_GetValue( NPP instance, NPPVariable variable, void *ret_alue );
+    virtual NPError		NPP_SetValue( NPP instance, NPNVariable variable, void *ret_alue );
+    
 private:
-    BOOL                retrieveFunction( TCHAR* pName, void** ppFunc ) const;
-
+    BOOL				retrieveFunction( TCHAR* pName, void** ppFunc ) const;
+    
 private:
-    HINSTANCE           _plDLL;
+    HINSTANCE			_plDLL;
 
-    NPPluginFuncs       _NPPfuncs;
+    NPPluginFuncs		_NPPfuncs;
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,18 +27,18 @@
  ************************************************************************/
 
 #include "oox/core/contexthandler.hxx"
-
 #include "oox/core/fragmenthandler.hxx"
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::xml::sax::SAXException;
+using ::com::sun::star::xml::sax::XFastAttributeList;
+using ::com::sun::star::xml::sax::XFastContextHandler;
+using ::com::sun::star::xml::sax::XLocator;
 
 namespace oox {
 namespace core {
-
-// ============================================================================
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
-
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -134,12 +134,12 @@ void ContextHandler::processingInstruction( const OUString&, const OUString& ) t
 
 // record context interface ---------------------------------------------------
 
-ContextHandlerRef ContextHandler::createRecordContext( sal_Int32, SequenceInputStream& )
+ContextHandlerRef ContextHandler::createRecordContext( sal_Int32, RecordInputStream& )
 {
     return 0;
 }
 
-void ContextHandler::startRecord( sal_Int32, SequenceInputStream& )
+void ContextHandler::startRecord( sal_Int32, RecordInputStream& )
 {
 }
 

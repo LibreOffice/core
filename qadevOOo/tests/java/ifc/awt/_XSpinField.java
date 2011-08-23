@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ public class _XSpinField extends MultiMethodTest {
 
     /**
     * Just adds a listener. <p>
-    * Has <b>OK</b> status if no runtime exceptions occurred.
+    * Has <b>OK</b> status if no runtime exceptions occured.
     */
     public void _addSpinListener() {
         oObj.addSpinListener(listener) ;
@@ -193,7 +193,7 @@ public class _XSpinField extends MultiMethodTest {
 
     /**
     * Enables then disables repeating. <p>
-    * Has <b>OK</b> status if no runtime exceptions occurred.
+    * Has <b>OK</b> status if no runtime exceptions occured.
     */
     public void _enableRepeat() {
         oObj.enableRepeat(true) ;

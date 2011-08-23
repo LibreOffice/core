@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,8 +74,8 @@ namespace
 class GrindApp : public Application
 {
 public:
-    virtual int Main();
-    virtual sal_uInt16 Exception( sal_uInt16 nError );
+    virtual void   Main();
+    virtual USHORT Exception( USHORT nError );
 };
 
 class TestWindow : public Dialog
@@ -83,7 +83,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutDev grinding")) );
+            SetText( rtl::OUString::createFromAscii( "OutDev grinding" ) );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
@@ -115,7 +115,7 @@ void setupMethodStubs( functor_vector_type& res )
     const Point aPt2(500,500);
     const Point aPt3(0,0);
     const Point aPt4(450,450);
-
+    
     const Rectangle   aRect(aPt1,aPt2);
     const Rectangle   aRect2(aPt3,aPt4);
     const Polygon     aPoly(aRect);
@@ -154,7 +154,7 @@ void setupMethodStubs( functor_vector_type& res )
     const Wallpaper   aWallpaper( aWhiteColor );
 
     GDIMetaFile       aMtf;
-    aMtf.AddAction( new MetaFillColorAction(Color(COL_RED),sal_True) );
+    aMtf.AddAction( new MetaFillColorAction(Color(COL_RED),TRUE) );
     aMtf.AddAction( new MetaRectAction(aRect) );
 
     /* void DrawText( const Point& rStartPt, const XubString& rStr,
@@ -166,7 +166,7 @@ void setupMethodStubs( functor_vector_type& res )
 //        boost::bind(
 //            &OutputDevice::DrawText,
 //            _1,
-//            aPt1, aString, (sal_uInt16)0, aString.Len(), (MetricVector*)0, (String*)0, (vcl::ITextLayout*)0 ));
+//            aPt1, aString, (USHORT)0, aString.Len(), (MetricVector*)0, (String*)0, (vcl::ITextLayout*)0 ));
 
     /* void DrawTextArray( const Point& rStartPt, const XubString& rStr,
                                        const sal_Int32* pDXAry = NULL,
@@ -178,7 +178,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             &OutputDevice::DrawTextArray,
             _1,
-            aPt1, aString, (const sal_Int32*)0, (sal_uInt16)0, aString.Len() ));
+            aPt1, aString, (const sal_Int32*)0, (USHORT)0, aString.Len() ));
 
     /* void DrawPixel( const Point& rPt, const Color& rColor ); */
     add(res,
@@ -257,12 +257,12 @@ void setupMethodStubs( functor_vector_type& res )
             aRect ));
 
     /* void DrawRect( const Rectangle& rRect,
-                                  sal_uLong nHorzRount, sal_uLong nVertRound );
+                                  ULONG nHorzRount, ULONG nVertRound );
     */
     add(res,
         "DrawRect(round corners)",
         boost::bind(
-            (void (OutputDevice::*)( const Rectangle&, sal_uLong nHorzRount, sal_uLong nVertRound ))(
+            (void (OutputDevice::*)( const Rectangle&, ULONG nHorzRount, ULONG nVertRound ))(
                 &OutputDevice::DrawRect),
             _1,
             aRect2,
@@ -353,14 +353,14 @@ void setupMethodStubs( functor_vector_type& res )
 
     /* void CopyArea( const Point& rDestPt,
                                   const Point& rSrcPt,  const Size& rSrcSize,
-                                  sal_uInt16 nFlags = 0 );
+                                  USHORT nFlags = 0 );
     */
     add(res,
         "CopyArea",
         boost::bind(
             &OutputDevice::CopyArea,
             _1,
-            aPt1,aPt3,aRect2.GetSize(),(sal_uInt16)0 ));
+            aPt1,aPt3,aRect2.GetSize(),(USHORT)0 ));
 
     /* void DrawBitmap( const Point& rDestPt,
                                     const Bitmap& rBitmap );
@@ -421,7 +421,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
-                                     const Point&,
+                                     const Point&, 
                                      const Size&,
                                      const Bitmap& ))(
                 &OutputDevice::DrawBitmap),
@@ -437,7 +437,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
-                                     const Point&,
+                                     const Point&, 
                                      const Size&,
                                      const Bitmap& ))(
                 &OutputDevice::DrawBitmap),
@@ -553,7 +553,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
-                                     const Point&,
+                                     const Point&, 
                                      const Size&,
                                      const BitmapEx& ))(
                 &OutputDevice::DrawBitmapEx),
@@ -569,7 +569,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
-                                     const Point&,
+                                     const Point&, 
                                      const Size&,
                                      const BitmapEx& ))(
                 &OutputDevice::DrawBitmapEx),
@@ -585,7 +585,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
-                                     const Point&,
+                                     const Point&, 
                                      const Size&,
                                      const BitmapEx& ))(
                 &OutputDevice::DrawBitmapEx),
@@ -601,7 +601,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
-                                     const Point&,
+                                     const Point&, 
                                      const Size&,
                                      const BitmapEx& ))(
                 &OutputDevice::DrawBitmapEx),
@@ -671,7 +671,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
-                                     const Point&,
+                                     const Point&, 
                                      const Size&,
                                      const Bitmap&,
                                      const Color& ))(
@@ -688,7 +688,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
-                                     const Point&,
+                                     const Point&, 
                                      const Size&,
                                      const Bitmap&,
                                      const Color& ))(
@@ -697,31 +697,31 @@ void setupMethodStubs( functor_vector_type& res )
             aPt1,aRect.GetSize(),aPt3,aRect2.GetSize(),aBitmap,aBlackColor ));
 
     /* void DrawImage( const Point& rPos,
-                                   const Image& rImage, sal_uInt16 nStyle = 0 );
+                                   const Image& rImage, USHORT nStyle = 0 );
     */
     add(res,
         "DrawImage",
         boost::bind(
             (void (OutputDevice::*)( const Point&,
-                                     const Image&,
-                                     sal_uInt16 nStyle ))(
+                                     const Image&, 
+                                     USHORT nStyle ))(
                 &OutputDevice::DrawImage),
             _1,
-            aPt1,aImage,(sal_uInt16)0 ));
+            aPt1,aImage,(USHORT)0 ));
 
     /* void DrawImage( const Point& rPos, const Size& rSize,
-                                   const Image& rImage, sal_uInt16 nStyle = 0 );
+                                   const Image& rImage, USHORT nStyle = 0 );
     */
     add(res,
         "DrawImage(scaled)",
         boost::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
-                                     const Image&,
-                                     sal_uInt16 nStyle ))(
+                                     const Image&, 
+                                     USHORT nStyle ))(
                 &OutputDevice::DrawImage),
             _1,
-            aPt1,aRect.GetSize(),aImage,(sal_uInt16)0 ));
+            aPt1,aRect.GetSize(),aImage,(USHORT)0 ));
 
     /* void DrawGradient( const Rectangle& rRect, const Gradient& rGradient ); */
     add(res,
@@ -757,15 +757,15 @@ void setupMethodStubs( functor_vector_type& res )
             _1,
             aRect2,aWallpaper ));
 
-    /* void DrawWaveLine( const Point& rStartPos, const Point& rEndPos, sal_uInt16 nStyle ); */
+    /* void DrawWaveLine( const Point& rStartPos, const Point& rEndPos, USHORT nStyle ); */
     add(res,
         "DrawWaveLine",
         boost::bind(
             &OutputDevice::DrawWaveLine,
             _1,
-            aPt1,aPt2,(sal_uInt16)WAVE_NORMAL ));
+            aPt1,aPt2,(USHORT)WAVE_NORMAL ));
 
-    /* void DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags ); */
+    /* void DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nFlags ); */
     add(res,
         "DrawGrid",
         boost::bind(
@@ -774,15 +774,15 @@ void setupMethodStubs( functor_vector_type& res )
             aRect,Size(10,20),GRID_HORZLINES|GRID_VERTLINES ));
 
     /* void DrawTransparent( const PolyPolygon& rPolyPoly,
-                                         sal_uInt16 nTransparencePercent );
+                                         USHORT nTransparencePercent ); 
     */
     add(res,
         "DrawTransparent",
         boost::bind(
-            (void (OutputDevice::*)( const PolyPolygon&, sal_uInt16 ))(
+            (void (OutputDevice::*)( const PolyPolygon&, USHORT ))(
                 &OutputDevice::DrawTransparent),
             _1,
-            aPoly3,(sal_uInt16)50 ));
+            aPoly3,(USHORT)50 ));
 
     /* void DrawTransparent( const GDIMetaFile& rMtf,
                                          const Point& rPos, const Size& rSize,
@@ -792,7 +792,7 @@ void setupMethodStubs( functor_vector_type& res )
         "DrawTransparent(metafile)",
         boost::bind(
             (void (OutputDevice::*)( const GDIMetaFile&,
-                                     const Point&,
+                                     const Point&, 
                                      const Size&,
                                      const Gradient& ))(
                 &OutputDevice::DrawTransparent),
@@ -810,9 +810,9 @@ void setupMethodStubs( functor_vector_type& res )
 
 //----------------------------------------------------------------------------------
 
-void grindFunc( OutputDevice&                       rTarget,
+void grindFunc( OutputDevice&                       rTarget, 
                 functor_vector_type::const_iterator iter,
-                sal_Int32                           nTurns,
+                sal_Int32                           nTurns, 
                 const char*                         pMsg )
 {
     const sal_uInt32 nStartTime( osl_getGlobalTimer() );
@@ -823,7 +823,7 @@ void grindFunc( OutputDevice&                       rTarget,
     if( rTarget.GetOutDevType() == OUTDEV_WINDOW )
         static_cast<Window&>(rTarget).Sync();
 
-    fprintf( stdout,
+    fprintf( stdout, 
              "Duration: %d ms (%d repetitions)\tOperation: %s\tSetup: %s\n",
              (int)(osl_getGlobalTimer() - nStartTime),
              (int)(nTurns),
@@ -903,35 +903,35 @@ void TestWindow::Paint( const Rectangle& )
     fflush( stdout );
 }
 
-sal_uInt16 GrindApp::Exception( sal_uInt16 nError )
+USHORT GrindApp::Exception( USHORT nError )
 {
     switch( nError & EXC_MAJORTYPE )
     {
         case EXC_RSCNOTLOADED:
-            Abort( String::CreateFromAscii(
+            Abort( String::CreateFromAscii( 
                        "Error: could not load language resources.\nPlease check your installation.\n" ) );
             break;
     }
     return 0;
 }
 
-int GrindApp::Main()
+void GrindApp::Main()
 {
     bool bHelp = false;
 
-    for( sal_uInt16 i = 0; i < GetCommandLineParamCount(); i++ )
+    for( USHORT i = 0; i < GetCommandLineParamCount(); i++ )
     {
         ::rtl::OUString aParam = GetCommandLineParam( i );
 
-        if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--help" ) ) ||
-            aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) )
+        if( aParam.equalsAscii( "--help" ) ||
+            aParam.equalsAscii( "-h" ) )
                 bHelp = true;
     }
 
     if( bHelp )
     {
         printf( "outdevgrind - Profile OutputDevice\n" );
-        return EXIT_SUCCESS;
+        return;
     }
 
     //-------------------------------------------------
@@ -941,7 +941,7 @@ int GrindApp::Main()
     try
     {
         uno::Reference< uno::XComponentContext > xCtx = ::cppu::defaultBootstrap_InitialComponentContext();
-        xFactory = uno::Reference< lang::XMultiServiceFactory >(  xCtx->getServiceManager(),
+        xFactory = uno::Reference< lang::XMultiServiceFactory >(  xCtx->getServiceManager(), 
                                                                   uno::UNO_QUERY );
         if( xFactory.is() )
             ::comphelper::setProcessServiceFactory( xFactory );
@@ -952,15 +952,15 @@ int GrindApp::Main()
 
     if( !xFactory.is() )
     {
-        fprintf( stderr,
+        fprintf( stderr, 
                  "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
         exit( 1 );
     }
 
     // Create UCB.
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
-    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
     ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     TestWindow pWindow;
@@ -968,7 +968,6 @@ int GrindApp::Main()
 
     // clean up UCB
     ::ucbhelper::ContentBroker::deinitialize();
-    return EXIT_SUCCESS;
 }
 
 } // namespace

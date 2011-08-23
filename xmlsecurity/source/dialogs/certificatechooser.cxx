@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,34 +46,34 @@
 
 /* HACK: disable some warnings for MS-C */
 #ifdef _MSC_VER
-#pragma warning (disable : 4355)    // 4355: this used in initializer-list
+#pragma warning (disable : 4355)	// 4355: this used in initializer-list
 #endif
 
 using namespace ::com::sun::star;
 
-#define INVAL_SEL       0xFFFF
+#define INVAL_SEL		0xFFFF
 
-sal_uInt16 CertificateChooser::GetSelectedEntryPos( void ) const
+USHORT CertificateChooser::GetSelectedEntryPos( void ) const
 {
-    sal_uInt16  nSel = INVAL_SEL;
+    USHORT	nSel = INVAL_SEL;
 
     SvLBoxEntry* pSel = maCertLB.FirstSelected();
     if( pSel )
-        nSel = (sal_uInt16) ( sal_uIntPtr ) pSel->GetUserData();
+        nSel = (USHORT) ( sal_uIntPtr ) pSel->GetUserData();
 
-    return (sal_uInt16) nSel;
+    return (USHORT) nSel;
 }
 
 CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::XComponentContext>& _rxCtx, uno::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
-    :ModalDialog    ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTCHOOSER ) )
+    :ModalDialog	( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTCHOOSER ) )
     ,maCertsToIgnore( _rCertsToIgnore )
-    ,maHintFT       ( this, XMLSEC_RES( FT_HINT_SELECT ) )
-    ,maCertLB       ( this, XMLSEC_RES( LB_SIGNATURES ) )
-    ,maViewBtn      ( this, XMLSEC_RES( BTN_VIEWCERT ) )
-    ,maBottomSepFL  ( this, XMLSEC_RES( FL_BOTTOM_SEP ) )
-    ,maOKBtn        ( this, XMLSEC_RES( BTN_OK ) )
-    ,maCancelBtn    ( this, XMLSEC_RES( BTN_CANCEL ) )
-    ,maHelpBtn      ( this, XMLSEC_RES( BTN_HELP ) )
+    ,maHintFT		( this, XMLSEC_RES( FT_HINT_SELECT ) )
+    ,maCertLB		( this, XMLSEC_RES( LB_SIGNATURES ) )
+    ,maViewBtn		( this, XMLSEC_RES( BTN_VIEWCERT ) )
+    ,maBottomSepFL	( this, XMLSEC_RES( FL_BOTTOM_SEP ) )
+    ,maOKBtn		( this, XMLSEC_RES( BTN_OK ) )
+    ,maCancelBtn	( this, XMLSEC_RES( BTN_CANCEL ) )
+    ,maHelpBtn		( this, XMLSEC_RES( BTN_HELP ) )
 {
     static long nTabs[] = { 3, 0, 30*CS_LB_WIDTH/100, 60*CS_LB_WIDTH/100 };
     maCertLB.SetTabs( &nTabs[0] );
@@ -86,7 +86,7 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::X
 
     mxCtx = _rxCtx;
     mxSecurityEnvironment = _rxSecurityEnvironment;
-    mbInitialized = sal_False;
+    mbInitialized = FALSE;
 
     // disable buttons
     CertificateHighlightHdl( NULL );
@@ -100,7 +100,7 @@ short CertificateChooser::Execute()
 {
     // #i48432#
     // We can't check for personal certificates before raising this dialog,
-    // because the mozilla implementation throws a NoPassword exception,
+    // because the mozilla implementation throws a NoPassword exception, 
     // if the user pressed cancel, and also if the database does not exist!
     // But in the later case, the is no password query, and the user is confused
     // that nothing happens when pressing "Add..." in the SignatureDialog.
@@ -114,12 +114,12 @@ short CertificateChooser::Execute()
     Window* pMe = this;
     Window* pParent = GetParent();
     if ( pParent )
-        pParent->EnableInput( sal_False );
+        pParent->EnableInput( FALSE );
     pMe->Show();
     pMe->Update();
     ImplInitialize();
     if ( pParent )
-        pParent->EnableInput( sal_True );
+        pParent->EnableInput( TRUE );
     return ModalDialog::Execute();
 }
 
@@ -188,12 +188,12 @@ void CertificateChooser::ImplInitialize()
             sEntry += '\t';
             sEntry += XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() );
             SvLBoxEntry* pEntry = maCertLB.InsertEntry( sEntry );
-            pEntry->SetUserData( ( void* )(sal_IntPtr)nC ); // missuse user data as index
+            pEntry->SetUserData( ( void* )nC ); // missuse user data as index
         }
 
         // enable/disable buttons
         CertificateHighlightHdl( NULL );
-        mbInitialized = sal_True;
+        mbInitialized = TRUE;
     }
 }
 
@@ -201,7 +201,7 @@ void CertificateChooser::ImplInitialize()
 uno::Reference< dcss::security::XCertificate > CertificateChooser::GetSelectedCertificate()
 {
     uno::Reference< dcss::security::XCertificate > xCert;
-    sal_uInt16  nSelected = GetSelectedEntryPos();
+    USHORT	nSelected = GetSelectedEntryPos();
     if ( nSelected < maCerts.getLength() )
         xCert = maCerts[ nSelected ];
     return xCert;
@@ -232,7 +232,7 @@ void CertificateChooser::ImplShowCertificateDetails()
     uno::Reference< dcss::security::XCertificate > xCert = GetSelectedCertificate();
     if( xCert.is() )
     {
-        CertificateViewer aViewer( this, mxSecurityEnvironment, xCert, sal_True );
+        CertificateViewer aViewer( this, mxSecurityEnvironment, xCert, TRUE );
         aViewer.Execute();
     }
 }

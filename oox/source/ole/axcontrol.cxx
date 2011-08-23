@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include "oox/ole/axcontrol.hxx"
-
+#include <rtl/tencinfo.h>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -40,47 +40,39 @@
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
-#include <com/sun/star/form/binding/XBindableValue.hpp>
-#include <com/sun/star/form/binding/XListEntrySink.hpp>
-#include <com/sun/star/form/binding/XListEntrySource.hpp>
-#include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <rtl/tencinfo.h>
+#include "properties.hxx"
+#include "tokens.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
+#include "oox/helper/propertyset.hxx"
+
+using ::rtl::OUString;
+using ::com::sun::star::awt::Point;
+using ::com::sun::star::awt::Size;
+using ::com::sun::star::awt::XControlModel;
+using ::com::sun::star::container::XIndexContainer;
+using ::com::sun::star::container::XNameContainer;
+using ::com::sun::star::drawing::XDrawPage;
+using ::com::sun::star::form::XForm;
+using ::com::sun::star::form::XFormComponent;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
 
 namespace oox {
 namespace ole {
-
-// ============================================================================
-
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::form;
-using namespace ::com::sun::star::form::binding;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::table;
-using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -108,6 +100,28 @@ const sal_uInt32 COMCTL_ID_PROGRESSBAR_50   = 0xE6E17E84;
 const sal_uInt32 COMCTL_ID_PROGRESSBAR_60   = 0x97AB8A01;
 
 // ----------------------------------------------------------------------------
+
+const sal_uInt32 AX_FLAGS_ENABLED           = 0x00000002;
+const sal_uInt32 AX_FLAGS_LOCKED            = 0x00000004;
+const sal_uInt32 AX_FLAGS_OPAQUE            = 0x00000008;
+const sal_uInt32 AX_FLAGS_COLUMNHEADS       = 0x00000400;
+const sal_uInt32 AX_FLAGS_ENTIREROWS        = 0x00000800;
+const sal_uInt32 AX_FLAGS_EXISTINGENTRIES   = 0x00001000;
+const sal_uInt32 AX_FLAGS_CAPTIONLEFT       = 0x00002000;
+const sal_uInt32 AX_FLAGS_EDITABLE          = 0x00004000;
+const sal_uInt32 AX_FLAGS_IMEMODE_MASK      = 0x00078000;
+const sal_uInt32 AX_FLAGS_DRAGENABLED       = 0x00080000;
+const sal_uInt32 AX_FLAGS_ENTERASNEWLINE    = 0x00100000;
+const sal_uInt32 AX_FLAGS_KEEPSELECTION     = 0x00200000;
+const sal_uInt32 AX_FLAGS_TABASCHARACTER    = 0x00400000;
+const sal_uInt32 AX_FLAGS_WORDWRAP          = 0x00800000;
+const sal_uInt32 AX_FLAGS_BORDERSSUPPRESSED = 0x02000000;
+const sal_uInt32 AX_FLAGS_SELECTLINE        = 0x04000000;
+const sal_uInt32 AX_FLAGS_SINGLECHARSELECT  = 0x08000000;
+const sal_uInt32 AX_FLAGS_AUTOSIZE          = 0x10000000;
+const sal_uInt32 AX_FLAGS_HIDESELECTION     = 0x20000000;
+const sal_uInt32 AX_FLAGS_MAXLENAUTOTAB     = 0x40000000;
+const sal_uInt32 AX_FLAGS_MULTILINE         = 0x80000000;
 
 const sal_uInt32 AX_CMDBUTTON_DEFFLAGS      = 0x0000001B;
 const sal_uInt32 AX_LABEL_DEFFLAGS          = 0x0080001B;
@@ -143,9 +157,29 @@ const sal_uInt32 AX_PICPOS_BELOWRIGHT       = AX_PICPOS_IMPL( TOPRIGHT,    BOTTO
 const sal_uInt32 AX_PICPOS_CENTER           = AX_PICPOS_IMPL( CENTER,      CENTER  );
 #undef AX_PICPOS_IMPL
 
+const sal_Int32 AX_DISPLAYSTYLE_TEXT        = 1;
+const sal_Int32 AX_DISPLAYSTYLE_LISTBOX     = 2;
+const sal_Int32 AX_DISPLAYSTYLE_COMBOBOX    = 3;
+const sal_Int32 AX_DISPLAYSTYLE_CHECKBOX    = 4;
+const sal_Int32 AX_DISPLAYSTYLE_OPTBUTTON   = 5;
+const sal_Int32 AX_DISPLAYSTYLE_TOGGLE      = 6;
+const sal_Int32 AX_DISPLAYSTYLE_DROPDOWN    = 7;
+
+const sal_Int32 AX_SELCTION_SINGLE          = 0;
+const sal_Int32 AX_SELCTION_MULTI           = 1;
+const sal_Int32 AX_SELCTION_EXTENDED        = 2;
+
+const sal_Int32 AX_SCROLLBAR_NONE           = 0x00;
+const sal_Int32 AX_SCROLLBAR_HORIZONTAL     = 0x01;
+const sal_Int32 AX_SCROLLBAR_VERTICAL       = 0x02;
+
 const sal_Int32 AX_MATCHENTRY_FIRSTLETTER   = 0;
 const sal_Int32 AX_MATCHENTRY_COMPLETE      = 1;
 const sal_Int32 AX_MATCHENTRY_NONE          = 2;
+
+const sal_Int32 AX_SHOWDROPBUTTON_NEVER     = 0;
+const sal_Int32 AX_SHOWDROPBUTTON_FOCUS     = 1;
+const sal_Int32 AX_SHOWDROPBUTTON_ALWAYS    = 2;
 
 const sal_Int32 AX_ORIENTATION_AUTO         = -1;
 const sal_Int32 AX_ORIENTATION_VERTICAL     = 0;
@@ -187,70 +221,14 @@ const sal_Int16 API_STATE_UNCHECKED         = 0;
 const sal_Int16 API_STATE_CHECKED           = 1;
 const sal_Int16 API_STATE_DONTKNOW          = 2;
 
-// ----------------------------------------------------------------------------
-
-/** Tries to extract a range address from a defined name. */
-bool lclExtractRangeFromName( CellRangeAddress& orRangeAddr, const Reference< XModel >& rxDocModel, const OUString& rAddressString )
-{
-    try
-    {
-        PropertySet aPropSet( rxDocModel );
-        Reference< XNameAccess > xRangesNA( aPropSet.getAnyProperty( PROP_NamedRanges ), UNO_QUERY_THROW );
-        Reference< XCellRangeReferrer > xReferrer( xRangesNA->getByName( rAddressString ), UNO_QUERY_THROW );
-        Reference< XCellRangeAddressable > xAddressable( xReferrer->getReferredCells(), UNO_QUERY_THROW );
-        orRangeAddr = xAddressable->getRangeAddress();
-        return true;
-    }
-    catch( Exception& )
-    {
-    }
-    return false;
-}
-
-bool lclExtractAddressFromName( CellAddress& orAddress, const Reference< XModel >& rxDocModel, const OUString& rAddressString )
-{
-    CellRangeAddress aRangeAddr;
-    if( lclExtractRangeFromName( aRangeAddr, rxDocModel, rAddressString ) &&
-        (aRangeAddr.StartColumn == aRangeAddr.EndColumn) &&
-        (aRangeAddr.StartRow == aRangeAddr.EndRow) )
-    {
-        orAddress.Sheet = aRangeAddr.Sheet;
-        orAddress.Column = aRangeAddr.StartColumn;
-        orAddress.Row = aRangeAddr.StartRow;
-        return true;
-    }
-    return false;
-}
-
-void lclPrepareConverter( PropertySet& rConverter, const Reference< XModel >& rxDocModel,
-        const OUString& rAddressString, sal_Int32 nRefSheet, bool bRange )
-{
-    if( !rConverter.is() ) try
-    {
-        Reference< XMultiServiceFactory > xFactory( rxDocModel, UNO_QUERY_THROW );
-        OUString aServiceName = bRange ?
-            CREATE_OUSTRING( "com.sun.star.table.CellRangeAddressConversion" ) :
-            CREATE_OUSTRING( "com.sun.star.table.CellAddressConversion" );
-        rConverter.set( xFactory->createInstance( aServiceName ) );
-    }
-    catch( Exception& )
-    {
-    }
-    rConverter.setProperty( PROP_XLA1Representation, rAddressString );
-    rConverter.setProperty( PROP_ReferenceSheet, nRefSheet );
-}
-
 } // namespace
 
 // ============================================================================
 
-ControlConverter::ControlConverter( const Reference< XModel >& rxDocModel,
-        const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
-    mxDocModel( rxDocModel ),
+ControlConverter::ControlConverter( const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
     mrGraphicHelper( rGraphicHelper ),
     mbDefaultColorBgr( bDefaultColorBgr )
 {
-    OSL_ENSURE( mxDocModel.is(), "ControlConverter::ControlConverter - missing document model" );
 }
 
 ControlConverter::~ControlConverter()
@@ -292,20 +270,9 @@ void ControlConverter::convertPicture( PropertyMap& rPropMap, const StreamDataSe
 
 void ControlConverter::convertOrientation( PropertyMap& rPropMap, bool bHorizontal ) const
 {
-    sal_Int32 nScrollOrient = bHorizontal ? ScrollBarOrientation::HORIZONTAL : ScrollBarOrientation::VERTICAL;
+    namespace AwtScrollBarOrient = ::com::sun::star::awt::ScrollBarOrientation;
+    sal_Int32 nScrollOrient = bHorizontal ? AwtScrollBarOrient::HORIZONTAL : AwtScrollBarOrient::VERTICAL;
     rPropMap.setProperty( PROP_Orientation, nScrollOrient );
-}
-
-void ControlConverter::convertVerticalAlign( PropertyMap& rPropMap, sal_Int32 nVerticalAlign ) const
-{
-    VerticalAlignment eAlign = VerticalAlignment_TOP;
-    switch( nVerticalAlign )
-    {
-        case XML_Top:       eAlign = VerticalAlignment_TOP;     break;
-        case XML_Center:    eAlign = VerticalAlignment_MIDDLE;  break;
-        case XML_Bottom:    eAlign = VerticalAlignment_BOTTOM;  break;
-    }
-    rPropMap.setProperty( PROP_VerticalAlign, eAlign );
 }
 
 void ControlConverter::convertScrollBar( PropertyMap& rPropMap,
@@ -317,74 +284,6 @@ void ControlConverter::convertScrollBar( PropertyMap& rPropMap,
     rPropMap.setProperty( PROP_LineIncrement, nSmallChange );
     rPropMap.setProperty( PROP_BlockIncrement, nLargeChange );
     rPropMap.setProperty( bAwtModel ? PROP_ScrollValue : PROP_DefaultScrollValue, nPosition );
-}
-
-void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlModel,
-        const OUString& rCtrlSource, const OUString& rRowSource, sal_Int32 nRefSheet ) const
-{
-    // value binding
-    if( rCtrlSource.getLength() > 0 ) try
-    {
-        // first check if the XBindableValue interface is supported
-        Reference< XBindableValue > xBindable( rxCtrlModel, UNO_QUERY_THROW );
-
-        // convert address string to cell address struct
-        CellAddress aAddress;
-        if( !lclExtractAddressFromName( aAddress, mxDocModel, rCtrlSource ) )
-        {
-            lclPrepareConverter( maAddressConverter, mxDocModel, rCtrlSource, nRefSheet, false );
-            if( !maAddressConverter.getProperty( aAddress, PROP_Address ) )
-                throw RuntimeException();
-        }
-
-        // create argument sequence
-        NamedValue aValue;
-        aValue.Name = CREATE_OUSTRING( "BoundCell" );
-        aValue.Value <<= aAddress;
-        Sequence< Any > aArgs( 1 );
-        aArgs[ 0 ] <<= aValue;
-
-        // create the CellValueBinding instance and set at the control model
-        Reference< XMultiServiceFactory > xFactory( mxDocModel, UNO_QUERY_THROW );
-        Reference< XValueBinding > xBinding( xFactory->createInstanceWithArguments(
-            CREATE_OUSTRING( "com.sun.star.table.CellValueBinding" ), aArgs ), UNO_QUERY_THROW );
-        xBindable->setValueBinding( xBinding );
-    }
-    catch( Exception& )
-    {
-    }
-
-    // list entry source
-    if( rRowSource.getLength() > 0 ) try
-    {
-        // first check if the XListEntrySink interface is supported
-        Reference< XListEntrySink > xEntrySink( rxCtrlModel, UNO_QUERY_THROW );
-
-        // convert address string to cell range address struct
-        CellRangeAddress aRangeAddr;
-        if( !lclExtractRangeFromName( aRangeAddr, mxDocModel, rRowSource ) )
-        {
-            lclPrepareConverter( maRangeConverter, mxDocModel, rRowSource, nRefSheet, true );
-            if( !maRangeConverter.getProperty( aRangeAddr, PROP_Address ) )
-                throw RuntimeException();
-        }
-
-        // create argument sequence
-        NamedValue aValue;
-        aValue.Name = CREATE_OUSTRING( "CellRange" );
-        aValue.Value <<= aRangeAddr;
-        Sequence< Any > aArgs( 1 );
-        aArgs[ 0 ] <<= aValue;
-
-        // create the EntrySource instance and set at the control model
-        Reference< XMultiServiceFactory > xFactory( mxDocModel, UNO_QUERY_THROW );
-        Reference< XListEntrySource > xEntrySource( xFactory->createInstanceWithArguments(
-            CREATE_OUSTRING( "com.sun.star.table.CellRangeListSource"  ), aArgs ), UNO_QUERY_THROW );
-        xEntrySink->setListEntrySource( xEntrySource );
-    }
-    catch( Exception& )
-    {
-    }
 }
 
 // ActiveX (Forms 2.0) specific conversion ------------------------------------
@@ -421,7 +320,8 @@ void ControlConverter::convertAxBorder( PropertyMap& rPropMap,
 
 void ControlConverter::convertAxVisualEffect( PropertyMap& rPropMap, sal_Int32 nSpecialEffect ) const
 {
-    sal_Int16 nVisualEffect = (nSpecialEffect == AX_SPECIALEFFECT_FLAT) ? VisualEffect::FLAT : VisualEffect::LOOK3D;
+    namespace AwtVisualEffect = ::com::sun::star::awt::VisualEffect;
+    sal_Int16 nVisualEffect = (nSpecialEffect == AX_SPECIALEFFECT_FLAT) ? AwtVisualEffect::FLAT : AwtVisualEffect::LOOK3D;
     rPropMap.setProperty( PROP_VisualEffect, nVisualEffect );
 }
 
@@ -431,23 +331,24 @@ void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamData
     convertPicture( rPropMap, rPicData );
 
     // picture position
-    sal_Int16 nImagePos = ImagePosition::LeftCenter;
+    namespace AwtImagePos = ::com::sun::star::awt::ImagePosition;
+    sal_Int16 nImagePos = AwtImagePos::LeftCenter;
     switch( nPicPos )
     {
-        case AX_PICPOS_LEFTTOP:     nImagePos = ImagePosition::LeftTop;     break;
-        case AX_PICPOS_LEFTCENTER:  nImagePos = ImagePosition::LeftCenter;  break;
-        case AX_PICPOS_LEFTBOTTOM:  nImagePos = ImagePosition::LeftBottom;  break;
-        case AX_PICPOS_RIGHTTOP:    nImagePos = ImagePosition::RightTop;    break;
-        case AX_PICPOS_RIGHTCENTER: nImagePos = ImagePosition::RightCenter; break;
-        case AX_PICPOS_RIGHTBOTTOM: nImagePos = ImagePosition::RightBottom; break;
-        case AX_PICPOS_ABOVELEFT:   nImagePos = ImagePosition::AboveLeft;   break;
-        case AX_PICPOS_ABOVECENTER: nImagePos = ImagePosition::AboveCenter; break;
-        case AX_PICPOS_ABOVERIGHT:  nImagePos = ImagePosition::AboveRight;  break;
-        case AX_PICPOS_BELOWLEFT:   nImagePos = ImagePosition::BelowLeft;   break;
-        case AX_PICPOS_BELOWCENTER: nImagePos = ImagePosition::BelowCenter; break;
-        case AX_PICPOS_BELOWRIGHT:  nImagePos = ImagePosition::BelowRight;  break;
-        case AX_PICPOS_CENTER:      nImagePos = ImagePosition::Centered;    break;
-        default:    OSL_FAIL( "ControlConverter::convertAxPicture - unknown picture position" );
+        case AX_PICPOS_LEFTTOP:     nImagePos = AwtImagePos::LeftTop;       break;
+        case AX_PICPOS_LEFTCENTER:  nImagePos = AwtImagePos::LeftCenter;    break;
+        case AX_PICPOS_LEFTBOTTOM:  nImagePos = AwtImagePos::LeftBottom;    break;
+        case AX_PICPOS_RIGHTTOP:    nImagePos = AwtImagePos::RightTop;      break;
+        case AX_PICPOS_RIGHTCENTER: nImagePos = AwtImagePos::RightCenter;   break;
+        case AX_PICPOS_RIGHTBOTTOM: nImagePos = AwtImagePos::RightBottom;   break;
+        case AX_PICPOS_ABOVELEFT:   nImagePos = AwtImagePos::AboveLeft;     break;
+        case AX_PICPOS_ABOVECENTER: nImagePos = AwtImagePos::AboveCenter;   break;
+        case AX_PICPOS_ABOVERIGHT:  nImagePos = AwtImagePos::AboveRight;    break;
+        case AX_PICPOS_BELOWLEFT:   nImagePos = AwtImagePos::BelowLeft;     break;
+        case AX_PICPOS_BELOWCENTER: nImagePos = AwtImagePos::BelowCenter;   break;
+        case AX_PICPOS_BELOWRIGHT:  nImagePos = AwtImagePos::BelowRight;    break;
+        case AX_PICPOS_CENTER:      nImagePos = AwtImagePos::Centered;      break;
+        default:    OSL_ENSURE( false, "ControlConverter::convertAxPicture - unknown picture position" );
     }
     rPropMap.setProperty( PROP_ImagePosition, nImagePos );
 }
@@ -459,13 +360,14 @@ void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamData
     convertPicture( rPropMap, rPicData );
 
     // picture scale mode
-    sal_Int16 nScaleMode = ImageScaleMode::None;
+    namespace AwtScaleMode = ::com::sun::star::awt::ImageScaleMode;
+    sal_Int16 nScaleMode = AwtScaleMode::None;
     switch( nPicSizeMode )
     {
-        case AX_PICSIZE_CLIP:       nScaleMode = ImageScaleMode::None;          break;
-        case AX_PICSIZE_STRETCH:    nScaleMode = ImageScaleMode::Anisotropic;   break;
-        case AX_PICSIZE_ZOOM:       nScaleMode = ImageScaleMode::Isotropic;     break;
-        default:    OSL_FAIL( "ControlConverter::convertAxPicture - unknown picture size mode" );
+        case AX_PICSIZE_CLIP:       nScaleMode = AwtScaleMode::None;        break;
+        case AX_PICSIZE_STRETCH:    nScaleMode = AwtScaleMode::Anisotropic; break;
+        case AX_PICSIZE_ZOOM:       nScaleMode = AwtScaleMode::Isotropic;   break;
+        default:    OSL_ENSURE( false, "ControlConverter::convertAxPicture - unknown picture size mode" );
     }
     rPropMap.setProperty( PROP_ScaleMode, nScaleMode );
 }
@@ -504,7 +406,7 @@ void ControlConverter::convertAxOrientation( PropertyMap& rPropMap,
         case AX_ORIENTATION_AUTO:       bHorizontal = rSize.first > rSize.second;   break;
         case AX_ORIENTATION_VERTICAL:   bHorizontal = false;                        break;
         case AX_ORIENTATION_HORIZONTAL: bHorizontal = true;                         break;
-        default:    OSL_FAIL( "ControlConverter::convertAxOrientation - unknown orientation" );
+        default:    OSL_ENSURE( false, "ControlConverter::convertAxOrientation - unknown orientation" );
     }
     convertOrientation( rPropMap, bHorizontal );
 }
@@ -530,19 +432,16 @@ OUString ControlModelBase::getServiceName() const
         case API_CONTROL_FIXEDTEXT:     return CREATE_OUSTRING( "com.sun.star.awt.UnoControlFixedTextModel" );
         case API_CONTROL_IMAGE:         return CREATE_OUSTRING( "com.sun.star.awt.UnoControlImageControlModel" );
         case API_CONTROL_CHECKBOX:      return CREATE_OUSTRING( "com.sun.star.awt.UnoControlCheckBoxModel" );
-        case API_CONTROL_RADIOBUTTON:   return CREATE_OUSTRING( "com.sun.star.form.component.RadioButton" );
+        case API_CONTROL_RADIOBUTTON:   return CREATE_OUSTRING( "com.sun.star.awt.UnoControlRadioButtonModel" );
         case API_CONTROL_EDIT:          return CREATE_OUSTRING( "com.sun.star.awt.UnoControlEditModel" );
-        case API_CONTROL_NUMERIC:       return CREATE_OUSTRING( "com.sun.star.awt.UnoControlNumericFieldModel" );
-        case API_CONTROL_LISTBOX:       return CREATE_OUSTRING( "com.sun.star.form.component.ListBox" );
-        case API_CONTROL_COMBOBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.ComboBox" );
-        case API_CONTROL_SPINBUTTON:    return CREATE_OUSTRING( "com.sun.star.form.component.SpinButton" );
-        case API_CONTROL_SCROLLBAR:     return CREATE_OUSTRING( "com.sun.star.form.component.ScrollBar" );
+        case API_CONTROL_LISTBOX:       return CREATE_OUSTRING( "com.sun.star.awt.UnoControlListBoxModel" );
+        case API_CONTROL_COMBOBOX:      return CREATE_OUSTRING( "com.sun.star.awt.UnoControlComboBoxModel" );
+        case API_CONTROL_SPINBUTTON:    return CREATE_OUSTRING( "com.sun.star.awt.UnoControlSpinButtonModel" );
+        case API_CONTROL_SCROLLBAR:     return CREATE_OUSTRING( "com.sun.star.awt.UnoControlScrollBarModel" );
         case API_CONTROL_PROGRESSBAR:   return CREATE_OUSTRING( "com.sun.star.awt.UnoControlProgressBarModel" );
-        case API_CONTROL_FRAME:         return CREATE_OUSTRING( "com.sun.star.awt.UnoFrameModel" );
-        case API_CONTROL_PAGE:          return CREATE_OUSTRING( "com.sun.star.awt.UnoPageModel" );
-        case API_CONTROL_MULTIPAGE:     return CREATE_OUSTRING( "com.sun.star.awt.UnoMultiPageModel" );
+        case API_CONTROL_GROUPBOX:      return CREATE_OUSTRING( "com.sun.star.awt.UnoControlGroupBoxModel" );
         case API_CONTROL_DIALOG:        return CREATE_OUSTRING( "com.sun.star.awt.UnoControlDialogModel" );
-        default:    OSL_FAIL( "ControlModelBase::getServiceName - no AWT model service supported" );
+        default:    OSL_ENSURE( false, "ControlModelBase::getServiceName - no AWT model service supported" );
     }
     else switch( eCtrlType )
     {
@@ -552,13 +451,12 @@ OUString ControlModelBase::getServiceName() const
         case API_CONTROL_CHECKBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.CheckBox" );
         case API_CONTROL_RADIOBUTTON:   return CREATE_OUSTRING( "com.sun.star.form.component.RadioButton" );
         case API_CONTROL_EDIT:          return CREATE_OUSTRING( "com.sun.star.form.component.TextField" );
-        case API_CONTROL_NUMERIC:       return CREATE_OUSTRING( "com.sun.star.form.component.NumericField" );
         case API_CONTROL_LISTBOX:       return CREATE_OUSTRING( "com.sun.star.form.component.ListBox" );
         case API_CONTROL_COMBOBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.ComboBox" );
         case API_CONTROL_SPINBUTTON:    return CREATE_OUSTRING( "com.sun.star.form.component.SpinButton" );
         case API_CONTROL_SCROLLBAR:     return CREATE_OUSTRING( "com.sun.star.form.component.ScrollBar" );
         case API_CONTROL_GROUPBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.GroupBox" );
-        default:    OSL_FAIL( "ControlModelBase::getServiceName - no form component service supported" );
+        default:    OSL_ENSURE( false, "ControlModelBase::getServiceName - no form component service supported" );
     }
     return OUString();
 }
@@ -633,10 +531,10 @@ sal_uInt32 ComCtlModelBase::getDataPartId() const
 {
     switch( mnVersion )
     {
-        case COMCTL_VERSION_50: return mnDataPartId5;
-        case COMCTL_VERSION_60: return mnDataPartId6;
+        case 5: return mnDataPartId5;
+        case 6: return mnDataPartId6;
     }
-    OSL_FAIL( "ComCtlObjectBase::getDataPartId - unxpected version" );
+    OSL_ENSURE( false, "ComCtlObjectBase::getDataPartId - unxpected version" );
     return SAL_MAX_UINT32;
 }
 
@@ -755,7 +653,7 @@ void ComCtlProgressBarModel::convertProperties( PropertyMap& rPropMap, const Con
 void ComCtlProgressBarModel::importControlData( BinaryInputStream& rInStrm )
 {
     rInStrm >> mfMin >> mfMax;
-    if( mnVersion == COMCTL_VERSION_60 )
+    if( mnVersion == 6 )
         rInStrm >> mnVertical >> mnSmooth;
 }
 
@@ -811,15 +709,17 @@ bool AxFontDataModel::importBinaryModel( BinaryInputStream& rInStrm )
 
 void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
+    namespace cssa = ::com::sun::star::awt;
+
     // font name
     if( maFontData.maFontName.getLength() > 0 )
         rPropMap.setProperty( PROP_FontName, maFontData.maFontName );
 
     // font effects
-    rPropMap.setProperty( PROP_FontWeight, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_BOLD, FontWeight::BOLD, FontWeight::NORMAL ) );
-    rPropMap.setProperty( PROP_FontSlant, getFlagValue< sal_Int16 >( maFontData.mnFontEffects, AX_FONTDATA_ITALIC, FontSlant_ITALIC, FontSlant_NONE ) );
-    rPropMap.setProperty( PROP_FontUnderline, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_UNDERLINE, maFontData.mbDblUnderline ? FontUnderline::DOUBLE : FontUnderline::SINGLE, FontUnderline::NONE ) );
-    rPropMap.setProperty( PROP_FontStrikeout, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_STRIKEOUT, FontStrikeout::SINGLE, FontStrikeout::NONE ) );
+    rPropMap.setProperty( PROP_FontWeight, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_BOLD, cssa::FontWeight::BOLD, cssa::FontWeight::NORMAL ) );
+    rPropMap.setProperty( PROP_FontSlant, getFlagValue< sal_Int16 >( maFontData.mnFontEffects, AX_FONTDATA_ITALIC, cssa::FontSlant_ITALIC, cssa::FontSlant_NONE ) );
+    rPropMap.setProperty( PROP_FontUnderline, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_UNDERLINE, cssa::FontUnderline::SINGLE, cssa::FontUnderline::NONE ) );
+    rPropMap.setProperty( PROP_FontStrikeout, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_STRIKEOUT, cssa::FontStrikeout::SINGLE, cssa::FontStrikeout::NONE ) );
     rPropMap.setProperty( PROP_FontHeight, maFontData.getHeightPoints() );
 
     // font character set
@@ -832,13 +732,13 @@ void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlCon
     // text alignment
     if( mbSupportsAlign )
     {
-        sal_Int32 nAlign = TextAlign::LEFT;
+        sal_Int32 nAlign = cssa::TextAlign::LEFT;
         switch( maFontData.mnHorAlign )
         {
-            case AX_FONTDATA_LEFT:      nAlign = TextAlign::LEFT;   break;
-            case AX_FONTDATA_RIGHT:     nAlign = TextAlign::RIGHT;  break;
-            case AX_FONTDATA_CENTER:    nAlign = TextAlign::CENTER; break;
-            default:    OSL_FAIL( "AxFontDataModel::convertProperties - unknown text alignment" );
+            case AX_FONTDATA_LEFT:      nAlign = cssa::TextAlign::LEFT;     break;
+            case AX_FONTDATA_RIGHT:     nAlign = cssa::TextAlign::RIGHT;    break;
+            case AX_FONTDATA_CENTER:    nAlign = cssa::TextAlign::CENTER;   break;
+            default:    OSL_ENSURE( false, "AxFontDataModel::convertProperties - unknown text alignment" );
         }
         // form controls expect short value
         rPropMap.setProperty( PROP_Align, static_cast< sal_Int16 >( nAlign ) );
@@ -855,7 +755,6 @@ AxCommandButtonModel::AxCommandButtonModel() :
     mnBackColor( AX_SYSCOLOR_BUTTONFACE ),
     mnFlags( AX_CMDBUTTON_DEFFLAGS ),
     mnPicturePos( AX_PICPOS_ABOVECENTER ),
-    mnVerticalAlign( XML_Center ),
     mbFocusOnClick( true )
 {
 }
@@ -911,8 +810,8 @@ void AxCommandButtonModel::convertProperties( PropertyMap& rPropMap, const Contr
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_FLAGS_ENABLED ) );
     rPropMap.setProperty( PROP_MultiLine, getFlag( mnFlags, AX_FLAGS_WORDWRAP ) );
     rPropMap.setProperty( PROP_FocusOnClick, mbFocusOnClick );
+    rPropMap.setProperty( PROP_VerticalAlign, ::com::sun::star::style::VerticalAlignment_MIDDLE );
     rConv.convertColor( rPropMap, PROP_TextColor, mnTextColor );
-    rConv.convertVerticalAlign( rPropMap, mnVerticalAlign );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_NOTSUPPORTED );
     rConv.convertAxPicture( rPropMap, maPictureData, mnPicturePos );
     AxFontDataModel::convertProperties( rPropMap, rConv );
@@ -926,8 +825,7 @@ AxLabelModel::AxLabelModel() :
     mnFlags( AX_LABEL_DEFFLAGS ),
     mnBorderColor( AX_SYSCOLOR_WINDOWFRAME ),
     mnBorderStyle( AX_BORDERSTYLE_NONE ),
-    mnSpecialEffect( AX_SPECIALEFFECT_FLAT ),
-    mnVerticalAlign( XML_Top )
+    mnSpecialEffect( AX_SPECIALEFFECT_FLAT )
 {
 }
 
@@ -975,8 +873,8 @@ void AxLabelModel::convertProperties( PropertyMap& rPropMap, const ControlConver
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_FLAGS_ENABLED ) );
     rPropMap.setProperty( PROP_MultiLine, getFlag( mnFlags, AX_FLAGS_WORDWRAP ) );
+    rPropMap.setProperty( PROP_VerticalAlign, ::com::sun::star::style::VerticalAlignment_TOP );
     rConv.convertColor( rPropMap, PROP_TextColor, mnTextColor );
-    rConv.convertVerticalAlign( rPropMap, mnVerticalAlign );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_VOID );
     rConv.convertAxBorder( rPropMap, mnBorderColor, mnBorderStyle, mnSpecialEffect );
     AxFontDataModel::convertProperties( rPropMap, rConv );
@@ -1073,8 +971,7 @@ AxMorphDataModelBase::AxMorphDataModelBase() :
     mnShowDropButton( AX_SHOWDROPBUTTON_NEVER ),
     mnMaxLength( 0 ),
     mnPasswordChar( 0 ),
-    mnListRows( 8 ),
-    mnVerticalAlign( XML_Center )
+    mnListRows( 8 )
 {
 }
 
@@ -1163,7 +1060,6 @@ void AxMorphDataModelBase::convertProperties( PropertyMap& rPropMap, const Contr
 
 AxToggleButtonModel::AxToggleButtonModel()
 {
-    mnDisplayStyle = AX_DISPLAYSTYLE_TOGGLE;
 }
 
 ApiControlType AxToggleButtonModel::getControlType() const
@@ -1176,8 +1072,8 @@ void AxToggleButtonModel::convertProperties( PropertyMap& rPropMap, const Contro
 {
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_MultiLine, getFlag( mnFlags, AX_FLAGS_WORDWRAP ) );
+    rPropMap.setProperty( PROP_VerticalAlign, ::com::sun::star::style::VerticalAlignment_MIDDLE );
     rPropMap.setProperty( PROP_Toggle, true );
-    rConv.convertVerticalAlign( rPropMap, mnVerticalAlign );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_NOTSUPPORTED );
     rConv.convertAxPicture( rPropMap, maPictureData, mnPicturePos );
     rConv.convertAxState( rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
@@ -1188,7 +1084,6 @@ void AxToggleButtonModel::convertProperties( PropertyMap& rPropMap, const Contro
 
 AxCheckBoxModel::AxCheckBoxModel()
 {
-    mnDisplayStyle = AX_DISPLAYSTYLE_CHECKBOX;
 }
 
 ApiControlType AxCheckBoxModel::getControlType() const
@@ -1201,7 +1096,7 @@ void AxCheckBoxModel::convertProperties( PropertyMap& rPropMap, const ControlCon
 {
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_MultiLine, getFlag( mnFlags, AX_FLAGS_WORDWRAP ) );
-    rConv.convertVerticalAlign( rPropMap, mnVerticalAlign );
+    rPropMap.setProperty( PROP_VerticalAlign, ::com::sun::star::style::VerticalAlignment_MIDDLE );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_VOID );
     rConv.convertAxVisualEffect( rPropMap, mnSpecialEffect );
     rConv.convertAxPicture( rPropMap, maPictureData, mnPicturePos );
@@ -1213,7 +1108,6 @@ void AxCheckBoxModel::convertProperties( PropertyMap& rPropMap, const ControlCon
 
 AxOptionButtonModel::AxOptionButtonModel()
 {
-    mnDisplayStyle = AX_DISPLAYSTYLE_OPTBUTTON;
 }
 
 ApiControlType AxOptionButtonModel::getControlType() const
@@ -1226,7 +1120,7 @@ void AxOptionButtonModel::convertProperties( PropertyMap& rPropMap, const Contro
 {
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_MultiLine, getFlag( mnFlags, AX_FLAGS_WORDWRAP ) );
-    rConv.convertVerticalAlign( rPropMap, mnVerticalAlign );
+    rPropMap.setProperty( PROP_VerticalAlign, ::com::sun::star::style::VerticalAlignment_MIDDLE );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_VOID );
     rConv.convertAxVisualEffect( rPropMap, mnSpecialEffect );
     rConv.convertAxPicture( rPropMap, maPictureData, mnPicturePos );
@@ -1238,7 +1132,6 @@ void AxOptionButtonModel::convertProperties( PropertyMap& rPropMap, const Contro
 
 AxTextBoxModel::AxTextBoxModel()
 {
-    mnDisplayStyle = AX_DISPLAYSTYLE_TEXT;
 }
 
 ApiControlType AxTextBoxModel::getControlType() const
@@ -1264,34 +1157,8 @@ void AxTextBoxModel::convertProperties( PropertyMap& rPropMap, const ControlConv
 
 // ============================================================================
 
-AxNumericFieldModel::AxNumericFieldModel()
-{
-    mnDisplayStyle = AX_DISPLAYSTYLE_TEXT;
-}
-
-ApiControlType AxNumericFieldModel::getControlType() const
-{
-    OSL_ENSURE( mnDisplayStyle == AX_DISPLAYSTYLE_TEXT, "AxNumericFieldModel::getControlType - invalid control type" );
-    return API_CONTROL_NUMERIC;
-}
-
-void AxNumericFieldModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
-{
-    rPropMap.setProperty( PROP_HideInactiveSelection, getFlag( mnFlags, AX_FLAGS_HIDESELECTION ) );
-    // TODO: OUString::toDouble() does not handle local decimal separator
-    rPropMap.setProperty( mbAwtModel ? PROP_Value : PROP_DefaultValue, maValue.toDouble() );
-    rPropMap.setProperty( PROP_Spin, getFlag( mnScrollBars, AX_SCROLLBAR_VERTICAL ) );
-    rPropMap.setProperty( PROP_Repeat, true );
-    rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_VOID );
-    rConv.convertAxBorder( rPropMap, mnBorderColor, mnBorderStyle, mnSpecialEffect );
-    AxMorphDataModelBase::convertProperties( rPropMap, rConv );
-}
-
-// ============================================================================
-
 AxListBoxModel::AxListBoxModel()
 {
-    mnDisplayStyle = AX_DISPLAYSTYLE_LISTBOX;
 }
 
 ApiControlType AxListBoxModel::getControlType() const
@@ -1314,7 +1181,6 @@ void AxListBoxModel::convertProperties( PropertyMap& rPropMap, const ControlConv
 
 AxComboBoxModel::AxComboBoxModel()
 {
-    mnDisplayStyle = AX_DISPLAYSTYLE_COMBOBOX;
 }
 
 ApiControlType AxComboBoxModel::getControlType() const
@@ -1503,7 +1369,7 @@ void AxScrollBarModel::convertProperties( PropertyMap& rPropMap, const ControlCo
 // ============================================================================
 
 AxTabStripModel::AxTabStripModel() :
-    AxFontDataModel( false ),   // no support for alignment properties
+    AxFontDataModel( false ),   // no support for Align property
     mnBackColor( AX_SYSCOLOR_BUTTONFACE ),
     mnTextColor( AX_SYSCOLOR_BUTTONTEXT ),
     mnFlags( AX_TABSTRIP_DEFFLAGS ),
@@ -1552,8 +1418,7 @@ ApiControlType AxTabStripModel::getControlType() const
 void AxTabStripModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
     rPropMap.setProperty( PROP_Decoration, mnTabStyle != AX_TABSTRIP_NONE );
-    // adjust for openoffice ( 1 based )
-    rPropMap.setProperty( PROP_MultiPageValue, mnSelectedTab + 1);
+    rPropMap.setProperty( PROP_MultiPageValue, mnSelectedTab );
     rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
     AxFontDataModel::convertProperties( rPropMap, rConv );
 }
@@ -1566,7 +1431,7 @@ OUString AxTabStripModel::getCaption( sal_Int32 nIndex ) const
 // ============================================================================
 
 AxContainerModelBase::AxContainerModelBase( bool bFontSupport ) :
-    AxFontDataModel( false ),   // no support for alignment properties
+    AxFontDataModel( false ),   // no support for Align property
     maLogicalSize( AX_CONTAINER_DEFWIDTH, AX_CONTAINER_DEFHEIGHT ),
     maScrollPos( 0, 0 ),
     mnBackColor( AX_SYSCOLOR_BUTTONFACE ),
@@ -1677,7 +1542,7 @@ AxFrameModel::AxFrameModel() :
 
 ApiControlType AxFrameModel::getControlType() const
 {
-    return mbAwtModel ? API_CONTROL_FRAME : API_CONTROL_GROUPBOX;
+    return API_CONTROL_GROUPBOX;
 }
 
 void AxFrameModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
@@ -1759,26 +1624,43 @@ EmbeddedControl::~EmbeddedControl()
 {
 }
 
-ControlModelBase* EmbeddedControl::createModelFromGuid( const OUString& rClassId )
+ControlModelRef EmbeddedControl::createModel( const OUString& rClassId )
 {
     OUString aClassId = rClassId.toAsciiUpperCase();
+    if( aClassId.equalsAscii( AX_GUID_COMMANDBUTTON ) )
+        mxModel.reset( new AxCommandButtonModel );
+    else if( aClassId.equalsAscii( AX_GUID_LABEL ) )
+        mxModel.reset( new AxLabelModel );
+    else if( aClassId.equalsAscii( AX_GUID_IMAGE ) )
+        mxModel.reset( new AxImageModel );
+    else if( aClassId.equalsAscii( AX_GUID_TOGGLEBUTTON ) )
+        mxModel.reset( new AxToggleButtonModel );
+    else if( aClassId.equalsAscii( AX_GUID_CHECKBOX ) )
+        mxModel.reset( new AxCheckBoxModel );
+    else if( aClassId.equalsAscii( AX_GUID_OPTIONBUTTON ) )
+        mxModel.reset( new AxOptionButtonModel );
+    else if( aClassId.equalsAscii( AX_GUID_TEXTBOX ) )
+        mxModel.reset( new AxTextBoxModel );
+    else if( aClassId.equalsAscii( AX_GUID_LISTBOX ) )
+        mxModel.reset( new AxListBoxModel );
+    else if( aClassId.equalsAscii( AX_GUID_COMBOBOX ) )
+        mxModel.reset( new AxComboBoxModel );
+    else if( aClassId.equalsAscii( AX_GUID_SPINBUTTON ) )
+        mxModel.reset( new AxSpinButtonModel );
+    else if( aClassId.equalsAscii( AX_GUID_SCROLLBAR ) )
+        mxModel.reset( new AxScrollBarModel );
+    else if( aClassId.equalsAscii( AX_GUID_FRAME ) )
+        mxModel.reset( new AxFrameModel );
+    else if( aClassId.equalsAscii( COMCTL_GUID_SCROLLBAR_60 ) )
+        mxModel.reset( new ComCtlScrollBarModel( 6 ) );
+    else
+        mxModel.reset();
 
-    if( aClassId.equalsAscii( AX_GUID_COMMANDBUTTON ) )     return &createModel< AxCommandButtonModel >();
-    if( aClassId.equalsAscii( AX_GUID_LABEL ) )             return &createModel< AxLabelModel >();
-    if( aClassId.equalsAscii( AX_GUID_IMAGE ) )             return &createModel< AxImageModel >();
-    if( aClassId.equalsAscii( AX_GUID_TOGGLEBUTTON ) )      return &createModel< AxToggleButtonModel >();
-    if( aClassId.equalsAscii( AX_GUID_CHECKBOX ) )          return &createModel< AxCheckBoxModel >();
-    if( aClassId.equalsAscii( AX_GUID_OPTIONBUTTON ) )      return &createModel< AxOptionButtonModel >();
-    if( aClassId.equalsAscii( AX_GUID_TEXTBOX ) )           return &createModel< AxTextBoxModel >();
-    if( aClassId.equalsAscii( AX_GUID_LISTBOX ) )           return &createModel< AxListBoxModel >();
-    if( aClassId.equalsAscii( AX_GUID_COMBOBOX ) )          return &createModel< AxComboBoxModel >();
-    if( aClassId.equalsAscii( AX_GUID_SPINBUTTON ) )        return &createModel< AxSpinButtonModel >();
-    if( aClassId.equalsAscii( AX_GUID_SCROLLBAR ) )         return &createModel< AxScrollBarModel >();
-    if( aClassId.equalsAscii( AX_GUID_FRAME ) )             return &createModel< AxFrameModel >();
-    if( aClassId.equalsAscii( COMCTL_GUID_SCROLLBAR_60 ) )  return &createModel< ComCtlScrollBarModel >( COMCTL_VERSION_60 );
-
-    mxModel.reset();
-    return 0;
+    // embedded controls are form component instances
+    if( mxModel.get() )
+        mxModel->setFormComponentMode();
+    
+    return mxModel;
 }
 
 OUString EmbeddedControl::getServiceName() const
@@ -1802,16 +1684,16 @@ bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtr
 
 // ============================================================================
 
-EmbeddedForm::EmbeddedForm( const Reference< XModel >& rxDocModel,
+EmbeddedForm::EmbeddedForm( const Reference< XMultiServiceFactory >& rxModelFactory,
         const Reference< XDrawPage >& rxDrawPage, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
-    maControlConv( rxDocModel, rGraphicHelper, bDefaultColorBgr ),
-    mxModelFactory( rxDocModel, UNO_QUERY ),
+    ControlConverter( rGraphicHelper, bDefaultColorBgr ),
+    mxModelFactory( rxModelFactory ),
     mxFormsSupp( rxDrawPage, UNO_QUERY )
 {
     OSL_ENSURE( mxModelFactory.is(), "EmbeddedForm::EmbeddedForm - missing service factory" );
 }
 
-Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl& rControl, sal_Int32& rnCtrlIndex )
+Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl& rControl )
 {
     if( mxModelFactory.is() && rControl.hasModel() ) try
     {
@@ -1821,12 +1703,12 @@ Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl
         Reference< XControlModel > xCtrlModel( xFormComp, UNO_QUERY_THROW );
 
         // insert the control into the form
-        Reference< XIndexContainer > xFormIC( createXForm(), UNO_SET_THROW );
-        rnCtrlIndex = xFormIC->getCount();
-        xFormIC->insertByIndex( rnCtrlIndex, Any( xFormComp ) );
-
+        Reference< XIndexContainer > xFormIC( createForm(), UNO_SET_THROW );
+        sal_Int32 nNewIndex = xFormIC->getCount();
+        xFormIC->insertByIndex( nNewIndex, Any( xFormComp ) );
+        
         // convert the control properties
-        if( rControl.convertProperties( xCtrlModel, maControlConv ) )
+        if( rControl.convertProperties( xCtrlModel, *this ) )
             return xCtrlModel;
     }
     catch( Exception& )
@@ -1835,7 +1717,7 @@ Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl
     return Reference< XControlModel >();
 }
 
-Reference< XIndexContainer > EmbeddedForm::createXForm()
+Reference< XIndexContainer > EmbeddedForm::createForm()
 {
     if( mxFormsSupp.is() )
     {

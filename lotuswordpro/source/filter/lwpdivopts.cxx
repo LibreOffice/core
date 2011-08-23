@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwpdivopts.hxx"
@@ -82,7 +82,7 @@ void LwpHyphenOptions::Read(LwpObjectStream *pStrm)
 
 
 
-LwpTextLanguage::LwpTextLanguage(){}
+LwpTextLanguage::LwpTextLanguage(){};
 LwpTextLanguage::~LwpTextLanguage(){}
 
 void LwpTextLanguage::Read(LwpObjectStream *pStrm)
@@ -99,20 +99,20 @@ sal_uInt16 LwpTextLanguage::ConvertFrom96(sal_uInt16 orgLang)
     // Reading a Word Pro 96 into Word Pro 97
     switch (orgLang)
     {
-        case 0x2809U:                       // AMI_MEDICAL 96
-            orgLang = 0x8409U;              //0x8409U       97
+        case 0x2809U:						// AMI_MEDICAL 96
+            orgLang = 0x8409U;				//0x8409U		97
             break;
-        case 0x2C09U:                       // AMI_BRMEDICAL 96
-            orgLang = 0x8809U;              // 0x8809U       97
+        case 0x2C09U:				   		// AMI_BRMEDICAL 96
+            orgLang = 0x8809U; 				// 0x8809U       97
             break;
-        case 0x3409U:                       // AMI_BRITISHMEDIZE 96
-            orgLang = 0x8C09U;                  // 0x8C09U           97
+        case 0x3409U:						// AMI_BRITISHMEDIZE 96
+            orgLang = 0x8C09U;  				// 0x8C09U           97
             break;
-        case 0x3009U:                       // AMI_BRITISHIZE 96
-            orgLang = 0x1009U;              // 0x1009U        97
+        case 0x3009U:						// AMI_BRITISHIZE 96
+            orgLang = 0x1009U; 				// 0x1009U        97
             break;
-        case 0x819U:                        // AMI_RUSSIANIO  96
-            orgLang = 0x8419U;              // 0x8419U        97
+        case 0x819U: 						// AMI_RUSSIANIO  96
+            orgLang = 0x8419U;		  		// 0x8419U		  97
             break;
     }
     return orgLang;

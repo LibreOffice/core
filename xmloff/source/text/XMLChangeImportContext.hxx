@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,18 +60,18 @@ public:
     TYPEINFO();
 
     /**
-     * import a change mark
+     * import a change mark 
      * (<text:change>, <text:change-start>, <text:change-end>)
-     * Note: a <text:change> mark denotes start and end of a change
-     * simultaniously, so both bIsStart and bIsEnd parameters would
+     * Note: a <text:change> mark denotes start and end of a change 
+     * simultaniously, so both bIsStart and bIsEnd parameters would 
      * be set true.
      */
     XMLChangeImportContext(
         SvXMLImport& rImport,
         sal_Int16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        sal_Bool bIsStart,  /// mark start of a change
-        sal_Bool bIsEnd,    /// mark end of a change
+        sal_Bool bIsStart,	/// mark start of a change
+        sal_Bool bIsEnd,	/// mark end of a change
         /// true if change mark is encountered outside of a paragraph
         /// (usually before a section or table)
         sal_Bool bIsOutsideOfParagraph = sal_False);

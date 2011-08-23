@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -138,17 +138,9 @@ namespace basic
                 impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel );
 
         /** creates a new BasicManager instance for the given model
-
-            @param _out_rpBasicManager
-                reference to the pointer variable that will hold the new
-                BasicManager.
-
-            @param _rxDocumentModel
-                the model whose BasicManager will be created. Must not be <NULL/>.
         */
-        void impl_createManagerForModel(
-                    BasicManagerPointer& _out_rpBasicManager,
-                    const Reference< XModel >& _rxDocumentModel );
+        BasicManagerPointer
+                impl_createManagerForModel( const Reference< XModel >& _rxDocumentModel );
 
         /** creates the application-wide BasicManager
         */
@@ -251,17 +243,9 @@ namespace basic
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        /*  #163556# (DR) - This function may be called recursively while
-            constructing the Basic manager and loading the Basic storage. By
-            passing the map entry received from impl_getLocationForModel() to
-            the function impl_createManagerForModel(), the new Basic manager
-            will be put immediately into the map of existing Basic managers,
-            thus a recursive call of this function will find and return it
-            without creating another instance.
-         */
         BasicManagerPointer& pBasicManager = impl_getLocationForModel( _rxDocumentModel );
         if ( pBasicManager == NULL )
-            impl_createManagerForModel( pBasicManager, _rxDocumentModel );
+            pBasicManager = impl_createManagerForModel( _rxDocumentModel );
 
         return pBasicManager;
     }
@@ -301,11 +285,11 @@ namespace basic
         if ( !aAppBasicDir.Len() )
             aPathCFG.SetBasicPath( String::CreateFromAscii("$(prog)") );
 
-        // soffice.new search only in user dir => first dir
+        // #58293# soffice.new search only in user dir => first dir
         String aAppFirstBasicDir = aAppBasicDir.GetToken(1);
 
         // Create basic and load it
-        // AppBasicDir is now a PATH
+        // MT: #47347# AppBasicDir is now a PATH
         INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(progurl)") ) );
         aAppBasic.insertName( Application::GetAppName() );
 
@@ -364,7 +348,7 @@ namespace basic
         if ( pos != m_aCreationListeners.end() )
             m_aCreationListeners.erase( pos );
         else {
-            OSL_FAIL( "ImplRepository::revokeCreationListener: listener is not registered!" );
+            DBG_ERROR( "ImplRepository::revokeCreationListener: listener is not registered!" );
         }
     }
 
@@ -423,21 +407,21 @@ namespace basic
     }
 
     //--------------------------------------------------------------------
-    void ImplRepository::impl_createManagerForModel( BasicManagerPointer& _out_rpBasicManager, const Reference< XModel >& _rxDocumentModel )
+    BasicManagerPointer ImplRepository::impl_createManagerForModel( const Reference< XModel >& _rxDocumentModel )
     {
         StarBASIC* pAppBasic = impl_getDefaultAppBasicLibrary();
 
-        _out_rpBasicManager = 0;
+        BasicManager* pBasicManager( NULL );
         Reference< XStorage > xStorage;
         if ( !impl_getDocumentStorage_nothrow( _rxDocumentModel, xStorage ) )
             // the document is not able to provide the storage it is based on.
-            return;
+            return pBasicManager;
 
         Reference< XPersistentLibraryContainer > xBasicLibs;
         Reference< XPersistentLibraryContainer > xDialogLibs;
         if ( !impl_getDocumentLibraryContainers_nothrow( _rxDocumentModel, xBasicLibs, xDialogLibs ) )
             // the document does not have BasicLibraries and DialogLibraries
-            return;
+            return pBasicManager;
 
         if ( xStorage.is() )
         {
@@ -448,24 +432,24 @@ namespace basic
 
             // Storage and BaseURL are only needed by binary documents!
             SotStorageRef xDummyStor = new SotStorage( ::rtl::OUString() );
-            _out_rpBasicManager = new BasicManager( *xDummyStor, String() /* TODO/LATER: xStorage */,
+            pBasicManager = new BasicManager( *xDummyStor, String() /* TODO/LATER: xStorage */,
                                                                 pAppBasic,
-                                                                &aAppBasicDir, sal_True );
-            if ( _out_rpBasicManager->HasErrors() )
+                                                                &aAppBasicDir, TRUE );
+            if ( pBasicManager->HasErrors() )
             {
                 // handle errors
-                BasicError* pErr = _out_rpBasicManager->GetFirstError();
+                BasicError* pErr = pBasicManager->GetFirstError();
                 while ( pErr )
                 {
                     // show message to user
                     if ( ERRCODE_BUTTON_CANCEL == ErrorHandler::HandleError( pErr->GetErrorId() ) )
                     {
                         // user wants to break loading of BASIC-manager
-                        BasicManagerCleaner::deleteBasicManager( _out_rpBasicManager );
+                        BasicManagerCleaner::deleteBasicManager( pBasicManager );
                         xStorage.clear();
                         break;
                     }
-                    pErr = _out_rpBasicManager->GetNextError();
+                    pErr = pBasicManager->GetNextError();
                 }
             }
         }
@@ -476,25 +460,28 @@ namespace basic
             // create new BASIC-manager
             StarBASIC* pBasic = new StarBASIC( pAppBasic );
             pBasic->SetFlag( SBX_EXTSEARCH );
-            _out_rpBasicManager = new BasicManager( pBasic, NULL, sal_True );
+            pBasicManager = new BasicManager( pBasic, NULL, TRUE );
         }
 
         // knit the containers with the BasicManager
         LibraryContainerInfo aInfo( xBasicLibs, xDialogLibs, dynamic_cast< OldBasicPassword* >( xBasicLibs.get() ) );
         OSL_ENSURE( aInfo.mpOldBasicPassword, "ImplRepository::impl_createManagerForModel: wrong BasicLibraries implementation!" );
-        _out_rpBasicManager->SetLibraryContainerInfo( aInfo );
+        pBasicManager->SetLibraryContainerInfo( aInfo );
+        //pBasicCont->setBasicManager( pBasicManager );
+            // that's not needed anymore today. The containers will retrieve their associated
+            // BasicManager from the BasicManagerRepository, when needed.
 
         // initialize the containers
         impl_initDocLibraryContainers_nothrow( xBasicLibs, xDialogLibs );
 
         // so that also dialogs etc. could be 'qualified' addressed
-        _out_rpBasicManager->GetLib(0)->SetParent( pAppBasic );
+        pBasicManager->GetLib(0)->SetParent( pAppBasic );
 
         // global properties in the document's Basic
-        _out_rpBasicManager->SetGlobalUNOConstant( "ThisComponent", makeAny( _rxDocumentModel ) );
+        pBasicManager->SetGlobalUNOConstant( "ThisComponent", makeAny( _rxDocumentModel ) );
 
         // notify
-        impl_notifyCreationListeners( _rxDocumentModel, *_out_rpBasicManager );
+        impl_notifyCreationListeners( _rxDocumentModel, *pBasicManager );
 
         // register as listener for this model being disposed/closed
         Reference< XComponent > xDocumentComponent( _rxDocumentModel, UNO_QUERY );
@@ -502,14 +489,9 @@ namespace basic
         startComponentListening( xDocumentComponent );
 
         // register as listener for the BasicManager being destroyed
-        StartListening( *_out_rpBasicManager );
+        StartListening( *pBasicManager );
 
-        // #i104876: Library container must not be modified just after
-        // creation. This happens as side effect when creating default
-        // "Standard" libraries and needs to be corrected here
-        xBasicLibs->setModified( sal_False );
-        xDialogLibs->setModified( sal_False );
-
+        return pBasicManager;
     }
 
     //--------------------------------------------------------------------
@@ -612,7 +594,7 @@ namespace basic
                 // a BasicManager which is still in our repository is being deleted.
                 // That's bad, since by definition, we *own* all instances in our
                 // repository.
-                OSL_FAIL( "ImplRepository::Notify: nobody should tamper with the managers, except ourself!" );
+                OSL_ENSURE( false, "ImplRepository::Notify: nobody should tamper with the managers, except ourself!" );
                 m_aStore.erase( loop );
                 break;
             }

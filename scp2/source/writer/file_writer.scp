@@ -27,9 +27,19 @@
 
 #include "macros.inc"
 
-STD_LIB_FILE( gid_File_Lib_Swd , swd)
+STD_UNO_LIB_FILE( gid_File_Lib_Swd , swd)
 
-SPECIAL_LIB_FILE(gid_File_Lib_Hwpreader, hwp)
+File gid_File_Lib_Hwpreader
+    TXT_FILE_BODY;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libhwp,UNXSUFFIX));
+  #else
+    Name = "hwp.dll";
+  #endif
+    Dir = SCP2_OOO_BIN_DIR;
+    Styles = (PACKED, UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+End
 
 File gid_File_Exe_Swriter
     BIN_FILE_BODY;

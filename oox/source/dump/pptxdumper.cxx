@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,28 +27,24 @@
  ************************************************************************/
 
 #include "oox/dump/pptxdumper.hxx"
-
+#include "oox/helper/zipstorage.hxx"
+#include "oox/ole/olestorage.hxx"
 #include "oox/dump/biffdumper.hxx"
 #include "oox/dump/oledumper.hxx"
 #include "oox/dump/xlsbdumper.hxx"
-#include "oox/helper/zipstorage.hxx"
-#include "oox/ole/olestorage.hxx"
 
 #if OOX_INCLUDE_DUMPER
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::io::XInputStream;
+using ::comphelper::MediaDescriptor;
+using ::oox::core::FilterBase;
 
 namespace oox {
 namespace dump {
 namespace pptx {
-
-// ============================================================================
-
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-
-using ::comphelper::MediaDescriptor;
-using ::oox::core::FilterBase;
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -94,17 +90,17 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
     }
     else if( aExt.equalsIgnoreAsciiCaseAscii( "bin" ) )
     {
-        if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ppt" ) ) && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "vbaProject.bin" ) ) )
+        if( rStrgPath.equalsAscii( "ppt" ) && rStrmName.equalsAscii( "vbaProject.bin" ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, false ) );
             VbaProjectStorageObject( *this, xStrg, rSysFileName ).dump();
         }
-        else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ppt/embeddings" ) ) )
+        else if( rStrgPath.equalsAscii( "ppt/embeddings" ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, false ) );
             OleStorageObject( *this, xStrg, rSysFileName ).dump();
         }
-        else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ppt/activeX" ) ) )
+        else if( rStrgPath.equalsAscii( "ppt/activeX" ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, true ) );
             ActiveXStorageObject( *this, xStrg, rSysFileName ).dump();

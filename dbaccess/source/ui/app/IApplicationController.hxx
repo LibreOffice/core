@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace dbaui
     {
     public:
         /** called when an entry in a tree list box has been double-clicked
-            @param  _rTree
+            @param	_rTree
                 The tree list box.
             @return
                 <TRUE/> if the double click event has been handled by the called, and should not
@@ -58,7 +58,7 @@ namespace dbaui
         virtual bool onEntryDoubleClick( SvTreeListBox& _rTree ) = 0;
 
         /** called when a container (category) in the application view has been selected
-            @param  _pTree
+            @param	_pTree
                 The tree list box.
             @return
                 <TRUE/> if the cotainer could be changed otherwise <FALSE/>
@@ -66,7 +66,7 @@ namespace dbaui
         virtual sal_Bool onContainerSelect(ElementType _eType) = 0;
 
         /** called when an entry in a tree view has been selected
-            @param  _pEntry
+            @param	_pEntry
                 the selected entry
         */
         virtual void onSelectionChanged() = 0;

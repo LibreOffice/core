@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,17 +35,17 @@
 // local includes
 #include "utf8conv.hxx"
 
-#define GSI_FILE_UNKNOWN        0x0000
-#define GSI_FILE_OLDSTYLE       0x0001
-#define GSI_FILE_L10NFRAMEWORK  0x0002
+#define GSI_FILE_UNKNOWN		0x0000
+#define GSI_FILE_OLDSTYLE		0x0001
+#define GSI_FILE_L10NFRAMEWORK	0x0002
 
 /*****************************************************************************/
-sal_uInt16 GetGSIFileType( SvStream &rStream )
+USHORT GetGSIFileType( SvStream &rStream )
 /*****************************************************************************/
 {
-    sal_uInt16 nFileType = GSI_FILE_UNKNOWN;
+    USHORT nFileType = GSI_FILE_UNKNOWN;
 
-    sal_uLong nPos( rStream.Tell());
+    ULONG nPos( rStream.Tell());
     rStream.Seek( STREAM_SEEK_TO_BEGIN );
 
     ByteString sLine;
@@ -65,7 +65,7 @@ sal_uInt16 GetGSIFileType( SvStream &rStream )
 }
 
 /*****************************************************************************/
-ByteString GetGSILineId( const ByteString &rLine, sal_uInt16 nFileType )
+ByteString GetGSILineId( const ByteString &rLine, USHORT nFileType )
 /*****************************************************************************/
 {
     ByteString sId;
@@ -90,7 +90,7 @@ ByteString GetGSILineId( const ByteString &rLine, sal_uInt16 nFileType )
 }
 
 /*****************************************************************************/
-ByteString GetGSILineLangId( const ByteString &rLine, sal_uInt16 nFileType )
+ByteString GetGSILineLangId( const ByteString &rLine, USHORT nFileType )
 /*****************************************************************************/
 {
     ByteString sLangId;
@@ -109,8 +109,8 @@ ByteString GetGSILineLangId( const ByteString &rLine, sal_uInt16 nFileType )
 }
 
 /*****************************************************************************/
-void ConvertGSILine( sal_Bool bToUTF8, ByteString &rLine,
-        rtl_TextEncoding nEncoding, sal_uInt16 nFileType )
+void ConvertGSILine( BOOL bToUTF8, ByteString &rLine,
+        rtl_TextEncoding nEncoding,	USHORT nFileType )
 /*****************************************************************************/
 {
     switch ( nFileType ) {
@@ -123,7 +123,7 @@ void ConvertGSILine( sal_Bool bToUTF8, ByteString &rLine,
 
         case GSI_FILE_L10NFRAMEWORK: {
             ByteString sConverted;
-            for ( sal_uInt16 i = 0; i < rLine.GetTokenCount( '\t' ); i++ ) {
+            for ( USHORT i = 0; i < rLine.GetTokenCount( '\t' ); i++ ) {
                 ByteString sToken = rLine.GetToken( i, '\t' );
                 if (( i > 9 ) && ( i < 14 )) {
                     if( bToUTF8 )
@@ -232,9 +232,9 @@ int _cdecl main( int argc, char *argv[] )
                 exit ( 3 );
             }
 
-            sal_uInt16 nFileType( GetGSIFileType( aGSI ));
+            USHORT nFileType( GetGSIFileType( aGSI ));
 
-            sal_uLong nMaxLines = (sal_uLong) ByteString( argv[ 2 ] ).ToInt64();
+            ULONG nMaxLines = (ULONG) ByteString( argv[ 2 ] ).ToInt64();
             if ( !nMaxLines ) {
                 fprintf( stderr, "\nERROR: Linecount must be at least 1!\n\n" );
                 exit ( 3 );
@@ -242,8 +242,8 @@ int _cdecl main( int argc, char *argv[] )
 
             ByteString sGSILine;
             ByteString sOldId;
-            sal_uLong nLine = 0;
-            sal_uLong nOutputFile = 1;
+            ULONG nLine = 0;
+            ULONG nOutputFile = 1;
 
             String sOutput( sBase );
             sOutput += String( "_", RTL_TEXTENCODING_ASCII_US );
@@ -315,19 +315,19 @@ int _cdecl main( int argc, char *argv[] )
             ByteString sCharset( argv[ 3 ] );
             sCharset.ToUpperAscii();
 
-            if      ( sCharset == "MS_932" )    nEncoding = RTL_TEXTENCODING_MS_932;
-            else if ( sCharset == "MS_936" )    nEncoding = RTL_TEXTENCODING_MS_936;
-            else if ( sCharset == "MS_949" )    nEncoding = RTL_TEXTENCODING_MS_949;
-            else if ( sCharset == "MS_950" )    nEncoding = RTL_TEXTENCODING_MS_950;
-            else if ( sCharset == "MS_1250" )   nEncoding = RTL_TEXTENCODING_MS_1250;
-            else if ( sCharset == "MS_1251" )   nEncoding = RTL_TEXTENCODING_MS_1251;
-            else if ( sCharset == "MS_1252" )   nEncoding = RTL_TEXTENCODING_MS_1252;
-            else if ( sCharset == "MS_1253" )   nEncoding = RTL_TEXTENCODING_MS_1253;
-            else if ( sCharset == "MS_1254" )   nEncoding = RTL_TEXTENCODING_MS_1254;
-            else if ( sCharset == "MS_1255" )   nEncoding = RTL_TEXTENCODING_MS_1255;
-            else if ( sCharset == "MS_1256" )   nEncoding = RTL_TEXTENCODING_MS_1256;
-            else if ( sCharset == "MS_1257" )   nEncoding = RTL_TEXTENCODING_MS_1257;
-            else if ( sCharset == "UTF8" )      nEncoding = RTL_TEXTENCODING_UTF8;
+            if 		( sCharset == "MS_932" ) 	nEncoding = RTL_TEXTENCODING_MS_932;
+            else if ( sCharset == "MS_936" ) 	nEncoding = RTL_TEXTENCODING_MS_936;
+            else if ( sCharset == "MS_949" ) 	nEncoding = RTL_TEXTENCODING_MS_949;
+            else if ( sCharset == "MS_950" ) 	nEncoding = RTL_TEXTENCODING_MS_950;
+            else if ( sCharset == "MS_1250" ) 	nEncoding = RTL_TEXTENCODING_MS_1250;
+            else if ( sCharset == "MS_1251" ) 	nEncoding = RTL_TEXTENCODING_MS_1251;
+            else if ( sCharset == "MS_1252" ) 	nEncoding = RTL_TEXTENCODING_MS_1252;
+            else if ( sCharset == "MS_1253" ) 	nEncoding = RTL_TEXTENCODING_MS_1253;
+            else if ( sCharset == "MS_1254" ) 	nEncoding = RTL_TEXTENCODING_MS_1254;
+            else if ( sCharset == "MS_1255" ) 	nEncoding = RTL_TEXTENCODING_MS_1255;
+            else if ( sCharset == "MS_1256" ) 	nEncoding = RTL_TEXTENCODING_MS_1256;
+            else if ( sCharset == "MS_1257" ) 	nEncoding = RTL_TEXTENCODING_MS_1257;
+            else if ( sCharset == "UTF8" )		nEncoding = RTL_TEXTENCODING_UTF8;
 
             else {
                 Help();
@@ -346,7 +346,7 @@ int _cdecl main( int argc, char *argv[] )
                 fprintf( stderr, "\nERROR: Could not open GSI-File %s!\n\n", ByteString( argv[ 3 ] ).GetBuffer());
                 exit ( 3 );
             }
-            sal_uInt16 nFileType( GetGSIFileType( aGSI ));
+            USHORT nFileType( GetGSIFileType( aGSI ));
 
             ByteString sGSILine;
             while ( !aGSI.IsEof()) {

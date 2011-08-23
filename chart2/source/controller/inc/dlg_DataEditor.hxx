@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ public:
     virtual void Resize();
 
     // Dialog
-    virtual sal_Bool Close();
+    virtual BOOL Close();
 
     void SetReadOnly( bool bReadOnly );
     bool ApplyChangesToModel();
@@ -77,6 +77,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
         m_xContext;
     ImageList       m_aToolboxImageList;
+    ImageList       m_aToolboxImageListHighContrast;
 
     /// handles actions of the toolbox
     DECL_LINK( ToolboxHdl, void* );
@@ -118,6 +119,6 @@ private:
 
 } // namespace chart
 
-#endif  // _SCH_DGRDATA_HXX
+#endif	// _SCH_DGRDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

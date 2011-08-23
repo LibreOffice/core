@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,12 +28,17 @@
 
 #include "hyperlinkcontext.hxx"
 
+#include <rtl/ustring.hxx>
+
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 
 #include "oox/helper/propertymap.hxx"
 #include "oox/core/relations.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/embeddedwavaudiofile.hxx"
+#include "properties.hxx"
+#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -49,7 +54,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
     , maProperties(aProperties)
 {
     OUString sURL, sHref;
-    OUString aRelId = xAttributes->getOptionalValue( R_TOKEN( id ) );
+    OUString aRelId = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_id );
     if ( aRelId.getLength() )
     {
         OSL_TRACE("OOX: URI rId %s", ::rtl::OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
@@ -60,19 +65,19 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
             sURL = getFilter().getAbsoluteUrl( sHref );
         }
     }
-    OUString sTooltip = xAttributes->getOptionalValue( R_TOKEN( tooltip ) );
+    OUString sTooltip = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_tooltip );
     if ( sTooltip.getLength() )
         maProperties[ PROP_Representation ] <<= sTooltip;
-    OUString sFrame = xAttributes->getOptionalValue( R_TOKEN( tgtFrame ) );
+    OUString sFrame = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_tgtFrame );
     if( sFrame.getLength() )
         maProperties[ PROP_TargetFrame ] <<= sFrame;
     OUString aAction = xAttributes->getOptionalValue( XML_action );
     if ( aAction.getLength() )
     {
         // reserved values of the unrestricted string aAction:
-        // ppaction://customshow?id=SHOW_ID             // custom presentation
-        // ppaction://hlinkfile                         // external file via r:id
-        // ppaction://hlinkpres?slideindex=SLIDE_NUM    // external presentation via r:id
+        // ppaction://customshow?id=SHOW_ID				// custom presentation
+        // ppaction://hlinkfile							// external file via r:id
+        // ppaction://hlinkpres?slideindex=SLIDE_NUM	// external presentation via r:id
         // ppaction://hlinkshowjump?jump=endshow
         // ppaction://hlinkshowjump?jump=firstslide
         // ppaction://hlinkshowjump?jump=lastslide
@@ -134,7 +139,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
                             sURL = CREATE_OUSTRING( "#Slide " ).concat( rtl::OUString::valueOf( nPageNumber ) );
                         else if ( aSlideType.match( sNotesSlide ) )
                             sURL = CREATE_OUSTRING( "#Notes " ).concat( rtl::OUString::valueOf( nPageNumber ) );
-//                      else: todo for other types such as notesMaster or slideMaster as they can't be referenced easily
+//						else: todo for other types such as notesMaster or slideMaster as they can't be referenced easily			
                     }
                 }
             }
@@ -160,9 +165,9 @@ Reference< XFastContextHandler > HyperLinkContext::createFastChildContext(
     Reference< XFastContextHandler > xRet;
     switch( aElement )
     {
-    case A_TOKEN( extLst ):
+    case NMSP_DRAWINGML|XML_extLst:
         return xRet;
-    case A_TOKEN( snd ):
+    case NMSP_DRAWINGML|XML_snd:
         EmbeddedWAVAudioFile aAudio;
         getEmbeddedWAVAudioFile( getRelations(), xAttribs, aAudio );
         break;

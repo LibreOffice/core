@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ SvpGlyphCache& SvpGlyphCache::GetInstance()
 {
     static SvpGlyphPeer aSvpGlyphPeer;
     static SvpGlyphCache aGC( aSvpGlyphPeer );
-    return aGC;
+    return aGC; 
 }
 
 // ===========================================================================
@@ -118,7 +118,7 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
                 bFound = rServerFont.GetGlyphBitmap8( nGlyphIndex, pGcpHelper->maRawBitmap );
                 break;
             default:
-                OSL_FAIL( "SVP GCP::GetGlyphBmp(): illegal scanline format");
+                DBG_ERROR( "SVP GCP::GetGlyphBmp(): illegal scanline format");
                 // fall back to black&white mask
                 nBmpFormat = Format::ONE_BIT_LSB_GREY;
                 bFound = false;
@@ -162,7 +162,7 @@ void SvpGlyphPeer::RemovingGlyph( ServerFont&, GlyphData& rGlyphData, int /*nGly
     if( rGlyphData.ExtDataRef().mpData != Format::NONE )
     {
         // release the glyph related resources
-        DBG_ASSERT( (rGlyphData.ExtDataRef().meInfo <= Format::MAX), "SVP::RG() invalid alpha format" );
+        DBG_ASSERT( (rGlyphData.ExtDataRef().meInfo <= Format::MAX), "SVP::RG() invalid alpha format" ); 
         SvpGcpHelper* pGcpHelper = (SvpGcpHelper*)rGlyphData.ExtDataRef().mpData;
         delete[] pGcpHelper->maRawBitmap.mpBits;
         delete pGcpHelper;
@@ -193,6 +193,8 @@ void PspKernInfo::Initialize() const
     if( rKernPairs.empty() )
         return;
 
+    // feed psprint's kerning list into a lookup-friendly container
+    maUnicodeKernPairs.resize( rKernPairs.size() );
     PspKernPairs::const_iterator it = rKernPairs.begin();
     for(; it != rKernPairs.end(); ++it )
     {
@@ -203,7 +205,7 @@ void PspKernInfo::Initialize() const
 
 // ===========================================================================
 
-sal_uInt16 SvpSalGraphics::SetFont( ImplFontSelectData* pIFSD, int nFallbackLevel )
+USHORT SvpSalGraphics::SetFont( ImplFontSelectData* pIFSD, int nFallbackLevel )
 {
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
@@ -253,15 +255,15 @@ void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
 
 // ---------------------------------------------------------------------------
 
-sal_uLong SvpSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs )
+ULONG SvpSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
 {
-    sal_uLong nGotPairs = 0;
+    ULONG nGotPairs = 0;
 
     if( m_pServerFont[0] != NULL )
     {
         ImplKernPairData* pTmpKernPairs = NULL;
         nGotPairs = m_pServerFont[0]->GetKernPairs( &pTmpKernPairs );
-        for( sal_uLong i = 0; i < nPairs && i < nGotPairs; ++i )
+        for( ULONG i = 0; i < nPairs && i < nGotPairs; ++i )
             pKernPairs[ i ] = pTmpKernPairs[ i ];
         delete[] pTmpKernPairs;
     }
@@ -271,21 +273,15 @@ sal_uLong SvpSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKer
 
 // ---------------------------------------------------------------------------
 
-const ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
+ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
 {
     if( !m_pServerFont[0] )
         return NULL;
 
-    const ImplFontCharMap* pIFCMap = m_pServerFont[0]->GetImplFontCharMap();
-    return pIFCMap;
-}
-
-bool SvpSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
-{
-    if (!m_pServerFont[0])
-        return false;
-
-    return m_pServerFont[0]->GetFontCapabilities(rFontCapabilities);
+    CmapResult aCmapResult;
+    if( !m_pServerFont[0]->GetFontCodeRanges( aCmapResult ) )
+        return NULL;
+    return new ImplFontCharMap( aCmapResult );
 }
 
 // ---------------------------------------------------------------------------
@@ -346,7 +342,7 @@ bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
 
 // ---------------------------------------------------------------------------
 
-sal_Bool SvpSalGraphics::CreateFontSubset(
+BOOL SvpSalGraphics::CreateFontSubset(
     const rtl::OUString& rToFile,
     const ImplFontData* pFont,
     sal_Int32* pGlyphIDs,
@@ -429,39 +425,39 @@ void SvpSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
 
 // ---------------------------------------------------------------------------
 
-sal_Bool SvpSalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+BOOL SvpSalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
-        return sal_False;
+        return FALSE;
 
     ServerFont* pSF = m_pServerFont[ nLevel ];
     if( !pSF )
-        return sal_False;
+        return FALSE;
 
     nGlyphIndex &= ~GF_FONTMASK;
     const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
     rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
-    return sal_True;
+    return TRUE;
 }
 
 // ---------------------------------------------------------------------------
 
-sal_Bool SvpSalGraphics::GetGlyphOutline( long nGlyphIndex, B2DPolyPolygon& rPolyPoly )
+BOOL SvpSalGraphics::GetGlyphOutline( long nGlyphIndex, B2DPolyPolygon& rPolyPoly )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
-        return sal_False;
+        return FALSE;
 
     const ServerFont* pSF = m_pServerFont[ nLevel ];
     if( !pSF )
-        return sal_False;
+        return FALSE;
 
     nGlyphIndex &= ~GF_FONTMASK;
     if( pSF->GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
-        return sal_True;
+        return TRUE;
 
-    return sal_False;
+    return FALSE;
 }
 
 // ---------------------------------------------------------------------------

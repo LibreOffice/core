@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 // SOActiveX.cpp : Implementation of CSOActiveX
@@ -45,26 +45,28 @@
 #define BARS_NUMBER  3
 #define BARS_TO_SHOW 2
 
-OLECHAR* pSlotUrl[BARS_NUMBER] =
+OLECHAR* pSlotUrl[BARS_NUMBER] = 
                         {L"slot:5910" // SID_TOGGLEFUNCTIONBAR
                         ,L"slot:5920" // SID_TOGGLESTATUSBAR
                         ,L"slot:6661" // SID_TOGGLE_MENUBAR
+//						,L"slot:10603" // SID_HYPERLINK_INSERT
                         };
 
-OLECHAR* pSlotName[BARS_NUMBER] =
-                        {L"FunctionBarVisible"      // SID_TOGGLEFUNCTIONBAR
-                        ,L"StatusBarVisible"        // SID_TOGGLESTATUSBAR
-                        ,L"MenuBarVisible"          // SID_TOGGLE_MENUBAR
+OLECHAR* pSlotName[BARS_NUMBER] = 
+                        {L"FunctionBarVisible"		// SID_TOGGLEFUNCTIONBAR
+                        ,L"StatusBarVisible"		// SID_TOGGLESTATUSBAR
+                        ,L"MenuBarVisible"			// SID_TOGGLE_MENUBAR
+//						,L"InsertHyperlink"			// SID_HYPERLINK_INSERT
                         };
 
 
 
 /////////////////////////////////////////////////////////////////////////////
 
-HRESULT ExecuteFunc( IDispatch* idispUnoObject,
-                     OLECHAR* sFuncName,
-                     CComVariant* params,
-                     unsigned int count,
+HRESULT ExecuteFunc( IDispatch* idispUnoObject, 
+                     OLECHAR* sFuncName, 
+                     CComVariant* params, 
+                     unsigned int count, 
                      CComVariant* pResult )
 {
     if( !idispUnoObject )
@@ -78,14 +80,14 @@ HRESULT ExecuteFunc( IDispatch* idispUnoObject,
 
     // DEBUG
     EXCEPINFO myInfo;
-    return idispUnoObject->Invoke( id, IID_NULL,LOCALE_USER_DEFAULT, DISPATCH_METHOD,
+    return idispUnoObject->Invoke( id, IID_NULL,LOCALE_USER_DEFAULT, DISPATCH_METHOD, 
                     &dispparams, pResult, &myInfo, 0);
 }
 
-HRESULT GetIDispByFunc( IDispatch* idispUnoObject,
-                          OLECHAR* sFuncName,
-                          CComVariant* params,
-                          unsigned int count,
+HRESULT GetIDispByFunc( IDispatch* idispUnoObject, 
+                          OLECHAR* sFuncName, 
+                          CComVariant* params, 
+                          unsigned int count, 
                           CComPtr<IDispatch>& pdispResult )
 {
     if( !idispUnoObject )
@@ -103,9 +105,9 @@ HRESULT GetIDispByFunc( IDispatch* idispUnoObject,
     return S_OK;
 }
 
-HRESULT PutPropertiesToIDisp( IDispatch* pdispObject,
-                              OLECHAR** sMemberNames,
-                              CComVariant* pVariant,
+HRESULT PutPropertiesToIDisp( IDispatch* pdispObject, 
+                              OLECHAR** sMemberNames, 
+                              CComVariant* pVariant, 
                               unsigned int count )
 {
     for( unsigned int ind = 0; ind < count; ind++ )
@@ -132,19 +134,19 @@ CSOActiveX::CSOActiveX()
 , mOffWin( NULL )
 , mbViewOnly( FALSE )
 {
-    CLSID clsFactory = {0x82154420,0x0FBF,0x11d4,{0x83, 0x13,0x00,0x50,0x04,0x52,0x6A,0xB4}};
+    CLSID clsFactory = {0x82154420,0x0FBF,0x11d4,{0x83, 0x13,0x00,0x50,0x04,0x52,0x6A,0xB4}}; 
     HRESULT hr = CoCreateInstance( clsFactory, NULL, CLSCTX_ALL, __uuidof(IDispatch), (void**)&mpDispFactory);
 
-    mPWinClass.style            = CS_HREDRAW|CS_VREDRAW;
-    mPWinClass.lpfnWndProc      = ::DefWindowProc;
-    mPWinClass.cbClsExtra       = 0;
-    mPWinClass.cbWndExtra       = 0;
-    mPWinClass.hInstance        = (HINSTANCE) GetModuleHandle(NULL); //myInstance;
-    mPWinClass.hIcon            = NULL;
-    mPWinClass.hCursor          = NULL;
-    mPWinClass.hbrBackground    = (HBRUSH) COLOR_BACKGROUND;
-    mPWinClass.lpszMenuName     = NULL;
-    mPWinClass.lpszClassName    = STAROFFICE_WINDOWCLASS;
+    mPWinClass.style			= CS_HREDRAW|CS_VREDRAW; 
+    mPWinClass.lpfnWndProc		= ::DefWindowProc; 
+    mPWinClass.cbClsExtra		= 0; 
+    mPWinClass.cbWndExtra		= 0; 
+    mPWinClass.hInstance		= (HINSTANCE) GetModuleHandle(NULL); //myInstance; 
+    mPWinClass.hIcon			= NULL; 
+    mPWinClass.hCursor			= NULL; 
+    mPWinClass.hbrBackground	= (HBRUSH) COLOR_BACKGROUND; 
+    mPWinClass.lpszMenuName	    = NULL; 
+    mPWinClass.lpszClassName	= STAROFFICE_WINDOWCLASS;
 
     RegisterClass(&mPWinClass);
 }
@@ -190,7 +192,7 @@ STDMETHODIMP CSOActiveX::Load ( LPSTREAM pStm )
 
     // may be later?
     // for now just ignore
-
+    
     return S_OK;
 }
 
@@ -199,19 +201,19 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog )
     IPropertyBag2* pPropBag2;
     HRESULT hr = pPropBag->QueryInterface( IID_IPropertyBag2, (void**)&pPropBag2 );
     ATLASSERT( hr >= 0 );
-
+    
     if( !SUCCEEDED( hr ) )
         return hr;
-
+    
     unsigned long aNum;
     hr = pPropBag2->CountProperties( &aNum );
     ATLASSERT( hr >= 0 );
     if( !SUCCEEDED( hr ) )
         return hr;
-
+        
     PROPBAG2* aPropNames = new PROPBAG2[aNum];
     unsigned long aReaded;
-
+    
     hr = pPropBag2->GetPropertyInfo( 0,
                                      aNum,
                                      aPropNames,
@@ -228,7 +230,7 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog )
     hr = pPropBag2->Read( aNum,
                           aPropNames,
                           NULL,
-                          aVal,
+                          aVal, 
                           hvs );
     ATLASSERT( hr >= 0 );
     if( !SUCCEEDED( hr ) )
@@ -247,7 +249,7 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog )
         {
             mCurFileUrl = wcsdup( aVal[ind].bstrVal );
         }
-        else if( aVal[ind].vt == VT_BSTR
+        else if( aVal[ind].vt == VT_BSTR 
                 && !strcmp( OLE2T( aPropNames[ind].pstrName ), "readonly" ) )
         {
             if( !strcmp( OLE2T( aVal[ind].bstrVal ), "true" ) )
@@ -268,10 +270,10 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog )
 
     if( !mpDispFactory )
         return hr;
-
+    
     mbLoad = TRUE;
 
-    Invalidate();
+    Invalidate();  
     UpdateWindow();
 
     return hr;
@@ -295,10 +297,10 @@ HRESULT CSOActiveX::GetUrlStruct( OLECHAR* sUrl, CComPtr<IDispatch>& pdispUrl )
     if( !SUCCEEDED( hr ) ) return hr;
 
     CComPtr<IDispatch> pdispTransformer;
-    hr = GetIDispByFunc( mpDispFactory,
-                         L"createInstance",
-                         &CComVariant( L"com.sun.star.util.URLTransformer" ),
-                         1,
+    hr = GetIDispByFunc( mpDispFactory, 
+                         L"createInstance", 
+                         &CComVariant( L"com.sun.star.util.URLTransformer" ), 
+                         1, 
                          pdispTransformer );
     if( !SUCCEEDED( hr ) ) return hr;
 
@@ -328,9 +330,9 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     HRESULT hr = GetUnoStruct( L"com.sun.star.awt.Rectangle", pdispRectangle );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    OLECHAR* sRectMemberNames[4] = { L"X",
-                                      L"Y",
-                                      L"Width",
+    OLECHAR* sRectMemberNames[4] = { L"X", 
+                                      L"Y", 
+                                      L"Width", 
                                       L"Height" };
     CComVariant pRectVariant[4];
     pRectVariant[0] = pRectVariant[1] = pRectVariant[2] = pRectVariant[3] = CComVariant( 0 );
@@ -344,10 +346,10 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     if( !SUCCEEDED( hr ) ) return hr;
 
     // fill in descriptor with info
-    OLECHAR* sDescriptorMemberNames[6] = { L"Type",
-                                 L"WindowServiceName",
-                                 L"ParentIndex",
-                                 L"Parent",
+    OLECHAR* sDescriptorMemberNames[6] = { L"Type", 
+                                 L"WindowServiceName", 
+                                 L"ParentIndex", 
+                                 L"Parent", 
                                  L"Bounds",
                                  L"WindowAttributes" };
     CComVariant pDescriptorVar[6];
@@ -401,7 +403,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     // initialize window
     hr = ExecuteFunc( mpDispWin, L"setBackground", &CComVariant( (long)0xFFFFFFFF ), 1, &dummyResult );
     if( !SUCCEEDED( hr ) ) return hr;
-
+    
     hr = ExecuteFunc( mpDispWin, L"setVisible", &CComVariant( TRUE ), 1, &dummyResult );
     if( !SUCCEEDED( hr ) ) return hr;
 
@@ -429,10 +431,10 @@ HRESULT CSOActiveX::CallDispatch1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL s
     aArgs[2] = CComVariant( pdispURL );
     aArgs[1] = CComVariant( L"" );
     aArgs[0] = CComVariant( (int)0 );
-    hr = GetIDispByFunc( mpDispFrame,
-                         L"queryDispatch",
-                         aArgs,
-                         3,
+    hr = GetIDispByFunc( mpDispFrame, 
+                         L"queryDispatch", 
+                         aArgs, 
+                         3, 
                          pdispXDispatch );
     if( !SUCCEEDED( hr ) ) return hr;
 
@@ -442,7 +444,7 @@ HRESULT CSOActiveX::CallDispatch1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL s
     hr = GetUnoStruct( L"com.sun.star.beans.PropertyValue", pdispPropVal );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    OLECHAR*    sPropMemberNames[2] = { L"Name", L"Value" };
+    OLECHAR* 	sPropMemberNames[2] = { L"Name", L"Value" };
     CComVariant pPropVar[2];
     pPropVar[0] = CComVariant( sArgName );
     pPropVar[1] = CComVariant(); pPropVar[1].vt = VT_BOOL; pPropVar[1].boolVal = sArgVal ? VARIANT_TRUE : VARIANT_FALSE ;
@@ -450,7 +452,7 @@ HRESULT CSOActiveX::CallDispatch1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL s
     if( !SUCCEEDED( hr ) ) return hr;
 
     SafeArrayPutElement( pPropVals, &ix, pdispPropVal );
-
+    
     CComVariant aDispArgs[2];
     aDispArgs[1] = CComVariant( pdispURL );
     // aDispArgs[0] = CComVariant( pPropVals ); such constructor is not defined ??!
@@ -496,7 +498,7 @@ HRESULT CSOActiveX::LoadURLToFrame( )
 
     return S_OK;
 }
-
+        
 HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
 {
     if( m_spInPlaceSite && mCurFileUrl )
@@ -515,7 +517,7 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
             }
 
             mParentWin = hwnd;
-            mOffWin = CreateWindow(
+            mOffWin = CreateWindow( 
                                 STAROFFICE_WINDOWCLASS,
                                 "OfficeContainer",
                                 WS_CHILD | WS_CLIPCHILDREN | WS_BORDER,
@@ -534,16 +536,16 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
         {
             RECT aRect;
             ::GetWindowRect( mOffWin, &aRect );
-
+            
             if( aRect.left !=  di.prcBounds->left || aRect.top != di.prcBounds->top
              || aRect.right != di.prcBounds->right || aRect.bottom != di.prcBounds->bottom )
             {
                 // on this state the office window should exist already
                 ::SetWindowPos( mOffWin,
                               HWND_TOP,
-                              di.prcBounds->left,
-                              di.prcBounds->top,
-                              di.prcBounds->right - di.prcBounds->left,
+                              di.prcBounds->left, 
+                              di.prcBounds->top, 
+                              di.prcBounds->right - di.prcBounds->left, 
                               di.prcBounds->bottom - di.prcBounds->top,
                               SWP_NOZORDER );
 
@@ -557,7 +559,7 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
                 hr = ExecuteFunc( mpDispWin, L"setPosSize", aPosArgs, 5, &dummyResult );
                 if( !SUCCEEDED( hr ) ) return hr;
             }
-        }
+        }                      
 
         if( ! mpDispFrame )
         {
@@ -614,12 +616,12 @@ STDMETHODIMP CSOActiveX::SetClientSite( IOleClientSite* aClientSite )
     return hr;
 }
 
-STDMETHODIMP CSOActiveX::Invoke(DISPID dispidMember,
-                                REFIID riid,
-                                LCID lcid,
-                                WORD wFlags,
+STDMETHODIMP CSOActiveX::Invoke(DISPID dispidMember, 
+                                REFIID riid, 
+                                LCID lcid, 
+                                WORD wFlags, 
                                 DISPPARAMS* pDispParams,
-                                VARIANT* pvarResult,
+                                VARIANT* pvarResult, 
                                 EXCEPINFO* pExcepInfo,
                                 UINT* puArgErr)
 {
@@ -631,8 +633,8 @@ STDMETHODIMP CSOActiveX::Invoke(DISPID dispidMember,
 
     if ( dispidMember == DISPID_ONQUIT )
         Cleanup();
-
-    IDispatchImpl<ISOActiveX, &IID_ISOActiveX,
+    
+    IDispatchImpl<ISOActiveX, &IID_ISOActiveX, 
                   &LIBID_SO_ACTIVEXLib>::Invoke(
              dispidMember, riid, lcid, wFlags, pDispParams,
              pvarResult, pExcepInfo, puArgErr);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,6 @@
 #include <vector>
 #include <set>
 
-#include <cstdio>
-
 // =======================================================================
 
 ImplFontMetric::ImplFontMetric()
@@ -54,7 +52,6 @@ ImplFontMetric::ImplFontMetric()
 
 inline void ImplFontMetric::AddReference()
 {
-    // TODO: disable refcounting on the default maps?
     ++mnRefCount;
 }
 
@@ -62,7 +59,6 @@ inline void ImplFontMetric::AddReference()
 
 inline void ImplFontMetric::DeReference()
 {
-    // TODO: disable refcounting on the default maps?
     if( --mnRefCount <= 0 )
         delete this;
 }
@@ -127,15 +123,15 @@ FontInfo& FontInfo::operator=( const FontInfo& rInfo )
 
 // -----------------------------------------------------------------------
 
-sal_Bool FontInfo::operator==( const FontInfo& rInfo ) const
+BOOL FontInfo::operator==( const FontInfo& rInfo ) const
 {
     if( !Font::operator==( rInfo ) )
-        return sal_False;
+        return FALSE;
     if( mpImplMetric == rInfo.mpImplMetric )
-        return sal_True;
+        return TRUE;
     if( *mpImplMetric == *rInfo.mpImplMetric  )
-        return sal_True;
-    return sal_False;
+        return TRUE;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -147,28 +143,28 @@ FontType FontInfo::GetType() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool FontInfo::IsDeviceFont() const
+BOOL FontInfo::IsDeviceFont() const
 {
     return mpImplMetric->IsDeviceFont();
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool FontInfo::SupportsLatin() const
+BOOL FontInfo::SupportsLatin() const
 {
     return mpImplMetric->SupportsLatin();
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool FontInfo::SupportsCJK() const
+BOOL FontInfo::SupportsCJK() const
 {
     return mpImplMetric->SupportsCJK();
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool FontInfo::SupportsCTL() const
+BOOL FontInfo::SupportsCTL() const
 {
     return mpImplMetric->SupportsCTL();
 }
@@ -231,7 +227,7 @@ FontMetric& FontMetric::operator =( const FontMetric& rMetric )
 
 // -----------------------------------------------------------------------
 
-sal_Bool FontMetric::operator==( const FontMetric& rMetric ) const
+BOOL FontMetric::operator==( const FontMetric& rMetric ) const
 {
     return FontInfo::operator==( rMetric );
 }
@@ -240,13 +236,13 @@ sal_Bool FontMetric::operator==( const FontMetric& rMetric ) const
 
 CmapResult::CmapResult( bool bSymbolic,
     const sal_uInt32* pRangeCodes, int nRangeCount,
-    const int* pStartGlyphs, const sal_uInt16* pExtraGlyphIds )
-:   mpRangeCodes( pRangeCodes)
-,   mpStartGlyphs( pStartGlyphs)
-,   mpGlyphIds( pExtraGlyphIds)
-,   mnRangeCount( nRangeCount)
-,   mbSymbolic( bSymbolic)
-,   mbRecoded( false)
+    const int* pStartGlyphs, const USHORT* pExtraGlyphIds )
+:	mpRangeCodes( pRangeCodes)
+,	mpStartGlyphs( pStartGlyphs)
+,	mpGlyphIds( pExtraGlyphIds)
+,	mnRangeCount( nRangeCount)
+,	mbSymbolic( bSymbolic)
+,	mbRecoded( false)
 {}
 
 // =======================================================================
@@ -257,7 +253,7 @@ ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
 ,   mpGlyphIds( rCR.mpGlyphIds )
 ,   mnRangeCount( rCR.mnRangeCount )
 ,   mnCharCount( 0 )
-,   mnRefCount( 0 )
+,   mnRefCount( 1 )
 {
     const sal_uInt32* pRangePtr = mpRangeCodes;
     for( int i = mnRangeCount; --i >= 0; pRangePtr += 2 )
@@ -268,8 +264,7 @@ ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
     }
 }
 
-static ImplFontCharMap* pDefaultUnicodeImplFontCharMap = NULL;
-static ImplFontCharMap* pDefaultSymbolImplFontCharMap = NULL;
+static ImplFontCharMap* pDefaultImplFontCharMap = NULL;
 static const sal_uInt32 aDefaultUnicodeRanges[] = {0x0020,0xD800, 0xE000,0xFFF0};
 static const sal_uInt32 aDefaultSymbolRanges[] = {0x0020,0x0100, 0xF020,0xF100};
 
@@ -290,60 +285,44 @@ ImplFontCharMap::~ImplFontCharMap()
     delete[] mpRangeCodes;
     delete[] mpStartGlyphs;
     delete[] mpGlyphIds;
- }
+}
 
 // -----------------------------------------------------------------------
-
-namespace
-{
-    ImplFontCharMap *GetDefaultUnicodeMap()
-    {
-        if( !pDefaultUnicodeImplFontCharMap )
-        {
-            const sal_uInt32* pRangeCodes = aDefaultUnicodeRanges;
-            int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
-            CmapResult aDefaultCR( false, pRangeCodes, nCodesCount/2 );
-            pDefaultUnicodeImplFontCharMap = new ImplFontCharMap( aDefaultCR );
-            pDefaultUnicodeImplFontCharMap->AddReference();
-        }
-
-        return pDefaultUnicodeImplFontCharMap;
-    }
-
-    ImplFontCharMap *GetDefaultSymbolMap()
-    {
-        if( !pDefaultSymbolImplFontCharMap )
-        {
-            const sal_uInt32* pRangeCodes = aDefaultSymbolRanges;
-            int nCodesCount = sizeof(aDefaultSymbolRanges) / sizeof(*pRangeCodes);
-            CmapResult aDefaultCR( true, pRangeCodes, nCodesCount/2 );
-            pDefaultSymbolImplFontCharMap = new ImplFontCharMap( aDefaultCR );
-            pDefaultSymbolImplFontCharMap->AddReference();
-        }
-
-        return pDefaultSymbolImplFontCharMap;
-    }
-}
 
 ImplFontCharMap* ImplFontCharMap::GetDefaultMap( bool bSymbols)
 {
-    return bSymbols ? GetDefaultSymbolMap() : GetDefaultUnicodeMap();
+    if( pDefaultImplFontCharMap )
+        pDefaultImplFontCharMap->AddReference();
+    else
+    {
+        const sal_uInt32* pRangeCodes = aDefaultUnicodeRanges;
+        int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
+        if( bSymbols )
+        {
+            pRangeCodes	= aDefaultSymbolRanges;
+            nCodesCount	= sizeof(aDefaultSymbolRanges) / sizeof(*pRangeCodes);
+        }
+
+        CmapResult aDefaultCR( bSymbols, pRangeCodes, nCodesCount/2 );
+        pDefaultImplFontCharMap = new ImplFontCharMap( aDefaultCR );
+    }
+
+    return pDefaultImplFontCharMap;
 }
 
 // -----------------------------------------------------------------------
 
-void ImplFontCharMap::AddReference( void ) const
+void ImplFontCharMap::AddReference()
 {
-    // TODO: disable refcounting on the default maps?
     ++mnRefCount;
 }
 
 // -----------------------------------------------------------------------
 
-void ImplFontCharMap::DeReference( void ) const
+void ImplFontCharMap::DeReference()
 {
     if( --mnRefCount <= 0 )
-        if( (this != pDefaultUnicodeImplFontCharMap) && (this != pDefaultSymbolImplFontCharMap) )
+        if( this != pDefaultImplFontCharMap )
             delete this;
 }
 
@@ -399,7 +378,7 @@ int ImplFontCharMap::GetGlyphIndex( sal_uInt32 cChar ) const
     // return -1 if the object doesn't know the glyph ids
     if( !mpStartGlyphs )
         return -1;
-
+    
     // return 0 if the unicode doesn't have a matching glyph
     int nRange = ImplFindRangeIndex( cChar );
     // check that we are inside any range
@@ -415,7 +394,7 @@ int ImplFontCharMap::GetGlyphIndex( sal_uInt32 cChar ) const
     // check that we are inside a range
     if( (nRange & 1) != 0 )
         return 0;
-
+    
     // get glyph index directly or indirectly
     int nGlyphIndex = cChar - mpRangeCodes[ nRange ];
     const int nStartIndex = mpStartGlyphs[ nRange/2 ];
@@ -555,7 +534,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 {
     rResult.mpRangeCodes = NULL;
     rResult.mpStartGlyphs= NULL;
-    rResult.mpGlyphIds   = NULL;
+    rResult.mpGlyphIds	 = NULL;
     rResult.mnRangeCount = 0;
     rResult.mbRecoded    = false;
     rResult.mbSymbolic   = false;
@@ -628,7 +607,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     sal_uInt32* pCodePairs = NULL;
     int* pStartGlyphs = NULL;
 
-    typedef std::vector<sal_uInt16> U16Vector;
+    typedef std::vector<USHORT> U16Vector;
     U16Vector aGlyphIdArray;
     aGlyphIdArray.reserve( 0x1000 );
     aGlyphIdArray.push_back( 0 );
@@ -666,7 +645,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
                 const unsigned char* pGlyphIdPtr = pOffsetBase + 2*i + nRangeOffset;
                 for( sal_uInt32 c = cMinChar; c <= cMaxChar; ++c, pGlyphIdPtr+=2 ) {
                     const int nGlyphIndex = GetUShort( pGlyphIdPtr ) + nGlyphDelta;
-                    aGlyphIdArray.push_back( static_cast<sal_uInt16>(nGlyphIndex) );
+                    aGlyphIdArray.push_back( static_cast<USHORT>(nGlyphIndex) );
                 }
             }
         }
@@ -808,17 +787,17 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
     // prepare the glyphid-array if needed
     // TODO: merge ranges if they are close enough?
-    sal_uInt16* pGlyphIds = NULL;
+    USHORT* pGlyphIds = NULL;
     if( !aGlyphIdArray.empty())
     {
-        pGlyphIds = new sal_uInt16[ aGlyphIdArray.size() ];
-        sal_uInt16* pOut = pGlyphIds;
+        pGlyphIds = new USHORT[ aGlyphIdArray.size() ];
+        USHORT* pOut = pGlyphIds;
         U16Vector::const_iterator it = aGlyphIdArray.begin();
         while( it != aGlyphIdArray.end() )
             *(pOut++) = *(it++);
     }
 
-    // update the result struct
+    // update the result struct    
     rResult.mpRangeCodes = pCodePairs;
     rResult.mpStartGlyphs = pStartGlyphs;
     rResult.mnRangeCount = nRangeCount;
@@ -830,9 +809,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
 FontCharMap::FontCharMap()
 :   mpImpl( ImplFontCharMap::GetDefaultMap() )
-{
-    mpImpl->AddReference();
-}
+{}
 
 // -----------------------------------------------------------------------
 
@@ -858,26 +835,31 @@ int FontCharMap::CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const
 
 // -----------------------------------------------------------------------
 
-void FontCharMap::Reset( const ImplFontCharMap* pNewMap )
+void FontCharMap::Reset( ImplFontCharMap* pNewMap )
 {
-    mpImpl->DeReference();
     if( pNewMap == NULL )
+    {
+        mpImpl->DeReference();
         mpImpl = ImplFontCharMap::GetDefaultMap();
+    }
     else if( pNewMap != mpImpl )
+    {
+        mpImpl->DeReference();
         mpImpl = pNewMap;
-    mpImpl->AddReference();
+        mpImpl->AddReference();
+    }
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool FontCharMap::IsDefaultMap() const
+BOOL FontCharMap::IsDefaultMap() const
 {
     return mpImpl->IsDefaultMap();
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool FontCharMap::HasChar( sal_uInt32 cChar ) const
+BOOL FontCharMap::HasChar( sal_uInt32 cChar ) const
 {
     return mpImpl->HasChar( cChar );
 }

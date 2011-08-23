@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@
 #include "oox/drawingml/theme.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "tokens.hxx"
 
 using ::rtl::OUString;
 using ::oox::core::XmlFilterBase;
@@ -81,7 +82,7 @@ void TextFont::assignIfUsed( const TextFont& rTextFont )
         *this = rTextFont;
 }
 
-bool TextFont::getFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily, const XmlFilterBase& rFilter ) const
+bool TextFont::getFontData( OUString& rFontName, sal_Int16 rnFontPitch, sal_Int16& rnFontFamily, const XmlFilterBase& rFilter ) const
 {
     if( const Theme* pTheme = rFilter.getCurrentTheme() )
         if( const TextFont* pFont = pTheme->resolveFont( maTypeface ) )
@@ -89,7 +90,7 @@ bool TextFont::getFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal_Int
     return implGetFontData( rFontName, rnFontPitch, rnFontFamily );
 }
 
-bool TextFont::implGetFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily ) const
+bool TextFont::implGetFontData( OUString& rFontName, sal_Int16 rnFontPitch, sal_Int16& rnFontFamily ) const
 {
     rFontName = maTypeface;
     rnFontPitch = lclGetFontPitch( extractValue< sal_Int16 >( mnPitch, 0, 4 ) );

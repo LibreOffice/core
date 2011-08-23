@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,12 @@
 #include <rtl/ustring.hxx>
 
 #include "oox/helper/attributelist.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/core/fragmenthandler.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "pptfilterhelpers.hxx"
+#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -79,29 +81,29 @@ namespace oox { namespace ppt {
 
         switch( aElementToken )
         {
-        case PPT_TOKEN( boolVal ):
+        case NMSP_PPT|XML_boolVal:
         {
             bool val = attribs.getBool( XML_val, false );
             maValue = makeAny( val );
             break;
         }
-        case PPT_TOKEN( clrVal ):
+        case NMSP_PPT|XML_clrVal:
             xRet.set( new ::oox::drawingml::ColorContext( *this, maColor ) );
             // we'll defer setting the Any until the end.
             break;
-        case PPT_TOKEN( fltVal ):
+        case NMSP_PPT|XML_fltVal:
         {
             double val = attribs.getDouble( XML_val, 0.0 );
             maValue = makeAny( val );
             break;
         }
-        case PPT_TOKEN( intVal ):
+        case NMSP_PPT|XML_intVal:
         {
             sal_Int32 val = attribs.getInteger( XML_val, 0 );
             maValue = makeAny( val );
             break;
         }
-        case PPT_TOKEN( strVal ):
+        case NMSP_PPT|XML_strVal:
         {
             OUString val = attribs.getString( XML_val, OUString() );
             convertMeasure( val ); // ignore success or failure if it fails, use as is

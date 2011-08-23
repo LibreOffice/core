@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,10 +52,10 @@
 |*
 \************************************************************************/
 
-SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, sal_Bool bAreaPage ) :
+SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, BOOL bAreaPage ) :
         SfxTabDialog ( pParent, SdResId( TAB_PAGE ), pAttr ),
-        mrOutAttrs          ( *pAttr ),
-        mpDocShell          ( pDocSh )
+        mrOutAttrs			( *pAttr ),
+        mpDocShell			( pDocSh )
 {
     SvxColorTableItem aColorTableItem(*( (const SvxColorTableItem*)
         ( mpDocShell->GetItem( SID_COLOR_TABLE ) ) ) );
@@ -87,15 +87,15 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet*
 |*
 \************************************************************************/
 
-void SdPageDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
+void SdPageDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch(nId)
     {
     case RID_SVXPAGE_PAGE:
-        aSet.Put (SfxAllEnumItem((const sal_uInt16)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_PRESENTATION));
-        aSet.Put (SfxAllEnumItem((const sal_uInt16)SID_PAPER_START, PAPER_A0));
-        aSet.Put (SfxAllEnumItem((const sal_uInt16)SID_PAPER_END, PAPER_E));
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_PRESENTATION));
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_START, PAPER_A0));
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_END, PAPER_E));
         rPage.PageCreated(aSet);
         break;
     case RID_SVXPAGE_AREA:

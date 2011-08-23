@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 
 CharacterSource::CharacterSource()
-    :   dpSource(new char[2]),
+    :	dpSource(new char[2]),
         nSourceSize(0),
         nCurPos(0),
         nLastCut(0),
@@ -77,7 +77,7 @@ CharacterSource::LoadText(csv::bstream & io_rSource)
 void
 CharacterSource::InsertTextAtCurPos( const char * i_sText2Insert )
 {
-    if ( !i_sText2Insert || !i_sText2Insert[0] )
+    if ( i_sText2Insert == 0 ? true : strlen(i_sText2Insert) == 0 )
         return;
 
     aSourcesStack.push( S_SourceState(
@@ -143,12 +143,12 @@ CharacterSource::MoveOn_OverStack()
 }
 
 CharacterSource::
-S_SourceState::S_SourceState( DYN char *    dpSource_,
-                              intt          nSourceSize_,
-                              intt          nCurPos_,
-                              intt          nLastCut_,
-                              intt          nLastTokenStart_,
-                              char          cCharAtLastCut_ )
+S_SourceState::S_SourceState( DYN char *	dpSource_,
+                              intt			nSourceSize_,
+                              intt			nCurPos_,
+                              intt			nLastCut_,
+                              intt			nLastTokenStart_,
+                              char 			cCharAtLastCut_ )
     :   dpSource(dpSource_),
         nSourceSize(nSourceSize_),
         nCurPos(nCurPos_),

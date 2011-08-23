@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,24 +39,24 @@ module com { module sun { module star { module ucb {
 /** specifies methods to convert between (file) URLs and file paths in system
     dependent notation.
 
-    @version    1.0
-    @author     Andreas Bille
+    @version	1.0
+    @author   	Andreas Bille
 */
 published interface XFileIdentifierConverter : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Get information about the "locality" of a file content provider.
+    /** Get information about the 'locality' of a file content provider.
 
-        <p>The returned information can be used to chose the "best" among a
+        <p>The returned information can be used to chose the 'best' among a
         number of file content providers implementing this interface.
 
         @param BaseURL
         the base (file) URL used to specify a file content provider.
 
         @returns
-        an appropriate value representing the "locality" of the specified file
+        an appropriat value representing the 'locality' of the specified file
         content provider.   Generally, higher (non-negative) numbers denote
-        file content providers that are more "local", and negative numbers
+        file content providers that are more 'local', and negative numbers
         denote content providers that are not file content providers at all.
         As a convention (and to keep this useful), values should be restricted
         to the range from -1 to +10, inclusive.

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,6 +60,7 @@
 #include "xmlfileview.hxx"
 
 
+using namespace rtl;
 using namespace utl;
 using namespace osl;
 using namespace comphelper;
@@ -73,8 +74,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
-
-using ::rtl::OUString;
 
 class GlobalEventListenerImpl : public ::cppu::WeakImplHelper1< com::sun::star::document::XEventListener >
 {
@@ -136,7 +135,7 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
     }
     catch( Exception& )
     {
-        OSL_FAIL( "checkComponent exception catched!" );
+        DBG_ERROR( "checkComponent exception catched!" );
     }
 
     return false;
@@ -182,11 +181,11 @@ XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, cons
 
     try
     {
-        Reference< XConfigManager > xCfgMgr( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" ))), UNO_QUERY );
+        Reference< XConfigManager > xCfgMgr( mxMSF->createInstance( OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")), UNO_QUERY );
         if( xCfgMgr.is() )
             sDTDPath = xCfgMgr->substituteVariables( sDTDPath );
 
-        mxGlobalBroadcaster = Reference < XEventBroadcaster >::query( mxMSF->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.GlobalEventBroadcaster" )) ) );
+        mxGlobalBroadcaster = Reference < XEventBroadcaster >::query( mxMSF->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster") ) );
         if ( mxGlobalBroadcaster.is() )
         {
             mxGlobalEventListener = new GlobalEventListenerImpl( this );
@@ -195,7 +194,7 @@ XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, cons
     }
     catch( Exception& )
     {
-        OSL_FAIL( "XMLFilterTestDialog::XMLFilterTestDialog exception catched!" );
+        DBG_ERROR( "XMLFilterTestDialog::XMLFilterTestDialog exception catched!" );
     }
 }
 
@@ -208,7 +207,7 @@ XMLFilterTestDialog::~XMLFilterTestDialog()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "XMLFilterTestDialog::~XMLFilterTestDialog exception catched!" );
+        DBG_ERROR( "XMLFilterTestDialog::~XMLFilterTestDialog exception catched!" );
     }
 
     delete mpSourceDLG;
@@ -329,9 +328,9 @@ void XMLFilterTestDialog::onExportBrowse()
            ::sfx2::FileDialogHelper aDlg(
             com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
-
-        Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ), UNO_QUERY );
-        Reference< XNameAccess > xTypeDetection( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ), UNO_QUERY );
+        
+        Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.FilterFactory" ) ), UNO_QUERY );
+        Reference< XNameAccess > xTypeDetection( mxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.TypeDetection" ) ), UNO_QUERY );
         if( xFilterContainer.is() && xTypeDetection.is() )
         {
             Sequence< OUString > aFilterNames( xFilterContainer->getElementNames() );
@@ -354,22 +353,22 @@ void XMLFilterTestDialog::onExportBrowse()
 
                 for( sal_Int32  nValue = 0; (nValue < aValues.getLength()) && (nFound != 15); nValue++, pValues++ )
                 {
-                    if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
+                    if( pValues->Name.equalsAscii( "Type" ) )
                     {
                         pValues->Value >>= aType;
                         nFound |= 1;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentService" ) ) )
+                    else if( pValues->Name.equalsAscii( "DocumentService" ) )
                     {
                         pValues->Value >>= aService;
                         nFound |= 2;
                     }
-                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Flags" ) ) )
+                    else if( pValues->Name.equalsAscii( "Flags" ) )
                     {
                         pValues->Value >>= nFlags;
                         nFound |= 4;
                     }
-                    if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UIName" ) ) )
+                    if( pValues->Name.equalsAscii( "UIName" ) )
                     {
                         pValues->Value >>= aInterfaceName;
                         nFound |= 8;
@@ -393,7 +392,7 @@ void XMLFilterTestDialog::onExportBrowse()
                             OUString aExtension;
                             for( nValue = 0; nValue < aValues2.getLength(); nValue++, pValues2++ )
                             {
-                                if( pValues2->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Extensions" ) ) )
+                                if( pValues2->Name.equalsAscii( "Extensions" ) )
                                 {
                                     Sequence< OUString > aExtensions;
                                     if( pValues2->Value >>= aExtensions )
@@ -405,7 +404,7 @@ void XMLFilterTestDialog::onExportBrowse()
                                         {
                                             if( n > 0 )
                                                 aExtension += OUString( sal_Unicode(';') );
-                                            aExtension += OUString( RTL_CONSTASCII_USTRINGPARAM( "*." ));
+                                            aExtension += OUString::createFromAscii("*.");
                                             aExtension += (*pExtensions++);
                                         }
                                     }
@@ -435,13 +434,13 @@ void XMLFilterTestDialog::onExportBrowse()
         {
             maExportRecentFile = aDlg.GetPath();
 
-            Reference< XComponentLoader > xLoader( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
-            Reference< XInteractionHandler > xInter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" )) ), UNO_QUERY );
+            Reference< XComponentLoader > xLoader( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+            Reference< XInteractionHandler > xInter( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.task.InteractionHandler" ) ), UNO_QUERY );
             if( xLoader.is() && xInter.is() )
             {
                 OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
                 Sequence< PropertyValue > aArguments(1);
-                aArguments[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
+                aArguments[0].Name = OUString::createFromAscii( "InteractionHandler" );
                 aArguments[0].Value <<= xInter;
                 Reference< XComponent > xComp( xLoader->loadComponentFromURL( maExportRecentFile, aFrame, 0, aArguments ) );
                 if( xComp.is() )
@@ -453,7 +452,7 @@ void XMLFilterTestDialog::onExportBrowse()
     }
     catch(Exception&)
     {
-        OSL_FAIL("XMLFilterTestDialog::onExportBrowse exception caught!");
+        DBG_ERROR("XMLFilterTestDialog::onExportBrowse exception caught!");
     }
 
     initDialog();
@@ -478,11 +477,11 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
             if( pAppInfo )
             {
                 File aOutputFile( aTempFileURL );
-                /* File::RC rc = */ aOutputFile.open( osl_File_OpenFlag_Write );
+                /* File::RC rc = */ aOutputFile.open( OpenFlag_Write );
 
                 // create xslt exporter
                 Reference< XOutputStream > xIS( new comphelper::OSLOutputStreamWrapper( aOutputFile ) );
-
+                
                 int bUseDTD = (mpFilterInfo->maDTD.getLength() != 0) ? 1 : 0 ;
                 int bUseDocType = (mpFilterInfo->maDocType.getLength() != 0 ) ? 1 : 0;
                 Sequence< PropertyValue > aSourceData( 2 + bUseDTD + bUseDocType );
@@ -506,7 +505,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                     aSourceData[i++].Value <<= mpFilterInfo->maDocType;
                 }
 
-                Reference< XExportFilter > xExporter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTFilter" )) ), UNO_QUERY );
+                Reference< XExportFilter > xExporter( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.documentconversion.XSLTFilter" ) ), UNO_QUERY );
                 Reference< XDocumentHandler > xHandler( xExporter, UNO_QUERY );
                 if( xHandler.is() )
                 {
@@ -516,14 +515,14 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                     Reference< XMultiServiceFactory > xDocFac( xComp, UNO_QUERY );
 
                     Reference< XEmbeddedObjectResolver > xObjectResolver;
-                    Reference< XGraphicObjectResolver > xGrfResolver;
+                    Reference< XGraphicObjectResolver >	xGrfResolver;
 
                     if( xDocFac.is() )
                     {
                         try
                         {
-                            xGrfResolver = Reference< XGraphicObjectResolver >::query( xDocFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExportGraphicObjectResolver" )) ) );
-                            xObjectResolver = Reference< XEmbeddedObjectResolver >::query( xDocFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExportEmbeddedObjectResolver" )) ) );
+                            xGrfResolver = Reference< XGraphicObjectResolver >::query( xDocFac->createInstance( OUString::createFromAscii("com.sun.star.document.ExportGraphicObjectResolver") ) );
+                            xObjectResolver = Reference< XEmbeddedObjectResolver >::query( xDocFac->createInstance( OUString::createFromAscii("com.sun.star.document.ExportEmbeddedObjectResolver") ) );
                         }
                         catch( Exception& )
                         {
@@ -532,10 +531,10 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
 
                     Sequence< Any > aArgs( 1 + ( xGrfResolver.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
                     Any* pArgs = aArgs.getArray();
-                    if( xGrfResolver.is() )         *pArgs++ <<= xGrfResolver;
-                    if( xObjectResolver.is() )      *pArgs++ <<= xObjectResolver;
+                    if( xGrfResolver.is() ) 		*pArgs++ <<= xGrfResolver;
+                    if( xObjectResolver.is() )		*pArgs++ <<= xObjectResolver;
 
-    //              *pArgs++ <<= xInfoSet;
+    //				*pArgs++ <<= xInfoSet;
                     *pArgs   <<= xHandler;
 
                     Reference< XFilter > xFilter( mxMSF->createInstanceWithArguments( pAppInfo->maXMLExporter, aArgs ), UNO_QUERY );
@@ -545,10 +544,10 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                         if( xExporter2.is() )
                         {
                             xExporter2->setSourceDocument( xComp );
-
+                        
                             Sequence< PropertyValue > aDescriptor( 1 );
                             aDescriptor[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) );
-                            aDescriptor[0].Value <<= aTempFileURL;
+                            aDescriptor[0].Value <<= aTempFileURL;	
 
                             if( xFilter->filter( aDescriptor ) )
                                 displayXMLFile( aTempFileURL );
@@ -560,7 +559,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "XMLFilterTestDialog::doExport exception catched!" );
+        DBG_ERROR( "XMLFilterTestDialog::doExport exception catched!" );
     }
 }
 
@@ -589,11 +588,11 @@ void XMLFilterTestDialog::onImportBrowse()
         if( i > 0 )
             aExtensions += ';';
 
-        aExtensions += String( RTL_CONSTASCII_USTRINGPARAM("*.") );
+        aExtensions += String( RTL_CONSTASCII_STRINGPARAM("*.") );
 
         if( nLastIndex == -1 )
         {
-
+            
             aExtensions += String( mpFilterInfo->maExtension.copy( nCurrentIndex ) );
         }
         else
@@ -629,16 +628,16 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 {
     try
     {
-        Reference< XComponentLoader > xLoader( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
-        Reference< XInteractionHandler > xInter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" )) ), UNO_QUERY );
+        Reference< XComponentLoader > xLoader( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+        Reference< XInteractionHandler > xInter( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.task.InteractionHandler" ) ), UNO_QUERY );
         if( xLoader.is() && xInter.is() )
         {
 
             OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
             Sequence< PropertyValue > aArguments(2);
-            aArguments[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+            aArguments[0].Name = OUString::createFromAscii( "FilterName" );
             aArguments[0].Value <<= mpFilterInfo->maFilterName;
-            aArguments[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
+            aArguments[1].Name = OUString::createFromAscii( "InteractionHandler" );
             aArguments[1].Value <<= xInter;
 
             xLoader->loadComponentFromURL( rURL, aFrame, 0, aArguments );
@@ -649,36 +648,36 @@ void XMLFilterTestDialog::import( const OUString& rURL )
             TempFile aTempFile;
             OUString aTempFileURL( aTempFile.GetURL() );
 
-            Reference< XImportFilter > xImporter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTFilter" )) ), UNO_QUERY );
+            Reference< XImportFilter > xImporter( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.documentconversion.XSLTFilter" ) ), UNO_QUERY );
             if( xImporter.is() )
             {
                 osl::File aInputFile( rURL );
-                aInputFile.open( osl_File_OpenFlag_Read );
+                osl::File::RC rc = aInputFile.open( OpenFlag_Read );
 
                 Reference< XInputStream > xIS( new comphelper::OSLInputStreamWrapper( aInputFile ) );
-
+                
                 Sequence< PropertyValue > aSourceData( 5 );
                 int i = 0;
 
-                aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ));
+                aSourceData[i  ].Name = OUString::createFromAscii( "InputStream" );
                 aSourceData[i++].Value <<= xIS;
 
-                aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ));
+                aSourceData[i  ].Name = OUString::createFromAscii( "FileName" );
                 aSourceData[i++].Value <<= rURL;
 
-                aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Indent" ));
+                aSourceData[i  ].Name = OUString::createFromAscii( "Indent" );
                 aSourceData[i++].Value <<= (sal_Bool)sal_True;
 
-                aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocType_Public" ));
-                aSourceData[i++].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" ));
+                aSourceData[i  ].Name = OUString::createFromAscii("DocType_Public");
+                aSourceData[i++].Value <<= OUString::createFromAscii("-//OpenOffice.org//DTD OfficeDocument 1.0//EN");
 
-                aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocType_System" ));
+                aSourceData[i  ].Name = OUString::createFromAscii("DocType_System");
                 aSourceData[i++].Value <<= sDTDPath;
 
-                Reference< XDocumentHandler > xWriter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ), UNO_QUERY );
-
+                Reference< XDocumentHandler > xWriter( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), UNO_QUERY );
+                
                 File aOutputFile( aTempFileURL );
-                aOutputFile.open( osl_File_OpenFlag_Write );
+                rc = aOutputFile.open( OpenFlag_Write );
 
                 Reference< XOutputStream > xOS( new OSLOutputStreamWrapper( aOutputFile ) );
                 Reference< XActiveDataSource > xDocSrc( xWriter, UNO_QUERY );
@@ -690,10 +689,10 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 
             displayXMLFile( aTempFileURL );
         }
-    }
+    }				
     catch(Exception&)
     {
-        OSL_FAIL("XMLFilterTestDialog::import catched an exception" );
+        DBG_ERROR("XMLFilterTestDialog::import catched an exception" );
     }
 }
 
@@ -730,7 +729,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
 
     try
     {
-        Reference< XDesktop > xDesktop( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
+        Reference< XDesktop > xDesktop( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
         if( xDesktop.is() )
         {
             Reference< XComponent > xTest( mxLastFocusModel );
@@ -738,7 +737,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
             {
                 xRet = xTest;
             }
-            else
+            else 
             {
                 xTest = (Reference< XComponent >)xDesktop->getCurrentComponent();
 
@@ -773,7 +772,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
     }
     catch( Exception& )
     {
-        OSL_FAIL( "XMLFilterTestDialog::getFrontMostDocument exception catched!" );
+        DBG_ERROR( "XMLFilterTestDialog::getFrontMostDocument exception catched!" );
     }
 
     return xRet;

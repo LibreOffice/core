@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,27 +37,27 @@ class SwDoc;
 
 class SwDPage : public FmFormPage, public SdrObjUserCall
 {
-    SdrPageGridFrameList*   pGridLst;
-    SwDoc&                  rDoc;
+    SdrPageGridFrameList*	pGridLst;
+    SwDoc& 					rDoc;
 
 public:
-    SwDPage(SwDrawDocument& rNewModel, sal_Bool bMasterPage=sal_False);
+    SwDPage(SwDrawDocument& rNewModel, BOOL bMasterPage=FALSE);
     ~SwDPage();
 
     // #i3694#
     // This GetOffset() method is not needed anymore, it even leads to errors.
     // virtual Point GetOffset() const;
-    virtual SdrObject* ReplaceObject( SdrObject* pNewObj, sal_uLong nObjNum );
+    virtual SdrObject* ReplaceObject( SdrObject* pNewObj, ULONG nObjNum );
 
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV,
                                     const Rectangle *pRect) const;
 
-    sal_Bool RequestHelp( Window* pWindow, SdrView* pView, const HelpEvent& rEvt );
+    BOOL RequestHelp( Window* pWindow, SdrView* pView, const HelpEvent& rEvt );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 };
 
-#endif     // _DPAGE_HXX
+#endif	   // _DPAGE_HXX
 
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@
  *              cierror & ciwarn take a format and a single int (char) argument.
  *              cfatal takes a format and a single string argument.
  */
-
+
 /*
  * This table must be rewritten for a non-Ascii machine.
  *
@@ -169,6 +169,7 @@ OP_LPA,OP_RPA,OP_MUL,OP_ADD,   000,OP_SUB,   DOT,OP_DIV, /* 28 ()*+,-./ */
 
 #endif
 
+
 /*
  *                      C P P   S y m b o l   T a b l e s
  */
@@ -226,7 +227,7 @@ skipws()
 #endif
         return (c);
 }
-
+
 void scanid(int c)
 /*
  * Get the next token (an id) into the token buffer.
@@ -267,7 +268,7 @@ macroid(int c)
         }
         return (c);
 }
-
+
 int
 catenate()
 /*
@@ -333,7 +334,7 @@ catenate()
         return (FALSE);                         /* Not supported        */
 #endif
 }
-
+
 int
 scanstring(int delim,
 #ifndef _NO_PROTO
@@ -372,7 +373,7 @@ void         (*outfun)() /* BP */
             return (FALSE);
         }
 }
-
+
 void scannumber(int c,
 #ifndef _NO_PROTO
 register void    (*outfun)( int )  /* BP */    /* Output/store func    */
@@ -502,7 +503,7 @@ nomore: unget();                                /* Not part of a number */
         if (octal89 && radix == 8)
             cwarn("Illegal digit in octal number", NULLST);
 }
-
+
 void save(int c)
 {
         if (workp >= &work[NWORK]) {
@@ -563,6 +564,7 @@ getmem(int size)
             cfatal("Out of memory", NULLST);
         return (result);
 }
+
 
 DEFBUF *
 lookid(int c)
@@ -602,7 +604,7 @@ lookid(int c)
         }
         return ((temp == 0) ? dp : NULL);
 }
-
+
 DEFBUF *
 defendel(char* name, int delete)
 /*
@@ -659,7 +661,7 @@ void dumpdef(char *why)
         register DEFBUF         **syp;
         FILE *pRememberOut = NULL;
 
-        if ( bDumpDefs )    /*ER */
+        if ( bDumpDefs )	/*ER */
         {
             pRememberOut = pCppOut;
             pCppOut = pDefOut;
@@ -729,7 +731,7 @@ void dumpadef(char *why, register DEFBUF *dp)
                 EVALTYPE valEval;
 
                 bIsInEval = 1;
-                infile = NULL;          /* start from scrap */
+                infile = NULL;			/* start from scrap */
                 line = 0;
                 wrongline = 0;
                 *token = EOS;
@@ -739,7 +741,7 @@ void dumpadef(char *why, register DEFBUF *dp)
                 strcpy( file->buffer, dp->repl );
                 fprintf( pCppOut, " ===> ");
                 nEvalOff = 0;
-                cppmain();              /* get() frees also *file */
+                cppmain();				/* get() frees also *file */
                 valEval = 0;
                 if ( 0 == evaluate( EvalBuf, &valEval ) )
                 {
@@ -770,7 +772,7 @@ void dumpadef(char *why, register DEFBUF *dp)
             pCppOut = pRememberOut;
 }
 #endif
-
+
 /*
  *                      G E T
  */
@@ -867,8 +869,8 @@ newline:
             }
         }
 #if (HOST == SYS_UNIX)
-/*ER*/  if (c == '\r')
-/*ER*/      return get();                       /* DOS fuck             */
+/*ER*/	if (c == '\r')
+/*ER*/		return get();						/* DOS fuck				*/
 #endif
         if (c == '\n')                          /* Maintain current     */
             ++line;                             /* line counter         */
@@ -978,7 +980,7 @@ newline:
         }
         else if (c == '\f' || c == VT)          /* Form Feed, Vertical  */
             c = ' ';                            /* Tab are whitespace   */
-        else if (c == 0xef)                     /* eat up UTF-8 BOM */
+        else if (c == 0xef)						/* eat up UTF-8 BOM */
         {
             if((c = get()) == 0xbb)
             {
@@ -1028,7 +1030,9 @@ void ungetstring(char* text)
  */
 {
         register FILEINFO       *file;
+#ifndef ZTC /* BP */
         extern FILEINFO         *getfile();
+#endif
         file = getfile(strlen(text) + 1, "");
         strcpy(file->buffer, text);
 }
@@ -1051,7 +1055,7 @@ cget()
 #endif
         return (c);
 }
-
+
 /*
  * Error messages and other hacks.  The first byte of severity
  * is 'S' for string arguments and 'I' for int arguments.  This

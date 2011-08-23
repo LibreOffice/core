@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,6 +55,15 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+
+// macro for selecting a normal or high contrast bitmap the stack variable
+// bIsHighContrast must exist and reflect the correct state
+#define SELECT_BITMAP(name) Bitmap( SchResId( bIsHighContrast ? name ## _HC : name ))
+#define SELECT_IMAGE(name) Image( SchResId( bIsHighContrast ? name ## _HC : name ))
+
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 
 namespace
 {
@@ -179,8 +188,6 @@ Dim3DLookResourceGroup::Dim3DLookResourceGroup( Window* pWindow )
     m_aLB_Scheme.SetDropDownLineCount(2);
 
     m_aLB_Scheme.SetSelectHdl( LINK( this, Dim3DLookResourceGroup, SelectSchemeHdl ) );
-    m_aLB_Scheme.SetAccessibleName(m_aCB_3DLook.GetText());
-    m_aLB_Scheme.SetAccessibleRelationLabeledBy(&m_aCB_3DLook);
 }
 Dim3DLookResourceGroup::~Dim3DLookResourceGroup()
 {
@@ -220,7 +227,7 @@ void Dim3DLookResourceGroup::fillControls( const ChartTypeParameter& rParameter 
 void Dim3DLookResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     rParameter.b3DLook = m_aCB_3DLook.IsChecked();
-    sal_uInt16 nPos = m_aLB_Scheme.GetSelectEntryPos();
+    USHORT nPos = m_aLB_Scheme.GetSelectEntryPos();
     if( POS_3DSCHEME_SIMPLE == nPos )
         rParameter.eThreeDLookScheme = ThreeDLookScheme_Simple;
     else if( POS_3DSCHEME_REALISTIC == nPos )
@@ -336,9 +343,6 @@ StackingResourceGroup::StackingResourceGroup( Window* pWindow )
     m_aRB_Stack_Y.SetToggleHdl( LINK( this, StackingResourceGroup, StackingChangeHdl ) );
     m_aRB_Stack_Y_Percent.SetToggleHdl( LINK( this, StackingResourceGroup, StackingChangeHdl ) );
     m_aRB_Stack_Z.SetToggleHdl( LINK( this, StackingResourceGroup, StackingChangeHdl ) );
-    m_aRB_Stack_Y.SetAccessibleRelationMemberOf(&m_aCB_Stacked);
-    m_aRB_Stack_Y_Percent.SetAccessibleRelationMemberOf(&m_aCB_Stacked);
-    m_aRB_Stack_Z.SetAccessibleRelationMemberOf(&m_aCB_Stacked);
 }
 StackingResourceGroup::~StackingResourceGroup()
 {
@@ -467,9 +471,9 @@ private:
     MetricField m_aMF_SplineOrder;
 
     FixedLine       m_aFL_DialogButtons;
-    HelpButton      m_aBP_Help;
-    OKButton        m_aBP_OK;
-    CancelButton    m_aBP_Cancel;
+    OKButton		m_aBP_OK;
+    CancelButton	m_aBP_Cancel;
+    HelpButton		m_aBP_Help;
 };
 
 SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
@@ -482,9 +486,9 @@ SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
         , m_aFT_SplineOrder( this, SchResId( FT_SPLINE_ORDER ) )
         , m_aMF_SplineOrder( this, SchResId( MF_SPLINE_ORDER ) )
         , m_aFL_DialogButtons( this, SchResId( FL_SPLINE_DIALOGBUTTONS ) )
-    , m_aBP_Help( this, SchResId(BTN_HELP) )
         , m_aBP_OK( this, SchResId(BTN_OK) )
-    , m_aBP_Cancel( this, SchResId(BTN_CANCEL) )
+        , m_aBP_Cancel( this, SchResId(BTN_CANCEL) )
+        , m_aBP_Help( this, SchResId(BTN_HELP) )
 {
     FreeResource();
 
@@ -502,7 +506,7 @@ void SplinePropertiesDialog::StateChanged( StateChangedType nType )
 {
     Dialog::StateChanged( nType );
 
-    if( nType == STATE_CHANGE_INITSHOW )
+    if( nType == STATE_CHANGE_INITSHOW )  
     {
         adjustControlPositions();
         adjustSize();
@@ -702,7 +706,7 @@ IMPL_LINK( SplineResourceGroup, SplineDetailsDialogHdl, void*, EMPTYARG )
     ChartTypeParameter aOldParameter;
     getSplinePropertiesDialog().fillParameter( aOldParameter, m_aCB_Splines.IsChecked() );
 
-    sal_Bool bOldSmoothLines = m_aCB_Splines.IsChecked();
+    BOOL bOldSmoothLines = m_aCB_Splines.IsChecked();
     m_aCB_Splines.Check();
     if( RET_OK == getSplinePropertiesDialog().Execute() )
     {
@@ -763,7 +767,7 @@ void GeometryResourceGroup::setPosition( const Point& rPoint )
 
 void GeometryResourceGroup::fillControls( const ChartTypeParameter& rParameter )
 {
-    sal_uInt16 nGeometry3D = static_cast<sal_uInt16>(rParameter.nGeometry3D);
+    USHORT nGeometry3D = static_cast<USHORT>(rParameter.nGeometry3D);
     m_aGeometryResources.SelectEntryPos(nGeometry3D);
     m_aGeometryResources.Enable(rParameter.b3DLook);
 }
@@ -846,6 +850,8 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
     m_aSubTypeList.SetColCount(4);
     m_aSubTypeList.SetLineCount(1);
 
+    bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
+
     bool bDisableComplexChartTypes = false;
     uno::Reference< beans::XPropertySet > xProps( m_xChartModel, uno::UNO_QUERY );
     if ( xProps.is() )
@@ -881,7 +887,7 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
     for( ; aIter != aEnd; aIter++ )
     {
-        m_aMainTypeList.InsertEntry( (*aIter)->getName(), (*aIter)->getImage() );
+        m_aMainTypeList.InsertEntry( (*aIter)->getName(), (*aIter)->getImage( bIsHighContrast ) );
         (*aIter)->setChangeListener( this );
     }
 
@@ -1080,9 +1086,10 @@ void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bo
     m_nChangingCalls++;
     if( m_pCurrentMainType && bAlsoResetSubTypeList )
     {
-        m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, rParameter );
+        bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
+        m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, bIsHighContrast, rParameter );
     }
-    m_aSubTypeList.SelectItem( static_cast<sal_uInt16>( rParameter.nSubTypeIndex) );
+    m_aSubTypeList.SelectItem( static_cast<USHORT>( rParameter.nSubTypeIndex) );
     m_pAxisTypeResourceGroup->fillControls( rParameter );
     m_pDim3DLookResourceGroup->fillControls( rParameter );
     m_pStackingResourceGroup->fillControls( rParameter );
@@ -1107,7 +1114,7 @@ void ChartTypeTabPage::initializePage()
 
     ::std::vector< ChartTypeDialogController* >::iterator             aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
-    for( sal_uInt16 nM=0; aIter != aEnd; aIter++, nM++ )
+    for( USHORT nM=0; aIter != aEnd; aIter++, nM++ )
     {
         if( (*aIter)->isSubType(aServiceName) )
         {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     m_ColorConfig.AddListener(this);
 
     //#i97044#
-    EnableFocusSelectionHide( sal_False );
+    EnableFocusSelectionHide( FALSE );
 }
 
 //------------------------------------------------------------------------------
@@ -127,11 +127,11 @@ IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
     if(aText != m_strOrigText)
     {
         OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
-        SfxUndoManager& rUndoMgr = rController.GetUndoManager();
+        SfxUndoManager* pUndoMgr = rController.getUndoMgr();
         OSqlEditUndoAct* pUndoAct = new OSqlEditUndoAct( this );
 
         pUndoAct->SetOriginalText( m_strOrigText );
-        rUndoMgr.AddUndoAction( pUndoAct );
+        pUndoMgr->AddUndoAction( pUndoAct );
 
         rController.InvalidateFeature(SID_UNDO);
         rController.InvalidateFeature(SID_REDO);
@@ -175,7 +175,7 @@ void OSqlEdit::SetText(const String& rNewText)
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
     if (m_timerUndoActionCreation.IsActive())
-    {   // die noch anstehenden Undo-Action erzeugen
+    {	// die noch anstehenden Undo-Action erzeugen
         m_timerUndoActionCreation.Stop();
         LINK(this, OSqlEdit, OnUndoActionTimer).Call(NULL);
     }

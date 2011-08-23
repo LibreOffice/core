@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,18 +24,20 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_reflection_XUnionTypeDescription_idl__
-#define __com_sun_star_reflection_XUnionTypeDescription_idl__
-
-#include <com/sun/star/reflection/XTypeDescription.idl>
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module reflection {
-
-//=============================================================================
-
+#ifndef __com_sun_star_reflection_XUnionTypeDescription_idl__ 
+#define __com_sun_star_reflection_XUnionTypeDescription_idl__ 
+ 
+#ifndef __com_sun_star_reflection_XTypeDescription_idl__ 
+#include <com/sun/star/reflection/XTypeDescription.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module reflection {  
+ 
+//============================================================================= 
+ 
 /** Deprecated.  Unions are not supported.
     Reflects a union type.
     The discriminant of a union switches between the current value types.
@@ -44,55 +46,55 @@
     @deprecated
 */
 published interface XUnionTypeDescription: com::sun::star::reflection::XTypeDescription
-{
+{ 
     /** Returns the (ordinal) discriminant type.
-
+        
         @return
                 type of the discriminant
     */
-    com::sun::star::reflection::XTypeDescription getDiscriminantType();
-
+    com::sun::star::reflection::XTypeDescription getDiscriminantType(); 
+    
     /** Returns the default discriminant value.
-
+        
         @return
                 default discriminant value
     */
-    any getDefaultDiscriminant();
-
+    any getDefaultDiscriminant(); 
+    
     /** Returns the type of the default value.
-
+        
         @return
                 type of the default value
     */
-    com::sun::star::reflection::XTypeDescription getDefaultMemberType();
-
+    com::sun::star::reflection::XTypeDescription getDefaultMemberType(); 
+    
     /** Returns discriminants of all members in order of IDL declaration.
 
         @return
                 discriminants of all members
     */
-    sequence< any > getDiscriminants();
-
+    sequence< any > getDiscriminants(); 
+    
     /** Returns types of all members in order of IDL declaration.
 
         @return
                 types of all members
     */
-    sequence< com::sun::star::reflection::XTypeDescription > getMemberTypes();
-
+    sequence< com::sun::star::reflection::XTypeDescription > getMemberTypes(); 
+    
     /** Returns names of all members in order of IDL declaration.
 
         @return
                 names of all members
     */
-    sequence< string > getMemberNames();
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    sequence< string > getMemberNames();	 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

@@ -62,7 +62,6 @@ using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
 using rtl::OUString;
-using ZipUtils::Inflater;
 
 /** This class is used to read entries from a zip file
  */
@@ -253,9 +252,9 @@ sal_Bool ZipFile::StaticFillData ( rtl::Reference < EncryptionData > & rData,
             sal_Int16 nSaltLength =   pBuffer[nPos++] & 0xFF;
             nSaltLength          |= ( pBuffer[nPos++] & 0xFF ) << 8;
             sal_Int16 nIVLength   = ( pBuffer[nPos++] & 0xFF );
-            nIVLength            |= ( pBuffer[nPos++] & 0xFF ) << 8;
+            nIVLength 			 |= ( pBuffer[nPos++] & 0xFF ) << 8;
             sal_Int16 nDigestLength = pBuffer[nPos++] & 0xFF;
-            nDigestLength        |= ( pBuffer[nPos++] & 0xFF ) << 8;
+            nDigestLength 	     |= ( pBuffer[nPos++] & 0xFF ) << 8;
 
             sal_Int16 nMediaTypeLength = pBuffer[nPos++] & 0xFF;
             nMediaTypeLength |= ( pBuffer[nPos++] & 0xFF ) << 8;
@@ -287,12 +286,12 @@ sal_Bool ZipFile::StaticFillData ( rtl::Reference < EncryptionData > & rData,
     return bOk;
 }
 
-Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference< XInputStream >& xStream,
+Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(	const Reference< XInputStream >& xStream,
                                                                 const rtl::Reference < EncryptionData > &rData )
         throw ( packages::WrongPasswordException, ZipIOException, RuntimeException )
 {
     if ( !rData.is() )
-        throw ZipIOException( OUString(RTL_CONSTASCII_USTRINGPARAM( "Encrypted stream without encryption data!\n" )),
+        throw ZipIOException( OUString::createFromAscii( "Encrypted stream without encryption data!\n" ),
                             Reference< XInterface >() );
 
     if ( !rData->aKey.getLength() )
@@ -300,7 +299,7 @@ Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference<
 
     Reference< XSeekable > xSeek( xStream, UNO_QUERY );
     if ( !xSeek.is() )
-        throw ZipIOException( OUString(RTL_CONSTASCII_USTRINGPARAM( "The stream must be seekable!\n" )),
+        throw ZipIOException( OUString::createFromAscii( "The stream must be seekable!\n" ),
                             Reference< XInterface >() );
 
 
@@ -359,7 +358,6 @@ sal_Bool ZipFile::StaticHasValidPassword( const Sequence< sal_Int8 > &aReadBuffe
 
     aDigestResult = rtl_digest_getSHA1 ( aDigest, aDigestSeq.getArray(), RTL_DIGEST_LENGTH_SHA1 );
     OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
-    (void)aDigestResult;
 
     // If we don't have a digest, then we have to assume that the password is correct
     if (  rData->aDigest.getLength() != 0  &&
@@ -561,7 +559,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
         // in case no digest is provided there is no way
         // to detect password correctness
         if ( !rData.is() )
-            throw ZipException( OUString(RTL_CONSTASCII_USTRINGPARAM( "Encrypted stream without encryption data!\n" )),
+            throw ZipException( OUString::createFromAscii( "Encrypted stream without encryption data!\n" ),
                                 Reference< XInterface >() );
 
         // if we have a digest, then this file is an encrypted one and we should
@@ -937,7 +935,7 @@ sal_Int32 ZipFile::recover()
                     aMemGrabber >> nCompressedSize;
                     aMemGrabber >> nSize;
 
-                    for( EntryHash::iterator aIter = aEntries.begin(); aIter != aEntries.end(); ++aIter )
+                    for( EntryHash::iterator aIter = aEntries.begin(); aIter != aEntries.end(); aIter++ )
                     {
                         ZipEntry aTmp = (*aIter).second;
 

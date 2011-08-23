@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,8 @@
 
 #ifndef SVX_UNOMODEL_HXX
 #define SVX_UNOMODEL_HXX
+
+#ifndef SVX_LIGHT
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -104,6 +106,8 @@ SVX_DLLPUBLIC extern sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const com
 SVX_DLLPUBLIC extern sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream );
 SVX_DLLPUBLIC extern sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xComponent  );
 SVX_DLLPUBLIC extern sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xComponent, const char* pImportService );
+
+#endif
 
 #endif
 

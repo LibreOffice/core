@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,6 @@
 #include <svl/undo.hxx>
 #include "global.hxx"
 #include "address.hxx"
-#include "docsh.hxx"
 
 class ScDocument;
 class ScDocShell;
@@ -47,25 +46,21 @@ class ScSimpleUndo: public SfxUndoAction
 public:
                     TYPEINFO();
                     ScSimpleUndo( ScDocShell* pDocSh );
-    virtual         ~ScSimpleUndo();
+    virtual 		~ScSimpleUndo();
 
-    virtual sal_Bool    Merge( SfxUndoAction *pNextAction );
+    virtual BOOL	Merge( SfxUndoAction *pNextAction );
 
 protected:
-    ScDocShell*     pDocShell;
-    SfxUndoAction*  pDetectiveUndo;
+    ScDocShell*		pDocShell;
+    SfxUndoAction*	pDetectiveUndo;
 
-    bool            IsPaintLocked() const { return pDocShell->IsPaintLocked(); }
+    void			BeginUndo();
+    void			EndUndo();
+    void			BeginRedo();
+    void			EndRedo();
 
-    bool            SetViewMarkData( const ScMarkData& rMarkData );
-
-    void            BeginUndo();
-    void            EndUndo();
-    void            BeginRedo();
-    void            EndRedo();
-
-    static void     ShowTable( SCTAB nTab );
-    static void     ShowTable( const ScRange& rRange );
+    static void		ShowTable( SCTAB nTab );
+    static void		ShowTable( const ScRange& rRange );
 };
 
 //----------------------------------------------------------------------------
@@ -78,20 +73,20 @@ public:
                     TYPEINFO();
                     ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
                                  ScBlockUndoMode eBlockMode );
-    virtual         ~ScBlockUndo();
+    virtual 		~ScBlockUndo();
 
 protected:
-    ScRange         aBlockRange;
-    SdrUndoAction*  pDrawUndo;
-    ScBlockUndoMode eMode;
+    ScRange			aBlockRange;
+    SdrUndoAction*	pDrawUndo;
+    ScBlockUndoMode	eMode;
 
-    void            BeginUndo();
-    void            EndUndo();
-//  void            BeginRedo();
-    void            EndRedo();
+    void			BeginUndo();
+    void			EndUndo();
+//	void			BeginRedo();
+    void			EndRedo();
 
-    sal_Bool            AdjustHeight();
-    void            ShowBlock();
+    BOOL			AdjustHeight();
+    void			ShowBlock();
 };
 
 //----------------------------------------------------------------------------
@@ -101,7 +96,6 @@ protected:
 
 class ScDBFuncUndo: public ScSimpleUndo
 {
-protected:
     ScDBData*       pAutoDBRange;
     ScRange         aOriginalRange;
     SdrUndoAction*  mpDrawUndo;
@@ -123,28 +117,28 @@ public:
 
 enum ScMoveUndoMode { SC_UNDO_REFFIRST, SC_UNDO_REFLAST };
 
-class ScMoveUndo: public ScSimpleUndo               // mit Referenzen
+class ScMoveUndo: public ScSimpleUndo				// mit Referenzen
 {
 public:
                     TYPEINFO();
                     ScMoveUndo( ScDocShell* pDocSh,
                                 ScDocument* pRefDoc, ScRefUndoData* pRefData,
                                 ScMoveUndoMode eRefMode );
-    virtual         ~ScMoveUndo();
+    virtual			~ScMoveUndo();
 
 protected:
-    SdrUndoAction*  pDrawUndo;
-    ScDocument*     pRefUndoDoc;
-    ScRefUndoData*  pRefUndoData;
-    ScMoveUndoMode  eMode;
+    SdrUndoAction*	pDrawUndo;
+    ScDocument*		pRefUndoDoc;
+    ScRefUndoData*	pRefUndoData;
+    ScMoveUndoMode	eMode;
 
-    void            BeginUndo();
-    void            EndUndo();
-//  void            BeginRedo();
-//  void            EndRedo();
+    void			BeginUndo();
+    void			EndUndo();
+//	void			BeginRedo();
+//	void			EndRedo();
 
 private:
-    void            UndoRef();
+    void			UndoRef();
 };
 
 //----------------------------------------------------------------------------
@@ -161,16 +155,16 @@ public:
     SfxUndoAction*          GetWrappedUndo()        { return pWrappedUndo; }
     void                    ForgetWrappedUndo();
 
-    virtual sal_Bool            IsLinked();
-    virtual void            SetLinked( sal_Bool bIsLinked );
+    virtual BOOL            IsLinked();
+    virtual void            SetLinked( BOOL bIsLinked );
     virtual void            Undo();
     virtual void            Redo();
     virtual void            Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool            CanRepeat(SfxRepeatTarget& rTarget) const;
-    virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
+    virtual BOOL            CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual BOOL            Merge( SfxUndoAction *pNextAction );
     virtual String          GetComment() const;
     virtual String          GetRepeatComment(SfxRepeatTarget&) const;
-    virtual sal_uInt16          GetId() const;
+    virtual USHORT          GetId() const;
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
-//  class BreakIterator_th
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class BreakIterator_th
+//	----------------------------------------------------
 class BreakIterator_th : public BreakIterator_CTL
 {
 public:
@@ -44,7 +44,7 @@ protected:
     void SAL_CALL makeIndex(const rtl::OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException);
 };
 
-} } } }
+} } } } 
 
 #endif // _I18N_BREAKITERATOR_TH_HXX_
 

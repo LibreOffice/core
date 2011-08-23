@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,22 +57,22 @@ void VirtDevServerFont::AnnounceFonts( ImplDevFontList* pToAdd )
         ImplFontData& rData = *new ImplFontData;
         rData.SetSysData( new FontSysData( (void*)SERVERFONT_MAGIC ) );
 
-        rData.maName        = aFontInfo.GetName();
-        rData.maStyleName   = aFontInfo.GetStyleName();
-        rData.mnWidth       = aFontInfo.GetWidth();
-        rData.mnHeight      = aFontInfo.GetHeight();
-        rData.meFamily      = aFontInfo.GetFamily();
-        rData.meCharSet     = aFontInfo.GetCharSet();
-        rData.mePitch       = aFontInfo.GetPitch();
-        rData.meWidthType   = aFontInfo.GetWidthType();
-        rData.meWeight      = aFontInfo.GetWeight();
-        rData.meItalic      = aFontInfo.GetItalic();
-        rData.meType        = aFontInfo.GetType();
-        rData.meFamily      = aFontInfo.GetFamily();
+        rData.maName		= aFontInfo.GetName();
+        rData.maStyleName	= aFontInfo.GetStyleName();
+        rData.mnWidth		= aFontInfo.GetWidth();
+        rData.mnHeight		= aFontInfo.GetHeight();
+        rData.meFamily		= aFontInfo.GetFamily();
+        rData.meCharSet		= aFontInfo.GetCharSet();
+        rData.mePitch		= aFontInfo.GetPitch();
+        rData.meWidthType	= aFontInfo.GetWidthType();
+        rData.meWeight		= aFontInfo.GetWeight();
+        rData.meItalic		= aFontInfo.GetItalic();
+        rData.meType		= aFontInfo.GetType();
+        rData.meFamily		= aFontInfo.GetFamily();
 
-        rData.mbOrientation = true;         // TODO: where to get this info?
-        rData.mbDevice      = false;
-        rData.mnQuality     = 0;            // prefer client-side fonts if available
+        rData.mbOrientation	= true;			// TODO: where to get this info?
+        rData.mbDevice		= false;
+        rData.mnQuality		= 0;			// prefer client-side fonts if available
 
         pToAdd->Add( &rData );
     }
@@ -98,7 +98,7 @@ VirtDevServerFont* VirtDevServerFont::CreateFont( const ImplFontSelectData& rFSD
 // -----------------------------------------------------------------------
 
 VirtDevServerFont::VirtDevServerFont( const ImplFontSelectData& rFSD )
-:   ServerFont( rFSD)
+:	ServerFont( rFSD)
 {}
 
 // -----------------------------------------------------------------------
@@ -108,37 +108,37 @@ void VirtDevServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor 
     const ImplFontSelectData& aFSD = GetFontSelData();
 
     Font aFont;
-    aFont.SetName       ( aFSD.maName );
-    aFont.SetStyleName  ( aFSD.maStyleName );
-    aFont.SetHeight     ( aFSD.mnHeight );
-    aFont.SetWidth      ( aFSD.mnWidth );
+    aFont.SetName		( aFSD.maName );
+    aFont.SetStyleName	( aFSD.maStyleName );
+    aFont.SetHeight		( aFSD.mnHeight );
+    aFont.SetWidth		( aFSD.mnWidth );
     aFont.SetOrientation( aFSD.mnOrientation );
-    aFont.SetVertical   ( GetFontSelData().mbVertical );
+    aFont.SetVertical	( GetFontSelData().mbVertical );
 
     VirtualDevice vdev( 1 );
     FontMetric aMetric( vdev.GetFontMetric( aFont ) );
 
     rFactor = 0x100;
 
-    rTo.mnAscent        = aMetric.GetAscent();
-    rTo.mnDescent       = aMetric.GetDescent();
-    rTo.mnIntLeading    = aMetric.GetIntLeading();
-    rTo.mnExtLeading    = aMetric.GetExtLeading();
-    rTo.mnSlant     = aMetric.GetSlant();
-    rTo.meType      = aMetric.GetType();
-    rTo.mnFirstChar     = 0x0020;   // TODO: where to get this info?
-    rTo.mnLastChar      = 0xFFFE;   // TODO: where to get this info?
+    rTo.mnAscent		= aMetric.GetAscent();
+    rTo.mnDescent		= aMetric.GetDescent();
+    rTo.mnIntLeading	= aMetric.GetIntLeading();
+    rTo.mnExtLeading	= aMetric.GetExtLeading();
+    rTo.mnSlant		= aMetric.GetSlant();
+    rTo.meType		= aMetric.GetType();
+    rTo.mnFirstChar		= 0x0020;	// TODO: where to get this info?
+    rTo.mnLastChar		= 0xFFFE;	// TODO: where to get this info?
 
-    rTo.mnWidth         = aFSD.mnWidth;
-    rTo.maName          = aFSD.maName;
-    rTo.maStyleName     = aFSD.maStyleName;
-    rTo.mnOrientation   = aFSD.mnOrientation;
-    rTo.meFamily        = aFSD.meFamily;
-    rTo.meCharSet       = aFSD.meCharSet;
-    rTo.meWeight        = aFSD.meWeight;
-    rTo.meItalic        = aFSD.meItalic;
-    rTo.mePitch         = aFSD.mePitch;
-    rTo.mbDevice        = sal_False;
+    rTo.mnWidth			= aFSD.mnWidth;
+    rTo.maName			= aFSD.maName;
+    rTo.maStyleName		= aFSD.maStyleName;
+    rTo.mnOrientation	= aFSD.mnOrientation;
+    rTo.meFamily		= aFSD.meFamily;
+    rTo.meCharSet		= aFSD.meCharSet;
+    rTo.meWeight		= aFSD.meWeight;
+    rTo.meItalic		= aFSD.meItalic;
+    rTo.mePitch			= aFSD.mePitch;
+    rTo.mbDevice		= FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -153,19 +153,19 @@ int VirtDevServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 void VirtDevServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 {
     Font aFont;
-    aFont.SetName       ( GetFontSelData().maName );
-    aFont.SetStyleName  ( GetFontSelData().maStyleName );
-    aFont.SetHeight     ( GetFontSelData().mnHeight );
-    aFont.SetWidth      ( GetFontSelData().mnWidth );
+    aFont.SetName		( GetFontSelData().maName );
+    aFont.SetStyleName	( GetFontSelData().maStyleName );
+    aFont.SetHeight		( GetFontSelData().mnHeight );
+    aFont.SetWidth		( GetFontSelData().mnWidth );
     aFont.SetOrientation( GetFontSelData().mnOrientation );
-    aFont.SetVertical   ( GetFontSelData().mbVertical );
+    aFont.SetVertical	( GetFontSelData().mbVertical );
 
     VirtualDevice vdev( 1 );
     vdev.SetFont( aFont );
 
     // get glyph metrics
     sal_Int32 nCharWidth = 10;
-// TODO:    vdev.GetCharWidth( nGlyphIndex, nGlyphIndex, &nCharWidth );
+// TODO:	vdev.GetCharWidth( nGlyphIndex, nGlyphIndex, &nCharWidth );
     rGD.SetCharWidth( nCharWidth );
 
     sal_Unicode aChar = nGlyphIndex;
@@ -195,7 +195,7 @@ bool VirtDevServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const
     String aGlyphStr( &aChar, 1 );
 
     // draw bitmap
-    vdev.SetOutputSizePixel( aSize, sal_True );
+    vdev.SetOutputSizePixel( aSize, TRUE );
     vdev.DrawText( Point(0,0)-rGD.GetMetric().GetOffset(), aGlyphStr );
 
     // create new glyph item
@@ -209,7 +209,7 @@ bool VirtDevServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const
 
 // -----------------------------------------------------------------------
 
-bool     VirtDevServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const
+bool	 VirtDevServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const
 {
     return false;
 }
@@ -223,20 +223,20 @@ int VirtDevServerFont::GetGlyphKernValue( int, int ) const
 
 // -----------------------------------------------------------------------
 
-sal_uLong VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) const
+ULONG VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) const
 {
     Font aFont;
-    aFont.SetName       ( GetFontSelData().maName );
-    aFont.SetStyleName  ( GetFontSelData().maStyleName );
-    aFont.SetHeight     ( GetFontSelData().mnHeight );
-    aFont.SetWidth      ( GetFontSelData().mnWidth );
+    aFont.SetName		( GetFontSelData().maName );
+    aFont.SetStyleName	( GetFontSelData().maStyleName );
+    aFont.SetHeight		( GetFontSelData().mnHeight );
+    aFont.SetWidth		( GetFontSelData().mnWidth );
     aFont.SetOrientation( GetFontSelData().mnOrientation );
-    aFont.SetVertical   ( GetFontSelData().mbVertical );
+    aFont.SetVertical	( GetFontSelData().mbVertical );
 
     VirtualDevice vdev( 1 );
     vdev.SetFont( aFont );
 
-    sal_uLong nPairs = vdev.GetKerningPairCount();
+    ULONG nPairs = vdev.GetKerningPairCount();
     if( nPairs > 0 )
     {
         KerningPair* const pKernPairs = new KerningPair[ nPairs ];
@@ -245,11 +245,11 @@ sal_uLong VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) 
         *ppImplKernPairs = new ImplKernPairData[ nPairs ];
         ImplKernPairData* pTo = *ppImplKernPairs;
         KerningPair* pFrom = pKernPairs;
-        for ( sal_uLong n = 0; n < nPairs; n++ )
+        for ( ULONG n = 0; n < nPairs; n++ )
         {
-            pTo->mnChar1    = pFrom->nChar1;
-            pTo->mnChar2    = pFrom->nChar2;
-            pTo->mnKern     = pFrom->nKern;
+            pTo->mnChar1	= pFrom->nChar1;
+            pTo->mnChar2	= pFrom->nChar2;
+            pTo->mnKern		= pFrom->nKern;
             ++pFrom;
             ++pTo;
         }
@@ -267,12 +267,12 @@ bool VirtDevServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly
     return false;
     /*
     Font aFont;
-    aFont.SetName       ( GetFontSelData().maName );
-    aFont.SetStyleName  ( GetFontSelData().maStyleName );
-    aFont.SetHeight     ( GetFontSelData().mnHeight );
-    aFont.SetWidth      ( GetFontSelData().mnWidth );
+    aFont.SetName		( GetFontSelData().maName );
+    aFont.SetStyleName	( GetFontSelData().maStyleName );
+    aFont.SetHeight		( GetFontSelData().mnHeight );
+    aFont.SetWidth		( GetFontSelData().mnWidth );
     aFont.SetOrientation( GetFontSelData().mnOrientation );
-    aFont.SetVertical   ( GetFontSelData().mbVertical );
+    aFont.SetVertical	( GetFontSelData().mbVertical );
 
     VirtualDevice vdev( 1 );
     vdev.SetFont( aFont );

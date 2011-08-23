@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,18 +62,18 @@ class SvxBackgroundTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    static sal_uInt16*      GetRanges();
+    static USHORT*      GetRanges();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        FillUserData();
     virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void                ShowSelector(); // Shift-ListBox activation
-    void                ShowTblControl(); // for the Writer (cells/rows/tables)
-    void                ShowParaControl(sal_Bool bCharOnly = sal_False); // for the Writer (paragraph/characters)
-    void                EnableTransparency(sal_Bool bColor, sal_Bool bGraphic);
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    void                ShowSelector(); // Umschalt-ListBox aktivieren
+    void                ShowTblControl(); // fuer den Writer (Zellen/Zeilen/Tabelle)
+    void                ShowParaControl(BOOL bCharOnly = FALSE); // fuer den Writer (Absatz/Zeichen)
+    void                EnableTransparency(BOOL bColor, BOOL bGraphic);
+    virtual void		PageCreated (SfxAllItemSet aSet); //add CHINA001
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
@@ -81,47 +81,51 @@ private:
     SvxBackgroundTabPage( Window* pParent, const SfxItemSet& rCoreSet );
     ~SvxBackgroundTabPage();
 
-    FixedText               aSelectTxt;
-    ListBox                 aLbSelect;
-    const String            aStrBrowse;
-    const String            aStrUnlinked;
-     FixedText               aTblDesc;
-     ListBox                 aTblLBox;
-     ListBox                 aParaLBox;
-    Control                 aBorderWin;
+    // Hintergrundfarbe ------------------------------------
+    Control					aBorderWin;
     ValueSet                aBackgroundColorSet;
     FixedLine               aBackgroundColorBox;
     BackgroundPreviewImpl*  pPreviewWin1;
     //color transparency
     FixedText               aColTransFT;
     MetricField             aColTransMF;
-    CheckBox                aBtnPreview;
-    // Background Bitmap ----------------------------------
-     FixedLine               aGbFile;
+    // Hintergrund-Bitmap ----------------------------------
     PushButton              aBtnBrowse;
     CheckBox                aBtnLink;
-      FixedLine               aGbPosition;
+    CheckBox                aBtnPreview;
+    FixedInfo               aFtFile;
+    FixedLine               aGbFile;
     RadioButton             aBtnPosition;
     RadioButton             aBtnArea;
     RadioButton             aBtnTile;
     SvxRectCtl              aWndPosition;
-    FixedInfo               aFtFile;
+    FixedLine               aGbPosition;
     //transparency of graphics
     FixedLine               aGraphTransFL;
     MetricField             aGraphTransMF;
 
     BackgroundPreviewImpl*  pPreviewWin2;
+    // Selektor --------------------------------------------
+    FixedText               aSelectTxt;
+    ListBox                 aLbSelect;
+    const String            aStrBrowse;
+    const String            aStrUnlinked;
 
-    // DDListBox for Writer -------------------------------
+    // DDListBox fuer Writer -------------------------------
+
+    FixedText               aTblDesc;
+    ListBox                 aTblLBox;
+    ListBox					aParaLBox;
+
     //------------------------------------------------------
-    Color       aBgdColor;
-    sal_uInt16      nHtmlMode;
-    sal_Bool        bAllowShowSelector  : 1;
-    sal_Bool        bIsGraphicValid     : 1;
-    sal_Bool        bLinkOnly           : 1;
-    sal_Bool        bResized            : 1;
-    sal_Bool        bColTransparency    : 1;
-    sal_Bool        bGraphTransparency  : 1;
+    Color		aBgdColor;
+    USHORT		nHtmlMode;
+    BOOL        bAllowShowSelector	: 1;
+    BOOL        bIsGraphicValid		: 1;
+    BOOL		bLinkOnly			: 1;
+    BOOL        bResized            : 1;
+    BOOL        bColTransparency    : 1;
+    BOOL        bGraphTransparency  : 1;
     Graphic     aBgdGraphic;
     String      aBgdGraphicPath;
     String      aBgdGraphicFilter;
@@ -129,23 +133,23 @@ private:
     SvxBackgroundPage_Impl* pPageImpl;
     SvxOpenGraphicDialog* pImportDlg;
 
-    // Items for Sw-Table must be corrected
-    SvxBackgroundTable_Impl*    pTableBck_Impl;
-    // also for the paragraph style
-    SvxBackgroundPara_Impl* pParaBck_Impl;
+    // Items fuer Sw-Tabelle muessen gesammelt werden
+    SvxBackgroundTable_Impl*	pTableBck_Impl;
+    // auch fuer die Absatzvorlage
+    SvxBackgroundPara_Impl*	pParaBck_Impl;
 
 #ifdef _SVX_BACKGRND_CXX
     void                FillColorValueSets_Impl();
     void                ShowColorUI_Impl();
     void                ShowBitmapUI_Impl();
-    sal_Bool                LoadLinkedGraphic_Impl();
+    BOOL                LoadLinkedGraphic_Impl();
     void                RaiseLoadError_Impl();
     void                SetGraphicPosition_Impl( SvxGraphicPosition ePos );
     SvxGraphicPosition  GetGraphicPosition_Impl();
-    void                FillControls_Impl(const SvxBrushItem& rBgdAttr,
+    void				FillControls_Impl(const SvxBrushItem& rBgdAttr,
                                             const String& rUserData);
-    sal_Bool                FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, sal_uInt16 nSlot);
-    void                ResetFromWallpaperItem( const SfxItemSet& rSet );
+    BOOL 				FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, USHORT nSlot);
+    void				ResetFromWallpaperItem( const SfxItemSet& rSet );
 
     DECL_LINK( LoadTimerHdl_Impl, Timer* );
     DECL_LINK( SelectHdl_Impl, ListBox* );

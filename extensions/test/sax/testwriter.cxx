@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,6 +51,7 @@
 #include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE
 
 using namespace std;
+using namespace rtl;
 using namespace usr;
 
 #define BUILD_ERROR(expr, Message)\
@@ -107,6 +108,9 @@ using namespace usr;
 
 /****
 * test szenarios :
+*
+*
+*
 ****/
 
 
@@ -119,7 +123,7 @@ public:
 
 
 public: // refcounting
-    BOOL                        queryInterface( Uik aUik, XInterfaceRef & rOut )
+    BOOL						queryInterface( Uik aUik, XInterfaceRef & rOut )
     {
         if( XOutputStream::getSmartUik() == aUik ) {
             rOut = (XOutputStream *) this;
@@ -128,9 +132,9 @@ public: // refcounting
 
         return TRUE;
     }
-    void                        acquire()                        { OWeakObject::acquire(); }
-    void                        release()                        { OWeakObject::release(); }
-    void*                       getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
+    void 						acquire() 						 { OWeakObject::acquire(); }
+    void 						release() 						 { OWeakObject::release(); }
+    void* 						getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 public:
     virtual void writeBytes(const Sequence< BYTE >& aData)
@@ -185,25 +189,25 @@ public:
     ~OSaxWriterTest() {}
 
 public: // refcounting
-    BOOL                        queryInterface( Uik aUik, XInterfaceRef & rOut );
-    void                        acquire()                        { OWeakObject::acquire(); }
-    void                        release()                        { OWeakObject::release(); }
-    void*                       getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
+    BOOL						queryInterface( Uik aUik, XInterfaceRef & rOut );
+    void 						acquire() 						 { OWeakObject::acquire(); }
+    void 						release() 						 { OWeakObject::release(); }
+    void* 						getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 public:
     virtual void testInvariant(const UString& TestName, const XInterfaceRef& TestObject)
-                                                                THROWS( (   IllegalArgumentException,
+                                                                THROWS( (	IllegalArgumentException,
                                                                             UsrSystemException) );
 
-    virtual INT32 test( const UString& TestName,
+    virtual INT32 test(	const UString& TestName,
                         const XInterfaceRef& TestObject,
-                        INT32 hTestHandle)                      THROWS( (   IllegalArgumentException,
+                        INT32 hTestHandle) 						THROWS( (	IllegalArgumentException,
                                                                             UsrSystemException) );
 
-    virtual BOOL testPassed(void)                               THROWS( (   UsrSystemException) );
-    virtual Sequence< UString > getErrors(void)                 THROWS( (UsrSystemException) );
-    virtual Sequence< UsrAny > getErrorExceptions(void)         THROWS( (UsrSystemException) );
-    virtual Sequence< UString > getWarnings(void)               THROWS( (UsrSystemException) );
+    virtual BOOL testPassed(void) 								THROWS( (	UsrSystemException) );
+    virtual Sequence< UString > getErrors(void) 				THROWS( (UsrSystemException) );
+    virtual Sequence< UsrAny > getErrorExceptions(void) 		THROWS( (UsrSystemException) );
+    virtual Sequence< UString > getWarnings(void) 				THROWS( (UsrSystemException) );
 
 private:
     void testSimple( const XExtendedDocumentHandlerRef &r );
@@ -213,9 +217,9 @@ private:
     void writeParagraph( const XExtendedDocumentHandlerRef &r , const UString & s);
 
 private:
-    Sequence<UsrAny>        m_seqExceptions;
-    Sequence<UString>       m_seqErrors;
-    Sequence<UString>       m_seqWarnings;
+    Sequence<UsrAny>  		m_seqExceptions;
+    Sequence<UString> 		m_seqErrors;
+    Sequence<UString> 		m_seqWarnings;
     XMultiServiceFactoryRef m_rFactory;
 
 };
@@ -224,7 +228,7 @@ private:
 
 /*----------------------------------------
 *
-*   Attributlist implementation
+* 	Attributlist implementation
 *
 *----------------------------------------*/
 struct AttributeListImpl_impl;
@@ -238,10 +242,10 @@ public:
     ~AttributeListImpl();
 
 public:
-    BOOL                    queryInterface( Uik aUik, XInterfaceRef & rOut );
-    void                    acquire()                        { OWeakObject::acquire(); }
-    void                    release()                        { OWeakObject::release(); }
-    void*                   getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
+    BOOL					queryInterface( Uik aUik, XInterfaceRef & rOut );
+    void 					acquire() 						 { OWeakObject::acquire(); }
+    void 					release() 						 { OWeakObject::release(); }
+    void* 					getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 public:
     virtual INT16 getLength(void) THROWS( (UsrSystemException) );
@@ -265,9 +269,9 @@ struct TagAttribute
     TagAttribute(){}
     TagAttribute( const UString &sName, const UString &sType , const UString &sValue )
     {
-        this->sName     = sName;
-        this->sType     = sType;
-        this->sValue    = sValue;
+        this->sName 	= sName;
+        this->sType 	= sType;
+        this->sValue 	= sValue;
     }
 
     UString sName;
@@ -329,10 +333,8 @@ UString AttributeListImpl::getTypeByName( const UString& sName ) THROWS( (UsrSys
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
-    {
-        if( (*ii).sName == sName )
-        {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
+        if( (*ii).sName == sName ) {
             return (*ii).sType;
         }
     }
@@ -343,10 +345,8 @@ UString AttributeListImpl::getValueByName(const UString& sName) THROWS( (UsrSyst
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
-    {
-        if( (*ii).sName == sName )
-        {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
+        if( (*ii).sName == sName ) {
             return (*ii).sValue;
         }
     }
@@ -379,7 +379,7 @@ AttributeListImpl::~AttributeListImpl()
 }
 
 
-void AttributeListImpl::addAttribute(   const UString &sName ,
+void AttributeListImpl::addAttribute( 	const UString &sName ,
                                         const UString &sType ,
                                         const UString &sValue )
 {
@@ -394,8 +394,20 @@ void AttributeListImpl::clear()
     OSL_ASSERT( ! getLength() );
 }
 
+
+
+
+
+
+
+
+
+
+
 /**
 * for external binding
+*
+*
 **/
 XInterfaceRef OSaxWriterTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception))
 {
@@ -409,7 +421,7 @@ UString     OSaxWriterTest_getServiceName( ) THROWS( () )
     return L"test.com.sun.star.xml.sax.Writer";
 }
 
-UString     OSaxWriterTest_getImplementationName( ) THROWS( () )
+UString 	OSaxWriterTest_getImplementationName( ) THROWS( () )
 {
     return L"test.extensions.xml.sax.Writer";
 }
@@ -437,7 +449,7 @@ BOOL OSaxWriterTest::queryInterface( Uik uik , XInterfaceRef &rOut )
 
 
 void OSaxWriterTest::testInvariant( const UString& TestName, const XInterfaceRef& TestObject )
-                                                                THROWS( (   IllegalArgumentException,
+                                                                THROWS( (	IllegalArgumentException,
                                                                             UsrSystemException) )
 {
     if( L"com.sun.star.xml.sax.Writer" == TestName ) {
@@ -455,9 +467,9 @@ void OSaxWriterTest::testInvariant( const UString& TestName, const XInterfaceRef
 }
 
 
-INT32 OSaxWriterTest::test( const UString& TestName,
+INT32 OSaxWriterTest::test(	const UString& TestName,
                         const XInterfaceRef& TestObject,
-                        INT32 hTestHandle)                      THROWS( (   IllegalArgumentException,
+                        INT32 hTestHandle) 						THROWS( (	IllegalArgumentException,
                                                                             UsrSystemException) )
 {
     if( L"com.sun.star.xml.sax.Writer" == TestName )  {
@@ -505,25 +517,25 @@ INT32 OSaxWriterTest::test( const UString& TestName,
 
 
 
-BOOL OSaxWriterTest::testPassed(void)                                       THROWS( (UsrSystemException) )
+BOOL OSaxWriterTest::testPassed(void) 										THROWS( (UsrSystemException) )
 {
     return m_seqErrors.getLen() == 0;
 }
 
 
-Sequence< UString > OSaxWriterTest::getErrors(void)                             THROWS( (UsrSystemException) )
+Sequence< UString > OSaxWriterTest::getErrors(void) 							THROWS( (UsrSystemException) )
 {
     return m_seqErrors;
 }
 
 
-Sequence< UsrAny > OSaxWriterTest::getErrorExceptions(void)                     THROWS( (UsrSystemException) )
+Sequence< UsrAny > OSaxWriterTest::getErrorExceptions(void) 					THROWS( (UsrSystemException) )
 {
     return m_seqExceptions;
 }
 
 
-Sequence< UString > OSaxWriterTest::getWarnings(void)                       THROWS( (UsrSystemException) )
+Sequence< UString > OSaxWriterTest::getWarnings(void) 						THROWS( (UsrSystemException) )
 {
     return m_seqWarnings;
 }
@@ -572,7 +584,7 @@ void OSaxWriterTest::testSimple( const XExtendedDocumentHandlerRef &r )
 
     r->startDocument();
 
-    pList->addAttribute( L"Arg1" , L"CDATA" , L"bla\n   u" );
+    pList->addAttribute( L"Arg1" , L"CDATA" , L"bla\n	u" );
     pList->addAttribute( L"Arg2" , L"CDATA" , L"blub" );
 
     r->startElement( L"tag1"  , rList );
@@ -652,13 +664,13 @@ void OSaxWriterTest::testExceptions( const XExtendedDocumentHandlerRef & r )
     }
 
     r->startDocument();
-
+    
     r->startElement( L"huhu" , rList );
     r->startCDATA();
 
     {
         BOOL bException = TRUE;
-        try {
+        try { 
             r->startElement( L"huhu" , rList );
             bException = FALSE;
         }
@@ -667,7 +679,7 @@ void OSaxWriterTest::testExceptions( const XExtendedDocumentHandlerRef & r )
         }
         ERROR_ASSERT( bException , "expected exception not thrown !" );
     }
-
+    
     r->endCDATA();
     r->endElement( L"hi" );
 
@@ -679,22 +691,22 @@ void OSaxWriterTest::testDTD(const  XExtendedDocumentHandlerRef &r )
 {
     OFileWriter *pw = new OFileWriter("outputDTD.xml");
     AttributeListImpl *pList = new AttributeListImpl;
-
+    
     XAttributeListRef rList( (XAttributeList *) pList , USR_QUERY );
     XOutputStreamRef ref( ( XOutputStream * ) pw , USR_QUERY );
-
+    
     XActiveDataSourceRef source( r , USR_QUERY );
-
+    
     ERROR_ASSERT( ref.is() , "no output stream" );
     ERROR_ASSERT( source.is() , "no active data source" );
-
+    
     source->setOutputStream( ref );
 
-
+    
     r->startDocument();
     r->unknown( L"<!DOCTYPE iCalendar >\n" );
     r->startElement( L"huhu" , rList );
-
+    
     r->endElement( L"huhu" );
     r->endDocument();
 }
@@ -708,15 +720,15 @@ void OSaxWriterTest::testPerformance(const  XExtendedDocumentHandlerRef &r )
                             L"wohl > Zeilenumbrueche halbwegs richtig macht oder ob er die Zeile "
                             L"bis zum bitteren Ende schreibt.";
 
-
+    
     XAttributeListRef rList( (XAttributeList *) pList , USR_QUERY );
     XOutputStreamRef ref( ( XOutputStream * ) pw , USR_QUERY );
-
+    
     XActiveDataSourceRef source( r , USR_QUERY );
-
+    
     ERROR_ASSERT( ref.is() , "no output stream" );
     ERROR_ASSERT( source.is() , "no active data source" );
-
+    
     source->setOutputStream( ref );
 
     TimeValue aStartTime, aEndTime;
@@ -735,6 +747,8 @@ void OSaxWriterTest::testPerformance(const  XExtendedDocumentHandlerRef &r )
             r->ignorableWhitespace( L"");
             r->startElement( L"huhu" , rList );
             r->characters( testParagraph );
+//			writeParagraph( r , testParagraph );
+            
             r->ignorableWhitespace( L"");
             r->endElement( L"huhu" );
         }
@@ -744,7 +758,7 @@ void OSaxWriterTest::testPerformance(const  XExtendedDocumentHandlerRef &r )
         r->ignorableWhitespace( L"");
         r->endElement( UString( L"tag" ) + UString::valueOf( i2 ) );
     }
-
+    
     r->endDocument();
 
     osl_getSystemTime( &aEndTime );

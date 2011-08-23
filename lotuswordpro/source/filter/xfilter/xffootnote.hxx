@@ -57,12 +57,16 @@
  * @file
  * Foot note object.
  ************************************************************************/
-#ifndef     _XFFOOTNOTE_HXX
-#define     _XFFOOTNOTE_HXX
+/*************************************************************************
+ * Change History
+ * 2004-1-31 create this file.
+ ************************************************************************/
+#ifndef		_XFFOOTNOTE_HXX
+#define		_XFFOOTNOTE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
-#include    "xfcontentcontainer.hxx"
+#include	"xfglobal.hxx"
+#include	"xfcontent.hxx"
+#include	"xfcontentcontainer.hxx"
 
 /**
  * @brief
@@ -75,13 +79,13 @@ public:
     XFFootNote();
 
 public:
-    void    SetLabel(sal_Unicode label);
+    void	SetLabel(sal_Unicode label);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString   m_strID;
-    rtl::OUString   m_strLabel;
+    rtl::OUString	m_strID;
+    rtl::OUString	m_strLabel;
 };
 
 inline XFFootNote::XFFootNote()
@@ -89,18 +93,18 @@ inline XFFootNote::XFFootNote()
     m_strID = XFGlobal::GenNoteName();
 }
 
-inline void XFFootNote::SetLabel(sal_Unicode label)
+inline void	XFFootNote::SetLabel(sal_Unicode label)
 {
-    sal_Unicode     chs[2];
+    sal_Unicode		chs[2];
     chs[0] = label;
     chs[1] = 0;
 
     m_strLabel = rtl::OUString(chs);
 }
 
-inline void XFFootNote::ToXml(IXFStream *pStrm)
+inline void	XFFootNote::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     pAttrList->AddAttribute( A2OUSTR("text:id"), m_strID );

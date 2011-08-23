@@ -42,17 +42,16 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMP_NAME=AsyncJob
-OUT_COMP_CLASS=$(OUT_CLASS)/$(COMP_NAME)
-OUT_COMP_MISC=$(OUT_MISC)/$(COMP_NAME)
-COMP_PACKAGE=$(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
-COMP_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
-COMP_JAR_NAME=$(COMP_NAME).uno.jar
-COMP_JAR=$(OUT_CLASS)/$(COMP_JAR_NAME)
-COMP_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMP_NAME).uno.Manifest
-COMP_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMP_NAME)/META-INF/manifest.xml
-REGISTERFLAG=$(OUT_COMP_MISC)$(PS)java_$(COMP_NAME)_register_component.flag
-COMP_COMPONENTS=$(COMP_NAME).components
+COMPONENT_NAME=AsyncJob
+OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT_NAME)
+OUT_COMP_MISC=$(OUT_MISC)/$(COMPONENT_NAME)
+COMPONENT_PACKAGE=$(OUT_BIN)/$(COMPONENT_NAME).$(UNOOXT_EXT)
+COMPONENT_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOOXT_EXT)")
+COMPONENT_JAR_NAME=$(COMPONENT_NAME).uno.jar
+COMPONENT_JAR=$(OUT_CLASS)/$(COMPONENT_JAR_NAME)
+COMPONENT_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
+COMPONENT_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT_NAME)/META-INF/manifest.xml
+REGISTERFLAG=$(OUT_COMP_MISC)$(PS)java_$(COMPONENT_NAME)_register_component.flag
 
 JAVAFILES  = AsyncJob.java
 
@@ -77,7 +76,7 @@ $(CLASSFILES) : $(JAVAFILES)
 	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
 # rule for component jar file
-$(COMP_JAR) : $(COMP_MANIFESTFILE) $(CLASSFILES)
+$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_JAR) cvfm $@ $< -C $(OUT_COMP_CLASS) .
@@ -92,24 +91,24 @@ $(OUT_COMP_CLASS)/%/manifest.xml :
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)Addons.xcu$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)Jobs.xcu$(QM)"/$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-components$(QM)">> $@
-	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP_COMPONENTS)$(QM)"/$(CSEP)>> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 # rule for component package file
-$(COMP_PACKAGE) : $(COMP_JAR) Addons.xcu Jobs.xcu $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS)
+$(COMPONENT_PACKAGE) : $(COMPONENT_JAR) Addons.xcu Jobs.xcu $(COMPONENT_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_ZIP) ../bin/$(@F) $(<F)
-	$(SDK_ZIP) -u $@ Addons.xcu Jobs.xcu $(COMP_COMPONENTS)
+	$(SDK_ZIP) -u $@ Addons.xcu Jobs.xcu
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 
-$(REGISTERFLAG) : $(COMP_PACKAGE)
+$(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(DEPLOYTOOL) $(COMP_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -133,5 +132,5 @@ DevGuideJobsAddon : $(REGISTERFLAG)
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_MISC))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_JAR)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))

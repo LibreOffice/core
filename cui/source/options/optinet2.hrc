@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,9 @@
 
 // Proxy ------------------------------------------------------------------
 #define GB_SETTINGS                 1
-#define FT_PROXYMODE                2
+#define FT_PROXYMODE 				2
 #define LB_PROXYMODE                2
-#define FT_HTTP_PROXY               3
+#define FT_HTTP_PROXY				3
 #define ED_HTTP_PROXY               3
 #define FT_HTTP_PORT                4
 #define ED_HTTP_PORT                4
@@ -51,18 +51,18 @@
 #define ED_NOPROXYFOR               11
 #define ED_NOPROXYDESC              12
 #define ST_PROXY_FROM_BROWSER       13
-#define FT_HTTPS_PROXY              14
+#define FT_HTTPS_PROXY				14
 #define ED_HTTPS_PROXY              14
 #define FT_HTTPS_PORT               15
 #define ED_HTTPS_PORT               15
 
 // Search ------------------------------------------------------------------
-#define GB_SEARCH                   40
-#define LB_SEARCH                   40
-#define FT_SEARCH_NAME              41
-#define ED_SEARCH_NAME              41
-#define FT_SEARCH                   42
-#define RB_AND                      43
+#define GB_SEARCH	                40
+#define LB_SEARCH	                40
+#define FT_SEARCH_NAME	            41
+#define ED_SEARCH_NAME	            41
+#define FT_SEARCH	                42
+#define RB_AND		                43
 #define RB_OR                       44
 #define RB_EXACT                    45
 #define FT_URL                      46
@@ -73,34 +73,34 @@
 #define ED_SEPARATOR                48
 #define FT_CASE                     49
 #define ED_CASE                     49
-#define PB_CHANGE                   53
-#define PB_DELETE                   54
-#define PB_ADD                      55
-#define PB_NEW                      56
+#define PB_CHANGE	                53
+#define PB_DELETE	                54
+#define PB_ADD		                55
+#define PB_NEW						56
 #define MSG_MODIFY                  57
 
 // Protocols  --------------------------------------------------------------
-#define GB_DNS                      105
+#define GB_DNS						105
 #define RB_DNS_AUTO                 106
 #define RB_DNS_MANUAL               107
 #define ED_DNS                      107
 
-#define ST_MSG_255_0                111
-#define ST_MSG_255_1                112
+#define ST_MSG_255_0				111
+#define ST_MSG_255_1				112
 
 // Site Certificate --------------------------------------------------------
-#define GB_SITECERT                 120
-#define LB_SITECERT                 121
-#define LB_FILTERCERT               122
-#define PB_EDIT_CERT                123
-#define PB_DELETE_CERT              124
+#define GB_SITECERT					120
+#define LB_SITECERT					121
+#define LB_FILTERCERT				122
+#define PB_EDIT_CERT				123
+#define PB_DELETE_CERT				124
 
 // personal Certificate ----------------------------------------------------
-#define GB_PERSCERT                 130
-#define LB_PERSCERT                 131
-#define PB_NEW_PERSCERT             132
-#define PB_INFO_PERSCERT            133
-#define PB_DELETE_PERSCERT          134
+#define GB_PERSCERT					130
+#define LB_PERSCERT					131
+#define PB_NEW_PERSCERT				132
+#define PB_INFO_PERSCERT	 		133
+#define PB_DELETE_PERSCERT			134
 
 // Security  -------------------------------------------------------------
 
@@ -145,12 +145,12 @@
 
 // Defines - JavaScriptDisableQueryBox_Impl -------------------------------
 
-#define IMG_JSCPT_WARNING           220
-#define FT_JSCPT_WARNING            221
-#define CB_JSCPT_DISABLE            222
-#define GB_JSCPT_WARNING            223
-#define BTN_JSCPT_YES               224
-#define BTN_JSCPT_NO                225
+#define IMG_JSCPT_WARNING			220
+#define FT_JSCPT_WARNING			221
+#define CB_JSCPT_DISABLE			222
+#define GB_JSCPT_WARNING			223
+#define BTN_JSCPT_YES				224
+#define BTN_JSCPT_NO				225
 
 // Defines - SvxEMailTabPage_Impl
 #define FL_MAIL                     1
@@ -161,8 +161,8 @@
 #define STR_DEFAULT_FILENAME        6
 
 // plugin
-#define GB_MOZPLUGIN    1
-#define CB_MOZPLUGIN_CODE   2
+#define GB_MOZPLUGIN	1
+#define CB_MOZPLUGIN_CODE	2
 
 
 #endif // #ifndef _SVX_OPTINET_HRC

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,13 +70,13 @@ namespace sdr
         }
 
         TextProperties::TextProperties(SdrObject& rObj)
-        :   AttributeProperties(rObj),
+        :	AttributeProperties(rObj),
             maVersion(0)
         {
         }
 
         TextProperties::TextProperties(const TextProperties& rProps, SdrObject& rObj)
-        :   AttributeProperties(rProps, rObj),
+        :	AttributeProperties(rProps, rObj),
             maVersion(rProps.getVersion())
         {
         }
@@ -489,7 +489,7 @@ namespace sdr
                                     if(bHasURL)
                                     {
                                         SfxItemSet aColorSet(*aSet.GetPool(), EE_CHAR_COLOR, EE_CHAR_COLOR );
-                                        aColorSet.Put(aSet, sal_False);
+                                        aColorSet.Put(aSet, FALSE);
 
                                         ESelection aSel((sal_uInt16)nPara, 0);
 
@@ -520,7 +520,7 @@ namespace sdr
 
                                 }
 
-                                aSet.Put(aParaSet, sal_False);
+                                aSet.Put(aParaSet, FALSE);
 
                                 if(bHasURL)
                                 {
@@ -626,7 +626,7 @@ namespace sdr
                 }
             }
         }
-
+        
         // #i101556# Handout version information
         sal_uInt32 TextProperties::getVersion() const
         {

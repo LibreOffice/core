@@ -26,16 +26,14 @@
  *
  ************************************************************************/
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <stdio.h>
 #include <oox/drawingml/chart/chartconverter.hxx>
-#include <oox/token/tokens.hxx>
-#include <oox/ole/vbaproject.hxx>
+#include <oox/core/tokens.hxx>
 #include <epptooxml.hxx>
 #include <epptdef.hxx>
 #include <oox/export/shapes.hxx>
 
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 #include <sax/fshelper.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -123,93 +121,7 @@ public:
     sal_Bool WritePlaceholder( Reference< XShape > xShape, PlaceholderType ePlaceholder, sal_Bool bMaster );
 };
 
-enum PPTXLayout {
-    LAYOUT_BLANK,
-    LAYOUT_TITLE_SLIDE,
-    LAYOUT_TITLE_CONTENT,
-    LAYOUT_TITLE_2CONTENT,
-    LAYOUT_TITLE,
-    LAYOUT_CENTERED_TEXT,
-    LAYOUT_TITLE_2CONTENT_CONTENT,
-    LAYOUT_TITLE_CONTENT_2CONTENT,
-    LAYOUT_TITLE_2CONTENT_OVER_CONTENT,
-    LAYOUT_TITLE_CONTENT_OVER_CONTENT,
-    LAYOUT_TITLE_4CONTENT,
-    LAYOUT_TITLE_6CONTENT,
-    LAYOUT_SIZE
-};
-
-struct PPTXLayoutInfo {
-    int nType;
-    const char* sName;
-    const char* sType;
-};
-
-static PPTXLayoutInfo aLayoutInfo[LAYOUT_SIZE] = {
-    { 20, "Blank Slide", "blank" },
-    { 0, "Title Slide", "tx" },
-    { 1, "Title, Content", "obj" },
-    { 3, "Title, 2 Content", "twoObj" },
-    { 19, "Title Only", "titleOnly" },
-    { 32, "Centered Text", "objOnly" },                       // not exactly, but close
-    { 15, "Title, 2 Content and Content", "twoObjAndObj" },
-    { 12, "Title Content and 2 Content", "objAndTwoObj" },
-    { 16, "Title, 2 Content over Content", "twoObjOverTx" },      // not exactly, but close
-    { 14, "Title, Content over Content", "objOverTx" },           // not exactly, but close
-    { 18, "Title, 4 Content", "fourObj" },
-    { 33, "Title, 6 Content", "blank" }                           // not defined => blank
-};
-
-int PowerPointExport::GetPPTXLayoutId( int nOffset )
-{
-    int nId = LAYOUT_BLANK;
-
-    DBG(printf("GetPPTXLayoutId %d\n", nOffset));
-
-    switch( nOffset ) {
-        case 0:
-            nId = LAYOUT_TITLE_SLIDE;
-            break;
-        case 1:
-            nId = LAYOUT_TITLE_CONTENT;
-            break;
-        case 3:
-            nId = LAYOUT_TITLE_2CONTENT;
-            break;
-        case 19:
-            nId = LAYOUT_TITLE;
-            break;
-        case 15:
-            nId = LAYOUT_TITLE_2CONTENT_CONTENT;
-            break;
-        case 12:
-            nId = LAYOUT_TITLE_CONTENT_2CONTENT;
-            break;
-        case 16:
-            nId = LAYOUT_TITLE_2CONTENT_OVER_CONTENT;
-            break;
-        case 14:
-            nId = LAYOUT_TITLE_CONTENT_OVER_CONTENT;
-            break;
-        case 18:
-            nId = LAYOUT_TITLE_4CONTENT;
-            break;
-        case 32:
-            nId = LAYOUT_CENTERED_TEXT;
-            break;
-        case 33:
-            nId = LAYOUT_TITLE_6CONTENT;
-            break;
-        case 20:
-        default:
-            nId = LAYOUT_BLANK;
-            break;
-    }
-
-    return nId;
-}
-
-PowerPointShapeExport::PowerPointShapeExport( FSHelperPtr pFS, ShapeHashMap* pShapeMap, PowerPointExport* pFB )
+    PowerPointShapeExport::PowerPointShapeExport( FSHelperPtr pFS, ShapeHashMap* pShapeMap, PowerPointExport* pFB )
         : ShapeExport( XML_p, pFS, pShapeMap, pFB )
     , mrExport( *pFB )
 {
@@ -238,43 +150,43 @@ ShapeExport& PowerPointShapeExport::WriteTextShape( Reference< XShape > xShape )
 
     DBG(printf( "shape(text): %s\n", USS(sShapeType) ));
 
-    if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.TextShape" ) ) )
+    if( sShapeType.equalsAscii( "com.sun.star.drawing.TextShape" ) )
     {
     ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.DateTimeShape" ) ) )
+    else if( sShapeType.equalsAscii( "com.sun.star.presentation.DateTimeShape" ) )
     {
         if( !WritePlaceholder( xShape, DateAndTime, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.FooterShape" ) ) )
+    else if( sShapeType.equalsAscii( "com.sun.star.presentation.FooterShape" ) )
     {
         if( !WritePlaceholder( xShape, Footer, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.HeaderShape" ) ) )
+    else if( sShapeType.equalsAscii( "com.sun.star.presentation.HeaderShape" ) )
     {
         if( !WritePlaceholder( xShape, Header, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.NotesShape" ) ) )
+    else if( sShapeType.equalsAscii( "com.sun.star.presentation.NotesShape" ) )
     {
         if( mePageType == NOTICE && mrExport.GetPresObj() )
             WritePlaceholderShape( xShape, Notes );
         else
             ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.OutlinerShape" ) ) )
+    else if( sShapeType.equalsAscii( "com.sun.star.presentation.OutlinerShape" ) )
     {
         if( !WritePlaceholder( xShape, Outliner, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.SlideNumberShape" ) ) )
+    else if( sShapeType.equalsAscii( "com.sun.star.presentation.SlideNumberShape" ) )
     {
         if( !WritePlaceholder( xShape, SlideNumber, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
     }
-    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.TitleTextShape" ) ) )
+    else if( sShapeType.equalsAscii( "com.sun.star.presentation.TitleTextShape" ) )
     {
         if( !WritePlaceholder( xShape, Title, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
@@ -289,18 +201,18 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape( Reference< XShape > xShap
 
     DBG(printf( "shape(unknown): %s\n", USS(sShapeType) ));
 
-    if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.GroupShape" ) ) )
+    if( sShapeType.equalsAscii( "com.sun.star.drawing.GroupShape" ) )
     {
         Reference< XIndexAccess > rXIndexAccess( xShape, UNO_QUERY );
 
         mrExport.EnterGroup( rXIndexAccess );
         DBG(printf( "enter group\n" ));
     }
-    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.PageShape" ) ) )
+    else if( sShapeType.equalsAscii( "com.sun.star.drawing.PageShape" ) )
     {
         WritePageShape( xShape, mePageType, mrExport.GetPresObj() );
     }
-    else if( sShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.SubtitleShape" ) ) )
+    else if( sShapeType.equalsAscii( "com.sun.star.presentation.SubtitleShape" ) )
     {
         if( !WritePlaceholder( xShape, Subtitle, mbMaster ) )
             ShapeExport::WriteTextShape( xShape );
@@ -309,8 +221,8 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape( Reference< XShape > xShap
     return *this;
 }
 
-PowerPointExport::PowerPointExport( const Reference< XComponentContext > & rxCtxt  )
-    : XmlFilterBase( rxCtxt ),
+PowerPointExport::PowerPointExport( const Reference< XMultiServiceFactory > & rSMgr  )
+    : XmlFilterBase( rSMgr ),
       PPTWriterBase(),
       mnLayoutFileIdMax( 1 ),
       mnSlideIdMax( 1 << 8 ),
@@ -370,16 +282,16 @@ bool PowerPointExport::exportDocument() throw()
     return true;
 }
 
-::oox::ole::VbaProject* PowerPointExport::implCreateVbaProject() const
-{
-    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), CREATE_OUSTRING( "Impress" ) );
-}
-
 void PowerPointExport::ImplWriteBackground( FSHelperPtr pFS, Reference< XPropertySet > rXPropSet )
 {
     FillStyle aFillStyle( FillStyle_NONE );
     if ( ImplGetPropertyValue( rXPropSet, S( "FillStyle" ) ) )
         mAny >>= aFillStyle;
+
+    if( aFillStyle == FillStyle_BITMAP ) {
+        //DBG(printf ("FillStyle_BITMAP properties\n"));
+        //DBG(dump_pset(rXPropSet));
+    }
 
     if( aFillStyle == FillStyle_NONE ||
         aFillStyle == FillStyle_GRADIENT ||
@@ -566,6 +478,10 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
         nTransition = XML_cover;
         pDirection = Get8Direction( nDirection );
         break;
+// we don't have cut transition AFAIK
+//      case PPT_TRANSITION_TYPE_CUT:
+//      nTransition = XML_cut;
+//      break;
         case PPT_TRANSITION_TYPE_DIAMOND:
         nTransition = XML_diamond;
         break;
@@ -720,11 +636,11 @@ void PowerPointExport::WriteAnimationAttributeName( FSHelperPtr pFS, const OUStr
     DBG(printf("write attribute name: %s\n", USS( rAttributeName )));
 
     const char* sAttributeName = NULL;
-    if( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Visibility" ) ) ) {
+    if( rAttributeName.equalsAscii( "Visibility" ) ) {
     sAttributeName = "style.visibility";
-    } else if( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "X" ) ) ) {
+    } else if( rAttributeName.equalsAscii( "X" ) ) {
     sAttributeName = "ppt_x";
-    } else if( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Y" ) ) ) {
+    } else if( rAttributeName.equalsAscii( "Y" ) ) {
     sAttributeName = "ppt_y";
     }
 
@@ -831,7 +747,7 @@ void PowerPointExport::WriteAnimationNodeAnimateInside( FSHelperPtr pFS, const R
     pFS->startElementNS( XML_p, XML_cBhvr,
              XML_additive, pAdditive,
              FSEND );
-    WriteAnimationNodeCommonPropsStart( pFS, rXNode, sal_True, bMainSeqChild );
+    WriteAnimationNodeCommonPropsStart( pFS, rXNode, TRUE, bMainSeqChild );
     WriteAnimationTarget( pFS, rXAnimate->getTarget() );
     WriteAnimationAttributeName( pFS, rXAnimate->getAttributeName() );
     pFS->endElementNS( XML_p, XML_cBhvr );
@@ -863,7 +779,7 @@ void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, const char* pDe
 
 void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, sal_Bool bWriteEvent, sal_Bool bMainSeqChild )
 {
-    sal_Bool bHasFDelay = sal_False;
+    sal_Bool bHasFDelay = FALSE;
     double fDelay = 0;
     Timing eTiming;
     Event aEvent;
@@ -871,7 +787,7 @@ void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, sal_
     const char* pEvent = NULL;
 
     if( rAny >>= fDelay )
-    bHasFDelay = sal_True;
+    bHasFDelay = TRUE;
     else if( rAny >>= eTiming ) {
     if( eTiming == Timing_INDEFINITE )
         pDelay = "indefinite";
@@ -921,7 +837,7 @@ void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, sal_
     }
 
     if( aEvent.Offset >>= fDelay ) {
-        bHasFDelay = sal_True;
+        bHasFDelay = TRUE;
         DBG(printf ("event offset: %f\n", fDelay));
     } else if( aEvent.Offset >>= eTiming ) {
         if( eTiming == Timing_INDEFINITE )
@@ -1025,7 +941,7 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     }
 
     sal_uInt32 nPresetId = 0;
-    sal_Bool bPresetId = sal_False;
+    sal_Bool bPresetId = FALSE;
     if ( pAny[ DFF_ANIM_PRESET_ID ] ) {
     rtl::OUString sPreset;
     if ( *pAny[ DFF_ANIM_PRESET_ID ] >>= sPreset )
@@ -1033,7 +949,7 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     }
 
     sal_uInt32 nPresetSubType = 0;
-    sal_Bool bPresetSubType = sal_False;
+    sal_Bool bPresetSubType = FALSE;
     if ( pAny[ DFF_ANIM_PRESET_SUB_TYPE ] ) {
     rtl::OUString sPresetSubType;
     if ( *pAny[ DFF_ANIM_PRESET_SUB_TYPE ] >>= sPresetSubType ) {
@@ -1079,9 +995,9 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     pFS->startElementNS( XML_p, XML_stCondLst, FSEND );
     if( aAny >>= aCondSeq ) {
         for( int i = 0; i < aCondSeq.getLength(); i ++ )
-        WriteAnimationCondition( pFS, aCondSeq[ i ], sal_False, bMainSeqChild );
+        WriteAnimationCondition( pFS, aCondSeq[ i ], FALSE, bMainSeqChild );
     } else
-        WriteAnimationCondition( pFS, aAny, sal_False, bMainSeqChild );
+        WriteAnimationCondition( pFS, aAny, FALSE, bMainSeqChild );
     pFS->endElementNS( XML_p, XML_stCondLst );
     }
 
@@ -1092,9 +1008,9 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     pFS->startElementNS( XML_p, XML_endCondLst, FSEND );
     if( aAny >>= aCondSeq ) {
         for( int i = 0; i < aCondSeq.getLength(); i ++ )
-        WriteAnimationCondition( pFS, aCondSeq[ i ], sal_False, bMainSeqChild );
+        WriteAnimationCondition( pFS, aCondSeq[ i ], FALSE, bMainSeqChild );
     } else
-        WriteAnimationCondition( pFS, aAny, sal_False, bMainSeqChild );
+        WriteAnimationCondition( pFS, aAny, FALSE, bMainSeqChild );
     pFS->endElementNS( XML_p, XML_stCondLst );
     }
 
@@ -1133,14 +1049,14 @@ void PowerPointExport::WriteAnimationNodeSeq( FSHelperPtr pFS, const Reference< 
 
     pFS->startElementNS( XML_p, XML_seq, FSEND );
 
-    WriteAnimationNodeCommonPropsStart( pFS, rXNode, sal_True, bMainSeqChild );
+    WriteAnimationNodeCommonPropsStart( pFS, rXNode, TRUE, bMainSeqChild );
 
     pFS->startElementNS( XML_p, XML_prevCondLst, FSEND );
-    WriteAnimationCondition( pFS, NULL, "onPrev", 0, sal_True );
+    WriteAnimationCondition( pFS, NULL, "onPrev", 0, TRUE );
     pFS->endElementNS( XML_p, XML_prevCondLst );
 
     pFS->startElementNS( XML_p, XML_nextCondLst, FSEND );
-    WriteAnimationCondition( pFS, NULL, "onNext", 0, sal_True );
+    WriteAnimationCondition( pFS, NULL, "onNext", 0, TRUE );
     pFS->endElementNS( XML_p, XML_nextCondLst );
 
     pFS->endElementNS( XML_p, XML_seq );
@@ -1159,7 +1075,7 @@ void PowerPointExport::WriteAnimationNodeEffect( FSHelperPtr pFS, const Referenc
                  XML_transition, pDirection,
                  FSEND );
 
-    WriteAnimationNodeAnimateInside( pFS, rXNode, bMainSeqChild, sal_False );
+    WriteAnimationNodeAnimateInside( pFS, rXNode, bMainSeqChild, FALSE );
 
     pFS->endElementNS( XML_p, XML_animEffect );
     }
@@ -1203,7 +1119,7 @@ void PowerPointExport::WriteAnimationNode( FSHelperPtr pFS, const Reference< XAn
 
     pFS->startElementNS( XML_p, xmlNodeType, FSEND );
 
-    WriteAnimationNodeCommonPropsStart( pFS, rXNode, sal_True, bMainSeqChild );
+    WriteAnimationNodeCommonPropsStart( pFS, rXNode, TRUE, bMainSeqChild );
 
     pFS->endElementNS( XML_p, xmlNodeType );
 }
@@ -1222,7 +1138,7 @@ void PowerPointExport::WriteAnimations( FSHelperPtr pFS )
             pFS->startElementNS( XML_p, XML_timing, FSEND );
             pFS->startElementNS( XML_p, XML_tnLst, FSEND );
 
-            WriteAnimationNode( pFS, xNode, sal_False );
+            WriteAnimationNode( pFS, xNode, FALSE );
 
             pFS->endElementNS( XML_p, XML_tnLst );
             pFS->endElementNS( XML_p, XML_timing );
@@ -1272,7 +1188,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
     const char* pShow = NULL;
 
     if( GETA( Visible ) ) {
-    sal_Bool bShow(sal_False);
+    sal_Bool bShow;
     if( ( mAny >>= bShow ) && !bShow )
         pShow = "0";
     }
@@ -1288,7 +1204,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
         ImplWriteBackground( pFS, aXBackgroundPropSet );
     }
 
-    WriteShapeTree( pFS, NORMAL, sal_False );
+    WriteShapeTree( pFS, NORMAL, FALSE );
 
     pFS->endElementNS( XML_p, XML_cSld );
 
@@ -1302,7 +1218,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
                  US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" ),
                  OUStringBuffer()
                  .appendAscii( "../slideLayouts/slideLayout" )
-                 .append( GetLayoutFileId( GetPPTXLayoutId( GetLayoutOffset( mXPagePropSet ) ), nMasterNum ) )
+                 .append( GetLayoutFileId( GetLayoutOffset( mXPagePropSet ), nMasterNum ) )
                  .appendAscii( ".xml" )
                  .makeStringAndClear() );
 
@@ -1311,7 +1227,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
 
 void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
 {
-    if( !mbCreateNotes || !ContainsOtherShapeThanPlaceholders( sal_True ) )
+    if( !mbCreateNotes || !ContainsOtherShapeThanPlaceholders( TRUE ) )
     return;
 
     DBG(printf("write Notes %d\n----------------\n", nPageNum));
@@ -1327,7 +1243,12 @@ void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
 
     pFS->startElementNS( XML_p, XML_cSld, FSEND );
 
-    WriteShapeTree( pFS, NOTICE, sal_False );
+    // background
+//     if( bHasBackground ) {
+//         ImplWriteBackground( pFS, aXBackgroundPropSet );
+//     }
+
+    WriteShapeTree( pFS, NOTICE, FALSE );
 
     pFS->endElementNS( XML_p, XML_cSld );
 
@@ -1391,6 +1312,7 @@ void PowerPointExport::WriteTextStyleLevel( FSHelperPtr pFS, int nInstance, int 
     OSL_ASSERT( nLevel >= 0 && nLevel < 5 );
     OSL_ASSERT( nInstance >= 0 && nInstance < 9 );
 
+    PPTExCharLevel rCharLevel = mpStyleSheet->GetCharSheet( nInstance ).maCharLevel[ nLevel ];
     PPTExParaLevel rParaLevel = mpStyleSheet->GetParaSheet( nInstance ).maParaLevel[ nLevel ];
 
     pFS->startElementNS( XML_a, PowerPointExport::nStyleLevelToken[ nLevel ],
@@ -1473,7 +1395,7 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
     pFS->startElementNS( XML_p, XML_cSld, FSEND );
 
     ImplWriteBackground( pFS, aXBackgroundPropSet );
-    WriteShapeTree( pFS, LAYOUT, sal_True );
+    WriteShapeTree( pFS, MASTER, TRUE );
 
     pFS->endElementNS( XML_p, XML_cSld );
 
@@ -1497,18 +1419,25 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
     pFS->startElementNS( XML_p, XML_sldLayoutIdLst, FSEND );
 
     int nCount = 0;
-    for( int i = 0; i < LAYOUT_SIZE; i++) {
-        sal_Int32 nLayoutFileId = GetLayoutFileId( i, nPageNum );
-        if( nLayoutFileId > 0 ) {
-            AddLayoutIdAndRelation( pFS, nLayoutFileId );
-            nCount++;
-        } else {
-            ImplWritePPTXLayout( i, nPageNum );
-            AddLayoutIdAndRelation( pFS, GetLayoutFileId( i, nPageNum ) );
-        }
+    for( int i = 0; i < EPP_LAYOUT_SIZE; i++) {
+
+    sal_Int32 nLayoutFileId = GetLayoutFileId( i, nPageNum );
+    if( nLayoutFileId > 0 ) {
+        AddLayoutIdAndRelation( pFS, nLayoutFileId );
+        nCount++;
+    }
+    }
+
+    if( nCount == 0 ) {
+    // add at least empty layout, so that we don't have master page
+    // without layout, such master cannot be used in ppt
+    ImplWriteLayout( 0, nPageNum );
+    AddLayoutIdAndRelation( pFS, GetLayoutFileId( 0, nPageNum ) );
     }
 
     pFS->endElementNS( XML_p, XML_sldLayoutIdLst );
+
+    // WriteTextStyles( pFS );
 
     pFS->endElementNS( XML_p, XML_sldMaster );
 
@@ -1517,42 +1446,14 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
 
 sal_Int32 PowerPointExport::GetLayoutFileId( sal_Int32 nOffset, sal_uInt32 nMasterNum )
 {
-    DBG(printf("GetLayoutFileId offset: %d master: %d", nOffset, nMasterNum));
     if( mLayoutInfo[ nOffset ].mnFileIdArray.size() <= nMasterNum )
-        return 0;
+    return 0;
 
     return mLayoutInfo[ nOffset ].mnFileIdArray[ nMasterNum ];
 }
 
-void PowerPointExport::ImplWriteLayout( sal_Int32 /*nOffset*/, sal_uInt32 /*nMasterNum*/ )
+void PowerPointExport::ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum )
 {
-    // we write all the layouts together with master(s)
-    // ImplWritePPTXLayout( GetPPTXLayoutId( nOffset ), nMasterNum );
-}
-
-void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum )
-{
-    DBG(printf("write layout: %d\n", nOffset));
-
-    Reference< drawing::XDrawPagesSupplier > xDPS( getModel(), uno::UNO_QUERY );
-    Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_QUERY );
-    Reference< drawing::XDrawPage > xSlide;
-    Reference< container::XIndexAccess > xIndexAccess( xDrawPages, uno::UNO_QUERY );
-
-    xSlide = xDrawPages->insertNewByIndex( xIndexAccess->getCount() );
-
-#ifdef DEBUG
-    if( xSlide.is() )
-        printf("new page created\n");
-#endif
-
-    Reference< beans::XPropertySet > xPropSet( xSlide, uno::UNO_QUERY );
-    xPropSet->setPropertyValue( US( "Layout" ), makeAny( short( aLayoutInfo[ nOffset ].nType ) ) );
-    DBG(dump_pset( xPropSet ));
-
-    mXPagePropSet = Reference< XPropertySet >( xSlide, UNO_QUERY );
-    mXShapes = Reference< XShapes >( xSlide, UNO_QUERY );
-
     if( mLayoutInfo[ nOffset ].mnFileIdArray.size() < mnMasterPages ) {
     mLayoutInfo[ nOffset ].mnFileIdArray.resize( mnMasterPages );
     }
@@ -1568,6 +1469,8 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
                                             .makeStringAndClear(),
                                             US( "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml" ) );
 
+//     LayoutInfo& rLayoutInfo = GetLayoutInfo( mXPagePropSet );
+
     // add implicit relation of slide layout to slide master
     addRelation( pFS->getOutputStream(),
                  US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster" ),
@@ -1579,16 +1482,14 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
 
     pFS->startElementNS( XML_p, XML_sldLayout,
                          PNMSS,
-                         XML_type, aLayoutInfo[ nOffset ].sType,
+                         XML_type, "title",
                          XML_preserve, "1",
                          FSEND );
 
     pFS->startElementNS( XML_p, XML_cSld,
-                         XML_name, aLayoutInfo[ nOffset ].sName,
+                         XML_name, "Title Slide",
                          FSEND );
-    //pFS->write( MINIMAL_SPTREE ); // TODO: write actual shape tree
-    WriteShapeTree( pFS, LAYOUT, sal_True );
-
+    pFS->write( MINIMAL_SPTREE ); // TODO: write actual shape tree
     pFS->endElementNS( XML_p, XML_cSld );
 
     pFS->endElementNS( XML_p, XML_sldLayout );
@@ -1596,8 +1497,6 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
     mLayoutInfo[ nOffset ].mnFileIdArray[ nMasterNum ] = mnLayoutFileIdMax;
 
     mnLayoutFileIdMax ++;
-
-    xDrawPages->remove( xSlide );
 }
 
 void PowerPointExport::WriteShapeTree( FSHelperPtr pFS, PageType ePageType, sal_Bool bMaster )
@@ -1619,7 +1518,7 @@ void PowerPointExport::WriteShapeTree( FSHelperPtr pFS, PageType ePageType, sal_
             DBG(printf( "leave group\n" ));
         }
 
-        if ( GetShapeByIndex( GetCurrentGroupIndex(), sal_True ) ) {
+        if ( GetShapeByIndex( GetCurrentGroupIndex(), TRUE ) ) {
             DBG(printf( "mType: \"%s\"\n", mType.GetBuffer() ));
             aDML.WriteShape( mXShape );
         }
@@ -1633,7 +1532,7 @@ void PowerPointExport::WriteShapeTree( FSHelperPtr pFS, PageType ePageType, sal_
 
 ShapeExport& PowerPointShapeExport::WritePageShape( Reference< XShape > xShape, PageType ePageType, sal_Bool bPresObj )
 {
-    if( ( ePageType == NOTICE && bPresObj ) || ePageType == LAYOUT )
+    if( ePageType == NOTICE && bPresObj )
     return WritePlaceholderShape( xShape, SlideImage );
 
     return WriteTextShape( xShape );
@@ -1641,14 +1540,13 @@ ShapeExport& PowerPointShapeExport::WritePageShape( Reference< XShape > xShape, 
 
 sal_Bool PowerPointShapeExport::WritePlaceholder( Reference< XShape > xShape, PlaceholderType ePlaceholder, sal_Bool bMaster )
 {
-    DBG(printf("WritePlaceholder %d %d\n", bMaster, ShapeExport::NonEmptyText( xShape )));
     if( bMaster && ShapeExport::NonEmptyText( xShape ) ) {
     WritePlaceholderShape( xShape, ePlaceholder );
 
-    return sal_True;
+    return TRUE;
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 ShapeExport& PowerPointShapeExport::WritePlaceholderShape( Reference< XShape > xShape, PlaceholderType ePlaceholder )
@@ -1695,7 +1593,6 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape( Reference< XShape > x
     default:
         DBG(printf("warning: unhandled placeholder type: %d\n", ePlaceholder));
     }
-    DBG(printf("write placeholder %s\n", pType));
     mpFS->singleElementNS( XML_p, XML_ph, XML_type, pType, FSEND );
     mpFS->endElementNS( XML_p, XML_nvPr );
     mpFS->endElementNS( XML_p, XML_nvSpPr );
@@ -1955,20 +1852,20 @@ void PowerPointExport::WriteTheme( sal_Int32 nThemeNum )
 
 sal_Bool PowerPointExport::ImplCreateDocument()
 {
-    mbCreateNotes = sal_False;
+    mbCreateNotes = FALSE;
 
     for( sal_uInt32 i = 0; i < mnPages; i++ )
     {
         if ( !GetPageByIndex( i, NOTICE ) )
-            return sal_False;
+            return FALSE;
 
-    if( ContainsOtherShapeThanPlaceholders( sal_True ) ) {
-        mbCreateNotes = sal_True;
+    if( ContainsOtherShapeThanPlaceholders( TRUE ) ) {
+        mbCreateNotes = TRUE;
         break;
     }
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 sal_Bool PowerPointExport::WriteNotesMaster()
@@ -2011,7 +1908,7 @@ sal_Bool PowerPointExport::WriteNotesMaster()
     ( mAny >>= aXBackgroundPropSet ) )
     ImplWriteBackground( pFS, aXBackgroundPropSet );
 
-    WriteShapeTree( pFS, NOTICE, sal_True );
+    WriteShapeTree( pFS, NOTICE, TRUE );
 
     pFS->endElementNS( XML_p, XML_cSld );
 
@@ -2035,7 +1932,7 @@ sal_Bool PowerPointExport::WriteNotesMaster()
 
     DBG(printf("----------------\n"));
 
-    return sal_True;
+    return TRUE;
 }
 
 sal_Bool PowerPointExport::ImplCreateMainNotes()
@@ -2043,7 +1940,7 @@ sal_Bool PowerPointExport::ImplCreateMainNotes()
     if( mbCreateNotes )
     return WriteNotesMaster();
 
-    return sal_True;
+    return TRUE;
 }
 
 #define IMPL_NAME "com.sun.star.comp.Impress.oox.PowerPointExport"
@@ -2060,9 +1957,9 @@ uno::Sequence< OUString > SAL_CALL PowerPointExport_getSupportedServiceNames() t
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL PowerPointExport_createInstance(const uno::Reference< XComponentContext > & rxCtxt ) throw( uno::Exception )
+uno::Reference< uno::XInterface > SAL_CALL PowerPointExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new PowerPointExport( rxCtxt );
+    return (cppu::OWeakObject*)new PowerPointExport( rSMgr );
 }
 
 OUString PowerPointExport::implGetImplementationName() const
@@ -2077,18 +1974,6 @@ OUString PowerPointExport::implGetImplementationName() const
 // - component_getImplementationEnvironment -
 // ------------------------------------------
 
-static struct cppu::ImplementationEntry g_entries[] =
-{
-    {
-        oox::core::PowerPointExport_createInstance,
-        oox::core::PowerPointExport_getImplementationName,
-       oox::core::PowerPointExport_getSupportedServiceNames,
-        cppu::createSingleComponentFactory,
-        0 , 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
 #ifdef __cplusplus
 extern "C"
 {
@@ -2099,13 +1984,61 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+// -----------------------
+// - component_writeInfo -
+// -----------------------
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceManager */, void* pRegistryKey )
+{
+    sal_Bool bRet = sal_False;
+
+    if( pRegistryKey )
+    {
+        try
+        {
+            uno::Reference< registry::XRegistryKey > xNewKey1(
+                static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
+                ::rtl::OUString::createFromAscii( IMPL_NAME "/UNO/SERVICES/" ) ) );
+            xNewKey1->createKey( oox::core::PowerPointExport_getSupportedServiceNames().getConstArray()[0] );
+
+            bRet = sal_True;
+        }
+        catch( registry::InvalidRegistryException& )
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+
+    return bRet;
+}
+
 // ------------------------
 // - component_getFactory -
 // ------------------------
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
 {
-    return cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
+    uno::Reference< lang::XSingleServiceFactory > xFactory;
+    void*                                   pRet = 0;
+
+    if( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
+    {
+        const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( IMPL_NAME ) );
+
+        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
+                        reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
+                        oox::core::PowerPointExport_getImplementationName(),
+                        oox::core::PowerPointExport_createInstance,
+                        oox::core::PowerPointExport_getSupportedServiceNames() ) );
+    }
+
+    if( xFactory.is() )
+    {
+        xFactory->acquire();
+        pRet = xFactory.get();
+    }
+
+    return pRet;
 }
 
 #ifdef __cplusplus

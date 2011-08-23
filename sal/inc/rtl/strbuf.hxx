@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -275,11 +275,6 @@ public:
      */
     const sal_Char* getStr() const { return pData->buffer; }
 
-    /**
-        Return a OString instance reflecting the current content
-        of this OStringBuffer.
-     */
-    const OString toString() const { return OString(pData->buffer); }
 
     /**
         The character at the specified index of this string buffer is set

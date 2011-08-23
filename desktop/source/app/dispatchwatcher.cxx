@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ struct DispatchHolder
     DispatchHolder( const URL& rURL, Reference< XDispatch >& rDispatch ) :
         aURL( rURL ), xDispatch( rDispatch ) {}
 
-    URL aURL;
+    URL	aURL;
     rtl::OUString cwdUrl;
     Reference< XDispatch > xDispatch;
 };
@@ -94,7 +94,7 @@ static String impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
 {
     String aFilter;
     SfxMedium* pMedium = new SfxMedium( aUrl,
-                                        STREAM_STD_READ, sal_False );
+                                        STREAM_STD_READ, FALSE );
     const SfxFilter *pSfxFilter = NULL;
     SfxFilterMatcher aMatcher;
     if( nFlags == SFX_FILTER_EXPORT )
@@ -129,7 +129,7 @@ Mutex& DispatchWatcher::GetMutex()
     return *pWatcherMutex;
 }
 
-// Create or get the dispatch watcher implementation. This implementation must be
+// Create or get the dispatch watcher implementation. This implementation must be 
 // a singleton to prevent access to the framework after it wants to terminate.
 DispatchWatcher* DispatchWatcher::GetDispatchWatcher()
 {
@@ -143,7 +143,7 @@ DispatchWatcher* DispatchWatcher::GetDispatchWatcher()
         if ( !xDispatchWatcher.is() )
         {
             pDispatchWatcher = new DispatchWatcher();
-
+            
             // We have to hold a reference to ourself forever to prevent our own destruction.
             xDispatchWatcher = static_cast< cppu::OWeakObject *>( pDispatchWatcher );
         }
@@ -170,15 +170,15 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                                                 OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                                             UNO_QUERY );
 
-    DispatchList::const_iterator    p;
-    std::vector< DispatchHolder >   aDispatches;
-    ::rtl::OUString                 aAsTemplateArg( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate"));
+    DispatchList::const_iterator	p;
+    std::vector< DispatchHolder >	aDispatches;
+    ::rtl::OUString					aAsTemplateArg( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate"));
     sal_Bool                        bSetInputFilter = sal_False;
     ::rtl::OUString                 aForcedInputFilter;
 
-    for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); ++p )
+    for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); p++ )
     {
-        const DispatchRequest&  aDispatchRequest = *p;
+        const DispatchRequest&	aDispatchRequest = *p;
 
         // create parameter array
         sal_Int32 nCount = 4;
@@ -340,7 +340,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 {
                     OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "Desktop::OpenDefault() IllegalArgumentException while calling XNotifyingDispatch: "));
-                    OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                    OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
                 }
             }
         }
@@ -352,7 +352,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
 
             // Set "AsTemplate" argument according to request type
             if ( aDispatchRequest.aRequestType == REQUEST_FORCENEW ||
-                 aDispatchRequest.aRequestType == REQUEST_FORCEOPEN     )
+                 aDispatchRequest.aRequestType == REQUEST_FORCEOPEN		)
             {
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc( nIndex+1 );
@@ -364,6 +364,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             }
 
             // if we are called in viewmode, open document read-only
+            // #95425#
             if(aDispatchRequest.aRequestType == REQUEST_VIEW) {
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc(nIndex+1);
@@ -392,26 +393,27 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             try
             {
                 xDoc = Reference < XPrintable >( ::comphelper::SynchronousDispatch::dispatch( xDesktop, aName, aTarget, 0, aArgs ), UNO_QUERY );
+                //xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
             }
             catch ( ::com::sun::star::lang::IllegalArgumentException& iae)
             {
                 OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "Dispatchwatcher IllegalArgumentException while calling loadComponentFromURL: "))
                     + iae.Message;
-                OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
             }
             catch (com::sun::star::io::IOException& ioe)
             {
                 OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "Dispatchwatcher IOException while calling loadComponentFromURL: "))
                     + ioe.Message;
-                OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
             }
             if ( aDispatchRequest.aRequestType == REQUEST_OPEN ||
                  aDispatchRequest.aRequestType == REQUEST_VIEW ||
                  aDispatchRequest.aRequestType == REQUEST_START ||
                  aDispatchRequest.aRequestType == REQUEST_FORCEOPEN ||
-                 aDispatchRequest.aRequestType == REQUEST_FORCENEW      )
+                 aDispatchRequest.aRequestType == REQUEST_FORCENEW		)
             {
                 // request is completed
                 OfficeIPCThread::RequestsCompleted( 1 );
@@ -453,6 +455,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             rtl::OUString aOutFile = aFilterOut+
                                                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ))+
                                                      aOutFilename.getName();
+                            //FileBase::getFileURLFromSystemPath( aOutFile, aOutFile );
 
                             if ( bGuess )
                             {
@@ -479,7 +482,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             {
                                 xStorable->storeToURL( aOutFile, conversionProperties );
                             }
-                            catch ( Exception& e )
+                            catch ( Exception& )
                             {
                                 fprintf( stderr, "Error: Please reverify input parameters...\n" );
                             }
@@ -636,6 +639,18 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) th
     sal_Int16 nCount = --m_nRequestCount;
     aGuard.clear();
     OfficeIPCThread::RequestsCompleted( 1 );
+/*
+    // Find request in our hash map and remove it as a pending request
+    DispatchWatcherHashMap::iterator pDispatchEntry = m_aRequestContainer.find( rEvent.FeatureURL.Complete ) ;
+    if ( pDispatchEntry != m_aRequestContainer.end() )
+    {
+        m_aRequestContainer.erase( pDispatchEntry );
+        aGuard.clear();
+        OfficeIPCThread::RequestsCompleted( 1 );
+    }
+    else
+        aGuard.clear();
+*/
     if ( !nCount && !OfficeIPCThread::AreRequestsPending() )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.

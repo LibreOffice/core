@@ -198,7 +198,7 @@ sub get_registry_component_directory
 
 sub get_file_component_attributes
 {
-    my ($componentname, $filesref, $allvariables) = @_;
+    my ($componentname, $filesref) = @_;
 
     my $attributes;
 
@@ -245,9 +245,6 @@ sub get_file_component_attributes
         $attributes = 4;    # Files in shellnew dir and in non advertised startmenu entries must have user registry key as KeyPath
     }
 
-    # Adding 256, if this is a 64 bit installation set.
-    if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 )) { $attributes = $attributes + 256; }
-
     return $attributes
 }
 
@@ -259,14 +256,11 @@ sub get_file_component_attributes
 
 sub get_registry_component_attributes
 {
-    my ($componentname, $allvariables) = @_;
+    my ($componentname) = @_;
 
     my $attributes;
 
     $attributes = 4;
-
-    # Adding 256, if this is a 64 bit installation set.
-    if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 )) { $attributes = $attributes + 256; }
 
     if ( exists($installer::globals::dontdeletecomponents{$componentname}) ) { $attributes = $attributes + 16; }
 
@@ -392,13 +386,16 @@ sub get_component_keypath
 
 sub create_component_table
 {
-    my ($filesref, $registryref, $dirref, $allfilecomponentsref, $allregistrycomponents, $basedir, $componentidhashref, $componentidkeypathhashref, $allvariables) = @_;
+    my ($filesref, $registryref, $dirref, $allfilecomponentsref, $allregistrycomponents, $basedir, $componentidhashref, $componentidkeypathhashref) = @_;
 
     my @componenttable = ();
 
     my ($oneline, $infoline);
 
     installer::windows::idtglobal::write_idt_header(\@componenttable, "component");
+
+    # collect_layer_conditions();
+
 
     # File components
 
@@ -410,7 +407,7 @@ sub create_component_table
         $onecomponent{'guid'} = get_component_guid($onecomponent{'name'}, $componentidhashref);
         $onecomponent{'directory'} = get_file_component_directory($onecomponent{'name'}, $filesref, $dirref);
         if ( $onecomponent{'directory'} eq "IGNORE_COMP" ) { next; }
-        $onecomponent{'attributes'} = get_file_component_attributes($onecomponent{'name'}, $filesref, $allvariables);
+        $onecomponent{'attributes'} = get_file_component_attributes($onecomponent{'name'}, $filesref);
         $onecomponent{'condition'} = get_file_component_condition($onecomponent{'name'}, $filesref);
         $onecomponent{'keypath'} = get_component_keypath($onecomponent{'name'}, $filesref, $componentidkeypathhashref);
 
@@ -429,7 +426,7 @@ sub create_component_table
         $onecomponent{'name'} = ${$allregistrycomponents}[$i];
         $onecomponent{'guid'} = get_component_guid($onecomponent{'name'}, $componentidhashref);
         $onecomponent{'directory'} = get_registry_component_directory();
-        $onecomponent{'attributes'} = get_registry_component_attributes($onecomponent{'name'}, $allvariables);
+        $onecomponent{'attributes'} = get_registry_component_attributes($onecomponent{'name'});
         $onecomponent{'condition'} = get_component_condition($onecomponent{'name'});
         $onecomponent{'keypath'} = get_component_keypath($onecomponent{'name'}, $registryref, $componentidkeypathhashref);
 

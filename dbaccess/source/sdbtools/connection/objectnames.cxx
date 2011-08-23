@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -200,9 +200,9 @@ namespace sdbtools
             if  (   ( _rName.indexOf( (sal_Unicode)34  ) >= 0 )  // "
                 ||  ( _rName.indexOf( (sal_Unicode)39  ) >= 0 )  // '
                 ||  ( _rName.indexOf( (sal_Unicode)96  ) >= 0 )  //
-                ||  ( _rName.indexOf( (sal_Unicode)145 ) >= 0 )  //
+                ||  ( _rName.indexOf( (sal_Unicode)145 ) >= 0 )  // 
                 ||  ( _rName.indexOf( (sal_Unicode)146 ) >= 0 )  //
-                ||  ( _rName.indexOf( (sal_Unicode)180 ) >= 0 )  // removed unparsable chars
+                ||  ( _rName.indexOf( (sal_Unicode)180 ) >= 0 )  // #86621# removed unparsable chars
                 )
                 return ErrorCondition::DB_QUERY_NAME_WITH_QUOTES;
 
@@ -448,7 +448,7 @@ namespace sdbtools
 
         return sName;
     }
-
+    
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ObjectNames::convertToSQLName( const ::rtl::OUString& Name ) throw (RuntimeException)
     {
@@ -456,7 +456,7 @@ namespace sdbtools
         Reference< XDatabaseMetaData > xMeta( getConnection()->getMetaData(), UNO_QUERY_THROW );
         return ::dbtools::convertName2SQLName( Name, xMeta->getExtraNameCharacters() );
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL ObjectNames::isNameUsed( ::sal_Int32 _CommandType, const ::rtl::OUString& _Name ) throw (IllegalArgumentException, RuntimeException)
     {
@@ -465,7 +465,7 @@ namespace sdbtools
         PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( getContext(), _CommandType, getConnection()) );
         return !pNameCheck->validateName( _Name );
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL ObjectNames::isNameValid( ::sal_Int32 _CommandType, const ::rtl::OUString& _Name ) throw (IllegalArgumentException, RuntimeException)
     {
@@ -474,7 +474,7 @@ namespace sdbtools
         PNameValidation pNameCheck( NameCheckFactory::createValidityCheck( getContext(), _CommandType, getConnection()) );
         return pNameCheck->validateName( _Name );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ObjectNames::checkNameForCreate( ::sal_Int32 _CommandType, const ::rtl::OUString& _Name ) throw (SQLException, RuntimeException)
     {

@@ -34,7 +34,7 @@ completelangiso=af \
 ar \
 as \
 ast \
-be \
+be-BY \
 bo \
 bg \
 br \
@@ -94,7 +94,7 @@ nb \
 nl \
 nn \
 nr \
-nso \
+ns \
 om \
 oc \
 or \

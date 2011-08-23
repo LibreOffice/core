@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,7 @@
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -41,7 +42,7 @@ using namespace ::com::sun::star::lang;
 //************ Class: java.sql.SQLException
 //**************************************************************
 java_sql_SQLException::java_sql_SQLException( const java_sql_SQLException_BASE& _rException,const Reference< XInterface> & _rContext)
-    : starsdbc::SQLException(   _rException.getMessage(),
+    : starsdbc::SQLException(	_rException.getMessage(),
                                 _rContext,
                                 _rException.getSQLState(),
                                 _rException.getErrorCode(),
@@ -66,7 +67,7 @@ jclass java_sql_SQLException_BASE::getMyClass() const
 }
 jclass java_sql_SQLException_BASE::st_getMyClass()
 {
-    // The class needs to be fetched just once, that is why it is static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/SQLException");
     return theClass;
@@ -77,10 +78,10 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
     SDBThreadAttach t;
     static jmethodID mID(NULL);
     jobject out = callObjectMethod(t.pEnv,"getNextException","()Ljava/sql/SQLException;", mID);
-    // WARNING: the caller will become the owner of the returned pointers !!!
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     if( out )
     {
-        java_sql_SQLException_BASE  warn_base(t.pEnv,out);
+        java_sql_SQLException_BASE	warn_base(t.pEnv,out);
         return (starsdbc::SQLException)java_sql_SQLException(warn_base,0);
     }
 

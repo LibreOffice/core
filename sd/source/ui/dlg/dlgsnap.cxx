@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,9 +54,9 @@
 \************************************************************************/
 
 SdSnapLineDlg::SdSnapLineDlg(
-    ::Window* pWindow,
+    ::Window* pWindow, 
     const SfxItemSet& rInAttrs,
-    ::sd::View* pView)
+    ::sd::View* pView) 
     : ModalDialog (pWindow, SdResId(DLG_SNAPLINE)),
       aFlPos      (this, SdResId(FL_POSITION)),
       aFtX        (this, SdResId(FT_X)),
@@ -74,6 +74,10 @@ SdSnapLineDlg::SdSnapLineDlg(
       eUIUnit(pView->GetDoc()->GetUIUnit()),
       aUIScale(pView->GetDoc()->GetUIScale())
 {
+    aRbPoint.SetModeRadioImage( Image( SdResId( BMP_POINT_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aRbVert.SetModeRadioImage( Image( SdResId( BMP_VERTICAL_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aRbHorz.SetModeRadioImage( Image( SdResId( BMP_HORIZONTAL_H ) ), BMP_COLOR_HIGHCONTRAST );
+
     FreeResource();
 
     aRbHorz.SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
@@ -82,8 +86,8 @@ SdSnapLineDlg::SdSnapLineDlg(
 
     aBtnDelete.SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
 
-    SetFieldUnit( aMtrFldX, eUIUnit, sal_True );
-    SetFieldUnit( aMtrFldY, eUIUnit, sal_True );
+    SetFieldUnit( aMtrFldX, eUIUnit, TRUE );
+    SetFieldUnit( aMtrFldY, eUIUnit, TRUE );
 
     // WorkArea holen
     Rectangle aWorkArea = pView->GetWorkArea();
@@ -94,7 +98,7 @@ SdSnapLineDlg::SdSnapLineDlg(
     SfxMapUnit ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
     // #i48497# Consider page origin
-    SdrPageView* pPV = pView->GetSdrPageView();
+    SdrPageView* pPV = pView->GetSdrPageView();	
     Point aLeftTop(aWorkArea.Left()+1, aWorkArea.Top()+1);
     pPV->LogicToPagePos(aLeftTop);
     Point aRightBottom(aWorkArea.Right()-2, aWorkArea.Bottom()-2);
@@ -146,9 +150,9 @@ SdSnapLineDlg::SdSnapLineDlg(
 
 IMPL_LINK( SdSnapLineDlg, ClickHdl, Button *, pBtn )
 {
-    if ( pBtn == &aRbPoint )        SetInputFields(sal_True, sal_True);
-    else if ( pBtn == &aRbHorz )    SetInputFields(sal_False, sal_True);
-    else if ( pBtn == &aRbVert )    SetInputFields(sal_True, sal_False);
+    if ( pBtn == &aRbPoint )		SetInputFields(TRUE, TRUE);
+    else if ( pBtn == &aRbHorz )	SetInputFields(FALSE, TRUE);
+    else if ( pBtn == &aRbVert )	SetInputFields(TRUE, FALSE);
     else if ( pBtn == &aBtnDelete ) EndDialog(RET_SNAP_DELETE);
 
     return 0;
@@ -164,14 +168,14 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
 {
     SnapKind eKind;
 
-    if ( aRbHorz.IsChecked() )      eKind = SK_HORIZONTAL;
+    if ( aRbHorz.IsChecked() )		eKind = SK_HORIZONTAL;
     else if ( aRbVert.IsChecked() ) eKind = SK_VERTICAL;
-    else                            eKind = SK_POINT;
+    else							eKind = SK_POINT;
 
     nXValue = Fraction( GetCoreValue( aMtrFldX, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
     nYValue = Fraction( GetCoreValue( aMtrFldY, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
 
-    rOutAttrs.Put(SfxAllEnumItem(ATTR_SNAPLINE_KIND, (sal_uInt16)eKind));
+    rOutAttrs.Put(SfxAllEnumItem(ATTR_SNAPLINE_KIND, (USHORT)eKind));
     rOutAttrs.Put(SfxUInt32Item(ATTR_SNAPLINE_X, nXValue));
     rOutAttrs.Put(SfxUInt32Item(ATTR_SNAPLINE_Y, nYValue));
 }
@@ -196,7 +200,7 @@ void SdSnapLineDlg::HideRadioGroup()
 |*
 \************************************************************************/
 
-void SdSnapLineDlg::SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY)
+void SdSnapLineDlg::SetInputFields(BOOL bEnableX, BOOL bEnableY)
 {
     if ( bEnableX )
     {

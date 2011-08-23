@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 class String;
 
 /*************************************************************************
- *                      class SwBreakIt
+ *						class SwBreakIt
  *************************************************************************/
 
 
@@ -59,7 +59,7 @@ class SW_DLLPUBLIC SwBreakIt
     LanguageType aForbiddenLang; // language of the current forbiddenChar struct
 
     void _GetLocale( const LanguageType aLang );
-    void _GetForbidden( const LanguageType  aLang );
+    void _GetForbidden( const LanguageType	aLang );
 
     void createBreakIterator() const;
     void createScriptTypeDetector();
@@ -89,10 +89,10 @@ public:
         return xBreak;
     }
 
-    com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector > GetScriptTypeDetector()
-    {
+    com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector > GetScriptTypeDetector() 
+    { 
         createScriptTypeDetector();
-        return xCTLDetect;
+        return xCTLDetect; 
     }
 
     const com::sun::star::lang::Locale& GetLocale( const LanguageType aLang )
@@ -109,8 +109,8 @@ public:
         return *m_pForbidden;
     }
 
-    sal_uInt16 GetRealScriptOfText( const String& rTxt, xub_StrLen nPos ) const;
-       sal_uInt16 GetAllScriptsOfText( const String& rTxt ) const;
+    USHORT GetRealScriptOfText( const String& rTxt, xub_StrLen nPos ) const;
+       USHORT GetAllScriptsOfText( const String& rTxt ) const;
 };
 
 #define SW_BREAKITER()  SwBreakIt::Get()

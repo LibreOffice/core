@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,26 +38,26 @@
 #endif
 
 #include <svtools/parhtml.hxx>
-#include <svtools/htmltokn.h>
-#include <svtools/htmlkywd.hxx>
+#include "htmltokn.h"
+#include "htmlkywd.hxx"
 
 /*  */
 
 // Tabellen zum Umwandeln von Options-Werten in Strings
 
-static HTMLOptionEnum const aScriptLangOptEnums[] =
+static HTMLOptionEnum __READONLY_DATA aScriptLangOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_LG_starbasic, HTML_SL_STARBASIC   },
-    { OOO_STRING_SVTOOLS_HTML_LG_javascript,    HTML_SL_JAVASCRIPT  },
-    { OOO_STRING_SVTOOLS_HTML_LG_javascript11,HTML_SL_JAVASCRIPT    },
-    { OOO_STRING_SVTOOLS_HTML_LG_livescript,    HTML_SL_JAVASCRIPT  },
-//  { OOO_STRING_SVTOOLS_HTML_LG_unused_javascript, HTML_SL_UNUSEDJS },
-//  { OOO_STRING_SVTOOLS_HTML_LG_vbscript,  HTML_SL_VBSCRIPT    },
-//  { OOO_STRING_SVTOOLS_HTML_LG_starone,       HTML_SL_STARONE     },
-    { 0,                    0                   }
+    { OOO_STRING_SVTOOLS_HTML_LG_starbasic,	HTML_SL_STARBASIC	},
+    { OOO_STRING_SVTOOLS_HTML_LG_javascript,	HTML_SL_JAVASCRIPT	},
+    { OOO_STRING_SVTOOLS_HTML_LG_javascript11,HTML_SL_JAVASCRIPT	},
+    { OOO_STRING_SVTOOLS_HTML_LG_livescript,	HTML_SL_JAVASCRIPT	},
+//	{ OOO_STRING_SVTOOLS_HTML_LG_unused_javascript, HTML_SL_UNUSEDJS },
+//	{ OOO_STRING_SVTOOLS_HTML_LG_vbscript,	HTML_SL_VBSCRIPT	},
+//	{ OOO_STRING_SVTOOLS_HTML_LG_starone,		HTML_SL_STARONE		},
+    { 0,					0					}
 };
 
-sal_Bool HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL,
+BOOL HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL,
                                      HTMLScriptLanguage& rLang,
                                      String& rSrc,
                                      String& rLibrary,
@@ -71,7 +71,7 @@ sal_Bool HTMLParser::ParseScriptOptions( String& rLangString, const String& rBas
     rLibrary.Erase();
     rModule.Erase();
 
-    for( sal_uInt16 i = pScriptOptions->Count(); i; )
+    for( USHORT i = pScriptOptions->Count(); i; )
     {
         const HTMLOption *pOption = (*pScriptOptions)[ --i ];
         switch( pOption->GetToken() )
@@ -79,7 +79,7 @@ sal_Bool HTMLParser::ParseScriptOptions( String& rLangString, const String& rBas
         case HTML_O_LANGUAGE:
             {
                 rLangString = pOption->GetString();
-                sal_uInt16 nLang;
+                USHORT nLang;
                 if( pOption->GetEnum( nLang, aScriptLangOptEnums ) )
                     rLang = (HTMLScriptLanguage)nLang;
                 else
@@ -100,10 +100,10 @@ sal_Bool HTMLParser::ParseScriptOptions( String& rLangString, const String& rBas
         }
     }
 
-    return sal_True;
+    return TRUE;
 }
 
-void HTMLParser::RemoveSGMLComment( String &rString, sal_Bool bFull )
+void HTMLParser::RemoveSGMLComment( String &rString, BOOL bFull )
 {
     sal_Unicode c = 0;
     while( rString.Len() &&

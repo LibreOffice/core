@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -169,12 +169,8 @@ class SwChartDataProvider :
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > SAL_CALL Impl_createDataSource( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments, sal_Bool bTestOnly = sal_False ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL Impl_createDataSequenceByRangeRepresentation( const ::rtl::OUString& aRangeRepresentation, sal_Bool bTestOnly = sal_False  ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-
+    
     rtl::OUString GetBrokenCellRangeForExport( const rtl::OUString &rCellRangeRepresentation );
-
-protected:
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
     SwChartDataProvider( const SwDoc* pDoc );
@@ -202,6 +198,10 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    //SwClient
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+
     SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 
     void        AddDataSequence( const SwTable &rTable, ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > &rxDataSequence );
@@ -213,7 +213,7 @@ public:
     void        DisposeAllDataSequences( const SwTable *pTable );
 
     // functionality needed to get notified about new added rows/cols
-    void        AddRowCols( const SwTable &rTable, const SwSelBoxes& rBoxes, sal_uInt16 nLines, sal_Bool bBehind );
+    void        AddRowCols( const SwTable &rTable, const SwSelBoxes& rBoxes, USHORT nLines, BOOL bBehind );
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -283,7 +283,7 @@ class SwChartDataSequence :
     SwChartDataProvider *                   pDataProvider;
 
     SwUnoCrsr*                  pTblCrsr;   // cursor spanned over cells to use
-    SwDepend                    aCursorDepend; //the cursor is removed after the doc has been removed
+    SwDepend					aCursorDepend; //the cursor is removed after the doc has been removed
 
     const SfxItemPropertySet*   _pPropSet;
 
@@ -292,10 +292,6 @@ class SwChartDataSequence :
     // disallow use of c-tor and assignment operator
     SwChartDataSequence( const SwChartDataSequence &rObj );
     SwChartDataSequence & operator = ( const SwChartDataSequence & );
-
-protected:
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
     SwChartDataSequence( SwChartDataProvider &rProvider,
@@ -353,6 +349,11 @@ public:
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
+
+    //SwClient
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+
     SwFrmFmt*   GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
     sal_Bool    DeleteBox( const SwTableBox &rBox );
 
@@ -390,7 +391,7 @@ class SwChartLabeledDataSequence :
     SwChartLabeledDataSequence( const SwChartLabeledDataSequence & );
     SwChartLabeledDataSequence & operator = ( const SwChartLabeledDataSequence & );
 
-    void    SetDataSequence( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& rxDest, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& rxSource );
+    void	SetDataSequence( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& rxDest, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& rxSource );
 
 
 public:

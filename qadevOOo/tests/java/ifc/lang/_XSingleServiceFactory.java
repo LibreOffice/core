@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ public class _XSingleServiceFactory extends MultiMethodTest {
             tRes.tested("createInstance()",
                 (negative && Inst == null) || (!negative && bOK));
         } catch (com.sun.star.uno.Exception ex) {
-            log.println("Exception occurred during createInstance()");
+            log.println("Exception occured during createInstance()");
             if (negative) {
                 ex.printStackTrace(log);
             }
@@ -157,7 +157,7 @@ public class _XSingleServiceFactory extends MultiMethodTest {
             tRes.tested("createInstanceWithArguments()", bOK);
         }
         catch (com.sun.star.uno.Exception ex) {
-            log.println("Exception occurred during createInstanceWithArguments()");
+            log.println("Exception occured during createInstanceWithArguments()");
             ex.printStackTrace(log);
             tRes.tested("createInstanceWithArguments()",false);
         }

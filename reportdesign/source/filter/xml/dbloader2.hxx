@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,14 +84,14 @@ public:
     ORptTypeDetection(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
     // XServiceInfo
-    ::rtl::OUString                                     SAL_CALL getImplementationName() throw(  );
-    sal_Bool                                            SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  SAL_CALL getSupportedServiceNames(void) throw(  );
+    ::rtl::OUString					                    SAL_CALL getImplementationName() throw(  );
+    sal_Bool 						                    SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > 	SAL_CALL getSupportedServiceNames(void) throw(  );
 
     // static methods
     static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException )
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.ORptTypeDetection"));
+        return ::rtl::OUString::createFromAscii("com.sun.star.comp.report.ORptTypeDetection");
     }
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL

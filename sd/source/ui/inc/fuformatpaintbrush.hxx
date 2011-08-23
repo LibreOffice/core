@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,27 +46,27 @@ public:
 
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
 
     virtual void Activate();
     virtual void Deactivate();
 
     static void GetMenuState( DrawViewShell& rDrawViewShell, SfxItemSet &rSet );
-    static bool CanCopyThisType( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier );
+    static bool CanCopyThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier );
 
 private:
     FuFormatPaintBrush ( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq);
 
     void DoExecute( SfxRequest& rReq );
-
-    bool HasContentForThisType( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier ) const;
+    
+    bool HasContentForThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const;
     void Paste( bool, bool );
-
+    
     void implcancel();
-
+    
     ::boost::shared_ptr<SfxItemSet> mpItemSet;
     bool   mbPermanent;
     bool   mbOldIsQuickTextEditMode;

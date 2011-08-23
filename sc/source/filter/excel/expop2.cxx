@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,13 +98,13 @@ FltError ExportBiff5::Write()
     if( pDocShell && xRootStrg.Is() && bWriteBasicStrg )
     {
         SvxImportMSVBasic aBasicImport( *pDocShell, *xRootStrg, bWriteBasicCode, bWriteBasicStrg );
-        sal_uLong nErr = aBasicImport.SaveOrDelMSVBAStorage( sal_True, EXC_STORAGE_VBA_PROJECT );
+        ULONG nErr = aBasicImport.SaveOrDelMSVBAStorage( TRUE, EXC_STORAGE_VBA_PROJECT );
         if( nErr != ERRCODE_NONE )
             pDocShell->SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     }
 
-    pExcDoc->ReadDoc();         // ScDoc -> ExcDoc
-    pExcDoc->Write( aOut );     // wechstreamen
+    pExcDoc->ReadDoc();			// ScDoc -> ExcDoc
+    pExcDoc->Write( aOut );		// wechstreamen
 
     if( pDocShell && xRootStrg.Is() )
     {
@@ -119,7 +119,7 @@ FltError ExportBiff5::Write()
         if ( SvtFilterOptions::Get()->IsEnableCalcPreview() )
         {
             ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                pDocShell->GetPreviewMetaFile (false);
+                pDocShell->GetPreviewMetaFile (sal_False);
             uno::Sequence<sal_uInt8> metaFile(
                 sfx2::convertMetaFile(pMetaFile.get()));
             sfx2::SaveOlePropertySet(xDocProps, xRootStrg, &metaFile);

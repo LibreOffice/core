@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: SettingsTable.hxx,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +33,7 @@
 #define INCLUDED_SETTINGSTABLE_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/LoggedResources.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <map>
@@ -46,34 +49,33 @@ namespace writerfilter {
 namespace dmapper
 {
 class DomainMapper;
-
+        
 using namespace std;
-
+        
 struct SettingsTable_Impl;
-
-class WRITERFILTER_DLLPRIVATE SettingsTable : public LoggedProperties, public LoggedTable
+        
+class WRITERFILTER_DLLPRIVATE SettingsTable : public Properties, public Table
 {
     SettingsTable_Impl *m_pImpl;
-
+            
  public:
     SettingsTable(  DomainMapper& rDMapper,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xTextFactory
             );
     virtual ~SettingsTable();
-
+            
+    // Properties
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
+            
+    // Table
+    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+            
     //returns default TabStop in 1/100th mm
     int GetDefaultTabStop() const;
 
     void ApplyProperties( uno::Reference< text::XTextDocument > xDoc );
-
- private:
-    // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
-
-    // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
-
+            
 };
 typedef boost::shared_ptr< SettingsTable >          SettingsTablePtr;
 }}

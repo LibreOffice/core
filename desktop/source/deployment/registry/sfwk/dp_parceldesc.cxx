@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,14 +94,14 @@ ParcelDescDocHandler::startElement( const OUString& aName,
         throw ( xml::sax::SAXException,
             RuntimeException )
 {
-
-    dp_misc::TRACE(OUSTR("ParcelDescDocHandler::startElement() for ") +
+ 
+    dp_misc::TRACE(OUSTR("ParcelDescDocHandler::startElement() for ") + 
         aName + OUSTR("\n"));
     if ( !skipIndex )
     {
-        if ( aName.equals( OUString(RTL_CONSTASCII_USTRINGPARAM( "parcel" )) ) )
-        {
-            m_sLang = xAttribs->getValueByName( OUString(RTL_CONSTASCII_USTRINGPARAM( "language" )) );
+        if ( aName.equals( OUString::createFromAscii( "parcel" ) ) )
+        { 
+            m_sLang = xAttribs->getValueByName( OUString::createFromAscii( "language" ) );
         }
         ++skipIndex;
     }
@@ -110,7 +110,7 @@ ParcelDescDocHandler::startElement( const OUString& aName,
         dp_misc::TRACE(OUSTR("ParcelDescDocHandler::startElement() skipping for ")
             + aName + OUSTR("\n"));
     }
-
+    
 }
 
 void SAL_CALL ParcelDescDocHandler::endElement( const OUString & aName )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,9 +51,7 @@
 using namespace padmin;
 using namespace psp;
 using namespace osl;
-
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
+using namespace rtl;
 
 PPDImportDialog::PPDImportDialog( Window* pParent ) :
         ModalDialog( pParent, PaResId( RID_PPDIMPORT_DLG ) ),
@@ -155,7 +153,7 @@ void PPDImportDialog::Import()
             continue;
         }
 
-        sal_uInt16 nPos = m_aDriverLB.InsertEntry( aPrinterName );
+        USHORT nPos = m_aDriverLB.InsertEntry( aPrinterName );
         m_aDriverLB.SetEntryData( nPos, new String( aPath.PathToFileName() ) );
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ struct InfoFindSame
 {
     rtl::OUString sJava;
     InfoFindSame(const rtl::OUString& sJavaHome):sJava(sJavaHome){}
-
+    
     bool operator () (const rtl::Reference<VendorBase> & aVendorInfo)
     {
         return aVendorInfo->getHome().equals(sJava) == sal_True ? true : false;
@@ -118,9 +118,6 @@ std::vector<rtl::Reference<VendorBase> > getAllJREInfos();
 
 bool getJavaProps(
     const rtl::OUString & exePath,
-#ifdef JVM_ONE_PATH_CHECK
-    const rtl::OUString & homePath,
-#endif
     std::vector<std::pair<rtl::OUString, rtl::OUString> >& props,
     bool * bProcessRun);
 

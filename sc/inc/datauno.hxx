@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 
 #include "global.hxx"
 #include "queryparam.hxx"
-#include "subtotalparam.hxx"
 
 #include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
@@ -74,43 +73,43 @@ SV_DECL_PTRARR_DEL( XDBRefreshListenerArr_Impl, XDBRefreshListenerPtr, 4, 4 )
 class ScDataUnoConversion
 {
 public:
-    static ScSubTotalFunc   GeneralToSubTotal( com::sun::star::sheet::GeneralFunction eSummary );
+    static ScSubTotalFunc	GeneralToSubTotal( com::sun::star::sheet::GeneralFunction eSummary );
     static com::sun::star::sheet::GeneralFunction SubTotalToGeneral( ScSubTotalFunc eSubTotal );
 };
 
 
-//  ImportDescriptor is not available as Uno-Objekt any longer, only Property-Sequence
+//	ImportDescriptor gibt's nicht mehr als Uno-Objekt, nur noch Property-Sequence
 
 class ScImportDescriptor
 {
 public:
-    static void FillImportParam(
+    static void	FillImportParam(
                     ScImportParam& rParam,
                     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rSeq );
-    static void FillProperties(
+    static void	FillProperties(
                     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rSeq,
                     const ScImportParam& rParam );
     static long GetPropertyCount();
 };
 
-//  SortDescriptor is not available as Uno-Objekt any longer, only Property-Sequence
+//	SortDescriptor gibt's nicht mehr als Uno-Objekt, nur noch Property-Sequence
 
 class ScSortDescriptor
 {
 public:
-    static void FillSortParam(
+    static void	FillSortParam(
                     ScSortParam& rParam,
                     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rSeq );
-    static void FillProperties(
+    static void	FillProperties(
                     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rSeq,
                     const ScSortParam& rParam );
     static long GetPropertyCount();
 };
 
 
-//  ScSubTotalDescriptorBase - base class for SubTotalDescriptor stand alone and in DB area (context?)
+//	ScSubTotalDescriptorBase - Basisklasse fuer SubTotalDescriptor alleine und im DB-Bereich
 
-//  to uno, both look the same
+//	to uno, both look the same
 
 class ScSubTotalDescriptorBase : public cppu::WeakImplHelper6<
                                         com::sun::star::sheet::XSubTotalDescriptor,
@@ -121,25 +120,25 @@ class ScSubTotalDescriptorBase : public cppu::WeakImplHelper6<
                                         com::sun::star::lang::XServiceInfo >
 {
 private:
-    SfxItemPropertySet      aPropSet;
+    SfxItemPropertySet		aPropSet;
 
-    ScSubTotalFieldObj*     GetObjectByIndex_Impl(sal_uInt16 nIndex);
+    ScSubTotalFieldObj*		GetObjectByIndex_Impl(USHORT nIndex);
 
 public:
                             ScSubTotalDescriptorBase();
-    virtual                 ~ScSubTotalDescriptorBase();
+    virtual					~ScSubTotalDescriptorBase();
 
                             // in derived classes:
                             // (Fields are within the range)
-    virtual void            GetData( ScSubTotalParam& rParam ) const = 0;
-    virtual void            PutData( const ScSubTotalParam& rParam ) = 0;
+    virtual void			GetData( ScSubTotalParam& rParam ) const = 0;
+    virtual void			PutData( const ScSubTotalParam& rParam ) = 0;
 
                             // XSubTotalDescriptor
-    virtual void SAL_CALL   addNew( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	addNew( const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::sheet::SubTotalColumn >& aSubTotalColumns,
                                 sal_Int32 nGroupColumn )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   clear() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	clear() throw(::com::sun::star::uno::RuntimeException);
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
@@ -161,7 +160,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -173,25 +172,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
@@ -217,40 +216,41 @@ public:
 };
 
 
-//  ScSubTotalDescriptor - dummy container to use with XImportTarget
+//	ScSubTotalDescriptor - dummer Container zur Benutzung mit XImportTarget
 
 class ScSubTotalDescriptor : public ScSubTotalDescriptorBase
 {
 private:
-    ScSubTotalParam         aStoredParam;
+    ScSubTotalParam			aStoredParam;
 
 public:
                             ScSubTotalDescriptor();
-    virtual                 ~ScSubTotalDescriptor();
+    virtual					~ScSubTotalDescriptor();
 
-                            // from ScSubTotalDescriptorBase:
-    virtual void            GetData( ScSubTotalParam& rParam ) const;
-    virtual void            PutData( const ScSubTotalParam& rParam );
+                            // von ScSubTotalDescriptorBase:
+    virtual void			GetData( ScSubTotalParam& rParam ) const;
+    virtual void			PutData( const ScSubTotalParam& rParam );
 
-                            // external access:
-    void                    SetParam( const ScSubTotalParam& rNew );
+                            // Zugriff von aussen:
+    void					SetParam( const ScSubTotalParam& rNew );
+//	const ScSubTotalParam&	GetParam() const	{ return aStoredParam; }
 };
 
 
-//  ScRangeSubTotalDescriptor - SubTotalDescriptor of a data base area
+//	ScRangeSubTotalDescriptor - SubTotalDescriptor eines Datenbank-Bereichs
 
 class ScRangeSubTotalDescriptor : public ScSubTotalDescriptorBase
 {
 private:
-    ScDatabaseRangeObj*     pParent;
+    ScDatabaseRangeObj*		pParent;
 
 public:
                             ScRangeSubTotalDescriptor(ScDatabaseRangeObj* pPar);
-    virtual                 ~ScRangeSubTotalDescriptor();
+    virtual					~ScRangeSubTotalDescriptor();
 
-                            // from ScSubTotalDescriptorBase:
-    virtual void            GetData( ScSubTotalParam& rParam ) const;
-    virtual void            PutData( const ScSubTotalParam& rParam );
+                            // von ScSubTotalDescriptorBase:
+    virtual void			GetData( ScSubTotalParam& rParam ) const;
+    virtual void			PutData( const ScSubTotalParam& rParam );
 };
 
 
@@ -260,20 +260,20 @@ class ScSubTotalFieldObj : public cppu::WeakImplHelper2<
 {
 private:
     com::sun::star::uno::Reference<com::sun::star::sheet::XSubTotalDescriptor> xRef;
-    ScSubTotalDescriptorBase&   rParent;
-    sal_uInt16                      nPos;
+    ScSubTotalDescriptorBase&	rParent;
+    USHORT						nPos;
 
 public:
-                            ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, sal_uInt16 nP );
-    virtual                 ~ScSubTotalFieldObj();
+                            ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, USHORT nP );
+    virtual					~ScSubTotalFieldObj();
 
                             // XSubTotalField
     virtual sal_Int32 SAL_CALL getGroupColumn() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setGroupColumn( sal_Int32 nGroupColumn )
+    virtual void SAL_CALL	setGroupColumn( sal_Int32 nGroupColumn )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::SubTotalColumn > SAL_CALL
                             getSubTotalColumns() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setSubTotalColumns( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	setSubTotalColumns( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::sheet::SubTotalColumn >& aSubTotalColumns )
                                     throw(::com::sun::star::uno::RuntimeException);
 
@@ -292,38 +292,38 @@ class ScConsolidationDescriptor : public cppu::WeakImplHelper2<
                                         com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScConsolidateParam      aParam;
+    ScConsolidateParam		aParam;
 
 public:
                             ScConsolidationDescriptor();
-    virtual                 ~ScConsolidationDescriptor();
+    virtual					~ScConsolidationDescriptor();
 
-    void                    SetParam( const ScConsolidateParam& rNew );
-    const ScConsolidateParam& GetParam() const  { return aParam; }
+    void					SetParam( const ScConsolidateParam& rNew );
+    const ScConsolidateParam& GetParam() const	{ return aParam; }
 
                             // XConsolidationDescriptor
     virtual ::com::sun::star::sheet::GeneralFunction SAL_CALL getFunction()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setFunction( ::com::sun::star::sheet::GeneralFunction nFunction )
+    virtual void SAL_CALL	setFunction( ::com::sun::star::sheet::GeneralFunction nFunction )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress > SAL_CALL
                             getSources(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setSources( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	setSources( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::table::CellRangeAddress >& aSources )
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::table::CellAddress SAL_CALL getStartOutputPosition()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setStartOutputPosition(
+    virtual void SAL_CALL	setStartOutputPosition(
                                 const ::com::sun::star::table::CellAddress& aStartOutputPosition )
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getUseColumnHeaders() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setUseColumnHeaders( sal_Bool bUseColumnHeaders )
+    virtual void SAL_CALL	setUseColumnHeaders( sal_Bool bUseColumnHeaders )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getUseRowHeaders() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setUseRowHeaders( sal_Bool bUseRowHeaders )
+    virtual void SAL_CALL	setUseRowHeaders( sal_Bool bUseRowHeaders )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getInsertLinks() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setInsertLinks( sal_Bool bInsertLinks )
+    virtual void SAL_CALL	setInsertLinks( sal_Bool bInsertLinks )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
@@ -336,10 +336,10 @@ public:
 };
 
 
-//  ScFilterDescriptorBase - base class for FilterDescriptor
-//                           stand alone, in a DB area (or context?) and in the DataPilot
+//	ScFilterDescriptorBase - Basisklasse fuer FilterDescriptor
+//							 alleine, im DB-Bereich und im DataPilot
 
-//  to uno, all three look the same
+//	to uno, all three look the same
 
 class ScFilterDescriptorBase : public cppu::WeakImplHelper4<
                                     com::sun::star::sheet::XSheetFilterDescriptor,
@@ -349,35 +349,31 @@ class ScFilterDescriptorBase : public cppu::WeakImplHelper4<
                                public SfxListener
 {
 private:
-    SfxItemPropertySet      aPropSet;
+    SfxItemPropertySet		aPropSet;
     ScDocShell*             pDocSh;
 
 public:
-    static void fillQueryParam(
-        ScQueryParam& rParam, ScDocument* pDoc,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::TableFilterField2>& aFilterFields);
-
                             ScFilterDescriptorBase(ScDocShell* pDocShell);
-    virtual                 ~ScFilterDescriptorBase();
+    virtual					~ScFilterDescriptorBase();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                            // in the derived classes(?):
-                            // (nField[] here within the area)
-    virtual void            GetData( ScQueryParam& rParam ) const = 0;
-    virtual void            PutData( const ScQueryParam& rParam ) = 0;
+                            // in den Ableitungen:
+                            // (nField[] hier innerhalb des Bereichs)
+    virtual void			GetData( ScQueryParam& rParam ) const = 0;
+    virtual void			PutData( const ScQueryParam& rParam ) = 0;
 
                             // XSheetFilterDescriptor
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::TableFilterField > SAL_CALL
                             getFilterFields() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setFilterFields( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	setFilterFields( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::sheet::TableFilterField >& aFilterFields )
                                     throw(::com::sun::star::uno::RuntimeException);
 
                             // XSheetFilterDescriptor2
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::TableFilterField2 > SAL_CALL
                             getFilterFields2() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setFilterFields2( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL	setFilterFields2( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::sheet::TableFilterField2 >& aFilterFields )
                                     throw(::com::sun::star::uno::RuntimeException);
 
@@ -385,7 +381,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -397,25 +393,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
@@ -432,58 +428,58 @@ public:
 };
 
 
-//  ScFilterDescriptor - dummy container to use with XFilterable
+//	ScFilterDescriptor - dummer Container zur Benutzung mit XFilterable
 
 class ScFilterDescriptor : public ScFilterDescriptorBase
 {
 private:
-    ScQueryParam            aStoredParam;       // nField[] here within the area
+    ScQueryParam			aStoredParam;		// nField[] hier innerhalb des Bereichs
 
 public:
                             ScFilterDescriptor(ScDocShell* pDocSh);
-    virtual                 ~ScFilterDescriptor();
+    virtual					~ScFilterDescriptor();
 
-                            // from ScFilterDescriptorBase:
-    virtual void            GetData( ScQueryParam& rParam ) const;
-    virtual void            PutData( const ScQueryParam& rParam );
+                            // von ScFilterDescriptorBase:
+    virtual void			GetData( ScQueryParam& rParam ) const;
+    virtual void			PutData( const ScQueryParam& rParam );
 
-                            // external access:
-    void                    SetParam( const ScQueryParam& rNew );
-    const ScQueryParam&     GetParam() const    { return aStoredParam; }
+                            // Zugriff von aussen:
+    void					SetParam( const ScQueryParam& rNew );
+    const ScQueryParam&		GetParam() const	{ return aStoredParam; }
 };
 
 
-//  ScRangeFilterDescriptor - FilterDescriptor of a data base area
+//	ScRangeFilterDescriptor - FilterDescriptor eines Datenbank-Bereichs
 
 class ScRangeFilterDescriptor : public ScFilterDescriptorBase
 {
 private:
-    ScDatabaseRangeObj*     pParent;
+    ScDatabaseRangeObj*		pParent;
 
 public:
                             ScRangeFilterDescriptor(ScDocShell* pDocSh, ScDatabaseRangeObj* pPar);
-    virtual                 ~ScRangeFilterDescriptor();
+    virtual					~ScRangeFilterDescriptor();
 
-                            // from ScFilterDescriptorBase:
-    virtual void            GetData( ScQueryParam& rParam ) const;
-    virtual void            PutData( const ScQueryParam& rParam );
+                            // von ScFilterDescriptorBase:
+    virtual void			GetData( ScQueryParam& rParam ) const;
+    virtual void			PutData( const ScQueryParam& rParam );
 };
 
 
-//  ScDataPilotFilterDescriptor - FilterDescriptor of a DataPilotDescriptors
+//	ScDataPilotFilterDescriptor - FilterDescriptor eines DataPilotDescriptors
 
 class ScDataPilotFilterDescriptor : public ScFilterDescriptorBase
 {
 private:
-    ScDataPilotDescriptorBase*  pParent;
+    ScDataPilotDescriptorBase*	pParent;
 
 public:
                             ScDataPilotFilterDescriptor(ScDocShell* pDocSh, ScDataPilotDescriptorBase* pPar);
-    virtual                 ~ScDataPilotFilterDescriptor();
+    virtual					~ScDataPilotFilterDescriptor();
 
-                            // from ScFilterDescriptorBase:
-    virtual void            GetData( ScQueryParam& rParam ) const;
-    virtual void            PutData( const ScQueryParam& rParam );
+                            // von ScFilterDescriptorBase:
+    virtual void			GetData( ScQueryParam& rParam ) const;
+    virtual void			PutData( const ScQueryParam& rParam );
 };
 
 
@@ -497,36 +493,36 @@ class ScDatabaseRangeObj : public cppu::WeakImplHelper6<
                            public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
-    String                  aName;
-    SfxItemPropertySet      aPropSet;
+    ScDocShell*				pDocShell;
+    String					aName;
+    SfxItemPropertySet		aPropSet;
     XDBRefreshListenerArr_Impl aRefreshListeners;
 
 private:
-    ScDBData*               GetDBData_Impl() const;
-    void                    Refreshed_Impl();
+    ScDBData*				GetDBData_Impl() const;
+    void					Refreshed_Impl();
 
 public:
                             ScDatabaseRangeObj(ScDocShell* pDocSh, const String& rNm);
-    virtual                 ~ScDatabaseRangeObj();
+    virtual					~ScDatabaseRangeObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                            // nField[] here within the area:
-    void                    GetQueryParam(ScQueryParam& rQueryParam) const;
-    void                    SetQueryParam(const ScQueryParam& rQueryParam);
-    void                    GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
-    void                    SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
+                            // nField[] hier innerhalb des Bereichs:
+    void					GetQueryParam(ScQueryParam& rQueryParam) const;
+    void					SetQueryParam(const ScQueryParam& rQueryParam);
+    void					GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
+    void					SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XDatabaseRange
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getDataArea()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setDataArea( const ::com::sun::star::table::CellRangeAddress& aDataArea )
+    virtual void SAL_CALL	setDataArea( const ::com::sun::star::table::CellRangeAddress& aDataArea )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
                             getSortDescriptor() throw(::com::sun::star::uno::RuntimeException);
@@ -536,13 +532,15 @@ public:
                             getSubTotalDescriptor() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
                             getImportDescriptor() throw(::com::sun::star::uno::RuntimeException);
+// implemented for the XRefreshable Interface
+//    virtual void SAL_CALL	refresh() throw(::com::sun::star::uno::RuntimeException);
 
                             // XRefreshable
-    virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addRefreshListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	refresh() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	addRefreshListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XRefreshListener >& l )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeRefreshListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	removeRefreshListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XRefreshListener >& l )
                                 throw(::com::sun::star::uno::RuntimeException);
 
@@ -554,7 +552,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -566,25 +564,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
@@ -609,22 +607,22 @@ class ScDatabaseRangesObj : public cppu::WeakImplHelper4<
                             public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
+    ScDocShell*				pDocShell;
 
-    ScDatabaseRangeObj*     GetObjectByIndex_Impl(sal_uInt16 nIndex);
-    ScDatabaseRangeObj*     GetObjectByName_Impl(const ::rtl::OUString& aName);
+    ScDatabaseRangeObj*		GetObjectByIndex_Impl(USHORT nIndex);
+    ScDatabaseRangeObj*		GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:
                             ScDatabaseRangesObj(ScDocShell* pDocSh);
-    virtual                 ~ScDatabaseRangesObj();
+    virtual					~ScDatabaseRangesObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XDatabaseRanges
-    virtual void SAL_CALL   addNewByName( const ::rtl::OUString& aName,
+    virtual void SAL_CALL	addNewByName( const ::rtl::OUString& aName,
                                 const ::com::sun::star::table::CellRangeAddress& aRange )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeByName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	removeByName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XEnumerationAccess

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@
 #include<vcl/window.hxx>
 
 
-SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCntnt,
-                        sal_uInt8 nAktNdTyp, long nLRPos, bool bAktSelection )
+SwCallLink::SwCallLink( SwCrsrShell & rSh, ULONG nAktNode, xub_StrLen nAktCntnt,
+                        BYTE nAktNdTyp, long nLRPos, bool bAktSelection )
     : rShell( rSh ), nNode( nAktNode ), nCntnt( nAktCntnt ),
       nNdTyp( nAktNdTyp ), nLeftFrmPos( nLRPos ),
       bHasSelection( bAktSelection )
@@ -64,7 +64,7 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCn
 SwCallLink::SwCallLink( SwCrsrShell & rSh )
     : rShell( rSh )
 {
-    // remember SPoint-values of current cursor
+    // SPoint-Werte vom aktuellen Cursor merken
     SwPaM* pCrsr = rShell.IsTableMode() ? rShell.GetTblCrs() : rShell.GetCrsr();
     SwNode& rNd = pCrsr->GetPoint()->nNode.GetNode();
     nNode = rNd.GetIndex();
@@ -73,17 +73,16 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
     bHasSelection = ( *pCrsr->GetPoint() != *pCrsr->GetMark() );
 
     if( ND_TEXTNODE & nNdTyp )
-        nLeftFrmPos = SwCallLink::getLayoutFrm( rShell.GetLayout(), (SwTxtNode&)rNd, nCntnt,
+        nLeftFrmPos = SwCallLink::GetFrm( (SwTxtNode&)rNd, nCntnt,
                                             !rShell.ActionPend() );
     else
     {
         nLeftFrmPos = 0;
 
-        // A special treatment for SwFeShell:
-        // When deleting the header/footer, footnotes SwFeShell sets the
-        // Cursor to NULL (Node + Content).
-        // If the Cursor is not on a CntntNode (ContentNode) this fact gets
-        // saved in NdType.
+        // eine Sonderbehandlung fuer die SwFeShell: diese setzt beim Loeschen
+        // der Kopf-/Fusszeile, Fussnoten den Cursor auf NULL (Node + Content)
+        // steht der Cursor auf keinem CntntNode, wird sich das im NdType
+        // gespeichert.
         if( ND_CONTENTNODE & nNdTyp )
             nNdTyp = 0;
     }
@@ -92,17 +91,18 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
 
 SwCallLink::~SwCallLink()
 {
-    if( !nNdTyp || !rShell.bCallChgLnk )        // see ctor
+    if( !nNdTyp || !rShell.bCallChgLnk )		// siehe ctor
         return ;
 
-    // If travelling over Nodes check formats and register them anew at the
-    // new Node.
+    // wird ueber Nodes getravellt, Formate ueberpruefen und im neuen
+    // Node wieder anmelden
     SwPaM* pCurCrsr = rShell.IsTableMode() ? rShell.GetTblCrs() : rShell.GetCrsr();
     SwCntntNode * pCNd = pCurCrsr->GetCntntNode();
     if( !pCNd )
         return;
 
-    SwFrm *myFrm = pCNd->getLayoutFrm( rShell.GetLayout() );
+    bool bUpdatedTable = false;
+    SwFrm *myFrm=pCNd->GetFrm();
     if (myFrm!=NULL)
     {
         // We need to emulated a change of the row height in order
@@ -112,7 +112,9 @@ SwCallLink::~SwCallLink()
         {
             const SwTableLine* pLine = pRow->GetTabLine( );
             SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
-            pRow->ModifyNotification( NULL, &pSize );
+            pRow->Modify( NULL, &pSize );
+
+            bUpdatedTable = true;
         }
     }
 
@@ -124,7 +126,7 @@ SwCallLink::~SwCallLink()
     }
     if ( pNode != NULL )
     {
-        SwFrm *myFrm2 = pNode->getLayoutFrm( rShell.GetLayout() );
+        SwFrm *myFrm2=pNode->GetFrm();
         if (myFrm2!=NULL)
         {
             // We need to emulated a change of the row height in order
@@ -134,25 +136,31 @@ SwCallLink::~SwCallLink()
             {
                 const SwTableLine* pLine = pRow->GetTabLine( );
                 SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
-                pRow->ModifyNotification( NULL, &pSize );
+                pRow->Modify( NULL, &pSize );
+
+                bUpdatedTable = true;
             }
         }
     }
 
-    xub_StrLen nCmp, nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
-    sal_uInt16 nNdWhich = pCNd->GetNodeType();
-    sal_uLong nAktNode = pCurCrsr->GetPoint()->nNode.GetIndex();
+    if ( bUpdatedTable )
+        rShell.GetWin( )->Invalidate( 0 );
 
-    // Register the Shell as dependent at the current Node. By doing this all
-    // attribute changes can be signaled over the link.
+    xub_StrLen nCmp, nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
+    USHORT nNdWhich = pCNd->GetNodeType();
+    ULONG nAktNode = pCurCrsr->GetPoint()->nNode.GetIndex();
+
+    // melde die Shell beim akt. Node als abhaengig an, dadurch koennen
+    // alle Attribut-Aenderungen ueber den Link weiter gemeldet werden.
     pCNd->Add( &rShell );
 
     if( nNdTyp != nNdWhich || nNode != nAktNode )
     {
-        // Every time a switch between nodes occurs, there is a chance that
-        // new attributes do apply - meaning text-attributes.
-        // So the currently applying attributes would have to be determined.
-        // That can be done in one go by the handler.
+        /* immer, wenn zwischen Nodes gesprungen wird, kann es
+         * vorkommen, das neue Attribute gelten; die Text-Attribute.
+         * Es muesste also festgestellt werden, welche Attribute
+         * jetzt gelten; das kann auch gleich der Handler machen
+         */
         rShell.CallChgLnk();
     }
     else if( !bHasSelection != !(*pCurCrsr->GetPoint() != *pCurCrsr->GetMark()) )
@@ -163,20 +171,20 @@ SwCallLink::~SwCallLink()
     else if( rShell.aChgLnk.IsSet() && ND_TEXTNODE == nNdWhich &&
              nCntnt != nAktCntnt )
     {
-        // If travelling with left/right only and the frame is
-        // unchanged (columns!) then check text hints.
-        if( nLeftFrmPos == SwCallLink::getLayoutFrm( rShell.GetLayout(), (SwTxtNode&)*pCNd, nAktCntnt,
+        // nur wenn mit Left/right getravellt, dann Text-Hints pruefen
+        // und sich nicht der Frame geaendert hat (Spalten!)
+        if( nLeftFrmPos == SwCallLink::GetFrm( (SwTxtNode&)*pCNd, nAktCntnt,
                                                     !rShell.ActionPend() ) &&
-            (( nCmp = nCntnt ) + 1 == nAktCntnt ||          // Right
-            nCntnt -1 == ( nCmp = nAktCntnt )) )            // Left
+            (( nCmp = nCntnt ) + 1 == nAktCntnt ||			// Right
+            nCntnt -1 == ( nCmp = nAktCntnt )) )			// Left
         {
-            if( nCmp == nAktCntnt && pCurCrsr->HasMark() ) // left & select
+            if( nCmp == nAktCntnt && pCurCrsr->HasMark() ) // left & Sele
                 ++nCmp;
             if ( ((SwTxtNode*)pCNd)->HasHints() )
             {
 
                 const SwpHints &rHts = ((SwTxtNode*)pCNd)->GetSwpHints();
-                sal_uInt16 n;
+                USHORT n;
                 xub_StrLen nStart;
                 const xub_StrLen *pEnd;
 
@@ -186,8 +194,8 @@ SwCallLink::~SwCallLink()
                     pEnd = pHt->GetEnd();
                     nStart = *pHt->GetStart();
 
-                    // If "only start" or "start and end equal" then call on
-                    // every overflow of start.
+                    // nur Start oder Start und Ende gleich, dann immer
+                    // beim Ueberlaufen von Start callen
                     if( ( !pEnd || ( nStart == *pEnd ) ) &&
                         ( nStart == nCntnt || nStart == nAktCntnt) )
                     {
@@ -195,9 +203,9 @@ SwCallLink::~SwCallLink()
                         return;
                     }
 
-                    // If the attribute has an area and that area is not empty ...
+                    // hat das Attribut einen Bereich und dieser nicht leer
                     else if( pEnd && nStart < *pEnd &&
-                        // ... then test if travelling occurred via start/end.
+                        // dann teste, ob ueber Start/Ende getravellt wurde
                         ( nStart == nCmp ||
                             ( pHt->DontExpand() ? nCmp == *pEnd-1
                                                 : nCmp == *pEnd ) ))
@@ -222,15 +230,17 @@ SwCallLink::~SwCallLink()
             }
         }
         else
-            // If travelling more than one character with home/end/.. then
-            // always call ChgLnk, because it can not be determined here what
-            // has changed. Something may have changed.
+            /* wenn mit Home/End/.. mehr als 1 Zeichen getravellt, dann
+             * immer den ChgLnk rufen, denn es kann hier nicht
+             * festgestellt werden, was sich geaendert; etwas kann
+             * veraendert sein.
+             */
             rShell.CallChgLnk();
     }
 
     const SwFrm* pFrm;
     const SwFlyFrm *pFlyFrm;
-    if( !rShell.ActionPend() && 0 != ( pFrm = pCNd->getLayoutFrm(rShell.GetLayout(),0,0,sal_False) ) &&
+    if( !rShell.ActionPend() && 0 != ( pFrm = pCNd->GetFrm(0,0,FALSE) ) &&
         0 != ( pFlyFrm = pFrm->FindFlyFrm() ) && !rShell.IsTableMode() )
     {
         const SwNodeIndex* pIndex = pFlyFrm->GetFmt()->GetCntnt().GetCntntIdx();
@@ -247,9 +257,9 @@ SwCallLink::~SwCallLink()
     }
 }
 
-long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm )
+long SwCallLink::GetFrm( SwTxtNode& rNd, xub_StrLen nCntPos, BOOL bCalcFrm )
 {
-    SwTxtFrm* pFrm = (SwTxtFrm*)rNd.getLayoutFrm(pRoot,0,0,bCalcFrm), *pNext = pFrm;
+    SwTxtFrm* pFrm = (SwTxtFrm*)rNd.GetFrm(0,0,bCalcFrm), *pNext = pFrm;
     if ( pFrm && !pFrm->IsHiddenNow() )
     {
         if( pFrm->HasFollow() )

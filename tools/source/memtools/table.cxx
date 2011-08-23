@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,17 +38,17 @@
 
 // =======================================================================
 
-sal_uIntPtr Table::ImplGetIndex( sal_uIntPtr nKey, sal_uIntPtr* pIndex ) const
+ULONG Table::ImplGetIndex( ULONG nKey, ULONG* pIndex ) const
 {
     // Abpruefen, ob der erste Key groesser als der Vergleichskey ist
-    if ( !nCount || (nKey < (sal_uIntPtr)Container::ImpGetObject(0)) )
+    if ( !nCount || (nKey < (ULONG)Container::ImpGetObject(0)) )
         return TABLE_ENTRY_NOTFOUND;
 
-    sal_uIntPtr nLow;
-    sal_uIntPtr nHigh;
-    sal_uIntPtr nMid;
-    sal_uIntPtr nCompareKey;
-    void**  pNodes = Container::ImpGetOnlyNodes();
+    ULONG	nLow;
+    ULONG	nHigh;
+    ULONG	nMid;
+    ULONG	nCompareKey;
+    void**	pNodes = Container::ImpGetOnlyNodes();
 
     // Binaeres Suchen
     nLow  = 0;
@@ -58,7 +58,7 @@ sal_uIntPtr Table::ImplGetIndex( sal_uIntPtr nKey, sal_uIntPtr* pIndex ) const
         do
         {
             nMid = (nLow + nHigh) / 2;
-            nCompareKey = (sal_uIntPtr)pNodes[nMid*2];
+            nCompareKey = (ULONG)pNodes[nMid*2];
             if ( nKey < nCompareKey )
                 nHigh = nMid-1;
             else
@@ -76,7 +76,7 @@ sal_uIntPtr Table::ImplGetIndex( sal_uIntPtr nKey, sal_uIntPtr* pIndex ) const
         do
         {
             nMid = (nLow + nHigh) / 2;
-            nCompareKey = (sal_uIntPtr)Container::ImpGetObject( nMid*2 );
+            nCompareKey = (ULONG)Container::ImpGetObject( nMid*2 );
             if ( nKey < nCompareKey )
                 nHigh = nMid-1;
             else
@@ -103,7 +103,7 @@ sal_uIntPtr Table::ImplGetIndex( sal_uIntPtr nKey, sal_uIntPtr* pIndex ) const
 
 // =======================================================================
 
-Table::Table( sal_uInt16 _nInitSize, sal_uInt16 _nReSize ) :
+Table::Table( USHORT _nInitSize, USHORT _nReSize ) :
            Container( CONTAINER_MAXBLOCKSIZE, _nInitSize*2, _nReSize*2 )
 {
     DBG_ASSERT( _nInitSize <= 32767, "Table::Table(): InitSize > 32767" );
@@ -113,26 +113,27 @@ Table::Table( sal_uInt16 _nInitSize, sal_uInt16 _nReSize ) :
 
 // -----------------------------------------------------------------------
 
-sal_Bool Table::Insert( sal_uIntPtr nKey, void* p )
+BOOL Table::Insert( ULONG nKey, void* p )
 {
     // Tabellenelement einsortieren
-    sal_uIntPtr i;
+    ULONG i;
     if ( nCount )
     {
         if ( nCount <= 24 )
         {
-            sal_uInt16 n = 0;
-            sal_uInt16 nTempCount = (sal_uInt16)nCount * 2;
+            USHORT n = 0;
+            USHORT nTempCount = (USHORT)nCount * 2;
+            //<!--Modified by PengYunQuan for resolving a NULL pointer access 
 
             if( void** pNodes = Container::ImpGetOnlyNodes() )
             {
-                sal_uIntPtr  nCompareKey = (sal_uIntPtr)(*pNodes);
+                ULONG  nCompareKey = (ULONG)(*pNodes);
                 while ( nKey > nCompareKey )
                 {
                     n += 2;
                     pNodes += 2;
                     if ( n < nTempCount )
-                        nCompareKey = (sal_uIntPtr)(*pNodes);
+                        nCompareKey = (ULONG)(*pNodes);
                     else
                     {
                         nCompareKey = 0;
@@ -142,7 +143,7 @@ sal_Bool Table::Insert( sal_uIntPtr nKey, void* p )
 
                 // Testen, ob sich der Key schon in der Tabelle befindet
                 if ( nKey == nCompareKey )
-                    return sal_False;
+                    return FALSE;
 
                 i = n;
             }
@@ -150,14 +151,15 @@ sal_Bool Table::Insert( sal_uIntPtr nKey, void* p )
             {
                 i = 0;
                 if ( ImplGetIndex( nKey, &i ) != TABLE_ENTRY_NOTFOUND )
-                    return sal_False;
+                    return FALSE;
             }
+            //-->Modified by PengYunQuan for resolving a NULL pointer access 
         }
         else
         {
             i = 0;
             if ( ImplGetIndex( nKey, &i ) != TABLE_ENTRY_NOTFOUND )
-                return sal_False;
+                return FALSE;
         }
     }
     else
@@ -170,15 +172,15 @@ sal_Bool Table::Insert( sal_uIntPtr nKey, void* p )
     // Ein neuer Eintrag
     nCount++;
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-void* Table::Remove( sal_uIntPtr nKey )
+void* Table::Remove( ULONG nKey )
 {
     // Index besorgen
-    sal_uIntPtr nIndex = ImplGetIndex( nKey );
+    ULONG nIndex = ImplGetIndex( nKey );
 
     // Testen, ob sich der Key in der Tabelle befindet
     if ( nIndex == TABLE_ENTRY_NOTFOUND )
@@ -196,10 +198,10 @@ void* Table::Remove( sal_uIntPtr nKey )
 
 // -----------------------------------------------------------------------
 
-void* Table::Replace( sal_uIntPtr nKey, void* p )
+void* Table::Replace( ULONG nKey, void* p )
 {
     // Index abfragen
-    sal_uIntPtr nIndex = ImplGetIndex( nKey );
+    ULONG nIndex = ImplGetIndex( nKey );
 
     // Existiert kein Eintrag mit dem Schluessel
     if ( nIndex == TABLE_ENTRY_NOTFOUND )
@@ -210,10 +212,10 @@ void* Table::Replace( sal_uIntPtr nKey, void* p )
 
 // -----------------------------------------------------------------------
 
-void* Table::Get( sal_uIntPtr nKey ) const
+void* Table::Get( ULONG nKey ) const
 {
     // Index besorgen
-    sal_uIntPtr nIndex = ImplGetIndex( nKey );
+    ULONG nIndex = ImplGetIndex( nKey );
 
     // Testen, ob sich der Key in der Tabelle befindet
     if ( nIndex == TABLE_ENTRY_NOTFOUND )
@@ -231,16 +233,16 @@ void* Table::GetCurObject() const
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Table::GetKey( const void* p ) const
+ULONG Table::GetKey( const void* p ) const
 {
-    sal_uIntPtr nIndex = 0;
+    ULONG nIndex = 0;
 
     // Solange noch Eintraege Vorhanden sind
     while ( nIndex < nCount )
     {
         // Stimmt der Pointer ueberein, wird der Key zurueckgegeben
         if ( p == Container::ImpGetObject( (nIndex*2)+1 ) )
-            return (sal_uIntPtr)Container::ImpGetObject( nIndex*2 );
+            return (ULONG)Container::ImpGetObject( nIndex*2 );
 
         nIndex++;
     }
@@ -250,14 +252,14 @@ sal_uIntPtr Table::GetKey( const void* p ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Table::IsKeyValid( sal_uIntPtr nKey ) const
+BOOL Table::IsKeyValid( ULONG nKey ) const
 {
-    return (ImplGetIndex( nKey ) != TABLE_ENTRY_NOTFOUND) ? sal_True : sal_False;
+    return (ImplGetIndex( nKey ) != TABLE_ENTRY_NOTFOUND) ? TRUE : FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Table::GetUniqueKey( sal_uIntPtr nStartKey ) const
+ULONG Table::GetUniqueKey( ULONG nStartKey ) const
 {
     DBG_ASSERT( (nStartKey > 1) && (nStartKey < 0xFFFFFFFF),
                 "Table::GetUniqueKey() - nStartKey == 0 or nStartKey >= 0xFFFFFFFF" );
@@ -265,7 +267,7 @@ sal_uIntPtr Table::GetUniqueKey( sal_uIntPtr nStartKey ) const
     if ( !nCount )
         return nStartKey;
 
-    sal_uIntPtr nLastKey = (sal_uIntPtr)Container::GetObject( (nCount*2)-2 );
+    ULONG nLastKey = (ULONG)Container::GetObject( (nCount*2)-2 );
     if ( nLastKey < nStartKey )
         return nStartKey;
     else
@@ -274,18 +276,18 @@ sal_uIntPtr Table::GetUniqueKey( sal_uIntPtr nStartKey ) const
             return nLastKey+1;
         else
         {
-            sal_uIntPtr nPos;
-            sal_uIntPtr nTempPos = ImplGetIndex( nStartKey, &nPos );
+            ULONG nPos;
+            ULONG nTempPos = ImplGetIndex( nStartKey, &nPos );
             if ( nTempPos != TABLE_ENTRY_NOTFOUND )
                 nPos = nTempPos;
-            nLastKey = (sal_uIntPtr)Container::GetObject( nPos );
+            nLastKey = (ULONG)Container::GetObject( nPos );
             if ( nStartKey < nLastKey )
                 return nStartKey;
             while ( nLastKey < 0xFFFFFFFE )
             {
                 nPos += 2;
                 nLastKey++;
-                if ( nLastKey != (sal_uIntPtr)Container::GetObject( nPos ) )
+                if ( nLastKey != (ULONG)Container::GetObject( nPos ) )
                     return nLastKey;
             }
         }
@@ -296,10 +298,10 @@ sal_uIntPtr Table::GetUniqueKey( sal_uIntPtr nStartKey ) const
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Table::SearchKey( sal_uIntPtr nKey, sal_uIntPtr* pPos ) const
+ULONG Table::SearchKey( ULONG nKey, ULONG* pPos ) const
 {
     *pPos = 0;
-    sal_uIntPtr nPos = ImplGetIndex( nKey, pPos );
+    ULONG nPos = ImplGetIndex( nKey, pPos );
     if ( nPos != TABLE_ENTRY_NOTFOUND )
     {
         nPos /= 2;
@@ -312,12 +314,12 @@ sal_uIntPtr Table::SearchKey( sal_uIntPtr nKey, sal_uIntPtr* pPos ) const
 
 // -----------------------------------------------------------------------
 
-void* Table::Seek( sal_uIntPtr nKey )
+void* Table::Seek( ULONG nKey )
 {
     // Testen, ob ein Eintrag vorhanden ist
     if ( nCount )
     {
-        sal_uIntPtr nIndex = ImplGetIndex( nKey );
+        ULONG nIndex = ImplGetIndex( nKey );
 
         // Ist Key nicht enthalten
         if ( nIndex == TABLE_ENTRY_NOTFOUND )
@@ -339,7 +341,7 @@ void* Table::Seek( sal_uIntPtr nKey )
 
 void* Table::Seek( void* p )
 {
-    sal_uIntPtr nKey = GetKey( p );
+    ULONG nKey = GetKey( p );
 
     // Ist Key vorhanden, dann als aktuellen Eintrag setzen
     if ( nKey != TABLE_ENTRY_NOTFOUND )

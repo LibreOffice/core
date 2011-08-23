@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@
 #include <float.h>
 #include <vcl/svapp.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -101,7 +101,7 @@ void ScAccessibleCell::Init()
 void SAL_CALL ScAccessibleCell::disposing()
 {
     SolarMutexGuard aGuard;
-    // dispose in AccessibleStaticTextBase
+    // #100593# dispose in AccessibleStaticTextBase
     Dispose();
 
     if (mpViewShell)
@@ -174,7 +174,7 @@ Rectangle ScAccessibleCell::GetBoundingBox(void) const
         mpViewShell->GetViewData()->GetMergeSizePixel(
             maCellAddress.Col(), maCellAddress.Row(), nSizeX, nSizeY);
         aCellRect.SetSize(Size(nSizeX, nSizeY));
-        aCellRect.SetPos(mpViewShell->GetViewData()->GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos, sal_True));
+        aCellRect.SetPos(mpViewShell->GetViewData()->GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos, TRUE));
 
         Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
@@ -343,7 +343,7 @@ sal_Bool ScAccessibleCell::IsOpaque(
 
 sal_Bool ScAccessibleCell::IsSelected()
 {
-    sal_Bool bResult(false);
+    sal_Bool bResult(sal_False);
     if (mpViewShell && mpViewShell->GetViewData())
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
@@ -379,7 +379,7 @@ void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelatio
         {
             if (pCell->GetCellType() == CELLTYPE_FORMULA)
             {
-                sal_Bool bFound(false);
+                sal_Bool bFound(sal_False);
                 ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
                 ScRange aRef;
                 while ( !bFound && aIter.GetNextRef( aRef ) )

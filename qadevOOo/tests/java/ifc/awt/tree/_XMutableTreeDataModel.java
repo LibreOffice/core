@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ import lib.MultiMethodTest;
 public class _XMutableTreeDataModel extends MultiMethodTest {
 
     public XMutableTreeDataModel oObj = null;
-
+    
     private XMutableTreeNode mNewNode = null;
 
     /**
@@ -70,26 +70,26 @@ public class _XMutableTreeDataModel extends MultiMethodTest {
     */
     public void _setRoot() {
         requiredMethod("createNode()") ;
-
+        
         boolean bOK = true;
         try {
-
+            
             oObj.setRoot(mNewNode);
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
             bOK = false;
             log.println("ERROR: while trying to set a new root an IllegalArgumentException was thrown:\n" + ex.toString());
         }
-
+        
         try {
-
+            
             oObj.setRoot(null);
             bOK = false;
             log.println("ERROR: while trying to set a null object as root expected IllegalArgumentException was not thrown.");
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
             log.println("expected IllegalArgumentException was thrown => ok");
-
+               
         }
-
+        
         tRes.tested("setRoot()", bOK);
 
     }

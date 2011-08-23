@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 //_______________________________________________
 // includes
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <rtl/ustring.hxx>
 
 //_______________________________________________
@@ -61,7 +61,7 @@ namespace filter{
     @attention  This class is not threadsafe implemented. Because its not neccessary.
                 But you have to make shure, that ist not used as such :-)
  */
-class QueryTokenizer : public ::boost::unordered_map< ::rtl::OUString                    ,
+class QueryTokenizer : public ::std::hash_map< ::rtl::OUString                    ,
                                                ::rtl::OUString                    ,
                                                ::rtl::OUStringHash                ,
                                                ::std::equal_to< ::rtl::OUString > >

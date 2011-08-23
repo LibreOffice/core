@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,11 +60,11 @@ TYPEINIT1( FuSlideShowDlg, FuPoor );
 \************************************************************************/
 
 FuSlideShowDlg::FuSlideShowDlg (
-    ViewShell* pViewSh,
+    ViewShell* pViewSh, 
     ::sd::Window* pWin,
-    ::sd::View* pView,
-    SdDrawDocument* pDoc,
-    SfxRequest& rReq)
+    ::sd::View*	pView, 
+    SdDrawDocument* pDoc, 
+    SfxRequest& rReq) 
     : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
 {
 }
@@ -80,17 +80,17 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 {
     PresentationSettings& rPresentationSettings = mpDoc->getPresentationSettings();
 
-    SfxItemSet      aDlgSet( mpDoc->GetPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
-    List            aPageNameList;
-    const String&   rPresPage = rPresentationSettings.maPresPage;
-    String          aFirstPage;
-    String          aStandardName( SdResId( STR_PAGE ) );
-    SdPage*         pPage = NULL;
-    long            nPage;
+    SfxItemSet		aDlgSet( mpDoc->GetPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
+    List			aPageNameList;
+    const String&	rPresPage = rPresentationSettings.maPresPage;
+    String			aFirstPage;
+    String			aStandardName( SdResId( STR_PAGE ) );
+    SdPage*			pPage = NULL;
+    long			nPage;
 
     for( nPage = mpDoc->GetSdPageCount( PK_STANDARD ) - 1L; nPage >= 0L; nPage-- )
     {
-        pPage = mpDoc->GetSdPage( (sal_uInt16) nPage, PK_STANDARD );
+        pPage = mpDoc->GetSdPage( (USHORT) nPage, PK_STANDARD );
         String* pStr = new String( pPage->GetName() );
 
         if ( !pStr->Len() )
@@ -99,7 +99,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
             (*pStr).Append( UniString::CreateFromInt32( nPage + 1 ) );
         }
 
-        aPageNameList.Insert( pStr, (sal_uLong) 0 );
+        aPageNameList.Insert( pStr, (ULONG) 0 );
 
         // ist dies unsere (vorhandene) erste Seite?
         if ( rPresPage == *pStr )
@@ -109,8 +109,8 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     }
     List* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
 
-    sal_Bool bStartWithActualPage = SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage();
-/* change in behaviour, even when always start with current page is enabled, range settings are
+    BOOL bStartWithActualPage = SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage();
+/* #109180# change in behaviour, even when always start with current page is enabled, range settings are
             still used
     if( bStartWithActualPage )
     {
@@ -145,9 +145,9 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     if( pDlg && (pDlg->Execute() == RET_OK) )
     {
         rtl::OUString aPage;
-        long    nValue32;
+        long	nValue32;
         sal_Bool bValue;
-        bool    bValuesChanged = sal_False;
+        bool	bValuesChanged = FALSE;
 
         pDlg->GetAttr( aDlgSet );
 
@@ -253,7 +253,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
         // wenn sich etwas geaendert hat, setzen wir das Modified-Flag,
         if ( bValuesChanged )
-            mpDoc->SetChanged( sal_True );
+            mpDoc->SetChanged( TRUE );
     }
     delete pDlg;
     // Strings aus Liste loeschen

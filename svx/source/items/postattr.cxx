@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 // include ---------------------------------------------------------------
 
 #define _SVX_POSTATTR_CXX
-#include "svx/postattr.hxx"
+#include "postattr.hxx"
 #include <editeng/itemtype.hxx>
 #include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>
@@ -66,7 +66,7 @@ SfxItemPresentation SvxPostItAuthorItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -87,7 +87,7 @@ SfxItemPresentation SvxPostItAuthorItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxPostItAuthorItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT SvxPostItAuthorItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItAuthorItem( *this );
 }
@@ -115,7 +115,7 @@ SfxItemPresentation SvxPostItDateItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -136,7 +136,7 @@ SfxItemPresentation SvxPostItDateItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxPostItDateItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT SvxPostItDateItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItDateItem( *this );
 }
@@ -164,7 +164,7 @@ SfxItemPresentation SvxPostItTextItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -185,7 +185,7 @@ SfxItemPresentation SvxPostItTextItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxPostItTextItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT SvxPostItTextItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItTextItem( *this );
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,9 @@
 #endif
 
 
-#define ULONG win32ULONG
+#define BOOL win32BOOL
+#define INT32 win32INT32
+#define UINT32 win32UINT32
 #define GradientStyle_RECT win32GradientStyle_RECT
 #define Polygon win32Polygon
 #define PolyPolygon win32PolyPolygon
@@ -115,13 +117,13 @@ using ::std::min;
 namespace dxcanvas
 {
     // some shared pointer typedefs to Gdiplus objects
-    typedef ::boost::shared_ptr< Gdiplus::Graphics >        GraphicsSharedPtr;
-    typedef ::boost::shared_ptr< Gdiplus::GraphicsPath >    GraphicsPathSharedPtr;
-    typedef ::boost::shared_ptr< Gdiplus::Bitmap >          BitmapSharedPtr;
-    typedef ::boost::shared_ptr< Gdiplus::CachedBitmap >    CachedBitmapSharedPtr;
-    typedef ::boost::shared_ptr< Gdiplus::Font >            FontSharedPtr;
-    typedef ::boost::shared_ptr< Gdiplus::Brush >           BrushSharedPtr;
-    typedef ::boost::shared_ptr< Gdiplus::TextureBrush >    TextureBrushSharedPtr;
+    typedef ::boost::shared_ptr< Gdiplus::Graphics > 		GraphicsSharedPtr;
+    typedef ::boost::shared_ptr< Gdiplus::GraphicsPath > 	GraphicsPathSharedPtr;
+    typedef ::boost::shared_ptr< Gdiplus::Bitmap > 			BitmapSharedPtr;
+    typedef ::boost::shared_ptr< Gdiplus::CachedBitmap > 	CachedBitmapSharedPtr;
+    typedef ::boost::shared_ptr< Gdiplus::Font > 			FontSharedPtr;
+    typedef ::boost::shared_ptr< Gdiplus::Brush > 			BrushSharedPtr;
+    typedef ::boost::shared_ptr< Gdiplus::TextureBrush > 	TextureBrushSharedPtr;
 
     /** COM object RAII wrapper
 
@@ -194,13 +196,13 @@ namespace dxcanvas
             return refcount;
         }
 
-        bool        is() const { return mp != NULL; }
+        bool		is() const { return mp != NULL; }
         T*          get() const { return mp; }
         T*          operator->() const { return mp; }
         T&          operator*() const { return *mp; }
 
     private:
-        T*  mp;
+        T*	mp;
     };
 
     // get_pointer() enables boost::mem_fn to recognize COMReference
@@ -215,6 +217,9 @@ namespace dxcanvas
 #endif
 
 #undef DELETE
+#undef BOOL
+#undef INT32
+#undef UINT32
 #undef PolyPolygon
 
 #endif /* _DXCANVAS_WINSTUFF_HXX */

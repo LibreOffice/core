@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,7 +103,7 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
     try
     {
         uno::Reference< io::XStream > xTempFile(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
+            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
             uno::UNO_QUERY_THROW );
         uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
 
@@ -171,11 +171,13 @@ uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
-    ::ucbhelper::Content aSourceContent( m_aURL, xEnv );
+    uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
+            xFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
+            uno::UNO_QUERY_THROW );
 
     // the file can be opened readonly, no locking will be done
-    return aSourceContent.openStream();
+    return xSimpleFileAccess->openFileRead( m_aURL );
 }
 
 // ----------------------------------------------------------------------
@@ -222,10 +224,11 @@ void DocumentLockFile::RemoveFile()
       || !aFileData[LOCKFILE_USERURL_ID].equals( aNewEntry[LOCKFILE_USERURL_ID] ) )
         throw io::IOException(); // not the owner, access denied
 
-    uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
-    ::ucbhelper::Content aCnt(m_aURL, xEnv);
-    aCnt.executeCommand(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
-        uno::makeAny(sal_Bool(sal_True)));
+    uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
+        xFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
+        uno::UNO_QUERY_THROW );
+    xSimpleFileAccess->kill( m_aURL );
 }
 
 } // namespace svt

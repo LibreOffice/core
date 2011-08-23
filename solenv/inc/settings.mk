@@ -302,12 +302,6 @@ dbgutil=
 # ---------------------------------------------------------------------------
 
 DMAKE_WORK_DIR*:=$(subst,/,/ $(PWD))
-.IF "$(GUI)"=="WNT"
-posix_PWD:=/cygdrive/$(PWD:s/://)
-.ELSE			#GUI)"=="WNT"
-posix_PWD:=$(PWD)
-.ENDIF			#GUI)"=="WNT"
-
 
 .IF "$(TMP)"!=""
 tmp*=$(TMP)
@@ -392,11 +386,13 @@ COMPILER_WARN_ALL=TRUE
 COMPILER_WARN_ERRORS=TRUE
 .ENDIF
 
-#.IF "$(COMMON_BUILD)"!=""
-#common_build*=$(COMMON_BUILD)
-#.ENDIF
-common_build:=
-COMMON_BUILD:=
+.IF "$(RSC_ONCE)"!=""
+rsc_once*=$(RSC_ONCE)
+.ENDIF
+
+.IF "$(COMMON_BUILD)"!=""
+common_build*=$(COMMON_BUILD)
+.ENDIF
 
 .IF "$(USE_SHL_VERSIONS)"!=""
 use_shl_versions*=$(USE_SHL_VERSIONS)
@@ -467,7 +463,7 @@ product=full
 .ENDIF
 
 .IF "$(debug)"!=""
-DBG_LEVEL*=1
+DBG_LEVEL*=2
 .ENDIF
 
 # Produkt auf einen Wert setzen (alles klein)
@@ -487,7 +483,7 @@ DBG_LEVEL*=0
 optimize!=true
 dbgutil!=true
 DBG_LEVEL*=1
-USE_DEBUG_RUNTIME*=TRUE
+USE_STLP_DEBUG*=TRUE
 .ENDIF
 
 .IF "$(debug)"!=""
@@ -581,24 +577,24 @@ PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && pwd $(PWDFLAGS))/, $(PWD))
 PATH_IN_MODULE:=
 .ENDIF			# "$(PRJ)"!="."
 
-## common output tree
-#.IF "$(common_build)"!=""
-#COMMON_OUTDIR*=common
-#.IF "$(no_common_build_reslib)"==""
-#common_build_reslib=true
-#.ENDIF			# "$(no_common_build_reslib)"==""
-#.IF "$(no_common_build_zip)"==""
-#common_build_zip=true
-#.ENDIF			# "$(no_common_build_zip)"==""
-#.IF "$(no_common_build_sign_jar)"==""
-#common_build_sign_jar=true
-#.ENDIF			# "$(no_common_build_sign_jar)"==""
-#.IF "$(no_common_build_srs)"==""
-#common_build_srs=true
-#.ENDIF			# "$(no_common_build_srs)"==""
-#.ELSE			# "$(common_build)"!=""
+# common output tree
+.IF "$(common_build)"!=""
+COMMON_OUTDIR*=common
+.IF "$(no_common_build_reslib)"==""
+common_build_reslib=true
+.ENDIF			# "$(no_common_build_reslib)"==""
+.IF "$(no_common_build_zip)"==""
+common_build_zip=true
+.ENDIF			# "$(no_common_build_zip)"==""
+.IF "$(no_common_build_sign_jar)"==""
+common_build_sign_jar=true
+.ENDIF			# "$(no_common_build_sign_jar)"==""
+.IF "$(no_common_build_srs)"==""
+common_build_srs=true
+.ENDIF			# "$(no_common_build_srs)"==""
+.ELSE			# "$(common_build)"!=""
 COMMON_OUTDIR:=$(OUTPATH)
-#.ENDIF			# "$(common_build)"!=""
+.ENDIF			# "$(common_build)"!=""
 
 LOCAL_OUT:=$(OUT)
 LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
@@ -606,25 +602,27 @@ LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 
 # --- generate output tree -----------------------------------------
 
-# disable for makefiles wrapping a gnumake module
-.IF "$(TARGET)"!="prj"
 # As this is not part of the initial startup makefile we define an infered
 # target instead of using $(OUT)/inc/myworld.mk as target name.
 # (See iz62795)
-$(posix_PWD)/$(OUT)/inc/%world.mk :
+$(OUT)/inc/%world.mk :
     @$(MKOUT) $(ROUT)
     @echo $(EMQ)# > $@
 
-.INCLUDE :  $(posix_PWD)/$(OUT)/inc/myworld.mk
+# don't need/want output trees in solenv!!!
+.IF "$(PRJNAME)"!="solenv"
+.INCLUDE : $(OUT)/inc/myworld.mk
+.ENDIF			# "$(PRJNAME)"!="solenv"
 
 .IF "$(common_build)"!=""
-$(posix_PWD)/$(LOCAL_COMMON_OUT)/inc/%world.mk :
+$(LOCAL_COMMON_OUT)/inc/%world.mk :
     @$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
     @echo $(EMQ)# > $@
 
-.INCLUDE : $(posix_PWD)/$(LOCAL_COMMON_OUT)/inc/myworld.mk
+.IF "$(PRJNAME)"!="solenv"
+.INCLUDE : $(LOCAL_COMMON_OUT)/inc/myworld.mk
+.ENDIF			# "$(PRJNAME)"!="solenv"
 .ENDIF			# "$(common_build)"!=""
-.ENDIF          # "$(TARGET)"!="prj"
 
 .INCLUDE .IGNORE : office.mk
 
@@ -809,7 +807,7 @@ SOLARCOMMONSDFDIR=$(SOLARSDFDIR)
 
 .EXPORT : SOLARBINDIR
 
-L10N_MODULE*=$(SRC_ROOT)/translations
+L10N_MODULE*=$(SOLARSRC)$/l10n
 ALT_L10N_MODULE*=$(SOLARSRC)$/l10n_so
 
 .IF "$(WITH_LANG)"!=""
@@ -862,8 +860,8 @@ LIB:=$(LB);$(BIN);$(ILIB)
 CPUNAME=CPUNAME_HAS_TO_BE_SET_IN_ENVIRONMENT
 .ENDIF
 
-.IF "$(USE_DEBUG_RUNTIME)" != ""
-SCPCDEFS+=-D_DEBUG_RUNTIME
+.IF "$(USE_STLP_DEBUG)" != ""
+SCPCDEFS+=-D_STLP_DEBUG
 .ENDIF
 
 .IF "$(UDK_MAJOR)"!=""
@@ -889,8 +887,8 @@ UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)/inc -I$(PRJ)/$(INPATH)/idl -I$(OUT)/inc -I
 
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
 
-.IF "$(USE_DEBUG_RUNTIME)" != "" && "$(GUI)"!="OS2"
-CDEFS+=-D_DEBUG_RUNTIME
+.IF "$(USE_STLP_DEBUG)" != "" && "$(GUI)"!="OS2"
+CDEFS+=-D_STLP_DEBUG
 .ENDIF
 
 .IF "$(CDEFS_PRESET)" != ""
@@ -969,8 +967,10 @@ RSC=$(AUGMENT_LIBRARY_PATH) $(FLIPCMD) $(SOLARBINDIR)/rsc
     VERBOSITY=-verbose
 .ELSE
     COMMAND_ECHO=@
-    VERBOSITY=-quiet
-    ZIP_VERBOSITY=-q
+    .IF "$(VERBOSE)" == "FALSE"
+        VERBOSITY=-quiet
+        ZIP_VERBOSITY=-q
+    .ENDIF
 .ENDIF # "$(VERBOSE)" == "TRUE"
 COMPILE_ECHO_SWITCH=
 COMPILE_ECHO_FILE=$(<:f)
@@ -1021,16 +1021,28 @@ LNTFLAGSOUTOBJ=-os
 .ENDIF
 
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
-# Add SOLARLIBDIR at the begin of a (potentially previously undefined) library
-# path (LD_LIBRARY_PATH, PATH, etc.; prepending avoids fetching libraries from
-# an existing office/URE installation; the ": &&" enables this to work at the
-# start of a recipe line that is not prefixed by "+" as well as in the middle of
-# an existing && chain:
+# Add SOLARLIBDIR to the end of a (potentially previously undefined) library
+# path (LD_LIBRARY_PATH, PATH, etc.; there is no real reason to prefer adding at
+# the end over adding at the start); the ": &&" in the bash case enables this to
+# work at the start of a recipe line that is not prefixed by "+" as well as in
+# the middle of an existing && chain:
 AUGMENT_LIBRARY_PATH = : && \
-    $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
+    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(SOLARSHAREDBIN))
 AUGMENT_LIBRARY_PATH_LOCAL = : && \
-    $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
+    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))
 .END
+
+# remove if .Net 2003 support has expired 
+.IF "$(debug)"!=""
+.IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
+.IF "$(COMEX)" == "10"
+.IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"!=""
+MAXPROCESS!:=1
+.EXPORT : MAXPROCESS
+.ENDIF			# "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"!=""
+.ENDIF			# "$(COMEX)" == "10"
+.ENDIF			# "$(OS)$(COM)$(CPU)" == "WNTMSCI"
+.ENDIF			# "$(debug)"!=""
 
 # for multiprocess building in external modules
 # allow seperate handling
@@ -1038,18 +1050,9 @@ EXTMAXPROCESS*=$(MAXPROCESS)
 
 GDBTRACE=gdb -nx --command=$(SOLARENV)/bin/gdbtrycatchtrace --args
 
-#use with export VALGRIND=memcheck, that method of invocation is used because
-#hunspell will aslo run its own unit tests under valgrind when this variable is
-#set.
-.IF "$(VALGRIND)" != ""
-VALGRINDTOOL=valgrind --tool=$(VALGRIND) --leak-check=yes --num-callers=50
-G_SLICE*:=always-malloc
-.EXPORT : G_SLICE
-.ENDIF
-
 IDLC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/idlc
-REGMERGE*=$(AUGMENT_LIBRARY_PATH) $(VALGRINDTOOL) $(SOLARBINDIR)/regmerge
-REGCOMPARE*=$(AUGMENT_LIBRARY_PATH) $(VALGRINDTOOL) $(SOLARBINDIR)/regcompare
+REGMERGE*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/regmerge
+REGCOMPARE*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/regcompare
 
 .IF "$(DEBUGREGCOMP)" != "" || "$(debugregcomp)" != ""
 GDBREGCOMPTRACE=$(GDBTRACE)
@@ -1065,7 +1068,7 @@ CLIMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/climaker
 GDBCPPUNITTRACE=$(GDBTRACE)
 .ENDIF
 
-CPPUNITTESTER=$(AUGMENT_LIBRARY_PATH_LOCAL) $(GDBCPPUNITTRACE) $(VALGRINDTOOL) $(SOLARBINDIR)/cppunit/cppunittester
+CPPUNITTESTER=$(AUGMENT_LIBRARY_PATH_LOCAL) $(GDBCPPUNITTRACE) $(SOLARBINDIR)/cppunittester
 HELPEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/helpex
 LNGCONVEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/lngconvex
 HELPLINKER=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/HelpLinker
@@ -1221,6 +1224,15 @@ STDSHL=$(STDSHLCUIMT)
 
 .EXPORT : PICSWITCH
 
+.IF "$(USE_SYSTEM_STL)"=="YES"
+LIBSTLPORT=""
+.ENDIF
+
+.IF "$(NO_DEFAULT_STL)"==""
+STDLIB+=$(LIBSTLPORT)
+STDSHL+=$(LIBSTLPORT)
+.ENDIF			# "$(NO_DEFAULT_STL)"==""
+
 # fill up unresolved symbols not found else where
 .IF "$(FILLUPARC)"!=""
 STDLIB+=$(FILLUPARC)
@@ -1237,13 +1249,11 @@ CDEFS+=$(JAVADEF)
 # .mk file for that platform should set COMPILER_WARN_ERRORS=TRUE and no longer
 # set MODULES_WITH_WARNINGS, and once no platform sets MODULES_WITH_WARNINGS any
 # longer, this code can go away:
-.IF "$(MODULES_WITH_WARNINGS)" == ""
-COMPILER_WARN_ERRORS=TRUE
-.ELSE
+.IF "$(MODULES_WITH_WARNINGS)" != ""
 MODULES_WITH_WARNINGS_1 := $(foreach,i,$(MODULES_WITH_WARNINGS) .$(i).)
 MODULES_WITH_WARNINGS_2 := $(subst,.$(PRJNAME)., $(MODULES_WITH_WARNINGS_1))
 .IF "$(MODULES_WITH_WARNINGS_1)" == "$(MODULES_WITH_WARNINGS_2)"
-COMPILER_WARN_ERRORS=TRUE
+COMPILER_WARN_ERRORS = TRUE
 .ENDIF
 .ENDIF
 
@@ -1364,20 +1374,6 @@ XERCES_JAR*=$(SOLARBINDIR)/xercesImpl.jar
 .IF "$(SYSTEM_CPPUNIT)" != "YES"
 CPPUNIT_CFLAGS =
 .END
-
-COMPONENTPREFIX_URE_NATIVE = vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/
-COMPONENTPREFIX_URE_JAVA = vnd.sun.star.expand:$$URE_INTERNAL_JAVA_DIR/
-.IF "$(OS)" == "WNT"
-COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$BRAND_BASE_DIR/program/
-.ELSE
-COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$OOO_BASE_DIR/program/
-.END
-COMPONENTPREFIX_BASIS_JAVA = vnd.sun.star.expand:$$OOO_BASE_DIR/program/classes/
-COMPONENTPREFIX_BASIS_PYTHON = vnd.openoffice.pymodule:
-COMPONENTPREFIX_INBUILD_NATIVE = \
-    vnd.sun.star.expand:$$OOO_INBUILD_SHAREDLIB_DIR/
-COMPONENTPREFIX_INBUILD_JAVA = vnd.sun.star.expand:$$OOO_INBUILD_JAR_DIR/
-COMPONENTPREFIX_EXTENSION = ./
 
 # workaround for strange dmake bug:
 # if the previous block was a rule or a target, "\#" isn't recognized

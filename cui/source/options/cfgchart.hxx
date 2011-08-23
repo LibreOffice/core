@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,6 @@ class SvxChartColorTable
 {
 private:
     ::std::vector< XColorEntry >     m_aColorEntries;
-    int                              nNextElementNumber;
-    String                           sDefaultNamePrefix;
-    String                           sDefaultNamePostfix;
 
 public:
     SvxChartColorTable();
@@ -60,10 +57,8 @@ public:
     // mutators
     void clear();
     void append( const XColorEntry & _rEntry );
-    void remove( size_t _nIndex );
     void replace( size_t _nIndex, const XColorEntry & _rEntry );
     void useDefault();
-    String getDefaultName(size_t _nIndex);
 
     // comparison
     bool operator==( const SvxChartColorTable & _rOther ) const;
@@ -75,24 +70,24 @@ public:
 class SvxChartOptions : public ::utl::ConfigItem
 {
 private:
-    SvxChartColorTable          maDefColors;
-    sal_Bool                    mbIsInitialized;
+    SvxChartColorTable		maDefColors;
+    BOOL					mbIsInitialized;
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString >
                             maPropertyNames;
 
     inline ::com::sun::star::uno::Sequence< ::rtl::OUString > GetPropertyNames() const
         { return maPropertyNames; }
-    sal_Bool RetrieveOptions();
+    BOOL RetrieveOptions();
 
 public:
     SvxChartOptions();
     virtual ~SvxChartOptions();
 
-    const SvxChartColorTable&   GetDefaultColors();
-    void                        SetDefaultColors( const SvxChartColorTable& aCol );
+    const SvxChartColorTable&	GetDefaultColors();
+    void						SetDefaultColors( const SvxChartColorTable& aCol );
 
-    virtual void                Commit();
+    virtual void				Commit();
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 };
 
@@ -103,12 +98,12 @@ class SvxChartColorTableItem : public SfxPoolItem
 {
 public:
     TYPEINFO();
-    SvxChartColorTableItem( sal_uInt16 nWhich, const SvxChartColorTable& );
+    SvxChartColorTableItem( USHORT nWhich, const SvxChartColorTable& );
     SvxChartColorTableItem( const SvxChartColorTableItem& );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
-    void                    SetOptions( SvxChartOptions* pOpts ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int 			operator==( const SfxPoolItem& ) const;
+    void					SetOptions( SvxChartOptions* pOpts ) const;
 
     const SvxChartColorTable & GetColorTable() const ;
     SvxChartColorTable &       GetColorTable();
@@ -118,6 +113,6 @@ private:
     SvxChartColorTable      m_aColorTable;
 };
 
-#endif  // _SVX_CFGCHART_HXX
+#endif	// _SVX_CFGCHART_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

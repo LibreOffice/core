@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,18 +34,18 @@
 
 struct SW_DLLPUBLIC SwDocStat
 {
-    sal_uInt16          nTbl;
-    sal_uInt16          nGrf;
-    sal_uInt16          nOLE;
-    sal_uLong           nPage;
+    USHORT			nTbl;
+    USHORT			nGrf;
+    USHORT			nOLE;
+    ULONG			nPage;
     /// paragraphs for document statistic: non-empty and non-hidden ones
-    sal_uLong           nPara;
+    ULONG 			nPara;
     /// all paragraphs, including empty/hidden ones
-    sal_uLong           nAllPara;
-    sal_uLong           nWord;
-    sal_uLong           nChar;
-    sal_uLong           nCharExcludingSpaces;
-    sal_Bool            bModified;
+    ULONG           nAllPara;
+    ULONG			nWord;
+    ULONG			nChar;
+    ULONG			nCharExcludingSpaces;
+    BOOL			bModified;
 
     SwDocStat();
     void Reset();

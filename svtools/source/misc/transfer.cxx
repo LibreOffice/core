@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
+#include <tools/prewin.h>
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#pragma warning(disable: 4917)
+#endif
 #include <shlobj.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
+#include <tools/postwin.h>
 #endif
 #include <osl/mutex.hxx>
 #include <rtl/memory.h>
@@ -148,20 +155,20 @@ const ::rtl::OUString aQuotedParamChars = ::rtl::OUString( RTL_CONSTASCII_USTRIN
 
 static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescriptor& rObjDesc )
 {
-    const ::rtl::OUString   aChar( RTL_CONSTASCII_USTRINGPARAM( "\"" ));
+    const ::rtl::OUString   aChar( ::rtl::OUString::createFromAscii( "\"" ) );
     const ::rtl::OUString   aClassName( rObjDesc.maClassName.GetHexName() );
     ::rtl::OUString         aParams;
 
     if( aClassName.getLength() )
     {
-        aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";classname=\"" ));
+        aParams += ::rtl::OUString::createFromAscii( ";classname=\"" );
         aParams += aClassName;
         aParams += aChar;
     }
 
     if( rObjDesc.maTypeName.Len() )
     {
-        aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";typename=\"" ));
+        aParams += ::rtl::OUString::createFromAscii( ";typename=\"" );
         aParams += rObjDesc.maTypeName;
         aParams += aChar;
     }
@@ -181,28 +188,28 @@ static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescripto
                 pToAccept[nChar] = sal_True;
         }
 
-        aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";displayname=\"" ));
+        aParams += ::rtl::OUString::createFromAscii( ";displayname=\"" );
         aParams += ::rtl::Uri::encode( rObjDesc.maDisplayName, pToAccept, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8 );
         aParams += aChar;
     }
 
-    aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";viewaspect=\"" ));
+    aParams += ::rtl::OUString::createFromAscii( ";viewaspect=\"" );
     aParams += ::rtl::OUString::valueOf( static_cast< sal_Int32 >( rObjDesc.mnViewAspect ) );
     aParams += aChar;
 
-    aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";width=\"" ));
+    aParams += ::rtl::OUString::createFromAscii( ";width=\"" );
     aParams += ::rtl::OUString::valueOf( rObjDesc.maSize.Width() );
     aParams += aChar;
 
-    aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";height=\"" ));
+    aParams += ::rtl::OUString::createFromAscii( ";height=\"" );
     aParams += ::rtl::OUString::valueOf( rObjDesc.maSize.Height() );
     aParams += aChar;
 
-    aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";posx=\"" ));
+    aParams += ::rtl::OUString::createFromAscii( ";posx=\"" );
     aParams += ::rtl::OUString::valueOf( rObjDesc.maDragStartPos.X() );
     aParams += aChar;
 
-    aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";posy=\"" ));
+    aParams += ::rtl::OUString::createFromAscii( ";posy=\"" );
     aParams += ::rtl::OUString::valueOf( rObjDesc.maDragStartPos.X() );
     aParams += aChar;
 
@@ -220,7 +227,8 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
     {
         if( xFact.is() )
         {
-            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.datatransfer.MimeContentTypeFactory" )) ),
+            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii(
+                                                              "com.sun.star.datatransfer.MimeContentTypeFactory" ) ),
                                                               UNO_QUERY );
         }
 
@@ -230,14 +238,14 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
 
             if( xMimeType.is() )
             {
-                const ::rtl::OUString aClassNameString(RTL_CONSTASCII_USTRINGPARAM( "classname" ));
-                const ::rtl::OUString aTypeNameString(RTL_CONSTASCII_USTRINGPARAM( "typename" ));
-                const ::rtl::OUString aDisplayNameString(RTL_CONSTASCII_USTRINGPARAM( "displayname" ));
-                const ::rtl::OUString aViewAspectString(RTL_CONSTASCII_USTRINGPARAM( "viewaspect" ));
-                const ::rtl::OUString aWidthString(RTL_CONSTASCII_USTRINGPARAM( "width" ));
-                const ::rtl::OUString aHeightString(RTL_CONSTASCII_USTRINGPARAM( "height" ));
-                const ::rtl::OUString aPosXString(RTL_CONSTASCII_USTRINGPARAM( "posx" ));
-                const ::rtl::OUString aPosYString(RTL_CONSTASCII_USTRINGPARAM( "posy" ));
+                const ::rtl::OUString aClassNameString( ::rtl::OUString::createFromAscii( "classname" ) );
+                const ::rtl::OUString aTypeNameString( ::rtl::OUString::createFromAscii( "typename" ) );
+                const ::rtl::OUString aDisplayNameString( ::rtl::OUString::createFromAscii( "displayname" ) );
+                const ::rtl::OUString aViewAspectString( ::rtl::OUString::createFromAscii( "viewaspect" ) );
+                const ::rtl::OUString aWidthString( ::rtl::OUString::createFromAscii( "width" ) );
+                const ::rtl::OUString aHeightString( ::rtl::OUString::createFromAscii( "height" ) );
+                const ::rtl::OUString aPosXString( ::rtl::OUString::createFromAscii( "posx" ) );
+                const ::rtl::OUString aPosYString( ::rtl::OUString::createFromAscii( "posy" ) );
 
                 if( xMimeType->hasParameter( aClassNameString ) )
                 {
@@ -386,14 +394,14 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
 
                     if( maAny >>= aSeq )
                     {
-                        SvMemoryStream* pSrcStm = new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC );
-                        GDIMetaFile     aMtf;
+                        SvMemoryStream*	pSrcStm = new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC );
+                        GDIMetaFile		aMtf;
 
                         *pSrcStm >> aMtf;
                         delete pSrcStm;
 
-                        Graphic         aGraphic( aMtf );
-                        SvMemoryStream  aDstStm( 65535, 65535 );
+                        Graphic			aGraphic( aMtf );
+                        SvMemoryStream	aDstStm( 65535, 65535 );
 
                         if( GraphicConverter::Export( aDstStm, aGraphic, CVT_EMF ) == ERRCODE_NONE )
                         {
@@ -416,16 +424,16 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
 
                     if( maAny >>= aSeq )
                     {
-                        SvMemoryStream* pSrcStm = new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC );
-                        GDIMetaFile     aMtf;
+                        SvMemoryStream*	pSrcStm = new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC );
+                        GDIMetaFile		aMtf;
 
                         *pSrcStm >> aMtf;
                         delete pSrcStm;
 
-                        SvMemoryStream  aDstStm( 65535, 65535 );
-
+                        SvMemoryStream	aDstStm( 65535, 65535 );
+                        
                         // taking wmf without file header
-                        if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, NULL, sal_False ) )
+                        if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, NULL, FALSE ) )
                         {
                             maAny <<= ( aSeq = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aDstStm.GetData() ),
                                                                      aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
@@ -474,9 +482,9 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
     {
     }
 
-    Sequence< DataFlavor >          aRet( mpFormats->size() );
-    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_uInt32                      nCurPos = 0;
+    Sequence< DataFlavor >			aRet( mpFormats->size() );
+    DataFlavorExVector::iterator	aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_uInt32						nCurPos = 0;
 
     while( aIter != aEnd )
     {
@@ -491,7 +499,7 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
 sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& rFlavor ) throw( RuntimeException )
 {
     const SolarMutexGuard aGuard;
-    sal_Bool            bRet = sal_False;
+    sal_Bool			bRet = sal_False;
 
     try
     {
@@ -532,7 +540,7 @@ void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >&,
 
             if( xFact.is() )
             {
-                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
+                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
 
                 if( xDesktop.is() )
                     xDesktop->removeTerminateListener( mxTerminateListener );
@@ -617,8 +625,8 @@ void TransferableHelper::ImplFlush()
 {
     if( mxClipboard.is() )
     {
-        Reference< XFlushableClipboard >    xFlushableClipboard( mxClipboard, UNO_QUERY );
-        const sal_uInt32                    nRef = Application::ReleaseSolarMutex();
+        Reference< XFlushableClipboard >	xFlushableClipboard( mxClipboard, UNO_QUERY );
+        const sal_uInt32					nRef = Application::ReleaseSolarMutex();
 
         try
         {
@@ -627,7 +635,7 @@ void TransferableHelper::ImplFlush()
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
-            OSL_FAIL( "Could not flush clipboard" );
+            DBG_ERROR( "Could not flush clipboard" );
         }
 
         Application::AcquireSolarMutex( nRef );
@@ -736,8 +744,8 @@ void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 
 sal_Bool TransferableHelper::HasFormat( SotFormatStringId nFormat )
 {
-    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool                        bRet = sal_False;
+    DataFlavorExVector::iterator	aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool						bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -779,9 +787,9 @@ sal_Bool TransferableHelper::SetString( const ::rtl::OUString& rString, const Da
         SotExchange::GetFormatDataFlavor( FORMAT_FILE, aFileFlavor ) &&
         TransferableDataHelper::IsEqual( aFileFlavor, rFlavor ) )
     {
-        const String            aString( rString );
-        const ByteString        aByteStr( aString, gsl_getSystemTextEncoding() );
-        Sequence< sal_Int8 >    aSeq( aByteStr.Len() + 1 );
+        const String			aString( rString );
+        const ByteString		aByteStr( aString, gsl_getSystemTextEncoding() );
+        Sequence< sal_Int8 >	aSeq( aByteStr.Len() + 1 );
 
         rtl_copyMemory( aSeq.getArray(), aByteStr.GetBuffer(), aByteStr.Len() );
         aSeq[ aByteStr.Len() ] = 0;
@@ -920,16 +928,16 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 #ifdef WNT
         case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
         {
-            Sequence< sal_Int8 >    aSeq( sizeof( FILEGROUPDESCRIPTOR ) );
-            FILEGROUPDESCRIPTOR*    pFDesc = (FILEGROUPDESCRIPTOR*) aSeq.getArray();
-            FILEDESCRIPTOR&         rFDesc1 = pFDesc->fgd[ 0 ];
+            Sequence< sal_Int8 >	aSeq( sizeof( FILEGROUPDESCRIPTOR ) );
+            FILEGROUPDESCRIPTOR*	pFDesc = (FILEGROUPDESCRIPTOR*) aSeq.getArray();
+            FILEDESCRIPTOR&			rFDesc1 = pFDesc->fgd[ 0 ];
 
             pFDesc->cItems = 1;
             memset( &rFDesc1, 0, sizeof( FILEDESCRIPTOR ) );
             rFDesc1.dwFlags = FD_LINKUI;
 
             ByteString aStr( rBmk.GetDescription(), eSysCSet );
-            for( sal_uInt16 nChar = 0; nChar < aStr.Len(); ++nChar )
+            for( USHORT nChar = 0; nChar < aStr.Len(); ++nChar )
                 if( strchr( "\\/:*?\"<>|", aStr.GetChar( nChar ) ) )
                     aStr.Erase( nChar--, 1 );
 
@@ -943,7 +951,7 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 
         case SOT_FORMATSTR_ID_FILECONTENT:
         {
-            String aStr( RTL_CONSTASCII_USTRINGPARAM( "[InternetShortcut]\x0aURL=" ) );
+            String aStr( RTL_CONSTASCII_STRINGPARAM( "[InternetShortcut]\x0aURL=" ) );
             maAny <<= ::rtl::OUString( aStr += rBmk.GetURL() );
         }
         break;
@@ -997,8 +1005,8 @@ sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjec
 
     if( pUserObject && WriteObject( xStm, pUserObject, nUserObjectId, rFlavor ) )
     {
-        const sal_uInt32        nLen = xStm->Seek( STREAM_SEEK_TO_END );
-        Sequence< sal_Int8 >    aSeq( nLen );
+        const sal_uInt32		nLen = xStm->Seek( STREAM_SEEK_TO_END );
+        Sequence< sal_Int8 >	aSeq( nLen );
 
         xStm->Seek( STREAM_SEEK_TO_BEGIN );
         xStm->Read( aSeq.getArray(),  nLen );
@@ -1006,9 +1014,9 @@ sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjec
         if( nLen && ( SotExchange::GetFormat( rFlavor ) == SOT_FORMAT_STRING ) )
         {
             //JP 24.7.2001: as I know was this only for the writer application and this
-            //              writes now UTF16 format into the stream
+            //		        writes now UTF16 format into the stream
             //JP 6.8.2001:  and now it writes UTF8 because then exist no problem with
-            //              little / big endians! - Bug 88121
+            //		        little / big endians! - Bug 88121
             maAny <<= ::rtl::OUString( reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ), nLen - 1, RTL_TEXTENCODING_UTF8 );
         }
         else
@@ -1031,7 +1039,7 @@ sal_Bool TransferableHelper::SetInterface( const ::com::sun::star::uno::Referenc
 
 sal_Bool TransferableHelper::WriteObject( SotStorageStreamRef&, void*, sal_uInt32, const DataFlavor& )
 {
-    OSL_FAIL( "TransferableHelper::WriteObject( ... ) not implemented" );
+    DBG_ERROR( "TransferableHelper::WriteObject( ... ) not implemented" );
     return sal_False;
 }
 
@@ -1082,7 +1090,7 @@ void TransferableHelper::CopyToClipboard( Window *pWindow ) const
 
             if( xFact.is() )
             {
-                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
+                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
 
                 if( xDesktop.is() )
                     xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
@@ -1119,7 +1127,7 @@ void TransferableHelper::CopyToSelection( Window *pWindow ) const
 
             if( xFact.is() )
             {
-                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
+                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
 
                 if( xDesktop.is() )
                     xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
@@ -1153,19 +1161,19 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
         if( pWindow->IsMouseCaptured() )
             pWindow->ReleaseMouse();
 
-        const Point aPt( pWindow->GetPointerPosPixel() );
+        const Point	aPt( pWindow->GetPointerPosPixel() );
 
         // On Mac OS X we are forced to execute 'startDrag' synchronously
         // contrary to the XDragSource interface specification because
-        // we can receive drag events from the system only in the main
+        // we can receive drag events from the system only in the main 
         // thread
 #if !defined(QUARTZ)
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-#endif
+#endif 
 
         try
         {
-            DragGestureEvent    aEvt;
+            DragGestureEvent	aEvt;
             aEvt.DragAction = DNDConstants::ACTION_COPY;
             aEvt.DragOriginX = aPt.X();
             aEvt.DragOriginY = aPt.Y();
@@ -1180,7 +1188,7 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
         // See above for the reason of this define
 #if !defined(QUARTZ)
         Application::AcquireSolarMutex( nRef );
-#endif
+#endif 
     }
 }
 
@@ -1204,7 +1212,7 @@ Reference< XClipboard> TransferableHelper::GetSystemClipboard()
     if( pFocusWindow )
         return pFocusWindow->GetClipboard();
 
-    return  Reference< XClipboard > ();
+    return 	Reference< XClipboard > ();
 }
 
 // -----------------------------------------------------------------------------
@@ -1235,7 +1243,7 @@ class TransferableClipboardNotifier : public ::cppu::WeakImplHelper1< XClipboard
 private:
     ::osl::Mutex&                   mrMutex;
     Reference< XClipboardNotifier > mxNotifier;
-    TransferableDataHelper*         mpListener;
+    TransferableDataHelper*		    mpListener;
 
 protected:
     // XClipboardListener
@@ -1407,16 +1415,17 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
     {
         Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
         Reference< XMimeContentTypeFactory >    xMimeFact;
-        DataFlavorEx                            aFlavorEx;
-        const ::rtl::OUString                   aCharsetStr(RTL_CONSTASCII_USTRINGPARAM( "charset" ));
+        DataFlavorEx		                    aFlavorEx;
+        const ::rtl::OUString                   aCharsetStr( ::rtl::OUString::createFromAscii( "charset" ) );
 
         if( xFact.is() )
-            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.datatransfer.MimeContentTypeFactory" )) ),
+            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii(
+                                                              "com.sun.star.datatransfer.MimeContentTypeFactory" ) ),
                                                               UNO_QUERY );
 
         for( sal_Int32 i = 0; i < rDataFlavorSeq.getLength(); i++ )
         {
-            const DataFlavor&               rFlavor = rDataFlavorSeq[ i ];
+            const DataFlavor&	            rFlavor = rDataFlavorSeq[ i ];
             Reference< XMimeContentType >   xMimeType;
 
             try
@@ -1459,35 +1468,35 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                 aFlavorEx.mnSotId = SOT_FORMATSTR_ID_HTML_NO_COMMENT;
                 rDataFlavorExVector.push_back( aFlavorEx );
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/plain" )) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/plain" ) ) )
             {
                 // add, if it is a UTF-8 byte buffer
                 if( xMimeType->hasParameter( aCharsetStr ) )
                 {
                     const ::rtl::OUString aCharset( xMimeType->getParameterValue( aCharsetStr ) );
 
-                    if( xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unicode" )) ) ||
-                        xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "utf-16" )) ) )
+                    if( xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "unicode" ) ) ||
+                        xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "utf-16" ) ) )
                     {
                         rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = FORMAT_STRING;
 
                     }
                 }
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/rtf" )) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/rtf" ) ) )
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = FORMAT_RTF;
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/html" )) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/html" ) ) )
 
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMATSTR_ID_HTML;
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/uri-list" )) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/uri-list" ) ) )
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMAT_FILE_LIST;
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-objectdescriptor-xml" )) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-openoffice-objectdescriptor-xml" ) ) )
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR;
             }
@@ -1533,8 +1542,8 @@ sal_Bool TransferableDataHelper::HasFormat( SotFormatStringId nFormat ) const
 {
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
-    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool                        bRet = sal_False;
+    DataFlavorExVector::iterator	aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool						bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -1554,8 +1563,8 @@ sal_Bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 {
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
-    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool                        bRet = sal_False;
+    DataFlavorExVector::iterator	aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    sal_Bool						bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -1629,7 +1638,7 @@ Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
 
 // -----------------------------------------------------------------------------
 
-Any TransferableDataHelper::GetAny( SotFormatStringId nFormat ) const
+Any	TransferableDataHelper::GetAny( SotFormatStringId nFormat ) const
 {
     Any aReturn;
 
@@ -1762,8 +1771,8 @@ sal_Bool TransferableDataHelper::GetBitmap( SotFormatStringId nFormat, Bitmap& r
 sal_Bool TransferableDataHelper::GetBitmap( const DataFlavor& rFlavor, Bitmap& rBmp )
 {
     SotStorageStreamRef xStm;
-    DataFlavor          aSubstFlavor;
-    sal_Bool            bRet = GetSotStorageStream( rFlavor, xStm );
+    DataFlavor			aSubstFlavor;
+    sal_Bool			bRet = GetSotStorageStream( rFlavor, xStm );
 
     if( bRet )
     {
@@ -1817,8 +1826,8 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( SotFormatStringId nFormat, GDIM
 sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaFile& rMtf )
 {
     SotStorageStreamRef xStm;
-    DataFlavor          aSubstFlavor;
-    sal_Bool            bRet = sal_False;
+    DataFlavor			aSubstFlavor;
+    sal_Bool			bRet = sal_False;
 
     if( GetSotStorageStream( rFlavor, xStm ) )
     {
@@ -1836,7 +1845,7 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIM
         if( GraphicConverter::Import( *xStm, aGraphic ) == ERRCODE_NONE )
         {
             rMtf = aGraphic.GetGDIMetaFile();
-            bRet = sal_True;
+            bRet = TRUE;
         }
     }
 
@@ -1850,7 +1859,7 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIM
         if( GraphicConverter::Import( *xStm, aGraphic ) == ERRCODE_NONE )
         {
             rMtf = aGraphic.GetGDIMetaFile();
-            bRet = sal_True;
+            bRet = TRUE;
         }
     }
 
@@ -1869,10 +1878,10 @@ sal_Bool TransferableDataHelper::GetGraphic( SotFormatStringId nFormat, Graphic&
 
 sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic )
 {
-    DataFlavor  aFlavor;
-    sal_Bool    bRet = sal_False;
+    DataFlavor	aFlavor;
+    sal_Bool	bRet = sal_False;
 
-    if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavor ) &&
+    if(	SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavor ) &&
         TransferableDataHelper::IsEqual( aFlavor, rFlavor ) )
     {
         Bitmap aBmp;
@@ -1915,7 +1924,7 @@ sal_Bool TransferableDataHelper::GetImageMap( SotFormatStringId nFormat, ImageMa
 sal_Bool TransferableDataHelper::GetImageMap( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ImageMap& rIMap )
 {
     SotStorageStreamRef xStm;
-    sal_Bool            bRet = GetSotStorageStream( rFlavor, xStm );
+    sal_Bool			bRet = GetSotStorageStream( rFlavor, xStm );
 
     if( bRet )
     {
@@ -1973,8 +1982,8 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
                 }
                 else
                 {
-                    String      aURL, aDesc;
-                    sal_uInt16  nStart = aString.Search( '@' ), nLen = (sal_uInt16) aString.ToInt32();
+                    String		aURL, aDesc;
+                    sal_uInt16	nStart = aString.Search( '@' ), nLen = (sal_uInt16) aString.ToInt32();
 
                     if( !nLen && aString.GetChar( 0 ) != '0' )
                     {
@@ -2031,8 +2040,8 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
                 if( pFDesc->cItems )
                 {
-                    ByteString          aDesc( pFDesc->fgd[ 0 ].cFileName );
-                    rtl_TextEncoding    eTextEncoding = gsl_getSystemTextEncoding();
+                    ByteString			aDesc( pFDesc->fgd[ 0 ].cFileName );
+                    rtl_TextEncoding	eTextEncoding = gsl_getSystemTextEncoding();
 
                     if( ( aDesc.Len() > 4 ) && aDesc.Copy( aDesc.Len() - 4 ).EqualsIgnoreCaseAscii( ".URL" ) )
                     {
@@ -2057,8 +2066,8 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
                         if( pStream )
                         {
-                            ByteString  aLine;
-                            sal_Bool    bSttFnd = sal_False;
+                            ByteString	aLine;
+                            sal_Bool	bSttFnd = sal_False;
 
                             while( pStream->ReadLine( aLine ) )
                             {
@@ -2136,7 +2145,7 @@ sal_Bool TransferableDataHelper::GetFileList(
 
             if( GetSotStorageStream( aFlavor, xStm ) )
             {
-                if( aFlavor.MimeType.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/uri-list" )) ) > -1 )
+                if( aFlavor.MimeType.indexOf( ::rtl::OUString::createFromAscii( "text/uri-list" ) ) > -1 )
                 {
                     ByteString aByteString;
 
@@ -2187,8 +2196,8 @@ sal_Bool TransferableDataHelper::GetSotStorageStream( SotFormatStringId nFormat,
 
 sal_Bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, SotStorageStreamRef& rxStream )
 {
-    Sequence< sal_Int8 >    aSeq;
-    sal_Bool                bRet = GetSequence( rFlavor, aSeq );
+    Sequence< sal_Int8 >	aSeq;
+    sal_Bool				bRet = GetSequence( rFlavor, aSeq );
 
     if( bRet )
     {
@@ -2210,8 +2219,8 @@ sal_Bool TransferableDataHelper::GetInputStream( SotFormatStringId nFormat, Refe
 
 sal_Bool TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, Reference < XInputStream >& rxStream )
 {
-    Sequence< sal_Int8 >    aSeq;
-    sal_Bool                bRet = GetSequence( rFlavor, aSeq );
+    Sequence< sal_Int8 >	aSeq;
+    sal_Bool				bRet = GetSequence( rFlavor, aSeq );
 
     if( bRet )
           rxStream = new ::comphelper::SequenceInputStream( aSeq );
@@ -2277,8 +2286,8 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
 
-    Reference< XClipboard > xClipboard;
-       TransferableDataHelper   aRet;
+    Reference< XClipboard >	xClipboard;
+       TransferableDataHelper	aRet;
 
     if( pWindow )
         xClipboard = pWindow->GetClipboard();
@@ -2294,7 +2303,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
             {
                 aRet = TransferableDataHelper( xTransferable );
                    aRet.mxClipboard = xClipboard;
-                    // also copy the clipboard
+                    // also copy the clipboard - 99030 - 23.05.2002 - fs@openoffice.org
             }
            }
         catch( const ::com::sun::star::uno::Exception& )
@@ -2312,8 +2321,8 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( Window* pWin
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
 
-    Reference< XClipboard > xSelection;
-       TransferableDataHelper   aRet;
+    Reference< XClipboard >	xSelection;
+       TransferableDataHelper	aRet;
 
     if( pWindow )
         xSelection = pWindow->GetPrimarySelection();
@@ -2349,12 +2358,13 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
 {
     Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
     Reference< XMimeContentTypeFactory >    xMimeFact;
-    sal_Bool                                bRet = sal_False;
+    sal_Bool								bRet = sal_False;
 
     try
     {
         if( xFact.is() )
-            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.datatransfer.MimeContentTypeFactory" )) ),
+            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii(
+                                                              "com.sun.star.datatransfer.MimeContentTypeFactory" ) ),
                                                               UNO_QUERY );
 
         if( xMimeFact.is() )
@@ -2366,22 +2376,22 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
             {
                 if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( xRequestType2->getFullMediaType() ) )
                 {
-                    if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/plain" )) ) )
+                    if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/plain" ) ) )
                     {
                         // special handling for text/plain media types
-                        const ::rtl::OUString aCharsetString(RTL_CONSTASCII_USTRINGPARAM( "charset" ));
+                        const ::rtl::OUString aCharsetString( ::rtl::OUString::createFromAscii( "charset" ) );
 
                         if( !xRequestType2->hasParameter( aCharsetString ) ||
-                            xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "utf-16" )) ) ||
-                            xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unicode" )) ) )
+                            xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "utf-16" ) ) ||
+                            xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "unicode" ) ) )
                         {
                             bRet = sal_True;
                         }
                     }
-                    else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice" )) ) )
+                    else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-openoffice" ) ) )
                     {
                         // special handling for application/x-openoffice media types
-                        const ::rtl::OUString aFormatString(RTL_CONSTASCII_USTRINGPARAM( "windows_formatname" ));
+                        const ::rtl::OUString aFormatString( ::rtl::OUString::createFromAscii( "windows_formatname" ) );
 
                         if( xRequestType1->hasParameter( aFormatString ) &&
                             xRequestType2->hasParameter( aFormatString ) &&

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include "switerator.hxx"
+
 #include "editsh.hxx"
 #include "doc.hxx"
 #include <docary.hxx>
@@ -46,30 +46,32 @@
     Beschreibung: Sortieren der Input-Eintraege
  --------------------------------------------------------------------*/
 
-SwInputFieldList::SwInputFieldList( SwEditShell* pShell, sal_Bool bBuildTmpLst )
+SwInputFieldList::SwInputFieldList( SwEditShell* pShell, BOOL bBuildTmpLst )
     : pSh(pShell)
 {
     // Hier die Liste aller Eingabefelder sortiert erstellen
     pSrtLst = new _SetGetExpFlds();
 
     const SwFldTypes& rFldTypes = *pSh->GetDoc()->GetFldTypes();
-    const sal_uInt16 nSize = rFldTypes.Count();
+    const USHORT nSize = rFldTypes.Count();
 
     // Alle Typen abklappern
 
-    for(sal_uInt16 i=0; i < nSize; ++i)
+    for(USHORT i=0; i < nSize; ++i)
     {
         SwFieldType* pFldType = (SwFieldType*)rFldTypes[ i ];
-        sal_uInt16 nType = pFldType->Which();
+        USHORT nType = pFldType->Which();
 
         if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType || RES_DROPDOWN == nType )
         {
-            SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-            for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+            SwClientIter aIter( *pFldType );
+            for( SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
+                    pFld; pFld = (SwFmtFld*)aIter.Next() )
+
             {
                 const SwTxtFld* pTxtFld = pFld->GetTxtFld();
 
-                //  nur InputFields und interaktive SetExpFlds bearbeiten
+                //	nur InputFields und interaktive SetExpFlds bearbeiten
                 //  and DropDown fields
                 if( !pTxtFld || ( RES_SETEXPFLD == nType &&
                     !((SwSetExpField*)pFld->GetFld())->GetInputFlag()))
@@ -104,13 +106,13 @@ SwInputFieldList::~SwInputFieldList()
     Beschreibung: Felder aus der Liste in sortierter Reihenfolge
  --------------------------------------------------------------------*/
 
-sal_uInt16 SwInputFieldList::Count() const
+USHORT SwInputFieldList::Count() const
 {
     return pSrtLst->Count();
 }
 
 
-SwField* SwInputFieldList::GetField(sal_uInt16 nId)
+SwField* SwInputFieldList::GetField(USHORT nId)
 {
     const SwTxtFld* pTxtFld = (*pSrtLst)[ nId ]->GetFld();
     OSL_ENSURE( pTxtFld, "kein TextFld" );
@@ -129,14 +131,14 @@ void SwInputFieldList::PushCrsr()
 
 void SwInputFieldList::PopCrsr()
 {
-    pSh->Pop(sal_False);
+    pSh->Pop(FALSE);
 }
 
 /*--------------------------------------------------------------------
     Beschreibung: Position eines Feldes ansteuern
  --------------------------------------------------------------------*/
 
-void SwInputFieldList::GotoFieldPos(sal_uInt16 nId)
+void SwInputFieldList::GotoFieldPos(USHORT nId)
 {
     pSh->StartAllAction();
     (*pSrtLst)[ nId ]->GetPosOfContent( *pSh->GetCrsr()->GetPoint() );
@@ -146,26 +148,27 @@ void SwInputFieldList::GotoFieldPos(sal_uInt16 nId)
     // vergleiche TmpLst mit akt Feldern. Alle neue kommen in die SortLst
     // damit sie geupdatet werden koennen. Returnt die Anzahl.
     // (Fuer Textbausteine: nur seine Input-Felder aktualisieren)
-sal_uInt16 SwInputFieldList::BuildSortLst()
+USHORT SwInputFieldList::BuildSortLst()
 {
     const SwFldTypes& rFldTypes = *pSh->GetDoc()->GetFldTypes();
-    sal_uInt16 nSize = rFldTypes.Count();
+    USHORT nSize = rFldTypes.Count();
 
     // Alle Typen abklappern
 
-    for( sal_uInt16 i = 0; i < nSize; ++i )
+    for( USHORT i = 0; i < nSize; ++i )
     {
         SwFieldType* pFldType = (SwFieldType*)rFldTypes[ i ];
-        sal_uInt16 nType = pFldType->Which();
+        USHORT nType = pFldType->Which();
 
         if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType )
         {
-            SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-            for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+            SwClientIter aIter( *pFldType );
+            for( SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
+                    pFld; pFld = (SwFmtFld*)aIter.Next() )
             {
                 const SwTxtFld* pTxtFld = pFld->GetTxtFld();
 
-                //  nur InputFields und interaktive SetExpFlds bearbeiten
+                //	nur InputFields und interaktive SetExpFlds bearbeiten
                 if( !pTxtFld || ( RES_SETEXPFLD == nType &&
                     !((SwSetExpField*)pFld->GetFld())->GetInputFlag()))
                     continue;
@@ -176,7 +179,7 @@ sal_uInt16 SwInputFieldList::BuildSortLst()
                     VoidPtr pTmp = (VoidPtr)pTxtFld;
                     // nicht in der TempListe vorhanden, also in die SortListe
                     // aufnehemen
-                    sal_uInt16 nFndPos = aTmpLst.GetPos( pTmp );
+                    USHORT nFndPos = aTmpLst.GetPos( pTmp );
                     if( USHRT_MAX == nFndPos )
                     {
                         SwNodeIndex aIdx( rTxtNode );
@@ -201,11 +204,11 @@ sal_uInt16 SwInputFieldList::BuildSortLst()
 
 void SwInputFieldList::RemoveUnselectedFlds()
 {
-    _SetGetExpFlds* pNewLst = new _SetGetExpFlds();
+    _SetGetExpFlds*	pNewLst = new _SetGetExpFlds();
 
     FOREACHPAM_START(pSh)
     {
-        for (sal_uInt16 i = 0; i < Count();)
+        for (USHORT i = 0; i < Count();)
         {
             _SetGetExpFld* pFld = (*pSrtLst)[i];
             SwPosition aPos(*PCURCRSR->GetPoint());

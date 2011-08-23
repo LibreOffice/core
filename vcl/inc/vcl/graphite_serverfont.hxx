@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,41 +33,35 @@
 #define GR_NAMESPACE
 
 #ifndef MSC
-#include "vcl/graphite_layout.hxx"
+#include <vcl/graphite_layout.hxx>
+#include <vcl/graphite_adaptors.hxx>
 
 // Modules
 
-class VCL_PLUGIN_PUBLIC GraphiteLayoutImpl : public GraphiteLayout
+class VCL_DLLPUBLIC GraphiteLayoutImpl : public GraphiteLayout
 {
 public:
-    GraphiteLayoutImpl(const gr_face * pFace,
-                       ServerFont & rServerFont) throw()
-    : GraphiteLayout(pFace), mrServerFont(rServerFont) {};
+    GraphiteLayoutImpl(const gr::Font & font, const grutils::GrFeatureParser * features, GraphiteFontAdaptor * pFont) throw()
+    : GraphiteLayout(font, features), mpFont(pFont) {};
     virtual ~GraphiteLayoutImpl() throw() {};
     virtual sal_GlyphId getKashidaGlyph(int & width);
 private:
-    ServerFont & mrServerFont;
+    GraphiteFontAdaptor * mpFont;
 };
 
 // This class implments the server font specific parts.
 // @author tse
 //
-class VCL_PLUGIN_PUBLIC GraphiteServerFontLayout : public ServerFontLayout
+class VCL_DLLPUBLIC GraphiteServerFontLayout : public ServerFontLayout
 {
 private:
+        mutable GraphiteFontAdaptor * mpFont;
         // mutable so that the DrawOffset/DrawBase can be set
         mutable GraphiteLayoutImpl maImpl;
-        grutils::GrFeatureParser * mpFeatures;
-        const sal_Unicode * mpStr;
 public:
-        GraphiteServerFontLayout(ServerFont& pServerFont) throw();
+        GraphiteServerFontLayout(GraphiteFontAdaptor * font) throw();
 
-        virtual bool  LayoutText( ImplLayoutArgs& rArgs)
-        {
-            mpStr = rArgs.mpStr;
-            SalLayout::AdjustLayout(rArgs);
-            return maImpl.LayoutText(rArgs);
-        };    // first step of layout
+        virtual bool  LayoutText( ImplLayoutArgs& rArgs) { SalLayout::AdjustLayout(rArgs); return maImpl.LayoutText(rArgs); };    // first step of layout
         virtual void  AdjustLayout( ImplLayoutArgs& rArgs)
         {
             SalLayout::AdjustLayout(rArgs);
@@ -95,12 +89,13 @@ public:
 
         virtual ~GraphiteServerFontLayout() throw();
 
-        static bool IsGraphiteEnabledFont(ServerFont * pServerFont);
 // For use with PspGraphics
-        const sal_Unicode* getTextPtr() const { return mpStr; };
+        const sal_Unicode* getTextPtr() const;
         int getMinCharPos() const { return mnMinCharPos; }
         int getMaxCharPos() const { return mnEndCharPos; }
 };
+
+
 
 #endif
 #endif //_SV_GRAPHITESERVERFONT_HXX

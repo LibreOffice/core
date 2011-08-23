@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include <cppuhelper/weak.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 namespace
 {
@@ -76,7 +76,7 @@ namespace svx
     using ::com::sun::star::beans::XPropertySet;
     /** === end UNO using === **/
 
-    typedef ::boost::unordered_map< ShapeProperty, PPropertyValueProvider, ShapePropertyHash  >    PropertyProviders;
+    typedef ::std::hash_map< ShapeProperty, PPropertyValueProvider, ShapePropertyHash  >    PropertyProviders;
 
     typedef ::cppu::OMultiTypeInterfaceContainerHelperVar   <   ::rtl::OUString
                                                             ,   ::comphelper::UStringHash

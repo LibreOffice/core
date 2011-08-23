@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,15 +92,15 @@ namespace framework{
 /// @NOHTML
 
 class DetectorFactory : // interfaces
-                        public  css::lang::XTypeProvider            ,
-                        public  css::lang::XServiceInfo             ,
-                        public  css::lang::XMultiServiceFactory     ,
-                        public  css::container::XNameContainer      ,       // => XNameReplace => XNameAccess => XElementAccess
-                        public  css::util::XFlushable               ,
+                        public	css::lang::XTypeProvider			,
+                        public	css::lang::XServiceInfo				,
+                        public	css::lang::XMultiServiceFactory		,
+                        public	css::container::XNameContainer		,		// => XNameReplace => XNameAccess => XElementAccess
+                        public	css::util::XFlushable				,
                         // base classes
                         // Order is neccessary for right initialization of it!
                         private ThreadHelpBase                      ,
-                        public  ::cppu::OWeakObject
+                        public	::cppu::OWeakObject
 {
     //-------------------------------------------
     // member
@@ -372,7 +372,7 @@ class DetectorFactory : // interfaces
             @param  sName
                     the name of the queried container entry.
 
-            @return sal_True if the requested item exist; sal_False otherwise.
+            @return TRUE if the requested item exist; FALSE otherwise.
          */
 
         virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& sName )
@@ -394,7 +394,7 @@ class DetectorFactory : // interfaces
 
         /** @short  return fill state of this cache.
 
-            @return sal_True if any item exist inside this conatiner; sal_False otherwhise.
+            @return TRUE if any item exist inside this conatiner; FALSE otherwhise.
          */
 
         virtual sal_Bool SAL_CALL hasElements()

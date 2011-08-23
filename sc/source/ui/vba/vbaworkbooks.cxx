@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,7 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
-#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
@@ -62,7 +60,7 @@
 #include "vbaworkbooks.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <vector>
 #include <osl/file.hxx>
 using namespace ::ooo::vba;
@@ -76,27 +74,25 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
     ScDocShell* pShell = excel::getDocShell( xModel );
     if ( pShell )
     {
-        String aPrjName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-        pShell->GetBasicManager()->SetName( aPrjName );
-
-        /*  Set library container to VBA compatibility mode. This will create
-            the VBA Globals object and store it in the Basic manager of the
-            document. */
         uno::Reference<script::XLibraryContainer> xLibContainer = pShell->GetBasicContainer();
         uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY_THROW );
         xVBACompat->setVBACompatibilityMode( sal_True );
+        String aPrjName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+        pShell->GetBasicManager()->SetName( aPrjName );
 
         if( xLibContainer.is() )
         {
-            if( !xLibContainer->hasByName( aPrjName ) )
-                xLibContainer->createLibrary( aPrjName );
+        if( !xLibContainer->hasByName( aPrjName ) )
+                xLibContainer->createLibrary( aPrjName );    
             uno::Any aLibAny = xLibContainer->getByName( aPrjName );
             uno::Reference< container::XNameContainer > xLib;
             aLibAny >>= xLib;
             if( xLib.is()  )
-            {
+            {           
                 uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
                 uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
+                // bootstrap vbaglobals
+                 xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals")));
                 uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider"))), uno::UNO_QUERY_THROW );
                 // set up the module info for the workbook and sheets in the nealy created
                 // spreadsheet
@@ -124,7 +120,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                 for ( std::vector<rtl::OUString>::iterator it = sDocModuleNames.begin(); it != it_end; ++it )
                 {
                     script::ModuleInfo sModuleInfo;
-
+    
                     sModuleInfo.ModuleObject.set( xVBACodeNamedObjectAccess->getByName( *it ), uno::UNO_QUERY );
                     sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
                     xVBAModuleInfo->insertModuleInfo( *it, sModuleInfo );
@@ -134,19 +130,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                         xLib->insertByName( *it, uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) ) ) );
                 }
             }
-        }
-
-        /*  Trigger the Workbook_Open event, event processor will register
-            itself as listener for specific events. */
-        try
-        {
-            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pShell->GetDocument()->GetVbaEventProcessor(), uno::UNO_SET_THROW );
-            uno::Sequence< uno::Any > aArgs;
-            xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_OPEN, aArgs );
-        }
-        catch( uno::Exception& )
-        {
-        }
+        } 
     }
 }
 
@@ -157,7 +141,7 @@ getWorkbook( uno::Reference< uno::XComponentContext >& xContext, const uno::Refe
     uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
     if( !xModel.is() )
         return uno::Any();
-
+    
     ScDocShell* pShell = excel::getDocShell( xModel );
     if ( pShell )
     {
@@ -180,8 +164,8 @@ class WorkBookEnumImpl : public EnumerationHelperImpl
 public:
     WorkBookEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Any& aApplication ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_aApplication( aApplication ) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    {
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException) 
+    { 
         uno::Reference< sheet::XSpreadsheetDocument > xDoc( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         return getWorkbook( m_xContext, xDoc, m_xParent );
     }
@@ -201,7 +185,7 @@ uno::Reference< container::XEnumeration >
 ScVbaWorkbooks::createEnumeration() throw (uno::RuntimeException)
 {
     // #FIXME its possible the WorkBookEnumImpl here doens't reflect
-    // the state of this object ( although it should ) would be
+    // the state of this object ( although it should ) would be 
     // safer to create an enumeration based on this objects state
     // rather than one effectively based of the desktop component
     uno::Reference< container::XEnumerationAccess > xEnumerationAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
@@ -217,62 +201,30 @@ ScVbaWorkbooks::createCollectionObject( const css::uno::Any& aSource )
 
 
 uno::Any SAL_CALL
-ScVbaWorkbooks::Add( const uno::Any& Template ) throw (uno::RuntimeException)
+ScVbaWorkbooks::Add() throw (uno::RuntimeException)
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xSpreadDoc;
-    sal_Int32 nWorkbookType = 0;
-    ::rtl::OUString aTemplateFileName;
-    if( Template >>= nWorkbookType )
-    {
-        // nWorkbookType is a constant from XlWBATemplate (added in Excel 2007)
-        // TODO: create chart-sheet if supported by Calc
+    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( VbaDocumentsBase::Add() , uno::UNO_QUERY_THROW );
 
-        xSpreadDoc.set( createDocument(), uno::UNO_QUERY_THROW );
-        // create a document with one sheet only
-        uno::Reference< sheet::XSpreadsheets > xSheets( xSpreadDoc->getSheets(), uno::UNO_SET_THROW );
-        uno::Reference< container::XIndexAccess > xSheetsIA( xSheets, uno::UNO_QUERY_THROW );
-        while( xSheetsIA->getCount() > 1 )
-        {
-            uno::Reference< container::XNamed > xSheetName( xSheetsIA->getByIndex( xSheetsIA->getCount() - 1 ), uno::UNO_QUERY_THROW );
-            xSheets->removeByName( xSheetName->getName() );
-        }
-    }
-    else if( Template >>= aTemplateFileName )
-    {
-        // TODO: create document from template
-        xSpreadDoc.set( createDocument(), uno::UNO_QUERY_THROW );
-    }
-    else if( !Template.hasValue() )
-    {
-        // regular spreadsheet document with configured number of sheets
-        xSpreadDoc.set( createDocument(), uno::UNO_QUERY_THROW );
-    }
-    else
-    {
-        // illegal argument
-        throw uno::RuntimeException();
-    }
-
-    // need to set up the document modules ( and vba mode ) here
+    // need to set up the document modules ( and vba mode ) here                                
     setUpDocumentModules( xSpreadDoc );
     if( xSpreadDoc.is() )
         return getWorkbook( mxContext, xSpreadDoc, mxParent );
     return uno::Any();
 }
 
-void SAL_CALL
+void
 ScVbaWorkbooks::Close() throw (uno::RuntimeException)
 {
-    closeDocuments();
+    VbaDocumentsBase::Close();
 }
 
-bool
+bool 
 ScVbaWorkbooks::isTextFile( const rtl::OUString& sType )
 {
     // will return true if the file is
     // a) a variant of a text file
     // b) a csv file
-    // c) unknown
+    // c) unknown 
     // returning true basically means treat this like a csv file
     const static rtl::OUString txtType( RTL_CONSTASCII_USTRINGPARAM("writer_Text" ) );
     const static rtl::OUString csvType( RTL_CONSTASCII_USTRINGPARAM("calc_Text_txt_csv_StarCalc" ) );
@@ -280,21 +232,21 @@ ScVbaWorkbooks::isTextFile( const rtl::OUString& sType )
     return sType.equals( txtType ) || sType.equals( csvType ) || ( sType.getLength() == 0 ) || sType.equals( encodedTxtType );
 }
 
-bool
+bool 
 ScVbaWorkbooks::isSpreadSheetFile( const rtl::OUString& sType )
 {
     // include calc_QPro etc. ? ( not for the moment anyway )
-    if ( sType.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("calc_MS"))) == 0
-    || sType.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("calc8"))) == 0
+    if ( sType.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("calc_MS"))) == 0 
+    || sType.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("calc8"))) == 0 
     || sType.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("calc_StarOffice"))) == 0 )
         return true;
     return false;
 }
 
-rtl::OUString
+rtl::OUString 
 ScVbaWorkbooks::getFileFilterType( const rtl::OUString& rFileName )
 {
-    uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection")), mxContext), uno::UNO_QUERY_THROW );
+    uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection"), mxContext), uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > aMediaDesc(1);
     aMediaDesc[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ("URL" ) );
     aMediaDesc[ 0 ].Value <<= rFileName;
@@ -303,7 +255,7 @@ ScVbaWorkbooks::getFileFilterType( const rtl::OUString& rFileName )
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
-uno::Any SAL_CALL
+uno::Any
 ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLinks*/, const uno::Any& ReadOnly, const uno::Any& Format, const uno::Any& /*Password*/, const uno::Any& /*WriteResPassword*/, const uno::Any& /*IgnoreReadOnlyRecommended*/, const uno::Any& /*Origin*/, const uno::Any& Delimiter, const uno::Any& /*Editable*/, const uno::Any& /*Notify*/, const uno::Any& /*Converter*/, const uno::Any& /*AddToMru*/ ) throw (uno::RuntimeException)
 {
     // we need to detect if this is a URL, if not then assume its a file path
@@ -317,12 +269,12 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
         osl::FileBase::getFileURLFromSystemPath( rFileName, aURL );
 
     uno::Sequence< beans::PropertyValue > sProps(0);
-
+    sal_Int32 nIndex = 0;
+    
     rtl::OUString sType = getFileFilterType( aURL );
-    // A text file means it needs to be processed as a csv file
-    if ( isTextFile( sType ) )
+    // A text file means it needs to be processed as a csv file	
+    if ( isTextFile( sType ) ) 
     {
-        sal_Int32 nIndex = 0;
         // Values for format
         // 1 Tabs
         // 2 Commas
@@ -333,24 +285,24 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
         // no format means use the current delimiter
         sProps.realloc( 3 );
         sProps[ nIndex ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FilterOptions" ) );
-        sal_Int16 delims[] = { 0 /*default not used*/, 9/*tab*/, 44/*comma*/, 32/*space*/, 59/*semicolon*/ };
+        sal_Int16 delims[] = { 0 /*default not used*/, 9/*tab*/, 44/*comma*/, 32/*space*/, 59/*semicolon*/ };	
         static rtl::OUString sRestOfFormat( RTL_CONSTASCII_USTRINGPARAM(",34,0,1" ) );
-
+        
         rtl::OUString sFormat;
         sal_Int16 nFormat = 0; // default indicator
 
 
         if ( Format.hasValue() )
         {
-            Format >>= nFormat; // val of nFormat overwritten if extracted
-            // validate param
+            Format >>= nFormat; // val of nFormat overwritten if extracted	
+            // validate param	
             if ( nFormat < 1 || nFormat > 6 )
                 throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Illegal value for Format" ) ), uno::Reference< uno::XInterface >() );
         }
 
         sal_Int16 nDelim = getCurrentDelim();
 
-        if (  nFormat > 0 && nFormat < CUSTOM_CHAR )
+        if (  nFormat > 0 && nFormat < CUSTOM_CHAR ) 
         {
             nDelim =  delims[ nFormat ];
         }
@@ -381,8 +333,8 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
     }
     else if ( !isSpreadSheetFile( sType ) )
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Bad Format")), uno::Reference< uno::XInterface >() );
-
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( openDocument( rFileName, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
+    
+    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( VbaDocumentsBase::Open( rFileName, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
     uno::Any aRet = getWorkbook( mxContext, xSpreadDoc, mxParent );
     uno::Reference< excel::XWorkbook > xWBook( aRet, uno::UNO_QUERY );
     if ( xWBook.is() )
@@ -390,14 +342,20 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
     return aRet;
 }
 
-rtl::OUString&
+uno::Any
+ScVbaWorkbooks::Open( const rtl::OUString& Filename, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (css::uno::RuntimeException)
+{
+    return VbaDocumentsBase::Open( Filename, ReadOnly, rProps );
+}
+
+rtl::OUString& 
 ScVbaWorkbooks::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWorkbooks") );
     return sImplName;
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<rtl::OUString> 
 ScVbaWorkbooks::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

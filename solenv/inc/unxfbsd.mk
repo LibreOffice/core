@@ -46,7 +46,7 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=$(PTHREAD_CFLAGS) -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1
+CDEFS+=$(PTHREAD_CFLAGS) -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=450
 
 # enable visibility define in "sal/types.h"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
@@ -74,8 +74,13 @@ CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
 CFLAGS+=-fmessage-length=0 -c
 
-# flags to enable build with symbols
-CFLAGSENABLESYMBOLS=-g
+# flags to enable build with symbols; required for crashdump feature
+.IF "$(ENABLE_SYMBOLS)"=="SMALL"
+CFLAGSENABLESYMBOLS=-g1
+.ELSE
+CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
+
+.ENDIF
 
 # flags for the C++ Compiler
 CFLAGSCC= -pipe $(ARCH_FLAGS)
@@ -143,8 +148,8 @@ LINKFLAGSRUNPATH_NONE=
 LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS)
 
 # linker flags for linking applications
-LINKFLAGSAPPGUI= -Wl,-export-dynamic
-LINKFLAGSAPPCUI= -Wl,-export-dynamic
+LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
+LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
 
 # linker flags for linking shared libraries
 LINKFLAGSSHLGUI= -shared
@@ -181,6 +186,26 @@ STDSHLGUIMT=-lX11 -lXext $(PTHREAD_LIBS) -lm
 STDSHLCUIMT=$(PTHREAD_LIBS) -lm
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
+
+.IF "$(USE_STLP_DEBUG)" != ""
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlportstlg
+LIBSTLPORTST=$(STATIC) -lstlportstlg $(DYNAMIC)
+.ELSE
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc_stldebug
+LIBSTLPORTST=$(STATIC) -lstlport_gcc_stldebug $(DYNAMIC)
+.ENDIF
+.ELSE # "$(USE_STLP_DEBUG)" != ""
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlport
+LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
+.ELSE
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
+LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
+.ENDIF
+.ENDIF # "$(USE_STLP_DEBUG)" != ""
+
+#FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
 # name of library manager
 LIBMGR=ar

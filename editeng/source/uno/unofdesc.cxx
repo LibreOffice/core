@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,11 +90,11 @@ void SvxUnoFontDescriptor::FillItemSet( const awt::FontDescriptor& rDesc, SfxIte
 
     {
         SvxFontItem aFontItem( EE_CHAR_FONTINFO );
-        aFontItem.SetFamilyName( rDesc.Name);
-        aFontItem.SetStyleName( rDesc.StyleName);
-        aFontItem.SetFamily( (FontFamily)rDesc.Family);
-        aFontItem.SetCharSet( rDesc.CharSet );
-        aFontItem.SetPitch( (FontPitch)rDesc.Pitch);
+        aFontItem.GetFamilyName()= rDesc.Name;
+        aFontItem.GetStyleName() = rDesc.StyleName;
+        aFontItem.GetFamily()    = (FontFamily)rDesc.Family;
+        aFontItem.GetCharSet()   = rDesc.CharSet;
+        aFontItem.GetPitch()     = (FontPitch)rDesc.Pitch;
         rSet.Put(aFontItem);
     }
 
@@ -143,47 +143,47 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
 {
     const SfxPoolItem* pItem = NULL;
     {
-        SvxFontItem* pFontItem = (SvxFontItem*)&rSet.Get( EE_CHAR_FONTINFO, sal_True );
-        rDesc.Name      = pFontItem->GetFamilyName();
-        rDesc.StyleName = pFontItem->GetStyleName();
-        rDesc.Family    = sal::static_int_cast< sal_Int16 >(
+        SvxFontItem* pFontItem = (SvxFontItem*)&rSet.Get( EE_CHAR_FONTINFO, TRUE );
+        rDesc.Name		= pFontItem->GetFamilyName();
+        rDesc.StyleName	= pFontItem->GetStyleName();
+        rDesc.Family	= sal::static_int_cast< sal_Int16 >(
             pFontItem->GetFamily());
-        rDesc.CharSet   = pFontItem->GetCharSet();
-        rDesc.Pitch     = sal::static_int_cast< sal_Int16 >(
+        rDesc.CharSet	= pFontItem->GetCharSet();
+        rDesc.Pitch		= sal::static_int_cast< sal_Int16 >(
             pFontItem->GetPitch());
     }
     {
-        pItem = &rSet.Get( EE_CHAR_FONTHEIGHT, sal_True );
+        pItem = &rSet.Get( EE_CHAR_FONTHEIGHT, TRUE );
         uno::Any aHeight;
         if( pItem->QueryValue( aHeight, MID_FONTHEIGHT ) )
             aHeight >>= rDesc.Height;
     }
     {
-        pItem = &rSet.Get( EE_CHAR_ITALIC, sal_True );
+        pItem = &rSet.Get( EE_CHAR_ITALIC, TRUE );
         uno::Any aFontSlant;
         if(pItem->QueryValue( aFontSlant, MID_POSTURE ))
             aFontSlant >>= rDesc.Slant;
     }
     {
-        pItem = &rSet.Get( EE_CHAR_UNDERLINE, sal_True );
+        pItem = &rSet.Get( EE_CHAR_UNDERLINE, TRUE );
         uno::Any aUnderline;
         if(pItem->QueryValue( aUnderline, MID_TL_STYLE ))
             aUnderline >>= rDesc.Underline;
     }
     {
-        pItem = &rSet.Get( EE_CHAR_WEIGHT, sal_True );
+        pItem = &rSet.Get( EE_CHAR_WEIGHT, TRUE );
         uno::Any aWeight;
         if(pItem->QueryValue( aWeight, MID_WEIGHT ))
             aWeight >>= rDesc.Weight;
     }
     {
-        pItem = &rSet.Get( EE_CHAR_STRIKEOUT, sal_True );
+        pItem = &rSet.Get( EE_CHAR_STRIKEOUT, TRUE );
         uno::Any aStrikeOut;
         if(pItem->QueryValue( aStrikeOut, MID_CROSS_OUT ))
             aStrikeOut >>= rDesc.Strikeout;
     }
     {
-        SvxWordLineModeItem* pWLMItem = (SvxWordLineModeItem*)&rSet.Get( EE_CHAR_WLM, sal_True );
+        SvxWordLineModeItem* pWLMItem = (SvxWordLineModeItem*)&rSet.Get( EE_CHAR_WLM, TRUE );
         rDesc.WordLineMode = pWLMItem->GetValue();
     }
 }
@@ -201,13 +201,13 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
 
 beans::PropertyState SvxUnoFontDescriptor::getPropertyState( const SfxItemSet& rSet )
 {
-    CheckState(rSet.GetItemState( EE_CHAR_FONTINFO, sal_False ));
-    CheckState(rSet.GetItemState( EE_CHAR_FONTHEIGHT, sal_False ));
-    CheckState(rSet.GetItemState( EE_CHAR_ITALIC, sal_False ));
-    CheckState(rSet.GetItemState( EE_CHAR_UNDERLINE, sal_False ));
-    CheckState(rSet.GetItemState( EE_CHAR_WEIGHT, sal_False ));
-    CheckState(rSet.GetItemState( EE_CHAR_STRIKEOUT, sal_False ));
-    CheckState(rSet.GetItemState( EE_CHAR_WLM, sal_False ));
+    CheckState(rSet.GetItemState( EE_CHAR_FONTINFO, FALSE ));
+    CheckState(rSet.GetItemState( EE_CHAR_FONTHEIGHT, FALSE ));
+    CheckState(rSet.GetItemState( EE_CHAR_ITALIC, FALSE ));
+    CheckState(rSet.GetItemState( EE_CHAR_UNDERLINE, FALSE ));
+    CheckState(rSet.GetItemState( EE_CHAR_WEIGHT, FALSE ));
+    CheckState(rSet.GetItemState( EE_CHAR_STRIKEOUT, FALSE ));
+    CheckState(rSet.GetItemState( EE_CHAR_WLM, FALSE ));
 
     return beans::PropertyState_DEFAULT_VALUE;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,24 +38,24 @@ class SwPageFrm;
 class SwLooping;
 class IDocumentLayoutAccess;
 
-// --> #i28701#
+// --> OD 2004-06-23 #i28701#
 class SwMovedFwdFrmsByObjPos;
 class SwTxtFrm;
 // <--
-// --> #i26945#
+// --> OD 2004-10-05 #i26945#
 class SwRowFrm;
 // <--
-// --> #i35911#
+// --> OD 2004-10-22 #i35911#
 class SwObjsMarkedAsTmpConsiderWrapInfluence;
 class SwAnchoredObject;
 // <--
-// --> #i40155#
+// --> OD 2005-01-12 #i40155#
 #include <vector>
 class SwFrm;
 // <--
-// --> #i65250#
+// --> OD 2006-05-10 #i65250#
 #include <swtypes.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 class SwFlowFrm;
 class SwLayoutFrm;
 // <--
@@ -67,21 +67,21 @@ class SwLayouter
     SwEndnoter* pEndnoter;
     SwLooping* pLooping;
     void _CollectEndnotes( SwSectionFrm* pSect );
-    sal_Bool StartLooping( SwPageFrm* pPage );
+    BOOL StartLooping( SwPageFrm* pPage );
 
-    // --> #i28701#
+    // --> OD 2004-06-23 #i28701#
     SwMovedFwdFrmsByObjPos* mpMovedFwdFrms;
     // <--
-    // --> #i35911#
+    // --> OD 2004-10-22 #i35911#
     SwObjsMarkedAsTmpConsiderWrapInfluence* mpObjsTmpConsiderWrapInfl;
     // <--
-    // --> #i40155# - data structure to collect frames, which are
+    // --> OD 2005-01-12 #i40155# - data structure to collect frames, which are
     // marked not to wrap around objects.
     std::vector< const SwFrm* > maFrmsNotToWrap;
     // <--
 
 public:
-    // --> #i65250#
+    // --> OD 2006-05-10 #i65250#
     // - data structure to collect moving backward layout information
     struct tMoveBwdLayoutInfoKey
     {
@@ -118,7 +118,7 @@ private:
                    p_key1.mnFreeSpaceInNewUpper == p_key2.mnFreeSpaceInNewUpper;
         }
     };
-    boost::unordered_map< const tMoveBwdLayoutInfoKey, sal_uInt16,
+    std::hash_map< const tMoveBwdLayoutInfoKey, sal_uInt16,
                    fMoveBwdLayoutInfoKeyHash,
                    fMoveBwdLayoutInfoKeyEq > maMoveBwdLayoutInfo;
     // <--
@@ -127,17 +127,17 @@ public:
     ~SwLayouter();
     void InsertEndnotes( SwSectionFrm* pSect );
     void CollectEndnote( SwFtnFrm* pFtn );
-    sal_Bool HasEndnotes() const;
+    BOOL HasEndnotes() const;
 
-    void LoopControl( SwPageFrm* pPage, sal_uInt8 nLoop );
+    void LoopControl( SwPageFrm* pPage, BYTE nLoop );
     void EndLoopControl();
     void LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm );
 
     static void CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect );
-    static sal_Bool Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn );
-    static sal_Bool StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage );
+    static BOOL Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn );
+    static BOOL StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage );
 
-    // --> #i28701#
+    // --> OD 2004-06-23 #i28701#
     static void ClearMovedFwdFrms( const SwDoc& _rDoc );
     static void InsertMovedFwdFrm( const SwDoc& _rDoc,
                                    const SwTxtFrm& _rMovedFwdFrmByObjPos,
@@ -146,29 +146,29 @@ public:
                                      const SwTxtFrm& _rTxtFrm,
                                      sal_uInt32& _ornToPageNum );
     // <--
-    // --> #i40155# - ummark given frame as to be moved forward.
+    // --> OD 2005-01-12 #i40155# - ummark given frame as to be moved forward.
     static void RemoveMovedFwdFrm( const SwDoc& _rDoc,
                                    const SwTxtFrm& _rTxtFrm );
     // <--
-    // --> #i26945#
+    // --> OD 2004-10-05 #i26945#
     static bool DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                                            const SwRowFrm& _rRowFrm );
     // <--
 
-    // --> #i35911#
+    // --> OD 2004-10-22 #i35911#
     static void ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc );
     static void InsertObjForTmpConsiderWrapInfluence(
                                         const SwDoc& _rDoc,
                                         SwAnchoredObject& _rAnchoredObj );
     // <--
-    // --> #i40155#
+    // --> OD 2005-01-12 #i40155#
     static void ClearFrmsNotToWrap( const SwDoc& _rDoc );
     static void InsertFrmNotToWrap( const SwDoc& _rDoc,
                                     const SwFrm& _rFrm );
     static bool FrmNotToWrap( const IDocumentLayoutAccess& _rIDLA,
                               const SwFrm& _rFrm );
     // <--
-    // --> #i65250#
+    // --> OD 2006-05-10 #i65250#
     static bool MoveBwdSuppressed( const SwDoc& p_rDoc,
                                    const SwFlowFrm& p_rFlowFrm,
                                    const SwLayoutFrm& p_rNewUpperFrm );

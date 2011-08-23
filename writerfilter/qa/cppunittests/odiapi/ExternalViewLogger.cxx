@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,12 +77,14 @@ namespace util
     NodeContainer_t::iterator iter_end = mNodeContainer.end();
     for (; iter != iter_end; ++iter)
     {
-        file << iter->first << string(" ") << iter->second->mParentNodeId << string(" ") << iter->second->mRefersToNodeId << string(" ") << iter->second->mNodeValue << endl;
+        file << iter->first << string(" ") << iter->second->mParentNodeId << string(" ") << iter->second->mRefersToNodeId << string(" ") << iter->second->mNodeValue << endl; 
     }
   }
 
   void ExternalViewLoggerImpl::endTree()
   {
+    //dumpNodeContainer(mFileName + string(".dmp"));
+
     mFile << "digraph {" << endl;
     mFile << "Root [shape=box, color=grey];" << endl;
 
@@ -90,7 +92,7 @@ namespace util
       mParentNodeStack.pop();
 
     mParentNodeStack.push("Root");
-
+    
     NodeContainer_t::iterator iter = mNodeContainer.begin();
     NodeContainer_t::iterator iter_end = mNodeContainer.end();
     for (; iter != iter_end; ++iter)
@@ -110,9 +112,9 @@ namespace util
   }
 
   void ExternalViewLoggerImpl::beginNode(const std::string& nodeId, const std::string& value, const std::string& refersToNodeId, bool inUse)
-  {
+  {	
     mNodeContainer.insert(
-        NodeContainer_t::value_type(nodeId,
+        NodeContainer_t::value_type(nodeId, 
         NodeDescription::Pointer_t(new NodeDescription(mParentNodeStack.top(), refersToNodeId, value, inUse))));
     mParentNodeStack.push(nodeId);
   }
@@ -138,16 +140,16 @@ namespace util
     }
     return isLeaf;
   }
-
+ 
   bool ExternalViewLoggerImpl::isUnreferencedLeaf(const string& nodeId)
   {
     return isLeaf(nodeId) && !isReferenced(nodeId);
   }
 
-  bool ExternalViewLoggerImpl::isReferenced(const string& nodeId)
+  bool ExternalViewLoggerImpl::isReferenced(const string& nodeId) 
   {
     bool isReferenced = false;
-
+    
     NodeContainer_t::const_iterator iter = mNodeContainer.begin();
     NodeContainer_t::const_iterator iter_end = mNodeContainer.end();
     for (; iter != iter_end; ++iter)
@@ -160,7 +162,7 @@ namespace util
     }
     return isReferenced;
   }
-
+  
   bool ExternalViewLoggerImpl::isReferingToOtherNode(const string& nodeId)
   {
     NodeContainer_t::const_iterator iter = mNodeContainer.find(nodeId);
@@ -193,7 +195,7 @@ namespace util
         mParentNodeStack.pop();
       }
     }
-
+    
     if (hasParent(nodeId))
       dumpTree(mNodeContainer.find(nodeId)->second->mParentNodeId);
   }

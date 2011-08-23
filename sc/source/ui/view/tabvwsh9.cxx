@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,6 +43,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/whiter.hxx>
+#include <avmedia/mediaplayer.hxx>
 
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
@@ -53,26 +54,26 @@
 
 // forwards -> galwrap.cxx (wg. CLOOKs)
 
-sal_uInt16  GallerySGA_FORMAT_GRAPHIC();
-Graphic GalleryGetGraphic       ();
-sal_Bool    GalleryIsLinkage        ();
-String  GalleryGetFullPath      ();
-String  GalleryGetFilterName    ();
+USHORT	GallerySGA_FORMAT_GRAPHIC();
+Graphic GalleryGetGraphic		();
+BOOL	GalleryIsLinkage		();
+String	GalleryGetFullPath		();
+String	GalleryGetFilterName	();
 
 // forwards -> imapwrap.cxx (wg. CLOOKs)
 
 class SvxIMapDlg;
 
-sal_uInt16          ScIMapChildWindowId();
-SvxIMapDlg*     ScGetIMapDlg();
-const void*     ScIMapDlgGetObj( SvxIMapDlg* pDlg );
-const ImageMap& ScIMapDlgGetMap( SvxIMapDlg* pDlg );
+USHORT			ScIMapChildWindowId();
+SvxIMapDlg*		ScGetIMapDlg();
+const void*		ScIMapDlgGetObj( SvxIMapDlg* pDlg );
+const ImageMap&	ScIMapDlgGetMap( SvxIMapDlg* pDlg );
 
 //------------------------------------------------------------------
 
 void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
 {
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     switch(nSlot)
     {
         case SID_GALLERY:
@@ -83,6 +84,15 @@ void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
             rReq.Ignore();
         }
         break;
+    
+        case SID_AVMEDIA_PLAYER:
+        {
+            SfxViewFrame* pThisFrame = GetViewFrame();
+            pThisFrame->ToggleChildWindow( ::avmedia::MediaPlayer::GetChildWindowId() );
+            pThisFrame->GetBindings().Invalidate( SID_AVMEDIA_PLAYER );
+            rReq.Ignore();
+        }
+        break;
     }
 }
 
@@ -90,8 +100,13 @@ void ScTabViewShell::GetChildWinState( SfxItemSet& rSet )
 {
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GALLERY ) )
     {
-        sal_uInt16 nId = GalleryChildWindow::GetChildWindowId();
+        USHORT nId = GalleryChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_GALLERY, GetViewFrame()->HasChildWindow( nId ) ) );
+    }
+    else if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_AVMEDIA_PLAYER ) )
+    {
+        USHORT nId = ::avmedia::MediaPlayer::GetChildWindowId();
+        rSet.Put( SfxBoolItem( SID_AVMEDIA_PLAYER, GetViewFrame()->HasChildWindow( nId ) ) );
     }
 }
 
@@ -104,10 +119,10 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
     if ( pArgs )
     {
         const SfxPoolItem* pItem = NULL;
-        SfxItemState eState = pArgs->GetItemState(SID_GALLERY_FORMATS, sal_True, &pItem);
+        SfxItemState eState = pArgs->GetItemState(SID_GALLERY_FORMATS, TRUE, &pItem);
         if ( eState == SFX_ITEM_SET )
         {
-            sal_uInt32 nFormats = ((const SfxUInt32Item*)pItem)->GetValue();
+            UINT32 nFormats = ((const SfxUInt32Item*)pItem)->GetValue();
 
             /******************************************************************
             * Graphik einfuegen
@@ -117,10 +132,10 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
                 MakeDrawLayer();
 
                 Graphic aGraphic = GalleryGetGraphic();
-                Point   aPos     = GetInsertPos();
+                Point 	aPos     = GetInsertPos();
 
                 String aPath, aFilter;
-                if ( GalleryIsLinkage() )           // als Link einfuegen?
+                if ( GalleryIsLinkage() )			// als Link einfuegen?
                 {
                     aPath = GalleryGetFullPath();
                     aFilter = GalleryGetFilterName();
@@ -130,8 +145,8 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
             }
             else if ( nFormats & SGA_FORMAT_SOUND )
             {
-                //  for sounds (linked or not), insert a hyperlink button,
-                //  like in Impress and Writer
+                //	#98115# for sounds (linked or not), insert a hyperlink button,
+                //	like in Impress and Writer
 
                 GalleryExplorer* pGal = SVX_GALLERY();
                 if ( pGal )
@@ -157,26 +172,26 @@ ScInputHandler* ScTabViewShell::GetInputHandler() const
 
 //------------------------------------------------------------------
 
-String ScTabViewShell::GetDescription() const
+String __EXPORT ScTabViewShell::GetDescription() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(" ** Test ** "));
 }
 
 void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
 {
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     switch(nSlot)
     {
         case SID_IMAP:
         {
             SfxViewFrame* pThisFrame = GetViewFrame();
-            sal_uInt16 nId = ScIMapChildWindowId();
+            USHORT nId = ScIMapChildWindowId();
             pThisFrame->ToggleChildWindow( nId );
             GetViewFrame()->GetBindings().Invalidate( SID_IMAP );
 
             if ( pThisFrame->HasChildWindow( nId ) )
             {
-                SvxIMapDlg* pDlg = ScGetIMapDlg();
+                SvxIMapDlg*	pDlg = ScGetIMapDlg();
                 if ( pDlg )
                 {
                     SdrView* pDrView = GetSdrView();
@@ -200,13 +215,13 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
 
             if ( pMark )
             {
-                SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
-                SvxIMapDlg* pDlg = ScGetIMapDlg();
+                SdrObject*	pSdrObj = pMark->GetMarkedSdrObj();
+                SvxIMapDlg*	pDlg = ScGetIMapDlg();
 
                 if ( ScIMapDlgGetObj(pDlg) == (void*) pSdrObj )
                 {
-                    const ImageMap& rImageMap = ScIMapDlgGetMap(pDlg);
-                    ScIMapInfo*     pIMapInfo = ScDrawLayer::GetIMapInfo( pSdrObj );
+                    const ImageMap&	rImageMap = ScIMapDlgGetMap(pDlg);
+                    ScIMapInfo*		pIMapInfo = ScDrawLayer::GetIMapInfo( pSdrObj );
 
                     if ( !pIMapInfo )
                         pSdrObj->InsertUserData( new ScIMapInfo( rImageMap ) );
@@ -224,24 +239,24 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
 void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
 {
     SfxWhichIter aIter(rSet);
-    sal_uInt16 nWhich = aIter.FirstWhich();
+    USHORT nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
         switch ( nWhich )
         {
             case SID_IMAP:
                 {
-                    //  Disabled wird nicht mehr...
+                    //	Disabled wird nicht mehr...
 
-                    sal_Bool bThere = false;
+                    BOOL bThere = FALSE;
                     SfxViewFrame* pThisFrame = GetViewFrame();
-                    sal_uInt16 nId = ScIMapChildWindowId();
+                    USHORT nId = ScIMapChildWindowId();
                     if ( pThisFrame->KnowsChildWindow(nId) )
                         if ( pThisFrame->HasChildWindow(nId) )
-                            bThere = sal_True;
+                            bThere = TRUE;
 
                     ObjectSelectionType eType=GetCurObjectSelectionType();
-                    sal_Bool bEnable=(eType==OST_OleObject) ||(eType==OST_Graphic);
+                    BOOL bEnable=(eType==OST_OleObject) ||(eType==OST_Graphic);
                     if(!bThere && !bEnable)
                     {
                        rSet.DisableItem( nWhich );
@@ -255,7 +270,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
 
             case SID_IMAP_EXEC:
                 {
-                    sal_Bool bDisable = sal_True;
+                    BOOL bDisable = TRUE;
 
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
@@ -264,7 +279,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
                         if ( rMarkList.GetMarkCount() == 1 )
                             if ( ScIMapDlgGetObj(ScGetIMapDlg()) ==
                                         (void*) rMarkList.GetMark(0)->GetMarkedSdrObj() )
-                                bDisable = false;
+                                bDisable = FALSE;
                     }
 
                     rSet.Put( SfxBoolItem( SID_IMAP_EXEC, bDisable ) );

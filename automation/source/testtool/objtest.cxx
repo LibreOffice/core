@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,16 @@
 #include <vcl/svapp.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <svl/brdcst.hxx>
+//#ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
+//#endif
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 
@@ -61,8 +64,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::connection;
+using namespace rtl;
 
-using ::rtl::OUString;
 
 #include <svtools/svmedit.hxx>
 
@@ -101,23 +104,23 @@ static CommunicationFactory aComManFac;
 
 #define cMyDelim ' '
 #define P_FEHLERLISTE pFehlerListe
-#define KEEP_SEQUENCES      100         // Keep Names of last 100 Calls
+#define KEEP_SEQUENCES		100			// Keep Names of last 100 Calls
 
 
-ControlDefLoad const Controls::arClasses [] =
+ControlDefLoad __READONLY_DATA Controls::arClasses [] =
 #include "classes.hxx"
 CNames *Controls::pClasses = NULL;
 
-ControlDefLoad const TestToolObj::arR_Cmds [] =
+ControlDefLoad __READONLY_DATA TestToolObj::arR_Cmds [] =
 #include "r_cmds.hxx"
 CNames *TestToolObj::pRCommands = NULL;
-CErrors *TestToolObj::pFehlerListe = NULL;      // Hier werden die Fehler des Testtools gespeichert
+CErrors *TestToolObj::pFehlerListe = NULL;		// Hier werden die Fehler des Testtools gespeichert
 
 
 DBG_NAME( ControlItem )
 DBG_NAME( ControlDef )
 
-ControlItem::ControlItem( const sal_Char *Name, rtl::OString aUIdP )
+ControlItem::ControlItem( const sal_Char *Name, SmartId aUIdP )
 {
 DBG_CTOR(ControlItem,0);
     InitData();
@@ -125,13 +128,41 @@ DBG_CTOR(ControlItem,0);
     pData->aUId = aUIdP;
 }
 
-ControlItem::ControlItem( const String &Name, rtl::OString aUIdP )
+ControlItem::ControlItem( const String &Name, SmartId aUIdP )
 {
 DBG_CTOR(ControlItem,0);
     InitData();
     pData->Kurzname = Name;
     pData->aUId = aUIdP;
 }
+
+/*ControlItem::ControlItem( const String &Name, const String &URL, const URLType aType )
+{
+DBG_CTOR(ControlItem,0);
+    InitData();
+    pData->Kurzname = Name;
+    pData->aURL = URL;
+    pData->nUId = aType;
+}
+
+ControlItem::ControlItem( const String &Name, const String &URL, const ULONG nUId )
+{
+DBG_CTOR(ControlItem,0);
+    InitData();
+    pData->Kurzname = Name;
+    pData->aURL = URL;
+    pData->nUId = nUId;
+}
+
+ControlItem::ControlItem( const char *Name, const String &URL, const ULONG nUId )
+{
+DBG_CTOR(ControlItem,0);
+    InitData();
+    pData->Kurzname.AssignAscii( Name );
+    pData->aURL = URL;
+    pData->nUId = nUId;
+} */
+
 
 ControlItem::ControlItem( ControlData *pDataP )
 {
@@ -148,48 +179,63 @@ ControlSon::~ControlSon()
     }
 }
 
-ControlItemSon::ControlItemSon(const String &Name, rtl::OString aUIdP )
+ControlItemSon::ControlItemSon(const String &Name, SmartId aUIdP )
 : ControlItem( Name, aUIdP )
 {}
 
-sal_Bool ControlDef::operator < (const ControlItem &rPar)
+/*ControlItemSon::ControlItemSon(const String &Name, const String &URL, const URLType aType )
+: ControlItem( Name, URL, aType )
+{}
+
+ControlItemSon::ControlItemSon(const String &Name, const String &URL, const ULONG nUId )
+: ControlItem( Name, URL, nUId )
+{}
+
+ControlItemSon::ControlItemSon(const char *Name, const String &URL, const ULONG nUId )
+: ControlItem( Name, URL, nUId )
+{}*/
+
+
+
+BOOL ControlDef::operator < (const ControlItem &rPar)
 {
     return pData->Kurzname.CompareIgnoreCaseToAscii(rPar.pData->Kurzname) == COMPARE_LESS;
 }
 
-sal_Bool ControlDef::operator == (const ControlItem &rPar)
+BOOL ControlDef::operator == (const ControlItem &rPar)
 {
     return pData->Kurzname.CompareIgnoreCaseToAscii(rPar.pData->Kurzname) == COMPARE_EQUAL;
 }
 
 void ControlDef::Write( SvStream &aStream )
 {
-    // FIXME: HELPID
-    #if 0
     if ( pSons )
         aStream.WriteByteString( String('*').Append( pData->Kurzname ), RTL_TEXTENCODING_UTF8 );
     else
         aStream.WriteByteString( pData->Kurzname, RTL_TEXTENCODING_UTF8 );
-    aStream << ((sal_uInt16)pData->aUId.HasNumeric());
+    aStream << ((USHORT)pData->aUId.HasNumeric());
     if ( pData->aUId.HasString() )
         aStream.WriteByteString( pData->aUId.GetStr(), RTL_TEXTENCODING_UTF8 );
     else
-        aStream << static_cast<comm_ULONG>(pData->aUId.GetNum()); //GetNum() sal_uLong != comm_ULONG on 64bit
+        aStream << static_cast<comm_ULONG>(pData->aUId.GetNum()); //GetNum() ULONG != comm_ULONG on 64bit
     if ( pSons )
-        for ( sal_uInt16 i = 0 ; pSons->Count() > i ; i++ )
+        for ( USHORT i = 0 ; pSons->Count() > i ; i++ )
             ((ControlDef*)(*pSons)[i])->Write(aStream);
-    #else
-    (void)aStream;
-    #endif
 }
 
-ControlDef::ControlDef(const String &Name, rtl::OString aUIdP )
+ControlDef::ControlDef(const String &Name, SmartId aUIdP )
 : ControlItemSon( Name, aUIdP)
 {
     DBG_CTOR(ControlDef,0);
 }
 
-ControlDef::ControlDef(const String &aOldName, const String &aNewName, ControlDef *pOriginal, sal_Bool bWithSons )
+/*ControlDef::ControlDef(const String &Name, const String &URL, const URLType aType )
+: ControlItemSon( Name, URL, aType )
+{
+    DBG_CTOR(ControlDef,0);
+} */
+
+ControlDef::ControlDef(const String &aOldName, const String &aNewName, ControlDef *pOriginal, BOOL bWithSons )
 : ControlItemSon("", pOriginal->pData->aUId)
 {
     DBG_CTOR(ControlDef,0);
@@ -201,13 +247,13 @@ ControlDef::ControlDef(const String &aOldName, const String &aNewName, ControlDe
     if ( bWithSons && pOriginal->pSons )
     {
         pSons = new CNames();
-        for ( sal_uInt16 i = 0; i < pOriginal->pSons->Count() ; i++)
+        for ( USHORT i = 0; i < pOriginal->pSons->Count() ; i++)
         {
             ControlDef *pNewDef;
-            pNewDef = new ControlDef( aOldName, aNewName, pOriginal->SonGetObject(i) ,sal_True );
+            pNewDef = new ControlDef( aOldName, aNewName, pOriginal->SonGetObject(i) ,TRUE );
             if (! SonInsert(pNewDef))
             {
-                OSL_FAIL("Name Doppelt im CopyConstructor. Neuer Name = Controlname!!");
+                DBG_ERROR("Name Doppelt im CopyConstructor. Neuer Name = Controlname!!");
                 delete pNewDef;
             }
         }
@@ -217,59 +263,54 @@ ControlDef::ControlDef(const String &aOldName, const String &aNewName, ControlDe
         pSons = NULL;
 }
 
-sal_Bool ControlItemUId::operator < (const ControlItem &rPar)
+BOOL ControlItemUId::operator < (const ControlItem &rPar)
 {
     return pData->aUId < rPar.pData->aUId;
 }
 
-sal_Bool ControlItemUId::operator == (const ControlItem &rPar)
+BOOL ControlItemUId::operator == (const ControlItem &rPar)
 {
     return pData->aUId == rPar.pData->aUId;
 }
 
 SV_IMPL_OP_PTRARR_SORT( CNames, ControlItem* )
 
-void CRevNames::Insert( String aName, rtl::OString aUId, sal_uLong nSeq )
+void CRevNames::Insert( String aName, SmartId aUId, ULONG nSeq )
 {
     ControlItem *pRN = new ReverseName(aName,aUId,nSeq);
-    sal_uInt16 nPos;
+    USHORT nPos;
     if ( Seek_Entry(pRN,&nPos) )
         DeleteAndDestroy(nPos);
 
     if ( !CNames::C40_PTR_INSERT( ControlItem, pRN) )
     {
-        OSL_FAIL("Interner Fehler beim Speichern der Lokalen KurzNamen");
+        DBG_ERROR("Interner Fehler beim Speichern der Lokalen KurzNamen");
         delete pRN;
     }
 
 }
 
-String CRevNames::GetName( rtl::OString aUId )
+String CRevNames::GetName( SmartId aUId )
 {
     ReverseName *pRN = new ReverseName(UniString(),aUId,0);
-    sal_uInt16 nPos;
-    sal_Bool bSeekOK = Seek_Entry(pRN,&nPos);
+    USHORT nPos;
+    BOOL bSeekOK = Seek_Entry(pRN,&nPos);
 
     delete pRN;
     if ( bSeekOK )
         return GetObject(nPos)->pData->Kurzname;
     else
     {
-        // FIXME: HELPID
-        #if 0
         if ( aUId.Matches( UID_ACTIVE ) )
             return CUniString("Active");
         else
             return GEN_RES_STR1( S_NAME_NOT_THERE, aUId.GetText() );
-        #else
-        return String();
-        #endif
     }
 }
 
-void CRevNames::Invalidate ( sal_uLong nSeq )
+void CRevNames::Invalidate ( ULONG nSeq )
 {
-    sal_uInt16 i;
+    USHORT i;
     for (i = 0; i < Count() ;)
     {
         if (((ReverseName*)GetObject(i))->LastSequence < nSeq)
@@ -292,12 +333,12 @@ SbxTransportMethod::SbxTransportMethod( SbxDataType DT )
 
 TestToolObj::TestToolObj( String aName, String aFilePath )              // Interner Aufruf
 : SbxObject( aName )
-, bUseIPC(sal_False)
-, bReturnOK(sal_True)
+, bUseIPC(FALSE)
+, bReturnOK(TRUE)
 , nSequence(KEEP_SEQUENCES)
 , ProgPath()
-, IsBlock(sal_False)
-, SingleCommandBlock(sal_True)
+, IsBlock(FALSE)
+, SingleCommandBlock(TRUE)
 , m_pControls(NULL)
 , m_pNameKontext(NULL)
 , m_pSIds(NULL)
@@ -313,8 +354,9 @@ TestToolObj::TestToolObj( String aName, String aFilePath )              // Inter
     pImpl = new ImplTestToolObj;
     pImpl->ProgParam = String();
     pImpl->aFileBase = DirEntry(aFilePath);
+//	pImpl->aLogFileBase = DirEntry();
     pImpl->aHIDDir = DirEntry(aFilePath);
-    pImpl->bIsStart = sal_False;
+    pImpl->bIsStart = FALSE;
     pImpl->pMyBasic = NULL;
 
     pImpl->aServerTimeout = Time(0,1,00);           // 1:00 Minuten fest
@@ -323,12 +365,12 @@ TestToolObj::TestToolObj( String aName, String aFilePath )              // Inter
 
 TestToolObj::TestToolObj( String aName, MyBasic* pBas )                // Aufruf im Testtool
 : SbxObject( aName )
-, bUseIPC(sal_True)
-, bReturnOK(sal_True)
+, bUseIPC(TRUE)
+, bReturnOK(TRUE)
 , nSequence(KEEP_SEQUENCES)
 , ProgPath()
-, IsBlock(sal_False)
-, SingleCommandBlock(sal_True)
+, IsBlock(FALSE)
+, SingleCommandBlock(TRUE)
 , m_pControls(NULL)
 , m_pNameKontext(NULL)
 , m_pSIds(NULL)
@@ -343,7 +385,7 @@ TestToolObj::TestToolObj( String aName, MyBasic* pBas )                // Aufruf
 {
     pImpl = new ImplTestToolObj;
     pImpl->ProgParam = String();
-    pImpl->bIsStart = sal_False;
+    pImpl->bIsStart = FALSE;
     pImpl->pMyBasic = pBas;
 
     LoadIniFile();
@@ -353,17 +395,17 @@ TestToolObj::TestToolObj( String aName, MyBasic* pBas )                // Aufruf
     pCommunicationManager->SetDataReceivedHdl( LINK( this, TestToolObj, ReturnResultsLink ));
 }
 
-void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die durch den ConfigDialog geï¿½ndert werden kï¿½nnen
+void TestToolObj::LoadIniFile()				// Laden der IniEinstellungen, die durch den ConfigDialog geï¿½ndert werden kï¿½nnen
 {
-#define GETSET(aVar, KeyName, Dafault)                          \
-    {                                                           \
-        ByteString __##aVar##__;                                \
-        __##aVar##__ = aConf.ReadKey(KeyName);      \
-        if ( !__##aVar##__.Len() )                  \
-        {                                                       \
-            __##aVar##__ = Dafault;                             \
-            aConf.WriteKey(KeyName, __##aVar##__);              \
-        }                                                       \
+#define GETSET(aVar, KeyName, Dafault)							\
+    {															\
+        ByteString __##aVar##__;								\
+        __##aVar##__ = aConf.ReadKey(KeyName);		\
+        if ( !__##aVar##__.Len() )					\
+        {														\
+            __##aVar##__ = Dafault;								\
+            aConf.WriteKey(KeyName, __##aVar##__);				\
+        }														\
         aVar = UniString( __##aVar##__, RTL_TEXTENCODING_UTF8 );\
     }
 
@@ -408,7 +450,7 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
 
     String aST;
     GETSET( aST, "ServerTimeout", ByteString::CreateFromInt64(Time(0,0,45).GetTime()) );     // 45 Sekunden Initial
-    pImpl->aServerTimeout = Time(sal_uLong(aST.ToInt64()));
+    pImpl->aServerTimeout = Time(ULONG(aST.ToInt64()));
 
     String aSOSE;
     aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Misc" );
@@ -421,18 +463,20 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
 
     String aGP;
     ByteString abGP;
-#if defined WNT && defined INTEL
-    abGP.Append( "501" );  // Windows on x86
-#elif defined WNT && defined X86_64
-    abGP.Append( "502" );  // Windows on x64
+#ifdef WNT
+    abGP.Append( "501" );  // WinXP
 #elif defined SOLARIS && defined SPARC
     abGP.Append( "01" );  // Solaris SPARC
+#elif defined SCO
+    abGP.Append( "02" );  // SCO UNIX
 #elif defined LINUX && defined INTEL
     abGP.Append( "03" );  // Linux
 #elif defined AIX
     abGP.Append( "04" );
 #elif defined SOLARIS && defined INTEL
     abGP.Append( "05" );  // Solaris x86
+#elif defined HPUX
+    abGP.Append( "07" );
 #elif defined FREEBSD
     abGP.Append( "08" );
 #elif defined MACOSX
@@ -465,10 +509,6 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "25" );  // OpenBSD/i386
 #elif defined OPENBSD && defined X86_64
     abGP.Append( "26" );  // OpenBSD/amd64
-#elif defined DRAGONFLY && defined X86
-    abGP.Append( "27" );  // DragonFly/i386
-#elif defined DRAGONFLY && defined X86_64
-    abGP.Append( "28" );  // DragonFly/x86-64
 #else
 #error ("unknown platform. please request an ID for your platform on qa/dev")
 #endif
@@ -488,7 +528,7 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     pMeth->SetUserData( nID );                                                  \
 }
 
-// SetUserData muï¿½ irgendwas sein, sonst wird es im Find rausgefiltert!!!
+// SetUserData muß irgendwas sein, sonst wird es im Find rausgefiltert!!!
 #define MAKE_USHORT_CONSTANT(cName, nValue)                                     \
     {                                                                           \
         SbxProperty *pVal = new SbxProperty( CUniString( cName) , SbxINTEGER ); \
@@ -501,13 +541,13 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
 
 void TestToolObj::InitTestToolObj()
 {
-    pImpl->nNumBorders = 0;                 // Fï¿½r Profiling mit kï¿½stchen
+    pImpl->nNumBorders = 0;					// Fï¿½r Profiling mit kï¿½stchen
 
     pImpl->nMinRemoteCommandDelay = 0;
     pImpl->nMaxRemoteCommandDelay = 0;
-    pImpl->bDoRemoteCommandDelay = sal_False;
+    pImpl->bDoRemoteCommandDelay = FALSE;
 
-    pImpl->bLnaguageExtensionLoaded= sal_False;
+    pImpl->bLnaguageExtensionLoaded= FALSE;
     pImpl->pTTSfxBroadcaster = NULL;
 
     pImpl->nErrorCount = 0;
@@ -522,8 +562,8 @@ void TestToolObj::InitTestToolObj()
 
     pImpl->nTestCaseLineNr = 0;
 
-    pImpl->bEnableQaErrors = sal_True;
-    pImpl->bDebugFindNoErrors = sal_False;
+    pImpl->bEnableQaErrors = TRUE;
+    pImpl->bDebugFindNoErrors = FALSE;
 
     pImpl->pChildEnv = new Environment;
 
@@ -546,17 +586,21 @@ void TestToolObj::InitTestToolObj()
         pWait = pRTLObject->Make( CUniString("Wait"), SbxCLASS_METHOD, SbxNULL );
         pWait->SetUserData( ID_Wait );
     // change listener here
-        pRTLObject->EndListening( pWait->GetBroadcaster(), sal_True );
-        StartListening( pWait->GetBroadcaster(), sal_True );
+        pRTLObject->EndListening( pWait->GetBroadcaster(), TRUE );
+        StartListening( pWait->GetBroadcaster(), TRUE );
     }
     else
     {
-        OSL_FAIL("Testtool: Could not replace Wait method");
+        DBG_ERROR("Testtool: Could not replace Wait method");
     }
 
     MAKE_TT_KEYWORD( "Kontext", SbxCLASS_METHOD, SbxNULL, ID_Kontext );
     MAKE_TT_KEYWORD( "GetNextError", SbxCLASS_VARIABLE, SbxVARIANT, ID_GetError );
     MAKE_TT_KEYWORD( "Start", SbxCLASS_METHOD, SbxSTRING, ID_Start );
+//		pMeth = Make( "Kill", SbxCLASS_METHOD, SbxNULL );
+//		pMeth->SetUserData( ID_Kill );
+    /*      pMeth = Make( "TestReset", SbxCLASS_METHOD, SbxNULL );
+        pMeth->SetUserData( ID_Reset );*/
     MAKE_TT_KEYWORD( "Use", SbxCLASS_METHOD, SbxNULL, ID_Use );
     MAKE_TT_KEYWORD( "StartUse", SbxCLASS_METHOD, SbxNULL, ID_StartUse );
     MAKE_TT_KEYWORD( "FinishUse", SbxCLASS_METHOD, SbxNULL, ID_FinishUse );
@@ -571,11 +615,11 @@ void TestToolObj::InitTestToolObj()
     MAKE_TT_KEYWORD( "MaybeAddErr", SbxCLASS_METHOD, SbxNULL, ID_MaybeAddErr );
     MAKE_TT_KEYWORD( "ClearError", SbxCLASS_METHOD, SbxNULL, ID_ClearError );
     MAKE_TT_KEYWORD( "SaveIDs", SbxCLASS_METHOD, SbxBOOL, ID_SaveIDs );
-    MAKE_TT_KEYWORD( "AutoExecute", SbxCLASS_PROPERTY, SbxBOOL, ID_AutoExecute );   // Achtung! PROPERTY Also eine Variable
+    MAKE_TT_KEYWORD( "AutoExecute", SbxCLASS_PROPERTY, SbxBOOL, ID_AutoExecute );	// Achtung! PROPERTY Also eine Variable
     MAKE_TT_KEYWORD( "Execute", SbxCLASS_METHOD, SbxNULL, ID_Execute );
     MAKE_TT_KEYWORD( "StopOnSyntaxError", SbxCLASS_PROPERTY, SbxBOOL, ID_StopOnSyntaxError );
 
-/*  Dialog Handler werden gebraucht, wenn im internen Testtool ein Dialog
+/*	Dialog Handler werden gebraucht, wenn im internen Testtool ein Dialog
     hochgerissen wird. Nach versenden der Remote-Kommandos wird IdleHandler aktiviert.
     Er testet, ob das Reschedule zum WaitForAnswer zurï¿½ckkehrt. Bleibt das aus, so
     wird erst der RemoteHandler zurï¿½ckgesetzt und dann die Handler-Sub im Basic
@@ -625,20 +669,15 @@ void TestToolObj::InitTestToolObj()
     // Load the Remote Commands from list
     if ( !pRCommands )                 // Ist static, wird also nur einmal geladen
         ReadFlatArray( arR_Cmds, pRCommands );
-    sal_uInt16 i;
+    USHORT i;
     for ( i = 0 ; i < pRCommands->Count() ; i++ )
     {
         SbxTransportMethod *pMeth = new SbxTransportMethod( SbxVARIANT );
         pMeth->SetName( pRCommands->GetObject( i )->pData->Kurzname );
         pMeth->SetUserData( ID_RemoteCommand );
-        // FIXME: HELPID
-        #if 0
         pMeth->nValue = pRCommands->GetObject( i )->pData->aUId.GetNum();
-        #else
-        pMeth->nValue = 0;
-        #endif
         Insert( pMeth );
-        StartListening( pMeth->GetBroadcaster(), sal_True );
+        StartListening( pMeth->GetBroadcaster(), TRUE );
     }
 
 // Konstanten fï¿½r SetControlType
@@ -683,10 +722,17 @@ void TestToolObj::InitTestToolObj()
 
     for ( i=0;i<VAR_POOL_SIZE;i++)
     {
+/*              pMyVar = new SbxObject( "Dummy" );
+        pMyVar->SetType( SbxVARIANT );*/
+
+//           pMyVar = new SbxMethod( "Dummy", SbxVARIANT );
+
         pImpl->pMyVars[i] = new SbxTransportMethod( SbxVARIANT );
         pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(String::CreateFromInt32(i) ) );
 
         Insert( pImpl->pMyVars[i] );
+//              StartListening( pMyVars[i]->GetBroadcaster(), TRUE );
+
     }
 
     m_pControls = new CNames();
@@ -696,8 +742,45 @@ void TestToolObj::InitTestToolObj()
     nMyVar = 0;
 
     pImpl->pMyBasic->AddFactory( &aComManFac );
-}
 
+
+// Das ist zum testen des IPC
+
+/*      int sent = 0;
+
+    ModelessDialog *pDlg = new ModelessDialog(NULL);
+    pDlg->SetOutputSizePixel(Size(100,30));
+
+    Edit *pMyEd = new Edit(pDlg,WB_CENTER | WB_BORDER);
+    pMyEd->SetSizePixel(Size(100,30));
+    pDlg->Show();
+    pMyEd->Show();
+    Time aTime;
+
+    String VollePackung;
+    VollePackung.Fill(32760,'*');
+
+    BeginBlock();   // zum warm werden
+    EndBlock();
+    ResetError();
+
+    while ( pDlg->IsVisible() && !IsError() )
+    {
+        BeginBlock();
+        In->GenCmdFlow (124,VollePackung);
+        EndBlock();
+        pMyEd->SetText(String("Test Nr. ") + String(++sent));
+        while ( aTime.Get100Sec() / 10 == Time().Get100Sec() / 10 );
+        aTime = Time();
+    }
+
+    delete pMyEd;
+    delete pDlg;
+*/
+// Test ende
+
+
+}
 
 TestToolObj::~TestToolObj()
 {
@@ -756,7 +839,7 @@ SfxBroadcaster& TestToolObj::GetTTBroadcaster()
     return *pImpl->pTTSfxBroadcaster;
 }
 
-void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, sal_Bool bIsFlat )
+void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, BOOL bIsFlat )
 {
 /*******************************************************************************
 **
@@ -772,9 +855,9 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, s
 
     SvFileStream Stream;
     String       aLine,aShortname,aLongname;
-    rtl::OString      aUId;
+    SmartId      aUId;
     xub_StrLen   nLineNr;
-    sal_uInt16       nElement;
+    USHORT       nElement;
     ControlDef   *pNewDef, *pNewDef2;
     ControlDef   *pFatherDef = NULL;
 
@@ -787,10 +870,10 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, s
             TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_READING_LONGNAMES)), aFileName );
             GetTTBroadcaster().Broadcast( aHint );
         }
-        ReadFlat( aFileName ,pUIds, sal_True );
+        ReadFlat( aFileName ,pUIds, TRUE );
         if ( !pUIds )
             return;
-        pNewDef = new ControlDef("Active",rtl::OString());
+        pNewDef = new ControlDef("Active",SmartId(0));
         const ControlItem *pItem = pNewDef;
         if (! pUIds->Insert(pItem))
         {
@@ -853,12 +936,12 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, s
         aFirstAllowedExtra.AssignAscii("+*");
         aAllowed.AssignAscii("_");
         xub_StrLen nIndex = 0;
-        sal_Bool bOK = sal_True;
+        BOOL bOK = TRUE;
 
         while ( bOK && nIndex < aShortname.Len() )
         {
             sal_Unicode aChar = aShortname.GetChar( nIndex );
-            sal_Bool bOKThis = sal_False;
+            BOOL bOKThis = FALSE;
             bOKThis |= ( aAllowed.Search( aChar ) != STRING_NOTFOUND );
             if ( !nIndex )
                 bOKThis |= ( aFirstAllowedExtra.Search( aChar ) != STRING_NOTFOUND );
@@ -875,7 +958,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, s
             continue;
         }
 
-        sal_Bool bUnoName = ( aLongname.Copy( 0, 5 ).EqualsIgnoreCaseAscii( ".uno:" )
+        BOOL bUnoName = ( aLongname.Copy( 0, 5 ).EqualsIgnoreCaseAscii( ".uno:" )
             || aLongname.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "http" )
             || aLongname.Copy( 0, 15 ).EqualsIgnoreCaseAscii( "private:factory" )
             || aLongname.Copy( 0, 8 ).EqualsIgnoreCaseAscii( "service:" )
@@ -884,20 +967,20 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, s
         // generic method to mark longnames as symbolic
         if ( aLongname.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "sym:" ) )
         {
-            bUnoName = sal_True;
+            bUnoName = TRUE;
             aLongname.Erase( 0, 4 );
         }
-        sal_Bool bMozillaName = ( !bIsFlat && aLongname.Copy( 0, 4 ).EqualsIgnoreCaseAscii( ".moz" ) );
+        BOOL bMozillaName = ( !bIsFlat && aLongname.Copy( 0, 4 ).EqualsIgnoreCaseAscii( ".moz" ) );
 
         if ( aShortname.GetChar(0) == '+' )          // Kompletten Eintrag kopieren
         {
             aShortname.Erase(0,1);
-            ControlDef WhatName(aLongname,rtl::OString());
+            ControlDef WhatName(aLongname,SmartId());
             ControlDef *OldTree;
             if (pNames->Seek_Entry(&WhatName,&nElement))
             {
                 OldTree = (ControlDef*)pNames->GetObject(nElement);
-                pNewDef = new ControlDef(aLongname,aShortname,OldTree,sal_True);
+                pNewDef = new ControlDef(aLongname,aShortname,OldTree,TRUE);
 
                 const ControlItem *pItem = pNewDef;
                 if (! pNames->Insert(pItem))
@@ -921,15 +1004,11 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, s
         else
         {
 
-            // FIXME: HELPID
-            #if 0
             if (aShortname.CompareIgnoreCaseToAscii("*Active") == COMPARE_EQUAL)
-                aUId = rtl::OString( UID_ACTIVE );
-            else
-            #endif
-                if ( !bUnoName && !bMozillaName )
-            {   // Bestimmen der ID aus der Hid.Lst
-                ControlDef WhatName(aLongname,rtl::OString());
+                aUId = SmartId( UID_ACTIVE );
+            else if ( !bUnoName && !bMozillaName )
+            {	// Bestimmen der ID aus der Hid.Lst
+                ControlDef WhatName(aLongname,SmartId());
                 if (pUIds->Seek_Entry(&WhatName,&nElement))
                     aUId = pUIds->GetObject(nElement)->pData->aUId;
                 else
@@ -940,17 +1019,14 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, s
             }
             else
             {
-                // FIXME: HELPID
-                #if 0
                 if ( bUnoName )
-                    aUId = rtl::OString( aLongname );
+                    aUId = SmartId( aLongname );
                 else if ( bMozillaName )
-                    aUId = rtl::OString( aLongname );
+                    aUId = SmartId( aLongname );
                 else
                 {
-                    OSL_FAIL("Unknown URL schema");
+                    DBG_ERROR("Unknown URL schema");
                 }
-                #endif
             }
 
 
@@ -970,7 +1046,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, s
                     if (!pNewDef->SonInsert( pNewDef2 ))         // Dialog in eigenen Namespace eintragen
                     {
                         delete pNewDef2;
-                        OSL_FAIL(" !!!! ACHTUNG !!!!  Fehler beim einfï¿½gen in leere Liste!");
+                        DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einfï¿½gen in leere Liste!");
                     }
                 }
 
@@ -1029,15 +1105,15 @@ void TestToolObj::AddName(String &aBisher, String &aNeu )
 }
 
 
-void TestToolObj::ReadFlat( String Filename, CNames *&pNames, sal_Bool bSortByName )
-//  Wenn bSortByName == sal_False, dann nach UId Sortieren (ControlItemUId statt ControlDef)
+void TestToolObj::ReadFlat( String Filename, CNames *&pNames, BOOL bSortByName )
+//  Wenn bSortByName == FALSE, dann nach UId Sortieren (ControlItemUId statt ControlDef)
 {
     SvFileStream Stream;
     String       aLine,aLongname;
-    rtl::OString      aUId;
+    SmartId      aUId;
     xub_StrLen   nLineNr;
     ControlItem  *pNewItem;
-    sal_uInt16       nDoubleCount = 0;
+    USHORT       nDoubleCount = 0;
 
     Stream.Open(Filename, STREAM_STD_READ);
 
@@ -1075,8 +1151,7 @@ void TestToolObj::ReadFlat( String Filename, CNames *&pNames, sal_Bool bSortByNa
         }
 
         aLongname = aLine.GetToken(0,cMyDelim);
-        // FIXME: HELPID
-        aUId = rtl::OUStringToOString( aLine.GetToken(1,cMyDelim), RTL_TEXTENCODING_UTF8 );
+        aUId = SmartId( (ULONG)aLine.GetToken(1,cMyDelim).ToInt64() );
 
         if ( bSortByName )
             pNewItem = new ControlDef( aLongname, aUId );
@@ -1093,7 +1168,7 @@ void TestToolObj::ReadFlat( String Filename, CNames *&pNames, sal_Bool bSortByNa
             }
             else
             {
-                sal_uInt16 nNr;
+                USHORT nNr;
                 pNames->Seek_Entry( pNewItem, &nNr );
                 AddName( pNames->GetObject(nNr)->pData->Kurzname, pNewItem->pData->Kurzname );
             }
@@ -1107,19 +1182,25 @@ void TestToolObj::ReadFlat( String Filename, CNames *&pNames, sal_Bool bSortByNa
     }
 
     Stream.Close();
+#ifdef DBG_UTIL
+//      int i;
+//      for ( i = 0 ; i < pNames->Count() ; i++ )
+//      {
+//              DBG_ERROR( pNames->GetObject(i)->pData->Kurzname );
+//      }
+#endif
 }
 
 void ReadFlatArray( const ControlDefLoad arWas [], CNames *&pNames )
 {
-    sal_uInt16 nIndex = 0;
+    USHORT nIndex = 0;
 
     if ( !pNames )
         pNames = new CNames();
 
     while ( String::CreateFromAscii(arWas[nIndex].Kurzname).Len() > 0 )
     {
-        // FIXME: HELPID
-        rtl::OString aUId;// (arWas[nIndex].nUId);
+        SmartId aUId (arWas[nIndex].nUId);
         const ControlItem *pX = new ControlDef( arWas[nIndex].Kurzname, aUId);
         pNames->C40_PTR_INSERT(ControlItem, pX);
         nIndex++;
@@ -1130,7 +1211,16 @@ void TestToolObj::WaitForAnswer ()
 {
     if ( bUseIPC )
     {
-        sal_Bool bWasRealWait = !bReturnOK;
+    #ifdef DBG_UTILx
+        USHORT nSysWinModeMemo = GetpApp()->GetSystemWindowMode();
+        GetpApp()->SetSystemWindowMode( 0 );
+        ModelessDialog aDlg(NULL);
+        aDlg.SetOutputSizePixel(Size(200,0));
+        aDlg.SetText(CUniString("Waiting for Answer"));
+        aDlg.Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+        GetpApp()->SetSystemWindowMode( nSysWinModeMemo );
+    #endif
+        BOOL bWasRealWait = !bReturnOK;
         BasicRuntime aRun( NULL );
         if ( BasicRuntimeAccess::HasRuntime() )
             aRun = BasicRuntimeAccess::GetRuntime();
@@ -1163,10 +1253,11 @@ void TestToolObj::WaitForAnswer ()
 
         while ( !bReturnOK && Ende > Time() )
         {
+//			pTemp = PlugInApplication::GetPlugInApp()->GetReturnFromExecute();
             if ( pTemp )
             {
                 ReturnResults( pTemp );
-                bReturnOK = sal_True;
+                bReturnOK = TRUE;
             }
             else
             {
@@ -1180,7 +1271,7 @@ void TestToolObj::WaitForAnswer ()
     if ( !bReturnOK )
     {
         ADD_ERROR(ERR_EXEC_TIMEOUT,GEN_RES_STR1(S_TIMOUT_WAITING, String::CreateFromInt64(nSequence)));
-        bReturnOK = sal_True;
+        bReturnOK = TRUE;
         nSequence++;
     }
 }
@@ -1204,7 +1295,7 @@ IMPL_LINK( TestToolObj, CallDialogHandler, Application*, EMPTYARG )
     String aHandlerName(aDialogHandlerName);
     aDialogHandlerName.Erase();
 
-    sal_uLong nRememberSequence = nSequence; // Da sich die Sequence im DialogHandler ï¿½ndert
+    ULONG nRememberSequence = nSequence; // Da sich die Sequence im DialogHandler ï¿½ndert
     ((StarBASIC*)GetParent())->Call( aHandlerName );
     nSequence = nRememberSequence;
     // Die Sequenznummern werden dann zwar doppelt vergeben, aber wen kï¿½mmerts.
@@ -1222,7 +1313,7 @@ void TestToolObj::BeginBlock()
 
     DBG_ASSERT(!IsBlock,"BeginBlock innerhalb eines Blockes");
     In->Reset(nSequence);
-    IsBlock = sal_True;
+    IsBlock = TRUE;
 }
 
 
@@ -1230,13 +1321,13 @@ void TestToolObj::SendViaSocket()
 {
     if ( !pCommunicationManager )
     {
-        OSL_FAIL("Kein CommunicationManager vorhanden!!");
+        DBG_ERROR("Kein CommunicationManager vorhanden!!");
         return;
     }
 
     if ( !pCommunicationManager->IsCommunicationRunning() )
     {
-        // first try to run basic sub "startTheOffice" see i86540
+        // first try to run basic sub "startTheOffice" see i86540 
         SbxVariable* pMeth = pImpl->pMyBasic->Find( CUniString( "startTheOffice" ), SbxCLASS_DONTCARE);
         if( !pImpl->bIsStart && pMeth && pMeth->ISA(SbxMethod) )
         {
@@ -1259,21 +1350,21 @@ void TestToolObj::SendViaSocket()
         }
     }
 
-    bReturnOK = sal_False;
+    bReturnOK = FALSE;
     if ( pCommunicationManager->GetLastNewLink() )
     {
         if ( !pCommunicationManager->GetLastNewLink()->TransferDataStream( In->GetStream() ) )
         {
             ADD_ERROR(ERR_SEND_TIMEOUT,GEN_RES_STR1(S_TIMOUT_SENDING, String::CreateFromInt64(nSequence)));
             nSequence++;
-            bReturnOK = sal_True;               // Kein Return zu erwarten
+            bReturnOK = TRUE;               // Kein Return zu erwarten
         }
     }
     else
     {
         ADD_ERROR(ERR_SEND_TIMEOUT,GEN_RES_STR1(S_NO_CONNECTION, String::CreateFromInt64(nSequence)));
         nSequence++;
-        bReturnOK = sal_True;               // Kein Return zu erwarten
+        bReturnOK = TRUE;               // Kein Return zu erwarten
     }
 
 }
@@ -1282,13 +1373,13 @@ void TestToolObj::EndBlock()
 {
     if (IsBlock)
     {
-        pImpl->LocalStarttime = Time::GetSystemTicks(); // Setzen der Anfangszeit fï¿½r Performancemessung
+        pImpl->LocalStarttime = Time::GetSystemTicks();	// Setzen der Anfangszeit fï¿½r Performancemessung
 
         In->GenCmdFlow (F_EndCommandBlock);
 
         if ( pImpl->bDoRemoteCommandDelay )
         {
-            sal_uLong nTimeWait = pImpl->nMinRemoteCommandDelay;
+            ULONG nTimeWait = pImpl->nMinRemoteCommandDelay;
             if ( pImpl->nMaxRemoteCommandDelay != pImpl->nMinRemoteCommandDelay )
                 nTimeWait += Time::GetSystemTicks() % ( pImpl->nMaxRemoteCommandDelay - pImpl->nMinRemoteCommandDelay );
             Timer aTimer;
@@ -1307,27 +1398,28 @@ void TestToolObj::EndBlock()
             SendViaSocket();
         else
         {
-            bReturnOK = sal_False;
+//			PlugInApplication::GetPlugInApp()->ExecuteRemoteStatements( In->GetStream() );
+            bReturnOK = FALSE;
             if ( aDialogHandlerName.Len() > 0 )
                 GetpApp()->InsertIdleHdl( LINK( this, TestToolObj, IdleHdl ), 1 );
         }
-        IsBlock = sal_False;
+        IsBlock = FALSE;
     }
     else
     {
-        OSL_FAIL("EndBlock auï¿½erhalb eines Blockes");
+        DBG_ERROR("EndBlock auï¿½erhalb eines Blockes");
     }
 }
 
 
-sal_Bool TestToolObj::Load( String aFileName, SbModule *pMod )
+BOOL TestToolObj::Load( String aFileName, SbModule *pMod )
 {
-    sal_Bool bOk = sal_True;
+    BOOL bOk = TRUE;
     SvFileStream aStrm( aFileName, STREAM_STD_READ );
     if( aStrm.IsOpen() )
     {
         String aText, aLine;
-        sal_Bool bIsFirstLine = sal_True;
+        BOOL bIsFirstLine = TRUE;
         rtl_TextEncoding aFileEncoding = RTL_TEXTENCODING_IBM_850;
         while( !aStrm.IsEof() && bOk )
         {
@@ -1339,10 +1431,10 @@ sal_Bool TestToolObj::Load( String aFileName, SbModule *pMod )
                 if ( !bIsFirstLine )
                     aText += '\n';
                 aText += aLine;
-                bIsFirstLine = sal_False;
+                bIsFirstLine = FALSE;
             }
             if( aStrm.GetError() != SVSTREAM_OK )
-                bOk = sal_False;
+                bOk = FALSE;
         }
         aText.ConvertLineEnd();
         pMod->SetName(CUniString("--").Append(aFileName));
@@ -1356,20 +1448,20 @@ sal_Bool TestToolObj::Load( String aFileName, SbModule *pMod )
 
         MyBasic::SetCompileModule( pOldModule );
         if ( WasPrecompilerError() )
-            bOk = sal_False;
+            bOk = FALSE;
 
     }
     else
-        bOk = sal_False;
+        bOk = FALSE;
     return bOk;
 }
 
 
-sal_Bool TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pControls )
+BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pControls )
 {
     SvFileStream aStream;
     String       aName,aURL;
-    rtl::OString      aUId;
+    SmartId      aUId;
     ControlDef   *pNewDef, *pNewDef2;
     ControlDef   *pFatherDef = NULL;
 
@@ -1378,7 +1470,7 @@ sal_Bool TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pC
     if (!aStream.IsOpen())
     {
         ADD_ERROR(ERR_NO_FILE,GEN_RES_STR1(S_CANNOT_OPEN_FILE, Filename));
-        return sal_False;
+        return FALSE;
     }
 
     if ( !pSIds )
@@ -1391,32 +1483,29 @@ sal_Bool TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pC
         GetTTBroadcaster().Broadcast( aHint );
     }
 
-    sal_uInt16 nAnz;
+    USHORT nAnz;
     aStream >> nAnz;
     CNames *pNames = pSIds; // first read all the slots
-    sal_Bool bIsFlat = sal_True;    // Slots do not have children
+    BOOL bIsFlat = TRUE;    // Slots do not have children
 
     while ( nAnz && !aStream.IsEof() )
     {
 
         aStream.ReadByteString( aName, RTL_TEXTENCODING_UTF8 );
 
-        sal_uInt16 nType;
+        USHORT nType;
          aStream >> nType;
         if ( !nType /* HasNumeric() */)
         {
             String aStrId;
             aStream.ReadByteString( aStrId, RTL_TEXTENCODING_UTF8 );
-            // FIXME: HELPID
-            #if 0
-            aUId = rtl::OString( aStrId );
-            #endif
+            aUId = SmartId( aStrId );
         }
         else
         {
             comm_ULONG nUId;
             aStream >> nUId;
-            aUId = rtl::OString();// nUId;
+            aUId = SmartId( nUId );
         }
 
         if (aName.GetChar(0) == '*' || bIsFlat )     // Globaler Kurzname (Dialogname oder SId)
@@ -1429,18 +1518,18 @@ sal_Bool TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pC
             {
                 pNewDef->Sons(new CNames());
 
-                pNewDef2 = new ControlDef(aName,aUId);      // Noch einen machen
+                pNewDef2 = new ControlDef(aName,aUId);		// Noch einen machen
                 if (!pNewDef->SonInsert(pNewDef2))                              // Dialog in eigenen Namespace eintragen
                 {
                     delete pNewDef2;
-                    OSL_FAIL(" !!!! ACHTUNG !!!!  Fehler beim einfï¿½gen in leere Liste!");
+                    DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einfï¿½gen in leere Liste!");
                 }
             }
 
             const ControlItem *pItem = pNewDef;
             if (! pNames->Insert(pItem))
             {
-                OSL_FAIL(" !!!! ACHTUNG !!!!  Fehler beim einfï¿½gen eines namens!");
+                DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einfï¿½gen eines namens!");
                 delete pNewDef;
                 pFatherDef = NULL;
             }
@@ -1453,7 +1542,7 @@ sal_Bool TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pC
         {
             if (!pFatherDef)
             {
-                OSL_FAIL( "Internal Error: Erster Kurzname muï¿½ mit * beginnen. ï¿½berspringe." );
+                DBG_ERROR( "Internal Error: Erster Kurzname muï¿½ mit * beginnen. ï¿½berspringe." );
             }
             else
             {
@@ -1461,7 +1550,7 @@ sal_Bool TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pC
                 if (! pFatherDef->SonInsert(pNewDef))
                 {
                     delete pNewDef;
-                    OSL_FAIL(" !!!! ACHTUNG !!!!  Fehler beim einfï¿½gen eines namens!");
+                    DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einfï¿½gen eines namens!");
                 }
             }
         }
@@ -1472,7 +1561,7 @@ sal_Bool TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pC
         {
             aStream >> nAnz;
             pNames = pControls; // Now read the controls
-            bIsFlat = sal_False;    // Controls *do* have children
+            bIsFlat = FALSE;    // Controls *do* have children
         }
 
 
@@ -1484,17 +1573,17 @@ sal_Bool TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pC
     }
 
     aStream.Close();
-    return sal_True;
+    return TRUE;
 }
 
 
-sal_Bool TestToolObj::WriteNamesBin( String Filename, CNames *pSIds, CNames *pControls )
+BOOL TestToolObj::WriteNamesBin( String Filename, CNames *pSIds, CNames *pControls )
 {
-    sal_Bool bOk = sal_True;
+    BOOL bOk = TRUE;
     SvFileStream aStrm( String(Filename).AppendAscii(".bin"), STREAM_STD_WRITE );
     if( aStrm.IsOpen() )
     {
-        sal_uInt16 i;
+        USHORT i;
         if ( pSIds )
         {
             aStrm << pSIds->Count();
@@ -1502,11 +1591,11 @@ sal_Bool TestToolObj::WriteNamesBin( String Filename, CNames *pSIds, CNames *pCo
             {
                 ((ControlDef*)(*pSIds)[i])->Write(aStrm);
                 if( aStrm.GetError() != SVSTREAM_OK )
-                    bOk = sal_False;
+                    bOk = FALSE;
             }
         }
         else
-            aStrm << sal_uInt16( 0 );
+            aStrm << USHORT( 0 );
 
         if ( pControls )
         {
@@ -1515,14 +1604,14 @@ sal_Bool TestToolObj::WriteNamesBin( String Filename, CNames *pSIds, CNames *pCo
             {
                 ((ControlDef*)(*pControls)[i])->Write(aStrm);
                 if( aStrm.GetError() != SVSTREAM_OK )
-                    bOk = sal_False;
+                    bOk = FALSE;
             }
         }
         else
-            aStrm << sal_uInt16( 0 );
+            aStrm << USHORT( 0 );
     }
     else
-        bOk = sal_False;
+        bOk = FALSE;
     return bOk;
 }
 
@@ -1538,8 +1627,8 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
         SbxVariable* pVar = p->GetVar();
         SbxArray* rPar = pVar->GetParameters();
 
-        sal_uLong nHintId = p->GetId();
-        sal_uLong nHintUserData = pVar->GetUserData();
+        ULONG nHintId = p->GetId();
+        ULONG nHintUserData = pVar->GetUserData();
         if( nHintId == SBX_HINT_DATAWANTED )
         {
             nMyVar = 0;
@@ -1551,23 +1640,23 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         m_pNameKontext = m_pControls;
 
                         // So daï¿½ nicht immer mal wieder was aus einem alten Kontext dazwischenhaut
-                        for (sal_uInt16 i=0;i<VAR_POOL_SIZE;i++)
+                        for (USHORT i=0;i<VAR_POOL_SIZE;i++)
                         {
                             pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
                         }
                     }
                     else if ( rPar && rPar->Count() == 2 )
                     {
-                        sal_uInt16 nElement;
+                        USHORT nElement;
                         SbxVariableRef pArg = rPar->Get( 1 );
                         String aKontext = pArg->GetString();
-                        ControlDef WhatName(aKontext,rtl::OString());
+                        ControlDef WhatName(aKontext,SmartId());
                         if (m_pControls && m_pControls->Seek_Entry(&WhatName,&nElement))
                         {
                             m_pNameKontext = ((ControlDef*)m_pControls->GetObject(nElement))->GetSons();
 
                             // So daï¿½ nicht immer mal wieder was aus einem alten Kontext dazwischenhaut
-                            for (sal_uInt16 i=0;i<VAR_POOL_SIZE;i++)
+                            for (USHORT i=0;i<VAR_POOL_SIZE;i++)
                             {
                                 pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
                             }
@@ -1597,10 +1686,10 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             GetTTBroadcaster().Broadcast( aHint );
                         }
 
-                        pImpl->bIsStart = sal_True;
+                        pImpl->bIsStart = TRUE;
                         BeginBlock();
                         EndBlock();
-                        pImpl->bIsStart = sal_False;
+                        pImpl->bIsStart = FALSE;
                         {
                             TTExecutionStatusHint aHint( TT_EXECUTION_HIDE_ACTION );
                             GetTTBroadcaster().Broadcast( aHint );
@@ -1652,11 +1741,13 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         WaitForAnswer();
                         if ( IS_ERROR() )
                         {
+//                                                      pVar->PutULong( GET_ERROR()->nError );
                             pVar->PutString( GET_ERROR()->aText );
                             POP_ERROR();
                         }
                         else
                         {
+//                                                      pVar->PutULong( 0 );
                             pVar->PutString( String() );
                         }
                     }
@@ -1679,10 +1770,12 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         while ( pCommunicationManager->IsCommunicationRunning() )
                             Application::Reschedule();
 
-                        SingleCommandBlock = sal_True;
-                        IsBlock = sal_False;
+                        SingleCommandBlock = TRUE;		// Bug 57188
+                        IsBlock = FALSE;
 
-                        for (sal_uInt16 i=0;i<VAR_POOL_SIZE;i++)
+//						pCommunicationManager->StartCommunication();
+
+                        for (USHORT i=0;i<VAR_POOL_SIZE;i++)
                         {
                             pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
                         }
@@ -1724,19 +1817,19 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             m_pReverseUIds = NULL;
                         }
                         m_pNameKontext = m_pControls;
-                        pImpl->bLnaguageExtensionLoaded = sal_False;
+                        pImpl->bLnaguageExtensionLoaded = FALSE;
                         SfxSimpleHint aHint( SBX_HINT_LANGUAGE_EXTENSION_LOADED );
                         GetTTBroadcaster().Broadcast( aHint );
 
                         pImpl->nMinRemoteCommandDelay = 0;
                         pImpl->nMaxRemoteCommandDelay = 0;
-                        pImpl->bDoRemoteCommandDelay = sal_False;
+                        pImpl->bDoRemoteCommandDelay = FALSE;
                         pImpl->aTestCaseName.Erase();
                         pImpl->aTestCaseFileName.Erase();
                         pImpl->nTestCaseLineNr = 0;
 
-                        pImpl->bEnableQaErrors = sal_True;
-                        pImpl->bDebugFindNoErrors = sal_False;
+                        pImpl->bEnableQaErrors = TRUE;
+                        pImpl->bDebugFindNoErrors = FALSE;
 
                         pImpl->pChildEnv->clear();
 
@@ -1761,21 +1854,21 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         if ( Ext.CompareIgnoreCaseToAscii("Win") == COMPARE_EQUAL )
                         {
                             ReadNames( FilePath.GetFull(),m_pControls,pUIds);
-                            pImpl->bLnaguageExtensionLoaded = sal_True;
+                            pImpl->bLnaguageExtensionLoaded = TRUE;
                             SfxSimpleHint aHint( SBX_HINT_LANGUAGE_EXTENSION_LOADED );
                             GetTTBroadcaster().Broadcast( aHint );
                         }
                         else if ( Ext.CompareIgnoreCaseToAscii("Sid") == COMPARE_EQUAL )
                         {
                             ReadNames( FilePath.GetFull(),m_pSIds,pUIds,FLAT);
-                            pImpl->bLnaguageExtensionLoaded = sal_True;
+                            pImpl->bLnaguageExtensionLoaded = TRUE;
                             SfxSimpleHint aHint( SBX_HINT_LANGUAGE_EXTENSION_LOADED );
                             GetTTBroadcaster().Broadcast( aHint );
                         }
                         else if ( Ext.CompareIgnoreCaseToAscii("Bin") == COMPARE_EQUAL )
                         {
                             ReadNamesBin( FilePath.GetFull(), m_pSIds, m_pControls );
-                            pImpl->bLnaguageExtensionLoaded = sal_True;
+                            pImpl->bLnaguageExtensionLoaded = TRUE;
                             SfxSimpleHint aHint( SBX_HINT_LANGUAGE_EXTENSION_LOADED );
                             GetTTBroadcaster().Broadcast( aHint );
                         }
@@ -1855,7 +1948,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                 case ID_CaseLog:
                     if ( rPar )  // rPar != NULL  <=>  Es gibt Parameter
                     {
-                        sal_uInt16 n;
+                        USHORT n;
                         String aX;
                         for ( n = 1; n < rPar->Count(); n++ )
                         {
@@ -1883,16 +1976,16 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     if ( IS_ERROR() )
                     {
                         BasicRuntime aRun = BasicRuntimeAccess::GetRuntime();
-                        sal_Bool bWasNewError = sal_False;
+                        BOOL bWasNewError = FALSE;
 
                         if ( BasicRuntimeAccess::HasStack() )
                         {
-                            for ( sal_uInt16 i = 0 ; i < BasicRuntimeAccess::GetStackEntryCount() -1 ; i++ )
+                            for ( USHORT i = 0 ; i < BasicRuntimeAccess::GetStackEntryCount() -1 ; i++ )
                             {
                                 BasicErrorStackEntry aThisEntry = BasicRuntimeAccess::GetStackEntry(i);
                                 if ( !bWasNewError )
                                 {
-                                    bWasNewError = sal_True;
+                                    bWasNewError = TRUE;
                                     ADD_ERROR_LOG( GET_ERROR()->aText, aThisEntry.GetModuleName(SbxNAME_SHORT_TYPES),
                                         aThisEntry.GetLine(), aThisEntry.GetCol1(), aThisEntry.GetCol2(), aThisEntry.GetSourceRevision() );
                                 }
@@ -1905,7 +1998,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             BasicRuntimeAccess::DeleteStack();
                         }
 
-                        sal_Bool bIsFirst = sal_True;
+                        BOOL bIsFirst = TRUE;
                         while ( aRun.IsValid() )
                         {
                             xub_StrLen nErrLn;
@@ -1913,7 +2006,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             xub_StrLen nCol2;
                             if ( bIsFirst )
                             {
-                                bIsFirst = sal_False;
+                                bIsFirst = FALSE;
                                 nErrLn = GET_ERROR()->nLine;
                                 nCol1 = GET_ERROR()->nCol1;
                                 nCol2 = GET_ERROR()->nCol2;
@@ -1927,7 +2020,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 
                             if ( !bWasNewError )
                             {
-                                bWasNewError = sal_True;
+                                bWasNewError = TRUE;
                                 ADD_ERROR_LOG( GET_ERROR()->aText, aRun.GetModuleName(SbxNAME_SHORT_TYPES),
                                     nErrLn, nCol1, nCol2, aRun.GetSourceRevision() );
                             }
@@ -1960,7 +2053,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                 case ID_QAErrorLog:
                     if ( rPar )  // rPar != NULL  <=>  Es gibt Parameter
                     {
-                        sal_uInt16 n;
+                        USHORT n;
                         String aSammel;
                         for ( n = 1; n < rPar->Count(); n++ )
                         {
@@ -1973,7 +2066,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                 case ID_PrintLog:
                     if ( rPar )  // rPar != NULL  <=>  Es gibt Parameter
                     {
-                        sal_uInt16 n;
+                        USHORT n;
                         String aSammel;
                         for ( n = 1; n < rPar->Count(); n++ )
                         {
@@ -1986,7 +2079,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                 case ID_WarnLog:
                     if ( rPar )  // rPar != NULL  <=>  Es gibt Parameter
                     {
-                        sal_uInt16 n;
+                        USHORT n;
                         String aSammel;
                         for ( n = 1; n < rPar->Count(); n++ )
                         {
@@ -2015,6 +2108,62 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     if ( !rPar )  // rPar = NULL  <=>  Kein Parameter
                     {
                         SetError( SbxERR_NOTIMP );
+                        break;
+
+//                                              Das ist total rotten und muï¿½ wohl komplett neu!!
+
+
+/*    					BOOL bWasBlock = IsBlock;
+                        if ( !IsBlock )                 // Impliziter call bei Aufruf mit Methode
+                            if ( SingleCommandBlock )
+                                BeginBlock();
+//                                              if ( !IsError() )
+//                                                      In->GenCmdSlot (128,rPar);
+//                                              ((Controls*)pVar)->pMethodVar->nValue = 128;
+
+                        ULONG nOldValue = ((Controls*)pVar)->GetULong();
+                        // Setzen, so daï¿½ beim Return der Wert stimmt
+                        ((Controls*)pVar)->PutULong( 128 );
+                        pImpl->pNextReturn = ((Controls*)pVar)->pMethodVar;
+                        if ( SingleCommandBlock )
+                            EndBlock();
+                        WaitForAnswer();
+                        if ( bWasBlock )
+                            if ( SingleCommandBlock )
+                                BeginBlock();
+                        ((Controls*)pVar)->PutULong( nOldValue );
+
+                        // Rï¿½cksetzen, so daï¿½ beim nï¿½chsten Aufruf alles klappt
+//                                              ((Controls*)pVar)->SetUserData( 128 );
+
+
+//                                              ((Controls*)pVar)->SetName("xxx");
+                        // Setzen und rï¿½cksetzen der ID, so dass der Notify ohne Wirkung bleibt.
+                        ((Controls*)pVar)->pMethodVar->SetUserData(ID_ErrorDummy);
+                        ((Controls*)pVar)->PutULong( ((Controls*)pVar)->pMethodVar->GetULong() );
+                        ((Controls*)pVar)->pMethodVar->SetUserData(ID_Control);
+
+                        pShortNames->Insert( CUniString("xxx"), SmartId( ((Controls*)pVar)->pMethodVar->nValue ), nSequence );
+
+                        nOldValue = ((Controls*)pVar)->GetULong();
+
+                        SbxVariable *pMember;
+                        if ( ! (pMember = ((Controls*)pVar)->Find(CUniString("ID"),SbxCLASS_DONTCARE)) )
+                        {
+                            pMember = new SbxProperty(CUniString("ID"),SbxVARIANT);
+                            ((Controls*)pVar)->Insert(pMember);
+                        }
+                        pMember->PutULong(((Controls*)pVar)->pMethodVar->nValue);
+
+                        if ( ! (pMember = ((Controls*)pVar)->Find(CUniString("name"),SbxCLASS_DONTCARE)) )
+                        {
+                            pMember = NULL;
+                        }
+                        else
+                            pMember->PutString(CUniString("xxx"));
+
+                                               */
+
                     }
                     else
                         SetError( SbxERR_WRONG_ARGS );
@@ -2029,16 +2178,15 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 SetError( SbxERR_NOTIMP );
                             }
                         if ( !IsError() )
-                            In->GenCmdCommand ((sal_uInt16)(((SbxTransportMethod*)pVar)->nValue),rPar);
+                            In->GenCmdCommand ((USHORT)(((SbxTransportMethod*)pVar)->nValue),rPar);
                         if ( !IsError() && ((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
                         {
                             pImpl->pNextReturn = ((SbxTransportMethod*)pVar);
-                                                        // FIXME: HELPID
-                            aNextReturnId = rtl::OString();// ((SbxTransportMethod*)pVar)->nValue );
+                            aNextReturnId = SmartId( ((SbxTransportMethod*)pVar)->nValue );
                         }
                         if ( SingleCommandBlock )
                             EndBlock();
-                        if ( !IsError() && (sal_uInt16)((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
+                        if ( !IsError() && (USHORT)((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
                         {
                             WaitForAnswer();
                         }
@@ -2046,6 +2194,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         switch ( ((SbxTransportMethod*)pVar)->nValue )
                         {
                             case RC_WinTree:
+//								::svt::OStringTransfer::CopyString(pVar->GetString(), pSomeWindowIDontHave );
                                 break;
                         }
 
@@ -2057,8 +2206,8 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         if ( SingleCommandBlock )
                             BeginBlock();
                         if ( !IsError() )
-                            In->GenCmdSlot ( (sal_uInt16)((SbxTransportMethod*)pVar)->nValue, rPar );
-                        pVar->PutInteger( (sal_uInt16)((SbxTransportMethod*)pVar)->nValue );
+                            In->GenCmdSlot ( (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar );
+                        pVar->PutInteger( (USHORT)((SbxTransportMethod*)pVar)->nValue );
                         if ( SingleCommandBlock )
                             EndBlock();
                     }
@@ -2105,18 +2254,14 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 if ( nHintUserData == ID_Control )
                                 {
                                     In->GenCmdControl (pMember->GetULong(),
-                                        (sal_uInt16)((SbxTransportMethod*)pVar)->nValue, rPar);
-                                                                // FIXME: HELPID
-                                    aNextReturnId = rtl::OString();// pMember->GetULong() );
+                                        (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
+                                    aNextReturnId = SmartId( pMember->GetULong() );
                                 }
                                 else
                                 {
                                     In->GenCmdControl (pMember->GetString(),
-                                        (sal_uInt16)((SbxTransportMethod*)pVar)->nValue, rPar);
-                                    // FIXME: HELPID
-                                    #if 0
-                                    aNextReturnId = rtl::OString( pMember->GetString() );
-                                    #endif
+                                        (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
+                                    aNextReturnId = SmartId( pMember->GetString() );
                                 }
                             }
 
@@ -2127,13 +2272,13 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             else
                             {
                                 pImpl->pNextReturn = NULL;
-                                aNextReturnId = rtl::OString();
+                                aNextReturnId = SmartId();
                             }
 
                         }
                         if ( SingleCommandBlock )
                             EndBlock();
-                        if ( !IsError() && (sal_uInt16)((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
+                        if ( !IsError() && (USHORT)((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
                         {
                             WaitForAnswer();
                         }
@@ -2145,9 +2290,9 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         // Hier wird der Remote UNO Kram gestartet
                         // Eintrag in die Konfiguration unter
                         // org.openoffice.Office.Common/Start/Connection
-                        //  socket,host=0,port=12345;iiop;XBla
+                        //	socket,host=0,port=12345;iiop;XBla
                         // oder
-                        //  socket,host=0,port=12345;urp;;XBla
+                        //	socket,host=0,port=12345;urp;;XBla
 
                         String aString;
                         aString.AppendAscii( "socket,host=" );
@@ -2159,6 +2304,13 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         try
                         {
                             Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
+// is allways there
+/*						    if ( ! xSMgr.is() )
+                            {
+                                xSMgr = ::cppu::createRegistryServiceFactory(OUString(RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")), sal_True );
+                                if ( xSMgr.is() )
+                                    comphelper::setProcessServiceFactory( xSMgr );
+                            }*/
 
                             OUString aURL( aString );
                             Reference< XConnector > xConnector( xSMgr->createInstance(
@@ -2171,7 +2323,12 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 OUString(), OUString( RTL_CONSTASCII_USTRINGPARAM("urp") ),
                                 xConnection, Reference< XInstanceProvider >() ) );
 
+    //						Reference< XInterface > xRet( xBridge->getInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ) );
                             Reference< XInterface > xRet( xBridge->getInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice.ServiceManager")) ) );
+
+    //						Reference< XNamingService > xNamingService(xRet, UNO_QUERY);
+
+    //			            Reference< XInterface > smgr = xNamingService->getRegisteredObject( OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice.ServiceManager" ) ) );
 
                             smgr_xMultiserviceFactory = Reference< XMultiServiceFactory >(xRet, UNO_QUERY);
     //MBA fragen!!
@@ -2188,6 +2345,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         if( smgr_xMultiserviceFactory.is() )
                         {
                             Any aAny;
+//							aAny <<= xBridge;
                             aAny <<= smgr_xMultiserviceFactory;
 
                             SbxObjectRef xMySbxObj = GetSbUnoObject( CUniString("RemoteUnoAppFuerTesttool"), aAny );
@@ -2201,10 +2359,15 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         // Hier wird der Remote UNO Kram gestartet
 
                         String aString;
+//						aString += GetHostConfig();
+//						aString.AppendAscii( ":" );
+//						aString += String::CreateFromInt32( GetUnoPortConfig() );
 
-                        Reference< XMultiServiceFactory > xSMgr;
+                        Reference< XMultiServiceFactory > xSMgr /* = comphelper::getProcessServiceFactory()*/;
+//						if ( ! xSMgr.is() )
                         {
                             xSMgr = ::cppu::createRegistryServiceFactory(OUString(RTL_CONSTASCII_USTRINGPARAM("g:\\iserverproxy.rdb")), sal_True);
+//							comphelper::setProcessServiceFactory( xSMgr );
                         }
 
                         OUString aURL( aString );
@@ -2220,6 +2383,21 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 
                         Reference< XInterface > xRet( xBridge->getInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("XIServerProxy")) ) );
 
+
+/*    					Reference< XIServerProxy > xIS( xRet, UNO_QUERY );
+                        if ( xIS.is() )
+                        {
+                            String aHost( xIS->getIServerHost() );
+
+//							Reference < XInformationClient > xIC = xIS->createIServerClient( "XInformationClient" );
+                            Reference < XInformationClient > xIC = xIS->createInformationClient();
+                            xIC->getTree(OUString::createFromAscii("r:\\b_server\\config\\stand.lst"), OUString() );
+
+
+                            Reference< XTypeProvider > xTP( xRet, UNO_QUERY );
+                            Sequence < com::sun::star::uno::Type > s = xTP->getTypes();
+                        }
+  */
 
                         if( xRet.is() )
                         {
@@ -2241,10 +2419,10 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     {
                         switch (rPar->Get( 1 )->GetType())
                         {
-                            case SbxLONG:       // alles immer als Short ï¿½bertragen
+                            case SbxLONG:		// alles immer als Short ï¿½bertragen
                             case SbxULONG:
-                            case SbxSALINT64:
-                            case SbxSALUINT64:
+                            case SbxLONG64:
+                            case SbxULONG64:
                             case SbxDOUBLE:
                             case SbxINTEGER:
                             case SbxBYTE:
@@ -2349,7 +2527,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 long aMS = long( aDiff.GetMSFromTime() );
                                 if ( Abs( aMS - nWait ) > 100 )
                                 {
-                                    OSL_TRACE("Wait was off limit by %i", aDiff.GetMSFromTime() - nWait );
+                                    DBG_ERROR1("Wait was off limit by %i", aDiff.GetMSFromTime() - nWait );
                                 }
 #endif
                             }
@@ -2575,7 +2753,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                 delete pFehlerListe;
             pFehlerListe = new CErrors;
 
-            for (sal_uInt16 i=0;i<VAR_POOL_SIZE;i++)
+            for (USHORT i=0;i<VAR_POOL_SIZE;i++)
             {
                 pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
             }
@@ -2590,7 +2768,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
             if ( pImpl->nErrorCount )
             {
                 ADD_WARNING_LOG( GEN_RES_STR1( S_ERRORS_DETECTED, String::CreateFromInt32( pImpl->nErrorCount ) ) );
-                pImpl->nWarningCount--;     // Anpassen, da diese Warnung nicht in die Statistik soll
+                pImpl->nWarningCount--;		// Anpassen, da diese Warnung nicht in die Statistik soll
             }
             else
                 ADD_MESSAGE_LOG( GEN_RES_STR0( S_NO_ERRORS_DETECTED ) );
@@ -2626,7 +2804,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
     }
 }
 
-void TestToolObj::DebugFindNoErrors( sal_Bool bDebugFindNoErrors )
+void TestToolObj::DebugFindNoErrors( BOOL bDebugFindNoErrors )
 {
     pImpl->bDebugFindNoErrors = bDebugFindNoErrors;
 }
@@ -2649,8 +2827,8 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
     else
     {
 
-        sal_uInt16 nElement;
-        ControlDef *pWhatName = new ControlDef(aStr,rtl::OString());
+        USHORT nElement;
+        ControlDef *pWhatName = new ControlDef(aStr,SmartId());
 
         /// nach Controls suchen
         if (m_pNameKontext && m_pNameKontext->Seek_Entry(pWhatName,&nElement))
@@ -2665,12 +2843,9 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 
 
             // Will be set on method-child further down
-            // FIXME: HELPID
-            #if 0
             if ( pWhatName->pData->aUId.HasNumeric() )
                 pImpl->pControlsObj->SetUserData( ID_Control );
             else
-            #endif
                 pImpl->pControlsObj->SetUserData( ID_StringControl );
 
             pShortNames->Insert(pWhatName->pData->Kurzname,pWhatName->pData->aUId,nSequence);
@@ -2683,13 +2858,10 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
                 pImpl->pControlsObj->SetDfltProperty(pID);
                 pMember = pID;
             }
-            // FIXME: HELPID
-            #if 0
             if ( pWhatName->pData->aUId.HasNumeric() )
                 pMember->PutULong(pWhatName->pData->aUId.GetNum());
             else
                 pMember->PutString(pWhatName->pData->aUId.GetStr());
-            #endif
 
             pMember = pImpl->pControlsObj->Find(CUniString("name"),SbxCLASS_DONTCARE);
             if ( pMember != NULL )
@@ -2709,8 +2881,6 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
             pWhatName = ( (ControlDef*)m_pSIds->GetObject( nElement ) );
             pMyVar->SetName( pWhatName->pData->Kurzname );
 
-            // FIXME: HELPID
-            #if 0
             if ( pWhatName->pData->aUId.HasNumeric() )
             {
                 pMyVar->SetUserData( ID_Dispatch );
@@ -2722,7 +2892,6 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
                 pMyVar->SetUserData( ID_UNODispatch );
                 pMyVar->aUnoSlot = pWhatName->pData->aUId.GetStr();
             }
-            #endif
             return pMyVar;
         }
 
@@ -2730,21 +2899,18 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
         if ( aStr.Copy( aStr.Len()-3, 3 ).CompareIgnoreCaseToAscii("_ID") == COMPARE_EQUAL && m_pSIds )
         {
             delete pWhatName;
-            pWhatName = new ControlDef( aStr.Copy( 0, aStr.Len()-3 ), rtl::OString() );
+            pWhatName = new ControlDef( aStr.Copy( 0, aStr.Len()-3 ), SmartId() );
             if ( m_pSIds->Seek_Entry( pWhatName, &nElement ) )
-            {   // Nach slots suchen
+            {	// Nach slots suchen
                 SbxVariable *pReturn = new SbxVariable;
                 delete pWhatName;
                 pWhatName = ( (ControlDef*)m_pSIds->GetObject( nElement ) );
                 pReturn->SetName( pWhatName->pData->Kurzname );
 
-                // FIXME: HELPID
-                #if 0
                 if ( pWhatName->pData->aUId.HasNumeric() )
                     pReturn->PutULong(pWhatName->pData->aUId.GetNum());
                 else
                     pReturn->PutString(pWhatName->pData->aUId.GetStr());
-                #endif
                 return pReturn;
             }
         }
@@ -2766,18 +2932,18 @@ String TestToolObj::GetRevision( String const &aSourceIn )
         return String::CreateFromAscii("No Revision found");
 }
 
-sal_Bool TestToolObj::CError( sal_uLong code, const String& rMsg, xub_StrLen l, xub_StrLen c1, xub_StrLen c2 )
+BOOL TestToolObj::CError( ULONG code, const String& rMsg, xub_StrLen l, xub_StrLen c1, xub_StrLen c2 )
 {
-    bWasPrecompilerError = sal_True;
+    bWasPrecompilerError = TRUE;
     if ( aCErrorHdl.IsSet() )
     {
         ErrorEntry aErrorEntry( code, rMsg, l, c1, c2 );
-        return (sal_Bool)aCErrorHdl.Call( &aErrorEntry );
+        return (BOOL)aCErrorHdl.Call( &aErrorEntry );
     }
     else
     {
         ADD_ERROR( code, rMsg )
-        return sal_True;
+        return TRUE;
     }
 }
 
@@ -2795,19 +2961,19 @@ void TestToolObj::CalcPosition( String const &aSource, xub_StrLen nPos, xub_StrL
 }
 
 
-#define CATCH_LABEL         CUniString( "ctch" )
-#define CATCHRES_LABEL      CUniString( "ctchres" )
-#define ENDCATCH_LABEL      CUniString( "endctch" )
+#define CATCH_LABEL			CUniString( "ctch" )
+#define CATCHRES_LABEL		CUniString( "ctchres" )
+#define ENDCATCH_LABEL		CUniString( "endctch" )
 
-sal_Bool IsAlphaChar( sal_Unicode cChar )
+BOOL IsAlphaChar( sal_Unicode cChar )
 {
-    return  ( cChar >= 'a' && cChar <= 'z' ) ||
+    return	( cChar >= 'a' && cChar <= 'z' ) ||
             ( cChar >= 'A' && cChar <= 'Z' );
 }
 
-sal_Bool IsInsideString( const String& aSource, const xub_StrLen nStart )
+BOOL IsInsideString( const String& aSource, const xub_StrLen nStart )
 {
-    sal_Bool bInside = sal_False;
+    BOOL bInside = FALSE;
     xub_StrLen nPos = nStart-1;
 
     while ( nPos && aSource.GetChar(nPos) != _CR && aSource.GetChar(nPos) != _LF )
@@ -2819,7 +2985,7 @@ sal_Bool IsInsideString( const String& aSource, const xub_StrLen nStart )
     return bInside;
 }
 
-sal_Bool IsValidHit( const String& aSource, const xub_StrLen nStart, const xub_StrLen nEnd )
+BOOL IsValidHit( const String& aSource, const xub_StrLen nStart, const xub_StrLen nEnd )
 {
     return !IsAlphaChar( aSource.GetChar(nStart-1) ) && !IsAlphaChar( aSource.GetChar(nEnd+1))
         && !IsInsideString( aSource, nStart );
@@ -2840,7 +3006,7 @@ xub_StrLen TestToolObj::ImplSearch( const String &aSource, const xub_StrLen nSta
     }
 }
 
-xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_StrLen nEnd, String aFinalErrorLabel, sal_uInt16 &nLabelCount )
+xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_StrLen nEnd, String aFinalErrorLabel, USHORT &nLabelCount )
 {
     xub_StrLen nTry,nCatch,nEndcatch;
     if( (nTry = ImplSearch( aSource, nStart, nEnd, CUniString("try"), nStart )) == STRING_NOTFOUND )
@@ -2871,7 +3037,7 @@ xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_
 
     xub_StrLen nTry2 = 0;
     while ( !WasPrecompilerError() && (nTry2 = ImplSearch( aSource, nStart, nEnd, CUniString("try"), nTry+1 )) != STRING_NOTFOUND )
-    {   // Wir rekursieren erstmal mit dem 2. Try
+    {	// Wir rekursieren erstmal mit dem 2. Try
         if ( nTry2 < nCatch )
             nEnd += PreCompilePart( aSource, nTry2, nEndcatch+8, aCatchLabel, nLabelCount ) - nEndcatch-8;
         else
@@ -2894,13 +3060,22 @@ xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_
     }
 
     String aReplacement;
-    int nTotalLength = -3 -5 -8;    // try, catch und endcatch fallen raus
+    int nTotalLength = -3 -5 -8;	// try, catch und endcatch fallen raus
 
     aReplacement.AppendAscii( "on error goto " );
     aReplacement += aCatchLabel;
     aSource.SearchAndReplaceAscii( "try", aReplacement, nTry );
     nTotalLength += aReplacement.Len();
 
+
+//			on error goto endcse
+//			goto endctchXX
+//			ctchXX:
+//			if err = 35 or err = 18 then : resume : endif :
+//			MaybeAddErr
+//			on error goto endcse
+//			resume ctchresXX
+//			ctchresXX:
     aReplacement.Erase();
     aReplacement.AppendAscii( "on error goto " );
     aReplacement += aFinalErrorLabel;
@@ -2940,7 +3115,7 @@ xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_
 
 void TestToolObj::PreCompileDispatchParts( String &aSource, String aStart, String aEnd, String aFinalLable )
 {
-    sal_uInt16 nLabelCount = 0;
+    USHORT nLabelCount = 0;
     xub_StrLen nPartPos = 0;
 
     while ( !WasPrecompilerError() && (nPartPos = ImplSearch( aSource, nPartPos, aSource.Len(), aStart )) != STRING_NOTFOUND )
@@ -2954,7 +3129,7 @@ void TestToolObj::PreCompileDispatchParts( String &aSource, String aStart, Strin
 }
 
 
-sal_Bool TestToolObj::WasPrecompilerError()
+BOOL TestToolObj::WasPrecompilerError()
 {
     return bWasPrecompilerError;
 }
@@ -2962,13 +3137,13 @@ sal_Bool TestToolObj::WasPrecompilerError()
 String TestToolObj::PreCompile( String const &aSourceIn )
 {
     // Im CTOR zu frï¿½h, und hier grade nicg rechtzeitig. Start und Stop von Programmausfï¿½hrung
-    StartListening( ((StarBASIC*)GetParent())->GetBroadcaster(), sal_True );
+    StartListening( ((StarBASIC*)GetParent())->GetBroadcaster(), TRUE );
 
     xub_StrLen nTestCase;
     xub_StrLen nEndCase;
     xub_StrLen nStartPos = 0;
     String aSource(aSourceIn);
-    bWasPrecompilerError = sal_False;
+    bWasPrecompilerError = FALSE;
 
 HACK("Ich gestehe alles: Ich war zu faul das richtig zu machen.")
     aSource = String(' ').Append( aSource );        // Da Schlï¿½sselworte an Position 0 sonst nicht gefunden werden
@@ -2979,7 +3154,7 @@ HACK("Ich gestehe alles: Ich war zu faul das richtig zu machen.")
     xub_StrLen nComment;
     while ( (nComment = aSource.SearchAscii("'",nStartPos)) != STRING_NOTFOUND )
     {
-        sal_uInt16 nStringEndCount = 0;
+        USHORT nStringEndCount = 0;
         xub_StrLen nIndex = nComment;
         while ( nIndex && aSource.GetChar(nIndex) != '\n' )
         {
@@ -3030,7 +3205,7 @@ HACK("Ich gestehe alles: Ich war zu faul das richtig zu machen.")
         if ( aSource.SearchAscii(":",nTestCase) < nTcEnd )
             nTcEnd = aSource.SearchAscii(":",nTestCase) -1;
         String aSuffix = aSource.Copy(nTestCase+8,nTcEnd-nTestCase-8);
-        sal_uInt16 nOldLen;
+        USHORT nOldLen;
         do
         {
             nOldLen = aSuffix.Len();
@@ -3058,7 +3233,7 @@ HACK("Ich gestehe alles: Ich war zu faul das richtig zu machen.")
 
 void TestToolObj::AddToListByNr( CNames *&pControls, ControlItemUId *&pNewItem )
 {
-    sal_uInt16 nNr;
+    USHORT nNr;
     if ( pControls->Seek_Entry( pNewItem, &nNr ) )
     {
         AddName( pControls->GetObject(nNr)->pData->Kurzname, pNewItem->pData->Kurzname );
@@ -3089,7 +3264,7 @@ void TestToolObj::ReadHidLstByNumber()
             GetTTBroadcaster().Broadcast( aHint );
         }
 
-        ReadFlat( aName, m_pReverseUIds, sal_False );
+        ReadFlat( aName, m_pReverseUIds, FALSE );
 
         {
             TTExecutionStatusHint aHint( TT_EXECUTION_HIDE_ACTION );
@@ -3098,14 +3273,14 @@ void TestToolObj::ReadHidLstByNumber()
     }
 }
 
-void TestToolObj::SortControlsByNumber( sal_Bool bIncludeActive )
+void TestToolObj::SortControlsByNumber( BOOL bIncludeActive )
 {
     // Die Controls einmal hirarchisch und einmal alle flach nach nummer sortiert
     if ( !m_pReverseControls && !m_pReverseControlsSon && m_pControls )
     {
         m_pReverseControls = new CNames;
         m_pReverseControlsSon = new CNames;
-        sal_uInt16 nWin,nCont;
+        USHORT nWin,nCont;
         const String aSl('/');
         for ( nWin = 0 ; nWin < m_pControls->Count() ; nWin++ )
         {
@@ -3134,26 +3309,30 @@ void TestToolObj::SortControlsByNumber( sal_Bool bIncludeActive )
         }
         if ( !bIncludeActive )
         {
-            // FIXME: HELPID
-            ControlItem *pZeroItem = new ControlItemUId( UniString(), rtl::OString() );
-            sal_uInt16 nNr;
+            ControlItem *pZeroItem = new ControlItemUId( UniString(), SmartId(0) );
+            USHORT nNr;
             if ( m_pReverseControls->Seek_Entry( pZeroItem, &nNr ) )
             {
                 m_pReverseControls->DeleteAndDestroy( nNr );
 // um VorlagenLaden/UntergeordneteIniDatei/SpeichernDlg/OrdnerDlg/OeffnenDlg/MessageBox/LetzteVersion/GrafikEinfuegenDlg/FarbeDlg/ExportierenDlg/DruckerEinrichten/DruckenDlg/DateiEinfuegenDlg/Active zu verhindern
             }
+/*    	    if ( m_pReverseControlsSon->Seek_Entry( pZeroItem, &nNr ) )
+            {
+                m_pReverseControlsSon->DeleteAndDestroy( nNr );
+// um VorlagenLaden/UntergeordneteIniDatei/SpeichernDlg/OrdnerDlg/OeffnenDlg/MessageBox/LetzteVersion/GrafikEinfuegenDlg/FarbeDlg/ExportierenDlg/DruckerEinrichten/DruckenDlg/DateiEinfuegenDlg/Active zu verhindern
+            }*/
             delete pZeroItem;
         }
     }
 }
 
 
-sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
+BOOL TestToolObj::ReturnResults( SvStream *pIn )
 {
 
-    sal_uInt16 nId;
-    sal_uLong nClearSequence = 0;
-    sal_Bool bSequenceOK = sal_True;
+    USHORT nId;
+    ULONG nClearSequence = 0;
+    BOOL bSequenceOK = TRUE;
     CNames *pReverseControlsKontext = NULL;
 
     CRetStream *pRetStream = new CRetStream(pIn);
@@ -3165,33 +3344,27 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
     {
         case SIReturn:
         {
-            sal_uInt16 nRet,nParams;
-            rtl::OString aUId;
+            USHORT nRet,nParams;
+            SmartId aUId;
             pRetStream->Read(nRet);
             if ( pRetStream->GetNextType() == BinString )
             {
                 String aUStrId;     // UniqueStringID Used for Mozilla Integration
                 pRetStream->Read( aUStrId );
-                // FIXME: HELPID
-                #if 0
-                aUId = rtl::OString( aUStrId );
-                #endif
+                aUId = SmartId( aUStrId );
             }
             else
             {
                 comm_ULONG nUId;
                 pRetStream->Read( nUId );         // bei Sequence einfach die Sequence
-                // FIXME: HELPID
-                #if 0
-                aUId = rtl::OString( nUId );
-                #endif
+                aUId = SmartId( nUId );
             }
             pRetStream->Read(nParams);
 
-            sal_uInt16 nNr1 = 0;
+            USHORT nNr1 = 0;
             comm_ULONG nLNr1 = 0;
             String aString1;
-            sal_Bool bBool1 = sal_False;
+            BOOL bBool1 = FALSE;
             SbxValueRef xValue1 = new SbxValue;
 
             if( nParams & PARAM_USHORT_1 )
@@ -3213,37 +3386,37 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
             {
                 case RET_Sequence:
                     {
-                        // FIXME: HELPID
-                        #if 0
-                        sal_uLong nUId = aUId.GetNum();
+                        ULONG nUId = aUId.GetNum();
                         if ( nSequence != nUId )
                         {
-                            bSequenceOK = sal_False;
+                            bSequenceOK = FALSE;
                             ADD_ERROR(SbxERR_BAD_ACTION, GEN_RES_STR2(S_RETURN_SEQUENCE_MISSMATCH, String::CreateFromInt64(nUId), String::CreateFromInt64(nSequence)) );
                         }
                         else
                         {
                             nClearSequence = nUId;
                         }
-                        #endif
                     }
                     break;
                 case RET_Value:
                     if ( pImpl->pNextReturn )
                     {
-                        if ( aNextReturnId.equals( aUId ) )
+//                                              ULONG nHintUserData = pImpl->pNextReturn->GetParent()->GetUserData();
+//                                              pImpl->pNextReturn->GetParent()->SetUserData(0);
+//                                              if ( nUId == pImpl->pNextReturn->GetParent()->GetULong() )
+                        if ( aNextReturnId.Matches( aUId ) )
                         {
-                            if( nParams & PARAM_ULONG_1 )   // FIXME this is to allow negative numbers, hoping that no large numbers are interpreted wrong. should have new PARAM_LONG_1 instead
+                            if( nParams & PARAM_ULONG_1 )
                             {
                                 if ( nLNr1 > 0x7fffffff )
                                     pImpl->pNextReturn->PutLong( long(nLNr1 - 0xffffffff) -1 );
                                 else
                                     pImpl->pNextReturn->PutULong( nLNr1 );
                             }
-                            if( nParams & PARAM_USHORT_1 )      pImpl->pNextReturn->PutUShort( nNr1 );
-                            if( nParams & PARAM_STR_1 )         pImpl->pNextReturn->PutString( aString1 );
-                            if( nParams & PARAM_BOOL_1 )        pImpl->pNextReturn->PutBool( bBool1 );
-                            if( nParams & PARAM_SBXVALUE_1 )    // FIXME: allow generic datatype
+                            if( nParams & PARAM_USHORT_1 )		pImpl->pNextReturn->PutUShort( nNr1 );
+                            if( nParams & PARAM_STR_1 )			pImpl->pNextReturn->PutString( aString1 );
+                            if( nParams & PARAM_BOOL_1 )		pImpl->pNextReturn->PutBool( bBool1 );
+                            if( nParams & PARAM_SBXVALUE_1 )
                             {
                                 SbxValues aValues( SbxDATE );
                                 xValue1->Get( aValues );
@@ -3254,6 +3427,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         {
                             ADD_ERROR(SbxERR_BAD_ACTION, GEN_RES_STR0(S_RETURNED_VALUE_ID_MISSMATCH) )
                         }
+//                                              pImpl->pNextReturn->GetParent()->SetUserData(nHintUserData);
                         pImpl->pNextReturn = NULL;
                     }
                     else
@@ -3273,7 +3447,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         if ( !m_pReverseSlots && m_pSIds )
                         {
                             m_pReverseSlots = new CNames;
-                            sal_uInt16 nWin;
+                            USHORT nWin;
                             const String aSl('/');
                             for ( nWin = 0 ; nWin < m_pSIds->Count() ; nWin++ )
                             {
@@ -3283,11 +3457,8 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         }
 
                         WinInfoRec *pWinInfo = new WinInfoRec;
-                        // FIXME: HELPID
-                        #if 0
                         pWinInfo->aUId = aUId.GetText();
-                        #endif
-                        pWinInfo->nRType = (sal_uInt16)nLNr1;   // just sal_uLong for Transport, data is always USHORT
+                        pWinInfo->nRType = (USHORT)nLNr1;   // just ULONG for Transport, data is always USHORT
                         pWinInfo->aRName = aString1;
                         pWinInfo->bIsReset = bBool1;
                         pWinInfo->aKurzname.Erase();
@@ -3296,7 +3467,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         // eventuell den Kontext feststellen. Passiert nur beim ersten Eintrag nach reset
                         if ( !pReverseControlsKontext && m_pReverseControlsSon )
                         {
-                            sal_uInt16 nNr;
+                            USHORT nNr;
                             ControlItem *pNewItem = new ControlItemUId( String(), aUId );
                             if ( m_pReverseControlsSon->Seek_Entry(pNewItem,&nNr) )
                             {
@@ -3318,10 +3489,11 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         // Kurzname feststellen
                         if ( pReverseControlsKontext )
                         {
-                            sal_uInt16 nNr;
+                            USHORT nNr;
                             ControlItem *pNewItem = new ControlItemUId( String(), aUId );
                             if ( pReverseControlsKontext->Seek_Entry(pNewItem,&nNr) )
                             {
+//                                SmartId aID = pReverseControlsKontext->GetObject(nNr)->pData->aUId;
                                 pWinInfo->aKurzname += pReverseControlsKontext->GetObject(nNr)->pData->Kurzname;
                             }
                             delete pNewItem;
@@ -3330,7 +3502,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         // Slotname feststellen
                         if ( m_pReverseSlots )
                         {
-                            sal_uInt16 nNr;
+                            USHORT nNr;
                             ControlItem *pNewItem = new ControlItemUId( String(), aUId );
                             if ( m_pReverseSlots->Seek_Entry(pNewItem,&nNr) )
                                 pWinInfo->aSlotname = m_pReverseSlots->GetObject(nNr)->pData->Kurzname;
@@ -3338,8 +3510,6 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         }
 
                         // Langname feststellen
-                        // FIXME: HELPID
-                        #if 0
                         if ( aUId.HasString() )
                         {   // use the String ID since there is no LongName in hid.lst
                             pWinInfo->aLangname = aUId.GetStr();
@@ -3348,14 +3518,13 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         {
                             if ( m_pReverseUIds )
                             {
-                                sal_uInt16 nNr;
+                                USHORT nNr;
                                 ControlItem *pNewItem = new ControlItemUId( String(), aUId );
                                 if ( m_pReverseUIds->Seek_Entry(pNewItem,&nNr) )
                                     pWinInfo->aLangname = m_pReverseUIds->GetObject(nNr)->pData->Kurzname;
                                 delete pNewItem;
                             }
                         }
-                        #endif
 
                         aWinInfoHdl.Call( pWinInfo );
 
@@ -3364,9 +3533,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                     break;
                 case RET_ProfileInfo:
                     {
-                        // FIXME: HELPID
-                        #if 0
-                        sal_uLong nUId = aUId.GetNum();
+                        ULONG nUId = aUId.GetNum();
                         if ( nParams & PARAM_STR_1 )
                         {
                             DirEntry FilePath = pImpl->aLogFileBase + DirEntry(DirEntry(aLogFileName).GetBase().AppendAscii(".prf"));
@@ -3383,10 +3550,10 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         {
                             switch ( nUId )
                             {
-                                case S_ProfileReset:    // nLNr1 = Anzahl Borders
+                                case S_ProfileReset:	// nLNr1 = Anzahl Borders
                                 {
-                                    pImpl->nNumBorders = (sal_uInt16)nLNr1;     // Borders are 0 to 4
-                                    sal_uInt16 i;
+                                    pImpl->nNumBorders = (USHORT)nLNr1;     // Borders are 0 to 4
+                                    USHORT i;
                                     for ( i=0 ; i<4 ; i++ )
                                         pImpl->naValBorders[i] = 0;
 
@@ -3398,17 +3565,17 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                                     }
                                     break;
                                 }
-                                case S_ProfileBorder1:  // nLNr1 = Border1 in ms
-                                case S_ProfileBorder2:  // nLNr1 = Border2 in ms
-                                case S_ProfileBorder3:  // nLNr1 = Border3 in ms
-                                case S_ProfileBorder4:  // nLNr1 = Border4 in ms
+                                case S_ProfileBorder1:	// nLNr1 = Border1 in ms
+                                case S_ProfileBorder2:	// nLNr1 = Border2 in ms
+                                case S_ProfileBorder3:	// nLNr1 = Border3 in ms
+                                case S_ProfileBorder4:	// nLNr1 = Border4 in ms
                                 {
                                     pImpl->naValBorders[ nUId - S_ProfileBorder1 ] = nLNr1;
                                     break;
                                 }
-                                case S_ProfileTime:     // nLNr1 = remote Zeit des Befehls
+                                case S_ProfileTime:		// nLNr1 = remote Zeit des Befehls
                                 {
-                                    sal_uInt16 i;
+                                    USHORT i;
                                     for ( i=0 ; i<pImpl->nNumBorders &&
                                         pImpl->naValBorders[i] <= nLNr1 ; i++ ) {};
 
@@ -3434,16 +3601,16 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
 
                                     break;
                                 }
-                                case S_ProfileDump:     // Gibt die daten aus.
+                                case S_ProfileDump:		// Gibt die daten aus.
                                 {
-                                    if ( pImpl->nNumBorders == 0 )  // Also keine alte Rï¿½ckmeldung vom Office
+                                    if ( pImpl->nNumBorders == 0 )	// Also keine alte Rï¿½ckmeldung vom Office
                                         break;
                                     DirEntry FilePath = pImpl->aLogFileBase + DirEntry(DirEntry(aLogFileName).GetBase().AppendAscii(".prf"));
                                     SvFileStream aStrm( FilePath.GetFull(), STREAM_STD_WRITE );
                                     if( aStrm.IsOpen() )
                                     {
                                         String aProfile;
-                                        sal_uInt16 i;
+                                        USHORT i;
 
                                         aProfile += String().Expand(15);
                                         for ( i=0 ; i<pImpl->nNumBorders ; i++ )
@@ -3490,23 +3657,22 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                                     break;
                                 }
                                 default:
-                                    OSL_TRACE("Unbekannter Sub Return Code bei Profile: %hu", nUId );
+                                    DBG_ERROR1("Unbekannter Sub Return Code bei Profile: %hu", nUId );
                                     break;
                             }
                         }
-                        #endif
                     }
                     break;
                 case RET_DirectLoging:
                     {
-                        // FIXME: HELPID
-                        #if 0
-                        sal_uLong nUId = aUId.GetNum();
+                        ULONG nUId = aUId.GetNum();
                         switch ( nUId )
                         {
                         case S_AssertError:
                             {
                                 ADD_ASSERTION_LOG( aString1 );
+//								ADD_ERROR_LOG( aString1, aRun.GetModuleName(SbxNAME_SHORT_TYPES),
+//									aRun.GetLine(), aRun.GetCol1(), aRun.GetCol2() );
                             }
                             break;
                         case S_QAError:
@@ -3517,20 +3683,19 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         default:
                             ;
                         }
-                        #endif
                     }
                     break;
                 case RET_MacroRecorder:
                     {
-                        SortControlsByNumber( sal_True );
+                        SortControlsByNumber( TRUE );
                         String aCommand,aControls,aControl,aULongNames,aULongName;
-                        sal_Bool bWriteNewKontext = sal_False;
+                        BOOL bWriteNewKontext = FALSE;
 
                         aControls.Erase();
                         // Kurzname feststellen
                         if ( m_pReverseControls )
                         {
-                            sal_uInt16 nNr;
+                            USHORT nNr;
                             ControlItem *pNewItem = new ControlItemUId( String(), aUId );
                             if ( m_pReverseControls->Seek_Entry(pNewItem,&nNr) )
                                 aControls = m_pReverseControls->GetObject(nNr)->pData->Kurzname;
@@ -3547,9 +3712,8 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         {
                             if ( m_pReverseControls )
                             {
-                                sal_uInt16 nNr;
-                                                    // FIXME: HELPID
-                                ControlItem *pNewItem = new ControlItemUId( String(), rtl::OString( /*nLNr1*/ ) );
+                                USHORT nNr;
+                                ControlItem *pNewItem = new ControlItemUId( String(), SmartId( nLNr1 ) );
                                 if ( m_pReverseControls->Seek_Entry(pNewItem,&nNr) )
                                     aULongNames = m_pReverseControls->GetObject(nNr)->pData->Kurzname;
                                 delete pNewItem;
@@ -3561,8 +3725,8 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                             }
 
                             // now determin the best common kontext
-                            sal_uInt16 i,j;
-                            sal_Bool bFoundUlongName = sal_False, bFoundControl = sal_False;
+                            USHORT i,j;
+                            BOOL bFoundUlongName = FALSE, bFoundControl = FALSE;
                             // check for current kontext
                             for ( i = 0 ; !bFoundUlongName && i < aULongNames.GetTokenCount('/') ; i++ )
                                 bFoundUlongName = aLastRecordedKontext.Equals( aULongNames.GetToken(i,'/').GetToken( 0,':') );
@@ -3577,7 +3741,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                             }
                             else
                             {   // see if we can find common kontext
-                                sal_Bool bFound = sal_False;
+                                BOOL bFound = FALSE;
 
                                 String aCurrentKontext;
                                 for ( i = 0 ; !bFound && i < aULongNames.GetTokenCount('/') ; i++ )
@@ -3588,19 +3752,19 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                                     {
                                         if ( aCurrentKontext.Equals( aControls.GetToken(j,'/').GetToken( 0,':') ) )
                                         {
-                                            bFound = sal_True;
+                                            bFound = TRUE;
                                             aULongName = aULongNames.GetToken(i,'/').GetToken( 1,':');
                                             aControl = aControls.GetToken(j,'/').GetToken( 1,':');
                                             aLastRecordedKontext = aCurrentKontext;
-                                            bWriteNewKontext = sal_True;
+                                            bWriteNewKontext = TRUE;
                                         }
                                     }
                                 }
                                 if ( !bFound )
                                 {
                                     // check if both contain toplevel
-                                    bFoundUlongName = sal_False;
-                                    bFoundControl = sal_False;
+                                    bFoundUlongName = FALSE;
+                                    bFoundControl = FALSE;
                                     for ( i = 0 ; !bFoundUlongName && i < aULongNames.GetTokenCount('/') ; i++ )
                                         bFoundUlongName = aULongNames.GetToken(i,'/').GetToken( 0,':').Equals( aULongNames.GetToken(i,'/').GetToken( 1,':') );
 
@@ -3614,7 +3778,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                                         if ( aLastRecordedKontext.Len() )
                                         {
                                             aLastRecordedKontext.Erase();
-                                            bWriteNewKontext = sal_True;
+                                            bWriteNewKontext = TRUE;
                                         }
                                     }
                                     else
@@ -3632,8 +3796,8 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         }
                         else
                         {   // we only have a Control
-                            sal_uInt16 i;
-                            sal_Bool bFoundControl = sal_False;
+                            USHORT i;
+                            BOOL bFoundControl = FALSE;
                             // check for current kontext
                             for ( i = 0 ; !bFoundControl && i < aControls.GetTokenCount('/') ; i++ )
                                 bFoundControl = aLastRecordedKontext.Equals( aControls.GetToken(i,'/').GetToken( 0,':') );
@@ -3642,7 +3806,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                             else
                             {
                                 aLastRecordedKontext = aControls.GetToken(0,'/').GetToken( 0,':');
-                                bWriteNewKontext = sal_True;
+                                bWriteNewKontext = TRUE;
                                 aControl = aControls.GetToken(0,'/').GetToken( 1,':');
                             }
 
@@ -3669,35 +3833,35 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         aCommand += '.';
                         aCommand += aMethod;
 
-                        sal_Bool bWasParam = sal_False;
+                        BOOL bWasParam = FALSE;
 
                         if( nParams & PARAM_STR_1 )
                         {
-                            bWasParam = sal_True;
+                            bWasParam = TRUE;
                             aCommand.AppendAscii( " \"" );
                             if ( nNr1 & M_KEY_STRING )
                             {
-                                sal_uInt16 nModify = 0;
-                                sal_Bool bIsProsa = sal_False;
+                                USHORT nModify = 0;
+                                BOOL bIsProsa = FALSE;
                                 xub_StrLen i;
                                 for ( i = 0; i < aString1.Len(); i++ )
                                 {
-                                    if ( ((sal_uInt16)aString1.GetChar(i)) == 1 )   // we have a spechial char
+                                    if ( ((USHORT)aString1.GetChar(i)) == 1 )   // we have a spechial char
                                     {
                                         i++;
                                         if ( !bIsProsa )
                                         {
                                             aCommand.AppendAscii( "<" );
-                                            bIsProsa = sal_True;
+                                            bIsProsa = TRUE;
                                         }
                                         else
                                             aCommand.AppendAscii( " " );
 
-                                        sal_uInt16 nKeyCode = (sal_uInt16)aString1.GetChar(i) & KEY_CODE;
-                                        sal_uInt16 nNewModify = (sal_uInt16)aString1.GetChar(i) & KEY_MODTYPE;
+                                        USHORT nKeyCode = (USHORT)aString1.GetChar(i) & KEY_CODE;
+                                        USHORT nNewModify = (USHORT)aString1.GetChar(i) & KEY_MODTYPE;
                                         if ( nNewModify != nModify )
                                         {   // generate modifiers
-                                            sal_uInt16 nChanged = ( nNewModify ^ nModify );
+                                            USHORT nChanged = ( nNewModify ^ nModify );
                                             if ( nChanged & KEY_SHIFT )
                                             {
                                                 aCommand += GetKeyName( KEY_SHIFT );
@@ -3722,7 +3886,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                                         if ( bIsProsa )
                                         {
                                             aCommand.AppendAscii( ">" );
-                                            bIsProsa = sal_False;
+                                            bIsProsa = FALSE;
                                         }
                                         aCommand += aString1.GetChar(i);
                                         nModify = 0;
@@ -3731,7 +3895,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                                 if ( bIsProsa )
                                 {
                                     aCommand.AppendAscii( ">" );
-                                    bIsProsa = sal_False;
+                                    bIsProsa = FALSE;
                                 }
                             }
                             else
@@ -3746,7 +3910,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                                 aCommand.AppendAscii( ", " );
                             else
                                 aCommand.AppendAscii( " " );
-                            bWasParam = sal_True;
+                            bWasParam = TRUE;
                             if ( nNr1 & M_RET_NUM_CONTROL )
                             {
                                 aCommand.Append( aULongName );
@@ -3762,7 +3926,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                                 aCommand.AppendAscii( ", " );
                             else
                                 aCommand.AppendAscii( " " );
-                            bWasParam = sal_True;
+                            bWasParam = TRUE;
                             if ( bBool1 )
                                 aCommand.AppendAscii( "true" );
                             else
@@ -3775,7 +3939,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                     }
                     break;
                 default:
-                    OSL_TRACE( "Unbekannter Return Code: %iu", nRet );
+                    DBG_ERROR1( "Unbekannter Return Code: %iu", nRet );
                     break;
             }
 
@@ -3784,24 +3948,18 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
         case SIReturnError:
         {
             String aString;
-            rtl::OString aUId;
+            SmartId aUId;
             if ( pRetStream->GetNextType() == BinString )
             {
                 String aUStrId;     // UniqueStringID Used for Mozilla Integration
                 pRetStream->Read( aUStrId );
-                // FIXME: HELPID
-                #if 0
-                aUId = rtl::OString( aUStrId );
-                #endif
+                aUId = SmartId( aUStrId );
             }
             else
             {
                 comm_ULONG nUId;
                 pRetStream->Read( nUId );         // bei Sequence einfach die Sequence
-                // FIXME: HELPID
-                #if 0
-                aUId = rtl::OString( nUId );
-                #endif
+                aUId = SmartId( nUId );
             }
             pRetStream->Read( aString );
             ReplaceNumbers (aString);
@@ -3816,14 +3974,14 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
             break;
         }
         default:
-            OSL_TRACE( "Unbekannter Request im Return Stream Nr: %iu", nId );
+            DBG_ERROR1( "Unbekannter Request im Return Stream Nr: %iu", nId );
         break;
     }
         if( !pIn->IsEof() )
             pRetStream->Read( nId );
         else
         {
-            OSL_FAIL( "truncated input stream" );
+            DBG_ERROR( "truncated input stream" );
         }
 
     }
@@ -3835,54 +3993,42 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
         pShortNames->Invalidate( nClearSequence - KEEP_SEQUENCES );
     }
 
-    bReturnOK = sal_True;
+    bReturnOK = TRUE;
 
-    return sal_True;
+    return TRUE;
 } // RetService::Request()
 
-String TestToolObj::GetMethodName( sal_uLong nMethodId )
+String TestToolObj::GetMethodName( ULONG nMethodId )
 {
-    sal_uInt16 nElement;
+    USHORT nElement;
     if ( !Controls::pClasses )                        // Ist static, wird also nur einmal geladen
         ReadFlatArray( Controls::arClasses, Controls::pClasses );
     if ( Controls::pClasses )
     {
-        // FIXME: HELPID
-        #if 0
         for ( nElement = 0 ; nElement < Controls::pClasses->Count() ; nElement++ )
             if ( Controls::pClasses->GetObject(nElement)->pData->aUId.Matches( nMethodId ) )
                 return Controls::pClasses->GetObject(nElement)->pData->Kurzname;
-        #else
-        (void)nElement;
-        (void)nMethodId;
-        #endif
     }
     return String();
 }
 
-String TestToolObj::GetKeyName( sal_uInt16 nKeyCode )
+String TestToolObj::GetKeyName( USHORT nKeyCode )
 {
-    sal_uInt16 nElement;
+    USHORT nElement;
     if ( !CmdStream::pKeyCodes )                        // Ist static, wird also nur einmal geladen
         ReadFlatArray( CmdStream::arKeyCodes, CmdStream::pKeyCodes );
     if ( CmdStream::pKeyCodes )
     {
-        // FIXME: HELPID
-        #if 0
         for ( nElement = 0 ; nElement < CmdStream::pKeyCodes->Count() ; nElement++ )
             if ( CmdStream::pKeyCodes->GetObject(nElement)->pData->aUId.Matches( nKeyCode ) )
                 return CmdStream::pKeyCodes->GetObject(nElement)->pData->Kurzname;
-        #else
-        (void)nElement;
-        (void)nKeyCode;
-        #endif
     }
     return CUniString( "UnknownKeyCode" );
 }
 
 void TestToolObj::ReplaceNumbers(String &aText)
 {
-static ControlDefLoad const arRes_Type [] =
+static ControlDefLoad __READONLY_DATA arRes_Type [] =
 #include "res_type.hxx"
 
     static CNames *pRTypes = NULL;
@@ -3890,86 +4036,74 @@ static ControlDefLoad const arRes_Type [] =
     xub_StrLen nGleich = STRING_NOTFOUND;
     xub_StrLen nEnd = STRING_NOTFOUND;
     xub_StrLen nStartPos = 0;
-    sal_uLong nNumber;
+    ULONG nNumber;
     String aType;
     String aResult;
-    sal_Bool bFound;
+    BOOL bFound;
 
     while ( (nStart = aText.Search(StartKenn,nStartPos)) != STRING_NOTFOUND &&
             (nGleich = aText.SearchAscii("=",nStart+StartKenn.Len())) != STRING_NOTFOUND &&
             (nEnd = aText.Search(EndKenn,nGleich+1)) != STRING_NOTFOUND)
     {
         aType = aText.Copy(nStart,nGleich-nStart);
-        nNumber = (sal_uLong)aText.Copy(nGleich+1,nEnd-nGleich-1).ToInt64();
-        bFound = sal_False;
+        nNumber = (ULONG)aText.Copy(nGleich+1,nEnd-nGleich-1).ToInt64();
+        bFound = FALSE;
         if ( aType.CompareTo(UIdKenn) == COMPARE_EQUAL )
         {
-                // FIXME: HELPID
-            aResult = pShortNames->GetName(rtl::OString(/*nNumber*/));
-            bFound = sal_True;
+            aResult = pShortNames->GetName(SmartId(nNumber));
+            bFound = TRUE;
         }
         if ( aType.CompareTo(MethodKenn ) == COMPARE_EQUAL )
         {
-            bFound = sal_True;
+            bFound = TRUE;
             aResult = GetMethodName( nNumber );
         }
         if ( aType.CompareTo(RcKenn ) == COMPARE_EQUAL )
         {
-            bFound = sal_True;
+            bFound = TRUE;
             if ( !pRCommands )                 // Ist static, wird also nur einmal geladen
                 ReadFlatArray( arR_Cmds, pRCommands );
 
-            sal_uInt16 nElement;
+            USHORT nElement;
             if ( pRCommands )
             {
-                // FIXME: HELPID
-                #if 0
                 for ( nElement = 0 ; nElement < pRCommands->Count() ; nElement++ )
                     if ( pRCommands->GetObject(nElement)->pData->aUId.Matches( nNumber ) )
                     {
                         aResult = pRCommands->GetObject(nElement)->pData->Kurzname;
                         nElement = pRCommands->Count();
                     }
-                #else
-                (void)nElement;
-                #endif
             }
         }
         if ( aType.CompareTo(TypeKenn ) == COMPARE_EQUAL )
         {
-            bFound = sal_True;
+            bFound = TRUE;
             if ( !pRTypes )                 // Ist static, wird also nur einmal geladen
                 ReadFlatArray( arRes_Type, pRTypes );
 
-            sal_uInt16 nElement;
+            USHORT nElement;
             if ( pRTypes )
             {
-                // FIXME: HELPID
-                #if 0
                 for ( nElement = 0 ; nElement < pRTypes->Count() ; nElement++ )
                     if ( pRTypes->GetObject(nElement)->pData->aUId.Matches( nNumber ) )
                     {
                         aResult = pRTypes->GetObject(nElement)->pData->Kurzname;
                         nElement = pRTypes->Count();
                     }
-                #else
-                (void)nElement;
-                #endif
             }
         }
         if ( aType.CompareTo(SlotKenn ) == COMPARE_EQUAL )
         {
-                // FIXME: HELPID
-            aResult = pShortNames->GetName(rtl::OString(/*nNumber*/));
-            bFound = sal_True;
+            aResult = pShortNames->GetName(SmartId(nNumber));
+            bFound = TRUE;
         }
         if ( aType.CompareTo(TabKenn ) == COMPARE_EQUAL )
         {
             if ( nNumber > nStart )
-                aResult.Fill( (sal_uInt16)nNumber - nStart +1 );
+                aResult.Fill( (USHORT)nNumber - nStart +1 );
             else
                 aResult = CUniString(" ");
-            bFound = sal_True;
+            bFound = TRUE;
         }
 
         nStartPos = nStart;
@@ -3985,19 +4119,19 @@ static ControlDefLoad const arRes_Type [] =
 }
 
 
-SbTextType TestToolObj::GetSymbolType( const String &rSymbol, sal_Bool bWasControl )
+SbTextType TestToolObj::GetSymbolType( const String &rSymbol, BOOL bWasControl )
 {
-    if (    rSymbol.CompareToAscii( "try" ) == COMPARE_EQUAL
-        ||  rSymbol.CompareToAscii( "catch" ) == COMPARE_EQUAL
-        ||  rSymbol.CompareToAscii( "endcatch" ) == COMPARE_EQUAL
-        ||  rSymbol.CompareToAscii( "testcase" ) == COMPARE_EQUAL
-        ||  rSymbol.CompareToAscii( "endcase" ) == COMPARE_EQUAL )
+    if (	rSymbol.CompareToAscii( "try" ) == COMPARE_EQUAL
+        ||	rSymbol.CompareToAscii( "catch" ) == COMPARE_EQUAL
+        ||	rSymbol.CompareToAscii( "endcatch" ) == COMPARE_EQUAL
+        ||	rSymbol.CompareToAscii( "testcase" ) == COMPARE_EQUAL
+        ||	rSymbol.CompareToAscii( "endcase" ) == COMPARE_EQUAL )
     {
         return TT_KEYWORD;
     }
 
 
-    ControlDef WhatName( rSymbol, rtl::OString() );
+    ControlDef WhatName( rSymbol, SmartId() );
 
     if ( bWasControl )
     {
@@ -4015,7 +4149,7 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, sal_Bool bWasContr
     // Die Controls durchsuchen
     if ( m_pControls )
     {
-        sal_uInt16 nWin;
+        USHORT nWin;
 
         for ( nWin = 0 ; nWin < m_pControls->Count() ; nWin++ )
         {
@@ -4041,7 +4175,7 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, sal_Bool bWasContr
         return TT_LOCALCMD;
     }
 
-    return SB_SYMBOL;   // Alles was hier landet ist vom Typ SB_SYMBOL und bleibt es auch
+    return SB_SYMBOL;	// Alles was hier landet ist vom Typ SB_SYMBOL und bleibt es auch
 }
 
 
@@ -4054,6 +4188,7 @@ Controls::Controls( String aCName )
     pMethodVar = new SbxTransportMethod( SbxVARIANT );
     pMethodVar->SetName( CUniString("Dummy") );
     Insert( pMethodVar );
+//      pMethodVar = Make( CUniString("Dummy"), SbxCLASS_PROPERTY, SbxULONG );
 }
 
 
@@ -4063,8 +4198,8 @@ Controls::~Controls()
 
 void Controls::ChangeListener( SbxObject* parent )
 {
-    EndListening( pMethodVar->GetBroadcaster(), sal_True );
-    parent->StartListening( pMethodVar->GetBroadcaster(), sal_True );
+    EndListening( pMethodVar->GetBroadcaster(), TRUE );
+    parent->StartListening( pMethodVar->GetBroadcaster(), TRUE );
 }
 
 void Controls::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
@@ -4086,13 +4221,12 @@ SbxVariable* Controls::Find( const String& aStr, SbxClassType aType)
     }
 
 
-    sal_uInt16 nElement;
-    ControlDef WhatName(aStr,rtl::OString());
+    USHORT nElement;
+    ControlDef WhatName(aStr,SmartId());
     if (pClasses && pClasses->Seek_Entry(&WhatName,&nElement))
     {
         pMethodVar->SetName(aStr);
-        // FIXME: HELPID
-        sal_uLong nUId = 0;//pClasses->GetObject(nElement)->pData->aUId.GetNum();
+        ULONG nUId = pClasses->GetObject(nElement)->pData->aUId.GetNum();
         pMethodVar->nValue = nUId;
 
          pMethodVar->SetUserData( GetUserData() );
@@ -4111,11 +4245,11 @@ SbxVariable* Controls::Find( const String& aStr, SbxClassType aType)
 }
 
 
-String TTFormat::ms2s( sal_uLong nMilliSeconds )
+String TTFormat::ms2s( ULONG nMilliSeconds )
 {
-    if ( nMilliSeconds < 100000 )       // 100 Sekunden
+    if ( nMilliSeconds < 100000 )		// 100 Sekunden
         return String::CreateFromInt64( nMilliSeconds );
-    if ( nMilliSeconds < 100000*60 )    // 100 Minuten
+    if ( nMilliSeconds < 100000*60 )	// 100 Minuten
         return String::CreateFromInt32( nMilliSeconds / 1000 ).AppendAscii("Sec");
     return String::CreateFromInt32( nMilliSeconds / 1000 / 60 ).AppendAscii("Min");
 }

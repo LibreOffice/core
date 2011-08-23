@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: svdomeas.cxx,v $
+ * $Revision: 1.35.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,30 +36,30 @@
 
 SV_IMPL_PERSIST1(SdrMeasureField,SvxFieldData);
 
-SdrMeasureField::~SdrMeasureField()
+__EXPORT SdrMeasureField::~SdrMeasureField()
 {
 }
 
-SvxFieldData* SdrMeasureField::Clone() const
+SvxFieldData* __EXPORT SdrMeasureField::Clone() const
 {
     return new SdrMeasureField(*this);
 }
 
-int SdrMeasureField::operator==(const SvxFieldData& rSrc) const
+int __EXPORT SdrMeasureField::operator==(const SvxFieldData& rSrc) const
 {
     return eMeasureFieldKind==((SdrMeasureField&)rSrc).GetMeasureFieldKind();
 }
 
-void SdrMeasureField::Load(SvPersistStream& rIn)
+void __EXPORT SdrMeasureField::Load(SvPersistStream& rIn)
 {
-    sal_uInt16 nFieldKind;
+    UINT16 nFieldKind;
     rIn>>nFieldKind;
     eMeasureFieldKind=(SdrMeasureFieldKind)nFieldKind;
 }
 
-void SdrMeasureField::Save(SvPersistStream& rOut)
+void __EXPORT SdrMeasureField::Save(SvPersistStream& rOut)
 {
-    rOut<<(sal_uInt16)eMeasureFieldKind;
+    rOut<<(UINT16)eMeasureFieldKind;
 }
 
 //////////////////////////////////////////////////////////////////////////////

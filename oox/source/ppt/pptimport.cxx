@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 #include "oox/dump/pptxdumper.hxx"
 #include "oox/drawingml/table/tablestylelistfragmenthandler.hxx"
 #include "oox/helper/graphichelper.hxx"
-#include "oox/ole/vbaproject.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -46,34 +45,25 @@ namespace oox { namespace ppt {
 
 OUString SAL_CALL PowerPointImport_getImplementationName() throw()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.ppt.PowerPointImport" );
+    return CREATE_OUSTRING( "com.sun.star.comp.Impress.oox.PowerPointImport" );
 }
 
 uno::Sequence< OUString > SAL_CALL PowerPointImport_getSupportedServiceNames() throw()
 {
-    Sequence< OUString > aSeq( 2 );
-    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
-    aSeq[ 1 ] = CREATE_OUSTRING( "com.sun.star.document.ExportFilter" );
+    const OUString aServiceName = CREATE_OUSTRING( "com.sun.star.comp.ooxpptx" );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL PowerPointImport_createInstance( const Reference< XComponentContext >& rxContext ) throw( Exception )
+uno::Reference< uno::XInterface > SAL_CALL PowerPointImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return static_cast< ::cppu::OWeakObject* >( new PowerPointImport( rxContext ) );
+    return (cppu::OWeakObject*)new PowerPointImport( rSMgr );
 }
 
-#if OSL_DEBUG_LEVEL > 0
-XmlFilterBase* PowerPointImport::mpDebugFilterBase = NULL;
-#endif
-
-PowerPointImport::PowerPointImport( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
-    XmlFilterBase( rxContext ),
-    mxChartConv( new ::oox::drawingml::chart::ChartConverter )
-
+PowerPointImport::PowerPointImport( const uno::Reference< lang::XMultiServiceFactory > & rSMgr  )
+    : XmlFilterBase( rSMgr )
+    , mxChartConv( new ::oox::drawingml::chart::ChartConverter )
 {
-#if OSL_DEBUG_LEVEL > 0
-    mpDebugFilterBase = this;
-#endif
 }
 
 PowerPointImport::~PowerPointImport()
@@ -87,9 +77,9 @@ bool PowerPointImport::importDocument() throw()
         file:///<path-to-oox-module>/source/dump/pptxdumper.ini. */
     OOX_DUMP_FILE( ::oox::dump::pptx::Dumper );
 
-    OUString aFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "officeDocument" ) );
+    OUString aFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
     FragmentHandlerRef xPresentationFragmentHandler( new PresentationFragmentHandler( *this, aFragmentPath ) );
-    maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "tableStyles" ) );
+    maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "tableStyles" ) );
     return importFragment( xPresentationFragmentHandler );
 
 
@@ -110,7 +100,7 @@ sal_Int32 PowerPointImport::getSchemeColor( sal_Int32 nToken ) const
         if ( pClrMapPtr )
             bColorMapped = pClrMapPtr->getColorMap( nToken );
 
-        if ( !bColorMapped )    // try masterpage mapping
+        if ( !bColorMapped )	// try masterpage mapping
         {
             SlidePersistPtr pMasterPersist = mpActualSlidePersist->getMasterPersist();
             if ( pMasterPersist )
@@ -150,7 +140,7 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
         return true;
 
     if( isExportFilter() ) {
-        Reference< XExporter > xExporter( getServiceFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.comp.Impress.oox.PowerPointExport" ) ), UNO_QUERY );
+        Reference< XExporter > xExporter( getGlobalFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.comp.Impress.oox.PowerPointExport" ) ), UNO_QUERY );
 
         if( xExporter.is() ) {
             Reference< XComponent > xDocument( getModel(), UNO_QUERY );
@@ -200,7 +190,7 @@ private:
 };
 
 PptGraphicHelper::PptGraphicHelper( const PowerPointImport& rFilter ) :
-    GraphicHelper( rFilter.getComponentContext(), rFilter.getTargetFrame(), rFilter.getStorage() ),
+    GraphicHelper( rFilter.getGlobalFactory(), rFilter.getTargetFrame(), rFilter.getStorage() ),
     mrFilter( rFilter )
 {
 }
@@ -215,11 +205,6 @@ sal_Int32 PptGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
 GraphicHelper* PowerPointImport::implCreateGraphicHelper() const
 {
     return new PptGraphicHelper( *this );
-}
-
-::oox::ole::VbaProject* PowerPointImport::implCreateVbaProject() const
-{
-    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), CREATE_OUSTRING( "Impress" ) );
 }
 
 OUString PowerPointImport::implGetImplementationName() const

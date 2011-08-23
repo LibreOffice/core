@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace oox { namespace ppt {
             switch( nNodeType )
             {
             case AnimationNodeType::PAR:
-//              sServiceName = CREATE_OUSTRING("com.sun.star.animations.IterateContainer");
+//				sServiceName = CREATE_OUSTRING("com.sun.star.animations.IterateContainer");
                 sServiceName = CREATE_OUSTRING("com.sun.star.animations.ParallelTimeContainer");
                 break;
             case AnimationNodeType::SEQ:
@@ -349,7 +349,7 @@ namespace oox { namespace ppt {
                     case NP_ATTRIBUTENAME:
                         if( xAnimate.is() )
                         {
-                            if( aValue >>= sString )
+                            if(	aValue >>= sString )
                                 xAnimate->setAttributeName( sString );
                             else
                             {
@@ -589,7 +589,7 @@ namespace oox { namespace ppt {
             const Reference< XAnimationNode >& rxNode )
     {
         try {
-            Reference< XAnimationNode > xNode ( rFilter.getServiceFactory()->createInstance( rServiceName ), UNO_QUERY_THROW );
+            Reference< XAnimationNode > xNode ( rFilter.getGlobalFactory()->createInstance(rServiceName ), UNO_QUERY_THROW );
             Reference< XTimeContainer > xParentContainer( rxNode, UNO_QUERY_THROW );
 
             xParentContainer->appendChild( xNode );
@@ -606,7 +606,7 @@ namespace oox { namespace ppt {
     }
 
 
-    void    TimeNode::setId( sal_Int32 nId )
+    void 	TimeNode::setId( sal_Int32 nId )
     {
         msId = OUString::valueOf(nId);
     }

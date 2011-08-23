@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,6 @@ class Ce_2s
 {
   public:
     // LIFECYCLE
-    Ce_2s() {}
     virtual             ~Ce_2s();
 
     static DYN Ce_2s *  Create_(

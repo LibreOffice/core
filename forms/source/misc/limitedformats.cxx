@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@ namespace frm
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::beans;
 
-    sal_Int32                               OLimitedFormats::s_nInstanceCount(0);
-    ::osl::Mutex                            OLimitedFormats::s_aMutex;
-    Reference< XNumberFormatsSupplier >     OLimitedFormats::s_xStandardFormats;
+    sal_Int32								OLimitedFormats::s_nInstanceCount(0);
+    ::osl::Mutex							OLimitedFormats::s_aMutex;
+    Reference< XNumberFormatsSupplier >		OLimitedFormats::s_xStandardFormats;
 
     //=====================================================================
     //=
@@ -64,8 +64,8 @@ namespace frm
     //---------------------------------------------------------------------
     static const Locale& getLocale(LocaleType _eType)
     {
-        static const Locale s_aEnglishUS( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en") ), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("us") ), ::rtl::OUString() );
-        static const Locale s_aGerman( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de") ), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE") ), ::rtl::OUString() );
+        static const Locale s_aEnglishUS( ::rtl::OUString::createFromAscii("en"), ::rtl::OUString::createFromAscii("us"), ::rtl::OUString() );
+        static const Locale s_aGerman( ::rtl::OUString::createFromAscii("de"), ::rtl::OUString::createFromAscii("DE"), ::rtl::OUString() );
         static const ::rtl::OUString s_sEmptyString;
         static const Locale s_aSystem( s_sEmptyString, s_sEmptyString, s_sEmptyString );
 
@@ -81,7 +81,7 @@ namespace frm
                 return s_aSystem;
         }
 
-        OSL_FAIL("getLocale: invalid enum value!");
+        OSL_ENSURE(sal_False, "getLocale: invalid enum value!");
         return s_aSystem;
     }
 
@@ -89,8 +89,8 @@ namespace frm
     struct FormatEntry
     {
         const sal_Char* pDescription;
-        sal_Int32       nKey;
-        LocaleType      eLocale;
+        sal_Int32		nKey;
+        LocaleType		eLocale;
     };
 
     //---------------------------------------------------------------------
@@ -135,7 +135,7 @@ namespace frm
             }
         }
 
-        OSL_FAIL("lcl_getFormatTable: invalid id!");
+        OSL_ENSURE(sal_False, "lcl_getFormatTable: invalid id!");
         return NULL;
     }
 
@@ -199,7 +199,7 @@ namespace frm
                             }
                             catch(const Exception&)
                             {
-                                OSL_FAIL("OLimitedFormats::ensureTableInitialized: adding the key to the formats collection failed!");
+                                OSL_ENSURE(sal_False, "OLimitedFormats::ensureTableInitialized: adding the key to the formats collection failed!");
                             }
 #endif
                         }
@@ -243,7 +243,7 @@ namespace frm
             }
             catch(const Exception&)
             {
-                OSL_FAIL("OLimitedFormats::setAggregateSet: invalid handle!");
+                OSL_ENSURE(sal_False, "OLimitedFormats::setAggregateSet: invalid handle!");
             }
         }
 #endif
@@ -267,7 +267,7 @@ namespace frm
 
             // seek to the nValue'th entry
             sal_Int32 nLookup = 0;
-            for (   ;
+            for	(	;
                     (NULL != pFormats->pDescription) && (nLookup < nValue);
                     ++pFormats, ++nLookup
                 )
@@ -305,7 +305,7 @@ namespace frm
 
             // look for the entry with the given format key
             sal_Int32 nTablePosition = 0;
-            for (   ;
+            for	(	;
                     (NULL != pFormats->pDescription) && (nNewFormat != pFormats->nKey);
                     ++pFormats, ++nTablePosition
                 )
@@ -323,7 +323,7 @@ namespace frm
             }
 
             if (!_rOldValue.hasValue())
-            {   // did not reach the end of the table (means we found nNewFormat)
+            {	// did not reach the end of the table (means we found nNewFormat)
                 // -> go to the end to ensure that _rOldValue is set
                 while (pFormats->pDescription)
                 {
@@ -341,8 +341,8 @@ namespace frm
             OSL_ENSURE(_rOldValue.hasValue(), "OLimitedFormats::convertFormatKeyPropertyValue: did not find the old enum value in the table!");
 
             if (!bFoundIt)
-            {   // somebody gave us an format which we can't translate
-                ::rtl::OUString sMessage (RTL_CONSTASCII_USTRINGPARAM("This control supports only a very limited number of formats.") );
+            {	// somebody gave us an format which we can't translate
+                ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("This control supports only a very limited number of formats.");
                 throw IllegalArgumentException(sMessage, NULL, 2);
             }
 
@@ -358,7 +358,7 @@ namespace frm
         OSL_ENSURE(m_xAggregate.is() && (-1 != m_nFormatEnumPropertyHandle), "OLimitedFormats::setFormatKeyPropertyValue: not initialized!");
 
         if (m_xAggregate.is())
-        {   // this is to be called after convertFormatKeyPropertyValue, where
+        {	// this is to be called after convertFormatKeyPropertyValue, where
             // we translated the format key into a enum value.
             // So now we can simply forward this enum value to our aggreate
             m_xAggregate->setFastPropertyValue(m_nFormatEnumPropertyHandle, _rNewValue);
@@ -370,7 +370,7 @@ namespace frm
     {
         ::osl::MutexGuard aGuard(s_aMutex);
         if ((1 == ++s_nInstanceCount) && _rxORB.is())
-        {   // create the standard formatter
+        {	// create the standard formatter
 
             Sequence< Any > aInit(1);
             aInit[0] <<= getLocale(ltEnglishUS);
@@ -398,7 +398,7 @@ namespace frm
     }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

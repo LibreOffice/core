@@ -84,7 +84,7 @@ int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
 
     int retVal = 0;
     if (tmpOffset < 0)
-    {
+    {	
         tmpOffset = 0;
         retVal = -1;
     }
@@ -147,7 +147,7 @@ WPXInputStream * WPXSvInputStream::getDocumentOLEStream(const char * name)
         return 0;
     }
 
-    mxChildStorage = new SotStorage( pStream, sal_True );
+    mxChildStorage = new SotStorage( pStream, TRUE );
 
     mxChildStream = mxChildStorage->OpenSotStream(
             rtl::OUString::createFromAscii( name ),

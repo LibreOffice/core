@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,19 +43,19 @@ class Fraction;
 
 class SVT_DLLPUBLIC IMapPolygonObject : public IMapObject
 {
-    Polygon             aPoly;
-    Rectangle           aEllipse;
-    sal_Bool                bEllipse;
+    Polygon				aPoly;
+    Rectangle			aEllipse;
+    BOOL				bEllipse;
 
-    SVT_DLLPRIVATE void             ImpConstruct( const Polygon& rPoly, sal_Bool bPixel );
+    SVT_DLLPRIVATE void				ImpConstruct( const Polygon& rPoly, BOOL bPixel );
 
 protected:
 
     // Binaer-Im-/Export
-    virtual void        WriteIMapObject( SvStream& rOStm ) const;
-    virtual void        ReadIMapObject(  SvStream& rIStm );
+    virtual void		WriteIMapObject( SvStream& rOStm ) const;
+    virtual void		ReadIMapObject(  SvStream& rIStm );
 
-    sal_Bool                ReadPreProLine( SvStream& rIStm, String& rStr );
+    BOOL				ReadPreProLine( SvStream& rIStm, String& rStr );
 
 public:
                         IMapPolygonObject() {};
@@ -65,26 +65,26 @@ public:
                                            const String& rDesc,
                                            const String& rTarget,
                                            const String& rName,
-                                           sal_Bool bActive = sal_True,
-                                           sal_Bool bPixelCoords = sal_True );
-    virtual             ~IMapPolygonObject() {};
+                                           BOOL bActive = TRUE,
+                                           BOOL bPixelCoords = TRUE );
+    virtual				~IMapPolygonObject() {};
 
-    virtual sal_uInt16      GetType() const;
-    virtual sal_Bool        IsHit( const Point& rPoint ) const;
+    virtual UINT16		GetType() const;
+    virtual BOOL		IsHit( const Point& rPoint ) const;
 
-    Polygon             GetPolygon( sal_Bool bPixelCoords = sal_True ) const;
+    Polygon				GetPolygon( BOOL bPixelCoords = TRUE ) const;
 
     // liefert das BoundRect des Polygon-Objektes in 1/100mm
-    virtual Rectangle   GetBoundRect() const {  return aPoly.GetBoundRect(); }
+    virtual Rectangle	GetBoundRect() const { 	return aPoly.GetBoundRect(); }
 
-    sal_Bool                HasExtraEllipse() const { return bEllipse; }
-    const Rectangle&    GetExtraEllipse() const { return aEllipse; }
-    void                SetExtraEllipse( const Rectangle& rEllipse );
+    BOOL				HasExtraEllipse() const { return bEllipse; }
+    const Rectangle&	GetExtraEllipse() const { return aEllipse; }
+    void				SetExtraEllipse( const Rectangle& rEllipse );
 
-    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
+    void				Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     using IMapObject::IsEqual;
-    sal_Bool                IsEqual( const IMapPolygonObject& rEqObj );
+    BOOL				IsEqual( const IMapPolygonObject& rEqObj );
 
     // Im-/Export
     void                WriteCERN( SvStream& rOStm, const String& rBaseURL  ) const;

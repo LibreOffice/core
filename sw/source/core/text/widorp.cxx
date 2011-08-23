@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,29 +45,30 @@
 #include <fmtftn.hxx>
 #include <rowfrm.hxx>
 
+#include "txtcfg.hxx"
 #include "widorp.hxx"
 #include "txtfrm.hxx"
 #include "itrtxt.hxx"
-#include "sectfrm.hxx"  //SwSectionFrm
+#include "sectfrm.hxx"	//SwSectionFrm
 #include "ftnfrm.hxx"
 
 #undef WIDOWTWIPS
 
 
 /*************************************************************************
- *                  inline IsNastyFollow()
+ *					inline IsNastyFollow()
  *************************************************************************/
 // Ein Follow, der auf der selben Seite steht, wie sein Master ist nasty.
 inline sal_Bool IsNastyFollow( const SwTxtFrm *pFrm )
 {
-    OSL_ENSURE( !pFrm->IsFollow() || !pFrm->GetPrev() ||
+    OSL_ENSURE(	!pFrm->IsFollow() || !pFrm->GetPrev() ||
             ((const SwTxtFrm*)pFrm->GetPrev())->GetFollow() == pFrm,
             "IsNastyFollow: Was ist denn hier los?" );
-    return  pFrm->IsFollow() && pFrm->GetPrev();
+    return	pFrm->IsFollow() && pFrm->GetPrev();
 }
 
 /*************************************************************************
- *                  SwTxtFrmBreak::SwTxtFrmBreak()
+ *					SwTxtFrmBreak::SwTxtFrmBreak()
  *************************************************************************/
 
 SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
@@ -109,7 +110,7 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
  */
 
 /*************************************************************************
- *                  SwTxtFrmBreak::IsInside()
+ *					SwTxtFrmBreak::IsInside()
  *************************************************************************/
 
 /* BP(22.07.92): Berechnung von Witwen und Waisen.
@@ -174,7 +175,7 @@ sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
 }
 
 /*************************************************************************
- *                  SwTxtFrmBreak::IsBreakNow()
+ *					SwTxtFrmBreak::IsBreakNow()
  *************************************************************************/
 
 sal_Bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
@@ -222,27 +223,19 @@ void SwTxtFrmBreak::SetRstHeight( const SwTxtMargin &rLine )
 {
     // OD, FME 2004-02-27 #106629# - consider bottom margin
     SWRECTFN( pFrm )
-
     nRstHeight = (pFrm->*fnRect->fnGetBottomMargin)();
-
     if ( bVert )
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    {
-           if ( pFrm->IsVertLR() )
-              nRstHeight = (*fnRect->fnYDiff)( pFrm->SwitchHorizontalToVertical( rLine.Y() ) , nOrigin );
-           else
-               nRstHeight += nOrigin - pFrm->SwitchHorizontalToVertical( rLine.Y() );
-    }
+        nRstHeight += nOrigin - pFrm->SwitchHorizontalToVertical( rLine.Y() );
     else
         nRstHeight += rLine.Y() - nOrigin;
 }
 
 /*************************************************************************
- *                  WidowsAndOrphans::WidowsAndOrphans()
+ *					WidowsAndOrphans::WidowsAndOrphans()
  *************************************************************************/
 
 WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
-    sal_Bool bChkKeep   )
+    sal_Bool bChkKeep	)
     : SwTxtFrmBreak( pNewFrm, nRst ), nWidLines( 0 ), nOrphLines( 0 )
 {
     SWAP_IF_SWAPPED( pFrm )
@@ -317,7 +310,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
 }
 
 /*************************************************************************
- *                  WidowsAndOrphans::FindBreak()
+ *					WidowsAndOrphans::FindBreak()
  *************************************************************************/
 
 /* Die Find*-Methoden suchen nicht nur, sondern stellen den SwTxtMargin auf
@@ -374,13 +367,13 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
 }
 
 /*************************************************************************
- *                  WidowsAndOrphans::FindWidows()
+ *					WidowsAndOrphans::FindWidows()
  *************************************************************************/
 
-/*  FindWidows positioniert den SwTxtMargin des Masters auf die umzubrechende
- *  Zeile, indem der Follow formatiert und untersucht wird.
- *  Liefert sal_True zurueck, wenn die Widows-Regelung in Kraft tritt,
- *  d.h. der Absatz _zusammengehalten_ werden soll !
+/*	FindWidows positioniert den SwTxtMargin des Masters auf die umzubrechende
+ *	Zeile, indem der Follow formatiert und untersucht wird.
+ *	Liefert sal_True zurueck, wenn die Widows-Regelung in Kraft tritt,
+ *	d.h. der Absatz _zusammengehalten_ werden soll !
  */
 
 sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
@@ -455,8 +448,8 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
     // 8575: Follow to Master II
     // Wenn der Follow *schrumpft*, so besteht fuer den Master die Chance,
     // den kompletten Orphan zu inhalieren.
-    // (0W, 2O, 2M, 1F) - 1F = 3M, 0F     -> PREP_ADJUST_FRM
-    // (0W, 2O, 3M, 2F) - 1F = 2M, 2F     -> PREP_WIDOWS
+    // (0W, 2O, 2M, 1F) - 1F = 3M, 0F	  -> PREP_ADJUST_FRM
+    // (0W, 2O, 3M, 2F) - 1F = 2M, 2F	  -> PREP_WIDOWS
 
     if( 0 > nChg && !pMaster->IsLocked() && pMaster->GetUpper() )
     {
@@ -494,7 +487,7 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
     // --> FME 2008-09-16 #i91421#
     if ( !pMaster->GetIndPrev() )
     {
-        sal_uLong nLines = pMaster->GetThisLines();
+        ULONG nLines = pMaster->GetThisLines();
         if(nLines == 0 && pMaster->HasPara())
         {
             const SwParaPortion *pMasterPara = pMaster->GetPara();
@@ -510,7 +503,7 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 }
 
 /*************************************************************************
- *                  WidowsAndOrphans::WouldFit()
+ *					WidowsAndOrphans::WouldFit()
  *************************************************************************/
 
 sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sal_Bool bTst )
@@ -532,6 +525,7 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
 
     while( nMinLines > rLine.GetLineNr() )
     {
+        DBG_LOOP;
         if( !rLine.NextLine() )
             return sal_False;
         nLineSum += rLine.GetLineHeight();

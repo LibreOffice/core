@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ DBG_NAME(SfxVisibilityItem)
 TYPEINIT1_AUTOFACTORY(SfxVisibilityItem, SfxPoolItem);
 
 //============================================================================
-SfxVisibilityItem::SfxVisibilityItem(sal_uInt16 which, SvStream & rStream):
+SfxVisibilityItem::SfxVisibilityItem(USHORT which, SvStream & rStream):
     SfxPoolItem(which)
 {
     DBG_CTOR(SfxVisibilityItem, 0);
@@ -86,7 +86,7 @@ SfxItemPresentation SfxVisibilityItem::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-bool SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     rVal <<= m_nValue;
     return true;
@@ -94,18 +94,18 @@ bool SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) co
 
 //============================================================================
 // virtual
-bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     if (rVal >>= m_nValue)
         return true;
 
-    OSL_FAIL( "SfxInt16Item::PutValue - Wrong type!" );
+    DBG_ERROR( "SfxInt16Item::PutValue - Wrong type!" );
     return false;
 }
 
 //============================================================================
 // virtual
-SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, USHORT) const
 {
     DBG_CHKTHIS(SfxVisibilityItem, 0);
     return new SfxVisibilityItem(Which(), rStream);
@@ -113,7 +113,7 @@ SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, sal_uInt16) const
 
 //============================================================================
 // virtual
-SvStream & SfxVisibilityItem::Store(SvStream & rStream, sal_uInt16) const
+SvStream & SfxVisibilityItem::Store(SvStream & rStream, USHORT) const
 {
     DBG_CHKTHIS(SfxVisibilityItem, 0);
     rStream << m_nValue.bVisible;
@@ -130,19 +130,19 @@ SfxPoolItem * SfxVisibilityItem::Clone(SfxItemPool *) const
 
 //============================================================================
 // virtual
-sal_uInt16 SfxVisibilityItem::GetValueCount() const
+USHORT SfxVisibilityItem::GetValueCount() const
 {
     return 2;
 }
 
 //============================================================================
 // virtual
-UniString SfxVisibilityItem::GetValueTextByVal(sal_Bool bTheValue) const
+UniString SfxVisibilityItem::GetValueTextByVal(BOOL bTheValue) const
 {
     return
         bTheValue ?
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("sal_True")) :
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("sal_False"));
+            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TRUE")) :
+            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("FALSE"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

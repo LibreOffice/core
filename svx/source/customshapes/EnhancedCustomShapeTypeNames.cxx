@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,17 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "svx/EnhancedCustomShapeTypeNames.hxx"
+#include "EnhancedCustomShapeTypeNames.hxx"
 #include <osl/mutex.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
-struct THash
-{
-    size_t operator()( const char* s ) const
-    {
-        return rtl_str_hashCode(s);
-    }
-};
 struct TCheck
 {
     bool operator()( const char* s1, const char* s2 ) const
@@ -46,7 +39,7 @@ struct TCheck
         return strcmp( s1, s2 ) == 0;
     }
 };
-typedef boost::unordered_map< const char*, MSO_SPT, THash, TCheck> TypeNameHashMap;
+typedef std::hash_map< const char*, MSO_SPT, std::hash<const char*>, TCheck> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {
@@ -56,10 +49,10 @@ static ::osl::Mutex& getHashMapMutex()
 
 struct NameTypeTable
 {
-    const char* pS;
-    MSO_SPT     pE;
+    const char*	pS;
+    MSO_SPT		pE;
 };
-static const NameTypeTable pNameTypeTableArray[] =
+static const NameTypeTable pNameTypeTableArray[] = 
 {
     { "non-primitive", mso_sptMin },
     { "rectangle", mso_sptRectangle },
@@ -266,7 +259,7 @@ static const NameTypeTable pNameTypeTableArray[] =
     { "mso-spt202", mso_sptTextBox }
 };
 
-    // gallery: quadrat
+    // gallery: quadrat		
     // gallery: round-quadrat
     // gallery: circle
     // gallery: circle-pie
@@ -296,7 +289,7 @@ static const NameTypeTable pNameTypeTableArray[] =
 MSO_SPT EnhancedCustomShapeTypeNames::Get( const rtl::OUString& rShapeType )
 {
     if ( !pHashMap )
-    {   // init hash map
+    {	// init hash map
         ::osl::MutexGuard aGuard( getHashMapMutex() );
         if ( !pHashMap )
         {

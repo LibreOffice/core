@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace basegfx
     {
         // B3DPolygon tools
 
-        /** Check if given polygon is closed. This is kind of a
+        /**	Check if given polygon is closed. This is kind of a
             'classic' method to support old polygon definitions.
             Those old polygon definitions define the closed state
             of the polygon using identical start and endpoints. This
@@ -106,15 +106,15 @@ namespace basegfx
             For a description see applyLineDashing in b2dpolygontoos.hxx
         */
         void applyLineDashing(
-            const B3DPolygon& rCandidate,
-            const ::std::vector<double>& rDotDashArray,
+            const B3DPolygon& rCandidate, 
+            const ::std::vector<double>& rDotDashArray, 
             B3DPolyPolygon* pLineTarget,
             B3DPolyPolygon* pGapTarget = 0,
             double fFullDashDotLen = 0.0);
 
         /** Create/replace normals for given 3d geometry with default normals from given center to outside.
-            rCandidate: the 3d geometry to change
-            rCenter:    the center of the 3d geometry
+            rCandidate:	the 3d geometry to change
+            rCenter:	the center of the 3d geometry
          */
         B3DPolygon applyDefaultNormalsSphere( const B3DPolygon& rCandidate, const B3DPoint& rCenter);
 
@@ -142,8 +142,8 @@ namespace basegfx
         // fDistance, and the sphere around both points with radius fDistance.
         bool isInEpsilonRange(const B3DPoint& rEdgeStart, const B3DPoint& rEdgeEnd, const B3DPoint& rTestPosition, double fDistance);
 
-        // test if point is inside epsilon-range around the given Polygon. Can be used
-        // for HitTesting. The epsilon-range is defined to be the cylinder centered to
+        // test if point is inside epsilon-range around the given Polygon. Can be used 
+        // for HitTesting. The epsilon-range is defined to be the cylinder centered to 
         // the given edge, using radius fDistance, and the sphere around both points with radius fDistance.
         bool isInEpsilonRange(const B3DPolygon& rCandidate, const B3DPoint& rTestPosition, double fDistance);
 
@@ -155,7 +155,7 @@ namespace basegfx
         // calculates if given point is on given line, taking care of the numerical epsilon
         bool isPointOnLine(const B3DPoint& rStart, const B3DPoint& rEnd, const B3DPoint& rCandidate, bool bWithPoints = false);
 
-        // calculates if given point is on given polygon, taking care of the numerical epsilon. Uses
+        // calculates if given point is on given polygon, taking care of the numerical epsilon. Uses 
         // isPointOnLine internally
         bool isPointOnPolygon(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithPoints = true);
 
@@ -175,7 +175,7 @@ namespace basegfx
         /** snap some polygon coordinates to discrete coordinates
 
             This method allows to snap some polygon points to discrete (integer) values
-            which equals e.g. a snap to discrete coordinates. It will snap points of
+            which equals e.g. a snap to discrete coordinates. It will snap points of 
             horizontal and vertical edges
 
             @param rCandidate

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,19 +38,21 @@
 
 #ifdef ENABLE_MEMORYMEASURE
 
-    #if !defined( WNT )
+    #if !defined( WIN ) && !defined( WNT )
         #error "Macros to measure memory access not available under platforms different from windows!"
     #endif
 
     //_________________________________________________________________________________________________________________
-    //  includes
+    //	includes
     //_________________________________________________________________________________________________________________
 
     #ifndef _RTL_STRBUF_HXX_
     #include <rtl/strbuf.hxx>
     #endif
 
+    #ifndef __SGI_STL_VECTOR
     #include <vector>
+    #endif
 
     /*_____________________________________________________________________________________________________________
         LOGFILE_MEMORYMEASURE
@@ -216,7 +218,7 @@
 #endif  // #ifdef ENABLE_MEMORYMEASURE
 
 //*****************************************************************************************************************
-//  end of file
+//	end of file
 //*****************************************************************************************************************
 
 #endif  // #ifndef __FRAMEWORK_MACROS_DEBUG_MEMORYMEASURE_HXX_

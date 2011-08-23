@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,9 +111,9 @@ sal_Bool OAccessibleMenuItemComponent::IsVisible()
 void OAccessibleMenuItemComponent::Select()
 {
     // open the parent menu
-    Reference< XAccessible > xParent( getAccessibleParent() );
+    Reference< XAccessible > xParent( getAccessibleParent() );	
     if ( xParent.is() )
-    {
+    {		
         OAccessibleMenuBaseComponent* pComp = static_cast< OAccessibleMenuBaseComponent* >( xParent.get() );
         if ( pComp && pComp->getAccessibleRole() == AccessibleRole::MENU && !pComp->IsPopupMenuOpen() )
             pComp->Click();
@@ -137,9 +137,9 @@ void OAccessibleMenuItemComponent::DeSelect()
 void OAccessibleMenuItemComponent::Click()
 {
     // open the parent menu
-    Reference< XAccessible > xParent( getAccessibleParent() );
+    Reference< XAccessible > xParent( getAccessibleParent() );	
     if ( xParent.is() )
-    {
+    {		
         OAccessibleMenuBaseComponent* pComp = static_cast< OAccessibleMenuBaseComponent* >( xParent.get() );
         if ( pComp && pComp->getAccessibleRole() == AccessibleRole::MENU && !pComp->IsPopupMenuOpen() )
             pComp->Click();
@@ -147,7 +147,7 @@ void OAccessibleMenuItemComponent::Click()
 
     // click the menu item
     if ( m_pParent )
-    {
+    {		
         Window* pWindow = m_pParent->GetWindow();
         if ( pWindow )
         {
@@ -158,7 +158,7 @@ void OAccessibleMenuItemComponent::Click()
             // that the popup menus are executed synchronously.
             AllSettings aSettings = pWindow->GetSettings();
             MouseSettings aMouseSettings = aSettings.GetMouseSettings();
-            sal_uLong nDelay = aMouseSettings.GetMenuDelay();
+            ULONG nDelay = aMouseSettings.GetMenuDelay();
             aMouseSettings.SetMenuDelay( 0 );
             aSettings.SetMouseSettings( aMouseSettings );
             pWindow->SetSettings( aSettings );
@@ -183,8 +183,8 @@ void OAccessibleMenuItemComponent::Click()
 // -----------------------------------------------------------------------------
 
 void OAccessibleMenuItemComponent::SetItemPos( sal_uInt16 nItemPos )
-{
-    m_nItemPos = nItemPos;
+{ 
+    m_nItemPos = nItemPos; 
 }
 
 // -----------------------------------------------------------------------------
@@ -261,7 +261,7 @@ void OAccessibleMenuItemComponent::FillAccessibleStateSet( utl::AccessibleStateS
 }
 
 // -----------------------------------------------------------------------------
-// OCommonAccessibleComponent
+// OCommonAccessibleComponent 
 // -----------------------------------------------------------------------------
 
 awt::Rectangle OAccessibleMenuItemComponent::implGetBounds() throw (RuntimeException)
@@ -284,7 +284,7 @@ awt::Rectangle OAccessibleMenuItemComponent::implGetBounds() throw (RuntimeExcep
             Reference< XAccessible > xParent = getAccessibleParent();
             if ( xParent.is() )
             {
-                Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), UNO_QUERY );
+                Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), UNO_QUERY );				
                 if ( xParentComponent.is() )
                 {
                     awt::Point aParentScreenLoc = xParentComponent->getLocationOnScreen();
@@ -365,13 +365,13 @@ sal_Int16 OAccessibleMenuItemComponent::getAccessibleRole(  ) throw (RuntimeExce
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OAccessibleMenuItemComponent::getAccessibleDescription( ) throw (RuntimeException)
+::rtl::OUString OAccessibleMenuItemComponent::getAccessibleDescription(	) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
     ::rtl::OUString sDescription;
     if ( m_pParent )
-        sDescription = m_pParent->GetHelpText( m_pParent->GetItemId( m_nItemPos ) );
+        sDescription = m_pParent->GetHelpText( m_pParent->GetItemId( m_nItemPos ) ); 
 
     return sDescription;
 }
@@ -425,7 +425,7 @@ void OAccessibleMenuItemComponent::grabFocus(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-sal_Int32 OAccessibleMenuItemComponent::getForeground(  ) throw (RuntimeException)
+sal_Int32 OAccessibleMenuItemComponent::getForeground(	) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -435,7 +435,7 @@ sal_Int32 OAccessibleMenuItemComponent::getForeground(  ) throw (RuntimeExceptio
     {
         Reference< XAccessibleComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
         if ( xParentComp.is() )
-            nColor = xParentComp->getForeground();
+            nColor = xParentComp->getForeground();	
     }
 
     return nColor;
@@ -453,7 +453,7 @@ sal_Int32 OAccessibleMenuItemComponent::getBackground(  ) throw (RuntimeExceptio
     {
         Reference< XAccessibleComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
         if ( xParentComp.is() )
-            nColor = xParentComp->getBackground();
+            nColor = xParentComp->getBackground();	
     }
 
     return nColor;
@@ -473,7 +473,7 @@ Reference< awt::XFont > OAccessibleMenuItemComponent::getFont(  ) throw (Runtime
     {
         Reference< XAccessibleExtendedComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
         if ( xParentComp.is() )
-            xFont = xParentComp->getFont();
+            xFont = xParentComp->getFont();	
     }
 
     return xFont;
@@ -496,7 +496,7 @@ Reference< awt::XFont > OAccessibleMenuItemComponent::getFont(  ) throw (Runtime
 
     ::rtl::OUString sRet;
     if ( m_pParent )
-        sRet = m_pParent->GetTipHelpText( m_pParent->GetItemId( m_nItemPos ) );
+        sRet = m_pParent->GetTipHelpText( m_pParent->GetItemId( m_nItemPos ) ); 
 
     return sRet;
 }

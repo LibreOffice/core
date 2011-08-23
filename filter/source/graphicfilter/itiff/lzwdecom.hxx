@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,9 @@
 #include <tools/stream.hxx>
 
 struct LZWTableEntry {
-    sal_uInt16 nPrevCode;
-    sal_uInt16 nDataCount;
-    sal_uInt8 nData;
+    USHORT nPrevCode;
+    USHORT nDataCount;
+    BYTE nData;
 };
 
 class LZWDecompressor {
@@ -46,32 +46,32 @@ public:
 
     void StartDecompression(SvStream & rIStream);
 
-    sal_uLong Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount);
+    ULONG Decompress(BYTE * pTarget, ULONG nMaxCount);
         // Liefert die Anzahl der geschriebenen Bytes, wenn < nMaxCount,
         // sind keine weiteren Daten zu entpacken, oder es ist ein
         // Fehler aufgetreten.
 
 private:
 
-    sal_uInt16 GetNextCode();
-    void AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData);
+    USHORT GetNextCode();
+    void AddToTable(USHORT nPrevCode, USHORT nCodeFirstData);
     void DecompressSome();
 
     SvStream * pIStream;
 
     LZWTableEntry * pTable;
-    sal_uInt16 nTableSize;
+    USHORT nTableSize;
 
-    sal_Bool bEOIFound, bInvert, bFirst;
+    BOOL bEOIFound, bInvert, bFirst;
 
-    sal_uInt16 nOldCode;
+    USHORT nOldCode;
 
-    sal_uInt8 * pOutBuf;
-    sal_uInt8 * pOutBufData;
-    sal_uInt16 nOutBufDataLen;
+    BYTE * pOutBuf;
+    BYTE * pOutBufData;
+    USHORT nOutBufDataLen;
 
-    sal_uInt8 nInputBitsBuf;
-    sal_uInt16 nInputBitsBufSize;
+    BYTE nInputBitsBuf;
+    USHORT nInputBitsBufSize;
 };
 
 

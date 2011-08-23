@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,36 +39,36 @@
 
 struct ImpDbgStackTree
 {
-    ImpDbgStackTree*    pLeft_;
-    ImpDbgStackTree*    pRight_;
-    ImpDbgStackTree*    pCaller_;
-    ImpDbgStackTree*    pSub_;
-    sal_uIntPtr             nIP_;
-    sal_uIntPtr             nBytesLeak_;
-    sal_uIntPtr             nBytesPeak_;
-    sal_uIntPtr             nBytes_;
-    sal_uIntPtr             nCountLeak_;
-    sal_uIntPtr             nCountPeak_;
-    sal_uIntPtr             nCount_;
-    sal_uIntPtr             nMax_;
-    sal_uIntPtr             nMin_;
+    ImpDbgStackTree*	pLeft_;
+    ImpDbgStackTree*	pRight_;
+    ImpDbgStackTree*	pCaller_;
+    ImpDbgStackTree*	pSub_;
+    ULONG				nIP_;
+    ULONG				nBytesLeak_;
+    ULONG				nBytesPeak_;
+    ULONG				nBytes_;
+    ULONG				nCountLeak_;
+    ULONG				nCountPeak_;
+    ULONG				nCount_;
+    ULONG				nMax_;
+    ULONG				nMin_;
 
-                        ImpDbgStackTree( ImpDbgStackTree* pSub, sal_uIntPtr nIP );
+                        ImpDbgStackTree( ImpDbgStackTree* pSub, ULONG nIP );
                         ~ImpDbgStackTree();
 
-    ImpDbgStackTree*    Add( sal_uIntPtr nAlloc, sal_uIntPtr* pBP, sal_uIntPtr nIP );
-    void                Print( int nLevel, sal_uIntPtr nCount, sal_uIntPtr nCountLeak );
-    void                Print( int nLevel );
+    ImpDbgStackTree*	Add( ULONG nAlloc, ULONG* pBP, ULONG nIP );
+    void				Print( int nLevel, ULONG nCount, ULONG nCountLeak );
+    void				Print( int nLevel );
 };
 
-static ImpDbgStackTree* pImpDbgStackTreeRoot     = NULL;
-static sal_uIntPtr*         pImpDbgStackTreeBP       = NULL;
-static sal_uIntPtr          nImpDbgStackTreeMain     = 0;
-static int              nImpDbgStackTreeSem      = 0;
+static ImpDbgStackTree* pImpDbgStackTreeRoot	 = NULL;
+static ULONG*			pImpDbgStackTreeBP		 = NULL;
+static ULONG			nImpDbgStackTreeMain	 = 0;
+static int				nImpDbgStackTreeSem 	 = 0;
 
 // -----------------------------------------------------------------------
 
-ImpDbgStackTree::ImpDbgStackTree( ImpDbgStackTree* pSub, sal_uIntPtr nIP )
+ImpDbgStackTree::ImpDbgStackTree( ImpDbgStackTree* pSub, ULONG nIP )
 {
     pSub_ = pSub;
     nIP_ = nIP;
@@ -91,7 +91,7 @@ ImpDbgStackTree::~ImpDbgStackTree()
 
 // -----------------------------------------------------------------------
 
-void ImpDbgStackTree::Print( int nLevel, sal_uIntPtr nCount, sal_uIntPtr nCountLeak )
+void ImpDbgStackTree::Print( int nLevel, ULONG nCount, ULONG nCountLeak )
 {
     if ( pLeft_ )
         pLeft_->Print( nLevel, nCount, nCountLeak );
@@ -100,7 +100,7 @@ void ImpDbgStackTree::Print( int nLevel, sal_uIntPtr nCount, sal_uIntPtr nCountL
     {
         if ( nMax_ == nMin_ )
         {
-            sal_uIntPtr nTemp = nCountLeak_ * nMin_;
+            ULONG nTemp = nCountLeak_ * nMin_;
             DbgOutf( "%*c%08lx Count=%lu/%lu/%lu Bytes=%lu/%lu/%lu Size=%lu",
                      nLevel, ' ', nIP_,
                      nCount_, nCountPeak_, nCountLeak_,
@@ -138,7 +138,7 @@ void ImpDbgStackTree::Print( int nLevel )
 
 // -----------------------------------------------------------------------
 
-ImpDbgStackTree* ImpDbgStackTree::Add( sal_uIntPtr nAlloc, sal_uIntPtr *pBP, sal_uIntPtr nIP )
+ImpDbgStackTree* ImpDbgStackTree::Add( ULONG nAlloc, ULONG *pBP, ULONG nIP )
 {
     if ( nIP < nIP_ )
     {
@@ -157,7 +157,7 @@ ImpDbgStackTree* ImpDbgStackTree::Add( sal_uIntPtr nAlloc, sal_uIntPtr *pBP, sal
     nCountLeak_++;
     if ( nCountLeak_ > nCountPeak_ )
         nCountPeak_ = nCountLeak_;
-    nBytes_     += nAlloc;
+    nBytes_ 	+= nAlloc;
     nBytesLeak_ += nAlloc;
     if ( nBytesLeak_ > nBytesPeak_ )
         nBytesPeak_ = nBytesLeak_;
@@ -168,9 +168,9 @@ ImpDbgStackTree* ImpDbgStackTree::Add( sal_uIntPtr nAlloc, sal_uIntPtr *pBP, sal
     else if ( nMin_ > nAlloc )
         nMin_ = nAlloc;
 
-    if ( !(pBP[0] & 3) && (sal_uIntPtr)pBP < pBP[0] && pBP[0] < (sal_uIntPtr)pImpDbgStackTreeBP )
+    if ( !(pBP[0] & 3) && (ULONG)pBP < pBP[0] && pBP[0] < (ULONG)pImpDbgStackTreeBP )
     {
-        pBP = (sal_uIntPtr*)pBP[0];
+        pBP = (ULONG*)pBP[0];
         nIP = pBP[1];
         if ( 0x01100000 <= nIP && nIP < 0x20000000 && nIP != nImpDbgStackTreeMain )
         {
@@ -191,10 +191,10 @@ void DbgStartStackTree()
 {
     if ( !nImpDbgStackTreeMain )
     {
-        sal_uIntPtr* pBP;
+        ULONG* pBP;
         __asm mov pBP, ebp;
 
-        pImpDbgStackTreeBP   = (sal_uIntPtr*)pBP[0];
+        pImpDbgStackTreeBP	 = (ULONG*)pBP[0];
         nImpDbgStackTreeMain = pImpDbgStackTreeBP[1];
     }
 }
@@ -210,7 +210,7 @@ void DbgEndStackTree()
         {
             // Ausgaben ins File umleiten
             DbgData* pData = DbgGetData();
-            sal_uIntPtr nOldOut = pData->nTraceOut;
+            ULONG nOldOut = pData->nTraceOut;
             pData->nTraceOut = DBG_OUT_FILE;
 
             DbgOutf( "Leak-Report" );
@@ -239,7 +239,7 @@ void DbgEndStackTree()
 
 // -----------------------------------------------------------------------
 
-void* DbgGetStackTree( sal_uIntPtr nAlloc )
+void* DbgGetStackTree( ULONG nAlloc )
 {
     ImpDbgStackTree* pReturn = NULL;
 
@@ -247,10 +247,10 @@ void* DbgGetStackTree( sal_uIntPtr nAlloc )
     {
         nImpDbgStackTreeSem++;
 
-        sal_uIntPtr* pBP;
+        ULONG* pBP;
         __asm mov pBP, ebp;
 
-        sal_uIntPtr  nIP = pBP[1];
+        ULONG  nIP = pBP[1];
         if ( !pImpDbgStackTreeRoot )
             pImpDbgStackTreeRoot = new ImpDbgStackTree( NULL, nIP );
         pReturn = pImpDbgStackTreeRoot->Add( nAlloc, pBP, nIP );
@@ -262,7 +262,7 @@ void* DbgGetStackTree( sal_uIntPtr nAlloc )
 
 // -----------------------------------------------------------------------
 
-void DbgFreeStackTree( void* pVoid, sal_uIntPtr nAlloc )
+void DbgFreeStackTree( void* pVoid, ULONG nAlloc )
 {
     ImpDbgStackTree* p = (ImpDbgStackTree*)pVoid;
 
@@ -278,8 +278,8 @@ void DbgFreeStackTree( void* pVoid, sal_uIntPtr nAlloc )
         {
             if ( p->nBytesLeak_ > p->nMax_ * p->nCountLeak_ )
             {
-                nAlloc         += p->nBytesLeak_ - p->nMax_ * p->nCountLeak_;
-                p->nBytesLeak_  = p->nMax_ * p->nCountLeak_;
+                nAlloc		   += p->nBytesLeak_ - p->nMax_ * p->nCountLeak_;
+                p->nBytesLeak_	= p->nMax_ * p->nCountLeak_;
             }
         }
 
@@ -298,7 +298,7 @@ void DbgPrintStackTree( void* pVoid )
     {
         // Ausgaben ins File umleiten
         DbgData* pData = DbgGetData();
-        sal_uIntPtr nOldOut = pData->nTraceOut;
+        ULONG nOldOut = pData->nTraceOut;
         pData->nTraceOut = DBG_OUT_FILE;
 
         DbgOutf( "Mem-StackTree:" );
@@ -314,8 +314,8 @@ void DbgPrintStackTree( void* pVoid )
 
 void DbgStartStackTree() {}
 void DbgEndStackTree() {}
-void* DbgGetStackTree( sal_uIntPtr ) { return NULL; }
-void DbgFreeStackTree( void*, sal_uIntPtr ) {}
+void* DbgGetStackTree( ULONG ) { return NULL; }
+void DbgFreeStackTree( void*, ULONG ) {}
 void DbgPrintStackTree( void* ) {}
 
 #endif

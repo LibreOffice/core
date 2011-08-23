@@ -346,8 +346,7 @@ testcase tWriterUIChangesTest7
             Kontext "RubyDialog"
             DialogClose.Click
             Sleep 2
-            '#i40913# 
-            warnlog "Something wrong in menu format/Ruby when Asian Language support is off"
+            QAErrorlog "#i40913# Something wrong in menu format/Ruby when Asian Language support is off"
         catch
         endcatch
     end if
@@ -399,29 +398,25 @@ testcase tWriterUIChangesTest8
 
         try
             FormatChangeCaseHalfWidth
-            '#i43434# 
-            warnlog "Something wrong in submenu format/change case -> Half width when Asian Language support is off"
+            QAErrorlog "#i43434# Something wrong in submenu format/change case -> Half width when Asian Language support is off"
         catch
         endcatch
 
         try
             FormatChangeCaseFullWidth
-            '#i43434# 
-            warnlog "Something wrong in submenu format/change case -> Full width when Asian Language support is off"
+            QAErrorlog "#i43434# Something wrong in submenu format/change case -> Full width when Asian Language support is off"
         catch
         endcatch
 
         try
             FormatChangeCaseHiragana
-            '#i43434# 
-            warnlog "Something wrong in submenu format/change case -> Hiragana when Asian Language support is off"
+            QAErrorlog "#i43434# Something wrong in submenu format/change case -> Hiragana when Asian Language support is off"
         catch
         endcatch
 
         try
             FormatChangeCaseKatagana
-            '#i43434# 
-            warnlog "Something wrong in submenu format/change case -> Katagana when Asian Language support is off"
+            QAErrorlog "#i43434# Something wrong in submenu format/change case -> Katagana when Asian Language support is off"
         catch
         endcatch
     end if

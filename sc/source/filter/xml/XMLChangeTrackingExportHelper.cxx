@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,8 +127,8 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
 
     {
         SvXMLElementExport aCreatorElem( rExport, XML_NAMESPACE_DC,
-                                            XML_CREATOR, sal_True,
-                                            false );
+                                            XML_CREATOR, sal_True, 
+                                            sal_False );
         rtl::OUString sAuthor(pAction->GetUser());
         rExport.Characters(sAuthor);
     }
@@ -137,15 +137,15 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
         rtl::OUStringBuffer sDate;
         ScXMLConverter::ConvertDateTimeToString(pAction->GetDateTimeUTC(), sDate);
         SvXMLElementExport aDateElem( rExport, XML_NAMESPACE_DC,
-                                          XML_DATE, sal_True,
-                                          false );
+                                          XML_DATE, sal_True, 
+                                          sal_False );
         rExport.Characters(sDate.makeStringAndClear());
-    }
+    } 	
 
     rtl::OUString sComment(pAction->GetComment());
     if (sComment.getLength())
     {
-        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, false);
+        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
         sal_Bool bPrevCharWasSpace(sal_True);
         rExport.GetTextParagraphExport()->exportText(sComment, bPrevCharWasSpace);
     }
@@ -228,8 +228,49 @@ void ScChangeTrackingExportHelper::WriteDependings(ScChangeAction* pAction)
             WriteDeleted(pEntry->GetAction());
             pEntry = pEntry->GetNext();
         }
+        /*if (pAction->IsDeleteType())
+        {
+            ScChangeActionDel* pDelAction = static_cast<ScChangeActionDel*> (pAction);
+            if (pDelAction)
+            {
+                const ScChangeActionCellListEntry* pCellEntry = pDelAction->GetFirstCellEntry();
+                while (pCellEntry)
+                {
+                    WriteGenerated(pCellEntry->GetContent());
+                    pCellEntry = pCellEntry->GetNext();
+                }
+            }
+        }
+        else if (pAction->GetType() == SC_CAT_MOVE)
+        {
+            ScChangeActionMove* pMoveAction = static_cast<ScChangeActionMove*> (pAction);
+            if (pMoveAction)
+            {
+                const ScChangeActionCellListEntry* pCellEntry = pMoveAction->GetFirstCellEntry();
+                while (pCellEntry)
+                {
+                    WriteGenerated(pCellEntry->GetContent());
+                    pCellEntry = pCellEntry->GetNext();
+                }
+            }
+        }*/
     }
 }
+
+/*void ScChangeTrackingExportHelper::WriteDependings(ScChangeAction* pAction)
+{
+    pChangeTrack->GetDependents(pAction, *pDependings);
+    if (pDependings->Count())
+    {
+        SvXMLElementExport aDependingsElem (rExport, XML_NAMESPACE_TABLE, XML_DEPENDENCIES, sal_True, sal_True);
+        ScChangeAction* pDependAction = pDependings->First();
+        while (pDependAction != NULL)
+        {
+            WriteDepending(pDependAction);
+            pDependAction = pDependings->Next();
+        }
+    }
+}*/
 
 void ScChangeTrackingExportHelper::WriteEmptyCell()
 {
@@ -238,7 +279,7 @@ void ScChangeTrackingExportHelper::WriteEmptyCell()
 
 void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, const String& sValue)
 {
-    sal_Bool bSetAttributes(false);
+    sal_Bool bSetAttributes(sal_False);
     if (sValue.Len())
     {
         sal_uInt32 nIndex;
@@ -293,6 +334,12 @@ void ScChangeTrackingExportHelper::WriteValueCell(const ScBaseCell* pCell, const
     {
         SetValueAttributes(pValueCell->GetValue(), sValue);
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, sal_True, sal_True);
+/*		if (sValue.Len())
+        {
+            SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
+            sal_Bool bPrevCharWasSpace(sal_True);
+            rExport.GetTextParagraphExport()->exportText(sValue, bPrevCharWasSpace);
+        }*/
     }
 }
 
@@ -308,7 +355,7 @@ void ScChangeTrackingExportHelper::WriteStringCell(const ScBaseCell* pCell)
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, sal_True, sal_True);
         if (sOUString.getLength())
         {
-            SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, false);
+            SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
             sal_Bool bPrevCharWasSpace(sal_True);
             rExport.GetTextParagraphExport()->exportText(sOUString, bPrevCharWasSpace);
         }
@@ -333,7 +380,7 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScBaseCell* pCell)
             }
             pEditTextObj->SetText(*(pEditCell->GetData()));
             if (xText.is())
-                rExport.GetTextParagraphExport()->exportText(xText, false, false);
+                rExport.GetTextParagraphExport()->exportText(xText, sal_False, sal_False);
         }
     }
 }
@@ -373,12 +420,12 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MATRIX_COVERED, XML_TRUE);
             }
             rtl::OUString sMatrixFormula = sOUFormula.copy(1, sOUFormula.getLength() - 2);
-            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sMatrixFormula, false );
+            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sMatrixFormula, sal_False ); 
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue);
         }
         else
         {
-            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sFormula, false );
+            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sFormula, sal_False ); 
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue);
         }
         if (pFormulaCell->IsValue())
@@ -395,7 +442,7 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
             SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, sal_True, sal_True);
             if (sOUValue.getLength())
             {
-                SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, false);
+                SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
                 sal_Bool bPrevCharWasSpace(sal_True);
                 rExport.GetTextParagraphExport()->exportText(sOUValue, bPrevCharWasSpace);
             }
@@ -492,7 +539,7 @@ void ScChangeTrackingExportHelper::AddInsertionAttributes(const ScChangeAction* 
         break;
         default :
         {
-            OSL_FAIL("wrong insertion type");
+            DBG_ERROR("wrong insertion type");
         }
         break;
     }
@@ -552,11 +599,12 @@ void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TYPE, XML_TABLE);
             nPosition = nStartSheet;
+            //DBG_ERROR("not implemented feature");
         }
         break;
         default :
         {
-            OSL_FAIL("wrong deletion type");
+            DBG_ERROR("wrong deletion type");
         }
         break;
     }
@@ -570,7 +618,7 @@ void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel
         if (pDelAction->IsMultiDelete() && !pDelAction->GetDx() && !pDelAction->GetDy())
         {
             const ScChangeAction* p = pDelAction->GetNext();
-            sal_Bool bAll(false);
+            sal_Bool bAll(sal_False);
             sal_Int32 nSlavesCount (1);
             while (!bAll && p)
             {
@@ -673,7 +721,7 @@ void ScChangeTrackingExportHelper::CollectCellAutoStyles(const ScBaseCell* pBase
             }
             pEditTextObj->SetText(*(pEditCell->GetData()));
             if (xText.is())
-                rExport.GetTextParagraphExport()->collectTextAutoStyles(xText, false, false);
+                rExport.GetTextParagraphExport()->collectTextAutoStyles(xText, sal_False, sal_False);
         }
     }
 }
@@ -711,7 +759,7 @@ void ScChangeTrackingExportHelper::WorkWithChangeAction(ScChangeAction* pAction)
         WriteRejection(pAction);
     else
     {
-        OSL_FAIL("not a writeable type");
+        DBG_ERROR("not a writeable type");
     }
     rExport.CheckAttrList();
 }
@@ -745,6 +793,13 @@ void ScChangeTrackingExportHelper::CollectAndWriteChanges()
 {
     if (pChangeTrack)
     {
+/*		if (pChangeTrack->IsProtected())
+        {
+            rtl::OUStringBuffer aBuffer;
+            SvXMLUnitConverter::encodeBase64(aBuffer, pChangeTrack->GetProtection());
+            if (aBuffer.getLength())
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
+        }*/
         SvXMLElementExport aCangeListElem(rExport, XML_NAMESPACE_TABLE, XML_TRACKED_CHANGES, sal_True, sal_True);
         {
             ScChangeAction* pAction = pChangeTrack->GetFirst();

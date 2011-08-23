@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 #include "res_bmp.hrc"
 #include "glob.hrc"
 #include "app.hrc"
-#include "helpids.h"
+
 #include "optsitem.hxx"
 #include "app.hxx"
 #include "FrameView.hxx"
@@ -90,15 +90,16 @@ void DrawViewShell::ModelHasChanged()
 {
     Invalidate();
     // Damit der Navigator auch einen aktuellen Status bekommt
-    GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
+    GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
 
-    SfxBoolItem aItem( SID_3D_STATE, sal_True );
+    //Update3DWindow();
+    SfxBoolItem aItem( SID_3D_STATE, TRUE );
     GetViewFrame()->GetDispatcher()->Execute(
         SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
     // jetzt den von der Drawing Engine neu erzeugten TextEditOutliner
     // initialisieren
-    ::Outliner* pOutliner     = mpDrawView->GetTextEditOutliner();
+    ::Outliner* pOutliner 	  = mpDrawView->GetTextEditOutliner();
     if (pOutliner)
     {
         SfxStyleSheetPool* pSPool = (SfxStyleSheetPool*) GetDocSh()->GetStyleSheetPool();
@@ -133,7 +134,7 @@ void DrawViewShell::ArrangeGUIElements (void)
     // Retrieve the current size (thickness) of the scroll bars.  That is
     // the width of the vertical and the height of the horizontal scroll
     // bar.
-    int nScrollBarSize =
+    int nScrollBarSize = 
         GetParentWindow()->GetSettings().GetStyleSettings().GetScrollBarSize();
     maScrBarWH = Size (nScrollBarSize, nScrollBarSize);
 
@@ -147,11 +148,11 @@ void DrawViewShell::ArrangeGUIElements (void)
 
     OSL_ASSERT (GetViewShell()!=NULL);
     Client* pIPClient = static_cast<Client*>(GetViewShell()->GetIPClient());
-    sal_Bool bClientActive = sal_False;
+    BOOL bClientActive = FALSE;
     if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
-        bClientActive = sal_True;
+        bClientActive = TRUE;
 
-    sal_Bool bInPlaceActive = GetViewFrame()->GetFrame().IsInPlace();
+    BOOL bInPlaceActive = GetViewFrame()->GetFrame().IsInPlace();
 
     if ( mbZoomOnPage && !bInPlaceActive && !bClientActive )
     {
@@ -234,6 +235,8 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if (mpDrawView->IsMoveOnlyDragging() != pView->IsMoveOnlyDragging() )
         mpDrawView->SetMoveOnlyDragging( pView->IsMoveOnlyDragging() );
 
+//    mpDrawView->SetSlantButShear( pView->IsSlantButShear() );
+
     if (mpDrawView->IsNoDragXorPolys() != pView->IsNoDragXorPolys() )
         mpDrawView->SetNoDragXorPolys( pView->IsNoDragXorPolys() );
 
@@ -269,9 +272,9 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
         mpDrawView->SetMasterPagePaintCaching( pView->IsMasterPagePaintCaching() );
 
     // Definition:
-    //  grosse Handles: 9
-    //  kleine Handles: 7
-    sal_uInt16 nTmp = mpDrawView->GetMarkHdlSizePixel();
+    //	grosse Handles:	9
+    //	kleine Handles:	7
+    USHORT nTmp = mpDrawView->GetMarkHdlSizePixel();
     //DBG_ASSERT(nTmp != 7, "HandleSize != 7 oder 9");
     if( nTmp == 9 && !pView->IsBigHandles() )
         mpDrawView->SetMarkHdlSizePixel( 7 );
@@ -311,7 +314,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if ( mpDrawView->GetActiveLayer() != pView->GetActiveLayer() )
         mpDrawView->SetActiveLayer( pView->GetActiveLayer() );
 
-    sal_uInt16 nSelectedPage = 0;
+    USHORT nSelectedPage = 0;
 
     if (mePageKind != PK_HANDOUT)
     {
@@ -319,7 +322,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     }
 
     EditMode eNewEditMode = pView->GetViewShEditMode(mePageKind);
-    sal_Bool bNewLayerMode = pView->IsLayerMode();
+    BOOL bNewLayerMode = pView->IsLayerMode();
     ChangeEditMode(eNewEditMode, bNewLayerMode);
     SwitchPage(nSelectedPage);
 
@@ -451,7 +454,7 @@ void DrawViewShell::PrePaint()
 
 void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 {
-    // Fill var FillColor here to have it available on later call
+    // #103834# Fill var FillColor here to have it available on later call
     svtools::ColorConfig aColorConfig;
     Color aFillColor;
 
@@ -464,15 +467,15 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
         aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     }
 
-    /* This is done before each text edit, so why not do it before every paint.
+    /* #97517#	This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
     GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ) );
 
-    // Set Application Background color for usage in SdrPaintView(s)
+    // #103834# Set Application Background color for usage in SdrPaintView(s)
     mpDrawView->SetApplicationBackgroundColor(aFillColor);
 
-    /* This is done before each text edit, so why not do it before every paint.
+    /* #97517#	This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
     GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( Application::GetSettings().GetLanguage() );
@@ -498,7 +501,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY)
 {
     ViewShell::SetZoomFactor(rZoomX, rZoomY);
-    mbZoomOnPage = sal_False;
+    mbZoomOnPage = FALSE;
     Point aOrigin = GetActiveWindow()->GetViewOrigin();
     GetActiveWindow()->SetWinViewPos(aOrigin);
 }
@@ -530,7 +533,7 @@ Size DrawViewShell::GetOptimalSizePixel() const
                 // 1:1 Darstellung
                 MapMode aMapMode(MAP_100TH_MM);
                 aSize = GetActiveWindow()->LogicToPixel( pPage->GetSize(), aMapMode );
-                const_cast< DrawViewShell* >(this)->mbZoomOnPage = sal_True;
+                const_cast< DrawViewShell* >(this)->mbZoomOnPage = TRUE;
             }
         }
     }
@@ -549,7 +552,7 @@ void DrawViewShell::HidePage()
 {
     FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
     if (pFormShell != NULL)
-        pFormShell->PrepareClose (sal_False);
+        pFormShell->PrepareClose (FALSE);
 }
 
 
@@ -593,20 +596,20 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
         if (mePageKind == PK_NOTES)
         {
             SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetHelpId( CMD_SID_NOTESMODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_NOTESMODE );
+            GetActiveWindow()->SetHelpId( SID_NOTESMODE );
+            GetActiveWindow()->SetUniqueId( SID_NOTESMODE );
         }
         else if (mePageKind == PK_HANDOUT)
         {
             SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetHelpId( CMD_SID_HANDOUTMODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUTMODE );
+            GetActiveWindow()->SetHelpId( SID_HANDOUTMODE );
+            GetActiveWindow()->SetUniqueId( SID_HANDOUTMODE );
         }
         else
         {
             SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetHelpId( HID_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetUniqueId( HID_SDDRAWVIEWSHELL );
+            GetActiveWindow()->SetHelpId( SD_IF_SDDRAWVIEWSHELL );
+            GetActiveWindow()->SetUniqueId( SD_IF_SDDRAWVIEWSHELL );
         }
     }
 
@@ -684,7 +687,7 @@ void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
 
 int DrawViewShell::GetActiveTabLayerIndex (void) const
 {
-    const LayerTabBar* pBar
+    const LayerTabBar* pBar 
         = const_cast<DrawViewShell*>(this)->GetLayerTabControl ();
     if (pBar != NULL)
         return pBar->GetPagePos (pBar->GetCurPageId());
@@ -704,8 +707,8 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
         if (nIndex>=0 && nIndex<pBar->GetPageCount())
         {
             // Tell the draw view and the tab control of the new active layer.
-            mpDrawView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId ((sal_uInt16)nIndex)));
-            pBar->SetCurPageId (pBar->GetPageId ((sal_uInt16)nIndex));
+            mpDrawView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId ((USHORT)nIndex)));
+            pBar->SetCurPageId (pBar->GetPageId ((USHORT)nIndex));
         }
     }
 }
@@ -731,7 +734,7 @@ LayerTabBar* DrawViewShell::GetLayerTabControl (void)
 
 int DrawViewShell::GetTabLayerCount (void) const
 {
-    const LayerTabBar* pBar
+    const LayerTabBar* pBar 
         = const_cast<DrawViewShell*>(this)->GetLayerTabControl ();
     if (pBar != NULL)
         return pBar->GetPageCount();

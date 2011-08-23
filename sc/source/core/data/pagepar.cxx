@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,11 +58,11 @@ ScPageTableParam::~ScPageTableParam()
 
 void ScPageTableParam::Reset()
 {
-    bCellContent = sal_True;
+    bCellContent = TRUE;
     bNotes=bGrid=bHeaders=bDrawings=
     bLeftRight=bScaleAll=bScaleTo=bScalePageNum=
-    bFormulas=bNullVals=bSkipEmpty          = false;
-    bTopDown=bScaleNone=bCharts=bObjects    = sal_True;
+    bFormulas=bNullVals=bSkipEmpty			= FALSE;
+    bTopDown=bScaleNone=bCharts=bObjects	= TRUE;
     nScaleAll = 100;
     nScalePageNum = nScaleWidth = nScaleHeight = 0;
     nFirstPageNo = 1;
@@ -70,7 +70,7 @@ void ScPageTableParam::Reset()
 
 //------------------------------------------------------------------------
 
-sal_Bool ScPageTableParam::operator==( const ScPageTableParam& r ) const
+BOOL ScPageTableParam::operator==( const ScPageTableParam& r ) const
 {
     return ( memcmp( this, &r, sizeof(ScPageTableParam) ) == 0 );
 }
@@ -93,7 +93,7 @@ ScPageAreaParam::~ScPageAreaParam()
 
 void ScPageAreaParam::Reset()
 {
-    bPrintArea = bRepeatRow = bRepeatCol = false;
+    bPrintArea = bRepeatRow = bRepeatCol = FALSE;
 
     memset( &aPrintArea, 0, sizeof(ScRange) );
     memset( &aRepeatRow, 0, sizeof(ScRange) );
@@ -102,22 +102,22 @@ void ScPageAreaParam::Reset()
 
 //------------------------------------------------------------------------
 
-sal_Bool ScPageAreaParam::operator==( const ScPageAreaParam& r ) const
+BOOL ScPageAreaParam::operator==( const ScPageAreaParam& r ) const
 {
-    sal_Bool bEqual =
-            bPrintArea  == r.bPrintArea
-        &&  bRepeatRow  == r.bRepeatRow
-        &&  bRepeatCol  == r.bRepeatCol;
+    BOOL bEqual =
+            bPrintArea 	== r.bPrintArea
+        &&	bRepeatRow 	== r.bRepeatRow
+        &&	bRepeatCol 	== r.bRepeatCol;
 
     if ( bEqual )
         if ( bPrintArea )
-            bEqual = bEqual && ( aPrintArea == r.aPrintArea );
+            bEqual = bEqual && ( aPrintArea	== r.aPrintArea );
     if ( bEqual )
         if ( bRepeatRow )
-            bEqual = bEqual && ( aRepeatRow == r.aRepeatRow );
+            bEqual = bEqual && ( aRepeatRow	== r.aRepeatRow );
     if ( bEqual )
         if ( bRepeatCol )
-            bEqual = bEqual && ( aRepeatCol == r.aRepeatCol );
+            bEqual = bEqual && ( aRepeatCol	== r.aRepeatCol );
 
     return bEqual;
 }

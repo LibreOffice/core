@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,6 +87,54 @@ using namespace ::com::sun::star::io;
 using namespace ::cppu;
 using namespace ::osl;
 
+
+
+Reference< frame::XModel >  getModelFromBasic( SbxObject* pBasic )
+{
+    OSL_PRECOND( pBasic != NULL, "getModelFromBasic: illegal call!" );
+    if ( !pBasic )
+        return NULL;
+
+    // look for the ThisComponent variable, first in the parent (which
+    // might be the document's Basic), then in the parent's parent (which might be
+    // the application Basic)
+    const ::rtl::OUString sThisComponent( RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" ) );
+    SbxVariable* pThisComponent = NULL;
+
+    SbxObject* pLookup = pBasic->GetParent();
+    while ( pLookup && !pThisComponent )
+    {
+        pThisComponent = pLookup->Find( sThisComponent, SbxCLASS_OBJECT );
+        pLookup = pLookup->GetParent();
+    }
+    if ( !pThisComponent )
+    {
+        OSL_TRACE("Failed to get ThisComponent");
+            // the application Basic, at the latest, should have this variable
+        return NULL;
+    }
+
+    Any aThisComponent( sbxToUnoValue( pThisComponent ) );
+    Reference< frame::XModel > xModel( aThisComponent, UNO_QUERY );
+    if ( !xModel.is() )
+    {
+        // it's no XModel. Okay, ThisComponent nowadays is allowed to be a controller.
+        Reference< frame::XController > xController( aThisComponent, UNO_QUERY );
+        if ( xController.is() )
+            xModel = xController->getModel();
+    }
+
+    if ( !xModel.is() )
+        return NULL;
+
+#if OSL_DEBUG_LEVEL > 0
+    OSL_TRACE("Have model ThisComponent points to url %s",
+        ::rtl::OUStringToOString( xModel->getURL(),
+            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+#endif
+
+    return xModel;
+}
 
 void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Reference< frame::XModel >& xModel )
 {
@@ -214,6 +262,8 @@ void BasicScriptListener_Impl::disposing(const EventObject& ) throw ( RuntimeExc
 
 void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
 {
+    //Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
+    //{
     if( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
     {
         // Full qualified name?
@@ -296,7 +346,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
                     if( aName == aLibName )
                     {
                         // Search only in the lib, not automatically in application basic
-                        sal_uInt16 nFlags = pBasic->GetFlags();
+                        USHORT nFlags = pBasic->GetFlags();
                         pBasic->ResetFlag( SBX_GBLSEARCH );
                         pMethVar = pBasic->Find( aMacro, SbxCLASS_DONTCARE );
                         pBasic->SetFlags( nFlags );
@@ -326,7 +376,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             {
                 SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
                 unoToSbxValue( (SbxVariable*)xVar, pArgs[i] );
-                xArray->Put( xVar, sal::static_int_cast< sal_uInt16 >(i+1) );
+                xArray->Put( xVar, sal::static_int_cast< USHORT >(i+1) );
             }
         }
 
@@ -436,7 +486,7 @@ Any implFindDialogLibForDialogBasic( const Any& aAnyISP, SbxObject* pBasic, Star
     return aDlgLibAny;
 }
 
-void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -515,7 +565,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     bool bDocDialog = false;
     StarBASIC* pFoundBasic = NULL;
     OSL_TRACE("About to try get a hold of ThisComponent");
-    Reference< frame::XModel > xModel = StarBASIC::GetModelFromBasic( pINST->GetBasic() ) ;
+    Reference< frame::XModel > xModel = getModelFromBasic( pINST->GetBasic() ) ;
     aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pINST->GetBasic(), pFoundBasic );
     // If we found the dialog then it belongs to the Search basic
     if ( !pFoundBasic )

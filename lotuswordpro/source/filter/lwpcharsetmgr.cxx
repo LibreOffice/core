@@ -57,10 +57,14 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
+/*************************************************************************
+ * Change History
+ Jan 2005			Created
+ ************************************************************************/
 #include "lwpcharsetmgr.hxx"
-//Added for SS migration
+//Added by yanjun for SS migration : 2007-12-21
 #include "rtl/textenc.h"
-
+//End
 LwpCharSetMgr* LwpCharSetMgr::Instance = NULL;
 
 LwpCharSetMgr* LwpCharSetMgr::GetInstance()
@@ -72,7 +76,7 @@ LwpCharSetMgr* LwpCharSetMgr::GetInstance()
 
 void LwpCharSetMgr::SetCodePageMap()
 {//sal_uInt16 wordproCode,rtl_TextEncoding encoding, tmp hardcoding, 1-18
-/*  m_CodePageMap[256] =
+/*	m_CodePageMap[256] =
     m_CodePageMap[259] =
     m_CodePageMap[819] =
     m_CodePageMap[921] =*/

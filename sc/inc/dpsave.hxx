@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,19 +29,14 @@
 #ifndef SC_DPSAVE_HXX
 #define SC_DPSAVE_HXX
 
-#include <list>
-#include <memory>
-
-#include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/unordered_map.hpp>
-
+#include <tools/string.hxx>
+#include <tools/list.hxx>
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <rtl/ustring.hxx>
-#include <sal/types.h>
-#include <tools/string.hxx>
-
 #include "scdllapi.h"
+#include <hash_map>
+#include <list>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -53,293 +48,240 @@ namespace com { namespace sun { namespace star { namespace sheet {
 class ScDPDimensionSaveData;
 class ScDPTableData;
 
+// --------------------------------------------------------------------
 //
-// classes to save Data Pilot settings
+//	classes to save Data Pilot settings
 //
 
 
 class ScDPSaveMember
 {
 private:
-    ::rtl::OUString aName;
+    String		aName;
     ::std::auto_ptr<rtl::OUString> mpLayoutName; // custom name to be displayed in the table.
-    sal_uInt16 nVisibleMode;
-    sal_uInt16 nShowDetailsMode;
+    USHORT		nVisibleMode;
+    USHORT		nShowDetailsMode;
 
 public:
-    ScDPSaveMember(const ::rtl::OUString& rName);
-    ScDPSaveMember(const ScDPSaveMember& r);
-    ~ScDPSaveMember();
+                            ScDPSaveMember(const String& rName);
+                            ScDPSaveMember(const ScDPSaveMember& r);
+                            ~ScDPSaveMember();
 
-    bool operator== ( const ScDPSaveMember& r ) const;
+    BOOL		 			operator== ( const ScDPSaveMember& r ) const;
 
-    const ::rtl::OUString& GetName() const
-        { return aName; }
+    const String&           GetName() const { return aName; }
+    BOOL                    HasIsVisible() const;
+    SC_DLLPUBLIC void					SetIsVisible(BOOL bSet);
+    BOOL                    GetIsVisible() const { return BOOL(nVisibleMode); }
+    BOOL                    HasShowDetails() const;
+    SC_DLLPUBLIC void					SetShowDetails(BOOL bSet);
+    BOOL                    GetShowDetails() const { return BOOL(nShowDetailsMode); }
 
-    bool HasIsVisible() const;
-    SC_DLLPUBLIC void SetIsVisible(bool bSet);
-    bool GetIsVisible() const
-        { return bool(nVisibleMode); }
+    void                    SetName( const String& rNew );  // used if the source member was renamed (groups)
 
-    bool HasShowDetails() const;
-    SC_DLLPUBLIC void SetShowDetails(bool bSet);
-    bool GetShowDetails() const
-        { return bool(nShowDetailsMode); }
-
-    void SetName( const ::rtl::OUString& rNew ); // used if the source member was renamed (groups)
-
-    SC_DLLPUBLIC void SetLayoutName( const ::rtl::OUString& rName );
+    SC_DLLPUBLIC void                    SetLayoutName( const ::rtl::OUString& rName );
     SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;
-    void RemoveLayoutName();
+    void                    RemoveLayoutName();
 
-    void WriteToSource( const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xMember,
-                            sal_Int32 nPosition );
+    void					WriteToSource( const com::sun::star::uno::Reference<
+                                            com::sun::star::uno::XInterface>& xMember,
+                                            sal_Int32 nPosition );
 };
 
 
 bool operator == (const ::com::sun::star::sheet::DataPilotFieldSortInfo &l, const ::com::sun::star::sheet::DataPilotFieldSortInfo &r );
 bool operator == (const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo &l, const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo &r );
 bool operator == (const ::com::sun::star::sheet::DataPilotFieldReference &l, const ::com::sun::star::sheet::DataPilotFieldReference &r );
-
 class SC_DLLPUBLIC ScDPSaveDimension
 {
 private:
-    ::rtl::OUString aName;
-    ::rtl::OUString* pSelectedPage;
+    String		aName;
+    String*		pSelectedPage;
     ::std::auto_ptr<rtl::OUString> mpLayoutName;
     ::std::auto_ptr<rtl::OUString> mpSubtotalName;
-    bool bIsDataLayout;
-    bool bDupFlag;
-    sal_uInt16 nOrientation;
-    sal_uInt16 nFunction; // enum GeneralFunction, for data dimensions
-    long nUsedHierarchy;
-    sal_uInt16 nShowEmptyMode; //! at level
-    bool bSubTotalDefault; //! at level
-    long nSubTotalCount;
-    sal_uInt16* pSubTotalFuncs; // enum GeneralFunction
+    BOOL		bIsDataLayout;
+    BOOL		bDupFlag;
+    USHORT		nOrientation;
+    USHORT		nFunction;			// enum GeneralFunction, for data dimensions
+    long		nUsedHierarchy;
+    USHORT		nShowEmptyMode;		//!	at level
+    BOOL		bSubTotalDefault;	//!	at level
+    long		nSubTotalCount;
+    USHORT*		pSubTotalFuncs;		// enum GeneralFunction
     ::com::sun::star::sheet::DataPilotFieldReference* pReferenceValue;
-    ::com::sun::star::sheet::DataPilotFieldSortInfo* pSortInfo; // (level)
-    ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* pAutoShowInfo; // (level)
-    ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pLayoutInfo; // (level)
+    ::com::sun::star::sheet::DataPilotFieldSortInfo*  pSortInfo;            // (level)
+    ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* pAutoShowInfo;     // (level)
+    ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pLayoutInfo;         // (level)
 
 public:
-    typedef boost::unordered_map <rtl::OUString, ScDPSaveMember*, rtl::OUStringHash> MemberHash;
-    typedef std::list <ScDPSaveMember*> MemberList;
-
+    typedef	std::hash_map <String, ScDPSaveMember*, rtl::OUStringHash> MemberHash;
+    typedef	std::list <ScDPSaveMember*>                                MemberList;
 private:
     MemberHash maMemberHash;
     MemberList maMemberList;
-
 public:
-    ScDPSaveDimension(const ::rtl::OUString& rName, bool bDataLayout);
-    ScDPSaveDimension(const ScDPSaveDimension& r);
-    ~ScDPSaveDimension();
+                            ScDPSaveDimension(const String& rName, BOOL bDataLayout);
+                            ScDPSaveDimension(const ScDPSaveDimension& r);
+                            ~ScDPSaveDimension();
 
-    bool operator== ( const ScDPSaveDimension& r ) const;
+    BOOL		 			operator== ( const ScDPSaveDimension& r ) const;
 
-    const MemberList& GetMembers() const
-        { return maMemberList; }
+    const MemberList&       GetMembers() const { return maMemberList; }
+    void					AddMember(ScDPSaveMember* pMember);
 
-    void AddMember(ScDPSaveMember* pMember);
+    void					SetDupFlag(BOOL bSet)	{ bDupFlag = bSet; }
+    BOOL					GetDupFlag() const		{ return bDupFlag; }
 
-    void SetDupFlag(bool bSet)
-        { bDupFlag = bSet; }
+    const String&			GetName() const			{ return aName; }
+    BOOL					IsDataLayout() const	{ return bIsDataLayout; }
 
-    bool GetDupFlag() const
-        { return bDupFlag; }
+    void                    SetName( const String& rNew );  // used if the source dim was renamed (groups)
 
-    const ::rtl::OUString& GetName() const
-        { return aName; }
+    void					SetOrientation(USHORT nNew);
+    void					SetSubTotals(long nCount, const USHORT* pFuncs);
+    long                    GetSubTotalsCount() const { return nSubTotalCount; }
+    USHORT                  GetSubTotalFunc(long nIndex) const { return pSubTotalFuncs[nIndex]; }
+    bool                    HasShowEmpty() const;
+    void					SetShowEmpty(BOOL bSet);
+    BOOL                    GetShowEmpty() const { return BOOL(nShowEmptyMode); }
+    void					SetFunction(USHORT nNew);		// enum GeneralFunction
+    USHORT                  GetFunction() const { return nFunction; }
+    void					SetUsedHierarchy(long nNew);
+    long                    GetUsedHierarchy() const { return nUsedHierarchy; }
 
-    bool IsDataLayout() const
-        { return bIsDataLayout; }
+    void                    SetLayoutName(const ::rtl::OUString& rName);
+    const ::rtl::OUString*  GetLayoutName() const;
+    void                    RemoveLayoutName();
+    void                    SetSubtotalName(const ::rtl::OUString& rName);
+    const ::rtl::OUString*  GetSubtotalName() const;
 
-    void SetName( const ::rtl::OUString& rNew ); // used if the source dim was renamed (groups)
+    bool                    IsMemberNameInUse(const ::rtl::OUString& rName) const;
 
-    void SetOrientation(sal_uInt16 nNew);
-    void SetSubTotals(long nCount, const sal_uInt16* pFuncs);
-    long GetSubTotalsCount() const
-        { return nSubTotalCount; }
+    const ::com::sun::star::sheet::DataPilotFieldReference* GetReferenceValue() const	{ return pReferenceValue; }
+    void					SetReferenceValue(const ::com::sun::star::sheet::DataPilotFieldReference* pNew);
 
-    sal_uInt16 GetSubTotalFunc(long nIndex) const
-        { return pSubTotalFuncs[nIndex]; }
+    const ::com::sun::star::sheet::DataPilotFieldSortInfo* GetSortInfo() const          { return pSortInfo; }
+    void                    SetSortInfo(const ::com::sun::star::sheet::DataPilotFieldSortInfo* pNew);
+    const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* GetAutoShowInfo() const  { return pAutoShowInfo; }
+    void                    SetAutoShowInfo(const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* pNew);
+    const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* GetLayoutInfo() const      { return pLayoutInfo; }
+    void                    SetLayoutInfo(const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pNew);
 
-    bool HasShowEmpty() const;
-    void SetShowEmpty(bool bSet);
-    bool GetShowEmpty() const
-        { return bool(nShowEmptyMode); }
+    void					SetCurrentPage( const String* pPage );		// NULL = no selection (all)
+    BOOL					HasCurrentPage() const;
+    const String&			GetCurrentPage() const;
 
-    void SetFunction(sal_uInt16 nNew); // enum GeneralFunction
-    sal_uInt16 GetFunction() const
-        { return nFunction; }
+    USHORT					GetOrientation() const	{ return nOrientation; }
 
-    void SetUsedHierarchy(long nNew);
-    long GetUsedHierarchy() const
-        { return nUsedHierarchy; }
+    ScDPSaveMember* 		GetExistingMemberByName(const String& rName);
+    ScDPSaveMember*			GetMemberByName(const String& rName);
 
-    void SetLayoutName(const ::rtl::OUString& rName);
-    const ::rtl::OUString* GetLayoutName() const;
-    void RemoveLayoutName();
-    void SetSubtotalName(const ::rtl::OUString& rName);
-    const ::rtl::OUString* GetSubtotalName() const;
+    void                    SetMemberPosition( const String& rName, sal_Int32 nNewPos );
 
-    bool IsMemberNameInUse(const ::rtl::OUString& rName) const;
+    void					WriteToSource( const com::sun::star::uno::Reference<
+                                            com::sun::star::uno::XInterface>& xDim );
+    void					Refresh( const com::sun::star::uno::Reference<
+                                    com::sun::star::sheet::XDimensionsSupplier>& xSource ,
+                                    const	std::list<String> & deletedDims);
 
-    const ::com::sun::star::sheet::DataPilotFieldReference* GetReferenceValue() const
-        { return pReferenceValue; }
+    void                    UpdateMemberVisibility(const ::std::hash_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rData);
 
-    void SetReferenceValue(const ::com::sun::star::sheet::DataPilotFieldReference* pNew);
-
-    const ::com::sun::star::sheet::DataPilotFieldSortInfo* GetSortInfo() const
-        { return pSortInfo; }
-
-    void SetSortInfo(const ::com::sun::star::sheet::DataPilotFieldSortInfo* pNew);
-    const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* GetAutoShowInfo() const
-        { return pAutoShowInfo; }
-
-    void SetAutoShowInfo(const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* pNew);
-    const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* GetLayoutInfo() const
-        { return pLayoutInfo; }
-
-    void SetLayoutInfo(const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pNew);
-
-    void SetCurrentPage( const ::rtl::OUString* pPage ); // NULL = no selection (all)
-    bool HasCurrentPage() const;
-    const ::rtl::OUString& GetCurrentPage() const;
-
-    sal_uInt16 GetOrientation() const
-        { return nOrientation; }
-
-    ScDPSaveMember* GetExistingMemberByName(const ::rtl::OUString& rName);
-
-    /**
-     * Get a member object by its name.  If one doesn't exist, creat a new
-     * object and return it.  This class manages the life cycle of all member
-     * objects belonging to it, so <i>don't delete the returned instance.</i>
-     *
-     * @param rName member name
-     *
-     * @return pointer to the member object.
-     */
-    ScDPSaveMember* GetMemberByName(const ::rtl::OUString& rName);
-
-    void SetMemberPosition( const ::rtl::OUString& rName, sal_Int32 nNewPos );
-
-    void WriteToSource( const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xDim );
-    void Refresh( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource ,
-                      const std::list<rtl::OUString> & deletedDims);
-
-    void UpdateMemberVisibility(const ::boost::unordered_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rData);
-
-    bool HasInvisibleMember() const;
+    bool                    HasInvisibleMember() const;
 };
 
 
 class ScDPSaveData
 {
 private:
-    boost::ptr_vector<ScDPSaveDimension> aDimList;
-    ScDPDimensionSaveData* pDimensionData; // settings that create new dimensions
-    sal_uInt16 nColumnGrandMode;
-    sal_uInt16 nRowGrandMode;
-    sal_uInt16 nIgnoreEmptyMode;
-    sal_uInt16 nRepeatEmptyMode;
-    bool bFilterButton; // not passed to DataPilotSource
-    bool bDrillDown; // not passed to DataPilotSource
+    List		aDimList;
+    ScDPDimensionSaveData* pDimensionData;      // settings that create new dimensions
+    USHORT		nColumnGrandMode;
+    USHORT		nRowGrandMode;
+    USHORT		nIgnoreEmptyMode;
+    USHORT		nRepeatEmptyMode;
+    BOOL        bFilterButton;      // not passed to DataPilotSource
+    BOOL        bDrillDown;         // not passed to DataPilotSource
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    long      mnCacheId;
+    // End Comments
 
     /** if true, all dimensions already have all of their member instances
      *  created. */
-    bool mbDimensionMembersBuilt;
+    bool        mbDimensionMembersBuilt; 
 
     ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
 
 public:
-    SC_DLLPUBLIC ScDPSaveData();
-    ScDPSaveData(const ScDPSaveData& r);
-    SC_DLLPUBLIC ~ScDPSaveData();
+    SC_DLLPUBLIC						ScDPSaveData();
+                            ScDPSaveData(const ScDPSaveData& r);
+    SC_DLLPUBLIC						~ScDPSaveData();
 
-    ScDPSaveData& operator= ( const ScDPSaveData& r );
+    ScDPSaveData& 			operator= ( const ScDPSaveData& r );
 
-    bool operator== ( const ScDPSaveData& r ) const;
+    BOOL		 			operator== ( const ScDPSaveData& r ) const;
 
-    SC_DLLPUBLIC void SetGrandTotalName(const ::rtl::OUString& rName);
-    SC_DLLPUBLIC const ::rtl::OUString* GetGrandTotalName() const;
+    SC_DLLPUBLIC void                    SetGrandTotalName(const ::rtl::OUString& rName);
+    SC_DLLPUBLIC const ::rtl::OUString*  GetGrandTotalName() const;
 
-    const boost::ptr_vector<ScDPSaveDimension>& GetDimensions() const
-        { return aDimList; }
+    const List&				GetDimensions() const { return aDimList; }
+    void					AddDimension(ScDPSaveDimension* pDim) { aDimList.Insert(pDim, LIST_APPEND); }
 
-    void AddDimension(ScDPSaveDimension* pDim)
-        { aDimList.push_back(pDim); }
+    ScDPSaveDimension*		GetDimensionByName(const String& rName);
+    SC_DLLPUBLIC ScDPSaveDimension*		GetDataLayoutDimension();
+    SC_DLLPUBLIC ScDPSaveDimension*      GetExistingDataLayoutDimension() const;
 
-    /**
-     * Get a dimension object by its name.  <i>If one doesn't exist for the
-     * given name, it creats a new one.</i>
-     *
-     * @param rName dimension name
-     *
-     * @return pointer to the dimension object.  The ScDPSaveData instance
-     *         manages its life cycle; hence the caller must
-     *         <i>not</i> delete this object.
-     */
-    ScDPSaveDimension* GetDimensionByName(const ::rtl::OUString& rName);
-    SC_DLLPUBLIC ScDPSaveDimension* GetDataLayoutDimension();
-    SC_DLLPUBLIC ScDPSaveDimension* GetExistingDataLayoutDimension() const;
+    ScDPSaveDimension*		DuplicateDimension(const String& rName);
+    SC_DLLPUBLIC ScDPSaveDimension&      DuplicateDimension(const ScDPSaveDimension& rDim);
 
-    ScDPSaveDimension* DuplicateDimension(const ::rtl::OUString& rName);
-    SC_DLLPUBLIC ScDPSaveDimension& DuplicateDimension(const ScDPSaveDimension& rDim);
+    SC_DLLPUBLIC ScDPSaveDimension*		GetExistingDimensionByName(const String& rName) const;
+    SC_DLLPUBLIC ScDPSaveDimension*		GetNewDimensionByName(const String& rName);
 
-    SC_DLLPUBLIC ScDPSaveDimension* GetExistingDimensionByName(const ::rtl::OUString& rName) const;
-    SC_DLLPUBLIC ScDPSaveDimension* GetNewDimensionByName(const ::rtl::OUString& rName);
+    void                    RemoveDimensionByName(const String& rName);
 
-    void RemoveDimensionByName(const ::rtl::OUString& rName);
+    ScDPSaveDimension*      GetInnermostDimension(USHORT nOrientation);
+    ScDPSaveDimension*      GetFirstDimension(::com::sun::star::sheet::DataPilotFieldOrientation eOrientation);
+    long                    GetDataDimensionCount() const;
 
-    ScDPSaveDimension* GetInnermostDimension(sal_uInt16 nOrientation);
-    ScDPSaveDimension* GetFirstDimension(::com::sun::star::sheet::DataPilotFieldOrientation eOrientation);
-    long GetDataDimensionCount() const;
 
-    void SetPosition( ScDPSaveDimension* pDim, long nNew );
-    SC_DLLPUBLIC void SetColumnGrand( bool bSet );
-    bool GetColumnGrand() const
-        { return bool(nColumnGrandMode); }
+    void					SetPosition( ScDPSaveDimension* pDim, long nNew );
+    SC_DLLPUBLIC void					SetColumnGrand( BOOL bSet );
+    BOOL					GetColumnGrand() const { return BOOL(nColumnGrandMode); }
+    SC_DLLPUBLIC void					SetRowGrand( BOOL bSet );
+    BOOL					GetRowGrand() const { return BOOL(nRowGrandMode); }
+    void					SetIgnoreEmptyRows( BOOL bSet );
+    BOOL					GetIgnoreEmptyRows() const { return BOOL(nIgnoreEmptyMode); }
+    void					SetRepeatIfEmpty( BOOL bSet );
+    BOOL					GetRepeatIfEmpty() const { return BOOL(nRepeatEmptyMode); }
 
-    SC_DLLPUBLIC void SetRowGrand( bool bSet );
-    bool GetRowGrand() const
-        { return bool(nRowGrandMode); }
+    SC_DLLPUBLIC void                    SetFilterButton( BOOL bSet );
+    BOOL                    GetFilterButton() const { return bFilterButton; }
+    SC_DLLPUBLIC void                    SetDrillDown( BOOL bSet );
+    BOOL                    GetDrillDown() const { return bDrillDown; }
 
-    void SetIgnoreEmptyRows( bool bSet );
-    bool GetIgnoreEmptyRows() const
-        { return bool(nIgnoreEmptyMode); }
+    void					WriteToSource( const com::sun::star::uno::Reference<
+        com::sun::star::sheet::XDimensionsSupplier>& xSource );
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    void					Refresh( const com::sun::star::uno::Reference<
+                                            com::sun::star::sheet::XDimensionsSupplier>& xSource );
+    BOOL					IsEmpty() const;
+    inline long GetCacheId() const{ return mnCacheId; }
+    inline void SetCacheId( long nCacheId ){ mnCacheId = nCacheId; }
+    // End Comments
+    const ScDPDimensionSaveData* GetExistingDimensionData() const   { return pDimensionData; }
+    SC_DLLPUBLIC ScDPDimensionSaveData*  GetDimensionData();     // create if not there
+    void                    SetDimensionData( const ScDPDimensionSaveData* pNew );      // copied
+    void                    BuildAllDimensionMembers(ScDPTableData* pData);
 
-    void SetRepeatIfEmpty( bool bSet );
-    bool GetRepeatIfEmpty() const
-        { return bool(nRepeatEmptyMode); }
-
-    SC_DLLPUBLIC void SetFilterButton( bool bSet );
-    bool GetFilterButton() const
-        { return bFilterButton; }
-
-    SC_DLLPUBLIC void SetDrillDown( bool bSet );
-    bool GetDrillDown() const
-        { return bDrillDown; }
-
-    void WriteToSource( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource );
-    void Refresh( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource );
-    bool IsEmpty() const;
-
-    const ScDPDimensionSaveData* GetExistingDimensionData() const
-        { return pDimensionData; }
-
-    SC_DLLPUBLIC ScDPDimensionSaveData* GetDimensionData(); // create if not there
-    void SetDimensionData( const ScDPDimensionSaveData* pNew ); // copied
-    void BuildAllDimensionMembers(ScDPTableData* pData);
-
-    /**
+    /** 
      * Check whether a dimension has one or more invisible members.
      *
      * @param rDimName dimension name
      */
-    SC_DLLPUBLIC bool HasInvisibleMember(const ::rtl::OUString& rDimName) const;
+    SC_DLLPUBLIC bool       HasInvisibleMember(const ::rtl::OUString& rDimName) const;
 };
+
 
 #endif
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,9 +81,12 @@ private:
     SvXMLTokenMap* mpChartElemTokenMap;
     SvXMLTokenMap* mpPlotAreaElemTokenMap;
     SvXMLTokenMap* mpSeriesElemTokenMap;
+    SvXMLTokenMap* mpAxisElemTokenMap;
 
     SvXMLTokenMap* mpChartAttrTokenMap;
     SvXMLTokenMap* mpPlotAreaAttrTokenMap;
+    SvXMLTokenMap* mpAxisAttrTokenMap;
+    SvXMLTokenMap* mpLegendAttrTokenMap;
     SvXMLTokenMap* mpAutoStyleAttrTokenMap;
     SvXMLTokenMap* mpCellAttrTokenMap;
     SvXMLTokenMap* mpSeriesAttrTokenMap;
@@ -121,9 +124,12 @@ public:
     const SvXMLTokenMap& GetChartElemTokenMap();
     const SvXMLTokenMap& GetPlotAreaElemTokenMap();
     const SvXMLTokenMap& GetSeriesElemTokenMap();
+    const SvXMLTokenMap& GetAxisElemTokenMap();
 
     const SvXMLTokenMap& GetChartAttrTokenMap();
     const SvXMLTokenMap& GetPlotAreaAttrTokenMap();
+    const SvXMLTokenMap& GetAxisAttrTokenMap();
+    const SvXMLTokenMap& GetLegendAttrTokenMap();
     const SvXMLTokenMap& GetAutoStyleAttrTokenMap();
     const SvXMLTokenMap& GetCellAttrTokenMap();
     const SvXMLTokenMap& GetSeriesAttrTokenMap();
@@ -131,9 +137,9 @@ public:
 
     static sal_uInt16 GetChartFamilyID() { return XML_STYLE_FAMILY_SCH_CHART_ID; }
 
-    /** @param bPushLastChartType If </sal_False>, in case a new chart type has to
+    /** @param bPushLastChartType If </FALSE>, in case a new chart type has to
                be added (because it does not exist yet), it is appended at the
-               end of the chart-type container.  When </sal_True>, a new chart type
+               end of the chart-type container.  When </TRUE>, a new chart type
                is added at one position before the last one, i.e. the formerly
                last chart type is pushed back, so that it remains the last one.
 
@@ -161,6 +167,6 @@ public:
             ::com::sun::star::chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence();
 };
 
-#endif  // _XMLOFF_SCH_XMLIMPORTHELPER_HXX_
+#endif	// _XMLOFF_SCH_XMLIMPORTHELPER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

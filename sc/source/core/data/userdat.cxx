@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ IMPL_LINK_INLINE_START( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFac
             pObjFactory->pNewData = new ScMacroInfo;
         else
         {
-            OSL_FAIL("MakeUserData: falsche ID");
+            DBG_ERROR("MakeUserData: falsche ID");
         }
     }
     return 0;

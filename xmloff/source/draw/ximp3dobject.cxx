@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,8 +60,8 @@ SdXML3DObjectContext::SdXML3DObjectContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mbSetTransform( sal_False )
+:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+    mbSetTransform( FALSE )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -124,6 +124,66 @@ void SdXML3DObjectContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
+//////////////////////////////////////////////////////////////////////////////
+/*
+void SdXML3DObjectContext::AddShape(uno::Reference< drawing::XShape >& xShape)
+{
+    if(xShape.is() && mxShapes.is())
+    {
+        // set shape local
+        mxShape = xShape;
+
+        // add new shape to parent
+        mxShapes->add( xShape );
+    }
+}
+*/
+//////////////////////////////////////////////////////////////////////////////
+/*
+void SdXML3DObjectContext::SetStyle()
+{
+    // set style on shape
+    if(maDrawStyleName.getLength() && mxShape.is())
+    {
+        const SvXMLStyleContext* pStyle = 0L;
+        sal_Bool bAutoStyle(FALSE);
+
+        if(GetImport().GetShapeImport()->GetAutoStylesContext())
+            pStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(
+            XML_STYLE_FAMILY_SD_GRAPHICS_ID, maDrawStyleName);
+
+        if(pStyle)
+            bAutoStyle = TRUE;
+
+        if(!pStyle && GetImport().GetShapeImport()->GetStylesContext())
+            pStyle = GetImport().GetShapeImport()->GetStylesContext()->
+            FindStyleChildContext(XML_STYLE_FAMILY_SD_GRAPHICS_ID, maDrawStyleName);
+
+        if(pStyle && pStyle->ISA(XMLShapeStyleContext))
+        {
+            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+            if(xPropSet.is())
+            {
+                XMLShapeStyleContext* pDocStyle = (XMLShapeStyleContext*)pStyle;
+
+                if(pDocStyle->GetStyle().is())
+                {
+                    // set style on object
+                    uno::Any aAny;
+                    aAny <<= pDocStyle->GetStyle();
+                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style")), aAny);
+                }
+
+                if(bAutoStyle)
+                {
+                    // set PropertySet on object
+                    pDocStyle->FillPropertySet(xPropSet);
+                }
+            }
+        }
+    }
+}
+*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -136,11 +196,11 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:	SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maMinEdge(-2500.0, -2500.0, -2500.0),
     maMaxEdge(2500.0, 2500.0, 2500.0),
-    mbMinEdgeUsed(sal_False),
-    mbMaxEdgeUsed(sal_False)
+    mbMinEdgeUsed(FALSE),
+    mbMaxEdgeUsed(FALSE)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -161,7 +221,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                 if(aNewVec != maMinEdge)
                 {
                     maMinEdge = aNewVec;
-                    mbMinEdgeUsed = sal_True;
+                    mbMinEdgeUsed = TRUE;
                 }
                 break;
             }
@@ -173,7 +233,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                 if(aNewVec != maMaxEdge)
                 {
                     maMaxEdge = aNewVec;
-                    mbMaxEdgeUsed = sal_True;
+                    mbMaxEdgeUsed = TRUE;
                 }
                 break;
             }
@@ -247,11 +307,11 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
+:	SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maCenter(0.0, 0.0, 0.0),
     maSize(5000.0, 5000.0, 5000.0),
-    mbCenterUsed(sal_False),
-    mbSizeUsed(sal_False)
+    mbCenterUsed(FALSE),
+    mbSizeUsed(FALSE)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -272,7 +332,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                 if(aNewVec != maCenter)
                 {
                     maCenter = aNewVec;
-                    mbCenterUsed = sal_True;
+                    mbCenterUsed = TRUE;
                 }
                 break;
             }
@@ -284,7 +344,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                 if(aNewVec != maSize)
                 {
                     maSize = aNewVec;
-                    mbSizeUsed = sal_True;
+                    mbSizeUsed = TRUE;
                 }
                 break;
             }
@@ -355,7 +415,7 @@ SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+:	SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -476,7 +536,7 @@ SdXML3DLatheObjectShapeContext::SdXML3DLatheObjectShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+:	SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }
 
@@ -520,7 +580,7 @@ SdXML3DExtrudeObjectShapeContext::SdXML3DExtrudeObjectShapeContext(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
-:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+:	SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }
 

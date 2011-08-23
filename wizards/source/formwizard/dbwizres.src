@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,34 +25,34 @@
  *
  ************************************************************************/// common
 
-#define RID_COMMON_START                    500
-#define RID_DB_COMMON_START             1000
+#define RID_COMMON_START					500
+#define RID_DB_COMMON_START				1000
 
 // db wizards
 
-#define RID_DB_FORM_WIZARD_START            2200
-#define RID_DB_QUERY_WIZARD_START           2300
-#define RID_DB_REPORT_WIZARD_START      2400
-#define RID_DB_TABLE_WIZARD_START       2500
+#define RID_DB_FORM_WIZARD_START			2200
+#define RID_DB_QUERY_WIZARD_START			2300
+#define RID_DB_REPORT_WIZARD_START		2400
+#define RID_DB_TABLE_WIZARD_START		2500
 
 
-#define RID_LETTERWIZARDDIALOG_START        3000
-#define RID_LETTERWIZARDGREETING_START  3080
-#define RID_LETTERWIZARDSALUTATION_START    3090
-#define RID_LETTERWIZARDROADMAP_START   3100
-#define RID_LETTERWIZARDLANGUAGE_START  3110
+#define RID_LETTERWIZARDDIALOG_START		3000
+#define RID_LETTERWIZARDGREETING_START	3080
+#define RID_LETTERWIZARDSALUTATION_START	3090
+#define RID_LETTERWIZARDROADMAP_START	3100
+#define RID_LETTERWIZARDLANGUAGE_START	3110
 
 
-#define RID_FAXWIZARDDIALOG_START           3200
-#define RID_FAXWIZARDCOMMUNICATION_START    3270
-#define RID_FAXWIZARDGREETING_START     3280
-#define RID_FAXWIZARDSALUTATION_START       3290
-#define RID_FAXWIZARDROADMAP_START      3300
+#define RID_FAXWIZARDDIALOG_START			3200
+#define RID_FAXWIZARDCOMMUNICATION_START	3270
+#define RID_FAXWIZARDGREETING_START		3280
+#define RID_FAXWIZARDSALUTATION_START		3290
+#define RID_FAXWIZARDROADMAP_START		3300
 
 // web wizard
 
-#define RID_WEBWIZARDDIALOG_START           4000
-#define RID_WEBWIZARDDIALOG_FTP         4200
+#define RID_WEBWIZARDDIALOG_START			4000
+#define RID_WEBWIZARDDIALOG_FTP			4200
 
 // agenda wizard
 
@@ -1748,9 +1748,9 @@ String RID_DB_TABLE_WIZARD_START + 51
 
 
 // ============================================================================
-// ============================                       ======================
-// ======================        LETTER WIZARD RESOURCES         ================
-// ============================                       ======================
+// ============================						  ======================
+// ======================		 LETTER WIZARD RESOURCES		 ================
+// ============================						  ======================
 // ============================================================================
 
 
@@ -2110,9 +2110,9 @@ String RID_LETTERWIZARDROADMAP_START + 6
 
 
 // ============================================================================
-// ============================                       ======================
-// ======================        FAX WIZARD RESOURCES        ================
-// ============================                       ======================
+// ============================						  ======================
+// ======================		 FAX WIZARD RESOURCES		 ================
+// ============================						  ======================
 // ============================================================================
 
 
@@ -2406,9 +2406,9 @@ String RID_FAXWIZARDROADMAP_START + 5
 
 
 // ============================================================================
-// ============================                       ======================
-// ======================        WEB WIZARD RESOURCES        ================
-// ============================                       ======================
+// ============================						  ======================
+// ======================		 WEB WIZARD RESOURCES		 ================
+// ============================						  ======================
 // ============================================================================
 
 
@@ -3063,7 +3063,7 @@ String RID_WEBWIZARDDIALOG_START +152
 
 
 // ============================================================================
-// =================         WEB WIZARD FTP DIALOG RESOURCES      =============
+// =================		 WEB WIZARD FTP DIALOG RESOURCES	  =============
 // ============================================================================
 
 
@@ -3166,9 +3166,9 @@ String RID_WEBWIZARDDIALOG_FTP +18
 
 
 // ============================================================================
-// ============================                       ======================
-// ======================        AGENDA WIZARD RESOURCES         ================
-// ============================                       ======================
+// ============================						  ======================
+// ======================		 AGENDA WIZARD RESOURCES		 ================
+// ============================						  ======================
 // ============================================================================
 
 String RID_AGENDAWIZARDDIALOG_START +1

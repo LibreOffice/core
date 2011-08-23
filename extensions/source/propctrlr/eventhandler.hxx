@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,12 +58,14 @@ namespace pcr
         ::rtl::OUString sDisplayName;
         ::rtl::OUString sListenerClassName;
         ::rtl::OUString sListenerMethodName;
-        ::rtl::OString  sHelpId;
-        ::rtl::OString  sUniqueBrowseId;
+        sal_Int32       nHelpId;
+        sal_Int32       nUniqueBrowseId;
         EventId         nId;
 
         EventDescription()
-            :nId( 0 )
+            :nHelpId( 0 )
+            ,nUniqueBrowseId( 0 )
+            ,nId( 0 )
             {
             }
 
@@ -73,11 +75,11 @@ namespace pcr
             const sal_Char* _pListenerClassAsciiName,
             const sal_Char* _pListenerMethodAsciiName,
             sal_uInt16 _nDisplayNameResId,
-            const rtl::OString& _sHelpId,
-            const rtl::OString& _sUniqueBrowseId );
+            sal_Int32 _nHelpId,
+            sal_Int32 _nUniqueBrowseId );
     };
 
-    typedef ::boost::unordered_map< ::rtl::OUString, EventDescription, ::rtl::OUStringHash >   EventMap;
+    typedef ::std::hash_map< ::rtl::OUString, EventDescription, ::rtl::OUStringHash >   EventMap;
 
     //====================================================================
     //= EventHandler

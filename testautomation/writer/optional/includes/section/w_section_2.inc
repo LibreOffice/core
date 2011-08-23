@@ -1038,7 +1038,7 @@ testcase tDisplaySection_9
             end if
 
             if GetClipBoardtext <> shouldbe then
-               Warnlog "Copied text not correctly exported through the clipboard"   '   "Problem with section"
+               qaerrorlog "#i85766# - Copied text not correctly exported through the clipboard"   '   "Problem with section"
             end if
          Case 3
             Call wTypeKeys "<Shift End>"

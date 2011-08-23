@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <svl/itemset.hxx>
 
 #ifndef ITEMID_GRF_CROP
-#define ITEMID_GRF_CROP 0
+#define ITEMID_GRF_CROP	0
 #endif
 
 #include <svx/sdgcpitm.hxx>
@@ -45,8 +45,8 @@
 #include <svx/sdr/event/eventhandler.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/primitive2d/sdrgrafprimitive2d.hxx>
-#include "svx/svdstr.hrc"
-#include <svx/svdglob.hxx>
+#include "svdstr.hrc"
+#include <svdglob.hxx>
 #include <vcl/svapp.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
@@ -77,7 +77,7 @@ namespace sdr
         }
 
         ViewContactOfGraphic::ViewContactOfGraphic(SdrGrafObj& rGrafObj)
-        :   ViewContactOfTextObj(rGrafObj)
+        :	ViewContactOfTextObj(rGrafObj)
         {
         }
 
@@ -103,20 +103,20 @@ namespace sdr
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
             GraphicObject aEmptyGraphicObject;
-            GraphicAttr aEmptyGraphicAttr;
-
+            GraphicAttr	aEmptyGraphicAttr;
+            
             // SdrGrafPrimitive2D without content in original size which carries all eventual attributes and texts
             const drawinglayer::primitive2d::Primitive2DReference xReferenceA(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
-                rObjectMatrix,
-                rAttribute,
-                aEmptyGraphicObject,
+                rObjectMatrix, 
+                rAttribute, 
+                aEmptyGraphicObject, 
                 aEmptyGraphicAttr));
             xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReferenceA, 1);
 
             // SdrGrafPrimitive2D with content (which is the preview graphic) scaled to smaller size and
             // without attributes
             basegfx::B2DHomMatrix aSmallerMatrix;
-
+            
             // #i94431# for some reason, i forgot to take the PrefMapMode of the graphic
             // into account. Since EmptyPresObj's are only used in Draw/Impress, it is
             // safe to assume 100th mm as target.
@@ -130,12 +130,12 @@ namespace sdr
             {
                 aPrefSize = Application::GetDefaultDevice()->LogicToLogic(aPrefSize, GetGrafObject().GetGrafPrefMapMode(), MAP_100TH_MM);
             }
-
+            
             // decompose object matrix to get single values
             basegfx::B2DVector aScale, aTranslate;
             double fRotate, fShearX;
             rObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
-
+            
             const double fOffsetX((aScale.getX() - aPrefSize.getWidth()) / 2.0);
             const double fOffsetY((aScale.getY() - aPrefSize.getHeight()) / 2.0);
 
@@ -149,9 +149,9 @@ namespace sdr
 
                 const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
                 const drawinglayer::primitive2d::Primitive2DReference xReferenceB(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
-                    aSmallerMatrix,
-                    drawinglayer::attribute::SdrLineFillShadowTextAttribute(),
-                    rGraphicObject,
+                    aSmallerMatrix, 
+                    drawinglayer::attribute::SdrLineFillShadowTextAttribute(), 
+                    rGraphicObject, 
                     rLocalGrafInfo));
 
                 drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xReferenceB);
@@ -166,13 +166,13 @@ namespace sdr
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
             GraphicObject aEmptyGraphicObject;
-            GraphicAttr aEmptyGraphicAttr;
-
+            GraphicAttr	aEmptyGraphicAttr;
+            
             // SdrGrafPrimitive2D without content in original size which carries all eventual attributes and texts
             const drawinglayer::primitive2d::Primitive2DReference xReferenceA(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
-                rObjectMatrix,
-                rAttribute,
-                aEmptyGraphicObject,
+                rObjectMatrix, 
+                rAttribute, 
+                aEmptyGraphicObject, 
                 aEmptyGraphicAttr));
             xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReferenceA, 1);
 
@@ -221,19 +221,19 @@ namespace sdr
                 {
                     aPrefSize = Application::GetDefaultDevice()->LogicToLogic(aPrefSize, aDraftBitmap.GetPrefMapMode(), MAP_100TH_MM);
                 }
-
+                
                 const double fBitmapScaling(2.0);
                 const double fWidth(aPrefSize.getWidth() * fBitmapScaling);
                 const double fHeight(aPrefSize.getHeight() * fBitmapScaling);
-
-                if(basegfx::fTools::more(fWidth, 1.0)
+                
+                if(basegfx::fTools::more(fWidth, 1.0) 
                     && basegfx::fTools::more(fHeight, 1.0)
                     && basegfx::fTools::lessOrEqual(fWidth, aScale.getX())
                     && basegfx::fTools::lessOrEqual(fHeight, aScale.getY()))
                 {
                     const basegfx::B2DHomMatrix aBitmapMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                         fWidth, fHeight, fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
-
+                    
                     drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
                         drawinglayer::primitive2d::Primitive2DReference(
                             new drawinglayer::primitive2d::BitmapPrimitive2D(
@@ -248,13 +248,13 @@ namespace sdr
 
             // Build the text for the draft object
             XubString aDraftText = GetGrafObject().GetFileName();
-
+            
             if(!aDraftText.Len())
             {
                 aDraftText = GetGrafObject().GetName();
                 aDraftText.AppendAscii(" ...");
             }
-
+            
             if(aDraftText.Len() && GetGrafObject().GetModel())
             {
                 // #i103255# Goal is to produce TextPrimitives which hold the given text as
@@ -297,10 +297,10 @@ namespace sdr
 
                     // decompose immediately with neutral ViewInformation. This will
                     // layout the text to more simple TextPrimitives from drawinglayer
-                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
 
                     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
-                        xRetval,
+                        xRetval, 
                         aBlockTextPrimitive.get2DDecomposition(aViewInformation2D));
                 }
             }
@@ -314,11 +314,11 @@ namespace sdr
             const SfxItemSet& rItemSet = GetGrafObject().GetMergedItemSet();
             drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
-                    rItemSet,
+                    rItemSet, 
                     GetGrafObject().getText(0)));
 
             // create and fill GraphicAttr
-            GraphicAttr aLocalGrafInfo;
+            GraphicAttr	aLocalGrafInfo;
             const sal_uInt16 nTrans(((SdrGrafTransparenceItem&)rItemSet.Get(SDRATTR_GRAFTRANSPARENCE)).GetValue());
             const SdrGrafCropItem& rCrop((const SdrGrafCropItem&)rItemSet.Get(SDRATTR_GRAFCROP));
             aLocalGrafInfo.SetLuminance(((SdrGrafLuminanceItem&)rItemSet.Get(SDRATTR_GRAFLUMINANCE)).GetValue());
@@ -327,7 +327,7 @@ namespace sdr
             aLocalGrafInfo.SetChannelG(((SdrGrafGreenItem&)rItemSet.Get(SDRATTR_GRAFGREEN)).GetValue());
             aLocalGrafInfo.SetChannelB(((SdrGrafBlueItem&)rItemSet.Get(SDRATTR_GRAFBLUE)).GetValue());
             aLocalGrafInfo.SetGamma(((SdrGrafGamma100Item&)rItemSet.Get(SDRATTR_GRAFGAMMA)).GetValue() * 0.01);
-            aLocalGrafInfo.SetTransparency((sal_uInt8)::basegfx::fround(Min(nTrans, (sal_uInt16)100) * 2.55));
+            aLocalGrafInfo.SetTransparency((BYTE)::basegfx::fround(Min(nTrans, (USHORT)100) * 2.55));
             aLocalGrafInfo.SetInvert(((SdrGrafInvertItem&)rItemSet.Get(SDRATTR_GRAFINVERT)).GetValue());
             aLocalGrafInfo.SetDrawMode(((SdrGrafModeItem&)rItemSet.Get(SDRATTR_GRAFMODE)).GetValue());
             aLocalGrafInfo.SetCrop(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
@@ -343,11 +343,11 @@ namespace sdr
                 {
                     // create new attribute set if indeed shadow is used
                     aAttribute = drawinglayer::attribute::SdrLineFillShadowTextAttribute(
-                        aAttribute.getLine(),
-                        aAttribute.getFill(),
-                        aAttribute.getLineStartEnd(),
-                        aShadow,
-                        aAttribute.getFillFloatTransGradient(),
+                        aAttribute.getLine(), 
+                        aAttribute.getFill(), 
+                        aAttribute.getLineStartEnd(), 
+                        aShadow, 
+                        aAttribute.getFillFloatTransGradient(), 
                         aAttribute.getText());
                 }
             }
@@ -356,7 +356,7 @@ namespace sdr
             // which will use the primitive data we just create in the near future
             const Rectangle& rRectangle = GetGrafObject().GetGeoRect();
             const ::basegfx::B2DRange aObjectRange(
-                rRectangle.Left(), rRectangle.Top(),
+                rRectangle.Left(), rRectangle.Top(), 
                 rRectangle.Right(), rRectangle.Bottom());
 
             // look for mirroring
@@ -389,8 +389,8 @@ namespace sdr
             const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
             const double fRotate(nDrehWink ? (36000 - nDrehWink) * F_PI18000 : 0.0);
             const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                aObjectRange.getWidth(), aObjectRange.getHeight(),
-                fShearX, fRotate,
+                aObjectRange.getWidth(), aObjectRange.getHeight(), 
+                fShearX, fRotate, 
                 aObjectRange.getMinX(), aObjectRange.getMinY()));
 
             // get the current, unchenged graphic obect from SdrGrafObj
@@ -416,16 +416,16 @@ namespace sdr
                 // create primitive. Info: Calling the copy-constructor of GraphicObject in this
                 // SdrGrafPrimitive2D constructor will force a full swap-in of the graphic
                 const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
-                    aObjectMatrix,
-                    aAttribute,
-                    rGraphicObject,
+                    aObjectMatrix, 
+                    aAttribute, 
+                    rGraphicObject, 
                     aLocalGrafInfo));
 
                 xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
 
             // always append an invisible outline for the cases where no visible content exists
-            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, 
                 drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                     false, aObjectMatrix));
 

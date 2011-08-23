@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,15 +40,15 @@
 #include <table.hrc>
 
 
-SwMergeTblDlg::SwMergeTblDlg( Window *pParent, sal_Bool& rWithPrev )
+SwMergeTblDlg::SwMergeTblDlg( Window *pParent, BOOL& rWithPrev )
     : SvxStandardDialog(pParent, SW_RES(DLG_MERGE_TABLE)),
-    aOKPB(                  this, SW_RES(PB_OK      )),
-    aCancelPB(              this, SW_RES(PB_CANCEL  )),
-    aHelpPB(                this, SW_RES(PB_HELP        )),
+    aOKPB(					this, SW_RES(PB_OK		)),
+    aCancelPB(      		this, SW_RES(PB_CANCEL	)),
+    aHelpPB(        		this, SW_RES(PB_HELP		)),
     aMergeFL(               this, SW_RES(FL_MERGE    )),
-    aMergePrevRB(           this, SW_RES(RB_MERGE_PREV)),
-    aMergeNextRB(           this, SW_RES(RB_MERGE_NEXT)),
-    rMergePrev(             rWithPrev )
+    aMergePrevRB(   		this, SW_RES(RB_MERGE_PREV)),
+    aMergeNextRB(  			this, SW_RES(RB_MERGE_NEXT)),
+    rMergePrev( 			rWithPrev )
 {
     FreeResource();
     aMergePrevRB.Check();

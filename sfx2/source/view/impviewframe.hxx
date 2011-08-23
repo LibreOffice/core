@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2009 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ struct SfxViewFrame_Impl
     Size                aSize;
     String              aFrameTitle;
     TypeId              aLastType;
-    String              aActualURL;
+    String				aActualURL;
     SfxFrame&           rFrame;
     svtools::AsynchronLink* pReloader;
-    Window*             pWindow;
+    Window*				pWindow;
     SfxViewFrame*       pActiveChild;
     Window*             pFocusWin;
     sal_uInt16          nDocViewNo;
@@ -58,7 +58,7 @@ struct SfxViewFrame_Impl
     sal_Bool            bEnabled:1;
     sal_Bool            bWindowWasEnabled:1;
     sal_Bool            bActive;
-    String              aFactoryName;
+    String          	aFactoryName;
     ::boost::optional< bool >
                         aHasToolPanels;
 
@@ -79,20 +79,20 @@ struct SfxViewFrame_Impl
 
 class SfxFrameViewWindow_Impl : public Window
 {
-    sal_Bool            bActive;
+    BOOL            bActive;
     SfxViewFrame*   pFrame;
 
 public:
                         SfxFrameViewWindow_Impl( SfxViewFrame* p, Window& rParent, WinBits nBits=0 ) :
                             Window( &rParent, nBits | WB_BORDER | WB_CLIPCHILDREN ),
-                            bActive( sal_False ),
+                            bActive( FALSE ),
                             pFrame( p )
                         {
                             p->GetFrame().GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
                         }
 
-    virtual void        Resize();
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void		Resize();
+    virtual void		StateChanged( StateChangedType nStateChange );
 };
 
 #endif // SFX2_IMPVIEWFRAME_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 #include <comphelper/stl_types.hxx>
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 namespace css = ::com::sun::star;
 
@@ -127,7 +127,7 @@ private:
         css::uno::Any maUserData;
     };
     typedef ::std::vector<ListenerDescriptor> ListenerList;
-    typedef ::boost::unordered_map
+    typedef ::std::hash_map
         <rtl::OUString,
          ListenerList,
          ::comphelper::UStringHash,

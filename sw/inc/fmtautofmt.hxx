@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class SwFmtAutoFmt: public SfxPoolItem
     boost::shared_ptr<SfxItemSet> mpHandle;
 
 public:
-    SwFmtAutoFmt( sal_uInt16 nWhich = RES_TXTATR_AUTOFMT );
+    SwFmtAutoFmt( USHORT nWhich = RES_TXTATR_AUTOFMT );
 
     // single argument ctors shall be explicit.
     virtual ~SwFmtAutoFmt();
@@ -57,15 +57,15 @@ public:
 
     // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual	bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     void SetStyleHandle( boost::shared_ptr<SfxItemSet> pHandle ) { mpHandle = pHandle; }
     const boost::shared_ptr<SfxItemSet> GetStyleHandle() const { return mpHandle; }

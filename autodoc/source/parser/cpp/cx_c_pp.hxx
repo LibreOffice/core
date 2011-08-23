@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,22 +44,22 @@ class Context_Preprocessor : public Cx_Base
 {
   public:
                         Context_Preprocessor(
-                            TkpContext &        i_rFollowUpContext );
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText );
+                            TkpContext &		i_rFollowUpContext );
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText );
     virtual void        AssignDealer(
                             Distributor &       o_rDealer );
   private:
     // Locals
     void                ReadDefault(
-                            CharacterSource &   io_rText );
+                            CharacterSource &	io_rText );
     void                ReadDefine(
-                            CharacterSource &   io_rText );
+                            CharacterSource &	io_rText );
 
     // DATA
-    TkpContext *        pContext_Parent;
-    Dyn<Cx_Base>        pContext_PP_MacroParams;
-    Dyn<Cx_Base>        pContext_PP_Definition;
+    TkpContext *   	    pContext_Parent;
+    Dyn<Cx_Base>    	pContext_PP_MacroParams;
+    Dyn<Cx_Base>       	pContext_PP_Definition;
 };
 
 class Context_PP_MacroParams : public Cx_Base
@@ -68,25 +68,25 @@ class Context_PP_MacroParams : public Cx_Base
                         Context_PP_MacroParams(
                             Cx_Base &           i_rFollowUpContext );
 
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText );
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText );
   private:
     // DATA
-    Cx_Base *           pContext_PP_Definition;
+    Cx_Base *   	    pContext_PP_Definition;
 };
 
 class Context_PP_Definition : public Cx_Base
 {
   public:
                         Context_PP_Definition(
-                            TkpContext &        i_rFollowUpContext );
+                            TkpContext &	    i_rFollowUpContext );
 
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText );
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText );
 
   private:
     // DATA
-    TkpContext *        pContext_Parent;
+    TkpContext *       	pContext_Parent;
 };
 
 

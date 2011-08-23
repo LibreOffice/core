@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@
 
 /* -----------------------------------------------------------------------
    ffi.c - Copyright (c) 2002  Bo Thorsen <bo@suse.de>
-
-   x86-64 Foreign Function Interface
+   
+   x86-64 Foreign Function Interface 
 
    Permission is hereby granted, free of charge, to any person obtaining
    a copy of this software and associated documentation files (the
@@ -66,6 +66,16 @@
 #include <rtl/ustring.hxx>
 
 using namespace x86_64;
+
+typedef struct
+{
+    /* Registers for argument passing.  */
+    long gpr[MAX_GPR_REGS];
+    __int128_t sse[MAX_SSE_REGS];
+
+    /* Stack space for arguments.  */
+    char argspace[0];
+} stackLayout;
 
 /* Register class used for passing given 64bit part of the argument.
    These represent classes as documented by the PS ABI, with the exception

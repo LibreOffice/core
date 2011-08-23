@@ -57,8 +57,12 @@
  * @file
  * Image object.
  ************************************************************************/
-#include    "xfimage.hxx"
-#include    "xfbase64.hxx"
+/*************************************************************************
+ * Change History
+   2005-02-22	create and implemente.
+ ************************************************************************/
+#include	"xfimage.hxx"
+#include	"xfbase64.hxx"
 
 XFImage::XFImage()
 {
@@ -86,14 +90,14 @@ void XFImage::SetImageData(sal_uInt8 *buf, int len)
             xlink:show="embed" xlink:actuate="onLoad"/>
  </text:p>
  */
-void    XFImage::ToXml(IXFStream *pStrm)
+void	XFImage::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     if( GetStyleName().getLength() )
         pAttrList->AddAttribute( A2OUSTR("draw:style-name"), GetStyleName() );
 
-    assert(m_strName.getLength()>0);    //name should not be null.
+    assert(m_strName.getLength()>0);	//name should not be null.
     if( m_strName.getLength() )
         pAttrList->AddAttribute( A2OUSTR("draw:name"), m_strName );
     //anchor type:

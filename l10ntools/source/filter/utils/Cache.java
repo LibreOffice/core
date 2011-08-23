@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,6 +159,7 @@ public class Cache
     private static final java.lang.String FLAGNAME_PACKED           = "PACKED";
     private static final java.lang.String FLAGNAME_PREFERRED        = "PREFERRED";
     private static final java.lang.String FLAGNAME_READONLY         = "READONLY";
+    private static final java.lang.String FLAGNAME_SILENTEXPORT     = "SILENTEXPORT";
     private static final java.lang.String FLAGNAME_TEMPLATE         = "TEMPLATE";
     private static final java.lang.String FLAGNAME_TEMPLATEPATH     = "TEMPLATEPATH";
     private static final java.lang.String FLAGNAME_USESOPTIONS      = "USESOPTIONS";
@@ -184,6 +185,7 @@ public class Cache
     private static final int FLAGVAL_PACKED            = 0x00100000; // 1048576
     private static final int FLAGVAL_PREFERRED         = 0x10000000; // 268435456
     private static final int FLAGVAL_READONLY          = 0x00010000; // 65536
+    private static final int FLAGVAL_SILENTEXPORT      = 0x00200000; // 2097152
     private static final int FLAGVAL_TEMPLATE          = 0x00000004; // 4
     private static final int FLAGVAL_TEMPLATEPATH      = 0x00000010; // 16
     private static final int FLAGVAL_USESOPTIONS       = 0x00000080; // 128
@@ -370,7 +372,7 @@ public class Cache
          *          <li>...</li>
          *      </ul>
          */
-
+         
         System.out.println("TODO: must be adapted to java 1.3 :-(");
         System.exit(-1);
 //TODO_JAVA        aFactory.setExpandEntityReferences(false);
@@ -1356,6 +1358,9 @@ public class Cache
             if (sFlagName.equals(FLAGNAME_READONLY))
                 nFlags |= FLAGVAL_READONLY;
             else
+            if (sFlagName.equals(FLAGNAME_SILENTEXPORT))
+                nFlags |= FLAGVAL_SILENTEXPORT;
+            else
             if (sFlagName.equals(FLAGNAME_TEMPLATE))
                 nFlags |= FLAGVAL_TEMPLATE;
             else
@@ -1449,6 +1454,9 @@ public class Cache
 
         if((field & FLAGVAL_PACKED) == FLAGVAL_PACKED)
             lFlags.add(FLAGNAME_PACKED);
+
+        if((field & FLAGVAL_SILENTEXPORT) == FLAGVAL_SILENTEXPORT)
+            lFlags.add(FLAGNAME_SILENTEXPORT);
 
         if((field & FLAGVAL_BROWSERPREFERRED) == FLAGVAL_BROWSERPREFERRED)
             lFlags.add(FLAGNAME_BROWSERPREFERRED);
@@ -1787,7 +1795,7 @@ public class Cache
                 {
                     // last token was not a delimiter - new one is such delim
                     // => ignore this delimiter - but save the information, that
-                    //    it occurred
+                    //    it occured
                     bLastWasDelim = true;
                 }
             }
@@ -2136,7 +2144,7 @@ public class Cache
             java.util.HashMap  lFilterUINames = (java.util.HashMap)aFilter.get(PROPNAME_UINAME);
             java.util.HashMap  lTypeUINames   = (java.util.HashMap)aType.get(PROPNAME_UINAME);
             java.util.HashMap  lPatchUINames  = new java.util.HashMap();
-
+            
             java.util.Iterator pUINames = lTypeUINames.keySet().iterator();
             while(pUINames.hasNext())
             {
@@ -2144,7 +2152,7 @@ public class Cache
                 java.lang.String sValue  = (java.lang.String)lTypeUINames.get(sLocale);
                 lPatchUINames.put(sLocale, sValue);
             }
-
+            
             pUINames = lFilterUINames.keySet().iterator();
             while(pUINames.hasNext())
             {
@@ -2153,7 +2161,7 @@ public class Cache
                 lPatchUINames.put(sFilter+":"+sLocale, sValue);
             }
             aType.put(PROPNAME_UINAME, lPatchUINames);
-
+            
             // set generic filter service wrapper for our own native filters!
             // By the way: The format types of such filters can be detected by our
             // generic detector too.
@@ -2184,11 +2192,11 @@ public class Cache
             int     flags1     = ((java.lang.Integer)aFilter.get(PROPNAME_FLAGS)).intValue();
             java.lang.String sDocSrv = (java.lang.String)aFilter.get(PROPNAME_DOCUMENTSERVICE);
             if (sDocSrv.length()>0)// without a doc service its not a real filter - its a graphic filter!
-            {
+            {    
                 boolean preferred1 = ((flags1 & FLAGVAL_PREFERRED) == FLAGVAL_PREFERRED);
                 if (preferred1)
                     lPreferredFilters.add(aFilter);
-
+    
                 java.lang.String sAlreadyRegisteredFilter = (java.lang.String)aType.get(PROPNAME_PREFERREDFILTER);
                 // no registration => set this filter as "any possible one"!
                 if (sAlreadyRegisteredFilter.length() < 1)
@@ -2198,7 +2206,7 @@ public class Cache
                     java.util.HashMap aAlreadyRegisteredFilter = (java.util.HashMap)m_lFilters.get(sAlreadyRegisteredFilter);
                     int               flags2                   = ((java.lang.Integer)aAlreadyRegisteredFilter.get(PROPNAME_FLAGS)).intValue();
                     boolean           preferred2               = ((flags2 & FLAGVAL_PREFERRED) == FLAGVAL_PREFERRED);
-
+    
                     // two preferred filters for the same type! => error
                     if (preferred1 && preferred2)
                     {
@@ -2215,7 +2223,7 @@ public class Cache
                         aType.put(PROPNAME_PREFERREDFILTER, sFilter);
                 }
             }
-
+            
             // create the new combined filter flag if required
             if (bCreateCombineFilterFlag)
             {

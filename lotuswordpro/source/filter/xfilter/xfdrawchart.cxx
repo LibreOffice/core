@@ -57,7 +57,12 @@
  * @file
  * chart object.
  ************************************************************************/
-#include    "xfdrawchart.hxx"
+/*************************************************************************
+ * Change History
+ * 2004-2-25 	draft code for draw chart in XML.
+ ************************************************************************/
+
+#include	"xfdrawchart.hxx"
 
 #include "xfchartstreamtools.hxx"
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,25 +34,23 @@
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/awt/XThrobber.hpp>
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/noncopyable.hpp>
-
 //........................................................................
 namespace toolkit
 {
 //........................................................................
+    class Throbber_Impl;
 
     //====================================================================
     //= XThrobber
     //====================================================================
-    typedef ::cppu::ImplInheritanceHelper1  <   VCLXWindow
-                                            ,   ::com::sun::star::awt::XThrobber
-                                            >   XThrobber_Base;
+    typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XThrobber
+                                >   XThrobber_Base;
 
-    class XThrobber :public XThrobber_Base
-                    ,public ::boost::noncopyable
+    class XThrobber :public VCLXWindow
+                    ,public XThrobber_Base
     {
     private:
+        Throbber_Impl   *mpThrobber;
         void SAL_CALL InitImageList() throw(::com::sun::star::uno::RuntimeException);
 
     public:
@@ -61,12 +59,22 @@ namespace toolkit
     protected:
         ~XThrobber();
 
+        // XInterface
+        DECLARE_XINTERFACE()
+
+        // XTypeProvider
+        DECLARE_XTYPEPROVIDER()
+
         // XThrobber
         virtual void SAL_CALL start() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL stop() throw (::com::sun::star::uno::RuntimeException);
 
+        // VclWindowPeer
+        virtual void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
         // VCLXWindow
-        virtual void    SetWindow( Window* pWindow );
+        void ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent );
 
     private:
         XThrobber( const XThrobber& );            // never implemented

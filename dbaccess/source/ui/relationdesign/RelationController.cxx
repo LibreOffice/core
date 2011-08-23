@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <sfx2/sfxsids.hrc>
 #include "dbu_rel.hrc"
 #include <vcl/svapp.hxx>
-#include "browserids.hxx"
+#include "browserids.hxx"		   
 #include <comphelper/types.hxx>
 #include "dbustrings.hrc"
 #include <connectivity/dbtools.hxx>
@@ -96,6 +96,8 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::util;
+//	using namespace ::com::sun::star::sdbcx;
+//	using namespace ::connectivity;
 using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;
@@ -110,13 +112,13 @@ using namespace ::osl;
 //------------------------------------------------------------------------------
 ::rtl::OUString ORelationController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.ORelationDesign"));
+    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ORelationDesign");
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> ORelationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.RelationDesign"));
+    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.RelationDesign");
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -131,7 +133,7 @@ Reference< XInterface > SAL_CALL ORelationController::Create(const Reference<XMu
 }
 DBG_NAME(ORelationController);
 // -----------------------------------------------------------------------------
-ORelationController::ORelationController(const Reference< XMultiServiceFactory >& _rM)
+ORelationController::ORelationController(const Reference< XMultiServiceFactory >& _rM) 
     : OJoinController(_rM)
     ,m_nThreadEvent(0)
     ,m_bRelationsPossible(sal_True)
@@ -180,7 +182,7 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
                 else
                 {
                     // now we save the layout information
-                    //  create the output stream
+                    //  create the output stream 
                     try
                     {
                         if ( haveDataSource() && getDataSource()->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION) )
@@ -216,7 +218,7 @@ void ORelationController::impl_initialize()
     {// check if this database supports relations
 
         setEditable(sal_False);
-        m_bRelationsPossible    = sal_False;
+        m_bRelationsPossible	= sal_False;
         {
             String sTitle(ModuleRes(STR_RELATIONDESIGN));
             sTitle.Erase(0,3);
@@ -249,7 +251,7 @@ void ORelationController::impl_initialize()
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-
+    
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString ORelationController::getPrivateTitle( ) const
@@ -293,17 +295,17 @@ namespace
         const Sequence< ::rtl::OUString>    m_aTableList;
         ORelationController*                m_pParent;
         const Reference< XDatabaseMetaData> m_xMetaData;
-        const Reference< XNameAccess >      m_xTables;
+        const Reference< XNameAccess >	    m_xTables;
         const sal_Int32                     m_nStartIndex;
         const sal_Int32                     m_nEndIndex;
-
+        
     public:
         RelationLoader(ORelationController* _pParent
                         ,const Reference< XDatabaseMetaData>& _xMetaData
                         ,const Reference< XNameAccess >& _xTables
                         ,const Sequence< ::rtl::OUString>& _aTableList
                         ,const sal_Int32 _nStartIndex
-                        ,const sal_Int32 _nEndIndex)
+                        ,const sal_Int32 _nEndIndex) 
             :m_aTableData(_xMetaData.is() && _xMetaData->supportsMixedCaseQuotedIdentifiers())
             ,m_aTableList(_aTableList)
             ,m_pParent(_pParent)
@@ -318,8 +320,8 @@ namespace
         virtual void SAL_CALL run();
         virtual void SAL_CALL onTerminated();
     protected:
-        virtual ~RelationLoader(){}
-
+        virtual ~RelationLoader(){}	    
+        
         void loadTableData(const Any& _aTable);
     };
 
@@ -331,8 +333,8 @@ namespace
             ::rtl::OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(m_xMetaData,
                                                 *pIter,
-                                                sCatalog,
-                                                sSchema,
+                                                sCatalog, 
+                                                sSchema, 
                                                 sTable,
                                                 ::dbtools::eInDataManipulation);
             Any aCatalog;
@@ -346,7 +348,7 @@ namespace
                 {
                     ::comphelper::disposeComponent(xResult);
                     loadTableData(m_xTables->getByName(*pIter));
-                }
+                } // if ( xResult.is() && xResult->next() )
             }
             catch( const Exception& )
             {
@@ -365,22 +367,24 @@ namespace
         Reference<XPropertySet> xTableProp(_aTable,UNO_QUERY);
         const ::rtl::OUString sSourceName = ::dbtools::composeTableName( m_xMetaData, xTableProp, ::dbtools::eInTableDefinitions, false, false, false );
         TTableDataHelper::iterator aFind = m_aTableData.find(sSourceName);
+        bool bNotFound = true, bAdded = false;
         if ( aFind == m_aTableData.end() )
         {
             aFind = m_aTableData.insert(TTableDataHelper::value_type(sSourceName,::boost::shared_ptr<OTableWindowData>(new OTableWindowData(xTableProp,sSourceName, sSourceName)))).first;
-            aFind->second->ShowAll(sal_False);
+            aFind->second->ShowAll(FALSE);
+            bAdded = true;
         }
         TTableWindowData::value_type pReferencingTable = aFind->second;
         Reference<XIndexAccess> xKeys = pReferencingTable->getKeys();
         const Reference<XKeysSupplier> xKeySup(xTableProp,UNO_QUERY);
-
+        
         if ( !xKeys.is() && xKeySup.is() )
         {
             xKeys = xKeySup->getKeys();
         }
-
+        
         if ( xKeys.is() )
-        {
+        {  
             Reference<XPropertySet> xKey;
             const sal_Int32 nCount = xKeys->getCount();
             for(sal_Int32 i = 0 ; i < nCount ; ++i)
@@ -390,6 +394,7 @@ namespace
                 xKey->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
                 if ( KeyType::FOREIGN == nKeyType )
                 {
+                    bNotFound = false;
                     ::rtl::OUString sReferencedTable;
                     xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
                     //////////////////////////////////////////////////////////////////////
@@ -401,11 +406,11 @@ namespace
                         {
                             Reference<XPropertySet>  xReferencedTable(m_xTables->getByName(sReferencedTable),UNO_QUERY);
                             aRefFind = m_aTableData.insert(TTableDataHelper::value_type(sReferencedTable,::boost::shared_ptr<OTableWindowData>(new OTableWindowData(xReferencedTable,sReferencedTable, sReferencedTable)))).first;
-                            aRefFind->second->ShowAll(sal_False);
+                            aRefFind->second->ShowAll(FALSE);
                         }
                         else
                             continue; // table name could not be found so we do not show this table releation
-                    }
+                    } // if ( aFind == m_aTableData.end() )
                     TTableWindowData::value_type pReferencedTable = aRefFind->second;
 
                     ::rtl::OUString sKeyName;
@@ -418,10 +423,10 @@ namespace
                     // insert columns
                     const Reference<XColumnsSupplier> xColsSup(xKey,UNO_QUERY);
                     OSL_ENSURE(xColsSup.is(),"Key is no XColumnsSupplier!");
-                    const Reference<XNameAccess> xColumns       = xColsSup->getColumns();
-                    const Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-                    const ::rtl::OUString* pIter    = aNames.getConstArray();
-                    const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
+                    const Reference<XNameAccess> xColumns		= xColsSup->getColumns();
+                    const Sequence< ::rtl::OUString> aNames	= xColumns->getElementNames();
+                    const ::rtl::OUString* pIter	= aNames.getConstArray();
+                    const ::rtl::OUString* pEnd		= pIter + aNames.getLength();
                     ::rtl::OUString sColumnName,sRelatedName;
                     for(sal_uInt16 j=0;pIter != pEnd;++pIter,++j)
                     {
@@ -429,18 +434,18 @@ namespace
                         OSL_ENSURE(xPropSet.is(),"Invalid column found in KeyColumns!");
                         if ( xPropSet.is() )
                         {
-                            xPropSet->getPropertyValue(PROPERTY_NAME)           >>= sColumnName;
-                            xPropSet->getPropertyValue(PROPERTY_RELATEDCOLUMN)  >>= sRelatedName;
+                            xPropSet->getPropertyValue(PROPERTY_NAME)			>>= sColumnName;
+                            xPropSet->getPropertyValue(PROPERTY_RELATEDCOLUMN)	>>= sRelatedName;
                         }
                         pTabConnData->SetConnLine( j, sColumnName, sRelatedName );
                     }
                     //////////////////////////////////////////////////////////////////////
                     // Update/Del-Flags setzen
-                    sal_Int32   nUpdateRule = 0;
-                    sal_Int32   nDeleteRule = 0;
+                    sal_Int32	nUpdateRule = 0;
+                    sal_Int32	nDeleteRule = 0;
                     xKey->getPropertyValue(PROPERTY_UPDATERULE) >>= nUpdateRule;
                     xKey->getPropertyValue(PROPERTY_DELETERULE) >>= nDeleteRule;
-
+                    
                     pTabConnData->SetUpdateRules( nUpdateRule );
                     pTabConnData->SetDeleteRules( nDeleteRule );
 
@@ -449,7 +454,7 @@ namespace
                     pTabConnData->SetCardinality();
                 }
             }
-        }
+        } // if ( xKeys.is() )
     }
 }
 
@@ -473,7 +478,7 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
         {
             m_vTableData.push_back((*aConnDataIter)->getReferencedTable());
         }
-    }
+    } // for(;aConnDataIter != aConnDataEnd;++aConnDataIter)
     if ( m_nThreadEvent )
     {
         --m_nThreadEvent;
@@ -488,11 +493,11 @@ IMPL_LINK( ORelationController, OnThreadFinished, void*, /*NOTINTERESTEDIN*/ )
     ::osl::MutexGuard aGuard( getMutex() );
     try
     {
-        getView()->initialize();    // show the windows and fill with our informations
+        getView()->initialize();	// show the windows and fill with our informations
         getView()->Invalidate(INVALIDATE_NOERASE);
-        ClearUndoManager();
-        setModified(sal_False);     // and we are not modified yet
-
+        getUndoMgr()->Clear();		// clear all undo redo things
+        setModified(sal_False);		// and we are not modified yet
+        
         if(m_vTableData.empty())
             Execute(ID_BROWSER_ADDTABLE,Sequence<PropertyValue>());
     }
@@ -530,8 +535,8 @@ void ORelationController::loadData()
                 nStart = nEnd;
                 nEnd += nMaxElements;
                 nEnd = ::std::min(nEnd,nCount);
-            }
-        }
+            } // for(;pIter != pEnd;++pIter)
+        } // if ( aMeta.supportsThreads() )
         else
         {
             RelationLoader* pThread = new RelationLoader(this,xMetaData,m_xTables,aNames,0,nCount);
@@ -546,7 +551,7 @@ void ORelationController::loadData()
     catch(const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
-    }
+    }	
 }
 // -----------------------------------------------------------------------------
 TTableWindowData::value_type ORelationController::existsTable(const ::rtl::OUString& _rComposedTableName,sal_Bool _bCase)  const

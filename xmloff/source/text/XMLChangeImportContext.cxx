@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 
@@ -72,7 +72,7 @@ void XMLChangeImportContext::StartElement(
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
                               &sLocalName );
         if ( (XML_NAMESPACE_TEXT == nPrefix) &&
              IsXMLToken( sLocalName, XML_CHANGE_ID ) )
@@ -80,7 +80,7 @@ void XMLChangeImportContext::StartElement(
             // Id found! Now call RedlineImportHelper
 
             // prepare parameters
-            UniReference<XMLTextImportHelper> rHelper =
+            UniReference<XMLTextImportHelper> rHelper = 
                 GetImport().GetTextImport();
             OUString sID = xAttrList->getValueByIndex(nAttr);
 

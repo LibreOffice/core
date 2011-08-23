@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/msgpool.hxx>
 
-using ::rtl::OUString;
+using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -62,14 +62,14 @@ using namespace ::com::sun::star::util;
 SFX_IMPL_XINTERFACE_3( SfxStatusListener, OWeakObject, ::com::sun::star::lang::XComponent, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
 SFX_IMPL_XTYPEPROVIDER_3( SfxStatusListener, ::com::sun::star::lang::XComponent, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
 
-SfxStatusListener::SfxStatusListener( const Reference< XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& rCommand ) :
+SfxStatusListener::SfxStatusListener( const Reference< XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const OUString& rCommand ) :
     cppu::OWeakObject(),
     m_nSlotID( nSlotId ),
     m_xDispatchProvider( rDispatchProvider )
 {
     m_aCommand.Complete = rCommand;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
+                                            rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
     xTrans->parseStrict( m_aCommand );
     if ( rDispatchProvider.is() )
         m_xDispatch = rDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );
@@ -80,7 +80,7 @@ SfxStatusListener::~SfxStatusListener()
 }
 
 // old sfx controller item C++ API
-void SfxStatusListener::StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* )
+void SfxStatusListener::StateChanged( USHORT, SfxItemState, const SfxPoolItem* )
 {
     // must be implemented by sub class
 }
@@ -101,7 +101,7 @@ void SfxStatusListener::Bind()
     }
 }
 
-void SfxStatusListener::Bind( sal_uInt16 nSlotId, const rtl::OUString& rNewCommand )
+void SfxStatusListener::Bind( USHORT nSlotId, const rtl::OUString& rNewCommand )
 {
     // first remove old listener, if we have a dispatch object
     Reference< XStatusListener > aStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
@@ -113,7 +113,7 @@ void SfxStatusListener::Bind( sal_uInt16 nSlotId, const rtl::OUString& rNewComma
         m_nSlotID = nSlotId;
         m_aCommand.Complete = rNewCommand;
         Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
+                                                rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
         xTrans->parseStrict( m_aCommand );
 
         m_xDispatch = m_xDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );
@@ -176,13 +176,13 @@ void SAL_CALL SfxStatusListener::dispose() throw( ::com::sun::star::uno::Runtime
     m_xDispatchProvider.clear();
 }
 
-void SAL_CALL SfxStatusListener::addEventListener( const Reference< XEventListener >& )
+void SAL_CALL SfxStatusListener::addEventListener( const Reference< XEventListener >& ) 
 throw ( RuntimeException )
 {
     // do nothing - this is a wrapper class which does not support listeners
 }
 
-void SAL_CALL SfxStatusListener::removeEventListener( const Reference< XEventListener >& )
+void SAL_CALL SfxStatusListener::removeEventListener( const Reference< XEventListener >& ) 
 throw ( RuntimeException )
 {
     // do nothing - this is a wrapper class which does not support listeners
@@ -227,7 +227,7 @@ throw( RuntimeException )
     if ( rEvent.IsEnabled )
     {
         eState = SFX_ITEM_AVAILABLE;
-        ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
+        ::com::sun::star::uno::Type pType =	rEvent.State.getValueType();
 
         if ( pType == ::getVoidCppuType() )
         {

@@ -36,8 +36,8 @@ namespace oox { namespace ppt {
 
 class PPTShape : public oox::drawingml::Shape
 {
-    ShapeLocation               meShapeLocation;        // placeholdershapes (mnSubType != 0) on Master are never displayed
-    sal_Bool                    mbReferenced;           // placeholdershapes on Layout are displayed only, if they are not referenced
+    ShapeLocation				meShapeLocation;		// placeholdershapes (mnSubType != 0) on Master are never displayed
+    sal_Bool					mbReferenced;			// placeholdershapes on Layout are displayed only, if they are not referenced
                                                         // placeholdershapes on Slide are displayed always
 
 public:
@@ -49,7 +49,7 @@ public:
     using oox::drawingml::Shape::addShape;
     // addShape is creating and inserting the corresponding XShape.
     void addShape(
-            oox::core::XmlFilterBase& rFilterBase,
+            const oox::core::XmlFilterBase& rFilterBase,
             const SlidePersist& rPersist,
             const oox::drawingml::Theme* pTheme,
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
@@ -67,8 +67,6 @@ public:
     static oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes );
     static oox::drawingml::ShapePtr findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes );
     static oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes );
-
-    static oox::drawingml::TextListStylePtr getSubTypeTextListStyle( const SlidePersist& rSlidePersist, sal_Int32 nSubType );
 
 protected:
 

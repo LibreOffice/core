@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,9 @@ class SwStartNode;
 #include <memory>
 #include <boost/noncopyable.hpp>
 #else
-#include <node.hxx>         // fuer StartNode->GetMyIndex
+#include <node.hxx>			// fuer StartNode->GetMyIndex
 #endif
 
-class SwFmt;
 class Color;
 class SwFrmFmt;
 class SwTableFmt;
@@ -85,14 +84,14 @@ typedef SwTableBox* SwTableBoxPtr;
 SV_DECL_PTRARR_SORT( SwTableSortBoxes, SwTableBoxPtr, 25, 50 )
 typedef SwTableLine* SwTableLinePtr;
 
-class SW_DLLPUBLIC SwTable: public SwClient          //Client vom FrmFmt
+class SW_DLLPUBLIC SwTable: public SwClient			 //Client vom FrmFmt
 {
-
+    using SwClient::IsModifyLocked;
 
 protected:
     SwTableLines aLines;
     SwTableSortBoxes aSortCntBoxes;
-    SwServerObjectRef refObj;   // falls DataServer -> Pointer gesetzt
+    SwServerObjectRef refObj;	// falls DataServer -> Pointer gesetzt
 
     SwHTMLTableLayout *pHTMLLayout;
 
@@ -103,27 +102,25 @@ protected:
     SwTableNode* pTableNode;
 
 //SOLL das fuer jede Tabelle einstellbar sein?
-    TblChgMode  eTblChgMode;
+    TblChgMode	eTblChgMode;
 
-    sal_uInt16      nGrfsThatResize;    // Anzahl der Grfs, die beim HTML-Import
+    USHORT		nGrfsThatResize;	// Anzahl der Grfs, die beim HTML-Import
                                     // noch ein Resize der Tbl. anstossen
-    sal_uInt16      nRowsToRepeat;      // number of rows to repeat on every page
+    USHORT      nRowsToRepeat;      // number of rows to repeat on every page
 
-    sal_Bool        bModifyLocked   :1;
-    sal_Bool        bNewModel       :1; // sal_False: old SubTableModel; sal_True: new RowSpanModel
+    BOOL		bModifyLocked	:1;
+    BOOL        bNewModel       :1; // FALSE: old SubTableModel; TRUE: new RowSpanModel
 #if OSL_DEBUG_LEVEL > 1
     bool bDontChangeModel;  // This is set by functions (like Merge()) to forbid a laet model change
 #endif
 
-    sal_Bool IsModifyLocked(){ return bModifyLocked;}
-
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+    BOOL IsModifyLocked(){ return bModifyLocked;}
 
 public:
     enum SearchType
     {
         SEARCH_NONE, // Default: expand to rectangle
-        SEARCH_ROW, // row selection
+        SEARCH_ROW,	// row selection
         SEARCH_COL  // column selection
     };
 
@@ -134,58 +131,59 @@ public:
     virtual ~SwTable();
 
     // @@@ public copy ctor, but no copy assignment?
-    SwTable( const SwTable& rTable );       // kein Copy der Lines !!
+    SwTable( const SwTable& rTable );		// kein Copy der Lines !!
 private:
     // @@@ public copy ctor, but no copy assignment?
     SwTable & operator= (const SwTable &);
     // no default ctor.
     SwTable();
-    sal_Bool OldMerge( SwDoc*, const SwSelBoxes&, SwTableBox*, SwUndoTblMerge* );
-    sal_Bool OldSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, sal_Bool );
-    sal_Bool NewMerge( SwDoc*, const SwSelBoxes&, const SwSelBoxes& rMerged,
+    BOOL OldMerge( SwDoc*, const SwSelBoxes&, SwTableBox*, SwUndoTblMerge* );
+    BOOL OldSplitRow( SwDoc*, const SwSelBoxes&, USHORT, BOOL );
+    BOOL NewMerge( SwDoc*, const SwSelBoxes&, const SwSelBoxes& rMerged,
                    SwTableBox*, SwUndoTblMerge* );
-    sal_Bool NewSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, sal_Bool );
+    BOOL NewSplitRow( SwDoc*, const SwSelBoxes&, USHORT, BOOL );
     SwBoxSelection* CollectBoxSelection( const SwPaM& rPam ) const;
-    void InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nIdx, sal_uInt16 nCnt );
-    sal_Bool _InsertRow( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, sal_Bool bBehind );
-    sal_Bool NewInsertCol( SwDoc*, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool );
+    void InsertSpannedRow( SwDoc* pDoc, USHORT nIdx, USHORT nCnt );
+    BOOL _InsertRow( SwDoc*, const SwSelBoxes&,	USHORT nCnt, BOOL bBehind );
+    BOOL NewInsertCol( SwDoc*, const SwSelBoxes& rBoxes, USHORT nCnt, BOOL );
     void _FindSuperfluousRows( SwSelBoxes& rBoxes, SwTableLine*, SwTableLine* );
     void AdjustWidths( const long nOld, const long nNew );
     void NewSetTabCols( Parm &rP, const SwTabCols &rNew, const SwTabCols &rOld,
-                        const SwTableBox *pStart, sal_Bool bCurRowOnly );
+                        const SwTableBox *pStart, BOOL bCurRowOnly );
 
 public:
 
     SwHTMLTableLayout *GetHTMLTableLayout() { return pHTMLLayout; }
     const SwHTMLTableLayout *GetHTMLTableLayout() const { return pHTMLLayout; }
-    void SetHTMLTableLayout( SwHTMLTableLayout *p );    //Eigentumsuebergang!
+    void SetHTMLTableLayout( SwHTMLTableLayout *p );	//Eigentumsuebergang!
 
-    sal_uInt16 IncGrfsThatResize() { return ++nGrfsThatResize; }
-    sal_uInt16 DecGrfsThatResize() { return nGrfsThatResize ? --nGrfsThatResize : 0; }
+    USHORT IncGrfsThatResize() { return ++nGrfsThatResize; }
+    USHORT DecGrfsThatResize() { return nGrfsThatResize ? --nGrfsThatResize : 0; }
 
-    void LockModify()   { bModifyLocked = sal_True; }   //Muessen _immer_ paarig
-    void UnlockModify() { bModifyLocked = sal_False;}   //benutzt werden!
+    void LockModify()	{ bModifyLocked = TRUE; }	//Muessen _immer_ paarig
+    void UnlockModify()	{ bModifyLocked = FALSE;}	//benutzt werden!
 
-    void SetTableModel( sal_Bool bNew ){ bNewModel = bNew; }
-    sal_Bool IsNewModel() const { return bNewModel; }
+    void SetTableModel( BOOL bNew ){ bNewModel = bNew; }
+    BOOL IsNewModel() const { return bNewModel; }
 
-    sal_uInt16 GetRowsToRepeat() const { return Min( GetTabLines().Count(), nRowsToRepeat ); }
-    sal_uInt16 _GetRowsToRepeat() const { return nRowsToRepeat; }
-    void SetRowsToRepeat( sal_uInt16 nNumOfRows ) { nRowsToRepeat = nNumOfRows; }
+    USHORT GetRowsToRepeat() const { return Min( GetTabLines().Count(), nRowsToRepeat ); }
+    USHORT _GetRowsToRepeat() const { return nRowsToRepeat; }
+    void SetRowsToRepeat( USHORT nNumOfRows ) { nRowsToRepeat = nNumOfRows; }
 
     bool IsHeadline( const SwTableLine& rLine ) const;
 
           SwTableLines &GetTabLines() { return aLines; }
     const SwTableLines &GetTabLines() const { return aLines; }
 
-    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
-    SwTableFmt* GetTableFmt() const { return (SwTableFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt() 		{ return (SwFrmFmt*)pRegisteredIn; }
+    SwFrmFmt* GetFrmFmt() const	{ return (SwFrmFmt*)pRegisteredIn; }
+
+    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
     void GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
-                     sal_Bool bHidden = sal_False, sal_Bool bCurRowOnly = sal_False ) const;
+                     BOOL bHidden = FALSE, BOOL bCurRowOnly = FALSE ) const;
     void SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
-                     const SwTableBox *pStart, sal_Bool bCurRowOnly );
+                     const SwTableBox *pStart, BOOL bCurRowOnly );
 
 // The following functions are for new table model only...
     void CreateSelection(  const SwPaM& rPam, SwSelBoxes& rBoxes,
@@ -198,17 +196,17 @@ public:
     // SwSavRowSpan is the structure needed by Undo to undo the split operation
     // CleanUpRowSpan corrects the (top of the) second table and delviers the structure
     // for Undo
-    SwSaveRowSpan* CleanUpTopRowSpan( sal_uInt16 nSplitLine );
+    SwSaveRowSpan* CleanUpTopRowSpan( USHORT nSplitLine );
     // RestoreRowSpan is called by Undo to restore the old row span values
     void RestoreRowSpan( const SwSaveRowSpan& );
     // CleanUpBottomRowSpan corrects the overhanging row spans at the end of the first table
-    void CleanUpBottomRowSpan( sal_uInt16 nDelLines );
+    void CleanUpBottomRowSpan( USHORT nDelLines );
 
 
 // The following functions are "pseudo-virtual", i.e. they are different for old and new table model
 // It's not allowed to change the table model after the first call of one of these functions.
 
-    sal_Bool Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
+    BOOL Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
                 SwTableBox* pMergeBox, SwUndoTblMerge* pUndo = 0 )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -217,8 +215,8 @@ public:
         return bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pMergeBox, pUndo ) :
                            OldMerge( pDoc, rBoxes, pMergeBox, pUndo );
     }
-    sal_Bool SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1,
-                   sal_Bool bSameHeight = sal_False )
+    BOOL SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1,
+                   BOOL bSameHeight = FALSE )
     {
 #if OSL_DEBUG_LEVEL > 1
         bDontChangeModel = true;
@@ -231,71 +229,73 @@ public:
     void ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax ) const;
     void PrepareDeleteCol( long nMin, long nMax );
 
-    sal_Bool InsertCol( SwDoc*, const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt = 1, sal_Bool bBehind = sal_True );
-    sal_Bool InsertRow( SwDoc*, const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt = 1, sal_Bool bBehind = sal_True );
-    sal_Bool AppendRow( SwDoc* pDoc, sal_uInt16 nCnt = 1 );
+    BOOL InsertCol( SwDoc*, const SwSelBoxes& rBoxes,
+                    USHORT nCnt = 1, BOOL bBehind = TRUE );
+    BOOL InsertRow( SwDoc*, const SwSelBoxes& rBoxes,
+                    USHORT nCnt = 1, BOOL bBehind = TRUE );
+    BOOL AppendRow( SwDoc* pDoc, USHORT nCnt = 1 );
     void PrepareDelBoxes( const SwSelBoxes& rBoxes );
-    sal_Bool DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
-        SwUndo* pUndo, const sal_Bool bDelMakeFrms, const sal_Bool bCorrBorder );
-    sal_Bool SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1 );
-    sal_Bool Merge( const SwSelBoxes& rBoxes,
+    BOOL DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
+        SwUndo* pUndo, const BOOL bDelMakeFrms, const BOOL bCorrBorder );
+    BOOL SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1 );
+    BOOL Merge( const SwSelBoxes& rBoxes,
                 SwTableBox* pMergeBox, SwUndoTblMerge* = 0 );
 
     void FindSuperfluousRows( SwSelBoxes& rBoxes )
         { _FindSuperfluousRows( rBoxes, 0, 0 ); }
     void CheckRowSpan( SwTableLinePtr &rpLine, bool bUp ) const;
 
-          SwTableSortBoxes& GetTabSortBoxes()       { return aSortCntBoxes; }
+          SwTableSortBoxes& GetTabSortBoxes() 		{ return aSortCntBoxes; }
     const SwTableSortBoxes& GetTabSortBoxes() const { return aSortCntBoxes; }
 
         // lese die 1. Nummer und loesche sie aus dem String
         // (wird von GetTblBox und SwTblFld benutzt)
-    // #i80314#
+    // --> OD 2007-08-03 #i80314#
     // add 3rd parameter in order to control validation check on <rStr>
-    static sal_uInt16 _GetBoxNum( String& rStr,
-                              sal_Bool bFirst = sal_False,
+    static USHORT _GetBoxNum( String& rStr,
+                              BOOL bFirst = FALSE,
                               const bool bPerformValidCheck = false );
+    // <--
         // suche die Inhaltstragende Box mit dem Namen
-    // #i80314#
+    // --> OD 2007-08-03 #i80314#
     // add 2nd parameter in order to control validation check in called method
     // <_GetBoxNum(..)>
     const SwTableBox* GetTblBox( const String& rName,
                                  const bool bPerformValidCheck = false ) const;
+    // <--
         // kopiere die selektierten Boxen in ein anderes Dokument.
-    sal_Bool MakeCopy( SwDoc*, const SwPosition&, const SwSelBoxes&,
-                    sal_Bool bCpyNds = sal_True, sal_Bool bCpyName = sal_False ) const;
+    BOOL MakeCopy( SwDoc*, const SwPosition&, const SwSelBoxes&,
+                    BOOL bCpyNds = TRUE, BOOL bCpyName = FALSE ) const;
         // kopiere die Tabelle in diese. (die Logik steht im TBLRWCL.CXX)
-    sal_Bool InsTable( const SwTable& rCpyTbl, const SwNodeIndex&,
+    BOOL InsTable( const SwTable& rCpyTbl, const SwNodeIndex&,
                     SwUndoTblCpyTbl* pUndo = 0 );
-    sal_Bool InsTable( const SwTable& rCpyTbl, const SwSelBoxes&,
+    BOOL InsTable( const SwTable& rCpyTbl, const SwSelBoxes&,
                     SwUndoTblCpyTbl* pUndo = 0 );
-    sal_Bool InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes&,
+    BOOL InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes&,
                       SwUndoTblCpyTbl* pUndo );
         // kopiere die Headline (mit Inhalt!) der Tabelle in eine andere
-    sal_Bool CopyHeadlineIntoTable( SwTableNode& rTblNd );
+    BOOL CopyHeadlineIntoTable( SwTableNode& rTblNd );
 
         // erfrage die Box, dessen Start-Index auf nBoxStt steht
-          SwTableBox* GetTblBox( sal_uLong nSttIdx );
-    const SwTableBox* GetTblBox( sal_uLong nSttIdx ) const
-                        {   return ((SwTable*)this)->GetTblBox( nSttIdx );  }
+          SwTableBox* GetTblBox( ULONG nSttIdx );
+    const SwTableBox* GetTblBox( ULONG nSttIdx ) const
+                        {	return ((SwTable*)this)->GetTblBox( nSttIdx );	}
 
-    // returnt sal_True wenn sich in der Tabelle Verschachtelungen befinden
-    sal_Bool IsTblComplex() const;
+    // returnt TRUE wenn sich in der Tabelle Verschachtelungen befinden
+    BOOL IsTblComplex() const;
 
-    //returnt sal_True wenn die Tabelle oder Selektion ausgeglichen ist
-    sal_Bool IsTblComplexForChart( const String& rSel,
+    //returnt TRUE wenn die Tabelle oder Selektion ausgeglichen ist
+    BOOL IsTblComplexForChart( const String& rSel,
                                 SwChartLines* pGetCLines = 0  ) const;
 
     // suche alle Inhaltstragenden-Boxen der Grundline in der diese Box
     // steht. rBoxes auch als Return-Wert, um es gleich weiter zu benutzen
-    //JP 31.01.97: bToTop = sal_True -> hoch bis zur Grundline,
-    //                      sal_False-> sonst nur die Line der Box
+    //JP 31.01.97: bToTop = TRUE -> hoch bis zur Grundline,
+    //						FALSE-> sonst nur die Line der Box
     SwSelBoxes& SelLineFromBox( const SwTableBox* pBox,
-                            SwSelBoxes& rBoxes, sal_Bool bToTop = sal_True ) const;
+                            SwSelBoxes& rBoxes, BOOL bToTop = TRUE ) const;
         // erfrage vom Client Informationen
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual BOOL GetInfo( SfxPoolItem& ) const;
 
         // suche im Format nach der angemeldeten Tabelle
     static SwTable * FindTable( SwFrmFmt const*const pFmt );
@@ -315,20 +315,19 @@ public:
     //Daten fuer das Chart fuellen.
     void UpdateCharts() const;
 
-    TblChgMode GetTblChgMode() const        { return eTblChgMode; }
-    void SetTblChgMode( TblChgMode eMode )  { eTblChgMode = eMode; }
+    TblChgMode GetTblChgMode() const 		{ return eTblChgMode; }
+    void SetTblChgMode( TblChgMode eMode )	{ eTblChgMode = eMode; }
 
-    sal_Bool SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
+    BOOL SetColWidth( SwTableBox& rAktBox, USHORT eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
-    sal_Bool SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
+    BOOL SetRowHeight( SwTableBox& rAktBox, USHORT eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
-    void RegisterToFormat( SwFmt& rFmt );
 #if OSL_DEBUG_LEVEL > 1
     void CheckConsistency() const;
 #endif
 };
 
-class SW_DLLPUBLIC SwTableLine: public SwClient     // Client vom FrmFmt
+class SW_DLLPUBLIC SwTableLine: public SwClient		// Client vom FrmFmt
 {
     SwTableBoxes aBoxes;
     SwTableBox *pUpper;
@@ -338,7 +337,7 @@ public:
 
     SwTableLine() : pUpper(0) {}
 
-    SwTableLine( SwTableLineFmt*, sal_uInt16 nBoxes, SwTableBox *pUp );
+    SwTableLine( SwTableLineFmt*, USHORT nBoxes, SwTableBox *pUp );
     virtual ~SwTableLine();
 
           SwTableBoxes &GetTabBoxes() { return aBoxes; }
@@ -349,8 +348,8 @@ public:
     void SetUpper( SwTableBox *pNew ) { pUpper = pNew; }
 
 
-    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt()		{ return (SwFrmFmt*)pRegisteredIn; }
+    SwFrmFmt* GetFrmFmt() const	{ return (SwFrmFmt*)pRegisteredIn; }
 
     //Macht ein eingenes FrmFmt wenn noch mehr Lines von ihm abhaengen.
     SwFrmFmt* ClaimFrmFmt();
@@ -358,25 +357,24 @@ public:
 
     // suche nach der naechsten/vorherigen Box mit Inhalt
     SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =0,
-                            sal_Bool bOvrTblLns=sal_True ) const;
+                            BOOL bOvrTblLns=TRUE ) const;
     SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =0,
-                            sal_Bool bOvrTblLns=sal_True ) const;
+                            BOOL bOvrTblLns=TRUE ) const;
 
     SwTwips GetTableLineHeight( bool& bLayoutAvailable ) const;
 
     bool hasSoftPageBreak() const;
-    void RegisterToFormat( SwFmt& rFmt );
 };
 
-class SW_DLLPUBLIC SwTableBox: public SwClient      //Client vom FrmFmt
+class SW_DLLPUBLIC SwTableBox: public SwClient		//Client vom FrmFmt
 {
-    friend class SwNodes;           // um den Index umzusetzen !
+    friend class SwNodes;			// um den Index umzusetzen !
     friend void DelBoxNode(SwTableSortBoxes&);  // um den StartNode* zu loeschen !
     friend class SwXMLTableContext;
 
     //nicht (mehr) implementiert.
     SwTableBox( const SwTableBox & );
-    SwTableBox &operator=( const SwTableBox &); //gibts nicht.
+    SwTableBox &operator=( const SwTableBox &);	//gibts nicht.
 
     SwTableLines aLines;
     const SwStartNode * pSttNd;
@@ -392,7 +390,7 @@ public:
 
     SwTableBox() : pSttNd(0), pUpper(0), pImpl(0) {}
 
-    SwTableBox( SwTableBoxFmt*, sal_uInt16 nLines, SwTableLine *pUp = 0 );
+    SwTableBox( SwTableBoxFmt*, USHORT nLines, SwTableLine *pUp = 0 );
     SwTableBox( SwTableBoxFmt*, const SwStartNode&, SwTableLine *pUp = 0 );
     SwTableBox( SwTableBoxFmt*, const SwNodeIndex&, SwTableLine *pUp = 0 );
     virtual ~SwTableBox();
@@ -404,15 +402,15 @@ public:
     const SwTableLine *GetUpper() const { return pUpper; }
     void SetUpper( SwTableLine *pNew ) { pUpper = pNew; }
 
-    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt()		{ return (SwFrmFmt*)pRegisteredIn; }
+    SwFrmFmt* GetFrmFmt() const	{ return (SwFrmFmt*)pRegisteredIn; }
 
     //Macht ein eingenes FrmFmt wenn noch mehr Boxen von ihm abhaengen.
     SwFrmFmt* ClaimFrmFmt();
     void ChgFrmFmt( SwTableBoxFmt *pNewFmt );
 
     const SwStartNode *GetSttNd() const { return pSttNd; }
-    sal_uLong GetSttIdx() const
+    ULONG GetSttIdx() const
 #if OSL_DEBUG_LEVEL > 1
         ;
 #else
@@ -421,29 +419,29 @@ public:
 
     // suche nach der naechsten/vorherigen Box mit Inhalt
     SwTableBox* FindNextBox( const SwTable&, const SwTableBox* =0,
-                            sal_Bool bOvrTblLns=sal_True ) const;
+                            BOOL bOvrTblLns=TRUE ) const;
     SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =0,
-                            sal_Bool bOvrTblLns=sal_True ) const;
+                            BOOL bOvrTblLns=TRUE ) const;
     // gebe den Namen dieser Box zurueck. Dieser wird dynamisch bestimmt
     // und ergibt sich aus der Position in den Lines/Boxen/Tabelle
     String GetName() const;
     // gebe den "Wert" der Box zurueck (fuers rechnen in der Tabelle)
     double GetValue( SwTblCalcPara& rPara ) const;
 
-    sal_Bool IsInHeadline( const SwTable* pTbl = 0 ) const;
+    BOOL IsInHeadline( const SwTable* pTbl = 0 ) const;
 
     // enthaelt die Box Inhalt, der als Nummer formatiert werden kann?
-    sal_Bool HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
-                    sal_Bool& rIsEmptyTxtNd ) const;
-    sal_uLong IsValidNumTxtNd( sal_Bool bCheckAttr = sal_True ) const;
+    BOOL HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
+                    BOOL& rIsEmptyTxtNd ) const;
+    ULONG IsValidNumTxtNd( BOOL bCheckAttr = TRUE ) const;
     // teste ob der BoxInhalt mit der Nummer uebereinstimmt, wenn eine
     // Tabellenformel gesetzt ist. (fuers Redo des Change vom NumFormat!)
-    sal_Bool IsNumberChanged() const;
+    BOOL IsNumberChanged() const;
 
     // ist das eine FormelBox oder eine Box mit numerischen Inhalt (AutoSum)
     // Was es ist, besagt der ReturnWert - die WhichId des Attributes
     // Leere Boxen haben den ReturnWert USHRT_MAX !!
-    sal_uInt16 IsFormulaOrValueBox() const;
+    USHORT IsFormulaOrValueBox() const;
 
     // Loading of a document requires an actualisation of cells with values
     void ActualiseValueBox();
@@ -451,7 +449,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBox)
 
     // zugriff auf interne Daten - z.Z. benutzt fuer den NumFormatter
-    inline const Color* GetSaveUserColor()  const;
+    inline const Color* GetSaveUserColor()	const;
     inline const Color* GetSaveNumFmtColor() const;
     inline void SetSaveUserColor(const Color* p );
     inline void SetSaveNumFmtColor( const Color* p );
@@ -461,17 +459,15 @@ public:
     bool getDummyFlag() const;
     void setDummyFlag( bool bDummy );
 
-    SwTableBox& FindStartOfRowSpan( const SwTable&, sal_uInt16 nMaxStep = USHRT_MAX );
+    SwTableBox& FindStartOfRowSpan( const SwTable&, USHORT nMaxStep = USHRT_MAX );
     const SwTableBox& FindStartOfRowSpan( const SwTable& rTable,
-        sal_uInt16 nMaxStep = USHRT_MAX ) const
+        USHORT nMaxStep = USHRT_MAX ) const
         { return const_cast<SwTableBox*>(this)->FindStartOfRowSpan( rTable, nMaxStep ); }
 
-    SwTableBox& FindEndOfRowSpan( const SwTable&, sal_uInt16 nMaxStep = USHRT_MAX );
+    SwTableBox& FindEndOfRowSpan( const SwTable&, USHORT nMaxStep = USHRT_MAX );
     const SwTableBox& FindEndOfRowSpan( const SwTable& rTable,
-        sal_uInt16 nMaxStep = USHRT_MAX ) const
+        USHORT nMaxStep = USHRT_MAX ) const
         { return const_cast<SwTableBox*>(this)->FindEndOfRowSpan( rTable, nMaxStep ); }
-    void RegisterToFormat( SwFmt& rFmt ) ;
-    void ForgetFrmFmt();
 };
 
 class SwCellFrm;
@@ -491,6 +487,6 @@ public:
     const SwTableBox * getTableBox() const;
 };
 
-#endif  //_SWTABLE_HXX
+#endif	//_SWTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

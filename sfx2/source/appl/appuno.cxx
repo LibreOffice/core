@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,9 +95,7 @@
 #include <tools/cachestr.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
-#include <framework/documentundoguard.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/interaction.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
@@ -118,6 +116,7 @@ using namespace ::com::sun::star::io;
 #include <sfx2/fcontnr.hxx>
 #include "frmload.hxx"
 #include <sfx2/frame.hxx>
+#include "sfxbasic.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/objuno.hxx>
 #include <sfx2/unoctitm.hxx>
@@ -128,7 +127,7 @@ using namespace ::com::sun::star::io;
 #include "fltoptint.hxx"
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
-#include <sfx2/brokenpackageint.hxx>
+#include "brokenpackageint.hxx"
 #include "eventsupplier.hxx"
 #include "xpackcreator.hxx"
 #include "plugin.hxx"
@@ -136,6 +135,8 @@ using namespace ::com::sun::star::io;
 #include <ownsubfilterservice.hxx>
 #include "SfxDocumentMetaData.hxx"
 
+
+#define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
 
 static char const sTemplateRegionName[] = "TemplateRegionName";
@@ -161,7 +162,7 @@ static char const sDontEdit[] = "DontEdit";
 static char const sSilent[] = "Silent";
 static char const sJumpMark[] = "JumpMark";
 static char const sFileName[] = "FileName";
-static char const sSalvagedFile[] = "SalvagedFile";
+static char const sSalvageURL[] = "SalvagedFile";
 static char const sStatusInd[] = "StatusIndicator";
 static char const sModel[] = "Model";
 static char const sFrame[] = "Frame";
@@ -187,10 +188,6 @@ static char const sUseSystemDialog[] = "UseSystemDialog";
 static char const sStandardDir[] = "StandardDir";
 static char const sBlackList[] = "BlackList";
 static char const sModifyPasswordInfo[] = "ModifyPasswordInfo";
-static char const sSuggestedSaveAsDir[] = "SuggestedSaveAsDir";
-static char const sSuggestedSaveAsName[] = "SuggestedSaveAsName";
-static char const sEncryptionData[] = "EncryptionData";
-
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -220,15 +217,15 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
             ByteString aStr( "No creator method for item: ");
             aStr += ByteString::CreateFromInt32( nSlotId );
-            OSL_FAIL( aStr.GetBuffer() );
+            DBG_ERROR( aStr.GetBuffer() );
 #endif
             return;
         }
 
-        sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
-        sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+        USHORT nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
         pItem->SetWhich( nWhich );
-        sal_uInt16 nSubCount = pType->nAttribs;
+        USHORT nSubCount = pType->nAttribs;
 
         const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[0];
         String aName = rProp.Name;
@@ -244,7 +241,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             {
                 ByteString aStr( "Property not convertable: ");
                 aStr += pSlot->pUnoName;
-                OSL_FAIL( aStr.GetBuffer() );
+                DBG_ERROR( aStr.GetBuffer() );
             }
 #endif
         }
@@ -254,7 +251,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             // for a simple property there can be only one parameter and its name *must* match
             ByteString aStr( "Property name does not match: ");
             aStr += ByteString( aName, RTL_TEXTENCODING_UTF8 );
-            OSL_FAIL( aStr.GetBuffer() );
+            DBG_ERROR( aStr.GetBuffer() );
         }
 #endif
         else
@@ -273,11 +270,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             }
 #endif
             // complex property; collect sub items from the parameter set and reconstruct complex item
-            sal_uInt16 nFound=0;
+            USHORT nFound=0;
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 const ::com::sun::star::beans::PropertyValue& rPropValue = pPropsVal[n];
-                sal_uInt16 nSub;
+                USHORT nSub;
                 for ( nSub=0; nSub<nSubCount; nSub++ )
                 {
                     // search sub item by name
@@ -287,7 +284,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     const char* pName = aStr.GetBuffer();
                     if ( rPropValue.Name.compareToAscii( pName ) == COMPARE_EQUAL )
                     {
-                        sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[nSub].nAID;
+                        BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
                         if ( pItem->PutValue( rPropValue.Value, nSubId ) )
@@ -297,7 +294,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         {
                             ByteString aDbgStr( "Property not convertable: ");
                             aDbgStr += pSlot->pUnoName;
-                            OSL_FAIL( aDbgStr.GetBuffer() );
+                            DBG_ERROR( aDbgStr.GetBuffer() );
                         }
 #endif
                         break;
@@ -310,7 +307,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     // there was a parameter with a name that didn't match to any of the members
                     ByteString aStr( "Property name does not match: ");
                     aStr += ByteString( String(rPropValue.Name), RTL_TEXTENCODING_UTF8 );
-                    OSL_FAIL( aStr.GetBuffer() );
+                    DBG_ERROR( aStr.GetBuffer() );
                 }
 #endif
             }
@@ -338,16 +335,16 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
                 ByteString aStr( "No creator method for argument: ");
                 aStr += rArg.pName;
-                OSL_FAIL( aStr.GetBuffer() );
+                DBG_ERROR( aStr.GetBuffer() );
 #endif
                 return;
             }
 
-            sal_uInt16 nWhich = rSet.GetPool()->GetWhich(rArg.nSlotId);
-            sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+            USHORT nWhich = rSet.GetPool()->GetWhich(rArg.nSlotId);
+            BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
             pItem->SetWhich( nWhich );
             const SfxType* pType = rArg.pType;
-            sal_uInt16 nSubCount = pType->nAttribs;
+            USHORT nSubCount = pType->nAttribs;
             if ( nSubCount == 0 )
             {
                 // "simple" (base type) argument
@@ -368,7 +365,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         {
                             ByteString aStr( "Property not convertable: ");
                             aStr += rArg.pName;
-                            OSL_FAIL( aStr.GetBuffer() );
+                            DBG_ERROR( aStr.GetBuffer() );
                         }
 #endif
                         break;
@@ -378,14 +375,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             else
             {
                 // complex argument, could be passed in one struct
-                sal_Bool bAsWholeItem = sal_False;
+                BOOL bAsWholeItem = FALSE;
                 for ( sal_uInt16 n=0; n<nCount; n++ )
                 {
                     const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
                     String aName = rProp.Name;
                     if ( aName.CompareToAscii(rArg.pName) == COMPARE_EQUAL )
                     {
-                        bAsWholeItem = sal_True;
+                        bAsWholeItem = TRUE;
 #ifdef DBG_UTIL
                         ++nFoundArgs;
 #endif
@@ -397,7 +394,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         {
                             ByteString aStr( "Property not convertable: ");
                             aStr += rArg.pName;
-                            OSL_FAIL( aStr.GetBuffer() );
+                            DBG_ERROR( aStr.GetBuffer() );
                         }
 #endif
                     }
@@ -408,11 +405,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     // complex argument; collect sub items from argument array and reconstruct complex item
                     // only put item if at least one member was found and had the correct type
                     // (is this a good idea?! Should we ask for *all* members?)
-                    sal_Bool bRet = sal_False;
+                    BOOL bRet = FALSE;
                     for ( sal_uInt16 n=0; n<nCount; n++ )
                     {
                         const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
-                        for ( sal_uInt16 nSub=0; nSub<nSubCount; nSub++ )
+                        for ( USHORT nSub=0; nSub<nSubCount; nSub++ )
                         {
                             // search sub item by name
                             ByteString aStr( rArg.pName );
@@ -422,21 +419,21 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                             if ( rProp.Name.compareToAscii( pName ) == COMPARE_EQUAL )
                             {
                                 // at least one member found ...
-                                bRet = sal_True;
+                                bRet = TRUE;
 #ifdef DBG_UTIL
                                 ++nFoundArgs;
 #endif
-                                sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[nSub].nAID;
+                                BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
                                 if ( bConvertTwips )
                                     nSubId |= CONVERT_TWIPS;
                                 if (!pItem->PutValue( rProp.Value, nSubId ) )
                                 {
                                     // ... but it was not convertable
-                                    bRet = sal_False;
+                                    bRet = FALSE;
 #ifdef DBG_UTIL
                                     ByteString aDbgStr( "Property not convertable: ");
                                     aDbgStr += rArg.pName;
-                                    OSL_FAIL( aDbgStr.GetBuffer() );
+                                    DBG_ERROR( aDbgStr.GetBuffer() );
 #endif
                                 }
 
@@ -693,7 +690,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for StandardDir" );
+                    DBG_ASSERT( bOK, "invalid type or value for StanadardDir" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
                 }
@@ -717,11 +714,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSalvagedFile)) )
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSalvageURL)) )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for SalvagedFile" );
+                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
                 }
@@ -729,7 +726,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for FolderName" );
+                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_PATH, sVal ) );
                 }
@@ -858,33 +855,13 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     rSet.Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, rProp.Value ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sEncryptionData)) )
-                {
-                    rSet.Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, rProp.Value ) );
-                }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuggestedSaveAsDir)) )
-                {
-                    ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsDir" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASDIR, sVal ) );
-                }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuggestedSaveAsName)) )
-                {
-                    ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsName" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASNAME, sVal ) );
-                }
 #ifdef DBG_UTIL
                 else
                     --nFoundArgs;
 #endif
             }
         }
-        // API to raise options dialog with a specified options ab page (#i83757#)
+        // --> PB 2007-12-09 #i83757#
         else
         {
             // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
@@ -906,6 +883,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 }
             }
         }
+        // <--
 #ifdef DB_UTIL
         if ( nFoundArgs == nCount )
         {
@@ -943,10 +921,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
         // slot is a property
-        sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        USHORT nWhich = rSet.GetPool()->GetWhich(nSlotId);
         if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) //???
         {
-            sal_uInt16 nSubCount = pType->nAttribs;
+            USHORT nSubCount = pType->nAttribs;
             if ( nSubCount )
                 // it's a complex property, we want it split into simple types
                 // so we expect to get as many items as we have (sub) members
@@ -961,7 +939,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             // we will not rely on the "toggle" ability of some property slots
             ByteString aStr( "Processing property slot without argument: ");
             aStr += ByteString::CreateFromInt32( nSlotId );
-            OSL_FAIL( aStr.GetBuffer() );
+            DBG_ERROR( aStr.GetBuffer() );
         }
 #endif
 
@@ -972,15 +950,15 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     else
     {
         // slot is a method
-        sal_uInt16 nFormalArgs = pSlot->GetFormalArgumentCount();
-        for ( sal_uInt16 nArg=0; nArg<nFormalArgs; ++nArg )
+        USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
+        for ( USHORT nArg=0; nArg<nFormalArgs; ++nArg )
         {
             // check every formal argument of the method
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
-            sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+            USHORT nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
             if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) //???
             {
-                sal_uInt16 nSubCount = rArg.pType->nAttribs;
+                USHORT nSubCount = rArg.pType->nAttribs;
                 if ( nSubCount )
                     // argument has a complex type, we want it split into simple types
                     // so for this argument we expect to get as many items as we have (sub) members
@@ -1093,13 +1071,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO ) == SFX_ITEM_SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR ) == SFX_ITEM_SET )
-                nAdditional++;
-            if ( rSet.GetItemState( SID_ENCRYPTIONDATA ) == SFX_ITEM_SET )
-                nAdditional++;
-                nAdditional++;
-            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME ) == SFX_ITEM_SET )
-                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1115,10 +1086,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     if ( rSet.Count() != nItems )
     {
         // detect unknown item and present error message
-        const sal_uInt16 *pRanges = rSet.GetRanges();
+        const USHORT *pRanges = rSet.GetRanges();
         while ( *pRanges )
         {
-            for(sal_uInt16 nId = *pRanges++; nId <= *pRanges; ++nId)
+            for(USHORT nId = *pRanges++; nId <= *pRanges; ++nId)
             {
                 if ( rSet.GetItemState(nId) < SFX_ITEM_SET ) //???
                     // not really set
@@ -1127,12 +1098,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 if ( !pSlot->IsMode(SFX_SLOT_METHOD) && nId == rSet.GetPool()->GetWhich( pSlot->GetSlotId() ) )
                     continue;
 
-                sal_uInt16 nFormalArgs = pSlot->GetFormalArgumentCount();
-                sal_uInt16 nArg;
+                USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
+                USHORT nArg;
                 for ( nArg=0; nArg<nFormalArgs; ++nArg )
                 {
                     const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
-                    sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+                    USHORT nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
                     if ( nId == nWhich )
                         break;
                 }
@@ -1235,17 +1206,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         continue;
                     if ( nId == SID_NOAUTOSAVE )
                         continue;
-                     if ( nId == SID_ENCRYPTIONDATA )
-                        continue;
 
                     // used only internally
                     if ( nId == SID_SAVETO )
                         continue;
                      if ( nId == SID_MODIFYPASSWORDINFO )
-                        continue;
-                     if ( nId == SID_SUGGESTEDSAVEASDIR )
-                        continue;
-                     if ( nId == SID_SUGGESTEDSAVEASNAME )
                         continue;
                }
 
@@ -1268,28 +1233,30 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
         // slot is a property
-        sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
-        sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+        USHORT nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
         SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, sal_False );
         if ( pItem ) //???
         {
-            sal_uInt16 nSubCount = pType->nAttribs;
+            USHORT nSubCount = pType->nAttribs;
             if ( !nSubCount )
             {
+                //rPool.FillVariable( *pItem, *pVar, eUserMetric );
                 pValue[nActProp].Name = String( String::CreateFromAscii( pSlot->pUnoName ) ) ;
                 if ( !pItem->QueryValue( pValue[nActProp].Value ) )
                 {
                     ByteString aStr( "Item not convertable: ");
                     aStr += ByteString::CreateFromInt32(nSlotId);
-                    OSL_FAIL( aStr.GetBuffer() );
+                    DBG_ERROR( aStr.GetBuffer() );
                 }
             }
             else
             {
                 // complex type, add a property value for every member of the struct
-                for ( sal_uInt16 n=1; n<=nSubCount; ++n )
+                for ( USHORT n=1; n<=nSubCount; ++n )
                 {
-                    sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[n-1].nAID;
+                    //rPool.FillVariable( *pItem, *pVar, eUserMetric );
+                    BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[n-1].nAID;
                     if ( bConvertTwips )
                         nSubId |= CONVERT_TWIPS;
 
@@ -1304,7 +1271,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         aStr += ByteString::CreateFromInt32( pType->aAttrib[n-1].nAID );
                         aStr += " not convertable in slot: ";
                         aStr += ByteString::CreateFromInt32(nSlotId);
-                        OSL_FAIL( aStr.GetBuffer() );
+                        DBG_ERROR( aStr.GetBuffer() );
                     }
                 }
             }
@@ -1313,32 +1280,34 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     else
     {
         // slot is a method
-        sal_uInt16 nFormalArgs = pSlot->GetFormalArgumentCount();
-        for ( sal_uInt16 nArg=0; nArg<nFormalArgs; ++nArg )
+        USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
+        for ( USHORT nArg=0; nArg<nFormalArgs; ++nArg )
         {
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
-            sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
-            sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+            USHORT nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+            BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
             SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, sal_False );
             if ( pItem ) //???
             {
-                sal_uInt16 nSubCount = rArg.pType->nAttribs;
+                USHORT nSubCount = rArg.pType->nAttribs;
                 if ( !nSubCount )
                 {
+                    //rPool.FillVariable( *pItem, *pVar, eUserMetric );
                     pValue[nActProp].Name = String( String::CreateFromAscii( rArg.pName ) ) ;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value ) )
                     {
                         ByteString aStr( "Item not convertable: ");
                         aStr += ByteString::CreateFromInt32(rArg.nSlotId);
-                        OSL_FAIL( aStr.GetBuffer() );
+                        DBG_ERROR( aStr.GetBuffer() );
                     }
                 }
                 else
                 {
                     // complex type, add a property value for every member of the struct
-                    for ( sal_uInt16 n = 1; n <= nSubCount; ++n )
+                    for ( USHORT n = 1; n <= nSubCount; ++n )
                     {
-                        sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) rArg.pType->aAttrib[n-1].nAID;
+                        //rPool.FillVariable( rItem, *pVar, eUserMetric );
+                        BYTE nSubId = (BYTE) (sal_Int8) rArg.pType->aAttrib[n-1].nAID;
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
 
@@ -1353,7 +1322,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                             aStr += ByteString::CreateFromInt32( rArg.pType->aAttrib[n-1].nAID );
                             aStr += " not convertable in slot: ";
                             aStr += ByteString::CreateFromInt32(rArg.nSlotId);
-                            OSL_FAIL( aStr.GetBuffer() );
+                            DBG_ERROR( aStr.GetBuffer() );
                         }
                     }
                 }
@@ -1429,13 +1398,13 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sFrame));
                 if ( pItem->ISA( SfxUsrAnyItem ) )
                 {
-                    OSL_FAIL( "TransformItems: transporting an XFrame via an SfxUsrAnyItem is not deprecated!" );
+                    OSL_ENSURE( false, "TransformItems: transporting an XFrame via an SfxUsrAnyItem is not deprecated!" );
                     pValue[nActProp++].Value = static_cast< const SfxUsrAnyItem* >( pItem )->GetValue();
                 }
                 else if ( pItem->ISA( SfxUnoFrameItem ) )
                     pValue[nActProp++].Value <<= static_cast< const SfxUnoFrameItem* >( pItem )->GetFrame();
                 else
-                    OSL_FAIL( "TransformItems: invalid item type for SID_FILLFRAME!" );
+                    OSL_ENSURE( false, "TransformItems: invalid item type for SID_FILLFRAME!" );
             }
             if ( rSet.GetItemState( SID_TEMPLATE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
@@ -1520,7 +1489,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_BLACK_LIST, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sBlackList));
-
+                
                 com::sun::star::uno::Sequence< rtl::OUString > aList;
                 ((SfxStringListItem*)pItem)->GetStringList( aList );
                 pValue[nActProp++].Value <<= aList ;
@@ -1532,7 +1501,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             }
             if ( rSet.GetItemState( SID_DOC_SALVAGE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSalvagedFile));
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSalvageURL));
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
             if ( rSet.GetItemState( SID_PATH, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -1610,21 +1579,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sModifyPasswordInfo));
                 pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
-            }
-            if ( rSet.GetItemState( SID_ENCRYPTIONDATA, sal_False, &pItem ) == SFX_ITEM_SET )
-            {
-                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sEncryptionData));
-                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
-            }
-            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR, sal_False, &pItem ) == SFX_ITEM_SET )
-            {
-                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSuggestedSaveAsDir));
-                pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
-            }
-            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME, sal_False, &pItem ) == SFX_ITEM_SET )
-            {
-                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSuggestedSaveAsName));
-                pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
         }
     }
@@ -1781,9 +1735,12 @@ void SAL_CALL SfxMacroLoader::removeStatusListener(
 {
 }
 
+// -----------------------------------------------------------------------
 ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::uno::Any& rRetval, SfxObjectShell* pSh )
     throw ( ::com::sun::star::uno::RuntimeException )
 {
+    SfxApplication* pApp = SFX_APP();
+    pApp->EnterBasicCall();
     SfxObjectShell* pCurrent = pSh;
     if ( !pCurrent )
         // all not full qualified names use the BASIC of the given or current document
@@ -1829,21 +1786,18 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
 
         if ( pBasMgr )
         {
-            const bool bIsAppBasic = ( pBasMgr == pAppMgr );
-            const bool bIsDocBasic = ( pBasMgr != pAppMgr );
-
-            if ( pDoc )
+            if ( pSh && pDoc )
             {
-                // security check for macros from document basic if an SFX doc is given
+                // security check for macros from document basic if an SFX context (pSh) is given
                 if ( !pDoc->AdjustMacroMode( String() ) )
                     // check forbids execution
                     return ERRCODE_IO_ACCESSDENIED;
             }
-            else if ( pDoc && pDoc->GetMedium() )
+            else if ( pSh && pSh->GetMedium() )
             {
-                pDoc->AdjustMacroMode( String() );
-                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
-                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
+                pSh->AdjustMacroMode( String() );
+                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
                 if ( pUpdateDocItem && pMacroExecModeItem
                   && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE
                   && pMacroExecModeItem->GetValue() == document::MacroExecMode::NEVER_EXECUTE )
@@ -1860,49 +1814,79 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 aQualifiedMethod.Erase( nArgsPos - nHashPos - 1 );
             }
 
-            if ( pBasMgr->HasMacro( aQualifiedMethod ) )
+            SbxMethod *pMethod = SfxQueryMacro( pBasMgr, aQualifiedMethod );
+            if ( pMethod )
             {
-                Any aOldThisComponent;
-                const bool bSetDocMacroMode = ( pDoc != NULL ) && bIsDocBasic;
-                const bool bSetGlobalThisComponent = ( pDoc != NULL ) && bIsAppBasic;
-                if ( bSetDocMacroMode )
+                // arguments must be quoted
+                String aQuotedArgs;
+                if ( aArgs.Len()<2 || aArgs.GetBuffer()[1] == '\"')
+                    // no args or already quoted args
+                    aQuotedArgs = aArgs;
+                else
                 {
-                    // mark document: it executes an own macro, so it's in a modal mode
-                    pDoc->SetMacroMode_Impl( sal_True );
+                    // quote parameters
+                    aArgs.Erase(0,1);
+                    aArgs.Erase( aArgs.Len()-1,1);
+
+                    aQuotedArgs = '(';
+
+                    sal_uInt16 nCount = aArgs.GetTokenCount(',');
+                    for ( sal_uInt16 n=0; n<nCount; n++ )
+                    {
+                        aQuotedArgs += '\"';
+                        aQuotedArgs += aArgs.GetToken( n, ',' );
+                        aQuotedArgs += '\"';
+                        if ( n<nCount-1 )
+                            aQuotedArgs += ',';
+                    }
+
+                    aQuotedArgs += ')';
                 }
 
-                if ( bSetGlobalThisComponent )
+                Any aOldThisComponent;
+                if ( pSh )
                 {
-                    // document is executed via AppBASIC, adjust ThisComponent variable
-                    aOldThisComponent = pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( pDoc->GetModel() ) );
+                    if ( pBasMgr != pAppMgr )
+                        // mark document: it executes an own macro, so it's in a modal mode
+                        pSh->SetMacroMode_Impl( TRUE );
+                    if ( pBasMgr == pAppMgr )
+                    {
+                        // document is executed via AppBASIC, adjust ThisComponent variable
+                        aOldThisComponent = pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( pSh->GetModel() ) );
+                    }
                 }
+
+                // add quoted arguments and do the call
+                String aCall( '[' );
+                aCall += pMethod->GetName();
+                aCall += aQuotedArgs;
+                aCall += ']';
 
                 // just to let the shell be alive
-                SfxObjectShellRef xKeepDocAlive = pDoc;
+                SfxObjectShellRef rSh = pSh;
 
+                // execute function using its Sbx parent,
+                //SbxVariable* pRet = pMethod->GetParent()->Execute( aCall );
+                //rRetval = sbxToUnoValue( pRet );
+
+                SbxVariable* pRet = pMethod->GetParent()->Execute( aCall );
+                if ( pRet )
                 {
-                    // attempt to protect the document against the script tampering with its Undo Context
-                    ::std::auto_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
-                    if ( bIsDocBasic )
-                        pUndoGuard.reset( new ::framework::DocumentUndoGuard( pDoc->GetModel() ) );
-
-                    // execute the method
-                    SbxVariableRef retValRef = new SbxVariable;
-                    nErr = pBasMgr->ExecuteMacro( aQualifiedMethod, aArgs, retValRef );
-                    if ( nErr == ERRCODE_NONE )
-                        rRetval = sbxToUnoValue( retValRef );
+                    USHORT nFlags = pRet->GetFlags();
+                    pRet->SetFlag( SBX_READWRITE | SBX_NO_BROADCAST );
+                    rRetval = sbxToUnoValue( pRet );
+                    pRet->SetFlags( nFlags );
                 }
 
-                if ( bSetGlobalThisComponent )
+                nErr = SbxBase::GetError();
+                if ( ( pBasMgr == pAppMgr ) && pSh )
                 {
                     pAppMgr->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
                 }
 
-                if ( bSetDocMacroMode )
-                {
-                    // remove flag for modal mode
-                    pDoc->SetMacroMode_Impl( sal_False );
-                }
+                if ( pSh && pSh->GetModel().is() )
+                       // remove flag for modal mode
+                       pSh->SetMacroMode_Impl( FALSE );
             }
             else
                 nErr = ERRCODE_BASIC_PROC_UNDEFINED;
@@ -1921,6 +1905,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
         nErr = SbxBase::GetError();
     }
 
+    pApp->LeaveBasicCall();
     SbxBase::ResetError();
     return nErr;
 }
@@ -1943,7 +1928,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     const ::rtl::OUString& /*sTargetFrameName*/,
     FrameSearchFlags /*eSearchFlags*/ ) throw( RuntimeException )
 {
-    sal_uInt16                  nId( 0 );
+    USHORT                  nId( 0 );
     sal_Bool                bMasterCommand( sal_False );
     Reference < XDispatch > xDisp;
     const SfxSlot* pSlot = 0;
@@ -1951,9 +1936,9 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL ||
          aURL.Protocol.compareToAscii( "commandId:" ) == COMPARE_EQUAL )
     {
-        nId = (sal_uInt16) aURL.Path.toInt32();
+        nId = (USHORT) aURL.Path.toInt32();
         SfxShell* pShell;
-        pAppDisp->GetShellAndSlot_Impl( nId, &pShell, &pSlot, sal_True, sal_True );
+        pAppDisp->GetShellAndSlot_Impl( nId, &pShell, &pSlot, TRUE, TRUE );
     }
     else if ( aURL.Protocol.compareToAscii( ".uno:" ) == COMPARE_EQUAL )
     {
@@ -1996,10 +1981,10 @@ throw (::com::sun::star::uno::RuntimeException)
     std::list< sal_Int16 > aGroupList;
     SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
 
-    const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+    const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
 
     // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-    for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
+    for ( USHORT i=0; i<pAppSlotPool->GetGroupCount(); i++ )
     {
         String aName = pAppSlotPool->SeekGroup( i );
         const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
@@ -2031,11 +2016,11 @@ throw (::com::sun::star::uno::RuntimeException)
 
     if ( pAppSlotPool )
     {
-        const sal_uIntPtr   nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+        const ULONG   nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
         rtl::OUString aCmdPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
 
         // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-        for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
+        for ( USHORT i=0; i<pAppSlotPool->GetGroupCount(); i++ )
         {
             String aName = pAppSlotPool->SeekGroup( i );
             const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
@@ -2144,34 +2129,194 @@ SFX_IMPL_SINGLEFACTORY( TestMouseClickHandler );
 extern "C" {
 
 SFX2_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char**  ppEnvironmentTypeName ,
+    const sal_Char**  ppEnvironmentTypeName	,
     uno_Environment** )
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
+SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
+    void*	               ,
+    void*	pRegistryKey	)
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >		xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pRegistryKey ) )	;
+
+    // register actual implementations and their services
+    ::rtl::OUString aImpl;
+    ::rtl::OUString aTempStr;
+    ::rtl::OUString aKeyStr;
+    Reference< XRegistryKey > xNewKey;
+    Reference< XRegistryKey > xLoaderKey;
+
+    // PluginObject
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += ::sfx2::PluginObject::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
+    
+    // IFrameObject
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += ::sfx2::IFrameObject::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
+
+    // global app event broadcaster
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxGlobalEvents_Impl::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster") );
+
+    // global app dispatcher
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxAppDispatchProvider::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.ProtocolHandler") );
+
+    // standalone document info
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxStandaloneDocumentInfoObject::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.document.StandaloneDocumentInfo") );
+
+    // frame loader
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxFrameLoader_Impl::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    Sequence < ::rtl::OUString > aServices = SfxFrameLoader_Impl::impl_getStaticSupportedServiceNames();
+    sal_Int32 nCount = aServices.getLength();
+    for ( sal_Int16 i=0; i<nCount; i++ )
+        xNewKey->createKey( aServices.getConstArray()[i] );
+
+    // macro loader
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxMacroLoader::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.ProtocolHandler") );
+
+    // - sfx document templates
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxDocTplService::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.DocumentTemplates") );
+
+    // quickstart wrapper service
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += ShutdownIcon::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.office.Quickstart") );
+
+    // application script library container service
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxApplicationScriptLibraryContainer::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ApplicationScriptLibraryContainer") );
+
+    // application dialog library container service
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxApplicationDialogLibraryContainer::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ApplicationDialogLibraryContainer") );
+
+    // converter of fs folders to packages
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += OPackageStructureCreator::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    Sequence< ::rtl::OUString > rServices = OPackageStructureCreator::impl_getStaticSupportedServiceNames();
+    for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
+        xNewKey->createKey( rServices.getConstArray()[ind] );
+
+    // subfilter to parse a stream in OASIS format generated by the filter
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += ::sfx2::OwnSubFilterService::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    rServices = ::sfx2::OwnSubFilterService::impl_getStaticSupportedServiceNames();
+    for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
+        xNewKey->createKey( rServices.getConstArray()[ind] );
+
+    // document meta data
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += comp_SfxDocumentMetaData::_getImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentProperties") );
+
+
+    // writer compatable document properties
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += comp_CompatWriterDocProps::_getImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.writer.DocumentProperties") );
+
+    return sal_True;
+}
+
 SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
-    const sal_Char* pImplementationName ,
-    void*           pServiceManager     ,
-    void*                                 )
+    const sal_Char*	pImplementationName	,
+    void*           pServiceManager		,
+    void*		                          )
 {
     // Set default return value for this operation - if it failed.
     void* pReturn = NULL ;
 
-    if  (
-            ( pImplementationName   !=  NULL ) &&
-            ( pServiceManager       !=  NULL )
+    if	(
+            ( pImplementationName	!=	NULL ) &&
+            ( pServiceManager		!=	NULL )
         )
     {
         // Define variables which are used in following macros.
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
               xFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    xServiceManager( reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	xServiceManager( reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ) )	;
 
         //=============================================================================
         //  Add new macro line to handle new service.
-        //  !!! ATTENTION !!!
-        //      Write no ";" at end of line and dont forget "else" ! (see macro)
+        //
+        //	!!! ATTENTION !!!
+        //		Write no ";" at end of line and dont forget "else" ! (see macro)
         //=============================================================================
         IF_NAME_CREATECOMPONENTFACTORY( SfxGlobalEvents_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
@@ -2245,18 +2390,18 @@ RequestFilterOptions::RequestFilterOptions( ::com::sun::star::uno::Reference< ::
     ::rtl::OUString temp;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
     ::com::sun::star::document::FilterOptionsRequest aOptionsRequest( temp,
-                                                                      temp2,
+                                                                         temp2,
                                                                       rModel,
                                                                       rProperties );
 
-    m_aRequest <<= aOptionsRequest;
+       m_aRequest <<= aOptionsRequest;
 
-    m_pAbort  = new comphelper::OInteractionAbort;
-    m_pOptions = new FilterOptionsContinuation;
+       m_pAbort  = new ContinuationAbort;
+       m_pOptions = new FilterOptionsContinuation;
 
-    m_lContinuations.realloc( 2 );
-    m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
-    m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pOptions );
+       m_lContinuations.realloc( 2 );
+       m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
+       m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pOptions );
 }
 
 ::com::sun::star::uno::Any SAL_CALL RequestFilterOptions::getRequest()
@@ -2273,140 +2418,108 @@ RequestFilterOptions::RequestFilterOptions( ::com::sun::star::uno::Reference< ::
 }
 
 //=========================================================================
-class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
-{
-    ::com::sun::star::uno::Any m_aRequest;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > m_lContinuations;
-    comphelper::OInteractionApprove* m_pApprove;
-    comphelper::OInteractionDisapprove*  m_pDisapprove;
 
-public:
-    RequestPackageReparation_Impl( ::rtl::OUString aName );
-    sal_Bool    isApproved();
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations()
-        throw( ::com::sun::star::uno::RuntimeException );
-};
-
-RequestPackageReparation_Impl::RequestPackageReparation_Impl( ::rtl::OUString aName )
+RequestPackageReparation::RequestPackageReparation( ::rtl::OUString aName )
 {
     ::rtl::OUString temp;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
     ::com::sun::star::document::BrokenPackageRequest aBrokenPackageRequest( temp,
                                                                                  temp2,
                                                                               aName );
+
        m_aRequest <<= aBrokenPackageRequest;
-    m_pApprove = new comphelper::OInteractionApprove;
-    m_pDisapprove = new comphelper::OInteractionDisapprove;
+
+       m_pApprove = new ContinuationApprove;
+       m_pDisapprove = new ContinuationDisapprove;
+
        m_lContinuations.realloc( 2 );
        m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pApprove );
        m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pDisapprove );
 }
 
-sal_Bool RequestPackageReparation_Impl::isApproved()
+/*uno::*/Any SAL_CALL RequestPackageReparation::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
 {
-    return m_pApprove->wasSelected();
+    return ::cppu::queryInterface ( rType,
+            // OWeakObject interfaces
+            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
+            static_cast< XWeak* > ( this ),
+            // my own interfaces
+            static_cast< XInteractionRequest*  > ( this ) );
+}    
+
+void SAL_CALL RequestPackageReparation::acquire(  ) throw ()
+{
+    OWeakObject::acquire();
 }
 
-::com::sun::star::uno::Any SAL_CALL RequestPackageReparation_Impl::getRequest()
+void SAL_CALL RequestPackageReparation::release(  ) throw ()
+{
+    OWeakObject::release();
+}    
+
+::com::sun::star::uno::Any SAL_CALL RequestPackageReparation::getRequest()
         throw( ::com::sun::star::uno::RuntimeException )
 {
     return m_aRequest;
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >
-    SAL_CALL RequestPackageReparation_Impl::getContinuations()
+    SAL_CALL RequestPackageReparation::getContinuations()
         throw( ::com::sun::star::uno::RuntimeException )
 {
     return m_lContinuations;
 }
 
-RequestPackageReparation::RequestPackageReparation( ::rtl::OUString aName )
-{
-    pImp = new RequestPackageReparation_Impl( aName );
-    pImp->acquire();
-}
-
-RequestPackageReparation::~RequestPackageReparation()
-{
-    pImp->release();
-}
-
-sal_Bool RequestPackageReparation::isApproved()
-{
-    return pImp->isApproved();
-}
-
-com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > RequestPackageReparation::GetRequest()
-{
-    return com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest >(pImp);
-}
-
 //=========================================================================
-class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
-{
-    ::com::sun::star::uno::Any m_aRequest;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > m_lContinuations;
-    comphelper::OInteractionAbort*  m_pAbort;
 
-public:
-    NotifyBrokenPackage_Impl( ::rtl::OUString aName );
-    sal_Bool    isAborted();
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations()
-        throw( ::com::sun::star::uno::RuntimeException );
-};
-
-NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( ::rtl::OUString aName )
+NotifyBrokenPackage::NotifyBrokenPackage( ::rtl::OUString aName )
 {
     ::rtl::OUString temp;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
     ::com::sun::star::document::BrokenPackageRequest aBrokenPackageRequest( temp,
                                                                                  temp2,
                                                                               aName );
+
        m_aRequest <<= aBrokenPackageRequest;
-    m_pAbort  = new comphelper::OInteractionAbort;
+
+       m_pAbort  = new ContinuationAbort;
+
        m_lContinuations.realloc( 1 );
        m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
 }
 
-sal_Bool NotifyBrokenPackage_Impl::isAborted()
+/*uno::*/Any SAL_CALL NotifyBrokenPackage::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
 {
-    return m_pAbort->wasSelected();
+    return ::cppu::queryInterface ( rType,
+            // OWeakObject interfaces
+            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
+            static_cast< XWeak* > ( this ),
+            // my own interfaces
+            static_cast< XInteractionRequest*  > ( this ) );
+}    
+
+void SAL_CALL NotifyBrokenPackage::acquire(  ) throw ()
+{
+    OWeakObject::acquire();
 }
 
-::com::sun::star::uno::Any SAL_CALL NotifyBrokenPackage_Impl::getRequest()
+void SAL_CALL NotifyBrokenPackage::release(  ) throw ()
+{
+    OWeakObject::release();
+}    
+
+::com::sun::star::uno::Any SAL_CALL NotifyBrokenPackage::getRequest()
         throw( ::com::sun::star::uno::RuntimeException )
 {
     return m_aRequest;
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >
-    SAL_CALL NotifyBrokenPackage_Impl::getContinuations()
+    SAL_CALL NotifyBrokenPackage::getContinuations()
         throw( ::com::sun::star::uno::RuntimeException )
 {
     return m_lContinuations;
 }
 
-NotifyBrokenPackage::NotifyBrokenPackage( ::rtl::OUString aName )
-{
-    pImp = new NotifyBrokenPackage_Impl( aName );
-    pImp->acquire();
-}
-
-NotifyBrokenPackage::~NotifyBrokenPackage()
-{
-    pImp->release();
-}
-
-sal_Bool NotifyBrokenPackage::isAborted()
-{
-    return pImp->isAborted();
-}
-
-com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > NotifyBrokenPackage::GetRequest()
-{
-    return com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest >(pImp);
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

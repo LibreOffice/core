@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,7 @@
 #include "precompiled_comphelper.hxx"
 
 #include <comphelper/uieventslogger.hxx>
+#include <boost/shared_ptr.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -60,10 +61,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
 using namespace osl;
+using namespace rtl;
 using namespace std;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace
 {
@@ -176,7 +176,6 @@ namespace comphelper
             static const OUString FN_ROTATEDLOG;
             static const OUString LOGROTATE_EVENTNAME;
             static const OUString URL_UNO;
-            static const OUString URL_SPECIAL;
             static const OUString URL_FILE;
     };
 }
@@ -211,7 +210,6 @@ namespace comphelper
     const OUString UiEventsLogger_Impl::LOGROTATE_EVENTNAME(RTL_CONSTASCII_USTRINGPARAM("onOOoImprovementLogRotated"));
 
     const OUString UiEventsLogger_Impl::URL_UNO(RTL_CONSTASCII_USTRINGPARAM(".uno:"));
-    const OUString UiEventsLogger_Impl::URL_SPECIAL(RTL_CONSTASCII_USTRINGPARAM(".special:"));
     const OUString UiEventsLogger_Impl::URL_FILE(RTL_CONSTASCII_USTRINGPARAM("file:"));
 
 
@@ -350,12 +348,7 @@ namespace comphelper
         const Sequence<PropertyValue>& args)
     {
         if(!m_Active) return;
-        if(!url.Complete.match(URL_UNO)
-            && !url.Complete.match(URL_FILE)
-            && !url.Complete.match(URL_SPECIAL))
-        {
-            return;
-        }
+        if(!url.Complete.match(URL_UNO) && !url.Complete.match(URL_FILE)) return;
         checkIdleTimeout();
 
         Sequence<OUString> logdata = Sequence<OUString>(COLUMNS);
@@ -535,7 +528,7 @@ namespace comphelper
     {
         Reference<XMultiServiceFactory> sm = getProcessServiceFactory();
 
-        // getting the Core Uno proxy object
+        // getting the Core Uno proxy object 
         // It will call disposing and make sure we clear all our references
         {
             Reference<XTerminateListener> xCore(
@@ -594,7 +587,7 @@ namespace comphelper
             m_Active = false;
     }
 
-    // private static UiEventsLogger_Impl
+    // private static UiEventsLogger_Impl 
     bool UiEventsLogger_Impl::shouldActivate()
     {
         return getEnabledFromCfg() && getEnabledFromCoreController();

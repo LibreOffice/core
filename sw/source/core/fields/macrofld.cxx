@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
 #include <hintids.hxx>
 #include <doc.hxx>
 #include <docufld.hxx>
@@ -38,10 +39,8 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
 
-
 using namespace ::com::sun::star;
 using ::rtl::OUString;
-
 /*--------------------------------------------------------------------
     Beschreibung: MacroFeldtypen
  --------------------------------------------------------------------*/
@@ -64,13 +63,13 @@ SwFieldType* SwMacroFieldType::Copy() const
 
 SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
                            const String& rLibAndName, const String& rTxt) :
-    SwField(pInitType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(sal_False)
+    SwField(pInitType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(FALSE)
 {
     bIsScriptURL = isScriptURL(aMacro);
 }
 
 String SwMacroField::Expand() const
-{   // Button malen anstatt von
+{ 	// Button malen anstatt von
     return aText ;
 }
 
@@ -79,12 +78,16 @@ SwField* SwMacroField::Copy() const
     return new SwMacroField((SwMacroFieldType*)GetTyp(), aMacro, aText);
 }
 
-String SwMacroField::GetFieldName() const
+String SwMacroField::GetCntnt(BOOL bName) const
 {
-    String aStr(GetTyp()->GetName());
-    aStr += ' ';
-    aStr += aMacro;
-    return aStr;
+    if(bName)
+    {
+        String aStr(GetTyp()->GetName());
+        aStr += ' ';
+        aStr += aMacro;
+        return aStr;
+    }
+    return Expand();
 }
 
 String SwMacroField::GetLibName() const
@@ -97,9 +100,9 @@ String SwMacroField::GetLibName() const
 
     if (aMacro.Len())
     {
-        sal_uInt16 nPos = aMacro.Len();
+        USHORT nPos = aMacro.Len();
 
-        for (sal_uInt16 i = 0; i < 3 && nPos > 0; i++)
+        for (USHORT i = 0; i < 3 && nPos > 0; i++)
             while (aMacro.GetChar(--nPos) != '.' && nPos > 0) ;
 
         return aMacro.Copy(0, nPos );
@@ -119,9 +122,9 @@ String SwMacroField::GetMacroName() const
         }
         else
         {
-            sal_uInt16 nPos = aMacro.Len();
+            USHORT nPos = aMacro.Len();
 
-            for (sal_uInt16 i = 0; i < 3 && nPos > 0; i++)
+            for (USHORT i = 0; i < 3 && nPos > 0; i++)
                 while (aMacro.GetChar(--nPos) != '.' && nPos > 0) ;
 
             return aMacro.Copy( ++nPos );
@@ -173,7 +176,10 @@ String SwMacroField::GetPar2() const
     return aText;
 }
 
-bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+/*-----------------05.03.98 13:38-------------------
+
+--------------------------------------------------*/
+bool SwMacroField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -190,12 +196,14 @@ bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= bIsScriptURL ? OUString(GetMacroName()): OUString();
         break;
     default:
-        OSL_FAIL("illegal property");
+        DBG_ERROR("illegal property");
     }
     return true;
 }
+/*-----------------05.03.98 13:38-------------------
 
-bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+--------------------------------------------------*/
+bool SwMacroField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     String sTmp;
     switch( nWhichId )
@@ -214,7 +222,7 @@ bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         bIsScriptURL = isScriptURL(aMacro);
         break;
     default:
-        OSL_FAIL("illegal property");
+        DBG_ERROR("illegal property");
     }
 
     return true;
@@ -233,7 +241,7 @@ void SwMacroField::CreateMacroString(
     rMacro += rMacroName;
 }
 
-sal_Bool SwMacroField::isScriptURL( const String& str )
+BOOL SwMacroField::isScriptURL( const String& str )
 {
     uno::Reference< lang::XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
@@ -250,10 +258,10 @@ sal_Bool SwMacroField::isScriptURL( const String& str )
 
         if ( xUrl.is() )
         {
-            return sal_True;
+            return TRUE;
         }
     }
-    return sal_False;
+    return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

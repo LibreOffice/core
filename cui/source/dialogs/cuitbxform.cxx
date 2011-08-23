@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,10 @@
  *
  ************************************************************************/
 
-#include <string>
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
+#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <tools/ref.hxx>
 #include <tools/shl.hxx>
 #include <svl/intitem.hxx>
@@ -56,7 +59,7 @@ FmInputRecordNoDialog::FmInputRecordNoDialog(Window * pParent)
 {
     m_aRecordNo.SetMin(1);
     m_aRecordNo.SetMax(0x7FFFFFFF);
-    m_aRecordNo.SetStrictFormat(sal_True);
+    m_aRecordNo.SetStrictFormat(TRUE);
     m_aRecordNo.SetDecimalDigits(0);
 
     FreeResource();

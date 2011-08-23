@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_canvas.hxx"
 
 
-#ifdef WNT
+#ifdef WNT            
 # if defined _MSC_VER
 # pragma warning(push,1)
 # endif
@@ -55,26 +55,27 @@ namespace canvas
             int mnOldPriority;
         };
 
-        PriorityBooster::PriorityBooster( sal_Int32 nDelta ) :
+        PriorityBooster::PriorityBooster( sal_Int32 nDelta ) : 
             mpImpl( new PriorityBooster_Impl )
         {
-#ifdef WNT
+#ifdef WNT            
             HANDLE aCurrThread = GetCurrentThread();
             mpImpl->mnOldPriority = GetThreadPriority( aCurrThread );
 
             if ( 0 == SetThreadPriority( aCurrThread, mpImpl->mnOldPriority + nDelta ) )
             {
-                OSL_FAIL( "PriorityBooster::PriorityBooster(): Was not able to modify thread priority" );
+                OSL_ENSURE( false,
+                            "PriorityBooster::PriorityBooster(): Was not able to modify thread priority" );
             }
 #else
-            (void)nDelta;
+            nDelta = 0; // #i55991# placate gcc warning
 #endif
         }
 
         PriorityBooster::~PriorityBooster()
         {
-#ifdef WNT
-            SetThreadPriority( GetCurrentThread(),
+#ifdef WNT            
+            SetThreadPriority( GetCurrentThread(), 
                                mpImpl->mnOldPriority );
 #endif
         }

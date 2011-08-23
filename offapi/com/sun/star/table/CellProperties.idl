@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -250,11 +250,11 @@ published service CellProperties
 
     //-------------------------------------------------------------------------
 
-    /** is <TRUE/>, if the cell content will be shrunk to fit in the cell.
+    /** is <TRUE/>, if the cell content will be shrinked to fit in the cell.
      */
     [optional, property] boolean ShrinkToFit;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 };
 
 //=============================================================================

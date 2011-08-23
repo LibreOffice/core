@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 #include "frmui.hrc"
 
 /*-----------------------------------------------------------------------
-    Description: V-Align
+    Beschreibung: V-Align
  -----------------------------------------------------------------------*/
 String STR_TOP
 {
@@ -46,7 +46,7 @@ String STR_CENTER_HORI
     Text [ en-US ] = "~Center" ;
 };
 /*-----------------------------------------------------------------------
-    Description: V-Rel
+    Beschreibung: V-Rel
  -----------------------------------------------------------------------*/
 String STR_TOPPRT
 {
@@ -54,13 +54,13 @@ String STR_TOPPRT
 };
 
 /*-----------------------------------------------------------------------
-    Description: H-Rel
+    Beschreibung: H-Rel
  -----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------
-    Description: V-Rel character alignment
+    Beschreibung: V-Rel Zeichenausrichtungen
  -----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------
-    Description: character alignment for frmsh.cxx - context menu
+    Beschreibung: Zeichenausrichtungen fuer frmsh.cxx - Kontextmenue
  -----------------------------------------------------------------------*/
 String STR_TOP_BASE
 {
@@ -100,6 +100,7 @@ String STR_CHAR_CENTER
 };
 String STR_OLE_INSERT
 {
+    /* ### ACHTUNG: Neuer Text in Resource? Objekt einfügen : Objekt einf³gen */
     Text [ en-US ] = "Insert object" ;
 };
 String STR_OLE_EDIT
@@ -126,6 +127,7 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
+    /* ### ACHTUNG: Neuer Text in Resource? Der Spaltenabstand ist zu groß für die Spaltenbreite. : Der Spaltenabstand ist zu gro˜ f³r die Spaltenbreite. */
     Message [ en-US ] = "Column spacing exceeds the column width." ;
 };
 

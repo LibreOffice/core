@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ public class UnoDialog implements EventNames
         XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControlModel);
         try
         {
-            String sName = (String) xPSet.getPropertyValue(PropertyNames.PROPERTY_NAME);
+            String sName = (String) xPSet.getPropertyValue("Name");
             Integer KeyObject = (Integer) ControlList.get(sName);
             iKey = KeyObject.intValue();
         }
@@ -245,7 +245,7 @@ public class UnoDialog implements EventNames
         XControl xControl2 = xDlgContainer.getControl(ControlName);
         XView xView = (XView) UnoRuntime.queryInterface(XView.class, xControl2);
         Size aSize = xView.getSize();
-        double dblMAPWidth = (double) (((Integer) Helper.getUnoPropertyValue(xControl2.getModel(), PropertyNames.PROPERTY_WIDTH)).intValue());
+        double dblMAPWidth = (double) (((Integer) Helper.getUnoPropertyValue(xControl2.getModel(), "Width")).intValue());
         double dblFactor = (((double) (aSize.Width)) / dblMAPWidth);
         return dblFactor;
     }
@@ -308,7 +308,7 @@ public class UnoDialog implements EventNames
         {
             Object oFixedText = insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", sName, sPropNames, oPropValues);
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oFixedText);
-            xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
+            xPSet.setPropertyValue("Name", sName);
             Object oLabel = xDlgContainer.getControl(new String(sName));
             return (XFixedText) UnoRuntime.queryInterface(XFixedText.class, oLabel);
         }
@@ -322,7 +322,7 @@ public class UnoDialog implements EventNames
     /*    public XButton insertButton(String sName, int iControlKey, XActionListener xActionListener, String[] sProperties, Object[] sValues) throws com.sun.star.uno.Exception{
     Object oButtonModel = insertControlModel("com.sun.star.awt.UnoControlButtonModel", sName, sProperties, sValues);
     XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oButtonModel);
-    xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
+    xPSet.setPropertyValue("Name", sName);
     Object objectButton = xDlgContainer.getControl( new String(sName));
     XButton xButton = ( XButton ) UnoRuntime.queryInterface( XButton.class, objectButton );
     xButton.addActionListener(xActionListener);
@@ -335,7 +335,7 @@ public class UnoDialog implements EventNames
     {
         Object oButtonModel = insertControlModel("com.sun.star.awt.UnoControlButtonModel", sName, sProperties, sValues);
         XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oButtonModel);
-        xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
+        xPSet.setPropertyValue("Name", sName);
         Object objectButton = xDlgContainer.getControl(new String(sName));
         XButton xButton = (XButton) UnoRuntime.queryInterface(XButton.class, objectButton);
         if (xActionListener != null)
@@ -354,7 +354,7 @@ public class UnoDialog implements EventNames
     {
         Object oButtonModel = insertControlModel("com.sun.star.awt.UnoControlCheckBoxModel", sName, sProperties, sValues);
         XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oButtonModel);
-        xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
+        xPSet.setPropertyValue("Name", sName);
         Object objectCheckBox = xDlgContainer.getControl(new String(sName));
         XCheckBox xCheckBox = (XCheckBox) UnoRuntime.queryInterface(XCheckBox.class, objectCheckBox);
         if (xItemListener != null)
@@ -372,7 +372,7 @@ public class UnoDialog implements EventNames
     {
         Object oNumericFieldModel = insertControlModel("com.sun.star.awt.UnoControlNumericFieldModel", sName, sProperties, sValues);
         XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oNumericFieldModel);
-        xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
+        xPSet.setPropertyValue("Name", sName);
         Object objectNumericField = xDlgContainer.getControl(new String(sName));
         XTextComponent xNumericField = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, objectNumericField);
         if (xTextListener != null)
@@ -392,7 +392,7 @@ public class UnoDialog implements EventNames
         {
             Object oScrollModel = insertControlModel("com.sun.star.awt.UnoControlScrollBarModel", sName, sProperties, sValues);
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oScrollModel);
-            xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
+            xPSet.setPropertyValue("Name", sName);
             Object oScrollBar = xDlgContainer.getControl(new String(sName));
             XScrollBar xScrollBar = (XScrollBar) UnoRuntime.queryInterface(XScrollBar.class, oScrollBar);
             if (xAdjustmentListener != null)
@@ -431,7 +431,7 @@ public class UnoDialog implements EventNames
         {
             XInterface xTextModel = insertControlModel(ServiceName, sName, sProperties, sValues);
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTextModel);
-            xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
+            xPSet.setPropertyValue("Name", sName);
             XControl xTextField = xDlgContainer.getControl(new String(sName));
             XTextComponent xTextBox = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, xTextField);
             if (xTextListener != null)
@@ -453,7 +453,7 @@ public class UnoDialog implements EventNames
     {
         XInterface xListBoxModel = insertControlModel("com.sun.star.awt.UnoControlListBoxModel", sName, sProperties, sValues);
         XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xListBoxModel);
-        xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
+        xPSet.setPropertyValue("Name", sName);
         XControl xControlListBox = xDlgContainer.getControl(new String(sName));
         XListBox xListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, xControlListBox);
         if (xItemListener != null)
@@ -473,7 +473,7 @@ public class UnoDialog implements EventNames
     {
         XInterface xComboBoxModel = insertControlModel("com.sun.star.awt.UnoControlComboBoxModel", sName, sProperties, sValues);
         XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xComboBoxModel);
-        xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
+        xPSet.setPropertyValue("Name", sName);
         XControl xControlComboBox = xDlgContainer.getControl(new String(sName));
         XComboBox xComboBox = (XComboBox) UnoRuntime.queryInterface(XComboBox.class, xControlComboBox);
         if (xItemListener != null)
@@ -545,7 +545,7 @@ public class UnoDialog implements EventNames
         {
             XInterface oRadioButtonModel = insertControlModel("com.sun.star.awt.UnoControlRadioButtonModel", sName, sProperties, sValues);
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oRadioButtonModel);
-            xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
+            xPSet.setPropertyValue("Name", sName);
             XControl xControlRadioButton = xDlgContainer.getControl(new String(sName));
             XRadioButton xRadioButton = (XRadioButton) UnoRuntime.queryInterface(XRadioButton.class, xControlRadioButton);
             return xRadioButton;
@@ -560,7 +560,7 @@ public class UnoDialog implements EventNames
     /**
      * @author bc93774
      * The problem with setting the visibility of controls is that changing the current step
-     * of a dialog will automatically make all controls visible. The PropertyNames.PROPERTY_STEP property always wins against
+     * of a dialog will automatically make all controls visible. The "Step" property always wins against
      * the property "visible". Therfor a control meant to be invisible is placed on a step far far away.
      * @param the name of the control
      * @param iStep  change the step if you want to make the control invisible
@@ -569,8 +569,8 @@ public class UnoDialog implements EventNames
     {
         try
         {
-            int iCurStep = AnyConverter.toInt(getControlProperty(controlname, PropertyNames.PROPERTY_STEP));
-            setControlProperty(controlname, PropertyNames.PROPERTY_STEP, new Integer(iStep));
+            int iCurStep = AnyConverter.toInt(getControlProperty(controlname, "Step"));
+            setControlProperty(controlname, "Step", new Integer(iStep));
         }
         catch (com.sun.star.uno.Exception exception)
         {
@@ -581,7 +581,7 @@ public class UnoDialog implements EventNames
     /**
      * @author bc93774
      * The problem with setting the visibility of controls is that changing the current step
-     * of a dialog will automatically make all controls visible. The PropertyNames.PROPERTY_STEP property always wins against
+     * of a dialog will automatically make all controls visible. The "Step" property always wins against
      * the property "visible". Therfor a control meant to be invisible is placed on a step far far away.
      * Afterwards the step property of the dialog has to be set with "repaintDialogStep". As the performance
      * of that method is very bad it should be used only once for all controls
@@ -592,16 +592,16 @@ public class UnoDialog implements EventNames
     {
         try
         {
-            int iCurControlStep = AnyConverter.toInt(getControlProperty(controlname, PropertyNames.PROPERTY_STEP));
-            int iCurDialogStep = AnyConverter.toInt(Helper.getUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_STEP));
+            int iCurControlStep = AnyConverter.toInt(getControlProperty(controlname, "Step"));
+            int iCurDialogStep = AnyConverter.toInt(Helper.getUnoPropertyValue(this.xDialogModel, "Step"));
             int iNewStep;
             if (bIsVisible)
             {
-                setControlProperty(controlname, PropertyNames.PROPERTY_STEP, new Integer(iCurDialogStep));
+                setControlProperty(controlname, "Step", new Integer(iCurDialogStep));
             }
             else
             {
-                setControlProperty(controlname, PropertyNames.PROPERTY_STEP, UIConsts.INVISIBLESTEP);
+                setControlProperty(controlname, "Step", UIConsts.INVISIBLESTEP);
             }
         }
         catch (com.sun.star.uno.Exception exception)
@@ -618,9 +618,9 @@ public class UnoDialog implements EventNames
     {
         try
         {
-            int ncurstep = AnyConverter.toInt(Helper.getUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_STEP));
-            Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, new Integer(99));
-            Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, new Integer(ncurstep));
+            int ncurstep = AnyConverter.toInt(Helper.getUnoPropertyValue(this.xDialogModel, "Step"));
+            Helper.setUnoPropertyValue(xDialogModel, "Step", new Integer(99));
+            Helper.setUnoPropertyValue(xDialogModel, "Step", new Integer(ncurstep));
         }
         catch (com.sun.star.uno.Exception exception)
         {
@@ -892,7 +892,7 @@ public class UnoDialog implements EventNames
 
     public static void setEnabled(Object control, Boolean enabled)
     {
-        Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_ENABLED, enabled);
+        Helper.setUnoPropertyValue(getModel(control), "Enabled", enabled);
     }
 
     /**
@@ -1004,11 +1004,11 @@ public class UnoDialog implements EventNames
         switch (itype)
         {
             case UIConsts.CONTROLTYPE.FIXEDTEXT:
-                return PropertyNames.PROPERTY_LABEL;
+                return "Label";
             case UIConsts.CONTROLTYPE.BUTTON:
-                return PropertyNames.PROPERTY_LABEL;
+                return "Label";
             case UIConsts.CONTROLTYPE.FIXEDLINE:
-                return PropertyNames.PROPERTY_LABEL;
+                return "Label";
             case UIConsts.CONTROLTYPE.NUMERICFIELD:
                 return "Value";
             case UIConsts.CONTROLTYPE.CURRENCYFIELD:
@@ -1024,11 +1024,11 @@ public class UnoDialog implements EventNames
             case UIConsts.CONTROLTYPE.PROGRESSBAR:
                 return "ProgressValue";
             case UIConsts.CONTROLTYPE.IMAGECONTROL:
-                return PropertyNames.PROPERTY_IMAGEURL;
+                return "ImageURL";
             case UIConsts.CONTROLTYPE.RADIOBUTTON:
-                return PropertyNames.PROPERTY_STATE;
+                return "State";
             case UIConsts.CONTROLTYPE.CHECKBOX:
-                return PropertyNames.PROPERTY_STATE;
+                return "State";
             case UIConsts.CONTROLTYPE.EDITCONTROL:
                 return "Text";
             case UIConsts.CONTROLTYPE.COMBOBOX:

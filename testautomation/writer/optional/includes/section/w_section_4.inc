@@ -856,8 +856,8 @@ testcase tParagraphSection_1
    PrintLog "   - Keep paragraphs together"
 
   '/// Open a file with 4 paragraphs, the 4th paragraph is crossing the page
-   hFileOpenLocally( documentName)
-   
+   Call hFileOpen(documentName)
+   Call sMakeReadOnlyDocumentEditable
 
    EditSelectAll
    Call fInsertSection(sectionName)
@@ -1198,8 +1198,8 @@ testcase tScenarioSection_1
    next i
 
   '/// open testdocument (tScenarioSection_1.sxw) ///
-   hFileOpenLocally(  gTesttoolpath + "writer\optional\input\section\tScenarioSection_1.sxw")
-   
+   Call hFileOpen ( gTesttoolpath + "writer\optional\input\section\tScenarioSection_1.sxw")
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Select 'File /Send -> Create Masterdocument ///
    FileSendCreateMasterdocument
@@ -1318,8 +1318,8 @@ testcase tScenarioSection_2
    next i
 
   '/// open testdocument (tScenarioSection_2.sxw) ///
-   hFileOpenLocally(  gTesttoolpath + "writer\optional\input\section\tScenarioSection_2.sxw")
-   
+   Call hFileOpen ( gTesttoolpath + "writer\optional\input\section\tScenarioSection_2.sxw")
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Select 'File -> Send -> Create Masterdocument ///
    FileSendCreateMasterdocument

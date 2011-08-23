@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,10 @@ import java.util.*;
 import java.io.*;
 import java.lang.*;
 
+/**
+ *
+ * @author  fs@openoffice.org
+ */
 public class RadioButtons extends complexlib.ComplexTestCase
 {
     private DocumentHelper          m_document;         /// our current test document

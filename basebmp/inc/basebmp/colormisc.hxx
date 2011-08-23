@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,18 +128,18 @@ template<> struct ColorTraits< Color >
     template< typename AlphaType, bool polarity > struct blend_functor;
 
     /// Calculate normalized distance between color c1 and c2
-    static inline double distance( const Color& c1,
-                                   const Color& c2 )
-    {
+    static inline double distance( const Color& c1, 
+                                   const Color& c2 ) 
+    { 
         return (c1 - c2).magnitude();
     }
 
-    static inline component_type toGreyscale( const Color& c )
+    static inline component_type toGreyscale( const Color& c ) 
     {
         return c.getGreyscale();
     }
 
-    static inline Color fromGreyscale( component_type c )
+    static inline Color fromGreyscale( component_type c ) 
     {
         return Color(c,c,c);
     }
@@ -176,7 +176,7 @@ struct NumericTraits<basebmp::Color>
     typedef VigraTrueType  isSigned;
     typedef VigraTrueType  isOrdered;
     typedef VigraFalseType isComplex;
-
+    
     static Type zero() { return Type(); }
     static Type one() { return Type(0x01010101); }
     static Type nonZero() { return Type(0x01010101); }

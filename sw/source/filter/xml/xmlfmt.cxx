@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ inline sal_Bool SwXMLConditionParser_Impl::SkipWS()
 inline sal_Bool SwXMLConditionParser_Impl::MatchChar( sal_Unicode c )
 {
     sal_Bool bRet = sal_False;
-    if( nPos < nLength && c == sInput[nPos] )
+    if(	nPos < nLength && c == sInput[nPos] )
     {
         nPos++;
         bRet = sal_True;
@@ -286,7 +286,7 @@ SV_DECL_PTRARR( SwXMLConditions_Impl, SwXMLConditionContextPtr, 5, 2 )
 
 class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 {
-    SwXMLConditions_Impl    *pConditions;
+    SwXMLConditions_Impl	*pConditions;
 
 protected:
 
@@ -450,16 +450,16 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
 
 class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
 {
-    OUString                sMasterPageName;
-    SfxItemSet              *pItemSet;
+    OUString				sMasterPageName;
+    SfxItemSet  			*pItemSet;
     SwXMLTextStyleContext_Impl *pTextStyle;
     SvXMLStylesContext      &rStyles;
 
-    OUString                sDataStyleName;
+    OUString 				sDataStyleName;
 
-    sal_Bool                bHasMasterPageName : 1;
-    sal_Bool                bPageDescConnected : 1;
-    sal_Bool                bDataStyleIsResolved;
+    sal_Bool				bHasMasterPageName : 1;
+    sal_Bool 				bPageDescConnected : 1;
+    sal_Bool				bDataStyleIsResolved;
 
     SvXMLImportContext *CreateItemSetContext(
             sal_uInt16 nPrefix,
@@ -524,7 +524,7 @@ void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
             if (rValue.getLength() > 0)
             {
                 sDataStyleName = rValue;
-                bDataStyleIsResolved = sal_False;   // needs to be resolved
+                bDataStyleIsResolved = sal_False;	// needs to be resolved
             }
         }
         else
@@ -660,8 +660,8 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
     String sName;
-    // #i40788# - first determine the display name of the page style,
-    // then map this name to the corresponding user interface name.
+    // --> OD 2005-02-01 #i40788# - first determine the display name of the
+    // page style, then map this name to the corresponding user interface name.
     sName = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE,
                                              GetMasterPageName() );
     SwStyleNameMapper::FillUIName( sName,
@@ -701,7 +701,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
 
     if( pFmtPageDesc )
     {
-        pFmtPageDesc->RegisterToPageDesc( *pPageDesc );
+        pPageDesc->Add( pFmtPageDesc );
         pItemSet->Put( *pFmtPageDesc );
         delete pFmtPageDesc;
     }
@@ -949,6 +949,12 @@ OUString SwXMLStylesContext_Impl::GetServiceName( sal_uInt16 nFamily ) const
 void SwXMLStylesContext_Impl::EndElement()
 {
     GetSwImport().InsertStyles( IsAutomaticStyle() );
+    // --> OD 2006-10-11 #i69629#
+    // assign paragraph styles to list levels of outline style after all styles
+    // are imported and finished.
+//    if( !bAutoStyles )
+//        GetImport().GetTextImport()->SetOutlineStyles( sal_True );
+    // <--
 }
 
 // ---------------------------------------------------------------------
@@ -1082,7 +1088,7 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
             if( bSendModify )
             {
                 SwCondCollCondChg aMsg( pColl );
-                pColl->ModifyNotification( &aMsg, &aMsg );
+                pColl->Modify( &aMsg, &aMsg );
             }
         }
     }

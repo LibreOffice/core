@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/extract.hxx>
 #include "callbacks.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
@@ -63,9 +63,9 @@ namespace xmloff
     // NO using namespace ...util !!!
     // need a tools Date/Time/DateTime below, which would conflict with the uno types then
 
-#define TYPE_DATE       1
-#define TYPE_TIME       2
-#define TYPE_DATETIME   3
+#define TYPE_DATE		1
+#define TYPE_TIME		2
+#define TYPE_DATETIME	3
 
 //=====================================================================
 //= PropertyConversion
@@ -108,7 +108,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
     sal_Bool bEnumAsInt = sal_False;
     switch (_rExpectedType.getTypeClass())
     {
-        case TypeClass_BOOLEAN:     // sal_Bool
+        case TypeClass_BOOLEAN:		// sal_Bool
         {
             bool bValue;
         #if OSL_DEBUG_LEVEL > 0
@@ -117,15 +117,15 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
             _rImporter.GetMM100UnitConverter().convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     ::rtl::OString("PropertyConversion::convertString: could not convert \"")
-                +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                +=  ::rtl::OString("\" into a boolean!"));
+                +=	::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                +=	::rtl::OString("\" into a boolean!"));
             aReturn = ::cppu::bool2any(_bInvertBoolean ? !bValue : bValue);
         }
         break;
-        case TypeClass_SHORT:       // sal_Int16
-        case TypeClass_LONG:        // sal_Int32
+        case TypeClass_SHORT:		// sal_Int16
+        case TypeClass_LONG:		// sal_Int32
             if (!_pEnumMap)
-            {   // it's a real int32/16 property
+            {	// it's a real int32/16 property
                 sal_Int32 nValue(0);
         #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
@@ -133,8 +133,8 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
                 _rImporter.GetMM100UnitConverter().convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
                         ::rtl::OString("PropertyConversion::convertString: could not convert \"")
-                    +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=  ::rtl::OString("\" into an integer!"));
+                    +=	::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                    +=	::rtl::OString("\" into an integer!"));
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
                     aReturn <<= (sal_Int16)nValue;
                 else
@@ -162,7 +162,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         break;
         case TypeClass_HYPER:
         {
-            OSL_FAIL("PropertyConversion::convertString: 64-bit integers not implemented yet!");
+            OSL_ENSURE(sal_False, "PropertyConversion::convertString: 64-bit integers not implemented yet!");
         }
         break;
         case TypeClass_DOUBLE:
@@ -174,8 +174,8 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
             _rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     ::rtl::OString("PropertyConversion::convertString: could not convert \"")
-                +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                +=  ::rtl::OString("\" into a double!"));
+                +=	::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                +=	::rtl::OString("\" into a double!"));
             aReturn <<= (double)nValue;
         }
         break;
@@ -202,8 +202,8 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
                 _rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
                         ::rtl::OString("PropertyConversion::convertString: could not convert \"")
-                    +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=  ::rtl::OString("\" into a double!"));
+                    +=	::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                    +=	::rtl::OString("\" into a double!"));
 
                 // then convert it into the target type
                 switch (nType)
@@ -241,11 +241,11 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
                 }
             }
             else
-                OSL_FAIL("PropertyConversion::convertString: unsupported property type!");
+                OSL_ENSURE(sal_False, "PropertyConversion::convertString: unsupported property type!");
         }
         break;
         default:
-            OSL_FAIL("PropertyConversion::convertString: invalid type class!");
+            OSL_ENSURE(sal_False, "PropertyConversion::convertString: invalid type class!");
     }
 
     return aReturn;
@@ -291,14 +291,15 @@ SvXMLImportContext* OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, con
 {
     if( token::IsXMLToken( _rLocalName, token::XML_PROPERTIES) )
     {
-        return new OPropertyElementsContext( m_rContext.getGlobalContext(),
+        return new OPropertyElementsContext( m_rContext.getGlobalContext(), 
                                              _nPrefix, _rLocalName, this);
     }
     else
     {
-        OSL_FAIL(::rtl::OString("OPropertyImport::CreateChildContext: unknown sub element (only \"properties\" is recognized, but it is ")
-            +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
-            +=  ::rtl::OString(")!"));
+        OSL_ENSURE(sal_False,
+                ::rtl::OString("OPropertyImport::CreateChildContext: unknown sub element (only \"properties\" is recognized, but it is ")
+            +=	::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
+            +=	::rtl::OString(")!"));
         return SvXMLImportContext::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
     }
 }
@@ -349,7 +350,7 @@ _rChars
 }
 
 //---------------------------------------------------------------------
-bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+void OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
 {
     const OAttribute2Property::AttributeAssignment* pProperty = m_rContext.getAttributeMap().getAttributeTranslation(_rLocalName);
     if (pProperty)
@@ -361,21 +362,18 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl
         // convert the value string into the target type
         aNewValue.Value = PropertyConversion::convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap, pProperty->bInverseSemantics);
         implPushBackPropertyValue( aNewValue );
-        return true;
     }
-    if (!token::IsXMLToken(_rLocalName, token::XML_TYPE))  // xlink:type is valid but ignored for <form:form>
-    {
 #if OSL_DEBUG_LEVEL > 0
+    else if (!token::IsXMLToken(_rLocalName, token::XML_TYPE))  // xlink:type is valid but ignored for <form:form>
+    {
         ::rtl::OString sMessage( "OPropertyImport::handleAttribute: Can't handle the following:\n" );
         sMessage += ::rtl::OString( "  Attribute name: " );
         sMessage += ::rtl::OString( _rLocalName.getStr(), _rLocalName.getLength(), osl_getThreadTextEncoding() );
         sMessage += ::rtl::OString( "\n  value: " );
         sMessage += ::rtl::OString( _rValue.getStr(), _rValue.getLength(), osl_getThreadTextEncoding() );
-        OSL_FAIL( sMessage.getStr() );
-#endif
-        return false;
+        OSL_ENSURE( sal_False, sMessage.getStr() );
     }
-    return true;
+#endif
 }
 
 //=====================================================================
@@ -403,9 +401,10 @@ SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPr
     }
     else
     {
-        OSL_FAIL(::rtl::OString("OPropertyElementsContext::CreateChildContext: unknown child element (\"")
-            +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
-            +=  ::rtl::OString("\")!"));
+        OSL_ENSURE(sal_False,
+                ::rtl::OString("OPropertyElementsContext::CreateChildContext: unknown child element (\"")
+            +=	::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
+            +=	::rtl::OString("\")!"));
         return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
     }
 }
@@ -442,17 +441,18 @@ OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16
 SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
         const Reference< sax::XAttributeList >&)
 {
-    OSL_FAIL(::rtl::OString("OSinglePropertyContext::CreateChildContext: unknown child element (\"")
-        +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
-        +=  ::rtl::OString("\")!"));
+    OSL_ENSURE(sal_False,
+            ::rtl::OString("OSinglePropertyContext::CreateChildContext: unknown child element (\"")
+        +=	::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
+        +=	::rtl::OString("\")!"));
     return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
 }
 
 //---------------------------------------------------------------------
 void OSinglePropertyContext::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
 {
-    ::com::sun::star::beans::PropertyValue aPropValue;      // the property the instance imports currently
-    ::com::sun::star::uno::Type aPropType;          // the type of the property the instance imports currently
+    ::com::sun::star::beans::PropertyValue aPropValue;		// the property the instance imports currently
+    ::com::sun::star::uno::Type	aPropType;			// the type of the property the instance imports currently
 
     ::rtl::OUString sType, sValue;
     const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
@@ -460,6 +460,7 @@ void OSinglePropertyContext::StartElement(const Reference< sax::XAttributeList >
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const ::rtl::OUString& rAttrName = _rxAttrList->getNameByIndex( i );
+        //const ::rtl::OUString& rValue = _rxAttrList->getValueByIndex( i );
 
         ::rtl::OUString aLocalName;
         sal_uInt16 nPrefix =
@@ -475,11 +476,11 @@ void OSinglePropertyContext::StartElement(const Reference< sax::XAttributeList >
         {
             if( token::IsXMLToken( aLocalName, token::XML_VALUE_TYPE ) )
                 sType = _rxAttrList->getValueByIndex( i );
-            else if( token::IsXMLToken( aLocalName,
+            else if( token::IsXMLToken( aLocalName, 
                                         token::XML_VALUE ) ||
-                        token::IsXMLToken( aLocalName,
+                        token::IsXMLToken( aLocalName, 
                                         token::XML_BOOLEAN_VALUE ) ||
-                     token::IsXMLToken( aLocalName,
+                     token::IsXMLToken( aLocalName, 
                                         token::XML_STRING_VALUE ) )
                 sValue = _rxAttrList->getValueByIndex( i );
         }
@@ -496,8 +497,8 @@ void OSinglePropertyContext::StartElement(const Reference< sax::XAttributeList >
     }
     else
     {
-        aPropValue.Value =
-            PropertyConversion::convertString(GetImport(), aPropType,
+        aPropValue.Value = 
+            PropertyConversion::convertString(GetImport(), aPropType, 
                                            sValue);
     }
 
@@ -542,9 +543,10 @@ void OListPropertyContext::StartElement( const Reference< sax::XAttributeList >&
         }
         else
         {
-            OSL_FAIL( ::rtl::OString( "OListPropertyContext::StartElement: unknown child element (\"")
-                +=  ::rtl::OString( sAttributeName.getStr(), sAttributeName.getLength(), RTL_TEXTENCODING_ASCII_US )
-                +=  ::rtl::OString( "\")!" ) );
+            OSL_ENSURE( false,
+                    ::rtl::OString( "OListPropertyContext::StartElement: unknown child element (\"")
+                +=	::rtl::OString( sAttributeName.getStr(), sAttributeName.getLength(), RTL_TEXTENCODING_ASCII_US )
+                +=	::rtl::OString( "\")!" ) );
         }
     }
 }
@@ -586,9 +588,10 @@ SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefi
     }
     else
     {
-        OSL_FAIL( ::rtl::OString("OListPropertyContext::CreateChildContext: unknown child element (\"")
-            +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
-            +=  ::rtl::OString("\")!"));
+        OSL_ENSURE( sal_False,
+                ::rtl::OString("OListPropertyContext::CreateChildContext: unknown child element (\"")
+            +=	::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
+            +=	::rtl::OString("\")!"));
         return new SvXMLImportContext( GetImport(), _nPrefix, _rLocalName );
     }
 }
@@ -626,14 +629,15 @@ void OListValueContext::StartElement( const Reference< sax::XAttributeList >& _r
             }
         }
 
-        OSL_FAIL( ::rtl::OString( "OListValueContext::StartElement: unknown child element (\"")
-            +=  ::rtl::OString( sAttributeName.getStr(), sAttributeName.getLength(), RTL_TEXTENCODING_ASCII_US )
-            +=  ::rtl::OString( "\")!" ) );
+        OSL_ENSURE( false,
+                ::rtl::OString( "OListValueContext::StartElement: unknown child element (\"")
+            +=	::rtl::OString( sAttributeName.getStr(), sAttributeName.getLength(), RTL_TEXTENCODING_ASCII_US )
+            +=	::rtl::OString( "\")!" ) );
     }
 }
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

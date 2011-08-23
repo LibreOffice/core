@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@ using com::sun::star::document::XEventBroadcaster;
 Any SAL_CALL MyJob::execute( const Sequence< NamedValue >& aArguments )
     throw ( IllegalArgumentException, Exception, RuntimeException )
 {
-    Reference < XEventBroadcaster > xBrd( mxMSF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster")) ), UNO_QUERY );
+    Reference < XEventBroadcaster > xBrd( mxMSF->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster") ), UNO_QUERY );
     Reference < com::sun::star::document::XEventListener > xLstner( mxMSF->createInstance(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Office.MyListener")) ), UNO_QUERY );
+        ::rtl::OUString::createFromAscii("com.sun.star.comp.Office.MyListener" ) ), UNO_QUERY );
     if ( xBrd.is() )
         xBrd->addEventListener( xLstner );
     return Any();

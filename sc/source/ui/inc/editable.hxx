@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ class ScRange;
 
 class ScEditableTester
 {
-    sal_Bool    bIsEditable;
-    sal_Bool    bOnlyMatrix;
+    BOOL	bIsEditable;
+    BOOL	bOnlyMatrix;
 
 public:
             // no test in ctor
@@ -52,7 +52,7 @@ public:
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
 
             // calls TestSelectedBlock
-            ScEditableTester( ScDocument* pDoc,
+            ScEditableTester( ScDocument* pDoc, 
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark );
 
@@ -69,18 +69,18 @@ public:
 
             // Several calls to the Test... methods check if *all* of the ranges
             // are editable. For several independent checks, Reset() has to be used.
-    void    TestBlock( ScDocument* pDoc, SCTAB nTab,
+    void	TestBlock( ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
-    void    TestSelectedBlock( ScDocument* pDoc,
+    void	TestSelectedBlock( ScDocument* pDoc, 
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark );
-    void    TestRange( ScDocument* pDoc, const ScRange& rRange );
-    void    TestSelection( ScDocument* pDoc, const ScMarkData& rMark );
-    void    TestView( ScViewFunc* pView );
+    void	TestRange( ScDocument* pDoc, const ScRange& rRange );
+    void	TestSelection( ScDocument* pDoc, const ScMarkData& rMark );
+    void	TestView( ScViewFunc* pView );
 
-    sal_Bool    IsEditable() const          { return bIsEditable; }
-    sal_Bool    IsFormatEditable() const    { return bIsEditable || bOnlyMatrix; }
-    sal_uInt16  GetMessageId() const;
+    BOOL	IsEditable() const			{ return bIsEditable; }
+    BOOL	IsFormatEditable() const	{ return bIsEditable || bOnlyMatrix; }
+    USHORT	GetMessageId() const;
 };
 
 #endif

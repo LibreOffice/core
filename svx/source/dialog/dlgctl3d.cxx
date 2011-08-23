@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,10 @@
 #include <svx/xlnwtit.hxx>
 #include "helpid.hrc"
 #include <algorithm>
-#include <svx/dialmgr.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
-Svx3DPreviewControl::Svx3DPreviewControl(Window* pParent, const ResId& rResId)
+Svx3DPreviewControl::Svx3DPreviewControl(Window* pParent, const ResId& rResId) 
 :   Control(pParent, rResId),
     mpModel(0),
     mpFmPage(0),
@@ -66,7 +65,7 @@ Svx3DPreviewControl::Svx3DPreviewControl(Window* pParent, const ResId& rResId)
     SetBackground();
 }
 
-Svx3DPreviewControl::Svx3DPreviewControl(Window* pParent, WinBits nStyle)
+Svx3DPreviewControl::Svx3DPreviewControl(Window* pParent, WinBits nStyle) 
 :   Control(pParent, nStyle),
     mpModel(0),
     mpFmPage(0),
@@ -92,7 +91,7 @@ void Svx3DPreviewControl::Construct()
 {
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.
-    EnableRTL (sal_False);
+    EnableRTL (FALSE);
     SetMapMode( MAP_100TH_MM );
 
     // Model
@@ -121,7 +120,7 @@ void Svx3DPreviewControl::Construct()
     double fH = rVolume.getHeight();
     double fCamZ = rVolume.getMaxZ() + ((fW + fH) / 2.0);
 
-    rCamera.SetAutoAdjustProjection(sal_False);
+    rCamera.SetAutoAdjustProjection(FALSE);
     rCamera.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
     basegfx::B3DPoint aLookAt;
     double fDefaultCamPosZ = mp3DView->GetDefaultCamPosZ();
@@ -144,7 +143,7 @@ void Svx3DPreviewControl::Construct()
 
     SfxItemSet aSet( mpModel->GetItemPool(),
         XATTR_LINESTYLE, XATTR_LINESTYLE,
-        XATTR_FILL_FIRST, XATTR_FILLBITMAP,
+        XATTR_FILL_FIRST, XATTR_FILLBITMAP, 
         0, 0 );
     aSet.Put( XLineStyleItem( XLINE_NONE ) );
     aSet.Put( XFillStyleItem( XFILL_SOLID ) );
@@ -253,9 +252,9 @@ void Svx3DPreviewControl::Set3DAttributes( const SfxItemSet& rAttr )
 
 //////////////////////////////////////////////////////////////////////////////
 
-#define RADIUS_LAMP_PREVIEW_SIZE    (4500.0)
-#define RADIUS_LAMP_SMALL           (600.0)
-#define RADIUS_LAMP_BIG             (1000.0)
+#define RADIUS_LAMP_PREVIEW_SIZE	(4500.0)
+#define RADIUS_LAMP_SMALL			(600.0)
+#define RADIUS_LAMP_BIG				(1000.0)
 #define NO_LIGHT_SELECTED           (0xffffffff)
 #define MAX_NUMBER_LIGHTS              (8)
 
@@ -376,7 +375,7 @@ void Svx3DLightControl::Construct2()
         SfxItemSet aSet(mpModel->GetItemPool());
         aSet.Put( XLineStyleItem( XLINE_NONE ) );
         aSet.Put( XFillStyleItem( XFILL_NONE ) );
-
+        
         mpLampBottomObject->SetMergedItemSet(aSet);
         mpLampShaftObject->SetMergedItemSet(aSet);
     }
@@ -389,7 +388,7 @@ void Svx3DLightControl::Construct2()
         double fH = rVolume.getHeight();
         double fCamZ = rVolume.getMaxZ() + ((fW + fH) / 2.0);
 
-        rCamera.SetAutoAdjustProjection(sal_False);
+        rCamera.SetAutoAdjustProjection(FALSE);
         rCamera.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
         basegfx::B3DPoint aLookAt;
         double fDefaultCamPosZ = mp3DView->GetDefaultCamPosZ();
@@ -413,7 +412,7 @@ void Svx3DLightControl::ConstructLightObjects()
 {
     for(sal_uInt32 a(0); a < MAX_NUMBER_LIGHTS; a++)
     {
-        // get rid of possible existing light object
+        // get rid of evtl. existing light object
         if(maLightObjects[a])
         {
             mpScene->Remove3DObj(maLightObjects[a]);
@@ -444,7 +443,7 @@ void Svx3DLightControl::ConstructLightObjects()
             aSet.Put( XFillStyleItem( XFILL_SOLID ) );
             aSet.Put( XFillColorItem(String(), GetLightColor(a)));
             pNewLight->SetMergedItemSet(aSet);
-
+            
             maLightObjects[a] = pNewLight;
         }
     }
@@ -494,8 +493,8 @@ void Svx3DLightControl::AdaptToSelectedLight()
         {
             aTransform.identity();
             aTransform.translate(
-                aDirection.getX() * RADIUS_LAMP_PREVIEW_SIZE,
-                aDirection.getY() * RADIUS_LAMP_PREVIEW_SIZE,
+                aDirection.getX() * RADIUS_LAMP_PREVIEW_SIZE, 
+                aDirection.getY() * RADIUS_LAMP_PREVIEW_SIZE, 
                 aDirection.getZ() * RADIUS_LAMP_PREVIEW_SIZE);
             pSelectedLight->SetTransform(aTransform);
         }
@@ -516,7 +515,7 @@ void Svx3DLightControl::TrySelection(Point aPosPixel)
             // exclude expansion object which will be part of
             // the hits. It's invisible, but for HitTest, it's included
             const E3dCompoundObject* pResult = 0;
-
+            
             for(sal_uInt32 b(0); !pResult && b < aResult.size(); b++)
             {
                 if(aResult[b] && aResult[b] != mpExpansionObject)
@@ -534,7 +533,7 @@ void Svx3DLightControl::TrySelection(Point aPosPixel)
                     ConstructLightObjects();
                     AdaptToSelectedLight();
                     Invalidate();
-
+                    
                     if(maSelectionChangeCallback.IsSet())
                     {
                         maSelectionChangeCallback.Call(this);
@@ -556,7 +555,7 @@ void Svx3DLightControl::TrySelection(Point aPosPixel)
                 if(aNewSelectedLight != maSelectedLight)
                 {
                     SelectLight(aNewSelectedLight);
-
+        
                     if(maSelectionChangeCallback.IsSet())
                     {
                         maSelectionChangeCallback.Call(this);
@@ -588,7 +587,8 @@ void Svx3DLightControl::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            // Single click without moving much trying to do a selection
+            // Einfacher Click ohne viel Bewegen, versuche eine
+            // Selektion
             TrySelection(rMEvt.GetPosPixel());
             bCallParent = false;
         }
@@ -620,7 +620,7 @@ void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
                 {
                     SetPosition(mfSaveActionStartHor, mfSaveActionStartVer);
                 }
-
+                
                 if(maChangeCallback.IsSet())
                 {
                     maChangeCallback.Call(this);
@@ -630,7 +630,7 @@ void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
         else
         {
             const MouseEvent& rMEvt = rTEvt.GetMouseEvent();
-
+            
             if(mbMouseMoved)
             {
                 // was change dinteractively
@@ -677,7 +677,7 @@ void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
                 {
                     fNewRotY += F_2PI;
                 }
-
+                
                 while(fNewRotY >= F_2PI)
                 {
                     fNewRotY -= F_2PI;
@@ -688,7 +688,7 @@ void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
                 {
                     fNewRotX = -F_PI2;
                 }
-
+                
                 if(fNewRotX > F_PI2)
                 {
                     fNewRotX = F_PI2;
@@ -986,7 +986,7 @@ basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const
 //////////////////////////////////////////////////////////////////////////////
 
 SvxLightCtl3D::SvxLightCtl3D( Window* pParent, const ResId& rResId)
-:   Control(pParent, rResId),
+:	Control(pParent, rResId),
     maLightControl(this, 0),
     maHorScroller(this, WB_HORZ | WB_DRAG),
     maVerScroller(this, WB_VERT | WB_DRAG),
@@ -997,7 +997,7 @@ SvxLightCtl3D::SvxLightCtl3D( Window* pParent, const ResId& rResId)
 }
 
 SvxLightCtl3D::SvxLightCtl3D( Window* pParent, WinBits nStyle )
-:   Control(pParent, nStyle),
+:	Control(pParent, nStyle),
     maLightControl(this, 0),
     maHorScroller(this, WB_HORZ | WB_DRAG),
     maVerScroller(this, WB_VERT | WB_DRAG),
@@ -1013,7 +1013,6 @@ void SvxLightCtl3D::Init()
     maHorScroller.SetHelpId(HID_CTRL3D_HSCROLL);
     maVerScroller.SetHelpId(HID_CTRL3D_VSCROLL);
     maSwitcher.SetHelpId(HID_CTRL3D_SWITCHER);
-    maSwitcher.SetAccessibleName(String(SVX_RES(STR_SWITCH)));
 
     // Light preview
     maLightControl.Show();
@@ -1097,8 +1096,8 @@ void SvxLightCtl3D::CheckSelection()
     {
         double fHor, fVer;
         maLightControl.GetPosition(fHor, fVer);
-        maHorScroller.SetThumbPos( sal_Int32(fHor * 100.0) );
-        maVerScroller.SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
+        maHorScroller.SetThumbPos( INT32(fHor * 100.0) );
+        maVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
     }
 }
 
@@ -1117,8 +1116,8 @@ void SvxLightCtl3D::move( double fDeltaHor, double fDeltaVer )
         return;
 
     maLightControl.SetPosition(fHor, fVer);
-    maHorScroller.SetThumbPos( sal_Int32(fHor * 100.0) );
-    maVerScroller.SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
+    maHorScroller.SetThumbPos( INT32(fHor * 100.0) );
+    maVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
 
     if(maUserInteractiveChangeCallback.IsSet())
     {
@@ -1174,7 +1173,7 @@ void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
             if(nLight < 0)
             {
                 nLight = 7;
-
+                
                 while((nLight >= 0) && !maLightControl.GetLightOnOff(nLight))
                 {
                     nLight--;
@@ -1298,8 +1297,8 @@ IMPL_LINK( SvxLightCtl3D, InternalInteractiveChange, void*, EMPTYARG)
     double fHor, fVer;
 
     maLightControl.GetPosition(fHor, fVer);
-    maHorScroller.SetThumbPos( sal_Int32(fHor * 100.0) );
-    maVerScroller.SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
+    maHorScroller.SetThumbPos( INT32(fHor * 100.0) );
+    maVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
 
     if(maUserInteractiveChangeCallback.IsSet())
     {

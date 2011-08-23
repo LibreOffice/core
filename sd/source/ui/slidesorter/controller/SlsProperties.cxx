@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,16 +38,13 @@ Properties::Properties (void)
       mbIsShowSelection(true),
       mbIsShowFocus(true),
       mbIsCenterSelection(false),
-      mbIsSmoothSelectionScrolling(true),
+      mbIsSmoothSelectionScrolling(false),
       mbIsSuspendPreviewUpdatesDuringFullScreenPresentation(true),
       maBackgroundColor(Application::GetSettings().GetStyleSettings().GetWindowColor()),
       maTextColor(Application::GetSettings().GetStyleSettings().GetActiveTextColor()),
-      maSelectionColor(Application::GetSettings().GetStyleSettings().GetHighlightColor()),
+      maSelectionColor(Application::GetSettings().GetStyleSettings().GetMenuHighlightColor()),
       maHighlightColor(Application::GetSettings().GetStyleSettings().GetMenuHighlightColor()),
-      mbIsUIReadOnly(false),
-      mbIsOnlyPreviewTriggersMouseOver(true),
-      mbIsHighContrastModeActive(
-          Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+      mbIsUIReadOnly(false)
 {
 }
 
@@ -56,19 +53,6 @@ Properties::Properties (void)
 
 Properties::~Properties (void)
 {
-}
-
-
-
-
-void Properties::HandleDataChangeEvent (void)
-{
-    maBackgroundColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
-    maTextColor = Application::GetSettings().GetStyleSettings().GetActiveTextColor();
-    maSelectionColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
-    maHighlightColor = Application::GetSettings().GetStyleSettings().GetMenuHighlightColor();
-    mbIsHighContrastModeActive
-        = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 
@@ -244,30 +228,6 @@ bool Properties::IsUIReadOnly (void) const
 void Properties::SetUIReadOnly (const bool bIsUIReadOnly)
 {
     mbIsUIReadOnly = bIsUIReadOnly;
-}
-
-
-
-
-bool Properties::IsOnlyPreviewTriggersMouseOver (void) const
-{
-    return mbIsOnlyPreviewTriggersMouseOver;
-}
-
-
-
-
-void Properties::SetOnlyPreviewTriggersMouseOver (const bool bFlag)
-{
-    mbIsOnlyPreviewTriggersMouseOver = bFlag;
-}
-
-
-
-
-bool Properties::IsHighContrastModeActive (void) const
-{
-    return mbIsHighContrastModeActive;
 }
 
 

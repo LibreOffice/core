@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 
 #include "RptModel.hxx"
 #include "RptPage.hxx"
-#include <dbaccess/dbsubcomponentcontroller.hxx>
+#include <dbaccess/singledoccontroller.hxx>
 #include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
 
@@ -37,7 +37,7 @@
 #include "UndoEnv.hxx"
 #include "ReportUndoFactory.hxx"
 #include "ReportDefinition.hxx"
-#define ITEMID_COLOR        1
+#define ITEMID_COLOR	    1
 #define ITEMID_BRUSH        2
 #define ITEMID_FONT         3
 #define ITEMID_FONTHEIGHT   4
@@ -71,6 +71,13 @@ OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition
     m_pUndoEnv = new OXUndoEnvironment(*this);
     m_pUndoEnv->acquire();
     SetSdrUndoFactory(new OReportUndoFactory);
+
+ //   SvxFontNameToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONT);
+    //SvxFontHeightToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT);
+    //SvxFontColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR);
+    //SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2);
+    //SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND);
+    //SvxColorToolBoxControl::RegisterControl(SID_BACKGROUND_COLOR);
 }
 
 //----------------------------------------------------------------------------
@@ -93,7 +100,7 @@ void OReportModel::detachController()
 SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 {
     DBG_CHKTHIS( rpt_OReportModel, 0);
-    OSL_FAIL("Who called me!");
+    OSL_ENSURE(0,"Who called me!");
     return NULL;
 }
 
@@ -113,7 +120,7 @@ Window* OReportModel::GetCurDocViewWin()
 }
 
 //----------------------------------------------------------------------------
-OXUndoEnvironment&  OReportModel::GetUndoEnv()
+OXUndoEnvironment&	OReportModel::GetUndoEnv()
 {
     return *m_pUndoEnv;
 }
@@ -124,9 +131,13 @@ void OReportModel::SetModified(sal_Bool _bModified)
         m_pController->setModified(_bModified);
 }
 // -----------------------------------------------------------------------------
-SdrPage* OReportModel::RemovePage(sal_uInt16 nPgNum)
+SdrPage* OReportModel::RemovePage(USHORT nPgNum)
 {
     OReportPage* pPage = dynamic_cast<OReportPage*>(SdrModel::RemovePage(nPgNum));
+    //if ( pPage )
+    //{
+    //    m_pUndoEnv->RemoveSection(pPage);
+    //}
     return pPage;
 }
 // -----------------------------------------------------------------------------
@@ -141,8 +152,8 @@ OReportPage* OReportModel::createNewPage(const uno::Reference< report::XSection 
 OReportPage* OReportModel::getPage(const uno::Reference< report::XSection >& _xSection)
 {
     OReportPage* pPage = NULL;
-    sal_uInt16 nCount = GetPageCount();
-    for (sal_uInt16 i = 0; i < nCount && !pPage ; ++i)
+    USHORT nCount = GetPageCount();
+    for (USHORT i = 0; i < nCount && !pPage ; ++i)
     {
         OReportPage* pRptPage = PTR_CAST( OReportPage, GetPage(i) );
         if ( pRptPage && pRptPage->getSection() == _xSection )
@@ -219,7 +230,7 @@ uno::Reference< uno::XInterface > OReportModel::createShape(const ::rtl::OUStrin
     return xRet;
 }
 //==================================================================
-}   //rptui
+}	//rptui
 //==================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

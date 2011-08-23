@@ -27,19 +27,16 @@
  ************************************************************************/
 
 #include "oox/helper/textinputstream.hxx"
-
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/binaryinputstream.hxx"
-
-namespace oox {
-
-// ============================================================================
 
 using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+
+namespace oox {
 
 // ============================================================================
 
@@ -102,7 +99,7 @@ OUString TextInputStream::readLine()
         mcLastEolChar = 0;
         return OUString();
     }
-
+        
     OUString aLine;
     if( meTextEnc == RTL_TEXTENCODING_UCS2 )
     {
@@ -122,7 +119,7 @@ OUString TextInputStream::readLine()
     // if last line is not empty but line-end character is missing, do not return EOF
     if( mrInStrm.isEof() && (aLine.getLength() > 0) )
         mcLastEolChar = 10;
-
+        
     return aLine;
 }
 

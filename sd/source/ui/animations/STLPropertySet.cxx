@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ void STLPropertySet::setPropertyValue( sal_Int32 nHandle, const Any& rValue, sal
     }
     else
     {
-        OSL_FAIL( "sd::STLPropertySet::setPropertyValue(), unknown property!" );
+        DBG_ERROR( "sd::STLPropertySet::setPropertyValue(), unknown property!" );
     }
 }
 
@@ -76,7 +76,7 @@ Any STLPropertySet::getPropertyValue( sal_Int32 nHandle ) const
     }
     else
     {
-        OSL_FAIL( "sd::STLPropertySet::setPropertyValue(), unknown property!" );
+        DBG_ERROR( "sd::STLPropertySet::setPropertyValue(), unknown property!" );
 
         Any aAny;
         return aAny;
@@ -92,7 +92,7 @@ sal_Int32 STLPropertySet::getPropertyState( sal_Int32 nHandle ) const
     }
     else
     {
-        OSL_FAIL( "sd::STLPropertySet::setPropertyState(), unknown property!" );
+        DBG_ERROR( "sd::STLPropertySet::setPropertyState(), unknown property!" );
         return STLPropertyState_AMBIGUOUS;
     }
 }
@@ -106,7 +106,7 @@ void STLPropertySet::setPropertyState( sal_Int32 nHandle, sal_Int32 nState )
     }
     else
     {
-        OSL_FAIL( "sd::STLPropertySet::setPropertyState(), unknown property!" );
+        DBG_ERROR( "sd::STLPropertySet::setPropertyState(), unknown property!" );
     }
 }
 

@@ -43,7 +43,6 @@ BEGIN
         "km",
         "nr",
         "ns",
-        "nso",
         "rw",
         "ss",
         "st",
@@ -88,13 +87,7 @@ BEGIN
         "oc",
         "ml",
         "as",
-        "ast",
-        "ht",
-        "jbo",
-        "fur",
-        "ny",
-        "so",
-        "kab"
+        "ast"
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
@@ -125,6 +118,8 @@ BEGIN
     $dounzip = 1;
     $languages_defined_in_productlist = 0;
     $setupscript_defined_in_productlist = 0;
+    $services_rdb_created = 0;
+    $servicesrdb_can_be_created = 0;
     $islinux = 0;
     $issolaris = 0;
     $ismacosx = 0;
@@ -243,6 +238,9 @@ BEGIN
     $creating_windows_installer_patch = 0;
 
     $strip = 1;
+    $solarjava = 0;
+    $jdklib = "";
+    $jrepath = "";
 
     $globallogging = 0;
     $globalloggingform21 = 1;
@@ -250,7 +248,6 @@ BEGIN
     @logfileinfo = ();
     @errorlogfileinfo = ();
     @globallogfileinfo = ();
-    $ignore_error_in_logfile = 0;
     $exitlog = "";
     $globalinfo_copied = 0;
     $quiet = 0;
@@ -309,6 +306,7 @@ BEGIN
     $productxpdfile = "setup.xpd";
     $xpd_files_prepared = 0;
     $defaultlanguage = "";
+    # @emptyxpdparents = ();
     @createdxpdfiles = ();
     @allxpdfiles = ();
     $isxpdplatform = 0;
@@ -316,6 +314,7 @@ BEGIN
     $javasettozero = 0;
     $addlicensefile = 1;
     $addsystemintegration = 0;
+    $addjavainstaller = 0;
     $added_directories = 0;
     $makedownload = 1;
     $makejds = 1;
@@ -381,10 +380,6 @@ BEGIN
     %spellcheckerlanguagehash = ();
     %spellcheckerfilehash = ();
     $registryrootcomponent = "";
-    %allcomponents = ();
-    %allcomponents_in_this_database = ();
-    %allshortcomponents = ();
-    %alluniquedirectorynames = ();
 
     $installlocationdirectory = "";
     $installlocationdirectoryset = 0;
@@ -416,10 +411,13 @@ BEGIN
     %usedtreeconditions = ();
     %moduledestination = ();
 
+    $unomaxservices = 1800; # regcomp -c argument length
+    $javamaxservices = 15;
+
     $one_cab_file = 0;
     $fix_number_of_cab_files = 1;
     $cab_file_per_component = 0;
-    $cabfilecompressionlevel = 21; # Using LZX compression, possible values are: 15 | 16 | ... | 21 (best compression)
+    $cabfilecompressionlevel = 7;
     $number_of_cabfiles = 1;    # only for $fix_number_of_cab_files = 1
     $include_cab_in_msi = 0;
     $use_packages_for_cabs = 0;
@@ -458,6 +456,8 @@ BEGIN
     @solarispatchfiles = (".diPatch", "patchinfo");
     @environmentvariables = ( "SOLARVERSION", "GUI", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
+    @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar", "commonwizards.jar" );
+    @regcompregisterlibs = ( "javavm.uno", "javaloader.uno", "stocservices.uno" );
     @languagepackfeature =();
     @helppackfeature =();
     @featurecollector =();
@@ -505,6 +505,7 @@ BEGIN
         $separator = "/";
         $pathseparator = "\:";
         $libextension = "\.dll";
+        $quote = "\'";
         $isunix = 0;
         $iswin = 1;
                 $archiveformat = ".zip";
@@ -529,9 +530,13 @@ BEGIN
             $libextension = "\.so";
         }
         $archiveformat = ".tar.gz";
+        $quote = "\'";
         $isunix = 1;
         $iswin = 0;
     }
+    # WRAPCMD is gone - remove this and all related
+    # $installer::globals::wrapcmd entries
+    $wrapcmd = "";
 
     if ( $plat =~ /linux/i ) { $islinux = 1; }
     if ( $plat =~ /kfreebsd/i ) { $islinux = 1; }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,6 +59,9 @@ private:
     void SetReplace( sal_Int32 type );
     void SetReplaceWith( const rtl::OUString& rText ) throw ( css::uno::RuntimeException );
     rtl::OUString GetReplaceWith() throw ( css::uno::RuntimeException );
+#ifdef TOMORROW
+    rtl::OUString ReplaceWildcards( const rtl::OUString& rText ) throw ( css::uno::RuntimeException );
+#endif
     css::uno::Reference< css::text::XTextRange > FindOneElement() throw ( css::uno::RuntimeException );
     sal_Bool SearchReplace() throw ( css::uno::RuntimeException );
 

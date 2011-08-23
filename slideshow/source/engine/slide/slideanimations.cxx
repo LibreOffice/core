@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,19 +66,19 @@ namespace slideshow
                 {
                     mpRootNode->dispose();
                 }
-                catch (uno::Exception &)
+                catch (uno::Exception &) 
                 {
-                    OSL_FAIL( rtl::OUStringToOString(
+                    OSL_ENSURE( false, rtl::OUStringToOString(
                                     comphelper::anyToString(
                                         cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
             }
         }
-
+        
         bool SlideAnimations::importAnimations( const uno::Reference< animations::XAnimationNode >& xRootAnimationNode )
         {
-            mpRootNode = AnimationNodeFactory::createAnimationNode(
+            mpRootNode = AnimationNodeFactory::createAnimationNode( 
                 xRootAnimationNode,
                 maSlideSize,
                 maContext );

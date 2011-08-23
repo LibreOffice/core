@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@
 #include <swwait.hxx>
 #include <shells.hrc>
 #include <popup.hrc>
-#include <extedit.hxx>
+
 #define SwGrfShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
@@ -95,7 +95,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
 
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     switch(nSlot)
     {
         case SID_TWAIN_TRANSFER:
@@ -114,48 +114,35 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-        case FN_EXTERNAL_EDIT:
-        {
-            /* When the graphic is selected to be opened via some external tool
-             * for advanced editing
-             */
-            GraphicObject *pGraphicObject = (GraphicObject *) rSh.GetGraphicObj();
-            if(0 != pGraphicObject)
-            {
-                EditWithExternalTool(pGraphicObject, &rSh);
-            }
-        }
-        break;
-
         case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
         {
-            SwFlyFrmAttrMgr aMgr( sal_False, &rSh, rSh.IsFrmSelected() ?
+            SwFlyFrmAttrMgr aMgr( FALSE, &rSh, rSh.IsFrmSelected() ?
                                                FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
             const SwViewOption* pVOpt = rSh.GetViewOptions();
             SwViewOption aUsrPref( *pVOpt );
 
             SfxItemSet aSet(GetPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-                            RES_GRFATR_MIRRORGRF,   RES_GRFATR_CROPGRF,
-                            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
+                            RES_GRFATR_MIRRORGRF, 	RES_GRFATR_CROPGRF,
+                            SID_ATTR_BORDER_INNER, 	SID_ATTR_BORDER_INNER,
                             SID_ATTR_GRAF_KEEP_ZOOM, SID_ATTR_GRAF_KEEP_ZOOM,
                             SID_ATTR_GRAF_FRMSIZE, SID_ATTR_GRAF_FRMSIZE,
                             SID_ATTR_GRAF_FRMSIZE_PERCENT, SID_ATTR_GRAF_FRMSIZE_PERCENT,
                             SID_ATTR_GRAF_GRAPHIC, SID_ATTR_GRAF_GRAPHIC,
-                            FN_PARAM_GRF_CONNECT,   FN_PARAM_GRF_CONNECT,
-                            SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
-                            FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
-                            FN_SET_FRM_NAME,        FN_KEEP_ASPECT_RATIO,
-                            FN_PARAM_GRF_DIALOG,    FN_PARAM_GRF_DIALOG,
-                            SID_DOCFRAME,           SID_DOCFRAME,
-                            SID_HTML_MODE,          SID_HTML_MODE,
-                            FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
+                            FN_PARAM_GRF_CONNECT, 	FN_PARAM_GRF_CONNECT,
+                            SID_ATTR_PAGE_SIZE, 	SID_ATTR_PAGE_SIZE,
+                            FN_GET_PRINT_AREA, 		FN_GET_PRINT_AREA,
+                            FN_SET_FRM_NAME, 		FN_KEEP_ASPECT_RATIO,
+                            FN_PARAM_GRF_DIALOG, 	FN_PARAM_GRF_DIALOG,
+                            SID_DOCFRAME, 			SID_DOCFRAME,
+                            SID_HTML_MODE, 			SID_HTML_MODE,
+                            FN_SET_FRM_ALT_NAME,	FN_SET_FRM_ALT_NAME,
                             0);
 
-            sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
+            USHORT nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
             aSet.Put(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));
             FieldUnit eMetric = ::GetDfltMetric((0 != (nHtmlMode&HTMLMODE_ON)));
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)) );
 
             const SwRect* pRect = &rSh.GetAnyCurRect(RECT_PAGE);
             SwFmtFrmSize aFrmSize( ATT_VAR_SIZE, pRect->Width(), pRect->Height());
@@ -165,8 +152,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
             if ( nSlot == FN_FORMAT_GRAFIC_DLG )
             {
-                // #i73249#
+                // --> OD 2009-07-13 #i73249#
+//                aSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, rSh.GetAlternateText()));
                 aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
+                // <--
             }
 
             pRect = &rSh.GetAnyCurRect(RECT_PAGE_PRT);
@@ -191,7 +180,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 aSet.Put( aSzItm );
 
                 Size aSz( aSizeCopy.GetWidthPercent(), aSizeCopy.GetHeightPercent() );
-                if( 0xff == aSz.Width() )   aSz.Width() = 0;
+                if( 0xff == aSz.Width() ) 	aSz.Width() = 0;
                 if( 0xff == aSz.Height() )  aSz.Height() = 0;
 
                 aSzItm.SetSize( aSz );
@@ -242,7 +231,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_GRF,
                                                     GetView().GetViewFrame(),
                                                     GetView().GetWindow(),
-                                                    aSet, sal_False, DLG_FRM_GRF);
+                                                    aSet, FALSE, DLG_FRM_GRF);
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if( pDlg->Execute() )
             {
@@ -253,7 +242,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 rReq.Done(*pSet);
                 // change the 2 frmsize SizeItems to the correct SwFrmSizeItem
                 if( SFX_ITEM_SET == pSet->GetItemState(
-                                SID_ATTR_GRAF_FRMSIZE, sal_False, &pItem ))
+                                SID_ATTR_GRAF_FRMSIZE, FALSE, &pItem ))
                 {
                     SwFmtFrmSize aSize;
                     const Size& rSz = ((SvxSizeItem*)pItem)->GetSize();
@@ -261,11 +250,11 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     aSize.SetHeight( rSz.Height() );
 
                     if( SFX_ITEM_SET == pSet->GetItemState(
-                            SID_ATTR_GRAF_FRMSIZE_PERCENT, sal_False, &pItem ))
+                            SID_ATTR_GRAF_FRMSIZE_PERCENT, FALSE, &pItem ))
                     {
                         const Size& rRelativeSize = ((SvxSizeItem*)pItem)->GetSize();
-                        aSize.SetWidthPercent( static_cast< sal_uInt8 >( rRelativeSize.Width() ) );
-                        aSize.SetHeightPercent( static_cast< sal_uInt8 >( rRelativeSize.Height() ) );
+                        aSize.SetWidthPercent( static_cast< BYTE >( rRelativeSize.Width() ) );
+                        aSize.SetHeightPercent( static_cast< BYTE >( rRelativeSize.Height() ) );
                     }
                     pSet->Put( aSize );
                 }
@@ -275,9 +264,9 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if(pFmt && pFmt->IsAutoUpdateFmt())
                 {
                     pFmt->SetFmtAttr(*pSet);
-                    SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,   RES_FRM_SIZE,
-                                                    RES_SURROUND,   RES_SURROUND,
-                                                    RES_ANCHOR,     RES_ANCHOR,
+                    SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,	RES_FRM_SIZE,
+                                                    RES_SURROUND, 	RES_SURROUND,
+                                                    RES_ANCHOR,		RES_ANCHOR,
                                                     RES_VERT_ORIENT,RES_HORI_ORIENT,
                                                     0);
                     aShellSet.Put(*pSet);
@@ -289,20 +278,20 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 }
                 aMgr.UpdateFlyFrm();
 
-                sal_Bool bApplyUsrPref = sal_False;
+                BOOL bApplyUsrPref = FALSE;
                 if (SFX_ITEM_SET == pSet->GetItemState(
-                    FN_KEEP_ASPECT_RATIO, sal_True, &pItem ))
+                    FN_KEEP_ASPECT_RATIO, TRUE, &pItem ))
                 {
                     aUsrPref.SetKeepRatio(
                                     ((const SfxBoolItem*)pItem)->GetValue() );
-                    bApplyUsrPref = sal_True;
+                    bApplyUsrPref = TRUE;
                 }
                 if( SFX_ITEM_SET == pSet->GetItemState(
-                    SID_ATTR_GRAF_KEEP_ZOOM, sal_True, &pItem ))
+                    SID_ATTR_GRAF_KEEP_ZOOM, TRUE, &pItem ))
                 {
                     aUsrPref.SetGrfKeepZoom(
                                     ((const SfxBoolItem*)pItem)->GetValue() );
-                    bApplyUsrPref = sal_True;
+                    bApplyUsrPref = TRUE;
                 }
 
                 if( bApplyUsrPref )
@@ -310,7 +299,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
                 // and now set all the graphic attributes and other stuff
                 if( SFX_ITEM_SET == pSet->GetItemState(
-                                        SID_ATTR_GRAF_GRAPHIC, sal_True, &pItem ))
+                                        SID_ATTR_GRAF_GRAPHIC, TRUE, &pItem ))
                 {
                     if( ((SvxBrushItem*)pItem)->GetGraphicLink() )
                         sGrfNm = *((SvxBrushItem*)pItem)->GetGraphicLink();
@@ -325,7 +314,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     if( sGrfNm.Len() )
                     {
                         SwDocShell* pDocSh = GetView().GetDocShell();
-                        SwWait aWait( *pDocSh, sal_True );
+                        SwWait aWait( *pDocSh, TRUE );
                         SfxMedium* pMedium = pDocSh->GetMedium();
                         INetURLObject aAbs;
                         if( pMedium )
@@ -337,10 +326,13 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     }
                 }
                 if ( SFX_ITEM_SET == pSet->GetItemState(
-                                        FN_SET_FRM_ALT_NAME, sal_True, &pItem ))
+                                        FN_SET_FRM_ALT_NAME, TRUE, &pItem ))
                 {
-                    // #i73249#
+                    // --> OD 2009-07-13 #i73249#
+//                    rSh.SetAlternateText(
+//                                ((const SfxStringItem*)pItem)->GetValue() );
                     rSh.SetObjTitle( ((const SfxStringItem*)pItem)->GetValue() );
+                    // <--
                 }
 
                 SfxItemSet aGrfSet( rSh.GetAttrPool(), RES_GRFATR_BEGIN,
@@ -375,7 +367,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
 void SwGrfShell::ExecAttr( SfxRequest &rReq )
 {
-    sal_uInt16 nGrfType;
+    USHORT nGrfType;
     if( CNT_GRF == GetShell().GetCntType() &&
         ( GRAPHIC_BITMAP == ( nGrfType = GetShell().GetGraphicType()) ||
           GRAPHIC_GDIMETAFILE == nGrfType ))
@@ -384,8 +376,8 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                                                       RES_GRFATR_END -1 );
         const SfxItemSet *pArgs = rReq.GetArgs();
         const SfxPoolItem* pItem;
-        sal_uInt16 nSlot = rReq.GetSlot();
-        if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, sal_False, &pItem ))
+        USHORT nSlot = rReq.GetSlot();
+        if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, FALSE, &pItem ))
             pItem = 0;
 
         switch( nSlot )
@@ -396,7 +388,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                 GetShell().GetCurAttr( aGrfSet );
                 SwMirrorGrf aMirror( (SwMirrorGrf&)aGrfSet.Get(
                                                     RES_GRFATR_MIRRORGRF ) );
-                sal_uInt16 nMirror = aMirror.GetValue();
+                USHORT nMirror = aMirror.GetValue();
                 if( FN_FLIP_VERT_GRAFIC == nSlot )
                     switch( nMirror )
                     {
@@ -524,39 +516,36 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     SfxItemSet aCoreSet( GetPool(), aNoTxtNodeSetRange );
     rSh.GetCurAttr( aCoreSet );
-    sal_Bool bParentCntProt = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
-    sal_Bool bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
+    BOOL bParentCntProt = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
+    BOOL bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
+    // --> OD 2006-11-03 #i59688#
+//    BOOL bSwappedOut = rSh.IsGrfSwapOut( TRUE );
+//    BOOL bBitmapType = !bSwappedOut && GRAPHIC_BITMAP == rSh.GetGraphicType();
+    // <--
 
     SetGetStateSet( &rSet );
 
     SfxWhichIter aIter( rSet );
-    sal_uInt16 nWhich = aIter.FirstWhich();
+    USHORT nWhich = aIter.FirstWhich();
     while( nWhich )
     {
-        sal_Bool bDisable = bParentCntProt;
+        BOOL bDisable = bParentCntProt;
         switch( nWhich )
         {
         case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
         case SID_TWAIN_TRANSFER:
             if( bParentCntProt || !bIsGrfCntnt )
-                bDisable = sal_True;
+                bDisable = TRUE;
             break;
         case FN_SAVE_GRAPHIC:
-            if( rSh.GetGraphicType() == GRAPHIC_NONE )
-                bDisable = sal_True;
-        break;
-        /*
-         * If the Graphic is None type it should be externally editable
-         */
-        case FN_EXTERNAL_EDIT:
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
                 bDisable = sal_True;
         break;
         case SID_COLOR_SETTINGS:
         {
             if ( bParentCntProt || !bIsGrfCntnt )
-                bDisable = sal_True;
+                bDisable = TRUE;
             else
             {
                 svx::ToolboxAccess aToolboxAccess( TOOLBOX_NAME );
@@ -616,7 +605,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
         case SID_ATTR_GRAF_GAMMA:
             if( !bParentCntProt )
-                rSet.Put( SfxUInt32Item( nWhich, static_cast< sal_uInt32 >(
+                rSet.Put( SfxUInt32Item( nWhich, static_cast< UINT32 >(
                     ( (SwGammaGrf&)aCoreSet.Get( RES_GRFATR_GAMMA ) ).GetValue() * 100 ) ) );
             break;
         case SID_ATTR_GRAF_TRANSPARENCE:
@@ -628,7 +617,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                 {
                     if( pGrfObj->IsAnimated() ||
                         GRAPHIC_GDIMETAFILE == pGrfObj->GetType() )
-                        bDisable = sal_True;
+                        bDisable = TRUE;
                     else
                         rSet.Put( SfxUInt16Item( nWhich, ((SwTransparencyGrf&)
                             aCoreSet.Get(RES_GRFATR_TRANSPARENCY)).GetValue() ));
@@ -661,18 +650,27 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_GRFFILTER_SOLARIZE:
             {
                 if( bParentCntProt || !bIsGrfCntnt )
-                    bDisable = sal_True;
-                // #i59688# load graphic only if type is unknown
+                    bDisable = TRUE;
+                // --> OD 2006-11-03 #i59688#
+                // load graphic only if type is unknown
+//                else if( bSwappedOut )
+//                {
+//                    rSet.DisableItem( nWhich );
+//                    if( AddGrfUpdateSlot( nWhich ))
+//                        rSh.GetGraphic(FALSE);  // start the loading
+//                }
+//                else
+//                    bDisable = !bBitmapType;
                 else
                 {
-                    const sal_uInt16 eGraphicType( rSh.GetGraphicType() );
+                    const USHORT eGraphicType( rSh.GetGraphicType() );
                     if ( ( eGraphicType == GRAPHIC_NONE ||
                            eGraphicType == GRAPHIC_DEFAULT ) &&
-                         rSh.IsGrfSwapOut( sal_True ) )
+                         rSh.IsGrfSwapOut( TRUE ) )
                     {
                         rSet.DisableItem( nWhich );
                         if( AddGrfUpdateSlot( nWhich ))
-                            rSh.GetGraphic(sal_False);  // start the loading
+                            rSh.GetGraphic(FALSE);  // start the loading
                     }
                     else
                     {
@@ -684,7 +682,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             break;
 
         default:
-            bDisable = sal_False;
+            bDisable = FALSE;
         }
 
         if( bDisable )

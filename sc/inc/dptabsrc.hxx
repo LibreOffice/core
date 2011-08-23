@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,15 @@
 #define SC_DPTABSRC_HXX
 
 #include <vector>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <hash_map>
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
 #include <list>
+// End Comments
 #include <memory>
-
 #include <tools/string.hxx>
-#include "global.hxx"       // enum ScSubTotalFunc
+#include <tools/list.hxx>
+#include "global.hxx"		// enum ScSubTotalFunc
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
@@ -60,10 +62,13 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
 #include "dpglobal.hxx"
+// End Comments
 #include "dptabdat.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace sheet {
         struct DataPilotFieldFilter;
     }
@@ -74,15 +79,22 @@ namespace com { namespace sun { namespace star {
 
 class ScDPResultMember;
 class ScDPResultData;
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
 class ScDPItemData;
+// End Comments
 class ScDPTableData;
 
-//  should be dynamic!
-#define SC_DAPI_MAXFIELDS   256
+// ------------------------------------------------------------------------
 
 
+//	should be dynamic!
+#define SC_DAPI_MAXFIELDS 	256
+
+
+// --------------------------------------------------------------------
 //
-//  implementation of DataPilotSource using ScDPTableData
+//	implementation of DataPilotSource using ScDPTableData
 //
 
 
@@ -105,91 +117,96 @@ class ScDPSource : public cppu::WeakImplHelper6<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScDPTableData*          pData;              // data source (ScDPObject manages its life time)
-    ScDPDimensions*         pDimensions;        // api objects
+    ScDPTableData*			pData;				// data source (ScDPObject manages its life time)
+    ScDPDimensions*			pDimensions;		// api objects
                                                 // settings:
-    long                    nColDims[SC_DAPI_MAXFIELDS];
-    long                    nRowDims[SC_DAPI_MAXFIELDS];
-    long                    nDataDims[SC_DAPI_MAXFIELDS];
-    long                    nPageDims[SC_DAPI_MAXFIELDS];
-    long                    nColDimCount;
-    long                    nRowDimCount;
-    long                    nDataDimCount;
-    long                    nPageDimCount;
-    sal_Bool                    bColumnGrand;
-    sal_Bool                    bRowGrand;
-    sal_Bool                    bIgnoreEmptyRows;
-    sal_Bool                    bRepeatIfEmpty;
+    long					nColDims[SC_DAPI_MAXFIELDS];
+    long					nRowDims[SC_DAPI_MAXFIELDS];
+    long					nDataDims[SC_DAPI_MAXFIELDS];
+    long					nPageDims[SC_DAPI_MAXFIELDS];
+    long					nColDimCount;
+    long					nRowDimCount;
+    long					nDataDimCount;
+    long					nPageDimCount;
+    BOOL					bColumnGrand;
+    BOOL					bRowGrand;
+    BOOL					bIgnoreEmptyRows;
+    BOOL					bRepeatIfEmpty;
 
-    long                    nDupCount;
+    long					nDupCount;
 
                                                 // results:
-    ScDPResultData*         pResData;           // keep the rest in this!
-    ScDPResultMember*       pColResRoot;
-    ScDPResultMember*       pRowResRoot;
+    ScDPResultData*			pResData;			// keep the rest in this!
+    ScDPResultMember*		pColResRoot;
+    ScDPResultMember*		pRowResRoot;
     com::sun::star::uno::Sequence<com::sun::star::sheet::MemberResult>* pColResults;
     com::sun::star::uno::Sequence<com::sun::star::sheet::MemberResult>* pRowResults;
-    std::vector<ScDPLevel*> aColLevelList;
-    std::vector<ScDPLevel*> aRowLevelList;
-    sal_Bool                    bResultOverflow;
+    List					aColLevelList;
+    List					aRowLevelList;
+    BOOL					bResultOverflow;
 
     ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
 
-    void                    CreateRes_Impl();
-    void                    FillMemberResults();
-    void                    FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*> &rList );
+    void					CreateRes_Impl();
+    void					FillMemberResults();
+    void					FillLevelList( USHORT nOrientation, List& rList );
     void                    FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &bHasAutoShow);
 
-    /**
-     * Compile a list of dimension indices that are either, column, row or
-     * page dimensions (i.e. all but data dimensions).
+    /** 
+     * Compile a list of dimension indices that are either, column, row or 
+     * page dimensions (i.e. all but data dimensions). 
      */
-    void                    GetCategoryDimensionIndices(::boost::unordered_set<sal_Int32>& rCatDims);
+    void                    GetCategoryDimensionIndices(::std::hash_set<sal_Int32>& rCatDims);
 
-    /**
-     * Set visibilities of individual rows in the cache table based on the
-     * page field data.
+    /** 
+     * Set visibilities of individual rows in the cache table based on the 
+     * page field data. 
      */
     void                    FilterCacheTableByPageDimensions();
 
-    void                    SetDupCount( long nNew );
+    void					SetDupCount( long nNew );
 
 public:
-                                ScDPSource( ScDPTableData* pD );
-    virtual                     ~ScDPSource();
+                                ScDPSource( ScDPTableData* pD );	// TableData is deleted by Source
+    virtual 					~ScDPSource();
 
-    ScDPTableData*          GetData()       { return pData; }
-    const ScDPTableData*    GetData() const { return pData; }
+    ScDPTableData*			GetData()		{ return pData; }
+    const ScDPTableData*	GetData() const	{ return pData; }
 
+    void                    SetGrandTotalName(const ::rtl::OUString& rName);
     const ::rtl::OUString*  GetGrandTotalName() const;
 
-    sal_uInt16                  GetOrientation(long nColumn);
-    void                    SetOrientation(long nColumn, sal_uInt16 nNew);
-    long                    GetPosition(long nColumn);
+    USHORT					GetOrientation(long nColumn);
+    void					SetOrientation(long nColumn, USHORT nNew);
+    long					GetPosition(long nColumn);
 
-    long                    GetDataDimensionCount();
+    long					GetDataDimensionCount();
     ScDPDimension*          GetDataDimension(long nIndex);
-    String                  GetDataDimName(long nIndex);
-    const ScDPCache* GetCache();
+    String					GetDataDimName(long nIndex);
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    ScDPTableDataCache*         GetCache();
     const ScDPItemData*            GetItemDataById( long nDim, long nId );
     long                                       GetDataLayoutDim(){ return pData->GetColumnCount(); }
     SCROW                                GetMemberId(  long  nDim, const ScDPItemData& rData );
-    sal_Bool                    IsDataLayoutDimension(long nDim);
-    sal_uInt16                  GetDataLayoutOrientation();
+    // End Comments
+    BOOL					IsDataLayoutDimension(long nDim);
+    USHORT					GetDataLayoutOrientation();
 
-    sal_Bool                    IsDateDimension(long nDim);
+    BOOL					IsDateDimension(long nDim);
+    UINT32					GetNumberFormat(long nDim);
 
-    sal_Bool                    SubTotalAllowed(long nColumn);      //! move to ScDPResultData
+    BOOL					SubTotalAllowed(long nColumn);		//! move to ScDPResultData
 
-    ScDPDimension*          AddDuplicated(long nSource, const String& rNewName);
-    long                    GetDupCount() const { return nDupCount; }
+    ScDPDimension*			AddDuplicated(long nSource, const String& rNewName);
+    long					GetDupCount() const	{ return nDupCount; }
 
-    long                    GetSourceDim(long nDim);
+    long					GetSourceDim(long nDim);
 
     const com::sun::star::uno::Sequence<com::sun::star::sheet::MemberResult>*
                             GetMemberResults( ScDPLevel* pLevel );
 
-    ScDPDimensions*         GetDimensionsObject();
+    ScDPDimensions*			GetDimensionsObject();
 
                             // XDimensionsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
@@ -202,17 +219,17 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XRefreshable
-    virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addRefreshListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	refresh() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	addRefreshListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XRefreshListener >& l )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeRefreshListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	removeRefreshListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XRefreshListener >& l )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XDrillDownDataSupplier
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >
-        SAL_CALL getDrillDownData(const ::com::sun::star::uno::Sequence<
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > 
+        SAL_CALL getDrillDownData(const ::com::sun::star::uno::Sequence< 
                                       ::com::sun::star::sheet::DataPilotFieldFilter >& aFilters )
                                 throw(::com::sun::star::uno::RuntimeException);
 
@@ -220,7 +237,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -232,25 +249,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
@@ -265,20 +282,20 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    virtual String              getDataDescription();       //! ???
+    virtual String				getDataDescription();		//! ???
 
-    virtual sal_Bool                getColumnGrand() const;
-    virtual void                setColumnGrand(sal_Bool bSet);
-    virtual sal_Bool                getRowGrand() const;
-    virtual void                setRowGrand(sal_Bool bSet);
+    virtual BOOL				getColumnGrand() const;
+    virtual void				setColumnGrand(BOOL bSet);
+    virtual BOOL				getRowGrand() const;
+    virtual void				setRowGrand(BOOL bSet);
 
-    virtual sal_Bool                getIgnoreEmptyRows() const;
-    virtual void                setIgnoreEmptyRows(sal_Bool bSet);
-    virtual sal_Bool                getRepeatIfEmpty() const;
-    virtual void                setRepeatIfEmpty(sal_Bool bSet);
+    virtual BOOL				getIgnoreEmptyRows() const;
+    virtual void				setIgnoreEmptyRows(BOOL bSet);
+    virtual BOOL				getRepeatIfEmpty() const;
+    virtual void				setRepeatIfEmpty(BOOL bSet);
 
-    virtual void                validate();     //! ???
-    virtual void                disposeData();
+    virtual void				validate();		//! ???
+    virtual void				disposeData();
 };
 
 class ScDPDimensions : public cppu::WeakImplHelper2<
@@ -286,15 +303,15 @@ class ScDPDimensions : public cppu::WeakImplHelper2<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScDPSource*         pSource;
-    long                nDimCount;
-    ScDPDimension**     ppDims;
+    ScDPSource*			pSource;
+    long				nDimCount;
+    ScDPDimension**		ppDims;
 
 public:
                             ScDPDimensions( ScDPSource* pSrc );
-    virtual                 ~ScDPDimensions();
+    virtual 				~ScDPDimensions();
 
-    void                    CountChanged();
+    void					CountChanged();
 
                             // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -319,8 +336,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    virtual long            getCount() const;
-    virtual ScDPDimension*  getByIndex(long nIndex) const;
+    virtual	long			getCount() const;
+    virtual ScDPDimension*	getByIndex(long nIndex) const;
 };
 
 class ScDPDimension : public cppu::WeakImplHelper5<
@@ -331,38 +348,38 @@ class ScDPDimension : public cppu::WeakImplHelper5<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScDPSource*         pSource;
-    long                nDim;               // dimension index (== column ID)
-    ScDPHierarchies*    pHierarchies;
-    long                nUsedHier;
-    sal_uInt16              nFunction;          // enum GeneralFunction
-    String              aName;              // if empty, take from source
+    ScDPSource*			pSource;
+    long				nDim;               // dimension index (== column ID)
+    ScDPHierarchies*	pHierarchies;
+    long				nUsedHier;
+    USHORT				nFunction;			// enum GeneralFunction
+    String				aName;				// if empty, take from source
     ::std::auto_ptr<rtl::OUString> mpLayoutName;
     ::std::auto_ptr<rtl::OUString> mpSubtotalName;
-    long                nSourceDim;         // >=0 if dup'ed
+    long				nSourceDim;			// >=0 if dup'ed
     ::com::sun::star::sheet::DataPilotFieldReference
                         aReferenceValue;    // settings for "show data as" / "displayed value"
-    sal_Bool                bHasSelectedPage;
-    String              aSelectedPage;
-    ScDPItemData*       pSelectedData;      // internal, temporary, created from aSelectedPage
+    BOOL				bHasSelectedPage;
+    String				aSelectedPage;
+    ScDPItemData*		pSelectedData;		// internal, temporary, created from aSelectedPage
     sal_Bool            mbHasHiddenMember;
 
 public:
                             ScDPDimension( ScDPSource* pSrc, long nD );
-    virtual                 ~ScDPDimension();
+    virtual 				~ScDPDimension();
 
     long                    GetDimension() const    { return nDim; }        // dimension index in source
-    long                    GetSourceDim() const    { return nSourceDim; }  // >=0 if dup'ed
+    long					GetSourceDim() const	{ return nSourceDim; }  // >=0 if dup'ed
 
-    ScDPDimension*          CreateCloneObject();
-    ScDPHierarchies*        GetHierarchiesObject();
+    ScDPDimension*			CreateCloneObject();
+    ScDPHierarchies*		GetHierarchiesObject();
 
     SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;
     const ::rtl::OUString*  GetSubtotalName() const;
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XHierarchiesSupplier
@@ -377,7 +394,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -389,25 +406,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
@@ -422,21 +439,26 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_uInt16              getOrientation() const;
-    virtual void                setOrientation(sal_uInt16 nNew);
-    virtual long                getPosition() const;
-    virtual void                setPosition(long nNew);
-    virtual sal_Bool                getIsDataLayoutDimension() const;
-    virtual sal_uInt16              getFunction() const;
-    virtual void                setFunction(sal_uInt16 nNew);       // for data dimension
-    virtual long                getUsedHierarchy() const;
-    virtual void                setUsedHierarchy(long nNew);
-    virtual sal_Bool                isDuplicated() const;
+    virtual USHORT				getOrientation() const;
+    virtual void				setOrientation(USHORT nNew);
+    virtual long				getPosition() const;
+    virtual void				setPosition(long nNew);
+    virtual	BOOL				getIsDataLayoutDimension() const;
+    virtual USHORT				getFunction() const;
+    virtual void				setFunction(USHORT nNew);		// for data dimension
+    virtual long				getUsedHierarchy() const;
+    virtual void				setUsedHierarchy(long nNew);
+    virtual BOOL				isDuplicated() const;
 
-    sal_Bool                        HasSelectedPage() const     { return bHasSelectedPage; }
+    BOOL                        HasSelectedPage() const     { return bHasSelectedPage; }
     const ScDPItemData&         GetSelectedData();
 
     const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
+
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+    BOOL                      IsVisible( const ScDPItemData& rData );
+// End Comments
 };
 
 class ScDPHierarchies : public cppu::WeakImplHelper2<
@@ -444,14 +466,14 @@ class ScDPHierarchies : public cppu::WeakImplHelper2<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScDPSource*         pSource;
-    long                nDim;
-    long                nHierCount;
-    ScDPHierarchy**     ppHiers;
+    ScDPSource*			pSource;
+    long				nDim;
+    long				nHierCount;
+    ScDPHierarchy**		ppHiers;
 
 public:
                             ScDPHierarchies( ScDPSource* pSrc, long nD );
-    virtual                 ~ScDPHierarchies();
+    virtual 				~ScDPHierarchies();
 
                             // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -476,8 +498,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    virtual long            getCount() const;
-    virtual ScDPHierarchy*  getByIndex(long nIndex) const;
+    virtual	long			getCount() const;
+    virtual ScDPHierarchy*	getByIndex(long nIndex) const;
 };
 
 class ScDPHierarchy : public cppu::WeakImplHelper3<
@@ -486,20 +508,20 @@ class ScDPHierarchy : public cppu::WeakImplHelper3<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScDPSource*     pSource;
-    long            nDim;
-    long            nHier;
-    ScDPLevels*     pLevels;
+    ScDPSource*		pSource;
+    long			nDim;
+    long			nHier;
+    ScDPLevels*		pLevels;
 
 public:
                             ScDPHierarchy( ScDPSource* pSrc, long nD, long nH );
-    virtual                 ~ScDPHierarchy();
+    virtual 				~ScDPHierarchy();
 
-    ScDPLevels*             GetLevelsObject();
+    ScDPLevels*				GetLevelsObject();
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XLevelsSupplier
@@ -520,15 +542,15 @@ class ScDPLevels : public cppu::WeakImplHelper2<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScDPSource*     pSource;
-    long            nDim;
-    long            nHier;
-    long            nLevCount;
-    ScDPLevel**     ppLevs;
+    ScDPSource*		pSource;
+    long			nDim;
+    long			nHier;
+    long			nLevCount;
+    ScDPLevel**		ppLevs;
 
 public:
                             ScDPLevels( ScDPSource* pSrc, long nD, long nH );
-    virtual                 ~ScDPLevels();
+    virtual 				~ScDPLevels();
 
                             // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -553,8 +575,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    virtual long            getCount() const;
-    virtual ScDPLevel*      getByIndex(long nIndex) const;
+    virtual	long			getCount() const;
+    virtual ScDPLevel*		getByIndex(long nIndex) const;
 };
 
 class ScDPLevel : public cppu::WeakImplHelper5<
@@ -565,13 +587,13 @@ class ScDPLevel : public cppu::WeakImplHelper5<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScDPSource*                 pSource;
-    long                        nDim;
-    long                        nHier;
-    long                        nLev;
-    ScDPMembers*                pMembers;
+    ScDPSource*					pSource;
+    long						nDim;
+    long						nHier;
+    long						nLev;
+    ScDPMembers*				pMembers;
     com::sun::star::uno::Sequence<com::sun::star::sheet::GeneralFunction> aSubTotals;
-    sal_Bool                        bShowEmpty;
+    BOOL						bShowEmpty;
     ::com::sun::star::sheet::DataPilotFieldSortInfo     aSortInfo;      // stored user settings
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo aAutoShowInfo;  // stored user settings
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo   aLayoutInfo;    // stored user settings
@@ -579,17 +601,17 @@ private:
     ::std::vector<sal_Int32>    aGlobalOrder;       // result of sorting by name or position
     long                        nSortMeasure;       // measure (index of data dimension) to sort by
     long                        nAutoMeasure;       // measure (index of data dimension) for AutoShow
-    sal_Bool                        bEnableLayout;      // enabled only for row fields, not for the innermost one
+    BOOL                        bEnableLayout;      // enabled only for row fields, not for the innermost one
 
 public:
                             ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL );
-    virtual                 ~ScDPLevel();
+    virtual 				~ScDPLevel();
 
-    ScDPMembers*            GetMembersObject();
+    ScDPMembers*			GetMembersObject();
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XMembersSupplier
@@ -604,7 +626,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -616,25 +638,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
@@ -650,56 +672,56 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 
     virtual com::sun::star::uno::Sequence<com::sun::star::sheet::GeneralFunction> getSubTotals() const;
-    virtual void            setSubTotals(const com::sun::star::uno::Sequence<
+    virtual void			setSubTotals(const com::sun::star::uno::Sequence<
                                             com::sun::star::sheet::GeneralFunction>& rNew);
-    virtual sal_Bool            getShowEmpty() const;
-    virtual void            setShowEmpty(sal_Bool bSet);
+    virtual BOOL			getShowEmpty() const;
+    virtual void			setShowEmpty(BOOL bSet);
 
     const ::com::sun::star::sheet::DataPilotFieldSortInfo& GetSortInfo() const      { return aSortInfo; }
     const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo& GetAutoShow() const  { return aAutoShowInfo; }
 
     void                    EvaluateSortOrder();
-    void                    SetEnableLayout( sal_Bool bSet );
+    void                    SetEnableLayout( BOOL bSet );
 
     const ::std::vector<sal_Int32>& GetGlobalOrder() const      { return aGlobalOrder; }
     ::std::vector<sal_Int32>&  GetGlobalOrder()                 { return aGlobalOrder; }
     long                    GetSortMeasure() const              { return nSortMeasure; }
     long                    GetAutoMeasure() const              { return nAutoMeasure; }
 
-    sal_Bool                    IsOutlineLayout() const
+    BOOL                    IsOutlineLayout() const
                             { return bEnableLayout &&
                                aLayoutInfo.LayoutMode !=
                                 ::com::sun::star::sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT; }
 
-    sal_Bool                    IsSubtotalsAtTop() const
+    BOOL                    IsSubtotalsAtTop() const
                             { return bEnableLayout &&
                                aLayoutInfo.LayoutMode ==
                                 ::com::sun::star::sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP; }
 
-    sal_Bool                    IsAddEmpty() const          { return bEnableLayout && aLayoutInfo.AddEmptyLines; }
+    BOOL                    IsAddEmpty() const          { return bEnableLayout && aLayoutInfo.AddEmptyLines; }
 
-    //! number format (for data fields and date fields)
+    //!	number format (for data fields and date fields)
 };
 
 // hash map from name to index in the member array, for fast name access
-typedef ::boost::unordered_map< ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > ScDPMembersHashMap;
+typedef ::std::hash_map< ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > ScDPMembersHashMap;
 
 class ScDPMembers : public cppu::WeakImplHelper2<
                             com::sun::star::container::XNameAccess,
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScDPSource*     pSource;
-    long            nDim;
-    long            nHier;
-    long            nLev;
-    long            nMbrCount;
-    ScDPMember**    ppMbrs;
+    ScDPSource*		pSource;
+    long			nDim;
+    long			nHier;
+    long			nLev;
+    long			nMbrCount;
+    ScDPMember**	ppMbrs;
     mutable ScDPMembersHashMap aHashMap;
 
 public:
                             ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL );
-    virtual                 ~ScDPMembers();
+    virtual 				~ScDPMembers();
 
                             // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -724,15 +746,18 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    virtual long            getCount() const;
-    virtual ScDPMember*     getByIndex(long nIndex) const;
+    virtual	long			getCount() const;
+    virtual ScDPMember*		getByIndex(long nIndex) const;
 
-    long                    getMinMembers() const;
+    long					getMinMembers() const;
 
     sal_Int32               GetIndexFromName( const ::rtl::OUString& rName ) const;     // <0 if not found
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
     const std::vector<sal_Int32>&    GetGlobalOrder();
     const ScDPItemData*               GetSrcItemDataByIndex(  SCROW nIndex);
     SCROW                                   GetSrcItemsCount();
+    // End Comments
 };
 
 class ScDPMember : public cppu::WeakImplHelper3<
@@ -741,29 +766,40 @@ class ScDPMember : public cppu::WeakImplHelper3<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScDPSource*     pSource;
-    long            nDim;
-    long            nHier;
-    long            nLev;
+    ScDPSource*		pSource;
+    long			nDim;
+    long			nHier;
+    long			nLev;
 
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
     SCROW       mnDataId;
-//  String          aCaption;           // visible name (changeable by user)
+    // End Comments
+//	String			aCaption;			// visible name (changeable by user)
     ::std::auto_ptr<rtl::OUString> mpLayoutName;
 
     sal_Int32       nPosition;          // manual sorting
-    sal_Bool            bVisible;
-    sal_Bool            bShowDet;
+    BOOL			bVisible;
+    BOOL			bShowDet;
 
 public:
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
     ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
         SCROW nIndex /*const String& rN, double fV, BOOL bHV */);
-    virtual                 ~ScDPMember();
+    // End Comments
+    virtual 				~ScDPMember();
 
-    String                  GetNameStr() const;
-    void                    FillItemData( ScDPItemData& rData ) const;
+    BOOL					IsNamedItem( const ScDPItemData& r ) const;
+    String					GetNameStr() const;
+    void					FillItemData( ScDPItemData& rData ) const;
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance    
+    //  const ScDPItemData&  GetItemData() const{ return maData; }
     const ScDPItemData&  GetItemData() const;
     inline SCROW               GetItemDataId() const { return mnDataId; }
-    sal_Bool                           IsNamedItem( SCROW    nIndex  ) const;
+    BOOL                           IsNamedItem( SCROW    nIndex  ) const;
+    // End Comments
 
     SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;
 
@@ -771,14 +807,14 @@ public:
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -790,25 +826,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
@@ -823,10 +859,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool            getIsVisible() const;
-    virtual void            setIsVisible(sal_Bool bSet);
-    virtual sal_Bool            getShowDetails() const;
-    virtual void            setShowDetails(sal_Bool bSet);
+    virtual BOOL			getIsVisible() const;
+    virtual void			setIsVisible(BOOL bSet);
+    virtual BOOL			getShowDetails() const;
+    virtual void			setShowDetails(BOOL bSet);
 
     sal_Int32               getPosition() const;
     void                    setPosition(sal_Int32 nNew);

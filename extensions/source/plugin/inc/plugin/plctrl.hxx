@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,32 +80,33 @@ public:
     { _xContext = xContext; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getContext() throw( ::com::sun::star::uno::RuntimeException )
     { return _xContext; }
-
+    
     virtual sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & Model ) throw( ::com::sun::star::uno::RuntimeException ) = 0;
+//	{ DBG_ERROR( "### setModel() illegal on plugincontrol!" ); return sal_False; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel() throw( ::com::sun::star::uno::RuntimeException ) = 0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView > SAL_CALL getView() throw( ::com::sun::star::uno::RuntimeException )
     { return (::com::sun::star::awt::XView*)this; }
-
+    
     virtual sal_Bool SAL_CALL isTransparent() throw( ::com::sun::star::uno::RuntimeException )
     { return sal_False; }
-
+    
     virtual void SAL_CALL setDesignMode( sal_Bool bOn ) throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL isDesignMode() throw( ::com::sun::star::uno::RuntimeException )
     { return _bInDesignMode; }
-
+    
     virtual void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > & xToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > & Parent) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > SAL_CALL getPeer() throw( ::com::sun::star::uno::RuntimeException )
     { return _xPeer; }
-
+    
     // ::com::sun::star::awt::XWindow
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setEnable( sal_Bool bEnable ) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setFocus(void) throw( ::com::sun::star::uno::RuntimeException );
-
+    
     virtual void SAL_CALL setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags ) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getPosSize(void) throw( ::com::sun::star::uno::RuntimeException );
-
+    
     virtual void SAL_CALL addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener > & l ) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener > & l ) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener > & l ) throw( ::com::sun::star::uno::RuntimeException );
@@ -124,11 +125,11 @@ public:
     // ::com::sun::star::awt::XFocusListener
     virtual void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent & rEvt ) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent & rEvt ) throw( ::com::sun::star::uno::RuntimeException );
-
+    
     // ::com::sun::star::lang::XComponent
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & l ) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & l ) throw( ::com::sun::star::uno::RuntimeException );
-
+    
     virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
 
     // ::com::sun::star::awt::XView
@@ -136,44 +137,44 @@ public:
     { return sal_False; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > SAL_CALL getGraphics(void) throw( ::com::sun::star::uno::RuntimeException )
     { return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > (); }
-
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize(void) throw( ::com::sun::star::uno::RuntimeException )
+    
+    virtual ::com::sun::star::awt::Size	SAL_CALL getSize(void) throw( ::com::sun::star::uno::RuntimeException )
     { return ::com::sun::star::awt::Size(_nWidth, _nHeight); }
-
+    
     virtual void SAL_CALL draw( sal_Int32 x, sal_Int32 y ) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setZoom( float ZoomX, float ZoomY ) throw( ::com::sun::star::uno::RuntimeException );
 
 public:
                                 PluginControl_Impl();
-    virtual                     ~PluginControl_Impl();
-
+    virtual						~PluginControl_Impl();
+    
     MRCListenerMultiplexerHelper* getMultiplexer();
 
 protected:
-    void                        releasePeer();
-
+    void						releasePeer();
+    
 protected:
-    ::std::list< Reference< ::com::sun::star::lang::XEventListener > >  _aDisposeListeners;
-    MRCListenerMultiplexerHelper*       _pMultiplexer;
+    ::std::list< Reference< ::com::sun::star::lang::XEventListener > >	_aDisposeListeners;
+    MRCListenerMultiplexerHelper*		_pMultiplexer;
 
-    Reference< XInterface >                         _xContext;
+    Reference< XInterface > 						_xContext;
+    
+    sal_Int32								_nX;
+    sal_Int32								_nY;
+    sal_Int32								_nWidth;
+    sal_Int32								_nHeight;
+    sal_Int16								_nFlags;
+    
+    sal_Bool								_bVisible;
+    sal_Bool								_bInDesignMode;
+    sal_Bool								_bEnable;
+    
+    SystemChildWindow*					_pSysChild;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > 						_xPeer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > 							_xPeerWindow;
 
-    sal_Int32                               _nX;
-    sal_Int32                               _nY;
-    sal_Int32                               _nWidth;
-    sal_Int32                               _nHeight;
-    sal_Int16                               _nFlags;
-
-    sal_Bool                                _bVisible;
-    sal_Bool                                _bInDesignMode;
-    sal_Bool                                _bEnable;
-
-    SystemChildWindow*                  _pSysChild;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >                      _xPeer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                          _xPeerWindow;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                          _xParentWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >                      _xParentPeer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > 							_xParentWindow;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > 						_xParentPeer;
 };
 
 #endif

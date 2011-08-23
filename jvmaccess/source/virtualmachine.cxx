@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
     JNIEnv * pEnv;
     jint n = m_pVm->GetEnv(reinterpret_cast< void ** >(&pEnv), m_nVersion);
     if (n != JNI_OK && n != JNI_EDETACHED) {
-        OSL_FAIL("JNI: GetEnv failed");
+        OSL_ENSURE(false, "JNI: GetEnv failed");
     }
     if (pEnv == 0)
     {
@@ -119,7 +119,7 @@ void VirtualMachine::detachThread() const
 {
 #ifdef SOLAR_JAVA
     if (m_pVm->DetachCurrentThread() != JNI_OK) {
-        OSL_FAIL("JNI: DetachCurrentThread failed");
+        OSL_ENSURE(false, "JNI: DetachCurrentThread failed");
     }
 #endif
 }

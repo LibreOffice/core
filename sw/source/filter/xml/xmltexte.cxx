@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
     SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
     const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
-    return  pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTxtNode();
+    return	pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTxtNode();
 }
 
 void SwXMLTextParagraphExport::exportStyleContent(
@@ -227,7 +227,7 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
     SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
     if( !pGrfNd->IsGrfLink() )
     {
-        String aNewURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.Package:") );
+        String aNewURL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.Package:") );
         aNewURL += String(rURL);
         pGrfNd->SetNewStreamName( aNewURL );
 
@@ -236,6 +236,13 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
         pGrfNd->SwapOut();
     }
 }
+/*
+static void lcl_addParam ( SvXMLExport &rExport, const SvCommand &rCommand )
+{
+    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rCommand.GetCommand() );
+    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, rCommand.GetArgument() );
+    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
+}*/
 
 static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
                          sal_Bool bToRel = sal_True )
@@ -285,18 +292,22 @@ void lcl_addOutplaceProperties(
         if( aSize.Width() && aSize.Height() )
         {
             Any aAny;
+            //aAny <<= (sal_Int32)rVisArea.Left();
             aAny <<= 0L;
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), aAny );
             pStates++;
 
+            //aAny <<= (sal_Int32)rVisArea.Top();
             aAny <<= 0L;
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), aAny );
             pStates++;
 
+            //aAny <<= (sal_Int32)rVisArea.GetWidth();
             aAny <<= (sal_Int32)aSize.Width();
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), aAny );
             pStates++;
 
+            //aAny <<= (sal_Int32)rVisArea.GetHeight();
             aAny <<= (sal_Int32)aSize.Height();
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), aAny );
             pStates++;
@@ -509,7 +520,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 catch( uno::Exception )
                 {
                     // TODO/LATER: error handling
-                    OSL_FAIL( "Link detection or retrieving of the URL of OOo link is failed!\n" );
+                    DBG_ERROR( "Link detection or retrieving of the URL of OOo link is failed!\n" );
                 }
             }
 
@@ -594,7 +605,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 while ( i > 0 )
                 {
                     beans::PropertyValue& aProp = aProps[--i];
-                    sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_True );
+                    USHORT nType2 = SwApplet_Impl::GetOptionType( aProp.Name, TRUE );
                     if ( nType2 == SWHTML_OPTTYPE_TAG)
                     {
                         ::rtl::OUString aStr2;
@@ -690,7 +701,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     while ( i > 0 )
                     {
                         beans::PropertyValue& aProp = aProps[--i];
-                        sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_True );
+                        USHORT nType2 = SwApplet_Impl::GetOptionType( aProp.Name, TRUE );
                         if (SWHTML_OPTTYPE_PARAM == nType2 || SWHTML_OPTTYPE_SIZE == nType2 )
                         {
                             ::rtl::OUString aStr;
@@ -716,7 +727,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     while ( i > 0 )
                     {
                         beans::PropertyValue& aProp = aProps[--i];
-                        sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_False );
+                        USHORT nType2 = SwApplet_Impl::GetOptionType( aProp.Name, FALSE );
                         if ( nType2 == SWHTML_OPTTYPE_TAG)
                         {
                             ::rtl::OUString aStr;
@@ -752,7 +763,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
 
     // Lastly the stuff common to each of Applet/Plugin/Floating Frame
     exportEvents( rPropSet );
-    exportTitleAndDescription( rPropSet, rPropSetInfo );  // #i73249#
+    // --> OD 2009-07-22 #i73249#
+    exportTitleAndDescription( rPropSet, rPropSetInfo );
+    // <--
     exportContour( rPropSet, rPropSetInfo );
 }
 

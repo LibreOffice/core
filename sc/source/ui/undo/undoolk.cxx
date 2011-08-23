@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ SdrUndoAction* GetSdrUndoAction( ScDocument* pDoc )
 {
     ScDrawLayer* pLayer = pDoc->GetDrawLayer();
     if (pLayer)
-        return pLayer->GetCalcUndo();               // muss vorhanden sein
+        return pLayer->GetCalcUndo();				// muss vorhanden sein
     else
         return NULL;
 }
@@ -58,7 +58,7 @@ void DoSdrUndoAction( SdrUndoAction* pUndoAction, ScDocument* pDoc )
         pUndoAction->Undo();
     else
     {
-        // if no drawing layer existed when the action was created,
+        // #125875# if no drawing layer existed when the action was created,
         // but it was created after that, there is no draw undo action,
         // and after undo there might be a drawing layer with a wrong page count.
         // The drawing layer must have been empty in that case, so any missing
@@ -81,7 +81,7 @@ void DoSdrUndoAction( SdrUndoAction* pUndoAction, ScDocument* pDoc )
 
 void RedoSdrUndoAction( SdrUndoAction* pUndoAction )
 {
-    // DoSdrUndoAction/RedoSdrUndoAction is called even if the pointer is null
+    // #125875# DoSdrUndoAction/RedoSdrUndoAction is called even if the pointer is null
 
     if ( pUndoAction )
         pUndoAction->Redo();
@@ -92,7 +92,7 @@ void DeleteSdrUndoAction( SdrUndoAction* pUndoAction )
     delete pUndoAction;
 }
 
-void EnableDrawAdjust( ScDocument* pDoc, sal_Bool bEnable )
+void EnableDrawAdjust( ScDocument* pDoc, BOOL bEnable )
 {
     ScDrawLayer* pLayer = pDoc->GetDrawLayer();
     if (pLayer)

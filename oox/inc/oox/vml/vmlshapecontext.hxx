@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,12 +34,10 @@
 namespace oox {
 namespace vml {
 
-class Drawing;
-
 struct ShapeTypeModel;
 class ShapeType;
 
-struct ClientData;
+struct ShapeClientData;
 struct ShapeModel;
 class ShapeBase;
 class GroupShape;
@@ -49,38 +47,20 @@ class ShapeContainer;
 
 // ============================================================================
 
-class ShapeLayoutContext : public ::oox::core::ContextHandler2
+class ShapeClientDataContext : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            ShapeLayoutContext(
+    explicit            ShapeClientDataContext(
                             ::oox::core::ContextHandler2Helper& rParent,
-                            Drawing& rDrawing );
+                            const AttributeList& rAttribs,
+                            ShapeClientData& rClientData );
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
 
 private:
-    Drawing&            mrDrawing;
-};
-
-// ============================================================================
-
-class ClientDataContext : public ::oox::core::ContextHandler2
-{
-public:
-    explicit            ClientDataContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            ClientData& rClientData,
-                            const AttributeList& rAttribs );
-
-    virtual ::oox::core::ContextHandlerRef
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
-    virtual void        onEndElement();
-
-private:
-    ClientData&         mrClientData;
-    ::rtl::OUString     maElementText;
+    ShapeClientData&    mrClientData;
 };
 
 // ============================================================================
@@ -91,9 +71,9 @@ public:
     static ::oox::core::ContextHandlerRef
                         createShapeContext(
                             ::oox::core::ContextHandler2Helper& rParent,
-                            ShapeContainer& rShapes,
                             sal_Int32 nElement,
-                            const AttributeList& rAttribs );
+                            const AttributeList& rAttribs,
+                            ShapeContainer& rShapes );
 
 protected:
     explicit            ShapeContextBase( ::oox::core::ContextHandler2Helper& rParent );
@@ -106,8 +86,8 @@ class ShapeTypeContext : public ShapeContextBase
 public:
     explicit            ShapeTypeContext(
                             ::oox::core::ContextHandler2Helper& rParent,
-                            ShapeType& rShapeType,
-                            const AttributeList& rAttribs );
+                            const AttributeList& rAttribs,
+                            ShapeType& rShapeType );
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -130,8 +110,8 @@ class ShapeContext : public ShapeTypeContext
 public:
     explicit            ShapeContext(
                             ::oox::core::ContextHandler2Helper& rParent,
-                            ShapeBase& rShape,
-                            const AttributeList& rAttribs );
+                            const AttributeList& rAttribs,
+                            ShapeBase& rShape );
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -154,8 +134,8 @@ class GroupShapeContext : public ShapeContext
 public:
     explicit            GroupShapeContext(
                             ::oox::core::ContextHandler2Helper& rParent,
-                            GroupShape& rShape,
-                            const AttributeList& rAttribs );
+                            const AttributeList& rAttribs,
+                            GroupShape& rShape );
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );

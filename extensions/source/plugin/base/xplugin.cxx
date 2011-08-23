@@ -33,13 +33,6 @@
 #include <sys/timer.h>
 #undef _LINUX_SOURCE_COMPAT
 #endif
-
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#undef OPTIONAL
-#endif
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
@@ -67,10 +60,8 @@ using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::plugin;
+using namespace rtl;
 using namespace osl;
-
-using ::rtl::OUString;
-using ::rtl::OString;
 
 class PluginDisposer : public salhelper::Timer
 {
@@ -93,7 +84,7 @@ void PluginDisposer::onShot()
     {
         if( m_pPlugin->isDisposable() )
         {
-            sal_uLong nEvent;
+            ULONG nEvent;
             Application::PostUserEvent( nEvent, LINK( m_pPlugin, XPlugin_Impl, secondLevelDispose ), (void*)m_pPlugin );
         }
     }
@@ -292,14 +283,14 @@ void XPlugin_Impl::freeArgs()
 
 void XPlugin_Impl::prependArg( const char* pName, const char* pValue )
 {
-    const char** pNewNames      = new const char*[m_nArgs+1];
-    const char** pNewValues = new const char*[m_nArgs+1];
+    const char** pNewNames		= new const char*[m_nArgs+1];
+    const char** pNewValues	= new const char*[m_nArgs+1];
 
-    pNewNames[0]        = strdup( pName );
-    pNewValues[0]       = strdup( pValue );
+    pNewNames[0]		= strdup( pName );
+    pNewValues[0]		= strdup( pValue );
     for( int nIndex = 0; nIndex < m_nArgs; ++nIndex )
     {
-        pNewNames[nIndex+1] = m_pArgn[nIndex];
+        pNewNames[nIndex+1]	= m_pArgn[nIndex];
         pNewValues[nIndex+1]= m_pArgv[nIndex];
     }
     // free old arrays
@@ -343,23 +334,23 @@ void XPlugin_Impl::handleSpecialArgs()
             m_pArgv = new const char*[m_nArgs];
 
             // SRC
-            m_pArgn[0]      = strdup( "SRC" );
-            m_pArgv[0]      = strdup( OUStringToOString( aURL, m_aEncoding ).getStr() );
+            m_pArgn[0]		= strdup( "SRC" );
+            m_pArgv[0]		= strdup( OUStringToOString( aURL, m_aEncoding ).getStr() );
             // WIDTH
-            m_pArgn[1]      = strdup( "WIDTH" );
-            m_pArgv[1]      = strdup( "200" );
+            m_pArgn[1]		= strdup( "WIDTH" );
+            m_pArgv[1]		= strdup( "200" );
             // HEIGHT
-            m_pArgn[2]      = strdup( "HEIGHT" );
-            m_pArgv[2]      = strdup( "200" );
+            m_pArgn[2]		= strdup( "HEIGHT" );
+            m_pArgv[2]		= strdup( "200" );
             // CONTROLS
-            m_pArgn[3]      = strdup( "CONTROLS" );
-            m_pArgv[3]      = strdup( "PlayButton,StopButton,ImageWindow" );
+            m_pArgn[3]		= strdup( "CONTROLS" );
+            m_pArgv[3]		= strdup( "PlayButton,StopButton,ImageWindow" );
             // AUTOSTART
-            m_pArgn[4]      = strdup( "AUTOSTART" );
-            m_pArgv[4]      = strdup( "TRUE" );
+            m_pArgn[4]		= strdup( "AUTOSTART" );
+            m_pArgv[4]		= strdup( "TRUE" );
             // NOJAVA
-            m_pArgn[5]      = strdup( "NOJAVA" );
-            m_pArgv[5]      = strdup( "TRUE" );
+            m_pArgn[5]		= strdup( "NOJAVA" );
+            m_pArgv[5]		= strdup( "TRUE" );
         }
     }
     // #69333# special for pdf
@@ -470,7 +461,7 @@ OUString XPlugin_Impl::getCreationURL()
     uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     if( xPS.is() )
     {
-        Any aValue = xPS->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) );
+        Any aValue = xPS->getPropertyValue( OUString::createFromAscii( "URL" ) );
         aValue >>= aRet;
     }
     return aRet;
@@ -557,7 +548,7 @@ void XPlugin_Impl::loadPlugin()
             return;
     }
 
-    getPluginComm()->
+    NPError aError = getPluginComm()->
         NPP_New( (char*)OUStringToOString( m_aDescription.Mimetype,
                                                   m_aEncoding).getStr(),
                  getNPPInstance(),
@@ -604,7 +595,7 @@ void XPlugin_Impl::loadPlugin()
     m_aNPWindow.width   = aPosSize.Width ? aPosSize.Width : 600;
     m_aNPWindow.height  = aPosSize.Height ? aPosSize.Height : 600;
 
-    getPluginComm()->NPP_SetWindow( this );
+    aError = getPluginComm()->NPP_SetWindow( this );
 }
 
 void XPlugin_Impl::destroyStreams()
@@ -658,9 +649,9 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
         {
             try
             {
-                xPS->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("URL")), aAny );
+                xPS->setPropertyValue( OUString::createFromAscii( "URL" ), aAny );
                 aAny <<= mimetype;
-                xPS->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE")), aAny );
+                xPS->setPropertyValue( OUString::createFromAscii( "TYPE" ), aAny );
             }
             catch(...)
             {
@@ -722,7 +713,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
              {
                  Any aAny;
                  aAny <<= m_aDescription.Mimetype;
-                 xPS->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE")), aAny );
+                 xPS->setPropertyValue( OUString::createFromAscii( "TYPE" ), aAny );
              }
              catch(...)
              {
@@ -732,8 +723,22 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
      // there may be plugins that can use the file length information,
      // but currently none are known. Since this file opening/seeking/closing
-     // is rather costly, it is not implemented. If there are plugins known to
+     // is rather costly, it is #if'ed out. If there are plugins known to
      // make use of the file length, simply put it in
+#if 0
+    if( isfile && ! length )
+    {
+        osl::File aFile( url );
+        if( aFile.open( OpenFlag_Read ) == FileBase::E_None )
+        {
+            aFile.setPos( Pos_End, 0 );
+            sal_uInt64 nPos = 0;
+            if( aFile.getPos( nPos ) == FileBase::E_None )
+                length = nPos;
+            aFile.close();
+        }
+    }
+#endif
 
      PluginInputStream* pStream = new PluginInputStream( this, aURL.getStr(),
                                                         length, lastmodified );
@@ -870,14 +875,14 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
 
     PluginControl_Impl::setPosSize(nX_, nY_, nWidth_, nHeight_, nFlags);
 
-    m_aNPWindow.x                   = 0;
-    m_aNPWindow.y                   = 0;
-    m_aNPWindow.width               = nWidth_;
-    m_aNPWindow.height              = nHeight_;
-    m_aNPWindow.clipRect.top        = 0;
-    m_aNPWindow.clipRect.left       = 0;
-    m_aNPWindow.clipRect.right      = ::sal::static_int_cast< uint16, sal_Int32 >( nWidth_ );
-    m_aNPWindow.clipRect.bottom     = ::sal::static_int_cast< uint16, sal_Int32 >( nHeight_ );
+    m_aNPWindow.x       			= 0;
+    m_aNPWindow.y       			= 0;
+    m_aNPWindow.width   			= nWidth_;
+    m_aNPWindow.height  			= nHeight_;
+    m_aNPWindow.clipRect.top		= 0;
+    m_aNPWindow.clipRect.left		= 0;
+    m_aNPWindow.clipRect.right		= ::sal::static_int_cast< uint16, sal_Int32 >( nWidth_ );
+    m_aNPWindow.clipRect.bottom		= ::sal::static_int_cast< uint16, sal_Int32 >( nHeight_ );
 
     if( getPluginComm() )
         getPluginComm()->NPP_SetWindow( this );
@@ -885,7 +890,7 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
 
 PluginDescription XPlugin_Impl::fitDescription( const OUString& rURL )
 {
-    uno::Reference< XPluginManager >  xPMgr( m_xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager")) ), UNO_QUERY );
+    uno::Reference< XPluginManager >  xPMgr( m_xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.plugin.PluginManager" ) ), UNO_QUERY );
     if( !xPMgr.is() )
     {
         m_nProvidingState = PROVIDING_NONE;
@@ -991,7 +996,7 @@ PluginInputStream::~PluginInputStream()
     {
         ByteString aFileName( aFile, m_pPlugin->getTextEncoding() );
         if( m_pPlugin->getPluginComm() && m_nMode != -1 )
-            // mode -1 means either an error occurred,
+            // mode -1 means either an error occured,
             // or the plugin is already disposing
         {
             m_pPlugin->getPluginComm()->addFileToDelete( aFile );
@@ -1027,7 +1032,7 @@ void PluginInputStream::load()
     aUrl.SetSmartProtocol( INET_PROT_FILE );
     aUrl.SetSmartURL(
         String( getStream()->url,
-                ::sal::static_int_cast< sal_uInt16, size_t >( strlen( getStream()->url ) ),
+                ::sal::static_int_cast< USHORT, size_t >( strlen( getStream()->url ) ),
                 RTL_TEXTENCODING_MS_1252
             ) );
     try
@@ -1072,8 +1077,8 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
     if( m_nMode == -1 || !m_pPlugin->getPluginComm() )
         return;
 
-    sal_uInt32 nPos = m_aFileStream.Tell();
-    sal_uInt32 nBytes = 0;
+    UINT32 nPos = m_aFileStream.Tell();
+    UINT32 nBytes = 0;
     while( m_nMode != NP_ASFILEONLY &&
            m_nWritePos < nPos &&
            (nBytes = m_pPlugin->getPluginComm()-> NPP_WriteReady(
@@ -1135,7 +1140,7 @@ PluginOutputStream::PluginOutputStream( XPlugin_Impl* pPlugin,
                                         sal_uInt32 len,
                                         sal_uInt32 lastmod ) :
         PluginStream( pPlugin, url, len, lastmod ),
-        m_xStream( pPlugin->getServiceManager()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataOutputStream")) ), UNO_QUERY )
+        m_xStream( pPlugin->getServiceManager()->createInstance( OUString::createFromAscii( "com.sun.star.io.DataOutputStream" ) ), UNO_QUERY )
 {
     Guard< Mutex > aGuard( m_pPlugin->getMutex() );
 

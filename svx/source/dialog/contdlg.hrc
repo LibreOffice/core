@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,52 +27,53 @@
 #include <svx/dialogs.hrc>
 
 
-// ImapDlg dialog
-#define RID_SVX_CONTOURDLG_START    RID_SVX_CONTOUR_START
+// ImapDlg-Dialoge
+#define	RID_SVX_CONTOURDLG_START	RID_SVX_CONTOUR_START
 
 
 /******************************************************************************/
 
 
-#define RID_SVXDLG_CONTOUR      (RID_SVX_CONTOURDLG_START)
+#define RID_SVXDLG_CONTOUR		(RID_SVX_CONTOURDLG_START)
 
-#define TBX1                    1
-#define TBI_APPLY               1
+#define TBX1					1
+#define TBI_APPLY				1
 
-#define TBI_WORKPLACE           2
+#define TBI_WORKPLACE			2
 
-#define TBI_SELECT              5
-#define TBI_RECT                6
-#define TBI_CIRCLE              7
-#define TBI_POLY                8
-#define TBI_FREEPOLY            9
+#define TBI_SELECT				5
+#define TBI_RECT				6
+#define TBI_CIRCLE				7
+#define TBI_POLY				8
+#define TBI_FREEPOLY			9
 
-#define TBI_POLYEDIT            15
-#define TBI_POLYMOVE            16
-#define TBI_POLYINSERT          17
-#define TBI_POLYDELETE          18
+#define TBI_POLYEDIT			15
+#define TBI_POLYMOVE			16
+#define TBI_POLYINSERT			17
+#define TBI_POLYDELETE			18
 
-#define TBI_UNDO                20
-#define TBI_REDO                21
+#define TBI_UNDO				20
+#define TBI_REDO				21
 
-#define TBI_AUTOCONTOUR         25
-#define TBI_PIPETTE             26
+#define TBI_AUTOCONTOUR			25
+#define TBI_PIPETTE				26
 
-#define MTF_TOLERANCE           1
+#define MTF_TOLERANCE			1
 
-#define CTL_CONTOUR             1
+#define CTL_CONTOUR				1
 
-#define STB_STATUS              1
+#define STB_STATUS				1
 
-#define CD_IMAPDLG              1300
+#define CD_IMAPDLG				1300
+#define CDH_IMAPDLG				1301
 
 
 /******************************************************************************/
 
-#define STR_CONTOURDLG_MODIFY       (RID_SVX_CONTOURDLG_START + 2)
-#define STR_CONTOURDLG_NEWPIPETTE   (RID_SVX_CONTOURDLG_START + 3)
-#define STR_CONTOURDLG_WORKPLACE    (RID_SVX_CONTOURDLG_START + 4)
-#define STR_CONTOURDLG_LINKED       (RID_SVX_CONTOURDLG_START + 5)
+#define STR_CONTOURDLG_MODIFY		(RID_SVX_CONTOURDLG_START + 2)
+#define STR_CONTOURDLG_NEWPIPETTE	(RID_SVX_CONTOURDLG_START + 3)
+#define STR_CONTOURDLG_WORKPLACE	(RID_SVX_CONTOURDLG_START + 4)
+#define STR_CONTOURDLG_LINKED		(RID_SVX_CONTOURDLG_START + 5)
 
 /******************************************************************************/
 

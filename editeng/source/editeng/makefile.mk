@@ -30,14 +30,19 @@ PRJNAME=editeng
 TARGET=editeng
 AUTOSEG=true
 
+#PROJECTPCH4DLL=TRUE
+#PROJECTPCH=eeng_pch
+#PROJECTPCHSOURCE=eeng_pch
+
 ENABLE_EXCEPTIONS=TRUE
+
 
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-# --- General ----------------------------------------------------------
+# --- Allgemein ----------------------------------------------------------
 
 .IF "$(editdebug)" != "" || "$(EDITDEBUG)" != ""
 CDEFS+=-DEDITDEBUG

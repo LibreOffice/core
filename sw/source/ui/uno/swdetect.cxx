@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,6 +113,7 @@ SwFilterDetect::~SwFilterDetect()
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
     sal_Int32 nPropertyCount = lDescriptor.getLength();
+    sal_Int32 nIndexOfFilterName = -1;
     sal_Int32 nIndexOfInputStream = -1;
     sal_Int32 nIndexOfContent = -1;
     sal_Int32 nIndexOfReadOnlyFlag = -1;
@@ -142,6 +143,10 @@ SwFilterDetect::~SwFilterDetect()
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aPreselectedFilterName = sTemp;
+
+            // if the preselected filter name is not correct, it must be erased after detection
+            // remember index of property to get access to it later
+            nIndexOfFilterName = nProperty;
         }
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
             nIndexOfInputStream = nProperty;
@@ -165,12 +170,14 @@ SwFilterDetect::~SwFilterDetect()
             nIndexOfDocumentTitle = nProperty;
     }
 
+    // can't check the type for external filters, so set the "dont" flag accordingly
     SolarMutexGuard aGuard;
+    //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
 
     SfxApplication* pApp = SFX_APP();
     SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
     TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
 
     bWasReadOnly = pItem && pItem->GetValue();
 
@@ -183,14 +190,15 @@ SwFilterDetect::~SwFilterDetect()
             String aPattern( aPrefix );
             aPattern += String::CreateFromAscii("swriter");
             if ( aURL.Match( aPattern ) >= aPattern.Len() )
+                //pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
                 return aTypeName;
         }
     }
     else
     {
         // ctor of SfxMedium uses owner transition of ItemSet
-        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, sal_False, NULL, pSet );
-        aMedium.UseInteractionHandler( sal_True );
+        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
+        aMedium.UseInteractionHandler( TRUE );
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
             // remember input stream and content and put them into the descriptor later
@@ -199,7 +207,7 @@ SwFilterDetect::~SwFilterDetect()
             xContent = aMedium.GetContent();
             bReadOnly = aMedium.IsReadOnly();
 
-            sal_Bool bIsStorage = aMedium.IsStorage();
+            BOOL bIsStorage = aMedium.IsStorage();
             if ( bIsStorage )
             {
                 uno::Reference< embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
@@ -245,7 +253,7 @@ SwFilterDetect::~SwFilterDetect()
                             aTypeName = pPreFilter->GetTypeName();
                         }
 
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pPreFilter ? pPreFilter->IsOwnTemplateFormat() : sal_False, &aFilterName );
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pPreFilter ? pPreFilter->IsOwnTemplateFormat() : FALSE, &aFilterName );
                     }
                     catch( lang::WrappedTargetException& aWrap )
                     {
@@ -267,17 +275,18 @@ SwFilterDetect::~SwFilterDetect()
                                 if ( !bRepairPackage )
                                 {
                                     // ask the user whether he wants to try to repair
-                                    RequestPackageReparation aRequest( aDocumentTitle );
-                                    xInteraction->handle( aRequest.GetRequest() );
-                                    bRepairAllowed = aRequest.isApproved();
+                                    RequestPackageReparation* pRequest = new RequestPackageReparation( aDocumentTitle );
+                                    uno::Reference< task::XInteractionRequest > xRequest ( pRequest );
+                                    xInteraction->handle( xRequest );
+                                    bRepairAllowed = pRequest->isApproved();
                                 }
 
                                 if ( !bRepairAllowed )
                                 {
                                     // repair either not allowed or not successful
-                                    // repair either not allowed or not successful
-                                    NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
-                                    xInteraction->handle( aNotifyRequest.GetRequest() );
+                                    NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
+                                    uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
+                                    xInteraction->handle( xRequest );
 
                                     rtl::Reference< ::comphelper::OIHWrapNoFilterDialog > xHandler = new ::comphelper::OIHWrapNoFilterDialog( xInteraction );
                                     if ( nIndexOfInteractionHandler != -1 )
@@ -318,9 +327,9 @@ SwFilterDetect::~SwFilterDetect()
                     else
                         pFilter = SfxFilterMatcher().GetFilter4EA( aTypeName );
 
-                    sal_Bool bTestWriter = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.TextDocument") ||
+                    BOOL bTestWriter = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.TextDocument") ||
                         pFilter->GetServiceName().EqualsAscii("com.sun.star.text.WebDocument");
-                    sal_Bool bTestGlobal = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.GlobalDocument");
+                    BOOL bTestGlobal = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.GlobalDocument");
 
                     const SfxFilter* pOrigFilter = NULL;
                     if ( !bTestWriter && !bTestGlobal && pFilter )
@@ -330,10 +339,10 @@ SwFilterDetect::~SwFilterDetect()
                         // example: HTML filter for Calc
                         pOrigFilter = pFilter;
                         pFilter = SfxFilterMatcher().GetFilter4EA( pFilter->GetTypeName() );
-                        bTestWriter = sal_True;
+                        bTestWriter = TRUE;
                     }
 
-                    sal_uLong nErr = ERRCODE_NONE;
+                    ULONG nErr = ERRCODE_NONE;
                     if ( pFilter || bTestWriter )
                         nErr = DetectFilter( aMedium, &pFilter );
                     if ( nErr != ERRCODE_NONE )

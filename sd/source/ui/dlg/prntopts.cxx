@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 
 /*************************************************************************
 |*
-|*  Dialog zum Aendern der Print-Optionen
+|*	Dialog zum Aendern der Print-Optionen
 |*
 \************************************************************************/
 
@@ -81,7 +81,7 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
 
         aCbxPaperbin            ( this, SdResId( CBX_PAPERBIN ) ),
 
-        rOutAttrs               ( rInAttrs )
+        rOutAttrs				( rInAttrs )
 {
     FreeResource();
 
@@ -100,9 +100,6 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
 #ifndef QUARTZ
     SetDrawMode();
 #endif
-
-    aCbxFront.SetAccessibleRelationLabeledBy( &aRbtBooklet );
-    aCbxBack.SetAccessibleRelationLabeledBy( &aRbtBooklet );
 }
 
 // -----------------------------------------------------------------------
@@ -113,7 +110,7 @@ SdPrintOptions::~SdPrintOptions()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
+BOOL SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 {
     if( aCbxDraw.GetSavedValue() != aCbxDraw.IsChecked() ||
         aCbxNotes.GetSavedValue() != aCbxNotes.IsChecked() ||
@@ -150,7 +147,7 @@ sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
         aOptions.GetOptionsPrint().SetBackPage( aCbxBack.IsChecked() );
         aOptions.GetOptionsPrint().SetPaperbin( aCbxPaperbin.IsChecked() );
 
-        sal_uInt16 nQuality = 0; // Standard, also Color
+        UINT16 nQuality = 0; // Standard, also Color
         if( aRbtGrayscale.IsChecked() )
             nQuality = 1;
         if( aRbtBlackWhite.IsChecked() )
@@ -159,9 +156,9 @@ sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 
         rAttrs.Put( aOptions );
 
-        return( sal_True );
+        return( TRUE );
     }
-    return( sal_False );
+    return( FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -169,7 +166,7 @@ sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
 {
     const SdOptionsPrintItem* pPrintOpts = NULL;
-    if( SFX_ITEM_SET == rAttrs.GetItemState( ATTR_OPTIONS_PRINT, sal_False,
+    if( SFX_ITEM_SET == rAttrs.GetItemState( ATTR_OPTIONS_PRINT, FALSE,
                             (const SfxPoolItem**) &pPrintOpts ) )
     {
         aCbxDraw.Check(              pPrintOpts->GetOptionsPrint().IsDraw() );
@@ -185,7 +182,7 @@ void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
         aRbtBooklet.Check(           pPrintOpts->GetOptionsPrint().IsBooklet() );
         aCbxFront.Check(             pPrintOpts->GetOptionsPrint().IsFrontPage() );
         aCbxBack.Check(              pPrintOpts->GetOptionsPrint().IsBackPage() );
-        aCbxPaperbin.Check(          pPrintOpts->GetOptionsPrint().IsPaperbin() );
+        aCbxPaperbin.Check(    		 pPrintOpts->GetOptionsPrint().IsPaperbin() );
 
         if( !aRbtPagesize.IsChecked() &&
             !aRbtPagetile.IsChecked() &&
@@ -194,7 +191,7 @@ void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
             aRbtDefault.Check();
         }
 
-        sal_uInt16 nQuality = pPrintOpts->GetOptionsPrint().GetOutputQuality();
+        UINT16 nQuality = pPrintOpts->GetOptionsPrint().GetOutputQuality();
         if( nQuality == 0 )
             aRbtColor.Check();
         else if( nQuality == 1 )
@@ -260,6 +257,9 @@ void SdPrintOptions::updateControls()
     aCbxPagename.Enable( !aRbtBooklet.IsChecked() && (aCbxDraw.IsChecked() || aCbxNotes.IsChecked() || aCbxOutline.IsChecked()) );
 }
 
+/* -----------------------------04.05.01 10:53--------------------------------
+
+ ---------------------------------------------------------------------------*/
 void lcl_MoveRB_Impl(Window& rBtn, long nXDiff)
 {
     Point aPos(rBtn.GetPosPixel());
@@ -291,8 +291,8 @@ void    SdPrintOptions::SetDrawMode()
     }
 }
 
-void SdPrintOptions::PageCreated (SfxAllItemSet
-#ifdef QUARTZ
+void SdPrintOptions::PageCreated (SfxAllItemSet 
+#ifdef QUARTZ 
                                   aSet
 #endif
                                   )
@@ -301,7 +301,7 @@ void SdPrintOptions::PageCreated (SfxAllItemSet
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG,sal_False);
     if (pFlagItem)
     {
-        sal_uInt32 nFlags=pFlagItem->GetValue();
+        UINT32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SD_DRAW_MODE ) == SD_DRAW_MODE )
             SetDrawMode();
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,10 @@
 
 /*************************************************************************
 |*
-|*  SwRect::SwRect()
+|*	SwRect::SwRect()
+|*
+|*	Ersterstellung		MA 02. Feb. 93
+|*	Letzte Aenderung	MA 05. Sep. 93
 |*
 |*************************************************************************/
 
@@ -56,18 +59,31 @@ SwRect::SwRect( const Rectangle &rRect ) :
 
 /*************************************************************************
 |*
-|*  SwRect::Center()
+|*	SwRect::Center()
+|*
+|*	Ersterstellung		MA 27. Jan. 93
+|*	Letzte Aenderung	MA 27. Jan. 93
 |*
 |*************************************************************************/
 Point SwRect::Center() const
 {
     return Point( Left() + Width()  / 2,
                   Top()  + Height() / 2 );
+
+/*  Wer ruft schon ein Center auf ein "falsches" Rechteck?
+    const long nRight = Right();
+    const long nBottom= Bottom();
+    return Point( min( Left(), nRight ) + long(abs( (nRight - Left())/2) ),
+                  min( Top(),  nBottom) + long(abs( (nBottom - Top())/2)));
+*/
 }
 
 /*************************************************************************
 |*
-|*  SwRect::Union()
+|*	SwRect::Union()
+|*
+|*	Ersterstellung		MA 27. Jan. 93
+|*	Letzte Aenderung	MA 27. Jan. 93
 |*
 |*************************************************************************/
 
@@ -89,7 +105,10 @@ SwRect& SwRect::Union( const SwRect& rRect )
 }
 /*************************************************************************
 |*
-|*  SwRect::Intersection(), _Intersection()
+|*	SwRect::Intersection(), _Intersection()
+|*
+|*	Ersterstellung		MA 27. Jan. 93
+|*	Letzte Aenderung	MA 05. Sep. 93
 |*
 |*************************************************************************/
 
@@ -141,37 +160,40 @@ SwRect& SwRect::_Intersection( const SwRect& rRect )
 }
 /*************************************************************************
 |*
-|*  SwRect::IsInside()
+|*	SwRect::IsInside()
+|*
+|*	Ersterstellung		MA 27. Jan. 93
+|*	Letzte Aenderung	MA 27. Jan. 93
 |*
 |*************************************************************************/
 
 
 
-sal_Bool SwRect::IsInside( const SwRect& rRect ) const
+BOOL SwRect::IsInside( const SwRect& rRect ) const
 {
     const long nRight  = Right();
     const long nBottom = Bottom();
     const long nrRight = rRect.Right();
     const long nrBottom= rRect.Bottom();
     return (Left() <= rRect.Left()) && (rRect.Left()<= nRight)  &&
-           (Left() <= nrRight)      && (nrRight     <= nRight)  &&
-           (Top()  <= rRect.Top())  && (rRect.Top() <= nBottom) &&
-           (Top()  <= nrBottom)     && (nrBottom    <= nBottom);
+           (Left() <= nrRight)		&& (nrRight		<= nRight)  &&
+           (Top()  <= rRect.Top())	&& (rRect.Top() <= nBottom) &&
+           (Top()  <= nrBottom)		&& (nrBottom	<= nBottom);
 }
 
 
 
-sal_Bool SwRect::IsInside( const Point& rPoint ) const
+BOOL SwRect::IsInside( const Point& rPoint ) const
 {
     return    (Left()  <= rPoint.X())
            && (Top()   <= rPoint.Y())
            && (Right() >= rPoint.X())
            && (Bottom()>= rPoint.Y());
 }
-/* ---------------------------------------------------------------------------
+/* -----------------------------11.04.00 15:46--------------------------------
     mouse moving of table borders
  ---------------------------------------------------------------------------*/
-sal_Bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
+BOOL SwRect::IsNear( const Point& rPoint, long nTolerance ) const
 {
     return    IsInside(rPoint) ||
         (((Left() - nTolerance)  <= rPoint.X())
@@ -182,23 +204,29 @@ sal_Bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
 
 /*************************************************************************
 |*
-|*  SwRect::IsOver()
+|*	SwRect::IsOver()
+|*
+|*	Ersterstellung		MA 25. Feb. 94
+|*	Letzte Aenderung	MA 27. Jun. 96
 |*
 |*************************************************************************/
 
 
 
-sal_Bool SwRect::IsOver( const SwRect& rRect ) const
+BOOL SwRect::IsOver( const SwRect& rRect ) const
 {
-    return    (Top()   <= rRect.Bottom())
+    return	  (Top()   <= rRect.Bottom())
            && (Left()  <= rRect.Right())
            && (Right() >= rRect.Left())
-           && (Bottom()>= rRect.Top()) ? sal_True : sal_False;
+           && (Bottom()>= rRect.Top()) ? TRUE : FALSE;
 }
 
 /*************************************************************************
 |*
-|*  SwRect::Justify()
+|*	SwRect::Justify()
+|*
+|*	Ersterstellung		MA 10. Oct. 94
+|*	Letzte Aenderung	MA 23. Oct. 96
 |*
 |*************************************************************************/
 
@@ -254,13 +282,13 @@ long SwRect::GetLeftDistance( long nLimit ) const { return m_Point.getX() - nLim
 long SwRect::GetBottomDistance( long nLim ) const { return nLim - m_Point.getY() - m_Size.getHeight();}
 long SwRect::GetTopDistance( long nLimit ) const { return m_Point.getY() - nLimit; }
 long SwRect::GetRightDistance( long nLim ) const { return nLim - m_Point.getX() - m_Size.getWidth(); }
-sal_Bool SwRect::OverStepLeft( long nLimit ) const
+BOOL SwRect::OverStepLeft( long nLimit ) const
     { return nLimit > m_Point.getX() && m_Point.getX() + m_Size.getWidth() > nLimit; }
-sal_Bool SwRect::OverStepBottom( long nLimit ) const
+BOOL SwRect::OverStepBottom( long nLimit ) const
     { return nLimit > m_Point.getY() && m_Point.getY() + m_Size.getHeight() > nLimit; }
-sal_Bool SwRect::OverStepTop( long nLimit ) const
+BOOL SwRect::OverStepTop( long nLimit ) const
     { return nLimit > m_Point.getY() && m_Point.getY() + m_Size.getHeight() > nLimit; }
-sal_Bool SwRect::OverStepRight( long nLimit ) const
+BOOL SwRect::OverStepRight( long nLimit ) const
     { return nLimit > m_Point.getX() && m_Point.getX() + m_Size.getWidth() > nLimit; }
 void SwRect::SetLeftAndWidth( long nLeft, long nNew )
 {
@@ -291,7 +319,7 @@ void SwRect::SetLowerLeftCorner(  const Point& rNew )
 
 #if OSL_DEBUG_LEVEL > 1
 /*************************************************************************
- *                  operator<<( ostream&, SwRect&)
+ *					operator<<( ostream&, SwRect&)
  *************************************************************************/
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@
 
 // -----------------------------------------------------------------------
 
-sal_Bool SubTotal::SafePlus(double& fVal1, double fVal2)
+BOOL SubTotal::SafePlus(double& fVal1, double fVal2)
 {
-    sal_Bool bOk = sal_True;
+    BOOL bOk = TRUE;
     SAL_MATH_FPEXCEPTIONS_OFF();
     fVal1 += fVal2;
     if (!::rtl::math::isFinite(fVal1))
     {
-        bOk = false;
+        bOk = FALSE;
         if (fVal2 > 0.0)
             fVal1 = DBL_MAX;
         else
@@ -54,28 +54,28 @@ sal_Bool SubTotal::SafePlus(double& fVal1, double fVal2)
 }
 
 
-sal_Bool SubTotal::SafeMult(double& fVal1, double fVal2)
+BOOL SubTotal::SafeMult(double& fVal1, double fVal2)
 {
-    sal_Bool bOk = sal_True;
+    BOOL bOk = TRUE;
     SAL_MATH_FPEXCEPTIONS_OFF();
     fVal1 *= fVal2;
     if (!::rtl::math::isFinite(fVal1))
     {
-        bOk = false;
+        bOk = FALSE;
         fVal1 = DBL_MAX;
     }
     return bOk;
 }
 
 
-sal_Bool SubTotal::SafeDiv(double& fVal1, double fVal2)
+BOOL SubTotal::SafeDiv(double& fVal1, double fVal2)
 {
-    sal_Bool bOk = sal_True;
+    BOOL bOk = TRUE;
     SAL_MATH_FPEXCEPTIONS_OFF();
     fVal1 /= fVal2;
     if (!::rtl::math::isFinite(fVal1))
     {
-        bOk = false;
+        bOk = FALSE;
         fVal1 = DBL_MAX;
     }
     return bOk;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -146,7 +146,6 @@ class ToolBarMerger
             const ::rtl::OUString& rControlType );
 
         static void CreateToolbarItem( ToolBox* pToolbox,
-                                       CommandToInfoMap& rCommandMap,
                                        sal_uInt16 nPos,
                                        sal_uInt16 nItemId,
                                        const AddonToolbarItem& rAddonToolbarItem );

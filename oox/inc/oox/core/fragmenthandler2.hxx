@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,6 +50,8 @@ public:
     virtual void SAL_CALL acquire() throw() { FragmentHandler::acquire(); }
     virtual void SAL_CALL release() throw() { FragmentHandler::release(); }
 
+    virtual ContextHandler& queryContextHandler();
+
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
@@ -85,19 +87,18 @@ public:
 
     // oox.core.ContextHandler interface --------------------------------------
 
-    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        startRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        startRecord( sal_Int32 nRecId, RecordInputStream& rStrm );
     virtual void        endRecord( sal_Int32 nRecId );
 
     // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
-    virtual void        onEndElement();
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
 
-    virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        onStartRecord( SequenceInputStream& rStrm );
+    virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        onStartRecord( RecordInputStream& rStrm );
     virtual void        onEndRecord();
 
     // oox.core.FragmentHandler2 interface ------------------------------------

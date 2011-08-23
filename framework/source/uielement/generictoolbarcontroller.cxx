@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@
 #include <classes/fwkresid.hxx>
 #include <dispatch/uieventloghelper.hxx>
 
-#include <framework/menuconfiguration.hxx>
+#include <xml/menuconfiguration.hxx>
 #include <uielement/menubarmanager.hxx>
 
 using namespace ::com::sun::star::awt;
@@ -125,7 +125,7 @@ struct ExecuteInfo
 GenericToolbarController::GenericToolbarController( const Reference< XMultiServiceFactory >& rServiceManager,
                                                     const Reference< XFrame >&               rFrame,
                                                     ToolBox*                                 pToolbar,
-                                                    sal_uInt16                                   nID,
+                                                    USHORT                                   nID,
                                                     const ::rtl::OUString&                          aCommand ) :
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
     ,   m_pToolbar( pToolbar )
@@ -200,7 +200,7 @@ throw ( RuntimeException )
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = aArgs;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GenericToolbarController"))).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+            UiEventLogHelper(::rtl::OUString::createFromAscii("GenericToolbarController")).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs);
         Application::PostUserEvent( STATIC_LINK(0, GenericToolbarController , ExecuteHdl_Impl), pExecuteInfo );
     }
 }
@@ -217,7 +217,7 @@ throw ( RuntimeException )
     {
         m_pToolbar->EnableItem( m_nID, Event.IsEnabled );
 
-        sal_uInt16 nItemBits = m_pToolbar->GetItemBits( m_nID );
+        USHORT nItemBits = m_pToolbar->GetItemBits( m_nID );
         nItemBits &= ~TIB_CHECKABLE;
         TriState eTri = STATE_NOCHECK;
 
@@ -230,7 +230,7 @@ throw ( RuntimeException )
         {
             // Boolean, treat it as checked/unchecked
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, sal_True );
+                m_pToolbar->ShowItem( m_nID, TRUE );
             m_pToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
                 eTri = STATE_CHECK;
@@ -281,14 +281,14 @@ throw ( RuntimeException )
             }
 
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, sal_True );
+                m_pToolbar->ShowItem( m_nID, TRUE );
         }
         else if (( Event.State >>= aItemState ) && !m_bEnumCommand )
         {
             eTri = STATE_DONTKNOW;
             nItemBits |= TIB_CHECKABLE;
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, sal_True );
+                m_pToolbar->ShowItem( m_nID, TRUE );
         }
         else if ( Event.State >>= aItemVisibility )
         {
@@ -296,7 +296,7 @@ throw ( RuntimeException )
             m_bMadeInvisible = !aItemVisibility.bVisible;
         }
         else if ( m_bMadeInvisible )
-            m_pToolbar->ShowItem( m_nID, sal_True );
+            m_pToolbar->ShowItem( m_nID, TRUE );
 
         m_pToolbar->SetItemState( m_nID, eTri );
         m_pToolbar->SetItemBits( m_nID, nItemBits );
@@ -322,7 +322,7 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteI
    return 0;
 }
 
-MenuToolbarController::MenuToolbarController( const Reference< XMultiServiceFactory >& rServiceManager, const Reference< XFrame >& rFrame, ToolBox* pToolBar, sal_uInt16   nID, const rtl::OUString& aCommand, const rtl::OUString& aModuleIdentifier, const Reference< XIndexAccess >& xMenuDesc ) : GenericToolbarController( rServiceManager, rFrame, pToolBar, nID, aCommand ), m_xMenuDesc( xMenuDesc ), pMenu( NULL ), m_aModuleIdentifier( aModuleIdentifier )
+MenuToolbarController::MenuToolbarController( const Reference< XMultiServiceFactory >& rServiceManager, const Reference< XFrame >& rFrame, ToolBox* pToolBar, USHORT   nID, const rtl::OUString& aCommand, const rtl::OUString& aModuleIdentifier, const Reference< XIndexAccess >& xMenuDesc ) : GenericToolbarController( rServiceManager, rFrame, pToolBar, nID, aCommand ), m_xMenuDesc( xMenuDesc ), pMenu( NULL ), m_aModuleIdentifier( aModuleIdentifier )
 {
 }
 
@@ -339,7 +339,7 @@ MenuToolbarController::~MenuToolbarController()
         delete pMenu;
         pMenu = NULL;
     }
-
+ 
 }
 
 class Toolbarmenu : public PopupMenu
@@ -364,10 +364,10 @@ void SAL_CALL MenuToolbarController::click() throw (RuntimeException)
     createPopupWindow();
 }
 
-Reference< XWindow > SAL_CALL
+Reference< XWindow > SAL_CALL 
 MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::RuntimeException)
 {
-    if ( !pMenu )
+    if ( !pMenu ) 
     {
         Reference< XDispatchProvider > xDispatch;
         Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
@@ -382,7 +382,7 @@ MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::Runtime
 
     ::Rectangle aRect( m_pToolbar->GetItemRect( m_nID ) );
     pMenu->Execute( m_pToolbar, aRect, POPUPMENU_EXECUTE_DOWN );
-    return NULL;
+    return NULL; 
 }
 } // namespace
 

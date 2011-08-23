@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,20 +63,20 @@ namespace slideshow
 
             ENSURE_OR_THROW( mxBitmap.is(), "SlideBitmap::SlideBitmap(): Invalid bitmap" );
         }
-
+        
         bool SlideBitmap::draw( const ::cppcanvas::CanvasSharedPtr& rCanvas ) const
         {
-            ENSURE_OR_RETURN_FALSE( rCanvas && rCanvas->getUNOCanvas().is(),
+            ENSURE_OR_RETURN_FALSE( rCanvas && rCanvas->getUNOCanvas().is(), 
                                "SlideBitmap::draw(): Invalid canvas" );
 
             // selectively only copy the transformation from current viewstate,
             // don't want no clipping here.
             rendering::ViewState aViewState;
-            aViewState.AffineTransform = rCanvas->getViewState().AffineTransform;
+            aViewState.AffineTransform = rCanvas->getViewState().AffineTransform; 
 
             rendering::RenderState aRenderState;
             ::canvas::tools::initRenderState( aRenderState );
-
+            
             const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createTranslateB2DHomMatrix(maOutputPos));
             ::canvas::tools::setRenderStateTransform( aRenderState, aTranslation );
 
@@ -84,20 +84,21 @@ namespace slideshow
             {
                 if( maClipPoly.count() )
                 {
-                    // TODO(P1): Buffer the clip polygon
-                    aRenderState.Clip =
-                        ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                    // TODO(P1): Buffer the clip polygon    
+                    aRenderState.Clip = 
+                        ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( 
                             rCanvas->getUNOCanvas()->getDevice(),
                             maClipPoly );
                 }
-
-                rCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
-                                                     aViewState,
+                
+                rCanvas->getUNOCanvas()->drawBitmap( mxBitmap, 
+                                                     aViewState, 
                                                      aRenderState );
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL( rtl::OUStringToOString(
+                OSL_ENSURE( false,
+                            rtl::OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -111,7 +112,7 @@ namespace slideshow
         {
             return ::basegfx::unotools::b2ISizeFromIntegerSize2D( mxBitmap->getSize() );
         }
-
+        
         void SlideBitmap::move( const ::basegfx::B2DPoint& rNewPos )
         {
             maOutputPos = rNewPos;
@@ -121,7 +122,7 @@ namespace slideshow
         {
             maClipPoly = rClipPoly;
         }
-
+        
         ::com::sun::star::uno::Reference<
                 ::com::sun::star::rendering::XBitmap >    SlideBitmap::getXBitmap()
         {

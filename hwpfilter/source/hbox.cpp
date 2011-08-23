@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,13 +85,13 @@ hunit HBox::Height(CharShape *csty)
 
 
 // skip block
-SkipData::SkipData(hchar hch):HBox(hch)
+SkipBlock::SkipBlock(hchar hch):HBox(hch)
 {
     data_block = 0;
 }
 
 
-SkipData::~SkipData(void)
+SkipBlock::~SkipBlock(void)
 {
     delete[]data_block;
 }

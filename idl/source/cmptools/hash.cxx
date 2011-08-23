@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,18 +29,34 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idl.hxx"
 
-// C and C++ includes
+/****************** I N C L U D E S **************************************/
+// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
 
-// program-sensitive includes
+// Programmabh„ngige Includes.
 #include <hash.hxx>
 #include <tools/debug.hxx>
 
+/****************** C O D E **********************************************/
+/*************************************************************************
+|*
+|*    SvStringHashEntry::~SvStringHashEntry()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
 SvStringHashEntry::~SvStringHashEntry() { };
 
-SvHashTable::SvHashTable( sal_uInt32 nMaxEntries )
+/*************************************************************************
+|*
+|*    SvHashTable::SvHashTable()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
+SvHashTable::SvHashTable( UINT32 nMaxEntries )
 {
     nMax = nMaxEntries;     // set max entries
     nFill = 0;              // no entries
@@ -48,22 +64,45 @@ SvHashTable::SvHashTable( sal_uInt32 nMaxEntries )
     lAsk = 0;
 }
 
+/*************************************************************************
+|*
+|*    SvHashTable::~SvHashTable()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
 SvHashTable::~SvHashTable()
 {
+#ifdef DOS_NIE
+    printf( "Maximum: %ld, Fllung: %ld\n", (ULONG)nMax, (ULONG)nFill );
+    printf( "Anfragen: %ld, Versuche: %ld", (ULONG)lAsk, (ULONG)lTry );
+    if( lTry != 0 )
+        printf( ", V/E = %ld\n", lTry / lAsk );
+#endif
 }
 
-sal_Bool SvHashTable::Test_Insert( const void * pElement, sal_Bool bInsert,
-                               sal_uInt32 * pInsertPos )
+/*************************************************************************
+|*
+|*    SvHashTable::Test_Insert()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
+BOOL SvHashTable::Test_Insert( const void * pElement, BOOL bInsert,
+                               UINT32 * pInsertPos )
 {
-    sal_uInt32    nHash;
-    sal_uInt32    nIndex;
-    sal_uInt32    nLoop;
+    UINT32    nHash;
+    UINT32    nIndex;
+    UINT32    nLoop;
 
     lAsk++;
     lTry++;
 
     nHash =  HashFunc( pElement );
     nIndex = nHash % nMax;
+
+//  const char* s = ((ByteString*) pElement)->GetStr();
+//  fprintf(stderr,"### Hash: %lu , Name: %s\n",nIndex,s );
 
     nLoop = 0;                                      // divide to range
     while( (nMax != nLoop) && IsEntry( nIndex ) )
@@ -72,11 +111,11 @@ sal_Bool SvHashTable::Test_Insert( const void * pElement, sal_Bool bInsert,
         {
             if( pInsertPos )
                 *pInsertPos = nIndex;               // place of Element
-            return sal_True;
+            return TRUE;
         }
         nLoop++;
         lTry++;
-        nIndex = (sal_uInt16)(nIndex + nHash + 7) % nMax;
+        nIndex = (USHORT)(nIndex + nHash + 7) % nMax;
     }
 
     if( bInsert )
@@ -86,18 +125,30 @@ sal_Bool SvHashTable::Test_Insert( const void * pElement, sal_Bool bInsert,
         {
             nFill++;
             *pInsertPos = nIndex;                       // return free place
-            return sal_True;
+            return TRUE;
         }
     }
-    return( sal_False );
+    return( FALSE );
 }
 
-SvStringHashTable::SvStringHashTable( sal_uInt32 nMaxEntries )
+/************************************************************************/
+/*************************************************************************
+|*
+|*    SvStringHashTable::SvStringHashTable()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
+SvStringHashTable::SvStringHashTable( UINT32 nMaxEntries )
         : SvHashTable( nMaxEntries )
 {
+#ifdef WIN
+    DBG_ASSERT( (UINT32)nMaxEntries * sizeof( SvStringHashEntry ) <= 0xFF00,
+                "Hash table size cannot exeed 64k byte" )
+#endif
     pEntries = new SvStringHashEntry[ nMaxEntries ];
 
-    // set RefCount to one
+    // RefCount auf eins setzen
     SvStringHashEntry * pPos, *pEnd;
     pPos    = pEntries;
     pEnd    = pEntries + nMaxEntries;
@@ -108,13 +159,20 @@ SvStringHashTable::SvStringHashTable( sal_uInt32 nMaxEntries )
     }
 }
 
+/*************************************************************************
+|*
+|*    ~SvStringHashTable::SvStringHashTable()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
 SvStringHashTable::~SvStringHashTable()
 {
-#ifdef DBG_UTIL
-    // set RefCount to one
+    // RefCount auf eins setzen
     SvStringHashEntry * pPos, *pEnd;
     pPos    = pEntries;
     pEnd    = pEntries + GetMax();
+#ifdef DBG_UTIL
     while( pPos != pEnd )
     {
         DBG_ASSERT( pPos->GetRefCount() == 1, "Reference count != 1" );
@@ -122,21 +180,35 @@ SvStringHashTable::~SvStringHashTable()
     }
 #endif
 
+#ifdef MPW
+    // der MPW-Compiler ruft sonst keine Dtoren!
+    for ( USHORT n = 0; n < GetMax(); ++n )
+        (pEntries+n)->SvStringHashEntry::~SvStringHashEntry();
+    delete (void*) pEntries;
+#else
     delete [] pEntries;
+#endif
 }
 
-sal_uInt32 SvStringHashTable::HashFunc( const void * pElement ) const
+/*************************************************************************
+|*
+|*    SvStringHashTable::HashFunc()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
+UINT32 SvStringHashTable::HashFunc( const void * pElement ) const
 {
-    sal_uInt32          nHash = 0;  // hash value
+    UINT32          nHash = 0;  // hash value
     const char *    pStr = ((const ByteString * )pElement)->GetBuffer();
 
     int nShift = 0;
     while( *pStr )
     {
         if( isupper( *pStr ) )
-            nHash ^= sal_uInt32(*pStr - 'A' + 26) << nShift;
+            nHash ^= UINT32(*pStr - 'A' + 26) << nShift;
         else
-            nHash ^= sal_uInt32(*pStr - 'a') << nShift;
+            nHash ^= UINT32(*pStr - 'a') << nShift;
         if( nShift == 28 )
             nShift = 0;
         else
@@ -146,9 +218,16 @@ sal_uInt32 SvStringHashTable::HashFunc( const void * pElement ) const
     return( nHash );
 }
 
+/*************************************************************************
+|*
+|*    SvStringHashTable::GetNearString()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
 ByteString SvStringHashTable::GetNearString( const ByteString & rName ) const
 {
-    for( sal_uInt32 i = 0; i < GetMax(); i++ )
+    for( UINT32 i = 0; i < GetMax(); i++ )
     {
         SvStringHashEntry * pE = Get( i );
         if( pE )
@@ -160,54 +239,96 @@ ByteString SvStringHashTable::GetNearString( const ByteString & rName ) const
     return ByteString();
 }
 
-sal_Bool SvStringHashTable::IsEntry( sal_uInt32 nIndex ) const
+/*************************************************************************
+|*
+|*    SvStringHashTable::IsEntry()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
+BOOL SvStringHashTable::IsEntry( UINT32 nIndex ) const
 {
     if( nIndex >= GetMax() )
-        return sal_False;
+        return FALSE;
     return pEntries[ nIndex ].HasId();
 }
 
-sal_Bool SvStringHashTable::Insert( const ByteString & rName, sal_uInt32 * pIndex )
+/*************************************************************************
+|*
+|*    SvStringHashTable::Insert()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
+BOOL SvStringHashTable::Insert( const ByteString & rName, UINT32 * pIndex )
 {
-    sal_uInt32 nIndex;
+    UINT32 nIndex;
 
     if( !pIndex ) pIndex = &nIndex;
 
-    if( !SvHashTable::Test_Insert( &rName, sal_True, pIndex ) )
-        return sal_False;
+    if( !SvHashTable::Test_Insert( &rName, TRUE, pIndex ) )
+        return FALSE;
 
     if( !IsEntry( *pIndex ) )
         pEntries[ *pIndex ] = SvStringHashEntry( rName, *pIndex );
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SvStringHashTable::Test( const ByteString & rName, sal_uInt32 * pPos ) const
+/*************************************************************************
+|*
+|*    SvStringHashTable::Test()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
+BOOL SvStringHashTable::Test( const ByteString & rName, UINT32 * pPos ) const
 {
     return ((SvStringHashTable *)this)->SvHashTable::
-                Test_Insert( &rName, sal_False, pPos );
+                Test_Insert( &rName, FALSE, pPos );
 }
 
-SvStringHashEntry * SvStringHashTable::Get( sal_uInt32 nIndex ) const
+/*************************************************************************
+|*
+|*    SvStringHashTable::Get()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
+SvStringHashEntry * SvStringHashTable::Get( UINT32 nIndex ) const
 {
     if( IsEntry( nIndex ) )
         return pEntries + nIndex;
     return( NULL );
 }
 
+/*************************************************************************
+|*
+|*    SvStringHashTable::Get()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
 StringCompare SvStringHashTable::Compare( const void * pElement,
-                                          sal_uInt32 nIndex ) const
+                                          UINT32 nIndex ) const
 {
     return ((const ByteString *)pElement)->CompareTo( pEntries[ nIndex ].GetName() );
 }
 
+/*************************************************************************
+|*
+|*    SvStringHashTable::FillHashList()
+|*
+|*    Beschreibung
+|*
+*************************************************************************/
 void SvStringHashTable::FillHashList( SvStringHashList * pList ) const
 {
-    for( sal_uInt32 n = 0; n < GetMax(); n++ )
+    for( UINT32 n = 0; n < GetMax(); n++ )
     {
         if( IsEntry( n ) )
-            pList->push_back( Get( n ) );
+            pList->Insert( Get( n ), LIST_APPEND );
     }
-    // hash order, sort now
+    // Hash Reihenfolge, jetzt sortieren
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

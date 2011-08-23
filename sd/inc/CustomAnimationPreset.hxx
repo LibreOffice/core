@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,12 +36,12 @@
 #include <comphelper/stl_types.hxx>
 #include <CustomAnimationEffect.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 namespace sd {
 
-typedef boost::unordered_map< rtl::OUString, CustomAnimationEffectPtr, comphelper::UStringHash, comphelper::UStringEqual > EffectsSubTypeMap;
-typedef boost::unordered_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
+typedef std::hash_map< rtl::OUString, CustomAnimationEffectPtr, comphelper::UStringHash, comphelper::UStringEqual > EffectsSubTypeMap;
+typedef std::hash_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
 typedef std::vector< rtl::OUString > UStringList;
 
 class CustomAnimationPreset
@@ -80,7 +80,7 @@ private:
 };
 
 typedef boost::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
-typedef boost::unordered_map<rtl::OUString, CustomAnimationPresetPtr, comphelper::UStringHash, comphelper::UStringEqual> EffectDescriptorMap;
+typedef std::hash_map<rtl::OUString, CustomAnimationPresetPtr, comphelper::UStringHash, comphelper::UStringEqual> EffectDescriptorMap;
 typedef std::vector< CustomAnimationPresetPtr > EffectDescriptorList;
 
 struct PresetCategory
@@ -107,6 +107,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
 
     SD_DLLPUBLIC CustomAnimationPresetPtr getEffectDescriptor( const rtl::OUString& rPresetId ) const;
+//	const AnimationEffect* getEffect( const rtl::OUString& rPresetId ) const;
+//	const AnimationEffect* getEffect( const rtl::OUString& rPresetId, const rtl::OUString& rPresetSubType ) const;
 
     const rtl::OUString& getUINameForPresetId( const rtl::OUString& rPresetId ) const;
     const rtl::OUString& getUINameForProperty( const rtl::OUString& rProperty ) const;
@@ -139,7 +141,7 @@ private:
     PresetCategoryList maMotionPathsPresets;
     PresetCategoryList maMiscPresets;
 
-    static CustomAnimationPresets*  mpCustomAnimationPresets;
+    static CustomAnimationPresets*	mpCustomAnimationPresets;
 };
 
 typedef boost::shared_ptr< CustomAnimationPresets > CustomAnimationPresetsPtr;

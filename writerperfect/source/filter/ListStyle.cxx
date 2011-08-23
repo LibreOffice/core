@@ -176,7 +176,7 @@ void ListStyle::write(DocumentHandlerInterface *pHandler) const
 
     for (int i=0; i<WP6_NUM_LIST_LEVELS; i++) {
         if (mppListLevels[i] != NULL)
-            mppListLevels[i]->write(pHandler, i);
+            mppListLevels[i]->write(pHandler, i);		
     }
 
     pHandler->endElement("text:list-style");

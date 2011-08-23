@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -217,7 +217,7 @@ SwAccessibleFrameBase::~SwAccessibleFrameBase()
 {
 }
 
-void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwAccessibleFrameBase::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
     const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( GetFrm() );
@@ -231,13 +231,13 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
 
             OUString sOldName( GetName() );
             OSL_ENSURE( !pOld ||
-                    static_cast < const SwStringMsgPoolItem * >( pOld )->GetString() == String( sOldName ),
+                    static_cast < SwStringMsgPoolItem * >( pOld )->GetString() == String( sOldName ),
                     "invalid old name" );
 
             const String& rNewName = pFrmFmt->GetName();
             SetName( rNewName );
             OSL_ENSURE( !pNew ||
-                    static_cast < const SwStringMsgPoolItem * >( pNew )->GetString() == rNewName,
+                    static_cast < SwStringMsgPoolItem * >( pNew )->GetString() == rNewName,
                     "invalid new name" );
 
             if( sOldName != GetName() )
@@ -251,20 +251,18 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
         }
         break;
     case RES_OBJECTDYING:
-        // mba: it seems that this class intentionally does not call code in base class SwClient
         if( GetRegisteredIn() ==
-                static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) )
-            GetRegisteredInNonConst()->Remove( this );
+                static_cast< SwModify *>( static_cast< SwPtrMsgPoolItem * >( pOld )->pObject ) )
+            pRegisteredIn->Remove( this );
         break;
 
     case RES_FMT_CHG:
-        if( static_cast< const SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
-            static_cast< const SwFmtChg * >(pOld)->pChangedFmt->IsFmtInDTOR() )
-            GetRegisteredInNonConst()->Remove( this );
+        if( static_cast< SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
+            static_cast< SwFmtChg * >(pOld)->pChangedFmt->IsFmtInDTOR() )
+            pRegisteredIn->Remove( this );
         break;
-
     default:
-        // mba: former call to base class method removed as it is meant to handle only RES_OBJECTDYING
+        SwClient::Modify( pOld, pNew );
         break;
     }
 }
@@ -274,7 +272,7 @@ void SwAccessibleFrameBase::Dispose( sal_Bool bRecursive )
     SolarMutexGuard aGuard;
 
     if( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove( this );
+        pRegisteredIn->Remove( this );
 
     SwAccessibleContext::Dispose( bRecursive );
 }

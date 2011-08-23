@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A TDCP Root Folder is the root container for all other TDCP contents.
+/** A TDCP Root Folder is the root container for all other DTCP contents.
 
     <p>There is at most one instance of a TDCP Root at a time. All other TDCP
     contents are children of this folder. The TDCP Root Folder can contain
@@ -79,7 +79,7 @@ module com { module sun { module star { module ucb {
     @see TransientDocumentsFolderContent
     @see TransientDocumentsStreamContent
 
-    @since OOo 2.0
+    @since OOo 2.0.0
 */
 service TransientDocumentsRootContent
 {

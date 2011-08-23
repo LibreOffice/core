@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ ScInvertMerger::ScInvertMerger( Window* pWindow ) :
     pWin( pWindow ),
     pRects( NULL )
 {
-    //  both rectangles empty
+    //	both rectangles empty
 }
 
 ScInvertMerger::ScInvertMerger( ::std::vector< Rectangle >* pRectangles ) :
@@ -111,7 +111,7 @@ void ScInvertMerger::Flush()
 void ScInvertMerger::FlushTotal()
 {
     if( aTotalRect.IsEmpty() )
-        return;                         // nothing to do
+        return;							// nothing to do
 
     if ( pWin )
         pWin->Invert( aTotalRect, INVERT_HIGHLIGHT );
@@ -124,11 +124,11 @@ void ScInvertMerger::FlushTotal()
 void ScInvertMerger::FlushLine()
 {
     if( aLineRect.IsEmpty() )
-        return;                         // nothing to do
+        return;							// nothing to do
 
     if ( aTotalRect.IsEmpty() )
     {
-        aTotalRect = aLineRect;         // start new total rect
+        aTotalRect = aLineRect;			// start new total rect
     }
     else
     {
@@ -141,8 +141,8 @@ void ScInvertMerger::FlushLine()
         }
         else
         {
-            FlushTotal();                   // draw old total rect
-            aTotalRect = aLineRect;         // and start new one
+            FlushTotal();					// draw old total rect
+            aTotalRect = aLineRect;			// and start new one
         }
     }
 
@@ -164,7 +164,7 @@ void ScInvertMerger::AddRect( const Rectangle& rRect )
     }
     else
     {
-        sal_Bool bDone = false;
+        BOOL bDone = FALSE;
         if ( aJustified.Top()    == aLineRect.Top()    &&
              aJustified.Bottom() == aLineRect.Bottom() )
         {
@@ -172,18 +172,18 @@ void ScInvertMerger::AddRect( const Rectangle& rRect )
             if ( aJustified.Left() == aLineRect.Right() + 1 )
             {
                 aLineRect.Right() = aJustified.Right();
-                bDone = sal_True;
+                bDone = TRUE;
             }
-            else if ( aJustified.Right() + 1 == aLineRect.Left() )  // for RTL layout
+            else if ( aJustified.Right() + 1 == aLineRect.Left() )	// for RTL layout
             {
                 aLineRect.Left() = aJustified.Left();
-                bDone = sal_True;
+                bDone = TRUE;
             }
         }
         if (!bDone)
         {
-            FlushLine();                // use old line rect for total rect
-            aLineRect = aJustified;     // and start new one
+            FlushLine();				// use old line rect for total rect
+            aLineRect = aJustified;		// and start new one
         }
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,28 +54,28 @@ enum FAT_ERROR
 struct StgLinkArg
 {
     String aFile;
-    sal_uLong nErr;
+    ULONG nErr;
 };
 
 class StgIo : public StgCache {
-    void SetupStreams();            // load all internal streams
-    sal_Bool         bCopied;
+    void SetupStreams();			// load all internal streams
+    BOOL         bCopied;
 public:
     StgIo();
    ~StgIo();
-    StgHeader    aHdr;              // storage file header
-    StgFATStrm*  pFAT;              // FAT stream
-    StgDirStrm*  pTOC;              // TOC stream
-    StgDataStrm* pDataFAT;          // small data FAT stream
-    StgDataStrm* pDataStrm;         // small data stream
-    short        GetDataPageSize(); // get the logical data page size
-    sal_Bool Load();                    // load a storage file
-    sal_Bool Init();                    // set up an empty file
-    sal_Bool CommitAll();               // commit everything (root commit)
-
+    StgHeader    aHdr;				// storage file header
+    StgFATStrm*  pFAT;				// FAT stream
+    StgDirStrm*  pTOC;				// TOC stream
+    StgDataStrm* pDataFAT;			// small data FAT stream
+    StgDataStrm* pDataStrm;			// small data stream
+    short	  	 GetDataPageSize();	// get the logical data page size
+    BOOL Load();					// load a storage file
+    BOOL Init();					// set up an empty file
+    BOOL CommitAll();				// commit everything (root commit)
+    
     static void SetErrorLink( const Link& );
     static const Link& GetErrorLink();
-    sal_uLong ValidateFATs( );
+    ULONG ValidateFATs( );
 };
 
 #endif

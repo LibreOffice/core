@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,14 +35,11 @@
 #include <stdio.h>
 #include <vector>
 
+using namespace rtl;
 using namespace std;
 using namespace osl;
 
 using jvmaccess::JavaInfo;
-
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 #define OUSTR( x )  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
@@ -216,7 +213,7 @@ bool test_compareVersions()
     printf("\ntest JavaInfo::compareVersions \n" \
            "! Check output for correctness\n\n");
 
-
+    
     JavaInfo a(OUSTR("file:///C:/Program%20Files/JavaSoft/JRE/1.3.1"));
     JavaInfo b(OUSTR("file:///C:/Program%20Files/JavaSoft/JRE/1.3.1_04"));
     JavaInfo c(OUSTR("file:///C:/Program%20Files/Java/j2re1.4.0_03"));

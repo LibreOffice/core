@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,17 +50,17 @@ CookiesDialog::CookiesDialog( Window* pParent,
 
     ModalDialog( pParent, ResId( DLG_COOKIES, *pResMgr ) ),
 
-    maCookieFB              ( this, ResId( FB_COOKIES, *pResMgr ) ),
-    maCookieFT              ( this, ResId( FT_COOKIES, *pResMgr ) ),
-    maInFutureLine          ( this, ResId( FL_COOKIES, *pResMgr ) ),
-    maInFutureSendBtn       ( this, ResId( RB_INFUTURE_SEND, *pResMgr ) ),
-    maInFutureIgnoreBtn     ( this, ResId( RB_INFUTURE_IGNORE, *pResMgr ) ),
+    maCookieFB				( this, ResId( FB_COOKIES, *pResMgr ) ),
+    maCookieFT				( this, ResId( FT_COOKIES, *pResMgr ) ),
+    maInFutureLine			( this, ResId( FL_COOKIES, *pResMgr ) ),
+    maInFutureSendBtn		( this, ResId( RB_INFUTURE_SEND, *pResMgr ) ),
+    maInFutureIgnoreBtn		( this, ResId( RB_INFUTURE_IGNORE, *pResMgr ) ),
     maInFutureInteractiveBtn( this, ResId( RB_INFUTURE_INTERACTIVE, *pResMgr ) ),
-    maInFutureGB            ( this, ResId( GB_INFUTURE, *pResMgr ) ),
-    maIgnoreBtn             ( this, ResId( BTN_COOKIES_CANCEL, *pResMgr ) ),
-    maSendBtn               ( this, ResId( BTN_COOKIES_OK, *pResMgr ) ),
+    maInFutureGB			( this, ResId( GB_INFUTURE, *pResMgr ) ),
+    maIgnoreBtn				( this, ResId( BTN_COOKIES_CANCEL, *pResMgr ) ),
+    maSendBtn				( this, ResId( BTN_COOKIES_OK, *pResMgr ) ),
 
-    mpCookieRequest         ( pRequest )
+    mpCookieRequest			( pRequest )
 
 {
     FreeResource();
@@ -77,7 +77,7 @@ CookiesDialog::CookiesDialog( Window* pParent,
     maCookieFB.SetPosSizePixel( LogicToPixel( aPoint ), aSize );
     maCookieFB.Show();
 
-    sal_uInt16 nOffset = CNTHTTP_COOKIE_REQUEST_RECV == mpCookieRequest->m_eType
+    USHORT nOffset = CNTHTTP_COOKIE_REQUEST_RECV == mpCookieRequest->m_eType
         ? 0 : STR_COOKIES_SEND_START - STR_COOKIES_RECV_START;
     INetURLObject aObj( mpCookieRequest->m_rURL );
     SetText( String( ResId( STR_COOKIES_RECV_TITLE + nOffset, *pResMgr ) ) );
@@ -88,7 +88,7 @@ CookiesDialog::CookiesDialog( Window* pParent,
     List& rList =mpCookieRequest->m_rCookieList;
     String aPair, aCookie;
 
-    for ( sal_uInt16 i = (sal_uInt16)rList.Count(); i--; )
+    for ( USHORT i = (USHORT)rList.Count(); i--; )
     {
         CntHTTPCookie* pCookie = (CntHTTPCookie*)rList.GetObject(i);
 
@@ -104,7 +104,7 @@ CookiesDialog::CookiesDialog( Window* pParent,
             aMsg += aCookie;
         }
     }
-    maInFutureInteractiveBtn.Check( sal_True );
+    maInFutureInteractiveBtn.Check( TRUE );
     maCookieFT.SetText( aMsg );
 }
 
@@ -114,7 +114,7 @@ short CookiesDialog::Execute()
 {
     maSendBtn.GrabFocus();
     short nRet = ModalDialog::Execute();
-    sal_uInt16 nStatus = CNTHTTP_COOKIE_POLICY_INTERACTIVE;
+    USHORT nStatus = CNTHTTP_COOKIE_POLICY_INTERACTIVE;
 
     if ( maInFutureSendBtn.IsChecked() )
         nStatus = CNTHTTP_COOKIE_POLICY_ACCEPTED;
@@ -123,9 +123,9 @@ short CookiesDialog::Execute()
         nStatus = CNTHTTP_COOKIE_POLICY_BANNED;
     List& rList = mpCookieRequest->m_rCookieList;
 
-    for ( sal_uInt16 i = (sal_uInt16)rList.Count(); i--; )
+    for ( USHORT i = (USHORT)rList.Count(); i--; )
     {
-        sal_uInt16& rStatus = ( (CntHTTPCookie*)rList.GetObject(i) )->m_nPolicy;
+        USHORT& rStatus = ( (CntHTTPCookie*)rList.GetObject(i) )->m_nPolicy;
 
         if ( rStatus == CNTHTTP_COOKIE_POLICY_INTERACTIVE )
             rStatus = nStatus;

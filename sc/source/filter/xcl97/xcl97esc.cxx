@@ -200,12 +200,12 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
 {
     if ( nAdditionalText )
         nAdditionalText++;
-    sal_Bool bInGroup = ( pCurrXclObj != NULL );
+    BOOL bInGroup = ( pCurrXclObj != NULL );
     if ( bInGroup )
-    {   // stacked recursive group object
+    {	// stacked recursive group object
         if ( !pCurrAppData->IsStackedGroup() )
         {   //! UpdateDffFragmentEnd only once
-            pCurrAppData->SetStackedGroup( sal_True );
+            pCurrAppData->SetStackedGroup( TRUE );
             UpdateDffFragmentEnd();
         }
     }
@@ -258,7 +258,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         }
         else if( !ScDrawLayer::IsNoteCaption( pObj ) )
         {
-            // ignore permanent note shapes
+            // #107540# ignore permanent note shapes
             // #i12190# do not ignore callouts (do not filter by object type ID)
             pCurrXclObj = ShapeInteractionHelper::CreateShapeObj( mrObjMgr, rxShape );
             ShapeInteractionHelper::PopulateShapeInteractionInfo( mrObjMgr, rxShape, *pCurrAppData );
@@ -267,7 +267,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     if ( pCurrXclObj )
     {
         if ( !mrObjMgr.AddObj( pCurrXclObj ) )
-        {   // maximum count reached, object got deleted
+        {	// maximum count reached, object got deleted
             pCurrXclObj = NULL;
         }
         else
@@ -312,12 +312,12 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         }
     }
     if ( !pCurrXclObj )
-        pCurrAppData->SetDontWriteShape( sal_True );
+        pCurrAppData->SetDontWriteShape( TRUE );
     return pCurrAppData;
 }
 
 
-void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
+void XclEscherEx::EndShape( UINT16 nShapeType, UINT32 nShapeID )
 {
     // own escher data created? -> never delete such objects
     bool bOwnEscher = pCurrXclObj && pCurrXclObj->IsOwnEscher();
@@ -492,7 +492,7 @@ void XclEscherEx::DeleteCurrAppData()
 // --- class XclEscherClientData -------------------------------------
 
 void XclEscherClientData::WriteData( EscherEx& rEx ) const
-{   // actual data is in the following OBJ record
+{	// actual data is in the following OBJ record
     rEx.AddAtom( 0, ESCHER_ClientData );
 }
 

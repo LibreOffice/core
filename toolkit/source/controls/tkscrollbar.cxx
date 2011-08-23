@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,7 @@ namespace toolkit
     //= UnoControlScrollBarModel
     //====================================================================
     //--------------------------------------------------------------------
-    UnoControlScrollBarModel::UnoControlScrollBarModel( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
-        :UnoControlModel( i_factory )
+    UnoControlScrollBarModel::UnoControlScrollBarModel()
     {
         UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXScrollBar );
     }
@@ -81,7 +80,7 @@ namespace toolkit
         static UnoPropertyArrayHelper* pHelper = NULL;
         if ( !pHelper )
         {
-            uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+            uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
             pHelper = new UnoPropertyArrayHelper( aIDs );
         }
         return *pHelper;
@@ -98,15 +97,14 @@ namespace toolkit
     //====================================================================
     //= UnoControlScrollBarModel
     //====================================================================
-    UnoScrollBarControl::UnoScrollBarControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
-        :UnoControlBase( i_factory )
-        ,maAdjustmentListeners( *this )
+    UnoScrollBarControl::UnoScrollBarControl()
+        : maAdjustmentListeners( *this )
     {
     }
 
     ::rtl::OUString UnoScrollBarControl::GetComponentServiceName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScrollBar"));
+        return ::rtl::OUString::createFromAscii( "ScrollBar" );
     }
 
     // ::com::sun::star::uno::XInterface
@@ -162,7 +160,7 @@ namespace toolkit
             break;
             default:
             {
-                OSL_FAIL( "UnoScrollBarControl::adjustmentValueChanged - unknown Type" );
+                DBG_ERROR( "UnoScrollBarControl::adjustmentValueChanged - unknown Type" );
 
             }
         }

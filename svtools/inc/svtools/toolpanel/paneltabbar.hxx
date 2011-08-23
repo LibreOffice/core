@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ namespace svt
         virtual void    DataChanged( const DataChangedEvent& i_rDataChanedEvent );
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                        GetComponentInterface( sal_Bool i_bCreate );
+                        GetComponentInterface( BOOL i_bCreate );
 
     private:
         ::std::auto_ptr< PanelTabBar_Impl > m_pImpl;

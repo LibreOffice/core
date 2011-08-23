@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include "formstrings.hxx"
-#include <comphelper/extract.hxx>
+#include <cppuhelper/extract.hxx>
 #include <comphelper/property.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
@@ -103,7 +103,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "PushButtonNavigation::PushButtonNavigation: caught an exception!" );
+            OSL_ENSURE( sal_False, "PushButtonNavigation::PushButtonNavigation: caught an exception!" );
         }
     }
 
@@ -123,7 +123,7 @@ namespace pcr
             m_xControlModel->getPropertyValue( PROPERTY_TARGET_URL ) >>= sTargetURL;
 
             sal_Int32 nNavigationURLIndex = lcl_getNavigationURLIndex( sTargetURL );
-            if ( nNavigationURLIndex >= 0)
+            if ( nNavigationURLIndex >= 0) 
                 // it actually *is* a virtual button type
                 nButtonType = s_nFirstVirtualButtonType + nNavigationURLIndex;
         }
@@ -142,7 +142,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "PushButtonNavigation::getCurrentButtonType: caught an exception!" );
+            OSL_ENSURE( sal_False, "PushButtonNavigation::getCurrentButtonType: caught an exception!" );
         }
         return aReturn;
     }
@@ -174,7 +174,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "PushButtonNavigation::setCurrentButtonType: caught an exception!" );
+            OSL_ENSURE( sal_False, "PushButtonNavigation::setCurrentButtonType: caught an exception!" );
         }
     }
 
@@ -206,7 +206,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "PushButtonNavigation::getCurrentButtonTypeState: caught an exception!" );
+            OSL_ENSURE( sal_False, "PushButtonNavigation::getCurrentButtonTypeState: caught an exception!" );
         }
 
         return eState;
@@ -237,7 +237,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "PushButtonNavigation::getCurrentTargetURL: caught an exception!" );
+            OSL_ENSURE( sal_False, "PushButtonNavigation::getCurrentTargetURL: caught an exception!" );
         }
         return aReturn;
     }
@@ -254,7 +254,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "PushButtonNavigation::setCurrentTargetURL: caught an exception!" );
+            OSL_ENSURE( sal_False, "PushButtonNavigation::setCurrentTargetURL: caught an exception!" );
         }
     }
 
@@ -273,7 +273,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "PushButtonNavigation::setCurrentTargetURL: caught an exception!" );
+            OSL_ENSURE( sal_False, "PushButtonNavigation::setCurrentTargetURL: caught an exception!" );
         }
 
         return eState;

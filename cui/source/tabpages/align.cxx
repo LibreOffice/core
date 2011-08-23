@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 
@@ -58,7 +61,7 @@ namespace svx {
 
 // horizontal alignment -------------------------------------------------------
 
-typedef sfx::ValueItemWrapper< SvxHorJustifyItem, SvxCellHorJustify, sal_uInt16 > HorJustItemWrapper;
+typedef sfx::ValueItemWrapper< SvxHorJustifyItem, SvxCellHorJustify, USHORT > HorJustItemWrapper;
 typedef sfx::ListBoxConnection< HorJustItemWrapper > HorJustConnection;
 
 static const HorJustConnection::MapEntryType s_pHorJustMap[] =
@@ -75,7 +78,7 @@ static const HorJustConnection::MapEntryType s_pHorJustMap[] =
 
 // vertical alignment ---------------------------------------------------------
 
-typedef sfx::ValueItemWrapper< SvxVerJustifyItem, SvxCellVerJustify, sal_uInt16 > VerJustItemWrapper;
+typedef sfx::ValueItemWrapper< SvxVerJustifyItem, SvxCellVerJustify, USHORT > VerJustItemWrapper;
 typedef sfx::ListBoxConnection< VerJustItemWrapper > VerJustConnection;
 
 static const VerJustConnection::MapEntryType s_pVerJustMap[] =
@@ -91,7 +94,7 @@ static const VerJustConnection::MapEntryType s_pVerJustMap[] =
 
 // cell rotate mode -----------------------------------------------------------
 
-typedef sfx::ValueItemWrapper< SvxRotateModeItem, SvxRotateMode, sal_uInt16 > RotateModeItemWrapper;
+typedef sfx::ValueItemWrapper< SvxRotateModeItem, SvxRotateMode, USHORT > RotateModeItemWrapper;
 typedef sfx::ValueSetConnection< RotateModeItemWrapper > RotateModeConnection;
 
 static const RotateModeConnection::MapEntryType s_pRotateModeMap[] =
@@ -104,7 +107,7 @@ static const RotateModeConnection::MapEntryType s_pRotateModeMap[] =
 
 // ============================================================================
 
-static sal_uInt16 s_pRanges[] =
+static USHORT s_pRanges[] =
 {
     SID_ATTR_ALIGN_HOR_JUSTIFY,SID_ATTR_ALIGN_VER_JUSTIFY,
     SID_ATTR_ALIGN_STACKED,SID_ATTR_ALIGN_LINEBREAK,
@@ -124,10 +127,10 @@ namespace {
 
 template<typename _JustContainerType, typename _JustEnumType>
 void lcl_MaybeResetAlignToDistro(
-    ListBox& rLB, sal_uInt16 nListPos, const SfxItemSet& rCoreAttrs, sal_uInt16 nWhichAlign, sal_uInt16 nWhichJM, _JustEnumType eBlock)
+    ListBox& rLB, USHORT nListPos, const SfxItemSet& rCoreAttrs, USHORT nWhichAlign, USHORT nWhichJM, _JustEnumType eBlock)
 {
     const SfxPoolItem* pItem;
-    if (rCoreAttrs.GetItemState(nWhichAlign, sal_True, &pItem) != SFX_ITEM_SET)
+    if (rCoreAttrs.GetItemState(nWhichAlign, TRUE, &pItem) != SFX_ITEM_SET)
         // alignment not set.
         return;
 
@@ -137,7 +140,7 @@ void lcl_MaybeResetAlignToDistro(
         // alignment is not 'justify'.  No need to go further.
         return;
 
-    if (rCoreAttrs.GetItemState(nWhichJM, sal_True, &pItem) != SFX_ITEM_SET)
+    if (rCoreAttrs.GetItemState(nWhichJM, TRUE, &pItem) != SFX_ITEM_SET)
         // justification method is not set.
         return;
 
@@ -148,7 +151,7 @@ void lcl_MaybeResetAlignToDistro(
         rLB.SelectEntryPos(nListPos);
 }
 
-void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const ListBox& rLB, sal_uInt16 nListPos)
+void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, USHORT nWhichJM, const ListBox& rLB, USHORT nListPos)
 {
     SvxCellJustifyMethod eJM = SVX_JUSTIFY_METHOD_AUTO;
     if (rLB.GetSelectEntryPos() == nListPos)
@@ -241,10 +244,6 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
     AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_SHRINKTOFIT, maBtnShrink, sfx::ITEMCONN_HIDE_UNKNOWN ) );
     AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_FRAMEDIRECTION, maFtFrameDir, sfx::ITEMCONN_HIDE_UNKNOWN ) );
     AddItemConnection( new FrameDirListBoxConnection( SID_ATTR_FRAMEDIRECTION, maLbFrameDir, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-
-    maLbHorAlign.SetAccessibleRelationMemberOf( &maFlAlignment );
-    maEdIndent.SetAccessibleRelationMemberOf( &maFlAlignment );
-    maLbVerAlign.SetAccessibleRelationMemberOf( &maFlAlignment );
 }
 
 AlignmentTabPage::~AlignmentTabPage()
@@ -256,24 +255,24 @@ SfxTabPage* AlignmentTabPage::Create( Window* pParent, const SfxItemSet& rAttrSe
     return new AlignmentTabPage( pParent, rAttrSet );
 }
 
-sal_uInt16* AlignmentTabPage::GetRanges()
+USHORT* AlignmentTabPage::GetRanges()
 {
     return s_pRanges;
 }
 
-sal_Bool AlignmentTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL AlignmentTabPage::FillItemSet( SfxItemSet& rSet )
 {
     bool bChanged = SfxTabPage::FillItemSet(rSet);
 
     // Special treatment for distributed alignment; we need to set the justify
     // method to 'distribute' to distinguish from the normal justification.
 
-    sal_uInt16 nWhichHorJM = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD);
+    USHORT nWhichHorJM = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD);
     lcl_SetJustifyMethodToItemSet(rSet, nWhichHorJM, maLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED);
     if (!bChanged)
         bChanged = HasAlignmentChanged(rSet, nWhichHorJM);
 
-    sal_uInt16 nWhichVerJM = GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD);
+    USHORT nWhichVerJM = GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD);
     lcl_SetJustifyMethodToItemSet(rSet, nWhichVerJM, maLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED);
     if (!bChanged)
         bChanged = HasAlignmentChanged(rSet, nWhichVerJM);
@@ -321,9 +320,9 @@ void AlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 void AlignmentTabPage::InitVsRefEgde()
 {
     // remember selection - is deleted in call to ValueSet::Clear()
-    sal_uInt16 nSel = maVsRefEdge.GetSelectItemId();
+    USHORT nSel = maVsRefEdge.GetSelectItemId();
 
-    ResId aResId( IL_LOCK_BMPS, CUI_MGR() );
+    ResId aResId( GetSettings().GetStyleSettings().GetHighContrastMode() ? IL_LOCK_BMPS_HC : IL_LOCK_BMPS, CUI_MGR() );
     ImageList aImageList( aResId );
     Size aItemSize( aImageList.GetImage( IID_BOTTOMLOCK ).GetSizePixel() );
 
@@ -342,7 +341,7 @@ void AlignmentTabPage::InitVsRefEgde()
 
 void AlignmentTabPage::UpdateEnableControls()
 {
-    sal_uInt16 nHorAlign = maLbHorAlign.GetSelectEntryPos();
+    USHORT nHorAlign = maLbHorAlign.GetSelectEntryPos();
     bool bHorLeft  = (nHorAlign == ALIGNDLG_HORALIGN_LEFT);
     bool bHorBlock = (nHorAlign == ALIGNDLG_HORALIGN_BLOCK);
     bool bHorFill  = (nHorAlign == ALIGNDLG_HORALIGN_FILL);
@@ -367,19 +366,19 @@ void AlignmentTabPage::UpdateEnableControls()
     maFlProperties.Show( maBtnWrap.IsVisible() || maBtnHyphen.IsVisible() || maBtnShrink.IsVisible() || maLbFrameDir.IsVisible() );
 }
 
-bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 nWhich ) const
+bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, USHORT nWhich ) const
 {
     const SfxItemSet& rOld = GetItemSet();
     const SfxPoolItem* pItem;
     SvxCellJustifyMethod eMethodOld = SVX_JUSTIFY_METHOD_AUTO;
     SvxCellJustifyMethod eMethodNew = SVX_JUSTIFY_METHOD_AUTO;
-    if (rOld.GetItemState(nWhich, sal_True, &pItem) == SFX_ITEM_SET)
+    if (rOld.GetItemState(nWhich, TRUE, &pItem) == SFX_ITEM_SET)
     {
         const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
         eMethodOld = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());
     }
 
-    if (rNew.GetItemState(nWhich, sal_True, &pItem) == SFX_ITEM_SET)
+    if (rNew.GetItemState(nWhich, TRUE, &pItem) == SFX_ITEM_SET)
     {
         const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
         eMethodNew = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());

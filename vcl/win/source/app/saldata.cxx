@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <svsys.h>
+#include <tools/svwin.h>
 #include "rtl/tencinfo.h"
 #include <saldata.hxx>
 #include <vcl/svapp.hxx>
@@ -55,7 +55,7 @@ rtl_TextEncoding ImplSalGetSystemEncoding()
 
 // -----------------------------------------------------------------------
 
-ByteString ImplSalGetWinAnsiString( const UniString& rStr, sal_Bool bFileName )
+ByteString ImplSalGetWinAnsiString( const UniString& rStr, BOOL bFileName )
 {
     rtl_TextEncoding eEncoding = ImplSalGetSystemEncoding();
     if ( bFileName )
@@ -92,9 +92,9 @@ UniString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen )
 
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
 {
-    int         nRet;
-    wchar_t     c1;
-    char       c2;
+    int 		nRet;
+    wchar_t 	c1;
+    char	   c2;
     do
     {
         // Ist das Zeichen zwischen 'A' und 'Z' dann umwandeln
@@ -118,37 +118,75 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
 
 // =======================================================================
 
-BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+LONG ImplSetWindowLong( HWND hWnd, int nIndex, DWORD dwNewLong )
 {
-    return PostMessageW( hWnd, nMsg, wParam, lParam );
+    if ( aSalShlData.mbWNT )
+        return SetWindowLongW( hWnd, nIndex, dwNewLong );
+    else
+        return SetWindowLongA( hWnd, nIndex, dwNewLong );
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+LONG ImplGetWindowLong( HWND hWnd, int nIndex )
 {
-    return SendMessageW( hWnd, nMsg, wParam, lParam );
+    if ( aSalShlData.mbWNT )
+        return GetWindowLongW( hWnd, nIndex );
+    else
+        return GetWindowLongA( hWnd, nIndex );
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
+WIN_BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
-    return GetMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
+    if ( aSalShlData.mbWNT )
+        return PostMessageW( hWnd, nMsg, wParam, lParam );
+    else
+        return PostMessageA( hWnd, nMsg, wParam, lParam );
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
+WIN_BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
-    return PeekMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );
+    WIN_BOOL bRet;
+    if ( aSalShlData.mbWNT )
+        bRet = SendMessageW( hWnd, nMsg, wParam, lParam );
+    else
+        bRet = SendMessageA( hWnd, nMsg, wParam, lParam );
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+WIN_BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
+{
+    if ( aSalShlData.mbWNT )
+        return GetMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
+    else
+        return GetMessageA( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
+}
+
+// -----------------------------------------------------------------------
+
+WIN_BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
+{
+    if ( aSalShlData.mbWNT )
+        return PeekMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );
+    else
+        return PeekMessageA( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );
 }
 
 // -----------------------------------------------------------------------
 
 LONG ImplDispatchMessage( CONST MSG *lpMsg )
 {
-    return DispatchMessageW( lpMsg );
+    if ( aSalShlData.mbWNT )
+        return DispatchMessageW( lpMsg );
+    else
+        return DispatchMessageA( lpMsg );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

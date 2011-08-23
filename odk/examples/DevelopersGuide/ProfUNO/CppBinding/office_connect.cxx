@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 #include <stdio.h>
@@ -45,10 +45,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge;
+using namespace rtl;
 using namespace cppu;
-
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 
 SAL_IMPLEMENT_MAIN()
 {
@@ -57,15 +55,15 @@ SAL_IMPLEMENT_MAIN()
         defaultBootstrap_InitialComponentContext();
 
     // retrieve the servicemanager from the context
-    Reference< XMultiComponentFactory > rServiceManager =
+    Reference< XMultiComponentFactory > rServiceManager = 
         rComponentContext->getServiceManager();
 
     // instantiate a sample service with the servicemanager.
     Reference< XInterface > rInstance =
-        rServiceManager->createInstanceWithContext(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.UnoUrlResolver")),
+        rServiceManager->createInstanceWithContext( 
+            OUString::createFromAscii("com.sun.star.bridge.UnoUrlResolver" ),
             rComponentContext );
-
+    
     // Query for the XUnoUrlResolver interface
     Reference< XUnoUrlResolver > rResolver( rInstance, UNO_QUERY );
 
@@ -77,9 +75,9 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         // resolve the uno-url
-        rInstance = rResolver->resolve( OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" )) );
-
+        rInstance = rResolver->resolve( OUString::createFromAscii( 
+            "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" ) );
+    
         if( ! rInstance.is() )
         {
             printf( "StarOffice.ServiceManager is not exported from remote counterpart\n" );
@@ -96,7 +94,7 @@ SAL_IMPLEMENT_MAIN()
         }
 
         printf( "Connected sucessfully to the office\n" );
-    }
+    }	
     catch( Exception &e )
     {
         OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );

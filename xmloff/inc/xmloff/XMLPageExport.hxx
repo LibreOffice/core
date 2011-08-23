@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,9 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <rtl/ustring.hxx>
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
 #include <xmloff/attrlist.hxx>
 #include <xmloff/uniref.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -53,8 +55,8 @@ class SvXMLExportPropertyMapper;
 
 struct XMLPageExportNameEntry
 {
-    ::rtl::OUString         sPageMasterName;
-    ::rtl::OUString         sStyleName;
+    ::rtl::OUString			sPageMasterName;
+    ::rtl::OUString			sStyleName;
 };
 
 //______________________________________________________________________________
@@ -101,14 +103,14 @@ public:
     XMLPageExport( SvXMLExport& rExp );
     ~XMLPageExport();
 
-    void    collectAutoStyles( sal_Bool bUsed )     { exportStyles( bUsed, sal_True ); }
-    void    exportAutoStyles();
-    void    exportMasterStyles( sal_Bool bUsed )    { exportStyles( bUsed, sal_False ); }
+    void	collectAutoStyles( sal_Bool bUsed )		{ exportStyles( bUsed, sal_True ); }
+    void	exportAutoStyles();
+    void	exportMasterStyles( sal_Bool bUsed )	{ exportStyles( bUsed, sal_False ); }
 
     //text grid enhancement for better CJK support
     void exportDefaultStyle();
 };
 
-#endif  //  _XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
+#endif	//  _XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

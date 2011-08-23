@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,13 +31,16 @@
 
 // include ---------------------------------------------------------------
 
+#ifndef SVX_LIGHT
+
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "svx/XPropertyTable.hxx"
+#include "XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
 
+#endif
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 
@@ -71,14 +74,13 @@
 #define GLOBALOVERFLOW
 
 using namespace com::sun::star;
+using namespace rtl;
 
-using ::rtl::OUString;
+sal_Unicode const pszExtLineEnd[]	= {'s','o','e'};
 
-sal_Unicode const pszExtLineEnd[]   = {'s','o','e'};
-
-static char const aChckLEnd[]  = { 0x04, 0x00, 'S','O','E','L'};    // < 5.2
-static char const aChckLEnd0[] = { 0x04, 0x00, 'S','O','E','0'};    // = 5.2
-static char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };       // = 6.0
+static char const aChckLEnd[]  = { 0x04, 0x00, 'S','O','E','L'};	// < 5.2
+static char const aChckLEnd0[] = { 0x04, 0x00, 'S','O','E','0'};	// = 5.2
+static char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };		// = 6.0
 
 // --------------------
 // class XLineEndTable
@@ -92,7 +94,7 @@ static char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };       // = 6.0
 
 XLineEndTable::XLineEndTable( const String& rPath,
                             XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
+                            USHORT nInitSize, USHORT nReSize ) :
                 XPropertyTable( rPath, pInPool, nInitSize, nReSize)
 {
     pBmpTable = new Table( nInitSize, nReSize );
@@ -127,37 +129,37 @@ XLineEndEntry* XLineEndTable::GetLineEnd(long nIndex) const
 
 /************************************************************************/
 
-sal_Bool XLineEndTable::Load()
+BOOL XLineEndTable::Load()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XLineEndTable::Save()
+BOOL XLineEndTable::Save()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-sal_Bool XLineEndTable::Create()
+BOOL XLineEndTable::Create()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /************************************************************************/
 
-Bitmap* XLineEndTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
+Bitmap* XLineEndTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 {
     return( NULL );
 }
 
 /************************************************************************/
 
-sal_Bool XLineEndTable::CreateBitmapsForUI()
+BOOL XLineEndTable::CreateBitmapsForUI()
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 // --------------------
@@ -168,9 +170,9 @@ class impXLineEndList
 {
 private:
     VirtualDevice*          mpVirtualDevice;
-    SdrModel*               mpSdrModel;
-    SdrObject*              mpBackgroundObject;
-    SdrObject*              mpLineObject;
+    SdrModel*				mpSdrModel;
+    SdrObject*			    mpBackgroundObject;
+    SdrObject*			    mpLineObject;
 
 public:
     impXLineEndList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB, SdrObject* pL)
@@ -208,7 +210,7 @@ void XLineEndList::impCreate()
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
-
+    
         SdrModel* pSdrModel = new SdrModel();
         OSL_ENSURE(0 != pSdrModel, "XLineEndList: no SdrModel created!" );
         pSdrModel->GetItemPool().FreezeIdRanges();
@@ -248,7 +250,7 @@ void XLineEndList::impDestroy()
 }
 
 XLineEndList::XLineEndList(const String& rPath, XOutdevItemPool* _pXPool, sal_uInt16 nInitSize, sal_uInt16 nReSize)
-:   XPropertyList(rPath, _pXPool, nInitSize, nReSize),
+:	XPropertyList(rPath, _pXPool, nInitSize, nReSize),
     mpData(0)
 {
     pBmpList = new List(nInitSize, nReSize);
@@ -274,18 +276,18 @@ XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const
     return (XLineEndEntry*) XPropertyList::Get(nIndex, 0);
 }
 
-sal_Bool XLineEndList::Load()
+BOOL XLineEndList::Load()
 {
     if( bListDirty )
     {
-        bListDirty = sal_False;
+        bListDirty = FALSE;
 
         INetURLObject aURL( aPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return sal_False;
+            return FALSE;
         }
 
         aURL.Append( aName );
@@ -296,17 +298,17 @@ sal_Bool XLineEndList::Load()
         uno::Reference< container::XNameContainer > xTable( SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-    return( sal_False );
+    return( FALSE );
 }
 
-sal_Bool XLineEndList::Save()
+BOOL XLineEndList::Save()
 {
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return sal_False;
+        return FALSE;
     }
 
     aURL.Append( aName );
@@ -318,7 +320,7 @@ sal_Bool XLineEndList::Save()
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 }
 
-sal_Bool XLineEndList::Create()
+BOOL XLineEndList::Create()
 {
     basegfx::B2DPolygon aTriangle;
     aTriangle.append(basegfx::B2DPoint(10.0, 0.0));
@@ -338,16 +340,16 @@ sal_Bool XLineEndList::Create()
     basegfx::B2DPolygon aCircle(basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 100.0));
     Insert( new XLineEndEntry( basegfx::B2DPolyPolygon(aCircle), SVX_RESSTR( RID_SVXSTR_CIRCLE ) ) );
 
-    return( sal_True );
+    return( TRUE );
 }
 
-sal_Bool XLineEndList::CreateBitmapsForUI()
+BOOL XLineEndList::CreateBitmapsForUI()
 {
     impCreate();
 
     for( long i = 0; i < Count(); i++)
     {
-        Bitmap* pBmp = CreateBitmapForUI( i, sal_False );
+        Bitmap* pBmp = CreateBitmapForUI( i, FALSE );
         OSL_ENSURE(0 != pBmp, "XLineEndList: Bitmap(UI) could not be created!" );
 
         if( pBmp )
@@ -356,10 +358,10 @@ sal_Bool XLineEndList::CreateBitmapsForUI()
 
     impDestroy();
 
-    return( sal_True );
+    return( TRUE );
 }
 
-Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
+Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, BOOL bDelete )
 {
     impCreate();
     VirtualDevice* pVD = mpData->getVirtualDevice();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,27 +47,27 @@ namespace sdr
         class SVX_DLLPUBLIC ViewContactOfSdrMediaObj : public ViewContactOfSdrObj
         {
             friend class ViewObjectContactOfSdrMediaObj;
-
+        
         public:
-
+        
             // basic constructor, used from SdrObject.
             ViewContactOfSdrMediaObj( SdrMediaObj& rMediaObj );
             virtual ~ViewContactOfSdrMediaObj();
 
         public:
-
+        
             // access to SdrMediaObj
             SdrMediaObj& GetSdrMediaObj() const
             {
                 return (SdrMediaObj&)GetSdrObject();
             }
 
-            bool    hasPreferredSize() const;
-            Size    getPreferredSize() const;
-
-            void    updateMediaItem( ::avmedia::MediaItem& rItem ) const;
-            void    executeMediaItem( const ::avmedia::MediaItem& rItem );
-
+            bool	hasPreferredSize() const;
+            Size	getPreferredSize() const;
+        
+            void	updateMediaItem( ::avmedia::MediaItem& rItem ) const;
+            void	executeMediaItem( const ::avmedia::MediaItem& rItem );
+                    
         protected:
 
             // Create a Object-Specific ViewObjectContact, set ViewContact and

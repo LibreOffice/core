@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,10 @@
 
 #define UNICODE
 #define _UNICODE
-#include <prewin.h>
-#include <postwin.h>
+
+#include <tools/svwin.h>
+
+#define WIN32_LEAN_AND_MEAN
 #include <tchar.h>
 #include <stdio.h>
 #include <systools/win32/uwinapi.h>
@@ -54,8 +56,8 @@
 
 static LONG RegReadValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, LPVOID lpData, DWORD cbData )
 {
-    HKEY    hKey = NULL;
-    LONG    lResult;
+    HKEY	hKey = NULL;
+    LONG	lResult;
 
     lResult = RegOpenKeyEx( hBaseKey, lpSubKey, 0, KEY_QUERY_VALUE, &hKey );
 
@@ -72,14 +74,14 @@ static LONG RegReadValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, 
 
 static LONG RegWriteValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, DWORD dwType, LPCVOID lpData, DWORD cbData )
 {
-    HKEY    hKey = NULL;
-    LONG    lResult;
+    HKEY	hKey = NULL;
+    LONG	lResult;
 
     lResult = RegCreateKeyEx( hBaseKey, lpSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL );
 
     if ( ERROR_SUCCESS == lResult )
     {
-        lResult = RegSetValueEx( hKey, lpValueName, NULL, dwType, (CONST sal_uInt8 *)lpData, cbData );
+        lResult = RegSetValueEx( hKey, lpValueName, NULL, dwType, (CONST BYTE *)lpData, cbData );
         RegCloseKey( hKey );
     }
 
@@ -93,20 +95,20 @@ namespace svx{
 
         bool ErrorRepSendDialog::ReadParams()
         {
-            _TCHAR  szBuffer[2048];
+            _TCHAR	szBuffer[2048];
 
             if ( ERROR_SUCCESS == RegReadValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
+                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
                 TEXT("HTTPProxyServer"),
                 szBuffer,
                 sizeof(szBuffer) ) )
                 maParams.maHTTPProxyServer = (sal_Unicode *)szBuffer;
 
-            DWORD   dwProxyPort;
+            DWORD	dwProxyPort;
             if ( ERROR_SUCCESS == RegReadValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
+                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
                 TEXT("HTTPProxyPort"),
                 &dwProxyPort,
                 sizeof(dwProxyPort) ) )
@@ -117,25 +119,25 @@ namespace svx{
 
             if ( ERROR_SUCCESS == RegReadValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
+                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
                 TEXT("ReturnAddress"),
                 szBuffer,
                 sizeof(szBuffer) ) )
                 maEMailAddrED.SetText( (sal_Unicode *)szBuffer );
 
-            DWORD   fAllowContact = sal_False;
+            DWORD	fAllowContact = FALSE;
             RegReadValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
+                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
                 TEXT("AllowContact"),
                 &fAllowContact,
                 sizeof(fAllowContact) );
-            maContactCB.Check( (sal_Bool)fAllowContact );
+            maContactCB.Check( (BOOL)fAllowContact );
 
-            DWORD   uInternetConnection = 0;
+            DWORD	uInternetConnection = 0;
             RegReadValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
+                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
                 TEXT("HTTPConnection"),
                 &uInternetConnection,
                 sizeof(uInternetConnection) );
@@ -146,10 +148,10 @@ namespace svx{
 
         bool ErrorRepSendDialog::SaveParams()
         {
-            const _TCHAR    *lpHTTPProxyServer = reinterpret_cast<LPCTSTR>(maParams.maHTTPProxyServer.GetBuffer());
+            const _TCHAR	*lpHTTPProxyServer = reinterpret_cast<LPCTSTR>(maParams.maHTTPProxyServer.GetBuffer());
             RegWriteValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
+                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
                 TEXT("HTTPProxyServer"), REG_SZ,
                 lpHTTPProxyServer,
                 sizeof(TCHAR) * (_tcslen(lpHTTPProxyServer) + 1) );
@@ -159,15 +161,15 @@ namespace svx{
 
             RegWriteValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
+                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
                 TEXT("HTTPProxyPort"), REG_DWORD,
                 &dwProxyPort,
                 sizeof(DWORD) );
 
-            DWORD   fAllowContact = IsContactAllowed();
+            DWORD	fAllowContact = IsContactAllowed();
             RegWriteValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
+                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
                 TEXT("AllowContact"), REG_DWORD,
                 &fAllowContact,
                 sizeof(DWORD) );
@@ -177,15 +179,15 @@ namespace svx{
 
             RegWriteValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
+                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
                 TEXT("HTTPConnection"), REG_DWORD,
                 &uInternetConnection,
                 sizeof(DWORD) );
 
-            const _TCHAR    *lpEmail = reinterpret_cast<LPCTSTR>(GetEMailAddress().GetBuffer());
+            const _TCHAR	*lpEmail = reinterpret_cast<LPCTSTR>(GetEMailAddress().GetBuffer());
             RegWriteValue(
                 HKEY_CURRENT_USER,
-                TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
+                TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
                 TEXT("ReturnAddress"), REG_SZ,
                 lpEmail,
                 sizeof(TCHAR) * (_tcslen(lpEmail) + 1) );
@@ -195,8 +197,8 @@ namespace svx{
 
         bool ErrorRepSendDialog::SendReport()
         {
-            TCHAR   szTempPath[MAX_PATH];
-            TCHAR   szFileName[MAX_PATH];
+            TCHAR	szTempPath[MAX_PATH];
+            TCHAR	szFileName[MAX_PATH];
 
             GetTempPath( SAL_N_ELEMENTS(szTempPath), szTempPath );
             GetTempFileName( szTempPath, TEXT("DSC"), 0, szFileName );
@@ -205,7 +207,7 @@ namespace svx{
 
             if ( fp )
             {
-                ByteString  strUTF8( GetUsing(), RTL_TEXTENCODING_UTF8 );
+                ByteString	strUTF8( GetUsing(), RTL_TEXTENCODING_UTF8 );
 
                 fwrite( strUTF8.GetBuffer(), 1, strUTF8.Len(), fp );
                 fclose( fp );
@@ -214,11 +216,11 @@ namespace svx{
             SetEnvironmentVariable( TEXT("ERRORREPORT_SUBJECT"), reinterpret_cast<LPCTSTR>(GetDocType().GetBuffer()) );
             SetEnvironmentVariable( TEXT("ERRORREPORT_BODYFILE"), szFileName );
 
-            _TCHAR  szBuffer[1024];
-            TCHAR   szPath[MAX_PATH];
-            LPTSTR  lpFilePart;
-            PROCESS_INFORMATION ProcessInfo;
-            STARTUPINFO StartupInfo;
+            _TCHAR	szBuffer[1024];
+            TCHAR	szPath[MAX_PATH];
+            LPTSTR	lpFilePart;
+            PROCESS_INFORMATION	ProcessInfo;
+            STARTUPINFO	StartupInfo;
 
             if ( SearchPath( NULL, TEXT("crashrep.exe"), NULL, MAX_PATH, szPath, &lpFilePart ) )
             {
@@ -235,12 +237,12 @@ namespace svx{
                         szBuffer,
                         NULL,
                         NULL,
-                        sal_False,
+                        FALSE,
                         0,
                         NULL, NULL, &StartupInfo, &ProcessInfo )
                     )
                 {
-                    DWORD   dwExitCode;
+                    DWORD	dwExitCode;
 
                     WaitForSingleObject( ProcessInfo.hProcess, INFINITE );
                     if ( GetExitCodeProcess( ProcessInfo.hProcess, &dwExitCode ) && 0 == dwExitCode )
@@ -256,7 +258,7 @@ namespace svx{
         }
 
 
-    }   // namespace DocRecovery
-}   // namespace svx
+    }	// namespace DocRecovery
+}	// namespace svx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,10 +32,6 @@
 #include "testlistener.hxx"
 
 #define U2S(s) OUStringToOString(s, RTL_TEXTENCODING_UTF8).getStr()
-
-
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::lang::IllegalArgumentException;
 
 
 namespace DOM { namespace events
@@ -96,28 +92,28 @@ namespace DOM { namespace events
     void SAL_CALL CTestListener::initialize(const Sequence< Any >& args) throw(RuntimeException)
     {
         if (args.getLength() < 3) throw IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong number of arguments")), Reference< XInterface >(), 0);
+            OUString::createFromAscii("Wrong number of arguments"), Reference< XInterface >(), 0);
 
         Reference <XEventTarget> aTarget;
         if(! (args[0] >>= aTarget)) throw IllegalArgumentException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Illegal argument 1")), Reference< XInterface >(), 1);
+                OUString::createFromAscii("Illegal argument 1"), Reference< XInterface >(), 1);
 
         OUString aType;
         if (! (args[1] >>= aType))
-            throw IllegalArgumentException(OUString(RTL_CONSTASCII_USTRINGPARAM("Illegal argument 2")), Reference< XInterface >(), 2);
+            throw IllegalArgumentException(OUString::createFromAscii("Illegal argument 2"), Reference< XInterface >(), 2);
 
         sal_Bool bCapture = sal_False;
         if(! (args[2]  >>=  bCapture)) throw IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Illegal argument 3")), Reference< XInterface >(), 3);
+            OUString::createFromAscii("Illegal argument 3"), Reference< XInterface >(), 3);
 
-        if(! (args[3] >>= m_name)) m_name = OUString(RTL_CONSTASCII_USTRINGPARAM("<unnamed listener>"));
+        if(! (args[3] >>= m_name)) m_name = OUString::createFromAscii("<unnamed listener>");
 
         m_target = aTarget;
         m_type = aType;
         m_capture = bCapture;
 
         m_target->addEventListener(m_type, Reference< XEventListener >(this), m_capture);
-
+        
 
     }
 
@@ -134,7 +130,7 @@ namespace DOM { namespace events
     {
         FILE* f = fopen("C:\\listener.out", "a");
         fprintf(f, "CTestListener::handleEvent in %s\n", U2S(m_name));
-        fprintf(f, "    type: %s\n\n", OUStringToOString(evt->getType(), RTL_TEXTENCODING_ASCII_US).getStr());
+        fprintf(f, "    type: %s\n\n", OUStringToOString(evt->getType(), RTL_TEXTENCODING_ASCII_US).getStr());        
         fclose(f);
 
     }

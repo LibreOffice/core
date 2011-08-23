@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,21 +122,21 @@ public class ORadioButtonModel extends GenericModelTest {
      * @param tParam the test parameter
      * @param log the log writer
      */
-
+    
     protected void initialize(TestParameters tParam, PrintWriter log) {
-
+        
         super.initialize(tParam, log);
         super.m_ChangePropertyName = "State";
-
+        
         super.m_kindOfControl="RadioButton";
-
+        
         super.m_ObjectName = "stardiv.one.form.component.RadioButton";
 
-        NamedValue myProp = new NamedValue();
+        NamedValue myProp = new NamedValue(); 
         myProp.Name = "DataField";
-        myProp.Value = DBTools.TST_STRING_F;
+        myProp.Value = DBTools.TST_STRING_F; 
         super.m_propertiesToSet.add(myProp);
-
+        
         super.m_LCShape_Type = "GroupBox";
 
     }
@@ -148,7 +148,7 @@ public class ORadioButtonModel extends GenericModelTest {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         super.cleanup(tParam, log);
     }
-
+    
 
     /**
      * calls <CODE>createTestEnvironment()</CODE> from it's super class
@@ -156,17 +156,17 @@ public class ORadioButtonModel extends GenericModelTest {
      * @param log the log writer
      * @return lib.TestEnvironment
      */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
                                                                  PrintWriter log) {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
-        tEnv.addObjRelation("DataAwareControlModel.NewFieldName",
+        tEnv.addObjRelation("DataAwareControlModel.NewFieldName", 
                             DBTools.TST_INT_F);
         PropertyValue prop = new PropertyValue();
         prop.Name = "HelpText";
         prop.Value = "new Help Text since XPropertyAccess";
         tEnv.addObjRelation("XPropertyAccess.propertyToChange", prop);
         tEnv.addObjRelation("XPropertyContainer.propertyNotRemovable", "HelpText");
-
+                                                                     
         return tEnv;
     }
 

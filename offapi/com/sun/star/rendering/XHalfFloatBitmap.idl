@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,10 @@
 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_rendering_FloatingPointBitmapLayout_idl__
 #include <com/sun/star/rendering/FloatingPointBitmapLayout.idl>
 #endif
@@ -68,11 +68,11 @@ interface XHalfFloatBitmap : XHalfFloatReadOnlyBitmap
         bitmap can be changed. When setting subsets of the bitmap, the
         same scanline padding takes place as when the whole bitmap is
         changed.<p>
-
+        
      */
-    void                        setData( [in] sequence<short> data, [in] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerRectangle2D rect )
+    void						setData( [in] sequence<short> data, [in] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerRectangle2D rect )
         raises (com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::lang::IndexOutOfBoundsException);
+                com::sun::star::lang::IndexOutOfBoundsException); 
 
     //-------------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ interface XHalfFloatBitmap : XHalfFloatReadOnlyBitmap
         IllegalArgumentException, if the memory layout changed between
         a call to getMemoryLayout() and setData().<p>
      */
-    void                        setPixel( [in] sequence<short> color, [in] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
+    void						setPixel( [in] sequence<short> color, [in] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
         raises (com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::IndexOutOfBoundsException);
 };

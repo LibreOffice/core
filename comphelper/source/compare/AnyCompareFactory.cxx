@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 //=============================================================================
 
@@ -66,7 +65,7 @@ public:
         if ( xFactory.is() )
     {
         m_rCollator = Reference< XCollator >(
-                xFactory->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.Collator" )), xContext ),
+                xFactory->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.i18n.Collator" ), xContext ),
                         UNO_QUERY );
         m_rCollator->loadDefaultCollator( rLocale,
                                           0 ); //???
@@ -81,9 +80,9 @@ public:
 
 class AnyCompareFactory : public cppu::WeakImplHelper3< XAnyCompareFactory, XInitialization, XServiceInfo >
 {
-    Reference< XAnyCompare >            m_rAnyCompare;
+    Reference< XAnyCompare > 			m_rAnyCompare;
     Reference< XComponentContext >      m_rContext;
-    Locale                              m_Locale;
+    Locale							  	m_Locale;
 
 public:
     AnyCompareFactory( Reference< XComponentContext > xContext ) : m_rContext( xContext )
@@ -134,7 +133,7 @@ Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( con
     // for now only OUString properties compare is implemented
     // so no check for the property name is done
 
-    if( aPropertyName.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" )) ) )
+    if( aPropertyName.equals( OUString::createFromAscii( "Title" ) ) )
         return m_rAnyCompare;
 
     return Reference< XAnyCompare >();

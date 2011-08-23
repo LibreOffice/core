@@ -7,4 +7,3 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%__SRC%\lib\iuui.lib %_DEST%\lib%_EXT%\iuui.lib
 
 ..\util\uui.xml %_DEST%\xml%_EXT%\uui.xml
-..\%__SRC%\misc\uui.component %_DEST%\xml%_EXT%\uui.component

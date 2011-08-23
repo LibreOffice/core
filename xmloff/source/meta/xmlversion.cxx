@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,9 +52,10 @@ using ::rtl::OUString;
 
 // ------------------------------------------------------------------------
 
-sal_Char XMLN_VERSIONSLIST[] = "VersionList.xml";
+sal_Char __FAR_DATA XMLN_VERSIONSLIST[] = "VersionList.xml";
 
 // ------------------------------------------------------------------------
+
 // #110897#
 XMLVersionListExport::XMLVersionListExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
@@ -62,7 +63,7 @@ XMLVersionListExport::XMLVersionListExport(
     const OUString &rFileName,
     Reference< XDocumentHandler > &rHandler )
 :   SvXMLExport( xServiceFactory, rFileName, rHandler ),
-    maVersions( rVersions )
+    maVersions( rVersions ) 
 {
     _GetNamespaceMap().AddAtIndex( XML_NAMESPACE_DC_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_DC),
                                    xmloff::token::GetXMLToken(xmloff::token::XML_N_DC), XML_NAMESPACE_DC );
@@ -115,11 +116,13 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 }
 
 // ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+
 // #110897#
 XMLVersionListImport::XMLVersionListImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions )
-:   SvXMLImport(xServiceFactory),
+:	SvXMLImport(xServiceFactory),
     maVersions( rVersions )
 {
     GetNamespaceMap().AddAtIndex( XML_NAMESPACE_FRAMEWORK_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),
@@ -153,6 +156,8 @@ SvXMLImportContext *XMLVersionListImport::CreateContext(
 
 
 // ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+
 XMLVersionListContext::XMLVersionListContext( XMLVersionListImport& rImport,
                                         sal_uInt16 nPrefix,
                                         const OUString& rLocalName,
@@ -187,6 +192,8 @@ SvXMLImportContext *XMLVersionListContext::CreateChildContext( sal_uInt16 nPrefi
 }
 
 // ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+
 XMLVersionContext::XMLVersionContext( XMLVersionListImport& rImport,
                                         sal_uInt16 nPref,
                                         const OUString& rLocalName,
@@ -246,6 +253,7 @@ XMLVersionContext::~XMLVersionContext( void )
 {}
 
 // ------------------------------------------------------------------------
+// static
 sal_Bool XMLVersionContext::ParseISODateTimeString(
                                 const rtl::OUString& rString,
                                 util::DateTime& rDateTime )
@@ -347,6 +355,8 @@ sal_Bool XMLVersionContext::ParseISODateTimeString(
 
 
 // ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+
 void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XStorage >& xRoot, const uno::Sequence< util::RevisionTag >& rVersions )
     throw (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
@@ -366,6 +376,14 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
         // and delete it
         OUString sVerName( RTL_CONSTASCII_USTRINGPARAM( XMLN_VERSIONSLIST ) );
 
+        // is this really needed, we set the size to zero before doing
+        // anything with this stream?
+/*      if ( xRoot->IsContained( sVerName ) )
+        {
+            xRoot->Remove( sVerName );
+            xRoot->Commit();
+        }
+*/
         try {
             // open (create) the sub storage with the version info
             uno::Reference< io::XStream > xVerStream = xRoot->openStreamElement(
@@ -373,6 +391,11 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
                                             embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
             if ( !xVerStream.is() )
                 throw uno::RuntimeException();
+
+//REMOVE	        	// SetSize should not be neccessary because OpenStream( WRITE|TRUNC ) should already
+//REMOVE	        	// have set the size to zero
+//REMOVE		//      xVerStream->SetSize ( 0L );
+//REMOVE	        	xVerStream->SetBufferSize( 16*1024 );
 
             Reference< io::XOutputStream > xOut = xVerStream->getOutputStream();
             if ( !xOut.is() )
@@ -383,11 +406,14 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
             Reference< XDocumentHandler > xHandler( xWriter, uno::UNO_QUERY );
 
+            // XMLVersionListExport aExp( pList, sVerName, xHandler );
             XMLVersionListExport aExp( xServiceFactory, rVersions, sVerName, xHandler );
 
             aExp.exportDoc( ::xmloff::token::XML_VERSION );
 
+//REMOVE	        	xVerStream->Commit();
             xVerStream = uno::Reference< io::XStream >(); // use refcounting for now to dispose
+    //      xRoot->Commit();
         }
         catch( uno::Exception& )
         {
@@ -419,7 +445,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
             if ( xProps.is() )
             {
                 try {
-                    xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) ) >>= aParserInput.sSystemId;
+                    xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "URL" ) ) >>= aParserInput.sSystemId;
                 }
                 catch( uno::Exception& )
                 {}
@@ -431,6 +457,9 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
             if ( !xDocStream.is() )
                 throw uno::RuntimeException();
 
+//REMOVE	        	xDocStream->Seek( 0L );
+//REMOVE	        	xDocStream->SetBufferSize( 16*1024 );
+
             aParserInput.aInputStream = xDocStream->getInputStream();
             OSL_ENSURE( aParserInput.aInputStream.is(),
                         "The stream was successfuly opened for reading, the input part must be accessible!\n" );
@@ -439,11 +468,12 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
 
             // get parser
             Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
+                OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
             DBG_ASSERT( xXMLParser.is(),
                     "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
 
             // get filter
+            // Reference< XDocumentHandler > xFilter = new XMLVersionListImport( pList );
             Reference< XDocumentHandler > xFilter = new XMLVersionListImport( xServiceFactory, aVersions );
 
             // connect parser and filter

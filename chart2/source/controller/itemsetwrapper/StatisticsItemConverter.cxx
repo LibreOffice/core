@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -154,7 +154,7 @@ uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
     {
         SvxChartRegress eRegress = CHREGRESS_NONE;
         const SfxPoolItem *pPoolItem = NULL;
-        if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+        if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, TRUE, &pPoolItem ) == SFX_ITEM_SET )
         {
             eRegress = static_cast< const SvxChartRegressItem * >( pPoolItem )->GetValue();
             bEquationExists = ( eRegress != CHREGRESS_NONE );
@@ -204,7 +204,7 @@ StatisticsItemConverter::StatisticsItemConverter(
 StatisticsItemConverter::~StatisticsItemConverter()
 {}
 
-const sal_uInt16 * StatisticsItemConverter::GetWhichPairs() const
+const USHORT * StatisticsItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nStatWhichPairs;
@@ -218,7 +218,7 @@ bool StatisticsItemConverter::GetItemProperty(
 }
 
 bool StatisticsItemConverter::ApplySpecialItem(
-    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
+    USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -304,7 +304,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_PERCENT:
         case SCHATTR_STAT_BIGERROR:
         {
-            OSL_FAIL( "Deprectaed item" );
+            OSL_ENSURE( false, "Deprectaed item" );
             uno::Reference< beans::XPropertySet > xErrorBarProp(
                 lcl_GetYErrorBar( GetPropertySet()));
             bool bOldHasErrorBar = xErrorBarProp.is();
@@ -522,7 +522,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
 }
 
 void StatisticsItemConverter::FillSpecialItem(
-    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
+    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )

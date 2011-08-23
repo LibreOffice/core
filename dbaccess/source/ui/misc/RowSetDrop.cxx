@@ -1,9 +1,8 @@
-
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,15 +48,16 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::lang;
+//	using namespace ::com::sun::star::sdbcx;
 
 // export data
-ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
+ORowSetImportExport::ORowSetImportExport(	Window* _pParent,
                                             const Reference< XResultSetUpdate >& _xResultSetUpdate,
                                             const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                             const Reference< XMultiServiceFactory >& _rM,
                                             const String& rExchange
-                                            )
-                                            : ODatabaseImportExport(_aDataDescriptor,_rM,NULL,rExchange)
+                                            ) 
+                                            : ODatabaseImportExport(_aDataDescriptor,_rM,NULL,rExchange) 
                                             ,m_xTargetResultSetUpdate(_xResultSetUpdate)
                                             ,m_xTargetRowUpdate(_xResultSetUpdate,UNO_QUERY)
                                             ,m_pParent(_pParent)
@@ -70,21 +70,21 @@ ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
 void ORowSetImportExport::initialize()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::initialize" );
-    ODatabaseImportExport::initialize();
-    // do namemapping
+    ODatabaseImportExport::initialize(); 
+    // do namemapping 
     Reference<XColumnLocate> xColumnLocate(m_xResultSet,UNO_QUERY);
     OSL_ENSURE(xColumnLocate.is(),"The rowset normally should support this");
 
     m_xTargetResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xTargetResultSetUpdate,UNO_QUERY)->getMetaData();
     if(!m_xTargetResultSetMetaData.is() || !xColumnLocate.is() || !m_xResultSetMetaData.is() )
         throw SQLException(String(ModuleRes(STR_UNEXPECTED_ERROR)),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
-
+    
     sal_Int32 nCount = m_xTargetResultSetMetaData->getColumnCount();
     m_aColumnMapping.reserve(nCount);
     m_aColumnTypes.reserve(nCount);
     for (sal_Int32 i = 1;i <= nCount; ++i)
     {
-        sal_Int32 nPos = -1; // -1 means column is autoincrement or doesn't exist
+        sal_Int32 nPos = -1; // -1 means column is autoincrement or doesn't exists
         if(!m_xTargetResultSetMetaData->isAutoIncrement(i))
         {
             try
@@ -95,9 +95,9 @@ void ORowSetImportExport::initialize()
             catch(const SQLException&)
             {
                 if(m_xTargetResultSetMetaData->isNullable(i))
-                    nPos = 0; // column doesn't exist but we could set it to null
+                    nPos = 0; // column doesn't exists but we could set it to null
             }
-        }
+        }		
 
         m_aColumnMapping.push_back(nPos);
         if(nPos > 0)
@@ -107,29 +107,31 @@ void ORowSetImportExport::initialize()
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool ORowSetImportExport::Write()
+BOOL ORowSetImportExport::Write()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::Write" );
-    return sal_True;
+    return TRUE;
 }
 // -----------------------------------------------------------------------------
-sal_Bool ORowSetImportExport::Read()
+BOOL ORowSetImportExport::Read()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::Read" );
     // check if there is any column to copy
     if(::std::find_if(m_aColumnMapping.begin(),m_aColumnMapping.end(),
                         ::std::bind2nd(::std::greater<sal_Int32>(),0)) == m_aColumnMapping.end())
-        return sal_False;
+        return FALSE;
+    sal_Int32 nCurrentRow = 0;
+    sal_Int32 nRowFilterIndex = 0;
     sal_Bool bContinue = sal_True;
     if(m_aSelection.getLength())
     {
         const Any* pBegin = m_aSelection.getConstArray();
-        const Any* pEnd   = pBegin + m_aSelection.getLength();
+        const Any* pEnd	  = pBegin + m_aSelection.getLength();
         for(;pBegin != pEnd && bContinue;++pBegin)
         {
             sal_Int32 nPos = -1;
             *pBegin >>= nPos;
-            OSL_ENSURE(nPos != -1,"Invalid position!");
+            OSL_ENSURE(nPos != -1,"Invalid posiotion!");
             bContinue = (m_xResultSet.is() && m_xResultSet->absolute(nPos) && insertNewRow());
         }
     }
@@ -137,8 +139,6 @@ sal_Bool ORowSetImportExport::Read()
     {
         Reference<XPropertySet> xProp(m_xResultSet,UNO_QUERY);
         sal_Int32 nRowCount = 0;
-        sal_Int32 nCurrentRow = 0;
-        sal_Int32 nRowFilterIndex = 0;
         if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISROWCOUNTFINAL) )
         {
             sal_Bool bFinal = sal_False;
@@ -161,11 +161,11 @@ sal_Bool ORowSetImportExport::Read()
             if(!m_pRowMarker || m_pRowMarker[nRowFilterIndex] == nCurrentRow)
             {
                 ++nRowFilterIndex;
-                bContinue = insertNewRow();
+                bContinue = insertNewRow();				
             }
         }
     }
-    return sal_True;
+    return TRUE;
 }
 // -----------------------------------------------------------------------------
 sal_Bool ORowSetImportExport::insertNewRow()
@@ -242,7 +242,7 @@ sal_Bool ORowSetImportExport::insertNewRow()
                         aValue <<= m_xRow->getClob(*aIter);
                         break;
                     default:
-                        OSL_FAIL("Unknown type");
+                        OSL_ENSURE(0,"Unknown type");
                 }
                 if(m_xRow->wasNull())
                     m_xTargetRowUpdate->updateNull(i);
@@ -258,7 +258,7 @@ sal_Bool ORowSetImportExport::insertNewRow()
     {
         if(!m_bAlreadyAsked)
         {
-            String sAskIfContinue = String(ModuleRes(STR_ERROR_OCCURRED_WHILE_COPYING));
+            String sAskIfContinue = String(ModuleRes(STR_ERROR_OCCURED_WHILE_COPYING));
             OSQLWarningBox aDlg( m_pParent, sAskIfContinue, WB_YES_NO | WB_DEF_YES );
             if(aDlg.Execute() == RET_YES)
                 m_bAlreadyAsked = sal_True;

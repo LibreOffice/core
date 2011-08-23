@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@
 // a 0-sign occurs; this functions converts 0-signs to blanks and reads
 // a complete line until a cr/lf is found
 
-sal_Bool DXFReadLine( SvStream& rIStm, ByteString& rStr )
+BOOL DXFReadLine( SvStream& rIStm, ByteString& rStr )
 {
     char  buf[256 + 1];
-    sal_Bool  bEnd = sal_False;
-    sal_uLong nOldFilePos = rIStm.Tell();
+    BOOL  bEnd = FALSE;
+    ULONG nOldFilePos = rIStm.Tell();
     char  c = 0;
 
     rStr.Erase();
@@ -53,16 +53,16 @@ sal_Bool DXFReadLine( SvStream& rIStm, ByteString& rStr )
                                           // !!! weil wir blockweise
                                           // !!! lesen
     {
-        sal_uInt16 nLen = (sal_uInt16)rIStm.Read( buf, sizeof(buf)-1 );
+        USHORT nLen = (USHORT)rIStm.Read( buf, sizeof(buf)-1 );
         if( !nLen )
         {
             if( rStr.Len() == 0 )
-                return sal_False;
+                return FALSE;
             else
                 break;
         }
 
-        for( sal_uInt16 n = 0; n < nLen ; n++ )
+        for( USHORT n = 0; n < nLen ; n++ )
         {
             c = buf[n];
             if( c != '\n' && c != '\r' )
@@ -73,14 +73,14 @@ sal_Bool DXFReadLine( SvStream& rIStm, ByteString& rStr )
             }
             else
             {
-                bEnd = sal_True;
+                bEnd = TRUE;
                 break;
             }
         }
     }
 
     if( !bEnd && !rIStm.GetError() && rStr.Len() )
-        bEnd = sal_True;
+        bEnd = TRUE;
 
     nOldFilePos += rStr.Len();
     if( rIStm.Tell() > nOldFilePos )
@@ -100,19 +100,19 @@ sal_Bool DXFReadLine( SvStream& rIStm, ByteString& rStr )
 
 // ------------------
 
-DXFGroupReader::DXFGroupReader(SvStream & rIStream, sal_uInt16 nminpercent, sal_uInt16 nmaxpercent ) :
+DXFGroupReader::DXFGroupReader(SvStream & rIStream, USHORT nminpercent, USHORT nmaxpercent ) :
     rIS(rIStream)
 {
-    sal_uInt16 i;
+    USHORT i;
 
     nIBuffPos=0;
     nIBuffSize=0;
-    bStatus=sal_True;
+    bStatus=TRUE;
     nLastG=0;
     nGCount=0;
 
-    nMinPercent=(sal_uLong)nminpercent;
-    nMaxPercent=(sal_uLong)nmaxpercent;
+    nMinPercent=(ULONG)nminpercent;
+    nMaxPercent=(ULONG)nmaxpercent;
     nLastPercent=nMinPercent;
 
     rIS.Seek(STREAM_SEEK_TO_END);
@@ -134,7 +134,7 @@ DXFGroupReader::DXFGroupReader(SvStream & rIStream, sal_uInt16 nminpercent, sal_
 }
 
 
-sal_uInt16 DXFGroupReader::Read()
+USHORT DXFGroupReader::Read()
 {
     sal_uInt16 nG = 0;
     if ( bStatus )
@@ -185,7 +185,7 @@ sal_uInt16 DXFGroupReader::Read()
 }
 
 
-long DXFGroupReader::GetI(sal_uInt16 nG) const
+long DXFGroupReader::GetI(USHORT nG)
 {
     sal_Int32 nRetValue = 0;
     if ( ( nG >= 60 ) && ( nG <= 79 ) )
@@ -199,7 +199,7 @@ long DXFGroupReader::GetI(sal_uInt16 nG) const
     return nRetValue;
 }
 
-double DXFGroupReader::GetF(sal_uInt16 nG) const
+double DXFGroupReader::GetF(USHORT nG)
 {
     nG-=10;
     if (nG<50) return F10_59[nG];
@@ -218,11 +218,11 @@ double DXFGroupReader::GetF(sal_uInt16 nG) const
     }
 }
 
-const char * DXFGroupReader::GetS(sal_uInt16 nG) const
+const char * DXFGroupReader::GetS(USHORT nG)
 {
     if (nG<10) return S0_9[nG];
     else if ( nG == 100 )
-        return S100;
+        return S100;    
     else if ( nG == 102 )
         return S102;
     else
@@ -233,7 +233,7 @@ const char * DXFGroupReader::GetS(sal_uInt16 nG) const
     }
 }
 
-void DXFGroupReader::SetF(sal_uInt16 nG, double fF)
+void DXFGroupReader::SetF(USHORT nG, double fF)
 {
     nG-=10;
     if (nG<50) F10_59[nG]=fF;
@@ -252,7 +252,7 @@ void DXFGroupReader::SetF(sal_uInt16 nG, double fF)
 }
 
 
-void DXFGroupReader::SetS(sal_uInt16 nG, const char * sS)
+void DXFGroupReader::SetS(USHORT nG, const char * sS)
 {
     char* pPtr = NULL;
     if ( nG < 10 )
@@ -274,9 +274,9 @@ void DXFGroupReader::SetS(sal_uInt16 nG, const char * sS)
 
 void DXFGroupReader::ReadLine(char * ptgt)
 {
-    ByteString  aStr;
-    sal_uLong       nLen;
-
+    ByteString	aStr;
+    ULONG		nLen;
+    
     DXFReadLine( rIS, aStr );
 
     nLen = aStr.Len();
@@ -288,13 +288,13 @@ void DXFGroupReader::ReadLine(char * ptgt)
 /*
     if ( pCallback )
     {
-        const sal_uLong nPercent= nMinPercent + (nMaxPercent-nMinPercent)*rIS.Tell() / nFileSize;
+        const ULONG nPercent= nMinPercent + (nMaxPercent-nMinPercent)*rIS.Tell() / nFileSize;
 
         if ( nPercent >= nLastPercent + 4 )
         {
             nLastPercent=nPercent;
-            if (((*pCallback)(pCallerData,(sal_uInt16)nPercent))==sal_True)
-                bStatus=sal_False;
+            if (((*pCallback)(pCallerData,(USHORT)nPercent))==TRUE)
+                bStatus=FALSE;
         }
     }
 */
@@ -313,7 +313,7 @@ long DXFGroupReader::ReadI()
     while(*p==0x20) p++;
 
     if ((*p<'0' || *p>'9') && *p!='-') {
-        bStatus=sal_False;
+        bStatus=FALSE;
         return 0;
     }
 
@@ -331,7 +331,7 @@ long DXFGroupReader::ReadI()
 
     while (*p==0x20) p++;
     if (*p!=0) {
-        bStatus=sal_False;
+        bStatus=FALSE;
         return 0;
     }
 
@@ -347,7 +347,7 @@ double DXFGroupReader::ReadF()
     p=sl;
     while(*p==0x20) p++;
     if ((*p<'0' || *p>'9') && *p!='.' && *p!='-') {
-        bStatus=sal_False;
+        bStatus=FALSE;
         return 0.0;
     }
     return atof(p);

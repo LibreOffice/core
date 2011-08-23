@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -243,7 +243,6 @@ TabPage TP_FRM_STD
     };
     MetricField ED_WIDTH
     {
-        HelpID = "sw:MetricField:TP_FRM_STD:ED_WIDTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( SWFRMPG_COL_3 , SWFRMPG_ROW_1 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_3) , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -262,7 +261,6 @@ TabPage TP_FRM_STD
     };
     CheckBox CB_REL_WIDTH
     {
-        HelpID = "sw:CheckBox:TP_FRM_STD:CB_REL_WIDTH";
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_3 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
@@ -270,7 +268,6 @@ TabPage TP_FRM_STD
     };
     CheckBox CB_AUTOWIDTH
     {
-        HelpID = "sw:CheckBox:TP_FRM_STD:CB_AUTOWIDTH";
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_4 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
@@ -292,7 +289,6 @@ TabPage TP_FRM_STD
     };
     MetricField ED_HEIGHT
     {
-        HelpID = "sw:MetricField:TP_FRM_STD:ED_HEIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( SWFRMPG_COL_3 , SWFRMPG_ROW_5 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_3) , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -310,7 +306,6 @@ TabPage TP_FRM_STD
     };
     CheckBox CB_REL_HEIGHT
     {
-        HelpID = "sw:CheckBox:TP_FRM_STD:CB_REL_HEIGHT";
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_7 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
@@ -318,7 +313,6 @@ TabPage TP_FRM_STD
     };
     CheckBox CB_AUTOHEIGHT
     {
-        HelpID = "sw:CheckBox:TP_FRM_STD:CB_AUTOHEIGHT";
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_8 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
@@ -326,7 +320,6 @@ TabPage TP_FRM_STD
     };
     CheckBox CB_FIXEDRATIO
     {
-        HelpID = "sw:CheckBox:TP_FRM_STD:CB_FIXEDRATIO";
         Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_9 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_1) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
@@ -334,7 +327,6 @@ TabPage TP_FRM_STD
     };
     PushButton BT_REALSIZE
     {
-        HelpID = "sw:PushButton:TP_FRM_STD:BT_REALSIZE";
         Pos = MAP_APPFONT ( 35 , 86 ) ;
         Size = MAP_APPFONT ( 70 , 14 ) ;
         TabStop = TRUE ;
@@ -355,35 +347,30 @@ TabPage TP_FRM_STD
     };
     RadioButton RB_ANCHOR_PAGE
     {
-        HelpID = "sw:RadioButton:TP_FRM_STD:RB_ANCHOR_PAGE";
         Pos = MAP_APPFONT ( 122 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "To ~page";
     };
     RadioButton RB_ANCHOR_PARA
     {
-        HelpID = "sw:RadioButton:TP_FRM_STD:RB_ANCHOR_PARA";
         Pos = MAP_APPFONT ( 122 , 28 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "To paragrap~h";
     };
     RadioButton RB_ANCHOR_AT_CHAR
     {
-        HelpID = "sw:RadioButton:TP_FRM_STD:RB_ANCHOR_AT_CHAR";
         Pos = MAP_APPFONT ( 122 , 42 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "To cha~racter";
     };
     RadioButton RB_ANCHOR_AS_CHAR
     {
-        HelpID = "sw:RadioButton:TP_FRM_STD:RB_ANCHOR_AS_CHAR";
         Pos = MAP_APPFONT ( 122 , 56 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~As character" ;
     };
     RadioButton RB_ANCHOR_FRAME
     {
-        HelpID = "sw:RadioButton:TP_FRM_STD:RB_ANCHOR_FRAME";
         Pos = MAP_APPFONT ( 122 , 70 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "To ~frame";
@@ -408,7 +395,6 @@ TabPage TP_FRM_STD
     };
     ListBox DLB_HORIZONTAL
     {
-        HelpID = "sw:ListBox:TP_FRM_STD:DLB_HORIZONTAL";
         Pos = MAP_APPFONT ( 49 , SWFRMPG_ROW_11 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         TabStop = TRUE ;
@@ -423,7 +409,6 @@ TabPage TP_FRM_STD
     };
     MetricField ED_AT_HORZ_POS
     {
-        HelpID = "sw:MetricField:TP_FRM_STD:ED_AT_HORZ_POS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 123 , SWFRMPG_ROW_11 ) ;
         Size = MAP_APPFONT ( 35 , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -448,7 +433,6 @@ TabPage TP_FRM_STD
     };
     ListBox LB_HORI_RELATION
     {
-        HelpID = "sw:ListBox:TP_FRM_STD:LB_HORI_RELATION";
         Pos = MAP_APPFONT ( 183 , SWFRMPG_ROW_11 ) ;
         Size = MAP_APPFONT ( 65 , 60 ) ;
         TabStop = TRUE ;
@@ -456,7 +440,6 @@ TabPage TP_FRM_STD
     };
     CheckBox CB_MIRROR
     {
-        HelpID = "sw:CheckBox:TP_FRM_STD:CB_MIRROR";
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_13 ) ;
         Size = MAP_APPFONT ( (260-SWFRMPG_COL_2-1) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
@@ -471,7 +454,6 @@ TabPage TP_FRM_STD
     };
     ListBox DLB_VERTICAL
     {
-        HelpID = "sw:ListBox:TP_FRM_STD:DLB_VERTICAL";
         Pos = MAP_APPFONT ( 49 , SWFRMPG_ROW_14 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         TabStop = TRUE ;
@@ -486,7 +468,6 @@ TabPage TP_FRM_STD
     };
     MetricField ED_AT_VERT_POS
     {
-        HelpID = "sw:MetricField:TP_FRM_STD:ED_AT_VERT_POS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 123 , SWFRMPG_ROW_14 ) ;
         Size = MAP_APPFONT ( 35 , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -511,7 +492,6 @@ TabPage TP_FRM_STD
     };
     ListBox LB_VERT_RELATION
     {
-        HelpID = "sw:ListBox:TP_FRM_STD:LB_VERT_RELATION";
         Pos = MAP_APPFONT ( 183 , SWFRMPG_ROW_14 ) ;
         Size = MAP_APPFONT ( 65 , 60 ) ;
         TabStop = TRUE ;
@@ -519,7 +499,6 @@ TabPage TP_FRM_STD
     };
     CheckBox CB_FOLLOWTEXTFLOW
     {
-        HelpID = "sw:CheckBox:TP_FRM_STD:CB_FOLLOWTEXTFLOW";
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_16 ) ;
         Size = MAP_APPFONT ( (260-SWFRMPG_COL_2-1) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
@@ -543,6 +522,10 @@ TabPage TP_GRF_EXT
     {
         File = "dog.bmp" ;
     };
+    Bitmap BMP_EXAMPLE_HC
+    {
+        File = "dog_h.bmp" ;
+    };
     FixedLine FL_CONNECT
     {
         Pos = MAP_APPFONT ( 6 , 87 ) ;
@@ -557,7 +540,6 @@ TabPage TP_GRF_EXT
     };
     Edit ED_CONNECT
     {
-        HelpID = "sw:Edit:TP_GRF_EXT:ED_CONNECT";
         Pos = MAP_APPFONT ( 13 , 109 ) ;
         Size = MAP_APPFONT ( 200 , 12 ) ;
         Text [ en-US ] = "[None]" ;
@@ -567,7 +549,6 @@ TabPage TP_GRF_EXT
     };
     PushButton PB_BROWSE
     {
-        HelpID = "sw:PushButton:TP_GRF_EXT:PB_BROWSE";
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 230 , 109 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
@@ -577,7 +558,6 @@ TabPage TP_GRF_EXT
     };
     CheckBox CB_VERT
     {
-        HelpID = "sw:CheckBox:TP_GRF_EXT:CB_VERT";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
         TabStop = TRUE ;
@@ -586,7 +566,6 @@ TabPage TP_GRF_EXT
     };
     CheckBox CB_HOR
     {
-        HelpID = "sw:CheckBox:TP_GRF_EXT:CB_HOR";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
@@ -594,7 +573,6 @@ TabPage TP_GRF_EXT
     };
     RadioButton RB_MIRROR_ALL_PAGES
     {
-        HelpID = "sw:RadioButton:TP_GRF_EXT:RB_MIRROR_ALL_PAGES";
         Pos = MAP_APPFONT ( 18 , 42 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -602,7 +580,6 @@ TabPage TP_GRF_EXT
     };
     RadioButton RB_MIRROR_LEFT_PAGES
     {
-        HelpID = "sw:RadioButton:TP_GRF_EXT:RB_MIRROR_LEFT_PAGES";
         Pos = MAP_APPFONT ( 18 , 56 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -610,7 +587,6 @@ TabPage TP_GRF_EXT
     };
     RadioButton RB_MIRROR_RIGHT_PAGES
     {
-        HelpID = "sw:RadioButton:TP_GRF_EXT:RB_MIRROR_RIGHT_PAGES";
         Pos = MAP_APPFONT ( 18 , 70 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -648,7 +624,6 @@ TabPage TP_FRM_URL
     };
     Edit ED_URL
     {
-        HelpID = "sw:Edit:TP_FRM_URL:ED_URL";
         Pos = MAP_APPFONT ( 45 , 14 ) ;
         Size = MAP_APPFONT ( 149 , 12 ) ;
         Left = TRUE ;
@@ -663,7 +638,6 @@ TabPage TP_FRM_URL
     };
     Edit ED_NAME
     {
-        HelpID = "sw:Edit:TP_FRM_URL:ED_NAME";
         Pos = MAP_APPFONT ( 45 , 30 ) ;
         Size = MAP_APPFONT ( 149 , 12 ) ;
         Left = TRUE ;
@@ -678,7 +652,6 @@ TabPage TP_FRM_URL
     };
     ComboBox CB_FRAME
     {
-        HelpID = "sw:ComboBox:TP_FRM_URL:CB_FRAME";
         Pos = MAP_APPFONT ( 45 , 46 ) ;
         Size = MAP_APPFONT ( 89 , 50 ) ;
         Left = TRUE ;
@@ -687,7 +660,6 @@ TabPage TP_FRM_URL
     };
     PushButton PB_SEARCH
     {
-        HelpID = "sw:PushButton:TP_FRM_URL:PB_SEARCH";
         Pos = MAP_APPFONT ( 198 , 13 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -701,14 +673,12 @@ TabPage TP_FRM_URL
     };
     CheckBox CB_SERVER
     {
-        HelpID = "sw:CheckBox:TP_FRM_URL:CB_SERVER";
         Pos = MAP_APPFONT ( 12 , 75 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "~Server-side image map";
     };
     CheckBox CB_CLIENT
     {
-        HelpID = "sw:CheckBox:TP_FRM_URL:CB_CLIENT";
         Pos = MAP_APPFONT ( 12 , 89 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "~Client-side image map";
@@ -735,7 +705,6 @@ TabPage TP_FRM_ADD
     };
     Edit ED_NAME
     {
-        HelpID = "sw:Edit:TP_FRM_ADD:ED_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 91 , 14 ) ;
         Size = MAP_APPFONT ( 157 , 12 ) ;
@@ -749,7 +718,6 @@ TabPage TP_FRM_ADD
     };
     Edit ED_ALT_NAME
     {
-        HelpID = "sw:Edit:TP_FRM_ADD:ED_ALT_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 91 , 30 ) ;
         Size = MAP_APPFONT ( 157 , 12 ) ;
@@ -763,7 +731,6 @@ TabPage TP_FRM_ADD
     };
     ListBox LB_PREV
     {
-        HelpID = "sw:ListBox:TP_FRM_ADD:LB_PREV";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 91 , 46 ) ;
         Size = MAP_APPFONT ( 157 , 50 ) ;
@@ -782,7 +749,6 @@ TabPage TP_FRM_ADD
     };
     ListBox LB_NEXT
     {
-        HelpID = "sw:ListBox:TP_FRM_ADD:LB_NEXT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 91 , 62 ) ;
         Size = MAP_APPFONT ( 157 , 50 ) ;
@@ -801,7 +767,6 @@ TabPage TP_FRM_ADD
     };
     CheckBox CB_PROTECT_CONTENT
     {
-        HelpID = "sw:CheckBox:TP_FRM_ADD:CB_PROTECT_CONTENT";
         Pos = MAP_APPFONT ( 12 , 91 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -809,7 +774,6 @@ TabPage TP_FRM_ADD
     };
     CheckBox CB_PROTECT_FRAME
     {
-        HelpID = "sw:CheckBox:TP_FRM_ADD:CB_PROTECT_FRAME";
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -817,7 +781,6 @@ TabPage TP_FRM_ADD
     };
     CheckBox CB_PROTECT_SIZE
     {
-        HelpID = "sw:CheckBox:TP_FRM_ADD:CB_PROTECT_SIZE";
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -831,7 +794,6 @@ TabPage TP_FRM_ADD
     };
     CheckBox CB_EDIT_IN_READONLY
     {
-        HelpID = "sw:CheckBox:TP_FRM_ADD:CB_EDIT_IN_READONLY";
         Pos = MAP_APPFONT ( 12 , 146 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -839,7 +801,6 @@ TabPage TP_FRM_ADD
     };
     CheckBox CB_PRINT_FRAME
     {
-        HelpID = "sw:CheckBox:TP_FRM_ADD:CB_PRINT_FRAME";
         Pos = MAP_APPFONT ( 12 , 160 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -862,7 +823,6 @@ TabPage TP_FRM_ADD
     };
     ListBox LB_TEXTFLOW
     {
-        HelpID = "sw:ListBox:TP_FRM_ADD:LB_TEXTFLOW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 81 , 172 ) ;
         Size = MAP_APPFONT ( 167 , 50 ) ;

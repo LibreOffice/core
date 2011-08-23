@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ module com { module sun { module star { module form {
 module component {
 //=============================================================================
 /** This service specifies a form which is connected to a database and
-    displays the results of SQL queries. It provides the possibility of
+    displays the results of SQL queries. It provides the possiblity of
     adding new data records, modifying existing ones, or deleting them.
 
     <p>A database form is a special kind of enhanced database row set
@@ -133,7 +133,7 @@ published service DataForm
         (if any). All values which can't be filled are then passed to all listeners, which can
         fill them by their own choice.</p>
 
-        <p>This is slightly changed if the form is loaded using the
+        <p>This is sligtly changed if the form is loaded using the
         <member scope="com::sun::star::sdb">XCompletedExecution::connectWithCompletion</member> method. In this case, the parameters
         are obtained from the interaction handler, not from the listeners</p>
 
@@ -161,7 +161,7 @@ published service DataForm
         which are related to the master fields of the parent form.
 
         <p>Entries in this sequence can either denote column names in the sub form,
-        or parameter names.<br/>
+        or paramater names.<br/>
         For instance, you could base the form on the SQL statement
         <code>SELECT * FROM invoices WHERE cust_ref = :cid</code>, and add <code>cid</code>
         to the DetailFields property. In this case, the parameter will be filled from
@@ -173,7 +173,7 @@ published service DataForm
         master field.<br/>
         If a string in this property denotes both a column name and a parameter name, it
         is undefined which way it is interpreted, but implementations of the service are required
-        to either decide for the parameter or the column, and proceed as usual.
+        to either decide for the paramter or the column, and proceed as usual.
         </p>
 
         <p>The columns specified herein typically represent a part of the primary key
@@ -196,7 +196,7 @@ published service DataForm
 
     //-------------------------------------------------------------------------
     /** determines if insertions into the form's row set are allowed.
-
+    
         <p>Note that this is a recommendation for user interface components displaying the
         form. Form implementations may decide to allow for insertions done via the API, even
         if the property is set to <FALSE/>, but the user interface should respect the property
@@ -206,7 +206,7 @@ published service DataForm
 
     //-------------------------------------------------------------------------
     /** determines if modifications of the current record of the form are allowed.
-
+    
         <p>Note that this is a recommendation for user interface components displaying the
         form. Form implementations may decide to allow for updates done via the API, even
         if the property is set to <FALSE/>, but the user interface should respect the property
@@ -216,7 +216,7 @@ published service DataForm
 
     //-------------------------------------------------------------------------
     /** determines if deletions of records of the form are allowed.
-
+    
         <p>Note that this is a recommendation for user interface components displaying the
         form. Form implementations may decide to allow for deletions done via the API, even
         if the property is set to <FALSE/>, but the user interface should respect the property

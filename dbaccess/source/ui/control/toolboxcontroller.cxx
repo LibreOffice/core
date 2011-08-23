@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ namespace dbaui
 
     namespace
     {
-        void lcl_copy(Menu* _pMenu,sal_uInt16 _nMenuId,sal_uInt16 _nMenuPos,ToolBox* _pToolBox,sal_uInt16 _nToolId,const ::rtl::OUString& _sCommand)
+        void lcl_copy(Menu* _pMenu,USHORT _nMenuId,USHORT _nMenuPos,ToolBox* _pToolBox,USHORT _nToolId,const ::rtl::OUString& _sCommand)
         {
             if ( _pMenu->GetItemType(_nMenuPos) != MENUITEM_STRING )
                 _pToolBox->SetItemImage(_nToolId, _pMenu->GetItemImage(_nMenuId));
@@ -115,14 +115,14 @@ namespace dbaui
         SolarMutexGuard aSolarMutexGuard;
         ::osl::MutexGuard aGuard(m_aMutex);
 
-        if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:DBNewForm")) )
+        if ( m_aCommandURL.equalsAscii(".uno:DBNewForm") )
         {
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewForm"))           ,sal_True));
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewView"))           ,sal_True));
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewViewSQL"))        ,sal_True));
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuery"))          ,sal_True));
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuerySql"))       ,sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewReport"))         ,sal_True));
+            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewReport"))			,sal_True));
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewReportAutoPilot")),sal_True));
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTable"))          ,sal_True));
         }
@@ -140,10 +140,10 @@ namespace dbaui
         ToolBox*    pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
         if ( pToolBox )
         {
-            sal_uInt16 nCount = pToolBox->GetItemCount();
-            for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
+            USHORT nCount = pToolBox->GetItemCount();
+            for (USHORT nPos = 0; nPos < nCount; ++nPos)
             {
-                sal_uInt16 nItemId = pToolBox->GetItemId(nPos);
+                USHORT nItemId = pToolBox->GetItemId(nPos);
                 if ( pToolBox->GetItemCommand(nItemId) == String(m_aCommandURL) )
                 {
                     m_nToolBoxId = nItemId;
@@ -167,10 +167,10 @@ namespace dbaui
             if ( m_aCommandURL == aFind->first && !Event.IsEnabled )
             {
                 ::std::auto_ptr<PopupMenu> pMenu = getMenu();
-                sal_uInt16 nCount = pMenu->GetItemCount();
-                for (sal_uInt16 i = 0; i < nCount; ++i)
+                USHORT nCount = pMenu->GetItemCount();
+                for (USHORT i = 0; i < nCount; ++i)
                 {
-                    sal_uInt16 nItemId = pMenu->GetItemId(i);
+                    USHORT nItemId = pMenu->GetItemId(i);
                     aFind = m_aStates.find(pMenu->GetItemCommand(nItemId));
                     if ( aFind != m_aStates.end() && aFind->second )
                     {
@@ -192,6 +192,8 @@ namespace dbaui
         {
             pMenu.reset( new PopupMenu( ModuleRes( RID_MENU_APP_NEW ) ) );
 
+            sal_Bool bHighContrast = isHighContrast();
+
             try
             {
                 Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(getServiceManager()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),UNO_QUERY);
@@ -200,15 +202,17 @@ namespace dbaui
 
 
                 short nImageType = hasBigImages() ? ImageType::SIZE_LARGE : ImageType::SIZE_DEFAULT;
+                if ( bHighContrast )
+                    nImageType |= ImageType::COLOR_HIGHCONTRAST;
 
                 Sequence< ::rtl::OUString> aSeq(1);
-                sal_uInt16 nCount = pMenu->GetItemCount();
-                for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
+                USHORT nCount = pMenu->GetItemCount();
+                for (USHORT nPos = 0; nPos < nCount; ++nPos)
                 {
                     if ( pMenu->GetItemType( nPos ) == MENUITEM_SEPARATOR )
                         continue;
 
-                    sal_uInt16 nItemId = pMenu->GetItemId(nPos);
+                    USHORT nItemId = pMenu->GetItemId(nPos);
                     aSeq[0] = pMenu->GetItemCommand(nItemId);
                     Sequence< Reference<XGraphic> > aImages = xImageMgr->getImages(nImageType,aSeq);
 
@@ -242,7 +246,7 @@ namespace dbaui
         ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
         ::std::auto_ptr<PopupMenu> pMenu = getMenu();
 
-        sal_uInt16 nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),POPUPMENU_EXECUTE_DOWN);
+        USHORT nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),POPUPMENU_EXECUTE_DOWN);
         // "cleanup" the toolbox state
         Point aPoint = pToolBox->GetItemRect( m_nToolBoxId ).TopLeft();
         MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );

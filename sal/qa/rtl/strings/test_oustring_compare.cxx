@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include "testshl/simpleheader.hxx"
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
 
@@ -41,14 +40,14 @@ class Compare: public CppUnit::TestFixture
 private:
     void equalsIgnoreAsciiCaseAscii();
 
-CPPUNIT_TEST_SUITE(Compare);
-CPPUNIT_TEST(equalsIgnoreAsciiCaseAscii);
-CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE(Compare);
+    CPPUNIT_TEST(equalsIgnoreAsciiCaseAscii);
+    CPPUNIT_TEST_SUITE_END();
 };
 
 } }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::Compare);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test::oustring::Compare, "alltest");
 
 void test::oustring::Compare::equalsIgnoreAsciiCaseAscii()
 {

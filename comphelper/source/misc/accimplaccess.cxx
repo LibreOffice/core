@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace comphelper
 {
 //.........................................................................
 
-#define BITFIELDSIZE    ( sizeof( sal_Int64 ) * 8 )
+#define BITFIELDSIZE	( sizeof( sal_Int64 ) * 8 )
     // maximum number of bits we have in a sal_Int64
 
     using ::com::sun::star::uno::Reference;
@@ -57,17 +57,17 @@ namespace comphelper
     //=====================================================================
     struct OAccImpl_Impl
     {
-        Reference< XAccessible >    m_xAccParent;
-        sal_Int64                   m_nForeignControlledStates;
+        Reference< XAccessible >	m_xAccParent;
+        sal_Int64					m_nForeignControlledStates;
     };
-
+    
 
     //=====================================================================
     //= OAccessibleImplementationAccess
     //=====================================================================
     //---------------------------------------------------------------------
     OAccessibleImplementationAccess::OAccessibleImplementationAccess( )
-        :m_pImpl( new OAccImpl_Impl )
+        :m_pImpl( new OAccImpl_Impl	)
     {
     }
 
@@ -111,7 +111,7 @@ namespace comphelper
 
     //---------------------------------------------------------------------
     sal_Bool OAccessibleImplementationAccess::setForeignControlledState( const Reference< XAccessibleContext >& _rxComponent, const sal_Int16 _nState,
-        const sal_Bool  _bSet )
+        const sal_Bool	_bSet )
     {
         OAccessibleImplementationAccess* pImplementation = getImplementation( _rxComponent );
 
@@ -143,8 +143,8 @@ namespace comphelper
     {
         sal_Int64 nReturn( 0 );
 
-        if  (   ( _rIdentifier.getLength() == 16 )
-            &&  ( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(), _rIdentifier.getConstArray(), 16 ) )
+        if	(	( _rIdentifier.getLength() == 16 )
+            &&	( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(), _rIdentifier.getConstArray(), 16 ) )
             )
             nReturn = reinterpret_cast< sal_Int64 >( this );
 
@@ -166,7 +166,7 @@ namespace comphelper
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAccessibleImplementationAccess::setAccessibleParent: caught an exception while retrieving the implementation!" );
+            OSL_ENSURE( sal_False, "OAccessibleImplementationAccess::setAccessibleParent: caught an exception while retrieving the implementation!" );
         }
         return pImplementation;
     }
@@ -184,7 +184,7 @@ namespace comphelper
     }
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 

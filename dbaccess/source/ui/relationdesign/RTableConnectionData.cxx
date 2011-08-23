@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ ORelationTableConnectionData::ORelationTableConnectionData( const TTableWindowDa
 {
     DBG_CTOR(ORelationTableConnectionData,NULL);
     m_aConnName = rConnName;
-
+    
     if ( m_aConnName.Len() )
         SetCardinality();
 }
@@ -97,7 +97,7 @@ ORelationTableConnectionData::~ORelationTableConnectionData()
 }
 
 //------------------------------------------------------------------------
-sal_Bool ORelationTableConnectionData::DropRelation()
+BOOL ORelationTableConnectionData::DropRelation()
 {
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -126,7 +126,7 @@ sal_Bool ORelationTableConnectionData::DropRelation()
             }
         }
     }
-    return sal_True;
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -175,16 +175,16 @@ void ORelationTableConnectionData::SetCardinality()
 
 }
 // -----------------------------------------------------------------------------
-sal_Bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const
+BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const
 {
     // check if Table has the primary key column dependig on _eEConnectionSide
-    sal_uInt16  nPrimKeysCount      = 0,
-            nValidLinesCount    = 0;
+    USHORT	nPrimKeysCount		= 0,
+            nValidLinesCount	= 0;
     const Reference< XNameAccess> xKeyColumns = dbtools::getPrimaryKeyColumns_throw(i_xTable);
     if ( xKeyColumns.is() )
     {
         Sequence< ::rtl::OUString> aKeyColumns = xKeyColumns->getElementNames();
-        const ::rtl::OUString* pKeyIter = aKeyColumns.getConstArray();
+        const ::rtl::OUString* pKeyIter	= aKeyColumns.getConstArray();
         const ::rtl::OUString* pKeyEnd  = pKeyIter + aKeyColumns.getLength();
 
         for(;pKeyIter != pKeyEnd;++pKeyIter)
@@ -202,15 +202,15 @@ sal_Bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropert
             }
         }
         if ( nPrimKeysCount != aKeyColumns.getLength() )
-            return sal_False;
+            return FALSE;
     }
     if ( !nPrimKeysCount || nPrimKeysCount != nValidLinesCount )
-        return sal_False;
+        return FALSE;
 
-    return sal_True;
+    return TRUE;
 }
 //------------------------------------------------------------------------
-sal_Bool ORelationTableConnectionData::IsConnectionPossible()
+BOOL ORelationTableConnectionData::IsConnectionPossible()
 {
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -220,7 +220,7 @@ sal_Bool ORelationTableConnectionData::IsConnectionPossible()
     if ( IsSourcePrimKey() && !IsDestPrimKey() )
         ChangeOrientation();
 
-    return sal_True;
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -260,14 +260,14 @@ namespace dbaui
 //-------------------------------------------------------------------------
 bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs)
 {
-    bool bEqual = (lhs.m_nUpdateRules == rhs.m_nUpdateRules)
+    bool bEqual = (lhs.m_nUpdateRules == rhs.m_nUpdateRules) 
         && (lhs.m_nDeleteRules == rhs.m_nDeleteRules)
         && (lhs.m_nCardinality == rhs.m_nCardinality)
         && (lhs.getReferencingTable() == rhs.getReferencingTable())
         && (lhs.getReferencedTable() == rhs.getReferencedTable())
         && (lhs.m_aConnName == rhs.m_aConnName)
         && (lhs.m_vConnLineData.size() == rhs.m_vConnLineData.size());
-
+    
     if ( bEqual )
     {
         std::vector< OConnectionLineDataRef >::const_iterator aIter = lhs.m_vConnLineData.begin();
@@ -283,7 +283,7 @@ bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableCon
 }
 }
 //------------------------------------------------------------------------
-sal_Bool ORelationTableConnectionData::Update()
+BOOL ORelationTableConnectionData::Update()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     ////////////////////////////////////////////////////////////
@@ -291,15 +291,15 @@ sal_Bool ORelationTableConnectionData::Update()
     {
         DropRelation();
         if( !IsConnectionPossible() )
-            return sal_False;
+            return FALSE;
     }
 
     // reassign the keys because the orientaion could be changed
     Reference<XPropertySet> xTableProp(getReferencingTable()->getTable());
     Reference< XIndexAccess> xKeys ( getReferencingTable()->getKeys());
-
+    
     if ( !xKeys.is() )
-        return sal_False;
+        return FALSE;
     ////////////////////////////////////////////////////////////
     // Neue Relation erzeugen
     Reference<XDataDescriptorFactory> xKeyFactory(xKeys,UNO_QUERY);
@@ -348,7 +348,7 @@ sal_Bool ORelationTableConnectionData::Update()
                     }
                 }
             }
-
+            
             if ( xColumns->hasElements() )
                 xAppend->appendByDescriptor(xKey);
         }
@@ -384,14 +384,14 @@ xKey.clear();
                     for ( ; pIter != pEnd ; ++pIter )
                     {
                         xColumn.set(xColumns->getByName(*pIter),UNO_QUERY_THROW);
-                        xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
-                        xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)   >>= sRelatedColumn;
+                        xColumn->getPropertyValue(PROPERTY_NAME)			>>= sName; 
+                        xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)	>>= sRelatedColumn;
 
                         OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
                         OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
                         for(;aIter != aEnd;++aIter)
                         {
-                            if(    (*aIter)->GetSourceFieldName() == sName
+                            if(    (*aIter)->GetSourceFieldName() == sName 
                                 && (*aIter)->GetDestFieldName() == sRelatedColumn )
                             {
                                 break;
@@ -411,18 +411,20 @@ xKey.clear();
                     }
                 }
                 catch(Exception&)
-                {
-                }
+                {                    
+                }                
             }
         }
     xKey.clear();
-    }
+    } // for(sal_Int32 i=0;i<xKeys->getCount();++i)
     if ( bDropRelation )
     {
         DropRelation();
         String sError(ModuleRes(STR_QUERY_REL_COULD_NOT_CREATE));
         ::dbtools::throwGenericSQLException(sError,NULL);
     }
+
+//	OSL_ENSURE(xKey.is(),"No key found have insertion!");
 
     // The fields the relation marks may not be the same as our LineDatas mark after the relation has been updated
     if ( xColSup.is() )
@@ -444,22 +446,22 @@ xKey.clear();
             {
                 OConnectionLineDataRef pNewData = CreateLineDataObj();
 
-                xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
-                xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)   >>= sRelatedColumn;
+                xColumn->getPropertyValue(PROPERTY_NAME)			>>= sName; 
+                xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)	>>= sRelatedColumn;
 
                 pNewData->SetSourceFieldName(sName);
                 pNewData->SetDestFieldName(sRelatedColumn);
                 m_vConnLineData.push_back(pNewData);
             }
         }
-    }
-    // NOTE : the caller is responsible for updating any other objects referencing the old LineDatas (for instance a ConnLine)
+    } // if ( xColSup.is() )
+    // NOTE : the caller is resposible for updating any other objects referencing the old LineDatas (for instance a ConnLine)
 
     ////////////////////////////////////////////////////////////
     // Kardinalitaet bestimmen
     SetCardinality();
 
-    return sal_True;
+    return TRUE;
 }
 // -----------------------------------------------------------------------------
 

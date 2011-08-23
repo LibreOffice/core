@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include "toolbox.hrc"
 #endif
 
-#define MN_PROPS    25
+#define MN_PROPS	25
 
 
 String RID_STR_NEW_FORM
@@ -111,12 +111,14 @@ Menu RID_MENU_APP_NEW
         MenuItem
         {
             Identifier = SID_APP_NEW_FORM;
+            HelpId = SID_APP_NEW_FORM;
             Command = ".uno:DBNewForm";
             Text [ en-US ] = "Form..." ;
         };
         MenuItem
         {
             Identifier = SID_APP_NEW_REPORT;
+            HelpId = SID_APP_NEW_REPORT;
             Command = ".uno:DBNewReport";
             Text [ en-US ] = "Report..." ;
         };
@@ -152,6 +154,7 @@ Menu RID_MENU_APP_NEW
         MenuItem
         {
             Identifier = SID_DB_NEW_VIEW_SQL;
+            HelpId = SID_DB_NEW_VIEW_SQL;
             Command = ".uno:DBNewViewSQL";
             Text [ en-US ] = "View (Simple)..." ;
         };
@@ -174,6 +177,7 @@ Menu RID_MENU_APP_EDIT
         MenuItem
         {
             Identifier = SID_DB_APP_PASTE_SPECIAL;
+            HelpID = SID_DB_APP_PASTE_SPECIAL ;
             Text[ en-US ] = "Paste Special...";
             Command = ".uno:PasteSpecial";
         };
@@ -184,36 +188,42 @@ Menu RID_MENU_APP_EDIT
         MenuItem
         {
             Identifier = SID_DB_APP_DELETE;
+            HelpID = SID_DB_APP_DELETE ;
             Text[ en-US ] = "Delete";
             Command = ".uno:DBDelete";
         };
         MenuItem
         {
             Identifier = SID_DB_APP_RENAME;
+            HelpID = SID_DB_APP_RENAME ;
             Text[ en-US ] = "Rename";
             Command = ".uno:DBRename";
         };
         MenuItem
         {
             Identifier = SID_DB_APP_EDIT;
+            HelpID = SID_DB_APP_EDIT ;
             Text[ en-US ] = "Edit";
             Command = ".uno:DBEdit";
         };
         MenuItem
         {
             Identifier = SID_DB_APP_EDIT_SQL_VIEW;
+            HelpID = SID_DB_APP_EDIT_SQL_VIEW ;
             Text [ en-US ] = "Edit in SQL View...";
             Command = ".uno:DBEditSqlView";
         };
         MenuItem
         {
             Identifier = SID_DB_APP_OPEN;
+            HelpID = SID_DB_APP_OPEN ;
             Text[ en-US ] = "Open";
             Command = ".uno:DBOpen";
         };
         MenuItem
         {
             Identifier = SID_DB_APP_CONVERTTOVIEW;
+            HelpID = SID_DB_APP_CONVERTTOVIEW ;
             Text[ en-US ] = "Create as View";
             Command = ".uno:DBConvertToView";
         };
@@ -226,12 +236,14 @@ Menu RID_MENU_APP_EDIT
         MenuItem
         {
             Identifier = SID_APP_NEW_REPORT_PRE_SEL;
+            HelpId = SID_APP_NEW_REPORT_PRE_SEL;
             Command = ".uno:DBNewReportWithPreSelection";
             Text [ en-US ] = "Report..." ;
         };
         MenuItem
         {
             Identifier = SID_REPORT_CREATE_REPWIZ_PRE_SEL ;
+            HelpID = HID_DOCUMENT_CREATE_REPWIZ ;
             Text[ en-US ] = "Report Wizard...";
 
             Command = ".uno:DBNewReportAutoPilotWithPreSelection";
@@ -243,6 +255,7 @@ Menu RID_MENU_APP_EDIT
         MenuItem
         {
             Identifier = SID_SELECTALL;
+            HelpID = SID_SELECTALL ;
             Text[ en-US ] = "Select All";
             Command = ".uno:SelectAll";
         };
@@ -261,18 +274,21 @@ Menu RID_MENU_APP_EDIT
                     MenuItem
                     {
                         Identifier = SID_DB_APP_DSPROPS;
+                        HelpID = SID_DB_APP_DSPROPS ;
                         Text[ en-US ] = "Properties";
                         Command = ".uno:DBDSProperties";
                     };
                     MenuItem
                     {
                         Identifier = SID_DB_APP_DSCONNECTION_TYPE;
+                        HelpID = SID_DB_APP_DSCONNECTION_TYPE ;
                         Text[ en-US ] = "Connection Type";
                         Command = ".uno:DBDSConnectionType";
                     };
                     MenuItem
                     {
                         Identifier = SID_DB_APP_DSADVANCED_SETTINGS;
+                        HelpID = SID_DB_APP_DSADVANCED_SETTINGS ;
                         Text[ en-US ] = "Advanced Settings";
                         Command = ".uno:DBDSAdvancedSettings";
                     };
@@ -296,53 +312,43 @@ String RID_STR_REPORTS_HELP_TEXT_WIZARD
 {
     Text [ en-US ] = "The wizard will guide you through the steps necessary to create a report." ;
 };
-
 String RID_STR_FORMS_HELP_TEXT
 {
     Text [ en-US ] = "Create a form by specifying the record source, controls, and control properties." ;
 };
-
 String RID_STR_REPORT_HELP_TEXT
 {
     Text [ de ] ="Erstellen Sie einen Bericht, indem Sie die Datensatzquelle, Steuerelemente und Steuerelementeigenschaften angeben." ;
     Text [ en-US ] = "Create a report by specifying the record source, controls, and control properties." ;
 };
-
 String RID_STR_FORMS_HELP_TEXT_WIZARD
 {
     Text [ en-US ] = "The wizard will guide you through the steps necessary to create a form." ;
 };
-
 String RID_STR_QUERIES_HELP_TEXT
 {
     Text [ en-US ] = "Create a query by specifying the filters, input tables, field names,  and  properties for sorting or grouping." ;
 };
-
 String RID_STR_QUERIES_HELP_TEXT_SQL
 {
     Text [ en-US ] = "Create a query  entering an SQL statement directly." ;
 };
-
 String RID_STR_QUERIES_HELP_TEXT_WIZARD
 {
     Text [ en-US ] = "The wizard will guide you through the steps necessary to create a query." ;
 };
-
 String RID_STR_TABLES_HELP_TEXT_DESIGN
 {
     Text [ en-US ] = "Create a table by specifying the field names and properties, as well as the data types." ;
 };
-
 String RID_STR_TABLES_HELP_TEXT_WIZARD
 {
     Text [ en-US ] = "Choose from a selection of business and personal table samples, which you customize to create a table." ;
 };
-
 String RID_STR_VIEWS_HELP_TEXT_DESIGN
 {
     Text [ en-US ] = "Create a view by specifying the tables and field names you would like to have visible." ;
 };
-
 String RID_STR_VIEWS_HELP_TEXT_WIZARD
 {
     Text [ en-US ] = "Opens the view wizard" ;
@@ -352,34 +358,28 @@ String STR_DATABASE
 {
     Text [ en-US ] = "Database" ;
 };
-
 String STR_TASKS
 {
     Text [ en-US ] = "Tasks" ;
 };
-
 String STR_DESCRIPTION
 {
     Text [ en-US ] = "Description" ;
 };
-
 String STR_PREVIEW
 {
     Text [ en-US ] = "Preview" ;
 };
-
 String STR_DISABLEPREVIEW
 {
     Text [ en-US ] = "Disable Preview" ;
 };
-
 QueryBox APP_SAVEMODIFIED
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
     Message [ en-US ] = "The database has been modified.\nDo you want to save the changes?" ;
 };
-
 QueryBox APP_CLOSEDOCUMENTS
 {
     Buttons = WB_YES_NO ;
@@ -394,6 +394,7 @@ Menu RID_MENU_APP_PREVIEW
         MenuItem
         {
             Identifier = SID_DB_APP_DISABLE_PREVIEW;
+            HelpId = SID_DB_APP_DISABLE_PREVIEW;
             Text[ en-US ] = "None";
             Command = ".uno:DBDisablePreview";
             Checkable = TRUE;
@@ -403,6 +404,7 @@ Menu RID_MENU_APP_PREVIEW
         MenuItem
         {
             Identifier = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
+            HelpId = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
             Text[ en-US ] = "Document Information";
             Command = ".uno:DBShowDocInfoPreview";
             Checkable = TRUE;
@@ -412,6 +414,7 @@ Menu RID_MENU_APP_PREVIEW
         MenuItem
         {
             Identifier = SID_DB_APP_VIEW_DOC_PREVIEW;
+            HelpId = SID_DB_APP_VIEW_DOC_PREVIEW;
             Text[ en-US ] = "Document";
             Command = ".uno:DBShowDocPreview";
             Checkable = TRUE;
@@ -420,7 +423,6 @@ Menu RID_MENU_APP_PREVIEW
         };
     };
 };
-
 String RID_STR_FORM
 {
     Text [ en-US ] = "Form";
@@ -430,12 +432,10 @@ String RID_STR_REPORT
 {
     Text [ en-US ] = "Report";
 };
-
 String STR_FRM_LABEL
 {
     Text [ en-US ] = "F~orm name" ;
 };
-
 String STR_RPT_LABEL
 {
     Text [ en-US ] = "~Report name" ;
@@ -466,12 +466,10 @@ String RID_STR_EMBEDDED_DATABASE
 {
     Text [ en-US ] = "Embedded database";
 };
-
 String RID_STR_NO_DIFF_CAT
 {
     Text [ en-US ] = "You cannot select different categories.";
 };
-
 String RID_STR_UNSUPPORTED_OBJECT_TYPE
 {
     Text [ en-US ] = "Unsupported object type found ($type$).";

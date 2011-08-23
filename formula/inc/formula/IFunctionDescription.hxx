@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,6 +46,7 @@ namespace formula
     class FormEditData;
     class FormulaTokenArray;
 
+    // ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
     class SAL_NO_VTABLE IFunctionManager
     {
     public:
@@ -89,10 +90,10 @@ namespace formula
         // GetFormulaString
         virtual ::rtl::OUString getFormula(const ::std::vector< ::rtl::OUString >& _aArguments) const = 0;
         // GetVisibleArgMapping
-        virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const = 0;
+        virtual void fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const = 0;
         virtual void initArgumentInfo() const = 0;
         virtual ::rtl::OUString getSignature() const = 0;
-        virtual rtl::OString getHelpId() const = 0;
+        virtual long getHelpId() const = 0;
 
         // parameter
         virtual sal_uInt32 getParameterCount() const = 0;
@@ -105,6 +106,10 @@ namespace formula
     {
     public:
         virtual bool isFunction() const = 0;
+        /*
+        OpCode eOp = pToken->GetOpCode();
+        if(!(pToken->IsFunction()|| ocArcTan2<=eOp))
+        */
         virtual sal_uInt32 getArgumentCount() const = 0;
     };
 
@@ -112,10 +117,10 @@ namespace formula
     {
     public:
         IStructHelper(){}
-        virtual SvLBoxEntry*    InsertEntry(const XubString& rText, SvLBoxEntry* pParent,
-                                sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL) = 0;
+        virtual SvLBoxEntry*	InsertEntry(const XubString& rText, SvLBoxEntry* pParent,
+                                USHORT nFlag,ULONG nPos=0,IFormulaToken* pScToken=NULL) = 0;
 
-        virtual String          GetEntryText(SvLBoxEntry* pEntry) const = 0;
+        virtual String	        GetEntryText(SvLBoxEntry* pEntry) const = 0;
         virtual SvLBoxEntry*    GetParent(SvLBoxEntry* pEntry) const = 0;
     };
 
@@ -148,10 +153,10 @@ namespace formula
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const = 0;
         virtual ::com::sun::star::table::CellAddress getReferencePosition() const = 0;
 
-        virtual void setDispatcherLock( sal_Bool bLock ) = 0;
-        virtual void dispatch(sal_Bool _bOK,sal_Bool _bMartixChecked) = 0;
-        virtual void doClose(sal_Bool _bOk) = 0;
-        virtual void insertEntryToLRUList(const IFunctionDescription*   pDesc) = 0;
+        virtual void setDispatcherLock( BOOL bLock ) = 0;
+        virtual void dispatch(BOOL _bOK,BOOL _bMartixChecked) = 0;
+        virtual void doClose(BOOL _bOk) = 0;
+        virtual void insertEntryToLRUList(const IFunctionDescription*	pDesc) = 0;
         virtual void showReference(const String& _sFormula) = 0;
     };
 

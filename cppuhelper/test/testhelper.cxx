@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,15 +50,12 @@
 
 #include "testhelper.hxx"
 
+using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
-
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
 
 SAL_IMPLEMENT_MAIN()
 {
@@ -80,14 +77,14 @@ SAL_IMPLEMENT_MAIN()
             Reference< beans::XPropertySet >(
                 xContext->getServiceManager(), UNO_QUERY )->getPropertyValue(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) != xInitialContext );
-
+    
         Reference< XMultiServiceFactory > x( xMgr, UNO_QUERY );
         test_ImplHelper( x );
         testPropertyTypeHelper();
         testidlclass( x );
          test_PropertySetHelper();
         test_interfacecontainer();
-
+        
         OSL_VERIFY( xContext->getValueByName(
                         OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") ) ) == (sal_Int32)5 );
         OSL_VERIFY( ! xInitialContext->getValueByName(
@@ -100,9 +97,9 @@ SAL_IMPLEMENT_MAIN()
     catch (Exception & exc)
     {
         OString cstr_msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( ! "exception occurred: ", cstr_msg.getStr() );
+        OSL_ENSURE( ! "exception occured: ", cstr_msg.getStr() );
     }
-
+    
     printf( "Test finished\n" );
     return 0;
 }

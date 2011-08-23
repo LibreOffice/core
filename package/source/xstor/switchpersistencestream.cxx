@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,7 +132,7 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
     }
 
     xNewSeekable->seek( nPos );
-
+    
     CloseAll_Impl();
 
     m_pStreamData = new SPStreamData_Impl( m_xFactory, sal_False,
@@ -184,8 +184,8 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
 
     if ( !xTargetStream.is() )
     {
-        xTargetStream = uno::Reference < io::XStream >(
-            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile") ) ),
+        xTargetStream = uno::Reference < io::XStream >( 
+            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
             uno::UNO_QUERY_THROW );
 
         xTargetSeek = uno::Reference< io::XSeekable >( xTargetStream, uno::UNO_QUERY_THROW );
@@ -372,7 +372,7 @@ void SAL_CALL SwitchablePersistenceStream::flush(  )
 
     if ( !m_pStreamData || m_pStreamData->m_bInStreamBased )
     {
-        OSL_FAIL( "flush() is not acceptable!\n" );
+        OSL_ENSURE( sal_False, "flush() is not acceptable!\n" );
         return;
         // in future throw exception, for now some code might call flush() on closed stream
         // since file ucp implementation allows it

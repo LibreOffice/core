@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_HELPER_TITLEBARUPDATE_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -44,7 +44,7 @@
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -62,7 +62,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #include <unotools/moduleoptions.hxx>
@@ -72,17 +72,17 @@
 #include <rtl/ustrbuf.hxx>
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -179,8 +179,8 @@ class TitleBarUpdate : // interfaces
                     Is set only if return value is true.
 
             @return [sal_Bool]
-                    sal_True in casee module could be identified and all needed values could be read.
-                    sal_False otherwise.
+                    TRUE in casee module could be identified and all needed values could be read.
+                    FALSE otherwise.
          */
         ::sal_Bool implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
                                               TModuleInfo&                               rInfo );

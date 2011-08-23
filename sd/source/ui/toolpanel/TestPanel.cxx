@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,8 +59,8 @@ class Wrapper
 {
 public:
     Wrapper (
-        TreeNode* pParent,
-        Size aPreferredSize,
+        TreeNode* pParent, 
+        Size aPreferredSize, 
         ::Window* pWrappedControl,
         bool bIsResizable)
         : TreeNode (pParent),
@@ -70,7 +70,7 @@ public:
     {
         mpWrappedControl->Show();
     }
-    virtual ~Wrapper (void)
+    virtual ~Wrapper (void) 
     {
         delete mpWrappedControl;
     }
@@ -130,7 +130,7 @@ TestPanel::TestPanel (::Window& i_rParent)
         ::std::auto_ptr<TreeNode>(new Wrapper (
             pScrollPanel, Size (200,300), pBox, true)),
         String::CreateFromAscii ("First ListBox"),
-        "");
+        0);
 
     pBox = new ListBox (pScrollPanel->GetWindow());
     for (i=1; i<=20; i++)
@@ -144,7 +144,7 @@ TestPanel::TestPanel (::Window& i_rParent)
         ::std::auto_ptr<TreeNode>(new Wrapper (
             pScrollPanel, Size (200,300), pBox, true)),
         String::CreateFromAscii ("Second ListBox"),
-        "");
+        0);
 
     AddControl (::std::auto_ptr<TreeNode>(pScrollPanel));
 
@@ -154,7 +154,7 @@ TestPanel::TestPanel (::Window& i_rParent)
         ::std::auto_ptr<TreeNode>(new Wrapper (
             this, Size (100,30), pButton, false)),
         String::CreateFromAscii ("Button Area"),
-        "");
+        0);
 }
 
 

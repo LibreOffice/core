@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,6 @@
 #include "precompiled_dbaccess.hxx"
 #include "TableConnectionData.hxx"
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
 #include <comphelper/stl_types.hxx>
 
 using namespace dbaui;
@@ -61,8 +60,8 @@ void OTableConnectionData::Init()
 {
     //////////////////////////////////////////////////////////////////////
     // LineDataList mit Defaults initialisieren
-    OSL_ENSURE(m_vConnLineData.size() == 0, "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
-    ResetConnLines(sal_True);
+    DBG_ASSERT(m_vConnLineData.size() == 0, "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
+    ResetConnLines(TRUE);
         // das legt Defaults an
 }
 //------------------------------------------------------------------------
@@ -84,6 +83,7 @@ OTableConnectionData::~OTableConnectionData()
     DBG_DTOR(OTableConnectionData,NULL);
     // LineDataList loeschen
     OConnectionLineDataVec().swap(m_vConnLineData);
+    //ResetConnLines(FALSE);	
 }
 
 //------------------------------------------------------------------------
@@ -97,11 +97,11 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     m_aConnName = rConnData.GetConnName();
 
     // clear line list
-    ResetConnLines(sal_False);
+    ResetConnLines(FALSE);
 
     // und kopieren
     OConnectionLineDataVec* pLineData = const_cast<OTableConnectionData*>(&rConnData)->GetConnLineDataList();
-
+    
     OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
     OConnectionLineDataVec::const_iterator aEnd = pLineData->end();
     for(;aIter != aEnd;++aIter)
@@ -111,26 +111,26 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
 }
 
 //------------------------------------------------------------------------
-sal_Bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const String& rSourceFieldName, const String& rDestFieldName )
+BOOL OTableConnectionData::SetConnLine( USHORT nIndex, const String& rSourceFieldName, const String& rDestFieldName )
 {
-    if (sal_uInt16(m_vConnLineData.size()) < nIndex)
-        return sal_False;
+    if (USHORT(m_vConnLineData.size()) < nIndex)
+        return FALSE;
         // == ist noch erlaubt, das entspricht einem Append
 
     if (m_vConnLineData.size() == nIndex)
         return AppendConnLine(rSourceFieldName, rDestFieldName);
 
     OConnectionLineDataRef pConnLineData = m_vConnLineData[nIndex];
-    OSL_ENSURE(pConnLineData != NULL, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
+    DBG_ASSERT(pConnLineData != NULL, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
 
     pConnLineData->SetSourceFieldName( rSourceFieldName );
     pConnLineData->SetDestFieldName( rDestFieldName );
 
-    return sal_True;
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
-sal_Bool OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName )
+BOOL OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName )
 {
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
     OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
@@ -143,15 +143,15 @@ sal_Bool OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFie
     {
         OConnectionLineDataRef pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
         if (!pNew.is())
-            return sal_False;
+            return FALSE;
 
         m_vConnLineData.push_back(pNew);
     }
-    return sal_True;
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
-void OTableConnectionData::ResetConnLines( sal_Bool /*bUseDefaults*/ )
+void OTableConnectionData::ResetConnLines( BOOL /*bUseDefaults*/ )
 {
     OConnectionLineDataVec().swap(m_vConnLineData);
 }
@@ -168,9 +168,9 @@ OConnectionLineDataRef OTableConnectionData::CreateLineDataObj( const OConnectio
     return new OConnectionLineData( rConnLineData );
 }
 // -----------------------------------------------------------------------------
-OTableConnectionData* OTableConnectionData::NewInstance() const
-{
-    return new OTableConnectionData();
+OTableConnectionData* OTableConnectionData::NewInstance() const 
+{ 
+    return new OTableConnectionData(); 
 }
 // -----------------------------------------------------------------------------
 void OTableConnectionData::normalizeLines()

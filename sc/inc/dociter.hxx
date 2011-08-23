@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,85 +49,87 @@ class ScAttrIterator;
 class ScRange;
 class ScFlatBoolRowSegments;
 
-class ScDocumentIterator                // walk through all non-empty cells
+class ScDocumentIterator				// alle nichtleeren Zellen durchgehen
 {
 private:
-    ScDocument*             pDoc;
-    SCTAB                   nStartTab;
-    SCTAB                   nEndTab;
+    ScDocument*				pDoc;
+    SCTAB					nStartTab;
+    SCTAB					nEndTab;
 
-    const ScPatternAttr*    pDefPattern;
+    const ScPatternAttr*	pDefPattern;
 
-    SCCOL                   nCol;
-    SCROW                   nRow;
-    SCTAB                   nTab;
-    ScBaseCell*             pCell;
-    const ScPatternAttr*    pPattern;
+    SCCOL					nCol;
+    SCROW					nRow;
+    SCTAB					nTab;
+    ScBaseCell*				pCell;
+    const ScPatternAttr*	pPattern;
 
 
-    SCSIZE                  nColPos;
-    SCSIZE                  nAttrPos;
+    SCSIZE					nColPos;
+    SCSIZE					nAttrPos;
 
-    sal_Bool                    GetThis();
-    sal_Bool                    GetThisCol();
+    BOOL					GetThis();
+    BOOL					GetThisCol();
 
 public:
             ScDocumentIterator( ScDocument* pDocument, SCTAB nStartTable, SCTAB nEndTable );
             ~ScDocumentIterator();
 
-    sal_Bool                    GetFirst();
-    sal_Bool                    GetNext();
+    BOOL					GetFirst();
+    BOOL					GetNext();
 
-    ScBaseCell*             GetCell();
-    const ScPatternAttr*    GetPattern();
-    void                    GetPos( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );
+    ScBaseCell*				GetCell();
+    const ScPatternAttr*	GetPattern();
+    void					GetPos( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );
 };
 
-class ScValueIterator            // walk through all values in an area
+class ScValueIterator            // alle Zahlenwerte in einem Bereich durchgehen
 {
 private:
-    double          fNextValue;
-    ScDocument*     pDoc;
-    const ScAttrArray*  pAttrArray;
-    sal_uLong           nNumFormat;     // for CalcAsShown
-    sal_uLong           nNumFmtIndex;
-    SCCOL           nStartCol;
-    SCROW           nStartRow;
-    SCTAB           nStartTab;
-    SCCOL           nEndCol;
-    SCROW           nEndRow;
-    SCTAB           nEndTab;
-    SCCOL           nCol;
-    SCROW           nRow;
-    SCTAB           nTab;
-    SCSIZE          nColRow;
-    SCROW           nNextRow;
-    SCROW           nAttrEndRow;
-    short           nNumFmtType;
-    sal_Bool            bNumValid;
-    sal_Bool            bSubTotal;
-    sal_Bool            bNextValid;
-    sal_Bool            bCalcAsShown;
-    sal_Bool            bTextAsZero;
+    double			fNextValue;
+    ScDocument*		pDoc;
+    const ScAttrArray*	pAttrArray;
+    ULONG			nNumFormat;		// fuer CalcAsShown
+    ULONG			nNumFmtIndex;
+    SCCOL			nStartCol;
+    SCROW			nStartRow;
+    SCTAB			nStartTab;
+    SCCOL			nEndCol;
+    SCROW			nEndRow;
+    SCTAB			nEndTab;
+    SCCOL 			nCol;
+    SCROW			nRow;
+    SCTAB			nTab;
+    SCSIZE			nColRow;
+    SCROW			nNextRow;
+    SCROW			nAttrEndRow;
+    short			nNumFmtType;
+    BOOL			bNumValid;
+    BOOL			bSubTotal;
+    BOOL			bNextValid;
+    BOOL			bCalcAsShown;
+    BOOL			bTextAsZero;
 
-    sal_Bool            GetThis(double& rValue, sal_uInt16& rErr);
+    BOOL			GetThis(double& rValue, USHORT& rErr);
 public:
 
                     ScValueIterator(ScDocument* pDocument,
-                                    const ScRange& rRange, sal_Bool bSTotal = false,
-                                    sal_Bool bTextAsZero = false );
-    void            GetCurNumFmtInfo( short& nType, sal_uLong& nIndex );
+                                    const ScRange& rRange, BOOL bSTotal = FALSE,
+                                    BOOL bTextAsZero = FALSE );
+    void			GetCurNumFmtInfo( short& nType, ULONG& nIndex );
     /// Does NOT reset rValue if no value found!
-    sal_Bool            GetFirst(double& rValue, sal_uInt16& rErr);
+    BOOL			GetFirst(double& rValue, USHORT& rErr);
     /// Does NOT reset rValue if no value found!
-    sal_Bool            GetNext(double& rValue, sal_uInt16& rErr)
+    BOOL			GetNext(double& rValue, USHORT& rErr)
                     {
-                        return bNextValid ? ( bNextValid = false, rValue = fNextValue,
+                        return bNextValid ? ( bNextValid = FALSE, rValue = fNextValue,
                                                 rErr = 0, nRow = nNextRow,
-                                                ++nColRow, bNumValid = false, sal_True )
+                                                ++nColRow, bNumValid = FALSE, TRUE )
                                           : ( ++nRow, GetThis(rValue, rErr) );
                     }
 };
+
+// ============================================================================
 
 class ScDBQueryDataIterator
 {
@@ -174,8 +176,8 @@ private:
         ScDBQueryParamInternal* mpParam;
         ScDocument*         mpDoc;
         const ScAttrArray*  pAttrArray;
-        sal_uLong               nNumFormat;     // for CalcAsShown
-        sal_uLong               nNumFmtIndex;
+        ULONG               nNumFormat;     // for CalcAsShown
+        ULONG               nNumFmtIndex;
         SCCOL               nCol;
         SCROW               nRow;
         SCSIZE              nColRow;
@@ -214,46 +216,48 @@ public:
     bool            GetNext(Value& rValue);
 };
 
-class ScCellIterator            // walk through all cells in an area
-{                               // for SubTotal no hidden and no sub-total lines
-private:
-    ScDocument*     pDoc;
-    SCCOL           nStartCol;
-    SCROW           nStartRow;
-    SCTAB           nStartTab;
-    SCCOL           nEndCol;
-    SCROW           nEndRow;
-    SCTAB           nEndTab;
-    SCCOL           nCol;
-    SCROW           nRow;
-    SCTAB           nTab;
-    SCSIZE          nColRow;
-    sal_Bool            bSubTotal;
+// ============================================================================
 
-    ScBaseCell*     GetThis();
+class ScCellIterator            // alle Zellen in einem Bereich durchgehen
+{								// bei SubTotal aber keine ausgeblendeten und
+private:						// SubTotalZeilen
+    ScDocument*		pDoc;
+    SCCOL			nStartCol;
+    SCROW			nStartRow;
+    SCTAB			nStartTab;
+    SCCOL			nEndCol;
+    SCROW			nEndRow;
+    SCTAB			nEndTab;
+    SCCOL 			nCol;
+    SCROW			nRow;
+    SCTAB			nTab;
+    SCSIZE			nColRow;
+    BOOL			bSubTotal;
+
+    ScBaseCell*		GetThis();
 public:
                     ScCellIterator(ScDocument* pDocument,
                                    SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
                                    SCCOL nECol, SCROW nERow, SCTAB nETab,
-                                   sal_Bool bSTotal = false);
+                                   BOOL bSTotal = FALSE);
                     ScCellIterator(ScDocument* pDocument,
-                                   const ScRange& rRange, sal_Bool bSTotal = false);
-    ScBaseCell*     GetFirst();
-    ScBaseCell*     GetNext();
+                                   const ScRange& rRange, BOOL bSTotal = FALSE);
+    ScBaseCell*		GetFirst();
+    ScBaseCell*		GetNext();
     SCCOL           GetCol() const { return nCol; }
     SCROW           GetRow() const { return nRow; }
     SCTAB           GetTab() const { return nTab; }
     ScAddress       GetPos() const { return ScAddress( nCol, nRow, nTab ); }
 };
 
-class ScQueryCellIterator           // walk through all non-empty cells in an area
-{
+class ScQueryCellIterator           // alle nichtleeren Zellen in einem Bereich
+{									// durchgehen
     enum StopOnMismatchBits
     {
         nStopOnMismatchDisabled = 0x00,
         nStopOnMismatchEnabled  = 0x01,
-        nStopOnMismatchOccurred  = 0x02,
-        nStopOnMismatchExecuted = nStopOnMismatchEnabled | nStopOnMismatchOccurred
+        nStopOnMismatchOccured  = 0x02,
+        nStopOnMismatchExecuted = nStopOnMismatchEnabled | nStopOnMismatchOccured
     };
 
     enum TestEqualConditionBits
@@ -265,21 +269,21 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
     };
 
 private:
-    ScQueryParam    aParam;
-    ScDocument*     pDoc;
-    const ScAttrArray*  pAttrArray;
-    sal_uLong           nNumFormat;
-    SCTAB           nTab;
-    SCCOL           nCol;
-    SCROW           nRow;
-    SCSIZE          nColRow;
-    SCROW           nAttrEndRow;
-    sal_uInt8            nStopOnMismatch;
-    sal_uInt8            nTestEqualCondition;
-    sal_Bool            bAdvanceQuery;
-    sal_Bool            bIgnoreMismatchOnLeadingStrings;
+    ScQueryParam	aParam;
+    ScDocument*		pDoc;
+    const ScAttrArray*	pAttrArray;
+    ULONG			nNumFormat;
+    SCTAB			nTab;
+    SCCOL 			nCol;
+    SCROW			nRow;
+    SCSIZE			nColRow;
+    SCROW			nAttrEndRow;
+    BYTE            nStopOnMismatch;
+    BYTE            nTestEqualCondition;
+    BOOL			bAdvanceQuery;
+    BOOL            bIgnoreMismatchOnLeadingStrings;
 
-    ScBaseCell*     GetThis();
+    ScBaseCell*		GetThis();
 
                     /* Only works if no regular expression is involved, only
                        searches for rows in one column, and only the first
@@ -294,36 +298,36 @@ private:
 
 public:
                     ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
-                                        const ScQueryParam& aParam, sal_Bool bMod = true);
-                                        // for bMod = FALSE the QueryParam has to be filled
-                                        // (bIsString)
-    ScBaseCell*     GetFirst();
-    ScBaseCell*     GetNext();
+                                        const ScQueryParam& aParam, BOOL bMod = TRUE);
+                                        // fuer bMod = FALSE muss der QueryParam
+                                        // weiter aufgefuellt sein (bIsString)
+    ScBaseCell*		GetFirst();
+    ScBaseCell*		GetNext();
     SCCOL           GetCol() { return nCol; }
     SCROW           GetRow() { return nRow; }
 
-                    // increments all Entry.nField, if column
-                    // changes, for ScInterpreter ScHLookup()
-    void            SetAdvanceQueryParamEntryField( sal_Bool bVal )
+                    // setzt alle Entry.nField einen weiter, wenn Spalte
+                    // wechselt, fuer ScInterpreter ScHLookup()
+    void			SetAdvanceQueryParamEntryField( BOOL bVal )
                         { bAdvanceQuery = bVal; }
-    void            AdvanceQueryParamEntryField();
+    void			AdvanceQueryParamEntryField();
 
                     /** If set, iterator stops on first non-matching cell
                         content. May be used in SC_LESS_EQUAL queries where a
                         cell range is assumed to be sorted; stops on first
                         value being greater than the queried value and
                         GetFirst()/GetNext() return NULL. StoppedOnMismatch()
-                        returns sal_True then.
+                        returns TRUE then.
                         However, the iterator's conditions are not set to end
                         all queries, GetCol() and GetRow() return values for
                         the non-matching cell, further GetNext() calls may be
                         executed. */
-    void            SetStopOnMismatch( sal_Bool bVal )
+    void            SetStopOnMismatch( BOOL bVal )
                         {
-                            nStopOnMismatch = sal::static_int_cast<sal_uInt8>(bVal ? nStopOnMismatchEnabled :
+                            nStopOnMismatch = sal::static_int_cast<BYTE>(bVal ? nStopOnMismatchEnabled :
                                 nStopOnMismatchDisabled);
                         }
-    sal_Bool            StoppedOnMismatch() const
+    BOOL            StoppedOnMismatch() const
                         { return nStopOnMismatch == nStopOnMismatchExecuted; }
 
                     /** If set, an additional test for SC_EQUAL condition is
@@ -331,13 +335,13 @@ public:
                         SC_GREATER_EQUAL conditions are to be tested. May be
                         used where a cell range is assumed to be sorted to stop
                         if an equal match is found. */
-    void            SetTestEqualCondition( sal_Bool bVal )
+    void            SetTestEqualCondition( BOOL bVal )
                         {
-                            nTestEqualCondition = sal::static_int_cast<sal_uInt8>(bVal ?
+                            nTestEqualCondition = sal::static_int_cast<BYTE>(bVal ?
                                 nTestEqualConditionEnabled :
                                 nTestEqualConditionDisabled);
                         }
-    sal_Bool            IsEqualConditionFulfilled() const
+    BOOL            IsEqualConditionFulfilled() const
                         { return nTestEqualCondition == nTestEqualConditionFulfilled; }
 
                     /** In a range assumed to be sorted find either the last of
@@ -355,7 +359,7 @@ public:
 
                         @param bIgnoreMismatchOnLeadingStrings
                             Normally strings are sorted behind numerical
-                            values. If this parameter is sal_True, the search does
+                            values. If this parameter is TRUE, the search does
                             not stop when encountering a string and does not
                             assume that no values follow anymore.
                             If querying for a string a mismatch on the first
@@ -367,148 +371,149 @@ public:
                         iterator is not usable anymore except for obtaining the
                         number format!
                       */
-    sal_Bool            FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
-                        SCROW& nFoundRow, sal_Bool bSearchForEqualAfterMismatch = false,
-                        sal_Bool bIgnoreMismatchOnLeadingStrings = sal_True );
+    BOOL            FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
+                        SCROW& nFoundRow, BOOL bSearchForEqualAfterMismatch = FALSE,
+                        BOOL bIgnoreMismatchOnLeadingStrings = TRUE );
 };
 
-class ScDocAttrIterator             // all attribute areas
+class ScDocAttrIterator				// alle Attribut-Bereiche
 {
 private:
-    ScDocument*     pDoc;
-    SCTAB           nTab;
-    SCCOL           nEndCol;
-    SCROW           nStartRow;
-    SCROW           nEndRow;
-    SCCOL           nCol;
-    ScAttrIterator* pColIter;
+    ScDocument*		pDoc;
+    SCTAB			nTab;
+    SCCOL			nEndCol;
+    SCROW			nStartRow;
+    SCROW			nEndRow;
+    SCCOL			nCol;
+    ScAttrIterator*	pColIter;
 
 public:
                     ScDocAttrIterator(ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
                     ~ScDocAttrIterator();
 
-    const ScPatternAttr*    GetNext( SCCOL& rCol, SCROW& rRow1, SCROW& rRow2 );
+    const ScPatternAttr*	GetNext( SCCOL& rCol, SCROW& rRow1, SCROW& rRow2 );
 };
 
-class ScAttrRectIterator            // all attribute areas, including areas stretching
-                                    // across more then one column
+class ScAttrRectIterator			// alle Attribut-Bereiche, auch Bereiche ueber mehrere Spalten
 {
 private:
-    ScDocument*     pDoc;
-    SCTAB           nTab;
-    SCCOL           nEndCol;
-    SCROW           nStartRow;
-    SCROW           nEndRow;
-    SCCOL           nIterStartCol;
-    SCCOL           nIterEndCol;
-    ScAttrIterator* pColIter;
+    ScDocument*		pDoc;
+    SCTAB			nTab;
+    SCCOL			nEndCol;
+    SCROW			nStartRow;
+    SCROW			nEndRow;
+    SCCOL			nIterStartCol;
+    SCCOL			nIterEndCol;
+    ScAttrIterator*	pColIter;
 
 public:
                     ScAttrRectIterator(ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
                     ~ScAttrRectIterator();
 
-    void                    DataChanged();
-    const ScPatternAttr*    GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow1, SCROW& rRow2 );
+    void 					DataChanged();
+    const ScPatternAttr*	GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow1, SCROW& rRow2 );
 };
 
-class ScHorizontalCellIterator      // walk through all non empty cells in an area
-{                                   // row by row
+class ScHorizontalCellIterator		// alle nichtleeren Zellen in einem Bereich
+{									// zeilenweise durchgehen
 private:
-    ScDocument*     pDoc;
-    SCTAB           nTab;
-    SCCOL           nStartCol;
-    SCCOL           nEndCol;
-    SCROW           nEndRow;
-    SCROW*          pNextRows;
-    SCSIZE*         pNextIndices;
-    SCCOL           nCol;
-    SCROW           nRow;
-    sal_Bool            bMore;
+    ScDocument*		pDoc;
+    SCTAB			nTab;
+    SCCOL			nStartCol;
+    SCCOL			nEndCol;
+    SCROW			nEndRow;
+    SCROW*			pNextRows;
+    SCSIZE*			pNextIndices;
+    SCCOL			nCol;
+    SCROW			nRow;
+    BOOL			bMore;
 
 public:
                     ScHorizontalCellIterator(ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
                     ~ScHorizontalCellIterator();
 
-    ScBaseCell*     GetNext( SCCOL& rCol, SCROW& rRow );
-    sal_Bool            ReturnNext( SCCOL& rCol, SCROW& rRow );
+    ScBaseCell*		GetNext( SCCOL& rCol, SCROW& rRow );
+    BOOL			ReturnNext( SCCOL& rCol, SCROW& rRow );
 
 private:
-    void            Advance();
+    void			Advance();
 };
 
 
 //
-//  returns all areas with non-default formatting (horizontal)
+//	gibt alle Bereiche mit nicht-Default-Formatierung zurueck (horizontal)
 //
 
 class ScHorizontalAttrIterator
 {
 private:
-    ScDocument*             pDoc;
-    SCTAB                   nTab;
-    SCCOL                   nStartCol;
-    SCROW                   nStartRow;
-    SCCOL                   nEndCol;
-    SCROW                   nEndRow;
+    ScDocument* 			pDoc;
+    SCTAB					nTab;
+    SCCOL					nStartCol;
+    SCROW					nStartRow;
+    SCCOL					nEndCol;
+    SCROW					nEndRow;
 
-    SCROW*                  pNextEnd;
-    SCSIZE*                 pIndices;
-    const ScPatternAttr**   ppPatterns;
-    SCCOL                   nCol;
-    SCROW                   nRow;
-    sal_Bool                    bRowEmpty;
+    SCROW*					pNextEnd;
+    SCSIZE*					pIndices;
+    const ScPatternAttr**	ppPatterns;
+    SCCOL					nCol;
+    SCROW					nRow;
+    BOOL					bRowEmpty;
 
 public:
             ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
             ~ScHorizontalAttrIterator();
 
-    const ScPatternAttr*    GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow );
+    const ScPatternAttr*	GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow );
 };
 
 //
-//  returns non-empty cells and areas with formatting (horizontal)
+//	gibt nichtleere Zellen und Bereiche mit Formatierung zurueck (horizontal)
 //
 
 class SC_DLLPUBLIC ScUsedAreaIterator
 {
 private:
-    ScHorizontalCellIterator    aCellIter;
-    ScHorizontalAttrIterator    aAttrIter;
+    ScHorizontalCellIterator	aCellIter;
+    ScHorizontalAttrIterator	aAttrIter;
 
-    SCCOL                   nNextCol;
-    SCROW                   nNextRow;
+    SCCOL					nNextCol;
+    SCROW					nNextRow;
 
-    SCCOL                   nCellCol;
-    SCROW                   nCellRow;
-    const ScBaseCell*       pCell;
-    SCCOL                   nAttrCol1;
-    SCCOL                   nAttrCol2;
-    SCROW                   nAttrRow;
-    const ScPatternAttr*    pPattern;
+    SCCOL					nCellCol;
+    SCROW					nCellRow;
+    const ScBaseCell*		pCell;
+    SCCOL					nAttrCol1;
+    SCCOL					nAttrCol2;
+    SCROW					nAttrRow;
+    const ScPatternAttr*	pPattern;
 
-    SCCOL                   nFoundStartCol;         // results after GetNext
-    SCCOL                   nFoundEndCol;
-    SCROW                   nFoundRow;
-    const ScPatternAttr*    pFoundPattern;
-    const ScBaseCell*       pFoundCell;
+    SCCOL					nFoundStartCol;			// Ergebnisse nach GetNext
+    SCCOL					nFoundEndCol;
+    SCROW					nFoundRow;
+    const ScPatternAttr*	pFoundPattern;
+    const ScBaseCell*		pFoundCell;
 
 public:
             ScUsedAreaIterator( ScDocument* pDocument, SCTAB nTable,
                                 SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
             ~ScUsedAreaIterator();
 
-    sal_Bool    GetNext();
+    BOOL	GetNext();
 
-    SCCOL                   GetStartCol() const     { return nFoundStartCol; }
-    SCCOL                   GetEndCol() const       { return nFoundEndCol; }
-    SCROW                   GetRow() const          { return nFoundRow; }
-    const ScPatternAttr*    GetPattern() const      { return pFoundPattern; }
-    const ScBaseCell*       GetCell() const         { return pFoundCell; }
+    SCCOL					GetStartCol() const		{ return nFoundStartCol; }
+    SCCOL					GetEndCol() const		{ return nFoundEndCol; }
+    SCROW					GetRow() const			{ return nFoundRow; }
+    const ScPatternAttr*	GetPattern() const		{ return pFoundPattern; }
+    const ScBaseCell*		GetCell() const			{ return pFoundCell; }
 };
+
+// ============================================================================
 
 class ScRowBreakIterator
 {
@@ -518,12 +523,14 @@ public:
     explicit ScRowBreakIterator(::std::set<SCROW>& rBreaks);
     SCROW first();
     SCROW next();
-
+ 
 private:
     ::std::set<SCROW>& mrBreaks;
     ::std::set<SCROW>::const_iterator maItr;
     ::std::set<SCROW>::const_iterator maEnd;
 };
+
+// ============================================================================
 
 class ScDocRowHeightUpdater
 {

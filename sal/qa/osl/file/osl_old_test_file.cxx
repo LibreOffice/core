@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,7 @@
 #define TEST_VOLUME "c:/"
 #endif
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <testshl/simpleheader.hxx>
 
 namespace osl_test_file
 {
@@ -69,31 +67,29 @@ public:
     CPPUNIT_TEST_SUITE( oldtestfile );
     CPPUNIT_TEST( test_file_001 );
     CPPUNIT_TEST( test_file_002 );
-    // so buggy!! CPPUNIT_TEST( test_file_003 );
+    CPPUNIT_TEST( test_file_003 );
     CPPUNIT_TEST( test_file_004 );
     CPPUNIT_TEST_SUITE_END( );
 };
 
-const char * const aSource1[] =
+char *aSource1[] =
 {
     "a"    , "file:///" TEST_VOLUME "bla/a",
-    ///TODO: check if last slash must be omitted in resolved path.
-//    "a/"   , "file:///" TEST_VOLUME "bla/a",
+    "a/"   , "file:///" TEST_VOLUME "bla/a",
     "../a" , "file:///" TEST_VOLUME "a" ,
-    "a/.." , "file:///" TEST_VOLUME "bla/",
+    "a/.." , "file:///" TEST_VOLUME "bla",
     "a/../b" , "file:///" TEST_VOLUME "bla/b",
     ".."   , "file:///" TEST_VOLUME "",
-    "a/b/c/d"   , "file:///" TEST_VOLUME "bla/a/b/c/d",
+    "a/b/c/d/"   , "file:///" TEST_VOLUME "bla/a/b/c/d",
     "a/./c"   , "file:///" TEST_VOLUME "bla/a/c",
-    "file:///bla/blub", "file:///"  "bla/blub",
+    "file:///bla/blub", "file:///" TEST_VOLUME "bla/blub",
     0 , 0
 };
 
-const char * const aSource2[ ] =
+char *aSource2[ ] =
 {
     "a" , "file:///" TEST_VOLUME "bla/blubs/schnubbel/a",
-    ///TODO: check if last slash must be omitted in resolved path.
-//    "a/", "file:///" TEST_VOLUME "bla/blubs/schnubbel/a",
+    "a/", "file:///" TEST_VOLUME "bla/blubs/schnubbel/a",
     "../a", "file:///" TEST_VOLUME "bla/blubs/a",
     "../../a", "file:///" TEST_VOLUME "bla/a",
     "../../../a", "file:///" TEST_VOLUME "a",
@@ -101,7 +97,7 @@ const char * const aSource2[ ] =
     0,0
 };
 
-const char * const aSource3[ ] =
+char *aSource3[ ] =
 {
     ".." , "/a",
     "../a" , "/a/a",
@@ -110,9 +106,8 @@ const char * const aSource3[ ] =
     0,0
 };
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
+using namespace rtl;
+
 void oldtestfile::test_file_001()
 {
 #ifdef WIN32
@@ -126,7 +121,6 @@ void oldtestfile::test_file_001()
         OUString target;
         OUString rel = OUString::createFromAscii( aSource1[i] );
         oslFileError e = osl_getAbsoluteFileURL( base1.pData, rel.pData , &target.pData );
-        // printf("%d : %s -- %s -- %s\n", i, aSource1[i], aSource1[i+1], OUStringToOString(target , RTL_TEXTENCODING_ASCII_US ).getStr() );
         CPPUNIT_ASSERT_MESSAGE("failure #1",  osl_File_E_None == e );
         if( osl_File_E_None == e )
         {
@@ -134,12 +128,12 @@ void oldtestfile::test_file_001()
         }
         OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
         OString obase = OUStringToOString( base1 , RTL_TEXTENCODING_ASCII_US );
-        // fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource1[i], o.pData->buffer );
+        fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource1[i], o.pData->buffer );
     }
 
     OUString err1( RTL_CONSTASCII_USTRINGPARAM( "../.." ) );
     OUString target;
-    // CPPUNIT_ASSERT_MESSAGE("failure #11",  osl_File_E_None != osl_getAbsoluteFileURL( base1.pData , err1.pData , &target.pData ) );
+    CPPUNIT_ASSERT_MESSAGE("failure #11",  osl_File_E_None != osl_getAbsoluteFileURL( base1.pData , err1.pData , &target.pData ) );
 
 }
 
@@ -156,7 +150,6 @@ void oldtestfile::test_file_002()
         OUString target;
         OUString rel = OUString::createFromAscii( aSource2[i] );
         oslFileError e = osl_getAbsoluteFileURL( base2.pData, rel.pData , &target.pData );
-        // printf("%d : %s -- %s -- %s\n", i, aSource2[i], aSource2[i+1], OUStringToOString(target , RTL_TEXTENCODING_ASCII_US ).getStr() );
         CPPUNIT_ASSERT_MESSAGE("failure #2",  osl_File_E_None == e );
         if( osl_File_E_None == e )
         {
@@ -164,7 +157,7 @@ void oldtestfile::test_file_002()
         }
         OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
         OString obase = OUStringToOString( base2 , RTL_TEXTENCODING_ASCII_US );
-//      fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource2[i], o.pData->buffer );
+//		fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource2[i], o.pData->buffer );
     }
 }
 
@@ -178,10 +171,10 @@ void oldtestfile::test_file_003()
 #ifdef UNX
     int i;
     char buf[PATH_MAX];
-    if( getcwd( buf, PATH_MAX -1 ) )
+    if( getcwd( buf, PATH_MAX ) )
     {
         char buf2[PATH_MAX];
-        strcpy( buf2 , "/tmp" );
+        strcpy( buf2 , buf );
         strcat( buf2, "/a" );
 
         if( 0 == mkdir( buf2 , S_IRWXG | S_IRWXO | S_IRWXU ) )
@@ -189,7 +182,7 @@ void oldtestfile::test_file_003()
             strcat( buf2, "/b" );
             if( 0 == mkdir( buf2, S_IRWXU | S_IRWXO | S_IRWXU ) )
             {
-                if( 0 == symlink( buf2 , "/tmp/c" ) )
+                if( 0 == symlink( buf2 , "c" ) )
                 {
                     OUString dir;
                     osl_getProcessWorkingDir( &(dir.pData) );
@@ -210,27 +203,27 @@ void oldtestfile::test_file_003()
                                                             int j;
                                                             for( j = dir.getLength() ;
                                      j < target.getLength() &&
-                                         aSource3[i+1][j-dir.getLength()] == target[j]  ; j++ );
+                                         aSource3[i+1][j-dir.getLength()] == target[j]	 ; j++ );
                                 CPPUNIT_ASSERT_MESSAGE("failure #5",  j == target.getLength() );
                             }
                         }
                         OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
                         OString obase = OUStringToOString( base3 , RTL_TEXTENCODING_ASCII_US );
-                        //fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource3[i], o.pData->buffer );
+                        fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource3[i], o.pData->buffer );
                     }
-                    unlink( "/tmp/c" );
+                    unlink( "c" );
                 }
                 else
                 {
                     CPPUNIT_ASSERT_MESSAGE("failure #6",  0 );
                 }
-                rmdir( "/tmp/a/b" );
+                rmdir( "a/b" );
             }
             else
             {
                 CPPUNIT_ASSERT_MESSAGE("failure #7",  0 );
             }
-            rmdir( "/tmp/a" );
+            rmdir( "a" );
         }
         else
         {
@@ -264,19 +257,19 @@ void oldtestfile::test_file_004()
         }
         OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
         OString obase = OUStringToOString( base4 , RTL_TEXTENCODING_ASCII_US );
-        //fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource1[i], o.pData->buffer );
+        fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource1[i], o.pData->buffer );
     }
 
 
-// fprintf( stderr, "test_file done\n" );
+//	fprintf( stderr, "test_file done\n" );
 }
 
 } // namespace osl_test_file
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_REGISTRATION( osl_test_file::oldtestfile);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_test_file::oldtestfile, "osl_File" );
 
 // -----------------------------------------------------------------------------
-CPPUNIT_PLUGIN_IMPLEMENT();
+NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

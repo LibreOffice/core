@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,19 +75,23 @@ public:
     ScFlatBoolRowSegments(const ScFlatBoolRowSegments& r);
     ~ScFlatBoolRowSegments();
 
-    bool setTrue(SCROW nRow1, SCROW nRow2);
-    bool setFalse(SCROW nRow1, SCROW nRow2);
+    void setTrue(SCROW nRow1, SCROW nRow2);
+    void setFalse(SCROW nRow1, SCROW nRow2);
     bool getValue(SCROW nRow);
     bool getRangeData(SCROW nRow, RangeData& rData);
-    bool getRangeDataLeaf(SCROW nRow, RangeData& rData);
     void removeSegment(SCROW nRow1, SCROW nRow2);
     void insertSegment(SCROW nRow, SCROW nSize, bool bSkipStartBoundary);
 
     SCROW findLastNotOf(bool bValue) const;
 
+    void enableTreeSearch(bool bEnable);
+    void setInsertFromBack(bool bInsertFromBack);
+
 private:
     ::std::auto_ptr<ScFlatBoolSegmentsImpl> mpImpl;
 };
+
+// ============================================================================
 
 class ScFlatBoolColSegments
 {
@@ -102,15 +106,21 @@ public:
     ScFlatBoolColSegments(const ScFlatBoolColSegments& r);
     ~ScFlatBoolColSegments();
 
-    bool setTrue(SCCOL nCol1, SCCOL nCol2);
-    bool setFalse(SCCOL nCol1, SCCOL nCol2);
+    void setTrue(SCCOL nCol1, SCCOL nCol2);
+    void setFalse(SCCOL nCol1, SCCOL nCol2);
+    bool getValue(SCCOL nCol);
     bool getRangeData(SCCOL nCol, RangeData& rData);
     void removeSegment(SCCOL nCol1, SCCOL nCol2);
     void insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipStartBoundary);
 
+    void enableTreeSearch(bool bEnable);
+    void setInsertFromBack(bool bInsertFromBack);
+
 private:
     ::std::auto_ptr<ScFlatBoolSegmentsImpl> mpImpl;
 };
+
+// ============================================================================
 
 class ScFlatUInt16SegmentsImpl;
 
@@ -154,6 +164,7 @@ public:
     SCROW findLastNotOf(sal_uInt16 nValue) const;
 
     void enableTreeSearch(bool bEnable);
+    void setInsertFromBack(bool bInsertFromBack);
 
 private:
     ::std::auto_ptr<ScFlatUInt16SegmentsImpl> mpImpl;

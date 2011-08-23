@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,6 @@
 #include <utility>
 
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/random.h>
 #include <sax/fshelper.hxx>
 #include <unotools/streamwrap.hxx>
 
@@ -53,15 +51,13 @@
 #include <../../ui/inc/viewdata.hxx>
 #include <excdoc.hxx>
 
-#include <oox/token/tokens.hxx>
+#include <oox/core/tokens.hxx>
 #include <formula/grammar.hxx>
 #include <oox/export/drawingml.hxx>
-#include <oox/xls/excelvbaproject.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
-#include <cppuhelper/implementationentry.hxx>
 
 #define DEBUG_XL_ENCRYPTION 0
 
@@ -82,17 +78,10 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
 using ::rtl::OString;
 using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::utl::OStreamWrapper;
 using ::std::vector;
 
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::uno;
-using namespace ::formula;
-using namespace ::oox;
+using namespace formula;
 
 // ============================================================================
 
@@ -345,7 +334,7 @@ void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nF
     }
 }
 
-// Xcl has an obscure sense of whether starting a new record or not,
+// ER: #71367# Xcl has an obscure sense of whether starting a new record or not,
 // and crashes if it encounters the string header at the very end of a record.
 // Thus we add 1 to give some room, seems like they do it that way but with another count (10?)
 void XclExpStream::WriteByteString( const ByteString& rString, sal_uInt16 nMaxLen, bool b16BitCount )
@@ -380,7 +369,7 @@ void XclExpStream::SetEncrypter( XclExpEncrypterRef xEncrypter )
 
 bool XclExpStream::HasValidEncrypter() const
 {
-    return mxEncrypter && mxEncrypter->IsValid();
+    return mxEncrypter.is() && mxEncrypter->IsValid();
 }
 
 void XclExpStream::EnableEncryption( bool bEnable )
@@ -484,16 +473,17 @@ void XclExpStream::WriteRawZeroBytes( sal_Size nBytes )
 
 // ============================================================================
 
-XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot ) :
+XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot, const sal_uInt8 nDocId[16],
+                                            const sal_uInt8 nSalt[16] ) :
     mrRoot(rRoot),
     mnOldPos(STREAM_SEEK_TO_END),
     mbValid(false)
 {
-    Sequence< NamedValue > aEncryptionData = rRoot.GetEncryptionData();
-    if( !aEncryptionData.hasElements() )
+    String aPass = rRoot.GetPassword();
+    if (aPass.Len() == 0)
         // Empty password.  Get the default biff8 password.
-        aEncryptionData = rRoot.GenerateDefaultEncryptionData();
-    Init( aEncryptionData );
+        aPass = rRoot.GetDefaultPassword();
+    Init(aPass, nDocId, nSalt);
 }
 
 XclExpBiff8Encrypter::~XclExpBiff8Encrypter()
@@ -505,22 +495,9 @@ bool XclExpBiff8Encrypter::IsValid() const
     return mbValid;
 }
 
-void XclExpBiff8Encrypter::GetSaltDigest( sal_uInt8 pnSaltDigest[16] ) const
+void XclExpBiff8Encrypter::GetSaltDigest( sal_uInt8 nSaltDigest[16] ) const
 {
-    if ( sizeof( mpnSaltDigest ) == 16 )
-        memcpy( pnSaltDigest, mpnSaltDigest, 16 );
-}
-
-void XclExpBiff8Encrypter::GetSalt( sal_uInt8 pnSalt[16] ) const
-{
-    if ( sizeof( mpnSalt ) == 16 )
-        memcpy( pnSalt, mpnSalt, 16 );
-}
-
-void XclExpBiff8Encrypter::GetDocId( sal_uInt8 pnDocId[16] ) const
-{
-    if ( sizeof( mpnDocId ) == 16 )
-    memcpy( pnDocId, mpnDocId, 16 );
+    memcpy(nSaltDigest, mnSaltDigest, 16);
 }
 
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt8 nData )
@@ -577,42 +554,46 @@ void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_Int32 nData )
     Encrypt(rStrm, static_cast<sal_uInt32>(nData));
 }
 
-void XclExpBiff8Encrypter::Init( const Sequence< NamedValue >& rEncryptionData )
+void XclExpBiff8Encrypter::Init( const String& aPass, const sal_uInt8 nDocId[16],
+                                 const sal_uInt8 nSalt[16] )
 {
-    mbValid = false;
+    memset(mnSaltDigest, 0, sizeof(mnSaltDigest));
 
-    if( maCodec.InitCodec( rEncryptionData ) )
+    xub_StrLen nLen = aPass.Len();
+    bool bValid = (0 < nLen) && (nLen < 16);
+    if ( bValid )
     {
-        maCodec.GetDocId( mpnDocId );
+        // transform String to sal_uInt16 array
+        memset(mnPassw, 0, sizeof(mnPassw));
+        for (xub_StrLen nChar = 0; nChar < nLen; ++nChar)
+            mnPassw[nChar] = static_cast<sal_uInt16>(aPass.GetChar(nChar));
 
-        // generate the salt here
-        TimeValue aTime;
-        osl_getSystemTime( &aTime );
-        rtlRandomPool aRandomPool = rtl_random_createPool ();
-        rtl_random_addBytes( aRandomPool, &aTime, 8 );
-        rtl_random_getBytes( aRandomPool, mpnSalt, 16 );
-        rtl_random_destroyPool( aRandomPool );
+        // copy document ID
+        memcpy(mnDocId, nDocId, sizeof(mnDocId));
 
-        memset( mpnSaltDigest, 0, sizeof( mpnSaltDigest ) );
+        // init codec
+        maCodec.InitKey(mnPassw, mnDocId);
 
         // generate salt hash.
         ::msfilter::MSCodec_Std97 aCodec;
-        aCodec.InitCodec( rEncryptionData );
-        aCodec.CreateSaltDigest( mpnSalt, mpnSaltDigest );
+        aCodec.InitKey(mnPassw, mnDocId);
+        aCodec.CreateSaltDigest(nSalt, mnSaltDigest);
 
         // verify to make sure it's in good shape.
-        mbValid = maCodec.VerifyKey( mpnSalt, mpnSaltDigest );
+        bValid = maCodec.VerifyKey(nSalt, mnSaltDigest);
     }
+
+    mbValid = bValid;
 }
 
 sal_uInt32 XclExpBiff8Encrypter::GetBlockPos( sal_Size nStrmPos ) const
 {
-    return static_cast< sal_uInt32 >( nStrmPos / EXC_ENCR_BLOCKSIZE );
+    return static_cast<sal_uInt32>(nStrmPos / EXC_ENCR_BLOCKSIZE);
 }
 
 sal_uInt16 XclExpBiff8Encrypter::GetOffsetInBlock( sal_Size nStrmPos ) const
 {
-    return static_cast< sal_uInt16 >( nStrmPos % EXC_ENCR_BLOCKSIZE );
+    return static_cast<sal_uInt16>(nStrmPos % EXC_ENCR_BLOCKSIZE);
 }
 
 void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBytes )
@@ -679,7 +660,7 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBy
     mnOldPos = nStrmPos;
 }
 
-static const char* lcl_GetErrorString( sal_uInt16 nScErrCode )
+static const char* lcl_GetErrorString( USHORT nScErrCode )
 {
     sal_uInt8 nXclErrCode = XclTools::GetXclErrorCode( nScErrCode );
     switch( nXclErrCode )
@@ -702,7 +683,7 @@ void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsT
         case NUMBERFORMAT_NUMBER:
         {
             // either value or error code
-            sal_uInt16 nScErrCode = rCell.GetErrCode();
+            USHORT nScErrCode = rCell.GetErrCode();
             if( nScErrCode )
             {
                 rsType = "e";
@@ -745,20 +726,17 @@ void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsT
 
 rtl::OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId )
 {
-    OUStringBuffer sBuf;
+    rtl::OUStringBuffer sBuf;
     if( sStreamDir )
         sBuf.appendAscii( sStreamDir );
     sBuf.appendAscii( sStream );
     if( nId )
         sBuf.append( nId );
-    if( strstr(sStream, "vml") )
-        sBuf.appendAscii( ".vml" );
-    else
-        sBuf.appendAscii( ".xml" );
+    sBuf.appendAscii( ".xml" );
     return sBuf.makeStringAndClear();
 }
 
-OString XclXmlUtils::ToOString( const Color& rColor )
+rtl::OString XclXmlUtils::ToOString( const Color& rColor )
 {
     char buf[9];
     sprintf( buf, "%.2X%.2X%.2X%.2X", rColor.GetTransparency(), rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
@@ -766,37 +744,37 @@ OString XclXmlUtils::ToOString( const Color& rColor )
     return OString( buf );
 }
 
-OString XclXmlUtils::ToOString( const OUString& s )
+rtl::OString XclXmlUtils::ToOString( const ::rtl::OUString& s )
 {
     return OUStringToOString( s, RTL_TEXTENCODING_UTF8  );
 }
 
-OString XclXmlUtils::ToOString( const String& s )
+rtl::OString XclXmlUtils::ToOString( const String& s )
 {
-    return OString( s.GetBuffer(), s.Len(), RTL_TEXTENCODING_UTF8 );
+    return rtl::OString( s.GetBuffer(), s.Len(), RTL_TEXTENCODING_UTF8 );
 }
 
-OString XclXmlUtils::ToOString( const ScAddress& rAddress )
+rtl::OString XclXmlUtils::ToOString( const ScAddress& rAddress )
 {
     String sAddress;
     rAddress.Format( sAddress, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1 ) );
     return ToOString( sAddress );
 }
 
-OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
+rtl::OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
 {
     const sal_uInt16* pBuffer = &rBuffer [0];
-    return OString( pBuffer, rBuffer.size(), RTL_TEXTENCODING_UTF8 );
+    return ::rtl::OString( pBuffer, rBuffer.size(), RTL_TEXTENCODING_UTF8 );
 }
 
-OString XclXmlUtils::ToOString( const ScRange& rRange )
+rtl::OString XclXmlUtils::ToOString( const ScRange& rRange )
 {
     String sRange;
     rRange.Format( sRange, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1 ) );
     return ToOString( sRange );
 }
 
-OString XclXmlUtils::ToOString( const ScRangeList& rRangeList )
+rtl::OString XclXmlUtils::ToOString( const ScRangeList& rRangeList )
 {
     String s;
     rRangeList.Format( s, SCA_VALID, NULL, FormulaGrammar::CONV_XL_A1, ' ' );
@@ -810,19 +788,18 @@ static ScAddress lcl_ToAddress( const XclAddress& rAddress )
     // For some reason, ScRange::Format() returns omits row numbers if
     // the row is >= MAXROW or the column is >= MAXCOL, and Excel doesn't
     // like "A:IV" (i.e. no row numbers).  Prevent this.
-    // KOHEI: Find out if the above comment is still true.
-    aAddress.SetRow( std::min<sal_Int32>( rAddress.mnRow, MAXROW ) );
-    aAddress.SetCol( static_cast<sal_Int16>(std::min<sal_Int32>( rAddress.mnCol, MAXCOL )) );
+    aAddress.SetRow( std::min<sal_Int32>( rAddress.mnRow, MAXROW-1 ) );
+    aAddress.SetCol( static_cast<sal_Int16>(std::min<sal_Int32>( rAddress.mnCol, MAXCOL-1 )) );
 
     return aAddress;
 }
 
-OString XclXmlUtils::ToOString( const XclAddress& rAddress )
+rtl::OString XclXmlUtils::ToOString( const XclAddress& rAddress )
 {
     return ToOString( lcl_ToAddress( rAddress ) );
 }
 
-OString XclXmlUtils::ToOString( const XclExpString& s )
+rtl::OString XclXmlUtils::ToOString( const XclExpString& s )
 {
     DBG_ASSERT( !s.IsRich(), "XclXmlUtils::ToOString(XclExpString): rich text string found!" );
     return ToOString( s.GetUnicodeBuffer() );
@@ -872,7 +849,7 @@ OUString XclXmlUtils::ToOUString( const String& s )
     return OUString( s.GetBuffer(), s.Len() );
 }
 
-OUString XclXmlUtils::ToOUString( ScDocument& rDocument, const ScAddress& rAddress, ScTokenArray* pTokenArray )
+rtl::OUString XclXmlUtils::ToOUString( ScDocument& rDocument, const ScAddress& rAddress, ScTokenArray* pTokenArray )
 {
     ScCompiler aCompiler( &rDocument, rAddress, *pTokenArray);
     aCompiler.SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_A1);
@@ -988,8 +965,8 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
 
 // ============================================================================
 
-XclExpXmlStream::XclExpXmlStream( const Reference< XComponentContext >& rCC )
-    : XmlFilterBase( rCC ),
+XclExpXmlStream::XclExpXmlStream( const Reference< XMultiServiceFactory >& rSMgr )
+    : XmlFilterBase( rSMgr ),
       mpRoot( NULL )
 {
 }
@@ -1013,6 +990,13 @@ void XclExpXmlStream::PopStream()
 {
     DBG_ASSERT( !maStreams.empty(), "XclExpXmlStream::PopStream - stack is empty!" );
     maStreams.pop();
+}
+
+OUString XclExpXmlStream::GetIdForPath( const OUString& sPath )
+{
+    if( maOpenedStreamMap.find( sPath ) == maOpenedStreamMap.end() )
+        return OUString();
+    return maOpenedStreamMap[ sPath ].first;
 }
 
 sax_fastparser::FSHelperPtr XclExpXmlStream::GetStreamForPath( const OUString& sPath )
@@ -1053,7 +1037,7 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     const Reference< XOutputStream >& xParentRelation,
     const char* sContentType,
     const char* sRelationshipType,
-    OUString* pRelationshipId )
+    ::rtl::OUString* pRelationshipId )
 {
     OUString sRelationshipId;
     if (xParentRelation.is())
@@ -1121,16 +1105,23 @@ bool XclExpXmlStream::exportDocument() throw()
 
     XclExpRootData aData( EXC_BIFF8, *pShell->GetMedium (), rStorage, *pDoc, RTL_TEXTENCODING_DONTKNOW );
     aData.meOutput = EXC_OUTPUT_XML_2007;
-    aData.maXclMaxPos.Set( EXC_MAXCOL_XML_2007, EXC_MAXROW_XML_2007, EXC_MAXTAB_XML_2007 );
-    aData.maMaxPos.SetCol( ::std::min( aData.maScMaxPos.Col(), aData.maXclMaxPos.Col() ) );
-    aData.maMaxPos.SetRow( ::std::min( aData.maScMaxPos.Row(), aData.maXclMaxPos.Row() ) );
-    aData.maMaxPos.SetTab( ::std::min( aData.maScMaxPos.Tab(), aData.maXclMaxPos.Tab() ) );
-
     XclExpRoot aRoot( aData );
 
     mpRoot = &aRoot;
     aRoot.GetOldRoot().pER = &aRoot;
     aRoot.GetOldRoot().eDateiTyp = Biff8;
+#if 0 // FIXME: Re-write this block without using SotStorage.
+    if ( SvtFilterOptions* pOptions = SvtFilterOptions::Get() )
+        if ( pShell && pOptions->IsLoadExcelBasicStorage() )
+            if ( sal_uInt32 nError
+                 = SvxImportMSVBasic( *pShell, *rStorage,
+                                      pOptions->IsLoadExcelBasicCode(),
+                                      pOptions->IsLoadExcelBasicStorage() )
+                .SaveOrDelMSVBAStorage( true, EXC_STORAGE_VBA_PROJECT) )
+            {
+                pShell->SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+            }
+#endif
     // Get the viewsettings before processing
     if( pShell->GetViewData() )
         pShell->GetViewData()->WriteExtOptions( mpRoot->GetExtDocOptions() );
@@ -1152,6 +1143,14 @@ bool XclExpXmlStream::exportDocument() throw()
     return true;
 }
 
+void XclExpXmlStream::Trace( const char* format, ...)
+{
+    va_list ap;
+    va_start( ap, format );
+    vfprintf( stderr, format, ap );
+    va_end( ap );
+}
+
 //////////////////////////////////////////////////////////////////////////
 // UNO stuff so that the filter is registered
 //////////////////////////////////////////////////////////////////////////
@@ -1163,12 +1162,7 @@ OUString XlsxExport_getImplementationName()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME ) );
 }
 
-::oox::ole::VbaProject* XclExpXmlStream::implCreateVbaProject() const
-{
-    return new ::oox::xls::ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
-}
-
-OUString XclExpXmlStream::implGetImplementationName() const
+::rtl::OUString XclExpXmlStream::implGetImplementationName() const
 {
     return CREATE_OUSTRING( "TODO" );
 }
@@ -1181,9 +1175,9 @@ Sequence< OUString > SAL_CALL XlsxExport_getSupportedServiceNames() throw()
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL XlsxExport_createInstance(const Reference< XComponentContext > & rCC ) throw( Exception )
+Reference< XInterface > SAL_CALL XlsxExport_createInstance(const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception )
 {
-    return (cppu::OWeakObject*) new XclExpXmlStream( rCC );
+    return (cppu::OWeakObject*) new XclExpXmlStream( rSMgr );
 }
 
 #ifdef __cplusplus
@@ -1196,23 +1190,57 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceManager */, void* pRegistryKey )
+{
+    sal_Bool bRet = sal_False;
+
+    if( pRegistryKey )
+    {
+        try
+        {
+            Reference< XRegistryKey > xNewKey1(
+                    static_cast< XRegistryKey* >( pRegistryKey )->createKey(
+                        OUString::createFromAscii( IMPL_NAME "/UNO/SERVICES/" ) ) );
+            xNewKey1->createKey( XlsxExport_getSupportedServiceNames().getConstArray()[0] );
+
+            bRet = sal_True;
+        }
+        catch( InvalidRegistryException& )
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+
+    return bRet;
+}
+
 // ------------------------
 // - component_getFactory -
 // ------------------------
-::cppu::ImplementationEntry entries [] =
+
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
 {
+    Reference< XSingleServiceFactory > xFactory;
+    void* pRet = 0;
+
+    if ( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
     {
-        XlsxExport_createInstance, XlsxExport_getImplementationName,
-        XlsxExport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
+        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME ) );
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, XMultiServiceFactory* pServiceManager, XRegistryKey*  pRegistryKey )
-{
-    return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, entries );
+        xFactory = Reference< XSingleServiceFactory >( ::cppu::createSingleFactory(
+                    reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
+                    XlsxExport_getImplementationName(),
+                    XlsxExport_createInstance,
+                    XlsxExport_getSupportedServiceNames() ) );
+    }
 
+    if ( xFactory.is() )
+    {
+        xFactory->acquire();
+        pRet = xFactory.get();
+    }
+
+    return pRet;
 }
 
 #ifdef __cplusplus

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 
 //-----------------------------------------------------------
-//  interface includes
+//	interface includes
 //-----------------------------------------------------------
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -51,23 +51,23 @@
 #include <windows.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
+#endif 
 
 #endif
 
 //--------------------------------------------------------------
-//  namesapces
+//	namesapces
 //--------------------------------------------------------------
 
-using namespace ::rtl                   ;
-using namespace ::cppu                  ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
-using namespace std                     ;
+using namespace	::rtl					;
+using namespace	::cppu					;
+using namespace	::com::sun::star::uno	;
+using namespace	::com::sun::star::lang	;
+using namespace std						;
 using namespace com::sun::star::system;
 
 //--------------------------------------------------------------
-//  defines
+//	defines
 //--------------------------------------------------------------
 
 #ifdef WNT
@@ -77,31 +77,31 @@ using namespace com::sun::star::system;
 #endif
 
 //--------------------------------------------------------------
-//  global variables
+//	global variables
 //--------------------------------------------------------------
 
-Reference< XMultiServiceFactory >   g_xFactory;
+Reference< XMultiServiceFactory >	g_xFactory;
 
 //--------------------------------------------------------------
-//  main
+//	main
 //--------------------------------------------------------------
 
 
-// int SAL_CALL main(int nArgc, char* Argv[], char* Env[]   )
-int SAL_CALL main(int, char*, char* )
+// int SAL_CALL main(int nArgc, char* Argv[], char* Env[]	)
+int SAL_CALL main(int, char*, char*	)
 {
     //-------------------------------------------------
     // get the global service-manager
     //-------------------------------------------------
-
+    
     // Get global factory for uno services.
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occurred.
+    // Print a message if an error occured.
     if ( g_xFactory.is() == sal_False )
     {
-        OSL_FAIL("Can't create RegistryServiceFactory");
+        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -114,14 +114,14 @@ int SAL_CALL main(int, char*, char* )
     try
     {
         Reference< XProxySettings > xProxySettings(
-            g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemProxySettings")) ), UNO_QUERY );
-
+            g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.system.SystemProxySettings" ) ), UNO_QUERY );
+    
         if ( !xProxySettings.is() )
         {
-            OSL_FAIL( "Error creating SystemProxySettings Service" );
+            OSL_ENSURE( sal_False, "Error creating SystemProxySettings Service" );
             return(-1);
-        }
-
+        }	
+        
         printf( "Creating instance of SystemProxySettings successful\n" );
 
         OUString ftpProxy    = xProxySettings->getFtpProxyAddress( );
@@ -141,11 +141,11 @@ int SAL_CALL main(int, char*, char* )
         printf( "Test of SystemProxySettings successful\n" );
 
         xProxySettings = Reference< XProxySettings >(
-            g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SOProxySettings")) ), UNO_QUERY );
+            g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.system.SOProxySettings" ) ), UNO_QUERY );
 
         if ( !xProxySettings.is() )
         {
-            OSL_FAIL( "Error creating SystemProxySettings Service" );
+            OSL_ENSURE( sal_False, "Error creating SystemProxySettings Service" );
             return(-1);
         }
 
@@ -170,7 +170,7 @@ int SAL_CALL main(int, char*, char* )
         {
             printf("Test ProxyEnabled true\n");
         }
-
+        
         printf( "Test of SOProxySettings successful\n" );
     }
     catch( Exception& )
@@ -184,10 +184,10 @@ int SAL_CALL main(int, char*, char* )
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
-    // Print a message if an error occurred.
+    // Print a message if an error occured.
     if ( xComponent.is() == sal_False )
     {
-        OSL_FAIL("Error shuting down");
+        OSL_ENSURE(sal_False, "Error shuting down");
     }
 
     // Dispose and clear factory

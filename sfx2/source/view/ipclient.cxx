@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ public:
     Rectangle                       m_aLastObjAreaPixel;    // area of object in coordinate system of the container (without scaling)
     sal_Bool                        m_bStoreObject;
     sal_Bool                        m_bUIActive;            // set and cleared when notification for UI (de)activation is sent
-    sal_Bool                        m_bResizeNoScale;
+    sal_Bool						m_bResizeNoScale;
 
     uno::Reference < embed::XEmbeddedObject > m_xObject;
     uno::Reference < embed::XEmbeddedClient > m_xClient;
@@ -197,15 +197,30 @@ throw (::com::sun::star::uno::RuntimeException)
             xDocument = m_pClient->GetViewShell()->GetObjectShell()->GetModel();
         SfxObjectShell::SetCurrentComponent( xDocument );
     }
+    else if ( m_pClient && nNewState == embed::EmbedStates::UI_ACTIVE )
+    {
+/*
+        uno::Reference < lang::XUnoTunnel > xObj( m_xObject->getComponent(), uno::UNO_QUERY );
+        uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
+        sal_Int64 nHandle = xObj.is() ? xObj->getSomething( aSeq ) : 0;
+        if ( nHandle )
+        {
+            // currently needs SFX code
+            SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
+            SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDoc );
+            SfxWorkWindow *pWorkWin = pFrame->GetFrame().GetWorkWindow_Impl();
+            pWorkWin->UpdateObjectBars_Impl();
+        }
+*/
+    }
 }
 
 void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
 
-    if ( m_pClient && aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnVisAreaChanged")) && m_nAspect != embed::Aspects::MSOLE_ICON )
+    if ( m_pClient && aEvent.EventName.equalsAscii("OnVisAreaChanged") && m_nAspect != embed::Aspects::MSOLE_ICON )
     {
-        m_pClient->FormatChanged(); // for Writer when format of the object is changed with the area
         m_pClient->ViewChanged();
         m_pClient->Invalidate();
     }
@@ -384,7 +399,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
         throw uno::RuntimeException();
 
     m_pClient->GetViewShell()->ResetAllClients_Impl(m_pClient);
-    m_bUIActive = sal_True;
+    m_bUIActive = TRUE;
     m_pClient->GetViewShell()->UIActivating( m_pClient );
 }
 
@@ -408,7 +423,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
         throw uno::RuntimeException();
 
     m_pClient->GetViewShell()->UIDeactivated( m_pClient );
-    m_bUIActive = sal_False;
+    m_bUIActive = FALSE;
 }
 
 //--------------------------------------------------------------------
@@ -423,7 +438,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SfxInPlaceCli
     uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
     try
     {
-        uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) );
+        uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") );
         aAny >>= xMan;
     }
     catch ( uno::Exception& )
@@ -609,7 +624,7 @@ void SfxInPlaceClient_Impl::SizeHasChanged()
                 Size aNewSize = m_pClient->GetEditWin()->LogicToLogic( m_aObjArea.GetSize(), &aClientMap, &aObjectMap );
                 m_xObject->setVisualAreaSize( m_nAspect, awt::Size( aNewSize.Width(), aNewSize.Height() ) );
             }
-
+    
             xInplace->setObjectRectangles( getPlacement(), getClipRectangle() );
         }
     }
@@ -677,7 +692,7 @@ void SfxInPlaceClient::SetObjectState( sal_Int32 nState )
         if ( m_pImp->m_nAspect == embed::Aspects::MSOLE_ICON
           && ( nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::INPLACE_ACTIVE ) )
         {
-            OSL_FAIL( "Iconified object should not be activated inplace!\n" );
+            OSL_ENSURE( sal_False, "Iconified object should not be activated inplace!\n" );
             return;
         }
 
@@ -722,7 +737,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL( "Can not clean the client site!\n" );
+                OSL_ENSURE( sal_False, "Can not clean the client site!\n" );
             }
         }
     }
@@ -746,7 +761,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "Can not set the client site!\n" );
+            OSL_ENSURE( sal_False, "Can not set the client site!\n" );
         }
 
         m_pImp->m_aTimer.Start();
@@ -756,7 +771,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
 }
 
 //--------------------------------------------------------------------
-sal_Bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
+BOOL SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
 {
     if( rArea != m_pImp->m_aObjArea )
     {
@@ -764,10 +779,10 @@ sal_Bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
         m_pImp->SizeHasChanged();
 
         Invalidate();
-        return sal_True;
+        return TRUE;
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 //--------------------------------------------------------------------
@@ -862,7 +877,7 @@ sal_Bool SfxInPlaceClient::IsObjectInPlaceActive() const
     try {
         return(
                (
-                m_pImp->m_xObject.is() &&
+                m_pImp->m_xObject.is() && 
                 (m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE)
                ) ||
                (
@@ -977,7 +992,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
             {
 
                 if ( m_pViewSh )
-                    m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(sal_True);
+                    m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(TRUE);
                 try
                 {
                     m_pImp->m_xObject->setClientSite( m_pImp->m_xClient );
@@ -1027,7 +1042,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 if ( m_pViewSh )
                 {
                     SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
-                    pFrame->GetTopFrame().LockResize_Impl(sal_False);
+                    pFrame->GetTopFrame().LockResize_Impl(FALSE);
                     pFrame->GetTopFrame().Resize();
                 }
             }
@@ -1068,19 +1083,14 @@ void SfxInPlaceClient::MakeVisible()
     // dummy implementation
 }
 
-void SfxInPlaceClient::FormatChanged()
-{
-    // dummy implementation
-}
-
 void SfxInPlaceClient::DeactivateObject()
 {
     if ( GetObject().is() )
     {
         try
         {
-            m_pImp->m_bUIActive = sal_False;
-            sal_Bool bHasFocus = sal_False;
+            m_pImp->m_bUIActive = FALSE;
+            BOOL bHasFocus = FALSE;
             uno::Reference< frame::XModel > xModel( m_pImp->m_xObject->getComponent(), uno::UNO_QUERY );
             if ( xModel.is() )
             {
@@ -1088,12 +1098,12 @@ void SfxInPlaceClient::DeactivateObject()
                 if ( xController.is() )
                 {
                     Window* pWindow = VCLUnoHelper::GetWindow( xController->getFrame()->getContainerWindow() );
-                    bHasFocus = pWindow->HasChildPathFocus( sal_True );
+                    bHasFocus = pWindow->HasChildPathFocus( TRUE );
                 }
             }
 
             if ( m_pViewSh )
-                m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(sal_True);
+                m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(TRUE);
 
             if ( m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
             {
@@ -1115,7 +1125,7 @@ void SfxInPlaceClient::DeactivateObject()
             {
                 SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
                 SfxViewFrame::SetViewFrame( pFrame );
-                pFrame->GetTopFrame().LockResize_Impl(sal_False);
+                pFrame->GetTopFrame().LockResize_Impl(FALSE);
                 pFrame->GetTopFrame().Resize();
             }
         }
@@ -1130,7 +1140,7 @@ void SfxInPlaceClient::ResetObject()
     {
         try
         {
-            m_pImp->m_bUIActive = sal_False;
+            m_pImp->m_bUIActive = FALSE;
             if ( m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
                 m_pImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
             else
@@ -1148,7 +1158,7 @@ void SfxInPlaceClient::ResetObject()
     }
 }
 
-sal_Bool SfxInPlaceClient::IsUIActive()
+BOOL SfxInPlaceClient::IsUIActive()
 {
     return m_pImp->m_bUIActive;
 }

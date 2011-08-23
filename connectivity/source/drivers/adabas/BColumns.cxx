@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,14 @@
 #include <comphelper/property.hxx>
 
 using namespace ::comphelper;
+
+
 using namespace connectivity::adabas;
 using namespace connectivity::sdbcx;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -66,12 +69,12 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
         {
             if(xRow->getString(4) == _rName)
             {
-                sal_Int32 nType             = xRow->getInt(5);
-                ::rtl::OUString sTypeName   = xRow->getString(6);
-                sal_Int32 nPrec             = xRow->getInt(7);
+                sal_Int32 nType				= xRow->getInt(5);
+                ::rtl::OUString sTypeName	= xRow->getString(6);
+                sal_Int32 nPrec				= xRow->getInt(7);
                 OAdabasCatalog::correctColumnProperties(nPrec,nType,sTypeName);
                 sal_Bool bAutoIncrement = sal_False;
-                if ( !_rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DEFAULT")) && !m_pTable->getSchema().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMAIN")) && !m_pTable->getTableName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("COLUMNS")) )
+                if ( !_rName.equalsAscii("DEFAULT") && !m_pTable->getSchema().equalsAscii("DOMAIN") && !m_pTable->getTableName().equalsAscii("COLUMNS") )
                 {
                     Reference< XStatement > xStmt = m_pTable->getMetaData()->getConnection()->createStatement(  );
                     ::rtl::OUString sQuery(RTL_CONSTASCII_USTRINGPARAM("SELECT \"DEFAULT\" FROM DOMAIN.COLUMNS WHERE OWNER = '"));
@@ -128,7 +131,7 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString& _rForName, cons
         return cloneDescriptor( descriptor );
 
     ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
-    ::rtl::OUString sQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString sQuote	= m_pTable->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
     m_pTable->beginTransAction();
@@ -140,7 +143,7 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString& _rForName, cons
         aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
         aSql += OTables::getColumnSqlType(descriptor);
         aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" )"));
-
+        
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement();
         xStmt->execute(aSql);
         ::comphelper::disposeComponent(xStmt);
@@ -164,7 +167,7 @@ void OColumns::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementNam
     if(!m_pTable->isNew())
     {
         ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("ALTER TABLE "));
-        ::rtl::OUString sQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString sQuote	= m_pTable->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + sDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());

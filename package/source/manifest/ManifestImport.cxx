@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,48 +37,47 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star;
+using namespace rtl;
 using namespace std;
-
-using ::rtl::OUString;
 
 // ---------------------------------------------------
 ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManVector )
 : nNumProperty ( 0 )
-, bIgnoreEncryptData    ( sal_False )
+, bIgnoreEncryptData 	( sal_False )
 , rManVector ( rNewManVector )
 
-, sFileEntryElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) )
-, sManifestElement      ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) )
+, sFileEntryElement   	( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) )
+, sManifestElement    	( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) )
 , sEncryptionDataElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ENCRYPTION_DATA ) )
-, sAlgorithmElement ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ALGORITHM ) )
+, sAlgorithmElement	( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ALGORITHM ) )
 , sKeyDerivationElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_KEY_DERIVATION ) )
 
-, sCdataAttribute               ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) )
-, sMediaTypeAttribute           ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_MEDIA_TYPE ) )
-, sVersionAttribute             ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) )
-, sFullPathAttribute            ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) )
-, sSizeAttribute                ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SIZE ) )
-, sSaltAttribute                ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) )
+, sCdataAttribute     			( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) )
+, sMediaTypeAttribute 			( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_MEDIA_TYPE ) )
+, sVersionAttribute 			( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) )
+, sFullPathAttribute  			( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) )
+, sSizeAttribute 				( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SIZE ) )
+, sSaltAttribute 				( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) )
 , sInitialisationVectorAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_INITIALISATION_VECTOR ) )
-, sIterationCountAttribute      ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) )
-, sAlgorithmNameAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) )
-, sKeyDerivationNameAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) )
-, sChecksumAttribute            ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM ) )
-, sChecksumTypeAttribute        ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) )
+, sIterationCountAttribute 		( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) )
+, sAlgorithmNameAttribute 		( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) )
+, sKeyDerivationNameAttribute 	( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) )
+, sChecksumAttribute 			( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM ) )
+, sChecksumTypeAttribute 		( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) )
 
-, sFullPathProperty             ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) )
-, sMediaTypeProperty            ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) )
-, sVersionProperty              ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) )
-, sIterationCountProperty       ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) )
-, sSaltProperty                 ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) )
-, sInitialisationVectorProperty ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) )
-, sSizeProperty                 ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) )
-, sDigestProperty               ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) )
+, sFullPathProperty  			( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) )
+, sMediaTypeProperty 			( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) )
+, sVersionProperty  			( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) )
+, sIterationCountProperty 		( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) )
+, sSaltProperty 				( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) )
+, sInitialisationVectorProperty	( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) )
+, sSizeProperty 				( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) )
+, sDigestProperty 				( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) )
 
-, sWhiteSpace                   ( RTL_CONSTASCII_USTRINGPARAM ( " " ) )
-, sBlowfish                     ( RTL_CONSTASCII_USTRINGPARAM ( "Blowfish CFB" ) )
-, sPBKDF2                       ( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) )
-, sChecksumType                 ( RTL_CONSTASCII_USTRINGPARAM ( CHECKSUM_TYPE ) )
+, sWhiteSpace 					( RTL_CONSTASCII_USTRINGPARAM ( " " ) )
+, sBlowfish						( RTL_CONSTASCII_USTRINGPARAM ( "Blowfish CFB" ) )
+, sPBKDF2 						( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) )
+, sChecksumType					( RTL_CONSTASCII_USTRINGPARAM ( CHECKSUM_TYPE ) )
 {
     aStack.reserve( 10 );
 }
@@ -89,19 +88,19 @@ ManifestImport::~ManifestImport ( void )
 }
 
 // ---------------------------------------------------
-void SAL_CALL ManifestImport::startDocument(  )
+void SAL_CALL ManifestImport::startDocument(  ) 	
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
 
 // ---------------------------------------------------
-void SAL_CALL ManifestImport::endDocument(  )
+void SAL_CALL ManifestImport::endDocument(  ) 	
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
 
 // ---------------------------------------------------
-void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
+void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) 	
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
     StringHashMap aConvertedAttribs;
@@ -136,7 +135,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
     else if ( aStack.size() > 1 )
     {
         ManifestStack::reverse_iterator aIter = aStack.rbegin();
-        ++aIter;
+        aIter++;
 
         if ( aIter->m_aConvertedName.equals( sFileEntryElement ) )
         {
@@ -198,12 +197,12 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
 }
 
 // ---------------------------------------------------
-void SAL_CALL ManifestImport::endElement( const OUString& aName )
+void SAL_CALL ManifestImport::endElement( const OUString& aName ) 	
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
     ::rtl::OUString aConvertedName = ConvertName( aName );
     if ( !aStack.empty() && aStack.rbegin()->m_aConvertedName.equals( aConvertedName ) )
-    {
+    { 
         if ( aConvertedName.equals( sFileEntryElement ) )
         {
             aSequence.realloc ( nNumProperty );
@@ -217,31 +216,31 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
 }
 
 // ---------------------------------------------------
-void SAL_CALL ManifestImport::characters( const OUString& /*aChars*/ )
+void SAL_CALL ManifestImport::characters( const OUString& /*aChars*/ ) 	
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
 
 // ---------------------------------------------------
-void SAL_CALL ManifestImport::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
+void SAL_CALL ManifestImport::ignorableWhitespace( const OUString& /*aWhitespaces*/ ) 	
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
 
 // ---------------------------------------------------
-void SAL_CALL ManifestImport::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
+void SAL_CALL ManifestImport::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ ) 	
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
 
 // ---------------------------------------------------
-void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
+void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ ) 	
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
 
 // ---------------------------------------------------
-::rtl::OUString ManifestImport::PushNameAndNamespaces( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs, StringHashMap& o_aConvertedAttribs )
+::rtl::OUString ManifestImport::PushNameAndNamespaces( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs, StringHashMap& o_aConvertedAttribs ) 	
 {
     StringHashMap aNamespaces;
     ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > > aAttribsStrs;
@@ -276,12 +275,12 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
         aConvertedName = ConvertName( aName );
 
     aStack.push_back( ManifestScopeEntry( aConvertedName, aNamespaces ) );
-
+ 
     for ( sal_uInt16 nInd = 0; nInd < aAttribsStrs.size(); nInd++ )
     {
         // convert the attribute names on filling
         o_aConvertedAttribs[ConvertName( aAttribsStrs[nInd].first )] = aAttribsStrs[nInd].second;
-    }
+    }    
 
     return aConvertedName;
 }
@@ -308,7 +307,7 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
     {
         // no check for manifest.xml consistency currently since the old versions have supported inconsistent documents as well
         aResult = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MANIFEST_NSPREFIX ) );
-        aResult += aPureName;
+        aResult += aPureName; 
     }
 
     return aResult;
@@ -318,7 +317,7 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
 ::rtl::OUString ManifestImport::ConvertName( const ::rtl::OUString& aName )
 {
     ::rtl::OUString aConvertedName;
-    for ( ManifestStack::reverse_iterator aIter = aStack.rbegin(); !aConvertedName.getLength() && aIter != aStack.rend(); ++aIter )
+    for ( ManifestStack::reverse_iterator aIter = aStack.rbegin(); !aConvertedName.getLength() && aIter != aStack.rend(); aIter++ )
     {
         if ( !aIter->m_aNamespaces.empty() )
             aConvertedName = ConvertNameWithNamespace( aName, aIter->m_aNamespaces );

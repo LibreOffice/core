@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,15 +42,15 @@
 
 //==================================================================
 
-sal_Bool   ScDeleteContentsDlg::bPreviousAllCheck = false;
-sal_uInt16 ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
+BOOL   ScDeleteContentsDlg::bPreviousAllCheck = FALSE;
+USHORT ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
                                                  IDF_NOTE     | IDF_FORMULA |
                                                  IDF_VALUE);
 
 //-----------------------------------------------------------------------
 
 ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
-                                          sal_uInt16  nCheckDefaults ) :
+                                          USHORT  nCheckDefaults ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DELCONT ) ),
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
@@ -61,16 +61,16 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
     aBtnDelFormulas ( this, ScResId( BTN_DELFORMULAS ) ),
     aBtnDelNotes    ( this, ScResId( BTN_DELNOTES ) ),
     aBtnDelAttrs    ( this, ScResId( BTN_DELATTRS ) ),
-    aBtnDelObjects  ( this, ScResId( BTN_DELOBJECTS ) ),
+    aBtnDelObjects	( this, ScResId( BTN_DELOBJECTS ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-    bObjectsDisabled( false )
+    bObjectsDisabled( FALSE )
 {
     if ( nCheckDefaults != 0 )
     {
         ScDeleteContentsDlg::nPreviousChecks = nCheckDefaults;
-        ScDeleteContentsDlg::bPreviousAllCheck = false;
+        ScDeleteContentsDlg::bPreviousAllCheck = FALSE;
     }
 
     aBtnDelAll.Check     ( ScDeleteContentsDlg::bPreviousAllCheck );
@@ -99,7 +99,7 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
 
 //------------------------------------------------------------------------
 
-sal_uInt16 ScDeleteContentsDlg::GetDelContentsCmdBits() const
+USHORT ScDeleteContentsDlg::GetDelContentsCmdBits() const
 {
     ScDeleteContentsDlg::nPreviousChecks = 0;
 
@@ -127,7 +127,7 @@ sal_uInt16 ScDeleteContentsDlg::GetDelContentsCmdBits() const
 
 //------------------------------------------------------------------------
 
-void ScDeleteContentsDlg::DisableChecks( sal_Bool bDelAllChecked )
+void ScDeleteContentsDlg::DisableChecks( BOOL bDelAllChecked )
 {
     if ( bDelAllChecked )
     {
@@ -158,8 +158,8 @@ void ScDeleteContentsDlg::DisableChecks( sal_Bool bDelAllChecked )
 
 void ScDeleteContentsDlg::DisableObjects()
 {
-    bObjectsDisabled = sal_True;
-    aBtnDelObjects.Check(false);
+    bObjectsDisabled = TRUE;
+    aBtnDelObjects.Check(FALSE);
     aBtnDelObjects.Disable();
 }
 
@@ -173,7 +173,7 @@ IMPL_LINK_INLINE_START( ScDeleteContentsDlg, DelAllHdl, void *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( ScDeleteContentsDlg, DelAllHdl, void *, EMPTYARG )
 
-ScDeleteContentsDlg::~ScDeleteContentsDlg()
+__EXPORT ScDeleteContentsDlg::~ScDeleteContentsDlg()
 {
 }
 

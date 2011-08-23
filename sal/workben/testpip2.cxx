@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define INCL_DOSPROCESS
 #include <osl/pipe.h>
+#include <os2.h>
 
 // eindeutiger Name fÅr die Pipe
 const char pszPipeName[] = "TestPipe";
@@ -46,7 +48,7 @@ void fail( const char * pszText, int retval )
     fprintf( stderr, "TestPipe Client: test failed, ErrNo: %d.\n", retval );
     exit( retval );
 }
-
+    
 
 
 /*
@@ -56,14 +58,14 @@ void fail( const char * pszText, int retval )
 int main (void)
 {
     char    szBuffer[ 256 ];
-    rtl_uString* ustrPipeName=0;
-    sal_Int32 nChars;
-
-    rtl_uString_newFromAscii(&ustrPipeName,pszPipeName);
-
+    sSize_t nChars;
+    
+    // gib dem Server die Chance, die Pipe zu îffnen
+    DosSleep( 1000 );
+    
     // erzeuge die Pipe
-    Pipe = osl_createPipe( ustrPipeName, osl_Pipe_OPEN, 0 );
-
+    Pipe = osl_createPipe( pszPipeName, osl_Pipe_OPEN, 0 );
+    
     if( !Pipe )
         fail( "unable to open pipe.\n",
               osl_getLastPipeError(NULL));
@@ -80,13 +82,13 @@ int main (void)
 
     // Sende die Daten wieder zurÅck.
     nChars = osl_sendPipe( Pipe, szBuffer, nChars );
-
+    
     if( nChars < 0 )
         fail( "unable to write on pipe.\n",
               osl_getLastPipeError( Pipe ) );
-
+              
     // schliesse die Pipe
-    osl_releasePipe( Pipe );
+    osl_destroyPipe( Pipe );
 
     printf( "TestPipe Client: test passed.\n" );
     return 0;

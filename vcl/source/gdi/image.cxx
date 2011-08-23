@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/scoped_array.hpp>
-
+#include <boost/scoped_ptr.hpp> 
+#include <boost/scoped_array.hpp> 
+ 
 #include <rtl/logfile.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
@@ -44,7 +44,6 @@
 #include <vcl/impimagetree.hxx>
 #include <vcl/image.h>
 #include <vcl/image.hxx>
-#include <vcl/imagerepository.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <rtl/strbuf.hxx>
@@ -81,8 +80,8 @@ Image::Image( const ResId& rResId ) :
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
-        BitmapEx    aBmpEx;
-        sal_uLong       nObjMask = pResMgr->ReadLong();
+        BitmapEx	aBmpEx;
+        ULONG 		nObjMask = pResMgr->ReadLong();
 
         if( nObjMask & RSC_IMAGE_IMAGEBITMAP )
         {
@@ -155,7 +154,7 @@ Image::Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap ) :
     DBG_CTOR( Image, NULL );
 
     const BitmapEx aBmpEx( rBitmap, rMaskBitmap );
-
+    
     ImplInit( aBmpEx );
 }
 
@@ -167,7 +166,7 @@ Image::Image( const Bitmap& rBitmap, const Color& rColor ) :
     DBG_CTOR( Image, NULL );
 
     const BitmapEx aBmpEx( rBitmap, rColor );
-
+    
     ImplInit( aBmpEx );
 }
 
@@ -177,7 +176,7 @@ Image::Image( const uno::Reference< graphic::XGraphic >& rxGraphic ) :
     mpImplData( NULL )
 {
     DBG_CTOR( Image, NULL );
-
+    
     const Graphic aGraphic( rxGraphic );
     ImplInit( aGraphic.GetBitmapEx() );
 }
@@ -219,7 +218,7 @@ void Image::ImplInit( const BitmapEx& rBmpEx )
 Size Image::GetSizePixel() const
 {
     DBG_CHKTHIS( Image, NULL );
-
+    
     Size aRet;
 
     if( mpImplData )
@@ -244,7 +243,7 @@ Size Image::GetSizePixel() const
 BitmapEx Image::GetBitmapEx() const
 {
     DBG_CHKTHIS( Image, NULL );
-
+    
     BitmapEx aRet;
 
     if( mpImplData )
@@ -269,8 +268,53 @@ BitmapEx Image::GetBitmapEx() const
 uno::Reference< graphic::XGraphic > Image::GetXGraphic() const
 {
     const Graphic aGraphic( GetBitmapEx() );
-
+    
     return aGraphic.GetXGraphic();
+}
+
+// -----------------------------------------------------------------------
+
+Image Image::GetColorTransformedImage( ImageColorTransform eColorTransform ) const
+{
+    DBG_CHKTHIS( Image, NULL );
+
+    Image aRet;
+
+    if( IMAGECOLORTRANSFORM_HIGHCONTRAST == eColorTransform )
+    {
+        BitmapEx aBmpEx( GetBitmapEx() );
+
+        if( !aBmpEx.IsEmpty() )
+        {
+            Color*  pSrcColors = NULL;
+            Color*  pDstColors = NULL;
+            ULONG   nColorCount = 0;
+
+            Image::GetColorTransformArrays( eColorTransform, pSrcColors, pDstColors, nColorCount );
+
+            if( nColorCount && pSrcColors && pDstColors )
+            {
+                aBmpEx.Replace( pSrcColors, pDstColors, nColorCount ); 
+                aRet = Image( aBmpEx );
+            }
+
+            delete[] pSrcColors;
+            delete[] pDstColors;
+        }
+    }
+    else if( IMAGECOLORTRANSFORM_MONOCHROME_BLACK == eColorTransform ||
+             IMAGECOLORTRANSFORM_MONOCHROME_WHITE == eColorTransform  )
+    {
+        BitmapEx aBmpEx( GetBitmapEx() );
+
+        if( !aBmpEx.IsEmpty() )
+            aRet = Image( aBmpEx.GetColorTransformedBitmapEx( ( BmpColorMode )( eColorTransform ) ) );
+    }
+
+    if( !aRet )
+        aRet = *this;
+
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
@@ -285,7 +329,7 @@ void Image::Invert()
 // -----------------------------------------------------------------------
 
 void Image::GetColorTransformArrays( ImageColorTransform eColorTransform,
-                                     Color*& rpSrcColor, Color*& rpDstColor, sal_uLong& rColorCount )
+                                     Color*& rpSrcColor, Color*& rpDstColor, ULONG& rColorCount )
 {
     if( IMAGECOLORTRANSFORM_HIGHCONTRAST == eColorTransform )
     {
@@ -324,7 +368,7 @@ Image& Image::operator=( const Image& rImage )
 
     if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
         delete mpImplData;
-
+    
     mpImplData = rImage.mpImplData;
 
     return *this;
@@ -332,11 +376,11 @@ Image& Image::operator=( const Image& rImage )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Image::operator==( const Image& rImage ) const
+BOOL Image::operator==( const Image& rImage ) const
 {
     DBG_CHKTHIS( Image, NULL );
     DBG_CHKOBJ( &rImage, Image, NULL );
-
+    
     bool bRet = false;
 
     if( rImage.mpImplData == mpImplData )
@@ -356,7 +400,7 @@ sal_Bool Image::operator==( const Image& rImage ) const
             case IMAGETYPE_IMAGE:
                 bRet = static_cast< ImplImageData* >( rImage.mpImplData->mpData )->IsEqual( *static_cast< ImplImageData* >( mpImplData->mpData ) );
             break;
-
+            
             default:
                 bRet = false;
             break;
@@ -370,7 +414,7 @@ sal_Bool Image::operator==( const Image& rImage ) const
 // - ImageList -
 // -------------
 
-ImageList::ImageList( sal_uInt16 nInit, sal_uInt16 nGrow ) :
+ImageList::ImageList( USHORT nInit, USHORT nGrow ) :
     mpImplData( NULL ),
     mnInitSize( nInit ),
     mnGrowSize( nGrow )
@@ -388,38 +432,38 @@ ImageList::ImageList( const ResId& rResId ) :
     RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::ImageList( const ResId& rResId )" );
 
     DBG_CTOR( ImageList, NULL );
-
+    
     rResId.SetRT( RSC_IMAGELIST );
-
+    
     ResMgr* pResMgr = rResId.GetResMgr();
 
     if( pResMgr && pResMgr->GetResource( rResId ) )
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
-        sal_uLong                               nObjMask = pResMgr->ReadLong();
-        const String                        aPrefix( pResMgr->ReadString() );
+        ULONG 								nObjMask = pResMgr->ReadLong();
+        const String						aPrefix( pResMgr->ReadString() );
         ::boost::scoped_ptr< Color >        spMaskColor;
 
         if( nObjMask & RSC_IMAGE_MASKCOLOR )
             spMaskColor.reset( new Color( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) ) );
-
+        
         pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
-
+        
         if( nObjMask & RSC_IMAGELIST_IDLIST )
         {
             for( sal_Int32 i = 0, nCount = pResMgr->ReadLong(); i < nCount; ++i )
                 pResMgr->ReadLong();
         }
-
+        
         sal_Int32 nCount = pResMgr->ReadLong();
-        ImplInit( static_cast< sal_uInt16 >( nCount ), Size() );
+        ImplInit( static_cast< USHORT >( nCount ), Size() );
 
         BitmapEx aEmpty;
         for( sal_Int32 i = 0; i < nCount; ++i )
         {
             rtl::OUString aName = pResMgr->ReadString();
-            sal_uInt16 nId = static_cast< sal_uInt16 >( pResMgr->ReadLong() );
+            USHORT nId = static_cast< USHORT >( pResMgr->ReadLong() );
             mpImplData->AddImage( aName, nId, aEmpty );
         }
 
@@ -430,8 +474,8 @@ ImageList::ImageList( const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
-                      const ::rtl::OUString& rPrefix,
+ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector, 
+                      const ::rtl::OUString& rPrefix, 
                       const Color* ) :
     mpImplData( NULL ),
     mnInitSize( 1 ),
@@ -441,12 +485,14 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
 
     DBG_CTOR( ImageList, NULL );
 
-    ImplInit( sal::static_int_cast< sal_uInt16 >( rNameVector.size() ), Size() );
+    ImplInit( sal::static_int_cast< USHORT >( rNameVector.size() ), Size() );
 
     mpImplData->maPrefix = rPrefix;
     for( sal_uInt32 i = 0; i < rNameVector.size(); ++i )
     {
-        mpImplData->AddImage( rNameVector[ i ], static_cast< sal_uInt16 >( i ) + 1, BitmapEx() );
+//		fprintf (stderr, "List %p [%d]: '%s'\n",
+//				 this, i, rtl::OUStringToOString( rNameVector[i], RTL_TEXTENCODING_UTF8 ).getStr() );
+        mpImplData->AddImage( rNameVector[ i ], static_cast< USHORT >( i ) + 1, BitmapEx() );
     }
 }
 
@@ -473,7 +519,7 @@ ImageList::~ImageList()
         delete mpImplData;
 }
 
-void ImageList::ImplInit( sal_uInt16 nItems, const Size &rSize )
+void ImageList::ImplInit( USHORT nItems, const Size &rSize )
 {
     mpImplData = new ImplImageList;
     mpImplData->mnRefCount = 1;
@@ -491,6 +537,9 @@ void ImageAryData::Load(const rtl::OUString &rPrefix)
 
     BitmapEx aBmpEx;
 
+//	fprintf (stderr, "Attempt load of '%s'\n",
+//			 rtl::OUStringToOString( maName, RTL_TEXTENCODING_UTF8 ).getStr() );
+
     rtl::OUString aFileName = rPrefix;
     aFileName += maName;
 #if OSL_DEBUG_LEVEL > 0
@@ -504,7 +553,7 @@ void ImageAryData::Load(const rtl::OUString &rPrefix)
         aMessage.append( "ImageAryData::Load: failed to load image '" );
         aMessage.append( ::rtl::OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
         aMessage.append( "'" );
-        OSL_FAIL( aMessage.makeStringAndClear().getStr() );
+        OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
     }
 #endif
 }
@@ -525,13 +574,13 @@ void ImageList::ImplMakeUnique()
 BitmapEx ImageList::GetAsHorizontalStrip() const
 {
     Size aSize( mpImplData->maImageSize );
-    sal_uInt16 nCount = GetImageCount();
+    USHORT nCount = GetImageCount();
     if( !nCount )
         return BitmapEx();
     aSize.Width() *= nCount;
 
     // Load any stragglers
-    for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
+    for (USHORT nIdx = 0; nIdx < nCount; nIdx++)
     {
         ImageAryData *pData = mpImplData->maImages[ nIdx ];
         if( pData->IsLoadable() )
@@ -549,7 +598,7 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
         aResult = BitmapEx( aPixels );
 
     Rectangle aSrcRect( Point( 0, 0 ), mpImplData->maImageSize );
-    for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
+    for (USHORT nIdx = 0; nIdx < nCount; nIdx++)
     {
         Rectangle aDestRect( Point( nIdx * mpImplData->maImageSize.Width(), 0 ),
                              mpImplData->maImageSize );
@@ -565,7 +614,9 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
 void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
                                            const std::vector< rtl::OUString > &rNameVector )
 {
-    sal_uInt16 nItems = sal::static_int_cast< sal_uInt16 >( rNameVector.size() );
+    USHORT nItems = sal::static_int_cast< USHORT >( rNameVector.size() );
+
+//	fprintf (stderr, "InsertFromHorizontalStrip (1) [%d items]\n", nItems);
 
     if (!nItems)
             return;
@@ -576,7 +627,7 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
     aSize.Width() /= nItems;
     ImplInit( nItems, aSize );
 
-    for (sal_uInt16 nIdx = 0; nIdx < nItems; nIdx++)
+    for (USHORT nIdx = 0; nIdx < nItems; nIdx++)
     {
         BitmapEx aBitmap( rBitmapEx, Point( nIdx * aSize.Width(), 0 ), aSize );
         mpImplData->AddImage( rNameVector[ nIdx ], nIdx + 1, aBitmap );
@@ -586,11 +637,11 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
 // -----------------------------------------------------------------------
 
 void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
-                                            sal_uInt16       nCount,
+                                            USHORT       nCount,
                                             const Color *pMaskColor,
-                                            const Color *pSearchColors,
+                                            const Color *pSearchColors, 
                                             const Color *pReplaceColors,
-                                            sal_uLong        nColorCount)
+                                            ULONG        nColorCount)
 {
     BitmapEx aBmpEx( rResId );
     if (!aBmpEx.IsTransparent())
@@ -602,14 +653,14 @@ void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
     }
     if ( nColorCount && pSearchColors && pReplaceColors )
         aBmpEx.Replace( pSearchColors, pReplaceColors, nColorCount );
-
+    
     std::vector< rtl::OUString > aNames( nCount );
     InsertFromHorizontalStrip( aBmpEx, aNames );
 }
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ImageList::ImplGetImageId( const ::rtl::OUString& rImageName ) const
+USHORT ImageList::ImplGetImageId( const ::rtl::OUString& rImageName ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
@@ -622,7 +673,7 @@ sal_uInt16 ImageList::ImplGetImageId( const ::rtl::OUString& rImageName ) const
 
 // -----------------------------------------------------------------------
 
-void ImageList::AddImage( sal_uInt16 nId, const Image& rImage )
+void ImageList::AddImage( USHORT nId, const Image& rImage )
 {
     DBG_CHKTHIS( ImageList, NULL );
     DBG_CHKOBJ( &rImage, Image, NULL );
@@ -652,7 +703,7 @@ void ImageList::AddImage( const ::rtl::OUString& rImageName, const Image& rImage
 
 // -----------------------------------------------------------------------
 
-void ImageList::ReplaceImage( sal_uInt16 nId, const Image& rImage )
+void ImageList::ReplaceImage( USHORT nId, const Image& rImage )
 {
     DBG_CHKTHIS( ImageList, NULL );
     DBG_CHKOBJ( &rImage, Image, NULL );
@@ -666,12 +717,12 @@ void ImageList::ReplaceImage( sal_uInt16 nId, const Image& rImage )
 
 void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const Image& rImage )
 {
-    const sal_uInt16 nId = ImplGetImageId( rImageName );
+    const USHORT nId = ImplGetImageId( rImageName );
 
     if( nId )
     {
         RemoveImage( nId );
-
+        
         if( !mpImplData )
             ImplInit( 0, rImage.GetSizePixel() );
         mpImplData->AddImage( rImageName, nId, rImage.GetBitmapEx());
@@ -680,14 +731,14 @@ void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const Image& rI
 
 // -----------------------------------------------------------------------
 
-void ImageList::ReplaceImage( sal_uInt16 nId, sal_uInt16 nReplaceId )
+void ImageList::ReplaceImage( USHORT nId, USHORT nReplaceId )
 {
     DBG_CHKTHIS( ImageList, NULL );
     DBG_ASSERT( GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND, "ImageList::ReplaceImage(): Unknown nId" );
     DBG_ASSERT( GetImagePos( nReplaceId ) != IMAGELIST_IMAGE_NOTFOUND, "ImageList::ReplaceImage(): Unknown nReplaceId" );
 
-    sal_uLong nPosDest = GetImagePos( nId );
-    sal_uLong nPosSrc = GetImagePos( nReplaceId );
+    ULONG nPosDest = GetImagePos( nId );
+    ULONG nPosSrc = GetImagePos( nReplaceId );
     if( nPosDest != IMAGELIST_IMAGE_NOTFOUND &&
         nPosSrc != IMAGELIST_IMAGE_NOTFOUND )
     {
@@ -700,7 +751,7 @@ void ImageList::ReplaceImage( sal_uInt16 nId, sal_uInt16 nReplaceId )
 
 void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const ::rtl::OUString& rReplaceName )
 {
-    const sal_uInt16 nId1 = ImplGetImageId( rImageName ), nId2 = ImplGetImageId( rReplaceName );
+    const USHORT nId1 = ImplGetImageId( rImageName ), nId2 = ImplGetImageId( rReplaceName );
 
     if( nId1 && nId2 )
         ReplaceImage( nId1, nId2 );
@@ -708,7 +759,7 @@ void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const ::rtl::OU
 
 // -----------------------------------------------------------------------
 
-void ImageList::RemoveImage( sal_uInt16 nId )
+void ImageList::RemoveImage( USHORT nId )
 {
     DBG_CHKTHIS( ImageList, NULL );
 
@@ -716,7 +767,7 @@ void ImageList::RemoveImage( sal_uInt16 nId )
     {
         if( mpImplData->maImages[ i ]->mnId == nId )
         {
-            mpImplData->RemoveImage( static_cast< sal_uInt16 >( i ) );
+            mpImplData->RemoveImage( static_cast< USHORT >( i ) );
             break;
         }
     }
@@ -726,7 +777,7 @@ void ImageList::RemoveImage( sal_uInt16 nId )
 
 void ImageList::RemoveImage( const ::rtl::OUString& rImageName )
 {
-    const sal_uInt16 nId = ImplGetImageId( rImageName );
+    const USHORT nId = ImplGetImageId( rImageName );
 
     if( nId )
         RemoveImage( nId );
@@ -734,9 +785,11 @@ void ImageList::RemoveImage( const ::rtl::OUString& rImageName )
 
 // -----------------------------------------------------------------------
 
-Image ImageList::GetImage( sal_uInt16 nId ) const
+Image ImageList::GetImage( USHORT nId ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
+
+//	fprintf (stderr, "GetImage %d\n", nId);
 
     Image aRet;
 
@@ -744,7 +797,7 @@ Image ImageList::GetImage( sal_uInt16 nId ) const
     {
         std::vector<ImageAryData *>::iterator aIter;
         for( aIter = mpImplData->maImages.begin();
-             aIter != mpImplData->maImages.end(); ++aIter)
+             aIter != mpImplData->maImages.end(); aIter++)
         {
             if ((*aIter)->mnId == nId)
             {
@@ -756,14 +809,6 @@ Image ImageList::GetImage( sal_uInt16 nId ) const
         }
     }
 
-    if (!aRet)
-    {
-        BitmapEx rBitmap;
-        bool res = ::vcl::ImageRepository::loadDefaultImage(rBitmap);
-        if (res)
-            aRet =  Image(rBitmap);
-    }
-
     return aRet;
 }
 
@@ -771,10 +816,13 @@ Image ImageList::GetImage( sal_uInt16 nId ) const
 
 Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
 {
+//	fprintf (stderr, "GetImage '%s'\n",
+//			 rtl::OUStringToOString( rImageName, RTL_TEXTENCODING_UTF8 ).getStr() );
+
     if( mpImplData )
     {
         ImageAryData *pImg = mpImplData->maNameHash[ rImageName ];
-
+        
         if( pImg )
         {
             if( pImg->IsLoadable() )
@@ -782,6 +830,7 @@ Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
             return Image( pImg->maBitmapEx );
         }
     }
+//	fprintf (stderr, "no such image\n");
 
     return Image();
 }
@@ -800,16 +849,16 @@ void ImageList::Clear()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ImageList::GetImageCount() const
+USHORT ImageList::GetImageCount() const
 {
     DBG_CHKTHIS( ImageList, NULL );
-
-    return mpImplData ? static_cast< sal_uInt16 >( mpImplData->maImages.size() ) : 0;
+    
+    return mpImplData ? static_cast< USHORT >( mpImplData->maImages.size() ) : 0;
 }
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ImageList::GetImagePos( sal_uInt16 nId ) const
+USHORT ImageList::GetImagePos( USHORT nId ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
@@ -818,21 +867,21 @@ sal_uInt16 ImageList::GetImagePos( sal_uInt16 nId ) const
         for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); ++i )
         {
             if (mpImplData->maImages[ i ]->mnId == nId)
-                return static_cast< sal_uInt16 >( i );
+                return static_cast< USHORT >( i );
         }
     }
 
     return IMAGELIST_IMAGE_NOTFOUND;
 }
 
-bool ImageList::HasImageAtPos( sal_uInt16 nId ) const
+bool ImageList::HasImageAtPos( USHORT nId ) const
 {
     return GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND;
 }
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ImageList::GetImagePos( const ::rtl::OUString& rImageName ) const
+USHORT ImageList::GetImagePos( const ::rtl::OUString& rImageName ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
@@ -841,7 +890,7 @@ sal_uInt16 ImageList::GetImagePos( const ::rtl::OUString& rImageName ) const
         for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); i++ )
         {
             if (mpImplData->maImages[i]->maName == rImageName)
-                return static_cast< sal_uInt16 >( i );
+                return static_cast< USHORT >( i );
         }
     }
 
@@ -850,7 +899,7 @@ sal_uInt16 ImageList::GetImagePos( const ::rtl::OUString& rImageName ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ImageList::GetImageId( sal_uInt16 nPos ) const
+USHORT ImageList::GetImageId( USHORT nPos ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
@@ -862,14 +911,14 @@ sal_uInt16 ImageList::GetImageId( sal_uInt16 nPos ) const
 
 // -----------------------------------------------------------------------
 
-void ImageList::GetImageIds( ::std::vector< sal_uInt16 >& rIds ) const
+void ImageList::GetImageIds( ::std::vector< USHORT >& rIds ) const
 {
     RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::GetImageIds" );
 
     DBG_CHKTHIS( ImageList, NULL );
 
-    rIds = ::std::vector< sal_uInt16 >();
-
+    rIds = ::std::vector< USHORT >();
+    
     if( mpImplData )
     {
         for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); i++ )
@@ -879,7 +928,7 @@ void ImageList::GetImageIds( ::std::vector< sal_uInt16 >& rIds ) const
 
 // -----------------------------------------------------------------------
 
-::rtl::OUString ImageList::GetImageName( sal_uInt16 nPos ) const
+::rtl::OUString	ImageList::GetImageName( USHORT nPos ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
@@ -898,7 +947,7 @@ void ImageList::GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const
     DBG_CHKTHIS( ImageList, NULL );
 
     rNames = ::std::vector< ::rtl::OUString >();
-
+    
     if( mpImplData )
     {
         for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); i++ )
@@ -915,7 +964,7 @@ void ImageList::GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const
 Size ImageList::GetImageSize() const
 {
     DBG_CHKTHIS( ImageList, NULL );
-
+    
     Size aRet;
 
     if( mpImplData )
@@ -930,6 +979,9 @@ Size ImageList::GetImageSize() const
             aRet = mpImplData->maImageSize = aTmp.GetSizePixel();
         }
     }
+//	fprintf (stderr, "GetImageSize returns %d, %d\n",
+//			 aRet.Width(), aRet.Height());
+
     return aRet;
 }
 
@@ -953,11 +1005,11 @@ ImageList& ImageList::operator=( const ImageList& rImageList )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImageList::operator==( const ImageList& rImageList ) const
+BOOL ImageList::operator==( const ImageList& rImageList ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
     DBG_CHKOBJ( &rImageList, ImageList, NULL );
-
+    
     bool bRet = false;
 
     if( rImageList.mpImplData == mpImplData )

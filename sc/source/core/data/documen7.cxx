@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,18 +33,25 @@
 
 #include <vcl/svapp.hxx>
 
+#if defined( WNT ) && defined( erBEEP )
+#include <svwin.h>
+#define erBEEPER() Beep( 666, 66 )
+#else
+#define erBEEPER()
+#endif
+
 #include "document.hxx"
 #include "brdcst.hxx"
 #include "bcaslot.hxx"
 #include "cell.hxx"
-#include "formula/errorcodes.hxx"       // errCircularReference
+#include "formula/errorcodes.hxx"		// errCircularReference
 #include "scerrors.hxx"
 #include "docoptio.hxx"
 #include "refupdat.hxx"
 #include "table.hxx"
 #include "progress.hxx"
-#include "scmod.hxx"        // SC_MOD
-#include "inputopt.hxx"     // GetExpandRefs
+#include "scmod.hxx"   		// SC_MOD
+#include "inputopt.hxx" 	// GetExpandRefs
 #include "conditio.hxx"
 #include "sheetevents.hxx"
 #include <tools/shl.hxx>
@@ -52,9 +59,14 @@
 
 #include "globstr.hrc"
 
-extern const ScFormulaCell* pLastFormulaTreeTop;    // cellform.cxx Err527 WorkAround
+extern const ScFormulaCell* pLastFormulaTreeTop;	// cellform.cxx Err527 WorkAround
 
 // STATIC DATA -----------------------------------------------------------
+
+#ifdef erDEBUG
+ULONG erCountBCAInserts = 0;
+ULONG erCountBCAFinds = 0;
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -76,12 +88,12 @@ void ScDocument::EndListeningArea( const ScRange& rRange,
 }
 
 
-void ScDocument::Broadcast( sal_uLong nHint, const ScAddress& rAddr,
+void ScDocument::Broadcast( ULONG nHint, const ScAddress& rAddr,
         ScBaseCell* pCell
     )
 {
     if ( !pBASM )
-        return ;    // Clipboard or Undo
+        return ;	// Clipboard or Undo
     ScHint aHint( nHint, rAddr, pCell );
     Broadcast( aHint );
 }
@@ -90,11 +102,11 @@ void ScDocument::Broadcast( sal_uLong nHint, const ScAddress& rAddr,
 void ScDocument::Broadcast( const ScHint& rHint )
 {
     if ( !pBASM )
-        return ;    // Clipboard or Undo
+        return ;	// Clipboard or Undo
     if ( !nHardRecalcState )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
-        sal_Bool bIsBroadcasted = false;
+        BOOL bIsBroadcasted = FALSE;
         ScBaseCell* pCell = rHint.GetCell();
         if ( pCell )
         {
@@ -102,14 +114,14 @@ void ScDocument::Broadcast( const ScHint& rHint )
             if ( pBC )
             {
                 pBC->Broadcast( rHint );
-                bIsBroadcasted = sal_True;
+                bIsBroadcasted = TRUE;
             }
         }
         if ( pBASM->AreaBroadcast( rHint ) || bIsBroadcasted )
             TrackFormulas( rHint.GetId() );
     }
 
-    //  Repaint fuer bedingte Formate mit relativen Referenzen:
+    //	Repaint fuer bedingte Formate mit relativen Referenzen:
     if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
         pCondFormList->SourceChanged( rHint.GetAddress() );
 
@@ -117,7 +129,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
     {
         SCTAB nTab = rHint.GetAddress().Tab();
         if (pTab[nTab] && pTab[nTab]->IsStreamValid())
-            pTab[nTab]->SetStreamValid(false);
+            pTab[nTab]->SetStreamValid(FALSE);
     }
 }
 
@@ -125,7 +137,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
 void ScDocument::AreaBroadcast( const ScHint& rHint )
 {
     if ( !pBASM )
-        return ;    // Clipboard or Undo
+        return ;	// Clipboard or Undo
     if ( !nHardRecalcState )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
@@ -133,7 +145,7 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
             TrackFormulas( rHint.GetId() );
     }
 
-    //  Repaint fuer bedingte Formate mit relativen Referenzen:
+    //	Repaint fuer bedingte Formate mit relativen Referenzen:
     if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
         pCondFormList->SourceChanged( rHint.GetAddress() );
 }
@@ -215,7 +227,7 @@ void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
     if ( pEOFormulaTree )
         pEOFormulaTree->SetNext( pCell );
     else
-        pFormulaTree = pCell;               // kein Ende, kein Anfang..
+        pFormulaTree = pCell;				// kein Ende, kein Anfang..
     pCell->SetPrevious( pEOFormulaTree );
     pCell->SetNext( 0 );
     pEOFormulaTree = pCell;
@@ -232,16 +244,16 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
     {
         ScFormulaCell* pNext = pCell->GetNext();
         if ( pPrev )
-            pPrev->SetNext( pNext );        // gibt Vorlaeufer
+            pPrev->SetNext( pNext );		// gibt Vorlaeufer
         else
-            pFormulaTree = pNext;           // ist erste Zelle
+            pFormulaTree = pNext;			// ist erste Zelle
         if ( pNext )
-            pNext->SetPrevious( pPrev );    // gibt Nachfolger
+            pNext->SetPrevious( pPrev );	// gibt Nachfolger
         else
-            pEOFormulaTree = pPrev;         // ist letzte Zelle
+            pEOFormulaTree = pPrev;			// ist letzte Zelle
         pCell->SetPrevious( 0 );
         pCell->SetNext( 0 );
-        sal_uInt16 nRPN = pCell->GetCode()->GetCodeLen();
+        USHORT nRPN = pCell->GetCode()->GetCodeLen();
         if ( nFormulaCodeInTree >= nRPN )
             nFormulaCodeInTree -= nRPN;
         else
@@ -258,27 +270,27 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
 }
 
 
-sal_Bool ScDocument::IsInFormulaTree( ScFormulaCell* pCell ) const
+BOOL ScDocument::IsInFormulaTree( ScFormulaCell* pCell ) const
 {
     return pCell->GetPrevious() || pFormulaTree == pCell;
 }
 
 
-void ScDocument::CalcFormulaTree( sal_Bool bOnlyForced, sal_Bool bNoProgress )
+void ScDocument::CalcFormulaTree( BOOL bOnlyForced, BOOL bNoProgress )
 {
     DBG_ASSERT( !IsCalculatingFormulaTree(), "CalcFormulaTree recursion" );
     // never ever recurse into this, might end up lost in infinity
     if ( IsCalculatingFormulaTree() )
         return ;
-    bCalculatingFormulaTree = sal_True;
+    bCalculatingFormulaTree = TRUE;
 
-    SetForcedFormulaPending( false );
-    sal_Bool bOldIdleDisabled = IsIdleDisabled();
-    DisableIdle( sal_True );
-    sal_Bool bOldAutoCalc = GetAutoCalc();
-    //! _nicht_ SetAutoCalc( sal_True ) weil das evtl. CalcFormulaTree( sal_True )
+    SetForcedFormulaPending( FALSE );
+    BOOL bOldIdleDisabled = IsIdleDisabled();
+    DisableIdle( TRUE );
+    BOOL bOldAutoCalc = GetAutoCalc();
+    //! _nicht_ SetAutoCalc( TRUE ) weil das evtl. CalcFormulaTree( TRUE )
     //! aufruft, wenn vorher disabled war und bHasForcedFormulas gesetzt ist
-    bAutoCalc = sal_True;
+    bAutoCalc = TRUE;
     if ( nHardRecalcState )
         CalcAll();
     else
@@ -287,7 +299,7 @@ void ScDocument::CalcFormulaTree( sal_Bool bOnlyForced, sal_Bool bNoProgress )
         while ( pCell )
         {
             if ( pCell->GetDirty() )
-                pCell = pCell->GetNext();       // alles klar
+                pCell = pCell->GetNext();		// alles klar
             else
             {
                 if ( pCell->GetCode()->IsRecalcModeAlways() )
@@ -300,15 +312,15 @@ void ScDocument::CalcFormulaTree( sal_Bool bOnlyForced, sal_Bool bNoProgress )
                     pCell = pNext;
                 }
                 else
-                {   // andere simpel berechnen
+                {	// andere simpel berechnen
                     pCell->SetDirtyVar();
                     pCell = pCell->GetNext();
                 }
             }
         }
-        sal_Bool bProgress = !bOnlyForced && nFormulaCodeInTree && !bNoProgress;
+        BOOL bProgress = !bOnlyForced && nFormulaCodeInTree && !bNoProgress;
         if ( bProgress )
-            ScProgress::CreateInterpretProgress( this, sal_True );
+            ScProgress::CreateInterpretProgress( this, TRUE );
 
         pCell = pFormulaTree;
         ScFormulaCell* pLastNoGood = 0;
@@ -366,7 +378,7 @@ void ScDocument::CalcFormulaTree( sal_Bool bOnlyForced, sal_Bool bNoProgress )
     }
     bAutoCalc = bOldAutoCalc;
     DisableIdle( bOldIdleDisabled );
-    bCalculatingFormulaTree = false;
+    bCalculatingFormulaTree = FALSE;
 }
 
 
@@ -393,7 +405,7 @@ void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
     if ( pEOFormulaTrack )
         pEOFormulaTrack->SetNextTrack( pCell );
     else
-        pFormulaTrack = pCell;              // kein Ende, kein Anfang..
+        pFormulaTrack = pCell;				// kein Ende, kein Anfang..
     pCell->SetPreviousTrack( pEOFormulaTrack );
     pCell->SetNextTrack( 0 );
     pEOFormulaTrack = pCell;
@@ -410,13 +422,13 @@ void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
     {
         ScFormulaCell* pNext = pCell->GetNextTrack();
         if ( pPrev )
-            pPrev->SetNextTrack( pNext );       // gibt Vorlaeufer
+            pPrev->SetNextTrack( pNext );		// gibt Vorlaeufer
         else
-            pFormulaTrack = pNext;              // ist erste Zelle
+            pFormulaTrack = pNext;				// ist erste Zelle
         if ( pNext )
-            pNext->SetPreviousTrack( pPrev );   // gibt Nachfolger
+            pNext->SetPreviousTrack( pPrev );	// gibt Nachfolger
         else
-            pEOFormulaTrack = pPrev;            // ist letzte Zelle
+            pEOFormulaTrack = pPrev;  			// ist letzte Zelle
         pCell->SetPreviousTrack( 0 );
         pCell->SetNextTrack( 0 );
         --nFormulaTrackCount;
@@ -424,7 +436,7 @@ void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
 }
 
 
-sal_Bool ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
+BOOL ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
 {
     return pCell->GetPreviousTrack() || pFormulaTrack == pCell;
 }
@@ -436,11 +448,12 @@ sal_Bool ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
     Der nachfolgende broadcastet wieder usw.
     View stoesst Interpret an.
  */
-void ScDocument::TrackFormulas( sal_uLong nHintId )
+void ScDocument::TrackFormulas( ULONG nHintId )
 {
 
     if ( pFormulaTrack )
     {
+        erBEEPER();
         // outside the loop, check if any sheet has a "calculate" event script
         bool bCalcEvent = HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true );
         SvtBroadcaster* pBC;
@@ -453,7 +466,7 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
             if ( ( pBC = pTrack->GetBroadcaster() ) != NULL )
                 pBC->Broadcast( aHint );
             pBASM->AreaBroadcast( aHint );
-            //  Repaint fuer bedingte Formate mit relativen Referenzen:
+            //	Repaint fuer bedingte Formate mit relativen Referenzen:
             if ( pCondFormList )
                 pCondFormList->SourceChanged( pTrack->aPos );
             // for "calculate" event, keep track of which sheets are affected by tracked formulas
@@ -462,24 +475,24 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
             pTrack = pTrack->GetNextTrack();
         } while ( pTrack );
         pTrack = pFormulaTrack;
-        sal_Bool bHaveForced = false;
+        BOOL bHaveForced = FALSE;
         do
         {
             pNext = pTrack->GetNextTrack();
             RemoveFromFormulaTrack( pTrack );
             PutInFormulaTree( pTrack );
             if ( pTrack->GetCode()->IsRecalcModeForced() )
-                bHaveForced = sal_True;
+                bHaveForced = TRUE;
             pTrack = pNext;
         } while ( pTrack );
         if ( bHaveForced )
         {
-            SetForcedFormulas( sal_True );
+            SetForcedFormulas( TRUE );
             if ( bAutoCalc && !IsAutoCalcShellDisabled() && !IsInInterpreter()
                     && !IsCalculatingFormulaTree() )
-                CalcFormulaTree( sal_True );
+                CalcFormulaTree( TRUE );
             else
-                SetForcedFormulaPending( sal_True );
+                SetForcedFormulaPending( TRUE );
         }
     }
     DBG_ASSERT( nFormulaTrackCount==0, "TrackFormulas: nFormulaTrackCount!=0" );
@@ -497,7 +510,7 @@ void ScDocument::UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
         const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz
     )
 {
-    sal_Bool bExpandRefsOld = IsExpandRefs();
+    BOOL bExpandRefsOld = IsExpandRefs();
     if ( eUpdateRefMode == URM_INSDEL && (nDx > 0 || nDy > 0 || nDz > 0) )
         SetExpandRefs( SC_MOD()->GetInputOptions().GetExpandRefs() );
     if ( pBASM )
@@ -505,16 +518,16 @@ void ScDocument::UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
     SetExpandRefs( bExpandRefsOld );
 }
 
-void ScDocument::SetAutoCalc( sal_Bool bNewAutoCalc )
+void ScDocument::SetAutoCalc( BOOL bNewAutoCalc )
 {
-    sal_Bool bOld = bAutoCalc;
+    BOOL bOld = bAutoCalc;
     bAutoCalc = bNewAutoCalc;
     if ( !bOld && bNewAutoCalc && bHasForcedFormulas )
     {
         if ( IsAutoCalcShellDisabled() )
-            SetForcedFormulaPending( sal_True );
+            SetForcedFormulaPending( TRUE );
         else if ( !IsInInterpreter() )
-            CalcFormulaTree( sal_True );
+            CalcFormulaTree( TRUE );
     }
 }
 

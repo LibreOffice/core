@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,12 @@
 #include <editeng/pgrditem.hxx>
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
-#include <doc.hxx>      // GetDoc()
-#include "rootfrm.hxx"
-#include <pagefrm.hxx>  // InvalidateSpelling
+#include <doc.hxx>		// GetDoc()
+#include <pagefrm.hxx>	// InvalidateSpelling
 #include <rootfrm.hxx>
-#include <viewsh.hxx>   // ViewShell
-#include <pam.hxx>      // SwPosition
-#include <ndtxt.hxx>        // SwTxtNode
+#include <viewsh.hxx>	// ViewShell
+#include <pam.hxx>		// SwPosition
+#include <ndtxt.hxx>		// SwTxtNode
 #include <txtatr.hxx>
 #include <paratr.hxx>
 #include <viewopt.hxx>
@@ -65,28 +64,34 @@
 #include <charatr.hxx>
 #include <ftninfo.hxx>
 #include <fmtline.hxx>
-#include <txtfrm.hxx>       // SwTxtFrm
-#include <sectfrm.hxx>      // SwSectFrm
-#include <itrform2.hxx>       // Iteratoren
-#include <widorp.hxx>       // SwFrmBreak
+#include <txtfrm.hxx>		// SwTxtFrm
+#include <sectfrm.hxx>		// SwSectFrm
+#include <txtcfg.hxx>		// DBG_LOOP
+#include <itrform2.hxx> 	  // Iteratoren
+#include <widorp.hxx>		// SwFrmBreak
 #include <txtcache.hxx>
 #include <fntcache.hxx>     // GetLineSpace benutzt pLastFont
 #include <SwGrammarMarkUp.hxx>
 #include <lineinfo.hxx>
 #include <SwPortionHandler.hxx>
+// OD 2004-01-15 #110582#
 #include <dcontact.hxx>
+// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+// --> OD 2005-03-30 #???#
 #include <txtflcnt.hxx>     // SwTxtFlyCnt
 #include <fmtflcnt.hxx>     // SwFmtFlyCnt
 #include <fmtcntnt.hxx>     // SwFmtCntnt
+// <--
+// --> OD 2008-01-31 #newlistlevelattrs#
 #include <numrule.hxx>
+// <--
 #include <swtable.hxx>
 #include <fldupde.hxx>
 #include <IGrammarContact.hxx>
-#include <switerator.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
-#include <txtpaint.hxx>     // DbgRect
+#include <txtpaint.hxx> 	// DbgRect
 extern const sal_Char *GetPrepName( const enum PrepareHint ePrep );
 #endif
 
@@ -100,22 +105,13 @@ void SwTxtFrm::SwapWidthAndHeight()
     {
         const long nPrtOfstX = Prt().Pos().X();
         Prt().Pos().X() = Prt().Pos().Y();
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        if( IsVertLR() )
-            Prt().Pos().Y() = nPrtOfstX;
-        else
-            Prt().Pos().Y() = Frm().Width() - ( nPrtOfstX + Prt().Width() );
-
+        Prt().Pos().Y() = Frm().Width() - ( nPrtOfstX + Prt().Width() );
     }
     else
     {
         const long nPrtOfstY = Prt().Pos().Y();
         Prt().Pos().Y() = Prt().Pos().X();
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        if( IsVertLR() )
-            Prt().Pos().X() = nPrtOfstY;
-        else
-            Prt().Pos().X() = Frm().Height() - ( nPrtOfstY + Prt().Height() );
+        Prt().Pos().X() = Frm().Height() - ( nPrtOfstY + Prt().Height() );
     }
 
     const long nFrmWidth = Frm().Width();
@@ -133,33 +129,16 @@ void SwTxtFrm::SwapWidthAndHeight()
 void SwTxtFrm::SwitchHorizontalToVertical( SwRect& rRect ) const
 {
     // calc offset inside frame
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    long nOfstX, nOfstY;
-    if ( IsVertLR() )
-    {
-        nOfstX = rRect.Left() - Frm().Left();
-        nOfstY = rRect.Top() - Frm().Top();
-    }
-    else
-    {
-        nOfstX = rRect.Left() - Frm().Left();
-        nOfstY = rRect.Top() + rRect.Height() - Frm().Top();
-    }
-
+    const long nOfstX = rRect.Left() - Frm().Left();
+    const long nOfstY = rRect.Top() + rRect.Height() - Frm().Top();
     const long nWidth = rRect.Width();
     const long nHeight = rRect.Height();
 
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    if ( IsVertLR() )
-        rRect.Left(Frm().Left() + nOfstY);
+    if ( bIsSwapped )
+        rRect.Left( Frm().Left() + Frm().Height() - nOfstY );
     else
-    {
-        if ( bIsSwapped )
-            rRect.Left( Frm().Left() + Frm().Height() - nOfstY );
-        else
-            // frame is rotated
-            rRect.Left( Frm().Left() + Frm().Width() - nOfstY );
-    }
+        // frame is rotated
+        rRect.Left( Frm().Left() + Frm().Width() - nOfstY );
 
     rRect.Top( Frm().Top() + nOfstX );
     rRect.Width( nHeight );
@@ -173,17 +152,12 @@ void SwTxtFrm::SwitchHorizontalToVertical( Point& rPoint ) const
     // calc offset inside frame
     const long nOfstX = rPoint.X() - Frm().Left();
     const long nOfstY = rPoint.Y() - Frm().Top();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    if ( IsVertLR() )
-        rPoint.X() = Frm().Left() + nOfstY;
+
+    if ( bIsSwapped )
+        rPoint.X() = Frm().Left() + Frm().Height() - nOfstY;
     else
-    {
-        if ( bIsSwapped )
-            rPoint.X() = Frm().Left() + Frm().Height() - nOfstY;
-        else
-            // calc rotated coords
-            rPoint.X() = Frm().Left() + Frm().Width() - nOfstY;
-    }
+        // calc rotated coords
+        rPoint.X() = Frm().Left() + Frm().Width() - nOfstY;
 
     rPoint.Y() = Frm().Top() + nOfstX;
 }
@@ -204,17 +178,10 @@ void SwTxtFrm::SwitchVerticalToHorizontal( SwRect& rRect ) const
     long nOfstX;
 
     // calc offset inside frame
-
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    if ( IsVertLR() )
-        nOfstX = rRect.Left() - Frm().Left();
+    if ( bIsSwapped )
+        nOfstX = Frm().Left() + Frm().Height() - ( rRect.Left() + rRect.Width() );
     else
-    {
-        if ( bIsSwapped )
-            nOfstX = Frm().Left() + Frm().Height() - ( rRect.Left() + rRect.Width() );
-        else
-            nOfstX = Frm().Left() + Frm().Width() - ( rRect.Left() + rRect.Width() );
-    }
+        nOfstX = Frm().Left() + Frm().Width() - ( rRect.Left() + rRect.Width() );
 
     const long nOfstY = rRect.Top() - Frm().Top();
     const long nWidth = rRect.Height();
@@ -234,17 +201,10 @@ void SwTxtFrm::SwitchVerticalToHorizontal( Point& rPoint ) const
     long nOfstX;
 
     // calc offset inside frame
-
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    if ( IsVertLR() )
-        nOfstX = rPoint.X() - Frm().Left();
+    if ( bIsSwapped )
+        nOfstX = Frm().Left() + Frm().Height() - rPoint.X();
     else
-    {
-        if ( bIsSwapped )
-            nOfstX = Frm().Left() + Frm().Height() - rPoint.X();
-        else
-            nOfstX = Frm().Left() + Frm().Width() - rPoint.X();
-    }
+        nOfstX = Frm().Left() + Frm().Width() - rPoint.X();
 
     const long nOfstY = rPoint.Y() - Frm().Top();
 
@@ -321,7 +281,7 @@ void SwLayoutModeModifier::Modify( sal_Bool bChgToRTL )
 
 void SwLayoutModeModifier::SetAuto()
 {
-    const sal_uLong nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
+    const ULONG nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
     ((OutputDevice&)rOut).SetLayoutMode( nNewLayoutMode );
 }
 
@@ -347,7 +307,7 @@ SwDigitModeModifier::~SwDigitModeModifier()
 }
 
 /*************************************************************************
- *                      SwTxtFrm::Init()
+ *						SwTxtFrm::Init()
  *************************************************************************/
 
 void SwTxtFrm::Init()
@@ -365,7 +325,7 @@ void SwTxtFrm::Init()
 }
 
 /*************************************************************************
-|*  SwTxtFrm::CTORen/DTOR
+|*	SwTxtFrm::CTORen/DTOR
 |*************************************************************************/
 
 void SwTxtFrm::InitCtor()
@@ -379,7 +339,9 @@ void SwTxtFrm::InitCtor()
     mnFtnLine = 0;
     // OD 2004-03-17 #i11860#
     mnHeightOfLastLine = 0;
+    // --> OD 2008-01-31 #newlistlevelattrs#
     mnAdditionalFirstLineOffset = 0;
+    // <--
 
     nType = FRMC_TXT;
     bLocked = bFormatted = bWidow = bUndersized = bJustWidow =
@@ -392,8 +354,8 @@ void SwTxtFrm::InitCtor()
 /*************************************************************************
  *                      SwTxtFrm::SwTxtFrm()
  *************************************************************************/
-SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode, SwFrm* pSib )
-    : SwCntntFrm( pNode, pSib )
+SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode)
+    : SwCntntFrm(pNode)
 {
     InitCtor();
 }
@@ -423,7 +385,7 @@ void SwTxtFrm::ResetPreps()
 }
 
 /*************************************************************************
- *                        SwTxtFrm::IsHiddenNow()
+ *						  SwTxtFrm::IsHiddenNow()
  *************************************************************************/
 sal_Bool SwTxtFrm::IsHiddenNow() const
 {
@@ -432,13 +394,13 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
     if( !Frm().Width() && IsValid() && GetUpper()->IsValid() )
                                        //bei Stackueberlauf (StackHack) invalid!
     {
-//        OSL_FAIL( "SwTxtFrm::IsHiddenNow: thin frame" );
+//        OSL_ENSURE( false, "SwTxtFrm::IsHiddenNow: thin frame" );
         return sal_True;
     }
 
     const bool bHiddenCharsHidePara = GetTxtNode()->HasHiddenCharAttribute( true );
     const bool bHiddenParaField = GetTxtNode()->HasHiddenParaField();
-    const ViewShell* pVsh = getRootFrm()->GetCurrShell();
+    const ViewShell* pVsh = GetShell();
 
     if ( pVsh && ( bHiddenCharsHidePara || bHiddenParaField ) )
     {
@@ -458,7 +420,7 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
 
 
 /*************************************************************************
- *                        SwTxtFrm::HideHidden()
+ *						  SwTxtFrm::HideHidden()
  *************************************************************************/
 // Entfernt die Anhaengsel des Textfrms wenn dieser hidden ist
 
@@ -484,9 +446,9 @@ void SwTxtFrm::HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd )
     const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
     if( pHints )
     {
-        const sal_uInt16 nSize = pHints->Count();
+        const USHORT nSize = pHints->Count();
         SwPageFrm *pPage = 0;
-        for ( sal_uInt16 i = 0; i < nSize; ++i )
+        for ( USHORT i = 0; i < nSize; ++i )
         {
             const SwTxtAttr *pHt = (*pHints)[i];
             if ( pHt->Which() == RES_TXTATR_FTN )
@@ -607,7 +569,7 @@ void SwTxtFrm::HideAndShowObjects()
             // paragraph is visible, but can contain hidden text portion.
             // first we check if objects are allowed to be hidden:
             const SwTxtNode& rNode = *GetTxtNode();
-            const ViewShell* pVsh = getRootFrm()->GetCurrShell();
+            const ViewShell* pVsh = GetShell();
             const bool bShouldBeHidden = !pVsh || !pVsh->GetWin() ||
                                          !pVsh->GetViewOptions()->IsShowHiddenChar();
 
@@ -644,7 +606,8 @@ void SwTxtFrm::HideAndShowObjects()
                 }
                 else
                 {
-                    OSL_FAIL( "<SwTxtFrm::HideAndShowObjects()> - object not anchored at/inside paragraph!?" );
+                    OSL_ENSURE( false,
+                            "<SwTxtFrm::HideAndShowObjects()> - object not anchored at/inside paragraph!?" );
                 }
             }
         }
@@ -657,7 +620,7 @@ void SwTxtFrm::HideAndShowObjects()
 }
 
 /*************************************************************************
- *                      SwTxtFrm::FindBrk()
+ *						SwTxtFrm::FindBrk()
  *
  * Liefert die erste Trennmoeglichkeit in der aktuellen Zeile zurueck.
  * Die Methode wird in SwTxtFrm::Format() benutzt, um festzustellen, ob
@@ -697,7 +660,7 @@ xub_StrLen SwTxtFrm::FindBrk( const XubString &rTxt,
 }
 
 /*************************************************************************
- *                      SwTxtFrm::IsIdxInside()
+ *						SwTxtFrm::IsIdxInside()
  *************************************************************************/
 
 sal_Bool SwTxtFrm::IsIdxInside( const xub_StrLen nPos, const xub_StrLen nLen ) const
@@ -705,8 +668,8 @@ sal_Bool SwTxtFrm::IsIdxInside( const xub_StrLen nPos, const xub_StrLen nLen ) c
     if( GetOfst() > nPos + nLen ) // d.h., der Bereich liegt komplett vor uns.
         return sal_False;
 
-    if( !GetFollow() )         // der Bereich liegt nicht komplett vor uns,
-        return sal_True;           // nach uns kommt niemand mehr.
+    if( !GetFollow() )		   // der Bereich liegt nicht komplett vor uns,
+        return sal_True;		   // nach uns kommt niemand mehr.
 
     const xub_StrLen nMax = GetFollow()->GetOfst();
 
@@ -721,7 +684,7 @@ sal_Bool SwTxtFrm::IsIdxInside( const xub_StrLen nPos, const xub_StrLen nLen ) c
 }
 
 /*************************************************************************
- *                      SwTxtFrm::InvalidateRange()
+ *						SwTxtFrm::InvalidateRange()
  *************************************************************************/
 inline void SwTxtFrm::InvalidateRange(const SwCharRange &aRange, const long nD)
 {
@@ -730,13 +693,13 @@ inline void SwTxtFrm::InvalidateRange(const SwCharRange &aRange, const long nD)
 }
 
 /*************************************************************************
- *                      SwTxtFrm::_InvalidateRange()
+ *						SwTxtFrm::_InvalidateRange()
  *************************************************************************/
 
 void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
 {
     if ( !HasPara() )
-    {   InvalidateSize();
+    {	InvalidateSize();
         return;
     }
 
@@ -771,7 +734,7 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
 }
 
 /*************************************************************************
- *                      SwTxtFrm::CalcLineSpace()
+ *						SwTxtFrm::CalcLineSpace()
  *************************************************************************/
 
 void SwTxtFrm::CalcLineSpace()
@@ -882,13 +845,13 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
         if ( !pTxtNode->GetWrong() && !pTxtNode->IsWrongDirty() )
         {
             pTxtNode->SetWrong( new SwWrongList( WRONGLIST_SPELL ) );
-            pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (sal_uInt16)( nCnt > 0 ? nCnt : 1 ) );
+            pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
         }
         if ( !pTxtNode->GetSmartTags() && !pTxtNode->IsSmartTagDirty() )
         {
             // SMARTTAGS
             pTxtNode->SetSmartTags( new SwWrongList( WRONGLIST_SMARTTAG ) );
-            pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (sal_uInt16)( nCnt > 0 ? nCnt : 1 ) );
+            pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
         }
         pTxtNode->SetWrongDirty( true );
         pTxtNode->SetGrammarCheckDirty( true );
@@ -898,10 +861,10 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
         pTxtNode->SetSmartTagDirty( true );
     }
 
-    SwRootFrm *pRootFrm = rFrm.getRootFrm();
+    SwRootFrm *pRootFrm = rFrm.FindRootFrm();
     if (pRootFrm)
     {
-        pRootFrm->SetNeedGrammarCheck( sal_True );
+        pRootFrm->SetNeedGrammarCheck( TRUE );
     }
 
     SwPageFrm *pPage = rFrm.FindPageFrm();
@@ -939,10 +902,10 @@ void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
 }
 
 /*************************************************************************
- *                      SwTxtFrm::Modify()
+ *						SwTxtFrm::Modify()
  *************************************************************************/
 
-void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
     const MSHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
 
@@ -951,7 +914,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     if( IsInRange( aFrmFmtSetRange, nWhich ) || RES_FMT_CHG == nWhich )
     {
         SwCntntFrm::Modify( pOld, pNew );
-        if( nWhich == RES_FMT_CHG && getRootFrm()->GetCurrShell() )
+        if( nWhich == RES_FMT_CHG && GetShell() )
         {
             // Collection hat sich geaendert
             Prepare( PREP_CLEAR );
@@ -1066,10 +1029,9 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             }
 
             // --> OD 2010-02-16 #i104008#
-            ViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
-            if ( pViewSh  )
+            if ( GetShell() )
             {
-                pViewSh->InvalidateAccessibleParaAttrs( *this );
+                GetShell()->InvalidateAccessibleParaAttrs( *this );
             }
             // <--
         }
@@ -1169,7 +1131,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             }
             sal_Bool bLineSpace = SFX_ITEM_SET == rNewSet.GetItemState(
                                             RES_PARATR_LINESPACING, sal_False ),
-                     bRegister  = SFX_ITEM_SET == rNewSet.GetItemState(
+                     bRegister	= SFX_ITEM_SET == rNewSet.GetItemState(
                                             RES_PARATR_REGISTER, sal_False );
             if ( bLineSpace || bRegister )
             {
@@ -1277,7 +1239,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
             if( nCount )
             {
-                if( getRootFrm()->GetCurrShell() )
+                if( GetShell() )
                 {
                     Prepare( PREP_CLEAR );
                     _InvalidatePrt();
@@ -1323,10 +1285,9 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             }
 
             // --> OD 2009-01-06 #i88069#
-            ViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
-            if ( pViewSh  )
+            if ( GetShell() )
             {
-                pViewSh->InvalidateAccessibleParaAttrs( *this );
+                GetShell()->InvalidateAccessibleParaAttrs( *this );
             }
             // <--
         }
@@ -1399,7 +1360,7 @@ sal_Bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
             if ( pPage == rInfo.GetOrigPage() && !GetPrev() )
             {
                 //Das sollte er sein (kann allenfalls temporaer anders sein,
-                //                    sollte uns das beunruhigen?)
+                //					  sollte uns das beunruhigen?)
                 rInfo.SetInfo( pPage, this );
                 return sal_False;
             }
@@ -1415,7 +1376,7 @@ sal_Bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
 }
 
 /*************************************************************************
- *                      SwTxtFrm::PrepWidows()
+ *						SwTxtFrm::PrepWidows()
  *************************************************************************/
 
 void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
@@ -1459,7 +1420,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
     if( !nHave )
     {
         sal_Bool bSplit;
-        if( !IsFollow() )   //Nur ein Master entscheidet ueber Orphans
+        if( !IsFollow() )	//Nur ein Master entscheidet ueber Orphans
         {
             const WidowsAndOrphans aWidOrp( this );
             bSplit = ( aLine.GetLineNr() >= aWidOrp.GetOrphansLines() &&
@@ -1486,7 +1447,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
 }
 
 /*************************************************************************
- *                      SwTxtFrm::Prepare
+ *						SwTxtFrm::Prepare
  *************************************************************************/
 
 sal_Bool lcl_ErgoVadis( SwTxtFrm* pFrm, xub_StrLen &rPos, const PrepareHint ePrep )
@@ -1527,10 +1488,10 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         switch ( ePrep )
         {
             case PREP_BOSS_CHGD:
-                SetInvalidVert( sal_True );  // Test
+                SetInvalidVert( TRUE );  // Test
             case PREP_WIDOWS_ORPHANS:
             case PREP_WIDOWS:
-            case PREP_FTN_GONE :    return;
+            case PREP_FTN_GONE :	return;
 
             case PREP_POS_CHGD :
             {
@@ -1573,7 +1534,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     if( !HasPara() && PREP_MUST_FIT != ePrep )
     {
-        SetInvalidVert( sal_True );  // Test
+        SetInvalidVert( TRUE );  // Test
         OSL_ENSURE( !IsLocked(), "SwTxtFrm::Prepare: three of a perfect pair" );
         if ( bNotify )
             InvalidateSize();
@@ -1593,7 +1554,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                                 _InvalidatePrt();
                                 _InvalidateSize();
                                 // KEIN break
-        case PREP_ADJUST_FRM :  pPara->SetPrepAdjust( sal_True );
+        case PREP_ADJUST_FRM :	pPara->SetPrepAdjust( sal_True );
                                 if( IsFtnNumFrm() != pPara->IsFtnNum() ||
                                     IsUndersized() )
                                 {
@@ -1602,9 +1563,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                                         _SetOfst( 0 );
                                 }
                                 break;
-        case PREP_MUST_FIT :        pPara->SetPrepMustFit( sal_True );
+        case PREP_MUST_FIT :		pPara->SetPrepMustFit( sal_True );
             /* no break here */
-        case PREP_WIDOWS_ORPHANS :  pPara->SetPrepAdjust( sal_True );
+        case PREP_WIDOWS_ORPHANS :	pPara->SetPrepAdjust( sal_True );
                                     break;
 
         case PREP_WIDOWS :
@@ -1653,9 +1614,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
     // Test
             {
-                SetInvalidVert( sal_False );
-                sal_Bool bOld = IsVertical();
-                SetInvalidVert( sal_True );
+                SetInvalidVert( FALSE );
+                BOOL bOld = IsVertical();
+                SetInvalidVert( TRUE );
                 if( bOld != IsVertical() )
                     InvalidateRange( SwCharRange( GetOfst(), STRING_LEN ) );
             }
@@ -1680,17 +1641,17 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             SwpHints *pHints = GetTxtNode()->GetpSwpHints();
             if( pHints )
             {
-                const sal_uInt16 nSize = pHints->Count();
+                const USHORT nSize = pHints->Count();
                 const xub_StrLen nEnd = GetFollow() ?
                                     GetFollow()->GetOfst() : STRING_LEN;
-                for ( sal_uInt16 i = 0; i < nSize; ++i )
+                for ( USHORT i = 0; i < nSize; ++i )
                 {
                     const SwTxtAttr *pHt = (*pHints)[i];
                     const xub_StrLen nStart = *pHt->GetStart();
                     if( nStart >= GetOfst() )
                     {
                         if( nStart >= nEnd )
-                            i = nSize;          // fuehrt das Ende herbei
+                            i = nSize;			// fuehrt das Ende herbei
                         else
                         {
                 // 4029: wenn wir zurueckfliessen und eine Ftn besitzen, so
@@ -1790,7 +1751,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                     _InvalidateSize();
                 }
                 else
-                    return;     // damit kein SetPrep() erfolgt.
+                    return; 	// damit kein SetPrep() erfolgt.
             }
             break;
         }
@@ -1870,14 +1831,14 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 else
                     _InvalidateSize();
             }
-            return;     // damit kein SetPrep() erfolgt.
+            return; 	// damit kein SetPrep() erfolgt.
         }
     }
     if( pPara )
         pPara->SetPrep( sal_True );
 }
 
-/* --------------------------------------------------
+/* -----------------11.02.99 17:56-------------------
  * Kleine Hilfsklasse mit folgender Funktion:
  * Sie soll eine Probeformatierung vorbereiten.
  * Der Frame wird in Groesse und Position angepasst, sein SwParaPortion zur Seite
@@ -1939,7 +1900,7 @@ SwTestFormat::SwTestFormat( SwTxtFrm* pTxtFrm, const SwFrm* pPre, SwTwips nMaxHe
         pFrm->SwapWidthAndHeight();
 
     SwTxtFormatInfo aInf( pFrm, sal_False, sal_True, sal_True );
-    SwTxtFormatter  aLine( pFrm, &aInf );
+    SwTxtFormatter	aLine( pFrm, &aInf );
 
     pFrm->_Format( aLine, aInf );
 
@@ -1970,7 +1931,7 @@ sal_Bool SwTxtFrm::TestFormat( const SwFrm* pPrv, SwTwips &rMaxHeight, sal_Bool 
 
 
 /*************************************************************************
- *                      SwTxtFrm::WouldFit()
+ *						SwTxtFrm::WouldFit()
  *************************************************************************/
 
 /* SwTxtFrm::WouldFit()
@@ -2087,7 +2048,7 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
 
 
 /*************************************************************************
- *                      SwTxtFrm::GetParHeight()
+ *						SwTxtFrm::GetParHeight()
  *************************************************************************/
 
 KSHORT SwTxtFrm::GetParHeight() const
@@ -2126,7 +2087,7 @@ KSHORT SwTxtFrm::GetParHeight() const
 
 
 /*************************************************************************
- *                      SwTxtFrm::GetFormatted()
+ *						SwTxtFrm::GetFormatted()
  *************************************************************************/
 
 // returnt this _immer_ im formatierten Zustand!
@@ -2157,7 +2118,7 @@ SwTxtFrm* SwTxtFrm::GetFormatted( bool bForceQuickFormat )
 }
 
 /*************************************************************************
- *                      SwTxtFrm::CalcFitToContent()
+ *						SwTxtFrm::CalcFitToContent()
  *************************************************************************/
 
 SwTwips SwTxtFrm::CalcFitToContent()
@@ -2194,7 +2155,7 @@ SwTwips SwTxtFrm::CalcFitToContent()
 
     SwTxtFormatInfo aInf( this, sal_False, sal_True, sal_True );
     aInf.SetIgnoreFly( sal_True );
-    SwTxtFormatter  aLine( this, &aInf );
+    SwTxtFormatter	aLine( this, &aInf );
     SwHookOut aHook( aInf );
 
     // --> OD 2005-09-06 #i54031# - assure mininum of MINLAY twips.
@@ -2220,6 +2181,8 @@ SwTwips SwTxtFrm::CalcFitToContent()
     line offset for the real text formatting due to the value of label
     adjustment attribute of the list level.
 
+    OD 2008-01-31 #newlistlevelattrs#
+
     @author OD
 */
 void SwTxtFrm::CalcAdditionalFirstLineOffset()
@@ -2235,7 +2198,7 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
          pTxtNode->GetNumRule() )
     {
         const SwNumFmt& rNumFmt =
-                pTxtNode->GetNumRule()->Get( static_cast<sal_uInt16>(pTxtNode->GetActualListLevel()) );
+                pTxtNode->GetNumRule()->Get( static_cast<USHORT>(pTxtNode->GetActualListLevel()) );
         if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             // keep current paragraph portion and apply dummy paragraph portion
@@ -2307,7 +2270,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     const SwTwips mnOldHeightOfLastLine( mnHeightOfLastLine );
     // <--
     // determine output device
-    ViewShell* pVsh = getRootFrm()->GetCurrShell();
+    ViewShell* pVsh = GetShell();
     OSL_ENSURE( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell" );
     // --> OD 2007-07-02 #i78921# - make code robust, according to provided patch
     // There could be no <ViewShell> instance in the case of loading a binary
@@ -2318,7 +2281,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     }
     OutputDevice* pOut = pVsh->GetOut();
     const IDocumentSettingAccess* pIDSA = GetTxtNode()->getIDocumentSettingAccess();
-    if ( !pVsh->GetViewOptions()->getBrowseMode() ||
+    if ( !pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) ||
           pVsh->GetViewOptions()->IsPrtFormat() )
     {
         pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
@@ -2438,7 +2401,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
 }
 
 /*************************************************************************
- *                      SwTxtFrm::GetLineSpace()
+ *						SwTxtFrm::GetLineSpace()
  *************************************************************************/
 // OD 07.01.2004 #i11859# - change return data type
 //      add default parameter <_bNoPropLineSpacing> to control, if the
@@ -2492,7 +2455,7 @@ long SwTxtFrm::GetLineSpace( const bool _bNoPropLineSpace ) const
 }
 
 /*************************************************************************
- *                      SwTxtFrm::FirstLineHeight()
+ *						SwTxtFrm::FirstLineHeight()
  *************************************************************************/
 
 KSHORT SwTxtFrm::FirstLineHeight() const
@@ -2535,7 +2498,7 @@ void SwTxtFrm::ChgThisLines()
 {
     //not necassary to format here (GerFormatted etc.), because we have to come from there!
 
-    sal_uLong nNew = 0;
+    ULONG nNew = 0;
     const SwLineNumberInfo &rInf = GetNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo();
     if ( GetTxt().Len() && HasPara() )
     {
@@ -2544,7 +2507,7 @@ void SwTxtFrm::ChgThisLines()
         if ( rInf.IsCountBlankLines() )
         {
             aLine.Bottom();
-            nNew = (sal_uLong)aLine.GetLineNr();
+            nNew = (ULONG)aLine.GetLineNr();
         }
         else
         {
@@ -2585,12 +2548,6 @@ void SwTxtFrm::ChgThisLines()
         else //Paragraphs which are not counted should not manipulate the AllLines.
             nThisLines = nNew;
     }
-
-    //mba: invalidating is not necessary; if mongolian script has a problem, it should be fixed at the ritgh place
-    //with invalidating we probably get too much flickering
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    //Ugly. How can we hack if better?
-    //InvalidatePage();
 }
 
 
@@ -2602,9 +2559,9 @@ void SwTxtFrm::RecalcAllLines()
 
     if ( !IsInTab() )
     {
-        const sal_uLong nOld = GetAllLines();
+        const ULONG nOld = GetAllLines();
         const SwFmtLineNumber &rLineNum = pAttrSet->GetLineNumber();
-        sal_uLong nNewNum;
+        ULONG nNewNum;
         const bool bRestart = GetTxtNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo().IsRestartEachPage();
 
         if ( !IsFollow() && rLineNum.GetStartValue() && rLineNum.IsCount() )
@@ -2794,20 +2751,6 @@ void SwTxtFrm::CalcBaseOfstForFly()
 
     mnFlyAnchorOfst = nRet1 - nLeft;
     mnFlyAnchorOfstNoWrap = nRet2 - nLeft;
-}
-
-/* repaint all text frames of the given text node */
-void SwTxtFrm::repaintTextFrames( const SwTxtNode& rNode )
-{
-    SwIterator<SwTxtFrm,SwTxtNode> aIter( rNode );
-    for( const SwTxtFrm *pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
-    {
-        SwRect aRec( pFrm->PaintArea() );
-        const SwRootFrm *pRootFrm = pFrm->getRootFrm();
-        ViewShell *pCurShell = pRootFrm ? pRootFrm->GetCurrShell() : NULL;
-        if( pCurShell )
-            pCurShell->InvalidateWindows( aRec );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

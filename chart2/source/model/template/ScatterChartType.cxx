@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,69 +83,39 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-struct StaticScatterChartTypeDefaults_Initializer
+void lcl_AddDefaultsToMap(
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCATTERCHARTTYPE_CURVE_STYLE, chart2::CurveStyle_LINES );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_SCATTERCHARTTYPE_CURVE_RESOLUTION, 20 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCATTERCHARTTYPE_CURVE_STYLE, chart2::CurveStyle_LINES );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_SCATTERCHARTTYPE_CURVE_RESOLUTION, 20 );
 
-        // todo: check whether order 3 means polygons of order 3 or 2. (see
-        // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_SCATTERCHARTTYPE_SPLINE_ORDER, 3 );
-    }
-};
+    // todo: check whether order 3 means polygons of order 3 or 2. (see
+    // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_SCATTERCHARTTYPE_SPLINE_ORDER, 3 );
+}
 
-struct StaticScatterChartTypeDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticScatterChartTypeDefaults_Initializer >
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-};
+    static Sequence< Property > aPropSeq;
 
-struct StaticScatterChartTypeInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    Sequence< Property > lcl_GetPropertySequence()
-    {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-};
-
-struct StaticScatterChartTypeInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticScatterChartTypeInfoHelper_Initializer >
-{
-};
-
-struct StaticScatterChartTypeInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticScatterChartTypeInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticScatterChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticScatterChartTypeInfo_Initializer >
-{
-};
+    return aPropSeq;
+}
 
 } // anonymous namespace
 
@@ -186,6 +156,7 @@ uno::Reference< util::XCloneable > SAL_CALL ScatterChartType::createClone()
 }
 
 // ____ XChartType ____
+// ____ XChartType ____
 Reference< chart2::XCoordinateSystem > SAL_CALL
     ScatterChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
     throw (lang::IllegalArgumentException,
@@ -200,7 +171,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
         Reference< chart2::XAxis > xAxis( xResult->getAxisByDimension( i, MAIN_AXIS_INDEX ) );
         if( !xAxis.is() )
         {
-            OSL_FAIL("a created coordinate system should have an axis for each dimension");
+            OSL_ENSURE(false,"a created coordinate system should have an axis for each dimension");
             continue;
         }
 
@@ -212,7 +183,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
             aScaleData.AxisType = chart2::AxisType::SERIES;
         else
             aScaleData.AxisType = chart2::AxisType::REALNUMBER;
-
+           
         xAxis->setScaleData( aScaleData );
     }
 
@@ -246,6 +217,13 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScatterChartType::getSupportedOptional
 {
     static uno::Sequence< ::rtl::OUString > aOptRolesSeq;
 
+//     if( aOptRolesSeq.getLength() == 0 )
+//     {
+//         aOptRolesSeq.realloc( 2 );
+//         aOptRolesSeq[0] = C2U( "error-bars-x" );
+//         aOptRolesSeq[1] = C2U( "error-bars-y" );
+//     }
+
     return aOptRolesSeq;
 }
 
@@ -254,24 +232,53 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScatterChartType::getSupportedOptional
 uno::Any ScatterChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticScatterChartTypeDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
+    static tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
+    }
+
+    tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
         return uno::Any();
+
     return (*aFound).second;
+    // \--
 }
 
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL ScatterChartType::getInfoHelper()
 {
-    return *StaticScatterChartTypeInfoHelper::get();
+    static ::cppu::OPropertyArrayHelper aArrayHelper( lcl_GetPropertySequence(),
+                                                      /* bSorted = */ sal_True );
+
+    return aArrayHelper;
 }
 
+
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartType::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+    ScatterChartType::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticScatterChartTypeInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
 
 uno::Sequence< ::rtl::OUString > ScatterChartType::getSupportedServiceNames_Static()

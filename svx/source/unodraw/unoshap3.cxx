@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 #include <svx/unopage.hxx>
 #include <editeng/unoprnms.hxx>
 #include <svx/polysc3d.hxx>
-#include "svx/globl3d.hxx"
+#include "globl3d.hxx"
 #include <svx/cube3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/lathe3d.hxx>
@@ -58,7 +58,6 @@
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include "shapeimpl.hxx"
 
 using ::rtl::OUString;
 using namespace ::cppu;
@@ -80,8 +79,8 @@ using namespace ::com::sun::star::container;
 
 //----------------------------------------------------------------------
 Svx3DSceneObject::Svx3DSceneObject( SdrObject* pObj, SvxDrawPage* pDrawPage ) throw()
-:   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DSCENEOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DSCENEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
-,   mxPage( pDrawPage )
+:	SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DSCENEOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DSCENEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
+,	mxPage( pDrawPage )
 {
 }
 
@@ -325,12 +324,12 @@ static void ConvertObjectToHomogenMatric( E3dObject* pObject, Any& rValue )
 }
 
 //----------------------------------------------------------------------
-#include <svx/svditer.hxx>
+#include <svditer.hxx>
 
 struct ImpRememberTransAndRect
 {
-    basegfx::B3DHomMatrix                   maMat;
-    Rectangle                   maRect;
+    basegfx::B3DHomMatrix					maMat;
+    Rectangle					maRect;
 };
 
 bool Svx3DSceneObject::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
@@ -390,12 +389,12 @@ bool Svx3DSceneObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
             double fH = rVolume.getHeight();
 
             const SfxItemSet& rSceneSet = pScene->GetMergedItemSet();
-            double fCamPosZ =
+            double fCamPosZ = 
                 (double)((const SfxUInt32Item&)rSceneSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
-            double fCamFocal =
+            double fCamFocal = 
                 (double)((const SfxUInt32Item&)rSceneSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
 
-            aCam.SetAutoAdjustProjection(sal_False);
+            aCam.SetAutoAdjustProjection(FALSE);
             aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
             basegfx::B3DPoint aLookAt;
             basegfx::B3DPoint aCamPos(0.0, 0.0, fCamPosZ);
@@ -503,7 +502,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
 
 //----------------------------------------------------------------------
 Svx3DCubeObject::Svx3DCubeObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DCUBEOBJEKT), getSvxMapProvider().GetPropertySet(SVXMAP_3DCUBEOBJEKT, SdrObject::GetGlobalDrawObjectItemPool()) )
+:	SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DCUBEOBJEKT), aSvxMapProvider.GetPropertySet(SVXMAP_3DCUBEOBJEKT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -526,7 +525,7 @@ bool Svx3DCubeObject::setPropertyValueImpl( const ::rtl::OUString& rName, const 
             return true;
         break;
     }
-    case OWN_ATTR_3D_VALUE_POSITION:
+    case OWN_ATTR_3D_VALUE_POSITION: 
     {
         // Position in das Objekt packen
         drawing::Position3D aUnoPos;
@@ -634,7 +633,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
 
 //----------------------------------------------------------------------
 Svx3DSphereObject::Svx3DSphereObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DSPHEREOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DSPHEREOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
+:	SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DSPHEREOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DSPHEREOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -750,7 +749,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
 
 //----------------------------------------------------------------------
 Svx3DLatheObject::Svx3DLatheObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DLATHEOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DLATHEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
+:	SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DLATHEOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DLATHEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -759,8 +758,8 @@ Svx3DLatheObject::~Svx3DLatheObject() throw()
 {
 }
 
-bool PolyPolygonShape3D_to_B3dPolyPolygon(
-    const Any& rValue,
+bool PolyPolygonShape3D_to_B3dPolyPolygon( 
+    const Any& rValue, 
     basegfx::B3DPolyPolygon& rResultPolygon,
     bool bCorrectPolygon)
 {
@@ -903,26 +902,26 @@ bool Svx3DLatheObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
         // Transformation in eine homogene Matrix packen
-        drawing::HomogenMatrix aHomMat;
-        basegfx::B3DHomMatrix aMat = static_cast<E3dObject*>(mpObj.get())->GetTransform();
+        drawing::HomogenMatrix aHomMat; 
+        basegfx::B3DHomMatrix aMat = static_cast<E3dObject*>(mpObj.get())->GetTransform(); 
 
         // pack evtl. transformed matrix to output
-        aHomMat.Line1.Column1 = aMat.get(0, 0);
-        aHomMat.Line1.Column2 = aMat.get(0, 1);
-        aHomMat.Line1.Column3 = aMat.get(0, 2);
-        aHomMat.Line1.Column4 = aMat.get(0, 3);
-        aHomMat.Line2.Column1 = aMat.get(1, 0);
-        aHomMat.Line2.Column2 = aMat.get(1, 1);
-        aHomMat.Line2.Column3 = aMat.get(1, 2);
-        aHomMat.Line2.Column4 = aMat.get(1, 3);
-        aHomMat.Line3.Column1 = aMat.get(2, 0);
-        aHomMat.Line3.Column2 = aMat.get(2, 1);
-        aHomMat.Line3.Column3 = aMat.get(2, 2);
-        aHomMat.Line3.Column4 = aMat.get(2, 3);
-        aHomMat.Line4.Column1 = aMat.get(3, 0);
-        aHomMat.Line4.Column2 = aMat.get(3, 1);
-        aHomMat.Line4.Column3 = aMat.get(3, 2);
-        aHomMat.Line4.Column4 = aMat.get(3, 3);
+        aHomMat.Line1.Column1 = aMat.get(0, 0); 
+        aHomMat.Line1.Column2 = aMat.get(0, 1); 
+        aHomMat.Line1.Column3 = aMat.get(0, 2); 
+        aHomMat.Line1.Column4 = aMat.get(0, 3); 
+        aHomMat.Line2.Column1 = aMat.get(1, 0); 
+        aHomMat.Line2.Column2 = aMat.get(1, 1); 
+        aHomMat.Line2.Column3 = aMat.get(1, 2); 
+        aHomMat.Line2.Column4 = aMat.get(1, 3); 
+        aHomMat.Line3.Column1 = aMat.get(2, 0); 
+        aHomMat.Line3.Column2 = aMat.get(2, 1); 
+        aHomMat.Line3.Column3 = aMat.get(2, 2); 
+        aHomMat.Line3.Column4 = aMat.get(2, 3); 
+        aHomMat.Line4.Column1 = aMat.get(3, 0); 
+        aHomMat.Line4.Column2 = aMat.get(3, 1); 
+        aHomMat.Line4.Column3 = aMat.get(3, 2); 
+        aHomMat.Line4.Column4 = aMat.get(3, 3); 
 
         rValue <<= aHomMat;
         break;
@@ -957,7 +956,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
 ***********************************************************************/
 
 Svx3DExtrudeObject::Svx3DExtrudeObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DEXTRUDEOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DEXTRUDEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
+:	SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DEXTRUDEOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DEXTRUDEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -1012,26 +1011,26 @@ bool Svx3DExtrudeObject::getPropertyValueImpl( const ::rtl::OUString& rName, con
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
         // Transformation in eine homogene Matrix packen
-        drawing::HomogenMatrix aHomMat;
-        basegfx::B3DHomMatrix aMat = ((E3dObject*)mpObj.get())->GetTransform();
+        drawing::HomogenMatrix aHomMat; 
+        basegfx::B3DHomMatrix aMat = ((E3dObject*)mpObj.get())->GetTransform(); 
 
         // pack evtl. transformed matrix to output
-        aHomMat.Line1.Column1 = aMat.get(0, 0);
-        aHomMat.Line1.Column2 = aMat.get(0, 1);
-        aHomMat.Line1.Column3 = aMat.get(0, 2);
-        aHomMat.Line1.Column4 = aMat.get(0, 3);
-        aHomMat.Line2.Column1 = aMat.get(1, 0);
-        aHomMat.Line2.Column2 = aMat.get(1, 1);
-        aHomMat.Line2.Column3 = aMat.get(1, 2);
-        aHomMat.Line2.Column4 = aMat.get(1, 3);
-        aHomMat.Line3.Column1 = aMat.get(2, 0);
-        aHomMat.Line3.Column2 = aMat.get(2, 1);
-        aHomMat.Line3.Column3 = aMat.get(2, 2);
-        aHomMat.Line3.Column4 = aMat.get(2, 3);
-        aHomMat.Line4.Column1 = aMat.get(3, 0);
-        aHomMat.Line4.Column2 = aMat.get(3, 1);
-        aHomMat.Line4.Column3 = aMat.get(3, 2);
-        aHomMat.Line4.Column4 = aMat.get(3, 3);
+        aHomMat.Line1.Column1 = aMat.get(0, 0); 
+        aHomMat.Line1.Column2 = aMat.get(0, 1); 
+        aHomMat.Line1.Column3 = aMat.get(0, 2); 
+        aHomMat.Line1.Column4 = aMat.get(0, 3); 
+        aHomMat.Line2.Column1 = aMat.get(1, 0); 
+        aHomMat.Line2.Column2 = aMat.get(1, 1); 
+        aHomMat.Line2.Column3 = aMat.get(1, 2); 
+        aHomMat.Line2.Column4 = aMat.get(1, 3); 
+        aHomMat.Line3.Column1 = aMat.get(2, 0); 
+        aHomMat.Line3.Column2 = aMat.get(2, 1); 
+        aHomMat.Line3.Column3 = aMat.get(2, 2); 
+        aHomMat.Line3.Column4 = aMat.get(2, 3); 
+        aHomMat.Line4.Column1 = aMat.get(3, 0); 
+        aHomMat.Line4.Column2 = aMat.get(3, 1); 
+        aHomMat.Line4.Column3 = aMat.get(3, 2); 
+        aHomMat.Line4.Column4 = aMat.get(3, 3); 
 
         rValue <<= aHomMat;
         break;
@@ -1069,7 +1068,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames(
 
 //----------------------------------------------------------------------
 Svx3DPolygonObject::Svx3DPolygonObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DPOLYGONOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DPOLYGONOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
+:	SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DPOLYGONOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DPOLYGONOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -1162,7 +1161,7 @@ bool Svx3DPolygonObject::getPropertyValueImpl( const ::rtl::OUString& rName, con
         ConvertObjectToHomogenMatric( static_cast< E3dObject* >( mpObj.get() ), rValue );
         break;
     }
-
+    
     case OWN_ATTR_3D_VALUE_POLYPOLYGON3D:
     {
         B3dPolyPolygon_to_PolyPolygonShape3D(static_cast<E3dPolygonObj*>(mpObj.get())->GetPolyPolygon3D(),rValue);

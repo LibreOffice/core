@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 #include <osl/mutex.hxx>
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 namespace connectivity
 {
@@ -59,7 +59,7 @@ namespace connectivity
                 {
                 }
             };
-            typedef ::boost::unordered_map< ::rtl::OUString, AliasEntry, ::rtl::OUStringHash > AliasMap;
+            typedef ::std::hash_map< ::rtl::OUString, AliasEntry, ::rtl::OUStringHash > AliasMap;
 
         private:
             AliasMap    m_aAliasMap;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "diagnose_ex.h"
 #include <osl/thread.h>
-
-#include <o3tl/compat_functional.hxx>
 
 //........................................................................
 namespace connectivity
@@ -85,7 +83,7 @@ namespace connectivity
                     catch(const Exception& e)
                     {
                         OSL_UNUSED( e );
-                        OSL_FAIL("Could not dispose OutputStream");
+                        OSL_ENSURE(0,"Could not dispose OutputStream");
                     }
                     m_xOutputStream.clear();
                 }
@@ -93,7 +91,7 @@ namespace connectivity
             catch(Exception& ex)
             {
                 OSL_UNUSED( ex );
-                OSL_FAIL("Exception catched!");
+                OSL_ENSURE(0,"Exception catched!");
             }
         }
         // -----------------------------------------------------------------------------
@@ -138,7 +136,7 @@ namespace connectivity
         ::rtl::OUString StorageContainer::removeOldURLPrefix(const ::rtl::OUString& _sURL)
         {
             ::rtl::OUString sRet = _sURL;
-#if defined(WNT)
+#if defined(WIN) || defined(WNT)
             sal_Int32 nIndex = sRet.lastIndexOf('\\');
 #else
             sal_Int32 nIndex = sRet.lastIndexOf('/');
@@ -158,7 +156,7 @@ namespace connectivity
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
-                OSL_FAIL("ExceptionClear");
+                OSL_ENSURE(0,"ExceptionClear");
             }
             ::rtl::OUString aStr;
             if ( jstr )
@@ -175,7 +173,7 @@ namespace connectivity
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
-                OSL_FAIL("ExceptionClear");
+                OSL_ENSURE(0,"ExceptionClear");
             }
             return aStr;
         }
@@ -187,9 +185,9 @@ namespace connectivity
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
-                                        ::o3tl::compose1(
+                                        ::std::compose1(
                                             ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
-                                            ,::o3tl::compose1(::o3tl::select1st<TStorageURLPair>(),::o3tl::compose1(::o3tl::select1st<TStorages::mapped_type>(),::o3tl::select2nd<TStorages::value_type>())))
+                                            ,::std::compose1(::std::select1st<TStorageURLPair>(),::std::compose1(::std::select1st<TStorages::mapped_type>(),::std::select2nd<TStorages::value_type>())))
                     );
             if ( aFind == rMap.end() )
             {
@@ -218,9 +216,9 @@ namespace connectivity
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
-                                        ::o3tl::compose1(
+                                        ::std::compose1(
                                             ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
-                                            ,::o3tl::compose1(::o3tl::select1st<TStorageURLPair>(),::o3tl::compose1(::o3tl::select1st<TStorages::mapped_type>(),::o3tl::select2nd<TStorages::value_type>())))
+                                            ,::std::compose1(::std::select1st<TStorageURLPair>(),::std::compose1(::std::select1st<TStorages::mapped_type>(),::std::select2nd<TStorages::value_type>())))
                     );
             if ( aFind != rMap.end() )
                 sKey = aFind->first;
@@ -313,7 +311,7 @@ namespace connectivity
                             if ( _nMode < 16 )
                                 sMessage += "0";
                             sMessage += ::rtl::OString::valueOf( _nMode, 16 ).toAsciiUpperCase();
-                            OSL_FAIL( sMessage.getStr() );
+                            OSL_ENSURE( false, sMessage.getStr() );
 #endif
                             StorageContainer::throwJavaException(e,env);
                         }
@@ -357,7 +355,7 @@ namespace connectivity
             env->ThrowNew(env->FindClass("java/io/IOException"), cstr.getStr());
         }
     //........................................................................
-    }   // namespace hsqldb
+    }	// namespace hsqldb
     //........................................................................
 //........................................................................
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ class E3dScene;
 class E3dPolyScene;
 
 namespace basegfx { class B3DPolyPolygon; }
-namespace sdr { namespace properties {
+namespace sdr {	namespace properties {
     class BaseProperties;
     class E3dProperties;
     class E3dCompoundProperties;
@@ -73,8 +73,8 @@ namespace sdr { namespace properties {
 class E3DObjGeoData : public SdrObjGeoData
 {
 public:
-    basegfx::B3DRange           maLocalBoundVol;    // surrounding volume of the object
-    basegfx::B3DHomMatrix       maTransformation;   // lokal transformations
+    basegfx::B3DRange			maLocalBoundVol;	// surrounding volume of the object
+    basegfx::B3DHomMatrix		maTransformation;	// lokal transformations
 
     E3DObjGeoData() {}
 };
@@ -93,10 +93,10 @@ public:
     SVX_DLLPUBLIC E3dObjList(const E3dObjList& rSrcList);
     SVX_DLLPUBLIC virtual ~E3dObjList();
 
-    virtual void NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
-    virtual void InsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
-    virtual SdrObject* NbcRemoveObject(sal_uIntPtr nObjNum);
-    virtual SdrObject* RemoveObject(sal_uIntPtr nObjNum);
+    virtual void NbcInsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
+    virtual void InsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
+    virtual SdrObject* NbcRemoveObject(ULONG nObjNum);
+    virtual SdrObject* RemoveObject(ULONG nObjNum);
 };
 
 /*************************************************************************
@@ -118,15 +118,15 @@ private:
  protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    E3dObjList                  maSubList;          // child objekts
+    E3dObjList					maSubList;			// child objekts
 
-    basegfx::B3DRange           maLocalBoundVol;    // surrounding volume of the object (from the geometry generation)
-    basegfx::B3DHomMatrix       maTransformation;   // local transformation
-    basegfx::B3DHomMatrix       maFullTransform;    // global transformation (including. parents)
+    basegfx::B3DRange			maLocalBoundVol;	// surrounding volume of the object (from the geometry generation)
+    basegfx::B3DHomMatrix		maTransformation;	// local transformation
+    basegfx::B3DHomMatrix		maFullTransform;	// global transformation (including. parents)
 
     // Flags
-    unsigned        mbTfHasChanged          : 1;
-    unsigned        mbIsSelected            : 1;
+    unsigned		mbTfHasChanged			: 1;
+    unsigned		mbIsSelected			: 1;
 
  public:
     void SetBoundVolInvalid();
@@ -138,11 +138,11 @@ private:
     basegfx::B3DRange RecalcBoundVolume() const;
 
 protected:
-    // E3dObject is only a helper class (for E3DScene and E3DCompoundObject)
-    // and no instances should be created from anyone, so i move the constructors
+    // E3dObject is only a helper class (for E3DScene and E3DCompoundObject) 
+    // and no instances should be created from anyone, so i move the constructors 
     // to protected area
     E3dObject();
-    E3dObject(sal_Bool bIsFromChart);
+    E3dObject(BOOL bIsFromChart);
 
 public:
     TYPEINFO();
@@ -151,17 +151,17 @@ public:
 
     virtual ~E3dObject();
 
-    virtual sal_uInt32  GetObjInventor() const;
-    virtual sal_uInt16  GetObjIdentifier() const;
+    virtual UINT32	GetObjInventor() const;
+    virtual UINT16	GetObjIdentifier() const;
 
-    virtual void    TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
+    virtual void	TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
 
-    virtual void        NbcSetLayer(SdrLayerID nLayer);
+    virtual void		NbcSetLayer(SdrLayerID nLayer);
 
-    virtual void        SetObjList(SdrObjList* pNewObjList);
-    virtual void        SetPage(SdrPage* pNewPage);
-    virtual void        SetModel(SdrModel* pNewModel);
-    virtual void        NbcMove(const Size& rSize);
+    virtual void		SetObjList(SdrObjList* pNewObjList);
+    virtual void		SetPage(SdrPage* pNewPage);
+    virtual void		SetModel(SdrModel* pNewModel);
+    virtual void		NbcMove(const Size& rSize);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual SdrObjList* GetSubList() const;
 
@@ -195,9 +195,8 @@ public:
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
-    sal_uInt16 GetLogicalGroup() { return 0; }
-    virtual E3dObject* Clone() const;
-    E3dObject& operator=( const E3dObject& rObj );
+    USHORT GetLogicalGroup() { return 0; }
+    virtual void operator=(const SdrObject&);
 
     virtual SdrObjGeoData *NewGeoData() const;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const;
@@ -208,7 +207,7 @@ public:
     void SetSelected(bool bNew);
 
     // break up
-    virtual sal_Bool IsBreakObjPossible();
+    virtual BOOL IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };
 
@@ -235,11 +234,11 @@ protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     // material of the object
-    Color                   aMaterialAmbientColor;
+    Color					aMaterialAmbientColor;
 
     // attributes for geometry creation
-    unsigned                bCreateNormals              : 1;
-    unsigned                bCreateTexture              : 1;
+    unsigned				bCreateNormals				: 1;
+    unsigned				bCreateTexture				: 1;
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
@@ -256,30 +255,30 @@ public :
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual sal_uInt32 GetHdlCount() const;
-    virtual void    AddToHdlList(SdrHdlList& rHdlList) const;
-
-    // DoubleSided: sal_True/FALSE
-    sal_Bool GetDoubleSided() const
+    virtual void	AddToHdlList(SdrHdlList& rHdlList) const;
+    
+    // DoubleSided: TRUE/FALSE
+    BOOL GetDoubleSided() const
         { return ((const Svx3DDoubleSidedItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue(); }
 
-    // NormalsKind: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
+    // NormalsKind: 0 == FALSE/FALSE, 1 == TRUE/FALSE, else == TRUE/TRUE
     sal_uInt16 GetNormalsKind() const
         { return ((const Svx3DNormalsKindItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue(); }
 
-    // NormalsInvert: sal_True/FALSE
-    sal_Bool GetNormalsInvert() const
+    // NormalsInvert: TRUE/FALSE
+    BOOL GetNormalsInvert() const
         { return ((const Svx3DNormalsInvertItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue(); }
 
-    // TextureProjX: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
+    // TextureProjX: 0 == FALSE/FALSE, 1 == TRUE/FALSE, else == TRUE/TRUE
     sal_uInt16 GetTextureProjectionX() const
         { return ((const Svx3DTextureProjectionXItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue(); }
 
-    // TextureProjY: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
+    // TextureProjY: 0 == FALSE/FALSE, 1 == TRUE/FALSE, else == TRUE/TRUE
     sal_uInt16 GetTextureProjectionY() const
         { return ((const Svx3DTextureProjectionYItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue(); }
 
-    // Shadow3D: sal_True/FALSE
-    sal_Bool GetShadow3D() const
+    // Shadow3D: TRUE/FALSE
+    BOOL GetShadow3D() const
         { return ((const Svx3DShadow3DItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue(); }
 
     // MaterialColor: Color
@@ -298,26 +297,27 @@ public :
     sal_uInt16 GetMaterialSpecularIntensity() const
         { return ((const Svx3DMaterialSpecularIntensityItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue(); }
 
-    // TextureFilter: sal_True/FALSE
-    sal_Bool GetTextureFilter() const
+    // TextureFilter: TRUE/FALSE
+    BOOL GetTextureFilter() const
         { return ((const Svx3DTextureFilterItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue(); }
 
     // #i28528#
     // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
-    sal_Bool GetReducedLineGeometry() const
+    BOOL GetReducedLineGeometry() const
         { return ((const Svx3DReducedLineGeometryItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY)).GetValue(); }
 
-    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual UINT16 GetObjIdentifier() const;
     virtual void RecalcSnapRect();
 
     // set/get parameters for geometry creation
-    sal_Bool GetCreateNormals() const { return bCreateNormals; }
-    void SetCreateNormals(sal_Bool bNew);
+    BOOL GetCreateNormals() const { return bCreateNormals; }
+    void SetCreateNormals(BOOL bNew);
 
-    sal_Bool GetCreateTexture() const { return bCreateTexture; }
-    void SetCreateTexture(sal_Bool bNew);
+    BOOL GetCreateTexture() const { return bCreateTexture; }
+    void SetCreateTexture(BOOL bNew);
 
-    virtual E3dCompoundObject* Clone() const;
+    // copy operator
+    virtual void operator=(const SdrObject&);
 
     // material of the object
     const Color& GetMaterialAmbientColor() const { return aMaterialAmbientColor; }
@@ -326,6 +326,6 @@ public :
     sal_Bool IsAOrdNumRemapCandidate(E3dScene*& prScene) const;
 };
 
-#endif          // _E3D_OBJ3D_HXX
+#endif			// _E3D_OBJ3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

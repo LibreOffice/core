@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,6 @@
 #include FT_FREETYPE_H
 
 class FreetypeServerFont;
-#ifdef ENABLE_GRAPHITE
-class GraphiteFaceWrapper;
-#endif
-
 struct FT_GlyphRec_;
 
 // -----------------------------------------------------------------------
@@ -82,12 +78,9 @@ public:
                                 const ExtraKernInfo* );
                           ~FtFontInfo();
 
-    const unsigned char*  GetTable( const char*, sal_uLong* pLength=0 ) const;
+    const unsigned char*  GetTable( const char*, ULONG* pLength=0 ) const;
 
     FT_FaceRec_*          GetFaceFT();
-#ifdef ENABLE_GRAPHITE
-    GraphiteFaceWrapper*  GetGraphiteFace();
-#endif
     void                  ReleaseFaceFT( FT_FaceRec_* );
 
     const ::rtl::OString* GetFontFileName() const   { return mpFontFile->GetFileName(); }
@@ -102,9 +95,6 @@ public:
     int                   GetGlyphIndex( sal_UCS4 cChar ) const;
     void                  CacheGlyphIndex( sal_UCS4 cChar, int nGI ) const;
 
-    bool                  GetFontCodeRanges( CmapResult& ) const;
-    const ImplFontCharMap* GetImplFontCharMap( void );
-
     bool                  HasExtraKerning() const;
     int                   GetExtraKernPairs( ImplKernPairData** ) const;
     int                   GetExtraGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
@@ -115,18 +105,13 @@ private:
     const int       mnFaceNum;
     int             mnRefCount;
     const int       mnSynthetic;
-#ifdef ENABLE_GRAPHITE
-    bool            mbCheckedGraphite;
-    GraphiteFaceWrapper * mpGraphiteFace;
-#endif
+
     sal_IntPtr      mnFontId;
     ImplDevFontAttributes maDevFontAttributes;
 
-    const ImplFontCharMap* mpFontCharMap;
-
     // cache unicode->glyphid mapping because looking it up is expensive
-    // TODO: change to boost::unordered_multimap when a use case requires a m:n mapping
-    typedef ::boost::unordered_map<int,int> Int2IntMap;
+    // TODO: change to hash_multimap when a use case requires a m:n mapping
+    typedef ::std::hash_map<int,int> Int2IntMap;
     mutable Int2IntMap* mpChar2Glyph;
     mutable Int2IntMap* mpGlyph2Char;
     void InitHashes() const;
@@ -172,7 +157,7 @@ public:
     FreetypeServerFont* CreateFont( const ImplFontSelectData& );
 
 private:
-    typedef ::boost::unordered_map<sal_IntPtr,FtFontInfo*> FontList;
+    typedef ::std::hash_map<sal_IntPtr,FtFontInfo*> FontList;
     FontList            maFontList;
 
     sal_IntPtr          mnMaxFontId;
@@ -191,14 +176,12 @@ public:
     virtual int                 GetFontFaceNum() const { return mpFontInfo->GetFaceNum(); }
     virtual bool                TestFont() const;
     virtual void*               GetFtFace() const;
-    virtual void                SetFontOptions( boost::shared_ptr<ImplFontOptions> );
-    virtual boost::shared_ptr<ImplFontOptions> GetFontOptions() const;
+    virtual void                SetFontOptions( const ImplFontOptions&);
     virtual int                 GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
     virtual bool                NeedsArtificialBold() const { return mbArtBold; }
     virtual bool                NeedsArtificialItalic() const { return mbArtItalic; }
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
-    virtual const ImplFontCharMap* GetImplFontCharMap( void ) const;
 
     virtual int                 GetGlyphIndex( sal_UCS4 ) const;
     int                         GetRawGlyphIndex( sal_UCS4 ) const;
@@ -209,22 +192,19 @@ public:
     virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphOutline( int nGlyphIndex, ::basegfx::B2DPolyPolygon& ) const;
     virtual int                 GetGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
-    virtual sal_uLong               GetKernPairs( ImplKernPairData** ) const;
+    virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
 
-    const unsigned char*        GetTable( const char* pName, sal_uLong* pLength )
+    const unsigned char*        GetTable( const char* pName, ULONG* pLength )
                                 { return mpFontInfo->GetTable( pName, pLength ); }
     int                         GetEmUnits() const;
     const FT_Size_Metrics&      GetMetricsFT() const { return maSizeFT->metrics; }
-#ifdef ENABLE_GRAPHITE
-    GraphiteFaceWrapper*        GetGraphiteFace() const { return mpFontInfo->GetGraphiteFace(); }
-#endif
 
 protected:
     friend class GlyphCache;
 
     int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
-    virtual bool                GetFontCapabilities(vcl::FontCapabilities &) const;
+    virtual bool                GetFontCodeRanges( CmapResult& ) const;
     bool                        ApplyGSUB( const ImplFontSelectData& );
     virtual ServerFontLayoutEngine* GetLayoutEngine();
 
@@ -239,14 +219,12 @@ private:
     FT_FaceRec_*                maFaceFT;
     FT_SizeRec_*                maSizeFT;
 
-    boost::shared_ptr<ImplFontOptions> mpFontOptions;
-
     bool                        mbFaceOk;
-    bool            mbArtItalic;
-    bool            mbArtBold;
-    bool            mbUseGamma;
+    bool			mbArtItalic;
+    bool			mbArtBold;
+    bool			mbUseGamma;
 
-    typedef ::boost::unordered_map<int,int> GlyphSubstitution;
+    typedef ::std::hash_map<int,int> GlyphSubstitution;
     GlyphSubstitution           maGlyphSubstitution;
     rtl_UnicodeToTextConverter  maRecodeConverter;
 

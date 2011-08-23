@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,11 +55,11 @@ DBG_NAMEEX( UniString )
 
 // -----------------------------------------------------------------------
 
-#define STRCODE         sal_Char
+#define STRCODE 		sal_Char
 #define STRCODEU        unsigned char
-#define STRING          ByteString
-#define STRINGDATA      ByteStringData
-#define DBGCHECKSTRING  DbgCheckByteString
+#define STRING			ByteString
+#define STRINGDATA		ByteStringData
+#define DBGCHECKSTRING	DbgCheckByteString
 #define STRING_TYPE     rtl_String
 #define STRING_ACQUIRE  rtl_string_acquire
 #define STRING_RELEASE  rtl_string_release
@@ -165,7 +165,7 @@ float ByteString::ToFloat() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    OSL_FAIL("ByteString::ToFloat unusable");
+    OSL_ENSURE(false, "ByteString::ToFloat unusable");
     return 0;
 }
 
@@ -175,13 +175,13 @@ double ByteString::ToDouble() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    OSL_FAIL("ByteString::ToDouble unusable");
+    OSL_ENSURE(false, "ByteString::ToDouble unusable");
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ByteString::IsLowerAscii() const
+BOOL ByteString::IsLowerAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
@@ -191,18 +191,18 @@ sal_Bool ByteString::IsLowerAscii() const
     while ( nIndex < nLen )
     {
         if ( (*pStr >= 65) && (*pStr <= 90) )
-            return sal_False;
+            return FALSE;
 
         ++pStr,
         ++nIndex;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ByteString::IsUpperAscii() const
+BOOL ByteString::IsUpperAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
@@ -212,18 +212,18 @@ sal_Bool ByteString::IsUpperAscii() const
     while ( nIndex < nLen )
     {
         if ( (*pStr >= 97) && (*pStr <= 122) )
-            return sal_False;
+            return FALSE;
 
         ++pStr,
         ++nIndex;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ByteString::IsAlphaAscii() const
+BOOL ByteString::IsAlphaAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
@@ -233,19 +233,19 @@ sal_Bool ByteString::IsAlphaAscii() const
     while ( nIndex < nLen )
     {
         if ( !(((*pStr >= 97) && (*pStr <= 122)) ||
-               ((*pStr >= 65) && (*pStr <=  90))) )
-            return sal_False;
+               ((*pStr >= 65) && (*pStr <=	90))) )
+            return FALSE;
 
         ++pStr,
         ++nIndex;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ByteString::IsNumericAscii() const
+BOOL ByteString::IsNumericAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
@@ -255,18 +255,18 @@ sal_Bool ByteString::IsNumericAscii() const
     while ( nIndex < nLen )
     {
         if ( !((*pStr >= 48) && (*pStr <= 57)) )
-            return sal_False;
+            return FALSE;
 
         ++pStr,
         ++nIndex;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ByteString::IsAlphaNumericAscii() const
+BOOL ByteString::IsAlphaNumericAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
@@ -276,15 +276,15 @@ sal_Bool ByteString::IsAlphaNumericAscii() const
     while ( nIndex < nLen )
     {
         if ( !(((*pStr >= 97) && (*pStr <= 122)) ||
-               ((*pStr >= 65) && (*pStr <=  90)) ||
-               ((*pStr >= 48) && (*pStr <=  57))) )
-            return sal_False;
+               ((*pStr >= 65) && (*pStr <=	90)) ||
+               ((*pStr >= 48) && (*pStr <=	57))) )
+            return FALSE;
 
         ++pStr,
         ++nIndex;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

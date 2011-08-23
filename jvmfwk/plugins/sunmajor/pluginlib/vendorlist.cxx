@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,11 +37,7 @@
 #include <stdio.h>
 
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OStringToOUString;
-using ::rtl::OString;
+using namespace rtl;
 
 namespace jfw_plugin
 {
@@ -59,7 +55,7 @@ BEGIN_VENDOR_MAP()
     VENDOR_MAP_ENTRY("BEA Systems, Inc.", OtherInfo)
     VENDOR_MAP_ENTRY("Free Software Foundation, Inc.", GnuInfo)
     VENDOR_MAP_ENTRY("The FreeBSD Foundation", OtherInfo)
-END_VENDOR_MAP()
+END_VENDOR_MAP()    
 
 
 Sequence<OUString> getVendorNames()
@@ -79,7 +75,7 @@ bool isVendorSupported(const rtl::OUString& sVendor)
     Sequence<OUString> seqNames = getVendorNames();
     const OUString * arNames = seqNames.getConstArray();
     sal_Int32 count = seqNames.getLength();
-
+    
     for (int i = 0; i < count; i++)
     {
         if (sVendor.equals(arNames[i]))
@@ -89,7 +85,7 @@ bool isVendorSupported(const rtl::OUString& sVendor)
     OString sVendorName = OUStringToOString(sVendor, osl_getThreadTextEncoding());
     fprintf(stderr, "[Java frameworksunjavaplugin.so]sunjavaplugin does not support vendor: %s.\n",
             sVendorName.getStr());
-#endif
+#endif    
     return false;
 }
 

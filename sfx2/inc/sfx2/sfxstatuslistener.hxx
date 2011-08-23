@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,29 +45,29 @@
 class SfxStatusListenerInterface
 {
     public:
-        virtual void StateChanged( sal_uInt16 nSlotId, SfxItemState eState, const SfxPoolItem* pState ) = 0;
+        virtual void StateChanged( USHORT nSlotId, SfxItemState eState, const SfxPoolItem* pState ) = 0;
 };
 
 class SFX2_DLLPUBLIC SfxStatusListener :
-                          public ::com::sun::star::frame::XStatusListener   ,
+                          public ::com::sun::star::frame::XStatusListener	,
                           public ::com::sun::star::lang::XTypeProvider      ,
                           public ::com::sun::star::lang::XComponent         ,
-                          public ::cppu::OWeakObject
+                          public ::cppu::OWeakObject 
 {
     public:
         SFX_DECL_XINTERFACE_XTYPEPROVIDER
 
-        SfxStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const rtl::OUString& aCommand );
+        SfxStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const rtl::OUString& aCommand );
         virtual ~SfxStatusListener();
 
         // old methods from SfxControllerItem
-        sal_uInt16  GetId() const { return m_nSlotID; }
+        USHORT  GetId() const { return m_nSlotID; }
         void    Bind();
-        void    Bind( sal_uInt16 nSlotID, const rtl::OUString& rNewCommand );
+        void    Bind( USHORT nSlotID, const rtl::OUString& rNewCommand );
         void    UnBind();
         void    ReBind();
 
-        virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+        virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
 
         // XComponent
         virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
@@ -85,7 +85,7 @@ class SFX2_DLLPUBLIC SfxStatusListener :
         SfxStatusListener();
         SfxStatusListener& operator=( const SfxStatusListener& );
 
-        sal_uInt16                                                                          m_nSlotID;
+        USHORT                                                                          m_nSlotID;
         ::com::sun::star::util::URL                                                     m_aCommand;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  m_xDispatchProvider;
         ::com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >            m_xDispatch;

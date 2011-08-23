@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_unotools.hxx"
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include <unotools/extendedsecurityoptions.hxx>
@@ -45,37 +45,37 @@
 
 #include <unotools/pathoptions.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::utl					;
+using namespace ::rtl					;
+using namespace ::osl					;
+using namespace ::com::sun::star::uno	;
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_SECURITY               OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Security"))
+#define	ROOTNODE_SECURITY				OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Security"))
 
-#define SECURE_EXTENSIONS_SET           OUString(RTL_CONSTASCII_USTRINGPARAM("SecureExtensions"))
-#define EXTENSION_PROPNAME              OUString(RTL_CONSTASCII_USTRINGPARAM("/Extension"))
+#define SECURE_EXTENSIONS_SET			OUString(RTL_CONSTASCII_USTRINGPARAM("SecureExtensions"))
+#define EXTENSION_PROPNAME				OUString(RTL_CONSTASCII_USTRINGPARAM("/Extension"))
 
-#define PROPERTYNAME_HYPERLINKS_OPEN    OUString(RTL_CONSTASCII_USTRINGPARAM("Hyperlinks/Open"))
+#define PROPERTYNAME_HYPERLINKS_OPEN	OUString(RTL_CONSTASCII_USTRINGPARAM("Hyperlinks/Open"))
 
-#define PROPERTYHANDLE_HYPERLINKS_OPEN  0
+#define PROPERTYHANDLE_HYPERLINKS_OPEN	0
 
 #define PROPERTYCOUNT                   1
 
 //_________________________________________________________________________________________________________________
-//  private declarations!
+//	private declarations!
 //_________________________________________________________________________________________________________________
 
 struct OUStringHashCode
@@ -86,7 +86,7 @@ struct OUStringHashCode
     }
 };
 
-class ExtensionHashMap : public ::boost::unordered_map< ::rtl::OUString,
+class ExtensionHashMap : public ::std::hash_map< ::rtl::OUString,
                                                  sal_Int32,
                                                  OUStringHashCode,
                                                  ::std::equal_to< ::rtl::OUString > >
@@ -101,134 +101,134 @@ class ExtensionHashMap : public ::boost::unordered_map< ::rtl::OUString,
 class SvtExtendedSecurityOptions_Impl : public ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
          SvtExtendedSecurityOptions_Impl();
         ~SvtExtendedSecurityOptions_Impl();
 
         //---------------------------------------------------------------------------------------------------------
-        //  overloaded methods of baseclass
+        //	overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      called for notify of configmanager
-            @descr      These method is called from the ConfigManager before application ends or from the
+            @short		called for notify of configmanager
+            @descr		These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
-            @seealso    baseclass ConfigItem
+            @seealso	baseclass ConfigItem
 
-            @param      "seqPropertyNames" is the list of properties which should be updated.
-            @return     -
+            @param		"seqPropertyNames" is the list of properties which should be updated.
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
 
         /*-****************************************************************************************************//**
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
+            @short		write changes to configuration
+            @descr		These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
 
-            @seealso    baseclass ConfigItem
+            @seealso	baseclass ConfigItem
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void Commit();
 
         //---------------------------------------------------------------------------------------------------------
-        //  public interface
+        //	public interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      Access method to check for security problems
-            @descr      Different methods to check for security related problems.
+            @short		Access method to check for security problems
+            @descr		Different methods to check for security related problems.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
-        sal_Bool                                        IsSecureHyperlink( const rtl::OUString& aURL ) const;
-        Sequence< rtl::OUString >                       GetSecureExtensionList() const;
+        sal_Bool										IsSecureHyperlink( const rtl::OUString& aURL ) const;
+        Sequence< rtl::OUString >						GetSecureExtensionList() const;
 
-        SvtExtendedSecurityOptions::OpenHyperlinkMode   GetOpenHyperlinkMode();
-        void                                            SetOpenHyperlinkMode( SvtExtendedSecurityOptions::OpenHyperlinkMode aMode );
+        SvtExtendedSecurityOptions::OpenHyperlinkMode	GetOpenHyperlinkMode();
+        void											SetOpenHyperlinkMode( SvtExtendedSecurityOptions::OpenHyperlinkMode aMode );
         sal_Bool                                        IsOpenHyperlinkModeReadOnly() const;
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short      return list of key names of ouer configuration management which represent oue module tree
-            @descr      These methods return a static const list of key names. We need it to get needed values from our
+            @short		return list of key names of ouer configuration management which represent oue module tree
+            @descr		These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     A list of needed configuration keys is returned.
+            @param		-
+            @return		A list of needed configuration keys is returned.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         static Sequence< OUString > GetPropertyNames();
 
         /*-****************************************************************************************************//**
-            @short      Fills the hash map with all extensions known to be secure
-            @descr      These methods fills the given hash map object with all extensions known to be secure.
+            @short		Fills the hash map with all extensions known to be secure
+            @descr		These methods fills the given hash map object with all extensions known to be secure.
 
-            @seealso    -
+            @seealso	-
 
-            @param      aHashMap
+            @param		aHashMap
                         A hash map to be filled with secure extension strings.
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
         void FillExtensionHashMap( ExtensionHashMap& aHashMap );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
-        OUString                                        m_aSecureExtensionsSetName;
-        OUString                                        m_aExtensionPropName;
+        OUString										m_aSecureExtensionsSetName;
+        OUString										m_aExtensionPropName;
 
-        SvtExtendedSecurityOptions::OpenHyperlinkMode   m_eOpenHyperlinkMode;
+        SvtExtendedSecurityOptions::OpenHyperlinkMode	m_eOpenHyperlinkMode;
         sal_Bool                                        m_bROOpenHyperlinkMode;
-        ExtensionHashMap                                m_aExtensionHashMap;
+        ExtensionHashMap								m_aExtensionHashMap;
 };
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     // Init baseclasses first
-    :   ConfigItem          ( ROOTNODE_SECURITY         ),
+    :	ConfigItem			( ROOTNODE_SECURITY			),
     m_aSecureExtensionsSetName( SECURE_EXTENSIONS_SET ),
     m_aExtensionPropName( EXTENSION_PROPNAME ),
     m_bROOpenHyperlinkMode(sal_False)
@@ -237,8 +237,8 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     // Fill the extension hash map with all secure extension strings
     FillExtensionHashMap( m_aExtensionHashMap );
 
-    Sequence< OUString >    seqNames    = GetPropertyNames();
-    Sequence< Any >         seqValues   = GetProperties( seqNames );
+    Sequence< OUString >	seqNames	= GetPropertyNames();
+    Sequence< Any >			seqValues	= GetProperties( seqNames );
     Sequence< sal_Bool >    seqRO       = GetReadOnlyStates ( seqNames  );
 
     sal_Int32 nPropertyCount = seqValues.getLength();
@@ -257,7 +257,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
                 if ( seqValues[nProperty] >>= nMode )
                     m_eOpenHyperlinkMode = (SvtExtendedSecurityOptions::OpenHyperlinkMode)nMode;
                 else {
-                    OSL_FAIL("Wrong type for Open mode!");
+                    DBG_ERROR("Wrong type for Open mode!");
                 }
                 m_bROOpenHyperlinkMode = seqRO[nProperty];
             }
@@ -273,7 +273,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtExtendedSecurityOptions_Impl::~SvtExtendedSecurityOptions_Impl()
 {
@@ -285,7 +285,7 @@ SvtExtendedSecurityOptions_Impl::~SvtExtendedSecurityOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtExtendedSecurityOptions_Impl::Notify( const Sequence< OUString >& )
 {
@@ -293,19 +293,19 @@ void SvtExtendedSecurityOptions_Impl::Notify( const Sequence< OUString >& )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtExtendedSecurityOptions_Impl::Commit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
-    Sequence< OUString >    seqNames    = GetPropertyNames  ();
-    sal_Int32               nCount      = seqNames.getLength();
-    Sequence< Any >         seqValues   ( nCount );
+    Sequence< OUString >	seqNames	= GetPropertyNames	();
+    sal_Int32				nCount		= seqNames.getLength();
+    Sequence< Any >			seqValues	( nCount );
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
     {
         switch( nProperty )
         {
-            case PROPERTYHANDLE_HYPERLINKS_OPEN:    {
+            case PROPERTYHANDLE_HYPERLINKS_OPEN:	{
                                                         seqValues[nProperty] <<= (sal_Int32)m_eOpenHyperlinkMode;
                                                     }
                                                     break;
@@ -317,7 +317,7 @@ void SvtExtendedSecurityOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtExtendedSecurityOptions_Impl::IsSecureHyperlink( const OUString& aURL ) const
 {
@@ -334,7 +334,7 @@ sal_Bool SvtExtendedSecurityOptions_Impl::IsSecureHyperlink( const OUString& aUR
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetSecureExtensionList() const
 {
@@ -342,7 +342,7 @@ Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetSecureExtensionList() c
 
     sal_Int32 nIndex = 0;
     for ( ExtensionHashMap::const_iterator pIter = m_aExtensionHashMap.begin();
-            pIter != m_aExtensionHashMap.end(); ++pIter )
+            pIter != m_aExtensionHashMap.end(); pIter++ )
     {
         aResult[nIndex++] = pIter->first;
     }
@@ -351,20 +351,22 @@ Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetSecureExtensionList() c
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions_Impl::GetOpenHyperlinkMode()
 {
     return m_eOpenHyperlinkMode;
 }
+/* -----------------09.07.2003 11:26-----------------
 
+ --------------------------------------------------*/
 sal_Bool SvtExtendedSecurityOptions_Impl::IsOpenHyperlinkModeReadOnly() const
 {
     return m_bROOpenHyperlinkMode;
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtExtendedSecurityOptions_Impl::SetOpenHyperlinkMode( SvtExtendedSecurityOptions::OpenHyperlinkMode eNewMode )
 {
@@ -373,16 +375,16 @@ void SvtExtendedSecurityOptions_Impl::SetOpenHyperlinkMode( SvtExtendedSecurityO
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aHashMap )
 {
     // Get sequence with secure extensions from configuration
-    Sequence< OUString >    seqNodes = GetNodeNames( m_aSecureExtensionsSetName );
+    Sequence< OUString >	seqNodes = GetNodeNames( m_aSecureExtensionsSetName );
 
-    OUString                aValue;
-    Sequence< Any >         aValues;
-    Sequence< OUString >    aPropSeq( 1 );
+    OUString				aValue;
+    Sequence< Any >			aValues;
+    Sequence< OUString >	aPropSeq( 1 );
     for ( int i = 0; i < seqNodes.getLength(); i++ )
     {
         // Create access name for property
@@ -408,7 +410,7 @@ void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aH
 }
 
 //*****************************************************************************************************************
-//  private method (currently not used)
+//	private method (currently not used)
 //*****************************************************************************************************************
 Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetPropertyNames()
 {
@@ -424,15 +426,15 @@ Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetPropertyNames()
 }
 
 //*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//	initialize static member
+//	DON'T DO IT IN YOUR HEADER!
+//	see definition for further informations
 //*****************************************************************************************************************
-SvtExtendedSecurityOptions_Impl*    SvtExtendedSecurityOptions::m_pDataContainer    = NULL  ;
-sal_Int32                           SvtExtendedSecurityOptions::m_nRefCount         = 0     ;
+SvtExtendedSecurityOptions_Impl*	SvtExtendedSecurityOptions::m_pDataContainer	= NULL	;
+sal_Int32							SvtExtendedSecurityOptions::m_nRefCount			= 0		;
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtExtendedSecurityOptions::SvtExtendedSecurityOptions()
 {
@@ -451,7 +453,7 @@ SvtExtendedSecurityOptions::SvtExtendedSecurityOptions()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
 {
@@ -469,7 +471,7 @@ SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtExtendedSecurityOptions::IsSecureHyperlink( const rtl::OUString& aURL ) const
 {
@@ -478,7 +480,7 @@ sal_Bool SvtExtendedSecurityOptions::IsSecureHyperlink( const rtl::OUString& aUR
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 Sequence< rtl::OUString > SvtExtendedSecurityOptions::GetSecureExtensionList() const
 {
@@ -487,21 +489,23 @@ Sequence< rtl::OUString > SvtExtendedSecurityOptions::GetSecureExtensionList() c
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions::GetOpenHyperlinkMode()
 {
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->GetOpenHyperlinkMode();
 }
+/* -----------------09.07.2003 11:26-----------------
 
+ --------------------------------------------------*/
 sal_Bool SvtExtendedSecurityOptions::IsOpenHyperlinkModeReadOnly() const
 {
     return m_pDataContainer->IsOpenHyperlinkModeReadOnly();
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtExtendedSecurityOptions::SetOpenHyperlinkMode( SvtExtendedSecurityOptions::OpenHyperlinkMode eMode )
 {
@@ -510,7 +514,7 @@ void SvtExtendedSecurityOptions::SetOpenHyperlinkMode( SvtExtendedSecurityOption
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Mutex& SvtExtendedSecurityOptions::GetInitMutex()
 {

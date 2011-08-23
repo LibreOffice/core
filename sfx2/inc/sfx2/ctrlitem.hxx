@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,69 +40,69 @@ class SvStream;
 class SFX2_DLLPUBLIC SfxControllerItem
 {
 private:
-    sal_uInt16              nId;
-    SfxControllerItem*  pNext; // zu benachrichtigendes weiteres ControllerItem
-    SfxBindings*        pBindings;
+    USHORT				nId;
+    SfxControllerItem*	pNext; // zu benachrichtigendes weiteres ControllerItem
+    SfxBindings*		pBindings;
 
 protected:
 //#if defined( DBG_UTIL ) && defined( _SOLAR__PRIVATE )
 #if defined( DBG_UTIL )
-    SAL_DLLPRIVATE void CheckConfigure_Impl( sal_uIntPtr nType );
+    SAL_DLLPRIVATE void CheckConfigure_Impl( ULONG nType );
 #endif
 
 public:
-    SfxBindings &       GetBindings() {
+    SfxBindings &		GetBindings() {
                             DBG_ASSERT(pBindings, "keine Bindings");
                             return *pBindings;
                         }
-    const SfxBindings & GetBindings() const {
+    const SfxBindings &	GetBindings() const {
                             DBG_ASSERT(pBindings, "keine Bindings");
                             return *pBindings;
                         }
 
                         SfxControllerItem(); // fuer arrays
-                        SfxControllerItem( sal_uInt16 nId, SfxBindings & );
-    virtual             ~SfxControllerItem();
+                        SfxControllerItem( USHORT nId, SfxBindings & );
+    virtual 			~SfxControllerItem();
 
-    void                Bind( sal_uInt16 nNewId, SfxBindings * = 0);    // in SfxBindings registrieren
-    void                UnBind();
-    void                ReBind();
-    sal_Bool                IsBound() const;
-    void                UpdateSlot();
-    void                ClearCache();
-    void                SetBindings(SfxBindings &rBindings) { pBindings = &rBindings; }
+    void				Bind( USHORT nNewId, SfxBindings * = 0);	// in SfxBindings registrieren
+    void				UnBind();
+    void				ReBind();
+    BOOL				IsBound() const;
+    void				UpdateSlot();
+    void				ClearCache();
+    void				SetBindings(SfxBindings &rBindings) { pBindings = &rBindings; }
 
-    SfxControllerItem*  GetItemLink();
-    SfxControllerItem*  ChangeItemLink( SfxControllerItem* pNewLink );
+    SfxControllerItem*	GetItemLink();
+    SfxControllerItem*	ChangeItemLink( SfxControllerItem* pNewLink );
 
-    void                SetId( sal_uInt16 nItemId );
-    sal_uInt16              GetId() const { return nId; }
+    void                SetId( USHORT nItemId );
+    USHORT				GetId() const { return nId; }
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    virtual void		StateChanged( USHORT nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
     virtual void        DeleteFloatingWindow();
 
-    SfxMapUnit          GetCoreMetric() const;
+    SfxMapUnit			GetCoreMetric() const;
 
-    static SfxItemState GetItemState( const SfxPoolItem* pState );
+    static SfxItemState	GetItemState( const SfxPoolItem* pState );
 
-    SAL_DLLPRIVATE sal_Bool IsBindable_Impl() const
+    SAL_DLLPRIVATE BOOL IsBindable_Impl() const
                         { return pBindings != NULL; }
-    SAL_DLLPRIVATE void BindInternal_Impl( sal_uInt16 nNewId, SfxBindings* );
+    SAL_DLLPRIVATE void BindInternal_Impl( USHORT nNewId, SfxBindings* );
 };
 
 //====================================================================
 
 class SFX2_DLLPUBLIC SfxStatusForwarder: public SfxControllerItem
 {
-    SfxControllerItem*      pMaster;
+    SfxControllerItem*		pMaster;
 
 protected:
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    virtual void		StateChanged( USHORT nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
 
 public:
-                            SfxStatusForwarder( sal_uInt16 nSlotId,
+                            SfxStatusForwarder( USHORT nSlotId,
                                    SfxControllerItem&rMaster );
 };
 

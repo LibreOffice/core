@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,10 +53,10 @@ class TemplatePopup_Impl : public PopupMenu
 public:
     TemplatePopup_Impl();
 
-    sal_uInt16          GetCurId() const { return nCurId; }
+    USHORT			GetCurId() const { return nCurId; }
 
 private:
-    sal_uInt16          nCurId;
+    USHORT			nCurId;
 
     virtual void    Select();
 };
@@ -78,8 +78,8 @@ void TemplatePopup_Impl::Select()
 
 // class SdTemplateControl ------------------------------------------
 
-SdTemplateControl::SdTemplateControl( sal_uInt16 _nSlotId,
-                                      sal_uInt16 _nId,
+SdTemplateControl::SdTemplateControl( USHORT _nSlotId,
+                                      USHORT _nId,
                                       StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
@@ -94,7 +94,7 @@ SdTemplateControl::~SdTemplateControl()
 // -----------------------------------------------------------------------
 
 void SdTemplateControl::StateChanged(
-    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState != SFX_ITEM_AVAILABLE || pState->ISA( SfxVoidItem ) )
         GetStatusBar().SetItemText( GetId(), String() );
@@ -131,18 +131,18 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
         CaptureMouse();
         TemplatePopup_Impl aPop;
         {
-            const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
-
-            sal_uInt16 nCount = 0;
-            for( sal_uInt16 nPage = 0; nPage < nMasterCount; ++nPage )
+            const USHORT nMasterCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
+    
+            USHORT nCount = 0;
+            for( USHORT nPage = 0; nPage < nMasterCount; ++nPage )
             {
                 SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PK_STANDARD);
                 if( pMaster )
-                    aPop.InsertItem( ++nCount, pMaster->GetName() );
+                    aPop.InsertItem( ++nCount, pMaster->GetName() );				
             }
             aPop.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
 
-            sal_uInt16 nCurrId = aPop.GetCurId()-1;
+            USHORT nCurrId = aPop.GetCurId()-1;
             if( nCurrId < nMasterCount )
             {
                 SdPage* pMaster = pDoc->GetMasterSdPage(nCurrId, PK_STANDARD);

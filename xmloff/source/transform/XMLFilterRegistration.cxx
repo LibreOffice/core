@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,12 +142,45 @@ extern "C"
 {
 #endif
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
+void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, void * pRegistryKey )
+{
+    if( pRegistryKey )
+    {
+        try
+        {
+            uno::Reference< registry::XRegistryKey > xMasterKey( reinterpret_cast< registry::XRegistryKey * >( pRegistryKey ) );
+
+            const ServiceDescriptor* pDescriptor = getServiceDescriptors();
+            while ( pDescriptor->getImplementationName )
+            {
+                ::rtl::OUString sNewKeyName( RTL_CONSTASCII_USTRINGPARAM("/") );
+                sNewKeyName += pDescriptor->getImplementationName();
+                sNewKeyName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") );
+
+                uno::Reference< registry::XRegistryKey > xNewKey( xMasterKey->createKey( sNewKeyName ) );
+
+                uno::Sequence< ::rtl::OUString > aServices = pDescriptor->getSupportedServiceNames();
+                const ::rtl::OUString* pServices = aServices.getConstArray();
+                for( sal_Int32 i = 0; i < aServices.getLength(); ++i, ++pServices )
+                    xNewKey->createKey( *pServices);
+
+                ++pDescriptor;
+            }
+        }
+        catch (registry::InvalidRegistryException &)
+        {
+            OSL_ENSURE( sal_False, "xof::component_writeInfo: InvalidRegistryException!" );
+        }
+    }
+    return sal_True;
+}
+
+void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = NULL;
     if( pServiceManager )
@@ -183,7 +216,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char * pImpl
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "xof::component_getFactory: Exception!" );
+            OSL_ENSURE( sal_False, "xof::component_getFactory: Exception!" );
         }
     }
 

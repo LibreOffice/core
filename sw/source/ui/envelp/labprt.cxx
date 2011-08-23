@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,17 +51,17 @@ SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_LAB_PRT), rSet),
 
     pPrinter( 0 ),
-    aFLDontKnow    (this, SW_RES(FL_DONTKNOW)),
     aPageButton    (this, SW_RES(BTN_PAGE   )),
     aSingleButton  (this, SW_RES(BTN_SINGLE )),
-    aColText       (this, SW_RES(TXT_COL    )),
-    aColField      (this, SW_RES(FLD_COL    )),
-    aRowText       (this, SW_RES(TXT_ROW    )),
-    aRowField      (this, SW_RES(FLD_ROW    )),
-    aSynchronCB    (this, SW_RES(CB_SYNCHRON)),
-    aFLPrinter     (this, SW_RES(FL_PRINTER )),
+    aColText	   (this, SW_RES(TXT_COL    )),
+    aColField	   (this, SW_RES(FLD_COL    )),
+    aRowText	   (this, SW_RES(TXT_ROW    )),
+    aRowField	   (this, SW_RES(FLD_ROW    )),
+    aSynchronCB	   (this, SW_RES(CB_SYNCHRON)),
+    aFLDontKnow    (this, SW_RES(FL_DONTKNOW)),
     aPrinterInfo   (this, SW_RES(INF_PRINTER)),
-    aPrtSetup      (this, SW_RES(BTN_PRTSETUP))
+    aPrtSetup	   (this, SW_RES(BTN_PRTSETUP)),
+    aFLPrinter     (this, SW_RES(FL_PRINTER ))
 
 {
     FreeResource();
@@ -107,7 +107,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
         aPrinterInfo.SetText(pPrinter->GetName());
         return 0;
     }
-    const sal_Bool bEnable = pButton == &aSingleButton;
+    const BOOL bEnable = pButton == &aSingleButton;
     aColText .Enable(bEnable);
     aColField.Enable(bEnable);
     aRowText .Enable(bEnable);
@@ -138,25 +138,25 @@ int SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
     if ( _pSet )
         FillItemSet(*_pSet);
 
-    return sal_True;
+    return TRUE;
 }
 
 void SwLabPrtPage::FillItem(SwLabItem& rItem)
 {
     rItem.bPage = aPageButton.IsChecked();
-    rItem.nCol  = (sal_uInt16) aColField.GetValue();
-    rItem.nRow  = (sal_uInt16) aRowField.GetValue();
+    rItem.nCol	= (USHORT) aColField.GetValue();
+    rItem.nRow	= (USHORT) aRowField.GetValue();
     rItem.bSynchron = aSynchronCB.IsChecked() && aSynchronCB.IsEnabled();
 }
 
-sal_Bool SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
+BOOL SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
 {
     SwLabItem aItem;
     GetParent()->GetLabItem(aItem);
     FillItem(aItem);
     rSet.Put(aItem);
 
-    return sal_True;
+    return TRUE;
 }
 
 void SwLabPrtPage::Reset(const SfxItemSet& )
@@ -164,8 +164,8 @@ void SwLabPrtPage::Reset(const SfxItemSet& )
     SwLabItem aItem;
     GetParent()->GetLabItem(aItem);
 
-    aColField.SetValue   (aItem.nCol);
-    aRowField.SetValue   (aItem.nRow);
+    aColField.SetValue	 (aItem.nCol);
+    aRowField.SetValue	 (aItem.nRow);
 
     if (aItem.bPage)
     {
@@ -180,7 +180,7 @@ void SwLabPrtPage::Reset(const SfxItemSet& )
 
     if (pPrinter)
     {
-        // show printer
+        // Drucker anzeigen
         aPrinterInfo.SetText(pPrinter->GetName());
     }
     else

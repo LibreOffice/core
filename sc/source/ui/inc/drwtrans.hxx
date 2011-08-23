@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,6 @@
 
 #include <sfx2/objsh.hxx>
 #include "global.hxx"
-#include "charthelper.hxx"
-#include "rangelst.hxx"
 
 
 class SdrModel;
@@ -50,30 +48,31 @@ class SdrOle2Obj;
 class ScDrawTransferObj : public TransferableHelper
 {
 private:
-    SdrModel*                       pModel;
-    TransferableDataHelper          aOleData;
-    TransferableObjectDescriptor    aObjDesc;
-    SfxObjectShellRef               aDocShellRef;
-    SfxObjectShellRef               aDrawPersistRef;
+    SdrModel*						pModel;
+    TransferableDataHelper			aOleData;
+    TransferableObjectDescriptor	aObjDesc;
+//REMOVE		SvEmbeddedObjectRef				aDocShellRef;
+//REMOVE		SvEmbeddedObjectRef				aDrawPersistRef;
+    SfxObjectShellRef				aDocShellRef;
+    SfxObjectShellRef				aDrawPersistRef;
 
                                     // extracted from model in ctor:
-    Size                            aSrcSize;
-    INetBookmark*                   pBookmark;
-    sal_Bool                            bGraphic;
-    sal_Bool                            bGrIsBit;
-    sal_Bool                            bOleObj;
+    Size							aSrcSize;
+    INetBookmark*					pBookmark;
+    BOOL							bGraphic;
+    BOOL							bGrIsBit;
+    BOOL							bOleObj;
                                     // source information for drag&drop:
                                     // (view is needed to handle drawing obejcts)
-    SdrView*                        pDragSourceView;
-    sal_uInt16                          nDragSourceFlags;
-    sal_Bool                            bDragWasInternal;
+    SdrView*						pDragSourceView;
+    USHORT							nDragSourceFlags;
+    BOOL							bDragWasInternal;
 
     sal_uInt32                      nSourceDocID;
 
-    ScRangeListVector               m_aProtectedChartRangesVector;
 
-
-    void                InitDocShell();
+    void				InitDocShell();
+//REMOVE		SvInPlaceObjectRef	GetSingleObject();
     SdrOle2Obj* GetSingleObject();
 
 public:
@@ -81,23 +80,23 @@ public:
                                 const TransferableObjectDescriptor& rDesc );
     virtual ~ScDrawTransferObj();
 
-    virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+    virtual void		AddSupportedFormats();
+    virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual sal_Bool	WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual void        ObjectReleased();
-    virtual void        DragFinished( sal_Int8 nDropAction );
+    virtual void		ObjectReleased();
+    virtual void		DragFinished( sal_Int8 nDropAction );
 
-    SdrModel*           GetModel()  { return pModel; }
+    SdrModel*			GetModel()	{ return pModel; }
 
-    void                SetDrawPersist( const SfxObjectShellRef& rRef );
-    void                SetDragSource( ScDrawView* pView );
-    void                SetDragSourceObj( SdrObject* pObj, SCTAB nTab );
-    void                SetDragSourceFlags( sal_uInt16 nFlags );
-    void                SetDragWasInternal();
+    void				SetDrawPersist( const SfxObjectShellRef& rRef );
+    void				SetDragSource( ScDrawView* pView );
+    void				SetDragSourceObj( SdrObject* pObj, SCTAB nTab );
+    void				SetDragSourceFlags( USHORT nFlags );
+    void				SetDragWasInternal();
 
-    SdrView*            GetDragSourceView()             { return pDragSourceView; }
-    sal_uInt16              GetDragSourceFlags() const      { return nDragSourceFlags; }
+    SdrView*			GetDragSourceView()				{ return pDragSourceView; }
+    USHORT				GetDragSourceFlags() const		{ return nDragSourceFlags; }
 
     void                SetSourceDocID( sal_uInt32 nVal )
                             { nSourceDocID = nVal; }
@@ -106,8 +105,6 @@ public:
     static ScDrawTransferObj* GetOwnClipboard( Window* pUIWin );
     virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException );
     static const com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-
-    const ScRangeListVector& GetProtectedChartRangesVector() const { return m_aProtectedChartRangesVector; }
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,18 +27,15 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/datasourcecontext.hxx"
-
 #include "oox/drawingml/chart/datasourcemodel.hxx"
+
+using ::rtl::OUString;
+using ::oox::core::ContextHandler2Helper;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace drawingml {
 namespace chart {
-
-// ============================================================================
-
-using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextHandlerRef;
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -91,7 +88,7 @@ ContextHandlerRef DoubleSequenceContext::onCreateContext( sal_Int32 nElement, co
     return 0;
 }
 
-void DoubleSequenceContext::onCharacters( const OUString& rChars )
+void DoubleSequenceContext::onEndElement( const OUString& rChars )
 {
     switch( getCurrentElement() )
     {
@@ -108,8 +105,8 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
                  * be values.
                  * TODO: NumberFormat conversion, remove the check then.
                  */
-                if( isParentElement( C_TOKEN( cat ), 4 ) ||
-                    isParentElement( C_TOKEN( xVal ), 4 ) )
+                if( isPreviousElement( C_TOKEN( cat ), 4 ) ||
+                    isPreviousElement( C_TOKEN( xVal ), 4 ) )
                     mrModel.maData[ mnPtIndex ] <<= rChars;
                 else
                     mrModel.maData[ mnPtIndex ] <<= rChars.toDouble();
@@ -174,7 +171,7 @@ ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, co
     return 0;
 }
 
-void StringSequenceContext::onCharacters( const OUString& rChars )
+void StringSequenceContext::onEndElement( const OUString& rChars )
 {
     switch( getCurrentElement() )
     {

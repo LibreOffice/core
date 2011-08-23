@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,14 +27,13 @@
 
 #include "datanavi.hrc"
 #include "globlmn.hrc"
-#include "svx/fmresids.hrc"
+#include "fmresids.hrc"
 #include "fmhelp.hrc"
 
-#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+#define MASKCOLOR	MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
 TabPage RID_SVX_XFORMS_TABPAGES
 {
-    HelpID = "svx:TabPage:RID_SVX_XFORMS_TABPAGES";
     Hide = TRUE ;
     DialogControl = TRUE;
     Size = MAP_APPFONT ( 63 , 100 ) ;
@@ -89,20 +88,26 @@ TabPage RID_SVX_XFORMS_TABPAGES
         Border = TRUE ;
         TabStop = TRUE;
     };
-#define IMG_LST                 \
-IdList =                        \
-{                               \
-    IID_ITEM_ADD ;              \
-    IID_ITEM_ADD_ELEMENT ;      \
-    IID_ITEM_ADD_ATTRIBUTE ;    \
-    IID_ITEM_EDIT ;             \
-    IID_ITEM_REMOVE ;           \
-};                              \
+#define IMG_LST					\
+IdList =						\
+{								\
+    IID_ITEM_ADD ;				\
+    IID_ITEM_ADD_ELEMENT ;		\
+    IID_ITEM_ADD_ATTRIBUTE ;	\
+    IID_ITEM_EDIT ;				\
+    IID_ITEM_REMOVE ;			\
+};								\
 IdCount = { 5 ; } ;
 
     ImageList IL_TBX_BMPS
     {
         Prefix = "tb";
+        MASKCOLOR
+        IMG_LST
+    };
+    ImageList IL_TBX_BMPS_HC
+    {
+        Prefix = "tbh";
         MASKCOLOR
         IMG_LST
     };
@@ -223,21 +228,27 @@ Window RID_SVXWIN_DATANAVIGATOR
         };
     };
 
-#define IMG_LST2            \
-IdList =                    \
-{                           \
-    IID_GROUP_CLOSED ;      \
-    IID_GROUP_OPEN ;        \
-    IID_ELEMENT ;           \
-    IID_ATTRIBUTE ;         \
-    IID_TEXT ;              \
-    IID_OTHER ;             \
-};                          \
+#define IMG_LST2			\
+IdList =					\
+{							\
+    IID_GROUP_CLOSED ;		\
+    IID_GROUP_OPEN ;		\
+    IID_ELEMENT ;			\
+    IID_ATTRIBUTE ;			\
+    IID_TEXT ;				\
+    IID_OTHER ;				\
+};							\
 IdCount = { 6 ; } ;
 
     ImageList IL_ITEM_BMPS
     {
         Prefix = "da";
+        MASKCOLOR
+        IMG_LST2
+    };
+    ImageList IL_ITEM_BMPS_HC
+    {
+        Prefix = "dah";
         MASKCOLOR
         IMG_LST2
     };
@@ -337,7 +348,6 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     Edit ED_NAME
     {
-        HelpID = "svx:Edit:RID_SVXDLG_ADD_DATAITEM:ED_NAME";
         Pos = MAP_APPFONT ( 78 , 14 ) ;
         Size = MAP_APPFONT ( 96 , 12 ) ;
         Border = TRUE ;
@@ -351,14 +361,12 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     Edit ED_DEFAULT
     {
-        HelpID = "svx:Edit:RID_SVXDLG_ADD_DATAITEM:ED_DEFAULT";
         Pos = MAP_APPFONT ( 78 , 29 ) ;
         Size = MAP_APPFONT ( 96 , 12 ) ;
         Border = TRUE ;
     };
     PushButton PB_DEFAULT
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_DEFAULT";
         Pos = MAP_APPFONT ( 160 , 29 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         TabStop = TRUE ;
@@ -380,7 +388,6 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     ListBox LB_DATATYPE
     {
-        HelpID = "svx:ListBox:RID_SVXDLG_ADD_DATAITEM:LB_DATATYPE";
         Pos = MAP_APPFONT ( 78 , 55 ) ;
         Size = MAP_APPFONT ( 96 , 45 ) ;
         Border = TRUE ;
@@ -388,7 +395,6 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     CheckBox CB_REQUIRED
     {
-        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_REQUIRED";
         Pos = MAP_APPFONT ( 6 , 72 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         TabStop = TRUE ;
@@ -396,7 +402,6 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     PushButton PB_REQUIRED
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_REQUIRED";
         Pos = MAP_APPFONT ( 78 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -404,7 +409,6 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     CheckBox CB_RELEVANT
     {
-        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_RELEVANT";
         Pos = MAP_APPFONT ( 6 , 89 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         TabStop = TRUE ;
@@ -412,7 +416,6 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     PushButton PB_RELEVANT
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_RELEVANT";
         Pos = MAP_APPFONT ( 78 , 87 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -420,7 +423,6 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     CheckBox CB_CONSTRAINT
     {
-        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_CONSTRAINT";
         Pos = MAP_APPFONT ( 6 , 106 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         TabStop = TRUE ;
@@ -428,7 +430,6 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     PushButton PB_CONSTRAINT
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_CONSTRAINT";
         Pos = MAP_APPFONT ( 78 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -436,7 +437,6 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     CheckBox CB_READONLY
     {
-        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_READONLY";
         Pos = MAP_APPFONT ( 6 , 123 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         TabStop = TRUE ;
@@ -444,7 +444,6 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     PushButton PB_READONLY
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_READONLY";
         Pos = MAP_APPFONT ( 78 , 121 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -452,7 +451,6 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     CheckBox CB_CALCULATE
     {
-        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_CALCULATE";
         Pos = MAP_APPFONT ( 6 , 140 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         TabStop = TRUE ;
@@ -460,7 +458,6 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
     };
     PushButton PB_CALCULATE
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_CALCULATE";
         Pos = MAP_APPFONT ( 78 , 138 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -577,7 +574,6 @@ ModalDialog RID_SVXDLG_ADD_CONDITION
     };
     MultiLineEdit ED_CONDITION
     {
-        HelpID = "svx:MultiLineEdit:RID_SVXDLG_ADD_CONDITION:ED_CONDITION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 198 , 34 ) ;
@@ -603,7 +599,6 @@ ModalDialog RID_SVXDLG_ADD_CONDITION
     };
     PushButton PB_EDIT_NAMESPACES
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_CONDITION:PB_EDIT_NAMESPACES";
         Pos = MAP_APPFONT ( 132 , 102 ) ;
         Size = MAP_APPFONT ( 72 , 14 ) ;
         TabStop = TRUE ;
@@ -660,7 +655,6 @@ ModalDialog RID_SVXDLG_NAMESPACE_ITEM
     };
     PushButton PB_ADD_NAMESPACE
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_NAMESPACE_ITEM:PB_ADD_NAMESPACE";
         Pos = MAP_APPFONT ( 184 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -668,7 +662,6 @@ ModalDialog RID_SVXDLG_NAMESPACE_ITEM
     };
     PushButton PB_EDIT_NAMESPACE
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_NAMESPACE_ITEM:PB_EDIT_NAMESPACE";
         Pos = MAP_APPFONT ( 184 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -676,7 +669,6 @@ ModalDialog RID_SVXDLG_NAMESPACE_ITEM
     };
     PushButton PB_DELETE_NAMESPACE
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_NAMESPACE_ITEM:PB_DELETE_NAMESPACE";
         Pos = MAP_APPFONT ( 184 , 48 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -733,7 +725,6 @@ ModalDialog RID_SVXDLG_MANAGE_NAMESPACE
     };
     Edit ED_PREFIX
     {
-        HelpID = "svx:Edit:RID_SVXDLG_MANAGE_NAMESPACE:ED_PREFIX";
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         Border = TRUE;
@@ -747,7 +738,6 @@ ModalDialog RID_SVXDLG_MANAGE_NAMESPACE
     };
     Edit ED_URL
     {
-        HelpID = "svx:Edit:RID_SVXDLG_MANAGE_NAMESPACE:ED_URL";
         Pos = MAP_APPFONT ( 54 , 14 ) ;
         Size = MAP_APPFONT ( 150 , 12 ) ;
         Border = TRUE;
@@ -805,7 +795,6 @@ ModalDialog RID_SVXDLG_ADD_SUBMISSION
     };
     Edit ED_SUBMIT_NAME
     {
-        HelpID = "svx:Edit:RID_SVXDLG_ADD_SUBMISSION:ED_SUBMIT_NAME";
         Pos = MAP_APPFONT ( 78 , 14 ) ;
         Size = MAP_APPFONT ( 96 , 12 ) ;
         Border = TRUE ;
@@ -819,7 +808,6 @@ ModalDialog RID_SVXDLG_ADD_SUBMISSION
     };
     Edit ED_SUBMIT_ACTION
     {
-        HelpID = "svx:Edit:RID_SVXDLG_ADD_SUBMISSION:ED_SUBMIT_ACTION";
         Pos = MAP_APPFONT ( 78 , 29 ) ;
         Size = MAP_APPFONT ( 96 , 12 ) ;
         Border = TRUE ;
@@ -833,7 +821,6 @@ ModalDialog RID_SVXDLG_ADD_SUBMISSION
     };
     ListBox LB_SUBMIT_METHOD
     {
-        HelpID = "svx:ListBox:RID_SVXDLG_ADD_SUBMISSION:LB_SUBMIT_METHOD";
         Pos = MAP_APPFONT ( 78 , 44 ) ;
         Size = MAP_APPFONT ( 96 , 51 ) ;
         Border = TRUE ;
@@ -848,14 +835,12 @@ ModalDialog RID_SVXDLG_ADD_SUBMISSION
     };
     Edit ED_SUBMIT_REF
     {
-        HelpID = "svx:Edit:RID_SVXDLG_ADD_SUBMISSION:ED_SUBMIT_REF";
         Pos = MAP_APPFONT ( 78 , 60 ) ;
         Size = MAP_APPFONT ( 79, 12 ) ;
         Border = TRUE ;
     };
     PushButton PB_SUBMIT_REF
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_SUBMISSION:PB_SUBMIT_REF";
         Pos = MAP_APPFONT ( 159 , 59 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         TabStop = TRUE ;
@@ -870,7 +855,6 @@ ModalDialog RID_SVXDLG_ADD_SUBMISSION
     };
     ListBox LB_SUBMIT_BIND
     {
-        HelpID = "svx:ListBox:RID_SVXDLG_ADD_SUBMISSION:LB_SUBMIT_BIND";
         Pos = MAP_APPFONT ( 78 , 75 ) ;
         Size = MAP_APPFONT ( 96 , 51 ) ;
         Border = TRUE ;
@@ -885,7 +869,6 @@ ModalDialog RID_SVXDLG_ADD_SUBMISSION
     };
     ListBox LB_SUBMIT_REPLACE
     {
-        HelpID = "svx:ListBox:RID_SVXDLG_ADD_SUBMISSION:LB_SUBMIT_REPLACE";
         Pos = MAP_APPFONT ( 78 , 90 ) ;
         Size = MAP_APPFONT ( 96 , 51 ) ;
         Border = TRUE ;
@@ -966,14 +949,12 @@ ModalDialog RID_SVXDLG_ADD_MODEL
     };
     Edit ED_INST_NAME
     {
-        HelpID = "svx:Edit:RID_SVXDLG_ADD_MODEL:ED_INST_NAME";
         Pos = MAP_APPFONT ( 60 , 14 ) ;
         Size = MAP_APPFONT ( 114 , 12 ) ;
         Border = TRUE ;
     };
     CheckBox CB_MODIFIES_DOCUMENT
     {
-        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_MODEL:CB_MODIFIES_DOCUMENT";
         Pos = MAP_APPFONT( 6, 32 );
         Size = MAP_APPFONT( 168, 16 );
         Top = TRUE;
@@ -1034,7 +1015,6 @@ ModalDialog RID_SVXDLG_ADD_INSTANCE
     };
     Edit ED_INST_NAME
     {
-        HelpID = "svx:Edit:RID_SVXDLG_ADD_INSTANCE:ED_INST_NAME";
         Pos = MAP_APPFONT ( 60 , 14 ) ;
         Size = MAP_APPFONT ( 144 , 12 ) ;
         Border = TRUE ;
@@ -1048,7 +1028,6 @@ ModalDialog RID_SVXDLG_ADD_INSTANCE
     };
     ComboBox ED_INST_URL
     {
-        HelpID = "svx:ComboBox:RID_SVXDLG_ADD_INSTANCE:ED_INST_URL";
         Pos = MAP_APPFONT ( 60 , 29 ) ;
         Size = MAP_APPFONT ( 127 , 48 ) ;
         DropDown = TRUE ;
@@ -1056,7 +1035,6 @@ ModalDialog RID_SVXDLG_ADD_INSTANCE
     };
     PushButton PB_FILEPICKER
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_INSTANCE:PB_FILEPICKER";
         Pos = MAP_APPFONT ( 190 , 28 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         TabStop = TRUE ;
@@ -1064,7 +1042,6 @@ ModalDialog RID_SVXDLG_ADD_INSTANCE
     };
     CheckBox CB_INST_LINKINST
     {
-        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_INSTANCE:CB_INST_LINKINST";
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 198 , 10 ) ;
         TabStop = TRUE ;

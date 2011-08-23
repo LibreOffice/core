@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,29 +42,32 @@ ElementMark::ElementMark(sal_Int32 nSecurityId, sal_Int32 nBufferId)
 /****** ElementMark/ElementMark ***********************************************
  *
  *   NAME
- *  ElementMark -- constructor method
+ *	ElementMark -- constructor method
  *
  *   SYNOPSIS
- *  ElementMark(nSecurityId, nBufferId);
+ *	ElementMark(nSecurityId, nBufferId);
  *
  *   FUNCTION
- *  construct an ElementMark object.
+ *	construct an ElementMark object.
  *
  *   INPUTS
- *  nSecurityId -   represents which security entity the buffer node is
- *          related with. Either a signature or an encryption is
- *          a security entity.
- *  nBufferId - the id of the element bufferred in the document
- *          wrapper component. The document wrapper component
- *          uses this id to search the particular bufferred
- *          element.
+ *	nSecurityId - 	represents which security entity the buffer node is
+ *			related with. Either a signature or an encryption is
+ *			a security entity.
+ *	nBufferId -	the id of the element bufferred in the document
+ *			wrapper component. The document wrapper component 
+ *			uses this id to search the particular bufferred
+ *			element.
  *
  *   RESULT
- *  empty
+ *	empty
+ *
+ *   HISTORY
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
 }

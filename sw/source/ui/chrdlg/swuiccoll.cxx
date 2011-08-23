@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,11 +34,13 @@
 #endif
 
 #include "cmdid.h"
+#include <tools/list.hxx>
 #include "swmodule.hxx"
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "globals.hrc"
 #include "helpid.h"
+
 
 #include <sfx2/styfitem.hxx>
 
@@ -56,14 +58,14 @@
 
 #include "swuiccoll.hxx"
 
-static sal_uInt16 aPageRg[] = {
+static USHORT __FAR_DATA aPageRg[] = {
     FN_COND_COLL, FN_COND_COLL,
     0
 };
 
 // Warning! This table is indicated directly in code (0, 1, ...)
 static long nTabs[] =
-    {   2, // Number of Tabs
+    {	2, // Number of Tabs
         0, 100
     };
 
@@ -72,61 +74,58 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, SW_RES(TP_CONDCOLL), rSet),
     aConditionFL( this, SW_RES( FL_CONDITION )),
     aConditionCB( this, SW_RES( CB_CONDITION ) ),
-    aContextFT  ( this, SW_RES( FT_CONTEXT  ) ),
-    aUsedFT     ( this, SW_RES( FT_USED         ) ),
-    aTbLinks(     this, SW_RES( TB_CONDCOLLS ) ),
-    aStyleFT    ( this, SW_RES( FT_STYLE    ) ),
-    aStyleLB    ( this, SW_RES( LB_STYLE    ) ),
-    aFilterLB   ( this, SW_RES( LB_FILTER   ) ),
-    aRemovePB   ( this, SW_RES( PB_REMOVE   ) ),
-    aAssignPB   ( this, SW_RES( PB_ASSIGN   ) ),
-    sNoTmpl     (       SW_RES( STR_NOTEMPL  ) ),
-    aStrArr     (       SW_RES( STR_REGIONS  ) ),
+    aContextFT  ( this, SW_RES( FT_CONTEXT 	) ),
+    aUsedFT     ( this, SW_RES( FT_USED 		) ),
+    aTbLinks( 	  this, SW_RES( TB_CONDCOLLS ) ),
+    aStyleFT    ( this, SW_RES( FT_STYLE 	) ),
+    aStyleLB    ( this, SW_RES( LB_STYLE 	) ),
+    aFilterLB   ( this, SW_RES( LB_FILTER 	) ),
+    aRemovePB   ( this, SW_RES( PB_REMOVE 	) ),
+    aAssignPB   ( this, SW_RES( PB_ASSIGN 	) ),
+    sNoTmpl		(		SW_RES( STR_NOTEMPL  ) ),
+    aStrArr 	( 		SW_RES( STR_REGIONS  ) ),
     rSh(::GetActiveView()->GetWrtShell()),
     pCmds( SwCondCollItem::GetCmds() ),
     pFmt(0),
 
-    bNewTemplate(sal_False)
+    bNewTemplate(FALSE)
 {
     FreeResource();
     SetExchangeSupport();
 
-    aRemovePB.SetAccessibleRelationMemberOf(&aConditionFL);
-    aAssignPB.SetAccessibleRelationMemberOf(&aConditionFL);
-    aTbLinks.SetAccessibleRelationLabeledBy(&aConditionCB);
-
     // Install handlers
-    aConditionCB.SetClickHdl(   LINK(this, SwCondCollPage, OnOffHdl));
+    aConditionCB.SetClickHdl(	LINK(this, SwCondCollPage, OnOffHdl));
     aTbLinks.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
     aStyleLB.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
-    aRemovePB.SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveHdl ));
-    aAssignPB.SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveHdl ));
-    aTbLinks.SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
-    aStyleLB.SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
-    aFilterLB.SetSelectHdl(     LINK(this, SwCondCollPage, SelectHdl));
+    aRemovePB.SetClickHdl(		LINK(this, SwCondCollPage, AssignRemoveHdl ));
+    aAssignPB.SetClickHdl(		LINK(this, SwCondCollPage, AssignRemoveHdl ));
+    aTbLinks.SetSelectHdl(		LINK(this, SwCondCollPage, SelectHdl));
+    aStyleLB.SetSelectHdl(		LINK(this, SwCondCollPage, SelectHdl));
+    aFilterLB.SetSelectHdl(		LINK(this, SwCondCollPage, SelectHdl));
 
-    aTbLinks.SetStyle(aTbLinks.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
+    aTbLinks.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN);
     aTbLinks.SetSelectionMode( SINGLE_SELECTION );
     aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
-    aTbLinks.Resize();  // OS: Hack for the right selection
+    aTbLinks.Resize();	// OS: Hack fuer richtige Selektion
     aTbLinks.SetSpaceBetweenEntries( 0 );
     aTbLinks.SetHelpId(HID_COND_COLL_TABLIST);
 
     SfxStyleFamilies aFamilies(SW_RES(DLG_STYLE_DESIGNER));
     const SfxStyleFamilyItem* pFamilyItem = 0;
+    USHORT nCount = aFamilies.Count();
+    USHORT i;
 
-    size_t nCount = aFamilies.size();
-    for( size_t i = 0; i < nCount; ++i )
+    for( i = 0; i < nCount; ++i)
     {
-        if(SFX_STYLE_FAMILY_PARA == (sal_uInt16)(pFamilyItem = aFamilies.at( i ))->GetFamily())
+        if(SFX_STYLE_FAMILY_PARA == (USHORT)(pFamilyItem = aFamilies.GetObject(i))->GetFamily())
             break;
     }
 
     const SfxStyleFilter& rFilterList = pFamilyItem->GetFilterList();
-    for( size_t i = 0; i < rFilterList.size(); ++i )
+    for( i = 0; i < rFilterList.Count(); ++i)
     {
-        aFilterLB.InsertEntry( rFilterList[ i ]->aName);
-        sal_uInt16* pFilter = new sal_uInt16(rFilterList[i]->nFlags);
+        aFilterLB.InsertEntry(rFilterList.GetObject(i)->aName);
+        USHORT* pFilter = new USHORT(rFilterList.GetObject(i)->nFlags);
         aFilterLB.SetEntryData(i, pFilter);
     }
     aFilterLB.SelectEntryPos(1);
@@ -140,15 +139,15 @@ Page: Dtor
 ****************************************************************************/
 
 
-SwCondCollPage::~SwCondCollPage()
+__EXPORT SwCondCollPage::~SwCondCollPage()
 {
-    for(sal_uInt16 i = 0; i < aFilterLB.GetEntryCount(); ++i)
-        delete (sal_uInt16*)aFilterLB.GetEntryData(i);
+    for(USHORT i = 0; i < aFilterLB.GetEntryCount(); ++i)
+        delete (USHORT*)aFilterLB.GetEntryData(i);
 
 }
 
 
-int SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
+int __EXPORT SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
 {
     if( _pSet )
         FillItemSet(*_pSet);
@@ -161,7 +160,7 @@ Page: Factory
 ****************************************************************************/
 
 
-SfxTabPage* SwCondCollPage::Create(Window *pParent, const SfxItemSet &rSet)
+SfxTabPage* __EXPORT SwCondCollPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwCondCollPage(pParent, rSet);
 }
@@ -171,11 +170,11 @@ Page: FillItemSet-Overload
 ****************************************************************************/
 
 
-sal_Bool SwCondCollPage::FillItemSet(SfxItemSet &rSet)
+BOOL __EXPORT SwCondCollPage::FillItemSet(SfxItemSet &rSet)
 {
-    sal_Bool bModified = sal_True;
+    BOOL bModified = TRUE;
     SwCondCollItem aCondItem;
-    for(sal_uInt16 i = 0; i < aStrArr.Count(); i++)
+    for(USHORT i = 0; i < aStrArr.Count(); i++)
     {
         String sEntry = aTbLinks.GetEntryText(i, 1);
         aCondItem.SetStyle( &sEntry, i);
@@ -189,7 +188,7 @@ Page: Reset-Overload
 ****************************************************************************/
 
 
-void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
+void __EXPORT SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
 {
     if(bNewTemplate)
         aConditionCB.Enable();
@@ -211,7 +210,7 @@ void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
     }
     aStyleLB.SelectEntryPos(0);
 
-    for( sal_uInt16 n = 0; n < aStrArr.Count(); n++)
+    for( USHORT n = 0; n < aStrArr.Count(); n++)
     {
         String aEntry( aStrArr.GetString(n) );
         aEntry += '\t';
@@ -232,17 +231,17 @@ void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
 
 }
 
-sal_uInt16* SwCondCollPage::GetRanges()
+USHORT* __EXPORT SwCondCollPage::GetRanges()
 {
     return aPageRg;
 }
 
 IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
 {
-    const sal_Bool bEnable = pBox->IsChecked();
+    const BOOL bEnable = pBox->IsChecked();
     aContextFT.Enable( bEnable );
     aUsedFT   .Enable( bEnable );
-    aTbLinks  .EnableList( bEnable != sal_False );
+    aTbLinks  .EnableList( bEnable != FALSE );
     aStyleFT  .Enable( bEnable );
     aStyleLB  .Enable( bEnable );
     aFilterLB .Enable( bEnable );
@@ -256,7 +255,7 @@ IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
 IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
 {
     SvLBoxEntry* pE = aTbLinks.FirstSelected();
-    sal_uLong nPos;
+    ULONG nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = aTbLinks.GetModel()->GetAbsPos( pE ) ) )
     {
@@ -264,21 +263,21 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
         return 0;
     }
 
-    String sSel = aStrArr.GetString( sal_uInt16(nPos) );
+    String sSel = aStrArr.GetString( USHORT(nPos) );
     sSel += '\t';
 
-    const sal_Bool bAssEnabled = pBtn != &aRemovePB && aAssignPB.IsEnabled();
+    const BOOL bAssEnabled = pBtn != &aRemovePB && aAssignPB.IsEnabled();
     aAssignPB.Enable( !bAssEnabled );
     aRemovePB.Enable(  bAssEnabled );
     if ( bAssEnabled )
         sSel += aStyleLB.GetSelectEntry();
 
-    aTbLinks.SetUpdateMode(sal_False);
+    aTbLinks.SetUpdateMode(FALSE);
     aTbLinks.GetModel()->Remove(pE);
     pE = aTbLinks.InsertEntryToColumn(sSel, nPos);
     aTbLinks.Select(pE);
     aTbLinks.MakeVisible(pE);
-    aTbLinks.SetUpdateMode(sal_True);
+    aTbLinks.SetUpdateMode(TRUE);
     return 0;
 }
 
@@ -287,8 +286,8 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     if(pBox == &aFilterLB)
     {
         aStyleLB.Clear();
-        sal_uInt16 nSearchFlags = pBox->GetSelectEntryPos();
-        nSearchFlags = *(sal_uInt16*)aFilterLB.GetEntryData(nSearchFlags);
+        USHORT nSearchFlags = pBox->GetSelectEntryPos();
+        nSearchFlags = *(USHORT*)aFilterLB.GetEntryData(nSearchFlags);
         SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, nSearchFlags);
         const SfxStyleSheetBase* pBase = pPool->First();
@@ -320,7 +319,7 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     return 0;
 }
 
-void SwCondCollPage::SetCollection( SwFmt* pFormat, sal_Bool bNew )
+void SwCondCollPage::SetCollection( SwFmt* pFormat, BOOL bNew )
 {
     pFmt = pFormat;
     bNewTemplate = bNew;

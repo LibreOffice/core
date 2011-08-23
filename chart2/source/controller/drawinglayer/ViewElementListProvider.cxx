@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -177,12 +177,12 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     if( nStandardSymbol >= static_cast<sal_Int32>(pSymbolList->GetObjCount()) )
         nStandardSymbol %= pSymbolList->GetObjCount();
     SdrObject* pObj = pSymbolList->GetObj(nStandardSymbol);
-
+    
     VirtualDevice aVDev;
     aVDev.SetMapMode(MapMode(MAP_100TH_MM));
     SdrModel* pModel = new SdrModel();
     pModel->GetItemPool().FreezeIdRanges();
-    SdrPage* pPage = new SdrPage( *pModel, sal_False );
+    SdrPage* pPage = new SdrPage( *pModel, FALSE );
     pPage->SetSize(Size(1000,1000));
     pModel->InsertPage( pPage, 0 );
     SdrView* pView = new SdrView( pModel, &aVDev );
@@ -222,13 +222,54 @@ FontList* ViewElementListProvider::getFontList() const
     if(!m_pFontList)
     {
         OutputDevice* pRefDev    = m_pDrawModelWrapper ? m_pDrawModelWrapper->getReferenceDevice() : NULL;
-        OutputDevice* pDefaultOut = Application::GetDefaultDevice();
+        OutputDevice* pDefaultOut = Application::GetDefaultDevice();	// #67730#
         m_pFontList = new FontList( pRefDev ? pRefDev    : pDefaultOut
                                 , pRefDev ? pDefaultOut : NULL
-                                , sal_False );
+                                , FALSE );
     }
     return m_pFontList;
 }
+
+/*
+SfxPrinter* ObjectPropertiesDialogParameter::getPrinter()
+{
+    //was old chart:
+    //SfxPrinter* SchChartDocShell::GetPrinter()
+
+    // OLE-Objekt: kein Printer anlegen ??? see old chart: :UpdateTablePointers
+    //@todo get printer from calc or other container
+    //return NULL;
+
+    SfxPrinter* pPrinter = NULL;
+    bool bOwnPrinter = true;
+    if (!pPrinter)
+    {
+        SfxBoolItem aItem(SID_PRINTER_NOTFOUND_WARN, TRUE);
+        // ItemSet mit speziellem Poolbereich anlegen
+        SfxItemSet* pSet = new SfxItemSet(GetPool(),
+                                          SID_PRINTER_NOTFOUND_WARN,
+                                          SID_PRINTER_NOTFOUND_WARN, 0);
+        pSet->Put(aItem);
+        pPrinter = new SfxPrinter(pSet); //@todo ->need to remember and delete
+        bOwnPrinter = TRUE;
+
+        MapMode aMapMode = pPrinter->GetMapMode();
+        aMapMode.SetMapUnit(MAP_100TH_MM);
+        pPrinter->SetMapMode(aMapMode);
+
+        if (pChDoc)
+        {
+            if (pPrinter != pChDoc->GetRefDevice())
+                pChDoc->SetRefDevice(pPrinter);
+
+            if (pPrinter != pChDoc->GetOutliner()->GetRefDevice())
+                pChDoc->GetOutliner()->SetRefDevice(pPrinter);
+        }
+    }
+    return pPrinter;
+}
+*/
+
 //.............................................................................
 } //namespace chart
 //.............................................................................

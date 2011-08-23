@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,20 +53,20 @@ using ::rtl::OUString;
 namespace sdext { namespace presenter {
 
 const ::rtl::OUString PresenterPaneFactory::msCurrentSlidePreviewPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane1"));
+    OUString::createFromAscii("private:resource/pane/Presenter/Pane1"));
 const ::rtl::OUString PresenterPaneFactory::msNextSlidePreviewPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane2"));
+    OUString::createFromAscii("private:resource/pane/Presenter/Pane2"));
 const ::rtl::OUString PresenterPaneFactory::msNotesPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane3"));
+    OUString::createFromAscii("private:resource/pane/Presenter/Pane3"));
 const ::rtl::OUString PresenterPaneFactory::msToolBarPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane4"));
+    OUString::createFromAscii("private:resource/pane/Presenter/Pane4"));
 const ::rtl::OUString PresenterPaneFactory::msSlideSorterPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane5"));
+    OUString::createFromAscii("private:resource/pane/Presenter/Pane5"));
 const ::rtl::OUString PresenterPaneFactory::msHelpPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane6"));
+    OUString::createFromAscii("private:resource/pane/Presenter/Pane6"));
 
 const ::rtl::OUString PresenterPaneFactory::msOverlayPaneURL(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Overlay"));
+    OUString::createFromAscii("private:resource/pane/Presenter/Overlay"));
 
 
 
@@ -117,7 +117,7 @@ void PresenterPaneFactory::Register (const Reference<frame::XController>& rxCont
         else
         {
             xCC->addResourceFactory(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/*")),
+                OUString::createFromAscii("private:resource/pane/Presenter/*"),
                 this);
         }
     }
@@ -149,7 +149,7 @@ void SAL_CALL PresenterPaneFactory::disposing (void)
     if (xCC.is())
         xCC->removeResourceFactoryForReference(this);
     mxConfigurationControllerWeak = WeakReference<XConfigurationController>();
-
+        
     // Dispose the panes in the cache.
     if (mpResourceCache.get() != NULL)
     {
@@ -169,7 +169,7 @@ void SAL_CALL PresenterPaneFactory::disposing (void)
 
 
 //----- XPaneFactory ----------------------------------------------------------
-
+    
 Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
     throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
@@ -260,11 +260,11 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
 {
     if ( ! rxPaneId.is())
         return NULL;
-
+        
     Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
     if ( ! xCC.is())
         return NULL;
-
+    
     Reference<XComponentContext> xContext (mxComponentContextWeak);
     if ( ! xContext.is())
         return NULL;
@@ -329,7 +329,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
         UNO_QUERY);
     aArguments[5] <<= bIsSpritePane ? false : true;
     xPane->initialize(aArguments);
-
+        
     // Store pane and canvases and windows in container.
     ::rtl::Reference<PresenterPaneContainer> pContainer (
         mpPresenterController->GetPaneContainer());

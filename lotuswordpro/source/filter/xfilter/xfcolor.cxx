@@ -57,12 +57,16 @@
  * @file
  * Color object to serial to xml filter.
  ************************************************************************/
+/*************************************************************************
+ * Change History
+ * 2005-01-17 create this file.
+ ************************************************************************/
 #include <stdio.h>
-#include    "xfcolor.hxx"
+#include	"xfcolor.hxx"
 
 rtl::OUString XFColor::ToString() const
 {
-    char    buf[8];
+    char	buf[8];
 
     rtl_zeroMemory(buf,8);
     sprintf(buf,"#%2x%2x%2x",m_nRed, m_nGreen, m_nBlue);

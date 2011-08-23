@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,39 +29,66 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include "lotattr.hxx"
 
-#include <boost/bind.hpp>
 
+//------------------------------------------------------------------------
+
+#include "scitems.hxx"
+#include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <svx/algitem.hxx>
 
-#include "attrib.hxx"
-#include "docpool.hxx"
 #include "document.hxx"
-#include "lotfntbf.hxx"
 #include "patattr.hxx"
+#include "docpool.hxx"
+#include "attrib.hxx"
+
+#include "lotattr.hxx"
+#include "lotfntbf.hxx"
 #include "root.hxx"
-#include "scitems.hxx"
 
-LotAttrCache::ENTRY::ENTRY (const ScPatternAttr &r)
-    : pPattAttr(new ScPatternAttr(r))
+
+
+void LotAttrCache::LotusToScBorderLine( UINT8 nLine, SvxBorderLine& aBL )
 {
+    static const UINT16 pPara[ 4 ][ 3 ] =
+    {
+        { 0,0,0 },
+        { DEF_LINE_WIDTH_1, 0, 0 },
+        { DEF_LINE_WIDTH_2, 0, 0 },
+        { DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1, DEF_LINE_WIDTH_1 }
+    };
+
+    nLine &= 0x03;
+
+    if( nLine )
+    {
+        aBL.SetOutWidth( pPara[ nLine ][ 0 ] );
+        aBL.SetInWidth( pPara[ nLine ][ 1 ] );
+        aBL.SetDistance( pPara[ nLine ][ 2 ] );
+    }
 }
 
-LotAttrCache::ENTRY::ENTRY (ScPatternAttr* p)
-    : pPattAttr(p)
+
+const SvxColorItem& LotAttrCache::GetColorItem( const UINT8 nLotIndex ) const
 {
+    DBG_ASSERT( nLotIndex > 0 && nLotIndex < 7,
+        "-LotAttrCache::GetColorItem(): so nicht!" );
+
+    return *ppColorItems[ nLotIndex - 1 ];
 }
 
-LotAttrCache::ENTRY::~ENTRY ()
+
+const Color& LotAttrCache::GetColor( const UINT8 nLotIndex ) const
 {
-    delete pPattAttr;
+    // Farbe <-> Index passt fuer Background, nicht aber fuer Fonts (0 <-> 7)!
+    DBG_ASSERT( nLotIndex < 8, "*LotAttrCache::GetColor(): Index > 7!" );
+    return pColTab[ nLotIndex ];
 }
 
-LotAttrCache::LotAttrCache ()
+
+LotAttrCache::LotAttrCache( void )
 {
     pDocPool = pLotusRoot->pDoc->GetPool();
 
@@ -89,7 +116,15 @@ LotAttrCache::LotAttrCache ()
 
 LotAttrCache::~LotAttrCache()
 {
-    for( sal_uInt16 nCnt = 0 ; nCnt < 6 ; nCnt++ )
+    ENTRY*	pAkt = ( ENTRY* ) List::First();
+
+    while( pAkt )
+    {
+        delete pAkt;
+        pAkt = ( ENTRY* ) List::Next();
+    }
+
+    for( UINT16 nCnt = 0 ; nCnt < 6 ; nCnt++ )
         delete ppColorItems[ nCnt ];
 
     delete pBlack;
@@ -101,30 +136,33 @@ LotAttrCache::~LotAttrCache()
 
 const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 {
-    sal_uInt32  nRefHash;
+    UINT32	nRefHash;
+    ENTRY*	pAkt = ( ENTRY* ) List::First();
+
     MakeHash( rAttr, nRefHash );
 
-    boost::ptr_vector<ENTRY>::const_iterator iter = std::find_if(aEntries.begin(),aEntries.end(),
-                                                                 boost::bind(&ENTRY::nHash0,_1) == nRefHash);
+    while( pAkt )
+    {
+        if( *pAkt == nRefHash )
+            return *pAkt->pPattAttr;
 
-    if (iter != aEntries.end())
-        return *(iter->pPattAttr);
+        pAkt = ( ENTRY* ) List::Next();
+    }
 
     // neues PatternAttribute erzeugen
-    ScPatternAttr*  pNewPatt = new ScPatternAttr(pDocPool);
-
-    SfxItemSet&     rItemSet = pNewPatt->GetItemSet();
-    ENTRY *pAkt = new ENTRY( pNewPatt );
+    ScPatternAttr*	pNewPatt = new ScPatternAttr( pDocPool );
+    SfxItemSet&		rItemSet = pNewPatt->GetItemSet();
+    pAkt = new ENTRY( pNewPatt );
 
     pAkt->nHash0 = nRefHash;
 
     pLotusRoot->pFontBuff->Fill( rAttr.nFont, rItemSet );
 
-    sal_uInt8 nLine = rAttr.nLineStyle;
+    UINT8 nLine = rAttr.nLineStyle;
     if( nLine )
     {
-        SvxBoxItem      aBox( ATTR_BORDER );
-        ::editeng::SvxBorderLine    aTop, aLeft, aBottom, aRight;
+        SvxBoxItem		aBox( ATTR_BORDER );
+        SvxBorderLine	aTop, aLeft, aBottom, aRight;
 
         LotusToScBorderLine( nLine, aLeft );
         nLine >>= 2;
@@ -142,7 +180,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
         rItemSet.Put( aBox );
     }
 
-    sal_uInt8               nFontCol = rAttr.nFontCol & 0x07;
+    UINT8				nFontCol = rAttr.nFontCol & 0x07;
     if( nFontCol )
     {
         // nFontCol > 0
@@ -152,7 +190,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
             rItemSet.Put( *pWhite );
     }
 
-    sal_uInt8 nBack = rAttr.nBack & 0x1F;
+    UINT8 nBack = rAttr.nBack & 0x1F;
     if( nBack )
         rItemSet.Put( SvxBrushItem( GetColor( nBack & 0x07 ), ATTR_BACKGROUND ) );
 
@@ -162,101 +200,89 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
         rItemSet.Put( aHorJustify );
     }
 
-    aEntries.push_back(pAkt);
+    List::Insert( pAkt, LIST_APPEND );
 
     return *pNewPatt;
-}
-
-
-void LotAttrCache::LotusToScBorderLine( sal_uInt8 nLine, ::editeng::SvxBorderLine& aBL )
-{
-    nLine &= 0x03;
-
-    switch ( nLine )
-    {
-        default:
-        case 0: aBL.SetStyle( ::editeng::NO_STYLE ); break;
-        case 1: aBL.SetWidth( DEF_LINE_WIDTH_1 ); break;
-        case 2: aBL.SetWidth( DEF_LINE_WIDTH_2 ); break;
-        case 3:
-        {
-            aBL.SetStyle( ::editeng::DOUBLE );
-            aBL.SetWidth( DEF_LINE_WIDTH_1 );
-        }
-        break;
     }
-}
 
-const SvxColorItem& LotAttrCache::GetColorItem( const sal_uInt8 nLotIndex ) const
+
+LotAttrCol::~LotAttrCol()
 {
-    DBG_ASSERT( nLotIndex > 0 && nLotIndex < 7,
-        "-LotAttrCache::GetColorItem(): so nicht!" );
-
-    return *ppColorItems[ nLotIndex - 1 ];
+    Clear();
 }
 
-const Color& LotAttrCache::GetColor( const sal_uInt8 nLotIndex ) const
-{
-    // Farbe <-> Index passt fuer Background, nicht aber fuer Fonts (0 <-> 7)!
-    DBG_ASSERT( nLotIndex < 8, "*LotAttrCache::GetColor(): Index > 7!" );
-
-    return pColTab[ nLotIndex ];
-}
 
 void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
 {
     DBG_ASSERT( ValidRow(nRow), "*LotAttrCol::SetAttr(): ... und rums?!" );
 
-    boost::ptr_vector<ENTRY>::reverse_iterator iterLast = aEntries.rbegin();
+    ENTRY*		pAkt = ( ENTRY* ) List::Last();
 
-    if(iterLast != aEntries.rend())
+    if( pAkt )
     {
-        if( ( iterLast->nLastRow == nRow - 1 ) && ( &rAttr == iterLast->pPattAttr ) )
-            iterLast->nLastRow = nRow;
+        if( ( pAkt->nLastRow == nRow - 1 ) && ( &rAttr == pAkt->pPattAttr ) )
+            pAkt->nLastRow = nRow;
         else
         {
-            ENTRY *pAkt = new ENTRY;
+            pAkt = new ENTRY;
 
             pAkt->pPattAttr = &rAttr;
             pAkt->nFirstRow = pAkt->nLastRow = nRow;
-
-            aEntries.push_back(pAkt);
+            List::Insert( pAkt, LIST_APPEND );
         }
     }
     else
-    {   // erster Eintrag
-        ENTRY *pAkt = new ENTRY;
+    {	// erster Eintrag
+        pAkt = new ENTRY;
         pAkt->pPattAttr = &rAttr;
         pAkt->nFirstRow = pAkt->nLastRow = nRow;
-
-        aEntries.push_back(pAkt);
+        List::Insert( pAkt, LIST_APPEND );
     }
 }
 
 
-void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum, const sal_Bool /*bClear*/ )
+void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum, const BOOL /*bClear*/ )
 {
-    ScDocument*     pDoc = pLotusRoot->pDoc;
+    ScDocument*		pDoc = pLotusRoot->pDoc;
+    ENTRY*			pAkt = ( ENTRY* ) List::First();
 
-    boost::ptr_vector<ENTRY>::iterator iter;
-    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
+    while( pAkt )
     {
-        pDoc->ApplyPatternAreaTab(nColNum,iter->nFirstRow,nColNum,iter->nLastRow,
-                                  nTabNum, *(iter->pPattAttr));
+        pDoc->ApplyPatternAreaTab( nColNum, pAkt->nFirstRow, nColNum, pAkt->nLastRow,
+            nTabNum, *pAkt->pPattAttr );
+
+        pAkt = ( ENTRY* ) List::Next();
     }
 }
 
 
-void LotAttrCol::Clear ()
+void LotAttrCol::Clear( void )
 {
-    aEntries.clear();
+    ENTRY*			pAkt = ( ENTRY* ) List::First();
+
+    while( pAkt )
+    {
+        delete pAkt;
+        pAkt = ( ENTRY* ) List::Next();
+    }
 }
+
+
+LotAttrTable::LotAttrTable( void )
+{
+}
+
+
+LotAttrTable::~LotAttrTable()
+{
+}
+
 
 void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow,
                             const LotAttrWK3& rAttr )
 {
-    const ScPatternAttr &rPattAttr = aAttrCache.GetPattAttr( rAttr );
-    SCCOL nColCnt;
+    const ScPatternAttr&	rPattAttr = aAttrCache.GetPattAttr( rAttr );
+    SCCOL					nColCnt;
 
     for( nColCnt = nColFirst ; nColCnt <= nColLast ; nColCnt++ )
         pCols[ nColCnt ].SetAttr( nRow, rPattAttr );
@@ -265,9 +291,12 @@ void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const S
 
 void LotAttrTable::Apply( const SCTAB nTabNum )
 {
-    SCCOL nColCnt;
+    SCCOL					nColCnt;
     for( nColCnt = 0 ; nColCnt <= MAXCOL ; nColCnt++ )
-        pCols[ nColCnt ].Apply( nColCnt, nTabNum );     // macht auch gleich ein Clear() am Ende
+        pCols[ nColCnt ].Apply( nColCnt, nTabNum );		// macht auch gleich ein Clear() am Ende
 }
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

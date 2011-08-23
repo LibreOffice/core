@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,41 +70,41 @@ class SapiDocu_PE : public TokenInterpreter
                             ParserInfo &        io_rPositionInfo );
                         ~SapiDocu_PE();
 
-    void                ProcessToken(
+    void				ProcessToken(
                             DYN csi::dsapi::Token &
                                                 let_drToken );
 
-    virtual void        Process_AtTag(
-                            const Tok_AtTag &   i_rToken );
-    virtual void        Process_HtmlTag(
-                            const Tok_HtmlTag & i_rToken );
-    virtual void        Process_XmlConst(
+    virtual void		Process_AtTag(
+                            const Tok_AtTag &	i_rToken );
+    virtual void		Process_HtmlTag(
+                            const Tok_HtmlTag &	i_rToken );
+    virtual void		Process_XmlConst(
                             const Tok_XmlConst &
                                                 i_rToken );
-    virtual void        Process_XmlLink_BeginTag(
+    virtual void		Process_XmlLink_BeginTag(
                             const Tok_XmlLink_BeginTag &
                                                 i_rToken );
-    virtual void        Process_XmlLink_EndTag(
+    virtual void		Process_XmlLink_EndTag(
                             const Tok_XmlLink_EndTag &
                                                 i_rToken );
-    virtual void        Process_XmlFormat_BeginTag(
+    virtual void		Process_XmlFormat_BeginTag(
                             const Tok_XmlFormat_BeginTag &
                                                 i_rToken );
-    virtual void        Process_XmlFormat_EndTag(
+    virtual void		Process_XmlFormat_EndTag(
                             const Tok_XmlFormat_EndTag &
                                                 i_rToken );
-    virtual void        Process_Word(
-                            const Tok_Word &    i_rToken );
-    virtual void        Process_Comma();
-    virtual void        Process_DocuEnd();
-    virtual void        Process_EOL();
-    virtual void        Process_White();
+    virtual void		Process_Word(
+                            const Tok_Word &	i_rToken );
+    virtual void		Process_Comma();
+    virtual void		Process_DocuEnd();
+    virtual void		Process_EOL();
+    virtual void		Process_White();
 
 
     DYN ary::doc::OldIdlDocu *
                             ReleaseJustParsedDocu();
 
-    bool                IsComplete() const;
+    bool				IsComplete() const;
 
   private:
     enum E_State
@@ -118,55 +118,48 @@ class SapiDocu_PE : public TokenInterpreter
 
     typedef void ( SapiDocu_PE::*F_TokenAdder )( DYN ary::inf::DocuToken & let_drNewToken );
 
-    void                AddDocuToken2Void(
+    void				AddDocuToken2Void(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
-    void                AddDocuToken2Short(
+    void				AddDocuToken2Short(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
-    void                AddDocuToken2Description(
+    void				AddDocuToken2Description(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
-    void                AddDocuToken2Deprecated(
+    void				AddDocuToken2Deprecated(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
-    void                AddDocuToken2CurAtTag(
+    void				AddDocuToken2CurAtTag(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
-    void                SetCurParameterAtTagName(
+    void				SetCurParameterAtTagName(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
-    void                SetCurSeeAlsoAtTagLinkText(
+    void				SetCurSeeAlsoAtTagLinkText(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
-    void                SetCurSeeAlsoAtTagLinkText_2(
+    void				SetCurSeeAlsoAtTagLinkText_2(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
-    void                SetCurSeeAlsoAtTagLinkText_3(
+    void				SetCurSeeAlsoAtTagLinkText_3(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
-    void                SetCurSinceAtTagVersion_OOo(
+    void				SetCurSinceAtTagVersion(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
-    void                SetCurSinceAtTagVersion_Number(
-                            DYN ary::inf::DocuToken &
-                                                let_drNewToken );
-    void                AddDocuToken2SinceAtTag(
+    void				AddDocuToken2SinceAtTag(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
 
-    bool                CheckVersionSyntax_OOo(
-                            const String &      i_versionPart1 );
-    bool                CheckVersionSyntax_Number(
-                            const String &      i_versionPart2 );
     // DATA
     Dyn<ary::doc::OldIdlDocu>
                         pDocu;
-    E_State             eState;
+    E_State				eState;
     ParserInfo *        pPositionInfo;
-    F_TokenAdder        fCurTokenAddFunction;
+    F_TokenAdder		fCurTokenAddFunction;
 
-    Dyn<DT_AtTag>       pCurAtTag;
+    Dyn<DT_AtTag>	    pCurAtTag;
     String              sCurDimAttribute;
     StreamStr           sCurAtSeeType_byXML;
 };

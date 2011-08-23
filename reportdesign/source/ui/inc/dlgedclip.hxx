@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ namespace rptui
 //============================================================================
 // OReportExchange
 //============================================================================
-/** \class OReportExchange
+/** \class OReportExchange 
  * \brief defines a clipboard fromat for copying selection elements.
  * \ingroup reportdesign_source_ui_report
  *
@@ -51,15 +51,15 @@ public:
     /** Constructs a new exchange object with section elements
     *
     * \param _rCopyElements the elements to copy. Each section is one entry. The value must be a sequence of elements.
-    * \return
+    * \return 
     */
     OReportExchange( const TSectionElements& _rCopyElements);
 
     /** checks whether or not a descriptor can be extracted from the data flavor vector given
     *
-    * \param _rFlavors
+    * \param _rFlavors 
             available flavors
-    * \return
+    * \return 
     */
     static sal_Bool         canExtract(const DataFlavorExVector& _rFlavors);
 
@@ -74,14 +74,14 @@ public:
     *
     * \return the registered format id
     */
-    static sal_uInt32       getDescriptorFormatId();
+    static sal_uInt32	    getDescriptorFormatId();
 
 protected:
     // TransferableHelper overridables
-    virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual void		AddSupportedFormats();
+    virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );	
 private:
-    TSectionElements    m_aCopyElements;
+    TSectionElements	m_aCopyElements;
 };
 }
 #endif // _REPORT_RPTUICLIP_HXX

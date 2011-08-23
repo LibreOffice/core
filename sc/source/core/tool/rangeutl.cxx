@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,10 +53,10 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-sal_Bool ScRangeUtil::MakeArea( const String&   rAreaStr,
-                            ScArea&         rArea,
-                            ScDocument*     pDoc,
-                            SCTAB           nTab,
+BOOL ScRangeUtil::MakeArea( const String&	rAreaStr,
+                            ScArea&			rArea,
+                            ScDocument*		pDoc,
+                            SCTAB			nTab,
                             ScAddress::Details const & rDetails ) const
 {
     // Eingabe in rAreaStr: "$Tabelle1.$A1:$D17"
@@ -64,12 +64,12 @@ sal_Bool ScRangeUtil::MakeArea( const String&   rAreaStr,
     // BROKEN BROKEN BROKEN
     // but it is only used in the consolidate dialog.  Ignore for now.
 
-    sal_Bool        nSuccess    = false;
-    sal_uInt16      nPointPos   = rAreaStr.Search('.');
-    sal_uInt16      nColonPos   = rAreaStr.Search(':');
-    String      aStrArea( rAreaStr );
-    ScRefAddress    startPos;
-    ScRefAddress    endPos;
+    BOOL		nSuccess	= FALSE;
+    USHORT		nPointPos	= rAreaStr.Search('.');
+    USHORT		nColonPos	= rAreaStr.Search(':');
+    String		aStrArea( rAreaStr );
+    ScRefAddress	startPos;
+    ScRefAddress	endPos;
 
     if ( nColonPos == STRING_NOTFOUND )
         if ( nPointPos != STRING_NOTFOUND )
@@ -82,22 +82,22 @@ sal_Bool ScRangeUtil::MakeArea( const String&   rAreaStr,
 
     if ( nSuccess )
         rArea = ScArea( startPos.Tab(),
-                        startPos.Col(), startPos.Row(),
-                        endPos.Col(),   endPos.Row() );
+                        startPos.Col(),	startPos.Row(),
+                        endPos.Col(),	endPos.Row() );
 
     return nSuccess;
 }
 
 //------------------------------------------------------------------------
 
-void ScRangeUtil::CutPosString( const String&   theAreaStr,
-                                String&         thePosStr ) const
+void ScRangeUtil::CutPosString( const String&	theAreaStr,
+                                String&			thePosStr ) const
 {
-    String  aPosStr;
+    String	aPosStr;
     // BROKEN BROKEN BROKEN
     // but it is only used in the consolidate dialog.  Ignore for now.
 
-    sal_uInt16  nColonPos = theAreaStr.Search(':');
+    USHORT	nColonPos = theAreaStr.Search(':');
 
     if ( nColonPos != STRING_NOTFOUND )
         aPosStr = theAreaStr.Copy( 0, nColonPos ); // ':' nicht mitkopieren
@@ -109,25 +109,25 @@ void ScRangeUtil::CutPosString( const String&   theAreaStr,
 
 //------------------------------------------------------------------------
 
-sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
-                                ScDocument*     pDoc,
-                                ScArea***       pppAreas,
-                                sal_uInt16*         pAreaCount,
-                                sal_Bool            /* bAcceptCellRef */,
+BOOL ScRangeUtil::IsAbsTabArea( const String& 	rAreaStr,
+                                ScDocument*		pDoc,
+                                ScArea***		pppAreas,
+                                USHORT*			pAreaCount,
+                                BOOL            /* bAcceptCellRef */,
                                 ScAddress::Details const & rDetails ) const
 {
     DBG_ASSERT( pDoc, "Kein Dokument uebergeben!" );
     if ( !pDoc )
-        return false;
+        return FALSE;
 
     // BROKEN BROKEN BROKEN
     // but it is only used in the consolidate dialog.  Ignore for now.
 
     /*
      * Erwartet wird ein String der Form
-     *      "$Tabelle1.$A$1:$Tabelle3.$D$17"
-     * Wenn bAcceptCellRef == sal_True ist, wird auch ein String der Form
-     *      "$Tabelle1.$A$1"
+     *		"$Tabelle1.$A$1:$Tabelle3.$D$17"
+     * Wenn bAcceptCellRef == TRUE ist, wird auch ein String der Form
+     *		"$Tabelle1.$A$1"
      * akzeptiert.
      *
      * als Ergebnis wird ein ScArea-Array angelegt,
@@ -135,10 +135,10 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
      * wieder geloescht werden muss!
      */
 
-    sal_Bool    bStrOk = false;
-    String  aTempAreaStr(rAreaStr);
-    String  aStartPosStr;
-    String  aEndPosStr;
+    BOOL	bStrOk = FALSE;
+    String	aTempAreaStr(rAreaStr);
+    String	aStartPosStr;
+    String	aEndPosStr;
 
     if ( STRING_NOTFOUND == aTempAreaStr.Search(':') )
     {
@@ -146,39 +146,39 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
         aTempAreaStr.Append(rAreaStr);
     }
 
-    sal_uInt16   nColonPos = aTempAreaStr.Search(':');
+    USHORT	 nColonPos = aTempAreaStr.Search(':');
 
     if (   STRING_NOTFOUND != nColonPos
         && STRING_NOTFOUND != aTempAreaStr.Search('.') )
     {
-        ScRefAddress    aStartPos;
-        ScRefAddress    aEndPos;
+        ScRefAddress	aStartPos;
+        ScRefAddress	aEndPos;
 
-        aStartPosStr = aTempAreaStr.Copy( 0,           nColonPos  );
-        aEndPosStr   = aTempAreaStr.Copy( nColonPos+1, STRING_LEN );
+        aStartPosStr = aTempAreaStr.Copy( 0,		   nColonPos  );
+        aEndPosStr	 = aTempAreaStr.Copy( nColonPos+1, STRING_LEN );
 
         if ( ConvertSingleRef( pDoc, aStartPosStr, 0, aStartPos, rDetails ) )
         {
             if ( ConvertSingleRef( pDoc, aEndPosStr, aStartPos.Tab(), aEndPos, rDetails ) )
             {
-                aStartPos.SetRelCol( false );
-                aStartPos.SetRelRow( false );
-                aStartPos.SetRelTab( false );
-                aEndPos.SetRelCol( false );
-                aEndPos.SetRelRow( false );
-                aEndPos.SetRelTab( false );
+                aStartPos.SetRelCol( FALSE );
+                aStartPos.SetRelRow( FALSE );
+                aStartPos.SetRelTab( FALSE );
+                aEndPos.SetRelCol( FALSE );
+                aEndPos.SetRelRow( FALSE );
+                aEndPos.SetRelTab( FALSE );
 
-                bStrOk = sal_True;
+                bStrOk = TRUE;
 
                 if ( pppAreas && pAreaCount ) // Array zurueckgegeben?
                 {
-                    SCTAB       nStartTab   = aStartPos.Tab();
-                    SCTAB       nEndTab     = aEndPos.Tab();
-                    sal_uInt16      nTabCount   = static_cast<sal_uInt16>(nEndTab-nStartTab+1);
-                    ScArea**    theAreas    = new ScArea*[nTabCount];
-                    SCTAB       nTab        = 0;
-                    sal_uInt16      i           = 0;
-                    ScArea      theArea( 0, aStartPos.Col(), aStartPos.Row(),
+                    SCTAB		nStartTab	= aStartPos.Tab();
+                    SCTAB		nEndTab		= aEndPos.Tab();
+                    USHORT		nTabCount	= static_cast<USHORT>(nEndTab-nStartTab+1);
+                    ScArea** 	theAreas	= new ScArea*[nTabCount];
+                    SCTAB		nTab		= 0;
+                    USHORT		i			= 0;
+                    ScArea		theArea( 0, aStartPos.Col(), aStartPos.Row(),
                                             aEndPos.Col(), aEndPos.Row() );
 
                     nTab = nStartTab;
@@ -200,28 +200,28 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
 
 //------------------------------------------------------------------------
 
-sal_Bool ScRangeUtil::IsAbsArea( const String&  rAreaStr,
-                             ScDocument*    pDoc,
-                             SCTAB          nTab,
-                             String*        pCompleteStr,
-                             ScRefAddress*  pStartPos,
-                             ScRefAddress*  pEndPos,
+BOOL ScRangeUtil::IsAbsArea( const String&	rAreaStr,
+                             ScDocument*	pDoc,
+                             SCTAB			nTab,
+                             String*		pCompleteStr,
+                             ScRefAddress*	pStartPos,
+                             ScRefAddress*	pEndPos,
                              ScAddress::Details const & rDetails ) const
 {
-    sal_Bool        bIsAbsArea = false;
-    ScRefAddress    startPos;
-    ScRefAddress    endPos;
+    BOOL		bIsAbsArea = FALSE;
+    ScRefAddress	startPos;
+    ScRefAddress	endPos;
 
     bIsAbsArea = ConvertDoubleRef( pDoc, rAreaStr, nTab, startPos, endPos, rDetails );
 
     if ( bIsAbsArea )
     {
-        startPos.SetRelCol( false );
-        startPos.SetRelRow( false );
-        startPos.SetRelTab( false );
-        endPos  .SetRelCol( false );
-        endPos  .SetRelRow( false );
-        endPos  .SetRelTab( false );
+        startPos.SetRelCol( FALSE );
+        startPos.SetRelRow( FALSE );
+        startPos.SetRelTab( FALSE );
+        endPos  .SetRelCol( FALSE );
+        endPos  .SetRelRow( FALSE );
+        endPos  .SetRelTab( FALSE );
 
         if ( pCompleteStr )
         {
@@ -242,20 +242,20 @@ sal_Bool ScRangeUtil::IsAbsArea( const String&  rAreaStr,
 
 //------------------------------------------------------------------------
 
-sal_Bool ScRangeUtil::IsAbsPos( const String&   rPosStr,
-                            ScDocument*     pDoc,
-                            SCTAB           nTab,
-                            String*         pCompleteStr,
-                            ScRefAddress*   pPosTripel,
+BOOL ScRangeUtil::IsAbsPos( const String&	rPosStr,
+                            ScDocument*		pDoc,
+                            SCTAB			nTab,
+                            String*			pCompleteStr,
+                            ScRefAddress*	pPosTripel,
                             ScAddress::Details const & rDetails ) const
 {
-    sal_Bool        bIsAbsPos = false;
-    ScRefAddress    thePos;
+    BOOL		bIsAbsPos = FALSE;
+    ScRefAddress	thePos;
 
-    bIsAbsPos = ConvertSingleRef( pDoc, rPosStr, nTab, thePos, rDetails );
-    thePos.SetRelCol( false );
-    thePos.SetRelRow( false );
-    thePos.SetRelTab( false );
+    bIsAbsPos = ConvertSingleRef( pDoc, rPosStr, nTab, thePos, rDetails ); 
+    thePos.SetRelCol( FALSE );
+    thePos.SetRelRow( FALSE );
+    thePos.SetRelTab( FALSE );
 
     if ( bIsAbsPos )
     {
@@ -270,16 +270,16 @@ sal_Bool ScRangeUtil::IsAbsPos( const String&   rPosStr,
 
 //------------------------------------------------------------------------
 
-sal_Bool ScRangeUtil::MakeRangeFromName (
-    const String&   rName,
-    ScDocument*     pDoc,
-    SCTAB           nCurTab,
-    ScRange&        rRange,
-    RutlNameScope   eScope,
+BOOL ScRangeUtil::MakeRangeFromName	(
+    const String&	rName,
+    ScDocument*		pDoc,
+    SCTAB			nCurTab,
+    ScRange&		rRange,
+    RutlNameScope 	eScope,
     ScAddress::Details const & rDetails ) const
 {
-    sal_Bool bResult=false;
-    ScRangeUtil     aRangeUtil;
+    BOOL bResult=FALSE;
+    ScRangeUtil		aRangeUtil;
     SCTAB nTab = 0;
     SCCOL nColStart = 0;
     SCCOL nColEnd = 0;
@@ -288,25 +288,27 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
 
     if( eScope==RUTL_NAMES )
     {
-        const ScRangeName& rRangeNames = *pDoc->GetRangeName();
-        const ScRangeData* pData = rRangeNames.findByName(rName);
-        if (pData)
+        ScRangeName& rRangeNames = *(pDoc->GetRangeName());
+        USHORT		 nAt		 = 0;
+
+        if ( rRangeNames.SearchName( rName, nAt ) )
         {
-            String       aStrArea;
-            ScRefAddress     aStartPos;
-            ScRefAddress     aEndPos;
+            ScRangeData* pData = rRangeNames[nAt];
+            String		 aStrArea;
+            ScRefAddress	 aStartPos;
+            ScRefAddress	 aEndPos;
 
             pData->GetSymbol( aStrArea );
 
             if ( IsAbsArea( aStrArea, pDoc, nCurTab,
                             NULL, &aStartPos, &aEndPos, rDetails ) )
             {
-                nTab       = aStartPos.Tab();
+                nTab	   = aStartPos.Tab();
                 nColStart  = aStartPos.Col();
                 nRowStart  = aStartPos.Row();
                 nColEnd    = aEndPos.Col();
                 nRowEnd    = aEndPos.Row();
-                bResult    = sal_True;
+                bResult	   = TRUE;
             }
             else
             {
@@ -315,31 +317,31 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
                 if ( IsAbsPos( aStrArea, pDoc, nCurTab,
                                           NULL, &aStartPos, rDetails ) )
                 {
-                    nTab       = aStartPos.Tab();
+                    nTab	   = aStartPos.Tab();
                     nColStart  = nColEnd = aStartPos.Col();
                     nRowStart  = nRowEnd = aStartPos.Row();
-                    bResult    = sal_True;
+                    bResult	   = TRUE;
                 }
             }
         }
     }
     else if( eScope==RUTL_DBASE )
     {
-        ScDBCollection& rDbNames = *(pDoc->GetDBCollection());
-        sal_uInt16          nAt = 0;
+        ScDBCollection&	rDbNames = *(pDoc->GetDBCollection());
+        USHORT		 	nAt = 0;
 
         if ( rDbNames.SearchName( rName, nAt ) )
         {
             ScDBData* pData = rDbNames[nAt];
 
             pData->GetArea( nTab, nColStart, nRowStart,
-                                  nColEnd,   nRowEnd );
-            bResult = sal_True;
+                                  nColEnd,	 nRowEnd );
+            bResult = TRUE;
         }
     }
     else
     {
-        OSL_FAIL( "ScRangeUtil::MakeRangeFromName" );
+        DBG_ERROR( "ScRangeUtil::MakeRangeFromName" );
     }
 
     if( bResult )
@@ -377,10 +379,10 @@ sal_Int32 ScRangeStringConverter::IndexOf(
         sal_Int32 nOffset,
         sal_Unicode cQuote )
 {
-    sal_Int32       nLength     = rString.getLength();
-    sal_Int32       nIndex      = nOffset;
-    sal_Bool        bQuoted     = false;
-    sal_Bool        bExitLoop   = false;
+    sal_Int32		nLength		= rString.getLength();
+    sal_Int32		nIndex		= nOffset;
+    sal_Bool		bQuoted		= sal_False;
+    sal_Bool		bExitLoop	= sal_False;
 
     while( !bExitLoop && (nIndex < nLength) )
     {
@@ -398,9 +400,9 @@ sal_Int32 ScRangeStringConverter::IndexOfDifferent(
         sal_Unicode cSearchChar,
         sal_Int32 nOffset )
 {
-    sal_Int32       nLength     = rString.getLength();
-    sal_Int32       nIndex      = nOffset;
-    sal_Bool        bExitLoop   = false;
+    sal_Int32		nLength		= rString.getLength();
+    sal_Int32		nIndex		= nOffset;
+    sal_Bool		bExitLoop	= sal_False;
 
     while( !bExitLoop && (nIndex < nLength) )
     {
@@ -446,9 +448,9 @@ void ScRangeStringConverter::AppendTableName(OUStringBuffer& rBuf, const OUStrin
 
 sal_Int32 ScRangeStringConverter::GetTokenCount( const OUString& rString, sal_Unicode cSeperator, sal_Unicode cQuote )
 {
-    OUString    sToken;
-    sal_Int32   nCount = 0;
-    sal_Int32   nOffset = 0;
+    OUString	sToken;
+    sal_Int32	nCount = 0;
+    sal_Int32	nOffset = 0;
     while( nOffset >= 0 )
     {
         GetTokenByOffset( sToken, rString, nOffset, cQuote, cSeperator );
@@ -475,11 +477,13 @@ sal_Bool ScRangeStringConverter::GetAddressFromString(
     {
         if ((rAddress.Parse( sToken, const_cast<ScDocument*>(pDocument), eConv ) & SCA_VALID) == SCA_VALID)
             return true;
+#if CHART_ADDRESS_CONV_WORKAROUND
         ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
         if (eConv != eConvUI)
             return ((rAddress.Parse(sToken, const_cast<ScDocument*>(pDocument), eConvUI) & SCA_VALID) == SCA_VALID);
+#endif
     }
-    return false;
+    return sal_False;
 }
 
 sal_Bool ScRangeStringConverter::GetRangeFromString(
@@ -492,7 +496,7 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
         sal_Unicode cQuote )
 {
     OUString sToken;
-    sal_Bool bResult(false);
+    sal_Bool bResult(sal_False);
     GetTokenByOffset( sToken, rRangeStr, nOffset, cSeperator, cQuote );
     if( nOffset >= 0 )
     {
@@ -504,9 +508,11 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
             if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
                 aUIString.Erase( 0, 1 );
             bResult = ((rRange.aStart.Parse( aUIString, const_cast<ScDocument*> (pDocument), eConv) & SCA_VALID) == SCA_VALID);
+#if CHART_ADDRESS_CONV_WORKAROUND
             if (!bResult && eConv != eConv)
                 bResult = ((rRange.aStart.Parse(
                     aUIString, const_cast<ScDocument*>(pDocument), eConv) & SCA_VALID) == SCA_VALID);
+#endif
             rRange.aEnd = rRange.aStart;
         }
         else
@@ -526,11 +532,12 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
             // #i77703# chart ranges in the file format contain both sheet names, even for an external reference sheet.
             // This isn't parsed by ScRange, so try to parse the two Addresses then.
             if (!bResult)
-            {
+            {    
                 bResult = ((rRange.aStart.Parse( aUIString.Copy(0, (xub_StrLen)nIndex), const_cast<ScDocument*>(pDocument),
                                 eConv) & SCA_VALID) == SCA_VALID) &&
                           ((rRange.aEnd.Parse( aUIString.Copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
                                 eConv) & SCA_VALID) == SCA_VALID);
+#if CHART_ADDRESS_CONV_WORKAROUND
                 if (!bResult && eConv != eConv)
                 {
                     bResult = ((rRange.aStart.Parse( aUIString.Copy(0, (xub_StrLen)nIndex), const_cast<ScDocument*>(pDocument),
@@ -538,6 +545,7 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
                               ((rRange.aEnd.Parse( aUIString.Copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
                                     eConv) & SCA_VALID) == SCA_VALID);
                 }
+#endif
             }
         }
     }
@@ -558,12 +566,10 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
     while( nOffset >= 0 )
     {
         ScRange* pRange = new ScRange;
-        if (  GetRangeFromString( *pRange, rRangeListStr, pDocument, eConv, nOffset, cSeperator, cQuote )
-           && (nOffset >= 0)
-           )
-            rRangeList.push_back( pRange );
+        if( GetRangeFromString( *pRange, rRangeListStr, pDocument, eConv, nOffset, cSeperator, cQuote ) && (nOffset >= 0) )
+            rRangeList.Insert( pRange, LIST_APPEND );
         else if (nOffset > -1)
-            bRet = false;
+            bRet = sal_False;
     }
     return bRet;
 }
@@ -581,7 +587,7 @@ sal_Bool ScRangeStringConverter::GetAreaFromString(
         sal_Unicode cQuote )
 {
     ScRange aScRange;
-    sal_Bool bResult(false);
+    sal_Bool bResult(sal_False);
     if( GetRangeFromString( aScRange, rRangeStr, pDocument, eConv, nOffset, cSeperator, cQuote ) && (nOffset >= 0) )
     {
         rArea.nTab = aScRange.aStart.Tab();
@@ -607,7 +613,7 @@ sal_Bool ScRangeStringConverter::GetAddressFromString(
         sal_Unicode cQuote )
 {
     ScAddress aScAddress;
-    sal_Bool bResult(false);
+    sal_Bool bResult(sal_False);
     if( GetAddressFromString( aScAddress, rAddressStr, pDocument, eConv, nOffset, cSeperator, cQuote ) && (nOffset >= 0) )
     {
         ScUnoConversion::FillApiAddress( rAddress, aScAddress );
@@ -626,7 +632,7 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
         sal_Unicode cQuote )
 {
     ScRange aScRange;
-    sal_Bool bResult(false);
+    sal_Bool bResult(sal_False);
     if( GetRangeFromString( aScRange, rRangeStr, pDocument, eConv, nOffset, cSeperator, cQuote ) && (nOffset >= 0) )
     {
         ScUnoConversion::FillApiRange( rRange, aScRange );
@@ -655,7 +661,7 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
             rRangeSeq[ rRangeSeq.getLength() - 1 ] = aRange;
         }
         else
-            bRet = false;
+            bRet = sal_False;
     }
     return bRet;
 }
@@ -715,9 +721,10 @@ void ScRangeStringConverter::GetStringFromRangeList(
     OUString sRangeListStr;
     if( pRangeList )
     {
-        for( size_t nIndex = 0, nCount = pRangeList->size(); nIndex < nCount; nIndex++ )
+        sal_Int32 nCount = pRangeList->Count();
+        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
         {
-            const ScRange* pRange = (*pRangeList)[nIndex];
+            const ScRange* pRange = pRangeList->GetObject( nIndex );
             if( pRange )
                 GetStringFromRange( sRangeListStr, *pRange, pDocument, eConv, cSeperator, sal_True, nFormatFlags );
         }
@@ -790,7 +797,7 @@ void ScRangeStringConverter::GetStringFromRangeList(
 }
 
 static void lcl_appendCellAddress(
-    rtl::OUStringBuffer& rBuf, ScDocument* pDoc, const ScAddress& rCell,
+    rtl::OUStringBuffer& rBuf, ScDocument* pDoc, const ScAddress& rCell, 
     const ScAddress::ExternalInfo& rExtInfo)
 {
     if (rExtInfo.mbExternal)
@@ -874,7 +881,7 @@ static void lcl_appendCellRangeAddress(
 void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, const OUString& rXMLRange, ScDocument* pDoc )
 {
     FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    const OUString aRangeSep = ScCompiler::GetNativeSymbol(ocSep);
+    const OUString aRangeSep = GetScCompilerNativeSymbol(ocSep);
     const sal_Unicode cSep = ' ';
     const sal_Unicode cQuote = '\'';
 
@@ -908,7 +915,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
                 OUStringBuffer aBuf = aBeginCell.copy(0, nDotPos);
 
                 if (nEndCellDotPos == 0)
-                {
+                {    
                     // workaround for old syntax (probably pre-chart2 age?)
                     // e.g. Sheet1.A1:.B2
                     aBuf.append(aEndCell);
@@ -921,14 +928,15 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
                 }
                 aEndCell = aBuf.makeStringAndClear();
             }
-
+                
             ScAddress::ExternalInfo aExtInfo1, aExtInfo2;
             ScAddress aCell1, aCell2;
             rtl::OUString aBuf;
-            sal_uInt16 nRet = aCell1.Parse(aBeginCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo1);
+            USHORT nRet = aCell1.Parse(aBeginCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo1);
             if ((nRet & SCA_VALID) != SCA_VALID)
             {
                 // first cell is invalid.
+#if CHART_ADDRESS_CONV_WORKAROUND
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
@@ -936,12 +944,16 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
                 if ((nRet & SCA_VALID) != SCA_VALID)
                     // first cell is really invalid.
                     continue;
+#else
+                continue;
+#endif
             }
 
             nRet = aCell2.Parse(aEndCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo2);
             if ((nRet & SCA_VALID) != SCA_VALID)
             {
                 // second cell is invalid.
+#if CHART_ADDRESS_CONV_WORKAROUND
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
@@ -949,6 +961,9 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
                 if ((nRet & SCA_VALID) != SCA_VALID)
                     // second cell is really invalid.
                     continue;
+#else
+                continue;
+#endif
             }
 
             if (aExtInfo1.mnFileId != aExtInfo2.mnFileId || aExtInfo1.mbExternal != aExtInfo2.mbExternal)
@@ -969,12 +984,16 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             // Chart always saves ranges using CONV_OOO convention.
             ScAddress::ExternalInfo aExtInfo;
             ScAddress aCell;
-            sal_uInt16 nRet = aCell.Parse(aToken, pDoc, ::formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+            USHORT nRet = aCell.Parse(aToken, pDoc, ::formula::FormulaGrammar::CONV_OOO, &aExtInfo);
             if ((nRet & SCA_VALID) != SCA_VALID)
             {
+#if CHART_ADDRESS_CONV_WORKAROUND
                 nRet = aCell.Parse(aToken, pDoc, eConv, &aExtInfo);
                 if ((nRet & SCA_VALID) != SCA_VALID)
                     continue;
+#else
+                continue;
+#endif
             }
 
             // Looks good!
@@ -996,18 +1015,18 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
 ScArea::ScArea( SCTAB tab,
                 SCCOL colStart, SCROW rowStart,
                 SCCOL colEnd,   SCROW rowEnd ) :
-        nTab     ( tab ),
-        nColStart( colStart ),  nRowStart( rowStart ),
-        nColEnd  ( colEnd ),    nRowEnd  ( rowEnd )
+        nTab	 ( tab ),
+        nColStart( colStart ),	nRowStart( rowStart ),
+        nColEnd	 ( colEnd ),	nRowEnd  ( rowEnd )
 {
 }
 
 //------------------------------------------------------------------------
 
 ScArea::ScArea( const ScArea& r ) :
-        nTab     ( r.nTab ),
-        nColStart( r.nColStart ),   nRowStart( r.nRowStart ),
-        nColEnd  ( r.nColEnd ),     nRowEnd  ( r.nRowEnd )
+        nTab	 ( r.nTab ),
+        nColStart( r.nColStart ),	nRowStart( r.nRowStart ),
+        nColEnd  ( r.nColEnd ),		nRowEnd  ( r.nRowEnd )
 {
 }
 
@@ -1015,75 +1034,71 @@ ScArea::ScArea( const ScArea& r ) :
 
 ScArea& ScArea::operator=( const ScArea& r )
 {
-    nTab        = r.nTab;
-    nColStart   = r.nColStart;
-    nRowStart   = r.nRowStart;
-    nColEnd     = r.nColEnd;
-    nRowEnd     = r.nRowEnd;
+    nTab		= r.nTab;
+    nColStart	= r.nColStart;
+    nRowStart	= r.nRowStart;
+    nColEnd		= r.nColEnd;
+    nRowEnd		= r.nRowEnd;
     return *this;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScArea::operator==( const ScArea& r ) const
+BOOL ScArea::operator==( const ScArea& r ) const
 {
-    return (   (nTab        == r.nTab)
-            && (nColStart   == r.nColStart)
-            && (nRowStart   == r.nRowStart)
-            && (nColEnd     == r.nColEnd)
-            && (nRowEnd     == r.nRowEnd) );
+    return (   (nTab		== r.nTab)
+            && (nColStart	== r.nColStart)
+            && (nRowStart	== r.nRowStart)
+            && (nColEnd		== r.nColEnd)
+            && (nRowEnd		== r.nRowEnd) );
 }
 
 //------------------------------------------------------------------------
 
 ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc ) :
-    pRangeName(pDoc->GetRangeName()),
-    pDBCollection(pDoc->GetDBCollection()),
-    bFirstPass(true),
-    nPos(0)
+    aStrNoName( ScGlobal::GetRscString(STR_DB_NONAME) )
 {
-    if (pRangeName)
-    {
-        maRNPos = pRangeName->begin();
-        maRNEnd = pRangeName->end();
-    }
+    pRangeName = pDoc->GetRangeName();
+    pDBCollection = pDoc->GetDBCollection();
+    nPos = 0;
+    bFirstPass = TRUE;
 }
 
-sal_Bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
+BOOL ScAreaNameIterator::Next( String& rName, ScRange& rRange )
 {
     for (;;)
     {
-        if ( bFirstPass )                                   // erst Bereichsnamen
+        if ( bFirstPass )									// erst Bereichsnamen
         {
-            if ( pRangeName && maRNPos != maRNEnd )
+            if ( pRangeName && nPos < pRangeName->GetCount() )
             {
-                const ScRangeData& rData = *maRNPos;
-                ++maRNPos;
-                bool bValid = rData.IsValidReference(rRange);
-                if (bValid)
+                ScRangeData* pData = (*pRangeName)[nPos++];
+                if ( pData && pData->IsValidReference(rRange) )
                 {
-                    rName = rData.GetName();
-                    return true;                            // gefunden
+                    rName = pData->GetName();
+                    return TRUE;							// gefunden
                 }
             }
             else
             {
-                bFirstPass = false;
+                bFirstPass = FALSE;
                 nPos = 0;
             }
         }
-
-        if ( !bFirstPass )                                  // dann DB-Bereiche
+        if ( !bFirstPass )									// dann DB-Bereiche
         {
             if ( pDBCollection && nPos < pDBCollection->GetCount() )
             {
                 ScDBData* pData = (*pDBCollection)[nPos++];
-                pData->GetArea( rRange );
-                rName = pData->GetName();
-                return sal_True;                            // gefunden
+                if (pData && pData->GetName() != aStrNoName)
+                {
+                    pData->GetArea( rRange );
+                    rName = pData->GetName();
+                    return TRUE;							// gefunden
+                }
             }
             else
-                return false;                               // gibt nichts mehr
+                return FALSE;								// gibt nichts mehr
         }
     }
 }

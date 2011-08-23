@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
     if you are not including ws2_32.lib in makefile.mk,  the including format will be like this:
 
     .IF "$(GUI)" == "WNT"
-    SHL1STDLIBS +=  $(SOLARLIBDIR)$/cppunit.lib
+    SHL1STDLIBS +=	$(SOLARLIBDIR)$/cppunit.lib
     SHL1STDLIBS +=  ws2_32.lib
     .ENDIF
 
@@ -55,15 +55,12 @@
     inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
  */
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <testshl/simpleheader.hxx>
 
 #include "sockethelper.hxx"
 
 using namespace osl;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 #define IP_PORT_MYPORT9  8897
 #define IP_PORT_MYPORT10 8898
@@ -108,8 +105,8 @@ namespace osl_DatagramSocket
 
     /** testing the methods:
         inline DatagramSocket(oslAddrFamily Family= osl_Socket_FamilyInet,
-                              oslProtocol   Protocol= osl_Socket_ProtocolIp,
-                              oslSocketType Type= osl_Socket_TypeDgram);
+                              oslProtocol	Protocol= osl_Socket_ProtocolIp,
+                              oslSocketType	Type= osl_Socket_TypeDgram);
     */
 
     class ctors : public CppUnit::TestFixture
@@ -152,7 +149,7 @@ protected:
 
 public:
     TalkerThread( ):
-        saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT9 )
+        saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT9 )
     {
     }
 
@@ -173,7 +170,7 @@ protected:
 
     void SAL_CALL run( )
     {
-        ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT10 );
+        ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT10 );
         dsSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
         if ( dsSocket.bind( saLocalSocketAddr ) == sal_False )
         {
@@ -181,11 +178,8 @@ protected:
             return;
         }
         //blocking mode: default
-#if !SILENT_TEST
-        sal_Int32 nRecv =
-#endif
-            dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr); //strlen( pTestString2 ) + 1
-        t_print("After recvFrom, nRecv is %d\n", (int) nRecv);
+        sal_Int32 nRecv = dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr); //strlen( pTestString2 ) + 1
+        t_print("After recvFrom, nRecv is %d\n", nRecv);
     }
 
     void SAL_CALL onTerminated( )
@@ -195,7 +189,7 @@ protected:
 public:
     sal_Char pRecvBuffer[30];
     ListenerThread( ):
-        saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT10 )
+        saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT10 )
     {
         pRecvBuffer[0] = '\0';
     }
@@ -221,7 +215,7 @@ public:
 
         void sr_001()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT9 );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT9 );
             ::osl::DatagramSocket dsSocket;
             dsSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
             dsSocket.bind( saLocalSocketAddr );
@@ -241,7 +235,7 @@ public:
 
         void sr_002()
         {
-            ::osl::SocketAddr saListenSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT10 );
+            ::osl::SocketAddr saListenSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT10 );
             ::osl::DatagramSocket dsSocket;
 
             //listener thread construct a DatagramSocket, recvFrom waiting for data, then main thread sendto data
@@ -266,7 +260,7 @@ public:
         //sendTo error, return -1; recvFrom error, return -1
         void sr_003()
         {
-            ::osl::SocketAddr saListenSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.345.67.89")), IP_PORT_MYPORT10 );
+            ::osl::SocketAddr saListenSocketAddr( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT10 );
             ::osl::DatagramSocket dsSocket;
             // Transport endpoint is not connected
             sal_Int32 nSend = dsSocket.sendTo( saListenSocketAddr, pTestString2, strlen( pTestString2 ) + 1 );
@@ -276,8 +270,8 @@ public:
 
         void sr_004()
         {
-            ::osl::SocketAddr saListenSocketAddr1( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.345.67.89")), IP_PORT_MYPORT10 );
-            ::osl::SocketAddr saListenSocketAddr2( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_MYPORT10 );
+            ::osl::SocketAddr saListenSocketAddr1( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT10 );
+            ::osl::SocketAddr saListenSocketAddr2( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_MYPORT10 );
             ::osl::DatagramSocket dsSocket;
 
             dsSocket.enableNonBlockingMode( sal_True );
@@ -306,8 +300,8 @@ public:
 
 // -----------------------------------------------------------------------------
 
-CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::ctors);
-CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DatagramSocket::ctors, "osl_DatagramSocket");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom, "osl_DatagramSocket");
 
 } // namespace osl_DatagramSocket
 
@@ -315,6 +309,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom);
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-CPPUNIT_PLUGIN_IMPLEMENT();
+NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

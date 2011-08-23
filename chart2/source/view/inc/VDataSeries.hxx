@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,14 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <cppuhelper/weakref.hxx>
 
+//.............................................................................
 namespace chart
 {
+//.............................................................................
 
+//-----------------------------------------------------------------------------
+/**
+*/
 class VDataSequence
 {
 public:
@@ -77,10 +82,6 @@ public:
         getModel() const;
 
     void setCategoryXAxis();
-    void setXValues( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence >& xValues );
-    void setXValuesIfNone( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence >& xValues );
     void setParticle( const rtl::OUString& rSeriesParticle );
     void setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex );
     void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
@@ -142,15 +143,16 @@ public:
     sal_Int32 getStartingAngle() const;
 
     void setRoleOfSequenceForDataLabelNumberFormatDetection( const rtl::OUString& rRole );
-
+    
     //this is only temporarily here for area chart:
     ::com::sun::star::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;
     sal_Int32   m_nPolygonIndex;
     double m_fLogicMinX;
     double m_fLogicMaxX;
-
+    //
     //this is here for deep stacking:
     double m_fLogicZPos;//from 0 to series count -1
+    //
 
     rtl::OUString       getCID() const;
     rtl::OUString       getSeriesParticle() const;
@@ -251,12 +253,15 @@ private: //member
                                                     m_apSymbolProperties_InvisibleSymbolForSelection;
     mutable sal_Int32                               m_nCurrentAttributedPoint;
     ::com::sun::star::awt::Size                     m_aReferenceSize;
+    //
 
     sal_Int32   m_nMissingValueTreatment;
     bool        m_bAllowPercentValueInDataLabel;
 };
 
+//.............................................................................
 } //namespace chart
+//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

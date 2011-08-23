@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,10 +92,10 @@ class NavigationBar
                             E_CeGatheringType   i_eCeGatheringType );
                         ~NavigationBar();
 
-    void                MakeSubRow(
-                            const char *        i_sTitle );
-    void                AddItem(                /// Items are added to last made sub-row.
-                            const char *        i_sName,
+    void	  	        MakeSubRow(
+                            const char *		i_sTitle );
+    void	  	        AddItem(                /// Items are added to last made sub-row.
+                            const char *		i_sName,
                             const char *        i_sLink,
                             bool                i_bValid );
     /** This writes the main bar and the pSubRowTable to o_rOut.

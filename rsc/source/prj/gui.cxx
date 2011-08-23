@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,18 +35,22 @@
 #include <rscrsc.hxx>
 #include <rscdb.hxx>
 
-/*************** G l o b a l e   V a r i a b l e n **********************/
+/*************** G l o b a l e	 V a r i a b l e n **********************/
 static RscCompiler * pRscCompiler = NULL;
 /****************************************************************/
-/*                                                              */
-/*  Function    :   ExitProgram()                               */
-/*                                                              */
-/*  Description :   Gibt die Temporaeren Dateien frei.          */
+/*																*/
+/*	Function	:	ExitProgram()								*/
+/*																*/
+/*	Description :	Gibt die Temporaeren Dateien frei.			*/
 /****************************************************************/
-#if defined( UNX ) || defined ( GCC ) || defined(__MINGW32__)
+#if defined( UNX ) || ( defined( OS2 ) && ( defined( TCPP ) || defined ( GCC )) ) ||  defined (WTC) || defined (MTW) || defined(__MINGW32__)
         void ExitProgram( void ){
 #else
+#if defined( CSET )
+    void _Optlink ExitProgram( void ){
+#else
     void cdecl ExitProgram( void ){
+#endif
 #endif
     if( pRscCompiler )
         delete pRscCompiler;
@@ -68,17 +72,25 @@ RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 #ifndef UNX
+#ifdef CSET
     atexit( ExitProgram );
+#else
+    atexit( ExitProgram );
+#endif
 #endif
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "debugging %s\n", argv[0] );
 #endif
 
-    ERRTYPE     aError;
+    ERRTYPE 	aError;
 
     InitRscCompiler();
-    RscError*   pErrHdl    = new RscError( lcl_determineVerbosity( argc, argv ) );
+    RscError*	pErrHdl    = new RscError( lcl_determineVerbosity( argc, argv ) );
+#ifdef MTW
+    RscCmdLine* pCmdLine   = new RscCmdLine( argc, (char **)argv, pErrHdl );
+#else
     RscCmdLine* pCmdLine   = new RscCmdLine( argc, argv, pErrHdl );
+#endif
     RscTypCont* pTypCont   = new RscTypCont( pErrHdl,
                                              pCmdLine->nByteOrder,
                                              pCmdLine->aPath,

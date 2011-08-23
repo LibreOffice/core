@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,20 +40,20 @@
 
 // =======================================================================
 
-#define IMAGEBUTTON_BORDER_OFF1     11
-#define IMAGEBUTTON_BORDER_OFF2     16
+#define IMAGEBUTTON_BORDER_OFF1 	11
+#define IMAGEBUTTON_BORDER_OFF2 	16
 
 // =======================================================================
 
 void MenuButton::ImplInitMenuButtonData()
 {
-    mnDDStyle       = PUSHBUTTON_DROPDOWN_MENUBUTTON;
+    mnDDStyle		= PUSHBUTTON_DROPDOWN_MENUBUTTON;
 
-    mpMenuTimer     = NULL;
-    mpMenu          = NULL;
-    mpOwnMenu       = NULL;
-    mnCurItemId     = 0;
-    mnMenuMode      = 0;
+    mpMenuTimer 	= NULL;
+    mpMenu			= NULL;
+    mpOwnMenu		= NULL;
+    mnCurItemId 	= 0;
+    mnMenuMode		= 0;
 }
 
 // -----------------------------------------------------------------------
@@ -77,10 +77,19 @@ void MenuButton::ImplExecuteMenu()
         Point aPos( 0, 1 );
         Size aSize = GetSizePixel();
         Rectangle aRect( aPos, aSize );
-        SetPressed( sal_True );
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        if ( !((GetStyle() & (WB_RECTSTYLE | WB_SMALLSTYLE)) ||
+             !(rStyleSettings.GetOptions() & STYLE_OPTION_MACSTYLE)) )
+        {
+            aRect.Left()	+= 2;
+            aRect.Top() 	+= 2;
+            aRect.Right()	-= 2;
+            aRect.Bottom()	-= 2;
+        }
+        SetPressed( TRUE );
         EndSelection();
         mnCurItemId = mpMenu->Execute( this, aRect, POPUPMENU_EXECUTE_DOWN );
-        SetPressed( sal_False );
+        SetPressed( FALSE );
         if ( mnCurItemId )
         {
             Select();
@@ -119,7 +128,7 @@ void MenuButton::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    sal_uLong nObjMask = ReadLongRes();
+    ULONG nObjMask = ReadLongRes();
 
     if ( RSCMENUBUTTON_MENU & nObjMask )
     {
@@ -171,10 +180,10 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
                 mpMenuTimer = new Timer;
                 mpMenuTimer->SetTimeoutHdl( LINK( this, MenuButton, ImplMenuTimeoutHdl ) );
             }
-
+    
             mpMenuTimer->SetTimeout( GetSettings().GetMouseSettings().GetActionDelay() );
             mpMenuTimer->Start();
-
+    
             PushButton::MouseButtonDown( rMEvt );
             bExecute = false;
         }
@@ -195,7 +204,7 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 void MenuButton::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();
-    sal_uInt16 nCode = aKeyCode.GetCode();
+    USHORT nCode = aKeyCode.GetCode();
     if ( (nCode == KEY_DOWN) && aKeyCode.IsMod2() )
         ImplExecuteMenu();
     else if ( !(mnMenuMode & MENUBUTTON_MENUMODE_TIMED) &&
@@ -222,7 +231,7 @@ void MenuButton::Select()
 
 // -----------------------------------------------------------------------
 
-void MenuButton::SetMenuMode( sal_uInt16 nMode )
+void MenuButton::SetMenuMode( USHORT nMode )
 {
     // Fuer die 5.1-Auslieferung besser noch nicht inline, ansonsten kann
     // diese Funktion zur 6.0 inline werden

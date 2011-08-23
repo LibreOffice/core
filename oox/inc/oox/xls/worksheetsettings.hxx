@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,8 @@
 #ifndef OOX_XLS_WORKSHEETSETTINGS_HXX
 #define OOX_XLS_WORKSHEETSETTINGS_HXX
 
-#include "oox/xls/richstring.hxx"
 #include "oox/xls/worksheethelper.hxx"
+#include "oox/xls/richstring.hxx"
 
 namespace oox {
 namespace xls {
@@ -99,18 +99,16 @@ public:
     void                importPhoneticPr( const AttributeList& rAttribs );
 
     /** Imports sheet properties from the SHEETPR record. */
-    void                importSheetPr( SequenceInputStream& rStrm );
+    void                importSheetPr( RecordInputStream& rStrm );
     /** Imports sheet properties from the CHARTSHEETPR record. */
-    void                importChartSheetPr( SequenceInputStream& rStrm );
+    void                importChartSheetPr( RecordInputStream& rStrm );
     /** Imports sheet protection settings from the SHEETPROTECTION record. */
-    void                importSheetProtection( SequenceInputStream& rStrm );
+    void                importSheetProtection( RecordInputStream& rStrm );
     /** Imports chart sheet protection settings from the CHARTPROTECTION record. */
-    void                importChartProtection( SequenceInputStream& rStrm );
+    void                importChartProtection( RecordInputStream& rStrm );
     /** Imports phonetic settings from the PHONETICPR record. */
-    void                importPhoneticPr( SequenceInputStream& rStrm );
+    void                importPhoneticPr( RecordInputStream& rStrm );
 
-    /** Imports sheet properties from a SHEETEXT record. */
-    void                importSheetExt( BiffInputStream& rStrm );
     /** Imports sheet properties from a SHEETPR record. */
     void                importSheetPr( BiffInputStream& rStrm );
     /** Imports protection status from the PROTECT record. */

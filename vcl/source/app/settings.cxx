@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <svsys.h>
 #include "tools/debug.hxx"
 #include "i18npool/mslangid.hxx"
 #include "vcl/svapp.hxx"
@@ -48,7 +47,14 @@
 #include "unotools/confignode.hxx"
 #include <unotools/syslocaleoptions.hxx>
 
-using ::rtl::OUString;
+#ifdef WNT
+#include "tools/prewin.h"
+#include <windows.h>
+#include "tools/postwin.h"
+#endif
+
+using namespace rtl;
+
 // =======================================================================
 
 DBG_NAME( AllSettings )
@@ -144,18 +150,18 @@ void MachineSettings::CopyData()
 
 // -----------------------------------------------------------------------
 
-sal_Bool MachineSettings::operator ==( const MachineSettings& rSet ) const
+BOOL MachineSettings::operator ==( const MachineSettings& rSet ) const
 {
     if ( mpData == rSet.mpData )
-        return sal_True;
+        return TRUE;
 
     if ( (mpData->mnOptions                     == rSet.mpData->mnOptions)                  &&
          (mpData->mnScreenOptions               == rSet.mpData->mnScreenOptions)            &&
          (mpData->mnPrintOptions                == rSet.mpData->mnPrintOptions)             &&
          (mpData->mnScreenRasterFontDeviation   == rSet.mpData->mnScreenRasterFontDeviation) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // =======================================================================
@@ -175,7 +181,7 @@ ImplMouseData::ImplMouseData()
     mnDragLinkCode              = KEY_SHIFT | KEY_MOD1;
     mnContextMenuCode           = MOUSE_RIGHT;
     mnContextMenuClicks         = 1;
-    mbContextMenuDown           = sal_True;
+    mbContextMenuDown           = TRUE;
     mnMiddleButtonAction        = MOUSE_MIDDLE_AUTOSCROLL;
     mnScrollRepeat              = 100;
     mnButtonStartRepeat         = 370;
@@ -277,10 +283,10 @@ void MouseSettings::CopyData()
 
 // -----------------------------------------------------------------------
 
-sal_Bool MouseSettings::operator ==( const MouseSettings& rSet ) const
+BOOL MouseSettings::operator ==( const MouseSettings& rSet ) const
 {
     if ( mpData == rSet.mpData )
-        return sal_True;
+        return TRUE;
 
     if ( (mpData->mnOptions             == rSet.mpData->mnOptions)              &&
          (mpData->mnDoubleClkTime       == rSet.mpData->mnDoubleClkTime)        &&
@@ -303,9 +309,9 @@ sal_Bool MouseSettings::operator ==( const MouseSettings& rSet ) const
          (mpData->mnMenuDelay           == rSet.mpData->mnMenuDelay)            &&
          (mpData->mnFollow              == rSet.mpData->mnFollow)               &&
          (mpData->mnWheelBehavior       == rSet.mpData->mnWheelBehavior ) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // =======================================================================
@@ -387,15 +393,15 @@ void KeyboardSettings::CopyData()
 
 // -----------------------------------------------------------------------
 
-sal_Bool KeyboardSettings::operator ==( const KeyboardSettings& rSet ) const
+BOOL KeyboardSettings::operator ==( const KeyboardSettings& rSet ) const
 {
     if ( mpData == rSet.mpData )
-        return sal_True;
+        return TRUE;
 
     if ( (mpData->mnOptions             == rSet.mpData->mnOptions) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // =======================================================================
@@ -414,20 +420,21 @@ ImplStyleData::ImplStyleData()
     mnCursorBlinkTime           = STYLE_CURSOR_NOBLINKTIME;
     mnScreenZoom                = 100;
     mnScreenFontZoom            = 100;
+    mnRadioButtonStyle          = 0;
+    mnCheckBoxStyle             = 0;
+    mnPushButtonStyle           = 0;
+    mnTabControlStyle           = 0;
     mnLogoDisplayTime           = LOGO_DISPLAYTIME_STARTTIME;
-    mnDragFullOptions           = DRAGFULL_OPTION_WINDOWMOVE | DRAGFULL_OPTION_WINDOWSIZE |
-                                  DRAGFULL_OPTION_OBJECTMOVE | DRAGFULL_OPTION_OBJECTSIZE |
-                                  DRAGFULL_OPTION_DOCKING    | DRAGFULL_OPTION_SPLIT      |
-                                  DRAGFULL_OPTION_SCROLL;
+    mnDragFullOptions           = 0;
     mnAnimationOptions          = 0;
     mnSelectionOptions          = 0;
     mnDisplayOptions            = 0;
     mnOptions                   = 0;
-    mnAutoMnemonic              = 1;
-    mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
-    mnSymbolsStyle              = STYLE_SYMBOLS_AUTO;
-    mnUseImagesInMenus          = STYLE_MENUIMAGES_AUTO;
-    mnPreferredSymbolsStyle         = STYLE_SYMBOLS_AUTO;
+    mnAutoMnemonic				= 1;
+    mnToolbarIconSize			= STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
+    mnSymbolsStyle				= STYLE_SYMBOLS_AUTO;
+    mnUseImagesInMenus			= STYLE_MENUIMAGES_AUTO;
+    mnPreferredSymbolsStyle			= STYLE_SYMBOLS_AUTO;
     mpFontOptions              = NULL;
 
     SetStandardStyles();
@@ -515,23 +522,27 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnCursorBlinkTime           = rData.mnCursorBlinkTime;
     mnScreenZoom                = rData.mnScreenZoom;
     mnScreenFontZoom            = rData.mnScreenFontZoom;
+    mnRadioButtonStyle          = rData.mnRadioButtonStyle;
+    mnCheckBoxStyle             = rData.mnCheckBoxStyle;
+    mnPushButtonStyle           = rData.mnPushButtonStyle;
+    mnTabControlStyle           = rData.mnTabControlStyle;
     mnLogoDisplayTime           = rData.mnLogoDisplayTime;
     mnDragFullOptions           = rData.mnDragFullOptions;
     mnAnimationOptions          = rData.mnAnimationOptions;
     mnSelectionOptions          = rData.mnSelectionOptions;
     mnDisplayOptions            = rData.mnDisplayOptions;
     mnOptions                   = rData.mnOptions;
-    mnHighContrast              = rData.mnHighContrast;
-    mnUseSystemUIFonts          = rData.mnUseSystemUIFonts;
-    mnUseFlatBorders            = rData.mnUseFlatBorders;
-    mnUseFlatMenues             = rData.mnUseFlatMenues;
-    mnAutoMnemonic              = rData.mnAutoMnemonic;
-    mnUseImagesInMenus          = rData.mnUseImagesInMenus;
-    mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
-    mnSkipDisabledInMenus       = rData.mnSkipDisabledInMenus;
-    mnToolbarIconSize           = rData.mnToolbarIconSize;
-    mnSymbolsStyle              = rData.mnSymbolsStyle;
-    mnPreferredSymbolsStyle         = rData.mnPreferredSymbolsStyle;
+    mnHighContrast				= rData.mnHighContrast;
+    mnUseSystemUIFonts			= rData.mnUseSystemUIFonts;
+    mnUseFlatBorders 			= rData.mnUseFlatBorders;
+    mnUseFlatMenues 			= rData.mnUseFlatMenues;
+    mnAutoMnemonic				= rData.mnAutoMnemonic;
+    mnUseImagesInMenus			= rData.mnUseImagesInMenus;
+    mbPreferredUseImagesInMenus	= rData.mbPreferredUseImagesInMenus;
+    mnSkipDisabledInMenus		= rData.mnSkipDisabledInMenus;
+    mnToolbarIconSize			= rData.mnToolbarIconSize;
+    mnSymbolsStyle				= rData.mnSymbolsStyle;
+    mnPreferredSymbolsStyle			= rData.mnPreferredSymbolsStyle;
     mpFontOptions               = rData.mpFontOptions;
 }
 
@@ -604,19 +615,25 @@ void ImplStyleData::SetStandardStyles()
     maLinkColor                 = Color( COL_BLUE );
     maVisitedLinkColor          = Color( 0x00, 0x00, 0xCC );
     maHighlightLinkColor        = Color( COL_LIGHTBLUE );
-    maFontColor                 = Color( COL_BLACK );
+    maFontColor					= Color( COL_BLACK );
 
+    mnRadioButtonStyle         &= ~STYLE_RADIOBUTTON_STYLE;
+    mnCheckBoxStyle            &= ~STYLE_CHECKBOX_STYLE;
+    mnPushButtonStyle          &= ~STYLE_PUSHBUTTON_STYLE;
+    mnTabControlStyle           = 0;
+
+    mnOptions                  &= ~(STYLE_OPTION_SYSTEMSTYLE | STDSYS_STYLE);
     mnBorderSize                = 1;
     mnTitleHeight               = 18;
     mnFloatTitleHeight          = 13;
     mnTearOffTitleHeight        = 8;
     mnMenuBarHeight             = 14;
-    mnHighContrast              = 0;
-    mnUseSystemUIFonts          = 1;
-    mnUseFlatBorders            = 0;
-    mnUseFlatMenues             = 0;
-    mbPreferredUseImagesInMenus         = sal_True;
-    mnSkipDisabledInMenus       = (sal_uInt16)sal_False;
+    mnHighContrast				= 0;
+    mnUseSystemUIFonts			= 1;
+    mnUseFlatBorders 			= 0;
+    mnUseFlatMenues 			= 0;
+    mbPreferredUseImagesInMenus	= TRUE;
+    mnSkipDisabledInMenus		= (USHORT)FALSE;
 
     Gradient aGrad( GRADIENT_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
     maWorkspaceGradient = Wallpaper( aGrad );
@@ -666,13 +683,13 @@ void StyleSettings::Set3DColors( const Color& rColor )
         mpData->maShadowColor   = rColor;
         mpData->maLightColor.IncreaseLuminance( 64 );
         mpData->maShadowColor.DecreaseLuminance( 64 );
-        sal_uLong   nRed    = mpData->maLightColor.GetRed();
-        sal_uLong   nGreen  = mpData->maLightColor.GetGreen();
-        sal_uLong   nBlue   = mpData->maLightColor.GetBlue();
-        nRed   += (sal_uLong)(mpData->maShadowColor.GetRed());
-        nGreen += (sal_uLong)(mpData->maShadowColor.GetGreen());
-        nBlue  += (sal_uLong)(mpData->maShadowColor.GetBlue());
-        mpData->maCheckedColor = Color( (sal_uInt8)(nRed/2), (sal_uInt8)(nGreen/2), (sal_uInt8)(nBlue/2) );
+        ULONG   nRed    = mpData->maLightColor.GetRed();
+        ULONG   nGreen  = mpData->maLightColor.GetGreen();
+        ULONG   nBlue   = mpData->maLightColor.GetBlue();
+        nRed   += (ULONG)(mpData->maShadowColor.GetRed());
+        nGreen += (ULONG)(mpData->maShadowColor.GetGreen());
+        nBlue  += (ULONG)(mpData->maShadowColor.GetBlue());
+        mpData->maCheckedColor = Color( (BYTE)(nRed/2), (BYTE)(nGreen/2), (BYTE)(nBlue/2) );
     }
     else
     {
@@ -684,7 +701,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
 
 // -----------------------------------------------------------------------
 
-::rtl::OUString StyleSettings::ImplSymbolsStyleToName( sal_uLong nStyle ) const
+::rtl::OUString StyleSettings::ImplSymbolsStyleToName( ULONG nStyle ) const
 {
     switch ( nStyle )
     {
@@ -703,7 +720,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
 
 // -----------------------------------------------------------------------
 
-sal_uLong StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const
+ULONG StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const
 {
     if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default")) )
         return STYLE_SYMBOLS_DEFAULT;
@@ -747,22 +764,22 @@ void StyleSettings::SetPreferredSymbolsStyleName( const ::rtl::OUString &rName )
 
 // -----------------------------------------------------------------------
 
-sal_uLong StyleSettings::GetCurrentSymbolsStyle() const
+ULONG StyleSettings::GetCurrentSymbolsStyle() const
 {
     // style selected in Tools -> Options... -> OpenOffice.org -> View
-    sal_uLong nStyle = GetSymbolsStyle();
+    ULONG nStyle = GetSymbolsStyle();
 
     if ( nStyle == STYLE_SYMBOLS_AUTO || ( !CheckSymbolStyle (nStyle) ) )
     {
         // the preferred style can be read from the desktop setting by the desktop native widgets modules
-        sal_uLong nPreferredStyle = GetPreferredSymbolsStyle();
+        ULONG nPreferredStyle = GetPreferredSymbolsStyle();
 
         if ( nPreferredStyle == STYLE_SYMBOLS_AUTO || ( !CheckSymbolStyle (nPreferredStyle) ) )
         {
 
             // use a hardcoded desktop-specific fallback if no preferred style has been detected
             static bool sbFallbackDesktopChecked = false;
-            static sal_uLong snFallbackDesktopStyle = STYLE_SYMBOLS_DEFAULT;
+            static ULONG snFallbackDesktopStyle = STYLE_SYMBOLS_DEFAULT;
 
             if ( !sbFallbackDesktopChecked )
             {
@@ -784,10 +801,10 @@ sal_uLong StyleSettings::GetCurrentSymbolsStyle() const
 
 // -----------------------------------------------------------------------
 
-sal_uLong StyleSettings::GetAutoSymbolsStyle() const
+ULONG StyleSettings::GetAutoSymbolsStyle() const
 {
     const ::rtl::OUString&      rDesktopEnvironment = Application::GetDesktopEnvironment();
-    sal_uLong                       nRet = STYLE_SYMBOLS_DEFAULT;
+    ULONG                       nRet = STYLE_SYMBOLS_DEFAULT;
     bool                        bCont = true;
 
     try
@@ -818,9 +835,9 @@ sal_uLong StyleSettings::GetAutoSymbolsStyle() const
     // falback to any existing style
     if ( ! CheckSymbolStyle (nRet) )
     {
-        for ( sal_uLong n = 0 ; n <= STYLE_SYMBOLS_THEMES_MAX  ; n++ )
+        for ( ULONG n = 0 ; n <= STYLE_SYMBOLS_THEMES_MAX  ; n++ )
         {
-            sal_uLong nStyleToCheck = n;
+            ULONG nStyleToCheck = n;
 
             // auto is not a real theme => can't be fallback
             if ( nStyleToCheck == STYLE_SYMBOLS_AUTO )
@@ -845,7 +862,7 @@ sal_uLong StyleSettings::GetAutoSymbolsStyle() const
 
 // -----------------------------------------------------------------------
 
-bool StyleSettings::CheckSymbolStyle( sal_uLong nStyle ) const
+bool StyleSettings::CheckSymbolStyle( ULONG nStyle ) const
 {
     if ( nStyle == STYLE_SYMBOLS_INDUSTRIAL )
         return false; // industrial is dead
@@ -856,15 +873,15 @@ bool StyleSettings::CheckSymbolStyle( sal_uLong nStyle ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool StyleSettings::GetUseImagesInMenus() const
+BOOL StyleSettings::GetUseImagesInMenus() const
 {
     // icon mode selected in Tools -> Options... -> OpenOffice.org -> View
-    sal_uInt16 nStyle = mpData->mnUseImagesInMenus;
+    USHORT nStyle = mpData->mnUseImagesInMenus;
 
     if ( nStyle == STYLE_MENUIMAGES_AUTO )
         return GetPreferredUseImagesInMenus();
 
-    return (sal_Bool)nStyle;
+    return (BOOL)nStyle;
 }
 
 // -----------------------------------------------------------------------
@@ -877,12 +894,40 @@ void StyleSettings::SetStandardStyles()
 
 // -----------------------------------------------------------------------
 
+void StyleSettings::SetStandardWinStyles()
+{
+    return; // no more style changes since NWF
+}
+
+// -----------------------------------------------------------------------
+
+void StyleSettings::SetStandardOS2Styles()
+{
+    return; // no more style changes since NWF
+}
+
+// -----------------------------------------------------------------------
+
+void StyleSettings::SetStandardMacStyles()
+{
+    return; // no more style changes since NWF
+}
+
+// -----------------------------------------------------------------------
+
+void StyleSettings::SetStandardUnixStyles()
+{
+    return; // no more style changes since NWF
+}
+
+// -----------------------------------------------------------------------
+
 Color StyleSettings::GetFaceGradientColor() const
 {
     // compute a brighter face color that can be used in gradients
     // for a convex look (eg toolbars)
 
-    sal_uInt16 h, s, b;
+    USHORT h, s, b;
     GetFaceColor().RGBtoHSB( h, s, b );
     if( s > 1) s=1;
     if( b < 98) b=98;
@@ -894,7 +939,7 @@ Color StyleSettings::GetFaceGradientColor() const
 Color StyleSettings::GetSeparatorColor() const
 {
     // compute a brighter shadow color for separators (used in toolbars or between menubar and toolbars on Windows XP)
-    sal_uInt16 h, s, b;
+    USHORT h, s, b;
     GetShadowColor().RGBtoHSB( h, s, b );
     b += b/4;
     s -= s/4;
@@ -935,15 +980,15 @@ void StyleSettings::CopyData()
 
 // -----------------------------------------------------------------------
 
-inline sal_Bool ImplIsBackOrWhite( const Color& rColor )
+inline BOOL ImplIsBackOrWhite( const Color& rColor )
 {
-    sal_uInt8 nLuminance = rColor.GetLuminance();
+    UINT8 nLuminance = rColor.GetLuminance();
     return ( nLuminance < 8 ) || ( nLuminance > 250 );
 }
 
-sal_Bool StyleSettings::IsHighContrastBlackAndWhite() const
+BOOL StyleSettings::IsHighContrastBlackAndWhite() const
 {
-    sal_Bool bBWOnly = sal_True;
+    BOOL bBWOnly = TRUE;
 
     // Only use B&W if fully B&W, like on GNOME.
     // Some colors like CheckedColor and HighlightColor are not B&W in Windows Standard HC Black,
@@ -952,44 +997,44 @@ sal_Bool StyleSettings::IsHighContrastBlackAndWhite() const
     // Unfortunately, GNOME uses a very very dark color (0x000033) instead of BLACK (0x000000)
 
     if ( !ImplIsBackOrWhite( GetFaceColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
     else if ( !ImplIsBackOrWhite( GetHighlightTextColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
     else if ( !ImplIsBackOrWhite( GetWindowColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
     else if ( !ImplIsBackOrWhite( GetWindowTextColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
     else if ( !ImplIsBackOrWhite( GetButtonTextColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
     else if ( !ImplIsBackOrWhite( GetButtonTextColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
     else if ( !ImplIsBackOrWhite( GetGroupTextColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
     else if ( !ImplIsBackOrWhite( GetLabelTextColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
     else if ( !ImplIsBackOrWhite( GetDialogColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
     else if ( !ImplIsBackOrWhite( GetFieldColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
     else if ( !ImplIsBackOrWhite( GetMenuColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
     else if ( !ImplIsBackOrWhite( GetMenuBarColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
     else if ( !ImplIsBackOrWhite( GetMenuHighlightColor() ) )
-        bBWOnly = sal_False;
+        bBWOnly = FALSE;
 
     return bBWOnly;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
+BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
 {
     if ( mpData == rSet.mpData )
-        return sal_True;
+        return TRUE;
 
     if ( (mpData->mnOptions                 == rSet.mpData->mnOptions)                  &&
-         (mpData->mnAutoMnemonic            == rSet.mpData->mnAutoMnemonic)             &&
+         (mpData->mnAutoMnemonic			== rSet.mpData->mnAutoMnemonic)				&&
          (mpData->mnLogoDisplayTime         == rSet.mpData->mnLogoDisplayTime)          &&
          (mpData->mnDragFullOptions         == rSet.mpData->mnDragFullOptions)          &&
          (mpData->mnAnimationOptions        == rSet.mpData->mnAnimationOptions)         &&
@@ -1011,12 +1056,14 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnAntialiasedMin          == rSet.mpData->mnAntialiasedMin)           &&
          (mpData->mnScreenZoom              == rSet.mpData->mnScreenZoom)               &&
          (mpData->mnScreenFontZoom          == rSet.mpData->mnScreenFontZoom)           &&
-         (mpData->mnHighContrast            == rSet.mpData->mnHighContrast)             &&
-         (mpData->mnUseSystemUIFonts        == rSet.mpData->mnUseSystemUIFonts)         &&
-         (mpData->mnUseFlatBorders          == rSet.mpData->mnUseFlatBorders)           &&
-         (mpData->mnUseFlatMenues           == rSet.mpData->mnUseFlatMenues)            &&
-         (mpData->mnSymbolsStyle            == rSet.mpData->mnSymbolsStyle)             &&
-         (mpData->mnPreferredSymbolsStyle   == rSet.mpData->mnPreferredSymbolsStyle)    &&
+         (mpData->mnRadioButtonStyle        == rSet.mpData->mnRadioButtonStyle)         &&
+         (mpData->mnCheckBoxStyle           == rSet.mpData->mnCheckBoxStyle)            &&
+         (mpData->mnPushButtonStyle         == rSet.mpData->mnPushButtonStyle)          &&
+         (mpData->mnTabControlStyle         == rSet.mpData->mnTabControlStyle)          &&
+         (mpData->mnHighContrast			== rSet.mpData->mnHighContrast)             &&
+         (mpData->mnUseSystemUIFonts		== rSet.mpData->mnUseSystemUIFonts)         &&
+         (mpData->mnUseFlatBorders   		== rSet.mpData->mnUseFlatBorders)           &&
+         (mpData->mnUseFlatMenues   		== rSet.mpData->mnUseFlatMenues)            &&
          (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&
          (mpData->maCheckedColor            == rSet.mpData->maCheckedColor)             &&
          (mpData->maLightColor              == rSet.mpData->maLightColor)               &&
@@ -1073,14 +1120,14 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maRadioCheckFont          == rSet.mpData->maRadioCheckFont)           &&
          (mpData->maPushButtonFont          == rSet.mpData->maPushButtonFont)           &&
          (mpData->maFieldFont               == rSet.mpData->maFieldFont)                &&
-         (mpData->maIconFont                == rSet.mpData->maIconFont)                 &&
-         (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus)         &&
+         (mpData->maIconFont                == rSet.mpData->maIconFont)					&&
+         (mpData->mnUseImagesInMenus		== rSet.mpData->mnUseImagesInMenus)			&&
          (mpData->mbPreferredUseImagesInMenus == rSet.mpData->mbPreferredUseImagesInMenus) &&
-         (mpData->mnSkipDisabledInMenus     == rSet.mpData->mnSkipDisabledInMenus)      &&
-         (mpData->maFontColor               == rSet.mpData->maFontColor ))
-        return sal_True;
+         (mpData->mnSkipDisabledInMenus		== rSet.mpData->mnSkipDisabledInMenus)		&&
+         (mpData->maFontColor				== rSet.mpData->maFontColor ))
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // =======================================================================
@@ -1088,10 +1135,10 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
 ImplMiscData::ImplMiscData()
 {
     mnRefCount                  = 1;
-    mnEnableATT                 = sal::static_int_cast<sal_uInt16>(~0U);
-    mnDisablePrinting           = sal::static_int_cast<sal_uInt16>(~0U);
+    mnEnableATT					= sal::static_int_cast<USHORT>(~0U);
+    mnDisablePrinting			= sal::static_int_cast<USHORT>(~0U);
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
-    mbEnableLocalizedDecimalSep = (pEnv != NULL) ? sal_True : sal_False;
+    mbEnableLocalizedDecimalSep = (pEnv != NULL) ? TRUE : FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1099,8 +1146,8 @@ ImplMiscData::ImplMiscData()
 ImplMiscData::ImplMiscData( const ImplMiscData& rData )
 {
     mnRefCount                  = 1;
-    mnEnableATT                 = rData.mnEnableATT;
-    mnDisablePrinting           = rData.mnDisablePrinting;
+    mnEnableATT					= rData.mnEnableATT;
+    mnDisablePrinting			= rData.mnDisablePrinting;
     mbEnableLocalizedDecimalSep = rData.mbEnableLocalizedDecimalSep;
 }
 
@@ -1167,24 +1214,24 @@ void MiscSettings::CopyData()
 
 // -----------------------------------------------------------------------
 
-sal_Bool MiscSettings::operator ==( const MiscSettings& rSet ) const
+BOOL MiscSettings::operator ==( const MiscSettings& rSet ) const
 {
     if ( mpData == rSet.mpData )
-        return sal_True;
+        return TRUE;
 
-    if ( (mpData->mnEnableATT           == rSet.mpData->mnEnableATT ) &&
-         (mpData->mnDisablePrinting     == rSet.mpData->mnDisablePrinting ) &&
+    if ( (mpData->mnEnableATT			== rSet.mpData->mnEnableATT ) &&
+         (mpData->mnDisablePrinting		== rSet.mpData->mnDisablePrinting ) &&
          (mpData->mbEnableLocalizedDecimalSep == rSet.mpData->mbEnableLocalizedDecimalSep ) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool MiscSettings::GetDisablePrinting() const
+BOOL MiscSettings::GetDisablePrinting() const
 {
-    if( mpData->mnDisablePrinting == (sal_uInt16)~0 )
+    if( mpData->mnDisablePrinting == (USHORT)~0 )
     {
         rtl::OUString aEnable =
             vcl::SettingsConfigItem::get()->
@@ -1193,15 +1240,15 @@ sal_Bool MiscSettings::GetDisablePrinting() const
         mpData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCaseAscii( "true" ) ? 1 : 0;
     }
 
-    return (sal_Bool)mpData->mnDisablePrinting;
+    return (BOOL)mpData->mnDisablePrinting;
 }
 // -----------------------------------------------------------------------
 
-sal_Bool MiscSettings::GetEnableATToolSupport() const
+BOOL MiscSettings::GetEnableATToolSupport() const
 {
 
 #ifdef WNT
-    if( mpData->mnEnableATT == (sal_uInt16)~0 )
+    if( mpData->mnEnableATT == (USHORT)~0 )
     {
         // Check in the Windows registry if an AT tool wants Accessibility support to
         // be activated ..
@@ -1212,7 +1259,7 @@ sal_Bool MiscSettings::GetEnableATToolSupport() const
             &hkey) )
         {
             DWORD dwType;
-            sal_uInt8 Data[6]; // possible values: "true", "false", "1", "0", DWORD
+            WIN_BYTE Data[6]; // possible values: "true", "false", "1", "0", DWORD
             DWORD cbData = sizeof(Data);
 
             if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
@@ -1224,7 +1271,7 @@ sal_Bool MiscSettings::GetEnableATToolSupport() const
                         mpData->mnEnableATT = ((0 == stricmp((const char *) Data, "1")) || (0 == stricmp((const char *) Data, "true")));
                         break;
                     case REG_DWORD:
-                        mpData->mnEnableATT = (sal_uInt16) (((DWORD *) Data)[0]);
+                        mpData->mnEnableATT = (USHORT) (((DWORD *) Data)[0]);
                         break;
                     default:
                         // Unsupported registry type
@@ -1237,7 +1284,7 @@ sal_Bool MiscSettings::GetEnableATToolSupport() const
     }
 #endif
 
-    if( mpData->mnEnableATT == (sal_uInt16)~0 )
+    if( mpData->mnEnableATT == (USHORT)~0 )
     {
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
         if( !pEnv || !*pEnv )
@@ -1254,30 +1301,30 @@ sal_Bool MiscSettings::GetEnableATToolSupport() const
         }
     }
 
-    return (sal_Bool)mpData->mnEnableATT;
+    return (BOOL)mpData->mnEnableATT;
 }
 
 // -----------------------------------------------------------------------
 
-void MiscSettings::SetDisablePrinting( sal_Bool bEnable )
+void MiscSettings::SetDisablePrinting( BOOL bEnable )
 {
     if ( bEnable != mpData->mnDisablePrinting )
     {
         vcl::SettingsConfigItem::get()->
             setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DesktopManagement" ) ),
                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisablePrinting" ) ),
-                      bEnable ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false" )) );
+                      rtl::OUString::createFromAscii( bEnable ? "true" : "false" ) );
         mpData->mnDisablePrinting = bEnable ? 1 : 0;
     }
 }
 
 // -----------------------------------------------------------------------
 
-void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
+void MiscSettings::SetEnableATToolSupport( BOOL bEnable )
 {
     if ( bEnable != mpData->mnEnableATT )
     {
-        sal_Bool bDummy;
+        BOOL bDummy;
         if( bEnable && !ImplInitAccessBridge(false, bDummy) )
             return;
 
@@ -1290,24 +1337,24 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
             &hkey) )
         {
             DWORD dwType;
-            sal_uInt8 Data[6]; // possible values: "true", "false", 1, 0
+            WIN_BYTE Data[6]; // possible values: "true", "false", 1, 0
             DWORD cbData = sizeof(Data);
 
             if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
-                NULL,   &dwType, Data, &cbData) )
+                NULL,	&dwType, Data, &cbData) )
             {
                 switch (dwType)
                 {
                     case REG_SZ:
                         RegSetValueEx(hkey, "SupportAssistiveTechnology",
                             NULL, dwType,
-                            bEnable ? (sal_uInt8 *) "true" : (sal_uInt8 *) "false",
+                            bEnable ? (WIN_BYTE *) "true" : (WIN_BYTE *) "false",
                             bEnable ? sizeof("true") : sizeof("false"));
                         break;
                     case REG_DWORD:
                         ((DWORD *) Data)[0] = bEnable ? 1 : 0;
                         RegSetValueEx(hkey, "SupportAssistiveTechnology",
-                            NULL, dwType, Data, sizeof(DWORD));
+                            NULL, dwType, Data,	sizeof(DWORD));
                         break;
                     default:
                         // Unsupported registry type
@@ -1322,18 +1369,18 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
         vcl::SettingsConfigItem::get()->
             setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ),
-                      bEnable ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false" )) );
+                      rtl::OUString::createFromAscii( bEnable ? "true" : "false" ) );
         mpData->mnEnableATT = bEnable ? 1 : 0;
     }
 }
 
-void MiscSettings::SetEnableLocalizedDecimalSep( sal_Bool bEnable )
+void MiscSettings::SetEnableLocalizedDecimalSep( BOOL bEnable )
 {
     CopyData();
     mpData->mbEnableLocalizedDecimalSep = bEnable;
 }
 
-sal_Bool MiscSettings::GetEnableLocalizedDecimalSep() const
+BOOL MiscSettings::GetEnableLocalizedDecimalSep() const
 {
     return mpData->mbEnableLocalizedDecimalSep;
 }
@@ -1417,15 +1464,15 @@ void NotificationSettings::CopyData()
 
 // -----------------------------------------------------------------------
 
-sal_Bool NotificationSettings::operator ==( const NotificationSettings& rSet ) const
+BOOL NotificationSettings::operator ==( const NotificationSettings& rSet ) const
 {
     if ( mpData == rSet.mpData )
-        return sal_True;
+        return TRUE;
 
     if ( (mpData->mnOptions             == rSet.mpData->mnOptions) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // =======================================================================
@@ -1513,18 +1560,18 @@ void HelpSettings::CopyData()
 
 // -----------------------------------------------------------------------
 
-sal_Bool HelpSettings::operator ==( const HelpSettings& rSet ) const
+BOOL HelpSettings::operator ==( const HelpSettings& rSet ) const
 {
     if ( mpData == rSet.mpData )
-        return sal_True;
+        return TRUE;
 
     if ( (mpData->mnOptions         == rSet.mpData->mnOptions ) &&
          (mpData->mnTipDelay        == rSet.mpData->mnTipDelay ) &&
          (mpData->mnTipTimeout      == rSet.mpData->mnTipTimeout ) &&
          (mpData->mnBalloonDelay    == rSet.mpData->mnBalloonDelay ) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // =======================================================================
@@ -1538,6 +1585,8 @@ ImplAllSettingsData::ImplAllSettingsData()
     meUILanguage                  = LANGUAGE_SYSTEM;
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
+    mpCollatorWrapper           = NULL;
+    mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
     maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
@@ -1563,6 +1612,8 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     // called
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
+    mpCollatorWrapper           = NULL;
+    mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
 }
@@ -1575,6 +1626,10 @@ ImplAllSettingsData::~ImplAllSettingsData()
         delete mpLocaleDataWrapper;
     if ( mpUILocaleDataWrapper )
         delete mpUILocaleDataWrapper;
+    if ( mpCollatorWrapper )
+        delete mpCollatorWrapper;
+    if ( mpUICollatorWrapper )
+        delete mpUICollatorWrapper;
     if ( mpI18nHelper )
         delete mpI18nHelper;
     if ( mpUII18nHelper )
@@ -1653,12 +1708,12 @@ void AllSettings::CopyData()
 
 // -----------------------------------------------------------------------
 
-sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
+ULONG AllSettings::Update( ULONG nFlags, const AllSettings& rSet )
 {
     DBG_CHKTHIS( AllSettings, NULL );
     DBG_CHKOBJ( &rSet, AllSettings, NULL );
 
-    sal_uLong nChangeFlags = 0;
+    ULONG nChangeFlags = 0;
 
     if ( nFlags & SETTINGS_MACHINE )
     {
@@ -1755,12 +1810,12 @@ sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
 
 // -----------------------------------------------------------------------
 
-sal_uLong AllSettings::GetChangeFlags( const AllSettings& rSet ) const
+ULONG AllSettings::GetChangeFlags( const AllSettings& rSet ) const
 {
     DBG_CHKTHIS( AllSettings, NULL );
     DBG_CHKOBJ( &rSet, AllSettings, NULL );
 
-    sal_uLong nChangeFlags = 0;
+    ULONG nChangeFlags = 0;
 
     if ( mpData->maMachineSettings != rSet.mpData->maMachineSettings )
         nChangeFlags |= SETTINGS_MACHINE;
@@ -1791,13 +1846,13 @@ sal_uLong AllSettings::GetChangeFlags( const AllSettings& rSet ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool AllSettings::operator ==( const AllSettings& rSet ) const
+BOOL AllSettings::operator ==( const AllSettings& rSet ) const
 {
     DBG_CHKTHIS( AllSettings, NULL );
     DBG_CHKOBJ( &rSet, AllSettings, NULL );
 
     if ( mpData == rSet.mpData )
-        return sal_True;
+        return TRUE;
 
     if ( (mpData->maMachineSettings         == rSet.mpData->maMachineSettings)      &&
          (mpData->maMouseSettings           == rSet.mpData->maMouseSettings)        &&
@@ -1807,13 +1862,13 @@ sal_Bool AllSettings::operator ==( const AllSettings& rSet ) const
          (mpData->maNotificationSettings    == rSet.mpData->maNotificationSettings) &&
          (mpData->maHelpSettings            == rSet.mpData->maHelpSettings)         &&
          (mpData->mnSystemUpdate            == rSet.mpData->mnSystemUpdate)         &&
-         (mpData->maLocale                  == rSet.mpData->maLocale)               &&
+         (mpData->maLocale					== rSet.mpData->maLocale)				&&
          (mpData->mnWindowUpdate            == rSet.mpData->mnWindowUpdate) )
     {
-        return sal_True;
+        return TRUE;
     }
     else
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1879,7 +1934,7 @@ void AllSettings::SetUILanguage( LanguageType  )
 
 // -----------------------------------------------------------------------
 
-sal_Bool AllSettings::GetLayoutRTL() const
+BOOL AllSettings::GetLayoutRTL() const
 {
     static const char* pEnv = getenv("SAL_RTL_ENABLED" );
     static int  nUIMirroring = -1;   // -1: undef, 0: auto, 1: on 2: off
@@ -1888,7 +1943,7 @@ sal_Bool AllSettings::GetLayoutRTL() const
     if( pEnv )
         return true;
 
-    sal_Bool bRTL = sal_False;
+    BOOL bRTL = FALSE;
 
     if( nUIMirroring == -1 )
     {
@@ -1898,7 +1953,7 @@ sal_Bool AllSettings::GetLayoutRTL() const
             OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/I18N/CTL")) );    // note: case sensisitive !
         if ( aNode.isValid() )
         {
-            sal_Bool bTmp = sal_Bool();
+            BOOL bTmp = BOOL();
             ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("UIMirroring")) );
             if( aValue >>= bTmp )
             {
@@ -2002,13 +2057,39 @@ const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
     return *mpData->mpUII18nHelper;
 }
 
+
+// -----------------------------------------------------------------------
+/*
+const CollatorWrapper& AllSettings::GetCollatorWrapper() const
+{
+    if ( !mpData->mpCollatorWrapper )
+    {
+        ((AllSettings*)this)->mpData->mpCollatorWrapper = new CollatorWrapper( vcl::unohelper::GetMultiServiceFactory() );
+        ((AllSettings*)this)->mpData->mpCollatorWrapper->loadDefaultCollator( GetLocale(), 0 );
+    }
+    return *mpData->mpCollatorWrapper;
+}
+*/
+// -----------------------------------------------------------------------
+/*
+const CollatorWrapper& AllSettings::GetUICollatorWrapper() const
+{
+    if ( !mpData->mpUICollatorWrapper )
+    {
+        ((AllSettings*)this)->mpData->mpUICollatorWrapper = new CollatorWrapper( vcl::unohelper::GetMultiServiceFactory() );
+        ((AllSettings*)this)->mpData->mpUICollatorWrapper->loadDefaultCollator( GetUILocale(), 0 );
+    }
+    return *mpData->mpUICollatorWrapper;
+}
+*/
+
 void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
 {
     AllSettings aAllSettings( Application::GetSettings() );
     if ( nHint & SYSLOCALEOPTIONS_HINT_DECSEP )
     {
         MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
-        sal_Bool bIsDecSepAsLocale = aAllSettings.mpData->maSysLocale.GetOptions().IsDecimalSeparatorAsLocale();
+        BOOL bIsDecSepAsLocale = aAllSettings.mpData->maSysLocale.GetOptions().IsDecimalSeparatorAsLocale();
         if ( aMiscSettings.GetEnableLocalizedDecimalSep() != bIsDecSepAsLocale )
         {
             aMiscSettings.SetEnableLocalizedDecimalSep( bIsDecSepAsLocale );

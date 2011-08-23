@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,9 +35,9 @@
 #include <comphelper/stl_types.hxx>
 
 #include <list>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace animations { class XAnimationNode; }
     namespace uno { template<class X> class Reference; }
 } } }
@@ -50,7 +50,7 @@ namespace sd {
 class TransitionPreset;
 typedef boost::shared_ptr< TransitionPreset > TransitionPresetPtr;
 typedef std::list< TransitionPresetPtr > TransitionPresetList;
-typedef boost::unordered_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
+typedef std::hash_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
 
 class TransitionPreset
 {

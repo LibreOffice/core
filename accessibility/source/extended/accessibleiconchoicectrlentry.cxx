@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 
 #define ACCESSIBLE_ACTION_COUNT     1
-#define AID_EXPAND                  0
-#define AID_COLLAPSE                1
+#define AID_EXPAND					0
+#define AID_COLLAPSE				1
 
 namespace
 {
@@ -79,15 +79,15 @@ namespace accessibility
     // Ctor() and Dtor()
     // -----------------------------------------------------------------------------
     AccessibleIconChoiceCtrlEntry::AccessibleIconChoiceCtrlEntry( SvtIconChoiceCtrl& _rIconCtrl,
-                                                                  sal_uLong _nPos,
+                                                                  ULONG _nPos,
                                                                   const Reference< XAccessible >& _xParent ) :
 
-        AccessibleIconChoiceCtrlEntry_BASE  ( m_aMutex ),
+        AccessibleIconChoiceCtrlEntry_BASE	( m_aMutex ),
 
-        m_pIconCtrl     ( &_rIconCtrl ),
-        m_nIndex        ( _nPos ),
+        m_pIconCtrl		( &_rIconCtrl ),
+        m_nIndex		( _nPos ),
         m_nClientId     ( 0 ),
-        m_xParent       ( _xParent )
+        m_xParent		( _xParent )
 
     {
         osl_incrementInterlockedCount( &m_refCount );
@@ -122,6 +122,21 @@ throw(RuntimeException)
             dispose();
         }
     }
+    #ifdef ACCESSIBLE_EVENT_NOTIFICATION_ENABLED
+    // (the following method is unused currently. If you need it, simply remove the #ifdef thing here and
+    // in the hxx)
+    // -----------------------------------------------------------------------------
+    void AccessibleIconChoiceCtrlEntry::NotifyAccessibleEvent( sal_Int16 _nEventId,
+                                                   const ::com::sun::star::uno::Any& _aOldValue,
+                                                   const ::com::sun::star::uno::Any& _aNewValue )
+    {
+        Reference< uno::XInterface > xSource( *this );
+        AccessibleEventObject aEventObj( xSource, _nEventId, _aNewValue, _aOldValue );
+
+        if (m_nClientId)
+            comphelper::AccessibleEventNotifier::addEvent( m_nClientId, aEventObj );
+    }
+    #endif
     // -----------------------------------------------------------------------------
     Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox_Impl() const
     {
@@ -428,7 +443,7 @@ throw(RuntimeException)
         // do nothing, because no focus for each item
     }
     // -----------------------------------------------------------------------------
-    sal_Int32 AccessibleIconChoiceCtrlEntry::getForeground( ) throw (RuntimeException)
+    sal_Int32 AccessibleIconChoiceCtrlEntry::getForeground(	) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -504,7 +519,7 @@ throw(RuntimeException)
             for ( long i = 0; i < nLen; ++i )
             {
                 Rectangle aRect = aLayoutData.GetCharacterBounds(i);
-                sal_Bool bInside = aRect.IsInside( aPnt );
+                BOOL bInside = aRect.IsInside( aPnt );
 
                 if ( bInside )
                     break;
@@ -520,12 +535,12 @@ throw(RuntimeException)
         ::osl::MutexGuard aGuard( m_aMutex );
 
         String sText = getText();
-        if  ( ( 0 > nStartIndex ) || ( sText.Len() <= nStartIndex )
+        if	( ( 0 > nStartIndex ) || ( sText.Len() <= nStartIndex )
             || ( 0 > nEndIndex ) || ( sText.Len() <= nEndIndex ) )
             throw IndexOutOfBoundsException();
 
         sal_Int32 nLen = nEndIndex - nStartIndex + 1;
-        ::svt::OStringTransfer::CopyString( sText.Copy( (sal_uInt16)nStartIndex, (sal_uInt16)nLen ), m_pIconCtrl );
+        ::svt::OStringTransfer::CopyString( sText.Copy( (USHORT)nStartIndex, (USHORT)nLen ), m_pIconCtrl );
 
         return sal_True;
     }

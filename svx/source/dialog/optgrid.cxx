@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,21 +39,23 @@
 
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
-#include "svx/optgrid.hxx"
+#include "optgrid.hxx"
 #include <svx/dialogs.hrc>
 #include "optgrid.hrc"
-#include "svx/dlgutil.hxx"
+#include "dlgutil.hxx"
 
-// local functions
-void    lcl_GetMinMax(MetricField& rField, long& nFirst, long& nLast, long& nMin, long& nMax)
+/* -----------------18.08.98 17:41-------------------
+ * local functions
+ * --------------------------------------------------*/
+void	lcl_GetMinMax(MetricField& rField, long& nFirst, long& nLast, long& nMin, long& nMax)
 {
-    nFirst  = static_cast<long>(rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) ));
+    nFirst	= static_cast<long>(rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) ));
     nLast = static_cast<long>(rField.Denormalize( rField.GetLast( FUNIT_TWIP ) ));
     nMin = static_cast<long>(rField.Denormalize( rField.GetMin( FUNIT_TWIP ) ));
     nMax = static_cast<long>(rField.Denormalize( rField.GetMax( FUNIT_TWIP ) ));
 }
 
-void    lcl_SetMinMax(MetricField& rField, long nFirst, long nLast, long nMin, long nMax)
+void	lcl_SetMinMax(MetricField& rField, long nFirst, long nLast, long nMin, long nMax)
 {
     rField.SetFirst( rField.Normalize( nFirst ), FUNIT_TWIP );
     rField.SetLast( rField.Normalize( nLast ), FUNIT_TWIP );
@@ -61,32 +63,44 @@ void    lcl_SetMinMax(MetricField& rField, long nFirst, long nLast, long nMin, l
     rField.SetMax( rField.Normalize( nMax ), FUNIT_TWIP );
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung: Rastereinstellungen Ctor
+ --------------------------------------------------------------------*/
+
 SvxOptionsGrid::SvxOptionsGrid() :
-    nFldDrawX       ( 100 ),
-    nFldDivisionX   ( 0 ),
-    nFldDrawY       ( 100 ),
-    nFldDivisionY   ( 0 ),
-    nFldSnapX       ( 100 ),
-    nFldSnapY       ( 100 ),
-    bUseGridsnap    ( 0 ),
-    bSynchronize    ( 1 ),
-    bGridVisible    ( 0 ),
-    bEqualGrid      ( 1 )
+    nFldDrawX		( 100 ),
+    nFldDivisionX	( 0 ),
+    nFldDrawY		( 100 ),
+    nFldDivisionY	( 0 ),
+    nFldSnapX		( 100 ),
+    nFldSnapY		( 100 ),
+    bUseGridsnap	( 0 ),
+    bSynchronize	( 1 ),
+    bGridVisible	( 0 ),
+    bEqualGrid		( 1 )
 {
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung: Rastereinstellungen Dtor
+ --------------------------------------------------------------------*/
 
 SvxOptionsGrid::~SvxOptionsGrid()
 {
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung: Item fuer Rastereinstellungen
+ --------------------------------------------------------------------*/
+
 SvxGridItem::SvxGridItem( const SvxGridItem& rItem )
-:   SvxOptionsGrid()
-,   SfxPoolItem(rItem)
+:	SvxOptionsGrid()
+,	SfxPoolItem(rItem)
 {
     bUseGridsnap = rItem.bUseGridsnap ;
     bSynchronize = rItem.bSynchronize ;
     bGridVisible = rItem.bGridVisible ;
-    bEqualGrid   = rItem.bEqualGrid   ;
+    bEqualGrid	 = rItem.bEqualGrid	  ;
     nFldDrawX    = rItem.nFldDrawX    ;
     nFldDivisionX= rItem.nFldDivisionX;
     nFldDrawY    = rItem.nFldDrawY    ;
@@ -96,36 +110,48 @@ SvxGridItem::SvxGridItem( const SvxGridItem& rItem )
 
 };
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SfxPoolItem*  SvxGridItem::Clone( SfxItemPool* ) const
 {
     return new SvxGridItem( *this );
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 int SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "different types ");
+    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
 
     const SvxGridItem& rItem = (const SvxGridItem&) rAttr;
 
-    return (    bUseGridsnap == rItem.bUseGridsnap &&
+    return ( 	bUseGridsnap == rItem.bUseGridsnap &&
                 bSynchronize == rItem.bSynchronize &&
                 bGridVisible == rItem.bGridVisible &&
-                bEqualGrid   == rItem.bEqualGrid   &&
+                bEqualGrid	 == rItem.bEqualGrid   &&
                 nFldDrawX    == rItem.nFldDrawX    &&
                 nFldDivisionX== rItem.nFldDivisionX&&
                 nFldDrawY    == rItem.nFldDrawY    &&
                 nFldDivisionY== rItem.nFldDivisionY&&
                 nFldSnapX    == rItem.nFldSnapX    &&
-                nFldSnapY    == rItem.nFldSnapY     );
+                nFldSnapY    == rItem.nFldSnapY		);
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 SfxItemPresentation  SvxGridItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     String&             rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -141,19 +167,23 @@ SfxItemPresentation  SvxGridItem::GetPresentation
     }
 }
 
-// TabPage Screen Settings
+
+/*----------------- OS 23.02.95  -----------------------
+ TabPage Rastereinstellungen
+-------------------------------------------------------*/
+
 SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_GRID ), rCoreSet ),
 
-    aCbxUseGridsnap ( this, SVX_RES( CBX_USE_GRIDSNAP ) ),
-    aCbxGridVisible ( this, SVX_RES( CBX_GRID_VISIBLE ) ),
+    aCbxUseGridsnap	( this, SVX_RES( CBX_USE_GRIDSNAP ) ),
+    aCbxGridVisible	( this, SVX_RES( CBX_GRID_VISIBLE ) ),
 
     aFlResolution   ( this, SVX_RES( FL_RESOLUTION ) ),
     aFtDrawX        ( this, SVX_RES( FT_DRAW_X ) ),
-    aMtrFldDrawX    ( this, SVX_RES( MTR_FLD_DRAW_X ) ),
+    aMtrFldDrawX	( this, SVX_RES( MTR_FLD_DRAW_X ) ),
     aFtDrawY        ( this, SVX_RES( FT_DRAW_Y ) ),
-    aMtrFldDrawY    ( this, SVX_RES( MTR_FLD_DRAW_Y ) ),
+    aMtrFldDrawY	( this, SVX_RES( MTR_FLD_DRAW_Y ) ),
 
     aFlDivision     ( this, SVX_RES( FL_DIVISION ) ),
     aFtDivisionX(     this, SVX_RES( FT_DIVISION_X) ),
@@ -164,7 +194,7 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     aNumFldDivisionY( this, SVX_RES( NUM_FLD_DIVISION_Y ) ),
     aDivisionPointY(  this, SVX_RES( FT_VERT_POINTS) ),
 
-    aCbxSynchronize ( this, SVX_RES( CBX_SYNCHRONIZE ) ),
+    aCbxSynchronize	( this, SVX_RES( CBX_SYNCHRONIZE ) ),
     aGrpDrawGrid    ( this, SVX_RES( GRP_DRAWGRID ) ),
 
     aGrpSnap            ( this, SVX_RES( GRP_SNAP ) ),
@@ -185,24 +215,24 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     aFtBezAngle         ( this, SVX_RES( FT_BEZ_ANGLE ) ),
     aMtrFldBezAngle     ( this, SVX_RES( MTR_FLD_BEZ_ANGLE ) ),
 
-    bAttrModified( sal_False )
+    bAttrModified( FALSE )
 {
-    // This page requires exchange Support
+    // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
     FreeResource();
 
     aDivisionPointY.SetText(aDivisionPointX.GetText());
-    // Set Metrics
+    // Metrik einstellen
     FieldUnit eFUnit = GetModuleFieldUnit( rCoreSet );
     long nFirst, nLast, nMin, nMax;
 
     lcl_GetMinMax(aMtrFldDrawX, nFirst, nLast, nMin, nMax);
-    SetFieldUnit( aMtrFldDrawX, eFUnit, sal_True );
+    SetFieldUnit( aMtrFldDrawX, eFUnit, TRUE );
     lcl_SetMinMax(aMtrFldDrawX, nFirst, nLast, nMin, nMax);
 
     lcl_GetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
-    SetFieldUnit( aMtrFldDrawY, eFUnit, sal_True );
+    SetFieldUnit( aMtrFldDrawY, eFUnit, TRUE );
     lcl_SetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
 
 
@@ -219,17 +249,6 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
         LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
     aNumFldDivisionY.SetModifyHdl(
         LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
-
-    ::rtl::OUString sFlResolution( aFlResolution.GetDisplayText() );
-    ::rtl::OUString sFtDrawX(aFtDrawX.GetDisplayText());
-    ::rtl::OUString sFtDrawY(aFtDrawY.GetDisplayText());
-    aMtrFldDrawX.SetAccessibleName( sFtDrawX + sFlResolution   );
-    aMtrFldDrawY.SetAccessibleName( sFtDrawY + sFlResolution   );
-    ::rtl::OUString sFlDivision( aFlDivision.GetDisplayText() );
-    ::rtl::OUString sFtDivisionX(aFtDivisionX.GetDisplayText());
-    ::rtl::OUString sFtDivisionY(aFtDivisionY.GetDisplayText());
-    aNumFldDivisionX.SetAccessibleName(  sFtDivisionX + sFlDivision );
-    aNumFldDivisionY.SetAccessibleName(  sFtDivisionY + sFlDivision );
 }
 
 //------------------------------------------------------------------------
@@ -241,25 +260,25 @@ SfxTabPage* SvxGridTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet 
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
+BOOL SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
     if ( bAttrModified )
     {
         SvxGridItem aGridItem( SID_ATTR_GRID_OPTIONS );
 
-        aGridItem.bUseGridsnap  = aCbxUseGridsnap.IsChecked();
-        aGridItem.bSynchronize  = aCbxSynchronize.IsChecked();
-        aGridItem.bGridVisible  = aCbxGridVisible.IsChecked();
+        aGridItem.bUseGridsnap	= aCbxUseGridsnap.IsChecked();
+        aGridItem.bSynchronize	= aCbxSynchronize.IsChecked();
+        aGridItem.bGridVisible	= aCbxGridVisible.IsChecked();
 
         SfxMapUnit eUnit =
             rCoreSet.GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
-        long nX =GetCoreValue(  aMtrFldDrawX, eUnit );
-        long nY = GetCoreValue( aMtrFldDrawY, eUnit );
+        long nX =GetCoreValue(	aMtrFldDrawX, eUnit );
+        long nY = GetCoreValue(	aMtrFldDrawY, eUnit );
 
-        aGridItem.nFldDrawX    = (sal_uInt32) nX;
-        aGridItem.nFldDrawY    = (sal_uInt32) nY;
-        aGridItem.nFldDivisionX = static_cast<long>(aNumFldDivisionX.GetValue()-1);
-        aGridItem.nFldDivisionY = static_cast<long>(aNumFldDivisionY.GetValue()-1);
+        aGridItem.nFldDrawX    = (UINT32) nX;
+        aGridItem.nFldDrawY    = (UINT32) nY;
+        aGridItem.nFldDivisionX = static_cast<long>(aNumFldDivisionX.GetValue());
+        aGridItem.nFldDivisionY = static_cast<long>(aNumFldDivisionY.GetValue());
 
         rCoreSet.Put( aGridItem );
     }
@@ -272,7 +291,7 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pAttr = 0;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS , sal_False,
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS , FALSE,
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SvxGridItem* pGridAttr = (SvxGridItem*)pAttr;
@@ -285,12 +304,16 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
         SetMetricValue( aMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
         SetMetricValue( aMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
 
-        aNumFldDivisionX.SetValue( pGridAttr->nFldDivisionX+1 );
-        aNumFldDivisionY.SetValue( pGridAttr->nFldDivisionY+1 );
+//		UINT32 nFineX = pGridAttr->nFldDivisionX;
+//		UINT32 nFineY = pGridAttr->nFldDivisionY;
+//      aNumFldDivisionX.SetValue( nFineX ? (pGridAttr->nFldDrawX / nFineX - 1) : 0 );
+//      aNumFldDivisionY.SetValue( nFineY ? (pGridAttr->nFldDrawY / nFineY - 1) : 0 );
+        aNumFldDivisionX.SetValue( pGridAttr->nFldDivisionX );
+        aNumFldDivisionY.SetValue( pGridAttr->nFldDivisionY );
     }
 
     ChangeGridsnapHdl_Impl( &aCbxUseGridsnap );
-    bAttrModified = sal_False;
+    bAttrModified = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -298,7 +321,7 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
 void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pAttr = NULL;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS , sal_False,
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS , FALSE,
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SvxGridItem* pGridAttr = (SvxGridItem*) pAttr;
@@ -307,9 +330,11 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
         ChangeGridsnapHdl_Impl( &aCbxUseGridsnap );
     }
 
-    // Metric Change if necessary (as TabPage is in the dialog, where the
-    // metric can be set
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , sal_False,
+    // Metrik ggfs. aendern (da TabPage im Dialog liegt,
+    // wo die Metrik eingestellt werden kann
+    //USHORT nWhich = GetWhich( SID_ATTR_METRIC );
+    //if( rSet.GetItemState( GetWhich( SID_ATTR_METRIC ) ) >= SFX_ITEM_AVAILABLE )
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , FALSE,
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SfxUInt16Item* pItem = (SfxUInt16Item*) pAttr;
@@ -318,19 +343,19 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 
         if( eFUnit != aMtrFldDrawX.GetUnit() )
         {
-            // Set Metrics
+            // Metriken einstellen
             long nFirst, nLast, nMin, nMax;
             long nVal = static_cast<long>(aMtrFldDrawX.Denormalize( aMtrFldDrawX.GetValue( FUNIT_TWIP ) ));
 
             lcl_GetMinMax(aMtrFldDrawX, nFirst, nLast, nMin, nMax);
-            SetFieldUnit( aMtrFldDrawX, eFUnit, sal_True );
+            SetFieldUnit( aMtrFldDrawX, eFUnit, TRUE );
             lcl_SetMinMax(aMtrFldDrawX, nFirst, nLast, nMin, nMax);
 
             aMtrFldDrawX.SetValue( aMtrFldDrawX.Normalize( nVal ), FUNIT_TWIP );
 
             nVal = static_cast<long>(aMtrFldDrawY.Denormalize( aMtrFldDrawY.GetValue( FUNIT_TWIP ) ));
             lcl_GetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
-            SetFieldUnit( aMtrFldDrawY, eFUnit, sal_True );
+            SetFieldUnit( aMtrFldDrawY, eFUnit, TRUE );
             lcl_SetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
             aMtrFldDrawY.SetValue( aMtrFldDrawY.Normalize( nVal ), FUNIT_TWIP );
 
@@ -348,7 +373,7 @@ int SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 //------------------------------------------------------------------------
 IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
 {
-    bAttrModified = sal_True;
+    bAttrModified = TRUE;
     if( aCbxSynchronize.IsChecked() )
     {
         if(pField == &aMtrFldDrawX)
@@ -374,7 +399,7 @@ IMPL_LINK( SvxGridTabPage, ClickRotateHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 {
-    bAttrModified = sal_True;
+    bAttrModified = TRUE;
     if( aCbxSynchronize.IsChecked() )
     {
         if(&aNumFldDivisionX == pField)
@@ -388,7 +413,7 @@ IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 
 IMPL_LINK( SvxGridTabPage, ChangeGridsnapHdl_Impl, void *, EMPTYARG )
 {
-    bAttrModified = sal_True;
+    bAttrModified = TRUE;
     return 0;
 }
 

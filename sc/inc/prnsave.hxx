@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,39 +41,39 @@ class ScPrintSaverTab
     typedef ::std::vector< ScRange > ScRangeVec;
 
     ScRangeVec  maPrintRanges;      // Array
-    ScRange*    mpRepeatCol;        // single
-    ScRange*    mpRepeatRow;        // single
-    sal_Bool        mbEntireSheet;
+    ScRange*    mpRepeatCol;        // einzeln
+    ScRange*    mpRepeatRow;        // einzeln
+    BOOL        mbEntireSheet;
 
 public:
             ScPrintSaverTab();
             ~ScPrintSaverTab();
 
-    void            SetAreas( const ScRangeVec& rRanges, sal_Bool bEntireSheet );
+    void            SetAreas( const ScRangeVec& rRanges, BOOL bEntireSheet );
     void            SetRepeat( const ScRange* pCol, const ScRange* pRow );
 
     const ScRangeVec&   GetPrintRanges() const  { return maPrintRanges; }
-    sal_Bool                IsEntireSheet() const   { return mbEntireSheet; }
+    BOOL                IsEntireSheet() const   { return mbEntireSheet; }
     const ScRange*      GetRepeatCol() const    { return mpRepeatCol; }
     const ScRange*      GetRepeatRow() const    { return mpRepeatRow; }
 
-    sal_Bool    operator==( const ScPrintSaverTab& rCmp ) const;
+    BOOL	operator==( const ScPrintSaverTab& rCmp ) const;
 };
 
 class ScPrintRangeSaver
 {
-    SCTAB               nTabCount;
-    ScPrintSaverTab*    pData;      // Array
+    SCTAB				nTabCount;
+    ScPrintSaverTab*	pData;		// Array
 
 public:
             ScPrintRangeSaver( SCTAB nCount );
             ~ScPrintRangeSaver();
 
-    SCTAB                   GetTabCount() const     { return nTabCount; }
-    ScPrintSaverTab&        GetTabData(SCTAB nTab);
-    const ScPrintSaverTab&  GetTabData(SCTAB nTab) const;
+    SCTAB					GetTabCount() const		{ return nTabCount; }
+    ScPrintSaverTab&		GetTabData(SCTAB nTab);
+    const ScPrintSaverTab&	GetTabData(SCTAB nTab) const;
 
-    sal_Bool    operator==( const ScPrintRangeSaver& rCmp ) const;
+    BOOL	operator==( const ScPrintRangeSaver& rCmp ) const;
 };
 
 

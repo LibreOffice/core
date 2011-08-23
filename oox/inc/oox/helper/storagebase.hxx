@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,8 @@
 #ifndef OOX_HELPER_STORAGEBASE_HXX
 #define OOX_HELPER_STORAGEBASE_HXX
 
-#include <vector>
-#include <com/sun/star/uno/Reference.hxx>
-#include "oox/helper/refmap.hxx"
 #include "oox/dllapi.h"
+#include "oox/helper/containerhelper.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace embed { class XStorage; }

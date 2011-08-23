@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
+
 #include "hintids.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <editeng/tstpitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
+
 
 #include "view.hxx"
 #include "wrtsh.hxx"
@@ -53,9 +56,9 @@ void SwView::ExecDlg(SfxRequest &rReq)
     const SfxPoolItem* pItem = 0;
     const SfxItemSet* pArgs = rReq.GetArgs();
 
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState( GetPool().GetWhich(nSlot), sal_False, &pItem );
+        pArgs->GetItemState( GetPool().GetWhich(nSlot), FALSE, &pItem );
 
     switch ( nSlot )
     {
@@ -63,11 +66,11 @@ void SwView::ExecDlg(SfxRequest &rReq)
         {
             if ( pItem )
             {
-                sal_uInt16 nValue = ((SfxUInt16Item *)pItem)->GetValue();
-                sal_uInt16 nOldValue = pWrtShell->GetPageOffset();
-                sal_uInt16 nPage, nLogPage;
+                USHORT nValue = ((SfxUInt16Item *)pItem)->GetValue();
+                USHORT nOldValue = pWrtShell->GetPageOffset();
+                USHORT nPage, nLogPage;
                 pWrtShell->GetPageNum( nPage, nLogPage,
-                   pWrtShell->IsCrsrVisible(), sal_False);
+                   pWrtShell->IsCrsrVisible(), FALSE);
 
                 if(nValue != nOldValue || nValue != nLogPage)
                 {

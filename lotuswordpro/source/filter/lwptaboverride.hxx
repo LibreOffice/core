@@ -57,13 +57,18 @@
  * @file
  * Tab override for VO_PARASTYLE.
  ************************************************************************/
-#ifndef     _LWPTABOVERRIDE_HXX
-#define     _LWPTABOVERRIDE_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-12  create and implement.
+ ************************************************************************/
 
-#include    "lwpoverride.hxx"
-#include    "lwpobjid.hxx"
+#ifndef		_LWPTABOVERRIDE_HXX
+#define		_LWPTABOVERRIDE_HXX
 
-class   LwpTabOverride : public LwpOverride
+#include	"lwpoverride.hxx"
+#include	"lwpobjid.hxx"
+
+class	LwpTabOverride : public LwpOverride
 {
 public:
     LwpTabOverride()
@@ -73,8 +78,6 @@ public:
     virtual ~LwpTabOverride()
     {
     }
-
-    virtual LwpTabOverride* clone() const;
 
     virtual void Read(LwpObjectStream *pStrm)
     {
@@ -91,18 +94,11 @@ public:
     inline sal_Bool IsTabRackOverridden();
     inline void Override(LwpTabOverride* pOther);
     inline void OverrideTabRack(LwpObjectID* pTabRackID);
-
-protected:
-    LwpTabOverride(LwpTabOverride const& rOther);
-
 private:
-    LwpTabOverride& operator=(LwpTabOverride const& rOther); // not implemented
-
-private:
-    LwpObjectID m_aTabRackID;
+    LwpObjectID	m_aTabRackID;
     enum
     {
-        TO_TABRACK  = 0x01
+        TO_TABRACK	= 0x01
     };
 };
 

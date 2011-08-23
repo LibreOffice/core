@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,11 +26,18 @@
  *
  ************************************************************************/
 #ifdef _MSC_VER
-#   define _POSIX_
+#	define _POSIX_
 #endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef __hpux
+#	define _HPUX_SOURCE
+#endif
+#ifdef SCO
+#	define _IBCS2
+#endif
 #include <limits.h>
 
 #include "cpp.h"
@@ -69,14 +76,14 @@ void
     args = NULL;
     if (tp < trp->lp && tp->type == LP && tp->wslen == 0)
     {
+        /* macro with args */
+        int narg = 0;
+
         tp += 1;
         args = new(Tokenrow);
         maketokenrow(2, args);
         if (tp->type != RP)
         {
-            /* macro with args */
-            int narg = 0;
-
             int err = 0;
 
             for (;;)
@@ -226,7 +233,7 @@ void
     expandrow(Tokenrow * trp, char *flag)
 {
     Token *tp;
-    Nlist *np=NULL;
+    Nlist *np;
 
     if (flag)
         setsource(flag, -1, -1, "", 0);
@@ -294,7 +301,7 @@ void
     expand(Tokenrow * trp, Nlist * np)
 {
     Tokenrow ntr;
-    int ntokc, narg;
+    int ntokc, narg, i;
     Tokenrow *atr[NARG + 1];
 
     if (Mflag == 2)
@@ -310,8 +317,6 @@ void
         ntokc = 1;
     else
     {
-        int i;
-
         ntokc = gatherargs(trp, atr, &narg);
         if (narg < 0)
         {                               /* not actually a call (no '(') */
@@ -324,8 +329,8 @@ void
             trp->tp += ntokc;
             return;
         }
-        substargs(np, &ntr, atr);       /* put args into replacement */
-        for (i = 0; i < narg; ++i)
+        substargs(np, &ntr, atr);		/* put args into replacement */
+        for (i = 0; i < narg; i++)
         {
             dofree(atr[i]->bp);
             dofree(atr[i]);
@@ -592,7 +597,7 @@ int
 /*
  * Return a quoted version of the tokenrow (from # arg)
  */
-#define STRLEN  512
+#define	STRLEN	512
 Tokenrow *
     stringify(Tokenrow * vp)
 {

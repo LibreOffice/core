@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace connectivity
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace dbtools;
-    namespace starjava  = com::sun::star::java;
+    namespace starjava	= com::sun::star::java;
     //------------------------------------------------------------------------------
     const sal_Unicode CHAR_PLACE = '_';
     const sal_Unicode CHAR_WILD  = '%';
@@ -83,8 +83,8 @@ namespace connectivity
                         else
                             pWild += pos;
                     else
-                        break;          // WARNING in certain circumstances
-                // it will run into the next 'case'!!
+                        break;          // ACHTUNG laeuft unter bestimmten
+                                        // Umstaenden in den nachsten case rein!!
                 case CHAR_WILD:
                     while ( *pWild == CHAR_WILD )
                         pWild++;
@@ -236,7 +236,7 @@ namespace connectivity
         try
         {
             Reference< starjava::XJavaVM > xVM(_rxFactory->createInstance(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"))), UNO_QUERY);
+                rtl::OUString::createFromAscii("com.sun.star.java.JavaVirtualMachine")), UNO_QUERY);
 
             OSL_ENSURE(_rxFactory.is(),"InitJava: I have no factory!");
             if (!xVM.is() || !_rxFactory.is())
@@ -280,26 +280,23 @@ namespace connectivity
         if ( _pJVM.is() )
         {
             jvmaccess::VirtualMachine::AttachGuard aGuard(_pJVM);
-            JNIEnv* pEnv = aGuard.getEnvironment();
+            JNIEnv*	pEnv = aGuard.getEnvironment();
             if( pEnv )
             {
                 ::rtl::OString sClassName = ::rtl::OUStringToOString(_sClassName, RTL_TEXTENCODING_ASCII_US);
                 sClassName = sClassName.replace('.','/');
-                jobject out = pEnv->FindClass(sClassName.getStr());
+                jobject out = pEnv->FindClass(sClassName);
                 bRet = out != NULL;
                 pEnv->DeleteLocalRef( out );
             }
         }
-#else
-        (void)_pJVM;
-        (void)_sClassName;
 #endif
         return bRet;
     }
 
 }
 
-#include <ctype.h>      //isdigit
+#include <ctype.h>		//isdigit
 namespace dbtools
 {
 //------------------------------------------------------------------
@@ -313,8 +310,8 @@ sal_Bool isCharOk(sal_Unicode c,const ::rtl::OUString& _rSpecials)
 //------------------------------------------------------------------------------
 sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
 {
-    // Test for correct naming (in SQL sense)
-    // This is important for table names for example
+    // Ueberpruefung auf korrekte Namensgebung im SQL Sinne
+    // Dieses ist wichtig fuer Tabellennamen beispielsweise
     const sal_Unicode* pStr = rName.getStr();
     if (*pStr > 127 || isdigit(*pStr))
         return sal_False;
@@ -323,10 +320,10 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
         if(!isCharOk(*pStr,_rSpecials))
             return sal_False;
 
-    if  (   rName.getLength()
-        &&  (   (rName.toChar() == '_')
-            ||  (   (rName.toChar() >= '0')
-                &&  (rName.toChar() <= '9')
+    if	(	rName.getLength()
+        &&	(	(rName.toChar() == '_')
+            ||	(	(rName.toChar() >= '0')
+                &&	(rName.toChar() <= '9')
                 )
             )
         )
@@ -339,7 +336,7 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
     return sal_True;
 }
 //------------------------------------------------------------------
-// Creates a new name if necessary
+// Erzeugt einen neuen Namen falls noetig
 ::rtl::OUString convertName2SQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
 {
     if(isValidSQLName(rName,_rSpecials))

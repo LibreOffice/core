@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,6 +40,7 @@ using namespace connectivity;
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -57,15 +58,15 @@ void OGroups::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OGroups::createDescriptor()
 {
-    //  OAdabasGroup* pNew =
+    //	OAdabasGroup* pNew = 
     return new OAdabasGroup(m_pConnection);
 }
 // -------------------------------------------------------------------------
 // XAppend
 sdbcx::ObjectType OGroups::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& /*descriptor*/ )
 {
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "CREATE USERGROUP " ));
-    ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("CREATE USERGROUP ");
+    ::rtl::OUString aQuote	= m_pConnection->getMetaData()->getIdentifierQuoteString(  );
 
     aSql = aSql + aQuote + _rForName + aQuote;
 
@@ -79,8 +80,8 @@ sdbcx::ObjectType OGroups::appendObject( const ::rtl::OUString& _rForName, const
 // XDrop
 void OGroups::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP USERGROUP " ));
-    ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("DROP USERGROUP ");
+    ::rtl::OUString aQuote	= m_pConnection->getMetaData()->getIdentifierQuoteString(  );
 
     aSql = aSql + aQuote + _sElementName + aQuote;
 

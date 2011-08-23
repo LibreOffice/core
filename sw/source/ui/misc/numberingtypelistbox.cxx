@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,7 @@
 #include <unomid.h>
 
 using namespace com::sun::star;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 struct SwNumberingTypeListBox_Impl
 {
@@ -48,7 +47,7 @@ struct SwNumberingTypeListBox_Impl
 };
 
 SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, const ResId& rResId,
-        sal_uInt16 nTypeFlags ) :
+        USHORT nTypeFlags ) :
     ListBox(pWin, rResId),
     pImpl(new SwNumberingTypeListBox_Impl)
 {
@@ -67,7 +66,7 @@ SwNumberingTypeListBox::~SwNumberingTypeListBox()
     delete pImpl;
 }
 
-void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
+void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
 {
     Clear();
     uno::Sequence<sal_Int16> aTypes;
@@ -86,14 +85,14 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
     {
         long nValue = rNames.GetValue(i);
         sal_Bool bInsert = sal_True;
-        sal_uInt16 nPos = LISTBOX_APPEND;
+        USHORT nPos = LISTBOX_APPEND;
         switch(nValue)
         {
             case  style::NumberingType::NUMBER_NONE:
                 bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_NO_NUMBERING);
                 nPos = 0;
              break;
-            case  style::NumberingType::CHAR_SPECIAL:   bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BULLET); break;
+            case  style::NumberingType::CHAR_SPECIAL:	bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BULLET); break;
             case  style::NumberingType::PAGE_DESCRIPTOR:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING); break;
             case  style::NumberingType::BITMAP:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BITMAP ); break;
             default:
@@ -116,7 +115,7 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
         }
         if(bInsert)
         {
-            sal_uInt16 nEntry = InsertEntry(rNames.GetString(i), nPos);
+            USHORT nEntry = InsertEntry(rNames.GetString(i), nPos);
             SetEntryData( nEntry, (void*)nValue );
         }
     }
@@ -129,11 +128,11 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
                 sal_Int16 nCurrent = pTypes[nType];
                 if(nCurrent > style::NumberingType::CHARS_LOWER_LETTER_N)
                 {
-                    if(LISTBOX_ENTRY_NOTFOUND == GetEntryPos((void*)(sal_uLong)nCurrent))
+                    if(LISTBOX_ENTRY_NOTFOUND == GetEntryPos((void*)(ULONG)nCurrent))
                     {
                         OUString aIdent = pImpl->xInfo->getNumberingIdentifier( nCurrent );
-                        sal_uInt16 nPos = InsertEntry(aIdent);
-                        SetEntryData(nPos,(void*)(sal_uLong)nCurrent);
+                        USHORT nPos = InsertEntry(aIdent);
+                        SetEntryData(nPos,(void*)(ULONG)nCurrent);
                     }
                 }
             }
@@ -142,22 +141,22 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
     }
 }
 
-sal_Int16   SwNumberingTypeListBox::GetSelectedNumberingType()
+sal_Int16 	SwNumberingTypeListBox::GetSelectedNumberingType()
 {
     sal_Int16 nRet = 0;
-    sal_uInt16 nSelPos = GetSelectEntryPos();
+    USHORT nSelPos = GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nSelPos)
-        nRet = (sal_Int16)(sal_uLong)GetEntryData(nSelPos);
+        nRet = (sal_Int16)(ULONG)GetEntryData(nSelPos);
 #if OSL_DEBUG_LEVEL > 1
     else
-        OSL_FAIL("SwNumberingTypeListBox not selected");
+        OSL_ENSURE(false, "SwNumberingTypeListBox not selected");
 #endif
     return nRet;
 }
 
-sal_Bool    SwNumberingTypeListBox::SelectNumberingType(sal_Int16 nType)
+sal_Bool 	SwNumberingTypeListBox::SelectNumberingType(sal_Int16 nType)
 {
-    sal_uInt16 nPos = GetEntryPos((void*)(sal_uLong)nType);
+    USHORT nPos = GetEntryPos((void*)(ULONG)nType);
     SelectEntryPos( nPos );
     return LISTBOX_ENTRY_NOTFOUND != nPos;
 }

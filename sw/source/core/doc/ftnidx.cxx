@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,24 +43,24 @@
 
 
 _SV_IMPL_SORTAR_ALG( _SwFtnIdxs, SwTxtFtnPtr )
-sal_Bool _SwFtnIdxs::Seek_Entry( const SwTxtFtnPtr rSrch, sal_uInt16* pFndPos ) const
+BOOL _SwFtnIdxs::Seek_Entry( const SwTxtFtnPtr rSrch, USHORT* pFndPos ) const
 {
-    sal_uLong nIdx = _SwTxtFtn_GetIndex( rSrch );
+    ULONG nIdx = _SwTxtFtn_GetIndex( rSrch );
     xub_StrLen nCntIdx = *rSrch->GetStart();
 
-    sal_uInt16 nO = Count(), nM, nU = 0;
+    USHORT nO = Count(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
         while( nU <= nO )
         {
             nM = nU + ( nO - nU ) / 2;
-            sal_uLong nFndIdx = _SwTxtFtn_GetIndex( (*this)[ nM ] );
+            ULONG nFndIdx = _SwTxtFtn_GetIndex( (*this)[ nM ] );
             if( nFndIdx == nIdx && *(*this)[ nM ]->GetStart() == nCntIdx )
             {
                 if( pFndPos )
                     *pFndPos = nM;
-                return sal_True;
+                return TRUE;
             }
             else if( nFndIdx < nIdx ||
                 (nFndIdx == nIdx && *(*this)[ nM ]->GetStart() < nCntIdx ))
@@ -69,7 +69,7 @@ sal_Bool _SwFtnIdxs::Seek_Entry( const SwTxtFtnPtr rSrch, sal_uInt16* pFndPos ) 
             {
                 if( pFndPos )
                     *pFndPos = nU;
-                return sal_False;
+                return FALSE;
             }
             else
                 nO = nM - 1;
@@ -77,7 +77,7 @@ sal_Bool _SwFtnIdxs::Seek_Entry( const SwTxtFtnPtr rSrch, sal_uInt16* pFndPos ) 
     }
     if( pFndPos )
         *pFndPos = nU;
-    return sal_False;
+    return FALSE;
 }
 
 
@@ -102,29 +102,29 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
         const SwNode* pCapStt = &pDoc->GetNodes().GetEndOfExtras();
-        sal_uLong nCapEnd = pDoc->GetNodes().GetEndOfContent().GetIndex();
+        ULONG nCapEnd = pDoc->GetNodes().GetEndOfContent().GetIndex();
         if( rOutlNds.Count() )
         {
             // suche den Start des Kapitels, in den rStt steht.
-            sal_uInt16 n;
+            USHORT n;
 
             for( n = 0; n < rOutlNds.Count(); ++n )
                 if( rOutlNds[ n ]->GetIndex() > rStt.GetIndex() )
-                    break;      // gefunden
-                //else if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )  //#outline level,zhaojianwei
+                    break;		// gefunden
+                //else if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )	//#outline level,zhaojianwei
                 else if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )   //<-end,zhaojianwei
-                    pCapStt = rOutlNds[ n ];    // Start eines neuen Kapitels
+                    pCapStt = rOutlNds[ n ];	// Start eines neuen Kapitels
             // dann suche jetzt noch das Ende vom Bereich
             for( ; n < rOutlNds.Count(); ++n )
                 //if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
                 if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
                 {
-                    nCapEnd = rOutlNds[ n ]->GetIndex();    // Ende des gefundenen Kapitels
+                    nCapEnd = rOutlNds[ n ]->GetIndex();	// Ende des gefundenen Kapitels
                     break;
                 }
         }
 
-        sal_uInt16 nPos, nFtnNo = 1;
+        USHORT nPos, nFtnNo = 1;
         if( SeekEntry( *pCapStt, &nPos ) && nPos )
         {
             // gehe nach vorne bis der Index nicht mehr gleich ist
@@ -134,7 +134,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
             ++nPos;
         }
 
-        if( nPos == Count() )       // nichts gefunden
+        if( nPos == Count() )		// nichts gefunden
             return;
 
         if( !rOutlNds.Count() )
@@ -156,12 +156,12 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 
     SwUpdFtnEndNtAtEnd aNumArr;
 
-    // sal_Bool, damit hier auch bei Chapter-Einstellung die Endnoten
+    // BOOL, damit hier auch bei Chapter-Einstellung die Endnoten
     // durchlaufen.
-    const sal_Bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
+    const BOOL bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
 
-    sal_uInt16 nPos, nFtnNo = 1, nEndNo = 1;
-    sal_uLong nUpdNdIdx = rStt.GetIndex();
+    USHORT nPos, nFtnNo = 1, nEndNo = 1;
+    ULONG nUpdNdIdx = rStt.GetIndex();
     for( nPos = 0; nPos < Count(); ++nPos )
     {
         pTxtFtn = (*this)[ nPos ];
@@ -188,7 +188,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
         if( !rFtn.GetNumStr().Len() )
         {
-            sal_uInt16 nSectNo = aNumArr.ChkNumber( *pTxtFtn );
+            USHORT nSectNo = aNumArr.ChkNumber( *pTxtFtn );
             if( !nSectNo && ( rFtn.IsEndNote() || !bEndNoteOnly ))
                 nSectNo = rFtn.IsEndNote()
                             ? rEndInfo.nFtnOffset + nEndNo++
@@ -221,21 +221,20 @@ void SwFtnIdxs::UpdateAllFtn()
 
     SwUpdFtnEndNtAtEnd aNumArr;
 
-    SwRootFrm* pTmpRoot = pDoc->GetCurrentLayout();//swmod 080305
-    std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
     //Fuer normale Fussnoten werden Chapter- und Dokumentweise Nummerierung
     //getrennt behandelt. Fuer Endnoten gibt es nur die Dokumentweise
     //Nummerierung.
     if( FTNNUM_CHAPTER == rFtnInfo.eNum )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
-        sal_uInt16 nNo = 1,         // Nummer fuer die Fussnoten
-               nFtnIdx = 0;     // Index in das FtnIdx-Array
-        for( sal_uInt16 n = 0; n < rOutlNds.Count(); ++n )
+        USHORT nNo = 1,			// Nummer fuer die Fussnoten
+               nFtnIdx = 0;		// Index in das FtnIdx-Array
+        for( USHORT n = 0; n < rOutlNds.Count(); ++n )
         {
+            //if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
             if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
             {
-                sal_uLong nCapStt = rOutlNds[ n ]->GetIndex();  // Start eines neuen Kapitels
+                ULONG nCapStt = rOutlNds[ n ]->GetIndex();	// Start eines neuen Kapitels
                 for( ; nFtnIdx < Count(); ++nFtnIdx )
                 {
                     pTxtFtn = (*this)[ nFtnIdx ];
@@ -250,7 +249,7 @@ void SwFtnIdxs::UpdateAllFtn()
                                             &rFtn.GetNumStr() );
                 }
                 if( nFtnIdx >= Count() )
-                    break;          // ok alles geupdatet
+                    break;			// ok alles geupdatet
                 nNo = 1;
             }
         }
@@ -268,17 +267,17 @@ void SwFtnIdxs::UpdateAllFtn()
 
     }
 
-    // sal_Bool, damit hier auch bei Chapter-Einstellung die Endnoten
+    // BOOL, damit hier auch bei Chapter-Einstellung die Endnoten
     // durchlaufen.
-    const sal_Bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
-    sal_uInt16 nFtnNo = 0, nEndNo = 0;
-    for( sal_uInt16 nPos = 0; nPos < Count(); ++nPos )
+    const BOOL bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
+    USHORT nFtnNo = 0, nEndNo = 0;
+    for( USHORT nPos = 0; nPos < Count(); ++nPos )
     {
         pTxtFtn = (*this)[ nPos ];
         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
         if( !rFtn.GetNumStr().Len() )
         {
-            sal_uInt16 nSectNo = aNumArr.ChkNumber( *pTxtFtn );
+            USHORT nSectNo = aNumArr.ChkNumber( *pTxtFtn );
             if( !nSectNo && ( rFtn.IsEndNote() || !bEndNoteOnly ))
                 nSectNo = rFtn.IsEndNote()
                                 ? rEndInfo.nFtnOffset + (++nEndNo)
@@ -294,22 +293,22 @@ void SwFtnIdxs::UpdateAllFtn()
         }
     }
 
-    if( pTmpRoot && FTNNUM_PAGE == rFtnInfo.eNum )
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));//swmod 0
+    if( pDoc->GetRootFrm() && FTNNUM_PAGE == rFtnInfo.eNum )
+        pDoc->GetRootFrm()->UpdateFtnNums();
 }
 
-SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, sal_uInt16* pFndPos ) const
+SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, USHORT* pFndPos ) const
 {
-    sal_uLong nIdx = rPos.GetIndex();
+    ULONG nIdx = rPos.GetIndex();
 
-    sal_uInt16 nO = Count(), nM, nU = 0;
+    USHORT nO = Count(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
         while( nU <= nO )
         {
             nM = nU + ( nO - nU ) / 2;
-            sal_uLong nNdIdx = _SwTxtFtn_GetIndex( (*this)[ nM ] );
+            ULONG nNdIdx = _SwTxtFtn_GetIndex( (*this)[ nM ] );
             if( nNdIdx == nIdx )
             {
                 if( pFndPos )
@@ -338,23 +337,23 @@ SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, sal_uInt16* pFndPos ) c
 const SwSectionNode* SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr(
                 const SwTxtFtn& rTxtFtn )
 {
-    sal_uInt16 nWh = static_cast<sal_uInt16>( rTxtFtn.GetFtn().IsEndNote() ?
-                        RES_END_AT_TXTEND : RES_FTN_AT_TXTEND );
-    sal_uInt16 nVal;
+    USHORT nWh = static_cast<USHORT>( rTxtFtn.GetFtn().IsEndNote() ?
+                        RES_END_AT_TXTEND :	RES_FTN_AT_TXTEND );
+    USHORT nVal;
     const SwSectionNode* pNd = rTxtFtn.GetTxtNode().FindSectionNode();
     while( pNd && FTNEND_ATTXTEND_OWNNUMSEQ != ( nVal =
             ((const SwFmtFtnAtTxtEnd&)pNd->GetSection().GetFmt()->
-            GetFmtAttr( nWh, sal_True )).GetValue() ) &&
+            GetFmtAttr( nWh, TRUE )).GetValue() ) &&
             FTNEND_ATTXTEND_OWNNUMANDFMT != nVal )
         pNd = pNd->StartOfSectionNode()->FindSectionNode();
 
     return pNd;
 }
 
-sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
+USHORT SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
                                     const SwSectionNode& rNd )
 {
-    sal_uInt16 nRet = 0, nWh;
+    USHORT nRet = 0, nWh;
     SvPtrarr* pArr;
     SvUShorts* pNum;
     if( rTxtFtn.GetFtn().IsEndNote() )
@@ -371,7 +370,7 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
     }
     void* pNd = (void*)&rNd;
 
-    for( sal_uInt16 n = pArr->Count(); n; )
+    for( USHORT n = pArr->Count(); n; )
         if( pArr->GetObject( --n ) == pNd )
         {
             nRet = ++pNum->GetObject( n );
@@ -389,7 +388,7 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
     return nRet;
 }
 
-sal_uInt16 SwUpdFtnEndNtAtEnd::ChkNumber( const SwTxtFtn& rTxtFtn )
+USHORT SwUpdFtnEndNtAtEnd::ChkNumber( const SwTxtFtn& rTxtFtn )
 {
     const SwSectionNode* pSectNd = FindSectNdWithEndAttr( rTxtFtn );
     return pSectNd ? GetNumber( rTxtFtn, *pSectNd ) : 0;

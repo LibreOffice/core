@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define SC_ADDINHELPID_HXX
 
 #include <rtl/ustring.hxx>
-#include <rtl/string.hxx>
+
 
 // ============================================================================
 
@@ -51,7 +51,7 @@ public:
     void                        SetServiceName( const ::rtl::OUString& rServiceName );
 
     /** @return  The help ID of the function with given built-in name or 0 if not found. */
-    rtl::OString                GetHelpId( const ::rtl::OUString& rFuncName ) const;
+    sal_uInt16                  GetHelpId( const ::rtl::OUString& rFuncName ) const;
 };
 
 

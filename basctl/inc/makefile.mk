@@ -24,7 +24,6 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-
 PRJ=..
 
 PRJNAME=basctl
@@ -33,6 +32,7 @@ TARGET=inc
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 # --- Targets -------------------------------------------------------
@@ -45,3 +45,4 @@ ALLTAR : \
     $(SLO)$/precompiled_ex.pch
     
 .ENDIF			# "$(ENABLE_PCH)"!=""
+

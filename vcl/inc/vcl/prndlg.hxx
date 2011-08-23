@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,27 +60,22 @@ namespace vcl
             VirtualDevice       maPageVDev;
             rtl::OUString       maReplacementString;
             rtl::OUString       maToolTipString;
-            bool                mbGreyscale;
-            FixedLine           maHorzDim;
-            FixedLine           maVertDim;
-
+            
+            bool useHCColorReplacement() const;
         public:
             PrintPreviewWindow( Window* pParent, const ResId& );
             virtual ~PrintPreviewWindow();
-
+            
             virtual void Paint( const Rectangle& rRect );
             virtual void Command( const CommandEvent& );
             virtual void Resize();
             virtual void DataChanged( const DataChangedEvent& );
 
-            void setPreview( const GDIMetaFile&, const Size& i_rPaperSize,
-                             const rtl::OUString& i_rPaperName,
-                             const rtl::OUString& i_rNoPageString,
-                             sal_Int32 i_nDPIX, sal_Int32 i_nDPIY,
-                             bool i_bGreyscale
+            void setPreview( const GDIMetaFile&, const Size&, const rtl::OUString&,
+                             sal_Int32 i_nDPIX, sal_Int32 i_nDPIY
                             );
         };
-
+        
         class ShowNupOrderWindow : public Window
         {
             int mnOrderMode;
@@ -90,9 +85,9 @@ namespace vcl
         public:
             ShowNupOrderWindow( Window* pParent );
             virtual ~ShowNupOrderWindow();
-
+            
             virtual void Paint( const Rectangle& );
-
+            
             void setValues( int i_nOrderMode, int i_nColumns, int i_nRows )
             {
                 mnOrderMode = i_nOrderMode;
@@ -101,7 +96,7 @@ namespace vcl
                 Invalidate();
             }
         };
-
+        
         class NUpTabPage : public TabPage
         {
         public:
@@ -110,10 +105,10 @@ namespace vcl
             RadioButton                             maBrochureBtn;
             FixedText                               maPagesBoxTitleTxt;
             ListBox                                 maNupPagesBox;
-
+            
             // controls for "Custom" page mode
             FixedText                               maNupNumPagesTxt;
-            NumericField                            maNupColEdt;
+            NumericField                            maNupColEdt;            
             FixedText                               maNupTimesTxt;
             NumericField                            maNupRowsEdt;
             FixedText                               maPageMarginTxt1;
@@ -131,25 +126,26 @@ namespace vcl
             ShowNupOrderWindow                      maNupOrderWin;
             // border around each page
             CheckBox                                maBorderCB;
-
+            
+            vcl::RowOrColumn                        maLayout;
             boost::shared_ptr< vcl::RowOrColumn >   mxBrochureDep;
             boost::shared_ptr< vcl::LabeledElement >mxPagesBtnLabel;
-
+            
             void setupLayout();
-
+            
             NUpTabPage( Window*, const ResId& );
             virtual ~NUpTabPage();
-
+            
             void readFromSettings();
             void storeToSettings();
             void initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& );
             void enableNupControls( bool bEnable );
-
+            
             void showAdvancedControls( bool );
-
-            // virtual void Resize();
+            
+            virtual void Resize();
         };
-
+        
         class JobTabPage : public TabPage
         {
         public:
@@ -162,52 +158,56 @@ namespace vcl
             FixedText                               maLocationTxt;
             FixedText                               maCommentLabel;
             FixedText                               maCommentTxt;
-
+            
             PushButton                              maSetupButton;
-
+            
             FixedLine                               maCopies;
             FixedLine                               maCopySpacer;
             FixedText                               maCopyCount;
             NumericField                            maCopyCountField;
             CheckBox                                maCollateBox;
             FixedImage                              maCollateImage;
-            CheckBox                                maReverseOrderBox;
-
+    
             Image                                   maCollateImg;
+            Image                                   maCollateHCImg;
             Image                                   maNoCollateImg;
-
+            Image                                   maNoCollateHCImg;
+            
             long                                    mnCollateUIMode;
 
+            vcl::RowOrColumn                        maLayout;
             boost::shared_ptr<vcl::RowOrColumn>     mxPrintRange;
             boost::shared_ptr<vcl::WindowArranger>  mxDetails;
-
+    
             JobTabPage( Window*, const ResId& );
             virtual ~JobTabPage();
 
             void readFromSettings();
             void storeToSettings();
-
-            // virtual void Resize();
-
+            
+            virtual void Resize();
+            
             void setupLayout();
         };
-
+        
         class OutputOptPage : public TabPage
         {
         public:
             FixedLine                           maOptionsLine;
             CheckBox                            maToFileBox;
             CheckBox                            maCollateSingleJobsBox;
+            CheckBox                            maReverseOrderBox;
 
+            vcl::RowOrColumn                    maLayout;
             boost::shared_ptr<vcl::RowOrColumn> mxOptGroup;
-
+            
             OutputOptPage( Window*, const ResId& );
             virtual ~OutputOptPage();
 
             void readFromSettings();
             void storeToSettings();
 
-            // virtual void Resize();
+            virtual void Resize();
 
             void setupLayout();
         };
@@ -220,21 +220,21 @@ namespace vcl
         FixedText                               maNumPagesText;
         PushButton                              maBackwardBtn;
         PushButton                              maForwardBtn;
-
+        
         TabControl                              maTabCtrl;
         NUpTabPage                              maNUpPage;
         JobTabPage                              maJobPage;
         OutputOptPage                           maOptionsPage;
-
+        
         FixedLine                               maButtonLine;
-
+        
         boost::shared_ptr< PrinterController >  maPController;
-
+        
         rtl::OUString                           maPageStr;
         rtl::OUString                           maNoPageStr;
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
-
+        
         std::list< Window* >                    maControls;
         std::map< Window*, rtl::OUString >      maControlToPropertyMap;
         std::map< rtl::OUString, std::vector< Window* > >
@@ -244,21 +244,22 @@ namespace vcl
 
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;
-
+        
         // internal, used for automatic Nup-Portrait/landscape
         Size                                    maFirstPageSize;
-
+        
         rtl::OUString                           maPrintToFileText;
         rtl::OUString                           maPrintText;
         rtl::OUString                           maDefPrtText;
-
+        
+        vcl::RowOrColumn                        maLayout;
         boost::shared_ptr<vcl::RowOrColumn>     mxPreviewCtrls;
-
+        
         Size                                    maDetailsCollapsedSize;
         Size                                    maDetailsExpandedSize;
-
+        
         sal_Bool                                mbShowLayoutPage;
-
+        
         Size getJobPageSize();
         void updateNup();
         void updateNupFromPages();
@@ -273,41 +274,41 @@ namespace vcl
         void readFromSettings();
         void storeToSettings();
         com::sun::star::beans::PropertyValue* getValueForWindow( Window* ) const;
-
+        
         virtual void Resize();
         virtual void Command( const CommandEvent& );
         virtual void DataChanged( const DataChangedEvent& );
-
+        
         DECL_LINK( SelectHdl, ListBox* );
         DECL_LINK( ClickHdl, Button* );
         DECL_LINK( ModifyHdl, Edit* );
         DECL_LINK( UIOptionsChanged, void* );
-
+        
         DECL_LINK( UIOption_CheckHdl, CheckBox* );
         DECL_LINK( UIOption_RadioHdl, RadioButton* );
         DECL_LINK( UIOption_SelectHdl, ListBox* );
         DECL_LINK( UIOption_ModifyHdl, Edit* );
-
+        
         void setupLayout();
     public:
         PrintDialog( Window*, const boost::shared_ptr< PrinterController >& );
         virtual ~PrintDialog();
-
+        
         bool isPrintToFile();
         int getCopyCount();
         bool isCollate();
         bool isSingleJobs();
-
+        
         void previewForward();
         void previewBackward();
     };
-
+    
     class PrintProgressDialog : public ModelessDialog
     {
         String              maStr;
         FixedText           maText;
         CancelButton        maButton;
-
+        
         bool                mbCanceled;
         sal_Int32           mnCur;
         sal_Int32           mnMax;
@@ -316,17 +317,17 @@ namespace vcl
         bool                mbNativeProgress;
 
         DECL_LINK( ClickHdl, Button* );
-
+        
         void implCalcProgressRect();
     public:
         PrintProgressDialog( Window* i_pParent, int i_nMax );
         ~PrintProgressDialog();
-
+        
         bool isCanceled() const { return mbCanceled; }
         void setProgress( int i_nCurrent, int i_nMax = -1 );
         void tick();
         void reset();
-
+        
         virtual void Paint( const Rectangle& );
     };
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,45 +39,45 @@ class SwWrtShell;
 
 class SwEndNoteOptionPage : public SfxTabPage
 {
+    FixedText		aNumTypeFT;
+    SwNumberingTypeListBox	 aNumViewBox;
+    FixedText 		aOffsetLbl;
+    NumericField 	aOffsetFld;
+    FixedText		aNumCountFT;
+    ListBox 		aNumCountBox;
+    FixedText		aPrefixFT;
+    Edit			aPrefixED;
+    FixedText		aSuffixFT;
+    Edit			aSuffixED;
+    FixedText		aPosFT;
+    RadioButton 	aPosPageBox;
+    RadioButton 	aPosChapterBox;
     FixedLine       aNumFL;
-    FixedText       aNumTypeFT;
-    SwNumberingTypeListBox   aNumViewBox;
-    FixedText       aOffsetLbl;
-    NumericField    aOffsetFld;
-    FixedText       aNumCountFT;
-    ListBox         aNumCountBox;
-    FixedText       aPrefixFT;
-    Edit            aPrefixED;
-    FixedText       aSuffixFT;
-    Edit            aSuffixED;
-    FixedText       aPosFT;
-    RadioButton     aPosPageBox;
-    RadioButton     aPosChapterBox;
 
+    FixedText 		aParaTemplLbl;
+    ListBox 		aParaTemplBox;
+    FixedText 		aPageTemplLbl;
+    ListBox 		aPageTemplBox;
     FixedLine        aTemplFL;
-    FixedText       aParaTemplLbl;
-    ListBox         aParaTemplBox;
-    FixedText       aPageTemplLbl;
-    ListBox         aPageTemplBox;
 
+    FixedText 		aFtnCharAnchorTemplLbl;
+    ListBox 		aFtnCharAnchorTemplBox;
+    FixedText 		aFtnCharTextTemplLbl;
+    ListBox 		aFtnCharTextTemplBox;
     FixedLine        aCharTemplFL;
-    FixedText       aFtnCharAnchorTemplLbl;
-    ListBox         aFtnCharAnchorTemplBox;
-    FixedText       aFtnCharTextTemplLbl;
-    ListBox         aFtnCharTextTemplBox;
 
-    FixedLine aContFL;
     FixedText aContLbl;
     Edit aContEdit;
     FixedText aContFromLbl;
     Edit aContFromEdit;
+    FixedLine aContFL;
 
     String aNumDoc;
     String aNumPage;
     String aNumChapter;
     SwWrtShell *pSh;
-    sal_Bool    bPosDoc;
-    sal_Bool    bEndNote;
+    BOOL	bPosDoc;
+    BOOL 	bEndNote;
 
     inline void SelectNumbering(int eNum);
     int GetNumbering() const;
@@ -88,12 +88,12 @@ class SwEndNoteOptionPage : public SfxTabPage
 
 
 public:
-    SwEndNoteOptionPage( Window *pParent, sal_Bool bEndNote,
+    SwEndNoteOptionPage( Window *pParent, BOOL bEndNote,
                          const SfxItemSet &rSet );
     ~SwEndNoteOptionPage();
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
-    virtual sal_Bool FillItemSet(SfxItemSet &rSet);
+    virtual BOOL FillItemSet(SfxItemSet &rSet);
     virtual void Reset( const SfxItemSet& );
 
     void SetShell( SwWrtShell &rShell );

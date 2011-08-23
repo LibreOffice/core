@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ SfxSizeItem::SfxSizeItem()
 
 // -----------------------------------------------------------------------
 
-SfxSizeItem::SfxSizeItem( sal_uInt16 nW, const Size& rVal ) :
+SfxSizeItem::SfxSizeItem( USHORT nW, const Size& rVal ) :
     SfxPoolItem( nW ),
     aVal( rVal )
 {
@@ -64,7 +64,7 @@ SfxSizeItem::SfxSizeItem( sal_uInt16 nW, const Size& rVal ) :
 
 // -----------------------------------------------------------------------
 
-SfxSizeItem::SfxSizeItem( sal_uInt16 nW, SvStream &rStream ) :
+SfxSizeItem::SfxSizeItem( USHORT nW, SvStream &rStream ) :
     SfxPoolItem( nW )
 {
     DBG_CTOR(SfxSizeItem, 0);
@@ -84,12 +84,12 @@ SfxSizeItem::SfxSizeItem( const SfxSizeItem& rItem ) :
 
 SfxItemPresentation SfxSizeItem::GetPresentation
 (
-    SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    SfxItemPresentation 	/*ePresentation*/,
+    SfxMapUnit				/*eCoreMetric*/,
+    SfxMapUnit				/*ePresentationMetric*/,
+    XubString& 				rText,
     const IntlWrapper *
-)   const
+)	const
 {
     DBG_CHKTHIS(SfxSizeItem, 0);
     rText = UniString::CreateFromInt32(aVal.Width());
@@ -118,7 +118,7 @@ SfxPoolItem* SfxSizeItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, sal_uInt16 ) const
+SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxSizeItem, 0);
     Size aStr;
@@ -128,7 +128,7 @@ SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, sal_uInt16 ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxSizeItem::Store(SvStream &rStream, sal_uInt16 ) const
+SvStream& SfxSizeItem::Store(SvStream &rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxSizeItem, 0);
     rStream << aVal;
@@ -137,7 +137,7 @@ SvStream& SfxSizeItem::Store(SvStream &rStream, sal_uInt16 ) const
 
 // -----------------------------------------------------------------------
 bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
-                               sal_uInt8 nMemberId ) const
+                               BYTE nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -160,7 +160,7 @@ bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
             rVal <<= aTmp.getWidth(); break;
         case MID_HEIGHT:
             rVal <<= aTmp.getHeight(); break;
-    default: OSL_FAIL("Wrong MemberId!"); return false;
+    default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
     return true;
@@ -168,7 +168,7 @@ bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
 
 // -----------------------------------------------------------------------
 bool SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
-                            sal_uInt8 nMemberId )
+                            BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;

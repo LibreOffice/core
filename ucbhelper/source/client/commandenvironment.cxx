@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,6 +45,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
+using namespace rtl;
 
 namespace ucbhelper
 {
@@ -63,7 +64,7 @@ struct CommandEnvironment_Impl
     Reference< XProgressHandler >    m_xProgressHandler;
 
     CommandEnvironment_Impl(
-        const Reference< XInteractionHandler >& rxInteractionHandler,
+        const Reference< XInteractionHandler >&	rxInteractionHandler,
         const Reference< XProgressHandler >& rxProgressHandler )
     : m_xInteractionHandler( rxInteractionHandler ),
       m_xProgressHandler( rxProgressHandler ) {}
@@ -78,7 +79,7 @@ struct CommandEnvironment_Impl
 //=========================================================================
 
 CommandEnvironment::CommandEnvironment(
-        const Reference< XInteractionHandler >& rxInteractionHandler,
+        const Reference< XInteractionHandler >&	rxInteractionHandler,
         const Reference< XProgressHandler >& rxProgressHandler )
 {
     m_pImpl = new CommandEnvironment_Impl( rxInteractionHandler,

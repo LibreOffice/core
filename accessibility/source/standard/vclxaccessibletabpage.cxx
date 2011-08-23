@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ VCLXAccessibleTabPage::VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt1
     ,m_nPageId( nPageId )
 {
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
-    m_bFocused  = IsFocused();
+    m_bFocused	= IsFocused();
     m_bSelected = IsSelected();
     m_sPageText = GetPageText();
 }
@@ -175,14 +175,14 @@ void VCLXAccessibleTabPage::Update( bool bNew )
             Reference< XAccessible > xChild( pTabPage->GetAccessible( bNew ) );
             if ( xChild.is() )
             {
-                Any aOldValue, aNewValue;
+                Any aOldValue, aNewValue;                
                 if ( bNew )
                     aNewValue <<= xChild;
                 else
                     aOldValue <<= xChild;
                 NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
             }
-        }
+        }                       
     }
 }
 
@@ -209,12 +209,12 @@ void VCLXAccessibleTabPage::FillAccessibleStateSet( utl::AccessibleStateSetHelpe
 }
 
 // -----------------------------------------------------------------------------
-// OCommonAccessibleComponent
+// OCommonAccessibleComponent 
 // -----------------------------------------------------------------------------
 
 awt::Rectangle VCLXAccessibleTabPage::implGetBounds() throw (RuntimeException)
 {
-    awt::Rectangle aBounds( 0, 0, 0, 0 );
+    awt::Rectangle aBounds( 0, 0, 0, 0 );	
 
     if ( m_pTabControl )
         aBounds = AWTRectangle( m_pTabControl->GetTabBounds( m_nPageId ) );
@@ -276,7 +276,7 @@ void VCLXAccessibleTabPage::disposing()
 
 ::rtl::OUString VCLXAccessibleTabPage::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleTabPage" ));
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleTabPage" );
 }
 
 // -----------------------------------------------------------------------------
@@ -297,7 +297,7 @@ sal_Bool VCLXAccessibleTabPage::supportsService( const ::rtl::OUString& rService
 Sequence< ::rtl::OUString > VCLXAccessibleTabPage::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleTabPage" ));
+    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleTabPage" );
     return aNames;
 }
 
@@ -388,7 +388,7 @@ sal_Int16 VCLXAccessibleTabPage::getAccessibleRole(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleTabPage::getAccessibleDescription(    ) throw (RuntimeException)
+::rtl::OUString VCLXAccessibleTabPage::getAccessibleDescription(	) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -462,8 +462,8 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleAtPoint( const awt:
     {
         Reference< XAccessible > xAcc = getAccessibleChild( i );
         if ( xAcc.is() )
-        {
-            Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
+        {			
+            Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );				
             if ( xComp.is() )
             {
                 Rectangle aRect = VCLRectangle( xComp->getBounds() );
@@ -495,7 +495,7 @@ void VCLXAccessibleTabPage::grabFocus(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-sal_Int32 VCLXAccessibleTabPage::getForeground( ) throw (RuntimeException)
+sal_Int32 VCLXAccessibleTabPage::getForeground(	) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -505,7 +505,7 @@ sal_Int32 VCLXAccessibleTabPage::getForeground( ) throw (RuntimeException)
     {
         Reference< XAccessibleComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
         if ( xParentComp.is() )
-            nColor = xParentComp->getForeground();
+            nColor = xParentComp->getForeground();	
     }
 
     return nColor;
@@ -523,7 +523,7 @@ sal_Int32 VCLXAccessibleTabPage::getBackground(  ) throw (RuntimeException)
     {
         Reference< XAccessibleComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
         if ( xParentComp.is() )
-            nColor = xParentComp->getBackground();
+            nColor = xParentComp->getBackground();	
     }
 
     return nColor;
@@ -543,7 +543,7 @@ Reference< awt::XFont > VCLXAccessibleTabPage::getFont(  ) throw (RuntimeExcepti
     {
         Reference< XAccessibleExtendedComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
         if ( xParentComp.is() )
-            xFont = xParentComp->getFont();
+            xFont = xParentComp->getFont();	
     }
 
     return xFont;
@@ -690,7 +690,7 @@ sal_Bool VCLXAccessibleTabPage::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
             Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
             if( xFlushableClipboard.is() )
                 xFlushableClipboard->flushClipboard();
-
+            
             Application::AcquireSolarMutex( nRef );
 
             bReturn = sal_True;

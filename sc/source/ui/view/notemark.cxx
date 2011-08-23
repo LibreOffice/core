@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,14 @@
 #include "document.hxx"
 #include "postit.hxx"
 
-#define SC_NOTEMARK_TIME    800
-#define SC_NOTEMARK_SHORT   70
+#define SC_NOTEMARK_TIME	800
+#define SC_NOTEMARK_SHORT	70
 
 // -----------------------------------------------------------------------
 
 ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
                             ScDocument* pD, ScAddress aPos, const String& rUser,
-                            const MapMode& rMap, sal_Bool bLeftEdge, sal_Bool bForce, sal_Bool bKeyboard ) :
+                            const MapMode& rMap, BOOL bLeftEdge, BOOL bForce, BOOL bKeyboard ) :
     pWindow( pWin ),
     pRightWin( pRight ),
     pBottomWin( pBottom ),
@@ -62,7 +62,7 @@ ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Windo
     bByKeyboard( bKeyboard ),
     pModel( NULL ),
     pObject( NULL ),
-    bVisible( false )
+    bVisible( FALSE )
 {
     Size aSizePixel = pWindow->GetOutputSizePixel();
     if( pRightWin )
@@ -99,23 +99,23 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
         OutputDevice* pPrinter = pDoc->GetRefDevice();
         if (pPrinter)
         {
-            //  Am Outliner des Draw-Model ist auch der Drucker als RefDevice gesetzt,
-            //  und es soll einheitlich aussehen.
+            //	Am Outliner des Draw-Model ist auch der Drucker als RefDevice gesetzt,
+            //	und es soll einheitlich aussehen.
             Outliner& rOutliner = pModel->GetDrawOutliner();
             rOutliner.SetRefDevice(pPrinter);
         }
 
-        if( SdrPage* pPage = pModel->AllocPage( false ) )
+        if( SdrPage* pPage = pModel->AllocPage( FALSE ) )
         {
             pObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
             if( pObject )
                 aRect = pObject->GetCurrentBoundRect();
 
-            // Page einfuegen damit das Model sie kennt und auch deleted
+            // #39351# Page einfuegen damit das Model sie kennt und auch deleted
             pModel->InsertPage( pPage );
 
         }
-        bVisible = sal_True;
+        bVisible = TRUE;
     }
 
     Draw();
@@ -127,7 +127,7 @@ void lcl_DrawWin( SdrObject* pObject, Window* pWindow, const MapMode& rMap )
     MapMode aOld = pWindow->GetMapMode();
     pWindow->SetMapMode( rMap );
 
-    sal_uLong nOldDrawMode = pWindow->GetDrawMode();
+    ULONG nOldDrawMode = pWindow->GetDrawMode();
     if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         pWindow->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |

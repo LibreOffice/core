@@ -1,31 +1,37 @@
-# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#*************************************************************************
 #
-# Version: MPL 1.1 / GPLv3+ / LGPLv3+
+#   OpenOffice.org - a multi-platform office productivity suite
 #
-# The contents of this file are subject to the Mozilla Public License Version
-# 1.1 (the "License"); you may not use this file except in compliance with
-# the License. You may obtain a copy of the License at
-# http://www.mozilla.org/MPL/
+#   $RCSfile: makefile.mk,v $
 #
-# Software distributed under the License is distributed on an "AS IS" basis,
-# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
-# for the specific language governing rights and limitations under the
-# License.
+#   $Revision: 1.2 $
 #
-# The Initial Developer of the Original Code is
-#       Novell, Inc.
-# Portions created by the Initial Developer are Copyright (C) 2010 the
-# Initial Developer. All Rights Reserved.
+#   last change: $Author: ihi $ $Date: 2007/11/23 13:58:12 $
 #
-# Contributor(s):  Michael Meeks <michael.meeks@novell.com>
-#                  Caolan McNamara <caolanm@redhat.com>
+#   The Contents of this file are made available subject to
+#   the terms of GNU Lesser General Public License Version 2.1.
 #
-# Alternatively, the contents of this file may be used under the terms of
-# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
-# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
-# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
-# instead of those above.
 #
+#     GNU Lesser General Public License Version 2.1
+#     =============================================
+#     Copyright 2007 by Sun Microsystems, Inc.
+#     901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#     This library is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU Lesser General Public
+#     License version 2.1, as published by the Free Software Foundation.
+#
+#     This library is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#     Lesser General Public License for more details.
+#
+#     You should have received a copy of the GNU Lesser General Public
+#     License along with this library; if not, write to the Free Software
+#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#     MA  02111-1307  USA
+#
+#*************************************************************************
 
 PRJ=..$/..
 PRJNAME=sc
@@ -35,13 +41,19 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS) -I../../source/ui/inc
+#building with stlport, but cppunit was not built with stlport
+.IF "$(USE_SYSTEM_STL)"!="YES"
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGSCXX+=-DADAPT_EXT_STL
+.ENDIF
+.ENDIF
+
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/ucalc.obj
 SHL1STDLIBS=       \
     $(BASICLIB)	\
-    $(VBAHELPERLIB) \
     $(SFXLIB)		\
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
@@ -71,7 +83,6 @@ SHL1STDLIBS=       \
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1LIBS=$(SLB)$/scalc3.lib $(SLB)$/scalc3c.lib 
 DEF1NAME = $(SHL1TARGET)
-SHL1VERSIONMAP=version.map
 
 .INCLUDE: target.mk
 
@@ -83,50 +94,44 @@ my_file = file://
 
 ALLTAR: test
 
-test_components = \
-    component/framework/util/fwk \
-    component/sfx2/util/sfx \
-    component/unoxml/source/service/unoxml \
-    ucb1 \
-    ucpfile1 \
-    i18npool
+$(MISC)$/$(TARGET)$/types.rdb .ERRREMOVE : $(SOLARBINDIR)$/types.rdb
+    $(MKDIRHIER) $(@:d)
+    $(GNUCOPY) $? $@
+
+$(MISC)/$(TARGET)/udkapi.rdb .ERRREMOVE : $(SOLARBINDIR)$/udkapi.rdb
+    $(MKDIRHIER) $(@:d)
+    $(GNUCOPY) $? $@
 
 #Make a services.rdb with the services we know we need to get up and running
-$(MISC)/$(TARGET)/services.input : makefile.mk
+$(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb
     $(MKDIRHIER) $(@:d)
-    echo \
-        '<list>$(test_components:^"<filename>":+".component</filename>")</list>' \
-        > $@
+    $(REGCOMP) -register -br $(MISC)/$(TARGET)/udkapi.rdb -r $@ -wop \
+        -c configmgr.uno$(DLLPOST) \
+        -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST)
 
-$(MISC)/$(TARGET)/services.rdb .ERRREMOVE : makefile.mk $(MISC)/$(TARGET)/services.input
-    $(MKDIRHIER) $(@:d)
-    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@.tmp \
-        $(SOLARENV)/bin/packcomponents.xslt $(MISC)/$(TARGET)/services.input
-    cat $(MISC)/$@.tmp | sed 's|/program/|/|g' > $@
-
-#Tweak things so that we use the .res files in the solver
-STAR_RESOURCEPATH:=$(PWD)/$(BIN)$(PATH_SEPERATOR)$(SOLARBINDIR)
+#Tweak things to that we use the .res files in the solver
+STAR_RESOURCEPATH:=$(PWD)/$(BIN):$(SOLARBINDIR)
 .EXPORT : STAR_RESOURCEPATH
 
-.IF "$(OS)" != "DRAGONFLY"
-
-test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb
-    @echo ----------------------------------------------------------
-    @echo - start unit test \#1 on library $(SHL1TARGETN)
-    @echo ----------------------------------------------------------
-    $(CPPUNITTESTER) $(SHL1TARGETN) --headless --invisible \
-        '-env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/udkapi.rdb $(my_file)$(SOLARBINDIR)$/types.rdb' \
-        '-env:UNO_SERVICES=$(my_file)$(SOLARXMLDIR)/ure/services.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb'\
-        -env:URE_INTERNAL_LIB_DIR="$(my_file)$(SOLARSHAREDBIN)" \
-        -env:OOO_BASE_DIR="$(my_file)$(SOLARSHAREDBIN)" \
-        -env:BRAND_BASE_DIR="$(my_file)$(SOLARSHAREDBIN)"
-
-.ELSE
-
+#.IF "$(OS)" == "LINUX"
+#
+#test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/types.rdb $(MISC)/$(TARGET)/udkapi.rdb
+#    @echo ----------------------------------------------------------
+#    @echo - start unit test \#1 on library $(SHL1TARGETN)
+#    @echo ----------------------------------------------------------
+#    $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
+#        -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
+#        -env:UNO_TYPES="$(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/udkapi.rdb" \
+#        -env:OOO_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
+#        -env:BRAND_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
+#        -env:UNO_USER_PACKAGES_CACHE="$(my_file)$(PWD)/$(MISC)/$(TARGET)"
+#
+#.ELSE
+#
 test .PHONY: $(SHL1TARGETN)
     @echo ----------------------------------------------------------
-    @echo - WARNING!!, test disabled on your platform
-    @echo - Please test manually, and enable if it works
+    @echo - WARNING!!, test disabled due to regcomp failure on SUSE
+    @echo - boxes on configmgr.uno.so
     @echo ----------------------------------------------------------
 
-.ENDIF
+#.ENDIF

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,30 +43,30 @@ enum GlobalDocContentType {
 class SwGlblDocContent
 {
     GlobalDocContentType eType;
-    sal_uLong nDocPos;
+    ULONG nDocPos;
     union {
         const SwTOXBase* pTOX;
         const SwSection* pSect;
     } PTR;
 
 public:
-    SwGlblDocContent( sal_uLong nPos );
+    SwGlblDocContent( ULONG nPos );
     SwGlblDocContent( const SwTOXBaseSection* pTOX );
     SwGlblDocContent( const SwSection* pSect );
 
-    // Query contents.
+    // Inhalte abfragen
     GlobalDocContentType GetType() const { return eType; }
     const SwSection* GetSection() const
                             { return GLBLDOC_SECTION == eType ? PTR.pSect : 0; }
     const SwTOXBase* GetTOX() const
                             { return GLBLDOC_TOXBASE == eType ? PTR.pTOX : 0; }
-    sal_uLong GetDocPos() const { return nDocPos; }
+    ULONG GetDocPos() const { return nDocPos; }
 
-    // For sorting.
+    // fuers Sortieren
     inline int operator==( const SwGlblDocContent& rCmp ) const
-        {   return GetDocPos() == rCmp.GetDocPos(); }
+        {	return GetDocPos() == rCmp.GetDocPos(); }
     inline int operator<( const SwGlblDocContent& rCmp ) const
-        {   return GetDocPos() < rCmp.GetDocPos(); }
+        {	return GetDocPos() < rCmp.GetDocPos(); }
 };
 
 

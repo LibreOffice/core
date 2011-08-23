@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,6 +39,7 @@
 #include <viewopt.hxx>
 
 #include "wrtsh.hxx"
+#include "errhdl.hxx"
 #include "cmdid.h"
 #include "helpid.h"
 #include "envfmt.hxx"
@@ -89,25 +90,25 @@ void SwEnvPreview::Paint(const Rectangle &)
     const SwEnvItem& rItem =
         ((SwEnvDlg*) GetParent()->GetParent()->GetParent())->aEnvItem;
 
-    sal_uInt16 nPageW = (sal_uInt16) Max(rItem.lWidth, rItem.lHeight),
-           nPageH = (sal_uInt16) Min(rItem.lWidth, rItem.lHeight);
+    USHORT nPageW = (USHORT) Max(rItem.lWidth, rItem.lHeight),
+           nPageH = (USHORT) Min(rItem.lWidth, rItem.lHeight);
 
-    float fx = (float)GetOutputSizePixel().Width () / (float)nPageW,
-          fy = (float)GetOutputSizePixel().Height() / (float)nPageH,
-          f  = 0.8f * ( fx < fy ? fx : fy );
+    float fx = static_cast< float >(GetOutputSizePixel().Width () / nPageW),
+          fy = static_cast< float >(GetOutputSizePixel().Height() / nPageH),
+          f  = static_cast< float >(0.8 * ( fx < fy ? fx : fy ));
 
     Color aBack = rSettings.GetWindowColor( );
     Color aFront = SwViewOption::GetFontColor();
-    Color aMedium = Color(  ( aBack.GetRed() + aFront.GetRed() ) / 2,
+    Color aMedium = Color(	( aBack.GetRed() + aFront.GetRed() ) / 2,
                             ( aBack.GetGreen() + aFront.GetGreen() ) / 2,
                             ( aBack.GetBlue() + aFront.GetBlue() ) / 2
                         );
 
     SetLineColor( aFront );
 
-    // Envelope
-    long   nW = (sal_uInt16) (f * nPageW),
-           nH = (sal_uInt16) (f * nPageH),
+    // Umschlag
+    long   nW = (USHORT) (f * nPageW),
+           nH = (USHORT) (f * nPageH),
            nX = (GetOutputSizePixel().Width () - nW) / 2,
            nY = (GetOutputSizePixel().Height() - nH) / 2;
     SetFillColor( aBack );
@@ -116,37 +117,37 @@ void SwEnvPreview::Paint(const Rectangle &)
     // Sender
     if (rItem.bSend)
     {
-        long   nSendX = nX + (sal_uInt16) (f * rItem.lSendFromLeft),
-               nSendY = nY + (sal_uInt16) (f * rItem.lSendFromTop ),
-               nSendW = (sal_uInt16) (f * (rItem.lAddrFromLeft - rItem.lSendFromLeft)),
-               nSendH = (sal_uInt16) (f * (rItem.lAddrFromTop  - rItem.lSendFromTop  - 566));
+        long   nSendX = nX + (USHORT) (f * rItem.lSendFromLeft),
+               nSendY = nY + (USHORT) (f * rItem.lSendFromTop ),
+               nSendW = (USHORT) (f * (rItem.lAddrFromLeft - rItem.lSendFromLeft)),
+               nSendH = (USHORT) (f * (rItem.lAddrFromTop  - rItem.lSendFromTop  - 566));
         SetFillColor( aMedium );
 
         DrawRect(Rectangle(Point(nSendX, nSendY), Size(nSendW, nSendH)));
     }
 
     // Addressee
-    long   nAddrX = nX + (sal_uInt16) (f * rItem.lAddrFromLeft),
-           nAddrY = nY + (sal_uInt16) (f * rItem.lAddrFromTop ),
-           nAddrW = (sal_uInt16) (f * (nPageW - rItem.lAddrFromLeft - 566)),
-           nAddrH = (sal_uInt16) (f * (nPageH - rItem.lAddrFromTop  - 566));
+    long   nAddrX = nX + (USHORT) (f * rItem.lAddrFromLeft),
+           nAddrY = nY + (USHORT) (f * rItem.lAddrFromTop ),
+           nAddrW = (USHORT) (f * (nPageW - rItem.lAddrFromLeft - 566)),
+           nAddrH = (USHORT) (f * (nPageH - rItem.lAddrFromTop  - 566));
     SetFillColor( aMedium );
     DrawRect(Rectangle(Point(nAddrX, nAddrY), Size(nAddrW, nAddrH)));
 
     // Stamp
-    long   nStmpW = (sal_uInt16) (f * 1417 /* 2,5 cm */),
-           nStmpH = (sal_uInt16) (f * 1701 /* 3,0 cm */),
-           nStmpX = nX + nW - (sal_uInt16) (f * 566) - nStmpW,
-           nStmpY = nY + (sal_uInt16) (f * 566);
+    long   nStmpW = (USHORT) (f * 1417 /* 2,5 cm */),
+           nStmpH = (USHORT) (f * 1701 /* 3,0 cm */),
+           nStmpX = nX + nW - (USHORT) (f * 566) - nStmpW,
+           nStmpY = nY + (USHORT) (f * 566);
 
     SetFillColor( aBack );
     DrawRect(Rectangle(Point(nStmpX, nStmpY), Size(nStmpW, nStmpH)));
 }
 
 SwEnvDlg::SwEnvDlg(Window* pParent, const SfxItemSet& rSet,
-                    SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert) :
+                    SwWrtShell* pWrtSh, Printer* pPrt, BOOL bInsert) :
 
-    SfxTabDialog(pParent, SW_RES(DLG_ENV), &rSet, sal_False, &aEmptyStr),
+    SfxTabDialog(pParent, SW_RES(DLG_ENV), &rSet, FALSE, &aEmptyStr),
     sInsert(SW_RES(ST_INSERT)),
     sChange(SW_RES(ST_CHANGE)),
     aEnvItem((const SwEnvItem&) rSet.Get(FN_ENVELOP)),
@@ -159,7 +160,7 @@ SwEnvDlg::SwEnvDlg(Window* pParent, const SfxItemSet& rSet,
 
     GetOKButton().SetText(String(SW_RES(STR_BTN_NEWDOC)));
     GetOKButton().SetHelpId(HID_ENVELOP_PRINT);
-    GetOKButton().SetHelpText(aEmptyStr);   // in order for generated help text to get used
+    GetOKButton().SetHelpText(aEmptyStr);	// Damit generierter Hilfetext verwendet wird
     if (GetUserButton())
     {
         GetUserButton()->SetText(bInsert ? sInsert : sChange);
@@ -177,7 +178,7 @@ SwEnvDlg::~SwEnvDlg()
     delete pSenderSet;
 }
 
-void SwEnvDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
+void SwEnvDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
 {
     if (nId == TP_ENV_PRT)
     {
@@ -229,10 +230,10 @@ SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet) :
     pSh = GetParent()->pSh;
 
     // Install handlers
-    aDatabaseLB    .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
-    aTableLB       .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
-    aInsertBT      .SetClickHdl (LINK(this, SwEnvPage, FieldHdl        ));
-    aSenderBox     .SetClickHdl (LINK(this, SwEnvPage, SenderHdl       ));
+    aDatabaseLB    .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl	   ));
+    aTableLB       .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl	   ));
+    aInsertBT      .SetClickHdl	(LINK(this, SwEnvPage, FieldHdl		   ));
+    aSenderBox	   .SetClickHdl (LINK(this, SwEnvPage, SenderHdl       ));
     aPreview.SetBorderStyle( WINDOW_BORDER_MONO );
 
     SwDBData aData = pSh->GetDBData();
@@ -248,7 +249,7 @@ SwEnvPage::~SwEnvPage()
 
 IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
 {
-    SwWait aWait( *pSh->GetView().GetDocShell(), sal_True );
+    SwWait aWait( *pSh->GetView().GetDocShell(), TRUE );
 
     if (pListBox == &aDatabaseLB)
     {
@@ -283,7 +284,7 @@ IMPL_LINK( SwEnvPage, FieldHdl, Button *, EMPTYARG )
 
 IMPL_LINK( SwEnvPage, SenderHdl, Button *, EMPTYARG )
 {
-    const sal_Bool bEnable = aSenderBox.IsChecked();
+    const BOOL bEnable = aSenderBox.IsChecked();
     GetParent()->aEnvItem.bSend = bEnable;
     aSenderEdit.Enable(bEnable);
     if ( bEnable )
@@ -348,11 +349,11 @@ void SwEnvPage::FillItem(SwEnvItem& rItem)
     rItem.aSendText = aSenderEdit.GetText();
 }
 
-sal_Bool SwEnvPage::FillItemSet(SfxItemSet& rSet)
+BOOL SwEnvPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(GetParent()->aEnvItem);
     rSet.Put(GetParent()->aEnvItem);
-    return sal_True;
+    return TRUE;
 }
 
 void SwEnvPage::Reset(const SfxItemSet& rSet)

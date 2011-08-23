@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@
 #include <sfx2/objsh.hxx>
 #include "fltfnc.hxx"
 #include <sfx2/viewsh.hxx>
-#include "sfx2/viewfac.hxx"
-#include "sfx2/sfxresid.hxx"
+#include "viewfac.hxx"
+#include "sfxresid.hxx"
 #include <sfx2/docfile.hxx>
 #include "preview.hxx"
 #include <sfx2/printer.hxx>
@@ -62,10 +62,10 @@
 #include <svtools/accessibilityoptions.hxx>
 
 // Draw modes
-#define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
+#define OUTPUT_DRAWMODE_COLOR		(DRAWMODE_DEFAULT)
 #define OUTPUT_DRAWMODE_GRAYSCALE   (DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT)
 #define OUTPUT_DRAWMODE_BLACKWHITE  (DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT)
-#define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
+#define OUTPUT_DRAWMODE_CONTRAST	(DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
 
 //========================================================================
 
@@ -135,13 +135,13 @@ void SfxPreviewWin_Impl::ImpPaint(
     Point aPoint;
     if (dRatio>dRatioPreV)
     {
-        aSize=Size(nWidth, (sal_uInt16)(nWidth/dRatio));
-        aPoint=Point( 0, (sal_uInt16)((nHeight-aSize.Height())/2));
+        aSize=Size(nWidth, (USHORT)(nWidth/dRatio));
+        aPoint=Point( 0, (USHORT)((nHeight-aSize.Height())/2));
     }
     else
     {
-        aSize=Size((sal_uInt16)(nHeight*dRatio), nHeight);
-        aPoint=Point((sal_uInt16)((nWidth-aSize.Width())/2),0);
+        aSize=Size((USHORT)(nHeight*dRatio), nHeight);
+        aPoint=Point((USHORT)((nWidth-aSize.Width())/2),0);
     }
     Point bPoint=Point(nWidth,nHeight)-aPoint;
 
@@ -157,6 +157,9 @@ void SfxPreviewWin_Impl::ImpPaint(
         pWindow->SetLineColor( aBlackCol );
         pWindow->SetFillColor( aWhiteCol );
         pWindow->DrawRect( Rectangle( aPoint + Point( FRAME, FRAME ), bPoint + Point( FRAME, FRAME ) ) );
+//!		pFile->Move( Point( FRAME, FRAME ) );
+//!		pFile->Scale( Fraction( aTmpSize.Width(), aSize.Width() ),
+//!					  Fraction( aTmpSize.Height(), aSize.Height() ) );
         pFile->WindStart();
         pFile->Play( pWindow, aPoint + Point( FRAME, FRAME ), aSize  );
     }
@@ -174,11 +177,12 @@ SfxPreviewWin::SfxPreviewWin(
     SetHelpId( HID_PREVIEW_FRAME );
 
     // adjust contrast mode initially
-    SetDrawMode( OUTPUT_DRAWMODE_COLOR );
+    bool bUseContrast = UseHighContrastSetting();
+    SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
-    // This preview window is for document previews.  Therefore
+    // #107818# This preview window is for document previews.  Therefore
     // right-to-left mode should be off
-    EnableRTL( sal_False );
+    EnableRTL( FALSE );
 }
 
 void SfxPreviewWin::Paint( const Rectangle& rRect )
@@ -198,7 +202,7 @@ void SfxPreviewWin::Paint( const Rectangle& rRect )
     DBG_ASSERT( aTmpSize.Height() * aTmpSize.Width(), "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
 
     aMtf.SetPrefSize( aTmpSize );
-    aDevice.EnableOutput( sal_False );
+    aDevice.EnableOutput( FALSE );
     aDevice.SetMapMode( rDocShell->GetMapUnit() );
     aDevice.SetDrawMode( GetDrawMode() );
     aMtf.Record( &aDevice );
@@ -215,9 +219,17 @@ void SfxPreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
     if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        SetDrawMode( OUTPUT_DRAWMODE_COLOR );
+        // adjust contrast mode
+        bool bUseContrast = UseHighContrastSetting();
+        SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
     }
 }
+
+bool SfxPreviewWin::UseHighContrastSetting() const
+{
+    return GetSettings().GetStyleSettings().GetHighContrastMode();
+}
+
 
 class SfxNewFileDialog_Impl
 {
@@ -254,7 +266,7 @@ class SfxNewFileDialog_Impl
     String aNone;
     String sLoadTemplate;
 
-    sal_uInt16 nFlags;
+    USHORT nFlags;
     SfxDocumentTemplates aTemplates;
     SfxObjectShellLock xDocShell;
     SfxNewFileDialog* pAntiImpl;
@@ -269,23 +281,23 @@ class SfxNewFileDialog_Impl
     DECL_LINK( Expand, MoreButton * );
     DECL_LINK( PreviewClick, CheckBox * );
     DECL_LINK( LoadFile, PushButton* );
-    sal_uInt16  GetSelectedTemplatePos() const;
+    USHORT  GetSelectedTemplatePos() const;
 
 public:
 
-    SfxNewFileDialog_Impl( SfxNewFileDialog* pAntiImplP, sal_uInt16 nFlags );
+    SfxNewFileDialog_Impl( SfxNewFileDialog* pAntiImplP, USHORT nFlags );
     ~SfxNewFileDialog_Impl();
 
-        // Returns sal_False if '- No -' is set as a template
-        // Template name can only be obtained if IsTemplate() is TRUE
+        // Liefert FALSE, wenn '- Keine -' als Vorlage eingestellt ist
+        // Nur wenn IsTemplate() TRUE liefert, koennen Vorlagennamen
         // erfragt werden
-    sal_Bool IsTemplate() const;
+    BOOL IsTemplate() const;
     String GetTemplateRegion() const;
     String GetTemplateName() const;
     String GetTemplateFileName() const;
 
-    sal_uInt16  GetTemplateFlags()const;
-    void    SetTemplateFlags(sal_uInt16 nSet);
+    USHORT  GetTemplateFlags()const;
+    void    SetTemplateFlags(USHORT nSet);
 };
 
 
@@ -307,11 +319,11 @@ IMPL_LINK( SfxNewFileDialog_Impl, Update, void *, EMPTYARG )
     if ( xDocShell.Is() )
     {
         if ( xDocShell->GetProgress() )
-            return sal_False;
+            return FALSE;
         xDocShell.Clear();
     }
 
-    const sal_uInt16 nEntry = GetSelectedTemplatePos();
+    const USHORT nEntry = GetSelectedTemplatePos();
     if(!nEntry)
     {
         ClearInfo();
@@ -355,24 +367,24 @@ IMPL_LINK( SfxNewFileDialog_Impl, Update, void *, EMPTYARG )
             Application::SetDefDialogParent( pAntiImpl );
             SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,pAntiImpl);
             SfxApplication *pSfxApp = SFX_APP();
-            sal_uIntPtr lErr;
+            ULONG lErr;
             SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
-            pSet->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-            pSet->Put( SfxBoolItem( SID_PREVIEW, sal_True ) );
-            lErr = pSfxApp->LoadTemplate( xDocShell, aFileName, sal_True, pSet );
+            pSet->Put( SfxBoolItem( SID_TEMPLATE, TRUE ) );
+            pSet->Put( SfxBoolItem( SID_PREVIEW, TRUE ) );
+            lErr = pSfxApp->LoadTemplate( xDocShell, aFileName, TRUE, pSet );
             if( lErr )
                 ErrorHandler::HandleError(lErr);
             Application::SetDefDialogParent( pParent );
             if ( !xDocShell.Is() )
             {
                 aPreviewWin.SetObjectShell( 0 );
-                return sal_False;
+                return FALSE;
             }
         }
 
         aPreviewWin.SetObjectShell( xDocShell );
     }
-    return sal_True;
+    return TRUE;
 }
 
 //-------------------------------------------------------------------------
@@ -382,20 +394,20 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
     if ( xDocShell.Is() && xDocShell->GetProgress() )
         return 0;
 
-    const sal_uInt16 nRegion = pBox->GetSelectEntryPos();
-    const sal_uInt16 nCount = aTemplates.GetRegionCount()? aTemplates.GetCount(nRegion): 0;
-    aTemplateLb.SetUpdateMode(sal_False);
+    const USHORT nRegion = pBox->GetSelectEntryPos();
+    const USHORT nCount = aTemplates.GetRegionCount()? aTemplates.GetCount(nRegion): 0;
+    aTemplateLb.SetUpdateMode(FALSE);
     aTemplateLb.Clear();
     String aSel=aRegionLb.GetSelectEntry();
-    sal_uInt16 nc=aSel.Search('(');
+    USHORT nc=aSel.Search('(');
     if (nc-1&&nc!=STRING_NOTFOUND)
         aSel.Erase(nc-1);
     if (aSel.CompareIgnoreCaseToAscii( String(SfxResId(STR_STANDARD)) )==COMPARE_EQUAL)
         aTemplateLb.InsertEntry(aNone);
-    for (sal_uInt16 i = 0; i < nCount; ++i)
+    for (USHORT i = 0; i < nCount; ++i)
         aTemplateLb.InsertEntry(aTemplates.GetName(nRegion, i));
     aTemplateLb.SelectEntryPos(0);
-    aTemplateLb.SetUpdateMode(sal_True);
+    aTemplateLb.SetUpdateMode(TRUE);
     aTemplateLb.Invalidate();
     aTemplateLb.Update();
     return 0;
@@ -417,7 +429,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, PreviewClick, CheckBox *, pBox )
     if ( xDocShell.Is() && xDocShell->GetProgress() )
         return 0;
 
-    sal_uInt16 nEntry = GetSelectedTemplatePos();
+    USHORT nEntry = GetSelectedTemplatePos();
     if ( nEntry && pBox->IsChecked() )
     {
         if(!Update(0))
@@ -436,12 +448,12 @@ IMPL_LINK( SfxNewFileDialog_Impl, PreviewClick, CheckBox *, pBox )
 
 IMPL_LINK( SfxNewFileDialog_Impl, TemplateSelect, ListBox *, EMPTYARG )
 {
-    // Still loading
+    // noch am Laden
     if ( xDocShell && xDocShell->GetProgress() )
         return 0;
 
     if ( !MORE_BTN(GetState()) )
-        // Dialog is not opened
+        // Dialog nicht aufgeklappt
         return 0;
 
     aPrevTimer.Start();
@@ -453,7 +465,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, TemplateSelect, ListBox *, EMPTYARG )
 IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 {
     (void)pListBox;
-    // Still loadning
+    // noch am Laden
     if ( !xDocShell.Is() || !xDocShell->GetProgress() )
         pAntiImpl->EndDialog(RET_OK);
     return 0;
@@ -470,11 +482,11 @@ IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, LoadFile, PushButton *, EMPTYARG 
 IMPL_LINK_INLINE_END( SfxNewFileDialog_Impl, LoadFile, PushButton *, EMPTYARG )
 //-------------------------------------------------------------------------
 
-sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
+USHORT  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
 {
-    sal_uInt16 nEntry=aTemplateLb.GetSelectEntryPos();
+    USHORT nEntry=aTemplateLb.GetSelectEntryPos();
     String aSel=aRegionLb.GetSelectEntry().Copy();
-    sal_uInt16 nc=aSel.Search('(');
+    USHORT nc=aSel.Search('(');
     if (nc-1&&nc!=STRING_NOTFOUND)
         aSel.Erase(nc-1);
     if (aSel.CompareIgnoreCaseToAscii(String(SfxResId(STR_STANDARD)))!=COMPARE_EQUAL)
@@ -486,7 +498,7 @@ sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxNewFileDialog_Impl::IsTemplate() const
+BOOL SfxNewFileDialog_Impl::IsTemplate() const
 {
     return GetSelectedTemplatePos()!=0;
 
@@ -531,9 +543,9 @@ void AdjustPosSize_Impl(Window *pWin, short nMoveOffset, short nSizeOffset)
     pWin->SetPosSizePixel(aPos, aSize);
 }
 //-------------------------------------------------------------------------
-sal_uInt16  SfxNewFileDialog_Impl::GetTemplateFlags()const
+USHORT  SfxNewFileDialog_Impl::GetTemplateFlags()const
 {
-    sal_uInt16 nRet = aTextStyleCB.IsChecked() ? SFX_LOAD_TEXT_STYLES : 0;
+    USHORT nRet = aTextStyleCB.IsChecked() ? SFX_LOAD_TEXT_STYLES : 0;
     if(aFrameStyleCB.IsChecked())
         nRet |= SFX_LOAD_FRAME_STYLES;
     if(aPageStyleCB.IsChecked())
@@ -545,7 +557,7 @@ sal_uInt16  SfxNewFileDialog_Impl::GetTemplateFlags()const
     return nRet;
 }
 //-------------------------------------------------------------------------
-void    SfxNewFileDialog_Impl::SetTemplateFlags(sal_uInt16 nSet)
+void    SfxNewFileDialog_Impl::SetTemplateFlags(USHORT nSet)
 {
     aTextStyleCB.Check(  0 != (nSet&SFX_LOAD_TEXT_STYLES ));
     aFrameStyleCB.Check( 0 != (nSet&SFX_LOAD_FRAME_STYLES));
@@ -557,8 +569,8 @@ void    SfxNewFileDialog_Impl::SetTemplateFlags(sal_uInt16 nSet)
 //-------------------------------------------------------------------------
 
 SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
-    SfxNewFileDialog* pAntiImplP, sal_uInt16 nFl)
-    :   aRegionFt( pAntiImplP, SfxResId( FT_REGION ) ),
+    SfxNewFileDialog* pAntiImplP, USHORT nFl)
+    :	aRegionFt( pAntiImplP, SfxResId( FT_REGION ) ),
         aRegionLb( pAntiImplP, SfxResId( LB_REGION ) ),
         aTemplateFt( pAntiImplP, SfxResId( FT_TEMPLATE ) ),
         aTemplateLb( pAntiImplP, SfxResId( LB_TEMPLATE ) ),
@@ -643,7 +655,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     }
 
     String &rExtra = pAntiImplP->GetExtraData();
-    sal_uInt16 nTokCount = rExtra.GetTokenCount( '|' );
+    USHORT nTokCount = rExtra.GetTokenCount( '|' );
     if( nTokCount > 0 && nFlags )
         MORE_BTN(SetState( rExtra.GetToken( 0, '|' ) == 'Y' ));
     if( nTokCount > 1 && nFlags )
@@ -657,10 +669,10 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
         aTemplates.Update( sal_True /* be smart */ );
     }
     // fill the list boxes
-    const sal_uInt16 nCount = aTemplates.GetRegionCount();
+    const USHORT nCount = aTemplates.GetRegionCount();
     if (nCount)
     {
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        for(USHORT i = 0; i < nCount; ++i)
             aRegionLb.InsertEntry(aTemplates.GetFullRegionName(i));
         aRegionLb.SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, RegionSelect));
     }
@@ -668,6 +680,8 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     aPrevTimer.SetTimeout( 500 );
     aPrevTimer.SetTimeoutHdl( LINK( this, SfxNewFileDialog_Impl, Update));
 
+//	 else
+//		  aRegionLb.InsertEntry(String(SfxResId(STR_STANDARD)));
     aRegionLb.SelectEntryPos(0);
     RegionSelect(&aRegionLb);
 }
@@ -684,7 +698,7 @@ SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
     delete pMoreBt;
 }
 //-------------------------------------------------------------------------
-SfxNewFileDialog::SfxNewFileDialog(Window *pParent, sal_uInt16 nFlags)
+SfxNewFileDialog::SfxNewFileDialog(Window *pParent, USHORT nFlags)
     : SfxModalDialog( pParent, SfxResId( DLG_NEW_FILE ) )
 {
     pImpl = new SfxNewFileDialog_Impl( this, nFlags );
@@ -695,7 +709,7 @@ SfxNewFileDialog::~SfxNewFileDialog()
     delete pImpl;
 }
 //-------------------------------------------------------------------------
-sal_Bool SfxNewFileDialog::IsTemplate() const
+BOOL SfxNewFileDialog::IsTemplate() const
 {
     return pImpl->IsTemplate();
 }
@@ -715,13 +729,13 @@ String SfxNewFileDialog::GetTemplateFileName() const
     return pImpl->GetTemplateFileName();
 }
 //-------------------------------------------------------------------------
-sal_uInt16 SfxNewFileDialog::GetTemplateFlags()const
+USHORT SfxNewFileDialog::GetTemplateFlags()const
 {
     return pImpl->GetTemplateFlags();
 
 }
 //-------------------------------------------------------------------------
-void    SfxNewFileDialog::SetTemplateFlags(sal_uInt16 nSet)
+void    SfxNewFileDialog::SetTemplateFlags(USHORT nSet)
 {
     pImpl->SetTemplateFlags(nSet);
 }

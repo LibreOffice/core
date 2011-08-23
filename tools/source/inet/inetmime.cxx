@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -373,11 +373,12 @@ bool parseParameters(ParameterList const & rInput,
                         break;
                 };
             }
-            pOutput->Append(new INetContentTypeParameter(p->m_aAttribute,
+            pOutput->Insert(new INetContentTypeParameter(p->m_aAttribute,
                                                              p->m_aCharset,
                                                              p->m_aLanguage,
                                                              aValue,
-                                                             !bBadEncoding));
+                                                             !bBadEncoding),
+                                LIST_APPEND);
             p = pNext;
         }
     return true;
@@ -799,7 +800,7 @@ const sal_Char * INetMIME::skipQuotedString(const sal_Char * pBegin,
                         || !isWhiteSpace(*p++))
                         return pBegin;
                     break;
-
+                    
                 case '"':
                     return p;
 
@@ -828,7 +829,7 @@ const sal_Unicode * INetMIME::skipQuotedString(const sal_Unicode * pBegin,
                         || !isWhiteSpace(*p++))
                         return pBegin;
                     break;
-
+                    
                 case '"':
                     return p;
 
@@ -1087,7 +1088,7 @@ const sal_Unicode * INetMIME::scanQuotedBlock(const sal_Unicode * pBegin,
                             }
                             else
                                 ++pBegin;
-                        }
+                        } 
                         break;
 
                     default:
@@ -1144,6 +1145,8 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
 
         bool bPresent;
         Parameter ** pPos = aList.find(aAttribute, nSection, bPresent);
+        if (bPresent)
+            break;
 
         bool bExtended = false;
         if (p != pEnd && *p == '*')
@@ -1300,8 +1303,7 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                     pTokenBegin, static_cast< xub_StrLen >(p - pTokenBegin));
         }
 
-        if (!bPresent)
-            *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
+        *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
                               nSection, bExtended);
     }
     return parseParameters(aList, pParameters) ? pParameterBegin : pBegin;
@@ -1548,7 +1550,7 @@ const sal_Char * INetMIME::getCharsetName(rtl_TextEncoding eEncoding)
                 return "ISO-10646-UCS-2";
 
             default:
-                OSL_FAIL("INetMIME::getCharsetName(): Unsupported encoding");
+                DBG_ERROR("INetMIME::getCharsetName(): Unsupported encoding");
                 return 0;
         }
 }
@@ -2038,7 +2040,7 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             break;
 
         default: //@@@ more cases are missing!
-            OSL_FAIL("INetMIME::createPreferredCharsetList():"
+            DBG_ERROR("INetMIME::createPreferredCharsetList():"
                           " Unsupported encoding");
             break;
     }
@@ -3064,7 +3066,7 @@ ByteString INetMIME::decodeUTF8(const ByteString & rText,
     ByteString sDecoded;
     while (p != pEnd)
     {
-        sal_uInt32 nCharacter = 0;
+        sal_uInt32 nCharacter;
         if (translateUTF8Char(p, pEnd, eEncoding, nCharacter))
             sDecoded += sal_Char(nCharacter);
         else
@@ -3346,22 +3348,22 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
             bEncodedWord = bEncodedWord && q != pEnd && *q++ == '=';
 
-//          if (bEncodedWord && q != pEnd)
-//              switch (*q)
-//              {
-//                  case '\t':
-//                  case ' ':
-//                  case '"':
-//                  case ')':
-//                  case ',':
-//                  case '.':
-//                  case '=':
-//                      break;
+//			if (bEncodedWord && q != pEnd)
+//				switch (*q)
+//				{
+//					case '\t':
+//					case ' ':
+//					case '"':
+//					case ')':
+//					case ',':
+//					case '.':
+//					case '=':
+//						break;
 //
-//                  default:
-//                      bEncodedWord = false;
-//                      break;
-//              }
+//					default:
+//						bEncodedWord = false;
+//						break;
+//				}
 
             sal_Unicode * pUnicodeBuffer = 0;
             sal_Size nUnicodeSize = 0;
@@ -3463,13 +3465,13 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
         switch (*p++)
         {
-//          case '\t':
-//          case ' ':
-//          case ',':
-//          case '.':
-//          case '=':
-//              bStartEncodedWord = true;
-//              break;
+//			case '\t':
+//			case ' ':
+//			case ',':
+//			case '.':
+//			case '=':
+//				bStartEncodedWord = true;
+//				break;
 
             case '"':
                 if (eType != HEADER_FIELD_TEXT && nCommentLevel == 0)
@@ -3497,7 +3499,7 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
             {
                 const sal_Char * pUTF8Begin = p - 1;
                 const sal_Char * pUTF8End = pUTF8Begin;
-                sal_uInt32 nCharacter = 0;
+                sal_uInt32 nCharacter;
                 if (translateUTF8Char(pUTF8End, pEnd, RTL_TEXTENCODING_UCS4,
                                       nCharacter))
                 {
@@ -4543,21 +4545,21 @@ INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
 
 void INetContentTypeParameterList::Clear()
 {
-    maEntries.clear();
+    while (Count() > 0)
+        delete static_cast< INetContentTypeParameter * >(Remove(Count() - 1));
 }
 
 //============================================================================
 const INetContentTypeParameter *
 INetContentTypeParameterList::find(const ByteString & rAttribute) const
 {
-    boost::ptr_vector<INetContentTypeParameter>::const_iterator iter;
-    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
+    for (ULONG i = 0; i < Count(); ++i)
     {
-        if (iter->m_sAttribute.EqualsIgnoreCaseAscii(rAttribute))
-            return &(*iter);
+        const INetContentTypeParameter * pParameter = GetObject(i);
+        if (pParameter->m_sAttribute.EqualsIgnoreCaseAscii(rAttribute))
+            return pParameter;
     }
-
-    return NULL;
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

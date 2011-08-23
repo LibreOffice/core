@@ -18,30 +18,30 @@
         <supported-service> com.sun.star.frame.ContentHandler </supported-service>
     </component-description>
 
-    <project-build-dependency>  cppu        </project-build-dependency>
-    <project-build-dependency>  cppuhelper  </project-build-dependency>
-    <project-build-dependency>  sal         </project-build-dependency>
-    <project-build-dependency>  tools       </project-build-dependency>
-    <project-build-dependency>  svtools     </project-build-dependency>
-    <project-build-dependency>  toolkit     </project-build-dependency>
-    <project-build-dependency>  sv          </project-build-dependency>
-    <project-build-dependency>  comphelper  </project-build-dependency>
-    <project-build-dependency>  unotools    </project-build-dependency>
-    <project-build-dependency>  ucbhelper   </project-build-dependency>
-    <project-build-dependency>  svl         </project-build-dependency>
-    <project-build-dependency>  sot         </project-build-dependency>
+    <project-build-dependency>	cppu		</project-build-dependency>
+    <project-build-dependency>	cppuhelper	</project-build-dependency>
+    <project-build-dependency>	sal			</project-build-dependency>
+    <project-build-dependency>	tools		</project-build-dependency>
+    <project-build-dependency>	svtools		</project-build-dependency>
+    <project-build-dependency>	toolkit		</project-build-dependency>
+    <project-build-dependency>	sv			</project-build-dependency>
+    <project-build-dependency>	comphelper	</project-build-dependency>
+    <project-build-dependency>	unotools	</project-build-dependency>
+    <project-build-dependency>	ucbhelper	</project-build-dependency>
+    <project-build-dependency>	svl			</project-build-dependency>
+    <project-build-dependency>	sot			</project-build-dependency>
 
-    <runtime-module-dependency> cppu2       </runtime-module-dependency>
-    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
-    <runtime-module-dependency> sal2        </runtime-module-dependency>
-    <runtime-module-dependency> tl          </runtime-module-dependency>
-    <runtime-module-dependency> svt         </runtime-module-dependency>
-    <runtime-module-dependency> svl         </runtime-module-dependency>
-    <runtime-module-dependency> tk          </runtime-module-dependency>
-    <runtime-module-dependency> sv          </runtime-module-dependency>
-    <runtime-module-dependency> comphelp2   </runtime-module-dependency>
-    <runtime-module-dependency> utl         </runtime-module-dependency>
-    <runtime-module-dependency> ucb         </runtime-module-dependency>
-    <runtime-module-dependency> sot         </runtime-module-dependency>
+    <runtime-module-dependency>	cppu2		</runtime-module-dependency>
+    <runtime-module-dependency>	cppuhelper	</runtime-module-dependency>
+    <runtime-module-dependency>	sal2		</runtime-module-dependency>
+    <runtime-module-dependency>	tl			</runtime-module-dependency>
+    <runtime-module-dependency>	svt			</runtime-module-dependency>
+    <runtime-module-dependency>	svl			</runtime-module-dependency>
+    <runtime-module-dependency>	tk			</runtime-module-dependency>
+    <runtime-module-dependency>	sv			</runtime-module-dependency>
+    <runtime-module-dependency>	comphelp2	</runtime-module-dependency>
+    <runtime-module-dependency>	utl			</runtime-module-dependency>
+    <runtime-module-dependency>	ucb			</runtime-module-dependency>
+    <runtime-module-dependency>	sot			</runtime-module-dependency>
 
 </module-description>

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ SvXMLImportContext* OXMLReportElementBase::_CreateChildContext(
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
-    const SvXMLTokenMap&    rTokenMap   = m_rImport.GetControlElemTokenMap();
+    const SvXMLTokenMap&	rTokenMap	= m_rImport.GetControlElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
@@ -108,7 +108,7 @@ void OXMLReportElementBase::EndElement()
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception caught while inserting a new control!");
+        OSL_ENSURE(0,"Exception caught while inserting a new control!");
     }
 }
 //----------------------------------------------------------------------------

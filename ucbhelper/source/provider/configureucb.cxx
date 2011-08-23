@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -174,14 +174,14 @@ configureUcb(
     if (rArguments.getLength() < 2
         || !(rArguments[0] >>= aKey1) || !(rArguments[1] >>= aKey2))
     {
-        OSL_FAIL("ucb::configureUcb(): Bad arguments");
+        OSL_ENSURE(false, "ucb::configureUcb(): Bad arguments");
         return false;
     }
 
     ContentProviderDataList aData;
     if (!getContentProviderData(rServiceFactory, aKey1, aKey2, aData))
     {
-        OSL_FAIL("ucb::configureUcb(): No configuration");
+        OSL_ENSURE(false, "ucb::configureUcb(): No configuration");
         return false;
     }
 
@@ -207,7 +207,8 @@ configureUcb(
                 pInfos->push_back(aInfo);
         }
         else
-            OSL_FAIL("ucb::configureUcb(): Bad argument placeholders");
+            OSL_ENSURE(false,
+                       "ucb::configureUcb(): Bad argument placeholders");
     }
 
     return true;

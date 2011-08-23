@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <oox/token/tokens.hxx>
+#include "tokens.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/chartexport.hxx"
 #include "oox/export/utils.hxx"
@@ -143,7 +142,7 @@ Reference< uno::XComponentContext > lcl_getComponentContext()
     {
         Reference< beans::XPropertySet > xFactProp( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
         if( xFactProp.is())
-            xFactProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))) >>= xContext;
+            xFactProp->getPropertyValue(OUString::createFromAscii("DefaultContext")) >>= xContext;
     }
     catch( uno::Exception& )
     {}
@@ -219,12 +218,30 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( rtl::OUStringToOString(
+        OSL_ENSURE( false, rtl::OUStringToOString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
+
+    /*
+    //unused ranges are very problematic as they bear the risk to damage the rectangular structure completly
+    if(!xResult.is())
+    {
+        Sequence< Reference< chart2::data::XLabeledDataSequence > > aUnusedSequences( xDiagram->getUnusedData() );
+
+        lcl_MatchesRole aHasCategories( OUString::createFromAscii("categories" ) );
+        for( sal_Int32 nN=0; nN<aUnusedSequences.getLength(); nN++ )
+        {
+            if( aHasCategories( aUnusedSequences[nN] ) )
+            {
+                xResult.set( aUnusedSequences[nN] );
+                break;
+            }
+        }
+    }
+    */
 
     return xResult;
 }
@@ -237,7 +254,7 @@ Reference< chart2::data::XDataSource > lcl_createDataSource(
     if( xContext.is() )
         xSink.set(
             xContext->getServiceManager()->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataSource")),
+                OUString::createFromAscii("com.sun.star.chart2.data.DataSource"),
                 xContext ), uno::UNO_QUERY_THROW );
     if( xSink.is())
         xSink->setData( aData );
@@ -303,12 +320,12 @@ Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( c
 
     //the first x-values is always the next sequence //todo ... other x-values get lost for old format
     Reference< chart2::data::XLabeledDataSequence > xXValues(
-        lcl_getDataSequenceByRole( aSeriesSeqVector, OUString(RTL_CONSTASCII_USTRINGPARAM("values-x")) ) );
+        lcl_getDataSequenceByRole( aSeriesSeqVector, OUString::createFromAscii("values-x" ) ) );
     if( xXValues.is() )
         aLabeledSeqVector.push_back( xXValues );
 
     //add all other sequences now without x-values
-    lcl_MatchesRole aHasXValues( OUString(RTL_CONSTASCII_USTRINGPARAM("values-x")) );
+    lcl_MatchesRole aHasXValues( OUString::createFromAscii("values-x" ) );
     for( sal_Int32 nN=0; nN<aSeriesSeqVector.getLength(); nN++ )
     {
         if( !aHasXValues( aSeriesSeqVector[nN] ) )
@@ -337,7 +354,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( rtl::OUStringToOString(
+        OSL_ENSURE( false, rtl::OUStringToOString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -396,7 +413,7 @@ bool lcl_hasChartType( const Reference< chart2::XDiagram > & xDiagram, const OUS
     }
     catch( uno::Exception & )
     {
-        OSL_FAIL( "Exception while searching for chart type in diagram" );
+        DBG_ERROR( "Exception while searching for chart type in diagram" );
     }
     return false;
 }
@@ -624,7 +641,7 @@ OUString ChartExport::parseFormula( const OUString& rRange )
     {
         try
         {
-            xParser.set( xSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.FormulaParser")) ), UNO_QUERY );
+            xParser.set( xSF->createInstance( OUString::createFromAscii( "com.sun.star.sheet.FormulaParser" ) ), UNO_QUERY );
         }
         catch( Exception& )
         {
@@ -636,12 +653,12 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         Reference< XPropertySet > xParserProps( xParser, uno::UNO_QUERY );
         if( xParserProps.is() )
         {
-            xParserProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FormulaConvention")), uno::makeAny(::com::sun::star::sheet::AddressConvention::OOO) );
+            xParserProps->setPropertyValue( OUString::createFromAscii("FormulaConvention"), uno::makeAny(::com::sun::star::sheet::AddressConvention::OOO) );
         }
         uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( rRange, CellAddress( 0, 0, 0 ) );
         if( xParserProps.is() )
         {
-            xParserProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FormulaConvention")), uno::makeAny(::com::sun::star::sheet::AddressConvention::XL_OOX) );
+            xParserProps->setPropertyValue( OUString::createFromAscii("FormulaConvention"), uno::makeAny(::com::sun::star::sheet::AddressConvention::XL_OOX) );
         }
         aResult = xParser->printFormula( aTokens, CellAddress( 0, 0, 0 ) );
     }
@@ -814,7 +831,7 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
         catch( uno::Exception & ex )
         {
             (void)ex; // avoid warning for pro build
-            OSL_FAIL( rtl::OUStringToOString(
+            OSL_ENSURE( false, rtl::OUStringToOString(
                             OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                             OUString::createFromAscii( typeid( ex ).name()) +
                             OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -861,7 +878,7 @@ void ChartExport::_ExportContent()
             if( xServ.is())
             {
                 if( xServ->supportsService(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.ChartTableAddressSupplier"))))
+                        OUString::createFromAscii( "com.sun.star.chart.ChartTableAddressSupplier" )))
                 {
                     Reference< beans::XPropertySet > xProp( xServ, uno::UNO_QUERY );
                     if( xProp.is())
@@ -871,13 +888,13 @@ void ChartExport::_ExportContent()
                         {
                             OUString sChartAddress;
                             aAny = xProp->getPropertyValue(
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("ChartRangeAddress")));
+                                OUString::createFromAscii( "ChartRangeAddress" ));
                             aAny >>= msChartAddress;
                             //maExportHelper.SetChartRangeAddress( sChartAddress );
 
                             OUString sTableNumberList;
                             aAny = xProp->getPropertyValue(
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("TableNumberList")));
+                                OUString::createFromAscii( "TableNumberList" ));
                             aAny >>= msTableNumberList;
                             //maExportHelper.SetTableNumberList( sTableNumberList );
 
@@ -886,7 +903,7 @@ void ChartExport::_ExportContent()
                         }
                         catch( beans::UnknownPropertyException & )
                         {
-                            OSL_FAIL( "Property ChartRangeAddress not supported by ChartDocument" );
+                            DBG_ERROR( "Property ChartRangeAddress not supported by ChartDocument" );
                         }
                     }
                 }
@@ -896,7 +913,7 @@ void ChartExport::_ExportContent()
     }
     else
     {
-        OSL_FAIL( "Couldn't export chart due to wrong XModel" );
+        DBG_ERROR( "Couldn't export chart due to wrong XModel" );
     }
 }
 
@@ -1070,6 +1087,10 @@ void ChartExport::exportLegend( Reference< ::com::sun::star::chart::XChartDocume
         // shape properties
         exportShapeProps( xProp );
     }
+
+    // manula layout
+
+    // text properties
 
     // legendEntry
 
@@ -1313,12 +1334,15 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
                 sShapeType = "box";
                 break;
             case cssc::ChartSolidType::CONE:
+            //case cssc::DataPointGeometry3D::CONE:
                 sShapeType = "cone";
                 break;
             case cssc::ChartSolidType::CYLINDER:
+            //case cssc::DataPointGeometry3D::CYLINDER:
                 sShapeType = "cylinder";
                 break;
             case cssc::ChartSolidType::PYRAMID:
+            //case cssc::DataPointGeometry3D::PYRAMID:
                 sShapeType = "pyramid";
                 break;
         }
@@ -1580,7 +1604,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
         sal_Bool bJapaneseCandleSticks = sal_False;
         Reference< beans::XPropertySet > xCTProp( xChartType, uno::UNO_QUERY );
         if( xCTProp.is())
-            xCTProp->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Japanese"))) >>= bJapaneseCandleSticks;
+            xCTProp->getPropertyValue( OUString::createFromAscii("Japanese")) >>= bJapaneseCandleSticks;
         exportCandleStickSeries(
             xDSCnt->getDataSeries(), bJapaneseCandleSticks, nAttachedAxis );
         return;
@@ -1597,10 +1621,10 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
         {
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                 xSource->getDataSequences());
+            sal_Int32 nMainSequenceIndex = -1;
+            sal_Int32 nSeriesLength = 0;
             // search for main sequence and create a series element
             {
-                sal_Int32 nMainSequenceIndex = -1;
-                sal_Int32 nSeriesLength = 0;
                 Reference< chart2::data::XDataSequence > xValuesSeq;
                 Reference< chart2::data::XDataSequence > xLabelSeq;
                 sal_Int32 nSeqIdx=0;
@@ -1612,7 +1636,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     {
                         Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
                         if( xSeqProp.is())
-                            xSeqProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Role"))) >>= aRole;
+                            xSeqProp->getPropertyValue(OUString::createFromAscii("Role")) >>= aRole;
                         // "main" sequence
                         if( aRole.equals( aLabelRole ))
                         {
@@ -1707,7 +1731,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                         || (eChartType == chart::TYPEID_BUBBLE) )
                     {
                         // export xVal
-                        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, OUString(RTL_CONSTASCII_USTRINGPARAM("values-x")) ) );
+                        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, OUString::createFromAscii("values-x" ) ) );
                         if( xSequence.is() )
                         {
                             Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
@@ -1720,7 +1744,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     if( eChartType == chart::TYPEID_BUBBLE )
                     {
                         // export yVal
-                        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, OUString(RTL_CONSTASCII_USTRINGPARAM("values-y")) ) );
+                        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, OUString::createFromAscii("values-y" ) ) );
                         if( xSequence.is() )
                         {
                             Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
@@ -1765,6 +1789,9 @@ void ChartExport::exportCandleStickSeries(
             // otherwise: low, high, close
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                 xSource->getDataSequences());
+
+            //sal_Int32 nSeriesLength =
+            //    lcl_getSequenceLengthByRole( aSeqCnt, OUString::createFromAscii("values-last"));
 
             Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
             const char* sSeries[] = {"values-first","values-max","values-min","values-last",0};
@@ -1916,6 +1943,7 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
 {
     FSHelperPtr pFS = GetFS();
     Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
+    // sal_Int32 nValueType = XML_val;
     pFS->startElement( FSNS( XML_c, nValueType ),
             FSEND );
 
@@ -1980,31 +2008,31 @@ void ChartExport::InitPlotArea( )
     if (xServiceInfo.is())
     {
         if (xServiceInfo->supportsService(
-            OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.chart.ChartAxisXSupplier"))))
+            OUString::createFromAscii ("com.sun.star.chart.ChartAxisXSupplier")))
         {
             xDiagramProperties->getPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("HasXAxis"))) >>= mbHasXAxis;
         }
         if (xServiceInfo->supportsService(
-            OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.chart.ChartAxisYSupplier"))))
+            OUString::createFromAscii ("com.sun.star.chart.ChartAxisYSupplier")))
         {
             xDiagramProperties->getPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("HasYAxis"))) >>= mbHasYAxis;
         }
         if (xServiceInfo->supportsService(
-            OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.chart.ChartAxisZSupplier"))))
+            OUString::createFromAscii ("com.sun.star.chart.ChartAxisZSupplier")))
         {
             xDiagramProperties->getPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("HasZAxis"))) >>= mbHasZAxis;
         }
         if (xServiceInfo->supportsService(
-            OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.chart.ChartTwoAxisXSupplier"))))
+            OUString::createFromAscii ("com.sun.star.chart.ChartTwoAxisXSupplier")))
         {
             xDiagramProperties->getPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryXAxis"))) >>= mbHasSecondaryXAxis;
         }
         if (xServiceInfo->supportsService(
-            OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.chart.ChartTwoAxisYSupplier"))))
+            OUString::createFromAscii ("com.sun.star.chart.ChartTwoAxisYSupplier")))
         {
             xDiagramProperties->getPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryYAxis"))) >>= mbHasSecondaryYAxis;
@@ -2031,6 +2059,18 @@ void ChartExport::exportAxes( )
     for( sal_Int32 nIdx = 0; nIdx < nSize; nIdx++ )
     {
         exportAxis( maAxes[nIdx] );
+        /*
+        sal_Int32 nAxisId = maAxes[nIdx].nAxisId;
+        switch( nAxisId )
+        {
+            case AXIS_PRIMARY_X:
+                exportXAxis( maAxes[nIdx] );
+                break;
+            case AXIS_PRIMARY_Y:
+                exportYAxis( maAxes[nIdx] );
+                break;
+        }
+        */
     }
 }
 
@@ -2575,8 +2615,12 @@ void ChartExport::exportDataPoints(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "VaryColorsByPoint" ))) >>= bVaryColorsByPoint;
     }
 
+    //sal_Int32 nSize = aDataPointSeq.getLength();
+    //DBG_ASSERT( nSize <= nSeriesLength, "Too many point attributes" );
+
     const sal_Int32 * pPoints = aDataPointSeq.getConstArray();
     sal_Int32 nElement;
+    //sal_Int32 nRepeat;
     Reference< chart2::XColorScheme > xColorScheme;
     if( mxNewDiagram.is())
         xColorScheme.set( mxNewDiagram->getDefaultColorScheme());
@@ -2600,7 +2644,7 @@ void ChartExport::exportDataPoints(
                 catch( uno::Exception & rEx )
                 {
                     (void)rEx; // avoid warning for pro build
-                    OSL_TRACE( "Exception caught during Export of data point: %s",
+                    DBG_ERROR1( "Exception caught during Export of data point: %s",
                                     rtl::OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 }
             }
@@ -2802,5 +2846,3 @@ sal_Bool ChartExport::isDeep3dChart()
 
 }// drawingml
 }// oox
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

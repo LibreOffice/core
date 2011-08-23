@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,6 +49,7 @@ AxisDispUnitsModel::~AxisDispUnitsModel()
 AxisModel::AxisModel( sal_Int32 nTypeId ) :
     mnAxisId( -1 ),
     mnAxisPos( XML_TOKEN_INVALID ),
+    mnBaseTimeUnit( XML_days ),
     mnCrossAxisId( -1 ),
     mnCrossBetween( XML_between ),
     mnCrossMode( XML_autoZero ),

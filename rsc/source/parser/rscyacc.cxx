@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,6 @@
 #include <string.h>
 
 #include <tools/rc.h>
-#include <tools/list.hxx>
 #include <rscerror.h>
 #include <rsctools.hxx>
 #include <rscclass.hxx>
@@ -46,10 +45,10 @@
 #include "rsclex.hxx"
 
 /************** V a r i a b l e n ****************************************/
-ObjectStack                     S;
-RscTop *                        pCurClass;
-sal_uInt32                      nCurMask;
-char                            szErrBuf[ 100 ];
+ObjectStack 					S;
+RscTop *						pCurClass;
+sal_uInt32						nCurMask;
+char							szErrBuf[ 100 ];
 
 /************** H i l f s F u n k t i o n e n ****************************/
 RSCINST GetVarInst( const RSCINST & rInst, const char * pVarName )
@@ -65,7 +64,7 @@ RSCINST GetVarInst( const RSCINST & rInst, const char * pVarName )
     return( aInst );
 }
 
-void SetNumber( const RSCINST & rInst, const char * pVarName, sal_Int32 lValue )
+void SetNumber( const RSCINST & rInst, const char * pVarName, INT32 lValue )
 {
     RSCINST aInst;
 
@@ -81,7 +80,7 @@ void SetNumber( const RSCINST & rInst, const char * pVarName, sal_Int32 lValue )
 }
 
 void SetConst( const RSCINST & rInst, const char * pVarName,
-               Atom nValueId, sal_Int32 nVal )
+               Atom nValueId, INT32 nVal )
 {
     RSCINST aInst;
 
@@ -113,11 +112,11 @@ void SetString( const RSCINST & rInst, const char * pVarName, const char * pStr 
 RscId MakeRscId( RscExpType aExpType )
 {
     if( !aExpType.IsNothing() ){
-        sal_Int32       lValue;
+        INT32		lValue;
 
         if( !aExpType.Evaluate( &lValue ) )
             pTC->pEH->Error( ERR_ZERODIVISION, NULL, RscId() );
-        if( lValue < 1 || lValue > (sal_Int32)0x7FFF )
+        if( lValue < 1 || lValue > (INT32)0x7FFF )
         {
             pTC->pEH->Error( ERR_IDRANGE, NULL, RscId(),
                              ByteString::CreateFromInt32( lValue ).GetBuffer() );
@@ -131,7 +130,7 @@ RscId MakeRscId( RscExpType aExpType )
     return RscId();
 }
 
-sal_Bool DoClassHeader( RSCHEADER * pHeader, sal_Bool bMember )
+BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
 {
     RSCINST aCopyInst;
     RscId aName1 = MakeRscId( pHeader->nName1 );
@@ -179,7 +178,7 @@ sal_Bool DoClassHeader( RSCHEADER * pHeader, sal_Bool bMember )
     {
         if( S.IsEmpty() )
         {
-            if( (sal_Int32)aName1 < 256 )
+            if( (INT32)aName1 < 256 )
                 pTC->pEH->Error( WRN_GLOBALID, pHeader->pClass, aName1 );
 
             if( aCopyInst.IsInst() )
@@ -201,7 +200,7 @@ sal_Bool DoClassHeader( RSCHEADER * pHeader, sal_Bool bMember )
             RSCINST aTmpI;
             ERRTYPE aError;
 
-            if( (sal_Int32)aName1 >= 256 && aName1.IsId() )
+            if( (INT32)aName1 >= 256 && aName1.IsId() )
                 pTC->pEH->Error( WRN_LOCALID, pHeader->pClass, aName1 );
             aError = S.Top().pClass->GetElement( S.Top(), aName1,
                                                  pHeader->pClass, aCopyInst, &aTmpI );
@@ -219,7 +218,7 @@ sal_Bool DoClassHeader( RSCHEADER * pHeader, sal_Bool bMember )
                                             pHeader->pClass, RSCINST(), &aTmpI );
 
                 if( !aTmpI.IsInst() )
-                    return( sal_False );
+                    return( FALSE );
             }
             S.Push( aTmpI );
         };
@@ -232,7 +231,7 @@ sal_Bool DoClassHeader( RSCHEADER * pHeader, sal_Bool bMember )
         pTC->pEH->Error( aError, S.Top().pClass, aName1 );
     }
 
-    return( sal_True );
+    return( TRUE );
 }
 
 RSCINST GetFirstTupelEle( const RSCINST & rTop )
@@ -249,18 +248,22 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 /************** Y a c c   C o d e ****************************************/
 //#define YYDEBUG 1
 
-#define TYPE_Atom             0
-#define TYPE_RESID                1
+#define TYPE_Atom 			  0
+#define TYPE_RESID				  1
 
 #ifdef UNX
-#define YYMAXDEPTH              2000
+#define YYMAXDEPTH				2000
 #else
-#define YYMAXDEPTH              800
+#ifdef W30
+#define YYMAXDEPTH				300
+#else
+#define YYMAXDEPTH				800
+#endif
 #endif
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
-#pragma warning(disable:4129 4273 4701 4702)
+#pragma warning(disable:4129 4273 4701)
 #endif
 #include "yyrscyacc.cxx"
 #if defined _MSC_VER

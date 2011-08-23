@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ published service HierarchyDataReadWriteAccess
     //-------------------------------------------------------------------------
     /** allows adding and removing of hierarchy data nodes, replacing of
         the value of hierarchy data node members, as well as obtaining the
-        value of hierarchy data node members.
+        value of hieryrchy data node members.
 
         <p>Adding and removing must only be supported if the access object
         points to the "Children" data member of a node or to the root node.

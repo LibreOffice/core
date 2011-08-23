@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,7 @@ class VCL_DLLPUBLIC SystemChildWindow : public Window
 {
 private:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void     ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, sal_Bool bShow = sal_False );
-    SAL_DLLPRIVATE void     ImplTestJavaException( void* pEnv );
+    SAL_DLLPRIVATE void     ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, BOOL bShow = FALSE );
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE          SystemChildWindow (const SystemChildWindow &);
@@ -54,21 +53,17 @@ private:
 public:
                             SystemChildWindow( Window* pParent, WinBits nStyle = 0 );
                             // create a SystemChildWindow using the given SystemWindowData
-                            SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, sal_Bool bShow = sal_True );
+                            SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, BOOL bShow = TRUE );
                             SystemChildWindow( Window* pParent, const ResId& rResId );
                             ~SystemChildWindow();
 
-    const SystemEnvData*    GetSystemData() const;
+    const SystemEnvData*	GetSystemData() const;
 
     //  per default systemchildwindows erase their background for better plugin support
     //  however, this might not always be required
-    void                    EnableEraseBackground( sal_Bool bEnable = sal_True );
-    sal_Bool                IsEraseBackgroundEnabled();
-    void                    SetForwardKey( sal_Bool bEnable );
-    // return the platform specific handle/id of this window;
-    // in case the flag bUseJava is set, a java compatible overlay window
-    // is created on which other java windows can be created (plugin interface)
-    sal_IntPtr              GetParentWindowHandle( sal_Bool bUseJava = sal_False );
+    void                    EnableEraseBackground( BOOL bEnable = TRUE );
+    BOOL                    IsEraseBackgroundEnabled();
+     void                    SetForwardKey( BOOL bEnable );
 };
 
 #endif // _SV_SYSCHILD_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace testOfHelperFunctions
     void test_valueequal::valueequal_001( )
     {
         rtl::OString sValue;
-        rtl::OUString suValue(RTL_CONSTASCII_USTRINGPARAM("This is only a test of some helper functions"));
+        rtl::OUString suValue(rtl::OUString::createFromAscii("This is only a test of some helper functions"));
         sValue <<= suValue;
         t_print("'%s'\n", sValue.getStr());
     }

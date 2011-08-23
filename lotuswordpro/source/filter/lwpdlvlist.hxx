@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef LWPDLVLIST_HXX_
@@ -68,13 +68,13 @@
 #include "lwpatomholder.hxx"
 #include "lwpobj.hxx"
 /**
- * @brief   Double Linked Virtual List
+ * @brief	Double Linked Virtual List
 */
 class LwpDLVList : public LwpObject
 {
 public:
     LwpDLVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDLVList(){}
+    virtual ~LwpDLVList(){};
 protected:
     LwpObjectID m_ListPrevious;
     LwpObjectID m_ListNext;
@@ -93,13 +93,13 @@ LwpObjectID* LwpDLVList::GetPrevious()
     return &m_ListPrevious;
 }
 /**
- * @brief   Double Linked Named Family Virtual List
+ * @brief	Double Linked Named Family Virtual List
 */
 class LwpDLNFVList : public LwpDLVList
 {
 public:
     LwpDLNFVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDLNFVList(){}
+    virtual ~LwpDLNFVList(){};
 protected:
     LwpObjectID m_ChildHead;
     LwpObjectID m_ChildTail;
@@ -139,7 +139,7 @@ LwpObjectID* LwpDLNFVList::GetParent()
 
 class LwpPropList;
 /**
- * @brief   Double Linked Named Family Properties Virtual List
+ * @brief	Double Linked Named Family Properties Virtual List
 */
 class LwpDLNFPVList : public LwpDLNFVList
 {
@@ -162,12 +162,12 @@ LwpPropList* LwpDLNFPVList::GetPropList()
 }
 
 /**
- * @brief   Double Linked Virtual List Head Tail
+ * @brief	Double Linked Virtual List Head Tail
 */
 class LwpDLVListHeadTail
 {
 public:
-    LwpDLVListHeadTail(){}
+    LwpDLVListHeadTail(){};
     void Read(LwpObjectStream* pObjStrm);
 private:
     LwpObjectID m_ListHead;
@@ -186,13 +186,13 @@ LwpObjectID* LwpDLVListHeadTail::GetTail()
 }
 
 /**
- * @brief   Double Linked Virtual List Head
+ * @brief	Double Linked Virtual List Head
 */
 class LwpDLVListHead
 {
 public:
-    LwpDLVListHead(){}
-    ~LwpDLVListHead(){}
+    LwpDLVListHead(){};
+    ~LwpDLVListHead(){};
     void Read(LwpObjectStream* pObjStrm);
     inline LwpObjectID* GetFirst();
 protected:

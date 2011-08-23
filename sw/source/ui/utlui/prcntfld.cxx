@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,13 @@
 
 #include "prcntfld.hxx"
 
+// STATIC DATA -----------------------------------------------------------
+
 PercentField::PercentField( Window* pWin, const ResId& rResId ) :
-        MetricField ( pWin, rResId ),
+        MetricField	( pWin, rResId ),
 
         nOldMax     (0),
-        nOldMin     (0),
+        nOldMin		(0),
         nLastPercent(-1),
         nLastValue  (-1),
         eOldUnit    (FUNIT_NONE),
@@ -58,7 +60,7 @@ void PercentField::SetRefValue(sal_Int64 nValue)
         SetPrcntValue(nRealValue, eOldUnit);
 }
 
-void PercentField::ShowPercent(sal_Bool bPercent)
+void PercentField::ShowPercent(BOOL bPercent)
 {
     if ((bPercent && GetUnit() == FUNIT_CUSTOM) ||
         (!bPercent && GetUnit() != FUNIT_CUSTOM))
@@ -82,7 +84,7 @@ void PercentField::ShowPercent(sal_Bool bPercent)
         SetDecimalDigits( 0 );
 
         nAktWidth = ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
-        // round to 0.5 percent
+        // Um 0.5 Prozent aufrunden
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
 
         MetricField::SetMin(Max(static_cast< sal_Int64 >(1), nPercent));
@@ -99,6 +101,7 @@ void PercentField::ShowPercent(sal_Bool bPercent)
         }
         else
             MetricFormatter::SetValue(nLastPercent);
+//		SetValue(100, FUNIT_CUSTOM);
     }
     else
     {
@@ -212,6 +215,7 @@ void PercentField::SetMax(sal_Int64 nNewMax, FieldUnit eInUnit)
     {
         if (eInUnit == FUNIT_NONE)
             eInUnit = eOldUnit;
+//		SetRefValue(Convert(nNewMax, eInUnit, FUNIT_TWIP));
     }
 }
 
@@ -238,17 +242,17 @@ sal_Int64 PercentField::DenormalizePercent(sal_Int64 nValue)
     return nValue;
 }
 
-sal_Bool PercentField::IsValueModified()
+BOOL PercentField::IsValueModified()
 {
     if (GetUnit() == FUNIT_CUSTOM)
-        return sal_True;
+        return TRUE;
     else
         return MetricField::IsValueModified();
 }
 
-sal_Int64 PercentField::ImpPower10( sal_uInt16 n )
+sal_Int64 PercentField::ImpPower10( USHORT n )
 {
-    sal_uInt16 i;
+    USHORT i;
     sal_Int64   nValue = 1;
 
     for ( i=0; i < n; i++ )
@@ -277,7 +281,7 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
         // Umrechnen in Metrik
         sal_Int64 nTwipValue = (nRefValue * nValue + 50) / 100;
 
-        if (eOutUnit == FUNIT_TWIP) // Nur wandeln, wenn unbedingt notwendig
+        if (eOutUnit == FUNIT_TWIP)	// Nur wandeln, wenn unbedingt notwendig
             return NormalizePercent(nTwipValue);
         else
             return ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FUNIT_TWIP, eOutUnit);
@@ -289,11 +293,11 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
         sal_Int64 nAktWidth;
         nValue = DenormalizePercent(nValue);
 
-        if (eInUnit == FUNIT_TWIP)  // Nur wandeln, wenn unbedingt notwendig
+        if (eInUnit == FUNIT_TWIP)	// Nur wandeln, wenn unbedingt notwendig
             nAktWidth = nValue;
         else
             nAktWidth = ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);
-        // Round to 0.5 percent
+        // Um 0.5 Prozent runden
         return ((nAktWidth * 1000) / nRefValue + 5) / 10;
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,7 +122,7 @@ void SwDbtoolsClient::registerClient()
 
             if (NULL == getDbToolsClientFactoryFunction())
             {   // did not find the symbol
-                OSL_FAIL("SwDbtoolsClient::registerClient: could not find the symbol for creating the factory!");
+                OSL_ENSURE(sal_False, "SwDbtoolsClient::registerClient: could not find the symbol for creating the factory!");
                 osl_unloadModule(getDbToolsClientModule());
                 getDbToolsClientModule() = NULL;
             }
@@ -148,7 +148,7 @@ void SwDbtoolsClient::getFactory()
     {
         registerClient();
         if(getDbToolsClientFactoryFunction())
-        {   // loading the lib succeeded
+        {	// loading the lib succeeded
             void* pUntypedFactory = (*getDbToolsClientFactoryFunction())();
             IDataAccessToolsFactory* pDBTFactory = static_cast<IDataAccessToolsFactory*>(pUntypedFactory);
             OSL_ENSURE(pDBTFactory, "SwDbtoolsClient::SwDbtoolsClient: no factory returned!");
@@ -211,7 +211,7 @@ sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
     return nRet;
 }
 
-::rtl::OUString SwDbtoolsClient::getFormattedValue(
+::rtl::OUString SwDbtoolsClient::getValue(
         const uno::Reference< beans::XPropertySet>& _rxColumn,
         const uno::Reference< util::XNumberFormatter>& _rxFormatter,
         const lang::Locale& _rLocale,
@@ -223,7 +223,7 @@ sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
                     getAccessTypeConversion();
     rtl::OUString sRet;
     if(xConversion.is())
-        sRet = xConversion->getFormattedValue(_rxColumn, _rxFormatter, _rLocale, _rNullDate);
+        sRet = xConversion->getValue(_rxColumn, _rxFormatter, _rLocale, _rNullDate);
     return sRet;
 }
 

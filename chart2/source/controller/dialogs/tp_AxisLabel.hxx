@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,13 +48,13 @@ namespace chart
 class SchAxisLabelTabPage : public SfxTabPage
 {
 private:
-    CheckBox            aCbShowDescription;
+    CheckBox			aCbShowDescription;
 
-    FixedLine           aFlOrder;
-    RadioButton         aRbSideBySide;
-    RadioButton         aRbUpDown;
-    RadioButton         aRbDownUp;
-    RadioButton         aRbAuto;
+    FixedLine			aFlOrder;
+    RadioButton			aRbSideBySide;
+    RadioButton			aRbUpDown;
+    RadioButton			aRbDownUp;
+    RadioButton			aRbAuto;
 
     FixedLine           aFlSeparator;
     FixedLine           aFlTextFlow;
@@ -71,13 +71,12 @@ private:
     FixedText               m_aFtTextDirection;
     TextDirectionListBox    m_aLbTextDirection;
 
-    sal_Bool                m_bShowStaggeringControls;
+    BOOL                m_bShowStaggeringControls;
 
     sal_Int32           m_nInitialDegrees;
     bool                m_bHasInitialDegrees;       /// false = DialControl in tristate
     bool                m_bInitialStacking;
     bool                m_bHasInitialStacking;      /// false = checkbox in tristate
-    bool                m_bComplexCategories;
 
     DECL_LINK ( ToggleShowLabel, void* );
 
@@ -85,14 +84,13 @@ public:
     SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SchAxisLabelTabPage();
 
-    void    Construct();
+    void	Construct();
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual sal_Bool FillItemSet( SfxItemSet& rOutAttrs );
+    virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );
     virtual void Reset( const SfxItemSet& rInAttrs );
 
-    void ShowStaggeringControls( sal_Bool bShowStaggeringControls );
-    void SetComplexCategories( bool bComplexCategories );
+    void ShowStaggeringControls( BOOL bShowStaggeringControls );
 };
 //.............................................................................
 } //namespace chart

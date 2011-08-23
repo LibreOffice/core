@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: service.cxx,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,13 +89,13 @@ namespace ooevtdescgen
     {
         {
             ::evtlstner::create, ::evtlstner::getImplementationName,
-            ::evtlstner::getSupportedServiceNames,
+            ::evtlstner::getSupportedServiceNames, 
             ::cppu::createSingleComponentFactory,
             0, 0
         },
         {
             ::ooevtdescgen::create, ::ooevtdescgen::getImplementationName,
-            ::ooevtdescgen::getSupportedServiceNames,
+            ::ooevtdescgen::getSupportedServiceNames, 
             ::cppu::createSingleComponentFactory,
             0, 0
         },
@@ -101,19 +104,29 @@ namespace ooevtdescgen
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT  void SAL_CALL component_getImplementationEnvironment(
+    SAL_DLLPUBLIC_EXPORT  void SAL_CALL component_getImplementationEnvironment( 
         const sal_Char ** ppEnvTypeName, uno_Environment ** )
     {
         OSL_TRACE("In component_getImplementationEnv");
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    SAL_DLLPUBLIC_EXPORT  void * SAL_CALL component_getFactory(
+    SAL_DLLPUBLIC_EXPORT  sal_Bool SAL_CALL component_writeInfo( 
+        lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
+    {
+        OSL_TRACE("In component_writeInfo");
+        if ( ::cppu::component_writeInfoHelper(
+            pServiceManager, pRegistryKey, s_component_entries ) )
+            return sal_True;
+        return sal_False;
+    }
+
+    SAL_DLLPUBLIC_EXPORT  void * SAL_CALL component_getFactory( 
         const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
     {
         OSL_TRACE("In component_getFactory");
-        return ::cppu::component_getFactoryHelper(
+        return ::cppu::component_getFactoryHelper( 
             pImplName, pServiceManager, pRegistryKey, s_component_entries );
     }
 }

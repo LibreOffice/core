@@ -106,7 +106,7 @@
         <name> com.sun.star.comp.framework.ServiceHandler </name>
         <description>
             It's a special dispatch object which is registered for "service:*" URL pattern
-            and will be automaticly used by the framework dispatch mechanism if such URL occurred.
+            and will be automaticly used by the framework dispatch mechanism if such URL occured.
             His job is to create any registered uno components which must be coded inside
             dispatched URL (may with some optional given parameters). After that such created
             service must be hold his self alive. Such mechanism can be usefull for UI components
@@ -123,7 +123,7 @@
         <name> com.sun.star.comp.framework.JobHandler </name>
         <description>
             It's a special dispatch object which is registered for "vnd.sun.star.job:*" URL pattern
-            and will be automaticly used by the framework dispatch mechanism if such URL occurred.
+            and will be automaticly used by the framework dispatch mechanism if such URL occured.
             It binds the dispatch mechanism to the generic job execution of this framework module.
             That can be used for e.g. addon purposes.
         </description>
@@ -132,7 +132,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.frame.ProtocolHandler </supported-service>
     </component-description>
-
+    
     <component-description>
         <author> Carsten Driesner </author>
         <name> com.sun.star.comp.framework.LayoutManager </name>
@@ -144,7 +144,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.frame.LayoutManager </supported-service>
     </component-description>
-
+    
     <component-description>
         <author> Carsten Driesner </author>
         <name> com.sun.star.comp.framework.PopupMenuControllerFactory </name>
@@ -156,7 +156,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.frame.PopupMenuControllerFactory </supported-service>
     </component-description>
-
+    
     <component-description>
         <author> Carsten Driesner </author>
         <name> com.sun.star.comp.framework.FontMenuController </name>
@@ -290,7 +290,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.frame.ModuleManager </supported-service>
     </component-description>
-
+    
     <component-description>
         <author> Carsten Driesner </author>
         <name> com.sun.star.comp.framework.UIConfigurationManager </name>
@@ -303,7 +303,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.ui.UIConfigurationManager </supported-service>
     </component-description>
-
+    
     <component-description>
         <author> Carsten Driesner </author>
         <name> com.sun.star.comp.framework.ModuleUIConfigurationManagerSupplier </name>
@@ -391,7 +391,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.ui.ToolBarFactory </supported-service>
     </component-description>
-
+    
     <component-description>
         <author> Carsten Driesner </author>
         <name> com.sun.star.comp.framework.ToolBarControllerFactory </name>
@@ -403,7 +403,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.frame.ToolBarControllerFactory </supported-service>
     </component-description>
-
+    
     <component-description>
         <author> Carsten Driesner </author>
         <name> com.sun.star.comp.framework.StatusbarFactory </name>
@@ -415,7 +415,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.ui.StatusbarFactory </supported-service>
     </component-description>
-
+    
     <component-description>
         <author> Carsten Driesner </author>
         <name> com.sun.star.comp.framework.StatusbarControllerFactory </name>
@@ -428,30 +428,30 @@
         <supported-service> com.sun.star.frame.StatusbarControllerFactory </supported-service>
     </component-description>
 
-    <project-build-dependency>  cppu        </project-build-dependency>
-    <project-build-dependency>  cppuhelper  </project-build-dependency>
-    <project-build-dependency>  sal         </project-build-dependency>
-    <project-build-dependency>  tools       </project-build-dependency>
-    <project-build-dependency>  svtools     </project-build-dependency>
-    <project-build-dependency>  toolkit     </project-build-dependency>
-    <project-build-dependency>  sv          </project-build-dependency>
-    <project-build-dependency>  comphelper  </project-build-dependency>
-    <project-build-dependency>  unotools    </project-build-dependency>
-    <project-build-dependency>  ucbhelper   </project-build-dependency>
-    <project-build-dependency>  svl         </project-build-dependency>
-    <project-build-dependency>  sot         </project-build-dependency>
+    <project-build-dependency>	cppu		</project-build-dependency>
+    <project-build-dependency>	cppuhelper	</project-build-dependency>
+    <project-build-dependency>	sal			</project-build-dependency>
+    <project-build-dependency>	tools		</project-build-dependency>
+    <project-build-dependency>	svtools		</project-build-dependency>
+    <project-build-dependency>	toolkit		</project-build-dependency>
+    <project-build-dependency>	sv			</project-build-dependency>
+    <project-build-dependency>	comphelper	</project-build-dependency>
+    <project-build-dependency>	unotools	</project-build-dependency>
+    <project-build-dependency>	ucbhelper	</project-build-dependency>
+    <project-build-dependency>	svl			</project-build-dependency>
+    <project-build-dependency>	sot			</project-build-dependency>
 
-    <runtime-module-dependency> cppu2       </runtime-module-dependency>
-    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
-    <runtime-module-dependency> sal2        </runtime-module-dependency>
-    <runtime-module-dependency> tl          </runtime-module-dependency>
-    <runtime-module-dependency> svt         </runtime-module-dependency>
-    <runtime-module-dependency> svl         </runtime-module-dependency>
-    <runtime-module-dependency> tk          </runtime-module-dependency>
-    <runtime-module-dependency> sv          </runtime-module-dependency>
-    <runtime-module-dependency> comphelp2   </runtime-module-dependency>
-    <runtime-module-dependency> utl         </runtime-module-dependency>
-    <runtime-module-dependency> ucb         </runtime-module-dependency>
-    <runtime-module-dependency> sot         </runtime-module-dependency>
+    <runtime-module-dependency>	cppu2		</runtime-module-dependency>
+    <runtime-module-dependency>	cppuhelper	</runtime-module-dependency>
+    <runtime-module-dependency>	sal2		</runtime-module-dependency>
+    <runtime-module-dependency>	tl			</runtime-module-dependency>
+    <runtime-module-dependency>	svt			</runtime-module-dependency>
+    <runtime-module-dependency>	svl			</runtime-module-dependency>
+    <runtime-module-dependency>	tk			</runtime-module-dependency>
+    <runtime-module-dependency>	sv			</runtime-module-dependency>
+    <runtime-module-dependency>	comphelp2	</runtime-module-dependency>
+    <runtime-module-dependency>	utl			</runtime-module-dependency>
+    <runtime-module-dependency>	ucb			</runtime-module-dependency>
+    <runtime-module-dependency>	sot			</runtime-module-dependency>
 
 </module-description>

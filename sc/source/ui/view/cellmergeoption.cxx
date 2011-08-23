@@ -17,7 +17,7 @@
  * Portions created by the Initial Developer are Copyright (C) 2010 the
  * Initial Developer. All Rights Reserved.
  *
- * Contributor(s):
+ * Contributor(s): 
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
@@ -25,9 +25,6 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
 
 #include "cellmergeoption.hxx"
 #include "address.hxx"

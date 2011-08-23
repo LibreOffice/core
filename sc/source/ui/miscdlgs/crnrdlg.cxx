@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,120 +53,124 @@
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute()
 #define QUERYBOX(m) QueryBox(this,WinBits(WB_YES_NO|WB_DEF_YES),m).Execute()
 
-const sal_uLong nEntryDataCol = 0;
-const sal_uLong nEntryDataRow = 1;
-const sal_uLong nEntryDataDelim = 2;
+const ULONG nEntryDataCol = 0;
+const ULONG nEntryDataRow = 1;
+const ULONG nEntryDataDelim = 2;
 
 
 //============================================================================
-//  class ScColRowNameRangesDlg
+//	class ScColRowNameRangesDlg
 
 
 /*************************************************************************
-#*  Member:     ScColRowNameRangesDlg
+#*	Member:		ScColRowNameRangesDlg						Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Konstruktor der Klasse ScColRowNameRangesDlg.
-#*              Initialisieren der Klassen- Mitglieder,
-#*              Uebernahme der Range- Angaben und Aufruf
-#*              der eigentlichen Initialisierungsroutine
+#*  Funktion:	Konstruktor der Klasse ScColRowNameRangesDlg.
+#*				Initialisieren der Klassen- Mitglieder,
+#*				Uebernahme der Range- Angaben und Aufruf
+#*				der eigentlichen Initialisierungsroutine
 #*
-#*  Input:      Sfx- Verknuepfungen
-#*              Parent- Window
-#*              SCViewData
+#*  Input:		Sfx- Verknuepfungen
+#*				Parent- Window
+#*				SCViewData
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
 ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
                                 SfxChildWindow* pCW,
                                 Window* pParent,
-                                ScViewData* ptrViewData )
+                                ScViewData*	ptrViewData )
 
-    :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_COLROWNAMERANGES ),
-
+    :	ScAnyRefDlg	( pB, pCW, pParent, RID_SCDLG_COLROWNAMERANGES ),
+        //
         aFlAssign       ( this, ScResId( FL_ASSIGN ) ),
-        aLbRange        ( this, ScResId( LB_RANGE ) ),
+        aLbRange		( this, ScResId( LB_RANGE ) ),
 
         aEdAssign       ( this, this, ScResId( ED_AREA ) ),
-        aRbAssign       ( this, ScResId( RB_AREA ), &aEdAssign, this ),
-        aBtnColHead     ( this, ScResId( BTN_COLHEAD ) ),
-        aBtnRowHead     ( this, ScResId( BTN_ROWHEAD ) ),
-        aFtAssign2      ( this, ScResId( FT_DATA_LABEL ) ),
+        aRbAssign		( this, ScResId( RB_AREA ), &aEdAssign, this ),
+        aBtnColHead		( this, ScResId( BTN_COLHEAD ) ),
+        aBtnRowHead		( this, ScResId( BTN_ROWHEAD ) ),
+        aFtAssign2		( this, ScResId( FT_DATA_LABEL ) ),
         aEdAssign2      ( this, this, ScResId( ED_DATA ) ),
-        aRbAssign2      ( this, ScResId( RB_DATA ), &aEdAssign2, this ),
+        aRbAssign2		( this, ScResId( RB_DATA ), &aEdAssign2, this ),
 
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        aBtnAdd         ( this, ScResId( BTN_ADD ) ),
-        aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
+        aBtnOk			( this, ScResId( BTN_OK ) ),
+        aBtnCancel		( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp		( this, ScResId( BTN_HELP ) ),
+        aBtnAdd			( this, ScResId( BTN_ADD ) ),
+        aBtnRemove		( this, ScResId( BTN_REMOVE ) ),
 
-        pViewData       ( ptrViewData ),
-        pDoc            ( ptrViewData->GetDocument() ),
+        pViewData		( ptrViewData ),
+        pDoc			( ptrViewData->GetDocument() ),
 
-        pEdActive       ( NULL ),
-        bDlgLostFocus   ( false )
+        pEdActive		( NULL ),
+        bDlgLostFocus	( FALSE )
 {
     xColNameRanges = pDoc->GetColNameRanges()->Clone();
     xRowNameRanges = pDoc->GetRowNameRanges()->Clone();
     Init();
     FreeResource();
-
-    aRbAssign.SetAccessibleRelationMemberOf(&aEdAssign);
-    aRbAssign2.SetAccessibleRelationMemberOf(&aEdAssign);
 }
 
 
 /*************************************************************************
-#*  Member:     ~ScColRowNameRangesDlg
+#*	Member:		~ScColRowNameRangesDlg						Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Destruktor der Klasse
+#*  Funktion:	Destruktor der Klasse
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
-ScColRowNameRangesDlg::~ScColRowNameRangesDlg()
+__EXPORT ScColRowNameRangesDlg::~ScColRowNameRangesDlg()
 {
 }
 
 
 /*************************************************************************
-#*  Member:     Init
+#*	Member:		Init										Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Initialisierungs- Routine:
-#*              Umlenken der Event- Handler und einstellen der
-#*              Startparameter.
+#*  Funktion:	Initialisierungs- Routine:
+#*				Umlenken der Event- Handler und einstellen der
+#*				Startparameter.
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
 void ScColRowNameRangesDlg::Init()
 {
-    aBtnOk.SetClickHdl      ( LINK( this, ScColRowNameRangesDlg, OkBtnHdl ) );
-    aBtnCancel.SetClickHdl  ( LINK( this, ScColRowNameRangesDlg, CancelBtnHdl ) );
-    aBtnAdd.SetClickHdl     ( LINK( this, ScColRowNameRangesDlg, AddBtnHdl ) );
-    aBtnRemove.SetClickHdl  ( LINK( this, ScColRowNameRangesDlg, RemoveBtnHdl ) );
-    aLbRange.SetSelectHdl   ( LINK( this, ScColRowNameRangesDlg, Range1SelectHdl ) );
-    aEdAssign.SetModifyHdl  ( LINK( this, ScColRowNameRangesDlg, Range1DataModifyHdl ) );
-    aBtnColHead.SetClickHdl ( LINK( this, ScColRowNameRangesDlg, ColClickHdl ) );
-    aBtnRowHead.SetClickHdl ( LINK( this, ScColRowNameRangesDlg, RowClickHdl ) );
-    aEdAssign2.SetModifyHdl ( LINK( this, ScColRowNameRangesDlg, Range2DataModifyHdl ) );
+    SCCOL	nStartCol 	= 0;
+    SCROW	nStartRow 	= 0;
+    SCTAB	nStartTab 	= 0;
+    SCCOL	nEndCol 	= 0;
+    SCROW	nEndRow		= 0;
+    SCTAB	nEndTab 	= 0;
+
+    aBtnOk.SetClickHdl		( LINK( this, ScColRowNameRangesDlg, OkBtnHdl ) );
+    aBtnCancel.SetClickHdl	( LINK( this, ScColRowNameRangesDlg, CancelBtnHdl ) );
+    aBtnAdd.SetClickHdl		( LINK( this, ScColRowNameRangesDlg, AddBtnHdl ) );
+    aBtnRemove.SetClickHdl	( LINK( this, ScColRowNameRangesDlg, RemoveBtnHdl ) );
+    aLbRange.SetSelectHdl	( LINK( this, ScColRowNameRangesDlg, Range1SelectHdl ) );
+    aEdAssign.SetModifyHdl	( LINK( this, ScColRowNameRangesDlg, Range1DataModifyHdl ) );
+    aBtnColHead.SetClickHdl	( LINK( this, ScColRowNameRangesDlg, ColClickHdl ) );
+    aBtnRowHead.SetClickHdl	( LINK( this, ScColRowNameRangesDlg, RowClickHdl ) );
+    aEdAssign2.SetModifyHdl	( LINK( this, ScColRowNameRangesDlg, Range2DataModifyHdl ) );
 
     Link aLink = LINK( this, ScColRowNameRangesDlg, GetFocusHdl );
     aEdAssign.SetGetFocusHdl( aLink );
@@ -186,21 +190,15 @@ void ScColRowNameRangesDlg::Init()
 
     if ( pViewData && pDoc )
     {
-        SCCOL nStartCol = 0;
-        SCROW nStartRow = 0;
-        SCTAB nStartTab = 0;
-        SCCOL nEndCol   = 0;
-        SCROW nEndRow   = 0;
-        SCTAB nEndTab   = 0;
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
-                                  nEndCol,   nEndRow,  nEndTab );
+                                  nEndCol,	 nEndRow,  nEndTab );
         SetColRowData( ScRange( ScAddress( nStartCol, nStartRow, nStartTab ),
                               ScAddress( nEndCol,   nEndRow,   nEndTab ) ) );
     }
     else
     {
-        aBtnColHead.Check( sal_True );
-        aBtnRowHead.Check( false );
+        aBtnColHead.Check( TRUE );
+        aBtnRowHead.Check( FALSE );
         aEdAssign.SetText( EMPTY_STRING );
         aEdAssign2.SetText( EMPTY_STRING );
     }
@@ -211,66 +209,68 @@ void ScColRowNameRangesDlg::Init()
     aEdAssign.Enable();
     aEdAssign.GrabFocus();
     aRbAssign.Enable();
+    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
+    //SFX_APPWINDOW->Enable();		// Ref-Feld hat Focus
 
     Range1SelectHdl( 0 );
 }
 
 
 /*************************************************************************
-#*  Member:     SetColRowData
+#*	Member:		SetColRowData								Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   zugehoerigen Datenbereich eines Beschriftungsbereiches
-#*              auf default Werte setzen und beide Referenz-Edit-Felder
-#*              fuellen.
+#*  Funktion:	zugehoerigen Datenbereich eines Beschriftungsbereiches
+#*				auf default Werte setzen und beide Referenz-Edit-Felder
+#*				fuellen.
 #*
-#*  Input:      Einstellbereich fuer Labels
+#*  Input:		Einstellbereich fuer Labels
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
-void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,sal_Bool bRef)
+void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,BOOL bRef)
 {
     theCurData = theCurArea = rLabelRange;
-    sal_Bool bValid = sal_True;
+    BOOL bValid = TRUE;
     SCCOL nCol1 = theCurArea.aStart.Col();
     SCCOL nCol2 = theCurArea.aEnd.Col();
     SCROW nRow1 = theCurArea.aStart.Row();
     SCROW nRow2 = theCurArea.aEnd.Row();
     if ( (static_cast<SCCOLROW>(nCol2 - nCol1) >= nRow2 - nRow1) || (nCol1 == 0 && nCol2 == MAXCOL) )
-    {   // Spaltenkoepfe und Grenzfall gesamte Tabelle
-        aBtnColHead.Check( sal_True );
-        aBtnRowHead.Check( false );
+    {	// Spaltenkoepfe und Grenzfall gesamte Tabelle
+        aBtnColHead.Check( TRUE );
+        aBtnRowHead.Check( FALSE );
         if ( nRow2 == MAXROW  )
         {
             if ( nRow1 == 0 )
-                bValid = false;     // Grenzfall gesamte Tabelle
+                bValid = FALSE;		// Grenzfall gesamte Tabelle
             else
-            {   // Head unten, Data oben
+            {	// Head unten, Data oben
                 theCurData.aStart.SetRow( 0 );
                 theCurData.aEnd.SetRow( nRow1 - 1 );
             }
         }
         else
-        {   // Head oben, Data unten
+        {	// Head oben, Data unten
             theCurData.aStart.SetRow( nRow2 + 1 );
             theCurData.aEnd.SetRow( MAXROW );
         }
     }
     else
-    {   // Zeilenkoepfe
-        aBtnRowHead.Check( sal_True );
-        aBtnColHead.Check( false );
+    {	// Zeilenkoepfe
+        aBtnRowHead.Check( TRUE );
+        aBtnColHead.Check( FALSE );
         if ( nCol2 == MAXCOL )
-        {   // Head rechts, Data links
+        {	// Head rechts, Data links
             theCurData.aStart.SetCol( 0 );
             theCurData.aEnd.SetCol( nCol2 - 1 );
         }
         else
-        {   // Head links, Data rechts
+        {	// Head links, Data rechts
             theCurData.aStart.SetCol( nCol2 + 1 );
             theCurData.aEnd.SetCol( MAXCOL );
         }
@@ -318,25 +318,25 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,sal_Bool b
 
 
 /*************************************************************************
-#*  Member:     AdjustColRowData
+#*	Member:		AdjustColRowData							Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   zugehoerigen Datenbereich eines Beschriftungsbereiches
-#*              anpassen und Data-Referenz-Edit-Feld fuellen.
+#*  Funktion:	zugehoerigen Datenbereich eines Beschriftungsbereiches
+#*				anpassen und Data-Referenz-Edit-Feld fuellen.
 #*
-#*  Input:      Bereich fuer Labels
+#*  Input:		Bereich fuer Labels
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
-void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,sal_Bool bRef)
+void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,BOOL bRef)
 {
     theCurData = rDataRange;
     if ( aBtnColHead.IsChecked() )
-    {   // Datenbereich gleiche Spalten wie Koepfe
+    {	// Datenbereich gleiche Spalten wie Koepfe
         theCurData.aStart.SetCol( theCurArea.aStart.Col() );
         theCurData.aEnd.SetCol( theCurArea.aEnd.Col() );
         if ( theCurData.Intersects( theCurArea ) )
@@ -345,13 +345,13 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,sal_Bool
             SCROW nRow2 = theCurArea.aEnd.Row();
             if ( nRow1 > 0
               && (theCurData.aEnd.Row() < nRow2 || nRow2 == MAXROW) )
-            {   // Data oben
+            {	// Data oben
                 theCurData.aEnd.SetRow( nRow1 - 1 );
                 if ( theCurData.aStart.Row() > theCurData.aEnd.Row() )
                     theCurData.aStart.SetRow( theCurData.aEnd.Row() );
             }
             else
-            {   // Data unten
+            {	// Data unten
                 theCurData.aStart.SetRow( nRow2 + 1 );
                 if ( theCurData.aStart.Row() > theCurData.aEnd.Row() )
                     theCurData.aEnd.SetRow( theCurData.aStart.Row() );
@@ -359,7 +359,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,sal_Bool
         }
     }
     else
-    {   // Datenbereich gleiche Zeilen wie Koepfe
+    {	// Datenbereich gleiche Zeilen wie Koepfe
         theCurData.aStart.SetRow( theCurArea.aStart.Row() );
         theCurData.aEnd.SetRow( theCurArea.aEnd.Row() );
         if ( theCurData.Intersects( theCurArea ) )
@@ -368,13 +368,13 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,sal_Bool
             SCCOL nCol2 = theCurArea.aEnd.Col();
             if ( nCol1 > 0
               && (theCurData.aEnd.Col() < nCol2 || nCol2 == MAXCOL) )
-            {   // Data links
+            {	// Data links
                 theCurData.aEnd.SetCol( nCol1 - 1 );
                 if ( theCurData.aStart.Col() > theCurData.aEnd.Col() )
                     theCurData.aStart.SetCol( theCurData.aEnd.Col() );
             }
             else
-            {   // Data rechts
+            {	// Data rechts
                 theCurData.aStart.SetCol( nCol2 + 1 );
                 if ( theCurData.aStart.Col() > theCurData.aEnd.Col() )
                     theCurData.aEnd.SetCol( theCurData.aStart.Col() );
@@ -394,19 +394,19 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,sal_Bool
 
 
 /*************************************************************************
-#*  Member:     SetReference
+#*	Member:		SetReference								Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Uebergabe eines mit der Maus selektierten Tabellen-
-#*              bereiches, der dann als neue Selektion im Referenz-
-#*              Fenster angezeigt wird.
+#*  Funktion:	Uebergabe eines mit der Maus selektierten Tabellen-
+#*				bereiches, der dann als neue Selektion im Referenz-
+#*				Fenster angezeigt wird.
 #*
-#*  Input:      Bereich fuer Labels
-#*              Dokumentklasse
+#*  Input:		Bereich fuer Labels
+#*				Dokumentklasse
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -419,9 +419,9 @@ void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* /* pD
 
         String aRefStr;
         if ( pEdActive == &aEdAssign )
-            SetColRowData( rRef, sal_True );
+            SetColRowData( rRef, TRUE );
         else
-            AdjustColRowData( rRef, sal_True );
+            AdjustColRowData( rRef, TRUE );
         aBtnColHead.Enable();
         aBtnRowHead.Enable();
         aBtnAdd.Enable();
@@ -431,36 +431,36 @@ void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* /* pD
 
 
 /*************************************************************************
-#*  Member:     Close
+#*	Member:		Close										Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Schliessen des Fensters
+#*  Funktion:	Schliessen des Fensters
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
-sal_Bool ScColRowNameRangesDlg::Close()
+BOOL __EXPORT ScColRowNameRangesDlg::Close()
 {
     return DoClose( ScColRowNameRangesDlgWrapper::GetChildWindowId() );
 }
 
 
 /*************************************************************************
-#*  Member:     SetActive
+#*	Member:		SetActive									Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Aktivieren des Fensters
+#*  Funktion:	Aktivieren des Fensters
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -468,7 +468,7 @@ void ScColRowNameRangesDlg::SetActive()
 {
     if ( bDlgLostFocus )
     {
-        bDlgLostFocus = false;
+        bDlgLostFocus = FALSE;
         if( pEdActive )
             pEdActive->GrabFocus();
     }
@@ -485,32 +485,32 @@ void ScColRowNameRangesDlg::SetActive()
 
 
 /*************************************************************************
-#*  Member:     UpdateNames
+#*	Member:		UpdateNames									Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Aktualisieren der Namen
+#*  Funktion:	Aktualisieren der Namen
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
 void ScColRowNameRangesDlg::UpdateNames()
 {
-    aLbRange.SetUpdateMode( false );
+    aLbRange.SetUpdateMode( FALSE );
     //-----------------------------------------------------------
     aLbRange.Clear();
     aRangeMap.clear();
     aEdAssign.SetText( EMPTY_STRING );
 
-    size_t nCount, j;
-    sal_uInt16 nPos; //@008 Hilfsvariable q eingefuegt
+    ULONG nCount, j;
+    USHORT nPos; //@008 Hilfsvariable q eingefuegt
 
-    SCCOL nCol1;
-    SCROW nRow1;    //Erweiterung fuer Bereichsnamen
+    SCCOL nCol1;	//@008 04.09.97
+    SCROW nRow1;	//Erweiterung fuer Bereichsnamen
     SCTAB nTab1;
     SCCOL nCol2;
     SCROW nRow2;
@@ -526,7 +526,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     aString += strDelim;
     nPos = aLbRange.InsertEntry( aString );
     aLbRange.SetEntryData( nPos, (void*)nEntryDataDelim );
-    if ( (nCount = xColNameRanges->size()) > 0 )
+    if ( (nCount = xColNameRanges->Count()) > 0 )
     {
         ScRangePair** ppSortArray = xColNameRanges->CreateNameSortedArray(
             nCount, pDoc );
@@ -545,12 +545,12 @@ void ScColRowNameRangesDlg::UpdateNames()
             if(pDoc!=NULL)
             {
                 pDoc->GetString(nCol1, nRow1, nTab1,rString);
-                strShow +=rString;
+                strShow	+=rString;
                 for(SCCOL i=nCol1+1;i<=q;i++)
                 {
                     strShow.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
                     pDoc->GetString(i, nRow1, nTab1,rString);
-                    strShow += rString;
+                    strShow	+= rString;
                 }
             }
             if(q<nCol2) // Zu lang? Ergaenzen um ",..."
@@ -573,7 +573,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     aString += strDelim;
     nPos = aLbRange.InsertEntry( aString );
     aLbRange.SetEntryData( nPos, (void*)nEntryDataDelim );
-    if ( (nCount = xRowNameRanges->size()) > 0 )
+    if ( (nCount = xRowNameRanges->Count()) > 0 )
     {
         ScRangePair** ppSortArray = xRowNameRanges->CreateNameSortedArray(
             nCount, pDoc );
@@ -591,12 +591,12 @@ void ScColRowNameRangesDlg::UpdateNames()
             if(pDoc!=NULL)
             {
                 pDoc->GetString(nCol1, nRow1, nTab1,rString);
-                strShow += rString;
+                strShow	+= rString;
                 for(SCROW i=nRow1+1;i<=q;i++)
                 {
                     strShow.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
                     pDoc->GetString(nCol1, i, nTab1,rString);
-                    strShow += rString;
+                    strShow	+= rString;
                 }
             }
             if(q<nRow2)
@@ -614,34 +614,34 @@ void ScColRowNameRangesDlg::UpdateNames()
         delete [] ppSortArray;
     }
     //-----------------------------------------------------------
-    aLbRange.SetUpdateMode( sal_True );
+    aLbRange.SetUpdateMode( TRUE );
     aLbRange.Invalidate();
 }
 
 
 /*************************************************************************
-#*  Member:     UpdateRangeData
+#*	Member:		UpdateRangeData								Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Aktualisieren der Bereichsdaten
+#*  Funktion:	Aktualisieren der Bereichsdaten
 #*
-#*  Input:      Bereichs-String
-#*              Flag fuer Spalten
+#*  Input:		Bereichs-String
+#*				Flag fuer Spalten
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
-void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, sal_Bool bColName )
+void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, BOOL bColName )
 {
     ScRangePair* pPair = NULL;
-    sal_Bool bFound = false;
+    BOOL bFound = FALSE;
     if ( bColName && (pPair = xColNameRanges->Find( rRange )) != NULL )
-        bFound = sal_True;
+        bFound = TRUE;
     else if ( !bColName && (pPair = xRowNameRanges->Find( rRange )) != NULL )
-        bFound = sal_True;
+        bFound = TRUE;
 
     if ( bFound )
     {
@@ -671,21 +671,21 @@ void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, sal_Bool bCo
 
 
 /*************************************************************************
-#*  Member:     IsRefInputMode
+#*	Member:		IsRefInputMode								Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Abfragefunktion fuer Referenz- Input- Mode.
+#*  Funktion:	Abfragefunktion fuer Referenz- Input- Mode.
 #*
-#*  Input:      Bereichs-String
-#*              Flag fuer Spalten
+#*  Input:		Bereichs-String
+#*				Flag fuer Spalten
 #*
-#*  Output:     true, wenn Referenz- Input- Mode
+#*	Output:		true, wenn Referenz- Input- Mode
 #*
 #************************************************************************/
 
-sal_Bool ScColRowNameRangesDlg::IsRefInputMode() const
+BOOL ScColRowNameRangesDlg::IsRefInputMode() const
 {
     return (pEdActive != NULL);
 }
@@ -695,18 +695,18 @@ sal_Bool ScColRowNameRangesDlg::IsRefInputMode() const
 // ========
 
 /*************************************************************************
-#*  Handler:    OkBtnHdl
+#*	Handler:	OkBtnHdl									Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
 #*  Funktion:   Wird ausgeloest, wenn der OK- Button gedrueckt wurde.
-#*              Hinzufuegen- Button ausloesen, und die neu einge-
-#*              stellten Bereiche ans Dokument uebergeben.
-#*              Fensterschliessen- Anweisung ausloesen.
-#*  Input:      ---
+#*				Hinzufuegen- Button ausloesen, und die neu einge-
+#*				stellten Bereiche ans Dokument uebergeben.
+#*				Fensterschliessen- Anweisung ausloesen.
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -729,16 +729,16 @@ IMPL_LINK( ScColRowNameRangesDlg, OkBtnHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    CancelBtnHdl
+#*	Handler:	CancelBtnHdl								Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Fensterschliessen- Anweisung ausloesen.
+#*  Funktion:	Fensterschliessen- Anweisung ausloesen.
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -751,18 +751,18 @@ IMPL_LINK_INLINE_END( ScColRowNameRangesDlg, CancelBtnHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    AddBtnHdl
+#*	Handler:	AddBtnHdl									Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Nach betaetigen des Hinzufuegen- Buttons, werden
-#*              die Bereichsangaben eingestellt und in der
-#*              Listbox dargestellt.
+#*  Funktion:	Nach betaetigen des Hinzufuegen- Buttons, werden
+#*				die Bereichsangaben eingestellt und in der
+#*				Listbox dargestellt.
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -775,8 +775,8 @@ IMPL_LINK( ScColRowNameRangesDlg, AddBtnHdl, void *, EMPTYARG )
     {
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         ScRange aRange1, aRange2;
-        sal_Bool bOk1;
-        if ( (bOk1 = ((aRange1.ParseAny( aNewArea, pDoc, eConv ) & SCA_VALID) == SCA_VALID)) != false
+        BOOL bOk1;
+        if ( (bOk1 = ((aRange1.ParseAny( aNewArea, pDoc, eConv ) & SCA_VALID) == SCA_VALID)) != FALSE
           && ((aRange2.ParseAny( aNewData, pDoc, eConv ) & SCA_VALID) == SCA_VALID) )
         {
             theCurArea = aRange1;
@@ -803,8 +803,8 @@ IMPL_LINK( ScColRowNameRangesDlg, AddBtnHdl, void *, EMPTYARG )
             aBtnAdd.Disable();
             aBtnRemove.Disable();
             aEdAssign.SetText( EMPTY_STRING );
-            aBtnColHead.Check( sal_True );
-            aBtnRowHead.Check( false );
+            aBtnColHead.Check( TRUE );
+            aBtnRowHead.Check( FALSE );
             aEdAssign2.SetText( EMPTY_STRING );
             theCurArea = ScRange();
             theCurData = theCurArea;
@@ -824,41 +824,41 @@ IMPL_LINK( ScColRowNameRangesDlg, AddBtnHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    RemoveBtnHdl
+#*	Handler:	RemoveBtnHdl								Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Nach betaetigen des Loeschen- Buttons, wird
-#*              die markierte Bereichsangabe geloescht.
+#*  Funktion:	Nach betaetigen des Loeschen- Buttons, wird
+#*				die markierte Bereichsangabe geloescht.
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
 IMPL_LINK( ScColRowNameRangesDlg, RemoveBtnHdl, void *, EMPTYARG )
 {
     String aRangeStr = aLbRange.GetSelectEntry();
-    sal_uInt16 nSelectPos = aLbRange.GetSelectEntryPos();
-    sal_Bool bColName =
-        ((sal_uLong)aLbRange.GetEntryData( nSelectPos ) == nEntryDataCol);
+    USHORT nSelectPos = aLbRange.GetSelectEntryPos();
+    BOOL bColName =
+        ((ULONG)aLbRange.GetEntryData( nSelectPos ) == nEntryDataCol);
     NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
     if (itr == aRangeMap.end())
         return 0;
     const ScRange& rRange = itr->second;
 
     ScRangePair* pPair = NULL;
-    sal_Bool bFound = false;
+    BOOL bFound = FALSE;
     if ( bColName && (pPair = xColNameRanges->Find( rRange )) != NULL )
-        bFound = sal_True;
+        bFound = TRUE;
     else if ( !bColName && (pPair = xRowNameRanges->Find( rRange )) != NULL )
-        bFound = sal_True;
+        bFound = TRUE;
     if ( bFound )
     {
         String aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
-        String aMsg       = aStrDelMsg.GetToken( 0, '#' );
+        String aMsg		  = aStrDelMsg.GetToken( 0, '#' );
 
         aMsg += aRangeStr;
         aMsg += aStrDelMsg.GetToken( 1, '#' );
@@ -872,7 +872,7 @@ IMPL_LINK( ScColRowNameRangesDlg, RemoveBtnHdl, void *, EMPTYARG )
             delete pPair;
 
             UpdateNames();
-            sal_uInt16 nCnt = aLbRange.GetEntryCount();
+            USHORT nCnt = aLbRange.GetEntryCount();
             if ( nSelectPos >= nCnt )
             {
                 if ( nCnt )
@@ -882,16 +882,16 @@ IMPL_LINK( ScColRowNameRangesDlg, RemoveBtnHdl, void *, EMPTYARG )
             }
             aLbRange.SelectEntryPos( nSelectPos );
             if ( nSelectPos &&
-                    (sal_uLong)aLbRange.GetEntryData( nSelectPos ) == nEntryDataDelim )
-                aLbRange.SelectEntryPos( --nSelectPos );    // ---Zeile---
+                    (ULONG)aLbRange.GetEntryData( nSelectPos ) == nEntryDataDelim )
+                aLbRange.SelectEntryPos( --nSelectPos );	// ---Zeile---
 
             aLbRange.GrabFocus();
             aBtnAdd.Disable();
             aBtnRemove.Disable();
             aEdAssign.SetText( EMPTY_STRING );
             theCurArea = theCurData = ScRange();
-            aBtnColHead.Check( sal_True );
-            aBtnRowHead.Check( false );
+            aBtnColHead.Check( TRUE );
+            aBtnRowHead.Check( FALSE );
             aEdAssign2.SetText( EMPTY_STRING );
             Range1SelectHdl( 0 );
         }
@@ -901,29 +901,29 @@ IMPL_LINK( ScColRowNameRangesDlg, RemoveBtnHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    Range1SelectHdl
+#*	Handler:	Range1SelectHdl								Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Wenn Zeile in Listbox ausgewaehlt wird,
-#*              werden die Eingabefelder entsprechend
-#*              eingestellt.
+#*  Funktion:	Wenn Zeile in Listbox ausgewaehlt wird,
+#*				werden die Eingabefelder entsprechend
+#*				eingestellt.
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
 IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
 {
-    sal_uInt16 nSelectPos = aLbRange.GetSelectEntryPos();
-    sal_uInt16 nCnt = aLbRange.GetEntryCount();
-    sal_uInt16 nMoves = 0;
+    USHORT nSelectPos = aLbRange.GetSelectEntryPos();
+    USHORT nCnt = aLbRange.GetEntryCount();
+    USHORT nMoves = 0;
     while ( nSelectPos < nCnt
-            && (sal_uLong)aLbRange.GetEntryData( nSelectPos ) == nEntryDataDelim )
-    {   // skip Delimiter
+            && (ULONG)aLbRange.GetEntryData( nSelectPos ) == nEntryDataDelim )
+    {	// skip Delimiter
         ++nMoves;
         aLbRange.SelectEntryPos( ++nSelectPos );
     }
@@ -931,7 +931,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
     if ( nMoves )
     {
         if ( nSelectPos > 1 && nSelectPos >= nCnt )
-        {   // am Ende nicht auf dem " --- Zeile --- " Delimiter stehenbleiben
+        {	// am Ende nicht auf dem " --- Zeile --- " Delimiter stehenbleiben
             // wenn davor Eintraege existieren
             nSelectPos = nCnt - 2;
             aLbRange.SelectEntryPos( nSelectPos );
@@ -939,7 +939,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
         }
         else if ( nSelectPos > 2 && nSelectPos < nCnt && aRangeStr.Len()
                 && aRangeStr == aEdAssign.GetText() )
-        {   // nach oben wandern statt nach unten auf die vorherige Position
+        {	// nach oben wandern statt nach unten auf die vorherige Position
             nSelectPos -= 2;
             aLbRange.SelectEntryPos( nSelectPos );
             aRangeStr = aLbRange.GetSelectEntry();
@@ -948,8 +948,8 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
     NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
     if ( itr != aRangeMap.end() )
     {
-        sal_Bool bColName =
-            ((sal_uLong)aLbRange.GetEntryData( nSelectPos ) == nEntryDataCol);
+        BOOL bColName =
+            ((ULONG)aLbRange.GetEntryData( nSelectPos ) == nEntryDataCol);
         UpdateRangeData( itr->second, bColName );
         aBtnAdd.Disable();
         aBtnRemove.Enable();
@@ -982,36 +982,38 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
     aEdAssign.Enable();
     aRbAssign.Enable();
 
+    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
+    //SFX_APPWINDOW->Enable();
     return 0;
 }
 
 
 /*************************************************************************
-#*  Handler:    Range1DataModifyHdl
+#*	Handler:	Range1DataModifyHdl							Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Wird ausgeloest, wenn in der Tabelle, der Label-
-#*              Bereich geaendert wurde.
+#*  Funktion:	Wird ausgeloest, wenn in der Tabelle, der Label-
+#*				Bereich geaendert wurde.
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
 IMPL_LINK( ScColRowNameRangesDlg, Range1DataModifyHdl, void *, EMPTYARG )
 {
     String aNewArea( aEdAssign.GetText() );
-    sal_Bool bValid = false;
+    BOOL bValid = FALSE;
     if ( aNewArea.Len() > 0 )
     {
         ScRange aRange;
         if ( (aRange.ParseAny( aNewArea, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID) == SCA_VALID )
         {
             SetColRowData( aRange );
-            bValid = sal_True;
+            bValid = TRUE;
         }
     }
     if ( bValid )
@@ -1036,17 +1038,17 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1DataModifyHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    Range2DataModifyHdl
+#*	Handler:	Range2DataModifyHdl							Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Wird ausgeloest, wenn in der Tabelle, der Daten-
-#*              Bereich geaendert wurde
+#*  Funktion:	Wird ausgeloest, wenn in der Tabelle, der Daten-
+#*				Bereich geaendert wurde
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -1073,18 +1075,18 @@ IMPL_LINK( ScColRowNameRangesDlg, Range2DataModifyHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    ColClickHdl
+#*	Handler:	ColClickHdl									Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Radiobutton fuer Spalten wurde betaetigt,
-#*              die entsprechenden Einstellungen werden
-#*              vorgenommen
+#*  Funktion:	Radiobutton fuer Spalten wurde betaetigt,
+#*				die entsprechenden Einstellungen werden
+#*				vorgenommen
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -1092,8 +1094,8 @@ IMPL_LINK( ScColRowNameRangesDlg, ColClickHdl, void *, EMPTYARG )
 {
     if ( !aBtnColHead.GetSavedValue() )
     {
-        aBtnColHead.Check( sal_True );
-        aBtnRowHead.Check( false );
+        aBtnColHead.Check( TRUE );
+        aBtnRowHead.Check( FALSE );
         if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == MAXROW )
         {
             theCurArea.aEnd.SetRow( MAXROW - 1 );
@@ -1111,18 +1113,18 @@ IMPL_LINK( ScColRowNameRangesDlg, ColClickHdl, void *, EMPTYARG )
 
 
 /*************************************************************************
-#*  Handler:    RowClickHdl
+#*	Handler:	RowClickHdl									Datum:04.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     ScColRowNameRangesDlg
+#*  Klasse:		ScColRowNameRangesDlg
 #*
-#*  Funktion:   Radiobutton fuer Zeilen wurde betaetigt,
-#*              die entsprechenden Einstellungen werden
-#*              vorgenommen
+#*  Funktion:	Radiobutton fuer Zeilen wurde betaetigt,
+#*				die entsprechenden Einstellungen werden
+#*				vorgenommen
 #*
-#*  Input:      ---
+#*  Input:		---
 #*
-#*  Output:     ---
+#*	Output:		---
 #*
 #************************************************************************/
 
@@ -1130,8 +1132,8 @@ IMPL_LINK( ScColRowNameRangesDlg, RowClickHdl, void *, EMPTYARG )
 {
     if ( !aBtnRowHead.GetSavedValue() )
     {
-        aBtnRowHead.Check( sal_True );
-        aBtnColHead.Check( false );
+        aBtnRowHead.Check( TRUE );
+        aBtnColHead.Check( FALSE );
         if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == MAXCOL )
         {
             theCurArea.aEnd.SetCol( MAXCOL - 1 );

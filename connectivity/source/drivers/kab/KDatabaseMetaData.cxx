@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-KabDatabaseMetaData::KabDatabaseMetaData(KabConnection* _pCon)
+KabDatabaseMetaData::KabDatabaseMetaData(KabConnection* _pCon) 
         : m_xConnection(_pCon),
           m_bUseCatalog(sal_True)
 {
     OSL_ENSURE(_pCon,"KabDatabaseMetaData::KabDatabaseMetaData: No connection set!");
 
     osl_incrementInterlockedCount( &m_refCount );
-    m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
+    m_bUseCatalog	= !(usesLocalFiles() || usesLocalFilePerTable());
     osl_decrementInterlockedCount( &m_refCount );
 }
 // -------------------------------------------------------------------------
@@ -220,7 +220,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLE
 ::rtl::OUString SAL_CALL KabDatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
 {
     // normally this is "
-    ::rtl::OUString aVal(RTL_CONSTASCII_USTRINGPARAM("\""));
+    ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("\"");
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -567,7 +567,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(S
 {
     // if someday we support more than the default address book,
     // this method should return the URL which was used to create it
-    ::rtl::OUString aValue( RTL_CONSTASCII_USTRINGPARAM( "sdbc:address:kab:" ));
+    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("sdbc:address:kab:");
     return aValue;
 }
 // -------------------------------------------------------------------------
@@ -579,13 +579,13 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(S
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL KabDatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue( RTL_CONSTASCII_USTRINGPARAM( "kab" ));
+    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("kab");
     return aValue;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL KabDatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue(RTL_CONSTASCII_USTRINGPARAM(KAB_DRIVER_VERSION));
+    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii(KAB_DRIVER_VERSION);
     return aValue;
 }
 // -------------------------------------------------------------------------
@@ -792,7 +792,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTableTypes(  ) throw(SQ
     Reference< XResultSet > xRef = pResult;
 
     static ODatabaseMetaDataResultSet::ORows aRows;
-    static const ::rtl::OUString aTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    static const ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
 
     if (aRows.empty())
     {
@@ -816,7 +816,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTypeInfo(  ) throw(SQLE
         ODatabaseMetaDataResultSet::ORow aRow(19);
 
         aRow[0] = ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CHAR")));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("CHAR"));
         aRow[2] = new ORowSetValueDecorator(DataType::CHAR);
         aRow[3] = new ORowSetValueDecorator((sal_Int32) 254);
         aRow[4] = ODatabaseMetaDataResultSet::getQuoteValue();
@@ -852,17 +852,17 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getSchemas(  ) throw(SQLEx
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eSchemas );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumnPrivileges(
-    const Any&, const ::rtl::OUString&, const ::rtl::OUString&,
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumnPrivileges( 
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString&, 
     const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumnPrivileges );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns( 
     const Any&,
     const ::rtl::OUString&,
-    const ::rtl::OUString& tableNamePattern,
+    const ::rtl::OUString& tableNamePattern, 
     const ::rtl::OUString& columnNamePattern) throw(SQLException, RuntimeException)
 {
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
@@ -887,7 +887,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
         aRow[14] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[15] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[16] = new ORowSetValueDecorator((sal_Int32) 254);
-        aRow[18] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YES")));
+        aRow[18] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("YES"));
 
         sal_Int32 nPosition = 1;
         QString aQtName;
@@ -899,7 +899,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
         {
             aRow[4] = new ORowSetValueDecorator(sName);
             aRow[5] = new ORowSetValueDecorator(DataType::TIMESTAMP);
-            aRow[6] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP")));
+            aRow[6] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("TIMESTAMP"));
             aRow[17] = new ORowSetValueDecorator(nPosition++);
             aRows.push_back(aRow);
         }
@@ -907,7 +907,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
         ::KABC::Field::List aFields = ::KABC::Field::allFields();
         ::KABC::Field::List::iterator aField;
 
-        for (   aField = aFields.begin();
+        for (	aField = aFields.begin();
                 aField != aFields.end();
                 ++aField, ++nPosition)
         {
@@ -917,7 +917,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
             {
                 aRow[4] = new ORowSetValueDecorator(sName);
                 aRow[5] = new ORowSetValueDecorator(DataType::CHAR);
-                aRow[6] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CHAR")));
+                aRow[6] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("CHAR"));
                 aRow[7] = new ORowSetValueDecorator((sal_Int32) 256);
 // Might be VARCHAR and not CHAR[256]...
                 aRow[17] = new ORowSetValueDecorator(nPosition);
@@ -929,7 +929,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
     return xRef;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTables(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTables( 
     const Any&,
     const ::rtl::OUString&,
     const ::rtl::OUString&,
@@ -941,7 +941,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTables(
     // check whether we have tables in the requested types
     // for the moment, we answer only the "TABLE" table type
     // when no types are given at all, we return all the tables
-    static const ::rtl::OUString aTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    static const ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
     sal_Bool bTableFound = sal_False;
     const ::rtl::OUString* p = types.getConstArray(),
                          * pEnd = p + types.getLength();
@@ -980,25 +980,25 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTables(
     return xRef;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedureColumns(
-    const Any&, const ::rtl::OUString&,
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedureColumns( 
+    const Any&, const ::rtl::OUString&, 
     const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedureColumns );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedures(
-    const Any&, const ::rtl::OUString&,
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedures( 
+    const Any&, const ::rtl::OUString&, 
     const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedures );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns( 
     const Any&, const ::rtl::OUString&, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eVersionColumns);
-
+    
     Reference< XResultSet > xRef = pResult;
 
     ODatabaseMetaDataResultSet::ORows aRows;
@@ -1014,7 +1014,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns(
 
         aRow[2] = new ORowSetValueDecorator(sName);
         aRow[3] = new ORowSetValueDecorator(DataType::TIMESTAMP);
-        aRow[4] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP")));
+        aRow[4] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("TIMESTAMP"));
 
         aRow[5] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[6] = ODatabaseMetaDataResultSet::getEmptyValue();
@@ -1027,47 +1027,47 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns(
     return xRef;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getExportedKeys(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getExportedKeys( 
     const Any&, const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eExportedKeys );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getImportedKeys(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getImportedKeys( 
     const Any&, const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eImportedKeys );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getPrimaryKeys(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getPrimaryKeys( 
     const Any&, const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::ePrimaryKeys );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getIndexInfo(
-    const Any&, const ::rtl::OUString&, const ::rtl::OUString&,
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getIndexInfo( 
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString&, 
     sal_Bool, sal_Bool ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eIndexInfo );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getBestRowIdentifier(
-    const Any&, const ::rtl::OUString&, const ::rtl::OUString&, sal_Int32,
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getBestRowIdentifier( 
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString&, sal_Int32, 
     sal_Bool ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eBestRowIdentifier );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTablePrivileges(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTablePrivileges( 
     const Any&, const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getCrossReference(
-    const Any&, const ::rtl::OUString&,
-    const ::rtl::OUString&, const Any&,
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getCrossReference( 
+    const Any&, const ::rtl::OUString&, 
+    const ::rtl::OUString&, const Any&, 
     const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCrossReference );
@@ -1075,7 +1075,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getCrossReference(
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getUDTs( const Any&, const ::rtl::OUString&, const ::rtl::OUString&, const Sequence< sal_Int32 >& ) throw(SQLException, RuntimeException)
 {
-    OSL_FAIL("Not implemented yet!");
+    OSL_ENSURE(0,"Not implemented yet!");
     throw SQLException();
 }
 // -----------------------------------------------------------------------------

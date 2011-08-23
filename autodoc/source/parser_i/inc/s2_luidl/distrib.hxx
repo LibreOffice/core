@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,8 +68,8 @@ namespace uidl
 {
 
 
-typedef std::vector< DYN Token * >  TokenQueue;
-typedef TokenQueue::iterator        TokenIterator;
+typedef std::vector< DYN Token * >	TokenQueue;
+typedef TokenQueue::iterator	    TokenIterator;
 
 class TokenParser_Uidl;
 class UnoIDL_PE;
@@ -81,21 +81,21 @@ class TokenDistributor : private TokenProcessing_Types
 {
   public:
                         TokenDistributor(
-                            ary::Repository &   io_rRepository,
+                            ary::Repository &	io_rRepository,
                             ParserInfo &            io_rParserInfo );
-    void                SetTokenProvider(
-                            TokenParser_Uidl &  io_rTokenSource );
-    void                SetTopParseEnvironment(
-                            UnoIDL_PE &         io_pTopParseEnvironment );
+    void				SetTokenProvider(
+                            TokenParser_Uidl &	io_rTokenSource );
+    void				SetTopParseEnvironment(
+                            UnoIDL_PE &			io_pTopParseEnvironment );
                         ~TokenDistributor();
 
 
-    void                Reset()                 { aDocumentation.Reset(); }
-    /** calls pTokenSource->GetNextToken() and checks the incoming tokens, until a
+    void				Reset()					{ aDocumentation.Reset(); }
+    /**	calls pTokenSource->GetNextToken() and checks the incoming tokens, until a
         usable token is found. This token will be forwarded to
         pTopParseEnv;
     */
-    void                TradeToken();
+    void				TradeToken();
 
     csi::uidl::Token_Receiver &
                         CodeTokens_Receiver();
@@ -122,59 +122,59 @@ class TokenDistributor : private TokenProcessing_Types
     class ProcessingData;
     friend class ProcessingData;
 
-    class  ProcessingData : public  csi::uidl::Token_Receiver,
+    class  ProcessingData : public 	csi::uidl::Token_Receiver,
                             private TokenProcessing_Types
     {
       public:
                             ProcessingData(
-                                ary::Repository &   io_rRepository,
-                                Documentation &         i_rDocuProcessor,
+                                ary::Repository &	io_rRepository,
+                                Documentation &		    i_rDocuProcessor,
                                 ParserInfo &            io_rParserInfo );
                             ~ProcessingData();
-        void                SetTopParseEnvironment(
-                                UnoIDL_PE &         io_pTopParseEnvironment );
+        void				SetTopParseEnvironment(
+                                UnoIDL_PE &			io_pTopParseEnvironment );
 
 
-        /** is called from pTokenSource before finishing a ::TokenParse2::GetNextToken()
+        /**	is called from pTokenSource before finishing a ::TokenParse2::GetNextToken()
             call and passes the just parsed token to this class.
         */
-        virtual void        Receive(
+        virtual void		Receive(
                                 DYN csi::uidl::Token &
                                                 let_drToken );
         virtual void        Increment_CurLine();
 
-        void                ProcessCurToken();
+        void				ProcessCurToken();
 
-        UnoIDL_PE &         CurEnvironment() const;
-        bool                NextTokenExists() const;
+        UnoIDL_PE &			CurEnvironment() const;
+        bool				NextTokenExists() const;
         void                Set_PublishedOn()
                                 { bPublishedRecentlyOn = true; }
 
       private:
-        typedef uintt   TokenQ_Position;
-        typedef std::pair< UnoIDL_PE *, TokenQ_Position >   EnvironmentInfo;
+        typedef uintt	TokenQ_Position;
+        typedef std::pair< UnoIDL_PE *, TokenQ_Position >	EnvironmentInfo;
         typedef std::vector< EnvironmentInfo >              EnvironmentStack;
 
-        void                AcknowledgeResult();
+        void				AcknowledgeResult();
         const csi::uidl::Token &
                             CurToken() const;
-        UnoIDL_PE &         CurEnv() const;
-        UnoIDL_PE &         PushEnv() const;
-        uintt               CurTokenPosition() const;
+        UnoIDL_PE &			CurEnv() const;
+        UnoIDL_PE &			PushEnv() const;
+        uintt				CurTokenPosition() const;
         uintt               CurEnv_TriedTokenPosition() const;
-        void                DecrementTryCount();
+        void				DecrementTryCount();
 
-        EnvironmentStack    aEnvironments;
-        TokenQueue          aTokenQueue;
-        TokenIterator       itCurToken;
+        EnvironmentStack	aEnvironments;
+        TokenQueue			aTokenQueue;
+        TokenIterator		itCurToken;
         TokenProcessing_Result
                             aCurResult;
-        uintt               nTryCount;
-        bool                bFinished;
+        uintt				nTryCount;
+        bool				bFinished;
         ary::Repository &
                             rRepository;
         ParserInfo &        rParserInfo;
-        Documentation *     pDocuProcessor;
+        Documentation *		pDocuProcessor;
         bool                bPublishedRecentlyOn;
     };
 
@@ -185,9 +185,9 @@ class TokenDistributor : private TokenProcessing_Types
                                 ParserInfo &    io_rParserInfo);
                             ~Documentation();
 
-        void                Reset()             { bIsPassedFirstDocu = false; }
+        void				Reset()				{ bIsPassedFirstDocu = false; }
 
-        virtual void        Receive(
+        virtual void		Receive(
                                 DYN csi::dsapi::Token &
                                                 let_drToken );
         virtual void        Increment_CurLine();
@@ -200,13 +200,13 @@ class TokenDistributor : private TokenProcessing_Types
         ParserInfo &        rParserInfo;
         Dyn<ary::doc::OldIdlDocu>
                             pMostRecentDocu;
-        bool                bIsPassedFirstDocu;
+        bool				bIsPassedFirstDocu;
     };
 
     // DATA
-    TokenParser_Uidl *  pTokenSource;
-    Documentation       aDocumentation;
-    ProcessingData      aProcessingData;
+    TokenParser_Uidl *	pTokenSource;
+    Documentation		aDocumentation;
+    ProcessingData		aProcessingData;
 };
 
 
@@ -214,7 +214,7 @@ class TokenDistributor : private TokenProcessing_Types
 // IMPLEMENTATION
 
 inline void
-TokenDistributor::SetTokenProvider( TokenParser_Uidl &  io_rTokenSource )
+TokenDistributor::SetTokenProvider( TokenParser_Uidl &	io_rTokenSource )
     { pTokenSource = &io_rTokenSource; }
 
 inline void

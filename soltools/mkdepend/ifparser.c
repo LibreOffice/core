@@ -103,10 +103,7 @@ parse_number (g, cp, valp)
     return CALLFUNC(g, handle_error) (g, cp, "number");
 
 #ifdef WIN32
-    {
-        char *cp2;
-        *valp = strtol(cp, &cp2, 0);
-    }
+    *valp = strtol(cp, &cp, 0);
 #else
     *valp = atoi (cp);
     /* EMPTY */
@@ -175,7 +172,7 @@ parse_value (g, cp, valp)
         cp++;
         }
         DO (cp = parse_variable (g, cp, &var));
-        len = (int)(cp - var);
+        len = cp - var;
         SKIPSPACE (cp);
         if (paren && *cp != ')')
         return CALLFUNC(g, handle_error) (g, cp, ")");

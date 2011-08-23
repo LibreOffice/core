@@ -61,7 +61,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-March 2005          Created
+March 2005			Created
  ************************************************************************/
 
 #ifndef _LWPVERSIONEDPOINTER_HXX_
@@ -72,11 +72,11 @@ class LwpVersionedPointer : public LwpObject
 {
 public:
     LwpVersionedPointer(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    ~LwpVersionedPointer(){}
+    ~LwpVersionedPointer(){};
     void Read();
     void RegisterStyle();
     void Parse(IXFStream* pOutputStream);
-    LwpObjectID* GetPointer(){return &m_PointerID;}
+    LwpObjectID* GetPointer(){return &m_PointerID;};
 protected:
     LwpObjectID m_PointerID;
 };

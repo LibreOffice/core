@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,11 +54,11 @@ class OutputDevice;
 
 #include <rtl/ref.hxx>
 
-#if defined(UNX) || defined(WNT)
+#if defined(UNX) || defined(WIN) || defined(WNT)
 #define DEGREE_CHAR ((sal_Unicode)176)   /* 0xB0 = Ansi */
 #endif
 
-#if defined(OS2)
+#if defined(DOS) || defined(OS2)
 #define DEGREE_CHAR ((sal_Unicode)248)   /* 0xF8 = IBM PC (Erw. ASCII) */
 #endif
 
@@ -107,11 +107,11 @@ namespace sfx2{
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define SDR_SWAPGRAPHICSMODE_NONE       0x00000000
-#define SDR_SWAPGRAPHICSMODE_TEMP       0x00000001
-#define SDR_SWAPGRAPHICSMODE_DOC        0x00000002
-#define SDR_SWAPGRAPHICSMODE_PURGE      0x00000100
-#define SDR_SWAPGRAPHICSMODE_DEFAULT    (SDR_SWAPGRAPHICSMODE_TEMP|SDR_SWAPGRAPHICSMODE_DOC|SDR_SWAPGRAPHICSMODE_PURGE)
+#define SDR_SWAPGRAPHICSMODE_NONE		0x00000000
+#define SDR_SWAPGRAPHICSMODE_TEMP		0x00000001
+#define SDR_SWAPGRAPHICSMODE_DOC		0x00000002
+#define SDR_SWAPGRAPHICSMODE_PURGE		0x00000100
+#define SDR_SWAPGRAPHICSMODE_DEFAULT	(SDR_SWAPGRAPHICSMODE_TEMP|SDR_SWAPGRAPHICSMODE_DOC|SDR_SWAPGRAPHICSMODE_PURGE)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -130,18 +130,18 @@ enum SdrHintKind
                   HINT_DEFFONTHGTCHG,   // Default FontHeight geaendert
                   HINT_MODELSAVED,      // Dokument wurde gesichert
                   HINT_SWITCHTOPAGE,    // #94278# UNDO/REDO at an object evtl. on another page
-                  HINT_BEGEDIT,         // Is called after the object has entered text edit mode
-                  HINT_ENDEDIT          // Is called after the object has left text edit mode
+                  HINT_BEGEDIT,			// Is called after the object has entered text edit mode
+                  HINT_ENDEDIT			// Is called after the object has left text edit mode
 };
 
 class SVX_DLLPUBLIC SdrHint: public SfxHint
 {
 public:
-    Rectangle                               maRectangle;
-    const SdrPage*                          mpPage;
-    const SdrObject*                        mpObj;
-    const SdrObjList*                       mpObjList;
-    SdrHintKind                             meHint;
+    Rectangle								maRectangle;
+    const SdrPage*							mpPage;
+    const SdrObject*						mpObj;
+    const SdrObjList*						mpObjList;
+    SdrHintKind								meHint;
 
 public:
     TYPEINFO();
@@ -167,15 +167,15 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Flag um nach dem Laden des Pools Aufzuraeumen (d.h. die RefCounts
-// neu zu bestimmen und unbenutztes wegzuwerfen). sal_False == aktiv
+// neu zu bestimmen und unbenutztes wegzuwerfen). FALSE == aktiv
 #define LOADREFCOUNTS (false)
 
 struct SdrDocumentStreamInfo
 {
     bool            mbDeleteAfterUse;
-    String          maUserData;
+    String		    maUserData;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxStorageRef;
-    sal_Bool            mbDummy1 : 1;
+    BOOL		    mbDummy1 : 1;
 };
 
 struct SdrModelImpl;
@@ -206,21 +206,21 @@ protected:
                     m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
     SdrOutliner*    pDrawOutliner;  // ein Outliner zur Textausgabe
     SdrOutliner*    pHitTestOutliner;// ein Outliner fuer den HitTest
-    sal_uIntPtr           nDefTextHgt;    // Default Texthoehe in logischen Einheiten
+    ULONG           nDefTextHgt;    // Default Texthoehe in logischen Einheiten
     OutputDevice*   pRefOutDev;     // ReferenzDevice fuer die EditEngine
-    sal_uIntPtr           nProgressAkt;   // fuer den
-    sal_uIntPtr           nProgressMax;   // ProgressBar-
-    sal_uIntPtr           nProgressOfs;   // -Handler
+    ULONG           nProgressAkt;   // fuer den
+    ULONG           nProgressMax;   // ProgressBar-
+    ULONG           nProgressOfs;   // -Handler
     rtl::Reference< SfxStyleSheetBasePool > mxStyleSheetPool;
-    SfxStyleSheet*  pDefaultStyleSheet;
+    SfxStyleSheet*	pDefaultStyleSheet;
     sfx2::LinkManager* pLinkManager;   // LinkManager
     Container*      pUndoStack;
     Container*      pRedoStack;
     SdrUndoGroup*   pAktUndoGroup;  // Fuer mehrstufige
-    sal_uInt16          nUndoLevel;     // Undo-Klammerung
-    bool            mbUndoEnabled;  // If false no undo is recorded or we are during the execution of an undo action
-    sal_uInt16          nProgressPercent; // fuer den ProgressBar-Handler
-    sal_uInt16          nLoadVersion;   // Versionsnummer der geladenen Datei
+    USHORT          nUndoLevel;     // Undo-Klammerung
+    bool			mbUndoEnabled;	// If false no undo is recorded or we are during the execution of an undo action
+    USHORT          nProgressPercent; // fuer den ProgressBar-Handler
+    USHORT          nLoadVersion;   // Versionsnummer der geladenen Datei
     bool            bExtColorTable; // Keinen eigenen ColorTable
     sal_Bool        mbChanged;
     bool            bInfoChanged;
@@ -234,13 +234,13 @@ protected:
     bool            bSaveCompressed;
     bool            bSwapGraphics;
     bool            bPasteResize; // Objekte werden gerade resized wegen Paste mit anderem MapMode
-    bool            bSaveOLEPreview;      // save preview metafile of OLE objects
-    sal_uInt16          nStreamCompressMode;  // Komprimiert schreiben?
-    sal_uInt16          nStreamNumberFormat;
-    sal_uInt16          nDefaultTabulator;
-    sal_uInt32          nMaxUndoCount;
+    bool    		bSaveOLEPreview;      // save preview metafile of OLE objects
+    UINT16          nStreamCompressMode;  // Komprimiert schreiben?
+    UINT16          nStreamNumberFormat;
+    UINT16          nDefaultTabulator;
+    UINT32          nMaxUndoCount;
     bool            bSaveNative;
-    sal_Bool            bStarDrawPreviewMode;
+    BOOL            bStarDrawPreviewMode;
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -248,7 +248,7 @@ protected:
 private:
     // the next unique comment ID, used for counting added comments. Initialized
     // to 0. UI shows one more due to the fact that 0 is a no-no for users.
-    sal_uInt32                                          mnUniqueCommentID;
+    sal_uInt32											mnUniqueCommentID;
 
 public:
     // create a new, unique comment ID
@@ -267,18 +267,19 @@ public:
     bool IsAllowShapePropertyChangeListener() const;
     void SetAllowShapePropertyChangeListener( bool bAllow );
 
-    sal_uInt16          nStarDrawPreviewMasterPageNum;
+    UINT16          nStarDrawPreviewMasterPageNum;
     // Reserven fuer kompatible Erweiterungen
-    SotStorage*     pModelStorage;
+//-/	SfxItemPool*    pUndoItemPool;
+    SotStorage*		pModelStorage;
     SvxForbiddenCharactersTable* mpForbiddenCharactersTable;
-    sal_uIntPtr         nSwapGraphicsMode;
+    ULONG			nSwapGraphicsMode;
 
     SdrOutlinerCache* mpOutlinerCache;
-    SdrModelImpl*   mpImpl;
-    sal_uInt16          mnCharCompressType;
-    sal_uInt16          mnHandoutPageCount;
-    sal_uInt16          nReserveUInt6;
-    sal_uInt16          nReserveUInt7;
+    SdrModelImpl*	mpImpl;
+    UINT16          mnCharCompressType;
+    UINT16          mnHandoutPageCount;
+    UINT16          nReserveUInt6;
+    UINT16          nReserveUInt7;
     bool            mbModelLocked;
     bool            mbKernAsianPunctuation;
     bool            mbAddExtLeading;
@@ -299,8 +300,8 @@ public:
 public:
     const SvNumberFormatter& GetNumberFormatter() const;
 
-    sal_uInt16 getHandoutPageCount() const { return mnHandoutPageCount; }
-    void setHandoutPageCount( sal_uInt16 nHandoutPageCount ) { mnHandoutPageCount = nHandoutPageCount; }
+    UINT16 getHandoutPageCount() const { return mnHandoutPageCount; }
+    void setHandoutPageCount( UINT16 nHandoutPageCount ) { mnHandoutPageCount = nHandoutPageCount; }
 
 protected:
 
@@ -313,9 +314,9 @@ private:
     SVX_DLLPRIVATE bool operator==(const SdrModel& rCmpModel) const;
     SVX_DLLPRIVATE void ImpPostUndoAction(SdrUndoAction* pUndo);
     SVX_DLLPRIVATE void ImpSetUIUnit();
-    SVX_DLLPRIVATE void ImpSetOutlinerDefaults( SdrOutliner* pOutliner, sal_Bool bInit = sal_False );
+    SVX_DLLPRIVATE void ImpSetOutlinerDefaults( SdrOutliner* pOutliner, BOOL bInit = FALSE );
     SVX_DLLPRIVATE void ImpReformatAllTextObjects();
-    SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();    // #103122#
+    SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();	// #103122#
     SVX_DLLPRIVATE void ImpCreateTables();
     SVX_DLLPRIVATE void ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable,
         bool bLoadRefCounts = true);
@@ -349,7 +350,7 @@ public:
     // Hier kann man erfragen, ob das Model gerade eingrstreamt wird
     bool IsLoading() const                  { return sal_False /*BFS01 bLoading */; }
     // Muss z.B. ueberladen werden, um das Swappen/LoadOnDemand von Grafiken
-    // zu ermoeglichen. Wird rbDeleteAfterUse auf sal_True gesetzt, so wird
+    // zu ermoeglichen. Wird rbDeleteAfterUse auf TRUE gesetzt, so wird
     // die SvStream-Instanz vom Aufrufer nach Gebrauch destruiert.
     // Wenn diese Methode NULL liefert, wird zum Swappen eine temporaere
     // Datei angelegt.
@@ -380,8 +381,8 @@ public:
     SdrOutliner&         GetHitTestOutliner() const { return *pHitTestOutliner; }
     const SdrTextObj*    GetFormattingTextObj() const;
     // Die TextDefaults (Font,Hoehe,Farbe) in ein Set putten
-    void                 SetTextDefaults() const;
-    static void          SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt );
+    void         		 SetTextDefaults() const;
+    static void    		 SetTextDefaults( SfxItemPool* pItemPool, ULONG nDefTextHgt );
 
     // ReferenzDevice fuer die EditEngine
     void                 SetRefDevice(OutputDevice* pDev);
@@ -389,11 +390,11 @@ public:
     // Wenn ein neuer MapMode am RefDevice gesetzt wird o.ae.
     void                 RefDeviceChanged(); // noch nicht implementiert
     // Default-Schrifthoehe in logischen Einheiten
-    void                 SetDefaultFontHeight(sal_uIntPtr nVal);
-    sal_uIntPtr                GetDefaultFontHeight() const           { return nDefTextHgt; }
+    void                 SetDefaultFontHeight(ULONG nVal);
+    ULONG                GetDefaultFontHeight() const           { return nDefTextHgt; }
     // Default-Tabulatorweite fuer die EditEngine
-    void                 SetDefaultTabulator(sal_uInt16 nVal);
-    sal_uInt16               GetDefaultTabulator() const            { return nDefaultTabulator; }
+    void                 SetDefaultTabulator(USHORT nVal);
+    USHORT               GetDefaultTabulator() const            { return nDefaultTabulator; }
 
     // Der DefaultStyleSheet wird jedem Zeichenobjekt verbraten das in diesem
     // Model eingefuegt wird und kein StyleSheet gesetzt hat.
@@ -404,8 +405,8 @@ public:
     void                 SetLinkManager( sfx2::LinkManager* pLinkMgr ) { pLinkManager = pLinkMgr; }
 
     ::comphelper::IEmbeddedHelper*     GetPersist() const               { return m_pEmbeddedHelper; }
-    void                 ClearPersist()                                 { m_pEmbeddedHelper = 0; }
-    void                 SetPersist( ::comphelper::IEmbeddedHelper *p ) { m_pEmbeddedHelper = p; }
+    void				 ClearPersist()                                 { m_pEmbeddedHelper = 0; }
+    void				 SetPersist( ::comphelper::IEmbeddedHelper *p ) { m_pEmbeddedHelper = p; }
 
     // Masseinheit fuer die Zeichenkoordinaten.
     // Default ist 1 logische Einheit = 1/100mm (Unit=MAP_100TH_MM, Fract=(1,1)).
@@ -447,7 +448,7 @@ public:
     int              GetUIUnitKomma() const                     { return nUIUnitKomma; }
     bool             IsUIOnlyKomma() const                      { return bUIOnlyKomma; }
 
-    static void      TakeUnitStr(FieldUnit eUnit, String& rStr);
+    static void		 TakeUnitStr(FieldUnit eUnit, String& rStr);
     void             TakeMetricStr(long nVal, String& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
     void             TakeWinkStr(long nWink, String& rStr, bool bNoDegChar = false) const;
     void             TakePercentStr(const Fraction& rVal, String& rStr, bool bNoPercentChar = false) const;
@@ -457,11 +458,11 @@ public:
     bool         IsMPgNumsDirty() const                     { return bMPgNumsDirty; };
     void             RecalcPageNums(bool bMaster);
     // Nach dem Insert gehoert die Page dem SdrModel.
-    virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
-    virtual void     DeletePage(sal_uInt16 nPgNum);
+    virtual void     InsertPage(SdrPage* pPage, USHORT nPos=0xFFFF);
+    virtual void     DeletePage(USHORT nPgNum);
     // Remove bedeutet Eigentumsuebereignung an den Aufrufer (Gegenteil von Insert)
-    virtual SdrPage* RemovePage(sal_uInt16 nPgNum);
-    virtual void     MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
+    virtual SdrPage* RemovePage(USHORT nPgNum);
+    virtual void     MovePage(USHORT nPgNum, USHORT nNewPos);
     const SdrPage* GetPage(sal_uInt16 nPgNum) const;
     SdrPage* GetPage(sal_uInt16 nPgNum);
     sal_uInt16 GetPageCount() const;
@@ -469,11 +470,11 @@ public:
     virtual void PageListChanged();
 
     // Masterpages
-    virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
-    virtual void     DeleteMasterPage(sal_uInt16 nPgNum);
+    virtual void     InsertMasterPage(SdrPage* pPage, USHORT nPos=0xFFFF);
+    virtual void     DeleteMasterPage(USHORT nPgNum);
     // Remove bedeutet Eigentumsuebereignung an den Aufrufer (Gegenteil von Insert)
-    virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum);
-    virtual void     MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
+    virtual SdrPage* RemoveMasterPage(USHORT nPgNum);
+    virtual void     MoveMasterPage(USHORT nPgNum, USHORT nNewPos);
     const SdrPage* GetMasterPage(sal_uInt16 nPgNum) const;
     SdrPage* GetMasterPage(sal_uInt16 nPgNum);
     sal_uInt16 GetMasterPageCount() const;
@@ -492,27 +493,27 @@ public:
     bool            IsPageNotValid() const                     { return bPageNotValid; }
     void            SetPageNotValid(bool bJa = true)           { bPageNotValid=bJa; }
 
-    // Schaltet man dieses Flag auf sal_True, so werden Grafikobjekte
+    // Schaltet man dieses Flag auf TRUE, so werden Grafikobjekte
     // portabel gespeichert. Es findet dann beim Speichern ggf.
     // eine implizite Wandlung von Metafiles statt.
     // Default=FALSE. Flag ist nicht persistent.
     bool            IsSavePortable() const                     { return bSavePortable; }
     void            SetSavePortable(bool bJa = true)           { bSavePortable=bJa; }
 
-    // Schaltet man dieses Flag auf sal_True, so werden
+    // Schaltet man dieses Flag auf TRUE, so werden
     // Pixelobjekte (stark) komprimiert gespeichert.
     // Default=FALSE. Flag ist nicht persistent.
     bool            IsSaveCompressed() const                   { return bSaveCompressed; }
     void            SetSaveCompressed(bool bJa = true)         { bSaveCompressed=bJa; }
 
-    // Schaltet man dieses Flag auf sal_True, so werden
+    // Schaltet man dieses Flag auf TRUE, so werden
     // Grafikobjekte mit gesetztem Native-Link
     // native gespeichert.
     // Default=FALSE. Flag ist nicht persistent.
     bool            IsSaveNative() const                       { return bSaveNative; }
     void            SetSaveNative(bool bJa = true)             { bSaveNative=bJa; }
 
-    // Schaltet man dieses Flag auf sal_True, so werden die Grafiken
+    // Schaltet man dieses Flag auf TRUE, so werden die Grafiken
     // von Grafikobjekten:
     // - beim Laden eines Dokuments nicht sofort mitgeladen,
     //   sondern erst wenn sie gebraucht (z.B. angezeigt) werden.
@@ -523,8 +524,8 @@ public:
     // Default=FALSE. Flag ist nicht persistent.
     bool            IsSwapGraphics() const { return bSwapGraphics; }
     void            SetSwapGraphics(bool bJa = true);
-    void            SetSwapGraphicsMode(sal_uIntPtr nMode) { nSwapGraphicsMode = nMode; }
-    sal_uIntPtr         GetSwapGraphicsMode() const { return nSwapGraphicsMode; }
+    void			SetSwapGraphicsMode(ULONG nMode) { nSwapGraphicsMode = nMode; }
+    ULONG			GetSwapGraphicsMode() const { return nSwapGraphicsMode; }
 
     bool            IsSaveOLEPreview() const          { return bSaveOLEPreview; }
     void            SetSaveOLEPreview( bool bSet) { bSaveOLEPreview = bSet; }
@@ -539,7 +540,7 @@ public:
     bool            IsBitmapCaching() const                     { return !bNoBitmapCaching; }
     void            SetBitmapCaching(bool bJa = true)           { bNoBitmapCaching=!bJa; }
 
-    // Defaultmaessig (sal_False) kann man Textrahmen ohne Fuellung durch
+    // Defaultmaessig (FALSE) kann man Textrahmen ohne Fuellung durch
     // Mausklick selektieren. Nach Aktivierung dieses Flags trifft man sie
     // nur noch in dem Bereich, wo sich auch tatsaechlich Text befindet.
     bool            IsPickThroughTransparentTextFrames() const  { return bTransparentTextFrames; }
@@ -549,7 +550,7 @@ public:
     // Wird nur von den Possibility-Methoden der View ausgewerdet.
     // Direkte Manipulationen am Model, ... berueksichtigen dieses Flag nicht.
     // Sollte ueberladen werden und entsprechend des ReadOnly-Status des Files
-    // sal_True oder sal_False liefern (Methode wird oeffters gerufen, also ein Flag
+    // TRUE oder FALSE liefern (Methode wird oeffters gerufen, also ein Flag
     // verwenden!).
     virtual bool IsReadOnly() const;
     virtual void     SetReadOnly(bool bYes);
@@ -559,25 +560,25 @@ public:
     // rSourceModel ist anschliessend u.U. weitgehend leer.
     // nFirstPageNum,nLastPageNum: Die aus rSourceModel zu uebernehmenden Seiten
     // nDestPos..................: Einfuegeposition
-    // bMergeMasterPages.........: sal_True =benoetigte MasterPages werden aus
+    // bMergeMasterPages.........: TRUE =benoetigte MasterPages werden aus
     //                                   rSourceModel ebenfalls uebernommen
-    //                             sal_False=Die MasterPageDescriptoren der Seiten
+    //                             FALSE=Die MasterPageDescriptoren der Seiten
     //                                   aus rSourceModel werden auf die
     //                                   vorhandenen MasterPages gemappt.
     // bUndo.....................: Fuer das Merging wird eine UndoAction generiert.
     //                             Undo ist nur fuer das ZielModel, nicht fuer
     //                             rSourceModel.
-    // bTreadSourceAsConst.......: sal_True=Das SourceModel wird nicht veraendert,.
+    // bTreadSourceAsConst.......: TRUE=Das SourceModel wird nicht veraendert,.
     //                             d.h die Seiten werden kopiert.
     virtual void Merge(SdrModel& rSourceModel,
-               sal_uInt16 nFirstPageNum=0, sal_uInt16 nLastPageNum=0xFFFF,
-               sal_uInt16 nDestPos=0xFFFF,
+               USHORT nFirstPageNum=0, USHORT nLastPageNum=0xFFFF,
+               USHORT nDestPos=0xFFFF,
                bool bMergeMasterPages = false, bool bAllMasterPages = false,
                bool bUndo = true, bool bTreadSourceAsConst = false);
 
-    // Ist wie Merge(SourceModel=DestModel,nFirst,nLast,nDest,sal_False,sal_False,bUndo,!bMoveNoCopy);
-    void CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
-                   sal_uInt16 nDestPos,
+    // Ist wie Merge(SourceModel=DestModel,nFirst,nLast,nDest,FALSE,FALSE,bUndo,!bMoveNoCopy);
+    void CopyPages(USHORT nFirstPageNum, USHORT nLastPageNum,
+                   USHORT nDestPos,
                    bool bUndo = true, bool bMoveNoCopy = false);
 
     // Mit BegUndo() / EndUndo() ist es moeglich beliebig viele UndoActions
@@ -594,7 +595,7 @@ public:
     void BegUndo(SdrUndoGroup* pUndoGrp); // Undo-Klammerung auf
     void EndUndo();                       // Undo-Klammerung zu
     void AddUndo(SdrUndoAction* pUndo);
-    sal_uInt16 GetUndoBracketLevel() const                       { return nUndoLevel; }
+    USHORT GetUndoBracketLevel() const                       { return nUndoLevel; }
     const SdrUndoGroup* GetAktUndoGroup() const              { return pAktUndoGroup; }
     // nur nach dem 1. BegUndo oder vor dem letzten EndUndo:
     void SetUndoComment(const String& rComment);
@@ -603,15 +604,15 @@ public:
     // Das Undo-Managment findet nur statt, wenn kein NotifyUndoAction-Handler
     // gesetzt ist.
     // Default ist 16. Minimaler MaxUndoActionCount ist 1!
-    void  SetMaxUndoActionCount(sal_uIntPtr nAnz);
-    sal_uIntPtr GetMaxUndoActionCount() const { return nMaxUndoCount; }
+    void  SetMaxUndoActionCount(ULONG nAnz);
+    ULONG GetMaxUndoActionCount() const { return nMaxUndoCount; }
     void  ClearUndoBuffer();
     // UndoAction(0) ist die aktuelle (also die zuletzt eingegangene)
-    sal_uIntPtr GetUndoActionCount() const                      { return pUndoStack!=NULL ? pUndoStack->Count() : 0; }
-    const SfxUndoAction* GetUndoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pUndoStack!=NULL ? pUndoStack->GetObject(nNum) : NULL); }
+    ULONG GetUndoActionCount() const                      { return pUndoStack!=NULL ? pUndoStack->Count() : 0; }
+    const SfxUndoAction* GetUndoAction(ULONG nNum) const  { return (SfxUndoAction*)(pUndoStack!=NULL ? pUndoStack->GetObject(nNum) : NULL); }
     // RedoAction(0) ist die aktuelle (also die des letzten Undo)
-    sal_uIntPtr GetRedoActionCount() const                      { return pRedoStack!=NULL ? pRedoStack->Count() : 0; }
-    const SfxUndoAction* GetRedoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pRedoStack!=NULL ? pRedoStack->GetObject(nNum) : NULL); }
+    ULONG GetRedoActionCount() const                      { return pRedoStack!=NULL ? pRedoStack->Count() : 0; }
+    const SfxUndoAction* GetRedoAction(ULONG nNum) const  { return (SfxUndoAction*)(pRedoStack!=NULL ? pRedoStack->GetObject(nNum) : NULL); }
 
     bool Undo();
     bool Redo();
@@ -619,7 +620,7 @@ public:
 
     // Hier kann die Applikation einen Handler setzen, der die auflaufenden
     // UndoActions einsammelt. Der Handler hat folgendes Aussehen:
-    //   void NotifyUndoActionHdl(SfxUndoAction* pUndoAction);
+    //   void __EXPORT NotifyUndoActionHdl(SfxUndoAction* pUndoAction);
     // Beim Aufruf des Handlers findet eine Eigentumsuebereignung statt; die
     // UndoAction gehoert somit dem Handler, nicht mehr dem SdrModel.
     void        SetNotifyUndoActionHdl(const Link& rLink)    { aUndoLink=rLink; }
@@ -627,8 +628,7 @@ public:
 
     /** application can set it's own undo manager, BegUndo, EndUndo and AddUndoAction
         calls are routet to this interface if given */
-    void SetSdrUndoManager( SfxUndoManager* pUndoManager );
-    SfxUndoManager* GetSdrUndoManager() const;
+    void SetSdrUndoManager( SfxUndoManager*	pUndoManager );
 
     /** applications can set their own undo factory to overide creation of
         undo actions. The SdrModel will become owner of the given SdrUndoFactory
@@ -642,7 +642,7 @@ public:
     // Hier kann man einen Handler setzen der beim Streamen mehrfach gerufen
     // wird und ungefaehre Auskunft ueber den Fortschreitungszustand der
     // Funktion gibt. Der Handler muss folgendes Aussehen haben:
-    //   void class::IOProgressHdl(const USHORT& nPercent);
+    //   void __EXPORT class::IOProgressHdl(const USHORT& nPercent);
     // Der erste Aufruf des Handlers erfolgt grundsaetzlich mit 0, der letzte
     // mit 100. Dazwischen erfolgen maximal 99 Aufrufe mit Werten 1...99.
     // Man kann also durchaus bei 0 den Progressbar Initiallisieren und bei
@@ -675,30 +675,30 @@ public:
     // durch. Geprueft wird insbesondere die Verkettung von Verschachtelten
     // Gruppenobjekten, aber auch Stati wie bInserted sowie Model* und Page*
     // der Objects, SubLists und Pages. Bei korrekter Struktur liefert die
-    // Methode sal_True, andernfalls FALSE.
+    // Methode TRUE, andernfalls FALSE.
     // Dieser Check steht nur zur Verfuegung, wenn die Engine mit DBG_UTIL
     // uebersetzt wurde. Andernfalls liefert die Methode immer TRUE. (ni)
     bool CheckConsistence() const;
 
-    void    SetStarDrawPreviewMode(sal_Bool bPreview);
-    sal_Bool    IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
+    void 	SetStarDrawPreviewMode(BOOL bPreview);
+    BOOL 	IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
 
-    SotStorage* GetModelStorage() const { return pModelStorage; }
-    void        SetModelStorage( SotStorage* pStor ) { pModelStorage = pStor; }
+    SotStorage*	GetModelStorage() const { return pModelStorage; }
+    void		SetModelStorage( SotStorage* pStor ) { pModelStorage = pStor; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoModel();
     void setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xModel );
 
     // these functions are used by the api to disable repaints during a
     // set of api calls.
-    bool isLocked() const { return mbModelLocked; }
-    void setLock( bool bLock );
+    BOOL isLocked() const { return (BOOL)mbModelLocked; }
+    void setLock( BOOL bLock );
 
-    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
-    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
+    void			SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    rtl::Reference<SvxForbiddenCharactersTable>	GetForbiddenCharsTable() const;
 
-    void SetCharCompressType( sal_uInt16 nType );
-    sal_uInt16 GetCharCompressType() const { return mnCharCompressType; }
+    void SetCharCompressType( UINT16 nType );
+    UINT16 GetCharCompressType() const { return mnCharCompressType; }
 
     void SetKernAsianPunctuation( sal_Bool bEnabled );
     sal_Bool IsKernAsianPunctuation() const { return (sal_Bool)mbKernAsianPunctuation; }
@@ -708,9 +708,9 @@ public:
 
     void ReformatAllTextObjects();
 
-    bool HasTransparentObjects( bool bCheckForAlphaChannel = false ) const;
+    bool HasTransparentObjects( BOOL bCheckForAlphaChannel = FALSE ) const;
 
-    SdrOutliner* createOutliner( sal_uInt16 nOutlinerMode );
+    SdrOutliner* createOutliner( USHORT nOutlinerMode );
     void disposeOutliner( SdrOutliner* pOutliner );
 
     sal_Bool IsWriter() const { return !bMyPool; }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,7 +119,7 @@ namespace canvas
 
         /** Query error status
 
-            @returns true, if an error occurred during primitive
+            @returns true, if an error occured during primitive
             construction.
          */
         virtual bool      isError() = 0;

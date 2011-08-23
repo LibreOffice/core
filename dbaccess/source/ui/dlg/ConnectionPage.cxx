@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,6 +56,7 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -71,11 +72,16 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/docfilt.hxx>
 #include "dsnItem.hxx"
-#if defined(WNT)
+#if defined(WIN) || defined(WNT)
 #define _ADO_DATALINK_BROWSE_
 #endif
 
 #ifdef _ADO_DATALINK_BROWSE_
+#if defined( WNT )
+    #include <tools/prewin.h>
+    #include <windows.h>
+    #include <tools/postwin.h>
+#endif
 #include <vcl/sysdata.hxx>
 #include "adodatalinks.hxx"
 #endif //_ADO_DATALINK_BROWSE_
@@ -96,7 +102,7 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    SfxTabPage* OConnectionTabPage::Create( Window* pParent,    const SfxItemSet& _rAttrSet )
+    SfxTabPage*	OConnectionTabPage::Create( Window* pParent,	const SfxItemSet& _rAttrSet )
     {
         return ( new OConnectionTabPage( pParent, _rAttrSet ) );
     }
@@ -129,8 +135,6 @@ namespace dbaui
         m_aTestJavaDriver.SetClickHdl(LINK(this,OConnectionTabPage,OnTestJavaClickHdl));
 
         FreeResource();
-
-        LayoutHelper::fitSizeRightAligned( m_aTestConnection );
     }
 
     // -----------------------------------------------------------------------
@@ -255,7 +259,7 @@ namespace dbaui
             String sUrl = pUrlItem->GetValue();
             setURL( sUrl );
 
-            const sal_Bool bEnableJDBC = m_pCollection->determineType(m_eType) == ::dbaccess::DST_JDBC;
+            const BOOL bEnableJDBC = m_pCollection->determineType(m_eType) == ::dbaccess::DST_JDBC;
             if ( !pJdbcDrvItem->GetValue().Len() )
             {
                 String sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
@@ -264,7 +268,7 @@ namespace dbaui
                     m_aJavaDriver.SetText(sDefaultJdbcDriverName);
                     m_aJavaDriver.SetModifyFlag();
                 }
-            }
+            } // if ( !pJdbcDrvItem->GetValue().Len() )
             else
                 m_aJavaDriver.SetText(pJdbcDrvItem->GetValue());
 
@@ -345,7 +349,7 @@ namespace dbaui
         {
         }
 
-        sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        USHORT nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String() );
         aMsg.Execute();
         return 0L;
@@ -354,7 +358,7 @@ namespace dbaui
     bool OConnectionTabPage::checkTestConnection()
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        sal_Bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
+        BOOL bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
         if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
             bEnableTestConnection = bEnableTestConnection && (m_aJavaDriver.GetText().Len() != 0);
         m_aTestConnection.Enable(bEnableTestConnection);
@@ -372,7 +376,7 @@ namespace dbaui
         return 0L;
     }
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

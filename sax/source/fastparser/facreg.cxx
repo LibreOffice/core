@@ -17,16 +17,16 @@ namespace sax_fastparser
 {
 
 //--------------------------------------
-// the extern interface
+// the extern interface 
 //---------------------------------------
 Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance( const Reference< XMultiServiceFactory  >  & ) throw(Exception)
-{
+{	
     FastSaxParser *p = new FastSaxParser;
     return Reference< XInterface > ( (OWeakObject * ) p );
 }
 
 Reference< XInterface > SAL_CALL FastSaxSerializer_CreateInstance( const Reference< XMultiServiceFactory  >  & ) throw(Exception)
-{
+{	
     FastSaxSerializer *p = new FastSaxSerializer;
     return Reference< XInterface > ( (OWeakObject * ) p );
 }
@@ -41,6 +41,34 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+
+sal_Bool SAL_CALL component_writeInfo(
+    void * /*pServiceManager*/, void * pRegistryKey )
+{
+    if (pRegistryKey)
+    {
+        try
+        {
+            Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey * >( pRegistryKey ) );
+
+            Reference< XRegistryKey > xNewKey( xKey->createKey(
+                OUString::createFromAscii( "/" PARSER_IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+            xNewKey->createKey( OUString::createFromAscii( PARSER_SERVICE_NAME ) );
+
+            Reference< XRegistryKey > xNewKey1( xKey->createKey(
+                OUString::createFromAscii( "/" SERIALIZER_IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+            xNewKey1->createKey( OUString::createFromAscii( SERIALIZER_SERVICE_NAME ) );
+                
+            return sal_True;
+        }
+        catch (InvalidRegistryException &)
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+    return sal_False;
+}
+
 void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
@@ -51,7 +79,7 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
         Reference< XMultiServiceFactory > xSMgr( reinterpret_cast< XMultiServiceFactory * > ( pServiceManager ) );
 
         OUString aImplementationName( OUString::createFromAscii( pImplName ) );
-
+        
         if (aImplementationName == OUString( RTL_CONSTASCII_USTRINGPARAM( PARSER_IMPLEMENTATION_NAME  ) ) )
         {
             xRet = createSingleFactory( xSMgr, aImplementationName,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define HELPCOMPILER_HXX
 
 #include <string>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <vector>
 #include <list>
 #include <fstream>
@@ -103,14 +103,6 @@ namespace fs
             HCDBG(std::cerr << "native_file_string is " << tmp.getStr() << std::endl);
             return std::string(tmp.getStr());
         }
-#ifdef WNT
-        wchar_t const * native_file_string_w() const
-        {
-            ::rtl::OUString ustrSystemPath;
-            osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
-            return ustrSystemPath.getStr();
-        }
-#endif
         std::string native_directory_string() const { return native_file_string(); }
         std::string toUTF8() const
         {
@@ -121,13 +113,13 @@ namespace fs
         path operator/(const std::string &in) const
         {
             path ret(*this);
-            HCDBG(std::cerr << "orig was " <<
+            HCDBG(std::cerr << "orig was " << 
                 rtl::OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
             rtl::OString tmp(in.c_str());
             rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, getThreadTextEncoding()));
             ret.data += rtl::OUString(sal_Unicode('/'));
             ret.data += ustrSystemPath;
-            HCDBG(std::cerr << "final is " <<
+            HCDBG(std::cerr << "final is " << 
                 rtl::OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
             return ret;
         }
@@ -223,11 +215,11 @@ struct SuperFastHash
 
 #define pref_hash joaat_hash
 
-typedef boost::unordered_map<std::string, std::string, pref_hash> Stringtable;
+typedef std::hash_map<std::string, std::string, pref_hash> Stringtable;
 typedef std::list<std::string> LinkedList;
 typedef std::vector<std::string> HashSet;
 
-typedef boost::unordered_map<std::string, LinkedList, pref_hash> Hashtable;
+typedef std::hash_map<std::string, LinkedList, pref_hash> Hashtable;
 
 class StreamTable
 {
@@ -247,26 +239,26 @@ public:
     Stringtable *default_helptexts;
     xmlDocPtr default_doc;
 
-    StreamTable() :
-        appl_hidlist(NULL), appl_keywords(NULL), appl_helptexts(NULL), appl_doc(NULL),
-        default_hidlist(NULL), default_keywords(NULL), default_helptexts(NULL), default_doc(NULL)
+    StreamTable() : 
+        appl_hidlist(NULL), appl_keywords(NULL), appl_helptexts(NULL), appl_doc(NULL), 
+        default_hidlist(NULL), default_keywords(NULL), default_helptexts(NULL), default_doc(NULL) 
     {}
     void dropdefault()
     {
         delete default_hidlist;
         delete default_keywords;
         delete default_helptexts;
-        if (default_doc) xmlFreeDoc(default_doc);
+        if (default_doc) xmlFreeDoc(default_doc); 
     }
     void dropappl()
     {
         delete appl_hidlist;
         delete appl_keywords;
         delete appl_helptexts;
-        if (appl_doc) xmlFreeDoc(appl_doc);
+        if (appl_doc) xmlFreeDoc(appl_doc); 
     }
     ~StreamTable()
-    {
+    { 
         dropappl();
         dropdefault();
     }
@@ -274,15 +266,14 @@ public:
 
 struct HelpProcessingException
 {
-    HelpProcessingErrorClass        m_eErrorClass;
-    std::string                     m_aErrorMsg;
-    std::string                     m_aXMLParsingFile;
-    int                             m_nXMLParsingLine;
+    HelpProcessingErrorClass		m_eErrorClass;
+    std::string						m_aErrorMsg;
+    std::string						m_aXMLParsingFile;
+    int								m_nXMLParsingLine;
 
     HelpProcessingException( HelpProcessingErrorClass eErrorClass, const std::string& aErrorMsg )
         : m_eErrorClass( eErrorClass )
         , m_aErrorMsg( aErrorMsg )
-        , m_nXMLParsingLine( 0 )
     {}
     HelpProcessingException( const std::string& aErrorMsg, const std::string& aXMLParsingFile, int nXMLParsingLine )
         : m_eErrorClass( HELPPROCESSING_XMLPARSING_ERROR )
@@ -294,7 +285,7 @@ struct HelpProcessingException
 
 class HelpCompiler
 {
-public:
+public: 
     HelpCompiler(StreamTable &streamTable,
                 const fs::path &in_inputFile,
                 const fs::path &in_src,
@@ -303,7 +294,7 @@ public:
                 const std::string &in_lang,
                 bool in_bExtensionMode);
     bool compile( void ) throw (HelpProcessingException);
-    void addEntryToJarFile(const std::string &prefix,
+    void addEntryToJarFile(const std::string &prefix, 
         const std::string &entryName, const std::string &bytesToAdd);
     void addEntryToJarFile(const std::string &prefix,
                 const std::string &entryName, const HashSet &bytesToAdd);

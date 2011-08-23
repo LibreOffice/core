@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: lerp.hxx,v $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,11 +47,11 @@ namespace basegfx
             @param t
             As usual, t must be in the [0,1] range
         */
-        template< typename ValueType > ValueType lerp( const ValueType&     rFrom,
-                                                       const ValueType&     rTo,
-                                                       double               t )
+        template< typename ValueType > ValueType lerp( const ValueType& 	rFrom, 
+                                                       const ValueType& 	rTo, 
+                                                       double				t )
         {
-            // This is only to suppress a double->int warning. All other
+            // This is only to suppress a double->int warning. All other 
             // types should be okay here.
             return static_cast<ValueType>( (1.0-t)*rFrom + t*rTo );
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,8 +119,8 @@ namespace frm
     {
         // this means that the content of the EditEngine changed via the UNO API
         // to reflect this in the views, we need to update them
-        sal_uInt16 viewCount = m_rEngine.GetViewCount();
-        for ( sal_uInt16 view = 0; view < viewCount; ++view )
+        USHORT viewCount = m_rEngine.GetViewCount();
+        for ( USHORT view = 0; view < viewCount; ++view )
         {
             EditView* pView = m_rEngine.GetView( view );
             if ( pView )

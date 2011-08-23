@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 #include "filterdetect.hxx"
@@ -58,6 +58,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 
+using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::document;
 using namespace com::sun::star::lang;
@@ -70,11 +71,8 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::container;
 using namespace com::sun::star::ucb;
 
-using ::rtl::OUString;
-using ::rtl::OString;
 
-
-OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
+OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments ) 
     throw( RuntimeException )
 {
     // type name to return
@@ -84,25 +82,25 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     // stream of the document to be detected
     Reference< XInputStream > xInStream;
     for ( sal_Int32 i = 0 ; i < aArguments.getLength(); i++)
-    {
+    {  
         OUString aName = aArguments[i].Name;
-        if (aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("TypeName" ) ) )
+        if (aName.equalsAscii("TypeName" ) )
             aArguments[i].Value >>= sOriginalTypeName;
-        if (aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL" ) ) )
+        if (aName.equalsAscii("URL" ) )
             aArguments[i].Value >>= sURL;
-        if (aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("InputStream" ) ) )
+        if (aName.equalsAscii("InputStream" ) )
             aArguments[i].Value >>= xInStream;
     }
 
-    if (!xInStream.is())
+    if (!xInStream.is()) 
     {
         // open the stream if it was not suplied by the framework
         Reference< XSimpleFileAccess > xSFI(mxMSF->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))), UNO_QUERY);
+            OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
         if (sURL.getLength() > 0 && xSFI.is())
         {
             try
-            {
+            {  
                 xInStream = xSFI->openFileRead( sURL);
             }
             catch( Exception& )
@@ -118,17 +116,17 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     // flatxml starts with an office:document element. this element
     // conatains a clas="..." attribut by which we can deduct the
     // type of document that is to be loaded
-    //
+    // 
     // WARNING:
     // parsing the plain text of the document is an easy way to do this
-    // but not the purest solution, since namespaces and other xml details
+    // but not the purest solution, since namespaces and other xml details 
     // may lead to another syntactic expression of the same document.
     // this example works for the way the office serializes it's XML stream
     // but might need extension for other data sources...
     static OString aDocToken("office:document");
     // static OString aClassToken("office:class=\"");
     static OString aMimeTypeToken("office:mimetype=\"");
-
+        
     sal_Int32 nHeadSize = 4096;
     Sequence< sal_Int8 > aHeadData(nHeadSize);
 
@@ -140,9 +138,9 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     long bytestRead = xInStream->readBytes(aHeadData, nHeadSize);
 
     OString aHead = OString((const sal_Char *)aHeadData.getConstArray(), bytestRead).toAsciiLowerCase();
-
+    
     // check for document element of flatxml format
-    if (aHead.indexOf(aDocToken) >= 0)
+    if (aHead.indexOf(aDocToken) >= 0) 
     {
         // read document class
         sal_Int32 n = aHead.indexOf(aMimeTypeToken);
@@ -152,26 +150,26 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
             OString aMimeType = aHead.copy(n, aHead.indexOf('\"', n) - n);
             // return type for class found
             if      (aMimeType.equals("application/x-vnd.oasis.opendocument.text") ||
-                       aMimeType.equals("application/vnd.oasis.opendocument.text"))
-                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_writer"));
+                       aMimeType.equals("application/vnd.oasis.opendocument.text")) 
+                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_writer");
             else if (aMimeType.equals("application/x-vnd.oasis.opendocument.text-master") ||
-                       aMimeType.equals("application/vnd.oasis.opendocument.text-master"))
-                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_master"));
+                       aMimeType.equals("application/vnd.oasis.opendocument.text-master")) 
+                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_master"); 
            else if (aMimeType.equals("application/x-vnd.oasis.openoffice.text-global") ||
-                      aMimeType.equals("application/vnd.oasis.openoffice.text-global"))
-                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_master"));
+                      aMimeType.equals("application/vnd.oasis.openoffice.text-global")) 
+                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_master"); 
            else if (aMimeType.equals("application/x-vnd.oasis.opendocument.spreadsheet") ||
-                       aMimeType.equals("application/vnd.oasis.opendocument.spreadsheet"))
-                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_calc"));
+                       aMimeType.equals("application/vnd.oasis.opendocument.spreadsheet")) 
+                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_calc"); 
             else if (aMimeType.equals("application/x-vnd.oasis.opendocument.drawing") ||
-                       aMimeType.equals("application/vnd.oasis.opendocument.drawing"))
-                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_draw"));
+                       aMimeType.equals("application/vnd.oasis.opendocument.drawing")) 
+                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_draw"); 
+            else if (aMimeType.equals("application/x-vnd.oasis.opendocument.presentation") ||
+                       aMimeType.equals("application/vnd.oasis.opendocument.presentation")) 
+                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_impress");
             else if (aMimeType.equals("application/x-vnd.oasis.opendocument.presentation") ||
                        aMimeType.equals("application/vnd.oasis.opendocument.presentation"))
-                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_impress"));
-            else if (aMimeType.equals("application/x-vnd.oasis.opendocument.presentation") ||
-                       aMimeType.equals("application/vnd.oasis.opendocument.presentation"))
-                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_impress"));
+                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_impress");                 
         }
     }
     return sTypeName;
@@ -179,7 +177,7 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
 
 
 // XInitialization
-void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments ) 
     throw (Exception, RuntimeException)
 {
     Sequence < PropertyValue > aAnySeq;
@@ -189,10 +187,10 @@ void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
         const PropertyValue * pValue = aAnySeq.getConstArray();
         nLength = aAnySeq.getLength();
         for ( sal_Int32 i = 0 ; i < nLength; i++)
-        {
+        {		  
             if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Type" ) ) )
             {
-                pValue[i].Value >>= msFilterName;
+                pValue[i].Value >>= msFilterName;     
             }
             else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "UserData" ) ) )
             {
@@ -214,13 +212,13 @@ OUString FilterDetect_getImplementationName ()
 
 #define SERVICE_NAME1 "com.sun.star.document.ExtendedTypeDetection"
 
-sal_Bool SAL_CALL FilterDetect_supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL FilterDetect_supportsService( const OUString& ServiceName ) 
     throw (RuntimeException)
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) );
 }
 
-Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  ) 
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
@@ -238,19 +236,19 @@ Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< X
 }
 
 // XServiceInfo
-OUString SAL_CALL FilterDetect::getImplementationName(  )
+OUString SAL_CALL FilterDetect::getImplementationName(  ) 
     throw (RuntimeException)
 {
     return FilterDetect_getImplementationName();
 }
 
-sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
+sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName ) 
     throw (RuntimeException)
 {
     return FilterDetect_supportsService( rServiceName );
 }
 
-Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  ) 
     throw (RuntimeException)
 {
     return FilterDetect_getSupportedServiceNames();

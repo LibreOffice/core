@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,11 +73,11 @@ public class _XDrawPageDuplicator extends MultiMethodTest {
             DP = (XDrawPage) AnyConverter.toObject(
                     new Type(XDrawPage.class),DPs.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occurred while testing: " + e);
+            log.println("Exception occured while testing: " + e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception occurred while testing: " + e);
+            log.println("Exception occured while testing: " + e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occurred while testing: " + e);
+            log.println("Exception occured while testing: " + e);
         }
 
         if (DP != null) {

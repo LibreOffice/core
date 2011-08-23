@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 #include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlerror.hxx"
+#include "xmlerror.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
@@ -54,7 +54,7 @@ TYPEINIT1(XMLEventsImportContext,  SvXMLImportContext);
 
 
 XMLEventsImportContext::XMLEventsImportContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     sal_uInt16 nPrfx,
     const OUString& rLocalName) :
         SvXMLImportContext(rImport, nPrfx, rLocalName)
@@ -63,7 +63,7 @@ XMLEventsImportContext::XMLEventsImportContext(
 
 
 XMLEventsImportContext::XMLEventsImportContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const Reference<XEventsSupplier> & xEventsSupplier) :
@@ -74,7 +74,7 @@ XMLEventsImportContext::XMLEventsImportContext(
 
 
 XMLEventsImportContext::XMLEventsImportContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const Reference<XNameReplace> & xNameReplace) :
@@ -85,8 +85,17 @@ XMLEventsImportContext::XMLEventsImportContext(
 
 XMLEventsImportContext::~XMLEventsImportContext()
 {
-//  // if, for whatever reason, the object gets destroyed prematurely,
-//  // we need to delete the collected events
+// 	// if, for whatever reason, the object gets destroyed prematurely,
+// 	// we need to delete the collected events
+// 	EventsVector::iterator aEnd = aCollectEvents.end();
+// 	for(EventsVector::iterator aIter = aCollectEvents.begin();
+// 		aIter != aEnd;
+// 		aIter++)
+// 	{
+// 		EventNameValuesPair* pPair = &(*aIter);
+// 		delete pPair;
+// 	}
+// 	aCollectEvents.clear();
 }
 
 
@@ -101,7 +110,7 @@ void XMLEventsImportContext::EndElement()
     // nothing to be done
 }
 
-SvXMLImportContext* XMLEventsImportContext::CreateChildContext(
+SvXMLImportContext* XMLEventsImportContext::CreateChildContext( 
     sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
@@ -139,7 +148,7 @@ SvXMLImportContext* XMLEventsImportContext::CreateChildContext(
 
     // b) delegate to factory
     return GetImport().GetEventImport().CreateContext(
-        GetImport(), p_nPrefix, rLocalName, xAttrList,
+        GetImport(), p_nPrefix, rLocalName, xAttrList, 
         this, sEventName, sLanguage);
 }
 
@@ -163,9 +172,11 @@ void XMLEventsImportContext::SetEvents(
         EventsVector::iterator aEnd = aCollectEvents.end();
         for(EventsVector::iterator aIter = aCollectEvents.begin();
             aIter != aEnd;
-            ++aIter)
+            aIter++)
         {
             AddEventValues(aIter->first, aIter->second);
+// 			EventNameValuesPair* pPair = &(*aIter);
+// 			delete pPair;
         }
         aCollectEvents.clear();
     }
@@ -183,9 +194,9 @@ sal_Bool XMLEventsImportContext::GetEventSequence(
     EventsVector::iterator aIter = aCollectEvents.begin();
     while( (aIter != aCollectEvents.end()) && (aIter->first != rName) )
     {
-        ++aIter;
+        aIter++;
     }
-
+    
     // if we're not at the end, set the sequence
     sal_Bool bRet = (aIter != aCollectEvents.end());
     if (bRet)
@@ -194,7 +205,7 @@ sal_Bool XMLEventsImportContext::GetEventSequence(
     return bRet;
 }
 
-void XMLEventsImportContext::AddEventValues(
+void XMLEventsImportContext::AddEventValues( 
     const OUString& rEventName,
     const Sequence<PropertyValue> & rValues )
 {
@@ -206,7 +217,7 @@ void XMLEventsImportContext::AddEventValues(
         {
             Any aAny;
             aAny <<= rValues;
-
+            
             try
             {
                 xEvents->replaceByName(rEventName, aAny);
@@ -215,8 +226,8 @@ void XMLEventsImportContext::AddEventValues(
                 Sequence<OUString> aMsgParams(1);
 
                 aMsgParams[0] = rEventName;
-
-                GetImport().SetError(XMLERROR_FLAG_ERROR |
+                
+                GetImport().SetError(XMLERROR_FLAG_ERROR | 
                                      XMLERROR_ILLEGAL_EVENT,
                                      aMsgParams, rException.Message, 0);
             }
@@ -224,6 +235,9 @@ void XMLEventsImportContext::AddEventValues(
     }
     else
     {
+// 		EventNameValuesPair* aPair = new EventNameValuesPair(rEventName, 
+// 															rValues);
+// 		aCollectEvents.push_back(*aPair);
         EventNameValuesPair aPair(rEventName, rValues);
         aCollectEvents.push_back(aPair);
     }

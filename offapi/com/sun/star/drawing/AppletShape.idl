@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module drawing {
+module com { module sun { module star { module drawing { 
 
 //=============================================================================
 /** This <type>Shape</type> encapsulates an applet.
@@ -47,28 +47,28 @@ module com { module sun { module star { module drawing {
 */
 published service AppletShape
 {
-    /** basic service for position, size and z-order.
-
+    /** basic service for position, size and z-order. 
+        
         <p>A <type>AppletShape</type> cannot be rotated.
      */
     service com::sun::star::drawing::Shape;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** This property specifies the base URI for the applet.
-
+        
         <p>If this property is empty, then it defaults the same base URI as for
         the current document.
     */
     [property] string AppletCodeBase;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** this is an optional name for the applet.
     */
     [property] string AppletName;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** This property specifies one of the following:
         <br>The name of the class file that contains the compiled applet subclass.
@@ -76,14 +76,14 @@ published service AppletShape
     */
     [property] string AppletCode;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /** This sequence contains parameters that are passed to the applet
+    /** This sequence contains paramaters that are passed to the applet
         when it is initialized.
     */
     [property] sequence< com::sun::star::beans::PropertyValue > AppletCommands;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** This property specifies whether or not the applet can be scripted.
     */
@@ -92,7 +92,7 @@ published service AppletShape
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ void HierarchyUri::init() const
         if ( ( m_aUri.getLength() < HIERARCHY_URL_SCHEME_LENGTH + 1 ) )
         {
             // error, but remember that we did a init().
-            m_aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            m_aPath = rtl::OUString::createFromAscii( "/" );
             return;
         }
 
@@ -124,7 +124,7 @@ void HierarchyUri::init() const
                     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                             DEFAULT_DATA_SOURCE_SERVICE ) );
 
-                nPos
+                nPos 
                     = HIERARCHY_URL_SCHEME_LENGTH + 3 + m_aService.getLength();
             }
             else
@@ -139,17 +139,17 @@ void HierarchyUri::init() const
                 if ( nStart == m_aUri.getLength() )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                    m_aPath = rtl::OUString::createFromAscii( "/" );
                     return;
                 }
 
                 // Empty path segments?
                 if ( m_aUri.indexOf(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("//")),
+                        rtl::OUString::createFromAscii( "//" ), 
                         nStart ) != -1 )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                    m_aPath = rtl::OUString::createFromAscii( "/" );
                     return;
                 }
 
@@ -159,7 +159,7 @@ void HierarchyUri::init() const
                 if ( nEnd == nStart )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                    m_aPath = rtl::OUString::createFromAscii( "/" );
                     return;
                 }
 
@@ -167,7 +167,7 @@ void HierarchyUri::init() const
                 {
                     // Trailing slash missing.
                     nEnd = m_aUri.getLength();
-                    m_aUri += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                    m_aUri += rtl::OUString::createFromAscii( "/" );
                 }
 
                 m_aService = m_aUri.copy( nStart, nEnd - nStart );
@@ -203,7 +203,7 @@ void HierarchyUri::init() const
         else
         {
             // error, but remember that we did a init().
-            m_aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            m_aPath = rtl::OUString::createFromAscii( "/" );
         }
     }
 }

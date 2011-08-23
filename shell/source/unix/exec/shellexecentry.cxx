@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_shell.hxx"
 
 //-----------------------------------------------------------------------
-//  includes of other projects
+//	includes of other projects
 //-----------------------------------------------------------------------
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
@@ -56,22 +56,22 @@ using com::sun::star::system::XSystemShellExecute;
 #define SHELLEXEC_REGKEY_NAME   "/com.sun.star.comp.system.SystemShellExecute/UNO/SERVICES/com.sun.star.system.SystemShellExecute"
 
 //-----------------------------------------------------------------------
-//
+// 
 //-----------------------------------------------------------------------
 
 namespace
 {
     Reference< XInterface > SAL_CALL createInstance(const Reference< XComponentContext >& xContext)
-    {
+    {		
         return Reference< XInterface >( static_cast< XSystemShellExecute* >( new ShellExec(xContext) ) );
     }
 }
 
 //-----------------------------------------------------------------------
-// the 3 important functions which will be exported
+// the 3 important functions which will be exported 
 //-----------------------------------------------------------------------
 
-extern "C"
+extern "C" 
 {
 
 //----------------------------------------------------------------------
@@ -84,8 +84,31 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+//-----------------------------------------------------------------------
+// component_writeInfo
+//-----------------------------------------------------------------------
+
+sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
+{
+    if (pRegistryKey)
+    {
+        try
+        {
+            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );							
+            pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( SHELLEXEC_REGKEY_NAME ) ) );
+            return sal_True;
+        }
+        catch( InvalidRegistryException& )
+        {			
+            OSL_ENSURE(sal_False, "InvalidRegistryException caught");			
+    }
+    }
+
+    return sal_False;
+}
+
 //----------------------------------------------------------------------
-// component_getFactory
+// component_getFactory 
 //----------------------------------------------------------------------
 
 void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* /*pSrvManager*/, uno_Interface* /*pRegistryKey*/ )
@@ -102,7 +125,7 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* /
             Sequence< OUString >( &serviceName, 1 ) );
 
     }
-
+    
     if (xFactory.is())
     xFactory->acquire();
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,11 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
  #include "precompiled_extensions.hxx"
  #include "MasterDetailLinkDialog.hxx"
  #include "formlinkdialog.hxx"
-
+ 
  extern "C" void SAL_CALL createRegistryInfo_MasterDetailLinkDialog()
 {
     ::pcr::OAutoRegistration< ::pcr::MasterDetailLinkDialog > aAutoRegistration;
@@ -74,7 +74,7 @@ namespace pcr
     //---------------------------------------------------------------------
     ::rtl::OUString MasterDetailLinkDialog::getImplementationName_static() throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.form.ui.MasterDetailLinkDialog"));
+        return ::rtl::OUString::createFromAscii("org.openoffice.comp.form.ui.MasterDetailLinkDialog");
     }
 
     //---------------------------------------------------------------------
@@ -87,7 +87,7 @@ namespace pcr
     ::comphelper::StringSequence MasterDetailLinkDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.MasterDetailLinkDialog"));
+        aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.MasterDetailLinkDialog");
         return aSupported;
     }
 
@@ -113,7 +113,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------------
-    Dialog* MasterDetailLinkDialog::createDialog(Window* _pParent)
+    Dialog*	MasterDetailLinkDialog::createDialog(Window* _pParent)
     {
         return new FormLinkDialog(_pParent,m_xDetail,m_xMaster,m_aContext.getLegacyServiceFactory()
             ,m_sExplanation,m_sDetailLabel,m_sMasterLabel);

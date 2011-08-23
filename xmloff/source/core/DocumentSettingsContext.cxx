@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,12 +34,14 @@
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
 
+#ifndef __SGI_STL_LIST
 #include <list>
+#endif
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -61,8 +63,8 @@ using namespace ::xmloff::token;
 
 class XMLMyList
 {
-    std::list<beans::PropertyValue> aProps;
-    sal_uInt32                      nCount;
+    std::list<beans::PropertyValue>	aProps;
+    sal_uInt32						nCount;
 
     // #110680#
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
@@ -80,7 +82,7 @@ public:
 
 // #110680#
 XMLMyList::XMLMyList(const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory)
-:   nCount(0),
+:	nCount(0),
     mxServiceFactory(xServiceFactory)
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
@@ -103,8 +105,8 @@ uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
         while (aItr != aProps.end())
         {
             *pProps = *aItr;
-            ++pProps;
-            ++aItr;
+            pProps++;
+            aItr++;
         }
     }
     return aSeq;
@@ -115,6 +117,8 @@ uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
     uno::Reference<container::XNameContainer> xNameContainer;
 
     // #110680#
+    // uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
+    // DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
 
     if( mxServiceFactory.is() )
     {
@@ -126,7 +130,7 @@ uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
             while (aItr != aProps.end())
             {
                 xNameContainer->insertByName(aItr->Name, aItr->Value);
-                ++aItr;
+                aItr++;
             }
         }
     }
@@ -137,6 +141,8 @@ uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 {
     uno::Reference<container::XIndexContainer> xIndexContainer;
     // #110680#
+    // uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
+    // DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
 
     if( mxServiceFactory.is() )
     {
@@ -149,8 +155,8 @@ uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
             while (aItr != aProps.end())
             {
                 xIndexContainer->insertByIndex(i, aItr->Value);
-                ++aItr;
-                ++i;
+                aItr++;
+                i++;
             }
         }
     }
@@ -162,12 +168,12 @@ uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 class XMLConfigBaseContext : public SvXMLImportContext
 {
 protected:
-    XMLMyList                   maProps;
-    beans::PropertyValue        maProp;
-    com::sun::star::uno::Any&   mrAny;
-    XMLConfigBaseContext*       mpBaseContext;
+    XMLMyList					maProps;
+    beans::PropertyValue		maProp;
+    com::sun::star::uno::Any&	mrAny;
+    XMLConfigBaseContext*		mpBaseContext;
 public:
-    XMLConfigBaseContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
+    XMLConfigBaseContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     com::sun::star::uno::Any& rAny,
                                     XMLConfigBaseContext* pBaseContext);
     virtual ~XMLConfigBaseContext();
@@ -179,15 +185,15 @@ public:
 
 class XMLConfigItemContext : public SvXMLImportContext
 {
-    rtl::OUString               msType;
-    rtl::OUString               msValue;
-    uno::Sequence<sal_Int8>     maDecoded;
-    com::sun::star::uno::Any&   mrAny;
+    rtl::OUString				msType;
+    rtl::OUString				msValue;
+    uno::Sequence<sal_Int8>		maDecoded;
+    com::sun::star::uno::Any&	mrAny;
     const rtl::OUString         mrItemName;
-    XMLConfigBaseContext*       mpBaseContext;
+    XMLConfigBaseContext*		mpBaseContext;
 
 public:
-    XMLConfigItemContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
+    XMLConfigItemContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rAny,
@@ -195,7 +201,7 @@ public:
                                     XMLConfigBaseContext* pBaseContext);
     virtual ~XMLConfigItemContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                                     const rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -211,14 +217,14 @@ public:
 class XMLConfigItemSetContext : public XMLConfigBaseContext
 {
 public:
-    XMLConfigItemSetContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
+    XMLConfigItemSetContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rAny,
                                     XMLConfigBaseContext* pBaseContext);
     virtual ~XMLConfigItemSetContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                                     const rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -231,14 +237,14 @@ public:
 class XMLConfigItemMapNamedContext : public XMLConfigBaseContext
 {
 public:
-    XMLConfigItemMapNamedContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
+    XMLConfigItemMapNamedContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rAny,
                                     XMLConfigBaseContext* pBaseContext);
     virtual ~XMLConfigItemMapNamedContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                                     const rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -254,7 +260,7 @@ private:
     rtl::OUString maConfigItemName;
 
 public:
-    XMLConfigItemMapIndexedContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
+    XMLConfigItemMapIndexedContext(SvXMLImport& rImport, USHORT nPrfx,
                                     const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -263,7 +269,7 @@ public:
                                     XMLConfigBaseContext* pBaseContext);
     virtual ~XMLConfigItemMapIndexedContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                                     const rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -273,7 +279,7 @@ public:
 
 //=============================================================================
 
-SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, sal_uInt16 p_nPrefix,
+SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, USHORT p_nPrefix,
                         const rtl::OUString& rLocalName,
                         const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                         beans::PropertyValue& rProp, XMLConfigBaseContext* pBaseContext)
@@ -286,7 +292,7 @@ SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, sal_uInt16 p_nPr
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
+        USHORT nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
@@ -340,14 +346,14 @@ namespace
 
 struct XMLDocumentSettingsContext_Data
 {
-    com::sun::star::uno::Any        aViewProps;
-    com::sun::star::uno::Any        aConfigProps;
+    com::sun::star::uno::Any	    aViewProps;
+    com::sun::star::uno::Any	    aConfigProps;
     ::std::list< SettingsGroup >    aDocSpecificSettings;
 };
 
 //=============================================================================
 
-XMLDocumentSettingsContext::XMLDocumentSettingsContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
+XMLDocumentSettingsContext::XMLDocumentSettingsContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                     const uno::Reference<xml::sax::XAttributeList>& )
     : SvXMLImportContext( rImport, nPrfx, rLName )
     , m_pData( new XMLDocumentSettingsContext_Data )
@@ -359,7 +365,7 @@ XMLDocumentSettingsContext::~XMLDocumentSettingsContext()
 {
 }
 
-SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( sal_uInt16 p_nPrefix,
+SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( USHORT p_nPrefix,
                                      const rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -372,7 +378,7 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( sal_uInt16 p
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
+        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
@@ -451,18 +457,10 @@ void XMLDocumentSettingsContext::EndElement()
     }
 
     sal_Bool bLoadDocPrinter( sal_True );
-
-    try
-    {
-        ::comphelper::ConfigurationHelper::readDirectKey(
-            ::comphelper::getProcessServiceFactory(),
-            C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("LoadPrinter"),
-            ::comphelper::ConfigurationHelper::E_READONLY ) >>= bLoadDocPrinter;
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
+    ::comphelper::ConfigurationHelper::readDirectKey(
+        ::comphelper::getProcessServiceFactory(),
+        C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("LoadPrinter"),
+        ::comphelper::ConfigurationHelper::E_READONLY ) >>= bLoadDocPrinter;
     uno::Sequence<beans::PropertyValue> aSeqConfigProps;
     if ( m_pData->aConfigProps >>= aSeqConfigProps )
     {
@@ -508,7 +506,7 @@ void XMLDocumentSettingsContext::EndElement()
 
 //=============================================================================
 
-XMLConfigBaseContext::XMLConfigBaseContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
+XMLConfigBaseContext::XMLConfigBaseContext(SvXMLImport& rImport, USHORT nPrfx,
         const rtl::OUString& rLName, com::sun::star::uno::Any& rTempAny,
         XMLConfigBaseContext* pTempBaseContext)
     : SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -526,7 +524,7 @@ XMLConfigBaseContext::~XMLConfigBaseContext()
 
 //=============================================================================
 
-XMLConfigItemSetContext::XMLConfigItemSetContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
+XMLConfigItemSetContext::XMLConfigItemSetContext(SvXMLImport& rImport, USHORT nPrfx,
                                     const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>&,
@@ -541,7 +539,7 @@ XMLConfigItemSetContext::~XMLConfigItemSetContext()
 {
 }
 
-SvXMLImportContext *XMLConfigItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *XMLConfigItemSetContext::CreateChildContext( USHORT nPrefix,
                                      const rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -558,7 +556,7 @@ void XMLConfigItemSetContext::EndElement()
 
 //=============================================================================
 
-XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
+XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rTempAny,
@@ -574,7 +572,7 @@ XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport, sal_uInt16 nPrf
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
+        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
@@ -590,7 +588,7 @@ XMLConfigItemContext::~XMLConfigItemContext()
 {
 }
 
-SvXMLImportContext *XMLConfigItemContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *XMLConfigItemContext::CreateChildContext( USHORT nPrefix,
                                                     const rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& )
@@ -607,7 +605,7 @@ void XMLConfigItemContext::Characters( const ::rtl::OUString& rChars )
         if( sTrimmedChars.getLength() )
         {
             rtl::OUString sChars;
-            if( msValue.getLength() )
+            if( msValue )
             {
                 sChars = msValue;
                 sChars += sTrimmedChars;
@@ -692,7 +690,7 @@ void XMLConfigItemContext::EndElement()
             mrAny <<= maDecoded;
         }
         else {
-            OSL_FAIL("wrong type");
+            DBG_ERROR("wrong type");
         }
 
         ManipulateConfigItem();
@@ -700,7 +698,7 @@ void XMLConfigItemContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        OSL_FAIL("no BaseContext");
+        DBG_ERROR("no BaseContext");
     }
 }
 
@@ -760,7 +758,7 @@ void XMLConfigItemContext::ManipulateConfigItem()
 
 //=============================================================================
 
-XMLConfigItemMapNamedContext::XMLConfigItemMapNamedContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
+XMLConfigItemMapNamedContext::XMLConfigItemMapNamedContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>&,
                                     com::sun::star::uno::Any& rAny,
@@ -773,7 +771,7 @@ XMLConfigItemMapNamedContext::~XMLConfigItemMapNamedContext()
 {
 }
 
-SvXMLImportContext *XMLConfigItemMapNamedContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *XMLConfigItemMapNamedContext::CreateChildContext( USHORT nPrefix,
                                                     const rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -789,13 +787,13 @@ void XMLConfigItemMapNamedContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        OSL_FAIL("no BaseContext");
+        DBG_ERROR("no BaseContext");
     }
 }
 
 //=============================================================================
 
-XMLConfigItemMapIndexedContext::XMLConfigItemMapIndexedContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
+XMLConfigItemMapIndexedContext::XMLConfigItemMapIndexedContext(SvXMLImport& rImport, USHORT nPrfx,
                                     const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>&,
@@ -811,7 +809,7 @@ XMLConfigItemMapIndexedContext::~XMLConfigItemMapIndexedContext()
 {
 }
 
-SvXMLImportContext *XMLConfigItemMapIndexedContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *XMLConfigItemMapIndexedContext::CreateChildContext( USHORT nPrefix,
                                                     const rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -898,7 +896,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
                             }
                             catch( uno::Exception& )
                             {
-                                OSL_FAIL( "Exception while importing forbidden characters" );
+                                DBG_ERROR( "Exception while importing forbidden characters" );
                             }
                         }
                     }
@@ -906,7 +904,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
             }
             else
             {
-                OSL_FAIL( "could not get the XForbiddenCharacters from document!" );
+                DBG_ERROR( "could not get the XForbiddenCharacters from document!" );
                 mrAny <<= maProps.GetIndexContainer();
             }
         }
@@ -1011,7 +1009,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        OSL_FAIL("no BaseContext");
+        DBG_ERROR("no BaseContext");
     }
 }
 

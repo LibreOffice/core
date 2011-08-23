@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ namespace svt
 {
 //.........................................................................
 
-#define PROPERTY_ID_HELPURL     1
-#define PROPERTY_ID_WINDOW      2
+#define PROPERTY_ID_HELPURL		1
+#define PROPERTY_ID_WINDOW		2
 
     // using --------------------------------------------------------------
 
@@ -67,13 +67,13 @@ namespace svt
     {
         // the two properties we have
         registerProperty(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HelpURL" )), PROPERTY_ID_HELPURL,
+            ::rtl::OUString::createFromAscii( "HelpURL" ), PROPERTY_ID_HELPURL,
             PropertyAttribute::TRANSIENT,
             &m_sHelpURL, ::getCppuType( &m_sHelpURL )
         );
 
         registerProperty(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window" )), PROPERTY_ID_WINDOW,
+            ::rtl::OUString::createFromAscii( "Window" ), PROPERTY_ID_WINDOW,
             PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY,
             &m_xWindow, ::getCppuType( &m_xWindow )
         );
@@ -160,7 +160,7 @@ namespace svt
         {
             stopWindowListening();
 
-            if ( !bDialogDying )    // it's the parent which is dying -> delete the dialog
+            if ( !bDialogDying )	// it's the parent which is dying -> delete the dialog
                 delete m_pDlg;
 
             m_pDlg = NULL;
@@ -169,7 +169,7 @@ namespace svt
         }
         else
         {
-            OSL_FAIL( "OCommonPicker::disposing: where did this come from?" );
+            DBG_ERROR( "OCommonPicker::disposing: where did this come from?" );
         }
     }
 
@@ -221,7 +221,7 @@ namespace svt
             {
                 // synchronize the help id of the dialog with out help URL property
                 if ( m_sHelpURL.getLength() )
-                {   // somebody already set the help URL while we had no dialog yet
+                {	// somebody already set the help URL while we had no dialog yet
                     OControlAccess::setHelpURL( m_pDlg, m_sHelpURL, sal_False );
                 }
                 else
@@ -432,15 +432,15 @@ namespace svt
         checkAlive();
 
         ::rtl::OUString sSettingName;
-        Any             aSettingValue;
+        Any				aSettingValue;
 
-        PropertyValue   aPropArg;
-        NamedValue      aPairArg;
+        PropertyValue	aPropArg;
+        NamedValue		aPairArg;
 
 
-        const Any* pArguments       = _rArguments.getConstArray();
-        const Any* pArgumentsEnd    = _rArguments.getConstArray() + _rArguments.getLength();
-        for (   const Any* pArgument = pArguments;
+        const Any* pArguments		= _rArguments.getConstArray();
+        const Any* pArgumentsEnd	= _rArguments.getConstArray() + _rArguments.getLength();
+        for	(	const Any* pArgument = pArguments;
                 pArgument != pArgumentsEnd;
                 ++pArgument
             )
@@ -461,13 +461,13 @@ namespace svt
                 sSettingName = aPairArg.Name;
                 aSettingValue = aPairArg.Value;
 
-
+                
             }
             else
             {
-                OSL_FAIL(
-                    (   ::rtl::OString( "OCommonPicker::initialize: unknown argument type at position " )
-                    +=  ::rtl::OString::valueOf( (sal_Int32)( pArguments - _rArguments.getConstArray() ) )
+                DBG_ERROR(
+                    (	::rtl::OString( "OCommonPicker::initialize: unknown argument type at position " )
+                    +=	::rtl::OString::valueOf( (sal_Int32)( pArguments - _rArguments.getConstArray() ) )
                     ).getStr()
                 );
                 continue;
@@ -478,9 +478,9 @@ namespace svt
 #endif
             implHandleInitializationArgument( sSettingName, aSettingValue );
             DBG_ASSERT( bKnownSetting,
-                (   ::rtl::OString( "OCommonPicker::initialize: unknown argument \"" )
-                +=  ::rtl::OString( sSettingName.getStr(), sSettingName.getLength(), osl_getThreadTextEncoding() )
-                +=  ::rtl::OString( "\"!" )
+                (	::rtl::OString( "OCommonPicker::initialize: unknown argument \"" )
+                +=	::rtl::OString( sSettingName.getStr(), sSettingName.getLength(), osl_getThreadTextEncoding() )
+                +=	::rtl::OString( "\"!" )
                 ).getStr()
             );
         }
@@ -490,7 +490,7 @@ namespace svt
     sal_Bool OCommonPicker::implHandleInitializationArgument( const ::rtl::OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
     {
         sal_Bool bKnown = sal_True;
-        if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ParentWindow" ) ) )
+        if ( _rName.equalsAscii( "ParentWindow" ) )
         {
             m_xDialogParent.clear();
             OSL_VERIFY( _rValue >>= m_xDialogParent );
@@ -502,7 +502,7 @@ namespace svt
     }
 
 //.........................................................................
-}   // namespace svt
+}	// namespace svt
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

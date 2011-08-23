@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,6 @@
 
 #include <pdffilter.hxx>
 #include <pdfdialog.hxx>
-#include <pdfinteract.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -54,6 +53,41 @@ extern "C"
     }
 
     // -------------------------------------------------------------------------
+    
+    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
+    {
+        if (pRegistryKey)
+        {
+            try
+            {
+                Reference< XRegistryKey >   xNewKey;
+                sal_Int32                   nPos;
+
+                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFFilter_getImplementationName() );
+                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                const Sequence< OUString > & rSNL1 = PDFFilter_getSupportedServiceNames();
+                const OUString * pArray1 = rSNL1.getConstArray();
+                for ( nPos = rSNL1.getLength(); nPos--; )
+                    xNewKey->createKey( pArray1[nPos] );
+
+                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFDialog_getImplementationName() ); 
+                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                const Sequence< OUString > & rSNL2 = PDFDialog_getSupportedServiceNames();
+                const OUString * pArray2 = rSNL2.getConstArray();
+                for ( nPos = rSNL2.getLength(); nPos--; )
+                    xNewKey->createKey( pArray2[nPos] );
+
+                return sal_True;
+            }
+            catch (InvalidRegistryException &)
+            {
+                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+            }
+        }
+        return sal_False;
+    }
+
+    // -------------------------------------------------------------------------
 
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
     {
@@ -67,25 +101,18 @@ extern "C"
             if( aImplName.equals( PDFFilter_getImplementationName() ) )
             {
                 xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
-                                                OUString::createFromAscii( pImplName ),
+                                                OUString::createFromAscii( pImplName ), 
                                                 PDFFilter_createInstance, PDFFilter_getSupportedServiceNames() );
-
+                
             }
             else if( aImplName.equals( PDFDialog_getImplementationName() ) )
             {
                 xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
-                                                OUString::createFromAscii( pImplName ),
+                                                OUString::createFromAscii( pImplName ), 
                                                 PDFDialog_createInstance, PDFDialog_getSupportedServiceNames() );
-
+                
             }
-            else if( aImplName.equals( PDFInteractionHandler_getImplementationName() ) )
-            {
-                xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
-                                                OUString::createFromAscii( pImplName ),
-                                                PDFInteractionHandler_createInstance, PDFInteractionHandler_getSupportedServiceNames() );
-
-            }
-
+            
             if( xFactory.is() )
             {
                 xFactory->acquire();

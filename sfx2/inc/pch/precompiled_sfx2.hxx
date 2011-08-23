@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -545,6 +545,7 @@
 #include "svl/ownlist.hxx"
 #include "svtools/parhtml.hxx"
 #include "unotools/pathoptions.hxx"
+#include "svl/pickerhelper.hxx"
 #include "svl/poolitem.hxx"
 #include "svtools/printoptions.hxx"
 #include "unotools/printwarningoptions.hxx"
@@ -599,6 +600,7 @@
 #include "tools/globname.hxx"
 #include "tools/inetmime.hxx"
 #include "tools/link.hxx"
+#include "tools/list.hxx"
 #include "tools/ownlist.hxx"
 #include "tools/rc.hxx"
 #include "tools/rcid.h"
@@ -655,7 +657,7 @@
 #include "vcl/stdtext.hxx"
 #include "vcl/timer.hxx"
 #include "vcl/unohelp.hxx"
-#include "tools/wintypes.hxx"
+#include "vcl/wintypes.hxx"
 #include "osl/diagnose.h"
 #include "osl/module.hxx"
 #include "osl/mutex.hxx"

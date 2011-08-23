@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,6 @@
 #include "xmlcoli.hxx"
 #include "xmlsceni.hxx"
 #include "xmlexternaltabi.hxx"
-#include "xmlnexpi.hxx"
 #include "document.hxx"
 #include "docuno.hxx"
 #include "olinetab.hxx"
@@ -66,22 +65,20 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::rtl::OUString;
 
-/**
- * Determine whether this table is an external reference cache from its
+/** 
+ * Determine whether this table is an external reference cache from its 
  * name.  There is currently no way of determining whether a table is a
- * regular table or an external reference cache other than examining the
- * name itself.  We should probably introduce a new boolean value for
- * table:table element and use it instead of doing this, to make it more
- * reliable and future-proof.
+ * regular table or an external reference cache other than examining the 
+ * name itself.  We should probably introduce a new boolean value for 
+ * table:table element and use it instead of doing this, to make it more 
+ * reliable and future-proof. 
  *
- * @param rName
- *
- * @return
+ * @param rName 
+ * 
+ * @return 
  */
 static bool lcl_isExternalRefCache(const rtl::OUString& rName, rtl::OUString& rUrl, rtl::OUString& rExtTabName)
 {
@@ -151,7 +148,7 @@ ScXMLExternalTabData::ScXMLExternalTabData() :
 //------------------------------------------------------------------
 
 ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -160,7 +157,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pExternalRefInfo(NULL),
     nStartOffset(-1),
-    bStartFormPage(false),
+    bStartFormPage(sal_False),
     bPrintEntireSheet(sal_True)
 {
     // get start offset in file (if available)
@@ -177,7 +174,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         {
             const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
             rtl::OUString aLocalName;
-            sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+            USHORT nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName ));
             const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -207,7 +204,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                 case XML_TOK_TABLE_PRINT:
                     {
                         if (IsXMLToken(sValue, XML_FALSE))
-                            bPrintEntireSheet = false;
+                            bPrintEntireSheet = sal_False;
                     }
                     break;
             }
@@ -244,7 +241,7 @@ ScXMLTableContext::~ScXMLTableContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -253,7 +250,7 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLName);
     if (pExternalRefInfo.get())
     {
-        // We only care about the table-row and table-source elements for
+        // We only care about the table-row and table-source elements for 
         // external cache data.
         switch (nToken)
         {
@@ -280,36 +277,20 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
 
     switch (nToken)
     {
-    case XML_TOK_TABLE_NAMED_EXPRESSIONS:
-    {
-        ScDocument* pDoc = GetScImport().GetDocument();
-        if (pDoc)
-        {
-            sal_Int32 nTab = GetScImport().GetTables().GetCurrentSheet();
-            ScRangeName* pRN = pDoc->GetRangeName(static_cast<SCTAB>(nTab));
-            if (pRN)
-            {
-                pContext = new ScXMLNamedExpressionsContext(
-                    GetScImport(), nPrefix, rLName, xAttrList,
-                    new ScXMLNamedExpressionsContext::SheetLocalInserter(pDoc, *pRN));
-            }
-        }
-    }
-        break;
     case XML_TOK_TABLE_COL_GROUP:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   false, sal_True );
+                                                   sal_False, sal_True );
         break;
     case XML_TOK_TABLE_HEADER_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, false );
+                                                   sal_True, sal_False );
         break;
     case XML_TOK_TABLE_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   false, false );
+                                                   sal_False, sal_False );
         break;
     case XML_TOK_TABLE_COL:
             pContext = new ScXMLTableColContext( GetScImport(), nPrefix,
@@ -321,17 +302,17 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     case XML_TOK_TABLE_ROW_GROUP:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   false, sal_True );
+                                                   sal_False, sal_True );
         break;
     case XML_TOK_TABLE_HEADER_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, false );
+                                                   sal_True, sal_False );
         break;
     case XML_TOK_TABLE_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   false, false );
+                                                   sal_False, sal_False );
         break;
     case XML_TOK_TABLE_ROW:
             pContext = new ScXMLTableRowContext( GetScImport(), nPrefix,
@@ -375,81 +356,80 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
 
 void ScXMLTableContext::EndElement()
 {
-    ScXMLImport::MutexGuard aMutexGuard(GetScImport());
+    // get end offset in file (if available)
+//    sal_Int32 nEndOffset = GetScImport().GetByteOffset();
+
+    GetScImport().LockSolarMutex();
     GetScImport().GetStylesImportHelper()->EndTable();
     ScDocument* pDoc(GetScImport().GetDocument());
-    if (!pDoc)
-        return;
-
-    SCTAB nCurTab = static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet());
-    if (sPrintRanges.getLength())
+    if (pDoc)
     {
-        Reference< sheet::XPrintAreas > xPrintAreas(
-            GetScImport().GetTables().GetCurrentXSheet(), UNO_QUERY);
-
-        if( xPrintAreas.is() )
+        if (sPrintRanges.getLength())
         {
-            Sequence< table::CellRangeAddress > aRangeList;
-            ScRangeStringConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc, ::formula::FormulaGrammar::CONV_OOO );
-            xPrintAreas->setPrintAreas( aRangeList );
-        }
-    }
-    else if (!bPrintEntireSheet)
-        // Sheet has "print entire sheet" option by default.  Remove it.
-        pDoc->ClearPrintRanges(nCurTab);
-
-    ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nCurTab, false));
-    if (pOutlineTable)
-    {
-        ScOutlineArray* pColArray(pOutlineTable->GetColArray());
-        sal_Int32 nDepth(pColArray->GetDepth());
-        sal_Int32 i;
-        for (i = 0; i < nDepth; ++i)
-        {
-            sal_Int32 nCount(pColArray->GetCount(static_cast<sal_uInt16>(i)));
-            for (sal_Int32 j = 0; j < nCount; ++j)
+            uno::Reference< sheet::XPrintAreas > xPrintAreas( GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY );
+            if( xPrintAreas.is() )
             {
-                ScOutlineEntry* pEntry(pColArray->GetEntry(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j)));
-                if (pEntry->IsHidden())
-                    pColArray->SetVisibleBelow(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j), false);
+                uno::Sequence< table::CellRangeAddress > aRangeList;
+                ScRangeStringConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc, ::formula::FormulaGrammar::CONV_OOO );
+                xPrintAreas->setPrintAreas( aRangeList );
             }
         }
-        ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
-        nDepth = pRowArray->GetDepth();
-        for (i = 0; i < nDepth; ++i)
+        else if (bPrintEntireSheet) pDoc->SetPrintEntireSheet(static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()));
+
+        ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()), sal_False));
+        if (pOutlineTable)
         {
-            sal_Int32 nCount(pRowArray->GetCount(static_cast<sal_uInt16>(i)));
-            for (sal_Int32 j = 0; j < nCount; ++j)
+            ScOutlineArray* pColArray(pOutlineTable->GetColArray());
+            sal_Int32 nDepth(pColArray->GetDepth());
+            sal_Int32 i;
+            for (i = 0; i < nDepth; ++i)
             {
-                ScOutlineEntry* pEntry(pRowArray->GetEntry(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j)));
-                if (pEntry->IsHidden())
-                    pRowArray->SetVisibleBelow(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j), false);
+                sal_Int32 nCount(pColArray->GetCount(static_cast<USHORT>(i)));
+                for (sal_Int32 j = 0; j < nCount; ++j)
+                {
+                    ScOutlineEntry* pEntry(pColArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j)));
+                    if (pEntry->IsHidden())
+                        pColArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
+                }
+            }
+            ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
+            nDepth = pRowArray->GetDepth();
+            for (i = 0; i < nDepth; ++i)
+            {
+                sal_Int32 nCount(pRowArray->GetCount(static_cast<USHORT>(i)));
+                for (sal_Int32 j = 0; j < nCount; ++j)
+                {
+                    ScOutlineEntry* pEntry(pRowArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j)));
+                    if (pEntry->IsHidden())
+                        pRowArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
+                }
             }
         }
-    }
-    if (GetScImport().GetTables().HasDrawPage())
-    {
-        if (GetScImport().GetTables().HasXShapes())
+        if (GetScImport().GetTables().HasDrawPage())
         {
-            GetScImport().GetShapeImport()->popGroupAndSort();
-            uno::Reference < drawing::XShapes > xTempShapes(GetScImport().GetTables().GetCurrentXShapes());
-            GetScImport().GetShapeImport()->endPage(xTempShapes);
+            if (GetScImport().GetTables().HasXShapes())
+            {
+                GetScImport().GetShapeImport()->popGroupAndSort();
+                uno::Reference < drawing::XShapes > xTempShapes(GetScImport().GetTables().GetCurrentXShapes());
+                GetScImport().GetShapeImport()->endPage(xTempShapes);
+            }
+            if (bStartFormPage)
+                GetScImport().GetFormImport()->endPage();
         }
-        if (bStartFormPage)
-            GetScImport().GetFormImport()->endPage();
-    }
 
-    GetScImport().GetTables().DeleteTable();
-    GetScImport().ProgressBarIncrement(false);
+        GetScImport().GetTables().DeleteTable();
+        GetScImport().ProgressBarIncrement(sal_False);
 
-    // store stream positions
-    if (!pExternalRefInfo.get() && nStartOffset >= 0 /* && nEndOffset >= 0 */)
-    {
-        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
-        sal_Int32 nTab = GetScImport().GetTables().GetCurrentSheet();
-        // pSheetData->AddStreamPos( nTab, nStartOffset, nEndOffset );
-        pSheetData->StartStreamPos( nTab, nStartOffset );
+        // store stream positions
+        if (!pExternalRefInfo.get() && nStartOffset >= 0 /* && nEndOffset >= 0 */)
+        {
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
+            sal_Int32 nTab = GetScImport().GetTables().GetCurrentSheet();
+            // pSheetData->AddStreamPos( nTab, nStartOffset, nEndOffset );
+            pSheetData->StartStreamPos( nTab, nStartOffset );
+        }
     }
+    GetScImport().UnlockSolarMutex();
 }
 
 // ============================================================================
@@ -460,7 +440,7 @@ ScXMLImport& ScXMLTableProtectionContext::GetScImport()
 }
 
 ScXMLTableProtectionContext::ScXMLTableProtectionContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrefix, rLName )
 {
@@ -476,7 +456,7 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
         const OUString aValue = xAttrList->getValueByIndex(i);
 
         OUString aLocalName;
-        sal_uInt16 nLocalPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        USHORT nLocalPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
             aAttrName, &aLocalName);
 
         switch (rAttrTokenMap.Get(nLocalPrefix, aLocalName))
@@ -502,7 +482,7 @@ ScXMLTableProtectionContext::~ScXMLTableProtectionContext()
 }
 
 SvXMLImportContext* ScXMLTableProtectionContext::CreateChildContext(
-    sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/, const Reference<XAttributeList>& /*xAttrList*/ )
+    USHORT /*nPrefix*/, const OUString& /*rLocalName*/, const Reference<XAttributeList>& /*xAttrList*/ )
 {
     return NULL;
 }

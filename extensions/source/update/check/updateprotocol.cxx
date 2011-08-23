@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace xml = css::xml ;
 
 //------------------------------------------------------------------------------
 
-static bool
+static bool 
 getBootstrapData(
     uno::Sequence< ::rtl::OUString > & rRepositoryList,
     ::rtl::OUString & rBuildID,
@@ -89,7 +89,7 @@ getBootstrapData(
 //------------------------------------------------------------------------------
 
 // Returns 'true' if successfully connected to the update server
-bool
+bool 
 checkForUpdates(
     UpdateInfo& o_rUpdateInfo,
     uno::Reference< uno::XComponentContext > const & rxContext,
@@ -97,36 +97,36 @@ checkForUpdates(
     const uno::Reference< deployment::XUpdateInformationProvider >& rUpdateInfoProvider)
 {
     OSL_TRACE("checking for updates ..\n");
-
+   
     ::rtl::OUString myArch;
     ::rtl::OUString myOS;
-
+  
     rtl::Bootstrap::get(UNISTRING("_OS"), myOS);
     rtl::Bootstrap::get(UNISTRING("_ARCH"), myArch);
-
+    
     uno::Sequence< ::rtl::OUString > aRepositoryList;
     ::rtl::OUString aBuildID;
     ::rtl::OUString aInstallSetID;
-
+    
     if( ! ( getBootstrapData(aRepositoryList, aBuildID, aInstallSetID) && (aRepositoryList.getLength() > 0) ) )
         return false;
 
     if( !rxContext.is() )
-        throw uno::RuntimeException(
+        throw uno::RuntimeException( 
             UNISTRING( "checkForUpdates: empty component context" ), uno::Reference< uno::XInterface >() );
-
+            
     OSL_ASSERT( rxContext->getServiceManager().is() );
-
-    // XPath implementation
-    uno::Reference< xml::xpath::XXPathAPI > xXPath(
-        rxContext->getServiceManager()->createInstanceWithContext( UNISTRING( "com.sun.star.xml.xpath.XPathAPI" ), rxContext ),
-        uno::UNO_QUERY_THROW);
-
+            
+    // XPath implementation 
+    uno::Reference< xml::xpath::XXPathAPI > xXPath( 
+        rxContext->getServiceManager()->createInstanceWithContext( UNISTRING( "com.sun.star.xml.xpath.XPathAPI" ), rxContext ), 
+        uno::UNO_QUERY_THROW);    
+    
     xXPath->registerNS( UNISTRING("inst"), UNISTRING("http://installation.openoffice.org/description") );
 
     if( rxInteractionHandler.is() )
         rUpdateInfoProvider->setInteractionHandler(rxInteractionHandler);
-
+    
     try
     {
         uno::Reference< container::XEnumeration > aUpdateInfoEnumeration =
@@ -143,13 +143,13 @@ checkForUpdates(
         aBuffer.appendAscii("\' and inst:buildid>");
         aBuffer.append( aBuildID );
         aBuffer.appendAscii("]");
-
+        
         rtl::OUString aXPathExpression = aBuffer.makeStringAndClear();
 
         while( aUpdateInfoEnumeration->hasMoreElements() )
         {
             deployment::UpdateInformationEntry aEntry;
-
+            
             if( aUpdateInfoEnumeration->nextElement() >>= aEntry )
             {
                 uno::Reference< xml::dom::XNode > xNode( aEntry.UpdateDocument.get() );
@@ -161,22 +161,22 @@ checkForUpdates(
                     // ignore
                 }
 
-/*
-                o_rUpdateInfo.Sources.push_back( DownloadSource(true,
+/*                
+                o_rUpdateInfo.Sources.push_back( DownloadSource(true, 
                     UNISTRING("http://openoffice.bouncer.osuosl.org/?product=OpenOffice.org&os=solarissparcwjre&lang=en-US&version=2.2.1") ) );
 */
-
+                
                 sal_Int32 i, imax = xNodeList->getLength();
                 for( i = 0; i < imax; ++i )
                 {
                     uno::Reference< xml::dom::XNode > xNode2( xNodeList->item(i) );
-
+                
                     if( xNode2.is() )
                     {
                         uno::Reference< xml::dom::XElement > xParent(xNode2->getParentNode(), uno::UNO_QUERY_THROW);
                         rtl::OUString aType = xParent->getAttribute(UNISTRING("type"));
                         bool bIsDirect = ( sal_False == aType.equalsIgnoreAsciiCaseAscii("text/html") );
-
+                    
                         o_rUpdateInfo.Sources.push_back( DownloadSource(bIsDirect, xNode2->getNodeValue()) );
                     }
                 }
@@ -218,16 +218,16 @@ checkForUpdates(
                     if( xRelNote.is() )
                     {
                         sal_Int32 pos = xRelNote->getAttribute(UNISTRING("pos")).toInt32();
-
+                        
                         ReleaseNote aRelNote((sal_uInt8) pos, xRelNote->getAttribute(UNISTRING("src")));
-
+                        
                         if( xRelNote->hasAttribute(UNISTRING("src2")) )
                         {
                             pos = xRelNote->getAttribute(UNISTRING("pos2")).toInt32();
                             aRelNote.Pos2 = (sal_Int8) pos;
                             aRelNote.URL2 = xRelNote->getAttribute(UNISTRING("src2"));
                         }
-
+                        
                         o_rUpdateInfo.ReleaseNotes.push_back(aRelNote);
                     }
                 }
@@ -236,7 +236,7 @@ checkForUpdates(
                     ReleaseNote(1, UNISTRING("http://qa.openoffice.org/tests/online_update_test.html"))
                 );
 */
-
+                
                 if( o_rUpdateInfo.Sources.size() > 0 )
                     return true;
             }
@@ -246,7 +246,7 @@ checkForUpdates(
     {
         return false;
     }
-
+    
     return true;
 }
 
@@ -254,18 +254,16 @@ checkForUpdates(
 bool storeExtensionUpdateInfos( const uno::Reference< uno::XComponentContext > & rxContext,
                                 const uno::Sequence< uno::Sequence< rtl::OUString > > &rUpdateInfos )
 {
-    bool bNotify = false;
-
     if ( rUpdateInfos.hasElements() )
     {
         rtl::Reference< UpdateCheckConfig > aConfig = UpdateCheckConfig::get( rxContext );
 
         for ( sal_Int32 i = rUpdateInfos.getLength() - 1; i >= 0; i-- )
         {
-            bNotify |= aConfig->storeExtensionVersion( rUpdateInfos[i][0], rUpdateInfos[i][1] );
+            aConfig->storeExtensionVersion( rUpdateInfos[i][0], rUpdateInfos[i][1] );
         }
     }
-    return bNotify;
+    return rUpdateInfos.hasElements();
 }
 
 //------------------------------------------------------------------------------
@@ -284,15 +282,15 @@ bool checkForExtensionUpdates( const uno::Reference< uno::XComponentContext > & 
     }
     catch( const uno::Exception& )
     {
-        OSL_FAIL( "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
+        OSL_ENSURE( false, "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
     }
 
     if ( !xInfoProvider.is() ) return false;
 
     aUpdateList = xInfoProvider->isUpdateAvailable( ::rtl::OUString() );
-    bool bNotify = storeExtensionUpdateInfos( rxContext, aUpdateList );
+    storeExtensionUpdateInfos( rxContext, aUpdateList );
 
-    return bNotify;
+    return aUpdateList.hasElements();
 }
 
 //------------------------------------------------------------------------------
@@ -310,7 +308,7 @@ bool checkForPendingUpdates( const uno::Reference< uno::XComponentContext > & rx
     }
     catch( const uno::Exception& )
     {
-        OSL_FAIL( "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
+        OSL_ENSURE( false, "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
     }
 
     if ( !xInfoProvider.is() ) return false;

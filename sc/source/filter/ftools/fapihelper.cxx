@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,6 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
@@ -61,8 +59,6 @@ using ::com::sun::star::beans::XPropertyState;
 using ::com::sun::star::lang::XServiceName;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER;
-
-using namespace ::com::sun::star;
 
 // Static helper functions ====================================================
 
@@ -135,33 +131,25 @@ Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
     return CreateInstanceWithArgs( ::comphelper::getProcessServiceFactory(), rServiceName, rArgs );
 }
 
-uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( SfxMedium& rMedium,
+String ScfApiHelper::QueryPasswordForMedium( SfxMedium& rMedium,
         ::comphelper::IDocPasswordVerifier& rVerifier, const ::std::vector< OUString >* pDefaultPasswords )
 {
-    uno::Sequence< beans::NamedValue > aEncryptionData;
-    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false);
-    if ( pEncryptionDataItem )
-        pEncryptionDataItem->GetValue() >>= aEncryptionData;
-
-    ::rtl::OUString aPassword;
-    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false);
-    if ( pPasswordItem )
-        aPassword = pPasswordItem->GetValue();
-
+    OUString aMediaPassword;
+    SfxItemSet* pItemSet = rMedium.GetItemSet();
+    const SfxPoolItem *pPasswordItem;
+    if( pItemSet && (SFX_ITEM_SET == pItemSet->GetItemState( SID_PASSWORD, TRUE, &pPasswordItem )) )
+        aMediaPassword = static_cast< const SfxStringItem* >( pPasswordItem )->GetValue();
     OUString aDocName = INetURLObject( rMedium.GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET );
 
     bool bIsDefaultPassword = false;
-    aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
-        rVerifier, aEncryptionData, aPassword, rMedium.GetInteractionHandler(), aDocName,
+    OUString aPassword = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+        rVerifier, aMediaPassword, rMedium.GetInteractionHandler(), aDocName,
         ::comphelper::DocPasswordRequestType_MS, pDefaultPasswords, &bIsDefaultPassword );
 
-    rMedium.GetItemSet()->ClearItem( SID_PASSWORD );
-    rMedium.GetItemSet()->ClearItem( SID_ENCRYPTIONDATA );
+    if( !bIsDefaultPassword && (aPassword.getLength() > 0) && pItemSet )
+        pItemSet->Put( SfxStringItem( SID_PASSWORD, aPassword ) );
 
-    if( !bIsDefaultPassword && (aEncryptionData.getLength() > 0) )
-        rMedium.GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
-
-    return aEncryptionData;
+    return aPassword;
 }
 
 // Property sets ==============================================================

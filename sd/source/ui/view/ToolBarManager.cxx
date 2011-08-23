@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -319,7 +319,7 @@ public:
     void LockViewShellManager (void);
     void LockUpdate (void);
     void UnlockUpdate (void);
-
+    
     ToolBarRules& GetToolBarRules (void);
 
 private:
@@ -343,8 +343,8 @@ private:
     ::std::auto_ptr<LayouterLock> mpSynchronousLayouterLock;
     ::std::auto_ptr<LayouterLock> mpAsynchronousLayouterLock;
     ::std::auto_ptr<ViewShellManager::UpdateLock> mpViewShellManagerLock;
-    sal_uLong mnPendingUpdateCall;
-    sal_uLong mnPendingSetValidCall;
+    ULONG mnPendingUpdateCall;
+    ULONG mnPendingSetValidCall;
     ToolBarRules maToolBarRules;
 
     ::rtl::OUString GetToolBarResourceName (const ::rtl::OUString& rsBaseName) const;

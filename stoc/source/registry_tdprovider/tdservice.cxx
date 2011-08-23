@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,6 @@
 #include <memory>
 
 using namespace com::sun::star;
-using ::rtl::OUStringBuffer;
 
 namespace {
 
@@ -543,7 +542,7 @@ void ServiceTypeDescriptionImpl::getReferences()
             case RT_REF_NEEDS:
                 break;
             default:
-                OSL_FAIL( "### unsupported reference type!" );
+                OSL_ENSURE( sal_False, "### unsupported reference type!" );
                 break;
             }
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,19 +53,19 @@ namespace sdr
         }
 
         GroupProperties::GroupProperties(SdrObject& rObj)
-        :   DefaultProperties(rObj)
+        :	DefaultProperties(rObj)
         {
         }
 
         GroupProperties::GroupProperties(const GroupProperties& rProps, SdrObject& rObj)
-        :   DefaultProperties(rProps, rObj)
+        :	DefaultProperties(rProps, rObj)
         {
         }
 
         GroupProperties::~GroupProperties()
         {
         }
-
+        
         BaseProperties& GroupProperties::Clone(SdrObject& rObj) const
         {
             return *(new GroupProperties(*this, rObj));
@@ -103,13 +103,13 @@ namespace sdr
 
                 while(nWhich)
                 {
-                    if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, sal_False))
+                    if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, FALSE))
                     {
                         mpItemSet->InvalidateItem(nWhich);
                     }
                     else
                     {
-                        mpItemSet->MergeValue(rSet.Get(nWhich), sal_True);
+                        mpItemSet->MergeValue(rSet.Get(nWhich), TRUE);
                     }
 
                     nWhich = aIter.NextWhich();

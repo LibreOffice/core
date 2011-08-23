@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,9 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include "oox/helper/attributelist.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/embeddedwavaudiofile.hxx"
+#include "tokens.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -66,29 +68,29 @@ namespace oox { namespace ppt {
 
                 switch( aElementToken )
                 {
-                case PPT_TOKEN( bg ):
+                case NMSP_PPT|XML_bg:
                     bTargetSet = true;
                     maShapeTarget.mnType = XML_bg;
                     break;
-                case PPT_TOKEN( txEl ):
+                case NMSP_PPT|XML_txEl:
                     bTargetSet = true;
                     maShapeTarget.mnType = XML_txEl;
                     break;
-                case PPT_TOKEN( subSp ):
+                case NMSP_PPT|XML_subSp:
                     bTargetSet = true;
                     maShapeTarget.mnType = XML_subSp;
                     maShapeTarget.msSubShapeId = xAttribs->getOptionalValue( XML_spid );
                     break;
-                case PPT_TOKEN( graphicEl ):
-                case PPT_TOKEN( oleChartEl ):
+                case NMSP_PPT|XML_graphicEl:
+                case NMSP_PPT|XML_oleChartEl:
                     bTargetSet = true;
                     // TODO
                     break;
-                case PPT_TOKEN( charRg ):
-                case PPT_TOKEN( pRg ):
+                case NMSP_PPT|XML_charRg:
+                case NMSP_PPT|XML_pRg:
                     if( bTargetSet && maShapeTarget.mnType == XML_txEl )
                     {
-                        maShapeTarget.mnRangeType = getBaseToken( aElementToken );
+                        maShapeTarget.mnRangeType = getToken( aElementToken );
                         maShapeTarget.maRange = drawingml::GetIndexRange( xAttribs );
                     }
                     break;
@@ -129,7 +131,7 @@ namespace oox { namespace ppt {
 
         switch( aElementToken )
         {
-        case PPT_TOKEN( inkTgt ):
+        case NMSP_PPT|XML_inkTgt:
         {
             mpTarget->mnType = XML_inkTgt;
             OUString aId = xAttribs->getOptionalValue( XML_spid );
@@ -139,10 +141,10 @@ namespace oox { namespace ppt {
             }
             break;
         }
-        case PPT_TOKEN( sldTgt ):
+        case NMSP_PPT|XML_sldTgt:
             mpTarget->mnType = XML_sldTgt;
             break;
-        case PPT_TOKEN( sndTgt ):
+        case NMSP_PPT|XML_sndTgt:
         {
             mpTarget->mnType = XML_sndTgt;
             drawingml::EmbeddedWAVAudioFile aAudio;
@@ -152,7 +154,7 @@ namespace oox { namespace ppt {
             mpTarget->msValue = sSndName;
             break;
         }
-        case PPT_TOKEN( spTgt ):
+        case NMSP_PPT|XML_spTgt:
         {
             mpTarget->mnType = XML_spTgt;
             OUString aId = xAttribs->getOptionalValue( XML_spid );
@@ -161,7 +163,7 @@ namespace oox { namespace ppt {
             break;
         }
         default:
-            OSL_TRACE( "OOX: unhandled tag %ld in TL_TimeTargetElement.", getBaseToken( aElementToken ) );
+            OSL_TRACE( "OOX: unhandled tag %ld in TL_TimeTargetElement.", getToken( aElementToken ) );
             break;
         }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,55 +55,55 @@ class SVT_DLLPUBLIC SvParser : public SvRefBase
     DECL_STATIC_LINK( SvParser, NewDataRead, void* );
 
 protected:
-    SvStream&       rInput;
-    String          aToken;             // gescanntes Token
-    sal_uLong           nlLineNr;           // akt. Zeilen Nummer
-    sal_uLong           nlLinePos;          // akt. Spalten Nummer
+    SvStream&		rInput;
+    String 	  		aToken;				// gescanntes Token
+    ULONG	  		nlLineNr;			// akt. Zeilen Nummer
+    ULONG	  		nlLinePos;			// akt. Spalten Nummer
 
-    SvParser_Impl   *pImplData;         // interne Daten
-    long            nTokenValue;        // zusaetzlicher Wert (RTF)
-    sal_Bool            bTokenHasValue;     // indicates whether nTokenValue is valid
-    SvParserState   eState;             // Status auch in abgl. Klassen
+    SvParser_Impl	*pImplData;			// interne Daten
+    long           	nTokenValue;		// zusaetzlicher Wert (RTF)
+    BOOL            bTokenHasValue;     // indicates whether nTokenValue is valid
+    SvParserState	eState;				// Status auch in abgl. Klassen
 
-    rtl_TextEncoding    eSrcEnc;        // Source encoding
+    rtl_TextEncoding	eSrcEnc;		// Source encoding
 
-    sal_uLong nNextChPos;
-    sal_Unicode nNextCh;                // Akt. Zeichen fuer die "lex"
+    ULONG nNextChPos;
+    sal_Unicode	nNextCh;    		    // Akt. Zeichen fuer die "lex"
 
 
-    sal_Bool            bDownloadingFile : 1;// sal_True: Es wird gerade ein externes
-                                        //       File geladen. d.h. alle
-                                        //       DataAvailable Links muessen
-                                        //       ignoriert werden.
+    BOOL			bDownloadingFile : 1;// TRUE: Es wird gerade ein externes
+                                        //		 File geladen. d.h. alle
+                                        // 		 DataAvailable Links muessen
+                                        //		 ignoriert werden.
                                         // Wenn keibes der folgenden
                                         // Flags gesetzt ist, wird der
                                         // Stream als ANSI gelesen,
                                         // aber als CharSet DONTKNOW
                                         // zurueckgegeben.
-    sal_Bool            bUCS2BSrcEnc : 1;   // oder als big-endian UCS2
-    sal_Bool            bSwitchToUCS2 : 1;  // Umschalten des ist erlaubt
+    BOOL			bUCS2BSrcEnc : 1;	// oder als big-endian UCS2
+    BOOL			bSwitchToUCS2 : 1;	// Umschalten des ist erlaubt
 
-    sal_Bool            bRTF_InTextRead : 1;  // only for RTF-Parser!!!
+    BOOL			bRTF_InTextRead : 1;  // only for RTF-Parser!!!
 
     struct TokenStackType
     {
-        String  sToken;
-        long    nTokenValue;
-        sal_Bool    bTokenHasValue;
-        int     nTokenId;
+        String	sToken;
+        long 	nTokenValue;
+        BOOL	bTokenHasValue;
+        int 	nTokenId;
 
         inline TokenStackType() { nTokenId = 0; }
         inline ~TokenStackType() { }
     };
 
     // Methoden fuer Token-Stack
-    int SkipToken( short nCnt = -1 );       // n Tokens zurueck "skippen"
+    int SkipToken( short nCnt = -1 );		// n Tokens zurueck "skippen"
     TokenStackType* GetStackPtr( short nCnt );
-    inline sal_uInt8 GetStackPos() const;
+    inline BYTE GetStackPos() const;
 
     // scanne das naechste Token:
-    //  Tokenstack abarbeiten und ggfs. _GetNextToken() rufen. Diese
-    //  ist fuers erkennen von neuen Token verantwortlich
+    //	Tokenstack abarbeiten und ggfs. _GetNextToken() rufen. Diese
+    //	ist fuers erkennen von neuen Token verantwortlich
     int GetNextToken();
     virtual int _GetNextToken() = 0;
 
@@ -111,34 +111,34 @@ protected:
     virtual void NextToken( int nToken );
 
     // zu Zeiten der SvRefBase-Ableitung darf nicht jeder loeschen
-    virtual ~SvParser();
+    virtual	~SvParser();
 
     void ClearTxtConvContext();
 
 private:
     TokenStackType* pTokenStack;
     TokenStackType *pTokenStackPos;
-    sal_uInt8 nTokenStackSize, nTokenStackPos;
+    BYTE nTokenStackSize, nTokenStackPos;
 
 public:
     // Konstruktor
-    SvParser( SvStream& rIn, sal_uInt8 nStackSize = 3 );
+    SvParser( SvStream& rIn, BYTE nStackSize = 3 );
 
-    virtual  SvParserState CallParser() = 0;    // Aufruf des Parsers
+    virtual	 SvParserState CallParser() = 0;	// Aufruf des Parsers
 
-    inline SvParserState GetStatus() const  { return eState; }  // StatusInfo
+    inline SvParserState GetStatus() const	{ return eState; }	// StatusInfo
 
-    inline sal_uLong    GetLineNr() const       { return nlLineNr; }
-    inline sal_uLong    GetLinePos() const      { return nlLinePos; }
-    inline sal_uLong    IncLineNr()             { return ++nlLineNr; }
-    inline sal_uLong    IncLinePos()            { return ++nlLinePos; }
-    inline sal_uLong    SetLineNr( sal_uLong nlNum );           // inline unten
-    inline sal_uLong    SetLinePos( sal_uLong nlPos );          // inline unten
+    inline ULONG	GetLineNr() const		{ return nlLineNr; }
+    inline ULONG	GetLinePos() const		{ return nlLinePos; }
+    inline ULONG	IncLineNr() 			{ return ++nlLineNr; }
+    inline ULONG	IncLinePos()			{ return ++nlLinePos; }
+    inline ULONG	SetLineNr( ULONG nlNum );			// inline unten
+    inline ULONG	SetLinePos( ULONG nlPos );			// inline unten
 
-    sal_Unicode GetNextChar();
+    sal_Unicode	GetNextChar();
     void RereadLookahead();
 
-    inline int  IsParserWorking() const { return SVPAR_WORKING == eState; }
+    inline int 	IsParserWorking() const	{ return SVPAR_WORKING == eState; }
 
     Link GetAsynchCallLink() const
         { return STATIC_LINK( this, SvParser, NewDataRead ); }
@@ -150,24 +150,24 @@ public:
     /*virtual*/ void RestoreState();
     virtual void Continue( int nToken );
 
-    inline void SetDownloadingFile( sal_Bool bSet ) { bDownloadingFile = bSet; }
-    inline sal_Bool IsDownloadingFile() const { return bDownloadingFile; }
+    inline void SetDownloadingFile( BOOL bSet ) { bDownloadingFile = bSet; }
+    inline BOOL IsDownloadingFile() const { return bDownloadingFile; }
 
     // Set/get source encoding. The UCS2BEncoding flag is valid if source
     // encoding is UCS2. It specifies a big endian encoding.
     void SetSrcEncoding( rtl_TextEncoding eSrcEnc );
     rtl_TextEncoding GetSrcEncoding() const { return eSrcEnc; }
 
-    void SetSrcUCS2BEncoding( sal_Bool bSet ) { bUCS2BSrcEnc = bSet; }
-    sal_Bool IsSrcUCS2BEncoding() const { return bUCS2BSrcEnc; }
+    void SetSrcUCS2BEncoding( BOOL bSet ) { bUCS2BSrcEnc = bSet; }
+    BOOL IsSrcUCS2BEncoding() const { return bUCS2BSrcEnc; }
 
     // Darf der Zeichensatz auf UCS/2 umgeschaltet werden, wenn
     // in den ersten beiden Zeichen im Stream eine BOM steht?
-    void SetSwitchToUCS2( sal_Bool bSet ) { bSwitchToUCS2 = bSet; }
-    sal_Bool IsSwitchToUCS2() const { return bSwitchToUCS2; }
+    void SetSwitchToUCS2( BOOL bSet ) { bSwitchToUCS2 = bSet; }
+    BOOL IsSwitchToUCS2() const { return bSwitchToUCS2; }
 
     // Aus wie vielen Bytes betseht ein Zeichen
-    inline sal_uInt16 GetCharSize() const;
+    inline USHORT GetCharSize() const;
 
     int GetSaveToken() const;
 
@@ -175,8 +175,8 @@ public:
     // 'pWhichIds' von Which-Ids. Es hat die Lange 'nWhichIds'.
     // Die Which-Map wird nicht geloescht.
     static void BuildWhichTbl( SvUShorts &rWhichMap,
-                               sal_uInt16 *pWhichIds,
-                               sal_uInt16 nWhichIds );
+                               USHORT *pWhichIds,
+                               USHORT nWhichIds );
 };
 
 
@@ -188,16 +188,16 @@ SV_IMPL_REF(SvParser)
 
 
 
-inline sal_uLong SvParser::SetLineNr( sal_uLong nlNum )
-{   sal_uLong nlOld = nlLineNr; nlLineNr = nlNum; return nlOld; }
+inline ULONG SvParser::SetLineNr( ULONG nlNum )
+{	ULONG nlOld = nlLineNr; nlLineNr = nlNum; return nlOld; }
 
-inline sal_uLong SvParser::SetLinePos( sal_uLong nlPos )
-{   sal_uLong nlOld = nlLinePos; nlLinePos = nlPos; return nlOld; }
+inline ULONG SvParser::SetLinePos( ULONG nlPos )
+{	ULONG nlOld = nlLinePos; nlLinePos = nlPos; return nlOld; }
 
-inline sal_uInt8 SvParser::GetStackPos() const
-{   return nTokenStackPos; }
+inline BYTE SvParser::GetStackPos() const
+{	return nTokenStackPos; }
 
-inline sal_uInt16 SvParser::GetCharSize() const
+inline USHORT SvParser::GetCharSize() const
 {
     return (RTL_TEXTENCODING_UCS2 == eSrcEnc) ? 2 : 1;
 }
@@ -262,7 +262,7 @@ class SVT_DLLPUBLIC SvKeyValueIterator : public SvRefBase,
     /** Representation.
     */
     SvKeyValueList_Impl* m_pList;
-    sal_uInt16               m_nPos;
+    USHORT               m_nPos;
 
 public:
     /** Construction/Destruction.
@@ -272,8 +272,8 @@ public:
 
     /** Operation.
     */
-    virtual sal_Bool GetFirst (SvKeyValue &rKeyVal);
-    virtual sal_Bool GetNext  (SvKeyValue &rKeyVal);
+    virtual BOOL GetFirst (SvKeyValue &rKeyVal);
+    virtual BOOL GetNext  (SvKeyValue &rKeyVal);
     virtual void Append   (const SvKeyValue &rKeyVal);
 };
 

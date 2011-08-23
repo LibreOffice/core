@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ public class _XPatternField extends MultiMethodTest {
 
     /**
     * Gets masks and stores them. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred.
+    * Has <b> OK </b> status if no runtime exceptions occured.
     */
     public void _getMasks() {
 
@@ -131,7 +131,7 @@ public class _XPatternField extends MultiMethodTest {
 
     /**
     * Gets current string and stores it. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     */
     public void _getString() {
 
@@ -162,7 +162,7 @@ public class _XPatternField extends MultiMethodTest {
 
     /**
     * Gets the current strict state and stores it. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred.
+    * Has <b> OK </b> status if no runtime exceptions occured.
     */
     public void _isStrictFormat() {
 

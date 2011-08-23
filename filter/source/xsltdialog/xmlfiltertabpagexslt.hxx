@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,34 +50,34 @@ public:
 
     DECL_LINK( ClickBrowseHdl_Impl, PushButton * );
 
-    FixedText       maFTDocType;
-    Edit            maEDDocType;
+    FixedText		maFTDocType;
+    Edit			maEDDocType;
 
-    FixedText       maFTDTDSchema;
-    SvtURLBox       maEDDTDSchema;
-    PushButton      maPBDTDSchemaBrowse;
+    FixedText		maFTDTDSchema;
+    SvtURLBox		maEDDTDSchema;
+    PushButton		maPBDTDSchemaBrowse;
 
-    FixedText       maFTExportXSLT;
-    SvtURLBox       maEDExportXSLT;
-    PushButton      maPBExprotXSLT;
+    FixedText		maFTExportXSLT;
+    SvtURLBox		maEDExportXSLT;
+    PushButton		maPBExprotXSLT;
 
-    FixedText       maFTImportXSLT;
-    SvtURLBox       maEDImportXSLT;
-    PushButton      maPBImportXSLT;
+    FixedText		maFTImportXSLT;
+    SvtURLBox		maEDImportXSLT;
+    PushButton		maPBImportXSLT;
 
-    FixedText       maFTImportTemplate;
-    SvtURLBox       maEDImportTemplate;
-    PushButton      maPBImportTemplate;
+    FixedText		maFTImportTemplate;
+    SvtURLBox		maEDImportTemplate;
+    PushButton		maPBImportTemplate;
 
 private:
     void SetURL( SvtURLBox& rURLBox, const rtl::OUString& rURL );
     rtl::OUString GetURL( SvtURLBox& rURLBox );
 
-    ::rtl::OUString sHTTPSchema;
-    ::rtl::OUString sSHTTPSchema;
-    ::rtl::OUString sFILESchema;
-    ::rtl::OUString sFTPSchema;
-    ::rtl::OUString sInstPath;
+    ::rtl::OUString	sHTTPSchema;
+    ::rtl::OUString	sSHTTPSchema;
+    ::rtl::OUString	sFILESchema;
+    ::rtl::OUString	sFTPSchema;
+    ::rtl::OUString	sInstPath;
 };
 
 #endif

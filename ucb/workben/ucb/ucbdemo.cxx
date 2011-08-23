@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -236,7 +236,7 @@ rtl::OUString TestOutputStream::getStart() const
 {
     rtl::OUString sResult = m_sStart;
     if (m_bMore)
-        sResult += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..."));
+        sResult += rtl::OUString::createFromAscii("...");
     return sResult;
 }
 
@@ -285,13 +285,13 @@ rtl::OUString ProgressHandler::toString(const uno::Any & rStatus)
         if (aStart.Text.getLength() > 0)
         {
             sResult = aStart.Text;
-            sResult += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+            sResult += rtl::OUString::createFromAscii(" ");
         }
-        sResult += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("["));
+        sResult += rtl::OUString::createFromAscii("[");
         sResult += rtl::OUString::valueOf(aStart.Minimum);
-        sResult += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".."));
+        sResult += rtl::OUString::createFromAscii("..");
         sResult += rtl::OUString::valueOf(aStart.Maximum);
-        sResult += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
+        sResult += rtl::OUString::createFromAscii("]");
         return sResult;
     }
 
@@ -302,13 +302,13 @@ rtl::OUString ProgressHandler::toString(const uno::Any & rStatus)
     sal_Int32 nValue;
     if (rStatus >>= nValue)
     {
-        rtl::OUString sResult(RTL_CONSTASCII_USTRINGPARAM(".."));
+        rtl::OUString sResult = rtl::OUString::createFromAscii("..");
         sResult += rtl::OUString::valueOf(nValue);
-        sResult += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".."));
+        sResult += rtl::OUString::createFromAscii("..");
         return rtl::OUString(sResult);
     }
 
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(Unknown object)"));
+    return rtl::OUString::createFromAscii("(Unknown object)");
 }
 
 //============================================================================
@@ -328,7 +328,7 @@ ProgressHandler::queryInterface( const uno::Type & rType )
 void SAL_CALL ProgressHandler::push(const uno::Any & rStatus)
     throw (uno::RuntimeException)
 {
-    rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Status push: "));
+    rtl::OUString sMessage = rtl::OUString::createFromAscii("Status push: ");
     sMessage += toString(rStatus);
     m_rPrinter.print(sMessage);
 }
@@ -338,7 +338,7 @@ void SAL_CALL ProgressHandler::push(const uno::Any & rStatus)
 void SAL_CALL ProgressHandler::update(const uno::Any & rStatus)
     throw (uno::RuntimeException)
 {
-    rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Status update: "));
+    rtl::OUString sMessage = rtl::OUString::createFromAscii("Status update: ");
     sMessage += toString(rStatus);
     m_rPrinter.print(sMessage);
 }
@@ -396,13 +396,13 @@ rtl::OUString Ucb::m_aProtocol;
 // static
 rtl::OUString Ucb::getUnoURL()
 {
-    rtl::OUString aUnoURL(RTL_CONSTASCII_USTRINGPARAM(
+    rtl::OUString aUnoURL(rtl::OUString::createFromAscii(
                          "uno:socket,host=localhost,port=8121;"));
     if (m_aProtocol.getLength() == 0)
-        aUnoURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("urp"));
+        aUnoURL += rtl::OUString::createFromAscii("urp");
     else
         aUnoURL += m_aProtocol;
-    aUnoURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";UCB.Factory"));
+    aUnoURL += rtl::OUString::createFromAscii(";UCB.Factory");
     return aUnoURL;
 }
 
@@ -437,7 +437,7 @@ sal_Bool Ucb::init()
             uno::Sequence< uno::Any > aArgs(4);
             aArgs[0] <<= m_aConfigurationKey1;
             aArgs[1] <<= m_aConfigurationKey2;
-            aArgs[2] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PIPE"));
+            aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
             aArgs[3] <<= aPipe;
 
             ::ucbhelper::ContentBroker::initialize( m_xFac, aArgs );
@@ -659,8 +659,8 @@ uno::Any UcbCommandProcessor::executeCommand( const rtl::OUString& rName,
                 = uno::Reference< task::XInteractionHandler >(
                       m_rUCB.getServiceFactory()->
                           createInstance(
-                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                  "com.sun.star.task.InteractionHandler"))),
+                              rtl::OUString::createFromAscii(
+                                  "com.sun.star.task.InteractionHandler")),
                       uno::UNO_QUERY);
         uno::Reference< ucb::XProgressHandler >
             xProgressHandler(new ProgressHandler(m_rUCB));
@@ -934,18 +934,18 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
             return;
         }
         aArgument.Properties.realloc(5);
-        aArgument.Properties[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+        aArgument.Properties[0].Name = rtl::OUString::createFromAscii("Title");
         aArgument.Properties[0].Handle = -1;
         aArgument.Properties[1].Name
-            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateCreated"));
+            = rtl::OUString::createFromAscii("DateCreated");
         aArgument.Properties[1].Handle = -1;
-        aArgument.Properties[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size"));
+        aArgument.Properties[2].Name = rtl::OUString::createFromAscii("Size");
         aArgument.Properties[2].Handle = -1;
         aArgument.Properties[3].Name
-            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
+            = rtl::OUString::createFromAscii("IsFolder");
         aArgument.Properties[3].Handle = -1;
         aArgument.Properties[4].Name
-            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument"));
+            = rtl::OUString::createFromAscii("IsDocument");
         aArgument.Properties[4].Handle = -1;
         aArg <<= aArgument;
     }
@@ -953,24 +953,24 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
     {
         aOpenArg.Mode = ucb::OpenMode::ALL;
         aOpenArg.Priority = 32768;
-//      if ( bFolder )
+//		if ( bFolder )
         {
             // Property values which shall be in the result set...
             uno::Sequence< beans::Property > aProps( 5 );
             beans::Property* pProps = aProps.getArray();
-            pProps[ 0 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+            pProps[ 0 ].Name   = rtl::OUString::createFromAscii( "Title" );
             pProps[ 0 ].Handle = -1; // Important!
-/**/        pProps[ 0 ].Type = getCppuType(static_cast< rtl::OUString * >(0));
+/**/		pProps[ 0 ].Type = getCppuType(static_cast< rtl::OUString * >(0));
                 // HACK for sorting...
-            pProps[ 1 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateCreated"));
+            pProps[ 1 ].Name   = rtl::OUString::createFromAscii( "DateCreated" );
             pProps[ 1 ].Handle = -1; // Important!
-            pProps[ 2 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size"));
+            pProps[ 2 ].Name   = rtl::OUString::createFromAscii( "Size" );
             pProps[ 2 ].Handle = -1; // Important!
-            pProps[ 3 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
+            pProps[ 3 ].Name   = rtl::OUString::createFromAscii( "IsFolder" );
             pProps[ 3 ].Handle = -1; // Important!
-/**/        pProps[ 3 ].Type = getCppuType(static_cast< sal_Bool * >(0));
+/**/		pProps[ 3 ].Type = getCppuType(static_cast< sal_Bool * >(0));
                 // HACK for sorting...
-            pProps[ 4 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument"));
+            pProps[ 4 ].Name   = rtl::OUString::createFromAscii( "IsDocument" );
             pProps[ 4 ].Handle = -1; // Important!
             aOpenArg.Properties = aProps;
 
@@ -987,13 +987,13 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
                 aOpenArg.SortingInfo[ 1 ].Ascending   = sal_True;
             }
         }
-//      else
+//		else
             aOpenArg.Sink
                 = static_cast< cppu::OWeakObject * >(new TestOutputStream);
         aArg <<= aOpenArg;
     }
 
-//  putenv("PROT_REMOTE_ACTIVATE=1"); // to log remote uno traffic
+//	putenv("PROT_REMOTE_ACTIVATE=1"); // to log remote uno traffic
 
     ULONG nTime = 0;
     if ( bTiming )
@@ -1022,9 +1022,9 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
                               m_rUCB.
                                   getServiceFactory()->
                                       createInstance(
-                                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                          rtl::OUString::createFromAscii(
                                               "com.sun.star.ucb.SortedDynamic"
-                                                  "ResultSetFactory"))),
+                                                  "ResultSetFactory")),
                               uno::UNO_QUERY);
                 uno::Reference< ucb::XDynamicResultSet > xSorted;
                 if (xSortedFactory.is())
@@ -1062,8 +1062,8 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
                     try
                     {
                         xProperties->
-                            setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                 "FetchSize")),
+                            setPropertyValue(rtl::OUString::createFromAscii(
+                                                 "FetchSize"),
                                              uno::makeAny(nFetchSize));
                         bSet = true;
                     }
@@ -1191,7 +1191,7 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
     if (xComponent.is())
         xComponent->dispose();
 
-//  putenv("PROT_REMOTE_ACTIVATE="); // to log remote uno traffic
+//	putenv("PROT_REMOTE_ACTIVATE="); // to log remote uno traffic
 
     if ( bTiming )
     {
@@ -1307,11 +1307,11 @@ void UcbContent::transfer( const rtl::OUString& rSourceURL, sal_Bool bMove  )
                             rSourceURL,
                             getURL(),
                             rtl::OUString(),
-                            //rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewTitle")),
+                            //rtl::OUString::createFromAscii( "NewTitle" ),
                             ucb::NameClash::ERROR );
 
-        ucb::Command aTransferCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                "globalTransfer" )),
+        ucb::Command aTransferCommand( rtl::OUString::createFromAscii(
+                                                "globalTransfer" ),
                                              -1,
                                              uno::makeAny( aArg ) );
 
@@ -1321,8 +1321,8 @@ void UcbContent::transfer( const rtl::OUString& rSourceURL, sal_Bool bMove  )
                 = uno::Reference< task::XInteractionHandler >(
                           m_rUCB.getServiceFactory()->
                               createInstance(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                      "com.sun.star.task.InteractionHandler"))),
+                                rtl::OUString::createFromAscii(
+                                      "com.sun.star.task.InteractionHandler")),
                         uno::UNO_QUERY);
         uno::Reference< ucb::XProgressHandler > xProgressHandler(
             new ProgressHandler(m_rUCB));
@@ -1347,9 +1347,9 @@ void UcbContent::transfer( const rtl::OUString& rSourceURL, sal_Bool bMove  )
     uno::Any aArg;
     aArg <<= ucb::TransferInfo(
             bMove, rSourceURL, rtl::OUString(), ucb::NameClash::ERROR );
-    executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")), aArg );
+    executeCommand( rtl::OUString::createFromAscii( "transfer" ), aArg );
 
-//  executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("flush")), Any() );
+//  executeCommand( rtl::OUString::createFromAscii( "flush" ), Any() );
 
 #endif
 }
@@ -1361,16 +1361,16 @@ void UcbContent::destroy()
 
     uno::Any aArg;
     aArg <<= sal_Bool( sal_True ); // delete physically, not only to trash.
-    executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), aArg );
+    executeCommand( rtl::OUString::createFromAscii( "delete" ), aArg );
 
-//  executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("flush")), Any() );
+//  executeCommand( rtl::OUString::createFromAscii( "flush" ), Any() );
 }
 
 //-------------------------------------------------------------------------
 uno::Sequence< ucb::CommandInfo > UcbContent::getCommands()
 {
     uno::Any aResult = executeCommand(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getCommandInfo")), uno::Any() );
+            rtl::OUString::createFromAscii( "getCommandInfo" ), uno::Any() );
 
     uno::Reference< ucb::XCommandInfo > xInfo;
     if ( aResult >>= xInfo )
@@ -1401,7 +1401,7 @@ uno::Sequence< ucb::CommandInfo > UcbContent::getCommands()
 uno::Sequence< beans::Property > UcbContent::getProperties()
 {
     uno::Any aResult = executeCommand(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertySetInfo")), uno::Any() );
+        rtl::OUString::createFromAscii( "getPropertySetInfo" ), uno::Any() );
 
     uno::Reference< beans::XPropertySetInfo > xInfo;
     if ( aResult >>= xInfo )
@@ -1433,16 +1433,16 @@ uno::Any UcbContent::getPropertyValue( const rtl::OUString& rName )
     uno::Sequence< beans::Property > aProps( 1 );
     beans::Property& rProp = aProps.getArray()[ 0 ];
 
-    rProp.Name       = rName;
+    rProp.Name	     = rName;
     rProp.Handle     = -1; /* unknown */
-//  rProp.Type       = ;
-//  rProp.Attributes = ;
+//	rProp.Type       = ;
+//	rProp.Attributes = ;
 
     uno::Any aArg;
     aArg <<= aProps;
 
     uno::Any aResult = executeCommand(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues")), aArg );
+        rtl::OUString::createFromAscii( "getPropertyValues" ), aArg );
 
     uno::Reference< sdbc::XRow > xValues;
     if ( aResult >>= xValues )
@@ -1482,18 +1482,18 @@ void UcbContent::setPropertyValue( const rtl::OUString& rName,
     uno::Sequence< beans::PropertyValue > aProps( 1 );
     beans::PropertyValue& rProp = aProps.getArray()[ 0 ];
 
-    rProp.Name       = rName;
+    rProp.Name	     = rName;
     rProp.Handle     = -1; /* unknown */
-    rProp.Value      = rValue;
-//  rProp.State      = ;
+    rProp.Value	     = rValue;
+//	rProp.State      = ;
 
     uno::Any aArg;
     aArg <<= aProps;
 
-    executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues")),
+    executeCommand( rtl::OUString::createFromAscii( "setPropertyValues" ),
                     aArg );
 
-//  executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("flush")), Any() );
+//  executeCommand( rtl::OUString::createFromAscii( "flush" ), Any() );
 }
 
 //----------------------------------------------------------------------------
@@ -1738,41 +1738,41 @@ void SAL_CALL UcbContent::propertiesChange(
  *
  *=======================================================================*/
 
-#define MYWIN_ITEMID_CLEAR          1
-#define MYWIN_ITEMID_CREATE         2
-#define MYWIN_ITEMID_RELEASE        3
-#define MYWIN_ITEMID_COMMANDS       4
-#define MYWIN_ITEMID_PROPS          5
-#define MYWIN_ITEMID_ADD_PROP       6
-#define MYWIN_ITEMID_REMOVE_PROP    7
-#define MYWIN_ITEMID_GET_PROP       8
-#define MYWIN_ITEMID_SET_PROP       9
-#define MYWIN_ITEMID_OPEN           10
-#define MYWIN_ITEMID_OPEN_ALL       11
-#define MYWIN_ITEMID_UPDATE         12
-#define MYWIN_ITEMID_SYNCHRONIZE    13
-#define MYWIN_ITEMID_COPY           14
-#define MYWIN_ITEMID_MOVE           15
-#define MYWIN_ITEMID_DELETE         16
-#define MYWIN_ITEMID_SEARCH         17
-#define MYWIN_ITEMID_TIMING         18
-#define MYWIN_ITEMID_SORT           19
-#define MYWIN_ITEMID_FETCHSIZE      20
-#define MYWIN_ITEMID_SYS2URI        21
-#define MYWIN_ITEMID_URI2SYS        22
-#define MYWIN_ITEMID_OFFLINE        23
-#define MYWIN_ITEMID_ONLINE         24
-#define MYWIN_ITEMID_REORGANIZE     25
+#define MYWIN_ITEMID_CLEAR    		1
+#define MYWIN_ITEMID_CREATE   		2
+#define MYWIN_ITEMID_RELEASE   		3
+#define MYWIN_ITEMID_COMMANDS 		4
+#define MYWIN_ITEMID_PROPS 			5
+#define MYWIN_ITEMID_ADD_PROP		6
+#define MYWIN_ITEMID_REMOVE_PROP	7
+#define MYWIN_ITEMID_GET_PROP		8
+#define MYWIN_ITEMID_SET_PROP		9
+#define MYWIN_ITEMID_OPEN			10
+#define MYWIN_ITEMID_OPEN_ALL		11
+#define MYWIN_ITEMID_UPDATE		   	12
+#define MYWIN_ITEMID_SYNCHRONIZE 	13
+#define MYWIN_ITEMID_COPY 			14
+#define MYWIN_ITEMID_MOVE 			15
+#define MYWIN_ITEMID_DELETE 		16
+#define MYWIN_ITEMID_SEARCH			17
+#define MYWIN_ITEMID_TIMING			18
+#define MYWIN_ITEMID_SORT			19
+#define MYWIN_ITEMID_FETCHSIZE		20
+#define MYWIN_ITEMID_SYS2URI		21
+#define MYWIN_ITEMID_URI2SYS		22
+#define MYWIN_ITEMID_OFFLINE		23
+#define MYWIN_ITEMID_ONLINE			24
+#define MYWIN_ITEMID_REORGANIZE		25
 
 //-------------------------------------------------------------------------
 class MyWin : public WorkWindow
 {
 private:
-    ToolBox*            m_pTool;
-    Edit*               m_pCmdEdit;
-    MyOutWindow*        m_pOutEdit;
+    ToolBox*			m_pTool;
+    Edit*				m_pCmdEdit;
+    MyOutWindow*		m_pOutEdit;
 
-    Ucb         m_aUCB;
+    Ucb 		m_aUCB;
     UcbContent* m_pContent;
 
     sal_Int32 m_nFetchSize;
@@ -2203,7 +2203,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             if ( m_pContent )
                 m_pContent->addStringProperty(
                         aCmdLine,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultValue")) );
+                        rtl::OUString::createFromAscii( "DefaultValue" ) );
             else
                 print( "No content!" );
 
@@ -2211,7 +2211,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 
         case MYWIN_ITEMID_REMOVE_PROP:
             if ( m_pContent )
-                m_pContent->removeProperty( aCmdLine );
+                m_pContent->removeProperty(	aCmdLine );
             else
                 print( "No content!" );
 
@@ -2229,7 +2229,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             if ( m_pContent )
                 m_pContent->setStringPropertyValue(
                                 aCmdLine,
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewValue")) );
+                                rtl::OUString::createFromAscii( "NewValue" ) );
             else
                 print( "No content!" );
 
@@ -2237,7 +2237,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 
         case MYWIN_ITEMID_OPEN:
             if ( m_pContent )
-                m_pContent->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open")),
+                m_pContent->open(rtl::OUString::createFromAscii("open"),
                                  aCmdLine, !m_bTiming, m_bTiming, m_bSort, 0,
                                  0, m_nFetchSize);
             else
@@ -2256,7 +2256,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 
         case MYWIN_ITEMID_UPDATE:
             if ( m_pContent )
-                m_pContent->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("update")),
+                m_pContent->open(rtl::OUString::createFromAscii("update"),
                                  aCmdLine, !m_bTiming, m_bTiming, m_bSort, 0,
                                  0, m_nFetchSize);
             else
@@ -2266,7 +2266,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 
         case MYWIN_ITEMID_SYNCHRONIZE:
             if ( m_pContent )
-                m_pContent->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("synchronize")),
+                m_pContent->open(rtl::OUString::createFromAscii("synchronize"),
                                  aCmdLine, !m_bTiming, m_bTiming, m_bSort, 0,
                                  0, m_nFetchSize);
             else
@@ -2276,7 +2276,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 
         case MYWIN_ITEMID_SEARCH:
             if ( m_pContent )
-                m_pContent->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("search")),
+                m_pContent->open(rtl::OUString::createFromAscii("search"),
                                  aCmdLine, !m_bTiming, m_bTiming, m_bSort, 0,
                                  0, m_nFetchSize);
             else
@@ -2287,7 +2287,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
         case MYWIN_ITEMID_REORGANIZE:
             if ( m_pContent )
                 m_pContent->executeCommand (
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("reorganizeData")),
+                    rtl::OUString::createFromAscii ("reorganizeData"),
                     uno::Any());
             else
                 print( "No content!" );
@@ -2402,7 +2402,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             uno::Any aArgument;
             if (nItemId == MYWIN_ITEMID_OFFLINE)
             {
-                aName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("goOffline"));
+                aName = rtl::OUString::createFromAscii("goOffline");
 
                 uno::Sequence<
                     uno::Reference< ucb::XContentIdentifier > >
@@ -2413,7 +2413,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
                 aArgument <<= aIdentifiers;
             }
             else
-                aName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("goOnline"));
+                aName = rtl::OUString::createFromAscii("goOnline");
 
             UcbCommandProcessor(m_aUCB, xProcessor, m_pOutEdit).
                 executeCommand(aName, aArgument);
@@ -2449,9 +2449,9 @@ void MyApp::Main()
     // Read command line params.
     //////////////////////////////////////////////////////////////////////
 
-    rtl::OUString aConfigurationKey1(RTL_CONSTASCII_USTRINGPARAM(
+    rtl::OUString aConfigurationKey1(rtl::OUString::createFromAscii(
                                          UCB_CONFIGURATION_KEY1_LOCAL));
-    rtl::OUString aConfigurationKey2(RTL_CONSTASCII_USTRINGPARAM(
+    rtl::OUString aConfigurationKey2(rtl::OUString::createFromAscii(
                                          UCB_CONFIGURATION_KEY2_OFFICE));
 
     USHORT nParams = Application::GetCommandLineParamCount();
@@ -2492,7 +2492,7 @@ void MyApp::Main()
             cppu::defaultBootstrap_InitialComponentContext() );
         if ( !xCtx.is() )
         {
-            OSL_FAIL( "Error creating initial component context!" );
+            DBG_ERROR( "Error creating initial component context!" );
             return;
         }
 
@@ -2501,13 +2501,13 @@ void MyApp::Main()
 
         if ( !xFac.is() )
         {
-            OSL_FAIL( "No service manager!" );
+            DBG_ERROR( "No service manager!" );
             return;
         }
     }
     catch ( uno::Exception )
     {
-        OSL_FAIL( "Exception during creation of initial component context!" );
+        DBG_ERROR( "Exception during creation of initial component context!" );
         return;
     }
 

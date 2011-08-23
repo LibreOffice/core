@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@ namespace rptxml
     class OXMLGroup : public SvXMLImportContext
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups >   m_xGroups;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >    m_xGroup;
-
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups >	m_xGroups;
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >	m_xGroup;
+    
         ORptFilter& GetOwnImport();
 
         OXMLGroup(const OXMLGroup&);
-        OXMLGroup operator =(const OXMLGroup&);
+        void operator =(const OXMLGroup&);
     public:
 
         OXMLGroup( ORptFilter& rImport

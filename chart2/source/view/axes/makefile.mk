@@ -37,17 +37,17 @@ ENABLE_EXCEPTIONS=	TRUE
 .INCLUDE: settings.mk
 .INCLUDE: $(PRJ)$/chartview.pmk
 
+#.IF "$(GUI)" == "WNT"
+#CFLAGS+=-GR
+#.ENDIF
+
 # --- export library -------------------------------------------------
 
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib
 SLOFILES = \
     $(SLO)$/VAxisOrGridBase.obj \
     $(SLO)$/VAxisBase.obj \
-    $(SLO)$/DateHelper.obj \
-    $(SLO)$/DateScaling.obj \
-    $(SLO)$/Tickmarks.obj \
-    $(SLO)$/Tickmarks_Equidistant.obj \
-    $(SLO)$/Tickmarks_Dates.obj \
+    $(SLO)$/TickmarkHelper.obj \
     $(SLO)$/MinimumAndMaximumSupplier.obj \
     $(SLO)$/ScaleAutomatism.obj \
     $(SLO)$/VAxisProperties.obj \

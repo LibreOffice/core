@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@ class SalDisplay;
 class SalBitmap;
 class Bitmap;
 
-sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,
-                          sal_uInt16 nIcon, sal_uInt16 iconSize,
+BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,
+                          USHORT nIcon, USHORT iconSize, 
                           Pixmap& icon_pixmap, Pixmap& icon_mask );
 #endif
 

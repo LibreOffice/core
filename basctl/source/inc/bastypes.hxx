@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,8 @@
 
 #include <svheader.hxx>
 
+#include <iderid.hxx>
+
 #include "scriptdocument.hxx"
 
 class ModulWindow;
@@ -51,11 +53,10 @@ class SfxItemSet;
 #include <svtools/tabbar.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 
-#include <boost/unordered_map.hpp>
-#include <vector>
+#include <hash_map>
 
-#define LINE_SEP_CR     0x0D
-#define LINE_SEP        0x0A
+#define LINE_SEP_CR		0x0D
+#define LINE_SEP		0x0A
 
 // Implementation: baside2b.cxx
 sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex );
@@ -70,47 +71,49 @@ sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex );
 
 struct BasicStatus
 {
-    sal_Bool    bIsRunning      : 1;
-    sal_Bool    bError          : 1;
-    sal_Bool    bIsInReschedule : 1;
-    sal_uInt16  nBasicFlags;
+//	BOOL	bCompiled		: 1;
+    BOOL	bIsRunning		: 1;
+    BOOL	bError			: 1;
+    BOOL	bIsInReschedule	: 1;
+    USHORT	nBasicFlags;
 
-    BasicStatus()   {
-            bIsRunning = sal_False; bError = sal_False;
-            nBasicFlags = 0; bIsInReschedule = sal_False; }
+    BasicStatus()	{
+            bIsRunning = FALSE; bError = FALSE;
+            nBasicFlags = 0; bIsInReschedule = FALSE; }
 };
 
 struct BreakPoint
 {
-    bool    bEnabled;
-    bool    bTemp;
-    size_t  nLine;
-    size_t  nStopAfter;
-    size_t  nHitCount;
+    BOOL	bEnabled;
+    BOOL	bTemp;
+    ULONG 	nLine;
+    ULONG	nStopAfter;
+    ULONG   nHitCount;
 
-    BreakPoint( size_t nL ) { nLine = nL; nStopAfter = 0; nHitCount = 0; bEnabled = true; bTemp = false; }
+    BreakPoint( ULONG nL )	{ nLine = nL; nStopAfter = 0; nHitCount = 0; bEnabled = TRUE; bTemp = FALSE; }
+
 };
 
 class BasicDockingWindow : public DockingWindow
 {
-    Rectangle       aFloatingPosAndSize;
+    Rectangle		aFloatingPosAndSize;
 
 protected:
-    virtual sal_Bool    Docking( const Point& rPos, Rectangle& rRect );
-    virtual void    EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
+    virtual BOOL 	Docking( const Point& rPos, Rectangle& rRect );
+    virtual void	EndDocking( const Rectangle& rRect, BOOL bFloatMode );
     virtual void    ToggleFloatingMode();
-    virtual sal_Bool    PrepareToggleFloatingMode();
-    virtual void    StartDocking();
+    virtual BOOL	PrepareToggleFloatingMode();
+    virtual void	StartDocking();
 
 public:
     BasicDockingWindow( Window* pParent );
 };
 
-class BreakPointList
+DECLARE_LIST( BreakPL, BreakPoint* )
+class BreakPointList : public BreakPL
 {
 private:
     void operator =(BreakPointList); // not implemented
-    ::std::vector< BreakPoint* > maBreakPoints;
 
 public:
     BreakPointList();
@@ -123,26 +126,19 @@ public:
 
     void transfer(BreakPointList & rList);
 
-    void        InsertSorted( BreakPoint* pBrk );
-    BreakPoint* FindBreakPoint( size_t nLine );
-    void        AdjustBreakPoints( size_t nLine, bool bInserted );
-    void        SetBreakPointsInBasic( SbModule* pModule );
+    void		InsertSorted( BreakPoint* pBrk );
+    BreakPoint*	FindBreakPoint( ULONG nLine );
+    void		AdjustBreakPoints( ULONG nLine, BOOL bInserted );
+    void		SetBreakPointsInBasic( SbModule* pModule );
     void        ResetHitCount();
-
-    size_t              size() const;
-    BreakPoint*         at( size_t i );
-    const BreakPoint*   at( size_t i ) const;
-    BreakPoint*         remove( BreakPoint* ptr );
-    void                push_back( BreakPoint* item );
-    void                clear();
 };
 
 // helper class for sorting TabBar
 class TabBarSortHelper
 {
 public:
-    sal_uInt16          nPageId;
-    String          aPageText;
+    USHORT			nPageId;
+    String			aPageText;
 
     bool operator<(const TabBarSortHelper& rComp) const { return (aPageText.CompareIgnoreCaseToAscii( rComp.aPageText ) == COMPARE_LESS); }
 };
@@ -150,112 +146,107 @@ public:
 class BasicIDETabBar : public TabBar
 {
 protected:
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	Command( const CommandEvent& rCEvt );
 
-    virtual long    AllowRenaming();
-    virtual void    EndRenaming();
+    virtual long	AllowRenaming();
+    virtual void	EndRenaming();
 
 public:
                     BasicIDETabBar( Window* pParent );
 
-    void            Sort();
+    void			Sort();
 };
 
-#define BASWIN_OK               0x00
-#define BASWIN_RUNNINGBASIC     0x01
-#define BASWIN_TOBEKILLED       0x02
-#define BASWIN_SUSPENDED        0x04
-#define BASWIN_INRESCHEDULE     0x08
+#define BASWIN_OK				0x00
+#define BASWIN_RUNNINGBASIC		0x01
+#define BASWIN_TOBEKILLED		0x02
+#define BASWIN_SUSPENDED		0x04
+#define BASWIN_INRESCHEDULE		0x08
 
 class Printer;
+class SfxUndoManager;
 class BasicEntryDescriptor;
-
-namespace svl
-{
-    class IUndoManager;
-}
 
 class IDEBaseWindow : public Window
 {
 private:
-    ScrollBar*      pShellHScrollBar;
-    ScrollBar*      pShellVScrollBar;
+    ScrollBar*		pShellHScrollBar;
+    ScrollBar*		pShellVScrollBar;
 
     DECL_LINK( ScrollHdl, ScrollBar * );
-    sal_uInt8           nStatus;
+    BYTE			nStatus;
 
     ScriptDocument      m_aDocument;
-    String              m_aLibName;
-    String              m_aName;
+    String			    m_aLibName;
+    String			    m_aName;
 
 protected:
-    virtual void    DoScroll( ScrollBar* pCurScrollBar );
+    virtual void	DoScroll( ScrollBar* pCurScrollBar );
 
 public:
                     TYPEINFO();
                     IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, String aLibName, String aName );
-    virtual         ~IDEBaseWindow();
+    virtual		 	~IDEBaseWindow();
 
-    void            Init();
-    virtual void    DoInit();
-    virtual void    Deactivating();
-    void            GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll );
+    void			Init();
+    virtual void	DoInit();
+    virtual void	Deactivating();
+    void			GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll );
 
-    ScrollBar*      GetHScrollBar() const { return pShellHScrollBar; }
-    ScrollBar*      GetVScrollBar() const { return pShellVScrollBar; }
+    ScrollBar*		GetHScrollBar()	const { return pShellHScrollBar; }
+    ScrollBar*		GetVScrollBar()	const { return pShellVScrollBar; }
 
-    virtual void    ExecuteCommand( SfxRequest& rReq );
-    virtual void    GetState( SfxItemSet& );
+    virtual void	ExecuteCommand( SfxRequest& rReq );
+    virtual void	GetState( SfxItemSet& );
     virtual long    Notify( NotifyEvent& rNEvt );
 
-    virtual void    StoreData();
-    virtual void    UpdateData();
-    virtual sal_Bool    CanClose();
-
+    virtual void	StoreData();
+    virtual void	UpdateData();
+    virtual BOOL 	CanClose();
+    
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter ) = 0;
     // print page
     virtual void printPage( sal_Int32 nPage, Printer* pPrinter ) = 0;
 
-    virtual String  GetTitle();
-    String          CreateQualifiedName();
+    virtual String	GetTitle();
+    String 			CreateQualifiedName();
     virtual BasicEntryDescriptor CreateEntryDescriptor() = 0;
 
-    virtual sal_Bool    IsModified();
-    virtual sal_Bool    IsPasteAllowed();
+    virtual BOOL	IsModified();
+    virtual BOOL    IsPasteAllowed();
 
-    virtual sal_Bool    AllowUndo();
+    virtual BOOL 	AllowUndo();
 
-    virtual void    SetReadOnly( sal_Bool bReadOnly );
-    virtual sal_Bool    IsReadOnly();
+    virtual void	SetReadOnly( BOOL bReadOnly );
+    virtual BOOL    IsReadOnly();
 
-    sal_uInt8           GetStatus()             { return nStatus; }
-    void            SetStatus( sal_uInt8 n )        { nStatus = n; }
-    void            AddStatus( sal_uInt8 n )        { nStatus = nStatus | n; }
-    void            ClearStatus( sal_uInt8 n )  { nStatus = nStatus & ~n; }
+    BYTE			GetStatus()				{ return nStatus; }
+    void			SetStatus( BYTE n )		{ nStatus = n; }
+    void			AddStatus( BYTE n )		{ nStatus = nStatus | n; }
+    void			ClearStatus( BYTE n )	{ nStatus = nStatus & ~n; }
 
-    virtual Window* GetLayoutWindow();
+    virtual Window*	GetLayoutWindow();
 
-    virtual ::svl::IUndoManager*
-                    GetUndoManager();
+    virtual SfxUndoManager*	GetUndoManager();
 
-    virtual sal_uInt16  GetSearchOptions();
+    virtual USHORT	GetSearchOptions();
 
-    virtual void    BasicStarted();
-    virtual void    BasicStopped();
+    virtual void	BasicStarted();
+    virtual void	BasicStopped();
 
-    sal_Bool            IsSuspended() const
-                        { return ( nStatus & BASWIN_SUSPENDED ) ? sal_True : sal_False; }
+    BOOL			IsSuspended() const
+                        { return ( nStatus & BASWIN_SUSPENDED ) ? TRUE : FALSE; }
 
     const ScriptDocument&
                     GetDocument() const { return m_aDocument; }
-    void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
+    void			SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
     bool            IsDocument( const ScriptDocument& rDocument ) const { return rDocument == m_aDocument; }
-    const String&   GetLibName() const { return m_aLibName; }
-    void            SetLibName( const String& aLibName ) { m_aLibName = aLibName; }
-    const String&   GetName() const { return m_aName; }
-    void            SetName( const String& aName ) { m_aName = aName; }
+    const String&	GetLibName() const { return m_aLibName; }
+    void			SetLibName( const String& aLibName ) { m_aLibName = aLibName; }
+    const String&	GetName() const { return m_aName; }
+    void			SetName( const String& aName ) { m_aName = aName; }
 };
 
 class LibInfoKey
@@ -284,10 +275,10 @@ private:
     ScriptDocument      m_aDocument;
     String              m_aLibName;
     String              m_aCurrentName;
-    sal_uInt16              m_nCurrentType;
+    USHORT              m_nCurrentType; 
 
 public:
-    LibInfoItem( const ScriptDocument& rDocument, const String& rLibName, const String& rCurrentName, sal_uInt16 nCurrentType );
+    LibInfoItem( const ScriptDocument& rDocument, const String& rLibName, const String& rCurrentName, USHORT nCurrentType );
     ~LibInfoItem();
 
     LibInfoItem( const LibInfoItem& rItem );
@@ -297,7 +288,7 @@ public:
                     GetDocument() const { return m_aDocument; }
     const String&   GetLibName() const { return m_aLibName; }
     const String&   GetCurrentName() const { return m_aCurrentName; }
-    sal_uInt16          GetCurrentType() const { return m_nCurrentType; }
+    USHORT          GetCurrentType() const { return m_nCurrentType; }
 };
 
 class LibInfos
@@ -314,7 +305,7 @@ private:
         }
     };
 
-    typedef ::boost::unordered_map< LibInfoKey, LibInfoItem*, LibInfoKeyHash, ::std::equal_to< LibInfoKey > > LibInfoMap;
+    typedef ::std::hash_map< LibInfoKey, LibInfoItem*, LibInfoKeyHash, ::std::equal_to< LibInfoKey > > LibInfoMap;
     LibInfoMap  m_aLibInfoMap;
 
 public:
@@ -327,16 +318,16 @@ public:
     LibInfoItem*    GetInfo( const LibInfoKey& rKey );
 };
 
-void            CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sal_Bool bEraseTrailingEmptyLines = sal_False );
-String          CreateMgrAndLibStr( const String& rMgrName, const String& rLibName );
-sal_uLong           CalcLineCount( SvStream& rStream );
+void            CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BOOL bEraseTrailingEmptyLines = FALSE );
+String			CreateMgrAndLibStr( const String& rMgrName, const String& rLibName );
+ULONG			CalcLineCount( SvStream& rStream );
 
-sal_Bool            QueryReplaceMacro( const String& rName, Window* pParent = 0 );
-sal_Bool            QueryDelMacro( const String& rName, Window* pParent = 0 );
-sal_Bool            QueryDelDialog( const String& rName, Window* pParent = 0 );
-sal_Bool            QueryDelModule( const String& rName, Window* pParent = 0 );
-sal_Bool            QueryDelLib( const String& rName, sal_Bool bRef = sal_False, Window* pParent = 0 );
-sal_Bool            QueryPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer, const String& rLibName, String& rPassword, sal_Bool bRepeat = sal_False, sal_Bool bNewTitle = sal_False );
+BOOL            QueryReplaceMacro( const String& rName, Window* pParent = 0 );
+BOOL			QueryDelMacro( const String& rName, Window* pParent = 0 );
+BOOL			QueryDelDialog( const String& rName, Window* pParent = 0 );
+BOOL			QueryDelModule( const String& rName, Window* pParent = 0 );
+BOOL			QueryDelLib( const String& rName, BOOL bRef = FALSE, Window* pParent = 0 );
+BOOL            QueryPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer, const String& rLibName, String& rPassword, BOOL bRepeat = FALSE, BOOL bNewTitle = FALSE );
 
 class ModuleInfoHelper
 {
@@ -347,6 +338,6 @@ public:
     static void getObjectName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const String& rModName, String& rObjName );
     static sal_Int32 getModuleType(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const String& rModName );
 };
-#endif  // _BASTYPES_HXX
+#endif	// _BASTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

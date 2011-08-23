@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-Mar 2005            Created
+Mar 2005			Created
  ************************************************************************/
 
 #ifndef _LWPFRAMELAYOUT_HXX
@@ -69,7 +69,7 @@ Mar 2005            Created
 #include "lwpstory.hxx"
 #include "lwpmarker.hxx"
 /**
- * @brief       For register frame style and parse frame
+ * @brief		For register frame style and parse frame
  *
  */
 
@@ -105,7 +105,7 @@ private:
 };
 
 /**
- * @brief       Frame link information
+ * @brief		Frame link information
  *
  */
 class LwpFrameLink
@@ -122,7 +122,7 @@ private:
 };
 
 /**
- * @brief       VO_FRAMELAYOUT object
+ * @brief		VO_FRAMELAYOUT object
  *
  */
 class LwpFrameLayout: public LwpPlacableLayout
@@ -150,7 +150,7 @@ private:
 };
 
 /**
- * @brief       VO_GROUPLAYOUT object , information for frame group layout
+ * @brief		VO_GROUPLAYOUT object , information for frame group layout
  *
  */
 class LwpGroupLayout: public LwpPlacableLayout
@@ -170,7 +170,7 @@ private:
 };
 
 /**
- * @brief       VO_GROUPFRAME object , information for frame group contents
+ * @brief		VO_GROUPFRAME object , information for frame group contents
  *
  */
 class LwpGroupFrame: public LwpContent
@@ -190,7 +190,7 @@ class LwpDropcapLayout : public LwpFrameLayout
 {
 public:
     LwpDropcapLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDropcapLayout(){}
+    virtual ~LwpDropcapLayout(){};
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_DROPCAP_LAYOUT;}
     virtual void Parse(IXFStream* pOutputStream);
     virtual void XFConvert(XFContentContainer* pCont);
@@ -211,7 +211,7 @@ class LwpRubyLayout : public LwpFrameLayout
 {
 public:
     LwpRubyLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpRubyLayout(){}
+    virtual ~LwpRubyLayout(){};
     LwpRubyMarker* GetMarker();
     void ConvertContentText();
     LwpStory* GetContentStory();

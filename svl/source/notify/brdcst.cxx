@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,6 @@
 #include "precompiled_svl.hxx"
 
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
 
 #include <svl/hint.hxx>
 #include <svl/smplhint.hxx>
@@ -59,7 +58,7 @@ void SfxBroadcaster::Broadcast( const SfxHint &rHint )
     if ( aListeners.Count() /*! || aGlobListeners.Count() */ )
     {
         // notify all registered listeners exactly once
-        for ( sal_uInt16 n = 0; n < aListeners.Count(); ++n )
+        for ( USHORT n = 0; n < aListeners.Count(); ++n )
         {
             SfxListener* pListener = aListeners[n];
             if ( pListener )
@@ -98,7 +97,7 @@ SfxBroadcaster::~SfxBroadcaster()
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     // remove all still registered listeners
-    for ( sal_uInt16 nPos = 0; nPos < aListeners.Count(); ++nPos )
+    for ( USHORT nPos = 0; nPos < aListeners.Count(); ++nPos )
     {
         SfxListener *pListener = aListeners[nPos];
         if ( pListener )
@@ -124,7 +123,7 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 {
     DBG_CTOR(SfxBroadcaster, 0);
 
-    for ( sal_uInt16 n = 0; n < rBC.aListeners.Count(); ++n )
+    for ( USHORT n = 0; n < rBC.aListeners.Count(); ++n )
     {
         SfxListener *pListener = rBC.aListeners[n];
         if ( pListener )
@@ -136,25 +135,25 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 
 // add a new SfxListener to the list
 
-sal_Bool SfxBroadcaster::AddListener( SfxListener& rListener )
+BOOL SfxBroadcaster::AddListener( SfxListener& rListener )
 {
     DBG_CHKTHIS(SfxBroadcaster, 0);
     const SfxListener *pListener = &rListener;
     const SfxListener *pNull = 0;
-    sal_uInt16 nFreePos = aListeners.GetPos( pNull );
+    USHORT nFreePos = aListeners.GetPos( pNull );
     if ( nFreePos < aListeners.Count() )
         aListeners.GetData()[nFreePos] = pListener;
     else if ( aListeners.Count() < (USHRT_MAX-1) )
         aListeners.Insert( pListener, aListeners.Count() );
     else
     {
-        OSL_FAIL( "array overflow" );
-        return sal_False;
+        DBG_ERROR( "array overflow" );
+        return FALSE;
     }
 
     DBG_ASSERT( USHRT_MAX != aListeners.GetPos(pListener),
                 "AddListener failed" );
-    return sal_True;
+    return TRUE;
 }
 
 //--------------------------------------------------------------------
@@ -172,8 +171,8 @@ void SfxBroadcaster::ListenersGone()
 
 void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    const sal_uInt16 nCount = aListeners.Count();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    const USHORT nCount = aListeners.Count();
+    for ( USHORT i = 0; i < nCount; ++i )
     {
         SfxListener *pListener = aListeners[i];
         if ( pListener )
@@ -189,7 +188,7 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 {
     {DBG_CHKTHIS(SfxBroadcaster, 0);}
     const SfxListener *pListener = &rListener;
-    sal_uInt16 nPos = aListeners.GetPos(pListener);
+    USHORT nPos = aListeners.GetPos(pListener);
     DBG_ASSERT( nPos != USHRT_MAX, "RemoveListener: Listener unknown" );
     aListeners.GetData()[nPos] = 0;
     if ( !HasListeners() )
@@ -198,12 +197,12 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxBroadcaster::HasListeners() const
+BOOL SfxBroadcaster::HasListeners() const
 {
-    for ( sal_uInt16 n = 0; n < aListeners.Count(); ++n )
+    for ( USHORT n = 0; n < aListeners.Count(); ++n )
         if ( aListeners.GetObject(n) != 0 )
-            return sal_True;
-    return sal_False;
+            return TRUE;
+    return FALSE;
 }
 
 //--------------------------------------------------------------------

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 namespace fileaccess {
 
 class ReconnectingFile
-{
+{     
     ::osl::File     m_aFile;
 
     sal_uInt32      m_nFlags;
@@ -43,7 +43,7 @@ class ReconnectingFile
     sal_Bool        m_bDisconnect;
 
     ReconnectingFile( ReconnectingFile& );
-
+    
     ReconnectingFile& operator=( ReconnectingFile& );
 
 public:
@@ -83,6 +83,6 @@ public:
 };
 
 } // namespace fileaccess
-#endif  // _FILREC_HXX_
+#endif	// _FILREC_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

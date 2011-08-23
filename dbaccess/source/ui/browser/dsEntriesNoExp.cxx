@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include "browserids.hxx"
 #include "listviewitems.hxx"
 #include "imageprovider.hxx"
-#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include "dbtreeview.hxx"
 #include "dbtreelistbox.hxx"
 #include "dbu_brw.hrc"
@@ -48,9 +48,9 @@ namespace dbaui
 {
 // .........................................................................
 // -----------------------------------------------------------------------------
-SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry* _pEntry ) const
+SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry* _pEntry ) const 
 {
-    OSL_ENSURE(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
+    DBG_ASSERT(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
     switch (getEntryType(_pEntry))
     {
         case etTableContainer:
@@ -75,10 +75,10 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry*
     if (!_pEntry)
         return etUnknown;
 
-    SvLBoxEntry* pRootEntry     = m_pTreeView->getListBox().GetRootLevelParent(_pEntry);
-    SvLBoxEntry* pEntryParent   = m_pTreeView->getListBox().GetParent(_pEntry);
-    SvLBoxEntry* pTables        = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_TABLES);
-    SvLBoxEntry* pQueries       = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_QUERIES);
+    SvLBoxEntry* pRootEntry 	= m_pTreeView->getListBox().GetRootLevelParent(_pEntry);
+    SvLBoxEntry* pEntryParent	= m_pTreeView->getListBox().GetParent(_pEntry);
+    SvLBoxEntry* pTables		= m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_TABLES);
+    SvLBoxEntry* pQueries		= m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_QUERIES);
 
 #ifdef DBG_UTIL
     String sTest;
@@ -125,7 +125,7 @@ void SbaTableQueryBrowser::select(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
         m_pTreeModel->InvalidateEntry(_pEntry);
     }
     else {
-        OSL_FAIL("SbaTableQueryBrowser::select: invalid entry!");
+        DBG_ERROR("SbaTableQueryBrowser::select: invalid entry!");
     }
 }
 
@@ -145,7 +145,7 @@ sal_Bool SbaTableQueryBrowser::isSelected(SvLBoxEntry* _pEntry) const
     if (pTextItem)
         return static_cast<OBoldListboxString*>(pTextItem)->isEmphasized();
     else {
-        OSL_FAIL("SbaTableQueryBrowser::isSelected: invalid entry!");
+        DBG_ERROR("SbaTableQueryBrowser::isSelected: invalid entry!");
     }
     return sal_False;
 }
@@ -157,7 +157,7 @@ void SbaTableQueryBrowser::SelectionChanged()
         InvalidateFeature(ID_BROWSER_INSERTCOLUMNS);
         InvalidateFeature(ID_BROWSER_INSERTCONTENT);
         InvalidateFeature(ID_BROWSER_FORMLETTER);
-    }
+    } // if ( !m_bShowMenu )
     InvalidateFeature(ID_BROWSER_COPY);
     InvalidateFeature(ID_BROWSER_CUT);
 }
@@ -200,7 +200,7 @@ sal_Int32 SbaTableQueryBrowser::getDatabaseObjectType( EntryType _eType )
     default:
         break;
     }
-    OSL_FAIL( "SbaTableQueryBrowser::getDatabaseObjectType: folder types and 'Unknown' not allowed here!" );
+    OSL_ENSURE( false, "SbaTableQueryBrowser::getDatabaseObjectType: folder types and 'Unknown' not allowed here!" );
     return DatabaseObject::TABLE;
 }
 
@@ -224,27 +224,31 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
             ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( pEntryLoop ) );
 
             // the images for this entry
-            Image aImage;
+            Image aImage, aImageHC;
             if ( pData->eType == etDatasource )
-                aImage = pImageProvider->getDatabaseImage();
+            {
+                aImage = pImageProvider->getDatabaseImage( false );
+                aImageHC = pImageProvider->getDatabaseImage( true );
+            }
             else
             {
                 bool bIsFolder = !isObject( pData->eType );
                 if ( bIsFolder )
                 {
                     sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                    aImage = pImageProvider->getFolderImage( nObjectType );
+                    aImage = pImageProvider->getFolderImage( nObjectType, false );
+                    aImageHC = pImageProvider->getFolderImage( nObjectType, true );
                 }
                 else
                 {
                     sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                    pImageProvider->getImages( GetEntryText( pEntryLoop ), nObjectType, aImage );
+                    pImageProvider->getImages( GetEntryText( pEntryLoop ), nObjectType, aImage, aImageHC );
                 }
             }
 
             // find the proper item, and set its icons
-            sal_uInt16 nCount = pEntryLoop->ItemCount();
-            for (sal_uInt16 i=0;i<nCount;++i)
+            USHORT nCount = pEntryLoop->ItemCount();
+            for (USHORT i=0;i<nCount;++i)
             {
                 SvLBoxItem* pItem = pEntryLoop->GetItem(i);
                 if ( !pItem || ( pItem->IsA() != SV_ITEM_ID_LBOXCONTEXTBMP ) )
@@ -252,8 +256,10 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
 
                 SvLBoxContextBmp* pContextBitmapItem = static_cast< SvLBoxContextBmp* >( pItem );
 
-                pContextBitmapItem->SetBitmap1( aImage );
-                pContextBitmapItem->SetBitmap2( aImage );
+                pContextBitmapItem->SetBitmap1( aImage, BMP_COLOR_NORMAL );
+                pContextBitmapItem->SetBitmap2( aImage, BMP_COLOR_NORMAL );
+                pContextBitmapItem->SetBitmap1( aImageHC, BMP_COLOR_HIGHCONTRAST );
+                pContextBitmapItem->SetBitmap2( aImageHC, BMP_COLOR_HIGHCONTRAST );
                 break;
             }
 
@@ -263,7 +269,7 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
 }
 // -----------------------------------------------------------------------------
 // .........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 // .........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ VCLXAccessibleComboBox::~VCLXAccessibleComboBox (void)
 bool VCLXAccessibleComboBox::IsValid (void) const
 {
     return static_cast<ComboBox*>(GetWindow()) != NULL;
-
+ 
 }
 
 
@@ -76,22 +76,23 @@ void VCLXAccessibleComboBox::ProcessWindowEvent (const VclWindowEvent& rVclWindo
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString VCLXAccessibleComboBox::getImplementationName (void)
+::rtl::OUString VCLXAccessibleComboBox::getImplementationName (void) 
     throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleComboBox" ));
+    return ::rtl::OUString::createFromAscii ("com.sun.star.comp.toolkit.AccessibleComboBox");
 }
 
 
 
 
-Sequence< ::rtl::OUString > VCLXAccessibleComboBox::getSupportedServiceNames (void)
+Sequence< ::rtl::OUString > VCLXAccessibleComboBox::getSupportedServiceNames (void) 
     throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleComboBox" ));
+    aNames[nLength] = ::rtl::OUString::createFromAscii(
+        "com.sun.star.accessibility.AccessibleComboBox" );
     return aNames;
 }
 

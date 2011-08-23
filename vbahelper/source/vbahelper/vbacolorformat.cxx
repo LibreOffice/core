@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xP
     {
         uno::Reference< ov::msforms::XFillFormat > xFillFormat( xInternalParent, uno::UNO_QUERY_THROW );
         m_pFillFormat = ( ScVbaFillFormat* )( xFillFormat.get() );
-    }catch ( uno::RuntimeException& )
+    }catch ( uno::RuntimeException  e )
     {
         m_pFillFormat = NULL;
     }
@@ -70,46 +70,46 @@ ScVbaColorFormat::setColorFormat( sal_Int16 _ntype )
 }
 
 // Attribute
-sal_Int32 SAL_CALL
+sal_Int32 SAL_CALL 
 ScVbaColorFormat::getRGB() throw (uno::RuntimeException)
 {
     sal_Int32 nRGB = 0;
     switch( m_nColorFormatType )
     {
     case ColorFormatType::LINEFORMAT_FORECOLOR:
-        m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")) ) >>= nRGB;
+        m_xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("LineColor") ) >>= nRGB;
         break;
     case ColorFormatType::LINEFORMAT_BACKCOLOR:
         //TODO BackColor not supported
-        // m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Color")), uno::makeAny( nRGB ) );
+        // m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii("Color"), uno::makeAny( nRGB ) );
         break;
     case ColorFormatType::FILLFORMAT_FORECOLOR:
-        m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")) ) >>= nRGB;
+        m_xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("FillColor") ) >>= nRGB;
         break;
     case ColorFormatType::FILLFORMAT_BACKCOLOR:
         nRGB = m_nFillFormatBackColor;
         break;
     default:
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Second parameter of ColorFormat is wrong.")), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString::createFromAscii("Second parameter of ColorFormat is wrong."), uno::Reference< uno::XInterface >() );
     }
     nRGB = OORGBToXLRGB( nRGB );
     return nRGB;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaColorFormat::setRGB( sal_Int32 _rgb ) throw (uno::RuntimeException)
 {
     sal_Int32 nRGB = XLRGBToOORGB( _rgb );
     switch( m_nColorFormatType )
     {
     case ColorFormatType::LINEFORMAT_FORECOLOR:
-        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")), uno::makeAny( nRGB ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "LineColor" ), uno::makeAny( nRGB ) );
         break;
     case ColorFormatType::LINEFORMAT_BACKCOLOR:
         // TODO BackColor not supported
         break;
     case ColorFormatType::FILLFORMAT_FORECOLOR:
-        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), uno::makeAny( nRGB ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "FillColor" ), uno::makeAny( nRGB ) );
         if( m_pFillFormat )
         {
             m_pFillFormat->setForeColorAndInternalStyle(nRGB);
@@ -122,17 +122,17 @@ ScVbaColorFormat::setRGB( sal_Int32 _rgb ) throw (uno::RuntimeException)
             m_pFillFormat->setForeColorAndInternalStyle(nRGB);
         }
         break;
-    default:
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Second parameter of ColorFormat is wrong.")), uno::Reference< uno::XInterface >() );
+    default:    
+        throw uno::RuntimeException( rtl::OUString::createFromAscii("Second parameter of ColorFormat is wrong."), uno::Reference< uno::XInterface >() );
     }
 }
 
-sal_Int32 SAL_CALL
+sal_Int32 SAL_CALL 
 ScVbaColorFormat::getSchemeColor() throw (uno::RuntimeException)
 {
     sal_Int32 nColor = getRGB();
     // #TODO I guess the number of elements is determined by the correct scheme
-    // the implementation here seems to be a rehash of color index ( which seems to be a
+    // the implementation here seems to be a rehash of color index ( which seems to be a 
     // different thing ) - I would guess we need to know/import etc. the correct color scheme
     // or at least find out a little more
     sal_Int32 i = 0;
@@ -144,8 +144,8 @@ ScVbaColorFormat::getSchemeColor() throw (uno::RuntimeException)
 
     if( i == 56 ) // this is most likely an error condition
         --i;
-    return i;
-    // #TODO figure out what craziness is this,
+    return i; 
+    // #TODO figure out what craziness is this, 
     // the 56 colors seems incorrect, as in default XL ( 2003 ) there are 80 colors
 /*
     if( i == 56 )
@@ -157,7 +157,7 @@ ScVbaColorFormat::getSchemeColor() throw (uno::RuntimeException)
 */
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaColorFormat::setSchemeColor( sal_Int32 _schemecolor ) throw (uno::RuntimeException)
 {
     // the table is 0 based

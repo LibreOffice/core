@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ using namespace xmloff::token;
 
 //___________________________________________________________________
 
-ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xModel )
+ScDocument*	ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xModel )
 {
     if (xModel.is())
     {
@@ -128,19 +128,19 @@ void ScXMLConverter::GetStringFromFunction(
     OUString sFuncStr;
     switch( eFunction )
     {
-        case sheet::GeneralFunction_AUTO:       sFuncStr = GetXMLToken( XML_AUTO );         break;
-        case sheet::GeneralFunction_AVERAGE:    sFuncStr = GetXMLToken( XML_AVERAGE );      break;
-        case sheet::GeneralFunction_COUNT:      sFuncStr = GetXMLToken( XML_COUNT );        break;
-        case sheet::GeneralFunction_COUNTNUMS:  sFuncStr = GetXMLToken( XML_COUNTNUMS );    break;
-        case sheet::GeneralFunction_MAX:        sFuncStr = GetXMLToken( XML_MAX );          break;
-        case sheet::GeneralFunction_MIN:        sFuncStr = GetXMLToken( XML_MIN );          break;
-        case sheet::GeneralFunction_NONE:       sFuncStr = GetXMLToken( XML_NONE );         break;
-        case sheet::GeneralFunction_PRODUCT:    sFuncStr = GetXMLToken( XML_PRODUCT );      break;
-        case sheet::GeneralFunction_STDEV:      sFuncStr = GetXMLToken( XML_STDEV );        break;
-        case sheet::GeneralFunction_STDEVP:     sFuncStr = GetXMLToken( XML_STDEVP );       break;
-        case sheet::GeneralFunction_SUM:        sFuncStr = GetXMLToken( XML_SUM );          break;
-        case sheet::GeneralFunction_VAR:        sFuncStr = GetXMLToken( XML_VAR );          break;
-        case sheet::GeneralFunction_VARP:       sFuncStr = GetXMLToken( XML_VARP );         break;
+        case sheet::GeneralFunction_AUTO:		sFuncStr = GetXMLToken( XML_AUTO );	  		break;
+        case sheet::GeneralFunction_AVERAGE:	sFuncStr = GetXMLToken( XML_AVERAGE ); 		break;
+        case sheet::GeneralFunction_COUNT:		sFuncStr = GetXMLToken( XML_COUNT );		break;
+        case sheet::GeneralFunction_COUNTNUMS:	sFuncStr = GetXMLToken( XML_COUNTNUMS );	break;
+        case sheet::GeneralFunction_MAX:		sFuncStr = GetXMLToken( XML_MAX );			break;
+        case sheet::GeneralFunction_MIN:		sFuncStr = GetXMLToken( XML_MIN );			break;
+        case sheet::GeneralFunction_NONE:		sFuncStr = GetXMLToken( XML_NONE );			break;
+        case sheet::GeneralFunction_PRODUCT:	sFuncStr = GetXMLToken( XML_PRODUCT );		break;
+        case sheet::GeneralFunction_STDEV:		sFuncStr = GetXMLToken( XML_STDEV );		break;
+        case sheet::GeneralFunction_STDEVP:		sFuncStr = GetXMLToken( XML_STDEVP );		break;
+        case sheet::GeneralFunction_SUM:		sFuncStr = GetXMLToken( XML_SUM );			break;
+        case sheet::GeneralFunction_VAR:		sFuncStr = GetXMLToken( XML_VAR );			break;
+        case sheet::GeneralFunction_VARP:		sFuncStr = GetXMLToken( XML_VARP );			break;
         default:
         {
             // added to avoid warnings
@@ -157,18 +157,18 @@ void ScXMLConverter::GetStringFromFunction(
     OUString sFuncStr;
     switch( eFunction )
     {
-        case SUBTOTAL_FUNC_AVE:     sFuncStr = GetXMLToken( XML_AVERAGE );      break;
-        case SUBTOTAL_FUNC_CNT:     sFuncStr = GetXMLToken( XML_COUNT );        break;
-        case SUBTOTAL_FUNC_CNT2:    sFuncStr = GetXMLToken( XML_COUNTNUMS );    break;
-        case SUBTOTAL_FUNC_MAX:     sFuncStr = GetXMLToken( XML_MAX );          break;
-        case SUBTOTAL_FUNC_MIN:     sFuncStr = GetXMLToken( XML_MIN );          break;
-        case SUBTOTAL_FUNC_NONE:    sFuncStr = GetXMLToken( XML_NONE );         break;
-        case SUBTOTAL_FUNC_PROD:    sFuncStr = GetXMLToken( XML_PRODUCT );      break;
-        case SUBTOTAL_FUNC_STD:     sFuncStr = GetXMLToken( XML_STDEV );        break;
-        case SUBTOTAL_FUNC_STDP:    sFuncStr = GetXMLToken( XML_STDEVP );       break;
-        case SUBTOTAL_FUNC_SUM:     sFuncStr = GetXMLToken( XML_SUM );          break;
-        case SUBTOTAL_FUNC_VAR:     sFuncStr = GetXMLToken( XML_VAR );          break;
-        case SUBTOTAL_FUNC_VARP:    sFuncStr = GetXMLToken( XML_VARP );         break;
+        case SUBTOTAL_FUNC_AVE:		sFuncStr = GetXMLToken( XML_AVERAGE ); 		break;
+        case SUBTOTAL_FUNC_CNT:		sFuncStr = GetXMLToken( XML_COUNT );		break;
+        case SUBTOTAL_FUNC_CNT2:	sFuncStr = GetXMLToken( XML_COUNTNUMS );	break;
+        case SUBTOTAL_FUNC_MAX:		sFuncStr = GetXMLToken( XML_MAX );			break;
+        case SUBTOTAL_FUNC_MIN:		sFuncStr = GetXMLToken( XML_MIN );			break;
+        case SUBTOTAL_FUNC_NONE:	sFuncStr = GetXMLToken( XML_NONE );			break;
+        case SUBTOTAL_FUNC_PROD:	sFuncStr = GetXMLToken( XML_PRODUCT );		break;
+        case SUBTOTAL_FUNC_STD:		sFuncStr = GetXMLToken( XML_STDEV );		break;
+        case SUBTOTAL_FUNC_STDP:	sFuncStr = GetXMLToken( XML_STDEVP );		break;
+        case SUBTOTAL_FUNC_SUM:		sFuncStr = GetXMLToken( XML_SUM );			break;
+        case SUBTOTAL_FUNC_VAR:		sFuncStr = GetXMLToken( XML_VAR );			break;
+        case SUBTOTAL_FUNC_VARP:	sFuncStr = GetXMLToken( XML_VARP );			break;
     }
     ScRangeStringConverter::AssignString( rString, sFuncStr, bAppendStr );
 }
@@ -251,7 +251,7 @@ sal_Bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const 
     else if( IsXMLToken(rString, XML_REMOVE_PRECEDENTS ) )
         rDetOpType = SCDETOP_DELPRED;
     else
-        return false;
+        return sal_False;
     return sal_True;
 }
 
@@ -316,8 +316,8 @@ void ScXMLConverter::GetStringFromDetOpType(
 void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
 {
     OUStringBuffer sBuffer(sFormula.getLength());
-    sal_Bool bInQuotationMarks(false);
-    sal_Bool bInDoubleQuotationMarks(false);
+    sal_Bool bInQuotationMarks(sal_False);
+    sal_Bool bInDoubleQuotationMarks(sal_False);
     sal_Int16 nCountBraces(0);
     sal_Unicode chPrevious('=');
     for (sal_Int32 i = 0; i < sFormula.getLength(); ++i)
@@ -333,7 +333,7 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
             ++nCountBraces;
         else if (sFormula[i] == ']')
             nCountBraces--;
-        else if ((sFormula[i] != '.') ||
+        else if	((sFormula[i] != '.') ||
                 ((nCountBraces == 0) && bIsFormula) ||
                 !((chPrevious == '[') || (chPrevious == ':') || (chPrevious == ' ') || (chPrevious == '=')))
                 sBuffer.append(sFormula[i]);
@@ -585,7 +585,7 @@ bool lclSkipEmptyParentheses( const sal_Unicode*& rpcString, const sal_Unicode* 
 
 // ----------------------------------------------------------------------------
 
-void ScXMLConditionHelper::parseCondition(
+/*static*/ void ScXMLConditionHelper::parseCondition(
         ScXMLConditionParseResult& rParseResult, const OUString& rAttribute, sal_Int32 nStartIndex )
 {
     rParseResult.meToken = XML_COND_INVALID;

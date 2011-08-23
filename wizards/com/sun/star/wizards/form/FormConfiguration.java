@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@ import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.CommandFieldSelection;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
@@ -79,34 +78,34 @@ public class FormConfiguration
         chkcreateSubForm = CurUnoDialog.insertCheckBox("chkcreateSubForm", SSUBFORMMODE, this,
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_CHKCREATESUBFORM", sSelectManually, new Integer(97), new Integer(26), ISubFormStep, new Short(curtabindex++), new Integer(160)
+                    UIConsts.INTEGERS[8], "HID:34421", sSelectManually, new Integer(97), new Integer(26), ISubFormStep, new Short(curtabindex++), new Integer(160)
                 });
         optOnExistingRelation = CurUnoDialog.insertRadioButton("optOnExistingRelation", STOGGLESTEPS, this,
                 new String[]
                 {
-                    PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTONEXISTINGRELATION", sOnExistingRelation, new Integer(107), new Integer(43), ISubFormStep, new Short(curtabindex++), new Integer(160)
+                    Boolean.FALSE, UIConsts.INTEGERS[8], "HID:34422", sOnExistingRelation, new Integer(107), new Integer(43), ISubFormStep, new Short(curtabindex++), new Integer(160)
                 });
         optSelectManually = CurUnoDialog.insertRadioButton("optSelectManually", STOGGLESTEPS, this,
                 new String[]
                 {
-                    PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTSELECTMANUALLY", sOnManualRelation, new Integer(107), new Integer(99), new Short((short) 1), ISubFormStep, new Short(curtabindex++), new Integer(160)
+                    Boolean.FALSE, UIConsts.INTEGERS[8], "HID:34423", sOnManualRelation, new Integer(107), new Integer(99), new Short((short) 1), ISubFormStep, new Short(curtabindex++), new Integer(160)
                 });
         lblRelations = CurUnoDialog.insertLabel("lblSelectRelation",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Enabled", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
@@ -115,16 +114,16 @@ public class FormConfiguration
         lstRelations = CurUnoDialog.insertListBox("lstrelations", SONEXISTINGRELATIONSELECTION, SONEXISTINGRELATIONSELECTION, this,
                 new String[]
                 {
-                    PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, new Integer(37), "HID:WIZARDS_HID_DLGFORM_lstRELATIONS", new Integer(201), new Integer(55), ISubFormStep, new Short(curtabindex++), new Integer(103)
+                    Boolean.FALSE, new Integer(37), "HID:34424", new Integer(201), new Integer(55), ISubFormStep, new Short(curtabindex++), new Integer(103)
                 });
         lblSubFormDescription = CurUnoDialog.insertLabel("lblSubFormDescription",
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
                 new Object[]
                 {
@@ -135,7 +134,7 @@ public class FormConfiguration
 
     // public void disableSubFormCheckBox()
     // {
-    //     Helper.setUnoPropertyValue(UnoDialog.getModel(chkcreateSubForm), PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+    //     Helper.setUnoPropertyValue(UnoDialog.getModel(chkcreateSubForm), "Enabled", Boolean.FALSE);
     // }
 
     public RelationController getRelationController()
@@ -151,8 +150,8 @@ public class FormConfiguration
     public void toggleSubFormMode()
     {
         boolean bdoEnable = (this.chkcreateSubForm.getState() == 1);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), PropertyNames.PROPERTY_ENABLED, new Boolean(bdoEnable && bsupportsRelations));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(optSelectManually), PropertyNames.PROPERTY_ENABLED, new Boolean(bdoEnable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), "Enabled", new Boolean(bdoEnable && bsupportsRelations));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(optSelectManually), "Enabled", new Boolean(bdoEnable));
         toggleSteps();
     }
 
@@ -164,7 +163,7 @@ public class FormConfiguration
         Helper.setUnoPropertyValue(UnoDialog.getModel(lstRelations), "StringItemList", sreferencedTables);
         this.CurSubFormFieldSelection = _CurSubFormFieldSelection;
         toggleRelationsListbox();
-        Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), PropertyNames.PROPERTY_ENABLED, new Boolean(bsupportsRelations && (chkcreateSubForm.getState() == 1)));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), "Enabled", new Boolean(bsupportsRelations && (chkcreateSubForm.getState() == 1)));
     }
 
     public void toggleSteps()
@@ -231,8 +230,8 @@ public class FormConfiguration
     private void toggleRelationsListbox()
     {
         boolean bdoenable = bsupportsRelations && this.optOnExistingRelation.getState() && (chkcreateSubForm.getState() == 1);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(lblRelations), PropertyNames.PROPERTY_ENABLED, new Boolean(bdoenable));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(lstRelations), PropertyNames.PROPERTY_ENABLED, new Boolean(bdoenable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(lblRelations), "Enabled", new Boolean(bdoenable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(lstRelations), "Enabled", new Boolean(bdoenable));
     }
 
     public boolean hasSubForm()

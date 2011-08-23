@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,6 +98,7 @@ enum ToxAuthorityField
     AUTH_FIELD_HOWPUBLISHED,
     AUTH_FIELD_INSTITUTION,
     AUTH_FIELD_JOURNAL,
+//	AUTH_FIELD_KEY, // BiBTeX - Field
     AUTH_FIELD_MONTH,
     AUTH_FIELD_NOTE,
     AUTH_FIELD_NUMBER,

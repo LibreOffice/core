@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdotext.hxx>
-#include "svx/svditext.hxx"
+#include "svditext.hxx"
 #include <svx/svdmodel.hxx> // fuer GetMaxObjSize
 #include <svx/svdoutl.hxx>
 #include <editeng/outliner.hxx>
@@ -66,9 +66,9 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     pEdtOutl=&rOutl;
 
     // #101684#
-    mbInEditMode = sal_True;
+    mbInEditMode = TRUE;
 
-    sal_uInt16 nOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
+    USHORT nOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
     if ( !IsOutlText() )
         nOutlinerMode = OUTLINERMODE_TEXTOBJECT;
     rOutl.Init( nOutlinerMode );
@@ -79,7 +79,7 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     ImpSetTextEditParams();
 
     if (!bContourFrame) {
-        sal_uIntPtr nStat=rOutl.GetControlWord();
+        ULONG nStat=rOutl.GetControlWord();
         nStat|=EE_CNTRL_AUTOPAGESIZE;
         if (bFitToSize || IsAutoFit())
             nStat|=EE_CNTRL_STRETCHING;
@@ -119,8 +119,8 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     {
         Rectangle aAnchorRect;
         Rectangle aTextRect;
-        TakeTextRect(rOutl, aTextRect, sal_False,
-            &aAnchorRect/* #97097# give sal_True here, not sal_False */);
+        TakeTextRect(rOutl, aTextRect, FALSE, 
+            &aAnchorRect/* #97097# give TRUE here, not FALSE */);
         Fraction aFitXKorreg(1,1);
         ImpSetCharStretching(rOutl,aTextRect.GetSize(),aAnchorRect.GetSize(),aFitXKorreg);
     }
@@ -134,13 +134,13 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         // #78476# also repaint when animated text is put to edit mode
         // to not make appear the text double
         // #111096# should now repaint automatically.
-        // sal_Bool bIsAnimated(pPlusData && pPlusData->pAnimator);
+        // BOOL bIsAnimated(pPlusData && pPlusData->pAnimator);
 
         if(aGeo.nDrehWink || IsFontwork() /*|| bIsAnimated*/)
         {
             // only repaint here, no real objectchange
 
-//          ActionChanged();
+//			ActionChanged();
             BroadcastObjectChange();
         }
     }
@@ -173,13 +173,13 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         if (aTmpSiz.Width()!=0) aMaxSiz.Width()=aTmpSiz.Width();
         if (aTmpSiz.Height()!=0) aMaxSiz.Height()=aTmpSiz.Height();
     }
-
+    
     // #106879#
     // Done earlier since used in else tree below
     SdrTextHorzAdjust eHAdj(GetTextHorizontalAdjust());
     SdrTextVertAdjust eVAdj(GetTextVerticalAdjust());
 
-    if(IsTextFrame())
+    if(IsTextFrame()) 
     {
         long nMinWdt=GetMinTextFrameWidth();
         long nMinHgt=GetMinTextFrameHeight();
@@ -196,9 +196,9 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
             SdrTextAniDirection eAniDirection=GetTextAniDirection();
 
             // #101684#
-            sal_Bool bInEditMode = IsInEditMode();
+            BOOL bInEditMode = IsInEditMode();
 
-            if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE))
+            if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE)) 
             {
                 // Grenzenlose Papiergroesse fuer Laufschrift
                 if (eAniDirection==SDRTEXTANI_LEFT || eAniDirection==SDRTEXTANI_RIGHT) nMaxWdt=1000000;
@@ -211,8 +211,8 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         }
         aPaperMin.Width()=nMinWdt;
         aPaperMin.Height()=nMinHgt;
-    }
-    else
+    } 
+    else 
     {
         // #106879#
         // aPaperMin needs to be set to object's size if full width is activated
@@ -252,7 +252,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     }
 
     // #103516# For complete ver adjust support, set paper min height to 0, here.
-    if(SDRTEXTVERTADJUST_BLOCK != eVAdj || bFitToSize)
+    if(SDRTEXTVERTADJUST_BLOCK != eVAdj || bFitToSize) 
     {
         aPaperMin.Height() = 0;
     }
@@ -280,26 +280,26 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         // need to end edit mode early since SetOutlinerParaObject already
         // uses GetCurrentBoundRect() which needs to take the text into account
         // to work correct
-        mbInEditMode = sal_False;
+        mbInEditMode = FALSE;
         SetOutlinerParaObject(pNewText);
     }
 
     pEdtOutl = NULL;
     rOutl.Clear();
-    sal_uInt32 nStat = rOutl.GetControlWord();
+    UINT32 nStat = rOutl.GetControlWord();
     nStat &= ~EE_CNTRL_AUTOPAGESIZE;
     rOutl.SetControlWord(nStat);
 
     // #101684#
-    mbInEditMode = sal_False;
+    mbInEditMode = FALSE;
 }
 
-sal_uInt16 SdrTextObj::GetOutlinerViewAnchorMode() const
+USHORT SdrTextObj::GetOutlinerViewAnchorMode() const
 {
     SdrTextHorzAdjust eH=GetTextHorizontalAdjust();
     SdrTextVertAdjust eV=GetTextVerticalAdjust();
     EVAnchorMode eRet=ANCHOR_TOP_LEFT;
-    if (IsContourTextFrame()) return (sal_uInt16)eRet;
+    if (IsContourTextFrame()) return (USHORT)eRet;
     if (eH==SDRTEXTHORZADJUST_LEFT) {
         if (eV==SDRTEXTVERTADJUST_TOP) {
             eRet=ANCHOR_TOP_LEFT;
@@ -325,14 +325,14 @@ sal_uInt16 SdrTextObj::GetOutlinerViewAnchorMode() const
             eRet=ANCHOR_VCENTER_HCENTER;
         }
     }
-    return (sal_uInt16)eRet;
+    return (USHORT)eRet;
 }
 
 void SdrTextObj::ImpSetTextEditParams() const
 {
     if (pEdtOutl!=NULL) {
         bool bUpdMerk=pEdtOutl->GetUpdateMode();
-        if (bUpdMerk) pEdtOutl->SetUpdateMode(sal_False);
+        if (bUpdMerk) pEdtOutl->SetUpdateMode(FALSE);
         Size aPaperMin;
         Size aPaperMax;
         Rectangle aEditArea;
@@ -341,16 +341,16 @@ void SdrTextObj::ImpSetTextEditParams() const
         //bool bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
         bool bContourFrame=IsContourTextFrame();
         //EVAnchorMode eAM=(EVAnchorMode)GetOutlinerViewAnchorMode();
-        //sal_uIntPtr nViewAnz=pEdtOutl->GetViewCount();
+        //ULONG nViewAnz=pEdtOutl->GetViewCount();
         pEdtOutl->SetMinAutoPaperSize(aPaperMin);
         pEdtOutl->SetMaxAutoPaperSize(aPaperMax);
         pEdtOutl->SetPaperSize(Size());
         if (bContourFrame) {
             Rectangle aAnchorRect;
             TakeTextAnchorRect(aAnchorRect);
-            ImpSetContourPolygon(*pEdtOutl,aAnchorRect, sal_True);
+            ImpSetContourPolygon(*pEdtOutl,aAnchorRect, TRUE);
         }
-        if (bUpdMerk) pEdtOutl->SetUpdateMode(sal_True);
+        if (bUpdMerk) pEdtOutl->SetUpdateMode(TRUE);
     }
 }
 

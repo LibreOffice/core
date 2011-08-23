@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,15 @@ TYPEINIT1(AppError,AppWin);
 AppError::AppError( BasicFrame* pParent, String aFileName )
 : AppWin( pParent )
 {
-    SetText( aFileName );   // Call before MsgEdit!!
+    SetText( aFileName );	// Call before MsgEdit!!
     pDataEdit = new MsgEdit( this, pParent, WB_HSCROLL | WB_VSCROLL | WB_LEFT );
     LoadIniFile();
     bHasFile = pDataEdit->Load( aFileName );
     DirEntry aEntry( aFileName );
     UpdateFileInfo( HAS_BEEN_LOADED );
+    // Define icon
+//	pIcon = new Icon( ResId( RID_WORKICON ) );
+//	if( pIcon ) SetIcon( *pIcon );
 
     pDataEdit->Show();
     GrabFocus();
@@ -60,24 +63,24 @@ AppError::~AppError()
 long AppError::InitMenu( Menu* pMenu )
 {
     AppWin::InitMenu (pMenu );
-
-    pMenu->EnableItem( RID_EDITUNDO,    sal_False );
-    pMenu->EnableItem( RID_EDITREDO,    sal_False );
-
-    return sal_True;
+    
+    pMenu->EnableItem( RID_EDITUNDO,	FALSE );
+    pMenu->EnableItem( RID_EDITREDO, 	FALSE );
+    
+    return TRUE;
 }
 
 long AppError::DeInitMenu( Menu* pMenu )
 {
     AppWin::DeInitMenu (pMenu );
-
+    
     pMenu->EnableItem( RID_EDITUNDO );
     pMenu->EnableItem( RID_EDITREDO );
-
-    return sal_True;
+    
+    return TRUE;
 }
 
-sal_uInt16 AppError::GetLineNr(){ return pDataEdit->GetLineNr(); }
+USHORT AppError::GetLineNr(){ return pDataEdit->GetLineNr(); }
 
 FileType AppError::GetFileType()
 {
@@ -99,10 +102,14 @@ void AppError::LoadIniFile()
     String aFontStyle = String( aConf.ReadKey( "ScriptFontStyle", "normal" ), RTL_TEXTENCODING_UTF8 );
     String aFontSize = String( aConf.ReadKey( "ScriptFontSize", "12" ), RTL_TEXTENCODING_UTF8 );
     Font aFont = aFontList.Get( aFontName, aFontStyle );
-    sal_uIntPtr nFontSize = aFontSize.ToInt32();
+//    ULONG nFontSize = aFontSize.GetValue( FUNIT_POINT );
+    ULONG nFontSize = aFontSize.ToInt32();
+//    aFont.SetSize( Size( nFontSize, nFontSize ) );
     aFont.SetHeight( nFontSize );
 
-    aFont.SetTransparent( sal_False );
+    aFont.SetTransparent( FALSE );
+//    aFont.SetAlign( ALIGN_BOTTOM );
+//    aFont.SetHeight( aFont.GetHeight()+2 );
     pDataEdit->SetFont( aFont );
 }
 

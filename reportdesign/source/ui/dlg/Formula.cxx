@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,9 +52,9 @@ namespace rptui
     using namespace formula;
     using namespace ::com::sun::star;
 
-//  --------------------------------------------------------------------------
-//      Initialisierung / gemeinsame Funktionen  fuer Dialog
-//  --------------------------------------------------------------------------
+//	--------------------------------------------------------------------------
+//		Initialisierung / gemeinsame Funktionen  fuer Dialog
+//	--------------------------------------------------------------------------
 
 FormulaDialog::FormulaDialog(Window* pParent
                              , const uno::Reference<lang::XMultiServiceFactory>& _xServiceFactory
@@ -100,7 +100,7 @@ FormulaDialog::~FormulaDialog()
 {
     if ( m_pAddField )
     {
-        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( HID_RPT_FIELD_SEL_WIN ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( HID_RPT_FIELD_SEL_WIN ) );
         aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
 
         ::std::auto_ptr<Window> aTemp2(m_pAddField);
@@ -108,28 +108,28 @@ FormulaDialog::~FormulaDialog()
     }
 }
 
-//  --------------------------------------------------------------------------
-//                          Funktionen fuer rechte Seite
-//  --------------------------------------------------------------------------
+//	--------------------------------------------------------------------------
+//							Funktionen fuer rechte Seite
+//	--------------------------------------------------------------------------
 bool FormulaDialog::calculateValue( const String& rStrExp, String& rStrResult )
 {
     rStrResult = rStrExp;
     return false;
 }
-void FormulaDialog::doClose(sal_Bool _bOk)
+void FormulaDialog::doClose(BOOL _bOk)
 {
     EndDialog(_bOk ? RET_OK : RET_CANCEL);
 }
-void FormulaDialog::insertEntryToLRUList(const IFunctionDescription*    /*_pDesc*/)
+void FormulaDialog::insertEntryToLRUList(const IFunctionDescription*	/*_pDesc*/)
 {
 }
 void FormulaDialog::showReference(const String& /*_sFormula*/)
 {
 }
-void FormulaDialog::dispatch(sal_Bool /*_bOK*/,sal_Bool /*_bMartixChecked*/)
+void FormulaDialog::dispatch(BOOL /*_bOK*/,BOOL /*_bMartixChecked*/)
 {
 }
-void FormulaDialog::setDispatcherLock( sal_Bool /*bLock*/ )
+void FormulaDialog::setDispatcherLock( BOOL /*bLock*/ )
 {
 }
 void FormulaDialog::setReferenceInput(const FormEditData* /*_pData*/)
@@ -189,7 +189,7 @@ void FormulaDialog::ShowReference(const String& /*_sRef*/)
 {
 }
 // -----------------------------------------------------------------------------
-void FormulaDialog::HideReference( sal_Bool /*bDoneRefMode*/)
+void FormulaDialog::HideReference( BOOL /*bDoneRefMode*/)
 {
 }
 // -----------------------------------------------------------------------------
@@ -210,7 +210,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
     {
         m_pAddField = new OAddFieldWindow(this,m_xRowSet);
         m_pAddField->SetCreateHdl(LINK( this, FormulaDialog, OnClickHdl ) );
-        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( HID_RPT_FIELD_SEL_WIN ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( HID_RPT_FIELD_SEL_WIN ) );
         if ( aDlgOpt.Exists() )
         {
             m_pAddField->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
@@ -218,7 +218,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
         }
 
         m_pAddField->Update();
-    }
+    } // if ( !m_pAddField )
     RefInputStartAfter( aPair.second, aPair.first );
     m_pAddField->Show();
 
@@ -240,10 +240,10 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("[")) + sName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
             m_pEdit->SetText(sName);
         }
-    }
+    } // if ( m_pEdit && aArgs.getLength() )
     m_pEdit = NULL;
     _pAddFieldDlg->Hide();
-    RefInputDoneAfter( sal_True );
+    RefInputDoneAfter( TRUE );
 
     return 0L;
 }

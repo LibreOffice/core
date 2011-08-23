@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,20 +43,20 @@ private:
     struct SvxZoomSliderControl_Impl;
     SvxZoomSliderControl_Impl* mpImpl;
 
-    sal_uInt16 Offset2Zoom( long nOffset ) const;
-    long Zoom2Offset( sal_uInt16 nZoom ) const;
+    USHORT Offset2Zoom( long nOffset ) const;
+    long Zoom2Offset( USHORT nZoom ) const;
 
 public:
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SvxZoomSliderControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& _rStb );
+    SvxZoomSliderControl( USHORT _nSlotId, USHORT _nId, StatusBar& _rStb );
     ~SvxZoomSliderControl();
 
-    virtual void  StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void  StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void  Paint( const UserDrawEvent& rEvt );
-    virtual sal_Bool  MouseButtonDown( const MouseEvent & );
-    virtual sal_Bool  MouseMove( const MouseEvent & rEvt );
+    virtual BOOL  MouseButtonDown( const MouseEvent & );
+    virtual BOOL  MouseMove( const MouseEvent & rEvt );
 };
 
 #endif

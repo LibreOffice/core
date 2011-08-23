@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ java_lang_Class::~java_lang_Class()
 
 jclass java_lang_Class::getMyClass() const
 {
-    // the class must be fetched only once, therefore static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/lang/Class");
     return theClass;
@@ -54,14 +54,14 @@ java_lang_Class * java_lang_Class::forName( const ::rtl::OUString& _par0 )
 {
     jobject out(NULL);
     SDBThreadAttach t;
-
+    
     {
         ::rtl::OString sClassName = ::rtl::OUStringToOString(_par0, RTL_TEXTENCODING_JAVA_UTF8);
         sClassName = sClassName.replace('.','/');
-        out = t.pEnv->FindClass(sClassName.getStr());
+        out = t.pEnv->FindClass(sClassName);
         ThrowSQLException(t.pEnv,0);
     } //t.pEnv
-    // WARNING: the caller becomes the owner of the returned pointer
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? NULL : new java_lang_Class( t.pEnv, out );
 }
 

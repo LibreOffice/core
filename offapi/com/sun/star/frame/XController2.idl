@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ module com {  module sun {  module star {  module frame {
 interface XController2 : XController
 {
     /** denotes the &quot;root window&quot; of the controller.
-
+    
         <p>If the controller is plugged into a frame, this window acts as the
         frame's <code>ComponentWindow</code>.</p>
 
@@ -63,7 +63,7 @@ interface XController2 : XController
     /** denotes the arguments used to create the instance.
 
         <p>Usually, controllers are created via <member>XModel2::createViewController</member>, where the
-        caller can pass not only a controller name, but also arguments parameterizing the to-be-created instance.
+        caller can pass not only a controller name, but also arguments parametrizing the to-be-created instance.
         Those arguments used at creation time can subsequently be retrieved using the <code>CreationArguments</code>
         member.</p>
     */

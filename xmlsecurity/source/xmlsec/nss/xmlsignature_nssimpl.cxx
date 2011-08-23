@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_NssImpl :: generate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
-) throw( com::sun::star::xml::crypto::XMLSignatureException,
+) throw( com::sun::star::xml::crypto::XMLSignatureException, 
          com::sun::star::uno::SecurityException )
 {
     xmlSecKeysMngrPtr pMngr = NULL ;
@@ -126,7 +126,11 @@ SAL_CALL XMLSignature_NssImpl :: generate(
          throw RuntimeException() ;
     }
 
-    //i39448 : the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
+#if 0 //i39448 : the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
+    XMLSecurityContext_NssImpl* pSecCtxt = ( XMLSecurityContext_NssImpl* )xSecTunnel->getSomething( XMLSecurityContext_NssImpl::getUnoTunnelId() ) ;
+    if( pSecCtxt == NULL )
+        throw RuntimeException() ;
+#endif
 
     SecurityEnvironment_NssImpl* pSecEnv =
         reinterpret_cast<SecurityEnvironment_NssImpl*>(
@@ -153,7 +157,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     }
 
     //Sign the template
-    if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 )
+    if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 ) 
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
             aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
@@ -182,8 +186,8 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_NssImpl :: validate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
-) throw( com::sun::star::uno::RuntimeException,
-         com::sun::star::uno::SecurityException,
+) throw( com::sun::star::uno::RuntimeException, 
+         com::sun::star::uno::SecurityException, 
          com::sun::star::xml::crypto::XMLSignatureException ) {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecDSigCtxPtr pDsigCtx = NULL ;
@@ -224,32 +228,32 @@ SAL_CALL XMLSignature_NssImpl :: validate(
     }
 
      setErrorRecorder();
-
+    
     sal_Int32 nSecurityEnvironment = aSecurityCtx->getSecurityEnvironmentNumber();
     sal_Int32 i;
-
+    
     for (i=0; i<nSecurityEnvironment; ++i)
     {
         Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
-
+        
         //Get Keys Manager
         Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
         if( !xSecTunnel.is() ) {
              throw RuntimeException() ;
         }
-
+    
         SecurityEnvironment_NssImpl* pSecEnv =
             reinterpret_cast<SecurityEnvironment_NssImpl*>(
                 sal::static_int_cast<sal_uIntPtr>(
                     xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() )));
         if( pSecEnv == NULL )
             throw RuntimeException() ;
-
+            
         pMngr = pSecEnv->createKeysManager() ; //i39448
         if( !pMngr ) {
             throw RuntimeException() ;
         }
-
+            
         //Create Signature context
         pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
         if( pDsigCtx == NULL )
@@ -262,9 +266,9 @@ SAL_CALL XMLSignature_NssImpl :: validate(
 
         //Verify signature
         int rs = xmlSecDSigCtxVerify( pDsigCtx , pNode );
-
-
-        if (rs == 0 &&
+        
+    
+        if (rs == 0 && 
             pDsigCtx->status == xmlSecDSigStatusSucceeded)
         {
             aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
@@ -321,12 +325,12 @@ Sequence< OUString > SAL_CALL XMLSignature_NssImpl :: getSupportedServiceNames()
 Sequence< OUString > XMLSignature_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLSignature")) ;
+    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.XMLSignature" ) ;
     return seqServiceNames ;
 }
 
 OUString XMLSignature_NssImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl")) ;
+    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl" ) ;
 }
 
 //Helper for registry

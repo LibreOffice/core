@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <sfx2/app.hxx>
@@ -45,25 +48,25 @@
 
 // define ----------------------------------------------------------------
 
-#define AZ_OPTIMAL      0
-#define AZ_VON_OBEN     1
-#define AZ_VON_LINKS    2
-#define AZ_HORIZONTAL   3
-#define AZ_VERTIKAL     4
+#define AZ_OPTIMAL		0
+#define AZ_VON_OBEN		1
+#define AZ_VON_LINKS	2
+#define AZ_HORIZONTAL	3
+#define AZ_VERTIKAL		4
 
-#define AT_OBEN         0
-#define AT_MITTE        1
-#define AT_UNTEN        2
+#define AT_OBEN			0
+#define AT_MITTE		1
+#define AT_UNTEN		2
 
-#define WK_OPTIMAL      0
-#define WK_30           1
-#define WK_45           2
-#define WK_60           3
-#define WK_90           4
+#define WK_OPTIMAL		0
+#define WK_30			1
+#define WK_45			2
+#define WK_60			3
+#define WK_90			4
 
 // static ----------------------------------------------------------------
 
-static sal_uInt16 pCaptionRanges[] =
+static USHORT pCaptionRanges[] =
 {
     SDRATTR_CAPTIONTYPE,
     SDRATTR_CAPTIONFIXEDANGLE,
@@ -81,27 +84,27 @@ static sal_uInt16 pCaptionRanges[] =
 // -----------------------------------------------------------------------
 
 SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs)
- :  SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_CAPTION ), rInAttrs ),
+ :	SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_CAPTION ), rInAttrs ),
 
-    aCT_CAPTTYPE(       this, CUI_RES( CT_CAPTTYPE ) ),
-    aFT_ABSTAND(        this, CUI_RES( FT_ABSTAND ) ),
-    aMF_ABSTAND(        this, CUI_RES( MF_ABSTAND ) ),
-    aFT_WINKEL(         this, CUI_RES( FT_WINKEL ) ),
-    aLB_WINKEL(         this, CUI_RES( LB_WINKEL ) ),
-    aFT_ANSATZ(         this, CUI_RES( FT_ANSATZ ) ),
-    aLB_ANSATZ(         this, CUI_RES( LB_ANSATZ ) ),
-    aFT_UM(             this, CUI_RES( FT_UM ) ),
-    aMF_ANSATZ(         this, CUI_RES( MF_ANSATZ ) ),
-    aFT_ANSATZ_REL(     this, CUI_RES( FT_ANSATZ_REL ) ),
-    aLB_ANSATZ_REL(     this, CUI_RES( LB_ANSATZ_REL ) ),
-    aFT_LAENGE(         this, CUI_RES( FT_LAENGE ) ),
-    aMF_LAENGE(         this, CUI_RES( MF_LAENGE ) ),
-    aCB_LAENGE(         this, CUI_RES( CB_LAENGE ) ),
+    aCT_CAPTTYPE(		this, CUI_RES( CT_CAPTTYPE ) ),
+    aFT_ABSTAND(		this, CUI_RES( FT_ABSTAND ) ),
+    aMF_ABSTAND(		this, CUI_RES( MF_ABSTAND ) ),
+    aFT_WINKEL(			this, CUI_RES( FT_WINKEL ) ),
+    aLB_WINKEL(			this, CUI_RES( LB_WINKEL ) ),
+    aFT_ANSATZ(			this, CUI_RES( FT_ANSATZ ) ),
+    aLB_ANSATZ(			this, CUI_RES( LB_ANSATZ ) ),
+    aFT_UM(				this, CUI_RES( FT_UM ) ),
+    aMF_ANSATZ(			this, CUI_RES( MF_ANSATZ ) ),
+    aFT_ANSATZ_REL(		this, CUI_RES( FT_ANSATZ_REL ) ),
+    aLB_ANSATZ_REL(		this, CUI_RES( LB_ANSATZ_REL ) ),
+    aFT_LAENGE(			this, CUI_RES( FT_LAENGE ) ),
+    aMF_LAENGE(			this, CUI_RES( MF_LAENGE ) ),
+    aCB_LAENGE(			this, CUI_RES( CB_LAENGE ) ),
 
     aStrHorzList( CUI_RES(STR_HORZ_LIST) ),
     aStrVertList( CUI_RES(STR_VERT_LIST) ),
 
-    rOutAttrs       ( rInAttrs )
+    rOutAttrs		( rInAttrs )
 {
     //------------NYI-------------------------------------------
     aFT_WINKEL.Hide();
@@ -123,7 +126,10 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
 
     sal_uInt16 nBitmap;
     for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
+    {
         mpBmpCapTypes[nBitmap]  = new Image(Bitmap(CUI_RES(BMP_CAPTTYPE_1   + nBitmap)), COL_LIGHTMAGENTA );
+        mpBmpCapTypesH[nBitmap] = new Image(Bitmap(CUI_RES(BMP_CAPTTYPE_1_H + nBitmap)), COL_LIGHTMAGENTA );
+    }
 
     //------------ValueSet installieren--------------------------
     aCT_CAPTTYPE.SetStyle( aCT_CAPTTYPE.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD );
@@ -132,9 +138,9 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     aCT_CAPTTYPE.SetSelectHdl(LINK( this, SvxCaptionTabPage, SelectCaptTypeHdl_Impl));
 
     Image aImage;
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_1, aImage, String(CUI_RES(STR_CAPTTYPE_1)));
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_2, aImage, String(CUI_RES(STR_CAPTTYPE_2)));
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_3, aImage, String(CUI_RES(STR_CAPTTYPE_3)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_1, aImage,	String(CUI_RES(STR_CAPTTYPE_1)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_2,	aImage,	String(CUI_RES(STR_CAPTTYPE_2)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_3,	aImage,	String(CUI_RES(STR_CAPTTYPE_3)));
 
     FillValueSet();
 
@@ -151,7 +157,10 @@ SvxCaptionTabPage::~SvxCaptionTabPage()
 {
     sal_uInt16 nBitmap;
     for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
+    {
         delete mpBmpCapTypes[nBitmap];
+        delete mpBmpCapTypesH[nBitmap];
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -164,12 +173,12 @@ void SvxCaptionTabPage::Construct()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
+BOOL SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 {
     SfxItemPool*    pPool = _rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
 
-    SfxMapUnit      eUnit;
+    SfxMapUnit		eUnit;
 
     nCaptionType = aCT_CAPTTYPE.GetSelectItemId()-1;
 
@@ -186,8 +195,8 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
     {
         switch( nEscDir )
         {
-            case SDRCAPT_ESCHORIZONTAL:     nEscDir=SDRCAPT_ESCVERTICAL;break;
-            case SDRCAPT_ESCVERTICAL:       nEscDir=SDRCAPT_ESCHORIZONTAL;break;
+            case SDRCAPT_ESCHORIZONTAL:		nEscDir=SDRCAPT_ESCVERTICAL;break;
+            case SDRCAPT_ESCVERTICAL:		nEscDir=SDRCAPT_ESCHORIZONTAL;break;
         }
     }
 
@@ -198,13 +207,13 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 
     if( bEscRel )
     {
-        long    nVal = 0;
+        long	nVal = 0;
 
         switch( aLB_ANSATZ_REL.GetSelectEntryPos() )
         {
-            case AT_OBEN:   nVal=0;break;
-            case AT_MITTE:  nVal=5000;break;
-            case AT_UNTEN:  nVal=10000;break;
+            case AT_OBEN:	nVal=0;break;
+            case AT_MITTE:	nVal=5000;break;
+            case AT_UNTEN:	nVal=10000;break;
         }
         _rOutAttrs.Put( SdrCaptionEscRelItem( nVal ) );
     }
@@ -231,7 +240,7 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 
 //NYI-------------die Winkel muessen noch hier rein!!! XXX----------------------
 
-    return( sal_True );
+    return( TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -256,11 +265,11 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     SetFieldUnit( aMF_ANSATZ, eFUnit );
     SetFieldUnit( aMF_LAENGE, eFUnit );
 
-    SfxItemPool*    pPool = rOutAttrs.GetPool();
+    SfxItemPool* 	pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
 
-    sal_uInt16          nWhich;
-    SfxMapUnit      eUnit;
+    USHORT			nWhich;
+    SfxMapUnit		eUnit;
 
     //------- Winkel ----------
     nWhich = GetWhich( SDRATTR_CAPTIONANGLE );
@@ -302,8 +311,8 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     {
         switch( nEscDir )
         {
-            case SDRCAPT_ESCHORIZONTAL:     nEscDir=SDRCAPT_ESCVERTICAL;break;
-            case SDRCAPT_ESCVERTICAL:       nEscDir=SDRCAPT_ESCHORIZONTAL;break;
+            case SDRCAPT_ESCHORIZONTAL:		nEscDir=SDRCAPT_ESCVERTICAL;break;
+            case SDRCAPT_ESCVERTICAL:		nEscDir=SDRCAPT_ESCHORIZONTAL;break;
         }
     }
 
@@ -383,22 +392,22 @@ SfxTabPage* SvxCaptionTabPage::Create( Window* pWindow,
 
 //------------------------------------------------------------------------
 
-sal_uInt16* SvxCaptionTabPage::GetRanges()
+USHORT*	SvxCaptionTabPage::GetRanges()
 {
     return( pCaptionRanges );
 }
 
 //------------------------------------------------------------------------
 
-void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
+void SvxCaptionTabPage::SetupAnsatz_Impl( USHORT nType )
 {
-    xub_StrLen  nCnt=0, nIdx=0;
+    xub_StrLen	nCnt=0, nIdx=0;
 
     switch( nType )
     {
         case AZ_OPTIMAL:
-//      aMF_ANSATZ.Hide(); //XXX auch bei OPTIMAL werden Abswerte genommen
-//      aFT_UM.Hide();
+//		aMF_ANSATZ.Hide(); //XXX auch bei OPTIMAL werden Abswerte genommen
+//		aFT_UM.Hide();
         aMF_ANSATZ.Show();
         aFT_UM.Show();
         aFT_ANSATZ_REL.Hide();
@@ -507,7 +516,7 @@ IMPL_LINK_INLINE_END( SvxCaptionTabPage, SelectCaptTypeHdl_Impl, void *, EMPTYAR
 
 //------------------------------------------------------------------------
 
-void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )
+void SvxCaptionTabPage::SetupType_Impl( USHORT nType )
 {
     switch( nType-1 )
     {
@@ -559,7 +568,9 @@ void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxCaptionTabPage::FillValueSet()
 {
-    Image** ppBitmaps = mpBmpCapTypes;
+    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+
+    Image** ppBitmaps = bHighContrast ? mpBmpCapTypesH : mpBmpCapTypes;
     aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_1, *(ppBitmaps[0]) );
     aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_2, *(ppBitmaps[1]) );
     aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_3, *(ppBitmaps[2]) );
@@ -568,8 +579,8 @@ void SvxCaptionTabPage::FillValueSet()
 //========================================================================
 
 
-SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrView, sal_uInt16 nAnchorTypes)
- :  SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_CAPTION ) ),
+SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrView, USHORT nAnchorTypes)
+ :	SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_CAPTION ) ),
     pView       ( pSdrView ),
     nAnchorCtrls(nAnchorTypes)
 {
@@ -579,13 +590,13 @@ SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrVie
 
     //different positioning page in Writer
     if(nAnchorCtrls & 0x00ff )
-    {
-        AddTabPage( RID_SVXPAGE_SWPOSSIZE, SvxSwPosSizeTabPage::Create,
+    {        
+        AddTabPage( RID_SVXPAGE_SWPOSSIZE, SvxSwPosSizeTabPage::Create, 
                                 SvxSwPosSizeTabPage::GetRanges );
         RemoveTabPage( RID_SVXPAGE_POSITION_SIZE);
     }
     else
-    {
+    {        
         AddTabPage( RID_SVXPAGE_POSITION_SIZE, SvxPositionSizeTabPage::Create,
                                 SvxPositionSizeTabPage::GetRanges );
         RemoveTabPage( RID_SVXPAGE_SWPOSSIZE );
@@ -602,7 +613,7 @@ SvxCaptionTabDialog::~SvxCaptionTabDialog()
 
 // -----------------------------------------------------------------------
 
-void SvxCaptionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SvxCaptionTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     switch( nId )
     {
@@ -620,7 +631,7 @@ void SvxCaptionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             SvxSwPosSizeTabPage& rSwPage = static_cast<SvxSwPosSizeTabPage&>(rPage);
             rSwPage.EnableAnchorTypes(nAnchorCtrls);
             rSwPage.SetValidateFramePosLink( aValidateLink );
-        }
+        }            
         break;
 
         case RID_SVXPAGE_CAPTION:
@@ -629,11 +640,13 @@ void SvxCaptionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         break;
     }
 }
+/*-- 05.03.2004 13:54:26---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SvxCaptionTabDialog::SetValidateFramePosLink( const Link& rLink )
 {
     aValidateLink = rLink;
-}
+}            
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

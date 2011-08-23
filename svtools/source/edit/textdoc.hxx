@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,10 +31,11 @@
 
 #include <svl/svarray.hxx>
 #include <svtools/textdata.hxx>
-#include <svtools/txtattr.hxx>
+#include <txtattr.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
+#include <tools/list.hxx>
 
 typedef TextCharAttrib* TextCharAttribPtr;
 SV_DECL_PTRARR_DEL( TextCharAttribs, TextCharAttribPtr, 0, 4 )
@@ -42,7 +43,7 @@ SV_DECL_PTRARR_DEL( TextCharAttribs, TextCharAttribPtr, 0, 4 )
 class TextCharAttribList : private TextCharAttribs
 {
 private:
-    sal_Bool            mbHasEmptyAttribs;
+    BOOL			mbHasEmptyAttribs;
 
                     TextCharAttribList( const TextCharAttribList& ) : TextCharAttribs() {}
 
@@ -50,28 +51,28 @@ public:
                     TextCharAttribList();
                     ~TextCharAttribList();
 
-    void            Clear( sal_Bool bDestroyAttribs );
-    sal_uInt16          Count() const               { return TextCharAttribs::Count(); }
+    void			Clear( BOOL bDestroyAttribs );
+    USHORT			Count()	const				{ return TextCharAttribs::Count(); }
 
-    TextCharAttrib* GetAttrib( sal_uInt16 n ) const { return TextCharAttribs::GetObject( n ); }
-    void            RemoveAttrib( sal_uInt16 n )    { TextCharAttribs::Remove( n, 1 ); }
+    TextCharAttrib*	GetAttrib( USHORT n ) const	{ return TextCharAttribs::GetObject( n ); }
+    void			RemoveAttrib( USHORT n )	{ TextCharAttribs::Remove( n, 1 ); }
 
-    void            InsertAttrib( TextCharAttrib* pAttrib );
+    void			InsertAttrib( TextCharAttrib* pAttrib );
 
-    void            DeleteEmptyAttribs();
-    void            ResortAttribs();
+    void			DeleteEmptyAttribs();
+    void			ResortAttribs();
 
-    sal_Bool            HasEmptyAttribs() const { return mbHasEmptyAttribs; }
-    sal_Bool&           HasEmptyAttribs()       { return mbHasEmptyAttribs; }
+    BOOL			HasEmptyAttribs() const	{ return mbHasEmptyAttribs; }
+    BOOL&			HasEmptyAttribs() 		{ return mbHasEmptyAttribs; }
 
-    TextCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
-    TextCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos, sal_uInt16 nMaxPos = 0xFFFF ) const;
-    TextCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
-    sal_Bool            HasAttrib( sal_uInt16 nWhich ) const;
-    sal_Bool            HasBoundingAttrib( sal_uInt16 nBound );
+    TextCharAttrib*	FindAttrib( USHORT nWhich, USHORT nPos );
+    TextCharAttrib*	FindNextAttrib( USHORT nWhich, USHORT nFromPos, USHORT nMaxPos = 0xFFFF ) const;
+    TextCharAttrib*	FindEmptyAttrib( USHORT nWhich, USHORT nPos );
+    BOOL 			HasAttrib( USHORT nWhich ) const;
+    BOOL			HasBoundingAttrib( USHORT nBound );
 
 #ifdef  DBG_UTIL
-    sal_Bool            DbgCheckAttribs();
+    BOOL 			DbgCheckAttribs();
 #endif
 };
 
@@ -79,70 +80,70 @@ public:
 class TextNode
 {
 private:
-    String              maText;
-    TextCharAttribList  maCharAttribs;
+    String				maText;
+    TextCharAttribList	maCharAttribs;
 
                         TextNode( const TextNode& ) {;}
 protected:
-    void                ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNewChars );
-    void                CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDelChars );
+    void				ExpandAttribs( USHORT nIndex, USHORT nNewChars );
+    void				CollapsAttribs( USHORT nIndex, USHORT nDelChars );
 
 public:
                         TextNode( const String& rText );
 
 
-    const String&               GetText() const         { return maText; }
+    const String&				GetText() const 		{ return maText; }
 
-    const TextCharAttribList&   GetCharAttribs() const  { return maCharAttribs; }
-    TextCharAttribList&         GetCharAttribs()        { return maCharAttribs; }
+    const TextCharAttribList&	GetCharAttribs() const	{ return maCharAttribs; }
+    TextCharAttribList&			GetCharAttribs() 		{ return maCharAttribs; }
 
-    void                InsertText( sal_uInt16 nPos, const String& rText );
-    void                InsertText( sal_uInt16 nPos, sal_Unicode c );
-    void                RemoveText( sal_uInt16 nPos, sal_uInt16 nChars );
+    void				InsertText( USHORT nPos, const String& rText );
+    void				InsertText( USHORT nPos, sal_Unicode c );
+    void 				RemoveText( USHORT nPos, USHORT nChars );
 
-    TextNode*           Split( sal_uInt16 nPos, sal_Bool bKeepEndigAttribs );
-    void                Append( const TextNode& rNode );
+    TextNode*			Split( USHORT nPos, BOOL bKeepEndigAttribs );
+    void				Append( const TextNode& rNode );
 };
 
 class TextDoc
 {
 private:
     ToolsList<TextNode*> maTextNodes;
-    sal_uInt16              mnLeftMargin;
+    USHORT				mnLeftMargin;
 
 protected:
-    void                DestroyTextNodes();
+    void				DestroyTextNodes();
 
 public:
                         TextDoc();
                         ~TextDoc();
 
-    void                Clear();
+    void				Clear();
 
-    ToolsList<TextNode*>&       GetNodes()              { return maTextNodes; }
-    const ToolsList<TextNode*>& GetNodes() const        { return maTextNodes; }
+    ToolsList<TextNode*>&		GetNodes() 				{ return maTextNodes; }
+    const ToolsList<TextNode*>&	GetNodes() const 		{ return maTextNodes; }
 
-    TextPaM             RemoveChars( const TextPaM& rPaM, sal_uInt16 nChars );
-    TextPaM             InsertText( const TextPaM& rPaM, sal_Unicode c );
-    TextPaM             InsertText( const TextPaM& rPaM, const String& rStr );
+    TextPaM				RemoveChars( const TextPaM& rPaM, USHORT nChars );
+    TextPaM				InsertText( const TextPaM& rPaM, sal_Unicode c );
+    TextPaM				InsertText( const TextPaM& rPaM, const String& rStr );
 
-    TextPaM             InsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndingAttribs );
-    TextPaM             ConnectParagraphs( TextNode* pLeft, TextNode* pRight );
+    TextPaM				InsertParaBreak( const TextPaM& rPaM, BOOL bKeepEndingAttribs );
+    TextPaM				ConnectParagraphs( TextNode* pLeft, TextNode* pRight );
 
-    sal_uLong               GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel = NULL ) const;
-    String              GetText( const sal_Unicode* pSep ) const;
-    String              GetText( sal_uLong nPara ) const;
+    ULONG				GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel = NULL ) const;
+    String				GetText( const sal_Unicode* pSep ) const;
+    String				GetText( ULONG nPara ) const;
 
-    void                SetLeftMargin( sal_uInt16 n )   { mnLeftMargin = n; }
-    sal_uInt16              GetLeftMargin() const       { return mnLeftMargin; }
+    void				SetLeftMargin( USHORT n )	{ mnLeftMargin = n; }
+    USHORT				GetLeftMargin() const		{ return mnLeftMargin; }
 
-//  sal_Bool                RemoveAttribs( TextNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd ), sal_uInt16 nWhich = 0 );
-//  sal_Bool                RemoveAttribs( TextNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, TextCharAttrib*& rpStarting, TextCharAttrib*& rpEnding, sal_uInt16 nWhich = 0 );
-//  void                InsertAttrib( const EditCharAttrib* pAttr );
-//  void                InsertAttribInSelection( const EditCharAttrib* pAttr );
-//  void                FindAttribs( TextNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet );
+//	BOOL				RemoveAttribs( TextNode* pNode, USHORT nStart, USHORT nEnd ), USHORT nWhich = 0 );
+//	BOOL				RemoveAttribs( TextNode* pNode, USHORT nStart, USHORT nEnd, TextCharAttrib*& rpStarting, TextCharAttrib*& rpEnding, USHORT nWhich = 0 );
+//	void				InsertAttrib( const EditCharAttrib* pAttr );
+//	void				InsertAttribInSelection( const EditCharAttrib* pAttr );
+//	void				FindAttribs( TextNode* pNode, USHORT nStartPos, USHORT nEndPos, SfxItemSet& rCurSet );
 
-    sal_Bool                IsValidPaM( const TextPaM& rPaM );
+    BOOL				IsValidPaM( const TextPaM& rPaM );
 };
 
 #endif // _TEXTDOC_HXX

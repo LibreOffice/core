@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,17 +35,17 @@
 class SvxControlFocusHelper : public Control
 {
 private:
-    Control*        m_pFocusCtrl;
+    Control*		m_pFocusCtrl;
 
 public:
     SvxControlFocusHelper( Window* pParent, const ResId& rId ) :
         Control( pParent, rId ), m_pFocusCtrl( NULL ) {}
 
-    void            SetFocusControl( Control* pCtrl ) { m_pFocusCtrl = pCtrl; }
+    void			SetFocusControl( Control* pCtrl ) { m_pFocusCtrl = pCtrl; }
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual long	Notify( NotifyEvent& rNEvt );
 };
 
-#endif  // SVX_CONTROLL_FUCUS_HELPER_HXX
+#endif	// SVX_CONTROLL_FUCUS_HELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

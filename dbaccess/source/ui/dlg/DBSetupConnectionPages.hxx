@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,6 +48,7 @@ namespace dbaui
 //.........................................................................
 
     class IDatabaseSettingsDialog;
+//		static	OGenericAdministrationPage*	CreateDbaseTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
 
        //========================================================================
@@ -56,8 +57,8 @@ namespace dbaui
     class OSpreadSheetConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
-        static  OGenericAdministrationPage* CreateSpreadSheetTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        virtual	BOOL		FillItemSet	( SfxItemSet& _rCoreAttrs );
+        static	OGenericAdministrationPage*	CreateSpreadSheetTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         OSpreadSheetConnectionPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs);
 
     protected:
@@ -77,12 +78,12 @@ namespace dbaui
     class OTextConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
-           static   OGenericAdministrationPage* CreateTextTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        virtual	BOOL		FillItemSet	( SfxItemSet& _rCoreAttrs );
+           static	OGenericAdministrationPage*	CreateTextTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         OTextConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs );
         OTextConnectionHelper*  m_pTextConnectionHelper;
     private:
-
+        
     protected:
         virtual ~OTextConnectionPageSetup();
         virtual sal_Bool prepareLeave();
@@ -101,8 +102,8 @@ namespace dbaui
     class OLDAPConnectionPageSetup : public OGenericAdministrationPage
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
-        static  OGenericAdministrationPage* CreateLDAPTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        virtual	BOOL		FillItemSet	( SfxItemSet& _rCoreAttrs );
+        static	OGenericAdministrationPage*	CreateLDAPTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         OLDAPConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual Link getControlModifiedLink() { return LINK(this, OLDAPConnectionPageSetup, OnEditModified); }
 
@@ -117,11 +118,11 @@ namespace dbaui
         FixedText           m_aFTHelpText;
         FixedText           m_aFTHostServer;
         Edit                m_aETHostServer;
-        FixedText           m_aFTBaseDN;
-        Edit                m_aETBaseDN;
-        FixedText           m_aFTPortNumber;
-        NumericField        m_aNFPortNumber;
-        FixedText           m_aFTDefaultPortNumber;
+        FixedText			m_aFTBaseDN;
+        Edit				m_aETBaseDN;
+        FixedText			m_aFTPortNumber;
+        NumericField		m_aNFPortNumber;
+        FixedText			m_aFTDefaultPortNumber;
         CheckBox            m_aCBUseSSL;
     };
 
@@ -144,7 +145,7 @@ namespace dbaui
         virtual void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList );
         virtual void fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList );
 
-        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual	BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
         virtual Link getControlModifiedLink();
@@ -160,18 +161,18 @@ namespace dbaui
     {
     public:
         OGeneralSpecialJDBCConnectionPageSetup(   Window* pParent
-                                        , sal_uInt16 _nResId
+                                        , USHORT _nResId
                                         , const SfxItemSet& _rCoreAttrs
-                                        , sal_uInt16 _nPortId
-                                        , sal_uInt16 _nDefaultPortResId
-                                        , sal_uInt16 _nHelpTextResId
-                                        , sal_uInt16 _nHeaderTextResId
-                                        , sal_uInt16 _nDriverClassId );
-    static  OGenericAdministrationPage* CreateMySQLJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-    static  OGenericAdministrationPage* CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+                                        , USHORT _nPortId
+                                        , USHORT _nDefaultPortResId
+                                        , USHORT _nHelpTextResId
+                                        , USHORT _nHeaderTextResId
+                                        , USHORT _nDriverClassId );
+    static	OGenericAdministrationPage*	CreateMySQLJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+    static	OGenericAdministrationPage*	CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
-        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual	BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -182,19 +183,19 @@ namespace dbaui
         FixedText           m_aFTHelpText;
         FixedText           m_aFTDatabasename;
         Edit                m_aETDatabasename;
-        FixedText           m_aFTHostname;
-        Edit                m_aETHostname;
-        FixedText           m_aFTPortNumber;
-        FixedText           m_aFTDefaultPortNumber;
-        NumericField        m_aNFPortNumber;
+        FixedText			m_aFTHostname;
+        Edit				m_aETHostname;
+        FixedText			m_aFTPortNumber;
+        FixedText			m_aFTDefaultPortNumber;
+        NumericField		m_aNFPortNumber;
+        
 
+        FixedText			m_aFTDriverClass;
+        Edit				m_aETDriverClass;
+        PushButton			m_aPBTestJavaDriver;
 
-        FixedText           m_aFTDriverClass;
-        Edit                m_aETDriverClass;
-        PushButton          m_aPBTestJavaDriver;
-
-        String              m_sDefaultJdbcDriverName;
-        sal_uInt16              m_nPortId;
+        String				m_sDefaultJdbcDriverName;
+        USHORT				m_nPortId;
     };
 
 
@@ -205,21 +206,21 @@ namespace dbaui
     {
     public:
                 OJDBCConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs );
-        static  OGenericAdministrationPage* CreateJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        static	OGenericAdministrationPage*	CreateJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
         virtual bool checkTestConnection();
 
-        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual	BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
 
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
-        FixedText           m_aFTDriverClass;
-        Edit                m_aETDriverClass;
-        PushButton          m_aPBTestJavaDriver;
+        FixedText			m_aFTDriverClass;
+        Edit				m_aETDriverClass;
+        PushButton			m_aPBTestJavaDriver;
     };
 
 
@@ -239,7 +240,7 @@ namespace dbaui
 
         OMySQLIntroPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs);
 
-        static OMySQLIntroPageSetup*    CreateMySQLIntroTabPage( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static OMySQLIntroPageSetup*	CreateMySQLIntroTabPage( Window* _pParent, const SfxItemSet& _rAttrSet );
         ConnectionType      getMySQLMode();
         Link                maClickHdl;
         void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
@@ -247,10 +248,10 @@ namespace dbaui
         DECL_LINK(ImplClickHdl, OMySQLIntroPageSetup*);
 
 
-
+        
 
     protected:
-        virtual sal_Bool FillItemSet(SfxItemSet& _rSet);
+        virtual BOOL FillItemSet(SfxItemSet& _rSet);
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -277,8 +278,8 @@ namespace dbaui
     class OAuthentificationPageSetup : public OGenericAdministrationPage
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
-        static  OGenericAdministrationPage* CreateAuthentificationTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        virtual	BOOL		FillItemSet	( SfxItemSet& _rCoreAttrs );
+        static	OGenericAdministrationPage*	CreateAuthentificationTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         OAuthentificationPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs);
 
     protected:
@@ -304,8 +305,8 @@ namespace dbaui
     class OFinalDBPageSetup : public OGenericAdministrationPage
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
-           static   OGenericAdministrationPage* CreateFinalDBTabPageSetup( Window* pParent, const SfxItemSet& _rAttrSet);
+        virtual	BOOL		FillItemSet	( SfxItemSet& _rCoreAttrs );
+           static	OGenericAdministrationPage*	CreateFinalDBTabPageSetup( Window* pParent, const SfxItemSet& _rAttrSet);
 
         FixedText   m_aFTFinalHeader;
         FixedText   m_aFTFinalHelpText;
@@ -336,7 +337,7 @@ namespace dbaui
     };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif

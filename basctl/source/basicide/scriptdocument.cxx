@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@
 
 #include <rtl/uri.hxx>
 #include <rtl/bootstrap.hxx>
-
+ 
 #include <osl/process.h>
 #include <osl/file.hxx>
 
@@ -95,9 +95,12 @@
 #include <functional>
 #include <set>
 
-
+//........................................................................
 namespace basctl
 {
+//........................................................................
+
+    /** === begin UNO using === **/
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::frame::XModel;
@@ -151,11 +154,13 @@ namespace basctl
     //====================================================================
     namespace
     {
+        //................................................................
         static bool StringCompareLessThan( const String& lhs, const String& rhs )
         {
             return ( lhs.CompareIgnoreCaseToAscii( rhs ) == COMPARE_LESS );
         }
 
+        //................................................................
         class FilterDocuments : public docs::IDocumentDescriptorFilter
         {
         public:
@@ -170,6 +175,7 @@ namespace basctl
             bool    m_bFilterInvisible;
         };
 
+        //................................................................
         bool FilterDocuments::impl_isDocumentVisible_nothrow( const docs::DocumentDescriptor& _rDocument ) const
         {
             try
@@ -192,6 +198,7 @@ namespace basctl
             return false;
         }
 
+        //................................................................
         bool FilterDocuments::includeDocument( const docs::DocumentDescriptor& _rDocument ) const
         {
             Reference< XEmbeddedScripts > xScripts( _rDocument.xModel, UNO_QUERY );
@@ -202,6 +209,7 @@ namespace basctl
             return false;
         }
 
+        //................................................................
         void lcl_getAllModels_throw( docs::Documents& _out_rModels, bool _bVisibleOnly )
         {
             _out_rModels.clear();
@@ -214,6 +222,9 @@ namespace basctl
         }
     }
 
+    //====================================================================
+    //= ScriptDocument_Impl - declaration
+    //====================================================================
     class ScriptDocument_Impl : public DocumentEventListener
     {
     private:
@@ -251,7 +262,7 @@ namespace basctl
                         getDocumentRef() const { return m_xDocument; }
 
         /// returns a library container belonging to the document
-        Reference< XLibraryContainer >
+        Reference< XLibraryContainer > 
                     getLibraryContainer( LibraryContainerType _eType ) const;
 
         /// determines whether a given library is part of the shared installation
@@ -320,6 +331,7 @@ namespace basctl
     //====================================================================
     //= ScriptDocument_Impl - implementation
     //====================================================================
+    //--------------------------------------------------------------------
     ScriptDocument_Impl::ScriptDocument_Impl()
         :m_bIsApplication( true )
         ,m_bValid( true )
@@ -327,6 +339,7 @@ namespace basctl
     {
     }
 
+    //--------------------------------------------------------------------
     ScriptDocument_Impl::ScriptDocument_Impl( const Reference< XModel >& _rxDocument )
         :m_bIsApplication( false )
         ,m_bValid( false )
@@ -340,11 +353,13 @@ namespace basctl
         }
     }
 
+    //--------------------------------------------------------------------
     ScriptDocument_Impl::~ScriptDocument_Impl()
     {
         invalidate();
     }
 
+    //--------------------------------------------------------------------
     void ScriptDocument_Impl::invalidate()
     {
         m_bIsApplication = false;
@@ -359,6 +374,7 @@ namespace basctl
             m_pDocListener->dispose();
     }
 
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::impl_initDocument_nothrow( const Reference< XModel >& _rxModel )
     {
         try
@@ -385,7 +401,7 @@ namespace basctl
 
         return m_bValid;
     }
-
+    //--------------------------------------------------------------------
     Reference< XLibraryContainer > ScriptDocument_Impl::getLibraryContainer( LibraryContainerType _eType ) const
     {
         OSL_ENSURE( isValid(), "ScriptDocument_Impl::getLibraryContainer: invalid!" );
@@ -412,6 +428,7 @@ namespace basctl
         return xContainer;
     }
 
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::isReadOnly() const
     {
         OSL_ENSURE( isValid(), "ScriptDocument_Impl::isReadOnly: invalid state!" );
@@ -443,10 +460,10 @@ namespace basctl
             if ( xVBACompat.is() )
                 bResult = xVBACompat->getVBACompatibilityMode();
         }
-        return bResult;
+        return bResult; 
     }
 
-
+    //--------------------------------------------------------------------
     BasicManager* ScriptDocument_Impl::getBasicManager() const
     {
         OSL_ENSURE( isValid(), "ScriptDocument_Impl::getBasicManager: invalid state!" );
@@ -459,7 +476,7 @@ namespace basctl
         return ::basic::BasicManagerRepository::getDocumentBasicManager( m_xDocument );
     }
 
-
+    //--------------------------------------------------------------------
     Reference< XModel > ScriptDocument_Impl::getDocument() const
     {
         OSL_ENSURE( isValid(), "ScriptDocument_Impl::getDocument: invalid state!" );
@@ -470,7 +487,7 @@ namespace basctl
         return m_xDocument;
     }
 
-
+    //--------------------------------------------------------------------
     Reference< XNameContainer > ScriptDocument_Impl::getLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, bool _bLoadLibrary ) const
         SAL_THROW((NoSuchElementException))
     {
@@ -505,7 +522,7 @@ namespace basctl
         return xContainer;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::hasLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const
     {
         bool bHas = false;
@@ -521,7 +538,7 @@ namespace basctl
         return bHas;
     }
 
-
+    //--------------------------------------------------------------------
     Reference< XNameContainer > ScriptDocument_Impl::getOrCreateLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const
     {
         Reference< XNameContainer > xLibrary;
@@ -543,7 +560,7 @@ namespace basctl
         return xLibrary;
     }
 
-
+    //--------------------------------------------------------------------
     void ScriptDocument_Impl::loadLibraryIfExists( LibraryContainerType _eType, const ::rtl::OUString& _rLibrary )
     {
         try
@@ -558,7 +575,7 @@ namespace basctl
         }
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::removeModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModuleName )
     {
         OSL_ENSURE( isValid(), "ScriptDocument_Impl::removeModuleOrDialog: invalid!" );
@@ -566,7 +583,7 @@ namespace basctl
         {
             try
             {
-                Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, sal_True ) );
+                Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, TRUE ) );
                 if ( xLib.is() )
                 {
                     xLib->removeByName( _rModuleName );
@@ -581,7 +598,7 @@ namespace basctl
         return false;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::hasModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName ) const
     {
         OSL_ENSURE( isValid(), "ScriptDocument_Impl::hasModuleOrDialog: invalid!" );
@@ -590,7 +607,7 @@ namespace basctl
 
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, sal_True ) );
+            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, TRUE ) );
             if ( xLib.is() )
                 return xLib->hasByName( _rModName );
         }
@@ -601,7 +618,7 @@ namespace basctl
         return false;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::getModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rObjectName, Any& _out_rModuleOrDialog )
     {
         OSL_ENSURE( isValid(), "ScriptDocument_Impl::getModuleOrDialog: invalid!" );
@@ -611,7 +628,7 @@ namespace basctl
         _out_rModuleOrDialog.clear();
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, sal_True ), UNO_QUERY_THROW );
+            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, TRUE ), UNO_QUERY_THROW );
             if ( xLib->hasByName( _rObjectName ) )
             {
                 _out_rModuleOrDialog = xLib->getByName( _rObjectName );
@@ -625,7 +642,7 @@ namespace basctl
         return false;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::renameModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName,
         const ::rtl::OUString& _rOldName, const ::rtl::OUString& _rNewName, const Reference< XNameContainer >& _rxExistingDialogModel )
     {
@@ -635,8 +652,8 @@ namespace basctl
 
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, sal_True ), UNO_QUERY_THROW );
-
+            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, TRUE ), UNO_QUERY_THROW );
+            
             // get element
             Any aElement( xLib->getByName( _rOldName ) );
 
@@ -693,13 +710,13 @@ namespace basctl
         return false;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::createModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, bool _bCreateMain, ::rtl::OUString& _out_rNewModuleCode ) const
     {
         _out_rNewModuleCode = ::rtl::OUString();
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( E_SCRIPTS, _rLibName, sal_True ) );
+            Reference< XNameContainer > xLib( getLibrary( E_SCRIPTS, _rLibName, TRUE ) );
             if ( !xLib.is() || xLib->hasByName( _rModName ) )
                 return false;
 
@@ -720,7 +737,7 @@ namespace basctl
         return true;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::insertModuleOrDialog( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rObjectName, const Any& _rElement ) const
     {
         try
@@ -739,7 +756,7 @@ namespace basctl
         return false;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::updateModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, const ::rtl::OUString& _rModuleCode ) const
     {
         try
@@ -757,12 +774,12 @@ namespace basctl
         return false;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::createDialog( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rDialogName, Reference< XInputStreamProvider >& _out_rDialogProvider ) const
     {
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( E_DIALOGS, _rLibName, sal_True ), UNO_QUERY_THROW );
+            Reference< XNameContainer > xLib( getLibrary( E_DIALOGS, _rLibName, TRUE ), UNO_QUERY_THROW );
 
             // create dialog
             _out_rDialogProvider.clear();
@@ -793,7 +810,7 @@ namespace basctl
         return _out_rDialogProvider.is();
     }
 
-
+    //--------------------------------------------------------------------
     void ScriptDocument_Impl::setDocumentModified() const
     {
         OSL_ENSURE( isValid() && isDocument(), "ScriptDocument_Impl::setDocumentModified: only to be called for real documents!" );
@@ -810,7 +827,7 @@ namespace basctl
         }
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::isDocumentModified() const
     {
         OSL_ENSURE( isValid() && isDocument(), "ScriptDocument_Impl::isDocumentModified: only to be called for real documents!" );
@@ -829,7 +846,7 @@ namespace basctl
         return bIsModified;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::saveDocument( const Reference< XStatusIndicator >& _rxStatusIndicator ) const
     {
         Reference< XFrame > xFrame;
@@ -868,7 +885,7 @@ namespace basctl
         return true;
     }
 
-
+    //--------------------------------------------------------------------
     ::rtl::OUString ScriptDocument_Impl::getTitle() const
     {
         OSL_PRECOND( isValid() && isDocument(), "ScriptDocument_Impl::getTitle: for documents only!" );
@@ -881,7 +898,7 @@ namespace basctl
         return sTitle;
     }
 
-
+    //--------------------------------------------------------------------
     ::rtl::OUString ScriptDocument_Impl::getURL() const
     {
         OSL_PRECOND( isValid() && isDocument(), "ScriptDocument_Impl::getURL: for documents only!" );
@@ -901,7 +918,7 @@ namespace basctl
         return sURL;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::allowMacros() const
     {
         OSL_ENSURE( isValid() && isDocument(), "ScriptDocument_Impl::allowMacros: for documents only!" );
@@ -920,7 +937,7 @@ namespace basctl
         return bAllow;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::getCurrentFrame( Reference< XFrame >& _out_rxFrame ) const
     {
         _out_rxFrame.clear();
@@ -942,7 +959,7 @@ namespace basctl
         return _out_rxFrame.is();
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument_Impl::isLibraryShared( const ::rtl::OUString& _rLibName, LibraryContainerType _eType )
     {
         bool bIsShared = false;
@@ -979,10 +996,10 @@ namespace basctl
                     aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
                     Reference< XComponentContext > xContext;
                     Reference< XPropertySet > xProps( xMSF, UNO_QUERY_THROW );
-                    xContext.set( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )) ), UNO_QUERY_THROW );
+                    xContext.set( xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "DefaultContext" ) ), UNO_QUERY_THROW );
                     Reference< XMacroExpander > xMacroExpander(
                         xContext->getValueByName(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander" )) ),
+                        ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ),
                         UNO_QUERY_THROW );
                     aFileURL = xMacroExpander->expandMacros( aDecodedURL );
                 }
@@ -1001,7 +1018,7 @@ namespace basctl
                 ::rtl::OUString aSearchURL3( RTL_CONSTASCII_USTRINGPARAM( "share/extensions" ) );
                 if( aCanonicalFileURL.indexOf( aSearchURL1 ) != -1 ||
                     aCanonicalFileURL.indexOf( aSearchURL2 ) != -1 ||
-                    aCanonicalFileURL.indexOf( aSearchURL3 ) != -1 )
+                    aCanonicalFileURL.indexOf( aSearchURL3 ) != -1 ) 
                         bIsShared = true;
             }
         }
@@ -1013,37 +1030,43 @@ namespace basctl
         return bIsShared;
     }
 
-
+    //--------------------------------------------------------------------
     void ScriptDocument_Impl::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
+    //--------------------------------------------------------------------
     void ScriptDocument_Impl::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
+    //--------------------------------------------------------------------
     void ScriptDocument_Impl::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
+    //--------------------------------------------------------------------
     void ScriptDocument_Impl::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
+    //--------------------------------------------------------------------
     void ScriptDocument_Impl::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
+    //--------------------------------------------------------------------
     void ScriptDocument_Impl::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
+    //--------------------------------------------------------------------
     void ScriptDocument_Impl::onDocumentClosed( const ScriptDocument& _rDocument )
     {
         DBG_TESTSOLARMUTEX();
@@ -1057,12 +1080,13 @@ namespace basctl
         }
     }
 
-
+    //--------------------------------------------------------------------
     void ScriptDocument_Impl::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
     }
 
+    //--------------------------------------------------------------------
     void ScriptDocument_Impl::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/ )
     {
         // not interested in
@@ -1071,12 +1095,13 @@ namespace basctl
     //====================================================================
     //= ScriptDocument
     //====================================================================
+    //--------------------------------------------------------------------
     ScriptDocument::ScriptDocument()
         :m_pImpl( new ScriptDocument_Impl() )
     {
     }
 
-
+    //--------------------------------------------------------------------
     ScriptDocument::ScriptDocument( ScriptDocument::SpecialDocument _eType )
         :m_pImpl( new ScriptDocument_Impl( Reference< XModel >() ) )
     {
@@ -1084,7 +1109,7 @@ namespace basctl
         (void)_eType;
     }
 
-
+    //--------------------------------------------------------------------
     ScriptDocument::ScriptDocument( const Reference< XModel >& _rxDocument )
         :m_pImpl( new ScriptDocument_Impl( _rxDocument ) )
     {
@@ -1093,25 +1118,25 @@ namespace basctl
             // purpose, there is a dedicated constructor
     }
 
-
+    //--------------------------------------------------------------------
     ScriptDocument::ScriptDocument( const ScriptDocument& _rSource )
         :m_pImpl( _rSource.m_pImpl )
     {
     }
 
-
+    //--------------------------------------------------------------------
     ScriptDocument::~ScriptDocument()
     {
     }
-
-
+    
+    //--------------------------------------------------------------------
     const ScriptDocument& ScriptDocument::getApplicationScriptDocument()
     {
         static ScriptDocument s_aApplicationScripts;
         return s_aApplicationScripts;
     }
 
-
+    //--------------------------------------------------------------------
     ScriptDocument ScriptDocument::getDocumentForBasicManager( const BasicManager* _pManager )
     {
         if ( _pManager == SFX_APP()->GetBasicManager() )
@@ -1134,11 +1159,11 @@ namespace basctl
             }
         }
 
-        OSL_FAIL( "ScriptDocument::getDocumentForBasicManager: did not find a document for this manager!" );
+        OSL_ENSURE( false, "ScriptDocument::getDocumentForBasicManager: did not find a document for this manager!" );
         return ScriptDocument( NoDocument );
     }
 
-
+    //--------------------------------------------------------------------
     ScriptDocument ScriptDocument::getDocumentWithURLOrCaption( const ::rtl::OUString& _rUrlOrCaption )
     {
         ScriptDocument aDocument( getApplicationScriptDocument() );
@@ -1166,7 +1191,7 @@ namespace basctl
         return aDocument;
     }
 
-
+    //--------------------------------------------------------------------
     namespace
     {
         struct DocumentTitleLess : public ::std::binary_function< ScriptDocument, ScriptDocument, bool >
@@ -1185,7 +1210,7 @@ namespace basctl
         };
     }
 
-
+    //--------------------------------------------------------------------
     ScriptDocuments ScriptDocument::getAllScriptDocuments( ScriptDocument::ScriptDocumentList _eListType )
     {
         ScriptDocuments aScriptDocs;
@@ -1228,63 +1253,63 @@ namespace basctl
 
         return aScriptDocs;
     }
-
-
+    
+    //--------------------------------------------------------------------
     bool ScriptDocument::operator==( const ScriptDocument& _rhs ) const
     {
         return m_pImpl->getDocumentRef() == _rhs.m_pImpl->getDocumentRef();
     }
 
-
+    //--------------------------------------------------------------------
     sal_Int32 ScriptDocument::hashCode() const
     {
         return sal::static_int_cast<sal_Int32>(reinterpret_cast< sal_IntPtr >( m_pImpl->getDocumentRef().get() ));
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::isValid() const
     {
         return m_pImpl->isValid();
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::isAlive() const
     {
         return m_pImpl->isAlive();
     }
 
-
+    //--------------------------------------------------------------------
     Reference< XLibraryContainer > ScriptDocument::getLibraryContainer( LibraryContainerType _eType ) const
     {
         return m_pImpl->getLibraryContainer( _eType );
     }
-
-
+    
+    //--------------------------------------------------------------------
     Reference< XNameContainer > ScriptDocument::getLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, bool _bLoadLibrary ) const
         SAL_THROW((NoSuchElementException))
     {
         return m_pImpl->getLibrary( _eType, _rLibName, _bLoadLibrary );
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::hasLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const
     {
         return m_pImpl->hasLibrary( _eType, _rLibName );
     }
 
-
+    //--------------------------------------------------------------------
     Reference< XNameContainer > ScriptDocument::getOrCreateLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const
     {
         return m_pImpl->getOrCreateLibrary( _eType, _rLibName );
     }
 
-
+    //--------------------------------------------------------------------
     void ScriptDocument::loadLibraryIfExists( LibraryContainerType _eType, const ::rtl::OUString& _rLibrary )
     {
         m_pImpl->loadLibraryIfExists( _eType, _rLibrary );
     }
 
-
+    //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > ScriptDocument::getObjectNames( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const
     {
         Sequence< ::rtl::OUString > aModuleNames;
@@ -1309,7 +1334,7 @@ namespace basctl
         return aModuleNames;
     }
 
-
+    //--------------------------------------------------------------------
     ::rtl::OUString ScriptDocument::createObjectName( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const
     {
         ::rtl::OUString aObjectName;
@@ -1324,14 +1349,14 @@ namespace basctl
             ::std::insert_iterator< ::std::set< ::rtl::OUString > >( aUsedNamesCheck, aUsedNamesCheck.begin() ) );
 
         bool bValid = false;
-        sal_uInt16 i = 1;
+        USHORT i = 1;
         while ( !bValid )
         {
             aObjectName = aBaseName;
             aObjectName += String::CreateFromInt32( i );
 
             if ( aUsedNamesCheck.find( aObjectName ) == aUsedNamesCheck.end() )
-                bValid = sal_True;
+                bValid = TRUE;
 
             ++i;
         }
@@ -1339,19 +1364,19 @@ namespace basctl
         return aObjectName;
     }
 
-
+    //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > ScriptDocument::getLibraryNames() const
     {
         return BasicIDE::GetMergedLibraryNames( getLibraryContainer( E_SCRIPTS ), getLibraryContainer( E_DIALOGS ) );
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::isReadOnly() const
     {
         return m_pImpl->isReadOnly();
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::isApplication() const
     {
         return m_pImpl->isApplication();
@@ -1362,19 +1387,19 @@ namespace basctl
         return m_pImpl->isInVBAMode();
     }
 
-
+    //--------------------------------------------------------------------
     BasicManager* ScriptDocument::getBasicManager() const
     {
         return m_pImpl->getBasicManager();
     }
 
-
+    //--------------------------------------------------------------------
     Reference< XModel > ScriptDocument::getDocument() const
     {
         return m_pImpl->getDocument();
     }
 
-
+    //--------------------------------------------------------------------
     Reference< XModel > ScriptDocument::getDocumentOrNull() const
     {
         if ( isDocument() )
@@ -1382,19 +1407,19 @@ namespace basctl
         return NULL;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::removeModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModuleName ) const
     {
         return m_pImpl->removeModuleOrDialog( E_SCRIPTS, _rLibName, _rModuleName );
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::hasModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModuleName ) const
     {
         return m_pImpl->hasModuleOrDialog( E_SCRIPTS, _rLibName, _rModuleName );
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::getModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, ::rtl::OUString& _out_rModuleSource ) const
     {
         Any aCode;
@@ -1404,13 +1429,13 @@ namespace basctl
         return true;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::renameModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rOldName, const ::rtl::OUString& _rNewName ) const
     {
         return m_pImpl->renameModuleOrDialog( E_SCRIPTS, _rLibName, _rOldName, _rNewName, NULL );
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::createModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, bool _bCreateMain, ::rtl::OUString& _out_rNewModuleCode ) const
     {
         if ( !m_pImpl->createModule( _rLibName, _rModName, _bCreateMain, _out_rNewModuleCode ) )
@@ -1421,31 +1446,31 @@ namespace basctl
         return true;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::insertModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, const ::rtl::OUString& _rModuleCode ) const
     {
         return m_pImpl->insertModuleOrDialog( E_SCRIPTS, _rLibName, _rModName, makeAny( _rModuleCode ) );
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::updateModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, const ::rtl::OUString& _rModuleCode ) const
     {
         return m_pImpl->updateModule( _rLibName, _rModName, _rModuleCode );
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::removeDialog( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rDialogName ) const
     {
         return m_pImpl->removeModuleOrDialog( E_DIALOGS, _rLibName, _rDialogName );
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::hasDialog( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rDialogName ) const
     {
         return m_pImpl->hasModuleOrDialog( E_DIALOGS, _rLibName, _rDialogName );
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::getDialog( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rDialogName, Reference< XInputStreamProvider >& _out_rDialogProvider ) const
     {
         Any aCode;
@@ -1455,13 +1480,13 @@ namespace basctl
         return _out_rDialogProvider.is();
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::renameDialog( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rOldName, const ::rtl::OUString& _rNewName, const Reference< XNameContainer >& _rxExistingDialogModel ) const
     {
         return m_pImpl->renameModuleOrDialog( E_DIALOGS, _rLibName, _rOldName, _rNewName, _rxExistingDialogModel );
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::createDialog( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rDialogName, Reference< XInputStreamProvider >& _out_rDialogProvider ) const
     {
         if ( !m_pImpl->createDialog( _rLibName, _rDialogName, _out_rDialogProvider ) )
@@ -1471,31 +1496,31 @@ namespace basctl
         return true;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::insertDialog( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rDialogName, const Reference< XInputStreamProvider >& _rxDialogProvider ) const
     {
         return m_pImpl->insertModuleOrDialog( E_DIALOGS, _rLibName, _rDialogName, makeAny( _rxDialogProvider ) );
     }
 
-
+    //--------------------------------------------------------------------
     void ScriptDocument::setDocumentModified() const
     {
         m_pImpl->setDocumentModified();
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::isDocumentModified() const
     {
         return m_pImpl->isDocumentModified();
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::saveDocument( const Reference< XStatusIndicator >& _rxStatusIndicator ) const
     {
         return m_pImpl->saveDocument( _rxStatusIndicator );
     }
 
-
+    //--------------------------------------------------------------------
     LibraryLocation ScriptDocument::getLibraryLocation( const ::rtl::OUString& _rLibName ) const
     {
         LibraryLocation eLocation = LIBRARY_LOCATION_UNKNOWN;
@@ -1523,7 +1548,7 @@ namespace basctl
         return eLocation;
     }
 
-
+    //--------------------------------------------------------------------
     ::rtl::OUString ScriptDocument::getTitle( LibraryLocation _eLocation, LibraryType _eType ) const
     {
         ::rtl::OUString aTitle;
@@ -1564,19 +1589,19 @@ namespace basctl
         return aTitle;
     }
 
-
+    //--------------------------------------------------------------------
     ::rtl::OUString ScriptDocument::getTitle() const
     {
         return m_pImpl->getTitle();
     }
 
-
+    //--------------------------------------------------------------------
     ::rtl::OUString ScriptDocument::getURL() const
     {
         return m_pImpl->getURL();
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::isActive() const
     {
         bool bIsActive( false );
@@ -1593,12 +1618,14 @@ namespace basctl
         return bIsActive;
     }
 
-
+    //--------------------------------------------------------------------
     bool ScriptDocument::allowMacros() const
     {
         return m_pImpl->allowMacros();
     }
 
-}
+//........................................................................
+} // namespace basctl
+//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

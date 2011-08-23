@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@ class SW_DLLPUBLIC PercentField : public MetricField
     sal_Int64   nOldBaseValue;
     sal_Int64   nLastPercent;
     sal_Int64   nLastValue;
-    sal_uInt16      nOldDigits;
-    FieldUnit   eOldUnit;
+    USHORT		nOldDigits;
+    FieldUnit	eOldUnit;
     sal_Bool    bLockAutoCalculation; //prevent recalcution of percent values when the
                                         //reference value is changed
 
-    SW_DLLPRIVATE sal_Int64      ImpPower10(sal_uInt16 n);
+    SW_DLLPRIVATE sal_Int64      ImpPower10(USHORT n);
 
     using MetricField::SetValue;
     using MetricField::GetValue;
@@ -69,7 +69,7 @@ public:
 
     sal_Int64        GetValue(FieldUnit eOutUnit = FUNIT_NONE);
 
-    sal_Bool        IsValueModified();
+    BOOL		IsValueModified();
 
     //using NumericFormatter::SetMax;
     void        SetMax(sal_Int64 nNewMax, FieldUnit eInUnit = FUNIT_NONE);
@@ -86,9 +86,9 @@ public:
 
     sal_Int64   Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit);
 
-    void        ShowPercent(sal_Bool bPercent);
+    void		ShowPercent(BOOL bPercent);
 
-    sal_uInt16      GetOldDigits() const {return nOldDigits;}
+    USHORT		GetOldDigits() const {return nOldDigits;}
 
     void        LockAutoCalculation(sal_Bool bLock) {bLockAutoCalculation = bLock;}
     sal_Bool    IsAutoCalculationLocked()const {return bLockAutoCalculation;}

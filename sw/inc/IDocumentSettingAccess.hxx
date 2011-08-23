@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,8 +77,9 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          USE_OLD_PRINTER_METRICS,
          TABS_RELATIVE_TO_INDENT,
          PROTECT_FORM,
-         // #i89181#
+         // --> OD 2008-06-05 #i89181#
          TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
+         // <--
      INVERT_BORDER_SPACING,
          COLLAPSE_EMPTY_CELL_PARA,
          // COMPATIBILITY FLAGS END
@@ -89,8 +90,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          GLOBAL_DOCUMENT_SAVE_LINKS,
          LABEL_DOCUMENT,
          PURGE_OLE,
-         KERN_ASIAN_PUNCTUATION,
-         MATH_BASELINE_ALIGNMENT
+         KERN_ASIAN_PUNCTUATION
      };
 
  public:
@@ -129,7 +129,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
        a list of forbidden characters.
     */
     virtual const com::sun::star::i18n::ForbiddenCharacters*
-        getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const = 0;
+        getForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ bool bLocaleData ) const = 0;
 
     /** Set the forbidden characters.
 
@@ -139,7 +139,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
        @param rForbiddenCharacters
        [in] the new list of forbidden characters for language lang.
     */
-    virtual void setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
+    virtual void setForbiddenCharacters(/*[in]*/ USHORT nLang,
                                         /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters ) = 0;
 
     /** Get the forbidden character table and creates one if necessary.
@@ -210,6 +210,6 @@ protected:
     virtual ~IDocumentSettingAccess() {};
  };
 
-#endif // IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+ #endif // IDOCUMENTSETTINGACCESS_HXX_INCLUDED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

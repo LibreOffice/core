@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,6 @@
 #include <svtools/transfer.hxx>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <svtools/accessibletableprovider.hxx>
-#include <vector>
 
 #ifndef INCLUDED_LIMITS_H
 #include <limits.h>
@@ -49,11 +48,10 @@
 #endif
 
 class BrowserColumn;
+class BrowserColumns;
 class BrowserDataWin;
 class MultiSelection;
 class BrowserHeader;
-
-typedef ::std::vector< BrowserColumn* > BrowserColumns;
 
 namespace svt {
     class BrowseBoxImpl;
@@ -70,13 +68,13 @@ namespace utl {
 #define BROWSER_INVALIDID           USHRT_MAX
 #define BROWSER_ENDOFSELECTION      (long)(SFX_ENDOFSELECTION)
 
-typedef sal_uLong BrowserMode;
+typedef ULONG BrowserMode;
 
 #define BROWSER_COLUMNSELECTION      0x0001
 #define BROWSER_MULTISELECTION       0x0002
 #define BROWSER_THUMBDRAGGING        0x0004
 #define BROWSER_KEEPHIGHLIGHT        0x0008
-#define BROWSER_KEEPSELECTION        BROWSER_KEEPHIGHLIGHT  // old, dont use!
+#define BROWSER_KEEPSELECTION        BROWSER_KEEPHIGHLIGHT	// old, dont use!
 #define BROWSER_HLINES               0x0010
 #define BROWSER_VLINES               0x0020
 #define BROWSER_HLINESFULL           BROWSER_HLINES // old, dont use!
@@ -84,25 +82,25 @@ typedef sal_uLong BrowserMode;
 #define BROWSER_HLINESDOTS           0x0000 // old => dont use!
 #define BROWSER_VLINESDOTS           0x0000 // old => dont use!
 
-#define BROWSER_HIDESELECT           0x0100 // old => dont use!
+#define BROWSER_HIDESELECT           0x0100	// old => dont use!
 #define BROWSER_HIDECURSOR           0x0200
 
 #define BROWSER_NO_HSCROLL           0x0400
 #define BROWSER_NO_SCROLLBACK        0x0800
 
-#define BROWSER_AUTO_VSCROLL         0x1000
-#define BROWSER_AUTO_HSCROLL         0x2000
+#define BROWSER_AUTO_VSCROLL	   	 0x1000
+#define BROWSER_AUTO_HSCROLL	   	 0x2000
 
-#define BROWSER_TRACKING_TIPS        0x4000
+#define BROWSER_TRACKING_TIPS 	  	 0x4000
 
 #define BROWSER_NO_VSCROLL           0x8000
 
 #define BROWSER_HIGHLIGHT_NONE       0x0100 // == BROWSER_HIDESELECT
 #define BROWSER_HIGHLIGHT_TOGGLE 0x00000000 // old default => NULL, dont use!
 
-#define BROWSER_HEADERBAR_NEW    0x00040000
+#define BROWSER_HEADERBAR_NEW	 0x00040000
 #define BROWSER_AUTOSIZE_LASTCOL 0x00080000
-#define BROWSER_OWN_DATACHANGED  0x00100000
+#define BROWSER_OWN_DATACHANGED	 0x00100000
 
 #define BROWSER_CURSOR_WO_FOCUS  0x00200000
     // Allows a cursor which is shown even if the control does not have the focus. This does not affect other
@@ -116,7 +114,7 @@ typedef sal_uLong BrowserMode;
 
 typedef int BrowserColumnMode;
 #define BROWSER_COLUMN_TITLEABBREVATION   1
-#define BROWSER_COLUMN_STANDARD             BROWSER_COLUMN_TITLEABBREVATION
+#define BROWSER_COLUMN_STANDARD         	BROWSER_COLUMN_TITLEABBREVATION
 
 #define BROWSER_NONE                      0
 #define BROWSER_SELECT                  720
@@ -141,11 +139,11 @@ typedef int BrowserColumnMode;
 #define BROWSER_CURSOREND               746
 #define BROWSER_SCROLLDOWN              751
 #define BROWSER_SCROLLUP                752
-#define BROWSER_SELECTHOME              753
-#define BROWSER_SELECTEND               754
-#define BROWSER_SELECTCOLUMN            755
-#define BROWSER_MOVECOLUMNLEFT          756
-#define BROWSER_MOVECOLUMNRIGHT         757
+#define BROWSER_SELECTHOME				753
+#define BROWSER_SELECTEND				754
+#define BROWSER_SELECTCOLUMN			755
+#define BROWSER_MOVECOLUMNLEFT			756
+#define BROWSER_MOVECOLUMNRIGHT			757
 
 // ---------------
 // - BrowseEvent -
@@ -156,20 +154,20 @@ class BrowseEvent
     Window*             pWin;
     long                nRow;
     Rectangle           aRect;
-    sal_uInt16              nCol;
-    sal_uInt16              nColId;
+    USHORT              nCol;
+    USHORT              nColId;
 
 public:
                         BrowseEvent();
                         BrowseEvent( Window* pWindow,
                                      long nAbsRow,
-                                     sal_uInt16 nColumn, sal_uInt16 nColumnId,
+                                     USHORT nColumn, USHORT nColumnId,
                                      const Rectangle& rRect );
 
     Window*             GetWindow() const { return pWin; }
     long                GetRow() const { return nRow; }
-    sal_uInt16              GetColumn() const { return nCol; }
-    sal_uInt16              GetColumnId() const { return nColId; }
+    USHORT              GetColumn() const { return nCol; }
+    USHORT              GetColumnId() const { return nColId; }
     const Rectangle&    GetRect() const { return aRect; }
 };
 
@@ -183,7 +181,7 @@ public:
     BrowserMouseEvent();
     BrowserMouseEvent( BrowserDataWin* pWin, const MouseEvent& rEvt );
     BrowserMouseEvent( Window* pWin, const MouseEvent& rEvt,
-                       long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
+                       long nAbsRow, USHORT nColumn, USHORT nColumnId,
                        const Rectangle& rRect );
 };
 
@@ -228,6 +226,7 @@ public:
 // whole class, which is planned for a long time :)
 //
 // sorry for the ranting. could not resist
+// 98483 - 11.04.2002 - fs@openoffice.org
 
 class SVT_DLLPUBLIC BrowseBox
         :public Control
@@ -235,12 +234,16 @@ class SVT_DLLPUBLIC BrowseBox
         ,public DropTargetHelper
         ,public svt::IAccessibleTableProvider
 {
-    #define NO_CURSOR_HIDE      0
-    #define HARD_CURSOR_HIDE    1
-    #define SMART_CURSOR_HIDE   2
+    #define NO_CURSOR_HIDE		0
+    #define HARD_CURSOR_HIDE	1
+    #define SMART_CURSOR_HIDE	2
 
     friend class BrowserDataWin;
     friend class ::svt::BrowseBoxImpl;
+
+#ifdef DBG_MI
+    friend void DoLog_Impl( const BrowseBox *pThis, const char *pWhat, const char *pWho );
+#endif
 
 #ifdef DBG_UTIL
     friend const char* BrowseBoxCheckInvariants( const void * pVoid );
@@ -251,46 +254,46 @@ class SVT_DLLPUBLIC BrowseBox
     ScrollBar       aHScroll;       // horizontal scrollbar
 
     long            nDataRowHeight; // height of a single data-row
-    sal_uInt16          nTitleLines;    // number of lines in title row
-    sal_uLong           nControlAreaWidth; // width of fixed area beneeth hscroll
-    sal_Bool            bThumbDragging; // handle thumb dragging
-    sal_Bool            bColumnCursor;  // single columns and fields selectable
-    sal_Bool            bMultiSelection;// allow multiple selected rows
-    sal_Bool            bKeepHighlight; // don't hide selection on LoseFocus
+    USHORT          nTitleLines;    // number of lines in title row
+    ULONG           nControlAreaWidth; // width of fixed area beneeth hscroll
+    BOOL            bThumbDragging; // handle thumb dragging
+    BOOL            bColumnCursor;  // single columns and fields selectable
+    BOOL            bMultiSelection;// allow multiple selected rows
+    BOOL            bKeepHighlight; // don't hide selection on LoseFocus
 
-    sal_Bool            bHLines;        // draw lines between rows
-    sal_Bool            bVLines;        // draw lines between columns
-    sal_Bool            bHDots;         // draw lines between rows dotted
-    sal_Bool            bVDots;         // draw lines between columns dotted
-    Color           aGridLineColor;     // color for lines, default dark grey
-    sal_Bool            bBootstrapped;  // child windows resized etc.
+    BOOL            bHLines;        // draw lines between rows
+    BOOL            bVLines;        // draw lines between columns
+    BOOL            bHDots;         // draw lines between rows dotted
+    BOOL            bVDots;         // draw lines between columns dotted
+    Color			aGridLineColor;		// color for lines, default dark grey
+    BOOL            bBootstrapped;  // child windows resized etc.
     long            nTopRow;        // no. of first visible row (0...)
     long            nCurRow;        // no. of row with cursor
     long            nRowCount;      // total number of rows in model
-    sal_uInt16          nFirstCol;      // no. of first visible scrollable column
-    sal_uInt16          nCurColId;      // column id of cursor
+    USHORT          nFirstCol;      // no. of first visible scrollable column
+    USHORT          nCurColId;      // column id of cursor
 
-    sal_Bool            bSelecting;
-    sal_Bool            bRowDividerDrag;
-    sal_Bool            bHit;
-    sal_Bool            mbInteractiveRowHeight;
+    BOOL			bSelecting;
+    BOOL            bRowDividerDrag;
+    BOOL            bHit;
+    BOOL            mbInteractiveRowHeight;
     Point           a1stPoint;
     Point           a2ndPoint;
 
     long            nResizeX;       // mouse position at start of resizing
     long            nMinResizeX;    // never drag more left
     long            nDragX;         // last dragged column (MouseMove)
-    sal_uInt16          nResizeCol;     // resize this column in MouseMove
-    sal_Bool            bResizing;      // mouse captured for column resizing
+    USHORT          nResizeCol;     // resize this column in MouseMove
+    BOOL            bResizing;      // mouse captured for column resizing
 
-    sal_Bool            bSelect;        // select or deselect
-    sal_Bool            bSelectionIsVisible; // depending on focus
-    sal_Bool            bScrolling;     // hidden cursor while scrolling
-    sal_Bool            bNotToggleSel;  // set while in ToggleSelection() etc.
-    sal_Bool            bHasFocus;      // set/unset in Get/LoseFocus
-    sal_Bool            bHideSelect;    // hide selection (highlight)
-    sal_Bool            bHideCursor;    // hide cursor (frame)
-    Range           aSelRange;      // for selection expansion
+    BOOL            bSelect;        // select or deselect
+    BOOL            bSelectionIsVisible; // depending on focus
+    BOOL            bScrolling;     // hidden cursor while scrolling
+    BOOL            bNotToggleSel;  // set while in ToggleSelection() etc.
+    BOOL            bHasFocus;      // set/unset in Get/LoseFocus
+    BOOL            bHideSelect;    // hide selection (highlight)
+    BOOL            bHideCursor;    // hide cursor (frame)
+    Range			aSelRange;		// for selection expansion
 
     BrowserColumns* pCols;          // array of column-descriptions
     union
@@ -300,53 +303,53 @@ class SVT_DLLPUBLIC BrowseBox
     }               uRow;
     MultiSelection* pColSel;        // selected column-ids
 
-    ::std::auto_ptr< ::svt::BrowseBoxImpl >  m_pImpl;       // impl structure of the BrowseBox object
+    ::std::auto_ptr< ::svt::BrowseBoxImpl >  m_pImpl;		// impl structure of the BrowseBox object
 
-    sal_Bool            m_bFocusOnlyCursor; // hide cursor if we don't have the focus
-    Color           m_aCursorColor;     // special color for cursor, COL_TRANSPARENT for usual (VCL-painted) "inverted" cursor
-    BrowserMode     m_nCurrentMode;     // last argument of SetMode (redundant, as our other members represent the current settings, too)
+    BOOL			m_bFocusOnlyCursor;	// hide cursor if we don't have the focus
+    Color			m_aCursorColor;		// special color for cursor, COL_TRANSPARENT for usual (VCL-painted) "inverted" cursor
+    BrowserMode		m_nCurrentMode;		// last argument of SetMode (redundant, as our other members represent the current settings, too)
 
 private:
     SVT_DLLPRIVATE void            ConstructImpl(BrowserMode nMode);
     SVT_DLLPRIVATE void            ExpandRowSelection( const BrowserMouseEvent& rEvt );
-    SVT_DLLPRIVATE void            ToggleSelection( sal_Bool bForce = sal_False );
+    SVT_DLLPRIVATE void            ToggleSelection( BOOL bForce = FALSE );
 
     SVT_DLLPRIVATE void            UpdateScrollbars();
     SVT_DLLPRIVATE void            AutoSizeLastColumn();
 
     SVT_DLLPRIVATE long            ImpGetDataRowHeight() const;
-    SVT_DLLPRIVATE Rectangle       ImplFieldRectPixel( long nRow, sal_uInt16 nColId ) const;
-    SVT_DLLPRIVATE sal_uInt16          FrozenColCount() const;
+    SVT_DLLPRIVATE Rectangle       ImplFieldRectPixel( long nRow, USHORT nColId ) const;
+    SVT_DLLPRIVATE USHORT          FrozenColCount() const;
 
-    SVT_DLLPRIVATE void            ColumnInserted( sal_uInt16 nPos );
+    SVT_DLLPRIVATE void            ColumnInserted( USHORT nPos );
 
-    DECL_DLLPRIVATE_LINK(       ScrollHdl, ScrollBar * );
-    DECL_DLLPRIVATE_LINK(       EndScrollHdl, ScrollBar * );
-    DECL_DLLPRIVATE_LINK(       StartDragHdl, HeaderBar * );
+    DECL_DLLPRIVATE_LINK( 		ScrollHdl, ScrollBar * );
+    DECL_DLLPRIVATE_LINK( 		EndScrollHdl, ScrollBar * );
+    DECL_DLLPRIVATE_LINK( 		StartDragHdl, HeaderBar * );
 
     SVT_DLLPRIVATE long            GetFrozenWidth() const;
 //#endif
 
-    sal_Bool            GoToRow(long nRow, sal_Bool bRowColMove, sal_Bool bDoNotModifySelection = sal_False );
+    BOOL            GoToRow(long nRow, BOOL bRowColMove, BOOL bDoNotModifySelection = FALSE );
 
-    sal_Bool            GoToColumnId( sal_uInt16 nColId, sal_Bool bMakeVisible, sal_Bool bRowColMove = sal_False);
-    void            SelectColumnPos( sal_uInt16 nCol, sal_Bool _bSelect, sal_Bool bMakeVisible);
-    void            SelectColumnId( sal_uInt16 nColId, sal_Bool _bSelect, sal_Bool bMakeVisible)
+    BOOL            GoToColumnId( USHORT nColId, BOOL bMakeVisible, BOOL bRowColMove = FALSE);
+    void            SelectColumnPos( USHORT nCol, BOOL _bSelect, BOOL bMakeVisible);
+    void            SelectColumnId( USHORT nColId, BOOL _bSelect, BOOL bMakeVisible)
                         { SelectColumnPos( GetColumnPos(nColId), _bSelect, bMakeVisible); }
 
-    void            ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_Bool _bForeignDevice, sal_Bool _bDrawSelections);
+    void			ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL _bForeignDevice, BOOL _bDrawSelections);
 
-    sal_Bool            PaintCursorIfHiddenOnce() const { return !m_bFocusOnlyCursor && !HasFocus(); }
+    BOOL			PaintCursorIfHiddenOnce() const { return !m_bFocusOnlyCursor && !HasFocus(); }
 
-    sal_uInt16          ToggleSelectedColumn();
-    void            SetToggledSelectedColumn(sal_uInt16 _nSelectedColumnId);
+    USHORT			ToggleSelectedColumn();
+    void			SetToggledSelectedColumn(USHORT _nSelectedColumnId);
 
 protected:
     /// retrieves the XAccessible implementation associated with the BrowseBox instance
     ::svt::IAccessibleFactory&   getAccessibleFactory();
 
 protected:
-    sal_uInt16          ColCount() const;
+    USHORT          ColCount() const;
 
     // software plug for database access
     // Der RowCount wird jetzt intern automatisch gezaehlt
@@ -357,9 +360,9 @@ public:
 
 protected:
     // fuer Anzeige im VScrollBar z.B. auf "?" oder setzen
-    void            SetRealRowCount( const String &rRealRowCount );
+    void 			SetRealRowCount( const String &rRealRowCount );
 
-    // Return Value muss immer sal_True sein - SeekRow *muss* klappen!
+    // Return Value muss immer TRUE sein - SeekRow *muss* klappen!
     // (sonst ASSERT) MI: wer hat das eingebaut? Das darf nicht so sein!
 
     /** seeks for the given row position
@@ -368,10 +371,10 @@ protected:
     */
     virtual sal_Bool SeekRow( long nRow ) = 0;
     virtual void    DrawCursor();
-    virtual void    PaintRow( OutputDevice &rDev, const Rectangle &rRect );
+    virtual void	PaintRow( OutputDevice &rDev, const Rectangle &rRect );
     virtual void    PaintData( Window& rWin, const Rectangle& rRect );
     virtual void    PaintField( OutputDevice& rDev, const Rectangle& rRect,
-                                sal_uInt16 nColumnId ) const = 0;
+                                USHORT nColumnId ) const = 0;
     // Benachrichtigung an die abgeleitete Klasse, dass sich der sichtbare
     // Bereich von Rows geaendert hat. Aus dieser Methode heraus darf
     // die abgeleitete Klasse Aenderungen des Model mit Hilfe der Methoden
@@ -389,40 +392,40 @@ protected:
     //   dadurch aendert sich nur die Numerierung der sichtbaren Rows
     // - Scrollen (und daraus resultierend eine andere erste sichtbare Row)
     // - Resize des Fensters
-    virtual void    VisibleRowsChanged( long nNewTopRow, sal_uInt16 nNumRows);
+    virtual void    VisibleRowsChanged( long nNewTopRow, USHORT nNumRows);
 
     // Anzahl sichtbarer Rows in dem Fenster (inkl. "angeschnittener" Rows)
-    sal_uInt16          GetVisibleRows()
-                        { return (sal_uInt16)((pDataWin->GetOutputSizePixel().Height() - 1 )/ GetDataRowHeight() + 1); }
+    USHORT          GetVisibleRows()
+                        { return (USHORT)((pDataWin->GetOutputSizePixel().Height() - 1 )/ GetDataRowHeight() + 1); }
     long            GetTopRow() { return nTopRow; }
-    sal_uInt16          GetFirstVisibleColNumber() const { return nFirstCol; }
+    USHORT			GetFirstVisibleColNumber() const { return nFirstCol; }
 
     // Focus-Rect ein-/ausschalten
-    void            DoShowCursor( const char *pWhoLog );
-    void            DoHideCursor( const char *pWhoLog );
-    short           GetCursorHideCount() const;
+    void			DoShowCursor( const char *pWhoLog );
+    void			DoHideCursor( const char *pWhoLog );
+    short			GetCursorHideCount() const;
 
-    virtual BrowserHeader*  CreateHeaderBar( BrowseBox* pParent );
+    virtual BrowserHeader*	CreateHeaderBar( BrowseBox* pParent );
 
     // HACK(virtuelles Create wird im Ctor nicht gerufen)
-    void            SetHeaderBar( BrowserHeader* );
+    void			SetHeaderBar( BrowserHeader* );
 
-    long            CalcReverseZoom(long nVal);
+    long			CalcReverseZoom(long nVal);
 
-    HeaderBar*      GetHeaderBar() const;
+    HeaderBar*		GetHeaderBar() const;
         // header bar access for derived classes
 
     inline const DataFlavorExVector&
                     GetDataFlavors() const;
 
-    sal_Bool        IsDropFormatSupported( SotFormatStringId nFormat );     // need this because the base class' IsDropFormatSupported is not const ...
-    sal_Bool        IsDropFormatSupported( SotFormatStringId nFormat ) const;
+    sal_Bool		IsDropFormatSupported( SotFormatStringId nFormat );		// need this because the base class' IsDropFormatSupported is not const ...
+    sal_Bool		IsDropFormatSupported( SotFormatStringId nFormat ) const;
 
-    sal_Bool        IsDropFormatSupported( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor );        // need this because the base class' IsDropFormatSupported is not const ...
-    sal_Bool        IsDropFormatSupported( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor ) const;
+    sal_Bool		IsDropFormatSupported( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor );		// need this because the base class' IsDropFormatSupported is not const ...
+    sal_Bool		IsDropFormatSupported( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor ) const;
 
 private:
-    void*           implGetDataFlavors() const;
+    void*			implGetDataFlavors() const;
         // with this we can make GetDataFlavors() inline, which is strongly needed as SVTOOLS does not export
         // any sysbols containing an "_STL", so a non-inlined method would not be exported ....
 
@@ -440,7 +443,7 @@ public:
                     ~BrowseBox();
 
     // ererbte ueberladene Handler
-    virtual void    StateChanged( StateChangedType nStateChange );
+    virtual void	StateChanged( StateChangedType nStateChange );
     virtual void    MouseButtonDown( const MouseEvent& rEvt );
     virtual void    MouseMove( const MouseEvent& rEvt );
     virtual void    MouseButtonUp( const MouseEvent& rEvt );
@@ -449,12 +452,12 @@ public:
     virtual void    GetFocus();
     virtual void    Resize();
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
+    virtual void	Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
     virtual void    Command( const CommandEvent& rEvt );
-    virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+    virtual void	StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
 
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );     // will forward everything got to the second AcceptDrop method
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );   // will forward everything got to the second ExecuteDrop method
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );		// will forward everything got to the second AcceptDrop method
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );	// will forward everything got to the second ExecuteDrop method
 
     virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt );
     virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt );
@@ -467,18 +470,18 @@ public:
     virtual void    EndScroll();
     virtual void    Select();
     virtual void    DoubleClick( const BrowserMouseEvent& rEvt );
-    virtual sal_Bool    IsCursorMoveAllowed( long nNewRow, sal_uInt16 nNewColId ) const;
+    virtual sal_Bool IsCursorMoveAllowed( long nNewRow, USHORT nNewColId ) const;
     virtual void    CursorMoved();
-    virtual void    ColumnMoved( sal_uInt16 nColId );
-    virtual void    ColumnResized( sal_uInt16 nColId );
-    virtual long    QueryColumnResize( sal_uInt16 nColId, long nWidth );
+    virtual void    ColumnMoved( USHORT nColId );
+    virtual void    ColumnResized( USHORT nColId );
+    virtual long    QueryColumnResize( USHORT nColId, long nWidth );
     /// called when the row height has been changed interactively
     virtual void    RowHeightChanged();
     virtual long    QueryMinimumRowHeight();
 
     // Window-Control (pass to DataWindow)
-    void            SetUpdateMode( sal_Bool bUpdate );
-    sal_Bool            GetUpdateMode() const;
+    void            SetUpdateMode( BOOL bUpdate );
+    BOOL            GetUpdateMode() const;
 
     // map-mode and font control
     void            SetFont( const Font& rNewFont );
@@ -488,122 +491,122 @@ public:
     const Font&     GetTitleFont() const { return Control::GetFont(); }
 
     // color for line painting
-    void            SetGridLineColor(const Color& rColor) {aGridLineColor = rColor;}
-    const Color&    GetGridLineColor() const {return aGridLineColor;}
+    void			SetGridLineColor(const Color& rColor) {aGridLineColor = rColor;}
+    const Color&	GetGridLineColor() const {return aGridLineColor;}
 
     // inserting, changing, removing and freezing of columns
-    void            InsertHandleColumn( sal_uLong nWidth );
-    void            InsertDataColumn( sal_uInt16 nItemId, const Image& rImage,
+    void            InsertHandleColumn( ULONG nWidth );
+    void			InsertDataColumn( USHORT nItemId, const Image& rImage,
                                     long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
-                                    sal_uInt16 nPos = HEADERBAR_APPEND );
-    void            InsertDataColumn( sal_uInt16 nItemId, const XubString& rText,
+                                    USHORT nPos = HEADERBAR_APPEND );
+    void			InsertDataColumn( USHORT nItemId, const XubString& rText,
                                     long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
-                                    sal_uInt16 nPos = HEADERBAR_APPEND );
-    void            InsertDataColumn( sal_uInt16 nItemId,
+                                    USHORT nPos = HEADERBAR_APPEND );
+    void			InsertDataColumn( USHORT nItemId,
                                     const Image& rImage, const XubString& rText,
                                     long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
-                                    sal_uInt16 nPos = HEADERBAR_APPEND,
+                                    USHORT nPos = HEADERBAR_APPEND,
                                     // Hilfstext bei leerem rText
                                     const String* pHelpText = 0 );
-    void            SetColumnTitle( sal_uInt16 nColumnId, const String &rTitle );
-    void            SetColumnMode( sal_uInt16 nColumnId, BrowserColumnMode nFlags );
-    void            SetColumnWidth( sal_uInt16 nColumnId, sal_uLong nWidth );
-    void            SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos );
-    void            FreezeColumn( sal_uInt16 nColumnId, sal_Bool bFreeze = sal_True );
+    void            SetColumnTitle( USHORT nColumnId, const String &rTitle );
+    void            SetColumnMode( USHORT nColumnId, BrowserColumnMode nFlags );
+    void            SetColumnWidth( USHORT nColumnId, ULONG nWidth );
+    void            SetColumnPos( USHORT nColumnId, USHORT nPos );
+    void            FreezeColumn( USHORT nColumnId, BOOL bFreeze = TRUE );
     void            UnfreezeColumns();
-    void            RemoveColumn( sal_uInt16 nColumnId );
+    void            RemoveColumn( USHORT nColumnId );
     void            RemoveColumns();
 
     // control of title and data row height
     void            SetDataRowHeight( long nPixel );
     long            GetDataRowHeight() const;
-    void            SetTitleLines( sal_uInt16 nLines );
-    sal_uInt16          GetTitleLines() const { return nTitleLines; }
-    virtual long    GetTitleHeight() const;
+    void            SetTitleLines( USHORT nLines );
+    USHORT          GetTitleLines() const { return nTitleLines; }
+    virtual long	GetTitleHeight() const;
 
     // access to dynamic values of cursor row
-    String          GetColumnTitle( sal_uInt16 nColumnId ) const;
-    BrowserColumnMode GetColumnMode( sal_uInt16 nColumnId ) const;
-    Rectangle       GetFieldRect( sal_uInt16 nColumnId ) const;
-    sal_uLong           GetColumnWidth( sal_uInt16 nColumnId ) const;
-    sal_uInt16          GetColumnId( sal_uInt16 nPos ) const;
-    sal_uInt16          GetColumnPos( sal_uInt16 nColumnId ) const;
-    sal_Bool            IsFrozen( sal_uInt16 nColumnId ) const;
+    String          GetColumnTitle( USHORT nColumnId ) const;
+    BrowserColumnMode GetColumnMode( USHORT nColumnId ) const;
+    Rectangle       GetFieldRect( USHORT nColumnId ) const;
+    ULONG           GetColumnWidth( USHORT nColumnId ) const;
+    USHORT          GetColumnId( USHORT nPos ) const;
+    USHORT          GetColumnPos( USHORT nColumnId ) const;
+    BOOL            IsFrozen( USHORT nColumnId ) const;
 
     // movement of visible area
     void            ResetScroll();
     long            ScrollColumns( long nColumns );
     long            ScrollRows( long nRows );
     long            ScrollPages( long nPagesY );
-    sal_Bool            MakeFieldVisible( long nRow, sal_uInt16 nColId, sal_Bool bComplete = sal_False );
+    BOOL			MakeFieldVisible( long nRow, USHORT nColId, BOOL bComplete = FALSE );
 
     // access and movement of cursor
     long            GetCurRow() const { return nCurRow; }
-    sal_uInt16          GetCurColumnId() const { return nCurColId; }
-    sal_Bool            GoToRow( long nRow );
-    sal_Bool            GoToRowAndDoNotModifySelection( long nRow );
-    sal_Bool            GoToColumnId( sal_uInt16 nColId );
-    sal_Bool            GoToRowColumnId( long nRow, sal_uInt16 nColId );
+    USHORT          GetCurColumnId() const { return nCurColId; }
+    BOOL            GoToRow( long nRow );
+    BOOL			GoToRowAndDoNotModifySelection( long nRow );
+    BOOL            GoToColumnId( USHORT nColId );
+    BOOL            GoToRowColumnId( long nRow, USHORT nColId );
 
     // selections
     virtual void    SetNoSelection();
     virtual void    SelectAll();
-    virtual void    SelectRow( long nRow, sal_Bool _bSelect = sal_True, sal_Bool bExpand = sal_True );
-    void            SelectColumnPos( sal_uInt16 nCol, sal_Bool _bSelect = sal_True )
-                        { SelectColumnPos( nCol, _bSelect, sal_True); }
-    void            SelectColumnId( sal_uInt16 nColId, sal_Bool _bSelect = sal_True )
-                        { SelectColumnPos( GetColumnPos(nColId), _bSelect, sal_True); }
+    virtual void    SelectRow( long nRow, BOOL _bSelect = TRUE, BOOL bExpand = TRUE );
+    void            SelectColumnPos( USHORT nCol, BOOL _bSelect = TRUE )
+                        { SelectColumnPos( nCol, _bSelect, TRUE); }
+    void            SelectColumnId( USHORT nColId, BOOL _bSelect = TRUE )
+                        { SelectColumnPos( GetColumnPos(nColId), _bSelect, TRUE); }
     long            GetSelectRowCount() const;
-    sal_uInt16          GetSelectColumnCount() const;
+    USHORT          GetSelectColumnCount() const;
     virtual bool    IsRowSelected( long nRow ) const;
-    bool            IsColumnSelected( sal_uInt16 nColumnId ) const;
+    bool            IsColumnSelected( USHORT nColumnId ) const;
     sal_Bool        IsAllSelected() const;
-    long            FirstSelectedRow( sal_Bool bInverse = sal_False );
+    long            FirstSelectedRow( BOOL bInverse = FALSE );
     long            LastSelectedRow();
     long            PrevSelectedRow();
     long            NextSelectedRow();
     const MultiSelection* GetColumnSelection() const { return pColSel; }
     const MultiSelection* GetSelection() const
                     { return bMultiSelection ? uRow.pSel : 0; }
-    void            SetSelection( const MultiSelection &rSelection );
+    void			SetSelection( const MultiSelection &rSelection );
 
-    long            FirstSelectedColumn( ) const;
-    long            NextSelectedColumn( ) const;
+    long			FirstSelectedColumn( ) const;
+    long			NextSelectedColumn( ) const;
 
-    sal_Bool            IsResizing() const { return bResizing; }
+    BOOL			IsResizing() const { return bResizing; }
 
     // access to positions of fields, column and rows
     Window&         GetEventWindow() const;
     Window&         GetDataWindow() const { return *pDataWin; }
     Rectangle       GetRowRectPixel( long nRow,
-                                     sal_Bool bRelToBrowser = sal_True ) const;
-    Rectangle       GetFieldRectPixel( long nRow, sal_uInt16 nColId,
-                                       sal_Bool bRelToBrowser = sal_True) const;
-    sal_Bool            IsFieldVisible( long nRow, sal_uInt16 nColId,
-                                    sal_Bool bComplete = sal_False ) const;
+                                     BOOL bRelToBrowser = TRUE ) const;
+    Rectangle       GetFieldRectPixel( long nRow, USHORT nColId,
+                                       BOOL bRelToBrowser = TRUE) const;
+    BOOL            IsFieldVisible( long nRow, USHORT nColId,
+                                    BOOL bComplete = FALSE ) const;
     long            GetRowAtYPosPixel( long nY,
-                                        sal_Bool bRelToBrowser = sal_True  ) const;
-    sal_uInt16          GetColumnAtXPosPixel( long nX,
-                                          sal_Bool bRelToBrowser = sal_True  ) const;
+                                        BOOL bRelToBrowser = TRUE  ) const;
+    USHORT          GetColumnAtXPosPixel( long nX,
+                                          BOOL bRelToBrowser = TRUE  ) const;
 
     // invalidations
     void            Clear();
-    void            RowRemoved( long nRow, long nNumRows = 1, sal_Bool bDoPaint = sal_True );
-    void            RowModified( long nRow, sal_uInt16 nColId = USHRT_MAX );
-    void            RowInserted( long nRow, long nNumRows = 1, sal_Bool bDoPaint = sal_True, sal_Bool bKeepSelection = sal_False );
+    void            RowRemoved( long nRow, long nNumRows = 1, BOOL bDoPaint = TRUE );
+    void            RowModified( long nRow, USHORT nColId = USHRT_MAX );
+    void            RowInserted( long nRow, long nNumRows = 1, BOOL bDoPaint = TRUE, BOOL bKeepSelection = FALSE );
 
     // miscellanous
-    void            ReserveControlArea( sal_uInt16 nWidth = USHRT_MAX );
+    void            ReserveControlArea( USHORT nWidth = USHRT_MAX );
     Rectangle       GetControlArea() const;
-    sal_Bool            ProcessKey( const KeyEvent& rEvt );
-    void            Dispatch( sal_uInt16 nId );
+    BOOL 			ProcessKey( const KeyEvent& rEvt );
+    void            Dispatch( USHORT nId );
     void            SetMode( BrowserMode nMode = 0 );
-    BrowserMode     GetMode( ) const { return m_nCurrentMode; }
-    bool            IsInCommandEvent() const;
+    BrowserMode		GetMode( ) const { return m_nCurrentMode; }
+    bool			IsInCommandEvent() const;
 
-    void            SetCursorColor(const Color& _rCol);
-    Color           GetCursorColor() const { return m_aCursorColor; }
-    void            ResetSelecting() { bSelecting = sal_False; }
+    void			SetCursorColor(const Color& _rCol);
+    Color			GetCursorColor() const { return m_aCursorColor; }
+    void			ResetSelecting() { bSelecting = FALSE; }
 
     /** specifies that the user is allowed to interactively change the height of a row,
         by simply dragging an arbitrary row separator.
@@ -611,36 +614,36 @@ public:
         Note that this works only if there's a handle column, since only in this case,
         there *is* something for the user to click onto
     */
-    void            EnableInteractiveRowHeight( sal_Bool _bEnable = sal_True ) { mbInteractiveRowHeight = _bEnable; }
-    sal_Bool            IsInteractiveRowHeightEnabled( ) const { return mbInteractiveRowHeight; }
+    void            EnableInteractiveRowHeight( BOOL _bEnable = TRUE ) { mbInteractiveRowHeight = _bEnable; }
+    BOOL            IsInteractiveRowHeightEnabled( ) const { return mbInteractiveRowHeight; }
 
     /// access to selected methods, to be granted to the BrowserColumn
     struct BrowserColumnAccess { friend class BrowserColumn; private: BrowserColumnAccess() { } };
     /** public version of PaintField, with selected access rights for the BrowserColumn
     */
-    void            DoPaintField( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId, BrowserColumnAccess ) const
+    void            DoPaintField( OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId, BrowserColumnAccess ) const
                     { PaintField( rDev, rRect, nColumnId ); }
 
     /** suggests a default width for a column containing a given text
 
         The width is calculated so that the text fits completely, plus som margin.
     */
-    sal_uLong           GetDefaultColumnWidth( const String& _rText ) const;
+    ULONG           GetDefaultColumnWidth( const String& _rText ) const;
 
     /** GetCellText returns the text at the given position
-        @param  _nRow
+        @param	_nRow
             the number of the row
-        @param  _nColId
+        @param	_nColId
             the ID of the column
         @return
             the text out of the cell
     */
-    virtual String  GetCellText(long _nRow, sal_uInt16 _nColId) const;
+    virtual String	GetCellText(long _nRow, USHORT _nColId) const;
 
     /** @return
             the current column count
     */
-    sal_uInt16 GetColumnCount() const { return ColCount(); }
+    USHORT GetColumnCount() const { return ColCount(); }
 
     /** commitBrowseBoxEvent commit the event at all listeners of the browsebox
         @param nEventId
@@ -682,34 +685,34 @@ public:
          );
 
     /** returns the Rectangle for either the column header bar ot the row header bar
-        @param  _bIsColumnBar
+        @param	_bIsColumnBar
             <TRUE/> when column header bar is used
-        @param  _bOnScreen
+        @param	_bOnScreen
             <TRUE/> when the rectangle should be calculated OnScreen
         @return
             the Rectangle
     */
-    virtual Rectangle calcHeaderRect(sal_Bool _bIsColumnBar,sal_Bool _bOnScreen = sal_True);
+    virtual Rectangle calcHeaderRect(sal_Bool _bIsColumnBar,BOOL _bOnScreen = TRUE);
 
     /** calculates the Rectangle of the table
-        @param  _bOnScreen
+        @param	_bOnScreen
             <TRUE/> when the rectangle should be calculated OnScreen
         @return
             the Rectangle
     */
-    virtual Rectangle calcTableRect(sal_Bool _bOnScreen = sal_True);
+    virtual Rectangle calcTableRect(BOOL _bOnScreen = TRUE);
 
     /**
-        @param  _nRowId
+        @param	_nRowId
             the current row
-        @param  _nColId
+        @param	_nColId
             teh column id
-        @param  _bOnScreen
+        @param	_bOnScreen
             <TRUE/> when the rectangle should be calculated OnScreen
         @return
             the Rectangle
     */
-    virtual Rectangle GetFieldRectPixelAbs(sal_Int32 _nRowId,sal_uInt16 _nColId, sal_Bool _bIsHeader, sal_Bool _bOnScreen = sal_True);
+    virtual Rectangle GetFieldRectPixelAbs(sal_Int32 _nRowId,sal_uInt16 _nColId, BOOL _bIsHeader, BOOL _bOnScreen = TRUE);
 
     /// return <TRUE/> if and only if the accessible object for this instance has been created and is alive
     sal_Bool isAccessibleAlive( ) const;
@@ -788,9 +791,9 @@ public:
     // Object data and state --------------------------------------------------
 
     /** return the name of the specified object.
-        @param  eObjType
+        @param	eObjType
             The type to ask for
-        @param  _nPosition
+        @param	_nPosition
             The position of a tablecell (index position), header bar  colum/row cell
         @return
             The name of the specified object.
@@ -798,9 +801,9 @@ public:
     virtual ::rtl::OUString GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
     /** return the description of the specified object.
-        @param  eObjType
+        @param	eObjType
             The type to ask for
-        @param  _nPosition
+        @param	_nPosition
             The position of a tablecell (index position), header bar  colum/row cell
         @return
             The description of the specified object.
@@ -811,7 +814,7 @@ public:
     virtual ::rtl::OUString GetRowDescription( sal_Int32 nRow ) const;
 
     /** @return  The header text of the specified column. */
-    virtual ::rtl::OUString GetColumnDescription( sal_uInt16 _nColumn ) const;
+    virtual ::rtl::OUString	GetColumnDescription( sal_uInt16 _nColumn ) const;
 
     /** Fills the StateSet with all states (except DEFUNC and SHOWING, done by
         the accessible object), depending on the specified object type. */
@@ -829,25 +832,25 @@ public:
     virtual void GrabTableFocus();
 
     // IAccessibleTableProvider
-    virtual sal_Int32               GetCurrRow() const;
-    virtual sal_uInt16              GetCurrColumn() const;
-    virtual sal_Bool                HasRowHeader() const;
-    virtual sal_Bool                IsCellFocusable() const;
-    virtual sal_Bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
-    virtual void                    SelectColumn( sal_uInt16 _nColumn, sal_Bool _bSelect = sal_True );
-    virtual sal_Bool                IsColumnSelected( long _nColumn ) const;
-    virtual sal_Int32               GetSelectedRowCount() const;
-    virtual sal_Int32               GetSelectedColumnCount() const;
-    virtual void                    GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& _rRows ) const;
-    virtual void                    GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& _rColumns ) const;
-    virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
-    virtual String                  GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const;
-    virtual sal_Bool                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
-    virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const;
-    virtual void                    GrabFocus();
-    virtual XACC                    GetAccessible( sal_Bool bCreate = sal_True );
-    virtual Window*                 GetAccessibleParentWindow() const;
-    virtual Window*                 GetWindowInstance();
+    virtual sal_Int32				GetCurrRow() const;
+    virtual sal_uInt16				GetCurrColumn() const;
+    virtual sal_Bool				HasRowHeader() const;
+    virtual sal_Bool				IsCellFocusable() const;
+    virtual BOOL					GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
+    virtual void					SelectColumn( sal_uInt16 _nColumn, sal_Bool _bSelect = sal_True );
+    virtual sal_Bool				IsColumnSelected( long _nColumn ) const;
+    virtual sal_Int32				GetSelectedRowCount() const;
+    virtual sal_Int32				GetSelectedColumnCount() const;
+    virtual void					GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& _rRows ) const;
+    virtual void					GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& _rColumns ) const;
+    virtual sal_Bool				IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
+    virtual String	                GetAccessibleCellText(long _nRow, USHORT _nColPos) const;
+    virtual BOOL					GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
+    virtual Rectangle				GetWindowExtentsRelative( Window *pRelativeWindow ) const;
+    virtual void					GrabFocus();
+    virtual XACC					GetAccessible( BOOL bCreate = TRUE );
+    virtual Window*					GetAccessibleParentWindow() const;
+    virtual Window*					GetWindowInstance();
 
 private:
     // the following declares some Window/OutputDevice methods private. This happened in the course

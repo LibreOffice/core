@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,22 +58,22 @@ using namespace com::sun::star;
 //------------------------------------------------------------------------
 
 void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
-        SCCOL nStartCol, SCROW nStartRow,   SCCOL nEndCol, SCROW nEndRow )
+        SCCOL nStartCol, SCROW nStartRow,	SCCOL nEndCol, SCROW nEndRow )
 {
     if ( pDrawLayer->HasObjectsInRows( nTab, nStartRow, nEndRow ) )
     {
         SdrPage* pDrawPage = pDrawLayer->GetPage( static_cast<sal_uInt16>(nTab) );
         if ( pDrawPage )
         {
-            bTabHasGraphics = true;
-            FillGraphList( pDrawPage, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
-            size_t ListSize = aGraphList.size();
-            for ( size_t i = 0; i < ListSize; ++i )
+            bTabHasGraphics = TRUE;
+            FillGraphList( pDrawPage, nTab,
+                nStartCol, nStartRow, nEndCol, nEndRow );
+            for ( ScHTMLGraphEntry* pE = aGraphList.First(); pE;
+                    pE = aGraphList.Next() )
             {
-                ScHTMLGraphEntry* pE = &aGraphList[ i ];
                 if ( !pE->bInCell )
-                {   // nicht alle in Zellen: einige neben Tabelle
-                    bTabAlignedLeft = sal_True;
+                {	// nicht alle in Zellen: einige neben Tabelle
+                    bTabAlignedLeft = TRUE;
                     break;
                 }
             }
@@ -83,9 +83,9 @@ void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
 
 
 void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
-        SCCOL nStartCol, SCROW nStartRow,   SCCOL nEndCol, SCROW nEndRow )
+        SCCOL nStartCol, SCROW nStartRow,	SCCOL nEndCol, SCROW nEndRow )
 {
-    sal_uLong   nObjCount = pPage->GetObjCount();
+    ULONG	nObjCount = pPage->GetObjCount();
     if ( nObjCount )
     {
         Rectangle aRect;
@@ -110,7 +110,7 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
                 SCCOL nCol2 = aR.aEnd.Col();
                 SCROW nRow2 = aR.aEnd.Row();
                 // All cells empty under object?
-                sal_Bool bInCell = (pDoc->GetEmptyLinesInBlock(
+                BOOL bInCell = (pDoc->GetEmptyLinesInBlock(
                     nCol1, nRow1, nTab, nCol2, nRow2, nTab, DIR_TOP )
                     == static_cast< SCSIZE >( nRow2 - nRow1 ));    // rows-1 !
                 if ( bInCell )
@@ -127,7 +127,7 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
                 }
                 ScHTMLGraphEntry* pE = new ScHTMLGraphEntry( pObject,
                     aR, aSize, bInCell, aSpace );
-                aGraphList.push_back( pE );
+                aGraphList.Insert( pE, LIST_APPEND );
             }
             pObject = aIter.Next();
         }
@@ -156,11 +156,11 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         {
             const SdrGrafObj* pSGO = (SdrGrafObj*)pObject;
             const SdrGrafObjGeoData* pGeo = (SdrGrafObjGeoData*)pSGO->GetGeoData();
-            sal_uInt16 nMirrorCase = (pGeo->aGeo.nDrehWink == 18000 ?
+            USHORT nMirrorCase = (pGeo->aGeo.nDrehWink == 18000 ?
                     ( pGeo->bMirrored ? 3 : 4 ) : ( pGeo->bMirrored ? 2 : 1 ));
-            sal_Bool bHMirr = ( ( nMirrorCase == 2 ) || ( nMirrorCase == 4 ) );
-            sal_Bool bVMirr = ( ( nMirrorCase == 3 ) || ( nMirrorCase == 4 ) );
-            sal_uLong nXOutFlags = 0;
+            BOOL bHMirr = ( ( nMirrorCase == 2 ) || ( nMirrorCase == 4 ) );
+            BOOL bVMirr = ( ( nMirrorCase == 3 ) || ( nMirrorCase == 4 ) );
+            ULONG nXOutFlags = 0;
             if ( bHMirr )
                 nXOutFlags |= XOUTBMP_MIRROR_HORZ;
             if ( bVMirr )
@@ -169,7 +169,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
             if ( pSGO->IsLinkedGraphic() )
                 aLinkName = pSGO->GetFileName();
             WriteImage( aLinkName, pSGO->GetGraphic(), aOpt, nXOutFlags );
-            pE->bWritten = sal_True;
+            pE->bWritten = TRUE;
         }
         break;
         case OBJ_OLE2:
@@ -179,7 +179,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
             {
                 String aLinkName;
                 WriteImage( aLinkName, *pGraphic, aOpt );
-                pE->bWritten = sal_True;
+                pE->bWritten = TRUE;
             }
         }
         break;
@@ -189,14 +189,14 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
                 pDoc->GetDrawLayer(), pObject ) );
             String aLinkName;
             WriteImage( aLinkName, aGraph, aOpt );
-            pE->bWritten = sal_True;
+            pE->bWritten = TRUE;
         }
     }
 }
 
 
 void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
-            const ByteString& rImgOptions, sal_uLong nXOutFlags )
+            const ByteString& rImgOptions, ULONG nXOutFlags )
 {
     // embeddete Grafik -> via WriteGraphic schreiben
     if( !rLinkName.Len() )
@@ -206,9 +206,9 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
             // Grafik als (JPG-)File speichern
             String aGrfNm( aStreamPath );
             nXOutFlags |= XOUTBMP_USE_NATIVE_IF_POSSIBLE;
-            sal_uInt16 nErr = XOutBitmap::WriteGraphic( rGrf, aGrfNm,
+            USHORT nErr = XOutBitmap::WriteGraphic( rGrf, aGrfNm,
                 CREATE_STRING( "JPG" ), nXOutFlags );
-            if( !nErr )     // sonst fehlerhaft, da ist nichts auszugeben
+            if( !nErr )		// sonst fehlerhaft, da ist nichts auszugeben
             {
                 rLinkName = URIHelper::SmartRel2Abs(
                         INetURLObject(aBaseURL),
@@ -234,7 +234,7 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
                     URIHelper::GetMaybeFileHdl());
     }
     if( rLinkName.Len() )
-    {   // <IMG SRC="..."[ rImgOptions]>
+    {	// <IMG SRC="..."[ rImgOptions]>
         rStrm << '<' << OOO_STRING_SVTOOLS_HTML_image << ' ' << OOO_STRING_SVTOOLS_HTML_O_src << "=\"";
         HTMLOutFuncs::Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(
                     aBaseURL,

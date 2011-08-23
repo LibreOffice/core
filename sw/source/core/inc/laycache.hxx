@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class SvStream;
 class SwLayoutCache
 {
     SwLayCacheImpl *pImpl;
-    sal_uInt16 nLockCount;
+    USHORT nLockCount;
 public:
     SwLayoutCache() : pImpl( NULL ), nLockCount( 0 ) {}
     ~SwLayoutCache();
@@ -62,7 +62,7 @@ public:
 
     void ClearImpl();
     sal_Bool IsLocked() const { return nLockCount > 0; }
-    sal_uInt16& GetLockCount() { return nLockCount; }
+    USHORT& GetLockCount() { return nLockCount; }
     SwLayCacheImpl *LockImpl()
         { if( nLockCount & 0x8000 ) return NULL;
           if ( pImpl )

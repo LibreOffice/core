@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,12 +67,12 @@ BasicDocShell::BasicDocShell()
     SetBaseModel( new SIDEModel(this) );
 }
 
-BasicDocShell::~BasicDocShell()
+__EXPORT BasicDocShell::~BasicDocShell()
 {
     delete pPrinter;
 }
 
-SfxPrinter* BasicDocShell::GetPrinter( sal_Bool bCreate )
+SfxPrinter* BasicDocShell::GetPrinter( BOOL bCreate )
 {
     if ( !pPrinter && bCreate )
         pPrinter = new SfxPrinter( new SfxItemSet( GetPool(), SID_PRINTER_NOTFOUND_WARN , SID_PRINTER_NOTFOUND_WARN ) );
@@ -89,13 +89,49 @@ void BasicDocShell::SetPrinter( SfxPrinter* pPr )
     }
 }
 
+void BasicDocShell::FillStatusBar( StatusBar& rStatusBar )
+{
+    String aTmp;
+
+    // Titel
+    aTmp.Fill( 30, 'X' );
+    rStatusBar.InsertItem( SID_BASICIDE_STAT_TITLE,
+        rStatusBar.GetTextWidth( aTmp ), SIB_AUTOSIZE | SIB_LEFT);
+
+    // Modify
+    rStatusBar.InsertItem( SID_DOC_MODIFIED,
+        rStatusBar.GetTextWidth( '*' ) );
+
+    // signatures
+    rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
+    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
+
+    // Position
+    aTmp.Erase();
+    aTmp.Fill( 15, 'X' );
+    rStatusBar.InsertItem( SID_BASICIDE_STAT_POS,
+        rStatusBar.GetTextWidth( aTmp ), SIB_LEFT);
+
+    // Insert/Overwrite
+    rStatusBar.InsertItem( SID_ATTR_INSERT,
+        rStatusBar.GetTextWidth( String( RTL_CONSTASCII_USTRINGPARAM( "XXXXX" /* "EINFG" */ ) ) ) );
+
+    // Uhrzeit
+    aTmp.Fill( 20, 'X' );
+    rStatusBar.InsertItem( SID_ATTR_SIZE,
+        rStatusBar.GetTextWidth( aTmp ), SIB_AUTOSIZE | SIB_LEFT | SIB_USERDRAW );
+
+//	return pStatusBar;
+
+}
+
 void BasicDocShell::FillClass( SvGlobalName*, sal_uInt32*, String*, String*, String*, sal_Int32, sal_Bool bTemplate) const
 {
     (void)bTemplate;
     DBG_ASSERT( bTemplate == sal_False, "No template for Basic" );
 }
 
-void BasicDocShell::Draw( OutputDevice *, const JobSetup &, sal_uInt16 )
+void BasicDocShell::Draw( OutputDevice *, const JobSetup &, USHORT )
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

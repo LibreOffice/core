@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <sal/macros.h>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -71,21 +70,21 @@ void OptimizerSettings::LoadSettingsFromConfiguration( const Reference< XNameAcc
                 Any aValue( rSettings->getByName( aPropertyName ) );
                 switch( TKGet( aPropertyName ) )
                 {
-                    case TK_Name :                      aValue >>= maName; break;
-                    case TK_JPEGCompression :           aValue >>= mbJPEGCompression; break;
-                    case TK_JPEGQuality :               aValue >>= mnJPEGQuality; break;
-                    case TK_RemoveCropArea :            aValue >>= mbRemoveCropArea; break;
-                    case TK_ImageResolution :           aValue >>= mnImageResolution; break;
-                    case TK_EmbedLinkedGraphics :       aValue >>= mbEmbedLinkedGraphics; break;
-                    case TK_OLEOptimization :           aValue >>= mbOLEOptimization; break;
-                    case TK_OLEOptimizationType :       aValue >>= mnOLEOptimizationType; break;
-                    case TK_DeleteUnusedMasterPages :   aValue >>= mbDeleteUnusedMasterPages; break;
-                    case TK_DeleteHiddenSlides :        aValue >>= mbDeleteHiddenSlides; break;
-                    case TK_DeleteNotesPages :          aValue >>= mbDeleteNotesPages ;break;
-                    case TK_SaveAs :                    aValue >>= mbSaveAs; break;
-//                  case TK_SaveAsURL :                 aValue >>= maSaveAsURL; break;      // URL is not saved to configuration
-//                  case TK_FilterName :                aValue >>= maFilterName; break;     // URL is not saved to configuration
-                    case TK_OpenNewDocument :           aValue >>= mbOpenNewDocument; break;
+                    case TK_Name :						aValue >>= maName; break;
+                    case TK_JPEGCompression :			aValue >>= mbJPEGCompression; break;
+                    case TK_JPEGQuality :				aValue >>= mnJPEGQuality; break;
+                    case TK_RemoveCropArea :			aValue >>= mbRemoveCropArea; break;
+                    case TK_ImageResolution :			aValue >>= mnImageResolution; break;
+                    case TK_EmbedLinkedGraphics :		aValue >>= mbEmbedLinkedGraphics; break;
+                    case TK_OLEOptimization :			aValue >>= mbOLEOptimization; break;
+                    case TK_OLEOptimizationType :		aValue >>= mnOLEOptimizationType; break;
+                    case TK_DeleteUnusedMasterPages :	aValue >>= mbDeleteUnusedMasterPages; break;
+                    case TK_DeleteHiddenSlides :		aValue >>= mbDeleteHiddenSlides; break;
+                    case TK_DeleteNotesPages :			aValue >>= mbDeleteNotesPages ;break;
+                    case TK_SaveAs :					aValue >>= mbSaveAs; break;
+//					case TK_SaveAsURL :					aValue >>= maSaveAsURL; break;		// URL is not saved to configuration
+//					case TK_FilterName :				aValue >>= maFilterName; break;		// URL is not saved to configuration
+                    case TK_OpenNewDocument :			aValue >>= mbOpenNewDocument; break;
                     default: break;
                 }
             }
@@ -113,11 +112,11 @@ void OptimizerSettings::SaveSettingsToConfiguration( const Reference< XNameRepla
             TKGet( TK_DeleteHiddenSlides ),
             TKGet( TK_DeleteNotesPages ),
             TKGet( TK_SaveAs ),
-//          TKGet( TK_SaveAsURL ),
-//          TKGet( TK_FilterName ),
-            TKGet( TK_OpenNewDocument ) };
+//			TKGet( TK_SaveAsURL ),
+//			TKGet( TK_FilterName ),
+            TKGet( TK_OpenNewDocument )	};
 
-        Any pValues[] = {
+        Any	pValues[] = {
             Any( maName ),
             Any( mbJPEGCompression ),
             Any( mnJPEGQuality ),
@@ -130,11 +129,11 @@ void OptimizerSettings::SaveSettingsToConfiguration( const Reference< XNameRepla
             Any( mbDeleteHiddenSlides ),
             Any( mbDeleteNotesPages ),
             Any( mbSaveAs ),
-//          Any( maSaveAsURL ),
-//          Any( maFilterName ),
+//			Any( maSaveAsURL ),
+//			Any( maFilterName ),
             Any( mbOpenNewDocument ) };
 
-        sal_Int32 i, nCount = SAL_N_ELEMENTS( pNames );
+        sal_Int32 i, nCount = sizeof( pNames ) / sizeof( OUString );
 
         for ( i = 0; i < nCount; i++ )
         {
@@ -161,7 +160,7 @@ sal_Bool OptimizerSettings::operator==( const OptimizerSettings& rOptimizerSetti
         && ( rOptimizerSettings.mbDeleteUnusedMasterPages == mbDeleteUnusedMasterPages )
         && ( rOptimizerSettings.mbDeleteHiddenSlides == mbDeleteHiddenSlides )
         && ( rOptimizerSettings.mbDeleteNotesPages == mbDeleteNotesPages );
-//      && ( rOptimizerSettings.mbOpenNewDocument == mbOpenNewDocument );
+//		&& ( rOptimizerSettings.mbOpenNewDocument == mbOpenNewDocument );
 }
 
 
@@ -235,7 +234,7 @@ void ConfigurationAccess::LoadStrings()
                     }
                     catch( Exception& )
                     {
-                    }
+                    }			
                 }
             }
         }
@@ -345,8 +344,8 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
         {
             Sequence< Any > aCreationArguments( 2 );
             aCreationArguments[0] = makeAny( PropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) ), 0,
-                makeAny( GetPathToConfigurationRoot() ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) ), 0, 
+                makeAny( GetPathToConfigurationRoot() ), 
                 PropertyState_DIRECT_VALUE ) );
             aCreationArguments[1] = makeAny(beans::PropertyValue(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ) ), 0, makeAny( true ),
@@ -370,7 +369,7 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
 }
 
 Reference< XInterface > ConfigurationAccess::GetConfigurationNode(
-    const Reference< XInterface >& xRoot,
+    const Reference< XInterface >& xRoot, 
     const OUString& sPathToNode )
 {
     Reference< XInterface > xNode;
@@ -406,22 +405,22 @@ com::sun::star::uno::Any ConfigurationAccess::GetConfigProperty( const PPPOptimi
     {
         switch( ePropertyToken )
         {
-            case TK_Name :                      aRetValue <<= rSettings.maName; break;
-            case TK_JPEGCompression :           aRetValue <<= rSettings.mbJPEGCompression; break;
-            case TK_JPEGQuality :               aRetValue <<= rSettings.mnJPEGQuality; break;
-            case TK_RemoveCropArea :            aRetValue <<= rSettings.mbRemoveCropArea; break;
-            case TK_ImageResolution :           aRetValue <<= rSettings.mnImageResolution; break;
-            case TK_EmbedLinkedGraphics :       aRetValue <<= rSettings.mbEmbedLinkedGraphics; break;
-            case TK_OLEOptimization :           aRetValue <<= rSettings.mbOLEOptimization; break;
-            case TK_OLEOptimizationType :       aRetValue <<= rSettings.mnOLEOptimizationType; break;
-            case TK_DeleteUnusedMasterPages :   aRetValue <<= rSettings.mbDeleteUnusedMasterPages; break;
-            case TK_DeleteHiddenSlides :        aRetValue <<= rSettings.mbDeleteHiddenSlides; break;
-            case TK_DeleteNotesPages :          aRetValue <<= rSettings.mbDeleteNotesPages; break;
-            case TK_SaveAs :                    aRetValue <<= rSettings.mbSaveAs; break;
-            case TK_SaveAsURL :                 aRetValue <<= rSettings.maSaveAsURL; break;
-            case TK_FilterName :                aRetValue <<= rSettings.maFilterName; break;
-            case TK_OpenNewDocument :           aRetValue <<= rSettings.mbOpenNewDocument; break;
-            case TK_EstimatedFileSize :         aRetValue <<= rSettings.mnEstimatedFileSize; break;
+            case TK_Name :						aRetValue <<= rSettings.maName; break;
+            case TK_JPEGCompression :			aRetValue <<= rSettings.mbJPEGCompression; break;
+            case TK_JPEGQuality :				aRetValue <<= rSettings.mnJPEGQuality; break;
+            case TK_RemoveCropArea :			aRetValue <<= rSettings.mbRemoveCropArea; break;
+            case TK_ImageResolution :			aRetValue <<= rSettings.mnImageResolution; break;
+            case TK_EmbedLinkedGraphics :		aRetValue <<= rSettings.mbEmbedLinkedGraphics; break;
+            case TK_OLEOptimization :			aRetValue <<= rSettings.mbOLEOptimization; break;
+            case TK_OLEOptimizationType :		aRetValue <<= rSettings.mnOLEOptimizationType; break;
+            case TK_DeleteUnusedMasterPages :	aRetValue <<= rSettings.mbDeleteUnusedMasterPages; break;
+            case TK_DeleteHiddenSlides :		aRetValue <<= rSettings.mbDeleteHiddenSlides; break;
+            case TK_DeleteNotesPages :			aRetValue <<= rSettings.mbDeleteNotesPages; break;
+            case TK_SaveAs :					aRetValue <<= rSettings.mbSaveAs; break;
+            case TK_SaveAsURL :					aRetValue <<= rSettings.maSaveAsURL; break;
+            case TK_FilterName :				aRetValue <<= rSettings.maFilterName; break;
+            case TK_OpenNewDocument :			aRetValue <<= rSettings.mbOpenNewDocument; break;
+            case TK_EstimatedFileSize :			aRetValue <<= rSettings.mnEstimatedFileSize; break;
             default:
                 break;
         }
@@ -439,23 +438,23 @@ void ConfigurationAccess::SetConfigProperty( const PPPOptimizerTokenEnum eProper
     {
         switch( ePropertyToken )
         {
-            case TK_Name :                      rValue >>= rSettings.maName; break;
-            case TK_JPEGCompression :           rValue >>= rSettings.mbJPEGCompression; break;
-            case TK_JPEGQuality :               rValue >>= rSettings.mnJPEGQuality; break;
-            case TK_RemoveCropArea :            rValue >>= rSettings.mbRemoveCropArea; break;
-            case TK_ImageResolution :           rValue >>= rSettings.mnImageResolution; break;
-            case TK_EmbedLinkedGraphics :       rValue >>= rSettings.mbEmbedLinkedGraphics; break;
-            case TK_OLEOptimization :           rValue >>= rSettings.mbOLEOptimization; break;
-            case TK_OLEOptimizationType :       rValue >>= rSettings.mnOLEOptimizationType; break;
-            case TK_DeleteUnusedMasterPages :   rValue >>= rSettings.mbDeleteUnusedMasterPages; break;
-            case TK_DeleteHiddenSlides :        rValue >>= rSettings.mbDeleteHiddenSlides; break;
-            case TK_DeleteNotesPages :          rValue >>= rSettings.mbDeleteNotesPages; break;
-            case TK_CustomShowName :            rValue >>= rSettings.maCustomShowName; break;
-            case TK_SaveAs :                    rValue >>= rSettings.mbSaveAs; break;
-            case TK_SaveAsURL :                 rValue >>= rSettings.maSaveAsURL; break;
-            case TK_FilterName :                rValue >>= rSettings.maFilterName; break;
-            case TK_OpenNewDocument :           rValue >>= rSettings.mbOpenNewDocument; break;
-            case TK_EstimatedFileSize :         rValue >>= rSettings.mnEstimatedFileSize; break;
+            case TK_Name :						rValue >>= rSettings.maName; break;
+            case TK_JPEGCompression :			rValue >>= rSettings.mbJPEGCompression; break;
+            case TK_JPEGQuality :				rValue >>= rSettings.mnJPEGQuality; break;
+            case TK_RemoveCropArea :			rValue >>= rSettings.mbRemoveCropArea; break;
+            case TK_ImageResolution :			rValue >>= rSettings.mnImageResolution; break;
+            case TK_EmbedLinkedGraphics :		rValue >>= rSettings.mbEmbedLinkedGraphics; break;
+            case TK_OLEOptimization :			rValue >>= rSettings.mbOLEOptimization; break;
+            case TK_OLEOptimizationType :		rValue >>= rSettings.mnOLEOptimizationType; break;
+            case TK_DeleteUnusedMasterPages :	rValue >>= rSettings.mbDeleteUnusedMasterPages; break;
+            case TK_DeleteHiddenSlides :		rValue >>= rSettings.mbDeleteHiddenSlides; break;
+            case TK_DeleteNotesPages :			rValue >>= rSettings.mbDeleteNotesPages; break;
+            case TK_CustomShowName :			rValue >>= rSettings.maCustomShowName; break;
+            case TK_SaveAs :					rValue >>= rSettings.mbSaveAs; break;
+            case TK_SaveAsURL :					rValue >>= rSettings.maSaveAsURL; break;
+            case TK_FilterName :				rValue >>= rSettings.maFilterName; break;
+            case TK_OpenNewDocument :			rValue >>= rSettings.mbOpenNewDocument; break;
+            case TK_EstimatedFileSize :			rValue >>= rSettings.mnEstimatedFileSize; break;
             default:
                 break;
         }

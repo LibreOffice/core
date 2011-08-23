@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl, ListBox*, EMPTYAR
 IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
 {
     bool bRename = pButton == &m_aRenamePB;
-    sal_uInt16 nPos = m_aFieldsLB.GetSelectEntryPos();
+    USHORT nPos = m_aFieldsLB.GetSelectEntryPos();
     if(nPos == LISTBOX_ENTRY_NOTFOUND)
         nPos = 0;
 
@@ -139,7 +139,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK(SwCustomizeAddressListDialog, DeleteHdl_Impl, PushButton*, EMPTYARG)
 {
-    sal_uInt16 nPos = m_aFieldsLB.GetSelectEntryPos();
+    USHORT nPos = m_aFieldsLB.GetSelectEntryPos();
     m_aFieldsLB.RemoveEntry(m_aFieldsLB.GetSelectEntryPos());
     m_aFieldsLB.SelectEntryPos(nPos > m_aFieldsLB.GetEntryCount() - 1 ? nPos - 1 : nPos);
 
@@ -156,8 +156,8 @@ IMPL_LINK(SwCustomizeAddressListDialog, DeleteHdl_Impl, PushButton*, EMPTYARG)
 
 IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
 {
-    sal_uInt16 nPos;
-    sal_uInt16 nOldPos = nPos = m_aFieldsLB.GetSelectEntryPos();
+    USHORT nPos;
+    USHORT nOldPos = nPos = m_aFieldsLB.GetSelectEntryPos();
     String aTemp = m_aFieldsLB.GetEntry(nPos);
     m_aFieldsLB.RemoveEntry( nPos );
     if(pButton == &m_aUpPB)
@@ -184,8 +184,8 @@ IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
 
 void SwCustomizeAddressListDialog::UpdateButtons()
 {
-    sal_uInt16 nPos = m_aFieldsLB.GetSelectEntryPos();
-    sal_uInt16 nEntries = m_aFieldsLB.GetEntryCount();
+    USHORT nPos = m_aFieldsLB.GetSelectEntryPos();
+    USHORT nEntries = m_aFieldsLB.GetEntryCount();
     m_aUpPB.Enable(nPos > 0 && nEntries > 0);
     m_aDownPB.Enable(nPos < nEntries -1);
     m_aDeletePB.Enable(nEntries > 0);
@@ -229,7 +229,7 @@ SwAddRenameEntryDialog::~SwAddRenameEntryDialog()
 IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit*, pEdit)
 {
     ::rtl::OUString sEntry = pEdit->GetText();
-    sal_Bool bFound = sEntry.getLength() ? sal_False : sal_True;
+    BOOL bFound = sEntry.getLength() ? FALSE : TRUE;
 
     if(!bFound)
     {
@@ -239,7 +239,7 @@ IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit*, pEdit)
                     ++aHeaderIter)
             if(*aHeaderIter == sEntry)
             {
-                bFound = sal_True;
+                bFound = TRUE;
                 break;
             }
     }

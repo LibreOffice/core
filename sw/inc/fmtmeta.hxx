@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,13 +75,17 @@ namespace com { namespace sun { namespace star {
  *   <li>The pool item is cloned (because it is non-poolable); the clone
  *       points to the same metadatable entity, but the metadatable entity's
  *       reverse pointer is unchanged.</li>
- *   <li>The DoCopy() method is called at the new pool item:
- *       it will clone the metadatable entity (using RegisterAsCopyOf).
+ *   <li>A new text hint is created, taking over the new pool item.
+ *       Unfortunately, this also makes the metadatable entity point at the
+ *       cloned pool item.</li>
+ *   <li>The text hint is inserted into the hints array of some text node.</li>
+ *   <li>The DoCopy() method must be called at the new pool item:
+ *       it will clone the metadatable entity (using RegisterAsCopyOf),
+ *       and fix the reverse pointer of the original to point at the
+ *       original pool item.
  *       This is necessary, because first, a metadatable entity may
  *       only be inserted once into a document, and second, the copy may be
  *       inserted into a different document than the source document!</li>
- *   <li>A new text hint is created, taking over the new pool item.</li>
- *   <li>The text hint is inserted into the hints array of some text node.</li>
  * </ol>
  */
 
@@ -96,7 +100,7 @@ class SwFmtMeta
     : public SfxPoolItem
 {
 private:
-    friend class SwTxtMeta; // needs SetTxtAttr, DoCopy
+    friend class SwTxtMeta; // needs SetTxtAttr
     friend class ::sw::Meta; // needs m_pTxtAttr
 
     ::boost::shared_ptr< ::sw::Meta > m_pMeta;
@@ -105,26 +109,25 @@ private:
     SwTxtMeta * GetTxtAttr() { return m_pTxtAttr; }
     void SetTxtAttr(SwTxtMeta * const i_pTxtAttr);
 
-    /// this method <em>must</em> be called when the hint is actually copied
-    void DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
-        SwTxtNode & i_rTargetTxtNode);
-
-    explicit SwFmtMeta( const sal_uInt16 i_nWhich );
+    explicit SwFmtMeta( const USHORT i_nWhich );
 
 public:
     // takes ownership
     explicit SwFmtMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
-                        const sal_uInt16 i_nWhich );
+                        const USHORT i_nWhich );
     virtual ~SwFmtMeta();
 
     // SfxPoolItem
     virtual int              operator==( const SfxPoolItem & ) const;
     virtual SfxPoolItem *    Clone( SfxItemPool *pPool = 0 ) const;
+//    TYPEINFO();
 
     /// notify clients registered at m_pMeta that this meta is being (re-)moved
     void NotifyChangeTxtNode(SwTxtNode *const pTxtNode);
-    static SwFmtMeta * CreatePoolDefault( const sal_uInt16 i_nWhich );
+    static SwFmtMeta * CreatePoolDefault( const USHORT i_nWhich );
     ::sw::Meta * GetMeta() { return m_pMeta.get(); }
+    /// this method <em>must</em> be called when the hint is actually copied
+    void DoCopy( SwFmtMeta & rOriginalMeta );
 };
 
 
@@ -144,7 +147,6 @@ protected:
         ::com::sun::star::rdf::XMetadatable> m_wXMeta;
 
     SwFmtMeta * m_pFmt;
-    SwTxtNode * m_pTxtNode;
 
     SwTxtMeta * GetTxtAttr() const;
     SwTxtNode * GetTxtNode() const; // returns 0 if not in document (undo)
@@ -152,8 +154,7 @@ protected:
     SwFmtMeta * GetFmtMeta() const { return m_pFmt; }
     void SetFmtMeta( SwFmtMeta * const i_pFmt ) { m_pFmt = i_pFmt; };
 
-    void NotifyChangeTxtNodeImpl();
-    void NotifyChangeTxtNode(SwTxtNode *const pTxtNode);
+    void NotifyChangeTxtNode();
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::rdf::XMetadatable> const& GetXMeta() const
@@ -162,12 +163,12 @@ protected:
                     ::com::sun::star::rdf::XMetadatable> const& xMeta)
             { m_wXMeta = xMeta; }
 
-    // SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
-
 public:
     explicit Meta(SwFmtMeta * const i_pFmt = 0);
     virtual ~Meta();
+
+    // SwClient
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
     // sfx2::Metadatable
     virtual ::sfx2::IXmlIdRegistry& GetRegistry();

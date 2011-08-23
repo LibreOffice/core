@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ class SlideSorter;
 
 namespace sd { namespace slidesorter { namespace controller {
 
-typedef cppu::WeakComponentImplHelper4<
+typedef cppu::WeakComponentImplHelper4< 
     ::com::sun::star::document::XEventListener,
     ::com::sun::star::beans::XPropertyChangeListener,
     ::com::sun::star::accessibility::XAccessibleEventListener,
@@ -105,7 +105,7 @@ public:
         const SfxHint& rHint);
 
     //=====  lang::XEventListener  ============================================
-    virtual void SAL_CALL
+    virtual void SAL_CALL 
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -117,7 +117,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     //=====  beans::XPropertySetListener  =====================================
-    virtual void SAL_CALL
+    virtual void SAL_CALL 
         propertyChange (
             const com::sun::star::beans::PropertyChangeEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException);
@@ -125,7 +125,7 @@ public:
     //===== accessibility::XAccessibleEventListener  ==========================
     virtual void SAL_CALL
         notifyEvent (
-            const ::com::sun::star::accessibility::AccessibleEventObject&
+            const ::com::sun::star::accessibility::AccessibleEventObject& 
             rEvent)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -134,7 +134,7 @@ public:
         frame it is listening to.  This usually happens when the view shell
         in the center pane is replaced by another view shell.
     */
-    virtual void SAL_CALL
+    virtual void SAL_CALL 
         frameAction (const ::com::sun::star::frame::FrameActionEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -169,17 +169,6 @@ private:
     /** Called when the edit mode has changed.  Update model accordingly.
     */
     void UpdateEditMode (void);
-
-    /** Handle a change in the order of slides or when the set of slides has
-        changed, i.e. a slide has been created.
-    */
-    void HandleModelChange (const SdrPage* pPage);
-
-    /** Handle a modification to a shape on the given page.  When this is a
-        regular page then update its preview.  When it is a master page then
-        additionally update the previews of all pages linked to it.
-    */
-    void HandleShapeModification (const SdrPage* pPage);
 
     /** This method throws a DisposedException when the object has already been
         disposed.

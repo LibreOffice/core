@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,9 +34,13 @@ class SvxErrorHandler;
 #include <sfx2/app.hxx>
 
 
-#define SMDLL           1
-#define APPLICATIONNAME     "smath3"
+#define SMDLL			1
+#define APPLICATIONNAME		"smath3"
 
+
+#ifdef WIN
+#define RELEASE     "WIN304"
+#endif
 
 #ifdef PM2
 #define RELEASE     "PM304"
@@ -54,7 +58,7 @@ class SvxErrorHandler;
 class SmResId : public ResId
 {
 public:
-    SmResId(sal_uInt16 nId) :
+    SmResId(USHORT nId) :
         ResId(nId)
     {
     }
@@ -63,6 +67,31 @@ public:
 
 #endif
 
+#ifndef _DLL_
+class SmDLL;
+
+class SmApplicat: public SfxApplication
+{
+protected:
+    SvxErrorHandler     *pSvxErrorHandler;
+
+    virtual void	OpenClients();
+
+    // initialization / deinitialization
+    virtual void	Init();
+    virtual void        Exit();
+
+public:
+    void Main();
+
+    SmApplicat() :
+        SfxApplication("iso")
+    {
+    }
+
+};
+
+#endif
 
 #endif
 

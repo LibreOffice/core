@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 
 namespace sd {
 
-static sal_uInt16 SidArray[] = {
+static USHORT SidArray[] = {
                 SID_STYLE_FAMILY2,
                 SID_STYLE_FAMILY3,
                 SID_STYLE_FAMILY5,
@@ -117,9 +117,9 @@ FunctionReference FuOutlineText::Create( ViewShell* pViewSh, ::sd::Window* pWin,
 |*
 \************************************************************************/
 
-sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     mpWindow->GrabFocus();
 
@@ -144,9 +144,9 @@ sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
+BOOL FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseMove(rMEvt);
 
@@ -180,9 +180,9 @@ sal_Bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseButtonUp(rMEvt);
 
@@ -200,11 +200,11 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 
             if( pField && pField->ISA( SvxURLField ) )
             {
-                bReturn = sal_True;
+                bReturn = TRUE;
                 mpWindow->ReleaseMouse();
                 SfxStringItem aStrItem( SID_FILE_NAME, ( (SvxURLField*) pField)->GetURL() );
                 SfxStringItem aReferer( SID_REFERER, mpDocSh->GetMedium()->GetName() );
-                SfxBoolItem aBrowseItem( SID_BROWSE, sal_True );
+                SfxBoolItem aBrowseItem( SID_BROWSE, TRUE );
                 SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
 
                 if ( rMEvt.IsMod1() )
@@ -234,16 +234,16 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
+BOOL FuOutlineText::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
-    sal_uInt16 nKeyGroup = rKEvt.GetKeyCode().GetGroup();
+    USHORT nKeyGroup = rKEvt.GetKeyCode().GetGroup();
     if( !mpDocSh->IsReadOnly() || nKeyGroup == KEYGROUP_CURSOR )
     {
         mpWindow->GrabFocus();

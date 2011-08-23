@@ -57,15 +57,19 @@
  * @file
  * Table object.
  ************************************************************************/
-#ifndef     _XFTABLE_HXX
-#define     _XFTABLE_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-24 create and implements.
+ ************************************************************************/
+#ifndef		_XFTABLE_HXX
+#define		_XFTABLE_HXX
 
-#include    "xfcontent.hxx"
-#include    "xfrow.hxx"
-#include    "xfcell.hxx"
-#include    "xfcontentcontainer.hxx"
-#include    <map>
-#include    <vector>
+#include	"xfcontent.hxx"
+#include	"xfrow.hxx"
+#include	"xfcell.hxx"
+#include	"xfcontentcontainer.hxx"
+#include	<map>
+#include	<vector>
 
 class XFTable : public XFContent
 {
@@ -79,61 +83,61 @@ public:
     virtual ~XFTable();
 
 public:
-    void    SetTableName(rtl::OUString name);
+    void	SetTableName(rtl::OUString name);
 
-    void    SetColumnStyle(sal_Int32 col, rtl::OUString style);
+    void	SetColumnStyle(sal_Int32 col, rtl::OUString style);
 
-    void    AddRow(XFRow *pRow);
+    void	AddRow(XFRow *pRow);
 
-    void    AddHeaderRow(XFRow *pRow);
+    void	AddHeaderRow(XFRow *pRow);
 
-    void    SetDefaultCellStyle(rtl::OUString style);
+    void	SetDefaultCellStyle(rtl::OUString style);
 
-    void    SetDefaultRowStyle(rtl::OUString style);
+    void	SetDefaultRowStyle(rtl::OUString style);
 
-    void    SetDefaultColStyle(rtl::OUString style);
+    void	SetDefaultColStyle(rtl::OUString style);
 
 public:
-    void    SetOwnerCell(XFCell *pCell);
+    void	SetOwnerCell(XFCell *pCell);
 
-    rtl::OUString   GetTableName();
+    rtl::OUString	GetTableName();
 
-    sal_Int32   GetRowCount();
+    sal_Int32	GetRowCount();
 
-    XFRow*      GetRow(sal_Int32 row);
+    XFRow*		GetRow(sal_Int32 row);
 
-    sal_Int32   GetColumnCount();
+    sal_Int32	GetColumnCount();
 
-    rtl::OUString   GetColumnStyle(sal_Int32 col);
+    rtl::OUString	GetColumnStyle(sal_Int32 col);
 
-    sal_Bool    IsSubTable();
+    sal_Bool	IsSubTable();
 
-    void        Normalize();
+    void		Normalize();
 
-    enumXFContent   GetContentType();
+    enumXFContent	GetContentType();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
-    void        RemoveRow(sal_Int32 row);
+    void		RemoveRow(sal_Int32 row);
 
 private:
-    rtl::OUString   m_strName;
-    sal_Bool    m_bSubTable;
-    XFCell      *m_pOwnerCell;
-    XFContentContainer  m_aHeaderRows;
-    std::map<sal_Int32,XFRow*>  m_aRows;
-    std::map<sal_Int32,rtl::OUString>   m_aColumns;
-    rtl::OUString   m_strDefCellStyle;
-    rtl::OUString   m_strDefRowStyle;
-    rtl::OUString   m_strDefColStyle;
+    rtl::OUString	m_strName;
+    sal_Bool	m_bSubTable;
+    XFCell		*m_pOwnerCell;
+    XFContentContainer	m_aHeaderRows;
+    std::map<sal_Int32,XFRow*>	m_aRows;
+    std::map<sal_Int32,rtl::OUString>	m_aColumns;
+    rtl::OUString	m_strDefCellStyle;
+    rtl::OUString	m_strDefRowStyle;
+    rtl::OUString	m_strDefColStyle;
 };
 
-inline void XFTable::SetTableName(rtl::OUString name)
+inline void	XFTable::SetTableName(rtl::OUString name)
 {
     m_strName = name;
 }
 
-inline void XFTable::SetOwnerCell(XFCell *pCell)
+inline void	XFTable::SetOwnerCell(XFCell *pCell)
 {
     m_pOwnerCell = pCell;
     m_bSubTable = (pCell!=NULL);

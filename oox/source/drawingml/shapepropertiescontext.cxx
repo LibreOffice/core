@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,12 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
+#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/linepropertiescontext.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/transform2dcontext.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -67,17 +69,17 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
     switch( aElementToken )
     {
     // CT_Transform2D
-    case A_TOKEN( xfrm ):
+    case NMSP_DRAWINGML|XML_xfrm:
         xRet.set( new Transform2DContext( *this, xAttribs, mrShape ) );
         break;
 
     // GeometryGroup
-    case A_TOKEN( custGeom ):   // custom geometry "CT_CustomGeometry2D"
+    case NMSP_DRAWINGML|XML_custGeom:	// custom geometry "CT_CustomGeometry2D"
         xRet.set( new CustomShapeGeometryContext( *this, xAttribs, *(mrShape.getCustomShapeProperties()) ) );
         break;
 
 
-    case A_TOKEN( prstGeom ):   // preset geometry "CT_PresetGeometry2D"
+    case NMSP_DRAWINGML|XML_prstGeom:	// preset geometry "CT_PresetGeometry2D"
         {
             sal_Int32 nToken = xAttribs->getOptionalValueToken( XML_prst, 0 );
             if ( nToken == XML_line )
@@ -89,24 +91,24 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
         }
         break;
 
-    case A_TOKEN( prstTxWarp ):
+    case NMSP_DRAWINGML|XML_prstTxWarp:
         xRet.set( new PresetTextShapeContext( *this, xAttribs, *(mrShape.getCustomShapeProperties()) ) );
         break;
 
     // CT_LineProperties
-    case A_TOKEN( ln ):
+    case NMSP_DRAWINGML|XML_ln:
         xRet.set( new LinePropertiesContext( *this, xAttribs, mrShape.getLineProperties() ) );
         break;
 
     // EffectPropertiesGroup
     // todo not supported by core
-    case A_TOKEN( effectLst ):  // CT_EffectList
-    case A_TOKEN( effectDag ):  // CT_EffectContainer
+    case NMSP_DRAWINGML|XML_effectLst:	// CT_EffectList
+    case NMSP_DRAWINGML|XML_effectDag:	// CT_EffectContainer
         break;
 
     // todo
-    case A_TOKEN( scene3d ):    // CT_Scene3D
-    case A_TOKEN( sp3d ):       // CT_Shape3D
+    case NMSP_DRAWINGML|XML_scene3d:	// CT_Scene3D
+    case NMSP_DRAWINGML|XML_sp3d:		// CT_Shape3D
         break;
     }
 

@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,6 +45,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
+#include <hash_map>
 #include <algorithm>
 #include <functional>
 
@@ -179,7 +180,7 @@ namespace dbaui
         //..............................................................................................................
         struct SelectSubComponent : public ::std::unary_function< SubComponentDescriptor, Reference< XComponent > >
         {
-            Reference< XComponent > operator()( const SubComponentDescriptor &_desc ) const
+            Reference< XComponent > operator()( const SubComponentDescriptor _desc ) const
             {
                 if ( _desc.xModel.is() )
                     return _desc.xModel.get();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,6 @@
 #include <svx/svxdlg.hxx>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 
@@ -115,26 +114,26 @@ using namespace ::dbtools;
 using namespace ::comphelper;
 using namespace ::svt;
 
-#define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
-    try                                                                     \
-    {                                                                       \
-        successflag = sal_False;                                            \
-        action;                                                             \
-        successflag = sal_True;                                             \
-    }                                                                       \
-    catch(SQLException& e)                                                  \
-    {                                                                       \
+#define HANDLE_SQL_ERRORS( action, successflag, context, message )			\
+    try 																	\
+    {																		\
+        successflag = sal_False;											\
+        action; 															\
+        successflag = sal_True; 											\
+    }																		\
+    catch(SQLException& e)							                        \
+    {																		\
         SQLException aError = ::dbtools::prependErrorInfo(e, *this, context); \
-        ::com::sun::star::sdb::SQLErrorEvent aEvent;                        \
-        aEvent.Reason <<= aError;                                           \
-        errorOccured(aEvent);                                               \
-    }                                                                       \
-    catch(Exception&)                                                       \
-    {                                                                       \
+        ::com::sun::star::sdb::SQLErrorEvent aEvent;						\
+        aEvent.Reason <<= aError;									        \
+        errorOccured(aEvent);												\
+    }																		\
+    catch(Exception&)														\
+    {																		\
         DBG_UNHANDLED_EXCEPTION();                                          \
-    }                                                                       \
+    }																		\
 
-#define DO_SAFE( action, message ) try { action; } catch(Exception&) { OSL_FAIL(message); } ;
+#define DO_SAFE( action, message ) try { action; } catch(Exception&) { DBG_ERROR(message); } ;
 
 //..................................................................
 namespace dbaui
@@ -146,12 +145,12 @@ namespace dbaui
 //==================================================================
 class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
 {
-    Sequence< PropertyValue >       m_aValues;
+    Sequence< PropertyValue >		m_aValues;
 
 public:
     OParameterContinuation() { }
 
-    Sequence< PropertyValue >   getValues() const { return m_aValues; }
+    Sequence< PropertyValue >	getValues() const { return m_aValues; }
 
 // XInteractionSupplyParameters
     virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException);
@@ -173,8 +172,8 @@ class SbaXDataBrowserController::FormControllerImpl
                                          ::com::sun::star::frame::XFrameActionListener >
 {
     friend class SbaXDataBrowserController;
-    ::cppu::OInterfaceContainerHelper   m_aActivateListeners;
-    SbaXDataBrowserController*          m_pOwner;
+    ::cppu::OInterfaceContainerHelper	m_aActivateListeners;
+    SbaXDataBrowserController*			m_pOwner;
 
 public:
     FormControllerImpl(SbaXDataBrowserController* pOwner);
@@ -242,7 +241,7 @@ public:
 
     // XTabController, base of XFormController
     virtual void SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel > & Model) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >	SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & _Container) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  SAL_CALL getContainer(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  > SAL_CALL getControls(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -283,7 +282,7 @@ SbaXDataBrowserController::FormControllerImpl::~FormControllerImpl()
 //------------------------------------------------------------------
 Reference< runtime::XFormOperations > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getFormOperations() throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::getFormOperations: not supported!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::getFormOperations: not supported!" );
     return NULL;
 }
 
@@ -315,27 +314,27 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addChildController(
 //------------------------------------------------------------------
 Reference< runtime::XFormControllerContext > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContext() throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::getContext: no support!!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::getContext: no support!!" );
     return NULL;
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContext( const Reference< runtime::XFormControllerContext >& /*_context*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::setContext: no support!!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::setContext: no support!!" );
 }
 
 //------------------------------------------------------------------
 Reference< XInteractionHandler > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getInteractionHandler() throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::getInteractionHandler: no support!!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::getInteractionHandler: no support!!" );
     return NULL;
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setInteractionHandler( const Reference< XInteractionHandler >& /*_interactionHandler*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::setInteractionHandler: no support!!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::setInteractionHandler: no support!!" );
 }
 
 //------------------------------------------------------------------
@@ -354,19 +353,19 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setParent( const Re
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::dispose(  ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::dispose: no, you do *not* want to do this!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::dispose: no, you do *not* want to do this!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addEventListener( const Reference< XEventListener >& /*xListener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addEventListener: no support!!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addEventListener: no support!!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeEventListener( const Reference< XEventListener >& /*aListener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeEventListener: no support!!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeEventListener: no support!!" );
 }
 
 //------------------------------------------------------------------
@@ -405,73 +404,73 @@ Reference< XEnumeration > SAL_CALL SbaXDataBrowserController::FormControllerImpl
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addModifyListener( const Reference< XModifyListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addModifyListener: no support!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addModifyListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeModifyListener( const Reference< XModifyListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeModifyListener: no support!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeModifyListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener: no support!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener: no support!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener: no support!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener: no support!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener: no support!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener: no support!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener: no support!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener: no support!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addParameterListener: no support!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addParameterListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeParameterListener: no support!" );
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeParameterListener: no support!" );
 }
 
 //------------------------------------------------------------------
@@ -504,7 +503,7 @@ Sequence< ::rtl::OUString > SAL_CALL SbaXDataBrowserController::FormControllerIm
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setModel(const Reference< ::com::sun::star::awt::XTabControllerModel > & /*Model*/) throw( RuntimeException )
 {
-    OSL_FAIL("SbaXDataBrowserController::FormControllerImpl::setModel : invalid call, can't change my model !");
+    OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::setModel : invalid call, can't change my model !");
 }
 
 //------------------------------------------------------------------
@@ -516,7 +515,7 @@ Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL SbaXDataBrowse
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< ::com::sun::star::awt::XControlContainer > & /*_Container*/) throw( RuntimeException )
 {
-    OSL_FAIL("SbaXDataBrowserController::FormControllerImpl::setContainer : invalid call, can't change my container !");
+    OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::setContainer : invalid call, can't change my container !");
 }
 
 //------------------------------------------------------------------
@@ -541,13 +540,13 @@ Sequence< Reference< ::com::sun::star::awt::XControl > > SAL_CALL SbaXDataBrowse
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::autoTabOrder(void) throw( RuntimeException )
 {
-    OSL_FAIL("SbaXDataBrowserController::FormControllerImpl::autoTabOrder : nothing to do (always have only one control) !");
+    OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::autoTabOrder : nothing to do (always have only one control) !");
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateTabOrder(void) throw( RuntimeException )
 {
-    OSL_FAIL("SbaXDataBrowserController::FormControllerImpl::activateTabOrder : nothing to do (always have only one control) !");
+    OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::activateTabOrder : nothing to do (always have only one control) !");
 }
 
 //------------------------------------------------------------------
@@ -580,7 +579,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const ::c
 //= SbaXDataBrowserController
 //==================================================================
 //------------------------------------------------------------------
-Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  ) throw (RuntimeException)
+Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(	) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::getTypes" );
     return ::comphelper::concatSequences(
@@ -658,7 +657,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
 SbaXDataBrowserController::~SbaXDataBrowserController()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::~SbaXDataBrowserController" );
-    //  deleteView();
+    //	deleteView();
     // release the aggregated form controller
     if (m_xFormControllerImpl.is())
     {
@@ -675,7 +674,7 @@ void SbaXDataBrowserController::startFrameListening( const Reference< XFrame >& 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::startFrameListening" );
     SbaXDataBrowserController_Base::startFrameListening( _rxFrame );
 
-    Reference< XFrameActionListener >   xAggListener;
+    Reference< XFrameActionListener >	xAggListener;
     if ( m_xFormControllerImpl.is() )
         m_xFormControllerImpl->queryAggregation( XFrameActionListener::static_type() ) >>= xAggListener;
 
@@ -689,7 +688,7 @@ void SbaXDataBrowserController::stopFrameListening( const Reference< XFrame >& _
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::stopFrameListening" );
     SbaXDataBrowserController_Base::stopFrameListening( _rxFrame );
 
-    Reference< XFrameActionListener >   xAggListener;
+    Reference< XFrameActionListener >	xAggListener;
     if ( m_xFormControllerImpl.is() )
         m_xFormControllerImpl->queryAggregation( XFrameActionListener::static_type() ) >>= xAggListener;
 
@@ -739,26 +738,6 @@ sal_Bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _r
     if (::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)))
         xFormSet->getPropertyValue(PROPERTY_SINGLESELECTQUERYCOMPOSER) >>= m_xParser;
 
-    {
-        const Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY );
-        const Reference< XSingleSelectQueryAnalyzer > xAnalyzer( xRowSetProps->getPropertyValue( PROPERTY_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY );
-        if ( xAnalyzer.is() )
-        {
-            const Reference< XIndexAccess > xOrderColumns( xAnalyzer->getOrderColumns(), UNO_SET_THROW );
-            const sal_Int32 nOrderColumns( xOrderColumns->getCount() );
-            for ( sal_Int32 c=0; c<nOrderColumns; ++c )
-            {
-                const Reference< XPropertySet > xOrderColumn( xOrderColumns->getByIndex(c), UNO_QUERY_THROW );
-                ::rtl::OUString sColumnName;
-                OSL_VERIFY( xOrderColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumnName);
-                ::rtl::OUString sTableName;
-                OSL_VERIFY( xOrderColumn->getPropertyValue( PROPERTY_TABLENAME ) >>= sTableName);
-                (void)sColumnName;
-                (void)sTableName;
-            }
-        }
-    }
-
     Reference< XWarningsSupplier > xWarnings( _rxLoadable, UNO_QUERY );
     if ( xWarnings.is() )
     {
@@ -785,7 +764,7 @@ void SbaXDataBrowserController::initFormatter()
     {
         // create a new formatter
         m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (
-            getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
+            getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
         if (m_xFormatter.is())
             m_xFormatter->attachNumberFormatsSupplier(xSupplier);
     }
@@ -829,8 +808,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     m_xColumnsSupplier.set(m_xRowSet,UNO_QUERY);
     m_xLoadable.set(m_xRowSet,UNO_QUERY);
 
-    Reference< XPropertySet > xFormProperties( m_xRowSet, UNO_QUERY );
-    if ( !InitializeForm( xFormProperties ) )
+    if (!InitializeForm(m_xRowSet))
         return sal_False;
 
     m_xGridModel = CreateGridModel();
@@ -872,12 +850,12 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     }
     catch(Exception&)
     {
-        OSL_FAIL("SbaXDataBrowserController::Construct : the construction of UnoDataBrowserView failed !");
+        DBG_ERROR("SbaXDataBrowserController::Construct : the construction of UnoDataBrowserView failed !");
     }
 
     if (!bSuccess)
     {
-        //  deleteView();
+        //	deleteView();
         return sal_False;
     }
 
@@ -896,7 +874,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     // set the callbacks for the grid control
     SbaGridControl* pVclGrid = getBrowserView()->getVclControl();
-    OSL_ENSURE(pVclGrid, "SbaXDataBrowserController::Construct : have no VCL control !");
+    DBG_ASSERT(pVclGrid, "SbaXDataBrowserController::Construct : have no VCL control !");
     pVclGrid->SetMasterListener(this);
 
     // --------------------------
@@ -922,7 +900,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     if (m_xLoadable.is())
         m_xLoadable->addLoadListener(this);
 
-    Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(getRowSet(), UNO_QUERY);
+    Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >	xFormParameter(getRowSet(), UNO_QUERY);
     if (xFormParameter.is())
         xFormParameter->addParameterListener((::com::sun::star::form::XDatabaseParameterListener*)this);
 
@@ -957,14 +935,14 @@ void SbaXDataBrowserController::RemoveColumnListener(const Reference< XPropertyS
 Reference< XRowSet >  SbaXDataBrowserController::CreateForm()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::CreateForm" );
-    return Reference< XRowSet > (getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.Form"))), UNO_QUERY);
+    return Reference< XRowSet > (getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.Form")), UNO_QUERY);
 }
 
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::form::XFormComponent >  SbaXDataBrowserController::CreateGridModel()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::CreateGridModel" );
-    return Reference< ::com::sun::star::form::XFormComponent > (getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.GridControl"))), UNO_QUERY);
+    return Reference< ::com::sun::star::form::XFormComponent > (getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.GridControl")), UNO_QUERY);
 }
 
 // -------------------------------------------------------------------------
@@ -1019,7 +997,7 @@ void SbaXDataBrowserController::addControlListeners(const Reference< ::com::sun:
         xBroadcaster->addModifyListener(static_cast<XModifyListener*>(this));
 
     // introduce ourself as dispatch provider for the grid
-    Reference< XDispatchProviderInterception >  xInterception(getBrowserView()->getGridControl(), UNO_QUERY);
+    Reference< XDispatchProviderInterception >	xInterception(getBrowserView()->getGridControl(), UNO_QUERY);
     if (xInterception.is())
         xInterception->registerDispatchProviderInterceptor(static_cast<XDispatchProviderInterceptor*>(this));
 
@@ -1037,7 +1015,7 @@ void SbaXDataBrowserController::removeControlListeners(const Reference< ::com::s
     if (xBroadcaster.is())
         xBroadcaster->removeModifyListener(static_cast<XModifyListener*>(this));
 
-    Reference< XDispatchProviderInterception >  xInterception(_xGridControl, UNO_QUERY);
+    Reference< XDispatchProviderInterception >	xInterception(_xGridControl, UNO_QUERY);
     if (xInterception.is())
         xInterception->releaseDispatchProviderInterceptor(static_cast<XDispatchProviderInterceptor*>(this));
 
@@ -1089,7 +1067,7 @@ void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e) throw( R
     if (xCommitable.is())
         xCommitable->commit();
     else
-        OSL_FAIL("SbaXDataBrowserController::focusLost : why is my control not commitable ?");
+        OSL_ENSURE(sal_False, "SbaXDataBrowserController::focusLost : why is my control not commitable ?");
 }
 
 // -------------------------------------------------------------------------
@@ -1130,7 +1108,7 @@ void SbaXDataBrowserController::disposingFormModel(const ::com::sun::star::lang:
     if (m_xLoadable.is())
         m_xLoadable->removeLoadListener(this);
 
-    Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(Source.Source, UNO_QUERY);
+    Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >	xFormParameter(Source.Source, UNO_QUERY);
     if (xFormParameter.is())
         xFormParameter->removeParameterListener((::com::sun::star::form::XDatabaseParameterListener*)this);
 }
@@ -1209,16 +1187,16 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
 
     SolarMutexGuard aGuard;
     // the IsModified changed to sal_False ?
-    if  (   (evt.PropertyName.equals(PROPERTY_ISMODIFIED))
-        &&  (::comphelper::getBOOL(evt.NewValue) == sal_False)
+    if	(	(evt.PropertyName.equals(PROPERTY_ISMODIFIED))
+        &&	(::comphelper::getBOOL(evt.NewValue) == sal_False)
         )
-    {   // -> the current field isn't modified anymore, too
+    {	// -> the current field isn't modified anymore, too
         setCurrentModified( sal_False );
     }
 
     // switching to a new record ?
-    if  (   (evt.PropertyName.equals(PROPERTY_ISNEW))
-        &&  (::comphelper::getBOOL(evt.NewValue) == sal_True)
+    if	(	(evt.PropertyName.equals(PROPERTY_ISNEW))
+        &&	(::comphelper::getBOOL(evt.NewValue) == sal_True)
         )
     {
         if (::comphelper::getINT32(xSource->getPropertyValue(PROPERTY_ROWCOUNT)) == 0)
@@ -1227,17 +1205,35 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
             InvalidateAll();
     }
 
-
-    if (evt.PropertyName.equals(PROPERTY_FILTER))
+    
+    // the filter or the sort criterias have changed ? -> update our parser
+    if (evt.PropertyName.equals(PROPERTY_ACTIVECOMMAND))
     {
+      //  if (m_xParser.is())
+            //DO_SAFE( m_xParser->setElementaryQuery(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new query to my parser !" );
+    }
+    else if (evt.PropertyName.equals(PROPERTY_FILTER))
+    {
+  //      if ( m_xParser.is() && m_xParser->getFilter() != ::comphelper::getString(evt.NewValue))
+        //{
+        //	DO_SAFE( m_xParser->setFilter(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new filter to my parser !" );
+        //}
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
     else if (evt.PropertyName.equals(PROPERTY_HAVING_CLAUSE))
     {
+        //if ( m_xParser.is() && m_xParser->getHavingClause() != ::comphelper::getString(evt.NewValue))
+        //{
+        //	DO_SAFE( m_xParser->setHavingClause(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new filter to my parser !" );
+        //}
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
     else if (evt.PropertyName.equals(PROPERTY_ORDER))
     {
+        //if ( m_xParser.is() && m_xParser->getOrder() != ::comphelper::getString(evt.NewValue))
+        //{
+        //	DO_SAFE( m_xParser->setOrder(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new order to my parser !" );
+        //}
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
 
@@ -1263,7 +1259,7 @@ void SbaXDataBrowserController::modified(const ::com::sun::star::lang::EventObje
 void SbaXDataBrowserController::elementInserted(const ::com::sun::star::container::ContainerEvent& evt) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::elementInserted" );
-    OSL_ENSURE(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
+    DBG_ASSERT(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementInserted: where did this come from (not from the grid model)?!");
     Reference< XPropertySet >  xNewColumn(evt.Element,UNO_QUERY);
     if ( xNewColumn.is() )
@@ -1274,7 +1270,7 @@ void SbaXDataBrowserController::elementInserted(const ::com::sun::star::containe
 void SbaXDataBrowserController::elementRemoved(const ::com::sun::star::container::ContainerEvent& evt) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::elementRemoved" );
-    OSL_ENSURE(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
+    DBG_ASSERT(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementRemoved: where did this come from (not from the grid model)?!");
     Reference< XPropertySet >  xOldColumn(evt.Element,UNO_QUERY);
     if ( xOldColumn.is() )
@@ -1285,7 +1281,7 @@ void SbaXDataBrowserController::elementRemoved(const ::com::sun::star::container
 void SbaXDataBrowserController::elementReplaced(const ::com::sun::star::container::ContainerEvent& evt) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::elementReplaced" );
-    OSL_ENSURE(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
+    DBG_ASSERT(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementReplaced: where did this come from (not from the grid model)?!");
     Reference< XPropertySet >  xOldColumn(evt.ReplacedElement,UNO_QUERY);
     if ( xOldColumn.is() )
@@ -1300,7 +1296,7 @@ void SbaXDataBrowserController::elementReplaced(const ::com::sun::star::containe
 sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::suspend" );
-    OSL_ENSURE(m_nPendingLoadFinished == 0, "SbaXDataBrowserController::suspend : there shouldn't be a pending load !");
+    DBG_ASSERT(m_nPendingLoadFinished == 0, "SbaXDataBrowserController::suspend : there shouldn't be a pending load !");
 
     m_aAsyncGetCellFocus.CancelCall();
     m_aAsyncDisplayError.CancelCall();
@@ -1336,7 +1332,7 @@ void SbaXDataBrowserController::disposing()
     if (m_xLoadable.is())
         m_xLoadable->removeLoadListener(this);
 
-    Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(getRowSet(), UNO_QUERY);
+    Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >	xFormParameter(getRowSet(), UNO_QUERY);
     if (xFormParameter.is())
         xFormParameter->removeParameterListener((::com::sun::star::form::XDatabaseParameterListener*)this);
 
@@ -1365,9 +1361,9 @@ void SbaXDataBrowserController::disposing()
     {
         ::comphelper::disposeComponent(m_xRowSet);
 
-        m_xRowSet           = NULL;
-        m_xColumnsSupplier  = NULL;
-        m_xLoadable         = NULL;
+        m_xRowSet			= NULL;
+        m_xColumnsSupplier	= NULL;
+        m_xLoadable 		= NULL;
     }
     catch(Exception&)
     {
@@ -1428,7 +1424,7 @@ IMPL_LINK( SbaXDataBrowserController, OnAsyncDisplayError, void*, /* _pNotIntere
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErrorEvent& aEvent) throw( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::errorOccurred" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::errorOccured" );
     ::osl::MutexGuard aGuard( getMutex() );
 
     SQLExceptionInfo aInfo( aEvent.Reason );
@@ -1437,7 +1433,7 @@ void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErr
 
     if ( m_nFormActionNestingLevel )
     {
-        OSL_ENSURE( !m_aCurrentError.isValid(), "SbaXDataBrowserController::errorOccurred: can handle one error per transaction only!" );
+        OSL_ENSURE( !m_aCurrentError.isValid(), "SbaXDataBrowserController::errorOccured: can handle one error per transaction only!" );
         m_aCurrentError = aInfo;
     }
     else
@@ -1454,12 +1450,19 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
     if (aEvent.Source != getRowSet())
     {
         // not my data source -> allow anything
-        OSL_FAIL("SbaXDataBrowserController::approveParameter : invalid event source !");
+        DBG_ERROR("SbaXDataBrowserController::approveParameter : invalid event source !");
         return sal_True;
     }
 
-    Reference< ::com::sun::star::container::XIndexAccess >  xParameters = aEvent.Parameters;
+    Reference< ::com::sun::star::container::XIndexAccess >	xParameters = aEvent.Parameters;
     SolarMutexGuard aSolarGuard;
+        // this may be executed in a non-main thread and we want to use vcl ...
+    Window* pParent = Application::GetDefDialogParent();
+        // don't use the content as parent if it isn't visible
+    // (and don't use NULL as parent : this may be displayed in the beamer and really shouldn't be task-local)
+        // 69297 - FS - 25.10.99
+    if (getBrowserView() && getBrowserView()->IsVisible())
+        pParent = getBrowserView();
 
     // default handling: instantiate an interaction handler and let it handle the parameter request
     try
@@ -1483,7 +1486,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
             xHandler->handle(xParamRequest);
 
         if (!pParamValues->wasSelected())
-        {   // canceled
+        {	// canceled
             setLoadingCancelled();
             return sal_False;
         }
@@ -1492,7 +1495,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         Sequence< PropertyValue > aFinalValues = pParamValues->getValues();
         if (aFinalValues.getLength() != aRequest.Parameters->getCount())
         {
-            OSL_FAIL("SbaXDataBrowserController::approveParameter: the InteractionHandler returned nonsense!");
+            DBG_ERROR("SbaXDataBrowserController::approveParameter: the InteractionHandler returned nonsense!");
             setLoadingCancelled();
             return sal_False;
         }
@@ -1501,18 +1504,18 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         {
             Reference< XPropertySet > xParam;
             ::cppu::extractInterface(xParam, aRequest.Parameters->getByIndex(i));
-            OSL_ENSURE(xParam.is(), "SbaXDataBrowserController::approveParameter: one of the parameters is no property set!");
+            DBG_ASSERT(xParam.is(), "SbaXDataBrowserController::approveParameter: one of the parameters is no property set!");
             if (xParam.is())
             {
 #ifdef DBG_UTIL
                 ::rtl::OUString sName;
                 xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
-                OSL_ENSURE(sName.equals(pFinalValues->Name), "SbaXDataBrowserController::approveParameter: suspicious value names!");
+                DBG_ASSERT(sName.equals(pFinalValues->Name), "SbaXDataBrowserController::approveParameter: suspicious value names!");
 #endif
                 try { xParam->setPropertyValue(PROPERTY_VALUE, pFinalValues->Value); }
                 catch(Exception&)
                 {
-                    OSL_FAIL("SbaXDataBrowserController::approveParameter: setting one of the properties failed!");
+                    DBG_ERROR("SbaXDataBrowserController::approveParameter: setting one of the properties failed!");
                 }
             }
         }
@@ -1537,7 +1540,7 @@ sal_Bool SbaXDataBrowserController::approveReset(const ::com::sun::star::lang::E
 void SbaXDataBrowserController::resetted(const ::com::sun::star::lang::EventObject& rEvent) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::resetted" );
-    OSL_ENSURE(rEvent.Source == getControlModel(), "SbaXDataBrowserController::resetted : where did this come from ?");
+    DBG_ASSERT(rEvent.Source == getControlModel(), "SbaXDataBrowserController::resetted : where did this come from ?");
     (void)rEvent;
     setCurrentModified( sal_False );
 }
@@ -1578,7 +1581,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
         }
         // no chance without valid models
         if (isValid() && !isValidCursor())
-            return aReturn;
+            return aReturn;		
 
         switch (nId)
         {
@@ -1597,7 +1600,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     try
                     {
                         Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
-                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowInserts")) ) >>= bAllowInsertions );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString::createFromAscii( "AllowInserts" ) ) >>= bAllowInsertions );
                     }
                     catch( const Exception& )
                     {
@@ -1616,7 +1619,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     try
                     {
                         Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
-                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowDeletes")) ) >>= bAllowDeletions );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString::createFromAscii( "AllowDeletes" ) ) >>= bAllowDeletions );
                         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ROWCOUNT ) >>= nRowCount );
                         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ISNEW ) >>= bInsertionRow );
                     }
@@ -1635,9 +1638,9 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     break;
                 }
                 // run through
-            case ID_BROWSER_PASTE:
+            case ID_BROWSER_PASTE:			
             case ID_BROWSER_CUT:
-            {
+            {                
                 CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
                 if (xCurrentController.Is() && xCurrentController->ISA(EditCellController))
                 {
@@ -1646,8 +1649,8 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     sal_Bool bIsReadOnly = rEdit.IsReadOnly();
                     switch (nId)
                     {
-                        case ID_BROWSER_CUT:    aReturn.bEnabled = m_aCurrentFrame.isActive() && bHasLen && !bIsReadOnly; break;
-                        case SID_COPY   :       aReturn.bEnabled = m_aCurrentFrame.isActive() && bHasLen; break;
+                        case ID_BROWSER_CUT:	aReturn.bEnabled = m_aCurrentFrame.isActive() && bHasLen && !bIsReadOnly; break;
+                        case SID_COPY	:		aReturn.bEnabled = m_aCurrentFrame.isActive() && bHasLen; break;
                         case ID_BROWSER_PASTE:
                             aReturn.bEnabled = m_aCurrentFrame.isActive() && !bIsReadOnly;
                             if(aReturn.bEnabled)
@@ -1707,7 +1710,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 break;
 
             case ID_BROWSER_REDO:
-                aReturn.bEnabled = sal_False;   // simply forget it ;). no redo possible.
+                aReturn.bEnabled = sal_False;	// simply forget it ;). no redo possible.
                 break;
 
             case ID_BROWSER_UNDORECORD:
@@ -1730,17 +1733,17 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 // check if it is available
                 Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
                 if (!xDataSourceSet.is())
-                    break;  // no datasource -> no edit mode
+                    break;	// no datasource -> no edit mode
 
                 sal_Int32 nDataSourcePrivileges = ::comphelper::getINT32(xDataSourceSet->getPropertyValue(PROPERTY_PRIVILEGES));
-                sal_Bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowInserts"))));
-                sal_Bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowUpdates"))));
-                sal_Bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowDeletes"))));
+                sal_Bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString::createFromAscii("AllowInserts")));
+                sal_Bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString::createFromAscii("AllowUpdates")));
+                sal_Bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString::createFromAscii("AllowDeletes")));
                 if (!bInsertAllowedAndPossible && !bUpdateAllowedAndPossible && !bDeleteAllowedAndPossible)
-                    break;  // no insert/update/delete -> no edit mode
+                    break;	// no insert/update/delete -> no edit mode
 
                 if (!isValidCursor() || !isLoaded())
-                    break;  // no cursor -> no edit mode
+                    break;	// no cursor -> no edit mode
 
                 aReturn.bEnabled = sal_True;
 
@@ -1785,7 +1788,7 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
     Reference< XPropertySet > xFormSet(getRowSet(), UNO_QUERY);
     if (!m_xLoadable.is())
     {
-        OSL_FAIL("SbaXDataBrowserController::applyParserOrder: invalid row set!");
+        OSL_ENSURE(sal_False, "SbaXDataBrowserController::applyParserOrder: invalid row set!");
         return;
     }
 
@@ -1803,6 +1806,7 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
     if (!bSuccess)
     {
         xFormSet->setPropertyValue(PROPERTY_ORDER, makeAny(_rOldOrder));
+        //DO_SAFE( _xParser->setOrder(_rOldOrder), "SbaXDataBrowserController::applyParserOrder: could not restore the old order of my parser !" );
 
         try
         {
@@ -1827,7 +1831,7 @@ void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFi
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
     if (!m_xLoadable.is())
     {
-        OSL_FAIL("SbaXDataBrowserController::applyParserFilter: invalid row set!");
+        OSL_ENSURE(sal_False, "SbaXDataBrowserController::applyParserFilter: invalid row set!");
         return;
     }
 
@@ -1868,50 +1872,25 @@ void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFi
 
     setCurrentColumnPosition(nPos);
 }
-
 //------------------------------------------------------------------------------
 Reference< XSingleSelectQueryComposer > SbaXDataBrowserController::createParser_nothrow()
 {
-    Reference< XSingleSelectQueryComposer > xComposer;
+    Reference< XSingleSelectQueryComposer > xRet;
     try
     {
-        const Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
-        const Reference< XMultiServiceFactory > xFactory(
-            xRowSetProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ), UNO_QUERY_THROW );
-        xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
-
-        ::rtl::OUString sActiveCommand;
-        OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= sActiveCommand );
-        if ( sActiveCommand.getLength() > 0 )
-        {
-            xComposer->setElementaryQuery( sActiveCommand );
-        }
-        else
-        {
-            ::rtl::OUString sCommand;
-            OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_COMMAND ) >>= sCommand );
-            sal_Int32 nCommandType = CommandType::COMMAND;
-            OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_COMMAND_TYPE ) >>= nCommandType );
-            xComposer->setCommand( sCommand, nCommandType );
-        }
-
-        ::rtl::OUString sFilter;
-        OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_FILTER ) >>= sFilter );
-        xComposer->setFilter( sFilter );
-
-        ::rtl::OUString sHavingClause;
-        OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_HAVING_CLAUSE ) >>= sHavingClause );
-        xComposer->setHavingClause( sHavingClause );
-
-        ::rtl::OUString sOrder;
-        OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ORDER ) >>= sOrder );
-        xComposer->setOrder( sOrder );
+        Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY_THROW);
+        const Reference<XMultiServiceFactory> xFactory(::dbtools::getConnection(getRowSet()),UNO_QUERY_THROW);
+        xRet.set(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY_THROW);
+        xRet->setElementaryQuery(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_ACTIVECOMMAND)));
+        xRet->setFilter(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_FILTER)));
+        xRet->setHavingClause(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_HAVING_CLAUSE)));
+        xRet->setOrder(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_ORDER)));
     }
-    catch ( const Exception& )
+    catch(Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return xComposer;
+    return xRet;
 }
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
@@ -1933,8 +1912,12 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         {
             DlgFilterCrit aDlg( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() );
             String aFilter;
-            if ( !aDlg.Execute() )
-                return; // if so we don't need to update the grid
+            if(!aDlg.Execute())
+            {
+                //m_xParser->setFilter(sOldVal);
+                //m_xParser->setHavingClause(sOldHaving);
+                return; // if so we don't need to actualize the grid
+            }
             aDlg.BuildWherePart();
         }
         else
@@ -1943,6 +1926,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
             String aOrder;
             if(!aDlg.Execute())
             {
+                //m_xParser->setOrder(sOldVal);
                 return; // if so we don't need to actualize the grid
             }
             aDlg.BuildOrderPart();
@@ -1984,12 +1968,12 @@ void SbaXDataBrowserController::ExecuteSearch()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::ExecuteSearch" );
     // calculate the control source of the active field
-    Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
-    OSL_ENSURE(xGrid.is(), "SbaXDataBrowserController::ExecuteSearch : the control should have an ::com::sun::star::form::XGrid interface !");
+    Reference< ::com::sun::star::form::XGrid >	xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    DBG_ASSERT(xGrid.is(), "SbaXDataBrowserController::ExecuteSearch : the control should have an ::com::sun::star::form::XGrid interface !");
 
-    Reference< ::com::sun::star::form::XGridPeer >  xGridPeer(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
+    Reference< ::com::sun::star::form::XGridPeer >	xGridPeer(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
     Reference< ::com::sun::star::container::XIndexContainer >  xColumns = xGridPeer->getColumns();
-    OSL_ENSURE(xGridPeer.is() && xColumns.is(), "SbaXDataBrowserController::ExecuteSearch : invalid peer !");
+    DBG_ASSERT(xGridPeer.is() && xColumns.is(), "SbaXDataBrowserController::ExecuteSearch : invalid peer !");
 
     sal_Int16 nViewCol = xGrid->getCurrentColumnPosition();
     sal_Int16 nModelCol = getBrowserView()->View2ModelPos(nViewCol);
@@ -1999,18 +1983,18 @@ void SbaXDataBrowserController::ExecuteSearch()
 
     // the text within the current cell
     String sInitialText;
-    Reference< ::com::sun::star::container::XIndexAccess >  xColControls(xGridPeer, UNO_QUERY);
+    Reference< ::com::sun::star::container::XIndexAccess >	xColControls(xGridPeer, UNO_QUERY);
     Reference< XInterface >  xCurControl(xColControls->getByIndex(nViewCol),UNO_QUERY);
     ::rtl::OUString aInitialText;
     if (IsSearchableControl(xCurControl, &aInitialText))
-        sInitialText = aInitialText;
+        sInitialText = (const sal_Unicode*)aInitialText;
 
     // prohibit the synchronization of the grid's display with the cursor's position
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
-    OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::ExecuteSearch : no model set ?!");
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlwaysShowCursor")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CursorColor")), makeAny(sal_Int32(COL_LIGHTRED)));
+    DBG_ASSERT(xModelSet.is(), "SbaXDataBrowserController::ExecuteSearch : no model set ?!");
+    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
+    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("AlwaysShowCursor"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("CursorColor"), makeAny(sal_Int32(COL_LIGHTRED)));
 
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,getORB()));
 
@@ -2022,7 +2006,7 @@ void SbaXDataBrowserController::ExecuteSearch()
         aContextNames.push_back( String::CreateFromAscii("Standard") );
         pDialog = pFact->CreateFmSearchDialog(getBrowserView(), sInitialText, aContextNames, 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest));
     }
-    OSL_ENSURE( pDialog, "SbaXDataBrowserController::ExecuteSearch: could not get the search dialog!" );
+    DBG_ASSERT( pDialog, "SbaXDataBrowserController::ExecuteSearch: could not get the search dialog!" );
     if ( pDialog )
     {
         pDialog->SetActiveField( sActiveField );
@@ -2033,9 +2017,9 @@ void SbaXDataBrowserController::ExecuteSearch()
     }
 
     // restore the grid's normal operating state
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlwaysShowCursor")), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CursorColor")), Any());
+    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("AlwaysShowCursor"), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
+    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("CursorColor"), Any());
 }
 
 //------------------------------------------------------------------------------
@@ -2063,11 +2047,11 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             }
             catch(Exception&)
             {
-                OSL_FAIL("Exception caught!");
+                OSL_ENSURE(0,"Exception caught!");
             }
             break;
         case SID_FM_DELETEROWS:
-
+            
             if (SaveModified())
             {
                 SbaGridControl* pVclGrid = getBrowserView()->getVclControl();
@@ -2135,14 +2119,15 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 // should be intercepted by GetState. Normally.
                 // Unfortunately ID_BROWSER_PASTE is a 'fast call' slot, which means it may be executed without checking if it is
                 // enabled. This would be really deadly herein if the current cell has no controller ...
+                // (FS - 13.04.99 - #64694#)
                 return;
 
             Edit& rEdit = (Edit&)xCurrentController->GetWindow();
             switch (nId)
             {
                 case ID_BROWSER_CUT :       rEdit.Cut();    break;
-                case SID_COPY   :           rEdit.Copy();   break;
-                case ID_BROWSER_PASTE   :   rEdit.Paste();  break;
+                case SID_COPY	:           rEdit.Copy();   break;
+                case ID_BROWSER_PASTE	:   rEdit.Paste();  break;
             }
             if (ID_BROWSER_CUT == nId || ID_BROWSER_PASTE == nId)
             {
@@ -2374,7 +2359,7 @@ sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
         }
     }
 
-    if ( !CommitCurrent() ) // das aktuelle Control committen lassen
+    if ( !CommitCurrent() )	// das aktuelle Control committen lassen
         return sal_False;
 
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
@@ -2396,7 +2381,7 @@ sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
     }
     catch(Exception&)
     {
-        OSL_FAIL("SbaXDataBrowserController::SaveModified : could not save the current record !");
+        DBG_ERROR("SbaXDataBrowserController::SaveModified : could not save the current record !");
         bResult = sal_False;
     }
 
@@ -2413,7 +2398,7 @@ sal_Bool SbaXDataBrowserController::CommitCurrent()
         return sal_True;
 
     Reference< ::com::sun::star::awt::XControl >  xActiveControl(getBrowserView()->getGridControl());
-    Reference< ::com::sun::star::form::XBoundControl >  xLockingTest(xActiveControl, UNO_QUERY);
+    Reference< ::com::sun::star::form::XBoundControl >	xLockingTest(xActiveControl, UNO_QUERY);
     sal_Bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
     if (xActiveControl.is() && !bControlIsLocked)
     {
@@ -2513,7 +2498,7 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 n
     // get the current column from the grid
     if (nViewPos == (sal_uInt16)-1)
     {
-        Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+        Reference< ::com::sun::star::form::XGrid >	xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
         if (!xGrid.is())
             return xEmptyReturn;
         nViewPos = xGrid->getCurrentColumnPosition();
@@ -2535,13 +2520,13 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 n
 //------------------------------------------------------------------------------
 IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, pContext)
 {
-    Reference< ::com::sun::star::container::XIndexAccess >  xPeerContainer(getBrowserView()->getGridControl(), UNO_QUERY);
+    Reference< ::com::sun::star::container::XIndexAccess >	xPeerContainer(getBrowserView()->getGridControl(), UNO_QUERY);
 
     // check all grid columns for their control source
-    Reference< ::com::sun::star::container::XIndexAccess >  xModelColumns(getFormComponent(), UNO_QUERY);
-    OSL_ENSURE(xModelColumns.is(), "SbaXDataBrowserController::OnSearchContextRequest : there is a grid control without columns !");
+    Reference< ::com::sun::star::container::XIndexAccess >	xModelColumns(getFormComponent(), UNO_QUERY);
+    DBG_ASSERT(xModelColumns.is(), "SbaXDataBrowserController::OnSearchContextRequest : there is a grid control without columns !");
         // the case 'no columns' should be indicated with an empty container, I think ...
-    OSL_ENSURE(xModelColumns->getCount() >= xPeerContainer->getCount(), "SbaXDataBrowserController::OnSearchContextRequest : impossible : have more view than model columns !");
+    DBG_ASSERT(xModelColumns->getCount() >= xPeerContainer->getCount(), "SbaXDataBrowserController::OnSearchContextRequest : impossible : have more view than model columns !");
 
     String sFieldList;
     for (sal_Int32 nViewPos=0; nViewPos<xPeerContainer->getCount(); ++nViewPos)
@@ -2550,15 +2535,15 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
         if (!xCurrentColumn.is())
             continue;
 
-        // can we use this column control for searching ?
+        // can we use this column control fo searching ?
         if (!IsSearchableControl(xCurrentColumn))
             continue;
 
         sal_uInt16 nModelPos = getBrowserView()->View2ModelPos((sal_uInt16)nViewPos);
         Reference< XPropertySet >  xCurrentColModel(xModelColumns->getByIndex(nModelPos),UNO_QUERY);
-        String aName = ::comphelper::getString(xCurrentColModel->getPropertyValue(PROPERTY_CONTROLSOURCE));
+        ::rtl::OUString aName = ::comphelper::getString(xCurrentColModel->getPropertyValue(PROPERTY_CONTROLSOURCE));
 
-        sFieldList += aName;
+        sFieldList += (const sal_Unicode*)aName;
         sFieldList += ';';
 
         pContext->arrFields.push_back(xCurrentColumn);
@@ -2570,7 +2555,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
 
     // if the cursor is in a mode other than STANDARD -> reset
     Reference< XPropertySet >  xCursorSet(pContext->xCursor, UNO_QUERY);
-    OSL_ENSURE(xCursorSet.is() && !::comphelper::getBOOL(xCursorSet->getPropertyValue(PROPERTY_ISMODIFIED)),
+    DBG_ASSERT(xCursorSet.is() && !::comphelper::getBOOL(xCursorSet->getPropertyValue(PROPERTY_ISMODIFIED)),
         "SbaXDataBrowserController::OnSearchContextRequest : please do not call for cursors with modified rows !");
     if (xCursorSet.is() && ::comphelper::getBOOL(xCursorSet->getPropertyValue(PROPERTY_ISNEW)))
     {
@@ -2584,20 +2569,20 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
 IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pInfo)
 {
     Reference< ::com::sun::star::sdbcx::XRowLocate >  xCursor(getRowSet(), UNO_QUERY);
-    OSL_ENSURE(xCursor.is(), "SbaXDataBrowserController::OnFoundData : shit happens. sometimes. but this is simply impossible !");
+    DBG_ASSERT(xCursor.is(), "SbaXDataBrowserController::OnFoundData : shit happens. sometimes. but this is simply impossible !");
 
     // move the cursor
     xCursor->moveToBookmark(pInfo->aPosition);
 
     // let the grid snyc it's display with the cursor
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
-    OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnFoundData : no model set ?!");
-    Any aOld = xModelSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")));
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), aOld);
+    DBG_ASSERT(xModelSet.is(), "SbaXDataBrowserController::OnFoundData : no model set ?!");
+    Any aOld = xModelSet->getPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"));
+    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), aOld);
 
     // and move to the field
-    Reference< ::com::sun::star::container::XIndexAccess >  aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
+    Reference< ::com::sun::star::container::XIndexAccess >	aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
     sal_uInt16 nViewPos;
 
     for ( nViewPos = 0; nViewPos < aColumnControls->getCount(); ++nViewPos )
@@ -2612,7 +2597,7 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
         }
     }
 
-    Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    Reference< ::com::sun::star::form::XGrid >	xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
     xGrid->setCurrentColumnPosition(nViewPos);
 
     return 0;
@@ -2625,7 +2610,7 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
 
     try
     {
-        OSL_ENSURE(xCursor.is(), "SbaXDataBrowserController::OnCanceledNotFound : shit happens. sometimes. but this is simply impossible !");
+        DBG_ASSERT(xCursor.is(), "SbaXDataBrowserController::OnCanceledNotFound : shit happens. sometimes. but this is simply impossible !");
         // move the cursor
         xCursor->moveToBookmark(pInfo->aPosition);
     }
@@ -2636,12 +2621,12 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
 
     try
     {
-        // let the grid snyc its display with the cursor
+        // let the grid snyc it's display with the cursor
         Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
-        OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnCanceledNotFound : no model set ?!");
-        Any aOld = xModelSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")));
-        xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-        xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), aOld);
+        DBG_ASSERT(xModelSet.is(), "SbaXDataBrowserController::OnCanceledNotFound : no model set ?!");
+        Any aOld = xModelSet->getPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"));
+        xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+        xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), aOld);
     }
     catch( const Exception& )
     {
@@ -2694,7 +2679,7 @@ void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-
+ 
         // --------------------------------
         // switch the control to alive mode
         getBrowserView()->getGridControl()->setDesignMode(sal_False);
@@ -2720,10 +2705,25 @@ void SbaXDataBrowserController::initializeParser() const
         {
             const Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
             if (::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)))
-            {   // (only if the statement isn't native)
+            {	// (only if the statement isn't native)
                 // (it is allowed to use the PROPERTY_ISPASSTHROUGH : _after_ loading a form it is valid)
                 xFormSet->getPropertyValue(PROPERTY_SINGLESELECTQUERYCOMPOSER) >>= m_xParser;
+/*
+                const Reference<XMultiServiceFactory> xFactory(::dbtools::getConnection(getRowSet()),UNO_QUERY);
+                if ( xFactory.is() )
+                    m_xParser.set(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
+*/
             }
+/*
+            // initialize the parser with the current sql-statement of the form
+            if ( m_xParser.is() )
+            {
+                m_xParser->setElementaryQuery(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_ACTIVECOMMAND)));
+                m_xParser->setFilter(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_FILTER)));
+                m_xParser->setHavingClause(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_HAVING_CLAUSE)));
+                m_xParser->setOrder(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_ORDER)));
+            }
+*/
         }
         catch(Exception&)
         {
@@ -2738,7 +2738,7 @@ void SbaXDataBrowserController::loaded(const EventObject& /*aEvent*/) throw( Run
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::loaded" );
     // not interested in
-    // we're loading within an separate thread and have a handling  for it's "finished event"
+    // we're loading within an separate thread and have a handling	for it's "finished event"
 }
 
 //------------------------------------------------------------------------------
@@ -2754,11 +2754,21 @@ void SbaXDataBrowserController::unloaded(const EventObject& /*aEvent*/) throw( R
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::unloaded" );
     m_xParser.clear();
     InvalidateAll();
-        // do this asynchronously, there are other listeners reacting on this message ...
+        // do this asynchron, there are other listeners reacting on this message ...
         // (it's a little hack : the grid columns are listening to this event, too, and their bound field may
         // change as a reaction on that event. as we have no chance to be notified of this change (which is
         // the one we're interested in) we give them time to do what they want to before invalidating our
         // bound-field-dependent slots ....
+    /*
+    try
+    {
+        ::comphelper::disposeComponent(m_xParser);
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Exception thrown by dispose");
+    }
+    */
 }
 
 //------------------------------------------------------------------------------
@@ -2792,7 +2802,7 @@ void SbaXDataBrowserController::enterFormAction()
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::leaveFormAction()
 {
-    OSL_ENSURE( m_nFormActionNestingLevel > 0, "SbaXDataBrowserController::leaveFormAction : invalid call !" );
+    DBG_ASSERT( m_nFormActionNestingLevel > 0, "SbaXDataBrowserController::leaveFormAction : invalid call !" );
     if ( --m_nFormActionNestingLevel > 0 )
         return;
 
@@ -2828,7 +2838,7 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
         {
             bIsValid = m_xParser.is();
         }
-    }
+    } // if ( !bIsValid )
     return bIsValid;
 }
 
@@ -2840,11 +2850,11 @@ class LoadFormHelper :public ::cppu::WeakImplHelper2< ::com::sun::star::form::XL
                                                       XRowSetListener>
 {
     enum STATE { STARTED, LOADED, POSITIONED, DISPOSED };
-    STATE   m_eState;
+    STATE	m_eState;
 
-    Reference< XRowSet >                m_xForm;
+    Reference< XRowSet >				m_xForm;
 
-    ::osl::Mutex    m_aAccessSafety;
+    ::osl::Mutex	m_aAccessSafety;
 
 public:
     LoadFormHelper(const Reference< XRowSet > & _rxForm);
@@ -2917,7 +2927,7 @@ void LoadFormHelper::implDispose()
 void SAL_CALL LoadFormHelper::loaded(const ::com::sun::star::lang::EventObject& /*aEvent*/) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aAccessSafety);
-    OSL_ENSURE(m_eState == STARTED || m_eState == DISPOSED, "LoadFormHelper::loaded : wrong call !");
+    DBG_ASSERT(m_eState == STARTED || m_eState == DISPOSED, "LoadFormHelper::loaded : wrong call !");
     if (m_eState == STARTED)
         m_eState = LOADED;
 }
@@ -2926,7 +2936,7 @@ void SAL_CALL LoadFormHelper::loaded(const ::com::sun::star::lang::EventObject& 
 void SAL_CALL LoadFormHelper::unloaded(const ::com::sun::star::lang::EventObject& /*aEvent*/) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aAccessSafety);
-    OSL_FAIL("LoadFormHelper::unloaded : shouldn't be called !");
+    DBG_ERROR("LoadFormHelper::unloaded : shouldn't be called !");
     implDispose();
 }
 
@@ -3007,7 +3017,7 @@ bool LoadFormHelper::WaitUntilReallyLoaded(bool _bOnlyIfLoaded)
 sal_Int16 SbaXDataBrowserController::getCurrentColumnPosition()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::getCurrentColumnPosition" );
-    Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    Reference< ::com::sun::star::form::XGrid >	xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
     sal_Int16 nViewPos = -1;
     try
     {
@@ -3021,7 +3031,7 @@ sal_Int16 SbaXDataBrowserController::getCurrentColumnPosition()
 void SbaXDataBrowserController::setCurrentColumnPosition( sal_Int16 _nPos )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::setCurrentColumnPosition" );
-    Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    Reference< ::com::sun::star::form::XGrid >	xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
     try
     {
         if ( -1 != _nPos )
@@ -3068,7 +3078,7 @@ sal_Bool SbaXDataBrowserController::InitializeGridModel(const Reference< ::com::
     return sal_True;
 }
 //..................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //..................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

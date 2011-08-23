@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,24 +34,28 @@
 |*
 |*    Link::operator==()
 |*
+|*    Beschreibung      LINK.SDW
+|*    Ersterstellung    AM 14.02.91
+|*    Letzte Aenderung  TH 07.11.95
+|*
 *************************************************************************/
 
-sal_Bool Link::operator==( const Link& rLink ) const
+BOOL Link::operator==( const Link& rLink ) const
 {
     if ( pFunc == rLink.pFunc )
     {
         if ( pFunc )
         {
             if ( pInst == rLink.pInst )
-                return sal_True;
+                return TRUE;
             else
-                return sal_False;
+                return FALSE;
         }
         else
-            return sal_True;
+            return TRUE;
     }
     else
-        return sal_False;
+        return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

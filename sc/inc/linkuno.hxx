@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 
 #include "externalrefmgr.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <vector>
 
 class ScAreaLink;
@@ -74,32 +74,32 @@ class ScSheetLinkObj : public cppu::WeakImplHelper4<
                         public SfxListener
 {
 private:
-    SfxItemPropertySet      aPropSet;
-    ScDocShell*             pDocShell;
-    String                  aFileName;
+    SfxItemPropertySet		aPropSet;
+    ScDocShell*				pDocShell;
+    String					aFileName;
     XRefreshListenerArr_Impl aRefreshListeners;
 
-    ScTableLink*            GetLink_Impl() const;
-    void                    Refreshed_Impl();
-    void                    ModifyRefreshDelay_Impl( sal_Int32 nRefresh );
+    ScTableLink*			GetLink_Impl() const;
+    void					Refreshed_Impl();
+    void					ModifyRefreshDelay_Impl( sal_Int32 nRefresh );
 
 public:
                             ScSheetLinkObj(ScDocShell* pDocSh, const String& rName);
-    virtual                 ~ScSheetLinkObj();
+    virtual					~ScSheetLinkObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XRefreshable
-    virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addRefreshListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	refresh() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	addRefreshListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XRefreshListener >& l )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeRefreshListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	removeRefreshListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XRefreshListener >& l )
                                 throw(::com::sun::star::uno::RuntimeException);
 
@@ -107,7 +107,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -119,25 +119,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
@@ -145,14 +145,14 @@ public:
                                     ::com::sun::star::uno::RuntimeException);
 
                             // aus get/setPropertyValue gerufen:
-    ::rtl::OUString         getFileName(void) const;
-    void                    setFileName(const ::rtl::OUString& FileName);
-    ::rtl::OUString         getFilter(void) const;
-    void                    setFilter(const ::rtl::OUString& Filter);
-    ::rtl::OUString         getFilterOptions(void) const;
-    void                    setFilterOptions(const ::rtl::OUString& FilterOptions);
-    sal_Int32               getRefreshDelay(void) const;
-    void                    setRefreshDelay(sal_Int32 nRefreshDelay);
+    ::rtl::OUString			getFileName(void) const;
+    void					setFileName(const ::rtl::OUString& FileName);
+    ::rtl::OUString			getFilter(void) const;
+    void					setFilter(const ::rtl::OUString& Filter);
+    ::rtl::OUString			getFilterOptions(void) const;
+    void					setFilterOptions(const ::rtl::OUString& FilterOptions);
+    sal_Int32				getRefreshDelay(void) const;
+    void					setRefreshDelay(sal_Int32 nRefreshDelay);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
@@ -172,16 +172,16 @@ class ScSheetLinksObj : public cppu::WeakImplHelper4<
                         public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
+    ScDocShell*				pDocShell;
 
-    ScSheetLinkObj*         GetObjectByIndex_Impl(sal_Int32 nIndex);
-    ScSheetLinkObj*         GetObjectByName_Impl(const ::rtl::OUString& aName);
+    ScSheetLinkObj*			GetObjectByIndex_Impl(INT32 nIndex);
+    ScSheetLinkObj*			GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:
                             ScSheetLinksObj(ScDocShell* pDocSh);
-    virtual                 ~ScSheetLinksObj();
+    virtual					~ScSheetLinksObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -227,29 +227,29 @@ class ScAreaLinkObj : public cppu::WeakImplHelper4<
                         public SfxListener
 {
 private:
-    SfxItemPropertySet      aPropSet;
-    ScDocShell*             pDocShell;
-    sal_uInt16                  nPos;
+    SfxItemPropertySet		aPropSet;
+    ScDocShell*				pDocShell;
+    USHORT					nPos;
     XRefreshListenerArr_Impl aRefreshListeners;
 
-    void    Modify_Impl( const ::rtl::OUString* pNewFile, const ::rtl::OUString* pNewFilter,
+    void	Modify_Impl( const ::rtl::OUString* pNewFile, const ::rtl::OUString* pNewFilter,
                          const ::rtl::OUString* pNewOptions, const ::rtl::OUString* pNewSource,
                          const com::sun::star::table::CellRangeAddress* pNewDest );
-    void    ModifyRefreshDelay_Impl( sal_Int32 nRefresh );
-    void    Refreshed_Impl();
+    void	ModifyRefreshDelay_Impl( sal_Int32 nRefresh );
+    void	Refreshed_Impl();
 
 public:
-                            ScAreaLinkObj(ScDocShell* pDocSh, sal_uInt16 nP);
-    virtual                 ~ScAreaLinkObj();
+                            ScAreaLinkObj(ScDocShell* pDocSh, USHORT nP);
+    virtual					~ScAreaLinkObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XRefreshable
-    virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addRefreshListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	refresh() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	addRefreshListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XRefreshListener >& l )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeRefreshListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	removeRefreshListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XRefreshListener >& l )
                                 throw(::com::sun::star::uno::RuntimeException);
 
@@ -257,7 +257,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -269,44 +269,44 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
-                            // called from get/setPropertyValue:
-    ::rtl::OUString         getFileName(void) const;
-    void                    setFileName(const ::rtl::OUString& FileName);
-    ::rtl::OUString         getFilter(void) const;
-    void                    setFilter(const ::rtl::OUString& Filter);
-    ::rtl::OUString         getFilterOptions(void) const;
-    void                    setFilterOptions(const ::rtl::OUString& FilterOptions);
-    sal_Int32               getRefreshDelay(void) const;
-    void                    setRefreshDelay(sal_Int32 nRefreshDelay);
+                            // aus get/setPropertyValue gerufen:
+    ::rtl::OUString			getFileName(void) const;
+    void					setFileName(const ::rtl::OUString& FileName);
+    ::rtl::OUString			getFilter(void) const;
+    void					setFilter(const ::rtl::OUString& Filter);
+    ::rtl::OUString			getFilterOptions(void) const;
+    void					setFilterOptions(const ::rtl::OUString& FilterOptions);
+    sal_Int32				getRefreshDelay(void) const;
+    void					setRefreshDelay(sal_Int32 nRefreshDelay);
 
                             // XAreaLink
     virtual ::rtl::OUString SAL_CALL getSourceArea() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setSourceArea( const ::rtl::OUString& aSourceArea )
+    virtual void SAL_CALL 	setSourceArea( const ::rtl::OUString& aSourceArea )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getDestArea()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -330,24 +330,24 @@ class ScAreaLinksObj : public cppu::WeakImplHelper3<
                         public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
+    ScDocShell*				pDocShell;
 
-    ScAreaLinkObj*          GetObjectByIndex_Impl(sal_Int32 nIndex);
+    ScAreaLinkObj*			GetObjectByIndex_Impl(INT32 nIndex);
 
 public:
                             ScAreaLinksObj(ScDocShell* pDocSh);
-    virtual                 ~ScAreaLinksObj();
+    virtual					~ScAreaLinksObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XAreaLinks
-    virtual void SAL_CALL   insertAtPosition( const ::com::sun::star::table::CellAddress& aDestPos,
+    virtual void SAL_CALL	insertAtPosition( const ::com::sun::star::table::CellAddress& aDestPos,
                                                 const ::rtl::OUString& aFileName,
                                                 const ::rtl::OUString& aSourceArea,
                                                 const ::rtl::OUString& aFilter,
                                                 const ::rtl::OUString& aFilterOptions )
                                             throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeByIndex( sal_Int32 nIndex )
+    virtual void SAL_CALL	removeByIndex( sal_Int32 nIndex )
                                             throw(::com::sun::star::uno::RuntimeException);
 
                             // XIndexAccess
@@ -376,7 +376,7 @@ public:
 };
 
 
-//! order of XNamed and DDELink changed to avoid "duplicate comdat" symbols
+//!	order of XNamed and DDELink changed to avoid "duplicate comdat" symbols
 
 class ScDDELinkObj : public cppu::WeakImplHelper5<
                             com::sun::star::sheet::XDDELink,
@@ -387,24 +387,24 @@ class ScDDELinkObj : public cppu::WeakImplHelper5<
                         public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
-    String                  aAppl;
-    String                  aTopic;
-    String                  aItem;
+    ScDocShell*				pDocShell;
+    String					aAppl;
+    String					aTopic;
+    String					aItem;
     XRefreshListenerArr_Impl aRefreshListeners;
 
-    void                    Refreshed_Impl();
+    void					Refreshed_Impl();
 
 public:
                             ScDDELinkObj(ScDocShell* pDocSh, const String& rA,
                                             const String& rT, const String& rI);
-    virtual                 ~ScDDELinkObj();
+    virtual					~ScDDELinkObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL	setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XDDELink
@@ -413,11 +413,11 @@ public:
     virtual ::rtl::OUString SAL_CALL getItem() throw(::com::sun::star::uno::RuntimeException);
 
                             // XRefreshable
-    virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addRefreshListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	refresh() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	addRefreshListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XRefreshListener >& l )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeRefreshListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	removeRefreshListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XRefreshListener >& l )
                                 throw(::com::sun::star::uno::RuntimeException);
 
@@ -447,16 +447,16 @@ class ScDDELinksObj : public cppu::WeakImplHelper4<
                         public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
+    ScDocShell*				pDocShell;
 
-    ScDDELinkObj*           GetObjectByIndex_Impl(sal_Int32 nIndex);
-    ScDDELinkObj*           GetObjectByName_Impl(const ::rtl::OUString& aName);
+    ScDDELinkObj*			GetObjectByIndex_Impl(INT32 nIndex);
+    ScDDELinkObj*			GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:
                             ScDDELinksObj(ScDocShell* pDocSh);
-    virtual                 ~ScDDELinksObj();
+    virtual					~ScDDELinksObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
@@ -499,6 +499,8 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
+// ============================================================================
+
 class ScExternalSheetCacheObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalSheetCache >
 {
 public:
@@ -531,6 +533,8 @@ private:
     ScExternalRefCache::TableTypeRef mpTable;
     size_t mnIndex;
 };
+
+// ============================================================================
 
 class ScExternalDocLinkObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalDocLink >
 {
@@ -577,6 +581,8 @@ private:
     ScExternalRefManager*   mpRefMgr;
     sal_uInt16              mnFileId;
 };
+
+// ============================================================================
 
 /** This is the UNO API equivalent of ScExternalRefManager. */
 class ScExternalDocLinksObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalDocLinks >

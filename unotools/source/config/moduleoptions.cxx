@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 #include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
 #ifndef css
@@ -58,7 +58,7 @@ namespace css = ::com::sun::star;
 #endif
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -217,6 +217,7 @@ struct FactoryInfo
         ::rtl::OUString     getShortName        () const { return sShortName;         };
         ::rtl::OUString     getTemplateFile     () const { return sTemplateFile;      };
         ::rtl::OUString     getWindowAttributes () const { return sWindowAttributes;  };
+        ::rtl::OUString     getEmptyDocumentURL () const { return sEmptyDocumentURL;  };
         ::rtl::OUString     getDefaultFilter    () const { return sDefaultFilter;     };
         sal_Bool            isDefaultFilterReadonly() const { return bDefaultFilterReadonly; }
         sal_Int32           getIcon             () const { return nIcon;              };
@@ -249,6 +250,24 @@ struct FactoryInfo
         }
 
         //---------------------------------------------------------------------------------------------------------
+        void setInstalled( sal_Bool bNewInstalled )
+        {
+            bInstalled = bNewInstalled;
+        };
+
+        //---------------------------------------------------------------------------------------------------------
+        void setFactory( const ::rtl::OUString& sNewFactory )
+        {
+            sFactory = sNewFactory;
+        };
+
+        //---------------------------------------------------------------------------------------------------------
+        void setShortName( const ::rtl::OUString& sNewShortName )
+        {
+            sShortName = sNewShortName;
+        };
+
+        //---------------------------------------------------------------------------------------------------------
         void setTemplateFile( const ::rtl::OUString& sNewTemplateFile )
         {
             if( sTemplateFile != sNewTemplateFile )
@@ -269,12 +288,32 @@ struct FactoryInfo
         };
 
         //---------------------------------------------------------------------------------------------------------
+        void setEmptyDocumentURL( const ::rtl::OUString& sNewEmptyDocumentURL )
+        {
+            if( sEmptyDocumentURL != sNewEmptyDocumentURL )
+            {
+                sEmptyDocumentURL        = sNewEmptyDocumentURL;
+                bChangedEmptyDocumentURL = sal_True            ;
+            }
+        };
+
+        //---------------------------------------------------------------------------------------------------------
         void setDefaultFilter( const ::rtl::OUString& sNewDefaultFilter )
         {
             if( sDefaultFilter != sNewDefaultFilter )
             {
                 sDefaultFilter       = sNewDefaultFilter;
                 bChangedDefaultFilter = sal_True         ;
+            }
+        };
+
+        //---------------------------------------------------------------------------------------------------------
+        void setIcon( sal_Int32 nNewIcon )
+        {
+            if( nNewIcon != nNewIcon )
+            {
+                nNewIcon     = nNewIcon;
+                bChangedIcon = sal_True;
             }
         };
 
@@ -329,32 +368,32 @@ typedef FactoryInfo   FactoryInfoList[FACTORYCOUNT];
                     a refcount and make it threadsafe by using an osl mutex. So we don't must do anything for that.
                     We can implement pure functionality to read/write configuration data only.
 
-    @implements     -
+    @implements		-
     @base           ConfigItem
 
-    @devstatus      ready to use
+    @devstatus		ready to use
     @threadsafe     no
 *//*-*************************************************************************************************************/
 class SvtModuleOptions_Impl : public ::utl::ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
          SvtModuleOptions_Impl(SvtModuleOptions* pOutsideClass);
         ~SvtModuleOptions_Impl();
 
         //---------------------------------------------------------------------------------------------------------
-        //  overloaded methods of baseclass
+        //	overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
         virtual void Notify( const css::uno::Sequence< ::rtl::OUString >& lPropertyNames );
         virtual void Commit(                                                             );
 
         //---------------------------------------------------------------------------------------------------------
-        //  public interface
+        //	public interface
         //---------------------------------------------------------------------------------------------------------
         sal_Bool        IsModuleInstalled         (       SvtModuleOptions::EModule     eModule    ) const;
         ::com::sun::star::uno::Sequence < ::rtl::OUString > GetAllServiceNames();
@@ -377,7 +416,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         void            MakeReadonlyStatesAvailable();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
         static css::uno::Sequence< ::rtl::OUString > impl_ExpandSetNames ( const css::uno::Sequence< ::rtl::OUString >& lSetNames   );
@@ -389,7 +428,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
     private:
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
     private:
         FactoryInfoList     m_lFactories;
@@ -398,7 +437,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
 };
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -478,7 +517,7 @@ SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
 *//*-*************************************************************************************************************/
 void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< ::rtl::OUString >& )
 {
-    OSL_FAIL( "SvtModuleOptions_Impl::Notify()\nNot implemented yet!\n" );
+    OSL_ENSURE( sal_False, "SvtModuleOptions_Impl::Notify()\nNot implemented yet!\n" );
 }
 
 /*-****************************************************************************************************//**
@@ -516,8 +555,8 @@ void SvtModuleOptions_Impl::Commit()
         sBasePath  = PATHSEPERATOR + pInfo->getFactory() + PATHSEPERATOR;
 
         const css::uno::Sequence< css::beans::PropertyValue > lChangedProperties = pInfo->getChangedProperties ( sBasePath );
-        const css::beans::PropertyValue*                      pChangedProperties = lChangedProperties.getConstArray();
-        sal_Int32                                             nPropertyCount     = lChangedProperties.getLength();
+        const css::beans::PropertyValue*					  pChangedProperties = lChangedProperties.getConstArray();
+        sal_Int32											  nPropertyCount     = lChangedProperties.getLength();
         for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
         {
             lCommitProperties[nRealCount] = pChangedProperties[nProperty];
@@ -680,7 +719,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
         case SvtModuleOptions::E_DATABASE     :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdatabase"));
                                                   break;
         default:
-            OSL_FAIL( "unknown factory" );
+            OSL_ASSERT( "unknown factory" );
             break;
     }
 
@@ -745,7 +784,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
         case SvtModuleOptions::E_DATABASE     :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdatabase?Interactive"));
                                                   break;
         default:
-            OSL_FAIL( "unknown factory" );
+            OSL_ASSERT( "unknown factory" );
             break;
     }
     return sURL;
@@ -837,7 +876,7 @@ css::uno::Sequence< ::rtl::OUString > SvtModuleOptions_Impl::impl_ExpandSetNames
 {
     sal_Int32                             nCount     = lSetNames.getLength() ;
     css::uno::Sequence< ::rtl::OUString > lPropNames ( nCount*PROPERTYCOUNT );
-    ::rtl::OUString*                      pPropNames = lPropNames.getArray() ;
+    ::rtl::OUString*					  pPropNames = lPropNames.getArray() ;
     sal_Int32                             nPropStart = 0                     ;
 
     for( sal_Int32 nName=0; nName<nCount; ++nName )
@@ -858,7 +897,7 @@ css::uno::Sequence< ::rtl::OUString > SvtModuleOptions_Impl::impl_ExpandSetNames
     @short      helper to classify given factory by name
     @descr      Every factory has his own long and short name. So we can match right enum value for internal using.
 
-    @attention  We change in/out parameter "eFactory" in every case! But you should use it only, if return value is sal_True!
+    @attention  We change in/out parameter "eFactory" in every case! But you should use it only, if return value is TRUE!
                 Algorithm:  Set out-parameter to propably value ... and check the longname.
                             If it match with these factory - break operation and return true AND right set parameter.
                             Otherwise try next one and so on. If no factory was found return false. Out parameter eFactory
@@ -1047,9 +1086,9 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
 }
 
 //*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//	initialize static member
+//	DON'T DO IT IN YOUR HEADER!
+//	see definition for further informations
 //*****************************************************************************************************************
 SvtModuleOptions_Impl*  SvtModuleOptions::m_pDataContainer  = NULL  ;
 sal_Int32               SvtModuleOptions::m_nRefCount       = 0     ;
@@ -1318,18 +1357,18 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
 {
     switch( eModule )
     {
-        case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
-        case SvtModuleOptions::E_SWEB       :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Web")); }
-        case SvtModuleOptions::E_SGLOBAL    :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Global")); }
-        case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Calc")); }
-        case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Draw")); }
-        case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Impress")); }
-        case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Math")); }
-        case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Chart")); }
-        case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Basic")); }
-        case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Database")); }
+        case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString::createFromAscii("Writer"); }
+        case SvtModuleOptions::E_SWEB       :   { return ::rtl::OUString::createFromAscii("Web"); }
+        case SvtModuleOptions::E_SGLOBAL    :   { return ::rtl::OUString::createFromAscii("Global"); }
+        case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString::createFromAscii("Calc"); }
+        case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString::createFromAscii("Draw"); }
+        case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString::createFromAscii("Impress"); }
+        case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString::createFromAscii("Math"); }
+        case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString::createFromAscii("Chart"); }
+        case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString::createFromAscii("Basic"); }
+        case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString::createFromAscii("Database"); }
         default:
-            OSL_FAIL( "unknown module" );
+            OSL_ASSERT( "unknown module" );
             break;
     }
 
@@ -1340,18 +1379,18 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
 {
     switch( eFactory )
     {
-        case SvtModuleOptions::E_WRITER         :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
-        case SvtModuleOptions::E_WRITERWEB      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
-        case SvtModuleOptions::E_WRITERGLOBAL   :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
-        case SvtModuleOptions::E_CALC           :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Calc")); }
-        case SvtModuleOptions::E_DRAW           :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Draw")); }
-        case SvtModuleOptions::E_IMPRESS        :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Impress")); }
-        case SvtModuleOptions::E_MATH           :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Math")); }
-        case SvtModuleOptions::E_CHART          :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Chart")); }
-        case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Basic")); }
-        case SvtModuleOptions::E_DATABASE       :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Database")); }
+        case SvtModuleOptions::E_WRITER         :   { return ::rtl::OUString::createFromAscii("Writer"); }
+        case SvtModuleOptions::E_WRITERWEB      :   { return ::rtl::OUString::createFromAscii("Writer"); }
+        case SvtModuleOptions::E_WRITERGLOBAL   :   { return ::rtl::OUString::createFromAscii("Writer"); }
+        case SvtModuleOptions::E_CALC           :   { return ::rtl::OUString::createFromAscii("Calc"); }
+        case SvtModuleOptions::E_DRAW           :   { return ::rtl::OUString::createFromAscii("Draw"); }
+        case SvtModuleOptions::E_IMPRESS        :   { return ::rtl::OUString::createFromAscii("Impress"); }
+        case SvtModuleOptions::E_MATH           :   { return ::rtl::OUString::createFromAscii("Math"); }
+        case SvtModuleOptions::E_CHART          :   { return ::rtl::OUString::createFromAscii("Chart"); }
+        case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString::createFromAscii("Basic"); }
+        case SvtModuleOptions::E_DATABASE		:   { return ::rtl::OUString::createFromAscii("Database"); }
         default:
-            OSL_FAIL( "unknown factory" );
+            OSL_ASSERT( "unknown factory" );
             break;
     }
 
@@ -1363,25 +1402,25 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
 -----------------------------------------------*/
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const ::rtl::OUString& sName)
 {
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter")))
+    if (sName.equalsAscii("swriter"))
         return E_WRITER;
-    if (sName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter/Web"))) // sometimes they are registerd for swriter/web :-(
+    if (sName.equalsIgnoreAsciiCaseAscii("swriter/Web")) // sometimes they are registerd for swriter/web :-(
         return E_WRITERWEB;
-    if (sName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter/GlobalDocument"))) // sometimes they are registerd for swriter/globaldocument :-(
+    if (sName.equalsIgnoreAsciiCaseAscii("swriter/GlobalDocument")) // sometimes they are registerd for swriter/globaldocument :-(
         return E_WRITERGLOBAL;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("scalc")))
+    if (sName.equalsAscii("scalc"))
         return E_CALC;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdraw")))
+    if (sName.equalsAscii("sdraw"))
         return E_DRAW;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("simpress")))
+    if (sName.equalsAscii("simpress"))
         return E_IMPRESS;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("schart")))
+    if (sName.equalsAscii("schart"))
         return E_CHART;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("smath")))
+    if (sName.equalsAscii("smath"))
         return E_MATH;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sbasic")))
+    if (sName.equalsAscii("sbasic"))
         return E_BASIC;
-    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdatabase")))
+    if (sName.equalsAscii("sdatabase"))
         return E_DATABASE;
 
     return E_UNKNOWN_FACTORY;
@@ -1429,9 +1468,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     try
     {
         xFilterCfg = css::uno::Reference< css::container::XNameAccess >(
-            xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory"))), css::uno::UNO_QUERY);
+            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory")), css::uno::UNO_QUERY);
         xTypeCfg = css::uno::Reference< css::container::XNameAccess >(
-            xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection"))), css::uno::UNO_QUERY);
+            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection")), css::uno::UNO_QUERY);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -1441,13 +1480,13 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     ::comphelper::SequenceAsHashMap stlDesc(lMediaDescriptor);
 
     // is there already a filter inside the descriptor?
-    ::rtl::OUString sFilterName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")), ::rtl::OUString());
+    ::rtl::OUString sFilterName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("FilterName"), ::rtl::OUString());
     if (sFilterName.getLength())
     {
         try
         {
             ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sFilterName));
-            ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService")), ::rtl::OUString());
+            ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("DocumentService"), ::rtl::OUString());
             SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
             if (eApp != E_UNKNOWN_FACTORY)
@@ -1460,7 +1499,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     }
 
     // is there already a type inside the descriptor?
-    ::rtl::OUString sTypeName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")), ::rtl::OUString());
+    ::rtl::OUString sTypeName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("TypeName"), ::rtl::OUString());
     if (!sTypeName.getLength())
     {
         // no :-(
@@ -1477,9 +1516,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     try
     {
         ::comphelper::SequenceAsHashMap stlTypeProps     (xTypeCfg->getByName(sTypeName));
-        ::rtl::OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter")), ::rtl::OUString());
+        ::rtl::OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("PreferredFilter"), ::rtl::OUString());
         ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sPreferredFilter));
-        ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService")), ::rtl::OUString());
+        ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("DocumentService"), ::rtl::OUString());
         SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
         if (eApp != E_UNKNOWN_FACTORY)

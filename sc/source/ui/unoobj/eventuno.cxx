@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: tokenuno.cxx,v $
+ * $Revision: 1.6.108.8 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -152,10 +155,10 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const rtl::OUString& aName )
     {
         uno::Sequence<beans::PropertyValue> aPropSeq( 2 );
         aPropSeq[0] = beans::PropertyValue(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EventType")), -1,
-                        uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script")) ), beans::PropertyState_DIRECT_VALUE );
+                        rtl::OUString::createFromAscii("EventType"), -1,
+                        uno::makeAny( rtl::OUString::createFromAscii("Script") ), beans::PropertyState_DIRECT_VALUE );
         aPropSeq[1] = beans::PropertyValue(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script")), -1,
+                        rtl::OUString::createFromAscii("Script"), -1,
                         uno::makeAny( *pScript ), beans::PropertyState_DIRECT_VALUE );
         aRet <<= aPropSeq;
     }
@@ -192,7 +195,7 @@ sal_Bool SAL_CALL ScSheetEventsObj::hasElements() throw(uno::RuntimeException)
     SolarMutexGuard aGuard;
     if (mpDocShell)
         return sal_True;
-    return false;
+    return sal_False;
 }
 
 

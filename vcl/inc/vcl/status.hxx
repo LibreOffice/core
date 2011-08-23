@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,10 +32,8 @@
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
-#include <vector>
 
-struct ImplStatusItem;
-typedef ::std::vector< ImplStatusItem* > ImplStatusItemList;
+class ImplStatusItemList;
 
 // --------------------
 // - Progress-Ausgabe -
@@ -43,7 +41,7 @@ typedef ::std::vector< ImplStatusItem* > ImplStatusItemList;
 
 void VCL_DLLPUBLIC DrawProgress( Window* pWindow, const Point& rPos,
                                  long nOffset, long nPrgsWidth, long nPrgsHeight,
-                                 sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
+                                 USHORT nPercent1, USHORT nPercent2, USHORT nPercentCount,
                                  const Rectangle& rFramePosSize
                                  );
 
@@ -51,28 +49,28 @@ void VCL_DLLPUBLIC DrawProgress( Window* pWindow, const Point& rPos,
 // - StatusBarItemBits -
 // ---------------------
 
-typedef sal_uInt16 StatusBarItemBits;
+typedef USHORT StatusBarItemBits;
 
 // ----------------------------
 // - Bits fuer StatusBarItems -
 // ----------------------------
 
-#define SIB_LEFT                    ((StatusBarItemBits)0x0001)
-#define SIB_CENTER                  ((StatusBarItemBits)0x0002)
-#define SIB_RIGHT                   ((StatusBarItemBits)0x0004)
-#define SIB_IN                      ((StatusBarItemBits)0x0008)
-#define SIB_OUT                     ((StatusBarItemBits)0x0010)
-#define SIB_FLAT                    ((StatusBarItemBits)0x0020)
-#define SIB_AUTOSIZE                ((StatusBarItemBits)0x0040)
-#define SIB_USERDRAW                ((StatusBarItemBits)0x0080)
+#define SIB_LEFT					((StatusBarItemBits)0x0001)
+#define SIB_CENTER					((StatusBarItemBits)0x0002)
+#define SIB_RIGHT					((StatusBarItemBits)0x0004)
+#define SIB_IN						((StatusBarItemBits)0x0008)
+#define SIB_OUT 					((StatusBarItemBits)0x0010)
+#define SIB_FLAT					((StatusBarItemBits)0x0020)
+#define SIB_AUTOSIZE				((StatusBarItemBits)0x0040)
+#define SIB_USERDRAW				((StatusBarItemBits)0x0080)
 
 // -------------------
 // - StatusBar-Types -
 // -------------------
 
-#define STATUSBAR_APPEND            ((sal_uInt16)0xFFFF)
-#define STATUSBAR_ITEM_NOTFOUND     ((sal_uInt16)0xFFFF)
-#define STATUSBAR_OFFSET            ((long)5)
+#define STATUSBAR_APPEND			((USHORT)0xFFFF)
+#define STATUSBAR_ITEM_NOTFOUND 	((USHORT)0xFFFF)
+#define STATUSBAR_OFFSET			((long)5)
 
 // -------------
 // - StatusBar -
@@ -84,40 +82,40 @@ class VCL_DLLPUBLIC StatusBar : public Window
 private:
     ImplStatusItemList* mpItemList;
     ImplData*           mpImplData;
-    XubString           maPrgsTxt;
-    Point               maPrgsTxtPos;
-    Rectangle           maPrgsFrameRect;
-    long                mnPrgsSize;
-    long                mnItemsWidth;
-    long                mnDX;
-    long                mnDY;
-    long                mnCalcHeight;
-    long                mnTextY;
-    long                mnItemY;
-    sal_uInt16              mnCurItemId;
-    sal_uInt16              mnPercent;
-    sal_uInt16              mnPercentCount;
-    sal_Bool                mbVisibleItems;
-    sal_Bool                mbFormat;
-    sal_Bool                mbProgressMode;
-    sal_Bool                mbInUserDraw;
-    sal_Bool                mbBottomBorder;
-    Link                maClickHdl;
-    Link                maDoubleClickHdl;
+    XubString			maPrgsTxt;
+    Point				maPrgsTxtPos;
+    Rectangle			maPrgsFrameRect;
+    long				mnPrgsSize;
+    long				mnItemsWidth;
+    long				mnDX;
+    long				mnDY;
+    long				mnCalcHeight;
+    long				mnTextY;
+    long				mnItemY;
+    USHORT				mnCurItemId;
+    USHORT				mnPercent;
+    USHORT				mnPercentCount;
+    BOOL				mbVisibleItems;
+    BOOL				mbFormat;
+    BOOL				mbProgressMode;
+    BOOL				mbInUserDraw;
+    BOOL				mbBottomBorder;
+    Link				maClickHdl;
+    Link				maDoubleClickHdl;
 
     using Window::ImplInit;
-    SAL_DLLPRIVATE void      ImplInit( Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void      ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
-    SAL_DLLPRIVATE void      ImplFormat();
-    SAL_DLLPRIVATE sal_Bool      ImplIsItemUpdate();
+    SAL_DLLPRIVATE void		 ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void		 ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+    SAL_DLLPRIVATE void		 ImplFormat();
+    SAL_DLLPRIVATE BOOL		 ImplIsItemUpdate();
     using OutputDevice::ImplDrawText;
-    SAL_DLLPRIVATE void      ImplDrawText( sal_Bool bOffScreen, long nOldTextWidth );
-    SAL_DLLPRIVATE void      ImplDrawItem( sal_Bool bOffScreen, sal_uInt16 nPos, sal_Bool bDrawText, sal_Bool bDrawFrame );
-    SAL_DLLPRIVATE void      ImplDrawProgress( sal_Bool bPaint,
-                                               sal_uInt16 nOldPerc, sal_uInt16 nNewPerc );
-    SAL_DLLPRIVATE void      ImplCalcProgressRect();
-    SAL_DLLPRIVATE Rectangle ImplGetItemRectPos( sal_uInt16 nPos ) const;
-    SAL_DLLPRIVATE sal_uInt16    ImplGetFirstVisiblePos() const;
+    SAL_DLLPRIVATE void		 ImplDrawText( BOOL bOffScreen, long nOldTextWidth );
+    SAL_DLLPRIVATE void		 ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL bDrawFrame );
+    SAL_DLLPRIVATE void		 ImplDrawProgress( BOOL bPaint,
+                                               USHORT nOldPerc, USHORT nNewPerc );
+    SAL_DLLPRIVATE void		 ImplCalcProgressRect();
+    SAL_DLLPRIVATE Rectangle ImplGetItemRectPos( USHORT nPos ) const;
+    SAL_DLLPRIVATE USHORT    ImplGetFirstVisiblePos() const;
     SAL_DLLPRIVATE void      ImplCalcBorder();
 
 public:
@@ -126,104 +124,104 @@ public:
                         StatusBar( Window* pParent, const ResId& rResId );
                         ~StatusBar();
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        Move();
-    virtual void        Resize();
-    virtual void        RequestHelp( const HelpEvent& rHEvt );
-    virtual void        StateChanged( StateChangedType nType );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void		MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void		Paint( const Rectangle& rRect );
+    virtual void		Move();
+    virtual void		Resize();
+    virtual void		RequestHelp( const HelpEvent& rHEvt );
+    virtual void		StateChanged( StateChangedType nType );
+    virtual void		DataChanged( const DataChangedEvent& rDCEvt );
 
-    virtual void        Click();
-    virtual void        DoubleClick();
-    virtual void        UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void		Click();
+    virtual void		DoubleClick();
+    virtual void		UserDraw( const UserDrawEvent& rUDEvt );
 
-    void                InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
+    void				InsertItem( USHORT nItemId, ULONG nWidth,
                                     StatusBarItemBits nBits = SIB_CENTER | SIB_IN,
                                     long nOffset = STATUSBAR_OFFSET,
-                                    sal_uInt16 nPos = STATUSBAR_APPEND );
-    void                RemoveItem( sal_uInt16 nItemId );
+                                    USHORT nPos = STATUSBAR_APPEND );
+    void				RemoveItem( USHORT nItemId );
 
-    void                ShowItem( sal_uInt16 nItemId );
-    void                HideItem( sal_uInt16 nItemId );
-    sal_Bool                IsItemVisible( sal_uInt16 nItemId ) const;
+    void				ShowItem( USHORT nItemId );
+    void				HideItem( USHORT nItemId );
+    BOOL				IsItemVisible( USHORT nItemId ) const;
 
-    void                ShowItems();
-    void                HideItems();
-    sal_Bool                AreItemsVisible() const { return mbVisibleItems; }
+    void				ShowItems();
+    void				HideItems();
+    BOOL				AreItemsVisible() const { return mbVisibleItems; }
 
-    void                CopyItems( const StatusBar& rStatusBar );
-    void                Clear();
+    void				CopyItems( const StatusBar& rStatusBar );
+    void				Clear();
 
-    sal_uInt16              GetItemCount() const;
-    sal_uInt16              GetItemId( sal_uInt16 nPos ) const;
-    sal_uInt16              GetItemId( const Point& rPos ) const;
-    sal_uInt16              GetItemPos( sal_uInt16 nItemId ) const;
-    Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
-    Point               GetItemTextPos( sal_uInt16 nItemId ) const;
-    sal_uInt16              GetCurItemId() const { return mnCurItemId; }
+    USHORT				GetItemCount() const;
+    USHORT				GetItemId( USHORT nPos ) const;
+    USHORT				GetItemId( const Point& rPos ) const;
+    USHORT				GetItemPos( USHORT nItemId ) const;
+    Rectangle			GetItemRect( USHORT nItemId ) const;
+    Point				GetItemTextPos( USHORT nItemId ) const;
+    USHORT				GetCurItemId() const { return mnCurItemId; }
 
-    sal_uLong               GetItemWidth( sal_uInt16 nItemId ) const;
-    StatusBarItemBits   GetItemBits( sal_uInt16 nItemId ) const;
-    long                GetItemOffset( sal_uInt16 nItemId ) const;
+    ULONG				GetItemWidth( USHORT nItemId ) const;
+    StatusBarItemBits	GetItemBits( USHORT nItemId ) const;
+    long				GetItemOffset( USHORT nItemId ) const;
 
-    void                SetItemText( sal_uInt16 nItemId, const XubString& rText );
-    const XubString&    GetItemText( sal_uInt16 nItemId ) const;
+    void				SetItemText( USHORT nItemId, const XubString& rText );
+    const XubString& 	GetItemText( USHORT nItemId ) const;
 
-    void                SetItemData( sal_uInt16 nItemId, void* pNewData );
-    void*               GetItemData( sal_uInt16 nItemId ) const;
+    void				SetItemData( USHORT nItemId, void* pNewData );
+    void*				GetItemData( USHORT nItemId ) const;
 
-    void                SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand );
-    const XubString&    GetItemCommand( sal_uInt16 nItemId );
+    void                SetItemCommand( USHORT nItemId, const XubString& rCommand );
+    const XubString&    GetItemCommand( USHORT nItemId );
 
-    void                SetHelpText( sal_uInt16 nItemId, const XubString& rText );
-    const XubString&    GetHelpText( sal_uInt16 nItemId ) const;
+    void				SetHelpText( USHORT nItemId, const XubString& rText );
+    const XubString& 	GetHelpText( USHORT nItemId ) const;
 
     using Window::SetQuickHelpText;
-    void                SetQuickHelpText( sal_uInt16 nItemId, const XubString& rText );
+    void                SetQuickHelpText( USHORT nItemId, const XubString& rText );
     using Window::GetQuickHelpText;
-    const XubString&    GetQuickHelpText( sal_uInt16 nItemId ) const;
+    const XubString&    GetQuickHelpText( USHORT nItemId ) const;
 
-    void                SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId );
-    rtl::OString        GetHelpId( sal_uInt16 nItemId ) const;
+    void				SetHelpId( USHORT nItemId, ULONG nHelpId );
+    ULONG				GetHelpId( USHORT nItemId ) const;
 
-    void                SetBottomBorder( sal_Bool bBottomBorder = sal_True );
-    sal_Bool                IsBottomBorder() const { return mbBottomBorder; }
+    void				SetBottomBorder( BOOL bBottomBorder = TRUE );
+    BOOL				IsBottomBorder() const { return mbBottomBorder; }
 
-    void                SetTopBorder( sal_Bool bTopBorder = sal_True );
-    sal_Bool                IsTopBorder() const;
+    void				SetTopBorder( BOOL bTopBorder = TRUE );
+    BOOL				IsTopBorder() const;
 
-    void                StartProgressMode( const XubString& rText );
-    void                SetProgressValue( sal_uInt16 nPercent );
-    void                EndProgressMode();
-    sal_Bool                IsProgressMode() const { return mbProgressMode; }
-    void                ResetProgressMode();
+    void				StartProgressMode( const XubString& rText );
+    void				SetProgressValue( USHORT nPercent );
+    void				EndProgressMode();
+    BOOL				IsProgressMode() const { return mbProgressMode; }
+    void				ResetProgressMode();
 
-    void                SetText( const XubString& rText );
+    void				SetText( const XubString& rText );
 
-    void                SetHelpText( const XubString& rText )
+    void				SetHelpText( const XubString& rText )
                             { Window::SetHelpText( rText ); }
-    const XubString&    GetHelpText() const
+    const XubString& 	GetHelpText() const
                             { return Window::GetHelpText(); }
 
-    void                SetHelpId( const rtl::OString& rId )
-                            { Window::SetHelpId( rId ); }
-    const rtl::OString& GetHelpId() const
+    void				SetHelpId( ULONG nId )
+                            { Window::SetHelpId( nId ); }
+    ULONG				GetHelpId() const
                             { return Window::GetHelpId(); }
 
-    Size                CalcWindowSizePixel() const;
+    Size				CalcWindowSizePixel() const;
 
-    void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
-    const Link&         GetClickHdl() const { return maClickHdl; }
-    void                SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
-    const Link&         GetDoubleClickHdl() const { return maDoubleClickHdl; }
+    void				SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
+    const Link& 		GetClickHdl() const { return maClickHdl; }
+    void				SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
+    const Link& 		GetDoubleClickHdl() const { return maDoubleClickHdl; }
 
     using Window::SetAccessibleName;
-    void                SetAccessibleName( sal_uInt16 nItemId, const XubString& rName );
+    void				SetAccessibleName( USHORT nItemId, const XubString& rName );
     using Window::GetAccessibleName;
-    const XubString&    GetAccessibleName( sal_uInt16 nItemId ) const;
+    const XubString& 	GetAccessibleName( USHORT nItemId ) const;
 };
 
-#endif  // _SV_STATUS_HXX
+#endif	// _SV_STATUS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <uno/dispatcher.h>
@@ -45,6 +45,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 using namespace cppu;
+using namespace rtl;
 using namespace osl;
 using namespace std;
 
@@ -52,10 +53,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
-using ::rtl::OUString;
-
 #define SERVICENAME "com.sun.star.uno.NamingService"
-#define IMPLNAME    "com.sun.star.comp.stoc.NamingService"
+#define IMPLNAME	"com.sun.star.comp.stoc.NamingService"
 
 namespace stoc_namingservice
 {
@@ -104,7 +103,7 @@ struct hashOWString_Impl
         { return rName.hashCode(); }
 };
 
-typedef boost::unordered_map
+typedef hash_map
 <
     OUString,
     Reference<XInterface >,
@@ -116,8 +115,8 @@ typedef boost::unordered_map
 class NamingService_Impl
     : public WeakImplHelper2 < XServiceInfo, XNamingService >
 {
-    Mutex                               aMutex;
-    HashMap_OWString_Interface          aMap;
+    Mutex								aMutex;
+    HashMap_OWString_Interface			aMap;
 public:
     NamingService_Impl();
     ~NamingService_Impl();
@@ -236,6 +235,12 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+//==================================================================================================
+sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager, void * pRegistryKey )
+{
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 #include <wrtsh.hxx>
 #include <shellres.hxx>
 #include <swwait.hxx>
@@ -36,7 +35,6 @@
 #include <toxmgr.hxx>
 #include <crsskip.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>
 #include <globals.hrc>
 
@@ -57,13 +55,13 @@ SwTOXMgr::SwTOXMgr(SwWrtShell* pShell):
  --------------------------------------------------------------------*/
 
 
-sal_uInt16 SwTOXMgr::GetTOXMarks()
+USHORT SwTOXMgr::GetTOXMarks()
 {
     return pSh->GetCurTOXMarks(aCurMarks);
 }
 
 
-SwTOXMark* SwTOXMgr::GetTOXMark(sal_uInt16 nId)
+SwTOXMark* SwTOXMgr::GetTOXMark(USHORT nId)
 {
     if(aCurMarks.Count() > 0)
         return aCurMarks[nId];
@@ -87,7 +85,7 @@ void SwTOXMgr::DeleteTOXMark()
     pCurTOXMark = pNext;
 }
 
-void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
+void	SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
 {
     SwTOXMark* pMark = 0;
     switch(rDesc.GetTOXType())
@@ -97,7 +95,7 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
             OSL_ENSURE(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
                        "invalid InsertTOCMark level");
             pMark = new SwTOXMark(pSh->GetTOXType(TOX_CONTENT, 0));
-            pMark->SetLevel( static_cast< sal_uInt16 >(rDesc.GetLevel()) );
+            pMark->SetLevel( static_cast< USHORT >(rDesc.GetLevel()) );
 
             if(rDesc.GetAltStr())
                 pMark->SetAlternativeText(*rDesc.GetAltStr());
@@ -131,10 +129,10 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
         {
             OSL_ENSURE(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
                        "invalid InsertTOCMark level");
-            sal_uInt16 nId = rDesc.GetTOUName() ?
+            USHORT nId = rDesc.GetTOUName() ?
                 GetUserTypeID(*rDesc.GetTOUName()) : 0;
             pMark = new SwTOXMark(pSh->GetTOXType(TOX_USER, nId));
-            pMark->SetLevel( static_cast< sal_uInt16 >(rDesc.GetLevel()) );
+            pMark->SetLevel( static_cast< USHORT >(rDesc.GetLevel()) );
 
             if(rDesc.GetAltStr())
                 pMark->SetAlternativeText(*rDesc.GetAltStr());
@@ -194,13 +192,13 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
         pCurTOXMark->SetMainEntry(rDesc.IsMainEntry());
     }
     else
-        pCurTOXMark->SetLevel( static_cast< sal_uInt16 >(rDesc.GetLevel()) );
+        pCurTOXMark->SetLevel( static_cast< USHORT >(rDesc.GetLevel()) );
 
     if(rDesc.GetAltStr())
     {
         // JP 26.08.96: Bug 30344 - entweder der Text aus dem Doc oder
-        //                          ein Alternativ-Text, beides gibts nicht!
-        sal_Bool bReplace = pCurTOXMark->IsAlternativeText();
+        //							ein Alternativ-Text, beides gibts nicht!
+        BOOL bReplace = pCurTOXMark->IsAlternativeText();
         if( bReplace )
             pCurTOXMark->SetAlternativeText( *rDesc.GetAltStr() );
         else
@@ -218,7 +216,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
     // Bug 36207 pCurTOXMark zeigt hier in den Wald!
     if(!pCurTOXMark)
     {
-        pSh->Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+        pSh->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
         pSh->GetCurTOXMarks(aCurMarks);
         SetCurTOXMark(0);
     }
@@ -226,14 +224,14 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   UserTypeID ermitteln
+    Beschreibung:	UserTypeID ermitteln
  --------------------------------------------------------------------*/
 
 
-sal_uInt16 SwTOXMgr::GetUserTypeID(const String& rStr)
+USHORT SwTOXMgr::GetUserTypeID(const String& rStr)
 {
-    sal_uInt16 nSize = pSh->GetTOXTypeCount(TOX_USER);
-    for(sal_uInt16 i=0; i < nSize; ++i)
+    USHORT nSize = pSh->GetTOXTypeCount(TOX_USER);
+    for(USHORT i=0; i < nSize; ++i)
     {
         const SwTOXType* pTmp = pSh->GetTOXType(TOX_USER, i);
         if(pTmp && pTmp->GetTypeName() == rStr)
@@ -249,7 +247,7 @@ sal_uInt16 SwTOXMgr::GetUserTypeID(const String& rStr)
  --------------------------------------------------------------------*/
 
 
-void SwTOXMgr::NextTOXMark(sal_Bool bSame)
+void SwTOXMgr::NextTOXMark(BOOL bSame)
 {
     OSL_ENSURE(pCurTOXMark, "no current TOXMark");
     if( pCurTOXMark )
@@ -260,7 +258,7 @@ void SwTOXMgr::NextTOXMark(sal_Bool bSame)
 }
 
 
-void SwTOXMgr::PrevTOXMark(sal_Bool bSame)
+void SwTOXMgr::PrevTOXMark(BOOL bSame)
 {
     OSL_ENSURE(pCurTOXMark, "no current TOXMark");
     if( pCurTOXMark )
@@ -278,22 +276,22 @@ const SwTOXBase* SwTOXMgr::GetCurTOX()
     return pSh->GetCurTOX();
 }
 
-const SwTOXType* SwTOXMgr::GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const
+const SwTOXType* SwTOXMgr::GetTOXType(TOXTypes eTyp, USHORT nId) const
 {
     return pSh->GetTOXType(eTyp, nId);
 }
 
-void SwTOXMgr::SetCurTOXMark(sal_uInt16 nId)
+void SwTOXMgr::SetCurTOXMark(USHORT nId)
 {
     pCurTOXMark = (nId < aCurMarks.Count()) ? aCurMarks[nId] : 0;
 }
 
-sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
+BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                                     SwTOXBase** ppBase,
                                     const SfxItemSet* pSet)
 {
-    SwWait aWait( *pSh->GetView().GetDocShell(), sal_True );
-    sal_Bool bRet = sal_True;
+    SwWait aWait( *pSh->GetView().GetDocShell(), TRUE );
+    BOOL bRet = TRUE;
     const SwTOXBase* pCurTOX = ppBase && *ppBase ? *ppBase : GetCurTOX();
     SwTOXBase* pTOX = (SwTOXBase*)pCurTOX;
 
@@ -338,12 +336,12 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         {
             if(!pCurTOX || (ppBase && !(*ppBase)))
             {
-                sal_uInt16 nPos  = 0;
-                sal_uInt16 nSize = pSh->GetTOXTypeCount(eCurTOXType);
-                for(sal_uInt16 i=0; rDesc.GetTOUName() && i < nSize; ++i)
-                {   const SwTOXType* pType = pSh->GetTOXType(TOX_USER, i);
+                USHORT nPos  = 0;
+                USHORT nSize = pSh->GetTOXTypeCount(eCurTOXType);
+                for(USHORT i=0; rDesc.GetTOUName() && i < nSize; ++i)
+                {	const SwTOXType* pType = pSh->GetTOXType(TOX_USER, i);
                     if(pType->GetTypeName() == *rDesc.GetTOUName())
-                    {   nPos = i;
+                    {	nPos = i;
                         break;
                     }
                 }
@@ -402,6 +400,7 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                     pSh->DelRight();
                 pNewTOX = (SwTOXBase*)pCurTOX;
             }
+//			pTOX->SetOptions(rDesc.GetIndexOptions());
             pNewTOX->SetFromObjectNames(rDesc.IsCreateFromObjectNames());
             pNewTOX->SetOLEOptions(rDesc.GetOLEOptions());
         }
@@ -411,14 +410,14 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
     OSL_ENSURE(pNewTOX, "no TOXBase created!" );
     if(!pNewTOX)
-        return sal_False;
+        return FALSE;
 
     pNewTOX->SetFromChapter(rDesc.IsFromChapter());
     pNewTOX->SetSequenceName(rDesc.GetSequenceName());
     pNewTOX->SetCaptionDisplay(rDesc.GetCaptionDisplay());
     pNewTOX->SetProtected(rDesc.IsReadonly());
 
-    for(sal_uInt16 nLevel = 0; nLevel < MAXLEVEL; nLevel++)
+    for(USHORT nLevel = 0; nLevel < MAXLEVEL; nLevel++)
         pNewTOX->SetStyleNames(rDesc.GetStyleNames(nLevel), nLevel);
 
     if(rDesc.GetTitle())
@@ -444,14 +443,12 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
     {
         SwDoc * pDoc = pSh->GetDoc();
 
-        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
+        if (pDoc->DoesUndo())
         {
             if (pNewTOX != NULL)
-            {
-                pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
-            }
+                pDoc->DelAllUndoObj();
 
-            pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_TOXCHANGE, NULL);
+            pDoc->StartUndo(UNDO_TOXCHANGE, NULL);
         }
 
         if (pNewTOX != NULL) // => pTOX != NULL
@@ -459,14 +456,12 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
         bRet = pSh->UpdateTableOf(*pTOX, pSet);
 
-        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
+        if (pDoc->DoesUndo())
         {
-            pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_TOXCHANGE, NULL);
+            pDoc->EndUndo(UNDO_TOXCHANGE, NULL);
 
             if (pNewTOX == NULL)
-            {
-                pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
-            }
+                pDoc->DelAllUndoObj();
         }
     }
 
@@ -478,7 +473,7 @@ void SwTOXDescription::SetSortKeys(SwTOXSortKey eKey1,
                             SwTOXSortKey eKey3)
 {
     SwTOXSortKey aArr[3];
-    sal_uInt16 nPos = 0;
+    USHORT nPos = 0;
     if(AUTH_FIELD_END > eKey1.eField)
         aArr[nPos++] = eKey1;
     if(AUTH_FIELD_END > eKey2.eField)
@@ -493,7 +488,7 @@ void SwTOXDescription::SetSortKeys(SwTOXSortKey eKey1,
 
 void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
 {
-    for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
+    for(USHORT i = 0; i < MAXLEVEL; i++)
         rTOXBase.SetStyleNames(GetStyleNames(i), i);
     rTOXBase.SetTitle(GetTitle() ? *GetTitle() : aEmptyStr);
     rTOXBase.SetCreate(GetContentOptions());

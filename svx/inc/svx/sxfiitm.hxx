@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,16 +39,19 @@ class SdrFractionItem: public SfxPoolItem {
     Fraction nValue;
 public:
     TYPEINFO_VISIBILITY( SVX_DLLPUBLIC );
-    SdrFractionItem(sal_uInt16 nId=0): SfxPoolItem(nId) {}
-    SdrFractionItem(sal_uInt16 nId, const Fraction& rVal): SfxPoolItem(nId), nValue(rVal) {}
-    SdrFractionItem(sal_uInt16 nId, SvStream& rIn);
+    SdrFractionItem(USHORT nId=0): SfxPoolItem(nId) {}
+    SdrFractionItem(USHORT nId, const Fraction& rVal): SfxPoolItem(nId), nValue(rVal) {}
+    SdrFractionItem(USHORT nId, SvStream& rIn);
     virtual int              operator==(const SfxPoolItem&) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric, String &rText, const IntlWrapper * = 0) const;
-    virtual SfxPoolItem*     Create(SvStream&, sal_uInt16 nVer) const;
-    virtual SvStream&        Store(SvStream&, sal_uInt16 nItemVers) const;
+    virtual SfxPoolItem*     Create(SvStream&, USHORT nVer) const;
+    virtual SvStream&        Store(SvStream&, USHORT nItemVers) const;
     virtual SfxPoolItem*     Clone(SfxItemPool *pPool=NULL) const;
             const Fraction&  GetValue() const { return nValue; }
             void             SetValue(const Fraction& rVal) { nValue = rVal; }
+#ifdef SDR_ISPOOLABLE
+    virtual int IsPoolable() const;
+#endif
 };
 
 

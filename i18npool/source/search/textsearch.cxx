@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,8 +114,8 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
         if( !xTranslit.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.i18n.Transliteration")));
+                    OUString::createFromAscii(
+                        "com.sun.star.i18n.Transliteration"));
             if ( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XExtendedTransliteration >*)0))
@@ -128,7 +128,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
                     aSrchPara.Locale);
     }
     else if( xTranslit.is() )
-        xTranslit = 0;
+        xTranslit = 0; 
 
     // Create Transliteration for 2<->1, 2<->2 transliteration
     if ( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
@@ -136,8 +136,8 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
         if( !xTranslit2.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.i18n.Transliteration")));
+                    OUString::createFromAscii(
+                        "com.sun.star.i18n.Transliteration"));
             if ( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XExtendedTransliteration >*)0))
@@ -153,7 +153,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     if ( !xBreak.is() )
     {
         Reference < XInterface > xI = xMSF->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")));
+                OUString::createFromAscii( "com.sun.star.i18n.BreakIterator"));
         if( xI.is() )
             xI->queryInterface( ::getCppuType(
                         (const Reference< XBreakIterator >*)0))
@@ -173,7 +173,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     sSrchStr2 = xTranslit2->transliterateString2String(
             aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
 
-    // When start or end of search string is a complex script type, we need to
+    // When start or end of search string is a complex script type, we need to 
     // make sure the result boundary is not located in the middle of cell.
     checkCTLStart = (xBreak.is() && (xBreak->getScriptType(sSrchStr, 0) ==
                 ScriptType::COMPLEX));
@@ -187,7 +187,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
 
         pRegExp = new Regexpr( aSrchPara, xTranslit );
     }
-    else
+    else 
     {
         if ( aSrchPara.algorithmType == SearchAlgorithms_APPROXIMATE )
         {
@@ -413,7 +413,7 @@ bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
         if ( !xCharClass.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification")));
+                    OUString::createFromAscii( "com.sun.star.i18n.CharacterClassification"));
             if( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XCharacterClassification >*)0))
@@ -544,7 +544,7 @@ sal_Int32 TextSearch::GetDiff( const sal_Unicode cChr ) const
 {
     TextSearchJumpTable *pJump;
     OUString sSearchKey;
-
+    
     if ( bUsePrimarySrchStr ) {
       pJump = pJumpTable;
       sSearchKey = sSrchStr;
@@ -986,6 +986,25 @@ void SAL_CALL component_getImplementationEnvironment(
         const sal_Char** ppEnvTypeName, uno_Environment** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+sal_Bool SAL_CALL component_writeInfo(
+        void* /*_pServiceManager*/, void* _pRegistryKey )
+{
+    if (_pRegistryKey)
+    {
+        ::com::sun::star::registry::XRegistryKey * pRegistryKey =
+            reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >(
+                                _pRegistryKey );
+        ::com::sun::star::uno::Reference<
+                        ::com::sun::star::registry::XRegistryKey > xNewKey;
+
+        xNewKey = pRegistryKey->createKey( getImplementationName_Static() );
+        xNewKey = xNewKey->createKey(
+                ::rtl::OUString::createFromAscii( "/UNO/SERVICES" ) );
+        xNewKey->createKey( getServiceName_Static() );
+    }
+    return sal_True;
 }
 
 void* SAL_CALL component_getFactory( const sal_Char* sImplementationName,

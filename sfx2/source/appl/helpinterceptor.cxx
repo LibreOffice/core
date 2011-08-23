@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 
 HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
-    m_pHistory  ( NULL ),
-    m_nCurPos   ( 0 )
+    m_pHistory	( NULL ),
+    m_nCurPos	( 0 )
 
 {
 }
@@ -63,12 +63,9 @@ HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
 HelpInterceptor_Impl::~HelpInterceptor_Impl()
 {
-    if ( m_pHistory )
-    {
-        for ( size_t i = 0, n = m_pHistory->size(); i < n; ++i )
-            delete m_pHistory->at( i );
-        delete m_pHistory;
-    }
+    for ( USHORT i = 0; m_pHistory && i < m_pHistory->Count(); ++i )
+        delete m_pHistory->GetObject(i);
+    delete m_pHistory;
 }
 
 // -----------------------------------------------------------------------
@@ -77,32 +74,26 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
 {
   if ( !m_pHistory )
         m_pHistory = new HelpHistoryList_Impl;
-
-    size_t nCount = m_pHistory->size();
+    ULONG nCount = m_pHistory->Count();
     if ( nCount && m_nCurPos < ( nCount - 1 ) )
     {
-        for ( size_t i = nCount - 1; i > m_nCurPos; i-- )
-        {
-            delete m_pHistory->at( i );
-            HelpHistoryList_Impl::iterator it = m_pHistory->begin();
-            ::std::advance( it, i );
-            m_pHistory->erase( it );
-        }
+        for ( ULONG i = nCount - 1; i > m_nCurPos; i-- )
+            delete m_pHistory->Remove(i);
     }
     Reference<XFrame> xFrame(m_xIntercepted, UNO_QUERY);
     Reference<XController> xController;
     if(xFrame.is())
         xController = xFrame->getController();
     Any aViewData;
-    if(xController.is() && !m_pHistory->empty())
+    if(xController.is() && m_pHistory->Count())
     {
-        m_pHistory->at( m_nCurPos )->aViewData = xController->getViewData();
+        m_pHistory->GetObject(m_nCurPos)->aViewData = xController->getViewData();
     }
 
     m_aCurrentURL = rURL;
     Any aEmptyViewData;
-    m_pHistory->push_back( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ) );
-    m_nCurPos = m_pHistory->size() - 1;
+    m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ), LIST_APPEND );
+    m_nCurPos = m_pHistory->Count() - 1;
 // TODO ?
     if ( m_xListener.is() )
     {
@@ -136,8 +127,8 @@ void HelpInterceptor_Impl::SetStartURL( const String& rURL )
     {
         m_pHistory = new HelpHistoryList_Impl;
         Any aEmptyViewData;
-        m_pHistory->insert( m_pHistory->begin(), new HelpHistoryEntry_Impl( rURL, aEmptyViewData));
-        m_nCurPos = m_pHistory->size() - 1;
+        m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ), ((ULONG)0x0) );
+        m_nCurPos = m_pHistory->Count() - 1;
 
         m_pWindow->UpdateToolbox();
     }
@@ -151,7 +142,7 @@ sal_Bool HelpInterceptor_Impl::HasHistoryPred() const
 
 sal_Bool HelpInterceptor_Impl::HasHistorySucc() const
 {
-    return m_pHistory && ( m_nCurPos < ( m_pHistory->size() - 1 ) );
+    return m_pHistory && ( m_nCurPos < ( m_pHistory->Count() - 1 ) );
 }
 
 
@@ -169,7 +160,9 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
     if ( m_xSlaveDispatcher.is() )
         xResult = m_xSlaveDispatcher->queryDispatch( aURL, aTargetFrameName, nSearchFlags );
 
-    sal_Bool bHelpURL = aURL.Complete.toAsciiLowerCase().match(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help")),0);
+    // INetURLObject aObj( aURL.Complete );
+    // sal_Bool bHelpURL = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
+    BOOL bHelpURL = aURL.Complete.toAsciiLowerCase().match(rtl::OUString::createFromAscii("vnd.sun.star.help"),0);
 
     if ( bHelpURL )
     {
@@ -265,7 +258,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
     {
         if ( m_pHistory )
         {
-            if(m_pHistory->size() > m_nCurPos)
+            if(m_pHistory->Count() > m_nCurPos)
             {
                 Reference<XFrame> xFrame(m_xIntercepted, UNO_QUERY);
                 Reference<XController> xController;
@@ -273,18 +266,18 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
                     xController = xFrame->getController();
                 if(xController.is())
                 {
-                    m_pHistory->at( m_nCurPos )->aViewData = xController->getViewData();
+                    m_pHistory->GetObject(m_nCurPos)->aViewData = xController->getViewData();
                 }
             }
-
-            sal_uIntPtr nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
-                                                    : ( !bBack && m_nCurPos < m_pHistory->size() - 1 )
+            
+            ULONG nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
+                                                    : ( !bBack && m_nCurPos < m_pHistory->Count() - 1 )
                                                     ? ++m_nCurPos
                                                     : ULONG_MAX;
 
             if ( nPos < ULONG_MAX )
             {
-                HelpHistoryEntry_Impl* pEntry = m_pHistory->at( nPos );
+                HelpHistoryEntry_Impl* pEntry = m_pHistory->GetObject( nPos );
                 if ( pEntry )
                     m_pWindow->loadHelpContent(pEntry->aURL, sal_False); // false => dont add item to history again!
             }
@@ -341,25 +334,33 @@ void SAL_CALL HelpListener_Impl::disposing( const ::com::sun::star::lang::EventO
     pInterceptor->removeStatusListener( this, ::com::sun::star::util::URL() );
     pInterceptor = NULL;
 }
+/*-- 05.09.2002 12:17:59---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 HelpStatusListener_Impl::HelpStatusListener_Impl(
         Reference < XDispatch > aDispatch, URL& rURL)
 {
     aDispatch->addStatusListener(this, rURL);
 }
+/*-- 05.09.2002 12:17:59---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 HelpStatusListener_Impl::~HelpStatusListener_Impl()
 {
     if(xDispatch.is())
         xDispatch->removeStatusListener(this, com::sun::star::util::URL());
 }
+/*-- 05.09.2002 12:17:59---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void HelpStatusListener_Impl::statusChanged(
     const FeatureStateEvent& rEvent ) throw( RuntimeException )
 {
     aStateEvent = rEvent;
 }
+/*-- 05.09.2002 12:18:00---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void HelpStatusListener_Impl::disposing( const EventObject& ) throw( RuntimeException )
 {
     xDispatch->removeStatusListener(this, com::sun::star::util::URL());

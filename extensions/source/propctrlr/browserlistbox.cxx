@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -195,7 +195,7 @@ namespace pcr
     private:
         /** processes the given event, i.e. notifies it to our IControlContext
             @param  _rEvent
-                the event no notify
+                the event no notify 
             @precond
                 our mutex (well, the SolarMutex) is locked
         */
@@ -282,21 +282,21 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL PropertyControlContext_Impl::focusGained( const Reference< XPropertyControl >& Control ) throw (RuntimeException)
     {
-        OSL_TRACE( "PropertyControlContext_Impl: FOCUS_GAINED" );
+        DBG_TRACE( "PropertyControlContext_Impl: FOCUS_GAINED" );
         impl_notify_throw( Control, FOCUS_GAINED );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL PropertyControlContext_Impl::valueChanged( const Reference< XPropertyControl >& Control ) throw (RuntimeException)
     {
-        OSL_TRACE( "PropertyControlContext_Impl: VALUE_CHANGED" );
+        DBG_TRACE( "PropertyControlContext_Impl: VALUE_CHANGED" );
         impl_notify_throw( Control, VALUE_CHANGED );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL PropertyControlContext_Impl::activateNextControl( const Reference< XPropertyControl >& CurrentControl ) throw (RuntimeException)
     {
-        OSL_TRACE( "PropertyControlContext_Impl: ACTIVATE_NEXT" );
+        DBG_TRACE( "PropertyControlContext_Impl: ACTIVATE_NEXT" );
         impl_notify_throw( CurrentControl, ACTIVATE_NEXT );
     }
 
@@ -338,15 +338,15 @@ namespace pcr
         switch ( rControlEvent.eType )
         {
         case FOCUS_GAINED:
-            OSL_TRACE( "PropertyControlContext_Impl::processEvent: FOCUS_GAINED" );
+            DBG_TRACE( "PropertyControlContext_Impl::processEvent: FOCUS_GAINED" );
             m_pContext->focusGained( rControlEvent.xControl );
             break;
         case VALUE_CHANGED:
-            OSL_TRACE( "PropertyControlContext_Impl::processEvent: VALUE_CHANGED" );
+            DBG_TRACE( "PropertyControlContext_Impl::processEvent: VALUE_CHANGED" );
             m_pContext->valueChanged( rControlEvent.xControl );
             break;
         case ACTIVATE_NEXT:
-            OSL_TRACE( "PropertyControlContext_Impl::processEvent: ACTIVATE_NEXT" );
+            DBG_TRACE( "PropertyControlContext_Impl::processEvent: ACTIVATE_NEXT" );
             m_pContext->activateNextControl( rControlEvent.xControl );
             break;
         }
@@ -393,6 +393,7 @@ namespace pcr
             // doing the commit here, while we, as well as our owner, as well as some other components,
             // are already "half dead" (means within their dtor) is potentially dangerous.
             // By definition, CommitModified has to be called (if necessary) before destruction
+            // #105868# - 2002-12-13 - fs@openoffice.org
 
         m_pControlContextImpl->dispose();
         m_pControlContextImpl.clear();
@@ -420,7 +421,7 @@ namespace pcr
         if ( IsModified() && m_xActiveControl.is() )
         {
             // for the time of this commit, notify all events synchronously
-            // #i63814#
+            // #i63814# / 2006-03-31 / frank.schoenheit@sun.com
             m_pControlContextImpl->setNotificationMode( PropertyControlContext_Impl::eSynchronously );
             try
             {
@@ -919,7 +920,7 @@ namespace pcr
                     ::rtl::OUString sPropertyName( _rLine.pLine->GetEntryName() );
                     sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
                     sMessage += ::rtl::OString( "')!" );
-                    OSL_FAIL( sMessage.getStr() );
+                    DBG_ERROR( sMessage );
                 }
     #endif
                 if ( _rLine.xHandler.is() )
@@ -950,7 +951,7 @@ namespace pcr
                 ::rtl::OUString sPropertyName( _rLine.pLine->GetEntryName() );
                 sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
                 sMessage += ::rtl::OString( "')!" );
-                OSL_FAIL( sMessage.getStr() );
+                DBG_ERROR( sMessage );
             }
         #endif
             if ( _rLine.xHandler.is() )
@@ -974,7 +975,7 @@ namespace pcr
             )
             if ( (*search)->second.pLine->getControl().get() == _rxControl.get() )
                 return sal_uInt16( search - m_aOrderedLines.begin() );
-        OSL_FAIL( "OBrowserListBox::impl_getControlPos: invalid control - not part of any of our lines!" );
+        DBG_ERROR( "OBrowserListBox::impl_getControlPos: invalid control - not part of any of our lines!" );
         return (sal_uInt16)-1;
     }
 
@@ -1032,8 +1033,8 @@ namespace pcr
             ++nLine;
         }
 
-        if  (   ( (size_t)nLine >= m_aOrderedLines.size() )
-            &&  ( m_aOrderedLines.size() > 0 )
+        if	(	( (size_t)nLine >= m_aOrderedLines.size() )
+            &&	( m_aOrderedLines.size() > 0 )
             )
             // wrap around
             m_aOrderedLines[0]->second.pLine->GrabFocus();
@@ -1064,7 +1065,7 @@ namespace pcr
     //------------------------------------------------------------------
     void OBrowserListBox::Clear()
     {
-        for (   ListBoxLines::iterator loop = m_aLines.begin();
+        for (	ListBoxLines::iterator loop = m_aLines.begin();
                 loop != m_aLines.end();
                 ++loop
             )
@@ -1116,7 +1117,7 @@ namespace pcr
 
         if ( nPos < m_aOrderedLines.size() )
         {
-            Window* pRefWindow = NULL;
+            Window*	pRefWindow = NULL;
             if ( nPos > 0 )
                 pRefWindow = m_aOrderedLines[nPos-1]->second.pLine->GetRefWindow();
 
@@ -1194,14 +1195,14 @@ namespace pcr
             m_aOutOfDateLines.insert( nPos );
             rLine.pLine->SetComponentHelpIds(
                 HelpIdUrl::getHelpId( _rPropertyData.HelpURL ),
-                rtl::OUStringToOString( _rPropertyData.PrimaryButtonId, RTL_TEXTENCODING_UTF8 ),
-                rtl::OUStringToOString( _rPropertyData.SecondaryButtonId, RTL_TEXTENCODING_UTF8 )
+                _rPropertyData.PrimaryButtonId,
+                _rPropertyData.SecondaryButtonId
             );
 
             if ( _rPropertyData.bReadOnly )
             {
                 rLine.pLine->SetReadOnly( true );
-
+            
                 // user controls (i.e. the ones not provided by the usual
                 // XPropertyControlFactory) have no chance to know that they should be read-only,
                 // since XPropertyHandler::describePropertyLine does not transport this
@@ -1211,9 +1212,9 @@ namespace pcr
                 {
                     Edit* pControlWindowAsEdit = dynamic_cast< Edit* >( rLine.pLine->getControlWindow() );
                     if ( pControlWindowAsEdit )
-                        pControlWindowAsEdit->SetReadOnly( sal_True );
+                        pControlWindowAsEdit->SetReadOnly( TRUE );
                     else
-                        pControlWindowAsEdit->Enable( sal_False );
+                        pControlWindowAsEdit->Enable( FALSE );
                 }
             }
         }
@@ -1264,11 +1265,11 @@ namespace pcr
                         m_aOrderedLines[ nFocusControlPos ]->second.pLine->GrabFocus();
                     }
                     else
-                        OSL_FAIL( "OBrowserListBox::PreNotify: internal error, invalid focus control position!" );
+                        OSL_ENSURE( false, "OBrowserListBox::PreNotify: internal error, invalid focus control position!" );
                 }
             }
 
-            return 1L;
+            return 1L; 
             // handled this. In particular, we also consume PageUp/Down events if we do not use them for scrolling,
             // otherwise they would be used to scroll the document view, which does not sound like it is desired by
             // the user.
@@ -1285,9 +1286,9 @@ namespace pcr
         case EVENT_COMMAND:
         {
             const CommandEvent* pCommand = _rNEvt.GetCommandEvent();
-            if  (   ( COMMAND_WHEEL == pCommand->GetCommand() )
-                ||  ( COMMAND_STARTAUTOSCROLL == pCommand->GetCommand() )
-                ||  ( COMMAND_AUTOSCROLL == pCommand->GetCommand() )
+            if	(   ( COMMAND_WHEEL == pCommand->GetCommand() )
+                ||	( COMMAND_STARTAUTOSCROLL == pCommand->GetCommand() )
+                ||	( COMMAND_AUTOSCROLL == pCommand->GetCommand() )
                 )
             {
                 // interested in scroll events if we have a scrollbar

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,10 @@
 
 // for the CreateSdrOLEFromStorage we need the information, how we handle
 // convert able OLE-Objects - this ist stored in
-#define OLE_STARMATH_2_MATHTYPE             0x0001
-#define OLE_STARWRITER_2_WINWORD            0x0002
-#define OLE_STARCALC_2_EXCEL                0x0004
-#define OLE_STARIMPRESS_2_POWERPOINT        0x0008
+#define OLE_STARMATH_2_MATHTYPE 			0x0001
+#define OLE_STARWRITER_2_WINWORD			0x0002
+#define OLE_STARCALC_2_EXCEL				0x0004
+#define OLE_STARIMPRESS_2_POWERPOINT		0x0008
 
 class SotStorage;
 
@@ -44,12 +44,12 @@ class SotStorage;
 
 class MSFILTER_DLLPUBLIC SvxMSExportOLEObjects
 {
-    sal_uInt32 nConvertFlags;
+    UINT32 nConvertFlags;
 public:
-    SvxMSExportOLEObjects( sal_uInt32 nCnvrtFlgs ) : nConvertFlags(nCnvrtFlgs) {}
+    SvxMSExportOLEObjects( UINT32 nCnvrtFlgs ) : nConvertFlags(nCnvrtFlgs) {}
 
-    void SetFlags( sal_uInt32 n )       { nConvertFlags = n; }
-    sal_uInt32 GetFlags() const         { return nConvertFlags; }
+    void SetFlags( UINT32 n ) 		{ nConvertFlags = n; }
+    UINT32 GetFlags() const 		{ return nConvertFlags; }
 
     void ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotStorage& rDestStg );
     void ExportOLEObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg );

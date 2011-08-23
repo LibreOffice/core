@@ -41,9 +41,9 @@
 
 #define WHEEL_EVENT_FACTOR 1.5
 
-static sal_uInt16 ImplGetModifierMask( unsigned int nMask )
+static USHORT ImplGetModifierMask( unsigned int nMask )
 {
-    sal_uInt16 nRet = 0;
+    USHORT nRet = 0;
     if( (nMask & NSShiftKeyMask) != 0 )
         nRet |= KEY_SHIFT;
     if( (nMask & NSControlKeyMask) != 0 )
@@ -55,9 +55,9 @@ static sal_uInt16 ImplGetModifierMask( unsigned int nMask )
     return nRet;
 }
 
-static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
+static USHORT ImplMapCharCode( sal_Unicode aCode )
 {
-    static sal_uInt16 aKeyCodeMap[ 128 ] =
+    static USHORT aKeyCodeMap[ 128 ] =
     {
         0, 0, 0, 0, 0, 0, 0, 0,
         KEY_BACKSPACE, KEY_TAB, KEY_RETURN, 0, 0, KEY_RETURN, 0, 0,
@@ -85,7 +85,7 @@ static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
     // tab alone is reported as 0x09 (as expected) but shift-tab is
     // reported as 0x19 (end of medium)
     
-    static sal_uInt16 aFunctionKeyCodeMap[ 128 ] =
+    static USHORT aFunctionKeyCodeMap[ 128 ] =
     {
         KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_F1, KEY_F2, KEY_F3, KEY_F4,
         KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12,
@@ -105,7 +105,7 @@ static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
         0, 0, 0, 0, 0, 0, 0, 0
     };
     
-    sal_uInt16 nKeyCode = 0;
+    USHORT nKeyCode = 0;
     if( aCode < SAL_N_ELEMENTS( aKeyCodeMap)  )
         nKeyCode = aKeyCodeMap[ aCode ];
     else if( aCode >= 0xf700 && aCode < 0xf780 )
@@ -117,12 +117,12 @@ static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
 static AquaSalFrame* s_pMouseFrame = NULL;
 // store the last pressed button for enter/exit events
 // which lack that information
-static sal_uInt16 s_nLastButton = 0;
+static USHORT s_nLastButton = 0;
 
 // combinations of keys we need to handle ourselves
 static const struct ExceptionalKey
 {
-    const sal_uInt16        nKeyCode;
+    const USHORT        nKeyCode;
     const unsigned int  nModifierMask;
 } aExceptionalKeys[] =
 {
@@ -155,9 +155,7 @@ static AquaSalFrame* getMouseContainerFrame()
     NSRect aRect = { { pFrame->maGeometry.nX, pFrame->maGeometry.nY },
                      { pFrame->maGeometry.nWidth, pFrame->maGeometry.nHeight } };
     pFrame->VCLToCocoa( aRect );
-    NSWindow* pNSWindow = [super initWithContentRect: aRect styleMask: mpFrame->getStyleMask() backing: NSBackingStoreBuffered defer: NO ];
-    [pNSWindow useOptimizedDrawing: YES]; // OSX recommendation when there are no overlapping subviews within the receiver
-    return pNSWindow;
+    return [super initWithContentRect: aRect styleMask: mpFrame->getStyleMask() backing: NSBackingStoreBuffered defer: NO ];
 }
 
 -(AquaSalFrame*)getSalFrame
@@ -165,30 +163,16 @@ static AquaSalFrame* getMouseContainerFrame()
     return mpFrame;
 }
 
--(void)displayIfNeeded
-{
-    if( GetSalData() && GetSalData()->mpFirstInstance )
-    {
-        osl::SolarMutex* pMutex = GetSalData()->mpFirstInstance->GetYieldMutex();
-        if( pMutex )
-        {
-            pMutex->acquire();
-            [super displayIfNeeded];
-            pMutex->release();
-        }
-    }
-}
-
--(BOOL)containsMouse
+-(MacOSBOOL)containsMouse
 {
     // is this event actually inside that NSWindow ?
     NSPoint aPt = [NSEvent mouseLocation];
     NSRect aFrameRect = [self frame];
-    BOOL bInRect = NSPointInRect( aPt, aFrameRect );
+    MacOSBOOL bInRect = NSPointInRect( aPt, aFrameRect );
     return bInRect;
 }
 
--(BOOL)canBecomeKeyWindow
+-(MacOSBOOL)canBecomeKeyWindow
 {
     if( (mpFrame->mnStyle & 
             ( SAL_FRAME_STYLE_FLOAT                 |
@@ -211,7 +195,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
-        static const sal_uLong nGuessDocument = SAL_FRAME_STYLE_MOVEABLE|
+        static const ULONG nGuessDocument = SAL_FRAME_STYLE_MOVEABLE|
                                             SAL_FRAME_STYLE_SIZEABLE|
                                             SAL_FRAME_STYLE_CLOSEABLE;
         
@@ -301,11 +285,11 @@ static AquaSalFrame* getMouseContainerFrame()
     }
 }
 
--(BOOL)windowShouldClose: (NSNotification*)pNotification
+-(MacOSBOOL)windowShouldClose: (NSNotification*)pNotification
 {
     YIELD_GUARD;
 
-    BOOL bRet = YES;
+    MacOSBOOL bRet = YES;
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
         // #i84461# end possible input
@@ -348,12 +332,12 @@ static AquaSalFrame* getMouseContainerFrame()
   [mDraggingDestinationHandler draggingExited: sender];
 }
 
--(BOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender
+-(MacOSBOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender
 {
   return [mDraggingDestinationHandler prepareForDragOperation: sender];
 }
 
--(BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+-(MacOSBOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
   return [mDraggingDestinationHandler performDragOperation: sender];
 }
@@ -399,11 +383,6 @@ static AquaSalFrame* getMouseContainerFrame()
     return self;
 }
 
--(AquaSalFrame*)getSalFrame
-{
-    return mpFrame;
-}
-
 -(void)resetCursorRects
 {
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
@@ -414,17 +393,17 @@ static AquaSalFrame* getMouseContainerFrame()
     }
 }
 
--(BOOL)acceptsFirstResponder
+-(MacOSBOOL)acceptsFirstResponder
 {
     return YES;
 }
 
--(BOOL)acceptsFirstMouse: (NSEvent*)pEvent
+-(MacOSBOOL)acceptsFirstMouse: (NSEvent*)pEvent
 {
     return YES;
 }
 
--(BOOL)isOpaque
+-(MacOSBOOL)isOpaque
 {
     return mpFrame ? (mpFrame->getClipPath() != 0 ? NO : YES) : YES;
 }
@@ -472,7 +451,7 @@ private:
     }
 }
 
--(void)sendMouseEventToFrame: (NSEvent*)pEvent button:(sal_uInt16)nButton eventtype:(sal_uInt16)nEvent
+-(void)sendMouseEventToFrame: (NSEvent*)pEvent button:(USHORT)nButton eventtype:(USHORT)nEvent
 {
     YIELD_GUARD;
 
@@ -528,13 +507,13 @@ private:
     
     if( pDispatchFrame && AquaSalFrame::isAlive( pDispatchFrame ) )
     {
-        pDispatchFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
+        pDispatchFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
         pDispatchFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
         NSPoint aPt = [NSEvent mouseLocation];
         pDispatchFrame->CocoaToVCL( aPt );
         
-        sal_uInt16 nModMask = ImplGetModifierMask( [pEvent modifierFlags] );
+        USHORT nModMask = ImplGetModifierMask( [pEvent modifierFlags] );
         // #i82284# emulate ctrl left
         if( nModMask == KEY_MOD3 && nButton == MOUSE_LEFT )
         {
@@ -595,11 +574,8 @@ private:
 -(void)mouseEntered: (NSEvent*)pEvent
 {
     s_pMouseFrame = mpFrame;
- 
-    // #i107215# the only mouse events we get when inactive are enter/exit
-    // actually we would like to have all of them, but better none than some
-    if( [NSApp isActive] )
-        [self sendMouseEventToFrame:pEvent button:s_nLastButton eventtype:SALEVENT_MOUSEMOVE];
+    
+    [self sendMouseEventToFrame:pEvent button:s_nLastButton eventtype:SALEVENT_MOUSEMOVE];
 }
 
 -(void)mouseExited: (NSEvent*)pEvent
@@ -607,10 +583,7 @@ private:
     if( s_pMouseFrame == mpFrame )
         s_pMouseFrame = NULL;
 
-    // #i107215# the only mouse events we get when inactive are enter/exit
-    // actually we would like to have all of them, but better none than some
-    if( [NSApp isActive] )
-        [self sendMouseEventToFrame:pEvent button:s_nLastButton eventtype:SALEVENT_MOUSELEAVE];
+    [self sendMouseEventToFrame:pEvent button:s_nLastButton eventtype:SALEVENT_MOUSELEAVE];
 }
 
 -(void)rightMouseDown: (NSEvent*)pEvent
@@ -668,7 +641,7 @@ private:
     if( AquaSalFrame::isAlive( mpFrame ) )
 	{
 		const NSTimeInterval fMagnifyTime = [pEvent timestamp];
-        mpFrame->mnLastEventTime = static_cast<sal_uLong>( fMagnifyTime * 1000.0 );
+        mpFrame->mnLastEventTime = static_cast<ULONG>( fMagnifyTime * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
         // check if this is a new series of magnify events
@@ -739,7 +712,7 @@ private:
     
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
-        mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
+        mpFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
         
         // merge pending scroll wheel events
@@ -799,7 +772,7 @@ private:
     
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
-        mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
+        mpFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
         // merge pending scroll wheel events
@@ -871,7 +844,7 @@ private:
         mbNeedSpecialKeyHandle = false;
         mbKeyHandled = false;
 
-        mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
+        mpFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
         
         if( ! [self handleKeyDownException: pEvent] )
@@ -884,7 +857,7 @@ private:
     }
 }
 
--(BOOL)handleKeyDownException:(NSEvent*)pEvent
+-(MacOSBOOL)handleKeyDownException:(NSEvent*)pEvent
 {
     // check for a very special set of modified characters
     NSString* pUnmodifiedString = [pEvent charactersIgnoringModifiers]; 
@@ -902,7 +875,7 @@ private:
                 return YES;
         }
         unichar keyChar = [pUnmodifiedString characterAtIndex: 0];
-        sal_uInt16 nKeyCode = ImplMapCharCode( keyChar );
+        USHORT nKeyCode = ImplMapCharCode( keyChar );
         
         // Caution: should the table grow to more than 5 or 6 entries,
         // we must consider moving it to a kind of hash map
@@ -928,7 +901,7 @@ private:
     
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
-        mpFrame->mnLastEventTime = static_cast<sal_uLong>( [pEvent timestamp] * 1000.0 );
+        mpFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
     }
 }
@@ -958,7 +931,7 @@ private:
 				! [self hasMarkedText ]
                 )
             {
-                sal_uInt16 nKeyCode = ImplMapCharCode( aCharCode );
+                USHORT nKeyCode = ImplMapCharCode( aCharCode );
                 unsigned int nLastModifiers = mpFrame->mnLastModifierFlags;
 
                 // #i99567#
@@ -1334,18 +1307,18 @@ private:
     }
 }
 
--(BOOL)sendKeyInputAndReleaseToFrame: (sal_uInt16)nKeyCode character: (sal_Unicode)aChar
+-(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar
 {
     return [self sendKeyInputAndReleaseToFrame: nKeyCode character: aChar modifiers: mpFrame->mnLastModifierFlags];
 }
 
--(BOOL)sendKeyInputAndReleaseToFrame: (sal_uInt16)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
+-(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
 {
     return [self sendKeyToFrameDirect: nKeyCode character: aChar modifiers: nMod] ||
            [self sendSingleCharacter: mpLastEvent];
 }
 
--(BOOL)sendKeyToFrameDirect: (sal_uInt16)nKeyCode  character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
+-(MacOSBOOL)sendKeyToFrameDirect: (USHORT)nKeyCode  character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
 {
     YIELD_GUARD;
     
@@ -1368,20 +1341,20 @@ private:
 }
 
 
--(BOOL)sendSingleCharacter: (NSEvent *)pEvent
+-(MacOSBOOL)sendSingleCharacter: (NSEvent *)pEvent
 {
     NSString* pUnmodifiedString = [pEvent charactersIgnoringModifiers]; 
 
     if( pUnmodifiedString && [pUnmodifiedString length] == 1 )
     {
         unichar keyChar = [pUnmodifiedString characterAtIndex: 0];
-        sal_uInt16 nKeyCode = ImplMapCharCode( keyChar );
+        USHORT nKeyCode = ImplMapCharCode( keyChar );
         if( nKeyCode != 0 )
         {
             // don't send unicodes in the private use area
             if( keyChar >= 0xf700 && keyChar < 0xf780 )
                 keyChar = 0;
-            BOOL bRet = [self sendKeyToFrameDirect: nKeyCode character: keyChar modifiers: mpFrame->mnLastModifierFlags];
+            MacOSBOOL bRet = [self sendKeyToFrameDirect: nKeyCode character: keyChar modifiers: mpFrame->mnLastModifierFlags];
             mbInKeyInput = false;
 
             return bRet;
@@ -1397,9 +1370,9 @@ private:
     return [NSArray arrayWithObjects:NSUnderlineStyleAttributeName, nil];
 }
 
-- (BOOL)hasMarkedText
+- (MacOSBOOL)hasMarkedText
 {
-    BOOL bHasMarkedText;
+    MacOSBOOL bHasMarkedText;
 
     bHasMarkedText = ( mMarkedRange.location != NSNotFound ) &&
                      ( mMarkedRange.length != 0 );
@@ -1466,7 +1439,7 @@ private:
     if( len > 0 ) {
         NSString *pString = [aString string];
         OUString aInsertString( GetOUString( pString ) );
-        std::vector<sal_uInt16> aInputFlags = std::vector<sal_uInt16>( std::max( 1, len ), 0 );
+        std::vector<USHORT> aInputFlags = std::vector<USHORT>( std::max( 1, len ), 0 );
         for ( int i = 0; i < len; i++ )
         {
             unsigned int nUnderlineValue;
@@ -1625,12 +1598,12 @@ private:
   [mDraggingDestinationHandler draggingExited: sender];
 }
 
--(BOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender
+-(MacOSBOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender
 {
   return [mDraggingDestinationHandler prepareForDragOperation: sender];
 }
 
--(BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+-(MacOSBOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
   return [mDraggingDestinationHandler performDragOperation: sender];
 }

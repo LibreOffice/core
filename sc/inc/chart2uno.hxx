@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
 
-#include <boost/unordered_set.hpp>
+#include <hash_set>
 #include <list>
 #include <vector>
 #include <memory>
@@ -109,6 +109,9 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection()
         throw (::com::sun::star::uno::RuntimeException);
+
+/*    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > SAL_CALL getNumberFormatsSupplier()
+        throw (::com::sun::star::uno::RuntimeException);*/
 
     // XRangeXMLConversion ---------------------------------------------------
 
@@ -236,6 +239,70 @@ private:
 };
 
 
+// LabeledDataSequence =======================================================
+
+class ScChart2LabeledDataSequence : public
+                ::cppu::WeakImplHelper4<
+                    ::com::sun::star::chart2::data::XLabeledDataSequence,
+                    ::com::sun::star::util::XCloneable,
+                    ::com::sun::star::util::XModifyBroadcaster,
+                    ::com::sun::star::lang::XServiceInfo >,
+                SfxListener
+{
+public:
+
+    explicit ScChart2LabeledDataSequence( ScDocument* pDoc );
+    virtual ~ScChart2LabeledDataSequence();
+
+    // SfxListener -----------------------------------------------------------
+
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    // XLabeledDataSequence --------------------------------------------------
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL getValues()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setValues(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& xSequence )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL getLabel()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setLabel(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& xSequence )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XCloneable ------------------------------------------------------------
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XModifyBroadcaster ----------------------------------------------------
+
+    virtual void SAL_CALL addModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo ----------------------------------------------------------
+
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw(
+            ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString&
+            rServiceName) throw( ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+        getSupportedServiceNames() throw(
+                ::com::sun::star::uno::RuntimeException);
+
+private:
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XDataSequence >   m_aData;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::data::XDataSequence >   m_aLabel;
+    ScDocument*                                               m_pDocument;
+};
+
 // DataSequence ==============================================================
 
 class ScChart2DataSequence : public
@@ -253,7 +320,7 @@ class ScChart2DataSequence : public
 public:
     explicit ScChart2DataSequence( ScDocument* pDoc,
             const com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataProvider >& xDP,
-            ::std::vector<ScTokenRef>* pTokens, bool bIncludeHiddenCells );
+            ::std::vector<ScSharedTokenRef>* pTokens, bool bIncludeHiddenCells );
 
     virtual ~ScChart2DataSequence();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -360,6 +427,16 @@ public:
         getSupportedServiceNames() throw(
                 ::com::sun::star::uno::RuntimeException);
 
+    // XUnoTunnel ------------------------------------------------------------
+
+// 	virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
+// 									sal_Int8 >& aIdentifier )
+// 								throw(::com::sun::star::uno::RuntimeException);
+
+// 	static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+// 	static ScChart2DataSequence* getImplementation( const com::sun::star::uno::Reference<
+// 									com::sun::star::uno::XInterface> xObj );
+
 private:
     void setDataChangedHint(bool b);
 
@@ -376,30 +453,30 @@ private:
     {
     public:
         ExternalRefListener(ScChart2DataSequence& rParent, ScDocument* pDoc);
-        virtual ~ExternalRefListener();
+        virtual ~ExternalRefListener(); 
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType);
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
-        const ::boost::unordered_set<sal_uInt16>& getAllFileIds();
+        const ::std::hash_set<sal_uInt16>& getAllFileIds();
 
     private:
         ExternalRefListener();
         ExternalRefListener(const ExternalRefListener& r);
 
         ScChart2DataSequence&       mrParent;
-        ::boost::unordered_set<sal_uInt16> maFileIds;
+        ::std::hash_set<sal_uInt16> maFileIds;
         ScDocument*                 mpDoc;
     };
 
-    /**
-     * Build an internal data array to cache the data ranges, and other
-     * information such as hidden values.
+    /** 
+     * Build an internal data array to cache the data ranges, and other 
+     * information such as hidden values. 
      */
     void BuildDataCache();
 
     void RebuildDataCache();
 
-    sal_Int32 FillCacheFromExternalRef(const ScTokenRef& pToken);
+    sal_Int32 FillCacheFromExternalRef(const ScSharedTokenRef& pToken);
 
     void UpdateTokensFromRanges(const ScRangeList& rRanges);
 
@@ -434,11 +511,11 @@ private:
 
     ::std::list<Item>           m_aDataArray;
 
-    /**
-     * Cached data for getData.  We may also need to cache data for the
-     * numerical and textural data series if they turn out to be bottlenecks
+    /** 
+     * Cached data for getData.  We may also need to cache data for the 
+     * numerical and textural data series if they turn out to be bottlenecks 
      * under certain scenarios.
-     */
+     */ 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > m_aMixedDataCache;
 
     ::com::sun::star::uno::Sequence<sal_Int32>  m_aHiddenValues;
@@ -448,7 +525,7 @@ private:
     sal_Bool                    m_bIncludeHiddenCells;
 
     // internals
-    typedef ::std::auto_ptr< ::std::vector<ScTokenRef> >  TokenListPtr;
+    typedef ::std::auto_ptr< ::std::vector<ScSharedTokenRef> >  TokenListPtr;
     typedef ::std::auto_ptr< ::std::vector<sal_uInt32> >        RangeIndexMapPtr;
     typedef ::std::auto_ptr<ExternalRefListener>                ExtRefListenerPtr;
 
@@ -458,7 +535,7 @@ private:
     RangeIndexMapPtr            m_pRangeIndices;
     ExtRefListenerPtr           m_pExtRefListener;
     com::sun::star::uno::Reference < com::sun::star::chart2::data::XDataProvider > m_xDataProvider;
-    SfxItemPropertySet          m_aPropSet;
+    SfxItemPropertySet		    m_aPropSet;
 
     ::std::auto_ptr<HiddenRangeListener> m_pHiddenListener;
     ScLinkListener*             m_pValueListener;
@@ -587,6 +664,16 @@ public:
         getSupportedServiceNames() throw(
                 ::com::sun::star::uno::RuntimeException);
 
+    // XUnoTunnel ------------------------------------------------------------
+
+// 	virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
+// 									sal_Int8 >& aIdentifier )
+// 								throw(::com::sun::star::uno::RuntimeException);
+
+// 	static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+// 	static ScChart2DataSequence* getImplementation( const com::sun::star::uno::Reference<
+// 									com::sun::star::uno::XInterface> xObj );
+
     // Implementation --------------------------------------------------------
 
     ScRangeListRef GetRangeList() { return m_xRanges; }
@@ -600,7 +687,7 @@ private:
     ScRangeListRef              m_xRanges;
     ScDocument*                 m_pDocument;
     com::sun::star::uno::Reference < com::sun::star::chart2::data::XDataProvider > m_xDataProvider;
-    SfxItemPropertySet          m_aPropSet;
+    SfxItemPropertySet		    m_aPropSet;
     sal_Bool                    m_bColumn; // defines the orientation to create the right labels
 
 };

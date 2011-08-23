@@ -57,10 +57,14 @@
  * @file
  * input list field.
  ************************************************************************/
-#ifndef     _XFINPUTLIST_HXX
-#define     _XFINPUTLIST_HXX
+/*************************************************************************
+ * Change History
+ * 2005-05-27  create this file.
+ ************************************************************************/
+#ifndef		_XFINPUTLIST_HXX
+#define		_XFINPUTLIST_HXX
 
-#include    "xfcontent.hxx"
+#include	"xfcontent.hxx"
 
 /**
  * @brief
@@ -71,7 +75,7 @@ class XFInputList : public XFContent
 public:
     void SetName(rtl::OUString sName);
     void SetLabels(std::vector<rtl::OUString> list);
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 private:
     rtl::OUString m_strName;
     std::vector<rtl::OUString> m_list;
@@ -89,7 +93,7 @@ inline void XFInputList::SetLabels(std::vector<rtl::OUString> list)
 
 inline void XFInputList::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     pAttrList->AddAttribute( A2OUSTR("text:name"), m_strName );

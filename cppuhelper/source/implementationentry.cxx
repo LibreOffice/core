@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
 namespace cppu {
-
+    
 sal_Bool component_writeInfoHelper(
     void *, void *pRegistryKey , const struct ImplementationEntry entries[] )
 {
@@ -65,7 +65,7 @@ sal_Bool component_writeInfoHelper(
     }
     catch ( InvalidRegistryException & )
     {
-        OSL_FAIL( "### InvalidRegistryException!" );
+        OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
     }
     return bRet;
 }
@@ -75,10 +75,10 @@ void * component_getFactoryHelper(
     const sal_Char * pImplName, void *, void *,
     const struct ImplementationEntry entries[] )
 {
-
+    
       void * pRet = 0;
     Reference< XSingleComponentFactory > xFactory;
-
+    
     for( sal_Int32 i = 0 ; entries[i].create ; i ++ )
     {
         OUString implName = entries[i].getImplementationName();

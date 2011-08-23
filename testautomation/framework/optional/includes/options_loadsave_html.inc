@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : gregor.hartmann@oracle.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Test the Load/Save HTML compatibility page
 '*

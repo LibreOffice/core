@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,17 +52,17 @@ namespace connectivity
                 //=============================================================
                 // create the config provider
                 Reference< XMultiServiceFactory > xConfigProvider(
-                    _rxORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")) ),
+                    _rxORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ) ),
                     UNO_QUERY
                 );
                 OSL_ENSURE( xConfigProvider.is(), "createDriverConfigNode: could not create the config provider!" );
 
                 if ( xConfigProvider.is() )
                 {
-                    ::rtl::OUString sCompleteNodePath(RTL_CONSTASCII_USTRINGPARAM ("/org.openoffice.Office.DataAccess/DriverSettings/" ));
+                    ::rtl::OUString sCompleteNodePath = ::rtl::OUString::createFromAscii ("/org.openoffice.Office.DataAccess/DriverSettings/" );
                     sCompleteNodePath += _sDriverImplementationName;
                     //sCompleteNodePath += OEvoabConnection::getDriverImplementationName();
-                    //sCompleteNodePath += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.comp.sdbc.MozabDriver"));
+                    //sCompleteNodePath += ::rtl::OUString::createFromAscii ("com.sun.star.comp.sdbc.MozabDriver");
                     EVO_TRACE_STRING("createDriverConfigNode()::sCompleteNodePath = %s\n", sCompleteNodePath );
 
                     //=========================================================
@@ -70,14 +70,14 @@ namespace connectivity
                     Sequence< Any > aArguments(2);
                     // the path to the node to open
                     aArguments[0] <<= PropertyValue(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+                        ::rtl::OUString::createFromAscii( "nodepath"),
                         0,
                         makeAny( sCompleteNodePath ),
                         PropertyState_DIRECT_VALUE
                     );
                     // the depth: -1 means unlimited
                     aArguments[1] <<= PropertyValue(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
+                        ::rtl::OUString::createFromAscii( "depth"),
                         0,
                         makeAny( (sal_Int32)-1 ),
                         PropertyState_DIRECT_VALUE
@@ -86,7 +86,7 @@ namespace connectivity
                     //=========================================================
                     // create the access
                     Reference< XInterface > xAccess = xConfigProvider->createInstanceWithArguments(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                        ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
                         aArguments
                     );
                     OSL_ENSURE( xAccess.is(), "createDriverConfigNode: invalid access returned (should throw an exception instead)!" );
@@ -96,7 +96,7 @@ namespace connectivity
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "createDriverConfigNode: caught an exception while accessing the driver's config node!" );
+                OSL_ENSURE( sal_False, "createDriverConfigNode: caught an exception while accessing the driver's config node!" );
             }
 
             // outta here
@@ -142,14 +142,14 @@ namespace connectivity
                     Reference< XPropertySet > xDriverNode = createDriverConfigNode( _rxORB, OEvoabDriver::getImplementationName_Static() );
                     Reference< XPropertySet > xEvoPrefsNode;
                     if ( xDriverNode.is() )
-                        xDriverNode->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EvolutionPreferences")) ) >>= xEvoPrefsNode;
+                        xDriverNode->getPropertyValue( ::rtl::OUString::createFromAscii( "EvolutionPreferences" ) ) >>= xEvoPrefsNode;
                     OSL_ENSURE( xEvoPrefsNode.is(), "getFullPathExportingCommand: could not access the node for the evolution preferences!" );
                     if ( xEvoPrefsNode.is() )
-                        xEvoPrefsNode->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FullPathExportingCommand")) ) >>= sFullPathExportingCommand;
+                        xEvoPrefsNode->getPropertyValue( ::rtl::OUString::createFromAscii( "FullPathExportingCommand" ) ) >>= sFullPathExportingCommand;
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "getFullPathExportingCommand: caught an exception!" );
+                    OSL_ENSURE( sal_False, "getFullPathExportingCommand: caught an exception!" );
                 }
             }
             return sFullPathExportingCommand;

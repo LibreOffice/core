@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +32,11 @@
 
 namespace ww
 {
-    enum eField
+    enum eField 
     {
         eNONE = 0,
         eUNKNOWN = 1,
-        ePOSSIBLEBOOKMARK = 2,
+        ePOSSIBLEBOOKMARK = 2, 
         eREF = 3,
         eXE = 4,
         eFOOTREF = 5,
@@ -131,9 +131,9 @@ namespace ww
         eGREETINGLINE = 94,
         eSHAPE = 95
     };
-
+    
     /** Find the English Field Name from a winword index
-
+     
         See OpenOffice.org issue 12831
         (http://www.openoffice.org/issues/show_bug.cgi?id=12831) and MS
         Knowledge Base article 268717

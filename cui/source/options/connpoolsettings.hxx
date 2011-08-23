@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,11 @@ namespace offapp
     //====================================================================
     struct DriverPooling
     {
-        String              sName;
-        sal_Bool            bEnabled;
-        sal_Int32           nTimeoutSeconds;
+        String				sName;
+        sal_Bool			bEnabled;
+        sal_Int32			nTimeoutSeconds;
 
+        DriverPooling();
         DriverPooling( const String& _rName, sal_Bool _bEnabled, const sal_Int32 _nTimeout );
 
         sal_Bool operator == (const DriverPooling& _rR) const;
@@ -60,22 +61,22 @@ namespace offapp
     {
     protected:
         DECLARE_STL_VECTOR( DriverPooling, DriverSettings );
-        DriverSettings      m_aDrivers;
+        DriverSettings		m_aDrivers;
 
     public:
-        typedef ConstDriverSettingsIterator const_iterator;
-        typedef DriverSettingsIterator      iterator;
+        typedef ConstDriverSettingsIterator	const_iterator;
+        typedef DriverSettingsIterator		iterator;
 
     public:
         DriverPoolingSettings();
 
         sal_Int32 size() const { return m_aDrivers.size(); }
 
-        const_iterator  begin() const   { return m_aDrivers.begin(); }
-        const_iterator  end() const     { return m_aDrivers.end(); }
+        const_iterator	begin() const	{ return m_aDrivers.begin(); }
+        const_iterator	end() const		{ return m_aDrivers.end(); }
 
-        iterator        begin()     { return m_aDrivers.begin(); }
-        iterator        end()       { return m_aDrivers.end(); }
+        iterator		begin()		{ return m_aDrivers.begin(); }
+        iterator		end()		{ return m_aDrivers.end(); }
 
         void push_back(const DriverPooling& _rElement) { m_aDrivers.push_back(_rElement); }
     };
@@ -86,21 +87,21 @@ namespace offapp
     class DriverPoolingSettingsItem : public SfxPoolItem
     {
     protected:
-        DriverPoolingSettings   m_aSettings;
+        DriverPoolingSettings	m_aSettings;
 
     public:
         TYPEINFO();
 
-        DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings );
+        DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings _rSettings );
 
         virtual int              operator==( const SfxPoolItem& ) const;
         virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
-        const DriverPoolingSettings& getSettings() const    { return m_aSettings; }
+        const DriverPoolingSettings& getSettings() const	{ return m_aSettings; }
     };
 
 //........................................................................
-}   // namespace offapp
+}	// namespace offapp
 //........................................................................
 
 #endif // _OFFAPP_CONNPOOLSETTINGS_HXX_

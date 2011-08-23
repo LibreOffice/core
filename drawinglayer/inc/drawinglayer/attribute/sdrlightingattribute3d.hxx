@@ -3,6 +3,12 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: sdrattribute3d.hxx,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
+ *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -81,7 +87,7 @@ namespace drawinglayer
             // color model solver
             basegfx::BColor solveColorModel(
                 const basegfx::B3DVector& rNormalInEyeCoordinates,
-                const basegfx::BColor& rColor, const basegfx::BColor& rSpecular,
+                const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, 
                 const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity) const;
         };
     } // end of namespace attribute

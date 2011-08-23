@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,10 +56,10 @@ namespace vclcanvas
     namespace
     {
         void setupLayoutMode( OutputDevice& rOutDev,
-                              sal_Int8      nTextDirection )
+                              sal_Int8		nTextDirection )	
         {
             // TODO(P3): avoid if already correctly set
-            sal_uIntPtr nLayoutMode;
+            ULONG nLayoutMode;
             switch( nTextDirection )
             {
                 default:
@@ -140,10 +140,10 @@ namespace vclcanvas
         if (aVDev.GetTextOutlines(
             aOutlines,
             maText.Text,
-            ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-            ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-            ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
-            sal_False,
+            ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+            ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+            ::canvas::tools::numeric_cast<USHORT>(maText.Length),
+            FALSE,
             0,
             aOffsets.get()))
         {
@@ -193,9 +193,9 @@ namespace vclcanvas
         if (aVDev.GetGlyphBoundRects(
             Point(0,0),
             maText.Text,
-            ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-            ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
-            ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+            ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+            ::canvas::tools::numeric_cast<USHORT>(maText.Length),
+            ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
             aMetricVector))
         {
             aBoundingBoxes.realloc(aMetricVector.size());
@@ -273,8 +273,8 @@ namespace vclcanvas
             return geometry::RealRectangle2D( 0, nAboveBaseline,
                                               aVDev.GetTextWidth(
                                                   maText.Text,
-                                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-                                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) ),
+                                                  ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+                                                  ::canvas::tools::numeric_cast<USHORT>(maText.Length) ),
                                               nBelowBaseline );
         }
     }
@@ -289,7 +289,7 @@ namespace vclcanvas
         return 0.0;
     }
 
-    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& aNextLayouts,
+    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& aNextLayouts, 
                                                  double                                                           nSize ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -406,15 +406,15 @@ namespace vclcanvas
             rOutDev.DrawTextArray( rOutpos,
                                    maText.Text,
                                    aOffsets.get(),
-                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
+                                   ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+                                   ::canvas::tools::numeric_cast<USHORT>(maText.Length) );
         }
         else
         {
             rOutDev.DrawText( rOutpos,
                               maText.Text,
-                              ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-                              ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
+                              ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+                              ::canvas::tools::numeric_cast<USHORT>(maText.Length) );
         }
 
         return true;
@@ -452,10 +452,10 @@ namespace vclcanvas
         };
     }
 
-    void TextLayout::setupTextOffsets( sal_Int32*                       outputOffsets,
-                                       const uno::Sequence< double >&   inputOffsets,
-                                       const rendering::ViewState&      viewState,
-                                       const rendering::RenderState&    renderState     ) const
+    void TextLayout::setupTextOffsets( sal_Int32*						outputOffsets,
+                                       const uno::Sequence< double >& 	inputOffsets,
+                                       const rendering::ViewState& 		viewState,
+                                       const rendering::RenderState& 	renderState		) const
     {
         ENSURE_OR_THROW( outputOffsets!=NULL,
                           "TextLayout::setupTextOffsets offsets NULL" );

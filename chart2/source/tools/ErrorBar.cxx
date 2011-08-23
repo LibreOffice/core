@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,72 +108,49 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-struct StaticErrorBarDefaults_Initializer
+void lcl_AddDefaultsToMap(
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_STYLE, ::com::sun::star::chart::ErrorBarStyle::NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_POS_ERROR, 0.0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_NEG_ERROR, 0.0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_WEIGHT, 1.0 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_SHOW_POS_ERROR, true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_SHOW_NEG_ERROR, true );
+}
 
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_STYLE, ::com::sun::star::chart::ErrorBarStyle::NONE );
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_POS_ERROR, 0.0 );
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_NEG_ERROR, 0.0 );
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_WEIGHT, 1.0 );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_SHOW_POS_ERROR, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_SHOW_NEG_ERROR, true );
-    }
-};
-
-struct StaticErrorBarDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticErrorBarDefaults_Initializer >
+const uno::Sequence< Property > & lcl_GetPropertySequence()
 {
-};
+    static uno::Sequence< Property > aPropSeq;
 
-struct StaticErrorBarInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    uno::Sequence< Property > lcl_GetPropertySequence()
-    {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-};
+    return aPropSeq;
+}
 
-struct StaticErrorBarInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticErrorBarInfoHelper_Initializer >
+::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
 {
-};
+    static ::cppu::OPropertyArrayHelper aArrayHelper(
+        lcl_GetPropertySequence(),
+        /* bSorted = */ sal_True );
 
-struct StaticErrorBarInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticErrorBarInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticErrorBarInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticErrorBarInfo_Initializer >
-{
-};
+    return aArrayHelper;
+}
 
 bool lcl_isInternalData( const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq )
 {
@@ -232,23 +209,50 @@ uno::Reference< util::XCloneable > SAL_CALL ErrorBar::createClone()
 uno::Any ErrorBar::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticErrorBarDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
+    static tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        LineProperties::AddDefaultsToMap( aStaticDefaults );
+    }
+
+    tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
         return uno::Any();
+
     return (*aFound).second;
+    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL ErrorBar::getInfoHelper()
 {
-    return *StaticErrorBarInfoHelper::get();
+    return lcl_getInfoHelper();
 }
 
+
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL ErrorBar::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+    ErrorBar::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticErrorBarInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
 
 // ____ XModifyBroadcaster ____

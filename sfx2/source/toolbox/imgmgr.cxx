@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,12 +30,12 @@
 #include "precompiled_sfx2.hxx"
 
 #include <stdio.h>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
-#include "sfx2/imgmgr.hxx"
+#include "imgmgr.hxx"
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include <sfx2/bindings.hxx>
 #include "statcach.hxx"
 #include <sfx2/module.hxx>
@@ -54,36 +54,40 @@ const sal_uInt32 IMAGELIST_COUNT = 4; // small, small-hi, large, large-hi
 struct ToolBoxInf_Impl
 {
     ToolBox* pToolBox;
-    sal_uInt16   nFlags;
+    USHORT   nFlags;
 };
 
 class SfxImageManager_Impl
 {
 public:
     sal_Int16                       m_nSymbolsSize;
-    SvtMiscOptions                  m_aOpt;
+    SvtMiscOptions		            m_aOpt;
     std::vector< ToolBoxInf_Impl* > m_aToolBoxes;
     ImageList*                      m_pImageList[IMAGELIST_COUNT];
     SfxModule*                      m_pModule;
 
-    ImageList*              GetImageList( bool bBig );
-    Image                   GetImage( sal_uInt16 nId, bool bBig );
+    ImageList*              GetImageList( BOOL bBig, BOOL bHiContrast );
+    Image                   GetImage( USHORT nId, BOOL bBig, BOOL bHiContrast );
     void                    SetSymbolsSize_Impl( sal_Int16 );
-
+    
     DECL_LINK( OptionsChanged_Impl, void* );
     DECL_LINK( SettingsChanged_Impl, void* );
 
-
+    
     SfxImageManager_Impl( SfxModule* pModule );
     ~SfxImageManager_Impl();
 };
 
-typedef boost::unordered_map< sal_Int64, sal_Int64 > SfxImageManagerMap;
+typedef std::hash_map< sal_Int64, sal_Int64 > SfxImageManagerMap;
 
 // global image lists
 static SfxImageManager_Impl* pGlobalImageManager = 0;
 static SfxImageManagerMap    m_ImageManager_ImplMap;
 static SfxImageManagerMap    m_ImageManagerMap;
+static ImageList*            pImageListSmall=0;
+static ImageList*            pImageListBig=0;
+static ImageList*            pImageListHiSmall=0;
+static ImageList*            pImageListHiBig=0;
 
 static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
 {
@@ -104,9 +108,9 @@ static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
         else
         {
             pImpl = new SfxImageManager_Impl( pModule );
-            m_ImageManager_ImplMap.insert(
-                SfxImageManagerMap::value_type(
-                    sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )),
+            m_ImageManager_ImplMap.insert( 
+                SfxImageManagerMap::value_type( 
+                    sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )), 
                     sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pImpl )) ));
         }
         return pImpl;
@@ -114,32 +118,40 @@ static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
 }
 
 // Global image list
-static ImageList* GetImageList( bool bBig )
+static ImageList* GetImageList( BOOL bBig, BOOL bHiContrast )
 {
     SolarMutexGuard aGuard;
-    ImageList* rpList = NULL;
+    
+    // Has to be changed if we know how the IDs are named!!!
+    ImageList*& rpList = bBig ? ( bHiContrast ? pImageListHiBig : pImageListBig ) :
+                                ( bHiContrast ? pImageListHiSmall : pImageListSmall );
+    if ( !rpList )
+    {
+        ResMgr *pResMgr = SfxApplication::GetOrCreate()->GetOffResManager_Impl();
 
-    ResMgr *pResMgr = SfxApplication::GetOrCreate()->GetOffResManager_Impl();
+        ResId aResId( bBig ? ( bHiContrast ? RID_DEFAULTIMAGELIST_LCH : RID_DEFAULTIMAGELIST_LC ) :
+                             ( bHiContrast ? RID_DEFAULTIMAGELIST_SCH : RID_DEFAULTIMAGELIST_SC ), *pResMgr);
 
-    ResId aResId( bBig ? ( RID_DEFAULTIMAGELIST_LC ) : ( RID_DEFAULTIMAGELIST_SC ), *pResMgr);
+        aResId.SetRT( RSC_IMAGELIST );
 
-    aResId.SetRT( RSC_IMAGELIST );
+        DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );
 
-    DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );
-
-    if ( pResMgr->IsAvailable(aResId) )
-        rpList = new ImageList( aResId );
-    else
-        rpList = new ImageList();
+        if ( pResMgr->IsAvailable(aResId) )
+            rpList = new ImageList( aResId );
+        else
+            rpList = new ImageList();
+    }
 
     return rpList;
 }
 
-static sal_Int16 impl_convertBools( sal_Bool bLarge )
+static sal_Int16 impl_convertBools( sal_Bool bLarge, sal_Bool bHiContrast )
 {
     sal_Int16 nIndex( 0 );
     if ( bLarge  )
         nIndex += 1;
+    if ( bHiContrast )
+        nIndex += 2;
     return nIndex;
 }
 
@@ -151,7 +163,7 @@ SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule ) :
 {
     for ( sal_uInt32 i = 0; i < IMAGELIST_COUNT; i++ )
         m_pImageList[i] = 0;
-
+    
     m_aOpt.AddListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
     Application::AddEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
 }
@@ -161,7 +173,7 @@ SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule ) :
 SfxImageManager_Impl::~SfxImageManager_Impl()
 {
     m_aOpt.RemoveListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
-    Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
+    Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) ); 
 
     for ( sal_uInt32 i = 0; i < m_aToolBoxes.size(); i++ )
         delete m_aToolBoxes[i];
@@ -169,25 +181,25 @@ SfxImageManager_Impl::~SfxImageManager_Impl()
 
 //-------------------------------------------------------------------------
 
-ImageList* SfxImageManager_Impl::GetImageList( bool bBig )
+ImageList* SfxImageManager_Impl::GetImageList( BOOL bBig, BOOL bHiContrast )
 {
-    sal_Int32 nIndex = impl_convertBools( bBig );
+    sal_Int32 nIndex = impl_convertBools( bBig, bHiContrast );
     if ( !m_pImageList[nIndex] )
     {
         if ( !m_pModule )
-            m_pImageList[nIndex] = ::GetImageList( bBig );
+            m_pImageList[nIndex] = ::GetImageList( bBig, bHiContrast );
         else
-            m_pImageList[nIndex] = m_pModule->GetImageList_Impl( bBig );
+            m_pImageList[nIndex] = m_pModule->GetImageList_Impl( bBig, bHiContrast );
     }
-
+    
     return m_pImageList[nIndex];
 }
 
 //-------------------------------------------------------------------------
 
-Image SfxImageManager_Impl::GetImage( sal_uInt16 nId, bool bBig )
+Image SfxImageManager_Impl::GetImage( USHORT nId, BOOL bBig, BOOL bHiContrast )
 {
-    ImageList* pImageList = GetImageList( bBig );
+    ImageList* pImageList = GetImageList( bBig, bHiContrast );
     if ( pImageList )
         return pImageList->GetImage( nId );
     return Image();
@@ -198,11 +210,11 @@ Image SfxImageManager_Impl::GetImage( sal_uInt16 nId, bool bBig )
 void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
 {
     SolarMutexGuard aGuard;
-
+    
     if ( nNewSymbolsSize != m_nSymbolsSize )
     {
         m_nSymbolsSize = nNewSymbolsSize;
-        sal_Bool bLarge( m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
+        BOOL bLarge( m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
 
         for ( sal_uInt32 n=0; n < m_aToolBoxes.size(); n++ )
         {
@@ -210,13 +222,14 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
             if ( pInf->nFlags & SFX_TOOLBOX_CHANGESYMBOLSET )
             {
                 ToolBox *pBox       = pInf->pToolBox;
-                sal_uInt16  nCount      = pBox->GetItemCount();
-                for ( sal_uInt16 nPos=0; nPos<nCount; nPos++ )
+                BOOL    bHiContrast = pBox->GetSettings().GetStyleSettings().GetHighContrastMode();
+                USHORT  nCount      = pBox->GetItemCount();
+                for ( USHORT nPos=0; nPos<nCount; nPos++ )
                 {
-                    sal_uInt16 nId = pBox->GetItemId( nPos );
+                    USHORT nId = pBox->GetItemId( nPos );
                     if ( pBox->GetItemType(nPos) == TOOLBOXITEM_BUTTON )
                     {
-                        pBox->SetItemImage( nId, GetImage( nId, bLarge ) );
+                        pBox->SetItemImage( nId, GetImage( nId, bLarge, bHiContrast ) );
                         SfxStateCache *pCache = SfxViewFrame::Current()->GetBindings().GetStateCache( nId );
                         if ( pCache )
                             pCache->SetCachedState();
@@ -233,8 +246,8 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
                         aSize.Height() = aActSize.Height();
 
                     pBox->SetSizePixel( aSize );
-                }
-            }
+                }                
+            }            
         }
     }
 }
@@ -278,16 +291,16 @@ SfxImageManager::~SfxImageManager()
 SfxImageManager* SfxImageManager::GetImageManager( SfxModule* pModule )
 {
     SolarMutexGuard aGuard;
-
-    SfxImageManagerMap::const_iterator pIter =
+    
+    SfxImageManagerMap::const_iterator pIter = 
         m_ImageManagerMap.find( sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )));
     if ( pIter != m_ImageManagerMap.end() )
         return reinterpret_cast< SfxImageManager* >( sal::static_int_cast< sal_IntPtr >( pIter->second ));
     else
     {
         SfxImageManager* pSfxImageManager = new SfxImageManager( pModule );
-        m_ImageManagerMap.insert( SfxImageManagerMap::value_type(
-            sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )),
+        m_ImageManagerMap.insert( SfxImageManagerMap::value_type( 
+            sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )), 
             sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pSfxImageManager )) ));
         return pSfxImageManager;
     }
@@ -295,9 +308,9 @@ SfxImageManager* SfxImageManager::GetImageManager( SfxModule* pModule )
 
 //-------------------------------------------------------------------------
 
-Image SfxImageManager::GetImage( sal_uInt16 nId, bool bBig ) const
+Image SfxImageManager::GetImage( USHORT nId, BOOL bBig, BOOL bHiContrast ) const
 {
-    ImageList* pImageList = pImp->GetImageList( bBig );
+    ImageList* pImageList = pImp->GetImageList( bBig, bHiContrast );
     if ( pImageList && pImageList->HasImageAtPos( nId ) )
         return pImageList->GetImage( nId );
     return Image();
@@ -305,23 +318,23 @@ Image SfxImageManager::GetImage( sal_uInt16 nId, bool bBig ) const
 
 //-------------------------------------------------------------------------
 
-Image SfxImageManager::GetImage( sal_uInt16 nId ) const
+Image SfxImageManager::GetImage( USHORT nId, BOOL bHiContrast ) const
 {
-    sal_Bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
-    return GetImage( nId, bLarge );
+    BOOL bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
+    return GetImage( nId, bLarge, bHiContrast );
 }
 
 //-------------------------------------------------------------------------
 
-Image SfxImageManager::SeekImage( sal_uInt16 nId, bool bBig ) const
+Image SfxImageManager::SeekImage( USHORT nId, BOOL bBig, BOOL bHiContrast ) const
 {
     sal_Bool bGlobal = ( pImp->m_pModule == 0 );
-    ImageList* pImageList = pImp->GetImageList( bBig );
+    ImageList* pImageList = pImp->GetImageList( bBig, bHiContrast );
     if ( pImageList && pImageList->HasImageAtPos( nId ) )
         return pImageList->GetImage( nId );
     else if ( !bGlobal )
     {
-        pImageList = ::GetImageManager( 0 )->GetImageList( bBig );
+        pImageList = ::GetImageManager( 0 )->GetImageList( bBig, bHiContrast );
         if ( pImageList )
             return pImageList->GetImage( nId );
     }
@@ -330,18 +343,18 @@ Image SfxImageManager::SeekImage( sal_uInt16 nId, bool bBig ) const
 
 //-------------------------------------------------------------------------
 
-Image SfxImageManager::SeekImage( sal_uInt16 nId ) const
+Image SfxImageManager::SeekImage( USHORT nId, BOOL bHiContrast ) const
 {
-    sal_Bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
-    return SeekImage( nId, bLarge );
+    BOOL bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
+    return SeekImage( nId, bLarge, bHiContrast );
 }
 
 //-------------------------------------------------------------------------
 
-void SfxImageManager::RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags )
+void SfxImageManager::RegisterToolBox( ToolBox *pBox, USHORT nFlags )
 {
     SolarMutexGuard aGuard;
-
+    
     ToolBoxInf_Impl* pInf = new ToolBoxInf_Impl;
     pInf->pToolBox = pBox;
     pInf->nFlags   = nFlags;
@@ -353,7 +366,7 @@ void SfxImageManager::RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags )
 void SfxImageManager::ReleaseToolBox( ToolBox *pBox )
 {
     SolarMutexGuard aGuard;
-
+    
     for ( sal_uInt32 n=0; n < pImp->m_aToolBoxes.size(); n++ )
     {
         if ((pImp->m_aToolBoxes[n])->pToolBox == pBox )
@@ -367,21 +380,21 @@ void SfxImageManager::ReleaseToolBox( ToolBox *pBox )
 
 //-------------------------------------------------------------------------
 
-void SfxImageManager::SetImages( ToolBox& rToolBox, bool bLarge )
+void SfxImageManager::SetImages( ToolBox& rToolBox, BOOL bHiContrast, BOOL bLarge )
 {
-    SetImagesForceSize( rToolBox, bLarge );
+    SetImagesForceSize( rToolBox, bLarge, bHiContrast );
 }
 
 //-------------------------------------------------------------------------
 
-void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, bool bLarge )
+void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, BOOL bHiContrast, BOOL bLarge )
 {
-    ImageList* pImageList = pImp->GetImageList( bLarge );
-
-    sal_uInt16 nCount = rToolBox.GetItemCount();
-    for (sal_uInt16 n=0; n<nCount; n++)
+    ImageList* pImageList = pImp->GetImageList( bLarge, bHiContrast );
+    
+    USHORT nCount = rToolBox.GetItemCount();
+    for (USHORT n=0; n<nCount; n++)
     {
-        sal_uInt16 nId = rToolBox.GetItemId(n);
+        USHORT nId = rToolBox.GetItemId(n);
         switch ( rToolBox.GetItemType(n) )
         {
             case TOOLBOXITEM_BUTTON:
@@ -403,8 +416,9 @@ void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, bool bLarge )
 
 void SfxImageManager::SetImages( ToolBox& rToolBox )
 {
-    sal_Bool bLarge = ( pImp->m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
-    SetImagesForceSize( rToolBox, bLarge );
+    BOOL bLarge = ( pImp->m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
+    BOOL bHiContrast = rToolBox.GetSettings().GetStyleSettings().GetHighContrastMode();
+    SetImagesForceSize( rToolBox, bHiContrast, bLarge );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

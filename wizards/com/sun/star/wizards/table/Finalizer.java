@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,6 @@ import com.sun.star.awt.XTextComponent;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.*;
 
@@ -79,7 +78,7 @@ public class Finalizer
             CurUnoDialog.insertLabel("lblTableName",
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                        "Height", "Label", "PositionX", "PositionY", "Step", "Width"
                     },
                     new Object[]
                     {
@@ -88,11 +87,11 @@ public class Finalizer
             txtTableName = CurUnoDialog.insertTextField("txtTableName", SETCOMPLETIONFLAG, this,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Text", PropertyNames.PROPERTY_WIDTH
+                        "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_TXT_NAME", new Integer(97), new Integer(35), IFINALSTEP, new Short(curtabindex++), "", new Integer(223)
+                        UIConsts.INTEGER_12, "HID:41240", new Integer(97), new Integer(35), IFINALSTEP, new Short(curtabindex++), "", new Integer(223)
                     });
             txtTableName.addTextListener(CurUnoDialog);
             txtTableName.setMaxTextLen((short) this.curtabledescriptor.getMaxTableNameLength());
@@ -115,7 +114,7 @@ public class Finalizer
                         CurUnoDialog.insertLabel("lblCatalog",
                                 new String[]
                                 {
-                                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                                 },
                                 new Object[]
                                 {
@@ -127,11 +126,11 @@ public class Finalizer
                             xCatalogListBox = CurUnoDialog.insertListBox("lstCatalog", null, null,
                                     new String[]
                                     {
-                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                                        "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, new Integer(12), "HID:WIZARDS_HID_DLGTABLE_LST_CATALOG", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sCatalogNames, new Short(curtabindex++), new Integer(80)
+                                        Boolean.TRUE, new Integer(12), "HID:41244", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sCatalogNames, new Short(curtabindex++), new Integer(80)
                                     });
                             int isel = JavaTools.FieldInList(sCatalogNames, sCatalog);
                             if (isel < 0)
@@ -170,7 +169,7 @@ public class Finalizer
                         CurUnoDialog.insertLabel("lblSchema",
                                 new String[]
                                 {
-                                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                                 },
                                 new Object[]
                                 {
@@ -182,11 +181,11 @@ public class Finalizer
                             xSchemaListBox = CurUnoDialog.insertListBox("lstSchema", null, null,
                                     new String[]
                                     {
-                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                                        "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, new Integer(12), "HID:WIZARDS_HID_DLGTABLE_LST_SCHEMA", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sSchemaNames, new Short(curtabindex++), new Integer(80)
+                                        Boolean.TRUE, new Integer(12), "HID:41245", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sSchemaNames, new Short(curtabindex++), new Integer(80)
                                     });
                             int isel = JavaTools.FieldInList(sSchemaNames, sSchema);
                             if (isel < 0)
@@ -210,7 +209,7 @@ public class Finalizer
                 CurUnoDialog.insertLabel("lblcongratulations",
                         new String[]
                         {
-                            PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                            "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                         },
                         new Object[]
                         {
@@ -224,7 +223,7 @@ public class Finalizer
             CurUnoDialog.insertLabel("lblProceed",
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                     },
                     new Object[]
                     {
@@ -233,29 +232,29 @@ public class Finalizer
             optWorkWithTable = CurUnoDialog.insertRadioButton("optWorkWithTable", null,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_WORKWITHTABLE", sWorkWithTable, new Integer(101), new Integer(97 + ndiffPosY), new Short((short) 1), IFINALSTEP, new Short(curtabindex++), new Integer(177)
+                        UIConsts.INTEGERS[8], "HID:41242", sWorkWithTable, new Integer(101), new Integer(97 + ndiffPosY), new Short((short) 1), IFINALSTEP, new Short(curtabindex++), new Integer(177)
                     });
             optModifyTable = CurUnoDialog.insertRadioButton("optModifyTable", null,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_MODIFYTABLE", sModifyTable, new Integer(101), new Integer(109 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), new Integer(177)
+                        UIConsts.INTEGERS[8], "HID:41241", sModifyTable, new Integer(101), new Integer(109 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), new Integer(177)
                     });
             optStartFormWizard = CurUnoDialog.insertRadioButton("optStartFormWizard", null,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_STARTFORMWIZARD", sStartFormWizard, new Integer(101), new Integer(121 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), new Integer(177)
+                        UIConsts.INTEGERS[8], "HID:41243", sStartFormWizard, new Integer(101), new Integer(121 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), new Integer(177)
                     });
         }
         catch (SQLException e)

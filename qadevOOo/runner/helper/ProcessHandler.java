@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,6 @@
  ************************************************************************/
 package helper;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.File;
 import java.io.PrintWriter;
@@ -34,12 +33,10 @@ import java.io.PrintStream;
 import java.io.LineNumberReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import lib.TestParameters;
-import share.LogWriter;
 import util.PropertyName;
 import util.utils;
 
@@ -61,7 +58,6 @@ class Pump extends Thread
     private String pref;
     private StringBuffer buf = new StringBuffer(256);
     private PrintWriter log;
-    private boolean bOutput;
 
     /**
      * Creates Pump for specified <code>InputStream</code>.
@@ -74,12 +70,11 @@ class Pump extends Thread
      * @param outPrefix A prefix which is printed at the
      *   beginning of each output line.
      */
-    public Pump(InputStream is, PrintWriter log, String outPrefix, boolean _bOutput)
+    public Pump(InputStream is, PrintWriter log, String outPrefix)
     {
         this.pref = (outPrefix == null) ? "" : outPrefix;
         reader = new LineNumberReader(new InputStreamReader(is));
         this.log = log;
-        this.bOutput = _bOutput;
         start();
     }
 
@@ -90,18 +85,15 @@ class Pump extends Thread
             String line = reader.readLine();
             while (line != null)
             {
-                if (bOutput)
-                {
-                    log.println(pref + line);
-                    log.flush();
-                }
+                log.println(pref + line);
+                log.flush();
                 buf.append(line).append('\n');
                 line = reader.readLine();
             }
         }
         catch (java.io.IOException e)
         {
-            log.println(pref + "Exception occurred: " + e);
+            log.println(pref + "Exception occured: " + e);
         }
     }
 
@@ -141,17 +133,12 @@ public class ProcessHandler
     private Process m_aProcess = null;
     private TestParameters param = null;
     private boolean debug = false;
-    private boolean bUseOutput = true;
-
-    private int m_nProcessTimeout = 0;
-    private String m_sProcessKiller;
-    private ProcessWatcher m_aWatcher;
 
     /**
      * Creates instance with specified external command.
      * Debug info and output
      * of external command is printed to stdout.
-     * @param cmdLine
+     * @param cmdLine 
      */
     public ProcessHandler(String cmdLine)
     {
@@ -159,11 +146,11 @@ public class ProcessHandler
     }
 
     /**
-     * Creates instance with specified external command
+     * Creates instance with specified external command 
      * including parameters as an array.
      * Debug info and output
      * of external command is printed to stdout.
-     * @param cmdLines
+     * @param cmdLines 
      */
     public ProcessHandler(String[] cmdLines)
     {
@@ -172,13 +159,13 @@ public class ProcessHandler
     }
 
     /**
-     * Creates instance with specified external command
+     * Creates instance with specified external command 
      * including parameters as an array, with environment
      * variables.
      * Debug info and output
      * of external command is printed to stdout.
-     * @param cmdLines
-     * @param envVars
+     * @param cmdLines 
+     * @param envVars 
      * @see java.lang.Runtime exec(String[], String[])
      */
     public ProcessHandler(String[] cmdLines, String[] envVars)
@@ -188,13 +175,13 @@ public class ProcessHandler
     }
 
     /**
-     * Creates instance with specified external command
+     * Creates instance with specified external command 
      * including parameters as an array, with environment
      * variables. The command will be started in workDir.
      * Debug info and output
      * of external command is printed to stdout.
-     * @param cmdLines
-     * @param workDir
+     * @param cmdLines 
+     * @param workDir 
      */
     public ProcessHandler(String[] cmdLines, File workDir)
     {
@@ -207,9 +194,9 @@ public class ProcessHandler
      * Creates instance with specified external command and
      * log stream where debug info and output
      * of external command is printed out.  The command will be started in workDir.
-     * @param cmdLines
-     * @param log
-     * @param workDir
+     * @param cmdLines 
+     * @param log 
+     * @param workDir 
      */
     public ProcessHandler(String[] cmdLines, PrintWriter log, File workDir)
     {
@@ -219,10 +206,10 @@ public class ProcessHandler
 
     /**
      * Creates instance with specified external command and
-     * log stream where debug info and output
+     * log stream where debug info and output 
      * of external command is printed out.
      * @param cmdLine
-     * @param log
+     * @param log 
      */
     public ProcessHandler(String cmdLine, PrintWriter log)
     {
@@ -232,7 +219,7 @@ public class ProcessHandler
     /**
      * Creates instance with specified external command and set the time out for the command.
      * @param cmdLine
-     * @param timeOut
+     * @param timeOut 
      */
     public ProcessHandler(String cmdLine, int timeOut)
     {
@@ -245,7 +232,7 @@ public class ProcessHandler
      * Debug info and output
      * of external commandis printed to stdout.
      * @param cmdLine
-     * @param workDir
+     * @param workDir 
      */
     public ProcessHandler(String cmdLine, File workDir)
     {
@@ -258,7 +245,7 @@ public class ProcessHandler
      * Debug info and output printed in log stream.
      * @param cmdLine
      * @param log
-     * @param workDir
+     * @param workDir 
      */
     public ProcessHandler(String cmdLine, PrintWriter log, File workDir)
     {
@@ -272,10 +259,10 @@ public class ProcessHandler
      * of external command is printed .
      * The specified environment variables are set for the new process.
      * If log stream is null, logging is printed to stdout.
-     * @param cmdLine
-     * @param log
-     * @param workDir
-     * @param envVars
+     * @param cmdLine 
+     * @param log 
+     * @param workDir 
+     * @param envVars 
      */
     public ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars)
     {
@@ -361,25 +348,7 @@ public class ProcessHandler
     }
 
     /**
-     * If not equal 0, the time to maximal wait.
-     * @param _n
-     */
-    public void setProcessTimeout(int _n)
-    {
-        m_nProcessTimeout = _n;
-    }
-
-    /**
-     * This command will call after ProcessTimeout is arrived.
-     * @param _s
-     */
-    public void setProcessKiller(String _s)
-    {
-        m_sProcessKiller = _s;
-    }
-
-    /**
-     * This method do an asynchronous execution of the commands. To avoid a interruption on long running processes
+     * This method do an asynchronous execution of the commands. To avoid a interruption on long running processes 
      * caused by <CODE>OfficeWatcher</CODE>, the OfficeWatcher get frequently a ping.
      * @see helper.OfficeWatcher
      */
@@ -426,7 +395,7 @@ public class ProcessHandler
                     if (sOutputText.length() == memText.length())
                     {
                         changedText = false;
-                        // dbg("runCommand Could not detect changes in output stream!!!");
+                    // dbg("runCommand Could not detect changes in output stream!!!");
                     }
                     hangcheck = 10;
                     memText = this.getOutputText();
@@ -546,21 +515,6 @@ public class ProcessHandler
         return m_nExactStartTimeInMillisec;
     }
 
-    private void showEnvVars()
-    {
-        if (envVars != null)
-        {
-            for (int i = 0; i < envVars.length; i++)
-            {
-                log.println("env: " + envVars[i]);
-            }
-        }
-        else
-        {
-            log.println("env: null");
-        }
-    }
-
     protected void execute()
     {
         if (isStarted())
@@ -573,32 +527,27 @@ public class ProcessHandler
         {
             if (cmdLine == null)
             {
-                log.println(utils.getDateTime() + "execute: Starting command from array: ");
+                log.print(utils.getDateTime() + "execute: Starting command from array: ");
                 for (int i = 0; i < cmdLineArray.length; i++)
                 {
-                    log.println(cmdLineArray[i]);
-                    // log.print(" ");
+                    log.print(cmdLineArray[i]);
+                    log.print(" ");
                 }
-                showEnvVars();
                 log.println("");
                 initialExactStartTime();
-                initializeProcessKiller();
                 m_aProcess = runtime.exec(cmdLineArray, envVars);
             }
             else
             {
                 if (workDir != null)
                 {
-                    log.println(utils.getDateTime() + "execute: Starting command: ");
-                    log.println(cmdLine + " path=" + workDir.getAbsolutePath());
-                    showEnvVars();
+                    log.println(utils.getDateTime() + "execute: Starting command: " + cmdLine + " " +
+                            workDir.getAbsolutePath());
                     m_aProcess = runtime.exec(cmdLine, envVars, workDir);
                 }
                 else
                 {
-                    log.println(utils.getDateTime() + "execute: Starting command: ");
-                    log.println(cmdLine);
-                    showEnvVars();
+                    log.println(utils.getDateTime() + "execute: Starting command: " + cmdLine);
                     m_aProcess = runtime.exec(cmdLine, envVars);
                 }
             }
@@ -617,8 +566,8 @@ public class ProcessHandler
             return;
         }
         dbg("execute: pump io-streams");
-        stdout = new Pump(m_aProcess.getInputStream(), log, "out > ", bUseOutput);
-        stderr = new Pump(m_aProcess.getErrorStream(), log, "err > ", bUseOutput);
+        stdout = new Pump(m_aProcess.getInputStream(), log, "out > ");
+        stderr = new Pump(m_aProcess.getErrorStream(), log, "err > ");
         stdIn = new PrintStream(m_aProcess.getOutputStream());
 
         // int nExitValue = m_aProcess.exitValue();
@@ -798,7 +747,7 @@ public class ProcessHandler
      * The method can also be called before the command
      * starts its execution. Then the text is buffered
      * and transfered to command when it will be started.
-     * @param str
+     * @param str 
      */
     public void printInputText(String str)
     {
@@ -851,7 +800,7 @@ public class ProcessHandler
     }
 
     /** Causes the thread to sleep some time.
-     * @param milliseconds
+     * @param milliseconds 
      */
     public static void shortWait(long milliseconds)
     {
@@ -870,141 +819,6 @@ public class ProcessHandler
         if (debug)
         {
             log.println(utils.getDateTime() + "PH." + message);
-        }
-    }
-
-    public void noOutput()
-    {
-        bUseOutput = false;
-    }
-    // -------------------------------------------------------------------------
-    class ProcessWatcher extends Thread
-    {
-
-        private int m_nTimeoutInSec;
-        private String m_sProcessToStart;
-        private boolean m_bInterrupt;
-
-        public ProcessWatcher(int _nTimeOut, String _sProcess)
-        {
-            m_nTimeoutInSec = _nTimeOut;
-            m_sProcessToStart = _sProcess;
-            m_bInterrupt = false;
-        }
-
-        /**
-         * returns true, if the thread should hold on
-         * @return
-         */
-        public synchronized boolean isInHoldOn()
-        {
-            return m_bInterrupt;
-        }
-        /**
-         * Marks the thread to hold on, next time
-         * STUPID: The thread must poll this flag itself.
-         *
-         * Reason: interrupt() seems not to work as expected.
-         */
-        public synchronized void holdOn()
-        {
-            m_bInterrupt = true;
-            interrupt();
-        }
-
-        public void run()
-        {
-            while (m_nTimeoutInSec > 0)
-            {
-                m_nTimeoutInSec--;
-                try
-                {
-                    sleep(1000);
-                }
-                catch(java.lang.InterruptedException e)
-                {
-                    // interrupt flag is set back to 'not interrupted' :-(
-                }
-                if (isInHoldOn())
-                {
-                    break;
-                }
-            }
-            if (m_nTimeoutInSec <= 0 && !isInHoldOn())       // not zero, so we are interrupted.
-            {
-                system(m_sProcessToStart);
-            }
-        }
-
-        /**
-         * Start an external Process
-         * @param _sProcess
-         */
-        private void system(String _sProcess)
-        {
-            if (_sProcess == null)
-            {
-                return;
-            }
-
-            try
-            {
-
-                // run a _sProcess command
-                // using the Runtime exec method:
-                Process p = Runtime.getRuntime().exec(_sProcess);
-
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-
-                // read the output from the command
-                String s;
-                while ((s = stdInput.readLine()) != null)
-                {
-                    System.out.println("out:" + s);
-                }
-
-                // read any errors from the attempted command
-                while ((s = stdError.readLine()) != null)
-                {
-                    System.out.println("err:" + s);
-                }
-
-            }
-            catch (java.io.IOException e)
-            {
-                System.out.println("exception caught: ");
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-    /**
-     *  If the timeout only given by setProcessTimeout(int seconds) function is != 0,
-     *  a extra thread is created and after time has run out, the ProcessKiller string
-     *  given by function setProcessKiller(string) will execute.
-     *  So it is possible to kill a running office after a given time of seconds.
-     */
-    private void initializeProcessKiller()
-    {
-        if (m_nProcessTimeout != 0)
-        {
-            m_aWatcher = new ProcessWatcher(m_nProcessTimeout, m_sProcessKiller);
-            m_aWatcher.start();
-        }
-    }
-
-    /**
-     * to stop the extra thread, before he will kill a running office. This will stop the thread.
-     */
-    public void stopWatcher()
-    {
-        if (m_aWatcher != null)
-        {
-            m_aWatcher.holdOn();
-            shortWait(5000);
         }
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ namespace sdr
         }
 
         ViewContactOfSdrOle2Obj::ViewContactOfSdrOle2Obj(SdrOle2Obj& rOle2Obj)
-        :   ViewContactOfSdrRectObj(rOle2Obj)
+        :	ViewContactOfSdrRectObj(rOle2Obj)
         {
         }
 
@@ -69,7 +69,8 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters() const
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters(
+            bool bHighContrast) const
         {
             // take unrotated snap rect (direct model data) for position and size
             const Rectangle& rRectangle = GetOle2Obj().GetGeoRect();
@@ -87,7 +88,7 @@ namespace sdr
             const SfxItemSet& rItemSet = GetOle2Obj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
-                    rItemSet,
+                    rItemSet, 
                     GetOle2Obj().getText(0)));
 
             // #i102063# embed OLE content in an own primitive; this will be able to decompose accessing
@@ -101,17 +102,18 @@ namespace sdr
 
                     // #i104867# add GraphicVersion number to be able to check for
                     // content change in the primitive later
-                    GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion()
-                ));
+                    GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion(),
 
-            // create primitive. Use Ole2 primitive here. Prepare attribute settings, will
-            // be used soon anyways. Always create primitives to allow the decomposition of
+                    bHighContrast));
+            
+            // create primitive. Use Ole2 primitive here. Prepare attribute settings, will 
+            // be used soon anyways. Always create primitives to allow the decomposition of 
             // SdrOle2Primitive2D to create needed invisible elements for HitTest and/or BoundRect
             const drawinglayer::primitive2d::Primitive2DSequence xOLEContent(&xOleContent, 1);
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrOle2Primitive2D(
                     xOLEContent,
-                    aObjectMatrix,
+                    aObjectMatrix, 
                     aAttribute));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
@@ -119,7 +121,8 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence() const
         {
-            return createPrimitive2DSequenceWithParameters();
+            // do as if no HC and call standard creator
+            return createPrimitive2DSequenceWithParameters(false);
         }
     } // end of namespace contact
 } // end of namespace sdr

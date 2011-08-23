@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,11 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 // header for class SvxShape
 #include <svx/unoshape.hxx>
+// header for GetSdrObjectFromXShape
+#include <svx/unoapi.hxx>
 // header for class E3dScene
 #include <svx/scene3d.hxx>
+#include <rtl/math.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
 //.............................................................................
@@ -86,7 +89,7 @@ VDiagram::VDiagram(
     {
         uno::Reference< beans::XPropertySet > xSourceProp( m_xDiagram, uno::UNO_QUERY );
         ThreeDHelper::getRotationAngleFromDiagram( xSourceProp, m_fXAnglePi, m_fYAnglePi, m_fZAnglePi );
-        if( ChartTypeHelper::isSupportingRightAngledAxes(
+        if( ChartTypeHelper::isSupportingRightAngledAxes( 
                 DiagramHelper::getChartTypeByIndex( m_xDiagram, 0 ) ) )
         {
             if(xSourceProp.is())
@@ -105,7 +108,7 @@ VDiagram::~VDiagram()
     delete m_pShapeFactory;
 }
 
-void VDiagram::init(
+void SAL_CALL VDiagram::init(
                 const uno::Reference< drawing::XShapes >& xLogicTarget
               , const uno::Reference< drawing::XShapes >& xFinalTarget
               , const uno::Reference< lang::XMultiServiceFactory >& xFactory )
@@ -157,7 +160,7 @@ void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
         //center diagram position
         m_aCurrentPosWithoutAxes = awt::Point( ShapeFactory::calculateTopLeftPositionToCenterObject(
             rPos, rAvailableSize, m_aCurrentSizeWithoutAxes ) );
-
+        
     }
 
     if( m_xWall2D.is() )
@@ -195,7 +198,8 @@ void VDiagram::createShapes_2d()
         m_xWall2D = uno::Reference< drawing::XShape >(
             m_xShapeFactory->createInstance( C2U(
             "com.sun.star.drawing.RectangleShape" ) ), uno::UNO_QUERY );
-
+        //m_xWall2D->setPosition(m_aAvailablePosIncludingAxes);
+        //m_xWall2D->setSize(m_aAvailableSizeIncludingAxes);
         xGroupForWall->add(m_xWall2D);
         uno::Reference< beans::XPropertySet > xProp( m_xWall2D, uno::UNO_QUERY );
         if( xProp.is())
@@ -350,11 +354,13 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                 double fW = rAvailableSize.Width;
                 double fH = rAvailableSize.Height;
 
+//                 double cx = fabs(cos(m_fXAnglePi));
                 double sx = fabs(sin(m_fXAnglePi));
+//                 double cy = fabs(cos(m_fYAnglePi));
                 double sy = fabs(sin(m_fYAnglePi));
                 double cz = fabs(cos(m_fZAnglePi));
                 double sz = fabs(sin(m_fZAnglePi));
-
+                
                 if(m_bRightAngledAxes)
                 {
                     //base equations:
@@ -414,6 +420,20 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                         else
                             fScaleY = 1.0;//looking from top or bottom the height is irrelevant
 
+                        /*
+                        //fW*zoomfactor == fScaleX*cy*cz + fScaleY*sz*cy + fScaleZ*sy*cx;
+                        //fH*zoomfactor == fScaleY*cx*cz + fScaleX*sz*cy + fScaleZ*sx*cz;
+                        //==> fScaleY*(sz*cy*fH -cx*cz*fW) =  fScaleX*(sz*cy*fW - cy*cz*fH) + fScaleZ*(sx*cz*fW - sy*cx*fH);
+                        double fDivide = sz*cy*fH -cx*cz*fW;
+                        if( !::basegfx::fTools::equalZero(fDivide) )
+                        {
+                            fScaleY = ( fScaleX*(sz*cy*fW - cy*cz*fH)
+                                + fScaleZ*(sx*cz*fW - sy*cx*fH) ) / fDivide;
+                            lcl_ensureScaleValue(fScaleY);
+                        }
+                        else
+                            fScaleY = 1.0;//looking from top or bottom hieght is irrelevant
+                        */
                     }
                     else if( fScaleY>0 && fScaleZ>0 )
                     {
@@ -504,7 +524,7 @@ void VDiagram::createShapes_3d()
             "com.sun.star.drawing.Shape3DSceneObject" ) ), uno::UNO_QUERY );
     ShapeFactory::setShapeName( m_xOuterGroupShape, C2U("PlotAreaExcludingAxes") );
     m_xLogicTarget->add(m_xOuterGroupShape);
-
+    
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes =
             uno::Reference<drawing::XShapes>( m_xOuterGroupShape, uno::UNO_QUERY );
 
@@ -583,7 +603,7 @@ void VDiagram::createShapes_3d()
             aStripe.InvertNormal(true);
 
             uno::Reference< drawing::XShape > xShape =
-                m_pShapeFactory->createStripe(xWallGroup_Shapes, aStripe
+                m_pShapeFactory->createStripe(xWallGroup_Shapes, aStripe 
                     , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture, bFlatNormals );
             if( !bAddFloorAndWall )
             {
@@ -657,9 +677,9 @@ void VDiagram::createShapes_3d()
         aStripe.InvertNormal(true);
 
         uno::Reference< drawing::XShape > xShape =
-            m_pShapeFactory->createStripe(xOuterGroup_Shapes, aStripe
+            m_pShapeFactory->createStripe(xOuterGroup_Shapes, aStripe 
                 , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, 0, bFlatNormals );
-
+        
         CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
         if( !bAddFloorAndWall || (CuboidPlanePosition_Bottom!=eBottomPos) )
         {
@@ -744,13 +764,13 @@ void VDiagram::reduceToMimimumSize()
 
     ::basegfx::B2IRectangle rAvailableOuterRect(
         BaseGFXHelper::makeRectangle(m_aAvailablePosIncludingAxes,m_aAvailableSizeIncludingAxes) );
-
+    
     sal_Int32 nDeltaWidth = static_cast<sal_Int32>(rAvailableOuterRect.getWidth() - rConsumedOuterRect.getWidth());
     sal_Int32 nDeltaHeight = static_cast<sal_Int32>(rAvailableOuterRect.getHeight() - rConsumedOuterRect.getHeight());
     if( (aNewSize.Width + nDeltaWidth) < rAvailableOuterRect.getWidth()/3 )
         nDeltaWidth = static_cast<sal_Int32>(rAvailableOuterRect.getWidth()/3 - aNewSize.Width);
     aNewSize.Width += nDeltaWidth;
-
+    
     if( (aNewSize.Height + nDeltaHeight) < rAvailableOuterRect.getHeight()/3 )
         nDeltaHeight = static_cast<sal_Int32>(rAvailableOuterRect.getHeight()/3 - aNewSize.Height);
     aNewSize.Height += nDeltaHeight;

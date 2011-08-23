@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 #include <tools/debug.hxx>
 #include "xmlfilter.hxx"
 #include "xmlHelper.hxx"
-#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
@@ -129,7 +129,7 @@ void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPr
                         pStyle = PTR_CAST(SvXMLNumFormatContext,pMyStyles->
                             FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True));
                     else {
-                        OSL_FAIL("not possible to get style");
+                        DBG_ERROR("not possible to get style");
                     }
                 }
                 if ( pStyle )
@@ -151,7 +151,7 @@ void OControlStyleContext::SetDefaults()
 void OControlStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
 {
     sal_Int32 nIndex(static_cast<OReportStylesContext *>(pStyles)->GetIndex(nContextID));
-    OSL_ENSURE(nIndex != -1, "Property not found in Map");
+    DBG_ASSERT(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
     GetProperties().push_back(aPropState); // has to be insertes in a sort order later
 }
@@ -229,7 +229,7 @@ UniReference < SvXMLImportPropertyMapper >
                 {
                     m_xCellImpPropMapper =
                         new XMLTextImportPropertyMapper/*OSpecialHanldeXMLImportPropertyMapper*/( rImport.GetCellStylesPropertySetMapper(), m_rImport , const_cast<XMLFontStylesContext*>(m_rImport.GetFontDecls()));
-
+                
                     m_xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(m_rImport, const_cast<XMLFontStylesContext*>(m_rImport.GetFontDecls())));
                 }
                 xMapper = m_xCellImpPropMapper;
@@ -238,9 +238,9 @@ UniReference < SvXMLImportPropertyMapper >
             case XML_STYLE_FAMILY_TABLE_COLUMN:
             {
                 if( !m_xColumnImpPropMapper.is() )
-                    m_xColumnImpPropMapper =
+                    m_xColumnImpPropMapper = 
                         new SvXMLImportPropertyMapper( rImport.GetColumnStylesPropertySetMapper(), m_rImport );
-
+                        
                 xMapper = m_xColumnImpPropMapper;
             }
              break;
@@ -257,6 +257,7 @@ UniReference < SvXMLImportPropertyMapper >
                 {
                     UniReference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
                     m_xTableImpPropMapper = new SvXMLImportPropertyMapper( new XMLPropertySetMapper(OXMLHelper::GetTableStyleProps(), xFac), m_rImport );
+                    //m_xTableImpPropMapper = new SvXMLImportPropertyMapper( rImport.GetTableStylesPropertySetMapper(), m_rImport );
                 }
                 xMapper = m_xTableImpPropMapper;
             }
@@ -265,7 +266,7 @@ UniReference < SvXMLImportPropertyMapper >
                 break;
         }
     }
-
+    
     return xMapper;
 }
 // -----------------------------------------------------------------------------
@@ -311,7 +312,7 @@ SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
                                                xAttrList, *this, nFamily );
             break;
         default:
-            OSL_FAIL("OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
+            OSL_ENSURE(0,"OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
             break;
         }
     }
@@ -368,7 +369,7 @@ Reference < XNameContainer >
                 xStyles = ((SvXMLImport *)&GetImport())->GetTextImport()->GetFrameStyles();
                 break;
             default:
-                OSL_FAIL("OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
+                OSL_ENSURE(0,"OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
                 break;
         }
         if( !xStyles.is() && sName.getLength() && GetOwnImport().GetModel().is() )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -387,7 +387,7 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
             {
                 SolarMutexGuard aGuard;
                 m_pChartController->setDrawMode( eDrawMode );
-                setInsertObj( sal::static_int_cast< sal_uInt16 >( eKind ) );
+                setInsertObj( sal::static_int_cast< USHORT >( eKind ) );
                 if ( bCreate )
                 {
                     pDrawViewWrapper->SetCreateMode();
@@ -399,7 +399,7 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
                 const beans::PropertyValue* pKeyModifier = ::std::find_if(
                     pIter, pEnd, ::std::bind2nd( PropertyValueCompare(), boost::cref( sKeyModifier ) ) );
                 sal_Int16 nKeyModifier = 0;
-                if ( pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
+                if ( pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 ) 
                 {
                     if ( eDrawMode == CHARTDRAW_INSERT )
                     {
@@ -444,7 +444,7 @@ void DrawCommandDispatch::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:StarShapes",        COMMAND_ID_DRAWTBX_CS_STAR,         CommandGroup::INSERT );
 }
 
-void DrawCommandDispatch::setInsertObj( sal_uInt16 eObj )
+void DrawCommandDispatch::setInsertObj( USHORT eObj )
 {
     DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
     if ( pDrawViewWrapper )
@@ -528,13 +528,13 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                 if ( pTextObj )
                                 {
                                     pTextObj->SetLogicRect( aRect );
-                                    sal_Bool bVertical = ( nID == SID_DRAW_TEXT_VERTICAL );
+                                    BOOL bVertical = ( nID == SID_DRAW_TEXT_VERTICAL );
                                     pTextObj->SetVerticalWriting( bVertical );
                                     if ( bVertical )
                                     {
                                         SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
-                                        aSet.Put( SdrTextAutoGrowWidthItem( sal_True ) );
-                                        aSet.Put( SdrTextAutoGrowHeightItem( sal_False ) );
+                                        aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
+                                        aSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
                                         aSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_TOP ) );
                                         aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_RIGHT ) );
                                         pTextObj->SetMergedItemSet( aSet );

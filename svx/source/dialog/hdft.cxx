@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@
 #include <svx/hdft.hxx>
 #include <svx/pageitem.hxx>
 
-#include "svx/dlgutil.hxx"
+#include "dlgutil.hxx"
 #include <svx/dialmgr.hxx>
-#include "svx/htmlmode.hxx"
+#include "htmlmode.hxx"
 
 #include <editeng/brshitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -64,35 +64,40 @@
 #include <svx/dialogs.hrc>
 // static ----------------------------------------------------------------
 
-// Word 97 incompatibility (#i19922#)
+// --> OD 2004-06-18 #i19922#
+//static const long MINBODY = 284;            // 0,5cm in twips aufgerundet
 static const long MINBODY = 56;  // 1mm in twips rounded
 
 // default distance to Header or footer
-static const long DEF_DIST_WRITER = 500;    // 5mm (Writer)
-static const long DEF_DIST_CALC = 250;      // 2.5mm (Calc)
+static const long DEF_DIST_WRITER = 500;	// 5mm (Writer)
+static const long DEF_DIST_CALC = 250;		// 2,5mm (Calc)
 
-static sal_uInt16 pRanges[] =
+static USHORT pRanges[] =
 {
-    SID_ATTR_BRUSH,          SID_ATTR_BRUSH,
-    SID_ATTR_BORDER_OUTER,   SID_ATTR_BORDER_OUTER,
-    SID_ATTR_BORDER_INNER,   SID_ATTR_BORDER_INNER,
-    SID_ATTR_BORDER_SHADOW,  SID_ATTR_BORDER_SHADOW,
-    SID_ATTR_LRSPACE,        SID_ATTR_LRSPACE,
-    SID_ATTR_ULSPACE,        SID_ATTR_ULSPACE,
-    SID_ATTR_PAGE_SIZE,      SID_ATTR_PAGE_SIZE,
+    SID_ATTR_BRUSH,			 SID_ATTR_BRUSH,
+    SID_ATTR_BORDER_OUTER,	 SID_ATTR_BORDER_OUTER,
+    SID_ATTR_BORDER_INNER,	 SID_ATTR_BORDER_INNER,
+    SID_ATTR_BORDER_SHADOW,	 SID_ATTR_BORDER_SHADOW,
+    SID_ATTR_LRSPACE,		 SID_ATTR_LRSPACE,
+    SID_ATTR_ULSPACE,		 SID_ATTR_ULSPACE,
+    SID_ATTR_PAGE_SIZE,		 SID_ATTR_PAGE_SIZE,
     SID_ATTR_PAGE_HEADERSET, SID_ATTR_PAGE_HEADERSET,
     SID_ATTR_PAGE_FOOTERSET, SID_ATTR_PAGE_FOOTERSET,
-    SID_ATTR_PAGE_ON,        SID_ATTR_PAGE_ON,
-    SID_ATTR_PAGE_DYNAMIC,   SID_ATTR_PAGE_DYNAMIC,
-    SID_ATTR_PAGE_SHARED,    SID_ATTR_PAGE_SHARED,
+    SID_ATTR_PAGE_ON,		 SID_ATTR_PAGE_ON,
+    SID_ATTR_PAGE_DYNAMIC,	 SID_ATTR_PAGE_DYNAMIC,
+    SID_ATTR_PAGE_SHARED,	 SID_ATTR_PAGE_SHARED,
     SID_ATTR_HDFT_DYNAMIC_SPACING, SID_ATTR_HDFT_DYNAMIC_SPACING,
     0
 };
 
-// returns the Which values to the range
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
+// gibt den Bereich der Which-Werte zurueck
 
 
-sal_uInt16* SvxHeaderPage::GetRanges()
+USHORT* SvxHeaderPage::GetRanges()
 {
     return pRanges;
 }
@@ -106,7 +111,7 @@ SfxTabPage* SvxHeaderPage::Create( Window* pParent, const SfxItemSet& rSet )
 
 //------------------------------------------------------------------------
 
-sal_uInt16* SvxFooterPage::GetRanges()
+USHORT* SvxFooterPage::GetRanges()
 {
     return pRanges;
 }
@@ -138,60 +143,46 @@ SvxFooterPage::SvxFooterPage( Window* pParent, const SfxItemSet& rAttr ) :
 
 // -----------------------------------------------------------------------
 
-SvxHFPage::SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rAttr, sal_uInt16 nSetId ) :
+SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, USHORT nSetId ) :
 
     SfxTabPage( pParent, SVX_RES( nResId ), rAttr ),
 
-    aFrm            ( this, SVX_RES( FL_FRAME ) ),
-    aTurnOnBox      ( this, SVX_RES( CB_TURNON ) ),
+    aTurnOnBox		( this, SVX_RES( CB_TURNON ) ),
     aCntSharedBox   ( this, SVX_RES( CB_SHARED ) ),
     aLMLbl          ( this, SVX_RES( FT_LMARGIN ) ),
     aLMEdit         ( this, SVX_RES( ED_LMARGIN ) ),
     aRMLbl          ( this, SVX_RES( FT_RMARGIN ) ),
     aRMEdit         ( this, SVX_RES( ED_RMARGIN ) ),
     aDistFT         ( this, SVX_RES( FT_DIST ) ),
-    aDistEdit       ( this, SVX_RES( ED_DIST ) ),
+    aDistEdit		( this, SVX_RES( ED_DIST ) ),
     aDynSpacingCB   ( this, SVX_RES( CB_DYNSPACING ) ),
     aHeightFT       ( this, SVX_RES( FT_HEIGHT ) ),
-    aHeightEdit     ( this, SVX_RES( ED_HEIGHT ) ),
-    aHeightDynBtn   ( this, SVX_RES( CB_HEIGHT_DYN ) ),
-    aBspWin         ( this, SVX_RES( WN_BSP ) ),
-    aBackgroundBtn  ( this, SVX_RES( BTN_EXTRAS ) ),
+    aHeightEdit		( this, SVX_RES( ED_HEIGHT ) ),
+    aHeightDynBtn	( this, SVX_RES( CB_HEIGHT_DYN ) ),
+    aFrm            ( this, SVX_RES( FL_FRAME ) ),
+    aBspWin			( this, SVX_RES( WN_BSP ) ),
+    aBackgroundBtn	( this, SVX_RES( BTN_EXTRAS ) ),
 
     nId                         ( nSetId ),
     pBBSet                      ( NULL ),
-    bDisableQueryBox            ( sal_False ),
-    bEnableBackgroundSelector   ( sal_True )
+    bDisableQueryBox            ( FALSE ),
+    bEnableBackgroundSelector	( TRUE )
 
 {
     InitHandler();
-    aBspWin.EnableRTL( sal_False );
+    aBspWin.EnableRTL( FALSE );
 
-    // This Page needs ExchangeSupport
+    // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
     FreeResource();
 
-    // Set metrics
+    // Metrik einstellen
     FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
     SetFieldUnit( aDistEdit, eFUnit );
     SetFieldUnit( aHeightEdit, eFUnit );
     SetFieldUnit( aLMEdit, eFUnit );
     SetFieldUnit( aRMEdit, eFUnit );
-
-    aTurnOnBox.SetAccessibleRelationMemberOf( &aFrm );
-    aCntSharedBox.SetAccessibleRelationMemberOf( &aFrm );
-    aLMLbl.SetAccessibleRelationMemberOf( &aFrm );
-    aLMEdit.SetAccessibleRelationMemberOf( &aFrm );
-    aRMLbl.SetAccessibleRelationMemberOf( &aFrm );
-    aRMEdit.SetAccessibleRelationMemberOf( &aFrm );
-    aDistFT.SetAccessibleRelationMemberOf( &aFrm );
-    aDistEdit.SetAccessibleRelationMemberOf( &aFrm );
-    aDynSpacingCB.SetAccessibleRelationMemberOf( &aFrm );
-    aHeightFT.SetAccessibleRelationMemberOf( &aFrm );
-    aHeightEdit.SetAccessibleRelationMemberOf( &aFrm );
-    aHeightDynBtn.SetAccessibleRelationMemberOf( &aFrm );
-    aBackgroundBtn.SetAccessibleRelationMemberOf(&aFrm);
 }
 
 // -----------------------------------------------------------------------
@@ -203,40 +194,40 @@ SvxHFPage::~SvxHFPage()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
+BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
 {
-    const sal_uInt16        nWSize      = GetWhich( SID_ATTR_PAGE_SIZE );
-    const sal_uInt16        nWLRSpace   = GetWhich( SID_ATTR_LRSPACE );
-    const sal_uInt16        nWULSpace   = GetWhich( SID_ATTR_ULSPACE );
-    const sal_uInt16        nWOn        = GetWhich( SID_ATTR_PAGE_ON );
-    const sal_uInt16        nWDynamic   = GetWhich( SID_ATTR_PAGE_DYNAMIC );
-    const sal_uInt16        nWDynSpacing = GetWhich( SID_ATTR_HDFT_DYNAMIC_SPACING );
-    const sal_uInt16        nWShared    = GetWhich( SID_ATTR_PAGE_SHARED );
-    const sal_uInt16        nWBrush     = GetWhich( SID_ATTR_BRUSH );
-    const sal_uInt16        nWBox       = GetWhich( SID_ATTR_BORDER_OUTER );
-    const sal_uInt16        nWBoxInfo   = GetWhich( SID_ATTR_BORDER_INNER );
-    const sal_uInt16        nWShadow    = GetWhich( SID_ATTR_BORDER_SHADOW );
-    const sal_uInt16        aWhichTab[] = { nWSize,     nWSize,
-                                        nWLRSpace,  nWLRSpace,
-                                        nWULSpace,  nWULSpace,
-                                        nWOn,       nWOn,
-                                        nWDynamic,  nWDynamic,
-                                        nWShared,   nWShared,
-                                        nWBrush,    nWBrush,
-                                        nWBoxInfo,  nWBoxInfo,
-                                        nWBox,      nWBox,
-                                        nWShadow,   nWShadow,
+    const USHORT		nWSize		= GetWhich( SID_ATTR_PAGE_SIZE );
+    const USHORT		nWLRSpace	= GetWhich( SID_ATTR_LRSPACE );
+    const USHORT		nWULSpace	= GetWhich( SID_ATTR_ULSPACE );
+    const USHORT		nWOn		= GetWhich( SID_ATTR_PAGE_ON );
+    const USHORT		nWDynamic	= GetWhich( SID_ATTR_PAGE_DYNAMIC );
+    const USHORT        nWDynSpacing = GetWhich( SID_ATTR_HDFT_DYNAMIC_SPACING );
+    const USHORT		nWShared	= GetWhich( SID_ATTR_PAGE_SHARED );
+    const USHORT		nWBrush		= GetWhich( SID_ATTR_BRUSH );
+    const USHORT		nWBox		= GetWhich( SID_ATTR_BORDER_OUTER );
+    const USHORT		nWBoxInfo	= GetWhich( SID_ATTR_BORDER_INNER );
+    const USHORT		nWShadow	= GetWhich( SID_ATTR_BORDER_SHADOW );
+    const USHORT		aWhichTab[] = { nWSize,		nWSize,
+                                        nWLRSpace,	nWLRSpace,
+                                        nWULSpace,	nWULSpace,
+                                        nWOn,		nWOn,
+                                        nWDynamic,	nWDynamic,
+                                        nWShared,	nWShared,
+                                        nWBrush,	nWBrush,
+                                        nWBoxInfo,	nWBoxInfo,
+                                        nWBox,		nWBox,
+                                        nWShadow,	nWShadow,
                                         nWDynSpacing, nWDynSpacing,
                                         0 };
-    const SfxItemSet&   rOldSet     = GetItemSet();
-    SfxItemPool*        pPool       = rOldSet.GetPool();
+    const SfxItemSet&	rOldSet		= GetItemSet();
+    SfxItemPool*		pPool		= rOldSet.GetPool();
     DBG_ASSERT( pPool, "no pool :-(" );
-    SfxMapUnit          eUnit       = pPool->GetMetric( nWSize );
-    SfxItemSet          aSet        ( *pPool, aWhichTab );
+    SfxMapUnit			eUnit		= pPool->GetMetric( nWSize );
+    SfxItemSet			aSet		( *pPool, aWhichTab );
 
     //--------------------------------------------------------------------
 
-    aSet.Put( SfxBoolItem( nWOn,      aTurnOnBox.IsChecked() ) );
+    aSet.Put( SfxBoolItem( nWOn,	  aTurnOnBox.IsChecked() ) );
     aSet.Put( SfxBoolItem( nWDynamic, aHeightDynBtn.IsChecked() ) );
     aSet.Put( SfxBoolItem( nWShared,  aCntSharedBox.IsChecked() ) );
     if(aDynSpacingCB.IsVisible() && SFX_WHICH_MAX > nWDynSpacing)
@@ -247,31 +238,33 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
         delete pBoolItem;
     }
 
-    // Size
+    // Groesse
     SvxSizeItem aSizeItem( (const SvxSizeItem&)rOldSet.Get( nWSize ) );
-    Size        aSize( aSizeItem.GetSize() );
-    long        nDist = GetCoreValue( aDistEdit, eUnit );
-    long        nH    = GetCoreValue( aHeightEdit, eUnit );
+    Size		aSize( aSizeItem.GetSize() );
+    long		nDist = GetCoreValue( aDistEdit, eUnit );
+    long		nH	  = GetCoreValue( aHeightEdit, eUnit );
 
-    nH += nDist; // add distance
+    // fixe Hoehe?
+//	if ( !aHeightDynBtn.IsChecked() )
+        nH += nDist; // dann Abstand dazu addieren
     aSize.Height() = nH;
     aSizeItem.SetSize( aSize );
     aSet.Put( aSizeItem );
 
-    // Margins
+    // Raender
     SvxLRSpaceItem aLR( nWLRSpace );
-    aLR.SetLeft( (sal_uInt16)GetCoreValue( aLMEdit, eUnit ) );
-    aLR.SetRight( (sal_uInt16)GetCoreValue( aRMEdit, eUnit ) );
+    aLR.SetLeft( (USHORT)GetCoreValue( aLMEdit, eUnit ) );
+    aLR.SetRight( (USHORT)GetCoreValue( aRMEdit, eUnit ) );
     aSet.Put( aLR );
 
     SvxULSpaceItem aUL( nWULSpace );
     if ( nId == SID_ATTR_PAGE_HEADERSET )
-        aUL.SetLower( (sal_uInt16)nDist );
+        aUL.SetLower( (USHORT)nDist );
     else
-        aUL.SetUpper( (sal_uInt16)nDist );
+        aUL.SetUpper( (USHORT)nDist );
     aSet.Put( aUL );
 
-    // Background and border?
+    // Hintergrund und Umrandung?
     if ( pBBSet )
         aSet.Put( *pBBSet );
     else
@@ -280,7 +273,7 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
         const SfxPoolItem* pItem;
 
         if ( SFX_ITEM_SET ==
-             GetItemSet().GetItemState( GetWhich( nId ), sal_False, &pItem ) )
+             GetItemSet().GetItemState( GetWhich( nId ), FALSE, &pItem ) )
         {
             _pSet = &( (SvxSetItem*)pItem )->GetItemSet();
 
@@ -295,11 +288,11 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    // Flush the SetItem
+    // Das SetItem wegschreiben
     SvxSetItem aSetItem( GetWhich( nId ), aSet );
     rSet.Put( aSetItem );
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -309,13 +302,14 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
     ResetBackground_Impl( rSet );
 
     SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Where is the pool" );
+    DBG_ASSERT( pPool, "Wo ist der Pool" );
     SfxMapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_PAGE_SIZE ) );
 
-    // Evaluate header-/footer- attributes
+    // Kopf-/Fusszeilen-Attribute auswerten
+    //
     const SvxSetItem* pSetItem = 0;
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich(nId), sal_False,
+    if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich(nId), FALSE,
                                             (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
@@ -345,12 +339,12 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
 
             if ( nId == SID_ATTR_PAGE_HEADERSET )
-            {   // Header
+            {	// Kopfzeile
                 SetMetricValue( aDistEdit, rUL.GetLower(), eUnit );
                 SetMetricValue( aHeightEdit, rSize.GetSize().Height() - rUL.GetLower(), eUnit );
             }
             else
-            {   // Footer
+            {	// Fusszeile
                 SetMetricValue( aDistEdit, rUL.GetUpper(), eUnit );
                 SetMetricValue( aHeightEdit, rSize.GetSize().Height() - rUL.GetUpper(), eUnit );
             }
@@ -379,9 +373,9 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
     if ( !pSetItem )
     {
-        aTurnOnBox.Check( sal_False );
-        aHeightDynBtn.Check( sal_True );
-        aCntSharedBox.Check( sal_True );
+        aTurnOnBox.Check( FALSE );
+        aHeightDynBtn.Check( TRUE );
+        aCntSharedBox.Check( TRUE );
     }
 
     TurnOnHdl(0);
@@ -395,13 +389,13 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
     aCntSharedBox.SaveValue();
     RangeHdl( 0 );
 
+    USHORT nHtmlMode = 0;
     const SfxPoolItem* pItem = 0;
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem) ||
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
-        sal_uInt16 nHtmlMode = 0;
         nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
         if(nHtmlMode && HTMLMODE_ON)
         {
@@ -412,21 +406,29 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:	Handler initialisieren
+ --------------------------------------------------------------------*/
+
 void SvxHFPage::InitHandler()
 {
-    aTurnOnBox.SetClickHdl(LINK(this,   SvxHFPage, TurnOnHdl));
-    aDistEdit.SetModifyHdl(LINK(this,   SvxHFPage, DistModify));
+    aTurnOnBox.SetClickHdl(LINK(this, 	SvxHFPage, TurnOnHdl));
+    aDistEdit.SetModifyHdl(LINK(this, 	SvxHFPage, DistModify));
     aDistEdit.SetLoseFocusHdl(LINK(this, SvxHFPage, RangeHdl));
 
-    aHeightEdit.SetModifyHdl(LINK(this,     SvxHFPage, HeightModify));
+    aHeightEdit.SetModifyHdl(LINK(this, 	SvxHFPage, HeightModify));
     aHeightEdit.SetLoseFocusHdl(LINK(this,SvxHFPage,RangeHdl));
 
-    aLMEdit.SetModifyHdl(LINK(this,         SvxHFPage, BorderModify));
-    aLMEdit.SetLoseFocusHdl(LINK(this,  SvxHFPage, RangeHdl));
-    aRMEdit.SetModifyHdl(LINK(this,         SvxHFPage, BorderModify));
-    aRMEdit.SetLoseFocusHdl(LINK(this,  SvxHFPage, RangeHdl));
+    aLMEdit.SetModifyHdl(LINK(this, 		SvxHFPage, BorderModify));
+    aLMEdit.SetLoseFocusHdl(LINK(this,	SvxHFPage, RangeHdl));
+    aRMEdit.SetModifyHdl(LINK(this, 		SvxHFPage, BorderModify));
+    aRMEdit.SetLoseFocusHdl(LINK(this,	SvxHFPage, RangeHdl));
     aBackgroundBtn.SetClickHdl(LINK(this,SvxHFPage, BackgroundHdl));
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:	Ein/aus
+ --------------------------------------------------------------------*/
 
 IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
 {
@@ -443,7 +445,7 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
         aRMLbl.Enable();
         aRMEdit.Enable();
 
-        sal_uInt16 nUsage = aBspWin.GetUsage();
+        USHORT nUsage = aBspWin.GetUsage();
 
         if( nUsage == SVX_PAGE_RIGHT || nUsage == SVX_PAGE_LEFT )
             aCntSharedBox.Disable();
@@ -453,16 +455,16 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
     }
     else
     {
-        sal_Bool bDelete = sal_True;
+        BOOL bDelete = TRUE;
 
-        if ( !bDisableQueryBox && pBox && aTurnOnBox.GetSavedValue() == sal_True )
+        if ( !bDisableQueryBox && pBox && aTurnOnBox.GetSavedValue() == TRUE )
             bDelete = ( QueryBox( this, SVX_RES( RID_SVXQBX_DELETE_HEADFOOT ) ).Execute() == RET_YES );
 
         if ( bDelete )
         {
             aDistFT.Disable();
             aDistEdit.Disable();
-            aDynSpacingCB.Enable(sal_False);
+            aDynSpacingCB.Enable(FALSE);
             aHeightFT.Disable();
             aHeightEdit.Disable();
             aHeightDynBtn.Disable();
@@ -482,6 +484,10 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
     return 0;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:	Abstand im Bsp Modifizieren
+ --------------------------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SvxHFPage, DistModify, MetricField *, EMPTYARG )
 {
     UpdateExample();
@@ -497,6 +503,10 @@ IMPL_LINK_INLINE_START( SvxHFPage, HeightModify, MetricField *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SvxHFPage, HeightModify, MetricField *, EMPTYARG )
 
+/*--------------------------------------------------------------------
+    Beschreibung: Raender einstellen
+ --------------------------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SvxHFPage, BorderModify, MetricField *, EMPTYARG )
 {
     UpdateExample();
@@ -504,30 +514,34 @@ IMPL_LINK_INLINE_START( SvxHFPage, BorderModify, MetricField *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SvxHFPage, BorderModify, MetricField *, EMPTYARG )
 
+/*--------------------------------------------------------------------
+    Beschreibung:	Hintergrund
+ --------------------------------------------------------------------*/
+
 IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
 {
     if ( !pBBSet )
     {
-        // Use only the necessary items for border and background
-        sal_uInt16 nBrush = GetWhich( SID_ATTR_BRUSH );
-        sal_uInt16 nOuter = GetWhich( SID_ATTR_BORDER_OUTER );
-        sal_uInt16 nInner = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
-        sal_uInt16 nShadow = GetWhich( SID_ATTR_BORDER_SHADOW );
+        // nur die n"otigen Items f"uer Umrandung und Hintergrund benutzen
+        USHORT nBrush = GetWhich( SID_ATTR_BRUSH );
+        USHORT nOuter = GetWhich( SID_ATTR_BORDER_OUTER );
+        USHORT nInner = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
+        USHORT nShadow = GetWhich( SID_ATTR_BORDER_SHADOW );
 
-        // Create an empty set
+        // einen leeren Set erzeugenc
         pBBSet = new SfxItemSet( *GetItemSet().GetPool(), nBrush, nBrush,
                                  nOuter, nOuter, nInner, nInner,
                                  nShadow, nShadow, 0 );
         const SfxPoolItem* pItem;
 
         if ( SFX_ITEM_SET ==
-             GetItemSet().GetItemState( GetWhich( nId ), sal_False, &pItem ) )
-            // if there is one that is already set, then use this
+             GetItemSet().GetItemState( GetWhich( nId ), FALSE, &pItem ) )
+            // wenn es schon einen gesetzen Set gibt, dann diesen benutzen
             pBBSet->Put( ( (SvxSetItem*)pItem)->GetItemSet() );
 
         if ( SFX_ITEM_SET ==
-             GetItemSet().GetItemState( nInner, sal_False, &pItem ) )
-            // The set InfoItem is always required
+             GetItemSet().GetItemState( nInner, FALSE, &pItem ) )
+            // das gesetze InfoItem wird immer ben"otigt
             pBBSet->Put( *pItem );
     }
 
@@ -550,7 +564,7 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
 
             //----------------------------------------------------------------
 
-            sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
+            USHORT nWhich = GetWhich( SID_ATTR_BRUSH );
 
             if ( pBBSet->GetItemState( nWhich ) == SFX_ITEM_SET )
             {
@@ -582,6 +596,10 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
     return 0;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:	Bsp
+ --------------------------------------------------------------------*/
+
 void SvxHFPage::UpdateExample()
 {
     if ( nId == SID_ATTR_PAGE_HEADERSET )
@@ -603,14 +621,18 @@ void SvxHFPage::UpdateExample()
     aBspWin.Invalidate();
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung: Hintergrund im Beispiel setzen
+ --------------------------------------------------------------------*/
+
 void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 {
-    sal_uInt16 nWhich = GetWhich( SID_ATTR_PAGE_HEADERSET );
+    USHORT nWhich = GetWhich( SID_ATTR_PAGE_HEADERSET );
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
     {
         const SvxSetItem& rSetItem =
-            (const SvxSetItem&)rSet.Get( nWhich, sal_False );
+            (const SvxSetItem&)rSet.Get( nWhich, FALSE );
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
         const SfxBoolItem& rOn =
             (const SfxBoolItem&)rTmpSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
@@ -637,10 +659,10 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
     nWhich = GetWhich( SID_ATTR_PAGE_FOOTERSET );
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
     {
         const SvxSetItem& rSetItem =
-            (const SvxSetItem&)rSet.Get( nWhich, sal_False );
+            (const SvxSetItem&)rSet.Get( nWhich, FALSE );
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
         const SfxBoolItem& rOn =
             (const SfxBoolItem&)rTmpSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
@@ -689,13 +711,17 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
     }
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_LRSPACE );
 
     if ( pItem )
     {
-        // Set left and right margins
+        // linken und rechten Rand einstellen
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)*pItem;
 
         aBspWin.SetLeft( rLRSpace.GetLeft() );
@@ -711,7 +737,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem )
     {
-        // Set top and bottom margins
+        // oberen und unteren Rand einstellen
         const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)*pItem;
 
         aBspWin.SetTop( rULSpace.GetUpper() );
@@ -723,7 +749,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         aBspWin.SetBottom( 0 );
     }
 
-    sal_uInt16 nUsage = SVX_PAGE_ALL;
+    USHORT nUsage = SVX_PAGE_ALL;
     pItem = GetItem( rSet, SID_ATTR_PAGE );
 
     if ( pItem )
@@ -739,17 +765,17 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem )
     {
-        // Orientation and Size from the PageItem
+        // Orientation und Size aus dem PageItem
         const SvxSizeItem& rSize = (const SvxSizeItem&)*pItem;
-        // if the size is already swapped (Landscape)
+        // die Groesse ist ggf. schon geswappt (Querformat)
         aBspWin.SetSize( rSize.GetSize() );
     }
 
-    // Evaluate Header attribute
+    // Kopfzeilen-Attribute auswerten
     const SvxSetItem* pSetItem = 0;
 
     if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
-                                            sal_False,
+                                            FALSE,
                                             (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
@@ -770,7 +796,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             aBspWin.SetHdDist( nDist );
             aBspWin.SetHdLeft( rLR.GetLeft() );
             aBspWin.SetHdRight( rLR.GetRight() );
-            aBspWin.SetHeader( sal_True );
+            aBspWin.SetHeader( TRUE );
         }
         else
             pSetItem = 0;
@@ -778,7 +804,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( !pSetItem )
     {
-        aBspWin.SetHeader( sal_False );
+        aBspWin.SetHeader( FALSE );
 
         if ( SID_ATTR_PAGE_HEADERSET == nId )
             aCntSharedBox.Disable();
@@ -786,7 +812,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     pSetItem = 0;
 
     if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
-                                            sal_False,
+                                            FALSE,
                                             (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rFooterSet = pSetItem->GetItemSet();
@@ -807,7 +833,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             aBspWin.SetFtDist( nDist );
             aBspWin.SetFtLeft( rLR.GetLeft() );
             aBspWin.SetFtRight( rLR.GetRight() );
-            aBspWin.SetFooter( sal_True );
+            aBspWin.SetFooter( TRUE );
         }
         else
             pSetItem = 0;
@@ -815,7 +841,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( !pSetItem )
     {
-        aBspWin.SetFooter( sal_False );
+        aBspWin.SetFooter( FALSE );
 
         if ( SID_ATTR_PAGE_FOOTERSET == nId )
             aCntSharedBox.Disable();
@@ -825,7 +851,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem && pItem->ISA(SfxBoolItem) )
     {
-        aBspWin.SetTable( sal_True );
+        aBspWin.SetTable( TRUE );
         aBspWin.SetHorz( ( (SfxBoolItem*)pItem )->GetValue() );
     }
 
@@ -833,12 +859,16 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem && pItem->ISA(SfxBoolItem) )
     {
-        aBspWin.SetTable( sal_True );
+        aBspWin.SetTable( TRUE );
         aBspWin.SetVert( ( (SfxBoolItem*)pItem )->GetValue() );
     }
     ResetBackground_Impl( rSet );
     RangeHdl( 0 );
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 int SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -846,6 +876,10 @@ int SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
         FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:	Berech
+ --------------------------------------------------------------------*/
 
 IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
 {
@@ -871,10 +905,10 @@ IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
     else
     {
         nFHeight = nHeight;
-        nFDist   = nDist;
+        nFDist 	 = nDist;
     }
 
-    // Current values of the side edges
+    // Aktuelle Werte der Seitenraender
     long nBT = aBspWin.GetTop();
     long nBB = aBspWin.GetBottom();
     long nBL = aBspWin.GetLeft();
@@ -883,7 +917,7 @@ IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
     long nH  = aBspWin.GetSize().Height();
     long nW  = aBspWin.GetSize().Width();
 
-    // Borders
+    // Grenzen
     if ( nId == SID_ATTR_PAGE_HEADERSET )
     {
         // Header
@@ -909,7 +943,7 @@ IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
         aDistEdit.SetMax( aDistEdit.Normalize( nDist ), FUNIT_TWIP );
     }
 
-    // Limit Indentation
+    // Einzuege beschraenken
     nMax = nW - nBL - nBR -
            static_cast<long>(aRMEdit.Denormalize( aRMEdit.GetValue( FUNIT_TWIP ) )) - MINBODY;
     aLMEdit.SetMax( aLMEdit.Normalize( nMax ), FUNIT_TWIP );
@@ -919,7 +953,9 @@ IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
     aRMEdit.SetMax( aLMEdit.Normalize( nMax ), FUNIT_TWIP );
     return 0;
 }
+/* -----------------------------26.08.2002 12:49------------------------------
 
+ ---------------------------------------------------------------------------*/
 void lcl_Move(Window& rWin, sal_Int32 nDiff)
 {
     Point aPos(rWin.GetPosPixel());

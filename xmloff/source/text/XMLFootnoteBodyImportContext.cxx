@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 using ::rtl::OUString;
@@ -49,24 +49,24 @@ using ::com::sun::star::xml::sax::XAttributeList;
 TYPEINIT1( XMLFootnoteBodyImportContext, SvXMLImportContext );
 
 XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     sal_uInt16 nPrfx,
     const OUString& rLocalName ) :
         SvXMLImportContext(rImport, nPrfx, rLocalName)
 {
 }
 
-SvXMLImportContext* XMLFootnoteBodyImportContext::CreateChildContext(
+SvXMLImportContext* XMLFootnoteBodyImportContext::CreateChildContext( 
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
     // return text context
-    SvXMLImportContext *pContext =
-        GetImport().GetTextImport()->CreateTextChildContext(GetImport(),
-                                                       nPrefix,
-                                                       rLocalName,
-                                                       xAttrList,
+    SvXMLImportContext *pContext = 
+        GetImport().GetTextImport()->CreateTextChildContext(GetImport(), 
+                                                       nPrefix, 
+                                                       rLocalName, 
+                                                       xAttrList, 
                                                        XML_TEXT_TYPE_FOOTNOTE);
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );

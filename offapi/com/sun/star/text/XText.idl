@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,46 +24,46 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_XText_idl__
-#define __com_sun_star_text_XText_idl__
-
-#ifndef __com_sun_star_text_XSimpleText_idl__
-#include <com/sun/star/text/XSimpleText.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextCursor_idl__
-#include <com/sun/star/text/XTextCursor.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextContent_idl__
-#include <com/sun/star/text/XTextContent.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
-#include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
-/** extends a <type>XSimpleText</type> by the capability of inserting
+#ifndef __com_sun_star_text_XText_idl__ 
+#define __com_sun_star_text_XText_idl__ 
+ 
+#ifndef __com_sun_star_text_XSimpleText_idl__ 
+#include <com/sun/star/text/XSimpleText.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_text_XTextCursor_idl__ 
+#include <com/sun/star/text/XTextCursor.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
+#include <com/sun/star/lang/IllegalArgumentException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_text_XTextContent_idl__ 
+#include <com/sun/star/text/XTextContent.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_container_NoSuchElementException_idl__ 
+#include <com/sun/star/container/NoSuchElementException.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module text {  
+ 
+//============================================================================= 
+ 
+/** extends a <type>XSimpleText</type> by the capability of inserting 
         <type>XTextContent</type>s.
  */
 published interface XText: com::sun::star::text::XSimpleText
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** inserts a content, such as a text table, text frame or text
         field.
-
+        
         <p>Which contents are accepted is implementation-specific. Some
         implementations may only accept contents which were created by the
         factory that supplied the same text or the document which contains
@@ -82,24 +82,24 @@ published interface XText: com::sun::star::text::XSimpleText
             be replaced by <var>xContent</var>, otherwise <var>xContent</var>
             will be inserted at the end of <var>xRange</var>.
      */
-    void insertTextContent( [in] com::sun::star::text::XTextRange xRange,
-             [in] com::sun::star::text::XTextContent xContent,
-             [in] boolean bAbsorb )
-            raises( com::sun::star::lang::IllegalArgumentException );
-
-    //-------------------------------------------------------------------------
-
+    void insertTextContent( [in] com::sun::star::text::XTextRange xRange, 
+             [in] com::sun::star::text::XTextContent xContent, 
+             [in] boolean bAbsorb ) 
+            raises( com::sun::star::lang::IllegalArgumentException ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** removes the specified content from the text object.
-
+        
         @example xDoc.removeTextContent( xDoc.TextTables.MyOwnTableName )
      */
-    void removeTextContent( [in] com::sun::star::text::XTextContent xContent )
-            raises( com::sun::star::container::NoSuchElementException );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void removeTextContent( [in] com::sun::star::text::XTextContent xContent ) 
+            raises( com::sun::star::container::NoSuchElementException ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,23 +30,29 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/bitmap.hxx>
 
+/************************************************************************
+|*    Impl_CacheElement
+|*    Impl_Cache
+|*
+|*    Beschreibung
+*************************************************************************/
 class Impl_OlePres
 {
-    sal_uLong   nFormat;
-    sal_uInt16  nAspect;
-    Bitmap *        pBmp;
-    GDIMetaFile *   pMtf;
+    ULONG	nFormat;
+    USHORT	nAspect;
+    Bitmap *		pBmp;
+    GDIMetaFile *	pMtf;
 
-    sal_uInt32  nAdvFlags;
-    sal_Int32   nJobLen;
-    sal_uInt8*  pJob;
-    Size    aSize;      // Groesse in 100TH_MM
+    UINT32  nAdvFlags;
+    INT32 	nJobLen;
+    BYTE*	pJob;
+    Size	aSize;		// Groesse in 100TH_MM
 public:
-                    Impl_OlePres( sal_uLong nF )
+                    Impl_OlePres( ULONG nF )
                         : nFormat( nF )
                         , pBmp( NULL )
                         , pMtf( NULL )
-                        , nAdvFlags( 0x2 )  // in Dokument gefunden
+                        , nAdvFlags( 0x2 )	// in Dokument gefunden
                         , nJobLen( 0 )
                         , pJob( NULL )
                     {}
@@ -56,7 +62,7 @@ public:
                         delete pBmp;
                         delete pMtf;
                     }
-    void    SetMtf( const GDIMetaFile & rMtf )
+    void	SetMtf( const GDIMetaFile & rMtf )
             {
                 if( pMtf )
                     delete pMtf;
@@ -64,14 +70,14 @@ public:
             }
     Bitmap *GetBitmap() const { return pBmp; }
     GDIMetaFile *GetMetaFile() const { return pMtf; }
-    sal_uLong   GetFormat() const { return nFormat; }
-    void    SetAspect( sal_uInt16 nAsp ) { nAspect = nAsp; }
-    sal_uLong   GetAdviseFlags() const { return nAdvFlags; }
-    void    SetAdviseFlags( sal_uLong nAdv ) { nAdvFlags = nAdv; }
-    void    SetSize( const Size & rSize ) { aSize = rSize; }
-            /// return sal_False => unknown format
-    sal_Bool    Read( SvStream & rStm );
-    void    Write( SvStream & rStm );
+    ULONG	GetFormat() const { return nFormat; }
+    void	SetAspect( USHORT nAsp ) { nAspect = nAsp; }
+    ULONG	GetAdviseFlags() const { return nAdvFlags; }
+    void	SetAdviseFlags( ULONG nAdv ) { nAdvFlags = nAdv; }
+    void	SetSize( const Size & rSize ) { aSize = rSize; }
+            /// return FALSE => unknown format
+    BOOL 	Read( SvStream & rStm );
+    void 	Write( SvStream & rStm );
 };
 
 

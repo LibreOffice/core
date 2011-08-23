@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,14 +47,13 @@
 #include "miscuno.hxx"
 
 using namespace utl;
+using namespace rtl;
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
 
 //------------------------------------------------------------------
 
-//  Version, ab der das Item kompatibel ist
-#define SC_VERSION ((sal_uInt16)351)
+//	Version, ab der das Item kompatibel ist
+#define SC_VERSION ((USHORT)351)
 
 
 //========================================================================
@@ -83,31 +82,31 @@ ScInputOptions::~ScInputOptions()
 
 void ScInputOptions::SetDefaults()
 {
-    nMoveDir        = DIR_BOTTOM;
-    bMoveSelection  = sal_True;
-    bEnterEdit      = false;
-    bExtendFormat   = false;
-    bRangeFinder    = sal_True;
-    bExpandRefs     = false;
-    bMarkHeader     = sal_True;
-    bUseTabCol      = false;
-    bTextWysiwyg    = false;
-    bReplCellsWarn  = sal_True;
+    nMoveDir		= DIR_BOTTOM;
+    bMoveSelection	= TRUE;
+    bEnterEdit		= FALSE;
+    bExtendFormat	= FALSE;
+    bRangeFinder	= TRUE;
+    bExpandRefs		= FALSE;
+    bMarkHeader		= TRUE;
+    bUseTabCol		= FALSE;
+    bTextWysiwyg	= FALSE;
+    bReplCellsWarn  = TRUE;
 }
 
 //------------------------------------------------------------------------
 
 const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
 {
-    nMoveDir        = rCpy.nMoveDir;
-    bMoveSelection  = rCpy.bMoveSelection;
-    bEnterEdit      = rCpy.bEnterEdit;
-    bExtendFormat   = rCpy.bExtendFormat;
-    bRangeFinder    = rCpy.bRangeFinder;
-    bExpandRefs     = rCpy.bExpandRefs;
-    bMarkHeader     = rCpy.bMarkHeader;
-    bUseTabCol      = rCpy.bUseTabCol;
-    bTextWysiwyg    = rCpy.bTextWysiwyg;
+    nMoveDir		= rCpy.nMoveDir;
+    bMoveSelection	= rCpy.bMoveSelection;
+    bEnterEdit		= rCpy.bEnterEdit;
+    bExtendFormat	= rCpy.bExtendFormat;
+    bRangeFinder	= rCpy.bRangeFinder;
+    bExpandRefs		= rCpy.bExpandRefs;
+    bMarkHeader		= rCpy.bMarkHeader;
+    bUseTabCol		= rCpy.bUseTabCol;
+    bTextWysiwyg	= rCpy.bTextWysiwyg;
     bReplCellsWarn  = rCpy.bReplCellsWarn;
 
     return *this;
@@ -115,20 +114,20 @@ const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
 
 
 //==================================================================
-//  Config Item containing input options
+//	Config Item containing input options
 //==================================================================
 
-#define CFGPATH_INPUT           "Office.Calc/Input"
+#define CFGPATH_INPUT			"Office.Calc/Input"
 
-#define SCINPUTOPT_MOVEDIR          0
-#define SCINPUTOPT_MOVESEL          1
-#define SCINPUTOPT_EDTEREDIT        2
-#define SCINPUTOPT_EXTENDFMT        3
-#define SCINPUTOPT_RANGEFIND        4
-#define SCINPUTOPT_EXPANDREFS       5
-#define SCINPUTOPT_MARKHEADER       6
-#define SCINPUTOPT_USETABCOL        7
-#define SCINPUTOPT_TEXTWYSIWYG      8
+#define SCINPUTOPT_MOVEDIR			0
+#define SCINPUTOPT_MOVESEL			1
+#define SCINPUTOPT_EDTEREDIT		2
+#define SCINPUTOPT_EXTENDFMT		3
+#define SCINPUTOPT_RANGEFIND		4
+#define SCINPUTOPT_EXPANDREFS		5
+#define SCINPUTOPT_MARKHEADER		6
+#define SCINPUTOPT_USETABCOL		7
+#define SCINPUTOPT_TEXTWYSIWYG		8
 #define SCINPUTOPT_REPLCELLSWARN    9
 #define SCINPUTOPT_COUNT            10
 
@@ -136,14 +135,14 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "MoveSelectionDirection",   // SCINPUTOPT_MOVEDIR
-        "MoveSelection",            // SCINPUTOPT_MOVESEL
-        "SwitchToEditMode",         // SCINPUTOPT_EDTEREDIT
-        "ExpandFormatting",         // SCINPUTOPT_EXTENDFMT
-        "ShowReference",            // SCINPUTOPT_RANGEFIND
-        "ExpandReference",          // SCINPUTOPT_EXPANDREFS
-        "HighlightSelection",       // SCINPUTOPT_MARKHEADER
-        "UseTabCol",                // SCINPUTOPT_USETABCOL
+        "MoveSelectionDirection",	// SCINPUTOPT_MOVEDIR
+        "MoveSelection",			// SCINPUTOPT_MOVESEL
+        "SwitchToEditMode",			// SCINPUTOPT_EDTEREDIT
+        "ExpandFormatting",			// SCINPUTOPT_EXTENDFMT
+        "ShowReference",			// SCINPUTOPT_RANGEFIND
+        "ExpandReference",			// SCINPUTOPT_EXPANDREFS
+        "HighlightSelection",		// SCINPUTOPT_MARKHEADER
+        "UseTabCol",				// SCINPUTOPT_USETABCOL
         "UsePrinterMetrics",        // SCINPUTOPT_TEXTWYSIWYG
         "ReplaceCellsWarning"       // SCINPUTOPT_REPLCELLSWARN
     };
@@ -156,8 +155,10 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
 }
 
 ScInputCfg::ScInputCfg() :
-    ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_INPUT )) )
+    ConfigItem( OUString::createFromAscii( CFGPATH_INPUT ) )
 {
+    sal_Int32 nIntVal = 0;
+
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     EnableNotification(aNames);
@@ -170,12 +171,11 @@ ScInputCfg::ScInputCfg() :
             DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
-                sal_Int32 nIntVal = 0;
                 switch(nProp)
                 {
                     case SCINPUTOPT_MOVEDIR:
                         if ( pValues[nProp] >>= nIntVal )
-                            SetMoveDir( (sal_uInt16)nIntVal );
+                            SetMoveDir( (USHORT)nIntVal );
                         break;
                     case SCINPUTOPT_MOVESEL:
                         SetMoveSelection( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
@@ -256,9 +256,9 @@ void ScInputCfg::Commit()
     PutProperties(aNames, aValues);
 }
 
-void ScInputCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
+void ScInputCfg::Notify( const Sequence<rtl::OUString>& /* aPropertyNames */ )
 {
-    OSL_FAIL("properties have been changed");
+    DBG_ERROR("properties have been changed");
 }
 
 void ScInputCfg::SetOptions( const ScInputOptions& rNew )

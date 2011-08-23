@@ -52,6 +52,7 @@ SLOFILES = \
     $(SLO)/modifications.obj \
     $(SLO)/node.obj \
     $(SLO)/nodemap.obj \
+    $(SLO)/pad.obj \
     $(SLO)/parsemanager.obj \
     $(SLO)/partial.obj \
     $(SLO)/propertynode.obj \
@@ -65,7 +66,8 @@ SLOFILES = \
     $(SLO)/xcdparser.obj \
     $(SLO)/xcsparser.obj \
     $(SLO)/xcuparser.obj \
-    $(SLO)/xmldata.obj
+    $(SLO)/xmldata.obj \
+    $(SLO)/xmlreader.obj
 
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLOFILES)
@@ -74,18 +76,9 @@ SHL1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALHELPERLIB) \
-    $(SALLIB) \
-    $(XMLREADERLIB)
+    $(SALLIB)
 SHL1TARGET = configmgr.uno
 SHL1USE_EXPORTS = name
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
-
-ALLTAR : $(MISC)/configmgr.component
-
-$(MISC)/configmgr.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        configmgr.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt configmgr.component

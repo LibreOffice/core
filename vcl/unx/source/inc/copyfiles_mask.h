@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define copyfiles_mask_height 32
 #define copyfiles_mask_x_hot 8
 #define copyfiles_mask_y_hot 9
-static unsigned char copyfiles_mask_bits[] = {
+static char copyfiles_mask_bits[] = {
    0xf0, 0x1f, 0x00, 0x00, 0xf0, 0x7f, 0x00, 0x00, 0xfc, 0x7f, 0x00, 0x00,
    0xfc, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,
    0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,

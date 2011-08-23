@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,25 +39,25 @@
 
 
 using namespace dbaui;
-DBG_NAME(OQueryDesignFieldUndoAct)
-OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID)
+DBG_NAME(OQueryDesignFieldUndoAct) 
+OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, USHORT nCommentID) 
     : OCommentUndoAction(nCommentID)
     , pOwner(pSelBrwBox)
-    , m_nColumnPostion(BROWSER_INVALIDID)
-{
+    , m_nColumnPostion(BROWSER_INVALIDID) 
+{ 
     DBG_CTOR(OQueryDesignFieldUndoAct,NULL);
 }
 // -----------------------------------------------------------------------------
-OQueryDesignFieldUndoAct::~OQueryDesignFieldUndoAct()
-{
+OQueryDesignFieldUndoAct::~OQueryDesignFieldUndoAct() 
+{ 
     DBG_DTOR(OQueryDesignFieldUndoAct,NULL);
-    pOwner = NULL;
+    pOwner = NULL; 	
 }
 // -----------------------------------------------------------------------------
 
-DBG_NAME(OQueryTabWinUndoAct )
+DBG_NAME(OQueryTabWinUndoAct ) 
 // ------------------------------------------------------------------------------------------------
-OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCommentID)
+OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, USHORT nCommentID)
     :OQueryDesignUndoAction(pOwner, nCommentID)
     ,m_pTabWin(NULL)
 {
@@ -66,9 +66,9 @@ OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCo
 //==============================================================================
 OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 {
-    DBG_DTOR(OQueryTabWinUndoAct ,NULL);
+    DBG_DTOR(OQueryTabWinUndoAct ,NULL); 
     if (m_bOwnerOfObjects)
-    {   // wenn ich der alleinige Owner des Fenster bin, muss ich dafuer sorgen, dass es geloescht wird
+    {	// wenn ich der alleinige Owner des Fenster bin, muss ich dafuer sorgen, dass es geloescht wird
         OSL_ENSURE(m_pTabWin != NULL, "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : m_pTabWin sollte nicht NULL sein");
         OSL_ENSURE(!m_pTabWin->IsVisible(), "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : *m_pTabWin sollte nicht sichtbar sein");
 
@@ -95,7 +95,7 @@ void OTabFieldCellModifiedUndoAct::Undo()
     OSL_ENSURE(m_nColumnPostion < pOwner->GetColumnCount(),"Position outside the column count!");
     if ( m_nColumnPostion != BROWSER_INVALIDID )
     {
-        sal_uInt16 nColumnId = pOwner->GetColumnId(m_nColumnPostion);
+        USHORT nColumnId = pOwner->GetColumnId(m_nColumnPostion);
         String strNext = pOwner->GetCellContents(m_nCellIndex, nColumnId);
         pOwner->SetCellContents(m_nCellIndex, nColumnId, m_strNextCellContents);
         m_strNextCellContents = strNext;
@@ -110,7 +110,7 @@ void OTabFieldSizedUndoAct::Undo()
     OSL_ENSURE(m_nColumnPostion != BROWSER_INVALIDID,"Column position was not set add the undo action!");
     if ( m_nColumnPostion != BROWSER_INVALIDID )
     {
-        sal_uInt16 nColumnId = pOwner->GetColumnId(m_nColumnPostion);
+        USHORT nColumnId = pOwner->GetColumnId(m_nColumnPostion);
         long nNextWidth = pOwner->GetColumnWidth(nColumnId);
         pOwner->SetColWidth(nColumnId, m_nNextWidth);
         m_nNextWidth = nNextWidth;
@@ -118,20 +118,24 @@ void OTabFieldSizedUndoAct::Undo()
     pOwner->LeaveUndoMode();
 }
 // -----------------------------------------------------------------------------
-void OTabFieldMovedUndoAct::Undo()
-{
+void OTabFieldMovedUndoAct::Undo() 
+{ 
     pOwner->EnterUndoMode();
     OSL_ENSURE(m_nColumnPostion != BROWSER_INVALIDID,"Column position was not set add the undo action!");
     if ( m_nColumnPostion != BROWSER_INVALIDID )
     {
         sal_uInt16 nId = pDescr->GetColumnId();
-        sal_uInt16 nOldPos = pOwner->GetColumnPos(nId);
+        USHORT nOldPos = pOwner->GetColumnPos(nId);
         pOwner->SetColumnPos(nId,m_nColumnPostion);
-        pOwner->ColumnMoved(nId,sal_False);
+        pOwner->ColumnMoved(nId,FALSE); 
         m_nColumnPostion = nOldPos;
     }
     pOwner->LeaveUndoMode();
 }
 // -----------------------------------------------------------------------------
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

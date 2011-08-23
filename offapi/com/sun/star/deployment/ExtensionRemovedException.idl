@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ interface XPackage;
    because the extension was removed. <member>XPackage::isRemoved</member> will
    return true on that object.
 
-   @since OOo 3.3
+   @since OOo 3.3.0
 */
 exception ExtensionRemovedException: com::sun::star::uno::Exception {
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,6 @@
  ************************************************************************/
 #include "strings.hrc"
 #include "glob.hrc"
-#include "helpids.h"
-
 String STR_DRAW_TOOLBOX
 {
     Text [ en-US ] = "Drawings Toolbar" ;
@@ -442,7 +440,7 @@ ModalDialog RID_UNDO_DELETE_WARNING
     Moveable = TRUE;
     Closeable = TRUE;
 
-    HelpID = HID_UNDO_DELETE_WARNING;
+    HelpID = RID_UNDO_DELETE_WARNING;
 
     FixedImage IMG_UNDO_DELETE_WARNING
     {
@@ -458,7 +456,6 @@ ModalDialog RID_UNDO_DELETE_WARNING
     };
     CheckBox CB_UNDO_DELETE_DISABLE
     {
-        HelpID = "sd:CheckBox:RID_UNDO_DELETE_WARNING:CB_UNDO_DELETE_DISABLE";
         Pos = MAP_APPFONT( 39, (4 * 12) + 9 );
         Size = MAP_APPFONT( 175, 12 );
         Text [ en-US ] = "~Do not show this warning again";
@@ -784,7 +781,7 @@ String STR_PUBLISH_OUTLINE
 };
 String STR_EYEDROPPER
 {
-    Text [ en-US ] = "Color Replacer" ;
+    Text [ en-US ] = "Eyedropper" ;
 };
 String STR_UNDO_MORPHING
 {
@@ -1234,20 +1231,13 @@ String STR_SET_BACKGROUND_PICTURE
 {
     Text [ en-US ] = "Set Background Picture for Slide ..." ;
 };
-
-String STR_ACC_DIALOG_DESC
-{
-    Text [ en-US ] = "Select a template from which to import page designs." ;
-};
-
 String RID_ANNOTATIONS_START
 {
      Text [ en-US ] = "Comments";
 };
-
 String STR_RESET_LAYOUT
 {
-    Text[ en-US ] = "Reset Slide Layout";
+    Text[ en-US ] = "Reset Slide Layout"; 
 };
 
 String STR_INSERT_TABLE

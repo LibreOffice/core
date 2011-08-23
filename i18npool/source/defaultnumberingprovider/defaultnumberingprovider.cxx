@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,6 @@
 #define S_CYR_A "\xD0\xB0"
 #define S_CYR_B "\xD0\xB1"
 
-//Greek upper case
-#define C_GR_A "\xCE\x91"
-#define C_GR_B "\xCE\x92"
-//Greek lower case
-#define S_GR_A "\xCE\xB1"
-#define S_GR_B "\xCE\xB2"
-
 #include <math.h>
 #include <sal/macros.h>
 #include <rtl/ustring.hxx>
@@ -77,17 +70,17 @@ static sal_Unicode table_Alphabet_ar[] = {
 };
 
 static sal_Unicode table_Alphabet_th[] = {
-    0x0E01, 0x0E02, 0x0E04, 0x0E07,
+    0x0E01, 0x0E02, 0x0E04, 0x0E07, 
     0x0E08, 0x0E09, 0x0E0A, 0x0E0B, 0x0E0C, 0x0E0D, 0x0E0E, 0x0E0F,
-    0x0E10, 0x0E11, 0x0E12, 0x0E13, 0x0E14, 0x0E15, 0x0E16, 0x0E17,
+    0x0E10, 0x0E11, 0x0E12, 0x0E13, 0x0E14, 0x0E15, 0x0E16, 0x0E17, 
     0x0E18, 0x0E19, 0x0E1A, 0x0E1B, 0x0E1C, 0x0E1D, 0x0E1E, 0x0E1F,
-    0x0E20, 0x0E21, 0x0E22, 0x0E23, 0x0E24, 0x0E25, 0x0E26, 0x0E27,
+    0x0E20, 0x0E21, 0x0E22, 0x0E23, 0x0E24, 0x0E25, 0x0E26, 0x0E27, 
     0x0E28, 0x0E29, 0x0E2A, 0x0E2B, 0x0E2C, 0x0E2D, 0x0E2E
 };
 
 static sal_Unicode table_Alphabet_he[] = {
     0x05D0, 0x05D1, 0x05D2, 0x05D3, 0x05D4, 0x05D5, 0x05D6, 0x05D7,
-    0x05D8, 0x05D9, 0x05DB, 0x05DC, 0x05DE, 0x05E0, 0x05E1, 0x05E2,
+    0x05D8, 0x05D9, 0x05DB, 0x05DC, 0x05DE, 0x05E0, 0x05E1, 0x05E2, 
     0x05E4, 0x05E6, 0x05E7, 0x05E8, 0x05E9, 0x05EA
 };
 
@@ -130,23 +123,23 @@ static sal_Unicode table_Alphabet_my[] = {
 };
 
 // Bulgarian Cyrillic upper case letters
-static sal_Unicode table_CyrillicUpperLetter_bg[] = {
+static sal_Unicode table_CyrillicUpperLetter_bg[] = { 
     0x0410, 0x0411, 0x0412, 0x0413, 0x0414, 0x0415, 0x0416, 0x0417, 0x0418,
     0x041A, 0x041B, 0x041C, 0x041D, 0x041E, 0x041F, 0x0420, 0x0421, 0x0422,
     0x0423, 0x0424, 0x0425, 0x0426, 0x0427, 0x0428, 0x0429, 0x042A, 0x042E,
-    0x042F
+    0x042F 
 };
 
 // Bulgarian cyrillic lower case letters
-static sal_Unicode table_CyrillicLowerLetter_bg[] = {
+static sal_Unicode table_CyrillicLowerLetter_bg[] = { 
     0x0430, 0x0431, 0x0432, 0x0433, 0x0434, 0x0435, 0x0436, 0x0437, 0x0438,
     0x043A, 0x043B, 0x043C, 0x043D, 0x043E, 0x043F, 0x0440, 0x0441, 0x0442,
     0x0443, 0x0444, 0x0445, 0x0446, 0x0447, 0x0448, 0x0449, 0x044A, 0x044E,
-    0x044F
+    0x044F 
 };
 
 // Russian Cyrillic upper letters
-static sal_Unicode table_CyrillicUpperLetter_ru[] = {
+static sal_Unicode table_CyrillicUpperLetter_ru[] = { 
     0x0410, 0x0411, 0x0412, 0x0413, 0x0414, 0x0415, 0x0416, 0x0417,
     0x0418, 0x041A, 0x041B, 0x041C, 0x041D, 0x041E, 0x041F, 0x0420,
     0x0421, 0x0422, 0x0423, 0x0424, 0x0425, 0x0426, 0x0427, 0x0428,
@@ -154,7 +147,7 @@ static sal_Unicode table_CyrillicUpperLetter_ru[] = {
 };
 
 // Russian cyrillic lower letters
-static sal_Unicode table_CyrillicLowerLetter_ru[] = {
+static sal_Unicode table_CyrillicLowerLetter_ru[] = { 
     0x0430, 0x0431, 0x0432, 0x0433, 0x0434, 0x0435, 0x0436, 0x0437,
     0x0438, 0x043A, 0x043B, 0x043C, 0x043D, 0x043E, 0x043F, 0x0440,
     0x0441, 0x0442, 0x0443, 0x0444, 0x0445, 0x0446, 0x0447, 0x0448,
@@ -162,31 +155,19 @@ static sal_Unicode table_CyrillicLowerLetter_ru[] = {
 };
 
 // Serbian Cyrillic upper letters
-static sal_Unicode table_CyrillicUpperLetter_sr[] = {
-    0x0410, 0x0411, 0x0412, 0x0413, 0x0414, 0x0402, 0x0415, 0x0416,
-    0x0417, 0x0418, 0x0408, 0x041A, 0x041B, 0x0409, 0x041C, 0x041D,
+static sal_Unicode table_CyrillicUpperLetter_sr[] = { 
+    0x0410, 0x0411, 0x0412, 0x0413, 0x0414, 0x0402, 0x0415, 0x0416, 
+    0x0417, 0x0418, 0x0408, 0x041A, 0x041B, 0x0409, 0x041C, 0x041D, 
     0x040A, 0x041E, 0x041F, 0x0420, 0x0421, 0x0422, 0x040B, 0x0423,
     0x0424, 0x0425, 0x0426, 0x0427, 0x040F, 0x0428
 };
 
 // Serbian cyrillic lower letters
-static sal_Unicode table_CyrillicLowerLetter_sr[] = {
+static sal_Unicode table_CyrillicLowerLetter_sr[] = { 
     0x0430, 0x0431, 0x0432, 0x0433, 0x0434, 0x0452, 0x0435, 0x0436,
-    0x0437, 0x0438, 0x0458, 0x043A, 0x043B, 0x0459, 0x043C, 0x043D,
+    0x0437, 0x0438, 0x0458, 0x043A, 0x043B, 0x0459, 0x043C, 0x043D, 
     0x045A, 0x043E, 0x043F, 0x0440, 0x0441, 0x0442, 0x045B, 0x0443,
     0x0444, 0x0445, 0x0446, 0x0447, 0x045F, 0x0448
-};
-
-static sal_Unicode table_GreekUpperLetter[] = {
-    0x0391, 0x0392, 0x0393, 0x0394, 0x0395, 0x03DB, 0x0396, 0x0397, 0x0398,
-    0x0399, 0x039A, 0x039B, 0x039C, 0x039D, 0x039E, 0x039F, 0x03A0, 0x03DF,
-    0x03A1, 0x03A3, 0x03A4, 0x03A5, 0x03A6, 0x03A7, 0x03A8, 0x03A9, 0x03E0
-};
-
-static sal_Unicode table_GreekLowerLetter[] = {
-    0x03B1, 0x03B2, 0x03B3, 0x03B4, 0x03B5, 0x03DB, 0x03B6, 0x03B7, 0x03B8,
-    0x03B9, 0x03BA, 0x03BB, 0x03BC, 0x03BD, 0x03BE, 0x03BF, 0x03C0, 0x03DF,
-    0x03C1, 0x03C3, 0x03C4, 0x03C5, 0x03C6, 0x03C7, 0x03C8, 0x03C9, 0x03E1
 };
 
 static sal_Unicode table_Alphabet_fa[] = {
@@ -205,12 +186,12 @@ static sal_Unicode upperLetter[] = {
 static sal_Unicode lowerLetter[] = {
     0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69,
     0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72,
-    0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A
+    0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A 
 };
 
 DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XMultiServiceFactory >& xMSF ) : xSMgr(xMSF),translit(NULL)
 {
-
+        
 }
 
 DefaultNumberingProvider::~DefaultNumberingProvider()
@@ -312,11 +293,11 @@ void lcl_formatChars2( sal_Unicode table_capital[], sal_Unicode table_small[], i
      // string representation of n is appended to s.
      // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>Aa, 27=>Ab, ...
 
-     if( n>=tableSize )
+     if( n>=tableSize ) 
      {
           lcl_formatChars2( table_capital, table_small, tableSize, (n-tableSize)/tableSize, s );
           s += OUString::valueOf( table_small[ n % tableSize ] );
-     } else
+     } else 
           s += OUString::valueOf( table_capital[ n % tableSize ] );
 }
 
@@ -331,82 +312,6 @@ void lcl_formatChars3( sal_Unicode table_capital[], sal_Unicode table_small[], i
 
      for( int i=1; i<repeat_count; i++ )
          s += OUString::valueOf( table_small[ n%tableSize ] );
-}
-
-// Greek Letter Numbering
-
-// KERAIA separates numerals from other text
-#define STIGMA        (sal_Unicode) 0x03DB
-#define LEFT_KERAIA   (sal_Unicode) 0x0375
-#define MYRIAD_SYM    (sal_Unicode) 0x039C
-#define DOT_SYM       (sal_Unicode) 0x002E
-#define SIGMA_OFFSET  19
-#define TAU_OFFSET    20
-#define MYRIAD        10000
-
-/*
-* Return the 1-999999 number's representation in the Greek numbering system.
-* Adding a "left keraia" to represent numbers in the range 10000 ... 999999 is
-* not orthodox, so it's better to use the myriad notation and call this method
-* only for numbers up to 9999.
-*/
-static
-OUStringBuffer gr_smallNum(sal_Unicode table[], int n)
-{
-    if (n > 9999)
-        throw IllegalArgumentException();
-
-    int i = 0;
-    OUStringBuffer sb;
-    for (int v = n; v > 0; v /= 10, i++) {
-        int digit = v % 10;
-        if (digit == 0)
-            continue;
-
-        sal_Unicode sign = table[(digit - 1) + 9 * (i % 3)];
-        if (sign == STIGMA) {
-            sb.insert(0, table[TAU_OFFSET]);
-            sb.insert(0, table[SIGMA_OFFSET]);
-        } else {
-            sb.insert(0, sign);
-        }
-
-        if (i > 2)
-            sb.insert(0, LEFT_KERAIA);
-    }
-
-    return sb;
-}
-
-static
-void lcl_formatCharsGR( sal_Unicode table[], int n, OUString& s )
-{
-    OUStringBuffer sb;
-    int myriadPower = 2;
-
-    for (int divisor = MYRIAD * MYRIAD; divisor > 1; divisor /= MYRIAD, myriadPower--) {
-        if (n > divisor - 1) {
-            /*
-             * Follow the Diophantus representation of:
-             *   A myriad sign, M(10000) as many times as the power
-             *   followed by the multiplier for the myriad
-             *   followed by a dot
-             *   followed by the rest
-             *   This is enough for 32-bit integers
-             */
-            for (int i = 0; i < myriadPower; i++)
-                sb.append(MYRIAD_SYM);
-
-                sb.append(gr_smallNum(table, n/divisor));
-                n %= divisor;
-
-                if (n > 0)
-                    sb.append(DOT_SYM);
-        }
-    }
-    sb.append(gr_smallNum(table,n));
-
-    s += sb.makeStringAndClear();
 }
 
 static
@@ -515,10 +420,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                result += OUString::valueOf( number );
                break;
           case NUMBER_NONE:
-               return OUString(RTL_CONSTASCII_USTRINGPARAM("")); // ignore prefix and suffix
+               return OUString::createFromAscii(""); // ignore prefix and suffix
           case CHAR_SPECIAL:
                // apparently, we're supposed to return an empty string in this case...
-               return OUString(RTL_CONSTASCII_USTRINGPARAM("")); // ignore prefix and suffix
+               return OUString::createFromAscii(""); // ignore prefix and suffix
           case PAGE_DESCRIPTOR:
           case BITMAP:
                OSL_ASSERT(0);
@@ -554,25 +459,25 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                 break;
           case NUMBER_LOWER_ZH:
                 natNum = NativeNumberMode::NATNUM7;
-                locale.Language = OUString(RTL_CONSTASCII_USTRINGPARAM("zh"));
+                locale.Language = OUString::createFromAscii("zh");
                 break;
           case NUMBER_UPPER_ZH_TW:
-                locale.Country = OUString(RTL_CONSTASCII_USTRINGPARAM("TW"));
+                locale.Country = OUString::createFromAscii("TW");
           case NUMBER_UPPER_ZH:
                 natNum = NativeNumberMode::NATNUM8;
-                locale.Language = OUString(RTL_CONSTASCII_USTRINGPARAM("zh"));
+                locale.Language = OUString::createFromAscii("zh");
                 break;
           case NUMBER_TRADITIONAL_JA:
                 natNum = NativeNumberMode::NATNUM8;
-                locale.Language = OUString(RTL_CONSTASCII_USTRINGPARAM("ja"));
+                locale.Language = OUString::createFromAscii("ja");
                 break;
           case NUMBER_UPPER_KO:
                 natNum = NativeNumberMode::NATNUM8;
-                locale.Language = OUString(RTL_CONSTASCII_USTRINGPARAM("ko"));
+                locale.Language = OUString::createFromAscii("ko");
                 break;
           case NUMBER_HANGUL_KO:
                 natNum = NativeNumberMode::NATNUM11;
-                locale.Language = OUString(RTL_CONSTASCII_USTRINGPARAM("ko"));
+                locale.Language = OUString::createFromAscii("ko");
                 break;
 
           case CIRCLE_NUMBER:
@@ -717,15 +622,6 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                       SAL_N_ELEMENTS(table_CyrillicLowerLetter_sr), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>bb, ...
               break;
-
-          case CHARS_GREEK_LOWER_LETTER:
-              lcl_formatCharsGR( table_GreekLowerLetter, number, result);
-              break;
-
-          case CHARS_GREEK_UPPER_LETTER:
-              lcl_formatCharsGR( table_GreekUpperLetter, number, result);
-              break;
-
           case CHARS_PERSIAN:
               lcl_formatChars(table_Alphabet_fa, sizeof(table_Alphabet_fa) / sizeof(sal_Unicode), number - 1, result);
               break;
@@ -750,6 +646,9 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
         return result;
 }
+/* -----------------------------21.02.01 15:57--------------------------------
+
+ ---------------------------------------------------------------------------*/
 
 #define LANG_ALL        (1 << 0)
 #define LANG_CJK        (1 << 1)
@@ -814,10 +713,11 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_SR, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_PERSIAN,   NULL, LANG_CTL},
-        {style::NumberingType::CHARS_GREEK_LOWER_LETTER,   C_GR_A ", " C_GR_B ", ... (gr)", LANG_ALL},
-        {style::NumberingType::CHARS_GREEK_UPPER_LETTER,   S_GR_A ", " S_GR_B ", ... (gr)", LANG_ALL},
 };
 static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
+/* -----------------------------21.02.01 15:57--------------------------------
+
+ ---------------------------------------------------------------------------*/
 
 OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
                                 throw(RuntimeException)
@@ -827,17 +727,17 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
 //            return OUString::createFromAscii(aSupportedTypes[index].cSymbol);
         else {
             OUString result;
-            Locale aLocale(OUString(RTL_CONSTASCII_USTRINGPARAM("en")), OUString(), OUString());
+            Locale aLocale(OUString::createFromAscii("en"), OUString(), OUString());
             Sequence<beans::PropertyValue> aProperties(2);
-            aProperties[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingType"));
+            aProperties[0].Name = OUString::createFromAscii("NumberingType");
             aProperties[0].Value <<= aSupportedTypes[index].nType;
-            aProperties[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
+            aProperties[1].Name = OUString::createFromAscii("Value");
             for (sal_Int32 j = 1; j <= 3; j++) {
                 aProperties[1].Value <<= j;
                 result += makeNumberingString( aProperties, aLocale );
-                result += OUString(RTL_CONSTASCII_USTRINGPARAM(", "));
+                result += OUString::createFromAscii(", ");
             }
-            result += OUString(RTL_CONSTASCII_USTRINGPARAM("..."));
+            result += OUString::createFromAscii("...");
             return result;
         }
 }
@@ -848,7 +748,7 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(Runti
     if (! xHierarchicalNameAccess.is()) {
         Reference< XInterface > xInterface;
 
-        xInterface = xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")));
+        xInterface = xSMgr->createInstance(OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider"));
         Reference< XMultiServiceFactory > xConfigProvider =
                 Reference< XMultiServiceFactory >(xInterface, UNO_QUERY );
 
@@ -857,12 +757,12 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(Runti
 
         Sequence< Any > aArgs(1);
         beans::PropertyValue aPath;
-        aPath.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
-        aPath.Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common/I18N")),
+        aPath.Name = OUString::createFromAscii("nodepath");
+        aPath.Value <<= OUString::createFromAscii("/org.openoffice.Office.Common/I18N"),
         aArgs[0] <<= aPath;
 
         xInterface = xConfigProvider->createInstanceWithArguments(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")), aArgs);
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), aArgs);
 
         xHierarchicalNameAccess.set(xInterface, UNO_QUERY);
 
@@ -885,8 +785,8 @@ Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
         Sequence< sal_Int16 > aRet(nSupported_NumberingTypes );
         sal_Int16* pArray = aRet.getArray();
 
-        sal_Bool cjkEnabled = isScriptFlagEnabled(OUString(RTL_CONSTASCII_USTRINGPARAM("CJK/CJKFont")));
-        sal_Bool ctlEnabled = isScriptFlagEnabled(OUString(RTL_CONSTASCII_USTRINGPARAM("CTL/CTLFont")));
+        sal_Bool cjkEnabled = isScriptFlagEnabled(OUString::createFromAscii("CJK/CJKFont"));
+        sal_Bool ctlEnabled = isScriptFlagEnabled(OUString::createFromAscii("CTL/CTLFont"));
 
         for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++) {
             if ( (aSupportedTypes[i].langOption & LANG_ALL) ||
@@ -896,7 +796,9 @@ Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
         }
         return aRet;
 }
+/* -----------------------------21.02.01 15:57--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumberingIdentifier )
                                 throw(RuntimeException)
 {
@@ -905,7 +807,9 @@ sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumbering
                         return aSupportedTypes[i].nType;
         throw RuntimeException();
 }
+/* -----------------------------21.02.01 15:57--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingIdentifier )
                                 throw(RuntimeException)
 {
@@ -914,7 +818,9 @@ sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingI
                         return sal_True;
         return sal_False;
 }
+/* -----------------------------21.02.01 15:57--------------------------------
 
+ ---------------------------------------------------------------------------*/
 OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingType )
                                 throw(RuntimeException)
 {
@@ -923,20 +829,26 @@ OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingT
                 return makeNumberingIdentifier(i);
         return OUString();
 }
+/* -----------------------------05.07.01 13:34--------------------------------
 
+ ---------------------------------------------------------------------------*/
 const sal_Char cDefaultNumberingProvider[] = "com.sun.star.text.DefaultNumberingProvider";
 OUString DefaultNumberingProvider::getImplementationName(void)
                 throw( RuntimeException )
 {
     return OUString::createFromAscii(cDefaultNumberingProvider);
 }
+/* -----------------------------05.07.01 13:34--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool DefaultNumberingProvider::supportsService(const rtl::OUString& rServiceName)
                 throw( RuntimeException )
 {
     return rServiceName.equalsAscii(cDefaultNumberingProvider);
 }
+/* -----------------------------05.07.01 13:34--------------------------------
 
+ ---------------------------------------------------------------------------*/
 Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames(void)
                 throw( RuntimeException )
 {

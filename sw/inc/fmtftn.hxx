@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,17 +35,17 @@
 class SwDoc;
 class SwTxtFtn;
 
-// ATT_FTN
+// ATT_FTN **********************************************************
 
 class SW_DLLPUBLIC SwFmtFtn: public SfxPoolItem
 {
     friend class SwTxtFtn;
-    SwTxtFtn* pTxtAttr;     // My TextAttribute.
-    String  aNumber;        // User-defined 'Number'.
-    sal_uInt16  nNumber;        //Automatische Nummerierung
-    bool    m_bEndNote;     // Is it an End note?
+    SwTxtFtn* pTxtAttr;		//mein TextAttribut
+    String  aNumber;		//Benutzerdefinierte 'Nummer'
+    USHORT  nNumber;		//Automatische Nummerierung
+    bool    m_bEndNote;     // is it an End note?
 
-    // Protected CopyCtor.
+    // geschuetzter CopyCtor
     SwFmtFtn& operator=(const SwFmtFtn& rFtn);
     SwFmtFtn( const SwFmtFtn& );
 
@@ -53,28 +53,28 @@ public:
     SwFmtFtn( bool bEndNote = false );
     virtual ~SwFmtFtn();
 
-    // "Pure virtual methods" of SfxPoolItem.
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
 
     const String &GetNumStr() const { return aNumber; }
-    const sal_uInt16 &GetNumber() const { return nNumber; }
+    const USHORT &GetNumber() const { return nNumber; }
           bool    IsEndNote() const { return m_bEndNote;}
 
-    void SetNumStr( const String& rStr )    { aNumber = rStr; }
-    void SetNumber( sal_uInt16 nNo )            { nNumber = nNo; }
+    void SetNumStr( const String& rStr )	{ aNumber = rStr; }
+    void SetNumber( USHORT nNo ) 			{ nNumber = nNo; }
     void SetEndNote( bool b );
 
     void SetNumber( const SwFmtFtn& rFtn )
         { nNumber = rFtn.nNumber; aNumber = rFtn.aNumber; }
 
     const SwTxtFtn *GetTxtFtn() const   { return pTxtAttr; }
-          SwTxtFtn *GetTxtFtn()         { return pTxtAttr; }
+          SwTxtFtn *GetTxtFtn()	  		{ return pTxtAttr; }
 
     void GetFtnText( String& rStr ) const;
 
-    // Returns string to be displayed of footnote / endnote.
-    String GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrs = sal_False ) const;
+    // returnt den anzuzeigenden String der Fuss-/Endnote
+    String GetViewNumStr( const SwDoc& rDoc, BOOL bInclStrs = FALSE ) const;
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@ package com.sun.star.comp.beans;
 import com.sun.star.uno.UnoRuntime;
 
 //==========================================================================
-/** Wrapper class for service OfficeDocument which emulates the upcoming
+/**	Wrapper class for service OfficeDocument which emulates the upcoming
      mode of automatic runtime Java classes to get rid of the need for
     queryInterface.
 
@@ -40,7 +40,7 @@ import com.sun.star.uno.UnoRuntime;
     @since OOo 2.0.0
  */
 public class OfficeDocument extends Wrapper
-    implements
+    implements 
         com.sun.star.frame.XModel,
         com.sun.star.util.XModifiable,
         com.sun.star.frame.XStorable,
@@ -57,13 +57,13 @@ public class OfficeDocument extends Wrapper
 
         this.xModel = xModel;
         this.xModifiable = (com.sun.star.util.XModifiable)
-            UnoRuntime.queryInterface(
+            UnoRuntime.queryInterface( 
                 com.sun.star.util.XModifiable.class, xModel );
         this.xPrintable = (com.sun.star.view.XPrintable)
-            UnoRuntime.queryInterface(
+            UnoRuntime.queryInterface( 
                 com.sun.star.view.XPrintable.class, xModel );
         this.xStorable = (com.sun.star.frame.XStorable)
-            UnoRuntime.queryInterface(
+            UnoRuntime.queryInterface( 
                 com.sun.star.frame.XStorable.class, xModel );
     }
 
@@ -71,7 +71,7 @@ public class OfficeDocument extends Wrapper
     // com.sun.star.frame.XModel
     //----------------------------------------------------------
 
-    public boolean attachResource( /*IN*/String aURL,
+    public boolean attachResource( /*IN*/String aURL, 
             /*IN*/com.sun.star.beans.PropertyValue[] aArguments )
     {
         return xModel.attachResource( aURL, aArguments );
@@ -87,13 +87,13 @@ public class OfficeDocument extends Wrapper
         return xModel.getArgs();
     }
 
-    public void connectController(
+    public void connectController( 
         /*IN*/ com.sun.star.frame.XController xController )
     {
         xModel.connectController( xController );
     }
 
-    public void disconnectController(
+    public void disconnectController( 
         /*IN*/ com.sun.star.frame.XController xController )
     {
         xModel.disconnectController( xController );
@@ -119,8 +119,8 @@ public class OfficeDocument extends Wrapper
         return xModel.getCurrentController();
     }
 
-    public void setCurrentController(
-        /*IN*/ com.sun.star.frame.XController xController )
+    public void setCurrentController( 
+        /*IN*/ com.sun.star.frame.XController xController ) 
         throws com.sun.star.container.NoSuchElementException
     {
         xModel.setCurrentController( xController );
@@ -156,7 +156,7 @@ public class OfficeDocument extends Wrapper
         return xModifiable.isModified();
     }
 
-    public void setModified( /*IN*/boolean bModified )
+    public void setModified( /*IN*/boolean bModified ) 
         throws com.sun.star.beans.PropertyVetoException
     {
         xModifiable.setModified( bModified );
@@ -171,13 +171,13 @@ public class OfficeDocument extends Wrapper
         return xPrintable.getPrinter();
     }
 
-    public void setPrinter( /*IN*/ com.sun.star.beans.PropertyValue[] aPrinter )
+    public void setPrinter( /*IN*/ com.sun.star.beans.PropertyValue[] aPrinter ) 
         throws com.sun.star.lang.IllegalArgumentException
     {
         xPrintable.setPrinter( aPrinter );
     }
 
-    public void print( /*IN*/ com.sun.star.beans.PropertyValue[] xOptions )
+    public void print( /*IN*/ com.sun.star.beans.PropertyValue[] xOptions ) 
         throws com.sun.star.lang.IllegalArgumentException
     {
         xPrintable.print( xOptions );
@@ -202,19 +202,19 @@ public class OfficeDocument extends Wrapper
         return xStorable.isReadonly();
     }
 
-    public void store(  )
+    public void store(  ) 
         throws com.sun.star.io.IOException
     {
         xStorable.store();
     }
 
-    public void storeAsURL( /*IN*/ String aURL, /*IN*/ com.sun.star.beans.PropertyValue[] aArguments )
+    public void storeAsURL( /*IN*/ String aURL, /*IN*/ com.sun.star.beans.PropertyValue[] aArguments ) 
         throws com.sun.star.io.IOException
     {
         xStorable.storeAsURL( aURL, aArguments );
     }
 
-    public void storeToURL( /*IN*/ String aURL, /*IN*/ com.sun.star.beans.PropertyValue[] aArguments )
+    public void storeToURL( /*IN*/ String aURL, /*IN*/ com.sun.star.beans.PropertyValue[] aArguments ) 
         throws com.sun.star.io.IOException
     {
         xStorable.storeToURL( aURL, aArguments );

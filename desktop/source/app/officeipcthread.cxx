@@ -53,14 +53,11 @@
 #include "rtl/process.h"
 #include "tools/getprocessworkingdir.hxx"
 
+using namespace rtl;
 using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
-
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 const char  *OfficeIPCThread::sc_aTerminationSequence = "InternalIPC::TerminateThread";
 const int OfficeIPCThread::sc_nTSeqLength = 28;
@@ -221,11 +218,11 @@ bool addArgument(
 
 }
 
-OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
+OfficeIPCThread*	OfficeIPCThread::pGlobalOfficeIPCThread = 0;
     namespace { struct Security : public rtl::Static<osl::Security, Security> {}; }
-::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
+::osl::Mutex*		OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
-// Turns a string in aMsg such as file:///home/foo/.libreoffice/3
+// Turns a string in aMsg such as file://home/foo/.libreoffice/3
 // Into a hex string of well known length ff132a86...
 String CreateMD5FromString( const OUString& aMsg )
 {
@@ -238,9 +235,9 @@ String CreateMD5FromString( const OUString& aMsg )
     if ( handle > 0 )
     {
         const sal_uInt8* pData = (const sal_uInt8*)aMsg.getStr();
-        sal_uInt32       nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));
-        sal_uInt32       nMD5KeyLen = rtl_digest_queryLength( handle );
-        sal_uInt8*       pMD5KeyBuffer = new sal_uInt8[ nMD5KeyLen ];
+        sal_uInt32		 nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));
+        sal_uInt32		 nMD5KeyLen = rtl_digest_queryLength( handle );
+        sal_uInt8*		 pMD5KeyBuffer = new sal_uInt8[ nMD5KeyLen ];
 
         rtl_digest_init( handle, pData, nSize );
         rtl_digest_update( handle, pData, nSize );
@@ -362,7 +359,7 @@ throw( RuntimeException )
 
 // ----------------------------------------------------------------------------
 
-::osl::Mutex&   OfficeIPCThread::GetMutex()
+::osl::Mutex&	OfficeIPCThread::GetMutex()
 {
     // Get or create our mutex for thread-saftey
     if ( !pOfficeIPCThreadMutex )
@@ -380,7 +377,7 @@ void OfficeIPCThread::SetDowning()
     // We have the order to block all incoming requests. Framework
     // wants to shutdown and we have to make sure that no loading/printing
     // requests are executed anymore.
-    ::osl::MutexGuard   aGuard( GetMutex() );
+    ::osl::MutexGuard	aGuard( GetMutex() );
 
     if ( pGlobalOfficeIPCThread )
         pGlobalOfficeIPCThread->mbDowning = true;
@@ -391,7 +388,7 @@ static bool s_bInEnableRequests = false;
 void OfficeIPCThread::EnableRequests( bool i_bEnable )
 {
     // switch between just queueing the requests and executing them
-    ::osl::MutexGuard   aGuard( GetMutex() );
+    ::osl::MutexGuard	aGuard( GetMutex() );
 
     if ( pGlobalOfficeIPCThread )
     {
@@ -411,7 +408,7 @@ void OfficeIPCThread::EnableRequests( bool i_bEnable )
 sal_Bool OfficeIPCThread::AreRequestsPending()
 {
     // Give info about pending requests
-    ::osl::MutexGuard   aGuard( GetMutex() );
+    ::osl::MutexGuard	aGuard( GetMutex() );
     if ( pGlobalOfficeIPCThread )
         return ( pGlobalOfficeIPCThread->mnPendingRequests > 0 );
     else
@@ -421,7 +418,7 @@ sal_Bool OfficeIPCThread::AreRequestsPending()
 void OfficeIPCThread::RequestsCompleted( int nCount )
 {
     // Remove nCount pending requests from our internal counter
-    ::osl::MutexGuard   aGuard( GetMutex() );
+    ::osl::MutexGuard	aGuard( GetMutex() );
     if ( pGlobalOfficeIPCThread )
     {
         if ( pGlobalOfficeIPCThread->mnPendingRequests > 0 )
@@ -431,7 +428,7 @@ void OfficeIPCThread::RequestsCompleted( int nCount )
 
 OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 {
-    ::osl::MutexGuard   aGuard( GetMutex() );
+    ::osl::MutexGuard	aGuard( GetMutex() );
 
     if( pGlobalOfficeIPCThread )
         return IPC_STATUS_OK;
@@ -486,9 +483,9 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     OUString aUserInstallPathHashCode;
 
-    if ( aPreloadData.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) ))
+    if ( aPreloadData.equalsAscii( "1" ))
     {
-        sal_Char    szBuffer[32];
+        sal_Char	szBuffer[32];
         sprintf( szBuffer, "%d", SUPD );
         aUserInstallPathHashCode = OUString( szBuffer, strlen(szBuffer), osl_getThreadTextEncoding() );
     }
@@ -543,9 +540,10 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         // Seems another office is running. Pipe arguments to it and self terminate
         osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
 
+        sal_Bool bWaitBeforeClose = sal_False;
         ByteString aArguments(RTL_CONSTASCII_STRINGPARAM(ARGUMENT_PREFIX));
         rtl::OUString cwdUrl;
-        if (!(tools::getProcessWorkingDir(cwdUrl) &&
+        if (!(tools::getProcessWorkingDir(&cwdUrl) &&
               addArgument(&aArguments, '1', cwdUrl)))
         {
             aArguments += '0';
@@ -554,14 +552,19 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         for( sal_uInt32 i=0; i < nCount; i++ )
         {
             rtl_getAppCommandArg( i, &aDummy.pData );
+            if( aDummy.indexOf('-',0) != 0 )
+            {
+                bWaitBeforeClose = sal_True;
+            }
             if (!addArgument(&aArguments, ',', aDummy)) {
                 return IPC_STATUS_BOOTSTRAP_ERROR;
             }
         }
-        // finally, write the string onto the pipe
+        // finaly, write the string onto the pipe
         aStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
         aStreamPipe.write( "\0", 1 );
 
+        // wait for confirmation #95361# #95425#
         ByteString aToken(sc_aConfirmationSequence);
         char *aReceiveBuffer = new char[aToken.Len()+1];
         int n = aStreamPipe.read( aReceiveBuffer, aToken.Len() );
@@ -594,6 +597,7 @@ void OfficeIPCThread::DisableOfficeIPCThread()
         // this is done so the subsequent join will not hang
         // because the thread hangs in accept of pipe
         osl::StreamPipe aPipe ( pOfficeIPCThread->maPipeIdent, osl_Pipe_OPEN, Security::get() );
+        //Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
         if (aPipe.is())
         {
             aPipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
@@ -626,7 +630,7 @@ OfficeIPCThread::OfficeIPCThread() :
 
 OfficeIPCThread::~OfficeIPCThread()
 {
-    ::osl::ClearableMutexGuard  aGuard( GetMutex() );
+    ::osl::ClearableMutexGuard	aGuard( GetMutex() );
 
     if ( mpDispatchWatcher )
         mpDispatchWatcher->release();
@@ -660,6 +664,8 @@ void SAL_CALL OfficeIPCThread::run()
 
         if( nError == osl_Pipe_E_None )
         {
+
+            // #111143# and others:
             // if we receive a request while the office is displaying some dialog or error during
             // bootstrap, that dialogs event loop might get events that are dispatched by this thread
             // we have to wait for cReady to be set by the real main loop.
@@ -689,7 +695,7 @@ void SAL_CALL OfficeIPCThread::run()
             }
             // don't close pipe ...
 
-            // Is this a lookup message from another application? if so, ignore
+            // #90717# Is this a lookup message from another application? if so, ignore
             if ( aArguments.Len() == 0 )
                 continue;
 
@@ -710,7 +716,7 @@ void SAL_CALL OfficeIPCThread::run()
 #endif
                 continue;
             }
-            CommandLineArgs *pCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
+            CommandLineArgs	*pCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
 
             if ( aCmdLineArgs->IsQuickstart() )
             {
@@ -722,12 +728,14 @@ void SAL_CALL OfficeIPCThread::run()
             }
 
             // handle request for acceptor
+            sal_Bool bAcceptorRequest = sal_False;
             OUString aAcceptString;
             if ( aCmdLineArgs->GetAcceptString(aAcceptString) && Desktop::CheckOEM()) {
                 ApplicationEvent* pAppEvent =
                     new ApplicationEvent( aEmpty, aEmpty,
                                           "ACCEPT", aAcceptString );
                 ImplPostForeignAppEvent( pAppEvent );
+                bAcceptorRequest = sal_True;
             }
             // handle acceptor removal
             OUString aUnAcceptString;
@@ -736,6 +744,7 @@ void SAL_CALL OfficeIPCThread::run()
                     new ApplicationEvent( aEmpty, aEmpty,
                                          "UNACCEPT", aUnAcceptString );
                 ImplPostForeignAppEvent( pAppEvent );
+                bAcceptorRequest = sal_True;
             }
 
 #ifndef UNX
@@ -758,7 +767,7 @@ void SAL_CALL OfficeIPCThread::run()
             // loaded with the "hidden" flag! So they are always checked.
             bDocRequestSent |= aCmdLineArgs->GetPrintList( pRequest->aPrintList );
             bDocRequestSent |= ( aCmdLineArgs->GetPrintToList( pRequest->aPrintToList ) &&
-                                    aCmdLineArgs->GetPrinterName( pRequest->aPrinterName )      );
+                                    aCmdLineArgs->GetPrinterName( pRequest->aPrinterName )		);
 
             if ( !pCurrentCmdLineArgs->IsInvisible() )
             {
@@ -840,6 +849,8 @@ void SAL_CALL OfficeIPCThread::run()
                     aHelpURLBuffer.appendAscii("&System=UNX");
 #elif defined WNT
                     aHelpURLBuffer.appendAscii("&System=WIN");
+#elif defined MAC
+                    aHelpURLBuffer.appendAscii("&System=MAC");
 #elif defined OS2
                     aHelpURLBuffer.appendAscii("&System=OS2");
 #endif
@@ -897,6 +908,9 @@ void SAL_CALL OfficeIPCThread::run()
             while (
                    (nResult = maStreamPipe.send(sc_aConfirmationSequence+nBytes, sc_nCSeqLength-nBytes))>0 &&
                    ((nBytes += nResult) < sc_nCSeqLength) ) ;
+            // now we can close, don't we?
+            // maStreamPipe.close();
+
         }
         else
         {
@@ -958,20 +972,20 @@ static void AddConversionsToDispatchList(
 
     OUString aOutDir( rParamOut.trim() );
     ::rtl::OUString aPWD;
-    ::tools::getProcessWorkingDir( aPWD );
+    ::tools::getProcessWorkingDir( &aPWD );
 
     if( !::osl::FileBase::getAbsoluteFileURL( aPWD, rParamOut, aOutDir ) )
         ::osl::FileBase::getSystemPathFromFileURL( aOutDir, aOutDir );
 
     if( rParamOut.trim().getLength() )
     {
-        aParam += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+        aParam += ::rtl::OUString::createFromAscii(";");
         aParam += aOutDir;
     }
     else
     {
         ::osl::FileBase::getSystemPathFromFileURL( aPWD, aPWD );
-        aParam += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";" )) + aPWD;
+        aParam += ::rtl::OUString::createFromAscii( ";" ) + aPWD;
     }
 
     if ( rRequestList.getLength() > 0 )
@@ -994,7 +1008,7 @@ sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequ
     // protect the dispatch list
     osl::ClearableMutexGuard aGuard( GetMutex() );
 
-    static DispatchWatcher::DispatchList    aDispatchList;
+    static DispatchWatcher::DispatchList	aDispatchList;
 
     rtl::OUString aEmpty;
     // Create dispatch list for dispatch watcher

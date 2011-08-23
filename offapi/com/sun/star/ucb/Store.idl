@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ module com { module sun { module star { module ucb {
 published service Store
 {
     //-------------------------------------------------------------------------
-    /** A factory for property set registries. This factory must create
-        instances of the service <type>PropertySetRegistry</type>
+    /** A factory for propertyset registries. This factory must create
+        instances of the service <typePropertySetRegistry</type>
      */
     interface com::sun::star::ucb::XPropertySetRegistryFactory;
 };

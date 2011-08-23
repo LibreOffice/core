@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,8 @@ String
 getContentPart( const String& _rRawString )
 {
     // search over some parts to find a string
-    static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };
+    //static char* aIDs[] = { "CN", "OU", "O", "E", NULL };
+    static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };// By CP
     String sPart;
     int i = 0;
     while ( aIDs[i] )
@@ -82,7 +83,7 @@ isDomainMatch(
     if (hostName.equalsIgnoreAsciiCase( certHostName ))
         return true;
 
-    if ( 0 == certHostName.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "*" )) ) &&
+    if ( 0 == certHostName.indexOf( rtl::OUString::createFromAscii( "*" ) ) &&
               hostName.getLength() >= certHostName.getLength()  )
     {
         rtl::OUString cmpStr = certHostName.copy( 1 );
@@ -147,7 +148,7 @@ executeUnknownAuthDialog(
                                    xServiceFactory,
                                    xManager.get()));
 
-        // Get correct resource string
+        // Get correct ressource string
         rtl::OUString aMessage;
 
         std::vector< rtl::OUString > aArguments;
@@ -196,7 +197,7 @@ executeSSLWarnDialog(
                               xServiceFactory,
                               xManager.get()));
 
-        // Get correct resource string
+        // Get correct ressource string
         rtl::OUString aMessage_1;
         std::vector< rtl::OUString > aArguments_1;
 

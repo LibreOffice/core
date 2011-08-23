@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 #include <hintids.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -37,14 +36,11 @@
 #include <ftninfo.hxx>
 #include <ftnidx.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <doctxm.hxx>       // pTOXBaseRing
+#include <doctxm.hxx>		// pTOXBaseRing
 #include <poolfmt.hxx>
-#include <UndoCore.hxx>
-#include <UndoRedline.hxx>
-#include <UndoNumbering.hxx>
+#include <undobj.hxx>
 #include <swundo.hxx>
 #include <SwUndoFmt.hxx>
 #include <rolbck.hxx>
@@ -60,13 +56,13 @@
 #include <frmatr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <SwNodeNum.hxx>
+
 #include <list.hxx>
 #include <listfunc.hxx>
-#include <switerator.hxx>
 
 #include <map>
 
-inline sal_uInt8 GetUpperLvlChg( sal_uInt8 nCurLvl, sal_uInt8 nLevel, sal_uInt16 nMask )
+inline BYTE GetUpperLvlChg( BYTE nCurLvl, BYTE nLevel, USHORT nMask )
 {
     if( 1 < nLevel )
     {
@@ -75,7 +71,7 @@ inline sal_uInt8 GetUpperLvlChg( sal_uInt8 nCurLvl, sal_uInt8 nLevel, sal_uInt16
         else
             nCurLvl = 0;
     }
-    return static_cast<sal_uInt8>((nMask - 1) & ~(( 1 << nCurLvl ) - 1));
+    return static_cast<BYTE>((nMask - 1) & ~(( 1 << nCurLvl ) - 1));
 }
 
 void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
@@ -95,7 +91,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
                            *this);
 
     // assure that the outline numbering rule is an automatic rule
-    pOutlineRule->SetAutoRule( sal_True );
+    pOutlineRule->SetAutoRule( TRUE );
 
     // teste ob die evt. gesetzen CharFormate in diesem Document
     // definiert sind
@@ -120,7 +116,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     }
 
     PropagateOutlineRule();
-    pOutlineRule->SetInvalidRule(sal_True);
+    pOutlineRule->SetInvalidRule(TRUE);
     UpdateNumRule();
 
     // gibt es Fussnoten && gilt Kapitelweises Nummerieren, dann updaten
@@ -134,14 +130,17 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
 
 void SwDoc::PropagateOutlineRule()
 {
-    for (sal_uInt16 n = 0; n < pTxtFmtCollTbl->Count(); n++)
+    for (USHORT n = 0; n < pTxtFmtCollTbl->Count(); n++)
     {
         SwTxtFmtColl *pColl = (*pTxtFmtCollTbl)[n];
 
+       // if (NO_NUMBERING != pColl->GetOutlineLevel())//#outline level,zhaojianwei
         if(pColl->IsAssignedToListLevelOfOutlineStyle())//<-end,zhaojianwei
         {
+            SwClientIter aIter(*pColl);
+
             // Check only the list style, which is set at the paragraph style
-            const SwNumRuleItem & rCollRuleItem = pColl->GetNumRule( sal_False );
+            const SwNumRuleItem & rCollRuleItem = pColl->GetNumRule( FALSE );
 
             // Check on document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE no longer needed.
             if ( rCollRuleItem.GetValue().Len() == 0 )
@@ -160,21 +159,21 @@ void SwDoc::PropagateOutlineRule()
 }
 
 // Hoch-/Runterstufen
-sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
+BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 {
     if( !GetNodes().GetOutLineNds().Count() || !nOffset )
-        return sal_False;
+        return FALSE;
 
     // den Bereich feststellen
     const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
     const SwNodePtr pSttNd = (SwNodePtr)&rPam.Start()->nNode.GetNode();
     const SwNodePtr pEndNd = (SwNodePtr)&rPam.End()->nNode.GetNode();
-    sal_uInt16 nSttPos, nEndPos;
+    USHORT nSttPos, nEndPos;
 
     if( !rOutlNds.Seek_Entry( pSttNd, &nSttPos ) &&
         !nSttPos-- )
         // wir stehen in keiner "Outline-Section"
-        return sal_False;
+        return FALSE;
 
     if( rOutlNds.Seek_Entry( pEndNd, &nEndPos ) )
         ++nEndPos;
@@ -182,7 +181,7 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     // jetzt haben wir unseren Bereich im OutlineNodes-Array
     // dann prufe ersmal, ob nicht unterebenen aufgehoben werden
     // (Stufung ueber die Grenzen)
-    sal_uInt16 n;
+    USHORT n;
 
     // so, dann koennen wir:
     // 1. Vorlagen-Array anlegen
@@ -191,6 +190,9 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 
     for( n = 0; n < pTxtFmtCollTbl->Count(); ++n )
     {
+        //BYTE nLevel = (*pTxtFmtCollTbl)[ n ]->GetOutlineLevel();//#outline level,zhaojianwei
+        //if( nLevel < MAXLEVEL )
+        //	aCollArr[ nLevel ] = (*pTxtFmtCollTbl)[ n ];
         if((*pTxtFmtCollTbl)[ n ]->IsAssignedToListLevelOfOutlineStyle())
         {
             const int nLevel = (*pTxtFmtCollTbl)[ n ]->GetAssignedOutlineStyleLevel();
@@ -218,6 +220,7 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             SwTxtFmtColl *aTmpColl =
                 GetTxtCollFromPool(static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
 
+            //if (aTmpColl->GetOutlineLevel() == n)//#outline level,zhaojianwei
             if( aTmpColl->IsAssignedToListLevelOfOutlineStyle() &&
                 aTmpColl->GetAssignedOutlineStyleLevel() == n )//<-end,zhaojianwei
             {
@@ -298,12 +301,12 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
         */
         if (aCollArr[n] != NULL)
         {
-            sal_uInt16 m = n;
+            USHORT m = n;
             int nCount = nNum;
 
             while (nCount > 0 && m + nStep >= 0 && m + nStep < MAXLEVEL)
             {
-                m = static_cast<sal_uInt16>(m + nStep);
+                m = static_cast<USHORT>(m + nStep);
 
                 if (aCollArr[m] != NULL)
                     nCount--;
@@ -327,7 +330,9 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     {
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
         SwTxtFmtColl* pColl = pTxtNd->GetTxtColl();
-
+//        int nLevel = pColl->GetOutlineLevel();//#outline level,zhaojianwei
+//        if (aMoveArr[nLevel] == -1)
+//          bMoveApplicable = false;
         if( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
             const int nLevel = pColl->GetAssignedOutlineStyleLevel();
@@ -348,13 +353,13 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     }
 
     if (! bMoveApplicable )
-        return sal_False;
+        return FALSE;
 
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if( DoesUndo() )
     {
-        GetIDocumentUndoRedo().StartUndo(UNDO_OUTLINE_LR, NULL);
-        SwUndo *const pUndoOLR( new SwUndoOutlineLeftRight( rPam, nOffset ) );
-        GetIDocumentUndoRedo().AppendUndo(pUndoOLR);
+        ClearRedo();
+        StartUndo(UNDO_OUTLINE_LR, NULL);
+        AppendUndo( new SwUndoOutlineLeftRight( rPam, nOffset ) );
     }
 
     // 2. allen Nodes die neue Vorlage zuweisen
@@ -367,6 +372,9 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 
         if( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
+        // OSL_ENSURE(pColl->GetOutlineLevel() < MAXLEVEL,	//#outline level,removed by zhaojianwei
+        //         "non outline node in outline nodes?");
+        //int nLevel = pColl->GetOutlineLevel();
             const int nLevel = pColl->GetAssignedOutlineStyleLevel();//#outline level,add by zhaojianwei
 
             OSL_ENSURE(aMoveArr[nLevel] >= 0,
@@ -382,7 +390,7 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             }
 
         }
-        else if( pTxtNd->GetAttrOutlineLevel() > 0) //#outline level,add by zhaojianwei
+        else if( pTxtNd->GetAttrOutlineLevel() > 0)	//#outline level,add by zhaojianwei
         {
             int nLevel = pTxtNd->GetAttrOutlineLevel() + nOffset;
             if( 0 <= nLevel && nLevel <= MAXLEVEL)
@@ -393,52 +401,50 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
         n++;
         // Undo ???
     }
-    if (GetIDocumentUndoRedo().DoesUndo())
-    {
-        GetIDocumentUndoRedo().EndUndo(UNDO_OUTLINE_LR, NULL);
-    }
+    if (DoesUndo())
+        EndUndo(UNDO_OUTLINE_LR, NULL);
 
     ChkCondColls();
     SetModified();
 
-    return sal_True;
+    return TRUE;
 }
 
 // Hoch-/Runter - Verschieben !
-sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
+BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
 {
     // kein Verschiebung in den Sonderbereichen
     const SwPosition& rStt = *rPam.Start(),
                     & rEnd = &rStt == rPam.GetPoint() ? *rPam.GetMark()
                                                       : *rPam.GetPoint();
     if( !GetNodes().GetOutLineNds().Count() || !nOffset ||
-        (rStt.nNode.GetIndex() < GetNodes().GetEndOfExtras().GetIndex()) ||
-        (rEnd.nNode.GetIndex() < GetNodes().GetEndOfExtras().GetIndex()))
-    {
-        return sal_False;
-    }
+        rStt.nNode.GetIndex() < aNodes.GetEndOfExtras().GetIndex() ||
+        rEnd.nNode.GetIndex() < aNodes.GetEndOfExtras().GetIndex() )
+        return FALSE;
 
-    sal_uInt16 nAktPos = 0;
+    USHORT nAktPos = 0;
     SwNodeIndex aSttRg( rStt.nNode ), aEndRg( rEnd.nNode );
 
-    int nOutLineLevel = MAXLEVEL;           //<-end,zhaojianwei
+    //BYTE nOutLineLevel = NO_NUMBERING;	//#outline level,zhaojianwei
+    int nOutLineLevel = MAXLEVEL;			//<-end,zhaojianwei
     SwNode* pSrch = &aSttRg.GetNode();
-
+    //if( pSrch->IsTxtNode() )				//#outline level,zhaojianwei
+    //     nOutLineLevel = static_cast<BYTE>(((SwTxtNode*)pSrch)->GetOutlineLevel());
    if( pSrch->IsTxtNode())
-        nOutLineLevel = static_cast<sal_uInt8>(((SwTxtNode*)pSrch)->GetAttrOutlineLevel()-1);//<-end,zhaojianwei
+        nOutLineLevel = static_cast<BYTE>(((SwTxtNode*)pSrch)->GetAttrOutlineLevel()-1);//<-end,zhaojianwei
     SwNode* pEndSrch = &aEndRg.GetNode();
     if( !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nAktPos ) )
     {
         if( !nAktPos )
-            return sal_False; // Promoting or demoting before the first outline => no.
+            return FALSE; // Promoting or demoting before the first outline => no.
         if( --nAktPos )
             aSttRg = *GetNodes().GetOutLineNds()[ nAktPos ];
         else if( 0 > nOffset )
-            return sal_False; // Promoting at the top of document?!
+            return FALSE; // Promoting at the top of document?!
         else
             aSttRg = *GetNodes().GetEndOfContent().StartOfSectionNode();
     }
-    sal_uInt16 nTmpPos = 0;
+    USHORT nTmpPos = 0;
     // If the given range ends at an outlined text node we have to decide if it has to be a part of
     // the moving range or not. Normally it will be a sub outline of our chapter
     // and has to be moved, too. But if the chapter ends with a table(or a section end),
@@ -447,6 +453,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     if( GetNodes().GetOutLineNds().Seek_Entry( pEndSrch, &nTmpPos ) )
     {
         if( !pEndSrch->IsTxtNode() || pEndSrch == pSrch ||
+            //nOutLineLevel < ((SwTxtNode*)pEndSrch)->GetOutlineLevel() )//#outline level,zhaojianwei
             nOutLineLevel < ((SwTxtNode*)pEndSrch)->GetAttrOutlineLevel()-1 )//<-end,zhaojianwei
             ++nTmpPos; // For sub outlines only!
     }
@@ -458,7 +465,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         nAktPos = nTmpPos;
     if( aEndRg == aSttRg )
     {
-        OSL_FAIL( "Moving outlines: Surprising selection" );
+        OSL_ENSURE( false, "Moving outlines: Surprising selection" );
         aEndRg++;
     }
 
@@ -491,14 +498,14 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     aEndRg++;
 
     // calculation of the new position
-    if( nOffset < 0 && nAktPos < sal_uInt16(-nOffset) )
+    if( nOffset < 0 && nAktPos < USHORT(-nOffset) )
         pNd = GetNodes().GetEndOfContent().StartOfSectionNode();
     else if( nAktPos + nOffset >= GetNodes().GetOutLineNds().Count() )
         pNd = &GetNodes().GetEndOfContent();
     else
         pNd = GetNodes().GetOutLineNds()[ nAktPos + nOffset ];
 
-    sal_uLong nNewPos = pNd->GetIndex();
+    ULONG nNewPos = pNd->GetIndex();
 
     // And now a correction of the insert position if necessary...
     SwNodeIndex aInsertPos( *pNd, -1 );
@@ -538,7 +545,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     if( pNd->IsTableNode() )
         pNd = pNd->StartOfSectionNode();
     if( pNd->FindTableNode() )
-        return sal_False;
+        return FALSE;
 
     OSL_ENSURE( aSttRg.GetIndex() > nNewPos || nNewPos >= aEndRg.GetIndex(),
                 "Position liegt im MoveBereich" );
@@ -547,19 +554,19 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     // setze die Position auf den Dokumentanfang.
     // Sollten da Bereiche oder Tabellen stehen, so werden sie nach
     // hinten verschoben.
-    nNewPos = Max( nNewPos, GetNodes().GetEndOfExtras().GetIndex() + 2 );
+    nNewPos = Max( nNewPos, aNodes.GetEndOfExtras().GetIndex() + 2 );
 
     long nOffs = nNewPos - ( 0 < nOffset ? aEndRg.GetIndex() : aSttRg.GetIndex());
     SwPaM aPam( aSttRg, aEndRg, 0, -1 );
-    return MoveParagraph( aPam, nOffs, sal_True );
+    return MoveParagraph( aPam, nOffs, TRUE );
 }
 
-sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
-                            sal_Bool bExact )
+USHORT lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
+                            BOOL bExact )
 {
-    sal_uInt16 nSavePos = USHRT_MAX;
+    USHORT nSavePos = USHRT_MAX;
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
-    for( sal_uInt16 n = 0; n < rOutlNds.Count(); ++n )
+    for( USHORT n = 0; n < rOutlNds.Count(); ++n )
     {
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
         String sTxt( pTxtNd->GetExpandTxt() );
@@ -580,35 +587,35 @@ sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
     return nSavePos;
 }
 
-sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
+USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
 {
     // Gueltig Nummern sind (immer nur Offsets!!!):
-    //  ([Nummer]+\.)+  (als regulaerer Ausdruck!)
-    //  (Nummer gefolgt von Punkt, zum 5 Wiederholungen)
-    //  also: "1.1.", "1.", "1.1.1."
+    // 	([Nummer]+\.)+	(als regulaerer Ausdruck!)
+    //	(Nummer gefolgt von Punkt, zum 5 Wiederholungen)
+    //	also: "1.1.", "1.", "1.1.1."
     xub_StrLen nPos = 0;
     String sNum = rName.GetToken( 0, '.', nPos );
     if( STRING_NOTFOUND == nPos )
-        return USHRT_MAX;           // ungueltige Nummer!!!
+        return USHRT_MAX;			// ungueltige Nummer!!!
 
-    sal_uInt16 nLevelVal[ MAXLEVEL ];       // Nummern aller Levels
+    USHORT nLevelVal[ MAXLEVEL ];		// Nummern aller Levels
     memset( nLevelVal, 0, MAXLEVEL * sizeof( nLevelVal[0] ));
-    sal_uInt8 nLevel = 0;
+    BYTE nLevel = 0;
     String sName( rName );
 
     while( STRING_NOTFOUND != nPos )
     {
-        sal_uInt16 nVal = 0;
+        USHORT nVal = 0;
         sal_Unicode c;
-        for( sal_uInt16 n = 0; n < sNum.Len(); ++n )
+        for( USHORT n = 0; n < sNum.Len(); ++n )
             if( '0' <= ( c = sNum.GetChar( n )) && c <= '9' )
             {
                 nVal *= 10;  nVal += c - '0';
             }
             else if( nLevel )
-                break;                      // "fast" gueltige Nummer
+                break;						// "fast" gueltige Nummer
             else
-                return USHRT_MAX;           // ungueltige Nummer!!!
+                return USHRT_MAX;			// ungueltige Nummer!!!
 
         if( MAXLEVEL > nLevel )
             nLevelVal[ nLevel++ ] = nVal;
@@ -620,13 +627,13 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
         if(!ByteString(sNum, gsl_getSystemTextEncoding()).IsNumericAscii())
             nPos = STRING_NOTFOUND;
     }
-    rName = sName;      // das ist der nachfolgende Text.
+    rName = sName;		// das ist der nachfolgende Text.
 
     // alle Levels gelesen, dann suche mal im Document nach dieser
     // Gliederung:
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
     // OS: ohne OutlineNodes lohnt die Suche nicht
-    // und man spart sich einen Absturz
+    // und man spart sich einen Absturz #42958#
     if(!rOutlNds.Count())
         return USHRT_MAX;
     SwTxtNode* pNd;
@@ -635,12 +642,16 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
     for( ; nPos < rOutlNds.Count(); ++nPos )
     {
         pNd = rOutlNds[ nPos ]->GetTxtNode();
+        //BYTE nLvl = pNd->GetTxtColl()->GetOutlineLevel();	//#outline level,zhaojianwei
         const int nLvl = pNd->GetAttrOutlineLevel()-1;   //<-end,zhaojianwei
         if( nLvl == nLevel - 1)
         {
-            // #i51089#, #i68289#
+            // check for the outline num
+            // --> OD 2005-11-02 #i51089 - TUNING#
+            // --> OD 2006-09-22 #i68289#
             // Assure, that text node has the correct numbering level. Otherwise,
             // its number vector will not fit to the searched level.
+//            if ( pNd->GetNum() )
             if ( pNd->GetNum() &&
                  pNd->GetActualListLevel() == ( nLevel - 1 ) )
             // <--
@@ -649,7 +660,7 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
                 SwNumberTree::tNumberVector aLevelVal = rNdNum.GetNumberVector();
                 //now compare with the one searched for
                 bool bEqual = true;
-                for( sal_uInt8 n = 0; (n < nLevel) && bEqual; ++n )
+                for( BYTE n = 0; (n < nLevel) && bEqual; ++n )
                 {
                     bEqual = aLevelVal[n] == nLevelVal[n];
                 }
@@ -660,6 +671,7 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
             }
             else
             {
+                // --> OD 2006-01-12 #126588#
                 // A text node, which has an outline paragraph style applied and
                 // has as hard attribute 'no numbering' set, has an outline level,
                 // but no numbering tree node. Thus, consider this situation in
@@ -684,7 +696,7 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
 // Text gesucht. Wird dieser gefunden ist es der Eintrag. Ansonsten der,
 // der ueber die Nummer gefunden wurde.
 // Ist keine Nummer angegeben, dann nur den Text suchen.
-sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
+BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 {
     if( rName.Len() )
     {
@@ -692,7 +704,7 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 
         // 1. Schritt: ueber die Nummer:
         String sName( rName );
-        sal_uInt16 nFndPos = ::lcl_FindOutlineNum( GetNodes(), sName );
+        USHORT nFndPos = ::lcl_FindOutlineNum( GetNodes(), sName );
         if( USHRT_MAX != nFndPos )
         {
             SwTxtNode* pNd = rOutlNds[ nFndPos ]->GetTxtNode();
@@ -700,7 +712,7 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
             //#i4533# leading numbers followed by a dot have been remove while
             //searching for the outline position
             //to compensate this they must be removed from the paragraphs text content, too
-            sal_uInt16 nPos = 0;
+            USHORT nPos = 0;
             String sTempNum;
             while(sExpandedText.Len() && (sTempNum = sExpandedText.GetToken(0, '.', nPos)).Len() &&
                     STRING_NOTFOUND != nPos &&
@@ -712,8 +724,8 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 
             if( !sExpandedText.Equals( sName ) )
             {
-                sal_uInt16 nTmp = ::lcl_FindOutlineName( GetNodes(), sName, sal_True );
-                if( USHRT_MAX != nTmp )             // ueber den Namen gefunden
+                USHORT nTmp = ::lcl_FindOutlineName( GetNodes(), sName, TRUE );
+                if( USHRT_MAX != nTmp )				// ueber den Namen gefunden
                 {
                     nFndPos = nTmp;
                     pNd = rOutlNds[ nFndPos ]->GetTxtNode();
@@ -721,41 +733,121 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
             }
             rPos.nNode = *pNd;
             rPos.nContent.Assign( pNd, 0 );
-            return sal_True;
+            return TRUE;
         }
 
-        nFndPos = ::lcl_FindOutlineName( GetNodes(), rName, sal_False );
+        nFndPos = ::lcl_FindOutlineName( GetNodes(), rName, FALSE );
         if( USHRT_MAX != nFndPos )
         {
             SwTxtNode* pNd = rOutlNds[ nFndPos ]->GetTxtNode();
             rPos.nNode = *pNd;
             rPos.nContent.Assign( pNd, 0 );
-            return sal_True;
+            return TRUE;
         }
 
-        // #i68289# additional search on hyperlink URL without its outline numbering part
+        // --> OD 2006-09-22 #i68289#
+        // additional search on hyperlink URL without its outline numbering part
         if ( !sName.Equals( rName ) )
         {
-            nFndPos = ::lcl_FindOutlineName( GetNodes(), sName, sal_False );
+            nFndPos = ::lcl_FindOutlineName( GetNodes(), sName, FALSE );
             if( USHRT_MAX != nFndPos )
             {
                 SwTxtNode* pNd = rOutlNds[ nFndPos ]->GetTxtNode();
                 rPos.nNode = *pNd;
                 rPos.nContent.Assign( pNd, 0 );
-                return sal_True;
+                return TRUE;
             }
         }
+        // <--
     }
-    return sal_False;
+    return FALSE;
 }
+
+// --- Nummerierung -----------------------------------------
+
+// --> OD 2008-02-19 #refactorlists#
+//void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL )
+//{
+//    SwNumRule* pRule = rDoc.FindNumRulePtr(rName);
+
+//    // no rule, no fun.
+//    if ( !pRule )
+//        return;
+
+//    //
+//    // 1. Case: Information already available at pRule:
+//    //
+//    if (pRule->GetTxtNodeList())
+//    {
+//        // copy list to own pList pointer:
+//        aList = *pRule->GetTxtNodeList();
+//        return;
+//    }
+
+//    //
+//    // 2. Case: Information has to be generated from scratch:
+//    //
+
+//    if (pRule->IsOutlineRule())
+//    {
+//        const SwOutlineNodes & rOutlineNodes = rDoc.GetNodes().GetOutLineNds();
+
+//        for (USHORT i = 0; i < rOutlineNodes.Count(); ++i)
+//        {
+//            SwTxtNode & aNode = *((SwTxtNode *) rOutlineNodes[i]);
+
+//            if (pRule == aNode.GetNumRule())
+//                AddNode(aNode);
+//        }
+//    }
+//    {
+//        SwModify* pMod;
+//        const SfxPoolItem* pItem;
+//        USHORT i, nMaxItems = rDoc.GetAttrPool().GetItemCount
+//            ( RES_PARATR_NUMRULE);
+//        for( i = 0; i < nMaxItems; ++i )
+//        {
+//            pItem = rDoc.GetAttrPool().GetItem( RES_PARATR_NUMRULE, i );
+//            if( 0 != pItem)
+//            {
+//                pMod = (SwModify*)((SwNumRuleItem*)pItem)->GetDefinedIn();
+//                if (0 != pMod &&
+//                    ((SwNumRuleItem*)pItem)->GetValue().Len() &&
+//                    ((SwNumRuleItem*)pItem)->GetValue() == rName )
+//                {
+//                    if( pMod->IsA( TYPE( SwFmt )) )
+//                        pMod->GetInfo( *this );
+//                    else
+//                    {
+//                        SwTxtNode* pModTxtNode = (SwTxtNode*)pMod;
+
+//                        // #115901#
+//                        if( pModTxtNode->GetNodes().IsDocNodes())
+//                        {
+//                            AddNode( *pModTxtNode );
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+
+//    // --> FME 2004-11-03 #i36571# The numrule and this info structure should
+//    // have different instances of the list:
+//    // --> OD 2006-09-12 #i69145#
+//    // method <SwNumRule::SetList(..)> copies content of list provided by the parameter
+//    pRule->SetTxtNodeList( aList );
+//    // <--
+//}
+// <--
 
 void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 {
     SwNumRule* pOld = rDoc.FindNumRulePtr( rRule.GetName() );
     OSL_ENSURE( pOld, "ohne die alte NumRule geht gar nichts" );
 
-    sal_uInt16 nChgFmtLevel = 0, nMask = 1;
-    sal_uInt8 n;
+    USHORT nChgFmtLevel = 0, nMask = 1;
+    BYTE n;
 
     for( n = 0; n < MAXLEVEL; ++n, nMask <<= 1 )
     {
@@ -777,22 +869,42 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
         pOld->CheckCharFmts( &rDoc );
         pOld->SetContinusNum( rRule.IsContinusNum() );
 
+        // Do NOT change list style type
+//        pOld->SetRuleType( rRule.GetRuleType() );
         if ( bInvalidateNumRule )
         {
-            pOld->SetInvalidRule(sal_True);
+            pOld->SetInvalidRule(TRUE);
         }
 
         return ;
     }
 
+//    SwNumRuleInfo* pUpd = new SwNumRuleInfo( rRule.GetName() );
+//    pUpd->MakeList( rDoc );
+
+//    BYTE nLvl;
+//    for( ULONG nFirst = 0, nLast = pUpd->GetList().Count();
+//        nFirst < nLast; ++nFirst )
+//    {
+//        SwTxtNode* pTxtNd = pUpd->GetList().GetObject( nFirst );
+//        nLvl = static_cast<BYTE>(pTxtNd->GetLevel());
+
+//        if( nLvl < MAXLEVEL )
+//        {
+//            if( nChgFmtLevel & ( 1 << nLvl ))
+//            {
+//                pTxtNd->NumRuleChgd();
+//            }
+//        }
+//    }
     SwNumRule::tTxtNodeList aTxtNodeList;
     pOld->GetTxtNodeList( aTxtNodeList );
-    sal_uInt8 nLvl( 0 );
+    BYTE nLvl( 0 );
     for ( SwNumRule::tTxtNodeList::iterator aIter = aTxtNodeList.begin();
           aIter != aTxtNodeList.end(); ++aIter )
     {
         SwTxtNode* pTxtNd = *aIter;
-        nLvl = static_cast<sal_uInt8>(pTxtNd->GetActualListLevel());
+        nLvl = static_cast<BYTE>(pTxtNd->GetActualListLevel());
 
         if( nLvl < MAXLEVEL )
         {
@@ -808,12 +920,18 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
             pOld->Set( n, rRule.GetNumFmt( n ));
 
     pOld->CheckCharFmts( &rDoc );
-    pOld->SetInvalidRule(sal_True);
+    pOld->SetInvalidRule(TRUE);
     pOld->SetContinusNum( rRule.IsContinusNum() );
+    // Do NOT change list style type
+//    pOld->SetRuleType( rRule.GetRuleType() );
+
+//    delete pUpd;
 
     rDoc.UpdateNumRule();
 }
 
+// OD 2008-02-08 #newlistlevelattrs# - add handling of parameter <bResetIndentAttrs>
+// --> OD 2008-03-17 #refactorlists#
 void SwDoc::SetNumRule( const SwPaM& rPam,
                         const SwNumRule& rRule,
                         const bool bCreateNewList,
@@ -822,12 +940,11 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                         const bool bResetIndentAttrs )
 {
     SwUndoInsNum * pUndo = NULL;
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if (DoesUndo())
     {
-        // Start/End for attributes!
-        GetIDocumentUndoRedo().StartUndo( UNDO_INSNUM, NULL );
-        pUndo = new SwUndoInsNum( rPam, rRule );
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        ClearRedo();
+        StartUndo( UNDO_INSNUM, NULL );		// Klammerung fuer die Attribute!
+        AppendUndo( pUndo = new SwUndoInsNum( rPam, rRule ) );
     }
 
     SwNumRule * pNew = FindNumRulePtr( rRule.GetName() );
@@ -902,8 +1019,8 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                     pTxtNd->AddToList();
                 }
             }
-            // Only clear numbering attribute at text node, if at paragraph
-            // style the new numbering rule is found.
+            // --> OD 2005-10-26 #b6340308# - only clear numbering attribute at
+            // text node, if at paragraph style the new numbering rule is found.
             else if ( !pRule )
             {
                 SwTxtFmtColl* pColl = pTxtNd->GetTxtColl();
@@ -917,7 +1034,9 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                     }
                 }
             }
+            // <--
         }
+        // <--
     }
 
     if ( bSetItem )
@@ -930,65 +1049,65 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
     {
         SvUShortsSort aResetAttrsArray;
         aResetAttrsArray.Insert( RES_LR_SPACE );
-        // --> OD 2010-10-05 #i114929#
-        // On a selection setup a corresponding Point-and-Mark in order to get
-        // the indentation attribute reset on all paragraphs touched by the selection
-        if ( rPam.HasMark() &&
-             rPam.End()->nNode.GetNode().GetTxtNode() )
-        {
-            SwPaM aPam( rPam.Start()->nNode,
-                        rPam.End()->nNode );
-            aPam.Start()->nContent = 0;
-            aPam.End()->nContent = rPam.End()->nNode.GetNode().GetTxtNode()->Len();
-            ResetAttrs( aPam, sal_False, &aResetAttrsArray );
-        }
-        else
-        {
-            ResetAttrs( rPam, sal_False, &aResetAttrsArray );
-        }
-        // <--
+        ResetAttrs( rPam, sal_True, &aResetAttrsArray );
     }
 
-    if (GetIDocumentUndoRedo().DoesUndo())
-    {
-        GetIDocumentUndoRedo().EndUndo( UNDO_INSNUM, NULL );
-    }
+    if (DoesUndo())
+        EndUndo( UNDO_INSNUM, NULL );
 
     SetModified();
 }
 
 void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
 {
+//    ULONG nStartPos = rPam.Start()->nNode.GetIndex();
+//    ULONG nEndPos = rPam.End()->nNode.GetIndex();
+
+//    for (ULONG n = nStartPos; n <= nEndPos; n++)
+//    {
+//        SwTxtNode * pNd = GetNodes()[n]->GetTxtNode();
+
+//        if (pNd)
+//            pNd->SetCountedInList(bCounted);
+//    }
     if ( bCounted )
     {
         SvUShortsSort aResetAttrsArray;
         aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
-        // --> OD 2010-10-05 #i114929#
-        // On a selection setup a corresponding Point-and-Mark in order to get
-        // the list-is-counted attribute reset on all paragraphs touched by the selection
-        if ( rPam.HasMark() &&
-             rPam.End()->nNode.GetNode().GetTxtNode() )
-        {
-            SwPaM aPam( rPam.Start()->nNode,
-                        rPam.End()->nNode );
-            aPam.Start()->nContent = 0;
-            aPam.End()->nContent = rPam.End()->nNode.GetNode().GetTxtNode()->Len();
-            ResetAttrs( aPam, sal_False, &aResetAttrsArray );
-        }
-        else
-        {
-            ResetAttrs( rPam, sal_False, &aResetAttrsArray );
-        }
-        // <--
+        ResetAttrs( rPam, sal_True, &aResetAttrsArray );
     }
     else
     {
         InsertPoolItem( rPam,
-            SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, sal_False ), 0 );
+            SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, FALSE ), 0 );
     }
 }
 
-void SwDoc::SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag )
+//void SwDoc::ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule)
+//{
+//    if (DoesUndo())
+//        StartUndo(UNDO_START, NULL);
+
+//  ULONG nStt = rPaM.Start()->nNode.GetIndex();
+//  ULONG nEnd = rPaM.End()->nNode.GetIndex();
+
+//    for (ULONG n = nStt; n <= nEnd; n++)
+//    {
+//        SwTxtNode * pCNd = GetNodes()[n]->GetTxtNode();
+
+//        if (pCNd && NULL != pCNd->GetNumRule())
+//        {
+//            SwPaM aPam(*pCNd);
+
+//            InsertPoolItem(aPam, SwNumRuleItem(rNumRule.GetName()), 0);
+//        }
+//    }
+
+//    if (DoesUndo())
+//        EndUndo(UNDO_START, NULL);
+//}
+
+void SwDoc::SetNumRuleStart( const SwPosition& rPos, BOOL bFlag )
 {
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
 
@@ -997,10 +1116,10 @@ void SwDoc::SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag )
         const SwNumRule* pRule = pTxtNd->GetNumRule();
         if( pRule && !bFlag != !pTxtNd->IsListRestart())
         {
-            if (GetIDocumentUndoRedo().DoesUndo())
+            if( DoesUndo() )
             {
-                SwUndo *const pUndo( new SwUndoNumRuleStart(rPos, bFlag) );
-                GetIDocumentUndoRedo().AppendUndo(pUndo);
+                ClearRedo();
+                AppendUndo( new SwUndoNumRuleStart( rPos, bFlag ));
             }
 
             pTxtNd->SetListRestart(bFlag ? true : false);
@@ -1010,19 +1129,31 @@ void SwDoc::SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag )
     }
 }
 
-void SwDoc::SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt )
+void SwDoc::SetNodeNumStart( const SwPosition& rPos, USHORT nStt )
 {
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
 
     if (pTxtNd)
     {
+//        const SwNumRule* pRule = pTxtNd->GetNumRule();
+//        if( pRule && nStt != pTxtNd->GetListRestartValue() )
+//        {
+//            if( DoesUndo() )
+//            {
+//                ClearRedo();
+//                AppendUndo( new SwUndoNumRuleStart( rPos, nStt ));
+//            }
+//        }
+//        pTxtNd->SetListRestartValue(nStt);
+
+//        SetModified();
         if ( !pTxtNd->HasAttrListRestartValue() ||
              pTxtNd->GetAttrListRestartValue() != nStt )
         {
-            if (GetIDocumentUndoRedo().DoesUndo())
+            if( DoesUndo() )
             {
-                SwUndo *const pUndo( new SwUndoNumRuleStart(rPos, nStt) );
-                GetIDocumentUndoRedo().AppendUndo(pUndo);
+                ClearRedo();
+                AppendUndo( new SwUndoNumRuleStart( rPos, nStt ));
             }
             pTxtNd->SetAttrListRestartValue( nStt );
 
@@ -1032,23 +1163,25 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt )
 }
 
 // loeschen geht nur, wenn die Rule niemand benutzt!
-sal_Bool SwDoc::DelNumRule( const String& rName, sal_Bool bBroadcast )
+BOOL SwDoc::DelNumRule( const String& rName, BOOL bBroadcast )
 {
-    sal_uInt16 nPos = FindNumRule( rName );
+    USHORT nPos = FindNumRule( rName );
 
     if ( (*pNumRuleTbl)[ nPos ] == GetOutlineNumRule() )
     {
-        OSL_FAIL( "<SwDoc::DelNumRule(..)> - No deletion of outline list style. This is serious defect - please inform OD" );
-        return sal_False;
+        OSL_ENSURE( false,
+                "<SwDoc::DelNumRule(..)> - No deletion of outline list style. This is serious defect - please inform OD" );
+        return FALSE;
     }
 
     if( USHRT_MAX != nPos && !IsUsed( *(*pNumRuleTbl)[ nPos ] ))
     {
-        if (GetIDocumentUndoRedo().DoesUndo())
+        if (DoesUndo())
         {
             SwUndo * pUndo =
                 new SwUndoNumruleDelete(*(*pNumRuleTbl)[nPos], this);
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+
+            AppendUndo(pUndo);
         }
 
         if (bBroadcast)
@@ -1085,9 +1218,9 @@ sal_Bool SwDoc::DelNumRule( const String& rName, sal_Bool bBroadcast )
         maNumRuleMap.erase(aTmpName);
 
         SetModified();
-        return sal_True;
+        return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
 void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule, const String * pName )
@@ -1096,11 +1229,12 @@ void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule, const String * pName )
     if( pRule )
     {
         SwUndoInsNum* pUndo = 0;
-        if (GetIDocumentUndoRedo().DoesUndo())
+        if( DoesUndo() )
         {
+            ClearRedo();
             pUndo = new SwUndoInsNum( *pRule, rRule );
             pUndo->GetHistory();
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
+            AppendUndo( pUndo );
         }
         ::lcl_ChgNumRule( *this, rRule );
 
@@ -1112,26 +1246,33 @@ void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule, const String * pName )
 }
 
 sal_Bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName,
-                              sal_Bool bBroadcast)
+                              BOOL bBroadcast)
 {
     sal_Bool bResult = sal_False;
     SwNumRule * pNumRule = FindNumRulePtr(rOldName);
 
     if (pNumRule)
     {
-        if (GetIDocumentUndoRedo().DoesUndo())
+        if (DoesUndo())
         {
             SwUndo * pUndo = new SwUndoNumruleRename(rOldName, rNewName, this);
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+
+            AppendUndo(pUndo);
         }
 
+//        SwNumRuleInfo aInfo(rOldName);
+//        aInfo.MakeList(*this);
         SwNumRule::tTxtNodeList aTxtNodeList;
         pNumRule->GetTxtNodeList( aTxtNodeList );
 
         pNumRule->SetName( rNewName, *this );
 
         SwNumRuleItem aItem(rNewName);
-
+//        for (ULONG nI = 0; nI < aInfo.GetList().Count(); ++nI)
+//        {
+//            SwTxtNode * pTxtNd = aInfo.GetList().GetObject(nI);
+//            pTxtNd->SwCntntNode::SetAttr(aItem);
+//        }
         for ( SwNumRule::tTxtNodeList::iterator aIter = aTxtNodeList.begin();
               aIter != aTxtNodeList.end(); ++aIter )
         {
@@ -1151,47 +1292,97 @@ sal_Bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName,
 
 void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
 {
-    for( sal_uInt16 n = GetNumRuleTbl().Count(); n; )
+    for( USHORT n = GetNumRuleTbl().Count(); n; )
     {
+//        SwNumRuleInfo aUpd( GetNumRuleTbl()[ --n ]->GetName() );
+//        aUpd.MakeList( *this );
+
+//        for( ULONG nFirst = 0, nLast = aUpd.GetList().Count();
+//                nFirst < nLast; ++nFirst )
+//        {
+//            SwTxtNode* pTNd = aUpd.GetList().GetObject( nFirst );
+//            SwClientIter aIter( *pTNd );
+//            for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
+//                    pFrm; pFrm = (SwFrm*)aIter.Next() )
+//                if( ((SwTxtFrm*)pFrm)->HasAnimation() )
+//                    ((SwTxtFrm*)pFrm)->StopAnimation( pOut );
+//        }
         SwNumRule::tTxtNodeList aTxtNodeList;
         GetNumRuleTbl()[ --n ]->GetTxtNodeList( aTxtNodeList );
         for ( SwNumRule::tTxtNodeList::iterator aTxtNodeIter = aTxtNodeList.begin();
               aTxtNodeIter != aTxtNodeList.end(); ++aTxtNodeIter )
         {
             SwTxtNode* pTNd = *aTxtNodeIter;
-            SwIterator<SwTxtFrm,SwTxtNode> aIter(*pTNd);
-            for(SwTxtFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
-                if( pFrm->HasAnimation() )
-                    pFrm->StopAnimation( pOut );
+            SwClientIter aIter( *pTNd );
+            for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
+                    pFrm; pFrm = (SwFrm*)aIter.Next() )
+                if( ((SwTxtFrm*)pFrm)->HasAnimation() )
+                    ((SwTxtFrm*)pFrm)->StopAnimation( pOut );
         }
     }
 }
 
-sal_Bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
+BOOL SwDoc::ReplaceNumRule( const SwPosition& rPos,
                             const String& rOldRule, const String& rNewRule )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     SwNumRule *pOldRule = FindNumRulePtr( rOldRule ),
               *pNewRule = FindNumRulePtr( rNewRule );
     if( pOldRule && pNewRule && pOldRule != pNewRule )
     {
         SwUndoInsNum* pUndo = 0;
-        if (GetIDocumentUndoRedo().DoesUndo())
+        if( DoesUndo() )
         {
-            // Start/End for attributes!
-            GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
-            pUndo = new SwUndoInsNum( rPos, *pNewRule, rOldRule );
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            ClearRedo();
+            StartUndo( UNDO_START, NULL );      // Klammerung fuer die Attribute!
+            AppendUndo( pUndo = new SwUndoInsNum( rPos, *pNewRule, rOldRule ) );
         }
 
+        // apply new list style <pNewRule> to all text nodes, which have the
+        // old list style <pOldNRule> applied and belong to the same list as
+        // the text node of the given <SwPosition>.
+//        SwNumRuleInfo aUpd( rOldRule );
+//        aUpd.MakeList( *this );
+
+//        if (aUpd.GetList().Count() > 0)    // #106897#
         SwNumRule::tTxtNodeList aTxtNodeList;
         pOldRule->GetTxtNodeList( aTxtNodeList );
         if ( aTxtNodeList.size() > 0 )
         {
+//            // Position suchen und bestimme ob ein Node davor oder dahinter
+//            // einen Start erzwingt
+//            SwTxtNode* pTxtNd;
+//            ULONG nFndPos, nFirst, nLast;
+
+//            if( TABLE_ENTRY_NOTFOUND != aUpd.GetList().SearchKey(
+//                                                                 rPos.nNode.GetIndex(), &nFndPos ))
+//                ++nFndPos;
+
+//            for( nLast = nFndPos; nLast < aUpd.GetList().Count(); ++nLast )
+//            {
+//                pTxtNd = aUpd.GetList().GetObject( nLast );
+//                if(pTxtNd->IsRestart())
+//                    break;
+//            }
+//            for( nFirst = nFndPos; nFirst; )
+//            {
+//                pTxtNd = aUpd.GetList().GetObject( --nFirst );
+//                if( pTxtNd->IsRestart() )
+//                    break;
+//            }
+//            // dann neue Numerierung ueber diesen Bereich
+//            // definieren und den Start am Anfang/Ende zurueck setzen
+//            pTxtNd = aUpd.GetList().GetObject( nFirst );
+//            if( pTxtNd->IsRestart() )
+//            {
+//                pTxtNd->SetRestart(false);
+//                if( pUndo )
+//                    pUndo->SetSttNum( pTxtNd->GetIndex() );
+//            }
 
             SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : 0 );
-            sal_uInt16 nChgFmtLevel = 0;
-            for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
+            USHORT nChgFmtLevel = 0;
+            for( BYTE n = 0; n < MAXLEVEL; ++n )
             {
                 const SwNumFmt& rOldFmt = pOldRule->Get( n ),
                     & rNewFmt = pNewRule->Get( n );
@@ -1203,7 +1394,15 @@ sal_Bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
 
             const SwTxtNode* pGivenTxtNode = rPos.nNode.GetNode().GetTxtNode();
             SwNumRuleItem aRule( rNewRule );
+//            for( ; nFirst < nLast; ++nFirst )
+//            {
+//                pTxtNd = aUpd.GetList().GetObject( nFirst );
 
+//                aRegH.RegisterInModify( pTxtNd, *pTxtNd );
+
+//                pTxtNd->SwCntntNode::SetAttr( aRule );
+//                pTxtNd->NumRuleChgd();
+//            }
             for ( SwNumRule::tTxtNodeList::iterator aIter = aTxtNodeList.begin();
                   aIter != aTxtNodeList.end(); ++aIter )
             {
@@ -1218,10 +1417,10 @@ sal_Bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
                     pTxtNd->NumRuleChgd();
                 }
             }
-            GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+            EndUndo( UNDO_END, NULL );
             SetModified();
 
-            bRet = sal_True;
+            bRet = TRUE;
         }
     }
 
@@ -1248,14 +1447,15 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 {
     OSL_ENSURE( rPaM.GetDoc() == this, "need same doc" );
 
+//    map<SwNumRule *, SwNumRule *> aMyNumRuleMap;
     ::std::map<SwNumRule *, ListStyleData> aMyNumRuleMap;
 
-     sal_uLong nStt = rPaM.Start()->nNode.GetIndex();
-    sal_uLong nEnd = rPaM.End()->nNode.GetIndex();
+     ULONG nStt = rPaM.Start()->nNode.GetIndex();
+    ULONG nEnd = rPaM.End()->nNode.GetIndex();
 
     bool bFirst = true;
 
-    for (sal_uLong n = nStt; n <= nEnd; n++)
+    for (ULONG n = nStt; n <= nEnd; n++)
     {
         SwTxtNode * pCNd = GetNodes()[n]->GetTxtNode();
 
@@ -1265,8 +1465,10 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 
             if (pRule && pRule->IsAutoRule() && ! pRule->IsOutlineRule())
             {
+//                SwNumRule * pReplaceNumRule = aMyNumRuleMap[pRule];
                 ListStyleData aListStyleData = aMyNumRuleMap[pRule];
 
+//                if (! pReplaceNumRule)
                 if ( aListStyleData.pReplaceNumRule == 0 )
                 {
                     if (bFirst)
@@ -1279,8 +1481,11 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
                                             aListStyleData.sListId, true ));
                     }
 
+//                    if (! pReplaceNumRule)
                     if ( aListStyleData.pReplaceNumRule == 0 )
                     {
+//                        pReplaceNumRule = new SwNumRule(*pRule);
+//                        pReplaceNumRule->SetName(GetUniqueNumRuleName());
                         aListStyleData.pReplaceNumRule = new SwNumRule(*pRule);
 
                         aListStyleData.pReplaceNumRule->SetName(
@@ -1289,6 +1494,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
                         aListStyleData.bCreateNewList = true;
                     }
 
+//                    aMyNumRuleMap[pRule] = pReplaceNumRule;
                     aMyNumRuleMap[pRule] = aListStyleData;
                 }
 
@@ -1311,10 +1517,10 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
     }
 }
 
-sal_Bool SwDoc::NoNum( const SwPaM& rPam )
+BOOL SwDoc::NoNum( const SwPaM& rPam )
 {
 
-    sal_Bool bRet = SplitNode( *rPam.GetPoint(), false );
+    BOOL bRet = SplitNode( *rPam.GetPoint(), false );
     // ist ueberhaupt Nummerierung im Spiel ?
     if( bRet )
     {
@@ -1329,25 +1535,25 @@ sal_Bool SwDoc::NoNum( const SwPaM& rPam )
             SetModified();
         }
         else
-            bRet = sal_False;   // keine Nummerierung , ?? oder immer sal_True ??
+            bRet = FALSE;	// keine Nummerierung , ?? oder immer TRUE ??
     }
     return bRet;
 }
 
 void SwDoc::DelNumRules( const SwPaM& rPam )
 {
-    sal_uLong nStt = rPam.GetPoint()->nNode.GetIndex(),
+    ULONG nStt = rPam.GetPoint()->nNode.GetIndex(),
             nEnd = rPam.GetMark()->nNode.GetIndex();
     if( nStt > nEnd )
     {
-        sal_uLong nTmp = nStt; nStt = nEnd; nEnd = nTmp;
+        ULONG nTmp = nStt; nStt = nEnd; nEnd = nTmp;
     }
 
     SwUndoDelNum* pUndo;
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if( DoesUndo() )
     {
-        pUndo = new SwUndoDelNum( rPam );
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        ClearRedo();
+        AppendUndo( pUndo = new SwUndoDelNum( rPam ) );
     }
     else
         pUndo = 0;
@@ -1366,13 +1572,13 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
             aRegH.RegisterInModify( pTNd, *pTNd );
 
             if( pUndo )
-                pUndo->AddNode( *pTNd, sal_False );
+                pUndo->AddNode( *pTNd, FALSE );
 
             // directly set list style attribute is reset, otherwise empty
             // list style is applied
             const SfxItemSet* pAttrSet = pTNd->GetpSwAttrSet();
             if ( pAttrSet &&
-                 pAttrSet->GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET )
+                 pAttrSet->GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_SET )
                 pTNd->ResetAttr( RES_PARATR_NUMRULE );
             else
                 pTNd->SetAttr( aEmptyRule );
@@ -1385,7 +1591,8 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
 
             if( RES_CONDTXTFMTCOLL == pTNd->GetFmtColl()->Which() )
                 pTNd->ChkCondColl();
-
+            //else if( !pOutlNd && NO_NUMBERING != //#outline level,zhaojianwei
+            //	((SwTxtFmtColl*)pTNd->GetFmtColl())->GetOutlineLevel() )
             else if( !pOutlNd &&
                 ((SwTxtFmtColl*)pTNd->GetFmtColl())->IsAssignedToListLevelOfOutlineStyle() )//<-end,zhaojianwei
                 pOutlNd = pTNd;
@@ -1401,21 +1608,21 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
 
 void SwDoc::InvalidateNumRules()
 {
-    for (sal_uInt16 n = 0; n < pNumRuleTbl->Count(); ++n)
-        (*pNumRuleTbl)[n]->SetInvalidRule(sal_True);
+    for (USHORT n = 0; n < pNumRuleTbl->Count(); ++n)
+        (*pNumRuleTbl)[n]->SetInvalidRule(TRUE);
 }
 
 // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
-sal_Bool lcl_IsNumOk( sal_uInt8 nSrchNum, sal_uInt8& rLower, sal_uInt8& rUpper,
-                    sal_Bool bOverUpper, sal_uInt8 nNumber )
+BOOL lcl_IsNumOk( BYTE nSrchNum, BYTE& rLower, BYTE& rUpper,
+                    BOOL bOverUpper, BYTE nNumber )
 {
     OSL_ENSURE( nNumber < MAXLEVEL,
             "<lcl_IsNumOk(..)> - misusage of method" );
 
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     {
         if( bOverUpper ? nSrchNum == nNumber : nSrchNum >= nNumber )
-            bRet = sal_True;
+            bRet = TRUE;
         else if( nNumber > rLower )
             rLower = nNumber;
         else if( nNumber < rUpper )
@@ -1424,9 +1631,9 @@ sal_Bool lcl_IsNumOk( sal_uInt8 nSrchNum, sal_uInt8& rLower, sal_uInt8& rUpper,
     return bRet;
 }
 
-sal_Bool lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
+BOOL lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     const SwNode& rNd = rIdx.GetNode();
     switch( rNd.GetNodeType() )
     {
@@ -1439,29 +1646,29 @@ sal_Bool lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
         bRet = SwTableBoxStartNode == ((SwStartNode&)rNd).GetStartNodeType();
         break;
 
-    case ND_SECTIONNODE:            // der ist erlaubt, also weiter
-        bRet = sal_True;
+    case ND_SECTIONNODE:			// der ist erlaubt, also weiter
+        bRet = TRUE;
         break;
     }
     return bRet;
 }
 
-sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
-                            sal_Bool bOverUpper, sal_uInt8* pUpper, sal_uInt8* pLower )
+BOOL lcl_GotoNextPrevNum( SwPosition& rPos, BOOL bNext,
+                            BOOL bOverUpper, BYTE* pUpper, BYTE* pLower )
 {
     const SwTxtNode* pNd = rPos.nNode.GetNode().GetTxtNode();
     const SwNumRule* pRule;
     if( !pNd || 0 == ( pRule = pNd->GetNumRule()))
-        return sal_False;
+        return FALSE;
 
-    sal_uInt8 nSrchNum = static_cast<sal_uInt8>(pNd->GetActualListLevel());
+    BYTE nSrchNum = static_cast<BYTE>(pNd->GetActualListLevel());
 
     SwNodeIndex aIdx( rPos.nNode );
     if( ! pNd->IsCountedInList() )
     {
         // falls gerade mal NO_NUMLEVEL an ist, so such den vorherigen Node
         // mit Nummerierung
-        sal_Bool bError = sal_False;
+        BOOL bError = FALSE;
         do {
             aIdx--;
             if( aIdx.GetNode().IsTxtNode() )
@@ -1469,28 +1676,28 @@ sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
                 pNd = aIdx.GetNode().GetTxtNode();
                 pRule = pNd->GetNumRule();
 
-                sal_uInt8 nTmpNum;
+                BYTE nTmpNum;
 
                 if( pRule  )
                 {
-                    nTmpNum = static_cast<sal_uInt8>(pNd->GetActualListLevel());
+                    nTmpNum = static_cast<BYTE>(pNd->GetActualListLevel());
                     if( !( ! pNd->IsCountedInList() &&
                          (nTmpNum >= nSrchNum )) )
-                        break;      // gefunden
+                        break;		// gefunden
                 }
                 else
-                    bError = sal_True;
+                    bError = TRUE;
             }
             else
                 bError = !lcl_IsValidPrevNextNumNode( aIdx );
 
         } while( !bError );
         if( bError )
-            return sal_False;
+            return FALSE;
     }
 
-    sal_uInt8 nLower = nSrchNum, nUpper = nSrchNum;
-    sal_Bool bRet = sal_False;
+    BYTE nLower = nSrchNum, nUpper = nSrchNum;
+    BOOL bRet = FALSE;
 
     const SwTxtNode* pLast;
     if( bNext )
@@ -1508,11 +1715,11 @@ sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
             if( pRule )
             {
                 if( ::lcl_IsNumOk( nSrchNum, nLower, nUpper, bOverUpper,
-                                    static_cast<sal_uInt8>(pNd->GetActualListLevel()) ))
+                                    static_cast<BYTE>(pNd->GetActualListLevel()) ))
                 {
                     rPos.nNode = aIdx;
                     rPos.nContent.Assign( (SwTxtNode*)pNd, 0 );
-                    bRet = sal_True;
+                    bRet = TRUE;
                     break;
                 }
                 else
@@ -1530,7 +1737,7 @@ sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
             aIdx--;
     }
 
-    if( !bRet && !bOverUpper && pLast )     // nicht ueber hoehere Nummmern, aber bis Ende
+    if( !bRet && !bOverUpper && pLast )		// nicht ueber hoehere Nummmern, aber bis Ende
     {
         if( bNext )
         {
@@ -1543,7 +1750,7 @@ sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
             rPos.nNode.Assign( *pLast );
             rPos.nContent.Assign( (SwTxtNode*)pLast, 0 );
         }
-        bRet = sal_True;
+        bRet = TRUE;
     }
 
     if( bRet )
@@ -1556,12 +1763,13 @@ sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
     return bRet;
 }
 
-sal_Bool SwDoc::GotoNextNum( SwPosition& rPos, sal_Bool bOverUpper,
-                            sal_uInt8* pUpper, sal_uInt8* pLower  )
+BOOL SwDoc::GotoNextNum( SwPosition& rPos, BOOL bOverUpper,
+                            BYTE* pUpper, BYTE* pLower  )
 {
-   return ::lcl_GotoNextPrevNum( rPos, sal_True, bOverUpper, pUpper, pLower );
+   return ::lcl_GotoNextPrevNum( rPos, TRUE, bOverUpper, pUpper, pLower );
 }
 
+// --> OD 2008-03-18 #refactorlists# - add output parameter <sListId>
 const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                                         const bool bForward,
                                         const bool bNum,
@@ -1597,7 +1805,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                 const SwNumRule * pNumRule = pTxtNd->GetNumRule();
                 if (pNumRule)
                 {
-                    if ( ( pNumRule->IsOutlineRule() == ( bOutline ? sal_True : sal_False ) ) &&
+                    if ( ( pNumRule->IsOutlineRule() == ( bOutline ? TRUE : FALSE ) ) && // #115901#
                          ( ( bNum && pNumRule->Get(0).IsEnumeration()) ||
                            ( !bNum && pNumRule->Get(0).IsItemize() ) ) ) // #i22362#, #i29560#
                     {
@@ -1630,33 +1838,33 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
 
             pNode = &aIdx.GetNode();
         }
-        while (!(pNode == GetNodes().DocumentSectionStartNode(pStartFromNode) ||
-                 pNode == GetNodes().DocumentSectionEndNode(pStartFromNode)));
+        while (! (pNode == aNodes.DocumentSectionStartNode(pStartFromNode) ||
+                  pNode == aNodes.DocumentSectionEndNode(pStartFromNode)));
     }
 
     return pResult;
 }
 
 
-sal_Bool SwDoc::GotoPrevNum( SwPosition& rPos, sal_Bool bOverUpper,
-                            sal_uInt8* pUpper, sal_uInt8* pLower  )
+BOOL SwDoc::GotoPrevNum( SwPosition& rPos, BOOL bOverUpper,
+                            BYTE* pUpper, BYTE* pLower  )
 {
-   return ::lcl_GotoNextPrevNum( rPos, sal_False, bOverUpper, pUpper, pLower );
+   return ::lcl_GotoNextPrevNum( rPos, FALSE, bOverUpper, pUpper, pLower );
 }
 
-sal_Bool SwDoc::NumUpDown( const SwPaM& rPam, sal_Bool bDown )
+BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
 {
-    sal_uLong nStt = rPam.GetPoint()->nNode.GetIndex(),
+    ULONG nStt = rPam.GetPoint()->nNode.GetIndex(),
             nEnd = rPam.GetMark()->nNode.GetIndex();
     if( nStt > nEnd )
     {
-        sal_uLong nTmp = nStt; nStt = nEnd; nEnd = nTmp;
+        ULONG nTmp = nStt; nStt = nEnd; nEnd = nTmp;
     }
 
-    // -> outline nodes are promoted or demoted differently
+    // -> #115901# outline nodes are promoted or demoted differently
     bool bOnlyOutline = true;
     bool bOnlyNonOutline = true;
-    for (sal_uLong n = nStt; n <= nEnd; n++)
+    for (ULONG n = nStt; n <= nEnd; n++)
     {
         SwTxtNode * pTxtNd = GetNodes()[n]->GetTxtNode();
 
@@ -1674,50 +1882,51 @@ sal_Bool SwDoc::NumUpDown( const SwPaM& rPam, sal_Bool bDown )
         }
     }
 
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
     char nDiff = bDown ? 1 : -1;
 
     if (bOnlyOutline)
         bRet = OutlineUpDown(rPam, nDiff);
     else if (bOnlyNonOutline)
     {
-        /* #i24560#
+        /* --> #i24560#
 
         Only promote or demote if all selected paragraphs are
         promotable resp. demotable.
 
         */
-        for (sal_uLong nTmp = nStt; nTmp <= nEnd; ++nTmp)
+        for (ULONG nTmp = nStt; nTmp <= nEnd; ++nTmp)
         {
             SwTxtNode* pTNd = GetNodes()[ nTmp ]->GetTxtNode();
 
-            // Make code robust: consider case that the node doesn't denote a
-            // text node.
+            // --> OD 2006-10-19 #134160# - make code robust:
+            // consider case that the node doesn't denote a text node.
             if ( pTNd )
             {
                 SwNumRule * pRule = pTNd->GetNumRule();
 
                 if (pRule)
                 {
-                    sal_uInt8 nLevel = static_cast<sal_uInt8>(pTNd->GetActualListLevel());
+                    BYTE nLevel = static_cast<BYTE>(pTNd->GetActualListLevel());
                     if( (-1 == nDiff && 0 >= nLevel) ||
                         (1 == nDiff && MAXLEVEL - 1 <= nLevel))
-                        bRet = sal_False;
+                        bRet = FALSE;
                 }
             }
+            // <--
         }
 
         if( bRet )
         {
-            if (GetIDocumentUndoRedo().DoesUndo())
+            if( DoesUndo() )
             {
-                SwUndo *const pUndo( new SwUndoNumUpDown(rPam, nDiff) );
-                GetIDocumentUndoRedo().AppendUndo(pUndo);
+                ClearRedo();
+                AppendUndo( new SwUndoNumUpDown( rPam, nDiff ) );
             }
 
             String sNumRule;
 
-            for(sal_uLong nTmp = nStt; nTmp <= nEnd; ++nTmp )
+            for(ULONG nTmp = nStt; nTmp <= nEnd; ++nTmp )
             {
                 SwTxtNode* pTNd = GetNodes()[ nTmp ]->GetTxtNode();
 
@@ -1727,7 +1936,7 @@ sal_Bool SwDoc::NumUpDown( const SwPaM& rPam, sal_Bool bDown )
 
                     if (pRule)
                     {
-                        sal_uInt8 nLevel = static_cast<sal_uInt8>(pTNd->GetActualListLevel());
+                        BYTE nLevel = static_cast<BYTE>(pTNd->GetActualListLevel());
                         nLevel = nLevel + nDiff;
 
                         pTNd->SetAttrListLevel(nLevel);
@@ -1743,12 +1952,12 @@ sal_Bool SwDoc::NumUpDown( const SwPaM& rPam, sal_Bool bDown )
     return bRet;
 }
 
-sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutlMv )
+BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
-    sal_uLong nStIdx = pStt->nNode.GetIndex();
-    sal_uLong nEndIdx = pEnd->nNode.GetIndex();
+    ULONG nStIdx = pStt->nNode.GetIndex();
+    ULONG nEndIdx = pEnd->nNode.GetIndex();
 
     // Here are some sophisticated checks whether the wished PaM will be moved or not.
     // For moving outlines (bIsOutlMv) I've already done some checks, so here are two different
@@ -1768,24 +1977,24 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
         {   // First is a start node
             pTmp2 = pTmp1->EndOfSectionNode();
             if( pTmp2->GetIndex() > nEndIdx )
-                return sal_False; // Its end node is behind the moved range
+                return FALSE; // Its end node is behind the moved range
         }
         pTmp1 = pTmp1->StartOfSectionNode()->EndOfSectionNode();
         if( pTmp1->GetIndex() <= nEndIdx )
-            return sal_False; // End node inside but start node before moved range => no.
+            return FALSE; // End node inside but start node before moved range => no.
         pTmp1 = GetNodes()[ nEndIdx ];
         if( pTmp1->IsEndNode() )
         {   // The last one is an end node
             pTmp1 = pTmp1->StartOfSectionNode();
             if( pTmp1->GetIndex() < nStIdx )
-                return sal_False; // Its start node is before the moved range.
+                return FALSE; // Its start node is before the moved range.
         }
         pTmp1 = pTmp1->StartOfSectionNode();
         if( pTmp1->GetIndex() >= nStIdx )
-            return sal_False; // A start node which ends behind the moved area => no.
+            return FALSE; // A start node which ends behind the moved area => no.
     }
 
-    sal_uLong nInStIdx, nInEndIdx;
+    ULONG nInStIdx, nInEndIdx;
     long nOffs = nOffset;
     if( nOffset > 0 )
     {
@@ -1796,8 +2005,8 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
     else
     {
         //Impossible to move to negative index
-        if( sal_uLong(abs( nOffset )) > nStIdx)
-            return sal_False;
+        if( ULONG(abs( nOffset )) > nStIdx)
+            return FALSE;
 
         nInEndIdx = nStIdx - 1;
         nStIdx += nOffset;
@@ -1807,7 +2016,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
     // [ nStIdx, nInEndIdx ] mit [ nInStIdx, nEndIdx ]
 
     if( nEndIdx >= GetNodes().GetEndOfContent().GetIndex() )
-        return sal_False;
+        return FALSE;
 
     if( !bIsOutlMv )
     {   // And here the restrictions for moving paragraphs other than chapters (outlines)
@@ -1818,7 +2027,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
         pTmp1 = GetNodes()[ nStIdx ]->StartOfSectionNode();
         pTmp2 = GetNodes()[ nInStIdx ]->StartOfSectionNode();
         if( pTmp1 != pTmp2 )
-            return sal_False; // "start" nodes in different sections
+            return FALSE; // "start" nodes in different sections
         pTmp1 = GetNodes()[ nEndIdx ];
         bool bIsEndNode = pTmp1->IsEndNode();
         if( !pTmp1->IsStartNode() )
@@ -1838,21 +2047,21 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
         }
         pTmp2 = pTmp2->EndOfSectionNode();
         if( pTmp1 != pTmp2 )
-            return sal_False; // The "end" notes are in different sections
+            return FALSE; // The "end" notes are in different sections
     }
 
     // auf Redlining testen - darf die Selektion ueberhaupt verschoben
     // werden?
     if( !IsIgnoreRedline() )
     {
-        sal_uInt16 nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_DELETE );
+        USHORT nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_DELETE );
         if( USHRT_MAX != nRedlPos )
         {
             SwPosition aStPos( *pStt ), aEndPos( *pEnd );
             aStPos.nContent = 0;
             SwCntntNode* pCNd = pEnd->nNode.GetNode().GetCntntNode();
             aEndPos.nContent = pCNd ? pCNd->Len() : 1;
-            sal_Bool bCheckDel = sal_True;
+            BOOL bCheckDel = TRUE;
 
             // es existiert fuer den Bereich irgendein Redline-Delete-Object
             for( ; nRedlPos < GetRedlineTbl().Count(); ++nRedlPos )
@@ -1864,24 +2073,24 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
                     switch( ComparePosition( *pRStt, *pREnd, aStPos, aEndPos ))
                     {
                     case POS_COLLIDE_START:
-                    case POS_BEHIND:            // Pos1 liegt hinter Pos2
+                    case POS_BEHIND:			// Pos1 liegt hinter Pos2
                         nRedlPos = GetRedlineTbl().Count();
                         break;
 
                     case POS_COLLIDE_END:
-                    case POS_BEFORE:            // Pos1 liegt vor Pos2
+                    case POS_BEFORE:			// Pos1 liegt vor Pos2
                         break;
-                    case POS_INSIDE:            // Pos1 liegt vollstaendig in Pos2
+                    case POS_INSIDE:			// Pos1 liegt vollstaendig in Pos2
                         // ist erlaubt, aber checke dann alle nachfolgenden
                         // auf Ueberlappungen
-                        bCheckDel = sal_False;
+                        bCheckDel = FALSE;
                         break;
 
-                    case POS_OUTSIDE:           // Pos2 liegt vollstaendig in Pos1
-                    case POS_EQUAL:             // Pos1 ist genauso gross wie Pos2
-                    case POS_OVERLAP_BEFORE:    // Pos1 ueberlappt Pos2 am Anfang
-                    case POS_OVERLAP_BEHIND:    // Pos1 ueberlappt Pos2 am Ende
-                        return sal_False;
+                    case POS_OUTSIDE:			// Pos2 liegt vollstaendig in Pos1
+                    case POS_EQUAL:				// Pos1 ist genauso gross wie Pos2
+                    case POS_OVERLAP_BEFORE:	// Pos1 ueberlappt Pos2 am Anfang
+                    case POS_OVERLAP_BEHIND:	// Pos1 ueberlappt Pos2 am Ende
+                        return FALSE;
                     }
                 }
             }
@@ -1903,7 +2112,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
     {
         // wenn der Bereich komplett im eigenen Redline liegt, kann es
         // verschoben werden!
-        sal_uInt16 nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_INSERT );
+        USHORT nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_INSERT );
         if( USHRT_MAX != nRedlPos )
         {
             SwRedline* pTmp = GetRedlineTbl()[ nRedlPos ];
@@ -1939,7 +2148,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
 
         if( !pOwnRedl )
         {
-            GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+            StartUndo( UNDO_START, NULL );
 
             // zuerst das Insert, dann das Loeschen
             SwPosition aInsPos( aIdx );
@@ -1951,9 +2160,9 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
             rOrigPam.DeleteMark();
             rOrigPam.GetPoint()->nNode = aIdx.GetIndex() - 1;
 
-            sal_Bool bDelLastPara = !aInsPos.nNode.GetNode().IsCntntNode();
+            BOOL bDelLastPara = !aInsPos.nNode.GetNode().IsCntntNode();
 
-            /* When copying to a non-content node Copy will
+            /* #101076# When copying to a non-content node Copy will
                insert a paragraph before that node and insert before
                that inserted node. Copy creates an SwUndoInserts that
                does not cover the extra paragraph. Thus we insert the
@@ -1964,7 +2173,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
                 /* aInsPos points to the non-content node. Move it to
                    the previous content node. */
                 SwPaM aInsPam(aInsPos);
-                sal_Bool bMoved = aInsPam.Move(fnMoveBackward);
+                BOOL bMoved = aInsPam.Move(fnMoveBackward);
                 OSL_ENSURE(bMoved, "No content node found!");
 
                 if (bMoved)
@@ -1990,21 +2199,21 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
                 // alle die im zu loeschenden Node stehen, mussen auf den
                 // naechsten umgestezt werden
                 SwPosition* pPos;
-                for( sal_uInt16 n = 0; n < GetRedlineTbl().Count(); ++n )
+                for( USHORT n = 0; n < GetRedlineTbl().Count(); ++n )
                 {
                     SwRedline* pTmp = GetRedlineTbl()[ n ];
-                    if( ( pPos = &pTmp->GetBound(sal_True))->nNode == aIdx )
+                    if( ( pPos = &pTmp->GetBound(TRUE))->nNode == aIdx )
                     {
                         pPos->nNode++;
                         pPos->nContent.Assign( pPos->nNode.GetNode().GetCntntNode(),0);
                     }
-                    if( ( pPos = &pTmp->GetBound(sal_False))->nNode == aIdx )
+                    if( ( pPos = &pTmp->GetBound(FALSE))->nNode == aIdx )
                     {
                         pPos->nNode++;
                         pPos->nContent.Assign( pPos->nNode.GetNode().GetCntntNode(),0);
                     }
                 }
-                CorrRel( aIdx, aInsPos, 0, sal_False );
+                CorrRel( aIdx, aInsPos, 0, FALSE );
 
                 pCNd->JoinNext();
             }
@@ -2014,31 +2223,30 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
 
             RedlineMode_t eOld = GetRedlineMode();
             checkRedlining(eOld);
-            if (GetIDocumentUndoRedo().DoesUndo())
+            if( DoesUndo() )
             {
                 //JP 06.01.98: MUSS noch optimiert werden!!!
                 SetRedlineMode(
                    (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
-                SwUndo *const pUndo(new SwUndoRedlineDelete(aPam, UNDO_DELETE));
-                GetIDocumentUndoRedo().AppendUndo(pUndo);
+                AppendUndo( new SwUndoRedlineDelete( aPam, UNDO_DELETE ));
             }
 
             SwRedline* pNewRedline = new SwRedline( nsRedlineType_t::REDLINE_DELETE, aPam );
 
-            // prevent assertion from aPam's target being deleted
+            // #101654# prevent assertion from aPam's target being deleted
             // (Alternatively, one could just let aPam go out of scope, but
             //  that requires touching a lot of code.)
-            aPam.GetBound(sal_True).nContent.Assign( NULL, 0 );
-            aPam.GetBound(sal_False).nContent.Assign( NULL, 0 );
+            aPam.GetBound(TRUE).nContent.Assign( NULL, 0 );
+            aPam.GetBound(FALSE).nContent.Assign( NULL, 0 );
 
             AppendRedline( pNewRedline, true );
 
 //JP 06.01.98: MUSS noch optimiert werden!!!
 SetRedlineMode( eOld );
-            GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+            EndUndo( UNDO_END, NULL );
             SetModified();
 
-            return sal_True;
+            return TRUE;
         }
     }
 
@@ -2048,7 +2256,7 @@ SetRedlineMode( eOld );
         SplitRedline(aTemp);
     }
 
-    sal_uLong nRedlSttNd(0), nRedlEndNd(0);
+    ULONG nRedlSttNd(0), nRedlEndNd(0);
     if( pOwnRedl )
     {
         const SwPosition *pRStt = pOwnRedl->Start(), *pREnd = pOwnRedl->End();
@@ -2057,8 +2265,8 @@ SetRedlineMode( eOld );
     }
 
     SwUndoMoveNum* pUndo = 0;
-    sal_uLong nMoved = 0;
-    if (GetIDocumentUndoRedo().DoesUndo())
+    ULONG nMoved = 0;
+    if( DoesUndo() )
     {
         pUndo = new SwUndoMoveNum( rPam, nOffset, bIsOutlMv );
         nMoved = rPam.End()->nNode.GetIndex() - rPam.Start()->nNode.GetIndex() + 1;
@@ -2069,12 +2277,13 @@ SetRedlineMode( eOld );
 
     if( pUndo )
     {
+        ClearRedo();
         // i57907: Under circumstances (sections at the end of a chapter)
         // the rPam.Start() is not moved to the new position.
         // But aIdx should be at the new end position and as long as the number of moved paragraphs
         // is nMoved, I know, where the new position is.
         pUndo->SetStartNode( aIdx.GetIndex() - nMoved );
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        AppendUndo( pUndo );
     }
 
     if( pOwnRedl )
@@ -2095,12 +2304,12 @@ SetRedlineMode( eOld );
     }
 
     SetModified();
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
+BOOL SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, BOOL bDel )
 {
-    sal_Bool bResult = sal_False;
+    BOOL bResult = FALSE;
     SwTxtNode * pTxtNd = rIdx.GetNode().GetTxtNode();
 
     if (pTxtNd && pTxtNd->GetNumRule() != NULL &&
@@ -2108,23 +2317,23 @@ sal_Bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
     {
         if ( !pTxtNd->IsCountedInList() == !bDel)
         {
-            sal_Bool bOldNum = bDel; // == pTxtNd->IsCounted();
-            sal_Bool bNewNum = bDel ? sal_False : sal_True;
+            BOOL bOldNum = bDel; // == pTxtNd->IsCounted();
+            BOOL bNewNum = bDel ? FALSE : TRUE;
             pTxtNd->SetCountedInList(bNewNum ? true : false);
 
             SetModified();
 
-            bResult = sal_True;
+            bResult = TRUE;
 
-            if (GetIDocumentUndoRedo().DoesUndo())
+            if (DoesUndo())
             {
                 SwUndoNumOrNoNum * pUndo =
                     new SwUndoNumOrNoNum(rIdx, bOldNum, bNewNum);
 
-                GetIDocumentUndoRedo().AppendUndo(pUndo);
+                AppendUndo(pUndo);
             }
         }
-        else if (bDel && pTxtNd->GetNumRule(sal_False) &&
+        else if (bDel && pTxtNd->GetNumRule(FALSE) &&
                  pTxtNd->GetActualListLevel() >= 0 &&
                  pTxtNd->GetActualListLevel() < MAXLEVEL)
         {
@@ -2132,7 +2341,7 @@ sal_Bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
 
             DelNumRules(aPam);
 
-            bResult = sal_True;
+            bResult = TRUE;
         }
     }
 
@@ -2146,15 +2355,16 @@ SwNumRule* SwDoc::GetCurrNumRule( const SwPosition& rPos ) const
 
     if( pTNd )
     {
+//        pTNd->SyncNumberAndNumRule();
         pRet = pTNd->GetNumRule();
     }
 
     return pRet;
 }
 
-sal_uInt16 SwDoc::FindNumRule( const String& rName ) const
+USHORT SwDoc::FindNumRule( const String& rName ) const
 {
-    for( sal_uInt16 n = pNumRuleTbl->Count(); n; )
+    for( USHORT n = pNumRuleTbl->Count(); n; )
         if( (*pNumRuleTbl)[ --n ]->GetName() == rName )
             return n;
 
@@ -2169,7 +2379,7 @@ SwNumRule* SwDoc::FindNumRulePtr( const String& rName ) const
 
     if ( !pResult )
     {
-        for (sal_uInt16 n = 0; n < pNumRuleTbl->Count(); ++n)
+        for (USHORT n = 0; n < pNumRuleTbl->Count(); ++n)
         {
             if ((*pNumRuleTbl)[n]->GetName() == rName)
             {
@@ -2192,9 +2402,9 @@ void SwDoc::AddNumRule(SwNumRule * pRule)
     createListForListStyle( pRule->GetName() );
 }
 
-sal_uInt16 SwDoc::MakeNumRule( const String &rName,
+USHORT SwDoc::MakeNumRule( const String &rName,
             const SwNumRule* pCpy,
-            sal_Bool bBroadcast,
+            BOOL bBroadcast,
             const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode )
 {
     SwNumRule* pNew;
@@ -2219,14 +2429,15 @@ sal_uInt16 SwDoc::MakeNumRule( const String &rName,
                               eDefaultNumberFormatPositionAndSpaceMode );
     }
 
-    sal_uInt16 nRet = pNumRuleTbl->Count();
+    USHORT nRet = pNumRuleTbl->Count();
 
     AddNumRule(pNew);
 
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if (DoesUndo())
     {
         SwUndo * pUndo = new SwUndoNumruleCreate(pNew, this);
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+
+        AppendUndo(pUndo);
     }
 
     if (bBroadcast)
@@ -2236,7 +2447,7 @@ sal_uInt16 SwDoc::MakeNumRule( const String &rName,
     return nRet;
 }
 
-String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) const
+String SwDoc::GetUniqueNumRuleName( const String* pChkStr, BOOL bAutoNum ) const
 {
     String aName;
     if( bAutoNum )
@@ -2255,8 +2466,8 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
         aName = SW_RESSTR( STR_NUMRULE_DEFNAME );
     }
 
-    sal_uInt16 nNum(0), nTmp, nFlagSize = ( pNumRuleTbl->Count() / 8 ) +2;
-    sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
+    USHORT nNum(0), nTmp, nFlagSize = ( pNumRuleTbl->Count() / 8 ) +2;
+    BYTE* pSetFlags = new BYTE[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
     xub_StrLen nNmLen = aName.Len();
@@ -2274,7 +2485,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
     }
 
     const SwNumRule* pNumRule;
-    sal_uInt16 n;
+    USHORT n;
 
     for( n = 0; n < pNumRuleTbl->Count(); ++n )
         if( 0 != ( pNumRule = (*pNumRuleTbl)[ n ] ) )
@@ -2283,7 +2494,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Nummer bestimmen und das Flag setzen
-                nNum = (sal_uInt16)rNm.Copy( nNmLen ).ToInt32();
+                nNum = (USHORT)rNm.Copy( nNmLen ).ToInt32();
                 if( nNum-- && nNum < pNumRuleTbl->Count() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
@@ -2315,14 +2526,14 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
 void SwDoc::UpdateNumRule()
 {
     const SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
-    for( sal_uInt16 n = 0; n < rNmTbl.Count(); ++n )
+    for( USHORT n = 0; n < rNmTbl.Count(); ++n )
         if( rNmTbl[ n ]->IsInvalidRule() )
             rNmTbl[ n ]->Validate();
 }
 
 void SwDoc::MarkListLevel( const String& sListId,
                            const int nListLevel,
-                           const sal_Bool bValue )
+                           const BOOL bValue )
 {
     SwList* pList = getListByName( sListId );
 
@@ -2334,15 +2545,15 @@ void SwDoc::MarkListLevel( const String& sListId,
 
 void SwDoc::MarkListLevel( SwList& rList,
                            const int nListLevel,
-                           const sal_Bool bValue )
+                           const BOOL bValue )
 {
     // Set new marked list level and notify all affected nodes of the changed mark.
     rList.MarkListLevel( nListLevel, bValue );
 }
 
-sal_Bool SwDoc::IsFirstOfNumRule(SwPosition & rPos)
+BOOL SwDoc::IsFirstOfNumRule(SwPosition & rPos)
 {
-    sal_Bool bResult = sal_False;
+    BOOL bResult = FALSE;
     SwTxtNode * pTxtNode = rPos.nNode.GetNode().GetTxtNode();
 
     if (pTxtNode)
@@ -2390,7 +2601,8 @@ void SwDoc::removeListItem( const SwNodeNum& rNodeNum )
     const tImplSortedNodeNumList::size_type nDeleted = mpListItemsList->erase( &rNodeNum );
     if ( nDeleted > 1 )
     {
-        OSL_FAIL( "<SwDoc::RemoveListItem(..)> - <SwNodeNum> was registered more than once as numbered item!" );
+        OSL_ENSURE( false,
+                "<SwDoc::RemoveListItem(..)> - <SwNodeNum> was registered more than once as numbered item!" );
     }
 }
 
@@ -2443,23 +2655,23 @@ sal_Int32 SwDoc::getOutlineNodesCount() const
 
 int SwDoc::getOutlineLevel( const sal_Int32 nIdx ) const
 {
-    return GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
-                                           // GetTxtNode()->GetOutlineLevel();              //#outline level,zhaojianwei
-                                GetTxtNode()->GetAttrOutlineLevel()-1;  //<-end,zhaojianwei
+    return GetNodes().GetOutLineNds()[ static_cast<USHORT>(nIdx) ]->
+                                           // GetTxtNode()->GetOutlineLevel();				//#outline level,zhaojianwei
+                                GetTxtNode()->GetAttrOutlineLevel()-1;	//<-end,zhaojianwei
 }
 
 String SwDoc::getOutlineText( const sal_Int32 nIdx,
                               const bool bWithNumber,
                               const bool bWithSpacesForLevel ) const
 {
-    return GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
+    return GetNodes().GetOutLineNds()[ static_cast<USHORT>(nIdx) ]->
                 GetTxtNode()->GetExpandTxt( 0, STRING_LEN, bWithNumber,
                                             bWithNumber, bWithSpacesForLevel );
 }
 
 SwTxtNode* SwDoc::getOutlineNode( const sal_Int32 nIdx ) const
 {
-    return GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->GetTxtNode();
+    return GetNodes().GetOutLineNds()[ static_cast<USHORT>(nIdx) ]->GetTxtNode();
 }
 
 void SwDoc::getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const
@@ -2467,8 +2679,8 @@ void SwDoc::getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOu
     orOutlineNodeList.clear();
     orOutlineNodeList.reserve( getOutlineNodesCount() );
 
-    const sal_uInt16 nOutlCount( static_cast<sal_uInt16>(getOutlineNodesCount()) );
-    for ( sal_uInt16 i = 0; i < nOutlCount; ++i )
+    const USHORT nOutlCount( static_cast<USHORT>(getOutlineNodesCount()) );
+    for ( USHORT i = 0; i < nOutlCount; ++i )
     {
         orOutlineNodeList.push_back(
             GetNodes().GetOutLineNds()[i]->GetTxtNode() );
@@ -2486,14 +2698,16 @@ SwList* SwDoc::createList( String sListId,
 
     if ( getListByName( sListId ) )
     {
-        OSL_FAIL( "<SwDoc::createList(..)> - provided list id already used. Serious defect -> please inform OD." );
+        OSL_ENSURE( false,
+                "<SwDoc::createList(..)> - provided list id already used. Serious defect -> please inform OD." );
         return 0;
     }
 
     SwNumRule* pDefaultNumRuleForNewList = FindNumRulePtr( sDefaultListStyleName );
     if ( !pDefaultNumRuleForNewList )
     {
-        OSL_FAIL( "<SwDoc::createList(..)> - for provided default list style name no list style is found. Serious defect -> please inform OD." );
+        OSL_ENSURE( false,
+                "<SwDoc::createList(..)> - for provided default list style name no list style is found. Serious defect -> please inform OD." );
         return 0;
     }
 
@@ -2517,7 +2731,7 @@ SwList* SwDoc::getListByName( const String sListId ) const
 {
     SwList* pList = 0;
 
-    boost::unordered_map< String, SwList*, StringHash >::const_iterator
+    std::hash_map< String, SwList*, StringHash >::const_iterator
                                             aListIter = maLists.find( sListId );
     if ( aListIter != maLists.end() )
     {
@@ -2531,20 +2745,23 @@ SwList* SwDoc::createListForListStyle( const String sListStyleName )
 {
     if ( sListStyleName.Len() == 0 )
     {
-        OSL_FAIL( "<SwDoc::createListForListStyle(..)> - no list style name provided. Serious defect -> please inform OD." );
+        OSL_ENSURE( false,
+                "<SwDoc::createListForListStyle(..)> - no list style name provided. Serious defect -> please inform OD." );
         return 0;
     }
 
     if ( getListForListStyle( sListStyleName ) )
     {
-        OSL_FAIL( "<SwDoc::createListForListStyle(..)> - a list for the provided list style name already exists. Serious defect -> please inform OD." );
+        OSL_ENSURE( false,
+                "<SwDoc::createListForListStyle(..)> - a list for the provided list style name already exists. Serious defect -> please inform OD." );
         return 0;
     }
 
     SwNumRule* pNumRule = FindNumRulePtr( sListStyleName );
     if ( !pNumRule )
     {
-        OSL_FAIL( "<SwDoc::createListForListStyle(..)> - for provided list style name no list style is found. Serious defect -> please inform OD." );
+        OSL_ENSURE( false,
+                "<SwDoc::createListForListStyle(..)> - for provided list style name no list style is found. Serious defect -> please inform OD." );
         return 0;
     }
 
@@ -2564,7 +2781,7 @@ SwList* SwDoc::getListForListStyle( const String sListStyleName ) const
 {
     SwList* pList = 0;
 
-    boost::unordered_map< String, SwList*, StringHash >::const_iterator
+    std::hash_map< String, SwList*, StringHash >::const_iterator
                             aListIter = maListStyleLists.find( sListStyleName );
     if ( aListIter != maListStyleLists.end() )
     {
@@ -2625,16 +2842,19 @@ namespace listfunc
     }
     const String CreateUniqueListId( const SwDoc& rDoc )
     {
-        // #i92478#
+        // --> OD 2008-08-06 #i92478#
         String aNewListId = String::CreateFromAscii( "list" );
+        // <--
         sal_Int64 n = Time().GetTime();
         n += Date().GetDate();
         n += rand();
-        // #i92478#
+        // --> OD 2008-08-06 #i92478#
         aNewListId += String::CreateFromInt64( n );
+        // <--
 
         return MakeListIdUnique( rDoc, aNewListId );
     }
 }
+// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

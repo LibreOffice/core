@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
     : DrawControllerInterfaceBase(&rBase),
       BroadcastHelperOwner(SfxBaseController::m_aMutex),
       OPropertySetHelper( static_cast<OBroadcastHelperVar<
-          OMultiTypeInterfaceContainerHelper,
+          OMultiTypeInterfaceContainerHelper, 
           OMultiTypeInterfaceContainerHelper::keyType>& >(
               BroadcastHelperOwner::maBroadcastHelper)),
       mpBase(&rBase),
@@ -113,7 +113,7 @@ void DrawController::SetSubController (
     mxSubController = rxSubController;
     mpPropertyArrayHelper.reset();
     maLastVisArea = Rectangle();
-
+    
     // Inform listeners about the changed state.
     FireSelectionChangeListener();
 }
@@ -124,7 +124,7 @@ void DrawController::SetSubController (
 // XInterface
 
 IMPLEMENT_FORWARD_XINTERFACE2(
-    DrawController,
+    DrawController, 
     DrawControllerInterfaceBase,
     OPropertySetHelper);
 
@@ -166,16 +166,14 @@ void SAL_CALL DrawController::dispose (void)
         {
             mbDisposing = true;
 
-            boost::shared_ptr<ViewShell> pViewShell;
-            if (mpBase)
-                pViewShell = mpBase->GetMainViewShell();
+            boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
             if ( pViewShell )
             {
                 pViewShell->DeactivateCurrentFunction();
                 DrawDocShell* pDocShell = pViewShell->GetDocSh();
                 if ( pDocShell != NULL )
-                    pDocShell->SetDocShellFunction(0);
-            }
+                    pDocShell->SetDocShellFunction(0);                 
+            }                                                  
             pViewShell.reset();
 
             // When the controller has not been detached from its view
@@ -190,7 +188,7 @@ void SAL_CALL DrawController::dispose (void)
             OPropertySetHelper::disposing();
 
             DisposeFrameworkControllers();
-
+            
             SfxBaseController::dispose();
         }
     }
@@ -211,7 +209,7 @@ void SAL_CALL DrawController::addEventListener(
 
 
 void SAL_CALL DrawController::removeEventListener (
-    const Reference<lang::XEventListener >& aListener)
+    const Reference<lang::XEventListener >& aListener) 
     throw (RuntimeException)
 {
     if(!rBHelper.bDisposed && !rBHelper.bInDispose && !mbDisposing)
@@ -249,7 +247,7 @@ OUString SAL_CALL DrawController::getImplementationName(  ) throw(RuntimeExcepti
 
 
 
-static OUString ssServiceName (RTL_CONSTASCII_USTRINGPARAM(
+static OUString ssServiceName (OUString::createFromAscii(
     "com.sun.star.drawing.DrawingDocumentDrawView"));
 
 sal_Bool SAL_CALL DrawController::supportsService (
@@ -300,7 +298,7 @@ Any SAL_CALL DrawController::getSelection()
 {
     ThrowIfDisposed();
     SolarMutexGuard aGuard;
-
+    
     if (mxSubController.is())
         return mxSubController->getSelection();
     else
@@ -324,7 +322,7 @@ void SAL_CALL DrawController::addSelectionChangeListener(
 
 
 void SAL_CALL DrawController::removeSelectionChangeListener(
-    const Reference< view::XSelectionChangeListener >& xListener )
+    const Reference< view::XSelectionChangeListener >& xListener ) 
     throw(RuntimeException)
 {
     if (rBHelper.bDisposed)
@@ -404,7 +402,7 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage (void)
     SolarMutexGuard aGuard;
     Reference<drawing::XDrawPage> xPage;
 
-    // Get current page from sub controller.
+    // Get current page from sub controller.	
     if (mxSubController.is())
         xPage = mxSubController->getCurrentPage();
 
@@ -424,17 +422,17 @@ void DrawController::FireVisAreaChanged (const Rectangle& rVisArea) throw()
     if( maLastVisArea != rVisArea )
     {
         Any aNewValue;
-        aNewValue <<= awt::Rectangle(
-            rVisArea.Left(),
-            rVisArea.Top(),
-            rVisArea.GetWidth(),
+        aNewValue <<= awt::Rectangle( 
+            rVisArea.Left(), 
+            rVisArea.Top(), 
+            rVisArea.GetWidth(), 
             rVisArea.GetHeight() );
 
         Any aOldValue;
-        aOldValue <<= awt::Rectangle(
-            maLastVisArea.Left(),
-            maLastVisArea.Top(),
-            maLastVisArea.GetWidth(),
+        aOldValue <<= awt::Rectangle( 
+            maLastVisArea.Left(), 
+            maLastVisArea.Top(), 
+            maLastVisArea.GetWidth(), 
             maLastVisArea.GetHeight() );
 
         FirePropertyChange (PROPERTY_WORKAREA, aNewValue, aOldValue);
@@ -461,7 +459,7 @@ void DrawController::FireSelectionChangeListener() throw()
         {
             try
             {
-                view::XSelectionChangeListener * pL =
+                view::XSelectionChangeListener * pL = 
                     static_cast<view::XSelectionChangeListener*>(aIt.next());
                 if (pL != NULL)
                     pL->selectionChanged( aEvent );
@@ -532,7 +530,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
         catch( uno::Exception& e )
         {
             (void)e;
-            OSL_FAIL(
+            DBG_ERROR(
                 (::rtl::OString("sd::SdUnoDrawView::FireSwitchCurrentPage(), "
                     "exception caught: ") +
                     ::rtl::OUStringToOString(
@@ -635,7 +633,7 @@ sal_Int64 SAL_CALL DrawController::getSomething (const Sequence<sal_Int8>& rId)
     throw (RuntimeException)
 {
     sal_Int64 nResult = 0;
-
+    
     if (rId.getLength() == 16
         && rtl_compareMemory(getUnoTunnelId().getConstArray(), rId.getConstArray(), 16) == 0)
     {
@@ -654,13 +652,13 @@ void DrawController::FillPropertyTable (
     ::std::vector<beans::Property>& rProperties)
 {
     rProperties.push_back(
-        beans::Property(
+        beans::Property( 
             OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleArea") ),
             PROPERTY_WORKAREA,
             ::getCppuType((const ::com::sun::star::awt::Rectangle*)0),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY));
     rProperties.push_back(
-        beans::Property(
+        beans::Property( 
             OUString( RTL_CONSTASCII_USTRINGPARAM("SubController") ),
             PROPERTY_SUB_CONTROLLER,
             ::getCppuType((const Reference<drawing::XDrawSubController>*)0),
@@ -724,7 +722,7 @@ IPropertyArrayHelper & DrawController::getInfoHelper()
             aPropertySequence[i] = aProperties[i];
         mpPropertyArrayHelper.reset(new OPropertyArrayHelper(aPropertySequence, sal_False));
     }
-
+   
     return *mpPropertyArrayHelper.get();
 }
 
@@ -797,9 +795,9 @@ uno::Reference< awt::XControl > SAL_CALL DrawController::getControl( const uno::
 
 
 sal_Bool DrawController::convertFastPropertyValue (
-    Any & rConvertedValue,
-    Any & rOldValue,
-    sal_Int32 nHandle,
+    Any & rConvertedValue, 
+    Any & rOldValue, 
+    sal_Int32 nHandle, 
     const Any& rValue)
     throw ( com::sun::star::lang::IllegalArgumentException)
 {
@@ -814,16 +812,14 @@ sal_Bool DrawController::convertFastPropertyValue (
     else if (mxSubController.is())
     {
         rConvertedValue = rValue;
-        try
-        {
-            rOldValue = mxSubController->getFastPropertyValue(nHandle);
-            bResult = (rOldValue != rConvertedValue);
-        }
-        catch(beans::UnknownPropertyException aException)
-        {
-            // The prperty is unknown and thus an illegal argument to this method.
-            throw com::sun::star::lang::IllegalArgumentException();
-        }
+        rOldValue = mxSubController->getFastPropertyValue(nHandle);
+        bResult = (rOldValue != rConvertedValue);
+        /*        bResult = mpSubController->convertFastPropertyValue(
+            rConvertedValue,
+            rOldValue,
+            nHandle,
+            rValue);
+        */
     }
 
     return bResult;
@@ -833,7 +829,7 @@ sal_Bool DrawController::convertFastPropertyValue (
 
 
 void DrawController::setFastPropertyValue_NoBroadcast (
-    sal_Int32 nHandle,
+    sal_Int32 nHandle, 
     const Any& rValue)
     throw ( com::sun::star::uno::Exception)
 {
@@ -848,7 +844,7 @@ void DrawController::setFastPropertyValue_NoBroadcast (
 
 
 void DrawController::getFastPropertyValue (
-    Any & rRet,
+    Any & rRet, 
     sal_Int32 nHandle ) const
 {
     SolarMutexGuard aGuard;
@@ -856,10 +852,10 @@ void DrawController::getFastPropertyValue (
     switch( nHandle )
     {
         case PROPERTY_WORKAREA:
-            rRet <<= awt::Rectangle(
-                maLastVisArea.Left(),
-                maLastVisArea.Top(),
-                maLastVisArea.GetWidth(),
+            rRet <<= awt::Rectangle( 
+                maLastVisArea.Left(), 
+                maLastVisArea.Top(), 
+                maLastVisArea.GetWidth(), 
                 maLastVisArea.GetHeight());
             break;
 

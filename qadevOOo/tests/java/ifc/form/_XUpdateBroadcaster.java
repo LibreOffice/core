@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -219,7 +219,7 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
                       ! listener.updateCalled ;
         }
         catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occurred during removeUpdateListener()");
+            log.println("Exception occured during removeUpdateListener()");
             e.printStackTrace(log);
             bResult = false;
         }
@@ -235,14 +235,14 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
         }
 
     }
-
+    
     /**
     * Forces environment recreation.
     */
     protected void after() {
         disposeEnvironment();
     }
-
+    
 }
 
 

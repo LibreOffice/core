@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -138,7 +138,7 @@ public final class Record {
      *  <code>Record</code> length followed by the data in this
      *  <code>Record</code> object.
      *
-     *  @param  outs  The <code>OutputStream</code> to write the object.
+     *  @param  out  The <code>OutputStream</code> to write the object.
      *
      *  @throws  IOException  If any I/O error occurs.
      */
@@ -155,7 +155,7 @@ public final class Record {
      *  Read the necessary data to create a PDB from
      *  the <code>InputStream</code>.
      *
-     *  @param  ins  The <code>InputStream</code> to read data from
+     *  @param  in  The <code>InputStream</code> to read data from
      *              in order to restore the <code>object</code>.
      *
      *  @throws  IOException  If any I/O error occurs.

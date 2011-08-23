@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
+#if STLPORT_VERSION>=321
 #include <cstdarg>
+#endif
+
 
 #include <hintids.hxx>
 
@@ -79,9 +83,9 @@
 #include "envelp.hrc"
 #include "envimg.hxx"
 
-#define ENV_NEWDOC      RET_OK
-#define ENV_INSERT      RET_USER
-#define ENV_CANCEL      SHRT_MAX
+#define ENV_NEWDOC		RET_OK
+#define ENV_INSERT		RET_USER
+#define ENV_CANCEL		SHRT_MAX
 
 
 // Function used for labels and envelopes in applab.cxx and appenv.cxx
@@ -92,16 +96,16 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
     aText.EraseAllChars( '\r' );
 
 
-    sal_uInt16 nTokenPos = 0;
+    USHORT nTokenPos = 0;
     while( STRING_NOTFOUND != nTokenPos )
     {
         String aLine = aText.GetToken( 0, '\n', nTokenPos );
         while ( aLine.Len() )
         {
             String sTmpText;
-            sal_Bool bField = sal_False;
+            BOOL bField = FALSE;
 
-            sal_uInt16 nPos = aLine.Search( '<' );
+            USHORT nPos = aLine.Search( '<' );
             if ( nPos )
             {
                 sTmpText = aLine.Copy( 0, nPos );
@@ -122,14 +126,14 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
 
                     // Database fields must contain at least 3 points!
                     String sDBName( sTmpText.Copy( 1, sTmpText.Len() - 2));
-                    sal_uInt16 nCnt = sDBName.GetTokenCount('.');
+                    USHORT nCnt = sDBName.GetTokenCount('.');
                     if (nCnt >= 3)
                     {
-                        ::ReplacePoint(sDBName, sal_True);
+                        ::ReplacePoint(sDBName, TRUE);
                         SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, &rSh );
                         rFldMgr.InsertFld( aData );
                         sRet = sDBName;
-                        bField = sal_True;
+                        bField = TRUE;
                     }
                 }
             }
@@ -138,48 +142,48 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
         }
         rSh.InsertLineBreak();
     }
-    rSh.DelLeft();  // Again remove last linebreak
+    rSh.DelLeft();	// Again remove last linebreak
 
     return sRet;
 }
 
-void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, sal_uInt16 nCollId)
+void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, USHORT nCollId)
 {
-    sal_uInt16 nCollCnt = pOldSh->GetTxtFmtCollCount();
+    USHORT nCollCnt = pOldSh->GetTxtFmtCollCount();
     SwTxtFmtColl* pColl;
-    for( sal_uInt16 nCnt = 0; nCnt < nCollCnt; ++nCnt )
+    for( USHORT nCnt = 0; nCnt < nCollCnt; ++nCnt )
         if(nCollId == (pColl = &pOldSh->GetTxtFmtColl(nCnt))->GetPoolFmtId())
             pNewSh->GetTxtCollFromPool(nCollId)->SetFmtAttr(pColl->GetAttrSet());
 }
 
 void SwModule::InsertEnv( SfxRequest& rReq )
 {
-    static sal_uInt16 nTitleNo = 0;
+    static USHORT nTitleNo = 0;
 
-    SwDocShell      *pMyDocSh;
-    SfxViewFrame    *pFrame;
+    SwDocShell		*pMyDocSh;
+    SfxViewFrame	*pFrame;
     SwView          *pNewView;
-    SwWrtShell      *pOldSh,
+    SwWrtShell		*pOldSh,
                     *pSh;
 
     // Get current shell
     pMyDocSh = (SwDocShell*) SfxObjectShell::Current();
-    pOldSh   = pMyDocSh ? pMyDocSh->GetWrtShell() : 0;
+    pOldSh	 = pMyDocSh ? pMyDocSh->GetWrtShell() : 0;
 
     // Create new document (don't show!)
-    SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
+    SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
     pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     pNewView = (SwView*) pFrame->GetViewShell();
-    pNewView->AttrChangedNotify( &pNewView->GetWrtShell() ); // so that SelectShell is being called
+    pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
     pSh = pNewView->GetWrtShellPtr();
 
     String aTmp( SW_RES(STR_ENV_TITLE) );
     aTmp += String::CreateFromInt32( ++nTitleNo );
     xDocSh->SetTitle( aTmp );
 
-    // if applicable, copy the old Collections "Sender" and "Reciever" to
-    // a new document
+    // Ggf. alte Collections "Absender" und "Empfaenger" in neues
+    // Dokument kopieren
     if ( pOldSh )
     {
         ::lcl_CopyCollAttr(pOldSh, pSh, RES_POOLCOLL_JAKETADRESS);
@@ -190,7 +194,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     SwEnvCfgItem aEnvCfg;
 
     // Check if there's already an envelope.
-    sal_Bool bEnvChange = sal_False;
+    BOOL bEnvChange = FALSE;
 
     SfxItemSet aSet(GetPool(), FN_ENVELOP, FN_ENVELOP, 0);
     aSet.Put(aEnvCfg.GetItem());
@@ -238,22 +242,22 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
     if (nMode == ENV_NEWDOC || nMode == ENV_INSERT)
     {
-        SwWait aWait( (SwDocShell&)*xDocSh, sal_True );
+        SwWait aWait( (SwDocShell&)*xDocSh, TRUE );
 
         // Read dialog and save item to config
         const SwEnvItem& rItem = pItem ? *pItem : (const SwEnvItem&) pDlg->GetOutputItemSet()->Get(FN_ENVELOP);
         aEnvCfg.GetItem() = rItem;
         aEnvCfg.Commit();
 
-        // When we print we take the Jobsetup that is set up in the dialog.
-        // Information has to be set here, before a possible destruction of
-        // the new shell because the shell's printer has been handed to the
-        // dialog.
+        //Wenn wir Drucken uebernehmen wir den eingestellten Jobsetup aus
+        //dem Dialog. Die Informationen muessen hier vor dem evtl. zerstoeren
+        //der neuen Shell gesetzt werden, weil deren Drucker an den Dialog
+        //gereicht wurde.
         if ( nMode != ENV_NEWDOC )
         {
             OSL_ENSURE(pOldSh, "No document - wasn't 'Insert' disabled???");
             SvxPaperBinItem aItem( RES_PAPER_BIN );
-            aItem.SetValue((sal_uInt8)pSh->getIDocumentDeviceAccess()->getPrinter(true)->GetPaperBin());
+            aItem.SetValue((BYTE)pSh->getIDocumentDeviceAccess()->getPrinter(true)->GetPaperBin());
             pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetFmtAttr(aItem);
         }
 
@@ -278,16 +282,16 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             // Here it goes (insert)
             pSh->StartUndo(UNDO_UI_INSERT_ENVELOPE, NULL);
             pSh->StartAllAction();
-            pSh->SttEndDoc(sal_True);
+            pSh->SttEndDoc(TRUE);
 
             if (bEnvChange)
             {
-                // followup template: page 2
+                // Folgevorlage: Seite 2
                 pFollow = pSh->GetPageDesc(pSh->GetCurPageDesc()).GetFollow();
 
                 // Delete text from the first page
-                if ( !pSh->SttNxtPg(sal_True) )
-                    pSh->EndPg(sal_True);
+                if ( !pSh->SttNxtPg(TRUE) )
+                    pSh->EndPg(TRUE);
                 pSh->DelRight();
                 // Delete frame of the first page
                 if( pSh->GotoFly( rSendMark ) )
@@ -300,34 +304,34 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                     pSh->EnterSelFrmMode();
                     pSh->DelRight();
                 }
-                pSh->SttEndDoc(sal_True);
+                pSh->SttEndDoc(TRUE);
             }
             else
-                // Followup template: page 1
+                // Folgevorlage: Seite 1
                 pFollow = &pSh->GetPageDesc(pSh->GetCurPageDesc());
 
             // Insert page break
             if ( pSh->IsCrsrInTbl() )
             {
                 pSh->SplitNode();
-                pSh->Right( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
+                pSh->Right( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
                 SfxItemSet aBreakSet( pSh->GetAttrPool(), RES_BREAK, RES_BREAK, 0 );
                 aBreakSet.Put( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
                 pSh->SetTblAttr( aBreakSet );
             }
             else
-                pSh->InsertPageBreak(0, sal_False);
-            pSh->SttEndDoc(sal_True);
+                pSh->InsertPageBreak(0, FALSE);
+            pSh->SttEndDoc(TRUE);
         }
         else
         {
             pFollow = &pSh->GetPageDesc(pSh->GetCurPageDesc());
-            // Let's go (print)
+            // Los geht's (Drucken)
             pSh->StartAllAction();
-            pSh->DoUndo(sal_False);
+            pSh->DoUndo(FALSE);
 
-            // Again, copy the new collections "Sender" and "Reciever" to
-            // a new document
+            // Neue Collections "Absender" und "Empfaenger" wieder in neues
+            // Dokument kopieren
             if ( pOldSh )
             {
                 ::lcl_CopyCollAttr(pOldSh, pSh, RES_POOLCOLL_JAKETADRESS);
@@ -338,7 +342,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         SET_CURR_SHELL(pSh);
         pSh->SetNewDoc();   // Avoid performance problems
 
-        // Remember Flys of this site
+        // Flys dieser Seite merken
         SvPtrarr aFlyArr(0, 5);
         if( ENV_NEWDOC != nMode && !bEnvChange )
             pSh->GetPageObjs( aFlyArr );
@@ -349,7 +353,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
         Printer *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( true );
 
-    // Borders (are put together by Shift-Offset and alignment)
+        // Raender (setzen sich zusammen aus Shift-Offset und
+        // Ausrichtung)
         Size aPaperSize = pPrt->PixelToLogic( pPrt->GetPaperSizePixel(),
                                               MAP_TWIP);
         if ( !aPaperSize.Width() && !aPaperSize.Height() )
@@ -360,8 +365,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         long lLeft  = rItem.lShiftRight,
              lUpper = rItem.lShiftDown;
 
-        sal_uInt16 nPageW = (sal_uInt16) Max(rItem.lWidth, rItem.lHeight),
-               nPageH = (sal_uInt16) Min(rItem.lWidth, rItem.lHeight);
+        USHORT nPageW = (USHORT) Max(rItem.lWidth, rItem.lHeight),
+               nPageH = (USHORT) Min(rItem.lWidth, rItem.lHeight);
 
         switch (rItem.eAlign)
         {
@@ -378,18 +383,18 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         }
         SvxLRSpaceItem aLRMargin( RES_LR_SPACE );
         SvxULSpaceItem aULMargin( RES_UL_SPACE );
-        aLRMargin.SetLeft ((sal_uInt16) lLeft );
-        aULMargin.SetUpper((sal_uInt16) lUpper);
+        aLRMargin.SetLeft ((USHORT) lLeft );
+        aULMargin.SetUpper((USHORT) lUpper);
         aLRMargin.SetRight(0);
         aULMargin.SetLower(0);
         rFmt.SetFmtAttr(aLRMargin);
         rFmt.SetFmtAttr(aULMargin);
 
         // Header and footer
-        rFmt.SetFmtAttr(SwFmtHeader(sal_Bool(sal_False)));
-        pDesc->ChgHeaderShare(sal_False);
-        rFmt.SetFmtAttr(SwFmtFooter(sal_Bool(sal_False)));
-        pDesc->ChgFooterShare(sal_False);
+        rFmt.SetFmtAttr(SwFmtHeader(BOOL(FALSE)));
+        pDesc->ChgHeaderShare(FALSE);
+        rFmt.SetFmtAttr(SwFmtFooter(BOOL(FALSE)));
+        pDesc->ChgFooterShare(FALSE);
 
         // Page numbering
         pDesc->SetUseOn(nsUseOnPage::PD_ALL);
@@ -403,7 +408,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         aType.SetNumberingType(SVX_NUM_NUMBER_NONE);
         pDesc->SetNumType(aType);
 
-        // Followup template
+        // Folgevorlage
         if (pFollow)
             pDesc->SetFollow(pFollow);
 
@@ -413,21 +418,21 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
         // Apply page description
 
-        sal_uInt16 nPos;
+        USHORT nPos;
         pSh->FindPageDescByName( pDesc->GetName(),
-                                    sal_False,
+                                    FALSE,
                                     &nPos );
 
 
         pSh->ChgPageDesc( nPos, *pDesc);
         pSh->ChgCurPageDesc(*pDesc);
 
-        // Insert Frame
-        SwFlyFrmAttrMgr aMgr(sal_False, pSh, FRMMGR_TYPE_ENVELP);
+        // Rahmen einfuegen
+        SwFlyFrmAttrMgr aMgr(FALSE, pSh, FRMMGR_TYPE_ENVELP);
         SwFldMgr aFldMgr;
         aMgr.SetHeightSizeType(ATT_VAR_SIZE);
 
-        // Overwrite defaults!
+        //Defaults ueberschreiben!
         aMgr.GetAttrSet().Put( SvxBoxItem(RES_BOX) );
         aMgr.SetULSpace( 0L, 0L );
         aMgr.SetLRSpace( 0L, 0L );
@@ -435,7 +440,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         // Sender
         if (rItem.bSend)
         {
-            pSh->SttEndDoc(sal_True);
+            pSh->SttEndDoc(TRUE);
             aMgr.InsertFlyFrm(FLY_AT_PAGE,
                 Point(rItem.lSendFromLeft + lLeft, rItem.lSendFromTop  + lUpper),
                 Size (rItem.lAddrFromLeft - rItem.lSendFromLeft, 0));
@@ -450,7 +455,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         }
 
         // Addressee
-        pSh->SttEndDoc(sal_True);
+        pSh->SttEndDoc(TRUE);
 
         aMgr.InsertFlyFrm(FLY_AT_PAGE,
             Point(rItem.lAddrFromLeft + lLeft, rItem.lAddrFromTop  + lUpper),
@@ -462,17 +467,17 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pSh->SetTxtFmtColl( pAddr );
         InsertLabEnvText(*pSh, aFldMgr, rItem.aAddrText);
 
-        // Move Flys to the "old" pages
+        // Flys auf die "alten" Seiten verschieben
         if (aFlyArr.Count())
             pSh->SetPageObjsNewPage(aFlyArr, 1);
 
         // Finished
-        pSh->SttEndDoc(sal_True);
+        pSh->SttEndDoc(TRUE);
 
         pSh->EndAllAction();
 
         if (nMode == ENV_NEWDOC)
-            pSh->DoUndo(sal_True);
+            pSh->DoUndo(TRUE);
         else
             pSh->EndUndo(UNDO_UI_INSERT_ENVELOPE);
 
@@ -482,7 +487,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
             if ( rItem.aAddrText.indexOf('<') >= 0 )
             {
-                static sal_uInt16 const aInva[] =
+                static USHORT __READONLY_DATA aInva[] =
                                     {
                                         SID_SBA_BRW_UPDATE,
                                         SID_SBA_BRW_INSERT,
@@ -491,7 +496,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                                     };
                 pFrame->GetBindings().Invalidate( aInva );
 
-                // Open database beamer
+                // Datenbankbeamer oeffnen
                 ShowDBObj(*pNewView, pSh->GetDBData());
             }
         }
@@ -500,12 +505,12 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         {
             rReq.AppendItem( rItem );
             if ( nMode == ENV_NEWDOC )
-                rReq.AppendItem( SfxBoolItem( FN_PARAM_1, sal_True ) );
+                rReq.AppendItem( SfxBoolItem( FN_PARAM_1, TRUE ) );
         }
 
         rReq.Done();
     }
-    else    // Abort
+    else	//Abbruch
     {
         rReq.Ignore();
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,45 +43,45 @@
 #include "decl.h"
 #include "tool.h"
 
-extern const long       nStackSize;
-extern const int        nAnzNRange;
+extern const long		nStackSize;
+extern const int		nAnzNRange;
 
-extern ScDocument*      pDoc;
+extern ScDocument*		pDoc;
 
-const long              nStackSize = 8L * 1024;     // -> form_xxx.cpp
-const int               nAnzNRange = 2048;          // -> tool_xxx.cpp, max. 2048 Named Ranges
+const long				nStackSize = 8L * 1024;		// -> form_xxx.cpp
+const int				nAnzNRange = 2048;			// -> tool_xxx.cpp, max. 2048 Named Ranges
 
-sal_Char*               pPuffer;                    // -> flt_xxx.cxx
-sal_Char*               pDummy1;                    // -> flt_xxx.cxx, ScanVersion()
-sal_Char*               pDummy2;                    // -> tool.cxx, CreateTable()
+sal_Char*				pPuffer;					// -> flt_xxx.cxx
+sal_Char*				pDummy1;					// -> flt_xxx.cxx, ScanVersion()
+sal_Char*				pDummy2;					// -> tool.cxx, CreateTable()
 
-extern sal_uInt8*           pFormelBuffer;              // -> tool.cxx, fuer OP_Formula()
-sal_uInt8*                  pFormelBuffer;
+extern BYTE*			pFormelBuffer;				// -> tool.cxx, fuer OP_Formula()
+BYTE*					pFormelBuffer;
 
-extern FormCache*       pValueFormCache;            // -> tool.cxx
+extern FormCache*		pValueFormCache;			// -> tool.cxx
 
-sal_Char*               pStack;                     // -> formel.cxx
-sal_Char*               pPuffer0;                   // -> formel.cxx
-sal_Char*               pPuffer1;                   // -> formel.cxx
-extern const int        nMaxPar;
-const int               nMaxPar = 128;              // max. 128 Parameter werden unterstuetzt
-sal_Char**              pPar;                       // -> formel.cxx, Pn()
+sal_Char*				pStack;						// -> formel.cxx
+sal_Char*				pPuffer0;					// -> formel.cxx
+sal_Char*				pPuffer1;					// -> formel.cxx
+extern const int		nMaxPar;
+const int				nMaxPar = 128;				// max. 128 Parameter werden unterstuetzt
+sal_Char**				pPar;						// -> formel.cxx, Pn()
 
-#ifndef _DOS                                        // -> op.cxx
-sal_Char*               pAnsi;
+#ifndef _DOS										// -> op.cxx
+sal_Char*				pAnsi;
 #endif
-sal_Char*               pErgebnis;                  // -> op.cxx
+sal_Char*				pErgebnis;					// -> op.cxx
 
-extern sal_Bool             bFormInit;                  // -> tool.cxx, fuer GetFormHandle()
-sal_Bool                    bFormInit;
+extern BOOL				bFormInit;					// -> tool.cxx, fuer GetFormHandle()
+BOOL					bFormInit;
 
-extern SvxHorJustifyItem    *pAttrRight, *pAttrLeft, *pAttrCenter,
-                            *pAttrRepeat, *pAttrStandard;   // -> tool.cxx, fuer GetFormAttr()
-extern ScProtectionAttr*    pAttrUnprot;   // -> tool.cxx, fuer PutFormString()
+extern SvxHorJustifyItem	*pAttrRight, *pAttrLeft, *pAttrCenter,
+                            *pAttrRepeat, *pAttrStandard;	// -> tool.cxx, fuer GetFormAttr()
+extern ScProtectionAttr*	pAttrUnprot;   // -> tool.cxx, fuer PutFormString()
 
 
 
-sal_Bool MemNew( void )
+BOOL MemNew( void )
 {
     pPuffer = new sal_Char [ 32L*1024L ];
 
@@ -100,20 +100,20 @@ sal_Bool MemNew( void )
 
     pPar = new sal_Char *[ nMaxPar ];
 
-    pFormelBuffer = new sal_uInt8[ 4096 ];
+    pFormelBuffer = new BYTE[ 4096 ];
 
     pValueFormCache = new FormCache( pDoc );
 
     // fuer tool.cxx::PutFormString()
-    pAttrUnprot = new ScProtectionAttr( sal_True );
+    pAttrUnprot = new ScProtectionAttr( TRUE );
     pAttrRight = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY );
     pAttrLeft = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY );
     pAttrCenter = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY );
     pAttrRepeat = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_REPEAT, ATTR_HOR_JUSTIFY );
     pAttrStandard = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
-    bFormInit = sal_True;
+    bFormInit = TRUE;
 
-    return sal_True;
+    return TRUE;
 }
 
 

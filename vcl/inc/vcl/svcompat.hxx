@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,10 @@
 // -----------
 
 #define COMPAT_FORMAT( char1, char2, char3, char4 ) \
-    ((sal_uLong)((((sal_uLong)(char)(char1)))|              \
-    (((sal_uLong)(char)(char2))<<8UL)|                  \
-    (((sal_uLong)(char)(char3))<<16UL)|                 \
-    ((sal_uLong)(char)(char4))<<24UL))
+    ((ULONG)((((ULONG)(char)(char1)))|				\
+    (((ULONG)(char)(char2))<<8UL)|					\
+    (((ULONG)(char)(char3))<<16UL)|					\
+    ((ULONG)(char)(char4))<<24UL))
 
 
 class SvStream;
@@ -51,21 +51,21 @@ class SvStream;
 class ImplCompat
 {
     SvStream*   mpRWStm;
-    sal_uInt32      mnCompatPos;
-    sal_uInt32      mnTotalSize;
-    sal_uInt16      mnStmMode;
-    sal_uInt16      mnVersion;
+    UINT32      mnCompatPos;
+    UINT32      mnTotalSize;
+    UINT16      mnStmMode;
+    UINT16      mnVersion;
 
                 ImplCompat() {}
                 ImplCompat( const ImplCompat& rCompat ) {}
     ImplCompat& operator=( const ImplCompat& rCompat ) { return *this; }
-    sal_Bool        operator==( const ImplCompat& rCompat ) { return sal_False; }
+    BOOL        operator==( const ImplCompat& rCompat ) { return FALSE; }
 
 public:
-                ImplCompat( SvStream& rStm, sal_uInt16 nStreamMode, sal_uInt16 nVersion = 1 );
+                ImplCompat( SvStream& rStm, USHORT nStreamMode, UINT16 nVersion = 1 );
                 ~ImplCompat();
 
-    sal_uInt16      GetVersion() const { return mnVersion; }
+    UINT16      GetVersion() const { return mnVersion; }
 };
 
 #endif // _SV_SVCOMPAT_HXX

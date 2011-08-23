@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,6 @@
 #ifndef _FMTFLD_HXX
 #define _FMTFLD_HXX
 
-#include <list>
 #include <svl/poolitem.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/smplhint.hxx>
@@ -39,31 +38,26 @@
 class SwField;
 class SwTxtFld;
 class SwView;
-class SwFieldType;
 
-// ATT_FLD
+// ATT_FLD ***********************************
 class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBroadcaster
 {
     friend class SwTxtFld;
     friend void _InitCore();
 
     SwField *pField;
-    SwTxtFld* pTxtAttr;
+    SwTxtFld* pTxtAttr;		// mein TextAttribut
 
-    SwFmtFld(); // Default attibute.
+    SwFmtFld();				// das default-Attibut
 
-    // Protected CopyCtor.
+    // geschuetzter CopyCtor
     // @@@ copy construction allowed, but copy assignment is not? @@@
     SwFmtFld& operator=(const SwFmtFld& rFld);
-
-protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
-    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint );
 
 public:
     TYPEINFO();
 
-    // Single argument constructors shall be explicit.
+    // single argument constructors shall be explicit.
     explicit SwFmtFld( const SwField &rFld );
 
     // @@@ copy construction allowed, but copy assignment is not? @@@
@@ -71,15 +65,17 @@ public:
 
     virtual ~SwFmtFld();
 
-    // "Pure virtual methods" of SfxPoolItem.
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
 
-    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
+    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
+    virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
-    const SwField *GetFld() const   { return pField; }
-    SwField *GetFld()               { return pField; }
+    const SwField *GetFld() const	{ return pField; }
+    SwField *GetFld()				{ return pField; }
 
+    // #111840#
     /**
        Sets current field.
 
@@ -89,21 +85,20 @@ public:
      */
     void SetFld(SwField * pField);
 
-    const SwTxtFld *GetTxtFld() const   { return pTxtAttr; }
-    SwTxtFld *GetTxtFld()               { return pTxtAttr; }
+    const SwTxtFld *GetTxtFld() const	{ return pTxtAttr; }
+    SwTxtFld *GetTxtFld()				{ return pTxtAttr; }
 
-    void RegisterToFieldType( SwFieldType& );
-    sal_Bool IsFldInDoc() const;
-    sal_Bool IsProtect() const;
+    BOOL IsFldInDoc() const;
+    BOOL IsProtect() const;
 };
 
 class SW_DLLPUBLIC SwFmtFldHint : public SfxHint
 {
-#define SWFMTFLD_INSERTED   1
-#define SWFMTFLD_REMOVED    2
-#define SWFMTFLD_FOCUS      3
-#define SWFMTFLD_CHANGED    4
-#define SWFMTFLD_LANGUAGE   5
+#define SWFMTFLD_INSERTED	1
+#define SWFMTFLD_REMOVED	2
+#define SWFMTFLD_FOCUS		3
+#define SWFMTFLD_CHANGED	4
+#define SWFMTFLD_LANGUAGE	5
 
     const SwFmtFld* pFld;
     sal_Int16 nWhich;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public class _XImporter extends MultiMethodTest {
 
     /**
     * Retrieves relation and sets target document. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred,
+    * Has <b> OK </b> status if no runtime exceptions occured,
     * really this method tested when the whole import result
     * checked.
     */

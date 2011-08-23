@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,20 +36,21 @@ import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
- *  This class describes the beginning of file. It is the
+ *  This class describes the beginning of file. It is the 
  *  the Biff record that marks the beginning of a a worbook
  *  or the beginning of worksheets in the workbook
  *
  */
 public class BeginningOfFile implements BIFFRecord {
-
+    
     private byte[] version = new byte[2];
     private byte[] subStream = new byte[2];
-
+    
    /**
     *  Constructor that initializes the member values.
     *
-    *  @param  global   True for a workbook, false for a worksheet
+    *  @param  ver	Version Number
+    *				Substream type (workbook = 0x05, worksheet = 0x10)
     */
     public BeginningOfFile(boolean global) {
         setVersion((short) 271);
@@ -57,6 +58,7 @@ public class BeginningOfFile implements BIFFRecord {
             setSubStreamWBGlobal();
         else
             setSubStreamWorkSheet();
+        // this.subStream = EndianConverter.writeShort(dt);
     }
 
     public BeginningOfFile(InputStream is) throws IOException {
@@ -66,43 +68,45 @@ public class BeginningOfFile implements BIFFRecord {
     private void setVersion(short version) {
         this.version = EndianConverter.writeShort(version);
     }
-
+    
     int getVersion() {
         return EndianConverter.readShort(version);
     }
-
+    
     private void setSubStreamWBGlobal() {
+        // subStream = new byte[] {0x05};
         subStream = EndianConverter.writeShort((short) 0x05);
     }
-
+    
     private void setSubStreamWorkSheet() {
+        // subStream = new byte[] {0x10};
         subStream = EndianConverter.writeShort((short) 0x10);
     }
-
+    
     int getSubStreamType() {
         return EndianConverter.readShort(subStream);
     }
-
+    
     public int read(InputStream input) throws IOException {
         int numBytesRead = input.read(version);
         numBytesRead += input.read(subStream);
-        Debug.log(Debug.TRACE,"\tVersion : "+ EndianConverter.readShort(version) +
+        Debug.log(Debug.TRACE,"\tVersion : "+ EndianConverter.readShort(version) + 
                             " Stream : " + EndianConverter.readShort(subStream));
 
         return numBytesRead;
     }
-
+    
     public void write(OutputStream output) throws IOException {
-
+    
         output.write(getBiffType());
         output.write(version);
         output.write(subStream);
 
         Debug.log(Debug.TRACE, "Writing BeginningOfFile record");
     }
-
+   
     /**
-     * Get the hex code for this particular <code>BIFFRecord</code>
+     * Get the hex code for this particular <code>BIFFRecord</code> 
      *
      * @return the hex code for <code>BeginningOfFile</code>
      */

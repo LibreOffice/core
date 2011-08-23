@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,14 @@ namespace svt
 
 // wizard buttons
 #define WZB_NONE                0x0000
-#define WZB_NEXT                0x0001
-#define WZB_PREVIOUS            0x0002
-#define WZB_FINISH              0x0004
-#define WZB_CANCEL              0x0008
-#define WZB_HELP                0x0010
+#define WZB_NEXT				0x0001
+#define WZB_PREVIOUS			0x0002
+#define WZB_FINISH				0x0004
+#define WZB_CANCEL				0x0008
+#define WZB_HELP				0x0010
 
 // wizard states
-#define WZS_INVALID_STATE       ((WizardState)-1)
+#define WZS_INVALID_STATE		((WizardState)-1)
 
     //=====================================================================
     //= WizardTypes
@@ -76,12 +76,12 @@ namespace svt
         // We may have situations where the next page depends on the state of the current, which needs
         // to be committed for this.
         // So initializePage and commitPage are designated to initialitzing/committing data on the page.
-        virtual void        initializePage() = 0;
-        virtual sal_Bool    commitPage( WizardTypes::CommitPageReason _eReason ) = 0;
+        virtual void		initializePage() = 0;
+        virtual sal_Bool	commitPage( WizardTypes::CommitPageReason _eReason ) = 0;
 
         /** determines whether or not it is allowed to advance to a next page
 
-            You should make this dependent on the current state of the page only, not on
+            You should make this dependent on the current state of the page only, not on 
             states on other pages of the whole dialog.
 
             The default implementation always returns <TRUE/>.
@@ -98,7 +98,7 @@ namespace svt
     class SVT_DLLPUBLIC OWizardPage : public TabPage, public IWizardPageController
     {
     private:
-        WizardPageImplData*     m_pImpl;
+        WizardPageImplData*		m_pImpl;
 
     public:
         /** @param _pParent
@@ -110,13 +110,13 @@ namespace svt
         ~OWizardPage();
 
         // IWizardPageController overridables
-        virtual void        initializePage();
-        virtual sal_Bool    commitPage( WizardTypes::CommitPageReason _eReason );
+        virtual void		initializePage();
+        virtual sal_Bool	commitPage( WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
 
     protected:
         // TabPage overridables
-        virtual void    ActivatePage();
+        virtual void	ActivatePage();
 
         /** updates the travel-related UI elements of the OWizardMachine we live in (if any)
 
@@ -150,10 +150,10 @@ namespace svt
     {
     private:
         // restrict access to some aspects of our base class
-        SVT_DLLPRIVATE void             AddPage( TabPage* pPage ) { WizardDialog::AddPage(pPage); }
-        SVT_DLLPRIVATE void             RemovePage( TabPage* pPage ) { WizardDialog::RemovePage(pPage); }
-        SVT_DLLPRIVATE void             SetPage( sal_uInt16 nLevel, TabPage* pPage ) { WizardDialog::SetPage(nLevel, pPage); }
-        //  TabPage*            GetPage( sal_uInt16 nLevel ) const { return WizardDialog::GetPage(nLevel); }
+        SVT_DLLPRIVATE void				AddPage( TabPage* pPage ) { WizardDialog::AddPage(pPage); }
+        SVT_DLLPRIVATE void				RemovePage( TabPage* pPage ) { WizardDialog::RemovePage(pPage); }
+        SVT_DLLPRIVATE void				SetPage( USHORT nLevel, TabPage* pPage ) { WizardDialog::SetPage(nLevel, pPage); }
+        //	TabPage*			GetPage( USHORT nLevel ) const { return WizardDialog::GetPage(nLevel); }
         // TODO: probably the complete page handling (next, previous etc.) should be prohibited ...
 
         // IMPORTANT:
@@ -162,11 +162,11 @@ namespace svt
         // So use the travelXXX methods if you need to travel
 
     protected:
-        OKButton*       m_pFinish;
-        CancelButton*   m_pCancel;
-        PushButton*     m_pNextPage;
-        PushButton*     m_pPrevPage;
-        HelpButton*     m_pHelp;
+        OKButton*		m_pFinish;
+        CancelButton*	m_pCancel;
+        PushButton*		m_pNextPage;
+        PushButton*		m_pPrevPage;
+        HelpButton*		m_pHelp;
 
     private:
         WizardMachineImplData*
@@ -188,15 +188,15 @@ namespace svt
         ~OWizardMachine();
 
         /// enable (or disable) buttons
-        void    enableButtons(sal_uInt32 _nWizardButtonFlags, sal_Bool _bEnable);
+        void	enableButtons(sal_uInt32 _nWizardButtonFlags, sal_Bool _bEnable);
         /// set the default style for a button
-        void    defaultButton(sal_uInt32 _nWizardButtonFlags);
+        void	defaultButton(sal_uInt32 _nWizardButtonFlags);
         /// set the default style for a button
-        void    defaultButton(PushButton* _pNewDefButton);
+        void	defaultButton(PushButton* _pNewDefButton);
 
         /// set the base of the title to use - the title of the current page is appended
-        void            setTitleBase(const String& _rTitleBase);
-        const String&   getTitleBase() const;
+        void			setTitleBase(const String& _rTitleBase);
+        const String&	getTitleBase() const;
 
         /// determines whether there is a next state to which we can advance
         virtual bool    canAdvance() const;
@@ -211,16 +211,16 @@ namespace svt
 
     protected:
         // WizardDialog overridables
-        virtual void        ActivatePage();
-        virtual long        DeactivatePage();
+        virtual void		ActivatePage();
+        virtual long		DeactivatePage();
 
         // our own overridables
 
         /// to override to create new pages
-        virtual TabPage*    createPage(WizardState _nState) = 0;
+        virtual TabPage*	createPage(WizardState _nState) = 0;
 
         /// will be called when a new page is about to be displayed
-        virtual void        enterState(WizardState _nState);
+        virtual	void		enterState(WizardState _nState);
 
         /** will be called when the current state is about to be left for the given reason
 
@@ -246,7 +246,7 @@ namespace svt
             @return
                 <TRUE/> if and only if the page is allowed to be left
         */
-        virtual sal_Bool    leaveState( WizardState _nState );
+        virtual	sal_Bool	leaveState( WizardState _nState );
 
         /** determine the next state to travel from the given one
 
@@ -262,10 +262,10 @@ namespace svt
         virtual sal_Bool    onFinish();
 
         /// travel to the next state
-        sal_Bool            travelNext();
+        sal_Bool	        travelNext();
 
         /// travel to the previous state
-        sal_Bool            travelPrevious();
+        sal_Bool	        travelPrevious();
 
         /** enables the automatic enabled/disabled state of the "Next" button
 
@@ -296,7 +296,7 @@ namespace svt
             @see skipUntil
             @see skipBackwardUntil
         */
-        sal_Bool                skip( sal_Int32 _nSteps = 1 );
+        sal_Bool	            skip( sal_Int32 _nSteps = 1 );
 
         /** skips one or more states, until a given state is reached
 
@@ -312,7 +312,7 @@ namespace svt
             @see skip
             @see skipBackwardUntil
         */
-        sal_Bool                skipUntil( WizardState _nTargetState );
+        sal_Bool	            skipUntil( WizardState _nTargetState );
 
         /** moves back one or more states, until a given state is reached
 
@@ -336,7 +336,7 @@ namespace svt
 
             Vulgo, this is the identifier of the current tab page :)
         */
-        WizardState             getCurrentState() const { return WizardDialog::GetCurLevel(); }
+        WizardState		        getCurrentState() const { return WizardDialog::GetCurLevel(); }
 
         virtual IWizardPageController*
                                 getPageController( TabPage* _pCurrentPage ) const;
@@ -361,8 +361,8 @@ namespace svt
         DECL_DLLPRIVATE_LINK(OnPrevPage, PushButton*);
         DECL_DLLPRIVATE_LINK(OnFinish, PushButton*);
 
-        SVT_DLLPRIVATE void     implResetDefault(Window* _pWindow);
-        SVT_DLLPRIVATE void     implUpdateTitle();
+        SVT_DLLPRIVATE void		implResetDefault(Window* _pWindow);
+        SVT_DLLPRIVATE void		implUpdateTitle();
         SVT_DLLPRIVATE void     implConstruct( const sal_uInt32 _nButtonFlags );
     };
 
@@ -386,7 +386,7 @@ namespace svt
     };
 
 //.........................................................................
-}   // namespace svt
+}	// namespace svt
 //.........................................................................
 
 #endif // _SVTOOLS_WIZARDMACHINE_HXX_

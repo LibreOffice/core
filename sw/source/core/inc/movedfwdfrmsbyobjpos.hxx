@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 
 class SwTxtNode;
 class SwTxtFrm;
-// --> #i26945#
+// --> OD 2004-10-05 #i26945#
 class SwRowFrm;
 // <--
 
@@ -54,14 +54,14 @@ class SwMovedFwdFrmsByObjPos
         void Insert( const SwTxtFrm& _rMovedFwdFrmByObjPos,
                      const sal_uInt32 _nToPageNum );
 
-        // --> #i40155#
+        // --> OD 2005-01-12 #i40155#
         void Remove( const SwTxtFrm& _rTxtFrm );
         // <--
 
         bool FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
                                   sal_uInt32& _ornToPageNum ) const;
 
-        // --> #i26945#
+        // --> OD 2004-10-05 #i26945#
         bool DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm ) const;
         // <--
 

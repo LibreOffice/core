@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 
 // class SvxCharSetColorItem ---------------------------------------------
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Is only needed internally in the reader of Writer.
+    PB: wird nur intern im Reader des Writers benoetigt
 */
 
 class EDITENG_DLLPUBLIC SvxCharSetColorItem : public SvxColorItem
@@ -47,22 +47,22 @@ class EDITENG_DLLPUBLIC SvxCharSetColorItem : public SvxColorItem
 public:
     TYPEINFO();
 
-    SvxCharSetColorItem( const sal_uInt16 nId  );
+    SvxCharSetColorItem( const USHORT nId  );
     SvxCharSetColorItem( const Color& aColor, const rtl_TextEncoding eFrom,
-                     const sal_uInt16 nId  );
+                     const USHORT nId  );
 
-    // "pure virtual Methods" from SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
+    virtual SvStream&		 Store(SvStream &, USHORT nItemVersion) const;
 
-    inline rtl_TextEncoding&    GetCharSet() { return eFrom; }
-    inline rtl_TextEncoding     GetCharSet() const { return eFrom; }
+    inline rtl_TextEncoding&	GetCharSet() { return eFrom; }
+    inline rtl_TextEncoding 	GetCharSet() const { return eFrom; }
 
     inline SvxCharSetColorItem& operator=(const SvxCharSetColorItem& rColor)
     {

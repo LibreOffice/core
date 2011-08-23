@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,15 +33,15 @@
 #include <tools/debug.hxx>
 #include "viewsh.hxx"
 #include "rootfrm.hxx"  // GetOleShell()
-#include "txtfrm.hxx"   // FindRootFrm()
+#include "txtfrm.hxx"	// FindRootFrm()
 #include "blink.hxx"
 #include "porlin.hxx"
 #include "porlay.hxx"   // SwLineLayout
 
 // Sichtbare Zeit:
-#define BLINK_ON_TIME       2400L
+#define BLINK_ON_TIME		2400L
 // Nihct sichtbare Zeit:
-#define BLINK_OFF_TIME      800L
+#define BLINK_OFF_TIME		800L
 
 /*************************************************************************
  * pBlink zeigt auf die Instanz, bei der sich blinkende Portions anmelden
@@ -137,7 +137,7 @@ IMPL_LINK( SwBlink, Blinker, Timer *, EMPTYARG )
 }
 
 void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
-                      const SwTxtFrm *pTxtFrm, sal_uInt16 nDir )
+                      const SwTxtFrm *pTxtFrm, USHORT nDir )
 {
     SwBlinkPortion *pBlinkPor = new SwBlinkPortion( pPor, nDir );
 
@@ -150,7 +150,7 @@ void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
     else
     {
         pBlinkPor->SetPos( rPoint );
-        pBlinkPor->SetRootFrm( pTxtFrm->getRootFrm() );
+        pBlinkPor->SetRootFrm( pTxtFrm->FindRootFrm() );
         aList.Insert( pBlinkPor );
         pTxtFrm->SetBlinkPor();
         if( pPor->IsLayPortion() || pPor->IsParaPortion() )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,6 +73,11 @@ public final class JavaSupplier extends WeakBase implements XSupplier {
             ? FactoryHelper.getServiceFactory(
                 JavaSupplier.class, serviceName, multiFactory, regKey)
             : null;
+    }
+
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
+        return FactoryHelper.writeRegistryServiceInfo(
+            implementationName, serviceName, regKey);
     }
 
     private static final String implementationName

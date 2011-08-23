@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,6 +61,9 @@ namespace com{ namespace sun{ namespace star{
     }
 }}}
 
+/* -----------------03.12.98 12:16-------------------
+ *
+ * --------------------------------------------------*/
 enum SwGetPropertyStatesCaller
 {
     SW_PROPERTY_STATE_CALLER_DEFAULT,
@@ -69,6 +72,9 @@ enum SwGetPropertyStatesCaller
     SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT
 };
 
+/* -----------------------------14.12.00 15:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
 namespace SwUnoCursorHelper
 {
     //  keep Any's mapped by (WhichId << 16 ) + (MemberId)
@@ -78,8 +84,8 @@ namespace SwUnoCursorHelper
         public:
             ~SwAnyMapHelper();
 
-            void    SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const com::sun::star::uno::Any& rAny );
-            bool    FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const com::sun::star::uno::Any*& pAny );
+            void    SetValue( USHORT nWhichId, USHORT nMemberId, const com::sun::star::uno::Any& rAny );
+            bool    FillValue( USHORT nWhichId, USHORT nMemberId, const com::sun::star::uno::Any*& pAny );
     };
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
@@ -92,38 +98,38 @@ namespace SwUnoCursorHelper
                                         , com::sun::star::beans::PropertyState& eState
                                         , const SwTxtNode* pNode = 0 );
 
-    void                        GetCurPageStyle(SwPaM& rPaM, String &rString);
+    void 						GetCurPageStyle(SwPaM& rPaM, String &rString);
 
-    inline sal_Bool             IsStartOfPara(SwPaM& rUnoCrsr)
+    inline sal_Bool 			IsStartOfPara(SwPaM& rUnoCrsr)
                                         { return rUnoCrsr.GetPoint()->nContent == 0;}
-    inline sal_Bool             IsEndOfPara(SwPaM& rUnoCrsr)
+    inline sal_Bool 			IsEndOfPara(SwPaM& rUnoCrsr)
                                         { return rUnoCrsr.GetCntntNode() &&
                                             rUnoCrsr.GetPoint()->nContent == rUnoCrsr.GetCntntNode()->Len();}
 
     void                        resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam);
-    void                        InsertFile(SwUnoCrsr* pUnoCrsr,
+    void 						InsertFile(SwUnoCrsr* pUnoCrsr,
                                     const String& rURL,
                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rOptions
                                     ) throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException );
 
-    void                        getNumberingProperty(
+    void 						getNumberingProperty(
                                     SwPaM& rPam,
                                     com::sun::star::beans::PropertyState& eState,
                                     com::sun::star::uno::Any *pAny );
 
-    void                        setNumberingProperty(
+    void 						setNumberingProperty(
                                     const com::sun::star::uno::Any& rValue,
                                     SwPaM& rPam);
 
-    sal_Int16                   IsNodeNumStart(
+    sal_Int16 					IsNodeNumStart(
                                     SwPaM& rPam,
                                     com::sun::star::beans::PropertyState& eState);
 
     sal_Bool    DocInsertStringSplitCR(  SwDoc &rDoc,
                     const SwPaM &rNewCursor, const String &rText,
                     const bool bForceExpandHints );
-    void    makeRedline( SwPaM& rPaM, const ::rtl::OUString& RedlineType,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties )
+    void    makeRedline( SwPaM& rPaM, const ::rtl::OUString& RedlineType, 
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties ) 
                 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
 

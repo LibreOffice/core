@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,9 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 
+#include "errhdl.hxx"
 #include "view.hxx"
+#include "initui.hxx"
 #include "cmdid.h"
 #include "textsh.hxx"
 #include "initui.hxx"
@@ -47,28 +49,28 @@
 // STATIC DATA -----------------------------------------------------------
 void SwTextShell::ExecGlossary(SfxRequest &rReq)
 {
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     ::GetGlossaries()->UpdateGlosPath(!rReq.IsAPI() ||
                                         FN_GLOSSARY_DLG == nSlot );
     SwGlossaryHdl* pGlosHdl = GetView().GetGlosHdl();
     // SwGlossaryList updaten?
-    sal_Bool bUpdateList = sal_False;
+    BOOL bUpdateList = FALSE;
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     if(pArgs)
-       pArgs->GetItemState(nSlot, sal_False, &pItem );
+       pArgs->GetItemState(nSlot, FALSE, &pItem );
 
     switch( nSlot )
     {
         case FN_GLOSSARY_DLG:
             pGlosHdl->GlossaryDlg();
-            bUpdateList = sal_True;
+            bUpdateList = TRUE;
             rReq.Ignore();
             break;
         case FN_EXPAND_GLOSSARY:
         {
-            sal_Bool bReturn;
+            BOOL bReturn;
             bReturn = pGlosHdl->ExpandGlossary();
             rReq.SetReturnValue( SfxBoolItem( nSlot, bReturn ) );
             rReq.Done();
@@ -79,10 +81,10 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
             {
                 String aGroup = (( const SfxStringItem *)pItem)->GetValue();
                 String aName;
-                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, sal_False, &pItem ))
+                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem ))
                     aName = (( const SfxStringItem *)pItem)->GetValue();
                 String aShortName;
-                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_2, sal_False, &pItem ))
+                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_2, FALSE, &pItem ))
                     aShortName = (( const SfxStringItem *)pItem)->GetValue();
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -90,12 +92,12 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
-                pGlosHdl->SetCurGroup(aGroup, sal_True);
+                pGlosHdl->SetCurGroup(aGroup, TRUE);
                 //eingestellte Gruppe muss in NewGlossary ggf. erzeugt werden!
-                pGlosHdl->NewGlossary( aName, aShortName, sal_True );
+                pGlosHdl->NewGlossary( aName, aShortName, TRUE );
                 rReq.Done();
             }
-            bUpdateList = sal_True;
+            bUpdateList = TRUE;
         break;
         case FN_SET_ACT_GLOSSARY:
             if(pItem)
@@ -115,21 +117,21 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
             {
                 String aGroup = (( const SfxStringItem *)pItem)->GetValue();
                 String aName;
-                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, sal_False, &pItem ))
+                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem ))
                     aName = (( const SfxStringItem *)pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
-                pGlosHdl->SetCurGroup(aGroup, sal_True);
+                pGlosHdl->SetCurGroup(aGroup, TRUE);
                 rReq.SetReturnValue(SfxBoolItem(nSlot, pGlosHdl->InsertGlossary( aName )));
                 rReq.Done();
             }
         }
         break;
         default:
-            OSL_FAIL("wrong dispatcher");
+            OSL_ENSURE(false, "wrong dispatcher");
             return;
     }
     if(bUpdateList)

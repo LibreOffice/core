@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <tools/debug.hxx>
 #include "impastpl.hxx"
 
-using ::rtl::OUString;
+using namespace rtl;
 
 //#############################################################################
 //
@@ -51,7 +51,7 @@ XMLFamilyData_Impl::XMLFamilyData_Impl(
         sal_Bool bAsFam )
     : pCache( 0 ), mnFamily( nFamily ), maStrFamilyName( rStrName), mxMapper( rMapper ),
       mnCount( 0 ), mnName( 0 ), maStrPrefix( rStrPrefix ), bAsFamily( bAsFam )
-
+      
 {
     mpParentList = new SvXMLAutoStylePoolParentsP_Impl( 5, 5 );
     mpNameList   = new SvXMLAutoStylePoolNamesP_Impl( 5, 5 );
@@ -61,13 +61,12 @@ XMLFamilyData_Impl::~XMLFamilyData_Impl()
 {
     if( mpParentList ) delete mpParentList;
     if( mpNameList ) delete mpNameList;
-    DBG_ASSERT( !pCache || !pCache->size(), "auto style pool cache is not empty!" );
+    DBG_ASSERT( !pCache || !pCache->Count(),
+                "auto style pool cache is not empty!" );
     if( pCache )
     {
-        for ( size_t i = 0, n = pCache->size(); i < n; ++i )
-            delete (*pCache)[ i ];
-        pCache->clear();
-        delete pCache;
+        while( pCache->Count() )
+            delete pCache->Remove( 0UL );
     }
 }
 
@@ -76,12 +75,12 @@ void XMLFamilyData_Impl::ClearEntries()
     if( mpParentList )
         delete mpParentList;
     mpParentList = new SvXMLAutoStylePoolParentsP_Impl( 5, 5 );
-    DBG_ASSERT( !pCache || !pCache->size(), "auto style pool cache is not empty!" );
+    DBG_ASSERT( !pCache || !pCache->Count(),
+                "auto style pool cache is not empty!" );
     if( pCache )
     {
-        for ( size_t i = 0, n = pCache->size(); i < n; ++i )
-            delete (*pCache)[ i ];
-        pCache->clear();
+        while( pCache->Count() )
+            delete pCache->Remove( 0UL );
     }
 }
 

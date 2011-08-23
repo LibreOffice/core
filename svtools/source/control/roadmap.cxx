@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,13 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include <svtools/roadmap.hxx>
+#include <roadmap.hxx>
 
 #ifndef _STRING_HXX
 #define _STRING_HXX
 #endif
 
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
+
 #include <algorithm>
 #include <vcl/bitmap.hxx>
 #include <tools/color.hxx>
@@ -64,7 +67,7 @@ namespace svt
     public:
         IDLabel( Window* _pParent, WinBits _nWinStyle = 0 );
         ~IDLabel( );
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void	DataChanged( const DataChangedEvent& rDCEvt );
     };
 
     //=====================================================================
@@ -73,7 +76,7 @@ namespace svt
     class ColorChanger
     {
     protected:
-        OutputDevice*   m_pDev;
+        OutputDevice*	m_pDev;
 
     public:
         ColorChanger( OutputDevice* _pDev, const Color& _rNewLineColor, const Color& _rNewFillColor )
@@ -103,33 +106,33 @@ namespace svt
     public:
         RoadmapItem( ORoadmap& _rParent, const Size& _rItemPlayground );
         ~RoadmapItem( );
+        
+        void					SetID( sal_Int16 _ID );
+        sal_Int16				GetID() const;
 
-        void                    SetID( sal_Int16 _ID );
-        sal_Int16               GetID() const;
-
-        void                    SetIndex( ItemIndex _Index );
+        void					SetIndex( ItemIndex _Index );
         ItemIndex               GetIndex() const;
 
-        void                    SetLabel( const ::rtl::OUString& _rText );
-        ::rtl::OUString         GetLabel( );
+        void					SetLabel( const ::rtl::OUString& _rText );
+        ::rtl::OUString			GetLabel( );
 
-        void                    Update( ItemIndex _RMIndex, const ::rtl::OUString& _rText );
+        void					Update( ItemIndex _RMIndex, const ::rtl::OUString& _rText );
+        
+        void					SetPosition( RoadmapItem* OldHyperLabel );
 
-        void                    SetPosition( RoadmapItem* OldHyperLabel );
+        void					ToggleBackgroundColor( const Color& _rGBColor );
+        void					SetInteractive( sal_Bool _bInteractive );
 
-        void                    ToggleBackgroundColor( const Color& _rGBColor );
-        void                    SetInteractive( sal_Bool _bInteractive );
-
-        void                    SetClickHdl( const Link& rLink );
-        const Link&             GetClickHdl() const;
-        void                    SetZOrder( RoadmapItem* pRefRoadmapHyperLabel, sal_uInt16 nFlags );
-        void                    Enable( sal_Bool bEnable = sal_True);
-        sal_Bool                    IsEnabled() const;
-        void                    GrabFocus();
+        void					SetClickHdl( const Link& rLink );
+        const Link&				GetClickHdl() const;
+        void					SetZOrder( RoadmapItem* pRefRoadmapHyperLabel, USHORT nFlags );
+        void					Enable( BOOL bEnable = TRUE);
+        BOOL					IsEnabled() const;
+        void					GrabFocus();
 
         bool                    Contains( const Window* _pWindow ) const;
-
-        HyperLabel*             GetDescriptionHyperLabel() const { return mpDescription; }
+        
+        HyperLabel*				GetDescriptionHyperLabel() const { return mpDescription; }
 
     private:
         void                    ImplUpdateIndex( const ItemIndex _nIndex );
@@ -144,7 +147,7 @@ namespace svt
     protected:
         const ORoadmap&     m_rAntiImpl;
         Link                m_aSelectHdl;
-        BitmapEx            m_aPicture;
+        BitmapEx	        m_aPicture;
         HL_Vector           m_aRoadmapSteps;
         ItemId              m_iCurItemID;
         sal_Bool            m_bInteractive;
@@ -162,10 +165,10 @@ namespace svt
 
         RoadmapItem* InCompleteHyperLabel;
 
-        void                addHyperLabel( RoadmapItem*  _rRoadmapStep ) { m_aRoadmapSteps.push_back(_rRoadmapStep); }
+        void			    addHyperLabel( RoadmapItem*  _rRoadmapStep ) { m_aRoadmapSteps.push_back(_rRoadmapStep); }
 
-        HL_Vector&          getHyperLabels() { return m_aRoadmapSteps; }
-        const HL_Vector&    getHyperLabels() const { return m_aRoadmapSteps; }
+        HL_Vector&	        getHyperLabels() { return m_aRoadmapSteps; }
+        const HL_Vector&	getHyperLabels() const { return m_aRoadmapSteps; }
 
         void                insertHyperLabel( ItemIndex _Index, RoadmapItem* _rRoadmapStep ) { m_aRoadmapSteps.insert( m_aRoadmapSteps.begin() + _Index, _rRoadmapStep ); }
 
@@ -180,11 +183,11 @@ namespace svt
         void                setComplete(const sal_Bool _bComplete) {m_bComplete = _bComplete; }
         sal_Bool            isComplete() const { return m_bComplete; };
 
-        void                setPicture( const BitmapEx& _rPic ) { m_aPicture = _rPic; }
-        const BitmapEx&     getPicture( ) const { return m_aPicture; }
+        void			    setPicture( const BitmapEx& _rPic ) { m_aPicture = _rPic; }
+        const BitmapEx&	    getPicture( ) const { return m_aPicture; }
 
-        void                setSelectHdl( const Link& _rHdl ) { m_aSelectHdl = _rHdl; }
-        const Link&         getSelectHdl( ) const { return m_aSelectHdl; }
+        void			    setSelectHdl( const Link& _rHdl ) { m_aSelectHdl = _rHdl; }
+        const Link&	        getSelectHdl( ) const { return m_aSelectHdl; }
 
         void                initItemSize();
         const Size&         getItemSize() const { return m_aItemSizePixel; }
@@ -760,9 +763,9 @@ namespace svt
     //---------------------------------------------------------------------
     void ORoadmap::DataChanged( const DataChangedEvent& rDCEvt )
     {
-        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
-            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
-            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS	)	||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY	))	&&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE		))
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
@@ -830,7 +833,7 @@ namespace svt
 
         if ( mpID )
         {
-            ::rtl::OUString aIDText = ::rtl::OUString::valueOf( (sal_Int32)( _nIndex + 1 ) ) +  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ));
+            ::rtl::OUString aIDText = ::rtl::OUString::valueOf( (sal_Int32)( _nIndex + 1 ) ) +  ::rtl::OUString::createFromAscii( "." );
              mpID->SetText( aIDText );
         }
 
@@ -886,7 +889,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void RoadmapItem::SetZOrder( RoadmapItem* pRefRoadmapHyperLabel, sal_uInt16 nFlags )
+    void RoadmapItem::SetZOrder( RoadmapItem* pRefRoadmapHyperLabel, USHORT nFlags )
     {
         if (pRefRoadmapHyperLabel == NULL)
             mpDescription->SetZOrder( NULL, nFlags); //WINDOW_ZORDER_FIRST );
@@ -895,14 +898,14 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void RoadmapItem::Enable( sal_Bool _bEnable)
+    void RoadmapItem::Enable( BOOL _bEnable)
     {
         mpID->Enable(_bEnable);
         mpDescription->Enable(_bEnable);
     }
 
     //---------------------------------------------------------------------
-    sal_Bool RoadmapItem::IsEnabled() const
+    BOOL RoadmapItem::IsEnabled() const
     {
         return mpID->IsEnabled();
     }
@@ -928,7 +931,7 @@ namespace svt
     {
         // calculate widths
         long nIDWidth = mpID->GetTextWidth( mpID->GetText() );
-        long nMaxIDWidth = mpID->GetTextWidth( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "100." )) );
+        long nMaxIDWidth = mpID->GetTextWidth( ::rtl::OUString::createFromAscii( "100." ) );
         nIDWidth = ::std::min( nIDWidth, nMaxIDWidth );
 
         // check how many space the description would need
@@ -996,9 +999,9 @@ namespace svt
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         FixedText::DataChanged( rDCEvt );
-        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
-            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
-            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS	)	||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY	))	&&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE		))
         {
             const Color& rGBColor = GetControlBackground();
             if (rGBColor == COL_TRANSPARENT)
@@ -1016,7 +1019,7 @@ namespace svt
 
 
 //.........................................................................
-}   // namespace svt
+}	// namespace svt
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

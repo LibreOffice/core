@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,7 +136,7 @@ DrawModelWrapper::DrawModelWrapper(
 
     SfxItemPool* pMasterPool = &GetItemPool();
     pMasterPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
-    pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, sal_True) );
+    pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, TRUE) );
     pMasterPool->SetPoolDefaultItem(Svx3DPercentDiagonalItem (5));
 
     SfxItemPool* pPool = pMasterPool;
@@ -175,7 +175,7 @@ DrawModelWrapper::DrawModelWrapper(
     }
     catch(...)
     {
-        OSL_FAIL("Can't get Hyphenator or SpellChecker for chart");
+        DBG_ERROR("Can't get Hyphenator or SpellChecker for chart");
     }
 
     //ref device for font rendering
@@ -371,12 +371,13 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const rtl::OUString& rName )
     return getNamedSdrObject( rName, GetPage(0) );
 }
 
+//static
 SdrObject* DrawModelWrapper::getNamedSdrObject( const String& rObjectCID, SdrObjList* pSearchList )
 {
     if(!pSearchList || rObjectCID.Len()==0)
         return 0;
-    sal_uLong nCount = pSearchList->GetObjCount();
-    for( sal_uLong nN=0; nN<nCount; nN++  )
+    ULONG nCount = pSearchList->GetObjCount();
+    for( ULONG nN=0; nN<nCount; nN++  )
     {
         SdrObject* pObj = pSearchList->GetObj(nN);
         if(!pObj)
@@ -390,6 +391,7 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const String& rObjectCID, SdrObj
     return 0;
 }
 
+//static
 bool DrawModelWrapper::removeShape( const uno::Reference< drawing::XShape >& xShape )
 {
     uno::Reference< container::XChild > xChild( xShape, uno::UNO_QUERY );

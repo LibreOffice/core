@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,12 +47,12 @@ Graphic GalleryGetGraphic()
     return pGal->GetGraphic();
 }
 
-sal_uInt16 GallerySGA_FORMAT_GRAPHIC()
+USHORT GallerySGA_FORMAT_GRAPHIC()
 {
     return SGA_FORMAT_GRAPHIC;
 }
 
-sal_Bool GalleryIsLinkage()
+BOOL GalleryIsLinkage()
 {
     GalleryExplorer* pGal = SVX_GALLERY();
     DBG_ASSERT( pGal, "Wo ist die Gallery?" );
@@ -63,7 +63,7 @@ String GalleryGetFullPath()
 {
     GalleryExplorer* pGal = SVX_GALLERY();
     DBG_ASSERT( pGal, "Wo ist die Gallery?" );
-
+//	return pGal->GetPath().GetFull();
     return pGal->GetURL().GetMainURL(INetURLObject::NO_DECODE);
     // URL as stored in GraphicLink must be encoded
 }

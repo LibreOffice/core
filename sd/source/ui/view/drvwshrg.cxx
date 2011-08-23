@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,7 @@
 #include <svx/tbxcustomshapes.hxx>
 
 #include <svx/svxids.hrc>
+#include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
 #include <avmedia/mediaplayer.hxx>
 
@@ -67,6 +68,8 @@ using namespace sd;
 
 namespace sd {
 
+//AF:unused #define TABCONTROL_INITIAL_SIZE  	500
+
 /*************************************************************************
 |*
 |* SFX-Slotmap und Standardinterface deklarieren
@@ -86,6 +89,7 @@ SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SvxBmpMaskChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( GalleryChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxIMapDlgChildWindow::GetChildWindowId() );
+    SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( ::sd::SpellDialogChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
@@ -111,6 +115,7 @@ SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH
     SFX_CHILDWINDOW_REGISTRATION( SvxBmpMaskChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( GalleryChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxIMapDlgChildWindow::GetChildWindowId() );
+    SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( ::sd::SpellDialogChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );

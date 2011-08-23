@@ -148,74 +148,67 @@ sub collect_definitions
     my $multidefinitionerror = 0;
     my @multidefinitiongids = ();
 
-    my %itemhash;
 
-    # create empty item hashes
-    foreach $oneitem ( @par2script::globals::allitems ) {
-    my %items;
-        $par2script::globals::definitions{$oneitem} = \%items;
-    }
-
-    for ( my $i = 0; $i <= $#{$parfilecontent}; $i++ )
+    foreach $oneitem ( @par2script::globals::allitems )
     {
-    my $line = ${$parfilecontent}[$i];
-    my $oneitem, $gid;
+        my $docollect = 0;
+        my $gid = "";
+        my %allitemhash = ();
 
-    $line =~ /^\s*$/ && next; # skip blank lines
-
-    # lines should be well formed:
-    if ($line =~ m/^\s*(\w+)\s+(\w+)\s*$/)
-    {
-        $oneitem = $1;
-        $gid = $2;
-    } else {
-        chomp ($line);
-        my $invalid = $line;
-        $invalid =~ s/[\s\w]*//g;
-        par2script::exiter::exit_program("ERROR: malformed par file, invalid character '$invalid', expecting <token> <gid> but saw '$line'", "test_par_syntax");
-    }
-#   print STDERR "line '$line' -> '$oneitem' '$gid'\n";
-
-    # hunt badness variously
-    if ( ! defined $par2script::globals::definitions{$oneitem} )
-    {
-        par2script::exiter::exit_program("ERROR: invalid scp2 fragment item type '$oneitem' in line: '$line'", "test_par_syntax");
-    }
-
-    # no hyphen allowed in gids -> cannot happen here because (\w+) is required for gids
-    if ( $gid =~ /-/ ) { par2script::exiter::exit_program("ERROR: No hyphen allowed in global id: $gid", "test_of_hyphen"); }
-
-    my %oneitemhash;
-
-    while (! ( ${$parfilecontent}[$i] =~ /^\s*End\s*$/i ) )
-    {
-        if ( ${$parfilecontent}[$i] =~ /^\s*(.+?)\s*\=\s*(.+?)\s*\;\s*$/ )  # only oneliner!
+        for ( my $i = 0; $i <= $#{$parfilecontent}; $i++ )
         {
-        $itemkey = $1;
-        $itemvalue = $2;
+            my $line = ${$parfilecontent}[$i];
 
-        if ( $oneitem eq "Directory" ) { if ( $itemkey =~ "DosName" ) { $itemkey =~ s/DosName/HostName/; } }
-        if (( $oneitem eq "Directory" ) || ( $oneitem eq "File" ) || ( $oneitem eq "Unixlink" )) { if ( $itemvalue eq "PD_PROGDIR" ) { $itemvalue = "PREDEFINED_PROGDIR"; }}
-        if (( $itemkey eq "Styles" ) && ( $itemvalue =~ /^\s*(\w+)(\s*\;\s*)$/ )) { $itemvalue = "($1)$2"; }
+            if ( $line =~ /^\s*$oneitem\s+(\w+)\s*$/ )
+            {
+                $gid = $1;
+                $docollect = 1;
+            }
+            else
+            {
+                $docollect = 0;
+            }
 
-        $oneitemhash{$itemkey} = $itemvalue;
+            if ( $docollect )
+            {
+                my $currentline = $i;
+                my %oneitemhash;
+
+                while (! ( ${$parfilecontent}[$currentline] =~ /^\s*End\s*$/i ) )
+                {
+                    if ( ${$parfilecontent}[$currentline] =~ /^\s*(.+?)\s*\=\s*(.+?)\s*\;\s*$/ )    # only oneliner!
+                    {
+                        $itemkey = $1;
+                        $itemvalue = $2;
+
+                        if ( $oneitem eq "Directory" ) { if ( $itemkey =~ "DosName" ) { $itemkey =~ s/DosName/HostName/; } }
+                        if (( $oneitem eq "Directory" ) || ( $oneitem eq "File" ) || ( $oneitem eq "Unixlink" )) { if ( $itemvalue eq "PD_PROGDIR" ) { $itemvalue = "PREDEFINED_PROGDIR"; }}
+                        if (( $itemkey eq "Styles" ) && ( $itemvalue =~ /^\s*(\w+)(\s*\;\s*)$/ )) { $itemvalue = "($1)$2"; }
+
+                        $oneitemhash{$itemkey} = $itemvalue;
+                    }
+
+                    $currentline++;
+                }
+
+                # no hyphen allowed in gids -> cannot happen here because (\w+) is required for gids
+                if ( $gid =~ /-/ ) { par2script::exiter::exit_program("ERROR: No hyphen allowed in global id: $gid", "test_of_hyphen"); }
+
+                # test of uniqueness
+                if ( exists($allitemhash{$gid}) )
+                {
+                    $multidefinitionerror = 1;
+                    push(@multidefinitiongids, $gid);
+                }
+
+                $allitemhash{$gid} = \%oneitemhash;
+            }
         }
-        $i++;
+
+        $par2script::globals::definitions{$oneitem} = \%allitemhash;
     }
 
-    my $allitemhash = \$par2script::globals::definitions{$oneitem};
-
-    # test of uniqueness
-    if ( defined ($par2script::globals::definitions{$oneitem}->{$gid}) )
-    {
-        $multidefinitionerror = 1;
-        push(@multidefinitiongids, $gid);
-    }
-
-    $par2script::globals::definitions{$oneitem}->{$gid} = \%oneitemhash;
-    }
-
-    if ( $multidefinitionerror ) { par2script::exiter::multidefinitionerror(\@multidefinitiongids); }
+    if ( $multidefinitionerror ) {  par2script::exiter::multidefinitionerror(\@multidefinitiongids); }
 
     # foreach $key (keys %par2script::globals::definitions)
     # {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,9 +56,9 @@ namespace accessibility
 
     DBG_NAME( AccessibleTabBar )
 
-    //  ----------------------------------------------------
-    //  class AccessibleTabBar
-    //  ----------------------------------------------------
+    //	----------------------------------------------------
+    //	class AccessibleTabBar
+    //	----------------------------------------------------
 
     AccessibleTabBar::AccessibleTabBar( TabBar* pTabBar )
         :AccessibleTabBarBase( pTabBar )
@@ -115,13 +115,13 @@ namespace accessibility
             case VCLEVENT_WINDOW_SHOW:
             {
                 aNewValue <<= AccessibleStateType::SHOWING;
-                NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+                NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );							
             }
             break;
             case VCLEVENT_WINDOW_HIDE:
             {
                 aOldValue <<= AccessibleStateType::SHOWING;
-                NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+                NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );				
             }
             break;
             default:
@@ -160,7 +160,7 @@ namespace accessibility
     }
 
     // -----------------------------------------------------------------------------
-    // OCommonAccessibleComponent
+    // OCommonAccessibleComponent 
     // -----------------------------------------------------------------------------
 
     awt::Rectangle AccessibleTabBar::implGetBounds() throw (RuntimeException)
@@ -208,7 +208,7 @@ namespace accessibility
 
     ::rtl::OUString AccessibleTabBar::getImplementationName() throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleTabBar" ));
+        return ::rtl::OUString::createFromAscii( "com.sun.star.comp.svtools.AccessibleTabBar" );
     }
 
     // -----------------------------------------------------------------------------
@@ -229,7 +229,7 @@ namespace accessibility
     Sequence< ::rtl::OUString > AccessibleTabBar::getSupportedServiceNames() throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aNames(1);
-        aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleTabBar" ));
+        aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleTabBar" );
         return aNames;
     }
 
@@ -273,7 +273,7 @@ namespace accessibility
 
                 if ( i < nCount )
                 {
-                    Window* pChild = m_pTabBar->GetAccessibleChildWindow( (sal_uInt16)i );
+                    Window* pChild = m_pTabBar->GetAccessibleChildWindow( (USHORT)i );
                     if ( pChild )
                         xChild = pChild->GetAccessible();
                 }
@@ -319,7 +319,7 @@ namespace accessibility
             Window* pParent = m_pTabBar->GetAccessibleParentWindow();
             if ( pParent )
             {
-                for ( sal_uInt16 i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
+                for ( USHORT i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
                 {
                     Window* pChild = pParent->GetAccessibleChildWindow( i );
                     if ( pChild == static_cast< Window* >( m_pTabBar ) )
@@ -345,7 +345,7 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBar::getAccessibleDescription( ) throw (RuntimeException)
+    ::rtl::OUString AccessibleTabBar::getAccessibleDescription(	) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -423,8 +423,8 @@ namespace accessibility
         {
             Reference< XAccessible > xAcc = getAccessibleChild( i );
             if ( xAcc.is() )
-            {
-                Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
+            {			
+                Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );				
                 if ( xComp.is() )
                 {
                     Rectangle aRect = VCLRectangle( xComp->getBounds() );
@@ -453,7 +453,7 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    sal_Int32 AccessibleTabBar::getForeground(  ) throw (RuntimeException)
+    sal_Int32 AccessibleTabBar::getForeground(	) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -551,7 +551,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace accessibility
+}	// namespace accessibility
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

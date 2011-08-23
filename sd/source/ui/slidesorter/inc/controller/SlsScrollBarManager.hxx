@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,10 @@
 #ifndef SD_SLIDESORTER_SLIDE_SORTER_SCROLL_BAR_MANAGER_HXX
 #define SD_SLIDESORTER_SLIDE_SORTER_SCROLL_BAR_MANAGER_HXX
 
-#include "SlideSorter.hxx"
-
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
 #include <boost/shared_ptr.hpp>
-#include <boost/function.hpp>
 
 class Point;
 class Rectangle;
@@ -56,7 +53,7 @@ namespace sd { namespace slidesorter { namespace controller {
 
 /** Manage the horizontal and vertical scroll bars.  Listen for events, set
     their sizes, place them in the window, determine their visibilities.
-
+    
     <p>Handle auto scrolling, i.e. the scrolling of the window when the
     mouse comes near the window border while dragging a selection.</p>
 
@@ -96,7 +93,7 @@ public:
         into a cache for later reuse.
     */
     void Disconnect (void);
-
+    
     /** Set up the scroll bar, i.e. thumb size and position.  Call this
         method when the content of the browser window changed, i.e. pages
         were inserted or deleted, the layout or the zoom factor has
@@ -114,34 +111,30 @@ public:
         bool bScrollToCurrentPosition = true);
 
     /** Place the scroll bars inside the given area.  When the available
-        area is not large enough for the content to display the horizontal
-        and/or vertical scroll bar is enabled.
+        area is not large enough for the content to display the resulting
+        behaviour depends on the mbUseVerticalScrollBar flag.  When it is
+        set to true then a vertical scroll bar is shown.  Otherwise the
+        height of the returned area is enlarged so that the content fits
+        into it.
         @param rAvailableArea
             The scroll bars will be placed inside this rectangle.  It is
             expected to be given in pixel relative to its parent.
-        @param bIsHorizontalScrollBarAllowed
-            Only when this flag is <TRUE/> the horizontal scroll may be
-            displayed.
-        @param bIsVerticalScrollBarAllowed
-            Only when this flag is <TRUE/> the horizontal scroll may be
-            displayed.
         @return
             Returns the space that remains after the scroll bars are
-            placed.
+            placed.  When the mbUseVerticalScrollBar flag is false then the
+            returned rectangle may be larger than the given one.
     */
-    Rectangle PlaceScrollBars (
-        const Rectangle& rAvailableArea,
-        const bool bIsHorizontalScrollBarAllowed,
-        const bool bIsVerticalScrollBarAllowed);
+    Rectangle PlaceScrollBars (const Rectangle& rAvailableArea);
 
-    /** Update the vertical and horizontal scroll bars so that the visible
-        area has the given top and left values.
+    /** Update the vertical scroll bar so that the visible area has the
+        given top value.
     */
-    void SetTopLeft (const Point aNewTopLeft);
+    void SetTop (const sal_Int32 nTop);
 
-    sal_Int32 GetTop (void) const;
-
-    sal_Int32 GetLeft (void) const;
+    /** Update the horizontal scroll bar so that the visible area has the
+        given left value.
+    */
+    void SetLeft (const sal_Int32 nLeft);
 
     /** Return the width of the vertical scroll bar, which--when
         shown--should be fixed in contrast to its height.
@@ -162,34 +155,13 @@ public:
     /** Call this method to scroll a window while the mouse is in dragging a
         selection.  If the mouse is near the window border or is outside the
         window then scroll the window accordingly.
-        @param rMouseWindowPosition
-            The mouse position for which the scroll amount is calculated.
-        @param rAutoScrollFunctor
-            Every time when the window is scrolled then this functor is executed.
         @return
             When the window is scrolled then this method returns <TRUE/>.
             When the window is not changed then <FALSE/> is returned.
     */
-    bool AutoScroll (
-        const Point& rMouseWindowPosition,
-        const ::boost::function<void(void)>& rAutoScrollFunctor);
+    bool AutoScroll (const Point& rMouseWindowPosition);
 
     void StopAutoScroll (void);
-
-    enum Orientation { Orientation_Horizontal, Orientation_Vertical };
-    enum Unit { Unit_Pixel, Unit_Slide };
-    /** Scroll the slide sorter by setting the thumbs of the scroll bars and
-        by moving the content of the content window.
-        @param eOrientation
-            Defines whether to scroll horizontally or vertically.
-        @param eUnit
-            Defines whether the distance is a pixel value or the number of
-            slides to scroll.
-    */
-    void Scroll(
-        const Orientation eOrientation,
-        const Unit eUnit,
-        const sal_Int32 nDistance);
 
 private:
     SlideSorter& mrSlideSorter;
@@ -198,7 +170,7 @@ private:
         objects of this class.  It is given to the constructor.
     */
     ::boost::shared_ptr<ScrollBar> mpHorizontalScrollBar;
-
+    
     /** The vertical scroll bar.  Note that is used but not owned by
         objects of this class.  It is given to the constructor.
     */
@@ -226,14 +198,11 @@ private:
     */
     Timer maAutoScrollTimer;
     Size maAutoScrollOffset;
-    bool mbIsAutoScrollActive;
 
     /** The content window is the one whose view port is controlled by the
         scroll bars.
     */
-    SharedSdWindow mpContentWindow;
-
-    ::boost::function<void(void)> maAutoScrollFunctor;
+    ::boost::shared_ptr<sd::Window> mpContentWindow;
 
     void SetWindowOrigin (
         double nHorizontalPosition,
@@ -249,10 +218,7 @@ private:
             The area that is enclosed by the scroll bars is returned.  It
             will be filled with the SlideSorterView.
     */
-    Rectangle DetermineScrollBarVisibilities(
-        const Rectangle& rAvailableArea,
-        const bool bIsHorizontalScrollBarAllowed,
-        const bool bIsVerticalScrollBarAllowed);
+    Rectangle DetermineScrollBarVisibilities (const Rectangle& rAvailableArea);
 
     /** Typically called by DetermineScrollBarVisibilities() this method
         tests a specific configuration of the two scroll bars being visible

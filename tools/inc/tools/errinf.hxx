@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,18 +48,18 @@ class Window;
 class ErrorInfo
 {
 private:
-    sal_uIntPtr                   lUserId;
+    ULONG                   lUserId;
 
 public:
                             TYPEINFO();
 
-                            ErrorInfo( sal_uIntPtr lArgUserId ) :
+                            ErrorInfo( ULONG lArgUserId ) :
                                 lUserId( lArgUserId ){}
     virtual                 ~ErrorInfo(){}
 
-    sal_uIntPtr                   GetErrorCode() const { return lUserId; }
+    ULONG                   GetErrorCode() const { return lUserId; }
 
-    static ErrorInfo*       GetErrorInfo(sal_uIntPtr);
+    static ErrorInfo*       GetErrorInfo(ULONG);
 };
 
 
@@ -77,11 +77,11 @@ private:
 public:
                             TYPEINFO();
 
-                            DynamicErrorInfo(sal_uIntPtr lUserId, sal_uInt16 nMask);
+                            DynamicErrorInfo(ULONG lUserId, USHORT nMask);
     virtual                 ~DynamicErrorInfo();
 
-    operator                sal_uIntPtr() const;
-    sal_uInt16                  GetDialogMask() const;
+    operator                ULONG() const;
+    USHORT                  GetDialogMask() const;
 };
 
 
@@ -92,14 +92,14 @@ public:
 class StandardErrorInfo : public DynamicErrorInfo
 {
 private:
-    sal_uIntPtr                   lExtId;
+    ULONG                   lExtId;
 
 public:
                             TYPEINFO();
 
-                            StandardErrorInfo( sal_uIntPtr lUserId, sal_uIntPtr lExtId,
-                                              sal_uInt16 nFlags = 0);
-    sal_uIntPtr                   GetExtendedErrorCode() const { return lExtId; }
+                            StandardErrorInfo( ULONG lUserId, ULONG lExtId,
+                                              USHORT nFlags = 0);
+    ULONG                   GetExtendedErrorCode() const { return lExtId; }
 
 };
 
@@ -116,9 +116,9 @@ private:
 public:
                             TYPEINFO();
 
-                            StringErrorInfo( sal_uIntPtr lUserId,
+                            StringErrorInfo( ULONG lUserId,
                                             const String& aStringP,
-                                            sal_uInt16 nFlags = 0);
+                                            USHORT nFlags = 0);
     const String&           GetErrorString() const { return aString; }
 };
 
@@ -132,8 +132,8 @@ private:
 public:
     TYPEINFO();
 
-    TwoStringErrorInfo(sal_uIntPtr nUserID, const String & rTheArg1,
-                       const String & rTheArg2, sal_uInt16 nFlags = 0):
+    TwoStringErrorInfo(ULONG nUserID, const String & rTheArg1,
+                       const String & rTheArg2, USHORT nFlags = 0):
      DynamicErrorInfo(nUserID, nFlags), aArg1(rTheArg1), aArg2(rTheArg2) {}
     virtual ~TwoStringErrorInfo() {}
 
@@ -150,10 +150,10 @@ class TOOLS_DLLPUBLIC MessageInfo : public DynamicErrorInfo
   public:
 
                             TYPEINFO();
-                            MessageInfo(sal_uIntPtr UserId, sal_uInt16 nFlags = 0) :
+                            MessageInfo(ULONG UserId, USHORT nFlags = 0) :
                                 DynamicErrorInfo(UserId, nFlags){}
-                            MessageInfo(sal_uIntPtr UserId, const String &rArg,
-                                        sal_uInt16 nFlags = 0 ) :
+                            MessageInfo(ULONG UserId, const String &rArg,
+                                        USHORT nFlags = 0 ) :
                                 DynamicErrorInfo(UserId, nFlags), aArg(rArg) {}
     const String&           GetMessageArg() const { return aArg; }
 
@@ -179,7 +179,7 @@ public:
                             ErrorContext(Window *pWin=0);
     virtual                 ~ErrorContext();
 
-    virtual sal_Bool            GetString( sal_uIntPtr nErrId, String& rCtxStr ) = 0;
+    virtual BOOL            GetString( ULONG nErrId, String& rCtxStr ) = 0;
     Window*                 GetParent() { return pWin; }
 
     static ErrorContext*    GetContext();
@@ -190,8 +190,8 @@ public:
 // - ErrorHandler -
 // ----------------
 
-typedef sal_uInt16 WindowDisplayErrorFunc(
-    Window *, sal_uInt16 nMask, const String &rErr, const String &rAction);
+typedef USHORT WindowDisplayErrorFunc(
+    Window *, USHORT nMask, const String &rErr, const String &rAction);
 
 typedef void BasicDisplayErrorFunc(
     const String &rErr, const String &rAction);
@@ -203,22 +203,22 @@ class TOOLS_DLLPUBLIC ErrorHandler
 private:
     ErrHdl_Impl*        pImpl;
 
-    static sal_uInt16       HandleError_Impl( sal_uIntPtr lId,
-                      sal_uInt16 nFlags,
-                      sal_Bool bJustCreateString,
+    static USHORT       HandleError_Impl( ULONG lId, 
+                      USHORT nFlags, 
+                      BOOL bJustCreateString, 
                       String & rError);
 protected:
-    virtual sal_Bool        CreateString( const ErrorInfo *,
-                      String &, sal_uInt16& nMask ) const = 0;
-            sal_Bool        ForwCreateString( const ErrorInfo*,
-                      String&, sal_uInt16& nMask ) const;
+    virtual BOOL        CreateString( const ErrorInfo *, 
+                      String &, USHORT& nMask ) const = 0;
+            BOOL        ForwCreateString( const ErrorInfo*, 
+                      String&, USHORT& nMask ) const;
 
 public:
                         ErrorHandler();
     virtual             ~ErrorHandler();
 
-    static sal_uInt16       HandleError ( sal_uIntPtr lId, sal_uInt16 nMask = USHRT_MAX );
-    static sal_Bool         GetErrorString( sal_uIntPtr lId, String& rStr );
+    static USHORT       HandleError ( ULONG lId, USHORT nMask = USHRT_MAX );
+    static BOOL         GetErrorString( ULONG lId, String& rStr );
 
     static void         RegisterDisplay( BasicDisplayErrorFunc* );
     static void         RegisterDisplay( WindowDisplayErrorFunc* );
@@ -232,8 +232,8 @@ public:
 class TOOLS_DLLPUBLIC SimpleErrorHandler : private ErrorHandler
 {
 protected:
-    virtual sal_Bool        CreateString( const ErrorInfo*, String &,
-                                      sal_uInt16 &nMask ) const;
+    virtual BOOL        CreateString( const ErrorInfo*, String &, 
+                                      USHORT &nMask ) const;
 
 public:
                         SimpleErrorHandler();

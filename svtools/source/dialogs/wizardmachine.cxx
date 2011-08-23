@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ namespace svt
             // the WizardDialog does not allow non-linear transitions (e.g. it's
             // not possible to add pages in a non-linear order), so we need some own maintainance data
 
-        sal_Bool                        m_bAutoNextButtonState;
+        sal_Bool						m_bAutoNextButtonState;
 
         bool                            m_bTravelingSuspended;
 
@@ -196,13 +196,13 @@ namespace svt
         if (_nButtonFlags & WZB_PREVIOUS)
         {
             m_pPrevPage = new PushButton(this, WB_TABSTOP);
-            m_pPrevPage->SetHelpId( HID_WIZARD_PREVIOUS );
+            m_pPrevPage->SetSmartHelpId( SmartId(HID_WIZARD_PREVIOUS) );
             m_pPrevPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pPrevPage->SetText(String(SvtResId(STR_WIZDLG_PREVIOUS)));
             m_pPrevPage->Show();
 
             if (_nButtonFlags & WZB_NEXT)
-                AddButton( m_pPrevPage, ( WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X) );      // half x-offset to the next button
+                AddButton( m_pPrevPage, ( WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X) );		// half x-offset to the next button
             else
                 AddButton( m_pPrevPage, WIZARDDIALOG_BUTTON_STDOFFSET_X );
             SetPrevButton( m_pPrevPage );
@@ -213,7 +213,7 @@ namespace svt
         if (_nButtonFlags & WZB_NEXT)
         {
             m_pNextPage = new PushButton(this, WB_TABSTOP);
-            m_pNextPage->SetHelpId( HID_WIZARD_NEXT );
+            m_pNextPage->SetSmartHelpId( SmartId(HID_WIZARD_NEXT) );
             m_pNextPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pNextPage->SetText(String(SvtResId(STR_WIZDLG_NEXT)));
             m_pNextPage->Show();
@@ -372,14 +372,14 @@ namespace svt
 
             // is it a button?
             WindowType eType = pChildLoop->GetType();
-            if  (   (WINDOW_BUTTON == eType)
-                ||  (WINDOW_PUSHBUTTON == eType)
-                ||  (WINDOW_OKBUTTON == eType)
-                ||  (WINDOW_CANCELBUTTON == eType)
-                ||  (WINDOW_HELPBUTTON == eType)
-                ||  (WINDOW_IMAGEBUTTON == eType)
-                ||  (WINDOW_MENUBUTTON == eType)
-                ||  (WINDOW_MOREBUTTON == eType)
+            if	(	(WINDOW_BUTTON == eType)
+                ||	(WINDOW_PUSHBUTTON == eType)
+                ||	(WINDOW_OKBUTTON == eType)
+                ||	(WINDOW_CANCELBUTTON == eType)
+                ||	(WINDOW_HELPBUTTON == eType)
+                ||	(WINDOW_IMAGEBUTTON == eType)
+                ||	(WINDOW_MENUBUTTON == eType)
+                ||	(WINDOW_MOREBUTTON == eType)
                 )
             {
                 pChildLoop->SetStyle(pChildLoop->GetStyle() & ~WB_DEFBUTTON);
@@ -522,7 +522,7 @@ namespace svt
             WizardState nNextState = determineNextState( nCurrentState );
             if ( WZS_INVALID_STATE == nNextState )
             {
-                OSL_FAIL( "OWizardMachine::skipUntil: the given target state does not exist!" );
+                DBG_ERROR( "OWizardMachine::skipUntil: the given target state does not exist!" );
                 return sal_False;
             }
 
@@ -538,7 +538,7 @@ namespace svt
         {
             // argh! prepareLeaveCurrentPage succeeded, determineNextState succeeded,
             // but ShowPage doesn't? Somebody behaves very strange here ....
-            OSL_FAIL( "OWizardMachine::skipUntil: very unpolite ...." );
+            DBG_ERROR( "OWizardMachine::skipUntil: very unpolite ...." );
             m_pImpl->aStateHistory = aOldStateHistory;
             return sal_False;
         }
@@ -574,7 +574,7 @@ namespace svt
         {
             // TODO: this leaves us in a state where we have no current page and an inconsistent state history.
             // Perhaps we should rollback the skipping here ....
-            OSL_FAIL("OWizardMachine::skip: very unpolite ....");
+            DBG_ERROR("OWizardMachine::skip: very unpolite ....");
                 // if somebody does a skip and then does not allow to leave ...
                 // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
                 // somebody behaves really strange ...)
@@ -745,7 +745,7 @@ namespace svt
     }
 
 //.........................................................................
-}   // namespace svt
+}	// namespace svt
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

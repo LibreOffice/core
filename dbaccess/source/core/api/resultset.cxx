@@ -50,6 +50,7 @@
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
+//using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -229,12 +230,12 @@ Reference< XPropertySetInfo > OResultSet::getPropertySetInfo() throw (RuntimeExc
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OResultSet::createArrayHelper" );
     BEGIN_PROPERTY_HELPER(6)
-        DECL_PROP1(CURSORNAME,              ::rtl::OUString,    READONLY);
-        DECL_PROP0(FETCHDIRECTION,          sal_Int32);
-        DECL_PROP0(FETCHSIZE,               sal_Int32);
-        DECL_PROP1_BOOL(ISBOOKMARKABLE,         READONLY);
-        DECL_PROP1(RESULTSETCONCURRENCY,    sal_Int32,      READONLY);
-        DECL_PROP1(RESULTSETTYPE,           sal_Int32,      READONLY);
+        DECL_PROP1(CURSORNAME,				::rtl::OUString,	READONLY);
+        DECL_PROP0(FETCHDIRECTION,			sal_Int32);
+        DECL_PROP0(FETCHSIZE,				sal_Int32);
+        DECL_PROP1_BOOL(ISBOOKMARKABLE,			READONLY);
+        DECL_PROP1(RESULTSETCONCURRENCY,	sal_Int32,		READONLY);
+        DECL_PROP1(RESULTSETTYPE,			sal_Int32,		READONLY);
     END_PROPERTY_HELPER();
 }
 
@@ -268,7 +269,7 @@ void OResultSet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any&
             xSet->setPropertyValue(PROPERTY_FETCHSIZE, rValue);
             break;
         default:
-            OSL_FAIL("unknown Property");
+            DBG_ERROR("unknown Property");
     }
 }
 
@@ -281,7 +282,7 @@ void OResultSet::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
         {
             sal_Bool bVal = m_bIsBookmarkable;
             rValue.setValue(&bVal, getBooleanCppuType());
-        }   break;
+        }	break;
         default:
         {
             // get the property name

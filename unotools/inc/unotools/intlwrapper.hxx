@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ class UNOTOOLS_DLLPUBLIC IntlWrapper
 {
 private:
 
-    ::com::sun::star::lang::Locale  aLocale;
+    ::com::sun::star::lang::Locale	aLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
 
             CharClass*          pCharClass;
@@ -70,7 +70,7 @@ private:
             void                ImplNewCharClass() const;
             void                ImplNewLocaleData() const;
             void                ImplNewCalendar() const;
-            void                ImplNewCollator( sal_Bool bCaseSensitive ) const;
+            void                ImplNewCollator( BOOL bCaseSensitive ) const;
 
 
 public:
@@ -109,14 +109,14 @@ public:
     const CollatorWrapper*      getCollator() const
                                     {
                                         if ( !pCollator )
-                                            ImplNewCollator( sal_False );
+                                            ImplNewCollator( FALSE );
                                         return pCollator;
                                     }
     /// case sensitive collator
     const CollatorWrapper*      getCaseCollator() const
                                     {
                                         if ( !pCaseCollator )
-                                            ImplNewCollator( sal_True );
+                                            ImplNewCollator( TRUE );
                                         return pCaseCollator;
                                     }
 };

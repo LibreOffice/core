@@ -33,7 +33,6 @@
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <tools/solar.h>
 #include <automation/simplecm.hxx>
-#include <osl/diagnose.h>
 
 #include <automation/commdefines.hxx>
 #include "packethandler.hxx"
@@ -46,7 +45,7 @@ void debug_printf( const char *chars )
     static BOOL bPrint = (getenv("DEBUG") != NULL);
     if ( bPrint )
     {
-        printf( "%c\n", chars );
+        printf( chars );
         fflush( stdout );
     }
 }
@@ -56,11 +55,11 @@ CommunicationLink::CommunicationLink( CommunicationManager *pMan )
 : pMyManager(pMan)
 , pServiceData(NULL)
 , nServiceProtocol( 0 )
-, bIsInsideCallback( sal_False )
+, bIsInsideCallback( FALSE )
 , nTotalBytes( 0 )
 , maApplication("Undefined")
 #if OSL_DEBUG_LEVEL > 1
-, bFlag( sal_False )
+, bFlag( FALSE )
 , nSomething( 0 )
 #endif
 {
@@ -70,7 +69,7 @@ CommunicationLink::~CommunicationLink()
 {
 #if OSL_DEBUG_LEVEL > 1
     if ( !bFlag )    // bFlag will be set if deletion is expected else we can set a breakpoint
-        bFlag = sal_False;
+        bFlag = FALSE;
 #endif
     if ( pMyManager )
         pMyManager->DestroyingLink( this );
@@ -104,14 +103,14 @@ IMPL_LINK( CommunicationLink, DataReceived, void*, EMPTYARG )
     return 1;
 }
 
-sal_Bool CommunicationLink::DoTransferDataStream( SvStream *pDataStream, CMProtocol nProtocol )
+BOOL CommunicationLink::DoTransferDataStream( SvStream *pDataStream, CMProtocol nProtocol )
 {
     INFO_MSG( CByteString("S :").Append( GetCommunicationPartner( CM_FQDN ) ),
         CByteString("Daten Senden:").Append( GetCommunicationPartner( CM_FQDN ) ),
         CM_SEND, this );
-    sal_Bool bWasError = sal_False;
+    BOOL bWasError = FALSE;
 
-    sal_uInt32 nBuffer;
+    UINT32 nBuffer;
     nBuffer = pDataStream->SeekRel(0) +1;
     bWasError = pPacketHandler->TransferData( ((SvMemoryStream*)pDataStream)->GetData(), nBuffer, nProtocol ) != C_ERROR_NONE;
 
@@ -125,7 +124,7 @@ sal_Bool CommunicationLink::DoTransferDataStream( SvStream *pDataStream, CMProto
     return !bWasError;
 }
 
-sal_Bool CommunicationLink::TransferDataStream( SvStream *pDataStream, CMProtocol nProtocol )
+BOOL CommunicationLink::TransferDataStream( SvStream *pDataStream, CMProtocol nProtocol )
 {
     aLastAccess = DateTime();
     nTotalBytes += pDataStream->Seek( STREAM_SEEK_TO_END );
@@ -144,7 +143,7 @@ SimpleCommunicationLinkViaSocket::SimpleCommunicationLinkViaSocket( Communicatio
 , aMyName()
 , pStreamSocket( pSocket )
 , pReceiveStream( NULL )
-, bIsRequestShutdownPending( sal_False )
+, bIsRequestShutdownPending( FALSE )
 {
     pTCPIO = new TCPIO( pStreamSocket );
     pPacketHandler = new PacketHandler( (ITransmiter*) pTCPIO, pTCPIO, pMyManager->IsMultiChannel() );
@@ -167,10 +166,10 @@ void SimpleCommunicationLinkViaSocket::SetStreamSocket( osl::StreamSocket* pSock
     pStreamSocket = pSocket;
 }
 
-sal_Bool SimpleCommunicationLinkViaSocket::StopCommunication()
+BOOL SimpleCommunicationLinkViaSocket::StopCommunication()
 {
-    CommunicationLinkRef rHold(this);       // avoid deleting this link before the end of the method
-    if ( !IsCommunicationError() )  // Meaning that the Communication is still runnung
+    CommunicationLinkRef rHold(this);		// avoid deleting this link before the end of the method
+    if ( !IsCommunicationError() )	// Meaning that the Communication is still runnung
     {
 #if OSL_DEBUG_LEVEL > 1
         debug_printf("Sending REQUEST_ShutdownLink\n");
@@ -178,10 +177,10 @@ sal_Bool SimpleCommunicationLinkViaSocket::StopCommunication()
         SendHandshake( CH_REQUEST_ShutdownLink );
     }
     WaitForShutdown();
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SimpleCommunicationLinkViaSocket::IsCommunicationError()
+BOOL SimpleCommunicationLinkViaSocket::IsCommunicationError()
 {
     return !pStreamSocket;
 }
@@ -251,7 +250,7 @@ ByteString SimpleCommunicationLinkViaSocket::GetMyName( CM_NameType eType )
 SvStream* SimpleCommunicationLinkViaSocket::GetBestCommunicationStream()
 {
     SvStream* pStream = new SvMemoryStream;
-//  pStream->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+//	pStream->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
     return pStream;
 }
 
@@ -264,9 +263,9 @@ SvStream* SimpleCommunicationLinkViaSocket::GetBestCommunicationStream()
     if ( !bWasError )\
         {nTotal += nLength;}
 
-sal_Bool SimpleCommunicationLinkViaSocket::DoReceiveDataStream()
+BOOL SimpleCommunicationLinkViaSocket::DoReceiveDataStream()
 {
-    sal_Bool bWasError = sal_False;
+    BOOL bWasError = FALSE;
     void* pBuffer = NULL;
     comm_UINT32 nLen;
     bWasError = pPacketHandler->ReceiveData( pBuffer, nLen ) != C_ERROR_NONE;
@@ -275,7 +274,7 @@ sal_Bool SimpleCommunicationLinkViaSocket::DoReceiveDataStream()
         pReceiveStream = GetBestCommunicationStream();
         DBG_ASSERT( pReceiveStream->IsA() == ID_MEMORYSTREAM, "CommunicationStream is not an SvMemoryStream. Communication has to be reimplemented here!");
         if ( pReceiveStream->IsA() == ID_MEMORYSTREAM )
-            ((SvMemoryStream*)pReceiveStream)->SetBuffer( pBuffer, nLen, sal_True, nLen );
+            ((SvMemoryStream*)pReceiveStream)->SetBuffer( pBuffer, nLen, TRUE, nLen );
         DBG_ASSERT( pReceiveStream, "Datastream is NULL");
     }
 
@@ -298,13 +297,13 @@ void SimpleCommunicationLinkViaSocket::SetNewPacketAsCurrent()
     nServiceHeaderType = pPacketHandler->GetReceiveHeaderType();
 }
 
-sal_Bool SimpleCommunicationLinkViaSocket::SendHandshake( HandshakeType aHandshakeType, SvStream* pData )
+BOOL SimpleCommunicationLinkViaSocket::SendHandshake( HandshakeType aHandshakeType, SvStream* pData )
 {
-    sal_Bool bWasError;
+    BOOL bWasError;
 
     if ( pData )
     {
-        sal_uInt32 nBuffer;
+        UINT32 nBuffer;
         nBuffer = pData->Seek( STREAM_SEEK_TO_END );
         bWasError = !pPacketHandler->SendHandshake( aHandshakeType, ((SvMemoryStream*)pData)->GetData(), nBuffer );
     }
@@ -320,7 +319,7 @@ sal_Bool SimpleCommunicationLinkViaSocket::SendHandshake( HandshakeType aHandsha
         ShutdownCommunication();
     }
     else
-    {   // set new status
+    {	// set new status
         switch ( aHandshakeType )
         {
             case CH_REQUEST_HandshakeAlive:
@@ -328,7 +327,7 @@ sal_Bool SimpleCommunicationLinkViaSocket::SendHandshake( HandshakeType aHandsha
             case CH_RESPONSE_HandshakeAlive:
                 break;
             case CH_REQUEST_ShutdownLink:
-                bIsRequestShutdownPending = sal_True;
+                bIsRequestShutdownPending = TRUE;
                 break;
             case CH_ShutdownLink:
                 break;
@@ -337,7 +336,7 @@ sal_Bool SimpleCommunicationLinkViaSocket::SendHandshake( HandshakeType aHandsha
             case CH_SetApplication:
                 break;
             default:
-                OSL_FAIL("Unknown HandshakeType");
+                DBG_ERROR("Unknown HandshakeType");
         }
     }
     return !bWasError;
@@ -367,30 +366,30 @@ bool SimpleCommunicationLinkViaSocket::IsReceiveReady()
 
 void SimpleCommunicationLinkViaSocketWithReceiveCallbacks::WaitForShutdown()
 {
-    CommunicationLinkRef rHold(this);       // avoid deleting this link before the end of the method
+    CommunicationLinkRef rHold(this);		// avoid deleting this link before the end of the method
 
     while( pMyManager && !IsCommunicationError() && IsReceiveReady())
         ReceiveDataStream();
 }
 
-sal_Bool SimpleCommunicationLinkViaSocketWithReceiveCallbacks::ReceiveDataStream()
+BOOL SimpleCommunicationLinkViaSocketWithReceiveCallbacks::ReceiveDataStream()
 {
     if ( DoReceiveDataStream() )
     {
         SetNewPacketAsCurrent();
         StartCallback();
         DataReceived();
-        return sal_True;
+        return TRUE;
     }
     else
     {
         StartCallback();
         ShutdownCommunication();
-        return sal_False;
+        return FALSE;
     }
 }
 
-sal_Bool SimpleCommunicationLinkViaSocketWithReceiveCallbacks::ShutdownCommunication()
+BOOL SimpleCommunicationLinkViaSocketWithReceiveCallbacks::ShutdownCommunication()
 {
     if ( GetStreamSocket() )
         GetStreamSocket()->shutdown();
@@ -404,14 +403,14 @@ sal_Bool SimpleCommunicationLinkViaSocketWithReceiveCallbacks::ShutdownCommunica
 
     ConnectionClosed();
 
-    return sal_True;
+    return TRUE;
 }
 
 
 
-CommunicationManager::CommunicationManager( sal_Bool bUseMultiChannel )
+CommunicationManager::CommunicationManager( BOOL bUseMultiChannel )
 : nInfoType( CM_NONE )
-, bIsCommunicationRunning( sal_False )
+, bIsCommunicationRunning( FALSE )
 , maApplication("Unknown")
 , bIsMultiChannel( bUseMultiChannel )
 {
@@ -422,18 +421,18 @@ CommunicationManager::~CommunicationManager()
     xLastNewLink.Clear();
 }
 
-sal_Bool CommunicationManager::StartCommunication( String aApp, String aParams )
+BOOL CommunicationManager::StartCommunication( String aApp, String aParams )
 {
     (void) aApp; /* avoid warning about unused parameter */
     (void) aParams; /* avoid warning about unused parameter */
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool CommunicationManager::StartCommunication( ByteString aHost, sal_uLong nPort )
+BOOL CommunicationManager::StartCommunication( ByteString aHost, ULONG nPort )
 {
     (void) aHost; /* avoid warning about unused parameter */
     (void) nPort; /* avoid warning about unused parameter */
-    return sal_False;
+    return FALSE;
 }
 
 ByteString CommunicationManager::GetMyName( CM_NameType )
@@ -444,10 +443,10 @@ ByteString CommunicationManager::GetMyName( CM_NameType )
 
 void CommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 {
-    pCL->StartCallback();       // Sollte bereits vor dem Aufruf gerufen werden
+    pCL->StartCallback();		// Sollte bereits vor dem Aufruf gerufen werden
     pCL->aStart = DateTime();
     pCL->aLastAccess = pCL->aStart;
-    bIsCommunicationRunning = sal_True;
+    bIsCommunicationRunning = TRUE;
     pCL->SetApplication( GetApplication() );
 
     xLastNewLink = pCL;
@@ -461,7 +460,7 @@ void CommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 
 void CommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
 {
-    pCL->StartCallback();       // Sollte bereits vor dem Aufruf gerufen werden
+    pCL->StartCallback();		// Sollte bereits vor dem Aufruf gerufen werden
     pCL->aLastAccess = DateTime();
 
     INFO_MSG( CByteString("C-:").Append( pCL->GetCommunicationPartner( CM_FQDN ) ),
@@ -473,19 +472,19 @@ void CommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
         xLastNewLink.Clear();
 
     pCL->FinishCallback();
-//  delete pCL;
+//	delete pCL;
 }
 
 void CommunicationManager::CallDataReceived( CommunicationLink* pCL )
 {
-    pCL->StartCallback();       // Sollte bereits vor dem Aufruf gerufen werden
+    pCL->StartCallback();		// Sollte bereits vor dem Aufruf gerufen werden
     pCL->aLastAccess = DateTime();
-    CommunicationLinkRef rHold(pCL);    // Hï¿½lt den Zeiger bis zum Ende des calls
+    CommunicationLinkRef rHold(pCL);	// Hält den Zeiger bis zum Ende des calls
 
     // should be impossible but happens for mysterious reasons
     if ( !pCL->pServiceData )
     {
-        OSL_FAIL( "Datastream is NULL" );
+        DBG_ERROR( "Datastream is NULL" );
         pCL->FinishCallback();
         return;
     }
@@ -494,8 +493,8 @@ void CommunicationManager::CallDataReceived( CommunicationLink* pCL )
     if ( CH_Handshake == pCL->nServiceHeaderType )
     {
         SvStream *pData = pCL->GetServiceData();
-        sal_uInt16 nType;
-        pData->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );    // Unfortulately it is written this way :((
+        USHORT nType;
+        pData->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );	// Unfortulately it is written this way :((
         *pData >> nType;
         pData->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
         switch ( nType )
@@ -566,12 +565,12 @@ void CommunicationManager::CallInfoMsg( InfoString aMsg )
     InfoMsg( aMsg );
 }
 
-void CommunicationManager::SetApplication( const ByteString& aApp, sal_Bool bRunningLinks )
+void CommunicationManager::SetApplication( const ByteString& aApp, BOOL bRunningLinks )
 {
     maApplication = aApp;
     if ( bRunningLinks )
     {
-        sal_uInt16 i;
+        USHORT i;
         for ( i = 0 ; i < GetCommunicationLinkCount() ; i++ )
             GetCommunicationLink( i )->SetApplication( aApp );
     }
@@ -579,7 +578,7 @@ void CommunicationManager::SetApplication( const ByteString& aApp, sal_Bool bRun
 
 
 
-SingleCommunicationManager::SingleCommunicationManager( sal_Bool bUseMultiChannel )
+SingleCommunicationManager::SingleCommunicationManager( BOOL bUseMultiChannel )
 : CommunicationManager( bUseMultiChannel )
 {
     xActiveLink = NULL;
@@ -593,31 +592,31 @@ SingleCommunicationManager::~SingleCommunicationManager()
         pInactiveLink->InvalidateManager();
 }
 
-sal_Bool SingleCommunicationManager::StopCommunication()
+BOOL SingleCommunicationManager::StopCommunication()
 {
     if ( xActiveLink.Is() )
     {
-        sal_Bool bSuccess = xActiveLink->StopCommunication();
+        BOOL bSuccess = xActiveLink->StopCommunication();
         if ( pInactiveLink )
             pInactiveLink->InvalidateManager();
         pInactiveLink = xActiveLink;
         xActiveLink.Clear();
         return bSuccess;
     }
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SingleCommunicationManager::IsLinkValid( CommunicationLink* pCL )
+BOOL SingleCommunicationManager::IsLinkValid( CommunicationLink* pCL )
 {
     return &xActiveLink == pCL;
 }
 
-sal_uInt16 SingleCommunicationManager::GetCommunicationLinkCount()
+USHORT SingleCommunicationManager::GetCommunicationLinkCount()
 {
     return IsCommunicationRunning()?1:0;
 }
 
-CommunicationLinkRef SingleCommunicationManager::GetCommunicationLink( sal_uInt16 )
+CommunicationLinkRef SingleCommunicationManager::GetCommunicationLink( USHORT )
 {
     return xActiveLink;
 }
@@ -630,7 +629,7 @@ void SingleCommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
         if ( pInactiveLink )
             pInactiveLink->InvalidateManager();
         pInactiveLink = xActiveLink;
-        xActiveLink->StopCommunication();   // Den alten Link brutal abwï¿½rgen
+        xActiveLink->StopCommunication();	// Den alten Link brutal abwürgen
     }
     xActiveLink = pCL;
     CommunicationManager::CallConnectionOpened( pCL );
@@ -645,7 +644,7 @@ void SingleCommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
         pInactiveLink->InvalidateManager();
     pInactiveLink = xActiveLink;
     xActiveLink.Clear();
-    bIsCommunicationRunning = sal_False;
+    bIsCommunicationRunning = FALSE;
 }
 
 void SingleCommunicationManager::DestroyingLink( CommunicationLink *pCL )
@@ -655,7 +654,7 @@ void SingleCommunicationManager::DestroyingLink( CommunicationLink *pCL )
 }
 
 
-SingleCommunicationManagerClientViaSocket::SingleCommunicationManagerClientViaSocket( ByteString aHost, sal_uLong nPort, sal_Bool bUseMultiChannel )
+SingleCommunicationManagerClientViaSocket::SingleCommunicationManagerClientViaSocket( ByteString aHost, ULONG nPort, BOOL bUseMultiChannel )
 : SingleCommunicationManager( bUseMultiChannel )
 , aHostToTalk( aHost )
 , nPortToTalk( nPort )
@@ -663,7 +662,7 @@ SingleCommunicationManagerClientViaSocket::SingleCommunicationManagerClientViaSo
 }
 
 
-SingleCommunicationManagerClientViaSocket::SingleCommunicationManagerClientViaSocket( sal_Bool bUseMultiChannel )
+SingleCommunicationManagerClientViaSocket::SingleCommunicationManagerClientViaSocket( BOOL bUseMultiChannel )
 : SingleCommunicationManager( bUseMultiChannel )
 , aHostToTalk()
 , nPortToTalk( 0 )
@@ -671,14 +670,14 @@ SingleCommunicationManagerClientViaSocket::SingleCommunicationManagerClientViaSo
 }
 
 
-sal_Bool CommonSocketFunctions::DoStartCommunication( CommunicationManager *pCM, ICommunicationManagerClient *pCMC, ByteString aHost, sal_uLong nPort )
+BOOL CommonSocketFunctions::DoStartCommunication( CommunicationManager *pCM, ICommunicationManagerClient *pCMC, ByteString aHost, ULONG nPort )
 {
     osl::SocketAddr Addr( rtl::OUString( UniString( aHost, RTL_TEXTENCODING_UTF8 ) ), nPort );
     osl::ConnectorSocket *pConnSocket;
 
 
     TimeValue aTV;
-    aTV.Seconds = 10;       // Warte 10 Sekunden
+    aTV.Seconds = 10;		// Warte 10 Sekunden
     aTV.Nanosec = 0;
     do
     {
@@ -688,14 +687,14 @@ sal_Bool CommonSocketFunctions::DoStartCommunication( CommunicationManager *pCM,
         {
             pConnSocket->setOption( osl_Socket_OptionTcpNoDelay, 1 );
             pCM->CallConnectionOpened( CreateCommunicationLink( pCM, pConnSocket ) );
-            return sal_True;
+            return TRUE;
         }
         else
             delete pConnSocket;
 
     } while ( pCMC->RetryConnect() );
 
-    return sal_False;
+    return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,25 +67,25 @@ void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
     {
         nCol = nRelCol + rPos.Col();
         if ( !VALIDCOL( nCol ) )
-            Flags.bColDeleted = sal_True;
+            Flags.bColDeleted = TRUE;
     }
     if ( Flags.bRowRel )
     {
         nRow = nRelRow + rPos.Row();
         if ( !VALIDROW( nRow ) )
-            Flags.bRowDeleted = sal_True;
+            Flags.bRowDeleted = TRUE;
     }
     if ( Flags.bTabRel )
     {
         nTab = nRelTab + rPos.Tab();
         if ( !VALIDTAB( nTab ) )
-            Flags.bTabDeleted = sal_True;
+            Flags.bTabDeleted = TRUE;
     }
 }
 
 
 
-sal_Bool ScSingleRefData::operator==( const ScSingleRefData& r ) const
+BOOL ScSingleRefData::operator==( const ScSingleRefData& r ) const
 {
     return bFlags == r.bFlags &&
         (Flags.bColRel ? nRelCol == r.nRelCol : nCol == r.nCol) &&
@@ -103,8 +103,8 @@ static void lcl_putInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2 )
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
     SCTAB nTab1, nTab2;
-    sal_Bool bTmp;
-    sal_uInt8 nRelState1, nRelState2;
+    BOOL bTmp;
+    BYTE nRelState1, nRelState2;
     if ( rRef1.Flags.bRelName )
         nRelState1 =
             ((rRef1.Flags.bTabRel & 0x01) << 2)
@@ -185,8 +185,8 @@ static void lcl_putInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2 )
         rRef1.Flags.bTabDeleted = rRef2.Flags.bTabDeleted;
         rRef2.Flags.bTabDeleted = bTmp;
     }
-    rRef1.Flags.bRelName = ( nRelState1 ? sal_True : false );
-    rRef2.Flags.bRelName = ( nRelState2 ? sal_True : false );
+    rRef1.Flags.bRelName = ( nRelState1 ? TRUE : FALSE );
+    rRef2.Flags.bRelName = ( nRelState2 ? TRUE : FALSE );
 }
 
 
@@ -244,7 +244,7 @@ ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const 
         Ref2.SetColRel( aRef.IsColRel());
     if (Ref2.nRow == aRef.nRow)
         Ref2.SetRowRel( aRef.IsRowRel());
-    // $Sheet1.$A$5:$A$6 => $Sheet1.$A$5:$A$5:$A$6 => $Sheet1.$A$5:$A$6, and
+    // $Sheet1.$A$5:$A$6 => $Sheet1.$A$5:$A$5:$A$6 => $Sheet1.$A$5:$A$6, and 
     // not $Sheet1.$A$5:Sheet1.$A$6 (with invisible second 3D, but relative).
     if (Ref2.nTab == aRef.nTab)
         Ref2.SetTabRel( bInherit3Dtemp ? Ref1.IsTabRel() : aRef.IsTabRel());

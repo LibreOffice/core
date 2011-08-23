@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,47 +30,65 @@
 #define __FRAMEWORK_HANDLER_OXT_HANDLER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
+
 #include <threadhelp/threadhelpbase.hxx>
+
 #include <threadhelp/resetableguard.hxx>
+
 #include <macros/xinterface.hxx>
+
 #include <macros/xtypeprovider.hxx>
+
 #include <macros/xserviceinfo.hxx>
+
 #include <macros/debug.hxx>
+
 #include <macros/generic.hxx>
+
 #include <general.h>
+
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
+
 #include <com/sun/star/lang/XTypeProvider.hpp>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
+
 #include <com/sun/star/frame/XStatusListener.hpp>
+
 #include <com/sun/star/frame/XFrame.hpp>
+
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
+
 #include <com/sun/star/beans/PropertyValue.hpp>
+
 #include <com/sun/star/util/URL.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
+
 #include <cppuhelper/weak.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//	exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//	exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -95,12 +113,12 @@ class Oxt_Handler  :   // interfaces
                     ,   public  ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
                  Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
         virtual ~Oxt_Handler(                                                                        );
@@ -120,7 +138,7 @@ class Oxt_Handler  :   // interfaces
                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XDispatch
+        //	XDispatch
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL dispatch              (  const css::util::URL&                                     aURL        ,
                                                        const css::uno::Sequence< css::beans::PropertyValue >&    lArguments  ) throw( css::uno::RuntimeException );
@@ -136,18 +154,18 @@ class Oxt_Handler  :   // interfaces
         virtual ::rtl::OUString SAL_CALL detect     (        css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
+    //	protected methods
     //-------------------------------------------------------------------------------------------------------------
     protected:
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
 
     //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  (should be private everyway!)
+    //	variables
+    //	(should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
     private:
 
@@ -157,7 +175,7 @@ class Oxt_Handler  :   // interfaces
 
 };      //  class Oxt_Handler
 
-}       //  namespace framework
+}		//	namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_HANDLER_OXT_HANDLER_HXX_
 

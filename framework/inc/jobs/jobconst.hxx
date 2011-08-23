@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,6 @@
 // other includes
 
 #include <rtl/ustring.hxx>
-#include <fwidllapi.h>
 
 //_______________________________________
 // namespace
@@ -61,9 +60,10 @@ namespace framework{
             it's code. Typos can occure or code will be changed by new developers ...
             Shared set of constant values can help to improve the mentainance of this code.
  */
-class FWI_DLLPUBLIC JobConst
+class JobConst
 {
     public:
+        
         static const ::rtl::OUString ANSWER_DEACTIVATE_JOB();
         static const ::rtl::OUString ANSWER_SAVE_ARGUMENTS();
         static const ::rtl::OUString ANSWER_SEND_DISPATCHRESULT();

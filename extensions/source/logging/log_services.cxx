@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,12 +47,19 @@ namespace logging
 
     static void initializeModule()
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        createRegistryInfo_LoggerPool();
-        createRegistryInfo_FileHandler();
-        createRegistryInfo_ConsoleHandler();
-        createRegistryInfo_PlainTextFormatter();
-        createRegistryInfo_CsvFormatter();
+        static bool bInitialized( false );
+        if ( !bInitialized )
+        {
+            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+            if ( !bInitialized )
+            {
+                createRegistryInfo_LoggerPool();
+                createRegistryInfo_FileHandler();
+                createRegistryInfo_ConsoleHandler();
+                createRegistryInfo_PlainTextFormatter();
+                createRegistryInfo_CsvFormatter();
+            }
+        }
     }
 
 //........................................................................

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,25 +34,23 @@
 
 #include <tools/solar.h>
 #include "sot/sotdllapi.h"
-#include <vector>
 
 //==================class SotData_Impl====================================
 
 class List;
 class SotFactory;
+class SotFactoryList;
 class SotObjectList;
-
-typedef ::std::vector< SotFactory* > SotFactoryList;
 
 struct SotData_Impl
 {
-    sal_uInt32              nSvObjCount;
-    SotObjectList *     pObjectList;
-    SotFactoryList *    pFactoryList;
-    SotFactory *        pSotObjectFactory;
-    SotFactory *        pSotStorageStreamFactory;
-    SotFactory *        pSotStorageFactory;
-    List*               pDataFlavorList;
+    UINT32				nSvObjCount;
+    SotObjectList *		pObjectList;
+    SotFactoryList *	pFactoryList;
+    SotFactory *		pSotObjectFactory;
+    SotFactory *		pSotStorageStreamFactory;
+    SotFactory *		pSotStorageFactory;
+    List*				pDataFlavorList;
     SotData_Impl();
 };
 

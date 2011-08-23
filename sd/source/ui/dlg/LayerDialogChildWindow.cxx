@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,17 +54,17 @@ namespace sd {
 
 LayerDialogChildWindow::LayerDialogChildWindow (
     ::Window* _pParent,
-    sal_uInt16 nId,
+    USHORT nId,
     SfxBindings* pBindings,
-    SfxChildWinInfo* pInfo)
+    SfxChildWinInfo* pInfo) 
     : SfxChildWindow (_pParent, nId)
 {
     ViewShellBase& rBase (*ViewShellBase::GetViewShellBase(
         pBindings->GetDispatcher()->GetFrame()));
     LayerDialogContent* pContent = new LayerDialogContent (
-        pBindings,
-        this,
-        _pParent,
+        pBindings, 
+        this, 
+        _pParent, 
         SdResId( FLT_WIN_LAYER_DIALOG),
         rBase);
     pWindow = pContent;

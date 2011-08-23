@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,12 +30,13 @@
 #define _SVX_GALLERY1_HXX_
 
 #include <tools/string.hxx>
+#include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/brdcst.hxx>
 #include "svx/svxdllapi.h"
 
 #include <cstdio>
-#include <vector>
+#include <list>
 
 // ---------------------
 // - GalleryThemeEntry -
@@ -47,51 +48,51 @@ class GalleryThemeEntry
 {
 private:
 
-    String                  aName;
-    INetURLObject           aThmURL;
-    INetURLObject           aSdgURL;
-    INetURLObject           aSdvURL;
-    sal_uInt32                  nFileNumber;
-    sal_uInt32                  nId;
-    sal_Bool                    bReadOnly;
-    sal_Bool                    bImported;
-    sal_Bool                    bModified;
-    sal_Bool                    bThemeNameFromResource;
-
+    String					aName;
+    INetURLObject			aThmURL;
+    INetURLObject			aSdgURL;
+    INetURLObject			aSdvURL;
+    UINT32					nFileNumber;
+    UINT32					nId;
+    BOOL					bReadOnly;
+    BOOL					bImported;
+    BOOL					bModified;
+    BOOL					bThemeNameFromResource;
+                            
                             GalleryThemeEntry();
-    INetURLObject           ImplGetURLIgnoreCase( const INetURLObject& rURL ) const;
-
-public:
-
+    INetURLObject			ImplGetURLIgnoreCase( const INetURLObject& rURL ) const;
+                            
+public:						
+                            
                             GalleryThemeEntry( const INetURLObject& rBaseURL, const String& rName,
-                                               sal_uInt32 nFileNumber, sal_Bool bReadOnly, sal_Bool bImported,
-                                               sal_Bool bNewFile, sal_uInt32 nId, sal_Bool bThemeNameFromResource );
+                                               UINT32 nFileNumber, BOOL bReadOnly, BOOL bImported,
+                                               BOOL bNewFile, UINT32 nId, BOOL bThemeNameFromResource );
                             ~GalleryThemeEntry() {};
+                            
+    const String&			GetThemeName() const { return aName; }
+    UINT32					GetFileNumber() const { return nFileNumber; }
 
-    const String&           GetThemeName() const { return aName; }
-    sal_uInt32                  GetFileNumber() const { return nFileNumber; }
+    const INetURLObject&	GetThmURL() const { return aThmURL; }
+    const INetURLObject&	GetSdgURL() const { return aSdgURL; }
+    const INetURLObject&	GetSdvURL() const { return aSdvURL; }
 
-    const INetURLObject&    GetThmURL() const { return aThmURL; }
-    const INetURLObject&    GetSdgURL() const { return aSdgURL; }
-    const INetURLObject&    GetSdvURL() const { return aSdvURL; }
-
-    sal_Bool                    IsImported() const { return bImported; }
-    sal_Bool                    IsReadOnly() const { return bReadOnly; }
-    sal_Bool                    IsDefault() const;
-
-    sal_Bool                    IsHidden() const { return aName.SearchAscii( "private://gallery/hidden/" ) == 0; }
-
-    sal_Bool                    IsModified() const { return bModified; }
-    void                    SetModified( sal_Bool bSet ) { bModified = ( bSet && !IsImported() && !IsReadOnly() ); }
-
-    void                    SetName( const String& rNewName );
-    sal_Bool                    IsNameFromResource() const { return bThemeNameFromResource; }
-
-    sal_uInt32                  GetId() const { return nId; }
-    void                    SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName );
+    BOOL					IsImported() const { return bImported; }
+    BOOL					IsReadOnly() const { return bReadOnly; }
+    BOOL					IsDefault() const;
+                            
+    BOOL					IsHidden() const { return aName.SearchAscii( "private://gallery/hidden/" ) == 0; }
+                            
+    BOOL					IsModified() const { return bModified; }
+    void					SetModified( BOOL bSet ) { bModified = ( bSet && !IsImported() && !IsReadOnly() ); }
+                            
+    void					SetName( const String& rNewName );
+    BOOL					IsNameFromResource() const { return bThemeNameFromResource; }
+                            
+    UINT32					GetId() const { return nId; }
+    void					SetId( UINT32 nNewId, BOOL bResetThemeName );
 };
 
-typedef ::std::vector< GalleryThemeEntry* > GalleryThemeList;
+DECLARE_LIST( GalleryThemeList, GalleryThemeEntry* )
 
 // ---------------------------
 // - GalleryImportThemeEntry -
@@ -99,13 +100,12 @@ typedef ::std::vector< GalleryThemeEntry* > GalleryThemeList;
 
 struct GalleryImportThemeEntry
 {
-    String          aThemeName;
-    String          aUIName;
-    INetURLObject   aURL;
-    String          aImportName;
+    String			aThemeName;
+    String			aUIName;
+    INetURLObject	aURL;
+    String			aImportName;
 };
-
-typedef ::std::vector< GalleryImportThemeEntry* > GalleryImportThemeList;
+DECLARE_LIST( GalleryImportThemeList, GalleryImportThemeEntry* )
 
 // -----------------------------------------------------------------------------
 
@@ -118,7 +118,6 @@ SvStream& operator>>( SvStream& rIn, GalleryImportThemeEntry& rEntry );
 
 class SfxListener;
 class GalleryTheme;
-class GalleryThemeCacheEntry;
 
 class Gallery : public SfxBroadcaster
 {
@@ -126,30 +125,28 @@ class Gallery : public SfxBroadcaster
     friend Gallery* createGallery( const rtl::OUString& );
     friend void disposeGallery( Gallery* );
 
-    typedef std::vector<GalleryThemeCacheEntry*> GalleryCacheThemeList;
-
 private:
 
-    GalleryThemeList            aThemeList;
-    GalleryImportThemeList      aImportList;
-    GalleryCacheThemeList       aThemeCache;
-    INetURLObject               aRelURL;
-    INetURLObject               aUserURL;
-    rtl_TextEncoding            nReadTextEncoding;
-    sal_uIntPtr                     nLastFileNumber;
-    sal_Bool                        bMultiPath;
+    GalleryThemeList			aThemeList;
+    GalleryImportThemeList		aImportList;
+    List						aThemeCache;
+    INetURLObject				aRelURL;
+    INetURLObject				aUserURL;
+    rtl_TextEncoding			nReadTextEncoding;
+    ULONG						nLastFileNumber;
+    BOOL						bMultiPath;
+                                
+    void						ImplLoad( const String& rMultiPath );
+    void						ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbIsReadOnly );
+    void						ImplLoadImports();
+    void 						ImplWriteImportList();
+    
+    SVX_DLLPUBLIC GalleryThemeEntry*			ImplGetThemeEntry( const String& rThemeName );
+    GalleryThemeEntry* 			ImplGetThemeEntry( ULONG nThemeId );
+    GalleryImportThemeEntry*	ImplGetImportThemeEntry( const String& rImportName );
 
-    void                        ImplLoad( const String& rMultiPath );
-    void                        ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbIsReadOnly );
-    void                        ImplLoadImports();
-    void                        ImplWriteImportList();
-
-    SVX_DLLPUBLIC GalleryThemeEntry*            ImplGetThemeEntry( const String& rThemeName );
-    GalleryThemeEntry*          ImplGetThemeEntry( sal_uIntPtr nThemeId );
-    GalleryImportThemeEntry*    ImplGetImportThemeEntry( const String& rImportName );
-
-    GalleryTheme*               ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
-    void                        ImplDeleteCachedTheme( GalleryTheme* pTheme );
+    GalleryTheme*				ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
+    void						ImplDeleteCachedTheme( GalleryTheme* pTheme );
 
                                 SVX_DLLPUBLIC Gallery( const String& rMultiPath );
                                 SVX_DLLPUBLIC ~Gallery();
@@ -157,31 +154,30 @@ private:
 public:
 
     SVX_DLLPUBLIC static Gallery* GetGalleryInstance();
+                                
+    ULONG					GetThemeCount() const { return aThemeList.Count(); }
+    const GalleryThemeEntry*	GetThemeInfo( ULONG nPos ) { return aThemeList.GetObject( nPos ); }
+    const GalleryThemeEntry*	GetThemeInfo( const String& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
+    
+    SVX_DLLPUBLIC BOOL			HasTheme( const String& rThemeName );
+    String						GetThemeName( ULONG nThemeId ) const;
 
-    size_t                      GetThemeCount() const { return aThemeList.size(); }
-    const GalleryThemeEntry*    GetThemeInfo( size_t nPos )
-                                { return nPos < aThemeList.size() ? aThemeList[ nPos ] : NULL; }
-    const GalleryThemeEntry*    GetThemeInfo( const String& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
-
-    SVX_DLLPUBLIC sal_Bool          HasTheme( const String& rThemeName );
-    String                      GetThemeName( sal_uIntPtr nThemeId ) const;
-
-    SVX_DLLPUBLIC sal_Bool          CreateTheme( const String& rThemeName, sal_uInt32 nNumFrom = 0 );
-    sal_Bool                        CreateImportTheme( const INetURLObject& rURL, const String& rFileName );
-    sal_Bool                        RenameTheme( const String& rOldName, const String& rNewName );
-    SVX_DLLPUBLIC sal_Bool                      RemoveTheme( const String& rThemeName );
+    SVX_DLLPUBLIC BOOL			CreateTheme( const String& rThemeName, UINT32 nNumFrom = 0 );
+    BOOL						CreateImportTheme( const INetURLObject& rURL, const String& rFileName );
+    BOOL						RenameTheme( const String& rOldName, const String& rNewName );
+    SVX_DLLPUBLIC BOOL						RemoveTheme( const String& rThemeName );
 
     SVX_DLLPUBLIC GalleryTheme* AcquireTheme( const String& rThemeName, SfxListener& rListener );
-    SVX_DLLPUBLIC void          ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener );
+    SVX_DLLPUBLIC void			ReleaseTheme( GalleryTheme*	pTheme, SfxListener& rListener );
 
 public:
 
-    INetURLObject               GetImportURL( const String& rThemeName );
-
-    const INetURLObject&        GetUserURL() const { return aUserURL; }
-    const INetURLObject&        GetRelativeURL() const { return aRelURL; }
-
-    sal_Bool                        IsMultiPath() const { return bMultiPath; }
+    INetURLObject				GetImportURL( const String& rThemeName );
+    
+    const INetURLObject&		GetUserURL() const { return aUserURL; }
+    const INetURLObject&		GetRelativeURL() const { return aRelURL; }
+    
+    BOOL						IsMultiPath() const { return bMultiPath; }
 };
 
 #endif // _SVX_GALLERY1_HXX_

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,19 +62,19 @@ namespace framework{
 // definitions
 
 /** adress job configuration inside argument set provided on method execute(). */
-static const ::rtl::OUString PROP_JOBCONFIG(RTL_CONSTASCII_USTRINGPARAM("JobConfig"));
+static const ::rtl::OUString PROP_JOBCONFIG = ::rtl::OUString::createFromAscii("JobConfig");
 
 /** adress job configuration property "Command". */
-static const ::rtl::OUString PROP_COMMAND(RTL_CONSTASCII_USTRINGPARAM("Command"));
+static const ::rtl::OUString PROP_COMMAND = ::rtl::OUString::createFromAscii("Command");
 
 /** adress job configuration property "Arguments". */
-static const ::rtl::OUString PROP_ARGUMENTS(RTL_CONSTASCII_USTRINGPARAM("Arguments"));
+static const ::rtl::OUString PROP_ARGUMENTS = ::rtl::OUString::createFromAscii("Arguments");
 
 /** adress job configuration property "DeactivateJobIfDone". */
-static const ::rtl::OUString PROP_DEACTIVATEJOBIFDONE(RTL_CONSTASCII_USTRINGPARAM("DeactivateJobIfDone"));
+static const ::rtl::OUString PROP_DEACTIVATEJOBIFDONE = ::rtl::OUString::createFromAscii("DeactivateJobIfDone");
 
 /** adress job configuration property "CheckExitCode". */
-static const ::rtl::OUString PROP_CHECKEXITCODE(RTL_CONSTASCII_USTRINGPARAM("CheckExitCode"));
+static const ::rtl::OUString PROP_CHECKEXITCODE = ::rtl::OUString::createFromAscii("CheckExitCode");
 
 //-----------------------------------------------
 
@@ -92,7 +92,7 @@ DEFINE_INIT_SERVICE(ShellJob,
                         */
                     }
                    )
-
+                    
 //-----------------------------------------------
 ShellJob::ShellJob(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : ThreadHelpBase(     )
@@ -121,7 +121,7 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
 
     // replace all might existing place holder.
     ::rtl::OUString sRealCommand = impl_substituteCommandVariables(sCommand);
-
+        
     // Command is required as minimum.
     // If it does not exists ... we cant do our job.
     // Deactivate such miss configured job silently .-)
@@ -132,12 +132,12 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
     ::sal_Bool bDone = impl_execute(sRealCommand, lCommandArguments, bCheckExitCode);
     if (! bDone)
         return css::uno::Any();
-
+        
     // Job was done ... user configured deactivation of this job
     // in such case.
     if (bDeactivateJobIfDone)
         return ShellJob::impl_generateAnswer4Deactivation();
-
+    
     // There was no decision about deactivation of this job.
     // So we have to return nothing here !
     return css::uno::Any();
@@ -165,9 +165,9 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
     try
     {
               css::uno::Reference< css::util::XStringSubstitution > xSubst           (  xSMGR->createInstance(SERVICENAME_SUBSTITUTEPATHVARIABLES), css::uno::UNO_QUERY_THROW);
-        const ::sal_Bool                                            bSubstRequired   = sal_True;
-        const ::rtl::OUString                                       sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);
-
+        const ::sal_Bool											bSubstRequired   = sal_True;
+        const ::rtl::OUString										sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);
+    
         return sCompleteCommand;
     }
     catch(const css::uno::Exception&)
@@ -188,7 +188,7 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 
     if (nArgs > 0)
         pArgs = reinterpret_cast< ::rtl_uString** >(const_cast< ::rtl::OUString* >(lArguments.getConstArray()));
-
+    
     oslProcessError eError = osl_executeProcess(sCommand.pData, pArgs, nArgs, nOptions, NULL, NULL, NULL, 0, &hProcess);
 
     // executable not found or couldnt be started

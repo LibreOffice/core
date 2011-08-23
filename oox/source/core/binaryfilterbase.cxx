@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,24 +27,21 @@
  ************************************************************************/
 
 #include "oox/core/binaryfilterbase.hxx"
-
 #include "oox/ole/olestorage.hxx"
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::io::XInputStream;
+using ::com::sun::star::io::XStream;
 
 namespace oox {
 namespace core {
 
 // ============================================================================
 
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
-
-// ============================================================================
-
-BinaryFilterBase::BinaryFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
-    FilterBase( rxContext )
+BinaryFilterBase::BinaryFilterBase( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
+    FilterBase( rxGlobalFactory )
 {
 }
 
@@ -56,12 +53,12 @@ BinaryFilterBase::~BinaryFilterBase()
 
 StorageRef BinaryFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    return StorageRef( new ::oox::ole::OleStorage( getServiceFactory(), rxInStream, true ) );
+    return StorageRef( new ::oox::ole::OleStorage( getGlobalFactory(), rxInStream, true ) );
 }
 
 StorageRef BinaryFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
 {
-    return StorageRef( new ::oox::ole::OleStorage( getServiceFactory(), rxOutStream, true ) );
+    return StorageRef( new ::oox::ole::OleStorage( getGlobalFactory(), rxOutStream, true ) );
 }
 
 // ============================================================================

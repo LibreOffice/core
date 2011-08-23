@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,38 +39,52 @@ namespace sfx2 { class SvLinkSource;  class LinkManager; }
  */
  class IDocumentLinksAdministration
  {
- public:
-    /** Insert links in-/visibly into LinkManager (linked ranges).
+ public:    
+    /** Links un-/sichtbar in LinkManager einfuegen (gelinkte Bereiche)
     */
     virtual bool IsVisibleLinks() const = 0;
-
+    
+    /**
+    */
     virtual void SetVisibleLinks(bool bFlag) = 0;
 
+    /**
+    */
     virtual sfx2::LinkManager& GetLinkManager() = 0;
-
+    
+    /**
+    */
     virtual const sfx2::LinkManager& GetLinkManager() const = 0;
 
-    /** #i42634# Moved common code of SwReader::Read() and
+    /** FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
         SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
     */
-    virtual void UpdateLinks(sal_Bool bUI) = 0;
-
-    /** SS fuers Linken von Dokumentteilen  / ?? for linking of parts of documents.
+    virtual void UpdateLinks(BOOL bUI) = 0;
+    
+    /** SS fuers Linken von Dokumentteilen
     */
     virtual bool GetData(const String& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const = 0;
-
+      
+    /**
+    */
     virtual bool SetData(const String& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue) = 0;
-
+      
+    /**
+    */
     virtual ::sfx2::SvLinkSource* CreateLinkSource(const String& rItem) = 0;
-
-    /** Embed all local links (ranges/graphics).
+    
+    /** embedded alle lokalen Links (Bereiche/Grafiken)
     */
     virtual bool EmbedAllLinks() = 0;
-
+    
+    /**
+    */
     virtual void SetLinksUpdated(const bool bNewLinksUpdated) = 0;
-
+    
+    /**
+    */    
     virtual bool LinksUpdated() const = 0;
-
+    
 protected:
     virtual ~IDocumentLinksAdministration() {};
  };

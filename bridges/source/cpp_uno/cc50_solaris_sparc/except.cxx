@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,12 +50,7 @@
 #include <hash.cxx>
 
 // need a += operator for OString and sal_Char
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OUStringToOString;
-using ::rtl::OStringToOUString;
-
+namespace rtl
 {
     inline OString& operator+=( OString& rString, sal_Char cAdd )
     {
@@ -68,6 +63,7 @@ using ::rtl::OStringToOUString;
 
 using namespace std;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star::uno;
 
 namespace CPPU_CURRENT_NAMESPACE
@@ -339,7 +335,7 @@ void cc50_solaris_sparc_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
         OUStringToOString(
             *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
             RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
+    fprintf( stderr, "> uno exception occured: %s\n", cstr.getStr() );
 #endif
     bridges::cpp_uno::shared::ArrayPointer< unsigned int > thunkPtr(
         new unsigned int[6]);
@@ -426,13 +422,13 @@ void cc50_solaris_sparc_fillUnoException(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr( OUStringToOString(
                           aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr.getStr() );
+        OSL_ENSURE( 0, cstr.getStr() );
 #endif
         return;
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "> c++ exception occurred: %s\n",
+    fprintf( stderr, "> c++ exception occured: %s\n",
              ::rtl::OUStringToOString(
                  pExcTypeDescr->pTypeName,
                  RTL_TEXTENCODING_ASCII_US ).getStr() );

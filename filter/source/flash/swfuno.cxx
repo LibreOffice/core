@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,13 +62,48 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
+//==================================================================================================
 
+void singlecomponent_writeInfo( Reference< XRegistryKey >& xNewKey, const Sequence< OUString > & rSNL )
+{
+    const OUString * pArray = rSNL.getConstArray();
+    for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+        xNewKey->createKey( pArray[nPos] );
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
+    void * /* pServiceManager */, void * pRegistryKey )
+{
+    if (pRegistryKey)
+    {
+        try
+        {
+            Reference< XRegistryKey > xNewKey(
+                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( FlashExportFilter_getImplementationName() ) ); 
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+            
+            singlecomponent_writeInfo( xNewKey, FlashExportFilter_getSupportedServiceNames() );
+
+            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SWFDialog_getImplementationName() ); 
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+
+            singlecomponent_writeInfo( xNewKey, SWFDialog_getSupportedServiceNames() );
+
+            return sal_True;
+        }
+        catch (InvalidRegistryException &)
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+    return sal_False;
+}
 //==================================================================================================
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = 0;
-
+    
     if( pServiceManager )
     {
         Reference< XSingleServiceFactory > xFactory;
@@ -80,7 +115,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 FlashExportFilter_createInstance, FlashExportFilter_getSupportedServiceNames() );
-
+            
         }
         else if ( implName.equals(SWFDialog_getImplementationName()) )
         {

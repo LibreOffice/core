@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,12 @@ protected:
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
-    SvxAutocorrWordList     *pAutocorr_List;
-    SvxAutoCorrect          &rAutoCorrect;
+    SvxAutocorrWordList		*pAutocorr_List;
+    SvxAutoCorrect			&rAutoCorrect;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStorage;
+    //SvStorageRef            &rStorage;
 
+    // #110680#
     SvXMLAutoCorrectImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SvxAutocorrWordList *pNewAutocorr_List,
@@ -101,8 +103,9 @@ protected:
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
-    SvStringsISortDtor  &rList;
+    SvStringsISortDtor 	&rList;
 
+    // #110680#
     SvXMLExceptionListImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SvStringsISortDtor & rNewList );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,6 +37,15 @@
 #include <tools/debug.hxx>
 
 #include "helper.hxx"
+
+#if TEST_LAYOUT && !defined( DBG_UTIL )
+#undef DBG_ERROR
+#define DBG_ERROR OSL_TRACE
+#undef DBG_ERROR1
+#define DBG_ERROR1 OSL_TRACE
+#undef DBG_ERROR2
+#define DBG_ERROR2 OSL_TRACE
+#endif /* TEST_LAYOUT && !DBG_UTIL */
 
 namespace layoutimpl
 {
@@ -184,14 +193,14 @@ uno::Any anyFromString( OUString const& value, uno::Type const& type )
             uno::Sequence< OUString > seq( values.size() );
             i = 0;
             for ( std::list< OUString >::const_iterator it = values.begin();
-                  it != values.end(); ++it, ++i )
+                  it != values.end(); it++, i++ )
                 seq[ i ] = *it;
 
             return uno::makeAny( seq );
         }
 
         default:
-            OSL_TRACE( "ERROR: unknown property type of value: `%s'\n", OUSTRING_CSTR( value ) );
+            DBG_ERROR1( "ERROR: unknown property type of value: `%s'\n", OUSTRING_CSTR( value ) );
             break;
     }
     throw uno::RuntimeException();
@@ -237,17 +246,17 @@ setProperties( uno::Reference< uno::XInterface > const& xPeer,
 {
     if ( !prophlp::canHandleProps( xPeer ) )
     {
-        OSL_FAIL( "Error: setProperties - bad handle ignoring props:\n" );
+        DBG_ERROR( "Error: setProperties - bad handle ignoring props:\n" );
         for ( PropList::const_iterator it = rProps.begin(); it != rProps.end();
-              ++it )
+              it++ )
         {
-            OSL_TRACE( "%s=%s\n", OUSTRING_CSTR( it->first ), OUSTRING_CSTR( it->second ) );
+            DBG_ERROR2( "%s=%s\n", OUSTRING_CSTR( it->first ), OUSTRING_CSTR( it->second ) );
         }
         return;
     }
 
     for ( PropList::const_iterator it = rProps.begin(); it != rProps.end();
-          ++it )
+          it++ )
         setProperty( xPeer, it->first, it->second );
 }
 
@@ -268,13 +277,13 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
     }
     catch( beans::UnknownPropertyException & )
     {
-        OSL_TRACE( "Warning: unknown attribute: `%s'\n", OUSTRING_CSTR( unoAttr ) );
+        DBG_ERROR1( "Warning: unknown attribute: `%s'\n", OUSTRING_CSTR( unoAttr ) );
         return;
     }
 
     if ( prop.Name.getLength() <= 0 )
     {
-        OSL_TRACE( "Warning: missing prop: `%s'\n", OUSTRING_CSTR( unoAttr ) );
+        DBG_ERROR1( "Warning: missing prop: `%s'\n", OUSTRING_CSTR( unoAttr ) );
         return;
     }
 
@@ -286,7 +295,7 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
     }
     catch( uno::RuntimeException & )
     {
-        OSL_TRACE( "Warning: %s( %s )( %s ) attribute is of type %s( rejected: %s )\n", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ), OUSTRING_CSTR( prop.Name ),  OUSTRING_CSTR( prop.Type.getTypeName() ), OUSTRING_CSTR( value ) );
+        DBG_ERROR5( "Warning: %s( %s )( %s ) attribute is of type %s( rejected: %s )\n", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ), OUSTRING_CSTR( prop.Name ),  OUSTRING_CSTR( prop.Type.getTypeName() ), OUSTRING_CSTR( value ) );
         return;
     }
 
@@ -297,7 +306,7 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
     }
     catch( ... )
     {
-        OSL_TRACE( "Warning: cannot set attribute %s to %s \n", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ) );
+        DBG_ERROR2( "Warning: cannot set attribute %s to %s \n", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ) );
     }
 }
 
@@ -364,10 +373,10 @@ findAndRemove( const char *pAttr, PropList &rProps, OUString &rValue )
     PropList::iterator it;
     OUString aName = OUString::createFromAscii( pAttr );
 
-    for ( it = rProps.begin(); it != rProps.end(); ++it )
+    for ( it = rProps.begin(); it != rProps.end(); it++ )
     {
         if ( it->first.equalsIgnoreAsciiCase( aName )
-             || it->first.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM ("_")) + aName ) )
+             || it->first.equalsIgnoreAsciiCase( OUString::createFromAscii ("_") + aName ) )
         {
             rValue = it->second;
             rProps.erase( it );

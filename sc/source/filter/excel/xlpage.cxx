@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,6 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/paperinf.hxx>
 #include <vcl/svapp.hxx>
-#include <sal/macros.h>
 #include "scitems.hxx"
 #include <editeng/brshitem.hxx>
 #include "global.hxx"
@@ -44,7 +43,7 @@
 
 struct XclPaperSize
 {
-    Paper               mePaper;            /// SVX paper size identifier.
+    Paper            	mePaper;            /// SVX paper size identifier.
     long                mnWidth;            /// Paper width in twips.
     long                mnHeight;           /// Paper height in twips.
 };
@@ -72,14 +71,14 @@ static const XclPaperSize pPaperSizeTable[] =
         //near DMPAPER_B4 in vcl
         //i.e.
         //http://msdn.microsoft.com/en-us/library/bb241398.aspx makes the claim:
-        //xlPaperB4 12  B4 (250 mm x 354 mm)
-        //xlPaperB5 13  A5 (148 mm x 210 mm)
+        //xlPaperB4	12	B4 (250 mm x 354 mm)
+        //xlPaperB5	13	A5 (148 mm x 210 mm)
         //but, a paper enum called B5 is surely not actually "A5", and furthermore
         //the XlPaperSize enumeration otherwise follows the DMPAPER values
         //http://msdn.microsoft.com/en-us/library/ms776398(VS.85).aspx
         //which has
-        //DMPAPER_B4    12  B4 (JIS) 250 x 354
-        //DMPAPER_B5    13  B5 (JIS) 182 x 257 mm
+        //DMPAPER_B4 	12 	B4 (JIS) 250 x 354
+        //DMPAPER_B5 	13 	B5 (JIS) 182 x 257 mm
     //which claim them to be the JIS sizes. Though that document then gives
     //"B4 (JIS)" an *ISO* B4 size in the text, but
         //http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf
@@ -210,7 +209,7 @@ void XclPageData::SetDefaults()
 Size XclPageData::GetScPaperSize() const
 {
     const XclPaperSize* pEntry = pPaperSizeTable;
-    if( mnPaperSize < SAL_N_ELEMENTS( pPaperSizeTable ) )
+    if( mnPaperSize < STATIC_TABLE_SIZE( pPaperSizeTable ) )
         pEntry += mnPaperSize;
 
     Size aSize;

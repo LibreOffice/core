@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ SvxB3DVectorItem::~SvxB3DVectorItem()
 
 // -----------------------------------------------------------------------
 
-SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, const basegfx::B3DVector& rVal ) :
+SvxB3DVectorItem::SvxB3DVectorItem( USHORT _nWhich, const basegfx::B3DVector& rVal ) :
     SfxPoolItem( _nWhich ),
     aVal( rVal )
 {
@@ -68,7 +68,7 @@ SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, const basegfx::B3DVector
 
 // -----------------------------------------------------------------------
 
-SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, SvStream& rStream ) :
+SvxB3DVectorItem::SvxB3DVectorItem( USHORT _nWhich, SvStream& rStream ) :
     SfxPoolItem( _nWhich )
 {
     DBG_CTOR(SvxB3DVectorItem, 0);
@@ -106,7 +106,7 @@ SfxPoolItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/) const
+SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, USHORT /*nVersion*/) const
 {
     DBG_CHKTHIS(SvxB3DVectorItem, 0);
     basegfx::B3DVector aStr;
@@ -119,7 +119,7 @@ SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
+SvStream& SvxB3DVectorItem::Store(SvStream &rStream, USHORT /*nItemVersion*/) const
 {
     DBG_CHKTHIS(SvxB3DVectorItem, 0);
 
@@ -134,7 +134,7 @@ SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/
 
 // -----------------------------------------------------------------------
 
-bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     drawing::Direction3D aDirection;
 
@@ -149,7 +149,7 @@ bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) con
 
 // -----------------------------------------------------------------------
 
-bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     drawing::Direction3D aDirection;
     if(!(rVal >>= aDirection))
@@ -163,7 +163,7 @@ bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SvxB3DVectorItem::GetVersion (sal_uInt16 nFileFormatVersion) const
+USHORT SvxB3DVectorItem::GetVersion (USHORT nFileFormatVersion) const
 {
     return (nFileFormatVersion == SOFFICE_FILEFORMAT_31) ? USHRT_MAX : 0;
 }

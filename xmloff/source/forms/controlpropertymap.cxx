@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,11 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmltypes.hxx>
+#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
+#endif
 #include "strings.hxx"
 #include <xmloff/contextid.hxx>
 #include "controlpropertymap.hxx"
@@ -47,9 +49,9 @@ namespace xmloff
 //.........................................................................
 
 #define MAP_ASCII( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFVER_010 }
-#define MAP_CONST( name, prefix, token, type, context )  { name.ascii, name.length, prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFVER_010 }
-#define MAP_CONST_P( name, prefix, token, type, context )  { name.ascii, name.length,   prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFVER_010 }
-#define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONST( name, prefix, token, type, context )  { name.ascii, name.length,	prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONST_P( name, prefix, token, type, context )  { name.ascii, name.length,	prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_END()	{ NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010 }
 
     XMLPropertyMapEntry* getControlStylePropertyMap_Access( )
     {
@@ -68,15 +70,15 @@ namespace xmloff
             MAP_ASCII( "FontPitch",             XML_NAMESPACE_STYLE,    XML_FONT_PITCH,             XML_TYPE_TEXT_FONTPITCH, 0 ),
             MAP_ASCII( "FontSlant",             XML_NAMESPACE_FO,       XML_FONT_STYLE,             XML_TYPE_TEXT_POSTURE, 0 ),
 
-            MAP_ASCII( "FontStrikeout",         XML_NAMESPACE_STYLE,    XML_TEXT_LINE_THROUGH_STYLE,    XML_TYPE_TEXT_CROSSEDOUT_STYLE|MID_FLAG_MERGE_PROPERTY, 0),
-            MAP_ASCII( "FontStrikeout",         XML_NAMESPACE_STYLE,    XML_TEXT_LINE_THROUGH_TYPE,     XML_TYPE_TEXT_CROSSEDOUT_TYPE|MID_FLAG_MERGE_PROPERTY,  0),
-            MAP_ASCII( "FontStrikeout",         XML_NAMESPACE_STYLE,    XML_TEXT_LINE_THROUGH_WIDTH,    XML_TYPE_TEXT_CROSSEDOUT_WIDTH|MID_FLAG_MERGE_PROPERTY, 0),
-            MAP_ASCII( "FontStrikeout",         XML_NAMESPACE_STYLE,    XML_TEXT_LINE_THROUGH_TEXT,     XML_TYPE_TEXT_CROSSEDOUT_TEXT|MID_FLAG_MERGE_PROPERTY,  0),
+            MAP_ASCII( "FontStrikeout",	        XML_NAMESPACE_STYLE,	XML_TEXT_LINE_THROUGH_STYLE, 	XML_TYPE_TEXT_CROSSEDOUT_STYLE|MID_FLAG_MERGE_PROPERTY,	0),
+            MAP_ASCII( "FontStrikeout",	        XML_NAMESPACE_STYLE,	XML_TEXT_LINE_THROUGH_TYPE, 	XML_TYPE_TEXT_CROSSEDOUT_TYPE|MID_FLAG_MERGE_PROPERTY,	0),
+            MAP_ASCII( "FontStrikeout",	        XML_NAMESPACE_STYLE,	XML_TEXT_LINE_THROUGH_WIDTH, 	XML_TYPE_TEXT_CROSSEDOUT_WIDTH|MID_FLAG_MERGE_PROPERTY,	0),
+            MAP_ASCII( "FontStrikeout",	        XML_NAMESPACE_STYLE,	XML_TEXT_LINE_THROUGH_TEXT, 	XML_TYPE_TEXT_CROSSEDOUT_TEXT|MID_FLAG_MERGE_PROPERTY,	0),
 
             MAP_ASCII( "FontStyleName",         XML_NAMESPACE_STYLE,    XML_FONT_STYLE_NAME,        XML_TYPE_STRING, 0 ),
-            MAP_ASCII( "FontUnderline",         XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_STYLE,       XML_TYPE_TEXT_UNDERLINE_STYLE|MID_FLAG_MERGE_PROPERTY, 0 ),
-            MAP_ASCII( "FontUnderline",         XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_TYPE,        XML_TYPE_TEXT_UNDERLINE_TYPE|MID_FLAG_MERGE_PROPERTY, 0 ),
-            MAP_ASCII( "FontUnderline",         XML_NAMESPACE_STYLE,    XML_TEXT_UNDERLINE_WIDTH,       XML_TYPE_TEXT_UNDERLINE_WIDTH|MID_FLAG_MERGE_PROPERTY, 0 ),
+            MAP_ASCII( "FontUnderline",	        XML_NAMESPACE_STYLE,	XML_TEXT_UNDERLINE_STYLE,		XML_TYPE_TEXT_UNDERLINE_STYLE|MID_FLAG_MERGE_PROPERTY, 0 ),
+            MAP_ASCII( "FontUnderline",	        XML_NAMESPACE_STYLE,	XML_TEXT_UNDERLINE_TYPE,		XML_TYPE_TEXT_UNDERLINE_TYPE|MID_FLAG_MERGE_PROPERTY, 0 ),
+            MAP_ASCII( "FontUnderline",	        XML_NAMESPACE_STYLE,	XML_TEXT_UNDERLINE_WIDTH,		XML_TYPE_TEXT_UNDERLINE_WIDTH|MID_FLAG_MERGE_PROPERTY, 0 ),
             MAP_ASCII( "FontWeight",            XML_NAMESPACE_FO,       XML_FONT_WEIGHT,            XML_TYPE_TEXT_WEIGHT, 0 ),
             MAP_ASCII( "FontWidth",             XML_NAMESPACE_STYLE,    XML_FONT_WIDTH,             XML_TYPE_FONT_WIDTH, 0 ),
             MAP_ASCII( "FontWordLineMode",      XML_NAMESPACE_FO,       XML_SCORE_SPACES,           XML_TYPE_NBOOL, 0 ),
@@ -149,7 +151,7 @@ namespace xmloff
     }
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 

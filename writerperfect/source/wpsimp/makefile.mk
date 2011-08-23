@@ -27,4 +27,3 @@ SLOFILES= \
     $(SLO)$/msworks_genericfilter.obj
 
 .INCLUDE :  target.mk
-

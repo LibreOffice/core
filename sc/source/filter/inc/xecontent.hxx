@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -247,11 +247,11 @@ class ScValidationData;
 class XclExpDV : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit            XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle );
+    explicit            XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle );
     virtual             ~XclExpDV();
 
     /** Returns the core handle of the validation data. */
-    inline sal_uLong        GetScHandle() const { return mnScHandle; }
+    inline ULONG        GetScHandle() const { return mnScHandle; }
 
     /** Inserts a new cell range into the cell range list. */
     void                InsertCellRange( const ScRange& rPos );
@@ -278,7 +278,7 @@ private:
     XclTokenArrayRef    mxTokArr2;      /// Formula for second condition.
     ::rtl::OUString     msFormula2;     /// OOXML Formula for second condition.
     sal_uInt32          mnFlags;        /// Miscellaneous flags.
-    sal_uLong               mnScHandle;     /// The core handle for quick list search.
+    ULONG               mnScHandle;     /// The core handle for quick list search.
 };
 
 // ----------------------------------------------------------------------------
@@ -291,7 +291,7 @@ public:
     virtual             ~XclExpDval();
 
     /** Inserts the cell range into the range list of the DV record with the specified handle. */
-    void                InsertCellRange( const ScRange& rRange, sal_uLong nScHandle );
+    void                InsertCellRange( const ScRange& rRange, ULONG nScHandle );
 
     /** Writes the DVAL record and the DV record list. */
     virtual void        Save( XclExpStream& rStrm );
@@ -299,7 +299,7 @@ public:
 
 private:
     /** Searches for or creates a XclExpDV record object with the specified handle. */
-    XclExpDV&           SearchOrCreateDv( sal_uLong nScHandle );
+    XclExpDV&           SearchOrCreateDv( ULONG nScHandle );
 
     /** Writes the body of the DVAL record. */
     virtual void        WriteBody( XclExpStream& rStrm );

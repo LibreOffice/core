@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,15 +29,15 @@
 #ifndef SC_WAITOFF_HXX
 #define SC_WAITOFF_HXX
 
-#include <sal/types.h>
+#include <tools/solar.h>
 
 class Window;
 
 class ScWaitCursorOff
 {
 private:
-    Window*                 pWin;
-    sal_uInt32              nWaiters;
+    Window*				pWin;
+    ULONG				nWaiters;
 public:
                         ScWaitCursorOff( Window* pWin );
                         ~ScWaitCursorOff();

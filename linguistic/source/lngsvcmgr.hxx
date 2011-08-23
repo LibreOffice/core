@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 #ifndef _LINGUISTIC_LNGSVCMGR_HXX_
 #define _LINGUISTIC_LNGSVCMGR_HXX_
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase4.hxx> // helper for implementations
-#include <cppuhelper/interfacecontainer.h>  //OMultiTypeInterfaceContainerHelper
+#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase4.hxx>	// helper for implementations
+#include <cppuhelper/interfacecontainer.h>	//OMultiTypeInterfaceContainerHelper
 
 
 #include <com/sun/star/uno/Reference.h>
@@ -41,9 +41,7 @@
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <unotools/configitem.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
-#include "linguistic/misc.hxx"
+#include "misc.hxx"
 #include "defs.hxx"
 
 class SpellCheckerDispatcher;
@@ -77,65 +75,69 @@ class LngSvcMgr :
 {
     friend class LngSvcMgrListenerHelper;
 
-    ::cppu::OInterfaceContainerHelper                   aEvtListeners;
+    ::cppu::OInterfaceContainerHelper					aEvtListeners;
 
     com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker >              xSpellDsp;
     com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XProofreadingIterator >      xGrammarDsp;
+        ::com::sun::star::linguistic2::XProofreadingIterator >   	xGrammarDsp;
     com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >                xHyphDsp;
     com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XThesaurus >                 xThesDsp;
-
+    
     com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XEventListener >        xListenerHelper;
-
+        ::com::sun::star::lang::XEventListener >		xListenerHelper;
+    
     com::sun::star::uno::Sequence<
-        com::sun::star::lang::Locale >                  aAvailSpellLocales;
+        com::sun::star::lang::Locale >					aAvailSpellLocales;
     com::sun::star::uno::Sequence<
         com::sun::star::lang::Locale >                  aAvailGrammarLocales;
     com::sun::star::uno::Sequence<
-        com::sun::star::lang::Locale >                  aAvailHyphLocales;
+        com::sun::star::lang::Locale >					aAvailHyphLocales;
     com::sun::star::uno::Sequence<
-        com::sun::star::lang::Locale >                  aAvailThesLocales;
+        com::sun::star::lang::Locale >					aAvailThesLocales;
 
-    SpellCheckerDispatcher *                            pSpellDsp;
+    SpellCheckerDispatcher *							pSpellDsp;
     GrammarCheckingIterator *                           pGrammarDsp;
-    HyphenatorDispatcher *                              pHyphDsp;
-    ThesaurusDispatcher *                               pThesDsp;
+    HyphenatorDispatcher *								pHyphDsp;
+    ThesaurusDispatcher *								pThesDsp;
 
-    LngSvcMgrListenerHelper *                           pListenerHelper;
-
-    typedef boost::ptr_vector< SvcInfo >    SvcInfoArray;
-    SvcInfoArray *                                      pAvailSpellSvcs;
+    LngSvcMgrListenerHelper *							pListenerHelper;
+    
+    typedef std::vector< SvcInfo * >    SvcInfoArray;
+    SvcInfoArray *										pAvailSpellSvcs;
     SvcInfoArray *                                      pAvailGrammarSvcs;
-    SvcInfoArray *                                      pAvailHyphSvcs;
-    SvcInfoArray *                                      pAvailThesSvcs;
-
-    sal_Bool bDisposing;
+    SvcInfoArray *										pAvailHyphSvcs;
+    SvcInfoArray *										pAvailThesSvcs;
+    
+    BOOL bDisposing;
+    BOOL bHasAvailSpellLocales;
+    BOOL bHasAvailGrammarLocales;
+    BOOL bHasAvailHyphLocales;
+    BOOL bHasAvailThesLocales;
 
     // disallow copy-constructor and assignment-operator for now
     LngSvcMgr(const LngSvcMgr &);
     LngSvcMgr & operator = (const LngSvcMgr &);
-
-    void    GetAvailableSpellSvcs_Impl();
+    
+    void	GetAvailableSpellSvcs_Impl();
     void    GetAvailableGrammarSvcs_Impl();
-    void    GetAvailableHyphSvcs_Impl();
-    void    GetAvailableThesSvcs_Impl();
-    void    GetListenerHelper_Impl();
-
+    void	GetAvailableHyphSvcs_Impl();
+    void	GetAvailableThesSvcs_Impl();
+    void	GetListenerHelper_Impl();
+    
     void    GetSpellCheckerDsp_Impl( sal_Bool bSetSvcList = sal_True );
     void    GetGrammarCheckerDsp_Impl( sal_Bool bSetSvcList = sal_True );
     void    GetHyphenatorDsp_Impl( sal_Bool bSetSvcList = sal_True );
     void    GetThesaurusDsp_Impl( sal_Bool bSetSvcList = sal_True );
 
-    void    SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp );
+    void	SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp );
     void    SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp );
-    void    SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp );
-    void    SetCfgServiceLists( ThesaurusDispatcher &rThesDsp );
-
-    sal_Bool    SaveCfgSvcs( const String &rServiceName );
+    void	SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp );
+    void	SetCfgServiceLists( ThesaurusDispatcher &rThesDsp );
+    
+    BOOL	SaveCfgSvcs( const String &rServiceName );
 
     void    SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
                     const SvcInfoArray &rAvailSvcs );
@@ -158,9 +160,9 @@ public:
     virtual void SAL_CALL setConfiguredServices( const ::rtl::OUString& aServiceName, const ::com::sun::star::lang::Locale& aLocale, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aServiceImplNames ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getConfiguredServices( const ::rtl::OUString& aServiceName, const ::com::sun::star::lang::Locale& aLocale ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XAvailableLocales
+    // XAvailableLocales	   	
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getAvailableLocales( const ::rtl::OUString& aServiceName ) throw (::com::sun::star::uno::RuntimeException);
-
+    
     // XComponent
     virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
@@ -175,11 +177,11 @@ public:
     static inline ::rtl::OUString   getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static() throw();
 
-    sal_Bool    AddLngSvcEvtBroadcaster(
-                const ::com::sun::star::uno::Reference<
+    BOOL	AddLngSvcEvtBroadcaster( 
+                const ::com::sun::star::uno::Reference< 
                     ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
-    sal_Bool    RemoveLngSvcEvtBroadcaster(
-                const ::com::sun::star::uno::Reference<
+    BOOL	RemoveLngSvcEvtBroadcaster( 
+                const ::com::sun::star::uno::Reference< 
                     ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
 };
 

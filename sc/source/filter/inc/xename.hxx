@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,6 @@
 #include "xlname.hxx"
 #include "xlformula.hxx"
 #include "xeroot.hxx"
-#include <boost/shared_ptr.hpp>
 
 // ============================================================================
 
@@ -51,9 +50,9 @@ public:
     void                Initialize();
 
     /** Inserts the Calc name with the passed index and returns the Excel NAME index. */
-    sal_uInt16          InsertName( SCTAB nTab, sal_uInt16 nScNameIdx );
+    sal_uInt16          InsertName( USHORT nScNameIdx );
     /** Inserts the Calc database range with the passed index and returns the Excel NAME index. */
-    sal_uInt16          InsertDBRange( sal_uInt16 nScDBRangeIdx );
+    sal_uInt16          InsertDBRange( USHORT nScDBRangeIdx );
 
     /** Inserts a new built-in defined name, referring to the passed sheet range. */
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, const ScRange& rRange );
@@ -81,7 +80,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
-    typedef boost::shared_ptr< XclExpNameManagerImpl > XclExpNameMgrImplRef;
+    typedef ScfRef< XclExpNameManagerImpl > XclExpNameMgrImplRef;
     XclExpNameMgrImplRef mxImpl;
 };
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ published service TextPortion
 
     //-------------------------------------------------------------------------
     /** gives access to a sequence of properties.
-        @since OOo 2.0
+        @since OOo 2.0.0
      */
     [optional]
     interface ::com::sun::star::beans::XTolerantMultiPropertySet;

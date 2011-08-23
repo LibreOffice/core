@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ SV_IMPL_PTRARR( TextLines, TextLinePtr );
 SV_IMPL_VARARR( TEWritingDirectionInfos, TEWritingDirectionInfo );
 
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // (+) class TextSelection
 // -------------------------------------------------------------------------
 
@@ -67,7 +67,7 @@ void TextSelection::Justify()
 }
 
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // (+) class TETextPortionList
 // -------------------------------------------------------------------------
 TETextPortionList::TETextPortionList()
@@ -81,24 +81,24 @@ TETextPortionList::~TETextPortionList()
 
 void TETextPortionList::Reset()
 {
-    for ( sal_uInt16 nPortion = 0; nPortion < Count(); nPortion++ )
+    for ( USHORT nPortion = 0; nPortion < Count(); nPortion++ )
         delete GetObject( nPortion );
     Remove( 0, Count() );
 }
 
-void TETextPortionList::DeleteFromPortion( sal_uInt16 nDelFrom )
+void TETextPortionList::DeleteFromPortion( USHORT nDelFrom )
 {
     DBG_ASSERT( ( nDelFrom < Count() ) || ( (nDelFrom == 0) && (Count() == 0) ), "DeleteFromPortion: Out of range" );
-    for ( sal_uInt16 nP = nDelFrom; nP < Count(); nP++ )
+    for ( USHORT nP = nDelFrom; nP < Count(); nP++ )
         delete GetObject( nP );
     Remove( nDelFrom, Count()-nDelFrom );
 }
 
-sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPortionStart, sal_Bool bPreferStartingPortion )
+USHORT TETextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart, BOOL bPreferStartingPortion )
 {
     // Bei nCharPos an Portion-Grenze wird die linke Portion gefunden
-    sal_uInt16 nTmpPos = 0;
-    for ( sal_uInt16 nPortion = 0; nPortion < Count(); nPortion++ )
+    USHORT nTmpPos = 0;
+    for ( USHORT nPortion = 0; nPortion < Count(); nPortion++ )
     {
         TETextPortion* pPortion = GetObject( nPortion );
         nTmpPos = nTmpPos + pPortion->GetLen();
@@ -112,15 +112,15 @@ sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPor
             }
         }
     }
-    OSL_FAIL( "FindPortion: Nicht gefunden!" );
+    DBG_ERROR( "FindPortion: Nicht gefunden!" );
     return ( Count() - 1 );
 }
 
 /*
-sal_uInt16 TETextPortionList::GetPortionStartIndex( sal_uInt16 nPortion )
+USHORT TETextPortionList::GetPortionStartIndex( USHORT nPortion )
 {
-    sal_uInt16 nPos = 0;
-    for ( sal_uInt16 nP = 0; nP < nPortion; nP++ )
+    USHORT nPos = 0;
+    for ( USHORT nP = 0; nP < nPortion; nP++ )
     {
         TETextPortion* pPortion = GetObject( nP );
         nPos += pPortion->GetLen();
@@ -130,24 +130,24 @@ sal_uInt16 TETextPortionList::GetPortionStartIndex( sal_uInt16 nPortion )
 */
 
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // (+) class TEParaPortion
 // -------------------------------------------------------------------------
 TEParaPortion::TEParaPortion( TextNode* pN )
 {
     mpNode = pN;
     mnInvalidPosStart = mnInvalidDiff = 0;
-    mbInvalid = sal_True;
-    mbSimple = sal_False;
+    mbInvalid = TRUE;
+    mbSimple = FALSE;
 }
 
 TEParaPortion::~TEParaPortion()
 {
 }
 
-void TEParaPortion::MarkInvalid( sal_uInt16 nStart, short nDiff )
+void TEParaPortion::MarkInvalid( USHORT nStart, short nDiff )
 {
-    if ( mbInvalid == sal_False )
+    if ( mbInvalid == FALSE )
     {
         mnInvalidPosStart = ( nDiff >= 0 ) ? nStart : ( nStart + nDiff );
         mnInvalidDiff = nDiff;
@@ -169,40 +169,40 @@ void TEParaPortion::MarkInvalid( sal_uInt16 nStart, short nDiff )
         else
         {
             DBG_ASSERT( ( nDiff >= 0 ) || ( (nStart+nDiff) >= 0 ), "MarkInvalid: Diff out of Range" );
-            mnInvalidPosStart = Min( mnInvalidPosStart, (sal_uInt16) ( (nDiff < 0) ? nStart+nDiff : nDiff ) );
+            mnInvalidPosStart = Min( mnInvalidPosStart, (USHORT) ( (nDiff < 0) ? nStart+nDiff : nDiff ) );
             mnInvalidDiff = 0;
-            mbSimple = sal_False;
+            mbSimple = FALSE;
         }
     }
 
     maWritingDirectionInfos.Remove( 0, maWritingDirectionInfos.Count() );
 
-    mbInvalid = sal_True;
+    mbInvalid = TRUE;
 }
 
-void TEParaPortion::MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 /*nEnd*/ )
+void TEParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT /*nEnd*/ )
 {
-    if ( mbInvalid == sal_False )
+    if ( mbInvalid == FALSE )
     {
         mnInvalidPosStart = nStart;
-//      nInvalidPosEnd = nEnd;
+//		nInvalidPosEnd = nEnd;
     }
     else
     {
         mnInvalidPosStart = Min( mnInvalidPosStart, nStart );
-//      nInvalidPosEnd = pNode->Len();
+//		nInvalidPosEnd = pNode->Len();
     }
 
     maWritingDirectionInfos.Remove( 0, maWritingDirectionInfos.Count() );
 
     mnInvalidDiff = 0;
-    mbInvalid = sal_True;
-    mbSimple = sal_False;
+    mbInvalid = TRUE;
+    mbSimple = FALSE;
 }
 
-sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, sal_Bool bInclEnd )
+USHORT TEParaPortion::GetLineNumber( USHORT nChar, BOOL bInclEnd )
 {
-    for ( sal_uInt16 nLine = 0; nLine < maLines.Count(); nLine++ )
+    for ( USHORT nLine = 0; nLine < maLines.Count(); nLine++ )
     {
         TextLine* pLine = maLines.GetObject( nLine );
         if ( ( bInclEnd && ( pLine->GetEnd() >= nChar ) ) ||
@@ -219,9 +219,9 @@ sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, sal_Bool bInclEnd )
 }
 
 
-void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine )
+void TEParaPortion::CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedLine )
 {
-    sal_uInt16 nLines = maLines.Count();
+    USHORT nLines = maLines.Count();
     DBG_ASSERT( nLines, "CorrectPortionNumbersFromLine: Leere Portion?" );
     if ( nLastFormattedLine < ( nLines - 1 ) )
     {
@@ -229,7 +229,7 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
         const TextLine* pUnformatted = maLines[ nLastFormattedLine+1 ];
         short nPortionDiff = pUnformatted->GetStartPortion() - pLastFormatted->GetEndPortion();
         short nTextDiff = pUnformatted->GetStart() - pLastFormatted->GetEnd();
-        nTextDiff++;    // LastFormatted->GetEnd() war incl. => 1 zuviel abgezogen!
+        nTextDiff++;	// LastFormatted->GetEnd() war incl. => 1 zuviel abgezogen!
 
         // Die erste unformatierte muss genau eine Portion hinter der letzten der
         // formatierten beginnen:
@@ -239,7 +239,7 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
         short nTDiff = sal::static_int_cast< short >(-( nTextDiff-1 ));
         if ( nPDiff || nTDiff )
         {
-            for ( sal_uInt16 nL = nLastFormattedLine+1; nL < nLines; nL++ )
+            for ( USHORT nL = nLastFormattedLine+1; nL < nLines; nL++ )
             {
                 TextLine* pLine = maLines[ nL ];
 
@@ -255,7 +255,7 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
     }
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // (+) class TEParaPortions
 // -------------------------------------------------------------------------
 TEParaPortions::TEParaPortions()
@@ -275,7 +275,7 @@ void TEParaPortions::Reset()
     clear();
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // (+) class IdleFormatter
 // -------------------------------------------------------------------------
 IdleFormatter::IdleFormatter()
@@ -289,7 +289,7 @@ IdleFormatter::~IdleFormatter()
     mpView = 0;
 }
 
-void IdleFormatter::DoIdleFormat( TextView* pV, sal_uInt16 nMaxRestarts )
+void IdleFormatter::DoIdleFormat( TextView* pV, USHORT nMaxRestarts )
 {
     mpView = pV;
 
@@ -319,12 +319,12 @@ void IdleFormatter::ForceTimeout()
 
 TYPEINIT1( TextHint, SfxSimpleHint );
 
-TextHint::TextHint( sal_uLong Id ) : SfxSimpleHint( Id )
+TextHint::TextHint( ULONG Id ) : SfxSimpleHint( Id )
 {
     mnValue = 0;
 }
 
-TextHint::TextHint( sal_uLong Id, sal_uLong nValue ) : SfxSimpleHint( Id )
+TextHint::TextHint( ULONG Id, ULONG nValue ) : SfxSimpleHint( Id )
 {
     mnValue = nValue;
 }
@@ -334,9 +334,9 @@ TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const String& rOldTextAfterStartPos
 {
     aPos = rPos;
     nLen = 0;
-    bCursor = sal_True;
+    bCursor = TRUE;
     pAttribs = NULL;
-    bWasCursorOverwrite = sal_False;
+    bWasCursorOverwrite = FALSE;
 }
 
 TEIMEInfos::~TEIMEInfos()
@@ -344,12 +344,12 @@ TEIMEInfos::~TEIMEInfos()
     delete[] pAttribs;
 }
 
-void TEIMEInfos::CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL )
+void TEIMEInfos::CopyAttribs( const USHORT* pA, USHORT nL )
 {
     nLen = nL;
     delete pAttribs;
-    pAttribs = new sal_uInt16[ nL ];
-    memcpy( pAttribs, pA, nL*sizeof(sal_uInt16) );
+    pAttribs = new USHORT[ nL ];
+    memcpy( pAttribs, pA, nL*sizeof(USHORT) );
 }
 
 void TEIMEInfos::DestroyAttribs()

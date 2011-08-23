@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ private:
     SvxSimpleTable*     m_pTable;
 
 protected:
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual long		PreNotify( NotifyEvent& rNEvt );
 
 public:
     SvxSimpTblContainer( Window* pParent, WinBits nWinStyle = 0 );
@@ -60,19 +60,19 @@ class SVX_DLLPUBLIC SvxSimpleTable : public SvHeaderTabListBox
     using Window::SetPosSizePixel;
 private:
 
-    Link                aHeaderBarClickLink;
-    Link                aHeaderBarDblClickLink;
-    Link                aCommandLink;
-    CommandEvent        aCEvt;
-    SvxSimpTblContainer aPrivContainer;
-    HeaderBar           aHeaderBar;
-    long                nOldPos;
-    sal_uInt16              nHeaderItemId;
-    sal_Bool                bResizeFlag;
-    sal_Bool                bPaintFlag;
-    sal_Bool                bSortDirection;
-    sal_uInt16              nSortCol;
-    Window*             pMyParentWin;
+    Link				aHeaderBarClickLink;
+    Link				aHeaderBarDblClickLink;
+    Link				aCommandLink;
+    CommandEvent		aCEvt;
+    SvxSimpTblContainer	aPrivContainer;
+    HeaderBar			aHeaderBar;
+    long				nOldPos;
+    USHORT				nHeaderItemId;
+    BOOL				bResizeFlag;
+    BOOL				bPaintFlag;
+    BOOL				bSortDirection;
+    USHORT				nSortCol;
+    Window*				pMyParentWin;
 
     DECL_LINK( StartDragHdl, HeaderBar* );
     DECL_LINK( DragHdl, HeaderBar* );
@@ -83,22 +83,22 @@ private:
 
 protected:
 
-    virtual void            NotifyScrolled();
+    virtual	void			NotifyScrolled();
 
-    virtual void            SetTabs();
-    virtual void            Paint( const Rectangle& rRect );
-    virtual void            UpdateViewSize();
+    virtual void			SetTabs();
+    virtual void			Paint( const Rectangle& rRect );
+    virtual void			UpdateViewSize();
 
-    virtual void            HBarClick();
-    virtual void            HBarDblClick();
-    virtual void            HBarStartDrag();
-    virtual void            HBarDrag();
-    virtual void            HBarEndDrag();
+    virtual void			HBarClick();
+    virtual void			HBarDblClick();
+    virtual void			HBarStartDrag();
+    virtual void			HBarDrag();
+    virtual void			HBarEndDrag();
 
-    virtual void            Command( const CommandEvent& rCEvt );
+    virtual void		    Command( const CommandEvent& rCEvt );
 
-    virtual StringCompare   ColCompare(SvLBoxEntry*,SvLBoxEntry*);
-    HeaderBar*              GetTheHeaderBar(){return &aHeaderBar;}
+    virtual StringCompare	ColCompare(SvLBoxEntry*,SvLBoxEntry*);
+    HeaderBar*				GetTheHeaderBar(){return &aHeaderBar;}
 
 public:
 
@@ -106,14 +106,14 @@ public:
     SvxSimpleTable( Window* pParent,const ResId& );
     ~SvxSimpleTable();
 
-    void            InsertHeaderEntry(const XubString& rText,
-                            sal_uInt16 nCol=HEADERBAR_APPEND,
+    void			InsertHeaderEntry(const XubString& rText,
+                            USHORT nCol=HEADERBAR_APPEND,
                             HeaderBarItemBits nBits = HIB_STDSTYLE);
 
-    void            SetTabs( long* pTabs, MapUnit = MAP_APPFONT );
+    void			SetTabs( long* pTabs, MapUnit = MAP_APPFONT );
 
-    void            ClearAll();
-    void            ClearHeader();
+    void			ClearAll();
+    void			ClearHeader();
 
     // to be removed all calls of the related methods are redirected to *Table() methods
     using Window::Show;
@@ -122,40 +122,40 @@ public:
     using Window::Disable;
     using Window::ToTop;
 
-    void            Show();
-    void            Hide();
+    void			Show();
+    void			Hide();
     void            Enable();
     void            Disable();
     void            ToTop();
 
     // remove until this line
-
+    
     void            ShowTable();
     void            HideTable();
-    sal_Bool            IsVisible() const;
+    BOOL            IsVisible() const;
 
     void            EnableTable();
     void            DisableTable();
-    sal_Bool            IsEnabled() const;
+    BOOL            IsEnabled() const;
 
     void            TableToTop();
-    void            SetPosPixel( const Point& rNewPos );
-    Point           GetPosPixel() const ;
-    virtual void    SetPosSizePixel( const Point& rNewPos, Size& rNewSize );
-    void            SetPosSize( const Point& rNewPos, const Size& rNewSize );
-    void            SetSizePixel(const Size& rNewSize );
-    void            SetOutputSizePixel(const Size& rNewSize );
+    void			SetPosPixel( const Point& rNewPos );
+    Point			GetPosPixel() const ;
+    virtual void	SetPosSizePixel( const Point& rNewPos, Size& rNewSize );
+    void			SetPosSize( const Point& rNewPos, const Size& rNewSize );
+    void	        SetSizePixel(const Size& rNewSize );
+    void			SetOutputSizePixel(const Size& rNewSize );
 
-    Size            GetSizePixel() const;
-    Size            GetOutputSizePixel() const;
+    Size			GetSizePixel() const;
+    Size			GetOutputSizePixel() const;
 
-    sal_uInt16          GetSelectedCol();
-    void            SortByCol(sal_uInt16,sal_Bool bDir=sal_True);
-    sal_Bool            GetSortDirection(){ return bSortDirection;}
-    sal_uInt16          GetSortedCol(){ return nSortCol;}
-    SvLBoxItem*     GetEntryAtPos( SvLBoxEntry* pEntry, sal_uInt16 nPos ) const;
+    USHORT	        GetSelectedCol();
+    void			SortByCol(USHORT,BOOL bDir=TRUE);
+    BOOL			GetSortDirection(){ return bSortDirection;}
+    USHORT			GetSortedCol(){ return nSortCol;}
+    SvLBoxItem*		GetEntryAtPos( SvLBoxEntry* pEntry, USHORT nPos ) const;
 
-    CommandEvent    GetCommandEvent()const;
+    CommandEvent	GetCommandEvent()const;
     inline sal_Bool IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }
 
     void            SetCommandHdl( const Link& rLink ) { aCommandLink = rLink; }
@@ -167,7 +167,7 @@ public:
     void            SetHeaderBarDblClickHdl( const Link& rLink ) { aHeaderBarDblClickLink = rLink; }
     const Link&     GetHeaderBarDblClickHdl() const { return aHeaderBarDblClickLink; }
 
-    void            SetHeaderBarHelpId(const rtl::OString& rHelpId) {aHeaderBar.SetHelpId(rHelpId);}
+    void            SetHeaderBarHelpId(ULONG nHelpId) {aHeaderBar.SetHelpId(nHelpId);}
 };
 
 

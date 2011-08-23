@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@
 
 using namespace com::sun::star;
 
-#define SCCOMPSCPREADSHEETSETTINGS_SERVICE      "com.sun.star.comp.SpreadsheetSettings"
-#define SCDOCUMENTSETTINGS_SERVICE              "com.sun.star.document.Settings"
-#define SCSAVEVERSION                           "SaveVersionOnClose"
+#define SCCOMPSCPREADSHEETSETTINGS_SERVICE		"com.sun.star.comp.SpreadsheetSettings"
+#define SCDOCUMENTSETTINGS_SERVICE				"com.sun.star.document.Settings"
+#define SCSAVEVERSION							"SaveVersionOnClose"
 
 
 const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
@@ -85,7 +85,9 @@ const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_UPDTEMPL),     0,  &getBooleanCppuType(),              0, 0},
         /*Stampit enable/disable print cancel */
         {MAP_CHAR_LEN(SC_UNO_ALLOWPRINTJOBCANCEL), 0, &getBooleanCppuType(),        0, 0},
+        // --> PB 2004-08-25 #i33095# Security Options
         {MAP_CHAR_LEN(SC_UNO_LOADREADONLY), 0,  &getBooleanCppuType(),              0, 0},
+        // <--
         {MAP_CHAR_LEN(SC_UNO_SHAREDOC),     0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNO_MODIFYPASSWORDINFO), 0,  &getCppuType((uno::Sequence< beans::PropertyValue >*)0),              0, 0},
         {0,0,0,0,0,0}
@@ -110,12 +112,12 @@ ScDocumentConfiguration::~ScDocumentConfiguration()
 
 void ScDocumentConfiguration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    //	Referenz-Update interessiert hier nicht
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;		// ungueltig geworden
     }
 }
 
@@ -143,7 +145,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         ScDocument* pDoc = pDocShell->GetDocument();
         if (pDoc)
         {
-            sal_Bool bUpdateHeights = false;
+            sal_Bool bUpdateHeights = sal_False;
 
             ScViewOptions aViewOpt(pDoc->GetViewOptions());
 
@@ -237,13 +239,13 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_FORBIDDEN ) == 0 )
             {
-                //  read-only - should not be set
+                //	read-only - should not be set
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_CHARCOMP ) == 0 )
             {
                 // Int16 contains CharacterCompressionType values
                 sal_Int16 nUno = ScUnoHelpFunctions::GetInt16FromAny( aValue );
-                pDoc->SetAsianCompression( (sal_uInt8) nUno );
+                pDoc->SetAsianCompression( (BYTE) nUno );
                 bUpdateHeights = sal_True;
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_ASIANKERN ) == 0 )
@@ -253,7 +255,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SCSAVEVERSION ) == 0)
             {
-                sal_Bool bTmp=false;
+                sal_Bool bTmp=sal_False;
                 if ( aValue >>= bTmp )
                     pDocShell->SetSaveVersionOnClose( bTmp );
             }
@@ -265,13 +267,13 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_LOADREADONLY ) == 0 )
             {
-                sal_Bool bTmp=false;
+                sal_Bool bTmp=sal_False;
                 if ( aValue >>= bTmp )
                     pDocShell->SetLoadReadonly( bTmp );
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
-                sal_Bool bDocShared = false;
+                sal_Bool bDocShared = sal_False;
                 if ( aValue >>= bDocShared )
                 {
                     pDocShell->SetSharedXMLFlag( bDocShared );
@@ -281,7 +283,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             {
                 uno::Sequence< beans::PropertyValue > aInfo;
                 if ( !( aValue >>= aInfo ) )
-                    throw lang::IllegalArgumentException(
+                    throw lang::IllegalArgumentException( 
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value of type Sequence<PropertyValue> expected!" ) ),
                         uno::Reference< uno::XInterface >(),
                         2 );
@@ -316,7 +318,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
 
             if ( bUpdateHeights && !pDoc->IsImportingXML() )
             {
-                //  update automatic row heights and repaint
+                //	update automatic row heights and repaint
                 SCTAB nTabCount = pDoc->GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                     if ( !pDocShell->AdjustRowHeight( 0, MAXROW, nTab ) )
@@ -378,7 +380,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 // #i75610# don't create the printer, return empty string if no printer created yet
                 // (as in SwXDocumentSettings)
-                SfxPrinter* pPrinter = pDoc->GetPrinter( false );
+                SfxPrinter* pPrinter = pDoc->GetPrinter( FALSE );
                 if (pPrinter)
                     aRet <<= rtl::OUString ( pPrinter->GetName());
                 else
@@ -388,7 +390,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 // #i75610# don't create the printer, return empty sequence if no printer created yet
                 // (as in SwXDocumentSettings)
-                SfxPrinter* pPrinter = pDoc->GetPrinter( false );
+                SfxPrinter* pPrinter = pDoc->GetPrinter( FALSE );
                 if (pPrinter)
                 {
                     SvMemoryStream aStream;
@@ -419,6 +421,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 aRet <<= pDocShell->IsQueryLoadTemplate();
             else if ( aPropertyName.compareToAscii( SC_UNO_LOADREADONLY ) == 0 )
                 aRet <<= pDocShell->IsLoadReadonly();
+            // <--
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasSharedXMLFlagSet() );
@@ -461,7 +464,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocumentConfiguration )
 
 rtl::OUString SAL_CALL ScDocumentConfiguration::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScDocumentConfiguration" ));
+    return rtl::OUString::createFromAscii( "ScDocumentConfiguration" );
 }
 
 sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const rtl::OUString& rServiceName )
@@ -477,8 +480,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDocumentConfiguration::getSupportedServi
 {
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCOMPSCPREADSHEETSETTINGS_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCDOCUMENTSETTINGS_SERVICE ));
+    pArray[0] = rtl::OUString::createFromAscii( SCCOMPSCPREADSHEETSETTINGS_SERVICE );
+    pArray[1] = rtl::OUString::createFromAscii( SCDOCUMENTSETTINGS_SERVICE );
     return aRet;
 }
 

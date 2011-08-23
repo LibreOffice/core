@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
 
-#include "linguistic/hyphdta.hxx"
-#include "linguistic/lngprops.hxx"
-#include "linguistic/misc.hxx"
+#include "hyphdta.hxx"
+#include "lngprops.hxx"
+#include "misc.hxx"
 #include <osl/mutex.hxx>
 
 
@@ -40,22 +40,23 @@
 #include <svl/lngmisc.hxx>
 #include <unotools/localedatawrapper.hxx>
 
+//using namespace utl;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
+//using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
-
-using ::rtl::OUString;
 
 namespace linguistic
 {
 ///////////////////////////////////////////////////////////////////////////
 
 
-HyphenatedWord::HyphenatedWord(const OUString &rWord, sal_Int16 nLang, sal_Int16 nHPos,
-                               const OUString &rHyphWord, sal_Int16 nPos ) :
-    aWord           (rWord),
+HyphenatedWord::HyphenatedWord(const OUString &rWord, INT16 nLang, INT16 nHPos,
+                               const OUString &rHyphWord, INT16 nPos ) :
+    aWord			(rWord),
     aHyphenatedWord (rHyphWord),
     nHyphPos        (nPos),
     nHyphenationPos (nHPos),
@@ -64,7 +65,7 @@ HyphenatedWord::HyphenatedWord(const OUString &rWord, sal_Int16 nLang, sal_Int16
     String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
     DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
     if (aSingleQuote.Len())
-    {
+    { 
         // ignore typographical apostrophes (which got replaced in original
         // word when being checked for hyphenation) in results.
         OUString aTmpWord( rWord );
@@ -86,7 +87,7 @@ HyphenatedWord::~HyphenatedWord()
 OUString SAL_CALL HyphenatedWord::getWord()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return aWord;
 }
 
@@ -94,7 +95,7 @@ OUString SAL_CALL HyphenatedWord::getWord()
 Locale SAL_CALL HyphenatedWord::getLocale()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     Locale aRes;
     return LanguageToLocale( aRes, nLanguage );
@@ -104,7 +105,7 @@ Locale SAL_CALL HyphenatedWord::getLocale()
 sal_Int16 SAL_CALL HyphenatedWord::getHyphenationPos()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return nHyphenationPos;
 }
 
@@ -112,7 +113,7 @@ sal_Int16 SAL_CALL HyphenatedWord::getHyphenationPos()
 OUString SAL_CALL HyphenatedWord::getHyphenatedWord()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return aHyphenatedWord;
 }
 
@@ -120,7 +121,7 @@ OUString SAL_CALL HyphenatedWord::getHyphenatedWord()
 sal_Int16 SAL_CALL HyphenatedWord::getHyphenPos()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return nHyphPos;
 }
 
@@ -128,7 +129,7 @@ sal_Int16 SAL_CALL HyphenatedWord::getHyphenPos()
 sal_Bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return bIsAltSpelling;
 }
 
@@ -136,13 +137,13 @@ sal_Bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
 ///////////////////////////////////////////////////////////////////////////
 
 
-PossibleHyphens::PossibleHyphens(const OUString &rWord, sal_Int16 nLang,
+PossibleHyphens::PossibleHyphens(const OUString &rWord, INT16 nLang,
             const OUString &rHyphWord,
-            const Sequence< sal_Int16 > &rPositions) :
-    aWord           (rWord),
+            const Sequence< INT16 > &rPositions) :
+    aWord			(rWord),
     aWordWithHyphens(rHyphWord),
-    aOrigHyphenPos  (rPositions),
-    nLanguage       (nLang)
+    aOrigHyphenPos	(rPositions),
+    nLanguage		(nLang)
 {
 }
 
@@ -155,7 +156,7 @@ PossibleHyphens::~PossibleHyphens()
 OUString SAL_CALL PossibleHyphens::getWord()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return aWord;
 }
 
@@ -163,7 +164,7 @@ OUString SAL_CALL PossibleHyphens::getWord()
 Locale SAL_CALL PossibleHyphens::getLocale()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return CreateLocale( nLanguage );
 }
 
@@ -171,7 +172,7 @@ Locale SAL_CALL PossibleHyphens::getLocale()
 OUString SAL_CALL PossibleHyphens::getPossibleHyphens()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return aWordWithHyphens;
 }
 
@@ -179,12 +180,12 @@ OUString SAL_CALL PossibleHyphens::getPossibleHyphens()
 Sequence< sal_Int16 > SAL_CALL PossibleHyphens::getHyphenationPositions()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return aOrigHyphenPos;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 
-}   // namespace linguistic
+}	// namespace linguistic
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

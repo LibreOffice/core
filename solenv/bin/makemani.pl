@@ -50,6 +50,7 @@ sub wanted;
 sub wanted {
     /^.*\.xc(s|u)\z/s
     && ( push @findlist, $name );
+#    && ( push @findlist, $name ) && print("$name\n");
 }
 
 sub usage

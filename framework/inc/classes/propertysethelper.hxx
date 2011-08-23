@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_CLASSES_PROPERTYSETHELPER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/transactionbase.hxx>
@@ -39,7 +39,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -47,13 +47,12 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 
 #include <cppuhelper/weakref.hxx>
-#include <fwidllapi.h>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 
 namespace framework{
 
@@ -68,7 +67,7 @@ namespace framework{
  *  Further the derived and this base class share the same lock.
  *  So it's possible to be threadsafe if it's needed.
 */
-class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
+class PropertySetHelper : public css::beans::XPropertySet
                         , public css::beans::XPropertySetInfo
 {
     //-------------------------------------------------------------------------

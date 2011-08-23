@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+/* $Id: hpara.cpp,v 1.6 2008-06-04 09:59:35 vg Exp $ */
 
 #include "precompile.h"
 
@@ -219,7 +221,7 @@ HBox *HWPPara::readHBox(HWPFile & hwpf)
     if (hh > 31 || hh == CH_END_PARA)
         hbox = new HBox(hh);
     else if (IS_SP_SKIP_BLOCK(hh))
-        hbox = new SkipData(hh);
+        hbox = new SkipBlock(hh);
     else
     {
         switch (hh)

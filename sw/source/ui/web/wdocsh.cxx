@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,11 +63,19 @@ TYPEINIT1(SwWebDocShell, SwDocShell);
 
 SFX_IMPL_OBJECTFACTORY(SwWebDocShell, SvGlobalName(SO3_SWWEB_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter/web" )
 
+/*-----------------22.01.97 09.29-------------------
+
+--------------------------------------------------*/
+
 SwWebDocShell::SwWebDocShell(SfxObjectCreateMode eMode ) :
         SwDocShell(eMode),
         nSourcePara(0)
 {
 }
+
+/*-----------------22.01.97 09.29-------------------
+
+--------------------------------------------------*/
 
 SwWebDocShell::~SwWebDocShell()
 {
@@ -94,8 +102,8 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
     }
     else if (nVersion == SOFFICE_FILEFORMAT_8)
     {
-        *pClassName     = SvGlobalName( SO3_SWWEB_CLASSID_60 );
-        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITERWEB_8;
+        *pClassName		= SvGlobalName( SO3_SWWEB_CLASSID_60 );
+        *pClipFormat	= SOT_FORMATSTR_ID_STARWRITERWEB_8;
         *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE);
     }
     *pUserName = SW_RESSTR(STR_HUMAN_SWWEBDOC_NAME);

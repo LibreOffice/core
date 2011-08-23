@@ -30,7 +30,9 @@
 
 #include "oox/drawingml/diagram/diagramfragmenthandler.hxx"
 #include "oox/drawingml/diagram/datamodelcontext.hxx"
+#include "oox/core/namespaces.hxx"
 #include "diagramdefinitioncontext.hxx"
+#include "tokens.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
@@ -69,7 +71,7 @@ DiagramDataFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
 
     switch( aElement )
     {
-    case DGM_TOKEN( dataModel ):
+    case NMSP_DIAGRAM|XML_dataModel:
         xRet.set( new DataModelContext( *this, mpDataPtr ) );
         break;
     default:
@@ -114,7 +116,7 @@ DiagramLayoutFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
 
     switch( aElement )
     {
-    case DGM_TOKEN( layoutDef ):
+    case NMSP_DIAGRAM|XML_layoutDef:
         xRet.set( new DiagramDefinitionContext( *this, xAttribs, mpDataPtr ) );
         break;
     default:
@@ -159,7 +161,7 @@ DiagramQStylesFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
 
     switch( aElement )
     {
-    case DGM_TOKEN( styleDef ):
+    case NMSP_DIAGRAM|XML_styleDef:
         // TODO
         break;
     default:
@@ -204,7 +206,7 @@ DiagramColorsFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
 
     switch( aElement )
     {
-    case DGM_TOKEN( colorsDef ):
+    case NMSP_DIAGRAM|XML_colorsDef:
         // TODO
         break;
     default:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,7 @@
 #include <textconversion.hxx>
 
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -43,9 +42,9 @@ extern "C" { static void SAL_CALL thisModule() {} }
 TextConversion::TextConversion()
 {
 #ifdef SAL_DLLPREFIX
-    OUString lib(RTL_CONSTASCII_USTRINGPARAM(SAL_DLLPREFIX"textconv_dict"SAL_DLLEXTENSION));
+    OUString lib=OUString::createFromAscii(SAL_DLLPREFIX"textconv_dict"SAL_DLLEXTENSION);
 #else
-    OUString lib(RTL_CONSTASCII_USTRINGPARAM("textconv_dict"SAL_DLLEXTENSION));
+    OUString lib=OUString::createFromAscii("textconv_dict"SAL_DLLEXTENSION);
 #endif
     hModule = osl_loadModuleRelative(
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
@@ -62,9 +61,9 @@ static void* nullFunc()
 }
 
 oslGenericFunction SAL_CALL
-TextConversion::getFunctionBySymbol(const sal_Char* func)
+TextConversion::getFunctionBySymbol(const sal_Char* func) 
 {
-    if (hModule)
+    if (hModule) 
         return osl_getFunctionSymbol(hModule, OUString::createFromAscii(func).pData);
     else
         return reinterpret_cast< oslGenericFunction >(nullFunc);

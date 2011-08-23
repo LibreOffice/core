@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,8 +60,8 @@ public:
     virtual void Redo();
 
 protected:
-    OutlinerParaObject* mpOldText;
-    OutlinerParaObject* mpNewText;
+    OutlinerParaObject*	mpOldText;
+    OutlinerParaObject*	mpNewText;
     rtl::Reference< TextApiObject > mxTextObj;
 };
 
@@ -83,8 +83,8 @@ void UndoTextAPIChanged::Undo()
 {
     if( !mpNewText )
         mpNewText = mxTextObj->CreateText();
-
-    mxTextObj->SetText( *mpOldText );
+        
+    mxTextObj->SetText( *mpOldText );        
 }
 
 void UndoTextAPIChanged::Redo()
@@ -95,32 +95,32 @@ void UndoTextAPIChanged::Redo()
     }
 }
 
-struct TextAPIEditSource_Impl
+struct TextAPIEditSource_Impl 
 {
     // needed for "internal" refcounting
-    SdDrawDocument*                 mpDoc;
-    Outliner*                       mpOutliner;
-    SvxOutlinerForwarder*           mpTextForwarder;
-    sal_Int32                       mnRef;
+    SdDrawDocument*					mpDoc;
+    Outliner*						mpOutliner;
+    SvxOutlinerForwarder*			mpTextForwarder;
+    sal_Int32						mnRef;
 };
 
 class TextAPIEditSource : public SvxEditSource
 {
     TextAPIEditSource_Impl* pImpl;
 
-    virtual SvxEditSource*      Clone() const;
-    virtual SvxTextForwarder*   GetTextForwarder();
-    virtual void                UpdateData();
-    explicit            TextAPIEditSource( const TextAPIEditSource& rSource );
+    virtual SvxEditSource*		Clone() const;
+    virtual SvxTextForwarder*	GetTextForwarder();
+    virtual void				UpdateData();
+    explicit			TextAPIEditSource( const TextAPIEditSource& rSource );
 
 public:
                         TextAPIEditSource(SdDrawDocument* pDoc);
-    virtual             ~TextAPIEditSource();
+    virtual				~TextAPIEditSource();
 
-    void                Dispose();
-    void                SetText( OutlinerParaObject& rText );
+    void				Dispose();
+    void				SetText( OutlinerParaObject& rText );
     OutlinerParaObject* CreateText();
-    String              GetText();
+    String				GetText();
     SdDrawDocument*     GetDoc() { return pImpl->mpDoc; }
 };
 
@@ -132,10 +132,10 @@ const SvxItemPropertySet* ImplGetSdTextPortionPropertyMap()
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        {MAP_CHAR_LEN("TextField"),                     EE_FEATURE_FIELD,   &::getCppuType((const Reference< XTextField >*)0),  PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN("TextPortionType"),               WID_PORTIONTYPE,    &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN("TextUserDefinedAttributes"),     EE_CHAR_XMLATTRIBS,     &::getCppuType((const Reference< XNameContainer >*)0)  ,        0,     0},
-        {MAP_CHAR_LEN("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     &::getCppuType((const Reference< XNameContainer >*)0)  ,        0,     0},
+        {MAP_CHAR_LEN("TextField"),						EE_FEATURE_FIELD,	&::getCppuType((const Reference< XTextField >*)0),	PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN("TextPortionType"),				WID_PORTIONTYPE,	&::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN("TextUserDefinedAttributes"),		EE_CHAR_XMLATTRIBS,		&::getCppuType((const Reference< XNameContainer >*)0)  , 		0,     0},
+        {MAP_CHAR_LEN("ParaUserDefinedAttributes"),		EE_PARA_XMLATTRIBS,		&::getCppuType((const Reference< XNameContainer >*)0)  , 		0,     0},
         {0,0,0,0,0,0}
     };
     static SvxItemPropertySet aSdTextPortionPropertyMap( aSdTextPortionPropertyEntries, SdrObject::GetGlobalDrawObjectItemPool() );
@@ -169,6 +169,7 @@ void SAL_CALL TextApiObject::dispose() throw(RuntimeException)
         mpSource = 0;
     }
 
+    // SvxUnoText::dispose();
 }
 
 OutlinerParaObject* TextApiObject::CreateText()
@@ -181,9 +182,9 @@ void TextApiObject::SetText( OutlinerParaObject& rText )
     SdrModel* pModel = mpSource->GetDoc();
     if( pModel && pModel->IsUndoEnabled() )
         pModel->AddUndo( new UndoTextAPIChanged( *pModel, this ) );
-
+            
     mpSource->SetText( rText );
-    maSelection.nStartPara = 0xffff;
+    maSelection.nStartPara = 0xffff;		
 }
 
 String TextApiObject::GetText()
@@ -272,7 +273,7 @@ void TextAPIEditSource::SetText( OutlinerParaObject& rText )
             pImpl->mpOutliner = new Outliner( pImpl->mpDoc, OUTLINERMODE_TEXTOBJECT );
             pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
         }
-
+      
         pImpl->mpOutliner->SetText( rText );
     }
 }

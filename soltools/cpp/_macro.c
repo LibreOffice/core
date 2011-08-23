@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef __hpux
+#   define _HPUX_SOURCE
+#endif
 #if defined(__IBMC__) || defined(__EMX__)
 #   define PATH_MAX _MAX_PATH
 #endif
@@ -43,13 +46,14 @@ void
     args = NULL;
     if (tp < trp->lp && tp->type == LP && tp->wslen == 0)
     {
+        /* macro with args */
+        int narg = 0;
+
         tp += 1;
         args = new(Tokenrow);
         maketokenrow(2, args);
         if (tp->type != RP)
         {
-            /* macro with args */
-            size_t narg = 0;
             int err = 0;
 
             for (;;)
@@ -289,8 +293,9 @@ void
 void
     expand(Tokenrow * trp, Nlist * np, MacroValidatorList * pValidators)
 {
+//  Token * pOldNextTp;
     Tokenrow ntr;
-    int ntokc, narg;
+    int ntokc, narg, i;
     Tokenrow *atr[NARG + 1];
 
     if (Mflag == 2)
@@ -306,8 +311,6 @@ void
         ntokc = 1;
     else
     {
-        int i;
-
         ntokc = gatherargs(trp, atr, &narg);
         if (narg < 0)
         {                               /* not actually a call (no '(') */
@@ -339,12 +342,32 @@ void
         }
     }
 
+/* old
+    np->flag |= ISACTIVE;
+*/
+
+/* rh
+*/
     doconcat(&ntr);                     /* execute ## operators */
     ntr.tp = ntr.bp;
     makespace(&ntr, trp->tp);
 
+/* old
+//  expandrow(&ntr, "<expand>");
+//  insertrow(trp, ntokc, &ntr);
+//  dofree(ntr.bp);
+//  np->flag &= ~ISACTIVE;
+*/
+
+/* NP
+        // Replace macro by its value:
+*/
+//  pOldNextTp = trp->tp+ntokc;
     tokenrow_zeroTokenIdentifiers(&ntr);
     insertrow(trp, ntokc, &ntr);
+        /* Reassign old macro validators:
+        */
+//  mvl_move(pValidators, trp->tp - pOldNextTp);
 
         /* add validator for just invalidated macro:
         */
@@ -492,7 +515,7 @@ void
                 error(ERROR, "# not followed by macro parameter");
                 continue;
             }
-            ntok = 1 + (int)(rtr->tp - tp);
+            ntok = 1 + (rtr->tp - tp);
             rtr->tp = tp;
             insertrow(rtr, ntok, stringify(atr[argno]));
             continue;
@@ -530,7 +553,7 @@ void
 {
     Token *ltp, *ntp;
     Tokenrow ntr;
-    size_t len;
+    int len;
 
     for (trp->tp = trp->bp; trp->tp < trp->lp; trp->tp++)
     {
@@ -593,7 +616,7 @@ void
                 doconcat(&ntr);
                 trp->tp = ltp;
                 makespace(&ntr, ltp);
-                insertrow(trp, (int)(ntp - ltp), &ntr);
+                insertrow(trp, ntp - ltp, &ntr);
                 dofree(ntr.bp);
                 trp->tp--;
             }
@@ -615,7 +638,7 @@ int
     for (ap = mac->ap->bp; ap < mac->ap->lp; ap++)
     {
         if (ap->len == tp->len && strncmp((char *) ap->t, (char *) tp->t, ap->len) == 0)
-            return (int)(ap - mac->ap->bp);
+            return ap - mac->ap->bp;
     }
     return -1;
 }

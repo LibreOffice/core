@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <vcl/salgdi.hxx>
 
-using ::rtl::OUString;
+using namespace rtl;
 
 /****************************************************************
  *  Placeholder for no native widgets
@@ -41,29 +41,29 @@ using ::rtl::OUString;
 /*
  * IsNativeControlSupported()
  *
- *  Returns sal_True if the platform supports native
+ *  Returns TRUE if the platform supports native
  *  drawing of the control defined by nPart
  */
-sal_Bool SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
+BOOL SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 
 /*
  * HitTestNativeControl()
  *
- *  If the return value is sal_True, bIsInside contains information whether
+ *  If the return value is TRUE, bIsInside contains information whether
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
-sal_Bool SalGraphics::hitTestNativeControl( ControlType,
+BOOL SalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
                               const Rectangle&,
                               const Point&,
-                              sal_Bool& )
+                              BOOL& )
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 
@@ -72,18 +72,18 @@ sal_Bool SalGraphics::hitTestNativeControl( ControlType,
  *
  *  Draws the requested control described by nPart/nState.
  *
- *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
- *  aValue:         An optional value (tristate/numerical/string)
- *  aCaption:   A caption or title string (like button text etc)
+ *  rControlRegion:	The bounding region of the complete control in VCL frame coordinates.
+ *  aValue:  		An optional value (tristate/numerical/string)
+ *  aCaption:  	A caption or title string (like button text etc)
  */
-sal_Bool SalGraphics::drawNativeControl(    ControlType,
+BOOL SalGraphics::drawNativeControl(	ControlType,
                             ControlPart,
                             const Rectangle&,
                             ControlState,
                             const ImplControlValue&,
                             const OUString& )
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 
@@ -93,35 +93,35 @@ sal_Bool SalGraphics::drawNativeControl(    ControlType,
  *  OPTIONAL.  Draws the requested text for the control described by nPart/nState.
  *     Used if text not drawn by DrawNativeControl().
  *
- *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
- *  aValue:         An optional value (tristate/numerical/string)
- *  aCaption:   A caption or title string (like button text etc)
+ *  rControlRegion:	The bounding region of the complete control in VCL frame coordinates.
+ *  aValue:  		An optional value (tristate/numerical/string)
+ *  aCaption:  	A caption or title string (like button text etc)
  */
-sal_Bool SalGraphics::drawNativeControlText(    ControlType,
+BOOL SalGraphics::drawNativeControlText(	ControlType,
                                 ControlPart,
                                 const Rectangle&,
                                 ControlState,
                                 const ImplControlValue&,
                                 const OUString& )
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 
 /*
  * GetNativeControlRegion()
  *
- *  If the return value is sal_True, rNativeBoundingRegion
- *  contains the sal_True bounding region covered by the control
+ *  If the return value is TRUE, rNativeBoundingRegion
+ *  contains the TRUE bounding region covered by the control
  *  including any adornment, while rNativeContentRegion contains the area
  *  within the control that can be safely drawn into without drawing over
  *  the borders of the control.
  *
- *  rControlRegion: The bounding region of the control in VCL frame coordinates.
- *  aValue:     An optional value (tristate/numerical/string)
- *  aCaption:       A caption or title string (like button text etc)
+ *  rControlRegion:	The bounding region of the control in VCL frame coordinates.
+ *  aValue:		An optional value (tristate/numerical/string)
+ *  aCaption:		A caption or title string (like button text etc)
  */
-sal_Bool SalGraphics::getNativeControlRegion(  ControlType,
+BOOL SalGraphics::getNativeControlRegion(  ControlType,
                                 ControlPart,
                                 const Rectangle&,
                                 ControlState,
@@ -130,7 +130,7 @@ sal_Bool SalGraphics::getNativeControlRegion(  ControlType,
                                 Rectangle &,
                                 Rectangle & )
 {
-    return( sal_False );
+    return( FALSE );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

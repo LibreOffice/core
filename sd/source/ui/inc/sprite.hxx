@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,36 +51,36 @@ public:
     Sprite( List* pListOfBmpEx );
     ~Sprite();
 
-    sal_Bool            StartMoving( OutputDevice* pOut,
+    BOOL			StartMoving( OutputDevice* pOut,
                                  OutputDevice* pBottomLayer = NULL,
                                  BitmapEx* pTopLayer = NULL,
-                                 MetaFile** ppTopMtf = NULL,
+                                 MetaFile** ppTopMtf = NULL, 
                                  Marker* pObjStartMarker = NULL,
                                  Marker* pObjEndMarker = NULL );
-    void            MoveTo( OutputDevice* pOut, const Point& rPt, const Size* pSz = NULL );
-    void            MoveTo( OutputDevice* pOut, const Point& rPt, const double& rScaleX, const double& rScaleY );
-    void            EndMoving( OutputDevice* pOut );
+    void			MoveTo( OutputDevice* pOut, const Point& rPt, const Size* pSz = NULL );
+    void			MoveTo( OutputDevice* pOut, const Point& rPt, const double& rScaleX, const double& rScaleY );
+    void			EndMoving( OutputDevice* pOut );
 
 protected:
-    MapMode         aOldMap;
-    Region          aOldClip;
-    Rectangle       aPaintRect;
-    Point           aPt;
-    Size            aSz;
-    Point           aLayerOffsetPix;
-    VirtualDevice*  pPaintDev;
-    VirtualDevice*  pBottomLayer;
-    BitmapEx*       pActBmpEx;
-    BitmapEx*       pTopLayer;
-    MetaFile**  ppTopMtf;
-    Marker*         pObjStartMarker;
-    Marker*         pObjEndMarker;
-    List*           pListOfBmpEx;
-    sal_uLong           nLastTime;
-    sal_Bool            bClipRegion;
+    MapMode			aOldMap;
+    Region			aOldClip;
+    Rectangle		aPaintRect;
+    Point			aPt;
+    Size			aSz;
+    Point			aLayerOffsetPix;
+    VirtualDevice*	pPaintDev;
+    VirtualDevice*	pBottomLayer;
+    BitmapEx*		pActBmpEx;
+    BitmapEx*		pTopLayer;
+    MetaFile**	ppTopMtf;
+    Marker*			pObjStartMarker;
+    Marker*			pObjEndMarker;
+    List*			pListOfBmpEx;
+    ULONG			nLastTime;
+    BOOL			bClipRegion;
 
-    sal_Bool            ImplPrepareMoveTo();
-    void            ImplDrawSprite( OutputDevice* pOut, const Point& rPt, const Size& rSz );
+    BOOL			ImplPrepareMoveTo();
+    void			ImplDrawSprite( OutputDevice* pOut, const Point& rPt, const Size& rSz );
 
 };
 

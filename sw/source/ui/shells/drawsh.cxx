@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,20 +86,20 @@ TYPEINIT1(SwDrawShell,SwDrawBaseShell)
 
 void SwDrawShell::Execute(SfxRequest &rReq)
 {
-    SwWrtShell          &rSh = GetShell();
-    SdrView             *pSdrView = rSh.GetDrawView();
-    const SfxItemSet    *pArgs = rReq.GetArgs();
-    SfxBindings         &rBnd  = GetView().GetViewFrame()->GetBindings();
-    sal_uInt16               nSlotId = rReq.GetSlot();
-    sal_Bool                 bChanged = pSdrView->GetModel()->IsChanged();
+    SwWrtShell			&rSh = GetShell();
+    SdrView				*pSdrView = rSh.GetDrawView();
+    const SfxItemSet	*pArgs = rReq.GetArgs();
+    SfxBindings			&rBnd  = GetView().GetViewFrame()->GetBindings();
+    USHORT				 nSlotId = rReq.GetSlot();
+    BOOL				 bChanged = pSdrView->GetModel()->IsChanged();
 
-    pSdrView->GetModel()->SetChanged(sal_False);
+    pSdrView->GetModel()->SetChanged(FALSE);
 
     const SfxPoolItem* pItem;
     if(pArgs)
-        pArgs->GetItemState(nSlotId, sal_False, &pItem);
+        pArgs->GetItemState(nSlotId, FALSE, &pItem);
 
-    sal_Bool bMirror = sal_True;
+    BOOL bMirror = TRUE;
 
     switch (nSlotId)
     {
@@ -169,7 +169,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             break;
 
         case FN_FLIP_HORZ_GRAFIC:
-            bMirror = sal_False;
+            bMirror = FALSE;
             /* no break */
         case FN_FLIP_VERT_GRAFIC:
             rSh.MirrorSelection( bMirror );
@@ -178,7 +178,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case SID_FONTWORK:
         {
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)) );
             SfxViewFrame* pVFrame = GetView().GetViewFrame();
             if (pArgs)
             {
@@ -235,7 +235,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             SwDocStat aCurr;
             SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
             {
-                SwWait aWait( *GetView().GetDocShell(), sal_True );
+                SwWait aWait( *GetView().GetDocShell(), TRUE );
                 rSh.StartAction();
                 rSh.CountWords( aCurr );
                 rSh.UpdateDocStat( aDocStat );
@@ -291,7 +291,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     if (pSdrView->GetModel()->IsChanged())
         rSh.SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged(sal_True);
+        pSdrView->GetModel()->SetChanged(TRUE);
 }
 
 void SwDrawShell::GetState(SfxItemSet& rSet)
@@ -299,10 +299,10 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
     SwWrtShell &rSh = GetShell();
     SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
     SfxWhichIter aIter( rSet );
-    sal_uInt16 nWhich = aIter.FirstWhich();
-    sal_Bool bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
+    USHORT nWhich = aIter.FirstWhich();
+    BOOL bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
 
-    if (!bProtected)    // Im Parent nachsehen
+    if (!bProtected)	// Im Parent nachsehen
         bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
     while( nWhich )
@@ -326,7 +326,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
 
             case SID_OBJECT_ROTATE:
             {
-                const sal_Bool bIsRotate = GetView().IsDrawRotate();
+                const BOOL bIsRotate = GetView().IsDrawRotate();
                 if ( (!bIsRotate && !pSdrView->IsRotateAllowed()) || bProtected )
                     rSet.DisableItem( nWhich );
                 else
@@ -355,7 +355,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
+                    const USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
                     rSet.Put(SfxBoolItem( nWhich , GetView().GetViewFrame()->HasChildWindow(nId)));
                 }
             }
@@ -382,9 +382,9 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
 void SwDrawShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
-    SdrView*    pDrView = rSh.GetDrawView();
-    sal_Bool        bChanged = pDrView->GetModel()->IsChanged();
-    pDrView->GetModel()->SetChanged(sal_False);
+    SdrView*	pDrView = rSh.GetDrawView();
+    BOOL		bChanged = pDrView->GetModel()->IsChanged();
+    pDrView->GetModel()->SetChanged(FALSE);
 
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
@@ -395,16 +395,16 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
 
         if ( pDrView->IsTextEdit() )
         {
-            pDrView->SdrEndTextEdit( sal_True );
+            pDrView->SdrEndTextEdit( TRUE );
             GetView().AttrChangedNotify(&rSh);
         }
 
-        if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, sal_True, &pItem) ==
+        if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, TRUE, &pItem) ==
              SFX_ITEM_SET &&
             ((const XFormTextStdFormItem*) pItem)->GetValue() != XFTFORM_NONE )
         {
 
-            const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
+            const USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
 
             SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)(GetView().GetViewFrame()->
                                         GetChildWindow(nId)->GetWindow());
@@ -422,7 +422,7 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
         rSh.SetModified();
     else
         if (bChanged)
-            pDrView->GetModel()->SetChanged(sal_True);
+            pDrView->GetModel()->SetChanged(TRUE);
 }
 
 /*************************************************************************
@@ -438,7 +438,7 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
     const SdrObject* pObj = NULL;
     SvxFontWorkDialog* pDlg = NULL;
 
-    const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
+    const USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     if ( pVFrame->HasChildWindow(nId) )
@@ -450,15 +450,15 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
     if ( pObj == NULL || !pObj->ISA(SdrTextObj) ||
         !((SdrTextObj*) pObj)->HasText() )
     {
-#define XATTR_ANZ 12
-        static const sal_uInt16 nXAttr[ XATTR_ANZ ] =
+#define	XATTR_ANZ 12
+        static const USHORT nXAttr[ XATTR_ANZ ] =
         {
             XATTR_FORMTXTSTYLE, XATTR_FORMTXTADJUST, XATTR_FORMTXTDISTANCE,
             XATTR_FORMTXTSTART, XATTR_FORMTXTMIRROR, XATTR_FORMTXTSTDFORM,
             XATTR_FORMTXTHIDEFORM, XATTR_FORMTXTOUTLINE, XATTR_FORMTXTSHADOW,
             XATTR_FORMTXTSHDWCOLOR, XATTR_FORMTXTSHDWXVAL, XATTR_FORMTXTSHDWYVAL
         };
-        for( sal_uInt16 i = 0; i < XATTR_ANZ; )
+        for( USHORT i = 0; i < XATTR_ANZ; )
             rSet.DisableItem( nXAttr[ i++ ] );
     }
     else

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,6 +51,8 @@ namespace wrapper
 {
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 class WrappedDataCaptionProperty : public WrappedSeriesOrDiagramProperty< sal_Int32 >
 {
@@ -74,7 +76,7 @@ enum
 sal_Int32 lcl_LabelToCaption( const chart2::DataPointLabel& rLabel )
 {
     sal_Int32 nCaption=0;
-
+    
     if( rLabel.ShowNumber )
         nCaption |= ::com::sun::star::chart::ChartDataCaption::VALUE;
     if( rLabel.ShowNumberInPercent )
@@ -83,14 +85,14 @@ sal_Int32 lcl_LabelToCaption( const chart2::DataPointLabel& rLabel )
         nCaption |= ::com::sun::star::chart::ChartDataCaption::TEXT;
     if( rLabel.ShowLegendSymbol )
         nCaption |= ::com::sun::star::chart::ChartDataCaption::SYMBOL;
-
+    
     return nCaption;
 }
 
 chart2::DataPointLabel lcl_CaptionToLabel( sal_Int32 nCaption )
 {
     chart2::DataPointLabel aLabel(false,false,false,false);
-
+    
     if( nCaption & ::com::sun::star::chart::ChartDataCaption::VALUE )
         aLabel.ShowNumber = true;
     if( nCaption & ::com::sun::star::chart::ChartDataCaption::PERCENT )
@@ -99,7 +101,7 @@ chart2::DataPointLabel lcl_CaptionToLabel( sal_Int32 nCaption )
         aLabel.ShowCategoryName = true;
     if( nCaption & ::com::sun::star::chart::ChartDataCaption::SYMBOL )
         aLabel.ShowLegendSymbol = true;
-
+    
     return aLabel;
 }
 
@@ -109,14 +111,16 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 {
     //if !spChart2ModelContact.get() is then the created properties do belong to a single series or single datapoint
     //otherwise they do belong to the whole diagram
-
+    
     rList.push_back( new WrappedDataCaptionProperty( spChart2ModelContact, ePropertyType ) );
 }
 
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//static
 void WrappedDataCaptionProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -128,7 +132,9 @@ void WrappedDataCaptionProperties::addProperties( ::std::vector< Property > & rO
 }
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
+//static
 void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -136,13 +142,17 @@ void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< W
 }
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
+//static
 void WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM );
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 WrappedDataCaptionProperty::WrappedDataCaptionProperty(
@@ -175,6 +185,8 @@ void WrappedDataCaptionProperty::setValueToSeries( const Reference< beans::XProp
     xSeriesPropertySet->setPropertyValue( C2U("Label"), uno::makeAny( aLabel ) );
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 } //namespace wrapper

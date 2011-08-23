@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ public class _XFilePicker extends MultiMethodTest {
 
     /**
     * Sets the current directory to the test document directory. <p>
-    * Has <b>OK</b> status if no exceptions occurred.
+    * Has <b>OK</b> status if no exceptions occured.
     */
     public void _setDisplayDirectory() {
         boolean result = true ;
@@ -95,7 +95,7 @@ public class _XFilePicker extends MultiMethodTest {
     /**
     * Sets default name to file name existing in test document
     * directory ('space-metal.jpg'). <p>
-    * Has <b>OK</b> status if no exceptions occurred.
+    * Has <b>OK</b> status if no exceptions occured.
     */
     public void _setDefaultName() {
         boolean result = true ;
@@ -113,7 +113,7 @@ public class _XFilePicker extends MultiMethodTest {
     /**
     * Just switch object to MultiSelectionMode. There is no ways
     * to check this method (only interactively). <p>
-    * Has <b>OK</b> status if no runtime exceptions occurred.
+    * Has <b>OK</b> status if no runtime exceptions occured.
     */
     public void _setMultiSelectionMode() {
 

@@ -205,8 +205,7 @@ testcase tmFilePassword
     if ( SpeichernDlg.exists( 2 ) ) then
         Dateiname.SetText Datei$
         if (Passwort.IsChecked <> TRUE) then
-            '#i36015# 
-            Warnlog "Password has to be checked! :-("
+            Warnlog "#i36015# Password has to be checked! :-("
             Passwort.Check
             printlog "will be forced checked no!"
         endif
@@ -256,8 +255,7 @@ testcase tmFilePassword
     Kontext "SpeichernDlg"
     Dateiname.SetText Datei$
     if (Passwort.IsChecked <> TRUE) then
-        '#i36015# 
-        Warnlog "Password has to be checked! :-("
+        Warnlog "#i36015# Password has to be checked! :-("
         Passwort.Check
         printlog "will be forced checked no!"
     endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,13 +66,13 @@ interface XDataSeries : ::com::sun::star::uno::XInterface
         raises( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** the formatting of the specified data point is cleared
-
+        
         @param nIndex
             specifies the index of the data point within the series. The first index is 0.
      */
     void resetDataPoint( [in] long nIndex );
 
-    /** all data point formatting are cleared
+    /** all data point formattings are cleared
      */
     void resetAllDataPoints();
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,6 +47,8 @@
 #define WRITER_COMPONENT 16
 #define MATH_COMPONENT 32
 
+// #define OWN_DEBUG_PRINT
+
 typedef int ( __stdcall * DllNativeRegProc ) ( int, BOOL, BOOL, const char* );
 typedef int ( __stdcall * DllNativeUnregProc ) ( int, BOOL, BOOL );
 
@@ -77,11 +79,24 @@ char* UnicodeToAnsiString( wchar_t* pUniString )
     return buff;
 }
 
+#ifdef OWN_DEBUG_PRINT
+void WarningMessageInt( wchar_t* pWarning, unsigned int nValue )
+{
+    wchar_t pStr[5] = { nValue%10000/1000 + 48, nValue%1000/100 + 48, nValue%100/10 + 48, nValue%10 + 48, 0 };
+       MessageBox(NULL, pStr, pWarning, MB_OK | MB_ICONINFORMATION);
+}
+#endif
+
 //----------------------------------------------------------
 void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
+#ifdef OWN_DEBUG_PRINT
+    MessageBoxW(NULL, L"RegisterActiveXNative", L"Information", MB_OK | MB_ICONINFORMATION);
+    MessageBoxA(NULL, pActiveXPath, "Library Path", MB_OK | MB_ICONINFORMATION);
+#endif
+
     // For Win98/WinME the values should be written to the local machine
-    OSVERSIONINFO       aVerInfo;
+    OSVERSIONINFO		aVerInfo;
     aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
     if ( GetVersionEx( &aVerInfo ) && aVerInfo.dwPlatformId != VER_PLATFORM_WIN32_NT )
         InstallForAllUser = TRUE;
@@ -92,6 +107,9 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
         DllNativeRegProc pNativeProc = ( DllNativeRegProc )GetProcAddress( hModule, "DllRegisterServerNative" );
         if( pNativeProc!=NULL )
         {
+#ifdef OWN_DEBUG_PRINT
+            MessageBoxA(NULL, pActiveXPath, "Library Path", MB_OK | MB_ICONINFORMATION);
+#endif
             int nLen = strlen( pActiveXPath );
             int nRemoveLen = strlen( "\\so_activex.dll" );
             if ( nLen > nRemoveLen )
@@ -114,7 +132,7 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
 void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
     // For Win98/WinME the values should be written to the local machine
-    OSVERSIONINFO       aVerInfo;
+    OSVERSIONINFO		aVerInfo;
     aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
     if ( GetVersionEx( &aVerInfo ) && aVerInfo.dwPlatformId != VER_PLATFORM_WIN32_NT )
         InstallForAllUser = TRUE;
@@ -156,6 +174,10 @@ BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
     if ( GetMsiProp( hMSI, L"INSTALLLOCATION", &pProgPath ) && pProgPath )
        {
         char* pCharProgPath = UnicodeToAnsiString( pProgPath );
+#ifdef OWN_DEBUG_PRINT
+        MessageBox(NULL, pProgPath, L"Basis Installation Path", MB_OK | MB_ICONINFORMATION);
+        MessageBoxA(NULL, pCharProgPath, "Basis Installation Path( char )", MB_OK | MB_ICONINFORMATION);
+#endif
 
         if ( pCharProgPath )
         {
@@ -189,6 +211,11 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Wrt_Bin", &current_state, &future_state ) )
     {
+#ifdef OWN_DEBUG_PRINT
+        WarningMessageInt( L"writer current_state = ", current_state );
+        WarningMessageInt( L"writer future_state = ", future_state );
+#endif
+
         // analyze writer installation mode
         if ( current_state == INSTALLSTATE_LOCAL )
             nOldInstallMode |= WRITER_COMPONENT;
@@ -206,6 +233,11 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Calc_Bin", &current_state, &future_state ) )
     {
+#ifdef OWN_DEBUG_PRINT
+        WarningMessageInt( L"calc current_state = ", current_state );
+        WarningMessageInt( L"calc future_state = ", future_state );
+#endif
+
         // analyze calc installation mode
         if ( current_state == INSTALLSTATE_LOCAL )
             nOldInstallMode |= CALC_COMPONENT;
@@ -309,11 +341,19 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
     int nInstallMode = 0;
     int nDeinstallMode = 0;
 
+#ifdef OWN_DEBUG_PRINT
+    MessageBox(NULL, L"InstallActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);
+#endif
+
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_o_Activexcontrol", &current_state, &future_state ) )
     {
+#ifdef OWN_DEBUG_PRINT
+        MessageBox(NULL, L"InstallActiveXControl Step2", L"Information", MB_OK | MB_ICONINFORMATION);
+#endif
+
         BOOL bInstallForAllUser = MakeInstallForAllUsers( hMSI );
         BOOL bInstallFor64Bit = MakeInstallFor64Bit( hMSI );
 
@@ -321,9 +361,17 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
         if ( GetActiveXControlPath( hMSI, &pActiveXPath ) && pActiveXPath
         && GetDelta( hMSI, nOldInstallMode, nInstallMode, nDeinstallMode ) )
         {
+#ifdef OWN_DEBUG_PRINT
+            MessageBox(NULL, L"InstallActiveXControl Step3", L"Information", MB_OK | MB_ICONINFORMATION);
+#endif
+
             if ( future_state == INSTALLSTATE_LOCAL
               || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             {
+#ifdef OWN_DEBUG_PRINT
+                MessageBox(NULL, L"InstallActiveXControl, adjusting", L"Information", MB_OK | MB_ICONINFORMATION);
+                WarningMessageInt( L"nInstallMode = ", nInstallMode );
+#endif
                 // the control is installed in the new selected configuration
 
                 if ( current_state == INSTALLSTATE_LOCAL && nDeinstallMode )
@@ -334,6 +382,9 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
             }
             else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             {
+#ifdef OWN_DEBUG_PRINT
+                MessageBox(NULL, L"InstallActiveXControl, removing", L"Information", MB_OK | MB_ICONINFORMATION);
+#endif
                 if ( nOldInstallMode )
                     UnregisterActiveXNative( pActiveXPath, nOldInstallMode, bInstallForAllUser, bInstallFor64Bit );
             }
@@ -355,6 +406,10 @@ extern "C" UINT __stdcall DeinstallActiveXControl( MSIHANDLE hMSI )
 {
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;
+
+#ifdef OWN_DEBUG_PRINT
+    MessageBox(NULL, L"DeinstallActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);
+#endif
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_o_Activexcontrol", &current_state, &future_state ) )
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,15 +43,15 @@ published service PageNumber
 {
     service  com::sun::star::text::TextField;
 
-    /** determines the type of the numbering.
+    /** determins the type of the numbering.
      @see <const scope="com::sun::star::style">NumberingType</const>
      */
     [property] short NumberingType;
 
-    /** determines an offset value to show a different page number.
+    /** determins an offset value to show a different page number.
      */
     [property] short Offset;
-    /** determines which page the field refers to.
+    /** determins which page the field refers to.
         @see <const scope="com::sun::star::text">PageNumberType</const>
      */
     [property] PageNumberType SubType;

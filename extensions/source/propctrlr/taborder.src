@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,6 @@
 
 ModalDialog RID_DLG_TABORDER
 {
-    HelpID = "extensions:ModalDialog:RID_DLG_TABORDER";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 168 , 158 ) ;
@@ -52,16 +51,15 @@ ModalDialog RID_DLG_TABORDER
 
     Control CTRL_TREE
     {
-        Border              = TRUE;
+        Border				= TRUE;
         Pos                 = MAP_APPFONT ( 6, 14) ;
         Size                = MAP_APPFONT ( 90, 136 ) ;
-        TabStop             = TRUE;
-        HelpId              = HID_PROP_TABORDER_CONTROLS;
+        TabStop				= TRUE;
+        HelpId				= HID_PROP_TABORDER_CONTROLS;
     };
 
     PushButton PB_MOVE_UP
     {
-        HelpID = "extensions:PushButton:RID_DLG_TABORDER:PB_MOVE_UP";
         Pos = MAP_APPFONT ( 102 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Move Up" ;
@@ -69,7 +67,6 @@ ModalDialog RID_DLG_TABORDER
 
     PushButton PB_MOVE_DOWN
     {
-        HelpID = "extensions:PushButton:RID_DLG_TABORDER:PB_MOVE_DOWN";
         Pos = MAP_APPFONT ( 102 , 32 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Move Down" ;
@@ -77,7 +74,6 @@ ModalDialog RID_DLG_TABORDER
 
     PushButton PB_AUTO_ORDER
     {
-        HelpID = "extensions:PushButton:RID_DLG_TABORDER:PB_AUTO_ORDER";
         Pos = MAP_APPFONT ( 102 , 50 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Automatic Sort" ;

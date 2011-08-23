@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,14 +44,14 @@ public:
     ConstPolygon(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
                                        // Mouse- & Key-Events
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate(const sal_uInt16 nSlotId);    // Function aktivieren
+    virtual void Activate(const USHORT nSlotId);	// Function aktivieren
 };
 
 
-#endif      // _CONPOLY_HXX
+#endif		// _CONPOLY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,28 +27,27 @@
  ************************************************************************/
 
 #include "oox/xls/sharedstringsfragment.hxx"
-
-#include "oox/xls/richstringcontext.hxx"
 #include "oox/xls/sharedstringsbuffer.hxx"
+#include "oox/xls/richstringcontext.hxx"
+
+using ::rtl::OUString;
+using ::oox::core::ContextHandlerRef;
+using ::oox::core::RecordInfo;
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-using namespace ::oox::core;
-
-using ::rtl::OUString;
-
-// ============================================================================
-
-SharedStringsFragment::SharedStringsFragment(
+OoxSharedStringsFragment::OoxSharedStringsFragment(
         const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
-    WorkbookFragmentBase( rHelper, rFragmentPath )
+    OoxWorkbookFragmentBase( rHelper, rFragmentPath )
 {
 }
 
-ContextHandlerRef SharedStringsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
+// oox.core.ContextHandler2Helper interface -----------------------------------
+
+ContextHandlerRef OoxSharedStringsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
@@ -59,40 +58,42 @@ ContextHandlerRef SharedStringsFragment::onCreateContext( sal_Int32 nElement, co
 
         case XLS_TOKEN( sst ):
             if( nElement == XLS_TOKEN( si ) )
-                return new RichStringContext( *this, getSharedStrings().createRichString() );
+                return new OoxRichStringContext( *this, getSharedStrings().createRichString() );
         break;
     }
     return 0;
 }
 
-ContextHandlerRef SharedStringsFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
+ContextHandlerRef OoxSharedStringsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            if( nRecId == BIFF12_ID_SST )
+            if( nRecId == OOBIN_ID_SST )
                 return this;
         break;
 
-        case BIFF12_ID_SST:
-            if( nRecId == BIFF12_ID_SI )
+        case OOBIN_ID_SST:
+            if( nRecId == OOBIN_ID_SI )
                 getSharedStrings().createRichString()->importString( rStrm, true );
         break;
     }
     return 0;
 }
 
-const RecordInfo* SharedStringsFragment::getRecordInfos() const
+// oox.core.FragmentHandler2 interface ----------------------------------------
+
+const RecordInfo* OoxSharedStringsFragment::getRecordInfos() const
 {
     static const RecordInfo spRecInfos[] =
     {
-        { BIFF12_ID_SST,    BIFF12_ID_SST + 1   },
+        { OOBIN_ID_SST,     OOBIN_ID_SST + 1    },
         { -1,               -1                  }
     };
     return spRecInfos;
 }
 
-void SharedStringsFragment::finalizeImport()
+void OoxSharedStringsFragment::finalizeImport()
 {
     getSharedStrings().finalizeImport();
 }

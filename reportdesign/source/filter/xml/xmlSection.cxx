@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
-
+                
                 case XML_TOK_PAGE_PRINT_OPTION:
                     if ( _bPageHeader )
                         m_xSection->getReportDefinition()->setPageHeaderOption(lcl_getReportPrintOption(sValue));
@@ -102,18 +102,18 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
                     break;
 
                 default:
-                    OSL_FAIL("OXMLSection: Unknown attribute!");
+                    OSL_ENSURE(0,"OXMLSection: Unknown attribute!");
             }
         }
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception catched while filling the section props");
+        OSL_ENSURE(0,"Exception catched while filling the section props");
     }
 }
 // -----------------------------------------------------------------------------
 OXMLSection::~OXMLSection()
-{
+{  
     DBG_DTOR( rpt_OXMLSection,NULL);
 }
 // -----------------------------------------------------------------------------
@@ -125,7 +125,7 @@ SvXMLImportContext* OXMLSection::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&    rTokenMap   = rImport.GetSectionElemTokenMap();
+    const SvXMLTokenMap&	rTokenMap	= rImport.GetSectionElemTokenMap();
     uno::Reference<lang::XMultiServiceFactory> xFactor = rImport.getServiceFactory();
 
     switch( rTokenMap.Get( _nPrefix, _rLocalName ) )

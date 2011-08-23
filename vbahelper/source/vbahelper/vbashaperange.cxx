@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,14 +61,14 @@ ScVbaShapeRange::ScVbaShapeRange( const uno::Reference< XHelperInterface >& xPar
 }
 
 // Methods
-void SAL_CALL
+void SAL_CALL 
 ScVbaShapeRange::Select(  ) throw (uno::RuntimeException)
 {
     uno::Reference< view::XSelectionSupplier > xSelectSupp( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     xSelectSupp->select( uno::makeAny( getShapes() ) );
 }
 
-uno::Reference< msforms::XShape > SAL_CALL
+uno::Reference< msforms::XShape > SAL_CALL 
 ScVbaShapeRange::Group() throw (uno::RuntimeException)
 {
     uno::Reference< drawing::XShapeGrouper > xShapeGrouper( m_xDrawPage, uno::UNO_QUERY_THROW );
@@ -77,13 +77,13 @@ ScVbaShapeRange::Group() throw (uno::RuntimeException)
     return uno::Reference< msforms::XShape >( new ScVbaShape( getParent(), mxContext, xShape, getShapes(), m_xModel, office::MsoShapeType::msoGroup ) );
 }
 
-uno::Reference< drawing::XShapes >
+uno::Reference< drawing::XShapes > 
 ScVbaShapeRange::getShapes() throw (uno::RuntimeException)
 {
     if ( !m_xShapes.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-        m_xShapes.set( xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ShapeCollection")) ), uno::UNO_QUERY_THROW );
+        m_xShapes.set( xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.drawing.ShapeCollection" ) ), uno::UNO_QUERY_THROW );
         sal_Int32 nLen = m_xIndexAccess->getCount();
         for ( sal_Int32 index = 0; index < nLen; ++index )
             m_xShapes->add( uno::Reference< drawing::XShape >( m_xIndexAccess->getByIndex( index ), uno::UNO_QUERY_THROW ) );
@@ -93,7 +93,7 @@ ScVbaShapeRange::getShapes() throw (uno::RuntimeException)
 }
 
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaShapeRange::IncrementRotation( double Increment ) throw (uno::RuntimeException)
 {
     sal_Int32 nLen = getCount();
@@ -104,7 +104,7 @@ ScVbaShapeRange::IncrementRotation( double Increment ) throw (uno::RuntimeExcept
     }
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaShapeRange::IncrementLeft( double Increment ) throw (uno::RuntimeException)
 {
     sal_Int32 nLen = getCount();
@@ -115,7 +115,7 @@ ScVbaShapeRange::IncrementLeft( double Increment ) throw (uno::RuntimeException)
     }
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaShapeRange::IncrementTop( double Increment ) throw (uno::RuntimeException)
 {
     sal_Int32 nLen = getCount();
@@ -375,7 +375,7 @@ ScVbaShapeRange::getElementType() throw (uno::RuntimeException)
     return msforms::XShape::static_type(0);
 }
 
-uno::Reference< container::XEnumeration > SAL_CALL
+uno::Reference< container::XEnumeration > SAL_CALL 
 ScVbaShapeRange::createEnumeration() throw (uno::RuntimeException)
 {
     return new VbShapeRangeEnumHelper( this, m_xIndexAccess );
@@ -385,20 +385,20 @@ uno::Any
 ScVbaShapeRange:: createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< drawing::XShape > xShape( aSource, uno::UNO_QUERY_THROW );
-    // #TODO  #FIXME Shape parent should always be the sheet the shapes belong
-    // to
-    uno::Reference< msforms::XShape > xVbShape( new ScVbaShape( uno::Reference< XHelperInterface >(), mxContext, xShape, getShapes(), m_xModel, ScVbaShape::getType( xShape ) ) );
+    // #TODO  #FIXME Shape parent should always be the sheet the shapes belong 
+    // to 
+    uno::Reference< msforms::XShape > xVbShape( new ScVbaShape( uno::Reference< XHelperInterface >(), mxContext, xShape, getShapes(), m_xModel, ScVbaShape::getType( xShape ) ) ); 
         return uno::makeAny( xVbShape );
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaShapeRange::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaShapeRange") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaShapeRange::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@
 #include "frmtool.hxx"
 
 
-sal_uInt16 SwEditShell::GetRedlineMode() const
+USHORT SwEditShell::GetRedlineMode() const
 {
     return GetDoc()->GetRedlineMode();
 }
 
-void SwEditShell::SetRedlineMode( sal_uInt16 eMode )
+void SwEditShell::SetRedlineMode( USHORT eMode )
 {
     if( eMode != GetDoc()->GetRedlineMode() )
     {
@@ -56,17 +56,17 @@ void SwEditShell::SetRedlineMode( sal_uInt16 eMode )
     }
 }
 
-sal_Bool SwEditShell::IsRedlineOn() const
+BOOL SwEditShell::IsRedlineOn() const
 {
     return GetDoc()->IsRedlineOn();
 }
 
-sal_uInt16 SwEditShell::GetRedlineCount() const
+USHORT SwEditShell::GetRedlineCount() const
 {
     return GetDoc()->GetRedlineTbl().Count();
 }
 
-const SwRedline& SwEditShell::GetRedline( sal_uInt16 nPos ) const
+const SwRedline& SwEditShell::GetRedline( USHORT nPos ) const
 {
     return *GetDoc()->GetRedlineTbl()[ nPos ];
 }
@@ -83,22 +83,22 @@ void lcl_InvalidateAll( ViewShell* pSh )
     } while ( pSh != pStop );
 }
 
-sal_Bool SwEditShell::AcceptRedline( sal_uInt16 nPos )
+BOOL SwEditShell::AcceptRedline( USHORT nPos )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    sal_Bool bRet = GetDoc()->AcceptRedline( nPos, true );
+    BOOL bRet = GetDoc()->AcceptRedline( nPos, true );
     if( !nPos && !::IsExtraData( GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
     return bRet;
 }
 
-sal_Bool SwEditShell::RejectRedline( sal_uInt16 nPos )
+BOOL SwEditShell::RejectRedline( USHORT nPos )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    sal_Bool bRet = GetDoc()->RejectRedline( nPos, true );
+    BOOL bRet = GetDoc()->RejectRedline( nPos, true );
     if( !nPos && !::IsExtraData( GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
@@ -106,9 +106,9 @@ sal_Bool SwEditShell::RejectRedline( sal_uInt16 nPos )
 }
 
 // Kommentar am Redline setzen
-sal_Bool SwEditShell::SetRedlineComment( const String& rS )
+BOOL SwEditShell::SetRedlineComment( const String& rS )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     FOREACHPAM_START(this)
         bRet = bRet || GetDoc()->SetRedlineComment( *PCURCRSR, rS );
     FOREACHPAM_END()
@@ -137,11 +137,11 @@ void SwEditShell::UpdateRedlineAttr()
 
     // suche das Redline zu diesem Data und returne die Pos im Array
     // USHRT_MAX wird returnt, falls nicht vorhanden
-sal_uInt16 SwEditShell::FindRedlineOfData( const SwRedlineData& rData ) const
+USHORT SwEditShell::FindRedlineOfData( const SwRedlineData& rData ) const
 {
     const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
 
-    for( sal_uInt16 i = 0, nCnt = rTbl.Count(); i < nCnt; ++i )
+    for( USHORT i = 0, nCnt = rTbl.Count(); i < nCnt; ++i )
         if( &rTbl[ i ]->GetRedlineData() == &rData )
             return i;
     return USHRT_MAX;

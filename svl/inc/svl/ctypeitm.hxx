@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,23 +37,23 @@ class CntContentTypeItem : public CntUnencodedStringItem
 {
 private:
     INetContentType _eType;
-    XubString       _aPresentation;
+    XubString		_aPresentation;
 
 public:
     TYPEINFO();
 
     CntContentTypeItem();
-    CntContentTypeItem( sal_uInt16 nWhich, const XubString& rType );
-    CntContentTypeItem( sal_uInt16 nWhich, const INetContentType eType );
+    CntContentTypeItem(	USHORT nWhich, const XubString& rType );
+    CntContentTypeItem(	USHORT nWhich, const INetContentType eType );
     CntContentTypeItem( const CntContentTypeItem& rOrig );
 
     virtual SfxPoolItem* Create( SvStream& rStream,
-                                 sal_uInt16 nItemVersion ) const;
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
+                                 USHORT nItemVersion ) const;
+    virtual SvStream & Store(SvStream & rStream, USHORT) const;
 
     virtual int          operator==( const SfxPoolItem& rOrig ) const;
 
-    virtual sal_uInt16 GetVersion(sal_uInt16) const;
+    virtual USHORT GetVersion(USHORT) const;
 
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = NULL ) const;
 
@@ -69,14 +69,14 @@ public:
                                                  XubString &rText,
                                                  const IntlWrapper* pIntlWrapper = 0 ) const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                             sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue  ( const com::sun::star::uno::Any& rVal,
-                             sal_uInt8 nMemberId = 0);
+    virtual	bool QueryValue( com::sun::star::uno::Any& rVal,
+                             BYTE nMemberId = 0 ) const;
+    virtual	bool PutValue  ( const com::sun::star::uno::Any& rVal,
+                             BYTE nMemberId = 0);
 
     INetContentType GetEnumValue() const;
 
-    void                  SetValue( const INetContentType eType );
+    void  			  	  SetValue( const INetContentType eType );
 };
 
 #endif /* !_SVTOOLS_CTYPEITM_HXX */

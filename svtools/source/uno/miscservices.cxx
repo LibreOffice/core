@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,8 +67,8 @@ extern sdecl::ServiceDecl const serviceDecl;
 
 // for CreateInstance functions implemented elsewhere, while the function is within a namespace
 #define DECLARE_CREATEINSTANCE_NAMESPACE( nmspe, ImplName ) \
-    namespace nmspe {   \
-        Reference< XInterface > SAL_CALL ImplName##_CreateInstance( const Reference< XMultiServiceFactory >& ); \
+    namespace nmspe {	\
+        Reference< XInterface > SAL_CALL ImplName##_CreateInstance( const Reference< XMultiServiceFactory >& );	\
     }
 
 namespace
@@ -79,7 +79,7 @@ namespace
             ::svt::uno::Wizard::Create,
             ::svt::uno::Wizard::getImplementationName_static,
             ::svt::uno::Wizard::getSupportedServiceNames_static,
-            ::cppu::createSingleComponentFactory, NULL, 0
+            ::cppu::createSingleComponentFactory, NULL, 0 
         },
         { 0, 0, 0, 0, 0, 0 }
     };
@@ -102,6 +102,55 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
+    void * pServiceManager, void * _pRegistryKey )
+{
+    if (_pRegistryKey)
+    {
+        Reference< XRegistryKey > xRegistryKey (
+            reinterpret_cast< XRegistryKey* >( _pRegistryKey ));
+        Reference< XRegistryKey > xNewKey;
+        uno::Sequence< ::rtl::OUString > 			aServices;
+
+        xNewKey = xRegistryKey->createKey (
+            OUString::createFromAscii( "/com.sun.star.comp.svtools.OAddressBookSourceDialogUno/UNO/SERVICES" ) );
+        xNewKey->createKey(
+            OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" ) );
+
+        xNewKey = xRegistryKey->createKey (
+            OUString::createFromAscii( "/com.sun.star.svtools.SvFilterOptionsDialog/UNO/SERVICES" ) );
+        xNewKey->createKey (
+            OUString::createFromAscii( "com.sun.star.ui.dialogs.FilterOptionsDialog" ) );
+
+        // GraphicProvider
+        xNewKey = reinterpret_cast< registry::XRegistryKey * >( _pRegistryKey )->createKey( 
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + 
+                    GraphicProvider::getImplementationName_Static() + 
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
+
+        aServices = GraphicProvider::getSupportedServiceNames_Static();    
+        int i;
+        for( i = 0; i < aServices.getLength(); i++ )
+            xNewKey->createKey( aServices.getConstArray()[ i ] );
+    
+        // GraphicRendererVCL
+        xNewKey = reinterpret_cast< registry::XRegistryKey * >( _pRegistryKey )->createKey( 
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + 
+                    GraphicRendererVCL::getImplementationName_Static() + 
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
+        
+        aServices = ( GraphicRendererVCL::getSupportedServiceNames_Static() );	    
+        for( i = 0; i < aServices.getLength(); i++ )
+            xNewKey->createKey( aServices.getConstArray()[ i ] );
+
+        if ( !component_writeInfoHelper( reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ), reinterpret_cast< registry::XRegistryKey* >( _pRegistryKey ), serviceDecl ) )
+            return false;
+
+        return ::cppu::component_writeInfoHelper( pServiceManager, _pRegistryKey, s_aServiceEntries );
+    }
+    return sal_False;
+}
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
     const sal_Char * pImplementationName, void * _pServiceManager, void * pRegistryKey)
 {
@@ -114,7 +163,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.AddressBookSourceDialog" ));
+                OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" );
 
             xFactory = ::cppu::createSingleFactory (
                 reinterpret_cast< XMultiServiceFactory* >( _pServiceManager ),
@@ -127,7 +176,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilterOptionsDialog" ));
+                OUString::createFromAscii( "com.sun.star.ui.dialogs.FilterOptionsDialog" );
 
             xFactory = ::cppu::createSingleFactory (
                 reinterpret_cast< XMultiServiceFactory* >( _pServiceManager ),
@@ -137,7 +186,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
         }
         else if( 0 == GraphicProvider::getImplementationName_Static().compareToAscii( pImplementationName ) )
         {
-            xFactory =  ::cppu::createOneInstanceFactory(
+            xFactory =  ::cppu::createOneInstanceFactory( 
                 reinterpret_cast< lang::XMultiServiceFactory * >( _pServiceManager ),
                 GraphicProvider::getImplementationName_Static(),
                 GraphicProvider_CreateInstance,
@@ -145,13 +194,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
         }
         else if( 0 == GraphicRendererVCL::getImplementationName_Static().compareToAscii( pImplementationName ) )
         {
-            xFactory = ::cppu::createOneInstanceFactory(
+            xFactory = ::cppu::createOneInstanceFactory( 
                 reinterpret_cast< lang::XMultiServiceFactory * >( _pServiceManager ),
                 GraphicRendererVCL::getImplementationName_Static(),
                 GraphicRendererVCL_CreateInstance,
                 GraphicRendererVCL::getSupportedServiceNames_Static() );
         }
-        else
+        else 
         {
             pResult =  component_getFactoryHelper( pImplementationName, reinterpret_cast< lang::XMultiServiceFactory * >( _pServiceManager ),reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ), serviceDecl );
             if ( !pResult )
@@ -167,6 +216,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
     return pResult;
 }
 
-}   // "C"
+}	// "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

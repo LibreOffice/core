@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,7 +122,7 @@ void BubbleChart::calculateMaximumLogicBubbleSize()
 
 void BubbleChart::calculateBubbleSizeScalingFactor()
 {
-    double fLogicZ=1.0;
+    double fLogicZ=0.5;
     drawing::Position3D aSceneMinPos( m_pMainPosHelper->transformLogicToScene( m_pMainPosHelper->getLogicMinX(),m_pMainPosHelper->getLogicMinY(),fLogicZ, false ) );
     drawing::Position3D aSceneMaxPos( m_pMainPosHelper->transformLogicToScene( m_pMainPosHelper->getLogicMaxX(),m_pMainPosHelper->getLogicMaxY(),fLogicZ, false ) );
 
@@ -176,7 +176,7 @@ bool BubbleChart::isSeperateStackingForDifferentSigns( sal_Int32 /*nDimensionInd
 
 LegendSymbolStyle BubbleChart::getLegendSymbolStyle()
 {
-    return LegendSymbolStyle_CIRCLE;
+    return chart2::LegendSymbolStyle_CIRCLE;
 }
 
 drawing::Direction3D BubbleChart::getPreferredDiagramAspectRatio() const
@@ -224,7 +224,7 @@ void BubbleChart::createShapes()
         m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
 
     //update/create information for current group
-    double fLogicZ        = 1.0;//as defined
+    double fLogicZ        = 0.5;//as defined
 
     sal_Int32 nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
@@ -249,7 +249,7 @@ void BubbleChart::createShapes()
     {
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-
+        
         aZSlotIter = m_aZSlots.begin();
         for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; aZSlotIter++, nZ++ )
         {
@@ -289,7 +289,7 @@ void BubbleChart::createShapes()
 
                     if( !m_bShowNegativeValues && fBubbleSize<0.0 )
                         continue;
-
+                    
                     if( ::rtl::math::approxEqual( fBubbleSize, 0.0 ) || ::rtl::math::isNan(fBubbleSize) )
                         continue;
 
@@ -306,7 +306,7 @@ void BubbleChart::createShapes()
                     //transformation 3) -> 4)
                     drawing::Position3D aScenePosition( pPosHelper->transformLogicToScene( fLogicX,fLogicY,fLogicZ, false ) );
 
-                    //better performance for big data
+                    //better performance for big data   
                     FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
                     pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
                     if( !pSeries->isAttributedDataPoint(nIndex)
@@ -349,7 +349,7 @@ void BubbleChart::createShapes()
 
                             m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
                         }
-
+                     
                         //create data point label
                         if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
                         {
@@ -359,7 +359,7 @@ void BubbleChart::createShapes()
                                         , aScenePosition.PositionZ+this->getTransformedDepth() );
 
                             sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nIndex, m_xChartTypeModel, m_nDimension, pPosHelper->isSwapXAndY() );
-
+                            
                             switch(nLabelPlacement)
                             {
                             case ::com::sun::star::chart::DataLabelPlacement::TOP:
@@ -382,7 +382,7 @@ void BubbleChart::createShapes()
                                 eAlignment = LABEL_ALIGN_CENTER;
                                 break;
                             default:
-                                OSL_FAIL("this label alignment is not implemented yet");
+                                DBG_ERROR("this label alignment is not implemented yet");
                                 aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
                                 eAlignment = LABEL_ALIGN_TOP;
                                 break;

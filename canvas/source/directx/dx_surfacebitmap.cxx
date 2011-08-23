@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2irange.hxx>
 
-#if defined(DX_DEBUG_IMAGES)
+#if defined(DX_DEBUG_IMAGES) 
 # if OSL_DEBUG_LEVEL > 0
 #  include <imdebug.h>
 #  undef min
@@ -136,7 +136,7 @@ namespace dxcanvas
 
         canvas::IColorBuffer::Format DXColorBuffer::getFormat() const
         {
-            return canvas::IColorBuffer::FMT_X8R8G8B8;
+            return canvas::IColorBuffer::FMT_X8R8G8B8; 
         }
 
         //////////////////////////////////////////////////////////////////////////////////
@@ -147,7 +147,7 @@ namespace dxcanvas
         {
         public:
 
-            GDIColorBuffer( const BitmapSharedPtr&      rSurface,
+            GDIColorBuffer( const BitmapSharedPtr&		rSurface,
                             const ::basegfx::B2IVector& rSize ) :
                 mpGDIPlusBitmap(rSurface),
                 maSize(rSize),
@@ -188,7 +188,7 @@ namespace dxcanvas
             {
                 return NULL;
             }
-
+            
             return static_cast<sal_uInt8*>(aBmpData.Scan0);
         }
 
@@ -222,10 +222,10 @@ namespace dxcanvas
     // DXSurfaceBitmap::DXSurfaceBitmap
     //////////////////////////////////////////////////////////////////////////////////
 
-    DXSurfaceBitmap::DXSurfaceBitmap( const ::basegfx::B2IVector&                   rSize,
-                                      const canvas::ISurfaceProxyManagerSharedPtr&  rMgr,
-                                      const IDXRenderModuleSharedPtr&               rRenderModule,
-                                      bool                                          bWithAlpha ) :
+    DXSurfaceBitmap::DXSurfaceBitmap( const ::basegfx::B2IVector&					rSize,
+                                      const canvas::ISurfaceProxyManagerSharedPtr&	rMgr,
+                                      const IDXRenderModuleSharedPtr&				rRenderModule,
+                                      bool											bWithAlpha ) : 
         mpGdiPlusUser( GDIPlusUser::createInstance() ),
         maSize(rSize),
         mpRenderModule(rRenderModule),
@@ -259,11 +259,11 @@ namespace dxcanvas
         // create container for pixel data
         if(mbAlpha)
         {
-            mpGDIPlusBitmap.reset(
-                new Gdiplus::Bitmap(
+            mpGDIPlusBitmap.reset( 
+                new Gdiplus::Bitmap( 
                     maSize.getX(),
                     maSize.getY(),
-                    PixelFormat32bppARGB
+                    PixelFormat32bppARGB 
                     ));
             mpGraphics.reset( tools::createGraphicsFromBitmap(mpGDIPlusBitmap) );
 
@@ -360,18 +360,18 @@ namespace dxcanvas
         const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY;
 
         // lock the directx surface to receive the pointer to the surface memory.
-        if(SUCCEEDED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
+        if(SUCCEEDED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL))) 
         {
             // decide about the format we pass the gdi+, the directx surface is always
             // 32bit, either with or without alpha component.
             Gdiplus::PixelFormat nFormat = hasAlpha() ? PixelFormat32bppARGB : PixelFormat32bppRGB;
 
-            // construct a gdi+ bitmap from the raw pixel data.
+            // construct a gdi+ bitmap from the raw pixel data. 
             pResult.reset(new Gdiplus::Bitmap( maSize.getX(),maSize.getY(),
                                                aSurfaceDesc.lPitch,
                                                nFormat,
                                                (BYTE *)aSurfaceDesc.lpSurface ));
-
+            
             // unlock the directx surface
             mpSurface->Unlock(NULL);
         }
@@ -383,7 +383,7 @@ namespace dxcanvas
             // 32bit, either with or without alpha component.
             Gdiplus::PixelFormat nFormat = hasAlpha() ? PixelFormat32bppARGB : PixelFormat32bppRGB;
 
-            // construct a gdi+ bitmap from the raw pixel data.
+            // construct a gdi+ bitmap from the raw pixel data. 
             pResult.reset(new Gdiplus::Bitmap( maSize.getX(),maSize.getY(),
                                                 aLockedRect.Pitch,
                                                 nFormat,
@@ -482,8 +482,8 @@ namespace dxcanvas
         rtl_fillMemory( &aSurfaceDesc,sizeof(DDSURFACEDESC),0 );
         aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
 
-        if( FAILED(mpSurface->Lock( NULL,
-                                    &aSurfaceDesc,
+        if( FAILED(mpSurface->Lock( NULL, 
+                                    &aSurfaceDesc, 
                                     DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY,
                                     NULL)) )
             return;
@@ -496,7 +496,7 @@ namespace dxcanvas
         if( FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)) )
             return;
 
-        imdebug("bgra w=%d h=%d %p", maSize.getX(),
+        imdebug("bgra w=%d h=%d %p", maSize.getX(), 
                 maSize.getY(), aLockedRect.pBits);
         mpSurface->UnlockRect();
 #endif
@@ -508,7 +508,7 @@ namespace dxcanvas
     // DXSurfaceBitmap::getData
     //////////////////////////////////////////////////////////////////////////////////
 
-    uno::Sequence< sal_Int8 > DXSurfaceBitmap::getData( rendering::IntegerBitmapLayout&     /*bitmapLayout*/,
+    uno::Sequence< sal_Int8 > DXSurfaceBitmap::getData( rendering::IntegerBitmapLayout&     /*bitmapLayout*/, 
                                                         const geometry::IntegerRectangle2D& rect )
     {
         if(hasAlpha())
@@ -518,11 +518,11 @@ namespace dxcanvas
             const Gdiplus::Rect aRect( tools::gdiPlusRectFromIntegerRectangle2D( rect ) );
 
             Gdiplus::BitmapData aBmpData;
-            aBmpData.Width       = rect.X2-rect.X1;
-            aBmpData.Height      = rect.Y2-rect.Y1;
-            aBmpData.Stride      = 4*aBmpData.Width;
+            aBmpData.Width		 = rect.X2-rect.X1;
+            aBmpData.Height		 = rect.Y2-rect.Y1;
+            aBmpData.Stride 	 = 4*aBmpData.Width;
             aBmpData.PixelFormat = PixelFormat32bppARGB;
-            aBmpData.Scan0       = aRes.getArray();
+            aBmpData.Scan0		 = aRes.getArray(); 
 
             // TODO(F1): Support more pixel formats natively
 
@@ -563,7 +563,7 @@ namespace dxcanvas
             sal_uInt8 *pSrc = (sal_uInt8 *)((((BYTE *)aSurfaceDesc.lpSurface)+(rect.Y1*aSurfaceDesc.lPitch))+rect.X1);
             sal_uInt8 *pDst = (sal_uInt8 *)aRes.getArray();
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
-            for(sal_uInt32 y=0; y<nHeight; ++y)
+            for(sal_uInt32 y=0; y<nHeight; ++y) 
             {
                 rtl_copyMemory(pDst,pSrc,nSegmentSizeInBytes);
                 pDst += nSegmentSizeInBytes;
@@ -579,7 +579,7 @@ namespace dxcanvas
             sal_uInt8 *pSrc = (sal_uInt8 *)((((BYTE *)aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1);
             sal_uInt8 *pDst = (sal_uInt8 *)aRes.getArray();
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
-            for(sal_uInt32 y=0; y<nHeight; ++y)
+            for(sal_uInt32 y=0; y<nHeight; ++y) 
             {
                 rtl_copyMemory(pDst,pSrc,nSegmentSizeInBytes);
                 pDst += nSegmentSizeInBytes;
@@ -596,20 +596,20 @@ namespace dxcanvas
     // DXSurfaceBitmap::setData
     //////////////////////////////////////////////////////////////////////////////////
 
-    void DXSurfaceBitmap::setData( const uno::Sequence< sal_Int8 >&      data,
-                                   const rendering::IntegerBitmapLayout& /*bitmapLayout*/,
-                                   const geometry::IntegerRectangle2D&   rect )
+    void DXSurfaceBitmap::setData( const uno::Sequence< sal_Int8 >& 	 data, 
+                                   const rendering::IntegerBitmapLayout& /*bitmapLayout*/, 
+                                   const geometry::IntegerRectangle2D& 	 rect )
     {
         if(hasAlpha())
         {
             const Gdiplus::Rect aRect( tools::gdiPlusRectFromIntegerRectangle2D( rect ) );
 
             Gdiplus::BitmapData aBmpData;
-            aBmpData.Width       = rect.X2-rect.X1;
-            aBmpData.Height      = rect.Y2-rect.Y1;
-            aBmpData.Stride      = 4*aBmpData.Width;
+            aBmpData.Width		 = rect.X2-rect.X1;
+            aBmpData.Height		 = rect.Y2-rect.Y1;
+            aBmpData.Stride 	 = 4*aBmpData.Width;
             aBmpData.PixelFormat = PixelFormat32bppARGB;
-            aBmpData.Scan0       = (void*)data.getConstArray();
+            aBmpData.Scan0		 = (void*)data.getConstArray(); 
 
             // TODO(F1): Support more pixel formats natively
 
@@ -645,7 +645,7 @@ namespace dxcanvas
             sal_uInt8 *pSrc = (sal_uInt8 *)data.getConstArray();
             sal_uInt8 *pDst = (sal_uInt8 *)((((BYTE *)aSurfaceDesc.lpSurface)+(rect.Y1*aSurfaceDesc.lPitch))+rect.X1);
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
-            for(sal_uInt32 y=0; y<nHeight; ++y)
+            for(sal_uInt32 y=0; y<nHeight; ++y) 
             {
                 rtl_copyMemory(pDst,pSrc,nSegmentSizeInBytes);
                 pSrc += nSegmentSizeInBytes;
@@ -662,7 +662,7 @@ namespace dxcanvas
             sal_uInt8 *pSrc = (sal_uInt8 *)data.getConstArray();
             sal_uInt8 *pDst = (sal_uInt8 *)((((BYTE *)aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1);
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
-            for(sal_uInt32 y=0; y<nHeight; ++y)
+            for(sal_uInt32 y=0; y<nHeight; ++y) 
             {
                 rtl_copyMemory(pDst,pSrc,nSegmentSizeInBytes);
                 pSrc += nSegmentSizeInBytes;
@@ -680,22 +680,22 @@ namespace dxcanvas
     // DXSurfaceBitmap::setPixel
     //////////////////////////////////////////////////////////////////////////////////
 
-    void DXSurfaceBitmap::setPixel( const uno::Sequence< sal_Int8 >&      color,
-                                    const rendering::IntegerBitmapLayout& /*bitmapLayout*/,
+    void DXSurfaceBitmap::setPixel( const uno::Sequence< sal_Int8 >&      color, 
+                                    const rendering::IntegerBitmapLayout& /*bitmapLayout*/, 
                                     const geometry::IntegerPoint2D&       pos )
     {
         if(hasAlpha())
         {
             const geometry::IntegerSize2D aSize( maSize.getX(),maSize.getY() );
 
-            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aSize.Width,
+            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aSize.Width, 
                             "CanvasHelper::setPixel: X coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aSize.Height,
+            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aSize.Height, 
                             "CanvasHelper::setPixel: Y coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( color.getLength() > 3,
+            ENSURE_ARG_OR_THROW( color.getLength() > 3, 
                             "CanvasHelper::setPixel: not enough color components" );
 
-            if( Gdiplus::Ok != mpGDIPlusBitmap->SetPixel( pos.X, pos.Y,
+            if( Gdiplus::Ok != mpGDIPlusBitmap->SetPixel( pos.X, pos.Y, 
                                                 Gdiplus::Color( tools::sequenceToArgb( color ))))
             {
                 throw uno::RuntimeException();
@@ -703,11 +703,11 @@ namespace dxcanvas
         }
         else
         {
-            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < maSize.getX(),
+            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < maSize.getX(), 
                             "CanvasHelper::setPixel: X coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < maSize.getY(),
+            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < maSize.getY(), 
                             "CanvasHelper::setPixel: Y coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( color.getLength() > 3,
+            ENSURE_ARG_OR_THROW( color.getLength() > 3, 
                             "CanvasHelper::setPixel: not enough color components" );
 
             Gdiplus::Color aColor(tools::sequenceToArgb(color));
@@ -744,30 +744,30 @@ namespace dxcanvas
     // DXSurfaceBitmap::getPixel
     //////////////////////////////////////////////////////////////////////////////////
 
-    uno::Sequence< sal_Int8 > DXSurfaceBitmap::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
+    uno::Sequence< sal_Int8 > DXSurfaceBitmap::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/, 
                                                          const geometry::IntegerPoint2D&   pos )
     {
         if(hasAlpha())
         {
             const geometry::IntegerSize2D aSize( maSize.getX(),maSize.getY() );
 
-            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aSize.Width,
+            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aSize.Width, 
                             "CanvasHelper::getPixel: X coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aSize.Height,
+            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aSize.Height, 
                             "CanvasHelper::getPixel: Y coordinate out of bounds" );
 
             Gdiplus::Color aColor;
 
             if( Gdiplus::Ok != mpGDIPlusBitmap->GetPixel( pos.X, pos.Y, &aColor ) )
                 return uno::Sequence< sal_Int8 >();
-
+            
             return tools::argbToIntSequence(aColor.GetValue());
         }
         else
         {
-            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < maSize.getX(),
+            ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < maSize.getX(), 
                             "CanvasHelper::getPixel: X coordinate out of bounds" );
-            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < maSize.getY(),
+            ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < maSize.getY(), 
                             "CanvasHelper::getPixel: Y coordinate out of bounds" );
 
 #if DIRECTX_VERSION < 0x0900
@@ -793,7 +793,7 @@ namespace dxcanvas
             Gdiplus::Color aColor(*pDst);
             mpSurface->UnlockRect();
 #endif
-
+            
             return tools::argbToIntSequence(aColor.GetValue());
         }
     }

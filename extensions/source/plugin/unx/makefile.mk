@@ -71,13 +71,13 @@ APP1TARGET=pluginapp.bin
 APP1OBJS=$(OBJFILES)
 APP1STDLIBS= $(SALLIB)
 
-.IF "$(OS)"=="SOLARIS" || "$(OS)"=="SCO"
+.IF "$(OS)"=="SOLARIS" || "$(OS)"=="SCO" || "$(OS)"=="HPUX"
 APP1STDLIBS+=-lXm -lXt $(X11LINK_DYNAMIC) -ldl
 .ELSE
 .IF "$(DISABLE_XAW)" != "TRUE"
 APP1STDLIBS+=-lXaw 
 .ENDIF
-.IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)"=="OPENBSD" || "$(OS)"=="DRAGONFLY"
+.IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)"=="OPENBSD"
 APP1STDLIBS+= -lXt -lXext -lX11
 .ELIF "$(OS)"=="AIX"
 APP1STDLIBS+= -lXpm -lXmu -lXt $(X11LINK_DYNAMIC) -ldl

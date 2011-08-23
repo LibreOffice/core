@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,23 +32,23 @@
 
 struct SwAccessibilityOptions
 {
-    sal_Bool bIsAlwaysAutoColor         :1;
-    sal_Bool bIsStopAnimatedText        :1;
-    sal_Bool bIsStopAnimatedGraphics    :1;
+    BOOL bIsAlwaysAutoColor         :1;
+    BOOL bIsStopAnimatedText        :1;
+    BOOL bIsStopAnimatedGraphics    :1;
 
     SwAccessibilityOptions() :
-        bIsAlwaysAutoColor(sal_False),
-        bIsStopAnimatedText(sal_False),
-        bIsStopAnimatedGraphics(sal_False) {}
+        bIsAlwaysAutoColor(FALSE),
+        bIsStopAnimatedText(FALSE),
+        bIsStopAnimatedGraphics(FALSE) {}
 
-    inline sal_Bool IsAlwaysAutoColor() const       { return bIsAlwaysAutoColor; }
-    inline void SetAlwaysAutoColor( sal_Bool b )    { bIsAlwaysAutoColor = b; }
+    inline BOOL IsAlwaysAutoColor() const       { return bIsAlwaysAutoColor; }
+    inline void SetAlwaysAutoColor( BOOL b )    { bIsAlwaysAutoColor = b; }
 
-    inline sal_Bool IsStopAnimatedGraphics() const       { return bIsStopAnimatedText;}
-    inline void SetStopAnimatedGraphics( sal_Bool b )    { bIsStopAnimatedText = b; }
+    inline BOOL IsStopAnimatedGraphics() const       { return bIsStopAnimatedText;}
+    inline void SetStopAnimatedGraphics( BOOL b )    { bIsStopAnimatedText = b; }
 
-    inline sal_Bool IsStopAnimatedText() const       { return bIsStopAnimatedGraphics; }
-    inline void SetStopAnimatedText( sal_Bool b )    { bIsStopAnimatedGraphics = b;}
+    inline BOOL IsStopAnimatedText() const       { return bIsStopAnimatedGraphics; }
+    inline void SetStopAnimatedText( BOOL b )    { bIsStopAnimatedGraphics = b;}
 };
 #endif
 

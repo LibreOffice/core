@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,23 +35,23 @@ class RTFVertOrient
 {
     union {
         struct {
-            sal_uInt16 nOrient : 4;
-            sal_uInt16 nRelOrient : 1;
+            USHORT nOrient : 4;
+            USHORT nRelOrient : 1;
         } Flags;
-        sal_uInt16 nVal;
+        USHORT nVal;
     } Value;
 
 public:
-    RTFVertOrient( sal_uInt16 nValue ) { Value.nVal = nValue; }
+    RTFVertOrient( USHORT nValue ) { Value.nVal = nValue; }
 
-    RTFVertOrient( sal_uInt16 nOrient, sal_uInt16 nRelOrient )  {
+    RTFVertOrient( USHORT nOrient, USHORT nRelOrient )	{
         Value.Flags.nOrient = nOrient;
         Value.Flags.nRelOrient = nRelOrient;
     }
 
-    sal_uInt16 GetOrient()   const { return Value.Flags.nOrient; }
-    sal_uInt16 GetRelation() const { return Value.Flags.nRelOrient; }
-    sal_uInt16 GetValue()    const { return Value.nVal; }
+    USHORT GetOrient() 	 const { return Value.Flags.nOrient; }
+    USHORT GetRelation() const { return Value.Flags.nRelOrient; }
+    USHORT GetValue() 	 const { return Value.nVal; }
 };
 
 
@@ -59,50 +59,50 @@ class RTFHoriOrient
 {
     union {
         struct {
-            sal_uInt16 nOrient : 4;
-            sal_uInt16 nRelAnchor : 4;
-            sal_uInt16 nRelOrient : 1;
+            USHORT nOrient : 4;
+            USHORT nRelAnchor : 4;
+            USHORT nRelOrient : 1;
         } Flags;
-        sal_uInt16 nVal;
+        USHORT nVal;
     } Value;
 
 public:
-    RTFHoriOrient( sal_uInt16 nValue ) { Value.nVal = nValue; }
+    RTFHoriOrient( USHORT nValue ) { Value.nVal = nValue; }
 
-    RTFHoriOrient( sal_uInt16 nOrient, sal_uInt16 nRelOrient ) {
+    RTFHoriOrient( USHORT nOrient, USHORT nRelOrient ) {
         Value.Flags.nOrient = nOrient;
         Value.Flags.nRelOrient = nRelOrient;
         Value.Flags.nRelAnchor = 0;
     }
 
-    sal_uInt16 GetOrient()   const { return Value.Flags.nOrient; }
-    sal_uInt16 GetRelation() const { return Value.Flags.nRelOrient; }
-    sal_uInt16 GetValue()    const { return Value.nVal; }
+    USHORT GetOrient() 	 const { return Value.Flags.nOrient; }
+    USHORT GetRelation() const { return Value.Flags.nRelOrient; }
+    USHORT GetValue() 	 const { return Value.nVal; }
 };
 
 class RTFProtect
 {
     union {
         struct {
-            sal_Bool bCntnt : 1;
-            sal_Bool bSize : 1;
-            sal_Bool bPos : 1;
+            BOOL bCntnt : 1;
+            BOOL bSize : 1;
+            BOOL bPos : 1;
         } Flags;
-        sal_uInt8 nVal;
+        BYTE nVal;
     } Value;
 public:
-    RTFProtect( sal_uInt8 nValue ) { Value.nVal = nValue; }
+    RTFProtect( BYTE nValue ) { Value.nVal = nValue; }
 
-    RTFProtect( sal_Bool bCntnt, sal_Bool bSize, sal_Bool bPos ) {
+    RTFProtect( BOOL bCntnt, BOOL bSize, BOOL bPos ) {
         Value.Flags.bCntnt = bCntnt;
         Value.Flags.bSize = bSize;
         Value.Flags.bPos = bPos;
     }
 
-    sal_Bool GetCntnt()     const { return Value.Flags.bCntnt; }
-    sal_Bool GetSize()      const { return Value.Flags.bSize; }
-    sal_Bool GetPos()       const { return Value.Flags.bPos; }
-    sal_uInt16 GetValue()   const { return Value.nVal; }
+    BOOL GetCntnt()  	const { return Value.Flags.bCntnt; }
+    BOOL GetSize()		const { return Value.Flags.bSize; }
+    BOOL GetPos()		const { return Value.Flags.bPos; }
+    USHORT GetValue() 	const { return Value.nVal; }
 };
 
 
@@ -110,22 +110,22 @@ class RTFSurround
 {
     union {
         struct {
-            sal_uInt16 nGoldCut : 1;
-            sal_uInt16 nOrder : 4;
+            USHORT nGoldCut : 1;
+            USHORT nOrder : 4;
         } Flags;
-        sal_uInt8 nVal;
+        BYTE nVal;
     } Value;
 public:
-    RTFSurround( sal_uInt8 nValue ) { Value.nVal = nValue; }
+    RTFSurround( BYTE nValue ) { Value.nVal = nValue; }
 
-    RTFSurround( sal_Bool bGoldCut, sal_uInt8 nOrder ) {
+    RTFSurround( BOOL bGoldCut, BYTE nOrder ) {
         Value.Flags.nOrder = nOrder;
         Value.Flags.nGoldCut = bGoldCut;
     }
 
-    sal_uInt8 GetOrder()     const { return (sal_uInt8)Value.Flags.nOrder; }
-    sal_Bool GetGoldCut()   const { return (sal_Bool)Value.Flags.nGoldCut; }
-    sal_uInt16 GetValue()   const { return Value.nVal; }
+    BYTE GetOrder()     const { return (BYTE)Value.Flags.nOrder; }
+    BOOL GetGoldCut()   const { return (BOOL)Value.Flags.nGoldCut; }
+    USHORT GetValue() 	const { return Value.nVal; }
 };
 
 #endif // _RTF_HXX

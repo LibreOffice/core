@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,33 +38,38 @@ class AppError;
 
 #define SelectChildren SelectChilds
 
-typedef sal_uInt16 TTFeatures;          // Bitfield for features of the entries
-#define HasNothing  TTFeatures(0x00)
-#define HasError    TTFeatures(0x01)
-#define HasWarning  TTFeatures(0x02)
+typedef USHORT TTFeatures;			// Bitfield for features of the entries
+#define HasNothing	TTFeatures(0x00)
+#define HasError	TTFeatures(0x01)
+#define HasWarning	TTFeatures(0x02)
 #define HasAssertion TTFeatures(0x04)
-#define HasQAError  TTFeatures(0x08)
+#define HasQAError	TTFeatures(0x08)
 
 
 class TTTreeListBox : public SvTreeListBox
 {
 protected:
-    BasicFrame      *pBasicFrame;
-    void            InitEntry( SvLBoxEntry*, const String&, const Image&,
+//	virtual void	Command( const CommandEvent& rCEvt );
+//	USHORT			nDeselectParent;
+    BasicFrame		*pBasicFrame;
+    void			InitEntry( SvLBoxEntry*, const String&, const Image&,
                                const Image&, SvLBoxButtonKind eButtonKind );
-    AppError        *pAppError;
+    AppError		*pAppError;
 
-    sal_Bool JumpToSourcecode( SvLBoxEntry *pThisEntry );
+    BOOL JumpToSourcecode( SvLBoxEntry *pThisEntry );
 
 public:
     TTTreeListBox( AppError* pParent, BasicFrame* pBF, WinBits nWinStyle=0 );
     ~TTTreeListBox(){}
 
-    virtual sal_Bool    DoubleClickHdl();
+//	virtual void	SelectHdl();
+//	virtual void	DeselectHdl();
+    virtual BOOL	DoubleClickHdl();
 
-    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual void	KeyInput( const KeyEvent& rKEvt );
 
-    TTFeatures      GetFeatures( SvLBoxEntry* );
+//	ULONG			SelectChildren( SvLBoxEntry* pParent, BOOL bSelect );
+    TTFeatures		GetFeatures( SvLBoxEntry* );
 };
 
 class MsgEdit : public DataEdit
@@ -75,20 +80,20 @@ class MsgEdit : public DataEdit
     SvLBoxEntry *pCurrentTestCase;
     SvLBoxEntry *pCurrentAssertion;
     SvLBoxEntry *pCurrentError;
-    sal_Bool bModified;
+    BOOL bModified;
     Link lModify;
-    sal_Bool bFileLoading;      // sal_True while loading a file
+    BOOL bFileLoading;		// TRUE while loading a file
     String Impl_MakeText( SvLBoxEntry *pEntry ) const;
     String Impl_MakeSaveText( SvLBoxEntry *pEntry ) const;
     String Impl_MakeSaveText( TTDebugData aData ) const;
-    sal_uInt16 nVersion;        // Stores file version
+    USHORT nVersion;		// Stores file version
     AppError* pAppError;
     String aLogFileName;
 
-    static sal_uInt16 nMaxLogLen;
-    static sal_Bool bLimitLogLen;
-    static sal_Bool bPrintLogToStdout;
-    static sal_Bool bPrintLogToStdoutSet;   // has it been initialized yet
+    static USHORT nMaxLogLen;
+    static BOOL bLimitLogLen;
+    static BOOL bPrintLogToStdout;
+    static BOOL bPrintLogToStdoutSet;   // has it been initialized yet
 public:
     MsgEdit( AppError*, BasicFrame *pBF, const WinBits& );
     ~MsgEdit();
@@ -103,7 +108,7 @@ public:
     void AddAssertionStack( String aMsg, TTDebugData aDebugData );
     void AddQAError( String aMsg, TTDebugData aDebugData );
 
-    static void SetMaxLogLen( sal_uInt16 nLen ) { nMaxLogLen = nLen; bLimitLogLen = sal_True; }
+    static void SetMaxLogLen( USHORT nLen ) { nMaxLogLen = nLen; bLimitLogLen = TRUE; }
 DATA_FUNC_DEF( aEditTree, TTTreeListBox )
 };
 

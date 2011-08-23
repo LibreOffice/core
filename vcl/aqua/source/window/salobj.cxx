@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
 {
     maSysData.nSize = sizeof( maSysData );
     maSysData.pView = NULL;
-
+    
     NSRect aInitFrame = { { 0, 0 }, { 20, 20 } };
     mpClipView = [[NSClipView alloc] initWithFrame: aInitFrame ];
     if( mpClipView )
@@ -91,7 +91,7 @@ AquaSalObject::~AquaSalObject()
    similar effect to non-rectangular windows is achieved by using a
    non-opaque window and not painting where one wants the background
    to shine through.
-
+   
    With respect to SalObject this leaves us to having an NSClipView
    containing the child view. Even a QTMovieView respects the boundaries of
    that, which gives us a clip "region" consisting of one rectangle.
@@ -108,14 +108,14 @@ void AquaSalObject::ResetClipRegion()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 AquaSalObject::GetClipRegionType()
+USHORT AquaSalObject::GetClipRegionType()
 {
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
 // -----------------------------------------------------------------------
 
-void AquaSalObject::BeginSetClipRegion( sal_uLong nRectCount )
+void AquaSalObject::BeginSetClipRegion( ULONG nRectCount )
 {
     mbClip = false;
 }
@@ -179,7 +179,7 @@ void AquaSalObject::setClippedPosSize()
         NSView *pView = maSysData.pView;
         [pView setFrame: aViewRect];
     }
-
+    
     NSRect aClipViewRect = { { mnX, mnY }, { mnWidth, mnHeight } };
     NSPoint aClipPt = { 0, 0 };
     if( mbClip )
@@ -192,16 +192,16 @@ void AquaSalObject::setClippedPosSize()
         if( mnClipY == 0 )
             aClipPt.y = mnHeight - mnClipHeight;;
     }
-
+    
     mpFrame->VCLToCocoa( aClipViewRect, false );
     [mpClipView setFrame: aClipViewRect];
-
+    
     [mpClipView scrollToPoint: aClipPt];
 }
 
 // -----------------------------------------------------------------------
 
-void AquaSalObject::Show( sal_Bool bVisible )
+void AquaSalObject::Show( BOOL bVisible )
 {
     if( mpClipView )
         [mpClipView setHidden: (bVisible ? NO : YES)];
@@ -209,7 +209,7 @@ void AquaSalObject::Show( sal_Bool bVisible )
 
 // -----------------------------------------------------------------------
 
-void AquaSalObject::Enable( sal_Bool bEnable )
+void AquaSalObject::Enable( BOOL bEnable )
 {
 }
 
@@ -236,12 +236,6 @@ void AquaSalObject::SetBackground( SalColor nSalColor )
 const SystemEnvData* AquaSalObject::GetSystemData() const
 {
     return &maSysData;
-}
-
-// -----------------------------------------------------------------------
-
-void AquaSalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

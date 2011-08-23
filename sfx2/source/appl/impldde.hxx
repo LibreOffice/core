@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,11 +49,11 @@ class SvDDEObject : public SvLinkSource
     DdeRequest* pRequest;
     ::com::sun::star::uno::Any * pGetData;
 
-    sal_uInt8 bWaitForData : 1;  // waiting for data?
-    sal_uInt8 nError       : 7;  // Error code for dialogue
+    BYTE bWaitForData : 1; 					// wird auf Daten gewartet?
+    BYTE nError		: 7;					// Error Code fuer den Dialog
 
 
-    sal_Bool ImplHasOtherFormat( DdeTransaction& );
+    BOOL ImplHasOtherFormat( DdeTransaction& );
     DECL_LINK( ImplGetDDEData, DdeData* );
     DECL_LINK( ImplDoneDDEData, void* );
 
@@ -63,15 +63,15 @@ protected:
 public:
     SvDDEObject();
 
-    virtual sal_Bool    GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual BOOL	GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                                 const String & aMimeType,
-                                sal_Bool bSynchron = sal_False );
+                                BOOL bSynchron = FALSE );
 
-    virtual sal_Bool    Connect( SvBaseLink * );
+    virtual BOOL	Connect( SvBaseLink * );
     virtual void    Edit( Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link& rEndEditHdl );
 
-    virtual sal_Bool    IsPending() const;
-    virtual sal_Bool    IsDataComplete() const;
+    virtual BOOL	IsPending() const;
+    virtual BOOL	IsDataComplete() const;
 };
 
 }

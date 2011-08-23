@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,35 +33,17 @@ class ResMgr;
 #ifdef GSTREAMER
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_GStreamer"
 #else
-#ifdef WNT
-
-#define AVMEDIA_MANAGER_SERVICE_NAME                    "com.sun.star.comp.avmedia.Manager_DirectX"
-#define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED            sal_False
-
-#define AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1          ""
-#define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED_FALLBACK1  sal_False
-
+#ifdef WNT 
+#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
 #else
 #ifdef QUARTZ
-
-#define AVMEDIA_MANAGER_SERVICE_NAME                    "com.sun.star.comp.avmedia.Manager_QuickTime"
-#define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED            sal_False
-
-#define AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1           ""
-#define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED_FALLBACK1  sal_False
-
+#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_QuickTime"
 #else
-
-#define AVMEDIA_MANAGER_SERVICE_NAME                    "com.sun.star.comp.avmedia.Manager_GStreamer"
-#define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED            sal_False
-
-#define AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1          "com.sun.star.comp.avmedia.Manager_Java"
-#define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED_FALLBACK1  sal_True
-
+#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
 #endif
 #endif
 #endif
-
+ 
 namespace avmedia
 {
     ResMgr* GetResMgr();

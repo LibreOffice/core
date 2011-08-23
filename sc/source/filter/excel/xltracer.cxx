@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using ::com::sun::star::beans::PropertyValue;
 static const XclTracerDetails pTracerDetails[] =
 {
     { eUnKnown,             0,     "UNKNOWN",        "UNKNOWN",         "Unknown trace property."            },
-    { eRowLimitExceeded,    1000,  "Limits",         "Sheet",           "Row limit exceeded."                },
+    { eRowLimitExceeded,    1000,  "Limits",	     "Sheet",           "Row limit exceeded."                },
     { eTabLimitExceeded,    1001,  "Limits",         "Sheet",           "Sheet limit exceeded."              },
     { ePassword,            2000,  "Protection",     "Password",        "Document is password protected."    },
     { ePrintRange,          3000,  "Print",          "Print Range",     "Print Range present."               },
@@ -241,6 +241,12 @@ void XclTracer::TraceChartLegendPosition()
     // If position is set to "not docked or inside the plot area" then
     // we cannot guarantee the legend position.
     ProcessTraceOnce(eChartLegendPosition);
+}
+
+void XclTracer::TraceChartEmbeddedObj()
+{
+    // drawing objects e.g. text boxes etc not supported inside charts
+    ProcessTraceOnce(eChartEmbeddedObj);
 }
 
 void XclTracer::TraceUnsupportedObjects()

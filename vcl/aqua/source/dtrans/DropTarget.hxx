@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,8 @@
 #include <postmac.h>
 
 class DropTarget;
-class AquaSalFrame;
 
-/* The functions declared in this protocol are actually
+/* The functions declared in this protocol are actually 
    declared in vcl/aqua/inc/salframe.h. Because we want
    to avoid importing VCL headers in UNO services and
    on the other hand want to avoid warnings caused by
@@ -76,16 +75,16 @@ class AquaSalFrame;
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender;
 -(NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender;
 -(void)draggingExited:(id <NSDraggingInfo>)sender;
--(BOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender;
--(BOOL)performDragOperation:(id <NSDraggingInfo>)sender;
+-(MacOSBOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender;
+-(MacOSBOOL)performDragOperation:(id <NSDraggingInfo>)sender;
 -(void)concludeDragOperation:(id <NSDraggingInfo>)sender;
 
 @end
 
 
 class DropTarget: public cppu::BaseMutex,
-                  public cppu::WeakComponentImplHelper5< com::sun::star::lang::XInitialization,
-                                                         com::sun::star::datatransfer::dnd::XDropTarget,
+                  public cppu::WeakComponentImplHelper5< com::sun::star::lang::XInitialization, 
+                                                         com::sun::star::datatransfer::dnd::XDropTarget, 
                                                          com::sun::star::datatransfer::dnd::XDropTargetDragContext,
                                                          com::sun::star::datatransfer::dnd::XDropTargetDropContext,
                                                          com::sun::star::lang::XServiceInfo >,
@@ -121,7 +120,7 @@ public:
   virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) throw(com::sun::star::uno::RuntimeException);
   virtual void SAL_CALL rejectDrag() throw(com::sun::star::uno::RuntimeException);
 
-  // XDropTargetDragContext
+  // XDropTargetDragContext 
   virtual void SAL_CALL acceptDrop(sal_Int8 dropOperation) throw (com::sun::star::uno::RuntimeException);
   virtual void SAL_CALL rejectDrop() throw (com::sun::star::uno::RuntimeException);
   virtual void SAL_CALL dropComplete(sal_Bool success) throw (com::sun::star::uno::RuntimeException);
@@ -135,8 +134,8 @@ public:
   virtual NSDragOperation draggingEntered(id sender);
   virtual NSDragOperation draggingUpdated(id sender);
   virtual void draggingExited(id sender);
-  virtual BOOL prepareForDragOperation(id sender);
-  virtual BOOL performDragOperation(id sender);
+  virtual MacOSBOOL prepareForDragOperation(id sender);
+  virtual MacOSBOOL performDragOperation(id sender);
   virtual void concludeDragOperation(id sender);
 
   /* If multiple actions are supported by the drag source and
@@ -159,7 +158,6 @@ private:
   com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboard > mXCurrentDragClipboard;
   DataFlavorMapperPtr_t mDataFlavorMapper;
   id  mView;
-  AquaSalFrame* mpFrame;
   DropTargetHelper* mDropTargetHelper;
   bool mbActive;
   sal_Int8 mDragSourceSupportedActions;

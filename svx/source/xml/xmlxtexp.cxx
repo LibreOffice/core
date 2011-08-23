@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
-#include "svx/xmlgrhlp.hxx"
+#include "xmlgrhlp.hxx"
 
 #include "xmlxtexp.hxx"
 
@@ -161,8 +161,8 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     const OUString& rFileName,
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,
-    uno::Reference<document::XGraphicObjectResolver >& xGrfResolver )
-:   SvXMLExport( xServiceFactory, rFileName, rHandler, NULL, MAP_100TH_MM),
+    uno::Reference<document::XGraphicObjectResolver >& xGrfResolver ) 
+:	SvXMLExport( xServiceFactory, rFileName, rHandler, NULL, MAP_100TH_MM), 
     mxTable( xTable )
 {
 
@@ -185,8 +185,8 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
     SfxMedium* pMedium = NULL;
     sal_Bool bRet = sal_False;
 
-    uno::Reference< XGraphicObjectResolver >    xGrfResolver;
-    SvXMLGraphicHelper* pGraphicHelper = 0;
+    uno::Reference< XGraphicObjectResolver >	xGrfResolver;
+    SvXMLGraphicHelper*	pGraphicHelper = 0;
 
     try
     {
@@ -200,18 +200,18 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
             uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
             if( !xServiceFactory.is() )
             {
-                OSL_FAIL( "got no service manager" );
-                return sal_False;
+                DBG_ERROR( "got no service manager" );
+                return FALSE;
             }
 
             uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
             if( !xWriter.is() )
             {
-                OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
-                return sal_False;
+                DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
+                return FALSE;
             }
 
-            uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
+            uno::Reference<xml::sax::XDocumentHandler>	xHandler( xWriter, uno::UNO_QUERY );
 
             if( bNeedStorage )
             {
@@ -220,7 +220,7 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
 
                 if( !xStorage.is() )
                 {
-                    OSL_FAIL( "no storage!" );
+                    DBG_ERROR( "no storage!" );
                     break;
                 }
 
@@ -232,13 +232,13 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
             }
             else
             {
-                pMedium = new SfxMedium( rURL, STREAM_WRITE | STREAM_TRUNC, sal_True );
+                pMedium = new SfxMedium( rURL, STREAM_WRITE | STREAM_TRUNC, TRUE );
                 pMedium->IsRemote();
 
                 SvStream* pStream = pMedium->GetOutStream();
                 if( NULL == pStream )
                 {
-                    OSL_FAIL( "no output stream!" );
+                    DBG_ERROR( "no output stream!" );
                     break;
                 }
 
@@ -249,7 +249,7 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
             xMetaSrc->setOutputStream( xOut );
 
             const OUString aName;
-
+            
             // #110680#
             // SvxXMLXTableExportComponent aExporter( aName, xHandler, xTable, xGrfResolver );
             SvxXMLXTableExportComponent aExporter( xServiceFactory, aName, xHandler, xTable, xGrfResolver );
@@ -344,7 +344,7 @@ sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
             }
             else
             {
-                OSL_FAIL( "unknown type for export");
+                DBG_ERROR( "unknown type for export");
                 break;
             }
 
@@ -368,7 +368,7 @@ sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
 
         GetDocHandler()->endDocument();
     }
-    catch( Exception const& )
+    catch( Exception e )
     {
         bRet = sal_False;
     }

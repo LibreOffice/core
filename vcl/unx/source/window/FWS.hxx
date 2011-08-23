@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ extern "C" {
  * providing FWS extension support.
  */
 
-Bool
+Bool 
 WMSupportsFWS (Display *display, int screen);
 
 /* Send a client message to the FWS_COMM_WINDOW indicating the existance
@@ -48,13 +48,13 @@ WMSupportsFWS (Display *display, int screen);
  * old/obsolete junk in it.
  */
 
-Bool
+Bool 
 RegisterFwsWindow (Display *display, Window window);
 
 /* Add the FWS protocol atoms to the WMProtocols property for the window.
  */
 
-void
+void 
 AddFwsProtocols (Display *display, Window window);
 
 #if defined(__cplusplus)

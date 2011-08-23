@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+ // include ---------------------------------------------------------------
+
 #include <cuires.hrc>
 
 String RID_SVXSTR_READONLY_CONFIG_TIP
@@ -39,3 +41,12 @@ Image RID_SVXBMP_LOCK
     };
     MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
 };
+Image RID_SVXBMP_LOCK_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lock_hc.bmp";
+    };
+    MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
+};
+

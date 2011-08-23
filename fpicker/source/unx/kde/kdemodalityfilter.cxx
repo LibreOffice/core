@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include <cstddef>
-
 #include <kdemodalityfilter.hxx>
 
 #include <kapplication.h>

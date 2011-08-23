@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@
 
 #ifdef UNICODE
 #define _UNICODE
-#define _tstring    wstring
+#define _tstring	wstring
 #else
-#define _tstring    string
+#define _tstring	string
 #endif
 #include <tchar.h>
 #include <string>
@@ -52,9 +52,9 @@
 
 std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 {
-    std::_tstring   result;
-    TCHAR   szDummy[1] = TEXT("");
-    DWORD   nChars = 0;
+    std::_tstring	result;
+    TCHAR	szDummy[1] = TEXT("");
+    DWORD	nChars = 0;
 
     if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
     {
@@ -62,10 +62,10 @@ std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
         LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
         ZeroMemory( buffer, nBytes );
         MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-        result = buffer;
+        result = buffer;            
     }
 
-    return  result;
+    return	result;
 }
 
 /*
@@ -74,25 +74,28 @@ std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 */
 extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
 {
-    std::_tstring   sOfficeMenuFolder = GetMsiProperty( handle, TEXT("OfficeMenuFolder") );
+    std::_tstring	sOfficeMenuFolder = GetMsiProperty( handle, TEXT("OfficeMenuFolder") );
     std::_tstring sDesktopFile = sOfficeMenuFolder + TEXT("Desktop.ini");
-    std::_tstring   sIconFile = GetMsiProperty( handle, TEXT("INSTALLLOCATION") ) + TEXT("program\\soffice.exe");
-
-    OSVERSIONINFO   osverinfo;
+    
+    //    MessageBox(NULL, sDesktopFile.c_str(), TEXT("OfficeMenuFolder"), MB_OK | MB_ICONINFORMATION);
+    
+    std::_tstring	sIconFile = GetMsiProperty( handle, TEXT("INSTALLLOCATION") ) + TEXT("program\\soffice.exe");
+    
+    OSVERSIONINFO	osverinfo;
     osverinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx( &osverinfo );
-
+    
     if (osverinfo.dwMajorVersion < 6 /* && osverinfo.dwMinorVersion  */ )
     {
         // This icon (18) is a Windows folder until XP Version (number is 0 based)
-        WritePrivateProfileString(
+        WritePrivateProfileString( 
             TEXT(".ShellClassInfo"),
             TEXT("IconFile"),
             sIconFile.c_str(),
             sDesktopFile.c_str() );
-
+        
         // FYI: in tool 'ResHack' this icon can be found on position '19' (number is 1 based)
-        WritePrivateProfileString(
+        WritePrivateProfileString( 
             TEXT(".ShellClassInfo"),
             TEXT("IconIndex"),
             TEXT("18"),
@@ -103,24 +106,32 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
     //     // at the moment there exists no Vista Icon, so we use the default folder icon.
     //     // add the icon into desktop/util/verinfo.rc
     // }
-
+    
     // The value '0' is to avoid a message like "You Are Deleting a System Folder" warning when deleting or moving the folder.
-    WritePrivateProfileString(
+    WritePrivateProfileString( 
         TEXT(".ShellClassInfo"),
         TEXT("ConfirmFileOp"),
         TEXT("0"),
         sDesktopFile.c_str() );
-
+    
+    /*
+      WritePrivateProfileString( 
+      TEXT(".ShellClassInfo"),
+      TEXT("InfoTip"),
+      TEXT("StarOffice Productivity Suite"),
+      sDesktopFile.c_str() );
+    */
+    
     SetFileAttributes( sDesktopFile.c_str(), FILE_ATTRIBUTE_HIDDEN );
     SetFileAttributes( sOfficeMenuFolder.c_str(), FILE_ATTRIBUTE_SYSTEM );
-
-
-    return ERROR_SUCCESS;
+    
+    
+    return ERROR_SUCCESS;    
 }
 
 extern "C" UINT __stdcall DeinstallStartmenuFolderIcon(MSIHANDLE handle)
 {
-    std::_tstring   sOfficeMenuFolder = GetMsiProperty( handle, TEXT("OfficeMenuFolder") );
+    std::_tstring	sOfficeMenuFolder = GetMsiProperty( handle, TEXT("OfficeMenuFolder") );
     std::_tstring sDesktopFile = sOfficeMenuFolder + TEXT("Desktop.ini");
 
     SetFileAttributes( sDesktopFile.c_str(), FILE_ATTRIBUTE_NORMAL );

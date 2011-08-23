@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 #include <SwUndoTOXChange.hxx>
 #include <swundo.hxx>
 #include <doctxm.hxx>
@@ -47,33 +46,29 @@ void SwUndoTOXChange::UpdateTOXBaseSection()
     if (pTOX->ISA(SwTOXBaseSection))
     {
         SwTOXBaseSection * pTOXBase = static_cast<SwTOXBaseSection *>(pTOX);
+        
         pTOXBase->Update();
         pTOXBase->UpdatePageNum();
     }
 }
 
-void SwUndoTOXChange::UndoImpl(::sw::UndoRedoContext &)
+void SwUndoTOXChange::Undo(SwUndoIter &)
 {
     *pTOX = aOld;
 
     UpdateTOXBaseSection();
 }
 
-void SwUndoTOXChange::DoImpl()
+void SwUndoTOXChange::Redo(SwUndoIter &)
 {
     *pTOX = aNew;
 
     UpdateTOXBaseSection();
 }
 
-void SwUndoTOXChange::RedoImpl(::sw::UndoRedoContext &)
+void SwUndoTOXChange::Repeat(SwUndoIter & rIter)
 {
-    DoImpl();
-}
-
-void SwUndoTOXChange::RepeatImpl(::sw::RepeatContext &)
-{
-    DoImpl();
+    Redo(rIter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

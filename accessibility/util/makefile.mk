@@ -34,6 +34,10 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :	settings.mk
 
+#.INCLUDE :	svpre.mk
+#.INCLUDE :	settings.mk
+#.INCLUDE :	sv.mk
+
 LDUMP=ldump2.exe
 
 # --- Library -----------------------------------

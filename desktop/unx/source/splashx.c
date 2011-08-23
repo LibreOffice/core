@@ -25,9 +25,6 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-
-#ifdef ENABLE_QUICKSTART_LIBPNG
-
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -115,12 +112,11 @@ static unsigned char **bitmap_rows = NULL;
 #  define PNG_TRANSFORM_GRAY_TO_RGB   0x2000
 #endif
 
-png_structp png_ptr = NULL;
-png_infop info_ptr = NULL;
-
 int splash_load_bmp( const char *filename )
 {
     FILE *file;
+    png_structp png_ptr;
+    png_infop info_ptr;
 
     if ( !(file = fopen( filename, "r" ) ) )
         return 0;
@@ -141,8 +137,8 @@ int splash_load_bmp( const char *filename )
                   PNG_TRANSFORM_GRAY_TO_RGB | PNG_TRANSFORM_BGR, NULL);
 
     bitmap_rows = png_get_rows( png_ptr, info_ptr );
-    width = png_get_image_width( png_ptr, info_ptr );
-    height = png_get_image_height( png_ptr, info_ptr );
+    width = info_ptr->width;
+    height = info_ptr->height;
 
 #if 0
     {
@@ -312,10 +308,11 @@ static void create_pixmap()
         int bytes_per_line = image->bytes_per_line;
         int bpp = image->bits_per_pixel;
         int byte_order = image->byte_order;
+        int machine_byte_order;
 #if defined( _LITTLE_ENDIAN )
-        int machine_byte_order = LSBFirst;
+        machine_byte_order = LSBFirst;
 #elif defined( _BIG_ENDIAN )
-        int machine_byte_order = MSBFirst;
+        machine_byte_order = MSBFirst;
 #else
         {
             fprintf( stderr, "Unsupported machine endianity.\n" );
@@ -464,6 +461,7 @@ static void suppress_decorations_motif()
     struct {
         unsigned long flags, functions, decorations;
         long input_mode;
+        unsigned long status;
     } mwmhints;
 
     Atom a = XInternAtom( display, "_MOTIF_WM_HINTS", False );
@@ -620,40 +618,9 @@ void splash_draw_progress( int progress )
 void splash_close_window()
 {
     XCloseDisplay( display );
-#ifdef USE_LIBPNG
-    png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
-#else
-    free( bitmap_rows );
-#endif
+
+    // leak it is faster
     bitmap_rows = NULL;
 }
-
-#else /* not ENABLE_QUICKSTART_LIBPNG */
-
-/* Stubs that will never be called in this case */
-
-int splash_load_bmp( const char *filename )
-{
-    (void)filename;
-    return 1;
-}
-void splash_setup( int barc[3], int framec[3], int posx, int posy, int w, int h )
-{
-    (void)barc; (void)framec; (void)posx; (void)posy; (void)w; (void)h;
-}
-int splash_create_window( int argc, char** argv )
-{
-    (void)argc; (void)argv;
-    return 1;
-}
-void splash_close_window()
-{
-}
-void splash_draw_progress( int progress )
-{
-    (void)progress;
-}
-
-#endif // ENABLE_QUICKSTART_LIBPNG
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

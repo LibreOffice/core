@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,62 +42,62 @@ namespace rtl
 
 // class SvxShadowItem ---------------------------------------------------
 
-/*  [Description]
+/*	[Beschreibung]
 
-    This item describes the shadow attribute (color, width and position).
+    Dieses Item beschreibt ein Schattenattribut (Farbe, Breite, Lage).
 */
 
-#define SHADOW_TOP      ((sal_uInt16)0)
-#define SHADOW_BOTTOM   ((sal_uInt16)1)
-#define SHADOW_LEFT     ((sal_uInt16)2)
-#define SHADOW_RIGHT    ((sal_uInt16)3)
+#define SHADOW_TOP		((USHORT)0)
+#define SHADOW_BOTTOM	((USHORT)1)
+#define SHADOW_LEFT		((USHORT)2)
+#define SHADOW_RIGHT	((USHORT)3)
 
 class EDITENG_DLLPUBLIC SvxShadowItem : public SfxEnumItemInterface
 {
-    Color               aShadowColor;
-    sal_uInt16              nWidth;
-    SvxShadowLocation   eLocation;
+    Color 				aShadowColor;
+    USHORT 				nWidth;
+    SvxShadowLocation 	eLocation;
 public:
     TYPEINFO();
 
-    SvxShadowItem( const sal_uInt16 nId ,
-                 const Color *pColor = 0, const sal_uInt16 nWidth = 100 /*5pt*/,
+    SvxShadowItem( const USHORT nId ,
+                 const Color *pColor = 0, const USHORT nWidth = 100 /*5pt*/,
                  const SvxShadowLocation eLoc = SVX_SHADOW_NONE );
 
     inline SvxShadowItem& operator=( const SvxShadowItem& rFmtShadow );
 
-    // "pure virtual Methods" from SfxPoolItem
-    virtual int              operator==( const SfxPoolItem& ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    // "pure virtual Methoden" vom SfxPoolItem
+    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual	bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	 Create(SvStream &, USHORT) const;
+    virtual SvStream&		 Store(SvStream &, USHORT nItemVersion ) const;
     virtual bool             ScaleMetrics( long nMult, long nDiv );
-    virtual bool             HasMetrics() const;
+    virtual	bool             HasMetrics() const;
 
-    const Color& GetColor() const { return aShadowColor;}
+    const Color& GetColor() const {	return aShadowColor;}
     void SetColor( const Color &rNew ) { aShadowColor = rNew; }
 
-    sal_uInt16 GetWidth() const { return nWidth; }
+    USHORT GetWidth() const { return nWidth; }
     SvxShadowLocation GetLocation() const { return eLocation; }
 
-    void SetWidth( sal_uInt16 nNew ) { nWidth = nNew; }
+    void SetWidth( USHORT nNew ) { nWidth = nNew; }
     void SetLocation( SvxShadowLocation eNew ) { eLocation = eNew; }
 
-    // Calculate width of the shadow on the page.
-    sal_uInt16 CalcShadowSpace( sal_uInt16 nShadow ) const;
+        //Breite des Schattens auf der jeweiligen Seite berechnen.
+    USHORT CalcShadowSpace( USHORT nShadow ) const;
 
-    virtual sal_uInt16          GetValueCount() const;
-    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
-    virtual sal_uInt16          GetEnumValue() const;
-    virtual void            SetEnumValue( sal_uInt16 nNewVal );
+    virtual USHORT			GetValueCount() const;
+    virtual String			GetValueTextByPos( USHORT nPos ) const;
+    virtual USHORT			GetEnumValue() const;
+    virtual void			SetEnumValue( USHORT nNewVal );
 };
 
 inline SvxShadowItem &SvxShadowItem::operator=( const SvxShadowItem& rFmtShadow )

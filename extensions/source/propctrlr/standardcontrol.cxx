@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 // ugly dependencies for the OColorControl
 #include <svx/svxids.hrc>
 #include <svx/drawitem.hxx>
-#include <svx/xtable.hxx>
+#include <xtable.hxx>
 //==================================================================
 #include <vcl/floatwin.hxx>
 #include <svtools/svmedit.hxx>
@@ -278,7 +278,7 @@ namespace pcr
 
         getTypedControlWindow()->SetFormatter( getTypedControlWindow()->StandardFormatter() );
         SvNumberFormatter* pFormatter = getTypedControlWindow()->GetFormatter();
-        sal_uLong nStandardDateTimeFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATETIME, eSysLanguage );
+        ULONG nStandardDateTimeFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATETIME, eSysLanguage );
 
         getTypedControlWindow()->SetFormatKey( nStandardDateTimeFormat );
     }
@@ -697,7 +697,7 @@ namespace pcr
             pColorTable = XColorTable::GetStdColorTable();
         }
 
-
+        
         DBG_ASSERT(pColorTable, "OColorControl::OColorControl: no color table!");
 
         if (pColorTable)
@@ -712,8 +712,8 @@ namespace pcr
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
         if ( ( nWinStyle & WB_READONLY ) != 0 )
         {
-            getTypedControlWindow()->SetReadOnly( sal_True );
-            getTypedControlWindow()->Enable( sal_True );
+            getTypedControlWindow()->SetReadOnly( TRUE );
+            getTypedControlWindow()->Enable( TRUE );
         }
     }
 
@@ -729,7 +729,7 @@ namespace pcr
 
                 getTypedControlWindow()->SelectEntry( aRgbCol );
                 if ( !getTypedControlWindow()->IsEntrySelected( aRgbCol ) )
-                {   // the given color is not part of the list -> insert a new entry with the hex code of the color
+                {	// the given color is not part of the list -> insert a new entry with the hex code of the color
                     String aStr = String::CreateFromAscii("0x");
                     aStr += MakeHexStr(nColor,8);
                     getTypedControlWindow()->InsertEntry( aRgbCol, aStr );
@@ -821,8 +821,8 @@ namespace pcr
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
         if ( ( nWinStyle & WB_READONLY ) != 0 )
         {
-            getTypedControlWindow()->SetReadOnly( sal_True );
-            getTypedControlWindow()->Enable( sal_True );
+            getTypedControlWindow()->SetReadOnly( TRUE );
+            getTypedControlWindow()->Enable( TRUE );
         }
     }
 
@@ -884,12 +884,12 @@ namespace pcr
     //------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL OListboxControl::getListEntries(  ) throw (RuntimeException)
     {
-        const sal_uInt16 nCount = getTypedControlWindow()->GetEntryCount();
+        const USHORT nCount = getTypedControlWindow()->GetEntryCount();
         Sequence< ::rtl::OUString > aRet(nCount);
         ::rtl::OUString* pIter = aRet.getArray();
-        for (sal_uInt16 i = 0; i < nCount ; ++i,++pIter)
+        for (USHORT i = 0; i < nCount ; ++i,++pIter)
             *pIter = getTypedControlWindow()->GetEntry(i);
-
+        
         return aRet;
     }
 
@@ -954,12 +954,12 @@ namespace pcr
     //------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL OComboboxControl::getListEntries(  ) throw (RuntimeException)
     {
-        const sal_uInt16 nCount = getTypedControlWindow()->GetEntryCount();
+        const USHORT nCount = getTypedControlWindow()->GetEntryCount();
         Sequence< ::rtl::OUString > aRet(nCount);
         ::rtl::OUString* pIter = aRet.getArray();
-        for (sal_uInt16 i = 0; i < nCount ; ++i,++pIter)
+        for (USHORT i = 0; i < nCount ; ++i,++pIter)
             *pIter = getTypedControlWindow()->GetEntry(i);
-
+        
         return aRet;
     }
 
@@ -978,17 +978,17 @@ namespace pcr
     class OMultilineFloatingEdit : public FloatingWindow
     {
     private:
-        MultiLineEdit   m_aImplEdit;
+        MultiLineEdit	m_aImplEdit;
 
     protected:
-        virtual void    Resize();
+        virtual void	Resize();
 
     public:
                         OMultilineFloatingEdit(Window* _pParen);
         MultiLineEdit*  getEdit() { return &m_aImplEdit; }
 
     protected:
-        virtual long    PreNotify(NotifyEvent& _rNEvt);
+        virtual long	PreNotify(NotifyEvent& _rNEvt);
     };
 
     //------------------------------------------------------------------
@@ -1016,11 +1016,11 @@ namespace pcr
             const KeyCode& aKeyCode = _rNEvt.GetKeyEvent()->GetKeyCode();
             sal_uInt16 nKey = aKeyCode.GetCode();
 
-            if  (   (   (KEY_RETURN == nKey)
+            if	(	(	(KEY_RETURN == nKey)
                     && !aKeyCode.IsShift()
                     )
-                ||  (   (KEY_UP == nKey)
-                    &&  aKeyCode.IsMod2()
+                ||	(	(KEY_UP == nKey)
+                    &&	aKeyCode.IsMod2()
                     )
                 )
             {
@@ -1047,7 +1047,7 @@ namespace pcr
         ,m_nOperationMode( eStringList )
         ,m_bDropdown( sal_False )
     {
-        SetCompoundControl( sal_True );
+        SetCompoundControl( TRUE );
 
         m_pImplEdit = new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
         SetSubEdit( m_pImplEdit );
@@ -1159,7 +1159,7 @@ namespace pcr
                 ShowDropDown( sal_True );
                 m_pFloatingEdit->getEdit()->GrabFocus();
                 m_pFloatingEdit->getEdit()->SetSelection( aSel );
-                Window* pFocusWin = Application::GetFocusWindow();
+                Window*	pFocusWin = Application::GetFocusWindow();
                 pFocusWin->KeyInput( *rNEvt.GetKeyEvent() );
             }
         }
@@ -1217,7 +1217,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    #define STD_HEIGHT  100
+    #define STD_HEIGHT	100
     sal_Bool DropDownEditControl::ShowDropDown( sal_Bool bShow )
     {
         if (bShow)

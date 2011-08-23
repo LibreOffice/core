@@ -67,6 +67,10 @@ curl_CFLAGS+=-I$(SYSBASE)$/usr$/include
 curl_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
+.IF "$(OS)$(COM)$(CPU)"=="LINUXGCCI"
+curl_LDFLAGS+=-Wl,-z,noexecstack
+.ENDIF
+
 .IF "$(OS)$(CPU)"=="SOLARISU"
 curl_CFLAGS+:=$(ARCH_FLAGS)
 curl_LDFLAGS+:=$(ARCH_FLAGS)
@@ -97,7 +101,7 @@ curl_CC+=-shared-libgcc
 .ENDIF
 curl_LIBS=-lws2_32 -lwinmm
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-curl_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
+curl_LIBS+=-lstdc++_s
 .ENDIF
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
@@ -108,6 +112,8 @@ BUILD_ACTION=make
 OUT2BIN=$(BUILD_DIR)$/.libs$/libcurl*.dll
 OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*.a
 .ELSE
+# make use of stlport headerfiles
+EXT_USE_STLPORT=TRUE
 
 .IF "$(CCNUMVER)" > "001399999999"
 EXCFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
@@ -116,17 +122,10 @@ EXCFLAGS="/EHsc /YX"
 .ENDIF
 
 BUILD_DIR=.$/lib
-
-.IF "$(CPU)" == "I"
-MACHINE=X86
-.ELSE
-MACHINE=X64
-.ENDIF
-
 .IF "$(debug)"==""
-BUILD_ACTION=nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS=$(EXCFLAGS) MACHINE=$(MACHINE)
+BUILD_ACTION=nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS=$(EXCFLAGS)
 .ELSE
-BUILD_ACTION=nmake -f Makefile.vc9 cfg=debug-dll EXCFLAGS=$(EXCFLAGS) MACHINE=$(MACHINE)
+BUILD_ACTION=nmake -f Makefile.vc9 cfg=debug-dll EXCFLAGS=$(EXCFLAGS)
 .ENDIF
 
 OUT2BIN=$(BUILD_DIR)$/libcurl.dll
@@ -136,6 +135,9 @@ OUT2LIB=$(BUILD_DIR)$/libcurl.lib
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
+# make use of stlport headerfiles
+EXT_USE_STLPORT=TRUE
+
 BUILD_DIR=.$/lib
 .IF "$(debug)"==""
 BUILD_ACTION=make -f Makefile.os2

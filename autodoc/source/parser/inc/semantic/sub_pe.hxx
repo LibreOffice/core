@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,20 +43,20 @@ template <class PE, class SUB>
 class SubPe
 {
   public:
-    typedef SubPe< PE, SUB >    self;
+    typedef SubPe< PE, SUB > 	self;
 
                         SubPe(
-                            PE &                i_rParent );
-    PE &                Parent() const;
-    SUB &               Child() const;
+                            PE &				i_rParent );
+    PE &				Parent() const;
+    SUB &				Child() const;
 
-    ParseEnvironment &  Get() const;
+    ParseEnvironment &	Get() const;
 
   private:
-    SUB &               CreateChild() const;
+    SUB &				CreateChild() const;
 
-    PE &                rParent;
-    Dyn<SUB>            pChild;
+    PE &				rParent;
+    Dyn<SUB>			pChild;
 };
 
 
@@ -64,11 +64,11 @@ class SubPe
 // IMPLEMENTATION
 
 
-//  SubPe
+// 	SubPe
 
 template <class PE, class SUB>
 SubPe<PE,SUB>::SubPe( PE & i_rParent )
-    :   rParent(i_rParent)
+    :	rParent(i_rParent)
 {
 }
 

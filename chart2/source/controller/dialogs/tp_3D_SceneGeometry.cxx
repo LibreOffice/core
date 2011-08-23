@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,6 +48,7 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
+//using namespace ::com::sun::star::chart2;
 
 namespace
 {
@@ -73,14 +74,14 @@ void lcl_SetMetricFieldLimits( MetricField& rField, sal_Int64 nLimit )
 ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
                 , const uno::Reference< beans::XPropertySet > & xSceneProperties
                 , ControllerLockHelper & rControllerLockHelper )
-                : TabPage       ( pWindow, SchResId( TP_3D_SCENEGEOMETRY ) )
+                : TabPage 	    ( pWindow, SchResId( TP_3D_SCENEGEOMETRY ) )
                 , m_xSceneProperties( xSceneProperties )
                 , m_aCbxRightAngledAxes( this, SchResId( CBX_RIGHT_ANGLED_AXES ) )
-                , m_aFtXRotation    ( this, SchResId( FT_X_ROTATION ) )
-                , m_aMFXRotation    ( this, SchResId( MTR_FLD_X_ROTATION ) )
-                , m_aFtYRotation    ( this, SchResId( FT_Y_ROTATION ) )
-                , m_aMFYRotation    ( this, SchResId( MTR_FLD_Y_ROTATION ) )
-                , m_aFtZRotation    ( this, SchResId( FT_Z_ROTATION ) )
+                , m_aFtXRotation	( this, SchResId( FT_X_ROTATION ) )
+                , m_aMFXRotation	( this, SchResId( MTR_FLD_X_ROTATION ) )
+                , m_aFtYRotation	( this, SchResId( FT_Y_ROTATION ) )
+                , m_aMFYRotation	( this, SchResId( MTR_FLD_Y_ROTATION ) )
+                , m_aFtZRotation	( this, SchResId( FT_Z_ROTATION ) )
                 , m_aMFZRotation    ( this, SchResId( MTR_FLD_Z_ROTATION ) )
                 , m_aCbxPerspective ( this, SchResId( CBX_PERSPECTIVE ) )
                 , m_aMFPerspective  ( this, SchResId( MTR_FLD_PERSPECTIVE ) )
@@ -116,7 +117,7 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     m_aMFYRotation.SetValue(m_nYRotation);
     m_aMFZRotation.SetValue(m_nZRotation);
 
-    const sal_uLong nTimeout = 4*EDIT_UPDATEDATA_TIMEOUT;
+    const ULONG nTimeout = 4*EDIT_UPDATEDATA_TIMEOUT;
     Link aAngleChangedLink( LINK( this, ThreeD_SceneGeometry_TabPage, AngleChanged ));
     Link aAngleEditedLink( LINK( this, ThreeD_SceneGeometry_TabPage, AngleEdited ));
 
@@ -151,7 +152,7 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     sal_Bool bRightAngledAxes = false;
 
     uno::Reference< chart2::XDiagram > xDiagram( m_xSceneProperties, uno::UNO_QUERY );
-    if( ChartTypeHelper::isSupportingRightAngledAxes(
+    if( ChartTypeHelper::isSupportingRightAngledAxes( 
             DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
     {
         m_xSceneProperties->getPropertyValue( C2U("RightAngledAxes")) >>= bRightAngledAxes;
@@ -162,8 +163,6 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     {
         m_aCbxRightAngledAxes.Enable(false);
     }
-    m_aMFPerspective.SetAccessibleName(m_aCbxPerspective.GetText());
-    m_aMFPerspective.SetAccessibleRelationLabeledBy(&m_aCbxPerspective);
 }
 
 ThreeD_SceneGeometry_TabPage::~ThreeD_SceneGeometry_TabPage()
@@ -253,7 +252,7 @@ IMPL_LINK( ThreeD_SceneGeometry_TabPage, PerspectiveChanged, void*, EMPTYARG )
 IMPL_LINK( ThreeD_SceneGeometry_TabPage, PerspectiveToggled, void*, EMPTYARG )
 {
     m_aMFPerspective.Enable( m_aCbxPerspective.IsChecked() );
-    applyPerspectiveToModel();
+    applyPerspectiveToModel();    
     return 0;
 }
 
@@ -270,7 +269,7 @@ IMPL_LINK( ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled, void*, EMPTYARG
         m_nXRotation = m_aMFXRotation.GetValue();
         m_nYRotation = m_aMFYRotation.GetValue();
         m_nZRotation = m_aMFZRotation.GetValue();
-
+       
         m_aMFXRotation.SetValue(static_cast<sal_Int64>(ThreeDHelper::getValueClippedToRange(static_cast<double>(m_nXRotation), ThreeDHelper::getXDegreeAngleLimitForRightAngledAxes())));
         m_aMFYRotation.SetValue(static_cast<sal_Int64>(ThreeDHelper::getValueClippedToRange(static_cast<double>(m_nYRotation), ThreeDHelper::getYDegreeAngleLimitForRightAngledAxes())));
         m_aMFZRotation.SetEmptyFieldValue();
@@ -289,7 +288,7 @@ IMPL_LINK( ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled, void*, EMPTYARG
     }
 
     ThreeDHelper::switchRightAngledAxes( m_xSceneProperties, m_aCbxRightAngledAxes.IsChecked(), true /*bRotateLights*/ );
-
+    
     return 0;
 }
 

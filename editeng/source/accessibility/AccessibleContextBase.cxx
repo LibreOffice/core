@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@
 
 #include <utility>
 
-using namespace ::rtl;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::rtl;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
@@ -56,7 +56,7 @@ namespace accessibility {
 //=====  internal  ============================================================
 
 // Define a shortcut for the somewhot longish base class name.
-typedef ::cppu::PartialWeakComponentImplHelper4<
+typedef ::cppu::WeakComponentImplHelper4<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleContext,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
@@ -244,7 +244,7 @@ uno::Reference<XAccessible> SAL_CALL
 {
     ThrowIfDisposed ();
     throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no child with index ") + nIndex),
+        ::rtl::OUString::createFromAscii ("no child with index " + nIndex),
         NULL);
 }
 
@@ -267,9 +267,9 @@ sal_Int32 SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    //  Use a simple but slow solution for now.  Optimize later.
+    //	Use a simple but slow solution for now.  Optimize later.
 
-    //  Iterate over all the parent's children and search for this object.
+    //	Iterate over all the parent's children and search for this object.
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xParentContext (
@@ -290,8 +290,8 @@ sal_Int32 SAL_CALL
         }
    }
 
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
+   //	Return -1 to indicate that this object's parent does not know about the
+   //	object.
    return -1;
 }
 
@@ -314,7 +314,7 @@ sal_Int16 SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-
+        
     return msDescription;
 }
 
@@ -334,14 +334,14 @@ OUString SAL_CALL
         msName = CreateAccessibleName();
         meNameOrigin = AutomaticallyCreated;
     }
-
+    
     return msName;
 }
 
 
 
 
-/** Return a copy of the relation set.
+/**	Return a copy of the relation set.
 */
 uno::Reference<XAccessibleRelationSet> SAL_CALL
        AccessibleContextBase::getAccessibleRelationSet (void)
@@ -364,7 +364,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 
 
 
-/** Return a copy of the state set.
+/**	Return a copy of the state set.
     Possible states are:
         ENABLED
         SHOWING
@@ -426,8 +426,8 @@ lang::Locale SAL_CALL
             return xParentContext->getLocale ();
     }
 
-    //  No locale and no parent.  Therefore throw exception to indicate this
-    //  cluelessness.
+    //	No locale and no parent.  Therefore throw exception to indicate this
+    //	cluelessness.
     throw IllegalAccessibleComponentStateException ();
 }
 
@@ -638,7 +638,7 @@ void AccessibleContextBase::SetAccessibleName (
 ::rtl::OUString AccessibleContextBase::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Empty Description"));
+    return ::rtl::OUString::createFromAscii ("Empty Description");
 }
 
 
@@ -647,7 +647,7 @@ void AccessibleContextBase::SetAccessibleName (
 ::rtl::OUString AccessibleContextBase::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Empty Name"));
+    return ::rtl::OUString::createFromAscii ("Empty Name");
 }
 
 

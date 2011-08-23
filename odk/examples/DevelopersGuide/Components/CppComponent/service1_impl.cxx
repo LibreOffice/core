@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 #include <osl/interlck.h>
@@ -63,7 +63,7 @@ OUString SAL_CALL getImplementationName_MyService1Impl()
                          "my_module.my_sc_implementation.MyService1") );
 }
 
-
+    
 class MyService1Impl
     : public ::my_module::XSomething
     , public lang::XServiceInfo
@@ -81,7 +81,7 @@ public:
         {}
 
     virtual ~MyService1Impl() {}
-
+    
     // XInterface
     virtual Any SAL_CALL queryInterface( Type const & type )
         throw (RuntimeException);
@@ -243,5 +243,69 @@ Reference< XInterface > SAL_CALL create_MyService2Impl(
     Reference< XComponentContext > const & ) SAL_THROW( () );
 
 }
+
+/*
+extern "C" void SAL_CALL component_getImplementationEnvironment(
+    sal_Char const ** ppEnvTypeName, uno_Environment ** )
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+extern "C" sal_Bool SAL_CALL component_writeInfo(
+    lang::XMultiServiceFactory * xMgr, registry::XRegistryKey * xRegistry )
+{
+    if (xRegistry)
+    {
+        try
+        {
+            // implementation of MyService1A
+            Reference< registry::XRegistryKey > xKey(
+                xRegistry->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "my_module.my_sc_implementation.MyService1/UNO/SERVICES") ) ) );
+            // subkeys denote implemented services of implementation
+            xKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "my_module.MyService1") ) );
+            // implementation of MyService1B
+            xKey = xRegistry->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "my_module.my_sc_implementation.MyService2/UNO/SERVICES") ) );
+            // subkeys denote implemented services of implementation
+            xKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "my_module.MyService2") ) );
+            return sal_True; // success
+        }
+        catch (registry::InvalidRegistryException &)
+        {
+            // function fails if exception caught
+        }
+    }
+    return sal_False;
+}
+extern "C" void * SAL_CALL component_getFactory(
+    sal_Char const * implName, lang::XMultiServiceFactory * xMgr, void * )
+{
+    Reference< lang::XSingleComponentFactory > xFactory;
+    if (0 == ::rtl_str_compare( implName, "my_module.my_sc_implementation.MyService1" ))
+    {
+        // create component factory for MyService1 implementation
+        OUString serviceName( RTL_CONSTASCII_USTRINGPARAM("my_module.MyService1") );
+        xFactory = ::cppu::createSingleComponentFactory(
+            ::my_sc_impl::create_MyService1Impl,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("my_module.my_sc_implementation.MyService1") ),
+            Sequence< OUString >( &serviceName, 1 ) );
+    }
+    else if (0 == ::rtl_str_compare( implName, "my_module.my_sc_implementation.MyService2" ))
+    {
+        // create component factory for MyService12 implementation
+        OUString serviceName( RTL_CONSTASCII_USTRINGPARAM("my_module.MyService2") );
+        xFactory = ::cppu::createSingleComponentFactory(
+            ::my_sc_impl::create_MyService2Impl,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("my_module.my_sc_implementation.MyService2") ),
+            Sequence< OUString >( &serviceName, 1 ) );
+    }
+    if (xFactory.is())
+        xFactory->acquire();
+    return xFactory.get(); // return acquired interface pointer or null
+}
+*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

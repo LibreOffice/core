@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,7 +106,7 @@ private:
     virtual void        WriteAddData( XclExpStream& rStrm );
 
 private:
-    typedef boost::shared_ptr< XclExpCachedMatrix > XclExpCachedMatRef;
+    typedef ScfRef< XclExpCachedMatrix > XclExpCachedMatRef;
     XclExpCachedMatRef  mxMatrix;       /// Cached results of the DDE link.
 };
 
@@ -247,7 +247,7 @@ protected:
     void                WriteExtNameBuffer( XclExpStream& rStrm );
 
 private:
-    typedef boost::shared_ptr< XclExpExtNameBuffer >   XclExpExtNameBfrRef;
+    typedef ScfRef< XclExpExtNameBuffer >   XclExpExtNameBfrRef;
     XclExpExtNameBfrRef mxExtNameBfr;   /// List of EXTERNNAME records.
 };
 
@@ -713,7 +713,7 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
 
     SCTAB nDisplScTab = rDocOpt.GetDocSettings().mnDisplTab;
 
-    // find first visible exported sheet
+    // #112908# find first visible exported sheet
     if( (nFirstVisScTab == SCTAB_INVALID) || !IsExportTab( nFirstVisScTab ) )
     {
         // no exportable visible sheet -> use first exportable sheet
@@ -936,7 +936,7 @@ XclExpExtNameDde::XclExpExtNameDde( const XclExpRoot& rRoot,
 
 void XclExpExtNameDde::WriteAddData( XclExpStream& rStrm )
 {
-    if( mxMatrix )
+    if( mxMatrix.is() )
         mxMatrix->Save( rStrm );
 }
 
@@ -1063,7 +1063,7 @@ sal_uInt16 XclExpExtNameBuffer::InsertDde(
     sal_uInt16 nIndex = GetIndex( rItem );
     if( nIndex == 0 )
     {
-        sal_uInt16 nPos;
+        USHORT nPos;
         if( GetDoc().FindDdeLink( rApplic, rTopic, rItem, SC_DDE_IGNOREMODE, nPos ) )
         {
             // create the leading 'StdDocumentName' EXTERNNAME record
@@ -1157,7 +1157,7 @@ void XclExpCrn::WriteDouble( XclExpStream& rStrm, double fValue )
 {
     if( ::rtl::math::isNan( fValue ) )
     {
-        sal_uInt16 nScError = static_cast< sal_uInt16 >( reinterpret_cast< const sal_math_Double* >( &fValue )->nan_parts.fraction_lo );
+        USHORT nScError = static_cast< USHORT >( reinterpret_cast< const sal_math_Double* >( &fValue )->nan_parts.fraction_lo );
         WriteError( rStrm, XclTools::GetXclErrorCode( nScError ) );
     }
     else
@@ -1232,7 +1232,7 @@ public:
 bool XclExpCrnList::InsertValue( SCCOL nScCol, SCROW nScRow, const Any& rValue )
 {
     RecordRefType xLastRec = GetLastRecord();
-    if( xLastRec && xLastRec->InsertValue( nScCol, nScRow, rValue ) )
+    if( xLastRec.is() && xLastRec->InsertValue( nScCol, nScRow, rValue ) )
         return true;
     if( GetSize() == SAL_MAX_UINT16 )
         return false;
@@ -1278,7 +1278,7 @@ void XclExpXct::Save( XclExpStream& rStrm )
         ::std::pair< SCCOL, SCCOL > aColRange = mxCacheTable->getColRange( nScRow );
         for( SCCOL nScCol = aColRange.first; bValid && (nScCol < aColRange.second); ++nScCol )
         {
-            if( maUsedCells.IsCellMarked( nScCol, nScRow, sal_True ) )
+            if( maUsedCells.IsCellMarked( nScCol, nScRow, TRUE ) )
             {
                 sal_uInt32 nScNumFmt = 0;
                 ScExternalRefCache::TokenRef xToken = mxCacheTable->getCell( nScCol, nScRow, &nScNumFmt );
@@ -1326,7 +1326,7 @@ XclExpExtNameBuffer& XclExpExternSheetBase::GetExtNameBuffer()
 
 void XclExpExternSheetBase::WriteExtNameBuffer( XclExpStream& rStrm )
 {
-    if( mxExtNameBfr )
+    if( mxExtNameBfr.is() )
         mxExtNameBfr->Save( rStrm );
 }
 
@@ -1530,7 +1530,7 @@ void XclExpSupbook::Save( XclExpStream& rStrm )
 const XclExpString* XclExpSupbook::GetTabName( sal_uInt16 nSBTab ) const
 {
     XclExpXctRef xXct = maXctList.GetRecord( nSBTab );
-    return xXct ? &xXct->GetTabName() : 0;
+    return xXct.is() ? &xXct->GetTabName() : 0;
 }
 
 void XclExpSupbook::WriteBody( XclExpStream& rStrm )
@@ -1611,7 +1611,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFirstXclTab, sal_uInt16 nLast
             pRefLogEntry->mnFirstXclTab = nFirstXclTab;
             pRefLogEntry->mnLastXclTab = nLastXclTab;
             XclExpSupbookRef xSupbook = maSupbookList.GetRecord( aXti.mnSupbook );
-            if( xSupbook )
+            if( xSupbook.is() )
                 xSupbook->FillRefLogEntry( *pRefLogEntry, aXti.mnFirstSBTab, aXti.mnLastSBTab );
         }
     }
@@ -1633,8 +1633,8 @@ void XclExpSupbookBuffer::StoreCellRange( const ScRange& rRange )
     {
         const XclExpSBIndex& rSBIndex = maSBIndexVec[ nXclTab ];
         XclExpSupbookRef xSupbook = maSupbookList.GetRecord( rSBIndex.mnSupbook );
-        DBG_ASSERT( xSupbook , "XclExpSupbookBuffer::StoreCellRange - missing SUPBOOK record" );
-        if( xSupbook )
+        DBG_ASSERT( xSupbook.is(), "XclExpSupbookBuffer::StoreCellRange - missing SUPBOOK record" );
+        if( xSupbook.is() )
             xSupbook->StoreCellRange( rRange, rSBIndex.mnSBTab );
     }
 }
@@ -1775,7 +1775,7 @@ bool XclExpSupbookBuffer::InsertAddIn(
     }
     else
         xSupbook = maSupbookList.GetRecord( mnAddInSB );
-    DBG_ASSERT( xSupbook, "XclExpSupbookBuffer::InsertAddin - missing add-in supbook" );
+    DBG_ASSERT( xSupbook.is(), "XclExpSupbookBuffer::InsertAddin - missing add-in supbook" );
     rnSupbook = mnAddInSB;
     rnExtName = xSupbook->InsertAddIn( rName );
     return rnExtName > 0;
@@ -1874,7 +1874,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFileId, const String& rTabNam
     {
         pRefLogEntry->mnFirstXclTab = 0;
         pRefLogEntry->mnLastXclTab  = 0;
-        if (xSupbook)
+        if (xSupbook.is())
             xSupbook->FillRefLogEntry(*pRefLogEntry, aXti.mnFirstSBTab, aXti.mnLastSBTab);
     }
 
@@ -1989,7 +1989,7 @@ bool XclExpLinkManagerImpl5::InsertAddIn(
         sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rName )
 {
     XclExpExtSheetRef xExtSheet = FindInternal( rnExtSheet, EXC_EXTSH_ADDIN );
-    if( xExtSheet )
+    if( xExtSheet.is() )
     {
         rnExtName = xExtSheet->InsertAddIn( rName );
         return rnExtName > 0;

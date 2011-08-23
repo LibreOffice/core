@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 
 #include "officeipcthread.hxx"
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <vector>
 
 namespace desktop
@@ -56,7 +56,7 @@ struct OUStringHashCode
     }
 };
 
-class DispatchWatcherHashMap : public ::boost::unordered_map< ::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString >  >
+class DispatchWatcherHashMap : public ::std::hash_map< ::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString >	>
 {
     public:
         inline void free()
@@ -87,8 +87,8 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
             DispatchRequest( RequestType aType, const ::rtl::OUString& aFile, boost::optional< rtl::OUString > const & cwdUrl, const ::rtl::OUString& aPrinter, const ::rtl::OUString& aFact ) :
                 aRequestType( aType ), aURL( aFile ), aCwdUrl( cwdUrl ), aPrinterName( aPrinter ), aPreselectedFactory( aFact ) {}
 
-            RequestType     aRequestType;
-            rtl::OUString   aURL;
+            RequestType		aRequestType;
+            rtl::OUString	aURL;
             boost::optional< rtl::OUString > aCwdUrl;
             rtl::OUString   aPrinterName;  // also conversion params
             rtl::OUString   aPreselectedFactory;
@@ -114,11 +114,11 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
     private:
         DispatchWatcher();
 
-        static ::osl::Mutex&        GetMutex();
+        static ::osl::Mutex&		GetMutex();
 
-        DispatchWatcherHashMap      m_aRequestContainer;
+        DispatchWatcherHashMap		m_aRequestContainer;
 
-        static ::osl::Mutex*        pWatcherMutex;
+        static ::osl::Mutex*		pWatcherMutex;
 
         sal_Int16                   m_nRequestCount;
 };

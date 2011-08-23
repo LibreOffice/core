@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_scripting.hxx"
 
-#include "DialogModelProvider.hxx"
 #include "dlgprov.hxx"
 #include "dlgevtatt.hxx"
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -62,112 +61,20 @@
 #include <util/MiscUtils.hxx>
 
 using namespace ::com::sun::star;
-using namespace awt;
-using namespace lang;
-using namespace uno;
-using namespace script;
-using namespace beans;
-using namespace document;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::document;
 using namespace ::sf_misc;
 
-// component helper namespace
-namespace comp_DialogModelProvider
-{
-
-    ::rtl::OUString SAL_CALL _getImplementationName()
-    {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogModelProvider"));
-    }
-
-    uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames()
-    {
-        uno::Sequence< ::rtl::OUString > s(1);
-        s[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlDialogModelProvider"));
-        return s;
-    }
-
-    uno::Reference< uno::XInterface > SAL_CALL _create(const uno::Reference< uno::XComponentContext > & context) SAL_THROW((uno::Exception))
-    {
-        return static_cast< ::cppu::OWeakObject * >(new dlgprov::DialogModelProvider(context));
-    }
-} // closing component helper namespace
 //.........................................................................
 namespace dlgprov
 {
 //.........................................................................
 
-static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("ResourceResolver"));
-
-    Reference< resource::XStringResourceManager > lcl_getStringResourceManager(const Reference< XComponentContext >& i_xContext,const ::rtl::OUString& i_sURL)
-    {
-        INetURLObject aInetObj( i_sURL );
-        ::rtl::OUString aDlgName = aInetObj.GetBase();
-        aInetObj.removeSegment();
-        ::rtl::OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
-        bool bReadOnly = true;
-        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-        ::rtl::OUString aComment;
-
-        Sequence<Any> aArgs( 6 );
-        aArgs[0] <<= aDlgLocation;
-        aArgs[1] <<= bReadOnly;
-        aArgs[2] <<= aLocale;
-        aArgs[3] <<= aDlgName;
-        aArgs[4] <<= aComment;
-
-        Reference< task::XInteractionHandler > xDummyHandler;
-        aArgs[5] <<= xDummyHandler;
-        Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_QUERY_THROW );
-        // TODO: Ctor
-        Reference< resource::XStringResourceManager > xStringResourceManager( xSMgr_->createInstanceWithContext
-            ( ::rtl::OUString::createFromAscii( "com.sun.star.resource.StringResourceWithLocation" ),
-                i_xContext ), UNO_QUERY );
-        if( xStringResourceManager.is() )
-        {
-            Reference< XInitialization > xInit( xStringResourceManager, UNO_QUERY );
-            if( xInit.is() )
-                xInit->initialize( aArgs );
-        }
-        return xStringResourceManager;
-    }
-    Reference< container::XNameContainer > lcl_createControlModel(const Reference< XComponentContext >& i_xContext)
-    {
-        Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_QUERY_THROW );
-        Reference< container::XNameContainer > xControlModel( xSMgr_->createInstanceWithContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ), i_xContext ), UNO_QUERY_THROW );
-        return xControlModel;
-    }
-    Reference< container::XNameContainer > lcl_createDialogModel( const Reference< XComponentContext >& i_xContext,
-        const Reference< io::XInputStream >& xInput,
-        const Reference< frame::XModel >& xModel,
-        const Reference< resource::XStringResourceManager >& xStringResourceManager,
-        const Any &aDialogSourceURL) throw ( Exception )
-    {
-        Reference< container::XNameContainer > xDialogModel(  lcl_createControlModel(i_xContext) );
-
-        ::rtl::OUString aDlgSrcUrlPropName( RTL_CONSTASCII_USTRINGPARAM( "DialogSourceURL" ) );
-        Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
-        xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURL );
-
-        // #TODO we really need to detect the source of the Dialog, is it
-        // the dialog. E.g. if the dialog was created from basic ( then we just
-        // can't tell  where its from )
-        // If we are happy to always substitute the form model for the awt
-        // one then maybe the presence of a document model is enough to trigger
-        // swapping out the models ( or perhaps we only want to do this
-        // for vba mode ) there are a number of feasible and valid possibilities
-        ::xmlscript::importDialogModel( xInput, xDialogModel, i_xContext, xModel );
-
-        // Set resource property
-        if( xStringResourceManager.is() )
-        {
-            Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
-            Any aStringResourceManagerAny;
-            aStringResourceManagerAny <<= xStringResourceManager;
-            xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
-        }
-
-        return xDialogModel;
-    }
+static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAscii( "ResourceResolver" );
     // =============================================================================
     // component operations
     // =============================================================================
@@ -267,7 +174,9 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
 
     Reference< container::XNameContainer > DialogProviderImpl::createControlModel() throw ( Exception )
     {
-        return lcl_createControlModel(m_xContext);
+        Reference< XMultiComponentFactory > xSMgr_( m_xContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< container::XNameContainer > xControlModel( xSMgr_->createInstanceWithContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ), m_xContext ), UNO_QUERY_THROW );
+        return xControlModel;
     }
 
     Reference< container::XNameContainer > DialogProviderImpl::createDialogModel(
@@ -275,7 +184,31 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
         const Reference< resource::XStringResourceManager >& xStringResourceManager,
         const Any &aDialogSourceURL) throw ( Exception )
     {
-        return lcl_createDialogModel(m_xContext,xInput,m_xModel,xStringResourceManager,aDialogSourceURL);
+        Reference< container::XNameContainer > xDialogModel(  createControlModel() );
+
+        ::rtl::OUString aDlgSrcUrlPropName( RTL_CONSTASCII_USTRINGPARAM( "DialogSourceURL" ) );
+        Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
+        xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURL );
+
+        // #TODO we really need to detect the source of the Dialog, is it
+        // located in the document or not. m_xModel need not be the location of
+        // the dialog. E.g. if the dialog was created from basic ( then we just
+        // can't tell  where its from )
+        // If we are happy to always substitute the form model for the awt
+        // one then maybe the presence of a document model is enough to trigger
+        // swapping out the models ( or perhaps we only want to do this
+        // for vba mode ) there are a number of feasible and valid possibilities
+        ::xmlscript::importDialogModel( xInput, xDialogModel, m_xContext, m_xModel );
+        // Set resource property
+        if( xStringResourceManager.is() )
+        {
+            Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
+            Any aStringResourceManagerAny;
+            aStringResourceManagerAny <<= xStringResourceManager;
+            xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
+        }
+
+        return xDialogModel;
     }
 
     Reference< XControlModel > DialogProviderImpl::createDialogModelForBasic() throw ( Exception )
@@ -310,13 +243,13 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
         }
 
         Reference< uri::XUriReferenceFactory > xFac (
-            xSMgr->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.uri.UriReferenceFactory")), m_xContext ) , UNO_QUERY );
+            xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii(
+            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
 
         if  ( !xFac.is() )
         {
             throw RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogProviderImpl::getDialogModel(), could not instatiate UriReferenceFactory.")),
+                ::rtl::OUString::createFromAscii( "DialogProviderImpl::getDialogModel(), could not instatiate UriReferenceFactory." ),
                 Reference< XInterface >() );
         }
 
@@ -329,7 +262,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
 
         Reference< util::XMacroExpander > xMacroExpander(
             m_xContext->getValueByName(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.util.theMacroExpander")) ),
+            ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ),
             UNO_QUERY_THROW );
 
         Reference< uri::XUriReference > uriRef;
@@ -338,7 +271,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
             uriRef = Reference< uri::XUriReference >( xFac->parse( aURL ), UNO_QUERY );
             if ( !uriRef.is() )
             {
-                ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("DialogProviderImpl::getDialogModel: failed to parse URI: "));
+                ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "DialogProviderImpl::getDialogModel: failed to parse URI: " );
                 errorMsg += aURL;
                 throw IllegalArgumentException( errorMsg,
                                                 Reference< XInterface >(), 1 );
@@ -356,9 +289,9 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
             bSingleDialog = true;
 
             // Try any other URL with SimpleFileAccess
-            Reference< ucb::XSimpleFileAccess > xSFI =
-                Reference< ucb::XSimpleFileAccess >( xSMgr->createInstanceWithContext
-                ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")), m_xContext ), UNO_QUERY );
+            Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSFI =
+                Reference< ::com::sun::star::ucb::XSimpleFileAccess >( xSMgr->createInstanceWithContext
+                ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ), m_xContext ), UNO_QUERY );
 
             try
             {
@@ -379,18 +312,18 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
                 sDlgName = sDescription.getToken( 0, (sal_Unicode)'.', nIndex );
 
             ::rtl::OUString sLocation = sfUri->getParameter(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("location")) );
+                ::rtl::OUString::createFromAscii( "location" ) );
 
 
             // get dialog library container
             // TODO: dialogs in packages
             Reference< XLibraryContainer > xLibContainer;
 
-            if ( sLocation == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application")) )
+            if ( sLocation == ::rtl::OUString::createFromAscii( "application" ) )
             {
                 xLibContainer = Reference< XLibraryContainer >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
             }
-            else if ( sLocation == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("document")) )
+            else if ( sLocation == ::rtl::OUString::createFromAscii( "document" ) )
             {
                 Reference< XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
                 if ( xDocumentScripts.is() )
@@ -489,7 +422,34 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
             Reference< resource::XStringResourceManager > xStringResourceManager;
             if( bSingleDialog )
             {
-                xStringResourceManager = lcl_getStringResourceManager(m_xContext,aURL);
+                INetURLObject aInetObj( aURL );
+                ::rtl::OUString aDlgName = aInetObj.GetBase();
+                aInetObj.removeSegment();
+                ::rtl::OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                bool bReadOnly = true;
+                ::com::sun	::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+                ::rtl::OUString aComment;
+
+                Sequence<Any> aArgs( 6 );
+                aArgs[0] <<= aDlgLocation;
+                aArgs[1] <<= bReadOnly;
+                aArgs[2] <<= aLocale;
+                aArgs[3] <<= aDlgName;
+                aArgs[4] <<= aComment;
+
+                Reference< task::XInteractionHandler > xDummyHandler;
+                aArgs[5] <<= xDummyHandler;
+                Reference< XMultiComponentFactory > xSMgr_( m_xContext->getServiceManager(), UNO_QUERY_THROW );
+                // TODO: Ctor
+                xStringResourceManager = Reference< resource::XStringResourceManager >( xSMgr_->createInstanceWithContext
+                    ( ::rtl::OUString::createFromAscii( "com.sun.star.resource.StringResourceWithLocation" ),
+                        m_xContext ), UNO_QUERY );
+                if( xStringResourceManager.is() )
+                {
+                    Reference< XInitialization > xInit( xStringResourceManager, UNO_QUERY );
+                    if( xInit.is() )
+                        xInit->initialize( aArgs );
+                }
             }
             else if( xDialogLib.is() )
             {
@@ -570,7 +530,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
         const Reference< XControl >& rxControl,
         const Reference< XInterface >& rxHandler,
         const Reference< XIntrospectionAccess >& rxIntrospectionAccess,
-        bool bDialogProviderMode )
+        bool bDialogProviderMode, const rtl::OUString& sDialogLibName )
     {
         if ( rxControl.is() )
         {
@@ -622,7 +582,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
 
             // Get introspection service
             Reference< XInterface > xI = xSMgr->createInstanceWithContext
-                ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")), m_xContext );
+                ( rtl::OUString::createFromAscii("com.sun.star.beans.Introspection"), m_xContext );
             if (xI.is())
                 xIntrospection = Reference< XIntrospection >::query( xI );
         }
@@ -720,8 +680,10 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
     // XDialogProvider
     // -----------------------------------------------------------------------------
 
-    static ::rtl::OUString aDecorationPropName(RTL_CONSTASCII_USTRINGPARAM("Decoration"));
-    static ::rtl::OUString aTitlePropName(RTL_CONSTASCII_USTRINGPARAM("Title"));
+    static ::rtl::OUString aDecorationPropName =
+        ::rtl::OUString::createFromAscii( "Decoration" );
+    static ::rtl::OUString aTitlePropName =
+        ::rtl::OUString::createFromAscii( "Title" );
 
     Reference < XControl > DialogProviderImpl::createDialogImpl(
         const ::rtl::OUString& URL, const Reference< XInterface >& xHandler,
@@ -784,7 +746,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
             {
                 //xDialog = Reference< XDialog >( xCtrl, UNO_QUERY );
                 Reference< XIntrospectionAccess > xIntrospectionAccess = inspectHandler( xHandler );
-                attachControlEvents( xCtrl, xHandler, xIntrospectionAccess, bDialogProviderMode );
+                attachControlEvents( xCtrl, xHandler, xIntrospectionAccess, bDialogProviderMode, msDialogLibName );
             }
         }
 
@@ -845,9 +807,9 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
     Reference< XWindow > DialogProviderImpl::createContainerWindow(
         const ::rtl::OUString& URL, const ::rtl::OUString& WindowType,
         const Reference< XWindowPeer >& xParent, const Reference< XInterface >& xHandler )
-            throw (lang::IllegalArgumentException, RuntimeException)
+            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
-        (void)WindowType;   // for future use
+        (void)WindowType;	// for future use
         if( !xParent.is() )
         {
             throw IllegalArgumentException(
@@ -875,15 +837,18 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
 
     static struct ::cppu::ImplementationEntry s_component_entries [] =
     {
-        {create_DialogProviderImpl, getImplementationName_DialogProviderImpl,getSupportedServiceNames_DialogProviderImpl, ::cppu::createSingleComponentFactory,0, 0},
-        { &comp_DialogModelProvider::_create,&comp_DialogModelProvider::_getImplementationName,&comp_DialogModelProvider::_getSupportedServiceNames,&::cppu::createSingleComponentFactory, 0, 0 },
+        {
+            create_DialogProviderImpl, getImplementationName_DialogProviderImpl,
+            getSupportedServiceNames_DialogProviderImpl, ::cppu::createSingleComponentFactory,
+            0, 0
+        },
         { 0, 0, 0, 0, 0, 0 }
     };
 
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace dlgprov
+}	// namespace dlgprov
 //.........................................................................
 
 
@@ -899,6 +864,13 @@ extern "C"
         (void)ppEnv;
 
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+    }
+
+    sal_Bool SAL_CALL component_writeInfo(
+        lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
+    {
+        return ::cppu::component_writeInfoHelper(
+            pServiceManager, pRegistryKey, ::dlgprov::s_component_entries );
     }
 
     void * SAL_CALL component_getFactory(

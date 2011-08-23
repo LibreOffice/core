@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,13 +82,13 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
         String aLayoutName( maLayoutName );
         const sal_uInt16 nLen = aLayoutName.Search(String( RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR)))+4;
         aLayoutName.Erase( nLen );
-
+        
         if( (maStyleSheets.size() == 0) || !((*maStyleSheets.begin()).second->GetName().Equals( aLayoutName, 0, nLen )) )
         {
             maStyleSheets.clear();
 
             const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) && (pStyle->GetName().Equals( aLayoutName, 0, nLen )) )
@@ -130,7 +130,7 @@ SdStyleFamily::~SdStyleFamily()
 
 // ----------------------------------------------------------
 
-void SdStyleFamily::throwIfDisposed() const throw(RuntimeException)
+void SdStyleFamily::throwIfDisposed() const throw(RuntimeException) 
 {
     if( !mxPool.is() )
         throw DisposedException();
@@ -166,7 +166,7 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuc
         else
         {
             const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == mnFamily) && (pStyle->GetApiName() == rName) )
@@ -179,7 +179,7 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuc
     }
     if( pRet )
         return pRet;
-
+    
     throw NoSuchElementException();
 }
 
@@ -279,13 +279,14 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
             }
         }
 
+//				*pNames++ = (*iter++).second->GetApiName();
         return aNames;
     }
     else
     {
         std::vector< OUString > aNames;
         const SfxStyles& rStyles = mxPool->GetStyles();
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
         {
             SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
             if( pStyle && (pStyle->GetFamily() == mnFamily) )
@@ -297,7 +298,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
 
 // ----------------------------------------------------------
 
-sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(RuntimeException)
+sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName )	throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -313,7 +314,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(Runtim
         else
         {
             const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == mnFamily) && ( pStyle->GetApiName() == aName ) )
@@ -348,7 +349,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasElements() throw(RuntimeException)
     else
     {
         const SfxStyles& rStyles = mxPool->GetStyles();
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
         {
             SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
             if( pStyle && (pStyle->GetFamily() == mnFamily) )
@@ -376,7 +377,7 @@ sal_Int32 SAL_CALL SdStyleFamily::getCount() throw(RuntimeException)
     else
     {
         const SfxStyles& rStyles = mxPool->GetStyles();
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
         {
             SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
             if( pStyle && (pStyle->GetFamily() == mnFamily) )
@@ -403,7 +404,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
             {
                 PresStyleMap::iterator iter( rStyleSheets.begin() );
                 while( Index-- && (iter != rStyleSheets.end()) )
-                    ++iter;
+                    iter++;
 
                 if( (Index==-1) && (iter != rStyleSheets.end()) )
                     return Any( Reference< XStyle >( (*iter).second.get() ) );
@@ -412,7 +413,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
         else
         {
             const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == mnFamily) )
@@ -453,7 +454,7 @@ void SAL_CALL SdStyleFamily::removeByName( const OUString& rName ) throw(NoSuchE
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
-
+    
     SdStyleSheet* pStyle = GetSheetByName( rName );
 
     if( !pStyle->IsUserDefined() )
@@ -538,7 +539,7 @@ void SAL_CALL SdStyleFamily::removeEventListener( const Reference< XEventListene
 
 Reference<XPropertySetInfo> SdStyleFamily::getPropertySetInfo() throw (RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
+    OSL_ENSURE( 0, "###unexpected!" );
     return Reference<XPropertySetInfo>();
 }
 
@@ -546,7 +547,7 @@ Reference<XPropertySetInfo> SdStyleFamily::getPropertySetInfo() throw (RuntimeEx
 
 void SdStyleFamily::setPropertyValue( const OUString& , const Any&  ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
+    OSL_ENSURE( 0, "###unexpected!" );
 }
 
 // ----------------------------------------------------------
@@ -559,9 +560,10 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (Unkno
         OUString sDisplayName;
         switch( mnFamily )
         {
-            case SD_STYLE_FAMILY_MASTERPAGE:    sDisplayName = getName(); break;
-            case SD_STYLE_FAMILY_CELL:          sDisplayName = String( SdResId(STR_CELL_STYLE_FAMILY) ); break;
-            default:                            sDisplayName = String( SdResId(STR_GRAPHICS_STYLE_FAMILY) ); break;
+            case SD_STYLE_FAMILY_MASTERPAGE:	sDisplayName = getName(); break;
+            case SD_STYLE_FAMILY_CELL:			sDisplayName = String( SdResId(STR_CELL_STYLE_FAMILY) ); break;
+//			case SD_STYLE_FAMILY_GRAPHICS:
+            default:							sDisplayName = String( SdResId(STR_GRAPHICS_STYLE_FAMILY) ); break;
         }
         return Any( sDisplayName );
     }
@@ -575,28 +577,28 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (Unkno
 
 void SdStyleFamily::addPropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
+    OSL_ENSURE( 0, "###unexpected!" );
 }
 
 // ----------------------------------------------------------
 
 void SdStyleFamily::removePropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
+    OSL_ENSURE( 0, "###unexpected!" );
 }
 
 // ----------------------------------------------------------
 
 void SdStyleFamily::addVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
+    OSL_ENSURE( 0, "###unexpected!" );
 }
 
 // ----------------------------------------------------------
 
 void SdStyleFamily::removeVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
+    OSL_ENSURE( 0, "###unexpected!" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

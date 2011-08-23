@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.LocaleData"
 
 static const int nDateFormatInvalid = -1;
-static const sal_uInt16 nCurrFormatInvalid = 0xffff;
-static const sal_uInt16 nCurrFormatDefault = 0;
+static const USHORT nCurrFormatInvalid = 0xffff;
+static const USHORT nCurrFormatDefault = 0;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -77,7 +77,7 @@ namespace
     {};
 }
 
-sal_uInt8 LocaleDataWrapper::nLocaleDataChecking = 0;
+BYTE LocaleDataWrapper::nLocaleDataChecking = 0;
 
 LocaleDataWrapper::LocaleDataWrapper(
             const Reference< lang::XMultiServiceFactory > & xSF,
@@ -85,8 +85,8 @@ LocaleDataWrapper::LocaleDataWrapper(
             )
         :
         xSMgr( xSF ),
-        bLocaleDataItemValid( sal_False ),
-        bReservedWordValid( sal_False )
+        bLocaleDataItemValid( FALSE ),
+        bReservedWordValid( FALSE )
 {
     setLocale( rLocale );
     if ( xSMgr.is() )
@@ -109,7 +109,7 @@ LocaleDataWrapper::LocaleDataWrapper(
         }
     }
     else
-    {   // try to get an instance somehow
+    {	// try to get an instance somehow
         DBG_ERRORFILE( "LocaleDataWrapper: no service manager, trying own" );
         try
         {
@@ -168,7 +168,7 @@ void LocaleDataWrapper::invalidateData()
         {
             aLocaleItem[j].Erase();
         }
-        bLocaleDataItemValid = sal_False;
+        bLocaleDataItemValid = FALSE;
     }
     if ( bReservedWordValid )
     {
@@ -176,7 +176,7 @@ void LocaleDataWrapper::invalidateData()
         {
             aReservedWord[j].Erase();
         }
-        bReservedWordValid = sal_False;
+        bReservedWordValid = FALSE;
     }
     xDefaultCalendar.reset();
     if (aGrouping.getLength())
@@ -464,7 +464,7 @@ void LocaleDataWrapper::invalidateData()
 
         // In checks, exclude known problems because no MS-LCID defined.
         if (areChecksEnabled() && eLang == LANGUAGE_DONTKNOW
-//              && !aDebugLocale.EqualsAscii( "br_AE" ) // ?!? Breton in United Arabic Emirates
+//				&& !aDebugLocale.EqualsAscii( "br_AE" )	// ?!? Breton in United Arabic Emirates
             )
         {
             String aMsg( RTL_CONSTASCII_USTRINGPARAM(
@@ -489,10 +489,10 @@ void LocaleDataWrapper::invalidateData()
                 // In checks, exclude known problems because no MS-LCID defined
                 // and default for Language found.
                 if ( areChecksEnabled()
-                        && !aDebugLocale.EqualsAscii( "ar_SD" ) // Sudan/ar
-                        && !aDebugLocale.EqualsAscii( "en_CB" ) // Carribean is not a country
-//                      && !aDebugLocale.EqualsAscii( "en_BG" ) // ?!? Bulgaria/en
-//                      && !aDebugLocale.EqualsAscii( "es_BR" ) // ?!? Brazil/es
+                        && !aDebugLocale.EqualsAscii( "ar_SD" )	// Sudan/ar
+                        && !aDebugLocale.EqualsAscii( "en_CB" )	// Carribean is not a country
+//						&& !aDebugLocale.EqualsAscii( "en_BG" )	// ?!? Bulgaria/en
+//						&& !aDebugLocale.EqualsAscii( "es_BR" )	// ?!? Brazil/es
                     )
                 {
                     String aMsg( RTL_CONSTASCII_USTRINGPARAM(
@@ -531,7 +531,7 @@ const String& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
         return aLocaleItem[0];
     }
     if ( aLocaleItem[nItem].Len() == 0 )
-    {   // no cached content
+    {	// no cached content
         aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getOneLocaleItemImpl( nItem );
     }
@@ -544,7 +544,7 @@ void LocaleDataWrapper::getOneLocaleItemImpl( sal_Int16 nItem )
     if ( !bLocaleDataItemValid )
     {
         aLocaleDataItem = getLocaleItem();
-        bLocaleDataItemValid = sal_True;
+        bLocaleDataItemValid = TRUE;
     }
     switch ( nItem )
     {
@@ -610,7 +610,7 @@ void LocaleDataWrapper::getOneReservedWordImpl( sal_Int16 nWord )
     if ( !bReservedWordValid )
     {
         aReservedWordSeq = getReservedWord();
-        bReservedWordValid = sal_True;
+        bReservedWordValid = TRUE;
     }
     DBG_ASSERT( nWord < aReservedWordSeq.getLength(), "getOneReservedWordImpl: which one?" );
     if ( nWord < aReservedWordSeq.getLength() )
@@ -627,7 +627,7 @@ const String& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
         nWord = reservedWords::FALSE_WORD;
     }
     if ( aReservedWord[nWord].Len() == 0 )
-    {   // no cached content
+    {	// no cached content
         aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getOneReservedWordImpl( nWord );
     }
@@ -673,7 +673,7 @@ const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar > LocaleDataWrapper:
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if (!xDefaultCalendar)
-    {   // no cached content
+    {	// no cached content
         aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getDefaultCalendarImpl();
     }
@@ -719,7 +719,7 @@ const String& LocaleDataWrapper::getCurrBankSymbol() const
 }
 
 
-sal_uInt16 LocaleDataWrapper::getCurrPositiveFormat() const
+USHORT LocaleDataWrapper::getCurrPositiveFormat() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nCurrPositiveFormat == nCurrFormatInvalid )
@@ -731,7 +731,7 @@ sal_uInt16 LocaleDataWrapper::getCurrPositiveFormat() const
 }
 
 
-sal_uInt16 LocaleDataWrapper::getCurrNegativeFormat() const
+USHORT LocaleDataWrapper::getCurrNegativeFormat() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nCurrNegativeFormat == nCurrFormatInvalid )
@@ -743,7 +743,7 @@ sal_uInt16 LocaleDataWrapper::getCurrNegativeFormat() const
 }
 
 
-sal_uInt16 LocaleDataWrapper::getCurrDigits() const
+USHORT LocaleDataWrapper::getCurrDigits() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nCurrDigits == nCurrFormatInvalid )
@@ -802,13 +802,13 @@ void LocaleDataWrapper::scanCurrFormatImpl( const String& rCode,
     const sal_Unicode* const pStop = pStr + rCode.Len();
     const sal_Unicode* p = pStr + nStart;
     int nInSection = 0;
-    sal_Bool bQuote = sal_False;
+    BOOL bQuote = FALSE;
     while ( p < pStop )
     {
         if ( bQuote )
         {
             if ( *p == '"' && *(p-1) != '\\' )
-                bQuote = sal_False;
+                bQuote = FALSE;
         }
         else
         {
@@ -816,7 +816,7 @@ void LocaleDataWrapper::scanCurrFormatImpl( const String& rCode,
             {
                 case '"' :
                     if ( pStr == p || *(p-1) != '\\' )
-                        bQuote = sal_True;
+                        bQuote = TRUE;
                 break;
                 case '-' :
                     if ( !nInSection && nSign == STRING_NOTFOUND )
@@ -857,7 +857,7 @@ void LocaleDataWrapper::scanCurrFormatImpl( const String& rCode,
                 break;
                 default:
                     if ( !nInSection && nSym == STRING_NOTFOUND && rCode.Equals( aCurrSymbol, (xub_StrLen)(p-pStr), aCurrSymbol.Len() ) )
-                    {   // currency symbol not surrounded by [$...]
+                    {	// currency symbol not surrounded by [$...]
                         nSym = (xub_StrLen)(p - pStr);
                         if ( nBlank == STRING_NOTFOUND && pStr < p && *(p-1) == ' ' )
                             nBlank = (xub_StrLen)(p - pStr - 1);
@@ -879,7 +879,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         = aNumberFormatCode.getAllFormatCode( KNumberFormatUsage::CURRENCY );
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
-    {   // bad luck
+    {	// bad luck
         if (areChecksEnabled())
         {
             String aMsg( RTL_CONSTASCII_USTRINGPARAM(
@@ -938,16 +938,16 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     if ( nBlank == STRING_NOTFOUND )
     {
         if ( nSym < nNum )
-            nCurrPositiveFormat = 0;    // $1
+            nCurrPositiveFormat = 0;	// $1
         else
-            nCurrPositiveFormat = 1;    // 1$
+            nCurrPositiveFormat = 1;	// 1$
     }
     else
     {
         if ( nSym < nNum )
-            nCurrPositiveFormat = 2;    // $ 1
+            nCurrPositiveFormat = 2;	// $ 1
         else
-            nCurrPositiveFormat = 3;    // 1 $
+            nCurrPositiveFormat = 3;	// 1 $
     }
 
     // negative format
@@ -971,24 +971,24 @@ void LocaleDataWrapper::getCurrFormatsImpl()
             if ( nSym < nNum )
             {
                 if ( nPar < nSym )
-                    nCurrNegativeFormat = 0;    // ($1)
+                    nCurrNegativeFormat = 0;	// ($1)
                 else if ( nSign < nSym )
-                    nCurrNegativeFormat = 1;    // -$1
+                    nCurrNegativeFormat = 1;	// -$1
                 else if ( nNum < nSign )
-                    nCurrNegativeFormat = 3;    // $1-
+                    nCurrNegativeFormat = 3;	// $1-
                 else
-                    nCurrNegativeFormat = 2;    // $-1
+                    nCurrNegativeFormat = 2;	// $-1
             }
             else
             {
                 if ( nPar < nNum )
-                    nCurrNegativeFormat = 4;    // (1$)
+                    nCurrNegativeFormat = 4;	// (1$)
                 else if ( nSign < nNum )
-                    nCurrNegativeFormat = 5;    // -1$
+                    nCurrNegativeFormat = 5;	// -1$
                 else if ( nSym < nSign )
-                    nCurrNegativeFormat = 7;    // 1$-
+                    nCurrNegativeFormat = 7;	// 1$-
                 else
-                    nCurrNegativeFormat = 6;    // 1-$
+                    nCurrNegativeFormat = 6;	// 1-$
             }
         }
         else
@@ -996,24 +996,24 @@ void LocaleDataWrapper::getCurrFormatsImpl()
             if ( nSym < nNum )
             {
                 if ( nPar < nSym )
-                    nCurrNegativeFormat = 14;   // ($ 1)
+                    nCurrNegativeFormat = 14;	// ($ 1)
                 else if ( nSign < nSym )
-                    nCurrNegativeFormat = 9;    // -$ 1
+                    nCurrNegativeFormat = 9;	// -$ 1
                 else if ( nNum < nSign )
-                    nCurrNegativeFormat = 12;   // $ 1-
+                    nCurrNegativeFormat = 12;	// $ 1-
                 else
-                    nCurrNegativeFormat = 11;   // $ -1
+                    nCurrNegativeFormat = 11;	// $ -1
             }
             else
             {
                 if ( nPar < nNum )
-                    nCurrNegativeFormat = 15;   // (1 $)
+                    nCurrNegativeFormat = 15;	// (1 $)
                 else if ( nSign < nNum )
-                    nCurrNegativeFormat = 8;    // -1 $
+                    nCurrNegativeFormat = 8;	// -1 $
                 else if ( nSym < nSign )
-                    nCurrNegativeFormat = 10;   // 1 $-
+                    nCurrNegativeFormat = 10;	// 1 $-
                 else
-                    nCurrNegativeFormat = 13;   // 1- $
+                    nCurrNegativeFormat = 13;	// 1- $
             }
         }
     }
@@ -1058,9 +1058,9 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
     xub_StrLen nMonth = rCode.Search( 'M' );
     xub_StrLen nYear = rCode.Search( 'Y' );
     if ( nDay == STRING_NOTFOUND || nMonth == STRING_NOTFOUND || nYear == STRING_NOTFOUND )
-    {   // This algorithm assumes that all three parts (DMY) are present
+    {	// This algorithm assumes that all three parts (DMY) are present
         if ( nMonth == STRING_NOTFOUND )
-        {   // only Finnish has something else than 'M' for month
+        {	// only Finnish has something else than 'M' for month
             nMonth = rCode.Search( 'K' );
             if ( nMonth != STRING_NOTFOUND )
             {
@@ -1069,30 +1069,30 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
             }
         }
         else if ( nDay == STRING_NOTFOUND )
-        {   // We have a month 'M' if we reach this branch.
+        {	// We have a month 'M' if we reach this branch.
             // Possible languages containing 'M' but no 'D':
             // German, French, Italian
-            nDay = rCode.Search( 'T' );         // German
+            nDay = rCode.Search( 'T' );			// German
             if ( nDay != STRING_NOTFOUND )
                 nYear = rCode.Search( 'J' );
             else
             {
-                nYear = rCode.Search( 'A' );    // French, Italian
+                nYear = rCode.Search( 'A' );	// French, Italian
                 if ( nYear != STRING_NOTFOUND )
                 {
-                    nDay = rCode.Search( 'J' ); // French
+                    nDay = rCode.Search( 'J' );	// French
                     if ( nDay == STRING_NOTFOUND )
-                        nDay = rCode.Search( 'G' ); // Italian
+                        nDay = rCode.Search( 'G' );	// Italian
                 }
             }
         }
         else
-        {   // We have a month 'M' and a day 'D'.
+        {	// We have a month 'M' and a day 'D'.
             // Possible languages containing 'D' and 'M' but not 'Y':
             // Spanish, Dutch
-            nYear = rCode.Search( 'A' );        // Spanish
+            nYear = rCode.Search( 'A' );		// Spanish
             if ( nYear == STRING_NOTFOUND )
-                nYear = rCode.Search( 'J' );    // Dutch
+                nYear = rCode.Search( 'J' );	// Dutch
         }
         if ( nDay == STRING_NOTFOUND || nMonth == STRING_NOTFOUND || nYear == STRING_NOTFOUND )
         {
@@ -1112,7 +1112,7 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
     }
     // compare with <= because each position may equal rCode.Len()
     if ( nDay <= nMonth && nMonth <= nYear )
-        return DMY;     // also if every position equals rCode.Len()
+        return DMY;		// also if every position equals rCode.Len()
     else if ( nMonth <= nDay && nDay <= nYear )
         return MDY;
     else if ( nYear <= nMonth && nMonth <= nDay )
@@ -1137,7 +1137,7 @@ void LocaleDataWrapper::getDateFormatsImpl()
         = aNumberFormatCode.getAllFormatCode( KNumberFormatUsage::DATE );
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
-    {   // bad luck
+    {	// bad luck
         if (areChecksEnabled())
         {
             String aMsg( RTL_CONSTASCII_USTRINGPARAM(
@@ -1261,7 +1261,7 @@ const ::com::sun::star::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGr
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if (!aGrouping.getLength() || aGrouping[0] == 0)
-    {   // no cached content
+    {	// no cached content
         aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getDigitGroupingImpl();
     }
@@ -1335,7 +1335,7 @@ static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber, int nMin
 }
 
 
-static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, sal_uInt16 nNumber, int bLeading )
+static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, USHORT nNumber, int bLeading )
 {
     DBG_ASSERT( nNumber < 100, "ImplAdd2UNum() - Number >= 100" );
 
@@ -1350,7 +1350,7 @@ static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, sal_uInt16 nNumber, int bLe
     }
     else
     {
-        sal_uInt16 nTemp = nNumber % 10;
+        USHORT nTemp = nNumber % 10;
         nNumber /= 10;
         *pBuf = nNumber + '0';
         pBuf++;
@@ -1393,25 +1393,29 @@ inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const sal_Unicode* pCopyBu
 
 
 sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
-        sal_Int64 nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep,
-        sal_Bool bTrailingZeros ) const
+        sal_Int64 nNumber, USHORT nDecimals, BOOL bUseThousandSep,
+        BOOL bTrailingZeros ) const
 {
     sal_Unicode aNumBuf[64];
     sal_Unicode* pNumBuf;
-    sal_uInt16  nNumLen;
-    sal_uInt16  i = 0;
+    USHORT	nNumLen;
+    USHORT	i = 0;
+    BOOL	bNeg;
 
     // negative number
     if ( nNumber < 0 )
     {
         nNumber *= -1;
+        bNeg = TRUE;
         *pBuf = '-';
         pBuf++;
     }
+    else
+        bNeg = FALSE;
 
     // convert number
     pNumBuf = ImplAddUNum( aNumBuf, (sal_uInt64)nNumber );
-    nNumLen = (sal_uInt16)(sal_uLong)(pNumBuf-aNumBuf);
+    nNumLen = (USHORT)(ULONG)(pNumBuf-aNumBuf);
     pNumBuf = aNumBuf;
 
     if ( nNumLen <= nDecimals )
@@ -1457,7 +1461,7 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
         const String& rThoSep = getNumThousandSep();
 
         // copy number to buffer (excluding decimals)
-        sal_uInt16 nNumLen2 = nNumLen-nDecimals;
+        USHORT nNumLen2 = nNumLen-nDecimals;
         uno::Sequence< sal_Bool > aGroupPos;
         if (bUseThousandSep)
             aGroupPos = utl::DigitGroupingIterator::createForwardSequence(
@@ -1478,11 +1482,11 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
         {
             pBuf = ImplAddString( pBuf, getNumDecimalSep() );
 
-            sal_Bool bNullEnd = sal_True;
+            BOOL bNullEnd = TRUE;
             while ( i < nNumLen )
             {
                 if ( *pNumBuf != '0' )
-                    bNullEnd = sal_False;
+                    bNullEnd = FALSE;
 
                 *pBuf = *pNumBuf;
                 pBuf++;
@@ -1508,12 +1512,12 @@ String LocaleDataWrapper::getDate( const Date& rDate ) const
 //!TODO: leading zeros et al
     sal_Unicode aBuf[128];
     sal_Unicode* pBuf = aBuf;
-    sal_uInt16  nDay    = rDate.GetDay();
-    sal_uInt16  nMonth  = rDate.GetMonth();
-    sal_uInt16  nYear   = rDate.GetYear();
-    sal_uInt16  nYearLen;
+    USHORT  nDay    = rDate.GetDay();
+    USHORT  nMonth  = rDate.GetMonth();
+    USHORT  nYear   = rDate.GetYear();
+    USHORT  nYearLen;
 
-    if ( sal_True /* IsDateCentury() */ )
+    if ( TRUE /* IsDateCentury() */ )
         nYearLen = 4;
     else
     {
@@ -1524,39 +1528,39 @@ String LocaleDataWrapper::getDate( const Date& rDate ) const
     switch ( getDateFormat() )
     {
         case DMY :
-            pBuf = ImplAdd2UNum( pBuf, nDay, sal_True /* IsDateDayLeadingZero() */ );
+            pBuf = ImplAdd2UNum( pBuf, nDay, TRUE /* IsDateDayLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAdd2UNum( pBuf, nMonth, sal_True /* IsDateMonthLeadingZero() */ );
+            pBuf = ImplAdd2UNum( pBuf, nMonth, TRUE /* IsDateMonthLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
             pBuf = ImplAddUNum( pBuf, nYear, nYearLen );
         break;
         case MDY :
-            pBuf = ImplAdd2UNum( pBuf, nMonth, sal_True /* IsDateMonthLeadingZero() */ );
+            pBuf = ImplAdd2UNum( pBuf, nMonth, TRUE /* IsDateMonthLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAdd2UNum( pBuf, nDay, sal_True /* IsDateDayLeadingZero() */ );
+            pBuf = ImplAdd2UNum( pBuf, nDay, TRUE /* IsDateDayLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
             pBuf = ImplAddUNum( pBuf, nYear, nYearLen );
         break;
         default:
             pBuf = ImplAddUNum( pBuf, nYear, nYearLen );
             pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAdd2UNum( pBuf, nMonth, sal_True /* IsDateMonthLeadingZero() */ );
+            pBuf = ImplAdd2UNum( pBuf, nMonth, TRUE /* IsDateMonthLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAdd2UNum( pBuf, nDay, sal_True /* IsDateDayLeadingZero() */ );
+            pBuf = ImplAdd2UNum( pBuf, nDay, TRUE /* IsDateDayLeadingZero() */ );
     }
 
-    return String( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
+    return String( aBuf, (xub_StrLen)(ULONG)(pBuf-aBuf) );
 }
 
 
-String LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool b100Sec ) const
+String LocaleDataWrapper::getTime( const Time& rTime, BOOL bSec, BOOL b100Sec ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
 //!TODO: leading zeros et al
     sal_Unicode aBuf[128];
     sal_Unicode* pBuf = aBuf;
-    sal_uInt16  nHour = rTime.GetHour();
-    sal_Bool bHour12 = sal_False;   //!TODO: AM/PM from default time format code
+    USHORT  nHour = rTime.GetHour();
+    BOOL bHour12 = FALSE;   //!TODO: AM/PM from default time format code
 
     if ( bHour12 )
     {
@@ -1568,22 +1572,22 @@ String LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool b1
     else
         nHour %= 24;
 
-    pBuf = ImplAdd2UNum( pBuf, nHour, sal_True /* IsTimeLeadingZero() */ );
+    pBuf = ImplAdd2UNum( pBuf, nHour, TRUE /* IsTimeLeadingZero() */ );
     pBuf = ImplAddString( pBuf, getTimeSep() );
-    pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), sal_True );
+    pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), TRUE );
     if ( bSec )
     {
         pBuf = ImplAddString( pBuf, getTimeSep() );
-        pBuf = ImplAdd2UNum( pBuf, rTime.GetSec(), sal_True );
+        pBuf = ImplAdd2UNum( pBuf, rTime.GetSec(), TRUE );
 
         if ( b100Sec )
         {
             pBuf = ImplAddString( pBuf, getTime100SecSep() );
-            pBuf = ImplAdd2UNum( pBuf, rTime.Get100Sec(), sal_True );
+            pBuf = ImplAdd2UNum( pBuf, rTime.Get100Sec(), TRUE );
         }
     }
 
-    String aStr( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
+    String aStr( aBuf, (xub_StrLen)(ULONG)(pBuf-aBuf) );
 
     if ( bHour12 )
     {
@@ -1615,7 +1619,7 @@ String LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
     // day of month
     nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
     pBuf = ImplAdd2UNum( aBuf, nVal, bDayOfMonthWithLeadingZero );
-    String aDay( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
+    String aDay( aBuf, (xub_StrLen)(ULONG)(pBuf-aBuf) );
     // month of year
     nVal = rCal.getValue( CalendarFieldIndex::MONTH );
     String aMonth( rCal.getDisplayName( CalendarDisplayIndex::MONTH, nVal, nDisplayMonth ) );
@@ -1625,7 +1629,7 @@ String LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
         pBuf = ImplAddUNum( aBuf, nVal % 100, 2 );
     else
         pBuf = ImplAddUNum( aBuf, nVal );
-    String aYear( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
+    String aYear( aBuf, (xub_StrLen)(ULONG)(pBuf-aBuf) );
     // concatenate
     switch ( getLongDateFormat() )
     {
@@ -1654,7 +1658,7 @@ String LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
 }
 
 
-String LocaleDataWrapper::getDuration( const Time& rTime, sal_Bool bSec, sal_Bool b100Sec ) const
+String LocaleDataWrapper::getDuration( const Time& rTime, BOOL bSec, BOOL b100Sec ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[128];
@@ -1663,31 +1667,31 @@ String LocaleDataWrapper::getDuration( const Time& rTime, sal_Bool bSec, sal_Boo
     if ( rTime < Time( 0 ) )
         pBuf = ImplAddString( pBuf, ' ' );
 
-    if ( sal_True /* IsTimeLeadingZero() */ )
+    if ( TRUE /* IsTimeLeadingZero() */ )
         pBuf = ImplAddUNum( pBuf, rTime.GetHour(), 2 );
     else
         pBuf = ImplAddUNum( pBuf, rTime.GetHour() );
     pBuf = ImplAddString( pBuf, getTimeSep() );
-    pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), sal_True );
+    pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), TRUE );
     if ( bSec )
     {
         pBuf = ImplAddString( pBuf, getTimeSep() );
-        pBuf = ImplAdd2UNum( pBuf, rTime.GetSec(), sal_True );
+        pBuf = ImplAdd2UNum( pBuf, rTime.GetSec(), TRUE );
 
         if ( b100Sec )
         {
             pBuf = ImplAddString( pBuf, getTime100SecSep() );
-            pBuf = ImplAdd2UNum( pBuf, rTime.Get100Sec(), sal_True );
+            pBuf = ImplAdd2UNum( pBuf, rTime.Get100Sec(), TRUE );
         }
     }
 
-    return String( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
+    return String( aBuf, (xub_StrLen)(ULONG)(pBuf-aBuf) );
 }
 
 
 // --- simple number formatting ---------------------------------------
 
-inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, sal_uInt16 nDecimals )
+inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, USHORT nDecimals )
 {
     // approximately 3.2 bits per digit
     const size_t nDig = ((sizeof(sal_Int64) * 8) / 3) + 1;
@@ -1699,11 +1703,11 @@ inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, sal
 }
 
 
-String LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
-        sal_Bool bUseThousandSep, sal_Bool bTrailingZeros ) const
+String LocaleDataWrapper::getNum( sal_Int64 nNumber, USHORT nDecimals,
+        BOOL bUseThousandSep, BOOL bTrailingZeros ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
-    sal_Unicode aBuf[128];      // big enough for 64-bit long and crazy grouping
+    sal_Unicode aBuf[128];		// big enough for 64-bit long and crazy grouping
     // check if digits and separators will fit into fixed buffer or allocate
     size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
     sal_Unicode* const pBuffer = (nGuess < 118 ? aBuf :
@@ -1711,7 +1715,7 @@ String LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
 
     sal_Unicode* pBuf = ImplAddFormatNum( pBuffer, nNumber, nDecimals,
         bUseThousandSep, bTrailingZeros );
-    String aStr( pBuffer, (xub_StrLen)(sal_uLong)(pBuf-pBuffer) );
+    String aStr( pBuffer, (xub_StrLen)(ULONG)(pBuf-pBuffer) );
 
     if ( pBuffer != aBuf )
         delete [] pBuffer;
@@ -1719,8 +1723,8 @@ String LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
 }
 
 
-String LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
-        const String& rCurrencySymbol, sal_Bool bUseThousandSep ) const
+String LocaleDataWrapper::getCurr( sal_Int64 nNumber, USHORT nDecimals,
+        const String& rCurrencySymbol, BOOL bUseThousandSep ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[192];
@@ -1737,26 +1741,26 @@ String LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         new sal_Unicode[ rCurrencySymbol.Len() + nGuess + 20 ]);
     sal_Unicode* pBuf = pBuffer;
 
-    sal_Bool bNeg;
+    BOOL bNeg;
     if ( nNumber < 0 )
     {
-        bNeg = sal_True;
+        bNeg = TRUE;
         nNumber *= -1;
     }
     else
-        bNeg = sal_False;
+        bNeg = FALSE;
 
     // convert number
     sal_Unicode* pEndNumBuf = ImplAddFormatNum( pNumBuffer, nNumber, nDecimals,
-        bUseThousandSep, sal_True );
-    xub_StrLen nNumLen = (xub_StrLen)(sal_uLong)(pEndNumBuf-pNumBuffer);
+        bUseThousandSep, TRUE );
+    xub_StrLen nNumLen = (xub_StrLen)(ULONG)(pEndNumBuf-pNumBuffer);
 
     // replace zeros with zero character
     if ( (cZeroChar != '0') && nDecimals /* && IsNumTrailingZeros() */ )
     {
         sal_Unicode* pTempBuf;
-        sal_uInt16  i;
-        sal_Bool    bZero = sal_True;
+        USHORT  i;
+        BOOL    bZero = TRUE;
 
         pTempBuf = pNumBuffer+nNumLen-nDecimals;
         i = 0;
@@ -1764,7 +1768,7 @@ String LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         {
             if ( *pTempBuf != '0' )
             {
-                bZero = sal_False;
+                bZero = FALSE;
                 break;
             }
 
@@ -1910,7 +1914,7 @@ String LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         }
     }
 
-    String aNumber( pBuffer, (xub_StrLen)(sal_uLong)(pBuf-pBuffer) );
+    String aNumber( pBuffer, (xub_StrLen)(ULONG)(pBuf-pBuffer) );
 
     if ( pBuffer != aBuf )
         delete [] pBuffer;
@@ -1959,7 +1963,7 @@ void LocaleDataWrapper::outputCheckMessage( const char* pStr )
 {
     fprintf( stderr, "\n%s\n", pStr);
     fflush( stderr);
-    OSL_TRACE("%s", pStr);
+    DBG_ERROR( pStr);
 }
 
 
@@ -1970,7 +1974,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
     // accesses, since we want to assign the result to the static member
     // variable and would need to dereference the pointer returned and assign
     // the value unguarded. This is the same pattern manually coded.
-    sal_uInt8 nCheck = nLocaleDataChecking;
+    BYTE nCheck = nLocaleDataChecking;
     if (!nCheck)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex());

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ inline SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
             return implCreateControlWrapper(_nPrefix, _rLocalName);
         else
         {
-            OSL_FAIL("OContainerImport::CreateChildContext: don't have an element!");
+            OSL_ENSURE(sal_False, "OContainerImport::CreateChildContext: don't have an element!");
             return NULL;
         }
     }
@@ -73,7 +73,7 @@ inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
     m_xMeAsContainer = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >(xReturn, ::com::sun::star::uno::UNO_QUERY);
     if (!m_xMeAsContainer.is())
     {
-        OSL_FAIL("OContainerImport::createElement: invalid element (no XNameContainer) created!");
+        OSL_ENSURE(sal_False, "OContainerImport::createElement: invalid element (no XNameContainer) created!");
         xReturn.clear();
     }
 

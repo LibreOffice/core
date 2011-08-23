@@ -27,25 +27,25 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/chartdrawingfragment.hxx"
-
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/connectorshapecontext.hxx"
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/drawingml/shapecontext.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
 
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::awt::Point;
+using ::com::sun::star::awt::Rectangle;
+using ::com::sun::star::awt::Size;
+using ::com::sun::star::drawing::XShapes;
+using ::oox::core::ContextHandlerRef;
+using ::oox::core::FragmentHandler2;
+using ::oox::core::XmlFilterBase;
+
 namespace oox {
 namespace drawingml {
 namespace chart {
-
-// ============================================================================
-
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::uno;
-using namespace ::oox::core;
-
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -74,13 +74,13 @@ void ShapeAnchor::setPos( sal_Int32 nElement, sal_Int32 nParentContext, const OU
             pAnchorPos = &maTo;
         break;
         default:
-            OSL_FAIL( "ShapeAnchor::setPos - unexpected parent element" );
+            OSL_ENSURE( false, "ShapeAnchor::setPos - unexpected parent element" );
     }
     if( pAnchorPos ) switch( nElement )
     {
         case CDR_TOKEN( x ):    pAnchorPos->mfX = rValue.toDouble();    break;
         case CDR_TOKEN( y ):    pAnchorPos->mfY = rValue.toDouble();    break;
-        default:    OSL_FAIL( "ShapeAnchor::setPos - unexpected element" );
+        default:    OSL_ENSURE( false, "ShapeAnchor::setPos - unexpected element" );
     }
 }
 
@@ -176,7 +176,7 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
                 case CDR_TOKEN( graphicFrame ):
                     if( !mbOleSupport )
                         return 0;
-                    mxShape.reset( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) );
+                    mxShape.reset( new Shape( "com.sun.star.drawing.OLE2Shape" ) );
                     return new GraphicalObjectFrameContext( *this, ShapePtr(), mxShape, true );
                 case CDR_TOKEN( grpSp ):
                     mxShape.reset( new Shape( "com.sun.star.drawing.GroupShape" ) );
@@ -205,24 +205,26 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-void ChartDrawingFragment::onCharacters( const OUString& rChars )
+void ChartDrawingFragment::onEndElement( const OUString& rChars )
 {
-    if( isCurrentElement( CDR_TOKEN( x ), CDR_TOKEN( y ) ) && mxAnchor.get() )
-        mxAnchor->setPos( getCurrentElement(), getParentElement(), rChars );
-}
-
-void ChartDrawingFragment::onEndElement()
-{
-    if( isCurrentElement( CDR_TOKEN( absSizeAnchor ), CDR_TOKEN( relSizeAnchor ) ) )
+    switch( getCurrentElement() )
     {
-        if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
-        {
-            Rectangle aLoc = mxAnchor->calcEmuLocation( maEmuChartRect );
-            if( (aLoc.X >= 0) && (aLoc.Y >= 0) && (aLoc.Width >= 0) && (aLoc.Height >= 0) )
-                mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, &aLoc );
-        }
-        mxShape.reset();
-        mxAnchor.reset();
+        case CDR_TOKEN( x ):
+        case CDR_TOKEN( y ):
+            if( mxAnchor.get() ) mxAnchor->setPos( getCurrentElement(), getPreviousElement(), rChars );
+        break;
+
+        case CDR_TOKEN( absSizeAnchor ):
+        case CDR_TOKEN( relSizeAnchor ):
+            if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
+            {
+                Rectangle aLoc = mxAnchor->calcEmuLocation( maEmuChartRect );
+                if( (aLoc.X >= 0) && (aLoc.Y >= 0) && (aLoc.Width >= 0) && (aLoc.Height >= 0) )
+                    mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, &aLoc );
+            }
+            mxShape.reset();
+            mxAnchor.reset();
+        break;
     }
 }
 

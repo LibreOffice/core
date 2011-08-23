@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ class SfxRequest;
 
 namespace sd {
 
-static sal_uInt16 SidArraySpell[] = {
+static USHORT SidArraySpell[] = {
             SID_DRAWINGMODE,
             SID_OUTLINEMODE,
             SID_DIAMODE,
@@ -77,7 +77,7 @@ FuSearch::FuSearch (
     SfxRequest& rReq )
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
       pSdOutliner(NULL),
-      bOwnOutliner(sal_False)
+      bOwnOutliner(FALSE)
 {
 }
 
@@ -94,12 +94,12 @@ void FuSearch::DoExecute( SfxRequest& )
 
     if ( mpViewShell->ISA(DrawViewShell) )
     {
-        bOwnOutliner = sal_True;
+        bOwnOutliner = TRUE;
         pSdOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
     }
     else if ( mpViewShell->ISA(OutlineViewShell) )
     {
-        bOwnOutliner = sal_False;
+        bOwnOutliner = FALSE;
         pSdOutliner = mpDoc->GetOutliner();
     }
 
@@ -145,7 +145,7 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
         {
             pSdOutliner->EndSpelling();
 
-            bOwnOutliner = sal_True;
+            bOwnOutliner = TRUE;
             pSdOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->PrepareSpelling();
         }
@@ -154,14 +154,14 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
             pSdOutliner->EndSpelling();
             delete pSdOutliner;
 
-            bOwnOutliner = sal_False;
+            bOwnOutliner = FALSE;
             pSdOutliner = mpDoc->GetOutliner();
             pSdOutliner->PrepareSpelling();
         }
 
         if (pSdOutliner)
         {
-            sal_Bool bEndSpelling = pSdOutliner->StartSearchAndReplace(pSearchItem);
+            BOOL bEndSpelling = pSdOutliner->StartSearchAndReplace(pSearchItem);
 
             if (bEndSpelling)
             {

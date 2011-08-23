@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ class GCThread : public ::osl::Thread
     PyInterpreterState *mPyInterpreter;
     GCThread( const GCThread & ); // not implemented
     GCThread &operator =( const GCThread & ); // not implemented
-
+    
 public:
     GCThread( PyInterpreterState *interpreter, PyObject * object );
     virtual void SAL_CALL run();
@@ -83,7 +83,7 @@ void GCThread::run()
             {
                 runtime.getImpl()->cargo->mappedObjects.erase( ii );
             }
-
+            
             Py_XDECREF( mPyObject );
         }
     }

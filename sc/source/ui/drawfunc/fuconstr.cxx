@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@
 #include "sc.hrc"
 #include "drawview.hxx"
 
-//  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
-//! fusel,fuconstr,futext - zusammenfassen!
-#define SC_MAXDRAGMOVE  3
+//	Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
+//!	fusel,fuconstr,futext - zusammenfassen!
+#define SC_MAXDRAGMOVE	3
 
 //------------------------------------------------------------------------
 
@@ -70,9 +70,9 @@ FuConstruct::~FuConstruct()
 {
 }
 
-sal_uInt8 FuConstruct::Command(const CommandEvent& rCEvt)
+BYTE FuConstruct::Command(const CommandEvent& rCEvt)
 {
-    //  special code for non-VCL OS2/UNX removed
+    //	special code for non-VCL OS2/UNX removed
 
     return FuDraw::Command( rCEvt );
 }
@@ -83,18 +83,18 @@ sal_uInt8 FuConstruct::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL __EXPORT FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
+    BOOL bReturn = FuDraw::MouseButtonDown(rMEvt);
 
     if ( pView->IsAction() )
     {
         if ( rMEvt.IsRight() )
             pView->BckAction();
-        return sal_True;
+        return TRUE;
     }
 
     aDragTimer.Start();
@@ -110,16 +110,16 @@ sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
         if ( pHdl != NULL || pView->IsMarkedHit(aMDPos) )
         {
             pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, 1);
-            bReturn = sal_True;
+            bReturn = TRUE;
         }
         else if ( pView->AreObjectsMarked() )
         {
             pView->UnmarkAll();
-            bReturn = sal_True;
+            bReturn = TRUE;
         }
     }
 
-    bIsInDragMode = false;
+    bIsInDragMode = FALSE;
 
     return bReturn;
 }
@@ -130,7 +130,7 @@ sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
+BOOL __EXPORT FuConstruct::MouseMove(const MouseEvent& rMEvt)
 {
     FuDraw::MouseMove(rMEvt);
 
@@ -168,7 +168,7 @@ sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
             pViewShell->SetActivePointer( aNewPointer );
         }
     }
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************
@@ -177,16 +177,16 @@ sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = SimpleMouseButtonUp( rMEvt );
+    BOOL bReturn = SimpleMouseButtonUp( rMEvt );
 
-    //      Doppelklick auf Textobjekt? (->fusel)
+    //		Doppelklick auf Textobjekt? (->fusel)
 
-    sal_uInt16 nClicks = rMEvt.GetClicks();
+    USHORT nClicks = rMEvt.GetClicks();
     if ( nClicks == 2 && rMEvt.IsLeft() )
     {
         if ( pView->AreObjectsMarked() )
@@ -197,25 +197,25 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                //  bei Uno-Controls nicht in Textmodus
+                //	#49458# bei Uno-Controls nicht in Textmodus
                 if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
                 {
                     OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-                    sal_Bool bVertical = ( pOPO && pOPO->IsVertical() );
-                    sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
+                    BOOL bVertical = ( pOPO && pOPO->IsVertical() );
+                    USHORT nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
                     pViewShell->GetViewData()->GetDispatcher().
                         Execute(nTextSlotId, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 
                     // jetzt den erzeugten FuText holen und in den EditModus setzen
                     FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
-                    if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // hat keine RTTI
+                    if ( pPoor && pPoor->GetSlotID() == nTextSlotId )	 //	hat keine RTTI
                     {
                         FuText* pText = (FuText*)pPoor;
                         Point aMousePixel = rMEvt.GetPosPixel();
                         pText->SetInEditMode( pObj, &aMousePixel );
                     }
-                    bReturn = sal_True;
+                    bReturn = TRUE;
                 }
             }
         }
@@ -226,18 +226,18 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-//      SimpleMouseButtonUp - ohne Test auf Doppelklick
+//		SimpleMouseButtonUp - ohne Test auf Doppelklick
 
-sal_Bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool    bReturn = sal_True;
+    BOOL	bReturn = TRUE;
 
     if (aDragTimer.IsActive() )
     {
         aDragTimer.Stop();
     }
 
-    Point   aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+    Point	aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
     if ( pView->IsDragObj() )
          pView->EndDragObj( rMEvt.IsMod1() );
@@ -245,7 +245,7 @@ sal_Bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
     else if ( pView->IsMarkObj() )
         pView->EndMarkObj();
 
-    else bReturn = false;
+    else bReturn = FALSE;
 
     if ( !pView->IsAction() )
     {
@@ -253,7 +253,7 @@ sal_Bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 
         if ( !pView->AreObjectsMarked() && rMEvt.GetClicks() < 2 )
         {
-            pView->MarkObj(aPnt, -2, false, rMEvt.IsMod1());
+            pView->MarkObj(aPnt, -2, FALSE, rMEvt.IsMod1());
 
             SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
             if ( pView->AreObjectsMarked() )
@@ -270,14 +270,14 @@ sal_Bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
+BOOL __EXPORT FuConstruct::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = false;
+    BOOL bReturn = FALSE;
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -286,9 +286,9 @@ sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
             {
                 pView->BrkAction();
                 pWindow->ReleaseMouse();
-                bReturn = sal_True;
+                bReturn = TRUE;
             }
-            else                            // Zeichenmodus beenden
+            else							// Zeichenmodus beenden
             {
                 pViewShell->GetViewData()->GetDispatcher().
                     Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
@@ -297,7 +297,7 @@ sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_DELETE:
             pView->DeleteMarked();
-            bReturn = sal_True;
+            bReturn = TRUE;
             break;
     }
 

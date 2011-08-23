@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,11 +44,11 @@ namespace frm
     /// the id of an attribute
     typedef sal_Int32   AttributeId;
     /// the "which id" of an item in an SfxItemSet
-    typedef sal_uInt16      WhichId;
+    typedef USHORT      WhichId;
     /// a SFX slot id
-    typedef sal_uInt16      SfxSlotId;
+    typedef USHORT      SfxSlotId;
     /// a script type
-    typedef sal_uInt16      ScriptType;
+    typedef USHORT      ScriptType;
 
     //====================================================================
     //= AttributeCheckState

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,50 +25,66 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
  #ifndef IDOCUMENTSTATE_HXX_INCLUDED
  #define IDOCUMENTSTATE_HXX_INCLUDED
-
+ 
  #include <tools/solar.h>
-
+ 
  /** Get information about the current document state
  */
  class IDocumentState
- {
+ { 
  public:
-    /** Must be called manually at changes of format.
+       /** Bei Formataenderungen muss das zu Fuss gerufen werden!
     */
     virtual void SetModified() = 0;
-
-    virtual void ResetModified() = 0;
-
-    /** Changes of document?
+    
+    /**
     */
-    virtual bool IsModified() const = 0;
-
-    /** State of being loaded or not.
-        Formerly DocInfo.
+    virtual void ResetModified() = 0;
+    
+    /** Dokumentaenderungen?
+    */
+    virtual bool IsModified() const = 0; 
+    
+    /** Zustaende ueber Ladezustand
+        frueher DocInfo
     */
     virtual bool IsLoaded() const = 0;
+    
+    /**
+    */
+    virtual bool IsUpdateExpFld() const  = 0; 
+    
+    /**
+    */
+    virtual bool IsNewDoc() const = 0; 
 
-    virtual bool IsUpdateExpFld() const  = 0;
-
-    virtual bool IsNewDoc() const = 0;
-
+    /**
+    */
     virtual bool IsPageNums() const = 0;
 
-    virtual void SetPageNums(bool b)    = 0;
-
+    /**
+    */
+    virtual void SetPageNums(bool b)	= 0;
+    
+    /**
+    */
     virtual void SetNewDoc(bool b) = 0;
-
+    
+    /**
+    */
     virtual void SetUpdateExpFldStat(bool b) = 0;
-
+    
+    /**
+    */
     virtual void SetLoaded(bool b = sal_True) = 0;
 
  protected:
     virtual ~IDocumentState() {};
  };
-
+  
  #endif // IDOCUMENTSTATE_HXX_INCLUDED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

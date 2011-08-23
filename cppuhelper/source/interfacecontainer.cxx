@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include <com/sun/star/lang/XEventListener.hpp>
 
@@ -47,6 +47,10 @@ using namespace com::sun::star::lang;
 
 namespace cppu
 {
+
+//===================================================================
+//===================================================================
+//===================================================================
 /**
  * Reallocate the sequence.
  */
@@ -76,10 +80,17 @@ static void sequenceRemoveElementAt( Sequence< Reference< XInterface > > & rSeq,
     rSeq = aDestSeq;
 }
 
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
 #ifdef _MSC_VER
 #pragma warning( disable: 4786 )
 #endif
 
+//===================================================================
+//===================================================================
+//===================================================================
 OInterfaceIteratorHelper::OInterfaceIteratorHelper( OInterfaceContainerHelper & rCont_ )
     SAL_THROW( () )
     : rCont( rCont_ )
@@ -159,6 +170,11 @@ void OInterfaceIteratorHelper::remove() SAL_THROW( () )
         rCont.removeInterface( * reinterpret_cast< const Reference< XInterface > * >(&aData.pAsInterface));
     }
 }
+
+//===================================================================
+//===================================================================
+//===================================================================
+
 
 OInterfaceContainerHelper::OInterfaceContainerHelper( Mutex & rMutex_ ) SAL_THROW( () )
     : rMutex( rMutex_ )
@@ -351,6 +367,10 @@ void OInterfaceContainerHelper::clear() SAL_THROW( () )
     aGuard.clear();
 }
 
+//##################################################################################################
+//##################################################################################################
+//##################################################################################################
+
 // specialized class for type
 
 typedef ::std::vector< std::pair < Type , void* > > t_type2ptr;
@@ -519,6 +539,11 @@ void OMultiTypeInterfaceContainerHelper::clear()
     }
 }
 
+
+//##################################################################################################
+//##################################################################################################
+//##################################################################################################
+
 // specialized class for long
 
 typedef ::std::vector< std::pair < sal_Int32 , void* > > t_long2ptr;
@@ -577,7 +602,7 @@ Sequence< sal_Int32 > OMultiTypeInterfaceContainerHelperInt32::getContainedTypes
 
         t_long2ptr::iterator iter = pMap->begin();
         t_long2ptr::iterator end = pMap->end();
-
+        
         sal_Int32 i = 0;
         while( iter != end )
         {

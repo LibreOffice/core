@@ -32,7 +32,7 @@
 namespace rtl { class OUString; }
 
 /** Localize a URI to one of the foundation's webservices
-
+    
     @param io_rURI
     URI to localize - depending on your UI locale, a country local
     part is appended to the URI (like "en", or "fr", or "es")

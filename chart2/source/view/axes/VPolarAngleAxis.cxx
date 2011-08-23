@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include "VPolarGrid.hxx"
 #include "ShapeFactory.hxx"
 #include "macros.hxx"
-#include "NumberFormatterWrapper.hxx"
+#include "chartview/NumberFormatterWrapper.hxx"
 #include "PolarLabelPositionHelper.hxx"
 #include <tools/color.hxx>
 
@@ -83,7 +83,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
     PropertyMapper::getTextLabelMultiPropertyLists( xProps, aPropNames, aPropValues, false );
     LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
         , rAxisLabelProperties.m_aFontReferenceSize );
-
+    
     uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,C2U("CharColor"));
     sal_Int32 nColor = Color( COL_AUTO ).GetColor();
     if(pColorAny)
@@ -95,7 +95,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
 
     //TickInfo* pLastVisibleNeighbourTickInfo = NULL;
     sal_Int32 nTick = 0;
-
+    
     for( TickInfo* pTickInfo = rTickIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = rTickIter.nextInfo(), nTick++ )
@@ -121,18 +121,18 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
             rtl::OUString aLabel;
             if(pLabels)
             {
-                sal_Int32 nIndex = static_cast< sal_Int32 >(pTickInfo->getUnscaledTickValue()) - 1; //first category (index 0) matches with real number 1.0
+                sal_Int32 nIndex = static_cast< sal_Int32 >(pTickInfo->fUnscaledTickValue) - 1; //first category (index 0) matches with real number 1.0
                 if( nIndex>=0 && nIndex<pLabels->getLength() )
                     aLabel = (*pLabels)[nIndex];
             }
             else
-                aLabel = aFixedNumberFormatter.getFormattedString( pTickInfo->getUnscaledTickValue(), nExtraColor, bHasExtraColor );
+                aLabel = aFixedNumberFormatter.getFormattedString( pTickInfo->fUnscaledTickValue, nExtraColor, bHasExtraColor );
 
             if(pColorAny)
                 *pColorAny = uno::makeAny(bHasExtraColor?nExtraColor:nColor);
 
-            double fLogicAngle = pTickInfo->getUnscaledTickValue();
-
+            double fLogicAngle = pTickInfo->fUnscaledTickValue;
+        
             LabelAlignment eLabelAlignment(LABEL_ALIGN_CENTER);
             PolarLabelPositionHelper aPolarLabelPositionHelper(m_pPosHelper,nDimensionCount,xTarget,&aShapeFactory);
             sal_Int32 nScreenValueOffsetInRadiusDirection = m_aAxisLabelProperties.m_aMaximumSpaceForLabels.Height/15;
@@ -142,7 +142,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
 
             // #i78696# use mathematically correct rotation now
             const double fRotationAnglePi(rAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
-
+        
             uno::Any aATransformation = ShapeFactory::makeTransformation( aAnchorScreenPosition2D, fRotationAnglePi );
             rtl::OUString aStackedLabel = ShapeFactory::getStackedString( aLabel, rAxisLabelProperties.bStackCharacters );
 
@@ -155,7 +155,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
     return true;
 }
 
-void VPolarAngleAxis::createMaximumLabels()
+void SAL_CALL VPolarAngleAxis::createMaximumLabels()
 {
     if( !prepareShapeCreation() )
         return;
@@ -163,7 +163,7 @@ void VPolarAngleAxis::createMaximumLabels()
     createLabels();
 }
 
-void VPolarAngleAxis::updatePositions()
+void SAL_CALL VPolarAngleAxis::updatePositions()
 {
     //todo: really only update the positions
 
@@ -173,18 +173,19 @@ void VPolarAngleAxis::updatePositions()
     createLabels();
 }
 
-void VPolarAngleAxis::createLabels()
+void SAL_CALL VPolarAngleAxis::createLabels()
 {
     if( !prepareShapeCreation() )
         return;
 
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
+    double fLogicZ      = -0.5;//as defined
 
     if( m_aAxisProperties.m_bDisplayLabels )
     {
         //-----------------------------------------
         //get the transformed screen values for all tickmarks in aAllTickInfos
-        std::auto_ptr< TickFactory > apTickFactory( this->createTickFactory() );
+        std::auto_ptr< TickmarkHelper > apTickmarkHelper( this->createTickmarkHelper() );
 
         //create tick mark text shapes
         //@todo: iterate through all tick depth wich should be labeled
@@ -196,7 +197,6 @@ void VPolarAngleAxis::createLabels()
 
         AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
         aAxisLabelProperties.bOverlapAllowed = true;
-        double fLogicZ      = 1.0;//as defined
         while( !createTextShapes_ForAngleAxis( m_xTextTarget, aTickIter
                         , aAxisLabelProperties
                         , fLogicRadius, fLogicZ
@@ -208,13 +208,13 @@ void VPolarAngleAxis::createLabels()
     }
 }
 
-void VPolarAngleAxis::createShapes()
+void SAL_CALL VPolarAngleAxis::createShapes()
 {
     if( !prepareShapeCreation() )
         return;
-
+    
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
-    double fLogicZ      = 1.0;//as defined
+    double fLogicZ      = -0.5;//as defined
 
     //-----------------------------------------
     //create axis main lines

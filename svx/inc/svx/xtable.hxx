@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ class XOutdevItemPool;
 #define BITMAP_HEIGHT 12
 
 // Standard-Vergleichsstring
-extern sal_Unicode pszStandard[]; // "standard"
+extern sal_Unicode __FAR_DATA pszStandard[]; // "standard"
 
 // Funktion zum Konvertieren in echte RGB-Farben, da mit
 // enum COL_NAME nicht verglichen werden kann.
@@ -90,6 +90,8 @@ class XColorEntry : public XPropertyEntry
 public:
             XColorEntry(const Color& rColor, const String& rName) :
                 XPropertyEntry(rName), aColor(rColor) {}
+            XColorEntry(const XColorEntry& rOther) :
+                XPropertyEntry(rOther), aColor(rOther.aColor) {}
 
     void    SetColor(const Color& rColor)   { aColor = rColor; }
     Color&  GetColor()                      { return aColor; }
@@ -101,22 +103,27 @@ public:
 
 class XLineEndEntry : public XPropertyEntry
 {
-    basegfx::B2DPolyPolygon aB2DPolyPolygon;
+    basegfx::B2DPolyPolygon	aB2DPolyPolygon;
 
 public:
-    XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName)
-    :   XPropertyEntry(rName),
-        aB2DPolyPolygon(rB2DPolyPolygon)
+    XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName) 
+    :	XPropertyEntry(rName), 
+        aB2DPolyPolygon(rB2DPolyPolygon) 
     {}
 
-    void SetLineEnd(const basegfx::B2DPolyPolygon& rB2DPolyPolygon)
-    {
-        aB2DPolyPolygon = rB2DPolyPolygon;
+    XLineEndEntry(const XLineEndEntry& rOther) 
+    :	XPropertyEntry(rOther), 
+        aB2DPolyPolygon(rOther.aB2DPolyPolygon) 
+    {}
+
+    void SetLineEnd(const basegfx::B2DPolyPolygon& rB2DPolyPolygon) 
+    { 
+        aB2DPolyPolygon = rB2DPolyPolygon; 
     }
 
     basegfx::B2DPolyPolygon& GetLineEnd()
-    {
-        return aB2DPolyPolygon;
+    { 
+        return aB2DPolyPolygon; 
     }
 };
 
@@ -131,6 +138,8 @@ class XDashEntry : public XPropertyEntry
 public:
             XDashEntry(const XDash& rDash, const String& rName) :
                 XPropertyEntry(rName), aDash(rDash) {}
+            XDashEntry(const XDashEntry& rOther) :
+                XPropertyEntry(rOther), aDash(rOther.aDash) {}
 
     void    SetDash(const XDash& rDash)    { aDash = rDash; }
     XDash&  GetDash()                      { return aDash; }
@@ -147,6 +156,8 @@ class XHatchEntry : public XPropertyEntry
 public:
             XHatchEntry(const XHatch& rHatch, const String& rName) :
                 XPropertyEntry(rName), aHatch(rHatch) {}
+            XHatchEntry(const XHatchEntry& rOther) :
+                XPropertyEntry(rOther), aHatch(rOther.aHatch) {}
 
     void    SetHatch(const XHatch& rHatch)  { aHatch = rHatch; }
     XHatch& GetHatch()                      { return aHatch; }
@@ -163,6 +174,8 @@ class XGradientEntry : public XPropertyEntry
 public:
                 XGradientEntry(const XGradient& rGradient, const String& rName):
                     XPropertyEntry(rName), aGradient(rGradient) {}
+                XGradientEntry(const XGradientEntry& rOther) :
+                    XPropertyEntry(rOther), aGradient(rOther.aGradient) {}
 
     void        SetGradient(const XGradient& rGrad) { aGradient = rGrad; }
     XGradient&  GetGradient()                       { return aGradient; }
@@ -179,6 +192,8 @@ class XBitmapEntry : public XPropertyEntry
 public:
             XBitmapEntry( const XOBitmap& rXOBitmap, const String& rName ):
                 XPropertyEntry( rName ), aXOBitmap( rXOBitmap ) {}
+            XBitmapEntry( const XBitmapEntry& rOther ) :
+                XPropertyEntry( rOther ), aXOBitmap( rOther.aXOBitmap ) {}
 
     void     SetXBitmap(const XOBitmap& rXOBitmap) { aXOBitmap = rXOBitmap; }
     XOBitmap& GetXBitmap()                    { return aXOBitmap; }
@@ -198,26 +213,26 @@ protected:
     Table               aTable;
     Table*              pBmpTable;
 
-    sal_Bool                bTableDirty;
-    sal_Bool                bBitmapsDirty;
-    sal_Bool                bOwnPool;
+    BOOL                bTableDirty;
+    BOOL                bBitmapsDirty;
+    BOOL                bOwnPool;
 
                         XPropertyTable( const String& rPath,
                                         XOutdevItemPool* pXPool = NULL,
-                                        sal_uInt16 nInitSize = 16,
-                                        sal_uInt16 nReSize = 16 );
+                                        USHORT nInitSize = 16,
+                                        USHORT nReSize = 16 );
                         XPropertyTable( SvStream& rIn );
     void                Clear();
 
 public:
-    virtual             ~XPropertyTable();
+    virtual				~XPropertyTable();
 
     long                Count() const;
 
-    sal_Bool                Insert(long nIndex, XPropertyEntry* pEntry);
+    BOOL                Insert(long nIndex, XPropertyEntry* pEntry);
     XPropertyEntry*     Replace(long nIndex, XPropertyEntry* pEntry);
-    XPropertyEntry*     Remove(long nIndex, sal_uInt16 nDummy);
-    XPropertyEntry*     Get( long nIndex, sal_uInt16 nDummy ) const;
+    XPropertyEntry*     Remove(long nIndex, USHORT nDummy);
+    XPropertyEntry*     Get( long nIndex, USHORT nDummy ) const;
 
     long                Get(const String& rName);
     Bitmap*             GetBitmap( long nIndex ) const;
@@ -226,15 +241,15 @@ public:
     void                SetName( const String& rString );
     const String&       GetPath() const { return aPath; }
     void                SetPath( const String& rString ) { aPath = rString; }
-    sal_Bool                IsDirty() const { return bTableDirty && bBitmapsDirty; }
-    void                SetDirty( sal_Bool bDirty = sal_True )
+    BOOL                IsDirty() const { return bTableDirty && bBitmapsDirty; }
+    void                SetDirty( BOOL bDirty = TRUE )
                             { bTableDirty = bDirty; bBitmapsDirty = bDirty; }
 
-    virtual sal_Bool        Load() = 0;
-    virtual sal_Bool        Save() = 0;
-    virtual sal_Bool        Create() = 0;
-    virtual sal_Bool        CreateBitmapsForUI() = 0;
-    virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True ) = 0;
+    virtual BOOL        Load() = 0;
+    virtual BOOL        Save() = 0;
+    virtual BOOL        Create() = 0;
+    virtual BOOL        CreateBitmapsForUI() = 0;
+    virtual Bitmap*     CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE ) = 0;
 };
 
 // --------------------
@@ -251,26 +266,26 @@ protected:
     List                aList;
     List*               pBmpList;
 
-    sal_Bool                bListDirty;
-    sal_Bool                bBitmapsDirty;
-    sal_Bool                bOwnPool;
+    BOOL                bListDirty;
+    BOOL                bBitmapsDirty;
+    BOOL                bOwnPool;
 
                         XPropertyList(  const String& rPath,
                                         XOutdevItemPool* pXPool = NULL,
-                                        sal_uInt16 nInitSize = 16,
-                                        sal_uInt16 nReSize = 16 );
+                                        USHORT nInitSize = 16,
+                                        USHORT nReSize = 16 );
                         XPropertyList( SvStream& rIn );
     void                Clear();
 
 public:
-    virtual             ~XPropertyList();
+    virtual				~XPropertyList();
 
     long                Count() const;
 
     void                Insert( XPropertyEntry* pEntry, long nIndex = LIST_APPEND );
     XPropertyEntry*     Replace( XPropertyEntry* pEntry, long nIndex );
-    XPropertyEntry*     Remove( long nIndex, sal_uInt16 nDummy );
-    XPropertyEntry*     Get( long nIndex, sal_uInt16 nDummy ) const;
+    XPropertyEntry*     Remove( long nIndex, USHORT nDummy );
+    XPropertyEntry*     Get( long nIndex, USHORT nDummy ) const;
 
     long                Get(const String& rName);
     Bitmap*             GetBitmap( long nIndex ) const;
@@ -279,15 +294,15 @@ public:
     void                SetName( const String& rString );
     const String&       GetPath() const { return aPath; }
     void                SetPath( const String& rString ) { aPath = rString; }
-    sal_Bool                IsDirty() const { return bListDirty && bBitmapsDirty; }
-    void                SetDirty( sal_Bool bDirty = sal_True )
+    BOOL                IsDirty() const { return bListDirty && bBitmapsDirty; }
+    void                SetDirty( BOOL bDirty = TRUE )
                             { bListDirty = bDirty; bBitmapsDirty = bDirty; }
 
-    virtual sal_Bool        Load() = 0;
-    virtual sal_Bool        Save() = 0;
-    virtual sal_Bool        Create() = 0;
-    virtual sal_Bool        CreateBitmapsForUI() = 0;
-    virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True ) = 0;
+    virtual BOOL        Load() = 0;
+    virtual BOOL        Save() = 0;
+    virtual BOOL        Create() = 0;
+    virtual BOOL        CreateBitmapsForUI() = 0;
+    virtual Bitmap*     CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE ) = 0;
 };
 
 // ------------------
@@ -297,11 +312,11 @@ public:
 class SVX_DLLPUBLIC XColorTable : public XPropertyTable
 {
 public:
-    explicit        XColorTable( const String& rPath,
+                    XColorTable( const String& rPath,
                                  XOutdevItemPool* pXPool = NULL,
-                                 sal_uInt16 nInitSize = 16,
-                                 sal_uInt16 nReSize = 16 );
-    virtual         ~XColorTable();
+                                 USHORT nInitSize = 16,
+                                 USHORT nReSize = 16 );
+    virtual			~XColorTable();
 
     using XPropertyTable::Replace;
     XColorEntry*    Replace(long nIndex, XColorEntry* pEntry );
@@ -310,13 +325,13 @@ public:
     using XPropertyTable::Get;
     XColorEntry*    GetColor(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
+    virtual BOOL    Load();
+    virtual BOOL    Save();
+    virtual BOOL    Create();
+    virtual BOOL    CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
 
-    static XColorTable* GetStdColorTable();
+    static XColorTable*	GetStdColorTable();
 };
 
 // -------------------
@@ -326,11 +341,11 @@ public:
 class XColorList : public XPropertyList
 {
 public:
-    explicit        XColorList( const String& rPath,
+                    XColorList( const String& rPath,
                                 XOutdevItemPool* pXPool = NULL,
-                                sal_uInt16 nInitSize = 16,
-                                sal_uInt16 nReSize = 16 );
-    virtual         ~XColorList();
+                                USHORT nInitSize = 16,
+                                USHORT nReSize = 16 );
+    virtual			~XColorList();
 
     using XPropertyList::Replace;
     XColorEntry*    Replace(XColorEntry* pEntry, long nIndex );
@@ -339,11 +354,11 @@ public:
     using XPropertyList::Get;
     XColorEntry*    GetColor(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
+    virtual BOOL    Load();
+    virtual BOOL    Save();
+    virtual BOOL    Create();
+    virtual BOOL    CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
 };
 
 // --------------------
@@ -353,11 +368,11 @@ public:
 class XLineEndTable : public XPropertyTable
 {
 public:
-    explicit        XLineEndTable( const String& rPath,
+                    XLineEndTable( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
-                                    sal_uInt16 nInitSize = 16,
-                                    sal_uInt16 nReSize = 16 );
-    virtual         ~XLineEndTable();
+                                    USHORT nInitSize = 16,
+                                    USHORT nReSize = 16 );
+    virtual			~XLineEndTable();
 
     using XPropertyTable::Replace;
     XLineEndEntry*  Replace(long nIndex, XLineEndEntry* pEntry );
@@ -366,11 +381,11 @@ public:
     using XPropertyTable::Get;
     XLineEndEntry*  GetLineEnd(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
+    virtual BOOL    Load();
+    virtual BOOL    Save();
+    virtual BOOL    Create();
+    virtual BOOL    CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
 };
 
 // -------------------
@@ -387,7 +402,7 @@ private:
     void impDestroy();
 
 public:
-    explicit XLineEndList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    XLineEndList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
     virtual ~XLineEndList();
 
     using XPropertyList::Replace;
@@ -397,11 +412,11 @@ public:
     using XPropertyList::Get;
     XLineEndEntry* GetLineEnd(long nIndex) const;
 
-    virtual sal_Bool Load();
-    virtual sal_Bool Save();
-    virtual sal_Bool Create();
-    virtual sal_Bool CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
+    virtual BOOL Load();
+    virtual BOOL Save();
+    virtual BOOL Create();
+    virtual BOOL CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI(long nIndex, BOOL bDelete = TRUE);
 };
 
 // --------------------
@@ -411,11 +426,11 @@ public:
 class XDashTable : public XPropertyTable
 {
 public:
-    explicit        XDashTable( const String& rPath,
+                    XDashTable( const String& rPath,
                                 XOutdevItemPool* pXPool = NULL,
-                                sal_uInt16 nInitSize = 16,
-                                sal_uInt16 nReSize = 16 );
-    virtual         ~XDashTable();
+                                USHORT nInitSize = 16,
+                                USHORT nReSize = 16 );
+    virtual			~XDashTable();
 
     using XPropertyTable::Replace;
     XDashEntry*     Replace(long nIndex, XDashEntry* pEntry );
@@ -424,11 +439,11 @@ public:
     using XPropertyTable::Get;
     XDashEntry*     GetDash(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
+    virtual BOOL    Load();
+    virtual BOOL    Save();
+    virtual BOOL    Create();
+    virtual BOOL    CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
 };
 
 // -------------------
@@ -445,7 +460,7 @@ private:
     void impDestroy();
 
 public:
-    explicit XDashList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    XDashList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
     virtual ~XDashList();
 
     using XPropertyList::Replace;
@@ -455,11 +470,11 @@ public:
     using XPropertyList::Get;
     XDashEntry* GetDash(long nIndex) const;
 
-    virtual sal_Bool Load();
-    virtual sal_Bool Save();
-    virtual sal_Bool Create();
-    virtual sal_Bool CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
+    virtual BOOL Load();
+    virtual BOOL Save();
+    virtual BOOL Create();
+    virtual BOOL CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI(long nIndex, BOOL bDelete = TRUE);
 };
 
 // --------------------
@@ -469,11 +484,11 @@ public:
 class XHatchTable : public XPropertyTable
 {
 public:
-    explicit        XHatchTable( const String& rPath,
+                    XHatchTable( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
-                                    sal_uInt16 nInitSize = 16,
-                                    sal_uInt16 nReSize = 16 );
-    virtual         ~XHatchTable();
+                                    USHORT nInitSize = 16,
+                                    USHORT nReSize = 16 );
+    virtual			~XHatchTable();
 
     using XPropertyTable::Replace;
     XHatchEntry*    Replace(long nIndex, XHatchEntry* pEntry );
@@ -482,11 +497,11 @@ public:
     using XPropertyTable::Get;
     XHatchEntry*    GetHatch(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
+    virtual BOOL    Load();
+    virtual BOOL    Save();
+    virtual BOOL    Create();
+    virtual BOOL    CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
 };
 
 // -------------------
@@ -503,7 +518,7 @@ private:
     void impDestroy();
 
 public:
-    explicit XHatchList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    XHatchList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
     ~XHatchList();
 
     using XPropertyList::Replace;
@@ -513,11 +528,11 @@ public:
     using XPropertyList::Get;
     XHatchEntry* GetHatch(long nIndex) const;
 
-    virtual sal_Bool Load();
-    virtual sal_Bool Save();
-    virtual sal_Bool Create();
-    virtual sal_Bool CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
+    virtual BOOL Load();
+    virtual BOOL Save();
+    virtual BOOL Create();
+    virtual BOOL CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI(long nIndex, BOOL bDelete = TRUE);
 };
 
 // ---------------------
@@ -527,11 +542,11 @@ public:
 class XGradientTable : public XPropertyTable
 {
 public:
-    explicit        XGradientTable( const String& rPath,
+                    XGradientTable( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
-                                    sal_uInt16 nInitSize = 16,
-                                    sal_uInt16 nReSize = 16 );
-    virtual         ~XGradientTable();
+                                    USHORT nInitSize = 16,
+                                    USHORT nReSize = 16 );
+    virtual			~XGradientTable();
 
     using XPropertyTable::Replace;
     XGradientEntry* Replace(long nIndex, XGradientEntry* pEntry );
@@ -540,11 +555,11 @@ public:
     using XPropertyTable::Get;
     XGradientEntry* GetGradient(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
+    virtual BOOL    Load();
+    virtual BOOL    Save();
+    virtual BOOL    Create();
+    virtual BOOL    CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
 };
 
 // -------------------
@@ -561,7 +576,7 @@ private:
     void impDestroy();
 
 public:
-    explicit XGradientList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    XGradientList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
     virtual ~XGradientList();
 
     using XPropertyList::Replace;
@@ -571,11 +586,11 @@ public:
     using XPropertyList::Get;
     XGradientEntry* GetGradient(long nIndex) const;
 
-    virtual sal_Bool Load();
-    virtual sal_Bool Save();
-    virtual sal_Bool Create();
-    virtual sal_Bool CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
+    virtual BOOL Load();
+    virtual BOOL Save();
+    virtual BOOL Create();
+    virtual BOOL CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI(long nIndex, BOOL bDelete = TRUE);
 };
 
 // ---------------------
@@ -585,11 +600,11 @@ public:
 class XBitmapTable : public XPropertyTable
 {
 public:
-    explicit        XBitmapTable( const String& rPath,
+                    XBitmapTable( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
-                                    sal_uInt16 nInitSize = 16,
-                                    sal_uInt16 nReSize = 16 );
-    virtual         ~XBitmapTable();
+                                    USHORT nInitSize = 16,
+                                    USHORT nReSize = 16 );
+    virtual			~XBitmapTable();
 
     using XPropertyTable::Replace;
     XBitmapEntry*   Replace(long nIndex, XBitmapEntry* pEntry );
@@ -598,11 +613,11 @@ public:
     using XPropertyTable::Get;
     XBitmapEntry*   GetBitmap(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
+    virtual BOOL    Load();
+    virtual BOOL    Save();
+    virtual BOOL    Create();
+    virtual BOOL    CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
 };
 
 // -------------------
@@ -612,11 +627,11 @@ public:
 class SVX_DLLPUBLIC XBitmapList : public XPropertyList
 {
 public:
-    explicit        XBitmapList( const String& rPath,
+                    XBitmapList( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
-                                    sal_uInt16 nInitSize = 16,
-                                    sal_uInt16 nReSize = 16 );
-    virtual         ~XBitmapList();
+                                    USHORT nInitSize = 16,
+                                    USHORT nReSize = 16 );
+    virtual			~XBitmapList();
 
     using XPropertyList::Replace;
     XBitmapEntry*   Replace(XBitmapEntry* pEntry, long nIndex );
@@ -625,11 +640,11 @@ public:
     using XPropertyList::Get;
     XBitmapEntry*   GetBitmap(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
+    virtual BOOL    Load();
+    virtual BOOL    Save();
+    virtual BOOL    Create();
+    virtual BOOL    CreateBitmapsForUI();
+    virtual Bitmap* CreateBitmapForUI( long nIndex, BOOL bDelete = TRUE );
 };
 
 #endif // _XTABLE_HXX

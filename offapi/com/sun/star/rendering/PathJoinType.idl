@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ module com { module sun { module star { module rendering {
     several different shapes (which are of course only visible for
     strokes wider than one device pixel).<p>
 
-    @since OOo 2.0
+    @since OOo 2.0.0
  */
 constants PathJoinType
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,10 +26,13 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
-#include <sfx2/sfxsids.hrc>
+#include <sfx2/sfxsids.hrc>	
 #define _ANIMATION
 #include "macroass.hxx"
 #include <svtools/imaprect.hxx>
@@ -57,7 +60,7 @@
 
 /*************************************************************************
 |*
-|*  URLDlg
+|*	URLDlg
 |*
 \************************************************************************/
 
@@ -85,8 +88,8 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL, const String& rAlternativeT
     maEdtDescription.SetText( rDescription );
     maEdtName.SetText( rName );
 
-    for( size_t i = 0, n = rTargetList.size(); i < n; ++i )
-        maCbbTargets.InsertEntry( *rTargetList[ i ] );
+    for( String* pStr = rTargetList.First(); pStr; pStr = rTargetList.Next() )
+        maCbbTargets.InsertEntry( *pStr );
 
     if( !rTarget.Len() )
         maCbbTargets.SetText( String::CreateFromAscii( "_self" ) );

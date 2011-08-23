@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,16 +32,16 @@
 // include ---------------------------------------------------------------
 
 #include <tools/ref.hxx>
-#include "svx/relfld.hxx"
+#include "relfld.hxx"
 
 // -----------------------------------------------------------------------
 
 SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nWinSize ) :
     MetricField( pParent, nWinSize )
 {
-    bNegativeEnabled = sal_False;
-    bRelativeMode = sal_False;
-    bRelative     = sal_False;
+    bNegativeEnabled = FALSE;
+    bRelativeMode = FALSE;
+    bRelative 	  = FALSE;
 
     SetDecimalDigits( 2 );
     SetMin( 0 );
@@ -53,9 +53,9 @@ SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nWinSize ) :
 SvxRelativeField::SvxRelativeField( Window* pParent, const ResId& rResId ) :
     MetricField( pParent, rResId )
 {
-    bNegativeEnabled = sal_False;
-    bRelativeMode = sal_False;
-    bRelative     = sal_False;
+    bNegativeEnabled = FALSE;
+    bRelativeMode = FALSE;
+    bRelative	  = FALSE;
 
     SetDecimalDigits( 2 );
     SetMin( 0 );
@@ -71,7 +71,7 @@ void SvxRelativeField::Modify()
     if ( bRelativeMode )
     {
         String  aStr = GetText();
-        sal_Bool    bNewMode = bRelative;
+        BOOL    bNewMode = bRelative;
 
         if ( bRelative )
         {
@@ -82,7 +82,7 @@ void SvxRelativeField::Modify()
                 if( ( ( *pStr < sal_Unicode( '0' ) ) || ( *pStr > sal_Unicode( '9' ) ) ) &&
                     ( *pStr != sal_Unicode( '%' ) ) )
                 {
-                    bNewMode = sal_False;
+                    bNewMode = FALSE;
                     break;
                 }
                 pStr++;
@@ -93,7 +93,7 @@ void SvxRelativeField::Modify()
             xub_StrLen nPos = aStr.Search( sal_Unicode( '%' ) );
 
             if ( nPos != STRING_NOTFOUND )
-                bNewMode = sal_True;
+                bNewMode = TRUE;
         }
 
         if ( bNewMode != bRelative )
@@ -105,10 +105,10 @@ void SvxRelativeField::Modify()
 
 // -----------------------------------------------------------------------
 
-void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin,
-                                           sal_uInt16 nMax, sal_uInt16 nStep )
+void SvxRelativeField::EnableRelativeMode( USHORT nMin,
+                                           USHORT nMax, USHORT nStep )
 {
-    bRelativeMode = sal_True;
+    bRelativeMode = TRUE;
     nRelMin       = nMin;
     nRelMax       = nMax;
     nRelStep      = nStep;
@@ -117,14 +117,14 @@ void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin,
 
 // -----------------------------------------------------------------------
 
-void SvxRelativeField::SetRelative( sal_Bool bNewRelative )
+void SvxRelativeField::SetRelative( BOOL bNewRelative )
 {
     Selection aSelection = GetSelection();
     String aStr = GetText();
 
     if ( bNewRelative )
     {
-        bRelative = sal_True;
+        bRelative = TRUE;
         SetDecimalDigits( 0 );
         SetMin( nRelMin );
         SetMax( nRelMax );
@@ -133,7 +133,7 @@ void SvxRelativeField::SetRelative( sal_Bool bNewRelative )
     }
     else
     {
-        bRelative = sal_False;
+        bRelative = FALSE;
         SetDecimalDigits( 2 );
         SetMin( bNegativeEnabled ? -9999 : 0 );
         SetMax( 9999 );

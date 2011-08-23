@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,31 +34,34 @@
 
 #include <tools/stream.hxx>
 
-class EditDataObject :  public ::com::sun::star::datatransfer::XTransferable,
+class EditDataObject :	public ::com::sun::star::datatransfer::XTransferable,
                         public ::cppu::OWeakObject
 
 {
 private:
-    SvMemoryStream  maBinData;
-    SvMemoryStream  maRTFData;
-    String          maText;
+    SvMemoryStream	maBinData;
+    SvMemoryStream	maRTFData;
+    String			maText;
 
-    String          maOfficeBookmark;
+    String			maOfficeBookmark;
 
-public:
+//	String			maNetscapeBookmark;
+//	SvMemoryStream	maRTFData;
+
+public:	
                     EditDataObject();
                     ~EditDataObject();
-
-    SvMemoryStream& GetStream() { return maBinData; }
-    SvMemoryStream& GetRTFStream() { return maRTFData; }
-    String&         GetString() { return maText; }
-    String&         GetURL()    { return maOfficeBookmark; }
-
-
+        
+    SvMemoryStream&	GetStream() { return maBinData; }
+    SvMemoryStream&	GetRTFStream() { return maRTFData; }
+    String&			GetString()	{ return maText; }
+    String&			GetURL()	{ return maOfficeBookmark; }
+        
+    
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::datatransfer::XTransferable
     ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -66,6 +69,6 @@ public:
     sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-#endif  // _DATAOBJ_HXX
+#endif	// _DATAOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

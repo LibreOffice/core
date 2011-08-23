@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ class FuDraw : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuDraw();
 
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
 
     virtual void ScrollStart();
     virtual void ScrollEnd();
@@ -59,22 +59,22 @@ class FuDraw : public FuPoor
 
     virtual void ForcePointer(const MouseEvent* pMEvt);
 
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    // II
+    // #97016# II
     virtual void SelectionHasChanged();
 
-    sal_Bool IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;
+    BOOL IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;
 
  private:
-    void    DoModifiers(const MouseEvent& rMEvt);
-    void    ResetModifiers();
+    void	DoModifiers(const MouseEvent& rMEvt);
+    void	ResetModifiers();
 };
 
 
 
-#endif      // _SD_FUDRAW_HXX
+#endif		// _SD_FUDRAW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

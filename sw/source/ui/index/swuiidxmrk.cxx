@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <multmrk.hxx>
-#include <swundo.hxx>                   // fuer Undo-Ids
+#include <swundo.hxx>               	// fuer Undo-Ids
 #include <cmdid.h>
 #include <index.hrc>
 #include <idxmrk.hrc>
@@ -72,7 +72,9 @@
 #include <ndtxt.hxx>
 #include <breakit.hxx>
 #include <SwRewriter.hxx>
+#include <undobj.hxx>
 
+#include "swuiidxmrk.hxx"
 #include <unomid.h>
 
 
@@ -95,17 +97,16 @@ using namespace ::comphelper;
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Dialog zum Einfuegen einer Verzeichnismarkierung
+     Beschreibung:	Dialog zum Einfuegen einer Verzeichnismarkierung
  --------------------------------------------------------------------*/
 SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
                                sal_Bool bNewDlg,
                                const ResId& rResId,
                                sal_Int32 _nOptionsId, SwWrtShell& rWrtShell ) :
       Window(pParent, rResId),
-    aIndexFL(this,  SW_RES(FL_INDEX )),
     aTypeFT (this,  SW_RES(LBL_INDEX    )),
     aTypeDCB(this,  SW_RES(DCB_INDEX    )),
-    aNewBT(this,    SW_RES(BT_NEW   )),
+    aNewBT(this, 	SW_RES(BT_NEW 	)),
 
     aEntryFT(this,  SW_RES(LBL_ENTRY    )),
     aEntryED(this,  SW_RES(SL_ENTRY )),
@@ -129,6 +130,7 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     aSearchCaseSensitiveCB(this,    SW_RES(CB_CASESENSITIVE )),
     aSearchCaseWordOnlyCB(this,     SW_RES(CB_WORDONLY      )),
 
+    aIndexFL(this,  SW_RES(FL_INDEX )),
 
     aOKBT(this,     SW_RES(BT_OK    )),
     aCancelBT(this, SW_RES(BT_CANCEL )),
@@ -145,17 +147,15 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     bNewMark(bNewDlg),
     bSelected(sal_False),
 
-    bPhoneticED0_ChangedByUser(sal_False),
-    bPhoneticED1_ChangedByUser(sal_False),
-    bPhoneticED2_ChangedByUser(sal_False),
+    bPhoneticED0_ChangedByUser(FALSE),
+    bPhoneticED1_ChangedByUser(FALSE),
+    bPhoneticED2_ChangedByUser(FALSE),
     nLangForPhoneticReading(2052),
-    bIsPhoneticReadingEnabled(sal_False),
+    bIsPhoneticReadingEnabled(FALSE),
     xExtendedIndexEntrySupplier(NULL),
     pTOXMgr(0),
     pSh(&rWrtShell)
 {
-    aNewBT.SetAccessibleRelationMemberOf(&aIndexFL);
-
     if( SvtCJKOptions().IsCJKFontEnabled() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
@@ -168,42 +168,43 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
 
     SetStyle(GetStyle()|WB_DIALOGCONTROL);
     FreeResource();
-    aOKBT           .SetHelpId(HID_INSERT_IDX_MRK_OK        );
-    aCancelBT       .SetHelpId(HID_INSERT_IDX_MRK_CLOSE     );
-    aDelBT          .SetHelpId(HID_INSERT_IDX_MRK_DELETE    );
-    aNewBT          .SetHelpId(HID_INSERT_IDX_MRK_NEW       );
-    aPrevBT         .SetHelpId(HID_INSERT_IDX_MRK_PREV      );
-    aPrevSameBT     .SetHelpId(HID_INSERT_IDX_MRK_PREV_SAME );
-    aNextBT         .SetHelpId(HID_INSERT_IDX_MRK_NEXT      );
-    aNextSameBT     .SetHelpId(HID_INSERT_IDX_MRK_NEXT_SAME );
-    aTypeDCB        .SetHelpId(HID_INSERT_IDX_MRK_TYPE      );
-    aEntryED        .SetHelpId(HID_INSERT_IDX_MRK_ENTRY     );
-    aKeyDCB         .SetHelpId(HID_INSERT_IDX_MRK_PRIM_KEY  );
-    aKey2DCB        .SetHelpId(HID_INSERT_IDX_MRK_SEC_KEY   );
-    aLevelED        .SetHelpId(HID_INSERT_IDX_MRK_LEVEL     );
-    aMainEntryCB    .SetHelpId(HID_INSERT_IDX_MRK_MAIN_ENTRY);
-    aApplyToAllCB   .SetHelpId(HID_INSERT_IDX_MRK_APPLY_ALL );
-    aPhoneticED0    .SetHelpId(HID_INSERT_IDX_MRK_PHONETIC_READING );
-    aPhoneticED1    .SetHelpId(HID_INSERT_IDX_MRK_PHONETIC_READING );
-    aPhoneticED2    .SetHelpId(HID_INSERT_IDX_MRK_PHONETIC_READING );
+    aOKBT			.SetHelpId(HID_INSERT_IDX_MRK_OK   		);
+    aCancelBT		.SetHelpId(HID_INSERT_IDX_MRK_CLOSE		);
+    aDelBT      	.SetHelpId(HID_INSERT_IDX_MRK_DELETE	);
+    aNewBT      	.SetHelpId(HID_INSERT_IDX_MRK_NEW		);
+    aPrevBT     	.SetHelpId(HID_INSERT_IDX_MRK_PREV		);
+    aPrevSameBT 	.SetHelpId(HID_INSERT_IDX_MRK_PREV_SAME	);
+    aNextBT     	.SetHelpId(HID_INSERT_IDX_MRK_NEXT		);
+    aNextSameBT 	.SetHelpId(HID_INSERT_IDX_MRK_NEXT_SAME	);
+    aTypeDCB    	.SetHelpId(HID_INSERT_IDX_MRK_TYPE		);
+    aEntryED    	.SetHelpId(HID_INSERT_IDX_MRK_ENTRY		);
+    aKeyDCB     	.SetHelpId(HID_INSERT_IDX_MRK_PRIM_KEY	);
+    aKey2DCB    	.SetHelpId(HID_INSERT_IDX_MRK_SEC_KEY	);
+    aLevelED    	.SetHelpId(HID_INSERT_IDX_MRK_LEVEL		);
+    aMainEntryCB	.SetHelpId(HID_INSERT_IDX_MRK_MAIN_ENTRY);
+    aApplyToAllCB	.SetHelpId(HID_INSERT_IDX_MRK_APPLY_ALL	);
+    aPhoneticED0	.SetHelpId(HID_INSERT_IDX_MRK_PHONETIC_READING );
+    aPhoneticED1	.SetHelpId(HID_INSERT_IDX_MRK_PHONETIC_READING );
+    aPhoneticED2	.SetHelpId(HID_INSERT_IDX_MRK_PHONETIC_READING );
 
-    aSearchCaseSensitiveCB.SetHelpId(   HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE   );
-    aSearchCaseWordOnlyCB.SetHelpId(    HID_INSERT_IDX_MRK_SRCH_WORDONLY        );
+    aSearchCaseSensitiveCB.SetHelpId(	HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE	);
+    aSearchCaseWordOnlyCB.SetHelpId(	HID_INSERT_IDX_MRK_SRCH_WORDONLY		);
 
 
     GetParent()->SetText( SW_RESSTR( bNewMark ? STR_IDXMRK_INSERT : STR_IDXMRK_EDIT));
 
-    aDelBT.SetClickHdl(LINK(this,SwIndexMarkDlg,        DelHdl));
-    aPrevBT.SetClickHdl(LINK(this,SwIndexMarkDlg,       PrevHdl));
-    aPrevSameBT.SetClickHdl(LINK(this,SwIndexMarkDlg,   PrevSameHdl));
-    aNextBT.SetClickHdl(LINK(this,SwIndexMarkDlg,       NextHdl));
-    aNextSameBT.SetClickHdl(LINK(this,SwIndexMarkDlg,   NextSameHdl));
-    aTypeDCB.SetSelectHdl(LINK(this,SwIndexMarkDlg,     ModifyHdl));
-    aKeyDCB.SetModifyHdl(LINK(this,SwIndexMarkDlg,      KeyDCBModifyHdl));
-    aKey2DCB.SetModifyHdl(LINK(this,SwIndexMarkDlg,     KeyDCBModifyHdl));
-    aOKBT.SetClickHdl(LINK(this,SwIndexMarkDlg,         InsertHdl));
-    aCancelBT.SetClickHdl(LINK(this,SwIndexMarkDlg,     CloseHdl));
-    aEntryED.SetModifyHdl(LINK(this,SwIndexMarkDlg,     ModifyHdl));
+    aDelBT.SetClickHdl(LINK(this,SwIndexMarkDlg, 		DelHdl));
+    aPrevBT.SetClickHdl(LINK(this,SwIndexMarkDlg, 		PrevHdl));
+    aPrevSameBT.SetClickHdl(LINK(this,SwIndexMarkDlg, 	PrevSameHdl));
+    aNextBT.SetClickHdl(LINK(this,SwIndexMarkDlg, 		NextHdl));
+    aNextSameBT.SetClickHdl(LINK(this,SwIndexMarkDlg, 	NextSameHdl));
+    //aTypeDCB.SetModifyHdl(LINK(this,SwIndexMarkDlg, 	ModifyHdl));
+    aTypeDCB.SetSelectHdl(LINK(this,SwIndexMarkDlg, 	ModifyHdl));
+    aKeyDCB.SetModifyHdl(LINK(this,SwIndexMarkDlg, 		KeyDCBModifyHdl));
+    aKey2DCB.SetModifyHdl(LINK(this,SwIndexMarkDlg, 	KeyDCBModifyHdl));
+    aOKBT.SetClickHdl(LINK(this,SwIndexMarkDlg, 		InsertHdl));
+    aCancelBT.SetClickHdl(LINK(this,SwIndexMarkDlg, 	CloseHdl));
+    aEntryED.SetModifyHdl(LINK(this,SwIndexMarkDlg, 	ModifyHdl));
     aNewBT.SetClickHdl(LINK(this, SwIndexMarkDlg,       NewUserIdxHdl));
     aApplyToAllCB.SetClickHdl(LINK(this, SwIndexMarkDlg, SearchTypeHdl));
     aPhoneticED0.SetModifyHdl(LINK(this,SwIndexMarkDlg, PhoneticEDModifyHdl));
@@ -213,8 +214,16 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     if(bNewMark)
     {
         aDelBT.Hide();
-        ImageList aTempList( SW_RES( IMG_NAVI_ENTRYBMP ) );
-        aNewBT.SetModeImage( aTempList.GetImage( SID_SW_START + CONTENT_TYPE_INDEX ) );
+
+        {
+            ImageList aTempList( SW_RES( IMG_NAVI_ENTRYBMPH ) );
+            aNewBT.SetModeImage( aTempList.GetImage( SID_SW_START + CONTENT_TYPE_INDEX ), BMP_COLOR_HIGHCONTRAST );
+        }
+
+        {
+            ImageList aTempList( SW_RES( IMG_NAVI_ENTRYBMP ) );
+            aNewBT.SetModeImage( aTempList.GetImage( SID_SW_START + CONTENT_TYPE_INDEX ), BMP_COLOR_NORMAL );
+        }
     }
     else
     {
@@ -227,7 +236,7 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Controls neu initialisieren mit der aktuellen
+     Beschreibung:	Controls neu initialisieren mit der aktuellen
                     Markierung
  --------------------------------------------------------------------*/
 void SwIndexMarkDlg::InitControls()
@@ -317,7 +326,7 @@ void SwIndexMarkDlg::InitControls()
         UpdateDialog();
     }
     else
-    {   // aktuelle Selektion (1.Element) anzeigen  ????
+    { 	// aktuelle Selektion (1.Element) anzeigen  ????
         sal_uInt16 nCnt = pSh->GetCrsrCnt();
         if (nCnt < 2)
         {
@@ -337,7 +346,7 @@ void SwIndexMarkDlg::InitControls()
         }
 
         // Verzeichnistyp ist default
-        if( sTmpTypeSelection.Len() &&
+        if(	sTmpTypeSelection.Len() &&
             LISTBOX_ENTRY_NOTFOUND != aTypeDCB.GetEntryPos( sTmpTypeSelection ) )
             aTypeDCB.SelectEntry(sTmpTypeSelection);
         else
@@ -346,15 +355,15 @@ void SwIndexMarkDlg::InitControls()
     }
 }
 
-void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
+void	SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
 {
     //no phonetic reading if no global cjk support
     if( !xExtendedIndexEntrySupplier.is() )
     {
-        bIsPhoneticReadingEnabled = sal_False;
+        bIsPhoneticReadingEnabled = FALSE;
         return;
     }
-    bIsPhoneticReadingEnabled = sal_True;
+    bIsPhoneticReadingEnabled = TRUE;
 
     //get the current language
     if(!bNewMark) //if dialog is opened to iterate existing marks
@@ -379,12 +388,13 @@ void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
     }
     else //if dialog is opened to create a new mark
     {
-        sal_uInt16 nScriptType = pSh->GetScriptType();
-        sal_uInt16 nWhich;
+        USHORT nScriptType = pSh->GetScriptType();
+        USHORT nWhich;
         switch(nScriptType)
         {
             case SCRIPTTYPE_ASIAN: nWhich = RES_CHRATR_CJK_LANGUAGE; break;
             case SCRIPTTYPE_COMPLEX:nWhich = RES_CHRATR_CTL_LANGUAGE; break;
+            //case SCRIPTTYPE_LATIN:
             default:nWhich = RES_CHRATR_LANGUAGE; break;
         }
         SfxItemSet aLangSet(pSh->GetAttrPool(), nWhich, nWhich);
@@ -392,9 +402,16 @@ void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
         nLangForPhoneticReading = ((const SvxLanguageItem&)aLangSet.Get(nWhich)).GetLanguage();
     }
 
+    /*
+    //enable phonetic reading dependent on the current language
+    {
+        lang::Locale aLocale( SvxCreateLocale( LanguageType( nLangForPhoneticReading ) ) );
+        bIsPhoneticReadingEnabled = xExtendedIndexEntrySupplier->usePhoneticEntry( aLocale );
+    }
+    */
 }
 
-String  SwIndexMarkDlg::GetDefaultPhoneticReading( const String& rText )
+String	SwIndexMarkDlg::GetDefaultPhoneticReading( const String& rText )
 {
     if( !bIsPhoneticReadingEnabled )
         return aEmptyStr;
@@ -403,10 +420,10 @@ String  SwIndexMarkDlg::GetDefaultPhoneticReading( const String& rText )
     return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, aLocale);
 }
 
-/* --------------------------------------------------
+/* -----------------07.09.99 10:43-------------------
     Change the content of aEntryED if text is selected
  --------------------------------------------------*/
-void    SwIndexMarkDlg::Activate()
+void	SwIndexMarkDlg::Activate()
 {
     // aktuelle Selektion (1.Element) anzeigen  ????
     if(bNewMark)
@@ -433,7 +450,7 @@ void    SwIndexMarkDlg::Activate()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Ok-Button auswerten
+     Beschreibung:	Ok-Button auswerten
  --------------------------------------------------------------------*/
 void SwIndexMarkDlg::Apply()
 {
@@ -482,9 +499,9 @@ void SwIndexMarkDlg::InsertUpdate()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Marke einfuegen
+     Beschreibung:	Marke einfuegen
  --------------------------------------------------------------------*/
-static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool bCaseSensitive)
+static void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSensitive)
 {
     rSh.Push();
 
@@ -499,12 +516,12 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool 
                             : TransliterationModules_IGNORE_CASE) );
 
     rSh.ClearMark();
-    sal_Bool bCancel;
+    BOOL bCancel;
 
     //todo/mba: assuming that notes should not be searched
-    sal_Bool bSearchInNotes = sal_False;
+    BOOL bSearchInNotes = FALSE;
     rSh.Find( aSearchOpt,  bSearchInNotes, DOCPOS_START, DOCPOS_END, bCancel,
-                        (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), sal_False );
+                        (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), FALSE );
 }
 
 
@@ -520,7 +537,7 @@ void SwIndexMarkDlg::InsertMark()
     switch(nPos)
     {
         case POS_CONTENT : break;
-        case POS_INDEX:     // Stichwortverzeichnismarke
+        case POS_INDEX:  	// Stichwortverzeichnismarke
         {
             UpdateKeyBoxes();
             String  aPrim(aKeyDCB.GetText());
@@ -541,9 +558,9 @@ void SwIndexMarkDlg::InsertMark()
     }
     if (aOrgStr != aEntryED.GetText())
         aDesc.SetAltStr(aEntryED.GetText());
-    sal_Bool bApplyAll = aApplyToAllCB.IsChecked();
-    sal_Bool bWordOnly = aSearchCaseWordOnlyCB.IsChecked();
-    sal_Bool bCaseSensitive = aSearchCaseSensitiveCB.IsChecked();
+    BOOL bApplyAll = aApplyToAllCB.IsChecked();
+    BOOL bWordOnly = aSearchCaseWordOnlyCB.IsChecked();
+    BOOL bCaseSensitive = aSearchCaseSensitiveCB.IsChecked();
 
     pSh->StartAllAction();
     // hier muessen alle gleichen Strings selektiert werden
@@ -556,17 +573,17 @@ void SwIndexMarkDlg::InsertMark()
     SwTOXMgr aMgr(pSh);
     aMgr.InsertTOXMark(aDesc);
     if(bApplyAll)
-        pSh->Pop(sal_False);
+        pSh->Pop(FALSE);
 
     pSh->EndAllAction();
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Marke Updaten
+     Beschreibung:	Marke Updaten
  --------------------------------------------------------------------*/
 void SwIndexMarkDlg::UpdateMark()
 {
-    String  aAltText(aEntryED.GetText());
+    String 	aAltText(aEntryED.GetText());
     String* pAltText = aOrgStr != aEntryED.GetText() ? &aAltText : 0;
     //empty alternative texts are not allowed
     if(pAltText && !pAltText->Len())
@@ -612,7 +629,7 @@ void SwIndexMarkDlg::UpdateKeyBoxes()
     sal_uInt16 nPos = aKeyDCB.GetEntryPos(aKey);
 
     if(nPos == LISTBOX_ENTRY_NOTFOUND && aKey.Len() > 0)
-    {   // neuen Key erzeugen
+    {	// neuen Key erzeugen
         aKeyDCB.InsertEntry(aKey);
     }
 
@@ -620,21 +637,21 @@ void SwIndexMarkDlg::UpdateKeyBoxes()
     nPos = aKey2DCB.GetEntryPos(aKey);
 
     if(nPos == LISTBOX_ENTRY_NOTFOUND && aKey.Len() > 0)
-    {   // neuen Key erzeugen
+    {	// neuen Key erzeugen
         aKey2DCB.InsertEntry(aKey);
     }
 }
 
 class SwNewUserIdxDlg : public ModalDialog
 {
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
+    OKButton 		aOKPB;
+    CancelButton 	aCancelPB;
+    HelpButton 		aHelpPB;
     FixedLine       aNameFL;
-    FixedText       aNameFT;
-    Edit            aNameED;
+    FixedText		aNameFT;
+    Edit			aNameED;
 
-    SwIndexMarkDlg* pDlg;
+    SwIndexMarkDlg*	pDlg;
 
     DECL_LINK( ModifyHdl, Edit*);
 
@@ -655,8 +672,8 @@ class SwNewUserIdxDlg : public ModalDialog
                 aNameED.GrabFocus();
             }
 
-    virtual void    Apply();
-    String  GetName(){return aNameED.GetText();}
+    virtual void	Apply();
+    String 	GetName(){return aNameED.GetText();}
 };
 void SwNewUserIdxDlg::Apply()
 {
@@ -714,7 +731,7 @@ IMPL_LINK( SwIndexMarkDlg, CloseHdl, Button *, EMPTYARG )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  VerzeichnisTyp auswaehlen nur bei Einfuegen
+     Beschreibung:	VerzeichnisTyp auswaehlen nur bei Einfuegen
  --------------------------------------------------------------------*/
 IMPL_LINK( SwIndexMarkDlg, ModifyHdl, ListBox *, pBox )
 {
@@ -723,12 +740,12 @@ IMPL_LINK( SwIndexMarkDlg, ModifyHdl, ListBox *, pBox )
         // Verzeichnistyp setzen
         sal_uInt16 nPos = aTypeDCB.GetEntryPos(aTypeDCB.GetSelectEntry());
         sal_Bool bLevelEnable = sal_False,
-             bKeyEnable   = sal_False,
-             bSetKey2     = sal_False,
+             bKeyEnable	  = sal_False,
+             bSetKey2 	  = sal_False,
              bKey2Enable  = sal_False,
-            bEntryHasText   = sal_False,
-            bKey1HasText    = sal_False,
-            bKey2HasText    = sal_False;
+            bEntryHasText	= sal_False,
+            bKey1HasText	= sal_False,
+            bKey2HasText	= sal_False;
         if(nPos == POS_INDEX)
         {
             if(aEntryED.GetText().Len())
@@ -774,11 +791,11 @@ IMPL_LINK( SwIndexMarkDlg, ModifyHdl, ListBox *, pBox )
     }
     else //aEntryED  !!aEntryED is not a ListBox but a Edit
     {
-        sal_Bool bHasText = (aEntryED.GetText().Len()>0);
+        BOOL bHasText = (aEntryED.GetText().Len()>0);
         if(!bHasText)
         {
             aPhoneticED0.SetText(aEmptyStr);
-            bPhoneticED0_ChangedByUser = sal_False;
+            bPhoneticED0_ChangedByUser = FALSE;
         }
         else if(!bPhoneticED0_ChangedByUser)
             aPhoneticED0.SetText(GetDefaultPhoneticReading(aEntryED.GetText()));
@@ -864,9 +881,9 @@ void SwIndexMarkDlg::UpdateDialog()
     sal_Bool bLevelEnable = sal_True,
          bKeyEnable   = sal_False,
          bKey2Enable  = sal_False,
-         bEntryHasText  = sal_False,
-         bKey1HasText   = sal_False,
-         bKey2HasText   = sal_False;
+         bEntryHasText	= sal_False,
+         bKey1HasText	= sal_False,
+         bKey2HasText	= sal_False;
 
     TOXTypes eCurType = pMark->GetTOXType()->GetType();
     if(TOX_INDEX == eCurType)
@@ -981,15 +998,15 @@ IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
             aKey2DCB.SetText(aEmptyStr);
             aPhoneticED1.SetText(aEmptyStr);
             aPhoneticED2.SetText(aEmptyStr);
-            bPhoneticED1_ChangedByUser = sal_False;
-            bPhoneticED2_ChangedByUser = sal_False;
+            bPhoneticED1_ChangedByUser = FALSE;
+            bPhoneticED2_ChangedByUser = FALSE;
         }
         else
         {
             if(pBox->IsInDropDown())
             {
                 //reset bPhoneticED1_ChangedByUser if a completly new string is selected
-                bPhoneticED1_ChangedByUser = sal_False;
+                bPhoneticED1_ChangedByUser = FALSE;
             }
             if(!bPhoneticED1_ChangedByUser)
                 aPhoneticED1.SetText(GetDefaultPhoneticReading(pBox->GetText()));
@@ -1002,21 +1019,21 @@ IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
         if(!(pBox->GetText().Len()>0))
         {
             aPhoneticED2.SetText(aEmptyStr);
-            bPhoneticED2_ChangedByUser = sal_False;
+            bPhoneticED2_ChangedByUser = FALSE;
         }
         else
         {
             if(pBox->IsInDropDown())
             {
                 //reset bPhoneticED1_ChangedByUser if a completly new string is selected
-                bPhoneticED2_ChangedByUser = sal_False;
+                bPhoneticED2_ChangedByUser = FALSE;
             }
             if(!bPhoneticED2_ChangedByUser)
                 aPhoneticED2.SetText(GetDefaultPhoneticReading(pBox->GetText()));
         }
     }
-    sal_Bool    bKey1HasText    = (0 != aKeyDCB.GetText().Len());
-    sal_Bool    bKey2HasText    = (0 != aKey2DCB.GetText().Len());
+    sal_Bool	bKey1HasText	= (0 != aKeyDCB.GetText().Len());
+    sal_Bool	bKey2HasText	= (0 != aKey2DCB.GetText().Len());
 
     aPhoneticFT1.Enable(bKey1HasText&&bIsPhoneticReadingEnabled);
     aPhoneticED1.Enable(bKey1HasText&bIsPhoneticReadingEnabled);
@@ -1026,7 +1043,7 @@ IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
     return 0;
 }
 
-/*--------------------------------------------------
+/*-----------------25.02.94 21:19-------------------
  dtor ueberladen
 --------------------------------------------------*/
 SwIndexMarkDlg::~SwIndexMarkDlg()
@@ -1042,7 +1059,7 @@ void    SwIndexMarkDlg::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark)
     pTOXMgr = new SwTOXMgr(pSh);
     if(pCurTOXMark)
     {
-        for(sal_uInt16 i = 0; i < pTOXMgr->GetTOXMarkCount(); i++)
+        for(USHORT i = 0; i < pTOXMgr->GetTOXMarkCount(); i++)
             if(pTOXMgr->GetTOXMark(i) == pCurTOXMark)
             {
                 pTOXMgr->SetCurTOXMark(i);
@@ -1065,7 +1082,7 @@ SfxModelessDialog(_pBindings, pChild, pParent, SvtCJKOptions().IsCJKFontEnabled(
     Initialize(pInfo);
 }
 
-void    SwIndexMarkFloatDlg::Activate()
+void	SwIndexMarkFloatDlg::Activate()
 {
     SfxModelessDialog::Activate();
     aDlg.Activate();
@@ -1084,7 +1101,7 @@ SvxStandardDialog(pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_EDIT_ID
     aDlg.ReInitDlg(rSh, pCurTOXMark);
 }
 
-void    SwIndexMarkModalDlg::Apply()
+void	SwIndexMarkModalDlg::Apply()
 {
     aDlg.Apply();
 }
@@ -1093,21 +1110,21 @@ class SwCreateAuthEntryDlg_Impl : public ModalDialog
 {
     FixedLine       aEntriesFL;
 
-    FixedText*      pFixedTexts[AUTH_FIELD_END];
-    ListBox*        pTypeListBox;
-    ComboBox*       pIdentifierBox;
-    Edit*           pEdits[AUTH_FIELD_END];
+    FixedText*		pFixedTexts[AUTH_FIELD_END];
+    ListBox*		pTypeListBox;
+    ComboBox*		pIdentifierBox;
+    Edit*			pEdits[AUTH_FIELD_END];
 
     OKButton        aOKBT;
-    CancelButton    aCancelBT;
-    HelpButton      aHelpBT;
+    CancelButton 	aCancelBT;
+    HelpButton 		aHelpBT;
 
-    Link            aShortNameCheckLink;
+    Link			aShortNameCheckLink;
 
-    SwWrtShell&     rWrtSh;
+    SwWrtShell& 	rWrtSh;
 
-    sal_Bool            m_bNewEntryMode;
-    sal_Bool            m_bNameAllowed;
+    sal_Bool			m_bNewEntryMode;
+    sal_Bool			m_bNameAllowed;
 
     DECL_LINK(IdentifierHdl, ComboBox*);
     DECL_LINK(ShortNameHdl, Edit*);
@@ -1121,16 +1138,16 @@ public:
                             sal_Bool bCreate);
     ~SwCreateAuthEntryDlg_Impl();
 
-    String          GetEntryText(ToxAuthorityField eField) const;
+    String			GetEntryText(ToxAuthorityField eField) const;
 
-    void            SetCheckNameHdl(const Link& rLink) {aShortNameCheckLink = rLink;}
+    void			SetCheckNameHdl(const Link& rLink) {aShortNameCheckLink = rLink;}
 
 };
 
 struct TextInfo
 {
     sal_uInt16 nToxField;
-    const char* pHelpId;
+    sal_uInt16 nHelpId;
 };
 
 static const TextInfo aTextInfoArr[] =
@@ -1212,11 +1229,11 @@ SwAuthMarkDlg::SwAuthMarkDlg(  Window *pParent,
     aFromComponentRB.Check(bIsFromComponent);
     aFromDocContentRB.Check(!bIsFromComponent);
 
-    aOKBT       .SetHelpId(HID_INSERT_AUTH_MRK_OK   );
-    aCancelBT   .SetHelpId(HID_INSERT_AUTH_MRK_CLOSE);
-    aEntryED        .SetHelpId(HID_INSERT_AUTH_MRK_ENTRY        );
-    aCreateEntryPB  .SetHelpId(HID_INSERT_AUTH_MRK_CREATE_ENTRY );
-    aEditEntryPB    .SetHelpId(HID_INSERT_AUTH_MRK_EDIT_ENTRY   );
+    aOKBT		.SetHelpId(HID_INSERT_AUTH_MRK_OK   );
+    aCancelBT	.SetHelpId(HID_INSERT_AUTH_MRK_CLOSE);
+    aEntryED		.SetHelpId(HID_INSERT_AUTH_MRK_ENTRY		);
+    aCreateEntryPB  .SetHelpId(HID_INSERT_AUTH_MRK_CREATE_ENTRY	);
+    aEditEntryPB    .SetHelpId(HID_INSERT_AUTH_MRK_EDIT_ENTRY	);
 
     aOKBT.SetClickHdl(LINK(this,SwAuthMarkDlg, InsertHdl));
     aCancelBT.SetClickHdl(LINK(this,SwAuthMarkDlg, CloseHdl));
@@ -1244,7 +1261,7 @@ SwAuthMarkDlg::~SwAuthMarkDlg()
 {
 }
 
-void    SwAuthMarkDlg::ReInitDlg(SwWrtShell& rWrtShell)
+void	SwAuthMarkDlg::ReInitDlg(SwWrtShell& rWrtShell)
 {
     pSh = &rWrtShell;
     InitControls();
@@ -1312,7 +1329,7 @@ IMPL_LINK( SwAuthMarkDlg, CompEntryHdl, ListBox*, pBox)
         {
             const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
                                         pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
-            const SwAuthEntry*  pEntry = pFType ? pFType->GetEntryByIdentifier(sEntry) : 0;
+            const SwAuthEntry* 	pEntry = pFType ? pFType->GetEntryByIdentifier(sEntry) : 0;
             for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = pEntry ?
                             pEntry->GetAuthorField((ToxAuthorityField)i) : aEmptyStr;
@@ -1339,7 +1356,7 @@ IMPL_LINK( SwAuthMarkDlg, InsertHdl, PushButton *, EMPTYARG )
         //check if the entry already exists with different content
         const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
                                         pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
-        const SwAuthEntry*  pEntry = pFType ?
+        const SwAuthEntry* 	pEntry = pFType ?
                 pFType->GetEntryByIdentifier( m_sFields[AUTH_FIELD_IDENTIFIER])
                 : 0;
         if(pEntry)
@@ -1480,7 +1497,7 @@ IMPL_LINK(SwAuthMarkDlg, ChangeSourceHdl, RadioButton*, pButton)
         if(pFType)
         {
             SvStringsDtor aIds;
-            pFType->GetAllEntryIdentifiers( aIds );
+            pFType->GetAllEntryIdentifiers(	aIds );
             for(sal_uInt16 n = 0; n < aIds.Count(); n++)
                 aEntryLB.InsertEntry(*aIds.GetObject(n));
         }
@@ -1641,7 +1658,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pTypeListBox->SetPosPixel(bLeft ? aTR1 : aTR2);
             pTypeListBox->Show();
             pTypeListBox->SetSelectHdl(LINK(this, SwCreateAuthEntryDlg_Impl, EnableHdl));
-            pTypeListBox->SetHelpId(aCurInfo.pHelpId);
+            pTypeListBox->SetHelpId(aCurInfo.nHelpId);
 
         }
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
@@ -1659,7 +1676,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             if(pFType)
             {
                 SvStringsDtor aIds;
-                pFType->GetAllEntryIdentifiers( aIds );
+                pFType->GetAllEntryIdentifiers(	aIds );
                 for(sal_uInt16 n = 0; n < aIds.Count(); n++)
                     pIdentifierBox->InsertEntry(*aIds.GetObject(n));
             }
@@ -1669,7 +1686,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pIdentifierBox->SetSizePixel(aTmp);
             pIdentifierBox->SetPosPixel(bLeft ? aTR1 : aTR2);
             pIdentifierBox->Show();
-            pIdentifierBox->SetHelpId(aCurInfo.pHelpId);
+            pIdentifierBox->SetHelpId(aCurInfo.nHelpId);
         }
         else
         {
@@ -1680,7 +1697,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pEdits[nIndex]->SetPosPixel(bLeft ? aTR1 : aTR2);
             pEdits[nIndex]->SetText(pFields[aCurInfo.nToxField]);
             pEdits[nIndex]->Show();
-            pEdits[nIndex]->SetHelpId(aCurInfo.pHelpId);
+            pEdits[nIndex]->SetHelpId(aCurInfo.nHelpId);
             if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
             {
                 pEdits[nIndex]->SetModifyHdl(LINK(this, SwCreateAuthEntryDlg_Impl, ShortNameHdl));
@@ -1709,6 +1726,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
     long nHeightDiff = - aFLSz.Height();
     aFLSz.Height() = aTL1.Y();
     nHeightDiff += aFLSz.Height();
+//    aEntriesFL.SetSizePixel(aFLSz);
     Size aDlgSize(GetSizePixel());
     aDlgSize.Height() += nHeightDiff;
     SetSizePixel(aDlgSize);
@@ -1726,7 +1744,7 @@ SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
     delete pIdentifierBox;
 }
 
-String  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
+String	SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
 {
     String sRet;
     if( AUTH_FIELD_AUTHORITY_TYPE == eField )
@@ -1812,7 +1830,7 @@ SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
     aDlg.ReInitDlg(*pWrtShell);
 }
 
-void    SwAuthMarkFloatDlg::Activate()
+void	SwAuthMarkFloatDlg::Activate()
 {
     SfxModelessDialog::Activate();
     aDlg.Activate();
@@ -1831,7 +1849,7 @@ SwAuthMarkModalDlg::SwAuthMarkModalDlg(Window *pParent, SwWrtShell& rSh) :
     aDlg.ReInitDlg(rSh);
 }
 
-void    SwAuthMarkModalDlg::Apply()
+void	SwAuthMarkModalDlg::Apply()
 {
     aDlg.InsertHdl(0);
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,6 @@ package com.sun.star.lib.uno.protocols.urp;
 import com.sun.star.bridge.InvalidProtocolChangeException;
 import com.sun.star.bridge.ProtocolProperty;
 import com.sun.star.bridge.XProtocolProperties;
-import com.sun.star.lang.DisposedException;
 import com.sun.star.lib.uno.environments.remote.IProtocol;
 import com.sun.star.lib.uno.environments.remote.Message;
 import com.sun.star.lib.uno.environments.remote.ThreadId;
@@ -80,15 +79,6 @@ public final class urp implements IProtocol {
         }
     }
 
-    // @see IProtocol#terminate
-    public void terminate() {
-        synchronized (monitor) {
-            state = STATE_TERMINATED;
-            initialized = true;
-            monitor.notifyAll();
-        }
-    }
-
     // @see IProtocol#readMessage
     public Message readMessage() throws IOException {
         for (;;) {
@@ -134,9 +124,6 @@ public final class urp implements IProtocol {
                     Thread.currentThread().interrupt();
                     throw new RuntimeException(e.toString());
                 }
-            }
-            if (state == STATE_TERMINATED) {
-                throw new DisposedException();
             }
             return writeRequest(false, oid, type, function, tid, arguments);
         }
@@ -388,6 +375,7 @@ public final class urp implements IProtocol {
         if ((header & HEADER_NEWTID) != 0) {
             inL1Tid = unmarshal.readThreadId();
         }
+        //TODO: check HEADER_IGNORECACHE
         return readRequest(funId, sync);
     }
 
@@ -696,6 +684,7 @@ public final class urp implements IProtocol {
     private static final int HEADER_NEWOID = 0x10;
     private static final int HEADER_NEWTID = 0x08;
     private static final int HEADER_FUNCTIONID16 = 0x04;
+    private static final int HEADER_IGNORECACHE = 0x02;
     private static final int HEADER_MOREFLAGS = 0x01;
     private static final int HEADER_MUSTREPLY = 0x80;
     private static final int HEADER_SYNCHRONOUS = 0x40;
@@ -712,7 +701,6 @@ public final class urp implements IProtocol {
     private static final int STATE_REQUESTED = 2;
     private static final int STATE_COMMITTED = 3;
     private static final int STATE_WAIT = 4;
-    private static final int STATE_TERMINATED = 5;
 
     private static final int MAX_RELEASE_QUEUE_SIZE = 100;
 

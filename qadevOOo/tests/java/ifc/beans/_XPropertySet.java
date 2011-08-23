@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -162,7 +162,7 @@ public class _XPropertySet extends MultiMethodTest {
     public void _addPropertyChangeListener() {
 
         requiredMethod("getPropertySetInfo()");
-
+        
         int count = PTT.bound.size();
         if ( count==0 || PTT.bound.get(0).equals("none") ) {
             log.println("*** No bound properties found ***");
@@ -179,19 +179,19 @@ public class _XPropertySet extends MultiMethodTest {
                     oObj.setPropertyValue(propertyName,
                         ValueChanger.changePValue(gValue));
                 } catch (com.sun.star.beans.PropertyVetoException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.beans.UnknownPropertyException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } // end of try-catch
@@ -203,7 +203,7 @@ public class _XPropertySet extends MultiMethodTest {
             }
             tRes.tested("addPropertyChangeListener()", !error);
         }
-
+        
         return;
 
     } // end of addPropertyChangeListener()
@@ -239,19 +239,19 @@ public class _XPropertySet extends MultiMethodTest {
                     oObj.setPropertyValue(propertyName,
                         ValueChanger.changePValue(gValue));
                 } catch (com.sun.star.beans.PropertyVetoException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.beans.UnknownPropertyException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } // end of try-catch
@@ -303,19 +303,19 @@ public class _XPropertySet extends MultiMethodTest {
                     oObj.setPropertyValue(propertyName, sValue);
                     sValue = oObj.getPropertyValue(propertyName);
                 } catch (com.sun.star.beans.PropertyVetoException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.beans.UnknownPropertyException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } // end of try-catch
@@ -334,7 +334,7 @@ public class _XPropertySet extends MultiMethodTest {
 
     /**
     * Tests <code>getPropertyValue</code> method for the given property.
-    * Returns true if no exceptions occurred
+    * Returns true if no exceptions occured
     */
     private boolean getSinglePropertyValue( String propertyName )
     {
@@ -343,17 +343,17 @@ public class _XPropertySet extends MultiMethodTest {
             oObj.getPropertyValue(propertyName);
             runOk = true;
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Exception occurred while trying to get property '"+
+            log.println("Exception occured while trying to get property '"+
                  propertyName+"'");
             e.printStackTrace(log);
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occurred while trying to get property '"+
+            log.println("Exception occured while trying to get property '"+
                 propertyName+"'");
             e.printStackTrace(log);
         }
         return runOk;
     }
-
+                
     /**
     * Tests <code>getPropertyValue</code> method.
     * Just call this method and checks for no exceptions <p>
@@ -371,7 +371,7 @@ public class _XPropertySet extends MultiMethodTest {
 
         int count = PTT.normal.size();
         if ( count==0 || PTT.normal.get(0).equals("none") ) {
-            Property[] properties = oObj.getPropertySetInfo().getProperties();
+            Property[] properties = oObj.getPropertySetInfo().getProperties();    
             if( properties.length > 0 ) {
                 String propertyName = properties[0].Name;
                 log.println("All properties are Read Only");
@@ -420,19 +420,19 @@ public class _XPropertySet extends MultiMethodTest {
             log.println("*** No bound properties found ***");
             tRes.tested("removePropertyChangeListener()", true) ;
         } else {
-
+            
             //remove all listeners first
             for (int i = 0; i < count; i++) {
                 String propertyName = PTT.bound.get(i);
                 try {
                     oObj.removePropertyChangeListener(propertyName,PClistener);
                 } catch (Exception e) {
-                    log.println("Exception occurred while removing change listener from"+
+                    log.println("Exception occured while removing change listener from"+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 }
             }
-
+            
             boolean error = false;
             for (int i = 0; i < count; i++) {
                 String propertyName = PTT.bound.get(i);
@@ -444,19 +444,19 @@ public class _XPropertySet extends MultiMethodTest {
                     oObj.setPropertyValue(propertyName,
                         ValueChanger.changePValue(gValue));
                 } catch (com.sun.star.beans.PropertyVetoException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.beans.UnknownPropertyException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } // end of try-catch
@@ -496,19 +496,19 @@ public class _XPropertySet extends MultiMethodTest {
             log.println("*** No constrained properties found ***");
             tRes.tested("removeVetoableChangeListener()", true) ;
         } else {
-
+        
             //remove all listeners first
             for (int i = 0; i < count; i++) {
                 String propertyName = PTT.constrained.get(i);
                 try {
                     oObj.removeVetoableChangeListener(propertyName,VClistener);
                 } catch (Exception e) {
-                    log.println("Exception occurred while removing veto listener from"+
+                    log.println("Exception occured while removing veto listener from"+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 }
             }
-
+            
             boolean error = false;
             for (int i = 0; i < count; i++) {
                 String propertyName = PTT.constrained.get(i);
@@ -520,19 +520,19 @@ public class _XPropertySet extends MultiMethodTest {
                     oObj.setPropertyValue(propertyName,
                         ValueChanger.changePValue(gValue));
                 } catch (com.sun.star.beans.PropertyVetoException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.beans.UnknownPropertyException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occurred while trying to change "+
+                    log.println("Exception occured while trying to change "+
                         "property '"+ propertyName+"'");
                     e.printStackTrace(log);
                 } // end of try-catch
@@ -563,7 +563,7 @@ public class _XPropertySet extends MultiMethodTest {
 
             Property property = properties[i];
             String name = property.Name;
-
+            
             boolean cont = false;
             for (int j = 0; j < skip.length; j++) {
                 if (name.equals(skip[j])){
@@ -571,9 +571,9 @@ public class _XPropertySet extends MultiMethodTest {
                     cont = true;
                 }
             }
-
+            
             if (cont) continue;
-
+            
             if (name.equals(oObj))
             log.println("Checking '"+name+"'");
             boolean isWritable = ((property.Attributes &

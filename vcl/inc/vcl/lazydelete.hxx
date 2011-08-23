@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "dllapi.h"
 
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <algorithm>
 
 #if OSL_DEBUG_LEVEL > 2
@@ -40,28 +40,26 @@
 #include <stdio.h>
 #endif
 
-#include <com/sun/star/lang/XComponent.hpp>
-
 namespace vcl
 {
     /* Helpers for lazy object deletion
-
+    
     With vcl it is often necessary to delete objects (especially Windows)
     in the right order as well as in a way ensuring that the deleted objects
     are not still on the stack (e.g. deleting a Window in its key handler). To
     make this easier a helper class is given here which takes care of both
     sorting as well as lazy deletion.
-
+    
     The grisly details:
     LazyDelete is a class that LazyDeletor register to. When vcl's event
     loop (that is Application::Yield or Application::Reschedule) comes out
     of the last level, the LazyDelete::flush is called. This will cause
     LazyDelete to delete all registered LazyDeletor objects.
-
+    
     LazyDeletor<T> is a one instance object that contains a list of
     <T> objects to be deleted in sorted order. It is derived from
     LazyDeletorBase as to be able to register itself in LazyDelete.
-
+    
     The user calls the static method LazyDeletor<T>::Delete( T* ) with the
     object to be destroyed lazy. The static method creates the LazyDeletor<T>
     (which in turn registers itself in LazyDelete) if this is the first time
@@ -70,19 +68,19 @@ namespace vcl
     that will ensure the correct order of deletion via the specialized is_less method
     (e.g. if a Window is a child of another Window and therefore should be destroyed
     first it is "less" in this sense)
-
+    
     LazyDelete::flush will be called when the top of the nested event loop is
     reached again and will then destroy each registered LazyDeletor<T> which
     in turn destroys the objects needed to be destroyed lazily. After this
     the state is as before entering the event loop.
-
+    
     Preconditions:
     - The class <T> of which objects are to be destroyed needs a virtual
     destructor or must be final, else the wrong type will be destroyed.
     - The destructor of <T> should call LazyDeletor<T>::Undelete( this ). This
     prevents duplicate deletionin case someone destroys the object prematurely.
     */
-
+    
     class LazyDeletorBase;
     class VCL_DLLPUBLIC LazyDelete
     {
@@ -107,27 +105,27 @@ namespace vcl
     class VCL_DLLPUBLIC LazyDeletor : public LazyDeletorBase
     {
         static LazyDeletor< T >*     s_pOneInstance;
-
+        
         struct DeleteObjectEntry
         {
             T*      m_pObject;
             bool    m_bDeleted;
-
+            
             DeleteObjectEntry() :
                 m_pObject( NULL ),
                 m_bDeleted( false )
             {}
-
+            
             DeleteObjectEntry( T* i_pObject ) :
                 m_pObject( i_pObject ),
                 m_bDeleted( false )
             {}
         };
-
+        
         std::vector< DeleteObjectEntry >    m_aObjects;
-        typedef boost::unordered_map< sal_IntPtr, unsigned int > PtrToIndexMap;
+        typedef std::hash_map< sal_IntPtr, unsigned int > PtrToIndexMap;
         PtrToIndexMap                       m_aPtrToIndex;
-
+        
         /** strict weak ordering funtion to bring objects to be destroyed lazily
         in correct order, e.g. for Window objects children before parents
         */
@@ -142,7 +140,7 @@ namespace vcl
             #endif
             if( s_pOneInstance == this ) // sanity check
                 s_pOneInstance = NULL;
-
+            
             // do the actual work
             unsigned int nCount = m_aObjects.size();
             std::vector<T*> aRealDelete;
@@ -171,7 +169,7 @@ namespace vcl
                     delete aRealDelete[n];
             }
         }
-
+                
         public:
         /** mark an object for lazy deletion
         */
@@ -205,7 +203,7 @@ namespace vcl
             }
         }
     };
-
+    
     /*
     class DeleteOnDeinit matches a similar need as LazyDelete for static objects:
     you may not access vcl objects after DeInitVCL has been called this includes their destruction
@@ -213,36 +211,36 @@ namespace vcl
     To work around this use DeleteOnDeinit<BitmapEx> which will allow you to have a static object container,
     that will have its contents destroyed on DeinitVCL. The single drawback is that you need to check on the
     container object whether it still contains content before actually accessing it.
-
+    
     caveat: when constructing a vcl object, you certainly want to ensure that InitVCL has run already.
     However this is not necessarily the case when using a class static member or a file level static variable.
     In these cases make judicious use of the set() method of DeleteOnDeinit, but beware of the changing
     ownership.
-
+    
     example use case: use a lazy initialized on call BitmapEx in a paint method. Of course a paint method
     would not normally be called after DeInitVCL anyway, so the check might not be necessary in a
     Window::Paint implementation, but always checking is a good idea.
-
+    
     SomeWindow::Paint()
     {
         static vcl::DeleteOnDeinit< BitmapEx > aBmp( new BitmapEx( ResId( 1000, myResMgr ) ) );
-
+     
         if( aBmp.get() ) // check whether DeInitVCL has been called already
             DrawBitmapEx( Point( 10, 10 ), *aBmp.get() );
     }
     */
-
+    
     class VCL_DLLPUBLIC DeleteOnDeinitBase
     {
     public:
         static void SAL_DLLPRIVATE ImplDeleteOnDeInit();
         virtual ~DeleteOnDeinitBase();
     protected:
-        static void addDeinitContainer( DeleteOnDeinitBase* i_pContainer );
+        static void addDeinitContainer( DeleteOnDeinitBase* i_pContainer );        
 
         virtual void doCleanup() = 0;
     };
-
+    
     template < typename T >
     class DeleteOnDeinit : public DeleteOnDeinitBase
     {
@@ -251,50 +249,13 @@ namespace vcl
     public:
         DeleteOnDeinit( T* i_pT ) : m_pT( i_pT ) { addDeinitContainer( this ); }
         virtual ~DeleteOnDeinit() {}
-
+        
         // get contents
         T* get() { return m_pT; }
-
+        
         // set contents, returning old contents
         // ownership is transfered !
         T* set( T* i_pNew ) { T* pOld = m_pT; m_pT = i_pNew; return pOld; }
-    };
-
-    /** Similar to DeleteOnDeinit, the DeleteUnoReferenceOnDeinit
-        template class makes sure that a static UNO object is disposed
-        and released at the right time.
-
-        Use like
-            static DeleteUnoReferenceOnDeinit<lang::XMultiServiceFactory>
-                xStaticFactory (<create factory object>);
-            Reference<lang::XMultiServiceFactory> xFactory (xStaticFactory.get());
-            if (xFactory.is())
-                <do something with xFactory>
-    */
-    template <typename I>
-    class DeleteUnoReferenceOnDeinit : public ::vcl::DeleteOnDeinitBase
-    {
-        ::com::sun::star::uno::Reference<I> m_xI;
-        virtual void doCleanup() { set(NULL); }
-    public:
-        DeleteUnoReferenceOnDeinit(const ::com::sun::star::uno::Reference<I>& r_xI ) : m_xI( r_xI ) {
-            addDeinitContainer( this ); }
-        virtual ~DeleteUnoReferenceOnDeinit() {}
-
-        ::com::sun::star::uno::Reference<I> get (void) { return m_xI; }
-
-        void set (const ::com::sun::star::uno::Reference<I>& r_xNew )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xComponent (m_xI, ::com::sun::star::uno::UNO_QUERY);
-            m_xI = r_xNew;
-            if (xComponent.is()) try
-            {
-                xComponent->dispose();
-            }
-            catch( ::com::sun::star::uno::Exception& )
-            {
-            }
-        }
     };
 }
 

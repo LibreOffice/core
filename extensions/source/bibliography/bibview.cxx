@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@
 #include "bib.hrc"
 #include "bibcont.hxx"
 #include "bibbeam.hxx"
+#include "bibmod.hxx"
 #include "general.hxx"
 #include "bibview.hxx"
 #include "datman.hxx"
@@ -101,8 +102,8 @@ namespace bib
                 }
                 catch( const uno::Exception& rEx)
                 {
-                   (void) rEx;
-                }
+                   (void) rEx; 
+                }            
             }
         }
 
@@ -113,6 +114,9 @@ namespace bib
         m_xGeneralPage = NULL;
     }
 
+    /* -----------------16.11.99 13:13-------------------
+
+     --------------------------------------------------*/
     void BibView::UpdatePages()
     {
         // TODO:
@@ -164,6 +168,8 @@ namespace bib
             }
         }
     }
+    //---------------------------------------------------------------------
+    //--- 19.10.01 16:55:49 -----------------------------------------------
 
     void BibView::_loaded( const EventObject& _rEvent )
     {
@@ -177,12 +183,17 @@ namespace bib
         FormControlContainer::_loaded( _rEvent );
     }
 
+    /* -----------------------------02.02.00 16:49--------------------------------
+
+     ---------------------------------------------------------------------------*/
     IMPL_STATIC_LINK( BibView, CallMappingHdl, BibView*, EMPTYARG )
     {
         pThis->m_pDatMan->CreateMappingDialog( pThis );
         return 0;
     }
+    /* -----------------------------13.04.00 16:12--------------------------------
 
+     ---------------------------------------------------------------------------*/
     void BibView::Resize()
     {
         if ( m_pGeneralPage )
@@ -192,6 +203,9 @@ namespace bib
         }
         Window::Resize();
     }
+
+    //---------------------------------------------------------------------
+    //--- 18.10.01 18:52:45 -----------------------------------------------
 
     Reference< awt::XControlContainer > BibView::getControlContainer()
     {
@@ -207,13 +221,13 @@ namespace bib
             m_pGeneralPage->GrabFocus();
     }
 
-    sal_Bool BibView::HandleShortCutKey( const KeyEvent& rKeyEvent )
+    BOOL BibView::HandleShortCutKey( const KeyEvent& rKeyEvent )
     {
-        return m_pGeneralPage? m_pGeneralPage->HandleShortCutKey( rKeyEvent ) : sal_False;
+        return m_pGeneralPage? m_pGeneralPage->HandleShortCutKey( rKeyEvent ) : FALSE;
     }
 
 //.........................................................................
-}   // namespace bib
+}	// namespace bib
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

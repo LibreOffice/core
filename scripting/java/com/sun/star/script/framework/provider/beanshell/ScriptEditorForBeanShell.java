@@ -1,7 +1,7 @@
-/*************************************************************************
+/************************************************************************* 
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,6 @@ import java.util.HashMap;
 
 import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.framework.provider.ScriptEditor;
-import com.sun.star.script.framework.provider.SwingInvocation;
 import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.provider.ClassLoaderFactory;
 
@@ -121,7 +120,7 @@ public class ScriptEditorForBeanShell
 
     /**
      *  Get the ScriptEditorForBeanShell instance for this URL
-     *
+     * 
      * @param  url         The URL of the script source file
      *
      * @return             The ScriptEditorForBeanShell associated with
@@ -129,9 +128,7 @@ public class ScriptEditorForBeanShell
      */
     public static ScriptEditorForBeanShell getEditor(URL url)
     {
-        synchronized (BEING_EDITED) {
-            return (ScriptEditorForBeanShell)BEING_EDITED.get(url);
-        }
+        return (ScriptEditorForBeanShell)BEING_EDITED.get(url);
     }
 
     /**
@@ -169,16 +166,16 @@ public class ScriptEditorForBeanShell
      */
     public String getExtension() {
         return "bsh";
-    }
+    } 
 
 
     /**
-     *  Indicates the line where error occurred
+     *  Indicates the line where error occured 
      *
      */
     public void indicateErrorLine( int lineNum )
     {
-        model.indicateErrorLine( lineNum );
+        model.indicateErrorLine( lineNum ); 
     }
     /**
      *  Executes the script edited by the editor
@@ -197,7 +194,8 @@ public class ScriptEditorForBeanShell
      * @param  context     The context in which to execute the script
      *
      */
-    public void edit(final XScriptContext context, ScriptMetaData entry) {
+    public void edit(XScriptContext context, ScriptMetaData entry) {
+
         if (entry != null ) {
             try {
                 ClassLoader cl = null;
@@ -207,35 +205,31 @@ public class ScriptEditorForBeanShell
                 catch (Exception ignore) // TODO re-examine error handling
                 {
                 }
-                final ClassLoader theCl = cl;
                 String sUrl = entry.getParcelLocation();
                 if ( !sUrl.endsWith( "/" ) )
                 {
                     sUrl += "/";
                 }
                 sUrl +=  entry.getLanguageName();
-                final URL url = entry.getSourceURL();
-                SwingInvocation.invoke(
-                    new Runnable() {
-                        public void run() {
-                            ScriptEditorForBeanShell editor;
-                            synchronized (BEING_EDITED) {
-                                editor = (ScriptEditorForBeanShell)
-                                    BEING_EDITED.get(url);
-                                if (editor == null) {
-                                    editor = new ScriptEditorForBeanShell(
-                                        context, theCl, url);
-                                    BEING_EDITED.put(url, editor);
-                                }
-                            }
-                            editor.frame.toFront();
-                        }
-                    });
+                URL url = entry.getSourceURL();
+
+                // check if there is already an editing session for this script
+                if (BEING_EDITED.containsKey(url))
+                {
+                    ScriptEditorForBeanShell editor =
+                        (ScriptEditorForBeanShell) BEING_EDITED.get(url);
+
+                    editor.frame.toFront();
+                }
+                else
+                {
+                    new ScriptEditorForBeanShell(context, cl, url);
+                }
             }
             catch (IOException ioe) {
                 showErrorMessage( "Error loading file: " + ioe.getMessage() );
             }
-        }
+        }        
     }
 
     private ScriptEditorForBeanShell() {
@@ -248,15 +242,15 @@ public class ScriptEditorForBeanShell
         this.scriptURL = url;
         this.model     = new ScriptSourceModel(url);
         this.filename  = url.getFile();
-        this.cl = cl;
+        this.cl = cl; 
         try {
             Class c = Class.forName(
                 "org.openoffice.netbeans.editor.NetBeansSourceView");
 
             Class[] types = new Class[] { ScriptSourceModel.class };
-
+                                                                                
             java.lang.reflect.Constructor ctor = c.getConstructor(types);
-
+                                                                                
             if (ctor != null) {
                 Object[] args = new Object[] { this.model };
                 this.view = (ScriptSourceView) ctor.newInstance(args);
@@ -275,6 +269,8 @@ public class ScriptEditorForBeanShell
         this.model.setView(this.view);
         initUI();
         frame.show();
+
+        BEING_EDITED.put(url, this);
     }
 
     private void showErrorMessage(String message) {
@@ -347,7 +343,7 @@ public class ScriptEditorForBeanShell
             return true;
         }
 
-        OutputStream fos = null;
+        OutputStream fos = null; 
         try {
             String s = view.getText();
             fos = scriptURL.openConnection().getOutputStream();
@@ -388,7 +384,7 @@ public class ScriptEditorForBeanShell
 
     private void shutdown()
     {
-        synchronized (BEING_EDITED) {
+        if (BEING_EDITED.containsKey(scriptURL)) {
             BEING_EDITED.remove(scriptURL);
         }
     }

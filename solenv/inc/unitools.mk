@@ -107,8 +107,7 @@ PERL*=perl
 TYPE=cat
 CDD=cd
 COPY=cp -f
-.IF "$(OS)"=="MACOSX" || "$(OS)"=="NETBSD" || "$(OS)"=="OPENBSD" || \
-    "$(OS)"=="DRAGONFLY"
+.IF "$(OS)"=="MACOSX" || "$(OS)"=="NETBSD" || "$(OS)"=="OPENBSD"
 COPYRECURSE=-R
 .ELSE #"$(OS)"=="MACOSX"
 COPYRECURSE=-r
@@ -127,12 +126,6 @@ GNUTAR*=gtar
 DEREFERENCE=-L
 .ELSE			# "$(OS)"=="SOLARIS"
 AWK*=awk
-# this is not true, as BSD does not default to a GNU cp, but BSD cp
-# so in dmake makefiles one should be restricted to use the subset
-# of features that both BSD and GNU make support.
-# as the GNU make build system requires GNUCOPY to really be a GNU copy
-# we work around that for now by not setting GNUCOPY in sdev300.ini
-# for fbsd for now, but for all other platforms it is set.
 GNUCOPY*=cp
 GNUPATCH*=patch
 DEREFERENCE=-L

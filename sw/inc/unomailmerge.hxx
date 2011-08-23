@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,9 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/text/XMailMergeBroadcaster.hpp>
 #include <svl/itemprop.hxx>
-#include <sfx2/objsh.hxx>
+#include <sfx2/objsh.hxx>   // SfxObjectShellRef
+
+#include <functional>
 
 namespace com { namespace sun { namespace star {
 
@@ -78,14 +80,14 @@ namespace rtl {
 // helper function call class
 struct PropHashType_Impl
 {
-    size_t operator()(const sal_Int32 &s) const { return s; }
+    size_t operator()(const INT32 &s) const { return s; }
 };
 
 typedef cppu::OMultiTypeInterfaceContainerHelperVar
     <
-        sal_Int32,
+        INT32,
         PropHashType_Impl,
-        std::equal_to< sal_Int32 >
+        std::equal_to< INT32 >
     > OPropertyListenerContainerHelper;
 
 ////////////////////////////////////////////////////////////
@@ -104,6 +106,7 @@ class SwXMailMerge :
     cppu::OInterfaceContainerHelper     aMergeListeners;
     OPropertyListenerContainerHelper    aPropListeners;
 
+    //SfxItemPropertySet          aPropSet;
     const SfxItemPropertySet*   pPropSet;
 
     SfxObjectShellRef xDocSh;   // the document

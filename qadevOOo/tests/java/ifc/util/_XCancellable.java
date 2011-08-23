@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ public class _XCancellable extends MultiMethodTest {
 
     /**
      * Just calls the method. <p>
-     * Has <b>OK</b> status if no exception has occurred. <p>
+     * Has <b>OK</b> status if no exception has occured. <p>
      */
     public void _cancel() {
         oObj.cancel() ;

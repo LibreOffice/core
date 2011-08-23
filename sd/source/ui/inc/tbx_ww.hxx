@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,16 +39,16 @@
 class SdPopupWindowTbx : public SfxPopupWindow
 {
 private:
-    SfxToolBoxManager   aTbx;
+    SfxToolBoxManager	aTbx;
     SdResId             aSdResIdWin;
     SdResId             aSdResIdTbx;
-    WindowAlign         eTbxAlign;
-    Link                aSelectLink;
+    WindowAlign			eTbxAlign;
+    Link				aSelectLink;
 
     DECL_LINK( TbxSelectHdl, ToolBox * );
 
 public:
-    SdPopupWindowTbx( sal_uInt16 nId, WindowAlign eAlign,
+    SdPopupWindowTbx( USHORT nId, WindowAlign eAlign,
                       SdResId aRIdWin, SdResId aRIdTbx, SfxBindings& rBindings );
     ~SdPopupWindowTbx();
 
@@ -56,8 +56,8 @@ public:
 
     virtual void PopupModeEnd();
 
-    void         StartSelection() { aTbx.GetToolBox().StartSelection(); }
-    void         Update();
+    void		 StartSelection() { aTbx.GetToolBox().StartSelection(); }
+    void		 Update();
 
 private:
 
@@ -72,20 +72,20 @@ private:
 class SdTbxControl : public SfxToolBoxControl
 {
 private:
-    sal_Bool    IsCheckable( sal_uInt16 nSId );
+    BOOL	IsCheckable( USHORT nSId );
 
 public:
             SFX_DECL_TOOLBOX_CONTROL();
 
-            SdTbxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+            SdTbxControl(USHORT nSlotId, USHORT nId, ToolBox& rTbx );
             ~SdTbxControl() {}
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow*		CreatePopupWindow();
+    virtual void StateChanged( USHORT nSId, SfxItemState eState,
                                 const SfxPoolItem* pState );
 };
 
-#endif      // _SD_TBX_WW_HXX
+#endif		// _SD_TBX_WW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

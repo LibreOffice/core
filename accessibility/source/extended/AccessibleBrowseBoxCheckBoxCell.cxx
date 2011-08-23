@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,7 +121,7 @@ namespace accessibility
             aValue <<= (sal_Int32) 2;
         else
             aValue <<= (sal_Int32) 1;
-
+                    
         return aValue;
     }
 
@@ -131,7 +131,7 @@ namespace accessibility
     {
         Any aValue;
         aValue <<= (sal_Int32) 0;
-
+        
         return aValue;
     }
     // -----------------------------------------------------------------------------

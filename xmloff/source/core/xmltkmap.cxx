@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,15 +34,14 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 
+using namespace rtl;
 using namespace ::xmloff::token;
-
-using ::rtl::OUString;
 
 class SvXMLTokenMapEntry_Impl
 {
-    sal_uInt16  nPrefixKey;
-    OUString    sLocalName;
-    sal_uInt16  nToken;
+    sal_uInt16	nPrefixKey;
+    OUString	sLocalName;
+    sal_uInt16	nToken;
 
 public:
 
@@ -61,13 +60,13 @@ public:
         nToken( rEntry.nToken )
     {}
 
-    sal_Bool operator==( const SvXMLTokenMapEntry_Impl& r ) const
+    BOOL operator==( const SvXMLTokenMapEntry_Impl& r ) const
     {
         return nPrefixKey == r.nPrefixKey &&
                sLocalName == r.sLocalName;
     }
 
-    sal_Bool operator<( const SvXMLTokenMapEntry_Impl& r ) const
+    BOOL operator<( const SvXMLTokenMapEntry_Impl& r ) const
     {
         return nPrefixKey < r.nPrefixKey ||
                ( nPrefixKey == r.nPrefixKey &&

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ StatusLine::StatusLine( BasicFrame* p )
 , pFrame( p )
 {
     // initialize TaskToolBox
-    TaskToolBox*    pTempTaskToolBox = GetTaskToolBox();
+    TaskToolBox*	pTempTaskToolBox = GetTaskToolBox();
     pTempTaskToolBox->SetActivateTaskHdl( LINK( this, StatusLine, ActivateTask ) );
 
     // initialize TaskStatusBar
-    TaskStatusBar*  pTempStatusBar = GetStatusBar();
-    long nCharWidth = GetTextWidth( '0' );  // We state: All numbers has the same width
+    TaskStatusBar*	pTempStatusBar = GetStatusBar();
+    long nCharWidth = GetTextWidth( '0' );	// We state: All numbers has the same width
     pTempStatusBar->InsertItem( ST_MESSAGE, GetTextWidth( 'X' ) * 20, SIB_LEFT | SIB_IN | SIB_AUTOSIZE );
     pTempStatusBar->InsertItem( ST_LINE, 5*nCharWidth );
     pTempStatusBar->InsertItem( ST_PROF, GetTextWidth( 'X' ) * 10 );
@@ -73,7 +73,7 @@ void StatusLine::SetProfileName( const String& s )
 
 IMPL_LINK( StatusLine, ActivateTask, TaskToolBox*, pTTB )
 {
-    sal_uInt16 nFirstWinPos=0;
+    USHORT nFirstWinPos=0;
     MenuBar* pMenu = pFrame->GetMenuBar();
     PopupMenu* pWinMenu = pMenu->GetPopupMenu( RID_APPWINDOW );
 
@@ -82,10 +82,14 @@ IMPL_LINK( StatusLine, ActivateTask, TaskToolBox*, pTTB )
 
     nFirstWinPos += pTTB->GetItemPos( pTTB->GetCurItemId() ) / 2;
 
+    USHORT x;
+    x = pTTB->GetItemPos( pTTB->GetCurItemId() );
+    x = pWinMenu->GetItemId( nFirstWinPos );
+    x = pWinMenu->GetItemCount();
     AppWin* pWin = pFrame->FindWin( pWinMenu->GetItemText( pWinMenu->GetItemId( nFirstWinPos ) ).EraseAllChars( L'~' ) );
     if ( pWin )
     {
-        pWin->Minimize( sal_False );
+        pWin->Minimize( FALSE );
         pWin->ToTop();
     }
     return 0;
@@ -93,7 +97,7 @@ IMPL_LINK( StatusLine, ActivateTask, TaskToolBox*, pTTB )
 
 void StatusLine::LoadTaskToolBox()
 {
-    sal_uInt16 nFirstWinPos=0;
+    USHORT nFirstWinPos=0;
     MenuBar* pMenu = pFrame->GetMenuBar();
     PopupMenu* pWinMenu = pMenu->GetPopupMenu( RID_APPWINDOW );
 
@@ -105,11 +109,11 @@ void StatusLine::LoadTaskToolBox()
     pTaskToolBox->StartUpdateTask();
 
     while ( nFirstWinPos < pWinMenu->GetItemCount() )
-    {   // There are windows
+    {	// There are windows
         Window* pWin = pFrame->FindWin( pWinMenu->GetItemId( nFirstWinPos ) );
 
         if ( pWin )
-            pTaskToolBox->UpdateTask( Image(), pWin->GetText(), pWin == pFrame->pList->back() && !( pFrame->pList->back()->GetWinState() & TT_WIN_STATE_HIDE ) );
+            pTaskToolBox->UpdateTask( Image(), pWin->GetText(), pWin == pFrame->pList->Last() && !( pFrame->pList->Last()->GetWinState() & TT_WIN_STATE_HIDE ) );
 
         nFirstWinPos++;
     }

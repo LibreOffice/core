@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <svx/svdtypes.hxx>
 #include "svx/svxdllapi.h"
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase3.hxx> 
 #include <vector>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -71,17 +71,17 @@ typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrPageView : public SfxListener
+class SVX_DLLPUBLIC SdrPageView : public SfxListener 
 {
 protected:
-    SdrView&                                                        mrView;
-    SdrPage*                                                        mpPage;
+    SdrView&														mrView;
+    SdrPage*														mpPage;
     Point         aPgOrg;   // Nullpunkt der Page
 
     Rectangle     aMarkBound; // wird
     Rectangle     aMarkSnap;  // von
-    sal_Bool                                                        mbHasMarked;
-    sal_Bool                                                        mbVisible;
+    sal_Bool														mbHasMarked;
+    sal_Bool														mbVisible;
 
     SetOfByte    aLayerVisi;   // Menge der sichtbaren Layer
     SetOfByte    aLayerLock;   // Menge der nicht editierbaren Layer
@@ -93,16 +93,16 @@ protected:
     SdrHelpLineList aHelpLines; // Hilfslinien und -punkte
 
     // #103911# Use one reserved slot (bReserveBool2) for the document color
-    Color         maDocumentColor;
+    Color		  maDocumentColor;
 
     // #103834# Use one reserved slot (bReserveBool1) for the background color
-    Color         maBackgroundColor;
-
-    SdrPageWindowVector                                         maPageWindows;
+    Color		  maBackgroundColor;
+    
+    SdrPageWindowVector											maPageWindows;
 
     // #i72752# member to remember with which SdrPageWindow the BeginDrawLayer
     // was done
-    SdrPageWindow*                                              mpPreparedPageWindow;
+    SdrPageWindow*												mpPreparedPageWindow;
 
     // interface to SdrPageWindow
 protected:
@@ -129,7 +129,7 @@ private:
     SVX_DLLPRIVATE SdrPageWindow& CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow);
 
 protected:
-    void ImpInvalidateHelpLineArea(sal_uInt16 nNum) const;
+    void ImpInvalidateHelpLineArea(USHORT nNum) const;
 
 protected:
     void SetLayer(const String& rName, SetOfByte& rBS, sal_Bool bJa);
@@ -180,13 +180,10 @@ public:
     void InvalidateAllWin();
 
     // rRect bezieht sich auf die Page
-    void InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix=sal_False);
+    void InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix=FALSE);
 
     // PrePaint call forwarded from app windows
     void PrePaint();
-
-    // PostPaint call forwarded from app windows
-    void PostPaint();
 
     // rReg bezieht sich auf's OutDev, nicht auf die Page
     void CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
@@ -250,13 +247,13 @@ public:
 
     const SdrHelpLineList& GetHelpLines() const { return aHelpLines; }
     void SetHelpLines(const SdrHelpLineList& rHLL);
-    //void SetHelpLinePos(sal_uInt16 nNum, const Point& rNewPos);
-    void SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine);
-    void DeleteHelpLine(sal_uInt16 nNum);
-    void InsertHelpLine(const SdrHelpLine& rHL, sal_uInt16 nNum=0xFFFF);
-    void MoveHelpLine(sal_uInt16 nNum, sal_uInt16 nNewNum) { aHelpLines.Move(nNum,nNewNum); }
+    //void SetHelpLinePos(USHORT nNum, const Point& rNewPos);
+    void SetHelpLine(USHORT nNum, const SdrHelpLine& rNewHelpLine);
+    void DeleteHelpLine(USHORT nNum);
+    void InsertHelpLine(const SdrHelpLine& rHL, USHORT nNum=0xFFFF);
+    void MoveHelpLine(USHORT nNum, USHORT nNewNum) { aHelpLines.Move(nNum,nNewNum); }
 
-    // Liefert sal_True, wenn Layer des Obj sichtbar und nicht gesperrt.
+    // Liefert TRUE, wenn Layer des Obj sichtbar und nicht gesperrt.
     // Beim Gruppenobjekt muss wenigstens ein Member sichtbar sein,
     // gesperrt sein darf keiner.
     sal_Bool IsObjMarkable(SdrObject* pObj) const;
@@ -274,7 +271,7 @@ public:
     void LeaveAllGroup();
 
     // Feststellen, wie weit hinabgestiegen wurde (0=Root(Page))
-    sal_uInt16 GetEnteredLevel() const;
+    USHORT GetEnteredLevel() const;
 
     // Name der aktuellen Objektgruppe
     String GetActualGroupName() const;

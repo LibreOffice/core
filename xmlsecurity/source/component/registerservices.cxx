@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,14 +47,56 @@ void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTyp
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
+{
+    if (pRegistryKey)
+    {
+        try
+        {
+                    sal_Int32 nPos = 0;
+                    // SERVICE DocumentDigitalSignatures
+                    nPos = 0;
+                    uno::Reference< registry::XRegistryKey > xNewKey(
+                    reinterpret_cast< registry::XRegistryKey* >( pRegistryKey )->createKey( DocumentDigitalSignatures::GetImplementationName() ) ); 
+                    
+                    xNewKey = xNewKey->createKey( rtl::OUString::createFromAscii( "/UNO/SERVICES" ) );
+            
+                    const uno::Sequence< rtl::OUString >& rSNL = DocumentDigitalSignatures::GetSupportedServiceNames();
+                    const rtl::OUString* pArray = rSNL.getConstArray();
+                    for ( nPos = rSNL.getLength(); nPos--; )
+                        xNewKey->createKey( pArray[nPos] );
+
+                    // SERVICE CertificateContainer
+                    nPos = 0;
+                    uno::Reference< registry::XRegistryKey > xNewKeyCertificateContainer(
+                    reinterpret_cast< registry::XRegistryKey* >( pRegistryKey )->createKey( CertificateContainer::impl_getStaticImplementationName() ) ); 
+                    xNewKeyCertificateContainer = xNewKeyCertificateContainer->createKey( rtl::OUString::createFromAscii( "/UNO/SERVICES" ) );
+            
+                    const uno::Sequence< rtl::OUString >& rSNLCertificateContainer = CertificateContainer::impl_getStaticSupportedServiceNames();
+                    const rtl::OUString* pArrayCertificateContainer = rSNLCertificateContainer.getConstArray();
+                    for ( nPos = rSNLCertificateContainer.getLength(); nPos--; )
+                        xNewKeyCertificateContainer->createKey( pArrayCertificateContainer[nPos] );    
+            
+                    //-----------------------------
+                    
+                    return sal_True;
+        }
+        catch (registry::InvalidRegistryException &)
+        {
+            DBG_ERROR( "InvalidRegistryException!" );
+        }
+    }
+    return sal_False;
+}
+
 void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void* pRet = 0;
     uno::Reference< XInterface > xFactory;
-
+    
     //Decryptor
     rtl::OUString implName = rtl::OUString::createFromAscii( pImplName );
-
+        
     if ( pServiceManager && implName.equals( DocumentDigitalSignatures::GetImplementationName() ) )
     {
         // DocumentDigitalSignatures
@@ -68,11 +110,11 @@ void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pService
         // CertificateContainer
         xFactory = cppu::createOneInstanceFactory(
             reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-            rtl::OUString::createFromAscii( pImplName ),
-            CertificateContainer::impl_createInstance,
+            rtl::OUString::createFromAscii( pImplName ), 
+            CertificateContainer::impl_createInstance, 
             CertificateContainer::impl_getStaticSupportedServiceNames() );
     }
-
+   
      if (xFactory.is())
     {
         xFactory->acquire();

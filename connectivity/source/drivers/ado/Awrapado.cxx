@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -289,8 +289,8 @@ void WpADOCommand::put_ActiveConnection(/* [in] */ const OLEVariant& vConn)
 
 void WpADOCommand::Create()
 {
-    IClassFactory2* pInterface2 = NULL;
-    IUnknown        *pOuter     = NULL;
+    IClassFactory2* pInterface2	= NULL;
+    IUnknown        *pOuter		= NULL;
     HRESULT         hr;
     hr = CoGetClassObject( ADOS::CLSID_ADOCOMMAND_21,
                           CLSCTX_INPROC_SERVER,
@@ -409,7 +409,7 @@ CommandTypeEnum WpADOCommand::get_CommandType( ) const
     return eNum;
 }
 
-// returns the name of the field
+// gibt den Namen des Feldes zur"ueck
 ::rtl::OUString WpADOCommand::GetName() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
@@ -485,7 +485,7 @@ WpADOProperties WpADOField::get_Properties()
  sal_Int32 WpADOField::GetActualSize() const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
-    ADO_LONGPTR nActualSize=0;
+    sal_Int32 nActualSize=0;
     pInterface->get_ActualSize(&nActualSize);
     return nActualSize;
 }
@@ -502,19 +502,19 @@ sal_Int32 WpADOField::GetStatus() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     sal_Int32 eADOSFieldAttributes=0;
-    //  pInterface->get_Status(&eADOSFieldAttributes);
+    //	pInterface->get_Status(&eADOSFieldAttributes);
     return eADOSFieldAttributes;
 }
 
 sal_Int32 WpADOField::GetDefinedSize() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
-    ADO_LONGPTR nDefinedSize=0;
+    sal_Int32 nDefinedSize=0;
     pInterface->get_DefinedSize(&nDefinedSize);
     return nDefinedSize;
 }
 
-// returns the name of the field
+// gibt den Namen des Feldes zur"ueck
 ::rtl::OUString WpADOField::GetName() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
@@ -699,8 +699,8 @@ sal_Bool WpADOProperty::PutValue(const OLEVariant &aValVar)
 }
  void WpADORecordset::Create()
 {
-    IClassFactory2* pInterface2 = NULL;
-    IUnknown        *pOuter     = NULL;
+    IClassFactory2* pInterface2	= NULL;
+    IUnknown        *pOuter		= NULL;
     HRESULT         hr;
     hr = CoGetClassObject( ADOS::CLSID_ADORECORDSET_21,
                           CLSCTX_INPROC_SERVER,
@@ -776,10 +776,10 @@ void WpADORecordset::Close()
     return bSupports == VARIANT_TRUE;
 }
 
-PositionEnum_Param WpADORecordset::get_AbsolutePosition()
+PositionEnum WpADORecordset::get_AbsolutePosition()
 {
     OSL_ENSURE(pInterface,"Interface is null!");
-    PositionEnum_Param aTemp=adPosUnknown;
+    PositionEnum aTemp=adPosUnknown;
     pInterface->get_AbsolutePosition(&aTemp);
     return aTemp;
 }
@@ -836,11 +836,11 @@ WpADOFields WpADORecordset::GetFields() const
 }
 
 
- sal_Bool WpADORecordset::Move(sal_Int32 nRows, VARIANT aBmk)   {return pInterface && SUCCEEDED(pInterface->Move(nRows, aBmk));}
+ sal_Bool WpADORecordset::Move(sal_Int32 nRows, VARIANT aBmk)	{return pInterface && SUCCEEDED(pInterface->Move(nRows, aBmk));}
  sal_Bool WpADORecordset::MoveNext() {return pInterface && SUCCEEDED(pInterface->MoveNext());}
  sal_Bool WpADORecordset::MovePrevious() {return pInterface && SUCCEEDED(pInterface->MovePrevious());}
  sal_Bool WpADORecordset::MoveFirst() {return pInterface && SUCCEEDED(pInterface->MoveFirst());}
- sal_Bool WpADORecordset::MoveLast()    {return pInterface && SUCCEEDED(pInterface->MoveLast());}
+ sal_Bool WpADORecordset::MoveLast()	{return pInterface && SUCCEEDED(pInterface->MoveLast());}
 
  sal_Bool WpADORecordset::IsAtBOF() const
 {
@@ -898,19 +898,19 @@ WpADOProperties WpADORecordset::get_Properties() const
     return SUCCEEDED(pInterface->NextRecordset(&RecordsAffected,ppiRset));
 }
 
- sal_Bool WpADORecordset::get_RecordCount(ADO_LONGPTR &_nRet) const
+ sal_Bool WpADORecordset::get_RecordCount(sal_Int32 &_nRet) const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     return SUCCEEDED(pInterface->get_RecordCount(&_nRet));
 }
 
- sal_Bool WpADORecordset::get_MaxRecords(ADO_LONGPTR &_nRet) const
+ sal_Bool WpADORecordset::get_MaxRecords(sal_Int32 &_nRet) const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     return SUCCEEDED(pInterface->get_MaxRecords(&_nRet));
 }
 
- sal_Bool WpADORecordset::put_MaxRecords(ADO_LONGPTR _nRet)
+ sal_Bool WpADORecordset::put_MaxRecords(sal_Int32 _nRet)
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     return SUCCEEDED(pInterface->put_MaxRecords(_nRet));
@@ -1319,7 +1319,7 @@ void WpADOCatalog::putref_ActiveConnection(IDispatch* pCon)
     pInterface->putref_ActiveConnection(pCon);
 }
 
-WpADOTables WpADOCatalog::get_Tables()
+WpADOTables	WpADOCatalog::get_Tables()
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     ADOTables* pRet = NULL;
@@ -1568,7 +1568,7 @@ WpBase::WpBase(IDispatch* pInt)
     {
         ULONG nCount = pIUnknown->AddRef();
         (void)nCount;
-        //  OSL_ENSURE(nCount == 1,"Count is greater than 1");
+        //	OSL_ENSURE(nCount == 1,"Count is greater than 1");
     }
 }
 
@@ -2006,7 +2006,7 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
 
     ++nPos;
     ::rtl::OUStringBuffer aTypes;
-    ::rtl::OUString aComma( RTL_CONSTASCII_USTRINGPARAM( "," ));
+    ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
     const ::rtl::OUString* pIter = types.getConstArray();
     const ::rtl::OUString* pEnd = pIter + types.getLength();
     for( ; pIter != pEnd ; ++pIter)

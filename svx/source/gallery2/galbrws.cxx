@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include "svx/gallery1.hxx"
 #include "galbrws1.hxx"
 #include "galbrws2.hxx"
-#include "svx/galbrws.hxx"
+#include "galbrws.hxx"
 
 // -------------------
 // - GallerySplitter -
@@ -82,7 +82,7 @@ void GallerySplitter::DataChanged( const DataChangedEvent& rDCEvt )
 // - SvxGalleryChildWindow -
 // -------------------------
 
-GalleryChildWindow::GalleryChildWindow( Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
+GalleryChildWindow::GalleryChildWindow( Window* _pParent, USHORT nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId )
 {
     pWindow = new GalleryBrowser( pBindings, this, _pParent, GAL_RESID( RID_SVXDLG_GALLERYBROWSER ) );
@@ -117,11 +117,11 @@ GalleryBrowser::GalleryBrowser( SfxBindings* _pBindings, SfxChildWindow* pCW,
     SetMinOutputSizePixel( maLastSize = GetOutputSizePixel() );
 
     mpBrowser1->SelectTheme( 0 );
-    mpBrowser1->Show( sal_True );
-    mpBrowser2->Show( sal_True );
+    mpBrowser1->Show( TRUE );
+    mpBrowser2->Show( TRUE );
 
     mpSplitter->SetSplitHdl( LINK( this, GalleryBrowser, SplitHdl ) );
-    mpSplitter->Show( sal_True );
+    mpSplitter->Show( TRUE );
 
     InitSettings();
 }
@@ -162,12 +162,12 @@ void GalleryBrowser::Resize()
 {
     SfxDockingWindow::Resize();
 
-    const long  nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
-    const long  nFrameWidth2 = nFrameWidth << 1;
-    Size        aMinSize( GetMinOutputSizePixel() );
-    Size        aNewSize( GetOutputSizePixel() );
-    Point       aSplitPos( mpSplitter->GetPosPixel() );
-    const Size  aSplitSize( mpSplitter->GetOutputSizePixel() );
+    const long	nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
+    const long	nFrameWidth2 = nFrameWidth << 1;
+    Size		aMinSize( GetMinOutputSizePixel() );
+    Size		aNewSize( GetOutputSizePixel() );
+    Point		aSplitPos( mpSplitter->GetPosPixel() );
+    const Size	aSplitSize( mpSplitter->GetOutputSizePixel() );
 
     mpBrowser1->SetPosSizePixel( Point( nFrameWidth, nFrameWidth ),
                                  Size( aSplitPos.X() - nFrameWidth, aNewSize.Height() - nFrameWidth2 ) );
@@ -183,17 +183,17 @@ void GalleryBrowser::Resize()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
+BOOL GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
 {
-    const sal_uInt16    nCode = rKEvt.GetKeyCode().GetCode();
-    sal_Bool            bRet = ( !rKEvt.GetKeyCode().IsMod1() &&
+    const USHORT    nCode = rKEvt.GetKeyCode().GetCode();
+    BOOL            bRet = ( !rKEvt.GetKeyCode().IsMod1() &&
                            ( ( KEY_TAB == nCode ) || ( KEY_F6 == nCode && rKEvt.GetKeyCode().IsMod2() ) ) );
 
     if( bRet )
     {
         if( !rKEvt.GetKeyCode().IsShift() )
         {
-            if( mpBrowser1->mpThemes->HasChildPathFocus( sal_True ) )
+            if( mpBrowser1->mpThemes->HasChildPathFocus( TRUE ) )
                 mpBrowser2->GetViewWindow()->GrabFocus();
             else if( mpBrowser2->GetViewWindow()->HasFocus() )
                 mpBrowser2->maViewBox.GrabFocus();
@@ -204,7 +204,7 @@ sal_Bool GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
         }
         else
         {
-            if( mpBrowser1->mpThemes->HasChildPathFocus( sal_True ) )
+            if( mpBrowser1->mpThemes->HasChildPathFocus( TRUE ) )
                 mpBrowser1->maNewTheme.GrabFocus();
             else if( mpBrowser1->maNewTheme.HasFocus() )
                 mpBrowser2->maViewBox.GrabFocus();
@@ -220,7 +220,7 @@ sal_Bool GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GalleryBrowser::Close()
+BOOL GalleryBrowser::Close()
 {
     return SfxDockingWindow::Close();
 }
@@ -263,14 +263,14 @@ Graphic GalleryBrowser::GetGraphic() const
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GalleryBrowser::GetVCDrawModel( FmFormModel& rModel ) const
+BOOL GalleryBrowser::GetVCDrawModel( FmFormModel& rModel ) const
 {
     return mpBrowser2->GetVCDrawModel( rModel );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GalleryBrowser::IsLinkage() const
+BOOL GalleryBrowser::IsLinkage() const
 {
     return mpBrowser2->IsLinkage();
 }

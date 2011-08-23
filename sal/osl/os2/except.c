@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@
  +              }
  +              CATCH(excptid)
  +              {
- +                  ....        // exception occurred: react here
+ +                  ....        // exception occured: react here
  +              } END_CATCH();  // always needed!
  +          } // end of your_func
  *
@@ -166,7 +166,7 @@
  +              CATCH(excpt1) { } END_CATCH();    // always needed!
  +
  +              if (fSemOwned)
- +                  // this gets executed always, even if an exception occurred
+ +                  // this gets executed always, even if an exception occured
  +                  DosReleaseMutexSem(hmtx);
  +          } // end of your_func
  *
@@ -736,7 +736,7 @@ VOID excExplainException(FILE *file,                   // in: logfile from fopen
 
             // *** instruction
 
-            fprintf(file, "Instruction pointer (where exception occurred):\n    CS:EIP = %04lX:%08lX  ",
+            fprintf(file, "Instruction pointer (where exception occured):\n    CS:EIP = %04lX:%08lX  ",
                     pContextRec->ctx_SegCs,
                     pContextRec->ctx_RegEip);
             excDescribePage(file, pContextRec->ctx_RegEip);

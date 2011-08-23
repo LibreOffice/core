@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ typedef ::std::list<rtl::OUString> FileNameList;
 class GalApp : public Application
 {
 public:
-    virtual int Main();
+    virtual void Main();
 
 protected:
     Reference<XMultiServiceFactory> xMSF;
@@ -108,11 +108,12 @@ static void createTheme( rtl::OUString aThemeName,
 
     if (!pGallery ) {
             fprintf( stderr, "Could't acquire '%s'\n",
-                     rtl::OUStringToOString(aGalleryURL, RTL_TEXTENCODING_UTF8).getStr() );
+                     (const sal_Char *) rtl::OUStringToOString( aGalleryURL,
+                                                                RTL_TEXTENCODING_UTF8 ) );
             exit( 1 );
     }
     fprintf( stderr, "Work on gallery '%s'\n",
-                     rtl::OUStringToOString(aGalleryURL, RTL_TEXTENCODING_UTF8).getStr() );
+                     (const sal_Char *) rtl::OUStringToOString( aGalleryURL, RTL_TEXTENCODING_UTF8 ) );
 
     fprintf( stderr, "Existing themes: %lu\n",
              sal::static_int_cast< unsigned long >(
@@ -140,16 +141,16 @@ static void createTheme( rtl::OUString aThemeName,
     }
 
     fprintf( stderr, "Using DestDir: %s\n",
-             rtl::OUStringToOString(aDestDir, RTL_TEXTENCODING_UTF8).getStr() );
+             (const sal_Char *) rtl::OUStringToOString( aDestDir, RTL_TEXTENCODING_UTF8 ) );
     pGalTheme->SetDestDir(String(aDestDir));
 
     FileNameList::const_iterator aIter;
-
+    
     for( aIter = rFiles.begin(); aIter != rFiles.end(); aIter++ )
     {
 //  Should/could use:
-//  if ( ! pGalTheme->InsertFileOrDirURL( aURL ) ) {
-//  Requires a load more components ...
+//	if ( ! pGalTheme->InsertFileOrDirURL( aURL ) ) {
+//	Requires a load more components ...
 
         Graphic aGraphic;
         String aFormat;
@@ -157,10 +158,10 @@ static void createTheme( rtl::OUString aThemeName,
 #if 1
         if ( ! pGalTheme->InsertURL( *aIter ) )
             fprintf( stderr, "Failed to import '%s'\n",
-                     rtl::OUStringToOString(*aIter, RTL_TEXTENCODING_UTF8).getStr() );
+                     (const sal_Char *) rtl::OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ) );
         else
             fprintf( stderr, "Imported file '%s' (%lu)\n",
-                     rtl::OUStringToOString(*aIter, RTL_TEXTENCODING_UTF8).getStr(),
+                     (const sal_Char *) rtl::OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ),
                      sal::static_int_cast< unsigned long >(
                          pGalTheme->GetObjectCount() ) );
 
@@ -185,11 +186,11 @@ static void createTheme( rtl::OUString aThemeName,
             fprintf( stderr, "Failed to create thumbnail for image\n" );
             continue;
         }
-
+        
         if ( ! pGalTheme->InsertObject( aObject ) ) {
             fprintf( stderr, "Failed to insert file or URL\n" );
             continue;
-        }
+        } 
 #endif
     }
 
@@ -200,10 +201,10 @@ static void createTheme( rtl::OUString aThemeName,
 static void PrintHelp()
 {
     fprintf( stdout, "Utility to generate OO.o gallery files\n\n" );
-
+    
     fprintf( stdout, "using: gengal --name <name> --path <dir> [ --destdir <path> ]\n");
     fprintf( stdout, "              [ --number-from <num> ] [ files ... ]\n\n" );
-
+    
     fprintf( stdout, "options:\n");
     fprintf( stdout, " --name <theme>\t\tdefines a name of the created or updated theme.\n");
     fprintf( stdout, " --path <dir>\t\tdefines directory where the gallery files are created\n");
@@ -239,7 +240,7 @@ void GalApp::Init()
             lastSlash = fileName.lastIndexOf( '\\' );
 #endif
         rtl::OUString baseBinDir = fileName.copy( 0, lastSlash );
-        rtl::OUString installPrefix = baseBinDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/../.."));
+        rtl::OUString installPrefix = baseBinDir + rtl::OUString::createFromAscii( "/../.." );
 
         rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("OOO_INSTALL_PREFIX"));
         osl_setEnvironment(envVar.pData, installPrefix.pData);
@@ -262,23 +263,23 @@ void GalApp::InitUCB()
     rtl::OUString aEmpty;
     Sequence< Any > aArgs(6);
     aArgs[0]
-        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_LOCAL));
+        <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY1_LOCAL);
     aArgs[1]
-        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY2_OFFICE));
-    aArgs[2] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PIPE"));
+        <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY2_OFFICE);
+    aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
     aArgs[3] <<= aEmpty;
-    aArgs[4] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PORTAL"));
+    aArgs[4] <<= rtl::OUString::createFromAscii("PORTAL");
     aArgs[5] <<= aEmpty;
 
     if (! ::ucbhelper::ContentBroker::initialize( xMSF, aArgs ) )
         fprintf( stderr, "Failed to init content broker\n" );
 }
 
-int GalApp::Main()
+void GalApp::Main()
 {
     bool bHelp = false;
     rtl::OUString aPath, aDestDir;
-    rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("Default name"));
+    rtl::OUString aName = rtl::OUString::createFromAscii( "Default name" );
     UINT32 nNumFrom = 0;
     FileNameList aFiles;
 
@@ -286,20 +287,20 @@ int GalApp::Main()
     {
         rtl::OUString aParam = GetCommandLineParam( i );
 
-        if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--help" ) ) ||
-            aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) )
+        if( aParam.equalsAscii( "--help" ) ||
+            aParam.equalsAscii( "-h" ) )
                 bHelp = true;
 
-        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--name" ) ) )
+        else if ( aParam.equalsAscii( "--name" ) )
             aName = GetCommandLineParam( ++i );
 
-        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--path" ) ) )
+        else if ( aParam.equalsAscii( "--path" ) )
             aPath = Smartify( GetCommandLineParam( ++i ) );
 
-        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--destdir" ) ) )
+        else if ( aParam.equalsAscii( "--destdir" ) )
             aDestDir = GetCommandLineParam( ++i );
 
-        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--number-from" ) ) )
+        else if ( aParam.equalsAscii( "--number-from" ) )
              nNumFrom = GetCommandLineParam( ++i ).ToInt32();
 
         else
@@ -309,11 +310,10 @@ int GalApp::Main()
     if( bHelp )
     {
         PrintHelp();
-        return EXIT_SUCCESS;
+        return;
     }
 
     createTheme( aName, aPath, aDestDir, nNumFrom, aFiles );
-    return EXIT_SUCCESS;
 }
 
 GalApp aGalApp;

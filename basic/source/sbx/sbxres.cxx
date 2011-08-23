@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,17 +76,17 @@ static const char* pSbxRes[] = {
     "Item",
     "Remove",
 
-    "Error ",   // with blank!
+    "Error ",	// with blank!
     "False",
     "True"
 };
 
-const char* GetSbxRes( sal_uInt16 nId )
+const char* GetSbxRes( USHORT nId )
 {
     return ( ( nId > SBXRES_MAX ) ? "???" : pSbxRes[ nId ] );
 }
 
-SbxRes::SbxRes( sal_uInt16 nId )
+SbxRes::SbxRes( USHORT nId )
     : ::rtl::OUString( ::rtl::OUString::createFromAscii( GetSbxRes( nId ) ) )
 {}
 

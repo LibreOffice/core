@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ namespace {
     long getLongestWordWidth( const String& rText, const Window& rWin )
     {
         long nWidth = 0;
-        Reference< XBreakIterator > xBreakIter( vcl::unohelper::CreateBreakIterator() );
+        Reference< XBreakIterator >	xBreakIter( vcl::unohelper::CreateBreakIterator() );
         sal_Int32 nStartPos = 0;
         const Locale aLocale = Application::GetSettings().GetUILocale();
         Boundary aBoundary = xBreakIter->getWordBoundary(
@@ -82,8 +82,8 @@ namespace {
         {
             nStartPos = aBoundary.endPos;
             String sWord( rText.Copy(
-                (sal_uInt16)aBoundary.startPos,
-                (sal_uInt16)aBoundary.endPos - (sal_uInt16)aBoundary.startPos ) );
+                (USHORT)aBoundary.startPos,
+                (USHORT)aBoundary.endPos - (USHORT)aBoundary.startPos ) );
             long nTemp = rWin.GetCtrlTextWidth( sWord );
             if ( nTemp > nWidth )
                 nWidth = nTemp;
@@ -99,19 +99,19 @@ ManageLanguageDialog::ManageLanguageDialog( Window* pParent, LocalizationMgr* _p
 
     ModalDialog( pParent, IDEResId( RID_DLG_MANAGE_LANGUAGE ) ),
 
-    m_aLanguageFT       ( this, IDEResId( FT_LANGUAGE ) ),
-    m_aLanguageLB       ( this, IDEResId( LB_LANGUAGE ) ),
-    m_aAddPB            ( this, IDEResId( PB_ADD_LANG ) ),
-    m_aDeletePB         ( this, IDEResId( PB_DEL_LANG ) ),
-    m_aMakeDefPB        ( this, IDEResId( PB_MAKE_DEFAULT ) ),
-    m_aInfoFT           ( this, IDEResId( FT_INFO ) ),
-    m_aBtnLine          ( this, IDEResId( FL_BUTTONS ) ),
-    m_aHelpBtn          ( this, IDEResId( PB_HELP ) ),
-    m_aCloseBtn         ( this, IDEResId( PB_CLOSE ) ),
-    m_pLocalizationMgr  ( _pLMgr ),
-    m_sDefLangStr       (       IDEResId( STR_DEF_LANG ) ),
-    m_sDeleteStr        (       IDEResId( STR_DELETE ) ),
-    m_sCreateLangStr    (       IDEResId( STR_CREATE_LANG ) )
+    m_aLanguageFT		( this, IDEResId( FT_LANGUAGE ) ),
+    m_aLanguageLB		( this, IDEResId( LB_LANGUAGE ) ),
+    m_aAddPB			( this, IDEResId( PB_ADD_LANG ) ),
+    m_aDeletePB			( this, IDEResId( PB_DEL_LANG ) ),
+    m_aMakeDefPB		( this, IDEResId( PB_MAKE_DEFAULT ) ),
+    m_aInfoFT			( this, IDEResId( FT_INFO ) ),
+    m_aBtnLine			( this, IDEResId( FL_BUTTONS ) ),
+    m_aHelpBtn			( this, IDEResId( PB_HELP ) ),
+    m_aCloseBtn			( this, IDEResId( PB_CLOSE ) ),
+    m_pLocalizationMgr	( _pLMgr ),
+    m_sDefLangStr		( 		IDEResId( STR_DEF_LANG ) ),
+    m_sDeleteStr		( 		IDEResId( STR_DELETE ) ),
+    m_sCreateLangStr	(		IDEResId( STR_CREATE_LANG ) )
 
 {
     FreeResource();
@@ -141,7 +141,7 @@ void ManageLanguageDialog::Init()
     m_aMakeDefPB.SetClickHdl( LINK( this, ManageLanguageDialog, MakeDefHdl ) );
     m_aLanguageLB.SetSelectHdl( LINK( this, ManageLanguageDialog, SelectHdl ) );
 
-    m_aLanguageLB.EnableMultiSelection( sal_True );
+    m_aLanguageLB.EnableMultiSelection( TRUE );
     CalcInfoSize();
 }
 
@@ -184,7 +184,7 @@ void ManageLanguageDialog::FillLanguageBox()
         Locale aDefaultLocale = m_pLocalizationMgr->getStringResourceManager()->getDefaultLocale();
         Sequence< Locale > aLocaleSeq = m_pLocalizationMgr->getStringResourceManager()->getLocales();
         const Locale* pLocale = aLocaleSeq.getConstArray();
-        sal_Int32 i, nCount = aLocaleSeq.getLength();
+        INT32 i, nCount = aLocaleSeq.getLength();
         for ( i = 0;  i < nCount;  ++i )
         {
             bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
@@ -195,7 +195,7 @@ void ManageLanguageDialog::FillLanguageBox()
                 sLanguage += ' ';
                 sLanguage += m_sDefLangStr;
             }
-            sal_uInt16 nPos = m_aLanguageLB.InsertEntry( sLanguage );
+            USHORT nPos = m_aLanguageLB.InsertEntry( sLanguage );
             m_aLanguageLB.SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
         }
     }
@@ -205,7 +205,7 @@ void ManageLanguageDialog::FillLanguageBox()
 
 void ManageLanguageDialog::ClearLanguageBox()
 {
-    sal_uInt16 i, nCount = m_aLanguageLB.GetEntryCount();
+    USHORT i, nCount = m_aLanguageLB.GetEntryCount();
     for ( i = 0; i < nCount; ++i )
     {
         LanguageEntry* pEntry = (LanguageEntry*)( m_aLanguageLB.GetEntryData(i) );
@@ -240,13 +240,13 @@ IMPL_LINK( ManageLanguageDialog, DeleteHdl, Button *, EMPTYARG )
     aQBox.SetButtonText( RET_OK, m_sDeleteStr );
     if ( aQBox.Execute() == RET_OK )
     {
-        sal_uInt16 i, nCount = m_aLanguageLB.GetSelectEntryCount();
-        sal_uInt16 nPos = m_aLanguageLB.GetSelectEntryPos();
+        USHORT i, nCount = m_aLanguageLB.GetSelectEntryCount();
+        USHORT nPos = m_aLanguageLB.GetSelectEntryPos();
         // remove locales
         Sequence< Locale > aLocaleSeq( nCount );
         for ( i = 0; i < nCount; ++i )
         {
-            sal_uInt16 nSelPos = m_aLanguageLB.GetSelectEntryPos(i);
+            USHORT nSelPos = m_aLanguageLB.GetSelectEntryPos(i);
             LanguageEntry* pEntry = (LanguageEntry*)( m_aLanguageLB.GetEntryData( nSelPos ) );
             if ( pEntry )
                 aLocaleSeq[i] = pEntry->m_aLocale;
@@ -267,7 +267,7 @@ IMPL_LINK( ManageLanguageDialog, DeleteHdl, Button *, EMPTYARG )
 
 IMPL_LINK( ManageLanguageDialog, MakeDefHdl, Button *, EMPTYARG )
 {
-    sal_uInt16 nPos = m_aLanguageLB.GetSelectEntryPos();
+    USHORT nPos = m_aLanguageLB.GetSelectEntryPos();
     LanguageEntry* pSelectEntry = (LanguageEntry*)( m_aLanguageLB.GetEntryData( nPos ) );
     if ( pSelectEntry && !pSelectEntry->m_bIsDefault )
     {
@@ -286,7 +286,7 @@ IMPL_LINK( ManageLanguageDialog, MakeDefHdl, Button *, EMPTYARG )
 
 IMPL_LINK( ManageLanguageDialog, SelectHdl, ListBox *, EMPTYARG )
 {
-    sal_uInt16 nCount = m_aLanguageLB.GetEntryCount();
+    USHORT nCount = m_aLanguageLB.GetEntryCount();
     bool bEmpty = ( !nCount ||
                     m_aLanguageLB.GetEntryPos( m_sCreateLangStr ) != LISTBOX_ENTRY_NOTFOUND );
     bool bSelect = ( m_aLanguageLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
@@ -304,14 +304,14 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, Localizatio
 
     ModalDialog( pParent, IDEResId( RID_DLG_SETDEF_LANGUAGE ) ),
 
-    m_aLanguageFT   ( this, IDEResId( FT_DEF_LANGUAGE ) ),
-    m_pLanguageLB   ( new SvxLanguageBox( this, IDEResId( LB_DEF_LANGUAGE ) ) ),
-    m_pCheckLangLB  ( NULL ),
-    m_aInfoFT       ( this, IDEResId( FT_DEF_INFO ) ),
-    m_aBtnLine      ( this, IDEResId( FL_DEF_BUTTONS ) ),
-    m_aOKBtn        ( this, IDEResId( PB_DEF_OK ) ),
-    m_aCancelBtn    ( this, IDEResId( PB_DEF_CANCEL ) ),
-    m_aHelpBtn      ( this, IDEResId( PB_DEF_HELP ) ),
+    m_aLanguageFT	( this, IDEResId( FT_DEF_LANGUAGE ) ),
+    m_pLanguageLB	( new SvxLanguageBox( this, IDEResId( LB_DEF_LANGUAGE ) ) ),
+    m_pCheckLangLB	( NULL ),
+    m_aInfoFT		( this, IDEResId( FT_DEF_INFO ) ),
+    m_aBtnLine		( this, IDEResId( FL_DEF_BUTTONS ) ),
+    m_aOKBtn		( this, IDEResId( PB_DEF_OK ) ),
+    m_aCancelBtn	( this, IDEResId( PB_DEF_CANCEL ) ),
+    m_aHelpBtn		( this, IDEResId( PB_DEF_HELP ) ),
 
     m_pLocalizationMgr( _pLMgr )
 
@@ -341,18 +341,18 @@ SetDefaultLanguageDialog::~SetDefaultLanguageDialog()
 void SetDefaultLanguageDialog::FillLanguageBox()
 {
     // fill list with all languages
-    m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, sal_False );
+    m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, FALSE );
     // remove the already localized languages
     Sequence< Locale > aLocaleSeq = m_pLocalizationMgr->getStringResourceManager()->getLocales();
     const Locale* pLocale = aLocaleSeq.getConstArray();
-    sal_Int32 i, nCount = aLocaleSeq.getLength();
+    INT32 i, nCount = aLocaleSeq.getLength();
     for ( i = 0;  i < nCount;  ++i )
         m_pLanguageLB->RemoveLanguage( SvxLocaleToLanguage( pLocale[i] ) );
 
     // fill checklistbox if not in default mode
     if ( m_pLocalizationMgr->isLibraryLocalized() )
     {
-        sal_uInt16 j, nCount_ = m_pLanguageLB->GetEntryCount();
+        USHORT j, nCount_ = m_pLanguageLB->GetEntryCount();
         for ( j = 0;  j < nCount_;  ++j )
         {
             m_pCheckLangLB->InsertEntry(
@@ -397,7 +397,7 @@ void SetDefaultLanguageDialog::CalcInfoSize()
 Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
 {
     bool bNotLocalized = !m_pLocalizationMgr->isLibraryLocalized();
-    sal_Int32 nSize = bNotLocalized ? 1 : m_pCheckLangLB->GetCheckedEntryCount();
+    INT32 nSize = bNotLocalized ? 1 : m_pCheckLangLB->GetCheckedEntryCount();
     Sequence< Locale > aLocaleSeq( nSize );
     if ( bNotLocalized )
     {
@@ -407,13 +407,13 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     }
     else
     {
-        sal_uInt16 i, nCount = static_cast< sal_uInt16 >( m_pCheckLangLB->GetEntryCount() );
-        sal_Int32 j = 0;
+        USHORT i, nCount = static_cast< USHORT >( m_pCheckLangLB->GetEntryCount() );
+        INT32 j = 0;
         for ( i = 0; i < nCount; ++i )
         {
             if ( m_pCheckLangLB->IsChecked(i) )
             {
-                LanguageType eType = LanguageType( (sal_uLong)m_pCheckLangLB->GetEntryData(i) );
+                LanguageType eType = LanguageType( (ULONG)m_pCheckLangLB->GetEntryData(i) );
                 Locale aLocale;
                 SvxLanguageToLocale( aLocale, eType );
                 aLocaleSeq[j++] = aLocale;

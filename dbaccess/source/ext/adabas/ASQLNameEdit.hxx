@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace adabasui
                         ,public OSQLNameChecker
     {
     public:
-        OSQLNameEdit(Window* _pParent,const ResId& _rRes)
+        OSQLNameEdit(Window* _pParent,const ResId& _rRes) 
             : Edit(_pParent,_rRes)
         {
         }

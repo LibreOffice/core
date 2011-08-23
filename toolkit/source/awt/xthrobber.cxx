@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,13 +31,12 @@
 #include "toolkit/awt/xthrobber.hxx"
 #include "toolkit/helper/property.hxx"
 #include <toolkit/helper/tkresmgr.hxx>
+#include <toolkit/helper/throbberimpl.hxx>
 
 #include "xthrobber.hrc"
 #include <tools/debug.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/throbber.hxx>
 
 //........................................................................
 namespace toolkit
@@ -55,51 +54,93 @@ namespace toolkit
     XThrobber::XThrobber()
     {
         DBG_CTOR( XThrobber, NULL );
+
+        mpThrobber = new Throbber_Impl( this, 100, sal_True );
+
+        InitImageList();
     }
 
     //--------------------------------------------------------------------
     XThrobber::~XThrobber()
     {
         DBG_DTOR( XThrobber, NULL );
+        delete mpThrobber;
     }
+
+    //--------------------------------------------------------------------
+    IMPLEMENT_FORWARD_XINTERFACE2( XThrobber, VCLXWindow, XThrobber_Base )
+
+    //--------------------------------------------------------------------
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2( XThrobber, VCLXWindow, XThrobber_Base )
 
     //--------------------------------------------------------------------
     void SAL_CALL XThrobber::start() throw ( uno::RuntimeException )
     {
-        SolarMutexGuard aGuard;
-        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
-        if ( pThrobber != NULL)
-            pThrobber->start();
+        mpThrobber->start();
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL XThrobber::stop() throw ( uno::RuntimeException )
     {
-        SolarMutexGuard aGuard;
-        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
-        if ( pThrobber != NULL)
-            pThrobber->stop();
+        mpThrobber->stop();
     }
 
     //--------------------------------------------------------------------
-    void XThrobber::SetWindow( Window* pWindow )
+    void XThrobber::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
     {
-        XThrobber_Base::SetWindow( pWindow );
-        InitImageList();
+        static bool bInit = false;
+        if ( !bInit )
+        {
+            // Images won't be shown if set too early
+            mpThrobber->initImage();
+            bInit = true;
+        }
+        // TODO: XSimpleAnimation::ProcessWindowEvent
+        //Reference< XSimpleAnimation > xKeepAlive( this );
+        //SpinButton* pSpinButton = static_cast< SpinButton* >( GetWindow() );
+        //if ( !pSpinButton )
+        //    return;
+
+        VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL XThrobber::setProperty( const ::rtl::OUString& PropertyName, const uno::Any& Value )
+        throw( uno::RuntimeException )
+    {
+        ::osl::SolarGuard aGuard( GetMutex() );
+
+        if ( GetWindow() )
+        {
+            VCLXWindow::setProperty( PropertyName, Value );
+        }
+    }
+    
+    //--------------------------------------------------------------------
+    uno::Any SAL_CALL XThrobber::getProperty( const ::rtl::OUString& PropertyName )
+        throw( uno::RuntimeException )
+    {
+        ::osl::SolarGuard aGuard( GetMutex() );
+
+        uno::Any aReturn;
+
+        if ( GetWindow() )
+        {
+            aReturn = VCLXWindow::getProperty( PropertyName );
+        }
+        return aReturn;
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL XThrobber::InitImageList()
         throw( uno::RuntimeException )
     {
-        SolarMutexGuard aGuard;
-
-        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
-        if ( pThrobber == NULL)
-            return;
-
+        ::osl::SolarGuard aGuard( GetMutex() );
         uno::Sequence< uno::Reference< graphic::XGraphic > > aImageList(12);
         sal_uInt16 nIconIdStart = RID_TK_ICON_THROBBER_START;
+
+        if ( mpThrobber->isHCMode() )
+            nIconIdStart = RID_TK_HC_ICON_THROBBER_START;
 
         for ( sal_uInt16 i=0; i<12; i++ )
         {
@@ -107,9 +148,9 @@ namespace toolkit
             aImageList[i] = aImage.GetXGraphic();
         }
 
-        pThrobber->setImageList( aImageList );
+        mpThrobber->setImageList( aImageList );
     }
-
+ 
 //........................................................................
 }   // namespace toolkit
 //........................................................................

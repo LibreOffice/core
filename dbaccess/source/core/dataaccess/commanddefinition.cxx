@@ -98,7 +98,7 @@ OCommandDefinition::~OCommandDefinition()
     DBG_DTOR(OCommandDefinition, NULL);
 }
 
-OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContainer
+OCommandDefinition::OCommandDefinition(	const Reference< XInterface >& _rxContainer
                                        ,const ::rtl::OUString& _rElementName
                                        ,const Reference< XMultiServiceFactory >& _xORB
                                        ,const TContentPtr& _pImpl)
@@ -115,7 +115,7 @@ IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP
 
 ::rtl::OUString OCommandDefinition::getImplementationName_static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.OCommandDefinition"));
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.dba.OCommandDefinition");
 }
 
 ::rtl::OUString SAL_CALL OCommandDefinition::getImplementationName(  ) throw(RuntimeException)
@@ -163,5 +163,5 @@ void SAL_CALL OCommandDefinition::rename( const ::rtl::OUString& newName ) throw
     }
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

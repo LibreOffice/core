@@ -83,6 +83,9 @@ APP1STDLIBS= \
     $(CPPULIB)		\
     $(CPPUHELPERLIB)\
     $(LIBXML2LIB)
+.IF "$(OS)" == "WNT"
+APP1STDLIBS += $(UNICOWSLIB)
+.ENDIF
 
 .INCLUDE :  target.mk
 

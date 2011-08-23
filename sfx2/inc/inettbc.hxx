@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,9 @@ class SfxURLToolBoxControl_Impl : public SfxToolBoxControl
 {
 private:
     ::svt::AcceleratorExecute*  pAccExec;
-
-    SvtURLBox*              GetURLBox() const;
-    void                    OpenURL( const String& rName, sal_Bool bNew ) const;
+    
+    SvtURLBox* 				GetURLBox() const;
+    void                    OpenURL( const String& rName, BOOL bNew ) const;
 
     DECL_LINK(              OpenHdl, void* );
     DECL_LINK(              SelectHdl, void* );
@@ -59,18 +59,18 @@ private:
         ::com::sun::star::util::URL                                                aTargetURL;
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
     };
-
+    
     DECL_STATIC_LINK( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo* );
 
 public:
 
                             SFX_DECL_TOOLBOX_CONTROL();
 
-                            SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
+                            SfxURLToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
     virtual                 ~SfxURLToolBoxControl_Impl();
 
-    virtual Window*         CreateItemWindow( Window* pParent );
-    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual Window* 		CreateItemWindow( Window* pParent );
+    virtual void			StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
 };
 
 #endif

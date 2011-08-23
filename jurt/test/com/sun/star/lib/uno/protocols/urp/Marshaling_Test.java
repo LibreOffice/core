@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,14 +32,21 @@ import com.sun.star.uno.IBridge;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;
+import complexlib.ComplexTestCase;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
-public final class Marshaling_Test {
-    @Test public void test() throws Exception {
+public final class Marshaling_Test extends ComplexTestCase {
+    public String getTestObjectName() {
+        return getClass().getName();
+    }
+
+    public String[] getTestMethodNames() {
+        return new String[] { "test" };
+    }
+
+    public void test() throws Exception {
         short cacheSize = (short)256;
         TestBridge testBridge = new TestBridge();
         Marshal marshal = new Marshal(testBridge, cacheSize);
@@ -232,7 +239,7 @@ public final class Marshaling_Test {
             if(op1 instanceof Any)
                 op1 = ((Any)op1).getObject();
 
-            assertTrue(compareObjects(op1, op2));
+            assure("", compareObjects(op1, op2));
         }
     }
 

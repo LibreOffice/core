@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@ class ScXMLImport;
 
 struct ScMyImpCellRangeSource
 {
-    ::rtl::OUString             sSourceStr;
-    ::rtl::OUString             sFilterName;
-    ::rtl::OUString             sFilterOptions;
-    ::rtl::OUString             sURL;
-    sal_Int32                   nColumns;
-    sal_Int32                   nRows;
-    sal_Int32                   nRefresh;
+    ::rtl::OUString				sSourceStr;
+    ::rtl::OUString				sFilterName;
+    ::rtl::OUString				sFilterOptions;
+    ::rtl::OUString				sURL;
+    sal_Int32					nColumns;
+    sal_Int32					nRows;
+    sal_Int32					nRefresh;
 
                                 ScMyImpCellRangeSource();
 };
@@ -55,25 +55,25 @@ struct ScMyImpCellRangeSource
 class ScXMLCellRangeSourceContext : public SvXMLImportContext
 {
 private:
-    const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&			GetScImport() const	{ return (const ScXMLImport&)GetImport(); }
+    ScXMLImport&				GetScImport()		{ return (ScXMLImport&)GetImport(); }
 
 public:
                                 ScXMLCellRangeSourceContext(
                                     ScXMLImport& rImport,
-                                    sal_uInt16 nPrfx,
+                                    USHORT nPrfx,
                                     const ::rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                     ScMyImpCellRangeSource* pCellRangeSource
                                     );
-    virtual                     ~ScXMLCellRangeSourceContext();
+    virtual						~ScXMLCellRangeSourceContext();
 
-    virtual SvXMLImportContext* CreateChildContext(
-                                    sal_uInt16 nPrefix,
+    virtual SvXMLImportContext*	CreateChildContext(
+                                    USHORT nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );
-    virtual void                EndElement();
+    virtual void				EndElement();
 };
 
 

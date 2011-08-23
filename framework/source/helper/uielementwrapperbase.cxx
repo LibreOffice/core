@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <helper/uielementwrapperbase.hxx>
 #include <general.h>
@@ -38,14 +38,14 @@
 #include <threadhelp/resetableguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <rtl/logfile.hxx>
@@ -58,24 +58,24 @@ const rtl::OUString UIELEMENT_PROPNAME_RESOURCEURL( RTL_CONSTASCII_USTRINGPARAM(
 const rtl::OUString UIELEMENT_PROPNAME_TYPE( RTL_CONSTASCII_USTRINGPARAM( "Type" ));
 const rtl::OUString UIELEMENT_PROPNAME_FRAME( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
 
+using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
-using ::rtl::OUString;
 
 namespace framework
 {
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
+//	XInterface, XTypeProvider
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_8     (   UIElementWrapperBase                                            ,
                             OWeakObject                                                     ,
                             DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider         ),
                             DIRECT_INTERFACE( ::com::sun::star::ui::XUIElement      ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet    ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet     ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet         ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet	),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet		),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet			),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XInitialization       ),
                             DIRECT_INTERFACE( ::com::sun::star::util::XUpdatable            ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XComponent            )
@@ -129,7 +129,7 @@ void SAL_CALL UIElementWrapperBase::initialize( const Sequence< Any >& aArgument
 throw ( Exception, RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
-
+    
     if ( !m_bInitialized )
     {
         for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
@@ -137,9 +137,9 @@ throw ( Exception, RuntimeException )
             PropertyValue aPropValue;
             if ( aArguments[n] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ResourceURL" ) ))
+                if ( aPropValue.Name.equalsAscii( "ResourceURL" ))
                     aPropValue.Value >>= m_aResourceURL;
-                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Frame" ) ))
+                else if ( aPropValue.Name.equalsAscii( "Frame" ))
                 {
                     Reference< XFrame > xFrame;
                     aPropValue.Value >>= xFrame;
@@ -181,8 +181,8 @@ sal_Bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*a
                                                                   sal_Int32  /*nHandle*/         ,
                                                                   const Any& /*aValue*/             ) throw( com::sun::star::lang::IllegalArgumentException )
 {
-    //  Initialize state with sal_False !!!
-    //  (Handle can be invalid)
+    //	Initialize state with FALSE !!!
+    //	(Handle can be invalid)
     return sal_False ;
 }
 
@@ -196,10 +196,10 @@ void SAL_CALL UIElementWrapperBase::getFastPropertyValue( com::sun::star::uno::A
 {
     switch( nHandle )
     {
-        case UIELEMENT_PROPHANDLE_RESOURCEURL:
+        case UIELEMENT_PROPHANDLE_RESOURCEURL: 
             aValue <<= m_aResourceURL;
             break;
-        case UIELEMENT_PROPHANDLE_TYPE:
+        case UIELEMENT_PROPHANDLE_TYPE: 
             aValue <<= m_nType;
             break;
         case UIELEMENT_PROPHANDLE_FRAME:

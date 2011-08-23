@@ -29,6 +29,7 @@
 #ifndef _DOCXEXPORT_HXX_
 #define _DOCXEXPORT_HXX_
 
+#include "docxattributeoutput.hxx"
 #include "wrtww8.hxx"
 
 #include <sax/fshelper.hxx>
@@ -38,7 +39,6 @@
 #include <cstdio>
 #include <vector>
 
-class DocxAttributeOutput;
 class DocxExportFilter;
 class SwNode;
 class SwEndNode;
@@ -86,23 +86,18 @@ class DocxExport : public MSWordExportBase
     oox::vml::VMLExport *m_pVMLExport;
 
 public:
-
-    DocxExportFilter& GetFilter() { return *m_pFilter; };
-    const DocxExportFilter& GetFilter() const { return *m_pFilter; };
-
     /// Access to the attribute output class.
     virtual AttributeOutputBase& AttrOutput() const;
 
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const;
 
-    /// Determines if the format is expected to support unicode.
-    virtual bool SupportsUnicode() const { return true; }
-
-    virtual bool ignoreAttributeForStyles( sal_uInt16 nWhich ) const;
+    /// Hack, unfortunately necessary at some places for now.
+    /// FIXME remove it when possible.
+    virtual bool HackIsWW8OrHigher() const { return true; }
 
     /// Guess the script (asian/western).
-    virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich );
+    virtual bool CollapseScriptsforWordOk( USHORT nScript, USHORT nWhich );
 
     virtual void AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen );
 
@@ -118,12 +113,12 @@ public:
     virtual bool DisallowInheritingOutlineNumbering( const SwFmt &rFmt );
 
     /// Output the actual headers and footers.
-    virtual void WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
-            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 nBreakCode );
+    virtual void WriteHeadersFooters( BYTE nHeadFootFlags,
+            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, BYTE nBreakCode );
 
     /// Write the field
     virtual void OutputField( const SwField* pFld, ww::eField eFldType,
-            const String& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL );
+            const String& rFldCmd, BYTE nMode = nsFieldFlags::WRITEFIELD_ALL );
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
@@ -137,7 +132,7 @@ public:
 
     virtual void DoFormText(const SwInputField * pFld);
 
-    virtual sal_uLong ReplaceCr( sal_uInt8 nChar );
+    virtual ULONG ReplaceCr( BYTE nChar );
 
     /// Returns the relationd id
     rtl::OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount );
@@ -163,7 +158,7 @@ protected:
 
     virtual void OutputLinkedOLE( const rtl::OUString& );
 
-    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum );
+    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
 
     virtual void SectionBreaksAndFrames( const SwTxtNode& /*rNode*/ ) {}
 

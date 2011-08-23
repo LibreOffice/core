@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,30 +52,30 @@ class ListBox;
 class SVX_DLLPUBLIC SvxFillToolBoxControl: public SfxToolBoxControl
 {
 private:
-    XFillStyleItem*     pStyleItem;
-    XFillColorItem*     pColorItem;
-    XFillGradientItem*  pGradientItem;
-    XFillHatchItem*     pHatchItem;
-    XFillBitmapItem*    pBitmapItem;
+    XFillStyleItem*		pStyleItem;
+    XFillColorItem*		pColorItem;
+    XFillGradientItem*	pGradientItem;
+    XFillHatchItem*		pHatchItem;
+    XFillBitmapItem*	pBitmapItem;
 
-    FillControl*        pFillControl;
-    SvxFillTypeBox*     pFillTypeLB;
-    SvxFillAttrBox*     pFillAttrLB;
+    FillControl*		pFillControl;
+    SvxFillTypeBox*		pFillTypeLB;
+    SvxFillAttrBox*		pFillAttrLB;
 
-    sal_Bool                bUpdate;
-    sal_Bool                bIgnoreStatusUpdate;
-    sal_uInt16              eLastXFS;
+    BOOL				bUpdate;
+    BOOL                bIgnoreStatusUpdate;
+    USHORT				eLastXFS;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFillToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SvxFillToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFillToolBoxControl();
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    virtual void		StateChanged( USHORT nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
-    void                Update( const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+    void 		        Update( const SfxPoolItem* pState );
+    virtual Window*		CreateItemWindow( Window *pParent );
     void                IgnoreStatusUpdate( sal_Bool bSet );
 };
 
@@ -86,8 +86,8 @@ class FillControl : public Window
 private:
     friend class SvxFillToolBoxControl;
 
-    SvxFillTypeBox* pLbFillType;
-    SvxFillAttrBox* pLbFillAttr;
+    SvxFillTypeBox*	pLbFillType;
+    SvxFillAttrBox*	pLbFillAttr;
     Size            aLogicalFillSize;
     Size            aLogicalAttrSize;
     Timer           aDelayTimer;
@@ -103,6 +103,6 @@ public:
     virtual void Resize();
 };
 
-#endif      // _FILLCTRL_HXX
+#endif		// _FILLCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

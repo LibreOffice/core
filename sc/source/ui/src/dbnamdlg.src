@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,13 +28,13 @@
 ModelessDialog RID_SCDLG_DBNAMES
 {
     OutputSize = TRUE ;
-    HelpId = CMD_SID_DEFINE_DBNAME ;
+    HelpId = SID_DEFINE_DBNAME ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 222 , 142 ) ;
     Text [ en-US ] = "Define Database Range" ;
     Moveable = TRUE ;
-     // Closeable = TRUE;   // Dieser Dialog hat einen Cancel-Button !
+     // Closeable = TRUE;	// Dieser Dialog hat einen Cancel-Button !
     FixedLine FL_NAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -43,7 +43,6 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     ComboBox ED_NAME
     {
-        HelpID = "sc:ComboBox:RID_SCDLG_DBNAMES:ED_NAME";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 145 , 92 ) ;
         TabStop = TRUE ;
@@ -57,7 +56,6 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     Edit ED_DBAREA
     {
-        HelpID = "sc:Edit:RID_SCDLG_DBNAMES:ED_DBAREA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 123 ) ;
         Size = MAP_APPFONT ( 131 , 12 ) ;
@@ -65,7 +63,6 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     ImageButton RB_DBAREA
     {
-        HelpID = "sc:ImageButton:RID_SCDLG_DBNAMES:RB_DBAREA";
         Pos = MAP_APPFONT ( 145 , 122 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -80,7 +77,6 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     CheckBox BTN_HEADER
     {
-        HelpID = "sc:CheckBox:RID_SCDLG_DBNAMES:BTN_HEADER";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
@@ -89,7 +85,6 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     CheckBox BTN_SIZE
     {
-        HelpID = "sc:CheckBox:RID_SCDLG_DBNAMES:BTN_SIZE";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 167 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
@@ -98,7 +93,6 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     CheckBox BTN_FORMAT
     {
-        HelpID = "sc:CheckBox:RID_SCDLG_DBNAMES:BTN_FORMAT";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 181 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
@@ -107,7 +101,6 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     CheckBox BTN_STRIPDATA
     {
-        HelpID = "sc:CheckBox:RID_SCDLG_DBNAMES:BTN_STRIPDATA";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 195 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
@@ -142,7 +135,6 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     PushButton BTN_ADD
     {
-        HelpID = "sc:PushButton:RID_SCDLG_DBNAMES:BTN_ADD";
         Pos = MAP_APPFONT ( 166 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add" ;
@@ -151,7 +143,6 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     PushButton BTN_REMOVE
     {
-        HelpID = "sc:PushButton:RID_SCDLG_DBNAMES:BTN_REMOVE";
         Pos = MAP_APPFONT ( 166 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete" ;
@@ -165,7 +156,6 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     MoreButton BTN_MORE
     {
-        HelpID = "sc:MoreButton:RID_SCDLG_DBNAMES:BTN_MORE";
         Pos = MAP_APPFONT ( 166 , 122 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -185,3 +175,24 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ en-US ] = "Invalid range" ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

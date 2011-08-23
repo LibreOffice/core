@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <vector>
 #include <stack>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <boost/shared_ptr.hpp>
 #include <rtl/ref.hxx>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
@@ -57,7 +57,7 @@ struct SaxContextImpl;
 typedef ::boost::shared_ptr< SaxContextImpl > SaxContextImplPtr;
 typedef ::boost::shared_ptr< NamespaceDefine > NamespaceDefineRef;
 
-typedef ::boost::unordered_map< ::rtl::OUString, sal_Int32,
+typedef ::std::hash_map< ::rtl::OUString, sal_Int32,
         ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NamespaceMap;
 
 // --------------------------------------------------------------------
@@ -90,7 +90,7 @@ struct Entity : public ParserData
 
     ::std::stack< SaxContextImplPtr >       maContextStack;
     ::std::vector< NamespaceDefineRef >     maNamespaceDefines;
-
+    
     explicit Entity( const ParserData& rData );
     ~Entity();
 };

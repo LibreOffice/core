@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,47 +41,47 @@
 class TOOLS_DLLPUBLIC UniqueIndex : private Container
 {
 private:
-    sal_uIntPtr           nReSize;
-    sal_uIntPtr           nStartIndex;
-    sal_uIntPtr           nUniqIndex;
-    sal_uIntPtr           nCount;
+    ULONG           nReSize;
+    ULONG           nStartIndex;
+    ULONG           nUniqIndex;
+    ULONG           nCount;
 
 public:
                     using Container::GetCurObject;
 
-                    UniqueIndex( sal_uIntPtr nStartIndex = 0,
-                                 sal_uIntPtr nInitSize = 16,
-                                 sal_uIntPtr nReSize = 16 );
+                    UniqueIndex( ULONG nStartIndex = 0,
+                                 ULONG nInitSize = 16,
+                                 ULONG nReSize = 16 );
                     UniqueIndex( const UniqueIndex& rIdx );
 
-    sal_uIntPtr           Insert( sal_uIntPtr nIndex, void* p );
-    sal_uIntPtr           Insert( void* p );
-    void*           Remove( sal_uIntPtr nIndex );
-    void*           Replace( sal_uIntPtr nIndex, void* p );
-    void*           Get( sal_uIntPtr nIndex ) const;
+    ULONG           Insert( ULONG nIndex, void* p );
+    ULONG           Insert( void* p );
+    void*           Remove( ULONG nIndex );
+    void*           Replace( ULONG nIndex, void* p );
+    void*           Get( ULONG nIndex ) const;
 
     void            Clear();
-    sal_uIntPtr           Count() const { return nCount; }
+    ULONG           Count() const { return nCount; }
 
-    sal_uIntPtr           GetCurIndex() const;
-    sal_uIntPtr           GetIndex( const void* p ) const;
-    sal_Bool            IsIndexValid( sal_uIntPtr nIndex ) const;
+    ULONG           GetCurIndex() const;
+    ULONG           GetIndex( const void* p ) const;
+    BOOL            IsIndexValid( ULONG nIndex ) const;
 
-    void*           Seek( sal_uIntPtr nIndex );
+    void*           Seek( ULONG nIndex );
     void*           Seek( void* p );
     void*           First();
     void*           Last();
     void*           Next();
     void*           Prev();
 
-    sal_uIntPtr           GetStartIndex() const { return nStartIndex; }
-    sal_uIntPtr           GetCurMaxIndex() const
+    ULONG           GetStartIndex() const { return nStartIndex; }
+    ULONG           GetCurMaxIndex() const
                         { return (nStartIndex + Container::GetSize()); }
 
     UniqueIndex&    operator =( const UniqueIndex& rIdx );
 
-    sal_Bool            operator ==( const UniqueIndex& rIdx ) const;
-    sal_Bool            operator !=( const UniqueIndex& rIdx ) const
+    BOOL            operator ==( const UniqueIndex& rIdx ) const;
+    BOOL            operator !=( const UniqueIndex& rIdx ) const
                         { return !(UniqueIndex::operator==( rIdx )); }
 };
 
@@ -100,37 +100,37 @@ inline void UniqueIndex::Clear()
 class ClassName : private UniqueIndex                                   \
 {                                                                       \
 public:                                                                 \
-                using UniqueIndex::Clear;                                       \
+                using UniqueIndex::Clear;										\
                 using UniqueIndex::Count;                                       \
                 using UniqueIndex::GetCurIndex;                             \
                 using UniqueIndex::IsIndexValid;                                \
                 using UniqueIndex::GetStartIndex;                               \
                 using UniqueIndex::GetCurMaxIndex;                          \
                                                                         \
-                ClassName( sal_uIntPtr _nStartIndex = 0,                      \
-                           sal_uIntPtr _nInitSize = 16, sal_uIntPtr _nReSize = 16 ):\
+                ClassName( ULONG _nStartIndex = 0,                      \
+                           ULONG _nInitSize = 16, ULONG _nReSize = 16 ):\
                     UniqueIndex( _nStartIndex, _nInitSize, _nReSize ) {}\
                 ClassName( const ClassName& rClassName ) :              \
                     UniqueIndex( rClassName ) {}                        \
                                                                         \
-    sal_uIntPtr       Insert( sal_uIntPtr nIndex, Type p )                          \
+    ULONG       Insert( ULONG nIndex, Type p )                          \
                     { return UniqueIndex::Insert( nIndex, (void*)p ); } \
-    sal_uIntPtr       Insert( Type p )                                        \
+    ULONG       Insert( Type p )                                        \
                     { return UniqueIndex::Insert( (void*)p ); }         \
-    Type        Remove( sal_uIntPtr nIndex )                                  \
+    Type        Remove( ULONG nIndex )                                  \
                     { return (Type)UniqueIndex::Remove( nIndex ); }     \
-    Type        Replace( sal_uIntPtr nIndex, Type p )                         \
+    Type        Replace( ULONG nIndex, Type p )                         \
                     { return (Type)UniqueIndex::Replace( nIndex,        \
                                                          (void*)p ); }  \
-    Type        Get( sal_uIntPtr nIndex ) const                               \
+    Type        Get( ULONG nIndex ) const                               \
                     { return (Type)UniqueIndex::Get( nIndex ); }        \
                                                                         \
     Type        GetCurObject() const                                    \
                     { return (Type)UniqueIndex::GetCurObject(); }       \
-    sal_uIntPtr       GetIndex( const Type p ) const                          \
+    ULONG       GetIndex( const Type p ) const                          \
                     { return UniqueIndex::GetIndex( (const void*)p ); } \
                                                                         \
-    Type        Seek( sal_uIntPtr nKey )                                      \
+    Type        Seek( ULONG nKey )                                      \
                     { return (Type)UniqueIndex::Seek( nKey ); }         \
     Type        Seek( Type p )                                          \
                     { return (Type)UniqueIndex::Seek( (void*)p ); }     \
@@ -143,9 +143,9 @@ public:                                                                 \
                     { UniqueIndex::operator =( rClassName );            \
                       return *this; }                                   \
                                                                         \
-    sal_Bool        operator ==( const ClassName& rIdx ) const              \
+    BOOL        operator ==( const ClassName& rIdx ) const              \
                     { return UniqueIndex::operator ==( rIdx ); }        \
-    sal_Bool        operator !=( const ClassName& rIdx ) const              \
+    BOOL        operator !=( const ClassName& rIdx ) const              \
                     { return UniqueIndex::operator !=( rIdx ); }        \
 };
 

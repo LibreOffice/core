@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,15 +48,17 @@
 #include "ftnfrm.hxx"
 #include "txtftn.hxx"
 #include "fmtftn.hxx"
+// OD 09.01.2004 #i11859#
 #include <txtfrm.hxx>   // SwTxtFrm
-#include <switerator.hxx>
 
 /*************************************************************************
 |*
-|*  FindBodyCont, FindLastBodyCntnt()
+|*	FindBodyCont, FindLastBodyCntnt()
 |*
-|*  Beschreibung        Sucht den ersten/letzten CntntFrm im BodyText unterhalb
-|*      der Seite.
+|*	Beschreibung		Sucht den ersten/letzten CntntFrm im BodyText unterhalb
+|* 		der Seite.
+|*	Ersterstellung		MA 15. Feb. 93
+|*	Letzte Aenderung	MA 18. Apr. 94
 |*
 |*************************************************************************/
 SwLayoutFrm *SwFtnBossFrm::FindBodyCont()
@@ -72,7 +74,7 @@ SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
     SwCntntFrm *pRet = FindFirstBodyCntnt();
     SwCntntFrm *pNxt = pRet;
     while ( pNxt && pNxt->IsInDocBody() && IsAnLower( pNxt ) )
-    {   pRet = pNxt;
+    {	pRet = pNxt;
         pNxt = pNxt->FindNextCnt();
     }
     return pRet;
@@ -80,11 +82,14 @@ SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::ContainsCntnt
+|*	SwLayoutFrm::ContainsCntnt
 |*
-|*  Beschreibung            Prueft, ob der Frame irgendwo in seiner
-|*          untergeordneten Struktur einen oder mehrere CntntFrm's enthaelt;
-|*          Falls ja wird der erste gefundene CntntFrm zurueckgegeben.
+|*	Beschreibung			Prueft, ob der Frame irgendwo in seiner
+|*			untergeordneten Struktur einen oder mehrere CntntFrm's enthaelt;
+|*			Falls ja wird der erste gefundene CntntFrm zurueckgegeben.
+|*
+|*	Ersterstellung		MA 13. May. 92
+|*	Letzte Aenderung	MA 20. Apr. 94
 |*
 |*************************************************************************/
 
@@ -132,12 +137,14 @@ const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::FirstCell
+|*	SwLayoutFrm::FirstCell
 |*
-|*  Beschreibung    ruft zunaechst ContainsAny auf, um in die innerste Zelle
-|*                  hineinzukommen. Dort hangelt es sich wieder hoch zum
-|*                  ersten SwCellFrm, seit es SectionFrms gibt, reicht kein
-|*                  ContainsCntnt()->GetUpper() mehr...
+|*	Beschreibung	ruft zunaechst ContainsAny auf, um in die innerste Zelle
+|* 					hineinzukommen. Dort hangelt es sich wieder hoch zum
+|*					ersten SwCellFrm, seit es SectionFrms gibt, reicht kein
+|*					ContainsCntnt()->GetUpper() mehr...
+|*	Ersterstellung		AMA 17. Mar. 99
+|*	Letzte Aenderung	AMA 17. Mar. 99
 |*
 |*************************************************************************/
 
@@ -151,10 +158,12 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::ContainsAny
+|*	SwLayoutFrm::ContainsAny
 |*
-|*  Beschreibung wie ContainsCntnt, nur dass nicht nur CntntFrms, sondern auch
-|*          Bereiche und Tabellen zurueckgegeben werden.
+|*	Beschreibung wie ContainsCntnt, nur dass nicht nur CntntFrms, sondern auch
+|*			Bereiche und Tabellen zurueckgegeben werden.
+|*	Ersterstellung		AMA 10. Mar. 99
+|*	Letzte Aenderung	AMA 10. Mar. 99
 |*
 |*************************************************************************/
 
@@ -206,7 +215,10 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
 
 /*************************************************************************
 |*
-|*  SwFrm::GetLower()
+|*	SwFrm::GetLower()
+|*
+|*	Ersterstellung		MA 27. Jul. 92
+|*	Letzte Aenderung	MA 09. Oct. 97
 |*
 |*************************************************************************/
 const SwFrm* SwFrm::GetLower() const
@@ -221,22 +233,25 @@ SwFrm* SwFrm::GetLower()
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::IsAnLower()
+|*	SwLayoutFrm::IsAnLower()
+|*
+|*	Ersterstellung		MA 18. Mar. 93
+|*	Letzte Aenderung	MA 18. Mar. 93
 |*
 |*************************************************************************/
-sal_Bool SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
+BOOL SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
 {
     const SwFrm *pUp = pAssumed;
     while ( pUp )
     {
         if ( pUp == this )
-            return sal_True;
+            return TRUE;
         if ( pUp->IsFlyFrm() )
             pUp = ((SwFlyFrm*)pUp)->GetAnchorFrm();
         else
             pUp = pUp->GetUpper();
     }
-    return sal_False;
+    return FALSE;
 }
 
 /** method to check relative position of layout frame to
@@ -396,6 +411,9 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 |*      Frms rueckwaerts gegangen wird.
 |*      Vorwaetzwander funktioniert analog.
 |*
+|*    Ersterstellung    ??
+|*    Letzte Aenderung  MA 30. Oct. 97
+|*
 |*************************************************************************/
 
 // Achtung: Fixes in ImplGetNextCntntFrm() muessen moeglicherweise auch in
@@ -405,10 +423,10 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
     const SwFrm *pFrm = this;
     // #100926#
     SwCntntFrm *pCntntFrm = 0;
-    sal_Bool bGoingUp = sal_False;
+    BOOL bGoingUp = FALSE;
     do {
         const SwFrm *p = 0;
-        sal_Bool bGoingFwdOrBwd = sal_False, bGoingDown = sal_False;
+        BOOL bGoingFwdOrBwd = FALSE, bGoingDown = FALSE;
 
         bGoingDown = ( !bGoingUp && ( 0 != ( p = lcl_GetLower( pFrm, true ) ) ) );
         if ( !bGoingDown )
@@ -444,10 +462,29 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
 
 /*************************************************************************
 |*
-|*  SwFrm::FindRootFrm(), FindTabFrm(), FindFtnFrm(), FindFlyFrm(),
-|*         FindPageFrm(), FindColFrm()
+|*	SwFrm::FindRootFrm(), FindTabFrm(), FindFtnFrm(), FindFlyFrm(),
+|* 		   FindPageFrm(), FindColFrm()
+|*
+|*	Ersterstellung		??
+|*	Letzte Aenderung	MA 05. Sep. 93
 |*
 |*************************************************************************/
+SwRootFrm* SwFrm::FindRootFrm()
+{
+    // MIB: A layout frame is always registerd at a SwFrmFmt and a content
+    // frame alyways at a SwCntntNode. For any other case we won't find
+    // a root frame.
+    // Casting the GetDep() result instead of the frame itself (that has
+    // been done before) makes it save to use that method in constructors
+    // and destructors.
+    OSL_ENSURE( GetDep(), "frame is not registered any longer" );
+    OSL_ENSURE( IsLayoutFrm() || IsCntntFrm(), "invalid frame type" );
+    SwDoc *pDoc = IsLayoutFrm()
+                        ? static_cast < SwFrmFmt * >( GetDep() )->GetDoc()
+                        : static_cast < SwCntntNode * >( GetDep() )->GetDoc();
+    return pDoc->GetRootFrm();
+}
+
 SwPageFrm* SwFrm::FindPageFrm()
 {
     SwFrm *pRet = this;
@@ -469,7 +506,7 @@ SwPageFrm* SwFrm::FindPageFrm()
     return (SwPageFrm*)pRet;
 }
 
-SwFtnBossFrm* SwFrm::FindFtnBossFrm( sal_Bool bFootnotes )
+SwFtnBossFrm* SwFrm::FindFtnBossFrm( BOOL bFootnotes )
 {
     SwFrm *pRet = this;
     // Innerhalb einer Tabelle gibt es keine Fussnotenbosse, auch spaltige
@@ -497,7 +534,7 @@ SwFtnBossFrm* SwFrm::FindFtnBossFrm( sal_Bool bFootnotes )
         SwSectionFrm* pSct = pRet->FindSctFrm();
         OSL_ENSURE( pSct, "FindFtnBossFrm: Single column outside section?" );
         if( !pSct->IsFtnAtEnd() )
-            return pSct->FindFtnBossFrm( sal_True );
+            return pSct->FindFtnBossFrm( TRUE );
     }
     return (SwFtnBossFrm*)pRet;
 }
@@ -555,7 +592,7 @@ SwFrm *SwFrm::FindColFrm()
 {
     SwFrm *pFrm = this;
     do
-    {   pFrm = pFrm->GetUpper();
+    {	pFrm = pFrm->GetUpper();
     } while ( pFrm && !pFrm->IsColumnFrm() );
     return pFrm;
 }
@@ -564,7 +601,7 @@ SwRowFrm *SwFrm::FindRowFrm()
 {
     SwFrm *pFrm = this;
     do
-    {   pFrm = pFrm->GetUpper();
+    {	pFrm = pFrm->GetUpper();
     } while ( pFrm && !pFrm->IsRowFrm() );
     return dynamic_cast< SwRowFrm* >( pFrm );
 }
@@ -573,7 +610,7 @@ SwFrm* SwFrm::FindFooterOrHeader()
 {
     SwFrm* pRet = this;
     do
-    {   if ( pRet->GetType() & 0x0018 ) //Header und Footer
+    {	if ( pRet->GetType() & 0x0018 )	//Header und Footer
             return pRet;
         else if ( pRet->GetUpper() )
             pRet = pRet->GetUpper();
@@ -617,7 +654,7 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
     }
 
     OSL_ENSURE( GetPageNum() <= maPageRects.size(), "number of pages differes from page rect array size" );
-    sal_uInt16 nPageIdx = 0;
+    USHORT nPageIdx = 0;
 
     while ( pPage && !pRet )
     {
@@ -637,7 +674,10 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
 
 /*************************************************************************
 |*
-|*  SwFrmFrm::GetAttrSet()
+|*	SwFrmFrm::GetAttrSet()
+|*
+|*	Ersterstellung		MA 02. Aug. 93
+|*	Letzte Aenderung	MA 02. Aug. 93
 |*
 |*************************************************************************/
 const SwAttrSet* SwFrm::GetAttrSet() const
@@ -650,22 +690,24 @@ const SwAttrSet* SwFrm::GetAttrSet() const
 
 /*************************************************************************
 |*
-|*  SwFrm::_FindNext(), _FindPrev(), InvalidateNextPos()
-|*         _FindNextCnt() geht in Tabellen und Bereiche hineinund liefert
+|*	SwFrm::_FindNext(), _FindPrev(), InvalidateNextPos()
+|* 		   _FindNextCnt() geht in Tabellen und Bereiche hineinund liefert
 |*         nur SwCntntFrms.
 |*
-|*  Beschreibung        Invalidiert die Position des Naechsten Frames.
-|*      Dies ist der direkte Nachfolger, oder bei CntntFrm's der naechste
-|*      CntntFrm der im gleichen Fluss liegt wie ich:
-|*      - Body,
-|*      - Fussnoten,
-|*      - Bei Kopf-/Fussbereichen ist die Benachrichtigung nur innerhalb des
-|*        Bereiches weiterzuleiten.
-|*      - dito fuer Flys.
-|*      - Cntnts in Tabs halten sich ausschliesslich innerhalb ihrer Zelle
-|*        auf.
-|*      - Tabellen verhalten sich prinzipiell analog zu den Cntnts
-|*      - Bereiche ebenfalls
+|*	Beschreibung		Invalidiert die Position des Naechsten Frames.
+|*		Dies ist der direkte Nachfolger, oder bei CntntFrm's der naechste
+|*		CntntFrm der im gleichen Fluss liegt wie ich:
+|* 		- Body,
+|* 		- Fussnoten,
+|* 		- Bei Kopf-/Fussbereichen ist die Benachrichtigung nur innerhalb des
+|* 		  Bereiches weiterzuleiten.
+|* 		- dito fuer Flys.
+|* 		- Cntnts in Tabs halten sich ausschliesslich innerhalb ihrer Zelle
+|* 		  auf.
+|* 		- Tabellen verhalten sich prinzipiell analog zu den Cntnts
+|* 		- Bereiche ebenfalls
+|*	Ersterstellung		AK 14-Feb-1991
+|*	Letzte Aenderung	AMA 10. Mar. 99
 |*
 |*************************************************************************/
 
@@ -674,12 +716,12 @@ const SwAttrSet* SwFrm::GetAttrSet() const
 SwFrm* lcl_NextFrm( SwFrm* pFrm )
 {
     SwFrm *pRet = 0;
-    sal_Bool bGoingUp = sal_False;
+    BOOL bGoingUp = FALSE;
     do {
         SwFrm *p = 0;
 
-        sal_Bool bGoingFwd = sal_False;
-        sal_Bool bGoingDown = (!bGoingUp && ( 0 != (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)));
+        BOOL bGoingFwd = FALSE;
+        BOOL bGoingDown = (!bGoingUp && ( 0 != (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)));
 
         if( !bGoingDown )
         {
@@ -702,7 +744,7 @@ SwFrm* lcl_NextFrm( SwFrm* pFrm )
 
 SwFrm *SwFrm::_FindNext()
 {
-    sal_Bool bIgnoreTab = sal_False;
+    BOOL bIgnoreTab = FALSE;
     SwFrm *pThis = this;
 
     if ( IsTabFrm() )
@@ -716,7 +758,7 @@ SwFrm *SwFrm::_FindNext()
         pThis = ((SwTabFrm*)this)->FindLastCntnt();
         if ( !pThis )
             pThis = this;
-        bIgnoreTab = sal_True;
+        bIgnoreTab = TRUE;
     }
     else if ( IsSctFrm() )
     {
@@ -745,7 +787,7 @@ SwFrm *SwFrm::_FindNext()
         return NULL;
 
     SwFrm* pRet = NULL;
-    const sal_Bool bFtn  = pThis->IsInFtn();
+    const BOOL bFtn  = pThis->IsInFtn();
     if ( !bIgnoreTab && pThis->IsInTab() )
     {
         SwLayoutFrm *pUp = pThis->GetUpper();
@@ -766,7 +808,7 @@ SwFrm *SwFrm::_FindNext()
     }
     else
     {
-        const sal_Bool bBody = pThis->IsInDocBody();
+        const BOOL bBody = pThis->IsInDocBody();
         SwFrm *pNxtCnt = lcl_NextFrm( pThis );
         if ( pNxtCnt )
         {
@@ -801,7 +843,7 @@ SwFrm *SwFrm::_FindNext()
                 pRet = pNxtCnt->IsInTab() ? pNxtCnt->FindTabFrm()
                                             : (SwFrm*)pNxtCnt;
             }
-            else    //Fuss-/oder Kopfbereich
+            else	//Fuss-/oder Kopfbereich
             {
                 const SwFrm *pUp = pThis->GetUpper();
                 const SwFrm *pCntUp = pNxtCnt->GetUpper();
@@ -865,8 +907,8 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
 
     if ( pThis->IsCntntFrm() )
     {
-        const sal_Bool bBody = pThis->IsInDocBody();
-        const sal_Bool bFtn  = pThis->IsInFtn();
+        const BOOL bBody = pThis->IsInDocBody();
+        const BOOL bFtn  = pThis->IsInFtn();
         SwCntntFrm *pNxtCnt = ((SwCntntFrm*)pThis)->GetNextCntntFrm();
         if ( pNxtCnt )
         {
@@ -878,7 +920,7 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
                 while ( pNxtCnt )
                 {
                     if ( (bBody && pNxtCnt->IsInDocBody()) ||
-                         (bFtn  && pNxtCnt->IsInFtn()) )
+                         (bFtn	&& pNxtCnt->IsInFtn()) )
                         return pNxtCnt;
                     pNxtCnt = pNxtCnt->GetNextCntntFrm();
                 }
@@ -1090,7 +1132,7 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
 
 SwFrm *SwFrm::_FindPrev()
 {
-    sal_Bool bIgnoreTab = sal_False;
+    BOOL bIgnoreTab = FALSE;
     SwFrm *pThis = this;
 
     if ( IsTabFrm() )
@@ -1102,7 +1144,7 @@ SwFrm *SwFrm::_FindPrev()
             return ((SwTabFrm*)this)->FindMaster();
         else
             pThis = ((SwTabFrm*)this)->ContainsCntnt();
-        bIgnoreTab = sal_True;
+        bIgnoreTab = TRUE;
     }
 
     if ( pThis && pThis->IsCntntFrm() )
@@ -1122,14 +1164,14 @@ SwFrm *SwFrm::_FindPrev()
         else
         {
             SwFrm* pRet;
-            const sal_Bool bBody = pThis->IsInDocBody();
-            const sal_Bool bFtn  = bBody ? sal_False : pThis->IsInFtn();
+            const BOOL bBody = pThis->IsInDocBody();
+            const BOOL bFtn  = bBody ? FALSE : pThis->IsInFtn();
             if ( bBody || bFtn )
             {
                 while ( pPrvCnt )
                 {
                     if ( (bBody && pPrvCnt->IsInDocBody()) ||
-                            (bFtn   && pPrvCnt->IsInFtn()) )
+                            (bFtn	&& pPrvCnt->IsInFtn()) )
                     {
                         pRet = pPrvCnt->IsInTab() ? pPrvCnt->FindTabFrm()
                                                   : (SwFrm*)pPrvCnt;
@@ -1144,7 +1186,7 @@ SwFrm *SwFrm::_FindPrev()
                                             : (SwFrm*)pPrvCnt;
                 return pRet;
             }
-            else    //Fuss-/oder Kopfbereich oder Fly
+            else	//Fuss-/oder Kopfbereich oder Fly
             {
                 const SwFrm *pUp = pThis->GetUpper();
                 const SwFrm *pCntUp = pPrvCnt->GetUpper();
@@ -1165,7 +1207,7 @@ SwFrm *SwFrm::_FindPrev()
     return 0;
 }
 
-void SwFrm::ImplInvalidateNextPos( sal_Bool bNoFtn )
+void SwFrm::ImplInvalidateNextPos( BOOL bNoFtn )
 {
     SwFrm *pFrm;
     if ( 0 != (pFrm = _FindNext()) )
@@ -1262,37 +1304,40 @@ void SwFrm::InvalidateNextPrtArea()
 
 /*************************************************************************
 |*
-|*    lcl_IsInColSect()
-|*      liefert nur sal_True, wenn der Frame _direkt_ in einem spaltigen Bereich steht,
-|*      nicht etwa, wenn er in einer Tabelle steht, die in einem spaltigen Bereich ist.
+|*	  lcl_IsInColSect()
+|*		liefert nur TRUE, wenn der Frame _direkt_ in einem spaltigen Bereich steht,
+|*		nicht etwa, wenn er in einer Tabelle steht, die in einem spaltigen Bereich ist.
 |*
 |*************************************************************************/
 
-sal_Bool lcl_IsInColSct( const SwFrm *pUp )
+BOOL lcl_IsInColSct( const SwFrm *pUp )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     while( pUp )
     {
         if( pUp->IsColumnFrm() )
-            bRet = sal_True;
+            bRet = TRUE;
         else if( pUp->IsSctFrm() )
             return bRet;
         else if( pUp->IsTabFrm() )
-            return sal_False;
+            return FALSE;
         pUp = pUp->GetUpper();
     }
-    return sal_False;
+    return FALSE;
 }
 
 /*************************************************************************
 |*
-|*    SwFrm::IsMoveable();
+|*	  SwFrm::IsMoveable();
+|*
+|*	  Ersterstellung	MA 09. Mar. 93
+|*	  Letzte Aenderung	MA 05. May. 95
 |*
 |*************************************************************************/
 /** determine, if frame is moveable in given environment
 
     OD 08.08.2003 #110978#
-    method replaced 'old' method <sal_Bool IsMoveable() const>.
+    method replaced 'old' method <BOOL IsMoveable() const>.
     Determines, if frame is moveable in given environment. if no environment
     is given (parameter _pLayoutFrm == 0L), the movability in the actual
     environment (<this->GetUpper()) is checked.
@@ -1364,34 +1409,37 @@ bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
 
 /*************************************************************************
 |*
-|*    SwFrm::SetInfFlags();
+|*	  SwFrm::SetInfFlags();
+|*
+|*	  Ersterstellung	MA 05. Apr. 94
+|*	  Letzte Aenderung	MA 05. Apr. 94
 |*
 |*************************************************************************/
 void SwFrm::SetInfFlags()
 {
     if ( !IsFlyFrm() && !GetUpper() ) //noch nicht gepastet, keine Informationen
-        return;                       //lieferbar
+        return;						  //lieferbar
 
-    bInfInvalid = bInfBody = bInfTab = bInfFly = bInfFtn = bInfSct = sal_False;
+    bInfInvalid = bInfBody = bInfTab = bInfFly = bInfFtn = bInfSct = FALSE;
 
     SwFrm *pFrm = this;
     if( IsFtnContFrm() )
-        bInfFtn = sal_True;
+        bInfFtn = TRUE;
     do
     {   // bInfBody wird nur am Seitenbody, nicht im ColumnBody gesetzt
         if ( pFrm->IsBodyFrm() && !bInfFtn && pFrm->GetUpper()
              && pFrm->GetUpper()->IsPageFrm() )
-            bInfBody = sal_True;
+            bInfBody = TRUE;
         else if ( pFrm->IsTabFrm() || pFrm->IsCellFrm() )
         {
-            bInfTab = sal_True;
+            bInfTab = TRUE;
         }
         else if ( pFrm->IsFlyFrm() )
-            bInfFly = sal_True;
+            bInfFly = TRUE;
         else if ( pFrm->IsSctFrm() )
-            bInfSct = sal_True;
+            bInfSct = TRUE;
         else if ( pFrm->IsFtnFrm() )
-            bInfFtn = sal_True;
+            bInfFtn = TRUE;
 
         pFrm = pFrm->GetUpper();
 
@@ -1399,13 +1447,13 @@ void SwFrm::SetInfFlags()
 }
 
 /*-----------------22.8.2001 14:30------------------
- * SwFrm::SetDirFlags( sal_Bool )
+ * SwFrm::SetDirFlags( BOOL )
  * actualizes the vertical or the righttoleft-flags.
  * If the property is derived, it's from the upper or (for fly frames) from
  * the anchor. Otherwise we've to call a virtual method to check the property.
  * --------------------------------------------------*/
 
-void SwFrm::SetDirFlags( sal_Bool bVert )
+void SwFrm::SetDirFlags( BOOL bVert )
 {
     if( bVert )
     {
@@ -1422,11 +1470,8 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
             {
                 bVertical = pAsk->IsVertical() ? 1 : 0;
                 bReverse  = pAsk->IsReverse()  ? 1 : 0;
-
-                bVertLR  = pAsk->IsVertLR() ? 1 : 0;
-                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 if ( !pAsk->bInvalidVert )
-                    bInvalidVert = sal_False;
+                    bInvalidVert = FALSE;
             }
         }
         else
@@ -1434,7 +1479,7 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
     }
     else
     {
-        sal_Bool bInv = 0;
+        BOOL bInv = 0;
         if( !bDerivedR2L ) // CheckDirection is able to set bDerivedR2L!
             CheckDirection( bVert );
         if( bDerivedR2L )
@@ -1621,15 +1666,15 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
         return *this;
 
     OSL_ENSURE( pTableFrm &&
-            (  (bStart && GetTabBox()->getRowSpan() < 1) ||
-              (!bStart && GetLayoutRowSpan() > 1) ),
+            (  bStart && GetTabBox()->getRowSpan() < 1 ||
+              !bStart && GetLayoutRowSpan() > 1 ),
             "SwCellFrm::FindStartRowSpanCell: No rowspan, no table, no cookies" );
 
     if ( pTableFrm )
     {
         const SwTable* pTable = pTableFrm->GetTable();
 
-        sal_uInt16 nMax = USHRT_MAX;
+        USHORT nMax = USHRT_MAX;
         if ( bCurrentTableOnly )
         {
             const SwFrm* pCurrentRow = GetUpper();
@@ -1644,7 +1689,7 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
                 if ( bStart )
                 {
                     // do not enter a repeated headline:
-                    if ( bDoNotEnterHeadline && pTableFrm->IsFollow() &&
+                    if ( bDoNotEnterHeadline && pTableFrm->IsFollow() && 
                          pTableFrm->IsInHeadline( *pCurrentRow->GetPrev() ) )
                         break;
 
@@ -1664,10 +1709,13 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
                                        GetTabBox()->FindStartOfRowSpan( *pTable, nMax ) :
                                        GetTabBox()->FindEndOfRowSpan( *pTable, nMax );
 
-        SwIterator<SwCellFrm,SwFmt> aIter( *rMasterBox.GetFrmFmt() );
+        SwClientIter aIter( const_cast<SwFrmFmt&>( *rMasterBox.GetFrmFmt()) );
 
-        for ( SwCellFrm* pMasterCell = aIter.First(); pMasterCell; pMasterCell = aIter.Next() )
+        for ( SwClient* pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
         {
+            OSL_ENSURE( ((SwFrm*)pLast)->IsCellFrm(), "Non-row frame registered in table line" );
+            const SwCellFrm* pMasterCell = static_cast<const SwCellFrm*>(pLast);
+
             if ( pMasterCell->GetTabBox() == &rMasterBox )
             {
                 const SwTabFrm* pMasterTable = static_cast<const SwTabFrm*>(pMasterCell->GetUpper()->GetUpper());

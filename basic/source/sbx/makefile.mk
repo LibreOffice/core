@@ -47,6 +47,7 @@ SLOFILES=	\
     $(SLO)$/sbxbyte.obj		\
     $(SLO)$/sbxchar.obj		\
     $(SLO)$/sbxcoll.obj		\
+    $(SLO)$/sbxcurr.obj 	\
     $(SLO)$/sbxdec.obj		\
     $(SLO)$/sbxform.obj		\
     $(SLO)$/sbxint.obj 		\
@@ -57,12 +58,12 @@ SLOFILES=	\
     $(SLO)$/sbxsng.obj 		\
     $(SLO)$/sbxuint.obj		\
     $(SLO)$/sbxulng.obj		\
+    $(SLO)$/sbxvals.obj		\
     $(SLO)$/sbxvar.obj
 
 
 EXCEPTIONSFILES=	\
     $(SLO)$/sbxarray.obj	\
-    $(SLO)$/sbxcurr.obj 	\
     $(SLO)$/sbxdate.obj		\
     $(SLO)$/sbxdbl.obj 		\
     $(SLO)$/sbxexec.obj		\

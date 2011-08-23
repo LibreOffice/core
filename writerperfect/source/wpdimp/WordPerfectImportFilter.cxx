@@ -139,7 +139,7 @@ sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::su
     OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLOasisImporter" ) );
     uno::Reference < XDocumentHandler > xInternalHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
 
-    // The XImporter sets up an empty target document for XDocumentHandler to write to..
+    // The XImporter sets up an empty target document for XDocumentHandler to write to.. 
     uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDoc);
 
@@ -209,13 +209,13 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
         {
             return ::rtl::OUString();
         }
-
+        
                 if (!xInputStream.is())
                     return ::rtl::OUString();
         }
-
+        
     WPXSvInputStream input( xInputStream );
-
+    
     if (input.atEOS())
         return ::rtl::OUString();
 
@@ -229,18 +229,18 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
         if ( location == Descriptor.getLength() )
         {
             Descriptor.realloc(nLength+1);
-            Descriptor[location].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName"));
+            Descriptor[location].Name = ::rtl::OUString::createFromAscii( "TypeName" );
         }
 
            Descriptor[location].Value <<=sTypeName;
     }
 
-    return sTypeName;
+    return sTypeName;	
 }
 
 
 // XInitialization
-void SAL_CALL WordPerfectImportFilter::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL WordPerfectImportFilter::initialize( const Sequence< Any >& aArguments ) 
     throw (Exception, RuntimeException)
 {
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::initialize: Got here!\n"));
@@ -268,19 +268,19 @@ OUString WordPerfectImportFilter_getImplementationName ()
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
-sal_Bool SAL_CALL WordPerfectImportFilter_supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL WordPerfectImportFilter_supportsService( const OUString& ServiceName ) 
     throw (RuntimeException)
 {
     return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
         ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
 }
-Sequence< OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames(  ) 
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
         OUString* pArray = aRet.getArray();
         pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
-    pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
+    pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) ); 
         return aRet;
 }
 #undef SERVICE_NAME2
@@ -293,17 +293,17 @@ uno::Reference< XInterface > SAL_CALL WordPerfectImportFilter_createInstance( co
 }
 
 // XServiceInfo
-OUString SAL_CALL WordPerfectImportFilter::getImplementationName(  )
+OUString SAL_CALL WordPerfectImportFilter::getImplementationName(  ) 
     throw (RuntimeException)
 {
     return WordPerfectImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL WordPerfectImportFilter::supportsService( const OUString& rServiceName )
+sal_Bool SAL_CALL WordPerfectImportFilter::supportsService( const OUString& rServiceName ) 
     throw (RuntimeException)
 {
     return WordPerfectImportFilter_supportsService( rServiceName );
 }
-Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames(  ) 
     throw (RuntimeException)
 {
     return WordPerfectImportFilter_getSupportedServiceNames();
@@ -377,7 +377,7 @@ void SAL_CALL WordPerfectImportFilterDialog::setPropertyValues( const uno::Seque
 
         if ( aPropName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
             rProp.Value >>= msPassword;
-        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
+        else if ( aPropName.equalsAscii( "InputStream" ) )
             rProp.Value >>= mxInputStream;
     }
 }

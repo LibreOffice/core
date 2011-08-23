@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,8 @@
 //----------------------------------------------------------
 // forward declarations
 //----------------------------------------------------------
-using ::rtl::OUString;
+
+using namespace rtl;
 
 //----------------------------------------------------------
 // class declaration
@@ -90,14 +91,14 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener )
         throw( ::com::sun::star::uno::RuntimeException );
-
+    
     //------------------------------------------------------------------------------------
     // XExecutableDialog functions
     //------------------------------------------------------------------------------------
-
+    
     virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle )
         throw( ::com::sun::star::uno::RuntimeException );
-
+    
     virtual sal_Int16 SAL_CALL execute(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
@@ -204,11 +205,11 @@ public:
    // rtl::OUString SAL_CALL helpRequested( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
    void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
    void SAL_CALL dialogSizeChanged( );
-
+   
    inline AquaFilePickerDelegate * getDelegate() {
        return m_pDelegate;
    }
-
+   
    inline rtl::OUString getSaveFileName() {
        return m_sSaveFileName;
    }
@@ -236,13 +237,13 @@ private:
     void updateSaveFileNameExtension();
 
 public:
-
+    
     virtual ~SalAquaFilePicker();
 
     void filterControlChanged();
 
     void implInitialize();
-
+    
 };
 
 #endif // _SALAQUAFILEPICKER_HXX_

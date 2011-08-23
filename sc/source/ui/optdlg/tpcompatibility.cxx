@@ -3,7 +3,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2010 Novell, Inc.
+ * Copyrigt 2010 Novell, Inc.
  *
  * LibreOffice - a multi-platform office productivity suite
  *
@@ -59,7 +59,7 @@ SfxTabPage* ScTpCompatOptions::Create(Window *pParent, const SfxItemSet &rCoreAt
     return new ScTpCompatOptions(pParent, rCoreAttrs);
 }
 
-sal_Bool ScTpCompatOptions::FillItemSet(SfxItemSet &rCoreAttrs)
+BOOL ScTpCompatOptions::FillItemSet(SfxItemSet &rCoreAttrs)
 {
     ScOptionsUtil::KeyBindingType eKeyB = ScOptionsUtil::KEY_DEFAULT;
     switch (maLbKeyBindings.GetSelectEntryPos())

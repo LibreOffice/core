@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-//  ItemID-Defines etc. must be included first
+//	ItemID-Defines etc. must be included first
 
 #include "scitems.hxx"
 
@@ -41,6 +41,7 @@
 #include <tools/rtti.hxx>
 #include <limits.h>
 #include <tools/ref.hxx>
+#include <tools/list.hxx>
 #include <tools/contnr.hxx>
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
@@ -100,6 +101,7 @@
 #include <sot/sotdata.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
+#include <sot/sotref.hxx>
 #include <rechead.hxx>
 #include <tools/unqid.hxx>
 #include <vcl/apptypes.hxx>
@@ -120,7 +122,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <vcl/event.hxx>
 #include <tools/ownlist.hxx>
 #include <svl/itempool.hxx>

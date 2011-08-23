@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "XMLChangedRegionImportContext.hxx"
 #include "XMLStringBufferImportContext.hxx"
 #include <com/sun/star/uno/Reference.h>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -54,9 +54,9 @@ XMLChangeInfoContext::XMLChangeInfoContext(
     const OUString& rLocalName,
     XMLChangedRegionImportContext& rPParent,
     const OUString& rChangeType)
-:   SvXMLImportContext(rImport, nPrefix, rLocalName)
-,   rType(rChangeType)
-,   rChangedRegion(rPParent)
+:	SvXMLImportContext(rImport, nPrefix, rLocalName)
+,	rType(rChangeType)
+,	rChangedRegion(rPParent)
 {
 }
 
@@ -70,7 +70,7 @@ void XMLChangeInfoContext::StartElement(const Reference<XAttributeList> &)
 }
 
 SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
-    sal_uInt16 nPrefix,
+    USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList >& xAttrList )
 {
@@ -79,13 +79,13 @@ SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
     if( XML_NAMESPACE_DC == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_CREATOR ) )
-            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
+            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix, 
                                             rLocalName, sAuthorBuffer);
         else if( IsXMLToken( rLocalName, XML_DATE ) )
-            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
+            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix, 
                                             rLocalName, sDateTimeBuffer);
     }
-    else if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
+    else if ( ( XML_NAMESPACE_TEXT == nPrefix ) && 
          IsXMLToken( rLocalName, XML_P )       )
     {
         pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
@@ -104,8 +104,8 @@ SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
 void XMLChangeInfoContext::EndElement()
 {
     // set values at changed region context
-    rChangedRegion.SetChangeInfo(rType, sAuthorBuffer.makeStringAndClear(),
-                                 sCommentBuffer.makeStringAndClear(),
+    rChangedRegion.SetChangeInfo(rType, sAuthorBuffer.makeStringAndClear(), 
+                                 sCommentBuffer.makeStringAndClear(), 
                                  sDateTimeBuffer.makeStringAndClear());
 }
 

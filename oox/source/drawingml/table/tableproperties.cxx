@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -73,10 +75,10 @@ void CreateTableRows( uno::Reference< XTableRows > xTableRows, const std::vector
     uno::Reference< container::XIndexAccess > xIndexAccess( xTableRows, UNO_QUERY_THROW );
     for ( sal_Int32 n = 0; n < xIndexAccess->getCount(); n++ )
     {
-        static const rtl::OUString  sHeight( RTL_CONSTASCII_USTRINGPARAM ( "Height" ) );
+        static const rtl::OUString	sHeight( RTL_CONSTASCII_USTRINGPARAM ( "Height" ) );
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sHeight, Any( static_cast< sal_Int32 >( aTableRowIter->getHeight() / 360 ) ) );
-        ++aTableRowIter;
+        aTableRowIter++;
     }
 }
 
@@ -88,7 +90,7 @@ void CreateTableColumns( Reference< XTableColumns > xTableColumns, const std::ve
     uno::Reference< container::XIndexAccess > xIndexAccess( xTableColumns, UNO_QUERY_THROW );
     for ( sal_Int32 n = 0; n < xIndexAccess->getCount(); n++ )
     {
-        static const rtl::OUString  sWidth( RTL_CONSTASCII_USTRINGPARAM ( "Width" ) );
+        static const rtl::OUString	sWidth( RTL_CONSTASCII_USTRINGPARAM ( "Width" ) );
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sWidth, Any( static_cast< sal_Int32 >( *aTableGridIter++ / 360 ) ) );
     }
@@ -105,7 +107,7 @@ void MergeCells( const uno::Reference< XTable >& xTable, sal_Int32 nCol, sal_Int
    catch( Exception& )
    {
    }
-}
+} 
 
 static TableStyle* pDefaultTableStyle = new TableStyle();
 
@@ -126,14 +128,14 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
             if ( const_cast< TableStyle& >( *aIter ).getStyleId() == aStyleId )
             {
                 pTableStyle = &const_cast< TableStyle& >( *aIter );
-                break;  // we get the correct style
+                break;	// we get the correct style
             }
             aIter++;
         }
     }
     if ( !pTableStyle )
         pTableStyle = pDefaultTableStyle;
-
+    
     return *pTableStyle;
 }
 

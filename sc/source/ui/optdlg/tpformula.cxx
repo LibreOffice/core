@@ -3,9 +3,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2010 Novell, Inc.
+ * Copyrigt 2010 Novell, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: tpcalc.hxx,v $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -210,12 +213,13 @@ IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, Edit*, pEdit )
     return 0;
 }
 
+// static
 SfxTabPage* ScTpFormulaOptions::Create(Window* pParent, const SfxItemSet& rCoreSet)
 {
     return new ScTpFormulaOptions(pParent, rCoreSet);
 }
 
-sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
+BOOL ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
 {
     ::formula::FormulaGrammar::Grammar eGram = ::formula::FormulaGrammar::GRAM_DEFAULT;
     switch (maLbFormulaSyntax.GetSelectEntryPos())

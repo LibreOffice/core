@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,15 +41,15 @@ namespace drawinglayer
     {
         /** ChartPrimitive2D class
 
-            This is a helper primitive which decomposes to the ChartMetaFile
-            visualisation. It is used to allow specific renderers to do something
+            This is a helper primitive which decomposes to the ChartMetaFile 
+            visualisation. It is used to allow specific renderers to do something 
             direct for visualising the chart.
          */
         class ChartPrimitive2D : public GroupPrimitive2D
         {
         private:
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     mxChartModel;
-            basegfx::B2DHomMatrix                   maTransformation;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >		mxChartModel;
+            basegfx::B2DHomMatrix					maTransformation;
 
         public:
             ChartPrimitive2D(

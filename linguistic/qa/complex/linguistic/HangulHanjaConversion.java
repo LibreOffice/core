@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,88 +43,85 @@ import com.sun.star.linguistic2.XConversionDictionaryList;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.table.XCell;
-
+import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XWordCursor;
 import com.sun.star.uno.UnoRuntime;
 
+import complexlib.ComplexTestCase;
 
+import java.io.PrintWriter;
 
 import util.DesktopTools;
 
-// import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
 
-public class HangulHanjaConversion {
+public class HangulHanjaConversion extends ComplexTestCase {
     XMultiServiceFactory xMSF = null;
     boolean disposed = false;
     Locale aLocale = new Locale("ko", "KR", "");
     short dictType = ConversionDictionaryType.HANGUL_HANJA;
 
-//    public String[] getTestMethodNames() {
-//        return new String[] { "ConversionDictionaryList" };
-//    }
-
-    @Before public void before() {
-        xMSF = getMSF();
+    public String[] getTestMethodNames() {
+        return new String[] { "ConversionDictionaryList" };
     }
 
-    @Test public void ConversionDictionaryList() {
+    public void before() {
+        xMSF = (XMultiServiceFactory) param.getMSF();
+    }
+
+    public void ConversionDictionaryList() {
         Object ConversionDictionaryList = null;
 
         try {
             ConversionDictionaryList = xMSF.createInstance(
                                                "com.sun.star.linguistic2.ConversionDictionaryList");
         } catch (com.sun.star.uno.Exception e) {
-            fail("Couldn't create ConversionDictionaryList");
+            assure("Couldn't create ConversionDictionaryList", false);
         }
 
         if (ConversionDictionaryList == null) {
-            fail("Couldn't create ConversionDictionaryList");
+            assure("Couldn't create ConversionDictionaryList", false);
         }
 
         boolean bList = checkXConversionDictionaryList(
                                 ConversionDictionaryList);
-        assertTrue("XConversionDictionaryList doesnt work as expected", bList);
+        assure("XConversionDictionaryList doesnt work as expected", bList);
     }
 
     private boolean checkXConversionDictionaryList(Object list) {
         boolean res = true;
-        XConversionDictionaryList xCList = UnoRuntime.queryInterface(XConversionDictionaryList.class, list);
+        XConversionDictionaryList xCList = (XConversionDictionaryList) UnoRuntime.queryInterface(
+                                                   XConversionDictionaryList.class, 
+                                                   list);
         XConversionDictionary xDict = null;
 
         try {
-            xDict = xCList.addNewDictionary("addNewDictionary", aLocale,
+            xDict = xCList.addNewDictionary("addNewDictionary", aLocale, 
                                             dictType);
         } catch (com.sun.star.lang.NoSupportException e) {
             res = false;
-            fail("Couldn't add Dictionary");
+            assure("Couldn't add Dictionary", false);
         } catch (com.sun.star.container.ElementExistException e) {
             res = false;
-            fail("Couldn't add Dictionary");
+            assure("Couldn't add Dictionary", false);
         }
 
         try {
             xCList.addNewDictionary("addNewDictionary", aLocale, dictType);
             res = false;
-            fail("wrong exception while adding Dictionary again");
+            assure("wrong exception while adding Dictionary again", false);
         } catch (com.sun.star.lang.NoSupportException e) {
             res = false;
-            fail("wrong exception while adding Dictionary again");
+            assure("wrong exception while adding Dictionary again", false);
         } catch (com.sun.star.container.ElementExistException e) {
         }
 
         boolean localRes = checkNameContainer(xCList.getDictionaryContainer());
         res &= localRes;
-        assertTrue("getDictionaryContainer didn't work as expected", localRes);
+        assure("getDictionaryContainer didn't work as expected", localRes);
 
-        String FileToLoad = TestDocument.getUrl("hangulhanja.sxc");
-        // String FileToLoad = util.utils.getFullTestURL();
-
-XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
+        String FileToLoad = util.utils.getFullTestURL("hangulhanja.sxc");
+        XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad, 
                                                new PropertyValue[] {  });
         XSpreadsheet xSheet = getSheet(xDoc);
         boolean done = false;
@@ -148,7 +145,7 @@ XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
                     e.printStackTrace();
                     res = false;
-                    fail("Exception while checking adding entry");
+                    assure("Exception while checking adding entry", false);
                 } catch (com.sun.star.container.ElementExistException e) {
                     //ignored
                 }
@@ -160,56 +157,57 @@ XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace();
             res = false;
-            fail("Exception while checking adding entry");
+            assure("Exception while checking adding entry", false);
         } catch (com.sun.star.container.ElementExistException e) {
             //ignored
         }
 
-        localRes = xCList.queryMaxCharCount(aLocale, dictType,
+        localRes = xCList.queryMaxCharCount(aLocale, dictType, 
                                             ConversionDirection.FROM_LEFT) == 42;
         res &= localRes;
-        assertTrue("queryMaxCharCount returned the wrong value", localRes);
+        assure("queryMaxCharCount returned the wrong value", localRes);
 
         String[] conversion = null;
 
         try {
-            conversion = xCList.queryConversions(wordToCheck, 0,
-                                                 wordToCheck.length(), aLocale,
-                                                 dictType,
-                                                 ConversionDirection.FROM_LEFT,
+            conversion = xCList.queryConversions(wordToCheck, 0, 
+                                                 wordToCheck.length(), aLocale, 
+                                                 dictType, 
+                                                 ConversionDirection.FROM_LEFT, 
                                                  TextConversionOption.NONE);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             res = false;
-            fail("Exception while calling queryConversions");
+            assure("Exception while calling queryConversions", false);
         } catch (com.sun.star.lang.NoSupportException e) {
             res = false;
-            fail("Exception while calling queryConversions");
+            assure("Exception while calling queryConversions", false);
         }
 
         localRes = conversion[0].equals(expectedConversion);
         res &= localRes;
-        assertTrue("queryConversions didn't work as expected", localRes);
+        assure("queryConversions didn't work as expected", localRes);
 
         try {
             xCList.getDictionaryContainer().removeByName("addNewDictionary");
         } catch (com.sun.star.container.NoSuchElementException e) {
             res = false;
-            fail("exception while removing Dictionary again");
+            assure("exception while removing Dictionary again", false);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             res = false;
-            fail("exception while removing Dictionary again");
+            assure("exception while removing Dictionary again", false);
         }
 
         localRes = !xCList.getDictionaryContainer()
                           .hasByName("addNewDictionary");
         res &= localRes;
-        assertTrue("Dictionary hasn't been removed properly", localRes);
+        assure("Dictionary hasn't been removed properly", localRes);
 
-        XComponent dicList = UnoRuntime.queryInterface(XComponent.class, xCList);
+        XComponent dicList = (XComponent) UnoRuntime.queryInterface(
+                                     XComponent.class, xCList);
         XEventListener listen = new EventListener();
         dicList.addEventListener(listen);
         dicList.dispose();
-        assertTrue("dispose didn't work", disposed);
+        assure("dispose didn't work", disposed);
         dicList.removeEventListener(listen);
 
         DesktopTools.closeDoc(xDoc);
@@ -246,17 +244,23 @@ XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
     }
 
     private XSpreadsheet getSheet(XComponent xDoc) {
-        XSpreadsheetDocument xSheetDoc = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xDoc);
+        XSpreadsheetDocument xSheetDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface(
+                                                 XSpreadsheetDocument.class, 
+                                                 xDoc);
         XSpreadsheet xSheet = null;
 
         try {
-            xSheet = UnoRuntime.queryInterface(XSpreadsheet.class, xSheetDoc.getSheets().getByName(xSheetDoc.getSheets().getElementNames()[0]));
+            xSheet = (XSpreadsheet) UnoRuntime.queryInterface(
+                             XSpreadsheet.class, 
+                             xSheetDoc.getSheets()
+                                      .getByName(xSheetDoc.getSheets()
+                                                          .getElementNames()[0]));
         } catch (com.sun.star.container.NoSuchElementException e) {
-            System.out.println("Couldn't get sheet");
-            e.printStackTrace();
+            log.println("Couldn't get sheet");
+            e.printStackTrace((PrintWriter) log);
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            System.out.println("Couldn't get sheet");
-            e.printStackTrace();
+            log.println("Couldn't get sheet");
+            e.printStackTrace((PrintWriter) log);
         }
 
         return xSheet;
@@ -276,8 +280,8 @@ XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
         try {
             re = xSpreadsheet.getCellByPosition(x, y);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            System.out.println("Couldn't get word");
-            e.printStackTrace();
+            log.println("Couldn't get word");
+            e.printStackTrace((PrintWriter) log);
         }
 
         return re;
@@ -301,8 +305,8 @@ XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
             return ConversionDictionaryType.HANGUL_HANJA;
         }
 
-        public String[] getConversions(String str, int param, int param2,
-                                       ConversionDirection conversionDirection,
+        public String[] getConversions(String str, int param, int param2, 
+                                       ConversionDirection conversionDirection, 
                                        int param4)
                                 throws IllegalArgumentException {
             return new String[] { "getConversion" };
@@ -338,26 +342,4 @@ XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
             disposed = true;
         }
     }
-
-    private XMultiServiceFactory getMSF()
-    {
-        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        return xMSF1;
-    }
-
-    // setup and close connections
-    @BeforeClass public static void setUpConnection() throws Exception {
-        System.out.println("setUpConnection()");
-        connection.setUp();
-    }
-
-    @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
-    {
-        System.out.println("tearDownConnection()");
-        connection.tearDown();
-    }
-
-    private static final OfficeConnection connection = new OfficeConnection();
-
 }

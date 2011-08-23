@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,26 +44,26 @@
 
 #include <stdio.h>
 
-using namespace ::rtl;
+using namespace	::rtl;
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::lang;
+using namespace	::com::sun::star::lang;
 
 Reference< XTransferable > rXTransfRead;
 
 class TestTransferable : public WeakImplHelper2< XClipboardOwner, XTransferable >
 {
-public:
+public:	
     TestTransferable();
     virtual Any SAL_CALL getTransferData( const DataFlavor& aFlavor ) throw(UnsupportedFlavorException, IOException, RuntimeException);
     virtual Sequence< DataFlavor > SAL_CALL getTransferDataFlavors() throw(RuntimeException);
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& aFlavor ) throw(RuntimeException);
     virtual void SAL_CALL lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans ) throw(RuntimeException);
-
+    
 private:
     Sequence< DataFlavor > m_seqDFlv;
     OUString               m_Data;
@@ -74,16 +74,16 @@ TestTransferable::TestTransferable() :
     m_Data( RTL_CONSTASCII_USTRINGPARAM( "This is a test string" ) )
 {
     DataFlavor df;
-
-    df.MimeType = OUString(RTL_CONSTASCII_USTRINGPARAM("text/html"));
+    
+    df.MimeType = OUString::createFromAscii( "text/html" );
     df.DataType = getCppuType( ( Sequence< sal_Int8 >* )0 );
 
-    m_seqDFlv[0] = df;
+    m_seqDFlv[0] = df;	
 }
 
-Any SAL_CALL TestTransferable::getTransferData( const DataFlavor& aFlavor )
+Any SAL_CALL TestTransferable::getTransferData( const DataFlavor& aFlavor ) 
     throw(UnsupportedFlavorException, IOException, RuntimeException)
-{
+{	
     Any anyData;
 
     if ( aFlavor.MimeType == m_seqDFlv[0].MimeType )
@@ -101,13 +101,13 @@ Any SAL_CALL TestTransferable::getTransferData( const DataFlavor& aFlavor )
     return anyData;
 }
 
-Sequence< DataFlavor > SAL_CALL TestTransferable::getTransferDataFlavors()
+Sequence< DataFlavor > SAL_CALL TestTransferable::getTransferDataFlavors() 
     throw(RuntimeException)
 {
     return m_seqDFlv;
 }
 
-sal_Bool SAL_CALL TestTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
+sal_Bool SAL_CALL TestTransferable::isDataFlavorSupported( const DataFlavor& aFlavor ) 
     throw(RuntimeException)
 {
     sal_Int32 nLength = m_seqDFlv.getLength();
@@ -125,7 +125,7 @@ sal_Bool SAL_CALL TestTransferable::isDataFlavorSupported( const DataFlavor& aFl
     return bRet;
 }
 
-void SAL_CALL TestTransferable::lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans )
+void SAL_CALL TestTransferable::lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans ) 
     throw(RuntimeException)
 {
 }
@@ -144,10 +144,10 @@ int SAL_CALL main( int argc, char** argv )
     OUString rdbName = OUString::createFromAscii( argv[1] );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occurred.
+    // Print a message if an error occured.
     if ( !g_xFactory.is() )
     {
-        OSL_FAIL("Can't create RegistryServiceFactory");
+        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -160,7 +160,7 @@ int SAL_CALL main( int argc, char** argv )
     Reference< XClipboard > xClipboard( g_xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( AQUA_CLIPBOARD_SERVICE_NAME ) ) ), UNO_QUERY );
     if ( !xClipboard.is() )
     {
-        OSL_FAIL( "Error creating FolderPicker Service" );
+        OSL_ENSURE( sal_False, "Error creating FolderPicker Service" );
         return(-1);
     }
 
@@ -196,14 +196,14 @@ int SAL_CALL main( int argc, char** argv )
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
     if ( !xComponent.is() )
-        OSL_FAIL("Error shuting down");
-
+        OSL_ENSURE(sal_False, "Error shuting down");
+    
     // Dispose and clear factory
     xComponent->dispose();
     g_xFactory.clear();
     g_xFactory = Reference< XMultiServiceFactory >();
 
-    return 0;
+    return 0;	
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

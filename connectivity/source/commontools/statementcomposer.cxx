@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -193,7 +193,7 @@ namespace dbtools
 
                         // the filter
                         sal_Bool bApplyFilter = sal_True;
-                        const ::rtl::OUString sPropApply( RTL_CONSTASCII_USTRINGPARAM( "ApplyFilter" ));
+                        const ::rtl::OUString sPropApply = ::rtl::OUString::createFromAscii( "ApplyFilter" );
                         if ( ::comphelper::hasProperty( sPropApply, xQuery ) )
                         {
                             OSL_VERIFY( xQuery->getPropertyValue( sPropApply ) >>= bApplyFilter );
@@ -212,7 +212,7 @@ namespace dbtools
                     break;
 
                     default:
-                        OSL_FAIL("lcl_ensureUpToDateComposer_nothrow: no table, no query, no statement - what else ?!");
+                        OSL_ENSURE(sal_False, "lcl_ensureUpToDateComposer_nothrow: no table, no query, no statement - what else ?!");
                         break;
                 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,7 @@ public class XMLStylesExporter extends TestCase {
                     XStyleFamiliesSupplier.class, xSheetDoc);
             XNameAccess StyleFamilies = styleSup.getStyleFamilies();
             String[] styleFamiliesNames = StyleFamilies.getElementNames();
-            XNameContainer StyleFamilyName = (XNameContainer)
+            XNameContainer StyleFamilyName = (XNameContainer) 
                 AnyConverter.toObject(new Type(XNameContainer.class),
                     StyleFamilies.getByName(styleFamiliesNames[0]));
             Object SC = SOF.createInstance(
@@ -155,10 +155,10 @@ public class XMLStylesExporter extends TestCase {
             XStyle StyleCell = (XStyle)
                 UnoRuntime.queryInterface(XStyle.class,SC);
             StyleFamilyName.insertByName(newName, StyleCell);
-
+            
             log.println("fill sheet 1 with contnet...");
             util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 1, 3, 3, 50, 100);
-
+            
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Can't create environment.", e);
@@ -182,7 +182,7 @@ public class XMLStylesExporter extends TestCase {
     /**
      * This class checks the XML for tags and data required and returns
      * checking result to <code>XFilter</code> interface test. All
-     * the information about errors occurred in XML data is written
+     * the information about errors occured in XML data is written
      * to log specified.
      * @see ifc.document._XFilter
      */
@@ -201,7 +201,7 @@ public class XMLStylesExporter extends TestCase {
          * which returns the result of XML checking.
          * @return <code>true</code> if the XML data exported was
          * valid (i.e. all necessary tags and character data exists),
-         * <code>false</code> if some errors occurred.
+         * <code>false</code> if some errors occured.
          */
         public boolean checkFilter() {
             return check();

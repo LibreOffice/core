@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.ui.event.*;
 
@@ -209,7 +208,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
         XControl xImgControl = insertImage(Desktop.getUniqueName(getDlgNameAccess(), "imgHint"),
                 new String[]
                 {
-                    "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                    "Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "Width"
                 },
                 new Object[]
                 {
@@ -341,7 +340,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
             Helper.setUnoPropertyValues(xControlModel, sPropNames, oPropValues);
             //setControlPropertiesDebug(xControlModel, sPropNames, oPropValues);
             //System.out.println("  Setting props successfull !");
-            Helper.setUnoPropertyValue(xControlModel, PropertyNames.PROPERTY_NAME, componentName);
+            Helper.setUnoPropertyValue(xControlModel, "Name", componentName);
         }
         catch (Exception ex)
         {

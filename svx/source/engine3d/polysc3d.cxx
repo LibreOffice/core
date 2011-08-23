@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,33 +31,33 @@
 #include <svx/xfillit.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>
-#include "svx/svditer.hxx"
+#include "svditer.hxx"
 #include <svx/svdetc.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpool.hxx>
 #include <svl/style.hxx>
-#include "svx/globl3d.hxx"
+#include "globl3d.hxx"
 #include <svx/polysc3d.hxx>
 #include <svx/xlnclit.hxx>
 #include <svl/metitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xlnwtit.hxx>
 
-#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
+#define ITEMVALUE(ItemSet,Id,Cast)	((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 TYPEINIT1(E3dPolyScene, E3dScene);
 
 E3dPolyScene::E3dPolyScene()
-:   E3dScene()
+:	E3dScene()
 {
 }
 
 E3dPolyScene::E3dPolyScene(E3dDefaultAttributes& rDefault)
-:   E3dScene(rDefault)
+:	E3dScene(rDefault)
 {
 }
 
@@ -67,14 +67,9 @@ E3dPolyScene::E3dPolyScene(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-sal_uInt16 E3dPolyScene::GetObjIdentifier() const
+UINT16 E3dPolyScene::GetObjIdentifier() const
 {
     return E3D_POLYSCENE_ID;
-}
-
-E3dPolyScene* E3dPolyScene::Clone() const
-{
-    return CloneHelper< E3dPolyScene >();
 }
 
 // eof

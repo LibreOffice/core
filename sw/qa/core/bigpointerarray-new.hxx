@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,20 +42,20 @@ class BigPtrEntry
 {
     friend class BigPtrArray;
     BigPtrArray* pBigPtrArray_;
-    sal_uLong pos_;
-
+    ULONG pos_;	
+    
 protected:
-    BigPtrEntry() : pBigPtrArray_(0), pos_(0)
+    BigPtrEntry() : pBigPtrArray_(0), pos_(0) 
+    {}
+    
+    virtual ~BigPtrEntry() 
     {}
 
-    virtual ~BigPtrEntry()
-    {}
-
-    sal_uLong GetPos() const
+    ULONG GetPos() const
     {
         return pos_;
     }
-
+    
     BigPtrArray& GetArray() const
     {
         return *pBigPtrArray_;
@@ -63,96 +63,96 @@ protected:
 };
 
 typedef BigPtrEntry* ElementPtr;
-typedef sal_Bool (*FnForEach)(const ElementPtr&, void* pArgs);
+typedef BOOL (*FnForEach)(const ElementPtr&, void* pArgs);
 
 /** A container abstraction
 */
 class BigPtrArray
 {
-public:
+public:    
     typedef std::deque<ElementPtr> Container_t;
-
+    
 public:
     /**
     */
     BigPtrArray();
-
+    
     /** Return the number of entries inserted
         into the array
     */
-    sal_uLong Count() const;
+    ULONG Count() const;
 
     /** Insert an Element into the array at a certain
         position
-
+        
         @param rElem
         [in] the element
-
+        
         @param pos
         [in] the position where to insert the element.
-
+        
         @pre (pos >= 0 && pos <= BigPtrArray.Count())
         @post (((oldCount + 1) == BigPtrArray.Count()) && BigPtrArray[pos] == rElem)
     */
-    void Insert(const ElementPtr& rElem, sal_uLong pos);
-
+    void Insert(const ElementPtr& rElem, ULONG pos);
+    
     /** Remove a specified number of elements starting at a certain position.
-
+    
         @param pos
         [in] the position where to start removing elements
-
+        
         @param n
         [in] the number of elements to remove
-
+        
         @pre (pos < BigPtrArray.Count() && n <= BigPtrArray.Count())
         @post ((oldCount - n) == BigPtrArray.Count())
     */
-    void Remove(sal_uLong pos, sal_uLong n = 1);
-
+    void Remove(ULONG pos, ULONG n = 1);
+    
     /** Move an entry from a certain position to another on.
-
+        
         @param from
-        [in]
-
+        [in] 
+        
         @param to
-        [in]
+        [in] 
     */
-    void Move(sal_uLong fromPos, sal_uLong toPos);
-
+    void Move(ULONG fromPos, ULONG toPos);
+    
     /** Replace an entry at a certain position
-
+    
         @param pos
         [in] the position of the entry
-
-        @param rElem
+        
+        @param rElem 
         [in] the new entry
-
+        
         @pre pos < BigPtrArray.Count()
-        @post (oldCount == BigPtrArray.Count() && BigPtrArray[pos] == rElem)
+        @post (oldCount == BigPtrArray.Count() && BigPtrArray[pos] == rElem) 
     */
-    void Replace(sal_uLong pos, const ElementPtr& rElem);
+    void Replace(ULONG pos, const ElementPtr& rElem);
 
     /** Get the entry at a certain index
-
+        
         @param pos
         [in] the position of the entry
-
+        
         @pre pos < BigPtrArray.Count()
     */
-    ElementPtr operator[](sal_uLong pos) const;
+    ElementPtr operator[](ULONG pos) const;
 
-    /**
+    /** 
     */
     void ForEach(FnForEach fn, void* pArgs = NULL);
-
+    
     /**
     */
-    void ForEach(sal_uLong fromPos, sal_uLong toPos, FnForEach fn, void* pArgs = NULL);
+    void ForEach(ULONG fromPos, ULONG toPos, FnForEach fn, void* pArgs = NULL);
 
 private:
-
+    
     void FixElementIndizes(Container_t::const_iterator begin, Container_t::const_iterator end) const;
-
+    
 private:
     Container_t container_;
 };

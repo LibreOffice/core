@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace {
 class AllPagesPredicate
 {
 public:
-    bool operator() (const SharedPageDescriptor& rpDescriptor) const
+    bool operator() (const SharedPageDescriptor& rpDescriptor)
     {
         (void)rpDescriptor;
         return true;
@@ -57,7 +57,7 @@ class SelectedPagesPredicate
 public:
     bool operator() (const SharedPageDescriptor& rpDescriptor)
     {
-        return rpDescriptor->HasState(PageDescriptor::ST_Selected);
+        return rpDescriptor->IsSelected(); 
     }
 };
 
@@ -69,7 +69,7 @@ class VisiblePagesPredicate
 public:
     bool operator() (const SharedPageDescriptor& rpDescriptor)
     {
-        return rpDescriptor->HasState(PageDescriptor::ST_Visible);
+        return rpDescriptor->IsVisible();
     }
 };
 
@@ -81,6 +81,7 @@ public:
 PageEnumeration PageEnumerationProvider::CreateAllPagesEnumeration (
     const SlideSorterModel& rModel)
 {
+//    AllPagesPredicate aPredicate; // spurious warning on unxsoli4 debug=t
     return PageEnumeration::Create(rModel, AllPagesPredicate());
 }
 

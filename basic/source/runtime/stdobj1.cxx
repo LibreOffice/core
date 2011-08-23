@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,23 +34,23 @@
 #include "runtime.hxx"
 #include <basic/sbstdobj.hxx>
 
-#define ATTR_IMP_TYPE           1
-#define ATTR_IMP_WIDTH          2
-#define ATTR_IMP_HEIGHT         3
-#define ATTR_IMP_BOLD           4
-#define ATTR_IMP_ITALIC         5
-#define ATTR_IMP_STRIKETHROUGH  6
-#define ATTR_IMP_UNDERLINE      7
-#define ATTR_IMP_WEIGHT         8
-#define ATTR_IMP_SIZE           9
-#define ATTR_IMP_NAME           10
+#define ATTR_IMP_TYPE			1
+#define ATTR_IMP_WIDTH			2
+#define ATTR_IMP_HEIGHT			3
+#define ATTR_IMP_BOLD			4
+#define ATTR_IMP_ITALIC			5
+#define ATTR_IMP_STRIKETHROUGH	6
+#define ATTR_IMP_UNDERLINE		7
+#define ATTR_IMP_WEIGHT			8
+#define ATTR_IMP_SIZE			9
+#define ATTR_IMP_NAME			10
 
-#define METH_CLEAR              20
-#define METH_GETDATA            21
-#define METH_GETFORMAT          22
-#define METH_GETTEXT            23
-#define METH_SETDATA            24
-#define METH_SETTEXT            25
+#define METH_CLEAR				20
+#define METH_GETDATA			21
+#define METH_GETFORMAT			22
+#define METH_GETTEXT			23
+#define METH_SETDATA			24
+#define METH_SETTEXT			25
 
 //------------------------------------------------------------------------------
 SbStdFactory::SbStdFactory()
@@ -72,7 +72,7 @@ SbxObject* SbStdFactory::CreateObject( const String& rClassName )
 
 
 
-void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, BOOL bWrite )
 {
     if( bWrite )
     {
@@ -81,7 +81,7 @@ void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
     }
 
     GraphicType eType = aGraphic.GetType();
-    sal_Int16 nType = 0;
+    INT16 nType = 0;
 
     if( eType == GRAPHIC_BITMAP )
         nType = 1;
@@ -93,7 +93,7 @@ void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 }
 
 
-void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, BOOL bWrite )
 {
     if( bWrite )
     {
@@ -102,13 +102,13 @@ void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
     }
 
     Size aSize = aGraphic.GetPrefSize();
-    aSize = GetpApp()->GetAppWindow()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
+    aSize =	GetpApp()->GetAppWindow()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
     aSize = GetpApp()->GetAppWindow()->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
 
-    pVar->PutInteger( (sal_Int16)aSize.Width() );
+    pVar->PutInteger( (INT16)aSize.Width() );
 }
 
-void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, BOOL bWrite )
 {
     if( bWrite )
     {
@@ -117,10 +117,10 @@ void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
     }
 
     Size aSize = aGraphic.GetPrefSize();
-    aSize = GetpApp()->GetAppWindow()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
+    aSize =	GetpApp()->GetAppWindow()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
     aSize = GetpApp()->GetAppWindow()->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
 
-    pVar->PutInteger( (sal_Int16)aSize.Height() );
+    pVar->PutInteger( (INT16)aSize.Height() );
 }
 
 
@@ -168,17 +168,17 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             return;
         }
 
-        SbxVariable* pVar   = pHint->GetVar();
-        SbxArray*    pPar_  = pVar->GetParameters();
-        sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
-        sal_Bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
+        SbxVariable* pVar 	= pHint->GetVar();
+        SbxArray*    pPar_ 	= pVar->GetParameters();
+        USHORT       nWhich	= (USHORT)pVar->GetUserData();
+        BOOL		 bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Propteries
         switch( nWhich )
         {
-            case ATTR_IMP_TYPE:     PropType( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_WIDTH:    PropWidth( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_HEIGHT:   PropHeight( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_TYPE:		PropType( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_WIDTH:	PropWidth( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_HEIGHT:	PropHeight( pVar, pPar_, bWrite ); return;
         }
 
         SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
@@ -187,7 +187,7 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 //-----------------------------------------------------------------------------
 
-void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, BOOL bWrite )
 {
     if( bWrite )
         SetBold( pVar->GetBool() );
@@ -195,7 +195,7 @@ void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
         pVar->PutBool( IsBold() );
 }
 
-void SbStdFont::PropItalic( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdFont::PropItalic( SbxVariable* pVar, SbxArray*, BOOL bWrite )
 {
     if( bWrite )
         SetItalic( pVar->GetBool() );
@@ -203,7 +203,7 @@ void SbStdFont::PropItalic( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
         pVar->PutBool( IsItalic() );
 }
 
-void SbStdFont::PropStrikeThrough( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdFont::PropStrikeThrough( SbxVariable* pVar, SbxArray*, BOOL bWrite )
 {
     if( bWrite )
         SetStrikeThrough( pVar->GetBool() );
@@ -211,7 +211,7 @@ void SbStdFont::PropStrikeThrough( SbxVariable* pVar, SbxArray*, sal_Bool bWrite
         pVar->PutBool( IsStrikeThrough() );
 }
 
-void SbStdFont::PropUnderline( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdFont::PropUnderline( SbxVariable* pVar, SbxArray*, BOOL bWrite )
 {
     if( bWrite )
         SetUnderline( pVar->GetBool() );
@@ -219,15 +219,15 @@ void SbStdFont::PropUnderline( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
         pVar->PutBool( IsUnderline() );
 }
 
-void SbStdFont::PropSize( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdFont::PropSize( SbxVariable* pVar, SbxArray*, BOOL bWrite )
 {
     if( bWrite )
-        SetSize( (sal_uInt16)pVar->GetInteger() );
+        SetSize( (USHORT)pVar->GetInteger() );
     else
-        pVar->PutInteger( (sal_Int16)GetSize() );
+        pVar->PutInteger( (INT16)GetSize() );
 }
 
-void SbStdFont::PropName( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdFont::PropName( SbxVariable* pVar, SbxArray*, BOOL bWrite )
 {
     if( bWrite )
         SetFontName( pVar->GetString() );
@@ -290,20 +290,20 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             return;
         }
 
-        SbxVariable* pVar   = pHint->GetVar();
-        SbxArray*    pPar_  = pVar->GetParameters();
-        sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
-        sal_Bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
+        SbxVariable* pVar 	= pHint->GetVar();
+        SbxArray*    pPar_ 	= pVar->GetParameters();
+        USHORT       nWhich	= (USHORT)pVar->GetUserData();
+        BOOL		 bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Propteries
         switch( nWhich )
         {
-            case ATTR_IMP_BOLD:         PropBold( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_ITALIC:       PropItalic( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_BOLD:			PropBold( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_ITALIC:		PropItalic( pVar, pPar_, bWrite ); return;
             case ATTR_IMP_STRIKETHROUGH:PropStrikeThrough( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_UNDERLINE:    PropUnderline( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_SIZE:         PropSize( pVar, pPar_, bWrite ); return;
-            case ATTR_IMP_NAME:         PropName( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_UNDERLINE:	PropUnderline( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_SIZE:			PropSize( pVar, pPar_, bWrite ); return;
+            case ATTR_IMP_NAME:			PropName( pVar, pPar_, bWrite ); return;
         }
 
         SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
@@ -313,8 +313,43 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 //-----------------------------------------------------------------------------
 
+/*
+class TransferableHelperImpl : public TransferableHelper
+{
+    SotFormatStringId   mFormat;
+    String              mString;
+    Graphic             mGraphic;
 
-void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, sal_Bool )
+    virtual void        AddSupportedFormats();
+    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+
+public:
+    TransferableHelperImpl( void ) { mFormat = 0; }
+    TransferableHelperImpl( const String& rStr )
+        mFormat( FORMAT_STRING ), mString( rStr ) {}
+    TransferableHelperImpl( const Graphic& rGraphic );
+        mFormat( FORMAT_BITMAP ), mGraphic( rGraphic ) {}
+
+};
+
+void TransferableHelperImpl::AddSupportedFormats()
+{
+}
+
+sal_Bool TransferableHelperImpl::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+{
+    sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
+    if( nFormat == FORMAT_STRING )
+    {
+    }
+    else if( nFormat == FORMAT_BITMAP || 
+             nFormat == FORMAT_GDIMETAFILE )
+    {
+    }
+}
+*/
+
+void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, BOOL )
 {
     if( pPar_ && (pPar_->Count() > 1) )
     {
@@ -322,28 +357,43 @@ void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, sal_Bool )
         return;
     }
 
+    //Clipboard::Clear();
 }
 
-void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
+void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
     (void)pVar;
-
+    
     if( !pPar_ || (pPar_->Count() != 2) )
     {
         StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
         return;
     }
 
-    sal_uInt16 nFormat = pPar_->Get(1)->GetInteger();
+    USHORT nFormat = pPar_->Get(1)->GetInteger();
     if( !nFormat  || nFormat > 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
+    /*
+    if( nFormat == FORMAT_STRING )
+        pVar->PutString( Clipboard::PasteString() );
+    else
+    if( (nFormat == FORMAT_BITMAP) ||
+        (nFormat == FORMAT_GDIMETAFILE ) )
+    {
+        SbxObjectRef xPic = new SbStdPicture;
+        Graphic aGraph;
+        aGraph.Paste();
+        ((SbStdPicture*)(SbxObject*)xPic)->SetGraphic( aGraph );
+        pVar->PutObject( xPic );
+    }
+    */
 }
 
-void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
+void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
     if( !pPar_ || (pPar_->Count() != 2) )
     {
@@ -351,17 +401,18 @@ void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, sal_Bool
         return;
     }
 
-    sal_uInt16 nFormat = pPar_->Get(1)->GetInteger();
+    USHORT nFormat = pPar_->Get(1)->GetInteger();
     if( !nFormat  || nFormat > 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    pVar->PutBool( sal_False );
+    pVar->PutBool( FALSE );
+    //pVar->PutBool( Clipboard::HasFormat( nFormat ) );
 }
 
-void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
+void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
     if( pPar_ && (pPar_->Count() > 1) )
     {
@@ -370,37 +421,54 @@ void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
     }
 
     pVar->PutString( String() );
+    //pVar->PutString( Clipboard::PasteString() );
 }
 
-void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
+void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
     (void)pVar;
-
+    
     if( !pPar_ || (pPar_->Count() != 3) )
     {
         StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
         return;
     }
 
-    sal_uInt16 nFormat = pPar_->Get(2)->GetInteger();
+    USHORT nFormat = pPar_->Get(2)->GetInteger();
     if( !nFormat  || nFormat > 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
+    /*
+    if( nFormat == FORMAT_STRING )
+    {
+        Clipboard::CopyString( pPar_->Get(1)->GetString() );
+    }
+    else
+    if( (nFormat == FORMAT_BITMAP) ||
+        (nFormat == FORMAT_GDIMETAFILE) )
+    {
+        SbxObject* pObj = (SbxObject*)pPar_->Get(1)->GetObject();
+
+        if( pObj && pObj->IsA( TYPE( SbStdPicture ) ) )
+            ((SbStdPicture*)(SbxObject*)pObj)->GetGraphic().Copy();
+    }
+    */
 }
 
-void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
+void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
     (void)pVar;
-
+    
     if( !pPar_ || (pPar_->Count() != 2) )
     {
         StarBASIC::Error( SbERR_BAD_NUMBER_OF_ARGS );
         return;
     }
 
+    // Clipboard::CopyString( pPar_->Get(1)->GetString() );
 }
 
 
@@ -461,20 +529,20 @@ void SbStdClipboard::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             return;
         }
 
-        SbxVariable* pVar   = pHint->GetVar();
-        SbxArray*    pPar_  = pVar->GetParameters();
-        sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
-        sal_Bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
+        SbxVariable* pVar 	= pHint->GetVar();
+        SbxArray*    pPar_ 	= pVar->GetParameters();
+        USHORT       nWhich	= (USHORT)pVar->GetUserData();
+        BOOL		 bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Methods
         switch( nWhich )
         {
-            case METH_CLEAR:            MethClear( pVar, pPar_, bWrite ); return;
-            case METH_GETDATA:          MethGetData( pVar, pPar_, bWrite ); return;
-            case METH_GETFORMAT:        MethGetFormat( pVar, pPar_, bWrite ); return;
-            case METH_GETTEXT:          MethGetText( pVar, pPar_, bWrite ); return;
-            case METH_SETDATA:          MethSetData( pVar, pPar_, bWrite ); return;
-            case METH_SETTEXT:          MethSetText( pVar, pPar_, bWrite ); return;
+            case METH_CLEAR:			MethClear( pVar, pPar_, bWrite ); return;
+            case METH_GETDATA:			MethGetData( pVar, pPar_, bWrite ); return;
+            case METH_GETFORMAT:		MethGetFormat( pVar, pPar_, bWrite ); return;
+            case METH_GETTEXT:			MethGetText( pVar, pPar_, bWrite ); return;
+            case METH_SETDATA:			MethSetData( pVar, pPar_, bWrite ); return;
+            case METH_SETTEXT:			MethSetText( pVar, pPar_, bWrite ); return;
         }
 
         SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );

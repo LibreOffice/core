@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@ namespace dbaui
                 :public SbaXDataBrowserController
                 ,public ::com::sun::star::util::XModifyBroadcaster
     {
-        ::cppu::OInterfaceContainerHelper   m_aModifyListeners;
+        ::cppu::OInterfaceContainerHelper	m_aModifyListeners;
             // for multiplexing the modify events
-        SbaXFormAdapter*                    m_pDataSourceImpl;
-        sal_Bool                            m_bInQueryDispatch;
+        SbaXFormAdapter*					m_pDataSourceImpl;
+        sal_Bool							m_bInQueryDispatch;
             // our queryDispatch will ask our frame, which first will ask our queryDispatch, so we need to protect against
             // recursion
 
@@ -62,10 +62,10 @@ namespace dbaui
 
         // UNO
         DECLARE_UNO3_DEFAULTS(SbaExternalSourceBrowser, OGenericUnoController);
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
-        //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > >  getIdlClasses(void);
+        virtual ::com::sun::star::uno::Any	SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+        //	virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > >	getIdlClasses(void);
 
-        //  static ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  getStaticIdlClass();
+        //	static ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  getStaticIdlClass();
 
         // ::com::sun::star::frame::XDispatch
         virtual void SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) throw(::com::sun::star::uno::RuntimeException);
@@ -97,7 +97,7 @@ namespace dbaui
         ~SbaExternalSourceBrowser();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  CreateForm();
-        virtual sal_Bool InitializeForm( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties );
+        virtual sal_Bool InitializeForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xForm);
 
         virtual sal_Bool LoadForm();
 

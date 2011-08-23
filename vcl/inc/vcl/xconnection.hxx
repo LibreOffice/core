@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,10 @@
 #ifndef _VCL_XCONNECTION_HXX
 #define _VCL_XCONNECTION_HXX
 
+#include <com/sun/star/awt/XDisplayConnection.hpp>
+#include <cppuhelper/implbase1.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-
-#include "vcl/displayconnectiondispatch.hxx"
 
 #ifndef _STLP_LIST
 #include <list>
@@ -42,23 +41,21 @@
 namespace vcl {
 
     class DisplayConnection :
-        public DisplayConnectionDispatch
+        public ::cppu::WeakImplHelper1< ::com::sun::star::awt::XDisplayConnection >
     {
-        ::osl::Mutex                    m_aMutex;
+        ::osl::Mutex					m_aMutex;
         ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler > >
                                         m_aHandlers;
         ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler > >
                                         m_aErrorHandlers;
-        ::com::sun::star::uno::Any      m_aAny;
+        ::com::sun::star::uno::Any		m_aAny;
     public:
         DisplayConnection();
         virtual ~DisplayConnection();
 
-        void start();
-        void terminate();
-
-        virtual bool dispatchEvent( void* pData, int nBytes );
-        virtual bool dispatchErrorEvent( void* pData, int nBytes );
+        static bool dispatchEvent( void* pThis, void* pData, int nBytes );
+        static bool dispatchErrorEvent( void* pThis, void* pData, int nBytes );
+        void dispatchDowningEvent();
 
         // XDisplayConnection
         virtual void SAL_CALL addEventHandler( const ::com::sun::star::uno::Any& window, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler, sal_Int32 eventMask ) throw();

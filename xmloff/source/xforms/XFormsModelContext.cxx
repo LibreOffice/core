@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
 #include "xformsapi.hxx"
 
 #include <xmloff/xmlimp.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlerror.hxx"
+#include "xmlerror.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -78,8 +78,8 @@ static SvXMLTokenMapEntry aChildren[] =
 };
 
 
-XFormsModelContext::XFormsModelContext( SvXMLImport& rImport,
-                                        sal_uInt16 nPrefix,
+XFormsModelContext::XFormsModelContext( SvXMLImport& rImport, 
+                                        USHORT nPrefix,
                                         const OUString& rLocalName ) :
     TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
     mxModel( lcl_createXFormsModel() )
@@ -97,8 +97,8 @@ Reference<XPropertySet> XFormsModelContext::getModel()
 }
 
 
-void XFormsModelContext::HandleAttribute(
-    sal_uInt16 nToken,
+void XFormsModelContext::HandleAttribute( 
+    sal_uInt16 nToken, 
     const OUString& rValue )
 {
     switch( nToken )
@@ -110,12 +110,12 @@ void XFormsModelContext::HandleAttribute(
         GetImport().SetError( XMLERROR_XFORMS_NO_SCHEMA_SUPPORT );
         break;
     default:
-        OSL_FAIL( "this should not happen" );
+        DBG_ERROR( "this should not happen" );
         break;
     }
-}
+}        
 
-SvXMLImportContext* XFormsModelContext::HandleChild(
+SvXMLImportContext* XFormsModelContext::HandleChild( 
     sal_uInt16 nToken,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -130,22 +130,22 @@ SvXMLImportContext* XFormsModelContext::HandleChild(
                                               mxModel );
         break;
     case XML_BIND:
-        pContext = new XFormsBindContext( GetImport(), nPrefix, rLocalName,
+        pContext = new XFormsBindContext( GetImport(), nPrefix, rLocalName, 
                                           mxModel );
         break;
     case XML_SUBMISSION:
-        pContext = new XFormsSubmissionContext( GetImport(), nPrefix,
+        pContext = new XFormsSubmissionContext( GetImport(), nPrefix, 
                                                 rLocalName, mxModel );
         break;
     case XML_SCHEMA:
-        pContext = new SchemaContext(
+        pContext = new SchemaContext( 
             GetImport(), nPrefix, rLocalName,
-            Reference<com::sun::star::xforms::XModel>( mxModel,
+            Reference<com::sun::star::xforms::XModel>( mxModel, 
                                                        UNO_QUERY_THROW )
                 ->getDataTypeRepository() );
         break;
     default:
-        OSL_FAIL( "Boooo!" );
+        DBG_ERROR( "Boooo!" );
         break;
     }
 

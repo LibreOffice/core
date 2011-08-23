@@ -34,13 +34,13 @@ ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
-
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
 .INCLUDE : $(PRJ)$/makefile.pmk
 .INCLUDE :  $(PRJ)$/version.mk
+
 
 # --- Files -------------------------------------
 
@@ -76,6 +76,10 @@ SHL1STDLIBS=\
     $(COMPHELPERLIB)
 
 
+#.IF "$(DBFILELIB)" == ""
+#SHL1STDLIBS+= ifile.lib
+#.ENDIF
+
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
 
@@ -84,16 +88,9 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
+
 # --- Targets ----------------------------------
 
 .INCLUDE : $(PRJ)$/target.pmk
 
 
-
-ALLTAR : $(MISC)/calc.component
-
-$(MISC)/calc.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        calc.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt calc.component

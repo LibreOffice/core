@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -405,16 +405,16 @@ static const struct InstancesArray {
         &InputSequenceChecker_th_CreateInstance },
     {   "com.sun.star.i18n.InputSequenceChecker_hi",
         "com.sun.star.i18n.InputSequenceChecker_hi",
-        &InputSequenceChecker_hi_CreateInstance },
+        &InputSequenceChecker_hi_CreateInstance },  
     {   "com.sun.star.i18n.TextConversion",
         "com.sun.star.i18n.TextConversion",
-        &TextConversionImpl_CreateInstance },
+        &TextConversionImpl_CreateInstance },  
     {   "com.sun.star.i18n.TextConversion_ko",
         "com.sun.star.i18n.TextConversion_ko",
-        &TextConversion_ko_CreateInstance },
+        &TextConversion_ko_CreateInstance },  
     {   "com.sun.star.i18n.TextConversion_zh",
         "com.sun.star.i18n.TextConversion_zh",
-        &TextConversion_zh_CreateInstance },
+        &TextConversion_zh_CreateInstance },  
     {   TRLT_SERVICELNAME,
         TRLT_IMPLNAME ,
         &TransliterationImpl_CreateInstance },
@@ -555,7 +555,7 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.OrdinalSuffix",
         "com.sun.star.i18n.OrdinalSuffix",
         & OrdinalSuffix_CreateInstance },
-
+ 
     {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "FULLWIDTHKATAKANA_HALFWIDTHKATAKANA",
         &fullwidthKatakanaToHalfwidthKatakana_CreateInstance },
@@ -579,6 +579,29 @@ extern "C"
 void SAL_CALL component_getImplementationEnvironment( const sal_Char** ppEnvTypeName, uno_Environment** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+sal_Bool SAL_CALL component_writeInfo( void* /*_pServiceManager*/, void* _pRegistryKey )
+{
+    if (_pRegistryKey)
+    {
+        ::com::sun::star::registry::XRegistryKey * pRegistryKey =
+            reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >(
+                                _pRegistryKey );
+        ::com::sun::star::uno::Reference<
+                        ::com::sun::star::registry::XRegistryKey > xNewKey;
+
+        for( const InstancesArray* pArr = aInstances; pArr->pServiceNm; ++pArr )
+        {
+            xNewKey = pRegistryKey->createKey(
+                    ::rtl::OUString::createFromAscii( pArr->pImplementationNm )  );
+            xNewKey = xNewKey->createKey(
+                    ::rtl::OUString::createFromAscii( "/UNO/SERVICES" ) );
+            xNewKey->createKey(
+                    ::rtl::OUString::createFromAscii( pArr->pServiceNm ) );
+        }
+    }
+    return sal_True;
 }
 
 void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* /*_pRegistryKey*/ )

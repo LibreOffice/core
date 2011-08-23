@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,25 +40,25 @@
 
 #define SVPAR_CSM_
 
-#define SVPAR_CSM_ANSI      0x0001U
-#define SVPAR_CSM_UTF8      0x0002U
-#define SVPAR_CSM_UCS2B     0x0004U
-#define SVPAR_CSM_UCS2L     0x0008U
-#define SVPAR_CSM_SWITCH    0x8000U
+#define SVPAR_CSM_ANSI		0x0001U
+#define SVPAR_CSM_UTF8		0x0002U
+#define SVPAR_CSM_UCS2B		0x0004U
+#define SVPAR_CSM_UCS2L		0x0008U
+#define SVPAR_CSM_SWITCH	0x8000U
 
 // Struktur, um sich die akt. Daten zumerken
 struct SvParser_Impl
 {
-    String          aToken;             // gescanntes Token
-    sal_uLong           nFilePos;           // akt. Position im Stream
-    sal_uLong           nlLineNr;           // akt. Zeilen Nummer
-    sal_uLong           nlLinePos;          // akt. Spalten Nummer
-    long            nTokenValue;        // zusaetzlicher Wert (RTF)
-    sal_Bool            bTokenHasValue;     // indicates whether nTokenValue is valid
-    int             nToken;             // akt. Token
-    sal_Unicode     nNextCh;            // akt. Zeichen
+    String 	  		aToken;				// gescanntes Token
+    ULONG 			nFilePos;			// akt. Position im Stream
+    ULONG	  		nlLineNr;			// akt. Zeilen Nummer
+    ULONG	  		nlLinePos;			// akt. Spalten Nummer
+    long            nTokenValue;		// zusaetzlicher Wert (RTF)
+    BOOL			bTokenHasValue;		// indicates whether nTokenValue is valid
+    int 			nToken;				// akt. Token
+    sal_Unicode		nNextCh;    		// akt. Zeichen
 
-    int             nSaveToken;         // das Token vom Continue
+    int 			nSaveToken;			// das Token vom Continue
 
     rtl_TextToUnicodeConverter hConv;
     rtl_TextToUnicodeContext   hContext;
@@ -77,7 +77,7 @@ struct SvParser_Impl
 
 
 // Konstruktor
-SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
+SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
     : rInput( rIn )
     , nlLineNr( 1 )
     , nlLinePos( 1 )
@@ -86,11 +86,11 @@ SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     , bTokenHasValue( false )
     , eState( SVPAR_NOTSTARTED )
     , eSrcEnc( RTL_TEXTENCODING_DONTKNOW )
-    , bDownloadingFile( sal_False )
+    , bDownloadingFile( FALSE )
     , nTokenStackSize( nStackSize )
     , nTokenStackPos( 0 )
 {
-    bUCS2BSrcEnc = bSwitchToUCS2 = sal_False;
+    bUCS2BSrcEnc = bSwitchToUCS2 = FALSE;
     eState = SVPAR_NOTSTARTED;
     if( nTokenStackSize < 3 )
         nTokenStackSize = 3;
@@ -191,11 +191,11 @@ sal_Unicode SvParser::GetNextChar()
     // When reading muliple bytes, we don't have to care about the file
     // position when we run inti the pending state. The file position is
     // maintained by SaveState/RestoreState.
-    sal_Bool bErr;
+    BOOL bErr;
     if( bSwitchToUCS2 && 0 == rInput.Tell() )
     {
         sal_uChar c1, c2;
-        sal_Bool bSeekBack = sal_True;
+        BOOL bSeekBack = TRUE;
 
         rInput >> c1;
         bErr = rInput.IsEof() || rInput.GetError();
@@ -210,14 +210,14 @@ sal_Unicode SvParser::GetNextChar()
                     if( 0xfe == c1 && 0xff == c2 )
                     {
                         eSrcEnc = RTL_TEXTENCODING_UCS2;
-                        bUCS2BSrcEnc = sal_True;
-                        bSeekBack = sal_False;
+                        bUCS2BSrcEnc = TRUE;
+                        bSeekBack = FALSE;
                     }
                     else if( 0xff == c1 && 0xfe == c2 )
                     {
                         eSrcEnc = RTL_TEXTENCODING_UCS2;
-                        bUCS2BSrcEnc = sal_False;
-                        bSeekBack = sal_False;
+                        bUCS2BSrcEnc = FALSE;
+                        bSeekBack = FALSE;
                     }
                 }
             }
@@ -225,7 +225,7 @@ sal_Unicode SvParser::GetNextChar()
         if( bSeekBack )
             rInput.Seek( 0 );
 
-        bSwitchToUCS2 = sal_False;
+        bSwitchToUCS2 = FALSE;
     }
 
     nNextChPos = rInput.Tell();
@@ -261,13 +261,13 @@ sal_Unicode SvParser::GetNextChar()
         sal_Size nChars = 0;
         do
         {
-            sal_Char c1;    // signed, that's the text converter expects
+            sal_Char c1;	// signed, that's the text converter expects
             rInput >> c1;
             bErr = rInput.IsEof() || rInput.GetError();
             if( !bErr )
             {
                 if (
-                     RTL_TEXTENCODING_DONTKNOW == eSrcEnc ||
+                     RTL_TEXTENCODING_DONTKNOW == eSrcEnc || 
                      RTL_TEXTENCODING_SYMBOL == eSrcEnc
                    )
                 {
@@ -319,11 +319,11 @@ sal_Unicode SvParser::GetNextChar()
                                 }
                                 else if( 0 != nChars || 0 != nInfo )
                                 {
-                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0,
+                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0, 
                                         "source buffer is to small" );
                                     DBG_ASSERT( (nInfo&~(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL)) == 0,
                                          "there is a conversion error" );
-                                    DBG_ASSERT( 0 == nChars,
+                                    DBG_ASSERT( 0 == nChars, 
                                        "there is a converted character, but an error" );
                                     // There are still errors, but nothing we can
                                     // do
@@ -363,13 +363,13 @@ sal_Unicode SvParser::GetNextChar()
                                 }
                                 else
                                 {
-                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0,
+                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0, 
                                         "source buffer is to small" );
                                     DBG_ASSERT( (nInfo&~(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL)) == 0,
                                          "there is a conversion error" );
-                                    DBG_ASSERT( 0 == nChars,
+                                    DBG_ASSERT( 0 == nChars, 
                                        "there is a converted character, but an error" );
-
+                                    
                                     // There are still errors, so we use the first
                                     // character and restart after that.
                                     c = (sal_Unicode)sBuffer[0];
@@ -388,9 +388,9 @@ sal_Unicode SvParser::GetNextChar()
                     }
                     else if( 0 != nChars || 0 != nInfo )
                     {
-                        DBG_ASSERT( 0 == nChars,
+                        DBG_ASSERT( 0 == nChars, 
                                 "there is a converted character, but an error" );
-                        DBG_ASSERT( 0 != nInfo,
+                        DBG_ASSERT( 0 != nInfo, 
                                 "there is no converted character and no error" );
                         // #73398#: If the character could not be converted,
                         // because a conversion is not available, do no conversion at all.
@@ -436,8 +436,8 @@ int SvParser::GetNextToken()
 
     if( !nTokenStackPos )
     {
-        aToken.Erase();     // Token-Buffer loeschen
-        nTokenValue = -1;   // Kennzeichen fuer kein Value gelesen
+        aToken.Erase();		// Token-Buffer loeschen
+        nTokenValue = -1;	// Kennzeichen fuer kein Value gelesen
         bTokenHasValue = false;
 
         nRet = _GetNextToken();
@@ -467,12 +467,12 @@ int SvParser::GetNextToken()
         pTokenStackPos->nTokenId = nRet;
     }
     else if( SVPAR_ACCEPTED != eState && SVPAR_PENDING != eState )
-        eState = SVPAR_ERROR;       // irgend ein Fehler
+        eState = SVPAR_ERROR;		// irgend ein Fehler
 
     return nRet;
 }
 
-int SvParser::SkipToken( short nCnt )       // n Tokens zurueck "skippen"
+int SvParser::SkipToken( short nCnt )		// n Tokens zurueck "skippen"
 {
     pTokenStackPos = GetStackPtr( nCnt );
     short nTmp = nTokenStackPos - nCnt;
@@ -480,7 +480,7 @@ int SvParser::SkipToken( short nCnt )       // n Tokens zurueck "skippen"
         nTmp = 0;
     else if( nTmp > nTokenStackSize )
         nTmp = nTokenStackSize;
-    nTokenStackPos = sal_uInt8(nTmp);
+    nTokenStackPos = BYTE(nTmp);
 
     // und die Werte zurueck
     aToken = pTokenStackPos->sToken;
@@ -492,15 +492,15 @@ int SvParser::SkipToken( short nCnt )       // n Tokens zurueck "skippen"
 
 SvParser::TokenStackType* SvParser::GetStackPtr( short nCnt )
 {
-    sal_uInt8 nAktPos = sal_uInt8(pTokenStackPos - pTokenStack );
+    BYTE nAktPos = BYTE(pTokenStackPos - pTokenStack );
     if( nCnt > 0 )
     {
         if( nCnt >= nTokenStackSize )
             nCnt = (nTokenStackSize-1);
         if( nAktPos + nCnt < nTokenStackSize )
-            nAktPos = sal::static_int_cast< sal_uInt8 >(nAktPos + nCnt);
+            nAktPos = sal::static_int_cast< BYTE >(nAktPos + nCnt);
         else
-            nAktPos = sal::static_int_cast< sal_uInt8 >(
+            nAktPos = sal::static_int_cast< BYTE >(
                 nAktPos + (nCnt - nTokenStackSize));
     }
     else if( nCnt < 0 )
@@ -508,9 +508,9 @@ SvParser::TokenStackType* SvParser::GetStackPtr( short nCnt )
         if( -nCnt >= nTokenStackSize )
             nCnt = -nTokenStackSize+1;
         if( -nCnt <= nAktPos )
-            nAktPos = sal::static_int_cast< sal_uInt8 >(nAktPos + nCnt);
+            nAktPos = sal::static_int_cast< BYTE >(nAktPos + nCnt);
         else
-            nAktPos = sal::static_int_cast< sal_uInt8 >(
+            nAktPos = sal::static_int_cast< BYTE >(
                 nAktPos + (nCnt + nTokenStackSize));
     }
     return pTokenStack + nAktPos;
@@ -574,32 +574,32 @@ void SvParser::Continue( int )
 }
 
 void SvParser::BuildWhichTbl( SvUShorts &rWhichMap,
-                              sal_uInt16 *pWhichIds,
-                              sal_uInt16 nWhichIds )
+                              USHORT *pWhichIds,
+                              USHORT nWhichIds )
 {
-    sal_uInt16 aNewRange[2];
+    USHORT aNewRange[2];
 
-    for( sal_uInt16 nCnt = 0; nCnt < nWhichIds; ++nCnt, ++pWhichIds )
+    for( USHORT nCnt = 0; nCnt < nWhichIds; ++nCnt, ++pWhichIds )
         if( *pWhichIds )
         {
             aNewRange[0] = aNewRange[1] = *pWhichIds;
-            sal_Bool bIns = sal_True;
+            BOOL bIns = TRUE;
 
             // Position suchen
-            for ( sal_uInt16 nOfs = 0; rWhichMap[nOfs]; nOfs += 2 )
+            for ( USHORT nOfs = 0; rWhichMap[nOfs]; nOfs += 2 )
             {
                 if( *pWhichIds < rWhichMap[nOfs] - 1 )
                 {
                     // neuen Range davor
                     rWhichMap.Insert( aNewRange, 2, nOfs );
-                    bIns = sal_False;
+                    bIns = FALSE;
                     break;
                 }
                 else if( *pWhichIds == rWhichMap[nOfs] - 1 )
                 {
                     // diesen Range nach unten erweitern
                     rWhichMap[nOfs] = *pWhichIds;
-                    bIns = sal_False;
+                    bIns = FALSE;
                     break;
                 }
                 else if( *pWhichIds == rWhichMap[nOfs+1] + 1 )
@@ -613,7 +613,7 @@ void SvParser::BuildWhichTbl( SvUShorts &rWhichMap,
                     else
                         // diesen Range nach oben erweitern
                         rWhichMap[nOfs+1] = *pWhichIds;
-                    bIns = sal_False;
+                    bIns = FALSE;
                     break;
                 }
             }
@@ -644,7 +644,7 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
             pThis->rInput.ResetError();
 
         if( SVPAR_PENDING != pThis->eState )
-            pThis->ReleaseRef();                    // ansonsten sind wir fertig!
+            pThis->ReleaseRef();					// ansonsten sind wir fertig!
         break;
 
     case SVPAR_WAITFORDATA:
@@ -656,7 +656,7 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
         break;
 
     default:
-        pThis->ReleaseRef();                    // ansonsten sind wir fertig!
+        pThis->ReleaseRef();					// ansonsten sind wir fertig!
         break;
     }
 
@@ -691,7 +691,7 @@ SvKeyValueIterator::~SvKeyValueIterator (void)
 /*
  * GetFirst.
  */
-sal_Bool SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
+BOOL SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
 {
     m_nPos = m_pList->Count();
     return GetNext (rKeyVal);
@@ -700,17 +700,17 @@ sal_Bool SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
 /*
  * GetNext.
  */
-sal_Bool SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
+BOOL SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
 {
     if (m_nPos > 0)
     {
         rKeyVal = *m_pList->GetObject(--m_nPos);
-        return sal_True;
+        return TRUE;
     }
     else
     {
         // Nothing to do.
-        return sal_False;
+        return FALSE;
     }
 }
 

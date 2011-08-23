@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.zip.ZipOutputStream;
 
-/**
-   When this tool is used with long path names on Windows, that is paths which start
-   with \\?\, then the caller must make sure that the path is unique. This is achieved
-   by removing '.' and '..' from the path. Paths which are created by
-   osl_getSystemPathFromFileURL fulfill this requirement. This is necessary because
-   lucene is patched to not use File.getCanonicalPath. See long_path.patch in the lucene
-   module.
- */
 public class HelpIndexer extends WeakBase
     implements XServiceInfo, XInvocation
 {
@@ -92,15 +84,15 @@ public class HelpIndexer extends WeakBase
     public XIntrospectionAccess getIntrospection()
     {
         return  null;
-    }
+    }        
 
     public Object invoke( String aFunctionName, java.lang.Object[] aParams,
         short[][] aOutParamIndex, java.lang.Object[][] aOutParam )
-            throws  com.sun.star.lang.IllegalArgumentException,
+            throws	com.sun.star.lang.IllegalArgumentException,
                     com.sun.star.script.CannotConvertException,
                     com.sun.star.reflection.InvocationTargetException
     {
-        if(
+        if( 
               !aFunctionName.equals( aCreateIndexMethodName  ) )
             throw new com.sun.star.lang.IllegalArgumentException();
 
@@ -128,7 +120,7 @@ public class HelpIndexer extends WeakBase
     }
 
     public void setValue( String aPropertyName, java.lang.Object aValue )
-        throws  com.sun.star.beans.UnknownPropertyException,
+        throws	com.sun.star.beans.UnknownPropertyException,
                 com.sun.star.script.CannotConvertException,
                 com.sun.star.reflection.InvocationTargetException
     {
@@ -140,7 +132,7 @@ public class HelpIndexer extends WeakBase
     {
         throw new com.sun.star.beans.UnknownPropertyException();
     }
-
+    
     public boolean hasMethod( String aMethodName )
     {
         boolean bRet = (aMethodName.equals( aCreateIndexMethodName ) );
@@ -188,7 +180,7 @@ public class HelpIndexer extends WeakBase
     public String getImplementationName()
     {
         return  HelpIndexer.class.getName();
-    }
+    }        
 
 }
 

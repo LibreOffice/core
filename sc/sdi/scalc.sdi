@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -2802,6 +2802,7 @@ SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
 ]
 
 //--------------------------------------------------------------------------
+//<!--Added by PengYunQuan for Validity Cell Range Picker
 SfxVoidItem ValidityReference SID_VALIDITY_REFERENCE
 ()
 [
@@ -2825,6 +2826,7 @@ SfxVoidItem ValidityReference SID_VALIDITY_REFERENCE
     ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
 ]
+//-->Added by PengYunQuan for Validity Cell Range Picker
 
 //--------------------------------------------------------------------------
 SfxVoidItem GoDownToEndOfData SID_CURSORBLKDOWN
@@ -7388,7 +7390,7 @@ SfxBoolItem ViewRowColumnHeaders FID_TOGGLEHEADERS
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ToggleFormula   FID_TOGGLEFORMULA
+SfxBoolItem ToggleFormula	FID_TOGGLEFORMULA
 
 [
     /* flags */
@@ -7828,7 +7830,7 @@ SfxBoolItem ToggleSheetGrid FID_TAB_TOGGLE_GRID
 SvxColorItem TabBgColor FID_TAB_SET_TAB_BG_COLOR
 
 [
-    // flags:
+    // flags: 
     AutoUpdate = FALSE,
     Cachable = Cachable,
     FastCall = FALSE,
@@ -7843,7 +7845,7 @@ SvxColorItem TabBgColor FID_TAB_SET_TAB_BG_COLOR
 
     Readonly = FALSE,
 
-    // config:
+    // config: 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,

@@ -100,7 +100,7 @@ private:
     ::rtl::OUString m_repository;
     bool m_bSuppressLicense;
 public:
-    LicenseCommandEnv() : m_bSuppressLicense(false) {};
+    LicenseCommandEnv(){};
     LicenseCommandEnv(
         css::uno::Reference< css::task::XInteractionHandler> const & handler,
         bool bSuppressLicense,
@@ -153,6 +153,22 @@ public:
     // Set to true if an unknown exception was handled.
     css::uno::Any m_UnknownException;
 };
+
+// class NoExceptionCommandEnv : public BaseCommandEnv
+// {
+//     css::uno::Type m_type;
+// public:
+//     NoExceptionCommandEnv::NoExceptionCommandEnv(){};
+//     NoExceptionCommandEnv::NoExceptionCommandEnv(
+//         css::uno::Reference< css::task::XInteractionHandler> const & handler,
+//         css::uno::Type const & type);
+
+// // XInteractionHandler
+//     virtual void SAL_CALL handle(
+//         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
+//         throw (css::uno::RuntimeException);
+
+// };
 
 }
 

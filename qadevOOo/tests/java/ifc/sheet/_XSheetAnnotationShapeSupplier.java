@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@ import lib.MultiMethodTest;
 public class _XSheetAnnotationShapeSupplier extends MultiMethodTest
 {
     public XSheetAnnotationShapeSupplier oObj = null;
-
+    
     public void _getAnnotationShape() {
         XShape xShape = oObj.getAnnotationShape ();
         tRes.tested ("getAnnotationShape()",xShape!=null);
     }
-
+    
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,51 +24,52 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_XErrorListener_idl__
-#define __com_sun_star_form_XErrorListener_idl__
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_form_ErrorEvent_idl__
-#include <com/sun/star/form/ErrorEvent.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module form {
-
-//=============================================================================
-
+#ifndef __com_sun_star_form_XErrorListener_idl__ 
+#define __com_sun_star_form_XErrorListener_idl__ 
+ 
+#ifndef __com_sun_star_lang_XEventListener_idl__ 
+#include <com/sun/star/lang/XEventListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_form_ErrorEvent_idl__ 
+#include <com/sun/star/form/ErrorEvent.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module form { 
+ 
+//============================================================================= 
+ 
 /** used to be notified when errors in a database form happen.
-
+    
     <p>Each time an exception is triggered by a database form, the error
     event is posted to the error listeners. This event may be used to
     configure the error handling of a database form.</p>
-
-    <p>Please do <em><b>not</b></em> use anymore, this interface is superseded
+    
+    <p>Please do <em><b>not</b></em> use anymore, this interface is superseeded
     by <type scope="com::sun::star::sdb">XSQLErrorListener</type>.</p>
-
+    
+@since foo
     @deprecated
  */
 published interface XErrorListener: com::sun::star::lang::XEventListener
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when a database action performed by a database form raises
         an exception.
      */
-    void errorOccured( [in] com::sun::star::form::ErrorEvent aEvent );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    void errorOccured( [in] com::sun::star::form::ErrorEvent aEvent ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

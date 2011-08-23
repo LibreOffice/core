@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ typedef SvMetaObject * (*CreateMetaObjectType)();
 #define IDL_WRITE_CALLING   0x2000
 #define IDL_WRITE_MASK      0xE000
 
-#define C_PREF  "C_"
+#define C_PREF	"C_"
 
 enum WriteType
 {
@@ -54,25 +54,50 @@ enum WriteType
 
 enum
 {
-    WA_METHOD = 0x1,    WA_VARIABLE = 0x2,  WA_ARGUMENT = 0x4,
-    WA_STRUCT = 0x8,    WA_READONLY = 0x10
+    WA_METHOD = 0x1,	WA_VARIABLE = 0x2,	WA_ARGUMENT = 0x4,
+    WA_STRUCT = 0x8,	WA_READONLY = 0x10
 };
 typedef int WriteAttribute;
 
+/******************** Meta Factory **************************************/
+#ifdef IDL_COMPILER
+
+#define PRV_SV_DECL_META_FACTORY( Class )                               \
+    static SvAttributeList * pAttribList;                               \
+    static SvMetaObject * Create() { return new Class; }                \
+    static const char *   GetClassName() { return #Class; }
+
+#define PRV_SV_IMPL_META_FACTORY( Class )                               \
+    SvAttributeList * Class::pAttribList = NULL;
+
+#else
+
+#define PRV_SV_DECL_META_FACTORY( Class )
+
+#define PRV_SV_IMPL_META_FACTORY( Class )
+
+#endif // IDL_COMPILER
+
 #define SV_DECL_META_FACTORY( Class, CLASS_ID )                         \
-    SV_DECL_PERSIST( Class, CLASS_ID )
+    SV_DECL_PERSIST( Class, CLASS_ID )                                  \
+    PRV_SV_DECL_META_FACTORY( Class )
 
 
 #define SV_DECL_META_FACTORY1( Class, Super1, CLASS_ID )                \
-    SV_DECL_PERSIST1( Class, Super1, CLASS_ID )
+    SV_DECL_PERSIST1( Class, Super1, CLASS_ID )                         \
+    PRV_SV_DECL_META_FACTORY( Class )
 
 #define SV_IMPL_META_FACTORY( Class )                                   \
+    PRV_SV_IMPL_META_FACTORY( Class )                                   \
     SV_IMPL_PERSIST( Class )
 
 
 #define SV_IMPL_META_FACTORY1( Class, Super1 )                          \
+    PRV_SV_IMPL_META_FACTORY( Class )                                   \
     SV_IMPL_PERSIST1( Class, Super1 )
 
+
+/******************** class SvMetaObject ********************************/
 class SvMetaObject : public SvPersistBase
 {
 public:
@@ -80,22 +105,23 @@ public:
             SvMetaObject();
 
 #ifdef IDL_COMPILER
-    static void         WriteTab( SvStream & rOutStm, sal_uInt16 nTab );
-    static sal_Bool         TestAndSeekSpaceOnly( SvStream &, sal_uLong nBegPos );
-    static void         Back2Delemitter( SvStream & );
-    static void         WriteStars( SvStream & );
+    static void			WriteTab( SvStream & rOutStm, USHORT nTab );
+    static BOOL			TestAndSeekSpaceOnly( SvStream &, ULONG nBegPos );
+    static void			Back2Delemitter( SvStream & );
+    static void 		WriteStars( SvStream & );
 
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
 
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
+    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
                                 WriteType, WriteAttribute = 0 );
 
-    virtual void        WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
-    virtual void        WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    virtual void        WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
+    virtual void        WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
 #endif
 };
 SV_DECL_IMPL_REF(SvMetaObject)
+//SV_DECL_IMPL_PERSIST_LIST(SvMetaObject,SvMetaObject *)
 SV_DECL_PERSIST_LIST(SvMetaObject,SvMetaObject *)
 SV_IMPL_PERSIST_LIST(SvMetaObject,SvMetaObject *)
 
@@ -111,7 +137,7 @@ public:
     SvMetaObject *  Pop() { return aList.Remove( aList.Count() -1 ); }
     SvMetaObject *  Top() const { return aList.GetObject( aList.Count() -1 ); }
     void            Clear() { aList.Clear(); }
-    sal_uLong     Count() const { return aList.Count(); }
+    ULONG           Count() const { return aList.Count(); }
 
     SvMetaObject *  Get( TypeId nType )
                     {
@@ -126,6 +152,7 @@ public:
                     }
 };
 
+/******************** class SvMetaName **********************************/
 class SvMetaName : public SvMetaObject
 {
     SvString      aName;
@@ -136,47 +163,48 @@ class SvMetaName : public SvMetaObject
 
 protected:
 #ifdef IDL_COMPILER
-    virtual sal_Bool ReadNameSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual BOOL ReadNameSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
             void DoReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm,
                                      char c = '\0' );
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void WriteContextSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, sal_uInt16 nTab );
+                                    SvStream & rOutStm, USHORT nTab );
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm );
     virtual void WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                       SvStream & rOutStm, sal_uInt16 nTab );
-    virtual void WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
+                                       SvStream & rOutStm, USHORT nTab );
+    virtual void WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
                                         WriteType, WriteAttribute = 0);
-    virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
+    virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
                                         WriteType, WriteAttribute = 0);
 #endif
 public:
             SV_DECL_META_FACTORY1( SvMetaName, SvMetaObject, 15 )
             SvMetaName();
 
-    virtual sal_Bool                SetName( const ByteString & rName, SvIdlDataBase * = NULL  );
-    void                        SetDescription( const ByteString& rText )
+    virtual BOOL        		SetName( const ByteString & rName, SvIdlDataBase * = NULL  );
+    void        				SetDescription( const ByteString& rText )
                                 { aDescription = rText; }
-    const SvHelpContext&        GetHelpContext() const { return aHelpContext; }
+    const SvHelpContext& 		GetHelpContext() const { return aHelpContext; }
     virtual const SvString &    GetName() const { return aName; }
     virtual const SvString &    GetHelpText() const { return aHelpText; }
-    virtual const SvString &    GetConfigName() const{ return aConfigName; }
+    virtual const SvString &	GetConfigName() const{ return aConfigName; }
     virtual const SvString&     GetDescription() const{ return aDescription; }
 
 #ifdef IDL_COMPILER
-    virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
+    virtual BOOL 		Test( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
+    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
                                        WriteType, WriteAttribute = 0);
-    void                WriteDescription( SvStream& rOutStm );
+    void				WriteDescription( SvStream& rOutStm );
 #endif
 };
 SV_DECL_IMPL_REF(SvMetaName)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaName,SvMetaName *)
 
 
+/******************** class SvMetaReference *****************************/
 SV_DECL_REF(SvMetaReference)
 class SvMetaReference : public SvMetaName
 {
@@ -225,15 +253,16 @@ SV_IMPL_REF(SvMetaReference)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaReference,SvMetaReference *)
 
 
+/******************** class SvMetaExtern *********************************/
 class SvMetaModule;
 class SvMetaExtern : public SvMetaReference
 {
-    SvMetaModule *          pModule;    // included in which module
+    SvMetaModule *          pModule;    // in welchem Modul enthalten
 
     SvUUId                  aUUId;
     SvVersion               aVersion;
-    sal_Bool                    bReadUUId;
-    sal_Bool                    bReadVersion;
+    BOOL					bReadUUId;
+    BOOL					bReadVersion;
 public:
                         SV_DECL_META_FACTORY1( SvMetaExtern, SvMetaName, 16 )
                         SvMetaExtern();
@@ -243,17 +272,17 @@ public:
     const SvGlobalName &GetUUId() const;
     const SvVersion &   GetVersion() const { return aVersion; }
 #ifdef IDL_COMPILER
-    void                SetModule( SvIdlDataBase & rBase );
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    void				SetModule( SvIdlDataBase & rBase );
+    virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
 
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
+    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
                                   WriteType, WriteAttribute = 0);
 protected:
     virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                              SvStream & rOutStm, sal_uInt16 nTab );
-    virtual void        WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
+                                              SvStream & rOutStm, USHORT nTab );
+    virtual void        WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
                                           WriteType, WriteAttribute = 0);
 #endif
 };

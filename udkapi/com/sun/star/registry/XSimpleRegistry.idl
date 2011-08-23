@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,15 +27,26 @@
 #ifndef __com_sun_star_registry_XSimpleRegistry_idl__
 #define __com_sun_star_registry_XSimpleRegistry_idl__
 
+#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_registry_InvalidRegistryException_idl__
 #include <com/sun/star/registry/InvalidRegistryException.idl>
+#endif
+
+#ifndef __com_sun_star_registry_XRegistryKey_idl__
 #include <com/sun/star/registry/XRegistryKey.idl>
+#endif
+
+#ifndef __com_sun_star_registry_MergeConflictException_idl__
 #include <com/sun/star/registry/MergeConflictException.idl>
+#endif
 
 
-//=============================================================================
+//============================================================================= 
 
-module com { module sun { module star { module registry {
+module com { module sun { module star { module registry { 
 
 //=============================================================================
 /** allows access to a registry (a persistent data source).
@@ -49,27 +60,27 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
     //---------------------------------------------------------------------
     /** returns the URL of the current data source of the registry.
      */
-    string  getURL();
+    string	getURL();
 
     //-------------------------------------------------------------------------
     /** connects the registry to a persistent data source represented by
         an URL.
-
-        <p>If a local registry is already open, this function
+        
+        <p>If a local registry is already open, this function 
         will close the currently open registry.
-
+        
         @param aURL
-        specifies the complete URL to access the data source.
-
+        specifies the complete URL to access the data source. 
+        
         @param bReadOnly
         specifies if the data source should be opened for
         read only.
-
+        
         @param bCreate
         specifies if the data source should be created if it
         does not already exist.
-
-        @throws InvalidRegistryException
+        
+        @throws InvalidRegistryException	 
         if the registry does not exist.
     */
     void open( [in] string rURL,
@@ -84,7 +95,7 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** disconnects the registry from the data-source.
-
+        
         @throws InvalidRegistryException
         if the registry is not open.
     */
@@ -93,18 +104,18 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** destroys the registry and the data source.
-
-        @throws InvalidRegistryException
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
     */
     void destroy()
             raises( com::sun::star::registry::InvalidRegistryException );
 
     //-------------------------------------------------------------------------
-    /** @returns
+    /**	@returns 
         the root key of the registry.
-
-        @throws InvalidRegistryException
+        
+        @throws InvalidRegistryException	 
         if no registry is open
     */
     com::sun::star::registry::XRegistryKey getRootKey()
@@ -112,8 +123,8 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** checks if the registry is readonly.
-
-        @throws InvalidRegistryException
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
     */
     boolean isReadOnly()
@@ -123,15 +134,15 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
     /** DEPRECATED: this method lacks a registry key (better than a URL).
 
         merges a registry under the specified key.
-
+        
         <p>If the key does not exist it will be created. Existing
         keys will be overridden from keys of registry specified by
         <var>aUrl</var>.
-
-        @throws InvalidRegistryException
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
-
-        @throws MergeConflictException
+        
+        @throws MergeConflictException	
         if any differences occur during merging
     */
     void mergeKey( [in] string aKeyName,
@@ -143,6 +154,6 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

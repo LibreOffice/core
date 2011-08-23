@@ -3,6 +3,12 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: UnifiedTransparencePrimitive2D.cxx,v $
+ *
+ *  $Revision: 1.5 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -51,9 +57,9 @@ namespace drawinglayer
     namespace primitive2d
     {
         UnifiedTransparencePrimitive2D::UnifiedTransparencePrimitive2D(
-            const Primitive2DSequence& rChildren,
+            const Primitive2DSequence& rChildren, 
             double fTransparence)
-        :   GroupPrimitive2D(rChildren),
+        :	GroupPrimitive2D(rChildren),
             mfTransparence(fTransparence)
         {
         }
@@ -86,9 +92,9 @@ namespace drawinglayer
             }
             else if(getTransparence() > 0.0 && getTransparence() < 1.0)
             {
-                // The idea is to create a TransparencePrimitive2D with transparent content using a fill color
-                // corresponding to the transparence value. Problem is that in most systems, the right
-                // and bottom pixel array is not filled when filling polygons, thus this would not
+                // The idea is to create a TransparencePrimitive2D with transparent content using a fill color 
+                // corresponding to the transparence value. Problem is that in most systems, the right 
+                // and bottom pixel array is not filled when filling polygons, thus this would not 
                 // always produce a complete transparent bitmap. There are some solutions:
                 //
                 // - Grow the used polygon range by one discrete unit in X and Y. This
@@ -100,13 +106,13 @@ namespace drawinglayer
                 // - At this decomposition, add a filled polygon and a hairline polygon. This
                 // solution stays view-independent.
                 //
-                // I will take the last one here. The small overhead of two primitives will only be
+                // I will take the last one here. The small overhead of two primitives will only be 
                 // used when UnifiedTransparencePrimitive2D is not handled directly.
                 const basegfx::B2DRange aPolygonRange(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));
                 const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aPolygonRange));
                 const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
                 Primitive2DSequence aTransparenceContent(2);
-
+                
                 aTransparenceContent[0] = Primitive2DReference(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), aGray));
                 aTransparenceContent[1] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, aGray));
 

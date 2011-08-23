@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,28 +42,28 @@
 
 namespace rptui
 {
-    class OReportModel;
-    class OReportPage;
-    class OSectionView;
-    class OSectionWindow;
+    class OReportModel;			
+    class OReportPage;			
+    class OSectionView;			
+    class OSectionWindow;	
 
-    class OReportSection :   public Window
-                        ,   public ::cppu::BaseMutex
-                        ,   public ::comphelper::OPropertyChangeListener
+    class OReportSection :	 public Window
+                        ,	public ::cppu::BaseMutex
+                        ,	public ::comphelper::OPropertyChangeListener
                         ,   public DropTargetHelper
     {
-        OReportPage*                        m_pPage;
-        OSectionView*                       m_pView;
-        OSectionWindow*                     m_pParent;
-        ::std::auto_ptr<DlgEdFunc>          m_pFunc;
+        OReportPage*				        m_pPage;
+        OSectionView*				        m_pView;
+        OSectionWindow*				        m_pParent;
+        ::std::auto_ptr<DlgEdFunc>	        m_pFunc;
         ::boost::shared_ptr<OReportModel>   m_pModel;
-        ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                           m_pMulti;
-        ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                           m_pReportListener;
+        ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>				            m_pMulti;
+        ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>				            m_pReportListener;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >              m_xSection;
-
-        DlgEdMode                   m_eMode;
-        sal_Bool                        m_bDialogModelChanged;
-        sal_Bool                    m_bInDrag;
+        
+        DlgEdMode					m_eMode;
+        BOOL						m_bDialogModelChanged;
+        sal_Bool					m_bInDrag;
 
         /** fills the section with all control from the report section
         */
@@ -73,24 +73,24 @@ namespace rptui
         void operator =(OReportSection&);
     protected:
         // DropTargetHelper overridables
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt );
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt );
-
+        virtual sal_Int8	AcceptDrop( const AcceptDropEvent& _rEvt );
+        virtual sal_Int8	ExecuteDrop( const ExecuteDropEvent& _rEvt );
+        
         // window overrides
         virtual void        Paint( const Rectangle& rRect );
-        virtual void        MouseMove( const MouseEvent& rMEvt );
-        virtual void        Command( const CommandEvent& rCEvt );
-        virtual void        Resize();
+        virtual void 		MouseMove( const MouseEvent& rMEvt );
+        virtual void		Command( const CommandEvent& rCEvt );
+        virtual void		Resize();
 
         // OPropertyChangeListener
-        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
+        virtual void	_propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
     public:
         OReportSection(OSectionWindow* _pParent,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
         virtual ~OReportSection();
 
         // window overrides
-        virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void        MouseButtonUp( const MouseEvent& rMEvt );
+        virtual void 		MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void 		MouseButtonUp( const MouseEvent& rMEvt );
 
         /** copies the current selection in this section
             @param  _rAllreadyCopiedObjects This is an out/in put param which contains all already copied objects.
@@ -118,23 +118,23 @@ namespace rptui
         *
         * \param _bVisible when <TRUE/> the grid is made visible
         */
-        void SetGridVisible(sal_Bool _bVisible);
+        void SetGridVisible(BOOL _bVisible);
 
-        inline OSectionWindow*      getSectionWindow() const { return m_pParent; }
-        inline OSectionView&        getSectionView() const { return *m_pView; }
-        inline OReportPage*         getPage() const { return m_pPage; }
+        inline OSectionWindow*		getSectionWindow() const { return m_pParent; }
+        inline OSectionView&		getSectionView() const { return *m_pView; }
+        inline OReportPage*			getPage() const { return m_pPage; }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const { return m_xSection; }
 
-        void            SetDialogModelChanged( sal_Bool bChanged = sal_True ) { m_bDialogModelChanged = bChanged; }
-        sal_Bool            IsDialogModelChanged() const { return m_bDialogModelChanged; }
-        DlgEdMode       GetMode() const { return m_eMode; }
-        void            SetMode( DlgEdMode m_eMode );
+        void			SetDialogModelChanged( BOOL bChanged = TRUE ) { m_bDialogModelChanged = bChanged; }
+        BOOL			IsDialogModelChanged() const { return m_bDialogModelChanged; }
+        DlgEdMode   	GetMode() const { return m_eMode; }
+        void 			SetMode( DlgEdMode m_eMode );
 
         /** checks if the keycode is known by the child windows
-            @param  _rCode  the keycode
+            @param	_rCode	the keycode
             @return <TRUE/> if the keycode is handled otherwise <FALSE/>
         */
-        sal_Bool        handleKeyEvent(const KeyEvent& _rEvent);
+        sal_Bool		handleKeyEvent(const KeyEvent& _rEvent);
 
         /** returns the current control report model or <NULL/>
         */
@@ -153,8 +153,8 @@ namespace rptui
 
         /** creates a new default custom shape
         *
-        * \param _sType
-        * \param _pObj
+        * \param _sType 
+        * \param _pObj 
         */
         void createDefault(const ::rtl::OUString& _sType,SdrObject* _pObj);
         void stopScrollTimer();
@@ -168,7 +168,7 @@ namespace rptui
         bool isUiActive() const;
     };
 //==================================================================
-}   //rptui
+}	//rptui
 //==================================================================
 #endif // REPORT_REPORTSECTION_HXX
 

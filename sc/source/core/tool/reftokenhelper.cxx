@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@ using ::std::auto_ptr;
 using ::rtl::OUString;
 
 void ScRefTokenHelper::compileRangeRepresentation(
-    vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc, FormulaGrammar::Grammar eGrammar)
+    vector<ScSharedTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc, FormulaGrammar::Grammar eGrammar)
 {
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSep = GetScCompilerNativeSymbol(ocSep).GetChar(0);
     const sal_Unicode cQuote = '\'';
 
     // #i107275# ignore parentheses
@@ -72,7 +72,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
 
         // There MUST be exactly one reference per range token and nothing
         // else, and it MUST be a valid reference, not some #REF!
-        sal_uInt16 nLen = pArray->GetLen();
+        USHORT nLen = pArray->GetLen();
         if (!nLen)
             continue;   // Should a missing range really be allowed?
         if (nLen != 1)
@@ -109,7 +109,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 }
                 if (!bFailure)
                     rRefTokens.push_back(
-                            ScTokenRef(static_cast<ScToken*>(p->Clone())));
+                            ScSharedTokenRef(static_cast<ScToken*>(p->Clone())));
             }
         }
 
@@ -118,25 +118,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
         rRefTokens.clear();
 }
 
-void singleRefToAddr(const ScSingleRefData& rRef, ScAddress& rAddr)
-{
-    if (rRef.IsColRel())
-        rAddr.SetCol(rRef.nRelCol);
-    else
-        rAddr.SetCol(rRef.nCol);
-
-    if (rRef.IsRowRel())
-        rAddr.SetRow(rRef.nRelRow);
-    else
-        rAddr.SetRow(rRef.nRow);
-
-    if (rRef.IsTabRel())
-        rAddr.SetTab(rRef.nRelTab);
-    else
-        rAddr.SetTab(rRef.nTab);
-}
-
-bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, bool bExternal)
+bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScSharedTokenRef& pToken, bool bExternal)
 {
     StackVar eType = pToken->GetType();
     switch (pToken->GetType())
@@ -149,7 +131,9 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pTok
                 return false;
 
             const ScSingleRefData& rRefData = pToken->GetSingleRef();
-            singleRefToAddr(rRefData, rRange.aStart);
+            rRange.aStart.SetCol(rRefData.nCol);
+            rRange.aStart.SetRow(rRefData.nRow);
+            rRange.aStart.SetTab(rRefData.nTab);
             rRange.aEnd = rRange.aStart;
             return true;
         }
@@ -161,8 +145,12 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pTok
                 return false;
 
             const ScComplexRefData& rRefData = pToken->GetDoubleRef();
-            singleRefToAddr(rRefData.Ref1, rRange.aStart);
-            singleRefToAddr(rRefData.Ref2, rRange.aEnd);
+            rRange.aStart.SetCol(rRefData.Ref1.nCol);
+            rRange.aStart.SetRow(rRefData.Ref1.nRow);
+            rRange.aStart.SetTab(rRefData.Ref1.nTab);
+            rRange.aEnd.SetCol(rRefData.Ref2.nCol);
+            rRange.aEnd.SetRow(rRefData.Ref2.nRow);
+            rRange.aEnd.SetTab(rRefData.Ref2.nTab);
             return true;
         }
         default:
@@ -171,9 +159,9 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pTok
     return false;
 }
 
-void ScRefTokenHelper::getRangeListFromTokens(ScRangeList& rRangeList, const vector<ScTokenRef>& rTokens)
+void ScRefTokenHelper::getRangeListFromTokens(ScRangeList& rRangeList, const vector<ScSharedTokenRef>& rTokens)
 {
-    vector<ScTokenRef>::const_iterator itr = rTokens.begin(), itrEnd = rTokens.end();
+    vector<ScSharedTokenRef>::const_iterator itr = rTokens.begin(), itrEnd = rTokens.end();
     for (; itr != itrEnd; ++itr)
     {
         ScRange aRange;
@@ -182,7 +170,7 @@ void ScRefTokenHelper::getRangeListFromTokens(ScRangeList& rRangeList, const vec
     }
 }
 
-void ScRefTokenHelper::getTokenFromRange(ScTokenRef& pToken, const ScRange& rRange)
+void ScRefTokenHelper::getTokenFromRange(ScSharedTokenRef& pToken, const ScRange& rRange)
 {
     ScComplexRefData aData;
     aData.InitFlags();
@@ -207,26 +195,26 @@ void ScRefTokenHelper::getTokenFromRange(ScTokenRef& pToken, const ScRange& rRan
     pToken.reset(new ScDoubleRefToken(aData));
 }
 
-void ScRefTokenHelper::getTokensFromRangeList(vector<ScTokenRef>& pTokens, const ScRangeList& rRanges)
+void ScRefTokenHelper::getTokensFromRangeList(vector<ScSharedTokenRef>& pTokens, const ScRangeList& rRanges)
 {
-    vector<ScTokenRef> aTokens;
-    size_t nCount = rRanges.size();
+    vector<ScSharedTokenRef> aTokens;
+    sal_uInt32 nCount = rRanges.Count();
     aTokens.reserve(nCount);
-    for (size_t i = 0; i < nCount; ++i)
+    for (sal_uInt32 i = 0; i < nCount; ++i)
     {
-        const ScRange* pRange = rRanges[i];
+        ScRange* pRange = static_cast<ScRange*>(rRanges.GetObject(i));
         if (!pRange)
             // failed.
             return;
 
-        ScTokenRef pToken;
+        ScSharedTokenRef pToken;
         ScRefTokenHelper::getTokenFromRange(pToken,* pRange);
         aTokens.push_back(pToken);
     }
     pTokens.swap(aTokens);
 }
 
-bool ScRefTokenHelper::isRef(const ScTokenRef& pToken)
+bool ScRefTokenHelper::isRef(const ScSharedTokenRef& pToken)
 {
     switch (pToken->GetType())
     {
@@ -241,7 +229,7 @@ bool ScRefTokenHelper::isRef(const ScTokenRef& pToken)
     return false;
 }
 
-bool ScRefTokenHelper::isExternalRef(const ScTokenRef& pToken)
+bool ScRefTokenHelper::isExternalRef(const ScSharedTokenRef& pToken)
 {
     switch (pToken->GetType())
     {
@@ -254,7 +242,7 @@ bool ScRefTokenHelper::isExternalRef(const ScTokenRef& pToken)
     return false;
 }
 
-bool ScRefTokenHelper::intersects(const vector<ScTokenRef>& rTokens, const ScTokenRef& pToken)
+bool ScRefTokenHelper::intersects(const vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken)
 {
     if (!isRef(pToken))
         return false;
@@ -265,10 +253,10 @@ bool ScRefTokenHelper::intersects(const vector<ScTokenRef>& rTokens, const ScTok
     ScRange aRange;
     getRangeFromToken(aRange, pToken, bExternal);
 
-    vector<ScTokenRef>::const_iterator itr = rTokens.begin(), itrEnd = rTokens.end();
+    vector<ScSharedTokenRef>::const_iterator itr = rTokens.begin(), itrEnd = rTokens.end();
     for (; itr != itrEnd; ++itr)
     {
-        const ScTokenRef& p = *itr;
+        const ScSharedTokenRef& p = *itr;
         if (!isRef(p))
             continue;
 
@@ -300,7 +288,7 @@ public:
      * @param rTokens existing list of reference tokens
      * @param rToken new token
      */
-    void operator() (vector<ScTokenRef>& rTokens, const ScTokenRef& pToken)
+    void operator() (vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken)
     {
         join(rTokens, pToken);
     }
@@ -343,7 +331,7 @@ private:
         return (bRowsContained && bColsContained);
     }
 
-    void join(vector<ScTokenRef>& rTokens, const ScTokenRef& pToken)
+    void join(vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken)
     {
         // Normalize the token to a double reference.
         ScComplexRefData aData;
@@ -356,10 +344,10 @@ private:
         String aTabName = bExternal ? pToken->GetString() : String();
 
         bool bJoined = false;
-        vector<ScTokenRef>::iterator itr = rTokens.begin(), itrEnd = rTokens.end();
+        vector<ScSharedTokenRef>::iterator itr = rTokens.begin(), itrEnd = rTokens.end();
         for (; itr != itrEnd; ++itr)
         {
-            ScTokenRef& pOldToken = *itr;
+            ScSharedTokenRef& pOldToken = *itr;
 
             if (!ScRefTokenHelper::isRef(pOldToken))
                 // A non-ref token should not have been added here in the first
@@ -429,7 +417,7 @@ private:
                 return;
 
             // Pop the last token from the list, and keep joining recursively.
-            ScTokenRef p = rTokens.back();
+            ScSharedTokenRef p = rTokens.back();
             rTokens.pop_back();
             join(rTokens, p);
         }
@@ -440,13 +428,13 @@ private:
 
 }
 
-void ScRefTokenHelper::join(vector<ScTokenRef>& rTokens, const ScTokenRef& pToken)
+void ScRefTokenHelper::join(vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken)
 {
     JoinRefTokenRanges join;
     join(rTokens, pToken);
 }
 
-bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const ScTokenRef& pToken)
+bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const ScSharedTokenRef& pToken)
 {
     switch (pToken->GetType())
     {
@@ -471,19 +459,19 @@ bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const 
     return true;
 }
 
-ScTokenRef ScRefTokenHelper::createRefToken(const ScAddress& rAddr)
+ScSharedTokenRef ScRefTokenHelper::createRefToken(const ScAddress& rAddr)
 {
     ScSingleRefData aRefData;
     aRefData.InitAddress(rAddr);
-    ScTokenRef pRef(new ScSingleRefToken(aRefData));
+    ScSharedTokenRef pRef(new ScSingleRefToken(aRefData));
     return pRef;
 }
 
-ScTokenRef ScRefTokenHelper::createRefToken(const ScRange& rRange)
+ScSharedTokenRef ScRefTokenHelper::createRefToken(const ScRange& rRange)
 {
     ScComplexRefData aRefData;
     aRefData.InitRange(rRange);
-    ScTokenRef pRef(new ScDoubleRefToken(aRefData));
+    ScSharedTokenRef pRef(new ScDoubleRefToken(aRefData));
     return pRef;
 }
 

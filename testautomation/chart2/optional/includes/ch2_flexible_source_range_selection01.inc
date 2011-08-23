@@ -782,7 +782,9 @@ endcase
 '
 function fOpenWriterTestDocumentAndInsertChart(sInputFile as STRING) as BOOLEAN
     fOpenWriterTestDocumentAndInsertChart = FALSE
-    hFileOpenLocally(sInputFile)
+    call hFileOpen(sInputFile)
+    sleep(2)
+    Call sMakeReadOnlyDocumentEditable()
     '///Menu Insert Object Chart to open chart wizard
     printlog "Menu Insert Object Chart to open chart wizard"
     InsertObjectChart

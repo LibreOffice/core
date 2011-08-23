@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,7 +148,7 @@ void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRe
         uno::Reference< uno::XComponentContext > xContext = comphelper_getProcessComponentContext();
         uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
             deployment::ui::LicenseDialog::create(
-            xContext, VCLUnoHelper::GetInterface( NULL ),
+            xContext, VCLUnoHelper::GetInterface( NULL ), 
             licExc.ExtensionName, licExc.Text ) );
         sal_Int16 res = xDialog->execute();
         if ( res == ui::dialogs::ExecutableDialogResults::CANCEL )
@@ -220,6 +220,8 @@ void SilentCommandEnv::pop() throw (uno::RuntimeException)
 } // end namespace
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 static const OUString sConfigSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) );
 static const OUString sAccessSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) );
 //------------------------------------------------------------------------------
@@ -231,7 +233,7 @@ static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContex
 
     uno::Reference< lang::XMultiComponentFactory > xServiceManager( xContext->getServiceManager() );
     if( !xServiceManager.is() )
-        throw uno::RuntimeException(
+        throw uno::RuntimeException( 
             UNISTRING( "impl_showExtensionDialog(): unable to obtain service manager from component context" ), uno::Reference< uno::XInterface > () );
 
     xService = xServiceManager->createInstanceWithContext( sServiceName, xContext );
@@ -252,7 +254,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
 
     if ( !xExtensionManager.is() )
     {
-        OSL_FAIL( "Could not get the Extension Manager!" );
+        OSL_ENSURE( 0, "Could not get the Extension Manager!" );
         return true;
     }
 
@@ -299,7 +301,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
                 catch ( uno::RuntimeException & ) { throw; }
                 catch ( uno::Exception & exc) {
                     (void) exc;
-                    OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    OSL_ENSURE( 0, ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
 
                 if ( bRegistered )
@@ -332,15 +334,15 @@ static void impl_setNeedsCompatCheck()
                 xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
 
         Sequence< Any > theArgs(1);
-        beans::NamedValue v( OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")),
-                      makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office")) ) );
+        beans::NamedValue v( OUString::createFromAscii("NodePath"), 
+                      makeAny( OUString::createFromAscii("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
             theConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY_THROW );
 
-        Any value = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("never")) );
+        Any value = makeAny( OUString::createFromAscii("never") );
 
-        pset->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LastCompatibilityCheckID")), value );
+        pset->setPropertyValue( OUString::createFromAscii("LastCompatibilityCheckID"), value );
         Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
     }
     catch (const Exception&) {}
@@ -385,20 +387,20 @@ static bool impl_needsCompatCheck()
                 xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
 
         Sequence< Any > theArgs(1);
-        beans::NamedValue v( OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")),
-                      makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office")) ) );
+        beans::NamedValue v( OUString::createFromAscii("NodePath"), 
+                      makeAny( OUString::createFromAscii("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
             theConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY_THROW );
 
-        Any result = pset->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LastCompatibilityCheckID")) );
+        Any result = pset->getPropertyValue( OUString::createFromAscii("LastCompatibilityCheckID") );
 
         result >>= aLastCheckBuildID;
         if ( aLastCheckBuildID != aCurrentBuildID )
         {
             bNeedsCheck = true;
             result <<= aCurrentBuildID;
-            pset->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LastCompatibilityCheckID")), result );
+            pset->setPropertyValue( OUString::createFromAscii("LastCompatibilityCheckID"), result );
             Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
         }
 #ifdef DEBUG

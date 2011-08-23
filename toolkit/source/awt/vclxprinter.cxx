@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@
 #include <toolkit/awt/vclxdevice.hxx>
 
 
-#define BINARYSETUPMARKER   0x23864691
+#define BINARYSETUPMARKER	0x23864691
 
-#define PROPERTY_Orientation    0
-#define PROPERTY_Horizontal     1
+#define PROPERTY_Orientation	0
+#define PROPERTY_Horizontal		1
 
 ::com::sun::star::beans::Property* ImplGetProperties( sal_uInt16& rElementCount )
 {
@@ -61,10 +61,10 @@
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if( !pProperties )
         {
-            static ::com::sun::star::beans::Property aPropTable[] =
+            static ::com::sun::star::beans::Property __FAR_DATA aPropTable[] =
             {
-                ::com::sun::star::beans::Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")), PROPERTY_Orientation, ::getCppuType((const sal_Int16*)0), 0 ),
-                ::com::sun::star::beans::Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Horizontal")), PROPERTY_Horizontal, ::getBooleanCppuType(), 0 )
+                ::com::sun::star::beans::Property( ::rtl::OUString::createFromAscii( "Orientation" ), PROPERTY_Orientation, ::getCppuType((const sal_Int16*)0), 0 ),
+                ::com::sun::star::beans::Property( ::rtl::OUString::createFromAscii( "Horizontal" ), PROPERTY_Horizontal, ::getBooleanCppuType(), 0 )
             };
             pProperties = aPropTable;
             nElements = sizeof( aPropTable ) / sizeof( ::com::sun::star::beans::Property );
@@ -74,9 +74,9 @@
     return pProperties;
 }
 
-//  ----------------------------------------------------
-//  class VCLXPrinterPropertySet
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXPrinterPropertySet
+//	----------------------------------------------------
 
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXPrinterPropertySet::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
@@ -178,7 +178,7 @@ sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( ::com::sun::star::uno
         break;
         default:
         {
-            OSL_FAIL( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
+            DBG_ERROR( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
         }
     }
     return bDifferent;
@@ -202,7 +202,7 @@ void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle
         break;
         default:
         {
-            OSL_FAIL( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
+            DBG_ERROR( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
         }
     }
 }
@@ -221,7 +221,7 @@ void VCLXPrinterPropertySet::getFastPropertyValue( ::com::sun::star::uno::Any& r
         break;
         default:
         {
-            OSL_FAIL( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
+            DBG_ERROR( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
         }
     }
 }
@@ -241,7 +241,7 @@ void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal ) throw(::com::
     ::osl::MutexGuard aGuard( Mutex );
 
     sal_uInt16 nPaperBinCount = GetPrinter()->GetPaperBinCount();
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aDescriptions( nPaperBinCount );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >	aDescriptions( nPaperBinCount );
     for ( sal_uInt16 n = 0; n < nPaperBinCount; n++ )
     {
         // Format: <DisplayFormName;FormNameId;DisplayPaperBinName;PaperBinNameId;DisplayPaperName;PaperNameId>
@@ -293,9 +293,9 @@ void VCLXPrinterPropertySet::setBinarySetup( const ::com::sun::star::uno::Sequen
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXPrinter
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXPrinter
+//	----------------------------------------------------
 VCLXPrinter::VCLXPrinter( const String& rPrinterName )
     : VCLXPrinterPropertySet( rPrinterName )
 {
@@ -377,9 +377,9 @@ void VCLXPrinter::endPage(  ) throw(::com::sun::star::awt::PrinterException, ::c
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXInfoPrinter
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXInfoPrinter
+//	----------------------------------------------------
 
 VCLXInfoPrinter::VCLXInfoPrinter( const String& rPrinterName )
     : VCLXPrinterPropertySet( rPrinterName )
@@ -416,9 +416,9 @@ IMPL_XTYPEPROVIDER_END
     return GetDevice();
 }
 
-//  ----------------------------------------------------
-//  class VCLXPrinterServer
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXPrinterServer
+//	----------------------------------------------------
 
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXPrinterServer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
@@ -439,10 +439,10 @@ IMPL_XTYPEPROVIDER_END
     const std::vector<rtl::OUString>& rQueues = Printer::GetPrinterQueues();
     sal_uInt32 nPrinters = rQueues.size();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aNames( nPrinters );
-    for ( sal_uInt32 n = 0; n < nPrinters; n++ )
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >	aNames( nPrinters );
+    for ( sal_uInt32 n = 0; n < nPrinters; n++ ) 
         aNames.getArray()[n] = rQueues[n];
-
+    
     return aNames;
 }
 

@@ -58,7 +58,7 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
 {
     // TODO - if we want more flexibility we could add a branding path
     // in an rc file perhaps fallback to "about.bmp"
-    rtl::OUString aBaseName = ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+    rtl::OUString aBaseName = ( rtl::OUString::createFromAscii( "/" ) +
                                 rtl::OUString::createFromAscii( pName ) );
     rtl::OUString aPng( RTL_CONSTASCII_USTRINGPARAM(".png") );
 
@@ -67,9 +67,9 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
     rtl::OLocale aLoc( pLoc );
 
     rtl::OUString aName = aBaseName + aPng;
-    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("-")) +
+    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString::createFromAscii ("-") +
                                   aLoc.getLanguage() +
-                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("_")) +
+                                  rtl::OUString::createFromAscii ("_") +
                                   aLoc.getCountry() + aPng );
 
     return ( loadPng ("$BRAND_BASE_DIR/program/edition", aLocaleName, rBitmap) ||

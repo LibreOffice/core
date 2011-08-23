@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,47 +127,47 @@ void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments 
     ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
     if ( pToolBox )
     {
-        const sal_uInt16 nCount = pToolBox->GetItemCount();
-        for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
+        const USHORT nCount = pToolBox->GetItemCount();
+        for ( USHORT nPos = 0; nPos < nCount; ++nPos )
         {
-            const sal_uInt16 nItemId = pToolBox->GetItemId( nPos );
+            const USHORT nItemId = pToolBox->GetItemId( nPos );
             if ( pToolBox->GetItemCommand( nItemId ) == String( m_aCommandURL ) )
             {
                 m_nToolBoxId = nItemId;
                 break;
             }
         }
-        if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:BasicShapes" ) ) )
+        if ( m_aCommandURL.equalsAscii( ".uno:BasicShapes" ) )
         {
             m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BasicShapes" ) ), sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_BASIC;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }
-        else if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:SymbolShapes" ) ) )
+        else if ( m_aCommandURL.equalsAscii( ".uno:SymbolShapes" ) )
         {
             m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SymbolShapes" ) ), sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_SYMBOL;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }
-        else if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:ArrowShapes" ) ) )
+        else if ( m_aCommandURL.equalsAscii( ".uno:ArrowShapes" ) )
         {
             m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ArrowShapes" ) ), sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_ARROW;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox) );
         }
-        else if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:FlowChartShapes" ) ) )
+        else if ( m_aCommandURL.equalsAscii( ".uno:FlowChartShapes" ) )
         {
             m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FlowChartShapes" ) ), sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_FLOWCHART;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }
-        else if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:CalloutShapes" ) ) )
+        else if ( m_aCommandURL.equalsAscii( ".uno:CalloutShapes" ) )
         {
             m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CalloutShapes" ) ), sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_CALLOUT;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }
-        else if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:StarShapes" ) ) )
+        else if ( m_aCommandURL.equalsAscii( ".uno:StarShapes" ) )
         {
             m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StarShapes" ) ), sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_STAR;
@@ -192,7 +192,7 @@ void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments 
 // ::com::sun::star::frame::XStatusListener
 void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );	
     TCommandState::iterator aFind = m_aStates.find( Event.FeatureURL.Complete );
     if ( aFind != m_aStates.end() )
     {
@@ -202,9 +202,9 @@ void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Even
             sal_Bool bCheckmark = sal_False;
             ToolBox& rTb = m_pToolbarController->GetToolBox();
 
-            for ( sal_uInt16 i = 0; i < rTb.GetItemCount(); ++i )
+            for ( USHORT i = 0; i < rTb.GetItemCount(); ++i )
             {
-                sal_uInt16 nId = rTb.GetItemId( i );
+                USHORT nId = rTb.GetItemId( i );
                 if ( nId == 0 )
                 {
                     continue;
@@ -235,7 +235,7 @@ void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Even
 Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno::RuntimeException)
 {
     SolarMutexGuard aSolarMutexGuard;
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );	
 
     Reference< awt::XWindow > xRet;
     if ( m_pToolbarController.is() )
@@ -260,7 +260,7 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
 ::rtl::OUString ShapeToolbarController::getSubToolbarName() throw (uno::RuntimeException)
 {
     SolarMutexGuard aSolarMutexGuard;
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard(m_aMutex);	
     uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );
     if ( xSub.is() )
     {
@@ -273,7 +273,7 @@ void ShapeToolbarController::functionSelected( const ::rtl::OUString& rCommand )
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-
+    
     uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );
     if ( xSub.is() )
     {

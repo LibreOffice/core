@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ interface XSlideRenderer
             memory consumption and longer runtime.
             This value is an attempt to provide some antialiasing and so to
             provide more readable slide previews.  May become obsolete in
-            the future when true antialiasing support will be integrated.
+            the future when true antialiasing suppport will be integrated.
     */
     com::sun::star::awt::XBitmap createPreview (
         [in] XDrawPage xSlide,
@@ -94,7 +94,7 @@ interface XSlideRenderer
         [in] com::sun::star::awt::Size aMaximumPreviewPixelSize,
         [in] short nSuperSampleFactor,
         [in] com::sun::star::rendering::XCanvas xCanvas);
-
+    
     /** Return a size that has the given aspect ratio and shares either the
         width or the height with the given maximum size.
         @param nSlideAspectRatio

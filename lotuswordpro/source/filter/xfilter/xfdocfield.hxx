@@ -57,8 +57,12 @@
  * @file
  * doc field.
  ************************************************************************/
-#ifndef     _XFDOCFIELD_HXX
-#define     _XFDOCFIELD_HXX
+/*************************************************************************
+ * Change History
+ * 2005-05-27  create this file.
+ ************************************************************************/
+#ifndef		_XFDOCFIELD_HXX
+#define		_XFDOCFIELD_HXX
 
 #include "xfcontent.hxx"
 #include "xfpagecount.hxx"
@@ -67,130 +71,130 @@ class XFFileName : public XFContent
 {
 public:
     void SetType(rtl::OUString sType);
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 private:
     rtl::OUString m_strType;
 };
 class XFWordCount : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 class XFWordCountStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 class XFWordCountEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 class XFPageCountStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 class XFPageCountEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 class XFCharCount : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 class XFCharCountStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 class XFCharCountEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 class XFDescription : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 class XFDescriptionStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 class XFDescriptionEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 class XFKeywords : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 class XFTotalEditTime : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 class XFTotalEditTimeEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 class XFTotalEditTimeStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 class XFCreateTime : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 class XFCreateTimeStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 class XFCreateTimeEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 class XFLastEditTime : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 class XFLastEditTimeStart : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 class XFLastEditTimeEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 class XFInitialCreator : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 

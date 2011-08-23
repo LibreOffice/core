@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,6 +52,7 @@
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
 
+// #97016#
 #include <svx/sxciaitm.hxx>
 
 namespace sd {
@@ -65,11 +66,11 @@ TYPEINIT1( FuConstructArc, FuConstruct );
 \************************************************************************/
 
 FuConstructArc::FuConstructArc (
-    ViewShell*  pViewSh,
-    ::sd::Window*       pWin,
-    ::sd::View*         pView,
+    ViewShell*	pViewSh,
+    ::sd::Window*		pWin,
+    ::sd::View* 		pView,
     SdDrawDocument* pDoc,
-    SfxRequest&     rReq )
+    SfxRequest& 	rReq )
     : FuConstruct( pViewSh, pWin, pView, pDoc, rReq )
 {
 }
@@ -95,14 +96,14 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 
     if (pArgs)
     {
-        SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X, sal_False);
-        SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y, sal_False);
-        SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X, sal_False);
-        SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y, sal_False);
-        SFX_REQUEST_ARG (rReq, pPhiStart, SfxUInt32Item, ID_VAL_ANGLESTART, sal_False);
-        SFX_REQUEST_ARG (rReq, pPhiEnd, SfxUInt32Item, ID_VAL_ANGLEEND, sal_False);
+        SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X, FALSE);
+        SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y, FALSE);
+        SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X, FALSE);
+        SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y, FALSE);
+        SFX_REQUEST_ARG (rReq, pPhiStart, SfxUInt32Item, ID_VAL_ANGLESTART, FALSE);
+        SFX_REQUEST_ARG (rReq, pPhiEnd, SfxUInt32Item, ID_VAL_ANGLEEND, FALSE);
 
-        Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
+        Rectangle	aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
                                    pCenterY->GetValue () - pAxisY->GetValue () / 2,
                                    pCenterX->GetValue () + pAxisX->GetValue () / 2,
                                    pCenterY->GetValue () + pAxisY->GetValue () / 2);
@@ -125,15 +126,15 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-sal_Bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
+BOOL FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown( rMEvt );
+    BOOL bReturn = FuConstruct::MouseButtonDown( rMEvt );
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         mpWindow->CaptureMouse();
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
         mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
 
         SdrObject* pObj = mpView->GetCreateObj();
@@ -143,10 +144,11 @@ sal_Bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
             SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
 
+//-/			pObj->NbcSetAttributes(aAttr, FALSE);
             pObj->SetMergedItemSet(aAttr);
         }
 
-        bReturn = sal_True;
+        bReturn = TRUE;
     }
     return bReturn;
 }
@@ -157,7 +159,7 @@ sal_Bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-sal_Bool FuConstructArc::MouseMove( const MouseEvent& rMEvt )
+BOOL FuConstructArc::MouseMove( const MouseEvent& rMEvt )
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -168,26 +170,26 @@ sal_Bool FuConstructArc::MouseMove( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-sal_Bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
+BOOL FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    sal_Bool bReturn = sal_False;
-    sal_Bool bCreated = sal_False;
+    BOOL bReturn = FALSE;
+    BOOL bCreated = FALSE;
 
     if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-        sal_uLong nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
+        ULONG nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
 
         if (mpView->EndCreateObj(SDRCREATE_NEXTPOINT) )
         {
             if (nCount != mpView->GetSdrPageView()->GetObjList()->GetObjCount())
             {
-                bCreated = sal_True;
+                bCreated = TRUE;
             }
         }
 
-        bReturn = sal_True;
+        bReturn = TRUE;
     }
 
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
@@ -202,14 +204,14 @@ sal_Bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuConstructArc::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstructArc::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
+    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -225,25 +227,25 @@ void FuConstructArc::Activate()
 
     switch( nSlotId )
     {
-        case SID_DRAW_ARC      :
+        case SID_DRAW_ARC	   :
         case SID_DRAW_CIRCLEARC:
         {
             aObjKind = OBJ_CARC;
         }
         break;
 
-        case SID_DRAW_PIE             :
-        case SID_DRAW_PIE_NOFILL      :
-        case SID_DRAW_CIRCLEPIE       :
+        case SID_DRAW_PIE			  :
+        case SID_DRAW_PIE_NOFILL	  :
+        case SID_DRAW_CIRCLEPIE 	  :
         case SID_DRAW_CIRCLEPIE_NOFILL:
         {
             aObjKind = OBJ_SECT;
         }
         break;
 
-        case SID_DRAW_ELLIPSECUT       :
+        case SID_DRAW_ELLIPSECUT	   :
         case SID_DRAW_ELLIPSECUT_NOFILL:
-        case SID_DRAW_CIRCLECUT        :
+        case SID_DRAW_CIRCLECUT 	   :
         case SID_DRAW_CIRCLECUT_NOFILL :
         {
             aObjKind = OBJ_CCUT;
@@ -257,9 +259,10 @@ void FuConstructArc::Activate()
         break;
     }
 
-    mpView->SetCurrentObj((sal_uInt16)aObjKind);
+    mpView->SetCurrentObj((UINT16)aObjKind);
 
     FuConstruct::Activate();
+//	FuDraw::Activate();
 }
 
 /*************************************************************************
@@ -271,10 +274,22 @@ void FuConstructArc::Activate()
 void FuConstructArc::Deactivate()
 {
     FuConstruct::Deactivate();
+//	FuDraw::Deactivate();
 }
 
+// #97016#
 SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
+    // case SID_DRAW_ARC:
+    // case SID_DRAW_CIRCLEARC:
+    // case SID_DRAW_PIE:
+    // case SID_DRAW_PIE_NOFILL:
+    // case SID_DRAW_CIRCLEPIE:
+    // case SID_DRAW_CIRCLEPIE_NOFILL:
+    // case SID_DRAW_ELLIPSECUT:
+    // case SID_DRAW_ELLIPSECUT_NOFILL:
+    // case SID_DRAW_CIRCLECUT:
+    // case SID_DRAW_CIRCLECUT_NOFILL:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
@@ -315,7 +330,7 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
         }
         else
         {
-            OSL_FAIL("Object is NO circle object");
+            DBG_ERROR("Object is NO circle object");
         }
     }
 

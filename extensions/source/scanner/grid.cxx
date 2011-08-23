@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ ResId SaneResId( sal_uInt32 );
 
 /***********************************************************************
  *
- *  GridWindow
+ *	GridWindow
  *
  ***********************************************************************/
 
 // ---------------------------------------------------------------------
 
-GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* pParent, sal_Bool bCutValues )
-:   ModalDialog( pParent, SaneResId( GRID_DIALOG ) ),
+GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* pParent, BOOL bCutValues ) 
+:	ModalDialog( pParent, SaneResId( GRID_DIALOG ) ),
     m_aGridArea( 50, 15, 100, 100 ),
     m_pXValues( pXValues ),
     m_pOrigYValues( pYValues ),
@@ -67,7 +67,7 @@ GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* 
     m_aResetTypeBox( this, SaneResId( GRID_DIALOG_TYPE_BOX ) ),
     m_aResetButton( this, SaneResId( GRID_DIALOG_RESET_BTN ) )
 {
-    sal_uInt16 nPos = m_aResetTypeBox.InsertEntry( String( SaneResId( RESET_TYPE_LINEAR_ASCENDING ) ) );
+    USHORT nPos = m_aResetTypeBox.InsertEntry( String( SaneResId( RESET_TYPE_LINEAR_ASCENDING ) ) );
     m_aResetTypeBox.SetEntryData( nPos, (void *)RESET_TYPE_LINEAR_ASCENDING );
 
     nPos = m_aResetTypeBox.InsertEntry( String( SaneResId( RESET_TYPE_LINEAR_DESCENDING ) ) );
@@ -272,7 +272,7 @@ void GridWindow::computeNew()
         std::sort(m_aHandles.begin(), m_aHandles.end());
         const int nSorted = m_aHandles.size();
         int i;
-
+    
         // get node arrays
         double* nodex = new double[ nSorted ];
         double* nodey = new double[ nSorted ];

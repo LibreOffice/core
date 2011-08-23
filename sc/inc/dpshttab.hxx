@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,6 @@
 #include "scdllapi.h"
 #include "queryparam.hxx"
 
-#include <boost/unordered_set.hpp>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -43,91 +42,64 @@ namespace com { namespace sun { namespace star { namespace sheet {
 }}}}
 
 class ScDPDimension;
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
 class ScDPItemData;
+// End Comments
+// --------------------------------------------------------------------
+//
+//	implementation of ScDPTableData with sheet data
+//
 
-/**
- * This class contains authoritative information on the internal reference
- * used as the data source for datapilot table.  <i>The range name takes
- * precedence over the source range when it's non-empty.</i>  When the range
- * name is empty, the source range gets used.
- */
-class ScSheetSourceDesc
+struct ScSheetSourceDesc
 {
-    ScSheetSourceDesc(); // disabled
+    ScRange			aSourceRange;
+    ScQueryParam	aQueryParam;
 
-public:
-    SC_DLLPUBLIC ScSheetSourceDesc(ScDocument* pDoc);
-
-    SC_DLLPUBLIC void SetSourceRange(const ScRange& rRange);
-
-    /**
-     * Get the range that contains the source data.  In case the source data
-     * is referred to via a range name, it returns the range that the range
-     * name points to.
-     *
-     * <i>Note that currently only a single range is supported; if the
-     * range name contains multiple ranges, only the first range is used.</i>
-     *
-     * @return source range.
-     */
-    SC_DLLPUBLIC const ScRange& GetSourceRange() const;
-    SC_DLLPUBLIC void SetRangeName(const ::rtl::OUString& rName);
-    SC_DLLPUBLIC const ::rtl::OUString& GetRangeName() const;
-    bool HasRangeName() const;
-    void SetQueryParam(const ScQueryParam& rParam);
-    const ScQueryParam& GetQueryParam() const;
-
-    bool operator== ( const ScSheetSourceDesc& rOther ) const;
-    SC_DLLPUBLIC ScDPCache* CreateCache() const;
-
-    /**
-     * Check the sanity of the data source range.
-     *
-     * @return 0 if the source range is sane, otherwise an error message ID is
-     *         returned.
-     */
-    sal_uLong CheckSourceRange() const;
-    long GetCacheId() const;
-
-private:
-    mutable ScRange maSourceRange;
-    ::rtl::OUString maRangeName;
-    ScQueryParam    maQueryParam;
-    ScDocument*     mpDoc;
+    BOOL operator==	( const ScSheetSourceDesc& rOther ) const
+        { return aSourceRange == rOther.aSourceRange &&
+                 aQueryParam  == rOther.aQueryParam; }
+// Wang Xu Ming - DataPilot migration
+// Buffer&&Performance
+    ScDPTableDataCache* CreateCache( ScDocument* pDoc, long nID = -1) const;
+    ULONG CheckValidate( ScDocument* pDoc  ) const;
+    ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
+    ScDPTableDataCache*  GetExistDPObjectCache ( ScDocument* pDoc  ) const;
+    long	GetCacheId( ScDocument* pDoc, long nID ) const;
+    
+// End Comments
 };
 
-/**
- * Implementation of ScDPTableData with sheet data.
- */
 class SC_DLLPUBLIC ScSheetDPData : public ScDPTableData
 {
 private:
-    ScQueryParam    aQuery;
-    bool*           pSpecial;
-    bool            bIgnoreEmptyRows;
-    bool            bRepeatIfEmpty;
+    ScQueryParam	aQuery;
+    BOOL*          		 pSpecial;          						
+    BOOL			bIgnoreEmptyRows;
+    BOOL			bRepeatIfEmpty;
 
-    const ScSheetSourceDesc& mrDesc;
-    ScDPCacheTable  aCacheTable;
+       ScDPCacheTable  aCacheTable;	
 
 public:
-    ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, ScDPCache* pCache);
-    virtual ~ScSheetDPData();
-
-    virtual long                    GetColumnCount();
-    virtual String                  getDimensionName(long nColumn);
-    virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
-    virtual sal_Bool                    IsDateDimension(long nDim);
-    virtual sal_uLong                   GetNumberFormat(long nDim);
-    virtual void                    DisposeData();
-    virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty );
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc, long nCacheId = -1 );
+    virtual			~ScSheetDPData();
+    // End Comments
+    virtual long					GetColumnCount();
+    virtual String					getDimensionName(long nColumn);
+    virtual BOOL					getIsDataLayoutDimension(long nColumn);
+    virtual BOOL					IsDateDimension(long nDim);
+    virtual ULONG					GetNumberFormat(long nDim);
+    virtual void					DisposeData();
+    virtual void					SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
 
     virtual bool                    IsRepeatIfEmpty();
 
     virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rCatDims);
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rCatDims);
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
-                                                     const ::boost::unordered_set<sal_Int32>& rCatDims,
+                                                     const ::std::hash_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
     virtual const ScDPCacheTable&   GetCacheTable() const;

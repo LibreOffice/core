@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,36 +32,56 @@
 #include <string.h>
 
 #include "iprcache.hxx"
-#include "linguistic/misc.hxx"
+#include "misc.hxx"
 
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
+
+//#define IPR_DEF_CACHE_SIZE		503
+#define IPR_DEF_CACHE_MAX		375
+#define IPR_DEF_CACHE_MAXINPUT	200
+
+#ifdef DBG_STATISTIC
+#include <tools/stream.hxx>
+
+//#define IPR_CACHE_SIZE 		nTblSize
+#define IPR_CACHE_MAX 		nMax
+#define IPR_CACHE_MAXINPUT 	nMaxInput
+
+#else
+
+//#define IPR_CACHE_SIZE		IPR_DEF_CACHE_SIZE
+#define IPR_CACHE_MAX		IPR_DEF_CACHE_MAX
+#define IPR_CACHE_MAXINPUT	IPR_DEF_CACHE_MAXINPUT
+
+#endif
 #include <unotools/processfactory.hxx>
-#include <linguistic/lngprops.hxx>
+
+#include <lngprops.hxx>
 
 using namespace utl;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 
-using ::rtl::OUString;
 
 namespace linguistic
 {
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define NUM_FLUSH_PROPS     6
+#define NUM_FLUSH_PROPS		6
 
 static const struct
 {
     const char *pPropName;
-    sal_Int32       nPropHdl;
-} aFlushProperties[ NUM_FLUSH_PROPS ] =
+    INT32		nPropHdl;
+} aFlushProperties[ NUM_FLUSH_PROPS ] = 
 {
     { UPN_IS_USE_DICTIONARY_LIST,         UPH_IS_USE_DICTIONARY_LIST },
     { UPN_IS_IGNORE_CONTROL_CHARACTERS,   UPH_IS_IGNORE_CONTROL_CHARACTERS },
@@ -71,7 +91,7 @@ static const struct
 };
 
 
-static void lcl_AddAsPropertyChangeListener(
+static void lcl_AddAsPropertyChangeListener( 
         Reference< XPropertyChangeListener > xListener,
         Reference< XPropertySet > &rPropSet )
 {
@@ -79,14 +99,14 @@ static void lcl_AddAsPropertyChangeListener(
     {
         for (int i = 0;  i < NUM_FLUSH_PROPS;  ++i)
         {
-            rPropSet->addPropertyChangeListener(
-                    ::rtl::OUString::createFromAscii(aFlushProperties[i].pPropName), xListener );
+            rPropSet->addPropertyChangeListener( 
+                    A2OU(aFlushProperties[i].pPropName), xListener );
         }
     }
 }
 
 
-static void lcl_RemoveAsPropertyChangeListener(
+static void lcl_RemoveAsPropertyChangeListener( 
         Reference< XPropertyChangeListener > xListener,
         Reference< XPropertySet > &rPropSet )
 {
@@ -94,14 +114,14 @@ static void lcl_RemoveAsPropertyChangeListener(
     {
         for (int i = 0;  i < NUM_FLUSH_PROPS;  ++i)
         {
-            rPropSet->removePropertyChangeListener(
-                    ::rtl::OUString::createFromAscii(aFlushProperties[i].pPropName), xListener );
+            rPropSet->removePropertyChangeListener( 
+                    A2OU(aFlushProperties[i].pPropName), xListener );
         }
     }
 }
 
 
-static sal_Bool lcl_IsFlushProperty( sal_Int32 nHandle )
+static BOOL lcl_IsFlushProperty( INT32 nHandle )
 {
     int i;
     for (i = 0;  i < NUM_FLUSH_PROPS;  ++i)
@@ -124,9 +144,9 @@ FlushListener::~FlushListener()
 }
 
 
-void FlushListener::SetDicList( Reference<XDictionaryList> &rDL )
+void FlushListener::SetDicList(	Reference<XDictionaryList> &rDL )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (xDicList != rDL)
     {
@@ -135,14 +155,14 @@ void FlushListener::SetDicList( Reference<XDictionaryList> &rDL )
 
         xDicList = rDL;
         if (xDicList.is())
-            xDicList->addDictionaryListEventListener( this, sal_False );
+            xDicList->addDictionaryListEventListener( this, FALSE );
     }
 }
-
+    
 
 void FlushListener::SetPropSet( Reference< XPropertySet > &rPS )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (xPropSet != rPS)
     {
@@ -159,17 +179,17 @@ void FlushListener::SetPropSet( Reference< XPropertySet > &rPS )
 void SAL_CALL FlushListener::disposing( const EventObject& rSource )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (xDicList.is()  &&  rSource.Source == xDicList)
     {
         xDicList->removeDictionaryListEventListener( this );
-        xDicList = NULL;    //! release reference
+        xDicList = NULL;	//! release reference
     }
     if (xPropSet.is()  &&  rSource.Source == xPropSet)
     {
         lcl_RemoveAsPropertyChangeListener( this, xPropSet );
-        xPropSet = NULL;    //! release reference
+        xPropSet = NULL;	//! release reference
     }
 }
 
@@ -178,34 +198,34 @@ void SAL_CALL FlushListener::processDictionaryListEvent(
             const DictionaryListEvent& rDicListEvent )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (rDicListEvent.Source == xDicList)
     {
-        sal_Int16 nEvt = rDicListEvent.nCondensedEvent;
-        sal_Int16 nFlushFlags =
-                DictionaryListEventFlags::ADD_NEG_ENTRY     |
-                DictionaryListEventFlags::DEL_POS_ENTRY     |
-                DictionaryListEventFlags::ACTIVATE_NEG_DIC  |
+        INT16 nEvt = rDicListEvent.nCondensedEvent;
+        INT16 nFlushFlags = 
+                DictionaryListEventFlags::ADD_NEG_ENTRY		|
+                DictionaryListEventFlags::DEL_POS_ENTRY		|
+                DictionaryListEventFlags::ACTIVATE_NEG_DIC	|
                 DictionaryListEventFlags::DEACTIVATE_POS_DIC;
-        sal_Bool bFlush = 0 != (nEvt & nFlushFlags);
+        BOOL bFlush	= 0 != (nEvt & nFlushFlags);
 
         DBG_ASSERT( pFlushObj, "missing object (NULL pointer)" );
         if (bFlush && pFlushObj != NULL)
             pFlushObj->Flush();
     }
 }
+    
 
-
-void SAL_CALL FlushListener::propertyChange(
-            const PropertyChangeEvent& rEvt )
+void SAL_CALL FlushListener::propertyChange( 
+            const PropertyChangeEvent& rEvt ) 
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (rEvt.Source == xPropSet)
     {
-        sal_Bool bFlush = lcl_IsFlushProperty( rEvt.PropertyHandle );
+        BOOL bFlush	= lcl_IsFlushProperty( rEvt.PropertyHandle );
 
         DBG_ASSERT( pFlushObj, "missing object (NULL pointer)" );
         if (bFlush && pFlushObj != NULL)
@@ -221,9 +241,9 @@ SpellCache::SpellCache()
     pFlushLstnr = new FlushListener( this );
     xFlushLstnr = pFlushLstnr;
     Reference<XDictionaryList> aDictionaryList(GetDictionaryList());
-    pFlushLstnr->SetDicList( aDictionaryList ); //! after reference is established
+    pFlushLstnr->SetDicList( aDictionaryList );	//! after reference is established
     Reference<XPropertySet> aPropertySet(GetLinguProperties());
-    pFlushLstnr->SetPropSet( aPropertySet );    //! after reference is established
+    pFlushLstnr->SetPropSet( aPropertySet );	//! after reference is established
 }
 
 SpellCache::~SpellCache()
@@ -236,7 +256,7 @@ SpellCache::~SpellCache()
 
 void SpellCache::Flush()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     // clear word list
     LangWordList_t aEmpty;
     aWordLists.swap( aEmpty );
@@ -244,7 +264,7 @@ void SpellCache::Flush()
 
 bool SpellCache::CheckWord( const OUString& rWord, LanguageType nLang )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     WordList_t &rList = aWordLists[ nLang ];
     const WordList_t::const_iterator aIt = rList.find( rWord );
     return aIt != rList.end();
@@ -252,7 +272,7 @@ bool SpellCache::CheckWord( const OUString& rWord, LanguageType nLang )
 
 void SpellCache::AddWord( const OUString& rWord, LanguageType nLang )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     WordList_t & rList = aWordLists[ nLang ];
     // occasional clean-up...
     if (rList.size() > 500)
@@ -261,6 +281,6 @@ void SpellCache::AddWord( const OUString& rWord, LanguageType nLang )
 }
 ///////////////////////////////////////////////////////////////////////////
 
-}   // namespace linguistic
+}	// namespace linguistic
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,15 +57,19 @@
  * @file
  * Style manager for the filter.
  ************************************************************************/
-#ifndef     _XFSTYLEMANAGER_HXX
-#define     _XFSTYLEMANAGER_HXX
+/*************************************************************************
+ * Change History
+ * 2004-12-23 create this file.
+ ************************************************************************/
+#ifndef		_XFSTYLEMANAGER_HXX
+#define		_XFSTYLEMANAGER_HXX
 
-#include    "xfglobal.hxx"
-#include    "xffontdecl.hxx"
-#include    "xfstylecont.hxx"
-#include    "xfconfigmanager.hxx"
-#include    <map>
-#include    <vector>
+#include	"xfglobal.hxx"
+#include	"xffontdecl.hxx"
+#include	"xfstylecont.hxx"
+#include	"xfconfigmanager.hxx"
+#include	<map>
+#include	<vector>
 
 class IXFStream;
 class IXFStyle;
@@ -90,53 +94,53 @@ public:
 
 public:
     /**
-     * @descr   clear all styles, called before load file.
+     * @descr	clear all styles, called before load file.
      */
-    void        Reset();
+    void		Reset();
 
-    void        AddFontDecl(XFFontDecl& aFontDecl);
+    void		AddFontDecl(XFFontDecl& aFontDecl);
 
-    void        AddFontDecl(rtl::OUString name, rtl::OUString family, sal_Bool fixed = false);
+    void		AddFontDecl(rtl::OUString name, rtl::OUString family, sal_Bool fixed = false);
 
-    IXFStyle*   AddStyle(IXFStyle *pStyle);
+    IXFStyle*	AddStyle(IXFStyle *pStyle);
 
-    IXFStyle*   FindStyle(rtl::OUString name);
+    IXFStyle*	FindStyle(rtl::OUString name);
 
-    XFParaStyle*    FindParaStyle(rtl::OUString name);
+    XFParaStyle*	FindParaStyle(rtl::OUString name);
 
-    XFTextStyle*    FindTextStyle(rtl::OUString name);
+    XFTextStyle*	FindTextStyle(rtl::OUString name);
 
-    void        SetLineNumberConfig(XFLineNumberConfig *pLNConfig);
+    void		SetLineNumberConfig(XFLineNumberConfig *pLNConfig);
 
-    void        SetFootnoteConfig(XFFootnoteConfig *pFNConfig);
+    void		SetFootnoteConfig(XFFootnoteConfig *pFNConfig);
 
-    void        SetEndnoteConfig(XFEndnoteConfig *pFNConfig);
+    void		SetEndnoteConfig(XFEndnoteConfig *pFNConfig);
 
-    void        ToXml(IXFStream *strm);
+    void		ToXml(IXFStream *strm);
 
 private:
-    std::vector<XFFontDecl> s_aFontDecls;
+    std::vector<XFFontDecl>	s_aFontDecls;
     //standard styles that can be inherited,<office:styles>
-    XFStyleContainer    s_aStdTextStyles;
-    XFStyleContainer    s_aStdParaStyles;
-    XFStyleContainer    s_aStdStrokeDashStyles;
-    XFStyleContainer    s_aStdAreaStyles;
-    XFStyleContainer    s_aStdArrowStyles;
-    XFConfigManager s_aConfigManager;
+    XFStyleContainer	s_aStdTextStyles;
+    XFStyleContainer	s_aStdParaStyles;
+    XFStyleContainer	s_aStdStrokeDashStyles;
+    XFStyleContainer	s_aStdAreaStyles;
+    XFStyleContainer	s_aStdArrowStyles;
+    XFConfigManager	s_aConfigManager;
     //automatic styles,<office:automatic-styles>
-    XFStyleContainer    s_aTextStyles;
-    XFStyleContainer    s_aParaStyles;
+    XFStyleContainer	s_aTextStyles;
+    XFStyleContainer	s_aParaStyles;
     XFStyleContainer s_aListStyles;
-    XFStyleContainer    s_aSectionStyles;
-    XFStyleContainer    s_aPageMasters;
-    XFStyleContainer    s_aMasterpages;
-    XFStyleContainer    s_aDateStyles;
-    XFStyleContainer    s_aGraphicsStyles;
-    XFStyleContainer    s_aTableStyles;
-    XFStyleContainer    s_aTableCellStyles;
-    XFStyleContainer    s_aTableRowStyles;
-    XFStyleContainer    s_aTableColStyles;
-    IXFStyle            *s_pOutlineStyle;
+    XFStyleContainer	s_aSectionStyles;
+    XFStyleContainer	s_aPageMasters;
+    XFStyleContainer	s_aMasterpages;
+    XFStyleContainer	s_aDateStyles;
+    XFStyleContainer	s_aGraphicsStyles;
+    XFStyleContainer	s_aTableStyles;
+    XFStyleContainer	s_aTableCellStyles;
+    XFStyleContainer	s_aTableRowStyles;
+    XFStyleContainer	s_aTableColStyles;
+    IXFStyle			*s_pOutlineStyle;
     XFStyleContainer s_aRubyStyles;
 };
 

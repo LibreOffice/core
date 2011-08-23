@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -192,7 +192,7 @@ bool testSetFSys(SetFSysTest const * pTest, std::size_t nSize)
         {
             String aTestA = aUrl1.GetMainURL(INetURLObject::NO_DECODE);
             String aTestB = aUrl2.GetMainURL(INetURLObject::NO_DECODE);
-
+                
             printf(" BAD %s %s -> %s, %s (%s)\n",
                    ByteString(aPath, RTL_TEXTENCODING_ISO_8859_1).GetBuffer(),
                    toString(pTest[i].m_eStyle),
@@ -611,7 +611,7 @@ main()
     if (true)
     {
         rtl::OUString
-            aParameters(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "; CharSet=UTF-8  ; Blubber=Blob" )));
+            aParameters(rtl::OUString::createFromAscii("; CharSet=UTF-8  ; Blubber=Blob"));
         sal_Unicode const * pBegin = aParameters.getStr();
         sal_Unicode const * pEnd = pBegin + aParameters.getLength();
         INetContentTypeParameterList aList;
@@ -1451,7 +1451,7 @@ main()
     }
 
     if (true) { // #112130#
-        INetURLObject url1(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:abc%3Fdef" )));
+        INetURLObject url1(rtl::OUString::createFromAscii(".uno:abc%3Fdef"));
         if (url1.GetProtocol() != INET_PROT_UNO) {
             printf("BAD .uno:abc%%3Fdef\n");
             bSuccess = false;
@@ -1469,7 +1469,7 @@ main()
             printf("BAD HasParam(.uno:abc%%3Fdef)\n");
             bSuccess = false;
         }
-        INetURLObject url2(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:abc?def?ghi" )));
+        INetURLObject url2(rtl::OUString::createFromAscii(".uno:abc?def?ghi"));
         if (url2.GetProtocol() != INET_PROT_UNO) {
             printf("BAD .uno:abc?def?ghi\n");
             bSuccess = false;

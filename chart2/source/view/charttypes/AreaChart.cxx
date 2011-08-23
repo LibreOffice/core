@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,16 +43,13 @@
 #include "Clipping.hxx"
 #include "Stripe.hxx"
 #include "PolarLabelPositionHelper.hxx"
-#include "DateHelper.hxx"
 
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
-
 #include <tools/debug.hxx>
 #include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
-
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -99,11 +96,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
 {
     if( !m_pMainPosHelper )
         m_pMainPosHelper = new PlottingPositionHelper();
-    if( m_pMainPosHelper )
-    {
-        m_pMainPosHelper->AllowShiftXAxisPos(true);
-        m_pMainPosHelper->AllowShiftZAxisPos(true);
-    }
     PlotterBase::m_pPosHelper = m_pMainPosHelper;
     VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper;
 
@@ -129,12 +121,18 @@ AreaChart::~AreaChart()
     delete m_pMainPosHelper;
 }
 
+double AreaChart::getMinimumX()
+{
+    if( m_bCategoryXAxis && m_bIsPolarCooSys )//the angle axis in net charts needs a different autoscaling
+        return 1.0;//first category (index 0) matches with real number 1.0
+    return VSeriesPlotter::getMinimumX();
+}
+
 double AreaChart::getMaximumX()
 {
-    double fMax = VSeriesPlotter::getMaximumX();
     if( m_bCategoryXAxis && m_bIsPolarCooSys )//the angle axis in net charts needs a different autoscaling
-        fMax += 1.0;
-    return fMax;
+        return getPointCount()+1;
+    return VSeriesPlotter::getMaximumX();
 }
 
 bool AreaChart::isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex )
@@ -154,8 +152,8 @@ bool AreaChart::isSeperateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex
 LegendSymbolStyle AreaChart::getLegendSymbolStyle()
 {
     if( m_bArea || m_nDimension == 3 )
-        return LegendSymbolStyle_BOX;
-    return LegendSymbolStyle_LINE;
+        return chart2::LegendSymbolStyle_BOX;
+    return chart2::LegendSymbolStyle_LINE_WITH_SYMBOL;
 }
 
 uno::Any AreaChart::getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex )
@@ -171,20 +169,6 @@ uno::Any AreaChart::getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPo
     return aRet;
 }
 
-//-----------------------------------------------------------------
-// lang::XServiceInfo
-//-----------------------------------------------------------------
-/*
-APPHELPER_XSERVICEINFO_IMPL(AreaChart,CHART2_VIEW_AREACHART_SERVICE_IMPLEMENTATION_NAME)
-
-    uno::Sequence< rtl::OUString > AreaChart
-::getSupportedServiceNames_Static()
-{
-    uno::Sequence< rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = CHART2_VIEW_AREACHART_SERVICE_NAME;
-    return aSNS;
-}
-*/
 drawing::Direction3D AreaChart::getPreferredDiagramAspectRatio() const
 {
     if( m_nKeepAspectRatio == 1 )
@@ -253,7 +237,7 @@ void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, Plotting
         drawing::DoubleSequence* pOuterSourceX = &rPolyPoly.SequenceX.getArray()[nPolygonIndex];
         drawing::DoubleSequence* pOuterSourceY = &rPolyPoly.SequenceY.getArray()[nPolygonIndex];
         drawing::DoubleSequence* pOuterSourceZ = &rPolyPoly.SequenceZ.getArray()[nPolygonIndex];
-
+        
         drawing::DoubleSequence* pOuterTargetX = &aTmp.SequenceX.getArray()[nPolygonIndex];
         drawing::DoubleSequence* pOuterTargetY = &aTmp.SequenceY.getArray()[nPolygonIndex];
         drawing::DoubleSequence* pOuterTargetZ = &aTmp.SequenceZ.getArray()[nPolygonIndex];
@@ -269,11 +253,11 @@ void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, Plotting
         double* pSourceX = pOuterSourceX->getArray();
         double* pSourceY = pOuterSourceY->getArray();
         double* pSourceZ = pOuterSourceZ->getArray();
-
+        
         double* pTargetX = pOuterTargetX->getArray();
         double* pTargetY = pOuterTargetY->getArray();
         double* pTargetZ = pOuterTargetZ->getArray();
-
+        
         //copy first point
         *pTargetX=*pSourceX++;
         *pTargetY=*pSourceY++;
@@ -293,7 +277,7 @@ void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, Plotting
             }
             pSourceX++; pSourceY++; pSourceZ++;
         }
-
+        
         //free unused space
         if( nTargetPointCount<nPointCount )
         {
@@ -618,7 +602,7 @@ void AreaChart::createShapes()
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     //update/create information for current group
-    double fLogicZ        = 1.0;//as defined
+    double fLogicZ        = 0.5;//as defined
 
     sal_Int32 nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
@@ -719,8 +703,6 @@ void AreaChart::createShapes()
 
                     //collect data point information (logic coordinates, style ):
                     double fLogicX = (*aSeriesIter)->getXValue(nIndex);
-                    if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() )
-                        fLogicX = DateHelper::RasterizeDateValue( fLogicX, m_aNullDate, m_nTimeResolution );
                     double fLogicY = (*aSeriesIter)->getYValue(nIndex);
 
                     if( m_bIsPolarCooSys && m_bArea &&
@@ -792,7 +774,7 @@ void AreaChart::createShapes()
                     //transformation 3) -> 4)
                     drawing::Position3D aScenePosition( pPosHelper->transformLogicToScene( fLogicX,fLogicY,fLogicZ, false ) );
 
-                    //better performance for big data
+                    //better performance for big data   
                     FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
                     pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
                     if( !pSeries->isAttributedDataPoint(nIndex)
@@ -906,7 +888,7 @@ void AreaChart::createShapes()
                                         , aScenePosition.PositionZ+this->getTransformedDepth() );
 
                             sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nIndex, m_xChartTypeModel, m_nDimension, pPosHelper->isSwapXAndY() );
-
+                            
                             switch(nLabelPlacement)
                             {
                             case ::com::sun::star::chart::DataLabelPlacement::TOP:
@@ -930,7 +912,7 @@ void AreaChart::createShapes()
                                 //todo implement this different for area charts
                                 break;
                             default:
-                                OSL_FAIL("this label alignment is not implemented yet");
+                                DBG_ERROR("this label alignment is not implemented yet");
                                 aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
                                 eAlignment = LABEL_ALIGN_TOP;
                                 break;

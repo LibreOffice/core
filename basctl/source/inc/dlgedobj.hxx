@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,14 +57,14 @@ class DlgEdObj: public SdrUnoObj
     friend class DlgEdForm;
 
 private:
-    sal_Bool        bIsListening;
-    DlgEdForm*      pDlgEdForm;
+    sal_Bool		bIsListening;
+    DlgEdForm*		pDlgEdForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xPropertyChangeListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>  m_xContainerListener;
 
 protected:
     DlgEdObj();
-    DlgEdObj(const ::rtl::OUString& rModelName,
+    DlgEdObj(const ::rtl::OUString& rModelName, 
              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
 
     virtual void NbcMove( const Size& rSize );
@@ -77,19 +77,19 @@ protected:
     void StartListening();
     using SfxListener::EndListening;
     void EndListening(sal_Bool bRemoveListener = sal_True);
-    sal_Bool    isListening() const { return bIsListening; }
+    sal_Bool	isListening() const { return bIsListening; }
 
-    virtual bool TransformSdrToControlCoordinates(
-        sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
+    virtual bool TransformSdrToControlCoordinates( 
+        sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn, 
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
-    virtual bool TransformSdrToFormCoordinates(
-        sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
+    virtual bool TransformSdrToFormCoordinates( 
+        sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn, 
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
-    virtual bool TransformControlToSdrCoordinates(
-        sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
+    virtual bool TransformControlToSdrCoordinates( 
+        sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn, 
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
-    virtual bool TransformFormToSdrCoordinates(
-        sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
+    virtual bool TransformFormToSdrCoordinates( 
+        sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn, 
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
 
 public:
@@ -97,25 +97,26 @@ public:
 
     virtual ~DlgEdObj();
     virtual void SetPage(SdrPage* pNewPage);
-
+    
     virtual void SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     virtual DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
 
     virtual sal_uInt32 GetObjInventor() const;
     virtual sal_uInt16 GetObjIdentifier() const;
 
-    virtual DlgEdObj*   Clone() const;                                          // not working yet
-    virtual void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
+    virtual SdrObject*	Clone() const;											// not working yet
+    virtual void		operator= (const SdrObject& rObj);						// not working yet
+    virtual void clonedFrom(const DlgEdObj* _pSource);							// not working yet
 
     // FullDrag support
     virtual SdrObject* getFullDragClone() const;
 
-    virtual sal_Bool        supportsService( const sal_Char* _pServiceName ) const;
-    virtual ::rtl::OUString GetDefaultName() const;
-    virtual ::rtl::OUString GetUniqueName() const;
+    virtual	sal_Bool		supportsService( const sal_Char* _pServiceName ) const;
+    virtual ::rtl::OUString	GetDefaultName() const;
+    virtual ::rtl::OUString	GetUniqueName() const;
 
-    virtual sal_Int32   GetStep() const;
-    virtual void        UpdateStep();
+    virtual sal_Int32	GetStep() const;
+    virtual	void		UpdateStep();
 
     virtual void SetDefaults();
     virtual void SetRectFromProps();
@@ -153,7 +154,7 @@ private:
     ::std::vector<DlgEdObj*> pChilds;
 
     mutable ::boost::optional< ::com::sun::star::awt::DeviceInfo >   mpDeviceInfo;
-
+    
 
 protected:
     DlgEdForm();
@@ -174,7 +175,7 @@ public:
     virtual void RemoveChild( DlgEdObj* pDlgEdObj );
     virtual ::std::vector<DlgEdObj*> GetChilds() const { return pChilds; }
 
-    virtual void UpdateStep();
+    virtual	void UpdateStep();
 
     virtual void SetRectFromProps();
     virtual void SetPropsFromRect();

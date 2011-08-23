@@ -57,12 +57,16 @@
  * @file
  * Table row style, ie. table row height.
  ************************************************************************/
-#ifndef     _XFROWSTYLE_HXX
-#define     _XFROWSTYLE_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-28 create and implements.
+ ************************************************************************/
+#ifndef		_XFROWSTYLE_HXX
+#define		_XFROWSTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
+#include	"xfglobal.hxx"
+#include	"xfstyle.hxx"
+#include	"xfcolor.hxx"
 
 class XFBGImage;
 class XFRowStyle : public XFStyle
@@ -72,25 +76,25 @@ public:
     XFRowStyle& operator=(XFRowStyle& other);
 
 public:
-    void    SetRowHeight(double height);
+    void	SetRowHeight(double height);
 
-    double  GetRowHeight();
+    double	GetRowHeight();
 
-    void    SetMinRowHeight(double height);
+    void	SetMinRowHeight(double height);
 
-    void    SetBackColor(XFColor& color);
+    void	SetBackColor(XFColor& color);
 
-    void    SetbackImage(XFBGImage *pImage);
+    void	SetbackImage(XFBGImage *pImage);
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle	GetStyleFamily();
 
     virtual void ToXml(IXFStream *pStrm);
 
 private:
-    double  m_fHeight;
-    double  m_fMinHeight;
-    XFColor m_aBackColor;
-    XFBGImage   *m_pBGImage;
+    double	m_fHeight;
+    double	m_fMinHeight;
+    XFColor	m_aBackColor;
+    XFBGImage	*m_pBGImage;
 };
 
 inline void XFRowStyle::SetRowHeight(double height)

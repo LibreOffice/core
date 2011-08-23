@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ namespace dbaxml
     class OXMLTable : public SvXMLImportContext
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xParentContainer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >	m_xParentContainer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >		m_xTable;
         ::rtl::OUString m_sFilterStatement;
         ::rtl::OUString m_sOrderStatement;
         ::rtl::OUString m_sName;
@@ -47,13 +47,13 @@ namespace dbaxml
         ::rtl::OUString m_sCatalog;
         ::rtl::OUString m_sStyleName;
         ::rtl::OUString m_sServiceName;
-        sal_Bool        m_bApplyFilter;
-        sal_Bool        m_bApplyOrder;
+        sal_Bool		m_bApplyFilter;
+        sal_Bool		m_bApplyOrder;
 
-
+    
         ODBFilter& GetOwnImport();
 
-        void fillAttributes(    sal_uInt16 nPrfx
+        void fillAttributes(	sal_uInt16 nPrfx
                                 ,const ::rtl::OUString& _sLocalName
                                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                                 , ::rtl::OUString& _rsCommand

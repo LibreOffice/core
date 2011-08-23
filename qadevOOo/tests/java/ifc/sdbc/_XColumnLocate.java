@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ public class _XColumnLocate extends MultiMethodTest {
             int colIdx = oObj.findColumn(colName) ;
             result = colIdx == 1 ;
         } catch (SQLException e) {
-            log.println("Exception occurred:");
+            log.println("Exception occured:");
             e.printStackTrace(log);
             result = false;
         }

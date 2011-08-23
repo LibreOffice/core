@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <rtl/instance.hxx>
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/factory.hxx>	// helper for factories
 #include <unotools/localfilehelper.hxx>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
@@ -52,18 +52,18 @@
 #include "convdiclist.hxx"
 #include "convdic.hxx"
 #include "hhconvdic.hxx"
-#include "linguistic/misc.hxx"
+#include "misc.hxx"
 #include "defs.hxx"
 
+//using namespace utl;
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
-
-using ::rtl::OUString;
 
 #define SN_CONV_DICTIONARY_LIST  "com.sun.star.linguistic2.ConversionDictionaryList"
 
@@ -112,7 +112,7 @@ class ConvDicNameContainer :
     ConvDicNameContainer(const ConvDicNameContainer &);
     ConvDicNameContainer & operator = (const ConvDicNameContainer &);
 
-    sal_Int32 GetIndexByName_Impl( const OUString& rName );
+    INT32 GetIndexByName_Impl( const OUString& rName );
 
 public:
     ConvDicNameContainer( ConvDicList &rMyConvDicList );
@@ -142,10 +142,10 @@ public:
     // calls Flush for the dictionaries that support XFlushable
     void    FlushDics() const;
 
-    sal_Int32   GetCount() const    { return aConvDics.getLength(); }
+    INT32   GetCount() const    { return aConvDics.getLength(); }
     uno::Reference< XConversionDictionary > GetByName( const OUString& rName );
 
-    const uno::Reference< XConversionDictionary >    GetByIndex( sal_Int32 nIdx )
+    const uno::Reference< XConversionDictionary >    GetByIndex( INT32 nIdx )
     {
         return aConvDics.getConstArray()[nIdx];
     }
@@ -165,9 +165,9 @@ ConvDicNameContainer::~ConvDicNameContainer()
 
 void ConvDicNameContainer::FlushDics() const
 {
-    sal_Int32 nLen = aConvDics.getLength();
+    INT32 nLen = aConvDics.getLength();
     const uno::Reference< XConversionDictionary > *pDic = aConvDics.getConstArray();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
+    for (INT32 i = 0;  i < nLen;  ++i)
     {
         uno::Reference< util::XFlushable > xFlush( pDic[i] , UNO_QUERY );
         if (xFlush.is())
@@ -178,20 +178,20 @@ void ConvDicNameContainer::FlushDics() const
             }
             catch(Exception &)
             {
-                OSL_FAIL( "flushing of conversion dictionary failed" );
+                DBG_ERROR( "flushing of conversion dictionary failed" );
             }
         }
     }
 }
 
 
-sal_Int32 ConvDicNameContainer::GetIndexByName_Impl(
+INT32 ConvDicNameContainer::GetIndexByName_Impl(
         const OUString& rName )
 {
-    sal_Int32 nRes = -1;
-    sal_Int32 nLen = aConvDics.getLength();
+    INT32 nRes = -1;
+    INT32 nLen = aConvDics.getLength();
     const uno::Reference< XConversionDictionary > *pDic = aConvDics.getConstArray();
-    for (sal_Int32 i = 0;  i < nLen && nRes == -1;  ++i)
+    for (INT32 i = 0;  i < nLen && nRes == -1;  ++i)
     {
         if (rName == pDic[i]->getName())
             nRes = i;
@@ -204,7 +204,7 @@ uno::Reference< XConversionDictionary > ConvDicNameContainer::GetByName(
         const OUString& rName )
 {
     uno::Reference< XConversionDictionary > xRes;
-    sal_Int32 nIdx = GetIndexByName_Impl( rName );
+    INT32 nIdx = GetIndexByName_Impl( rName );
     if ( nIdx != -1)
         xRes = aConvDics.getArray()[nIdx];
     return xRes;
@@ -243,11 +243,11 @@ uno::Sequence< OUString > SAL_CALL ConvDicNameContainer::getElementNames(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int32 nLen = aConvDics.getLength();
+    INT32 nLen = aConvDics.getLength();
     uno::Sequence< OUString > aRes( nLen );
     OUString *pName = aRes.getArray();
     const uno::Reference< XConversionDictionary > *pDic = aConvDics.getConstArray();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
+    for (INT32 i = 0;  i < nLen;  ++i)
         pName[i] = pDic[i]->getName();
     return aRes;
 }
@@ -268,7 +268,7 @@ void SAL_CALL ConvDicNameContainer::replaceByName(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int32 nRplcIdx = GetIndexByName_Impl( rName );
+    INT32 nRplcIdx = GetIndexByName_Impl( rName );
     if (nRplcIdx == -1)
         throw NoSuchElementException();
     uno::Reference< XConversionDictionary > xNew;
@@ -293,7 +293,7 @@ void SAL_CALL ConvDicNameContainer::insertByName(
     if (!xNew.is() || xNew->getName() != rName)
         throw IllegalArgumentException();
 
-    sal_Int32 nLen = aConvDics.getLength();
+    INT32 nLen = aConvDics.getLength();
     aConvDics.realloc( nLen + 1 );
     aConvDics.getArray()[ nLen ] = xNew;
 }
@@ -304,7 +304,7 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int32 nRplcIdx = GetIndexByName_Impl( rName );
+    INT32 nRplcIdx = GetIndexByName_Impl( rName );
     if (nRplcIdx == -1)
         throw NoSuchElementException();
 
@@ -318,9 +318,9 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
     {
         try
         {
-            ::ucbhelper::Content    aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ),
+            ::ucbhelper::Content	aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ),
                                     uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-            aCnt.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), makeAny( sal_Bool( sal_True ) ) );
+            aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
         }
         catch( ::com::sun::star::ucb::CommandAbortedException& )
         {
@@ -332,9 +332,9 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
         }
     }
 
-    sal_Int32 nLen = aConvDics.getLength();
+    INT32 nLen = aConvDics.getLength();
     uno::Reference< XConversionDictionary > *pDic = aConvDics.getArray();
-    for (sal_Int32 i = nRplcIdx;  i < nLen - 1;  ++i)
+    for (INT32 i = nRplcIdx;  i < nLen - 1;  ++i)
         pDic[i] = pDic[i + 1];
     aConvDics.realloc( nLen - 1 );
 }
@@ -345,11 +345,11 @@ void ConvDicNameContainer::AddConvDics(
         const String &rExtension )
 {
     const Sequence< OUString > aDirCnt(
-                utl::LocalFileHelper::GetFolderContents( rSearchDirPathURL, sal_False ) );
+                utl::LocalFileHelper::GetFolderContents( rSearchDirPathURL, FALSE ) );
     const OUString *pDirCnt = aDirCnt.getConstArray();
-    sal_Int32 nEntries = aDirCnt.getLength();
+    INT32 nEntries = aDirCnt.getLength();
 
-    for (sal_Int32 i = 0;  i < nEntries;  ++i)
+    for (INT32 i = 0;  i < nEntries;  ++i)
     {
         String  aURL( pDirCnt[i] );
 
@@ -361,7 +361,7 @@ void ConvDicNameContainer::AddConvDics(
         if(aExt != aSearchExt)
             continue;          // skip other files
 
-        sal_Int16 nLang;
+        INT16 nLang;
         sal_Int16 nConvType;
         if (IsConvDic( aURL, nLang, nConvType ))
         {
@@ -380,7 +380,7 @@ void ConvDicNameContainer::AddConvDics(
             else if ((nLang == LANGUAGE_CHINESE_SIMPLIFIED || nLang == LANGUAGE_CHINESE_TRADITIONAL) &&
                       nConvType == ConversionDictionaryType::SCHINESE_TCHINESE)
             {
-                xDic = new ConvDic( aDicName, nLang, nConvType, sal_False, aURL );
+                xDic = new ConvDic( aDicName, nLang, nConvType, FALSE, aURL );
             }
 
             if (xDic.is())
@@ -416,7 +416,7 @@ ConvDicList::ConvDicList() :
     aEvtListeners( GetLinguMutex() )
 {
     pNameContainer = 0;
-    bDisposing = sal_False;
+    bDisposing = FALSE;
 
     pExitListener = new MyAppExitListener( *this );
     xExitListener = pExitListener;
@@ -458,9 +458,9 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
         // access list of text conversion dictionaries to activate
         SvtLinguOptions aOpt;
         SvtLinguConfig().GetOptions( aOpt );
-        sal_Int32 nLen = aOpt.aActiveConvDics.getLength();
+        INT32 nLen = aOpt.aActiveConvDics.getLength();
         const OUString *pActiveConvDics = aOpt.aActiveConvDics.getConstArray();
-        for (sal_Int32 i = 0;  i < nLen;  ++i)
+        for (INT32 i = 0;  i < nLen;  ++i)
         {
             uno::Reference< XConversionDictionary > xDic =
                     pNameContainer->GetByName( pActiveConvDics[i] );
@@ -501,7 +501,7 @@ uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int16 nLang = LocaleToLanguage( rLocale );
+    INT16 nLang = LocaleToLanguage( rLocale );
 
     if (GetNameContainer().hasByName( rName ))
         throw ElementExistException();
@@ -516,7 +516,7 @@ uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
     else if ((nLang == LANGUAGE_CHINESE_SIMPLIFIED || nLang == LANGUAGE_CHINESE_TRADITIONAL) &&
               nConvDicType == ConversionDictionaryType::SCHINESE_TCHINESE)
     {
-        xRes = new ConvDic( rName, nLang, nConvDicType, sal_False, aDicMainURL );
+        xRes = new ConvDic( rName, nLang, nConvDicType, FALSE, aDicMainURL );
     }
 
     if (!xRes.is())
@@ -544,13 +544,15 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    sal_Int32 nCount = 0;
+    /*INT16 nLang = LocaleToLanguage( rLocale );*/
+
+    INT32 nCount = 0;
     uno::Sequence< OUString > aRes( 20 );
     OUString *pRes = aRes.getArray();
 
     sal_Bool bSupported = sal_False;
-    sal_Int32 nLen = GetNameContainer().GetCount();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
+    INT32 nLen = GetNameContainer().GetCount();
+    for (INT32 i = 0;  i < nLen;  ++i)
     {
         const uno::Reference< XConversionDictionary > xDic( GetNameContainer().GetByIndex(i) );
         sal_Bool bMatch =   xDic.is()  &&
@@ -562,7 +564,7 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
             Sequence< OUString > aNewConv( xDic->getConversions(
                                 rText, nStartPos, nLength,
                                 eDirection, nTextConversionOptions ) );
-            sal_Int32 nNewLen = aNewConv.getLength();
+            INT32 nNewLen = aNewConv.getLength();
             if (nNewLen > 0)
             {
                 if (nCount + nNewLen > aRes.getLength())
@@ -571,7 +573,7 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
                     pRes = aRes.getArray();
                 }
                 const OUString *pNewConv = aNewConv.getConstArray();
-                for (sal_Int32 k = 0;  k < nNewLen;  ++k)
+                for (INT32 k = 0;  k < nNewLen;  ++k)
                     pRes[nCount++] = pNewConv[k];
             }
         }
@@ -595,8 +597,8 @@ sal_Int16 SAL_CALL ConvDicList::queryMaxCharCount(
 
     sal_Int16 nRes = 0;
     GetNameContainer();
-    sal_Int32 nLen = GetNameContainer().GetCount();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
+    INT32 nLen = GetNameContainer().GetCount();
+    for (INT32 i = 0;  i < nLen;  ++i)
     {
         const uno::Reference< XConversionDictionary > xDic( GetNameContainer().GetByIndex(i) );
         if (xDic.is()  &&
@@ -618,7 +620,7 @@ void SAL_CALL ConvDicList::dispose(  )
     MutexGuard  aGuard( GetLinguMutex() );
     if (!bDisposing)
     {
-        bDisposing = sal_True;
+        bDisposing = TRUE;
         EventObject aEvtObj( (XConversionDictionaryList *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
 
@@ -659,7 +661,7 @@ sal_Bool SAL_CALL ConvDicList::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_CONV_DICTIONARY_LIST));
+    return rServiceName.equalsAscii( SN_CONV_DICTIONARY_LIST );
 }
 
 
@@ -688,6 +690,31 @@ uno::Reference< uno::XInterface > SAL_CALL ConvDicList_CreateInstance(
 {
     return StaticConvDicList::get();
 }
+
+
+sal_Bool SAL_CALL ConvDicList_writeInfo(
+    void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
+{
+    try
+    {
+        String aImpl( '/' );
+        aImpl += ConvDicList::getImplementationName_Static().getStr();
+        aImpl.AppendAscii( "/UNO/SERVICES" );
+        uno::Reference< registry::XRegistryKey > xNewKey =
+                pRegistryKey->createKey(aImpl );
+        uno::Sequence< OUString > aServices =
+                ConvDicList::getSupportedServiceNames_Static();
+        for( INT32 i = 0; i < aServices.getLength(); i++ )
+            xNewKey->createKey( aServices.getConstArray()[i]);
+
+        return sal_True;
+    }
+    catch(Exception &)
+    {
+        return sal_False;
+    }
+}
+
 
 void * SAL_CALL ConvDicList_getFactory(
         const sal_Char * pImplName,

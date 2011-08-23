@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/urlobj.hxx>
+
 #include <boost/noncopyable.hpp>
 
 //......................................................................................................................
@@ -185,7 +185,8 @@ namespace sfx2
                         aCommandName.append( sImageURL.copy( nCommandImagePrefixLen ) );
                         const ::rtl::OUString sCommandName( aCommandName.makeStringAndClear() );
 
-                        const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, sal_False ) );
+                        const BOOL bHiContrast( Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
+                        const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, FALSE, bHiContrast ) );
                         return aPanelImage.GetXGraphic();
                     }
 
@@ -244,7 +245,7 @@ namespace sfx2
     SFX_IMPL_DOCKINGWINDOW( TaskPaneWrapper, SID_TASKPANE );
 
     //------------------------------------------------------------------------------------------------------------------
-    TaskPaneWrapper::TaskPaneWrapper( Window* i_pParent, sal_uInt16 i_nId, SfxBindings* i_pBindings, SfxChildWinInfo* i_pInfo )
+    TaskPaneWrapper::TaskPaneWrapper( Window* i_pParent, USHORT i_nId, SfxBindings* i_pBindings, SfxChildWinInfo* i_pInfo )
         :SfxChildWindow( i_pParent, i_nId )
     {
         pWindow = new TaskPaneDockingWindow( i_pBindings, *this, i_pParent,
@@ -255,7 +256,7 @@ namespace sfx2
         pWindow->SetOutputSizePixel( Size( 300, 450 ) );
 
         dynamic_cast< SfxDockingWindow* >( pWindow )->Initialize( i_pInfo );
-        SetHideNotDelete( sal_True );
+        SetHideNotDelete( TRUE );
 
         pWindow->Show();
     }
@@ -310,7 +311,7 @@ namespace sfx2
 
         virtual ::rtl::OUString GetDisplayName() const;
         virtual Image GetImage() const;
-        virtual rtl::OString GetHelpID() const;
+        virtual SmartId GetHelpID() const;
         virtual void Activate( Window& i_rParentWindow );
         virtual void Deactivate();
         virtual void SetSizePixel( const Size& i_rPanelWindowSize );
@@ -409,19 +410,10 @@ namespace sfx2
         return m_aPanelImage;
     }
 
-    static rtl::OString lcl_getHelpId( const ::rtl::OUString& _rHelpURL )
-    {
-        INetURLObject aHID( _rHelpURL );
-        if ( aHID.GetProtocol() == INET_PROT_HID )
-            return rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
-        else
-            return rtl::OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
-    }
-
     //------------------------------------------------------------------------------------------------------------------
-    rtl::OString CustomToolPanel::GetHelpID() const
+    SmartId CustomToolPanel::GetHelpID() const
     {
-        return lcl_getHelpId( m_aPanelHelpURL );
+        return SmartId( m_aPanelHelpURL );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -616,7 +608,7 @@ namespace sfx2
                 // assuming that nobody will insert hundreths of panels, a simple O(n) search should suffice here ...
                 while ( nPanelPos > 0 )
                 {
-                    const short nCompare = i_pPanelCompare->compareToolPanelsURLs(
+                    const short nCompare = i_pPanelCompare->compareToolPanelsURLs( 
                         *resource,
                         GetPanelResourceURL( --nPanelPos )
                     );
@@ -923,7 +915,7 @@ namespace sfx2
 
         ModuleTaskPane&         m_rTaskPane;
         TitledDockingWindow&    m_rDockingWindow;
-        sal_uInt16                  m_nViewMenuID;
+        USHORT                  m_nViewMenuID;
         PanelSelectorLayout     m_eCurrentLayout;
         PanelDescriptors        m_aPanelRepository;
         bool                    m_bTogglingPanelVisibility;
@@ -1020,7 +1012,7 @@ namespace sfx2
         if ( i_pToolBox->GetCurItemId() == m_nViewMenuID )
         {
             i_pToolBox->EndSelection();
-
+            
             ::std::auto_ptr< PopupMenu > pMenu = impl_createPopupMenu();
             pMenu->SetSelectHdl( LINK( this, TaskPaneController_Impl, OnMenuItemSelected ) );
 
@@ -1042,11 +1034,11 @@ namespace sfx2
         switch ( i_pMenu->GetCurItemId() )
         {
             case MID_UNLOCK_TASK_PANEL:
-                m_rDockingWindow.SetFloatingMode( sal_True );
+                m_rDockingWindow.SetFloatingMode( TRUE );
                 break;
 
             case MID_LOCK_TASK_PANEL:
-                m_rDockingWindow.SetFloatingMode( sal_False );
+                m_rDockingWindow.SetFloatingMode( FALSE );
                 break;
 
             case MID_LAYOUT_DRAWERS:
@@ -1128,7 +1120,7 @@ namespace sfx2
     // ---------------------------------------------------------------------------------------------------------------------
     void TaskPaneController_Impl::Dying()
     {
-        OSL_FAIL( "TaskPaneController_Impl::Dying: unexpected call!" );
+        OSL_ENSURE( false, "TaskPaneController_Impl::Dying: unexpected call!" );
         // We are expected to live longer than the ToolPanelDeck we work with. Since we remove ourself, in our dtor,
         // as listener from the panel deck, this method here should never be called.
     }
@@ -1233,7 +1225,7 @@ namespace sfx2
 
         // Add one entry for every tool panel element to individually make
         // them visible or hide them.
-        sal_uInt16 nIndex = MID_FIRST_PANEL;
+        USHORT nIndex = MID_FIRST_PANEL;
         for ( size_t i=0; i<m_aPanelRepository.size(); ++i, ++nIndex )
         {
             const PanelDescriptor& rPanelDesc( m_aPanelRepository[i] );
@@ -1263,8 +1255,8 @@ namespace sfx2
                 String( SfxResId( STR_SFX_UNDOCK ) )
             );
 
-        pMenu->RemoveDisabledEntries( sal_False, sal_False );
-
+        pMenu->RemoveDisabledEntries( FALSE, FALSE );
+                
         return pMenu;
     }
 

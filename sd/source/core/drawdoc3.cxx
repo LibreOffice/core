@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,6 @@
 #include <sot/formats.hxx>
 
 #include <set>
-#include <boost/bind.hpp>
 
 #include "glob.hrc"
 #include "drawdoc.hxx"
@@ -81,36 +80,52 @@
 
 using namespace ::com::sun::star;
 
-#define POOL_BUFFER_SIZE        (sal_uInt16)32768
-#define BASIC_BUFFER_SIZE       (sal_uInt16)8192
-#define DOCUMENT_BUFFER_SIZE    (sal_uInt16)32768
+#define POOL_BUFFER_SIZE		(USHORT)32768
+#define BASIC_BUFFER_SIZE		(USHORT)8192
+#define DOCUMENT_BUFFER_SIZE	(USHORT)32768
 
 /*************************************************************************
 |*
 |* Oeffnet ein Bookmark-Dokument
 |*
 \************************************************************************/
+/*
+SdStorageListener : public BaseImplHelper1 < lang::XEventListener >
+{
+    uno::Reference < embed::XStorage >& xStor;
+public:
+            SdStorageListener ( uno::Reference < embed::XStorage >& rStor )
+                : xStor( rStor )
+            {}
+
+    void disposing ( const lang::EventObject& aEvent ) throw ( uno::RuntimeException );
+};
+
+void SdStorageListener::disposing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException )
+{
+    xStor = NULL;
+}*/
 
 SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 {
-    sal_Bool bOK = sal_True;
+    BOOL bOK = TRUE;
     SdDrawDocument* pBookmarkDoc = NULL;
     String aBookmarkName = rMedium.GetName();
     const SfxFilter* pFilter = rMedium.GetFilter();
     if ( !pFilter )
     {
-        rMedium.UseInteractionHandler( sal_True );
+        rMedium.UseInteractionHandler( TRUE );
         SFX_APP()->GetFilterMatcher().GuessFilter( rMedium, &pFilter );
     }
 
     if ( !pFilter )
     {
-        bOK = sal_False;
+        bOK = FALSE;
     }
     else if ( maBookmarkFile != aBookmarkName && aBookmarkName.Len() )
     {
-        sal_Bool bCreateGraphicShell = pFilter->GetServiceName().EqualsAscii( "com.sun.star.drawing.DrawingDocument" );
-        sal_Bool bCreateImpressShell = pFilter->GetServiceName().EqualsAscii( "com.sun.star.presentation.PresentationDocument" );
+        BOOL bCreateGraphicShell = pFilter->GetServiceName().EqualsAscii( "com.sun.star.drawing.DrawingDocument" );
+        BOOL bCreateImpressShell = pFilter->GetServiceName().EqualsAscii( "com.sun.star.presentation.PresentationDocument" );
         if ( bCreateGraphicShell || bCreateImpressShell )
         {
             CloseBookmarkDoc();
@@ -121,10 +136,10 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
             // direkt laden
             if ( bCreateGraphicShell )
                 // Draw
-                mxBookmarkDocShRef = new ::sd::GraphicDocShell(SFX_CREATE_MODE_STANDARD, sal_True);
+                mxBookmarkDocShRef = new ::sd::GraphicDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
             else
                 // Impress
-                mxBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, sal_True);
+                mxBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
 
             bOK = mxBookmarkDocShRef->DoLoad(&rMedium);
             if( bOK )
@@ -165,7 +180,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const String& rBookmarkFile)
 
     if (maBookmarkFile != rBookmarkFile && rBookmarkFile.Len())
     {
-        SfxMedium* pMedium = new SfxMedium( rBookmarkFile, STREAM_READ, sal_False );
+        SfxMedium* pMedium = new SfxMedium( rBookmarkFile, STREAM_READ, FALSE );
         pBookmarkDoc = OpenBookmarkDoc(*pMedium);
     }
     else if (mxBookmarkDocShRef.Is())
@@ -182,26 +197,26 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const String& rBookmarkFile)
 |*
 \************************************************************************/
 
-sal_Bool SdDrawDocument::InsertBookmark(
-    List* pBookmarkList,            // Liste der Namen der einzufuegenden Bookmarks
+BOOL SdDrawDocument::InsertBookmark(
+    List* pBookmarkList,			// Liste der Namen der einzufuegenden Bookmarks
     List* pExchangeList,            // Liste der zu verwendenen Namen
-    sal_Bool bLink,                     // Bookmarks sollen als Verknuepfung eingefuegt werden
-    sal_Bool bReplace,                  // Aktuellen Seiten (Standard&Notiz) werden ersetzt
-    sal_uInt16 nInsertPos,              // Einfuegeposition fuer Seiten
-    sal_Bool bNoDialogs,                // Keine Dialoge anzeigen
+    BOOL bLink, 					// Bookmarks sollen als Verknuepfung eingefuegt werden
+    BOOL bReplace,					// Aktuellen Seiten (Standard&Notiz) werden ersetzt
+    USHORT nInsertPos,				// Einfuegeposition fuer Seiten
+    BOOL bNoDialogs,				// Keine Dialoge anzeigen
     ::sd::DrawDocShell* pBookmarkDocSh, // Wenn gesetzt, so ist dieses das Source-Dokument
-    sal_Bool bCopy,                     // Seiten werden kopiert
+    BOOL bCopy,                     // Seiten werden kopiert
     Point* pObjPos)                 // Einfuegeposition fuer Objekte
 {
-    sal_Bool bOK = sal_True;
-    sal_Bool bInsertPages = sal_False;
+    BOOL bOK = TRUE;
+    BOOL bInsertPages = FALSE;
 
     if (!pBookmarkList)
     {
         /**********************************************************************
         * Alle Seiten werden eingefuegt
         **********************************************************************/
-        bInsertPages = sal_True;
+        bInsertPages = TRUE;
     }
     else
     {
@@ -219,20 +234,20 @@ sal_Bool SdDrawDocument::InsertBookmark(
             aBookmarkName = maBookmarkFile;
         }
         else
-            bOK = sal_False;
+            bOK = FALSE;
 
-        for (sal_uInt16 nPos = 0; bOK && ( nPos < pBookmarkList->Count() ) && !bInsertPages; nPos++)
+        for (USHORT nPos = 0; bOK && ( nPos < pBookmarkList->Count() ) && !bInsertPages; nPos++)
         {
             /******************************************************************
             * Gibt es in der Bookmark-Liste einen Seitennamen?
             ******************************************************************/
             String  aBMPgName (*(String*) pBookmarkList->GetObject(nPos));
-            sal_Bool    bIsMasterPage;
+            BOOL    bIsMasterPage;
 
             if( pBookmarkDoc->GetPageByName( aBMPgName, bIsMasterPage ) != SDRPAGE_NOTFOUND )
             {
                 // Seite gefunden
-                bInsertPages = sal_True;
+                bInsertPages = TRUE;
             }
         }
     }
@@ -241,7 +256,7 @@ sal_Bool SdDrawDocument::InsertBookmark(
     {
         // Zuerst werden alle Seiten-Bookmarks eingefuegt
         bOK = InsertBookmarkAsPage(pBookmarkList, pExchangeList, bLink, bReplace,
-                                   nInsertPos, bNoDialogs, pBookmarkDocSh, bCopy, sal_True, sal_False);
+                                   nInsertPos, bNoDialogs, pBookmarkDocSh, bCopy, TRUE, FALSE);
     }
 
     if ( bOK && pBookmarkList )
@@ -274,11 +289,11 @@ SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase::~InsertBookmarkAsPage_Page
 {
 }
 
-void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* pBookmarkList, sal_uInt16 nBMSdPageCount,
+void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* pBookmarkList, USHORT nBMSdPageCount,
                                            SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase& rPageIterator )
 {
     //
-    // Refactored copy'n'pasted layout name collection from InsertBookmarkAsPage
+    // #96029# Refactored copy'n'pasted layout name collection from InsertBookmarkAsPage
     //
     int nPos, nEndPos;
 
@@ -304,15 +319,15 @@ void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* p
         if( !pBookmarkList )
         {
             // simply take master page of nPos'th page in source document
-            pBMMPage = (SdPage*)(&(pBookmarkDoc->GetSdPage((sal_uInt16)nPos, PK_STANDARD)->TRG_GetMasterPage()));
+            pBMMPage = (SdPage*)(&(pBookmarkDoc->GetSdPage((USHORT)nPos, PK_STANDARD)->TRG_GetMasterPage()));
         }
         else
         {
             // fetch nPos'th entry from bookmark list, and determine master page
             String  aBMPgName (*(String*) pBookmarkList->GetObject(nPos));
-            sal_Bool    bIsMasterPage;
+            BOOL    bIsMasterPage;
 
-            sal_uInt16 nBMPage = pBookmarkDoc->GetPageByName( aBMPgName, bIsMasterPage );
+            USHORT nBMPage = pBookmarkDoc->GetPageByName( aBMPgName, bIsMasterPage );
 
             if (nBMPage != SDRPAGE_NOTFOUND)
             {
@@ -326,7 +341,7 @@ void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* p
             // enforce that bookmarked page is a standard page and not already a master page
             if (pBMPage && pBMPage->GetPageKind()==PK_STANDARD && !pBMPage->IsMasterPage())
             {
-                const sal_uInt16 nBMSdPage = (nBMPage - 1) / 2;
+                const USHORT nBMSdPage = (nBMPage - 1) / 2;
                 pBMMPage = (SdPage*) (&(pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD)->TRG_GetMasterPage()));
             }
         }
@@ -344,16 +359,16 @@ class InsertBookmarkAsPage_FindDuplicateLayouts : public SdDrawDocument::InsertB
 {
 public:
     InsertBookmarkAsPage_FindDuplicateLayouts( List* pLayoutsToTransfer, SdDrawDocument* pBookmarkDoc,
-                                               List* pBookmarkList, sal_uInt16 nBMSdPageCount ) :
+                                               List* pBookmarkList, USHORT nBMSdPageCount ) :
         mpLayoutsToTransfer(pLayoutsToTransfer), mpBookmarkDoc(pBookmarkDoc),
         mpBookmarkList(pBookmarkList), mnBMSdPageCount(nBMSdPageCount) {}
     virtual ~InsertBookmarkAsPage_FindDuplicateLayouts() {};
     virtual void operator()( SdDrawDocument&, SdPage* );
 private:
-    List*           mpLayoutsToTransfer;
+    List* 			mpLayoutsToTransfer;
     SdDrawDocument* mpBookmarkDoc;
-    List*           mpBookmarkList;
-    sal_uInt16          mnBMSdPageCount;
+    List* 			mpBookmarkList;
+    USHORT 			mnBMSdPageCount;
 };
 
 void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage* pBMMPage )
@@ -366,18 +381,18 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
     pLayout->Erase( pLayout->SearchAscii( SD_LT_SEPARATOR ));
 
     String* pTest = (String*) mpLayoutsToTransfer->First();
-    sal_Bool bFound = sal_False;
+    BOOL bFound = FALSE;
 
-    while (pTest && !bFound)    // found yet?
+    while (pTest && !bFound)	// found yet?
     {
         if (*pLayout == *pTest)
-            bFound = sal_True;
+            bFound = TRUE;
         else
             pTest = (String*)mpLayoutsToTransfer->Next();
     }
 
-    const sal_uInt16 nMPageCount = rDoc.GetMasterPageCount();
-    for (sal_uInt16 nMPage = 0; nMPage < nMPageCount && !bFound; nMPage++)
+    const USHORT nMPageCount = rDoc.GetMasterPageCount();
+    for (USHORT nMPage = 0; nMPage < nMPageCount && !bFound; nMPage++)
     {
         /**************************************************************
          * Gibt es die Layouts schon im Dokument?
@@ -387,7 +402,7 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
         aTest.Erase( aTest.SearchAscii( SD_LT_SEPARATOR ));
 
         if (aTest == *pLayout)
-            bFound = sal_True;
+            bFound = TRUE;
     }
 
     if (!bFound)
@@ -396,37 +411,23 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
         delete pLayout;
 }
 
-/** Just add one page to the container given to the constructor.
-*/
-class InsertBookmarkAsPage_AddBookmarkedPages
-    : public SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase
-{
-public:
-    InsertBookmarkAsPage_AddBookmarkedPages(::std::vector<SdPage*>& rContainer)
-        : mrContainer(rContainer) {}
-    ~InsertBookmarkAsPage_AddBookmarkedPages(void) {}
-    void operator() (SdDrawDocument&, SdPage* pPage) { mrContainer.push_back(pPage); }
-private:
-    ::std::vector<SdPage*>& mrContainer;
-};
 
-
-sal_Bool SdDrawDocument::InsertBookmarkAsPage(
+BOOL SdDrawDocument::InsertBookmarkAsPage(
     List* pBookmarkList,
     List* pExchangeList,            // Liste der zu verwendenen Namen
-    sal_Bool bLink,
-    sal_Bool bReplace,
-    sal_uInt16 nInsertPos,
-    sal_Bool bNoDialogs,
+    BOOL bLink,
+    BOOL bReplace,
+    USHORT nInsertPos,
+    BOOL bNoDialogs,
     ::sd::DrawDocShell* pBookmarkDocSh,
-    sal_Bool bCopy,
-    sal_Bool bMergeMasterPages,
-    sal_Bool bPreservePageNames)
+    BOOL bCopy,
+    BOOL bMergeMasterPages,
+    BOOL bPreservePageNames)
 {
-    sal_Bool bOK = sal_True;
-    sal_Bool bContinue = sal_True;
-    sal_Bool bScaleObjects = sal_False;
-    sal_uInt16 nReplacedStandardPages = 0;
+    BOOL bOK = TRUE;
+    BOOL bContinue = TRUE;
+    BOOL bScaleObjects = FALSE;
+    USHORT nReplacedStandardPages = 0;
 
     SdDrawDocument* pBookmarkDoc = NULL;
     String aBookmarkName;
@@ -447,16 +448,16 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     }
     else
     {
-        return sal_False;
+        return FALSE;
     }
 
-    const sal_uInt16 nSdPageCount = GetSdPageCount(PK_STANDARD);
-    const sal_uInt16 nBMSdPageCount = pBookmarkDoc->GetSdPageCount(PK_STANDARD);
-    const sal_uInt16 nMPageCount = GetMasterPageCount();
+    const USHORT nSdPageCount = GetSdPageCount(PK_STANDARD);
+    const USHORT nBMSdPageCount = pBookmarkDoc->GetSdPageCount(PK_STANDARD);
+    const USHORT nMPageCount = GetMasterPageCount();
 
     if (nSdPageCount==0 || nBMSdPageCount==0 || nMPageCount==0)
     {
-        bContinue = bOK = sal_False;
+        bContinue = bOK = FALSE;
         return(bContinue);
     }
 
@@ -466,18 +467,18 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     // Note that the pointers are used later on as general page pointers.
     SdPage* pRefPage = GetSdPage(0, PK_STANDARD);
     Size  aSize(pRefPage->GetSize());
-    sal_Int32 nLeft  = pRefPage->GetLftBorder();
-    sal_Int32 nRight = pRefPage->GetRgtBorder();
-    sal_Int32 nUpper = pRefPage->GetUppBorder();
-    sal_Int32 nLower = pRefPage->GetLwrBorder();
+    INT32 nLeft  = pRefPage->GetLftBorder();
+    INT32 nRight = pRefPage->GetRgtBorder();
+    INT32 nUpper = pRefPage->GetUppBorder();
+    INT32 nLower = pRefPage->GetLwrBorder();
     Orientation eOrient = pRefPage->GetOrientation();
 
     SdPage* pNPage = GetSdPage(0, PK_NOTES);
     Size aNSize(GetSdPage(0, PK_NOTES)->GetSize());
-    sal_Int32 nNLeft  = pNPage->GetLftBorder();
-    sal_Int32 nNRight = pNPage->GetRgtBorder();
-    sal_Int32 nNUpper = pNPage->GetUppBorder();
-    sal_Int32 nNLower = pNPage->GetLwrBorder();
+    INT32 nNLeft  = pNPage->GetLftBorder();
+    INT32 nNRight = pNPage->GetRgtBorder();
+    INT32 nNUpper = pNPage->GetUppBorder();
+    INT32 nNLower = pNPage->GetLwrBorder();
     Orientation eNOrient = pRefPage->GetOrientation();
 
     // Seitengroesse und -raender an die Werte der letzten
@@ -489,23 +490,23 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         if( !pBookmarkList )
             bScaleObjects = pRefPage->IsScaleObjects();
         else
-            bScaleObjects = sal_True;
+            bScaleObjects = TRUE;
     }
     else
     {
         SdPage* pBMPage = pBookmarkDoc->GetSdPage(0,PK_STANDARD);
 
-        if (pBMPage->GetSize()        != pRefPage->GetSize()         ||
-            pBMPage->GetLftBorder()   != pRefPage->GetLftBorder()    ||
-            pBMPage->GetRgtBorder()   != pRefPage->GetRgtBorder()    ||
-            pBMPage->GetUppBorder()   != pRefPage->GetUppBorder()    ||
+        if (pBMPage->GetSize()		  != pRefPage->GetSize()		 ||
+            pBMPage->GetLftBorder()   != pRefPage->GetLftBorder()	 ||
+            pBMPage->GetRgtBorder()   != pRefPage->GetRgtBorder()	 ||
+            pBMPage->GetUppBorder()   != pRefPage->GetUppBorder()	 ||
             pBMPage->GetLwrBorder()   != pRefPage->GetLwrBorder())
         {
             String aStr(SdResId(STR_SCALE_OBJECTS));
-            sal_uInt16 nBut = QueryBox( NULL, WB_YES_NO_CANCEL, aStr).Execute();
+            USHORT nBut = QueryBox( NULL, WB_YES_NO_CANCEL, aStr).Execute();
 
             bScaleObjects = nBut == RET_YES;
-            bContinue     = nBut != RET_CANCEL;
+            bContinue	  = nBut != RET_CANCEL;
 
             if (!bContinue)
             {
@@ -520,7 +521,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     |* den Seiten transferieren, sonst verlieren die Textobjekte
     |* beim Transfer den Bezug zur Vorlage
     \*************************************************************************/
-    ::svl::IUndoManager* pUndoMgr = NULL;
+    SfxUndoManager* pUndoMgr = NULL;
     if( mpDocSh )
     {
         pUndoMgr = mpDocSh->GetUndoManager();
@@ -530,7 +531,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     List* pLayoutsToTransfer = new List;
 
     //
-    // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
+    // #96029# Refactored copy'n'pasted layout name collection into IterateBookmarkPages
     //
     InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( pLayoutsToTransfer, pBookmarkDoc,
                                                               pBookmarkList, nBMSdPageCount );
@@ -547,7 +548,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     // Wenn Vorlagen kopiert werden muessen, dann muessen auch die
     // MasterPages kopiert werden!
     if( pLayout )
-        bMergeMasterPages = sal_True;
+        bMergeMasterPages = TRUE;
 
     while (pLayout)
     {
@@ -559,7 +560,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         {
             if( pUndoMgr )
             {
-                SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, sal_True);
+                SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, TRUE);
                 pUndoMgr->AddUndoAction(pMovStyles);
             }
         }
@@ -588,17 +589,17 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
             nInsertPos = GetPageCount();
         }
 
-        sal_uInt16 nActualInsertPos = nInsertPos;
+        USHORT nActualInsertPos = nInsertPos;
 
         List aNameList;
-        std::set<sal_uInt16> aRenameSet;
-        sal_uInt16 nBMSdPage;
+        std::set<USHORT> aRenameSet;
+        USHORT nBMSdPage;
 
         for (nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
         {
             SdPage* pBMPage = pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD);
             String  pName( pBMPage->GetName() );
-            sal_Bool    bIsMasterPage;
+            BOOL    bIsMasterPage;
 
             if (bLink)
             {
@@ -606,32 +607,32 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
                 aNameList.Insert(new String(pName), nBMSdPage);
             }
 
-            // Have to check for duplicate names here, too
-            // don't change name if source and dest model are the same!
+            // #95677# Have to check for duplicate names here, too
+            // #67905# don't change name if source and dest model are the same!
             if( pBookmarkDoc != this &&
                 GetPageByName(pName, bIsMasterPage ) != SDRPAGE_NOTFOUND )
             {
-                // delay renaming *after* pages are copied (might destroy source otherwise)
+                // #95991# delay renaming *after* pages are copied (might destroy source otherwise)
                 aRenameSet.insert(nBMSdPage);
             }
         }
 
         Merge(*pBookmarkDoc,
-              1,                 // Nicht die Handzettelseite
-              0xFFFF,            // Aber alle anderen
+              1,				 // Nicht die Handzettelseite
+              0xFFFF,			 // Aber alle anderen
               nActualInsertPos,  // An Position einfuegen
               bMergeMasterPages, // MasterPages mitnehmen
-              sal_False,             // Aber nur die benoetigten MasterPages
-              sal_True,              // Undo-Aktion erzeugen
-              bCopy);            // Seiten kopieren (oder mergen)
+              FALSE,			 // Aber nur die benoetigten MasterPages
+              TRUE, 			 // Undo-Aktion erzeugen
+              bCopy);			 // Seiten kopieren (oder mergen)
 
         for (nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
         {
-            SdPage* pPage       = (SdPage*) GetPage(nActualInsertPos);
+            SdPage* pPage 		= (SdPage*) GetPage(nActualInsertPos);
             SdPage* pNotesPage  = (SdPage*) GetPage(nActualInsertPos+1);
-            String* pName       = (String*) aNameList.GetObject(nBMSdPage);
+            String* pName 		= (String*) aNameList.GetObject(nBMSdPage);
 
-            // delay renaming *after* pages are copied (might destroy source otherwise)
+            // #95991# delay renaming *after* pages are copied (might destroy source otherwise)
             if( aRenameSet.find(nBMSdPage) != aRenameSet.end() )
             {
                 // Seitenname schon vorhanden -> Defaultname
@@ -662,30 +663,29 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         if (nInsertPos >= GetPageCount())
         {
             // Seiten werden hinten angefuegt
-            bReplace = sal_False;
+            bReplace = FALSE;
             nInsertPos = GetPageCount();
         }
 
-        sal_uInt16 nActualInsertPos = nInsertPos;
+        USHORT nActualInsertPos = nInsertPos;
 
-        // Collect the bookmarked pages.
-        ::std::vector<SdPage*> aBookmarkedPages (pBookmarkList->Count(), NULL);
-        for (sal_uInt16 nPos = 0; nPos < pBookmarkList->Count(); nPos++)
+        for (USHORT nPos = 0; nPos < pBookmarkList->Count(); nPos++)
         {
+            /**************************************************************
+            * Namen der Bookmark-Seiten aus Liste holen
+            **************************************************************/
             String  aPgName(*(String*) pBookmarkList->GetObject(nPos));
-            sal_Bool    bIsMasterPage;
-            sal_uInt16  nBMPage = pBookmarkDoc->GetPageByName( aPgName, bIsMasterPage );
+            BOOL    bIsMasterPage;
+            USHORT  nBMPage = pBookmarkDoc->GetPageByName( aPgName, bIsMasterPage );
 
             if (nBMPage != SDRPAGE_NOTFOUND)
             {
-                aBookmarkedPages[nPos] =  dynamic_cast<SdPage*>(pBookmarkDoc->GetPage(nBMPage));
+                pBMPage = (SdPage*) pBookmarkDoc->GetPage(nBMPage);
             }
-        }
-
-        for (sal_uInt16 nPos = 0; nPos < pBookmarkList->Count(); nPos++)
-        {
-            pBMPage = aBookmarkedPages[nPos];
-            sal_uInt16 nBMPage = pBMPage!=NULL ? pBMPage->GetPageNum() : SDRPAGE_NOTFOUND;
+            else
+            {
+                pBMPage = NULL;
+            }
 
             if (pBMPage && pBMPage->GetPageKind()==PK_STANDARD && !pBMPage->IsMasterPage())
             {
@@ -694,12 +694,10 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
                 **************************************************************/
                 sal_Bool bMustRename = sal_False;
 
-                // delay renaming *after* pages are copied (might destroy source otherwise)
-                // don't change name if source and dest model are the same!
-                // avoid renaming if replacing the same page
-                String  aPgName(*(String*) pBookmarkList->GetObject(nPos));
-                sal_Bool    bIsMasterPage;
-                sal_uInt16 nPageSameName = GetPageByName(aPgName, bIsMasterPage);
+                // #95991# delay renaming *after* pages are copied (might destroy source otherwise)
+                // #67905# don't change name if source and dest model are the same!
+                // #96029# avoid renaming if replacing the same page
+                USHORT nPageSameName = GetPageByName(aPgName, bIsMasterPage);
                 if( pBookmarkDoc != this &&
                     nPageSameName != SDRPAGE_NOTFOUND &&
                     ( !bReplace ||
@@ -708,20 +706,20 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
                     bMustRename = sal_True;
                 }
 
-                SdPage* pBookmarkPage = pBMPage;
+                SdPage* pBookmarkPage = dynamic_cast< SdPage* >( pBookmarkDoc->GetPage(nBMPage) );
                 if (bReplace )
                 {
                     ReplacePageInCustomShows( dynamic_cast< SdPage* >( GetPage( nActualInsertPos ) ), pBookmarkPage );
                 }
 
                 Merge(*pBookmarkDoc,
-                      nBMPage,           // Von Seite (Standard)
-                      nBMPage+1,         // Bis Seite (Notizen)
+                      nBMPage,			 // Von Seite (Standard)
+                      nBMPage+1,		 // Bis Seite (Notizen)
                       nActualInsertPos,  // An Position einfuegen
                       bMergeMasterPages, // MasterPages mitnehmen
-                      sal_False,             // Aber nur die benoetigten MasterPages
-                      sal_True,              // Undo-Aktion erzeugen
-                      bCopy);            // Seiten kopieren (oder mergen)
+                      FALSE,			 // Aber nur die benoetigten MasterPages
+                      TRUE, 			 // Undo-Aktion erzeugen
+                      bCopy);			 // Seiten kopieren (oder mergen)
 
                 if( bReplace )
                 {
@@ -765,7 +763,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
                     {
                         if( bPreservePageNames )
                         {
-                            // Take old slide names for inserted pages
+                            // #96029# Take old slide names for inserted pages
                             SdPage* pPage = (SdPage*) GetPage(nActualInsertPos);
                             pPage->SetName( pStandardPage->GetRealName() );
                         }
@@ -790,7 +788,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
                     {
                         if( bPreservePageNames )
                         {
-                            // Take old slide names for inserted pages
+                            // #96029# Take old slide names for inserted pages
                             SdPage* pNewNotesPage = (SdPage*) GetPage(nActualInsertPos+1);
                             if( pNewNotesPage )
                                 pNewNotesPage->SetName( pStandardPage->GetRealName() );
@@ -819,22 +817,22 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     |* DrawingEngine gleiche Praesentationslayouts nicht erkennen kann.
     |* Ueberzaehlige MasterPages entfernen.
     \*************************************************************************/
-    sal_uInt16 nNewMPageCount = GetMasterPageCount();
+    USHORT nNewMPageCount = GetMasterPageCount();
 
     // rueckwaerts, damit Nummern nicht durcheinander geraten
-    for (sal_uInt16 nPage = nNewMPageCount - 1; nPage >= nMPageCount; nPage--)
+    for (USHORT nPage = nNewMPageCount - 1; nPage >= nMPageCount; nPage--)
     {
         pRefPage = (SdPage*) GetMasterPage(nPage);
         String aMPLayout(pRefPage->GetLayoutName());
         PageKind eKind = pRefPage->GetPageKind();
 
         // gibt's den schon?
-        for (sal_uInt16 nTest = 0; nTest < nMPageCount; nTest++)
+        for (USHORT nTest = 0; nTest < nMPageCount; nTest++)
         {
             SdPage* pTest = (SdPage*) GetMasterPage(nTest);
             String aTest(pTest->GetLayoutName());
 
-            // nInsertPos > 2 is always true when inserting into non-empty models
+            // #96029# nInsertPos > 2 is always true when inserting into non-empty models
             if ( nInsertPos > 2 &&
                  aTest == aMPLayout &&
                  eKind == pTest->GetPageKind() )
@@ -852,13 +850,13 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         }
     }
 
-    // nInsertPos > 2 is always true when inserting into non-empty models
+    // #96029# nInsertPos > 2 is always true when inserting into non-empty models
     if (nInsertPos > 0)
     {
-        sal_uInt16 nSdPageStart = (nInsertPos - 1) / 2;
-        sal_uInt16 nSdPageEnd = GetSdPageCount(PK_STANDARD) - nSdPageCount +
+        USHORT nSdPageStart = (nInsertPos - 1) / 2;
+        USHORT nSdPageEnd = GetSdPageCount(PK_STANDARD) - nSdPageCount +
                             nSdPageStart - 1;
-        const bool bRemoveEmptyPresObj = pBookmarkDoc &&
+        const bool bRemoveEmptyPresObj = pBookmarkDoc && 
                 (pBookmarkDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) &&
                 (GetDocumentType() == DOCUMENT_TYPE_DRAW);
 
@@ -867,7 +865,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
             nSdPageEnd = nSdPageStart + nReplacedStandardPages - 1;
         }
 
-        for (sal_uInt16 nSdPage = nSdPageStart; nSdPage <= nSdPageEnd; nSdPage++)
+        for (USHORT nSdPage = nSdPageStart; nSdPage <= nSdPageEnd; nSdPage++)
         {
             pRefPage = GetSdPage(nSdPage, PK_STANDARD);
 
@@ -901,7 +899,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
             if (bScaleObjects)
             {
                 Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
-                pRefPage->ScaleObjects(aSize, aBorderRect, sal_True);
+                pRefPage->ScaleObjects(aSize, aBorderRect, TRUE);
             }
             pRefPage->SetSize(aSize);
             pRefPage->SetBorder(nLeft, nUpper, nRight, nLower);
@@ -920,7 +918,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
             if (bScaleObjects)
             {
                 Rectangle aBorderRect(nNLeft, nNUpper, nNRight, nNLower);
-                pRefPage->ScaleObjects(aNSize, aBorderRect, sal_True);
+                pRefPage->ScaleObjects(aNSize, aBorderRect, TRUE);
             }
 
             pRefPage->SetSize(aNSize);
@@ -931,7 +929,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
                 pRefPage->RemoveEmptyPresentationObjects();
         }
 
-        for (sal_uInt16 nPage = nMPageCount; nPage < nNewMPageCount; nPage++)
+        for (USHORT nPage = nMPageCount; nPage < nNewMPageCount; nPage++)
         {
             pRefPage = (SdPage*) GetMasterPage(nPage);
             if (pRefPage->GetPageKind() == PK_STANDARD)
@@ -939,7 +937,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
                 if (bScaleObjects)
                 {
                     Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
-                    pRefPage->ScaleObjects(aSize, aBorderRect, sal_True);
+                    pRefPage->ScaleObjects(aSize, aBorderRect, TRUE);
                 }
                 pRefPage->SetSize(aSize);
                 pRefPage->SetBorder(nLeft, nUpper, nRight, nLower);
@@ -950,7 +948,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
                 if (bScaleObjects)
                 {
                     Rectangle aBorderRect(nNLeft, nNUpper, nNRight, nNLower);
-                    pRefPage->ScaleObjects(aNSize, aBorderRect, sal_True);
+                    pRefPage->ScaleObjects(aNSize, aBorderRect, TRUE);
                 }
                 pRefPage->SetSize(aNSize);
                 pRefPage->SetBorder(nNLeft, nNUpper, nNRight, nNLower);
@@ -962,8 +960,8 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         }
     }
 
-    // Make absolutely sure no double masterpages are there
-    RemoveUnnecessaryMasterPages(NULL, sal_True, sal_True);
+    // #91146# Make absolutely sure no double masterpages are there
+    RemoveUnnecessaryMasterPages(NULL, TRUE, TRUE);
 
     if( bUndo )
         EndUndo();
@@ -978,15 +976,15 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
 |*
 \************************************************************************/
 
-sal_Bool SdDrawDocument::InsertBookmarkAsObject(
+BOOL SdDrawDocument::InsertBookmarkAsObject(
     List* pBookmarkList,
     List* pExchangeList,            // Liste der zu verwendenen Namen
-    sal_Bool /* bLink */,
+    BOOL /* bLink */,
     ::sd::DrawDocShell* pBookmarkDocSh,
     Point* pObjPos)
 {
-    sal_Bool bOK = sal_True;
-    sal_Bool bOLEObjFound = sal_False;
+    BOOL bOK = TRUE;
+    BOOL bOLEObjFound = FALSE;
     ::sd::View* pBMView = NULL;
 
     SdDrawDocument* pBookmarkDoc = NULL;
@@ -1008,7 +1006,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
     }
     else
     {
-        return sal_False;
+        return FALSE;
     }
 
     if (!pBookmarkList)
@@ -1022,7 +1020,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
         SdrPage* pPage;
         SdrPageView* pPV;
 
-        for (sal_uInt16 nPos = 0; nPos < pBookmarkList->Count(); nPos++)
+        for (USHORT nPos = 0; nPos < pBookmarkList->Count(); nPos++)
         {
             /******************************************************************
             * Namen der Bookmarks aus Liste holen
@@ -1038,7 +1036,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
                 if (pObj->GetObjInventor() == SdrInventor &&
                     pObj->GetObjIdentifier() == OBJ_OLE2)
                 {
-                    bOLEObjFound = sal_True;
+                    bOLEObjFound = TRUE;
                 }
 
                 if (!pBMView)
@@ -1061,7 +1059,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
                         pPV = pBMView->ShowSdrPage(pPage);
                 }
 
-                pBMView->MarkObj(pObj, pPV, sal_False);
+                pBMView->MarkObj(pObj, pPV, FALSE);
             }
         }
     }
@@ -1108,7 +1106,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
             aObjPos = Rectangle(Point(), pPage->GetSize()).Center();
         }
 
-        sal_uLong nCountBefore = 0;
+        ULONG nCountBefore = 0;
 
         if (pExchangeList)
         {
@@ -1118,25 +1116,27 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
         }
 
         if (bOLEObjFound)
-            pBMView->GetDoc()->SetAllocDocSh(sal_True);
+            pBMView->GetDoc()->SetAllocDocSh(TRUE);
 
         SdDrawDocument* pTmpDoc = (SdDrawDocument*) pBMView->GetAllMarkedModel();
         bOK = pView->Paste(*pTmpDoc, aObjPos, pPage);
 
         if (bOLEObjFound)
-            pBMView->GetDoc()->SetAllocDocSh(sal_False);
+            pBMView->GetDoc()->SetAllocDocSh(FALSE);
 
         if (!bOLEObjFound)
             delete pTmpDoc;             // Wird ansonsten von der DocShell zerstoert
 
         delete pView;
 
+        List* pList = pBookmarkList;
+
         if (pExchangeList)
         {
             // Anzahl Objekte nach dem Einfuegen bestimmen
-            sal_uLong nCount = pPage->GetObjCount();
+            ULONG nCount = pPage->GetObjCount();
 
-            for (sal_uLong nObj = nCountBefore; nObj < nCount; nObj++)
+            for (ULONG nObj = nCountBefore; nObj < nCount; nObj++)
             {
                 // Zuverwendener Name aus Exchange-Liste holen
                 if (pExchangeList->GetCurObject())
@@ -1151,6 +1151,8 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
 
                 pExchangeList->Next();
             }
+
+            pList = pExchangeList;
         }
     }
 
@@ -1206,7 +1208,7 @@ void SdDrawDocument::DisposeLoadedModels()
 
 bool SdDrawDocument::IsReadOnly() const
 {
-    return sal_False;
+    return FALSE;
 }
 
 
@@ -1217,7 +1219,7 @@ bool SdDrawDocument::IsReadOnly() const
 |*
 \************************************************************************/
 
-void SdDrawDocument::SetAllocDocSh(sal_Bool bAlloc)
+void SdDrawDocument::SetAllocDocSh(BOOL bAlloc)
 {
     mbAllocDocSh = bAlloc;
 
@@ -1235,7 +1237,7 @@ void SdDrawDocument::SetAllocDocSh(sal_Bool bAlloc)
 |*
 \************************************************************************/
 
-List* SdDrawDocument::GetCustomShowList(sal_Bool bCreate)
+List* SdDrawDocument::GetCustomShowList(BOOL bCreate)
 {
     if (!mpCustomShowList && bCreate)
     {
@@ -1257,7 +1259,7 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
     uno::Reference < embed::XStorage > xStor;
     if (mpDocSh)
         xStor = mpDocSh->GetStorage();
-    SvStream*   pRet = NULL;
+    SvStream*	pRet = NULL;
 
     if( xStor.is() )
     {
@@ -1294,7 +1296,7 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
             catch( uno::Exception& e )
             {
                 (void)e;
-                OSL_FAIL(
+                DBG_ERROR(
                     (rtl::OString("sd::SdDrawDocument::GetDocumentStream(), "
                             "exception caught: ") +
                     rtl::OUStringToOString(
@@ -1311,10 +1313,10 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
     if( pRet )
     {
         // try to get some information from stream
-        const sal_uLong nStartPos = pRet->Tell();
-        const sal_uLong nEndPos = pRet->Seek( STREAM_SEEK_TO_END );
-        const sal_uLong nStmLen = nEndPos - nStartPos;
-        sal_uChar   aTestByte;
+        const ULONG nStartPos = pRet->Tell();
+        const ULONG nEndPos = pRet->Seek( STREAM_SEEK_TO_END );
+        const ULONG nStmLen = nEndPos - nStartPos;
+        sal_uChar	aTestByte;
 
         // try to read one byte
         if( nStmLen )
@@ -1334,13 +1336,13 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
 |*
 \************************************************************************/
 
-void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, sal_Bool bOnlyDuplicatePages, sal_Bool bUndo)
+void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, BOOL bOnlyDuplicatePages, BOOL bUndo)
 {
     ::sd::View* pView = NULL;
-    ::svl::IUndoManager* pUndoMgr = NULL;
+    SfxUndoManager* pUndoMgr = NULL;
 
     if( bUndo && !IsUndoEnabled() )
-        bUndo = sal_False;
+        bUndo = FALSE;
 
     if (mpDocSh)
     {
@@ -1353,7 +1355,7 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, sal_Bool 
     /***********************************************************
     * Alle MasterPages pruefen
     ***********************************************************/
-    sal_uInt16 nSdMasterPageCount = GetMasterSdPageCount( PK_STANDARD );
+    USHORT nSdMasterPageCount = GetMasterSdPageCount( PK_STANDARD );
     for (sal_Int32 nMPage = nSdMasterPageCount - 1; nMPage >= 0; nMPage--)
     {
         SdPage* pMaster = pMasterPage;
@@ -1361,12 +1363,12 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, sal_Bool 
 
         if (!pMaster)
         {
-            pMaster = (SdPage*) GetMasterSdPage( (sal_uInt16) nMPage, PK_STANDARD );
-            pNotesMaster = (SdPage*) GetMasterSdPage( (sal_uInt16) nMPage, PK_NOTES );
+            pMaster = (SdPage*) GetMasterSdPage( (USHORT) nMPage, PK_STANDARD );
+            pNotesMaster = (SdPage*) GetMasterSdPage( (USHORT) nMPage, PK_NOTES );
         }
         else
         {
-            for ( sal_uInt16 nMPg = 0; nMPg < GetMasterPageCount(); nMPg++ )
+            for ( USHORT nMPg = 0; nMPg < GetMasterPageCount(); nMPg++ )
             {
                 if ( pMaster == GetMasterPage( nMPg ) )
                 {
@@ -1383,21 +1385,21 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, sal_Bool 
              pNotesMaster )
         {
             // Do not delete master pages that have their precious flag set.
-            sal_Bool bDeleteMaster = !pMaster->IsPrecious();
+            BOOL bDeleteMaster = !pMaster->IsPrecious();
             String aLayoutName = pMaster->GetLayoutName();
 
             if(bOnlyDuplicatePages )
             {
                 // remove only duplicate pages
-                bDeleteMaster = sal_False;
-                for (sal_uInt16 i = 0; i < GetMasterSdPageCount( PK_STANDARD ); i++)
+                bDeleteMaster = FALSE;
+                for (USHORT i = 0; i < GetMasterSdPageCount( PK_STANDARD ); i++)
                 {
                     SdPage* pMPg = (SdPage*) GetMasterSdPage( i, PK_STANDARD );
                     if( pMPg != pMaster &&
                         pMPg->GetLayoutName() == aLayoutName )
                     {
                         // duplicate page found -> remove it
-                        bDeleteMaster = sal_True;
+                        bDeleteMaster = TRUE;
                     }
                 }
             }
@@ -1439,18 +1441,18 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, sal_Bool 
                     delete pMaster;
 
                 if( bUndo )
-                    EndUndo();  // schon hier, damit sich Joes Actions ZWISCHEN unsere eigenen schieben
+                    EndUndo();	// schon hier, damit sich Joes Actions ZWISCHEN unsere eigenen schieben
 
                 // alte Layoutvorlagen loeschen, wenn sie nicht mehr benoetigt werden
-                sal_Bool bDeleteOldStyleSheets = sal_True;
-                for ( sal_uInt16 nMPg = 0;
+                BOOL bDeleteOldStyleSheets = TRUE;
+                for ( USHORT nMPg = 0;
                           nMPg < GetMasterPageCount() && bDeleteOldStyleSheets;
                        nMPg++ )
                 {
                     SdPage* pMPg = (SdPage*) GetMasterPage(nMPg);
                     if (pMPg->GetLayoutName() == aLayoutName)
                     {
-                        bDeleteOldStyleSheets = sal_False;
+                        bDeleteOldStyleSheets = FALSE;
                     }
                 }
 
@@ -1468,14 +1470,14 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, sal_Bool 
                             pUndoMgr->AddUndoAction(pMovStyles);
                     }
 
-                    for( SdStyleSheetVector::iterator iter = aRemove.begin(); iter != aRemove.end(); ++iter )
+                    for( SdStyleSheetVector::iterator iter = aRemove.begin(); iter != aRemove.end(); iter++ )
                         static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->Remove((*iter).get());
                 }
             }
         }
 
         if (pMasterPage)
-            break;                      // Nur diese eine MasterPage!
+            break;			            // Nur diese eine MasterPage!
     }
 }
 
@@ -1497,16 +1499,16 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, sal_Bool 
 |* Ist rLayoutName leer, so wird die erste MasterPage genommen
 \************************************************************************/
 
-void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
+void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                                    const String& rLayoutName,
                                    SdDrawDocument* pSourceDoc,
-                                   sal_Bool bMaster,
-                                   sal_Bool bCheckMasters)
+                                   BOOL bMaster,
+                                   BOOL bCheckMasters)
 {
     if( mpDocSh )
-        mpDocSh->SetWaitCursor( sal_True );
+        mpDocSh->SetWaitCursor( TRUE );
 
-    ::svl::IUndoManager* pUndoMgr = mpDocSh->GetUndoManager();
+    SfxUndoManager* pUndoMgr = mpDocSh->GetUndoManager();
 
     const bool bUndo = IsUndoEnabled();
 
@@ -1516,12 +1518,12 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
     }
 
     SdPage* pSelectedPage   = GetSdPage(nSdPageNum, PK_STANDARD);
-    SdPage* pNotes          = (SdPage*) GetPage(pSelectedPage->GetPageNum()+1);
-    SdPage& rOldMaster      = (SdPage&)pSelectedPage->TRG_GetMasterPage();
+    SdPage* pNotes			= (SdPage*) GetPage(pSelectedPage->GetPageNum()+1);
+    SdPage& rOldMaster		= (SdPage&)pSelectedPage->TRG_GetMasterPage();
     SdPage& rOldNotesMaster = (SdPage&)pNotes->TRG_GetMasterPage();
-    SdPage* pMaster         = NULL;
-    SdPage* pNotesMaster    = NULL;
-    SdPage* pPage           = NULL;
+    SdPage* pMaster 		= NULL;
+    SdPage* pNotesMaster	= NULL;
+    SdPage* pPage			= NULL;
     String aOldPageLayoutName(pSelectedPage->GetLayoutName());
     String aOldLayoutName(aOldPageLayoutName);
     aOldLayoutName.Erase(aOldLayoutName.SearchAscii( SD_LT_SEPARATOR ));
@@ -1531,7 +1533,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
     if (pSourceDoc)
     {
         List* pReplList = NULL;
-        sal_Bool bLayoutReloaded = sal_False;   // Wurde ex. Layout wieder geladen?
+        BOOL bLayoutReloaded = FALSE; 	// Wurde ex. Layout wieder geladen?
 
         /*********************************************************************
         |* LayoutName, Page and Notespage
@@ -1549,7 +1551,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             aSearchFor.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
             aSearchFor.Append( String(SdResId(STR_LAYOUT_OUTLINE))) ;
 
-            for (sal_uInt16 nMP = 0; nMP < pSourceDoc->GetMasterPageCount(); nMP++)
+            for (USHORT nMP = 0; nMP < pSourceDoc->GetMasterPageCount(); nMP++)
             {
                 SdPage* pMP = (SdPage*) pSourceDoc->GetMasterPage(nMP);
 
@@ -1582,22 +1584,22 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             pUndoMgr->LeaveListAction();
 
             if( mpDocSh )
-                mpDocSh->SetWaitCursor( sal_False );
+                mpDocSh->SetWaitCursor( FALSE );
 
-            OSL_FAIL( "SdDrawDocument::SetMasterPage() failed!" );
+            DBG_ERROR( "SdDrawDocument::SetMasterPage() failed!" );
 
             return;
         }
 
         if (pSourceDoc != this)
         {
-            const sal_uInt16 nMasterPageCount = GetMasterPageCount();
-            for ( sal_uInt16 nMPage = 0; nMPage < nMasterPageCount; nMPage++ )
+            const USHORT nMasterPageCount = GetMasterPageCount();
+            for ( USHORT nMPage = 0; nMPage < nMasterPageCount; nMPage++ )
             {
                 SdPage* pCheckMaster = (SdPage*)GetMasterPage(nMPage);
                 if( pCheckMaster->GetName() == aNewLayoutName )
                 {
-                    bLayoutReloaded = sal_True;
+                    bLayoutReloaded = TRUE;
                     break;
                 }
             }
@@ -1611,8 +1613,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             pSourceStyleSheetPool->SetSearchMask(SD_STYLE_FAMILY_MASTERPAGE);
             static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->SetSearchMask(SD_STYLE_FAMILY_MASTERPAGE);
 
-            pReplList = new List;           // Liste fuer ersetzte StyleSheets
-            SdStyleSheetVector aCreatedStyles;          // Liste fuer erzeugte StyleSheets
+            pReplList = new List;         	// Liste fuer ersetzte StyleSheets
+            SdStyleSheetVector aCreatedStyles;			// Liste fuer erzeugte StyleSheets
 
             SfxStyleSheetBase* pHisSheet = pSourceStyleSheetPool->First();
 
@@ -1628,7 +1630,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                     {
                         // Es ist eine gleichnamige Vorlage vorhanden ist: Inhalte ersetzen
 #ifdef DBG_UTIL
-                        sal_Bool bTest =
+                        BOOL bTest = 
 #endif
                             pMySheet->SetName(pHisSheet->GetName());
                         DBG_ASSERT(bTest, "StyleSheet-Umbenennung fehlgeschlagen");
@@ -1658,7 +1660,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                     pReplData->aNewName   = pMySheet->GetName();
 
                     String aTemp(pMySheet->GetName());
-                    sal_uInt16 nPos = aTemp.SearchAscii( SD_LT_SEPARATOR );
+                    USHORT nPos = aTemp.SearchAscii( SD_LT_SEPARATOR );
                     aTemp.Erase(0, nPos);
                     aTemp.Insert(aOldLayoutName, 0);
                     pReplData->aName = aTemp;
@@ -1688,7 +1690,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         if (rParentOfOld.Len() > 0 && rParentOfNew.Len() == 0)
                         {
 
-                            for (sal_uLong i = 0; i < pReplList->Count(); i++)
+                            for (ULONG i = 0; i < pReplList->Count(); i++)
                             {
                                 StyleReplaceData* pRD = (StyleReplaceData*)pReplList->
                                                                         GetObject(i);
@@ -1713,7 +1715,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             {
                 // UndoAction fuer das Erzeugen und Einfuegen vorn StyleSheets
                 // auf den UndoManager legen
-                SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction( this, aCreatedStyles, sal_True);
+                SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction( this, aCreatedStyles, TRUE);
                 pUndoMgr->AddUndoAction(pMovStyles);
             }
         }
@@ -1726,8 +1728,9 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         if (pSourceDoc != this)
         {
             // Aus dem Source-Dokument austragen
-            pSourceDoc->RemoveMasterPage(pNotesMaster->GetPageNum());
-            pSourceDoc->RemoveMasterPage(pMaster->GetPageNum());
+            SdrPage* pTest = NULL;
+            pTest = pSourceDoc->RemoveMasterPage(pNotesMaster->GetPageNum());
+            pTest = pSourceDoc->RemoveMasterPage(pMaster->GetPageNum());
         }
 
         /*********************************************************************
@@ -1741,7 +1744,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             // dagegen ersetzt, so muss vor der Position der alten Masterpage
             // eingefuegt werden, damit ab jetzt beim Suchen (z. B. SdPage::
             // SetPresentationLayout) die neue Masterpage zuerst gefunden wird
-            sal_uInt16 nInsertPos = rOldMaster.GetPageNum();
+            USHORT nInsertPos = rOldMaster.GetPageNum();
             BegUndo();
 
             if (!bLayoutReloaded)
@@ -1766,13 +1769,13 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         List* pPageList = new List;
 
 //      #98456, this has to be removed according to CL (KA 07/08/2002)
-//      #109884# but we need them again to restore the styles of the presentation objects while undo
+//		#109884# but we need them again to restore the styles of the presentation objects while undo
         pPageList->Insert(pMaster, LIST_APPEND);
         pPageList->Insert(pNotesMaster, LIST_APPEND);
 
         if (bMaster || bLayoutReloaded)
         {
-            for (sal_uInt16 nPage = 1; nPage < GetPageCount(); nPage++)
+            for (USHORT nPage = 1; nPage < GetPageCount(); nPage++)
             {
                 pPage = (SdPage*) GetPage(nPage);
                 String aTest = pPage->GetLayoutName();
@@ -1801,7 +1804,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         (this,
                         pPage->IsMasterPage() ? aLayoutName : aOldLayoutName,
                         aLayoutName,
-                         eAutoLayout, eAutoLayout, sal_False, pPage);
+                         eAutoLayout, eAutoLayout, FALSE, pPage);
                 pUndoMgr->AddUndoAction(pPLUndoAction);
             }
             pPage->SetPresentationLayout(aLayoutName);
@@ -1822,7 +1825,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                                   rOldMaster.GetUppBorder(),
                                   rOldMaster.GetRgtBorder(),
                                   rOldMaster.GetLwrBorder());
-            pMaster->ScaleObjects(aSize, aBorderRect, sal_True);
+            pMaster->ScaleObjects(aSize, aBorderRect, TRUE);
             pMaster->SetSize(aSize);
             pMaster->SetBorder(rOldMaster.GetLftBorder(),
                                rOldMaster.GetUppBorder(),
@@ -1836,7 +1839,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                                        rOldNotesMaster.GetUppBorder(),
                                        rOldNotesMaster.GetRgtBorder(),
                                        rOldNotesMaster.GetLwrBorder());
-            pNotesMaster->ScaleObjects(aSize, aNotesBorderRect, sal_True);
+            pNotesMaster->ScaleObjects(aSize, aNotesBorderRect, TRUE);
             pNotesMaster->SetSize(aSize);
             pNotesMaster->SetBorder(rOldNotesMaster.GetLftBorder(),
                                     rOldNotesMaster.GetUppBorder(),
@@ -1870,27 +1873,27 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         \********************************************************************/
         String aName        = String(SdResId(STR_LAYOUT_DEFAULT_NAME));
         String aTest;
-        sal_Bool   bNotANewName = sal_True;
-        sal_uInt16 nCount       = 0;
-        sal_uInt16 nMPgCount    = GetMasterPageCount();
+        BOOL   bNotANewName = TRUE;
+        USHORT nCount		= 0;
+        USHORT nMPgCount	= GetMasterPageCount();
 
         for (nCount = 0; bNotANewName; nCount++)
         {
             // Testnamen bilden
-            aTest = aName;              // Standard, Standard1, Standard2, ...
+            aTest = aName;				// Standard, Standard1, Standard2, ...
             if (nCount > 0)
                 aTest += String::CreateFromInt32( nCount );
 
             // gibt's schon eine, die so heisst?
-            bNotANewName = sal_False;
-            for (sal_uInt16 nMPg = 1; nMPg < nMPgCount; nMPg++)
+            bNotANewName = FALSE;
+            for (USHORT nMPg = 1; nMPg < nMPgCount; nMPg++)
             {
                 const SdrPage* pTest = GetMasterPage(nMPg);
                 String aPageLayoutName(pTest->GetLayoutName());
                 aPageLayoutName.Erase( aPageLayoutName.SearchAscii( SD_LT_SEPARATOR ));
 
                 if (aPageLayoutName == aTest)
-                    bNotANewName = sal_True;
+                    bNotANewName = TRUE;
             }
         }
         aName = aTest;
@@ -1907,7 +1910,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
         if( bUndo )
         {
-            SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, sal_True);
+            SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, TRUE);
             pUndoMgr->AddUndoAction(pMovStyles);
         }
 
@@ -1918,7 +1921,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         if( bUndo )
             BegUndo();
 
-        pMaster = (SdPage*) AllocPage(sal_True);
+        pMaster = (SdPage*) AllocPage(TRUE);
         pMaster->SetSize(pSelectedPage->GetSize());
         pMaster->SetBorder(pSelectedPage->GetLftBorder(),
                            pSelectedPage->GetUppBorder(),
@@ -1933,7 +1936,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
         pMaster->SetAutoLayout(AUTOLAYOUT_NONE, true, true);
 
-        pNotesMaster = (SdPage*) AllocPage(sal_True);
+        pNotesMaster = (SdPage*) AllocPage(TRUE);
         pNotesMaster->SetPageKind(PK_NOTES);
         pNotesMaster->SetSize(pNotes->GetSize());
         pNotesMaster->SetBorder(pNotes->GetLftBorder(),
@@ -1958,7 +1961,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         List* pPageList = new List;
         if (bMaster)
         {
-            for (sal_uInt16 nPage = 1; nPage < GetPageCount(); nPage++)
+            for (USHORT nPage = 1; nPage < GetPageCount(); nPage++)
             {
                 pPage = (SdPage*) GetPage(nPage);
                 const String s(pPage->GetLayoutName());
@@ -1989,7 +1992,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                 SdPresentationLayoutUndoAction * pPLUndoAction =
                     new SdPresentationLayoutUndoAction
                             (this, aOldLayoutName, aName,
-                             eOldAutoLayout, eNewAutoLayout, sal_True,
+                             eOldAutoLayout, eNewAutoLayout, TRUE,
                              pPage);
                 pUndoMgr->AddUndoAction(pPLUndoAction);
             }
@@ -2024,14 +2027,14 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         pUndoMgr->LeaveListAction();
 
     if( mpDocSh )
-        mpDocSh->SetWaitCursor( sal_False );
+        mpDocSh->SetWaitCursor( FALSE );
 }
 
 
 
 void SdDrawDocument::Merge(SdrModel& rSourceModel,
-               sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
-               sal_uInt16 nDestPos,
+               USHORT nFirstPageNum, USHORT nLastPageNum,
+               USHORT nDestPos,
                bool bMergeMasterPages, bool bAllMasterPages,
                bool bUndo, bool bTreadSourceAsConst)
 {

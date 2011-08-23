@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,13 +66,13 @@ class DomBuilderContext : public SvXMLImportContext
 public:
 
     /** default constructor: create new DOM tree */
-    DomBuilderContext( SvXMLImport& rImport,
-                       sal_uInt16 nPrefix,
+    DomBuilderContext( SvXMLImport& rImport, 
+                       USHORT nPrefix,
                        const ::rtl::OUString& rLocalName );
 
     /** constructor: create DOM subtree under the given node */
-    DomBuilderContext( SvXMLImport& rImport,
-                       sal_uInt16 nPrefix,
+    DomBuilderContext( SvXMLImport& rImport, 
+                       USHORT nPrefix,
                        const ::rtl::OUString& rLocalName,
                        com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>& );
 
@@ -94,12 +94,12 @@ public:
     // implement SvXMLImportContext methods:
     //
 
-    virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix,
+    virtual SvXMLImportContext* CreateChildContext( 
+        USHORT nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    virtual void StartElement(
+    virtual void StartElement( 
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void EndElement();

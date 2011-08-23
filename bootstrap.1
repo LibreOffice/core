@@ -14,7 +14,9 @@ export EXEEXT
 # Build dmake
 
 if test "$BUILD_DMAKE" != "NO"; then
-    if test ! -x "$SRC_ROOT/dmake/dmake$EXEEXT"; then
+
+    if test ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT"; then
+
         cd "$SRC_ROOT/dmake" || exit
 
         # Special case! The w32/tcsh build needs CC pointing to the MSVC++ compiler
@@ -40,9 +42,14 @@ if test "$BUILD_DMAKE" != "NO"; then
         echo "dmake has been successfully built"
 
         cd ..
+
     else
-	echo "dmake/dmake already built"
+
+        echo ""
+        echo "dmake present in $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
+
     fi
+
 fi
 
 mkdir -p "$SOLARENV/$OUTPATH/bin"
@@ -72,9 +79,6 @@ chmod +x "$SRC_ROOT/solenv/bin/zipdep.pl"
 chmod +x "$SRC_ROOT/solenv/bin/gccinstlib.pl"
 
 # fetch or update external tarballs
-if [ ! -d $SRC_ROOT/src ] ; then
-    mkdir $SRC_ROOT/src
-fi
 if [ "$DO_FETCH_TARBALLS" = "yes" ]; then
-	$SRC_ROOT/download $SRC_ROOT/ooo.lst
+	$SRC_ROOT/fetch_tarballs.sh $SRC_ROOT/ooo.lst
 fi

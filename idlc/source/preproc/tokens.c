@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#if (defined(_WIN32) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #include <io.h>
 #else
 #include <unistd.h>

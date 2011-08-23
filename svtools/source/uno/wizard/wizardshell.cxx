@@ -134,7 +134,7 @@ namespace svt { namespace uno
         default:
             break;
         }
-        OSL_FAIL( "WizardShell::convertCommitReasonToTravelType: unsupported CommitPageReason!" );
+        OSL_ENSURE( false, "WizardShell::convertCommitReasonToTravelType: unsupported CommitPageReason!" );
         return WizardTravelType::FINISH;
     }
 
@@ -189,7 +189,7 @@ namespace svt { namespace uno
     Reference< XWizardPage > WizardShell::getCurrentWizardPage() const
     {
         const WizardState eState = getCurrentState();
-
+        
         PWizardPageController pController( impl_getController( GetPage( eState ) ) );
         ENSURE_OR_RETURN( pController, "WizardShell::getCurrentWizardPage: invalid page/controller!", NULL );
 

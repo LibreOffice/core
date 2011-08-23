@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include "EnhancedCustomShapeHandle.hxx"
-#include "svx/EnhancedCustomShape2d.hxx"
-#include "svx/unoapi.hxx"
+#include "EnhancedCustomShape2d.hxx"
+#include "unoapi.hxx"
 
 // -----------------------------------------------------------------------------
 
 EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xCustomShape, sal_uInt32 nIndex ) :
-    mnIndex     ( nIndex ),
+    mnIndex		( nIndex ),
     mxCustomShape ( xCustomShape )
 {
 }

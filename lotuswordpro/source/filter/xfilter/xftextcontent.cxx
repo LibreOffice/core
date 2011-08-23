@@ -57,8 +57,12 @@
  * @file
  * Text content, it's an adapter for string to IXFObject.
  ************************************************************************/
-#include    "xftextcontent.hxx"
-#include    "ixfstream.hxx"
+/*************************************************************************
+ * Change History
+   2005-02-02	create and implemente.
+ ************************************************************************/
+#include	"xftextcontent.hxx"
+#include	"ixfstream.hxx"
 
 XFTextContent::XFTextContent(rtl::OUString text):m_strText(text)
 {
@@ -73,7 +77,7 @@ enumXFContent XFTextContent::GetContentType()
     return enumXFContentText;
 }
 
-void    XFTextContent::SetText(const rtl::OUString& text)
+void	XFTextContent::SetText(const rtl::OUString& text)
 {
     m_strText = text;
 }
@@ -83,11 +87,11 @@ rtl::OUString XFTextContent::GetText()
     return m_strText;
 }
 
-void    XFTextContent::ToXml(IXFStream *pStrm)
+void	XFTextContent::ToXml(IXFStream *pStrm)
 {
-//  pStrm->Characters(m_strText);
-    rtl::OUString sSpaceToken(RTL_CONSTASCII_USTRINGPARAM(" "));
-    sSpaceToken += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+//	pStrm->Characters(m_strText);
+    rtl::OUString sSpaceToken = rtl::OUString::createFromAscii(" ");
+    sSpaceToken += rtl::OUString::createFromAscii(" ");
     rtl::OUString sSubString;
     sal_Int32 nIndex = 0;
     sal_Int32 nSize = m_strText.getLength();
@@ -110,7 +114,7 @@ void    XFTextContent::ToXml(IXFStream *pStrm)
                 if (sSubString[j] != sal_Char(' '))
                     break;
             }
-            IXFAttrList *pAttrList = pStrm->GetAttrList();
+            IXFAttrList	*pAttrList = pStrm->GetAttrList();
             pAttrList->Clear();
             pAttrList->AddAttribute( A2OUSTR("text:c"), rtl::OUString::valueOf(j-nIndex) );
             pStrm->StartElement( A2OUSTR("text:s") );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 module com { module sun { module star { module document {
 
 //=============================================================================
-/** encapsulate a type detection service and provide read/write access on it's configuration data.
+/** capsulate a type detection service and provide read/write access on it's configuration data.
 
     <p>
     It's possible to make a "flat" detection which may use internal configuration

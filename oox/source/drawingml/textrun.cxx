@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,6 +36,7 @@
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "properties.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -55,21 +56,18 @@ TextRun::~TextRun()
 {
 }
 
-sal_Int32 TextRun::insertAt(
+void TextRun::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > & xText,
         const Reference < XTextCursor > &xAt,
         const TextCharacterProperties& rTextCharacterStyle ) const
 {
-    sal_Int32 nCharHeight = 0;
     try {
         Reference< XTextRange > xStart( xAt, UNO_QUERY );
         PropertySet aPropSet( xStart );
 
         TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
         aTextCharacterProps.assignUsed( maTextCharacterProperties );
-        if ( aTextCharacterProps.moHeight.has() )
-            nCharHeight = aTextCharacterProps.moHeight.get();
         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 
         if( maTextCharacterProperties.maHyperlinkPropertyMap.empty() )
@@ -81,55 +79,7 @@ sal_Int32 TextRun::insertAt(
             }
             else
             {
-                OUString aLatinFontName, aSymbolFontName;
-                sal_Int16 nLatinFontPitch = 0, nSymbolFontPitch = 0;
-                sal_Int16 nLatinFontFamily = 0, nSymbolFontFamily = 0;
-
-                if ( !aTextCharacterProps.maSymbolFont.getFontData( aSymbolFontName, nSymbolFontPitch, nSymbolFontFamily, rFilterBase ) )
-                    xText->insertString( xStart, getText(), sal_False );
-                else if ( getText().getLength() )
-                {   // !!#i113673<<<
-                    aTextCharacterProps.maLatinFont.getFontData( aLatinFontName, nLatinFontPitch, nLatinFontFamily, rFilterBase );
-
-                    sal_Int32 nIndex = 0;
-                    while ( sal_True )
-                    {
-                        sal_Int32 nCount = 0;
-                        sal_Bool bSymbol = ( getText()[ nIndex ] & 0xff00 ) == 0xf000;
-                        if ( bSymbol )
-                        {
-                            do
-                            {
-                                nCount++;
-                            }
-                            while( ( ( nCount + nIndex ) < getText().getLength() ) && ( ( getText()[ nCount + nIndex ] & 0xff00 ) == 0xf000 ) );
-                            aPropSet.setAnyProperty( PROP_CharFontName, Any( aSymbolFontName ) );
-                            aPropSet.setAnyProperty( PROP_CharFontPitch, Any( nSymbolFontPitch ) );
-                            aPropSet.setAnyProperty( PROP_CharFontFamily, Any( nSymbolFontFamily ) );
-                        }
-                        else
-                        {
-                            do
-                            {
-                                nCount++;
-                            }
-                            while( ( ( nCount + nIndex ) < getText().getLength() ) && ( ( getText()[ nCount + nIndex ] & 0xff00 ) != 0xf000 ) );
-                            aPropSet.setAnyProperty( PROP_CharFontName, Any( aLatinFontName ) );
-                            aPropSet.setAnyProperty( PROP_CharFontPitch, Any( nLatinFontPitch ) );
-                            aPropSet.setAnyProperty( PROP_CharFontFamily, Any( nLatinFontFamily ) );
-                        }
-                        rtl::OUString aSubString( getText().copy( nIndex, nCount ) );
-                        xText->insertString( xStart, aSubString, sal_False );
-                        nIndex += nCount;
-
-                        if ( nIndex >= getText().getLength() )
-                            break;
-
-                        xStart = Reference< XTextRange >( xAt, UNO_QUERY );
-                        aPropSet = PropertySet( xStart );
-                        aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
-                    }
-                }
+                xText->insertString( xStart, getText(), sal_False );
             }
         }
         else
@@ -166,8 +116,6 @@ sal_Int32 TextRun::insertAt(
     {
         OSL_TRACE("OOX:  TextRun::insertAt() exception");
     }
-
-    return nCharHeight;
 }
 
 

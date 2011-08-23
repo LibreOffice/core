@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,24 +33,42 @@
 
 using namespace sd;
 
-UndoManager::UndoManager( sal_uInt16 nMaxUndoActionCount /* = 20 */ )
+UndoManager::UndoManager( USHORT nMaxUndoActionCount /* = 20 */ )
 : SfxUndoManager( nMaxUndoActionCount )
+, mnListLevel( 0 )
 , mpLinkedUndoManager(NULL)
 {
 }
 
-void UndoManager::EnterListAction(const UniString &rComment, const UniString& rRepeatComment, sal_uInt16 nId /* =0 */)
+void UndoManager::EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId /* =0 */)
 {
-    if( !IsDoing() )
+    if( !isInUndo() )
     {
         ClearLinkedRedoActions();
+        mnListLevel++;
         SfxUndoManager::EnterListAction( rComment, rRepeatComment, nId );
     }
 }
 
-void UndoManager::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg /* = sal_False */ )
+void UndoManager::LeaveListAction()
 {
-    if( !IsDoing() )
+    if( !isInUndo() )
+    {
+        SfxUndoManager::LeaveListAction();
+        if( mnListLevel )
+        {
+            mnListLevel--;
+        }
+        else
+        {
+            DBG_ERROR("sd::UndoManager::LeaveListAction(), no open list action!" );
+        }
+    }
+}
+
+void UndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg /* = FALSE */ )
+{
+    if( !isInUndo() )
     {
         ClearLinkedRedoActions();
         SfxUndoManager::AddUndoAction( pAction, bTryMerg );
@@ -62,7 +80,22 @@ void UndoManager::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg /* = 
 }
 
 
-void UndoManager::SetLinkedUndoManager (::svl::IUndoManager* pLinkedUndoManager)
+BOOL UndoManager::Undo( USHORT nCount )
+{
+    ScopeLockGuard aGuard( maIsInUndoLock );
+    return SfxUndoManager::Undo( nCount );
+}
+
+BOOL UndoManager::Redo( USHORT nCount )
+{
+    ScopeLockGuard aGuard( maIsInUndoLock );
+    return SfxUndoManager::Redo( nCount );
+}
+
+
+
+
+void UndoManager::SetLinkedUndoManager (SfxUndoManager* pLinkedUndoManager)
 {
     mpLinkedUndoManager = pLinkedUndoManager;
 }

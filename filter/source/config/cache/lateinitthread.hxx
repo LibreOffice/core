@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,8 +82,6 @@ class LateInitThread : public ::osl::Thread
         /** @short  thread function.
          */
         virtual void SAL_CALL run();
-
-        virtual void SAL_CALL onTerminated();
 };
 
     } // namespace config

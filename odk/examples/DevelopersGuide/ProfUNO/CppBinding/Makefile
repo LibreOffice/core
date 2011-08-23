@@ -49,11 +49,17 @@ SAMPLE_OBJ_OUT=$(OUT_OBJ)/$(SAMPLE_NAME)
 
 APP1_NAME=office_connect
 APP1_BINARY=$(OUT_BIN)/$(APP1_NAME)$(EXE_EXT)
+APP1_RDB=$(OUT_BIN)/office_connect.rdb
+APP1_ENV_FLAG = $(SAMPLE_GEN_OUT)/cpp_$(SAMPLE_NAME)_prepare_env.flag
 
 APP2_NAME=string_samples
 APP2_BINARY=$(OUT_BIN)/$(APP2_NAME)$(EXE_EXT)
 
-ENV_OFFICE_TYPES=-env:URE_MORE_TYPES=$(URLPREFIX)$(OFFICE_TYPES)
+ifeq "$(OS)" "WIN"
+INI_EXTENSION=.ini
+else
+INI_EXTENSION=rc
+endif
 
 CXXFILES = \
 	 office_connect.cxx \
@@ -66,6 +72,14 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
+$(OUT_BIN)/%$(INI_EXTENSION) : %$(INI_EXTENSION)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(COPY) $< $(subst /,$(PS),$@)
+
+$(OUT_BIN)/%.rdb :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(REGMERGE) $@ / $(URE_TYPES) $(OFFICE_TYPES)
+
 $(SAMPLE_OBJ_OUT)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(SAMPLE_INC_OUT) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
@@ -75,25 +89,36 @@ $(OUT_BIN)/%$(EXE_EXT) : $(SAMPLE_OBJ_OUT)/%.$(OBJ_EXT)
 	-$(MKDIR) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
 ifeq "$(OS)" "WIN"
 	$(LINK) $(EXE_LINK_FLAGS) /OUT:$@ /MAP:$(SAMPLE_GEN_OUT)/$(subst $(EXE_EXT),.map,$(@F)) \
-	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB)
+	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB)
 else
 	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $< \
-	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STDC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALHELPERDYLIB) $(SALDYLIB)
+	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALHELPERDYLIB) $(SALDYLIB)
 ifeq "$(OS)" "MACOSX"
 	$(INSTALL_NAME_URELIBS_BIN)  $@
 endif
 endif
 
-$(OUT_BIN)/office_connect$(EXE_EXT) : $(SAMPLE_OBJ_OUT)/office_connect.$(OBJ_EXT) 
+$(OUT_BIN)/office_connect$(EXE_EXT) : $(APP1_ENV_FLAG) $(OUT_BIN)/office_connect$(INI_EXTENSION) $(SAMPLE_OBJ_OUT)/office_connect.$(OBJ_EXT) 
 
 $(OUT_BIN)/string_samples$(EXE_EXT) : $(SAMPLE_OBJ_OUT)/string_samples.$(OBJ_EXT)
+
+$(APP1_ENV_FLAG) : $(APP1_RDB)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	@echo --------------------------------------------------------------------------------
+	@echo   Register necessary runtime components in $(APP1_RDB)
+	@echo --------------------------------------------------------------------------------
+	$(REGCOMP) -register -r $(APP1_RDB) -c connector.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(APP1_RDB) -c remotebridge.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(APP1_RDB) -c bridgefac.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(APP1_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
+	@echo bla > $@
+
 
 ProUNOCppBindingExample : $(APP1_BINARY) $(APP2_BINARY)
 	@echo --------------------------------------------------------------------------------
 	@echo Note: For the "$(QM)$(APP1_NAME)$(QM)" example you need a running office listening
-	@echo $(SQM)      $(SQM)on port 2083. The example use the defaultBootstrap_InitialComponentContext method and provides 
-	@echo $(SQM)      $(SQM)the additional office types via the UNO environment variable -env:URE_MORE_TYPES=... 
-	@echo $(SQM)      $(SQM)Before you can run this example you have to start your office in listening mode.
+	@echo $(SQM)      $(SQM)on port 2083. Before you run the example you have to start your office with
 	@echo -
 	@echo $(SQM)  $(SQM)soffice "$(QM)-accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager$(QM)"
 	@echo -----
@@ -105,9 +130,6 @@ ProUNOCppBindingExample : $(APP1_BINARY) $(APP2_BINARY)
 
 %.run: $(OUT_BIN)/%$(EXE_EXT) 
 	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@)
-
-$(API1_NAME).run: $(API1_BINARY) 
-	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@) $(ENV_OFFICE_TYPES)
 
 .PHONY: clean
 clean :

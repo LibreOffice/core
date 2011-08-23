@@ -34,7 +34,6 @@ COMP1TYPELIST = migrationoo2
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
-
 .INCLUDE : ..$/..$/deployment/inc/dp_misc.mk
 .INCLUDE :  settings.mk
 DLLPRE =
@@ -81,13 +80,14 @@ SHL1STDLIBS= \
 
 SHL1DEPN=
 SHL1IMPLIB=imigrationoo2
+#SHL1LIBS=$(SLB)$/$(TARGET).lib
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
 
 COMP2TYPELIST = migrationoo3
 SHL2TARGET=migrationoo3.uno
-SHL2VERSIONMAP = $(SOLARENV)/src/component.map
+SHL2VERSIONMAP = migrationoo3.map
 
 SHL2OBJS= \
         $(SLO)$/cexportsoo3.obj \
@@ -108,6 +108,7 @@ SHL2STDLIBS= \
 
 SHL2DEPN=
 SHL2IMPLIB=imigrationoo3
+#SHL2LIBS=$(SLB)$/$(SHL2TARGET).lib
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME=$(SHL2TARGET)
@@ -116,18 +117,3 @@ DEF2NAME=$(SHL2TARGET)
 
 .INCLUDE : target.mk
 
-ALLTAR : $(MISC)/migrationoo3.component
-
-$(MISC)/migrationoo3.component .ERRREMOVE : \
-        $(SOLARENV)/bin/createcomponent.xslt migrationoo3.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt migrationoo3.component
-
-ALLTAR : $(MISC)/migrationoo2.component
-
-$(MISC)/migrationoo2.component .ERRREMOVE : \
-        $(SOLARENV)/bin/createcomponent.xslt migrationoo2.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt migrationoo2.component

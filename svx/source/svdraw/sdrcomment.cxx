@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@
 namespace sdr
 {
     Comment::Comment(
-        sal_uInt32 nID,
-        Date aCreationDate,
-        const ::rtl::OUString& rUserName,
+        sal_uInt32 nID, 
+        Date aCreationDate, 
+        const ::rtl::OUString& rUserName, 
         const ::rtl::OUString& rText,
         const basegfx::B2DPoint& rPosition)
-    :   mnID(nID),
+    :	mnID(nID),
         maCreationDate(aCreationDate),
         maUserName(rUserName),
         maText(rText),

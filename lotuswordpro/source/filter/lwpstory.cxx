@@ -61,7 +61,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 #include "lwpglobalmgr.hxx"
 #include "lwpstory.hxx"
@@ -156,7 +156,7 @@ void LwpStory::Parse(IXFStream* pOutputStream)
     }*/
 
     //Don't process the next story
-/*  LwpObject* pNextStory = GetNextStory()->obj();
+/*	LwpObject* pNextStory = GetNextStory()->obj();
     if(pNextStory)
     {
         pNextStory->SetFoundry(m_pFoundry);
@@ -202,7 +202,7 @@ void LwpStory::AddPageLayout(LwpPageLayout * pObject)
 LwpPageLayout* LwpStory::GetNextPageLayout()
 {
     std::vector<LwpPageLayout*>::iterator it;
-    for( it = m_LayoutList.begin(); it != m_LayoutList.end(); ++it )
+    for( it = m_LayoutList.begin(); it != m_LayoutList.end(); it++ )
     {
         if(m_pCurrentLayout == *it)
         {
@@ -243,9 +243,9 @@ void LwpStory::SortPageLayout()
     LwpPageLayout* pTemp = NULL;
     std::vector<LwpPageLayout*>::iterator aIt;
     std::vector<LwpPageLayout*>::iterator bIt;
-    for( aIt = aLayoutList.begin(); aIt != aLayoutList.end() -1; ++aIt)
+    for( aIt = aLayoutList.begin(); aIt != aLayoutList.end() -1; aIt++)
     {
-        for( bIt = aIt +1; bIt != aLayoutList.end(); ++bIt )
+        for( bIt = aIt +1; bIt != aLayoutList.end(); bIt ++)
         {
             if(**aIt < **bIt)
             {
@@ -263,7 +263,7 @@ void LwpStory::SortPageLayout()
     //put all the sorted  layouts into list
     m_LayoutList.clear();
 
-    for( aIt = aLayoutList.begin(); aIt != aLayoutList.end(); ++aIt)
+    for( aIt = aLayoutList.begin(); aIt != aLayoutList.end(); aIt++)
     {
         m_LayoutList.push_back(*aIt);
     }
@@ -507,7 +507,7 @@ OUString LwpStory::GetContentText(sal_Bool bAllText)
             pPara->SetFoundry(m_pFoundry);
             return pPara->GetContentText();
         }
-        return  A2OUSTR("");
+        return 	A2OUSTR("");
     }
 
 }
@@ -537,7 +537,7 @@ OUString LwpStory::RegisterFirstFribStyle()
 sal_Bool LwpStory::IsBullStyleUsedBefore(const rtl::OUString& rStyleName, const sal_uInt8& nPos)
 {
     std::vector <NamePosPair>::reverse_iterator rIter;
-    for (rIter = m_vBulletStyleNameList.rbegin(); rIter != m_vBulletStyleNameList.rend(); ++rIter)
+    for (rIter = m_vBulletStyleNameList.rbegin(); rIter != m_vBulletStyleNameList.rend(); rIter++)
     {
         rtl::OUString aName = (*rIter).first;
         sal_uInt8 nPosition = (*rIter).second;

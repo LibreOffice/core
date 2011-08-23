@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ public class DOMDocument
     }
 
      /**
-     *  Returns the file extension of the <code>Document</code>
+     *  Returns the file extension of the <code>Document</code> 
      *  represented.
      *
      *  @return  file extension of the <code>Document</code>.
@@ -154,10 +154,10 @@ public class DOMDocument
     }
 
     /**
-     *  Sets the Content of the <code>Document</code> to the contents of the
-     *  supplied <code>Node</code> list.
+     *  Sets the Content of the <code>Document</code> to the contents of the 
+     *  supplied <code>Node</code> list. 
      *
-     *  @param newDom DOM <code>Document</code> object.
+     *  @return  DOM <code>Document</code> object.
      */
     public void setContentDOM( Node newDom) {
     contentDoc=(Document)newDom;
@@ -200,20 +200,22 @@ public class DOMDocument
         DocumentBuilder builder = null;
         try {
             builder = factory.newDocumentBuilder();
-        } catch (ParserConfigurationException ex) {
+        } catch (ParserConfigurationException ex) {  
         System.out.println("Error:"+ ex);
+            //throw new OfficeDocumentException(ex);
         }
     try {
-
+       
         contentDoc=  builder.parse(is);
-
-
+       
+         
         } catch (SAXException ex) {
         System.out.println("Error:"+ ex);
+            //throw new OfficeDocumentException(ex);
         }
     }
-
-
+    
+  
     /**
      *  Write out content to the supplied <code>OutputStream</code>.
      *
@@ -225,7 +227,7 @@ public class DOMDocument
 
         // set bytes for writing to output stream
         byte contentBytes[] = docToBytes(contentDoc);
-
+       
         os.write(contentBytes);
     }
 
@@ -251,11 +253,11 @@ public class DOMDocument
 
         java.lang.reflect.Constructor con;
         java.lang.reflect.Method meth;
-
+        
         String domImpl = doc.getClass().getName();
 
         System.err.println("type b " + domImpl);
-
+        
         /*
          * We may have multiple XML parsers in the Classpath.
          * Depending on which one is first, the actual type of
@@ -267,11 +269,11 @@ public class DOMDocument
             if (domImpl.equals("com.sun.xml.tree.XmlDocument")) {
                 System.out.println("Using JAXP");
                 Class jaxpDoc = Class.forName("com.sun.xml.tree.XmlDocument");
-
+            
                 // The method is in the XMLDocument class itself, not a helper
-                meth = jaxpDoc.getMethod("write",
+                meth = jaxpDoc.getMethod("write", 
                             new Class[] { Class.forName("java.io.OutputStream") } );
-
+                                     
                 meth.invoke(doc, new Object [] { baos } );
             }
         else if (domImpl.equals("org.apache.crimson.tree.XmlDocument"))
@@ -279,34 +281,34 @@ public class DOMDocument
          System.out.println("Using Crimson");
          Class crimsonDoc = Class.forName("org.apache.crimson.tree.XmlDocument");
          // The method is in the XMLDocument class itself, not a helper
-                meth = crimsonDoc.getMethod("write",
+                meth = crimsonDoc.getMethod("write", 
                             new Class[] { Class.forName("java.io.OutputStream") } );
-
-                meth.invoke(doc, new Object [] { baos } );
+                                     
+                meth.invoke(doc, new Object [] { baos } );  
         }
-            else if (domImpl.equals("org.apache.xerces.dom.DocumentImpl")
+            else if (domImpl.equals("org.apache.xerces.dom.DocumentImpl") 
             || domImpl.equals("org.apache.xerces.dom.DeferredDocumentImpl")) {
                 System.out.println("Using Xerces");
                 // Try for Xerces
-                Class xercesSer =
+                Class xercesSer = 
                         Class.forName("org.apache.xml.serialize.XMLSerializer");
-
+                
                 // Get the OutputStream constructor
                 // May want to use the OutputFormat parameter at some stage too
-                con = xercesSer.getConstructor(new Class []
+                con = xercesSer.getConstructor(new Class [] 
                         { Class.forName("java.io.OutputStream"),
                           Class.forName("org.apache.xml.serialize.OutputFormat") } );
-
-
+                              
+                
                 // Get the serialize method
-                meth = xercesSer.getMethod("serialize",
-                            new Class [] { Class.forName("org.w3c.dom.Document") } );
-
-
+                meth = xercesSer.getMethod("serialize", 
+                            new Class [] { Class.forName("org.w3c.dom.Document") } );                                           
+                                           
+                          
                 // Get an instance
                 Object serializer = con.newInstance(new Object [] { baos, null } );
-
-
+                
+                
                 // Now call serialize to write the document
                 meth.invoke(serializer, new Object [] { doc } );
             }
@@ -327,7 +329,7 @@ public class DOMDocument
                 meth.invoke(serializer, new Object [] { doc, baos } );
             }
             else {
-                // We dont have another parser
+                // We dont have another parser  
                 try {
                         DOMSource domSource = new DOMSource(doc);
                         StringWriter writer = new StringWriter();
@@ -338,7 +340,7 @@ public class DOMDocument
                         return writer.toString().getBytes();
                     }
                 catch (Exception e) {
-                    // We don't have another parser
+                    // We don't have another parser  
                     throw new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
                 }
             }
@@ -364,9 +366,9 @@ public class DOMDocument
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-    public final void initContentDOM() throws IOException {
+    public final void initContentDOM() throws IOException {	
         contentDoc = createDOM("");
-
+    
     }
 
     /**
@@ -392,14 +394,14 @@ public class DOMDocument
 
         } catch (ParserConfigurationException ex) {
              System.out.println("Error:"+ ex);
-
+       
 
         }
 
         Element root = (Element) doc.createElement(rootName);
         doc.appendChild(root);
 
-
+       
         return doc;
     }
 

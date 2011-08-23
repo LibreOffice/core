@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,10 @@
 #define _CFG_MERGE_HXX
 
 #include <tools/string.hxx>
-#include <boost/unordered_map.hpp>
-#include <vector>
+#include <tools/list.hxx>
+#include <hash_map>
 
-typedef boost::unordered_map<ByteString , ByteString , hashByteString,equalByteString>
+typedef std::hash_map<ByteString , ByteString , hashByteString,equalByteString>
                                 ByteStringHashMap;
 
 
@@ -57,7 +57,7 @@ private:
 
     ByteStringHashMap sText;
 public:
-    CfgStackData( const ByteString &rTag, const ByteString &rId )
+    CfgStackData( const ByteString &rTag, const ByteString &rId ) 
             : sTagType( rTag ), sIdentifier( rId ) {};
 
     ByteString &GetTagType() { return sTagType; }
@@ -69,39 +69,28 @@ public:
 // class CfgStack
 //
 
-typedef ::std::vector< CfgStackData* > CfgStackList;
+DECLARE_LIST( CfgStackList, CfgStackData * )
 
-class CfgStack
+class CfgStack : public CfgStackList
 {
-private:
-    CfgStackList maList;
-
 public:
-    CfgStack() {}
+    CfgStack() : CfgStackList( 10, 10 ) {}
     ~CfgStack();
 
-    size_t Push( CfgStackData *pStackData );
+    ULONG Push( CfgStackData *pStackData );	
     CfgStackData *Push( const ByteString &rTag, const ByteString &rId );
-    CfgStackData *Pop()
-        {
-            if ( maList.empty() ) return NULL;
-            CfgStackData* temp = maList.back();
-            maList.pop_back();
-            return temp;
-        }
+    CfgStackData *Pop() { return Remove( Count() - 1 ); }
 
-    CfgStackData *GetStackData( size_t nPos = LIST_APPEND );
+    CfgStackData *GetStackData( ULONG nPos = LIST_APPEND );
 
-    ByteString GetAccessPath( size_t nPos = LIST_APPEND );
-
-    size_t size() const { return maList.size(); }
+    ByteString GetAccessPath( ULONG nPos = LIST_APPEND );
 };
 
 //
 // class CfgParser
 //
 
-class CfgParser
+class CfgParser 
 {
 protected:
     ByteString sCurrentResTyp;
@@ -113,10 +102,10 @@ protected:
     CfgStack aStack;
     CfgStackData *pStackData;
 
-    sal_Bool bLocalize;
+    BOOL bLocalize;
 
-    virtual void WorkOnText(
-        ByteString &rText,
+    virtual void WorkOnText( 
+        ByteString &rText, 
         const ByteString &nLangIndex )=0;
 
     virtual void WorkOnRessourceEnd()=0;
@@ -128,12 +117,12 @@ protected:
 private:
     int ExecuteAnalyzedToken( int nToken, char *pToken );
     std::vector<ByteString> aLanguages;
-    void AddText(
-        ByteString &rText,
+    void AddText( 
+        ByteString &rText, 
         const ByteString &rIsoLang,
         const ByteString &rResTyp );
-
-sal_Bool IsTokenClosed( const ByteString &rToken );
+    
+BOOL IsTokenClosed( const ByteString &rToken );
 
 public:
     CfgParser();
@@ -166,14 +155,14 @@ private:
     ByteString sPath;
     std::vector<ByteString> aLanguages;
 protected:
-    void WorkOnText(
-        ByteString &rText,
+    void WorkOnText( 
+        ByteString &rText, 
         const ByteString &rIsoLang
         );
 
     void WorkOnRessourceEnd();
     void Output( const ByteString& rOutput );
-public:
+public:	
     CfgExport(
         const ByteString &rOutputFile,
         const ByteString &rProject,
@@ -192,13 +181,14 @@ private:
     MergeDataFile *pMergeDataFile;
     std::vector<ByteString> aLanguages;
     ResData *pResData;
-
+    
+    BOOL bGerman;
     ByteString sFilename;
-    sal_Bool bEnglish;
+    BOOL bEnglish;
 
 protected:
-    void WorkOnText(
-        ByteString &rText,
+    void WorkOnText( 
+        ByteString &rText, 
         const ByteString &nLangIndex );
 
     void WorkOnRessourceEnd();

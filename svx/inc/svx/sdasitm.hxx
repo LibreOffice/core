@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <map>
 #include "svx/svxdllapi.h"
 
@@ -60,22 +60,22 @@ public:
     typedef std::pair < const ::rtl::OUString, const ::rtl::OUString > PropertyPair;
 
 private:
-    struct SVX_DLLPUBLIC PropertyEq
+    struct SVX_DLLPRIVATE PropertyEq
     {
         bool operator()( const rtl::OUString&, const rtl::OUString& ) const;
     };
-    struct SVX_DLLPUBLIC PropertyPairEq
+    struct SVX_DLLPRIVATE PropertyPairEq
     {
         bool operator()( const SdrCustomShapeGeometryItem::PropertyPair&, const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
-    struct SVX_DLLPUBLIC PropertyPairHash
+    struct SVX_DLLPRIVATE PropertyPairHash
     {
-        size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair& ) const;
+        size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair &r1 ) const;
     };
-    typedef boost::unordered_map < PropertyPair, sal_Int32, PropertyPairHash, PropertyPairEq > PropertyPairHashMap;
-    typedef boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash, PropertyEq > PropertyHashMap;
+    typedef std::hash_map < PropertyPair, sal_Int32, PropertyPairHash, PropertyPairEq > PropertyPairHashMap;
+    typedef std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash, PropertyEq > PropertyHashMap;
 
-    PropertyHashMap     aPropHashMap;
+    PropertyHashMap		aPropHashMap;
     PropertyPairHashMap aPropPairHashMap;
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aPropSeq;
@@ -89,22 +89,25 @@ private:
             SdrCustomShapeGeometryItem( SvStream& rIn, sal_uInt16 nVersion );
             ~SdrCustomShapeGeometryItem();
 
-            virtual int                 operator==( const SfxPoolItem& ) const;
+            virtual int					operator==( const SfxPoolItem& ) const;
             virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,
                                             SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
                                                 String &rText, const IntlWrapper * = 0) const;
 
-            virtual SfxPoolItem*        Create( SvStream&, sal_uInt16 nItem ) const;
-            virtual SvStream&           Store( SvStream&, sal_uInt16 nVersion ) const;
+            virtual SfxPoolItem*		Create( SvStream&, sal_uInt16 nItem ) const;
+            virtual SvStream&			Store( SvStream&, sal_uInt16 nVersion ) const;
 
-            virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const;
-            virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
+            virtual SfxPoolItem*		Clone( SfxItemPool* pPool = NULL ) const;
+            virtual	sal_uInt16			GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
-            virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-            virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+            virtual	bool                QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+            virtual	bool                PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
             const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetGeometry() const;
 
+#ifdef SDR_ISPOOLABLE
+            virtual int IsPoolable() const;
+#endif
             com::sun::star::uno::Any* GetPropertyValueByName( const rtl::OUString& rPropName );
             com::sun::star::uno::Any* GetPropertyValueByName( const rtl::OUString& rPropName, const rtl::OUString& rPropName2 );
 
@@ -127,8 +130,8 @@ class SdrCustomShapeReplacementURLItem : public SfxStringItem
 //---------------------------
 class SdrTextWordWrapItem : public SdrOnOffItem {
 public:
-    SdrTextWordWrapItem( sal_Bool bAuto = sal_False ):  SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bAuto ) {}
-    SdrTextWordWrapItem( SvStream& rIn )  :     SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, rIn )   {}
+    SdrTextWordWrapItem( BOOL bAuto = FALSE ):	SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bAuto ) {}
+    SdrTextWordWrapItem( SvStream& rIn )  :		SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, rIn )   {}
 };
 
 //-------------------------------
@@ -136,8 +139,8 @@ public:
 //-------------------------------
 class SdrTextAutoGrowSizeItem : public SdrOnOffItem {
 public:
-    SdrTextAutoGrowSizeItem( sal_Bool bAuto = sal_False ):      SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, bAuto ) {}
-    SdrTextAutoGrowSizeItem( SvStream& rIn )   :        SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, rIn )   {}
+    SdrTextAutoGrowSizeItem( BOOL bAuto = FALSE ):		SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, bAuto ) {}
+    SdrTextAutoGrowSizeItem( SvStream& rIn )   :		SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, rIn )   {}
 };
 
 #endif

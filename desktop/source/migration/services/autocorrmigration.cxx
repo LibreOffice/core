@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -175,7 +175,7 @@ namespace migration
                 ::rtl::OUString sLanguageType = sSourceLocalName.copy( nStart, nEnd - nStart );
                 ::rtl::OUString sIsoName = MsLangId::convertLanguageToIsoString( (LanguageType) sLanguageType.toInt32() );
                 ::rtl::OUString sTargetLocalName = sBaseName;
-                sTargetLocalName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_" ));
+                sTargetLocalName += ::rtl::OUString::createFromAscii( "_" );
                 sTargetLocalName += sIsoName;
                 sTargetLocalName += sSuffix;
                 ::rtl::OUString sTargetName = sTargetDir + sTargetLocalName;
@@ -188,14 +188,14 @@ namespace migration
                     ::rtl::OString aMsg( "AutocorrectionMigration::copyFiles: cannot copy " );
                     aMsg += ::rtl::OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 ) + " to "
                          +  ::rtl::OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
-                    OSL_FAIL( aMsg.getStr() );
+                    OSL_ENSURE( sal_False, aMsg.getStr() );
                 }
                 ++aI;
             }
         }
         else
         {
-            OSL_FAIL( "AutocorrectionMigration::copyFiles: no user installation!" );
+            OSL_ENSURE( sal_False, "AutocorrectionMigration::copyFiles: no user installation!" );
         }
     }
 
@@ -242,11 +242,11 @@ namespace migration
         {
             beans::NamedValue aValue;
             *pIter >>= aValue;
-            if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserData" ) ) )
+            if ( aValue.Name.equalsAscii( "UserData" ) )
             {
                 if ( !(aValue.Value >>= m_sSourceDir) )
                 {
-                    OSL_FAIL( "AutocorrectionMigration::initialize: argument UserData has wrong type!" );
+                    OSL_ENSURE( false, "AutocorrectionMigration::initialize: argument UserData has wrong type!" );
                 }
                 m_sSourceDir += sSourceSubDir;
                 break;
@@ -282,7 +282,7 @@ namespace migration
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace migration
+}	// namespace migration
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

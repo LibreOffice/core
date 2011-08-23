@@ -36,8 +36,9 @@
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
-#include "xmlreader/span.hxx"
-#include "xmlreader/xmlreader.hxx"
+
+#include "span.hxx"
+#include "xmlreader.hxx"
 
 namespace rtl { class OUString; }
 
@@ -55,15 +56,13 @@ public:
 
     bool parse();
 
-    enum { NAMESPACE_OOR = 1, NAMESPACE_XS = 2, NAMESPACE_XSI = 3 };
-
 private:
     virtual ~ParseManager();
 
-    xmlreader::XmlReader reader_;
+    XmlReader reader_;
     rtl::Reference< Parser > parser_;
-    xmlreader::Span itemData_;
-    int itemNamespaceId_;
+    Span itemData_;
+    XmlReader::Namespace itemNamespace_;
 };
 
 }

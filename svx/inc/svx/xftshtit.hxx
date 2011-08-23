@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ class XFormTextShadowTranspItem: public SfxUInt16Item
 {
 public:
                             TYPEINFO();
-                            XFormTextShadowTranspItem(sal_uInt16 nShdwTransparence = 0);
+                            XFormTextShadowTranspItem(USHORT nShdwTransparence = 0);
                             XFormTextShadowTranspItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = NULL) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
 };
 
 #endif

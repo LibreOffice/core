@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,30 +29,25 @@
 
 TabPage TP_OPTIONS
 {
-    HelpID = "chart2:TabPage:TP_OPTIONS";
     Hide = TRUE ;
+//    HelpID = HID_LAYOUT ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-
     FixedLine 1
     {
         Pos = MAP_APPFONT ( 6 , 6  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Align data series to";
     };
-
     RadioButton RBT_OPT_AXIS_1
     {
-        HelpID = "chart2:RadioButton:TP_OPTIONS:RBT_OPT_AXIS_1";
         Pos = MAP_APPFONT ( 12 , 20  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Primary Y axis";
     };
-
     RadioButton RBT_OPT_AXIS_2
     {
-        HelpID = "chart2:RadioButton:TP_OPTIONS:RBT_OPT_AXIS_2";
         Pos = MAP_APPFONT ( 12 , 34  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
@@ -65,7 +60,6 @@ TabPage TP_OPTIONS
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Settings";
     };
-
     FixedText FT_OVERLAP
     {
         Pos = MAP_APPFONT ( 12 , 80 ) ;
@@ -75,7 +69,6 @@ TabPage TP_OPTIONS
 
     MetricField MT_OVERLAP
     {
-        HelpID = "chart2:MetricField:TP_OPTIONS:MT_OVERLAP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 63 , 78 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -102,7 +95,6 @@ TabPage TP_OPTIONS
 
     MetricField MT_GAP
     {
-        HelpID = "chart2:MetricField:TP_OPTIONS:MT_GAP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 63 , 62 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -122,7 +114,6 @@ TabPage TP_OPTIONS
 
     CheckBox CB_CONNECTOR
     {
-        HelpID = "chart2:CheckBox:TP_OPTIONS:CB_CONNECTOR";
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
@@ -131,13 +122,12 @@ TabPage TP_OPTIONS
 
     CheckBox CB_BARS_SIDE_BY_SIDE
     {
-        HelpID = "chart2:CheckBox:TP_OPTIONS:CB_BARS_SIDE_BY_SIDE";
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Show ~bars side by side";
     };
-
+    
     FixedLine FL_PLOT_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 113  ) ;
@@ -151,37 +141,33 @@ TabPage TP_OPTIONS
         Size = MAP_APPFONT ( 80 , 8 ) ;
         Text [ en-US ] = "Plot missing values";
     };
-
+    
     RadioButton RB_DONT_PAINT
     {
-        HelpID = "chart2:RadioButton:TP_OPTIONS:RB_DONT_PAINT";
         Pos = MAP_APPFONT ( 82 , 127  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~Leave gap";
+        Text [ en-US ] = "~Leave gap";  
     };
-
+    
     RadioButton RB_ASSUME_ZERO
     {
-        HelpID = "chart2:RadioButton:TP_OPTIONS:RB_ASSUME_ZERO";
         Pos = MAP_APPFONT ( 82 , 141  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~Assume zero";
+        Text [ en-US ] = "~Assume zero";  
     };
-
+    
     RadioButton RB_CONTINUE_LINE
     {
-        HelpID = "chart2:RadioButton:TP_OPTIONS:RB_CONTINUE_LINE";
         Pos = MAP_APPFONT ( 82 , 155  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~Continue line";
+        Text [ en-US ] = "~Continue line";  
     };
-
+      
     CheckBox CB_INCLUDE_HIDDEN_CELLS
     {
-        HelpID = "chart2:CheckBox:TP_OPTIONS:CB_INCLUDE_HIDDEN_CELLS";
         Pos = MAP_APPFONT ( 12 , 172 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;

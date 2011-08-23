@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,6 +43,6 @@ private:
     bool m_bCrossingValue;
 };
 
-#endif  // _XMLAXISPOSITIONPROPERTYHDL_HXX_
+#endif	// _XMLAXISPOSITIONPROPERTYHDL_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

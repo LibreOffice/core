@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ namespace {
             switch(nIndex)
             {
             default:
-                OSL_FAIL("Unexpected case!");
+                OSL_ENSURE(false,"Unexpected case!");
                 break;
             case DRAW_INDEX:
                 bDrawState=sal_True;
@@ -104,7 +104,7 @@ namespace {
         {}
 
         void initControls( const uno::Reference<awt::XControlContainer>& xControls,
-                           const rtl::OUString&                          rFilename )
+                           const rtl::OUString&							 rFilename )
         {
             m_xListbox.set(xControls->getControl(
                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListBox" ))),
@@ -355,13 +355,13 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
                    rtl::OUStringToOString( pAttribs[i].Name, RTL_TEXTENCODING_UTF8 ).getStr(),
                    rtl::OUStringToOString( aVal, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
-        if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
+        if( pAttribs[i].Name.equalsAscii( "InputStream" ) )
             pAttribs[i].Value >>= xInput;
-        else if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
+        else if( pAttribs[i].Name.equalsAscii( "URL" ) )
             pAttribs[i].Value >>= aURL;
-        else if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
+        else if( pAttribs[i].Name.equalsAscii( "FilterName" ) )
             nFilterNamePos = i;
-        else if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) )
+        else if( pAttribs[i].Name.equalsAscii( "Password" ) )
         {
             nPwdPos = i;
             pAttribs[i].Value >>= aPwd;
@@ -443,15 +443,15 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
             osl_removeFile( aURL.pData );
         if( aEmbedMimetype.getLength() )
         {
-            if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text" ) )
-                || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text-master" ) ) )
+            if( aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.text" )
+                || aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.text-master" ) )
                 aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_pdf_addstream_import" ) );
-            else if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.presentation" ) ) )
+            else if( aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.presentation" ) )
                 aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_pdf_addstream_import" ) );
-            else if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.graphics" ) )
-                     || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.drawing" ) ) )
+            else if( aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.graphics" )
+                     || aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.drawing" ) )
                 aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw_pdf_addstream_import" ) );
-            else if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.spreadsheet" ) ) )
+            else if( aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.spreadsheet" ) )
                 aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_pdf_addstream_import" ) );
         }
     }
@@ -520,7 +520,7 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
                     break;
 
                 default:
-                    OSL_FAIL("Unexpected case");
+                    OSL_ENSURE(false,"Unexpected case");
             }
 
             aOutTypeName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("pdf_Portable_Document_Format") );
@@ -634,7 +634,7 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                 if( pTrailer && pTrailer->m_pDict )
                 {
                     // search document checksum entry
-                    boost::unordered_map< rtl::OString,
+                    std::hash_map< rtl::OString,
                                    pdfparse::PDFEntry*,
                                    rtl::OStringHash >::iterator chk;
                     chk = pTrailer->m_pDict->m_aMap.find( "DocChecksum" );
@@ -651,7 +651,7 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                     }
 
                     // search for AdditionalStreams entry
-                    boost::unordered_map< rtl::OString,
+                    std::hash_map< rtl::OString,
                                    pdfparse::PDFEntry*,
                                    rtl::OStringHash >::iterator add_stream;
                     add_stream = pTrailer->m_pDict->m_aMap.find( "AdditionalStreams" );
@@ -693,8 +693,6 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                     rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                                    RTL_TEXTENCODING_ISO_8859_1 );
                                     bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
-                                    // trash password string on heap
-                                    rtl_zeroMemory( (void*)aIsoPwd.getStr(), aIsoPwd.getLength() );
                                 }
                                 if( ! bAuthenticated )
                                 {
@@ -703,7 +701,7 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                     uno::Reference< task::XInteractionHandler > xIntHdl;
                                     for( sal_Int32 i = 0; i < nAttribs; i++ )
                                     {
-                                        if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
+                                        if( pAttribs[i].Name.equalsAscii( "InteractionHandler" ) )
                                             pAttribs[i].Value >>= xIntHdl;
                                     }
                                     if( ! bMayUseUI || ! xIntHdl.is() )
@@ -712,7 +710,7 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                         xEmbed.clear();
                                         break;
                                     }
-
+                                    
                                     rtl::OUString aDocName( rInPDFFileURL.copy( rInPDFFileURL.lastIndexOf( sal_Unicode('/') )+1 ) );
 
                                     bool bEntered = false;
@@ -722,8 +720,6 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                         rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                                        RTL_TEXTENCODING_ISO_8859_1 );
                                         bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
-                                        // trash password string on heap
-                                        rtl_zeroMemory( (void*)aIsoPwd.getStr(), aIsoPwd.getLength() );
                                     } while( bEntered && ! bAuthenticated );
                                 }
 

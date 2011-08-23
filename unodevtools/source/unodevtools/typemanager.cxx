@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,16 +79,16 @@ static RTTypeClass mapTypeClass(TypeClass typeclass) {
 UnoTypeManager::UnoTypeManager()
 {
     m_pImpl = new UnoTypeManagerImpl();
-    acquire();
-}
+    acquire();	
+}	
 
 UnoTypeManager::~UnoTypeManager()
 {
     release();
-}
+}	
 
 void UnoTypeManager::release()
-{
+{ 
     if (0 == TypeManager::release())
         delete m_pImpl;
 }
@@ -117,7 +117,7 @@ sal_Bool UnoTypeManager::init(
     }
 
     if ( !registries.empty() ) {
-
+    
         Reference< XMultiComponentFactory > xServiceManager(
             xContext->getServiceManager() );
         if ( !xServiceManager.is() ) {
@@ -125,9 +125,9 @@ sal_Bool UnoTypeManager::init(
                              "internal UNO problem, can't get ServiceManager"));
             throw RuntimeException( msg, Reference< XInterface >());
         }
-
+        
         Sequence<Any> seqArgs(registries.size());
-
+        
         std::vector< OUString >::const_iterator iter = registries.begin();
         int i = 0;
         while ( iter != registries.end() )
@@ -142,7 +142,7 @@ sal_Bool UnoTypeManager::init(
                            sal_True, sal_False);
 
             seqArgs[i++] = makeAny(xReg);
-            ++iter;
+            iter++;
         }
 
         Reference< XHierarchicalNameAccess > xTDProvider(
@@ -162,9 +162,9 @@ sal_Bool UnoTypeManager::init(
         Reference< XSet > xSet(m_pImpl->m_tdmgr, UNO_QUERY);
         xSet->insert(a);
     }
-
+    
     return sal_True;
-}
+}	
 
 sal_Bool UnoTypeManager::isValidType(const ::rtl::OString& name) const
 {
@@ -203,81 +203,81 @@ typereg::Reader UnoTypeManager::getTypeReader(
         rtl_freeMemory(pBlob);
 
     return reader;
-}
+}	
 
 typereg::Reader UnoTypeManager::getTypeReader(RegistryKey& rTypeKey) const
 {
     typereg::Reader reader;
-
+    
     if (rTypeKey.isValid()) {
-        RegValueType    valueType;
-        sal_uInt32      valueSize;
+        RegValueType 	valueType;
+        sal_uInt32		valueSize;
 
         if (!rTypeKey.getValueInfo(OUString(), &valueType, &valueSize)) {
-            sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
+            sal_uInt8*	pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);	
             if ( !rTypeKey.getValue(OUString(), pBuffer) ) {
                 reader = typereg::Reader(
                     pBuffer, valueSize, true, TYPEREG_VERSION_1);
-            }
+            }		
             rtl_freeMemory(pBuffer);
         }
     }
     return reader;
-}
+}	
 
 
 RTTypeClass UnoTypeManager::getTypeClass(const OString& name) const
 {
     if ( m_pImpl->m_t2TypeClass.count(name) > 0 ) {
-        return m_pImpl->m_t2TypeClass[name];
+        return m_pImpl->m_t2TypeClass[name];		
     } else {
         Reference< XTypeDescription > xTD;
         Any a = m_pImpl->m_tdmgr->getByHierarchicalName(
             OStringToOUString(name, RTL_TEXTENCODING_UTF8));
         a >>= xTD;
-
+        
         if ( xTD.is() ) {
             RTTypeClass tc = mapTypeClass(xTD->getTypeClass());
             if (tc != RT_TYPE_INVALID)
-                m_pImpl->m_t2TypeClass[name] = tc;
+                m_pImpl->m_t2TypeClass[name] = tc;				
             return tc;
         }
-    }
+    }	
 
-    return RT_TYPE_INVALID;
-}
+    return RT_TYPE_INVALID;	
+}	
 
 RTTypeClass UnoTypeManager::getTypeClass(RegistryKey& rTypeKey) const
 {
     OString name = getTypeName(rTypeKey);
-
+    
     if ( m_pImpl->m_t2TypeClass.count(name) > 0 ) {
         return m_pImpl->m_t2TypeClass[name];
     } else {
         if ( rTypeKey.isValid() ) {
-            RegValueType    valueType;
-            sal_uInt32      valueSize;
+            RegValueType 	valueType;
+            sal_uInt32		valueSize;
 
             if ( !rTypeKey.getValueInfo(OUString(), &valueType, &valueSize) ) {
-                sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
+                sal_uInt8*	pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);	
                 if ( !rTypeKey.getValue(OUString(), pBuffer) ) {
                     typereg::Reader reader(
                         pBuffer, valueSize, false, TYPEREG_VERSION_1);
 
                     RTTypeClass ret = reader.getTypeClass();
-
+                    
                     rtl_freeMemory(pBuffer);
-
-                    m_pImpl->m_t2TypeClass[name] = ret;
+                    
+                    m_pImpl->m_t2TypeClass[name] = ret;				
                     return ret;
-                }
+                }		
                 rtl_freeMemory(pBuffer);
             }
         }
-    }
+    }	
 
-    return RT_TYPE_INVALID;
-}
+    return RT_TYPE_INVALID;	
+}	
 
 } // end of namespace unodevtools
 

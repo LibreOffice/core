@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,31 +58,26 @@
 #include <svl/lstner.hxx>
 #include <unotools/eventcfg.hxx>
 
-namespace comphelper
-{
-    class NamedValueCollection;
-}
-
 //--------------------------------------------------------------------------------------------------------
 
-#define NOSUCHELEMENTEXCEPTION      ::com::sun::star::container::NoSuchElementException
-#define XNAMEREPLACE                ::com::sun::star::container::XNameReplace
-#define DOCEVENTOBJECT              ::com::sun::star::document::EventObject
-#define XEVENTBROADCASTER           ::com::sun::star::document::XEventBroadcaster
-#define XDOCEVENTLISTENER           ::com::sun::star::document::XEventListener
-#define XEVENTSSUPPLIER             ::com::sun::star::document::XEventsSupplier
+#define NOSUCHELEMENTEXCEPTION		::com::sun::star::container::NoSuchElementException
+#define XNAMEREPLACE				::com::sun::star::container::XNameReplace
+#define DOCEVENTOBJECT				::com::sun::star::document::EventObject
+#define	XEVENTBROADCASTER			::com::sun::star::document::XEventBroadcaster
+#define XDOCEVENTLISTENER			::com::sun::star::document::XEventListener
+#define	XEVENTSSUPPLIER				::com::sun::star::document::XEventsSupplier
 #define XJOBEXECUTOR                ::com::sun::star::task::XJobExecutor
-#define EVENTOBJECT                 ::com::sun::star::lang::EventObject
-#define ILLEGALARGUMENTEXCEPTION    ::com::sun::star::lang::IllegalArgumentException
-#define WRAPPEDTARGETEXCEPTION      ::com::sun::star::lang::WrappedTargetException
-#define ANY                         ::com::sun::star::uno::Any
-#define REFERENCE                   ::com::sun::star::uno::Reference
+#define EVENTOBJECT					::com::sun::star::lang::EventObject
+#define ILLEGALARGUMENTEXCEPTION	::com::sun::star::lang::IllegalArgumentException
+#define WRAPPEDTARGETEXCEPTION		::com::sun::star::lang::WrappedTargetException
+#define ANY							::com::sun::star::uno::Any
+#define	REFERENCE					::com::sun::star::uno::Reference
 #define WEAKREFERENCE               ::com::sun::star::uno::WeakReference
-#define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
-#define SEQUENCE                    ::com::sun::star::uno::Sequence
-#define UNOTYPE                     ::com::sun::star::uno::Type
-#define OUSTRING                    ::rtl::OUString
-#define OINTERFACECONTAINERHELPER   ::cppu::OInterfaceContainerHelper
+#define RUNTIMEEXCEPTION			::com::sun::star::uno::RuntimeException
+#define SEQUENCE					::com::sun::star::uno::Sequence
+#define UNOTYPE						::com::sun::star::uno::Type
+#define OUSTRING					::rtl::OUString
+#define	OINTERFACECONTAINERHELPER   ::cppu::OInterfaceContainerHelper
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -94,11 +89,11 @@ class SvxMacro;
 
 class SfxEvents_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameReplace, ::com::sun::star::document::XEventListener  >
 {
-    SEQUENCE< OUSTRING >            maEventNames;
-    SEQUENCE< ANY >                 maEventData;
-    REFERENCE< XEVENTBROADCASTER >  mxBroadcaster;
-    ::osl::Mutex                    maMutex;
-    SfxObjectShell                 *mpObjShell;
+    SEQUENCE< OUSTRING >			maEventNames;
+    SEQUENCE< ANY >					maEventData;
+    REFERENCE< XEVENTBROADCASTER >	mxBroadcaster;
+    ::osl::Mutex					maMutex;
+    SfxObjectShell				   *mpObjShell;
 
     sal_Bool                    Warn_Impl( const String& );
 
@@ -108,35 +103,31 @@ public:
                                ~SfxEvents_Impl();
 
     //  --- XNameReplace ---
-    virtual void SAL_CALL       replaceByName( const OUSTRING & aName, const ANY & aElement )
+    virtual void SAL_CALL		replaceByName( const OUSTRING & aName, const ANY & aElement )
                                     throw( ILLEGALARGUMENTEXCEPTION, NOSUCHELEMENTEXCEPTION,
                                            WRAPPEDTARGETEXCEPTION, RUNTIMEEXCEPTION );
 
     //  --- XNameAccess ( parent of XNameReplace ) ---
-    virtual ANY SAL_CALL        getByName( const OUSTRING& aName )
+    virtual ANY SAL_CALL		getByName( const OUSTRING& aName )
                                     throw( NOSUCHELEMENTEXCEPTION, WRAPPEDTARGETEXCEPTION,
                                            RUNTIMEEXCEPTION );
     virtual SEQUENCE< OUSTRING > SAL_CALL getElementNames() throw ( RUNTIMEEXCEPTION );
-    virtual sal_Bool SAL_CALL   hasByName( const OUSTRING& aName ) throw ( RUNTIMEEXCEPTION );
+    virtual sal_Bool SAL_CALL	hasByName( const OUSTRING& aName ) throw ( RUNTIMEEXCEPTION );
 
     //  --- XElementAccess ( parent of XNameAccess ) ---
-    virtual UNOTYPE SAL_CALL    getElementType() throw ( RUNTIMEEXCEPTION );
-    virtual sal_Bool SAL_CALL   hasElements() throw ( RUNTIMEEXCEPTION );
+    virtual UNOTYPE SAL_CALL	getElementType() throw ( RUNTIMEEXCEPTION );
+    virtual sal_Bool SAL_CALL	hasElements() throw ( RUNTIMEEXCEPTION );
 
     // --- ::document::XEventListener ---
-    virtual void SAL_CALL       notifyEvent( const DOCEVENTOBJECT& aEvent )
+    virtual void SAL_CALL		notifyEvent( const DOCEVENTOBJECT& aEvent )
                                     throw( RUNTIMEEXCEPTION );
 
     // --- ::lang::XEventListener ---
-    virtual void SAL_CALL       disposing( const EVENTOBJECT& Source )
+    virtual void SAL_CALL		disposing( const EVENTOBJECT& Source )
                                     throw( RUNTIMEEXCEPTION );
 
-    static SvxMacro*            ConvertToMacro( const ANY& rElement, SfxObjectShell* pDoc, sal_Bool bNormalizeMacro );
-    static void                 NormalizeMacro( const ANY& rIn, ANY& rOut, SfxObjectShell* pDoc );
-    static void                 NormalizeMacro(
-                                    const ::comphelper::NamedValueCollection& i_eventDescriptor,
-                                    ::comphelper::NamedValueCollection& o_normalizedDescriptor,
-                                    SfxObjectShell* i_document );
+    static SvxMacro*            ConvertToMacro( const ANY& rElement, SfxObjectShell* pDoc, BOOL bBlowUp );
+    static void					BlowUpMacro( const ANY& rIn, ANY& rOut, SfxObjectShell* pDoc );
 };
 
 //=============================================================================

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_xmloff.hxx"
 #include <tools/debug.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include "SchXMLImport.hxx"
@@ -51,7 +51,7 @@ private:
 
 public:
 
-    SchXMLBodyContext_Impl( SchXMLImportHelper& rImpHelper,
+    SchXMLBodyContext_Impl( SchXMLImportHelper& rImpHelper, 
                 SvXMLImport& rImport, sal_uInt16 nPrfx,
                 const ::rtl::OUString& rLName );
     virtual ~SchXMLBodyContext_Impl();
@@ -61,7 +61,7 @@ public:
                 const uno::Reference< xml::sax::XAttributeList > & xAttrList );
 };
 
-SchXMLBodyContext_Impl::SchXMLBodyContext_Impl(
+SchXMLBodyContext_Impl::SchXMLBodyContext_Impl( 
         SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
         sal_uInt16 nPrfx, const ::rtl::OUString& rLName ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -78,7 +78,7 @@ SvXMLImportContext *SchXMLBodyContext_Impl::CreateChildContext(
         const ::rtl::OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & )
 {
-    return new SchXMLBodyContext( mrImportHelper, GetImport(), nPrefix,
+    return new SchXMLBodyContext( mrImportHelper, GetImport(), nPrefix, 
                                   rLocalName );
 }
 
@@ -86,7 +86,7 @@ SvXMLImportContext *SchXMLBodyContext_Impl::CreateChildContext(
 
 SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
                                     SvXMLImport& rImport,
-                                    sal_uInt16 nPrefix,
+                                    USHORT nPrefix,
                                     const rtl::OUString& rLName ) :
         SvXMLImportContext( rImport, nPrefix, rLName ),
         mrImportHelper( rImpHelper )
@@ -151,7 +151,7 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
 SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(
         SchXMLImportHelper& i_rImpHelper,
         SchXMLImport& i_rImport,
-        sal_uInt16 i_nPrefix, const ::rtl::OUString & i_rLName,
+        USHORT i_nPrefix, const ::rtl::OUString & i_rLName,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
     SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
@@ -165,7 +165,7 @@ SchXMLFlatDocContext_Impl::~SchXMLFlatDocContext_Impl() { }
 
 
 SvXMLImportContext *SchXMLFlatDocContext_Impl::CreateChildContext(
-    sal_uInt16 i_nPrefix, const ::rtl::OUString& i_rLocalName,
+    USHORT i_nPrefix, const ::rtl::OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
     // behave like meta base class iff we encounter office:meta
@@ -184,7 +184,7 @@ SvXMLImportContext *SchXMLFlatDocContext_Impl::CreateChildContext(
 
 SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport,
-                                      sal_uInt16 nPrefix,
+                                      USHORT nPrefix,
                                       const rtl::OUString& rLName ) :
         SvXMLImportContext( rImport, nPrefix, rLName ),
         mrImportHelper( rImpHelper )
@@ -228,7 +228,7 @@ SvXMLImportContext* SchXMLBodyContext::CreateChildContext(
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
     }
 
-    return pContext;
+    return pContext;	
 }
 
 

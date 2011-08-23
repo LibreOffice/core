@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,6 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 
-#include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -67,9 +66,9 @@
 #include <editeng/numitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
-#include "svx/xoutbmp.hxx"
+#include "xoutbmp.hxx"
 #include "svtools/filter.hxx"
-#include "svx/unoapi.hxx"
+#include "unoapi.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/fmview.hxx>
@@ -82,7 +81,7 @@
 
 #include "boost/scoped_ptr.hpp"
 
-#define MAX_EXT_PIX         2048
+#define MAX_EXT_PIX			2048
 
 using namespace ::comphelper;
 using namespace ::osl;
@@ -116,8 +115,8 @@ namespace svx
         URL maURL;
         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > mxOutputStream;
         com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicRenderer > mxGraphicRenderer;
-        com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >    mxStatusIndicator;
-        com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > mxInteractionHandler;
+        com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >	mxStatusIndicator;
+        com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >	mxInteractionHandler;
 
         sal_Int32 mnWidth;
         sal_Int32 mnHeight;
@@ -127,7 +126,7 @@ namespace svx
         sal_Bool mbUseHighContrast;
         sal_Bool mbTranslucent;
 
-        Sequence< PropertyValue >   maFilterData;
+        Sequence< PropertyValue >	maFilterData;
 
         Fraction    maScaleX;
         Fraction    maScaleY;
@@ -153,7 +152,7 @@ namespace svx
         }
     }
 
-    /** implements a component to export shapes or pages to external graphic formats.
+    /**	implements a component to export shapes or pages to external graphic formats.
 
         @implements com.sun.star.drawing.GraphicExportFilter
     */
@@ -179,7 +178,7 @@ namespace svx
         virtual sal_Bool SAL_CALL supportsMimeType( const ::rtl::OUString& MimeTypeName ) throw (RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedMimeTypeNames(  ) throw (RuntimeException);
 
-        VirtualDevice* CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const;
+        VirtualDevice* CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel, ULONG nHeightPixel ) const;
 
         DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
@@ -187,16 +186,16 @@ namespace svx
         bool GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, sal_Bool bVectorType );
 
     private:
-        Reference< XShape >     mxShape;
-        Reference< XDrawPage >  mxPage;
-        Reference< XShapes >    mxShapes;
+        Reference< XShape >		mxShape;
+        Reference< XDrawPage >	mxPage;
+        Reference< XShapes >	mxShapes;
 
-        SvxDrawPage*        mpUnoPage;
+        SvxDrawPage*		mpUnoPage;
 
-        Link                maOldCalcFieldValueHdl;
-        sal_Int32           mnPageNumber;
-        SdrPage*            mpCurrentPage;
-        SdrModel*           mpDoc;
+        Link				maOldCalcFieldValueHdl;
+        sal_Int32			mnPageNumber;
+        SdrPage*			mpCurrentPage;
+        SdrModel*			mpDoc;
     };
 
     SVX_DLLPUBLIC Reference< XInterface > SAL_CALL GraphicExporter_createInstance(const Reference< XMultiServiceFactory > & )
@@ -221,16 +220,16 @@ namespace svx
 
     /** creates a bitmap that is optionaly transparent from a metafile
     */
-    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, sal_Bool bTransparent, const Size* pSize )
+    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, BOOL bTransparent, const Size* pSize )
     {
         Graphic     aGraphic( rMtf );
-        BitmapEx    aBmpEx;
+        BitmapEx	aBmpEx;
 
         // #i102089# support user's settings of AA and LineSnap when the MetaFile gets
         // rasterconverted to a bitmap
         const SvtOptionsDrawinglayer aDrawinglayerOpt;
         const GraphicConversionParameters aParameters(
-            pSize ? *pSize : Size(0, 0),
+            pSize ? *pSize : Size(0, 0), 
             true, // allow unlimited size
             aDrawinglayerOpt.IsAntiAliasing(),
             aDrawinglayerOpt.IsSnapHorVerLinesToDiscrete());
@@ -282,15 +281,15 @@ public:
     virtual ~ImplExportCheckVisisbilityRedirector();
 
     virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
-        const sdr::contact::ViewObjectContact& rOriginal,
+        const sdr::contact::ViewObjectContact& rOriginal, 
         const sdr::contact::DisplayInfo& rDisplayInfo);
 
 private:
-    SdrPage*    mpCurrentPage;
+    SdrPage*	mpCurrentPage;
 };
 
 ImplExportCheckVisisbilityRedirector::ImplExportCheckVisisbilityRedirector( SdrPage* pCurrentPage )
-:   ViewObjectContactRedirector(), mpCurrentPage( pCurrentPage )
+:	ViewObjectContactRedirector(), mpCurrentPage( pCurrentPage )
 {
 }
 
@@ -299,7 +298,7 @@ ImplExportCheckVisisbilityRedirector::~ImplExportCheckVisisbilityRedirector()
 }
 
 drawinglayer::primitive2d::Primitive2DSequence ImplExportCheckVisisbilityRedirector::createRedirectedPrimitive2DSequence(
-    const sdr::contact::ViewObjectContact& rOriginal,
+    const sdr::contact::ViewObjectContact& rOriginal, 
     const sdr::contact::DisplayInfo& rDisplayInfo)
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
@@ -349,7 +348,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             if( pField && pField->ISA( SvxPageField ) )
             {
                 String aPageNumValue;
-                sal_Bool bUpper = sal_False;
+                BOOL bUpper = FALSE;
 
                 switch(mpDoc->GetPageNumType())
                 {
@@ -360,7 +359,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                         aPageNumValue += (sal_Unicode)(char)((mnPageNumber - 1) % 26 + 'a');
                         break;
                     case SVX_ROMAN_UPPER:
-                        bUpper = sal_True;
+                        bUpper = TRUE;
                     case SVX_ROMAN_LOWER:
                         aPageNumValue += SvxNumberFormat::CreateRomanString(mnPageNumber, bUpper);
                         break;
@@ -389,12 +388,12 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
 /** creates an virtual device for the given page
 
-    @return the returned VirtualDevice is owned by the caller
+    @return	the returned VirtualDevice is owned by the caller
 */
-VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const
+VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel, ULONG nHeightPixel ) const
 {
-    VirtualDevice*  pVDev = new VirtualDevice();
-    MapMode         aMM( MAP_100TH_MM );
+    VirtualDevice*	pVDev = new VirtualDevice();
+    MapMode			aMM( MAP_100TH_MM );
 
     Point aPoint( 0, 0 );
     Size aPageSize(pPage->GetSize());
@@ -422,17 +421,17 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWid
 
     pVDev->SetMapMode( aMM );
 #ifdef DBG_UTIL
-    sal_Bool bAbort = !
+    BOOL bAbort = !
 #endif
         pVDev->SetOutputSize(aPageSize);
     DBG_ASSERT(!bAbort, "virt. Device nicht korrekt erzeugt");
 
     SdrView* pView = new SdrView(mpDoc, pVDev);
-    pView->SetPageVisible( sal_False );
-    pView->SetBordVisible( sal_False );
-    pView->SetGridVisible( sal_False );
-    pView->SetHlplVisible( sal_False );
-    pView->SetGlueVisible( sal_False );
+    pView->SetPageVisible( FALSE );
+    pView->SetBordVisible( FALSE );
+    pView->SetGridVisible( FALSE );
+    pView->SetHlplVisible( FALSE );
+    pView->SetGlueVisible( FALSE );
     pView->ShowSdrPage(pPage);
     Region aRegion (Rectangle( aPoint, aPageSize ) );
 
@@ -481,15 +480,15 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
         {
             pValues->Value >>= rSettings.mxInteractionHandler;
         }
-        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
+        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )	// for compatibility reasons, deprecated
         {
             pValues->Value >>= rSettings.mnWidth;
         }
-        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) ) // for compatibility reasons, deprecated
+        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) )	// for compatibility reasons, deprecated
         {
             pValues->Value >>= rSettings.mnHeight;
         }
-        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )   // for compatibility reasons, deprecated
+        else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )	// for compatibility reasons, deprecated
         {
             pValues->Value >>= rSettings.mbExportOnlyBackground;
         }
@@ -503,8 +502,8 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
             {
                 if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Translucent" ) ) )
                 {
-                    if ( !( pDataValues->Value >>= rSettings.mbTranslucent ) )  // SJ: TODO: The GIF Transparency is stored as int32 in
-                    {                                               // configuration files, this has to be changed to boolean
+                    if ( !( pDataValues->Value >>= rSettings.mbTranslucent ) )	// SJ: TODO: The GIF Transparency is stored as int32 in
+                    {												// configuration files, this has to be changed to boolean
                         sal_Int32 nTranslucent = 0;
                         if ( pDataValues->Value >>= nTranslucent )
                             rSettings.mbTranslucent = nTranslucent != 0;
@@ -518,12 +517,12 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                 {
                     pDataValues->Value >>= rSettings.mnHeight;
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )	// for compatibility reasons, deprecated
                 {
                     pDataValues->Value >>= rSettings.mnWidth;
                     pDataValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PixelWidth" ) );
                 }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) ) // for compatibility reasons, deprecated
+                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) )	// for compatibility reasons, deprecated
                 {
                     pDataValues->Value >>= rSettings.mnHeight;
                     pDataValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PixelHeight" ) );
@@ -552,7 +551,7 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                 }
                 else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CurrentPage" ) ) )
                 {
-                    Reference< XDrawPage >  xPage;
+                    Reference< XDrawPage >	xPage;
                     pDataValues->Value >>= xPage;
                     if( xPage.is() )
                     {
@@ -585,7 +584,7 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                     if( pDataValues->Value >>= nVal )
                         rSettings.maScaleY = Fraction( rSettings.maScaleY.GetNumerator(), nVal );
                 }
-
+                
                 pDataValues++;
             }
         }
@@ -613,8 +612,8 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     if( !pPage )
         return false;
 
-    VirtualDevice       aVDev;
-    const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), rSettings.maScaleX, rSettings.maScaleY );
+    VirtualDevice		aVDev;
+    const MapMode 		aMap( mpDoc->GetScaleUnit(), Point(), rSettings.maScaleX, rSettings.maScaleY );
 
     SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
     maOldCalcFieldValueHdl = rOutl.GetCalcFieldValueHdl();
@@ -643,7 +642,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 pTempBackgroundShape->SetMergedItemSet(pCorrectProperties->GetItemSet());
                 pTempBackgroundShape->SetMergedItem(XLineStyleItem(XLINE_NONE));
                 pTempBackgroundShape->NbcSetStyleSheet(pCorrectProperties->GetStyleSheet(), true);
-                aShapes.push_back(pTempBackgroundShape);
+                aShapes.push_back(pTempBackgroundShape);				
             }
         }
         else
@@ -701,7 +700,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 }
 
 
-                VirtualDevice*  pVDev = CreatePageVDev( pPage, nWidthPix, nHeightPix );
+                VirtualDevice*	pVDev = CreatePageVDev( pPage, nWidthPix, nHeightPix );
 
                 if( pVDev )
                 {
@@ -719,13 +718,13 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 aVDev.SetMapMode( aMap );
                 if( rSettings.mbUseHighContrast )
                     aVDev.SetDrawMode( aVDev.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
-                aVDev.EnableOutput( sal_False );
+                aVDev.EnableOutput( FALSE );
                 aMtf.Record( &aVDev );
                 Size aNewSize;
 
                 // create a view
-                SdrView*        pView;
-
+                SdrView*		pView;
+                
                 if( PTR_CAST( FmFormModel, mpDoc ) )
                 {
                     pView = new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev );
@@ -735,21 +734,21 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     pView = new SdrView( mpDoc, &aVDev );
                 }
 
-                pView->SetBordVisible( sal_False );
-                pView->SetPageVisible( sal_False );
+                pView->SetBordVisible( FALSE );
+                pView->SetPageVisible( FALSE );
                 pView->ShowSdrPage( pPage );
 
                 if ( pView && pPage )
                 {
-                    pView->SetBordVisible( sal_False );
-                    pView->SetPageVisible( sal_False );
+                    pView->SetBordVisible( FALSE );
+                    pView->SetPageVisible( FALSE );
                     pView->ShowSdrPage( pPage );
 
-                    const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
+                    const Point	aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
                     aNewSize = Size( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
                                           aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
                     const Rectangle aClipRect( aNewOrg, aNewSize );
-                    MapMode         aVMap( aMap );
+                    MapMode			aVMap( aMap );
 
                     aVDev.Push();
                     aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
@@ -788,7 +787,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 if( rSettings.mbTranslucent )
                 {
                     Size aOutSize;
-                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), sal_True, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aNewSize, aOutSize ) );
+                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), TRUE, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aNewSize, aOutSize ) );
                 }
             }
         }
@@ -859,7 +858,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 {
                     Rectangle aScrollRectangle;
                     Rectangle aPaintRectangle;
-
+                    
                     const boost::scoped_ptr< GDIMetaFile > pMtf(
                         ( (SdrTextObj*) pObj )->GetTextScrollMetaFileAndRectangle(
                         aScrollRectangle, aPaintRectangle ) );
@@ -880,31 +879,31 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     // set actual origin (mtf is at actual shape
                     // output position)
                     MapMode aLocalMapMode( aMap );
-                    aLocalMapMode.SetOrigin(
+                    aLocalMapMode.SetOrigin( 
                         Point( -aPaintRectangle.Left(),
                                -aPaintRectangle.Top() ) );
                     pMtf->SetPrefMapMode( aLocalMapMode );
 
                     pMtf->AddAction( new MetaCommentAction(
                                          "XTEXT_SCROLLRECT", 0,
-                                         reinterpret_cast<sal_uInt8 const*>(&aScrollRectangle),
+                                         reinterpret_cast<BYTE const*>(&aScrollRectangle),
                                          sizeof( Rectangle ) ) );
                     pMtf->AddAction( new MetaCommentAction(
                                          "XTEXT_PAINTRECT", 0,
-                                         reinterpret_cast<sal_uInt8 const*>(&aPaintRectangle),
+                                         reinterpret_cast<BYTE const*>(&aPaintRectangle),
                                          sizeof( Rectangle ) ) );
-
+                    
                     aGraphic = Graphic( *pMtf );
-
+                    
                     bSingleGraphic = sal_True;
                 }
             }
         }
-
+        
         if( !bSingleGraphic )
         {
             // create a metafile for all shapes
-            VirtualDevice   aOut;
+            VirtualDevice	aOut;
 
             // calculate bound rect for all shapes
             Rectangle aBound;
@@ -924,7 +923,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 }
             }
 
-            aOut.EnableOutput( sal_False );
+            aOut.EnableOutput( FALSE );
             aOut.SetMapMode( aMap );
             if( rSettings.mbUseHighContrast )
                 aOut.SetDrawMode( aVDev.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
@@ -952,7 +951,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             if(aShapes.size())
             {
                 // more effective way to paint a vector of SdrObjects. Hand over the processed page
-                // to have it in the
+                // to have it in the 
                 sdr::contact::ObjectContactOfObjListPainter aMultiObjectPainter(aOut, aShapes, mpCurrentPage);
                 ImplExportCheckVisisbilityRedirector aCheckVisibilityRedirector(mpCurrentPage);
                 aMultiObjectPainter.SetViewObjectContactRedirector(&aCheckVisibilityRedirector);
@@ -963,8 +962,8 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             aMtf.Stop();
             aMtf.WindStart();
 
-            const Size  aExtSize( aOut.PixelToLogic( Size( 0, 0  ) ) );
-            Size        aBoundSize( aBound.GetWidth() + ( aExtSize.Width() ),
+            const Size	aExtSize( aOut.PixelToLogic( Size( 0, 0  ) ) );
+            Size		aBoundSize( aBound.GetWidth() + ( aExtSize.Width() ),
                                     aBound.GetHeight() + ( aExtSize.Height() ) );
 
             aMtf.SetPrefMapMode( aMap );
@@ -1005,8 +1004,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     if( NULL == mpUnoPage )
         return sal_False;
 
-    GraphicFilter*              pFilter = GraphicFilter::GetGraphicFilter();
-
+    GraphicFilter*				pFilter = GraphicFilter::GetGraphicFilter();
+   
     if( NULL == pFilter || NULL == mpUnoPage->GetSdrPage() || NULL == mpDoc )
         return sal_False;
 
@@ -1014,15 +1013,15 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     ExportSettings aSettings( mpDoc );
     ParseSettings( aDescriptor, aSettings );
 
-    const sal_uInt16    nFilter = aSettings.maMediaType.getLength()
+    const sal_uInt16	nFilter = aSettings.maMediaType.getLength()
                             ? pFilter->GetExportFormatNumberForMediaType( aSettings.maMediaType )
                             : pFilter->GetExportFormatNumberForShortName( aSettings.maFilterName );
-    sal_Bool            bVectorType = !pFilter->IsExportPixelFormat( nFilter );
+    sal_Bool			bVectorType = !pFilter->IsExportPixelFormat( nFilter );
 
     // create the output stuff
     Graphic aGraphic;
 
-    sal_uInt16 nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? GRFILTER_OK : GRFILTER_FILTERERROR;
+    USHORT nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? GRFILTER_OK : GRFILTER_FILTERERROR;
 
     if( nStatus == GRFILTER_OK )
     {
@@ -1042,7 +1041,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             }
             else if( aSettings.mxOutputStream.is() )
             {
-                // TODO: Either utilize optional XSeekable functionality for the
+                // TODO: Either utilize optional XSeekable functionality for the 
                 // SvOutputStream, or adapt the graphic filter to not seek anymore.
                 SvMemoryStream aStream( 1024, 1024 );
 
@@ -1067,13 +1066,15 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     {
         Any aInteraction;
         Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(1);
-        ::comphelper::OInteractionApprove* pApprove = new ::comphelper::OInteractionApprove();
+        ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
         lContinuations[0] = Reference< XInteractionContinuation >(static_cast< XInteractionContinuation* >(pApprove), UNO_QUERY);
 
         GraphicFilterRequest aErrorCode;
         aErrorCode.ErrCode = nStatus;
         aInteraction <<= aErrorCode;
-        aSettings.mxInteractionHandler->handle( framework::InteractionRequest::CreateRequest( aInteraction, lContinuations ) );
+        framework::InteractionRequest* pRequest = new framework::InteractionRequest( aInteraction, lContinuations );
+        Reference< XInteractionRequest >xRequest( static_cast< XInteractionRequest* >(pRequest), UNO_QUERY );
+        aSettings.mxInteractionHandler->handle( xRequest ); 
     }
     return nStatus == GRFILTER_OK;
 }
@@ -1155,7 +1156,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
         mpDoc = mpUnoPage->GetSdrPage()->GetModel();
 
         // Step 4:  If we got a generic XShapes test all contained shapes
-        //          if they belong to the same XDrawPage
+        //			if they belong to the same XDrawPage
 
         if( mxShapes.is() )
         {
@@ -1223,7 +1224,7 @@ sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& MimeTypeNam
 {
     const String aMimeTypeName( MimeTypeName );
 
-    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+    GraphicFilter*	pFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nCount = pFilter->GetExportFormatCount();
     sal_uInt16 nFilter;
     for( nFilter = 0; nFilter < nCount; nFilter++ )
@@ -1239,7 +1240,7 @@ sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& MimeTypeNam
 
 Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  ) throw (RuntimeException)
 {
-    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+    GraphicFilter*	pFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nCount = pFilter->GetExportFormatCount();
     sal_uInt16 nFilter;
     sal_uInt16 nFound = 0;
@@ -1276,7 +1277,7 @@ Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector )
     }
     catch( Exception& )
     {
-        OSL_FAIL("SvxGetGraphicForShape(), exception caught!");
+        DBG_ERROR("SvxGetGraphicForShape(), exception caught!");
     }
     return aGraphic;
 }

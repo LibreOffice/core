@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,11 +38,11 @@ public class _XExtendedTransliteration extends MultiMethodTest {
     public XExtendedTransliteration oObj = null;
 //    private Locale loc = new Locale("ja", "JP", "") ;
     private Locale loc = new Locale("en", "US", "") ;
-
+    
     public void before() {
         oObj.loadModule(TransliterationModules.LOWERCASE_UPPERCASE, loc);
     }
-
+    
     /**
      * Check lowercase - uppercase conversion of chars
      */
@@ -62,7 +62,7 @@ public class _XExtendedTransliteration extends MultiMethodTest {
         }
         tRes.tested("transliterateChar2Char()", result);
     }
-
+    
     /**
      * Check lowercase - uppercase conversion of char to string
      */
@@ -77,7 +77,7 @@ public class _XExtendedTransliteration extends MultiMethodTest {
         result &= out.equals("$");
         tRes.tested("transliterateChar2String()", result);
     }
-
+    
     /**
      * Check lowercase - uppercase conversion of strings
      */

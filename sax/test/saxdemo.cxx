@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -293,9 +293,9 @@ struct TagAttribute
                   const OUString &sType ,
                   const OUString &sValue )
     {
-        this->sName     = sName;
-        this->sType     = sType;
-        this->sValue    = sValue;
+        this->sName 	= sName;
+        this->sType 	= sType;
+        this->sValue 	= sValue;
     }
 
     OUString sName;
@@ -357,7 +357,7 @@ OUString AttributeListImpl::getTypeByName( const OUString& sName ) throw  (Runti
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
         if( (*ii).sName == sName ) {
             return (*ii).sType;
         }
@@ -369,7 +369,7 @@ OUString AttributeListImpl::getValueByName(const OUString& sName) throw  (Runtim
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
         if( (*ii).sName == sName ) {
             return (*ii).sValue;
         }
@@ -392,7 +392,7 @@ AttributeListImpl::~AttributeListImpl()
 }
 
 
-void AttributeListImpl::addAttribute(   const OUString &sName ,
+void AttributeListImpl::addAttribute( 	const OUString &sName ,
                                         const OUString &sType ,
                                         const OUString &sValue )
 {
@@ -509,7 +509,7 @@ int main (int argc, char **argv)
     {
         // Create registration service
         Reference < XInterface > x = xSMgr->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) );
+            OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
     }
     catch( Exception & ) {
@@ -521,9 +521,10 @@ int main (int argc, char **argv)
     try
     {
         // Load dll for the tested component
-        OUString aDllName(RTL_CONSTASCII_USTRINGPARAM( "sax.uno" SAL_DLLEXTENSION ));
+        OUString aDllName =
+            OUString::createFromAscii( "sax.uno" SAL_DLLEXTENSION );
         xReg->registerImplementation(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
+            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
             aDllName,
             Reference< XSimpleRegistry > ()  );
     }
@@ -540,7 +541,7 @@ int main (int argc, char **argv)
     // read xml from a file and count elements
     //--------------------------------
     Reference< XInterface > x = xSMgr->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
+        OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ) );
     if( x.is() )
     {
         Reference< XParser > rParser( x , UNO_QUERY );
@@ -548,7 +549,7 @@ int main (int argc, char **argv)
         // create and connect the document handler to the parser
         TestDocumentHandler *pDocHandler = new TestDocumentHandler( );
 
-        Reference < XDocumentHandler >  rDocHandler( (XDocumentHandler *) pDocHandler );
+        Reference < XDocumentHandler >	rDocHandler( (XDocumentHandler *) pDocHandler );
         Reference< XEntityResolver > rEntityResolver( (XEntityResolver *) pDocHandler );
 
         rParser->setDocumentHandler( rDocHandler );
@@ -557,7 +558,7 @@ int main (int argc, char **argv)
         // create the input stream
         InputSource source;
         source.aInputStream = createStreamFromFile( argv[1] );
-        source.sSystemId    = OUString::createFromAscii( argv[1] );
+        source.sSystemId 	= OUString::createFromAscii( argv[1] );
 
         try
         {
@@ -580,7 +581,7 @@ int main (int argc, char **argv)
     //----------------------
     // The SAX-Writer demo
     //----------------------
-    x= xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) );
+    x= xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) );
     if( x.is() )
     {
         printf( "start writing to %s\n" , argv[2] );
@@ -597,7 +598,7 @@ int main (int argc, char **argv)
 
         pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("Arg1" )),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("CDATA")) ,
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("foo\n   u")) );
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("foo\n	u")) );
         pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("Arg2")) ,
                              OUString( RTL_CONSTASCII_USTRINGPARAM("CDATA")) ,
                              OUString( RTL_CONSTASCII_USTRINGPARAM("foo2")) );

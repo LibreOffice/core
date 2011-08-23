@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -178,7 +178,9 @@ sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
 ScaFuncDataList::ScaFuncDataList( ResMgr& rResMgr ) :
     nLast( 0xFFFFFFFF )
 {
-    for( sal_uInt16 nIndex = 0; nIndex < SAL_N_ELEMENTS(pFuncDataArr); nIndex++ )
+    const sal_uInt32 nCnt = sizeof( pFuncDataArr ) / sizeof( ScaFuncDataBase );
+
+    for( sal_uInt16 nIndex = 0; nIndex < nCnt; nIndex++ )
         Append( new ScaFuncData( pFuncDataArr[ nIndex ], rResMgr ) );
 }
 
@@ -241,6 +243,35 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+sal_Bool SAL_CALL component_writeInfo(
+    void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
+{
+    if (pRegistryKey)
+    {
+        try
+        {
+            OUString aImpl = OUString::createFromAscii( "/" );
+            aImpl += ScaDateAddIn::getImplementationName_Static();
+            aImpl += OUString::createFromAscii( "/UNO/SERVICES" );
+
+            uno::Reference< registry::XRegistryKey > xNewKey(
+                reinterpret_cast< registry::XRegistryKey* >( pRegistryKey )->createKey( aImpl ) );
+
+            uno::Sequence< OUString > aSequ = ScaDateAddIn::getSupportedServiceNames_Static();
+            const OUString * pArray = aSequ.getConstArray();
+            for( sal_Int32 i = 0; i < aSequ.getLength(); i++ )
+                xNewKey->createKey( pArray[i] );
+
+            return sal_True;
+        }
+        catch (registry::InvalidRegistryException&)
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+    return sal_False;
+}
+
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
@@ -292,7 +323,7 @@ ScaDateAddIn::~ScaDateAddIn()
 
 static const sal_Char*  pLang[] = { "de", "en" };
 static const sal_Char*  pCoun[] = { "DE", "US" };
-static const sal_uInt32 nNumOfLoc = SAL_N_ELEMENTS( pLang );
+static const sal_uInt32 nNumOfLoc = sizeof( pLang ) / sizeof( sal_Char* );
 
 void ScaDateAddIn::InitDefLocales()
 {
@@ -330,7 +361,8 @@ void ScaDateAddIn::InitData()
         delete pResMgr;
 
     OString aModName( "date" );
-    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), aFuncLoc );
+    pResMgr = ResMgr::CreateResMgr( (const sal_Char*) aModName,
+                                        aFuncLoc );
 
     if( pFuncDataList )
         delete pFuncDataList;
@@ -369,15 +401,15 @@ OUString ScaDateAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex 
 
 OUString ScaDateAddIn::getImplementationName_Static()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( MY_IMPLNAME ));
+    return OUString::createFromAscii( MY_IMPLNAME );
 }
 
 uno::Sequence< OUString > ScaDateAddIn::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aRet( 2 );
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( ADDIN_SERVICE ));
-    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( MY_SERVICE ));
+    pArray[0] = OUString::createFromAscii( ADDIN_SERVICE );
+    pArray[1] = OUString::createFromAscii( MY_SERVICE );
     return aRet;
 }
 
@@ -386,7 +418,7 @@ uno::Sequence< OUString > ScaDateAddIn::getSupportedServiceNames_Static()
 OUString SAL_CALL ScaDateAddIn::getServiceName() throw( uno::RuntimeException )
 {
     // name of specific AddIn service
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( MY_SERVICE ));
+    return OUString::createFromAscii( MY_SERVICE );
 }
 
 // XServiceInfo
@@ -398,8 +430,8 @@ OUString SAL_CALL ScaDateAddIn::getImplementationName() throw( uno::RuntimeExcep
 
 sal_Bool SAL_CALL ScaDateAddIn::supportsService( const OUString& aServiceName ) throw( uno::RuntimeException )
 {
-    return aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ADDIN_SERVICE ) ) ||
-        aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MY_SERVICE ) );
+    return aServiceName.equalsAscii( ADDIN_SERVICE ) ||
+        aServiceName.equalsAscii( MY_SERVICE );
 }
 
 uno::Sequence< OUString > SAL_CALL ScaDateAddIn::getSupportedServiceNames() throw( uno::RuntimeException )
@@ -679,7 +711,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
         try
         {
             uno::Any aAny = xOptions->getPropertyValue(
-                                        OUString(RTL_CONSTASCII_USTRINGPARAM( "NullDate" )) );
+                                        OUString::createFromAscii( "NullDate" ) );
             util::Date aDate;
             if ( aAny >>= aDate )
                 return DateToDays( aDate.Day, aDate.Month, aDate.Year );

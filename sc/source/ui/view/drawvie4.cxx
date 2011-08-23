@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "drwtrans.hxx"
-#include "transobj.hxx"     // SetDrawClipDoc
+#include "transobj.hxx"		// SetDrawClipDoc
 #include "drawutil.hxx"
 #include "scmod.hxx"
 #include "globstr.hrc"
@@ -64,7 +64,7 @@ Point aDragStartDiff;
 
 // -----------------------------------------------------------------------
 
-//! welche Funktionen aus drawview/drawvie4 muessen wirklich ohne Optimierung sein?
+//!	welche Funktionen aus drawview/drawvie4 muessen wirklich ohne Optimierung sein?
 
 #ifdef _MSC_VER
 #pragma optimize ( "", off )
@@ -72,18 +72,18 @@ Point aDragStartDiff;
 
 // -----------------------------------------------------------------------
 
-void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle )
+void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle )
 {
-    rAnyOle = rOneOle = false;
-    sal_uLong nCount = rMarkList.GetMarkCount();
-    for (sal_uLong i=0; i<nCount; i++)
+    rAnyOle = rOneOle = FALSE;
+    ULONG nCount = rMarkList.GetMarkCount();
+    for (ULONG i=0; i<nCount; i++)
     {
         SdrMark* pMark = rMarkList.GetMark(i);
         SdrObject* pObj = pMark->GetMarkedSdrObj();
-        sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+        UINT16 nSdrObjKind = pObj->GetObjIdentifier();
         if (nSdrObjKind == OBJ_OLE2)
         {
-            rAnyOle = sal_True;
+            rAnyOle = TRUE;
             rOneOle = (nCount == 1);
             break;
         }
@@ -95,8 +95,8 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rO
             {
                 if ( pSubObj->GetObjIdentifier() == OBJ_OLE2 )
                 {
-                    rAnyOle = sal_True;
-                    // rOneOle remains sal_False - a group isn't treated like a single OLE object
+                    rAnyOle = TRUE;
+                    // rOneOle remains FALSE - a group isn't treated like a single OLE object
                     return;
                 }
                 pSubObj = aIter.Next();
@@ -105,9 +105,9 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rO
     }
 }
 
-sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
+BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 {
-    sal_Bool bReturn = false;
+    BOOL bReturn = FALSE;
 
     if ( AreObjectsMarked() )
     {
@@ -118,24 +118,24 @@ sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 
         aDragStartDiff = rStartPos - aMarkedRect.TopLeft();
 
-        sal_Bool bAnyOle, bOneOle;
+        BOOL bAnyOle, bOneOle;
         const SdrMarkList& rMarkList = GetMarkedObjectList();
         lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
 
         ScDocShellRef aDragShellRef;
         if (bAnyOle)
         {
-            aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
+            aDragShellRef = new ScDocShell;		// DocShell needs a Ref immediately
             aDragShellRef->DoInitNew(NULL);
         }
         ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
         SdrModel* pModel = GetAllMarkedModel();
         ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-        //  Charts now always copy their data in addition to the source reference, so
-        //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
-        //  Update with the data (including NumberFormatter) from the live document would
-        //  also store the NumberFormatter in the clipboard chart (#88749#)
+        //	Charts now always copy their data in addition to the source reference, so
+        //	there's no need to call SchDLL::Update for the charts in the clipboard doc.
+        //	Update with the data (including NumberFormatter) from the live document would
+        //	also store the NumberFormatter in the clipboard chart (#88749#)
         // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
 
         ScDocShell* pDocSh = pViewData->GetDocShell();
@@ -149,9 +149,9 @@ sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
         uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
         pTransferObj->SetDrawPersist( &aDragShellRef );    // keep persist for ole objects alive
-        pTransferObj->SetDragSource( this );            // copies selection
+        pTransferObj->SetDragSource( this );			// copies selection
 
-        SC_MOD()->SetDragObject( NULL, pTransferObj );      // for internal D&D
+        SC_MOD()->SetDragObject( NULL, pTransferObj );		// for internal D&D
         pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
     }
 
@@ -160,7 +160,7 @@ sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 
 void ScDrawView::DoCopy()
 {
-    sal_Bool bAnyOle, bOneOle;
+    BOOL bAnyOle, bOneOle;
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
 
@@ -169,10 +169,10 @@ void ScDrawView::DoCopy()
     SdrModel* pModel = GetAllMarkedModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-    //  Charts now always copy their data in addition to the source reference, so
-    //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
-    //  Update with the data (including NumberFormatter) from the live document would
-    //  also store the NumberFormatter in the clipboard chart (#88749#)
+    //	Charts now always copy their data in addition to the source reference, so
+    //	there's no need to call SchDLL::Update for the charts in the clipboard doc.
+    //	Update with the data (including NumberFormatter) from the live document would
+    //	also store the NumberFormatter in the clipboard chart (#88749#)
     // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
 
     ScDocShell* pDocSh = pViewData->GetDocShell();
@@ -190,13 +190,13 @@ void ScDrawView::DoCopy()
         pTransferObj->SetDrawPersist( &(*ScGlobal::pDrawClipDocShellRef) );    // keep persist for ole objects alive
     }
 
-    pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
-    SC_MOD()->SetClipObject( NULL, pTransferObj );                  // internal clipboard
+    pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );		// system clipboard
+    SC_MOD()->SetClipObject( NULL, pTransferObj );					// internal clipboard
 }
 
 uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 {
-    sal_Bool bAnyOle, bOneOle;
+    BOOL bAnyOle, bOneOle;
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
 
@@ -205,10 +205,10 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     SdrModel* pModel = GetAllMarkedModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-    //  Charts now always copy their data in addition to the source reference, so
-    //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
-    //  Update with the data (including NumberFormatter) from the live document would
-    //  also store the NumberFormatter in the clipboard chart (#88749#)
+    //	Charts now always copy their data in addition to the source reference, so
+    //	there's no need to call SchDLL::Update for the charts in the clipboard doc.
+    //	Update with the data (including NumberFormatter) from the live document would
+    //	also store the NumberFormatter in the clipboard chart (#88749#)
     // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
 
     ScDocShell* pDocSh = pViewData->GetDocShell();
@@ -229,10 +229,11 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     return xTransferable;
 }
 
-//  Korrektur fuer 100% berechnen, unabhaengig von momentanen Einstellungen
+//	Korrektur fuer 100% berechnen, unabhaengig von momentanen Einstellungen
 
 void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
 {
+    Point aLogic = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
     double nPPTX = ScGlobal::nScreenPPTX;
     double nPPTY = ScGlobal::nScreenPPTY;
 
@@ -258,18 +259,18 @@ void ScDrawView::SetMarkedOriginalSize()
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     long nDone = 0;
-    sal_uLong nCount = rMarkList.GetMarkCount();
-    for (sal_uLong i=0; i<nCount; i++)
+    ULONG nCount = rMarkList.GetMarkCount();
+    for (ULONG i=0; i<nCount; i++)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        sal_uInt16 nIdent = pObj->GetObjIdentifier();
-        sal_Bool bDo = false;
+        USHORT nIdent = pObj->GetObjIdentifier();
+        BOOL bDo = FALSE;
         Size aOriginalSize;
         if (nIdent == OBJ_OLE2)
         {
             // TODO/LEAN: working with visual area can switch object to running state
             uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
-            if ( xObj.is() )    // NULL for an invalid object that couldn't be loaded
+            if ( xObj.is() )    // #121612# NULL for an invalid object that couldn't be loaded
             {
                 sal_Int64 nAspect = ((SdrOle2Obj*)pObj)->GetAspect();
 
@@ -277,7 +278,7 @@ void ScDrawView::SetMarkedOriginalSize()
                 {
                     MapMode aMapMode( MAP_100TH_MM );
                     aOriginalSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize( &aMapMode );
-                    bDo = sal_True;
+                    bDo = TRUE;
                 }
                 else
                 {
@@ -289,10 +290,10 @@ void ScDrawView::SetMarkedOriginalSize()
                         aOriginalSize = OutputDevice::LogicToLogic(
                                             Size( aSz.Width, aSz.Height ),
                                             aUnit, MAP_100TH_MM );
-                        bDo = sal_True;
+                        bDo = TRUE;
                     } catch( embed::NoVisualAreaSizeException& )
                     {
-                        OSL_ENSURE( false, "Can't get the original size of the object!" );
+                        OSL_ENSURE( sal_False, "Can't get the original size of the object!" );
                     }
                 }
             }
@@ -305,7 +306,7 @@ void ScDrawView::SetMarkedOriginalSize()
             MapMode aDestMap( MAP_100TH_MM );
             if (aSourceMap.GetMapUnit() == MAP_PIXEL)
             {
-                //  Pixel-Korrektur beruecksichtigen, damit Bitmap auf dem Bildschirm stimmt
+                //	Pixel-Korrektur beruecksichtigen, damit Bitmap auf dem Bildschirm stimmt
 
                 Fraction aNormScaleX, aNormScaleY;
                 CalcNormScale( aNormScaleX, aNormScaleY );
@@ -319,7 +320,7 @@ void ScDrawView::SetMarkedOriginalSize()
                 {
                     aOriginalSize = pActWin->LogicToLogic(
                                     rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
-                    bDo = sal_True;
+                    bDo = TRUE;
                 }
             }
         }

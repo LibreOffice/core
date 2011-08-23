@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,34 +59,34 @@ class TaskPaneList;
 #define ICON_MATH_DOCUMENT              15
 #define ICON_TEMPLATE                   16
 #define ICON_MACROLIBRARY               17
-#define ICON_PLAYER                     100
+#define	ICON_PLAYER						100
 #define ICON_SETUP                      500
 
 // -------------------
 // - WindowStateData -
 // -------------------
 
-#define WINDOWSTATE_MASK_X                  ((sal_uLong)0x00000001)
-#define WINDOWSTATE_MASK_Y                  ((sal_uLong)0x00000002)
-#define WINDOWSTATE_MASK_WIDTH              ((sal_uLong)0x00000004)
-#define WINDOWSTATE_MASK_HEIGHT             ((sal_uLong)0x00000008)
-#define WINDOWSTATE_MASK_STATE              ((sal_uLong)0x00000010)
-#define WINDOWSTATE_MASK_MINIMIZED          ((sal_uLong)0x00000020)
-#define WINDOWSTATE_MASK_MAXIMIZED_X        ((sal_uLong)0x00000100)
-#define WINDOWSTATE_MASK_MAXIMIZED_Y        ((sal_uLong)0x00000200)
-#define WINDOWSTATE_MASK_MAXIMIZED_WIDTH    ((sal_uLong)0x00000400)
-#define WINDOWSTATE_MASK_MAXIMIZED_HEIGHT   ((sal_uLong)0x00000800)
+#define WINDOWSTATE_MASK_X                  ((ULONG)0x00000001)
+#define WINDOWSTATE_MASK_Y                  ((ULONG)0x00000002)
+#define WINDOWSTATE_MASK_WIDTH              ((ULONG)0x00000004)
+#define WINDOWSTATE_MASK_HEIGHT             ((ULONG)0x00000008)
+#define WINDOWSTATE_MASK_STATE              ((ULONG)0x00000010)
+#define WINDOWSTATE_MASK_MINIMIZED          ((ULONG)0x00000020)
+#define WINDOWSTATE_MASK_MAXIMIZED_X        ((ULONG)0x00000100)
+#define WINDOWSTATE_MASK_MAXIMIZED_Y        ((ULONG)0x00000200)
+#define WINDOWSTATE_MASK_MAXIMIZED_WIDTH    ((ULONG)0x00000400)
+#define WINDOWSTATE_MASK_MAXIMIZED_HEIGHT   ((ULONG)0x00000800)
 #define WINDOWSTATE_MASK_POS  (WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y)
 #define WINDOWSTATE_MASK_ALL  (WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT | WINDOWSTATE_MASK_MAXIMIZED_X | WINDOWSTATE_MASK_MAXIMIZED_Y | WINDOWSTATE_MASK_MAXIMIZED_WIDTH | WINDOWSTATE_MASK_MAXIMIZED_HEIGHT | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)
 
-#define WINDOWSTATE_STATE_NORMAL         ((sal_uLong)0x00000001)
-#define WINDOWSTATE_STATE_MINIMIZED      ((sal_uLong)0x00000002)
-#define WINDOWSTATE_STATE_MAXIMIZED      ((sal_uLong)0x00000004)
-#define WINDOWSTATE_STATE_ROLLUP         ((sal_uLong)0x00000008)
-#define WINDOWSTATE_STATE_MAXIMIZED_HORZ ((sal_uLong)0x00000010)
-#define WINDOWSTATE_STATE_MAXIMIZED_VERT ((sal_uLong)0x00000020)
+#define WINDOWSTATE_STATE_NORMAL         ((ULONG)0x00000001)
+#define WINDOWSTATE_STATE_MINIMIZED      ((ULONG)0x00000002)
+#define WINDOWSTATE_STATE_MAXIMIZED      ((ULONG)0x00000004)
+#define WINDOWSTATE_STATE_ROLLUP         ((ULONG)0x00000008)
+#define WINDOWSTATE_STATE_MAXIMIZED_HORZ ((ULONG)0x00000010)
+#define WINDOWSTATE_STATE_MAXIMIZED_VERT ((ULONG)0x00000020)
 
-class VCL_PLUGIN_PUBLIC WindowStateData
+class VCL_DLLPUBLIC WindowStateData
 {
 private:
     sal_uInt32          mnValidMask;
@@ -107,7 +107,7 @@ public:
                     mnMaximizedX = mnMaximizedY = mnMaximizedWidth = mnMaximizedHeight = 0;
                 }
 
-    void        SetMask( sal_uLong nValidMask ) { mnValidMask = nValidMask; }
+    void        SetMask( ULONG nValidMask ) { mnValidMask = nValidMask; }
     sal_uInt32  GetMask() const { return mnValidMask; }
 
     void         SetX( int nX ) { mnX = nX; }
@@ -134,12 +134,12 @@ public:
 // - SystemWindow-Types -
 // ----------------------
 
-#define MENUBAR_MODE_NORMAL         ((sal_uInt16)0)
-#define MENUBAR_MODE_HIDE           ((sal_uInt16)1)
+#define MENUBAR_MODE_NORMAL         ((USHORT)0)
+#define MENUBAR_MODE_HIDE           ((USHORT)1)
 
-#define TITLE_BUTTON_DOCKING        ((sal_uInt16)1)
-#define TITLE_BUTTON_HIDE           ((sal_uInt16)2)
-#define TITLE_BUTTON_MENU           ((sal_uInt16)4)
+#define TITLE_BUTTON_DOCKING        ((USHORT)1)
+#define TITLE_BUTTON_HIDE           ((USHORT)2)
+#define TITLE_BUTTON_MENU           ((USHORT)4)
 
 // ----------------
 // - SystemWindow -
@@ -156,20 +156,20 @@ private:
     Size            maOrgSize;
     Size            maRollUpOutSize;
     Size            maMinOutSize;
-    sal_Bool            mbPined;
-    sal_Bool            mbRollUp;
-    sal_Bool            mbRollFunc;
-    sal_Bool            mbDockBtn;
-    sal_Bool            mbHideBtn;
-    sal_Bool            mbSysChild;
-    sal_uInt16          mnMenuBarMode;
-    sal_uInt16          mnIcon;
+    BOOL            mbPined;
+    BOOL            mbRollUp;
+    BOOL            mbRollFunc;
+    BOOL            mbDockBtn;
+    BOOL            mbHideBtn;
+    BOOL            mbSysChild;
+    USHORT          mnMenuBarMode;
+    USHORT          mnIcon;
     ImplData*       mpImplData;
 
 #if _SOLAR__PRIVATE
 public:
     using Window::ImplIsInTaskPaneList;
-    SAL_DLLPRIVATE sal_Bool ImplIsInTaskPaneList( Window* pWin );
+    SAL_DLLPRIVATE BOOL ImplIsInTaskPaneList( Window* pWin );
 #endif
 
 private:
@@ -179,7 +179,7 @@ private:
     // Copy assignment is forbidden and not implemented.
     SystemWindow (const SystemWindow &);
     SystemWindow & operator= (const SystemWindow &);
-
+    
     SAL_DLLPRIVATE void ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, Window* i_pConfigureWin );
 
 protected:
@@ -193,34 +193,34 @@ public:
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
-    virtual sal_Bool    Close();
-    virtual void    TitleButtonClick( sal_uInt16 nButton );
+    virtual BOOL    Close();
+    virtual void    TitleButtonClick( USHORT nButton );
     virtual void    Pin();
     virtual void    Roll();
     virtual void    Resizing( Size& rSize );
 
-    void            SetIcon( sal_uInt16 nIcon );
-    sal_uInt16          GetIcon() const { return mnIcon; }
+    void            SetIcon( USHORT nIcon );
+    USHORT          GetIcon() const { return mnIcon; }
     // for systems like MacOSX which can display the URL a document is loaded from
     // separately from the window title
     void            SetRepresentedURL( const rtl::OUString& );
     const rtl::OUString& GetRepresentedURL() const;
 
-    void            SetZLevel( sal_uInt8 nLevel );
-    sal_uInt8            GetZLevel() const;
+    void            SetZLevel( BYTE nLevel );
+    BYTE            GetZLevel() const;
 
-    void            EnableSaveBackground( sal_Bool bSave = sal_True );
-    sal_Bool            IsSaveBackgroundEnabled() const;
+    void            EnableSaveBackground( BOOL bSave = TRUE );
+    BOOL            IsSaveBackgroundEnabled() const;
 
-    void            ShowTitleButton( sal_uInt16 nButton, sal_Bool bVisible = sal_True );
-    sal_Bool            IsTitleButtonVisible( sal_uInt16 nButton ) const;
+    void            ShowTitleButton( USHORT nButton, BOOL bVisible = TRUE );
+    BOOL            IsTitleButtonVisible( USHORT nButton ) const;
 
-    void            SetPin( sal_Bool bPin );
-    sal_Bool            IsPined() const { return mbPined; }
+    void            SetPin( BOOL bPin );
+    BOOL            IsPined() const { return mbPined; }
 
     void            RollUp();
     void            RollDown();
-    sal_Bool            IsRollUp() const { return mbRollUp; }
+    BOOL            IsRollUp() const { return mbRollUp; }
 
     void            SetRollUpOutputSizePixel( const Size& rSize ) { maRollUpOutSize = rSize; }
     Size            GetRollUpOutputSizePixel() const { return maRollUpOutSize; }
@@ -232,41 +232,41 @@ public:
     Size            GetResizeOutputSizePixel() const;
 
     void            SetWindowState( const ByteString& rStr );
-    ByteString      GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const;
+    ByteString      GetWindowState( ULONG nMask = WINDOWSTATE_MASK_ALL ) const;
 
     void            SetMenuBar( MenuBar* pMenuBar );
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
-    void            SetMenuBarMode( sal_uInt16 nMode );
-    sal_uInt16          GetMenuBarMode() const { return mnMenuBarMode; }
+    void            SetMenuBarMode( USHORT nMode );
+    USHORT          GetMenuBarMode() const { return mnMenuBarMode; }
 
-    TaskPaneList*   GetTaskPaneList();
+    TaskPaneList*	GetTaskPaneList();
     void            GetWindowStateData( WindowStateData& rData ) const;
-
+    
     /**
     Returns the screen number the window is on
-
+    
     The screen number is counted the same way that
     <code>Application::GetScreenPosSizePixel</code>,
     <code>Application::GetWorkAreaPosSizePixel</code>,
     <code>Application::GetScreenName</code>
     and of course <code>SystemWindow::SetScreenNumber</code>
     are counted in.
-
+    
     In case the window is positioned on multiple screens the
     screen number returned will be of the screen containing the
     upper left pixel of the frame area (that is of the client
     area on system decorated windows, or the frame area of
     undecorated resp. owner decorated windows.
-
+    
     @returns the screen number
-
+    
     @see SystemWindow::SetScreenNumber
     */
     unsigned int    GetScreenNumber() const;
     /**
     Move the Window to a new screen. The same rules for
     positioning apply as in <code>SystemWindow::GetScreenNumber</code>
-
+    
     The screen number is counted the same way that
     <code>Application::GetScreenPosSizePixel</code>,
     <code>Application::GetWorkAreaPosSizePixel</code>,

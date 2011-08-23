@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
@@ -54,14 +54,14 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-const sal_Char sAPI_FieldMaster_Bibliography[] =
+const sal_Char sAPI_FieldMaster_Bibliography[] = 
                                 "com.sun.star.text.FieldMaster.Bibliography";
 
 
 TYPEINIT1( XMLIndexBibliographyConfigurationContext, SvXMLStyleContext );
 
 XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList) :
@@ -98,10 +98,10 @@ void XMLIndexBibliographyConfigurationContext::StartElement(
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
                               &sLocalName );
 
-        ProcessAttribute(nPrefix, sLocalName,
+        ProcessAttribute(nPrefix, sLocalName, 
                          xAttrList->getValueByIndex(nAttr));
         // else: ignore
     }
@@ -117,7 +117,7 @@ void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
         if( IsXMLToken(sLocalName, XML_PREFIX) )
         {
             sPrefix = sValue;
-        }
+        } 
         else if( IsXMLToken(sLocalName, XML_SUFFIX) )
         {
             sSuffix = sValue;
@@ -157,7 +157,7 @@ void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
 }
 
 
-SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext(
+SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext( 
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
@@ -166,7 +166,7 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
     sal_Bool bSort(sal_True);
 
     // process children here and use default context!
-    if ( ( nPrefix == XML_NAMESPACE_TEXT ) &&
+    if ( ( nPrefix == XML_NAMESPACE_TEXT ) && 
          IsXMLToken( rLocalName, XML_SORT_KEY ) )
     {
         sal_Int16 nLength = xAttrList->getLength();
@@ -174,10 +174,10 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
         {
             OUString sLocalName;
             sal_uInt16 nPrfx = GetImport().GetNamespaceMap().
-                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
                                   &sLocalName );
 
-            if (nPrfx == XML_NAMESPACE_TEXT)
+            if (nPrfx == XML_NAMESPACE_TEXT) 
             {
                 if ( IsXMLToken( sLocalName, XML_KEY ) )
                 {
@@ -197,13 +197,13 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
 
         // valid data?
         sal_uInt16 nKey;
-        if (SvXMLUnitConverter::convertEnum(nKey, sKey,
+        if (SvXMLUnitConverter::convertEnum(nKey, sKey, 
                                             aBibliographyDataFieldMap))
         {
 
             Any aAny;
             Sequence<PropertyValue> aKey(2);
-
+        
             PropertyValue aNameValue;
             aNameValue.Name = sSortKey;
             aAny <<= (sal_Int16)nKey;
@@ -215,12 +215,12 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
             aAny.setValue(&bSort, ::getBooleanCppuType());
             aSortValue.Value = aAny;
             aKey[1] = aSortValue;
-
+            
             aSortKeys.push_back(aKey);
         }
     }
 
-    return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
+    return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, 
                                                   xAttrList);
 }
 
@@ -242,7 +242,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
         while (i < nServiceCount && !bFound)
         {
             if (aServices[i].equals(sFieldMaster_Bibliography))
-            // here we should use a method which compares in reverse order if available
+            // here we should use a methode which compares in reverse order if available
             // #85282#
                 bFound = sal_True;
             else
@@ -250,7 +250,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
         }
         if (bFound)
         {
-            Reference<XInterface> xIfc =
+            Reference<XInterface> xIfc = 
                 xFactory->createInstance(sFieldMaster_Bibliography);
             if( xIfc.is() )
             {
@@ -262,7 +262,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
 
                 aAny <<= sPrefix;
                 xPropSet->setPropertyValue(sBracketBefore, aAny);
-
+        
                 aAny.setValue(&bNumberedEntries, ::getBooleanCppuType());
                 xPropSet->setPropertyValue(sIsNumberEntries, aAny);
 

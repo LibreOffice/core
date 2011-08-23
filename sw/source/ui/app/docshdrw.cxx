@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
-    Description: Load Document
+    Beschreibung: Document laden
  --------------------------------------------------------------------*/
 
 
@@ -52,7 +52,7 @@ void  SwDocShell::InitDraw()
     SdrModel *pDrDoc = pDoc->GetDrawModel();
     if( pDrDoc )
     {
-        // create Lists and Tables DocShell's ItemSet
+        // Listen, bzw. Tables im ItemSet der DocShell anlegen
         PutItem( SvxGradientListItem( pDrDoc->GetGradientList(), SID_GRADIENT_LIST ) );
         PutItem( SvxHatchListItem( pDrDoc->GetHatchList(), SID_HATCH_LIST ) );
         PutItem( SvxBitmapListItem( pDrDoc->GetBitmapList(), SID_BITMAP_LIST ) );

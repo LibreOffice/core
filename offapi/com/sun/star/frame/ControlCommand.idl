@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,44 +24,44 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_frame_ControlCommand_idl__
-#define __com_sun_star_frame_ControlCommand_idl__
-
-
+#ifndef __com_sun_star_frame_ControlCommand_idl__ 
+#define __com_sun_star_frame_ControlCommand_idl__ 
+ 
+ 
 #ifndef __com_sun_star_beans_NamedValue_idl__
 #include <com/sun/star/beans/NamedValue.idl>
 #endif
-
-//=============================================================================
-
+ 
+//============================================================================= 
+ 
 module com {  module sun {  module star {  module frame {
-
-//=============================================================================
-
+ 
+//============================================================================= 
+ 
 /** describes a command which can be send to a generic toolbar control.
-
+    
     @since OOo 2.0.3
  */
 struct ControlCommand
 {
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+    
     /** specifies the command which should be processed by the toolbar
         control.
      */
     string Command;
-
-    //-------------------------------------------------------------------------
-
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies a sequence of named values which are used as argument
         for the command. The number and type of arguments depend on the
         the command and control.
      */
-    sequence< com::sun::star::beans::NamedValue > Arguments;
-};
-
-//=============================================================================
-
+    sequence< com::sun::star::beans::NamedValue > Arguments;	
+}; 
+ 
+//============================================================================= 
+ 
 }; }; }; };
-
+ 
 #endif

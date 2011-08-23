@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,32 +50,32 @@ ExtMultiLineEdit::~ExtMultiLineEdit()
 {
 }
 
-void ExtMultiLineEdit::InsertText( const String& rNew, sal_Bool )
+void ExtMultiLineEdit::InsertText( const String& rNew, BOOL )
 {
-    GetTextView()->InsertText( rNew, sal_False );
+    GetTextView()->InsertText( rNew, FALSE );
 }
 
-void ExtMultiLineEdit::SetAutoScroll( sal_Bool bAutoScroll )
+void ExtMultiLineEdit::SetAutoScroll( BOOL bAutoScroll )
 {
     GetTextView()->SetAutoScroll( bAutoScroll );
 }
 
-void ExtMultiLineEdit::EnableCursor( sal_Bool bEnable )
+void ExtMultiLineEdit::EnableCursor( BOOL bEnable )
 {
     GetTextView()->EnableCursor( bEnable );
 }
 
-void ExtMultiLineEdit::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd )
+void ExtMultiLineEdit::SetAttrib( const TextAttrib& rAttr, ULONG nPara, USHORT nStart, USHORT nEnd )
 {
     GetTextEngine()->SetAttrib( rAttr, nPara, nStart, nEnd );
 }
 
-void ExtMultiLineEdit::SetLeftMargin( sal_uInt16 nLeftMargin )
+void ExtMultiLineEdit::SetLeftMargin( USHORT nLeftMargin )
 {
     GetTextEngine()->SetLeftMargin( nLeftMargin );
 }
 
-sal_uLong ExtMultiLineEdit::GetParagraphCount() const
+ULONG ExtMultiLineEdit::GetParagraphCount() const
 {
     return GetTextEngine()->GetParagraphCount();
 }

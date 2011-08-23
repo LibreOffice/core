@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ namespace drawinglayer
                         aLastViewInformation3D.getViewTime(),
                         aLastViewInformation3D.getExtendedInformationSequence());
                     updateViewInformation(aNewViewInformation3D);
-
+                    
                     // let break down
                     process(rPrimitive.getChildren());
 
@@ -110,7 +110,7 @@ namespace drawinglayer
                             mfMinimalDepth = aPointInView.getZ();
                         }
                     }
-
+                    
                     break;
                 }
                 case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :
@@ -135,7 +135,7 @@ namespace drawinglayer
                             }
                         }
                     }
-
+                    
                     break;
                 }
                 default :
@@ -192,7 +192,7 @@ double getMinimalDepthInViewCoordinates(const E3dCompoundObject& rObject)
 
             // build new ViewInformation containing all transforms
             const drawinglayer::geometry::ViewInformation3D aNewViewInformation3D(
-                aViewInfo3D.getObjectTransformation() * aInBetweenSceneMatrix,
+                aViewInfo3D.getObjectTransformation() * aInBetweenSceneMatrix, 
                 aViewInfo3D.getOrientation(),
                 aViewInfo3D.getProjection(),
                 aViewInfo3D.getDeviceToView(),

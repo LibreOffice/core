@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,44 +24,44 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_TextSortable_idl__
-#define __com_sun_star_util_TextSortable_idl__
+#ifndef __com_sun_star_util_TextSortable_idl__ 
+#define __com_sun_star_util_TextSortable_idl__ 
+  
+#ifndef __com_sun_star_text_TextSortDescriptor_idl__ 
+#include <com/sun/star/text/TextSortDescriptor.idl> 
+#endif 
 
-#ifndef __com_sun_star_text_TextSortDescriptor_idl__
-#include <com/sun/star/text/TextSortDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_util_XSortable_idl__
-#include <com/sun/star/util/XSortable.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
+#ifndef __com_sun_star_util_XSortable_idl__ 
+#include <com/sun/star/util/XSortable.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module text {  
+ 
+//============================================================================= 
+ 
 /** provides an interface for sorting.
 
     @deprecated
-
+    
     @since OOo 1.1.2
-
+    
  */
 published service TextSortable
 {
-        /** the properties returned by a call to the "createSortDescriptor" method
+        /** the properties returned by a call to the 'createSortDescriptor' method
             of this interfaces implementation are those of the
-            "com.sun.star.text.TextSortDescriptor" service.
-
+            'com.sun.star.text.TextSortDescriptor' service.
+         
            @see <type scope="com::sun::star::text">TextSortDescriptor</type>
          */
         interface com::sun::star::util::XSortable;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

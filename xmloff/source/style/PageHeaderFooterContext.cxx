@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "PageHeaderFooterContext.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "PagePropertySetContext.hxx"
 
@@ -46,7 +46,7 @@ using ::xmloff::token::XML_HEADER_FOOTER_PROPERTIES;
 //------------------------------------------------------------------
 
 PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>&,
@@ -67,7 +67,7 @@ PageHeaderFooterContext::~PageHeaderFooterContext()
 {
 }
 
-SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( USHORT nPrefix,
                                             const rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )

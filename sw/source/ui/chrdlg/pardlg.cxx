@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,10 +69,10 @@
 SwParaDlg::SwParaDlg(Window *pParent,
                     SwView& rVw,
                     const SfxItemSet& rCoreSet,
-                    sal_uInt8 nDialogMode,
+                    BYTE nDialogMode,
                     const String *pTitle,
-                    sal_Bool bDraw,
-                    sal_uInt16 nDefPage):
+                    BOOL bDraw,
+                    UINT16 nDefPage):
 
     SfxTabDialog(pParent, bDraw ? SW_RES(DLG_DRAWPARA) : SW_RES(DLG_PARA),
                     &rCoreSet,  0 != pTitle),
@@ -85,7 +85,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
     FreeResource();
 
     nHtmlMode = ::GetHtmlMode(rVw.GetDocShell());
-    sal_Bool bHtmlMode = static_cast< sal_Bool >(nHtmlMode & HTMLMODE_ON);
+    BOOL bHtmlMode = static_cast< BOOL >(nHtmlMode & HTMLMODE_ON);
     if(pTitle)
     {
         // Update title
@@ -99,18 +99,18 @@ SwParaDlg::SwParaDlg(Window *pParent,
 
     OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
     OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageRangesFunc fail!");
-    AddTabPage( TP_PARA_STD,    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH) );
+    AddTabPage( TP_PARA_STD,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH) );
 
     OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageCreatorFunc fail!");
     OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageRangesFunc fail!");
-    AddTabPage( TP_PARA_ALIGN,  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),      pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH) );
+    AddTabPage( TP_PARA_ALIGN,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH) );
 
     SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
     if (!bDrawParaDlg && (!bHtmlMode || pHtmlOpt->IsPrintLayoutExtension()))
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageCreatorFunc fail!");
         OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageRangesFunc fail!");
-        AddTabPage( TP_PARA_EXT,    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
+        AddTabPage( TP_PARA_EXT,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
 
     }
     else
@@ -121,20 +121,20 @@ SwParaDlg::SwParaDlg(Window *pParent,
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
         OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");
-        AddTabPage( TP_PARA_ASIAN,  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
+        AddTabPage( TP_PARA_ASIAN,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
     }
     else
         RemoveTabPage(TP_PARA_ASIAN);
 
-    sal_uInt16 nWhich(rCoreSet.GetPool()->GetWhich(SID_ATTR_LRSPACE));
-    sal_Bool bLRValid = SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(nWhich);
+    USHORT nWhich(rCoreSet.GetPool()->GetWhich(SID_ATTR_LRSPACE));
+    BOOL bLRValid = SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(nWhich);
     if(bHtmlMode || !bLRValid)
         RemoveTabPage(TP_TABULATOR);
     else
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), "GetTabPageCreatorFunc fail!");
         OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR), "GetTabPageRangesFunc fail!");
-        AddTabPage( TP_TABULATOR,   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
+        AddTabPage( TP_TABULATOR,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
 
     }
     if (!bDrawParaDlg)
@@ -145,7 +145,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
             RemoveTabPage(TP_NUMPARA);
         if(!bHtmlMode || (nHtmlMode & HTMLMODE_FULL_STYLES))
         {
-            AddTabPage(TP_DROPCAPS,  SwDropCapsPage::Create,        SwDropCapsPage::GetRanges);
+            AddTabPage(TP_DROPCAPS,  SwDropCapsPage::Create, 		SwDropCapsPage::GetRanges);
         }
         else
         {
@@ -176,12 +176,12 @@ SwParaDlg::SwParaDlg(Window *pParent,
 }
 
 
-SwParaDlg::~SwParaDlg()
+__EXPORT SwParaDlg::~SwParaDlg()
 {
 }
 
 
-void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
+void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 {
     SwWrtShell& rSh = rView.GetWrtShell();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
@@ -195,7 +195,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     else if( nId == TP_PARA_STD )
     {
         aSet.Put(SfxUInt16Item(SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,
-                            static_cast< sal_uInt16 >(rSh.GetAnyCurRect(RECT_PAGE_PRT).Width()) ));
+                            static_cast< UINT16 >(rSh.GetAnyCurRect(RECT_PAGE_PRT).Width()) ));
 
         if (!bDrawParaDlg)
         {
@@ -209,24 +209,25 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     {
         if (!bDrawParaDlg)
         {
-            aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_True));
+            aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,TRUE));
             rPage.PageCreated(aSet);
         }
     }
     else if( TP_PARA_EXT == nId )
     {
-        // pagebreak only when the cursor is in the body-area and not in a table
-        const sal_uInt16 eType = rSh.GetFrmType(0,sal_True);
+        // Seitenumbruch nur, wenn der Cursor im Body-Bereich und nicht in
+        // einer Tabelle steht
+        const USHORT eType = rSh.GetFrmType(0,TRUE);
         if( !(FRMTYPE_BODY & eType) ||
             rSh.GetSelectionType() & nsSelectionType::SEL_TBL )
         {
-            aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,sal_True));
+            aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,TRUE));
             rPage.PageCreated(aSet);
         }
     }
     else if( TP_DROPCAPS == nId )
     {
-        ((SwDropCapsPage&)rPage).SetFormat(sal_False);
+        ((SwDropCapsPage&)rPage).SetFormat(FALSE);
     }
     else if( TP_BACKGROUND == nId )
     {
@@ -256,7 +257,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
             aNames.Insert(new String(pBase->GetName()));
             pBase = pPool->Next();
         }
-        for(sal_uInt16 i = 0; i < aNames.Count(); i++)
+        for(USHORT i = 0; i < aNames.Count(); i++)
             rBox.InsertEntry(*aNames.GetObject(i));
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include "QueryTableView.hxx"
 #include "querycontroller.hxx"
 #include "JoinExchange.hxx"
-#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <svx/dbexch.hrc>
 #include <vcl/svapp.hxx>
@@ -44,12 +44,12 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
 
-OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox)
+OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox) 
     : pListBox(pBox)
-    , pEntry(pBox->FirstSelected())
+    , pEntry(pBox->FirstSelected()) 
 { }
 
-const sal_uLong SCROLLING_TIMESPAN = 500;
+const ULONG SCROLLING_TIMESPAN = 500;
 const long LISTBOX_SCROLLING_AREA = 6;
 //==================================================================
 // class OTableWindowListBox
@@ -77,7 +77,7 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
 void OTableWindowListBox::dragFinished( )
 {
     // first show the error msg when existing
-    m_pTabWin->getDesignView()->getController().showError(m_pTabWin->getDesignView()->getController().clearOccurredError());
+    m_pTabWin->getDesignView()->getController().showError(m_pTabWin->getDesignView()->getController().clearOccuredError());
     // second look for ui activities which should happen after d&d
     if (m_nUiEvent)
         Application::RemoveUserEvent(m_nUiEvent);
@@ -107,7 +107,7 @@ SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
     OJoinDesignView* pView = m_pTabWin->getDesignView();
     OJoinController& rController = pView->getController();
 
-    sal_Bool bCase = sal_False;
+    BOOL bCase = FALSE;
     try
     {
         Reference<XConnection> xConnection = rController.getConnection();
@@ -136,7 +136,7 @@ SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
 //------------------------------------------------------------------------------
 void OTableWindowListBox::NotifyScrolled()
 {
-    m_bReallyScrolled = sal_True;
+    m_bReallyScrolled = TRUE;
 }
 
 //------------------------------------------------------------------------------
@@ -147,25 +147,26 @@ void OTableWindowListBox::NotifyEndScroll()
         m_pTabWin->getTableView()->Invalidate(INVALIDATE_NOCHILDREN);
         // ohne das INVALIDATE_NOCHILDREN wuerden auch alle Tabellen neu gezeichnet werden,
         // sprich : es flackert
-    m_bReallyScrolled = sal_False;
+    m_bReallyScrolled = FALSE;
 }
 
 //------------------------------------------------------------------------------
 long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
 {
-    sal_Bool bHandled = sal_False;
+    BOOL bHandled = FALSE;
     switch (rNEvt.GetType())
     {
         case EVENT_KEYINPUT:
         {
-            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            const KeyEvent* pKeyEvent =	rNEvt.GetKeyEvent();
             const KeyCode& rCode = pKeyEvent->GetKeyCode();
-
+            
             if (rCode.GetCode() != KEY_RETURN)
             {
                 if(m_pTabWin)
                 {
                     bHandled = m_pTabWin->HandleKeyInput(*pKeyEvent);
+                    //	bHandled = TRUE;
                 }
                 break;
             }
@@ -194,7 +195,8 @@ IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
     {
         ScrollOutputArea( -1 );
         pEntry = GetEntry( m_aMousePos );
-        Select( pEntry, sal_True );
+        Select( pEntry, TRUE );
+//		m_aScrollTimer.Start();
     }
 
     return 0;
@@ -211,7 +213,8 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
     {
         ScrollOutputArea( 1 );
         pEntry = GetEntry( m_aMousePos );
-        Select( pEntry, sal_True );
+        Select( pEntry, TRUE );
+//		m_aScrollTimer.Start();
     }
 
     return 0;
@@ -223,7 +226,7 @@ void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPi
     OJoinTableView* pCont = m_pTabWin->getTableView();
     if (!pCont->getDesignView()->getController().isReadOnly() && pCont->getDesignView()->getController().isConnected())
     {
-        // asterix was not allowed to be copied to selection browsebox
+        // #100271# OJ asterix was not allowed to be copied to selection browsebox
         sal_Bool bFirstNotAllowed = FirstSelected() == First() && m_pTabWin->GetData()->IsShowAll();
         EndSelection();
         // create a description of the source
@@ -242,11 +245,12 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     // check the format
     if ( !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_TABID) // this means that the first entry is to be draged
         && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_JOIN) )
-    {   // don't drop into the window if it's the drag source itself
+    {	// don't drop into the window if it's the drag source itself
 
+        
         // remove the selection if the dragging operation is leaving the window
         if (_rEvt.mbLeaving)
-            SelectAll(sal_False);
+            SelectAll(FALSE);
         else
         {
             // hit test
@@ -288,8 +292,8 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 
             // Beim Drag automatisch den richtigen Eintrag selektieren
             if ((FirstSelected() != pEntry) || (FirstSelected() && NextSelected(FirstSelected())))
-                SelectAll(sal_False);
-            Select(pEntry, sal_True);
+                SelectAll(FALSE);
+            Select(pEntry, TRUE);
 
             // Auf den ersten Eintrag (*) kann nicht gedroppt werden
             if(!( m_pTabWin->GetData()->IsShowAll() && (pEntry==First()) ))
@@ -322,7 +326,7 @@ IMPL_LINK( OTableWindowListBox, DropHdl, void *, /*EMPTY_ARG*/)
     catch(const SQLException& e)
     {
         // remember the exception so that we can show them later when d&d is finished
-        m_pTabWin->getDesignView()->getController().setErrorOccurred(::dbtools::SQLExceptionInfo(e));
+        m_pTabWin->getDesignView()->getController().setErrorOccured(::dbtools::SQLExceptionInfo(e));
     }
     return 0L;
 }
@@ -331,9 +335,9 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
     TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
     if ( OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
-    {   // don't drop into the window if it's the drag source itself
-        m_aDropInfo.aSource = OJoinExchangeData(this);
-        m_aDropInfo.aDest   = OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
+    {	// don't drop into the window if it's the drag source itself
+        m_aDropInfo.aSource	= OJoinExchangeData(this);
+        m_aDropInfo.aDest	= OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
 
         if (m_nDropEvent)
             Application::RemoveUserEvent(m_nDropEvent);
@@ -363,13 +367,13 @@ void OTableWindowListBox::GetFocus()
         if ( GetSelectionCount() == 0 || GetCurEntry() != FirstSelected() )
         {
             if ( FirstSelected() )
-                Select(FirstSelected(), sal_False);
-            Select(GetCurEntry(), sal_True);
+                Select(FirstSelected(), FALSE);
+            Select(GetCurEntry(), TRUE);
         }
         else
             ShowFocusRect(FirstSelected());
     }
-    SvTreeListBox::GetFocus();
+    SvTreeListBox::GetFocus();	
 }
 
 //------------------------------------------------------------------------------
@@ -377,7 +381,7 @@ IMPL_LINK( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, /*pBox*/ )
 {
     // meinem Elter Bescheid sagen
     Window* pParent = Window::GetParent();
-    OSL_ENSURE(pParent != NULL, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
+    DBG_ASSERT(pParent != NULL, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
 
     static_cast<OTableWindow*>(pParent)->OnEntryDoubleClicked(GetHdlEntry());
 

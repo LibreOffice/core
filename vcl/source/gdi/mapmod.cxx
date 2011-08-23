@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ ImplMapMode::ImplMapMode() :
 {
     mnRefCount  = 1;
     meUnit      = MAP_PIXEL;
-    mbSimple    = sal_False;
+    mbSimple    = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -58,15 +58,15 @@ ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
 {
     mnRefCount      = 1;
     meUnit          = rImplMapMode.meUnit;
-    mbSimple        = sal_False;
+    mbSimple        = FALSE;
 }
 
 // -----------------------------------------------------------------------
 
 SvStream& operator>>( SvStream& rIStm, ImplMapMode& rImplMapMode )
 {
-    VersionCompat   aCompat( rIStm, STREAM_READ );
-    sal_uInt16          nTmp16;
+    VersionCompat	aCompat( rIStm, STREAM_READ );
+    UINT16			nTmp16;
 
     rIStm >> nTmp16; rImplMapMode.meUnit = (MapUnit) nTmp16;
     rIStm >> rImplMapMode.maOrigin >> rImplMapMode.maScaleX >>
@@ -81,7 +81,7 @@ SvStream& operator<<( SvStream& rOStm, const ImplMapMode& rImplMapMode )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm << (sal_uInt16) rImplMapMode.meUnit <<
+    rOStm << (UINT16) rImplMapMode.meUnit <<
              rImplMapMode.maOrigin <<
              rImplMapMode.maScaleX <<
              rImplMapMode.maScaleY <<
@@ -107,7 +107,7 @@ ImplMapMode* ImplMapMode::ImplGetStaticMapMode( MapUnit eUnit )
         pImplMapMode->maScaleX  = aDefFraction;
         pImplMapMode->maScaleY  = aDefFraction;
         pImplMapMode->meUnit    = eUnit;
-        pImplMapMode->mbSimple  = sal_True;
+        pImplMapMode->mbSimple  = TRUE;
     }
 
     return pImplMapMode;
@@ -260,40 +260,40 @@ MapMode& MapMode::operator=( const MapMode& rMapMode )
 
 // -----------------------------------------------------------------------
 
-sal_Bool MapMode::operator==( const MapMode& rMapMode ) const
+BOOL MapMode::operator==( const MapMode& rMapMode ) const
 {
     DBG_CHKTHIS( MapMode, NULL );
     DBG_CHKOBJ( &rMapMode, MapMode, NULL );
 
     if ( mpImplMapMode == rMapMode.mpImplMapMode )
-        return sal_True;
+        return TRUE;
 
     if ( (mpImplMapMode->meUnit   == rMapMode.mpImplMapMode->meUnit)   &&
          (mpImplMapMode->maOrigin == rMapMode.mpImplMapMode->maOrigin) &&
          (mpImplMapMode->maScaleX == rMapMode.mpImplMapMode->maScaleX) &&
          (mpImplMapMode->maScaleY == rMapMode.mpImplMapMode->maScaleY) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool MapMode::IsDefault() const
+BOOL MapMode::IsDefault() const
 {
     DBG_CHKTHIS( MapMode, NULL );
 
     ImplMapMode* pDefMapMode = ImplMapMode::ImplGetStaticMapMode( MAP_PIXEL );
     if ( mpImplMapMode == pDefMapMode )
-        return sal_True;
+        return TRUE;
 
     if ( (mpImplMapMode->meUnit   == pDefMapMode->meUnit)   &&
          (mpImplMapMode->maOrigin == pDefMapMode->maOrigin) &&
          (mpImplMapMode->maScaleX == pDefMapMode->maScaleX) &&
          (mpImplMapMode->maScaleY == pDefMapMode->maScaleY) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ using namespace ::com::sun::star;
 
 namespace nullcanvas
 {
-    TextLayout::TextLayout( const rendering::StringContext&     aText,
-                            sal_Int8                            nDirection,
-                            sal_Int64                           /*nRandomSeed*/,
-                            const CanvasFont::ImplRef&          rFont ) :
+    TextLayout::TextLayout( const rendering::StringContext& 	aText, 
+                            sal_Int8                        	nDirection, 
+                            sal_Int64                       	/*nRandomSeed*/,
+                            const CanvasFont::ImplRef&      	rFont ) :
         TextLayout_Base( m_aMutex ),
         maText( aText ),
         maLogicalAdvancements(),
@@ -55,7 +55,7 @@ namespace nullcanvas
         mnTextDirection( nDirection )
     {
     }
-
+    
     TextLayout::~TextLayout()
     {
     }
@@ -144,7 +144,7 @@ namespace nullcanvas
         return 0.0;
     }
 
-    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& /*aNextLayouts*/,
+    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& /*aNextLayouts*/, 
                                                  double /*nSize*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -161,7 +161,7 @@ namespace nullcanvas
         return rendering::TextHit();
     }
 
-    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 /*nInsertionIndex*/,
+    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 /*nInsertionIndex*/, 
                                                     sal_Bool  /*bExcludeLigatures*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -170,8 +170,8 @@ namespace nullcanvas
         return rendering::Caret();
     }
 
-    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 /*nStartIndex*/,
-                                                          sal_Int32 /*nCaretAdvancement*/,
+    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 /*nStartIndex*/, 
+                                                          sal_Int32 /*nCaretAdvancement*/, 
                                                           sal_Bool  /*bExcludeLigatures*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -180,7 +180,7 @@ namespace nullcanvas
         return 0;
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 /*nStartIndex*/,
+    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 /*nStartIndex*/, 
                                                                                               sal_Int32 /*nEndIndex*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -189,7 +189,7 @@ namespace nullcanvas
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 /*nStartIndex*/,
+    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 /*nStartIndex*/, 
                                                                                                sal_Int32 /*nEndIndex*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -226,10 +226,10 @@ namespace nullcanvas
 
         return maText;
     }
-
-    bool TextLayout::draw( const rendering::ViewState&                          /*rViewState*/,
-                           const rendering::RenderState&                        /*rRenderState*/,
-                           const uno::Reference< rendering::XGraphicDevice >&   /*xGraphicDevice*/ ) const
+  
+    bool TextLayout::draw( const rendering::ViewState& 							/*rViewState*/, 
+                           const rendering::RenderState& 						/*rRenderState*/,
+                           const uno::Reference< rendering::XGraphicDevice >&	/*xGraphicDevice*/ ) const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -256,7 +256,7 @@ namespace nullcanvas
     {
         uno::Sequence< ::rtl::OUString > aRet(1);
         aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-
+        
         return aRet;
     }
 }

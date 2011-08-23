@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ class SAL_DLLPRIVATE FmFieldWinListBox
     FmFieldWin* pTabWin;
 
 protected:
-//  virtual void Command( const CommandEvent& rEvt );
+//	virtual void Command( const CommandEvent& rEvt );
 
 public:
     FmFieldWinListBox( FmFieldWin* pParent );
@@ -61,7 +61,7 @@ protected:
     virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     // SvLBox
-    virtual sal_Bool DoubleClickHdl();
+    virtual BOOL DoubleClickHdl();
 
     using SvLBox::ExecuteDrop;
 };
@@ -76,21 +76,21 @@ public:
 };
 
 //========================================================================
-class SAL_DLLPRIVATE FmFieldWin :public SfxFloatingWindow
+class SAL_DLLPRIVATE FmFieldWin	:public SfxFloatingWindow
                     ,public SfxControllerItem
                     ,public ::comphelper::OPropertyChangeListener
                     ,public ::svxform::OStaticDataAccessTools
 {
-    ::osl::Mutex        m_aMutex;
+    ::osl::Mutex		m_aMutex;
     FmFieldWinListBox* pListBox;
     FmFieldWinData*    pData;
     ::svxform::SharedConnection
                        m_aConnection;
     ::rtl::OUString    m_aDatabaseName,
                        m_aObjectName;
-    sal_Int32          m_nObjectType;
+    sal_Int32		   m_nObjectType;
 
-    ::comphelper::OPropertyChangeMultiplexer*   m_pChangeListener;
+    ::comphelper::OPropertyChangeMultiplexer*	m_pChangeListener;
 
 public:
     FmFieldWin(SfxBindings *pBindings,
@@ -110,20 +110,20 @@ public:
     void UpdateContent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > &);
     void FillInfo( SfxChildWinInfo& rInfo ) const;
 
-    const ::rtl::OUString&      GetDatabaseName() const { return m_aDatabaseName; }
+    const ::rtl::OUString&	    GetDatabaseName() const { return m_aDatabaseName; }
     ::svxform::SharedConnection GetConnection() const { return m_aConnection; }
-    const ::rtl::OUString&      GetObjectName() const { return m_aObjectName; }
-    sal_Int32                   GetObjectType() const { return m_nObjectType; }
+    const ::rtl::OUString&	    GetObjectName() const { return m_aObjectName; }
+    sal_Int32				    GetObjectType() const { return m_nObjectType; }
 
-    sal_Bool    createSelectionControls( );
+    sal_Bool	createSelectionControls( );
 
 protected:
     // FmXChangeListener
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException );
 
 protected:
-    inline          SfxBindings&    GetBindings()       { return SfxControllerItem::GetBindings(); }
-    inline  const   SfxBindings&    GetBindings() const { return SfxControllerItem::GetBindings(); }
+    inline			SfxBindings&	GetBindings()		{ return SfxControllerItem::GetBindings(); }
+    inline	const	SfxBindings&	GetBindings() const	{ return SfxControllerItem::GetBindings(); }
 
     using SfxFloatingWindow::StateChanged;
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,19 +48,19 @@
 class SC_DLLPUBLIC ScAsciiOptions
 {
 private:
-    sal_Bool        bFixedLen;
-    String      aFieldSeps;
-    sal_Bool        bMergeFieldSeps;
+    BOOL		bFixedLen;
+    String		aFieldSeps;
+    BOOL		bMergeFieldSeps;
     bool        bQuotedFieldAsText;
     bool        bDetectSpecialNumber;
-    sal_Unicode cTextSep;
-    CharSet     eCharSet;
+    sal_Unicode	cTextSep;
+    CharSet		eCharSet;
     LanguageType eLang;
-    sal_Bool        bCharSetSystem;
-    long        nStartRow;
-    sal_uInt16      nInfoCount;
+    BOOL		bCharSetSystem;
+    long		nStartRow;
+    USHORT		nInfoCount;
     xub_StrLen* pColStart;  //! TODO replace with vector
-    sal_uInt8*       pColFormat; //! TODO replace with vector
+    BYTE*       pColFormat; //! TODO replace with vector
 
 public:
                     ScAsciiOptions();
@@ -69,41 +69,41 @@ public:
 
     static const sal_Unicode cDefaultTextSep = '"';
 
-    ScAsciiOptions& operator=( const ScAsciiOptions& rCpy );
+    ScAsciiOptions&	operator=( const ScAsciiOptions& rCpy );
 
-    sal_Bool            operator==( const ScAsciiOptions& rCmp ) const;
+    BOOL			operator==( const ScAsciiOptions& rCmp ) const;
 
-    void            ReadFromString( const String& rString );
-    String          WriteToString() const;
+    void			ReadFromString( const String& rString );
+    String			WriteToString() const;
 
-    void            InterpretColumnList( const String& rString );
+    void			InterpretColumnList( const String& rString );
 
-    CharSet             GetCharSet() const      { return eCharSet; }
-    sal_Bool                GetCharSetSystem() const    { return bCharSetSystem; }
-    const String&       GetFieldSeps() const    { return aFieldSeps; }
-    sal_Bool                IsMergeSeps() const     { return bMergeFieldSeps; }
+    CharSet				GetCharSet() const		{ return eCharSet; }
+    BOOL				GetCharSetSystem() const	{ return bCharSetSystem; }
+    const String&		GetFieldSeps() const	{ return aFieldSeps; }
+    BOOL				IsMergeSeps() const		{ return bMergeFieldSeps; }
     bool                IsQuotedAsText() const  { return bQuotedFieldAsText; }
     bool                IsDetectSpecialNumber() const { return bDetectSpecialNumber; }
-    sal_Unicode         GetTextSep() const      { return cTextSep; }
-    sal_Bool                IsFixedLen() const      { return bFixedLen; }
-    sal_uInt16              GetInfoCount() const    { return nInfoCount; }
-    const xub_StrLen*   GetColStart() const     { return pColStart; }
-    const sal_uInt8*            GetColFormat() const    { return pColFormat; }
-    long                GetStartRow() const     { return nStartRow; }
+    sal_Unicode			GetTextSep() const		{ return cTextSep; }
+    BOOL				IsFixedLen() const		{ return bFixedLen; }
+    USHORT				GetInfoCount() const	{ return nInfoCount; }
+    const xub_StrLen*	GetColStart() const		{ return pColStart; }
+    const BYTE*			GetColFormat() const	{ return pColFormat; }
+    long				GetStartRow() const		{ return nStartRow; }
     LanguageType        GetLanguage() const     { return eLang; }
 
-    void    SetCharSet( CharSet eNew )          { eCharSet = eNew; }
-    void    SetCharSetSystem( sal_Bool bSet )       { bCharSetSystem = bSet; }
-    void    SetFixedLen( sal_Bool bSet )            { bFixedLen = bSet; }
-    void    SetFieldSeps( const String& rStr )  { aFieldSeps = rStr; }
-    void    SetMergeSeps( sal_Bool bSet )           { bMergeFieldSeps = bSet; }
+    void	SetCharSet( CharSet eNew )			{ eCharSet = eNew; }
+    void	SetCharSetSystem( BOOL bSet )		{ bCharSetSystem = bSet; }
+    void	SetFixedLen( BOOL bSet )			{ bFixedLen = bSet; }
+    void	SetFieldSeps( const String& rStr )	{ aFieldSeps = rStr; }
+    void	SetMergeSeps( BOOL bSet )			{ bMergeFieldSeps = bSet; }
     void    SetQuotedAsText(bool bSet)          { bQuotedFieldAsText = bSet; }
     void    SetDetectSpecialNumber(bool bSet)   { bDetectSpecialNumber = bSet; }
-    void    SetTextSep( sal_Unicode c )         { cTextSep = c; }
-    void    SetStartRow( long nRow)             { nStartRow= nRow; }
+    void	SetTextSep( sal_Unicode c )			{ cTextSep = c; }
+    void	SetStartRow( long nRow)				{ nStartRow= nRow; }
     void    SetLanguage(LanguageType e)         { eLang = e; }
 
-    void    SetColInfo( sal_uInt16 nCount, const xub_StrLen* pStart, const sal_uInt8* pFormat );
+    void	SetColInfo( USHORT nCount, const xub_StrLen* pStart, const BYTE* pFormat );
     void    SetColumnInfo( const ScCsvExpDataVec& rDataVec );
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,17 +47,17 @@ SV_IMPL_PTRARR( ScDetOpArr_Impl, ScDetOpDataPtr );
 
 ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
     ScDetOpArr_Impl(),
-    bHasAddError( false )
+    bHasAddError( FALSE )
 {
-    sal_uInt16 nCount = rList.Count();
+    USHORT nCount = rList.Count();
 
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for (USHORT i=0; i<nCount; i++)
         Append( new ScDetOpData(*rList[i]) );
 }
 
 void ScDetOpList::DeleteOnTab( SCTAB nTab )
 {
-    sal_uInt16 nPos = 0;
+    USHORT nPos = 0;
     while ( nPos < Count() )
     {
         // look for operations on the deleted sheet
@@ -72,8 +72,8 @@ void ScDetOpList::DeleteOnTab( SCTAB nTab )
 void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    USHORT nCount = Count();
+    for (USHORT i=0; i<nCount; i++)
     {
         ScAddress aPos = (*this)[i]->GetPos();
         SCCOL nCol1 = aPos.Col();
@@ -96,21 +96,21 @@ void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMod
 void ScDetOpList::Append( ScDetOpData* pDetOpData )
 {
     if ( pDetOpData->GetOperation() == SCDETOP_ADDERROR )
-        bHasAddError = sal_True;
+        bHasAddError = TRUE;
 
     Insert( pDetOpData, Count() );
 }
 
 
-sal_Bool ScDetOpList::operator==( const ScDetOpList& r ) const
+BOOL ScDetOpList::operator==( const ScDetOpList& r ) const
 {
     // fuer Ref-Undo
 
-    sal_uInt16 nCount = Count();
-    sal_Bool bEqual = ( nCount == r.Count() );
-    for (sal_uInt16 i=0; i<nCount && bEqual; i++)       // Reihenfolge muss auch gleich sein
-        if ( !(*(*this)[i] == *r[i]) )              // Eintraege unterschiedlich ?
-            bEqual = false;
+    USHORT nCount = Count();
+    BOOL bEqual = ( nCount == r.Count() );
+    for (USHORT i=0; i<nCount && bEqual; i++)		// Reihenfolge muss auch gleich sein
+        if ( !(*(*this)[i] == *r[i]) )				// Eintraege unterschiedlich ?
+            bEqual = FALSE;
 
     return bEqual;
 }

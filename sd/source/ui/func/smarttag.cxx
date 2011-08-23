@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,30 +122,30 @@ bool SmartTag::getContext( SdrViewContext& /*rContext*/ )
 
 // --------------------------------------------------------------------
 
-sal_uLong SmartTag::GetMarkablePointCount() const
+ULONG SmartTag::GetMarkablePointCount() const
 {
     return 0;
 }
 
 // --------------------------------------------------------------------
 
-sal_uLong SmartTag::GetMarkedPointCount() const
+ULONG SmartTag::GetMarkedPointCount() const
 {
     return 0;
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool SmartTag::MarkPoint(SdrHdl& /*rHdl*/, sal_Bool /*bUnmark*/ )
+BOOL SmartTag::MarkPoint(SdrHdl& /*rHdl*/, BOOL /*bUnmark*/ )
 {
-    return sal_False;
+    return FALSE;
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool SmartTag::MarkPoints(const Rectangle* /*pRect*/, sal_Bool /*bUnmark*/ )
+BOOL SmartTag::MarkPoints(const Rectangle* /*pRect*/, BOOL /*bUnmark*/ )
 {
-    return sal_False;
+    return FALSE;
 }
 
 // --------------------------------------------------------------------
@@ -285,8 +285,8 @@ bool SmartTagSet::KeyInput( const KeyEvent& rKEvt )
             return true;
         }
     }
-
-
+    
+    
     return false;
 }
 
@@ -336,7 +336,7 @@ bool SmartTagSet::Command( const CommandEvent& rCEvt )
     {
         if( mxSelectedTag.is() )
             return mxSelectedTag->Command( rCEvt );
-
+    
     }
 
     return false;
@@ -369,14 +369,14 @@ bool SmartTagSet::getContext( SdrViewContext& rContext ) const
 // support point editing
 // --------------------------------------------------------------------
 
-sal_Bool SmartTagSet::HasMarkablePoints() const
+BOOL SmartTagSet::HasMarkablePoints() const
 {
-    return GetMarkablePointCount() != 0 ? sal_True : sal_False;
+    return GetMarkablePointCount() != 0 ? TRUE : FALSE;
 }
 
 // --------------------------------------------------------------------
 
-sal_uLong SmartTagSet::GetMarkablePointCount() const
+ULONG SmartTagSet::GetMarkablePointCount() const
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->GetMarkablePointCount();
@@ -385,14 +385,14 @@ sal_uLong SmartTagSet::GetMarkablePointCount() const
 
 // --------------------------------------------------------------------
 
-sal_Bool SmartTagSet::HasMarkedPoints() const
+BOOL SmartTagSet::HasMarkedPoints() const
 {
-    return GetMarkedPointCount() != 0 ? sal_True : sal_False;
+    return GetMarkedPointCount() != 0 ? TRUE : FALSE;
 }
 
 // --------------------------------------------------------------------
 
-sal_uLong SmartTagSet::GetMarkedPointCount() const
+ULONG SmartTagSet::GetMarkedPointCount() const
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->GetMarkedPointCount();
@@ -402,30 +402,30 @@ sal_uLong SmartTagSet::GetMarkedPointCount() const
 
 // --------------------------------------------------------------------
 
-sal_Bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
+BOOL SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
 {
     const SmartHdl* pSmartHdl = dynamic_cast< const SmartHdl* >( &rHdl );
-
+    
     return pSmartHdl && pSmartHdl->isMarkable();
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool SmartTagSet::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
+BOOL SmartTagSet::MarkPoint(SdrHdl& rHdl, BOOL bUnmark )
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->MarkPoint( rHdl, bUnmark );
 
-    return sal_False;
+    return FALSE;
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool SmartTagSet::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
+BOOL SmartTagSet::MarkPoints(const Rectangle* pRect, BOOL bUnmark)
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->MarkPoints( pRect, bUnmark );
-    return sal_False;
+    return FALSE;
 }
 
 // --------------------------------------------------------------------
@@ -451,7 +451,7 @@ SmartHdl::SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind
 : SdrHdl( rPnt, eNewKind )
 , mxTag( xTag )
 {
-}
+} 
 
 // --------------------------------------------------------------------
 

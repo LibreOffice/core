@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,28 +44,28 @@ import org.openoffice.idesupport.zip.ParcelZipper;
  * @author tomaso
  */
 public class ParcelDataLoader extends UniFileLoader {
-
+    
     public ParcelDataLoader() {
         this("org.openoffice.netbeans.modules.office.loader.ParcelDataObject");
     }
-
+    
     // Can be useful for subclasses:
     protected ParcelDataLoader(String recognizedObjectClass) {
         super(recognizedObjectClass);
     }
-
+    
     protected String defaultDisplayName() {
         return "Office Script Parcel";
     }
-
+    
     protected void initialize() {
         super.initialize();
-
+        
         ExtensionList extensions = new ExtensionList();
         extensions.addExtension(ParcelZipper.PARCEL_EXTENSION);
         setExtensions(extensions);
     }
-
+    
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
             // SystemAction.get(MountParcelAction.class),
@@ -82,7 +82,7 @@ public class ParcelDataLoader extends UniFileLoader {
             SystemAction.get(PropertiesAction.class),
         };
     }
-
+    
     protected MultiDataObject createMultiObject(FileObject primaryFile) throws DataObjectExistsException, IOException {
         return new ParcelDataObject(primaryFile, this);
     }

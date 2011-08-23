@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,7 +123,7 @@ namespace utl
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OObserverImpl::ensureObservation: caught an exception!" );
+                OSL_ENSURE( sal_False, "OObserverImpl::ensureObservation: caught an exception!" );
             }
         }
 
@@ -145,7 +145,7 @@ namespace utl
                     throw TerminationVetoException();
             }
         }
-
+        
         //--------------------------------------------------------------------
         void SAL_CALL OObserverImpl::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException)
         {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
                             String          aTheNewLayoutName,
                             AutoLayout      eTheOldAutoLayout,
                             AutoLayout      eTheNewAutoLayout,
-                            sal_Bool            bSet,
+                            BOOL            bSet,
                             SdPage*         pThePage):
                       SdUndoAction(pTheDoc)
 {
@@ -77,9 +77,9 @@ SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
 
 void SdPresentationLayoutUndoAction::Undo()
 {
-    pPage->SetPresentationLayout(aOldLayoutName, sal_True, sal_True, sal_True);
+    pPage->SetPresentationLayout(aOldLayoutName, TRUE, TRUE, TRUE);
     if (bSetAutoLayout)
-        pPage->SetAutoLayout(eOldAutoLayout, sal_True);
+        pPage->SetAutoLayout(eOldAutoLayout, TRUE);
 }
 
 /*************************************************************************
@@ -92,7 +92,7 @@ void SdPresentationLayoutUndoAction::Redo()
 {
     pPage->SetPresentationLayout(aNewLayoutName);
     if (bSetAutoLayout)
-        pPage->SetAutoLayout(eNewAutoLayout, sal_True);
+        pPage->SetAutoLayout(eNewAutoLayout, TRUE);
 }
 
 /*************************************************************************

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +32,11 @@
 #include <accessibility/standard/accessiblemenuitemcomponent.hxx>
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleMenuSeparator
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXAccessibleMenuSeparator
+//	----------------------------------------------------
 
-class VCLXAccessibleMenuSeparator : public OAccessibleMenuItemComponent
+class VCLXAccessibleMenuSeparator :	public OAccessibleMenuItemComponent
 {
 public:
     VCLXAccessibleMenuSeparator( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = 0 );

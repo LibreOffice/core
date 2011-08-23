@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #define RID_DLG_EXTENSION_MANAGER              RID_DEPLOYMENT_GUI_START
 #define RID_DLG_UPDATE_REQUIRED               (RID_DEPLOYMENT_GUI_START + 11)
 
-#define RID_EM_BTN_CLOSE                       10
+#define RID_EM_BTN_CLOSE                       10                      
 #define RID_EM_BTN_HELP                        11
 #define RID_EM_BTN_ADD                         12
 #define RID_EM_BTN_CHECK_UPDATES               13
@@ -46,18 +46,19 @@
 #define RID_EM_FT_MSG                          22
 
 // local RIDs:
-#define PB_LICENSE_DOWN                         50
-#define ML_LICENSE                              51
-#define BTN_LICENSE_DECLINE                     53
-#define FT_LICENSE_HEADER                       54
-#define FT_LICENSE_BODY_1                       55
-#define FT_LICENSE_BODY_1_TXT                   56
-#define FT_LICENSE_BODY_2                       57
-#define FT_LICENSE_BODY_2_TXT                   58
-#define FL_LICENSE                              69
-#define FI_LICENSE_ARROW1                       60
-#define FI_LICENSE_ARROW2                       61
-#define BTN_LICENSE_ACCEPT                      63
+#define PB_LICENSE_DOWN							50
+#define ML_LICENSE								51
+#define BTN_LICENSE_DECLINE						53
+#define FT_LICENSE_HEADER						54
+#define FT_LICENSE_BODY_1						55
+#define FT_LICENSE_BODY_1_TXT					56
+#define FT_LICENSE_BODY_2						57
+#define FT_LICENSE_BODY_2_TXT					58
+#define FL_LICENSE								69
+#define FI_LICENSE_ARROW1						60
+#define FI_LICENSE_ARROW2						61
+#define IMG_LICENCE_ARROW_HC					62
+#define BTN_LICENSE_ACCEPT						63
 
 // local RIDs for "Download and Install" dialog
 
@@ -93,27 +94,28 @@
 #define RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES        (RID_DEPLOYMENT_GUI_START + 8)
 #define RID_WARNINGBOX_INSTALL_EXTENSION                          (RID_DEPLOYMENT_GUI_START + 9)
 
-#define RID_DLG_UPDATE                      (RID_DEPLOYMENT_GUI_START + 10)
+#define RID_DLG_UPDATE (RID_DEPLOYMENT_GUI_START + 10)
 
-#define RID_DLG_UPDATE_CHECKING             1
-#define RID_DLG_UPDATE_THROBBER             2
-#define RID_DLG_UPDATE_UPDATE               3
-#define RID_DLG_UPDATE_UPDATES              4
-#define RID_DLG_UPDATE_ALL                  5
-#define RID_DLG_UPDATE_DESCRIPTION          6
-#define RID_DLG_UPDATE_DESCRIPTIONS         7
-#define RID_DLG_UPDATE_LINE                 8
-#define RID_DLG_UPDATE_HELP                 9
-#define RID_DLG_UPDATE_OK                   10
-#define RID_DLG_UPDATE_CLOSE                11
-#define RID_DLG_UPDATE_NORMALALERT          12
-#define RID_DLG_UPDATE_ERROR                14
-#define RID_DLG_UPDATE_NONE                 15
-#define RID_DLG_UPDATE_NOINSTALLABLE        16
-#define RID_DLG_UPDATE_FAILURE              17
-#define RID_DLG_UPDATE_UNKNOWNERROR         18
-#define RID_DLG_UPDATE_NODESCRIPTION        19
-#define RID_DLG_UPDATE_NOINSTALL            20
+#define RID_DLG_UPDATE_CHECKING 1
+#define RID_DLG_UPDATE_THROBBER 2
+#define RID_DLG_UPDATE_UPDATE 3
+#define RID_DLG_UPDATE_UPDATES 4
+#define RID_DLG_UPDATE_ALL 5
+#define RID_DLG_UPDATE_DESCRIPTION 6
+#define RID_DLG_UPDATE_DESCRIPTIONS 7
+#define RID_DLG_UPDATE_LINE 8
+#define RID_DLG_UPDATE_HELP 9
+#define RID_DLG_UPDATE_OK 10
+#define RID_DLG_UPDATE_CANCEL 11
+#define RID_DLG_UPDATE_NORMALALERT 12
+#define RID_DLG_UPDATE_HIGHCONTRASTALERT 13
+#define RID_DLG_UPDATE_ERROR 14
+#define RID_DLG_UPDATE_NONE 15
+#define RID_DLG_UPDATE_NOINSTALLABLE 16
+#define RID_DLG_UPDATE_FAILURE 17
+#define RID_DLG_UPDATE_UNKNOWNERROR 18
+#define RID_DLG_UPDATE_NODESCRIPTION 19
+#define RID_DLG_UPDATE_NOINSTALL 20
 #define RID_DLG_UPDATE_NODEPENDENCY         21
 #define RID_DLG_UPDATE_NODEPENDENCY_CUR_VER 22
 #define RID_DLG_UPDATE_NOPERMISSION         23
@@ -121,24 +123,23 @@
 #define RID_DLG_UPDATE_BROWSERBASED         25
 #define RID_DLG_UPDATE_PUBLISHER_LABEL      26
 #define RID_DLG_UPDATE_PUBLISHER_LINK       27
-#define RID_DLG_UPDATE_RELEASENOTES_LABEL   28
-#define RID_DLG_UPDATE_RELEASENOTES_LINK    29
+#define RID_DLG_UPDATE_RELEASENOTES_LABEL   28 
+#define RID_DLG_UPDATE_RELEASENOTES_LINK    29 
 #define RID_DLG_UPDATE_NOUPDATE             30
 #define RID_DLG_UPDATE_VERSION              31
-#define RID_DLG_UPDATE_IGNORE               32
-#define RID_DLG_UPDATE_ENABLE               33
-#define RID_DLG_UPDATE_IGNORE_ALL           34
-#define RID_DLG_UPDATE_IGNORED_UPDATE       35
-
 
 
 #define RID_DLG_UPDATEINSTALL                  (RID_DEPLOYMENT_GUI_START + 20)
 #define RID_INFOBOX_UPDATE_SHARED_EXTENSION    (RID_DEPLOYMENT_GUI_START + 21)
 
 #define RID_IMG_WARNING                        (RID_DEPLOYMENT_GUI_START+56)
+#define RID_IMG_WARNING_HC                     (RID_DEPLOYMENT_GUI_START+57)
 #define RID_IMG_LOCKED                         (RID_DEPLOYMENT_GUI_START+58)
+#define RID_IMG_LOCKED_HC                      (RID_DEPLOYMENT_GUI_START+59)
 #define RID_IMG_EXTENSION                      (RID_DEPLOYMENT_GUI_START+60)
+#define RID_IMG_EXTENSION_HC                   (RID_DEPLOYMENT_GUI_START+61)
 #define RID_IMG_SHARED                         (RID_DEPLOYMENT_GUI_START+62)
+#define RID_IMG_SHARED_HC                      (RID_DEPLOYMENT_GUI_START+63)
 
 #define RID_STR_ADD_PACKAGES                   (RID_DEPLOYMENT_GUI_START+70)
 
@@ -162,7 +163,6 @@
 #define RID_STR_NO_ADMIN_PRIVILEGE             (RID_DEPLOYMENT_GUI_START+95)
 #define RID_STR_ERROR_MISSING_DEPENDENCIES     (RID_DEPLOYMENT_GUI_START+96)
 #define RID_STR_ERROR_MISSING_LICENSE          (RID_DEPLOYMENT_GUI_START+97)
-#define RID_STR_SHOW_LICENSE_CMD               (RID_DEPLOYMENT_GUI_START+98)
 
 #define WARNINGBOX_CONCURRENTINSTANCE          (RID_DEPLOYMENT_GUI_START+100)
 
@@ -172,9 +172,8 @@
 #define RID_WARNINGBOX_REMOVE_SHARED_EXTENSION  (RID_DEPLOYMENT_GUI_START+104)
 #define RID_WARNINGBOX_ENABLE_SHARED_EXTENSION  (RID_DEPLOYMENT_GUI_START+105)
 #define RID_WARNINGBOX_DISABLE_SHARED_EXTENSION (RID_DEPLOYMENT_GUI_START+106)
-#define RID_DLG_SHOW_LICENSE                    (RID_DEPLOYMENT_GUI_START+107)
 
-#define RID_DLG_LICENSE                         RID_DEPLOYMENT_LICENSE_START
+#define RID_DLG_LICENSE							RID_DEPLOYMENT_LICENSE_START
 
 
 

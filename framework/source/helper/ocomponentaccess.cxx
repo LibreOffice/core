@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <helper/ocomponentaccess.hxx>
 #include <helper/ocomponentenumeration.hxx>
@@ -38,46 +38,46 @@
 #include <threadhelp/resetableguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
-using namespace ::com::sun::star::container     ;
-using namespace ::com::sun::star::frame         ;
-using namespace ::com::sun::star::lang          ;
-using namespace ::com::sun::star::uno           ;
-using namespace ::cppu                          ;
-using namespace ::osl                           ;
-using namespace ::rtl                           ;
+using namespace ::com::sun::star::container		;
+using namespace ::com::sun::star::frame			;
+using namespace ::com::sun::star::lang			;
+using namespace ::com::sun::star::uno			;
+using namespace ::cppu							;
+using namespace ::osl							;
+using namespace ::rtl							;
 
 //_________________________________________________________________________________________________________________
-//  non exported const
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	non exported definitions
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
+//	declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
-OComponentAccess::OComponentAccess( const css::uno::Reference< XDesktop >& xOwner )
-        //  Init baseclasses first
+OComponentAccess::OComponentAccess( const Reference< XDesktop >& xOwner )
+        //	Init baseclasses first
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
         // Init member
         ,   m_xOwner        ( xOwner                        )
@@ -87,36 +87,36 @@ OComponentAccess::OComponentAccess( const css::uno::Reference< XDesktop >& xOwne
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 OComponentAccess::~OComponentAccess()
 {
 }
 
 //*****************************************************************************************************************
-//  XEnumerationAccess
+//	XEnumerationAccess
 //*****************************************************************************************************************
-css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration() throw( RuntimeException )
+Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration() throw( RuntimeException )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
 
     // Set default return value, if method failed.
     // If no desktop exist and there is no task container - return an empty enumeration!
-    css::uno::Reference< XEnumeration > xReturn = css::uno::Reference< XEnumeration >();
+    Reference< XEnumeration > xReturn = Reference< XEnumeration >();
 
     // Try to "lock" the desktop for access to task container.
-    css::uno::Reference< XInterface > xLock = m_xOwner.get();
+    Reference< XInterface > xLock = m_xOwner.get();
     if ( xLock.is() == sal_True )
     {
         // Desktop exist => pointer to task container must be valid.
         // Initialize a new enumeration ... if some tasks and his components exist!
         // (OTasksEnumeration will make an assert, if we initialize the new instance without valid values!)
 
-        Sequence< css::uno::Reference< XComponent > > seqComponents;
-        impl_collectAllChildComponents( css::uno::Reference< XFramesSupplier >( xLock, UNO_QUERY ), seqComponents );
+        Sequence< Reference< XComponent > > seqComponents;
+        impl_collectAllChildComponents( Reference< XFramesSupplier >( xLock, UNO_QUERY ), seqComponents );
         OComponentEnumeration* pEnumeration = new OComponentEnumeration( seqComponents );
-        xReturn = css::uno::Reference< XEnumeration >( (OWeakObject*)pEnumeration, UNO_QUERY );
+        xReturn = Reference< XEnumeration >( (OWeakObject*)pEnumeration, UNO_QUERY );
     }
 
     // Return result of this operation.
@@ -124,17 +124,17 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
 }
 
 //*****************************************************************************************************************
-//  XElementAccess
+//	XElementAccess
 //*****************************************************************************************************************
 Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException )
 {
     // Elements in list an enumeration are components!
     // Return the uno-type of XComponent.
-    return ::getCppuType((const css::uno::Reference< XComponent >*)NULL);
+    return ::getCppuType((const Reference< XComponent >*)NULL);
 }
 
 //*****************************************************************************************************************
-//  XElementAccess
+//	XElementAccess
 //*****************************************************************************************************************
 sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException )
 {
@@ -145,7 +145,7 @@ sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException )
     sal_Bool bReturn = sal_False;
 
     // Try to "lock" the desktop for access to task container.
-    css::uno::Reference< XFramesSupplier > xLock( m_xOwner.get(), UNO_QUERY );
+    Reference< XFramesSupplier > xLock( m_xOwner.get(), UNO_QUERY );
     if ( xLock.is() == sal_True )
     {
         // Ask container of owner for existing elements.
@@ -157,10 +157,10 @@ sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException )
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
-void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Reference< XFramesSupplier >&         xNode           ,
-                                                                 Sequence< css::uno::Reference< XComponent > >& seqComponents   )
+void OComponentAccess::impl_collectAllChildComponents(	const	Reference< XFramesSupplier >&			xNode			,
+                                                                 Sequence< Reference< XComponent > >&	seqComponents	)
 {
     // If valid node was given ...
     if( xNode.is() == sal_True )
@@ -172,13 +172,13 @@ void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Refere
 
         sal_Int32 nComponentCount = seqComponents.getLength();
 
-        const css::uno::Reference< XFrames >                xContainer  = xNode->getFrames();
-        const Sequence< css::uno::Reference< XFrame > > seqFrames   = xContainer->queryFrames( FrameSearchFlag::CHILDREN );
+        const Reference< XFrames >				xContainer	= xNode->getFrames();
+        const Sequence< Reference< XFrame > >	seqFrames	= xContainer->queryFrames( FrameSearchFlag::CHILDREN );
 
         const sal_Int32 nFrameCount = seqFrames.getLength();
         for( sal_Int32 nFrame=0; nFrame<nFrameCount; ++nFrame )
         {
-            css::uno::Reference< XComponent > xComponent = impl_getFrameComponent( seqFrames[nFrame] );
+            Reference< XComponent > xComponent = impl_getFrameComponent( seqFrames[nFrame] );
             if( xComponent.is() == sal_True )
             {
                 nComponentCount++;
@@ -191,32 +191,32 @@ void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Refere
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
-css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( const css::uno::Reference< XFrame >& xFrame ) const
+Reference< XComponent > OComponentAccess::impl_getFrameComponent( const Reference< XFrame >& xFrame ) const
 {
     // Set default return value, if method failed.
-    css::uno::Reference< XComponent > xComponent = css::uno::Reference< XComponent >();
+    Reference< XComponent > xComponent = Reference< XComponent >();
     // Does no controller exists?
-    css::uno::Reference< XController > xController = xFrame->getController();
+    Reference< XController > xController = xFrame->getController();
     if ( xController.is() == sal_False )
     {
         // Controller not exist - use the VCL-component.
-        xComponent = css::uno::Reference< XComponent >( xFrame->getComponentWindow(), UNO_QUERY );
+        xComponent = Reference< XComponent >( xFrame->getComponentWindow(), UNO_QUERY );
     }
     else
     {
         // Does no model exists?
-        css::uno::Reference< XModel > xModel( xController->getModel(), UNO_QUERY );
+        Reference< XModel > xModel( xController->getModel(), UNO_QUERY );
         if ( xModel.is() == sal_True )
         {
             // Model exist - use the model as component.
-            xComponent = css::uno::Reference< XComponent >( xModel, UNO_QUERY );
+            xComponent = Reference< XComponent >( xModel, UNO_QUERY );
         }
         else
         {
             // Model not exist - use the controller as component.
-            xComponent = css::uno::Reference< XComponent >( xController, UNO_QUERY );
+            xComponent = Reference< XComponent >( xController, UNO_QUERY );
         }
     }
 
@@ -224,7 +224,7 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
 }
 
 //_________________________________________________________________________________________________________________
-//  debug methods
+//	debug methods
 //_________________________________________________________________________________________________________________
 
 /*-----------------------------------------------------------------------------------------------------------------
@@ -240,14 +240,14 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
 #ifdef ENABLE_ASSERTIONS
 
 //*****************************************************************************************************************
-sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   css::uno::Reference< XDesktop >&      xOwner  )
+sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   Reference< XDesktop >&      xOwner  )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;
     // Check parameter.
-    if  (
-            ( &xOwner       ==  NULL        )   ||
-            ( xOwner.is()   ==  sal_False   )
+    if	(
+            ( &xOwner		==	NULL		)	||
+            ( xOwner.is()	==	sal_False	)
         )
     {
         bOK = sal_False ;
@@ -256,8 +256,8 @@ sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   
     return bOK ;
 }
 
-#endif  //  #ifdef ENABLE_ASSERTIONS
+#endif	//	#ifdef ENABLE_ASSERTIONS
 
-}       //  namespace framework
+}		//	namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

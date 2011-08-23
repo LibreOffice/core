@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.uno.*;
@@ -182,8 +182,8 @@ class UniqueColumnValue
 class KeyGeneratorForReset extends UniqueColumnValue implements XResetListener
 {
     /* ------------------------------------------------------------------ */
-    private DocumentViewHelper  m_aView;
-    private String              m_sFieldName;
+    private DocumentViewHelper	m_aView;
+    private	String				m_sFieldName;
 
     /* ------------------------------------------------------------------ */
     /** ctor
@@ -249,13 +249,13 @@ class KeyGeneratorForReset extends UniqueColumnValue implements XResetListener
     /* ------------------------------------------------------------------ */
     public void resetted( com.sun.star.lang.EventObject aEvent ) throws com.sun.star.uno.RuntimeException
     {
-        // check if this reset occurred becase we're on a new record
+        // check if this reset occured becase we're on a new record
         XPropertySet xFormProps = UNO.queryPropertySet( aEvent.Source );
         try
         {
             Boolean aIsNew = (Boolean)xFormProps.getPropertyValue( "IsNew" );
             if ( aIsNew.booleanValue() )
-            {   // yepp
+            {	// yepp
 
                 // we're going to modify the record, though after that, to the user, it should look
                 // like it has not been modified
@@ -295,7 +295,7 @@ class KeyGeneratorForReset extends UniqueColumnValue implements XResetListener
 class KeyGeneratorForUpdate extends UniqueColumnValue implements XRowSetApproveListener
 {
     /* ------------------------------------------------------------------ */
-    private String  m_sFieldName;
+    private	String	m_sFieldName;
 
     /* ------------------------------------------------------------------ */
     public KeyGeneratorForUpdate( String sFieldName )
@@ -354,13 +354,13 @@ class KeyGeneratorForUpdate extends UniqueColumnValue implements XRowSetApproveL
 public class KeyGenerator
 {
     /* ------------------------------------------------------------------ */
-    private KeyGeneratorForReset    m_aResetKeyGenerator;
-    private KeyGeneratorForUpdate   m_aUpdateKeyGenerator;
-    private boolean                 m_bResetListening;
-    private boolean                 m_bUpdateListening;
+    private	KeyGeneratorForReset	m_aResetKeyGenerator;
+    private KeyGeneratorForUpdate	m_aUpdateKeyGenerator;
+    private boolean					m_bResetListening;
+    private boolean					m_bUpdateListening;
 
-    private DocumentHelper          m_aDocument;
-    private XPropertySet            m_xForm;
+    private DocumentHelper			m_aDocument;
+    private	XPropertySet			m_xForm;
 
     /* ------------------------------------------------------------------ */
     /** ctor

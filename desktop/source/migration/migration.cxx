@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,7 @@
 
 #include "migration.hxx"
 #include "migration_impl.hxx"
+#include "cfgfilter.hxx"
 
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
@@ -65,6 +66,7 @@
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 
+using namespace rtl;
 using namespace osl;
 using namespace std;
 using namespace com::sun::star::task;
@@ -74,9 +76,6 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::container;
 using com::sun::star::uno::Exception;
 using namespace com::sun::star;
-
-using ::rtl::OUString;
-using ::rtl::OString;
 
 namespace desktop {
 
@@ -112,7 +111,7 @@ static const ::rtl::OUString MIGRATION_STAMP_NAME(RTL_CONSTASCII_USTRINGPARAM("/
                 {
                     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                     {
-                        if ( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Label" ) ))
+                        if ( aPropSeq[i].Name.equalsAscii( "Label" ))
                         {
                             aPropSeq[i].Value >>= aStr;
                             break;
@@ -135,6 +134,19 @@ static const ::rtl::OUString MIGRATION_STAMP_NAME(RTL_CONSTASCII_USTRINGPARAM("/
     }
 
     return sLabel;
+}
+
+::rtl::OUString stripHotKey( const ::rtl::OUString& str )
+{
+    sal_Int32 index = str.indexOf( '~' );
+    if ( index == -1 )
+    {
+        return str;
+    }
+    else
+    {
+        return str.replaceAt( index, 1, ::rtl::OUString() );
+    }
 }
 
 ::rtl::OUString mapModuleShortNameToIdentifier(const ::rtl::OUString& sShortName)
@@ -231,10 +243,9 @@ void Migration::migrateSettingsIfNecessary()
     {
         OString aMsg("doMigration() exception: ");
         aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(aMsg.getStr());
+        OSL_ENSURE(sal_False, aMsg.getStr());
     }
     OSL_ENSURE(bResult, "Migration has not been successfull");
-    (void)bResult;
 }
 
 MigrationImpl::MigrationImpl(const uno::Reference< XMultiServiceFactory >& xFactory)
@@ -334,7 +345,7 @@ sal_Bool MigrationImpl::doMigration()
         OString aMsg("An unexpected exception was thrown during migration");
         aMsg += "\nOldVersion: " + OUStringToOString(m_aInfo.productname, RTL_TEXTENCODING_ASCII_US);
         aMsg += "\nDataPath  : " + OUStringToOString(m_aInfo.userdata, RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(aMsg.getStr());
+        OSL_ENSURE(sal_False, aMsg.getStr());
     }
 
     // prevent running the migration multiple times
@@ -349,7 +360,7 @@ void MigrationImpl::refresh()
     if (xRefresh.is())
         xRefresh->refresh();
     else
-        OSL_FAIL("could not get XRefresh interface from default config provider. No refresh done.");
+        OSL_ENSURE(sal_False, "could not get XRefresh interface from default config provider. No refresh done.");
 
 }
 
@@ -440,7 +451,7 @@ migrations_vr MigrationImpl::readMigrationSteps(const ::rtl::OUString& rMigratio
     // get migration access
     uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_QUERY_THROW);
     uno::Reference< XNameAccess > xMigrationData( aMigrationAccess->getByName(rMigrationName), uno::UNO_QUERY_THROW );
-
+    
     // get migration description from from org.openoffice.Setup/Migration
     // and build vector of migration steps
     OUString aMigrationSteps( RTL_CONSTASCII_USTRINGPARAM( "MigrationSteps" ));
@@ -454,6 +465,7 @@ migrations_vr MigrationImpl::readMigrationSteps(const ::rtl::OUString& rMigratio
     {
         // get current migration step
         theNameAccess->getByName(seqMigrations[i]) >>= tmpAccess;
+        // tmpStepPtr = new migration_step();
         migration_step tmpStep;
         tmpStep.name = seqMigrations[i];
 
@@ -547,7 +559,7 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
             aProfileName = (*i_ver).copy( nSeparatorIndex+1 );
         }
 
-        if ( aVersion.getLength() && aProfileName.getLength() &&
+        if ( aVersion.getLength() && aProfileName.getLength() && 
                 ( !aInfo.userdata.getLength() || !aProfileName.toAsciiLowerCase().compareTo( aProductName, aProductName.getLength() ) )
            )
         {
@@ -623,9 +635,9 @@ strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& 
             end = (xub_StrLen)(i_set->getLength());
             if (ts.SearchFrwrd(*i_set, &start, &end))
                 vrResult->push_back(*i_set);
-            ++i_set;
+            i_set++;
         }
-        ++i_pat;
+        i_pat++;
     }
     return vrResult;
 }
@@ -662,7 +674,7 @@ strings_vr MigrationImpl::getAllFiles(const OUString& baseURL) const
         {
             vrSubResult = getAllFiles(*i);
             vrResult->insert(vrResult->end(), vrSubResult->begin(), vrSubResult->end());
-            ++i;
+            i++;
         }
     }
     return vrResult;
@@ -692,7 +704,7 @@ strings_vr MigrationImpl::compileFileList()
         vrExclude = applyPatterns(*vrFiles, i_migr->excludeFiles);
         subtract(*vrInclude, *vrExclude);
         vrResult->insert(vrResult->end(), vrInclude->begin(), vrInclude->end());
-        ++i_migr;
+        i_migr++;
     }
     return vrResult;
 }
@@ -826,9 +838,9 @@ void MigrationImpl::subtract(strings_v& va, const strings_v& vb_c) const
                 break;
             }
             else
-                ++i_in;
+                i_in++;
         }
-        ++i_ex;
+        i_ex++;
     }
 }
 
@@ -859,7 +871,7 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
     } catch (com::sun::star::uno::Exception& e)
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(aMsg.getStr());
+        OSL_ENSURE(sal_False, aMsg.getStr());
     }
     return xNameAccess;
 }
@@ -889,14 +901,14 @@ void MigrationImpl::copyFiles()
                 OString msg("Cannot copy ");
                 msg += OUStringToOString(*i_file, RTL_TEXTENCODING_UTF8) + " to "
                     +  OUStringToOString(destName, RTL_TEXTENCODING_UTF8);
-                OSL_FAIL(msg.getStr());
+                OSL_ENSURE(sal_False, msg.getStr());
             }
-            ++i_file;
+            i_file++;
         }
     }
     else
     {
-        OSL_FAIL("copyFiles: UserInstall does not exist");
+        OSL_ENSURE(sal_False, "copyFiles: UserInstall does not exist");
     }
 }
 
@@ -945,17 +957,17 @@ void MigrationImpl::runServices()
                 OString aMsg("Execution of migration service failed (Exception caught).\nService: ");
                 aMsg += OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US) + "\nMessage: ";
                 aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-                OSL_FAIL(aMsg.getStr());
+                OSL_ENSURE(sal_False, aMsg.getStr());
             } catch (...)
             {
                 OString aMsg("Execution of migration service failed (Exception caught).\nService: ");
                 aMsg += OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US) +
                     "\nNo message available";
-                OSL_FAIL(aMsg.getStr());
+                OSL_ENSURE(sal_False, aMsg.getStr());
             }
 
         }
-        ++i_mig;
+        i_mig++;
     }
 }
 
@@ -1009,7 +1021,7 @@ void MigrationImpl::runServices()
                 for (sal_Int32 j=0; j<lToolbars.getLength(); ++j)
                 {
                     ::rtl::OUString sToolbarName = lToolbars[j];
-                    if (sToolbarName.getLength()>=nCustomLen &&
+                    if (sToolbarName.getLength()>=nCustomLen && 
                         sToolbarName.copy(0, nCustomLen).equals(RESOURCEURL_CUSTOM_ELEMENT))
                         continue;
 
@@ -1097,7 +1109,7 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
         }
         else if (pFound == vNewItems.end())
         {
-            MigrationItem aMigrationItem(sParent, sSibling, it->m_sCommandURL, it->m_xPopupMenu);
+            MigrationItem aMigrationItem(sParent, sSibling, it->m_sCommandURL, it->m_xPopupMenu);	
             if (m_aOldVersionItemsHashMap.find(sResourceURL)==m_aOldVersionItemsHashMap.end())
             {
                 ::std::vector< MigrationItem > vMigrationItems;
@@ -1130,7 +1142,7 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
         }
         else if (::std::find(vOldItems.begin(), vOldItems.end(), *it) == vOldItems.end())
         {
-            MigrationItem aMigrationItem(sParent, sSibling, it->m_sCommandURL, it->m_xPopupMenu);
+            MigrationItem aMigrationItem(sParent, sSibling, it->m_sCommandURL, it->m_xPopupMenu);	
             if (m_aNewVersionItemsHashMap.find(sResourceURL)==m_aNewVersionItemsHashMap.end())
             {
                 ::std::vector< MigrationItem > vMigrationItems;
@@ -1146,9 +1158,9 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
     }
 }
 
-void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurationManager >& xCfgManager,
-                                         const uno::Reference< container::XIndexContainer>& xIndexContainer,
-                                         const ::rtl::OUString& sModuleIdentifier,
+void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurationManager >& xCfgManager, 
+                                         const uno::Reference< container::XIndexContainer>& xIndexContainer, 
+                                         const ::rtl::OUString& sModuleIdentifier, 
                                          const ::rtl::OUString& sResourceURL)
 {
     MigrationHashMap::iterator pFound = m_aOldVersionItemsHashMap.find(sResourceURL);
@@ -1162,7 +1174,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
 
         ::rtl::OUString sParentNodeName = it->m_sParentNodeName;
         sal_Int32 nIndex = 0;
-        do
+        do 
         {
             ::rtl::OUString sToken = sParentNodeName.getToken(0, '|', nIndex).trim();
             if (sToken.getLength()<=0)
@@ -1175,7 +1187,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
                 ::rtl::OUString sLabel;
                 uno::Reference< container::XIndexContainer > xChild;
 
-                uno::Sequence< beans::PropertyValue > aPropSeq;
+                uno::Sequence< beans::PropertyValue > aPropSeq;					
                 xTemp->getByIndex(i) >>= aPropSeq;
                 for (sal_Int32 j=0; j<aPropSeq.getLength(); ++j)
                 {
@@ -1247,14 +1259,14 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
 }
 
 uno::Reference< ui::XUIConfigurationManager > NewVersionUIInfo::getConfigManager(const ::rtl::OUString& sModuleShortName) const
-{
+{ 
     uno::Reference< ui::XUIConfigurationManager > xCfgManager;
 
     for (sal_Int32 i=0; i<m_lCfgManagerSeq.getLength(); ++i)
     {
         if (m_lCfgManagerSeq[i].Name.equals(sModuleShortName))
         {
-            m_lCfgManagerSeq[i].Value >>= xCfgManager;
+            m_lCfgManagerSeq[i].Value >>= xCfgManager; 
             break;
         }
     }

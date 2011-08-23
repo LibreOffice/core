@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ import com.sun.star.xml.AttributeData;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import lib.MultiPropertyTest;
-
+ 
 import util.ValueChanger;
 import util.utils;
 
@@ -160,7 +160,7 @@ public class _CharacterProperties extends MultiPropertyTest {
 
     /**
      * Custom tester for style name properties. If object relations "STYLENAME1"
-     * and "STYLENAME2" exists, then testing with these strings, else switches
+     * and "STYLENAME2" exists, then testing with these strings, else switches 
      * between 'Citation' and 'Emphasis' names.
      */
     protected PropertyTester StyleTester = new PropertyTester() {
@@ -311,9 +311,9 @@ public class _CharacterProperties extends MultiPropertyTest {
                 "RubyIsAbove",new Boolean(true));
         }
     }
-
+    
     /**
-    * This property only takes values between 0..100
+    * This property only takes values between 0..100 
     * so ist must be treated special
     */
     public void _CharEscapementHeight() {
@@ -321,7 +321,7 @@ public class _CharacterProperties extends MultiPropertyTest {
         Byte max = new Byte((byte)100);
         testProperty("CharEscapementHeight", aByte, max) ;
     }
-
+    
 
     /**
     * This property can be void, so if old value is <code> null </code>
@@ -412,29 +412,29 @@ public class _CharacterProperties extends MultiPropertyTest {
                 tRes.tested(name,true);
             }
             else {
-                log.println("Exception occurred while testing property '" +
+                log.println("Exception occured while testing property '" +
                      name + "'");
                 ex.printStackTrace(log);
                 tRes.tested(name, false);
             }
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occurred while testing property '" +
+            log.println("Exception occured while testing property '" +
                 name + "'");
             e.printStackTrace(log);
             tRes.tested(name, false);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occurred while testing property '" +
+            log.println("Exception occured while testing property '" +
                  name + "'");
             e.printStackTrace(log);
             tRes.tested(name, false);
         } catch (com.sun.star.beans.PropertyVetoException e) {
-            log.println("Exception occurred while testing property '" +
+            log.println("Exception occured while testing property '" +
                  name + "'");
             e.printStackTrace(log);
             tRes.tested(name, false);
         }
     }// end of changeProp
-
+    
     public void _TextUserDefinedAttributes() {
         XNameContainer uda = null;
         boolean res = false;
@@ -457,7 +457,7 @@ public class _CharacterProperties extends MultiPropertyTest {
             String[] els = uda.getElementNames();
             oObj.setPropertyValue("TextUserDefinedAttributes", uda);
             uda = (XNameContainer) AnyConverter.toObject(
-                          new Type(XNameContainer.class),
+                          new Type(XNameContainer.class), 
                           oObj.getPropertyValue("TextUserDefinedAttributes"));
             els = uda.getElementNames();
 
@@ -488,19 +488,19 @@ public class _CharacterProperties extends MultiPropertyTest {
 
         tRes.tested("TextUserDefinedAttributes", res);
     }
-
+    
     private class OwnUserDefinedAttributes implements XNameContainer{
         Hashtable members = null;
-
-
+        
+        
         public OwnUserDefinedAttributes() {
             members = new Hashtable();
         }
-
+        
         public Object getByName(String str) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException {
             return members.get(str);
         }
-
+        
         public String[] getElementNames() {
             Enumeration oEnum = members.keys();
             int count = members.size();
@@ -510,34 +510,34 @@ public class _CharacterProperties extends MultiPropertyTest {
                 res[i] = (String)oEnum.nextElement();
             return res;
         }
-
+        
         public com.sun.star.uno.Type getElementType() {
             Enumeration oEnum = members.keys();
             String key = (String)oEnum.nextElement();
             Object o = members.get(key);
             return new Type(o.getClass());
         }
-
+        
         public boolean hasByName(String str) {
             return members.get(str) != null;
         }
-
+        
         public boolean hasElements() {
             return members.size() > 0;
         }
-
+        
         public void insertByName(String str, Object obj) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.ElementExistException, com.sun.star.lang.WrappedTargetException {
             members.put(str, obj);
         }
-
+        
         public void removeByName(String str) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException {
             members.remove(str);
         }
-
+        
         public void replaceByName(String str, Object obj) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException {
             members.put(str, obj);
         }
-
+        
     }
 
 } //finish class _CharacterProperties

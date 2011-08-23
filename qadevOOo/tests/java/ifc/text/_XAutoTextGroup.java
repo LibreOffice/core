@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,7 +135,7 @@ public class _XAutoTextGroup extends MultiMethodTest {
             result = !util.ValueComparer.equalValue(before, after);
         }
         catch (com.sun.star.container.ElementExistException ex) {
-            log.println("Exception occurred while testing insertNewByName");
+            log.println("Exception occured while testing insertNewByName");
             ex.printStackTrace(log);
             result = false;
         }
@@ -180,7 +180,7 @@ public class _XAutoTextGroup extends MultiMethodTest {
                 !ValueComparer.equalValue(before,after));
         }
         catch (com.sun.star.container.NoSuchElementException ex) {
-            log.println("Exception occurred while testing removeByName");
+            log.println("Exception occured while testing removeByName");
             ex.printStackTrace(log);
             tRes.tested("removeByName()",false);
         }
@@ -212,7 +212,7 @@ public class _XAutoTextGroup extends MultiMethodTest {
             names = oObj.getElementNames() ;
             result = true;
         } catch (com.sun.star.container.ElementExistException e) {
-            log.println("Unexpected exception occurred :") ;
+            log.println("Unexpected exception occured :") ;
             e.printStackTrace(log);
         } finally {
             if (!result) {
@@ -279,15 +279,15 @@ public class _XAutoTextGroup extends MultiMethodTest {
             oObj.renameByName(str,str+"a",str+"b");
             result &= oObj.hasByName(str + "a");
         } catch (com.sun.star.container.ElementExistException ex) {
-            log.println("Exception occurred while testing renameByName");
+            log.println("Exception occured while testing renameByName");
             ex.printStackTrace(log);
             result &=false;
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occurred while testing renameByName");
+            log.println("Exception occured while testing renameByName");
             ex.printStackTrace(log);
             result &=false;
         } catch (com.sun.star.io.IOException ex) {
-            log.println("Exception occurred while testing renameByName");
+            log.println("Exception occured while testing renameByName");
             ex.printStackTrace(log);
             result &=false;
         } finally {

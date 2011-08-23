@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,9 +72,9 @@ class INetURLHistory_Impl
     {
         /** Representation.
         */
-        sal_uInt32 m_nMagic;
-        sal_uInt16 m_nNext;
-        sal_uInt16 m_nMBZ;
+        UINT32 m_nMagic;
+        UINT16 m_nNext;
+        UINT16 m_nMBZ;
 
         /** Initialization.
         */
@@ -92,13 +92,13 @@ class INetURLHistory_Impl
     {
         /** Representation.
         */
-        sal_uInt32 m_nHash;
-        sal_uInt16 m_nLru;
-        sal_uInt16 m_nMBZ;
+        UINT32 m_nHash;
+        UINT16 m_nLru;
+        UINT16 m_nMBZ;
 
         /** Initialization.
         */
-        void initialize (sal_uInt16 nLru, sal_uInt32 nHash = 0)
+        void initialize (UINT16 nLru, UINT32 nHash = 0)
         {
             m_nHash = nHash;
             m_nLru  = nLru;
@@ -107,20 +107,20 @@ class INetURLHistory_Impl
 
         /** Comparison.
         */
-        sal_Bool operator== (const hash_entry &rOther) const
+        BOOL operator== (const hash_entry &rOther) const
         {
             return (m_nHash == rOther.m_nHash);
         }
-        sal_Bool operator< (const hash_entry &rOther) const
+        BOOL operator< (const hash_entry &rOther) const
         {
             return (m_nHash < rOther.m_nHash);
         }
 
-        sal_Bool operator== (sal_uInt32 nHash) const
+        BOOL operator== (UINT32 nHash) const
         {
             return (m_nHash == nHash);
         }
-        sal_Bool operator< (sal_uInt32 nHash) const
+        BOOL operator< (UINT32 nHash) const
         {
             return (m_nHash < nHash);
         }
@@ -132,13 +132,13 @@ class INetURLHistory_Impl
     {
         /** Representation.
         */
-        sal_uInt32 m_nHash;
-        sal_uInt16 m_nNext;
-        sal_uInt16 m_nPrev;
+        UINT32 m_nHash;
+        UINT16 m_nNext;
+        UINT16 m_nPrev;
 
         /** Initialization.
         */
-        void initialize (sal_uInt16 nThis, sal_uInt32 nHash = 0)
+        void initialize (UINT16 nThis, UINT32 nHash = 0)
         {
             m_nHash = nHash;
             m_nNext = nThis;
@@ -156,34 +156,34 @@ class INetURLHistory_Impl
     */
     void initialize (void);
 
-    void downheap (hash_entry a[], sal_uInt16 n, sal_uInt16 k);
-    void heapsort (hash_entry a[], sal_uInt16 n);
+    void downheap (hash_entry a[], UINT16 n, UINT16 k);
+    void heapsort (hash_entry a[], UINT16 n);
 
     /** capacity.
     */
-    sal_uInt16 capacity (void) const
+    UINT16 capacity (void) const
     {
-        return (sal_uInt16)(INETHIST_SIZE_LIMIT);
+        return (UINT16)(INETHIST_SIZE_LIMIT);
     }
 
     /** crc32.
     */
-    sal_uInt32 crc32 (UniString const & rData) const
+    UINT32 crc32 (UniString const & rData) const
     {
         return rtl_crc32 (0, rData.GetBuffer(), rData.Len() * sizeof(sal_Unicode));
     }
 
     /** find.
     */
-    sal_uInt16 find (sal_uInt32 nHash) const;
+    UINT16 find (UINT32 nHash) const;
 
     /** move.
     */
-    void move (sal_uInt16 nSI, sal_uInt16 nDI);
+    void move (UINT16 nSI, UINT16 nDI);
 
     /** backlink.
     */
-    void backlink (sal_uInt16 nThis, sal_uInt16 nTail)
+    void backlink (UINT16 nThis, UINT16 nTail)
     {
         register lru_entry &rThis = m_pList[nThis];
         register lru_entry &rTail = m_pList[nTail];
@@ -196,7 +196,7 @@ class INetURLHistory_Impl
 
     /** unlink.
     */
-    void unlink (sal_uInt16 nThis)
+    void unlink (UINT16 nThis)
     {
         register lru_entry &rThis = m_pList[nThis];
 
@@ -218,7 +218,7 @@ public:
     /** putUrl/queryUrl.
     */
     void putUrl   (const String &rUrl);
-    sal_Bool queryUrl (const String &rUrl);
+    BOOL queryUrl (const String &rUrl);
 };
 
 /*========================================================================
@@ -248,7 +248,7 @@ void INetURLHistory_Impl::initialize (void)
 {
     m_aHead.initialize();
 
-    sal_uInt16 i, n = capacity();
+    USHORT i, n = capacity();
     for (i = 0; i < n; i++)
         m_pHash[i].initialize(i);
     for (i = 0; i < n; i++)
@@ -260,12 +260,12 @@ void INetURLHistory_Impl::initialize (void)
 /*
  * downheap.
  */
-void INetURLHistory_Impl::downheap (hash_entry a[], sal_uInt16 n, sal_uInt16 k)
+void INetURLHistory_Impl::downheap (hash_entry a[], UINT16 n, UINT16 k)
 {
     hash_entry h = a[k];
     while (k < n / 2)
     {
-        sal_uInt16 i = k + k + 1;
+        UINT16 i = k + k + 1;
         if (((i + 1) < n) && (a[i] < a[i + 1])) i++;
         if (!(h < a[i])) break;
         a[k] = a[i];
@@ -277,11 +277,11 @@ void INetURLHistory_Impl::downheap (hash_entry a[], sal_uInt16 n, sal_uInt16 k)
 /*
  * heapsort.
  */
-void INetURLHistory_Impl::heapsort (hash_entry a[], sal_uInt16 n)
+void INetURLHistory_Impl::heapsort (hash_entry a[], UINT16 n)
 {
     hash_entry h;
 
-    for (sal_uInt16 k = (n - 1) / 2 + 1; k > 0; k--)
+    for (UINT16 k = (n - 1) / 2 + 1; k > 0; k--)
         downheap (a, n, k - 1);
 
     while (n > 0)
@@ -296,15 +296,15 @@ void INetURLHistory_Impl::heapsort (hash_entry a[], sal_uInt16 n)
 /*
  * find.
  */
-sal_uInt16 INetURLHistory_Impl::find (sal_uInt32 nHash) const
+UINT16 INetURLHistory_Impl::find (UINT32 nHash) const
 {
-    sal_uInt16 l = 0;
-    sal_uInt16 r = capacity() - 1;
-    sal_uInt16 c = capacity();
+    UINT16 l = 0;
+    UINT16 r = capacity() - 1;
+    UINT16 c = capacity();
 
     while ((l < r) && (r < c))
     {
-        sal_uInt16 m = (l + r) / 2;
+        UINT16 m = (l + r) / 2;
         if (m_pHash[m] == nHash)
             return m;
 
@@ -319,7 +319,7 @@ sal_uInt16 INetURLHistory_Impl::find (sal_uInt32 nHash) const
 /*
  * move.
  */
-void INetURLHistory_Impl::move (sal_uInt16 nSI, sal_uInt16 nDI)
+void INetURLHistory_Impl::move (UINT16 nSI, UINT16 nDI)
 {
     hash_entry e = m_pHash[nSI];
     if (nSI < nDI)
@@ -346,12 +346,12 @@ void INetURLHistory_Impl::move (sal_uInt16 nSI, sal_uInt16 nDI)
  */
 void INetURLHistory_Impl::putUrl (const String &rUrl)
 {
-    sal_uInt32 h = crc32 (rUrl);
-    sal_uInt16 k = find (h);
+    UINT32 h = crc32 (rUrl);
+    UINT16 k = find (h);
     if ((k < capacity()) && (m_pHash[k] == h))
     {
         // Cache hit.
-        sal_uInt16 nMRU = m_pHash[k].m_nLru;
+        UINT16 nMRU = m_pHash[k].m_nLru;
         if (nMRU != m_aHead.m_nNext)
         {
             // Update LRU chain.
@@ -365,9 +365,9 @@ void INetURLHistory_Impl::putUrl (const String &rUrl)
     else
     {
         // Cache miss. Obtain least recently used.
-        sal_uInt16 nLRU = m_pList[m_aHead.m_nNext].m_nPrev;
+        UINT16 nLRU = m_pList[m_aHead.m_nNext].m_nPrev;
 
-        sal_uInt16 nSI = find (m_pList[nLRU].m_nHash);
+        UINT16 nSI = find (m_pList[nLRU].m_nHash);
         if (!(nLRU == m_pHash[nSI].m_nLru))
         {
             // Update LRU chain.
@@ -380,7 +380,7 @@ void INetURLHistory_Impl::putUrl (const String &rUrl)
         m_aHead.m_nNext = m_pList[m_aHead.m_nNext].m_nPrev;
 
         // Check source and destination.
-        sal_uInt16 nDI = std::min (k, sal_uInt16(capacity() - 1));
+        UINT16 nDI = std::min (k, UINT16(capacity() - 1));
         if (nSI < nDI)
         {
             if (!(m_pHash[nDI] < h))
@@ -401,19 +401,19 @@ void INetURLHistory_Impl::putUrl (const String &rUrl)
 /*
  * queryUrl.
  */
-sal_Bool INetURLHistory_Impl::queryUrl (const String &rUrl)
+BOOL INetURLHistory_Impl::queryUrl (const String &rUrl)
 {
-    sal_uInt32 h = crc32 (rUrl);
-    sal_uInt16 k = find (h);
+    UINT32 h = crc32 (rUrl);
+    UINT16 k = find (h);
     if ((k < capacity()) && (m_pHash[k] == h))
     {
         // Cache hit.
-        return sal_True;
+        return TRUE;
     }
     else
     {
         // Cache miss.
-        return sal_False;
+        return FALSE;
     }
 }
 
@@ -527,7 +527,7 @@ void INetURLHistory::PutUrl_Impl (const INetURLObject &rUrl)
 /*
  * QueryUrl_Impl.
  */
-sal_Bool INetURLHistory::QueryUrl_Impl (const INetURLObject &rUrl)
+BOOL INetURLHistory::QueryUrl_Impl (const INetURLObject &rUrl)
 {
     DBG_ASSERT (m_pImpl, "QueryUrl_Impl(): no Implementation");
     if (m_pImpl)
@@ -537,7 +537,7 @@ sal_Bool INetURLHistory::QueryUrl_Impl (const INetURLObject &rUrl)
 
         return m_pImpl->queryUrl (aHistUrl.GetMainURL(INetURLObject::NO_DECODE));
     }
-    return sal_False;
+    return FALSE;
 }
 
 

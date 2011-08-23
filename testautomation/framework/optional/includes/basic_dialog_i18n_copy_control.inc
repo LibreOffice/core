@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : gregor.hartmann@oracle.com
+'*  owner : Joerg.Skottke@Sun.Com
 '*
 '*  short description : Copy a control with i18n data
 '*

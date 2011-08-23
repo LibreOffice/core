@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include <sal/types.h>
 #include <rtl/string.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 typedef sal_uInt32 Atom;
 
@@ -39,16 +39,16 @@ typedef sal_uInt32 Atom;
 class AtomContainer
 {
     Atom m_nNextID;
-    boost::unordered_map< rtl::OString, Atom, rtl::OStringHash > m_aStringToID;
-    boost::unordered_map< Atom, rtl::OString > m_aIDToString;
-
+    std::hash_map< rtl::OString, Atom, rtl::OStringHash > m_aStringToID;
+    std::hash_map< Atom, rtl::OString > m_aIDToString;
+    
     public:
     AtomContainer();
     ~AtomContainer();
-
+    
     Atom getID( const rtl::OString& rStr, bool bOnlyIfExists = false );
-    const rtl::OString& getString( Atom nAtom );
-
+    const rtl::OString& getString( Atom nAtom ); 
+    
 };
 
 #endif // _RSCHASH_HXX

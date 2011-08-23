@@ -25,6 +25,10 @@
 #
 #***********************************************************************/
 
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
 PRJ = ../..
 PRJNAME = sal
 TARGET = qa_ByteSequence
@@ -46,4 +50,6 @@ DEF1NAME = $(SHL1TARGET)
 SLOFILES = $(SHL1OBJS)
 
 .INCLUDE: target.mk
-.INCLUDE: $(PRJ)$/qa$/cppunit_local.mk
+.INCLUDE: _cppunit.mk
+
+.END

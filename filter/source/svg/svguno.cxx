@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,11 +52,37 @@ extern "C"
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
     //==================================================================================================
+    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
+        void * /* pServiceManager */, void * pRegistryKey )
+    {
+        if (pRegistryKey)
+        {
+            try
+            {
+                Reference< XRegistryKey > xNewKey(
+                    reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SVGFilter_getImplementationName() ) ); 
+                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                
+                const Sequence< OUString > & rSNL = SVGFilter_getSupportedServiceNames();
+                const OUString * pArray = rSNL.getConstArray();
+                for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+                    xNewKey->createKey( pArray[nPos] );
+
+                return sal_True;
+            }
+            catch (InvalidRegistryException &)
+            {
+                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+            }
+        }
+        return sal_False;
+    }
+    //==================================================================================================
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
     {
         void * pRet = 0;
-
+        
         OUString implName = OUString::createFromAscii( pImplName );
         if ( pServiceManager && implName.equals(SVGFilter_getImplementationName()) )
         {
@@ -64,14 +90,14 @@ extern "C"
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 SVGFilter_createInstance, SVGFilter_getSupportedServiceNames() ) );
-
+            
             if (xFactory.is())
             {
                 xFactory->acquire();
                 pRet = xFactory.get();
             }
         }
-
+        
         return pRet;
     }
 }

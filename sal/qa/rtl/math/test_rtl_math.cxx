@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,19 +26,21 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sal.hxx"
+
 #include "rtl/math.h"
 #include "rtl/math.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/textenc.h"
+#include <testshl/tresstatewrapper.hxx>
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include <sal/macros.h>
 
 #include <stdlib.h>
-
-#include <sal/cppunit.h>
 
 namespace {
 
@@ -116,11 +118,12 @@ struct TestNumberToString
 };
 
 template< typename StringT, typename NumberT >
-void testNumberToString(TestNumberToString const & rTest)
+bool testNumberToString(hTestResult pTestResult,
+                        TestNumberToString const & rTest)
 {
     typename NumberT::Number fValue = static_cast< typename NumberT::Number >(rTest.fValue);
     if (fValue != rTest.fValue)
-        return;
+        return true;
 
     // LLA: t_print("size: %d ", sizeof(fValue));
     typename StringT::String aResult1;
@@ -130,6 +133,16 @@ void testNumberToString(TestNumberToString const & rTest)
                                        rTest.bEraseTrailingDecZeros);
 
     typename StringT::String aResult2(StringT::createFromAscii(rTest.pResult));
+
+    // LLA: rtl::OStringBuffer aBuf;
+    // LLA: StringT::appendBuffer(aBuf, aResult1);
+    // LLA: t_print("aResult1: %s  ", aBuf.getStr());
+    // LLA: 
+    // LLA: rtl::OStringBuffer aBuf2;
+    // LLA: StringT::appendBuffer(aBuf2, aResult2);  
+    // LLA: t_print("aResult2: %s\n", aBuf2.getStr());
+    
+    bool bSuccess = aResult1 == aResult2;
 
     rtl::OStringBuffer aBuffer;
     aBuffer.append(StringT::getPrefix());
@@ -147,19 +160,27 @@ void testNumberToString(TestNumberToString const & rTest)
     aBuffer.append(static_cast< sal_Int32 >(rTest.bEraseTrailingDecZeros));
     aBuffer.append(RTL_CONSTASCII_STRINGPARAM("): "));
     StringT::appendBuffer(aBuffer, aResult1);
-    if (aResult1 != aResult2)
+    if (!bSuccess)
     {
         aBuffer.append(RTL_CONSTASCII_STRINGPARAM(" != "));
         StringT::appendBuffer(aBuffer, aResult2);
     }
-    CPPUNIT_ASSERT_MESSAGE(aBuffer.getStr(), aResult1 == aResult2);
+    // call to the real test checker
+    // pTestResult->pFuncs->state_(pTestResult, bSuccess, "test_rtl_math",
+    //                             aBuffer.getStr(), false);
+    c_rtl_tres_state(pTestResult, bSuccess, aBuffer.getStr(), "testNumberToString");
+    return bSuccess;
 }
 
 template< typename StringT, typename NumberT >
-void testNumberToString(TestNumberToString const * pTests, size_t nCount)
+bool testNumberToString(hTestResult pTestResult,
+                        TestNumberToString const * pTests, size_t nCount)
 {
+    bool bSuccess = true;
     for (size_t i = 0; i < nCount; ++i)
-        testNumberToString< StringT, NumberT >(pTests[i]);
+        bSuccess &= testNumberToString< StringT, NumberT >(pTestResult,
+                                                           pTests[i]);
+    return bSuccess;
 }
 
 struct TestStringToNumberToString
@@ -173,7 +194,8 @@ struct TestStringToNumberToString
 };
 
 template< typename StringT >
-void testStringToNumberToString(TestStringToNumberToString const & rTest)
+bool testStringToNumberToString(hTestResult pTestResult,
+                                TestStringToNumberToString const & rTest)
 {
     double d = rtl::math::stringToDouble(StringT::createFromAscii(rTest.pValue),
                                          rTest.cDecSeparator, 0, 0, 0);
@@ -182,6 +204,7 @@ void testStringToNumberToString(TestStringToNumberToString const & rTest)
                                 rTest.cDecSeparator,
                                 rTest.bEraseTrailingDecZeros));
     typename StringT::String aResult2(StringT::createFromAscii(rTest.pResult));
+    bool bSuccess = aResult1 == aResult2;
     rtl::OStringBuffer aBuffer;
     aBuffer.append(StringT::getPrefix());
     aBuffer.append(RTL_CONSTASCII_STRINGPARAM(
@@ -199,36 +222,37 @@ void testStringToNumberToString(TestStringToNumberToString const & rTest)
     aBuffer.append(static_cast< sal_Int32 >(rTest.bEraseTrailingDecZeros));
     aBuffer.append(RTL_CONSTASCII_STRINGPARAM("): "));
     StringT::appendBuffer(aBuffer, aResult1);
-    if (aResult1 != aResult2)
+    if (!bSuccess)
     {
         aBuffer.append(RTL_CONSTASCII_STRINGPARAM(" != "));
         StringT::appendBuffer(aBuffer, aResult2);
     }
-    CPPUNIT_ASSERT_MESSAGE(aBuffer.getStr(), aResult1 == aResult2);
+    // call to the real test checker
+    // pTestResult->pFuncs->state_(pTestResult, bSuccess, "test_rtl_math",
+    //                             aBuffer.getStr(), false);
+    c_rtl_tres_state(pTestResult, bSuccess, aBuffer.getStr(), "testStringToNumberToString");
+
+    return bSuccess;
 }
 
 template< typename StringT >
-void testStringToNumberToString(TestStringToNumberToString const * pTests,
+bool testStringToNumberToString(hTestResult pTestResult,
+                                TestStringToNumberToString const * pTests,
                                 size_t nCount)
 {
+    bool bSuccess = true;
     for (size_t i = 0; i < nCount; ++i)
-        testStringToNumberToString< StringT >(pTests[i]);
+        bSuccess &= testStringToNumberToString< StringT >(pTestResult,
+                                                          pTests[i]);
+    return bSuccess;
 }
 
 }
 
-class Math : public CppUnit::TestFixture
+extern "C" sal_Bool SAL_CALL test_rtl_math(hTestResult pTestResult)
 {
-public:
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
-    void rtl_math_001()
+    bool bReturn = true;
+    
     {
         static TestNumberToString const aTest[]
             = { // 1, 1+2^-1, ..., 1+2^-52
@@ -517,13 +541,14 @@ public:
 
 //        bReturn &= testNumberToString< StringTraits, FloatTraits >(
 //            pTestResult, aTest, nCount);
-        testNumberToString< StringTraits, DoubleTraits >(aTest, nCount);
+        bReturn &= testNumberToString< StringTraits, DoubleTraits >(
+            pTestResult, aTest, nCount);
 //        bReturn &= testNumberToString< UStringTraits, FloatTraits >(
 //            pTestResult, aTest, nCount);
-        testNumberToString< UStringTraits, DoubleTraits >(aTest, nCount);
+        bReturn &= testNumberToString< UStringTraits, DoubleTraits >(
+            pTestResult, aTest, nCount);
     }
 
-    void rtl_math_002()
     {
         static TestStringToNumberToString const aTest[]
             = { { "1", rtl_math_StringFormat_Automatic,
@@ -622,36 +647,31 @@ public:
                   "1.#INF" },
             };
         size_t const nCount = SAL_N_ELEMENTS(aTest);
-        testStringToNumberToString< StringTraits >(aTest, nCount);
-        testStringToNumberToString< UStringTraits >(aTest, nCount);
+        bReturn &= testStringToNumberToString< StringTraits >(
+            pTestResult, aTest, nCount);
+        bReturn &= testStringToNumberToString< UStringTraits >(
+            pTestResult, aTest, nCount);
     }
 
-    CPPUNIT_TEST_SUITE(Math);
-    CPPUNIT_TEST(rtl_math_001);
-    CPPUNIT_TEST(rtl_math_002);
-    CPPUNIT_TEST_SUITE_END();
-};
+    return bReturn;
+}
 
 // -----------------------------------------------------------------------------
-//extern "C" void /* sal_Bool */ SAL_CALL test_rtl_math2( hTestResult hRtlTestResult )
-//{
-//    c_rtl_tres_state_start(hRtlTestResult, "rtl_math" );
-//
-//    test_rtl_math( hRtlTestResult );
-//
-//    c_rtl_tres_state_end(hRtlTestResult, "rtl_math" );
-//}
+extern "C" void /* sal_Bool */ SAL_CALL test_rtl_math2( hTestResult hRtlTestResult )
+{
+    c_rtl_tres_state_start(hRtlTestResult, "rtl_math" );
+
+    test_rtl_math( hRtlTestResult );
+
+    c_rtl_tres_state_end(hRtlTestResult, "rtl_math" );
+}
 // -----------------------------------------------------------------------------
-//void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
-//{
-//    if (_pFunc)
-//    {
-//        (_pFunc)(&test_rtl_math2, "");
-//    }
-//}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(::Math);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
+void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
+{
+    if (_pFunc)
+    {
+        (_pFunc)(&test_rtl_math2, "");
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

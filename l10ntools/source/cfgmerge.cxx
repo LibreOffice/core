@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,24 +42,24 @@ extern "C" { int yyerror( char * ); }
 extern "C" { int YYWarning( char * ); }
 
 // defines to parse command line
-#define STATE_NON       0x0001
-#define STATE_INPUT     0x0002
-#define STATE_OUTPUT    0x0003
-#define STATE_PRJ       0x0004
-#define STATE_ROOT      0x0005
-#define STATE_MERGESRC  0x0006
-#define STATE_ERRORLOG  0x0007
-#define STATE_UTF8      0x0008
-#define STATE_LANGUAGES 0X0009
-#define STATE_ISOCODE99 0x000A
-#define STATE_FORCE     0x000B
+#define STATE_NON  		0x0001
+#define STATE_INPUT		0x0002
+#define STATE_OUTPUT	0x0003
+#define STATE_PRJ		0x0004
+#define STATE_ROOT		0x0005
+#define STATE_MERGESRC	0x0006
+#define STATE_ERRORLOG	0x0007
+#define STATE_UTF8		0x0008
+#define STATE_LANGUAGES	0X0009
+#define STATE_ISOCODE99	0x000A
+#define STATE_FORCE		0x000B
 
 // set of global variables
-sal_Bool bEnableExport;
-sal_Bool bMergeMode;
-sal_Bool bErrorLog;
-sal_Bool bForce;
-sal_Bool bUTF8;
+BOOL bEnableExport;
+BOOL bMergeMode;
+BOOL bErrorLog;
+BOOL bForce;
+BOOL bUTF8;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sInputFileName;
@@ -78,24 +78,24 @@ extern "C" {
 extern char *GetOutputFile( int argc, char* argv[])
 /*****************************************************************************/
 {
-    bEnableExport   = sal_False;
-    bMergeMode      = sal_False;
-    bErrorLog       = sal_True;
-    bForce          = sal_False;
-    bUTF8           = sal_True;
+    bEnableExport   = FALSE;
+    bMergeMode      = FALSE;
+    bErrorLog       = TRUE;
+    bForce          = FALSE;
+    bUTF8           = TRUE;
     sPrj            = "";
     sPrjRoot        = "";
     sInputFileName  = "";
     sActFileName    = "";
 
-    sal_uInt16 nState = STATE_NON;
-    sal_Bool bInput = sal_False;
+    USHORT nState = STATE_NON;
+    BOOL bInput = FALSE;
 
     // parse command line
     for( int i = 1; i < argc; i++ ) {
         ByteString sSwitch( argv[ i ] );
         sSwitch.ToUpperAscii();
-
+        
         if ( sSwitch == "-I" ) {
             nState = STATE_INPUT; // next token specifies source file
         }
@@ -113,19 +113,19 @@ extern char *GetOutputFile( int argc, char* argv[])
         }
         else if ( sSwitch == "-E" ) {
             nState = STATE_ERRORLOG;
-            bErrorLog = sal_False;
+            bErrorLog = FALSE;
         }
         else if ( sSwitch == "-UTF8" ) {
             nState = STATE_UTF8;
-            bUTF8 = sal_True;
+            bUTF8 = TRUE;
         }
         else if ( sSwitch == "-NOUTF8" ) {
             nState = STATE_UTF8;
-            bUTF8 = sal_False;
+            bUTF8 = FALSE;
         }
         else if ( sSwitch == "-F" ) {
             nState = STATE_FORCE;
-            bForce = sal_True;
+            bForce = TRUE;
         }
         else if ( sSwitch == "-L" ) {
             nState = STATE_LANGUAGES;
@@ -136,11 +136,11 @@ extern char *GetOutputFile( int argc, char* argv[])
         else {
             switch ( nState ) {
                 case STATE_NON: {
-                    return NULL;    // no valid command line
+                    return NULL;	// no valid command line
                 }
                 case STATE_INPUT: {
                     sInputFileName = argv[ i ];
-                    bInput = sal_True; // source file found
+                    bInput = TRUE; // source file found
                 }
                 break;
                 case STATE_OUTPUT: {
@@ -149,7 +149,7 @@ extern char *GetOutputFile( int argc, char* argv[])
                 break;
                 case STATE_PRJ: {
                     sPrj = ByteString( argv[ i ]);
-//                  sPrj.ToLowerAscii(); // the project
+//					sPrj.ToLowerAscii(); // the project
                 }
                 break;
                 case STATE_ROOT: {
@@ -158,7 +158,7 @@ extern char *GetOutputFile( int argc, char* argv[])
                 break;
                 case STATE_MERGESRC: {
                     sMergeSrc = ByteString( argv[ i ]);
-                    bMergeMode = sal_True; // activate merge mode, cause merge database found
+                    bMergeMode = TRUE; // activate merge mode, cause merge database found
                 }
                 break;
                 case STATE_LANGUAGES: {
@@ -171,7 +171,7 @@ extern char *GetOutputFile( int argc, char* argv[])
 
     if ( bInput ) {
         // command line is valid
-        bEnableExport = sal_True;
+        bEnableExport = TRUE;
         char *pReturn = new char[ sOutputFile.Len() + 1 ];
         strcpy( pReturn, sOutputFile.GetBuffer());  // #100211# - checked
         return pReturn;
@@ -191,9 +191,9 @@ int InitCfgExport( char *pOutput , char* pFilename )
 
     if ( bMergeMode )
         pParser = new CfgMerge( sMergeSrc, sOutputFile, sFilename );
-      else if ( sOutputFile.Len())
+      else if ( sOutputFile.Len()) 
         pParser = new CfgExport( sOutputFile, sPrj, sActFileName );
-
+    
     return 1;
 }
 
@@ -214,7 +214,7 @@ void removeTempFile(){
 }
 extern const char* getFilename()
 {
-    return sInputFileName.GetBuffer();
+    return sInputFileName.GetBuffer(); 
 }
 /*****************************************************************************/
 extern FILE *GetCfgFile()
@@ -253,9 +253,9 @@ extern FILE *GetCfgFile()
 
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
-//            printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
+//			printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
-//            printf("sActFileName = %s\n",sActFileName.GetBuffer());
+//            printf("sActFileName = %s\n",sActFileName.GetBuffer());    
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
 
@@ -296,12 +296,12 @@ int GetError()
 //
 
 CfgStackData* CfgStack::Push( const ByteString &rTag, const ByteString &rId )
-{
-    CfgStackData *pD = new CfgStackData( rTag, rId );
-    maList.push_back( pD );
-    return pD;
+{ 
+    CfgStackData *pD = new CfgStackData( rTag, rId ); 
+    Insert( pD, LIST_APPEND ); 
+    return pD; 
 }
-
+            
 //
 // class CfgStack
 //
@@ -310,20 +310,19 @@ CfgStackData* CfgStack::Push( const ByteString &rTag, const ByteString &rId )
 CfgStack::~CfgStack()
 /*****************************************************************************/
 {
-    for ( size_t i = 0, n = maList.size(); i < n; i++ )
-        delete maList[ i ];
-    maList.clear();
+    for ( ULONG i = 0; i < Count(); i++ )
+        delete GetObject( i );
 }
 
 /*****************************************************************************/
-ByteString CfgStack::GetAccessPath( size_t nPos )
+ByteString CfgStack::GetAccessPath( ULONG nPos )
 /*****************************************************************************/
 {
     if ( nPos == LIST_APPEND )
-        nPos = maList.size() - 1;
+        nPos = Count() - 1;
 
     ByteString sReturn;
-    for ( size_t i = 0; i <= nPos; i++ ) {
+    for ( ULONG i = 0; i <= nPos; i++ ) {
         if ( i )
             sReturn += ".";
         sReturn += GetStackData( i )->GetIdentifier();
@@ -333,18 +332,13 @@ ByteString CfgStack::GetAccessPath( size_t nPos )
 }
 
 /*****************************************************************************/
-CfgStackData *CfgStack::GetStackData( size_t nPos )
+CfgStackData *CfgStack::GetStackData( ULONG nPos )
 /*****************************************************************************/
 {
     if ( nPos == LIST_APPEND )
-    {
-        if (!maList.empty())
-            nPos = maList.size() - 1;
-        else
-            return 0;
-    }
+        nPos = Count() - 1;
 
-    return maList[  nPos ];
+    return GetObject( nPos );
 }
 
 //
@@ -355,7 +349,7 @@ CfgStackData *CfgStack::GetStackData( size_t nPos )
 CfgParser::CfgParser()
 /*****************************************************************************/
                 : pStackData( NULL ),
-                bLocalize( sal_False )
+                bLocalize( FALSE )
 {
 }
 
@@ -367,7 +361,7 @@ CfgParser::~CfgParser()
 
 
 /*****************************************************************************/
-sal_Bool CfgParser::IsTokenClosed( const ByteString &rToken )
+BOOL CfgParser::IsTokenClosed( const ByteString &rToken )
 /*****************************************************************************/
 {
     return rToken.GetChar( rToken.Len() - 2 ) == '/';
@@ -381,7 +375,7 @@ void CfgParser::AddText(
 )
 /*****************************************************************************/
 {
-        sal_uInt16 nTextLen = 0;
+        USHORT nTextLen = 0;
         while ( rText.Len() != nTextLen ) {
             nTextLen = rText.Len();
             rText.SearchAndReplaceAll( "\n", " " );
@@ -414,7 +408,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
     ByteString sTokenName;
     ByteString sTokenId;
 
-    sal_Bool bOutput = sal_True;
+    BOOL bOutput = TRUE;
 
     switch ( nToken ) {
         case CFG_TOKEN_PACKAGE:
@@ -446,7 +440,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     break;
                     case CFG_TOKEN_OORNAME:
                         sSearch = "oor:name=";
-                        bLocalize = sal_True;
+                        bLocalize = TRUE;
                     break;
                     case CFG_TOKEN_OORVALUE:
                         sSearch = "oor:value=";
@@ -466,7 +460,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                         sCurrentIsoLang = sTemp.GetToken( 1, '\"' ).GetToken( 0, '\"' );
 
                         if ( sCurrentIsoLang == NO_TRANSLATE_ISO )
-                            bLocalize = sal_False;
+                            bLocalize = FALSE;
 
                         pStackData->sTextTag = sToken;
 
@@ -484,7 +478,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     ByteString sTemp( sToken );
                     sTemp.ToUpperAscii();
                     bLocalize = (( sTemp.Search( "CFG:TYPE=\"STRING\"" ) != STRING_NOTFOUND ) &&
-                        ( sTemp.Search( "CFG:LOCALIZED=\"sal_True\"" ) != STRING_NOTFOUND ));
+                        ( sTemp.Search( "CFG:LOCALIZED=\"TRUE\"" ) != STRING_NOTFOUND ));
                 }
             }
             else if ( sTokenName == "label" ) {
@@ -521,11 +515,11 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
 
         case CFG_TEXTCHAR:
             sCurrentText += sToken;
-            bOutput = sal_False;
+            bOutput = FALSE;
         break;
 
         case CFG_TOKEN_NO_TRANSLATE:
-            bLocalize = sal_False;
+            bLocalize = FALSE;
         break;
     }
 
@@ -583,6 +577,9 @@ int CfgParser::Execute( int nToken, char * pToken )
 void CfgParser::Error( const ByteString &rError )
 /*****************************************************************************/
 {
+//	ByteString sError( rError );
+//    sError.Append("Error: In file ");
+//    sError.Append( sActFileName );
     yyerror(( char * ) rError.GetBuffer());
 }
 
@@ -659,14 +656,18 @@ void CfgExport::WorkOnRessourceEnd()
                     pStackData->sText[ ByteString("en-US") ].Len() )))
         {
             ByteString sFallback = pStackData->sText[ ByteString("en-US") ];
+
+            //if ( pStackData->sText[ ByteString("en-US") ].Len())
+            //	sFallback = pStackData->sText[ ByteString("en-US") ];
+
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
-            if ( aStack.size() == 1 ) {
+            if ( aStack.Count() == 1 ) {
                 sGroupId = sLocalId;
                 sLocalId = "";
             }
             else {
-                sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
+                sGroupId = aStack.GetAccessPath( aStack.Count() - 2 );
             }
 
             ByteString sTimeStamp( Export::GetTimeStamp());
@@ -693,6 +694,7 @@ void CfgExport::WorkOnRessourceEnd()
                     sOutput += sText; sOutput += "\t\t\t\t";
                     sOutput += sTimeStamp;
 
+                    //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
                     pOutputStream->WriteLine( sOutput );
             }
         }
@@ -722,12 +724,13 @@ CfgMerge::CfgMerge(
                 : CfgOutputParser( rOutputFile ),
                 pMergeDataFile( NULL ),
                 pResData( NULL ),
+                bGerman( FALSE ),
                 sFilename( rFilename ),
-                bEnglish( sal_False )
+                bEnglish( FALSE )
 {
     if ( rMergeSource.Len()){
         pMergeDataFile = new MergeDataFile(
-        rMergeSource, sInputFileName  , bErrorLog, RTL_TEXTENCODING_MS_1252, true );
+        rMergeSource, sInputFileName  , bErrorLog, RTL_TEXTENCODING_MS_1252, true ); 
         if( Export::sLanguages.EqualsIgnoreCaseAscii("ALL") ){
             Export::SetLanguages( pMergeDataFile->GetLanguages() );
             aLanguages = pMergeDataFile->GetLanguages();
@@ -757,12 +760,12 @@ void CfgMerge::WorkOnText(
         if ( !pResData ) {
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
-            if ( aStack.size() == 1 ) {
+            if ( aStack.Count() == 1 ) {
                 sGroupId = sLocalId;
                 sLocalId = "";
             }
             else {
-                sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
+                sGroupId = aStack.GetAccessPath( aStack.Count() - 2 );
             }
 
             ByteString sPlatform( "" );
@@ -772,18 +775,20 @@ void CfgMerge::WorkOnText(
             pResData->sResTyp = pStackData->sResTyp;
         }
 
+        //if ( nLangIndex.EqualsIgnoreCaseAscii("de") )
+        //	bGerman = TRUE;
         if (( nLangIndex.EqualsIgnoreCaseAscii("en-US") ))
-            bEnglish = sal_True;
+            bEnglish = TRUE;
 
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrysCaseSensitive( pResData );
         if ( pEntrys ) {
             ByteString sContent;
             pEntrys->GetText( sContent, STRING_TYP_TEXT, nLangIndex );
-
+            
             if ( Export::isAllowed( nLangIndex ) &&
                 ( sContent != "-" ) && ( sContent.Len()))
             {
-#ifdef MERGE_SOURCE_LANGUAGES
+#ifdef MERGE_SOURCE_LANGUAGES 
                     if( nLangIndex.EqualsIgnoreCaseAscii("de") || nLangIndex.EqualsIgnoreCaseAscii("en-US") )
                         rText = sContent;
 #endif
@@ -801,10 +806,10 @@ void CfgMerge::Output( const ByteString& rOutput )
         pOutputStream->Write( rOutput.GetBuffer(), rOutput.Len());
 }
 
-size_t CfgStack::Push( CfgStackData *pStackData )
-{
-    maList.push_back( pStackData );
-    return maList.size() - 1;
+ULONG CfgStack::Push( CfgStackData *pStackData )
+{ 
+    Insert( pStackData, LIST_APPEND ); 
+    return Count() - 1; 
 }
 
 /*****************************************************************************/
@@ -821,13 +826,14 @@ void CfgMerge::WorkOnRessourceEnd()
                 sCur = aLanguages[ n ];
 
                 ByteString sContent;
-                pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , sal_True );
-                if (
+                pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , TRUE );
+                if ( 
+                    // (!sCur.EqualsIgnoreCaseAscii("de") )    &&
                     ( !sCur.EqualsIgnoreCaseAscii("en-US") ) &&
 
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
-
+                    
                     ByteString sText = sContent;
                     Export::QuotHTML( sText );
 
@@ -862,7 +868,8 @@ void CfgMerge::WorkOnRessourceEnd()
     }
     delete pResData;
     pResData = NULL;
-    bEnglish = sal_False;
+    bGerman = FALSE;
+    bEnglish = FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

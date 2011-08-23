@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ UnxPluginComm::UnxPluginComm(
         }
         else
         {
-            MediatorMessage* pMessage = GetNextMessage( sal_True );
+            MediatorMessage* pMessage = GetNextMessage( TRUE );
             Respond( pMessage->m_nID,
                      const_cast<char*>("init ack"),8,
                      NULL );
@@ -117,7 +117,7 @@ UnxPluginComm::~UnxPluginComm()
         int status = 16777216;
         pid_t nExit = waitpid( m_nCommPID, &status, WUNTRACED );
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "child %d (plugin app child %d) exited with status %d\n", (int)nExit, (int)m_nCommPID, (int)WEXITSTATUS(status) );
+        fprintf( stderr, "child %d (plugin app child %d) exited with status %d\n", nExit, m_nCommPID, WEXITSTATUS(status) );
 #else
         (void)nExit;
 #endif

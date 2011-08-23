@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "svx/fontlb.hxx"
+#include "fontlb.hxx"
 #include <vcl/svapp.hxx>
 
 // ============================================================================
@@ -72,6 +72,7 @@ void SvLBoxFontString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags
     Font aOldFont( rDev.GetFont() );
     Font aNewFont( maFont );
     bool bSel = (nFlags & SVLISTENTRYFLAG_SELECTED) != 0;
+//  if( !mbUseColor )               // selection gets font color, if available
     if( !mbUseColor || bSel )       // selection always gets highlight color
     {
         const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
@@ -100,7 +101,7 @@ SvxFontListBox::SvxFontListBox( Window* pParent, const ResId& rResId ) :
     maStdFont( GetFont() ),
     mbUseFont( false )
 {
-    maStdFont.SetTransparent( sal_True );
+    maStdFont.SetTransparent( TRUE );
     maEntryFont = maStdFont;
 }
 
@@ -125,10 +126,10 @@ void SvxFontListBox::SelectEntryPos( sal_uInt16 nPos, bool bSelect )
 
 void SvxFontListBox::SetNoSelection()
 {
-    SelectAll( sal_False, sal_True );
+    SelectAll( FALSE, TRUE );
 }
 
-sal_uLong SvxFontListBox::GetSelectEntryPos() const
+ULONG SvxFontListBox::GetSelectEntryPos() const
 {
     SvLBoxEntry* pSvLBoxEntry = FirstSelected();
     return pSvLBoxEntry ? GetModel()->GetAbsPos( pSvLBoxEntry ) : LIST_APPEND;
@@ -175,6 +176,11 @@ SvxFontListBox::SvxFontListBox( Context* pParent, const char* pFile)
 : ListBox( pParent, pFile )
 {
 }
+
+/*IMPL_IMPL (SvxFontListBox, ListBox);
+IMPL_CONSTRUCTORS (SvxFontListBox, ListBox, "svxfontlistbox");
+IMPL_GET_IMPL (SvxFontListBox);
+IMPL_GET_WINDOW (SvxFontListBox);*/
 
 };
 

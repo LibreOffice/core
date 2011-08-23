@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,21 +35,21 @@ class SubTotal
 {
 public:
 
-    static  sal_Bool SafePlus( double& fVal1, double fVal2);
-    static  sal_Bool SafeMult( double& fVal1, double fVal2);
-    static  sal_Bool SafeDiv( double& fVal1, double fVal2);
+    static  BOOL SafePlus( double& fVal1, double fVal2);
+    static  BOOL SafeMult( double& fVal1, double fVal2);
+    static  BOOL SafeDiv( double& fVal1, double fVal2);
 };
 
 
-struct ScFunctionData                   // to calculate single functions
+struct ScFunctionData					// zum Berechnen von einzelnen Funktionen
 {
-    ScSubTotalFunc  eFunc;
-    double          nVal;
-    long            nCount;
-    sal_Bool            bError;
+    ScSubTotalFunc	eFunc;
+    double			nVal;
+    long			nCount;
+    BOOL			bError;
 
     ScFunctionData( ScSubTotalFunc eFn ) :
-        eFunc(eFn), nVal(0.0), nCount(0), bError(false) {}
+        eFunc(eFn), nVal(0.0), nCount(0), bError(FALSE) {}
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,10 @@
 #include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
+#ifdef __MINGW32__
+#include <tools/prewin.h>
+#include <tools/postwin.h>
+#endif
 #include <osl/thread.hxx>
 
 static void impl_sleep( sal_uInt32 nSec )
@@ -46,8 +50,8 @@ static void impl_sleep( sal_uInt32 nSec )
     osl::Thread::wait( aTime );
 }
 
-HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_inputFile,
-    const fs::path &in_src, const fs::path &in_resEmbStylesheet,
+HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_inputFile, 
+    const fs::path &in_src, const fs::path &in_resEmbStylesheet, 
     const std::string &in_module, const std::string &in_lang, bool in_bExtensionMode)
     : streamTable(in_streamTable), inputFile(in_inputFile),
     src(in_src), module(in_module), lang(in_lang), resEmbStylesheet(in_resEmbStylesheet),
@@ -56,7 +60,7 @@ HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_input
     xmlKeepBlanksDefaultValue = 0;
 }
 
-xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
+xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath) 
 {
     static const char *params[4 + 1];
     static xsltStylesheetPtr cur = NULL;
@@ -76,7 +80,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
         {
             static std::string fsroot('\'' + src.toUTF8() + '\'');
             static std::string esclang('\'' + lang + '\'');
-
+            
             xmlSubstituteEntitiesDefault(1);
             xmlLoadExtDtdDefaultValue = 1;
             cur = xsltParseStylesheetFile((const xmlChar *)resEmbStylesheet.native_file_string().c_str());
@@ -154,7 +158,7 @@ xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
     while (n != NULL)
     {
         bool isappl = false;
-        if ( (!strcmp((const char*)n->name, "switchinline")) ||
+        if ( (!strcmp((const char*)n->name, "switchinline")) || 
              (!strcmp((const char*)n->name, "switch")) )
         {
             xmlChar *select = xmlGetProp(n, (xmlChar*)"select");
@@ -168,7 +172,7 @@ xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
         if (isappl)
         {
             xmlNodePtr caseNode = n->xmlChildrenNode;
-            if (appl == "DEFAULT")
+            if (appl == "DEFAULT") 
             {
                 while (caseNode)
                 {
@@ -236,7 +240,7 @@ public:
 private:
     HashSet extendedHelpText;
 public:
-    myparser(const std::string &indocumentId, const std::string &infileName,
+    myparser(const std::string &indocumentId, const std::string &infileName, 
         const std::string &intitle) : documentId(indocumentId), fileName(infileName),
         title(intitle)
     {
@@ -291,7 +295,7 @@ void myparser::traverse( xmlNodePtr parentNode )
     xmlNodePtr test ;
     for (test = parentNode->xmlChildrenNode; test; test = test->next)
     {
-        if (fileName.empty() && !strcmp((const char*)test->name, "filename"))
+        if (fileName.empty() && !strcmp((const char*)test->name, "filename")) 
         {
             xmlNodePtr node = test->xmlChildrenNode;
             if (xmlNodeIsText(node))
@@ -335,7 +339,7 @@ void myparser::traverse( xmlNodePtr parentNode )
                 else
                     continue;
             }
-            else if (branch.compare("index") == 0)
+            else if (branch.compare("index") == 0) 
             {
                 LinkedList ll;
 
@@ -350,7 +354,7 @@ void myparser::traverse( xmlNodePtr parentNode )
                     {
                         embedded = std::string((const char*)embeddedxml);
                         xmlFree (embeddedxml);
-                        std::transform (embedded.begin(), embedded.end(),
+                        std::transform (embedded.begin(), embedded.end(), 
                             embedded.begin(), tolower);
                     }
 
@@ -375,7 +379,7 @@ void myparser::traverse( xmlNodePtr parentNode )
                 if (!ll.empty())
                     (*keywords)[anchor] = ll;
             }
-            else if (branch.compare("contents") == 0)
+            else if (branch.compare("contents") == 0) 
             {
                 // currently not used
             }
@@ -479,7 +483,7 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
                        << "\" in file" << src.native_file_string().c_str() << std::endl;
             throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
         }
-
+        
     } // end iteration over all applications
 
     streamTable.document_id = documentId;
@@ -518,8 +522,8 @@ namespace fs
     void create_directory(const fs::path indexDirName)
     {
         HCDBG(
-            std::cerr << "creating " <<
-            rtl::OUStringToOString(indexDirName.data, RTL_TEXTENCODING_UTF8).getStr()
+            std::cerr << "creating " << 
+            rtl::OUStringToOString(indexDirName.data, RTL_TEXTENCODING_UTF8).getStr() 
             << std::endl
            );
         osl::Directory::createPath(indexDirName.data);
@@ -557,15 +561,15 @@ namespace fs
                 osl::FileStatus aStatus(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Attributes);
                 while (aDir.getNextItem(aItem) == ::osl::FileBase::E_None)
                 {
-                    if (osl::FileBase::E_None == aItem.getFileStatus(aStatus) &&
+                    if (osl::FileBase::E_None == aItem.getFileStatus(aStatus) && 
                         aStatus.isValid(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Attributes))
                     {
                         rtl::OUString suFilename = aStatus.getFileName();
                         rtl::OUString suFullFileURL;
                         suFullFileURL += _suDirURL;
-                        suFullFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                        suFullFileURL += rtl::OUString::createFromAscii("/");
                         suFullFileURL += suFilename;
-
+                        
                         if (aStatus.getFileType() == osl::FileStatus::Directory)
                             removeRecursive(suFullFileURL);
                         else

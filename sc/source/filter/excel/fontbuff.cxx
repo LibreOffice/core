@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,13 @@
 #include "patattr.hxx"
 #include "ftools.hxx"
 
-const sal_uInt16    LotusFontBuffer::nSize = 8;
+const UINT16	LotusFontBuffer::nSize = 8;
 
-void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
+void LotusFontBuffer::Fill( const UINT8 nIndex, SfxItemSet& rItemSet )
 {
-    sal_uInt8   nIntIndex = nIndex & 0x07;
+    UINT8	nIntIndex = nIndex & 0x07;
 
-    ENTRY*  pAkt = pData + nIntIndex;
+    ENTRY*	pAkt = pData + nIntIndex;
 
     if( pAkt->pFont )
         rItemSet.Put( *pAkt->pFont );
@@ -79,12 +79,12 @@ void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
     }
 
     FontUnderline eUnderline;
-    switch( nIndex & 0x60 ) // Bit 5+6
+    switch( nIndex & 0x60 )	// Bit 5+6
     {
         case 0x60:
-        case 0x20:  eUnderline = UNDERLINE_SINGLE;      break;
-        case 0x40:  eUnderline = UNDERLINE_DOUBLE;      break;
-        default:    eUnderline = UNDERLINE_NONE;
+        case 0x20:	eUnderline = UNDERLINE_SINGLE;		break;
+        case 0x40:	eUnderline = UNDERLINE_DOUBLE;		break;
+        default:	eUnderline = UNDERLINE_NONE;
     }
     if( eUnderline != UNDERLINE_NONE )
     {
@@ -94,12 +94,12 @@ void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
 }
 
 
-void LotusFontBuffer::SetName( const sal_uInt16 nIndex, const String& rName )
+void LotusFontBuffer::SetName( const UINT16 nIndex, const String& rName )
 {
     DBG_ASSERT( nIndex < nSize, "*LotusFontBuffer::SetName(): Array zu klein!" );
     if( nIndex < nSize )
     {
-        register ENTRY* pEntry = pData + nIndex;
+        register ENTRY*	pEntry = pData + nIndex;
         pEntry->TmpName( rName );
 
         if( pEntry->nType >= 0 )
@@ -108,20 +108,20 @@ void LotusFontBuffer::SetName( const sal_uInt16 nIndex, const String& rName )
 }
 
 
-void LotusFontBuffer::SetHeight( const sal_uInt16 nIndex, const sal_uInt16 nHeight )
+void LotusFontBuffer::SetHeight( const UINT16 nIndex, const UINT16 nHeight )
 {
     DBG_ASSERT( nIndex < nSize, "*LotusFontBuffer::SetHeight(): Array zu klein!" );
     if( nIndex < nSize )
-        pData[ nIndex ].Height( *( new SvxFontHeightItem( ( sal_uLong ) nHeight * 20, 100, ATTR_FONT_HEIGHT ) ) );
+        pData[ nIndex ].Height( *( new SvxFontHeightItem( ( ULONG ) nHeight * 20, 100, ATTR_FONT_HEIGHT ) ) );
 }
 
 
-void LotusFontBuffer::SetType( const sal_uInt16 nIndex, const sal_uInt16 nType )
+void LotusFontBuffer::SetType( const UINT16 nIndex, const UINT16 nType )
 {
     DBG_ASSERT( nIndex < nSize, "*LotusFontBuffer::SetType(): Array zu klein!" );
     if( nIndex < nSize )
     {
-        register ENTRY* pEntry = pData + nIndex;
+        register ENTRY*	pEntry = pData + nIndex;
         pEntry->Type( nType );
 
         if( pEntry->pTmpName )
@@ -132,24 +132,24 @@ void LotusFontBuffer::SetType( const sal_uInt16 nIndex, const sal_uInt16 nType )
 
 void LotusFontBuffer::MakeFont( ENTRY* pEntry )
 {
-    FontFamily      eFamily = FAMILY_DONTKNOW;
-    FontPitch       ePitch = PITCH_DONTKNOW;
-    CharSet         eCharSet = RTL_TEXTENCODING_DONTKNOW;
+    FontFamily		eFamily = FAMILY_DONTKNOW;
+    FontPitch		ePitch = PITCH_DONTKNOW;
+    CharSet			eCharSet = RTL_TEXTENCODING_DONTKNOW;
 
     switch( pEntry->nType )
     {
-        case 0x00:                      // Helvetica
+        case 0x00:						// Helvetica
             eFamily = FAMILY_SWISS;
-            ePitch  = PITCH_VARIABLE;
+            ePitch	= PITCH_VARIABLE;
             break;
-        case 0x01:                      // Times Roman
+        case 0x01:						// Times Roman
             eFamily = FAMILY_ROMAN;
-            ePitch  = PITCH_VARIABLE;
+            ePitch	= PITCH_VARIABLE;
             break;
-        case 0x02:                      // Courier
-            ePitch  = PITCH_FIXED;
+        case 0x02:						// Courier
+            ePitch	= PITCH_FIXED;
             break;
-        case 0x03:                      // Symbol
+        case 0x03:						// Symbol
             eCharSet = RTL_TEXTENCODING_SYMBOL;
             break;
     }

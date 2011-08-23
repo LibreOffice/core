@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <sfx2/app.hxx>
@@ -44,7 +47,7 @@
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <cuitabline.hxx>
-#include "paragrph.hrc"
+
 #include <svx/xlineit0.hxx>
 #include <sfx2/request.hxx>
 
@@ -52,7 +55,7 @@
 
 // static ----------------------------------------------------------------
 
-static sal_uInt16 pShadowRanges[] =
+static USHORT pShadowRanges[] =
 {
     SDRATTR_SHADOWCOLOR,
     SDRATTR_SHADOWTRANSPARENCE,
@@ -63,28 +66,28 @@ static sal_uInt16 pShadowRanges[] =
 
 /*************************************************************************
 |*
-|*  Dialog zum Aendern des Schattens
+|*	Dialog zum Aendern des Schattens
 |*
 \************************************************************************/
 
 SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
-    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_SHADOW ), rInAttrs ),
+    SvxTabPage			( pParent, CUI_RES( RID_SVXPAGE_SHADOW ), rInAttrs ),
 
     aFlProp             ( this, CUI_RES( FL_PROP ) ),
     aTsbShowShadow      ( this, CUI_RES( TSB_SHOW_SHADOW ) ),
     aFtPosition         ( this, CUI_RES( FT_POSITION ) ),
     aCtlPosition        ( this, CUI_RES( CTL_POSITION ) ),
-    aFtDistance         ( this, CUI_RES( FT_DISTANCE ) ),
-    aMtrDistance        ( this, CUI_RES( MTR_FLD_DISTANCE ) ),
-    aFtShadowColor      ( this, CUI_RES( FT_SHADOW_COLOR ) ),
-    aLbShadowColor      ( this, CUI_RES( LB_SHADOW_COLOR ) ),
+    aFtDistance			( this, CUI_RES( FT_DISTANCE ) ),
+    aMtrDistance		( this, CUI_RES( MTR_FLD_DISTANCE ) ),
+    aFtShadowColor		( this, CUI_RES( FT_SHADOW_COLOR ) ),
+    aLbShadowColor		( this, CUI_RES( LB_SHADOW_COLOR ) ),
     aFtTransparent      ( this, CUI_RES( FT_TRANSPARENT ) ),
     aMtrTransparent      ( this, CUI_RES( MTR_SHADOW_TRANSPARENT ) ),
     aCtlXRectPreview    ( this, CUI_RES( CTL_COLOR_PREVIEW ) ),
-    rOutAttrs           ( rInAttrs ),
+    rOutAttrs			( rInAttrs ),
     pColorTab( NULL ),
-    bDisable            ( sal_False ),
+    bDisable            ( FALSE ),
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
@@ -186,8 +189,6 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     aMtrTransparent.SetModifyHdl( aLink );
     aMtrDistance.SetModifyHdl( aLink );
 
-    aCtlXRectPreview.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
-    aCtlPosition.SetAccessibleRelationMemberOf( &aFlProp );
 }
 
 // -----------------------------------------------------------------------
@@ -215,8 +216,8 @@ void SvxShadowTabPage::Construct()
 
 void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    sal_uInt16 nPos;
-    sal_uInt16 nCount;
+    USHORT nPos;
+    USHORT nCount;
 
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
     if (pPageTypeItem)
@@ -276,10 +277,10 @@ int SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
+BOOL SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
-    const SfxPoolItem*  pOld = NULL;
-    sal_Bool                bModified = sal_False;
+    const SfxPoolItem*	pOld = NULL;
+    BOOL				bModified = FALSE;
 
     if( !bDisable )
     {
@@ -287,31 +288,31 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
         TriState eState = aTsbShowShadow.GetState();
         if( eState != aTsbShowShadow.GetSavedValue() )
         {
-            SdrShadowItem aItem( sal::static_int_cast< sal_Bool >( eState ) );
+            SdrShadowItem aItem( sal::static_int_cast< BOOL >( eState ) );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOW );
             if ( !pOld || !( *(const SdrShadowItem*)pOld == aItem ) )
             {
                 rAttrs.Put( aItem );
-                bModified = sal_True;
+                bModified = TRUE;
             }
         }
 
         // Schatten-Entfernung
         // Etwas umstaendliche Abfrage, ob etwas geaendert wurde,
         // da Items nicht direkt auf Controls abbildbar sind
-        sal_Int32 nX = 0L, nY = 0L;
-        sal_Int32 nXY = GetCoreValue( aMtrDistance, ePoolUnit );
+        INT32 nX = 0L, nY = 0L;
+        INT32 nXY = GetCoreValue( aMtrDistance, ePoolUnit );
 
         switch( aCtlPosition.GetActualRP() )
         {
-            case RP_LT: nX = nY = -nXY;      break;
-            case RP_MT: nY = -nXY;           break;
+            case RP_LT: nX = nY = -nXY; 	 break;
+            case RP_MT: nY = -nXY;			 break;
             case RP_RT: nX = nXY; nY = -nXY; break;
-            case RP_LM: nX = -nXY;           break;
-            case RP_RM: nX = nXY;            break;
+            case RP_LM: nX = -nXY;			 break;
+            case RP_RM: nX = nXY;			 break;
             case RP_LB: nX = -nXY; nY = nXY; break;
-            case RP_MB: nY = nXY;            break;
-            case RP_RB: nX = nY = nXY;       break;
+            case RP_MB: nY = nXY; 			 break;
+            case RP_RB: nX = nY = nXY; 		 break;
             case RP_MM: break;
         }
 
@@ -323,8 +324,8 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
              rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE ||
              rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE    )
         {
-            sal_Int32 nOldX = 9876543; // Unmoeglicher Wert, entspr. DontCare
-            sal_Int32 nOldY = 9876543;
+            INT32 nOldX = 9876543; // Unmoeglicher Wert, entspr. DontCare
+            INT32 nOldY = 9876543;
             if( rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE &&
                 rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE )
             {
@@ -339,7 +340,7 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
                 ( !pOld || !( *(const SdrShadowXDistItem*)pOld == aXItem ) ) )
             {
                 rAttrs.Put( aXItem );
-                bModified = sal_True;
+                bModified = TRUE;
             }
             SdrShadowYDistItem aYItem( nY );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOWYDIST );
@@ -347,12 +348,12 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
                 ( !pOld || !( *(const SdrShadowYDistItem*)pOld == aYItem ) ) )
             {
                 rAttrs.Put( aYItem );
-                bModified = sal_True;
+                bModified = TRUE;
             }
         }
 
         // ShadowColor
-        sal_uInt16 nPos = aLbShadowColor.GetSelectEntryPos();
+        USHORT nPos = aLbShadowColor.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
             nPos != aLbShadowColor.GetSavedValue() )
         {
@@ -362,20 +363,20 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
             if ( !pOld || !( *(const SdrShadowColorItem*)pOld == aItem ) )
             {
                 rAttrs.Put( aItem );
-                bModified = sal_True;
+                bModified = TRUE;
             }
         }
 
         // Transparenz
-        sal_uInt16 nVal = (sal_uInt16)aMtrTransparent.GetValue();
-        if( nVal != (sal_uInt16)aMtrTransparent.GetSavedValue().ToInt32() )
+        UINT16 nVal = (UINT16)aMtrTransparent.GetValue();
+        if( nVal != (UINT16)aMtrTransparent.GetSavedValue().ToInt32() )
         {
             SdrShadowTransparenceItem aItem( nVal );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOWTRANSPARENCE );
             if ( !pOld || !( *(const SdrShadowTransparenceItem*)pOld == aItem ) )
             {
                 rAttrs.Put( aItem );
-                bModified = sal_True;
+                bModified = TRUE;
             }
         }
     }
@@ -397,7 +398,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         // Ist Schatten gesetzt?
         if( rAttrs.GetItemState( SDRATTR_SHADOW ) != SFX_ITEM_DONTCARE )
         {
-            aTsbShowShadow.EnableTriState( sal_False );
+            aTsbShowShadow.EnableTriState( FALSE );
 
             if( ( ( const SdrShadowItem& ) rAttrs.Get( SDRATTR_SHADOW ) ).GetValue() )
                 aTsbShowShadow.SetState( STATE_CHECK );
@@ -415,8 +416,8 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         if( rAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE &&
             rAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE )
         {
-            sal_Int32 nX = ( ( const SdrShadowXDistItem& ) rAttrs.Get( SDRATTR_SHADOWXDIST ) ).GetValue();
-            sal_Int32 nY = ( ( const SdrShadowYDistItem& ) rAttrs.Get( SDRATTR_SHADOWYDIST ) ).GetValue();
+            INT32 nX = ( ( const SdrShadowXDistItem& ) rAttrs.Get( SDRATTR_SHADOWXDIST ) ).GetValue();
+            INT32 nY = ( ( const SdrShadowYDistItem& ) rAttrs.Get( SDRATTR_SHADOWYDIST ) ).GetValue();
 
             if( nX != 0 )
                 SetMetricValue( aMtrDistance, nX < 0L ? -nX : nX, ePoolUnit );
@@ -424,7 +425,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
                 SetMetricValue( aMtrDistance, nY < 0L ? -nY : nY, ePoolUnit );
 
             // Setzen des Schatten-Controls
-            if     ( nX <  0L && nY <  0L ) aCtlPosition.SetActualRP( RP_LT );
+            if	   ( nX <  0L && nY <  0L ) aCtlPosition.SetActualRP( RP_LT );
             else if( nX == 0L && nY <  0L ) aCtlPosition.SetActualRP( RP_MT );
             else if( nX >  0L && nY <  0L ) aCtlPosition.SetActualRP( RP_RT );
             else if( nX <  0L && nY == 0L ) aCtlPosition.SetActualRP( RP_LM );
@@ -443,8 +444,8 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
             SdrShadowYDistItem* pYDistItem = (SdrShadowYDistItem*)&pPool->GetDefaultItem (SDRATTR_SHADOWYDIST);
             if (pXDistItem && pYDistItem)
             {
-                sal_Int32 nX = pXDistItem->GetValue();
-                sal_Int32 nY = pYDistItem->GetValue();
+                INT32 nX = pXDistItem->GetValue();
+                INT32 nY = pYDistItem->GetValue();
                 if( nX != 0 )
                     SetMetricValue( aMtrDistance, nX < 0L ? -nX : nX, ePoolUnit );
                 else
@@ -469,7 +470,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         // Transparenz
         if( rAttrs.GetItemState( SDRATTR_SHADOWTRANSPARENCE ) != SFX_ITEM_DONTCARE )
         {
-            sal_uInt16 nTransp = ( ( const SdrShadowTransparenceItem& ) rAttrs.Get( SDRATTR_SHADOWTRANSPARENCE ) ).GetValue();
+            USHORT nTransp = ( ( const SdrShadowTransparenceItem& ) rAttrs.Get( SDRATTR_SHADOWTRANSPARENCE ) ).GetValue();
             aMtrTransparent.SetValue( nTransp );
         }
         else
@@ -501,7 +502,7 @@ SfxTabPage* SvxShadowTabPage::Create( Window* pWindow,
 
 //------------------------------------------------------------------------
 
-sal_uInt16* SvxShadowTabPage::GetRanges()
+USHORT*	SvxShadowTabPage::GetRanges()
 {
     return( pShadowRanges );
 }
@@ -548,29 +549,29 @@ IMPL_LINK( SvxShadowTabPage, ModifyShadowHdl_Impl, void *, EMPTYARG )
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    sal_uInt16 nPos = aLbShadowColor.GetSelectEntryPos();
+    USHORT nPos = aLbShadowColor.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         rXFSet.Put( XFillColorItem( String(),
                         aLbShadowColor.GetSelectEntryColor() ) );
     }
-    sal_uInt16 nVal = (sal_uInt16)aMtrTransparent.GetValue();
+    UINT16 nVal = (UINT16)aMtrTransparent.GetValue();
     XFillTransparenceItem aItem( nVal );
     rXFSet.Put( XFillTransparenceItem( aItem ) );
 
     // Schatten-Entfernung
-    sal_Int32 nX = 0L, nY = 0L;
-    sal_Int32 nXY = GetCoreValue( aMtrDistance, ePoolUnit );
+    INT32 nX = 0L, nY = 0L;
+    INT32 nXY = GetCoreValue( aMtrDistance, ePoolUnit );
     switch( aCtlPosition.GetActualRP() )
     {
-        case RP_LT: nX = nY = -nXY;      break;
-        case RP_MT: nY = -nXY;           break;
+        case RP_LT: nX = nY = -nXY; 	 break;
+        case RP_MT: nY = -nXY;			 break;
         case RP_RT: nX = nXY; nY = -nXY; break;
-        case RP_LM: nX = -nXY;           break;
-        case RP_RM: nX = nXY;            break;
+        case RP_LM: nX = -nXY;			 break;
+        case RP_RM: nX = nXY;			 break;
         case RP_LB: nX = -nXY; nY = nXY; break;
-        case RP_MB: nY = nXY;            break;
-        case RP_RB: nX = nY = nXY;       break;
+        case RP_MB: nY = nXY; 			 break;
+        case RP_RB: nX = nY = nXY; 		 break;
         case RP_MM: break;
     }
 

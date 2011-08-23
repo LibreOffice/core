@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,6 @@
 #include <sal/mathconf.h>
 #include <unotools/fontcvt.hxx>
 #include <sfx2/objsh.hxx>
-#include <sal/macros.h>
 #include <editeng/editstat.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include "xestream.hxx"
@@ -217,7 +216,7 @@ sal_uInt8 XclTools::GetXclOrientFromRot( sal_uInt16 nXclRot )
     return EXC_ORIENT_NONE;
 }
 
-sal_uInt8 XclTools::GetXclErrorCode( sal_uInt16 nScError )
+sal_uInt8 XclTools::GetXclErrorCode( USHORT nScError )
 {
     using namespace ScErrorCodes;
     switch( nScError )
@@ -242,7 +241,7 @@ sal_uInt8 XclTools::GetXclErrorCode( sal_uInt16 nScError )
     return EXC_ERR_NA;
 }
 
-sal_uInt16 XclTools::GetScErrorCode( sal_uInt8 nXclError )
+USHORT XclTools::GetScErrorCode( sal_uInt8 nXclError )
 {
     using namespace ScErrorCodes;
     switch( nXclError )
@@ -330,13 +329,13 @@ sal_Int32 XclTools::GetHmmFromTwips( sal_Int32 nTwips )
     return GetHmmFromInch( GetInchFromTwips( nTwips ) );
 }
 
-sal_uInt16 XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth )
+USHORT XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth )
 {
     double fScWidth = static_cast< double >( nXclWidth ) / 256.0 * nScCharWidth + 0.5;
-    return limit_cast< sal_uInt16 >( fScWidth );
+    return limit_cast< USHORT >( fScWidth );
 }
 
-sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth )
+sal_uInt16 XclTools::GetXclColumnWidth( USHORT nScWidth, long nScCharWidth )
 {
     double fXclWidth = static_cast< double >( nScWidth ) * 256.0 / nScCharWidth + 0.5;
     return limit_cast< sal_uInt16 >( fXclWidth );
@@ -359,7 +358,7 @@ Color XclTools::GetPatternColor( const Color& rPattColor, const Color& rBackColo
         0x40, 0x40, 0x20, 0x60, 0x60, 0x60, 0x60, 0x48,     // 08 - 15
         0x50, 0x70, 0x78                                    // 16 - 18
     };
-    return (nXclPattern < SAL_N_ELEMENTS( pnRatioTable )) ?
+    return (nXclPattern < STATIC_TABLE_SIZE( pnRatioTable )) ?
         ScfTools::GetMixedColor( rPattColor, rBackColor, pnRatioTable[ nXclPattern ] ) : rPattColor;
 }
 
@@ -434,7 +433,7 @@ rtl_TextEncoding XclTools::GetTextEncoding( sal_uInt16 nCodePage )
     const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_CPPred( nCodePage ) );
     if( pEntry == pCodePageTableEnd )
     {
-        OSL_TRACE( "XclTools::GetTextEncoding - unknown code page: 0x%04hX (%d)", nCodePage, nCodePage );
+        DBG_ERROR2( "XclTools::GetTextEncoding - unknown code page: 0x%04hX (%d)", nCodePage, nCodePage );
         return RTL_TEXTENCODING_DONTKNOW;
     }
     return pEntry->meTextEnc;
@@ -448,7 +447,7 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
     const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_TEPred( eTextEnc ) );
     if( pEntry == pCodePageTableEnd )
     {
-        OSL_TRACE( "XclTools::GetXclCodePage - unsupported text encoding: %d", eTextEnc );
+        DBG_ERROR1( "XclTools::GetXclCodePage - unsupported text encoding: %d", eTextEnc );
         return 1252;
     }
     return pEntry->mnCodePage;
@@ -458,7 +457,7 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
 
 String XclTools::GetXclFontName( const String& rFontName )
 {
-    // substitute with MS fonts
+    // #106246# substitute with MS fonts
     String aNewName( GetSubsFontName( rFontName, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
     if( aNewName.Len() )
         return aNewName;
@@ -489,10 +488,10 @@ static const sal_Char* const ppcDefNames[] =
 
 String XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 {
-    DBG_ASSERT( SAL_N_ELEMENTS( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
+    DBG_ASSERT( STATIC_TABLE_SIZE( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
         "XclTools::GetXclBuiltInDefName - built-in defined name list modified" );
     String aDefName;
-    if( cBuiltIn < SAL_N_ELEMENTS( ppcDefNames ) )
+    if( cBuiltIn < STATIC_TABLE_SIZE( ppcDefNames ) )
         aDefName.AssignAscii( ppcDefNames[ cBuiltIn ] );
     else
         aDefName = String::CreateFromInt32( cBuiltIn );
@@ -556,7 +555,7 @@ String XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const String& rName, s
     else
     {
         aStyleName = maStyleNamePrefix1;
-        if( nStyleId < SAL_N_ELEMENTS( ppcStyleNames ) )
+        if( nStyleId < STATIC_TABLE_SIZE( ppcStyleNames ) )
             aStyleName.AppendAscii( ppcStyleNames[ nStyleId ] );
         else if( rName.Len() > 0 )
             aStyleName.Append( rName );
@@ -596,7 +595,7 @@ bool XclTools::IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleI
     if( nPrefixLen > 0 )
     {
         String aShortName;
-        for( sal_uInt8 nId = 0; nId < SAL_N_ELEMENTS( ppcStyleNames ); ++nId )
+        for( sal_uInt8 nId = 0; nId < STATIC_TABLE_SIZE( ppcStyleNames ); ++nId )
         {
             if( nId != EXC_STYLE_NORMAL )
             {
@@ -697,9 +696,9 @@ const OUString XclTools::maSbMacroSuffix( RTL_CONSTASCII_USTRINGPARAM( "?languag
 OUString XclTools::GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell )
 {
     OSL_ENSURE( rMacroName.Len() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
-    ::ooo::vba::MacroResolvedInfo aMacroInfo = ::ooo::vba::resolveVBAMacro( pDocShell, rMacroName, false );
-    if( aMacroInfo.mbFound )
-        return ::ooo::vba::makeMacroURL( aMacroInfo.msResolvedMacro );
+    ::ooo::vba::VBAMacroResolvedInfo aMacroInfo = ::ooo::vba::resolveVBAMacro( pDocShell, rMacroName, false );
+    if( aMacroInfo.IsResolved() )
+        return ::ooo::vba::makeMacroURL( aMacroInfo.ResolvedMacro() );
     return OUString();
 }
 

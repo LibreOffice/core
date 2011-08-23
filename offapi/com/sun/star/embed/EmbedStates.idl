@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ published constants EmbedStates
     /** "Loaded" - the persistent representation of the object is loaded in
         memory.
 
-        <p>
-        The object is created and assigned with a persistent entry,
+        <p> 
+        The object is created and assigned with a persistent entry, 
         and a view representation ( metafile and etc. ) can be retrieved
         ( if there is any ).
         </p>
@@ -52,7 +52,7 @@ published constants EmbedStates
 
     //------------------------------------------------------------------------
     /** "Running" - the object is connected and loaded.
-
+    
         <p>
         The object has a connection to the container client and a component
         loaded from persistent entry. In case of internal document it also
@@ -84,7 +84,7 @@ published constants EmbedStates
     /** "UI active" - the inplace active object that has user interface.
 
         <p>
-        The object is inplace active, allowed to have menus, toolbars,
+        The object is inplace active, allowed to have menues, toolbars,
         keyboard accelerators, and has the focus.
         </p>
      */

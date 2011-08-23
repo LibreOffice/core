@@ -3,6 +3,12 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: fillattribute.cxx,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
+ *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -44,28 +50,28 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32                              mnRefCount;
+            sal_uInt32								mnRefCount;
 
             // data definitions
-            GradientStyle                           meStyle;
-            double                                  mfBorder;
-            double                                  mfOffsetX;
-            double                                  mfOffsetY;
-            double                                  mfAngle;
-            basegfx::BColor                         maStartColor;
-            basegfx::BColor                         maEndColor;
-            sal_uInt16                              mnSteps;
+            GradientStyle							meStyle;
+            double									mfBorder;
+            double									mfOffsetX;
+            double									mfOffsetY;
+            double									mfAngle;
+            basegfx::BColor							maStartColor;
+            basegfx::BColor							maEndColor;
+            sal_uInt16								mnSteps;
 
             ImpFillGradientAttribute(
-                GradientStyle eStyle,
-                double fBorder,
-                double fOffsetX,
-                double fOffsetY,
-                double fAngle,
-                const basegfx::BColor& rStartColor,
-                const basegfx::BColor& rEndColor,
+                GradientStyle eStyle, 
+                double fBorder, 
+                double fOffsetX, 
+                double fOffsetY, 
+                double fAngle, 
+                const basegfx::BColor& rStartColor, 
+                const basegfx::BColor& rEndColor, 
                 sal_uInt16 nSteps)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 meStyle(eStyle),
                 mfBorder(fBorder),
                 mfOffsetX(fOffsetX),
@@ -121,27 +127,27 @@ namespace drawinglayer
         };
 
         FillGradientAttribute::FillGradientAttribute(
-            GradientStyle eStyle,
-            double fBorder,
-            double fOffsetX,
-            double fOffsetY,
-            double fAngle,
-            const basegfx::BColor& rStartColor,
-            const basegfx::BColor& rEndColor,
+            GradientStyle eStyle, 
+            double fBorder, 
+            double fOffsetX, 
+            double fOffsetY, 
+            double fAngle, 
+            const basegfx::BColor& rStartColor, 
+            const basegfx::BColor& rEndColor, 
             sal_uInt16 nSteps)
-        :   mpFillGradientAttribute(new ImpFillGradientAttribute(
+        :	mpFillGradientAttribute(new ImpFillGradientAttribute(
                 eStyle, fBorder, fOffsetX, fOffsetY, fAngle, rStartColor, rEndColor, nSteps))
         {
         }
 
         FillGradientAttribute::FillGradientAttribute()
-        :   mpFillGradientAttribute(ImpFillGradientAttribute::get_global_default())
+        :	mpFillGradientAttribute(ImpFillGradientAttribute::get_global_default())
         {
             mpFillGradientAttribute->mnRefCount++;
         }
 
         FillGradientAttribute::FillGradientAttribute(const FillGradientAttribute& rCandidate)
-        :   mpFillGradientAttribute(rCandidate.mpFillGradientAttribute)
+        :	mpFillGradientAttribute(rCandidate.mpFillGradientAttribute)
         {
             mpFillGradientAttribute->mnRefCount++;
         }
@@ -175,7 +181,7 @@ namespace drawinglayer
                 {
                     delete mpFillGradientAttribute;
                 }
-
+                
                 mpFillGradientAttribute = rCandidate.mpFillGradientAttribute;
                 mpFillGradientAttribute->mnRefCount++;
             }
@@ -198,44 +204,44 @@ namespace drawinglayer
             return (*rCandidate.mpFillGradientAttribute == *mpFillGradientAttribute);
         }
 
-        const basegfx::BColor& FillGradientAttribute::getStartColor() const
+        const basegfx::BColor& FillGradientAttribute::getStartColor() const 
         {
-            return mpFillGradientAttribute->getStartColor();
+            return mpFillGradientAttribute->getStartColor(); 
         }
 
-        const basegfx::BColor& FillGradientAttribute::getEndColor() const
+        const basegfx::BColor& FillGradientAttribute::getEndColor() const 
         {
-            return mpFillGradientAttribute->getEndColor();
+            return mpFillGradientAttribute->getEndColor(); 
         }
 
-        double FillGradientAttribute::getBorder() const
+        double FillGradientAttribute::getBorder() const 
         {
-            return mpFillGradientAttribute->getBorder();
+            return mpFillGradientAttribute->getBorder(); 
         }
 
-        double FillGradientAttribute::getOffsetX() const
+        double FillGradientAttribute::getOffsetX() const 
         {
-            return mpFillGradientAttribute->getOffsetX();
+            return mpFillGradientAttribute->getOffsetX(); 
         }
 
-        double FillGradientAttribute::getOffsetY() const
+        double FillGradientAttribute::getOffsetY() const 
         {
-            return mpFillGradientAttribute->getOffsetY();
+            return mpFillGradientAttribute->getOffsetY(); 
         }
 
-        double FillGradientAttribute::getAngle() const
+        double FillGradientAttribute::getAngle() const 
         {
-            return mpFillGradientAttribute->getAngle();
+            return mpFillGradientAttribute->getAngle(); 
         }
 
-        GradientStyle FillGradientAttribute::getStyle() const
+        GradientStyle FillGradientAttribute::getStyle() const 
         {
-            return mpFillGradientAttribute->getStyle();
+            return mpFillGradientAttribute->getStyle(); 
         }
 
-        sal_uInt16 FillGradientAttribute::getSteps() const
+        sal_uInt16 FillGradientAttribute::getSteps() const 
         {
-            return mpFillGradientAttribute->getSteps();
+            return mpFillGradientAttribute->getSteps(); 
         }
 
     } // end of namespace attribute

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,8 +62,6 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 
-#include <vector>
-
 #define IMPLEMENTATION_NAME "com.sun.star.comp.ucb.SimpleFileAccess"
 #define SERVICE_NAME "com.sun.star.ucb.SimpleFileAccess"
 
@@ -77,8 +75,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::container;
-
-using ::std::vector;
 
 namespace io_FileAccess
 {
@@ -354,7 +350,7 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
-        // Interaction Handler already handled the error that has occurred...
+        // Interaction Handler already handled the error that has occured...
     }
 }
 
@@ -378,11 +374,11 @@ void OFileAccess::kill( const rtl::OUString& FileURL )
     ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     try
     {
-        aCnt.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "delete" )), makeAny( sal_Bool( sal_True ) ) );
+        aCnt.executeCommand( rtl::OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
-        // Interaction Handler already handled the error that has occurred...
+        // Interaction Handler already handled the error that has occured...
     }
 }
 
@@ -484,7 +480,7 @@ void OFileAccess::createFolder( const rtl::OUString& NewFolderURL )
             }
             catch ( ::com::sun::star::ucb::CommandFailedException const & )
             {
-                // Interaction Handler already handled the error that has occurred...
+                // Interaction Handler already handled the error that has occured...
                 continue;
             }
         }
@@ -499,7 +495,7 @@ sal_Int32 OFileAccess::getSize( const rtl::OUString& FileURL )
     sal_Int64 nTemp = 0;
     INetURLObject aObj( FileURL, INET_PROT_FILE );
     ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
-    aCnt.getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Size" )) ) >>= nTemp;
+    aCnt.getPropertyValue( rtl::OUString::createFromAscii( "Size" ) ) >>= nTemp;
     nSize = (sal_Int32)nTemp;
     return nSize;
 }
@@ -523,11 +519,12 @@ DateTime OFileAccess::getDateTimeModified( const rtl::OUString& FileURL )
 
     Reference< XCommandEnvironment > aCmdEnv;
     ucbhelper::Content aYoung( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-    aYoung.getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= aDateTime;
+    aYoung.getPropertyValue( rtl::OUString::createFromAscii( "DateModified" ) ) >>= aDateTime;
     return aDateTime;
 }
 
-typedef vector< rtl::OUString* > StringList_Impl;
+
+DECLARE_LIST( StringList_Impl, rtl::OUString* )
 
 Sequence< rtl::OUString > OFileAccess::getFolderContents( const rtl::OUString& FolderURL, sal_Bool bIncludeFolders )
     throw(CommandAbortedException, Exception, RuntimeException)
@@ -540,6 +537,9 @@ Sequence< rtl::OUString > OFileAccess::getFolderContents( const rtl::OUString& F
     ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Reference< XResultSet > xResultSet;
     Sequence< rtl::OUString > aProps(0);
+    //Sequence< rtl::OUString > aProps(1);
+    //rtl::OUString* pProps = aProps.getArray();
+    //pProps[0] == rtl::OUString::createFromAscii( "Url" );
 
     ucbhelper::ResultSetInclude eInclude = bIncludeFolders ? ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS : ucbhelper::INCLUDE_DOCUMENTS_ONLY;
 
@@ -549,12 +549,12 @@ Sequence< rtl::OUString > OFileAccess::getFolderContents( const rtl::OUString& F
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
-        // Interaction Handler already handled the error that has occurred...
+        // Interaction Handler already handled the error that has occured...
     }
 
     if ( xResultSet.is() )
     {
-        pFiles = new StringList_Impl();
+        pFiles = new StringList_Impl;
         Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
 
         while ( xResultSet->next() )
@@ -562,22 +562,21 @@ Sequence< rtl::OUString > OFileAccess::getFolderContents( const rtl::OUString& F
             rtl::OUString aId = xContentAccess->queryContentIdentifierString();
             INetURLObject aURL( aId, INET_PROT_FILE );
             rtl::OUString* pFile = new rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-            pFiles->push_back( pFile );
+            pFiles->Insert( pFile, LIST_APPEND );
         }
     }
 
     if ( pFiles )
     {
-        size_t nCount = pFiles->size();
+        ULONG nCount = pFiles->Count();
         Sequence < rtl::OUString > aRet( nCount );
         rtl::OUString* pRet = aRet.getArray();
-        for ( size_t i = 0; i < nCount; ++i )
+        for ( USHORT i = 0; i < nCount; ++i )
         {
-            rtl::OUString* pFile = pFiles->at( i );
+            rtl::OUString* pFile = pFiles->GetObject(i);
             pRet[i] = *( pFile );
             delete pFile;
         }
-        pFiles->clear();
         delete pFiles;
         return aRet;
     }
@@ -621,7 +620,7 @@ Reference< XInputStream > OFileAccess::openFileRead( const rtl::OUString& FileUR
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
-        // Interaction Handler already handled the error that has occurred...
+        // Interaction Handler already handled the error that has occured...
     }
 
     return xRet;
@@ -665,7 +664,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const rtl::OUString& FileUR
 
     try
     {
-        aCnt.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "open" )), aCmdArg );
+        aCnt.executeCommand( rtl::OUString::createFromAscii( "open" ), aCmdArg );
     }
     catch ( InteractiveIOException const & e )
     {
@@ -683,7 +682,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const rtl::OUString& FileUR
             aInsertArg.ReplaceExisting = sal_False;
 
             aCmdArg <<= aInsertArg;
-            aCnt.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "insert" )), aCmdArg );
+            aCnt.executeCommand( rtl::OUString::createFromAscii( "insert" ), aCmdArg );
 
             // Retry...
             return openFileReadWrite( FileURL );
@@ -760,7 +759,7 @@ bool OFileAccess::createNewFile( const rtl::OUString & rParentURL,
             catch ( CommandFailedException const & )
             {
                 // Interaction Handler already handled the
-                // error that has occurred...
+                // error that has occured...
                 continue;
             }
         }
@@ -785,7 +784,7 @@ void SAL_CALL OFileAccess::writeFile( const rtl::OUString& FileURL,
         }
         catch ( CommandFailedException const & )
         {
-            // Interaction Handler already handled the error that has occurred...
+            // Interaction Handler already handled the error that has occured...
         }
     }
     catch ( ContentCreationException const & e )
@@ -859,7 +858,7 @@ Sequence< rtl::OUString > FileAccess_getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< rtl::OUString > seqNames(1);
-            seqNames.getArray()[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
+            seqNames.getArray()[0] = rtl::OUString::createFromAscii( SERVICE_NAME );
             pNames = &seqNames;
         }
     }
@@ -879,6 +878,32 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+//==================================================================================================
+sal_Bool SAL_CALL component_writeInfo(
+    void * /*pServiceManager*/, void * pRegistryKey )
+{
+    if (pRegistryKey)
+    {
+        try
+        {
+            Reference< XRegistryKey > xNewKey(
+                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
+                    rtl::OUString::createFromAscii("/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+
+            const Sequence< rtl::OUString > & rSNL = io_FileAccess::FileAccess_getSupportedServiceNames();
+            const rtl::OUString * pArray = rSNL.getConstArray();
+            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+                xNewKey->createKey( pArray[nPos] );
+
+            return sal_True;
+        }
+        catch (InvalidRegistryException &)
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+    return sal_False;
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

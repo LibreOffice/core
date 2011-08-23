@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,22 +24,22 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_MessageBoxButtons_idl__
-#define __com_sun_star_awt_MessageBoxButtons_idl__
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
-/** defines constants for the possible message box button
+#ifndef __com_sun_star_awt_MessageBoxButtons_idl__ 
+#define __com_sun_star_awt_MessageBoxButtons_idl__ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
+/** defines constants for the possible message box button 
     combinations.
 
  */
 constants MessageBoxButtons
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
 
     /** specifies a message with "OK" button.
      */
@@ -68,7 +68,7 @@ constants MessageBoxButtons
     /** specifies that OK is the default button.
      */
     const long DEFAULT_BUTTON_OK            = 0x10000;
-
+    
     /** specifies that CANCEL is the default button.
      */
     const long DEFAULT_BUTTON_CANCEL        = 0x20000;
@@ -76,7 +76,7 @@ constants MessageBoxButtons
     /** specifies that RETRY is the default button.
      */
     const long DEFAULT_BUTTON_RETRY         = 0x30000;
-
+    
     /** specifies that YES is the default button.
      */
     const long DEFAULT_BUTTON_YES           = 0x40000;
@@ -88,10 +88,10 @@ constants MessageBoxButtons
     /** specifies that IGNORE is the default button.
      */
     const long DEFAULT_BUTTON_IGNORE        = 0x60000;
-};
+}; 
 
-//=============================================================================
-
-}; }; }; };
-
-#endif
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

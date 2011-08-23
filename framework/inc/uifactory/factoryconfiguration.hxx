@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -46,20 +46,21 @@
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Namespace
+//	Namespace
 //_________________________________________________________________________________________________________________
+// 
 
 namespace framework
 {
 
 //*****************************************************************************************************************
-//  Configuration access class for PopupMenuControllerFactory implementation
+//	Configuration access class for PopupMenuControllerFactory implementation
 //*****************************************************************************************************************
 class ConfigurationAccess_ControllerFactory : // interfaces
                                                     private ThreadHelpBase,
@@ -94,7 +95,7 @@ private:
         ControllerInfo(const ::rtl::OUString& _aImplementationName,const ::rtl::OUString& _aValue) : m_aImplementationName(_aImplementationName),m_aValue(_aValue){}
         ControllerInfo(){}
     };
-    class MenuControllerMap : public boost::unordered_map< rtl::OUString,
+    class MenuControllerMap : public std::hash_map< rtl::OUString,
                                                          ControllerInfo,
                                                          OUStringHashCode,
                                                          ::std::equal_to< ::rtl::OUString > >
@@ -116,7 +117,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xConfigProvider;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xConfigAccess;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xConfigAccessListener;
     sal_Bool                          m_bConfigAccessInitialized;
     bool                              m_bAskValue;
 };

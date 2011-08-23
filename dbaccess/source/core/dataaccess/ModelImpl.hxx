@@ -192,8 +192,8 @@ public:
 
 private:
     OModuleClient                                                               m_aModuleClient;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >     m_xModel;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource > m_xDataSource;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >	    m_xModel;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource >	m_xDataSource;
 
     DocumentStorageAccess*                                                      m_pStorageAccess;
     ::comphelper::SharedMutex                                                   m_aMutex;
@@ -207,14 +207,14 @@ private:
 
     SharedStorage                                                               m_xDocumentStorage;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >                   m_pStorageModifyListener;
-    ODatabaseContext*                                                           m_pDBContext;
+    ODatabaseContext*									                        m_pDBContext;
     DocumentEventsData                                                          m_aDocumentEvents;
 
     ::comphelper::NamedValueCollection                                          m_aMediaDescriptor;
     /// the URL the document was loaded from
-    ::rtl::OUString                                                             m_sDocFileLocation;
+    ::rtl::OUString										                        m_sDocFileLocation;
 
-    oslInterlockedCount                                 m_refCount;
+    oslInterlockedCount									m_refCount;
 
     /// do we have any object (forms/reports) which contains macros?
     ::boost::optional< EmbeddedMacros >                 m_aEmbeddedMacros;
@@ -240,32 +240,32 @@ public:
     const ::comphelper::ComponentContext                                        m_aContext;
 
 public:
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xCommandDefinitions;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xTableDefinitions;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >	m_xCommandDefinitions;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >	m_xTableDefinitions;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
                                                         m_xNumberFormatsSupplier;
-    ::rtl::OUString                                     m_sConnectURL;
-    ::rtl::OUString                                     m_sName;        // transient, our creator has to tell us the title
-    ::rtl::OUString                                     m_sUser;
-    ::rtl::OUString                                     m_aPassword;    // transient !
+    ::rtl::OUString										m_sConnectURL;
+    ::rtl::OUString										m_sName;		// transient, our creator has to tell us the title
+    ::rtl::OUString										m_sUser;
+    ::rtl::OUString										m_aPassword;	// transient !
     ::rtl::OUString                                     m_sFailedPassword;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
                                                         m_aLayoutInformation;
     sal_Int32                                           m_nLoginTimeout;
-    sal_Bool                                            m_bReadOnly : 1;
-    sal_Bool                                            m_bPasswordRequired : 1;
-    sal_Bool                                            m_bSuppressVersionColumns : 1;
-    sal_Bool                                            m_bModified : 1;
-    sal_Bool                                            m_bDocumentReadOnly : 1;
+    sal_Bool											m_bReadOnly : 1;
+    sal_Bool											m_bPasswordRequired : 1;
+    sal_Bool											m_bSuppressVersionColumns : 1;
+    sal_Bool											m_bModified : 1;
+    sal_Bool											m_bDocumentReadOnly : 1;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyAccess >
                                                         m_xSettings;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
-    OSharedConnectionManager*                           m_pSharedConnectionManager;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >	m_aTableFilter;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >	m_aTableTypeFilter;
+    OSharedConnectionManager*							m_pSharedConnectionManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >
                                                         m_xSharedConnectionManager;
-    sal_uInt16                                          m_nControllerLockCount;
+    sal_uInt16											m_nControllerLockCount;
 
     void reset();
 
@@ -336,7 +336,7 @@ public:
             stripLoadArguments( const ::comphelper::NamedValueCollection& _rArguments );
 
 // other stuff
-    void    flushTables();
+    void	flushTables();
 
     // disposes all elements in m_aStorages, and clears it
     void    disposeStorages() SAL_THROW(());
@@ -564,7 +564,7 @@ public:
     {
         return getMutex();
     }
-    inline ::rtl::Reference< ODatabaseModelImpl > getImpl( GuardAccess ) const
+    inline ::rtl::Reference< ODatabaseModelImpl > getImpl( GuardAccess )
     {
         return m_pImpl;
     }
@@ -573,7 +573,7 @@ public:
     inline void checkDisposed() const
     {
         if ( !m_pImpl.is() )
-            throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Component is already disposed.")), getThis() );
+            throw ::com::sun::star::lang::DisposedException( ::rtl::OUString::createFromAscii( "Component is already disposed." ), getThis() );
     }
 
     inline void lockModify()
@@ -636,7 +636,7 @@ public:
 };
 
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 
 #endif // _DBA_COREDATAACCESS_DATALINK_HXX_

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,62 +36,62 @@
 
 class ImpEditEngine;
 
-#define MAX_NUMBERLEVEL         10
+#define MAX_NUMBERLEVEL			10
 
 struct AnchorInfo
 {
-    String  aHRef;
-    String  aText;
+    String	aHRef;
+    String	aText;
 };
 
 class EditHTMLParser : public HTMLParser
 {
     using HTMLParser::CallParser;
 private:
-    EditSelection           aCurSel;
+    EditSelection 			aCurSel;
     String                  aBaseURL;
-    ImpEditEngine*          pImpEditEngine;
-    AnchorInfo*             pCurAnchor;
+    ImpEditEngine* 			pImpEditEngine;
+    AnchorInfo*				pCurAnchor;
 
-    sal_Bool                    bInPara;
-    sal_Bool                    bWasInPara; // Remember bInPara before HeadingStart, because afterwards it will be gone.
-    sal_Bool                    bFieldsInserted;
-    sal_uInt8                   nInTable;
-    sal_uInt8                   nInCell;
-    sal_Bool                    bInTitle;
+    BOOL					bInPara;
+    BOOL					bWasInPara;	// bInPara vor HeadingStart merken, weil sonst hinterher weg
+    BOOL					bFieldsInserted;
+    BYTE					nInTable;
+    BYTE					nInCell;
+    BOOL                    bInTitle;
 
-    sal_uInt8                   nDefListLevel;
-    sal_uInt8                   nBulletLevel;
-    sal_uInt8                   nNumberingLevel;
+    BYTE					nDefListLevel;
+    BYTE					nBulletLevel;
+    BYTE					nNumberingLevel;
 
-    sal_uInt8                   nLastAction;
+    BYTE					nLastAction;
 
-    void                    StartPara( sal_Bool bReal );
-    void                    EndPara( sal_Bool bReal );
-    void                    AnchorStart();
-    void                    AnchorEnd();
-    void                    HeadingStart( int nToken );
-    void                    HeadingEnd( int nToken );
-    void                    SkipGroup( int nEndToken );
-    sal_Bool                    ThrowAwayBlank();
-    sal_Bool                    HasTextInCurrentPara();
-    void                    ProcessUnknownControl( sal_Bool bOn );
+    void					StartPara( BOOL bReal );
+    void					EndPara( BOOL bReal );
+    void					AnchorStart();
+    void					AnchorEnd();
+    void					HeadingStart( int nToken );
+    void					HeadingEnd( int nToken );
+    void					SkipGroup( int nEndToken );
+    BOOL					ThrowAwayBlank();
+    BOOL					HasTextInCurrentPara();
+    void					ProcessUnknownControl( BOOL bOn );
 
-    void                    ImpInsertParaBreak();
-    void                    ImpInsertText( const String& rText );
-    void                    ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSel = 0 );
-    void                    ImpSetStyleSheet( sal_uInt16 nHeadingLevel );
+    void					ImpInsertParaBreak();
+    void 					ImpInsertText( const String& rText );
+    void 					ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSel = 0 );
+    void					ImpSetStyleSheet( USHORT nHeadingLevel );
 
 protected:
-    virtual void            NextToken( int nToken );
+    virtual void 			NextToken( int nToken );
 
 public:
                             EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs );
                             ~EditHTMLParser();
 
-    virtual SvParserState   CallParser( ImpEditEngine* pImpEE, const EditPaM& rPaM );
+    virtual SvParserState 	CallParser( ImpEditEngine* pImpEE, const EditPaM& rPaM );
 
-    const EditSelection&    GetCurSelection() const { return aCurSel; }
+    const EditSelection&	GetCurSelection() const { return aCurSel; }
 };
 
 SV_DECL_REF( EditHTMLParser )

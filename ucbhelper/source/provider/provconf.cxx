@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ using namespace com::sun::star;
 
 //=========================================================================
 
-#define CONFIG_CONTENTPROVIDERS_KEY \
+#define CONFIG_CONTENTPROVIDERS_KEY	\
                 "/org.openoffice.ucb.Configuration/ContentProviders"
 
 //=========================================================================
@@ -99,7 +99,8 @@ bool getContentProviderData(
 {
     if ( !rServiceMgr.is() || !rKey1.getLength() || !rKey2.getLength() )
     {
-        OSL_FAIL( "getContentProviderData - Invalid argument!" );
+        OSL_ENSURE( false,
+                    "getContentProviderData - Invalid argument!" );
         return false;
     }
 
@@ -107,13 +108,14 @@ bool getContentProviderData(
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
                 rServiceMgr->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.ConfigurationProvider" )) ),
+                    rtl::OUString::createFromAscii(
+                        "com.sun.star.configuration.ConfigurationProvider" ) ),
                 uno::UNO_QUERY );
 
         if ( !xConfigProv.is() )
         {
-            OSL_FAIL( "getContentProviderData - No config provider!" );
+            OSL_ENSURE( false,
+                        "getContentProviderData - No config provider!" );
             return false;
         }
 
@@ -139,7 +141,8 @@ bool getContentProviderData(
 
         if ( !xInterface.is() )
         {
-            OSL_FAIL( "getContentProviderData - No config access!" );
+            OSL_ENSURE( false,
+                        "getContentProviderData - No config access!" );
             return false;
         }
 
@@ -148,7 +151,8 @@ bool getContentProviderData(
 
         if ( !xNameAccess.is() )
         {
-            OSL_FAIL( "getContentProviderData - No XNameAccess!" );
+            OSL_ENSURE( false,
+                        "getContentProviderData - No XNameAccess!" );
             return false;
         }
 
@@ -163,7 +167,8 @@ bool getContentProviderData(
 
             if ( !xHierNameAccess.is() )
             {
-                OSL_FAIL( "getContentProviderData - "
+                OSL_ENSURE( false,
+                            "getContentProviderData - "
                             "No XHierarchicalNameAccess!" );
                 return false;
             }
@@ -187,7 +192,8 @@ bool getContentProviderData(
                     if ( !( xHierNameAccess->getByHierarchicalName(
                                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
-                        OSL_FAIL( "getContentProviderData - "
+                        OSL_ENSURE( false,
+                                    "getContentProviderData - "
                                     "Error getting item value!" );
                         continue;
                     }
@@ -201,7 +207,8 @@ bool getContentProviderData(
                     if ( !( xHierNameAccess->getByHierarchicalName(
                                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
-                        OSL_FAIL( "getContentProviderData - "
+                        OSL_ENSURE( false,
+                                    "getContentProviderData - "
                                     "Error getting item value!" );
                         continue;
                     }
@@ -215,7 +222,8 @@ bool getContentProviderData(
                     if ( !( xHierNameAccess->getByHierarchicalName(
                                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
-                        OSL_FAIL( "getContentProviderData - "
+                        OSL_ENSURE( false,
+                                    "getContentProviderData - "
                                     "Error getting item value!" );
                         continue;
                     }
@@ -229,7 +237,8 @@ bool getContentProviderData(
                 {
                     // getByHierarchicalName
 
-                    OSL_FAIL( "getContentProviderData - "
+                    OSL_ENSURE( false,
+                                "getContentProviderData - "
                                 "caught NoSuchElementException!" );
                 }
             }
@@ -237,14 +246,16 @@ bool getContentProviderData(
     }
     catch ( uno::RuntimeException& )
     {
-        OSL_FAIL( "getContentProviderData - caught RuntimeException!" );
+        OSL_ENSURE( false,
+                    "getContentProviderData - caught RuntimeException!" );
         return false;
     }
     catch ( uno::Exception& )
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_FAIL( "getContentProviderData - caught Exception!" );
+        OSL_ENSURE( false,
+                    "getContentProviderData - caught Exception!" );
         return false;
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ short ODbAdminDialog::Ok()
 }
 
 //-------------------------------------------------------------------------
-void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
+void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
 {
     // register ourself as modified listener
     static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory(m_pImpl->getORB());
@@ -124,7 +124,7 @@ void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
 }
 
 // -----------------------------------------------------------------------------
-void ODbAdminDialog::addDetailPage(sal_uInt16 _nPageId, sal_uInt16 _nTextId, CreateTabPage _pCreateFunc)
+void ODbAdminDialog::addDetailPage(USHORT _nPageId, USHORT _nTextId, CreateTabPage _pCreateFunc)
 {
     // open our own resource block, as the page titles are strings local to this block
     LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
@@ -149,6 +149,7 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
     {
         case  ::dbaccess::DST_DBASE:
             addDetailPage(PAGE_DBASE, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateDbase);
+            //	bResetPasswordRequired = sal_True;
             break;
 
         case  ::dbaccess::DST_ADO:
@@ -157,6 +158,7 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
 
         case  ::dbaccess::DST_FLAT:
             addDetailPage(PAGE_TEXT, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateText);
+            //	bResetPasswordRequired = sal_True;
             break;
 
         case  ::dbaccess::DST_ODBC:
@@ -186,7 +188,7 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
         case  ::dbaccess::DST_LDAP:
             addDetailPage(PAGE_LDAP,STR_PAGETITLE_ADVANCED,ODriversSettings::CreateLDAP);
             break;
-        case  ::dbaccess::DST_USERDEFINE1:  /// first user defined driver
+        case  ::dbaccess::DST_USERDEFINE1:	/// first user defined driver
         case  ::dbaccess::DST_USERDEFINE2:
         case  ::dbaccess::DST_USERDEFINE3:
         case  ::dbaccess::DST_USERDEFINE4:
@@ -226,7 +228,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     // are set. Select another data source of the same type, where the indirect props are not set (yet). Then,
     // the indirect property values of the first ds are shown in the second ds ...)
     const ODbDataSourceAdministrationHelper::MapInt2String& rMap = m_pImpl->getIndirectProperties();
-    for (   ODbDataSourceAdministrationHelper::ConstMapInt2StringIterator aIndirect = rMap.begin();
+    for	(	ODbDataSourceAdministrationHelper::ConstMapInt2StringIterator aIndirect = rMap.begin();
             aIndirect != rMap.end();
             ++aIndirect
         )
@@ -280,7 +282,7 @@ sal_Bool ODbAdminDialog::saveDatasource()
 ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
 {
     if (!PrepareLeaveCurrentPage())
-    {   // the page did not allow us to leave
+    {	// the page did not allow us to leave
         return AR_KEEP;
     }
 
@@ -329,7 +331,7 @@ Reference< XDriver > ODbAdminDialog::getDriver()
     return m_pImpl->getDriver();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
+::rtl::OUString	ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }
@@ -349,7 +351,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     const ::rtl::OUString sFilterAll( "%", 1, RTL_TEXTENCODING_ASCII_US );
     // create and initialize the defaults
     _rppDefaults = new SfxPoolItem*[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1];
-    SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
+    SfxPoolItem** pCounter = _rppDefaults;	// want to modify this without affecting the out param _rppDefaults
     *pCounter++ = new SfxStringItem(DSID_NAME, String());
     *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, String());
     *pCounter++ = new SfxStringItem(DSID_CONNECTURL, String());
@@ -409,12 +411,10 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_ESCAPE_DATETIME, sal_True);
     *pCounter++ = new SfxStringItem(DSID_NAMED_PIPE, String());
     *pCounter++ = new OptionalBoolItem( DSID_PRIMARY_KEY_SUPPORT );
-    *pCounter++ = new SfxInt32Item(DSID_MAX_ROW_SCAN, 100);
 
     // create the pool
-    static SfxItemInfo const aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
+    static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
-        {0,0},
         {0,0},
         {0,0},
         {0,0},
@@ -509,9 +509,9 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
     _rppDefaults = NULL;
         // no need to explicitly delete the defaults, this has been done by the ReleaseDefaults
 }
-
+                     
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

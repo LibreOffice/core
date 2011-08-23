@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@ struct ImplKernPairData;
 class ImplFontOptions;
 
 #include <tools/gen.hxx>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
-#include <boost/shared_ptr.hpp>
+#include <hash_map>
+#include <hash_set>
 
 namespace basegfx { class B2DPolyPolygon; }
 
 class RawBitmap;
+class CmapResult;
 
 #include <vcl/outfont.hxx>
 #include <vcl/impfont.hxx>
@@ -57,20 +57,15 @@ class RawBitmap;
 class ServerFontLayout;
 #include <vcl/sallayout.hxx>
 
-namespace vcl
-{
-    struct FontCapabilities;
-}
-
 // =======================================================================
 
-class VCL_PLUGIN_PUBLIC GlyphCache
+class VCL_DLLPUBLIC GlyphCache
 {
 public:
     explicit                    GlyphCache( GlyphCachePeer& );
     /*virtual*/                 ~GlyphCache();
 
-    static GlyphCache&      GetInstance();
+    static GlyphCache&		GetInstance();
     void                        LoadFonts();
 
     void                        ClearFontPath();
@@ -96,17 +91,17 @@ private:
     void                        GrowNotify();
 
 private:
-    sal_uLong                       CalcByteCount() const;
+    ULONG                       CalcByteCount() const;
     void                        GarbageCollect();
 
     // the GlyphCache's FontList matches a font request to a serverfont instance
     // the FontList key's mpFontData member is reinterpreted as integer font id
     struct IFSD_Equal{  bool operator()( const ImplFontSelectData&, const ImplFontSelectData& ) const; };
     struct IFSD_Hash{ size_t operator()( const ImplFontSelectData& ) const; };
-    typedef ::boost::unordered_map<ImplFontSelectData,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
+    typedef ::std::hash_map<ImplFontSelectData,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
     FontList                    maFontList;
-    sal_uLong                       mnMaxSize;      // max overall cache size in bytes
-    mutable sal_uLong               mnBytesUsed;
+    ULONG                       mnMaxSize;      // max overall cache size in bytes
+    mutable ULONG               mnBytesUsed;
     mutable long                mnLruIndex;
     mutable int                 mnGlyphCount;
     ServerFont*                 mpCurrentGCFont;
@@ -179,7 +174,7 @@ private:
 
 // =======================================================================
 
-class VCL_PLUGIN_PUBLIC ServerFont
+class VCL_DLLPUBLIC ServerFont
 {
 public:
     virtual const ::rtl::OString*   GetFontFileName() const { return NULL; }
@@ -187,19 +182,16 @@ public:
     virtual bool                TestFont() const            { return true; }
     virtual void*               GetFtFace() const { return 0; }
     virtual int                 GetLoadFlags() const { return 0; }
-    virtual void                SetFontOptions( boost::shared_ptr<ImplFontOptions> ) {}
-    virtual boost::shared_ptr<ImplFontOptions> GetFontOptions() const
-        { return boost::shared_ptr<ImplFontOptions>(); }
+    virtual void                SetFontOptions( const ImplFontOptions&) {}
     virtual bool                NeedsArtificialBold() const { return false; }
     virtual bool                NeedsArtificialItalic() const { return false; }
 
     const ImplFontSelectData&   GetFontSelData() const      { return maFontSelData; }
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const = 0;
-    virtual sal_uLong               GetKernPairs( ImplKernPairData** ) const      { return 0; }
+    virtual ULONG               GetKernPairs( ImplKernPairData** ) const      { return 0; }
     virtual int                 GetGlyphKernValue( int, int ) const           { return 0; }
-    virtual const ImplFontCharMap* GetImplFontCharMap() const = 0;
-    virtual bool                GetFontCapabilities(vcl::FontCapabilities &) const { return false; }
+    virtual bool                GetFontCodeRanges( CmapResult& ) const        { return false; }
     Point                       TransformPoint( const Point& ) const;
 
     GlyphData&                  GetGlyphData( int nGlyphIndex );
@@ -226,7 +218,7 @@ protected:
     void                        AddRef() const      { ++mnRefCount; }
     long                        GetRefCount() const { return mnRefCount; }
     long                        Release() const;
-    sal_uLong                       GetByteCount() const { return mnBytesUsed; }
+    ULONG                       GetByteCount() const { return mnBytesUsed; }
 
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const = 0;
     virtual void                GarbageCollect( long );
@@ -235,7 +227,7 @@ protected:
     virtual ServerFontLayoutEngine* GetLayoutEngine() { return NULL; }
 
 private:
-    typedef ::boost::unordered_map<int,GlyphData> GlyphList;
+    typedef ::std::hash_map<int,GlyphData> GlyphList;
     mutable GlyphList           maGlyphList;
 
     const ImplFontSelectData    maFontSelData;
@@ -246,7 +238,7 @@ private:
 
     // used by GlyphCache for cache LRU algorithm
     mutable long                mnRefCount;
-    mutable sal_uLong               mnBytesUsed;
+    mutable ULONG               mnBytesUsed;
 
     ServerFont*                 mpPrevGCFont;
     ServerFont*                 mpNextGCFont;
@@ -264,12 +256,13 @@ private:
 // =======================================================================
 
 // a class for cache entries for physical font instances that are based on serverfonts
-class VCL_PLUGIN_PUBLIC ImplServerFontEntry : public ImplFontEntry
+class VCL_DLLPUBLIC ImplServerFontEntry : public ImplFontEntry
 {
 private:
     ServerFont*    mpServerFont;
-    boost::shared_ptr<ImplFontOptions> mpFontOptions;
+    ImplFontOptions maFontOptions;
     bool           mbGotFontOptions;
+    bool           mbValidFontOptions;
 
 public:
                    ImplServerFontEntry( ImplFontSelectData& );
@@ -280,7 +273,7 @@ public:
 
 // =======================================================================
 
-class VCL_PLUGIN_PUBLIC ServerFontLayout : public GenericSalLayout
+class VCL_DLLPUBLIC ServerFontLayout : public GenericSalLayout
 {
 private:
     ServerFont&     mrServerFont;
@@ -325,7 +318,7 @@ protected:
 
 // =======================================================================
 
-class VCL_PLUGIN_PUBLIC RawBitmap
+class VCL_DLLPUBLIC RawBitmap
 {
 public:
                     RawBitmap();
@@ -334,13 +327,13 @@ public:
 
 public:
     unsigned char*  mpBits;
-    sal_uLong           mnAllocated;
+    ULONG           mnAllocated;
 
-    sal_uLong           mnWidth;
-    sal_uLong           mnHeight;
+    ULONG           mnWidth;
+    ULONG           mnHeight;
 
-    sal_uLong           mnScanlineSize;
-    sal_uLong           mnBitCount;
+    ULONG           mnScanlineSize;
+    ULONG           mnBitCount;
 
     int             mnXOffset;
     int             mnYOffset;
@@ -358,7 +351,7 @@ inline void ServerFont::SetExtended( int nInfo, void* pVoid )
 
 // ExtraKernInfo allows an on-demand query of extra kerning info #i29881#
 // The kerning values have to be scaled to match the font size before use
-class VCL_PLUGIN_PUBLIC ExtraKernInfo
+class VCL_DLLPUBLIC ExtraKernInfo
 {
 public:
     ExtraKernInfo( sal_IntPtr nFontId );
@@ -380,7 +373,7 @@ protected:
                           { return (rA.mnChar1 == rB.mnChar1) && (rA.mnChar2 == rB.mnChar2); } };
     struct PairHash{ int operator()(const ImplKernPairData& rA) const
                          { return (rA.mnChar1) * 256 ^ rA.mnChar2; } };
-    typedef boost::unordered_set< ImplKernPairData, PairHash, PairEqual > UnicodeKernPairs;
+    typedef std::hash_set< ImplKernPairData, PairHash, PairEqual > UnicodeKernPairs;
     mutable UnicodeKernPairs maUnicodeKernPairs;
 };
 

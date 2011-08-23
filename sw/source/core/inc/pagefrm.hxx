@@ -46,10 +46,12 @@ class SdrObject;
 class SwAttrSetChg;
 class Font;
 
-// #i28701# - replaced by class <SwSortedObjs>
+// OD 2004-05-07 #i28701# - replaced by class <SwSortedObjs>
+//SV_DECL_PTRARR_SORT(SwSortDrawObjs,SdrObjectPtr,1,2);
 class SwSortedObjs;
-// #i28701#
+// --> OD 2004-07-02 #i28701#
 class SwAnchoredObject;
+// <--
 
 enum SwPageChg
 {
@@ -62,42 +64,70 @@ class SwPageFrm: public SwFtnBossFrm
 {
     friend class SwFrm;
 
-    // #i28701# - use <SwSortedObjs>
+    // OD 2004-05-07 #i28701# - use <SwSortedObjs>
     SwSortedObjs *pSortedObjs;
 
-    SwPageDesc *pDesc;      //PageDesc der die Seite beschreibt.
+    SwPageDesc *pDesc;		//PageDesc der die Seite beschreibt.
 
-    sal_uInt16  nPhyPageNum;        //Physikalische Seitennummer.
+    USHORT	nPhyPageNum;		//Physikalische Seitennummer.
 
-    sal_Bool bInvalidCntnt      :1;
-    sal_Bool bInvalidLayout     :1;
-    sal_Bool bInvalidFlyCntnt   :1;
-    sal_Bool bInvalidFlyLayout  :1;
-    sal_Bool bInvalidFlyInCnt   :1;
-    sal_Bool bFtnPage           :1; //Diese Seite ist fuer Dokumentende-Fussnoten.
-    sal_Bool bEmptyPage         :1; //Dies ist eine explizite Leerseite
-    sal_Bool bEndNotePage       :1; //'Fussnotenseite' fuer Endnoten
-    sal_Bool bInvalidSpelling   :1; //Das Online-Spelling ist gefordert
-    sal_Bool bInvalidSmartTags :1;  //checking for smarttags is needed  // SMARTTAGS
-    sal_Bool bInvalidAutoCmplWrds :1; //Auto-Complete Wordliste aktualisieren
-    sal_Bool bInvalidWordCount  :1;
-    sal_Bool bHasGrid           :1; // Grid for Asian layout
+    BOOL bInvalidCntnt		:1;
+    BOOL bInvalidLayout		:1;
+    BOOL bInvalidFlyCntnt	:1;
+    BOOL bInvalidFlyLayout	:1;
+    BOOL bInvalidFlyInCnt	:1;
+    BOOL bFtnPage			:1;	//Diese Seite ist fuer Dokumentende-Fussnoten.
+    BOOL bEmptyPage			:1; //Dies ist eine explizite Leerseite
+    BOOL bEndNotePage       :1; //'Fussnotenseite' fuer Endnoten
+    BOOL bInvalidSpelling   :1; //Das Online-Spelling ist gefordert
+    BOOL bInvalidSmartTags :1;  //checking for smarttags is needed  // SMARTTAGS
+    BOOL bInvalidAutoCmplWrds :1; //Auto-Complete Wordliste aktualisieren
+    BOOL bInvalidWordCount  :1;
+    BOOL bHasGrid           :1; // Grid for Asian layout
 
-    // #i28701# - boolean, indicating that layout of page frame
+    // OD 2004-05-17 #i28701# - boolean, indicating that layout of page frame
     // is in progress.
     bool mbLayoutInProgress;
 
+    // OD 12.02.2003 #i9719#, #105645#
+    static const sal_Int8 mnBorderPxWidth;
     static const sal_Int8 mnShadowPxWidth;
 
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
+    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     // Anpassen der max. Fussnotenhoehen in den einzelnen Spalten
     void SetColMaxFtnHeight();
 
+    /** determine rectangle for page border
+
+        OD 12.02.2003 for #i9719# and #105645#
+
+        @author OD
+
+        @param _rPageRect
+        input parameter - constant instance reference of the page rectangle.
+        Generally, it's the frame area of the page, but for empty pages in print
+        preview, this parameter is useful.
+
+        @param _pViewShell
+        input parameter - instance of the view shell, for which the rectangle
+        has to be generated.
+
+        @param _orBorderRect
+        output parameter - instance reference of the border rectangle for
+        the given page rectangle
+    */
+    static void GetBorderRect( const SwRect& _rPageRect,
+                               ViewShell*    _pViewShell,
+                               SwRect& _orBorderRect,
+                               bool bRightSidebar );
+
     /** determine rectangle for right page shadow
 
-        #i9719#
+        OD 12.02.2003 for #i9719# and #105645#
+
+        @author OD
 
         @param _rPageRect
         input parameter - constant instance reference of the page rectangle.
@@ -119,7 +149,9 @@ class SwPageFrm: public SwFtnBossFrm
 
     /** determine rectangle for bottom page shadow
 
-        #i9719#
+        OD 12.02.2003 for #i9719# and #105645#
+
+        @author OD
 
         @param _rPageRect
         input parameter - constant instance reference of the page rectangle.
@@ -138,11 +170,12 @@ class SwPageFrm: public SwFtnBossFrm
     static void GetBottomShadowRect( const SwRect& _rPageRect,
                                      ViewShell*    _pViewShell,
                                      SwRect&       _orBottomShadowRect,
-                                     bool bFullBottomShadow,
                                      bool bRightSidebar );
 
     /** adds the sidebar used for notes to right and left border
-        #i6193#
+        mod 20.10.2007 for #i6193#
+
+        @author mod
 
         @param aRect
         input parameter - current rect, we change borders if we want a sidebar
@@ -159,25 +192,25 @@ class SwPageFrm: public SwFtnBossFrm
 
 protected:
     virtual void MakeAll();
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
 
-    SwPageFrm( SwFrmFmt*, SwFrm*, SwPageDesc* );
+    SwPageFrm( SwFrmFmt*, SwPageDesc* );
     ~SwPageFrm();
 
     //public, damit die ViewShell beim Umschalten vom BrowseMode darauf
     //zugreifen kann.
-    void PrepareHeader();   //Kopf-/Fusszeilen anlegen/entfernen.
+    void PrepareHeader();	//Kopf-/Fusszeilen anlegen/entfernen.
     void PrepareFooter();
 
     const SwSortedObjs  *GetSortedObjs() const  { return pSortedObjs; }
           SwSortedObjs  *GetSortedObjs()          { return pSortedObjs; }
 
-    // #i28701# - new methods to append/remove drawing objects
+    // --> OD 2004-07-02 #i28701# - new methods to append/remove drawing objects
     void AppendDrawObjToPage( SwAnchoredObject& _rNewObj );
     void RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj );
+    // <--
 
     void AppendFlyToPage( SwFlyFrm *pNew );
     void RemoveFlyFromPage( SwFlyFrm *pToRemove );
@@ -189,25 +222,25 @@ public:
           SwPageDesc *FindPageDesc();
 
                  SwCntntFrm  *FindLastBodyCntnt();
-    inline       SwCntntFrm  *FindFirstBodyCntnt();
+    inline 		 SwCntntFrm	 *FindFirstBodyCntnt();
     inline const SwCntntFrm  *FindFirstBodyCntnt() const;
     inline const SwCntntFrm  *FindLastBodyCntnt() const;
 
     //Spezialisiertes GetCntntPos() fuer Felder in Rahmen.
     void GetCntntPosition( const Point &rPt, SwPosition &rPos ) const;
 
-    sal_Bool IsEmptyPage() const { return bEmptyPage; } //explizite Leerseite.
+    BOOL IsEmptyPage() const { return bEmptyPage; } //explizite Leerseite.
 
-    void    UpdateFtnNum();
+    void	UpdateFtnNum();
 
     //Immer nach dem Paste rufen. Erzeugt die Seitengeb. Rahmen und Formatiert
     //generischen Inhalt.
-    void PreparePage( sal_Bool bFtn );
+    void PreparePage( BOOL bFtn );
 
     //Schickt an alle ContentFrames ein Prepare wg. geaenderter Registervorlage
     void PrepareRegisterChg();
 
-    // #i50432# - adjust method description and synopsis.
+    // --> OD 2005-06-09 #i50432# - adjust method description and synopsis.
     // Appends a fly frame - the given one or a new one - at the page frame.
     // Needed for <Modify> and <MakeFrms>
     // - return value not needed any more
@@ -215,18 +248,20 @@ public:
     // - third parameter only needed for assertion, but calling method assures
     //   this assertion. Thus, delete it.
     void PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt );
+    // <--
 
-    virtual sal_Bool GetCrsrOfst( SwPosition *, Point&,
+    virtual BOOL GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0 ) const;
+    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
         // erfrage vom Client Informationen
-    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual BOOL GetInfo( SfxPoolItem& ) const;
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
-    virtual void  CheckDirection( sal_Bool bVert );
-    void CheckGrid( sal_Bool bInvalidate );
+    virtual void  CheckDirection( BOOL bVert );
+    void CheckGrid( BOOL bInvalidate );
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
-    sal_Bool HasGrid() const { return bHasGrid; }
+    BOOL HasGrid() const { return bHasGrid; }
 
     //Zeilennummern usw malen
     void RefreshExtraData( const SwRect & ) const;
@@ -235,52 +270,55 @@ public:
     void RefreshSubsidiary( const SwRect& ) const;
 
     //Fussnotenschnittstelle
-    sal_Bool IsFtnPage() const                                  { return bFtnPage; }
-    sal_Bool IsEndNotePage() const                              { return bEndNotePage; }
-    void SetFtnPage( sal_Bool b )                               { bFtnPage = b; }
-    void SetEndNotePage( sal_Bool b )                           { bEndNotePage = b; }
+    BOOL IsFtnPage() const									{ return bFtnPage; }
+    BOOL IsEndNotePage() const								{ return bEndNotePage; }
+    void SetFtnPage( BOOL b )								{ bFtnPage = b; }
+    void SetEndNotePage( BOOL b )							{ bEndNotePage = b; }
 
-    inline  sal_uInt16 GetPhyPageNum() const        { return nPhyPageNum;}
-    inline  void SetPhyPageNum( sal_uInt16 nNum )   { nPhyPageNum = nNum;}
-    inline  void DecrPhyPageNum()               { --nPhyPageNum;     }
-    inline  void IncrPhyPageNum()               { ++nPhyPageNum;     }
+    inline	USHORT GetPhyPageNum() const	    { return nPhyPageNum;}
+    inline	void SetPhyPageNum( USHORT nNum )	{ nPhyPageNum = nNum;}
+    inline	void DecrPhyPageNum()				{ --nPhyPageNum;	 }
+    inline	void IncrPhyPageNum()				{ ++nPhyPageNum;	 }
 
     //Validieren, invalidieren und abfragen des Status der Seite.
     //Layout/Cntnt und jeweils Fly/nicht Fly werden getrennt betrachtet.
     inline void InvalidateFlyLayout() const;
     inline void InvalidateFlyCntnt() const;
     inline void InvalidateFlyInCnt() const;
-    inline void InvalidateLayout() const;
-    inline void InvalidateCntnt() const;
-    inline void InvalidateSpelling() const;
+    inline void	InvalidateLayout() const;
+    inline void	InvalidateCntnt() const;
+    inline void	InvalidateSpelling() const;
     inline void InvalidateSmartTags() const;
-    inline void InvalidateAutoCompleteWords() const;
+    inline void	InvalidateAutoCompleteWords() const;
     inline void InvalidateWordCount() const;
     inline void ValidateFlyLayout() const;
     inline void ValidateFlyCntnt() const;
     inline void ValidateFlyInCnt() const;
-    inline void ValidateLayout() const;
-    inline void ValidateCntnt() const;
-    inline void ValidateSpelling()  const;
+    inline void	ValidateLayout() const;
+    inline void	ValidateCntnt()	const;
+    inline void	ValidateSpelling()	const;
     inline void ValidateSmartTags() const;        // SMARTTAGS
     inline void ValidateAutoCompleteWords() const;
     inline void ValidateWordCount() const;
-    inline sal_Bool IsInvalid() const;
-    inline sal_Bool IsInvalidFly() const;
-    sal_Bool IsInvalidFlyLayout() const { return bInvalidFlyLayout; }
-    sal_Bool IsInvalidFlyCntnt() const { return bInvalidFlyCntnt; }
-    sal_Bool IsInvalidFlyInCnt() const { return bInvalidFlyInCnt; }
-    sal_Bool IsInvalidLayout() const { return bInvalidLayout; }
-    sal_Bool IsInvalidCntnt() const { return (bInvalidCntnt || bInvalidFlyInCnt); }
-    sal_Bool IsInvalidSpelling() const { return bInvalidSpelling; }
-    sal_Bool IsInvalidSmartTags() const { return bInvalidSmartTags; }   // SMARTTAGS
-    sal_Bool IsInvalidAutoCompleteWords() const { return bInvalidAutoCmplWrds; }
-    sal_Bool IsInvalidWordCount() const { return bInvalidWordCount; }
+    inline BOOL IsInvalid() const;
+    inline BOOL IsInvalidFly() const;
+    BOOL IsInvalidFlyLayout() const { return bInvalidFlyLayout; }
+    BOOL IsInvalidFlyCntnt() const { return bInvalidFlyCntnt; }
+    BOOL IsInvalidFlyInCnt() const { return bInvalidFlyInCnt; }
+    BOOL IsInvalidLayout() const { return bInvalidLayout; }
+    BOOL IsInvalidCntnt() const { return (bInvalidCntnt || bInvalidFlyInCnt); }
+    BOOL IsInvalidSpelling() const { return bInvalidSpelling; }
+    BOOL IsInvalidSmartTags() const { return bInvalidSmartTags; }   // SMARTTAGS
+    BOOL IsInvalidAutoCompleteWords() const { return bInvalidAutoCmplWrds; }
+    BOOL IsInvalidWordCount() const { return bInvalidWordCount; }
 
-    /** SwPageFrm::GetDrawBackgrdColor
+    /** SwPageFrm::GetDrawBackgrdColor - for #102450#
 
+        29.08.2002:
         determine the color, that is respectively will be drawn as background
         for the page frame.
+
+        @author OD
 
         @return reference to an instance of class Color
     */
@@ -288,8 +326,11 @@ public:
 
     /** paint margin area of a page
 
+        OD 20.11.2002 for #104598#:
         implement paint of margin area; margin area will be painted for a
         view shell with a window and if the document is not in online layout.
+
+        @author OD
 
         @param _rOutputRect
         input parameter - constant instance reference of the rectangle, for
@@ -304,8 +345,10 @@ public:
 
     /** paint page border and shadow
 
-        #i9719#
+        OD 12.02.2003 for #i9719# and #105645#
         implement paint of page border and shadow
+
+        @author OD
 
         @param _rPageRect
         input parameter - constant instance reference of the page rectangle.
@@ -315,27 +358,17 @@ public:
         @param _pViewShell
         input parameter - instance of the view shell, on which the output
         has to be generated.
-
-        @param bPaintRightShadow
-        Should we paint shadow on the right or not (used in book mode)
-
-        @param bFullBottomShadow
-        Should we have a bottom shadow of the same size as the pages or
-        not (for right pages in book mode in a LTR environment).
-
-        @param bRightSidebar
-        Is the note sidebar on the right or not (used to adjust the
-        shadow with & position).
     */
     static void PaintBorderAndShadow( const SwRect& _rPageRect,
                                       ViewShell*    _pViewShell,
                                       bool bPaintRightShadow,
-                                      bool bFullBottomShadow,
                                       bool bRightSidebar );
 
     /** get bound rectangle of border and shadow for repaints
 
-        #i9719#
+        OD 12.02.2003 for #i9719# and #105645#
+
+        author OD
 
         @param _rPageRect
         input parameter - constant instance reference of the page rectangle.
@@ -355,9 +388,11 @@ public:
                                              SwRect& _orBorderAndShadowBoundRect,
                                              const bool bRightSidebar );
 
-    static void PaintNotesSidebar(const SwRect& _rPageRect, ViewShell* _pViewShell, sal_uInt16 nPageNum, bool bRight);
+    static void PaintNotesSidebar(const SwRect& _rPageRect, ViewShell* _pViewShell, USHORT nPageNum, bool bRight);
     static void PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, ViewShell* _pViewShell, const Color aColorUp, const Color aColorDown);
     /**
+        mod #6i193#
+
         asks the page on which side a margin should be shown, e.g for notes
         returns true for left side, false for right side
     */
@@ -365,14 +400,20 @@ public:
 
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
+    // OD 12.02.2003 #i9719#, #105645#
+    inline sal_Int8 BorderPxWidth() const
+    {
+        return mnBorderPxWidth;
+    }
     inline sal_Int8 ShadowPxWidth() const
     {
         return mnShadowPxWidth;
     }
 
+    // OD 22.09.2003 #110978#
     const SwRect PrtWithoutHeaderAndFooter() const;
 
-    // #i28701#
+    // OD 2004-05-17 #i28701#
     inline bool IsLayoutInProgress() const
     {
         return mbLayoutInProgress;
@@ -405,86 +446,86 @@ inline const SwCntntFrm *SwPageFrm::FindLastBodyCntnt() const
 {
     return ((SwPageFrm*)this)->FindLastBodyCntnt();
 }
-inline void SwPageFrm::InvalidateFlyLayout() const
+inline void	SwPageFrm::InvalidateFlyLayout() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyLayout = sal_True;
+    ((SwPageFrm*)this)->bInvalidFlyLayout = TRUE;
 }
-inline void SwPageFrm::InvalidateFlyCntnt() const
+inline void	SwPageFrm::InvalidateFlyCntnt() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyCntnt = sal_True;
+    ((SwPageFrm*)this)->bInvalidFlyCntnt = TRUE;
 }
 inline void SwPageFrm::InvalidateFlyInCnt() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyInCnt = sal_True;
+    ((SwPageFrm*)this)->bInvalidFlyInCnt = TRUE;
 }
-inline void SwPageFrm::InvalidateLayout() const
+inline void	SwPageFrm::InvalidateLayout() const
 {
-    ((SwPageFrm*)this)->bInvalidLayout = sal_True;
+    ((SwPageFrm*)this)->bInvalidLayout = TRUE;
 }
-inline void SwPageFrm::InvalidateCntnt() const
+inline void	SwPageFrm::InvalidateCntnt() const
 {
-    ((SwPageFrm*)this)->bInvalidCntnt = sal_True;
+    ((SwPageFrm*)this)->bInvalidCntnt = TRUE;
 }
-inline void SwPageFrm::InvalidateSpelling() const
+inline void	SwPageFrm::InvalidateSpelling() const
 {
-    ((SwPageFrm*)this)->bInvalidSpelling = sal_True;
+    ((SwPageFrm*)this)->bInvalidSpelling = TRUE;
 }
 // SMARTTAGS
 inline void    SwPageFrm::InvalidateSmartTags() const
 {
-   ((SwPageFrm*)this)->bInvalidSmartTags = sal_True;
+   ((SwPageFrm*)this)->bInvalidSmartTags = TRUE;
 }
-inline void SwPageFrm::InvalidateAutoCompleteWords() const
+inline void	SwPageFrm::InvalidateAutoCompleteWords() const
 {
-    ((SwPageFrm*)this)->bInvalidAutoCmplWrds = sal_True;
+    ((SwPageFrm*)this)->bInvalidAutoCmplWrds = TRUE;
 }
 inline void SwPageFrm::InvalidateWordCount() const
 {
-    ((SwPageFrm*)this)->bInvalidWordCount = sal_True;
+    ((SwPageFrm*)this)->bInvalidWordCount = TRUE;
 }
-inline void SwPageFrm::ValidateFlyLayout() const
+inline void	SwPageFrm::ValidateFlyLayout() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyLayout = sal_False;
+    ((SwPageFrm*)this)->bInvalidFlyLayout = FALSE;
 }
-inline void SwPageFrm::ValidateFlyCntnt() const
+inline void	SwPageFrm::ValidateFlyCntnt() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyCntnt = sal_False;
+    ((SwPageFrm*)this)->bInvalidFlyCntnt = FALSE;
 }
 inline void SwPageFrm::ValidateFlyInCnt() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyInCnt = sal_False;
+    ((SwPageFrm*)this)->bInvalidFlyInCnt = FALSE;
 }
-inline void SwPageFrm::ValidateLayout() const
+inline void	SwPageFrm::ValidateLayout() const
 {
-    ((SwPageFrm*)this)->bInvalidLayout = sal_False;
+    ((SwPageFrm*)this)->bInvalidLayout = FALSE;
 }
-inline void SwPageFrm::ValidateCntnt() const
+inline void	SwPageFrm::ValidateCntnt() const
 {
-    ((SwPageFrm*)this)->bInvalidCntnt = sal_False;
+    ((SwPageFrm*)this)->bInvalidCntnt = FALSE;
 }
-inline void SwPageFrm::ValidateSpelling() const
+inline void	SwPageFrm::ValidateSpelling() const
 {
-    ((SwPageFrm*)this)->bInvalidSpelling = sal_False;
+    ((SwPageFrm*)this)->bInvalidSpelling = FALSE;
 }
 // SMARTTAGS
 inline void    SwPageFrm::ValidateSmartTags() const
 {
-   ((SwPageFrm*)this)->bInvalidSmartTags = sal_False;
+   ((SwPageFrm*)this)->bInvalidSmartTags = FALSE;
 }
 inline void SwPageFrm::ValidateAutoCompleteWords() const
 {
-    ((SwPageFrm*)this)->bInvalidAutoCmplWrds = sal_False;
+    ((SwPageFrm*)this)->bInvalidAutoCmplWrds = FALSE;
 }
 inline void SwPageFrm::ValidateWordCount() const
 {
-    ((SwPageFrm*)this)->bInvalidWordCount = sal_False;
+    ((SwPageFrm*)this)->bInvalidWordCount = FALSE;
 }
 
-inline sal_Bool SwPageFrm::IsInvalid() const
+inline BOOL SwPageFrm::IsInvalid() const
 {
     return (bInvalidCntnt || bInvalidLayout || bInvalidFlyInCnt);
 }
-inline sal_Bool SwPageFrm::IsInvalidFly() const
+inline BOOL SwPageFrm::IsInvalidFly() const
 {
     return bInvalidFlyLayout || bInvalidFlyCntnt;
 }
@@ -499,6 +540,6 @@ inline sal_Bool SwPageFrm::IsInvalidFly() const
 
 
 
-#endif  //_PAGEFRM_HXX
+#endif	//_PAGEFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

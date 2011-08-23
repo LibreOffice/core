@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,6 +31,7 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/worksheethelper.hxx"
@@ -119,13 +120,13 @@ public:
     void                importChartSheetView( const AttributeList& rAttribs );
 
     /** Imports the SHEETVIEW record containing sheet view settings. */
-    void                importSheetView( SequenceInputStream& rStrm );
+    void                importSheetView( RecordInputStream& rStrm );
     /** Imports the PANE record containing sheet pane settings. */
-    void                importPane( SequenceInputStream& rStrm );
+    void                importPane( RecordInputStream& rStrm );
     /** Imports the SELECTION record containing selection settings for a pane. */
-    void                importSelection( SequenceInputStream& rStrm );
+    void                importSelection( RecordInputStream& rStrm );
     /** Imports the CHARTSHEETVIEW record containing view settings of a chart sheet. */
-    void                importChartSheetView( SequenceInputStream& rStrm );
+    void                importChartSheetView( RecordInputStream& rStrm );
 
     /** Imports the WINDOW2 record containing sheet view settings. */
     void                importWindow2( BiffInputStream& rStrm );
@@ -138,9 +139,6 @@ public:
 
     /** Converts all imported sheet view settings. */
     void                finalizeImport();
-
-    /** Returns true, if the sheet layout is set to right-to-left. */
-    bool                isSheetRightToLeft() const;
 
 private:
     SheetViewModelRef   createSheetView();
@@ -185,9 +183,9 @@ public:
     /** Imports the oleSize element containing the visible size of the workbook. */
     void                importOleSize( const AttributeList& rAttribs );
     /** Imports the WORKBOOKVIEW record containing workbook view settings. */
-    void                importWorkbookView( SequenceInputStream& rStrm );
+    void                importWorkbookView( RecordInputStream& rStrm );
     /** Imports the OLESIZE record containing the visible size of the workbook. */
-    void                importOleSize( SequenceInputStream& rStrm );
+    void                importOleSize( RecordInputStream& rStrm );
     /** Imports the WINDOW1 record containing workbook view settings. */
     void                importWindow1( BiffInputStream& rStrm );
     /** Imports the OLESIZE record containing the visible size of the workbook. */

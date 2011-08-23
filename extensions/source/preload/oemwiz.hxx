@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ namespace preload
     };
     class LicenceView : public MultiLineEdit, public SfxListener
     {
-        sal_Bool            mbEndReached;
+        BOOL            mbEndReached;
         Link            maEndReachedHdl;
         Link            maScrolledHdl;
 
@@ -101,9 +101,9 @@ namespace preload
 
         void            ScrollDown( ScrollType eScroll );
 
-        sal_Bool            IsEndReached() const;
-        sal_Bool            EndReached() const { return mbEndReached; }
-        void            SetEndReached( sal_Bool bEnd ) { mbEndReached = bEnd; }
+        BOOL            IsEndReached() const;
+        BOOL            EndReached() const { return mbEndReached; }
+        void            SetEndReached( BOOL bEnd ) { mbEndReached = bEnd; }
 
         void            SetEndReachedHdl( const Link& rHdl )  { maEndReachedHdl = rHdl; }
         const Link&     GetAutocompleteHdl() const { return maEndReachedHdl; }
@@ -129,7 +129,7 @@ namespace preload
         String          aStrAccept;
         String          aStrNotAccept;
         String          aOldCancelText;
-        sal_Bool            bEndReached;
+        BOOL            bEndReached;
 
         OEMPreloadDialog* pPreloadDialog;
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,24 +52,24 @@ static void lcl_Move( Window &rWin, long nOffset )
 }
 
 
-void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
+void LoginDialog::HideControls_Impl( USHORT nFlags )
 {
-    bool bPathHide = sal_False;
-    bool bErrorHide = sal_False;
-    bool bAccountHide = sal_False;
-    bool bUseSysCredsHide = sal_False;
+    bool bPathHide = FALSE;
+    bool bErrorHide = FALSE;
+    bool bAccountHide = FALSE;
+    bool bUseSysCredsHide = FALSE;
 
     if ( ( nFlags & LF_NO_PATH ) == LF_NO_PATH )
     {
         aPathFT.Hide();
         aPathED.Hide();
         aPathBtn.Hide();
-        bPathHide = sal_True;
+        bPathHide = TRUE;
     }
     else if ( ( nFlags & LF_PATH_READONLY ) == LF_PATH_READONLY )
     {
-        aPathED.Enable( sal_False );
-        aPathBtn.Enable( sal_False );
+        aPathED.Enable( FALSE );
+        aPathBtn.Enable( FALSE );
     }
 
     if ( ( nFlags & LF_NO_USERNAME ) == LF_NO_USERNAME )
@@ -79,7 +79,7 @@ void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
     }
     else if ( ( nFlags & LF_USERNAME_READONLY ) == LF_USERNAME_READONLY )
     {
-        aNameED.Enable( sal_False );
+        aNameED.Enable( FALSE );
     }
 
     if ( ( nFlags & LF_NO_PASSWORD ) == LF_NO_PASSWORD )
@@ -96,20 +96,20 @@ void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
         aErrorInfo.Hide();
         aErrorFT.Hide();
         aLogin1FL.Hide();
-        bErrorHide = sal_True;
+        bErrorHide = TRUE;
     }
 
     if ( ( nFlags & LF_NO_ACCOUNT ) == LF_NO_ACCOUNT )
     {
         aAccountFT.Hide();
         aAccountED.Hide();
-        bAccountHide = sal_True;
+        bAccountHide = TRUE;
     }
 
     if ( ( nFlags & LF_NO_USESYSCREDS ) == LF_NO_USESYSCREDS )
     {
         aUseSysCredsCB.Hide();
-        bUseSysCredsHide = sal_True;
+        bUseSysCredsHide = TRUE;
     }
 
     if ( bErrorHide )
@@ -163,7 +163,7 @@ void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
 
     if ( bAccountHide )
     {
-        long nOffset = aAccountED.GetPosPixel().Y() -
+        long nOffset = aAccountED.GetPosPixel().Y() - 
                        aPasswordED.GetPosPixel().Y();
         lcl_Move( aSavePasswdBtn, nOffset );
         lcl_Move( aUseSysCredsCB, nOffset );
@@ -179,7 +179,7 @@ void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
 
     if ( bUseSysCredsHide )
     {
-        long nOffset = aUseSysCredsCB.GetPosPixel().Y() -
+        long nOffset = aUseSysCredsCB.GetPosPixel().Y() - 
                        aSavePasswdBtn.GetPosPixel().Y();
         lcl_Move( aButtonsFL, nOffset );
         lcl_Move( aOKBtn, nOffset );
@@ -193,7 +193,7 @@ void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
 };
 
 // -----------------------------------------------------------------------
-void LoginDialog::EnableUseSysCredsControls_Impl( sal_Bool bUseSysCredsEnabled )
+void LoginDialog::EnableUseSysCredsControls_Impl( BOOL bUseSysCredsEnabled )
 {
     aErrorInfo.Enable( !bUseSysCredsEnabled );
     aErrorFT.Enable( !bUseSysCredsEnabled );
@@ -249,7 +249,7 @@ IMPL_LINK( LoginDialog, UseSysCredsHdl_Impl, CheckBox *, EMPTYARG )
 LoginDialog::LoginDialog
 (
     Window* pParent,
-    sal_uInt16 nFlags,
+    USHORT nFlags,
     const String& rServer,
     const String* pRealm,
     ResMgr* pResMgr
@@ -262,21 +262,21 @@ LoginDialog::LoginDialog
     aLogin1FL       ( this, ResId( FL_LOGIN_1, *pResMgr ) ),
     aRequestInfo    ( this, ResId( FT_INFO_LOGIN_REQUEST, *pResMgr ) ),
     aLogin2FL       ( this, ResId( FL_LOGIN_2, *pResMgr ) ),
-    aPathFT         ( this, ResId( FT_LOGIN_PATH, *pResMgr ) ),
-    aPathED         ( this, ResId( ED_LOGIN_PATH, *pResMgr ) ),
-    aPathBtn        ( this, ResId( BTN_LOGIN_PATH, *pResMgr ) ),
-    aNameFT         ( this, ResId( FT_LOGIN_USERNAME, *pResMgr ) ),
-    aNameED         ( this, ResId( ED_LOGIN_USERNAME, *pResMgr ) ),
-    aPasswordFT     ( this, ResId( FT_LOGIN_PASSWORD, *pResMgr ) ),
-    aPasswordED     ( this, ResId( ED_LOGIN_PASSWORD, *pResMgr ) ),
-    aAccountFT      ( this, ResId( FT_LOGIN_ACCOUNT, *pResMgr ) ),
-    aAccountED      ( this, ResId( ED_LOGIN_ACCOUNT, *pResMgr ) ),
-    aSavePasswdBtn  ( this, ResId( CB_LOGIN_SAVEPASSWORD, *pResMgr ) ),
-    aUseSysCredsCB  ( this, ResId( CB_LOGIN_USESYSCREDS, *pResMgr ) ),
+    aPathFT			( this, ResId( FT_LOGIN_PATH, *pResMgr ) ),
+    aPathED			( this, ResId( ED_LOGIN_PATH, *pResMgr ) ),
+    aPathBtn		( this, ResId( BTN_LOGIN_PATH, *pResMgr ) ),
+    aNameFT			( this, ResId( FT_LOGIN_USERNAME, *pResMgr ) ),
+    aNameED			( this, ResId( ED_LOGIN_USERNAME, *pResMgr ) ),
+    aPasswordFT		( this, ResId( FT_LOGIN_PASSWORD, *pResMgr ) ),
+    aPasswordED		( this, ResId( ED_LOGIN_PASSWORD, *pResMgr ) ),
+    aAccountFT		( this, ResId( FT_LOGIN_ACCOUNT, *pResMgr ) ),
+    aAccountED		( this, ResId( ED_LOGIN_ACCOUNT, *pResMgr ) ),
+    aSavePasswdBtn	( this, ResId( CB_LOGIN_SAVEPASSWORD, *pResMgr ) ),
+    aUseSysCredsCB	( this, ResId( CB_LOGIN_USESYSCREDS, *pResMgr ) ),
     aButtonsFL      ( this, ResId( FL_BUTTONS, *pResMgr ) ),
-    aOKBtn          ( this, ResId( BTN_LOGIN_OK, *pResMgr ) ),
-    aCancelBtn      ( this, ResId( BTN_LOGIN_CANCEL, *pResMgr ) ),
-    aHelpBtn        ( this, ResId( BTN_LOGIN_HELP, *pResMgr ) )
+    aOKBtn			( this, ResId( BTN_LOGIN_OK, *pResMgr ) ),
+    aCancelBtn		( this, ResId( BTN_LOGIN_CANCEL, *pResMgr ) ),
+    aHelpBtn		( this, ResId( BTN_LOGIN_HELP, *pResMgr ) )
 
 {
     UniString aRequest;
@@ -310,15 +310,15 @@ LoginDialog::LoginDialog
 
 LoginDialog::~LoginDialog()
 {
-}
+}    
 
 // -----------------------------------------------------------------------
 
-void LoginDialog::SetUseSystemCredentials( sal_Bool bUse )
-{
+void LoginDialog::SetUseSystemCredentials( BOOL bUse )
+{ 
     if ( aUseSysCredsCB.IsVisible() )
     {
-        aUseSysCredsCB.Check( bUse );
+        aUseSysCredsCB.Check( bUse ); 
         EnableUseSysCredsControls_Impl( bUse );
     }
 }

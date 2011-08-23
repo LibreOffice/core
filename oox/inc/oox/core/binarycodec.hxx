@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,6 @@
 
 #ifndef OOX_CORE_BINARYCODEC_HXX
 #define OOX_CORE_BINARYCODEC_HXX
-
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
 
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
@@ -89,22 +86,6 @@ public:
      */
     void                initKey( const sal_uInt8 pnPassData[ 16 ] );
 
-    /** Initializes the algorithm with the encryption data.
-
-        @param aData
-            The sequence contains the necessary data to initialize
-            the codec.
-     */
-    bool                initCodec( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aData );
-
-    /** Retrieves the encryption data
-
-        @return
-            The sequence contains the necessary data to initialize
-            the codec.
-     */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > getEncryptionData();
-
     /** Verifies the validity of the password using the passed key and hash.
 
         @precond
@@ -146,7 +127,7 @@ public:
             this size.
 
         @return
-            True = decoding was successful (no error occurred).
+            True = decoding was successful (no error occured).
     */
     bool                decode(
                             sal_uInt8* pnDestData,
@@ -166,9 +147,19 @@ public:
             Number of bytes to be skipped (cipher "seeks" forward).
 
         @return
-            True = skip was successful (no error occurred).
+            True = skip was successful (no error occured).
      */
     bool                skip( sal_Int32 nBytes );
+
+    // static -----------------------------------------------------------------
+
+    /** Calculates the 16-bit hash value for the given password.
+
+        The password data may be longer than 16 bytes. The array does not need
+        to be terminated with a null byte (but it can without invalidating the
+        result).
+     */
+    static sal_uInt16   getHash( const sal_uInt8* pnPassData, sal_Int32 nSize );
 
 private:
     CodecType           meCodecType;        /// Codec type.
@@ -198,22 +189,6 @@ public:
     explicit            BinaryCodec_RCF();
 
                         ~BinaryCodec_RCF();
-
-    /** Initializes the algorithm with the encryption data.
-
-        @param aData
-            The sequence contains the necessary data to initialize
-            the codec.
-     */
-    bool            initCodec( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aData );
-
-    /** Retrieves the encryption data
-
-        @return
-            The sequence contains the necessary data to initialize
-            the codec.
-     */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > getEncryptionData();
 
     /** Initializes the algorithm with the specified password and document ID.
 
@@ -279,7 +254,7 @@ public:
             this size.
 
         @return
-            True = decoding was successful (no error occurred).
+            True = decoding was successful (no error occured).
     */
     bool                decode(
                             sal_uInt8* pnDestData,
@@ -299,19 +274,14 @@ public:
             Number of bytes to be skipped (cipher "seeks" forward).
 
         @return
-            True = skip was successful (no error occurred).
+            True = skip was successful (no error occured).
      */
     bool                skip( sal_Int32 nBytes );
 
 private:
-    void                InitKeyImpl(
-                            const sal_uInt8 pKeyData[64],
-                            const sal_uInt8 pUnique[16] );
-
     rtlCipher           mhCipher;
     rtlDigest           mhDigest;
     sal_uInt8           mpnDigestValue[ RTL_DIGEST_LENGTH_MD5 ];
-    sal_uInt8           mpnUnique[16];
 };
 
 // ============================================================================

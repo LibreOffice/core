@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,55 +24,63 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_io_XDataExporter_idl__
-#define __com_sun_star_io_XDataExporter_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-#include <com/sun/star/io/XOutputStream.idl>
-
-#include <com/sun/star/lang/XComponent.idl>
-
-#include <com/sun/star/io/XDataTransferEventListener.idl>
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module io {
-
-//=============================================================================
-
+#ifndef __com_sun_star_io_XDataExporter_idl__ 
+#define __com_sun_star_io_XDataExporter_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_XOutputStream_idl__ 
+#include <com/sun/star/io/XOutputStream.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_XComponent_idl__ 
+#include <com/sun/star/lang/XComponent.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_XDataTransferEventListener_idl__ 
+#include <com/sun/star/io/XDataTransferEventListener.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module io {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: interface com::sun::star::io::XDataExporter
 /** makes it possible to export data from a component into a data sink.
-
+    
     <p>Exporter objects are registered for specific components and data types.
     </p>
  */
 published interface XDataExporter: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::io::XDataExporter::exportData
     /** exports data for a component into an output stream.
      */
-    [oneway] void exportData( [in] com::sun::star::io::XOutputStream aOutputStream,
-             [in] com::sun::star::lang::XComponent Component,
-             [in] com::sun::star::io::XDataTransferEventListener aListener );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void exportData( [in] com::sun::star::io::XOutputStream aOutputStream, 
+             [in] com::sun::star::lang::XComponent Component, 
+             [in] com::sun::star::io::XDataTransferEventListener aListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::io::XDataExporter::cancel
     /** cancels the export process.
      */
-    [oneway] void cancel();
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    [oneway] void cancel(); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

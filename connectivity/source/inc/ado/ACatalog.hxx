@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,22 +39,22 @@ namespace connectivity
 
         class OCatalog : public connectivity::sdbcx::OCatalog
         {
-            WpADOCatalog    m_aCatalog;
-            OConnection*    m_pConnection;
+            WpADOCatalog	m_aCatalog;
+            OConnection*	m_pConnection;
 
         public:
             virtual void refreshTables();
-            virtual void refreshViews() ;
+            virtual void refreshViews()	;
             virtual void refreshGroups();
-            virtual void refreshUsers() ;
+            virtual void refreshUsers()	;
 
         public:
             OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon);
             ~OCatalog();
 
-            OConnection*        getConnection()     const { return m_pConnection;   }
-            sdbcx::OCollection* getPrivateTables()  const { return m_pTables;       }
-            WpADOCatalog        getCatalog()        const { return m_aCatalog;      }
+            OConnection*		getConnection()		const { return m_pConnection;	}
+            sdbcx::OCollection*	getPrivateTables()	const { return m_pTables;		}
+            WpADOCatalog		getCatalog()		const { return m_aCatalog;		}
         };
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexE
 sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( RuntimeException )
 {
         Reference < XInterface > xI = xMSF->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.IndexEntrySupplier_")) + name);
+            OUString::createFromAscii("com.sun.star.i18n.IndexEntrySupplier_") + name);
 
         if ( xI.is() ) {
             xI->queryInterface( ::getCppuType((const Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier>*)0) ) >>= xIES;
@@ -125,7 +125,7 @@ sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(con
 Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL
 IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, const OUString& rSortAlgorithm) throw (RuntimeException)
 {
-        if (xIES.is() && rSortAlgorithm == aSortAlgorithm && rLocale.Language == aLocale.Language &&
+        if (xIES.is() && rSortAlgorithm == aSortAlgorithm && rLocale.Language == aLocale.Language && 
                 rLocale.Country == aLocale.Country && rLocale.Variant == aLocale.Variant)
             return xIES;
         else if (xMSF.is()) {
@@ -168,7 +168,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
                         // load service with name <base>_<algorithm>
                 (a > 0 && createLocaleSpecificIndexEntrySupplier(aSortAlgorithm)) ||
                         // load default service with name <base>_Unicode
-                        createLocaleSpecificIndexEntrySupplier(OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode")))) {
+                        createLocaleSpecificIndexEntrySupplier(OUString::createFromAscii("Unicode"))) {
                 return xIES;
             }
         }
@@ -181,7 +181,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePage
         Sequence< OUString > aFollowPageWords = LocaleData().getFollowPageWords(rLocale);
 
         return (bMorePages && aFollowPageWords.getLength() > 1) ?
-            aFollowPageWords[1] : (aFollowPageWords.getLength() > 0 ?
+            aFollowPageWords[1] : (aFollowPageWords.getLength() > 0 ? 
             aFollowPageWords[0] : OUString());
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,13 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/dialogs.hrc>
-#include <svx/prtqry.hxx>
+#include <prtqry.hxx>
 #include <svx/dialmgr.hxx>
 #include <tools/shl.hxx>
 
+/* -----------------------------01.02.00 13:57--------------------------------
+
+ ---------------------------------------------------------------------------*/
 SvxPrtQryBox::SvxPrtQryBox(Window* pParent) :
     MessBox(pParent, 0,
             String(SVX_RES(RID_SVXSTR_QRY_PRINT_TITLE)),
@@ -48,7 +51,9 @@ SvxPrtQryBox::SvxPrtQryBox(Window* pParent) :
     AddButton(BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON);
     SetButtonHelpText( RET_OK, String() );
 }
+/* -----------------------------01.02.00 13:57--------------------------------
 
+ ---------------------------------------------------------------------------*/
 SvxPrtQryBox::~SvxPrtQryBox()
 {
 }

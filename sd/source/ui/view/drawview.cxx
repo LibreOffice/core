@@ -2,7 +2,7 @@
     /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -157,10 +157,10 @@ void DrawView::ModelHasChanged()
 |*
 \************************************************************************/
 
-sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
-                                            sal_Bool bReplaceAll)
+BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
+                                            BOOL bReplaceAll)
 {
-    sal_Bool bOk = sal_False;
+    BOOL bOk = FALSE;
 
     // wird eine Masterpage bearbeitet?
     if ( mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE )
@@ -175,11 +175,11 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
             // Textedit
             String aTemplateName(aLayoutName);
 
-            sal_uInt32 nInv = pEditObject->GetObjInventor();
+            UINT32 nInv = pEditObject->GetObjInventor();
 
             if (nInv == SdrInventor)
             {
-                sal_uInt16 eObjKind = pEditObject->GetObjIdentifier();
+                UINT16 eObjKind = pEditObject->GetObjIdentifier();
                 PresObjKind ePresObjKind = rPage.GetPresObjKind(pEditObject);
 
                 if ( ePresObjKind == PRESOBJ_TITLE ||
@@ -199,18 +199,18 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                     pSheet->GetItemSet().Put(aTempSet);
                     pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                    bOk = sal_True;
+                    bOk = TRUE;
                 }
                 else if (eObjKind == OBJ_OUTLINETEXT)
                 {
                     // Presentation object outline
-                    OutlinerView* pOV   = GetTextEditOutlinerView();
+                    OutlinerView* pOV	= GetTextEditOutlinerView();
                     ::Outliner* pOutliner = pOV->GetOutliner();
-
+                    List*		  pList = (List*)pOV->CreateSelectionList();
                     aTemplateName += String(SdResId(STR_LAYOUT_OUTLINE));
 
-                    pOutliner->SetUpdateMode(sal_False);
-                    mpDocSh->SetWaitCursor( sal_True );
+                    pOutliner->SetUpdateMode(FALSE);
+                    mpDocSh->SetWaitCursor( TRUE );
 
                     // Platzhalter durch Vorlagennamen ersetzen
                     String aComment(SdResId(STR_UNDO_CHANGE_PRES_OBJECT));
@@ -219,16 +219,11 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     aComment.Insert( String((SdResId(STR_PSEUDOSHEET_OUTLINE))), nPos);
                     mpDocSh->GetUndoManager()->EnterListAction( aComment, String() );
 
-                    std::vector<Paragraph*> aSelList;
-                    pOV->CreateSelectionList(aSelList);
-
-                    std::vector<Paragraph*>::reverse_iterator iter = aSelList.rbegin();
-                    Paragraph* pPara = iter != aSelList.rend() ? *iter : NULL;
-
+                    Paragraph* pPara = (Paragraph*)pList->Last();
                     while (pPara)
                     {
-                        sal_uLong nParaPos = pOutliner->GetAbsPos( pPara );
-                        sal_Int16 nDepth = pOutliner->GetDepth( (sal_uInt16) nParaPos );
+                        ULONG nParaPos = pOutliner->GetAbsPos( pPara );
+                        sal_Int16 nDepth = pOutliner->GetDepth( (USHORT) nParaPos );
                         String aName(rPage.GetLayoutName());
                         aName += (sal_Unicode)(' ');
                         aName += String::CreateFromInt32( (nDepth <= 0) ? 1 : nDepth + 1 );
@@ -265,20 +260,20 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                                 pOutlSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                         }
 
-                        ++iter;
-                        pPara = iter != aSelList.rend() ? *iter : NULL;
+                        pPara = (Paragraph*)pList->Prev();
 
                         if( !pPara && nDepth > 0 &&  rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON &&
-                            pOutliner->GetDepth( (sal_uInt16) pOutliner->GetAbsPos(*(aSelList.begin())) ) > 0 )
+                            pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( (Paragraph*) pList->First() ) ) > 0 )
                             pPara = pOutliner->GetParagraph( 0 );  // Put NumBulletItem in outline level 1
                     }
 
-                    mpDocSh->SetWaitCursor( sal_False );
-                    pOV->GetOutliner()->SetUpdateMode(sal_True);
+                    mpDocSh->SetWaitCursor( FALSE );
+                    pOV->GetOutliner()->SetUpdateMode(TRUE);
 
                     mpDocSh->GetUndoManager()->LeaveListAction();
 
-                    bOk = sal_True;
+                    delete pList;
+                    bOk = TRUE;
                 }
                 else
                 {
@@ -290,15 +285,15 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
         {
             // Selection
             const SdrMarkList& rList = GetMarkedObjectList();
-            sal_uLong nMarkCount         = rList.GetMarkCount();
-            for (sal_uLong nMark = 0; nMark < nMarkCount; nMark++)
+            ULONG nMarkCount		 = rList.GetMarkCount();
+            for (ULONG nMark = 0; nMark < nMarkCount; nMark++)
             {
                 SdrObject* pObject = rList.GetMark(nMark)->GetMarkedSdrObj();
-                sal_uInt32 nInv = pObject->GetObjInventor();
+                UINT32 nInv = pObject->GetObjInventor();
 
                 if (nInv == SdrInventor)
                 {
-                    sal_uInt16 eObjKind = pObject->GetObjIdentifier();
+                    UINT16 eObjKind = pObject->GetObjIdentifier();
                     PresObjKind ePresObjKind = rPage.GetPresObjKind(pObject);
                     String aTemplateName(aLayoutName);
 
@@ -319,13 +314,13 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                         pSheet->GetItemSet().Put(aTempSet,false);
                         pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                        bOk = sal_True;
+                        bOk = TRUE;
                     }
                     else if (eObjKind == OBJ_OUTLINETEXT)
                     {
                         // Presentation object outline
                         aTemplateName += String(SdResId(STR_LAYOUT_OUTLINE));
-                        for (sal_uInt16 nLevel = 9; nLevel > 0; nLevel--)
+                        for (USHORT nLevel = 9; nLevel > 0; nLevel--)
                         {
                             String aName(rPage.GetLayoutName());
                             aName += (sal_Unicode)(' ');
@@ -376,7 +371,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             nWhich = aWhichIter.NextWhich();
                         }
 
-                        bOk = sal_True;
+                        bOk = TRUE;
                     }
                 }
             }
@@ -385,7 +380,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                 bOk = ::sd::View::SetAttributes(rSet, bReplaceAll);
         }
     }
-    else    // nicht auf der Masterpage
+    else	// nicht auf der Masterpage
     {
         bOk = ::sd::View::SetAttributes(rSet, bReplaceAll);
     }
@@ -414,7 +409,7 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             mpDrawViewShell->ResetActualLayer();
         }
 
-        // switch to that page when it's not a master page
+        // #94278# switch to that page when it's not a master page
         if(HINT_SWITCHTOPAGE == eHintKind)
         {
             const SdrPage* pPage = ((const SdrHint&)rHint).GetPage();
@@ -439,7 +434,7 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 |*
 \************************************************************************/
 
-void DrawView::BlockPageOrderChangedHint(sal_Bool bBlock)
+void DrawView::BlockPageOrderChangedHint(BOOL bBlock)
 {
     if (bBlock)
         mnPOCHSmph++;
@@ -457,19 +452,19 @@ void DrawView::BlockPageOrderChangedHint(sal_Bool bBlock)
 |*
 \************************************************************************/
 
-sal_Bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
+BOOL DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 {
-    sal_Bool bResult = sal_True;
+    BOOL bResult = TRUE;
 
     // wird eine Masterpage bearbeitet?
     if (mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE)
     {
-        if (IsPresObjSelected(sal_False, sal_True))
+        if (IsPresObjSelected(FALSE, TRUE))
         {
 
             InfoBox(mpDrawViewShell->GetActiveWindow(),
                     String(SdResId(STR_ACTION_NOTPOSSIBLE))).Execute();
-            bResult = sal_False;
+            bResult = FALSE;
         }
         else
         {
@@ -497,7 +492,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::co
         mpVDev = NULL;
     }
 
-    sal_Bool bStandardPaint = sal_True;
+    BOOL bStandardPaint = TRUE;
 
     SdDrawDocument* pDoc = mpDocShell->GetDoc();
     if( pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
@@ -510,7 +505,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::co
             {
                 if( pShowWindow == pOutDev )
                     PresPaint(rReg);
-                bStandardPaint = sal_False;
+                bStandardPaint = FALSE;
             }
         }
     }
@@ -542,7 +537,7 @@ void DrawView::PresPaint(const Region& rRegion)
 |* erschienene Animationsobjekte in der Diashow)
 \************************************************************************/
 
-sal_Bool DrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
+BOOL DrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
 {
     return FmFormView::IsObjMarkable(pObj, pPV);;
 }
@@ -594,11 +589,11 @@ void DrawView::DeleteMarked()
     SdPage* pPage = 0;
     bool bResetLayout = false;
 
-    const sal_uLong nMarkCount = GetMarkedObjectList().GetMarkCount();
+    const ULONG nMarkCount = GetMarkedObjectList().GetMarkCount();
     if( nMarkCount )
     {
         SdrMarkList aList( GetMarkedObjectList() );
-        for (sal_uLong nMark = 0; nMark < nMarkCount; nMark++)
+        for (ULONG nMark = 0; nMark < nMarkCount; nMark++)
         {
             SdrObject* pObj = aList.GetMark(nMark)->GetMarkedSdrObj();
             if( pObj && !pObj->IsEmptyPresObj() && pObj->GetUserCall() )

@@ -94,8 +94,8 @@ testcase tSetReferenceNoSelection
   Call hNewDocument
 
   '/// Open test file pageTest.sxw
-   hFileOpenLocally( sTestFile )
-   
+   Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Set curson to the 2nd page
    Call wTypeKeys "<MOD1 Home>"
@@ -182,8 +182,8 @@ testcase tInsertReferencePage
   Call hNewDocument
 
   '/// Open test file pageTest.sxw
-   hFileOpenLocally( sTestFile )
-   
+   Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Set curson to the 2nd page
    Call wTypeKeys "<MOD1 Home>"
@@ -242,8 +242,8 @@ testcase tInsertReferenceChapter
   Call hNewDocument
 
   '/// Open test file chapterTest.sxw
-   hFileOpenLocally( sTestFile )
-   
+   Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Set curson to the 2nd line
    Call wTypeKeys "<MOD1 Home>"
@@ -278,7 +278,7 @@ testcase tInsertReferenceChapter
    Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent( ) <> "2" then
-       Warnlog "Should get 2 , but get " & fGetFieldContent()
+       Warnlog "#i40625# Should get 2 , but get " & fGetFieldContent()
    end if
 
  '/// Close the document
@@ -685,8 +685,8 @@ testcase tInsertBookmarkPage
   Call hNewDocument
 
   '/// Open test file pageTest.sxw
-   hFileOpenLocally( sTestFile )
-   
+   Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Set curson to the 2nd page
    Call wTypeKeys "<MOD1 Home>"
@@ -743,8 +743,8 @@ testcase tInsertBookmarkChapter
   Call hNewDocument
 
   '/// Open test file chapterTest.sxw
-   hFileOpenLocally( sTestFile )
-   
+   Call hFileOpen(sTestFile)
+   Call sMakeReadOnlyDocumentEditable
 
   '/// Set curson to the 2nd line
    Call wTypeKeys "<MOD1 Home>"
@@ -776,7 +776,7 @@ testcase tInsertBookmarkChapter
    Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent( ) <> "2" then
-       Warnlog "Should get 2 , but get " & fGetFieldContent()
+       Warnlog "#i40625# Should get 2 , but get " & fGetFieldContent()
    end if
 
  '/// Close the document

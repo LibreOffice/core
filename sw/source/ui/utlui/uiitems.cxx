@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // Breitenangaben der Fussnotenlinien, mit TabPage abstimmen
-static const sal_uInt16 nFtnLines[] = {
+static const USHORT __FAR_DATA nFtnLines[] = {
     0,
     10,
     50,
@@ -58,7 +58,7 @@ static const sal_uInt16 nFtnLines[] = {
 #define FTN_LINE_STYLE_COUNT 5
 
 
-SwPageFtnInfoItem::SwPageFtnInfoItem( const sal_uInt16 nId, SwPageFtnInfo& rInfo) :
+SwPageFtnInfoItem::SwPageFtnInfoItem( const USHORT nId, SwPageFtnInfo& rInfo) :
     SfxPoolItem( nId ),
     aFtnInfo(rInfo)
 {
@@ -93,11 +93,11 @@ int  SwPageFtnInfoItem::operator==( const SfxPoolItem& rAttr ) const
 SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    String&             rText,
+    SfxMapUnit			eCoreUnit,
+    SfxMapUnit			ePresUnit,
+    String& 			rText,
     const IntlWrapper*    pIntl
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -107,7 +107,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            sal_uInt16 nHght = (sal_uInt16) GetPageFtnInfo().GetHeight();
+            USHORT nHght = (USHORT) GetPageFtnInfo().GetHeight();
             if ( nHght )
             {
                 rText = SW_RESSTR( STR_MAX_FTN_HEIGHT );
@@ -122,7 +122,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
+bool SwPageFtnInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
 {
     bool bRet = true;
     switch(nMemberId & ~CONVERT_TWIPS)
@@ -140,25 +140,13 @@ bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
         case MID_LINE_ADJUST       :     rVal <<= (sal_Int16)aFtnInfo.GetAdj();break;//text::HorizontalAdjust
         case MID_LINE_TEXT_DIST    :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetTopDist());break;
         case MID_LINE_FOOTNOTE_DIST:     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetBottomDist());break;
-        case MID_FTN_LINE_STYLE    :
-        {
-            switch ( aFtnInfo.GetLineStyle( ) )
-            {
-                default:
-                case ::editeng::NO_STYLE: rVal <<= sal_Int8( 0 ); break;
-                case ::editeng::SOLID: rVal <<= sal_Int8( 1 ); break;
-                case ::editeng::DOTTED: rVal <<= sal_Int8( 2 ); break;
-                case ::editeng::DASHED: rVal <<= sal_Int8( 3 ); break;
-            }
-            break;
-        }
         default:
             bRet = false;
     }
     return bRet;
 }
 
-bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
+bool SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
 {
     sal_Int32 nSet32 = 0;
     bool bRet = true;
@@ -214,20 +202,6 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             else
                 bRet = false;
         }
-        case MID_FTN_LINE_STYLE:
-        {
-            ::editeng::SvxBorderStyle eStyle = ::editeng::NO_STYLE;
-            sal_Int8 nSet = 0;
-            rVal >>= nSet;
-            switch ( nSet )
-            {
-                case 1: eStyle = ::editeng::SOLID; break;
-                case 2: eStyle = ::editeng::DOTTED; break;
-                case 3: eStyle = ::editeng::DASHED; break;
-                default: break;
-            }
-            aFtnInfo.SetLineStyle( eStyle );
-        }
         break;
         default:
             bRet = false;
@@ -235,7 +209,7 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
     return bRet;
 }
 
-SwPtrItem::SwPtrItem( const sal_uInt16 nId, void* pPtr ) :
+SwPtrItem::SwPtrItem( const USHORT nId, void* pPtr ) :
     SfxPoolItem( nId ),
     pMisc(pPtr)
 {
@@ -269,10 +243,10 @@ int SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 
-/*--------------------------------------------------------------
+/*-----------------12.11.97 12:55-------------------------------
  SwUINumRuleItem fuer die NumTabPages der FormatNumRule/Stylisten
 ---------------------------------------------------------------*/
-SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul, const sal_uInt16 nId )
+SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul, const USHORT nId )
     : SfxPoolItem( nId ), pRule( new SwNumRule( rRul ) )
 {
 }
@@ -300,13 +274,13 @@ int  SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
     return *pRule == *((SwUINumRuleItem&)rAttr).pRule;
 }
 
-bool SwUINumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SwUINumRuleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     uno::Reference< container::XIndexReplace >xRules = new SwXNumberingRules(*pRule);
     rVal.setValue(&xRules, ::getCppuType((uno::Reference< container::XIndexReplace>*)0));
     return true;
 }
-bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SwUINumRuleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     uno::Reference< container::XIndexReplace> xRulesRef;
     if(rVal >>= xRulesRef)
@@ -322,7 +296,7 @@ bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     return true;
 }
 
-SwBackgroundDestinationItem::SwBackgroundDestinationItem(sal_uInt16  _nWhich, sal_uInt16 nValue) :
+SwBackgroundDestinationItem::SwBackgroundDestinationItem(USHORT  _nWhich, USHORT nValue) :
     SfxUInt16Item(_nWhich, nValue)
 {
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include <tools/debug.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -72,7 +72,7 @@ void XMLTextMasterPageExport::exportHeaderFooterContent(
 
     // tracked changes (autostyles + changes list)
     GetExport().GetTextParagraphExport()->recordTrackedChangesForXText(rText);
-    GetExport().GetTextParagraphExport()->exportTrackedChanges(rText,
+    GetExport().GetTextParagraphExport()->exportTrackedChanges(rText, 
                                                                bAutoStyles);
     if( bAutoStyles )
         GetExport().GetTextParagraphExport()

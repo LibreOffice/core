@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,6 +75,8 @@ SetupApp::~SetupApp()
 }
 
 //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 
 extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
 {
@@ -127,7 +129,7 @@ extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
     {
         pSetup->DisplayError( ERROR_OUTOFMEMORY );
     }
-    catch ( UINT &nErr )
+    catch ( UINT nErr )
     {
         pSetup->DisplayError( nErr );
     }

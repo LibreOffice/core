@@ -33,6 +33,7 @@ PACKAGE = com$/sun$/star$/wizards$/fax
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
+#.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 JARFILES= unoil.jar jurt.jar ridl.jar juh.jar java_uno.jar java_uno_accessbridge commonwizards.jar
 
@@ -59,11 +60,3 @@ JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-ALLTAR : $(MISC)/fax.component
-
-$(MISC)/fax.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        fax.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_JAVA)$(JARTARGET)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt fax.component

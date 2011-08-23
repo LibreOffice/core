@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,16 +34,21 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <doc.hxx>          // fuer GetAttrPool
+#include <doc.hxx>			// fuer GetAttrPool
+#include <errhdl.hxx>
 #include <fmtcol.hxx>
+// --> OD 2006-11-22 #i71574#
 #include <fmtcolfunc.hxx>
+// <--
 #include <hints.hxx>
 #include <calc.hxx>
 #include <node.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>
-#include <switerator.hxx>
+
+//--> #outlinelevel added by zhaojianwei
 #include <svl/intitem.hxx>
+//<--end
 
 TYPEINIT1( SwTxtFmtColl, SwFmtColl );
 TYPEINIT1( SwGrfFmtColl, SwFmtColl );
@@ -52,10 +57,11 @@ TYPEINIT1( SwCollCondition, SwClient );
 
 SV_IMPL_PTRARR( SwFmtCollConditions, SwCollConditionPtr );
 
+// --> OD 2008-03-04 #refactorlists#
 namespace TxtFmtCollFunc
 {
 
-    // #i71574#
+    // --> OD 2006-11-22 #i71574#
     void CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
                                             SwFmt* pFmt,
                                             const SwNumRuleItem* pNewNumRuleItem )
@@ -64,19 +70,21 @@ namespace TxtFmtCollFunc
         if ( !pTxtFmtColl )
         {
     #if OSL_DEBUG_LEVEL > 1
-            OSL_FAIL( "<TxtFmtCollFunc::CheckTxtFmtCollFuncForDeletionOfAssignmentToOutlineStyle> - misuse of method - it's only for instances of <SwTxtFmtColl>" );
+            OSL_ENSURE( false,
+                    "<TxtFmtCollFunc::CheckTxtFmtCollFuncForDeletionOfAssignmentToOutlineStyle> - misuse of method - it's only for instances of <SwTxtFmtColl>" );
     #endif
             return;
         }
 
-        // #i73790#
+        // --> OD 2007-01-24 #i73790#
+    //    if ( pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
         if ( !pTxtFmtColl->StayAssignedToListLevelOfOutlineStyle() &&
              pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
         // <--
         {
             if ( !pNewNumRuleItem )
             {
-                pTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, sal_False, (const SfxPoolItem**)&pNewNumRuleItem );
+                pTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, FALSE, (const SfxPoolItem**)&pNewNumRuleItem );
             }
             if ( pNewNumRuleItem )
             {
@@ -97,7 +105,7 @@ namespace TxtFmtCollFunc
         SwNumRule* pNumRule( 0 );
 
         const SwNumRuleItem* pNumRuleItem( 0 );
-        rTxtFmtColl.GetItemState( RES_PARATR_NUMRULE, sal_False, (const SfxPoolItem**)&pNumRuleItem );
+        rTxtFmtColl.GetItemState( RES_PARATR_NUMRULE, FALSE, (const SfxPoolItem**)&pNumRuleItem );
         if ( pNumRuleItem )
         {
             const String sNumRuleName = pNumRuleItem->GetValue();
@@ -134,7 +142,7 @@ namespace TxtFmtCollFunc
  * SwTxtFmtColl  TXT
  */
 
-void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     if( GetDoc()->IsInDtor() )
     {
@@ -142,13 +150,16 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         return;
     }
 
-    bool bNewParent( false ); // #i66431# - adjust type of <bNewParent>
+    // --> OD 2006-06-16 #i66431# - adjust type of <bNewParent>
+    bool bNewParent( false );
+    // <--
     SvxULSpaceItem *pNewULSpace = 0, *pOldULSpace = 0;
     SvxLRSpaceItem *pNewLRSpace = 0, *pOldLRSpace = 0;
     SvxFontHeightItem* aFontSizeArr[3] = {0,0,0};
-    // #i70223#
+    // --> OD 2006-10-17 #i70223#
     const bool bAssignedToListLevelOfOutlineStyle(IsAssignedToListLevelOfOutlineStyle());//#outline level ,zhaojianwei
     const SwNumRuleItem* pNewNumRuleItem( 0L );
+    // <--
 
     SwAttrSetChg *pNewChgSet = 0,  *pOldChgSet = 0;
 
@@ -159,21 +170,22 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         pNewChgSet = (SwAttrSetChg*)pNew;
         pOldChgSet = (SwAttrSetChg*)pOld;
         pNewChgSet->GetChgSet()->GetItemState(
-            RES_LR_SPACE, sal_False, (const SfxPoolItem**)&pNewLRSpace );
+            RES_LR_SPACE, FALSE, (const SfxPoolItem**)&pNewLRSpace );
         pNewChgSet->GetChgSet()->GetItemState(
-            RES_UL_SPACE, sal_False, (const SfxPoolItem**)&pNewULSpace );
+            RES_UL_SPACE, FALSE, (const SfxPoolItem**)&pNewULSpace );
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_FONTSIZE,
-                        sal_False, (const SfxPoolItem**)&(aFontSizeArr[0]) );
+                        FALSE, (const SfxPoolItem**)&(aFontSizeArr[0]) );
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CJK_FONTSIZE,
-                        sal_False, (const SfxPoolItem**)&(aFontSizeArr[1]) );
+                        FALSE, (const SfxPoolItem**)&(aFontSizeArr[1]) );
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CTL_FONTSIZE,
-                        sal_False, (const SfxPoolItem**)&(aFontSizeArr[2]) );
-        // #i70223#, #i84745#
+                        FALSE, (const SfxPoolItem**)&(aFontSizeArr[2]) );
+        // --> OD 2006-10-17 #i70223#
+        // --> OD 2007-12-19 #i84745#
         // check, if attribute set is applied to this paragraph style
         if ( bAssignedToListLevelOfOutlineStyle &&
              pNewChgSet->GetTheChgdSet() == &GetAttrSet() )
         {
-            pNewChgSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, sal_False,
+            pNewChgSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, FALSE,
                                                    (const SfxPoolItem**)&pNewNumRuleItem );
         }
         // <--
@@ -189,8 +201,10 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             aFontSizeArr[0] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_FONTSIZE );
             aFontSizeArr[1] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CJK_FONTSIZE );
             aFontSizeArr[2] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CTL_FONTSIZE );
-            // #i66431# - modify has to be propagated, because of new parent format.
+            // --> OD 2006-06-16 #i66431#
+            // modify has to be propagated, because of new parent format.
             bNewParent = true;
+            // <--
         }
         break;
 
@@ -209,7 +223,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_CHRATR_CTL_FONTSIZE:
         aFontSizeArr[2] = (SvxFontHeightItem*)pNew;
         break;
-    // #i70223#
+    // --> OD 2006-10-17 #i70223#
     case RES_PARATR_NUMRULE:
     {
         if ( bAssignedToListLevelOfOutlineStyle )
@@ -221,7 +235,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         break;
     }
 
-    // #i70223#
+    // --> OD 2006-10-17 #i70223#
     if ( bAssignedToListLevelOfOutlineStyle && pNewNumRuleItem )
     {
         TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
@@ -229,34 +243,34 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
     // <--
 
-    int bWeiter = sal_True;
+    int bWeiter = TRUE;
 
     // dann pruefe doch mal gegen die eigenen Attribute
-    if( pNewLRSpace && SFX_ITEM_SET == GetItemState( RES_LR_SPACE, sal_False,
+    if( pNewLRSpace && SFX_ITEM_SET == GetItemState( RES_LR_SPACE, FALSE,
                                         (const SfxPoolItem**)&pOldLRSpace ))
     {
-        int bChg = sal_False;
-        if( pOldLRSpace != pNewLRSpace )    // verhinder Rekursion (SetAttr!!)
+        int bChg = FALSE;
+        if( pOldLRSpace != pNewLRSpace )	// verhinder Rekursion (SetAttr!!)
         {
             SvxLRSpaceItem aNew( *pOldLRSpace );
             // wir hatten eine relative Angabe -> neu berechnen
             if( 100 != aNew.GetPropLeft() )
             {
-                long nTmp = aNew.GetLeft();     // alten zum Vergleichen
+                long nTmp = aNew.GetLeft();		// alten zum Vergleichen
                 aNew.SetLeft( pNewLRSpace->GetLeft(), aNew.GetPropLeft() );
                 bChg |= nTmp != aNew.GetLeft();
             }
             // wir hatten eine relative Angabe -> neu berechnen
             if( 100 != aNew.GetPropRight() )
             {
-                long nTmp = aNew.GetRight();        // alten zum Vergleichen
+                long nTmp = aNew.GetRight();		// alten zum Vergleichen
                 aNew.SetRight( pNewLRSpace->GetRight(), aNew.GetPropRight() );
                 bChg |= nTmp != aNew.GetRight();
             }
             // wir hatten eine relative Angabe -> neu berechnen
             if( 100 != aNew.GetPropTxtFirstLineOfst() )
             {
-                short nTmp = aNew.GetTxtFirstLineOfst();        // alten zum Vergleichen
+                short nTmp = aNew.GetTxtFirstLineOfst();		// alten zum Vergleichen
                 aNew.SetTxtFirstLineOfst( pNewLRSpace->GetTxtFirstLineOfst(),
                                             aNew.GetPropTxtFirstLineOfst() );
                 bChg |= nTmp != aNew.GetTxtFirstLineOfst();
@@ -274,22 +288,22 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 
     if( pNewULSpace && SFX_ITEM_SET == GetItemState(
-            RES_UL_SPACE, sal_False, (const SfxPoolItem**)&pOldULSpace ) &&
-        pOldULSpace != pNewULSpace )    // verhinder Rekursion (SetAttr!!)
+            RES_UL_SPACE, FALSE, (const SfxPoolItem**)&pOldULSpace ) &&
+        pOldULSpace != pNewULSpace )	// verhinder Rekursion (SetAttr!!)
     {
         SvxULSpaceItem aNew( *pOldULSpace );
-        int bChg = sal_False;
+        int bChg = FALSE;
         // wir hatten eine relative Angabe -> neu berechnen
         if( 100 != aNew.GetPropUpper() )
         {
-            sal_uInt16 nTmp = aNew.GetUpper();      // alten zum Vergleichen
+            USHORT nTmp = aNew.GetUpper();		// alten zum Vergleichen
             aNew.SetUpper( pNewULSpace->GetUpper(), aNew.GetPropUpper() );
             bChg |= nTmp != aNew.GetUpper();
         }
         // wir hatten eine relative Angabe -> neu berechnen
         if( 100 != aNew.GetPropLower() )
         {
-            sal_uInt16 nTmp = aNew.GetLower();      // alten zum Vergleichen
+            USHORT nTmp = aNew.GetLower();		// alten zum Vergleichen
             aNew.SetLower( pNewULSpace->GetLower(), aNew.GetPropLower() );
             bChg |= nTmp != aNew.GetLower();
         }
@@ -310,7 +324,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     {
         SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
         if( pFSize && SFX_ITEM_SET == GetItemState(
-            pFSize->Which(), sal_False, (const SfxPoolItem**)&pOldFSize ) &&
+            pFSize->Which(), FALSE, (const SfxPoolItem**)&pOldFSize ) &&
             // verhinder Rekursion (SetAttr!!)
             pFSize != pOldFSize )
         {
@@ -325,7 +339,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             else
             {
                 // wir hatten eine relative Angabe -> neu berechnen
-                sal_uInt32 nTmp = pOldFSize->GetHeight();       // alten zum Vergleichen
+                UINT32 nTmp = pOldFSize->GetHeight();		// alten zum Vergleichen
                 SvxFontHeightItem aNew(240 , 100, pFSize->Which());
                 aNew.SetHeight( pFSize->GetHeight(), pOldFSize->GetProp(),
                                 pOldFSize->GetPropUnit() );
@@ -346,18 +360,19 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         SwFmtColl::Modify( pOld, pNew );
 }
 
-sal_Bool SwTxtFmtColl::IsAtDocNodeSet() const
+BOOL SwTxtFmtColl::IsAtDocNodeSet() const
 {
-    SwIterator<SwCntntNode,SwFmtColl> aIter( *this );
+    SwClientIter aIter( *(SwModify*)this );
     const SwNodes& rNds = GetDoc()->GetNodes();
-    for( SwCntntNode* pNode = aIter.First(); pNode; pNode = aIter.Next() )
-        if( &(pNode->GetNodes()) == &rNds )
-            return sal_True;
+    for( SwClient* pC = aIter.First(TYPE(SwCntntNode)); pC; pC = aIter.Next() )
+        if( &((SwCntntNode*)pC)->GetNodes() == &rNds )
+            return TRUE;
 
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
+// --> OD 2008-03-04 #refactorlists#
+BOOL SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
 {
     const bool bIsNumRuleItem = rAttr.Which() == RES_PARATR_NUMRULE;
     if ( bIsNumRuleItem )
@@ -365,7 +380,7 @@ sal_Bool SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
         TxtFmtCollFunc::RemoveFromNumRule( *this );
     }
 
-    const sal_Bool bRet = SwFmtColl::SetFmtAttr( rAttr );
+    const BOOL bRet = SwFmtColl::SetFmtAttr( rAttr );
 
     if ( bIsNumRuleItem )
     {
@@ -375,16 +390,16 @@ sal_Bool SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
     return bRet;
 }
 
-sal_Bool SwTxtFmtColl::SetFmtAttr( const SfxItemSet& rSet )
+BOOL SwTxtFmtColl::SetFmtAttr( const SfxItemSet& rSet )
 {
     const bool bIsNumRuleItemAffected =
-                rSet.GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET;
+                rSet.GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_SET;
     if ( bIsNumRuleItemAffected )
     {
         TxtFmtCollFunc::RemoveFromNumRule( *this );
     }
 
-    const sal_Bool bRet = SwFmtColl::SetFmtAttr( rSet );
+    const BOOL bRet = SwFmtColl::SetFmtAttr( rSet );
 
     if ( bIsNumRuleItemAffected )
     {
@@ -394,7 +409,7 @@ sal_Bool SwTxtFmtColl::SetFmtAttr( const SfxItemSet& rSet )
     return bRet;
 }
 
-sal_Bool SwTxtFmtColl::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
+BOOL SwTxtFmtColl::ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 )
 {
     const bool bIsNumRuleItemAffected =
                 ( nWhich2 != 0 && nWhich2 > nWhich1 )
@@ -406,18 +421,18 @@ sal_Bool SwTxtFmtColl::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
         TxtFmtCollFunc::RemoveFromNumRule( *this );
     }
 
-    const sal_Bool bRet = SwFmtColl::ResetFmtAttr( nWhich1, nWhich2 );
+    const BOOL bRet = SwFmtColl::ResetFmtAttr( nWhich1, nWhich2 );
 
     return bRet;
 }
 // <--
 
-// #i73790#
-sal_uInt16 SwTxtFmtColl::ResetAllFmtAttr()
+// --> OD 2007-01-24 #i73790#
+USHORT SwTxtFmtColl::ResetAllFmtAttr()
 {
     const bool bOldState( mbStayAssignedToListLevelOfOutlineStyle );
     mbStayAssignedToListLevelOfOutlineStyle = true;
-    // #i70748#
+    // --> OD 2008-12-16 #i70748#
     // Outline level is no longer a member, it is a attribute now.
     // Thus, it needs to be restored, if the paragraph style is assigned
     // to the outline style
@@ -426,9 +441,9 @@ sal_uInt16 SwTxtFmtColl::ResetAllFmtAttr()
                                      : -1;
     // <--
 
-    sal_uInt16 nRet = SwFmtColl::ResetAllFmtAttr();
+    USHORT nRet = SwFmtColl::ResetAllFmtAttr();
 
-    // #i70748#
+    // --> OD 2008-12-16 #i70748#
     if ( nAssignedOutlineStyleLevel != -1 )
     {
         AssignToListLevelOfOutlineStyle( nAssignedOutlineStyleLevel );
@@ -441,6 +456,7 @@ sal_uInt16 SwTxtFmtColl::ResetAllFmtAttr()
 }
 // <--
 
+// --> OD 2008-02-13 #newlistlevelattrs#
 bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
 {
     bool bAreListLevelIndentsApplicable( true );
@@ -450,12 +466,12 @@ bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
         // no list style applied to paragraph style
         bAreListLevelIndentsApplicable = false;
     }
-    else if ( GetItemState( RES_LR_SPACE, sal_False ) == SFX_ITEM_SET )
+    else if ( GetItemState( RES_LR_SPACE, FALSE ) == SFX_ITEM_SET )
     {
         // paragraph style has hard-set indent attributes
         bAreListLevelIndentsApplicable = false;
     }
-    else if ( GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET )
+    else if ( GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_SET )
     {
         // list style is directly applied to paragraph style and paragraph
         // style has no hard-set indent attributes
@@ -470,14 +486,14 @@ bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
         const SwTxtFmtColl* pColl = dynamic_cast<const SwTxtFmtColl*>(DerivedFrom());
         while ( pColl )
         {
-            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, sal_False ) == SFX_ITEM_SET )
+            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, FALSE ) == SFX_ITEM_SET )
             {
                 // indent attributes found in the paragraph style hierarchy.
                 bAreListLevelIndentsApplicable = false;
                 break;
             }
 
-            if ( pColl->GetAttrSet().GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET )
+            if ( pColl->GetAttrSet().GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_SET )
             {
                 // paragraph style with the list style found and until now no
                 // indent attributes are found in the paragraph style hierarchy.
@@ -497,15 +513,15 @@ bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
 
 //FEATURE::CONDCOLL
 
-SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
-                                sal_uLong nSubCond )
+SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, ULONG nMasterCond,
+                                ULONG nSubCond )
     : SwClient( pColl ), nCondition( nMasterCond )
 {
     aSubCondition.nSubCondition = nSubCond;
 }
 
 
-SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
+SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, ULONG nMasterCond,
                                     const String& rSubExp )
     : SwClient( pColl ), nCondition( nMasterCond )
 {
@@ -531,12 +547,6 @@ SwCollCondition::~SwCollCondition()
     if( USRFLD_EXPRESSION & nCondition )
         delete aSubCondition.pFldExpression;
 }
-
-void SwCollCondition::RegisterToFormat( SwFmt& rFmt )
-{
-    rFmt.Add( this );
-}
-
 
 
 int SwCollCondition::operator==( const SwCollCondition& rCmp ) const
@@ -571,7 +581,7 @@ int SwCollCondition::operator==( const SwCollCondition& rCmp ) const
 }
 
 
-void SwCollCondition::SetCondition( sal_uLong nCond, sal_uLong nSubCond )
+void SwCollCondition::SetCondition( ULONG nCond, ULONG nSubCond )
 {
     if( USRFLD_EXPRESSION & nCondition )
         delete aSubCondition.pFldExpression;
@@ -588,7 +598,7 @@ const SwCollCondition* SwConditionTxtFmtColl::HasCondition(
                         const SwCollCondition& rCond ) const
 {
     const SwCollCondition* pFnd = 0;
-    sal_uInt16 n;
+    USHORT n;
 
     for( n = 0; n < aCondColls.Count(); ++n )
         if( *( pFnd = aCondColls[ n ]) == rCond )
@@ -600,7 +610,7 @@ const SwCollCondition* SwConditionTxtFmtColl::HasCondition(
 
 void SwConditionTxtFmtColl::InsertCondition( const SwCollCondition& rCond )
 {
-    for( sal_uInt16 n = 0; n < aCondColls.Count(); ++n )
+    for( USHORT n = 0; n < aCondColls.Count(); ++n )
         if( *aCondColls[ n ] == rCond )
         {
             aCondColls.DeleteAndDestroy( n );
@@ -613,14 +623,14 @@ void SwConditionTxtFmtColl::InsertCondition( const SwCollCondition& rCond )
 }
 
 
-sal_Bool SwConditionTxtFmtColl::RemoveCondition( const SwCollCondition& rCond )
+BOOL SwConditionTxtFmtColl::RemoveCondition( const SwCollCondition& rCond )
 {
-    sal_Bool bRet = sal_False;
-    for( sal_uInt16 n = 0; n < aCondColls.Count(); ++n )
+    BOOL bRet = FALSE;
+    for( USHORT n = 0; n < aCondColls.Count(); ++n )
         if( *aCondColls[ n ] == rCond )
         {
             aCondColls.DeleteAndDestroy( n );
-            bRet = sal_True;
+            bRet = TRUE;
         }
 
     return bRet;
@@ -633,7 +643,7 @@ void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
     if( aCondColls.Count() )
         aCondColls.DeleteAndDestroy( 0, aCondColls.Count() );
     SwDoc& rDoc = *GetDoc();
-    for( sal_uInt16 n = 0; n < rCndClls.Count(); ++n )
+    for( USHORT n = 0; n < rCndClls.Count(); ++n )
     {
         SwCollCondition* pFnd = rCndClls[ n ];
         SwTxtFmtColl* pTmpColl = pFnd->GetTxtFmtColl()
@@ -654,7 +664,7 @@ void SwTxtFmtColl::SetAttrOutlineLevel( int nLevel)
 {
     OSL_ENSURE( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtFmtColl: Level Out Of Range" );
     SetFmtAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL,
-                            static_cast<sal_uInt16>(nLevel) ) );
+                            static_cast<UINT16>(nLevel) ) );
 }
 
 int SwTxtFmtColl::GetAttrOutlineLevel() const
@@ -674,25 +684,26 @@ void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
     mbAssignedToOutlineStyle = true;
     SetAttrOutlineLevel(nAssignedListLevel+1);
 
-    // #i100277#
-    SwIterator<SwTxtFmtColl,SwFmtColl> aIter( *this );
-    SwTxtFmtColl* pDerivedTxtFmtColl = aIter.First();
+    // --> OD 2009-03-18 #i100277#
+    SwClientIter aIter( *this );
+    SwTxtFmtColl* pDerivedTxtFmtColl =
+                dynamic_cast<SwTxtFmtColl*>(aIter.First( TYPE( SwTxtFmtColl ) ));
     while ( pDerivedTxtFmtColl != 0 )
     {
         if ( !pDerivedTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_DEFAULT )
+            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_DEFAULT )
             {
                 SwNumRuleItem aItem(aEmptyStr);
                 pDerivedTxtFmtColl->SetFmtAttr( aItem );
             }
-            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_OUTLINELEVEL, sal_False ) == SFX_ITEM_DEFAULT )
+            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_OUTLINELEVEL, FALSE ) == SFX_ITEM_DEFAULT )
             {
                 pDerivedTxtFmtColl->SetAttrOutlineLevel( 0 );
             }
         }
 
-        pDerivedTxtFmtColl = aIter.Next();
+        pDerivedTxtFmtColl = dynamic_cast<SwTxtFmtColl*>(aIter.Next());
     }
     // <--
 }

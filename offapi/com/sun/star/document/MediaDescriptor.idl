@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,6 @@
 
 #ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
-
-#ifndef __com_sun_star_beans_NamedValue_idl__
-#include <com/sun/star/beans/NamedValue.idl>
 #endif
 
 #ifndef __com_sun_star_util_URL_idl__
@@ -145,10 +141,10 @@ published service MediaDescriptor
         for a special component type. Format of that depends from real
         type of addressed component.
         </p>
-
+        
         <p>
         For extensibility, it is recommended to use values of type
-        sequence<com.sun.star.beans.NamedValue> with this property.
+        sequence<com.sun.star.beans.PropertyValue> with this property.
         </p>
      */
     [optional,property] any ComponentData;
@@ -166,23 +162,6 @@ published service MediaDescriptor
         </p>
      */
     [optional,property] string DocumentTitle;
-
-    //-------------------------------------------------------------------------
-    /** encryption information for encryption/decryption of documents
-
-        <p>
-        It contains the necessary information for encryption/decryption of
-        a component (if necessary).
-        If neither password nor encryption data is specified, loading of
-        a password protected document will fail, storing will be done without
-        encryption. If both are provided, the encryption data is used
-        ( if the filter supports it ).
-        </p>
-        <p>
-        The encryption data is generated based on the password.
-        </p>
-     */
-    [optional,property] sequence< ::com::sun::star::beans::NamedValue > EncryptionData;
 
     //-------------------------------------------------------------------------
     /** same as <member>MediaDescriptor::URL</member>
@@ -293,7 +272,7 @@ published service MediaDescriptor
         The implemented API provides a default implementation for it that can handle many situations.
         If no InteractionHandler is set, a suitable exception is thrown.
         It is not allowed to keep a reference to this object, even not in the loaded
-        or stored component's copy of the MediaDescriptor provided by its arguments attribute.
+        or stored components' copy of the MediaDescriptor provided by its arguments attribute.
         </p>
      */
     [optional,property] com::sun::star::task::XInteractionHandler InteractionHandler;
@@ -302,8 +281,8 @@ published service MediaDescriptor
     /** jump to a marked position after loading
 
         <p>
-        This is the same as the text behind a "#" in a http URL. But
-        this syntax with a "#" is not specified in most URL schemas.
+        This is the same as the text behind a '#' in a http URL. But
+        this syntax with a '#' is not specified in most URL schemas.
         </p>
      */
     [optional,property] string JumpMark;
@@ -387,10 +366,8 @@ published service MediaDescriptor
 
         <p>
         It contains a password for loading or storing a component (if necessary).
-        If neither password nor encryption data is specified, loading of
-        a password protected document will fail, storing will be done without
-        encryption. If both are provided, the encryption data is used
-        ( if the filter supports it ).
+        If no password is specified, loading of a password protected document
+        will fail, storing will be done without encryption.
         </p>
      */
     [optional,property] string Password;
@@ -489,7 +466,7 @@ published service MediaDescriptor
         Object implementing the <type scope="com::sun::star::task">XStatusIndicator</type>
         interface that can be used to give status information (text or progress) for the task.
         The office provides a default implementation for it. It is not allowed to keep
-        a reference to this object, even not in the loaded or stored component's
+        a reference to this object, even not in the loaded or stored components'
         copy of the MediaDescriptor provided by its arguments attribute.
         </p>
      */

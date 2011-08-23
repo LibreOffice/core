@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,9 +60,9 @@ using namespace com::sun::star;
 //==================================================================
 
 void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rectangle& rRect,
-                                SCTAB nSrcTab, sal_uInt16 nX1, sal_uInt16 nY1, sal_uInt16 nX2, sal_uInt16 nY2 )
+                                SCTAB nSrcTab, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 )
 {
-    //  wenn Chart nicht installiert ist, darf nicht auf SCH_MOD zugegriffen werden!
+    //	wenn Chart nicht installiert ist, darf nicht auf SCH_MOD zugegriffen werden!
     if ( !SvtModuleOptions().IsChart() )
         return;
 
@@ -85,7 +85,7 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
         DBG_ASSERT(pPage,"Page ?");
         pPage->InsertObject(pSdrOle2Obj);
 
-        pSdrOle2Obj->SetLogicRect(rRect);               // erst nach InsertObject !!!
+        pSdrOle2Obj->SetLogicRect(rRect);				// erst nach InsertObject !!!
         awt::Size aSz;
         aSz.Width = rRect.GetSize().Width();
         aSz.Height = rRect.GetSize().Height();

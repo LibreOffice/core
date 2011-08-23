@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -179,7 +179,7 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
     OSL_ASSERT(pTarget != NULL
                && (pSource != NULL || nLength == 0)
                && nLength >= 0
-               && (nLength == 0 || rtl_isOctetTextEncoding(nEncoding)));
+               && rtl_isOctetTextEncoding(nEncoding));
 
     if ( !nLength )
         rtl_string_new( pTarget );

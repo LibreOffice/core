@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "SchXMLImport.hxx"
 #include "SchXMLParagraphContext.hxx"
 
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 
@@ -67,7 +67,7 @@ void SchXMLParagraphContext::StartElement( const uno::Reference< xml::sax::XAttr
         {
             rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
             rtl::OUString aLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+            USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
             if (IsXMLToken(aLocalName, XML_ID))
             {
@@ -94,7 +94,7 @@ void SchXMLParagraphContext::EndElement()
 }
 
 SvXMLImportContext* SchXMLParagraphContext::CreateChildContext(
-    sal_uInt16 nPrefix,
+    USHORT nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {

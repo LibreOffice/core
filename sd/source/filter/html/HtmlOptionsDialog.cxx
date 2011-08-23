@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,8 +144,8 @@ Sequence< ::rtl::OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceName
 // -----------------------------------------------------------------------------
 
 SdHtmlOptionsDialog::SdHtmlOptionsDialog( const Reference< XMultiServiceFactory > & xMgr ) :
-    mrxMgr      ( xMgr ),
-    meDocType   ( DOCUMENT_TYPE_DRAW )
+    mrxMgr		( xMgr ),
+    meDocType	( DOCUMENT_TYPE_DRAW )
 {
 }
 
@@ -200,7 +200,7 @@ Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()
     sal_Int32 i, nCount;
     for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( maMediaDescriptor[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
+        if ( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
             break;
     }
     if ( i == nCount )
@@ -222,7 +222,7 @@ void SdHtmlOptionsDialog::setPropertyValues( const Sequence< PropertyValue > & a
     sal_Int32 i, nCount;
     for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( maMediaDescriptor[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
+        if ( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
         {
             maMediaDescriptor[ i ].Value >>= maFilterDataSequence;
             break;

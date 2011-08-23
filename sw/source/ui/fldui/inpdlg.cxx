@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,10 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
+
+
+#define _INPDLG_CXX
+
 #include <vcl/msgbox.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
@@ -48,13 +52,13 @@
 
 
 /*--------------------------------------------------------------------
-    Description: edit field-insert
+    Beschreibung: Feldeinfuegen bearbeiten
  --------------------------------------------------------------------*/
 
 SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
-                              SwField* pField, sal_Bool bNextButton ) :
+                              SwField* pField, BOOL bNextButton ) :
 
-    SvxStandardDialog(pParent,  SW_RES(DLG_FLD_INPUT)),
+    SvxStandardDialog(pParent,	SW_RES(DLG_FLD_INPUT)),
 
     rSh( rS ),
     pInpFld(0),
@@ -62,15 +66,15 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     pUsrType(0),
 
     aLabelED    (this, SW_RES(ED_LABEL  )),
-    aEditED     (this, SW_RES(ED_EDIT   )),
+    aEditED		(this, SW_RES(ED_EDIT	)),
     aEditFL     (this, SW_RES(FL_EDIT       )),
 
     aOKBT       (this, SW_RES(BT_OK     )),
-    aCancelBT   (this, SW_RES(BT_CANCEL )),
-    aNextBT     (this, SW_RES(PB_NEXT   )),
+    aCancelBT	(this, SW_RES(BT_CANCEL	)),
+    aNextBT		(this, SW_RES(PB_NEXT	)),
     aHelpBT     (this, SW_RES(PB_HELP    ))
 {
-    // switch font for Edit
+    // Font fuers Edit umschalten
     Font aFont(aEditED.GetFont());
     aFont.SetWeight(WEIGHT_LIGHT);
     aEditED.SetFont(aFont);
@@ -88,14 +92,14 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
         aHelpBT.SetPosPixel(aPos);
     }
 
-    // evaluation here
+    // Auswertung hier
     String aStr;
     if( RES_INPUTFLD == pField->GetTyp()->Which() )
-    {   // it is an input field
+    {	// Es ist eine Eingabefeld
         //
         pInpFld = (SwInputField*)pField;
         aLabelED.SetText( pInpFld->GetPar2() );
-        sal_uInt16 nSubType = pInpFld->GetSubType();
+        USHORT nSubType = pInpFld->GetSubType();
 
         switch(nSubType & 0xff)
         {
@@ -104,7 +108,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
                 break;
 
             case INP_USR:
-                // user field
+                // Benutzerfeld
                 if( 0 != ( pUsrType = (SwUserFieldType*)rSh.GetFldType(
                             RES_USERFLD, pInpFld->GetPar1() ) ) )
                     aStr = pUsrType->GetContent();
@@ -113,24 +117,22 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     }
     else
     {
-        // it is a SetExpression
+        // es ist eine SetExpression
         pSetFld = (SwSetExpField*)pField;
         String sFormula(pSetFld->GetFormula());
         //values are formatted - formulas are not
         CharClass aCC( SvxCreateLocale( pSetFld->GetLanguage() ));
         if( aCC.isNumeric( sFormula ))
-        {
-            aStr = pSetFld->ExpandField(true);
-        }
+            aStr = pSetFld->Expand();
         else
             aStr = sFormula;
         aLabelED.SetText( pSetFld->GetPromptText() );
     }
 
     // JP 31.3.00: Inputfields in readonly regions must be allowed to
-    //              input any content. - 74639
-    sal_Bool bEnable = !rSh.IsCrsrReadonly();
-
+    //				input any content. - 74639
+    BOOL bEnable = !rSh.IsCrsrReadonly();
+                    /*!rSh.IsReadOnlyAvailable() || !rSh.HasReadonlySel()*/;
     aOKBT.Enable( bEnable );
     aEditED.SetReadOnly( !bEnable );
 
@@ -151,7 +153,7 @@ void SwFldInputDlg::StateChanged( StateChangedType nType )
 }
 
 /*--------------------------------------------------------------------
-     Description:   Close
+     Beschreibung:	Schliessen
  --------------------------------------------------------------------*/
 
 void SwFldInputDlg::Apply()
@@ -160,7 +162,7 @@ void SwFldInputDlg::Apply()
     aTmp.EraseAllChars( '\r' );
 
     rSh.StartAllAction();
-    sal_Bool bModified = sal_False;
+    BOOL bModified = FALSE;
     if(pInpFld)
     {
         if(pUsrType)
@@ -169,21 +171,21 @@ void SwFldInputDlg::Apply()
             {
                 pUsrType->SetContent(aTmp);
                 pUsrType->UpdateFlds();
-                bModified = sal_True;
+                bModified = TRUE;
             }
         }
         else if( aTmp != pInpFld->GetPar1() )
         {
             pInpFld->SetPar1(aTmp);
             rSh.SwEditShell::UpdateFlds(*pInpFld);
-            bModified = sal_True;
+            bModified = TRUE;
         }
     }
     else if( aTmp != pSetFld->GetPar2() )
     {
         pSetFld->SetPar2(aTmp);
         rSh.SwEditShell::UpdateFlds(*pSetFld);
-        bModified = sal_True;
+        bModified = TRUE;
     }
 
     if( bModified )

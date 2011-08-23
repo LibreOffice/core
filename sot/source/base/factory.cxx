@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <tools/string.hxx>
 #include <sot/object.hxx>
 #include <sot/sotdata.hxx>
-#include <sot/clsids.hxx>
+#include <clsids.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 
@@ -83,6 +83,29 @@ void SotFactory::DeInit()
         ByteString aStr( "Objects alive: " );
         aStr.Append( ByteString::CreateFromInt32( pSotData->nSvObjCount ) );
         DBG_WARNING(  aStr.GetBuffer()  );
+
+/*
+        SotObjectList *pObjList = pSotData->pObjectList;
+
+        if( pObjList )
+        {
+            SotObject * p = pObjList->First();
+            while( p )
+            {
+                String aStr( "Factory: " );
+                aStr += p->GetSvFactory()->GetClassName();
+                aStr += " Count: ";
+                aStr += p->GetRefCount();
+                DBG_TRACE( "\tReferences:" );
+                p->TestObjRef( FALSE );
+#ifdef TEST_INVARIANT
+                DBG_TRACE( "\tInvariant:" );
+                p->TestInvariant( TRUE );
+#endif
+                p = pObjList->Next();
+            }
+        }
+*/
 #endif
         return;
     }
@@ -92,9 +115,12 @@ void SotFactory::DeInit()
     SotFactoryList* pFactoryList = pSotData->pFactoryList;
     if( pFactoryList )
     {
-        for ( size_t i = pFactoryList->size(); i > 0 ; )
-            delete (*pFactoryList)[ --i ];
-        pFactoryList->clear();
+        SotFactory * pFact = pFactoryList->Last();
+        while( NULL != (pFact = pFactoryList->Remove()) )
+        {
+            delete pFact;
+            pFact = pFactoryList->Last();
+        }
         delete pFactoryList;
         pSotData->pFactoryList = NULL;
     }
@@ -104,11 +130,13 @@ void SotFactory::DeInit()
     if( pSotData->pDataFlavorList )
     {
 
-        for( sal_uLong i = 0, nMax = pSotData->pDataFlavorList->Count(); i < nMax; i++ )
+        for( ULONG i = 0, nMax = pSotData->pDataFlavorList->Count(); i < nMax; i++ )
             delete (::com::sun::star::datatransfer::DataFlavor*) pSotData->pDataFlavorList->GetObject( i );
         delete pSotData->pDataFlavorList;
         pSotData->pDataFlavorList = NULL;
     }
+    //delete pSOTDATA();
+    //SOTDATA() = NULL;
 }
 
 
@@ -136,7 +164,14 @@ SotFactory::SotFactory( const SvGlobalName & rName,
     DBG_ASSERT( aEmptyName != *this, "create factory without SvGlobalName" );
     if( Find( *this ) )
     {
-        OSL_FAIL( "create factories with the same unique name" );
+        /*
+        String aStr( GetClassName() );
+        aStr += ", UniqueName: ";
+        aStr += GetHexName();
+        aStr += ", create factories with the same unique name";
+        DBG_ERROR( aStr );
+        */
+        DBG_ERROR( "create factories with the same unique name" );
     }
     }
 #endif
@@ -144,7 +179,7 @@ SotFactory::SotFactory( const SvGlobalName & rName,
     if( !pSotData->pFactoryList )
         pSotData->pFactoryList = new SotFactoryList();
     // muss nach hinten, wegen Reihenfolge beim zerstoeren
-    pSotData->pFactoryList->push_back( this );
+    pSotData->pFactoryList->Insert( this, LIST_APPEND );
 }
 
 
@@ -160,7 +195,7 @@ SotFactory::~SotFactory()
 |*
 |*    Beschreibung      Zugriffsmethoden auf SotData_Impl-Daten
 *************************************************************************/
-sal_uInt32 SotFactory::GetSvObjectCount()
+UINT32 SotFactory::GetSvObjectCount()
 {
     return SOTDATA()->nSvObjCount;
 }
@@ -182,10 +217,12 @@ const SotFactory* SotFactory::Find( const SvGlobalName & rFactName )
     SotData_Impl * pSotData = SOTDATA();
     if( rFactName != aEmpty && pSotData->pFactoryList )
     {
-        for ( size_t i = 0, n = pSotData->pFactoryList->size(); i < n; ++i ) {
-            SotFactory* pFact = (*pSotData->pFactoryList)[ i ];
+        SotFactory * pFact = pSotData->pFactoryList->First();
+        while( pFact )
+        {
             if( *pFact == rFactName )
                 return pFact;
+            pFact = pSotData->pFactoryList->Next();
         }
     }
 
@@ -259,10 +296,10 @@ void SotFactory::TestInvariant()
     SotData_Impl * pSotData = SOTDATA();
     if( pSotData->pObjectList )
     {
-        sal_uLong nCount = pSotData->pObjectList->Count();
-        for( sal_uLong i = 0; i < nCount ; i++ )
+        ULONG nCount = pSotData->pObjectList->Count();
+        for( ULONG i = 0; i < nCount ; i++ )
         {
-            pSotData->pObjectList->GetObject( i )->TestInvariant( sal_False );
+            pSotData->pObjectList->GetObject( i )->TestInvariant( FALSE );
         }
     }
 #endif
@@ -308,22 +345,61 @@ void * SotFactory::CastAndAddRef
     return pObj ? pObj->CastAndAddRef( this ) : NULL;
 }
 
+//=========================================================================
+void * SotFactory::AggCastAndAddRef
+(
+    SotObject * pObj /* Das Objekt von dem der Typ gepr"uft wird. */
+) const
+/*  [Beschreibung]
+
+    Ist eine Optimierung, damit die Ref-Klassen k"urzer implementiert
+    werden k"onnen. pObj wird auf den Typ der Factory gecastet.
+    In c++ (wenn es immer erlaubt w"are) w"urde der void * wie im
+    Beispiel gebildet.
+    Factory der Klasse SvPersist.
+    void * p = (void *)(SvPersist *)pObj;
+    Hinzu kommt noch, dass ein Objekt aus meheren c++ Objekten
+    zusammengesetzt sein kann. Diese Methode sucht nach einem
+    passenden Objekt.
+
+    [R"uckgabewert]
+
+    void *,     NULL, pObj war NULL oder das Objekt war nicht vom Typ
+                der Factory.
+                Ansonsten wird pObj zuerst auf den Typ der Factory
+                gecastet und dann auf void *.
+
+    [Querverweise]
+
+    <SvObject::AggCast>
+*/
+{
+    void * pRet = NULL;
+    if( pObj )
+    {
+        pRet = pObj->AggCast( this );
+        if( pRet )
+            pObj->AddRef();
+    }
+    return pRet;
+}
+
 /*************************************************************************
 |*    SotFactory::Is()
 |*
 |*    Beschreibung
 *************************************************************************/
-sal_Bool SotFactory::Is( const SotFactory * pSuperCl ) const
+BOOL SotFactory::Is( const SotFactory * pSuperCl ) const
 {
     if( this == pSuperCl )
-        return sal_True;
+        return TRUE;
 
-    for( sal_uInt16 i = 0; i < nSuperCount; i++ )
+    for( USHORT i = 0; i < nSuperCount; i++ )
     {
         if( pSuperClasses[ i ]->Is( pSuperCl ) )
-            return sal_True;
+            return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
 

@@ -29,6 +29,10 @@ PRJ=..$/..
 PRJNAME=basegfx
 TARGET=tuple
 
+#UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
+#ENABLE_EXCEPTIONS=FALSE
+#USE_DEFFILE=TRUE
+
 # --- Settings ----------------------------------
 
 .INCLUDE :  	settings.mk

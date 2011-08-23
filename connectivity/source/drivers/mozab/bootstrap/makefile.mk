@@ -78,14 +78,6 @@ SHL1STDLIBS=\
         $(SALLIB)        \
         $(COMPHELPERLIB)
 
-ALLTAR : $(MISC)/mozbootstrap.component
-
-$(MISC)/mozbootstrap.component .ERRREMOVE : \
-        $(SOLARENV)/bin/createcomponent.xslt mozbootstrap.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt mozbootstrap.component
-
 .ELSE
 SLOFILES += \
     $(SLO)$/MNSInit.obj			            \
@@ -98,3 +90,4 @@ SLOFILES += \
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+

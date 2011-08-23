@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,13 +139,12 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
 
 } // namespace
 
-sal_Int32 TextField::insertAt(
+void TextField::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > & xText,
         const Reference < XTextCursor > &xAt,
         const TextCharacterProperties& rTextCharacterStyle ) const
 {
-    sal_Int32 nCharHeight = 0;
     try
     {
         PropertyMap aioBulletList;
@@ -153,13 +152,11 @@ sal_Int32 TextField::insertAt(
         Reference< XPropertySet > xProps( xStart, UNO_QUERY);
         PropertySet aPropSet( xProps );
 
-        maTextParagraphProperties.pushToPropSet( &rFilterBase, xProps, aioBulletList, NULL, sal_True, 18 );
+        maTextParagraphProperties.pushToPropSet( rFilterBase, xProps, aioBulletList, NULL, sal_True, 18 );
 
         TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
         aTextCharacterProps.assignUsed( maTextParagraphProperties.getTextCharacterProperties() );
         aTextCharacterProps.assignUsed( getTextCharacterProperties() );
-        if ( aTextCharacterProps.moHeight.has() )
-            nCharHeight = aTextCharacterProps.moHeight.get();
         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 
         std::list< Reference< XTextField > > fields;
@@ -194,8 +191,6 @@ sal_Int32 TextField::insertAt(
     {
         OSL_TRACE("OOX:  TextField::insertAt() exception");
     }
-
-    return nCharHeight;
 }
 
 } }

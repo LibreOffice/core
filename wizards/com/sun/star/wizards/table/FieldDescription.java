@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Properties;
-import com.sun.star.wizards.common.PropertyNames;
 
 public class FieldDescription
 {
@@ -71,7 +70,7 @@ public class FieldDescription
         }
         else
         {
-            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xMSF, aLocale, xNameAccessTableNode, keyname, PropertyNames.PROPERTY_NAME, _nmaxcharCount);
+            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xMSF, aLocale, xNameAccessTableNode, keyname, "Name", _nmaxcharCount);
         }
         setFieldProperties(xNameAccessFieldNode);
     }
@@ -81,7 +80,7 @@ public class FieldDescription
         Name = _fieldname;
         aPropertyValues = new Vector();
         Type = new Integer(com.sun.star.sdbc.DataType.VARCHAR);
-        aPropertyValues.addElement(Properties.createProperty(PropertyNames.PROPERTY_NAME, _fieldname));
+        aPropertyValues.addElement(Properties.createProperty("Name", _fieldname));
         aPropertyValues.addElement(Properties.createProperty("Type", Type));
     }
 
@@ -90,7 +89,7 @@ public class FieldDescription
         for (int i = 0; i < aPropertyValues.size(); i++)
         {
             PropertyValue aPropertyValue = (PropertyValue) aPropertyValues.get(i);
-            if (aPropertyValue.Name.equals(PropertyNames.PROPERTY_NAME))
+            if (aPropertyValue.Name.equals("Name"))
             {
                 aPropertyValue.Value = _newfieldname;
                 aPropertyValues.set(i, aPropertyValue);
@@ -133,10 +132,10 @@ public class FieldDescription
         try
         {
             xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xNameAccessFieldNode);
-//      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");
-            if (propertyexists(PropertyNames.PROPERTY_NAME))
+//      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");       
+            if (propertyexists("Name"))
             {
-                aPropertyValues.addElement(Properties.createProperty(PropertyNames.PROPERTY_NAME, Name));
+                aPropertyValues.addElement(Properties.createProperty("Name", Name));
             }
             if (propertyexists("Type"))
             {
@@ -145,16 +144,16 @@ public class FieldDescription
             if (propertyexists("Scale"))
             {
                 aPropertyValues.addElement(Properties.createProperty("Scale", (Integer) xPropertySet.getPropertyValue("Scale")));
-//          Scale =
+//          Scale =         
             }
             if (propertyexists("Precision"))
             {
                 aPropertyValues.addElement(Properties.createProperty("Precision", (Integer) xPropertySet.getPropertyValue("Precision")));
-//          Precision = (Integer) xPropertySet.getPropertyValue("Precision");
+//          Precision = (Integer) xPropertySet.getPropertyValue("Precision");       
             }
             if (propertyexists("DefaultValue"))
             {
-                aPropertyValues.addElement(Properties.createProperty("DefaultValue", (Boolean) xPropertySet.getPropertyValue("DefaultValue")));//          DefaultValue = (Boolean) xPropertySet.getPropertyValue("DefaultValue");
+                aPropertyValues.addElement(Properties.createProperty("DefaultValue", (Boolean) xPropertySet.getPropertyValue("DefaultValue")));//          DefaultValue = (Boolean) xPropertySet.getPropertyValue("DefaultValue");     
             //Type =  new Integer(4); // TODO wo ist der Fehler?(Integer) xPropertySet.getPropertyValue("Type");
             }
         }

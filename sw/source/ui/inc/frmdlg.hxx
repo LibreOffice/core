@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,29 +34,28 @@
 class SwWrtShell;
 
 /*--------------------------------------------------------------------
-   Beschreibung:    Rahmendialog
+   Beschreibung:	Rahmendialog
  --------------------------------------------------------------------*/
 class SwFrmDlg : public SfxTabDialog
 {
-    sal_Bool                m_bFormat;
-    sal_Bool                m_bNew;
-    sal_Bool                m_bHTMLMode;
-    bool                m_bEnableVertPos;
+    BOOL                m_bFormat;
+    BOOL                m_bNew;
+    BOOL                m_bHTMLMode;
     const SfxItemSet&   m_rSet;
-    sal_uInt16              m_nDlgType;
+    USHORT              m_nDlgType;
     SwWrtShell*         m_pWrtShell;
 
 
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
 
 public:
-    SwFrmDlg(   SfxViewFrame *pFrame, Window *pParent,
+    SwFrmDlg(	SfxViewFrame *pFrame, Window *pParent,
                 const SfxItemSet& rCoreSet,
-                sal_Bool            bNewFrm  = sal_True,
-                sal_uInt16          nResType = DLG_FRM_STD,
-                sal_Bool            bFmt     = sal_False,
-                sal_uInt16          nDefPage = 0,
-                const String*   pFmtStr  = 0);
+                BOOL			bNewFrm  = TRUE,
+                USHORT			nResType = DLG_FRM_STD,
+                BOOL			bFmt 	 = FALSE,
+                UINT16			nDefPage = 0,
+                const String* 	pFmtStr  = 0);
 
     ~SwFrmDlg();
 

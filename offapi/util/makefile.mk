@@ -31,18 +31,17 @@ PRJPCH=
 PRJNAME=offapi
 TARGET=offapi_db
 
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  makefile.pmk
 
 # ------------------------------------------------------------------
-
 UNOIDLDBFILES= \
     $(UCR)$/cssauth.db \
     $(UCR)$/cssawt.db \
     $(UCR)$/cssawttree.db \
     $(UCR)$/cssawtgrid.db \
-    $(UCR)$/cssawttab.db \
     $(UCR)$/csschart.db \
     $(UCR)$/csschart2.db \
     $(UCR)$/csschart2data.db \
@@ -133,6 +132,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssgallery.db \
     $(UCR)$/cssxsd.db \
     $(UCR)$/cssinspection.db \
+    $(UCR)$/dcssform.db \
     $(UCR)$/xsec-security.db \
     $(UCR)$/xsec-crypto.db \
     $(UCR)$/xsec-csax.db \

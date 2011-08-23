@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class SvStream;
 class ImplSdPPTImport;
 
 namespace ppt
-{
+{ 
 class PropertySet;
 class Atom;
 
@@ -93,19 +93,19 @@ private:
 
     void fixMainSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void fixInteractiveSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-
+                            
     void processAfterEffectNodes();
 
-    ::com::sun::star::uno::Any  implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
-    sal_Int16                   implGetColorSpace( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
+    ::com::sun::star::uno::Any 	implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
+    sal_Int16 					implGetColorSpace( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxRootNode;
 
     ImplSdPPTImport* mpPPTImport;
-    SvStream&   mrStCtrl;
+    SvStream&	mrStCtrl;
 
-    sd::AfterEffectNodeList maAfterEffectNodes;
+    sd::AfterEffectNodeList	maAfterEffectNodes;
 
 #ifdef DBG_ANIM_LOG
     FILE * mpFile;

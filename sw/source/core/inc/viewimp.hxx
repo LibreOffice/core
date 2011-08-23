@@ -25,14 +25,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_VIEWIMP_HXX
-#define SW_VIEWIMP_HXX
-
-#include <vector>
+#ifndef _VIEWIMP_HXX
+#define _VIEWIMP_HXX
 
 #include <vcl/timer.hxx>
 #include <tools/color.hxx>
 
+// OD 25.06.2003 #108784#
 #include <svx/svdtypes.hxx>
 
 #include <tools/string.hxx>
@@ -55,52 +54,56 @@ struct SdrPaintProcRec;
 class SwAccessibleMap;
 class SdrObject;
 class Fraction;
-class SwPrintData;
+class SwPrtOptions;
 class SwPagePreviewLayout;
 struct PrevwPage;
+#include <vector>
 class SwTxtFrm;
 
 class SwViewImp
 {
     friend class ViewShell;
 
-    friend class SwLayAction;   //Lay- und IdleAction tragen sich ein und aus.
+    friend class SwLayAction;	//Lay- und IdleAction tragen sich ein und aus.
     friend class SwLayIdle;
 
-    // for paint of page preview
+    // OD 12.12.2002 #103492# - for paint of page preview
     friend class SwPagePreviewLayout;
 
-    ViewShell *pSh;             //Falls jemand einen Imp durchreicht und doch
+    ViewShell *pSh;				//Falls jemand einen Imp durchreicht und doch
                                 //mal eine ViewShell braucht hier die
                                 //Rueckwaertsverkettung.
 
-    SwDrawView  *pDrawView;     //Unsere DrawView
-    SdrPageView *pSdrPageView;  //Genau eine Seite fuer unsere DrawView
+    SwDrawView  *pDrawView;		//Unsere DrawView
+    SdrPageView *pSdrPageView;	//Genau eine Seite fuer unsere DrawView
 
-    SwPageFrm     *pFirstVisPage;//Zeigt immer auf die erste sichtbare Seite.
+    SwPageFrm	  *pFirstVisPage;//Zeigt immer auf die erste sichtbare Seite.
     SwRegionRects *pRegion;      //Sammler fuer Paintrects aus der LayAction.
 
-    SwLayAction   *pLayAct;      //Ist gesetzt wenn ein Action-Objekt existiert
+    SwLayAction	  *pLayAct;		 //Ist gesetzt wenn ein Action-Objekt existiert
                                  //Wird vom SwLayAction-CTor ein- und vom DTor
                                  //ausgetragen.
-    SwLayIdle     *pIdleAct;     //Analog zur SwLayAction fuer SwLayIdle.
+    SwLayIdle	  *pIdleAct;	 //Analog zur SwLayAction fuer SwLayIdle.
 
-    SwAccessibleMap *pAccMap;       // Accessible Wrappers
+    SwAccessibleMap	*pAccMap;		// Accessible Wrappers
 
     mutable const SdrObject * pSdrObjCached;
     mutable String sSdrObjCachedComment;
 
-    sal_Bool bFirstPageInvalid  :1; //Pointer auf erste Seite ungueltig?
+    BOOL bFirstPageInvalid	:1;	//Pointer auf erste Seite ungueltig?
 
-    sal_Bool bResetHdlHiddenPaint:1;//  -- "" --
+    //BOOL bResetXorVisibility:1; //StartAction/EndAction
+    //HMHBOOL bShowHdlPaint		:1; //LockPaint/UnlockPaint
+    BOOL bResetHdlHiddenPaint:1;//  -- "" --
 
-    sal_Bool bSmoothUpdate      :1; //Meber fuer SmoothScroll
-    sal_Bool bStopSmooth        :1;
-    sal_Bool bStopPrt           :1; // Stop Printing
+    BOOL bSmoothUpdate		:1;	//Meber fuer SmoothScroll
+    BOOL bStopSmooth		:1;
+    BOOL bStopPrt           :1; // Stop Printing
 
-    sal_uInt16 nRestoreActions  ; //Die Anzahl der zu restaurierenden Actions (UNO)
+    USHORT nRestoreActions  ; //Die Anzahl der zu restaurierenden Actions (UNO)
     SwRect aSmoothRect;
 
+    // OD 12.12.2002 #103492#
     SwPagePreviewLayout* mpPgPrevwLayout;
 
     /**
@@ -113,22 +116,22 @@ class SwViewImp
     /**
        Returns if printer shall be stopped.
 
-       @retval sal_True The printer shall be stopped.
-       @retval sal_False else
+       @retval TRUE The printer shall be stopped.
+       @retval FALSE else
     */
-    sal_Bool IsStopPrt() { return bStopPrt; }
+    BOOL IsStopPrt() { return bStopPrt; }
 
     /**
        Resets signal for stopping printing.
 
     */
-    void ResetStopPrt() { bStopPrt = sal_False; }
+    void ResetStopPrt() { bStopPrt = FALSE; }
 
-    void SetFirstVisPage();     //Neue Ermittlung der ersten sichtbaren Seite
+    void SetFirstVisPage();		//Neue Ermittlung der ersten sichtbaren Seite
 
-    void StartAction();         //Henkel Anzeigen und verstecken.
-    void EndAction();           //gerufen von ViewShell::ImplXXXAction
-    void LockPaint();           //dito, gerufen von ViewShell::ImplLockPaint
+    void StartAction();			//Henkel Anzeigen und verstecken.
+    void EndAction();			//gerufen von ViewShell::ImplXXXAction
+    void LockPaint();			//dito, gerufen von ViewShell::ImplLockPaint
     void UnlockPaint();
 
 private:
@@ -137,9 +140,11 @@ private:
 
     /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
 
-        #i27138#
+        OD 2005-12-01 #i27138#
         implementation for wrapper method
         <ViewShell::InvalidateAccessibleParaFlowRelation(..)>
+
+        @author OD
 
         @param _pFromTxtFrm
         input parameter - paragraph frame, for which the relation CONTENT_FLOWS_FROM
@@ -156,91 +161,98 @@ private:
 
     /** invalidate text selection for paragraphs
 
-        #i27301#
+        OD 2005-12-12 #i27301#
         implementation for wrapper method
         <ViewShell::InvalidateAccessibleParaTextSelection(..)>
+
+        @author OD
     */
     void _InvalidateAccessibleParaTextSelection();
 
     /** invalidate attributes for paragraphs and paragraph's characters
 
-        #i88069#
+        OD 2009-01-06 #i88069#
         implementation for wrapper method
         <ViewShell::InvalidateAccessibleParaAttrs(..)>
+
+        @author OD
     */
     void _InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm );
 
 public:
     SwViewImp( ViewShell * );
     ~SwViewImp();
-    void Init( const SwViewOption * );          //nur fuer ViewShell::Init()
+    void Init( const SwViewOption * );			//nur fuer ViewShell::Init()
 
     const ViewShell *GetShell() const { return pSh; }
-          ViewShell *GetShell()       { return pSh; }
+          ViewShell *GetShell()		  { return pSh; }
 
     Color GetRetoucheColor() const;
 
     //Verwaltung zur ersten sichtbaren Seite
     inline const SwPageFrm *GetFirstVisPage() const;
-    inline       SwPageFrm *GetFirstVisPage();
-    void SetFirstVisPageInvalid() { bFirstPageInvalid = sal_True; }
+    inline		 SwPageFrm *GetFirstVisPage();
+    void SetFirstVisPageInvalid() { bFirstPageInvalid = TRUE; }
 
-    sal_Bool AddPaintRect( const SwRect &rRect );
-    SwRegionRects *GetRegion()      { return pRegion; }
+    BOOL AddPaintRect( const SwRect &rRect );
+    SwRegionRects *GetRegion()		{ return pRegion; }
     void DelRegion();
 
     // neues Interface fuer StarView Drawing
-    inline sal_Bool HasDrawView()       const { return 0 != pDrawView; }
-          SwDrawView* GetDrawView()       { return pDrawView; }
+    inline BOOL HasDrawView()       const { return 0 != pDrawView; }
+          SwDrawView* GetDrawView() 	  { return pDrawView; }
     const SwDrawView* GetDrawView() const { return pDrawView; }
-          SdrPageView*GetPageView()       { return pSdrPageView; }
+          SdrPageView*GetPageView() 	  { return pSdrPageView; }
     const SdrPageView*GetPageView() const { return pSdrPageView; }
     void MakeDrawView();
 
+    // OD 29.08.2002 #102450#
     // add 3rd parameter <const Color* pPageBackgrdColor> for setting this
     // color as the background color at the outliner of the draw view
     // for painting layers <hell> and <heaven>
-
-    // add 4th parameter for the horizontal text
+    // OD 09.12.2002 #103045# - add 4th parameter for the horizontal text
     // direction of the page in order to set the default horizontal text
     // direction at the outliner of the draw view for painting layers <hell>
     // and <heaven>.
-
-    // correct type of 1st parameter
+    // OD 25.06.2003 #108784# - correct type of 1st parameter
     void   PaintLayer( const SdrLayerID _nLayerID,
-                       SwPrintData const*const pPrintData,
+                       const SwPrtOptions *pPrintData,
                        const SwRect& _rRect,
                        const Color* _pPageBackgrdColor = 0,
                        const bool _bIsPageRightToLeft = false ) const;
 
     //wird als Link an die DrawEngine uebergeben, entscheidet was wie
     //gepaintet wird oder nicht.
+    //#110094#-3
+    //DECL_LINK( PaintDispatcher, SdrPaintProcRec * );
 
     // Interface Drawing
-    sal_Bool IsDragPossible( const Point &rPoint );
+    BOOL IsDragPossible( const Point &rPoint );
     void NotifySizeChg( const Size &rNewSz );
 
     //SS Fuer die Lay- bzw. IdleAction und verwandtes
-    sal_Bool  IsAction() const                   { return pLayAct  != 0; }
-    sal_Bool  IsIdleAction() const               { return pIdleAct != 0; }
-          SwLayAction &GetLayAction()        { return *pLayAct; }
+    BOOL  IsAction() const 					 { return pLayAct  != 0; }
+    BOOL  IsIdleAction() const				 { return pIdleAct != 0; }
+          SwLayAction &GetLayAction()		 { return *pLayAct; }
     const SwLayAction &GetLayAction() const  { return *pLayAct; }
-          SwLayIdle   &GetIdleAction()       { return *pIdleAct;}
+          SwLayIdle	  &GetIdleAction()		 { return *pIdleAct;}
     const SwLayIdle   &GetIdleAction() const { return *pIdleAct;}
 
     //Wenn eine Aktion laueft wird diese gebeten zu pruefen ob es
     //an der zeit ist den WaitCrsr einzuschalten.
     void CheckWaitCrsr();
-    sal_Bool IsCalcLayoutProgress() const;  //Fragt die LayAction wenn vorhanden.
-    //sal_True wenn eine LayAction laeuft, dort wird dann auch das Flag fuer
+    BOOL IsCalcLayoutProgress() const;	//Fragt die LayAction wenn vorhanden.
+    //TRUE wenn eine LayAction laeuft, dort wird dann auch das Flag fuer
     //ExpressionFields gesetzt.
-    sal_Bool IsUpdateExpFlds();
+    BOOL IsUpdateExpFlds();
 
-    void    SetRestoreActions(sal_uInt16 nSet){nRestoreActions = nSet;}
-    sal_uInt16  GetRestoreActions() const{return nRestoreActions;}
+    void	SetRestoreActions(USHORT nSet){nRestoreActions = nSet;}
+    USHORT 	GetRestoreActions() const{return nRestoreActions;}
 
+    // OD 12.12.2002 #103492#
     void InitPagePreviewLayout();
 
+    // OD 12.12.2002 #103492#
     inline SwPagePreviewLayout* PagePreviewLayout()
     {
         return mpPgPrevwLayout;
@@ -286,7 +298,8 @@ public:
                                           const SwFlyFrm *pFollow );
 
     // update data for accessible preview
-    // change method signature due to new page preview functionality
+    // OD 15.01.2003 #103492# - change method signature due to new page preview
+    // functionality
     void UpdateAccessiblePreview( const std::vector<PrevwPage*>& _rPrevwPages,
                                   const Fraction&  _rScale,
                                   const SwPageFrm* _pSelectedPageFrm,
@@ -348,6 +361,6 @@ inline void SwViewImp::AddAccessibleObj( const SdrObject *pObj )
     SwRect aEmptyRect;
     MoveAccessible( 0, pObj, aEmptyRect );
 }
-#endif // SW_VIEWIMP_HXX
+#endif //_VIEWIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

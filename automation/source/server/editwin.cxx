@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 class ImpWorkWindow : public WorkWindow
 {
 public:
-    MultiLineEdit   m_aInhalt;
+    MultiLineEdit	m_aInhalt;
     ImpWorkWindow( WorkWindow *pParent, const UniString &rName, WinBits );
     ~ImpWorkWindow();
     void Resize();
@@ -63,14 +63,14 @@ void ImpWorkWindow::Resize()
     m_aInhalt.SetPosSizePixel( Point(), GetOutputSizePixel() );
 }
 
-sal_Bool EditWindow::Close()
+BOOL EditWindow::Close()
 {
     if ( pImpWorkWindow )
     {
         delete pImpWorkWindow;
         pImpWorkWindow = NULL;
     }
-    return sal_True;
+    return TRUE;
 }
 
 void EditWindow::Show()
@@ -78,7 +78,7 @@ void EditWindow::Show()
     if ( Check() )
         pImpWorkWindow->Show();
     else
-        bShowWin = sal_True;
+        bShowWin = TRUE;
 }
 
 void EditWindow::Hide()
@@ -86,7 +86,7 @@ void EditWindow::Hide()
     if ( Check() )
         pImpWorkWindow->Hide();
     else
-        bShowWin = sal_False;
+        bShowWin = FALSE;
 }
 
 EditWindow::EditWindow( WorkWindow *pParent, const String &rName, WinBits iWstyle )
@@ -95,7 +95,7 @@ EditWindow::EditWindow( WorkWindow *pParent, const String &rName, WinBits iWstyl
 , aMemName(rName)
 , iMemWstyle(iWstyle)
 , nTextLen(0)
-, bQuiet(sal_False)
+, bQuiet(FALSE)
 {
 }
 
@@ -104,7 +104,7 @@ EditWindow::~EditWindow()
     Close();
 }
 
-sal_Bool EditWindow::Check()
+BOOL EditWindow::Check()
 {
     if ( ! pImpWorkWindow && Application::IsInExecute() )
     {
@@ -114,7 +114,7 @@ sal_Bool EditWindow::Check()
         aMemPreWinText.Erase();
         if ( bShowWin )
             pImpWorkWindow->Show();
-        return sal_True;
+        return TRUE;
     }
     return pImpWorkWindow != NULL;
 }
@@ -146,7 +146,7 @@ void EditWindow::AddText( const String &rNew )
         if ( nTextLen > 5000 )
         {
             pImpWorkWindow->m_aInhalt.SetText( pImpWorkWindow->m_aInhalt.GetText().Erase(0,1000) );
-            nTextLen = pImpWorkWindow->m_aInhalt.GetText().Len();       // Absolut, um Fehler sonstwo auszubügeln
+            nTextLen = pImpWorkWindow->m_aInhalt.GetText().Len();		// Absolut, um Fehler sonstwo auszubügeln
         }
 
 

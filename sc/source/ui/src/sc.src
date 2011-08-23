@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,16 +27,21 @@
 
 #include "sc.hrc" // -> #include <sfx.hrc>
 
+
+
 // App-Titel------------------------------------------------------
 
 String RID_APPTITLE
 {
+    /* ### ACHTUNG: Neuer Text in Resource? StarCalc 4.0 : StarCalc 3.1 */
     Text [ en-US ] = "%PRODUCTNAME Calc" ;
 };
 
  // About-Dialog --------------------------------------------------------------
 
  // Icons & Bitmaps: ----------------------------------------------------------
+
+
 
  // ???
 String 30001 { Text = "Dummy1" ; };

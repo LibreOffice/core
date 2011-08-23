@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,17 +48,17 @@ class IconCache
 {
 public:
     /** The lifetime of the returned reference is limited to that of the sd
-        module.
+        module. 
     */
     static IconCache& Instance (void);
 
     /** Return the icon with the given resource id.
         @return
             The returned Image may be empty when there is no icon for the
-            given id or an error occurred.  Should not happen under normal
+            given id or an error occured.  Should not happen under normal
             circumstances.
     */
-    Image GetIcon (sal_uInt16 nResourceId);
+    Image GetIcon (USHORT nResourceId);
 
 private:
     class Implementation;

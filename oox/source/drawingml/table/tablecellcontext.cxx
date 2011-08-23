@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/linepropertiescontext.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
 
 using namespace ::oox::core;
@@ -66,7 +67,7 @@ TableCellContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::
 
     switch( aElementToken )
     {
-    case A_TOKEN( txBody ):     // CT_TextBody
+    case NMSP_DRAWINGML|XML_txBody:		// CT_TextBody
         {
             oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
             mrTableCell.setTextBody( xTextBody );
@@ -74,41 +75,41 @@ TableCellContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::
         }
         break;
 
-    case A_TOKEN( tcPr ):       // CT_TableCellProperties
+    case NMSP_DRAWINGML|XML_tcPr:		// CT_TableCellProperties
         {
             AttributeList aAttribs( xAttribs );
             mrTableCell.setLeftMargin( aAttribs.getInteger( XML_marL, 91440 ) );
             mrTableCell.setRightMargin( aAttribs.getInteger( XML_marR, 91440 ) );
             mrTableCell.setTopMargin( aAttribs.getInteger( XML_marT, 45720 ) );
             mrTableCell.setBottomMargin( aAttribs.getInteger( XML_marB, 45720 ) );
-            mrTableCell.setVertToken( xAttribs->getOptionalValueToken( XML_vert, XML_horz ) );                  // ST_TextVerticalType
-            mrTableCell.setAnchorToken( xAttribs->getOptionalValueToken( XML_anchor, XML_t ) );                 // ST_TextAnchoringType
+            mrTableCell.setVertToken( xAttribs->getOptionalValueToken( XML_vert, XML_horz ) );					// ST_TextVerticalType
+            mrTableCell.setAnchorToken( xAttribs->getOptionalValueToken( XML_anchor, XML_t ) );					// ST_TextAnchoringType
             mrTableCell.setAnchorCtr( aAttribs.getBool( XML_anchorCtr, sal_False ) );
-            mrTableCell.setHorzOverflowToken( xAttribs->getOptionalValueToken( XML_horzOverflow, XML_clip ) );  // ST_TextHorzOverflowType
+            mrTableCell.setHorzOverflowToken( xAttribs->getOptionalValueToken( XML_horzOverflow, XML_clip ) );	// ST_TextHorzOverflowType
         }
         break;
-        case A_TOKEN( lnL ):
+        case NMSP_DRAWINGML|XML_lnL:
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesLeft ) );
             break;
-        case A_TOKEN( lnR ):
+        case NMSP_DRAWINGML|XML_lnR:
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesRight ) );
             break;
-        case A_TOKEN( lnT ):
+        case NMSP_DRAWINGML|XML_lnT:
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesTop ) );
             break;
-        case A_TOKEN( lnB ):
+        case NMSP_DRAWINGML|XML_lnB:
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesBottom ) );
             break;
-        case A_TOKEN( lnTlToBr ):
+        case NMSP_DRAWINGML|XML_lnTlToBr:
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesTopLeftToBottomRight ) );
             break;
-        case A_TOKEN( lnBlToTr ):
+        case NMSP_DRAWINGML|XML_lnBlToTr:
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesBottomLeftToTopRight ) );
             break;
-        case A_TOKEN( cell3D ): // CT_Cell3D
+        case NMSP_DRAWINGML|XML_cell3D:	// CT_Cell3D
         break;
 
-    case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList
+    case NMSP_DRAWINGML|XML_extLst:		// CT_OfficeArtExtensionList
     break;
 
     default:

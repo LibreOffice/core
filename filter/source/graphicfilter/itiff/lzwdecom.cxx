@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,20 +32,19 @@
 #include "lzwdecom.hxx"
 
 LZWDecompressor::LZWDecompressor()
-    : pOutBufData(NULL)
 {
-    sal_uInt16 i;
+    USHORT i;
 
     pTable=new LZWTableEntry[4096];
-    pOutBuf=new sal_uInt8[4096];
+    pOutBuf=new BYTE[4096];
     for (i=0; i<4096; i++)
     {
         pTable[i].nPrevCode=0;
         pTable[i].nDataCount=1;
-        pTable[i].nData=(sal_uInt8)i;
+        pTable[i].nData=(BYTE)i;
     }
     pIStream=NULL;
-    bFirst = sal_True;
+    bFirst = TRUE;
     nOldCode = 0;
 }
 
@@ -63,7 +62,7 @@ void LZWDecompressor::StartDecompression(SvStream & rIStream)
 
     nTableSize=258;
 
-    bEOIFound=sal_False;
+    bEOIFound=FALSE;
 
     nOutBufDataLen=0;
 
@@ -74,7 +73,7 @@ void LZWDecompressor::StartDecompression(SvStream & rIStream)
     if ( bFirst )
     {
         bInvert = nInputBitsBuf == 1;
-        bFirst = sal_False;
+        bFirst = FALSE;
     }
 
     if ( bInvert )
@@ -82,9 +81,9 @@ void LZWDecompressor::StartDecompression(SvStream & rIStream)
 }
 
 
-sal_uLong LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount)
+ULONG LZWDecompressor::Decompress(BYTE * pTarget, ULONG nMaxCount)
 {
-    sal_uLong nCount;
+    ULONG nCount;
 
     if (pIStream==NULL) return 0;
 
@@ -93,8 +92,8 @@ sal_uLong LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount)
 
         if (pIStream->GetError()) break;
 
-        if (((sal_uLong)nOutBufDataLen)>=nMaxCount) {
-            nOutBufDataLen = nOutBufDataLen - (sal_uInt16)nMaxCount;
+        if (((ULONG)nOutBufDataLen)>=nMaxCount) {
+            nOutBufDataLen = nOutBufDataLen - (USHORT)nMaxCount;
             nCount+=nMaxCount;
             while (nMaxCount>0) {
                 *(pTarget++)=*(pOutBufData++);
@@ -103,14 +102,14 @@ sal_uLong LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount)
             break;
         }
 
-        nMaxCount-=(sal_uLong)nOutBufDataLen;
+        nMaxCount-=(ULONG)nOutBufDataLen;
         nCount+=nOutBufDataLen;
         while (nOutBufDataLen>0) {
             *(pTarget++)=*(pOutBufData++);
             nOutBufDataLen--;
         }
 
-        if (bEOIFound==sal_True) break;
+        if (bEOIFound==TRUE) break;
 
         DecompressSome();
 
@@ -120,9 +119,9 @@ sal_uLong LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount)
 }
 
 
-sal_uInt16 LZWDecompressor::GetNextCode()
+USHORT LZWDecompressor::GetNextCode()
 {
-    sal_uInt16 nBits,nCode;
+    USHORT nBits,nCode;
 
     if      (nTableSize<511)  nBits=9;
     else if (nTableSize<1023) nBits=10;
@@ -153,7 +152,7 @@ sal_uInt16 LZWDecompressor::GetNextCode()
 }
 
 
-void LZWDecompressor::AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData)
+void LZWDecompressor::AddToTable(USHORT nPrevCode, USHORT nCodeFirstData)
 {
     while (pTable[nCodeFirstData].nDataCount>1)
         nCodeFirstData=pTable[nCodeFirstData].nPrevCode;
@@ -168,17 +167,17 @@ void LZWDecompressor::AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData
 
 void LZWDecompressor::DecompressSome()
 {
-    sal_uInt16 i,nCode;
+    USHORT i,nCode;
 
     nCode=GetNextCode();
     if (nCode==256) {
         nTableSize=258;
         nCode=GetNextCode();
-        if (nCode==257) { bEOIFound=sal_True; return; }
+        if (nCode==257) { bEOIFound=TRUE; return; }
     }
     else if (nCode<nTableSize) AddToTable(nOldCode,nCode);
     else if (nCode==nTableSize) AddToTable(nOldCode,nOldCode);
-    else { bEOIFound=sal_True; return; }
+    else { bEOIFound=TRUE; return; }
 
     nOldCode=nCode;
 

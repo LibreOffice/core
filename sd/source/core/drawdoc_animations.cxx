@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ void SdDrawDocument::ReplacePageInCustomShows( const SdPage* pOldPage, const SdP
 {
     if ( mpCustomShowList )
     {
-        for (sal_uLong i = 0; i < mpCustomShowList->Count(); i++)
+        for (ULONG i = 0; i < mpCustomShowList->Count(); i++)
         {
             SdCustomShow* pCustomShow = (SdCustomShow*) mpCustomShowList->GetObject(i);
             if( pNewPage == 0 )

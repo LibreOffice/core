@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,18 +33,18 @@
 #include <algorithm>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>
-#include <framework/imageproducer.hxx>
-#include <framework/sfxhelperfunctions.hxx>
+#include <helper/imageproducer.hxx>
+#include <classes/sfxhelperfunctions.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -59,7 +59,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
@@ -77,8 +77,9 @@
 #include <svtools/miscopt.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
+//
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -93,11 +94,12 @@ using namespace ::com::sun::star::ui;
 static const char CONFIGURE_TOOLBARS_CMD[]      = "ConfigureDialog";
 static const char CONFIGURE_TOOLBARS[]          = ".uno:ConfigureDialog";
 static const char CMD_COLORBAR[]                = ".uno:ColorControl";
+static const char CMD_HYPERLINKBAR[]            = ".uno:InsertHyperlink";
 static const char CMD_FORMULABAR[]              = ".uno:InsertFormula";
 static const char CMD_INPUTLINEBAR[]            = ".uno:InputLineVisible";
 static const char CMD_RESTOREVISIBILITY[]       = ".cmd:RestoreVisibility";
 static const char ITEM_DESCRIPTOR_RESOURCEURL[] = "ResourceURL";
-static const char ITEM_DESCRIPTOR_UINAME[]      = "UIName";
+static const char ITEM_DESCRIPTOR_UINAME[]		= "UIName";
 static const char STATIC_PRIVATE_TB_RESOURCE[]  = "private:resource/toolbar/";
 
 static const char STATIC_CMD_PART[]             = ".uno:AvailableToolbars?Toolbar:string=";
@@ -106,7 +108,7 @@ static const char STATIC_INTERNAL_CMD_PART[]    = ".cmd:";
 namespace framework
 {
 
-typedef boost::unordered_map< rtl::OUString, rtl::OUString, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ToolbarHashMap;
+typedef std::hash_map< rtl::OUString, rtl::OUString, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ToolbarHashMap;
 
 struct ToolBarEntry
 {
@@ -151,9 +153,9 @@ struct ToolBarInfo
     rtl::OUString aToolBarUIName;
 };
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   ToolbarsMenuController                  ,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   ToolbarsMenuController				    ,
                                             OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
+                                            SERVICENAME_POPUPMENUCONTROLLER		    ,
                                             IMPLEMENTATIONNAME_TOOLBARSMENUCONTROLLER
                                         )
 
@@ -174,9 +176,9 @@ ToolbarsMenuController::~ToolbarsMenuController()
 }
 
 void ToolbarsMenuController::addCommand(
-    Reference< css::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, const rtl::OUString& rLabel )
+    Reference< css::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, USHORT nHelpId, const rtl::OUString& rLabel )
 {
-    sal_uInt16        nItemId    = m_xPopupMenu->getItemCount()+1;
+    USHORT        nItemId    = m_xPopupMenu->getItemCount()+1;
 
     rtl::OUString aLabel;
     if ( rLabel.getLength() == 0 )
@@ -201,7 +203,7 @@ void ToolbarsMenuController::addCommand(
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     if ( rSettings.GetUseImagesInMenus() )
-        aImage = GetImageFromURL( m_xFrame, rCommandURL, false );
+        aImage = GetImageFromURL( m_xFrame, rCommandURL, FALSE, rSettings.GetHighContrastMode() );
 
     VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( rPopupMenu );
     if ( pPopupMenu )
@@ -209,6 +211,7 @@ void ToolbarsMenuController::addCommand(
         PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
         if ( !!aImage )
             pVCLPopupMenu->SetItemImage( nItemId, aImage );
+        pVCLPopupMenu->SetHelpId( nItemId, nHelpId );
     }
 
     m_aCommandVector.push_back( rCommandURL );
@@ -217,7 +220,7 @@ void ToolbarsMenuController::addCommand(
 Reference< XDispatch > ToolbarsMenuController::getDispatchFromCommandURL( const rtl::OUString& rCommandURL )
 {
     URL                          aTargetURL;
-    Sequence<PropertyValue>      aArgs;
+    Sequence<PropertyValue>	     aArgs;
     Reference< XURLTransformer > xURLTransformer;
     Reference< XFrame >          xFrame;
 
@@ -267,7 +270,7 @@ rtl::OUString ToolbarsMenuController::getUINameFromCommand( const rtl::OUString&
             {
                 for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                 {
-                    if ( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Label" ) ))
+                    if ( aPropSeq[i].Name.equalsAscii( "Label" ))
                     {
                         aPropSeq[i].Value >>= aStr;
                         break;
@@ -467,7 +470,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         const sal_uInt32 nCount = aSortedTbs.size();
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
-            sal_uInt16 nItemCount = m_xPopupMenu->getItemCount();
+            USHORT nItemCount = m_xPopupMenu->getItemCount();
             m_xPopupMenu->insertItem( nIndex, aSortedTbs[i].aUIName, css::awt::MenuItemStyle::CHECKABLE, nItemCount );
             if ( aSortedTbs[i].bVisible )
                 m_xPopupMenu->checkItem( nIndex, sal_True );
@@ -477,7 +480,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
                 PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
-                pVCLPopupMenu->SetUserValue( nIndex, sal_uIntPtr( aSortedTbs[i].bContextSensitive ? 1L : 0L ));
+                pVCLPopupMenu->SetUserValue( nIndex, ULONG( aSortedTbs[i].bContextSensitive ? 1L : 0L ));
             }
 
             // use VCL popup menu pointer to set vital information that are not part of the awt implementation
@@ -496,20 +499,21 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         }
 
         // Create commands for non-toolbars
-        if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ) ||
-             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.WebDocument" ) ) ||
-             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) ||
-             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ||
-             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ||
-             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
+        if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.text.TextDocument" ) ||
+             m_aModuleIdentifier.equalsAscii( "com.sun.star.text.WebDocument" ) ||
+             m_aModuleIdentifier.equalsAscii( "com.sun.star.text.GlobalDocument" ) ||
+             m_aModuleIdentifier.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) ||
+             m_aModuleIdentifier.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) ||
+             m_aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
         {
-            if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ||
-                 m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ))
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_COLORBAR )), aEmptyString );
-            else if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_INPUTLINEBAR )), aEmptyString );
+            addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_HYPERLINKBAR )), 10360, aEmptyString );
+            if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) ||
+                 m_aModuleIdentifier.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
+                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_COLORBAR )), 10417, aEmptyString );
+            else if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
+                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_INPUTLINEBAR )), 26241, aEmptyString );
             else
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_FORMULABAR )), aEmptyString );
+                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_FORMULABAR )), 20128, aEmptyString );
         }
 
         sal_Bool          bAddCommand( sal_True );
@@ -528,11 +532,11 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             // Create command for configure
             if ( m_xPopupMenu->getItemCount() > 0 )
             {
-                sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
+                USHORT        nItemCount = m_xPopupMenu->getItemCount();
                 m_xPopupMenu->insertSeparator( nItemCount+1 );
             }
 
-            addCommand( m_xPopupMenu, aConfigureToolbar, aEmptyString );
+            addCommand( m_xPopupMenu, aConfigureToolbar, 5904, aEmptyString );
         }
 
         // Add separator if no configure has been added
@@ -541,14 +545,14 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             // Create command for configure
             if ( m_xPopupMenu->getItemCount() > 0 )
             {
-                sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
+                USHORT        nItemCount = m_xPopupMenu->getItemCount();
                 m_xPopupMenu->insertSeparator( nItemCount+1 );
             }
         }
 
         String aLabelStr = String( FwkResId( STR_RESTORE_TOOLBARS ));
         rtl::OUString aRestoreCmd( RTL_CONSTASCII_USTRINGPARAM( CMD_RESTOREVISIBILITY ));
-        addCommand( m_xPopupMenu, aRestoreCmd, aLabelStr );
+        addCommand( m_xPopupMenu, aRestoreCmd, 9999, aLabelStr );
     }
 }
 
@@ -576,7 +580,7 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 
     // All other status events will be processed here
     sal_Bool bSetCheckmark      = sal_False;
-    sal_Bool bCheckmark         = sal_False;
+    sal_Bool bCheckmark			= sal_False;
 
     osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< css::awt::XPopupMenu > xPopupMenu( m_xPopupMenu );
@@ -588,9 +592,9 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
         VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( xPopupMenu );
         PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
-        for ( sal_uInt16 i = 0; i < pVCLPopupMenu->GetItemCount(); i++ )
+        for ( USHORT i = 0; i < pVCLPopupMenu->GetItemCount(); i++ )
         {
-            sal_uInt16 nId = pVCLPopupMenu->GetItemId( i );
+            USHORT nId = pVCLPopupMenu->GetItemId( i );
             if ( nId == 0 )
                 continue;
 
@@ -728,7 +732,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
             else if ( aCmd.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_CMD_PART ))) < 0 )
             {
                 URL                     aTargetURL;
-                Sequence<PropertyValue> aArgs;
+                Sequence<PropertyValue>	aArgs;
 
                 aTargetURL.Complete = aCmd;
                 xURLTransformer->parseStrict( aTargetURL );
@@ -743,7 +747,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                     pExecuteInfo->aTargetURL    = aTargetURL;
                     pExecuteInfo->aArgs         = aArgs;
                     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                        UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ToolbarsMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+                        UiEventLogHelper(::rtl::OUString::createFromAscii("ToolbarsMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
                     Application::PostUserEvent( STATIC_LINK(0, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
                 }
             }

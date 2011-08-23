@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module text {
 
 //=============================================================================
 
-/** The accessible view of pages.
+/** The accessible view of pagees.
 
 
      @since OOo 1.1.2
@@ -55,9 +55,9 @@ published service AccessiblePageView
 {
     /** This interface gives access to any page that is visible in the
           page preview of a text document.
-
+        
         <ul>
-            <li>The parent returned by
+            <li>The parent returned by 
                 <method scope="::com::sun::star::accessibility"
                 >XAccessibleContext::getAccessibleParent</method> is the
                 accessible page preview of a text document.  That is, the
@@ -66,7 +66,7 @@ published service AccessiblePageView
                 >XAccessible::getAccessibleContext</method> supports
                 <type scope="::com::sun::star::text"
                 >AccessibleTextDocumentPageView</type>.
-            <li>The children returned by
+            <li>The children returned by 
                 <method scope="::com::sun::star::accessibility"
                 >XAccessibleContext::getAccessibleChild</method> all
                 support the interface XAccessible. Calling
@@ -78,36 +78,36 @@ published service AccessiblePageView
                     <li><type scope="::com::sun::star::text"
                         >AccessibleHeaderFooterView</type>:
                         A child of this kind is returned for every header
-                        and footer that is contained in the page.
+                        and footer that is conatined in the page.
                     <li><type scope="::com::sun::star::text"
                         >AccessibleFootnoteView</type>:
                         A child of this kind is returned for every footnote
-                        that is contained in the page.
+                        that is conatined in the page.
                     <li><type scope="::com::sun::star::text"
                         >AccessibleEndnoteView</type>:
                         A child of this kind is returned for every endnote
-                        that is contained in the page.
+                        that is conatined in the page.
                     <li><type scope="::com::sun::star::text"
                         >AccessibleParagraphView</type>:
                         A child of this kind is returned for every paragraph
                         fragment that is contained in the page.
-                        A paragraph fragment is the part of a paragraph that
+                        A paragraph fragment is the part of a paragraph that 
                         is displayed on a certain page.
                     <li><type scope="::com::sun::star::table"
                         >AccessibleTableView</type>:
                         A child of this kind is returned for every table
                         fragment that is contained in the page.
-                        A table fragment is the part of a table that is
+                        A table fragment is the part of a table that is 
                         displayed on a certain page.
                     <li><type scope="::com::sun::star::text"
                         >AccessibleTextFrameView</type>:
                         A child of this kind is returned for every text
-                        frame that is contained in the page. These objects
+                        frame that is conrtained in the page. These objects
                         are children of the <type>AccessiblePageView</type>
                         regardless whether they are bound to the page, a
-                        paragraph, a frame, or a character. The only
+                        paragarph, a frame, or a character. The only
                         exception are text frames that are bound as
-                        character.  They are children of the paragraph they
+                        character.  They are childen of the paragraph they
                         are contained in.
                     <li><type scope="::com::sun::star::text"
                         >AccessibleTextGraphicObject</type>:
@@ -115,17 +115,17 @@ published service AccessiblePageView
                         is contained in the page. These objects are
                         children of the <type>AccessiblePageView</type>
                         regardless whether they are bound to a page, paragraph,
-                        a frame or a character. The only exception
-                        are text frames that are bound as character. They are
-                        children of the paragraph they are contained in.
+                        a frame or a character. The only exception 
+                        are text frames that are bound as character. They are 
+                        childen of the paragraph they are contained in.
                     <li><type scope="::com::sun::star::text"
                         >AccessibleTextEmbeddedObject</type>:
                         A child of this kind is returned for every embedded
-                        object that is contained in the page.
+                        object that is conatained in the page.
                         These objects are children of the
                         <type>AccessibleTextDocumentView</type> regardless
-                        whether they are bound to a page, a paragraph, a frame,
-                        or a character.  They are children of the paragraph they
+                        whether they are bound to a page, a paragarph, a frame,
+                        or a character.  They are childen of the paragraph they
                         are contained in.
                     <li><type scope="::com::sun::star::drawing"
                         >AccessibleShape</type>:
@@ -198,7 +198,7 @@ published service AccessiblePageView
      */
     interface ::com::sun::star::accessibility::XAccessibleContext;
 
-    /** This interface describes the graphical representation of a
+    /** This interface describes the graphical representation of a 
           endnote.
      */
     interface ::com::sun::star::accessibility::XAccessibleComponent;

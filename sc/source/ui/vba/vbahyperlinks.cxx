@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #include "vbahyperlinks.hxx"
 #include <algorithm>
 #include <vector>
@@ -46,11 +46,11 @@ namespace {
 bool lclContains( const ScRangeList& rScOuter, const uno::Reference< excel::XRange >& rxInner ) throw (uno::RuntimeException)
 {
     const ScRangeList& rScInner = ScVbaRange::getScRangeList( rxInner );
-    if( (rScInner.size() == 0) || (rScOuter.size() == 0) )
+    if( (rScInner.Count() == 0) || (rScOuter.Count() == 0) )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Empty range objects" ) ), uno::Reference< uno::XInterface >() );
 
-    for( size_t nIndex = 0, nCount = rScInner.size(); nIndex < nCount; ++nIndex )
-        if( !rScOuter.In( *rScInner[ nIndex ] ) )
+    for( ULONG nIndex = 0, nCount = rScInner.Count(); nIndex < nCount; ++nIndex )
+        if( !rScOuter.In( *rScInner.GetObject( nIndex ) ) )
             return false;
     return true;
 }
@@ -89,7 +89,7 @@ bool EqualAnchorFunctor::operator()( const uno::Reference< excel::XHyperlink >& 
     sal_Int32 nType = rxHlink->getType();
     if( nType != mnType )
         return false;
-
+        
     switch( nType )
     {
         case office::MsoHyperlinkType::msoHyperlinkRange:
@@ -97,7 +97,7 @@ bool EqualAnchorFunctor::operator()( const uno::Reference< excel::XHyperlink >& 
             uno::Reference< excel::XRange > xAnchorRange( rxHlink->getRange(), uno::UNO_QUERY_THROW );
             const ScRangeList& rScRanges1 = ScVbaRange::getScRangeList( xAnchorRange );
             const ScRangeList& rScRanges2 = ScVbaRange::getScRangeList( mxAnchorRange );
-            return (rScRanges1.size() == 1) && (rScRanges2.size() == 1) && (*rScRanges1[ 0 ] == *rScRanges2[ 0 ]);
+            return (rScRanges1.Count() == 1) && (rScRanges2.Count() == 1) && (*rScRanges1.GetObject( 0 ) == *rScRanges2.GetObject( 0 ));
         }
         case office::MsoHyperlinkType::msoHyperlinkShape:
         case office::MsoHyperlinkType::msoHyperlinkInlineShape:
@@ -126,7 +126,7 @@ public:
     /** Inserts the passed hyperlink into the collection. Will remove a
         Hyperlink object with the same anchor as the passed Hyperlink object. */
     void insertHyperlink( const uno::Reference< excel::XHyperlink >& rxHlink ) throw (uno::RuntimeException);
-
+    
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException);
     virtual uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
@@ -134,7 +134,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException);
-
+    
 private:
     typedef ::std::vector< uno::Reference< excel::XHyperlink > > HyperlinkVector;
     HyperlinkVector     maHlinks;
@@ -252,7 +252,7 @@ uno::Reference< excel::XHyperlink > SAL_CALL ScVbaHyperlinks::Add(
         the spreadsheet document. Parent of the Hyperlink is the anchor object. */
     uno::Reference< excel::XHyperlink > xHlink( new ScVbaHyperlink(
         xAnchor, mxContext, rAddress, rSubAddress, rScreenTip, rTextToDisplay ) );
-
+        
     /*  If creation of the hyperlink did not throw, insert it into the
         collection. */
     mxContainer->insertHyperlink( xHlink );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,24 +62,24 @@ namespace sdr
         {
         protected:
             // the OutputDevice to work on, set on construction and not to be changed
-            OutputDevice&                               rmOutputDevice;
+            OutputDevice&							    rmOutputDevice;
 
             // the vector of registered OverlayObjects
-            OverlayObjectVector                         maOverlayObjects;
-
+            OverlayObjectVector							maOverlayObjects;
+            
             // Stripe support. All striped OverlayObjects use these stripe
             // values. Changes change all those objects.
-            Color                                       maStripeColorA; // defaults to Color(COL_BLACK)
-            Color                                       maStripeColorB; // defaults to Color(COL_WHITE)
-            sal_uInt32                                  mnStripeLengthPixel; // defaults to 4L
+            Color									    maStripeColorA; // defaults to Color(COL_BLACK)
+            Color									    maStripeColorB; // defaults to Color(COL_WHITE)
+            sal_uInt32								    mnStripeLengthPixel; // defaults to 4L
 
             // hold an incarnation of Drawinglayer configuration options
-            SvtOptionsDrawinglayer                      maDrawinglayerOpt;
+            SvtOptionsDrawinglayer				    	maDrawinglayerOpt;
 
             // hold buffered the logic length of discrete vector (1.0, 0.0) and the
             // view transformation belonging to it. Update happens in getDiscreteOne()
             basegfx::B2DHomMatrix                       maViewTransformation;
-            drawinglayer::geometry::ViewInformation2D   maViewInformation2D;
+            drawinglayer::geometry::ViewInformation2D	maViewInformation2D;
             double                                      mfDiscreteOne;
 
             // internal

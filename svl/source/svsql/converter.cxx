@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,14 +28,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#include <svl/converter.hxx>
+#include "converter.hxx"
 
-sal_Int32 SvDbaseConverter::ConvertPrecisionToDbase(sal_Int32 _nLen, sal_Int32 _nScale)
+INT32 SvDbaseConverter::ConvertPrecisionToDbase(INT32 _nLen, INT32 _nScale)
 {
     return _nScale ? _nLen +2 : _nLen +1;
 }
 //------------------------------------------------------------------------
-sal_Int32 SvDbaseConverter::ConvertPrecisionToOdbc(sal_Int32 _nLen, sal_Int32 _nScale)
+INT32 SvDbaseConverter::ConvertPrecisionToOdbc(INT32 _nLen, INT32 _nScale)
 {
     return _nScale ? _nLen -2 : _nLen -1;
 }

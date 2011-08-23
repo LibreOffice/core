@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 
 #include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <vcl/fixed.hxx>
 
 //------------------------------------------------------------------------
@@ -40,20 +40,20 @@ class ScGroupDlg : public ModalDialog
 {
 public:
             ScGroupDlg( Window* pParent,
-                        sal_uInt16  nResId,
-                        sal_Bool    bUnGroup = false,
-                        sal_Bool    bRows    = sal_True  );
+                        USHORT	nResId,
+                        BOOL	bUnGroup = FALSE,
+                        BOOL	bRows    = TRUE  );
             ~ScGroupDlg();
 
-    sal_Bool GetColsChecked() const;
+    BOOL GetColsChecked() const;
 
 private:
     FixedLine       aFlFrame;
-    RadioButton     aBtnRows;
-    RadioButton     aBtnCols;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    RadioButton		aBtnRows;
+    RadioButton		aBtnCols;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 };
 
 

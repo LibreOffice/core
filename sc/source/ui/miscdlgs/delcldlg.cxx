@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@
 #include "miscdlgs.hrc"
 
 
-static sal_uInt8 nDelItemChecked=0;
+static BYTE nDelItemChecked=0;
 
 //==================================================================
 
-ScDeleteCellDlg::ScDeleteCellDlg( Window* pParent, sal_Bool bDisallowCellMove ) :
+ScDeleteCellDlg::ScDeleteCellDlg( Window* pParent, BOOL bDisallowCellMove ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DELCELL ) ),
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
@@ -113,7 +113,7 @@ DelCellCmd ScDeleteCellDlg::GetDelCellCmd() const
     return nReturn;
 }
 
-ScDeleteCellDlg::~ScDeleteCellDlg()
+__EXPORT ScDeleteCellDlg::~ScDeleteCellDlg()
 {
 }
 

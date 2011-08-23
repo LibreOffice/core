@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: sheetdata.hxx,v $
+ * $Revision: 1.16.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +54,7 @@ public:
                 ScSheetEvents(const ScSheetEvents& rOther);
                 ~ScSheetEvents();
 
-    const ScSheetEvents&    operator= (const ScSheetEvents& rOther);
+    const ScSheetEvents&	operator= (const ScSheetEvents& rOther);
 
     const rtl::OUString*    GetScript(sal_Int32 nEvent) const;
     void                    SetScript(sal_Int32 nEvent, const rtl::OUString* pNew);

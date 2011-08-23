@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,10 +54,8 @@ public:
     {}
     SharedMasterPageDescriptor mpDescriptor;
     int mnPriority;
-    class Compare
-    {
-    public:
-        bool operator() (const PreviewCreationRequest& r1,const PreviewCreationRequest& r2) const
+    class Compare {public:
+        bool operator() (const PreviewCreationRequest& r1,const PreviewCreationRequest& r2)
         {
             if (r1.mnPriority != r2.mnPriority)
             {
@@ -72,13 +70,11 @@ public:
             }
         }
     };
-    class CompareToken
-    {
-        public:
+    class CompareToken {public:
         MasterPageContainer::Token maToken;
         CompareToken(MasterPageContainer::Token aToken) : maToken(aToken) {}
-        bool operator() (const PreviewCreationRequest& rRequest) const
-            { return maToken==rRequest.mpDescriptor->maToken; }
+        bool operator() (const PreviewCreationRequest& rRequest)
+        {     return maToken==rRequest.mpDescriptor->maToken; }
     };
 };
 
@@ -150,7 +146,7 @@ bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor&
         && rpDescriptor->maLargePreview.GetSizePixel().Width() == 0)
     {
         sal_Int32 nPriority (CalculatePriority(rpDescriptor));
-
+        
         // Add a new or replace an existing request.
         RequestQueue::iterator iRequest (::std::find_if(
             mpRequestQueue->begin(),
@@ -158,7 +154,7 @@ bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor&
             PreviewCreationRequest::CompareToken(rpDescriptor->maToken)));
         // When a request for the same token exists then the lowest of the
         // two priorities is used.
-        if (iRequest != mpRequestQueue->end())
+        if (HasRequest(rpDescriptor->maToken))
             if (iRequest->mnPriority < nPriority)
             {
                 mpRequestQueue->erase(iRequest);
@@ -201,7 +197,7 @@ sal_Int32 MasterPageContainerQueue::CalculatePriority (
     // Add a term that introduces an order based on the appearance in the
     // AllMasterPagesSelector.
     nPriority -= rpDescriptor->maToken / 3;
-
+    
     // Process requests for the CurrentMasterPagesSelector first.
     if (rpDescriptor->meOrigin == MasterPageContainer::MASTERPAGE)
         nPriority += snMasterPagePriorityBoost;
@@ -249,7 +245,7 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
         }
 
         mpRequestQueue->erase(mpRequestQueue->begin());
-
+        
         if (aRequest.mpDescriptor.get() != NULL)
         {
             mnRequestsServedCount += 1;
@@ -262,7 +258,7 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer)
         }
     }
     while (false);
-
+    
     if (mpRequestQueue->size() > 0 && ! bWaitForMoreRequests)
     {
         int nTimeout (snDelayedCreationTimeout);

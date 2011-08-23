@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,15 +112,15 @@ class PropertySubControl
 {
 public:
     PropertySubControl( sal_Int32 nType ) : mnType( nType ) {}
-    virtual ~PropertySubControl();
+    virtual	~PropertySubControl();
 
-    virtual             ::com::sun::star::uno::Any getValue() = 0;
-    virtual             void setValue( const ::com::sun::star::uno::Any& rValue, const rtl::OUString& rPresetId ) = 0;
+    virtual				::com::sun::star::uno::Any getValue() = 0;
+    virtual				void setValue( const ::com::sun::star::uno::Any& rValue, const rtl::OUString& rPresetId ) = 0;
 
-    virtual Control*    getControl() = 0;
+    virtual Control*	getControl() = 0;
 
-    static PropertySubControl*
-                        create( sal_Int32 nType,
+    static PropertySubControl* 
+                        create(	sal_Int32 nType,
                                 ::Window* pParent,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const rtl::OUString& rPresetId,
@@ -129,14 +129,14 @@ public:
     sal_Int32 getControlType() const { return mnType; }
 
 protected:
-    sal_Int32           mnType;
+    sal_Int32			mnType;
 };
 
 // --------------------------------------------------------------------
 
 class PropertyControl : public ListBox
 {
-public:
+public: 
     PropertyControl( Window* pParent, const ResId& rResId );
     ~PropertyControl();
 
@@ -159,7 +159,7 @@ class STLPropertySet;
 class CustomAnimationDialog : public TabDialog
 {
 public:
-    CustomAnimationDialog( Window* pParent, STLPropertySet* pSet, sal_uInt16 nPage = 0 );
+    CustomAnimationDialog( Window* pParent, STLPropertySet* pSet, USHORT nPage = 0 );
     ~CustomAnimationDialog();
 
     STLPropertySet* getDefaultSet() { return mpSet; }

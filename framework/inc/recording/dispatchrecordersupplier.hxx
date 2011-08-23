@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,15 +55,15 @@
 #include <cppuhelper/weak.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//	exported const
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//	exported definitions
 
 //_______________________________________________
 
@@ -109,7 +109,7 @@ class DispatchRecorderSupplier  :   // interfaces
 
         //_______________________________________
         // XInterface, XTypeProvider, XServiceInfo
-
+        
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
@@ -133,7 +133,7 @@ class DispatchRecorderSupplier  :   // interfaces
 
 };      //  class DispatchRecorderSupplier
 
-}       //  namespace framework
+}		//	namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_RECORDING_DISPATCHRECORDERSUPPLIER_HXX_
 

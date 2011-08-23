@@ -1,3 +1,0 @@
-Sealed: true
-RegistrationClassName: com.sun.star.comp.test.deployment.passive_java.Services
-UNO-Type-Path: 

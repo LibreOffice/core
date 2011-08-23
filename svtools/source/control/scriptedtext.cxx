@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,8 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include <svtools/scriptedtext.hxx>
+#include "scriptedtext.hxx"
+
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
 #include <rtl/ustring.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/font.hxx>
@@ -234,7 +237,7 @@ void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XB
                                 nScript = i18n::ScriptType::LATIN;
                                 while( (nScript != i18n::ScriptType::WEAK) && (nCharIx == nNextCharIx) )
                                 {
-                                    nNextCharIx = mrOutDevice.HasGlyphs( GetFont( nScript ), maText, sal::static_int_cast< sal_uInt16 >(nCharIx), sal::static_int_cast< sal_uInt16 >(nNextPos - nCharIx) );
+                                    nNextCharIx = mrOutDevice.HasGlyphs( GetFont( nScript ), maText, sal::static_int_cast< USHORT >(nCharIx), sal::static_int_cast< USHORT >(nNextPos - nCharIx) );
                                     if( nCharIx == nNextCharIx )
                                         ++nScript;
                                 }

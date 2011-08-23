@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@ class PaneChildWindow
 public:
     PaneChildWindow (
         ::Window* pParentWindow,
-        sal_uInt16 nId,
-        SfxBindings* pBindings,
+        USHORT nId, 
+        SfxBindings* pBindings, 
         SfxChildWinInfo* pInfo,
-        const sal_uInt16 nDockWinTitleResId,
-        const sal_uInt16 nTitleBarResId,
+        const USHORT nDockWinTitleResId,
+        const USHORT nTitleBarResId,
         SfxChildAlignment eAlignment);
     virtual ~PaneChildWindow (void);
 };
@@ -56,7 +56,7 @@ class LeftPaneImpressChildWindow
     : public PaneChildWindow
 {
 public:
-    LeftPaneImpressChildWindow (::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
+    LeftPaneImpressChildWindow (::Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
 
     SFX_DECL_CHILDWINDOW(LeftPaneImpressChildWindow);
 };
@@ -68,7 +68,7 @@ class LeftPaneDrawChildWindow
     : public PaneChildWindow
 {
 public:
-    LeftPaneDrawChildWindow (::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
+    LeftPaneDrawChildWindow (::Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
 
     SFX_DECL_CHILDWINDOW(LeftPaneDrawChildWindow);
 };
@@ -85,8 +85,8 @@ class ToolPanelChildWindow  :public PaneChildWindow
 public:
     ToolPanelChildWindow(
         ::Window* i_pParentWindow,
-        sal_uInt16 i_nId,
-        SfxBindings* i_pBindings,
+        USHORT i_nId, 
+        SfxBindings* i_pBindings, 
         SfxChildWinInfo* i_pChildWindowInfo );
 
     SFX_DECL_CHILDWINDOW( ToolPanelChildWindow );

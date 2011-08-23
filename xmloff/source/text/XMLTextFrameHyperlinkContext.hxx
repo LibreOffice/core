@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ class XMLTextFrameHint_Impl;
 
 class XMLTextFrameHyperlinkContext : public SvXMLImportContext
 {
-    ::rtl::OUString              sHRef;
-    ::rtl::OUString              sName;
-    ::rtl::OUString              sTargetFrameName;
+    ::rtl::OUString				 sHRef;
+    ::rtl::OUString				 sName;
+    ::rtl::OUString				 sTargetFrameName;
     ::com::sun::star::text::TextContentAnchorType eDefaultAnchorType;
-    SvXMLImportContextRef       xFrameContext;
-    sal_Bool                    bMap;
+    SvXMLImportContextRef		xFrameContext;
+    sal_Bool					bMap;
 
 public:
 
@@ -70,13 +70,12 @@ public:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     ::com::sun::star::text::TextContentAnchorType GetAnchorType() const;
-
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextContent > GetTextContent() const;
-
-    // Frame "to character": anchor moves from first to last char after saving (#i33242#)
+    // --> OD 2004-08-24 #i33242#
     ::com::sun::star::uno::Reference <
         ::com::sun::star::drawing::XShape > GetShape() const;
+    // <--
 };
 
 

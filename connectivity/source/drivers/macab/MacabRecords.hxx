@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ namespace connectivity
                 /* For required properties */
                 CFStringRef *requiredProperties;
                 sal_Int32 numRequiredProperties;
-
+                
             private:
                 /* All of the private methods are for creating a MacabHeader or a
                  * MacabRecord. They are used by the initialize method that goes
@@ -121,7 +121,7 @@ namespace connectivity
                         MacabRecords *records;
                     public:
                         sal_Int32 id;
-                        iterator& operator= (MacabRecords *_records);
+                        void operator= (MacabRecords *_records);
                         iterator();
                         ~iterator();
                         void operator++ ();

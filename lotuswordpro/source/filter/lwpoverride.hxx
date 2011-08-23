@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPOVERRIDE_HXX
@@ -72,21 +72,21 @@ class LwpObjectStream;
 
 enum STATE
 {
-    STATE_OFF   = 0,
-    STATE_ON    = 1,
-    STATE_STYLE = 2
+    STATE_OFF	= 0,
+    STATE_ON	= 1,
+    STATE_STYLE	= 2
 };
 
 class LwpOverride
 {
 public:
-    LwpOverride() : m_nValues(0), m_nOverride(0), m_nApply(0) {}
+    LwpOverride() : m_nValues(0), m_nOverride(0), m_nApply(0) {};
 
     virtual ~LwpOverride(){}
 
-    virtual LwpOverride* clone() const = 0;
-
     virtual void Read(LwpObjectStream* pStrm) = 0;
+
+    virtual void operator=(const LwpOverride& rOther);
 
     void ReadCommon(LwpObjectStream* pStrm);
 
@@ -95,44 +95,28 @@ public:
     void Override(sal_uInt16 nBits, STATE eState);
 
 protected:
-    LwpOverride(LwpOverride const& rOther);
-
-private:
-    LwpOverride& operator=(LwpOverride const& rOther); // not implemented
-
-protected:
-    sal_uInt16  m_nValues;
-    sal_uInt16  m_nOverride;
-    sal_uInt16  m_nApply;
+    sal_uInt16	m_nValues;
+    sal_uInt16	m_nOverride;
+    sal_uInt16	m_nApply;
 };
 
 /////////////////////////////////////////////////////////////////
 class LwpTextLanguageOverride : public LwpOverride
 {
 public:
-    LwpTextLanguageOverride() : m_nLanguage(0) {}
-
-    virtual LwpTextLanguageOverride* clone() const;
+    LwpTextLanguageOverride() : m_nLanguage(0) {};
 
     void Read(LwpObjectStream* pStrm);
 
-protected:
-    LwpTextLanguageOverride(LwpTextLanguageOverride const& rOther);
-
 private:
-    LwpTextLanguageOverride& operator=(LwpTextLanguageOverride const& rOther); // not implemented
-
-private:
-    sal_uInt16  m_nLanguage;
+    sal_uInt16	m_nLanguage;
 };
 
 /////////////////////////////////////////////////////////////////
 class LwpTextAttributeOverride : public LwpOverride
 {
 public:
-    LwpTextAttributeOverride() : m_nHideLevels(0), m_nBaseLineOffset(0) {}
-
-    virtual LwpTextAttributeOverride* clone() const;
+    LwpTextAttributeOverride() : m_nHideLevels(0), m_nBaseLineOffset(0) {};
 
     void Read(LwpObjectStream* pStrm);
 
@@ -140,18 +124,12 @@ public:
 
     sal_Bool IsHighLight();
 
-protected:
-    LwpTextAttributeOverride(LwpTextAttributeOverride const& rOther);
-
-private:
-    LwpTextAttributeOverride& operator=(LwpTextAttributeOverride const& rOther); // not implemented
-
 private:
     enum{
     TAO_HIGHLIGHT = 0x08,
     };
-    sal_uInt16  m_nHideLevels;
-    sal_uInt32  m_nBaseLineOffset;
+    sal_uInt16	m_nHideLevels;
+    sal_uInt32	m_nBaseLineOffset;
 };
 
 inline sal_uInt16 LwpTextAttributeOverride::GetHideLevels() const
@@ -162,20 +140,12 @@ inline sal_uInt16 LwpTextAttributeOverride::GetHideLevels() const
 class LwpKinsokuOptsOverride : public LwpOverride
 {
 public:
-    LwpKinsokuOptsOverride() : m_nLevels(0) {}
-
-    virtual LwpKinsokuOptsOverride* clone() const;
+    LwpKinsokuOptsOverride() : m_nLevels(0) {};
 
     void Read(LwpObjectStream* pStrm);
 
-protected:
-    LwpKinsokuOptsOverride(LwpKinsokuOptsOverride const& rOther);
-
 private:
-    LwpKinsokuOptsOverride& operator=(LwpKinsokuOptsOverride const& rOther); // not implemented
-
-private:
-    sal_uInt16  m_nLevels;
+    sal_uInt16	m_nLevels;
 };
 
 /////////////////////////////////////////////////////////////////
@@ -184,11 +154,11 @@ class LwpBulletOverride : public LwpOverride
 public:
     LwpBulletOverride() {m_bIsNull = sal_True;}
 
-    virtual LwpBulletOverride* clone() const;
-
     void Read(LwpObjectStream* pStrm);
 
     inline LwpObjectID GetSilverBullet() const;
+
+    void operator=(const LwpOverride& rOther);
 
     void Override(LwpBulletOverride* pOther);
 
@@ -209,27 +179,19 @@ public:
     inline void RevertRightAligned();
 
     sal_Bool IsInValid(){return m_bIsNull;}
-
-protected:
-    LwpBulletOverride(LwpBulletOverride const& rOther);
-
-private:
-    LwpBulletOverride& operator=(LwpBulletOverride const& rOther); // not implemented
-
 private:
     enum
     {
-        BO_SILVERBULLET = 0x01,
+        BO_SILVERBULLET	= 0x01,
         // 0x02 is free
-        BO_RIGHTALIGN   = 0x04,
-        BO_EDITABLE     = 0x08,
-        BO_SKIP         = 0x10
+        BO_RIGHTALIGN	= 0x04,
+        BO_EDITABLE		= 0x08,
+        BO_SKIP			= 0x10
     };
 
-    LwpObjectID m_SilverBullet;
+    LwpObjectID	m_SilverBullet;
     sal_Bool m_bIsNull;
 };
-
 inline LwpObjectID LwpBulletOverride::GetSilverBullet() const
 {
     return m_SilverBullet;
@@ -284,68 +246,57 @@ inline void LwpBulletOverride::RevertRightAligned()
 class LwpAlignmentOverride : public LwpOverride
 {
 public:
-    LwpAlignmentOverride() : m_nAlignType(ALIGN_LEFT), m_nPosition(0), m_nAlignChar(0){}
-
-    virtual LwpAlignmentOverride* clone() const;
+    LwpAlignmentOverride() : m_nAlignType(ALIGN_LEFT), m_nPosition(0), m_nAlignChar(0){};
 
     void Read(LwpObjectStream* pStrm);
 
     enum AlignType
     {
-        ALIGN_LEFT          = 0,
-        ALIGN_RIGHT         = 1,
-        ALIGN_CENTER        = 2,
-        ALIGN_JUSTIFY       = 3,
-        ALIGN_JUSTIFYALL    = 4,
-        ALIGN_NUMERICLEFT   = 5,
-        ALIGN_NUMERICRIGHT  = 6,
-        ALIGN_SQUEEZE       = 7
+        ALIGN_LEFT			= 0,
+        ALIGN_RIGHT			= 1,
+        ALIGN_CENTER		= 2,
+        ALIGN_JUSTIFY		= 3,
+        ALIGN_JUSTIFYALL	= 4,
+        ALIGN_NUMERICLEFT	= 5,
+        ALIGN_NUMERICRIGHT	= 6,
+        ALIGN_SQUEEZE		= 7
     };
 
     AlignType GetAlignType(){ return m_nAlignType; }
     void Override(LwpAlignmentOverride* other);//add by  1-24
     void OverrideAlignment(AlignType val);//add by  1-24
-
-protected:
-    LwpAlignmentOverride(LwpAlignmentOverride const& rOther);
-
-private:
-    LwpAlignmentOverride& operator=(LwpAlignmentOverride const& rOther); // not implemented
-
 private:
     enum
     {
-        AO_TYPE     = 0x01,
-        AO_POSITION = 0x02,
-        AO_CHAR     = 0x04
+        AO_TYPE		= 0x01,
+        AO_POSITION	= 0x02,
+        AO_CHAR		= 0x04
     };
 
-    AlignType   m_nAlignType;
-    sal_uInt32  m_nPosition;
-    sal_uInt16  m_nAlignChar;
+    AlignType	m_nAlignType;
+    sal_uInt32	m_nPosition;
+    sal_uInt16	m_nAlignChar;
 };
 
 /////////////////////////////////////////////////////////////////
 class LwpSpacingCommonOverride : public LwpOverride
 {
 public:
-    LwpSpacingCommonOverride() : m_nSpacingType(SPACING_NONE), m_nAmount(0), m_nMultiple(65536){}
-
-    virtual LwpSpacingCommonOverride* clone() const;
+    LwpSpacingCommonOverride() : m_nSpacingType(SPACING_NONE), m_nAmount(0), m_nMultiple(65536){};
 
     void Read(LwpObjectStream* pStrm);
 
     enum SpacingType
     {
-        SPACING_DYNAMIC = 0,
-        SPACING_LEADING = 1,
-        SPACING_CUSTOM  = 2,
-        SPACING_NONE    = 3
+        SPACING_DYNAMIC	= 0,
+        SPACING_LEADING	= 1,
+        SPACING_CUSTOM	= 2,
+        SPACING_NONE	= 3
     };
 
-    SpacingType GetType() const {return m_nSpacingType;}
-    sal_Int32 GetAmount() const {return m_nAmount;}
-    sal_Int32 GetMultiple() const {return m_nMultiple;}
+    SpacingType GetType() const {return m_nSpacingType;};
+    sal_Int32 GetAmount() const {return m_nAmount;};
+    sal_Int32 GetMultiple() const {return m_nMultiple;};
 
     void Override(LwpSpacingCommonOverride* other);
     void OverrideType(SpacingType val);
@@ -353,21 +304,16 @@ public:
     void OverrideMultiple(sal_Int32 val);
 
 protected:
-    LwpSpacingCommonOverride(LwpSpacingCommonOverride const& rOther);
-
-private:
-    LwpSpacingCommonOverride& operator=(LwpSpacingCommonOverride const& rOther); // not implemented
-
-protected:
     enum
     {
-        SPO_TYPE    = 0x01,
-        SPO_AMOUNT  = 0x02,
+        SPO_TYPE	= 0x01,
+        SPO_AMOUNT	= 0x02,
         SPO_MULTIPLE= 0x04
     };
-    SpacingType m_nSpacingType;//sal_uInt16
-    sal_Int32   m_nAmount;
-    sal_Int32   m_nMultiple;
+    SpacingType	m_nSpacingType;//sal_uInt16
+    sal_Int32	m_nAmount;
+    sal_Int32	m_nMultiple;
+
 };
 
 /////////////////////////////////////////////////////////////////
@@ -375,40 +321,30 @@ class LwpSpacingOverride : public LwpOverride
 {
 public:
     LwpSpacingOverride();
+    LwpSpacingOverride& operator=(LwpSpacingOverride& other);
     virtual ~LwpSpacingOverride();
-
-    virtual LwpSpacingOverride* clone() const;
 
     void Read(LwpObjectStream* pStrm);
 
     void Override(LwpSpacingOverride* other);
 
-    LwpSpacingCommonOverride* GetSpacing(){return m_pSpacing;}
-    LwpSpacingCommonOverride* GetAboveLineSpacing(){return m_pAboveLineSpacing;}
-    LwpSpacingCommonOverride* GetAboveSpacing(){return m_pParaSpacingAbove;}
-    LwpSpacingCommonOverride* GetBelowSpacing(){return m_pParaSpacingBelow;}
-
-protected:
-    LwpSpacingOverride(LwpSpacingOverride const& rOther);
-
+    LwpSpacingCommonOverride* GetSpacing(){return m_pSpacing;};
+    LwpSpacingCommonOverride* GetAboveLineSpacing(){return m_pAboveLineSpacing;};
+    LwpSpacingCommonOverride* GetAboveSpacing(){return m_pParaSpacingAbove;};
+    LwpSpacingCommonOverride* GetBelowSpacing(){return m_pParaSpacingBelow;};
 private:
-    LwpSpacingOverride& operator=(LwpSpacingOverride const& rOther); // not implemented
-
-private:
-    LwpSpacingCommonOverride*   m_pSpacing;
-    LwpSpacingCommonOverride*   m_pAboveLineSpacing;
-    LwpSpacingCommonOverride*   m_pParaSpacingAbove;
-    LwpSpacingCommonOverride*   m_pParaSpacingBelow;
+    LwpSpacingCommonOverride*	m_pSpacing;
+    LwpSpacingCommonOverride*	m_pAboveLineSpacing;
+    LwpSpacingCommonOverride*	m_pParaSpacingAbove;
+    LwpSpacingCommonOverride*	m_pParaSpacingBelow;
 };
 
 /////////////////////////////////////////////////////////////////
 class LwpIndentOverride : public LwpOverride
 {
 public:
-    LwpIndentOverride() : m_nAll(0), m_nFirst(0), m_nRest(0), m_nRight(0) {}
-
-    virtual LwpIndentOverride* clone() const;
-
+    LwpIndentOverride() : m_nAll(0), m_nFirst(0), m_nRest(0), m_nRight(0) {};
+    LwpIndentOverride& operator=(LwpIndentOverride& other);
     void Read(LwpObjectStream* pStrm);
 
     enum
@@ -437,41 +373,33 @@ public:
     void SetMFirst(sal_Int32 val){m_nFirst=val;}
     void SetMRest(sal_Int32 val){m_nRest=val;}
     void SetMRight(sal_Int32 val){m_nRight=val;}
-
-protected:
-    LwpIndentOverride(LwpIndentOverride const& rOther);
-
-private:
-    LwpIndentOverride& operator=(LwpIndentOverride const& rOther); // not implemented
-
 private:
     enum
     {
-        IO_ALL          = 0x0001,
-        IO_FIRST        = 0x0002,
-        IO_REST         = 0x0004,
-        IO_RIGHT        = 0x0008,
-        IO_HANGING      = 0x0010,
-        IO_EQUAL        = 0x0020,
-        IO_BODY         = 0x0040,
-        IO_REL_ALL      = 0x0080,
-        IO_REL_FIRST    = 0x0100,
-        IO_REL_REST     = 0x0200,
-        IO_REL_FLAGS    = (IO_REL_ALL | IO_REL_FIRST | IO_REL_REST),
+        IO_ALL			= 0x0001,
+        IO_FIRST		= 0x0002,
+        IO_REST			= 0x0004,
+        IO_RIGHT		= 0x0008,
+        IO_HANGING		= 0x0010,
+        IO_EQUAL		= 0x0020,
+        IO_BODY			= 0x0040,
+        IO_REL_ALL		= 0x0080,
+        IO_REL_FIRST	= 0x0100,
+        IO_REL_REST		= 0x0200,
+        IO_REL_FLAGS	= (IO_REL_ALL | IO_REL_FIRST | IO_REL_REST),
 #ifdef JAPANESE_ENABLED // 96/4/8 ueda for indentation by char width
-        IO_USE_RELATIVE = 0x0400,
-        IO_CHARUNIT     = 0x0800
+        IO_USE_RELATIVE	= 0x0400,
+        IO_CHARUNIT		= 0x0800
 #else
-        IO_USE_RELATIVE = 0x0400
+        IO_USE_RELATIVE	= 0x0400
 #endif
     };
 
-    sal_Int32   m_nAll;
-    sal_Int32   m_nFirst;
-    sal_Int32   m_nRest;
-    sal_Int32   m_nRight;
+    sal_Int32	m_nAll;
+    sal_Int32	m_nFirst;
+    sal_Int32	m_nRest;
+    sal_Int32	m_nRight;
 };
-
 inline double LwpIndentOverride::GetFirst() const
 {
         return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nFirst-m_nRest));
@@ -494,25 +422,17 @@ public:
 
     virtual ~LwpAmikakeOverride();
 
-    virtual LwpAmikakeOverride* clone() const;
-
     void Read(LwpObjectStream* pStrm);
     enum
     {
-        AMIKAKE_NONE        = 0,
-        AMIKAKE_BACKGROUND  = 1,
-        AMIKAKE_CHARACTER   = 2
+        AMIKAKE_NONE		= 0,
+        AMIKAKE_BACKGROUND	= 1,
+        AMIKAKE_CHARACTER	= 2
     };
 
-protected:
-    LwpAmikakeOverride(LwpAmikakeOverride const& rOther);
-
 private:
-    LwpAmikakeOverride& operator=(LwpAmikakeOverride const& rOther); // not implemented
-
-private:
-    LwpBackgroundStuff* m_pBackgroundStuff;
-    sal_uInt16      m_nType;
+    LwpBackgroundStuff*	m_pBackgroundStuff;
+    sal_uInt16		m_nType;
 
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,8 +89,8 @@ namespace
 //------------------------------------------------------------------------------
 sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
 {
-    const ::rtl::OUString aModelPrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component."));
-    const ::rtl::OUString aCompatibleModelPrefix(RTL_CONSTASCII_USTRINGPARAM("stardiv.one.form.component."));
+    const ::rtl::OUString aModelPrefix = ::rtl::OUString::createFromAscii("com.sun.star.form.component.");
+    const ::rtl::OUString aCompatibleModelPrefix = ::rtl::OUString::createFromAscii("stardiv.one.form.component.");
 
     sal_Int32 nTypeId = -1;
     if (aModelName == FM_COMPONENT_EDIT)

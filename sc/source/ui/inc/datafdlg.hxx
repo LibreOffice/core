@@ -29,9 +29,19 @@
 #ifndef SC_DATAFDLG_HXX
 #define SC_DATAFDLG_HXX
 
+
+#ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
+#endif
+
+#ifndef _SV_BUTTON_HXX //autogen
+#include <vcl/imagebtn.hxx>
+#endif
+
+#ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
+#endif
+
 
 #include "global.hxx"
 
@@ -61,6 +71,8 @@ private:
     PushButton      aBtnClose;
     ScrollBar       aSlider;
     FixedText       aFixedText;
+    //FixedText       aFixedText1;
+    //Edit            aEdit1;
 
     ScTabViewShell* pTabViewShell;
     ScDocument*     pDoc;
@@ -71,7 +83,7 @@ private:
     SCROW           nStartRow;
     SCROW           nEndRow;
     SCTAB           nTab;
-    sal_Bool            bNoSelection;
+    BOOL            bNoSelection;
 
     FixedText** pFixedTexts;
     Edit** pEdits;

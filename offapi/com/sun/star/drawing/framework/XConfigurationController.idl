@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ interface XConfigurationChangeListener;
 interface XConfigurationChangeRequest;
 interface XResourceId;
 interface XResource;
-
+    
 /** The configuration controller is responsible for the management of the
     set of active resources.
 
@@ -62,18 +62,18 @@ interface XResource;
     <member>requestResourceActivation()</member> and
     <member>requestResourceDeactivation()</member>.</li>
     </ul></p>
-
+    
     <p>When the two configurations differ then the current configuration is
     updated eventually to reflect the requested configuration.  An update
-    takes place when the following three conditions are fulfilled.
+    takes place when the following three conditions are fullfilled.
     <ol>
     <li>when the last pending request for configuration changes has been
-    processed,</li>
+    processed,</li> 
     <li>when the <member>update()</member> method is called.</li>
     <li>when the configuration manager it is unlocked after formerly being
     locked.</li>
     </ol></p>
-
+    
     <p>Requests for configuration changes are handled in a two step process:
     <ol>
     <li>First the requested configuration is updated iteratively: Every
@@ -94,7 +94,7 @@ interface XResource;
     <p>This process goes on until the queue of request objects becomes
     empty.  Until this point only the requested configuration has been
     modified.  No resources have been activated or deactivated.</p></li>
-
+    
     <li><p>The second update step activates or deactivates resources so that
     the current configuration (the one that comprises the actually active
     resources) reflects the requested configuration.</p>
@@ -108,7 +108,7 @@ interface XResource;
     temporarily or permanently unavailable.  For example, during the
     start-up of a new Impress application the side panes are displayed
     with a visible delay because they are not provided sooner by the
-    underlying framework.  Such unavailable resources are not forgotten but
+    underlying framework.  Such anavailable resources are not forgotten but
     remain in the requested configuration.  Every time the configuration
     controller updates its current configuration these resources are
     requested once more.</li></ol></p>
@@ -252,12 +252,12 @@ interface XConfigurationController
         allows the saving and restoring of configurations.  However, the
         given configuration can have other origins then these methods.</p>
         <p>The given configuration is transformed into a list of of change
-        requests so that the resulting requested configuration equals the
+        requests so that the resulting reqeusted configuration equals the
         given configuration.  This has the advantage that not only the
         resource activations and deactivations but all configuration
         changes are properly broadcasted.</p>
         <p>Note that because of the configuration change notifications
-        listeners can make more configuration change requests, so that the
+        listeners can make more configuratio change requests, so that the
         resulting requested configuration can be different from the given
         configuration.</p>
         @param xConfiguration

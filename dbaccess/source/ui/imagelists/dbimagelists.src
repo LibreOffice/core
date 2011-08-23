@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,10 +56,24 @@ ImageList IMG_INDEX_DLG_SC
     IL_TOOL_2 ;
 };
 
+ImageList IMG_INDEX_DLG_SCH
+{
+    MASKCOLOR;
+    prefix = "sch";
+    IL_TOOL_2 ;
+};
+
 ImageList IMG_INDEX_DLG_LC
 {
     MASKCOLOR;
     prefix = "lc";
+    IL_TOOL_2 ;
+};
+
+ImageList IMG_INDEX_DLG_LCH
+{
+    MASKCOLOR;
+    prefix = "lch";
     IL_TOOL_2 ;
 };
 
@@ -68,22 +82,39 @@ Image IMG_FORMFOLDER_TREE_L
     ImageBitmap = Bitmap { File = "forms_32"; };
     MASKCOLOR;
 };
-
+Image IMG_FORMFOLDER_TREE_LHC
+{
+    ImageBitmap = Bitmap { File = "forms_32_h"; };
+    MASKCOLOR;
+};
 Image IMG_REPORTFOLDER_TREE_L
 {
     ImageBitmap = Bitmap { File = "reports_32"; };
     MASKCOLOR;
 };
-
+Image IMG_REPORTFOLDER_TREE_LHC
+{
+    ImageBitmap = Bitmap { File = "reports_32_h"; };
+    MASKCOLOR;
+};
 Image IMG_QUERYFOLDER_TREE_L
 {
     ImageBitmap = Bitmap { File = "queries_32"; };
     MASKCOLOR;
 };
-
+Image IMG_QUERYFOLDER_TREE_LHC
+{
+    ImageBitmap = Bitmap { File = "queries_32_h"; };
+    MASKCOLOR;
+};
 Image IMG_TABLEFOLDER_TREE_L
 {
     ImageBitmap = Bitmap { File = "tables_32"; };
+    MASKCOLOR;
+};
+Image IMG_TABLEFOLDER_TREE_LHC
+{
+    ImageBitmap = Bitmap { File = "tables_32_h"; };
     MASKCOLOR;
 };
 
@@ -95,7 +126,13 @@ Image IMG_TABLEFOLDER_TREE_L
 
 Image DATABASE_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "db.png"; };
+    ImageBitmap = Bitmap { File = "db.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+
+Image DATABASE_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "db_sch.bmp"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
 
@@ -108,9 +145,21 @@ Image TABLE_TREE_ICON
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
+Image TABLE_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "sxh03188.png"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
 Image TABLEFOLDER_TREE_ICON
 {
     ImageBitmap = Bitmap { File = "sx03187.png"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Image TABLEFOLDER_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "sxh03187.png"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
@@ -123,18 +172,36 @@ Image VIEW_TREE_ICON
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
+Image VIEW_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "sxh16670.png"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
 //------------------------------------------------------------------------
 // queries and query folders
 
 Image QUERY_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "sx03202.png"; };
+    ImageBitmap = Bitmap { File = "sx03202.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Image QUERY_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "sxh03202.bmp"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
 Image QUERYFOLDER_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "sx03201.png"; };
+    ImageBitmap = Bitmap { File = "sx03201.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Image QUERYFOLDER_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "sxh03201.bmp"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
@@ -147,9 +214,21 @@ Image FORM_TREE_ICON
     MASKCOLOR;
 };
 
+Image FORM_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "form_16_h"; };
+    MASKCOLOR;
+};
+
 Image FORMFOLDER_TREE_ICON
 {
     ImageBitmap = Bitmap { File = "forms_16"; };
+    MASKCOLOR;
+};
+
+Image FORMFOLDER_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "forms_16_h"; };
     MASKCOLOR;
 };
 
@@ -162,8 +241,22 @@ Image REPORT_TREE_ICON
     MASKCOLOR;
 };
 
+Image REPORT_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "report_16_h"; };
+    MASKCOLOR;
+};
 Image REPORTFOLDER_TREE_ICON
 {
     ImageBitmap = Bitmap { File = "reports_16"; };
     MASKCOLOR;
 };
+
+Image REPORTFOLDER_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "reports_16_h"; };
+    MASKCOLOR;
+};
+
+//========================================================================
+

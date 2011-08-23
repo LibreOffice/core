@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "SubmissionHelper::canTriggerSubmissions: caught an exception!" );
+            OSL_ENSURE( sal_False, "SubmissionHelper::canTriggerSubmissions: caught an exception!" );
         }
         return false;
     }
@@ -167,18 +167,18 @@ namespace pcr
             break;
 
             default:
-                OSL_FAIL( "SubmissionPropertyHandler::getPropertyValue: cannot handle this property!" );
+                DBG_ERROR( "SubmissionPropertyHandler::getPropertyValue: cannot handle this property!" );
                 break;
             }
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "SubmissionPropertyHandler::getPropertyValue: caught an exception!" );
+            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::getPropertyValue: caught an exception!" );
         }
 
         return aReturn;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SubmissionPropertyHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
@@ -213,15 +213,15 @@ namespace pcr
                 break;
 
             default:
-                OSL_FAIL( "SubmissionPropertyHandler::setPropertyValue: cannot handle this id!" );
+                OSL_ENSURE( sal_False, "SubmissionPropertyHandler::setPropertyValue: cannot handle this id!" );
             }
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "SubmissionPropertyHandler::setPropertyValue: caught an exception!" );
+            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::setPropertyValue: caught an exception!" );
         }
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL SubmissionPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
@@ -318,7 +318,7 @@ namespace pcr
         break;
 
         default:
-            OSL_FAIL( "SubmissionPropertyHandler::describePropertyLine: cannot handle this id!" );
+            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::describePropertyLine: cannot handle this id!" );
             return LineDescriptor();
         }
 
@@ -352,7 +352,7 @@ namespace pcr
         break;
 
         default:
-            OSL_FAIL( "SubmissionPropertyHandler::actuatingPropertyChanged: cannot handle this id!" );
+            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::actuatingPropertyChanged: cannot handle this id!" );
         }
     }
 
@@ -389,12 +389,12 @@ namespace pcr
         break;
 
         default:
-            OSL_FAIL( "SubmissionPropertyHandler::convertToPropertyValue: cannot handle this id!" );
+            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::convertToPropertyValue: cannot handle this id!" );
         }
 
         return aPropertyValue;
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL SubmissionPropertyHandler::convertToControlValue( const ::rtl::OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
@@ -430,7 +430,7 @@ namespace pcr
         break;
 
         default:
-            OSL_FAIL( "SubmissionPropertyHandler::convertToControlValue: cannot handle this id!" );
+            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::convertToControlValue: cannot handle this id!" );
         }
 
         return aControlValue;

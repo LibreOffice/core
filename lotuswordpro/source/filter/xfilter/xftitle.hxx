@@ -57,12 +57,16 @@
  * @file
  * Page number field.
  ************************************************************************/
-#ifndef     _XFTITLE_HXX
-#define     _XFTITLE_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-31 create this file.
+ ************************************************************************/
+#ifndef		_XFTITLE_HXX
+#define		_XFTITLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
-#include    "xfnumfmt.hxx"
+#include	"xfglobal.hxx"
+#include	"xfcontent.hxx"
+#include	"xfnumfmt.hxx"
 
 /**
  * @brief
@@ -71,12 +75,12 @@
 class XFTitle : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 };
 
 inline void XFTitle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     pStrm->StartElement( A2OUSTR("text:title") );

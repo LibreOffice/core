@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,18 +36,18 @@
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem )
+BOOL ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem )
 {
-    sal_uInt32 nMetaType;
-    sal_uInt32 nOrgPos = rStreamWMF.Tell();
-    sal_uInt16 nOrigNumberFormat = rStreamWMF.GetNumberFormatInt();
+    UINT32 nMetaType;
+    UINT32 nOrgPos = rStreamWMF.Tell();
+    UINT16 nOrigNumberFormat = rStreamWMF.GetNumberFormatInt();
     rStreamWMF.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rStreamWMF.Seek( 0x28 );
     rStreamWMF >> nMetaType;
     rStreamWMF.Seek( nOrgPos );
     if ( nMetaType == 0x464d4520 )
     {
-        if ( EnhWMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadEnhWMF() == sal_False )
+        if ( EnhWMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadEnhWMF() == FALSE )
             rStreamWMF.SetError( SVSTREAM_FILEFORMAT_ERROR );
     }
     else
@@ -60,18 +60,18 @@ sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaF
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pFilterConfigItem )
+BOOL ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pFilterConfigItem )
 {
-    sal_uInt32 nMetaType;
-    sal_uInt32 nOrgPos = rStream.Tell();
-    sal_uInt16 nOrigNumberFormat = rStream.GetNumberFormatInt();
+    UINT32 nMetaType;
+    UINT32 nOrgPos = rStream.Tell();
+    UINT16 nOrigNumberFormat = rStream.GetNumberFormatInt();
     rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rStream.Seek( 0x28 );
     rStream >> nMetaType;
     rStream.Seek( nOrgPos );
     if ( nMetaType == 0x464d4520 )
     {
-        if ( EnhWMFReader( rStream, rMTF, NULL ).ReadEnhWMF() == sal_False )
+        if ( EnhWMFReader( rStream, rMTF, NULL ).ReadEnhWMF() == FALSE )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
     }
     else
@@ -84,8 +84,8 @@ sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigI
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                              FilterConfigItem* pConfigItem, sal_Bool bPlaceable)
+BOOL ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
+                              FilterConfigItem* pConfigItem, BOOL bPlaceable)
 {
     WMFWriter aWMFWriter;
     return aWMFWriter.WriteWMF( rMTF, rTargetStream, pConfigItem, bPlaceable );
@@ -93,25 +93,25 @@ sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetSt
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
+BOOL ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
                               FilterConfigItem* pConfigItem )
 {
-    EMFWriter aEMFWriter(rTargetStream);
-    return aEMFWriter.WriteEMF( rMTF, pConfigItem );
+    EMFWriter aEMFWriter;
+    return aEMFWriter.WriteEMF( rMTF, rTargetStream, pConfigItem );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool WriteWindowMetafile( SvStream& rStream, const GDIMetaFile& rMTF )
+BOOL WriteWindowMetafile( SvStream& rStream, const GDIMetaFile& rMTF )
 {
     return WMFWriter().WriteWMF( rMTF, rStream, NULL );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF )
+BOOL WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF )
 {
-    return WMFWriter().WriteWMF( rMTF, rStream, NULL, sal_False );
+    return WMFWriter().WriteWMF( rMTF, rStream, NULL, FALSE );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

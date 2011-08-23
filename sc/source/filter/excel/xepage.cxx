@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #include <set>
 #include <limits>
 
-using namespace ::oox;
+#include <oox/core/tokens.hxx>
 
 using ::rtl::OString;
 using ::std::set;
@@ -198,7 +198,7 @@ void XclExpPageBreaks::SaveXml( XclExpXmlStream& rStrm )
     sal_Int32 nElement = GetRecId() == EXC_ID_HORPAGEBREAKS ? XML_rowBreaks : XML_colBreaks;
     sax_fastparser::FSHelperPtr& pWorksheet = rStrm.GetCurrentStream();
     OString sNumPageBreaks = OString::valueOf( (sal_Int32) mrPageBreaks.size() );
-    pWorksheet->startElement( nElement,
+    pWorksheet->startElement( nElement, 
             XML_count,              sNumPageBreaks.getStr(),
             XML_manualBreakCount,   sNumPageBreaks.getStr(),
             FSEND );
@@ -326,7 +326,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
         SCROW nRow = *itr;
         if (nRow > nMaxRow)
             break;
-
+        
         maData.maHorPageBreaks.push_back(nRow);
     }
 
@@ -338,7 +338,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
 static void lcl_WriteHeaderFooter( XclExpXmlStream& rStrm )
 {
-    // OOXTODO: we currently only emit oddHeader/oddFooter elements, and
+    // OOXTODO: we currently only emit oddHeader/oddFooter elements, and 
     //          do not support the first/even/odd page distinction.
     rStrm.WriteAttributes(
             // OOXTODO: XML_alignWithMargins,
@@ -397,9 +397,9 @@ void XclExpPageSettings::SaveXml( XclExpXmlStream& rStrm )
     XclExpHeaderFooter( EXC_ID_FOOTER, maData.maFooter ).SaveXml( rStrm );
     XclExpXmlEndElementRecord( XML_headerFooter ).SaveXml( rStrm );
 
-    XclExpPageBreaks( EXC_ID_HORPAGEBREAKS, maData.maHorPageBreaks,
+    XclExpPageBreaks( EXC_ID_HORPAGEBREAKS, maData.maHorPageBreaks, 
                     static_cast< sal_uInt16 >( GetXclMaxPos().Col() ) ).SaveXml( rStrm );
-    XclExpPageBreaks( EXC_ID_VERPAGEBREAKS, maData.maVerPageBreaks,
+    XclExpPageBreaks( EXC_ID_VERPAGEBREAKS, maData.maVerPageBreaks, 
                     static_cast< sal_uInt16 >( GetXclMaxPos().Row() ) ).SaveXml( rStrm );
 
     if( const Graphic* pGraphic = maData.mxBrushItem->GetGraphic() )

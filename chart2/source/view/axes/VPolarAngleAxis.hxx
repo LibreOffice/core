@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,6 @@
 #define _CHART2_VPOLARANGLEAXIS_HXX
 
 #include "VPolarAxis.hxx"
-#include "Tickmarks_Equidistant.hxx"
 
 //.............................................................................
 namespace chart
@@ -48,11 +47,11 @@ public:
            , sal_Int32 nDimensionCount );
     virtual ~VPolarAngleAxis();
 
-    virtual void createMaximumLabels();
-    virtual void createLabels();
-    virtual void updatePositions();
+    virtual void SAL_CALL createMaximumLabels();
+    virtual void SAL_CALL createLabels();
+    virtual void SAL_CALL updatePositions();
 
-    virtual void createShapes();
+    virtual void SAL_CALL createShapes();
 
 private: //methods
     bool createTextShapes_ForAngleAxis(

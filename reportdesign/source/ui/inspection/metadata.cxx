@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include <svtools/localresaccess.hxx>
 #include "com/sun/star/inspection/XPropertyHandler.hpp"
 #include <tools/debug.hxx>
-#include <comphelper/extract.hxx>
+#include <cppuhelper/extract.hxx>
 #include "helpids.hrc"
 #include "RptResId.hrc"
 #include "uistrings.hrc"
@@ -51,28 +51,28 @@ namespace rptui
     //========================================================================
     struct OPropertyInfoImpl
     {
-        String          sName;
-        String          sTranslation;
-        rtl::OString    sHelpId;
+        String			sName;
+        String			sTranslation;
+        sal_uInt32      nHelpId;
         sal_Int32       nId;
         sal_uInt16      nPos;
         sal_uInt32      nUIFlags;
 
         OPropertyInfoImpl(
-                        const ::rtl::OUString&      rName,
-                        sal_Int32                   _nId,
-                        const String&               aTranslation,
-                        sal_uInt16                  nPosId,
-                        const rtl::OString&         _sHelpId,
+                        const ::rtl::OUString&		rName,
+                        sal_Int32					_nId,
+                        const String&				aTranslation,
+                        sal_uInt16					nPosId,
+                        sal_uInt32					nHelpId,
                         sal_uInt32                  _nUIFlags);
     };
 
     //------------------------------------------------------------------------
     OPropertyInfoImpl::OPropertyInfoImpl(const ::rtl::OUString& _rName, sal_Int32 _nId,
-                                   const String& aString, sal_uInt16 nP, const rtl::OString& sHid, sal_uInt32 _nUIFlags)
+                                   const String& aString, sal_uInt16 nP, sal_uInt32 nHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
        ,sTranslation(aString)
-       ,sHelpId(sHid)
+       ,nHelpId(nHid)
        ,nId(_nId)
        ,nPos(nP)
        ,nUIFlags(_nUIFlags)
@@ -111,8 +111,8 @@ namespace rptui
 #define DEF_INFO_5( ident, uinameres, helpid, flag1, flag2, flag3, flag4, flag5 ) \
     DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 | PROP_FLAG_##flag3 | PROP_FLAG_##flag4 | PROP_FLAG_##flag5 )
 
-    sal_uInt16              OPropertyInfoService::s_nCount = 0;
-    OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = NULL;
+    sal_uInt16				OPropertyInfoService::s_nCount = 0;
+    OPropertyInfoImpl*		OPropertyInfoService::s_pPropertyInfos = NULL;
     //------------------------------------------------------------------------
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo()
     {
@@ -155,7 +155,7 @@ namespace rptui
             ,DEF_INFO_2( TYPE,                          TYPE,                       TYPE,                       COMPOSEABLE,DATA_PROPERTY )
             ,DEF_INFO_2( DATAFIELD,                     DATAFIELD,                  DATAFIELD,                  COMPOSEABLE,DATA_PROPERTY )
             ,DEF_INFO_2( FORMULALIST,                   FORMULALIST,                FORMULALIST,                COMPOSEABLE,DATA_PROPERTY )
-            ,DEF_INFO_2( SCOPE,                         SCOPE,                      SCOPE,                      COMPOSEABLE,DATA_PROPERTY )
+            ,DEF_INFO_2( SCOPE,                         SCOPE,                      SCOPE,                      COMPOSEABLE,DATA_PROPERTY )            
             ,DEF_INFO_1( PRESERVEIRI,                   PRESERVEIRI,                PRESERVEIRI,                COMPOSEABLE )
             ,DEF_INFO_1( BACKCOLOR,                     BACKCOLOR,                  BACKCOLOR,                  COMPOSEABLE )
             ,DEF_INFO_1( CONTROLBACKGROUND,             BACKCOLOR,                  BACKCOLOR,                  COMPOSEABLE )
@@ -194,10 +194,10 @@ namespace rptui
     }
 
     //------------------------------------------------------------------------
-    rtl::OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
+    sal_Int32 OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->sHelpId : rtl::OString();
+        return (pInfo) ? pInfo->nHelpId : 0;
     }
 
     //------------------------------------------------------------------------
@@ -213,7 +213,7 @@ namespace rptui
         // intialisierung
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, "", 0);
+        OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, 0, 0);
 
         const OPropertyInfoImpl* pPropInfo = ::std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );

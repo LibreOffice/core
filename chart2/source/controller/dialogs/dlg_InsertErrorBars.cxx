@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,6 +96,7 @@ void InsertErrorBarsDialog::SetAxisMinorStepWidthForErrorBarDecimals( double fMi
     m_apErrorBarResources->SetAxisMinorStepWidthForErrorBarDecimals( fMinorStepWidth );
 }
 
+//static
 double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
     const Reference< frame::XModel >& xChartModel,
     const Reference< uno::XInterface >& xChartView,
@@ -119,7 +120,7 @@ double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
             pExplicitValueProvider->getExplicitValuesForAxis( xAxis,aExplicitScale, aExplicitIncrement );
 
             fStepWidth = aExplicitIncrement.Distance;
-            if( !aExplicitIncrement.SubIncrements.empty() && aExplicitIncrement.SubIncrements[0].IntervalCount>0 )
+            if( aExplicitIncrement.SubIncrements.getLength()  && aExplicitIncrement.SubIncrements[0].IntervalCount>0 )
                 fStepWidth=fStepWidth/double(aExplicitIncrement.SubIncrements[0].IntervalCount);
             else
                 fStepWidth/=10;

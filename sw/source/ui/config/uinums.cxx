@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,17 +29,23 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
+
+
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
+#ifndef _SFX_INIMGR_HXX
+#endif
 #include <sfx2/docfile.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/brshitem.hxx>
 
+
 #include <tools/resid.hxx>
 #include <fmtornt.hxx>
-#include <swtypes.hxx>      // empty string
+#include <swtypes.hxx>		// Leerstring
 #include <wrtsh.hxx>
 #include <uinums.hxx>
 #include <poolfmt.hxx>
@@ -51,12 +57,12 @@
 using namespace ::com::sun::star;
 
 
-#define VERSION_30B     ((sal_uInt16)250)
-#define VERSION_31B     ((sal_uInt16)326)
-#define VERSION_40A     ((sal_uInt16)364)
-#define VERSION_50A     ((sal_uInt16)373)
-#define VERSION_53A     ((sal_uInt16)596)
-#define ACT_NUM_VERSION VERSION_53A
+#define VERSION_30B		((USHORT)250)
+#define VERSION_31B		((USHORT)326)
+#define VERSION_40A		((USHORT)364)
+#define VERSION_50A     ((USHORT)373)
+#define VERSION_53A     ((USHORT)596)
+#define ACT_NUM_VERSION	VERSION_53A
 
 #define NUMRULE_FILENAME "numrule.cfg"
 #define CHAPTER_FILENAME "chapter.cfg"
@@ -67,17 +73,17 @@ SV_IMPL_PTRARR( _SwNumFmtsAttrs, SfxPoolItem* )
 // SwNumRulesWithName ----------------------------------------------------
 // PUBLIC METHODES -------------------------------------------------------
 /*------------------------------------------------------------------------
- Description:   Saving a rule
- Parameter:     rCopy -- the rule to save
-                    nIdx -- position, where the rule is to be saved.
-                        An old rule at that position will be overwritten.
+ Beschreibung:	Speichern einer Regel
+ Parameter:		rCopy -- die zu speichernde Regel
+                nIdx -- Position, an der die Regel zu speichern ist.
+                        Eine alte Regel an dieser Position wird ueberschrieben.
 ------------------------------------------------------------------------*/
 
 SwBaseNumRules::SwBaseNumRules( const String& rFileName )
     :
     sFileName( rFileName ),
     nVersion(0),
-    bModified( sal_False )
+    bModified( FALSE )
 {
     Init();
 }
@@ -93,29 +99,29 @@ SwBaseNumRules::~SwBaseNumRules()
         INetURLObject aTempObj(sNm);
         sNm = aTempObj.GetFull();
         SfxMedium aStrm( sNm, STREAM_WRITE | STREAM_TRUNC |
-                                        STREAM_SHARE_DENYALL, sal_True );
+                                        STREAM_SHARE_DENYALL, TRUE );
         Store( *aStrm.GetOutStream() );
     }
 
-    for( sal_uInt16 i = 0; i < nMaxRules; ++i )
+    for( USHORT i = 0; i < nMaxRules; ++i )
         delete pNumRules[i];
 }
 
 void  SwBaseNumRules::Init()
 {
-    for(sal_uInt16 i = 0; i < nMaxRules; ++i )
+    for(USHORT i = 0; i < nMaxRules; ++i )
         pNumRules[i] = 0;
 
     String sNm( sFileName );
     SvtPathOptions aOpt;
     if( aOpt.SearchFile( sNm, SvtPathOptions::PATH_USERCONFIG ))
     {
-        SfxMedium aStrm( sNm, STREAM_STD_READ, sal_True );
+        SfxMedium aStrm( sNm, STREAM_STD_READ, TRUE );
         Load( *aStrm.GetInStream() );
     }
 }
 
-void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 nIdx)
+void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, USHORT nIdx)
 {
     OSL_ENSURE(nIdx < nMaxRules, "Array der NumRules ueberindiziert.");
     if( !pNumRules[nIdx] )
@@ -125,41 +131,41 @@ void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 n
 }
 
 // PROTECTED METHODS ----------------------------------------------------
-sal_Bool SwBaseNumRules::Store(SvStream &rStream)
+BOOL SwBaseNumRules::Store(SvStream &rStream)
 {
     rStream << ACT_NUM_VERSION;
-        // Write, what positions are occupied by a rule
-        // Then write each of the rules
-    for(sal_uInt16 i = 0; i < nMaxRules; ++i)
+        // Schreiben, welche Positionen durch eine Regel belegt sind
+        // Anschliessend Schreiben der einzelnen Rules
+    for(USHORT i = 0; i < nMaxRules; ++i)
     {
         if(pNumRules[i])
         {
-            rStream << (unsigned char) sal_True;
+            rStream << (unsigned char) TRUE;
             pNumRules[i]->Store( rStream );
         }
         else
-            rStream << (unsigned char) sal_False;
+            rStream << (unsigned char) FALSE;
     }
-    return sal_True;
+    return TRUE;
 }
 
 int SwBaseNumRules::Load(SvStream &rStream)
 {
-    int         rc = 0;
+    int			rc = 0;
 
     rStream >> nVersion;
 
-    // due to a small but serious mistake, PreFinal writes the same VERION_40A as SP2
-    // #55402#
+    // wegen eines kleinen aber schweren Fehlers schreibt die PreFinal die
+    // gleiche VERSION_40A wie das SP2 #55402#
     if(VERSION_40A == nVersion)
     {
-        OSL_FAIL("Version 364 is not clear #55402#");
+        OSL_ENSURE(false, "Version 364 is not clear #55402#");
     }
     else if( VERSION_30B == nVersion || VERSION_31B == nVersion ||
              ACT_NUM_VERSION >= nVersion )
     {
-        unsigned char bRule = sal_False;
-        for(sal_uInt16 i = 0; i < nMaxRules; ++i)
+        unsigned char bRule = FALSE;
+        for(USHORT i = 0; i < nMaxRules; ++i)
         {
             rStream >> bRule;
             if(bRule)
@@ -183,9 +189,9 @@ SwChapterNumRules::SwChapterNumRules() :
 {
 }
 
-void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 nIdx)
+void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, USHORT nIdx)
 {
-    bModified = sal_True;
+    bModified = TRUE;
     SwBaseNumRules::ApplyNumRules(rCopy, nIdx);
 }
 
@@ -193,7 +199,7 @@ SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
                                         const String &rName )
     : aName(rName)
 {
-    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
+    for( USHORT n = 0; n < MAXLEVEL; ++n )
     {
         const SwNumFmt* pFmt = rCopy.GetNumFmt( n );
         if( pFmt )
@@ -234,18 +240,18 @@ const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName
     return *this;
 }
 
-SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
+SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, USHORT nVersion )
 {
     CharSet eEncoding = gsl_getSystemTextEncoding();
     rStream.ReadByteString(aName, eEncoding);
 
     char c;
-    for(sal_uInt16 n = 0; n < MAXLEVEL; ++n )
+    for(USHORT n = 0; n < MAXLEVEL; ++n )
     {
         if( VERSION_30B == nVersion )
             c = 1;
-        // due to a small but serious mistake, PreFinal writes the same VERION_40A as SP2
-        // #55402#
+        // wegen eines kleinen aber schweren Fehlers schreibt die PreFinal die
+        // gleiche VERSION_40A wie das SP2 #55402#
         else if(nVersion < VERSION_40A && n > 5)
             c = 0;
         else
@@ -262,9 +268,9 @@ void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
 {
     // #i89178#
     rChg = SwNumRule( aName, numfunc::GetDefaultPositionAndSpaceMode() );
-    rChg.SetAutoRule( sal_False );
+    rChg.SetAutoRule( FALSE );
     _SwNumFmtGlobal* pFmt;
-    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
+    for( USHORT n = 0; n < MAXLEVEL; ++n )
         if( 0 != ( pFmt = aFmts[ n ] ) )
         {
             SwNumFmt aNew;
@@ -278,7 +284,7 @@ void SwNumRulesWithName::Store( SvStream &rStream )
     CharSet eEncoding = gsl_getSystemTextEncoding();
     rStream.WriteByteString(aName, eEncoding);
 
-    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
+    for( USHORT n = 0; n < MAXLEVEL; ++n )
     {
         _SwNumFmtGlobal* pFmt = aFmts[ n ];
         if( pFmt )
@@ -294,7 +300,7 @@ void SwNumRulesWithName::Store( SvStream &rStream )
 SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const SwNumFmt& rFmt )
     : aFmt( rFmt ), nCharPoolId( USHRT_MAX )
 {
-    // relative gaps?????
+    // relative Abstaende ?????
 
     SwCharFmt* pFmt = rFmt.GetCharFmt();
     if( pFmt )
@@ -305,7 +311,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const SwNumFmt& rFmt )
         {
             SfxItemIter aIter( pFmt->GetAttrSet() );
             const SfxPoolItem *pCurr = aIter.GetCurItem();
-            while( sal_True )
+            while( TRUE )
             {
                 aItems.Insert( pCurr->Clone(), aItems.Count() );
                 if( aIter.IsAtEnd() )
@@ -324,67 +330,67 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const _SwNumFmtGlobal& rFm
     sCharFmtName( rFmt.sCharFmtName ),
     nCharPoolId( rFmt.nCharPoolId )
 {
-    for( sal_uInt16 n = rFmt.aItems.Count(); n; )
+    for( USHORT n = rFmt.aItems.Count(); n; )
         aItems.Insert( rFmt.aItems[ --n ]->Clone(), aItems.Count() );
 }
 
 SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
-                                                        sal_uInt16 nVersion )
+                                                        USHORT nVersion )
     : nCharPoolId( USHRT_MAX )
 {
     CharSet eEncoding = gsl_getSystemTextEncoding();
     {
-        sal_uInt16 nUS;
+        USHORT nUS;
         sal_Char cChar;
-        sal_Bool bFlag;
+        short nShort;
+        BOOL bFlag;
         String sStr;
 
-        rStream >> nUS;             aFmt.SetNumberingType((sal_Int16)nUS );
+        rStream >> nUS;				aFmt.SetNumberingType((sal_Int16)nUS );
         if( VERSION_53A > nVersion )
         {
-            rStream >> cChar;       aFmt.SetBulletChar( cChar );
+            rStream >> cChar;		aFmt.SetBulletChar( cChar );
         }
         else
         {
-            rStream >> nUS;         aFmt.SetBulletChar( nUS );
+            rStream >> nUS; 		aFmt.SetBulletChar( nUS );
         }
 
-        rStream >> bFlag;           aFmt.SetIncludeUpperLevels( bFlag );
+        rStream >> bFlag;			aFmt.SetIncludeUpperLevels( bFlag );
 
         if( VERSION_30B == nVersion )
         {
             long nL;
-            rStream >> cChar;       aFmt.SetStart( (sal_uInt16)cChar );
+            rStream >> cChar;		aFmt.SetStart( (USHORT)cChar );
 
             rStream.ReadByteString(sStr, eEncoding);
             aFmt.SetPrefix( sStr );
             rStream.ReadByteString(sStr, eEncoding);
             aFmt.SetSuffix( sStr );
-            rStream >> nUS;         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
-            rStream >> nL;          aFmt.SetLSpace( lNumIndent );
-            rStream >> nL;          aFmt.SetFirstLineOffset( (short)nL );
+            rStream >> nUS;			aFmt.SetNumAdjust( SvxAdjust( nUS ) );
+            rStream >> nL;			aFmt.SetLSpace( lNumIndent );
+            rStream >> nL;			aFmt.SetFirstLineOffset( (short)nL );
         }
-        else                // old start-value was a Byte
+        else 				// alter StartWert war ein Byte
         {
-            short nShort;
-            rStream >> nUS;         aFmt.SetStart( nUS );
+            rStream >> nUS;			aFmt.SetStart( nUS );
             rStream.ReadByteString(sStr, eEncoding);
             aFmt.SetPrefix( sStr );
             rStream.ReadByteString(sStr, eEncoding);
             aFmt.SetSuffix( sStr );
-            rStream >> nUS;         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
-            rStream >> nUS;         aFmt.SetAbsLSpace( nUS );
-            rStream >> nShort;      aFmt.SetFirstLineOffset( nShort );
-            rStream >> nUS;         aFmt.SetCharTextDistance( nUS );
-            rStream >> nShort;      aFmt.SetLSpace( nShort );
+            rStream >> nUS;			aFmt.SetNumAdjust( SvxAdjust( nUS ) );
+            rStream >> nUS;			aFmt.SetAbsLSpace( nUS );
+            rStream >> nShort;		aFmt.SetFirstLineOffset( nShort );
+            rStream >> nUS;			aFmt.SetCharTextDistance( nUS );
+            rStream >> nShort;		aFmt.SetLSpace( nShort );
             rStream >> bFlag;
         }
 
-        sal_uInt16  nFamily;
-        sal_uInt16  nCharSet;
+        USHORT	nFamily;
+        USHORT  nCharSet;
         short   nWidth;
         short   nHeight;
-        sal_uInt16  nPitch;
+        USHORT  nPitch;
         String aName;
 
         rStream.ReadByteString(aName, eEncoding);
@@ -409,14 +415,14 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
 
     if( VERSION_30B != nVersion )
     {
-        sal_uInt16 nItemCount;
+        USHORT nItemCount;
         rStream >> nCharPoolId;
         rStream.ReadByteString(sCharFmtName, eEncoding);
         rStream >> nItemCount;
 
         while( nItemCount-- )
         {
-            sal_uInt16 nWhich, nVers;
+            USHORT nWhich, nVers;
             rStream >> nWhich >> nVers;
             aItems.Insert( GetDfltAttr( nWhich )->Create( rStream, nVers ),
                             aItems.Count() );
@@ -425,7 +431,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
 
     if( VERSION_40A == nVersion && SVX_NUM_BITMAP == aFmt.GetNumberingType() )
     {
-        sal_uInt8 cF;
+        BYTE cF;
         Size aSz;
 
         rStream >> aSz.Width() >> aSz.Height();
@@ -435,7 +441,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         {
             SvxBrushItem* pBrush = 0;
             SwFmtVertOrient* pVOrient = 0;
-            sal_uInt16 nVer;
+            USHORT nVer;
 
             if( cF & 1 )
             {
@@ -467,32 +473,32 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
     CharSet eEncoding = gsl_getSystemTextEncoding();
     {
         String aName;
-        sal_uInt16 nFamily = FAMILY_DONTKNOW, nCharSet = 0, nPitch = 0;
+        USHORT nFamily = FAMILY_DONTKNOW, nCharSet = 0, nPitch = 0;
         short  nWidth = 0, nHeight = 0;
 
         const Font* pFnt = aFmt.GetBulletFont();
         if( pFnt )
         {
             aName = pFnt->GetName();
-            nFamily = (sal_uInt16)pFnt->GetFamily();
-            nCharSet = (sal_uInt16)pFnt->GetCharSet();
+            nFamily = (USHORT)pFnt->GetFamily();
+            nCharSet = (USHORT)pFnt->GetCharSet();
             nWidth = (short)pFnt->GetSize().Width();
             nHeight = (short)pFnt->GetSize().Height();
-            nPitch = (sal_uInt16)pFnt->GetPitch();
+            nPitch = (USHORT)pFnt->GetPitch();
         }
 
-        rStream << sal_uInt16(aFmt.GetNumberingType())
+        rStream << USHORT(aFmt.GetNumberingType())
                 << aFmt.GetBulletChar()
                 << (aFmt.GetIncludeUpperLevels() > 0)
                 << aFmt.GetStart();
         rStream.WriteByteString( aFmt.GetPrefix(), eEncoding );
         rStream.WriteByteString( aFmt.GetSuffix(), eEncoding );
-        rStream << sal_uInt16( aFmt.GetNumAdjust() )
+        rStream << USHORT( aFmt.GetNumAdjust() )
                 << aFmt.GetAbsLSpace()
                 << aFmt.GetFirstLineOffset()
                 << aFmt.GetCharTextDistance()
                 << aFmt.GetLSpace()
-                << sal_False;//aFmt.IsRelLSpace();
+                << FALSE;//aFmt.IsRelLSpace();
         rStream.WriteByteString( aName, eEncoding );
         rStream << nFamily
                 << nCharSet
@@ -504,10 +510,10 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
     rStream.WriteByteString( sCharFmtName, eEncoding );
     rStream << aItems.Count();
 
-    for( sal_uInt16 n = aItems.Count(); n; )
+    for( USHORT n = aItems.Count(); n; )
     {
         SfxPoolItem* pItem = aItems[ --n ];
-        sal_uInt16 nIVers = pItem->GetVersion( SOFFICE_FILEFORMAT_50 );
+        USHORT nIVers = pItem->GetVersion( SOFFICE_FILEFORMAT_50 );
         OSL_ENSURE( nIVers != USHRT_MAX,
                 "Was'n das: Item-Version USHRT_MAX in der aktuellen Version" );
         rStream << pItem->Which()
@@ -515,25 +521,25 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
         pItem->Store( rStream, nIVers );
     }
 
-    // Extensions for 40A
+    // Erweiterungen fuer Version 40A
 
     if( SVX_NUM_BITMAP == aFmt.GetNumberingType() )
     {
-        rStream << (sal_Int32)aFmt.GetGraphicSize().Width()
-                << (sal_Int32)aFmt.GetGraphicSize().Height();
-        sal_uInt8 cFlg = ( 0 != aFmt.GetBrush() ? 1 : 0 ) +
+        rStream << (INT32)aFmt.GetGraphicSize().Width()
+                << (INT32)aFmt.GetGraphicSize().Height();
+        BYTE cFlg = ( 0 != aFmt.GetBrush() ? 1 : 0 ) +
                     ( 0 != aFmt.GetGraphicOrientation() ? 2 : 0 );
         rStream << cFlg;
 
         if( aFmt.GetBrush() )
         {
-            sal_uInt16 nVersion = aFmt.GetBrush()->GetVersion( SOFFICE_FILEFORMAT_50 );
+            USHORT nVersion = aFmt.GetBrush()->GetVersion( SOFFICE_FILEFORMAT_50 );
             rStream << nVersion;
             aFmt.GetBrush()->Store( rStream, nVersion );
         }
         if( aFmt.GetGraphicOrientation() )
         {
-            sal_uInt16 nVersion = aFmt.GetGraphicOrientation()->GetVersion( SOFFICE_FILEFORMAT_50 );
+            USHORT nVersion = aFmt.GetGraphicOrientation()->GetVersion( SOFFICE_FILEFORMAT_50 );
             rStream << nVersion;
             aFmt.GetGraphicOrientation()->Store( rStream, nVersion );
         }
@@ -546,13 +552,13 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
     SwCharFmt* pFmt = 0;
     if( sCharFmtName.Len() )
     {
-        // at first, look for the name
-        sal_uInt16 nArrLen = rSh.GetCharFmtCount();
-        for( sal_uInt16 i = 1; i < nArrLen; ++i )
+        // suche erstmal ueber den Namen
+        USHORT nArrLen = rSh.GetCharFmtCount();
+        for( USHORT i = 1; i < nArrLen; ++i )
         {
             pFmt = &rSh.GetCharFmt( i );
             if( COMPARE_EQUAL == pFmt->GetName().CompareTo( sCharFmtName ))
-                // exists, so leave attributes as they are!
+                // ist vorhanden, also belasse die Attribute wie sie sind!
                 break;
             pFmt = 0;
         }
@@ -562,13 +568,13 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
             if( IsPoolUserFmt( nCharPoolId ) )
             {
                 pFmt = rSh.MakeCharFmt( sCharFmtName );
-                pFmt->SetAuto( sal_False );
+                pFmt->SetAuto( FALSE );
             }
             else
                 pFmt = rSh.GetCharFmtFromPool( nCharPoolId );
 
-            if( !pFmt->GetDepends() )       // set attributes
-                for( sal_uInt16 n = aItems.Count(); n; )
+            if( !pFmt->GetDepends() )		// Attribute setzen
+                for( USHORT n = aItems.Count(); n; )
                     pFmt->SetFmtAttr( *aItems[ --n ] );
         }
     }

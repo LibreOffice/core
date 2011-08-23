@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -385,7 +385,7 @@ namespace ucb { namespace ucp { namespace ext
         }
 
         default:
-            OSL_FAIL( "Content::getParentURL: unhandled case!" );
+            OSL_ENSURE( false, "Content::getParentURL: unhandled case!" );
             break;
         }
         return ::rtl::OUString();
@@ -435,22 +435,22 @@ namespace ucb { namespace ucp { namespace ext
         else
         {
             // Append all Core Properties.
-            xRow->appendString ( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
+            xRow->appendString ( Property( ::rtl::OUString::createFromAscii( "ContentType" ),
                           -1,
                           getCppuType( static_cast< const ::rtl::OUString * >( 0 ) ),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 ContentProvider::getArtificialNodeContentType() );
-            xRow->appendString ( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+            xRow->appendString ( Property( ::rtl::OUString::createFromAscii( "Title" ),
                           -1,
                           getCppuType( static_cast< const ::rtl::OUString * >( 0 ) ),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 i_rTitle );
-            xRow->appendBoolean( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
+            xRow->appendBoolean( Property( ::rtl::OUString::createFromAscii( "IsDocument" ),
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 sal_False );
-            xRow->appendBoolean( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
+            xRow->appendBoolean( Property( ::rtl::OUString::createFromAscii( "IsFolder" ),
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
@@ -514,11 +514,11 @@ namespace ucb { namespace ucp { namespace ext
         }
 
         default:
-            OSL_FAIL( "Content::getPropertyValues: unhandled case!" );
+            OSL_ENSURE( false, "Content::getPropertyValues: unhandled case!" );
             break;
         }
 
-        OSL_FAIL( "Content::getPropertyValues: unreachable!" );
+        OSL_ENSURE( false, "Content::getPropertyValues: unreachable!" );
         return NULL;
     }
 
@@ -532,7 +532,7 @@ namespace ucb { namespace ucp { namespace ext
 
         PropertyChangeEvent aEvent;
         aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
-        aEvent.Further        = sal_False;
+        aEvent.Further 		  = sal_False;
         aEvent.PropertyHandle = -1;
 
         const PropertyValue* pValues = i_rValues.getConstArray();
@@ -541,7 +541,7 @@ namespace ucb { namespace ucp { namespace ext
         for ( sal_Int32 n = 0; n < nCount; ++n, ++pValues )
         {
             // all our properties are read-only ...
-            aRet[ n ] <<= IllegalAccessException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("property is read-only.")), *this );
+            aRet[ n ] <<= IllegalAccessException( ::rtl::OUString::createFromAscii( "property is read-only." ), *this );
         }
 
         return aRet;

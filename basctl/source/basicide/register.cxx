@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,6 +54,28 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
 }
 
 SAL_DLLPUBLIC_EXPORT
+sal_Bool SAL_CALL component_writeInfo(	void*	pServiceManager	,
+                                        void*	pRegistryKey	)
+{
+    (void)pServiceManager;
+
+    Reference< ::registry::XRegistryKey >
+            xKey( reinterpret_cast< ::registry::XRegistryKey* >( pRegistryKey ) ) ;
+
+    OUString aDelimiter( RTL_CONSTASCII_USTRINGPARAM("/") );
+    OUString aUnoServices( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") );
+
+    sal_Int32 i;
+    Reference< ::registry::XRegistryKey >  xNewKey;
+    xNewKey = xKey->createKey( aDelimiter + SIDEModel::getImplementationName_Static() + aUnoServices );
+    Sequence< OUString > aServices = SIDEModel::getSupportedServiceNames_Static();
+    for(i = 0; i < aServices.getLength(); i++ )
+        xNewKey->createKey( aServices.getConstArray()[i] );
+
+    return sal_True;
+}
+
+SAL_DLLPUBLIC_EXPORT
 void* SAL_CALL component_getFactory( const sal_Char* pImplementationName,
                                      void* pServiceManager,
                                      void* pRegistryKey )
@@ -63,9 +85,9 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplementationName,
     // Set default return value for this operation - if it failed.
     void* pReturn = NULL ;
 
-    if  (
-            ( pImplementationName   !=  NULL ) &&
-            ( pServiceManager       !=  NULL )
+    if	(
+            ( pImplementationName	!=	NULL ) &&
+            ( pServiceManager		!=	NULL )
         )
     {
         // Define variables which are used in following macros.
